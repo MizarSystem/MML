@@ -64,10 +64,10 @@
 </Adjective>
 <Adjective nr="19"/>
 <Adjective nr="37"/>
-<Adjective nr="46"/>
-<Adjective nr="48"/>
+<Adjective nr="47"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
+<Adjective nr="51"/>
 <Adjective nr="80">
 <LocusVar nr="1"/>
 </Adjective>

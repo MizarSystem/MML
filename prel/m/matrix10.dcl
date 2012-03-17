@@ -55,7 +55,7 @@
 </Func>
 </Adjective>
 <Adjective nr="18"/>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 <Adjective nr="117"/>
 <Adjective nr="136"/>
 <Adjective nr="139"/>
@@ -80,7 +80,7 @@
 </Func>
 </Adjective>
 <Adjective nr="18"/>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 <Adjective nr="117"/>
 <Adjective nr="137"/>
 <Adjective nr="138"/>
@@ -111,7 +111,7 @@
 </Func>
 </Adjective>
 <Adjective nr="18"/>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 <Adjective nr="117"/>
 <Adjective nr="136"/>
 <Adjective nr="139"/>
@@ -142,7 +142,7 @@
 </Func>
 </Adjective>
 <Adjective nr="18"/>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 <Adjective nr="117"/>
 <Adjective nr="137"/>
 <Adjective nr="138"/>

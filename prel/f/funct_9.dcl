@@ -252,7 +252,7 @@
 </FCluster>
 <FCluster aid="FUNCT_9" nr="8">
 <ArgTypes/>
-<Func kind="K" nr="212"/>
+<Func kind="K" nr="210"/>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="24">
@@ -264,7 +264,7 @@
 </FCluster>
 <FCluster aid="FUNCT_9" nr="9">
 <ArgTypes/>
-<Func kind="K" nr="215"/>
+<Func kind="K" nr="213"/>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="24">
@@ -276,7 +276,7 @@
 </FCluster>
 <FCluster aid="FUNCT_9" nr="10">
 <ArgTypes/>
-<Func kind="K" nr="230"/>
+<Func kind="K" nr="228"/>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="58"/>
@@ -284,7 +284,7 @@
 </FCluster>
 <FCluster aid="FUNCT_9" nr="11">
 <ArgTypes/>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="227"/>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="58"/>
@@ -292,7 +292,7 @@
 </FCluster>
 <FCluster aid="FUNCT_9" nr="12">
 <ArgTypes/>
-<Func kind="K" nr="225"/>
+<Func kind="K" nr="223"/>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="58"/>
@@ -300,7 +300,7 @@
 </FCluster>
 <FCluster aid="FUNCT_9" nr="13">
 <ArgTypes/>
-<Func kind="K" nr="226"/>
+<Func kind="K" nr="224"/>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="58"/>

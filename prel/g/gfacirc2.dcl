@@ -51,14 +51,14 @@
 <Cluster>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -82,14 +82,14 @@
 <Cluster>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 </ArgTypes>

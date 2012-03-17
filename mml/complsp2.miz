@@ -16,12 +16,13 @@ environ
  constructors PARTFUN1, SETWISEO, XXREAL_0, REAL_1, BINOP_2, FINSEQOP, SEQ_4,
       MATRIX_5, SEQ_1, BINOP_1, RVSUM_1, RELSET_1, SETFAM_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS, XCMPLX_0,
-      BINOP_2, MEMBERED, FINSEQ_2, XXREAL_0, VALUED_0, FINSEQ_1, VALUED_1;
+      BINOP_2, MEMBERED, FINSEQ_2, XXREAL_0, VALUED_0, FINSEQ_1, VALUED_1,
+      CARD_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, VALUED_1;
  theorems FUNCT_1, FUNCT_2, FINSEQ_1, FUNCOP_1, FINSEQ_2, FINSEQOP, RELAT_1,
       BINOP_2, COMPLEX1, XCMPLX_0, FINSEQ_3, RVSUM_1, ORDINAL1, VALUED_0,
-      VALUED_1, SEQ_4;
+      VALUED_1, SEQ_4, CARD_1;
  schemes FINSEQ_1;
 
 begin :: Preliminaries
@@ -130,7 +131,7 @@ proof
   set n=len x;
   reconsider z=x as Element of n-tuples_on COMPLEX by FINSEQ_2:110;
   reconsider a9 = a as Element of COMPLEX by XCMPLX_0:def 2;
-  len (a9*z)=n by FINSEQ_1:def 18;
+  len (a9*z)=n by CARD_1:def 13;
   hence thesis;
 end;
 
@@ -145,7 +146,7 @@ proof
   hence thesis by FINSEQ_3:31;
 end;
 
-Lm4: for F being complex-valued FinSequence holds F is FinSequence of COMPLEX
+Lm2: for F being complex-valued FinSequence holds F is FinSequence of COMPLEX
 proof
   let F be complex-valued FinSequence;
   rng F c= COMPLEX by VALUED_0:def 1;
@@ -158,8 +159,8 @@ theorem Th6:
 proof
   let x1,x2 be complex-valued FinSequence;
   set n=len x1;
-A1: x2 is FinSequence of COMPLEX by Lm4;
-  x1 is FinSequence of COMPLEX by Lm4; then
+A1: x2 is FinSequence of COMPLEX by Lm2;
+  x1 is FinSequence of COMPLEX by Lm2; then
   reconsider z1=x1 as Element of (len x1)-tuples_on COMPLEX by FINSEQ_2:110;
   assume len x1=len x2; then
   reconsider z2=x2 as Element of n-tuples_on COMPLEX by A1,FINSEQ_2:110;
@@ -173,8 +174,8 @@ theorem Th7:
 proof
   let x1,x2 be complex-valued FinSequence;
   set n=len x1;
-A1: x2 is FinSequence of COMPLEX by Lm4;
-  x1 is FinSequence of COMPLEX by Lm4; then
+A1: x2 is FinSequence of COMPLEX by Lm2;
+  x1 is FinSequence of COMPLEX by Lm2; then
   reconsider z1=x1 as Element of (len x1)-tuples_on COMPLEX by FINSEQ_2:110;
   assume len x1=len x2; then
   reconsider z2=x2 as Element of n-tuples_on COMPLEX by A1,FINSEQ_2:110;
@@ -186,7 +187,7 @@ theorem
   for f being complex-valued FinSequence holds f is Element of COMPLEX len f
 proof
   let f be complex-valued FinSequence;
-  f is FinSequence of COMPLEX by Lm4; then
+  f is FinSequence of COMPLEX by Lm2; then
   f is Element of COMPLEX* by FINSEQ_1:def 11;
   then f in { s where s is Element of COMPLEX*: len s = len f };
   then f in ((len f)-tuples_on COMPLEX) by FINSEQ_2:def 4;
@@ -447,27 +448,27 @@ theorem Th25:
   (x-y).i = x.i - y.i
 proof
   let x,y be complex-valued FinSequence;
-A:x is FinSequence of COMPLEX & y is FinSequence of COMPLEX by Lm4; then
+A1:x is FinSequence of COMPLEX & y is FinSequence of COMPLEX by Lm2; then
   reconsider x2=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y2=y as Element of (len y)-tuples_on COMPLEX by A,FINSEQ_2:110;
+  reconsider y2=y as Element of (len y)-tuples_on COMPLEX by A1,FINSEQ_2:110;
   reconsider y29=(x2 - y2) as Element of (len (x2 - y2))-tuples_on COMPLEX by
 FINSEQ_2:110;
   assume
-A1: len x=len y; then
-A2: len (x - y) = len x by Th7;
+A2: len x=len y; then
+A3: len (x - y) = len x by Th7;
   per cases;
   suppose
-A3: not i in Seg (len x); then
-A4: not i in dom x2 by FINSEQ_2:144;
-A5: not i in dom y2 by A1,A3,FINSEQ_2:144;
-    not i in dom(y29) by A2,A3,FINSEQ_2:144;
+A4: not i in Seg (len x); then
+A5: not i in dom x2 by FINSEQ_2:144;
+A6: not i in dom y2 by A2,A4,FINSEQ_2:144;
+    not i in dom(y29) by A3,A4,FINSEQ_2:144;
     then (x2-y2).i = 0-0 by FUNCT_1:def 4
-      .= x2.i - 0 by A4,FUNCT_1:def 4
-      .= x2.i - y2.i by A5,FUNCT_1:def 4;
+      .= x2.i - 0 by A5,FUNCT_1:def 4
+      .= x2.i - y2.i by A6,FUNCT_1:def 4;
     hence thesis;
   end;
   suppose i in Seg (len x);
-    then i in dom (y29) by A2,FINSEQ_2:144;
+    then i in dom (y29) by A3,FINSEQ_2:144;
     hence thesis by VALUED_1:13;
   end;
 end;
@@ -477,27 +478,27 @@ theorem Th26:
   (x+y).i = x.i + y.i
 proof
   let x,y be complex-valued FinSequence;
-A:x is FinSequence of COMPLEX & y is FinSequence of COMPLEX by Lm4; then
+A1:x is FinSequence of COMPLEX & y is FinSequence of COMPLEX by Lm2; then
   reconsider x2=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y2=y as Element of (len y)-tuples_on COMPLEX by A,FINSEQ_2:110;
+  reconsider y2=y as Element of (len y)-tuples_on COMPLEX by A1,FINSEQ_2:110;
   reconsider y29=(x2 + y2) as Element of (len (x2 + y2))-tuples_on COMPLEX by
 FINSEQ_2:110;
   assume
-A1: len x=len y; then
-A2: len (x + y) = len x by Th6;
+A2: len x=len y; then
+A3: len (x + y) = len x by Th6;
   per cases;
   suppose
-A3: not i in Seg len x; then
-A4: not i in dom x2 by FINSEQ_2:144;
-A5: not i in dom y2 by A1,A3,FINSEQ_2:144;
-    not i in dom(y29) by A2,A3,FINSEQ_2:144;
+A4: not i in Seg len x; then
+A5: not i in dom x2 by FINSEQ_2:144;
+A6: not i in dom y2 by A2,A4,FINSEQ_2:144;
+    not i in dom(y29) by A3,A4,FINSEQ_2:144;
     then (x2+y2).i = 0+0 by FUNCT_1:def 4
-      .= x2.i + 0 by A4,FUNCT_1:def 4
-      .= x2.i + y2.i by A5,FUNCT_1:def 4;
+      .= x2.i + 0 by A5,FUNCT_1:def 4
+      .= x2.i + y2.i by A6,FUNCT_1:def 4;
     hence thesis;
   end;
   suppose i in Seg len x;
-    then i in dom y29 by A2,FINSEQ_2:144;
+    then i in dom y29 by A3,FINSEQ_2:144;
     hence thesis by VALUED_1:def 1;
   end;
 end;
@@ -583,7 +584,7 @@ theorem Th28:
   holds x + (y + z) = x + y + z
 proof
   let x,y,z be complex-valued FinSequence;
-  reconsider x1=x, y1 = y, z1 = z as FinSequence of COMPLEX by Lm4;
+  reconsider x1=x, y1 = y, z1 = z as FinSequence of COMPLEX by Lm2;
   assume
 A1: len x=len y & len y=len z;
   reconsider z9=z1 as Element of (len z)-tuples_on COMPLEX by FINSEQ_2:110;
@@ -637,7 +638,7 @@ proof
   assume that
 A1: len x=len y and
 A2: x + y = 0c (len x);
-  reconsider x1=x, y1 = y as FinSequence of COMPLEX by Lm4;
+  reconsider x1=x, y1 = y as FinSequence of COMPLEX by Lm2;
   reconsider x9=x1 as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
   reconsider y9=y1 as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
 A3: x + y = addcomplex.:(x1,y1) & -y = compcomplex*y1 by SEQ_4:def 9,def 11;
@@ -650,10 +651,10 @@ theorem Th33:
   for x being complex-valued FinSequence holds x + 0c (len x) = x
 proof
   let x be complex-valued FinSequence;
-A:x is FinSequence of COMPLEX by Lm4; then
+A1:x is FinSequence of COMPLEX by Lm2; then
   reconsider x9=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
   x + 0c (len x) = x+(len x) |-> 0c by SEQ_4:def 15
-    .= addcomplex.:(x,(len x) |-> 0c) by A,SEQ_4:def 9
+    .= addcomplex.:(x,(len x) |-> 0c) by A1,SEQ_4:def 9
     .= x9 by BINOP_2:1,FINSEQOP:57;
   hence thesis;
 end;
@@ -662,10 +663,10 @@ theorem Th34:
   for x being complex-valued FinSequence holds x + -x = 0c (len x)
 proof
   let x be complex-valued FinSequence;
-A:x is FinSequence of COMPLEX & -x is FinSequence of COMPLEX by Lm4; then
+A1:x is FinSequence of COMPLEX & -x is FinSequence of COMPLEX by Lm2; then
   reconsider x9=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
-  x + -x = addcomplex.:(x,-x) by A,SEQ_4:def 9
-    .= addcomplex.:(x,compcomplex*x) by A,SEQ_4:def 11
+  x + -x = addcomplex.:(x,-x) by A1,SEQ_4:def 9
+    .= addcomplex.:(x,compcomplex*x) by A1,SEQ_4:def 11
     .= (len x9) |-> 0c by BINOP_2:1,FINSEQOP:77,SEQ_4:68,69
     .= 0c (len x9) by SEQ_4:def 15;
   hence thesis;
@@ -972,7 +973,7 @@ RELAT_1:55
     .= a*(b*z) by Lm1;
 end;
 
-Lm2: -(0c (len x)) = 0c (len x)
+Lm3: -(0c (len x)) = 0c (len x)
 proof
   -(0c (len x)) = -((len x) |-> 0c) by SEQ_4:def 15
     .= compcomplex*((len x) |-> 0c) by SEQ_4:def 11
@@ -991,7 +992,7 @@ A2: len (c*x)=len x by Th3;
   (-c)*x + c*x = (-1)*c*x + c*x .= -(c*x)+ c*x by Th53
     .= -(c*x - c*x) by A2,Th39
     .= -(0c (len x)) by A2,Th34
-    .= 0c (len x) by Lm2;
+    .= 0c (len x) by Lm3;
   hence thesis by A1,A2,Th32;
 end;
 

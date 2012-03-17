@@ -29,7 +29,8 @@ environ
       SUBSET_1, PARTFUN1, RFUNCT_1, MEASURE6, RVSUM_1, PARTFUN2, ZFMISC_1,
       FUNCT_3, FINSEQ_4, RFINSEQ, RELAT_1, FUNCT_2, XBOOLE_0, XBOOLE_1,
       FUNCOP_1, XREAL_1, XXREAL_0, FINSOP_1, ORDINAL1, XXREAL_1, VALUED_1,
-      FINSEQ_3, XXREAL_2, SEQM_3, NAT_D, FINSEQ_6, MEMBER_1, MEMBERED;
+      FINSEQ_3, XXREAL_2, SEQM_3, NAT_D, FINSEQ_6, MEMBER_1, MEMBERED,
+      CARD_1;
  schemes FINSEQ_2, SEQ_1, NAT_1, XBOOLE_0;
 
 begin :: Definition of closed interval and its properties
@@ -103,7 +104,7 @@ registration
   cluster closed-interval Subset of REAL;
   existence
   proof
-    consider I being closed-interval Subset of REAL;
+    set I =the  closed-interval Subset of REAL;
     take I;
     thus thesis;
   end;
@@ -183,29 +184,29 @@ definition
   proof
     set a = upper_bound A;
     reconsider p = Seg 1 --> a as Function of Seg 1, REAL by FUNCOP_1:57;
-A2: dom p = Seg 1 by FUNCOP_1:19;
+A1: dom p = Seg 1 by FUNCOP_1:19;
     rng p c= REAL;
     then reconsider p as FinSequence of REAL by FINSEQ_1:def 4;
-A3: 1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
+A2: 1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
     for n,m st n in dom p & m in dom p & n<m holds p.n < p.m
     proof
       let n,m;
       assume that
-A4:   n in dom p and
-A5:   m in dom p;
-      n = 1 by A2,A4,FINSEQ_1:4,TARSKI:def 1;
-      hence thesis by A2,A5,FINSEQ_1:4,TARSKI:def 1;
+A3:   n in dom p and
+A4:   m in dom p;
+      n = 1 by A1,A3,FINSEQ_1:4,TARSKI:def 1;
+      hence thesis by A1,A4,FINSEQ_1:4,TARSKI:def 1;
     end;
     then
-A6: p is non empty increasing FinSequence of REAL by SEQM_3:def 1;
+A5: p is non empty increasing FinSequence of REAL by SEQM_3:def 1;
     upper_bound A in A by RCOMP_1:32;
     then for n being Nat st n in Seg 1 holds p.n in A by FUNCOP_1:13;
-    then p is FinSequence of A by A2,FINSEQ_2:14;
+    then p is FinSequence of A by A1,FINSEQ_2:14;
     then
-A7: rng p c= A by FINSEQ_1:def 4;
-    len p = 1 by A2,FINSEQ_1:def 3;
-    then p.(len p)=upper_bound A by A3,FUNCOP_1:13;
-    hence thesis by A7,A6;
+A6: rng p c= A by FINSEQ_1:def 4;
+    len p = 1 by A1,FINSEQ_1:def 3;
+    then p.(len p)=upper_bound A by A2,FUNCOP_1:13;
+    hence thesis by A6,A5;
   end;
 end;
 
@@ -425,15 +426,15 @@ A6:   divset(D,i)=[. lower_bound A,b .] by A4,Th5;
 A7:   i<>1;
       set b=D.i;
       b in A by A1,Th8; then
-A9:   b in [.lower_bound A,upper_bound A.] by Th5;
+A8:   b in [.lower_bound A,upper_bound A.] by Th5;
       set a=D.(i-1);
       D.(i-1) in A by A1,A7,Th9;
       then a in [.lower_bound A,upper_bound A.] by Th5; then
-A11:  [.a,b.] c= [.lower_bound A,upper_bound A.] by A9,XXREAL_2:def 12;
-A12:  upper_bound divset(D,i) = b by A1,A7,Def5;
+A9:  [.a,b.] c= [.lower_bound A,upper_bound A.] by A8,XXREAL_2:def 12;
+A10:  upper_bound divset(D,i) = b by A1,A7,Def5;
       lower_bound divset(D,i) = a by A1,A7,Def5;
-      then divset(D,i)=[.a,b.] by A12,Th5;
-      hence thesis by A11,Th5;
+      then divset(D,i)=[.a,b.] by A10,Th5;
+      hence thesis by A9,Th5;
     end;
   end;
   hence thesis;
@@ -699,16 +700,16 @@ proof
     let y be set;
     assume y in rng(f+g);
     then consider x1 such that
-A2: x1 in dom(f+g) and
-A3: y=(f+g).x1 by FUNCT_1:def 5;
-A4: dom(f+g)=dom f /\ dom g by VALUED_1:def 1;
-    then x1 in dom f by A2,XBOOLE_0:def 4; then
-A5: f.x1 in rng f by FUNCT_1:def 5;
-    x1 in dom g by A2,A4,XBOOLE_0:def 4;
+A1: x1 in dom(f+g) and
+A2: y=(f+g).x1 by FUNCT_1:def 5;
+A3: dom(f+g)=dom f /\ dom g by VALUED_1:def 1;
+    then x1 in dom f by A1,XBOOLE_0:def 4; then
+A4: f.x1 in rng f by FUNCT_1:def 5;
+    x1 in dom g by A1,A3,XBOOLE_0:def 4;
     then
-A6: g.x1 in rng g by FUNCT_1:def 5;
-    (f+g).x1=f.x1+g.x1 by A2,VALUED_1:def 1;
-    hence thesis by A3,A5,A6,MEMBER_1:46;
+A5: g.x1 in rng g by FUNCT_1:def 5;
+    (f+g).x1=f.x1+g.x1 by A1,VALUED_1:def 1;
+    hence thesis by A2,A4,A5,MEMBER_1:46;
   end;
   hence thesis by TARSKI:def 3;
 end;
@@ -739,15 +740,15 @@ proof
   let f be PartFunc of X,REAL;
   assume rng f is bounded_below;
   then consider a be real number such that
-B1: a is LowerBound of rng f by XXREAL_2:def 9;
-A1: for y be real number st y in rng f holds a <= y by B1,XXREAL_2:def 2;
+A1: a is LowerBound of rng f by XXREAL_2:def 9;
+A2: for y be real number st y in rng f holds a <= y by A1,XXREAL_2:def 2;
   for x1 being set st x1 in X /\ dom f holds a <= f.x1
   proof
     let x1 be set;
-A2: X /\ dom f = dom f by XBOOLE_1:28;
+A3: X /\ dom f = dom f by XBOOLE_1:28;
     assume x1 in X /\ dom f;
-    then f.x1 in rng f by A2,FUNCT_1:def 5;
-    hence thesis by A1;
+    then f.x1 in rng f by A3,FUNCT_1:def 5;
+    hence thesis by A2;
   end;
   hence thesis by RFUNCT_1:88;
 end;
@@ -778,15 +779,15 @@ proof
   let f be PartFunc of X,REAL;
   assume rng f is bounded_above;
   then consider a be real number such that
-B1: a is UpperBound of rng f by XXREAL_2:def 10;
-A1: for y be real number st y in rng f holds y <= a by B1,XXREAL_2:def 1;
+A1: a is UpperBound of rng f by XXREAL_2:def 10;
+A2: for y be real number st y in rng f holds y <= a by A1,XXREAL_2:def 1;
   for x1 being set st x1 in X /\ dom f holds f.x1 <= a
   proof
     let x1 be set;
-A2: X /\ dom f = dom f by XBOOLE_1:28;
+A3: X /\ dom f = dom f by XBOOLE_1:28;
     assume x1 in X /\ dom f;
-    then f.x1 in rng f by A2,FUNCT_1:def 5;
-    hence thesis by A1;
+    then f.x1 in rng f by A3,FUNCT_1:def 5;
+    hence thesis by A2;
   end;
   hence thesis by RFUNCT_1:87;
 end;
@@ -921,7 +922,7 @@ A4: F is Element of (len F)-tuples_on REAL by FINSEQ_2:110;
 A5: G is Element of (len F)-tuples_on REAL by A1,FINSEQ_2:110;
   then F+G is Element of (len F)-tuples_on REAL by A4,FINSEQ_2:140;
   then
-A6: len H = len (F+G) by A2,FINSEQ_1:def 18;
+A6: len H = len (F+G) by A2,CARD_1:def 13;
   then
 A7: dom H = Seg len(F+G) by FINSEQ_1:def 3;
 A8: for k st k in dom F holds H.k = F.k + G.k
@@ -965,7 +966,7 @@ A5: G is Element of (len F)-tuples_on REAL by A1,FINSEQ_2:110;
   then
 A6: F-G is Element of (len F)-tuples_on REAL by A4,FINSEQ_2:140;
   then
-A7: len H = len (F-G) by A2,FINSEQ_1:def 18;
+A7: len H = len (F-G) by A2,CARD_1:def 13;
   then
 A8: dom H = Seg len (F-G) by FINSEQ_1:def 3;
 A9: for k st k in dom F holds H.k = F.k - G.k
@@ -985,7 +986,7 @@ A11: G/.k = G.k by PARTFUN1:def 8;
     let k be Nat;
     assume
 A12: k in dom H;
-    then k in Seg(len F) by A6,A8,FINSEQ_1:def 18;
+    then k in Seg(len F) by A6,A8,CARD_1:def 13;
     then k in dom F by FINSEQ_1:def 3;
     then
 A13: H.k=F.k-G.k by A9;
@@ -1773,7 +1774,7 @@ A3: (p/^(i-'1))|Seg(j-'i+1) is increasing FinSequence of REAL by FINSEQ_1:23
   hence thesis by A3,FINSEQ_1:def 15;
 end;
 
-Th38a:
+Lm1:
   for f being FinSequence holds
   i in dom f & j in dom f & i<=j implies len mid(f,i,j) = j-i+1
 proof
@@ -1838,38 +1839,38 @@ A7: mid(D,i,j) = (D/^(i-'1))|(j-'i+1) by A3,FINSEQ_6:def 3
   non empty increasing FinSequence of REAL by A2,A3,Th37;
   j-'i+1 >= 0 + 1 by XREAL_1:8;
   then
-A9: 1 <= len M by A6,A7,FINSEQ_1:21;
+A8: 1 <= len M by A6,A7,FINSEQ_1:21;
   then len M in Seg(len M) by FINSEQ_1:3;
   then
-A10: len M in dom M by FINSEQ_1:def 3;
-  1 in Seg(len M) by A9,FINSEQ_1:3;
+A9: len M in dom M by FINSEQ_1:def 3;
+  1 in Seg(len M) by A8,FINSEQ_1:3;
   then
-A11: 1 in dom M by FINSEQ_1:def 3;
-  then M.1 <= M.(len M) by A9,A10,SEQ_4:154;
+A10: 1 in dom M by FINSEQ_1:def 3;
+  then M.1 <= M.(len M) by A8,A9,SEQ_4:154;
   then reconsider B=[. M.1,M.(len M) .] as closed-interval Subset of REAL by
 Def1;
-A12: B=[.lower_bound B,upper_bound B.] by Th5; then
-A13: lower_bound B = M.1 by Th6;
-A14: M.(len M)=upper_bound B by A12,Th6;
+A11: B=[.lower_bound B,upper_bound B.] by Th5; then
+A12: lower_bound B = M.1 by Th6;
+A13: M.(len M)=upper_bound B by A11,Th6;
   for x st x in rng M holds x in B
   proof
     let x;
     assume x in rng M;
     then consider i such that
-A15: i in dom M and
-A16: x=M.i by PARTFUN1:26;
-A17: i in Seg(len M) by A15,FINSEQ_1:def 3;
+A14: i in dom M and
+A15: x=M.i by PARTFUN1:26;
+A16: i in Seg(len M) by A14,FINSEQ_1:def 3;
     then i <= len M by FINSEQ_1:3;
     then
-A18: M.i <= M.(len M) by A10,A15,SEQ_4:154;
-    1 <= i by A17,FINSEQ_1:3;
-    then M.1 <= M.i by A11,A15,SEQ_4:154;
-    then M.i in {a: M.1 <= a & a <= M.(len M)} by A18;
-    hence thesis by A16,RCOMP_1:def 1;
+A17: M.i <= M.(len M) by A9,A14,SEQ_4:154;
+    1 <= i by A16,FINSEQ_1:3;
+    then M.1 <= M.i by A10,A14,SEQ_4:154;
+    then M.i in {a: M.1 <= a & a <= M.(len M)} by A17;
+    hence thesis by A15,RCOMP_1:def 1;
   end;
   then rng M c= B by SUBSET_1:7;
-  then M is Division of B by A14,Def2;
-  hence thesis by A13,A14;
+  then M is Division of B by A13,Def2;
+  hence thesis by A12,A13;
 end;
 
 theorem Th39:
@@ -1892,8 +1893,8 @@ A9: j<=len D by FINSEQ_1:3;
   consider A1 be closed-interval Subset of REAL such that
 A10: lower_bound A1=mid(D,i,j).1 and
 A11: upper_bound A1=mid(D,i,j).(len mid(D,i,j)) and
-A13: mid(D,i,j) is Division of A1 by A1,A2,A3,Th38;
-A12: len mid(D,i,j)=j-i+1 by A1,A2,A3,Th38a;
+A12: mid(D,i,j) is Division of A1 by A1,A2,A3,Th38;
+A13: len mid(D,i,j)=j-i+1 by A1,A2,A3,Lm1;
 A14: 1+i-1 = i;
   for x st x in A1 holds x in B
   proof
@@ -1906,17 +1907,17 @@ A15: ex a st x=a & lower_bound A1 <= a & a <= upper_bound A1;
     then D.i <= x by A3,A10,A7,A9,A8,A14,FINSEQ_6:128;
     then
 A16: lower_bound B <= x by A4,XXREAL_0:2;
-    x <= upper_bound B by A3,A5,A11,A12,A7,A9,A8,A6,A15,FINSEQ_6:128;
+    x <= upper_bound B by A3,A5,A11,A13,A7,A9,A8,A6,A15,FINSEQ_6:128;
     then x in {a: lower_bound B <= a & a <= upper_bound B} by A16;
     then x in [.lower_bound B,upper_bound B.] by RCOMP_1:def 1;
     hence thesis by Th5;
   end; then
 A17: A1 c= B by SUBSET_1:7;
-  rng mid(D,i,j) c= A1 by A13,Def2;
+  rng mid(D,i,j) c= A1 by A12,Def2;
   then
 A18: rng mid(D,i,j) c= B by A17,XBOOLE_1:1;
-  mid(D,i,j).(len mid(D,i,j))=D.j by A3,A12,A7,A9,A8,A6,FINSEQ_6:128;
-  hence thesis by A5,A13,A18,Def2;
+  mid(D,i,j).(len mid(D,i,j))=D.j by A3,A13,A7,A9,A8,A6,FINSEQ_6:128;
+  hence thesis by A5,A12,A18,Def2;
 end;
 
 definition
@@ -3792,45 +3793,45 @@ proof
   for z be set st z in --(X++Y) holds z in (--X)++(--Y)
   proof
     let z be set;
-    assume Y: z in --(X++Y);
+    assume A1: z in --(X++Y);
     reconsider XY = X++Y as Subset of REAL by MEMBERED:3;
-    z in -- XY by Y;
+    z in -- XY by A1;
     then consider x be Real such that
-A7: x in XY and
-A6: z=-x by MEASURE6:108;
+A2: x in XY and
+A3: z=-x by MEASURE6:108;
     consider a,b be Real such that
-A9: a in X and
-A10: b in Y and
-A8: x=a+b by A7,MEASURE6:57;
-A11: -a in --X by A9,MEMBER_1:11;
-A12: -b in --Y by A10,MEMBER_1:11;
-    z = -a+-b by A6,A8;
-    hence thesis by A11,A12,MEMBER_1:46;
+A4: a in X and
+A5: b in Y and
+A6: x=a+b by A2,MEASURE6:57;
+A7: -a in --X by A4,MEMBER_1:11;
+A8: -b in --Y by A5,MEMBER_1:11;
+    z = -a+-b by A3,A6;
+    hence thesis by A7,A8,MEMBER_1:46;
   end; then
-A13: --(X++Y) c= (--X)++(--Y) by TARSKI:def 3;
+A9: --(X++Y) c= (--X)++(--Y) by TARSKI:def 3;
   for z be set st z in (--X)++(--Y) holds z in --(X++Y)
   proof
     let z be set;
-    assume AA: z in --(X)++(--Y);
+    assume A10: z in --(X)++(--Y);
     --X ++ --Y c= REAL by MEMBERED:3; then
-    z in REAL by AA;
+    z in REAL by A10;
     then consider x,y being Real such that
-A15: x in --X and
-A16: y in --Y and
-A14: z=x+y by AA,MEASURE6:57;
+A11: x in --X and
+A12: y in --Y and
+A13: z=x+y by A10,MEASURE6:57;
     consider b be Real such that
-A18: b in Y and
-A17: y=-b by A16,MEASURE6:108;
+A14: b in Y and
+A15: y=-b by A12,MEASURE6:108;
     reconsider X as Subset of REAL;
     consider a be Real such that
-A20: a in X and
-A19: x=-a by A15,MEASURE6:108;
-A21: a+b in X++Y by A20,A18,MEMBER_1:46;
-    z=-(a+b) by A14,A19,A17;
-    hence thesis by A21,MEMBER_1:11;
+A16: a in X and
+A17: x=-a by A11,MEASURE6:108;
+A18: a+b in X++Y by A16,A14,MEMBER_1:46;
+    z=-(a+b) by A13,A17,A15;
+    hence thesis by A18,MEMBER_1:11;
   end;
   then (--X)++(--Y) c= --(X++Y) by TARSKI:def 3;
-  hence thesis by A13,XBOOLE_0:def 10;
+  hence thesis by A9,XBOOLE_0:def 10;
 end;
 
 theorem Th53:
@@ -3870,10 +3871,10 @@ A5: lower_bound(--X++--Y) = -upper_bound(----X)+lower_bound(--Y)
     .= -upper_bound X + -upper_bound(----Y) by A3,MEASURE6:79
     .= -(upper_bound X + upper_bound Y);
 A6: (--X)++(--Y)=--(X++Y) by Th52;
-then a: --(X++Y) is bounded_below by A4,A3,SEQ_4:141;
+then A7: --(X++Y) is bounded_below by A4,A3,SEQ_4:141;
   X++Y c= REAL by MEMBERED:3; then
   reconsider XY = X++Y as Subset of REAL;
-  --XY is bounded_below by a; then
+  --XY is bounded_below by A7; then
   - upper_bound(-- --XY)= - (upper_bound X + upper_bound Y)
     by A6,A5,MEASURE6:79; then
   upper_bound(-- --XY) = upper_bound X + upper_bound Y; then
@@ -4286,4 +4287,4 @@ end;
 
 theorem
   for f being FinSequence holds
-  i in dom f & j in dom f & i<=j implies len mid(f,i,j) = j-i+1 by Th38a;
+  i in dom f & j in dom f & i<=j implies len mid(f,i,j) = j-i+1 by Lm1;

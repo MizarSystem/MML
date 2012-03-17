@@ -15,11 +15,11 @@ environ
  constructors PARTFUN1, BINOP_1, SETWISEO, XXREAL_0, NAT_1, INT_1, FINSEQ_4,
       FINSOP_1, SERIES_1, BINARITH, BINOP_2, NAT_D, RELSET_1;
  registrations ORDINAL1, RELSET_1, XREAL_0, NAT_1, INT_1, BINOP_2, XBOOLEAN,
-      MARGREL1, XBOOLE_0, FINSEQ_2;
+      MARGREL1, XBOOLE_0, FINSEQ_2, CARD_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions XBOOLEAN;
  theorems BINARITH, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCOP_1, POWER, NAT_1,
-      FINSOP_1, BINOP_2, XBOOLEAN, PARTFUN1, XREAL_0;
+      FINSOP_1, BINOP_2, XBOOLEAN, PARTFUN1, XREAL_0, CARD_1;
  schemes FINSEQ_2, NAT_1;
 
 begin
@@ -41,11 +41,11 @@ A4: dom p = Seg n by A1,FINSEQ_1:def 3;
   proof
     let i be Nat;
     assume
-A6: i in dom p;
-then A7: i in dom q by A2,A4,FINSEQ_1:def 3;
-A8: p/.i=p.i by A6,PARTFUN1:def 8;
- q/.i = q.i by A7,PARTFUN1:def 8;
-    hence thesis by A3,A4,A6,A8;
+A5: i in dom p;
+then A6: i in dom q by A2,A4,FINSEQ_1:def 3;
+A7: p/.i=p.i by A5,PARTFUN1:def 8;
+ q/.i = q.i by A6,PARTFUN1:def 8;
+    hence thesis by A3,A4,A5,A7;
   end;
   hence thesis by A1,A2,FINSEQ_2:10;
 end;
@@ -75,22 +75,22 @@ then  i in dom z by A1,FINSEQ_1:def 3;
   uniqueness
   proof
     let z1, z2 be Tuple of n, BOOLEAN such that
-A6: for i st i in Seg n holds z1/.i = IFEQ(i,1,TRUE,FALSE) and
-A7: for i st i in Seg n holds z2/.i = IFEQ(i,1,TRUE,FALSE);
-A8: len z1 = n by FINSEQ_1:def 18;
-A9: len z2 = n by FINSEQ_1:def 18;
-A10: dom z1 = Seg n by A8,FINSEQ_1:def 3;
+A5: for i st i in Seg n holds z1/.i = IFEQ(i,1,TRUE,FALSE) and
+A6: for i st i in Seg n holds z2/.i = IFEQ(i,1,TRUE,FALSE);
+A7: len z1 = n by CARD_1:def 13;
+A8: len z2 = n by CARD_1:def 13;
+A9: dom z1 = Seg n by A7,FINSEQ_1:def 3;
  now
       let j be Nat;
       assume
-A12:  j in dom z1;
-then A13:  j in dom z2 by A9,A10,FINSEQ_1:def 3;
-      thus z1.j = z1/.j by A12,PARTFUN1:def 8
-        .= IFEQ(j,1,TRUE,FALSE) by A6,A10,A12
-        .= z2/.j by A7,A10,A12
-        .= z2.j by A13,PARTFUN1:def 8;
+A10:  j in dom z1;
+then A11:  j in dom z2 by A8,A9,FINSEQ_1:def 3;
+      thus z1.j = z1/.j by A10,PARTFUN1:def 8
+        .= IFEQ(j,1,TRUE,FALSE) by A5,A9,A10
+        .= z2/.j by A6,A9,A10
+        .= z2.j by A11,PARTFUN1:def 8;
     end;
-    hence thesis by A8,A9,FINSEQ_2:10;
+    hence thesis by A7,A8,FINSEQ_2:10;
   end;
 end;
 
@@ -140,14 +140,14 @@ then A4: z1/.1 = FALSE by FINSEQ_4:26;
 A5: z1/.2 = FALSE by A3,FINSEQ_4:26;
  1 in Seg 1 & Seg 1 c= Seg 2 by FINSEQ_1:5,7;
 then
-A7: (Binary(z1))/.1 = IFEQ(z1/.1,FALSE,0,2 to_power(1-'1)) by BINARITH:def 6
+A6: (Binary(z1))/.1 = IFEQ(z1/.1,FALSE,0,2 to_power(1-'1)) by BINARITH:def 6
     .= 0 by A4,FUNCOP_1:def 8;
  2 in Seg 2 by FINSEQ_1:5;
-then A9: (Binary(z1))/.2 = IFEQ(z1/.2,FALSE,0,2 to_power(2-'1)) by
+then A7: (Binary(z1))/.2 = IFEQ(z1/.2,FALSE,0,2 to_power(2-'1)) by
   BINARITH:def 6
     .= 0 by A5,FUNCOP_1:def 8;
    (Binary(z1))/.1 = k1 & (Binary(z1))/.2 = k2 by A2,FINSEQ_4:26;
-then  Absval(z1) = addnat $$ (<* 0,0 *>) by A2,A7,A9,BINARITH:def 7
+then  Absval(z1) = addnat $$ (<* 0,0 *>) by A2,A6,A7,BINARITH:def 7
     .= addnat $$ (<* 0 *>^<* 0 *>) by FINSEQ_1:def 9
     .= addnat.(addnat$$<* 0 *>,addnat$$<* 0 *>) by FINSOP_1:6
     .= addnat.(0,addnat$$<* 0 *>) by FINSOP_1:12
@@ -171,17 +171,17 @@ then A4: z1/.1 = TRUE by FINSEQ_4:26;
 A5: z1/.2 = FALSE by A3,FINSEQ_4:26;
  1 in Seg 1 & Seg 1 c= Seg 2 by FINSEQ_1:5,7;
 then
-A7: (Binary(z1))/.1 = IFEQ(z1/.1,FALSE,0,2 to_power(1-'1)) by BINARITH:def 6
+A6: (Binary(z1))/.1 = IFEQ(z1/.1,FALSE,0,2 to_power(1-'1)) by BINARITH:def 6
     .= 2 to_power(1-'1) by A4,FUNCOP_1:def 8;
  1 - 1 = 0;
 then  1 -' 1 = 0 by XREAL_0:def 2;
-then A10: (Binary(z1))/.1 = 1 by A7,POWER:29;
+then A7: (Binary(z1))/.1 = 1 by A6,POWER:29;
  2 in Seg 2 by FINSEQ_1:5;
-then A12: (Binary(z1))/.2 = IFEQ(z1/.2,FALSE,0,2 to_power(2-'1)) by
+then A8: (Binary(z1))/.2 = IFEQ(z1/.2,FALSE,0,2 to_power(2-'1)) by
   BINARITH:def 6
     .= 0 by A5,FUNCOP_1:def 8;
    (Binary(z1))/.1 = k1 & (Binary(z1))/.2 = k2 by A2,FINSEQ_4:26;
-then  Absval(z1) = addnat $$ (<* 1,0 *>) by A2,A10,A12,BINARITH:def 7
+then  Absval(z1) = addnat $$ (<* 1,0 *>) by A2,A7,A8,BINARITH:def 7
     .= addnat $$ (<* 1 *>^<* 0 *>) by FINSEQ_1:def 9
     .= addnat.(addnat$$<* 1 *>,addnat$$<* 0 *>) by FINSOP_1:6
     .= addnat.(1,addnat$$<* 0 *>) by FINSOP_1:12
@@ -210,17 +210,17 @@ then A6: Intval(z1) = Absval(z1) - 2 to_power (1 + 1) by Def3
     .= Absval(z1) - 4;
  1 in Seg 1 & Seg 1 c= Seg 2 by FINSEQ_1:5,7;
 then
-A8: (Binary(z1))/.1 = IFEQ(z1/.1,FALSE,0,2 to_power(1-'1)) by BINARITH:def 6
+A7: (Binary(z1))/.1 = IFEQ(z1/.1,FALSE,0,2 to_power(1-'1)) by BINARITH:def 6
     .= 0 by A4,FUNCOP_1:def 8;
  2 in Seg 2 by FINSEQ_1:5;
-then A10: (Binary(z1))/.2 = IFEQ(z1/.2,FALSE,0,2 to_power(2-'1)) by
+then A8: (Binary(z1))/.2 = IFEQ(z1/.2,FALSE,0,2 to_power(2-'1)) by
   BINARITH:def 6
     .= 2 to_power(2-'1) by A5,FUNCOP_1:def 8;
  2 - 1 = 1;
 then  2 -' 1 = 1 by XREAL_0:def 2;
-then A13: (Binary(z1))/.2 = 2 by A10,POWER:30;
+then A9: (Binary(z1))/.2 = 2 by A8,POWER:30;
    (Binary(z1))/.1 = k1 & (Binary(z1))/.2 = k2 by A2,FINSEQ_4:26;
-then  Absval(z1) = addnat $$ (<* 0,2 *>) by A2,A8,A13,BINARITH:def 7
+then  Absval(z1) = addnat $$ (<* 0,2 *>) by A2,A7,A9,BINARITH:def 7
     .= addnat $$ (<* 0 *>^<* 2 *>) by FINSEQ_1:def 9
     .= addnat.(addnat$$<* 0 *>,addnat$$<* 2 *>) by FINSOP_1:6
     .= addnat.(0,addnat$$<* 2 *>) by FINSOP_1:12
@@ -249,20 +249,20 @@ then A6: Intval(z1) = Absval(z1) - 2 to_power (1 + 1) by Def3
     .= Absval(z1) - 4;
  1 in Seg 1 & Seg 1 c= Seg 2 by FINSEQ_1:5,7;
 then
-A8: (Binary(z1))/.1 = IFEQ(z1/.1,FALSE,0,2 to_power(1-'1)) by BINARITH:def 6
+A7: (Binary(z1))/.1 = IFEQ(z1/.1,FALSE,0,2 to_power(1-'1)) by BINARITH:def 6
     .= 2 to_power(1-'1) by A4,FUNCOP_1:def 8;
  1 - 1 = 0;
 then  1 -' 1 = 0 by XREAL_0:def 2;
-then A11: (Binary(z1))/.1 = 1 by A8,POWER:29;
+then A8: (Binary(z1))/.1 = 1 by A7,POWER:29;
  2 in Seg 2 by FINSEQ_1:5;
-then A13: (Binary(z1))/.2 = IFEQ(z1/.2,FALSE,0,2 to_power(2-'1)) by
+then A9: (Binary(z1))/.2 = IFEQ(z1/.2,FALSE,0,2 to_power(2-'1)) by
   BINARITH:def 6
     .= 2 to_power(2-'1) by A5,FUNCOP_1:def 8;
  2 - 1 = 1;
 then  2 -' 1 = 1 by XREAL_0:def 2;
-then A16: (Binary(z1))/.2 = 2 by A13,POWER:30;
+then A10: (Binary(z1))/.2 = 2 by A9,POWER:30;
    (Binary(z1))/.1 = k1 & (Binary(z1))/.2 = k2 by A2,FINSEQ_4:26;
-then  Absval(z1) = addnat $$ (<* 1,2 *>) by A2,A11,A16,BINARITH:def 7
+then  Absval(z1) = addnat $$ (<* 1,2 *>) by A2,A8,A10,BINARITH:def 7
     .= addnat $$ (<* 1 *>^<* 2 *>) by FINSEQ_1:def 9
     .= addnat.(addnat$$<* 1 *>,addnat$$<* 2 *>) by FINSOP_1:6
     .= addnat.(1,addnat$$<* 2 *>) by FINSOP_1:12
@@ -295,36 +295,36 @@ end;
 theorem Th9:
   Bin1 (m+1) = Bin1 (m)^<*FALSE*>
 proof
-  A1: len(Bin1(m+1)) = m+1 & len(Bin1(m)^<*FALSE*>) = m+1 by FINSEQ_1:def 18;
+  A1: len(Bin1(m+1)) = m+1 & len(Bin1(m)^<*FALSE*>) = m+1 by CARD_1:def 13;
  for i st i in Seg (m+1) holds (Bin1(m+1))/.i = (Bin1(m)^<*FALSE*>)/.i
   proof
     let i such that
-A3: i in Seg (m+1);
-    per cases by A3,FINSEQ_2:8;
+A2: i in Seg (m+1);
+    per cases by A2,FINSEQ_2:8;
     suppose
-A4:   i in Seg m;
+A3:   i in Seg m;
       thus (Bin1(m+1))/.i = (Bin1(m)^<*FALSE*>)/.i
       proof
         per cases;
         suppose
-A5:       i = 1;
-       (Bin1(m)^<*FALSE*>)/.i = (Bin1(m))/.i by A4,BINARITH:2
-            .= TRUE by A4,A5,Th7;
-          hence thesis by A3,A5,Th7;
+A4:       i = 1;
+       (Bin1(m)^<*FALSE*>)/.i = (Bin1(m))/.i by A3,BINARITH:2
+            .= TRUE by A3,A4,Th7;
+          hence thesis by A2,A4,Th7;
         end;
         suppose
-A7:       i <> 1;
-       (Bin1(m)^<*FALSE*>)/.i = (Bin1(m))/.i by A4,BINARITH:2
-            .= FALSE by A4,A7,Th8;
-          hence thesis by A3,A7,Th8;
+A5:       i <> 1;
+       (Bin1(m)^<*FALSE*>)/.i = (Bin1(m))/.i by A3,BINARITH:2
+            .= FALSE by A3,A5,Th8;
+          hence thesis by A2,A5,Th8;
         end;
       end;
     end;
     suppose
-A9:   i = m+1;
+A6:   i = m+1;
   1 <> m + 1 by NAT_1:14;
-then   (Bin1(m+1))/.i = FALSE by A3,A9,Th8;
-      hence thesis by A9,BINARITH:3;
+then   (Bin1(m+1))/.i = FALSE by A2,A6,Th8;
+      hence thesis by A6,BINARITH:3;
     end;
   end;
   hence thesis by A1,Lm1;
@@ -343,21 +343,21 @@ A3: (Bin1(1))/.1 = k by A2,FINSEQ_4:25;
 then  Bin1(1) = <*TRUE*> by A2,A3,Th7;
     hence thesis by Th4;
   end;
-A6: now
+A4: now
     let m be non empty Nat such that
-A7: P[m];
+A5: P[m];
  (Bin1(m)^<*FALSE*>)/.(m+1) = FALSE by BINARITH:3;
-then A9: Absval(Bin1(m)^<*FALSE*>) = 1 by A7,Def3;
+then A6: Absval(Bin1(m)^<*FALSE*>) = 1 by A5,Def3;
  (Bin1(m+1)^<*FALSE*>)/.(m+1+1) = FALSE by BINARITH:3;
 then  Intval(Bin1(m+1)^<*FALSE*>) = Absval(Bin1(m+1)^<*FALSE*>) by Def3
       .= Absval(Bin1(m)^<*FALSE*>^<*FALSE*>) by Th9
       .= Absval(Bin1(m)^<*FALSE*>)
     + IFEQ(FALSE,FALSE,0,2 to_power(m+1)) by BINARITH:46
-      .= 1 + 0 by A9,FUNCOP_1:def 8
+      .= 1 + 0 by A6,FUNCOP_1:def 8
       .= 1;
     hence P[m+1];
   end;
-  thus for m holds P[m] from NAT_1:sch 10(A1,A6);
+  thus for m holds P[m] from NAT_1:sch 10(A1,A4);
 end;
 
 theorem Th11:
@@ -367,26 +367,26 @@ proof
   let z be Tuple of m,BOOLEAN;
   let d;
   A1: len('not' (z^<*d*>))= m+1 & len('not' z^<*'not' d*>) = m+1 by
-  FINSEQ_1:def 18;
+  CARD_1:def 13;
  for i st i in Seg (m+1) holds
   ('not' (z^<*d*>))/.i = ('not' z^<*'not' d*>)/.i
   proof
     let i such that
-A3: i in Seg (m+1);
-    per cases by A3,FINSEQ_2:8;
+A2: i in Seg (m+1);
+    per cases by A2,FINSEQ_2:8;
     suppose
-A4:   i in Seg m;
-A5:   ('not' (z^<*d*>))/.i = 'not' ((z^<*d*>)/.i) by A3,BINARITH:def 4
-        .= 'not' (z/.i) by A4,BINARITH:2;
-   ('not' z^<*'not' d*>)/.i = ('not' z)/.i by A4,BINARITH:2
-        .= 'not' (z/.i) by A4,BINARITH:def 4;
-      hence thesis by A5;
+A3:   i in Seg m;
+A4:   ('not' (z^<*d*>))/.i = 'not' ((z^<*d*>)/.i) by A2,BINARITH:def 4
+        .= 'not' (z/.i) by A3,BINARITH:2;
+   ('not' z^<*'not' d*>)/.i = ('not' z)/.i by A3,BINARITH:2
+        .= 'not' (z/.i) by A3,BINARITH:def 4;
+      hence thesis by A4;
     end;
     suppose
-A7:   i = m + 1;
-   ('not' (z^<*d*>))/.i = 'not' ((z^<*d*>)/.i) by A3,BINARITH:def 4
-        .= 'not' d by A7,BINARITH:3;
-      hence thesis by A7,BINARITH:3;
+A5:   i = m + 1;
+   ('not' (z^<*d*>))/.i = 'not' ((z^<*d*>)/.i) by A2,BINARITH:def 4
+        .= 'not' d by A5,BINARITH:3;
+      hence thesis by A5,BINARITH:3;
     end;
   end;
   hence thesis by A1,Lm1;
@@ -403,27 +403,27 @@ proof
   suppose
 A1: d = FALSE;
 then  (z^<*d*>)/.(m+1) = FALSE by BINARITH:3;
-then A3: Intval(z^<*d*>) = Absval(z^<*d*>) by Def3
+then A2: Intval(z^<*d*>) = Absval(z^<*d*>) by Def3
       .= Absval(z)+IFEQ(d,FALSE,0,2 to_power(m)) by BINARITH:46
       .= Absval(z)+0 by A1,FUNCOP_1:def 8
       .= Absval(z);
  Absval(z)-(IFEQ(d,FALSE,0,2 to_power(m)) qua Nat)
     = Absval(z) - 0 by A1,FUNCOP_1:def 8
       .= Absval(z);
-    hence thesis by A3;
+    hence thesis by A2;
   end;
   suppose
-A5: d = TRUE;
+A3: d = TRUE;
 then  (z^<*d*>)/.(m+1) <> FALSE by BINARITH:3;
 then  Intval(z^<*d*>) = Absval(z^<*d*>) - 2 to_power(m+1) by Def3
       .= Absval(z) + IFEQ(d,FALSE,0,2 to_power m)-2 to_power(m+1)
     by BINARITH:46
       .= Absval(z) + 2 to_power m - 2 to_power(m+1)
-    by A5,FUNCOP_1:def 8
+    by A3,FUNCOP_1:def 8
       .= Absval(z) + 2 to_power m - (2 to_power m * 2 to_power 1) by POWER:32
       .= Absval(z) + 2 to_power m - 2*2 to_power m by POWER:30
       .= Absval(z) - 2 to_power m;
-    hence thesis by A5,FUNCOP_1:def 8;
+    hence thesis by A3,FUNCOP_1:def 8;
   end;
 end;
 
@@ -445,132 +445,132 @@ A1: Absval(z1+z2) = Absval(z1) + Absval(z2)
  siki1 + siki2 - siki2 = siki1;
     hence thesis by BINARITH:47;
   end;
-A3: Intval(z1^<*d1*> + z2^<*d2*>)
+A2: Intval(z1^<*d1*> + z2^<*d2*>)
   = Intval((z1+z2)^<*d1 'xor' d2 'xor' add_ovfl(z1,z2)*>) by BINARITH:45
     .= Absval(z1) + Absval(z2) - IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power m)
   - IFEQ(d1 'xor' d2 'xor' add_ovfl(z1,z2),FALSE,0, 2 to_power m) by A1,Th12;
-A4: Int_add_ovfl(z1^<*d1*>,z2^<*d2*>)
+A3: Int_add_ovfl(z1^<*d1*>,z2^<*d2*>)
   = 'not' d1 '&' 'not' ((z2^<*d2*>)/.(m+1)) '&'
   ((carry(z1^<*d1*>,z2^<*d2*>))/.(m+1)) by BINARITH:3
     .= 'not' d1 '&' 'not' d2 '&' ((carry(z1^<*d1*>,z2^<*d2*>))/.(m+1))
   by BINARITH:3
     .= 'not' d1 '&' 'not' d2 '&' add_ovfl(z1,z2) by BINARITH:44;
-A5: Int_add_udfl(z1^<*d1*>,z2^<*d2*>) = d1 '&' ((z2^<*d2*>)/.(m+1)) '&'
+A4: Int_add_udfl(z1^<*d1*>,z2^<*d2*>) = d1 '&' ((z2^<*d2*>)/.(m+1)) '&'
   'not' ((carry(z1^<*d1*>,z2^<*d2*>))/.(m+1)) by BINARITH:3
     .= d1 '&' d2 '&' 'not' ((carry(z1^<*d1*>,z2^<*d2*>))/.(m+1)) by BINARITH:3
     .= d1 '&' d2 '&' 'not' add_ovfl(z1,z2) by BINARITH:44;
-A6: Intval(z1^<*d1*>) = Absval(z1)-IFEQ(d1,FALSE,0,2 to_power m) by Th12;
-A7: Intval(z2^<*d2*>) = Absval(z2)-IFEQ(d2,FALSE,0,2 to_power m) by Th12;
+A5: Intval(z1^<*d1*>) = Absval(z1)-IFEQ(d1,FALSE,0,2 to_power m) by Th12;
+A6: Intval(z2^<*d2*>) = Absval(z2)-IFEQ(d2,FALSE,0,2 to_power m) by Th12;
   per cases by XBOOLEAN:def 3;
   suppose
-A8: d1 = f & d2 = f;
-then A9: Absval(z1) - IFEQ(d1,FALSE,0,2 to_power m)
+A7: d1 = f & d2 = f;
+then A8: Absval(z1) - IFEQ(d1,FALSE,0,2 to_power m)
     = Absval(z1) - 0 by FUNCOP_1:def 8
       .= Absval(z1);
-A10: Absval(z2) - IFEQ(d2,FALSE,0,2 to_power m)
-    = Absval(z2) - 0 by A8,FUNCOP_1:def 8
+A9: Absval(z2) - IFEQ(d2,FALSE,0,2 to_power m)
+    = Absval(z2) - 0 by A7,FUNCOP_1:def 8
       .= Absval(z2);
-A11: IFEQ((d1 '&' d2 '&' 'not' add_ovfl(z1,z2)),f,0,2 to_power(m+1))
-    = 0 by A8,FUNCOP_1:def 8;
+A10: IFEQ((d1 '&' d2 '&' 'not' add_ovfl(z1,z2)),f,0,2 to_power(m+1))
+    = 0 by A7,FUNCOP_1:def 8;
     thus thesis
     proof
       per cases by XBOOLEAN:def 3;
       suppose
     add_ovfl(z1,z2) = f;
-        hence thesis by A3,A4,A5,A7,A8,A9,Th12;
+        hence thesis by A2,A3,A4,A6,A7,A8,Th12;
       end;
       suppose
-A13:    add_ovfl(z1,z2) = t;
+A11:    add_ovfl(z1,z2) = t;
 then     IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power m)
         = 2 to_power m by FUNCOP_1:def 8;
 then     Intval(z1^<*d1*>+z2^<*d2*>)
         + IFEQ(Int_add_ovfl(z1^<*d1*>,z2^<*d2*>),FALSE,0,2 to_power(m+1))
         - IFEQ(Int_add_udfl(z1^<*d1*>,z2^<*d2*>),FALSE,0,2 to_power(m+1))
         = (Absval(z1) + Absval(z2))
-        - (2*2 to_power m) + 2 to_power(m+1) by A3,A4,A5,A8,A11,A13,
+        - (2*2 to_power m) + 2 to_power(m+1) by A2,A3,A4,A7,A10,A11,
         FUNCOP_1:def 8
           .= (Absval(z1) + Absval(z2))
         - (2 to_power 1*2 to_power m) + 2 to_power(m+1) by POWER:30
           .= (Absval(z1) + Absval(z2))
         - 2 to_power (m+1) + 2 to_power(m+1) by POWER:32
           .= Absval(z1) + Absval(z2);
-        hence thesis by A7,A9,A10,Th12;
+        hence thesis by A6,A8,A9,Th12;
       end;
     end;
   end;
   suppose
-A16: d1 = t & d2 = f;
-then A17: Absval(z2) - IFEQ(d2,FALSE,0,2 to_power m)
+A12: d1 = t & d2 = f;
+then A13: Absval(z2) - IFEQ(d2,FALSE,0,2 to_power m)
     = Absval(z2) - 0 by FUNCOP_1:def 8
       .= Absval(z2);
     thus thesis
     proof
       per cases by XBOOLEAN:def 3;
       suppose
-A18:    add_ovfl(z1,z2) = f;
+A14:    add_ovfl(z1,z2) = f;
 then     IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power m) = 0 by
         FUNCOP_1:def 8;
-        hence thesis by A3,A4,A5,A6,A7,A16,A17,A18;
+        hence thesis by A2,A3,A4,A5,A6,A12,A13,A14;
       end;
       suppose
     add_ovfl(z1,z2) = t;
-        hence thesis by A3,A4,A5,A6,A7,A16;
+        hence thesis by A2,A3,A4,A5,A6,A12;
       end;
     end;
   end;
   suppose
-A21: d1 = f & d2 = t;
-then A22: Absval(z1) - IFEQ(d1,FALSE,0,2 to_power m)
+A15: d1 = f & d2 = t;
+then A16: Absval(z1) - IFEQ(d1,FALSE,0,2 to_power m)
     = Absval(z1) - 0 by FUNCOP_1:def 8
       .= Absval(z1);
     thus thesis
     proof
       per cases by XBOOLEAN:def 3;
       suppose
-A23:    add_ovfl(z1,z2) = f;
+A17:    add_ovfl(z1,z2) = f;
 then     IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power m) = 0 by
         FUNCOP_1:def 8;
-        hence thesis by A3,A4,A5,A6,A7,A21,A22,A23;
+        hence thesis by A2,A3,A4,A5,A6,A15,A16,A17;
       end;
       suppose
     add_ovfl(z1,z2) = t;
-        hence thesis by A3,A4,A5,A6,A7,A21;
+        hence thesis by A2,A3,A4,A5,A6,A15;
       end;
     end;
   end;
   suppose
-A26: d1 = t & d2 = t;
-then A27: Absval(z2) - IFEQ(d2,FALSE,0,2 to_power m)
+A18: d1 = t & d2 = t;
+then A19: Absval(z2) - IFEQ(d2,FALSE,0,2 to_power m)
     = Absval(z2) - 2 to_power m by FUNCOP_1:def 8;
-  A28: Intval(z1^<*d1*>) + Intval(z2^<*d2*>)
+  A20: Intval(z1^<*d1*>) + Intval(z2^<*d2*>)
     = Absval(z1)-IFEQ(d1,FALSE,0,2 to_power m) +  Intval(z2^<*d2*>)
-    by A6
-   .= (Absval(z1) + Absval(z2)) - (2*2 to_power m) by A7,A26,A27
+    by A5
+   .= (Absval(z1) + Absval(z2)) - (2*2 to_power m) by A6,A18,A19
       .= (Absval(z1) + Absval(z2)) - (2 to_power 1*2 to_power m) by POWER:30
       .= (Absval(z1) + Absval(z2)) - 2 to_power(m+1) by POWER:32;
-A29: IFEQ(('not' d1 '&' 'not' d2 '&' add_ovfl(z1,z2)),f,0,2 to_power(m+1 ))
-    = 0 by A26,FUNCOP_1:def 8;
+A21: IFEQ(('not' d1 '&' 'not' d2 '&' add_ovfl(z1,z2)),f,0,2 to_power(m+1 ))
+    = 0 by A18,FUNCOP_1:def 8;
     thus thesis
     proof
       per cases by XBOOLEAN:def 3;
       suppose
-A30:    add_ovfl(z1,z2) = f;
+A22:    add_ovfl(z1,z2) = f;
 then     IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power m) = 0 by
         FUNCOP_1:def 8;
-        hence thesis by A3,A4,A5,A26,A28,A29,A30,FUNCOP_1:def 8;
+        hence thesis by A2,A3,A4,A18,A20,A21,A22,FUNCOP_1:def 8;
       end;
       suppose
-A32:    add_ovfl(z1,z2) = t;
+A23:    add_ovfl(z1,z2) = t;
 then     IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power m)
         = 2 to_power m by FUNCOP_1:def 8;
 then     Intval(z1^<*d1*>+z2^<*d2*>)
         + IFEQ(Int_add_ovfl(z1^<*d1*>,z2^<*d2*>),FALSE,0,2 to_power(m+1))
         - IFEQ(Int_add_udfl(z1^<*d1*>,z2^<*d2*>),FALSE,0,2 to_power(m+1))
-        = (Absval(z1) + Absval(z2)) - (2*2 to_power m) by A3,A4,A5,A26,A32
+        = (Absval(z1) + Absval(z2)) - (2*2 to_power m) by A2,A3,A4,A18,A23
           .= (Absval(z1) + Absval(z2)) - (2 to_power 1*2 to_power m)
         by POWER:30
           .= (Absval(z1) + Absval(z2)) - 2 to_power(m+1) by POWER:32;
-        hence thesis by A28;
+        hence thesis by A20;
       end;
     end;
   end;
@@ -609,80 +609,80 @@ then A3:   x/.1 = FALSE by FINSEQ_4:25;
 A4:   'not' x = <* k *> by FINSEQ_2:117;
 A5:   ('not' x)/.1 = k by A4,FINSEQ_4:25;
    1 in Seg 1 by FINSEQ_1:5;
-then A7:   ('not' x)/.1 = 'not' FALSE by A3,BINARITH:def 4
+then A6:   ('not' x)/.1 = 'not' FALSE by A3,BINARITH:def 4
         .= TRUE;
    - Absval(x) + 2 to_power 1 - 1 = - 0 + 2 to_power 1 - 1 by A2,BINARITH:41
         .= 0 + 2 - 1 by POWER:30
         .= 1;
-      hence thesis by A4,A5,A7,BINARITH:42;
+      hence thesis by A4,A5,A6,BINARITH:42;
     end;
     suppose
-A9:   x = <*TRUE*>;
-then A10:  x/.1 = TRUE by FINSEQ_4:25;
+A7:   x = <*TRUE*>;
+then A8:  x/.1 = TRUE by FINSEQ_4:25;
       consider k being Element of BOOLEAN such that
-A11:  'not' x = <* k *> by FINSEQ_2:117;
-A12:  ('not' x)/.1 = k by A11,FINSEQ_4:25;
+A9:  'not' x = <* k *> by FINSEQ_2:117;
+A10:  ('not' x)/.1 = k by A9,FINSEQ_4:25;
   1 in Seg 1 by FINSEQ_1:5;
-then A14:  ('not' x)/.1 = 'not' TRUE by A10,BINARITH:def 4
+then A11:  ('not' x)/.1 = 'not' TRUE by A8,BINARITH:def 4
         .= FALSE;
-  - Absval(x) + 2 to_power 1 - 1 = - 1 + 2 to_power 1 - 1 by A9,BINARITH:42
+  - Absval(x) + 2 to_power 1 - 1 = - 1 + 2 to_power 1 - 1 by A7,BINARITH:42
         .= - 1 + 2 - 1 by POWER:30
         .= 0;
-      hence thesis by A11,A12,A14,BINARITH:41;
+      hence thesis by A9,A10,A11,BINARITH:41;
     end;
   end;
-A16: now
+A12: now
     let m;
     assume
-A17: P[m];
+A13: P[m];
  now
       let x be Tuple of m+1, BOOLEAN;
       consider t being (Element of m-tuples_on BOOLEAN),
       d being Element of BOOLEAN such that
-A19:  x = t^<*d*> by FINSEQ_2:137;
-A20:  Absval('not' x) = Absval('not' t^<*'not' d*>) by A19,Th11
+A14:  x = t^<*d*> by FINSEQ_2:137;
+A15:  Absval('not' x) = Absval('not' t^<*'not' d*>) by A14,Th11
         .= Absval('not' t) + IFEQ('not' d,FALSE,0,2 to_power m) by BINARITH:46
         .= - Absval(t) + 2 to_power m - 1
-      + IFEQ('not' d,FALSE,0,2 to_power m) by A17;
-A21:  - Absval(x) + 2 to_power(m+1) - 1
+      + IFEQ('not' d,FALSE,0,2 to_power m) by A13;
+A16:  - Absval(x) + 2 to_power(m+1) - 1
       = - (Absval(t) + IFEQ(d,FALSE,0,2 to_power m))
-      + 2 to_power(m+1) - 1 by A19,BINARITH:46;
+      + 2 to_power(m+1) - 1 by A14,BINARITH:46;
       thus Absval('not' x) = - Absval(x) + 2 to_power (m+1) - 1
       proof
         per cases by XBOOLEAN:def 3;
         suppose
-A22:      d = FALSE;
-          then A23:      Absval
+A17:      d = FALSE;
+          then A18:      Absval
 ('not' x) = - Absval(t) + 2 to_power m - 1 + 2 to_power m
-          by A20,FUNCOP_1:def 8
+          by A15,FUNCOP_1:def 8
             .= - Absval(t) + 2*2 to_power m - 1
             .= - Absval(t) + 2 to_power 1*2 to_power m - 1 by POWER:30
             .= - Absval(t) + 2 to_power(m+1) - 1 by POWER:32;
       - Absval(x) + 2 to_power(m+1) - 1
-          = -(Absval(t) + 0) + 2 to_power(m+1) - 1 by A21,A22,FUNCOP_1:def 8
+          = -(Absval(t) + 0) + 2 to_power(m+1) - 1 by A16,A17,FUNCOP_1:def 8
             .= - Absval(t) + 2 to_power(m+1) - 1;
-          hence thesis by A23;
+          hence thesis by A18;
         end;
         suppose
-A25:      d = TRUE;
-then A26:      Absval('not' x)
-          = - Absval(t) + 2 to_power m - 1 + 0 by A20,FUNCOP_1:def 8
+A19:      d = TRUE;
+then A20:      Absval('not' x)
+          = - Absval(t) + 2 to_power m - 1 + 0 by A15,FUNCOP_1:def 8
             .= - Absval(t) + 2 to_power m - 1;
       - Absval(x) + 2 to_power(m+1) - 1
           = -(Absval(t) + 2 to_power m) + 2 to_power(m+1) - 1
-          by A21,A25,FUNCOP_1:def 8
+          by A16,A19,FUNCOP_1:def 8
             .= - Absval(t) - 2 to_power m + 2 to_power 1*2 to_power m - 1
           by POWER:32
             .= - Absval(t) - 2 to_power m + 2*2 to_power m - 1
           by POWER:30
             .= - Absval(t) + 2 to_power m - 1;
-          hence thesis by A26;
+          hence thesis by A20;
         end;
       end;
     end;
     hence P[m+1];
   end;
-  thus for m holds P[m] from NAT_1:sch 10(A1,A16);
+  thus for m holds P[m] from NAT_1:sch 10(A1,A12);
 end;
 
 theorem Th16:
@@ -747,12 +747,12 @@ then  Intval(Neg2(z^<*d*>))
     hence thesis by A3,A4,FUNCOP_1:def 8;
   end;
   suppose
-A6: d = TRUE;
+A5: d = TRUE;
 then  Intval(Neg2(z^<*d*>))
     + IFEQ(Int_add_ovfl('not' (z^<*d*>),Bin1(m+1)),FALSE,0, 2 to_power(m+1))
     = (- Absval(z) + 2 to_power m) - 0 by A2,FUNCOP_1:def 8
       .= - Absval(z) + 2 to_power m;
-    hence thesis by A3,A6,FUNCOP_1:def 8;
+    hence thesis by A3,A5,FUNCOP_1:def 8;
   end;
 end;
 
@@ -883,25 +883,25 @@ A10: z = <*k*> by FINSEQ_2:117;
  Neg2(Neg2(z^<*d*>)) = <* k,d *> by A6,A7,A8,A9,A10,FINSEQ_4:25;
     hence thesis by A10,FINSEQ_1:def 9;
   end;
-A12: now
+A11: now
     let m;
     assume
-A13: P[m];
+A12: P[m];
  now
       let z be Tuple of m+1, BOOLEAN;
       let d be Element of BOOLEAN;
       consider t being (Element of m-tuples_on BOOLEAN),
       k being Element of BOOLEAN such that
-A15:  z = t^<*k*> by FINSEQ_2:137;
+A13:  z = t^<*k*> by FINSEQ_2:137;
       set A = add_ovfl('not' t,Bin1(m)), B = add_ovfl('not' Neg2(t),Bin1(m));
   Neg2(Neg2(t^<*k*>))
       = Neg2(Neg2(t)^<*'not' k 'xor' add_ovfl('not' t,Bin1(m))*>) by Th16
         .= Neg2(Neg2(t))^<*'not' ('not' k 'xor' add_ovfl('not'
       t,Bin1(m))) 'xor' add_ovfl('not' Neg2(t),Bin1(m))*> by Th16;
-then A17:  (Neg2(Neg2(t^<*k*>)))/.(m+1)
+then A14:  (Neg2(Neg2(t^<*k*>)))/.(m+1)
       = 'not' ('not' k 'xor' add_ovfl('not' t,Bin1(m))) 'xor'
       add_ovfl('not' Neg2(t),Bin1(m)) by BINARITH:3;
-A18:  (t^<*k*>)/.(m+1) = k by BINARITH:3;
+A15:  (t^<*k*>)/.(m+1) = k by BINARITH:3;
       reconsider p = k, q = A as boolean set;
   'not' ('not' k 'xor' A) 'xor' B
       = (p '&' ('not' p 'or' 'not' q) 'or' ('not' p 'or' 'not'
@@ -910,18 +910,18 @@ A18:  (t^<*k*>)/.(m+1) = k by BINARITH:3;
       A)) 'xor' B by XBOOLEAN:11
         .= (A 'xor' k) 'xor' B by XBOOLEAN:11
         .= k 'xor' (A 'xor' B) by XBOOLEAN:73;
-then A20:  k 'xor' (A 'xor' B) = k 'xor' FALSE by A13,A17,A18;
-A21:  k 'xor' (k 'xor' (A 'xor' B))
+then A16:  k 'xor' (A 'xor' B) = k 'xor' FALSE by A12,A14,A15;
+A17:  k 'xor' (k 'xor' (A 'xor' B))
       = (k 'xor' k) 'xor' (A 'xor' B) by XBOOLEAN:73
         .= FALSE 'xor' (A 'xor' B) by XBOOLEAN:138
         .= A 'xor' B;
-A22:  k 'xor' (k 'xor' FALSE) = FALSE by XBOOLEAN:138;
-A23:  A 'xor' (A 'xor' B) = (A 'xor' A) 'xor' B by XBOOLEAN:73
+A18:  k 'xor' (k 'xor' FALSE) = FALSE by XBOOLEAN:138;
+A19:  A 'xor' (A 'xor' B) = (A 'xor' A) 'xor' B by XBOOLEAN:73
         .= FALSE 'xor' B by XBOOLEAN:138
         .= B;
-A24:  m + 1 in Seg(m+1) by FINSEQ_1:5;
-A25:  add_ovfl('not' z,Bin1(m+1))
-      = add_ovfl('not' t^<*'not' k*>,Bin1(m+1)) by A15,Th11
+A20:  m + 1 in Seg(m+1) by FINSEQ_1:5;
+A21:  add_ovfl('not' z,Bin1(m+1))
+      = add_ovfl('not' t^<*'not' k*>,Bin1(m+1)) by A13,Th11
         .= add_ovfl('not' t^<*'not' k*>,Bin1(m)^<*FALSE*>) by Th9
         .= ((('not' t^<*'not' k*>)/.(m+1)) '&'
       ((Bin1(m)^<*FALSE*>)/.(m+1))) 'or' ((('not' t^<*'not' k*>)/.(m+1)) '&'
@@ -939,7 +939,7 @@ A25:  add_ovfl('not' z,Bin1(m+1))
         .= 'not' k '&'
       ((carry('not' t^<*'not' k*>,Bin1(m)^<*FALSE*>))/.(m+1)) by BINARITH:3
         .= 'not' k '&' A by BINARITH:44;
-A26:  add_ovfl('not' (Neg2(z)),Bin1(m+1))
+A22:  add_ovfl('not' (Neg2(z)),Bin1(m+1))
       = add_ovfl('not' (Neg2(z)),Bin1(m)^<*FALSE*>) by Th9
         .= ((('not' (Neg2(z)))/.(m+1)) '&' ((Bin1(m)^<*FALSE*>)/.(m+1))) 'or'
       ((('not' (Neg2(z)))/.(m+1)) '&'
@@ -957,7 +957,7 @@ A26:  add_ovfl('not' (Neg2(z)),Bin1(m+1))
       by BINARITH:3
         .= (('not' ('not' t^<*'not' k*> + Bin1(m+1)))/.(m+1)) '&'
       ((carry('not' ('not' (t^<*k*>) + Bin1(m+1)),Bin1(m)^<*FALSE*>))/.(m+1))
-      by A15,Th11
+      by A13,Th11
         .= (('not' ('not' t^<*'not' k*> + Bin1(m+1)))/.(m+1)) '&'
 ((carry('not' ('not' t^<*'not' k*> + Bin1(m+1)),Bin1(m)^<*FALSE*>))/.(m+1))
       by Th11
@@ -969,11 +969,11 @@ A26:  add_ovfl('not' (Neg2(z)),Bin1(m+1))
       Bin1(m)^<*FALSE*>))/.(m+1)) by Th9
         .= 'not' ((('not' t^<*'not' k*> + Bin1(m)^<*FALSE*>))/.(m+1)) '&'
       ((carry('not' ('not' t^<*'not' k*> + Bin1(m)^<*FALSE*>),
-      Bin1(m)^<*FALSE*>))/.(m+1)) by A24,BINARITH:def 4
+      Bin1(m)^<*FALSE*>))/.(m+1)) by A20,BINARITH:def 4
 .= 'not' ((('not' t^<*'not' k*>)/.(m+1)) 'xor' ((Bin1(m)^<*FALSE*>)/.(m+1))
       'xor' ((carry('not' t^<*'not' k*>,Bin1(m)^<*FALSE*>))/.(m+1))) '&'
       ((carry('not' ('not' t^<*'not' k*> + Bin1(m)^<*FALSE*>),
-      Bin1(m)^<*FALSE*>))/.(m+1)) by A24,BINARITH:def 8
+      Bin1(m)^<*FALSE*>))/.(m+1)) by A20,BINARITH:def 8
         .= 'not' ('not' k 'xor' ((Bin1(m)^<*FALSE*>)/.(m+1)) 'xor'
       ((carry('not' t^<*'not' k*>,Bin1(m)^<*FALSE*>))/.(m+1))) '&'
       ((carry('not' ('not' t^<*'not' k*> + Bin1(m)^<*FALSE*>),
@@ -994,13 +994,13 @@ A26:  add_ovfl('not' (Neg2(z)),Bin1(m+1))
       ^<*'not' ('not' k 'xor' FALSE 'xor' add_ovfl('not' t,Bin1(m)))*>),
       Bin1(m)^<*FALSE*>))/.(m+1)) by Th11
         .= (('not' k 'or' 'not' A) '&' (k 'or' 'not' 'not'
-      A)) '&' A by A20,A21,A22,A23,BINARITH:44
+      A)) '&' A by A16,A17,A18,A19,BINARITH:44
         .= ('not' k 'or' 'not' A) '&' (A '&' (k 'or' A))
         .= A '&' ('not' A 'or' 'not' k) by XBOOLEAN:6
         .= A '&' 'not' k by XBOOLEAN:11;
       set C = 'not' k '&' A;
       reconsider p = d, q = C as boolean set;
-A27:  'not' ('not' d 'xor' C) 'xor' C
+A23:  'not' ('not' d 'xor' C) 'xor' C
       = ((p '&' ('not' p 'or' 'not' q)) 'or' (('not' p 'or' 'not'
       q) '&' q)) 'xor' C by XBOOLEAN:8
         .= ((d '&' 'not' C) 'or' (C '&' ('not' d 'or' 'not'
@@ -1013,11 +1013,11 @@ A27:  'not' ('not' d 'xor' C) 'xor' C
       = Neg2(Neg2(z)^<*'not' d 'xor' add_ovfl('not' z,Bin1(m+1))*>) by Th16
         .= Neg2(Neg2(z))^<*'not' ('not' d 'xor' add_ovfl('not'
       z,Bin1(m+1))) 'xor' add_ovfl('not' Neg2(z),Bin1(m+1))*> by Th16
-        .= z^<*d*> by A13,A15,A25,A26,A27;
+        .= z^<*d*> by A12,A13,A21,A22,A23;
     end;
     hence P[m+1];
   end;
-  thus for m holds P[m] from NAT_1:sch 10(A1,A12);
+  thus for m holds P[m] from NAT_1:sch 10(A1,A11);
 end;
 
 definition
@@ -1047,26 +1047,26 @@ then  i in dom z by A1,FINSEQ_1:def 3;
   uniqueness
   proof
     let z1, z2 be Tuple of n, BOOLEAN such that
-A6: for i st i in Seg n holds
+A5: for i st i in Seg n holds
     z1/.i = (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i) and
-A7: for i st i in Seg n holds
+A6: for i st i in Seg n holds
     z2/.i = (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i);
-A8: len z1 = n by FINSEQ_1:def 18;
-A9: len z2 = n by FINSEQ_1:def 18;
-A10: dom z1 = Seg n by A8,FINSEQ_1:def 3;
+A7: len z1 = n by CARD_1:def 13;
+A8: len z2 = n by CARD_1:def 13;
+A9: dom z1 = Seg n by A7,FINSEQ_1:def 3;
  now
       let j be Nat;
       assume
-A12:  j in dom z1;
-  Seg n = Seg len z2 by FINSEQ_1:def 18;
-then A14:  j in dom z2 by A10,A12,FINSEQ_1:def 3;
-      thus z1.j = z1/.j by A12,PARTFUN1:def 8
-        .= (x/.j) 'xor' ((Neg2(y))/.j) 'xor' ((carry(x,Neg2(y)))/.j) by A6,A10
-      ,A12
-        .= z2/.j by A7,A10,A12
-        .= z2.j by A14,PARTFUN1:def 8;
+A10:  j in dom z1;
+  Seg n = Seg len z2 by CARD_1:def 13;
+then A11:  j in dom z2 by A9,A10,FINSEQ_1:def 3;
+      thus z1.j = z1/.j by A10,PARTFUN1:def 8
+        .= (x/.j) 'xor' ((Neg2(y))/.j) 'xor' ((carry(x,Neg2(y)))/.j) by A5,A9
+      ,A10
+        .= z2/.j by A6,A9,A10
+        .= z2.j by A11,PARTFUN1:def 8;
     end;
-    hence thesis by A8,A9,FINSEQ_2:10;
+    hence thesis by A7,A8,FINSEQ_2:10;
   end;
 end;
 

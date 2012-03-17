@@ -88,7 +88,7 @@
 <Func kind="K" nr="340"/>
 </Func>
 </Adjective>
-<Adjective nr="55">
+<Adjective nr="56">
 <Func kind="K" nr="372"/>
 <Func kind="K" nr="340"/>
 </Adjective>
@@ -129,7 +129,7 @@
 <Func kind="K" nr="340"/>
 </Func>
 </Adjective>
-<Adjective nr="55">
+<Adjective nr="56">
 <Func kind="K" nr="372"/>
 <Func kind="K" nr="340"/>
 </Adjective>
@@ -138,30 +138,30 @@
 <CCluster aid="TOPGEN_5" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="53"/>
 <Adjective nr="178"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="52"/>
-<Adjective nr="59"/>
+<Adjective nr="53"/>
+<Adjective nr="60"/>
 </Cluster>
 </CCluster>
 <CCluster aid="TOPGEN_5" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="52"/>
-<Adjective nr="62"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="53"/>
+<Adjective nr="63"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="52"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="53"/>
 <Adjective nr="178"/>
 </Cluster>
 </CCluster>

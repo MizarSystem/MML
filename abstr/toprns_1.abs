@@ -8,20 +8,22 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, SEQ_1, NAT_1, EUCLID, REAL_1, PRE_TOPC,
       FUNCT_1, RELAT_1, VALUED_0, TARSKI, STRUCT_0, SUPINF_2, ARYTM_3, ARYTM_1,
-      COMPLEX1, VALUED_1, CARD_1, XXREAL_0, XXREAL_2, SEQ_2, ORDINAL2;
- notations TARSKI, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, VALUED_1, COMPLEX1,
-      REAL_1, PRE_TOPC, XXREAL_0, NAT_1, SEQ_1, STRUCT_0, RLVECT_1, EUCLID;
+      COMPLEX1, VALUED_1, CARD_1, XXREAL_0, XXREAL_2, SEQ_2, ORDINAL2,
+      XBOOLE_0, PARTFUN1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, VALUED_1,
+      PARTFUN1, COMPLEX1, REAL_1, PRE_TOPC, XXREAL_0, NAT_1, SEQ_1, STRUCT_0,
+      RLVECT_1, VFUNCT_1, EUCLID;
  constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, MONOID_0, EUCLID, SEQ_1,
-      RELSET_1, VALUED_0, BINOP_2;
+      RELSET_1, VALUED_0, BINOP_2, VFUNCT_1;
  registrations ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0,
-      MONOID_0, EUCLID, XBOOLE_0, VALUED_1, FUNCT_2, NUMBERS, VALUED_0;
+      MONOID_0, EUCLID, XBOOLE_0, VALUED_1, FUNCT_2, NUMBERS, VALUED_0, NAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin
 
 definition
-  let N be Element of NAT;
+  let N be Nat;
   mode Real_Sequence of N is sequence of TOP-REAL N;
 end;
 
@@ -53,46 +55,54 @@ theorem :: TOPRNS_1:4
   seq is non-zero iff for n holds seq.n<>0.TOP-REAL N;
 
 definition
-  let N,seq1,seq2;
-  func seq1 + seq2 -> Real_Sequence of N means
+  let N be Nat,seq1,seq2 be Real_Sequence of N;
+  func seq1 + seq2 -> Real_Sequence of N equals
 :: TOPRNS_1:def 2
-
-  for n holds it.n = seq1. n + seq2.n;
+  seq1 + seq2;
 end;
 
 definition
-  let r,N,seq;
-  func r*seq -> Real_Sequence of N means
+  let r;
+  let N be Nat,seq be Real_Sequence of N;
+  func r * seq -> Real_Sequence of N equals
 :: TOPRNS_1:def 3
-
-  for n holds it.n = r*seq.n;
+  r(#)seq;
 end;
 
 definition
-  let N,seq;
-  func - seq -> Real_Sequence of N means
+  let N be Nat,seq be Real_Sequence of N;
+  func - seq -> Real_Sequence of N equals
 :: TOPRNS_1:def 4
-
-  for n holds it.n = -seq.n;
+  - seq;
 end;
 
 definition
-  let N,seq1,seq2;
-  func seq1-seq2 -> Real_Sequence of N equals
+  let N be Nat,seq1,seq2 be Real_Sequence of N;
+  func seq1 - seq2 -> Real_Sequence of N equals
 :: TOPRNS_1:def 5
   seq1 +- seq2;
 end;
 
 definition
   canceled;
-  let N,seq;
+  let N be Nat,seq be Real_Sequence of N;
   func |.seq.| -> Real_Sequence means
 :: TOPRNS_1:def 7
 
-  for n holds it.n=|.seq.n.|;
+  for n holds it.n = |.seq.n.|;
 end;
 
-canceled 3;
+theorem :: TOPRNS_1:5
+  for N,n be Nat,seq1,seq2 be Real_Sequence of N holds
+  (seq1+seq2).n = seq1.n + seq2.n;
+
+theorem :: TOPRNS_1:6
+  for N,n be Nat,seq be Real_Sequence of N holds
+  (r*seq).n = r*seq.n;
+
+theorem :: TOPRNS_1:7
+  for N,n be Nat,seq be Real_Sequence of N holds
+  (-seq).n = -seq.n;
 
 theorem :: TOPRNS_1:8
   abs(r)*|.w.| = |.r*w.|;
@@ -236,8 +246,8 @@ theorem :: TOPRNS_1:47
   seq is convergent & seq9 is convergent implies seq - seq9 is convergent;
 
 theorem :: TOPRNS_1:48
-  seq is convergent & seq9 is convergent implies lim(seq - seq9)=(lim
-  seq)-(lim seq9);
+  seq is convergent & seq9 is convergent implies
+  lim(seq - seq9) = (lim seq)-(lim seq9);
 
 canceled;
 

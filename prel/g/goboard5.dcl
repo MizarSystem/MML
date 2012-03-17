@@ -65,8 +65,8 @@
 <Adjective nr="8" value="false"/>
 <Adjective nr="11" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="38">
 <Func kind="U" nr="1">
 <Func kind="K" nr="298">

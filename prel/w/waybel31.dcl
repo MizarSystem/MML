@@ -43,33 +43,33 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="45" value="false"/>
 <Adjective nr="50"/>
-<Adjective nr="70"/>
-<Adjective nr="72"/>
+<Adjective nr="51"/>
+<Adjective nr="71"/>
 <Adjective nr="73"/>
 <Adjective nr="74"/>
-<Adjective nr="76"/>
-<Adjective nr="147"/>
+<Adjective nr="75"/>
+<Adjective nr="77"/>
 <Adjective nr="148"/>
+<Adjective nr="149"/>
 </Cluster>
 </RCluster>
 <FCluster aid="WAYBEL31" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="72"/>
 <Adjective nr="73"/>
 <Adjective nr="74"/>
-<Adjective nr="76"/>
-<Adjective nr="147"/>
-<Adjective nr="160"/>
+<Adjective nr="75"/>
+<Adjective nr="77"/>
+<Adjective nr="148"/>
+<Adjective nr="161"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="19">
 <Cluster>
-<Adjective nr="169">
+<Adjective nr="170">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -85,20 +85,20 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="70"/>
-<Adjective nr="111"/>
+<Adjective nr="71"/>
+<Adjective nr="112"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL31" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="72"/>
 <Adjective nr="73"/>
 <Adjective nr="74"/>
-<Adjective nr="76"/>
-<Adjective nr="147"/>
-<Adjective nr="160"/>
+<Adjective nr="75"/>
+<Adjective nr="77"/>
+<Adjective nr="148"/>
+<Adjective nr="161"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -108,31 +108,31 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="70"/>
-<Adjective nr="147"/>
-<Adjective nr="160"/>
+<Adjective nr="71"/>
+<Adjective nr="148"/>
+<Adjective nr="161"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WAYBEL31" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="50"/>
-<Adjective nr="72"/>
+<Adjective nr="51"/>
 <Adjective nr="73"/>
 <Adjective nr="74"/>
-<Adjective nr="147"/>
+<Adjective nr="75"/>
 <Adjective nr="148"/>
+<Adjective nr="149"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="72"/>
 <Adjective nr="73"/>
 <Adjective nr="74"/>
-<Adjective nr="112"/>
-<Adjective nr="147"/>
+<Adjective nr="75"/>
+<Adjective nr="113"/>
 <Adjective nr="148"/>
+<Adjective nr="149"/>
 </Cluster>
 </CCluster>
 </Registrations>

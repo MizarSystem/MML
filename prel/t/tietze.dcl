@@ -66,23 +66,23 @@
 <Func kind="K" nr="32"/>
 <Func kind="K" nr="28"/>
 </Adjective>
-<Adjective nr="37"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="61"/>
-<Adjective nr="104"/>
+<Adjective nr="40"/>
+<Adjective nr="62"/>
+<Adjective nr="105"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TIETZE" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="76"/>
+<Adjective nr="77"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="78">
+<Adjective nr="79">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -98,8 +98,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="75"/>
-<Adjective nr="98">
+<Adjective nr="76"/>
+<Adjective nr="99">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

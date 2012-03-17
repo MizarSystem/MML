@@ -68,7 +68,7 @@
 </Func>
 </Adjective>
 <Adjective nr="17"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="136">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -120,7 +120,7 @@
 </Func>
 </Adjective>
 <Adjective nr="17"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="116"/>
 <Adjective nr="135">
 <Func kind="U" nr="1">

@@ -3,7 +3,7 @@
 ::
 :: Received October 27, 1992
 :: Copyright (c) 1992 Association of Mizar Users
- 
+
 environ
 
  vocabularies XBOOLE_0, SUBSET_1, NORMSP_1, PARTFUN1, STRUCT_0, REAL_1,
@@ -11,17 +11,18 @@ environ
       TARSKI, COMPLEX1, XXREAL_0, XXREAL_2, XREAL_0, ORDINAL1, RLVECT_1,
       VFUNCT_1, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
-      REAL_1, STRUCT_0, RELSET_1, PARTFUN1, PARTFUN2, ALGSTR_0, RLVECT_1,
-      VALUED_1, SEQ_1, SEQ_2, XXREAL_0, NORMSP_0, NORMSP_1;
+      REAL_1, RELSET_1, PARTFUN1, FUNCT_2,
+      PARTFUN2, VALUED_1, SEQ_1, SEQ_2, XXREAL_0,
+      STRUCT_0, ALGSTR_0, RLVECT_1, NORMSP_0, NORMSP_1;
  constructors PARTFUN1, XXREAL_0, REAL_1, COMPLEX1, PARTFUN2, RFUNCT_1,
       NORMSP_1, SEQ_1, VALUED_1, SEQ_2, RELSET_1;
  registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, STRUCT_0, VALUED_0,
-      RFUNCT_1, NORMSP_1, ALGSTR_0, RLVECT_1, NORMSP_0;
+      RFUNCT_1, NORMSP_1, ALGSTR_0, RLVECT_1, NORMSP_0, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, PARTFUN1, XBOOLE_0, RLVECT_1, NORMSP_0;
  theorems TARSKI, SUBSET_1, FUNCT_1, ABSVALUE, PARTFUN1, PARTFUN2, RFUNCT_1,
       RLVECT_1, NORMSP_1, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1, XREAL_1,
-      COMPLEX1, XXREAL_0, VALUED_1, NORMSP_0;
+      COMPLEX1, XXREAL_0, VALUED_1, NORMSP_0, FUNCT_2;
  schemes PARTFUN2;
 
 begin
@@ -30,9 +31,9 @@ reserve x,X,Y for set;
 reserve C for non empty set;
 reserve c for Element of C;
 reserve V for RealNormSpace;
-reserve f,f1,f2,f3 for PartFunc of C,the carrier of V;
+reserve f,f1,f2,f3 for PartFunc of C,V;
 reserve r,r1,r2,p for Real;
- 
+
 ::
 ::OPERATIONS ON PARTIAL FUNCTIONS FROM A DOMAIN TO THE SET OF REAL NUMBERS
 ::
@@ -40,18 +41,18 @@ reserve r,r1,r2,p for Real;
 definition
   let C;
   let V be non empty addLoopStr;
-  let f1,f2 be PartFunc of C,the carrier of V;
-  deffunc F(Element of C) = (f1/.$1) + (f2/.$1);
-  deffunc G(Element of C) = (f1/.$1) - (f2/.$1);
+  let f1,f2 be PartFunc of C,V;
+  deffunc F(set) = (f1/.$1) + (f2/.$1);
+  deffunc G(set) = (f1/.$1) - (f2/.$1);
   defpred P[set] means $1 in dom f1 /\ dom f2;
   set X = dom f1 /\ dom f2;
-  func f1+f2 -> PartFunc of C,the carrier of V means
+  func f1+f2 -> PartFunc of C,V means
   :Def1:
   dom it = dom f1 /\ dom f2 &
   for c st c in dom it holds it/.c = (f1/.c) + (f2/.c);
   existence
   proof
-    consider F be PartFunc of C,the carrier of V such that
+    consider F be PartFunc of C,V such that
 A1: for c holds c in dom F iff P[c] and
 A2: for c st c in dom F holds F/.c = F(c) from PARTFUN2:sch 2;
     take F;
@@ -59,17 +60,17 @@ A2: for c st c in dom F holds F/.c = F(c) from PARTFUN2:sch 2;
   end;
   uniqueness
   proof
-    thus for f,g being PartFunc of C, the carrier of V st (dom f=X & for c be
-Element of C st c in dom f holds f/.c = F(c)) & (dom g=X & for c be Element of
-    C st c in dom g holds g/.c = F(c)) holds f = g from PARTFUN2:sch 3;
+    thus for f,g being PartFunc of C,V st (dom f=X &
+    for c st c in dom f holds f/.c = F(c)) & (dom g=X &
+    for c st c in dom g holds g/.c = F(c)) holds f = g from PARTFUN2:sch 3;
   end;
-  func f1-f2 -> PartFunc of C,the carrier of V means
+  func f1-f2 -> PartFunc of C,V means
   :Def2:
   dom it = dom f1 /\ dom f2 &
   for c st c in dom it holds it/.c = (f1/.c) - (f2/.c);
   existence
   proof
-    consider F be PartFunc of C,the carrier of V such that
+    consider F be PartFunc of C,V such that
 A3: for c holds c in dom F iff P[c] and
 A4: for c st c in dom F holds F/.c = G(c) from PARTFUN2:sch 2;
     take F;
@@ -77,9 +78,31 @@ A4: for c st c in dom F holds F/.c = G(c) from PARTFUN2:sch 2;
   end;
   uniqueness
   proof
-    thus for f,g being PartFunc of C, the carrier of V st (dom f=X & for c be
+    thus for f,g being PartFunc of C,V st (dom f=X & for c be
 Element of C st c in dom f holds f/.c = G(c)) & (dom g=X & for c be Element of
     C st c in dom g holds g/.c = G(c)) holds f = g from PARTFUN2:sch 3;
+  end;
+end;
+
+registration
+  let C;
+  let V be non empty addLoopStr;
+  let f1,f2 be Function of C,V;
+  cluster f1+f2 -> total;
+  coherence
+  proof
+    thus dom (f1+f2) = dom f1 /\ dom f2 by Def1
+    .= C /\ dom f2 by FUNCT_2:def 1
+    .= C /\ C by FUNCT_2:def 1
+    .= C;
+  end;
+  cluster f1-f2 -> total;
+  coherence
+  proof
+    thus dom (f1-f2) = dom f1 /\ dom f2 by Def2
+    .= C /\ dom f2 by FUNCT_2:def 1
+    .= C /\ C by FUNCT_2:def 1
+    .= C;
   end;
 end;
 
@@ -87,17 +110,17 @@ definition
   let C;
   let V be non empty RLSStruct;
   let f1 be PartFunc of C,REAL;
-  let f2 be PartFunc of C,the carrier of V;
+  let f2 be PartFunc of C,V;
   deffunc F(Element of C) = (f1.$1) * (f2/.$1);
   defpred P[set] means $1 in dom f1 /\ dom f2;
   set X = dom f1 /\ dom f2;
-  func f1(#)f2 -> PartFunc of C,the carrier of V means
+  func f1(#)f2 -> PartFunc of C,V means
   :Def3:
   dom it = dom f1 /\ dom f2 &
   for c st c in dom it holds it/.c = f1.c * (f2/.c);
   existence
   proof
-    consider F be PartFunc of C,the carrier of V such that
+    consider F be PartFunc of C,V such that
 A1: for c holds c in dom F iff P[c] and
 A2: for c st c in dom F holds F/.c = F(c) from PARTFUN2:sch 2;
     take F;
@@ -105,25 +128,40 @@ A2: for c st c in dom F holds F/.c = F(c) from PARTFUN2:sch 2;
   end;
   uniqueness
   proof
-    thus for f,g being PartFunc of C, the carrier of V st (dom f=X & for c be
+    thus for f,g being PartFunc of C,V st (dom f=X & for c be
 Element of C st c in dom f holds f/.c = F(c)) & (dom g=X & for c be Element of
     C st c in dom g holds g/.c = F(c)) holds f = g from PARTFUN2:sch 3;
+  end;
+end;
+
+registration
+  let C;
+  let V be non empty RLSStruct;
+  let f1 be Function of C,REAL;
+  let f2 be Function of C,V;
+  cluster f1(#)f2 -> total;
+  coherence
+  proof
+    thus dom (f1(#)f2) = dom f1 /\ dom f2 by Def3
+    .= C /\ dom f2 by FUNCT_2:def 1
+    .= C /\ C by FUNCT_2:def 1
+    .= C;
   end;
 end;
 
 definition
   let C;
   let V be non empty RLSStruct;
-  let f be PartFunc of C,the carrier of V;
+  let f be PartFunc of C,V;
   let r;
   deffunc F(Element of C) = r * (f/.$1);
   defpred P[set] means $1 in dom f;
-  func r(#)f -> PartFunc of C,the carrier of V means
+  func r(#)f -> PartFunc of C,V means
   :Def4:
   dom it = dom f & for c st c in dom it holds it/.c = r * (f/.c);
   existence
   proof
-    consider F be PartFunc of C,the carrier of V such that
+    consider F be PartFunc of C,V such that
 A1: for c holds c in dom F iff P[c] and
 A2: for c st c in dom F holds F/.c = F(c) from PARTFUN2:sch 2;
     take F;
@@ -132,9 +170,22 @@ A2: for c st c in dom F holds F/.c = F(c) from PARTFUN2:sch 2;
   uniqueness
   proof
     set X = dom f;
-    thus for f,g being PartFunc of C, the carrier of V st (dom f=X & for c be
+    thus for f,g being PartFunc of C,V st (dom f=X & for c be
 Element of C st c in dom f holds f/.c = F(c)) & (dom g=X & for c be Element of
     C st c in dom g holds g/.c = F(c)) holds f = g from PARTFUN2:sch 3;
+  end;
+end;
+
+registration
+  let C;
+  let V be non empty RLSStruct;
+  let f be Function of C,V;
+  let r;
+  cluster r(#)f -> total;
+  coherence
+  proof
+    thus dom (r(#)f) = dom f by Def4
+    .= C by FUNCT_2:def 1;
   end;
 end;
 
@@ -142,26 +193,38 @@ definition
  canceled;
   let C;
   let V be non empty addLoopStr;
-  let f be PartFunc of C,the carrier of V;
+  let f be PartFunc of C,V;
   deffunc G(Element of C) = - f/.$1;
   defpred P[set] means $1 in dom f;
-  func -f ->PartFunc of C,the carrier of V means
+  func -f -> PartFunc of C,V means
   :Def6:
   dom it = dom f & for c st c in dom it holds it/.c = -(f/.c);
   existence
   proof
-    consider F being PartFunc of C,the carrier of V such that
-A3: for c holds c in dom F iff P[c] and
-A4: for c st c in dom F holds F/.c = G(c) from PARTFUN2:sch 2;
+    consider F being PartFunc of C,V such that
+A1: for c holds c in dom F iff P[c] and
+A2: for c st c in dom F holds F/.c = G(c) from PARTFUN2:sch 2;
     take F;
-    thus thesis by A3,A4,SUBSET_1:8;
+    thus thesis by A1,A2,SUBSET_1:8;
   end;
   uniqueness
   proof
     set X = dom f;
-    thus for f,g being PartFunc of C, the carrier of V st (dom f=X & for c be
+    thus for f,g being PartFunc of C,V st (dom f=X & for c be
 Element of C st c in dom f holds f/.c = G(c)) & (dom g=X & for c be Element of
     C st c in dom g holds g/.c = G(c)) holds f = g from PARTFUN2:sch 3;
+  end;
+end;
+
+registration
+  let C;
+  let V be non empty addLoopStr;
+  let f be Function of C,V;
+  cluster -f -> total;
+  coherence
+  proof
+    thus dom -f = dom f by Def6
+    .= C by FUNCT_2:def 1;
   end;
 end;
 
@@ -336,12 +399,12 @@ A6: c in dom (r(#)f) by Def4;
   end;
   hence thesis by SUBSET_1:8;
 end;
- 
+
 ::
 :: BASIC PROPERTIES OF OPERATIONS
 ::
 
-theorem Th:
+theorem Th10:
   f1 + f2 = f2 + f1
 proof
 A1: dom (f1 + f2) = dom f2 /\ dom f1 by Def1
@@ -359,7 +422,7 @@ end;
 definition
   let C,V; let f1,f2;
   redefine func f1+f2;
-  commutativity by Th;
+  commutativity by Th10;
 end;
 
 theorem
@@ -390,11 +453,11 @@ A4: c in dom (f2 + f3) by XBOOLE_0:def 4;
 end;
 
 theorem
-  for f1,f2 be PartFunc of C,REAL,f3 be PartFunc of C,the carrier of V
+  for f1,f2 be PartFunc of C,REAL,f3 be PartFunc of C,V
   holds (f1 (#) f2) (#) f3 = f1 (#) (f2 (#) f3)
 proof
   let f1,f2 be PartFunc of C,REAL;
-  let f3 be PartFunc of C,the carrier of V;
+  let f3 be PartFunc of C,V;
 A1: dom (f1 (#) f2 (#) f3) = dom (f1 (#) f2) /\ dom f3 by Def3
     .= dom f1 /\ dom f2 /\ dom f3 by VALUED_1:def 4
     .= dom f1 /\ (dom f2 /\ dom f3) by XBOOLE_1:16
@@ -1194,24 +1257,18 @@ A7: c in dom (r(#)(f|X)) by Def4;
     .= dom (r(#)(f|X)) by Def4;
   hence thesis by A1,PARTFUN2:3;
 end;
- 
+
 ::
 :: TOTAL PARTIAL FUNCTIONS FROM A DOMAIN TO REAL
 ::
 
-theorem Th38:
+theorem
   (f1 is total & f2 is total iff f1+f2 is total) & (f1 is total &
   f2 is total iff f1-f2 is total)
 proof
   thus f1 is total & f2 is total iff f1+f2 is total
   proof
-    thus f1 is total & f2 is total implies f1+f2 is total
-    proof
-      assume f1 is total & f2 is total;
-      then dom f1 = C & dom f2 = C by PARTFUN1:def 4;
-      hence dom (f1+f2) = C /\ C by Def1
-        .= C;
-    end;
+    thus f1 is total & f2 is total implies f1+f2 is total;
     assume f1+f2 is total;
     then dom (f1+f2) = C by PARTFUN1:def 4;
     then dom f1 /\ dom f2 = C by Def1;
@@ -1220,13 +1277,7 @@ proof
   end;
   thus f1 is total & f2 is total iff f1-f2 is total
   proof
-    thus f1 is total & f2 is total implies f1-f2 is total
-    proof
-      assume f1 is total & f2 is total;
-      then dom f1 = C & dom f2 = C by PARTFUN1:def 4;
-      hence dom (f1-f2) = C /\ C by Def2
-        .= C;
-    end;
+    thus f1 is total & f2 is total implies f1-f2 is total;
     assume f1-f2 is total;
     then dom (f1-f2) = C by PARTFUN1:def 4;
     then dom f1 /\ dom f2 = C by Def2;
@@ -1235,18 +1286,12 @@ proof
   end;
 end;
 
-theorem Th39:
+theorem
   for f1 be PartFunc of C,REAL holds (f1 is total & f2 is total
   iff f1(#)f2 is total)
 proof
   let f1 be PartFunc of C,REAL;
-  thus f1 is total & f2 is total implies f1(#)f2 is total
-  proof
-    assume f1 is total & f2 is total;
-    then dom f1 = C & dom f2 = C by PARTFUN1:def 4;
-    hence dom (f1(#)f2) = C /\ C by Def3
-      .= C;
-  end;
+  thus f1 is total & f2 is total implies f1(#)f2 is total;
   assume f1(#)f2 is total;
   then dom (f1(#)f2) = C by PARTFUN1:def 4;
   then dom f1 /\ dom f2 = C by Def3;
@@ -1257,27 +1302,16 @@ end;
 theorem Th40:
   f is total iff r(#)f is total
 proof
-  thus f is total implies r(#)f is total
-  proof
-    assume f is total;
-    then dom f = C by PARTFUN1:def 4;
-    hence dom (r(#)f) = C by Def4;
-  end;
+  thus f is total implies r(#)f is total;
   assume r(#)f is total;
   then dom (r(#)f) = C by PARTFUN1:def 4;
   hence dom f = C by Def4;
 end;
 
-theorem Th41:
+theorem
   f is total iff -f is total
 proof
-  thus f is total implies -f is total
-  proof
-    assume
-A1: f is total;
-    -f = (-1)(#) f by Th29;
-    hence thesis by A1,Th40;
-  end;
+  thus f is total implies -f is total;
   assume
 A2: -f is total;
   -f = (-1)(#)f by Th29;
@@ -1299,26 +1333,23 @@ proof
 end;
 
 theorem
-  f1 is total & f2 is total implies (f1+f2)/.c = (f1/.c) + (f2/.c) & (f1
-  -f2)/.c = (f1/.c) - (f2/.c)
+  f1 is total & f2 is total implies (f1+f2)/.c = (f1/.c) + (f2/.c) &
+  (f1-f2)/.c = (f1/.c) - (f2/.c)
 proof
   assume
 A1: f1 is total & f2 is total;
-  then f1+f2 is total by Th38;
   then dom (f1+f2) = C by PARTFUN1:def 4;
   hence (f1+f2)/.c = (f1/.c) + (f2/.c) by Def1;
-  f1-f2 is total by A1,Th38;
-  then dom (f1-f2) = C by PARTFUN1:def 4;
+  dom (f1-f2) = C by A1,PARTFUN1:def 4;
   hence thesis by Def2;
 end;
 
 theorem
-  for f1 be PartFunc of C,REAL holds f1 is total & f2 is total implies (
-  f1(#)f2)/.c = f1.c * (f2/.c)
+  for f1 be PartFunc of C,REAL holds f1 is total & f2 is total implies
+  (f1(#)f2)/.c = f1.c * (f2/.c)
 proof
   let f1 be PartFunc of C,REAL;
   assume f1 is total & f2 is total;
-  then f1(#)f2 is total by Th39;
   then dom (f1(#)f2) = C by PARTFUN1:def 4;
   hence thesis by Def3;
 end;
@@ -1327,7 +1358,6 @@ theorem
   f is total implies (r(#)f)/.c = r * (f/.c)
 proof
   assume f is total;
-  then r(#)f is total by Th40;
   then dom (r(#)f) = C by PARTFUN1:def 4;
   hence thesis by Def4;
 end;
@@ -1337,14 +1367,13 @@ theorem
 proof
   assume
 A1: f is total;
-  then -f is total by Th41;
   then dom (-f) = C by PARTFUN1:def 4;
   hence (-f)/.c = - f/.c by Def6;
   ||.f.|| is total by A1,Th42;
   then dom (||.f.||) = C by PARTFUN1:def 4;
   hence thesis by NORMSP_0:def 3;
 end;
- 
+
 ::
 :: BOUNDED AND CONSTANT PARTIAL FUNCTIONS FROM A DOMAIN TO A NORMED REAL SPACE
 ::
@@ -1352,7 +1381,7 @@ end;
 definition
   let C;
   let V be non empty NORMSTR;
-  let f be PartFunc of C,the carrier of V;
+  let f be PartFunc of C,V;
   let Y;
   pred f is_bounded_on Y means
   :Def7:

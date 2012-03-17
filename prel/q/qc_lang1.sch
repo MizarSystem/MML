@@ -45,7 +45,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="33">
+<Adjective nr="31">
 <Var nr="1"/>
 </Adjective>
 </Cluster>

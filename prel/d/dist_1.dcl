@@ -67,8 +67,8 @@
 <Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
-<Adjective nr="58"/>
 <Adjective nr="59"/>
+<Adjective nr="60"/>
 <Adjective nr="160"/>
 <Adjective nr="163"/>
 </Cluster>

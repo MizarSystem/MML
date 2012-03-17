@@ -34,7 +34,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="107"/>
+<Adjective nr="108"/>
 </Cluster>
 </RCluster>
 <RCluster aid="QMAX_1" nr="2">
@@ -43,8 +43,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="107"/>
 <Adjective nr="108"/>
+<Adjective nr="109"/>
 </Cluster>
 </RCluster>
 <RCluster aid="QMAX_1" nr="3">
@@ -53,7 +53,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="109"/>
+<Adjective nr="110"/>
 </Cluster>
 </RCluster>
 <FCluster aid="QMAX_1" nr="1">
@@ -66,10 +66,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="51">
+<Adjective nr="52">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="54">
+<Adjective nr="55">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -118,7 +118,7 @@
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="108"/>
+<Adjective nr="109"/>
 </Cluster>
 </Typ>
 </ArgTypes>

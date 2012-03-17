@@ -10,24 +10,27 @@ environ
       ARYTM_3, ARYTM_1, TARSKI, FUNCT_1, XXREAL_0, PARTFUN1, CAT_1, NAT_1,
       CARD_1, FUNCOP_1, SCMFSA6A, ORDINAL4, AMI_3, FUNCT_4, INT_1, GRAPHSP,
       FSM_1, CIRCUIT2, SCMNORM, SCMFSA6B, GLIB_000, SF_MASTR, MSUALG_1,
-      XBOOLE_0, PRE_POLY, UNIALG_2, AMISTD_2, SCMFSA7B, ORDINAL1, AFINSQ_1;
+      XBOOLE_0, PRE_POLY, UNIALG_2, AMISTD_2, SCMFSA7B, ORDINAL1, AFINSQ_1,
+      PBOOLE, SCMFSA6C;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, FINSEQ_1,
-      FINSEQ_2, NAT_D, FUNCOP_1, AFINSQ_1, AFINSQ_2, COMPOS_1, EXTPRO_1, AMI_1,
-      SCMFSA_2, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, INT_2, XXREAL_0,
-      PRE_POLY;
- constructors ENUMSET1, XXREAL_0, REAL_1, AMI_5, SCMFSA_7, SCMFSA6A, SF_MASTR,
-      SCMFSA6B, NAT_D, RELSET_1, PRE_POLY, DOMAIN_1, AFINSQ_2, PARTFUN3, AMI_1;
+      FINSEQ_2, NAT_D, FUNCOP_1, PBOOLE, AFINSQ_1, AFINSQ_2, COMPOS_1,
+      EXTPRO_1, AMI_1, SCMFSA_2, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, INT_2,
+      XXREAL_0, PRE_POLY;
+ constructors ENUMSET1, XXREAL_0, REAL_1, SCMFSA_7, SCMFSA6A, SF_MASTR,
+      SCMFSA6B, NAT_D, RELSET_1, PRE_POLY, DOMAIN_1, AFINSQ_2, PARTFUN3, AMI_1,
+      PBOOLE;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, FUNCT_7, AMI_1, SCMFSA_2,
       SF_MASTR, SCMFSA6B, ORDINAL1, FINSET_1, FINSEQ_2, CARD_1, AFINSQ_1,
-      COMPOS_1, AFINSQ_2, ORDINAL5, EXTPRO_1;
+      COMPOS_1, AFINSQ_2, ORDINAL5, EXTPRO_1, PBOOLE, FUNCT_4;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
 begin
 
 reserve m for Element of NAT;
+reserve P for (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
 
 canceled 6;
 
@@ -52,9 +55,9 @@ end;
 
 theorem :: SCMFSA7B:9
   for s being State of SCM+FSA for a being read-write Int-Location, k
-  being Integer holds IExec(a := k,s).a = k & (for b being read-write
-  Int-Location st b <> a holds IExec(a := k,s).b = s.b) & for f being
-  FinSeq-Location holds IExec(a := k,s).f = s.f;
+  being Integer holds IExec(a := k,P,s).a = k & (for b being read-write
+  Int-Location st b <> a holds IExec(a := k,P,s).b = s.b) & for f being
+  FinSeq-Location holds IExec(a := k,P,s).f = s.f;
 
 registration
   let f be FinSeq-Location, p be FinSequence of INT;
@@ -69,9 +72,10 @@ end;
 
 theorem :: SCMFSA7B:10
   for s being State of SCM+FSA, f being FinSeq-Location, p being
-  FinSequence of INT holds IExec(f := p,s).f = p & (for a being read-write
-Int-Location st a <> intloc 1 & a <> intloc 2 holds IExec(f := p,s).a = s.a) &
-  for g being FinSeq-Location st g <> f holds IExec(f := p,s).g = s.g;
+  FinSequence of INT holds IExec(f := p,P,s).f = p &
+  (for a being read-write Int-Location st a <> intloc 1 & a <> intloc 2
+  holds IExec(f := p,P,s).a = s.a) &
+  for g being FinSeq-Location st g <> f holds IExec(f := p,P,s).g = s.g;
 
 definition
   let i be Instruction of SCM+FSA;
@@ -106,7 +110,7 @@ definition
 end;
 
 definition
-  let I be FinPartState of SCM+FSA;
+  let I be NAT-defined (the Instructions of SCM+FSA)-valued Function;
   let a be Int-Location;
   pred I destroys a means
 :: SCMFSA7B:def 4
@@ -115,11 +119,11 @@ definition
 end;
 
 definition
-  let I be FinPartState of SCM+FSA;
+  let I be NAT-defined (the Instructions of SCM+FSA)-valued Function;
   attr I is good means
 :: SCMFSA7B:def 5
 
-  not I destroys intloc 0;
+  I does not destroy intloc 0;
 end;
 
 theorem :: SCMFSA7B:11
@@ -177,36 +181,43 @@ definition
   canceled;
   let I be FinPartState of SCM+FSA;
   let s be State of SCM+FSA;
-  pred I is_closed_on s means
+  let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
+  pred I is_closed_on s,P means
 :: SCMFSA7B:def 7
 
-  for k being Element of NAT holds IC
-  Comput(ProgramPart(s +* (I +* Start-At( 0,SCM+FSA))),s +* (I +* Start-At( 0,
-SCM+FSA)),k) in dom I;
-  pred I is_halting_on s means
+  for k being Element of NAT holds
+   IC Comput(P+*ProgramPart I,s +* (Initialize I),k) in dom I;
+  pred I is_halting_on s,P means
 :: SCMFSA7B:def 8
 
-  ProgramPart(s +* (I +* Start-At( 0,SCM+FSA)))
-     halts_on s +* (I +* Start-At( 0,SCM+FSA));
+   P +* ProgramPart I halts_on s +* (Initialize I);
 end;
 
 theorem :: SCMFSA7B:24
-  for I being Program of SCM+FSA holds I is paraclosed iff for s
-  being State of SCM+FSA holds I is_closed_on s;
+  for I being Program of SCM+FSA holds I is paraclosed iff
+   for s being State of SCM+FSA
+   for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+    holds I is_closed_on s,P;
 
 theorem :: SCMFSA7B:25
-  for I being Program of SCM+FSA holds I is parahalting iff for s being
-  State of SCM+FSA holds I is_halting_on s;
+  for I being Program of SCM+FSA
+   holds I is parahalting iff
+  for s being State of SCM+FSA
+  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+   holds I is_halting_on s,P;
 
 theorem :: SCMFSA7B:26
   for i being Instruction of SCM+FSA, a being Int-Location, s
   being State of SCM+FSA holds not i destroy a implies Exec(i,s).a = s.a;
 
 theorem :: SCMFSA7B:27
-  for s being State of SCM+FSA, I being Program of SCM+FSA, a
-being Int-Location st not I destroy a & I is_closed_on s holds for k being
-  Element of NAT holds Comput(ProgramPart(s +* (I +* Start-At( 0,SCM+FSA))),s
-+* (I +* Start-At( 0,SCM+FSA)),k).a = s.a;
+  for s being State of SCM+FSA,
+      P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+      I being Program of SCM+FSA, a being Int-Location
+       st not I destroy a & I is_closed_on s,P
+    for k being
+  Element of NAT holds Comput(P +* I,s +* Initialize I,k).a
+        = s.a;
 
 registration
   cluster Stop SCM+FSA -> parahalting good;
@@ -239,4 +250,3 @@ registration
   let a be read-write Int-Location, k be Integer;
   cluster a := k -> keeping_0;
 end;
-

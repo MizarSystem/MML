@@ -32,8 +32,6 @@
 <ArticleID name="AFINSQ_1"/>
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="EXTPRO_1"/>
-<ArticleID name="AMI_2"/>
-<ArticleID name="SCMFSA_1"/>
 <ArticleID name="SCMFSA_2"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="SF_MASTR"/>
@@ -51,30 +49,30 @@
 </Adjective>
 <Adjective nr="16">
 <Func kind="U" nr="1">
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Func>
 </Adjective>
 <Adjective nr="17">
-<Func kind="U" nr="6">
+<Func kind="U" nr="5">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
 <Func kind="K" nr="121">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Func>
 </Adjective>
 <Adjective nr="18"/>
 <Adjective nr="22">
-<Func kind="U" nr="8">
+<Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
 <Func kind="K" nr="121">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>
@@ -86,7 +84,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="372">
+<Func kind="K" nr="336">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -98,30 +96,30 @@
 </Adjective>
 <Adjective nr="16">
 <Func kind="U" nr="1">
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Func>
 </Adjective>
 <Adjective nr="17">
-<Func kind="U" nr="6">
+<Func kind="U" nr="5">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
 <Func kind="K" nr="121">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Func>
 </Adjective>
 <Adjective nr="18"/>
 <Adjective nr="22">
-<Func kind="U" nr="8">
+<Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
 <Func kind="K" nr="121">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>

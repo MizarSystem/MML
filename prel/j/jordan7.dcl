@@ -25,7 +25,7 @@
 <Cluster>
 <Adjective nr="12"/>
 <Adjective nr="17"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="38"/>
 <Adjective nr="42"/>
 </Cluster>
@@ -36,7 +36,7 @@
 <Adjective nr="12"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="38"/>
 </Cluster>
 </CCluster>

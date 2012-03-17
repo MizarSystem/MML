@@ -10,31 +10,33 @@ environ
       SCMFSA_2, RELAT_1, FUNCT_1, PARTFUN1, TARSKI, XXREAL_0, NAT_1, CARD_1,
       XBOOLE_0, INT_1, GRAPHSP, FINSEQ_2, AMI_3, PRE_POLY, FSM_1, CIRCUIT2,
       MSUALG_1, COMPLEX1, FUNCT_4, SCMFSA_7, ORDINAL1, SCMNORM, AFINSQ_1,
-      FUNCOP_1;
+      FUNCOP_1, PBOOLE;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, NAT_1, INT_2,
       NAT_D, INT_1, RELAT_1, PARTFUN1, FINSEQ_1, AFINSQ_1, FINSEQ_2, FUNCT_1,
-      FUNCOP_1, FUNCT_7, XXREAL_0, STRUCT_0, COMPOS_1,
+      FUNCOP_1, FUNCT_7, PBOOLE, XXREAL_0, STRUCT_0, COMPOS_1,
       EXTPRO_1, AMI_1, SCMFSA_2,
       PRE_POLY, AFINSQ_2;
  constructors WELLORD2, XXREAL_0, REAL_1, AMI_3, SCMFSA_2, NAT_D,
-      RELSET_1, PRE_POLY, AFINSQ_1, AFINSQ_2, AMI_1;
+      RELSET_1, PRE_POLY, AFINSQ_1, AFINSQ_2, AMI_1, PBOOLE;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, FUNCT_7, SCMFSA_2, FINSET_1,
-      FINSEQ_2, CARD_1, AMI_1, COMPOS_1, AFINSQ_1, AFINSQ_2, FUNCOP_1;
+      FINSEQ_2, CARD_1, AMI_1, COMPOS_1, AFINSQ_1, AFINSQ_2, FUNCOP_1,
+      PBOOLE;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, EXTPRO_1, AMI_1, FINSEQ_1, FINSEQ_2, SCMFSA_2, COMPOS_1,
     AFINSQ_1, AFINSQ_2, FUNCOP_1;
  theorems AMI_1, FUNCT_1, SCMFSA_2, INT_1, NAT_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       RELAT_1, CARD_1, TARSKI, GRFUNC_1, ABSVALUE, FUNCT_7, XBOOLE_1, XREAL_1,
       XXREAL_0, FUNCOP_1, AMI_3, ORDINAL1, COMPOS_1, AFINSQ_1, AFINSQ_2,
-      EXTPRO_1;
+      EXTPRO_1, PBOOLE;
  schemes NAT_1, STIRL2_1, AFINSQ_1;
 
 begin
 
 reserve m for Element of NAT;
+reserve P for (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
 
-Lm2: for p1,p2,p3,p4 being XFinSequence
+Lm1: for p1,p2,p3,p4 being XFinSequence
 holds p1 ^ p2 ^ p3 ^ p4 = p1 ^ p2 ^ (p3
 ^ p4) & p1 ^ p2 ^ p3 ^ p4 = p1 ^ (p2 ^ p3 ^ p4) & p1 ^ p2 ^ p3 ^ p4 = p1 ^ (p2
 ^ (p3 ^ p4)) & p1 ^ p2 ^ p3 ^ p4 = p1 ^ (p2 ^ p3) ^ p4
@@ -48,7 +50,7 @@ proof
   thus thesis by AFINSQ_1:30;
 end;
 
-Lm3: for p1,p2,p3,p4,p5 being XFinSequence
+Lm2: for p1,p2,p3,p4,p5 being XFinSequence
  holds p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^
 p2 ^ p3 ^ (p4 ^ p5) & p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ p4 ^ p5) & p1 ^
 p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ (p4 ^ p5)) & p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^
@@ -61,18 +63,18 @@ p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ p4) ^ p5 & p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1
 proof
   let p1,p2,p3,p4,p5 be XFinSequence;
   thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ p3 ^ (p4 ^ p5) by AFINSQ_1:30;
-  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ p4 ^ p5) by Lm2;
-  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ (p4 ^ p5)) by Lm2;
+  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ p4 ^ p5) by Lm1;
+  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ (p4 ^ p5)) by Lm1;
   thus
-A1: p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ p4) ^ p5 by Lm2
+A1: p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ p4) ^ p5 by Lm1
     .= p1 ^ (p2 ^ p3 ^ p4 ^ p5) by AFINSQ_1:30;
   hence p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ (p4 ^ p5)) by AFINSQ_1:30;
-  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ p4 ^ p5)) by A1,Lm2;
-  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ (p4 ^ p5))) by A1,Lm2;
-  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ p4) ^ p5 by Lm2;
-  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ p4) ^ p5 by Lm2;
-  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ p4)) ^ p5 by Lm2;
-  thus thesis by A1,Lm2;
+  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ p4 ^ p5)) by A1,Lm1;
+  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ (p4 ^ p5))) by A1,Lm1;
+  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ p4) ^ p5 by Lm1;
+  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ p4) ^ p5 by Lm1;
+  thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ p4)) ^ p5 by Lm1;
+  thus thesis by A1,Lm1;
 end;
 deffunc U(Element of NAT) = $1-'1;
 
@@ -320,14 +322,14 @@ theorem Th36:
   for s being c0-started State of SCM+FSA st s.intloc 0 = 1
   for a being Int-Location, k being Integer st a <> intloc 0 &
    (for c being Element of NAT st c in dom aSeq(a,k)
-     holds aSeq(a,k).c = s.(c0 + c))
+     holds aSeq(a,k).c = P.(c0 + c))
    holds
   (for i being Element of NAT st i <= len aSeq(a,k)
-   holds IC Comput(ProgramPart(s),s,i) = c0 + i &
+   holds IC Comput(P,s,i) = c0 + i &
   (for b being Int-Location st b <> a
-     holds Comput(ProgramPart(s),s,i).b = s.b) &
-  (for f being FinSeq-Location holds Comput(ProgramPart(s),s,i).f = s.f)) &
-  Comput(ProgramPart(s),s,len aSeq(a,k)).a = k
+     holds Comput(P,s,i).b = s.b) &
+  (for f being FinSeq-Location holds Comput(P,s,i).f = s.f)) &
+  Comput(P,s,len aSeq(a,k)).a = k
 proof
   let c0 be Element of NAT;
   let s be c0-started State of SCM+FSA;
@@ -339,7 +341,7 @@ A2: IC s =  c0 by COMPOS_1:def 16;
   assume that
 A3: a <> intloc 0 and
 A4: for c being Element of NAT st c in dom aSeq(a,k)
-   holds aSeq(a,k).c = s.(c0 + c);
+   holds aSeq(a,k).c = P.(c0 + c);
   per cases;
   suppose
 A5: k > 0;
@@ -347,310 +349,301 @@ A5: k > 0;
     consider k1 being Element of NAT such that
 A6: k1 + 1 = k9 and
 A7: aSeq(a,k9) = <%a:=intloc 0%> ^ (k1 --> AddTo(a,intloc 0)) by A5,Def3;
-    defpred Q[Nat] means $1 <= k9 implies IC Comput(ProgramPart(s),s,$1) =
- (c0 + $1) & (1 <= $1 implies Comput(ProgramPart(s),s,$1).a = $1) & (for b
+    defpred Q[Nat] means $1 <= k9 implies IC Comput(P,s,$1) =
+ (c0 + $1) & (1 <= $1 implies Comput(P,s,$1).a = $1) & (for b
 being
-    Int-Location st b <> a holds Comput(ProgramPart(s),s,$1).b=s.b) & (for f
+    Int-Location st b <> a holds Comput(P,s,$1).b=s.b) & (for f
 being
-    FinSeq-Location holds Comput(ProgramPart(s),s,$1).f = s.f);
+    FinSeq-Location holds Comput(P,s,$1).f = s.f);
 A8: len aSeq(a,k9) = len <%a:=intloc 0%> + len (k1-->AddTo(a,intloc 0))
         by A7,AFINSQ_1:20
       .= 1 + len(k1-->AddTo(a,intloc 0)) by AFINSQ_1:36
       .= k9 by A6,CARD_1:106;
 A9: for i being Element of NAT st i <= len aSeq(a,k9)
-   holds IC Comput(ProgramPart(s),s,i) =  (c0 + i) &
-    (1 <= i implies Comput(ProgramPart(s),s,i).a = i) &
+   holds IC Comput(P,s,i) =  (c0 + i) &
+    (1 <= i implies Comput(P,s,i).a = i) &
     (for b being Int-Location st b <> a
-     holds Comput(ProgramPart(s),s,i).b = s.b) &
+     holds Comput(P,s,i).b = s.b) &
     for f being
-    FinSeq-Location holds Comput(ProgramPart(s),s,i).f = s.f
+    FinSeq-Location holds Comput(P,s,i).f = s.f
     proof
 A10: for i being Element of NAT st i < k9 holds i in dom aSeq(a,k9)
      by A8,NAT_1:45;
-A13:  s. (c0 + 0) = aSeq(a,k9).0 by A5,A4,A10
+A11:  P.(c0 + 0) = aSeq(a,k9).0 by A5,A4,A10
         .= a:= intloc 0 by A7,AFINSQ_1:39;
-A14:  now
+A12:  now
         let n be Element of NAT;
         assume n = 0;
         hence
-A15:    Comput(ProgramPart(s),s,n) = s by EXTPRO_1:3;
-        hence CurInstr(ProgramPart Comput(ProgramPart(s),s,n),Comput(
-ProgramPart(s),s,n)) =
-         a:= intloc 0 by A2,A13,COMPOS_1:38;
-        thus Comput(ProgramPart(s),s,n+1) = Following(ProgramPart s,
-        Comput(ProgramPart(s),s,n)) by EXTPRO_1:4
-          .= Exec(a:= intloc 0,s) by A2,A13,A15,COMPOS_1:38;
+A13:    Comput(P,s,n) = s by EXTPRO_1:3;
+        hence CurInstr(P,Comput(P,s,n)) =
+         a:= intloc 0 by A2,A11,PBOOLE:158;
+        thus Comput(P,s,n+1) = Following(P,
+        Comput(P,s,n)) by EXTPRO_1:4
+          .= Exec(a:= intloc 0,s) by A2,A11,A13,PBOOLE:158;
       end;
-A16:  now
+A14:  now
         let i be Element of NAT;
         assume that
-A17:    1 <= i and
-A18:    i < k9;
-        reconsider i1 = i - 1 as Element of NAT by A17,INT_1:18;
+A15:    1 <= i and
+A16:    i < k9;
+        reconsider i1 = i - 1 as Element of NAT by A15,INT_1:18;
          i = i1 + 1;
          then
-      i1 < k1 by A18,A6,XREAL_1:8;
+      i1 < k1 by A16,A6,XREAL_1:8;
         then
-A20:     i1 in k1 by NAT_1:45;
-TT:      len (k1 --> AddTo(a,intloc 0)) = k1 by CARD_1:106;
+A17:     i1 in k1 by NAT_1:45;
+A18:      len (k1 --> AddTo(a,intloc 0)) = k1 by CARD_1:106;
          len <% a:= intloc 0 %> = 1 by AFINSQ_1:36;
         hence aSeq(a,k9).i = (k1 --> AddTo(a,intloc 0)).(i - 1)
-            by A17,A7,TT,A6,A18,AFINSQ_1:21
-          .= AddTo(a,intloc 0) by A20,FUNCOP_1:13;
+            by A15,A7,A18,A6,A16,AFINSQ_1:21
+          .= AddTo(a,intloc 0) by A17,FUNCOP_1:13;
       end;
-A21:  now
+A19:  now
         let i be Element of NAT;
         assume that
-A22:    0 < i and
-A23:    i < k9;
-A24:     0+1 <= i by A22,NAT_1:13;
-        thus s. (c0 + i) = aSeq(a,k9).(i) by A4,A10,A23
-          .=AddTo(a,intloc 0) by A16,A24,A23;
+A20:    0 < i and
+A21:    i < k9;
+A22:     0+1 <= i by A20,NAT_1:13;
+        thus P. (c0 + i) = aSeq(a,k9).(i) by A4,A10,A21
+          .=AddTo(a,intloc 0) by A14,A22,A21;
       end;
-A25:  for n being Element of NAT st Q[n] holds Q[n + 1]
+A23:  for n being Element of NAT st Q[n] holds Q[n + 1]
       proof
         let n be Element of NAT;
         assume
-A26:    Q[n];
+A24:    Q[n];
         assume
-A27:    n + 1 <= k9;
+A25:    n + 1 <= k9;
         per cases;
         suppose
-A28:      n = 0;
-          hence IC Comput(ProgramPart(s),s,n+1) = Exec(a:= intloc 0,s).IC
-SCM+FSA by A14
-            .= succ  (c0 + n) by A2,A28,SCMFSA_2:89
+A26:      n = 0;
+          hence IC Comput(P,s,n+1) = Exec(a:= intloc 0,s).IC
+SCM+FSA by A12
+            .= succ  (c0 + n) by A2,A26,SCMFSA_2:89
             .=  (c0 + n + 1) by NAT_1:39
             .=  (c0 + (n + 1));
           hereby
             assume 1 <= n + 1;
-            thus Comput(ProgramPart(s),s,n+1).a = Exec(a:= intloc 0,s).a by A14
-,A28
-              .= n + 1 by A1,A28,SCMFSA_2:89;
+            thus Comput(P,s,n+1).a = Exec(a:= intloc 0,s).a by A12,A26
+              .= n + 1 by A1,A26,SCMFSA_2:89;
           end;
           hereby
             let b be Int-Location;
             assume
-A29:        b <> a;
-            thus Comput(ProgramPart(s),s,n+1).b = Exec(a:= intloc 0,s).b by A14
-,A28
-              .= s.b by A29,SCMFSA_2:89;
+A27:        b <> a;
+            thus Comput(P,s,n+1).b = Exec(a:= intloc 0,s).b by A12,A26
+              .= s.b by A27,SCMFSA_2:89;
           end;
           let f be FinSeq-Location;
-          thus Comput(ProgramPart(s),s,n+1).f = Exec(a:= intloc 0,s).f by A14
-,A28
+          thus Comput(P,s,n+1).f = Exec(a:= intloc 0,s).f by A12,A26
             .= s.f by SCMFSA_2:89;
         end;
         suppose
-A30:      n > 0;
-A31:      n < k9 by A27,NAT_1:13;
-Y:  (ProgramPart Comput(ProgramPart(s),s,n))/.IC Comput(ProgramPart(s),s,n)
- = Comput(ProgramPart(s),s,n).IC Comput(ProgramPart(s),s,n) by COMPOS_1:38;
-A32:      n + 0 <= n + 1 by XREAL_1:9;
+A28:      n > 0;
+A29:      n < k9 by A25,NAT_1:13;
+A30:  P/.IC Comput(P,s,n) = P.IC Comput(P,s,n) by PBOOLE:158;
+A31:      n + 0 <= n + 1 by XREAL_1:9;
           then
-A33:      CurInstr(ProgramPart Comput(ProgramPart(s),s,n),Comput(ProgramPart(s)
+A32:      CurInstr(P,Comput(P
 ,s,n)) =
- s. (c0 + n) by A26,A27,Y,AMI_1:54,XXREAL_0:2
-            .= AddTo(a,intloc 0) by A21,A30,A31;
-A34:      Comput(ProgramPart(s),s,n+1) = Following(ProgramPart s,
-Comput(ProgramPart(s),s,n)) by EXTPRO_1:4
-            .= Exec(AddTo(a,intloc 0), Comput(ProgramPart(s),s,n))
-                   by A33,AMI_1:123;
-          hence IC Comput(ProgramPart(s),s,n+1) = succ IC Comput(ProgramPart(s)
+ P. (c0 + n) by A24,A25,A30,XXREAL_0:2
+            .= AddTo(a,intloc 0) by A19,A28,A29;
+A33:      Comput(P,s,n+1) = Following(P,
+Comput(P,s,n)) by EXTPRO_1:4
+            .= Exec(AddTo(a,intloc 0), Comput(P,s,n))
+                   by A32;
+          hence IC Comput(P,s,n+1) = succ IC Comput(P
 ,s,n) by SCMFSA_2:90
-            .=  (c0 + n + 1) by A26,A27,A32,NAT_1:39,XXREAL_0:2
+            .=  (c0 + n + 1) by A24,A25,A31,NAT_1:39,XXREAL_0:2
             .=  (c0 + (n + 1));
-A35:      0 + 1 <= n by A30,INT_1:20;
+A34:      0 + 1 <= n by A28,INT_1:20;
           hereby
             assume 1 <= n + 1;
-            thus Comput(ProgramPart(s),s,n+1).a = n + Comput(ProgramPart(s),s,n
-).intloc 0 by A26,A27,A35,A32,A34,SCMFSA_2:90,XXREAL_0:2
-              .= n + 1 by A1,A3,A26,A27,A32,XXREAL_0:2;
+            thus Comput(P,s,n+1).a = n + Comput(P,s,n
+).intloc 0 by A24,A25,A34,A31,A33,SCMFSA_2:90,XXREAL_0:2
+              .= n + 1 by A1,A3,A24,A25,A31,XXREAL_0:2;
           end;
           hereby
             let b be Int-Location;
             assume
-A36:        b <> a;
-            hence Comput(ProgramPart(s),s,n+1).b = Comput(ProgramPart(s),s,n).b
-by A34,SCMFSA_2:90
-              .= s.b by A26,A27,A32,A36,XXREAL_0:2;
+A35:        b <> a;
+            hence Comput(P,s,n+1).b = Comput(P,s,n).b
+by A33,SCMFSA_2:90
+              .= s.b by A24,A25,A31,A35,XXREAL_0:2;
           end;
           let f be FinSeq-Location;
-          thus ( Comput(ProgramPart(s),s,n+1)).f = Comput(ProgramPart(s),s,n).f
-by A34,SCMFSA_2:90
-            .= s.f by A26,A27,A32,XXREAL_0:2;
+          thus ( Comput(P,s,n+1)).f = Comput(P,s,n).f
+by A33,SCMFSA_2:90
+            .= s.f by A24,A25,A31,XXREAL_0:2;
         end;
       end;
-A37:  Q[0] by A2,EXTPRO_1:3;
-A38:  for i being Element of NAT holds Q[i] from NAT_1:sch 1(A37,A25);
+A36:  Q[0] by A2,EXTPRO_1:3;
+A37:  for i being Element of NAT holds Q[i] from NAT_1:sch 1(A36,A23);
       let i be Element of NAT;
       assume i <= len aSeq(a,k9);
-      hence thesis by A8,A38;
+      hence thesis by A8,A37;
     end;
     hence
     for i being Element of NAT st i <= len aSeq(a,k) holds IC Comput(
-ProgramPart(s),s,i) =  (c0 + i) & (for b being Int-Location st b <> a holds
-Comput(ProgramPart(s),s,i).b = s.b) & for f being FinSeq-Location holds Comput(
-ProgramPart(s),s,i).f = s.f;
+P,s,i) =  (c0 + i) & (for b being Int-Location st b <> a holds
+Comput(P,s,i).b = s.b) & for f being FinSeq-Location holds Comput(
+P,s,i).f = s.f;
     1 <= len aSeq(a,k) by A6,A8,NAT_1:11;
     hence thesis by A8,A9;
   end;
   suppose
-A39: k <= 0;
+A38: k <= 0;
     then reconsider mk = - k as Element of NAT by INT_1:16;
-    defpred Q[Nat] means $1 <= mk+1+1 implies IC Comput(ProgramPart(s),s,$1)
-=  (c0 + $1) & (1 <= $1 implies Comput(ProgramPart(s),s,$1).a = -$1+1+1) & (for
+    defpred Q[Nat] means $1 <= mk+1+1 implies IC Comput(P,s,$1)
+=  (c0 + $1) & (1 <= $1 implies Comput(P,s,$1).a = -$1+1+1) & (for
 b
-    being Int-Location st b <> a holds Comput(ProgramPart(s),s,$1).b=s.b) & (
+    being Int-Location st b <> a holds Comput(P,s,$1).b=s.b) & (
 for f being
-    FinSeq-Location holds Comput(ProgramPart(s),s,$1).f = s.f);
+    FinSeq-Location holds Comput(P,s,$1).f = s.f);
     consider k1 being Element of NAT such that
-A40: k1 + k = 1 and
-A41: aSeq(a,k) = <%a:=intloc 0%> ^ (k1 --> SubFrom(a,intloc 0)) by A39,Def3;
-A42: len aSeq(a,k) = len <% a:=intloc 0 %> + len (k1-->SubFrom(a,intloc 0)
-    ) by A41,AFINSQ_1:20
+A39: k1 + k = 1 and
+A40: aSeq(a,k) = <%a:=intloc 0%> ^ (k1 --> SubFrom(a,intloc 0)) by A38,Def3;
+A41: len aSeq(a,k) = len <% a:=intloc 0 %> + len (k1-->SubFrom(a,intloc 0)
+    ) by A40,AFINSQ_1:20
       .= 1 + len (k1-->SubFrom(a,intloc 0)) by AFINSQ_1:36
-      .= mk+1+1 by A40,CARD_1:106;
-A43: for i being Element of NAT st i <= len aSeq(a,k) holds IC Comput(
-ProgramPart(s),s,i) =  (c0 + i) & (1 <= i implies Comput(ProgramPart(s),s,i).a
+      .= mk+1+1 by A39,CARD_1:106;
+A42: for i being Element of NAT st i <= len aSeq(a,k) holds IC Comput(
+P,s,i) =  (c0 + i) & (1 <= i implies Comput(P,s,i).a
 = -i+1+1) & (for b
-    being Int-Location st b <> a holds Comput(ProgramPart(s),s,i).b = s.b) &
+    being Int-Location st b <> a holds Comput(P,s,i).b = s.b) &
 for f being
-    FinSeq-Location holds Comput(ProgramPart(s),s,i).f = s.f
+    FinSeq-Location holds Comput(P,s,i).f = s.f
     proof
-A44: for i being Element of NAT st i < mk+1+1 holds i in dom  aSeq(a,k)
-        by A42,NAT_1:45;
-A47:  s. (c0 + 0) = aSeq(a,k).0 by A4,A44
-        .= a:= intloc 0 by A41,AFINSQ_1:39;
-A48:  for n being Element of NAT st n = 0 holds Comput(ProgramPart(s),s,n) = s
+A43: for i being Element of NAT st i < mk+1+1 holds i in dom  aSeq(a,k)
+        by A41,NAT_1:45;
+A44:  P.(c0 + 0) = aSeq(a,k).0 by A4,A43
+        .= a:= intloc 0 by A40,AFINSQ_1:39;
+A45:  for n being Element of NAT st n = 0 holds Comput(P,s,n) = s
 &
-CurInstr(ProgramPart Comput(ProgramPart(s),s,n),Comput(ProgramPart(s),s,n)) = a
+CurInstr(P,Comput(P,s,n)) = a
 := intloc 0 &
-Comput(ProgramPart(s),s,n+1) = Exec(a:= intloc
+Comput(P,s,n+1) = Exec(a:= intloc
       0,s)
       proof
         let n be Element of NAT;
         assume n = 0;
         hence
-A49:    Comput(ProgramPart(s),s,n) = s by EXTPRO_1:3;
-        hence CurInstr(ProgramPart Comput(ProgramPart(s),s,n),Comput(
-ProgramPart(s),s,n))
-         = a:= intloc 0 by A2,A47,COMPOS_1:38;
-        thus Comput(ProgramPart(s),s,n+1) = Following(ProgramPart s,
-        Comput(ProgramPart(s),s,n)) by EXTPRO_1:4
-          .= Exec(a:= intloc 0,s) by A2,A47,A49,COMPOS_1:38;
+A46:    Comput(P,s,n) = s by EXTPRO_1:3;
+        hence CurInstr(P,Comput(P,s,n))
+         = a:= intloc 0 by A2,A44,PBOOLE:158;
+        thus Comput(P,s,n+1) = Following(P,
+        Comput(P,s,n)) by EXTPRO_1:4
+          .= Exec(a:= intloc 0,s) by A2,A44,A46,PBOOLE:158;
       end;
-A50:  now
+A47:  now
         let i be Element of NAT;
         assume that
-A51:    1 <= i and
-A52:    i < mk+1+1;
-A53:    i - 1 < mk+1+1 - 1 by A52,XREAL_1:11;
-        reconsider i1 = i - 1 as Element of NAT by A51,INT_1:18;
-A55:    i1 in k1 by A40,A53,NAT_1:45;
-TT:   len(k1 --> SubFrom(a,intloc 0)) = k1 by CARD_1:106;
+A48:    1 <= i and
+A49:    i < mk+1+1;
+A50:    i - 1 < mk+1+1 - 1 by A49,XREAL_1:11;
+        reconsider i1 = i - 1 as Element of NAT by A48,INT_1:18;
+A51:    i1 in k1 by A39,A50,NAT_1:45;
+A52:   len(k1 --> SubFrom(a,intloc 0)) = k1 by CARD_1:106;
         len <% a:= intloc 0 %> = 1 by AFINSQ_1:36;
         hence aSeq(a,k).i = (k1-->SubFrom(a,intloc 0)).(i - 1)
-         by A41,A51,TT,A40,A52,AFINSQ_1:21
-          .= SubFrom(a,intloc 0) by A55,FUNCOP_1:13;
+         by A40,A48,A52,A39,A49,AFINSQ_1:21
+          .= SubFrom(a,intloc 0) by A51,FUNCOP_1:13;
       end;
-A56:  now
+A53:  now
         let i be Element of NAT;
         assume that
-A57:    0 < i and
-A58:    i < mk+1+1;
-A59:    0+1 <= i by A57,NAT_1:13;
-        thus s. (c0 + i) = aSeq(a,k).(i) by A4,A44,A58
-          .=SubFrom(a,intloc 0) by A50,A59,A58;
+A54:    0 < i and
+A55:    i < mk+1+1;
+A56:    0+1 <= i by A54,NAT_1:13;
+        thus P. (c0 + i) = aSeq(a,k).(i) by A4,A43,A55
+          .=SubFrom(a,intloc 0) by A47,A56,A55;
       end;
-A60:  for n being Element of NAT st Q[n] holds Q[n + 1]
+A57:  for n being Element of NAT st Q[n] holds Q[n + 1]
       proof
         let n be Element of NAT;
         assume
-A61:    Q[n];
+A58:    Q[n];
         assume
-A62:    n + 1 <= mk+1+1;
+A59:    n + 1 <= mk+1+1;
         per cases;
         suppose
-A63:      n = 0;
-          hence IC Comput(ProgramPart(s),s,n+1) = Exec(a:= intloc 0,s).IC
-SCM+FSA by A48
-            .= succ  (c0 + n) by A2,A63,SCMFSA_2:89
+A60:      n = 0;
+          hence IC Comput(P,s,n+1) = Exec(a:= intloc 0,s).IC
+SCM+FSA by A45
+            .= succ  (c0 + n) by A2,A60,SCMFSA_2:89
             .=  (c0 + n + 1) by NAT_1:39
             .=  (c0 + (n + 1));
           hereby
             assume 1 <= n + 1;
-            thus Comput(ProgramPart(s),s,n+1).a = Exec(a:= intloc 0,s).a by A48
-,A63
-              .= -(n + 1)+1+1 by A1,A63,SCMFSA_2:89;
+            thus Comput(P,s,n+1).a = Exec(a:= intloc 0,s).a by A45,A60
+              .= -(n + 1)+1+1 by A1,A60,SCMFSA_2:89;
           end;
           hereby
             let b be Int-Location;
             assume
-A64:        b <> a;
-            thus Comput(ProgramPart(s),s,n+1).b = Exec(a:= intloc 0,s).b by A48
-,A63
-              .= s.b by A64,SCMFSA_2:89;
+A61:        b <> a;
+            thus Comput(P,s,n+1).b = Exec(a:= intloc 0,s).b by A45,A60
+              .= s.b by A61,SCMFSA_2:89;
           end;
           let f be FinSeq-Location;
-          thus Comput(ProgramPart(s),s,n+1).f = Exec(a:= intloc 0,s).f by A48
-,A63
+          thus Comput(P,s,n+1).f = Exec(a:= intloc 0,s).f by A45,A60
             .= s.f by SCMFSA_2:89;
         end;
         suppose
-A65:      n > 0;
-A66:      n < mk+1+1 by A62,NAT_1:13;
-Y:  (ProgramPart Comput(ProgramPart(s),s,n))/.IC Comput(ProgramPart(s),s,n)
- = Comput(ProgramPart(s),s,n).IC Comput(ProgramPart(s),s,n) by COMPOS_1:38;
-A67:      n + 0 <= n + 1 by XREAL_1:9;
+A62:      n > 0;
+A63:      n < mk+1+1 by A59,NAT_1:13;
+A64:  P/.IC Comput(P,s,n) = P.IC Comput(P,s,n) by PBOOLE:158;
+A65:      n + 0 <= n + 1 by XREAL_1:9;
           then
-A68:      CurInstr(ProgramPart Comput(ProgramPart(s),s,n),Comput(ProgramPart(s)
+A66:      CurInstr(P,Comput(P
 ,s,n))
- = s. (c0 + n) by A61,A62,Y,AMI_1:54,XXREAL_0:2
-            .= SubFrom(a,intloc 0) by A56,A65,A66;
-A69:      Comput(ProgramPart(s),s,n+1) = Following(ProgramPart s,
-Comput(ProgramPart(s),s,n)) by EXTPRO_1:4
-            .= Exec(SubFrom(a,intloc 0), Comput(ProgramPart(s),s,n))
-             by A68,AMI_1:123;
-          hence IC Comput(ProgramPart(s),s,n+1) = succ IC Comput(ProgramPart(s)
+ = P. (c0 + n) by A58,A59,A64,XXREAL_0:2
+            .= SubFrom(a,intloc 0) by A53,A62,A63;
+A67:      Comput(P,s,n+1) = Following(P,
+Comput(P,s,n)) by EXTPRO_1:4
+            .= Exec(SubFrom(a,intloc 0), Comput(P,s,n))
+             by A66;
+          hence IC Comput(P,s,n+1) = succ IC Comput(P
 ,s,n) by SCMFSA_2:91
-            .=  (c0 + n + 1) by A61,A62,A67,NAT_1:39,XXREAL_0:2
+            .=  (c0 + n + 1) by A58,A59,A65,NAT_1:39,XXREAL_0:2
             .=  (c0 + (n + 1));
-A70:      0 + 1 < n + 1 by A65,XREAL_1:8;
+A68:      0 + 1 < n + 1 by A62,XREAL_1:8;
           hereby
             assume 1 <= n + 1;
-            thus Comput(ProgramPart(s),s,n+1).a = -n+1+1 - Comput(ProgramPart(s
-),s,n).intloc 0 by A61,A62,A70,A69,NAT_1:13,SCMFSA_2:91
-              .= -n+1+1 - s.intloc 0 by A3,A61,A62,A67,XXREAL_0:2
+            thus Comput(P,s,n+1).a
+             = -n+1+1 - Comput(P,s,n).intloc 0
+              by A58,A59,A68,A67,NAT_1:13,SCMFSA_2:91
+              .= -n+1+1 - s.intloc 0 by A3,A58,A59,A65,XXREAL_0:2
               .= -(n+1)+1+1 by A1;
           end;
           hereby
             let b be Int-Location;
             assume
-A71:        b <> a;
-            hence Comput(ProgramPart(s),s,n+1).b = Comput(ProgramPart(s),s,n).b
-by A69,SCMFSA_2:91
-              .= s.b by A61,A62,A67,A71,XXREAL_0:2;
+A69:        b <> a;
+            hence Comput(P,s,n+1).b = Comput(P,s,n).b
+by A67,SCMFSA_2:91
+              .= s.b by A58,A59,A65,A69,XXREAL_0:2;
           end;
           let f be FinSeq-Location;
-          thus ( Comput(ProgramPart(s),s,n+1)).f = Comput(ProgramPart(s),s,n).f
-by A69,SCMFSA_2:91
-            .= s.f by A61,A62,A67,XXREAL_0:2;
+          thus ( Comput(P,s,n+1)).f = Comput(P,s,n).f
+by A67,SCMFSA_2:91
+            .= s.f by A58,A59,A65,XXREAL_0:2;
         end;
       end;
-A72:  Q[0] by A2,EXTPRO_1:3;
-A73:  for i being Element of NAT holds Q[i] from NAT_1:sch 1(A72,A60);
+A70:  Q[0] by A2,EXTPRO_1:3;
+A71:  for i being Element of NAT holds Q[i] from NAT_1:sch 1(A70,A57);
       let i be Element of NAT;
       assume i <= len aSeq(a,k);
-      hence thesis by A42,A73;
+      hence thesis by A41,A71;
     end;
     hence
     for i being Element of NAT st i <= len aSeq(a,k) holds IC Comput(
-ProgramPart(s),s,i) =  (c0 + i) & (for b being Int-Location st b <> a holds
-Comput(ProgramPart(s),s,i).b = s.b) & for f being FinSeq-Location holds Comput(
-ProgramPart(s),s,i).f = s.f;
-    1 <= len aSeq(a,k) by A42,NAT_1:11;
-    hence Comput(ProgramPart(s),s,len aSeq(a,k)).a = -(-k+(1+1))+1+1 by A42,A43
+P,s,i) =  (c0 + i) & (for b being Int-Location st b <> a holds
+Comput(P,s,i).b = s.b) & for f being FinSeq-Location holds Comput(
+P,s,i).f = s.f;
+    1 <= len aSeq(a,k) by A41,NAT_1:11;
+    hence Comput(P,s,len aSeq(a,k)).a = -(-k+(1+1))+1+1 by A41,A42
       .= k;
   end;
 end;
@@ -658,14 +651,14 @@ end;
 theorem Th37:
   for s being 0-started State of SCM+FSA st s.intloc 0 = 1
    for a being Int-Location
-   for k being Integer st  aSeq(a,k) c= s & a<>intloc 0
+   for k being Integer st  aSeq(a,k) c= P & a<>intloc 0
     holds
   (for i being Element of NAT st i <= len aSeq(a,k)
-      holds IC Comput(ProgramPart(s),s,i) =  i &
+      holds IC Comput(P,s,i) =  i &
   (for b being Int-Location st b <> a
-    holds Comput(ProgramPart(s),s,i).b = s.b) &
-  (for f being FinSeq-Location holds Comput(ProgramPart(s),s,i).f = s.f)) &
-      Comput(ProgramPart(s),s,len aSeq(a,k)).a = k
+    holds Comput(P,s,i).b = s.b) &
+  (for f being FinSeq-Location holds Comput(P,s,i).f = s.f)) &
+      Comput(P,s,len aSeq(a,k)).a = k
 proof
   let s be 0-started State of SCM+FSA;
   assume
@@ -673,41 +666,41 @@ A1: s.intloc 0 = 1;
   let a be Int-Location;
   let k be Integer;
   assume that
-A2:  aSeq(a,k) c= s and
+A2:  aSeq(a,k) c= P and
 A3: a <> intloc 0;
-A5: for c being Element of NAT st c in dom aSeq(a,k)
-    holds aSeq(a,k).c = s.(0 + c) by A2,GRFUNC_1:8;
+A4: for c being Element of NAT st c in dom aSeq(a,k)
+    holds aSeq(a,k).c = P.(0 + c) by A2,GRFUNC_1:8;
   hereby
     let i be Element of NAT;
     assume
-A9: i <= len aSeq(a,k);
-    then IC Comput(ProgramPart(s),s,i) =  (0 + i) by A1,A3,A5,Th36;
-    hence IC Comput(ProgramPart(s),s,i) =  i & (for b being Int-Location st b
+A5: i <= len aSeq(a,k);
+    then IC Comput(P,s,i) =  (0 + i) by A1,A3,A4,Th36;
+    hence IC Comput(P,s,i) =  i & (for b being Int-Location st b
 <> a
-holds Comput(ProgramPart(s),s,i).b = s.b) & for f being FinSeq-Location holds
-Comput(ProgramPart(s),s,i).f = s.f by A1,A3,A5,A9,Th36;
+holds Comput(P,s,i).b = s.b) & for f being FinSeq-Location holds
+Comput(P,s,i).f = s.f by A1,A3,A4,A5,Th36;
   end;
-  thus thesis by A1,A3,A5,Th36;
+  thus thesis by A1,A3,A4,Th36;
 end;
 
 :: Users' guide
 
 theorem
   for s being 0-started State of SCM+FSA st s.intloc 0 = 1 for a
-  being Int-Location, k being Integer st a:=k c= s & a<>intloc 0
-   holds ProgramPart s halts_on s &
-    (Result(ProgramPart(s),s)).a = k & (for b being Int-Location st b <> a
-holds Result(ProgramPart s,
-  s).b = s.b) & for f being FinSeq-Location holds (Result(ProgramPart(s),s)).f
+  being Int-Location, k being Integer st a:=k c= P & a<>intloc 0
+   holds P halts_on s &
+    (Result(P,s)).a = k & (for b being Int-Location st b <> a
+holds Result(P,
+  s).b = s.b) & for f being FinSeq-Location holds (Result(P,s)).f
 = s.f
 proof
   let s be 0-started State of SCM+FSA;
   assume that
-A2: s.intloc 0 = 1;
-A1: IC s =  0 by COMPOS_1:def 16;
+A1: s.intloc 0 = 1;
+A2: IC s =  0 by COMPOS_1:def 16;
   let a be Int-Location, k be Integer;
   assume that
-A3: a:=k c= s and
+A3: a:=k c= P and
 A4: a <> intloc 0;
   per cases;
   suppose
@@ -722,184 +715,177 @@ A8: len(<%a:=intloc 0%>^(k1-->AddTo(a,intloc 0))) = len<%a:=intloc 0%> +
       .= k by A6,CARD_1:106;
     reconsider k as Element of NAT by A5,INT_1:16;
     defpred Q[Nat] means $1 <= k implies (1 <= $1 implies
-    Comput(ProgramPart(s),s,$1).a = $1) & (for b being Int-Location st b <> a
+    Comput(P,s,$1).a = $1) & (for b being Int-Location st b <> a
 holds
-Comput(ProgramPart(s),s,$1).b=s.b) & (for f being FinSeq-Location holds Comput(
-ProgramPart(s),s,$1)
+Comput(P,s,$1).b=s.b) & (for f being FinSeq-Location holds Comput(
+P,s,$1)
     .f = s.f);
     set f = <%a:=intloc 0%> ^ (k1 --> AddTo(a,intloc 0)) ^ <%halt SCM+FSA%>;
 A9: f.0 = (<%a:=intloc 0%>^((k1 --> AddTo(a,intloc 0))^<%halt SCM+FSA%>))
     .0 by AFINSQ_1:30
       .= a:= intloc 0 by AFINSQ_1:39;
-B11: len f = len(<%a:=intloc 0%>^(k1-->AddTo(a,intloc 0)))+len<%halt
+A10: len f = len(<%a:=intloc 0%>^(k1-->AddTo(a,intloc 0)))+len<%halt
     SCM+FSA%> by AFINSQ_1:20
       .= k + 1 by A8,AFINSQ_1:36;
-A14: now
+A11: now
       let i be Element of NAT;
       assume that
-A15:  i <= k;
-       i < k+1 by A15,NAT_1:13;
-      hence  i in dom  f by B11,NAT_1:45;
+A12:  i <= k;
+       i < k+1 by A12,NAT_1:13;
+      hence  i in dom  f by A10,NAT_1:45;
     end;
-A17: now
+A13: now
       let i be Element of NAT;
       assume that
-A18:  i <= k;
-   i in dom  f by A14,A18;
-      hence s. i = ( f). i by A3,A7,GRFUNC_1:8;
+A14:  i <= k;
+   i in dom  f by A11,A14;
+      hence P. i = ( f). i by A3,A7,GRFUNC_1:8;
     end;
     then
-A20: s.0 = a:= intloc 0 by A9;
-A21: now
+A15: P.0 = a:= intloc 0 by A9;
+A16: now
       let n be Element of NAT;
       assume n = 0;
       hence
-A22:  Comput(ProgramPart(s),s,n) = s by EXTPRO_1:3;
-      hence CurInstr(ProgramPart Comput(ProgramPart(s),s,n),Comput(ProgramPart(
-s),s,n))
-       = a:= intloc 0 by A1,A20,COMPOS_1:38;
-      thus Comput(ProgramPart(s),s,n+1) = Following(ProgramPart s,
-      Comput(ProgramPart(s),s,n)) by EXTPRO_1:4
-        .= Exec(a:= intloc 0,s) by A1,A20,A22,COMPOS_1:38;
+A17:  Comput(P,s,n) = s by EXTPRO_1:3;
+      hence CurInstr(P,Comput(P,s,n))
+       = a:= intloc 0 by A2,A15,PBOOLE:158;
+      thus Comput(P,s,n+1) = Following(P,
+      Comput(P,s,n)) by EXTPRO_1:4
+        .= Exec(a:= intloc 0,s) by A2,A15,A17,PBOOLE:158;
     end;
-A23: now
+A18: now
       let i be Element of NAT;
       assume that
-A24:  1 <= i and
-A25:  i < k;
-      reconsider i1 = i - 1 as Element of NAT by A24,INT_1:18;
-      i - 1 < k - 1 by A25,XREAL_1:11;
+A19:  1 <= i and
+A20:  i < k;
+      reconsider i1 = i - 1 as Element of NAT by A19,INT_1:18;
+      i - 1 < k - 1 by A20,XREAL_1:11;
       then
-A27:  i1 in k1 by A6,NAT_1:45;
-A28:  len <%a:= intloc 0%> = 1 by AFINSQ_1:36;
-TT:   len(k1-->AddTo(a,intloc 0)) = k1 by CARD_1:106;
+A21:  i1 in k1 by A6,NAT_1:45;
+A22:  len <%a:= intloc 0%> = 1 by AFINSQ_1:36;
+A23:   len(k1-->AddTo(a,intloc 0)) = k1 by CARD_1:106;
       i in dom (<%a:=intloc 0%>^(k1-->AddTo(a,intloc 0)))
-           by A25,A8,NAT_1:45;
+           by A20,A8,NAT_1:45;
       hence f.i=(<%a:=intloc 0%>^(k1-->AddTo(a,intloc 0))).i by AFINSQ_1:def 4
         .= (k1-->AddTo(a,intloc 0)).(i - 1)
-         by A24,A25,A28,TT,A6,AFINSQ_1:21
-        .= AddTo(a,intloc 0) by A27,FUNCOP_1:13;
+         by A19,A20,A22,A23,A6,AFINSQ_1:21
+        .= AddTo(a,intloc 0) by A21,FUNCOP_1:13;
     end;
-A29: now
+A24: now
       let i be Element of NAT;
       assume that
-A30:  0 < i and
-A31:  i < k;
-A32:  0+1 <= i by A30,NAT_1:13;
-      thus s. i = f.(i) by A17,A31
-        .=AddTo(a,intloc 0) by A23,A32,A31;
+A25:  0 < i and
+A26:  i < k;
+A27:  0+1 <= i by A25,NAT_1:13;
+      thus P. i = f.(i) by A13,A26
+        .=AddTo(a,intloc 0) by A18,A27,A26;
     end;
-A33: for i being Element of NAT st i <= k holds IC Comput(ProgramPart(s),s,i) =
+A28: for i being Element of NAT st i <= k holds IC Comput(P,s,i) =
      i
     proof
-      defpred P[Nat] means $1 <= k implies IC Comput(ProgramPart(s),s,$1) =
+      defpred P[Nat] means $1 <= k implies IC Comput(P,s,$1) =
        $1;
       let i be Element of NAT;
       assume
-A34:  i <= k;
-A35:  for n being Element of NAT st P[n] holds P[n + 1]
+A29:  i <= k;
+A30:  for n being Element of NAT st P[n] holds P[n + 1]
       proof
         let n be Element of NAT;
         assume
-A36:    P[n];
+A31:    P[n];
         assume
-A37:    n+1 <= k;
+A32:    n+1 <= k;
         then
-A38:    n < k by NAT_1:13;
+A33:    n < k by NAT_1:13;
         per cases;
         suppose
-A39:      n=0;
-          hence IC Comput(ProgramPart(s),s,n+1) = Exec(a:= intloc 0,s).IC
-SCM+FSA by A21
-            .= succ  n by A1,A39,SCMFSA_2:89
+A34:      n=0;
+          hence IC Comput(P,s,n+1) = Exec(a:= intloc 0,s).IC
+SCM+FSA by A16
+            .= succ  n by A2,A34,SCMFSA_2:89
             .=  (n+1) by NAT_1:39;
         end;
         suppose
-A40:      n>0;
-Y:  (ProgramPart Comput(ProgramPart(s),s,n))/.IC Comput(ProgramPart(s),s,n)
- = Comput(ProgramPart(s),s,n).IC Comput(ProgramPart(s),s,n) by COMPOS_1:38;
+A35:      n>0;
+A36:  P/.IC Comput(P,s,n) = P.IC Comput(P,s,n) by PBOOLE:158;
           n + 0 <= n + 1 by XREAL_1:9;
           then
-A41:      CurInstr(ProgramPart Comput(ProgramPart(s),s,n),Comput(ProgramPart(s)
-,s,n)) = s. n
-by A36,A37,Y,AMI_1:54,XXREAL_0:2
-            .= AddTo(a,intloc 0) by A29,A38,A40;
-          Comput(ProgramPart(s),s,n+1) = Following(ProgramPart s,
-          Comput(ProgramPart(s),s,n)) by EXTPRO_1:4
-            .= Exec(AddTo(a,intloc 0), Comput(ProgramPart(s),s,n))
-               by A41,AMI_1:123;
-          hence IC Comput(ProgramPart(s),s,n+1) = succ IC Comput(ProgramPart(s)
+A37:      CurInstr(P,Comput(P,s,n)) = P. n
+by A31,A32,A36,XXREAL_0:2
+            .= AddTo(a,intloc 0) by A24,A33,A35;
+          Comput(P,s,n+1) = Following(P,
+          Comput(P,s,n)) by EXTPRO_1:4
+            .= Exec(AddTo(a,intloc 0), Comput(P,s,n))
+               by A37;
+          hence IC Comput(P,s,n+1) = succ IC Comput(P
 ,s,n) by SCMFSA_2:90
-            .=  (n+1) by A36,A37,NAT_1:13,39;
+            .=  (n+1) by A31,A32,NAT_1:13,39;
         end;
       end;
-A42:  P[0] by A1,EXTPRO_1:3;
-      for i being Element of NAT holds P[i] from NAT_1:sch 1(A42,A35);
-      hence thesis by A34;
+A38:  P[0] by A2,EXTPRO_1:3;
+      for i being Element of NAT holds P[i] from NAT_1:sch 1(A38,A30);
+      hence thesis by A29;
     end;
-A43: for n being Element of NAT st Q[n] holds Q[n + 1]
+A39: for n being Element of NAT st Q[n] holds Q[n + 1]
     proof
       let n be Element of NAT;
       assume
-A44:  Q[n];
+A40:  Q[n];
       assume
-A45:  n + 1 <= k;
+A41:  n + 1 <= k;
       per cases;
       suppose
-A46:    n = 0;
+A42:    n = 0;
         hereby
           assume 1 <= n + 1;
-          thus Comput(ProgramPart(s),s,n+1).a = Exec(a:= intloc 0,s).a by A21
-,A46
-            .= n + 1 by A2,A46,SCMFSA_2:89;
+          thus Comput(P,s,n+1).a = Exec(a:= intloc 0,s).a by A16,A42
+            .= n + 1 by A1,A42,SCMFSA_2:89;
         end;
         hereby
           let b be Int-Location;
           assume
-A47:      b <> a;
-          thus Comput(ProgramPart(s),s,n+1).b = Exec(a:= intloc 0,s).b by A21
-,A46
-            .= s.b by A47,SCMFSA_2:89;
+A43:      b <> a;
+          thus Comput(P,s,n+1).b = Exec(a:= intloc 0,s).b by A16,A42
+            .= s.b by A43,SCMFSA_2:89;
         end;
         let f be FinSeq-Location;
-        thus Comput(ProgramPart(s),s,n+1).f = Exec(a:= intloc 0,s).f by A21,A46
+        thus Comput(P,s,n+1).f = Exec(a:= intloc 0,s).f by A16,A42
           .= s.f by SCMFSA_2:89;
       end;
       suppose
-A48:    n > 0;
-A49:    n < k by A45,NAT_1:13;
-Y:  (ProgramPart Comput(ProgramPart(s),s,n))/.IC Comput(ProgramPart(s),s,n)
- = Comput(ProgramPart(s),s,n).IC Comput(ProgramPart(s),s,n) by COMPOS_1:38;
-A50:    n + 0 <= n + 1 by XREAL_1:9;
+A44:    n > 0;
+A45:    n < k by A41,NAT_1:13;
+A46:  P/.IC Comput(P,s,n) = P.IC Comput(P,s,n) by PBOOLE:158;
+A47:    n + 0 <= n + 1 by XREAL_1:9;
         then
-A51:    CurInstr(ProgramPart Comput(ProgramPart(s),s,n),Comput(ProgramPart(s),s
-,n))
- = ( Comput(ProgramPart(s),s,n)). n by A33,A45,Y,XXREAL_0:2
-          .= s. n by AMI_1:54
-          .= AddTo(a,intloc 0) by A29,A48,A49;
-A52:    Comput(ProgramPart(s),s,n+1) = Following(ProgramPart s,
-Comput(ProgramPart(s),s,n)) by EXTPRO_1:4
-          .= Exec(AddTo(a,intloc 0), Comput(ProgramPart(s),s,n))
-             by A51,AMI_1:123;
-A53:    0 + 1 <= n by A48,INT_1:20;
+A48:    CurInstr(P,Comput(P,s,n))
+           = P. n by A28,A41,A46,XXREAL_0:2
+          .= P. n
+          .= AddTo(a,intloc 0) by A24,A44,A45;
+A49:    Comput(P,s,n+1) = Following(P,
+Comput(P,s,n)) by EXTPRO_1:4
+          .= Exec(AddTo(a,intloc 0), Comput(P,s,n))
+             by A48;
+A50:    0 + 1 <= n by A44,INT_1:20;
         hereby
           assume 1 <= n + 1;
-          thus Comput(ProgramPart(s),s,n+1).a = n + Comput(ProgramPart(s),s,n).
-intloc 0 by A44,A45,A53,A50,A52,SCMFSA_2:90,XXREAL_0:2
-            .= n + 1 by A2,A4,A44,A45,A50,XXREAL_0:2;
+          thus Comput(P,s,n+1).a = n + Comput(P,s,n).
+intloc 0 by A40,A41,A50,A47,A49,SCMFSA_2:90,XXREAL_0:2
+            .= n + 1 by A1,A4,A40,A41,A47,XXREAL_0:2;
         end;
         hereby
           let b be Int-Location;
           assume
-A54:      b <> a;
-          hence Comput(ProgramPart(s),s,n+1).b = Comput(ProgramPart(s),s,n).b
-by A52,SCMFSA_2:90
-            .= s.b by A44,A45,A50,A54,XXREAL_0:2;
+A51:      b <> a;
+          hence Comput(P,s,n+1).b = Comput(P,s,n).b
+by A49,SCMFSA_2:90
+            .= s.b by A40,A41,A47,A51,XXREAL_0:2;
         end;
         let f be FinSeq-Location;
-        thus ( Comput(ProgramPart(s),s,n+1)).f = Comput(ProgramPart(s),s,n).f
-by A52,SCMFSA_2:90
-          .= s.f by A44,A45,A50,XXREAL_0:2;
+        thus ( Comput(P,s,n+1)).f = Comput(P,s,n).f
+by A49,SCMFSA_2:90
+          .= s.f by A40,A41,A47,XXREAL_0:2;
       end;
     end;
    k < k + len <%halt SCM+FSA%> by XREAL_1:31;
@@ -907,221 +893,208 @@ by A52,SCMFSA_2:90
     f.(k) = <% halt SCM+FSA %>.(k - k) by A8,AFINSQ_1:21
       .= halt SCM+FSA by AFINSQ_1:38;
     then
-A55: s. k = halt SCM+FSA by A17;
+A52: P. k = halt SCM+FSA by A13;
     0 + 1 < k + 1 by A5,XREAL_1:8;
     then
-A56: 1 <= k by NAT_1:13;
-A57: Q[0] by EXTPRO_1:3;
-A58: for i being Element of NAT holds Q[i] from NAT_1:sch 1(A57,A43);
-Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by COMPOS_1:38;
-TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:123;
-A59: CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,k)
-)
- = ( Comput(ProgramPart(s),s,k)). k by A33,Y,TX
-      .= halt SCM+FSA by A55,AMI_1:54;
-    hence ProgramPart s halts_on s by EXTPRO_1:30;
-    then Comput(ProgramPart(s),s,k) = Result(ProgramPart(s),s)
-    by A59,EXTPRO_1:def 8;
-    hence thesis by A58,A56;
+A53: 1 <= k by NAT_1:13;
+A54: Q[0] by EXTPRO_1:3;
+A55: for i being Element of NAT holds Q[i] from NAT_1:sch 1(A54,A39);
+A56:  P/.IC Comput(P,s,k) = P.IC Comput(P,s,k) by PBOOLE:158;
+A57: CurInstr(P,Comput(P,s,k)) = P. k by A28,A56
+      .= halt SCM+FSA by A52;
+    hence P halts_on s by EXTPRO_1:30;
+    then Comput(P,s,k) = Result(P,s)
+    by A57,EXTPRO_1:def 8;
+    hence thesis by A55,A53;
   end;
   suppose
-A60: k <= 0;
+A58: k <= 0;
     then reconsider mk = - k as Element of NAT by INT_1:16;
     defpred Q[Nat] means $1 <= mk+1+1 implies (1 <= $1 implies
-    Comput(ProgramPart(s),s,$1).a = -$1+1+1) & (for b being Int-Location st b
+    Comput(P,s,$1).a = -$1+1+1) & (for b being Int-Location st b
 <> a holds
-Comput(ProgramPart(s),s,$1).b=s.b) & (for f being FinSeq-Location holds Comput(
-ProgramPart(s),s,$1)
+Comput(P,s,$1).b=s.b) & (for f being FinSeq-Location holds Comput(
+P,s,$1)
     .f = s.f);
     consider k1 being Element of NAT such that
-A61: k1 + k = 1 and
-A62: a:=k =  (<%a:=intloc 0%> ^ (k1 --> SubFrom(a,intloc 0)) ^ <%
-    halt SCM+FSA%>) by A60,Def2;
-A63: len (<%a:=intloc 0%>^(k1-->SubFrom(a,intloc 0))) = len<%a:=intloc 0%>
+A59: k1 + k = 1 and
+A60: a:=k =  (<%a:=intloc 0%> ^ (k1 --> SubFrom(a,intloc 0)) ^ <%
+    halt SCM+FSA%>) by A58,Def2;
+A61: len (<%a:=intloc 0%>^(k1-->SubFrom(a,intloc 0))) = len<%a:=intloc 0%>
     + len(k1-->SubFrom(a,intloc 0)) by AFINSQ_1:20
       .= 1 + len(k1-->SubFrom(a,intloc 0)) by AFINSQ_1:36
-      .= mk+1+1 by A61,CARD_1:106;
+      .= mk+1+1 by A59,CARD_1:106;
     set f = <%a:=intloc 0%> ^ (k1 --> SubFrom(a,intloc 0)) ^ <%halt SCM+FSA%>;
-A64: f.0 = (<%a:=intloc 0%>^((k1-->SubFrom(a,intloc 0))^<%halt SCM+FSA%>))
+A62: f.0 = (<%a:=intloc 0%>^((k1-->SubFrom(a,intloc 0))^<%halt SCM+FSA%>))
     .0 by AFINSQ_1:30
       .= a:= intloc 0 by AFINSQ_1:39;
-B66: len f = len(<%a:=intloc 0%>^(k1-->SubFrom(a,intloc 0)))+len<%halt
+A63: len f = len(<%a:=intloc 0%>^(k1-->SubFrom(a,intloc 0)))+len<%halt
     SCM+FSA %> by AFINSQ_1:20
-      .= mk+1+1 + 1 by A63,AFINSQ_1:36;
-A69: now
+      .= mk+1+1 + 1 by A61,AFINSQ_1:36;
+A64: now
       let i be Element of NAT;
       assume that
-A70:  i <= mk+1+1;
-      i < mk+1+1+1 by A70,NAT_1:13;
-      hence  i in dom  f by B66,NAT_1:45;
+A65:  i <= mk+1+1;
+      i < mk+1+1+1 by A65,NAT_1:13;
+      hence  i in dom  f by A63,NAT_1:45;
     end;
-A72: now
+A66: now
       let i be Element of NAT;
       assume that
-A73:  i <= mk+1+1;
-   i in dom  f by A69,A73;
-      hence s. i = ( f). i by A3,A62,GRFUNC_1:8;
+A67:  i <= mk+1+1;
+   i in dom  f by A64,A67;
+      hence P.i = ( f). i by A3,A60,GRFUNC_1:8;
     end;
     then
-A75: s.0 = a:= intloc 0 by A64;
-A76: now
+A68: P.0 = a:= intloc 0 by A62;
+A69: now
       let n be Element of NAT;
       assume n = 0;
       hence
-A77:  Comput(ProgramPart(s),s,n) = s by EXTPRO_1:3;
-      hence CurInstr(ProgramPart Comput(ProgramPart(s),s,n),Comput(ProgramPart(
-s),s,n))
-       = a:= intloc 0 by A1,A75,COMPOS_1:38;
-      thus Comput(ProgramPart(s),s,n+1) = Following(ProgramPart s,
-      Comput(ProgramPart(s),s,n)) by EXTPRO_1:4
-        .= Exec(a:= intloc 0,s) by A1,A75,A77,COMPOS_1:38;
+A70:  Comput(P,s,n) = s by EXTPRO_1:3;
+      hence CurInstr(P,Comput(P,s,n))
+       = a:= intloc 0 by A2,A68,PBOOLE:158;
+      thus Comput(P,s,n+1) = Following(P,
+      Comput(P,s,n)) by EXTPRO_1:4
+        .= Exec(a:= intloc 0,s) by A2,A68,A70,PBOOLE:158;
     end;
-A78: now
-A79:  len <%a:= intloc 0%> = 1 by AFINSQ_1:36;
+A71: now
+A72:  len <%a:= intloc 0%> = 1 by AFINSQ_1:36;
       let i be Element of NAT;
       assume that
-A80:  1 <= i and
-A81:  i < mk+1+1;
-      reconsider i1 = i - 1 as Element of NAT by A80,INT_1:18;
-      i-1 < k1+1-1 by A81,A61,XREAL_1:11;
+A73:  1 <= i and
+A74:  i < mk+1+1;
+      reconsider i1 = i - 1 as Element of NAT by A73,INT_1:18;
+      i-1 < k1+1-1 by A74,A59,XREAL_1:11;
       then
-A84:  i1 in k1 by NAT_1:45;
-TT:   len(k1-->SubFrom(a,intloc 0)) = k1 by CARD_1:106;
+A75:  i1 in k1 by NAT_1:45;
+A76:   len(k1-->SubFrom(a,intloc 0)) = k1 by CARD_1:106;
       i in dom (<%a:=intloc 0%>^(k1-->SubFrom(a,intloc 0)))
-       by A81,A63,NAT_1:45;
+       by A74,A61,NAT_1:45;
       hence f.i = (<%a:=intloc 0%>^(k1-->SubFrom(a,intloc 0))).i by
 AFINSQ_1:def 4
         .= (k1-->SubFrom(a,intloc 0)).(i - 1)
-             by A61,A80,A81,A79,TT,AFINSQ_1:21
-        .= SubFrom(a,intloc 0) by A84,FUNCOP_1:13;
+             by A59,A73,A74,A72,A76,AFINSQ_1:21
+        .= SubFrom(a,intloc 0) by A75,FUNCOP_1:13;
     end;
-A85: now
+A77: now
       let i be Element of NAT;
       assume that
-A86:  0 < i and
-A87:  i < mk+1+1;
-A88:   0+1 <= i by A86,NAT_1:13;
-      thus s. i = f.(i) by A72,A87
-        .=SubFrom(a,intloc 0) by A78,A88,A87;
+A78:  0 < i and
+A79:  i < mk+1+1;
+A80:   0+1 <= i by A78,NAT_1:13;
+      thus P. i = f.(i) by A66,A79
+        .=SubFrom(a,intloc 0) by A71,A80,A79;
     end;
-A89: for i being Element of NAT st i <= mk+1+1 holds IC Comput(ProgramPart(s),s
+A81: for i being Element of NAT st i <= mk+1+1 holds IC Comput(P,s
 ,i)
     =  i
     proof
-      defpred P[Nat] means $1<=mk+1+1 implies IC Comput(ProgramPart(s),s,$1)=
+      defpred P[Nat] means $1<=mk+1+1 implies IC Comput(P,s,$1)=
        $1;
       let i be Element of NAT;
       assume
-A90:  i <= mk+1+1;
-A91:  for n being Element of NAT st P[n] holds P[n + 1]
+A82:  i <= mk+1+1;
+A83:  for n being Element of NAT st P[n] holds P[n + 1]
       proof
         let n be Element of NAT;
         assume
-A92:    P[n];
+A84:    P[n];
         assume
-A93:    n+1 <= mk+1+1;
+A85:    n+1 <= mk+1+1;
         then
-A94:    n < mk+1+1 by NAT_1:13;
+A86:    n < mk+1+1 by NAT_1:13;
         per cases;
         suppose
-A95:      n=0;
+A87:      n=0;
           hence
-          IC Comput(ProgramPart(s),s,n+1) = Exec(a:= intloc 0,s).IC SCM+FSA by
-A76
-            .= succ  n by A1,A95,SCMFSA_2:89
+          IC Comput(P,s,n+1) = Exec(a:= intloc 0,s).IC SCM+FSA by A69
+            .= succ  n by A2,A87,SCMFSA_2:89
             .=  (n+1) by NAT_1:39;
         end;
         suppose
-A96:      n>0;
-Y:  (ProgramPart Comput(ProgramPart(s),s,n))/.IC Comput(ProgramPart(s),s,n)
- = Comput(ProgramPart(s),s,n).IC Comput(ProgramPart(s),s,n) by COMPOS_1:38;
+A88:      n>0;
+A89:  P/.IC Comput(P,s,n) = P.IC Comput(P,s,n) by PBOOLE:158;
           n + 0 <= n + 1 by XREAL_1:9;
           then
-A97:      CurInstr(ProgramPart Comput(ProgramPart(s),s,n),Comput(ProgramPart(s)
+A90:      CurInstr(P,Comput(P
 ,s,n))
- = s. n by A92,A93,Y,AMI_1:54,XXREAL_0:2
-            .= SubFrom(a,intloc 0) by A85,A94,A96;
-          Comput(ProgramPart(s),s,n+1) = Following(ProgramPart s,
-          Comput(ProgramPart(s),s,n)) by EXTPRO_1:4
-            .= Exec(SubFrom(a,intloc 0), Comput(ProgramPart(s),s,n))
-             by A97,AMI_1:123;
-          hence IC Comput(ProgramPart(s),s,n+1) = succ IC Comput(ProgramPart(s)
+ = P. n by A84,A85,A89,XXREAL_0:2
+            .= SubFrom(a,intloc 0) by A77,A86,A88;
+          Comput(P,s,n+1) = Following(P,
+          Comput(P,s,n)) by EXTPRO_1:4
+            .= Exec(SubFrom(a,intloc 0), Comput(P,s,n))
+             by A90;
+          hence IC Comput(P,s,n+1) = succ IC Comput(P
 ,s,n) by SCMFSA_2:91
-            .=  (n+1) by A92,A93,NAT_1:13,39;
+            .=  (n+1) by A84,A85,NAT_1:13,39;
         end;
       end;
-A98:  P[0] by A1,EXTPRO_1:3;
-      for i being Element of NAT holds P[i] from NAT_1:sch 1(A98,A91);
-      hence thesis by A90;
+A91:  P[0] by A2,EXTPRO_1:3;
+      for i being Element of NAT holds P[i] from NAT_1:sch 1(A91,A83);
+      hence thesis by A82;
     end;
-A99: for n being Element of NAT st Q[n] holds Q[n + 1]
+A92: for n being Element of NAT st Q[n] holds Q[n + 1]
     proof
       let n be Element of NAT;
       assume
-A100: Q[n];
+A93: Q[n];
       assume
-A101: n + 1 <= mk+1+1;
+A94: n + 1 <= mk+1+1;
       per cases;
       suppose
-A102:   n = 0;
+A95:   n = 0;
         hereby
           assume 1 <= n + 1;
-          thus Comput(ProgramPart(s),s,n+1).a = Exec(a:= intloc 0,s).a by A76
-,A102
-            .= -(n + 1)+1+1 by A2,A102,SCMFSA_2:89;
+          thus Comput(P,s,n+1).a = Exec(a:= intloc 0,s).a by A69,A95
+            .= -(n + 1)+1+1 by A1,A95,SCMFSA_2:89;
         end;
         hereby
           let b be Int-Location;
           assume
-A103:     b <> a;
-          thus Comput(ProgramPart(s),s,n+1).b = Exec(a:= intloc 0,s).b by A76
-,A102
-            .= s.b by A103,SCMFSA_2:89;
+A96:     b <> a;
+          thus Comput(P,s,n+1).b = Exec(a:= intloc 0,s).b by A69,A95
+            .= s.b by A96,SCMFSA_2:89;
         end;
         let f be FinSeq-Location;
-        thus Comput(ProgramPart(s),s,n+1).f = Exec(a:= intloc 0,s).f by A76
-,A102
+        thus Comput(P,s,n+1).f = Exec(a:= intloc 0,s).f by A69,A95
           .= s.f by SCMFSA_2:89;
       end;
       suppose
-A104:   n > 0;
-A105:   n < mk+1+1 by A101,NAT_1:13;
-Y:  (ProgramPart Comput(ProgramPart(s),s,n))/.IC Comput(ProgramPart(s),s,n)
- = Comput(ProgramPart(s),s,n).IC Comput(ProgramPart(s),s,n) by COMPOS_1:38;
-A106:   n + 0 <= n + 1 by XREAL_1:9;
+A97:   n > 0;
+A98:   n < mk+1+1 by A94,NAT_1:13;
+A99:  P/.IC Comput(P,s,n) = P.IC Comput(P,s,n) by PBOOLE:158;
+A100:   n + 0 <= n + 1 by XREAL_1:9;
         then
-A107:   CurInstr(ProgramPart Comput(ProgramPart(s),s,n),Comput(ProgramPart(s),s
-,n))
- = ( Comput(ProgramPart(s),s,n)). n by A89,A101,Y,XXREAL_0:2
-          .= s. n by AMI_1:54
-          .= SubFrom(a,intloc 0) by A85,A104,A105;
-A108:   Comput(ProgramPart(s),s,n+1) =
-Following(ProgramPart s,Comput(ProgramPart(s),s,n))
+A101:   CurInstr(P,Comput(P,s,n))
+ = P. n by A81,A94,A99,XXREAL_0:2
+          .= P. n
+          .= SubFrom(a,intloc 0) by A77,A97,A98;
+A102:   Comput(P,s,n+1) =
+Following(P,Comput(P,s,n))
  by EXTPRO_1:4
-          .= Exec(SubFrom(a,intloc 0), Comput(ProgramPart(s),s,n))
-          by A107,AMI_1:123;
-A109:   0 + 1 < n + 1 by A104,XREAL_1:8;
+          .= Exec(SubFrom(a,intloc 0), Comput(P,s,n))
+          by A101;
+A103:   0 + 1 < n + 1 by A97,XREAL_1:8;
         hereby
           assume 1 <= n + 1;
-          thus Comput(ProgramPart(s),s,n+1).a = -n+1+1 - Comput(ProgramPart(s),
-s,n).intloc 0 by A100,A101,A109,A108,NAT_1:13,SCMFSA_2:91
-            .= -n+1+1 - s.intloc 0 by A4,A100,A101,A106,XXREAL_0:2
-            .= -(n+1)+1+1 by A2;
+          thus Comput(P,s,n+1).a = -n+1+1 - Comput(P,
+s,n).intloc 0 by A93,A94,A103,A102,NAT_1:13,SCMFSA_2:91
+            .= -n+1+1 - s.intloc 0 by A4,A93,A94,A100,XXREAL_0:2
+            .= -(n+1)+1+1 by A1;
         end;
         hereby
           let b be Int-Location;
           assume
-A110:     b <> a;
-          hence Comput(ProgramPart(s),s,n+1).b = Comput(ProgramPart(s),s,n).b
-by A108,SCMFSA_2:91
-            .= s.b by A100,A101,A106,A110,XXREAL_0:2;
+A104:     b <> a;
+          hence Comput(P,s,n+1).b = Comput(P,s,n).b
+by A102,SCMFSA_2:91
+            .= s.b by A93,A94,A100,A104,XXREAL_0:2;
         end;
         let f be FinSeq-Location;
-        thus ( Comput(ProgramPart(s),s,n+1)).f = Comput(ProgramPart(s),s,n).f
-by A108,SCMFSA_2:91
-          .= s.f by A100,A101,A106,XXREAL_0:2;
+        thus ( Comput(P,s,n+1)).f = Comput(P,s,n).f
+by A102,SCMFSA_2:91
+          .= s.f by A93,A94,A100,XXREAL_0:2;
       end;
     end;
 
@@ -1132,39 +1105,33 @@ by A108,SCMFSA_2:91
    len (<%a:=intloc 0%> ^ (k1 --> SubFrom(a,intloc 0))))
            by AFINSQ_1:21;
    then
-    f.(mk+1+1) = halt SCM+FSA by A63,AFINSQ_1:38,XREAL_1:31;
+    f.(mk+1+1) = halt SCM+FSA by A61,AFINSQ_1:38,XREAL_1:31;
     then
-A111: s. (mk+1+1) = halt SCM+FSA by A72;
-Y:  (ProgramPart Comput(ProgramPart(s),s,mk+1+1))/.IC Comput(ProgramPart(s),s,
-mk+1+1)
- = Comput(ProgramPart(s),s,mk+1+1).IC Comput(ProgramPart(s),s,mk+1+1) by
-COMPOS_1:38;
-TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,mk+1+1)
-by AMI_1:123;
-A112: CurInstr(ProgramPart(s),Comput(ProgramPart(s
-),s,mk+1+1))
-     = ( Comput(ProgramPart(s),s,mk+1+1)). (mk+1+1) by A89,Y,TX
-      .= halt SCM+FSA by A111,AMI_1:54;
-    hence ProgramPart s halts_on s by EXTPRO_1:30;
+A105: P. (mk+1+1) = halt SCM+FSA by A66;
+A106:  P/.IC Comput(P,s,mk+1+1)
+ = P.IC Comput(P,s,mk+1+1) by PBOOLE:158;
+A107: CurInstr(P,Comput(P,s,mk+1+1))
+     = P. (mk+1+1) by A81,A106
+      .= halt SCM+FSA by A105;
+    hence P halts_on s by EXTPRO_1:30;
     then
-A113: Comput(ProgramPart(s),s,mk+1+1) = Result(ProgramPart(s),s) by A112,
-EXTPRO_1:def 8;
-A114: Q[0] by EXTPRO_1:3;
-A115: for i being Element of NAT holds Q[i] from NAT_1:sch 1(A114,A99);
+A108: Comput(P,s,mk+1+1) = Result(P,s) by A107,EXTPRO_1:def 8;
+A109: Q[0] by EXTPRO_1:3;
+A110: for i being Element of NAT holds Q[i] from NAT_1:sch 1(A109,A92);
     -(mk+1+1)+1+1 = k & 0 + 1 <= mk+(1+1) by XREAL_1:9;
-    hence thesis by A115,A113;
+    hence thesis by A110,A108;
   end;
 end;
 
 theorem
   for s being 0-started State of SCM+FSA st s.intloc 0 = 1 for f
-  being FinSeq-Location, p being FinSequence of INT st f:=p c= s
-   holds ProgramPart s halts_on s &
-    (Result(ProgramPart(s),s)).f = p &
+  being FinSeq-Location, p being FinSequence of INT st f:=p c= P
+   holds P halts_on s &
+    (Result(P,s)).f = p &
  (for b being Int-Location st b <> intloc 1 & b <> intloc 2
-  holds (Result(ProgramPart(s),s)).b = s.b) &
+  holds (Result(P,s)).b = s.b) &
  for g being FinSeq-Location st g <> f
-  holds (Result(ProgramPart(s),s)).g = s.g
+  holds (Result(P,s)).g = s.g
 proof
   set D = the Instructions of SCM+FSA;
   set V = intloc 2;
@@ -1173,555 +1140,524 @@ proof
 A1: I <> O by AMI_3:52;
 A2: I <> V by AMI_3:52;
   let s be 0-started State of SCM+FSA such that
-A4: s.O = 1;
+A3: s.O = 1;
   let f be FinSeq-Location, p be FinSequence of INT such that
-A5: f:=p c= s;
+A4: f:=p c= P;
   set q = aSeq(I,len p)^<% f:=<0,...,0>I %>^aSeq(f,p)^<% halt SCM+FSA %>;
-A9: now
+A5: now
     let i,k be Element of NAT;
     assume i < len q;
     then
-A10:  i in dom  q by NAT_1:45;
-    thus ( Comput(ProgramPart(s),s,k)). i = s. i by AMI_1:54
-      .= q.(i) by A5,A10,GRFUNC_1:8;
+A6:  i in dom  q by NAT_1:45;
+    thus P. i = P. i
+      .= q.(i) by A4,A6,GRFUNC_1:8;
   end;
   set q0 = aSeq(I,len p) ^ <% f:=<0,...,0>I %>;
   consider pp being XFinSequence of D^omega such that
-A15: len pp = len p and
-A16: for k being Element of NAT st k < len pp holds
+A7: len pp = len p and
+A8: for k being Element of NAT st k < len pp holds
    ex i being Integer st i = p.(k+1) &
    pp.k = (aSeq(I,k+1) ^ aSeq(V,i) ^ <% (f,I):=V %>) and
-A17: aSeq(f,p) = FlattenSeq pp by Def4;
+A9: aSeq(f,p) = FlattenSeq pp by Def4;
   len<% halt SCM+FSA %> = 1 by AFINSQ_1:38;
-  then len q = len (q0 ^ FlattenSeq pp) + 1 by A17,AFINSQ_1:20;
+  then len q = len (q0 ^ FlattenSeq pp) + 1 by A9,AFINSQ_1:20;
   then
-A18: len (q0 ^ FlattenSeq pp) < len q by NAT_1:13;
+A10: len (q0 ^ FlattenSeq pp) < len q by NAT_1:13;
   defpred P[XFinSequence] means $1 c= pp implies
    (ex pp0 being XFinSequence of D^omega  st
    (pp0 = $1 &
     (for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp0)
-       holds IC Comput(ProgramPart(s),s,i) =  i) &
-   ((Comput(ProgramPart(s),s,len (q0^ FlattenSeq pp0)).f) | len pp0
+       holds IC Comput(P,s,i) =  i) &
+   ((Comput(P,s,len (q0^ FlattenSeq pp0)).f) | len pp0
     = p | len pp0) &
-   len (Comput(ProgramPart(s),s,len(q0 ^FlattenSeq pp0)).f) = len p &
+   len (Comput(P,s,len(q0 ^FlattenSeq pp0)).f) = len p &
    (for b being Int-Location st b <> I & b <> V
-  holds Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp0)).b = s.b) &
+  holds Comput(P,s,len (q0 ^ FlattenSeq pp0)).b = s.b) &
   (for g being FinSeq-Location st g <> f
-   holds Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp0)).g = s.g)));
-A19: V <> O by AMI_3:52;
-A20: for r being XFinSequence, x being set st P[r] holds P[r ^ <% x %>]
+   holds Comput(P,s,len (q0 ^ FlattenSeq pp0)).g = s.g)));
+A11: V <> O by AMI_3:52;
+A12: for r being XFinSequence, x being set st P[r] holds P[r ^ <% x %>]
   proof
     let r be XFinSequence, x be set;
     assume
-A21: P[r];
+A13: P[r];
     set r1 = len r;
     len<% x %> =1 by AFINSQ_1:38;
     then len (r ^ <% x %>) = r1+1 by AFINSQ_1:20;
     then r1 < len (r ^ <% x %>) by XREAL_1:31;
     then
-A22: r1 in dom (r ^ <% x %>) by NAT_1:45;
+A14: r1 in dom (r ^ <% x %>) by NAT_1:45;
     assume
-A23: r ^ <% x %> c= pp;
+A15: r ^ <% x %> c= pp;
     then
-A24: dom (r ^ <% x %>) c= dom pp by GRFUNC_1:8;
+A16: dom (r ^ <% x %>) c= dom pp by GRFUNC_1:8;
     then
-uu:   r1 < len pp by A22,NAT_1:45;
+A17:   r1 < len pp by A14,NAT_1:45;
     then consider pr1 being Integer such that
-A26: pr1 = p.(r1+1) and
-A27: pp.r1 = aSeq(I,r1+1) ^ aSeq(V,pr1) ^ <% (f,I):=V %> by A16;
-     1 <= r1+1 & r1+1 <= len pp by uu,NAT_1:11,13;
+A18: pr1 = p.(r1+1) and
+A19: pp.r1 = aSeq(I,r1+1) ^ aSeq(V,pr1) ^ <% (f,I):=V %> by A8;
+     1 <= r1+1 & r1+1 <= len pp by A17,NAT_1:11,13;
      then
-OO:  r1+1 in Seg len pp;
+A20:  r1+1 in Seg len pp;
     r c= r ^ <% x %> by AFINSQ_1:78;
     then consider pp0 being XFinSequence of D^omega such that
-A28: pp0 = r and
-A29: for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp0)
-    holds IC Comput(ProgramPart(s),s,i) =  i and
-A30: (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp0)).f) | len pp0 = p |
+A21: pp0 = r and
+A22: for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp0)
+    holds IC Comput(P,s,i) =  i and
+A23: (Comput(P,s,len (q0 ^ FlattenSeq pp0)).f) | len pp0 = p |
      len pp0 and
-A31: len (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp0)).f) = len p and
-A32: for b being Int-Location st b <> I & b <> V holds Comput(ProgramPart(s),s,
+A24: len (Comput(P,s,len (q0 ^ FlattenSeq pp0)).f) = len p and
+A25: for b being Int-Location st b <> I & b <> V holds Comput(P,s,
     len (q0 ^ FlattenSeq pp0)).b = s.b and
-A33: for h being FinSeq-Location st h <> f holds Comput(ProgramPart(s),s,len (
-q0 ^ FlattenSeq pp0)).h = s.h by A21,A23,XBOOLE_1:1;
-A34: x = (r ^ <% x %>).r1 by AFINSQ_1:40
-      .= pp.r1 by A23,A22,GRFUNC_1:8;
-    then x in D^omega by A22,A24,FUNCT_1:172;
+A26: for h being FinSeq-Location st h <> f holds Comput(P,s,len (
+q0 ^ FlattenSeq pp0)).h = s.h by A13,A15,XBOOLE_1:1;
+A27: x = (r ^ <% x %>).r1 by AFINSQ_1:40
+      .= pp.r1 by A15,A14,GRFUNC_1:8;
+    then x in D^omega by A14,A16,FUNCT_1:172;
     then reconsider pp1 = pp0 ^ <% x %> as XFinSequence of D^omega;
     take pp1;
-    thus pp1 = r ^ <% x %> by A28;
-    reconsider x as Element of D^omega by A22,A24,A34,FUNCT_1:172;
-A35: FlattenSeq pp1 = FlattenSeq pp0 ^ FlattenSeq <% x %> by AFINSQ_2:87
+    thus pp1 = r ^ <% x %> by A21;
+    reconsider x as Element of D^omega by A14,A16,A27,FUNCT_1:172;
+A28: FlattenSeq pp1 = FlattenSeq pp0 ^ FlattenSeq <% x %> by AFINSQ_2:87
       .= FlattenSeq pp0 ^ x by AFINSQ_2:85;
-TT: Seg len p = dom p by FINSEQ_1:def 3;
-    len pp1 <= len p by A15,A23,A28,NAT_1:44;
+A29: Seg len p = dom p by FINSEQ_1:def 3;
+    len pp1 <= len p by A7,A15,A21,NAT_1:44;
     then
-FF:   Seg len pp1 c= Seg len p by FINSEQ_1:7;
+A30:   Seg len pp1 c= Seg len p by FINSEQ_1:7;
     then
-A37: dom (p | Seg len pp1) = Seg len pp1 by TT,RELAT_1:91;
+A31: dom (p | Seg len pp1) = Seg len pp1 by A29,RELAT_1:91;
     set c2 = len (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1));
     set c1 = len (q0 ^ FlattenSeq pp0);
-    set s1 = Comput(ProgramPart(s),s,c1);
-    set s2 = Comput(ProgramPart(s),s,c2);
-A41: x = aSeq(I,r1+1) ^ (aSeq(V,pr1) ^ <% (f,I):=V %>) by A27,A34,AFINSQ_1:30;
+    set s1 = Comput(P,s,c1);
+    set s2 = Comput(P,s,c2);
+A32: x = aSeq(I,r1+1) ^ (aSeq(V,pr1) ^ <% (f,I):=V %>) by A19,A27,AFINSQ_1:30;
     then
-A42: len q0 + len FlattenSeq pp1 = len q0 + len (FlattenSeq pp0 ^ aSeq(I,
-    r1+1) ^ (aSeq(V,pr1) ^ <% (f,I):=V %>)) by A35,AFINSQ_1:30
+A33: len q0 + len FlattenSeq pp1 = len q0 + len (FlattenSeq pp0 ^ aSeq(I,
+    r1+1) ^ (aSeq(V,pr1) ^ <% (f,I):=V %>)) by A28,AFINSQ_1:30
       .= len (q0 ^ (FlattenSeq pp0 ^ aSeq(I,r1+1) ^
       (aSeq(V,pr1) ^ <% (f,I):=V%>))) by AFINSQ_1:20
       .= len (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1) ^
-         (aSeq(V,pr1) ^ <% (f,I):=V%>)) by Lm3
+         (aSeq(V,pr1) ^ <% (f,I):=V%>)) by Lm2
       .= c2 + len (aSeq(V,pr1) ^ <% (f,I):=V %>) by AFINSQ_1:20
       .= c2 + (len aSeq(V,pr1) + len <% (f,I):=V %>) by AFINSQ_1:20
       .= c2 + (len aSeq(V,pr1) + 1) by AFINSQ_1:36
       .= c2 + len aSeq(V,pr1) + 1;
     then
-A43: len (q0 ^ FlattenSeq pp1) = c2 + len aSeq(V,pr1) + 1 by AFINSQ_1:20;
-A44: FlattenSeq pp1 c= FlattenSeq pp by A23,A28,AFINSQ_2:94;
-A45: now
+A34: len (q0 ^ FlattenSeq pp1) = c2 + len aSeq(V,pr1) + 1 by AFINSQ_1:20;
+A35: FlattenSeq pp1 c= FlattenSeq pp by A15,A21,AFINSQ_2:94;
+A36: now
       let p be XFinSequence;
       assume p c= x;
-      then FlattenSeq pp0 ^ p c= FlattenSeq pp0 ^ x by AFINSQ_1:79,82
-,AFINSQ_2:93;
-      then FlattenSeq pp0 ^ p c= FlattenSeq pp by A44,A35,XBOOLE_1:1;
-      then q0 ^ (FlattenSeq pp0 ^ p) c= q0 ^ FlattenSeq pp by AFINSQ_1:79,82
-,AFINSQ_2:93;
+      then FlattenSeq pp0 ^ p c= FlattenSeq pp0 ^ x by AFINSQ_2:93;
+      then FlattenSeq pp0 ^ p c= FlattenSeq pp by A35,A28,XBOOLE_1:1;
+      then q0 ^ (FlattenSeq pp0 ^ p) c= q0 ^ FlattenSeq pp by AFINSQ_2:93;
       then
-A46:  q0 ^ FlattenSeq pp0 ^ p c= q0 ^ FlattenSeq pp by AFINSQ_1:30;
-      q0 ^ FlattenSeq pp c= q by A17,AFINSQ_1:78;
-      hence q0 ^ FlattenSeq pp0 ^ p c= q by A46,XBOOLE_1:1;
+A37:  q0 ^ FlattenSeq pp0 ^ p c= q0 ^ FlattenSeq pp by AFINSQ_1:30;
+      q0 ^ FlattenSeq pp c= q by A9,AFINSQ_1:78;
+      hence q0 ^ FlattenSeq pp0 ^ p c= q by A37,XBOOLE_1:1;
     end;
-    IC s1 =  c1 by A29;
+    IC s1 =  c1 by A22;
     then reconsider s1 as c1-started State of SCM+FSA by COMPOS_1:def 20;
-B47: s1.O = 1 by A1,A19,A4,A32;
-A47: for c being Element of NAT st c in dom aSeq(I,r1+1)
-     holds aSeq(I,r1+1).c = s1.(c1 + c)
+A38: s1.O = 1 by A1,A11,A3,A25;
+A39: for c being Element of NAT st c in dom aSeq(I,r1+1)
+     holds aSeq(I,r1+1).c = P.(c1 + c)
     proof
       let c be Element of NAT;
       assume
-A48:  c in dom aSeq(I,r1+1);
+A40:  c in dom aSeq(I,r1+1);
       then
-A49:  c1 + c in dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1)) by AFINSQ_1:26;
-A51:  q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1) c= q by A41,A45,AFINSQ_1:78;
+A41:  c1 + c in dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1)) by AFINSQ_1:26;
+A42:  q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1) c= q by A32,A36,AFINSQ_1:78;
       then
-B52:   dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1)) c= dom q by GRFUNC_1:8;
+A43:   dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1)) c= dom q by GRFUNC_1:8;
       thus aSeq(I,r1+1).c = (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1)).(c1 + c)
-       by A48,AFINSQ_1:def 4
-        .= q.(c1 + c) by A51,A49,GRFUNC_1:8
-        .= s. (c1 + c) by A5,B52,A49,GRFUNC_1:8
-        .= s1. (c1 + c) by AMI_1:54;
+       by A40,AFINSQ_1:def 4
+        .= q.(c1 + c) by A42,A41,GRFUNC_1:8
+        .= P. (c1 + c) by A4,A43,A41,GRFUNC_1:8
+        .= P. (c1 + c);
     end;
     then
-A53: Comput(ProgramPart(s1),s1,len aSeq(I,r1+1)).I = r1+1 by Th36,B47,A1;
-A54: q0 ^ FlattenSeq pp1 = q0 ^ FlattenSeq pp0 ^ x by A35,AFINSQ_1:30;
-    then len (q0 ^ FlattenSeq pp1) <= len q by A45,NAT_1:44;
+A44: Comput(P,s1,len aSeq(I,r1+1)).I = r1+1 by Th36,A38,A1;
+A45: q0 ^ FlattenSeq pp1 = q0 ^ FlattenSeq pp0 ^ x by A28,AFINSQ_1:30;
+    then len (q0 ^ FlattenSeq pp1) <= len q by A36,NAT_1:44;
     then
-A55: c2 + len aSeq(V,pr1) < len q by A43,NAT_1:13;
-A56: now
+A46: c2 + len aSeq(V,pr1) < len q by A34,NAT_1:13;
+A47: now
       let i be Element of NAT;
-T: ProgramPart s = ProgramPart s1
-by AMI_1:123;
       assume i <= len aSeq(I,r1+1);
-      hence  (c1 + i) = IC Comput(ProgramPart(s),s1,i) by A47,Th36,T,B47,A1
-        .= IC Comput(ProgramPart(s),s,c1+i) by EXTPRO_1:5;
+      hence  (c1 + i) = IC Comput(P,s1,i) by A39,Th36,A38,A1
+        .= IC Comput(P,s,c1+i) by EXTPRO_1:5;
     end;
     set c3 = len (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1) ^ aSeq(V,pr1));
-A57: c3 = c2 + len aSeq(V,pr1) by AFINSQ_1:20;
-T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,c1)
-by AMI_1:123;
-A58: c2 = c1 + len aSeq(I,r1+1) by AFINSQ_1:20;
+A48: c3 = c2 + len aSeq(V,pr1) by AFINSQ_1:20;
+A49: c2 = c1 + len aSeq(I,r1+1) by AFINSQ_1:20;
     then
-A59: s2 = Comput(ProgramPart(s),Comput(ProgramPart(s)
+A50: s2 = Comput(P,Comput(P
 ,s,c1),len aSeq(I,r1+1)) by EXTPRO_1:5;
-    IC s2 =  c2 by A58,A59,A47,Th36,T,B47,A1;
+    IC s2 =  c2 by A49,A50,A39,Th36,A38,A1;
     then reconsider s2 as c2-started State of SCM+FSA by COMPOS_1:def 20;
-B60: s2.O = 1 by A59,A47,Th36,T,B47,A1;
-A60: for c being Element of NAT st c in dom aSeq(V,pr1)
-      holds aSeq(V,pr1).c = s2.(c2 + c)
+A51: s2.O = 1 by A50,A39,Th36,A38,A1;
+A52: for c being Element of NAT st c in dom aSeq(V,pr1)
+      holds aSeq(V,pr1).c = P.(c2 + c)
     proof
       let c be Element of NAT;
       assume
-A61:  c in dom aSeq(V,pr1);
+A53:  c in dom aSeq(V,pr1);
       then
-A62:  c2 + c in dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1) ^ aSeq(V,pr1)) by
+A54:  c2 + c in dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1) ^ aSeq(V,pr1)) by
 AFINSQ_1:26;
-      q0 ^ FlattenSeq pp0 ^ (aSeq(I,r1+1) ^ aSeq(V,pr1)) c= q by A27,A34,A45,
+      q0 ^ FlattenSeq pp0 ^ (aSeq(I,r1+1) ^ aSeq(V,pr1)) c= q by A19,A27,A36,
 AFINSQ_1:78;
       then
-A64:  q0 ^FlattenSeq pp0^aSeq(I,r1+1) ^ aSeq(V,pr1) c= q by AFINSQ_1:30;
+A55:  q0 ^FlattenSeq pp0^aSeq(I,r1+1) ^ aSeq(V,pr1) c= q by AFINSQ_1:30;
       then
-B65: dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1) ^ aSeq(V,pr1)) c= dom q by
+A56: dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1) ^ aSeq(V,pr1)) c= dom q by
 GRFUNC_1:8;
       thus aSeq(V,pr1).c
           = (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1+1) ^ aSeq(V,pr1)).(c2 + c)
-               by A61,AFINSQ_1:def 4
-        .= q.(c2 + c) by A62,A64,GRFUNC_1:8
-        .= s. (c2 + c) by A5,B65,A62,GRFUNC_1:8
-        .= s2. (c2 + c) by AMI_1:54;
+               by A53,AFINSQ_1:def 4
+        .= q.(c2 + c) by A54,A55,GRFUNC_1:8
+        .= P. (c2 + c) by A4,A56,A54,GRFUNC_1:8
+        .= P. (c2 + c);
     end;
     then
-A66: Comput(ProgramPart(s2),s2,len aSeq(V,pr1)).V = pr1 by Th36,B60,A19;
-S: ProgramPart s = ProgramPart s2
-by AMI_1:123;
-A67: Comput(ProgramPart(s),s,c3).f = Comput(ProgramPart(s),s,c2 + len aSeq(V,
+A57: Comput(P,s2,len aSeq(V,pr1)).V = pr1 by Th36,A51,A11;
+A58: Comput(P,s,c3).f = Comput(P,s,c2 + len aSeq(V,
 pr1)).f by AFINSQ_1:20
-      .= Comput(ProgramPart(s),s2,len aSeq(V,pr1)).f by EXTPRO_1:5
-      .= s2.f by A60,Th36,S,B60,A19
-      .= s1.f by A59,A47,Th36,T,B47,A1;
-A68: now
+      .= Comput(P,s2,len aSeq(V,pr1)).f by EXTPRO_1:5
+      .= s2.f by A52,Th36,A51,A11
+      .= s1.f by A50,A39,Th36,A38,A1;
+A59: now
       let i be Element of NAT;
-T: ProgramPart s = ProgramPart s2
-by AMI_1:123;
       assume i <= len aSeq(V,pr1);
-      hence  (c2 + i) = IC Comput(ProgramPart(s),s2,i)
-       by A60,Th36,T,B60,A19
-        .= IC Comput(ProgramPart(s),s,c2+i) by EXTPRO_1:5;
+      hence  (c2 + i) = IC Comput(P,s2,i)
+       by A52,Th36,A51,A11
+        .= IC Comput(P,s,c2+i) by EXTPRO_1:5;
     end;
-A69: for i being Element of NAT st i < len (q0 ^ FlattenSeq pp1) holds IC
-    Comput(ProgramPart(s),s,i) =  i
+A60: for i being Element of NAT st i < len (q0 ^ FlattenSeq pp1) holds IC
+    Comput(P,s,i) =  i
     proof
       let i be Element of NAT;
       assume
-A70:  i < len (q0 ^ FlattenSeq pp1);
-A71:  now
-A72:    i < len q0 + len FlattenSeq pp1 by A70,AFINSQ_1:20;
+A61:  i < len (q0 ^ FlattenSeq pp1);
+A62:  now
+A63:    i < len q0 + len FlattenSeq pp1 by A61,AFINSQ_1:20;
         assume
-A73:    not i <= c1;
+A64:    not i <= c1;
         assume not (c1 + 1 <= i & i <= c2);
-        hence c2 + 1 <= i & i <= c2 + len aSeq(V,pr1) by A42,A73,A72,NAT_1:13;
+        hence c2 + 1 <= i & i <= c2 + len aSeq(V,pr1) by A33,A64,A63,NAT_1:13;
       end;
-      per cases by A71;
+      per cases by A62;
       suppose
         i <= len (q0 ^ FlattenSeq pp0);
-        hence thesis by A29;
+        hence thesis by A22;
       end;
       suppose
-A74:    c1 + 1 <= i & i <= c2;
+A65:    c1 + 1 <= i & i <= c2;
         then c1 + 1 - c1 <= i - c1 by XREAL_1:11;
         then reconsider ii = i - c1 as Element of NAT by INT_1:16;
-        i - c1 <= c2 - c1 by A74,XREAL_1:11;
-        hence  i = IC Comput(ProgramPart(s),s,c1+ii) by A58,A56
-          .= IC Comput(ProgramPart(s),s,i);
+        i - c1 <= c2 - c1 by A65,XREAL_1:11;
+        hence  i = IC Comput(P,s,c1+ii) by A49,A47
+          .= IC Comput(P,s,i);
       end;
       suppose
-A75:    c2 + 1 <= i & i <= c2 + len aSeq(V,pr1);
+A66:    c2 + 1 <= i & i <= c2 + len aSeq(V,pr1);
         then c2 + 1 - c2 <= i - c2 by XREAL_1:11;
         then reconsider ii = i - c2 as Element of NAT by INT_1:16;
-        i - c2 <= c2 + len aSeq(V,pr1) - c2 by A75,XREAL_1:11;
-        hence  i = IC Comput(ProgramPart(s),s,c2+ii) by A68
-          .= IC Comput(ProgramPart(s),s,i);
+        i - c2 <= c2 + len aSeq(V,pr1) - c2 by A66,XREAL_1:11;
+        hence  i = IC Comput(P,s,c2+ii) by A59
+          .= IC Comput(P,s,i);
       end;
     end;
-A76: c3 = c1 + len aSeq(I,r1+1) + len aSeq(V,pr1) by A58,AFINSQ_1:20;
-Y:  (ProgramPart Comput(ProgramPart(s),s,c3))/.IC Comput(ProgramPart(s),s,c3)
- = Comput(ProgramPart(s),s,c3).IC Comput(ProgramPart(s),s,c3) by COMPOS_1:38;
+A67: c3 = c1 + len aSeq(I,r1+1) + len aSeq(V,pr1) by A49,AFINSQ_1:20;
+A68:  P/.IC Comput(P,s,c3) = P.IC Comput(P,s,c3) by PBOOLE:158;
 
- q0 ^ FlattenSeq pp0 ^ x c= q by A45;
+ q0 ^ FlattenSeq pp0 ^ x c= q by A36;
     then consider rq being XFinSequence of D such that
-W:   (q0 ^ FlattenSeq pp0 ^ x)^rq = q by AFINSQ_2:92;
-A77: len (q0 ^ FlattenSeq pp1) = c2 + len aSeq(V,pr1) + 1 by A42,AFINSQ_1:20;
+A69:   (q0 ^ FlattenSeq pp0 ^ x)^rq = q by AFINSQ_2:92;
+A70: len (q0 ^ FlattenSeq pp1) = c2 + len aSeq(V,pr1) + 1 by A33,AFINSQ_1:20;
     then
-A78: len (q0 ^ FlattenSeq pp1) > c2 + len aSeq(V,pr1) by NAT_1:13;
+A71: len (q0 ^ FlattenSeq pp1) > c2 + len aSeq(V,pr1) by NAT_1:13;
     then
-YY: c3 in dom(q0 ^ FlattenSeq pp0 ^ x)
-       by A54,A57,AFINSQ_1:70;
+A72: c3 in dom(q0 ^ FlattenSeq pp0 ^ x)
+       by A45,A48,AFINSQ_1:70;
     dom<% (f,I):=V %> = 1 by AFINSQ_1:36;
     then
-SS: 0 in dom<% (f,I):=V %> by CARD_1:87,TARSKI:def 1;
+A73: 0 in dom<% (f,I):=V %> by CARD_1:87,TARSKI:def 1;
     len<% (f,I):=V %> = 1 by AFINSQ_1:38;
     then len(aSeq(I,r1+1) ^ aSeq(V,pr1) ^ <% (f,I):=V %>)
       = len (aSeq(I,r1+1) ^ aSeq(V,pr1)) + 1 by AFINSQ_1:20;
     then len (aSeq(I,r1+1) ^ aSeq(V,pr1))
       < len(aSeq(I,r1+1) ^ aSeq(V,pr1) ^ <% (f,I):=V %>) by XREAL_1:31;
     then
-ZZ: len (aSeq(I,r1+1) ^ aSeq(V,pr1))
+A74: len (aSeq(I,r1+1) ^ aSeq(V,pr1))
         in dom(aSeq(I,r1+1) ^ aSeq(V,pr1) ^ <% (f,I):=V %>) by AFINSQ_1:70;
-    CurInstr(ProgramPart Comput(ProgramPart(s),s,c3),
-       Comput(ProgramPart(s),s,c3))
-     = Comput(ProgramPart(s),s,c3). c3 by A57,A69,Y,A78
-      .= q.(c3 ) by A9,A57,A55
+    CurInstr(P,Comput(P,s,c3))
+     = P. c3 by A48,A60,A68,A71
+      .= q.(c3 ) by A5,A48,A46
       .= (q0 ^ FlattenSeq pp0 ^ x).
          (c1 + (len aSeq(I,r1+1) + (len aSeq(V,pr1))))
-             by A76,YY,W,AFINSQ_1:def 4
+             by A67,A72,A69,AFINSQ_1:def 4
       .= (q0 ^ FlattenSeq pp0 ^ x).
          (c1 + len(aSeq(I,r1+1) ^ aSeq(V,pr1))) by AFINSQ_1:20;
     then
-A79: CurInstr(ProgramPart Comput(ProgramPart(s),s,c3),
-      Comput(ProgramPart(s),s,c3))
+A75: CurInstr(P,
+      Comput(P,s,c3))
       = (q0 ^ FlattenSeq pp0 ^ x).
          (c1 + len(aSeq(I,r1+1) ^ aSeq(V,pr1)))
       .= (aSeq(I,r1+1) ^ aSeq(V,pr1) ^ <% (f,I):=V %>).
-          (len (aSeq(I,r1+1) ^ aSeq(V,pr1))+0) by ZZ,A27,A34,AFINSQ_1:def 4
-      .= <% (f,I):=V %>.0 by SS,AFINSQ_1:def 4
+          (len (aSeq(I,r1+1) ^ aSeq(V,pr1))+0) by A74,A19,A27,AFINSQ_1:def 4
+      .= <% (f,I):=V %>.0 by A73,AFINSQ_1:def 4
       .= (f,I):=V by AFINSQ_1:38;
-A80: Comput(ProgramPart(s),s,c3+1)
-= Following(ProgramPart s,Comput(ProgramPart(s),s,c3)
+A76: Comput(P,s,c3+1)
+= Following(P,Comput(P,s,c3)
 )
  by EXTPRO_1:4
-      .= Exec((f,I):=V, Comput(ProgramPart(s),s,c3)) by A79,AMI_1:123;
+      .= Exec((f,I):=V, Comput(P,s,c3)) by A75;
     then
-A81: IC Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp1)) = succ IC Comput(
-ProgramPart(s),s,
-    c3) by A57,A43,SCMFSA_2:99
-      .= succ  c3 by A57,A69,A78
-      .=  len (q0 ^ FlattenSeq pp1) by A57,A77,NAT_1:39;
+A77: IC Comput(P,s,len (q0 ^ FlattenSeq pp1)) = succ IC Comput(
+P,s,
+    c3) by A48,A34,SCMFSA_2:99
+      .= succ  c3 by A48,A60,A71
+      .=  len (q0 ^ FlattenSeq pp1) by A48,A70,NAT_1:39;
     thus for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp1) holds IC
-    Comput(ProgramPart(s),s,i) =  i
+    Comput(P,s,i) =  i
     proof
       let i be Element of NAT;
       assume
-A82:  i <= len (q0 ^ FlattenSeq pp1);
-      per cases by A82,XXREAL_0:1;
+A78:  i <= len (q0 ^ FlattenSeq pp1);
+      per cases by A78,XXREAL_0:1;
       suppose
         i < len (q0 ^ FlattenSeq pp1);
-        hence thesis by A69;
+        hence thesis by A60;
       end;
       suppose
         i = len (q0 ^ FlattenSeq pp1);
-        hence thesis by A81;
+        hence thesis by A77;
       end;
     end;
-t: ProgramPart s = ProgramPart s2
-by AMI_1:123;
-A83: Comput(ProgramPart(s),s,c3).V
-   = Comput(ProgramPart(s),s,c2 + len aSeq(V,pr1)).V by AFINSQ_1:20
-      .= p.(r1+1) by A26,A66,t,EXTPRO_1:5;
-S: ProgramPart s = ProgramPart s2
-by AMI_1:123;
+A79: Comput(P,s,c3).V
+   = Comput(P,s,c2 + len aSeq(V,pr1)).V by AFINSQ_1:20
+      .= p.(r1+1) by A18,A57,EXTPRO_1:5;
     consider ki being Element of NAT such that
-A84: ki = abs( Comput(ProgramPart(s),s,c3).I) and
-A85: Exec((f,I):=V, Comput(ProgramPart(s),s,c3)).f
-     = Comput(ProgramPart(s),s,c3).f +*(ki,Comput(ProgramPart(s),s,c3).V)
+A80: ki = abs( Comput(P,s,c3).I) and
+A81: Exec((f,I):=V, Comput(P,s,c3)).f
+     = Comput(P,s,c3).f +*(ki,Comput(P,s,c3).V)
      by SCMFSA_2:99;
-A86: ki = abs( Comput(ProgramPart(s),s,c2 + len aSeq(V,pr1)).I ) by A84,
-AFINSQ_1:20
-      .= abs( Comput(ProgramPart(s),s2,len aSeq(V,pr1)).I ) by EXTPRO_1:5
-      .= abs( s2.I ) by A2,A60,Th36,S,B60,A19
-      .= r1+1 by A59,A53,T,ABSVALUE:def 1;
-A87: dom (s1.f) = Seg len p by A31,FINSEQ_1:def 3;
+A82: ki = abs( Comput(P,s,c2 + len aSeq(V,pr1)).I ) by A80,AFINSQ_1:20
+      .= abs( Comput(P,s2,len aSeq(V,pr1)).I ) by EXTPRO_1:5
+      .= abs( s2.I ) by A2,A52,Th36,A51,A11
+      .= r1+1 by A50,A44,ABSVALUE:def 1;
+A83: dom (s1.f) = Seg len p by A24,FINSEQ_1:def 3;
     for i being Element of NAT st i in Seg len pp1
-     holds ((Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp1)).f)
+     holds ((Comput(P,s,len (q0 ^ FlattenSeq pp1)).f)
           | Seg len pp1).i
        = (p | Seg len pp1).i
     proof
       let i be Element of NAT;
       assume
-A88:  i in Seg len pp1;
+A84:  i in Seg len pp1;
       then
-A89:  i <= len pp1 by FINSEQ_1:3;
+A85:  i <= len pp1 by FINSEQ_1:3;
    len<% x %> = 1 by AFINSQ_1:38;
       then
-KK:   len pp1 = len pp0 + 1 by AFINSQ_1:20;
+A86:   len pp1 = len pp0 + 1 by AFINSQ_1:20;
       per cases;
       suppose
-A90:    i = len pp1;
+A87:    i = len pp1;
         thus
-        ((Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp1))).f |
+        ((Comput(P,s,len (q0 ^ FlattenSeq pp1))).f |
          Seg len pp1).i =
          (s1.f +*(r1+1,p.(r1+1))).i
-            by A57,A77,A80,A85,A86,A83,A67,A90,KK,FINSEQ_1:6,FUNCT_1:72
-          .= p.i by A28,A15,A87,A90,OO,KK,FUNCT_7:33
-          .= (p | Seg len pp1).i by A90,KK,FINSEQ_1:6,FUNCT_1:72;
+            by A48,A70,A76,A81,A82,A79,A58,A87,A86,FINSEQ_1:6,FUNCT_1:72
+          .= p.i by A21,A7,A83,A87,A20,A86,FUNCT_7:33
+          .= (p | Seg len pp1).i by A87,A86,FINSEQ_1:6,FUNCT_1:72;
       end;
       suppose
-A92:    i <> len pp1;
-        then i < len pp0 + 1 by KK,A89,XXREAL_0:1;
+A88:    i <> len pp1;
+        then i < len pp0 + 1 by A86,A85,XXREAL_0:1;
         then
-A93:    i <= len pp0 by NAT_1:13;
-        1 <= i by A88,FINSEQ_1:3;
+A89:    i <= len pp0 by NAT_1:13;
+        1 <= i by A84,FINSEQ_1:3;
         then
-A94:    i in Seg len pp0 by A93;
-        ((Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp1))).f |
+A90:    i in Seg len pp0 by A89;
+        ((Comput(P,s,len (q0 ^ FlattenSeq pp1))).f |
          Seg len pp1).i =
         (s1.f +*(r1+1,p.(r1+1))).i
-         by A57,A77,A80,A85,A86,A83,A67,A88,FUNCT_1:72
-          .= s1.f.i by KK,A28,A92,FUNCT_7:34;
+         by A48,A70,A76,A81,A82,A79,A58,A84,FUNCT_1:72
+          .= s1.f.i by A86,A21,A88,FUNCT_7:34;
         hence
-        ((Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp1))).f |
+        ((Comput(P,s,len (q0 ^ FlattenSeq pp1))).f |
         Seg len pp1).i =
-        (p | Seg len pp0).i by A30,A94,FUNCT_1:72
-          .= p.i by A94,FUNCT_1:72
-          .= (p | Seg len pp1).i by A88,FUNCT_1:72;
+        (p | Seg len pp0).i by A23,A90,FUNCT_1:72
+          .= p.i by A90,FUNCT_1:72
+          .= (p | Seg len pp1).i by A84,FUNCT_1:72;
       end;
     end;
     then
-A96: for i being set st i in Seg len pp1
- holds ((Comput(ProgramPart(s),s,len (q0 ^FlattenSeq pp1)).f) | Seg len pp1).i
+A91: for i being set st i in Seg len pp1
+ holds ((Comput(P,s,len (q0 ^FlattenSeq pp1)).f) | Seg len pp1).i
       = (p | Seg len pp1).i;
-A97: dom (s1.f +*(r1+1,p.(r1+1))) = dom (s1.f) by FUNCT_7:32;
-    dom (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp1)).f)
+A92: dom (s1.f +*(r1+1,p.(r1+1))) = dom (s1.f) by FUNCT_7:32;
+    dom (Comput(P,s,len (q0 ^ FlattenSeq pp1)).f)
        = dom (s1.f +*(r1+1,p.(r1+1)))
-by A43,A80,A85,A86,A83,A67,AFINSQ_1:20
+by A34,A76,A81,A82,A79,A58,AFINSQ_1:20
       .= Seg len p
-by A31,A97,FINSEQ_1:def 3;
-    then dom ((Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp1)).f)
+by A24,A92,FINSEQ_1:def 3;
+    then dom ((Comput(P,s,len (q0 ^ FlattenSeq pp1)).f)
      | Seg len pp1 ) =
-    Seg len pp1 by FF,RELAT_1:91;
-    hence (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp1)).f) | len pp1
-= p | len pp1 by A37,A96,FUNCT_1:9;
-    len (s1.f +*(r1+1,p.(r1+1))) = len (s1.f) by A97,FINSEQ_3:31;
-    hence len (Comput(ProgramPart(s),s,len (q0^FlattenSeq pp1)).f)
-     = len p by A31,A43,A80,A85,A86,A83,A67,AFINSQ_1:20;
+    Seg len pp1 by A30,RELAT_1:91;
+    hence (Comput(P,s,len (q0 ^ FlattenSeq pp1)).f) | len pp1
+= p | len pp1 by A31,A91,FUNCT_1:9;
+    len (s1.f +*(r1+1,p.(r1+1))) = len (s1.f) by A92,FINSEQ_3:31;
+    hence len (Comput(P,s,len (q0^FlattenSeq pp1)).f)
+     = len p by A24,A34,A76,A81,A82,A79,A58,AFINSQ_1:20;
     hereby
       let b be Int-Location;
       assume that
-A98:  b <> I and
-A99:  b <> V;
-S: ProgramPart s = ProgramPart s2
-by AMI_1:123;
-      thus Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp1)).b = Comput(
-ProgramPart(s),s,c2 + len
-      aSeq(V,pr1)).b by A57,A43,A80,SCMFSA_2:99
-        .= Comput(ProgramPart(s),s2,len aSeq(V,pr1)).b by EXTPRO_1:5
-        .= s2.b by A60,A99,Th36,S,B60,A19
-        .= s1.b by A59,A47,A98,Th36,T,B47,A1
-        .= s.b by A32,A98,A99;
+A93:  b <> I and
+A94:  b <> V;
+      thus Comput(P,s,len (q0 ^ FlattenSeq pp1)).b = Comput(
+P,s,c2 + len
+      aSeq(V,pr1)).b by A48,A34,A76,SCMFSA_2:99
+        .= Comput(P,s2,len aSeq(V,pr1)).b by EXTPRO_1:5
+        .= s2.b by A52,A94,Th36,A51,A11
+        .= s1.b by A50,A39,A93,Th36,A38,A1
+        .= s.b by A25,A93,A94;
     end;
     hereby
       let h be FinSeq-Location;
-S: ProgramPart s = ProgramPart s2
-by AMI_1:123;
       assume
-A100: h <> f;
+A95: h <> f;
       hence
-      Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp1)).h = Comput(ProgramPart
-(s),s,c2 + len
-      aSeq(V,pr1)).h by A57,A43,A80,SCMFSA_2:99
-        .= Comput(ProgramPart(s),s2,len aSeq(V,pr1)).h by EXTPRO_1:5
-        .= s2.h by A60,Th36,S,B60,A19
-        .= s1.h by A59,A47,Th36,T,B47,A1
-        .= s.h by A33,A100;
+      Comput(P,s,len (q0 ^ FlattenSeq pp1)).h = Comput(P,s,c2 + len
+      aSeq(V,pr1)).h by A48,A34,A76,SCMFSA_2:99
+        .= Comput(P,s2,len aSeq(V,pr1)).h by EXTPRO_1:5
+        .= s2.h by A52,Th36,A51,A11
+        .= s1.h by A50,A39,Th36,A38,A1
+        .= s.h by A26,A95;
     end;
   end;
   set k = len aSeq(I,len p);
   len<% f:=<0,...,0>I %> = 1 by AFINSQ_1:38;
   then
-A101: len q0 = k + 1 by AFINSQ_1:20;
-A102: q = aSeq(I,len p)^<% f:=<0,...,0>I %>^(aSeq(f,p)^<% halt SCM+FSA %>) by
+A96: len q0 = k + 1 by AFINSQ_1:20;
+A97: q = aSeq(I,len p)^<% f:=<0,...,0>I %>^(aSeq(f,p)^<% halt SCM+FSA %>) by
 AFINSQ_1:30;
   then q = aSeq(I,len p)^(<% f:=<0,...,0>I %>^(aSeq(f,p)^<% halt SCM+FSA %>))
   by AFINSQ_1:30;
   then  aSeq(I,len p) c= f:=p by AFINSQ_1:78;
   then
-A103:  aSeq(I,len p) c= s by A5,XBOOLE_1:1;
+A98:  aSeq(I,len p) c= P by A4,XBOOLE_1:1;
   then
-A104: Comput(ProgramPart(s),s,len aSeq(I,len p)).I = len p by A1,A4,Th37;
-A105: P[{}]
+A99: Comput(P,s,len aSeq(I,len p)).I = len p by A1,A3,Th37;
+A100: P[{}]
   proof
-A106: now
+A101: now
       let i be Element of NAT such that
-A107: i < len q0;
-      i < len q0 implies i <= len aSeq(I,len p) by A101,NAT_1:13;
-      hence IC Comput(ProgramPart(s),s,i) =  i by A1,A4,A103,A107,Th37;
+A102: i < len q0;
+      i < len q0 implies i <= len aSeq(I,len p) by A96,NAT_1:13;
+      hence IC Comput(P,s,i) =  i by A1,A3,A98,A102,Th37;
     end;
     assume {} c= pp;
      reconsider sD = <%>(D^omega) as XFinSequence of D^omega;
     take sD;
-A109: q0 ^ FlattenSeq <%>(D^omega) = q0 ^ <%>D by AFINSQ_2:86
+A103: q0 ^ FlattenSeq <%>(D^omega) = q0 ^ <%>D by AFINSQ_2:86
       .= q0 by AFINSQ_1:32;
-OO:   k < len q0 by A101,NAT_1:13;
+A104:   k < len q0 by A96,NAT_1:13;
     then
-A110: IC Comput(ProgramPart(s),s,k) =  k by A106;
-Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by COMPOS_1:38;
-    len q = len q0 + len ((aSeq(f,p) ^ <% halt SCM+FSA %>)) by A102,AFINSQ_1:20
+A105: IC Comput(P,s,k) =  k by A101;
+A106:  P/.IC Comput(P,s,k) = P.IC Comput(P,s,k) by PBOOLE:158;
+    len q = len q0 + len ((aSeq(f,p) ^ <% halt SCM+FSA %>)) by A97,AFINSQ_1:20
 ;
     then len q0 <= len q by NAT_1:11;
     then
-QQ:   k < len q by A101,NAT_1:13;
-NN: q = aSeq(I,len p)^<% f:=<0,...,0>I %>^(aSeq(f,p)^<% halt SCM+FSA %>)
+A107:   k < len q by A96,NAT_1:13;
+A108: q = aSeq(I,len p)^<% f:=<0,...,0>I %>^(aSeq(f,p)^<% halt SCM+FSA %>)
          by AFINSQ_1:30;
-RR:  k in dom q0 by OO,AFINSQ_1:70;
-A111: CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(ProgramPart(s),s,k
-))
-       = q.k by A9,A110,Y,QQ
-      .= q0.k by NN,RR,AFINSQ_1:def 4
+A109:  k in dom q0 by A104,AFINSQ_1:70;
+A110: CurInstr(P,Comput(P,s,k))
+       = q.k by A5,A105,A106,A107
+      .= q0.k by A108,A109,AFINSQ_1:def 4
       .= f:=<0,...,0>I by AFINSQ_1:40;
     thus sD = {};
-A112: Comput(ProgramPart(s),s,len q0) =
-Following(ProgramPart s,Comput(ProgramPart(s),s,k))
- by A101,EXTPRO_1:4
-      .= Exec(f:=<0,...,0>I, Comput(ProgramPart(s),s,k)) by A111,AMI_1:123;
+A111: Comput(P,s,len q0) =
+Following(P,Comput(P,s,k))
+ by A96,EXTPRO_1:4
+      .= Exec(f:=<0,...,0>I, Comput(P,s,k)) by A110;
     then
-A113: IC Comput(ProgramPart(s),s,len q0) = succ IC Comput(ProgramPart(s),s,k)
+A112: IC Comput(P,s,len q0) = succ IC Comput(P,s,k)
 by SCMFSA_2:101
-      .=  len q0 by A101,A110,NAT_1:39;
+      .=  len q0 by A96,A105,NAT_1:39;
     now
       let i be Element of NAT;
       assume i <= len q0;
       then i < len q0 or i = len q0 by XXREAL_0:1;
-      hence IC Comput(ProgramPart(s),s,i) =  i by A106,A113;
+      hence IC Comput(P,s,i) =  i by A101,A112;
     end;
     hence for i being Element of NAT st i <= len (q0 ^ FlattenSeq sD)
-    holds IC Comput(ProgramPart(s),s,i) =  i by A109;
+    holds IC Comput(P,s,i) =  i by A103;
     consider ki being Element of NAT such that
-A114: ki = abs( Comput(ProgramPart(s),s,k).I) and
-A115: Exec(f:=<0,...,0>I, Comput(ProgramPart(s),s,k)).f = ki |-> 0 by
-SCMFSA_2:101;
-  (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq sD)).f) | 0 = p | len sD;
+A113: ki = abs( Comput(P,s,k).I) and
+A114: Exec(f:=<0,...,0>I, Comput(P,s,k)).f = ki |-> 0 by SCMFSA_2:101;
+  (Comput(P,s,len (q0 ^ FlattenSeq sD)).f) | 0 = p | len sD;
     hence
-    (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq sD)).f)|len sD = p
+    (Comput(P,s,len (q0 ^ FlattenSeq sD)).f)|len sD = p
     | len sD;
-    ki = len p by A104,A114,ABSVALUE:def 1;
-    hence len (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq sD)).f) = len p
-     by A109,A112,A115,FINSEQ_1:def 18;
+    ki = len p by A99,A113,ABSVALUE:def 1;
+    hence len (Comput(P,s,len (q0 ^ FlattenSeq sD)).f) = len p
+     by A103,A111,A114,CARD_1:def 13;
     now
       let b be Int-Location such that
-A116: b <> I and
+A115: b <> I and
       b <> V;
-      thus Comput(ProgramPart(s),s,len q0).b = Comput(ProgramPart(s),s,k).b by
-A112,SCMFSA_2:101
-        .= s.b by A1,A4,A103,A116,Th37;
+      thus Comput(P,s,len q0).b = Comput(P,s,k).b by A111,SCMFSA_2:101
+        .= s.b by A1,A3,A98,A115,Th37;
     end;
     hence
-    for b being Int-Location st b <> I & b <> V holds Comput(ProgramPart(s),s,
+    for b being Int-Location st b <> I & b <> V holds Comput(P,s,
 len (
-    q0 ^ FlattenSeq sD)).b = s.b by A109;
+    q0 ^ FlattenSeq sD)).b = s.b by A103;
     now
       let g be FinSeq-Location;
       assume g <> f;
-      hence Comput(ProgramPart(s),s,len q0).g = Comput(ProgramPart(s),s,k).g
-by A112,SCMFSA_2:101
-        .= s.g by A1,A4,A103,Th37;
+      hence Comput(P,s,len q0).g = Comput(P,s,k).g
+by A111,SCMFSA_2:101
+        .= s.g by A1,A3,A98,Th37;
     end;
-    hence thesis by A109;
+    hence thesis by A103;
   end;
-  for r being XFinSequence holds P[r] from AFINSQ_1:sch 3(A105,A20);
+  for r being XFinSequence holds P[r] from AFINSQ_1:sch 3(A100,A12);
   then consider pp0 being XFinSequence of D^omega such that
-A117: pp0 = pp and
-A118: for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp0) holds
-  IC Comput(ProgramPart(s),s,i) =  i and
-A119: (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp0)).f) | len pp0
+A116: pp0 = pp and
+A117: for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp0) holds
+  IC Comput(P,s,i) =  i and
+A118: (Comput(P,s,len (q0 ^ FlattenSeq pp0)).f) | len pp0
  = p | len pp0 and
-A120: len (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp0)).f) = len p and
-A121: ( for b being Int-Location st b <> I & b <> V holds Comput(ProgramPart(s)
+A119: len (Comput(P,s,len (q0 ^ FlattenSeq pp0)).f) = len p and
+A120: ( for b being Int-Location st b <> I & b <> V holds Comput(P
 ,s,
   len (q0 ^ FlattenSeq pp0)).b = s.b)& for g being FinSeq-Location st g <> f
-  holds Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp0)).g = s.g;
-TX: ProgramPart s =
- ProgramPart Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp))
-by AMI_1:123;
-Y:  (ProgramPart Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp)))/.
-IC Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp))
- = Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp)).
- IC Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp)) by COMPOS_1:38;
+  holds Comput(P,s,len (q0 ^ FlattenSeq pp0)).g = s.g;
+A121:  P/.IC Comput(P,s,len (q0 ^ FlattenSeq pp))
+ = P.IC Comput(P,s,len (q0 ^ FlattenSeq pp)) by PBOOLE:158;
 
-  IC Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp))
-   =  len (q0 ^ FlattenSeq pp) by A117,A118;
+  IC Comput(P,s,len (q0 ^ FlattenSeq pp))
+   =  len (q0 ^ FlattenSeq pp) by A116,A117;
   then
-A123: CurInstr(ProgramPart(s),
-    Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp)))
-     = q.len (q0 ^ FlattenSeq pp) by A9,A18,Y,TX
-    .= halt SCM+FSA by A17,AFINSQ_1:40;
-  hence ProgramPart s halts_on s by EXTPRO_1:30;
+A122: CurInstr(P,
+    Comput(P,s,len (q0 ^ FlattenSeq pp)))
+     = q.len (q0 ^ FlattenSeq pp) by A5,A10,A121
+    .= halt SCM+FSA by A9,AFINSQ_1:40;
+  hence P halts_on s by EXTPRO_1:30;
   then
-A124: Comput(ProgramPart(s),s,len (q0^FlattenSeq pp))
- = Result(ProgramPart(s),s) by A123,EXTPRO_1:def 8;
-TT: Seg len pp0 = dom p by A15,A117,FINSEQ_1:def 3;
-  (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp0)).f)
-   = (Comput(ProgramPart(s),s,len (q0 ^ FlattenSeq pp0)).f) | len pp0
-                by A15,A117,A120,FINSEQ_3:122;
-  hence (Result(ProgramPart(s),s)).f = p by TT,A117,A124,A119,RELAT_1:97;
-  thus thesis by A117,A121,A124;
+A123: Comput(P,s,len (q0^FlattenSeq pp))
+ = Result(P,s) by A122,EXTPRO_1:def 8;
+A124: Seg len pp0 = dom p by A7,A116,FINSEQ_1:def 3;
+  (Comput(P,s,len (q0 ^ FlattenSeq pp0)).f)
+   = (Comput(P,s,len (q0 ^ FlattenSeq pp0)).f) | len pp0
+                by A7,A116,A119,FINSEQ_3:122;
+  hence (Result(P,s)).f = p by A124,A116,A123,A118,RELAT_1:97;
+  thus thesis by A116,A120,A123;
 end;
 

@@ -14,15 +14,15 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, XXREAL_0,
       FINSET_1, PARTFUN1, FINSEQ_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, NAT_1,
       DOMAIN_1, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_4,
-      VECTSP_4;
+      VFUNCT_1, VECTSP_4;
  constructors PARTFUN1, DOMAIN_1, FUNCOP_1, XXREAL_0, NAT_1, MEMBERED,
-      FINSEQ_4, VECTSP_4, RELSET_1;
+      FINSEQ_4, VECTSP_4, RELSET_1, VFUNCT_1;
  registrations SUBSET_1, FUNCT_1, RELSET_1, FINSET_1, NUMBERS, MEMBERED,
       STRUCT_0, VECTSP_1, XXREAL_0, CARD_1, FINSEQ_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions FUNCT_1, TARSKI, VECTSP_4, XBOOLE_0, RELAT_1;
  theorems CARD_1, CARD_2, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4,
-      FUNCT_1, FUNCT_2, RLVECT_1, RLVECT_2, TARSKI, VECTSP_1,
+      FUNCT_1, FUNCT_2, RLVECT_1, RLVECT_2, TARSKI, VECTSP_1, VFUNCT_1,
       VECTSP_4, ZFMISC_1, NAT_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1,
       XCMPLX_1, GROUP_1, FUNCOP_1, XREAL_1, PARTFUN1;
  schemes FINSEQ_1, FUNCT_2, NAT_1;
@@ -37,31 +37,29 @@ reserve p,q,r for FinSequence,
   V for Abelian
   add-associative right_zeroed right_complementable vector-distributive
   scalar-distributive scalar-associative scalar-unital
-   (non empty
-  VectSpStr over GF),
+   (non empty VectSpStr over GF),
   u,v,v1,v2,v3,w for Element of V,
   a,b for Element of GF,
-  F,G ,H for FinSequence of the carrier of V,
+  F,G ,H for FinSequence of V,
   A,B for Subset of V,
-  f for Function of the carrier of V, the carrier of GF;
+  f for Function of V, GF;
 
 definition
   let GF be non empty ZeroStr;
   let V be non empty VectSpStr over GF;
   canceled 3;
-  mode Linear_Combination of V -> Element of Funcs(the carrier of V, the
-    carrier of GF) means
-    :Def4:
-    ex T being finite Subset of V st for v being
-    Element of V st not v in T holds it.v = 0.GF;
+  mode Linear_Combination of V ->
+       Element of Funcs(the carrier of V, the carrier of GF) means
+   :Def4:
+  ex T being finite Subset of V st
+  for v being Element of V st not v in T holds it.v = 0.GF;
   existence
   proof
-    reconsider P = {}V as finite Subset of V;
     reconsider f = (the carrier of V) --> 0.GF as Function of the carrier of V
     , the carrier of GF;
     reconsider f as Element of Funcs(the carrier of V, the carrier of GF) by
 FUNCT_2:11;
-    take f, P;
+    take f, {}V;
     thus thesis by FUNCOP_1:13;
   end;
 end;
@@ -73,8 +71,7 @@ definition
   let V be non empty VectSpStr over GF;
   let L be Linear_Combination of V;
   func Carrier(L) -> finite Subset of V equals
-  {v where v is Element of V: L.v
-  <> 0.GF};
+  {v where v is Element of V: L.v <> 0.GF};
   coherence
   proof
     set A = {v where v is Element of V: L.v <> 0.GF};
@@ -133,7 +130,7 @@ FUNCT_2:11;
     take f;
     set C = {v where v is Element of V : f.v <> 0.GF};
     now
-      consider x being Element of C;
+      set x =the  Element of C;
       assume C <> {};
       then x in C;
       then ex v being Element of V st x = v & f.v <> 0.GF;
@@ -229,8 +226,8 @@ definition
   let GF be non empty addLoopStr;
   let V be non empty VectSpStr over GF;
   let F be FinSequence of the carrier of V;
-  let f be Function of the carrier of V, the carrier of GF;
-  func f (#) F -> FinSequence of the carrier of V means
+  let f be Function of V, GF;
+  func f (#) F -> FinSequence of V means
   :Def8:
   len it = len F & for i be Nat st i in dom it holds it.i = f.(F/.i) * F/.i;
   existence
@@ -417,8 +414,8 @@ definition
 A1: V is Abelian add-associative right_zeroed right_complementable;
   func Sum(L) -> Element of V means
   :Def9:
-  ex F being FinSequence of the
-  carrier of V st F is one-to-one & rng F = Carrier(L) & it = Sum(L (#) F);
+  ex F being FinSequence of the carrier of V st
+  F is one-to-one & rng F = Carrier(L) & it = Sum(L (#) F);
   existence
   proof
     consider F being FinSequence such that
@@ -1001,19 +998,17 @@ definition
 end;
 
 definition
-  let GF;
-  let V;
-  let L1,L2;
-  func L1 + L2 -> Linear_Combination of V means
-  :Def11:
-  for v holds it.v = L1. v + L2.v;
-  existence
+  let GF,V,L1,L2;
+  func L1 + L2 -> Linear_Combination of V equals
+  L1 + L2;
+  coherence
   proof
-    deffunc F(Element of V) = L1.$1 + L2.$1;
-    consider f being Function of the carrier of V, the carrier of GF such that
-A1: for v being Element of V holds f.v = F(v) from FUNCT_2:sch 4;
-    reconsider f as Element of Funcs(the carrier of V,the carrier of GF) by
-FUNCT_2:11;
+    set f = L1+L2;
+A1: dom L1 = the carrier of V & dom L2 = the carrier of V by FUNCT_2:def 1;
+A5: dom f = dom L1 /\ dom L2 by VFUNCT_1:def 1;
+    then f is Function of V,GF by A1,FUNCT_2:130;
+    then
+A4: f is Element of Funcs(the carrier of V,the carrier of GF) by FUNCT_2:11;
     now
       let v;
       assume
@@ -1021,30 +1016,30 @@ A2:   not v in Carrier(L1) \/ Carrier(L2);
       then not v in Carrier(L2) by XBOOLE_0:def 3;
       then
 A3:   L2.v = 0.GF;
+A6:   L1/.v = L1.v & L2/.v = L2.v by A1,PARTFUN1:def 8;
       not v in Carrier(L1) by A2,XBOOLE_0:def 3;
-      then L1.v = 0.GF;
-      hence f.v = 0.GF + 0.GF by A1,A3
-        .= 0.GF by RLVECT_1:10;
+      then
+A7:   L1.v = 0.GF;
+      thus f.v = f/.v by A1,A5,PARTFUN1:def 8
+      .= 0.GF + 0.GF by A1,A5,A3,A6,A7,VFUNCT_1:def 1
+      .= 0.GF by RLVECT_1:10;
     end;
-    then reconsider f as Linear_Combination of V by Def4;
-    take f;
-    let v;
-    thus thesis by A1;
-  end;
-  uniqueness
-  proof
-    let M,N be Linear_Combination of V;
-    assume
-A4: for v holds M.v = L1.v + L2.v;
-    assume
-A5: for v holds N.v = L1.v + L2.v;
-    let v;
-    thus M.v = L1.v + L2.v by A4
-      .= N.v by A5;
+    hence thesis by A4,Def4;
   end;
 end;
 
-canceled 3;
+theorem ThDef11:
+  (L1+L2).v = L1.v + L2.v
+  proof
+    dom L1 = the carrier of V & dom L2 = the carrier of V by FUNCT_2:def 1;
+    then
+A1: L1/.v = L1.v & L2/.v = L2.v by PARTFUN1:def 8;
+A2: dom (L1+L2) = the carrier of V by FUNCT_2:def 1;
+    hence (L1+L2).v = (L1+L2)/.v by PARTFUN1:def 8
+    .= L1.v + L2.v by A1,A2,VFUNCT_1:def 1;
+  end;
+
+canceled 2;
 
 theorem Th51:
   Carrier(L1 + L2) c= Carrier(L1) \/ Carrier(L2)
@@ -1054,7 +1049,7 @@ proof
   then consider u such that
 A1: x = u and
 A2: (L1 + L2).u <> 0.GF;
-  (L1 + L2).u = L1.u + L2.u by Def11;
+  (L1 + L2).u = L1.u + L2.u by ThDef11;
   then L1.u <> 0.GF or L2.u <> 0.GF by A2,RLVECT_1:10;
   then x in {v1 : L1.v1 <> 0.GF} or x in {v2 : L2.v2 <> 0.GF} by A1;
   hence thesis by XBOOLE_0:def 3;
@@ -1076,19 +1071,19 @@ theorem Th53:
   L1 + L2 = L2 + L1
 proof
   let v;
-  thus (L1 + L2).v = L2.v + L1.v by Def11
-    .= (L2 + L1).v by Def11;
+  thus (L1 + L2).v = L2.v + L1.v by ThDef11
+    .= (L2 + L1).v by ThDef11;
 end;
 
 theorem
   L1 + (L2 + L3) = L1 + L2 + L3
 proof
   let v;
-  thus (L1 + (L2 + L3)).v = L1.v + (L2 + L3).v by Def11
-    .= L1.v + (L2.v + L3.v) by Def11
+  thus (L1 + (L2 + L3)).v = L1.v + (L2 + L3).v by ThDef11
+    .= L1.v + (L2.v + L3.v) by ThDef11
     .= L1.v + L2.v + L3.v by RLVECT_1:def 6
-    .= (L1 + L2).v + L3.v by Def11
-    .= (L1 + L2 + L3).v by Def11;
+    .= (L1 + L2).v + L3.v by ThDef11
+    .= (L1 + L2 + L3).v by ThDef11;
 end;
 
 theorem
@@ -1097,7 +1092,7 @@ proof
   thus L + ZeroLC(V) = L
   proof
     let v;
-    thus (L + ZeroLC(V)).v = L.v + ZeroLC(V).v by Def11
+    thus (L + ZeroLC(V)).v = L.v + ZeroLC(V).v by ThDef11
       .= L.v + 0.GF by Th22
       .= L.v by RLVECT_1:10;
   end;
@@ -1105,9 +1100,7 @@ proof
 end;
 
 definition
-  let GF;
-  let V,a;
-  let L;
+  let GF,V,a,L;
   func a * L -> Linear_Combination of V means
   :Def12:
   for v holds it.v = a * L .v;
@@ -1227,7 +1220,7 @@ proof
     .= a * L.v + b * L.v by VECTSP_1:def 18
     .= (a * L).v + b * L.v by Def12
     .= (a * L).v + (b * L). v by Def12
-    .= ((a * L) + (b * L)).v by Def11;
+    .= ((a * L) + (b * L)).v by ThDef11;
 end;
 
 theorem
@@ -1235,11 +1228,11 @@ theorem
 proof
   let v;
   thus (a * (L1 + L2)).v = a * (L1 + L2).v by Def12
-    .= a * (L1.v + L2.v) by Def11
+    .= a * (L1.v + L2.v) by ThDef11
     .= a * L1.v + a * L2.v by VECTSP_1:def 18
     .= (a * L1).v + a * L2.v by Def12
     .= (a * L1).v + (a * L2). v by Def12
-    .= ((a * L1) + (a * L2)).v by Def11;
+    .= ((a * L1) + (a * L2)).v by ThDef11;
 end;
 
 theorem Th64:
@@ -1261,9 +1254,7 @@ proof
 end;
 
 definition
-  let GF;
-  let V;
-  let L;
+  let GF,V,L;
   func - L -> Linear_Combination of V equals
   (- 1.GF) * L;
   correctness;
@@ -1305,7 +1296,7 @@ proof
   assume
 A1: L1 + L2 = ZeroLC(V);
   let v;
-  L1.v + L2.v = ZeroLC(V).v by A1,Def11
+  L1.v + L2.v = ZeroLC(V).v by A1,ThDef11
     .= 0.GF by Th22;
   hence L2.v = - L1.v by RLVECT_1:19
     .= (- L1).v by Th67;
@@ -1330,9 +1321,7 @@ theorem
   L is Linear_Combination of A implies - L is Linear_Combination of A by Th61;
 
 definition
-  let GF;
-  let V;
-  let L1,L2;
+  let GF,V,L1,L2;
   func L1 - L2 -> Linear_Combination of V equals
   L1 + (- L2);
   coherence;
@@ -1343,7 +1332,7 @@ canceled 2;
 theorem Th73:
   (L1 - L2).v = L1.v - L2.v
 proof
-  thus (L1 - L2).v = L1.v + (- L2).v by Def11
+  thus (L1 - L2).v = L1.v + (- L2).v by ThDef11
     .= L1.v + (- L2.v) by Th67
     .= L1.v - L2.v by RLVECT_1:def 14;
 end;
@@ -1416,7 +1405,7 @@ A15: rng FF = A by A6,XBOOLE_1:7,12;
 A16: rng GG = A by A3,XBOOLE_1:7,12;
   rng F misses rng r
   proof
-    consider x being Element of rng F /\ rng r;
+    set x =the  Element of rng F /\ rng r;
     assume not thesis;
     then rng F /\ rng r <> {} by XBOOLE_0:def 7;
     then x in Carrier(L1 + L2) & x in C3 by A10,A4,XBOOLE_0:def 4;
@@ -1426,7 +1415,7 @@ A16: rng GG = A by A3,XBOOLE_1:7,12;
 A17: FF is one-to-one by A9,A5,FINSEQ_3:98;
   rng G misses rng p
   proof
-    consider x being Element of rng G /\ rng p;
+    set x =the  Element of rng G /\ rng p;
     assume not thesis;
     then rng G /\ rng p <> {} by XBOOLE_0:def 7;
     then x in Carrier(L1) & x in C1 by A13,A1,XBOOLE_0:def 4;
@@ -1564,7 +1553,7 @@ A51: Sum(L2 (#) H) = Sum(L2) by Def9;
   set HH = H ^ q;
   rng H misses rng q
   proof
-    consider x being Element of rng H /\ rng q;
+    set x =the  Element of rng H /\ rng q;
     assume not thesis;
     then rng H /\ rng q <> {} by XBOOLE_0:def 7;
     then x in Carrier(L2) & x in C2 by A50,A7,XBOOLE_0:def 4;
@@ -1730,7 +1719,7 @@ A97: h.j = L2.v * v by A94,Th32;
     P.k in dom FF by A34,A72,A93,A95,FUNCT_1:def 5;
     then
 A98: f.l = (L1 + L2).v * v by A96,Th32
-      .= (L1.v + L2.v) * v by Def11
+      .= (L1.v + L2.v) * v by ThDef11
       .= L1.v * v + L2.v * v by VECTSP_1:def 27;
 A99: x in dom g by A80,A47,A88,FINSEQ_1:def 3;
     then g/.k = g.k by PARTFUN1:def 8
@@ -1908,7 +1897,7 @@ proof
     .= Sum(L1) + (- Sum(L2)) by Th79
     .= Sum(L1) - Sum(L2) by RLVECT_1:def 14;
 end;
- 
+
 ::
 ::  Auxiliary theorems.
 ::

@@ -56,7 +56,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MSAFREE1" nr="2">
@@ -163,7 +163,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSAFREE1" nr="4">
@@ -209,7 +209,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSAFREE1" nr="5">
@@ -358,7 +358,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSAFREE1" nr="9">
@@ -426,7 +426,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </CCluster>
 </Registrations>

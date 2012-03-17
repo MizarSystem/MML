@@ -83,6 +83,52 @@
 </Func>
 </Func>
 </Typ>
+</ArgTypes>
+<Func kind="K" nr="172">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="6"/>
+<Adjective nr="15">
+<Func kind="K" nr="84"/>
+<Func kind="K" nr="80"/>
+</Adjective>
+<Adjective nr="42"/>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster>
+<Adjective nr="6"/>
+<Adjective nr="15">
+<Func kind="K" nr="84"/>
+<Func kind="K" nr="80"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="21">
+<Func kind="K" nr="22">
+<Func kind="K" nr="84"/>
+<Func kind="K" nr="80"/>
+</Func>
+</Func>
+</Typ>
+</FCluster>
+<FCluster aid="SEQ_4" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster>
+<Adjective nr="6"/>
+<Adjective nr="15">
+<Func kind="K" nr="84"/>
+<Func kind="K" nr="80"/>
+</Adjective>
+<Adjective nr="42"/>
+</Cluster>
+<Func kind="K" nr="21">
+<Func kind="K" nr="22">
+<Func kind="K" nr="84"/>
+<Func kind="K" nr="80"/>
+</Func>
+</Func>
+</Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="84"/>
@@ -117,7 +163,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster aid="SEQ_4" nr="2">
+<FCluster aid="SEQ_4" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -131,7 +177,7 @@
 <Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster aid="SEQ_4" nr="3">
+<FCluster aid="SEQ_4" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="9">
 <Cluster>

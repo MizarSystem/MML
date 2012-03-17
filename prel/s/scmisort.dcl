@@ -19,13 +19,13 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FUNCT_7"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="RECDEF_2"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FUNCT_7"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="ORDINAL4"/>
@@ -33,15 +33,13 @@
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="AMI_2"/>
-<ArticleID name="SCMFSA_1"/>
 <ArticleID name="SCMFSA_2"/>
 <ArticleID name="SF_MASTR"/>
 <ArticleID name="SCMISORT"/>
 </Signature>
 <FCluster aid="SCMISORT" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="374"/>
+<Func kind="K" nr="337"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="4"/>
@@ -50,30 +48,30 @@
 </Adjective>
 <Adjective nr="7">
 <Func kind="U" nr="1">
-<Func kind="K" nr="345"/>
+<Func kind="K" nr="308"/>
 </Func>
 </Adjective>
 <Adjective nr="8">
-<Func kind="U" nr="6">
+<Func kind="U" nr="5">
 <Func kind="K" nr="2">
 <Func kind="K" nr="88"/>
 <Func kind="K" nr="305">
 <Func kind="K" nr="88"/>
 </Func>
 </Func>
-<Func kind="K" nr="345"/>
+<Func kind="K" nr="308"/>
 </Func>
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="13">
-<Func kind="U" nr="8">
+<Func kind="U" nr="7">
 <Func kind="K" nr="2">
 <Func kind="K" nr="88"/>
 <Func kind="K" nr="305">
 <Func kind="K" nr="88"/>
 </Func>
 </Func>
-<Func kind="K" nr="345"/>
+<Func kind="K" nr="308"/>
 </Func>
 </Adjective>
 <Adjective nr="31"/>
@@ -85,7 +83,7 @@
 <Func kind="K" nr="88"/>
 </Func>
 </Func>
-<Func kind="K" nr="345"/>
+<Func kind="K" nr="308"/>
 </Adjective>
 </Cluster>
 </FCluster>

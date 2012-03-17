@@ -1,0 +1,3501 @@
+:: Veblen Hierarchy
+::  by Grzegorz Bancerek
+::
+:: Received October 18, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies ORDINAL6, CARD_1, RELAT_1, FUNCT_1, CLASSES2, NUMBERS, TARSKI,
+      XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, WELLORD1, WELLORD2, ABIAN,
+      CARD_3, MATROID0, ORDINAL4, NAT_1, ARYTM_3, CLASSES1, VALUED_0, AFINSQ_1,
+      ORDINAL5, ZFMISC_1, FINSET_1, MESFUNC8, NAGATA_1, ORDINAL3, PRE_TOPC,
+      AOFA_000;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, FINSET_1, ORDINAL1, ORDINAL2, NAT_1, ORDINAL3, ABIAN, WELLORD1,
+      WELLORD2, CARD_1, ORDINAL4, CARD_3, NAGATA_1, AFINSQ_1, CLASSES1,
+      CLASSES2, NUMBERS, MATROID0, ORDINAL5, AOFA_000;
+ constructors WELLORD1, WELLORD2, CLASSES1, ABIAN, CARD_3, AFINSQ_1, ORDINAL3,
+      ORDINAL5, NAT_1, RELSET_1;
+ registrations XBOOLE_0, RELAT_1, RELSET_1, FUNCT_1, FINSET_1, FUNCT_2,
+      ORDINAL1, ORDINAL2, CARD_1, WELLORD2, ORDINAL3, CLASSES2, CARD_5,
+      ORDINAL4, CARD_LAR, ORDINAL5, CLASSES1, AFINSQ_1, SUBSET_1;
+ requirements SUBSET, BOOLE, NUMERALS;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, WELLORD1, ABIAN, ORDINAL1, ORDINAL2,
+      ORDINAL4, CARD_3, ORDINAL5;
+ theorems XBOOLE_1, ZFMISC_1, RELAT_1, FUNCT_1, ORDINAL1, ORDINAL2, ORDINAL3,
+      FUNCT_3, WELLORD1, WELLORD2, ORDERS_1, CARD_2, CARD_5, FUNCT_2, ORDINAL4,
+      XBOOLE_0, TARSKI, ORDINAL5, NAT_1, CLASSES1, CLASSES2, CARD_1, AFINSQ_1,
+      NAT_2, GRFUNC_1, ABIAN;
+ schemes NAT_1, ORDINAL1, ORDINAL2, ORDINAL4, TREES_2;
+
+begin :: Preliminaries
+
+reserve a,b,c,d for ordinal number;
+reserve l for non empty limit_ordinal Ordinal;
+reserve u for Element of l;
+reserve A for non empty ordinal number;
+reserve e for Element of A;
+reserve X,Y,x,y,z for set;
+reserve n,m for Nat;
+
+definition
+  let X be set;
+  attr X is ordinal-membered means :SS:
+  ex a st X c= a;
+end;
+
+registration
+  cluster ordinal -> ordinal-membered set;
+  coherence
+  proof
+    let X be set;
+    assume X is ordinal;
+    hence ex a st X c= a;
+  end;
+  let X;
+  cluster On X -> ordinal-membered;
+  coherence
+  proof
+    take sup X;
+    thus thesis by ORDINAL2:def 7;
+  end;
+end;
+
+theorem EXCH9:
+  X is ordinal-membered iff for x st x in X holds x is ordinal
+  proof
+    thus X is ordinal-membered implies for x st x in X holds x is ordinal
+    proof assume
+      ex a st X c= a;
+      hence thesis;
+    end;
+    assume
+Z1: for x st x in X holds x is ordinal;
+    take a = sup X;
+    let x; assume
+Z2: x in X; then
+    x is Ordinal by Z1;
+    hence thesis by Z2,ORDINAL2:27;
+end;
+
+registration
+  cluster ordinal-membered set;
+  existence
+  proof
+    take 0,0;
+    thus 0 c= 0;
+  end;
+end;
+
+registration
+  let X be ordinal-membered set;
+  cluster -> ordinal Element of X;
+  coherence
+  proof
+    let a be Element of X;
+    per cases;
+    suppose X is empty;
+      hence thesis;
+    end;
+    suppose X is non empty;
+      hence thesis by EXCH9;
+    end;
+  end;
+end;
+
+theorem EXCH10:
+  X is ordinal-membered iff On X = X
+  proof
+    hereby assume
+Z0:   X is ordinal-membered;
+      thus On X = X
+      proof thus On X c= X by ORDINAL2:9;
+        let x;
+        thus thesis by Z0,ORDINAL1:def 10;
+      end;
+    end;
+    thus thesis;
+  end;
+
+theorem TM2:
+  for X being ordinal-membered set holds X c= sup X
+  proof
+    let X be ordinal-membered set;
+    let x;
+    thus thesis by ORDINAL2:27;
+  end;
+
+theorem EXCH1:
+  a c= b iff b nin a
+  proof
+    a c= b & b in a implies b in b;
+    hence thesis by ORDINAL1:26;
+  end;
+
+theorem OM0:
+  x in a\b iff b c= x & x in a
+  proof
+    x in a\b iff x nin b & x in a by XBOOLE_0:def 5;
+    hence thesis by EXCH1;
+  end;
+
+registration let a,b;
+  cluster a\b -> ordinal-membered;
+  coherence
+  proof take a;
+    thus thesis;
+  end;
+end;
+
+theorem Lem1:
+  for f being Function st f is_isomorphism_of RelIncl X, RelIncl Y
+  for x,y st x in X & y in X holds x c= y iff f.x c= f.y
+  proof
+    let f be Function; assume
+Z0: f is_isomorphism_of RelIncl X, RelIncl Y;
+    let x,y such that
+Z1: x in X & y in X;
+A1: field RelIncl X = X & field RelIncl Y = Y by WELLORD2:def 1; then
+    dom f = X & rng f = Y by Z0,WELLORD1:def 7; then
+A2: f.x in Y & f.y in Y by Z1,FUNCT_1:def 5;
+    x c= y iff [x,y] in RelIncl X by Z1,WELLORD2:def 1; then
+    x c= y iff [f.x,f.y] in RelIncl Y by Z0,Z1,A1,WELLORD1:def 7;
+    hence thesis by A2,WELLORD2:def 1;
+  end;
+
+theorem
+  for X,Y being ordinal-membered set
+  for f being Function st f is_isomorphism_of RelIncl X, RelIncl Y
+  for x,y st x in X & y in X holds x in y iff f.x in f.y
+  proof
+    let X,Y be ordinal-membered set;
+    let f be Function; assume
+Z0: f is_isomorphism_of RelIncl X, RelIncl Y;
+    let x,y;
+    assume
+Z1: x in X & y in X;
+    field RelIncl X = X & field RelIncl Y = Y by WELLORD2:def 1; then
+    dom f = X & rng f = Y by Z0,WELLORD1:def 7; then
+    f.x in Y & f.y in Y by Z1,FUNCT_1:def 5; then
+    reconsider a=f.x,b=f.y,x,y as Ordinal by Z1;
+    y c= x iff b c= a by Z0,Z1,Lem1;
+    hence thesis by EXCH1;
+  end;
+
+theorem Lem3:
+  [x,y] in RelIncl X implies x c= y
+  proof assume
+Z0: [x,y] in RelIncl X;
+    field RelIncl X = X by WELLORD2:def 1; then
+    x in X & y in X by Z0,RELAT_1:30;
+    hence x c= y by Z0,WELLORD2:def 1;
+  end;
+
+theorem Lem4:
+  for f1,f2 being T-Sequence holds f1 c= f1^f2
+  proof
+    let f1,f2 be T-Sequence;
+    dom(f1^f2) = (dom f1)+^dom f2 by ORDINAL4:def 1; then
+A1: dom f1 c= dom(f1^f2) by ORDINAL3:27;
+    for x st x in dom f1 holds f1.x = (f1^f2).x by ORDINAL4:def 1;
+    hence f1 c= f1^f2 by A1,GRFUNC_1:8;
+  end;
+
+theorem ORDINAL4th2:
+  for f1,f2 being T-Sequence holds rng(f1^f2) = rng f1 \/ rng f2
+  proof let f1,f2 be T-Sequence;
+    set f = f1^f2, A1 = rng f1, A2 = rng f2;
+X:  dom(f1^f2) = (dom f1)+^(dom f2) by ORDINAL4:def 1;
+    thus rng(f1^f2) c= rng f1 \/ rng f2
+    proof
+      let y;
+      assume y in rng f;
+      then consider x such that
+A5:   x in dom f and
+A6:   y = f.x by FUNCT_1:def 5;
+      reconsider x as Ordinal by A5;
+      per cases;
+      suppose
+A8:     x in dom f1;
+        then
+A9:     f1.x in rng f1 by FUNCT_1:def 5;
+        y = f1.x by A6,A8,ORDINAL4:def 1;
+        hence thesis by A9,XBOOLE_0:def 3;
+      end;
+      suppose
+        not x in dom f1;
+        then dom f1 c= x by ORDINAL1:26;
+        then
+A10:    (dom f1)+^(x-^dom f1) = x by ORDINAL3:def 6;
+        then
+A11:    x-^dom f1 in dom f2 by X,A5,ORDINAL3:25;
+        then y = f2.(x-^dom f1) by A6,A10,ORDINAL4:def 1;
+        then y in rng f2 by A11,FUNCT_1:def 5;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+    end;
+    let x; assume
+A0: x in rng f1 \/ rng f2;
+A1: dom f1 c= (dom f1)+^dom f2 by ORDINAL3:27;
+    per cases by A0,XBOOLE_0:def 3;
+    suppose x in rng f1; then
+      consider z such that
+A2:   z in dom f1 & x = f1.z by FUNCT_1:def 5;
+      x = f.z by A2,ORDINAL4:def 1;
+      hence thesis by X,A1,A2,FUNCT_1:def 5;
+    end;
+    suppose x in rng f2; then
+      consider z such that
+A2:   z in dom f2 & x = f2.z by FUNCT_1:def 5;
+      reconsider z as Ordinal by A2;
+A3:   (dom f1)+^z in dom f by X,A2,ORDINAL3:20;
+      x = f.((dom f1)+^z) by A2,ORDINAL4:def 1;
+      hence thesis by A3,FUNCT_1:def 5;
+    end;
+  end;
+
+theorem LemE1:
+  a c= b iff epsilon_a c= epsilon_b
+  proof
+    hereby assume
+      a c= b; then
+      a = b or a c< b by XBOOLE_0:def 8; then
+      a = b or epsilon_a in epsilon_b by ORDINAL1:21,ORDINAL5:44;
+      hence epsilon_a c= epsilon_b by ORDINAL1:def 2;
+    end;
+    assume
+Z1: epsilon_a c= epsilon_b;
+    assume a c/= b; then
+    epsilon_b in epsilon_a by ORDINAL1:26,ORDINAL5:44; then
+    epsilon_b in epsilon_b by Z1;
+    hence thesis;
+  end;
+
+theorem LemE2:
+  a in b iff epsilon_a in epsilon_b
+  proof
+    b c/= a iff epsilon_b c/= epsilon_a by LemE1;
+    hence thesis by EXCH1;
+  end;
+
+registration
+  let X be ordinal-membered set;
+  cluster union X -> ordinal;
+  coherence
+  proof
+    ex a st X c= a by SS;
+    hence thesis by ORDINAL3:6;
+  end;
+end;
+
+registration
+  let f be Ordinal-yielding Function;
+  cluster rng f -> ordinal-membered;
+  coherence
+  proof
+    thus ex a st rng f c= a by ORDINAL2:def 8;
+  end;
+end;
+
+registration
+  let a;
+  cluster id a -> T-Sequence-like Ordinal-yielding;
+  coherence
+  proof
+    dom id a = a & rng id a = a by RELAT_1:71;
+    hence thesis by ORDINAL1:def 7,ORDINAL2:def 8;
+  end;
+end;
+
+registration
+  let a;
+  cluster id a -> increasing Ordinal-Sequence;
+  coherence
+  proof
+    let f be Ordinal-Sequence such that
+A1: f = id a;
+    let b,c; assume
+A2: b in c & c in dom f; then
+    b in dom f & dom f = a by A1,RELAT_1:71,ORDINAL1:19; then
+    f.b = b & f.c = c by A1,A2,FUNCT_1:35;
+    hence thesis by A2;
+  end;
+end;
+
+registration
+  let a;
+  cluster id a -> continuous Ordinal-Sequence;
+  coherence
+  proof
+    let f be Ordinal-Sequence such that
+A1: f = id a;
+    let b,c; assume
+A2: b in dom f & b <> {} & b is limit_ordinal & c = f.b;
+    set g = f|b;
+A3: dom f = a & dom id b = b by A1,RELAT_1:71; then
+A4: c = b by A1,A2,FUNCT_1:35;
+    b c= a by A2,A3,ORDINAL1:def 2; then
+A5: g = id b by A1,FUNCT_3:1;
+    per cases;
+    case c = {};
+      hence thesis by A2,A1,A3,FUNCT_1:35;
+    end;
+    case c <> {};
+      let B,C be Ordinal; assume
+B1:   B in c & c in C;
+      take D = succ B;
+      thus D in dom g by A2,A3,A4,A5,B1,ORDINAL1:41;
+      let E be Ordinal; assume
+B3:   D c= E & E in dom g; then
+      g.E = E by A3,A5,FUNCT_1:35;
+      hence B in g.E & g.E in C by A3,A4,A5,B1,B3,ORDINAL1:19,33;
+    end;
+  end;
+end;
+
+registration
+  cluster non empty increasing continuous Ordinal-Sequence;
+  existence
+  proof
+    set A =the  non empty ordinal number;
+    take id A;
+    thus thesis;
+  end;
+end;
+
+definition
+  let f be T-Sequence;
+  attr f is normal means: NORM:
+  f is increasing continuous Ordinal-Sequence;
+end;
+
+definition
+  let f be Ordinal-Sequence;
+  redefine attr f is normal means
+  f is increasing continuous;
+  compatibility by NORM;
+end;
+
+registration
+  cluster normal -> Ordinal-yielding T-Sequence;
+  coherence by NORM;
+  cluster normal -> increasing continuous Ordinal-Sequence;
+  coherence by NORM;
+  cluster increasing continuous -> normal Ordinal-Sequence;
+  coherence by NORM;
+end;
+
+registration
+  cluster non empty normal T-Sequence;
+  existence
+  proof
+    set A =the  non empty ordinal number;
+    take id A;
+    thus thesis;
+  end;
+end;
+
+theorem ThND:
+  for f being Ordinal-Sequence holds
+  f is non-decreasing implies f|a is non-decreasing
+  proof let f be Ordinal-Sequence;
+    assume
+A1: for b,c st b in c & c in dom f holds f.b c= f.c;
+    let b,c; assume
+A2: b in c & c in dom(f|a); then
+A3: c in dom f & c in a by RELAT_1:86; then
+    (f|a).b = f.b & (f|a).c = f.c by A2,ORDINAL1:19,FUNCT_1:72;
+    hence thesis by A1,A2,A3;
+  end;
+
+definition
+  let X;
+  func ord-type X -> ordinal number equals
+  order_type_of RelIncl On X;
+  coherence;
+end;
+
+definition
+  let X be ordinal-membered set;
+  redefine func ord-type X equals order_type_of RelIncl X;
+  compatibility by EXCH10;
+end;
+
+registration
+  let X be ordinal-membered set;
+  cluster RelIncl X -> well-ordering;
+  coherence
+  proof
+    ex a st X c= a by SS;
+    hence thesis by WELLORD2:9;
+  end;
+end;
+
+registration
+  let E be empty set;
+  cluster On E -> empty;
+  coherence by XBOOLE_1:3,ORDINAL2:9;
+end;
+
+registration
+  let E be empty set;
+  cluster order_type_of E -> empty;
+  coherence
+  proof
+    RelIncl E = E;
+    hence thesis by ORDERS_1:198;
+  end;
+end;
+
+theorem
+  ord-type {} = 0;
+
+theorem
+  ord-type {a} = 1
+  proof
+    a in succ a by ORDINAL1:10; then
+A1: {a} c= succ a by ZFMISC_1:37; then
+    order_type_of RelIncl {a} = 1 by CARD_5:49;
+    hence thesis by A1,ORDINAL3:8;
+  end;
+
+theorem
+  a <> b implies ord-type {a,b} = 2
+  proof
+    assume a <> b; then
+A1: card {a,b} = 2 by CARD_2:76;
+    a c= a\/b & b c= a\/b by XBOOLE_1:7; then
+    a in succ(a\/b) & b in succ(a\/b) by ORDINAL1:34; then
+A2: {a,b} c= succ(a\/b) by ZFMISC_1:38; then
+    On {a,b} = {a,b} by ORDINAL3:8;
+    hence thesis by A1,A2,CARD_5:48;
+  end;
+
+theorem
+  ord-type a = a by ORDERS_1:198;
+
+definition
+  let X;
+  func numbering X -> Ordinal-Sequence equals
+  canonical_isomorphism_of(RelIncl ord-type X, RelIncl On X);
+  coherence
+  proof
+    set R1 = RelIncl ord-type X;
+    set R2 = RelIncl On X;
+    set f = canonical_isomorphism_of(R1, R2);
+    consider a such that
+A1: On X c= a by SS;
+    ex phi being Ordinal-Sequence st phi = f &
+    phi is increasing & dom phi = ord-type X & rng phi = On X
+    by A1,CARD_5:14;
+    hence thesis;
+  end;
+end;
+
+theorem ThN1:
+  dom numbering X = ord-type X & rng numbering X = On X
+  proof
+    set R1 = RelIncl ord-type X;
+    set R2 = RelIncl On X;
+    set f = canonical_isomorphism_of(R1, R2);
+    consider a such that
+A1: On X c= a by SS;
+    ex phi being Ordinal-Sequence st phi = f &
+    phi is increasing & dom phi = ord-type X & rng phi = On X
+    by A1,CARD_5:14;
+    hence thesis;
+  end;
+
+theorem ThN1a:
+  for X being ordinal-membered set holds rng numbering X = X
+  proof
+    let X be ordinal-membered set;
+    thus rng numbering X = On X by ThN1 .= X by EXCH10;
+  end;
+
+theorem
+  card dom numbering X = card On X
+  proof
+    dom numbering X = ord-type X &
+    ex a st On X c= a by ThN1,SS;
+    hence thesis by CARD_5:16;
+  end;
+
+theorem ThN3:
+  numbering X is_isomorphism_of RelIncl ord-type X, RelIncl On X
+  proof
+    set R1 = RelIncl ord-type X;
+    set R2 = RelIncl On X;
+    R2,R1 are_isomorphic by WELLORD2:def 2; then
+    R1,R2 are_isomorphic by WELLORD1:50;
+    hence thesis by WELLORD1:def 9;
+  end;
+
+reserve f for Ordinal-Sequence;
+
+theorem ThN4:
+  f = numbering X & x in dom f & y in dom f implies (x c= y iff f.x c= f.y)
+  proof assume
+A1: f = numbering X & x in dom f & y in dom f; then
+    dom f = ord-type X &
+    f is_isomorphism_of RelIncl ord-type X, RelIncl On X by ThN1,ThN3;
+    hence thesis by A1,Lem1;
+  end;
+
+theorem ThN5:
+  f = numbering X & x in dom f & y in dom f implies (x in y iff f.x in f.y)
+  proof assume
+A1: f = numbering X & x in dom f & y in dom f; then
+    y c= x iff f.y c= f.x by ThN4;
+    hence thesis by A1,EXCH1;
+  end;
+
+registration
+  let X;
+  cluster numbering X -> increasing;
+  coherence
+  proof
+    set R1 = RelIncl ord-type X;
+    set R2 = RelIncl On X;
+    set f = canonical_isomorphism_of(R1, R2);
+    consider a such that
+A1: On X c= a by SS;
+    ex phi being Ordinal-Sequence st phi = f &
+    phi is increasing & dom phi = ord-type X & rng phi = On X
+    by A1,CARD_5:14;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X,Y be ordinal-membered set;
+  cluster X \/ Y -> ordinal-membered;
+  coherence
+  proof
+    consider a such that
+A1: X c= a by SS;
+    consider b such that
+A2: Y c= b by SS;
+    take a \/ b;
+    thus thesis by A1,A2,XBOOLE_1:13;
+  end;
+end;
+
+registration
+  let X be ordinal-membered set, Y be set;
+  cluster X \ Y -> ordinal-membered;
+  coherence
+  proof
+    consider a such that
+A1: X c= a by SS;
+    take a;
+    thus thesis by A1,XBOOLE_1:1;
+  end;
+end;
+
+theorem ThN6:
+  for X,Y being ordinal-membered set
+  st for x,y st x in X & y in Y holds x in y
+  holds (numbering X)^(numbering Y) is_isomorphism_of
+  RelIncl ((ord-type X)+^(ord-type Y)), RelIncl (X \/ Y)
+  proof
+    let X,Y be ordinal-membered set; assume
+Z0: for x,y st x in X & y in Y holds x in y;
+    set f = numbering X, g = numbering Y;
+    set a = ord-type X, b = ord-type Y;
+    set R = RelIncl(a+^b), Q = RelIncl(X\/Y);
+    set R1 = RelIncl a, Q1 = RelIncl(X);
+    set R2 = RelIncl b, Q2 = RelIncl(Y);
+X:  dom(f^g) = (dom f)+^dom g by ORDINAL4:def 1;
+A0: dom f = a & dom g = b by ThN1;
+A1: rng f = X & rng g = Y by ThN1a;
+A2: f is_isomorphism_of RelIncl a, RelIncl On X &
+    g is_isomorphism_of RelIncl b, RelIncl On Y by ThN3; then
+A3: f is one-to-one & g is one-to-one by WELLORD1:def 7;
+    thus
+A5: dom(f^g) = (dom f)+^dom g by ORDINAL4:def 1
+    .= field R by A0,WELLORD2:def 1;
+    thus rng(f^g) = (rng f)\/rng g by ORDINAL4th2
+    .= field Q by A1,WELLORD2:def 1; then
+A6: rng(f^g) = X\/Y by WELLORD2:def 1;
+A7: On X = X & On Y = Y by EXCH10;
+    thus f^g is one-to-one
+    proof
+      let x,y; assume
+B1:   x in dom(f^g) & y in dom(f^g) & (f^g).x = (f^g).y; then
+      reconsider a = x, b = y as Ordinal;
+      per cases by B1,ORDINAL1:26;
+      suppose
+B2:     x in dom f & y in dom f; then
+        (f^g).x = f.x & (f^g).y = f.y by ORDINAL4:def 1;
+        hence thesis by A3,B1,B2,FUNCT_1:def 8;
+      end;
+      suppose
+B3:     x in dom f & dom f c= y; then
+B4:     (dom f)+^(b-^dom f) = y by ORDINAL3:def 6; then
+B5:     b-^dom f in dom g by X,B1,ORDINAL3:25; then
+        (f^g).x = f.x & (f^g).y = g.(b-^dom f) by B3,B4,ORDINAL4:def 1; then
+        f.x in X & f.x in Y by A1,B1,B3,B5,FUNCT_1:def 5; then
+        f.x in f.x by Z0;
+        hence thesis;
+      end;
+      suppose
+B3:     dom f c= x & y in dom f; then
+B4:     (dom f)+^(a-^dom f) = x by ORDINAL3:def 6; then
+B5:     a-^dom f in dom g by X,B1,ORDINAL3:25; then
+        (f^g).y = f.y & (f^g).x = g.(a-^dom f) by B3,B4,ORDINAL4:def 1; then
+        f.y in X & f.y in Y by A1,B1,B3,B5,FUNCT_1:def 5; then
+        f.y in f.y by Z0;
+        hence thesis;
+      end;
+      suppose dom f c= x & dom f c= y; then
+B4:     (dom f)+^(a-^dom f) = x & (dom f)+^(b-^dom f) = y
+        by ORDINAL3:def 6; then
+B5:     a-^dom f in dom g & b-^dom f in dom g by X,B1,ORDINAL3:25; then
+        (f^g).y = g.(b-^dom f) & (f^g).x = g.(a-^dom f) by B4,ORDINAL4:def 1;
+        hence thesis by A3,B1,B4,B5,FUNCT_1:def 8;
+      end;
+    end;
+    let x,y;
+A4: field R = a+^b by WELLORD2:def 1;
+    hereby assume
+C1:   [x,y] in R;
+      hence
+C2:   x in field R & y in field R by RELAT_1:30; then
+C3:   x c= y by C1,A4,WELLORD2:def 1;
+C4:   (f^g).x in X\/Y & (f^g).y in X\/Y by A5,A6,C2,FUNCT_1:def 5;
+      thus [(f^g).x,(f^g).y] in Q
+      proof
+        reconsider x,y as Ordinal by A4,C2;
+        per cases by ORDINAL1:26;
+        suppose
+B2:       x in dom f & y in dom f; then
+B6:       [x,y] in RelIncl a by A0,C3,WELLORD2:def 1;
+          (f^g).x = f.x & (f^g).y = f.y by B2,ORDINAL4:def 1; then
+B7:       [(f^g).x, (f^g).y] in Q1 by A7,A2,B6,WELLORD1:def 7; then
+          (f^g).x in field Q1 & (f^g).y in field Q1 by RELAT_1:30; then
+          (f^g).x in X & (f^g).y in X by WELLORD2:def 1; then
+          (f^g).x c= (f^g).y by B7,WELLORD2:def 1;
+          hence thesis by C4,WELLORD2:def 1;
+        end;
+        suppose
+B3:       x in dom f & dom f c= y; then
+B4:       (dom f)+^(y-^dom f) = y by ORDINAL3:def 6; then
+B5:       y-^dom f in dom g by A0,A4,C2,ORDINAL3:25; then
+          (f^g).x = f.x & (f^g).y = g.(y-^dom f) by B3,B4,ORDINAL4:def 1; then
+          (f^g).x in X & (f^g).y in Y by A1,B3,B5,FUNCT_1:def 5; then
+          (f^g).x in (f^g).y by Z0; then
+          (f^g).x c= (f^g).y by ORDINAL1:def 2;
+          hence thesis by C4,WELLORD2:def 1;
+        end;
+        suppose
+          dom f c= x & y in dom f; then
+          y in x; then
+          y in y by C3;
+          hence thesis;
+        end;
+        suppose dom f c= x & dom f c= y; then
+B4:       (dom f)+^(x-^dom f) = x & (dom f)+^(y-^dom f) = y
+          by ORDINAL3:def 6; then
+B5:       x-^dom f in dom g & y-^dom f in dom g by A0,A4,C2,ORDINAL3:25;
+          x-^a c= y-^a by C3,ORDINAL3:72; then
+B6:       [x-^a,y-^a] in RelIncl b by B5,A0,WELLORD2:def 1;
+          (f^g).y = g.(y-^dom f) & (f^g).x = g.(x-^dom f)
+          by B4,B5,ORDINAL4:def 1; then
+B7:       [(f^g).x, (f^g).y] in Q2 by A7,A0,A2,B6,WELLORD1:def 7; then
+          (f^g).x in field Q2 & (f^g).y in field Q2 by RELAT_1:30; then
+          (f^g).x in Y & (f^g).y in Y by WELLORD2:def 1; then
+          (f^g).x c= (f^g).y by B7,WELLORD2:def 1;
+          hence thesis by C4,WELLORD2:def 1;
+        end;
+      end;
+    end;
+    assume
+D1: x in field R & y in field R & [(f^g).x,(f^g).y] in Q; then
+D2: (f^g).x c= (f^g).y by Lem3;
+D3: field R1 = a & field R2 = b by WELLORD2:def 1;
+    reconsider x,y as Ordinal by A4,D1;
+    per cases by ORDINAL1:26;
+    suppose
+B2:   x in dom f & y in dom f; then
+B3:   (f^g).x = f.x & (f^g).y = f.y by ORDINAL4:def 1;
+      f.x in X & f.y in X by A1,B2,FUNCT_1:def 5; then
+      [f.x, f.y] in Q1 by B3,D2,WELLORD2:def 1; then
+      [x,y] in R1 by A7,B2,D3,A0,A2,WELLORD1:def 7; then
+      x c= y by Lem3;
+      hence thesis by A4,D1,WELLORD2:def 1;
+    end;
+    suppose
+      x in dom f & dom f c= y; then
+      x c= y by ORDINAL1:def 2;
+      hence thesis by A4,D1,WELLORD2:def 1;
+    end;
+    suppose
+B2:   dom f c= x & y in dom f; then
+B3:   (f^g).y = f.y by ORDINAL4:def 1;
+B4:   f.y in X by A1,B2,FUNCT_1:def 5;
+B7:   (dom f)+^(x-^dom f) = x by B2,ORDINAL3:def 6; then
+B5:   x-^dom f in dom g by A0,A4,D1,ORDINAL3:25; then
+B6:   (f^g).x = g.(x-^dom f) by B7,ORDINAL4:def 1;
+      g.(x-^dom f) in Y by A1,B5,FUNCT_1:def 5; then
+      (f^g).y in (f^g).x by B3,B4,B6,Z0; then
+      (f^g).y in (f^g).y by D2;
+      hence thesis;
+    end;
+    suppose dom f c= x & dom f c= y; then
+B4:   (dom f)+^(x-^dom f) = x & (dom f)+^(y-^dom f) = y
+      by ORDINAL3:def 6; then
+B5:   x-^dom f in dom g & y-^dom f in dom g by A0,A4,D1,ORDINAL3:25; then
+B6:   g.(y-^dom f) in Y & g.(x-^dom f) in Y by A1,FUNCT_1:def 5;
+      (f^g).y = g.(y-^dom f) & (f^g).x = g.(x-^dom f)
+      by B4,B5,ORDINAL4:def 1; then
+      [g.(x-^dom f), g.(y-^dom f)] in Q2
+      by B6,D2,WELLORD2:def 1; then
+      [(x-^dom f), (y-^dom f)] in R2 by A7,D3,A0,A2,B5,WELLORD1:def 7; then
+      x-^dom f c= y-^dom f by Lem3; then
+      x c= y by B4,ORDINAL3:21;
+      hence thesis by A4,D1,WELLORD2:def 1;
+    end;
+  end;
+
+theorem ThN7:
+  for X,Y being ordinal-membered set
+  st for x,y st x in X & y in Y holds x in y
+  holds numbering(X \/ Y) = (numbering X)^(numbering Y)
+  proof
+    let X,Y be ordinal-membered set; assume
+Z0: for x,y st x in X & y in Y holds x in y;
+    set f = numbering X, g = numbering Y, h = numbering(X\/Y);
+    set a = ord-type X, b = ord-type Y;
+    set P = RelIncl(a+^b), Q = RelIncl(X\/Y);
+    set R = RelIncl ord-type(X\/Y);
+A0: On(X\/Y) = X\/Y & On X = X & On Y = Y by EXCH10; then
+I1: h is_isomorphism_of R,Q by ThN3;
+II: f^g is_isomorphism_of P,Q by Z0,ThN6; then
+I2: P,Q are_isomorphic & R,Q are_isomorphic by I1,WELLORD1:def 8; then
+    Q,R are_isomorphic by WELLORD1:50; then
+    a+^b = ord-type(X\/Y) by I2,WELLORD1:52,WELLORD2:11;
+    hence numbering(X \/ Y) = (numbering X)^(numbering Y)
+    by A0,II,I2,WELLORD1:def 9;
+  end;
+
+theorem
+  for X,Y being ordinal-membered set
+  st for x,y st x in X & y in Y holds x in y
+  holds ord-type(X \/ Y) = (ord-type X)+^(ord-type Y)
+  proof
+    let X,Y be ordinal-membered set;
+    assume for x,y st x in X & y in Y holds x in y; then
+A1: numbering(X \/ Y) = (numbering X)^(numbering Y) by ThN7;
+    thus ord-type(X \/ Y) = dom numbering(X \/ Y) by ThN1
+    .= (dom numbering X)+^(dom numbering Y) by A1,ORDINAL4:def 1
+    .= (ord-type X)+^(dom numbering Y) by ThN1
+    .= (ord-type X)+^(ord-type Y) by ThN1;
+  end;
+
+begin :: Fixpoints of a Normal Function
+
+theorem LemF1:
+  for f being Function st x is_a_fixpoint_of f holds x in rng f
+  proof
+    let f be Function;
+    assume x in dom f & x = f.x;
+    hence thesis by FUNCT_1:def 5;
+  end;
+
+definition
+  let f be Ordinal-Sequence;
+  func criticals f -> Ordinal-Sequence equals
+  numbering {a where a is Element of dom f: a is_a_fixpoint_of f};
+  coherence;
+end;
+
+theorem Th01:
+  On {a where a is Element of dom f: a is_a_fixpoint_of f}
+  = {a where a is Element of dom f: a is_a_fixpoint_of f}
+  proof
+    set X = {a where a is Element of dom f: a is_a_fixpoint_of f};
+    now
+      let x;
+      assume x in X; then
+      ex a being Element of dom f st x = a & a is_a_fixpoint_of f;
+      hence x is ordinal;
+    end; then
+    X is ordinal-membered by EXCH9;
+    hence thesis by EXCH10;
+  end;
+
+theorem Th02:
+  x in dom criticals f implies (criticals f).x is_a_fixpoint_of f
+  proof set a = x;
+    set X = {b where b is Element of dom f: b is_a_fixpoint_of f};
+    set g = criticals f;
+    assume a in dom g; then
+    g.a in rng g by FUNCT_1:def 5; then
+    g.a in On X by ThN1; then
+    g.a in X by Th01; then
+    ex b being Element of dom f st g.a = b & b is_a_fixpoint_of f;
+    hence thesis;
+  end;
+
+theorem Th03:
+  rng criticals f = {a where a is Element of dom f: a is_a_fixpoint_of f} &
+  rng criticals f c= rng f
+  proof
+    set X = {a where a is Element of dom f: a is_a_fixpoint_of f};
+    On X = X by Th01;
+    hence
+A1: rng criticals f = X by ThN1;
+    let x; assume x in rng criticals f; then
+    ex a being Element of dom f st x = a & a is_a_fixpoint_of f by A1;
+    hence thesis by LemF1;
+  end;
+
+registration let f;
+  cluster criticals f -> increasing;
+  coherence;
+end;
+
+theorem
+  x in dom criticals f implies x c= (criticals f).x by ORDINAL4:10;
+
+theorem Th05:
+  dom criticals f c= dom f
+  proof let x be Ordinal;
+    set X = {a where a is Element of dom f: a is_a_fixpoint_of f};
+    assume
+A1: x in dom criticals f; then
+    (criticals f).x in rng criticals f by FUNCT_1:def 5; then
+    (criticals f).x in On X by ThN1; then
+    (criticals f).x in X by Th01; then
+    consider a being Element of dom f such that
+A2: (criticals f).x = a & a is_a_fixpoint_of f;
+    x c= a & a in dom f & a = f.a by A1,A2,ORDINAL4:10,ABIAN:def 3;
+    hence thesis by ORDINAL1:22;
+  end;
+
+theorem Th06:
+  b is_a_fixpoint_of f implies
+  ex a st a in dom criticals f & b = (criticals f).a
+  proof
+    set X = {a where a is Element of dom f: a is_a_fixpoint_of f};
+    assume
+A1: b is_a_fixpoint_of f; then
+    b in dom f by ABIAN:def 3; then
+    b in X by A1; then
+    b in rng criticals f by Th03; then
+    ex x st x in dom criticals f & b = (criticals f).x by FUNCT_1:def 5;
+    hence thesis;
+  end;
+
+theorem
+  a in dom criticals f & b is_a_fixpoint_of f & (criticals f).a in b
+  implies succ a in dom criticals f
+  proof set g = criticals f;
+    assume that
+Z0: a in dom g and
+Z1: b is_a_fixpoint_of f and
+Z2: g.a in b;
+    consider c such that
+A1: c in dom g & b = g.c by Z1,Th06;
+    a in c by Z0,Z2,A1,ThN5; then
+    succ a c= c by ORDINAL1:33;
+    hence succ a in dom criticals f by A1,ORDINAL1:22;
+  end;
+
+theorem
+  succ a in dom criticals f & b is_a_fixpoint_of f & (criticals f).a in b
+  implies (criticals f).succ a c= b
+  proof set g = criticals f;
+    set Y = {c where c is Element of dom f: c is_a_fixpoint_of f};
+    set X = ord-type Y;
+    assume
+A1: succ a in dom g & b is_a_fixpoint_of f & g.a in b; then
+    consider c such that
+A0: c in dom g & b = g.c by Th06;
+    a in succ a by ORDINAL1:10; then
+A3: a in dom g & g.a in g.succ a by A1,ORDINAL1:19,ORDINAL2:def 16;
+    On Y = Y by Th01; then
+A6: g is_isomorphism_of RelIncl X, RelIncl Y by ThN3;
+A7: dom g = X by ThN1;
+    b c/= g.a by A1,EXCH1; then
+    c c/= a by A0,A3,A6,A7,Lem1; then
+    a in c by EXCH1; then
+    succ a c= c by ORDINAL1:33;
+    hence g.succ a c= b by A0,ORDINAL4:9;
+  end;
+
+theorem Th08a:
+  f is normal & union X in dom f & X is non empty &
+  (for x st x in X ex y st x c= y & y in X & y is_a_fixpoint_of f)
+  implies union X = f.union X
+  proof assume that
+Z0: f is normal and
+Z1: union X in dom f & X is non empty and
+Z2: for x st x in X ex y st x c= y & y in X & y is_a_fixpoint_of f;
+    reconsider l = union X as Ordinal by Z1;
+    per cases;
+    suppose
+      ex a st a in X & for b st b in X holds b c= a; then
+      consider a such that
+A1:   a in X & for b st b in X holds b c= a;
+      now
+        let x; assume
+        x in X; then
+        consider y such that
+A3:     x c= y & y in X & y is_a_fixpoint_of f by Z2;
+        y in dom f by A3,ABIAN:def 3; then
+        y c= a by A1,A3;
+        hence x c= a by A3,XBOOLE_1:1;
+      end; then
+      union X c= a & a c= union X by A1,ZFMISC_1:92,94; then
+A6:   union X = a by XBOOLE_0:def 10; then
+      consider y such that
+A4:   union X c= y & y in X & y is_a_fixpoint_of f by Z2,A1;
+      y in dom f & y = f.y by A4,ABIAN:def 3; then
+      y c= union X by A6,A4,A1; then
+      y = union X by A4,XBOOLE_0:def 10;
+      hence union X = f.union X by A4,ABIAN:def 3;
+    end;
+    suppose
+A3:   not ex a st a in X & for b st b in X holds b c= a;
+      set y0 =the  Element of X;
+      consider x0 being set such that
+B0:   y0 c= x0 & x0 in X & x0 is_a_fixpoint_of f by Z1,Z2;
+B1:   x0 in dom f by B0,ABIAN:def 3; then
+      consider b such that
+B2:   b in X & b c/= x0 by B0,A3;
+C3:   x0 in b by B1,B2,EXCH1;
+      now
+        let a; assume a in l; then
+        consider x such that
+A4:     a in x & x in X by TARSKI:def 4;
+        consider y such that
+B4:     x c= y & y in X & y is_a_fixpoint_of f by Z2,A4;
+A5:     y in dom f by B4,ABIAN:def 3; then
+        consider b such that
+A6:     b in X & b c/= y by A3,B4;
+        succ a c= y & y in b by A4,B4,A5,A6,ORDINAL1:33,EXCH1; then
+        succ a in b by ORDINAL1:22;
+        hence succ a in l by A6,TARSKI:def 4;
+      end; then
+      reconsider l as non empty limit_ordinal Ordinal
+      by C3,B2,TARSKI:def 4,ORDINAL1:41;
+      thus union X c= f.union X by Z1,Z0,ORDINAL4:10;
+      reconsider g = f|l as increasing Ordinal-Sequence by Z0,ORDINAL4:15;
+      l c= dom f by Z1,ORDINAL1:def 2; then
+A9:   dom g = l by RELAT_1:91; then
+A7:   Union g is_limes_of g by ORDINAL5:6;
+      f.l is_limes_of g by Z0,Z1,ORDINAL2:def 17; then
+A8:   f.l = lim g & Union g = lim g by A7,ORDINAL2:def 14;
+      let x; assume x in f.union X; then
+      consider z such that
+C1:   z in dom g & x in g.z by A8,CARD_5:10;
+      consider y such that
+C2:   z in y & y in X by A9,C1,TARSKI:def 4;
+      consider t being set such that
+C4:   y c= t & t in X & t is_a_fixpoint_of f by C2,Z2;
+C3:   t in dom f & t = f.t by C4,ABIAN:def 3; then
+      reconsider z,t as Ordinal by C1;
+      f.z = g.z & z in t by C1,C2,C4,FUNCT_1:70; then
+      g.z in t by Z0,C3,ORDINAL2:def 16; then
+      x in t by C1,ORDINAL1:19;
+      hence x in union X by C4,TARSKI:def 4;
+    end;
+  end;
+
+theorem Th08:
+  f is normal & union X in dom f & X is non empty &
+  (for x st x in X holds x is_a_fixpoint_of f)
+  implies union X = f.union X
+  proof assume that
+Z0: f is normal and
+Z1: union X in dom f & X is non empty and
+Z2: for x st x in X holds x is_a_fixpoint_of f;
+    for x st x in X ex y st x c= y & y in X & y is_a_fixpoint_of f by Z2;
+    hence thesis by Z0,Z1,Th08a;
+  end;
+
+theorem Th19:
+  l c= dom criticals f & a is_a_fixpoint_of f &
+  (for x st x in l holds (criticals f).x in a)
+  implies l in dom criticals f
+  proof set g = criticals f;
+    assume that
+Z1: l c= dom g and
+Z2: a is_a_fixpoint_of f and
+Z4: for x st x in l holds g.x in a;
+    consider b such that
+A1: b in dom g & a = g.b by Z2,Th06;
+    l c= b
+    proof
+      let x be Ordinal; assume x in l; then
+      x in dom g & g.x in g.b by Z1,Z4,A1;
+      hence x in b by A1,ThN5;
+    end;
+    hence l in dom criticals f by A1,ORDINAL1:22;
+  end;
+
+theorem Th09:
+  f is normal & l in dom criticals f implies
+  (criticals f).l = Union ((criticals f)|l)
+  proof set g = criticals f;
+    reconsider h = g|l as increasing Ordinal-Sequence by ORDINAL4:15;
+    set X = rng h;
+    assume
+A0: f is normal & l in dom g; then
+    g.l is_a_fixpoint_of f by Th02; then
+A1: g.l in dom f & f.(g.l) = g.l by ABIAN:def 3;
+A2: l c= dom g by A0,ORDINAL1:def 2; then
+A3: dom h = l by RELAT_1:91;
+A4: for x st x in X holds x is_a_fixpoint_of f
+    proof
+      let x; assume x in X; then
+      consider y such that
+B1:   y in dom h & x = h.y by FUNCT_1:def 5;
+      x = g.y & y in dom g by A2,A3,B1,FUNCT_1:70;
+      hence thesis by Th02;
+    end;
+    reconsider u = union X as Ordinal;
+S5: h <> {} by A3;
+    now
+      let x; assume x in X; then
+      consider y such that
+B2:   y in dom h & x = h.y by FUNCT_1:def 5;
+      x = g.y & y in dom g by A2,A3,B2,FUNCT_1:70; then
+      x in g.l by A0,A3,B2,ORDINAL2:def 16;
+      hence x c= g.l by ORDINAL1:def 2;
+    end; then
+A9: union X c= g.l by ZFMISC_1:94; then
+A6: u in dom f by A1,ORDINAL1:22;
+    u = f.u by A0,A4,S5,A9,Th08,A1,ORDINAL1:22; then
+    u is_a_fixpoint_of f by A6,ABIAN:def 3; then
+    consider a such that
+A8: a in dom g & u = g.a by Th06;
+    a = l
+    proof
+      thus a c= l by A0,A8,A9,ThN4;
+      let x be Ordinal; assume
+C1:   x in l; then
+C2:   succ x in l by ORDINAL1:41; then
+C3:   g.x = h.x & g.succ x = h.succ x & h.succ x in X
+      by A3,C1,FUNCT_1:def 5,70;
+      x in succ x by ORDINAL1:10; then
+      h.x in h.succ x by A3,C2,ORDINAL2:def 16; then
+      g.x in u by C3,TARSKI:def 4; then
+      g.a c/= g.x & x in dom g by A2,A8,C1,EXCH1; then
+      a c/= x by A8,ThN4;
+      hence thesis by EXCH1;
+    end;
+    hence thesis by A8;
+  end;
+
+registration
+  let f be normal Ordinal-Sequence;
+  cluster criticals f -> continuous;
+  coherence
+  proof set g = criticals f;
+    let a,b;
+    reconsider h = g|a as increasing Ordinal-Sequence by ORDINAL4:15;
+    assume
+A1: a in dom g & a <> {} & a is limit_ordinal & b = g.a; then
+A2: b = Union h by Th09;
+    a c= dom g by A1,ORDINAL1:def 2; then
+    dom h = a by RELAT_1:91;
+    hence b is_limes_of g|a by A1,A2,ORDINAL5:6;
+  end;
+end;
+
+theorem Th0A:
+  for f1,f2 being Ordinal-Sequence st f1 c= f2
+  holds criticals f1 c= criticals f2
+  proof
+    let f1,f2 be Ordinal-Sequence;
+    assume
+Z0: f1 c= f2; then
+Z1: dom f1 c= dom f2 by GRFUNC_1:8;
+    set X = {a where a is Element of dom f1: a is_a_fixpoint_of f1};
+    set Z = {a where a is Element of dom f2: a is_a_fixpoint_of f2};
+    On X = X & On Z = Z by Th01; then
+    reconsider X,Z as ordinal-membered set;
+    set Y = Z\X;
+A1: now let x,y; assume x in X; then
+      consider a being Element of dom f1 such that
+B1:   x = a & a is_a_fixpoint_of f1;
+      assume y in Y; then
+B2:   y in Z & not y in X by XBOOLE_0:def 5; then
+      consider b being Element of dom f2 such that
+B3:   y = b & b is_a_fixpoint_of f2;
+      now assume
+B4:     b in dom f1; then
+        f1.b = f2.b by Z0,GRFUNC_1:8 .= b by B3,ABIAN:def 3; then
+        b is_a_fixpoint_of f1 by B4,ABIAN:def 3;
+        hence contradiction by B2,B3,B4;
+      end; then
+      dom f1 c= b & x in dom f1 by B1,EXCH1,ABIAN:def 3;
+      hence x in y by B3;
+    end;
+    X c= Z
+    proof
+      let x; assume x in X; then
+      consider a being Element of dom f1 such that
+B1:   x = a & a is_a_fixpoint_of f1;
+B6:   a in dom f1 & a = f1.a by B1,ABIAN:def 3; then
+      a in dom f2 & a = f2.a by Z0,Z1,GRFUNC_1:8; then
+      a is_a_fixpoint_of f2 by ABIAN:def 3;
+      hence thesis by B1,B6,Z1;
+    end; then
+    X\/Y = Z by XBOOLE_1:45; then
+    criticals f2 = (criticals f1)^numbering Y by A1,ThN7;
+    hence criticals f1 c= criticals f2 by Lem4;
+  end;
+
+begin :: Fixpoints in a Universal Set
+
+reserve U,W for Universe;
+
+registration
+  let U;
+  cluster normal Ordinal-Sequence of U;
+  existence
+  proof
+    reconsider F = id On U as Ordinal-Sequence of U;
+    take F;
+    thus thesis;
+  end;
+end;
+
+definition
+  let U,a;
+  mode Ordinal-Sequence of a,U is Function of a, On U;
+end;
+
+registration
+  let U,a;
+  cluster -> T-Sequence-like Ordinal-yielding Ordinal-Sequence of a,U;
+  coherence
+  proof
+    let f be Ordinal-Sequence of a,U;
+    thus dom f is ordinal by FUNCT_2:def 1;
+    take On U;
+    thus thesis by RELAT_1:def 19;
+  end;
+end;
+
+definition
+  let U,a;
+  let f be Ordinal-Sequence of a,U;
+  let x;
+  redefine func f.x -> Ordinal of U;
+  coherence
+  proof
+    per cases by FUNCT_1:def 4;
+    suppose
+      x in dom f; then
+      x in a by FUNCT_2:def 1; then
+      f.x in On U by FUNCT_2:7;
+      hence thesis by ORDINAL1:def 10;
+    end;
+    suppose
+      f.x = 0;
+      hence thesis by CLASSES2:62;
+    end;
+  end;
+end;
+
+theorem ThC1:
+  a in U implies for f being Ordinal-Sequence of a,U holds Union f in U
+  proof assume
+Z0: a in U;
+    let f be Ordinal-Sequence of a,U;
+    dom f = a by FUNCT_2:def 1; then
+    card dom f in card U & card rng f c= card dom f & rng f c= On U & On U c= U
+    by Z0,RELAT_1:def 19,CLASSES2:1,CARD_2:80,ORDINAL2:9; then
+    card rng f in card U & rng f c= U by XBOOLE_1:1,ORDINAL1:22; then
+    rng f in U by CLASSES1:2;
+    hence Union f in U by CLASSES2:65;
+  end;
+
+theorem ThC2:
+  a in U implies for f being Ordinal-Sequence of a,U holds sup f in U
+  proof assume
+Z0: a in U;
+    let f be Ordinal-Sequence of a,U;
+    reconsider u = Union f as Ordinal of U by ThC1,Z0;
+    On rng f = rng f by EXCH10; then
+    sup f c= succ u by ORDINAL3:85;
+    hence sup f in U by CLASSES1:def 1;
+  end;
+
+scheme CriticalNumber2
+  {U() -> Universe, a() -> Ordinal of U(),
+  f() -> Ordinal-Sequence of omega, U(),
+  phi(Ordinal) -> Ordinal}:
+   a() c= Union f() & phi(Union f()) = Union f() &
+   for b st a() c= b & b in U() & phi(b) = b holds Union f() c= b
+  provided
+A0:  omega in U()
+  and
+P0: for a st a in U() holds phi(a) in U()
+  and
+A1:  for a,b st a in b & b in U() holds phi(a) in phi(b)
+  and
+A2: for a being Ordinal of U() st a is non empty limit_ordinal
+    for phi being Ordinal-Sequence
+      st dom phi = a & for b st b in a holds phi.b = phi(b)
+    holds phi(a) is_limes_of phi
+  and
+F1:  f().0 = a()
+  and
+F2:  for a st a in omega holds f().(succ a) = phi(f().a)
+  proof
+F1a:dom f() = omega by FUNCT_2:def 1;
+F0: a() in rng f() by F1,F1a,FUNCT_1:def 5;
+    hence a() c= Union f() by ZFMISC_1:92;
+    set phi = f();
+A7: now
+      defpred P[Ordinal] means $1 in U() & $1 c/= phi($1);
+      assume
+A8:   ex a st P[a];
+      consider a such that
+A9:   P[a] and
+A10:  for b st P[b] holds a c= b from ORDINAL1:sch 1(A8);
+      phi(phi(a)) in phi(a) by A1,A9,ORDINAL1:26; then
+      phi(a) c/= phi(phi(a)) by ORDINAL1:7;
+      hence contradiction by P0,A9,A10;
+    end; then
+    a() c= phi(a()); then
+F3: a() c< phi(a()) or a() = phi(a()) by XBOOLE_0:def 8;
+    per cases by F3,ORDINAL1:21;
+    suppose
+A3:   phi(a()) = a();
+A4:   for a be set st a in omega holds f().a = a()
+      proof
+        let a be set; assume a in omega; then
+        reconsider a as Element of omega;
+        defpred P[Nat] means f().$1 = a();
+C0:     P[0] by F1;
+C1:     now let n be Nat; assume
+C2:       P[n];
+          n in omega by ORDINAL1:def 13; then
+          f().succ n = phi(a()) by F2,C2;
+          hence P[n+1] by A3,NAT_1:39;
+        end;
+        for n being Nat holds P[n] from NAT_1:sch 2(C0,C1); then
+        P[a];
+        hence thesis;
+      end;
+      rng f() = {a()}
+      proof
+        thus rng f() c= {a()}
+        proof
+          let x be set; assume x in rng f(); then
+          consider a being set such that
+G1:       a in dom f() & x = f().a by FUNCT_1:def 5;
+          x = a() by A4,G1,F1a;
+          hence thesis by TARSKI:def 1;
+        end;
+        thus thesis by F0,ZFMISC_1:37;
+      end; then
+      Union f() = a() by ZFMISC_1:31;
+      hence phi(Union f()) = Union f() &
+      for b st a() c= b & b in U() & phi(b) = b holds Union f() c= b by A3;
+    end;
+    suppose
+A3:   a() in phi(a());
+      deffunc F(Ordinal,Ordinal) = phi($2);
+      deffunc G(Ordinal,T-Sequence) = {};
+A6:   now let a such that
+G1:     succ a in omega;
+        a in succ a by ORDINAL1:10;
+        hence phi.(succ a) = F(a,phi.a) by F2,G1,ORDINAL1:19;
+      end;
+B1:   for a st a in omega holds a() c= phi.a & phi.a in phi.succ a
+      proof let a; assume a in omega; then
+        reconsider a as Element of omega;
+        defpred N[Nat] means a() c= phi.$1 & phi.$1 in phi.succ $1;
+B01:    N[0] by A3,F1,F2;
+B02:    now
+          let n be Nat; assume
+B03:      N[n];
+B04:      n+1 = succ n & n+1+1 = succ (n+1) &
+          n+1 in omega & n+1+1 in omega by NAT_1:39; then
+          phi.(n+1) = phi(phi.n) & phi.(n+1+1) = phi(phi.(n+1)) by A6; then
+          phi.n c= phi.(n+1) & phi.(n+1) in phi.(n+1+1) by A1,A7,B03,B04;
+          hence N[n+1] by B03,NAT_1:39,XBOOLE_1:1;
+        end;
+        for n being Nat holds N[n] from NAT_1:sch 2(B01,B02); then
+        N[a];
+        hence thesis;
+      end;
+      deffunc phi(Ordinal) = phi($1);
+      consider fi being Ordinal-Sequence such that
+A23:  dom fi = Union phi & for a st a in Union phi holds fi.a = phi(a)
+      from ORDINAL2:sch 3;
+      1 = succ 0; then
+      f().1 = phi(a()) by F1,F2; then
+      phi(a()) in rng phi by F1a,FUNCT_1:def 5; then
+A24:  phi(a()) c= Union phi by ZFMISC_1:92;
+J1:   Union phi in U() by A0,ThC1;
+      now
+        let c; assume c in Union phi; then
+        consider x being set such that
+V1:     x in dom phi & c in phi.x by CARD_5:10;
+        reconsider x as Element of omega by V1,FUNCT_2:def 1;
+        succ c c= phi.x & phi.x in phi.succ x by B1,V1,ORDINAL1:33; then
+        succ c in phi.succ x & succ x in omega by ORDINAL1:22;
+        hence succ c in Union phi by F1a,CARD_5:10;
+      end; then
+A249: Union phi is limit_ordinal by ORDINAL1:41; then
+A25:  phi(Union phi) is_limes_of fi by A2,A3,A23,A24,J1;
+      fi is increasing
+      proof
+        let a,b;
+        assume
+A26:    a in b & b in dom fi; then
+        fi.a = phi(a) & fi.b = phi(b) & b in U() by J1,A23,ORDINAL1:19;
+        hence thesis by A1,A26;
+      end; then
+A27:  sup fi = lim fi by A3,A23,A24,A249,ORDINAL4:8
+      .= phi(Union phi) by A25,ORDINAL2:def 14;
+      thus phi(Union phi) c= Union phi
+      proof
+        let x be Ordinal;
+        assume
+A28:    x in phi(Union phi);
+        reconsider A = x as Ordinal;
+        consider b such that
+A29:    b in rng fi & A c= b by A27,A28,ORDINAL2:29;
+        consider y being set such that
+A30:    y in dom fi & b = fi.y by A29,FUNCT_1:def 5;
+        reconsider y as Ordinal by A30;
+        consider z being set such that
+A32:    z in dom phi & y in phi.z by A23,A30,CARD_5:10;
+        reconsider z as Ordinal by A32;
+        set c = phi.z;
+        succ z in omega by F1a,A32,ORDINAL1:41; then
+A33:    phi.succ z = phi(c) & phi.succ z in rng phi & b = phi(y)
+        by F1a,A6,A23,A30,FUNCT_1:def 5;
+        b in phi(c) & phi(c) c= Union phi by A33,ZFMISC_1:92,A1,A32;
+        hence thesis by A29,ORDINAL1:22;
+      end;
+      thus Union f() c= phi(Union f()) by A7,A0,ThC1;
+      let b; assume
+Z1:   a() c= b & b in U() & phi(b) = b;
+      rng f() c= b
+      proof
+        let x be set; assume x in rng f(); then
+        consider a being set such that
+Z2:     a in dom f() & x = f().a by FUNCT_1:def 5;
+        reconsider a as Element of omega by Z2,FUNCT_2:def 1;
+        defpred P[Nat] means f().$1 in b;
+        a() <> b by A3,Z1; then
+        a() c< b by Z1,XBOOLE_0:def 8; then
+Z3:     P[0] by F1,ORDINAL1:21;
+Z4:     now let n be Nat; assume P[n]; then
+          phi(f().n) in b & n in omega by A1,Z1,ORDINAL1:def 13; then
+          f().succ n in b by F2;
+          hence P[n+1] by NAT_1:39;
+        end;
+        for n being Nat holds P[n] from NAT_1:sch 2(Z3,Z4); then
+        P[a];
+        hence thesis by Z2;
+      end; then
+      Union f() c= union b & union b c= b by ZFMISC_1:95,ORDINAL2:5;
+      hence Union f() c= b by XBOOLE_1:1;
+    end;
+  end;
+
+Lm1: {} in omega by ORDINAL1:def 12;
+
+scheme CriticalNumber3
+  {U() -> Universe, a() -> Ordinal of U(), phi(Ordinal) -> Ordinal}:
+  ex a being Ordinal of U() st a() in a & phi(a) = a
+  provided
+A0: omega in U()
+    and
+P0: for a st a in U() holds phi(a) in U()
+    and
+A1: for a,b st a in b & b in U() holds phi(a) in phi(b)
+    and
+A2: for a being Ordinal of U() st a is non empty limit_ordinal
+    for phi being Ordinal-Sequence
+      st dom phi = a & for b st b in a holds phi.b = phi(b)
+    holds phi(a) is_limes_of phi
+  proof assume
+A3: not thesis;
+    deffunc F(Ordinal,Ordinal) = phi($2);
+    deffunc G(Ordinal,T-Sequence) = {};
+    consider phi being Ordinal-Sequence such that
+A4: dom phi = omega and
+A5: {} in omega implies phi.{} = succ a() and
+A6: for a st succ a in omega holds phi.(succ a) = F(a,phi.a) and
+    for a st a in omega & a <> {} & a is limit_ordinal
+    holds phi.a = G(a,phi|a) from ORDINAL2:sch 11;
+K0: rng phi c= On U()
+    proof
+      let y; assume y in rng phi; then
+      consider x such that
+K1:   x in dom phi & y = phi.x by FUNCT_1:def 5;
+      reconsider x as Element of NAT by A4,K1;
+      defpred P[Nat] means phi.$1 in On U();
+K2:   P[0] by A5,ORDINAL1:def 10;
+K3:   P[n] implies P[n+1]
+      proof assume P[n]; then
+K5:     phi.n in U() by ORDINAL1:def 10;
+K4:     n+1 = succ n by NAT_1:39;
+        phi.(n+1) = phi(phi.n) & phi(phi.n) in U() by A6,K4,K5,P0;
+        hence P[n+1] by ORDINAL1:def 10;
+      end;
+
+      P[n] from NAT_1:sch 2(K2,K3); then P[x];
+      hence thesis by K1;
+    end; then
+    reconsider phi as Ordinal-Sequence of omega,U() by A4,FUNCT_2:4;
+A7: now
+      defpred P[Ordinal] means $1 in U() & $1 c/= phi($1);
+      assume
+A8:   ex a st P[a];
+      consider a such that
+A9:   P[a] and
+A10:  for b st P[b] holds a c= b from ORDINAL1:sch 1(A8);
+      phi(phi(a)) in phi(a) by A1,A9,ORDINAL1:26; then
+      phi(a) c/= phi(phi(a)) by ORDINAL1:7;
+      hence contradiction by A9,A10,P0;
+    end;
+A11:now
+      let a;
+      assume a() in a & a in U(); then
+      a c= phi(a) & a <> phi(a) by A3,A7; then
+      a c< phi(a) by XBOOLE_0:def 8;
+      hence a in phi(a) by ORDINAL1:21;
+    end;
+B1: for a st a in omega holds a() in phi.a
+    proof let a; assume a in omega; then
+      reconsider a as Element of omega;
+      defpred N[Nat] means a() in phi.$1;
+B01:  N[0] by ORDINAL1:10,A5;
+B02:  now
+        let n be Nat; assume
+B03:    N[n];
+        n+1 = succ n & n+1 in omega by NAT_1:39; then
+        phi.(n+1) = phi(phi.n) by A6; then
+        phi.n in phi.(n+1) by B03,A11;
+        hence N[n+1] by B03,ORDINAL1:19;
+      end;
+      for n being Nat holds N[n] from NAT_1:sch 2(B01,B02); then
+      N[a];
+      hence thesis;
+    end;
+A12:phi is increasing
+    proof
+      let a,b;
+      assume
+A13:  a in b & b in dom phi; then
+A14:  ex c st b = a+^c & c <> {} by ORDINAL3:31;
+      defpred R[Ordinal] means
+      a+^$1 in omega & $1 <> {} implies phi.a in phi.(a+^$1);
+A15:  R[{}];
+A16:  for c st R[c] holds R[succ c]
+      proof
+        let c such that
+A17:    a+^c in omega & c <> {} implies phi.a in phi.(a+^c) and
+A18:    a+^succ c in omega & succ c <> {};
+A19:    a+^c in succ(a+^c) & a+^succ c = succ(a+^c) by ORDINAL1:10,ORDINAL2:45;
+        reconsider d = phi.(a+^c) as Ordinal;
+        a+^c in omega by A18,A19,ORDINAL1:19; then
+        phi.(a+^succ c) = phi(d) & d in phi(d) & a+^({} qua Ordinal) = a
+        by A6,A11,A18,A19,ORDINAL2:44,B1;
+        hence thesis by A17,A18,A19,ORDINAL1:19;
+      end;
+A20:  for b st b <> {} & b is limit_ordinal & for c st c in b holds R[c]
+      holds R[b]
+      proof
+        let b such that
+A21:    b <> {} & b is limit_ordinal and
+        for c st c in b holds a+^c in omega & c <> {} implies
+        phi.a in phi.(a+^c) and
+A22:    a+^b in omega & b <> {};
+        a+^b <> {} by A22,ORDINAL3:29; then
+        a+^b is limit_ordinal & {} in a+^b by A21,ORDINAL3:10,32;
+        hence thesis by A22;
+      end;
+      for c holds R[c] from ORDINAL2:sch 1(A15,A16,A20);
+      hence thesis by A4,A13,A14;
+    end;
+J1: sup phi in U() by A0,ThC2;
+    deffunc phi(Ordinal) = phi($1);
+    consider fi being Ordinal-Sequence such that
+A23: dom fi = sup phi & for a st a in sup phi holds fi.a = phi(a)
+     from ORDINAL2:sch 3;
+     succ a() in rng phi & sup rng phi = sup phi
+     by A4,A5,Lm1,FUNCT_1:def 5; then
+A24: sup phi <> {} & sup phi is limit_ordinal
+     by A4,A12,ORDINAL4:16,ORDINAL2:27; then
+A25: phi(sup phi) is_limes_of fi by J1,A2,A23;
+     fi is increasing
+     proof
+       let a,b;
+       assume
+A26:   a in b & b in dom fi; then
+       fi.a = phi(a) & fi.b = phi(b) & b in U() by J1,A23,ORDINAL1:19;
+       hence thesis by A1,A26;
+     end; then
+A27: sup fi = lim fi by A23,A24,ORDINAL4:8
+     .= phi(sup phi) by A25,ORDINAL2:def 14;
+ZZ:  sup fi c= sup phi
+     proof
+       let x be Ordinal;
+       assume
+A28:   x in sup fi;
+       reconsider A = x as Ordinal;
+       consider b such that
+A29:   b in rng fi & A c= b by A28,ORDINAL2:29;
+       consider y being set such that
+A30:   y in dom fi & b = fi.y by A29,FUNCT_1:def 5;
+       reconsider y as Ordinal by A30;
+       consider c such that
+A31:   c in rng phi & y c= c by A23,A30,ORDINAL2:29;
+C1:    c in U() by K0,A31,ORDINAL1:def 10;
+       consider z being set such that
+A32:   z in dom phi & c = phi.z by A31,FUNCT_1:def 5;
+       reconsider z as Ordinal by A32;
+       succ z in omega by A4,A32,ORDINAL1:41; then
+A33:   phi.succ z = phi(c) & phi.succ z in rng phi & b = phi(y)
+       by A4,A6,A23,A30,A32,FUNCT_1:def 5;
+       y c< c iff y <> c & y c= c by XBOOLE_0:def 8; then
+       phi(y) in phi(c) or y = c by C1,A1,A31,ORDINAL1:21; then
+       b c= phi(c) & phi(c) in sup phi by A33,ORDINAL1:def 2,ORDINAL2:27; then
+       b in sup phi by ORDINAL1:22;
+       hence thesis by A29,ORDINAL1:22;
+     end;
+     phi.0 in rng phi by A4,FUNCT_1:def 5; then
+     a() in phi.0 & phi.0 in sup phi by B1,ORDINAL2:27; then
+     a() in sup phi by ORDINAL1:19;
+     hence contradiction by J1,A11,A27,ZZ,ORDINAL1:7;
+   end;
+
+reserve F,phi for normal Ordinal-Sequence of W;
+
+theorem Th38:
+  omega in W & b in W implies ex a st b in a & a is_a_fixpoint_of phi
+  proof assume that
+A1: omega in W and
+A0: b in W;
+    reconsider b1 = b as Ordinal of W by A0;
+A2: dom phi = On W by FUNCT_2:def 1;
+    deffunc phi(set) = phi.$1;
+P0: for a st a in W holds phi(a) in W;
+00: for a,b st a in b & b in W holds phi(a) in phi(b)
+    proof
+      let a,b;
+      b in W implies b in dom phi by A2,ORDINAL1:def 10;
+      hence thesis by ORDINAL2:def 16;
+    end;
+01: for a being Ordinal of W st a is non empty limit_ordinal
+    for f being Ordinal-Sequence
+      st dom f = a & for b st b in a holds f.b = phi(b)
+    holds phi(a) is_limes_of f
+    proof let a be Ordinal of W;
+      assume
+Z0:   a is non empty limit_ordinal;
+      let f be Ordinal-Sequence such that
+Z1:   dom f = a and
+Z2:   for b st b in a holds f.b = phi(b);
+A3:   a in dom phi by A2,ORDINAL1:def 10; then
+      a c= dom phi by ORDINAL1:def 2; then
+A4:   dom (phi|a) = a by RELAT_1:91;
+      now let x; assume
+A5:     x in a;
+        hence (phi|a).x = phi(x) by FUNCT_1:72 .= f.x by A5,Z2;
+      end; then
+      f = phi|a by Z1,A4,FUNCT_1:9;
+      hence phi(a) is_limes_of f by Z0,A3,ORDINAL2:def 17;
+    end;
+    consider a being Ordinal of W such that
+A6: b1 in a & phi(a) = a from CriticalNumber3(A1,P0,00,01);
+    take a;
+    thus b in a & a in dom phi & a = phi.a by A2,A6,ORDINAL1:def 10;
+  end;
+
+theorem Th39:
+  omega in W implies criticals F is Ordinal-Sequence of W
+  proof assume
+A0: omega in W;
+    set G = criticals F;
+A1: dom F = On W & rng F c= On W by RELAT_1:def 19,FUNCT_2:def 1;
+D2: rng G c= rng F by Th03; then
+A2: rng G c= On W by A1,XBOOLE_1:1;
+    dom G = On W
+    proof
+      thus dom G c= On W by A1,Th05;
+      let a; assume a in On W; then
+A3:   a in W by ORDINAL1:def 10;
+      defpred P[Ordinal] means $1 in W implies $1 in dom G;
+      consider a0 being Ordinal such that
+A4:   0-element_of W in a0 & a0 is_a_fixpoint_of F by A0,Th38;
+      consider a1 being Ordinal such that
+A5:   a1 in dom G & a0 = G.a1 by A4,Th06;
+00:   P[{}] by A5,XBOOLE_1:2,ORDINAL1:22;
+01:   for a st P[a] holds P[succ a]
+      proof
+        let a; assume
+B1:     P[a] & succ a in W;
+B4:     a c= succ a by ORDINAL3:1; then
+        G.a in rng G by B1,FUNCT_1:def 5,CLASSES1:def 1; then
+        G.a in W by A2,ORDINAL1:def 10; then
+        consider b such that
+B2:     G.a in b & b is_a_fixpoint_of F by A0,Th38;
+        consider c such that
+B3:     c in dom G & b = G.c by B2,Th06;
+        a in c by B1,B4,B2,B3,ThN5,CLASSES1:def 1; then
+        succ a c= c by ORDINAL1:33;
+        hence thesis by B3,ORDINAL1:22;
+      end;
+02:   for a st a <> {} & a is limit_ordinal &
+      for b st b in a holds P[b] holds P[a]
+      proof
+        let a such that
+C1:     a <> {} & a is limit_ordinal and
+C2:     for b st b in a holds P[b] and
+C3:     a in W;
+        set X = G.:a;
+        card X c= card a & card a c= a by CARD_1:24,CARD_2:3; then
+        card X c= a by XBOOLE_1:1; then
+        card X in W by C3,CLASSES1:def 1; then
+        card X in On W by ORDINAL1:def 10; then
+C4:     card X in card W by CLASSES2:10;
+D5:     X c= rng G by RELAT_1:144; then
+C5:     X c= On W by A2,XBOOLE_1:1;
+        reconsider u = union X as Ordinal by D5,A2,XBOOLE_1:1,ORDINAL3:6;
+        On W c= W by ORDINAL2:9; then
+        X c= W by C5,XBOOLE_1:1; then
+        X in W by C4,CLASSES1:2; then
+        u in W by CLASSES2:65; then
+        consider b such that
+B2:     u in b & b is_a_fixpoint_of F by A0,Th38;
+C6:     a c= dom G
+        proof
+          let c; assume
+C7:       c in a; then
+          c in W by C3,ORDINAL1:19;
+          hence thesis by C2,C7;
+        end;
+        now
+          let x; assume
+C7:       x in a; then
+          G.x in X by C6,FUNCT_1:def 12; then
+          G.x is Ordinal & G.x c= u by C7,ZFMISC_1:92;
+          hence G.x in b by B2,ORDINAL1:22;
+        end;
+        hence thesis by C1,C6,B2,Th19;
+      end;
+      P[b] from ORDINAL2:sch 1(00,01,02);
+      hence thesis by A3;
+    end;
+    hence thesis by D2,A1,XBOOLE_1:1,FUNCT_2:4;
+  end;
+
+theorem Th40:
+  f is normal implies
+  for a st a in dom criticals f holds f.a c= (criticals f).a
+  proof assume
+A1: f is normal;
+    set g = criticals f;
+A2: dom g c= dom f by Th05;
+    defpred P[Ordinal] means $1 in dom g implies f.$1 c= g.$1;
+00: P[{}]
+    proof
+      assume
+      {} in dom g; then
+      g.0 is_a_fixpoint_of f by Th02; then
+      f.(g.0) = g.0 & g.0 in dom f by ABIAN:def 3;
+      hence thesis by A1,XBOOLE_1:2,ORDINAL4:9;
+    end;
+01: P[a] implies P[succ a]
+    proof assume that
+      P[a] and
+C2:   succ a in dom g;
+      g.succ a is_a_fixpoint_of f by C2,Th02; then
+      g.succ a in dom f & f.(g.succ a) = g.succ a by ABIAN:def 3;
+      hence f.succ a c= g.succ a by A1,C2,ORDINAL4:9,10;
+    end;
+02: for a st a <> {} & a is limit_ordinal & for b st b in a holds P[b]
+    holds P[a]
+    proof
+      let a such that
+Z1:   a <> {} & a is limit_ordinal and
+Z2:   for b st b in a holds P[b] and
+Z3:   a in dom g;
+      f.a is_limes_of (f|a) & g.a is_limes_of (g|a)
+      by A1,A2,Z1,Z3,ORDINAL2:def 17; then
+Z4:   f.a = lim(f|a) & g.a = lim(g|a) by ORDINAL2:def 14;
+Z5:   f|a is increasing & g|a is increasing by A1,ORDINAL4:15;
+Z9:   a c= dom f & a c= dom g by A2,Z3,ORDINAL1:def 2; then
+Z7:   dom (f|a) = a & dom (g|a) = a by RELAT_1:91; then
+      Union(f|a) is_limes_of (f|a) & Union(g|a) is_limes_of (g|a)
+      by Z1,Z5,ORDINAL5:6; then
+Z6:   f.a = Union(f|a) & g.a = Union(g|a) by Z4,ORDINAL2:def 14;
+      let b; assume b in f.a; then
+      consider x such that
+Z8:   x in a & b in (f|a).x by Z7,Z6,CARD_5:10;
+      (f|a).x = f.x & (g|a).x = g.x & f.x c= g.x by Z9,Z2,Z8,FUNCT_1:72;
+      hence b in g.a by Z8,Z7,Z6,CARD_5:10;
+    end;
+    thus P[a] from ORDINAL2:sch 1(00,01,02);
+  end;
+
+begin :: Sequences of Sequences of Ordinals
+
+definition
+  let U;
+  let a,b be Ordinal of U;
+  redefine func exp(a,b) -> Ordinal of U;
+  coherence
+  proof
+    per cases by ORDINAL3:10;
+    suppose a = 0 & b = 0; then
+      exp(a,b) = 1-element_of U by ORDINAL2:60;
+      hence thesis;
+    end;
+    suppose a = 0 & b <> 0;
+      hence thesis by ORDINAL4:20;
+    end;
+    suppose
+AA:   0 in a;
+      defpred P[Ordinal] means $1 in U implies exp(a,$1) in U;
+      exp(a,0) = succ 0 by ORDINAL2:60; then
+00:   P[{}] by CLASSES2:6;
+01:   for b holds P[b] implies P[succ b]
+      proof
+        let b such that
+A1:     P[b] and
+A2:     succ b in U;
+        b in succ b by ORDINAL1:10; then
+        reconsider b as Ordinal of U by A2,ORDINAL1:19;
+        reconsider ab = exp(a,b) as Ordinal of U by A1;
+        exp(a,succ b) = a*^ab by ORDINAL2:61;
+        hence thesis;
+      end;
+02:   for b st b <> {} & b is limit_ordinal & for c st c in b holds P[c]
+      holds P[b]
+      proof
+        let b such that
+B1:     b <> {} & b is limit_ordinal and
+B2:     for c st c in b holds P[c] and
+B0:     b in U;
+        deffunc F(Ordinal) = exp(a,$1);
+        consider f such that
+B3:     dom f = b & for c st c in b holds f.c = F(c) from ORDINAL2:sch 3;
+        rng f c= On U
+        proof
+          let x; assume x in rng f; then
+          consider y such that
+C1:       y in b & x = f.y by B3,FUNCT_1:def 5;
+          reconsider y as Ordinal by C1;
+          P[y] & y in U & x = F(y) by B0,B2,B3,C1,ORDINAL1:19;
+          hence thesis by ORDINAL1:def 10;
+        end; then
+        reconsider f as Ordinal-Sequence of b,U by B3,FUNCT_2:4;
+B4:     exp(a,b) = lim f by B1,B3,ORDINAL2:62;
+        f is non-decreasing by AA,B3,ORDINAL5:8; then
+        Union f is_limes_of f by B1,B3,ORDINAL5:6; then
+        exp(a,b) = Union f by B4,ORDINAL2:def 14;
+        hence thesis by B0,ThC1;
+      end;
+      for b holds P[b] from ORDINAL2:sch 1(00,01,02);
+      hence thesis;
+    end;
+  end;
+end;
+
+definition
+  let U,a such that
+AA: a in U;
+  func U exp a -> Ordinal-Sequence of U means: EXP:
+  for b being Ordinal of U holds it.b = exp(a,b);
+  existence
+  proof
+    reconsider a as Ordinal of U by AA;
+    deffunc F(Ordinal of U) = exp(a,$1);
+    ex f being Ordinal-Sequence of U st
+    for b being Ordinal of U holds f.b = F(b) from ORDINAL4:sch 2;
+    hence thesis;
+  end;
+  uniqueness
+  proof let f1,f2 be Ordinal-Sequence of U such that
+A1: for b being Ordinal of U holds f1.b = exp(a,b) and
+A2: for b being Ordinal of U holds f2.b = exp(a,b);
+    now
+      let x be Element of On U;
+      x in U by ORDINAL1:def 10; then
+      f1.x = exp(a,x) & f2.x = exp(a,x) by A1,A2;
+      hence f1.x = f2.x;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+end;
+
+registration
+  cluster omega -> non trivial;
+  coherence
+  proof
+    0 in omega & 1 in omega;
+    hence thesis by ZFMISC_1:def 10;
+  end;
+end;
+
+registration
+  let U;
+  cluster non trivial finite Ordinal of U;
+  existence
+  proof
+    succ(1-element_of U) is non trivial by NAT_2:def 1;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster non trivial finite Ordinal;
+  existence
+  proof
+    2 is non trivial by NAT_2:def 1;
+    hence thesis;
+  end;
+end;
+
+registration
+  let U;
+  let a be non trivial Ordinal of U;
+  cluster U exp a -> normal;
+  coherence
+  proof set f = U exp a;
+A1: dom f = On U by FUNCT_2:def 1;
+A2: a <> 0 & a <> 1 by NAT_2:def 1; then
+B2: 0 in a by ORDINAL3:10; then
+    succ 0 c= a by ORDINAL1:33; then
+    1 c< a by A2,XBOOLE_0:def 8; then
+A3: 1 in a by ORDINAL1:21;
+S4: now
+      let b; assume b in dom f; then
+      b in U by A1,ORDINAL1:def 10;
+      hence f.b = exp(a,b) by EXP;
+    end;
+    hence f is increasing by A3,ORDINAL5:10;
+    let b,c; assume
+A5: b in dom f & b <> {} & b is limit_ordinal & c = f.b; then
+    b c= dom f by ORDINAL1:def 2; then
+A6: dom (f|b) = b by RELAT_1:91;
+S7: f|b is increasing by S4,A3,ORDINAL5:10,ORDINAL4:15;
+A8: b in U by A1,A5,ORDINAL1:def 10; then
+A9: f.b = exp(a,b) by EXP;
+    f.b = Union(f|b)
+    proof
+      thus f.b c= Union(f|b)
+      proof
+        let c; assume c in f.b; then
+        consider d such that
+B1:     d in b & c in exp(a,d) by B2,A5,A9,ORDINAL5:11;
+        d in U by A8,B1,ORDINAL1:19; then
+        exp(a,d) = f.d by EXP .= (f|b).d by B1,FUNCT_1:72;
+        hence c in Union(f|b) by A6,B1,CARD_5:10;
+      end;
+      let c; assume c in Union(f|b); then
+      consider x such that
+B3:   x in b & c in (f|b).x by A6,CARD_5:10;
+      reconsider x as Ordinal by B3;
+      x in U by A8,B3,ORDINAL1:19; then
+      exp(a,x) = f.x by EXP .= (f|b).x by B3,FUNCT_1:72;
+      hence thesis by B2,B3,A5,A9,ORDINAL5:11;
+    end;
+    hence thesis by A5,S7,A6,ORDINAL5:6;
+  end;
+end;
+
+definition
+  let g be Function;
+  attr g is Ordinal-Sequence-valued means:
+OSV:  x in rng g implies x is Ordinal-Sequence;
+end;
+
+registration
+  let f be Ordinal-Sequence;
+  cluster <%f%> -> Ordinal-Sequence-valued;
+  coherence
+  proof
+    let x; assume x in rng <%f%>; then
+    x in {f} by AFINSQ_1:36;
+    hence thesis by TARSKI:def 1;
+  end;
+end;
+
+definition ::: MESFUNC8:def 1 generalized
+  let f be Function;
+  attr f is with_the_same_dom means
+  rng f is with_common_domain;
+end;
+
+registration
+  let f be Function;
+  cluster {f} -> with_common_domain;
+  coherence
+  proof
+    let g,h be Function;
+    assume g in {f} & h in {f}; then
+    g = f & h = f by TARSKI:def 1;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be Function;
+  cluster <%f%> -> with_the_same_dom;
+  coherence
+  proof
+    rng <%f%> = {f} by AFINSQ_1:36;
+    hence rng <%f%> is with_common_domain;
+  end;
+end;
+
+registration
+  cluster non empty Ordinal-Sequence-valued with_the_same_dom T-Sequence;
+  existence
+  proof
+    set f =the  Ordinal-Sequence; take <%f%>; thus thesis;
+  end;
+end;
+
+registration
+  let g be Ordinal-Sequence-valued Function;
+  let x;
+  cluster g.x -> Relation-like Function-like;
+  coherence
+  proof
+    per cases by FUNCT_1:def 4;
+    suppose g.x = {};
+      hence thesis;
+    end;
+    suppose x in dom g; then
+      g.x in rng g by FUNCT_1:def 5;
+      hence thesis by OSV;
+    end;
+  end;
+end;
+
+registration
+  let g be Ordinal-Sequence-valued Function;
+  let x;
+  cluster g.x -> T-Sequence-like Ordinal-yielding;
+  coherence
+  proof
+    per cases by FUNCT_1:def 4;
+    suppose g.x = {};
+      hence thesis;
+    end;
+    suppose x in dom g; then
+      g.x in rng g by FUNCT_1:def 5;
+      hence thesis by OSV;
+    end;
+  end;
+end;
+
+registration
+  let g be T-Sequence;
+  let a;
+  cluster g|a -> T-Sequence-like;
+  coherence;
+end;
+
+registration
+  let g be Ordinal-Sequence-valued Function;
+  let X;
+  cluster g|X -> Ordinal-Sequence-valued;
+  coherence
+  proof
+    let x;
+    rng(g|X) c= rng g by RELAT_1:99;
+    hence thesis by OSV;
+  end;
+end;
+
+registration
+  let a,b;
+  cluster -> Ordinal-yielding T-Sequence-like Function of a,b;
+  coherence
+  proof
+    let f be Function of a,b;
+    rng f c= b by RELAT_1:def 19;
+    hence ex c st rng f c= c;
+    b = {} implies f = {};
+    hence dom f is ordinal by FUNCT_2:def 1;
+  end;
+end;
+
+definition
+  let g be Ordinal-Sequence-valued T-Sequence;
+  func criticals g -> Ordinal-Sequence equals
+  numbering {a where a is Element of dom(g.0): a in dom(g.0) &
+  for f st f in rng g holds a is_a_fixpoint_of f};
+  coherence;
+end;
+
+reserve g for Ordinal-Sequence-valued T-Sequence;
+
+theorem ThA1:
+  for g holds
+  {a where a is Element of dom(g.0): a in dom(g.0) &
+  for f st f in rng g holds a is_a_fixpoint_of f} is ordinal-membered
+  proof let g;
+    now let x;
+      assume x in {a where a is Element of dom(g.0): a in dom(g.0) &
+      for f st f in rng g holds a is_a_fixpoint_of f};
+      then ex a being Element of dom(g.0) st x = a & a in dom(g.0) &
+      for f st f in rng g holds a is_a_fixpoint_of f;
+      hence x is ordinal;
+    end;
+    hence thesis by EXCH9;
+  end;
+
+theorem ThA2:
+  a in dom g & b in dom criticals g
+  implies (criticals g).b is_a_fixpoint_of g.a
+  proof
+    assume that
+Z0: a in dom g and
+Z1: b in dom criticals g;
+    set h = criticals g;
+    set X = {c where c is Element of dom(g.0): c in dom(g.0) &
+    for f st f in rng g holds c is_a_fixpoint_of f};
+    X is ordinal-membered by ThA1; then
+    rng h = X by ThN1a; then
+    h.b in X by Z1,FUNCT_1:def 5; then
+    consider c being Element of dom(g.0) such that
+A1: h.b = c & c in dom(g.0) & for f st f in rng g holds c is_a_fixpoint_of f;
+    g.a in rng g by Z0,FUNCT_1:def 5;
+    hence (criticals g).b is_a_fixpoint_of g.a by A1;
+  end;
+
+theorem
+  x in dom criticals g implies x c= (criticals g).x by ORDINAL4:10;
+
+theorem ThA5:
+  f in rng g implies dom criticals g c= dom f
+  proof assume
+A0: f in rng g;
+    let x be Ordinal;
+    set X = {a where a is Element of dom(g.0): a in dom(g.0) &
+    for f st f in rng g holds a is_a_fixpoint_of f};
+    assume
+A1: x in dom criticals g; then
+    (criticals g).x in rng criticals g by FUNCT_1:def 5; then
+    (criticals g).x in On X & X is ordinal-membered by ThN1,ThA1; then
+    (criticals g).x in X by EXCH10; then
+    consider a being Element of dom(g.0) such that
+A2: (criticals g).x = a & a in dom(g.0) &
+    for f st f in rng g holds a is_a_fixpoint_of f;
+    a is_a_fixpoint_of f by A0,A2; then
+    x c= a & a in dom f & a = f.a by A1,A2,ORDINAL4:10,ABIAN:def 3;
+    hence thesis by ORDINAL1:22;
+  end;
+
+theorem ThA6:
+  dom g <> {} & (for c st c in dom g holds b is_a_fixpoint_of g.c) implies
+  ex a st a in dom criticals g & b = (criticals g).a
+  proof
+    reconsider X = {a where a is Element of dom(g.0): a in dom(g.0) &
+    for f st f in rng g holds a is_a_fixpoint_of f} as ordinal-membered set
+    by ThA1;
+    assume that
+A0: dom g <> {} and
+A1: for c st c in dom g holds b is_a_fixpoint_of g.c;
+    b is_a_fixpoint_of g.0 by A1,A0,ORDINAL3:10; then
+A2: b in dom(g.0) by ABIAN:def 3;
+    now
+      let f; assume f in rng g;
+      then ex x st x in dom g & f = g.x by FUNCT_1:def 5;
+      hence b is_a_fixpoint_of f by A1;
+    end; then
+    b in X by A2; then
+    b in rng criticals g by ThN1a; then
+    ex x st x in dom criticals g & b = (criticals g).x by FUNCT_1:def 5;
+    hence thesis;
+  end;
+
+theorem
+  dom g <> {} & l c= dom criticals g &
+  (for f st f in rng g holds a is_a_fixpoint_of f) &
+  (for x st x in l holds (criticals g).x in a)
+  implies l in dom criticals g
+  proof set h = criticals g;
+    assume that
+Z0: dom g <> {} and
+Z1: l c= dom h and
+Z2: for f st f in rng g holds a is_a_fixpoint_of f and
+Z4: for x st x in l holds h.x in a;
+    now
+      let c; assume
+      c in dom g; then
+      g.c in rng g by FUNCT_1:def 5;
+      hence a is_a_fixpoint_of g.c by Z2;
+    end; then
+    consider b such that
+A1: b in dom h & a = h.b by Z0,ThA6;
+    l c= b
+    proof
+      let x be Ordinal; assume x in l; then
+      x in dom h & h.x in h.b by Z1,Z4,A1;
+      hence x in b by A1,ThN5;
+    end;
+    hence l in dom criticals g by A1,ORDINAL1:22;
+  end;
+
+theorem ThA9:
+  for g st dom g <> {} & for a st a in dom g holds g.a is normal
+  holds l in dom criticals g implies
+  (criticals g).l = Union ((criticals g)|l)
+  proof let F be Ordinal-Sequence-valued T-Sequence such that
+AA: dom F <> {};
+    set g = criticals F;
+    reconsider h = g|l as increasing Ordinal-Sequence by ORDINAL4:15;
+    set X = rng h;
+    assume
+A0: (for a st a in dom F holds F.a is normal) & l in dom g;
+A1: now
+      let a; set f = F.a;
+      assume a in dom F; then
+      g.l is_a_fixpoint_of F.a by A0,ThA2;
+      hence g.l in dom f & f.(g.l) = g.l by ABIAN:def 3;
+    end;
+A2: l c= dom g by A0,ORDINAL1:def 2; then
+A3: dom h = l by RELAT_1:91;
+A4: for a,x st a in dom F & x in X holds x is_a_fixpoint_of F.a
+    proof
+      let a,x; assume
+B0:   a in dom F & x in X; then
+      consider y such that
+B1:   y in dom h & x = h.y by FUNCT_1:def 5;
+      x = g.y & y in dom g by A2,A3,B1,FUNCT_1:70;
+      hence thesis by B0,ThA2;
+    end;
+    reconsider u = union X as Ordinal;
+T5: h <> {} by A3;
+    now
+      let x; assume x in X; then
+      consider y such that
+B2:   y in dom h & x = h.y by FUNCT_1:def 5;
+      x = g.y & y in dom g by A2,A3,B2,FUNCT_1:70; then
+      x in g.l by A0,A3,B2,ORDINAL2:def 16;
+      hence x c= g.l by ORDINAL1:def 2;
+    end; then
+A9: u c= g.l by ZFMISC_1:94;
+    now let c; set f = F.c;
+      assume
+D1:   c in dom F; then
+A6:   g.l in dom f by A1; then
+A7:   u in dom f by A9,ORDINAL1:22;
+D2:   f is normal by A0,D1;
+      for x st x in X holds x is_a_fixpoint_of f by A4,D1; then
+      u = f.u by T5,A6,D2,Th08,A9,ORDINAL1:22;
+      hence u is_a_fixpoint_of f by A7,ABIAN:def 3;
+    end; then
+    consider a such that
+A8: a in dom g & u = g.a by AA,ThA6;
+    a = l
+    proof
+      thus a c= l by A0,A8,A9,ThN4;
+      let x be Ordinal; assume
+C1:   x in l; then
+C2:   succ x in l by ORDINAL1:41; then
+C3:   g.x = h.x & g.succ x = h.succ x & h.succ x in X
+      by A3,C1,FUNCT_1:def 5,70;
+      x in succ x by ORDINAL1:10; then
+      h.x in h.succ x by A3,C2,ORDINAL2:def 16; then
+      g.x in u by C3,TARSKI:def 4; then
+      g.a c/= g.x & x in dom g by A2,A8,C1,EXCH1; then
+      a c/= x by A8,ThN4;
+      hence thesis by EXCH1;
+    end;
+    hence thesis by A8;
+  end;
+
+theorem ThAA:
+  for g st dom g <> {} & for a st a in dom g holds g.a is normal
+  holds criticals g is continuous
+  proof
+    let g;
+    assume Z0: dom g <> {};
+    assume Z1: for a st a in dom g holds g.a is normal;
+    set f = criticals g;
+    let a,b;
+    reconsider h = f|a as increasing Ordinal-Sequence by ORDINAL4:15;
+    assume
+A1: a in dom f & a <> {} & a is limit_ordinal & b = f.a; then
+A2: b = Union h by Z0,Z1,ThA9;
+    a c= dom f by A1,ORDINAL1:def 2; then
+    dom h = a by RELAT_1:91;
+    hence b is_limes_of f|a by A1,A2,ORDINAL5:6;
+  end;
+
+theorem ThAB:
+  for g st dom g <> {} & for a st a in dom g holds g.a is normal
+  for a,f st a in dom criticals g & f in rng g holds f.a c= (criticals g).a
+  proof let F be Ordinal-Sequence-valued T-Sequence such that
+X0: dom F <> {} and
+X1: for a st a in dom F holds F.a is normal;
+    let a,f such that
+X2: a in dom criticals F and
+X3: f in rng F;
+    consider x such that
+A0: x in dom F & f = F.x by X3,FUNCT_1:def 5;
+A1: f is normal by A0,X1;
+    set g = criticals F;
+A2: dom g c= dom f by X3,ThA5;
+    defpred P[Ordinal] means $1 in dom g implies f.$1 c= g.$1;
+00: P[{}]
+    proof
+      assume
+      {} in dom g; then
+      g.0 is_a_fixpoint_of f by A0,ThA2; then
+      f.(g.0) = g.0 & g.0 in dom f by ABIAN:def 3;
+      hence thesis by A1,XBOOLE_1:2,ORDINAL4:9;
+    end;
+01: for a holds P[a] implies P[succ a]
+    proof let a such that
+      P[a] and
+C2:   succ a in dom g;
+      g.succ a is_a_fixpoint_of f by A0,C2,ThA2; then
+      g.succ a in dom f & f.(g.succ a) = g.succ a by ABIAN:def 3;
+      hence f.succ a c= g.succ a by A1,C2,ORDINAL4:9,10;
+    end;
+02: for a st a <> {} & a is limit_ordinal & for b st b in a holds P[b]
+    holds P[a]
+    proof
+      let a such that
+Z1:   a <> {} & a is limit_ordinal and
+Z2:   for b st b in a holds P[b] and
+Z3:   a in dom g;
+      g is continuous by X0,X1,ThAA; then
+      f.a is_limes_of (f|a) & g.a is_limes_of (g|a)
+      by A1,A2,Z1,Z3,ORDINAL2:def 17; then
+Z4:   f.a = lim(f|a) & g.a = lim(g|a) by ORDINAL2:def 14;
+Z5:   f|a is increasing & g|a is increasing by A1,ORDINAL4:15;
+Z9:   a c= dom f & a c= dom g by A2,Z3,ORDINAL1:def 2; then
+Z7:   dom (f|a) = a & dom (g|a) = a by RELAT_1:91; then
+      Union(f|a) is_limes_of (f|a) & Union(g|a) is_limes_of (g|a)
+      by Z1,Z5,ORDINAL5:6; then
+Z6:   f.a = Union(f|a) & g.a = Union(g|a) by Z4,ORDINAL2:def 14;
+      let b; assume b in f.a; then
+      consider x such that
+Z8:   x in a & b in (f|a).x by Z7,Z6,CARD_5:10;
+      (f|a).x = f.x & (g|a).x = g.x & f.x c= g.x by Z9,Z2,Z8,FUNCT_1:72;
+      hence b in g.a by Z8,Z7,Z6,CARD_5:10;
+    end;
+    for a holds P[a] from ORDINAL2:sch 1(00,01,02);
+    hence thesis by X2;
+  end;
+
+theorem ThAC:
+  for g1,g2 being Ordinal-Sequence-valued T-Sequence
+  st dom g1 = dom g2 & dom g1 <> {} & for a st a in dom g1 holds g1.a c= g2.a
+  holds criticals g1 c= criticals g2
+  proof
+    let g1,g2 be Ordinal-Sequence-valued T-Sequence;
+    assume
+Z0: dom g1 = dom g2;
+    assume
+Z1: dom g1 <> {};
+    assume
+Z2: for a st a in dom g1 holds g1.a c= g2.a;
+    set f1 = g1.0, f2 = g2.0;
+    0 in dom g1 by Z1,ORDINAL3:10; then
+    f1 c= f2 & f1 in rng g1 & f2 in rng g2 by Z0,Z2,FUNCT_1:def 5; then
+Z4: dom f1 c= dom f2 by GRFUNC_1:8;
+    set X = {a where a is Element of dom f1: a in dom f1 &
+    for f st f in rng g1 holds a is_a_fixpoint_of f};
+    set Z = {a where a is Element of dom f2: a in dom f2 &
+    for f st f in rng g2 holds a is_a_fixpoint_of f};
+    reconsider X,Z as ordinal-membered set by ThA1;
+    set Y = Z\X;
+A1: now let x,y; assume x in X; then
+      consider a being Element of dom f1 such that
+B1:   x = a & a in dom f1 & for f st f in rng g1 holds a is_a_fixpoint_of f;
+      assume y in Y; then
+B2:   y in Z & not y in X by XBOOLE_0:def 5; then
+      consider b being Element of dom f2 such that
+B3:   y = b & b in dom f2 & for f st f in rng g2 holds b is_a_fixpoint_of f;
+      assume not x in y; then
+B4:   b c= a by B1,B3,ORDINAL1:26; then
+B5:   b in dom f1 by B1,ORDINAL1:22;
+      now
+        let f; assume
+B7:     f in rng g1; then
+        consider z such that
+B6:     z in dom g1 & f = g1.z by FUNCT_1:def 5;
+B8:     f c= g2.z by Z2,B6;
+        g2.z in rng g2 by Z0,B6,FUNCT_1:def 5; then
+BB:     b is_a_fixpoint_of g2.z by B3;
+        a is_a_fixpoint_of f by B1,B7; then
+        a in dom f by ABIAN:def 3; then
+B9:     b in dom f by B4,ORDINAL1:22; then
+        f.b = g2.z.b by B8,GRFUNC_1:8 .= b by BB,ABIAN:def 3;
+        hence b is_a_fixpoint_of f by B9,ABIAN:def 3;
+      end;
+      hence contradiction by B2,B3,B5;
+    end;
+    X c= Z
+    proof
+      let x; assume x in X; then
+      consider a being Element of dom f1 such that
+B1:   x = a & a in dom f1 & for f st f in rng g1 holds a is_a_fixpoint_of f;
+      now let f; assume
+        f in rng g2; then
+        consider z such that
+B4:     z in dom g2 & f = g2.z by FUNCT_1:def 5;
+B5:     g1.z c= f by Z0,Z2,B4; then
+B6:     dom(g1.z) c= dom f by GRFUNC_1:8;
+        g1.z in rng g1 by Z0,B4,FUNCT_1:def 5; then
+        a is_a_fixpoint_of g1.z by B1; then
+        a in dom(g1.z) & a = g1.z.a by ABIAN:def 3; then
+        a in dom f & a = f.a by B5,B6,GRFUNC_1:8;
+        hence a is_a_fixpoint_of f by ABIAN:def 3;
+      end;
+      hence thesis by B1,Z4;
+    end; then
+    X\/Y = Z by XBOOLE_1:45; then
+    criticals g2 = (criticals g1)^numbering Y by A1,ThN7;
+    hence criticals g1 c= criticals g2 by Lem4;
+  end;
+
+definition
+  let g be Ordinal-Sequence-valued T-Sequence;
+  func lims g -> Ordinal-Sequence means:
+LIM:
+  dom it = dom (g.0) & for a st a in dom it holds
+  it.a = union {g.b.a where b is Element of dom g: b in dom g};
+  existence
+  proof
+    deffunc X(Ordinal) = {g.b.$1 where b is Element of dom g: b in dom g};
+    deffunc F(Ordinal) = union On X($1);
+    consider f such that
+A1: dom f = dom(g.0) & for a st a in dom(g.0) holds f.a = F(a)
+    from ORDINAL2:sch 3;
+    take f; thus dom f = dom(g.0) by A1;
+    let a; assume a in dom f; then
+A2: f.a = F(a) by A1;
+    now
+      let x; assume x in X(a); then
+      ex b being Element of dom g st x = g.b.a & b in dom g;
+      hence x is ordinal;
+    end; then
+    X(a) is ordinal-membered by EXCH9;
+    hence thesis by A2,EXCH10;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Ordinal-Sequence such that
+A1: dom f1 = dom (g.0) & for a st a in dom f1 holds f1.a =
+    union {g.b.a where b is Element of dom g: b in dom g} and
+A2: dom f2 = dom (g.0) & for a st a in dom f2 holds f2.a =
+    union {g.b.a where b is Element of dom g: b in dom g};
+    thus dom f1 = dom f2 by A1,A2;
+    let x; assume
+A3: x in dom f1; then
+    f1.x = union {g.b.x where b is Element of dom g: b in dom g} by A1;
+    hence thesis by A1,A2,A3;
+  end;
+end;
+
+theorem ThL1:
+  for g being Ordinal-Sequence-valued T-Sequence
+  st dom g <> {} & dom g in U &
+  for a st a in dom g holds g.a is Ordinal-Sequence of U
+  holds lims g is Ordinal-Sequence of U
+  proof
+    let g be Ordinal-Sequence-valued T-Sequence;
+    assume
+Z0: dom g <> {} & dom g in U;
+    assume
+Z1: for a st a in dom g holds g.a is Ordinal-Sequence of U;
+    reconsider g0 = g.0 as Ordinal-Sequence of U by Z1,Z0,ORDINAL3:10;
+Z2: dom lims g = dom g0 by LIM .= On U by FUNCT_2:def 1;
+    rng lims g c= On U
+    proof
+      let x; assume x in rng lims g; then
+      consider y such that
+A1:   y in dom lims g & x = (lims g).y by FUNCT_1:def 5;
+      reconsider y as Ordinal by A1;
+      set X = {g.b.y where b is Element of dom g: b in dom g};
+A2:   x = union X by A1,LIM;
+      reconsider a = dom g as non empty Ordinal of U by Z0;
+      deffunc F(set) = g.$1.y;
+A3:   card {F(b) where b is Element of a: b in a} c= card a from TREES_2:sch 2;
+      card a c= a by CARD_1:24; then
+      card X c= a by A3,XBOOLE_1:1; then
+      card X in U by CLASSES1:def 1; then
+      card X in On U by ORDINAL1:def 10; then
+C4:   card X in card U by CLASSES2:10;
+C5:   X c= On U
+      proof
+        let z; assume z in X; then
+        consider b being Element of a such that
+C6:     z = g.b.y & b in a;
+        reconsider f = g.b as Ordinal-Sequence of U by Z1;
+        z = f.y by C6;
+        hence thesis by ORDINAL1:def 10;
+      end; then
+      reconsider u = union X as Ordinal by ORDINAL3:6;
+      On U c= U by ORDINAL2:9; then
+      X c= U by C5,XBOOLE_1:1; then
+      X in U by C4,CLASSES1:2; then
+      u in U by CLASSES2:65;
+      hence thesis by A2,ORDINAL1:def 10;
+    end;
+    hence lims g is Ordinal-Sequence of U by Z2,FUNCT_2:4;
+  end;
+
+begin :: Veblen Hierarchy
+
+definition
+  let x;
+  func OS@ x -> Ordinal-Sequence equals: OSc:
+  x if x is Ordinal-Sequence otherwise the Ordinal-Sequence;
+  correctness;
+  func OSV@ x -> Ordinal-Sequence-valued T-Sequence equals: OSVc:
+  x if x is Ordinal-Sequence-valued T-Sequence
+  otherwise the Ordinal-Sequence-valued T-Sequence;
+  correctness;
+end;
+
+definition
+  let U;
+  func U-Veblen -> Ordinal-Sequence-valued T-Sequence means: V:
+  dom it = On U & it.0 = U exp omega &
+  (for b st succ b in On U holds it.succ b = criticals (it.b)) &
+  (for l st l in On U holds it.l = criticals (it|l));
+  existence
+  proof
+    reconsider o = omega as non trivial Ordinal;
+    deffunc C(set,set) = criticals OS@ $2;
+    deffunc D(set,set) = criticals OSV@ $2;
+    consider L being T-Sequence such that
+A1: dom L = On U and
+A2: {} in On U implies L.{} = U exp o and
+A3: for b st succ b in On U holds L.(succ b) = C(b,L.b) and
+A4: for b st b in On U & b <> {} & b is limit_ordinal holds L.b = D(b,L|b)
+    from ORDINAL2:sch 5;
+    defpred P[Ordinal] means
+    $1 in On U implies L.$1 is Ordinal-Sequence;
+00: P[{}] by A2;
+01: P[b] implies P[succ b]
+    proof assume that
+B1:   P[b] and
+B2:   succ b in On U;
+      b in succ b by ORDINAL1:10; then
+      reconsider f = L.b as Ordinal-Sequence by B1,B2,ORDINAL1:19;
+      L.(succ b) = C(b,f) by A3,B2 .= criticals f by OSc;
+      hence thesis;
+    end;
+02: for b st b <> {} & b is limit_ordinal & for c st c in b holds P[c]
+    holds P[b]
+    proof
+      let b; assume that
+C1:   b <> {} & b is limit_ordinal and
+      for c st c in b holds P[c] and
+C3:   b in On U;
+      L.b = D(b,L|b) by A4,C1,C3;
+      hence thesis;
+    end;
+03: P[b] from ORDINAL2:sch 1(00,01,02);
+    L is Ordinal-Sequence-valued
+    proof
+      let x; assume x in rng L; then
+      ex y st y in dom L & x = L.y by FUNCT_1:def 5;
+      hence thesis by A1,03;
+    end; then
+    reconsider L as Ordinal-Sequence-valued T-Sequence;
+    take L;
+    0-element_of U in On U by ORDINAL1:def 10;
+    hence dom L = On U & L.0 = U exp omega by A1,A2;
+    hereby
+      let b; assume
+E1:   succ b in On U;
+      reconsider f = L.b as Ordinal-Sequence;
+      thus L.succ b = C(b,f) by E1,A3 .= criticals (L.b) by OSc;
+    end;
+    let l; assume l in On U;
+    hence L.l = D(l,L|l) by A4 .= criticals(L|l) by OSVc;
+  end;
+  uniqueness
+  proof let g1,g2 be Ordinal-Sequence-valued T-Sequence such that
+01: dom g1 = On U and
+A1: g1.0 = U exp omega and
+B1: (for b st succ b in On U holds g1.succ b = criticals (g1.b)) and
+C1: (for l st l in On U holds g1.l = criticals(g1|l)) and
+05: dom g2 = On U and
+A2: g2.0 = U exp omega and
+B2: (for b st succ b in On U holds g2.succ b = criticals (g2.b)) and
+C2: (for l st l in On U holds g2.l = criticals(g2|l));
+    deffunc C(set,Ordinal-Sequence) = criticals $2;
+    deffunc D(set,Ordinal-Sequence-valued T-Sequence) = criticals $2;
+02: {} in On U implies g1.{} = U exp omega by A1;
+03: for b st succ b in On U holds g1.succ b = C(b,g1.b) by B1;
+04: for a st a in On U & a <> {} & a is limit_ordinal
+    holds g1.a = D(a,g1|a) by C1;
+06: {} in On U implies g2.{} = U exp omega by A2;
+07: for b st succ b in On U holds g2.succ b = C(b,g2.b) by B2;
+08: for a st a in On U & a <> {} & a is limit_ordinal
+    holds g2.a = D(a,g2|a) by C2;
+    thus g1 = g2 from ORDINAL2:sch 4(01,02,03,04,05,06,07,08);
+  end;
+end;
+
+registration
+  cluster uncountable Universe;
+  existence
+  proof
+    take U = Tarski-Class omega;
+    omega in U by CLASSES1:5; then
+    card omega in card U by CLASSES2:1;
+    hence card U c/= omega;
+  end;
+end;
+
+theorem Unc1:
+  for U being Universe holds U is uncountable iff omega in U
+  proof
+    let U be Universe;
+    thus U is uncountable implies omega in U
+    proof assume
+      card U c/= omega; then
+      omega in card U by EXCH1; then
+      omega in On U by CLASSES2:10;
+      hence omega in U by ORDINAL1:def 10;
+    end;
+    assume omega in U; then
+    card omega in card U by CLASSES2:1;
+    hence card U c/= omega;
+  end;
+
+theorem Th51:
+  a in b & b in U & omega in U & c in dom(U-Veblen.b)
+  implies U-Veblen.b.c is_a_fixpoint_of U-Veblen.a
+  proof assume
+Z0: a in b & b in U & omega in U;
+    set F = U-Veblen;
+    defpred P[Ordinal] means $1 in U implies
+    for a,c st a in $1 & c in dom(F.$1) holds F.$1.c is_a_fixpoint_of F.a;
+00: P[0];
+01: for b st P[b] holds P[succ b]
+    proof
+      let b such that
+Z1:   P[b] and
+Z2:   succ b in U;
+A0:   b in succ b by ORDINAL1:10;
+      let a,c;
+      assume a in succ b; then
+A1:   a in b or a in {b} by XBOOLE_0:def 3;
+      succ b in On U by Z2,ORDINAL1:def 10; then
+A2:   F.succ b = criticals(F.b) by V;
+      assume c in dom(F.succ b); then
+A3:   F.(succ b).c is_a_fixpoint_of F.b by A2,Th02; then
+      F.(succ b).c in dom(F.b) & F.(succ b).c = F.b.(F.(succ b).c)
+      by ABIAN:def 3;
+      hence thesis by Z1,Z2,A0,A1,A3,TARSKI:def 1,ORDINAL1:19;
+    end;
+F1: dom F = On U by V;
+02: for b st b <> {} & b is limit_ordinal & for d st d in b holds P[d]
+    holds P[b]
+    proof
+      let b such that
+Z1:   b <> {} & b is limit_ordinal and
+      for d st d in b holds P[d] and
+Z3:   b in U;
+B2:   b in On U by Z3,ORDINAL1:def 10; then
+B0:   F.b = criticals(F|b) by Z1,V;
+      b c= On U by B2,ORDINAL1:def 2; then
+B3:   dom(F|b) = b by F1,RELAT_1:91;
+      let a,c; assume
+Z4:   a in b; then
+B1:   F.a = (F|b).a by FUNCT_1:72;
+      set g = F|b;
+      set X = {z where z is Element of dom(g.0): z in dom(g.0) &
+      for f st f in rng g holds z is_a_fixpoint_of f};
+      now
+        let x; assume x in X; then
+        ex a being Element of dom(g.0) st x = a & a in dom(g.0) &
+        for f st f in rng g holds a is_a_fixpoint_of f;
+        hence x is ordinal;
+      end; then
+      reconsider X as ordinal-membered set by EXCH9;
+      assume
+      c in dom(F.b); then
+      F.b.c in rng (F.b) by FUNCT_1:def 5; then
+      F.b.c in X by B0,ThN1a; then
+      consider z being Element of dom(g.0) such that
+B4:   F.b.c = z & z in dom(g.0) &
+      for f st f in rng g holds z is_a_fixpoint_of f;
+      F.a in rng g by B3,B1,Z4,FUNCT_1:def 5;
+      hence thesis by B4;
+    end;
+    for b holds P[b] from ORDINAL2:sch 1(00,01,02);
+    hence thesis by Z0;
+  end;
+
+theorem
+  l in U & (for c st c in l holds a is_a_fixpoint_of U-Veblen.c)
+  implies a is_a_fixpoint_of lims(U-Veblen|l)
+  proof
+    assume
+Z0: l in U;
+    assume
+Z1: for c st c in l holds a is_a_fixpoint_of U-Veblen.c;
+    set F = U-Veblen; set g = F|l;
+    set X = {g.d.a where d is Element of dom g: d in dom g};
+    set u = union X;
+A0: 0 in l by ORDINAL3:10; then
+    omega c= l by ORDINAL1:def 12; then
+    reconsider o = omega as non trivial Ordinal of U by Z0,CLASSES1:def 1;
+    F.0 = U exp o by V; then
+    reconsider f0 = F.0 as normal Ordinal-Sequence of U;
+A2: f0 = g.0 by ORDINAL3:10,FUNCT_1:72; then
+A1: dom lims g = dom f0 & dom f0 = On U by LIM,FUNCT_2:def 1;
+B3: a is_a_fixpoint_of f0 by Z1,ORDINAL3:10; then
+A3: a in On U & a = f0.a by A1,ABIAN:def 3;
+A5: dom F = On U by V;
+    l in On U by Z0,ORDINAL1:def 10; then
+    l c= dom F by A5,ORDINAL1:def 2; then
+A6: dom g = l by RELAT_1:91;
+    set lg = lims g;
+    thus a in dom lims g by A1,B3,ABIAN:def 3;
+A4: lg.a = u by A1,A3,LIM;
+    {a} = X
+    proof
+      a in X by A0,A6,A3,A2;
+      hence {a} c= X by ZFMISC_1:37;
+      let x; assume x in X; then
+      consider d being Element of dom g such that
+A7:   x = g.d.a & d in dom g;
+      g.d = F.d by A7,FUNCT_1:70; then
+      a is_a_fixpoint_of g.d by Z1,A6; then
+      x = a by A7,ABIAN:def 3;
+      hence thesis by TARSKI:def 1;
+    end;
+    hence a = (lims g).a by A4,ZFMISC_1:31;
+  end;
+
+theorem Th52:
+  a c= b & b in U & omega in U & c in dom(U-Veblen.b) &
+  (for c st c in b holds U-Veblen.c is normal)
+  implies U-Veblen.a.c c= U-Veblen.b.c
+  proof assume
+A0: a c= b & b in U & omega in U & c in dom(U-Veblen.b);
+    set F = U-Veblen;
+    defpred P[Ordinal] means
+    for a,c st a c= $1 & $1 in U & c in dom(F.$1) &
+    for c st c in $1 holds U-Veblen.c is normal holds F.a.c c= F.$1.c;
+01: P[0];
+02: for b st P[b] holds P[succ b]
+    proof
+      let b such that
+A1:   P[b];
+      let a,c such that
+A2:   a c= succ b and
+A3:   succ b in U and
+A4:   c in dom(F.succ b);
+      assume
+Z0:   for c st c in succ b holds U-Veblen.c is normal;
+      succ b in On U by A3,ORDINAL1:def 10; then
+A5:   F.succ b = criticals (F.b) by V; then
+A6:   dom(F.succ b) c= dom(F.b) by Th05;
+Z1:   b in succ b by ORDINAL1:10; then
+A7:   b in U by A3,ORDINAL1:19;
+      F.b is normal by Z0,ORDINAL1:10; then
+A8:   F.b.c c= F.succ b.c by A4,A5,Th40;
+A9:   for c st c in b holds F.c is normal by Z0,Z1,ORDINAL1:19;
+      per cases by A2,ORDINAL5:1;
+      suppose a = succ b;
+        hence thesis;
+      end;
+      suppose a c= b; then
+        F.a.c c= F.b.c by A1,A4,A6,A7,A9;
+        hence thesis by A8,XBOOLE_1:1;
+      end;
+    end;
+03: for b st b <> {} & b is limit_ordinal & for d st d in b holds P[d]
+    holds P[b]
+    proof
+      let b;
+      assume
+Z1:   b <> {} & b is limit_ordinal;
+      assume for d st d in b holds P[d];
+      let a,c;
+      assume
+Z3:   a c= b;
+      per cases by Z3,XBOOLE_0:def 8;
+      suppose a = b;
+        hence thesis;
+      end;
+      suppose
+C0:     a c< b; then
+B0:     a in b by ORDINAL1:21;
+        assume
+        b in U; then
+B1:     b in On U by ORDINAL1:def 10; then
+B2:     F.b = criticals(F|b) by Z1,V;
+        dom F = On U by V; then
+        b c= dom F by B1,ORDINAL1:def 2; then
+B4:     dom(F|b) = b by RELAT_1:91;
+        assume
+Z5:     c in dom(F.b);
+       assume
+Z7:     for c st c in b holds U-Veblen.c is normal;
+Z6:     now let c; assume c in dom(F|b); then
+          c in b & (F|b).c = F.c by B4,FUNCT_1:72;
+          hence (F|b).c is normal by Z7;
+        end;
+B6:     (F|b).a in rng(F|b) by B0,B4,FUNCT_1:def 5;
+        (F|b).a = F.a by C0,ORDINAL1:21,FUNCT_1:72;
+        hence F.a.c c= F.b.c by B0,B2,B4,Z5,Z6,B6,ThAB;
+      end;
+    end;
+
+    for b holds P[b] from ORDINAL2:sch 1(01,02,03);
+    hence thesis by A0;
+  end;
+
+theorem Th53:
+  l in U & a in U & b in l &
+  (for c st c in l holds U-Veblen.c is normal Ordinal-Sequence of U)
+  implies (lims(U-Veblen|l)).a is_a_fixpoint_of U-Veblen.b
+  proof assume that
+Z0: l in U and
+Z1: a in U and
+Z2: b in l and
+Z3: for c st c in l holds U-Veblen.c is normal Ordinal-Sequence of U;
+    set F = U-Veblen;
+    set g = F|l;
+    set X = {g.d.a where d is Element of dom g: d in dom g};
+    set u = union X;
+A0: 0 in l by ORDINAL3:10;
+    reconsider f0 = F.0, f = F.b as normal Ordinal-Sequence of U
+    by Z2,Z3,ORDINAL3:10;
+A2: f0 = g.0 & f = g.b by Z2,ORDINAL3:10,FUNCT_1:72; then
+A1: dom lims g = dom f0 by LIM .= On U by FUNCT_2:def 1;
+A5: dom F = On U by V;
+    l in On U by Z0,ORDINAL1:def 10; then
+    l c= dom F by A5,ORDINAL1:def 2; then
+A6: dom g = l by RELAT_1:91; then
+A7: g.b.a in X by Z2;
+    now
+      let c; assume
+C1:   c in dom g; then
+      g.c = F.c by FUNCT_1:70;
+      hence g.c is Ordinal-Sequence of U by A6,C1,Z3;
+    end; then
+    reconsider lg = lims g as Ordinal-Sequence of U by Z0,A6,ThL1;
+A9: a in On U by Z1,ORDINAL1:def 10; then
+A3: lg.a = u by A1,LIM;
+A4: dom f = On U & dom f0 = On U by FUNCT_2:def 1;
+A8: for x st x in X ex y st x c= y & y in X & y is_a_fixpoint_of f
+    proof let x; assume
+B0:   x in X; then
+      consider d being Element of dom g such that
+B1:   x = g.d.a & d in dom g;
+      reconsider f2 = F.d as normal Ordinal-Sequence of U by Z3,A6;
+C2:   f2 = g.d by A6,FUNCT_1:72;
+C3:   dom f2 = On U by FUNCT_2:def 1;
+      omega c= l by A0,ORDINAL1:def 12; then
+C4:   d in U & omega in U by A6,Z0,ORDINAL1:19,CLASSES1:def 1;
+C5:   b in U by Z0,Z2,ORDINAL1:19;
+C6:   for c st c in b holds U-Veblen.c is normal by Z3,Z2,ORDINAL1:19;
+      per cases by ORDINAL1:26;
+      suppose
+        d c= b; then
+B2:     x c= g.b.a by A9,A2,A4,B1,C2,C4,C5,C6,Th52;
+        take y = g.(succ b).a;
+B3:     b in succ b & succ b in l by Z2,ORDINAL1:10,41; then
+        reconsider f1 = F.succ b as normal Ordinal-Sequence of U by Z3;
+B4:     f1 = g.succ b by B3,FUNCT_1:72;
+        succ b in U by B3,Z0,ORDINAL1:19; then
+        succ b in On U by ORDINAL1:def 10; then
+B6:     f1 = criticals f & dom f1 = On U by V,FUNCT_2:def 1; then
+        f.a c= y by A9,B4,Th40;
+        hence x c= y by B2,A2,XBOOLE_1:1;
+        thus y in X by A6,B3;
+        thus thesis by A9,B4,B6,Th02;
+      end;
+      suppose
+C1:     b in d;
+        take y = x;
+        thus x c= y & y in X by B0;
+        thus thesis by A9,B1,C1,C2,C3,C4,Th51;
+      end;
+    end;
+    thus (lims(U-Veblen|l)).a in dom(U-Veblen.b) by A3,A4,ORDINAL1:def 10;
+    hence thesis by A3,A7,A8,Th08a;
+  end;
+
+Th21:
+  omega in U implies U-Veblen.0 is normal Ordinal-Sequence of U
+  proof
+    assume omega in U;
+    then reconsider o = omega as non trivial Ordinal of U;
+    U-Veblen.0 = U exp o by V;
+    hence U-Veblen.0 is normal Ordinal-Sequence of U;
+  end;
+
+Th22:
+  omega in U & a in U & U-Veblen.a is normal Ordinal-Sequence of U
+  implies U-Veblen.succ a is normal Ordinal-Sequence of U
+  proof assume that
+Z0: omega in U and
+Z1: a in U;
+    assume U-Veblen.a is normal Ordinal-Sequence of U;
+    then reconsider f = U-Veblen.a as normal Ordinal-Sequence of U;
+    succ a in U by Z1,CLASSES2:6;
+    then succ a in On U by ORDINAL1:def 10;
+    then U-Veblen.succ a = criticals f by V;
+    hence U-Veblen.succ a is normal Ordinal-Sequence of U
+    by Z0,Th39;
+  end;
+
+Th61:
+  l in U & (for a st a in l holds U-Veblen.a is normal Ordinal-Sequence of U)
+  implies U-Veblen.l is normal Ordinal-Sequence of U
+  proof
+    assume
+Z0: l in U;
+    assume
+Z1: for a st a in l holds U-Veblen.a is normal Ordinal-Sequence of U;
+A0: l in On U by Z0,ORDINAL1:def 10; then
+A1: U-Veblen.l = criticals(U-Veblen|l) by V;
+A3: dom(U-Veblen) = On U by V;
+    l c= On U by A0,ORDINAL1:def 2; then
+A2: dom(U-Veblen|l) = l by A3,RELAT_1:91;
+YY: dom (U-Veblen.l) = On U
+    proof set F = U-Veblen; set G = F.l;
+H1:   0 in l by ORDINAL3:10;
+      reconsider f0 = F.0 as normal Ordinal-Sequence of U by Z1,ORDINAL3:10;
+H2:   dom f0 = On U by FUNCT_2:def 1;
+H2a:  f0 = (F|l).0 by ORDINAL3:10,FUNCT_1:72; then
+      f0 in rng (F|l) by A2,H1,FUNCT_1:def 5;
+      hence dom G c= On U by A1,H2,ThA5;
+      now
+        let c; assume
+C1:     c in dom (F|l); then
+        (F|l).c = F.c by FUNCT_1:70;
+        hence (F|l).c is Ordinal-Sequence of U by A2,C1,Z1;
+      end; then
+      reconsider lg = lims (F|l) as Ordinal-Sequence of U by Z0,A2,ThL1;
+H3:   dom lg = On U by FUNCT_2:def 1;
+      rng lg c= rng G
+      proof let y;
+        assume y in rng lg; then
+        consider x such that
+G1:     x in dom lg & y = lg.x by FUNCT_1:def 5;
+        reconsider x as Ordinal by G1;
+G2:     x in U & y in On U by H3,G1,ORDINAL1:def 10;
+        set Y = {a where a is Element of dom((F|l).0): a in dom((F|l).0) &
+        for f st f in rng(F|l) holds a is_a_fixpoint_of f};
+G4:     Y is ordinal-membered by ThA1;
+        now let f;
+          assume f in rng(F|l); then
+          consider z such that
+G3:       z in l & f = (F|l).z by A2,FUNCT_1:def 5;
+          f = F.z by G3,FUNCT_1:72;
+          hence y is_a_fixpoint_of f by Z0,Z1,G3,G1,G2,Th53;
+        end; then
+        y in Y by H2,H2a,G2;
+        hence thesis by A1,G4,ThN1a;
+      end; then
+F1:   Union lg c= Union G by ZFMISC_1:95;
+      On U c= Union lg
+      proof
+        let a; assume
+E1:     a in On U;
+E2:     a in succ a by ORDINAL1:10;
+        set X = {(F|l).b.succ a where b is Element of dom(F|l):b in dom(F|l)};
+        On U is limit_ordinal by CLASSES2:55; then
+E3:     succ a in On U by E1,ORDINAL1:41; then
+E4:     lg.succ a = union X by H3,LIM;
+E5:     f0.succ a in X by H2a,A2,H1;
+E6:     f0.a in f0.succ a by E2,E3,H2,ORDINAL2:def 16;
+        a c= f0.a by H2,E1,ORDINAL4:10; then
+        a in f0.succ a by E6,ORDINAL1:22; then
+        a in lg.succ a by E4,E5,TARSKI:def 4;
+        hence thesis by H3,E3,CARD_5:10;
+      end; then
+F2:   On U c= Union G by F1,XBOOLE_1:1;
+F3:   rng G c= U
+      proof let x;
+        assume x in rng G; then
+        consider y such that
+D1:     y in dom G & x = G.y by FUNCT_1:def 5;
+        x is_a_fixpoint_of f0 by A1,A2,H1,H2a,D1,ThA2; then
+        x in dom f0 & x = f0.x by ABIAN:def 3;
+        hence thesis;
+      end;
+      assume On U c/= dom G; then
+      dom G in On U by ORDINAL1:26; then
+      reconsider d = dom G as Ordinal of U by ORDINAL1:def 10;
+H5:   card d in card U by CLASSES2:1;
+      card rng G c= card d by CARD_1:28; then
+      card rng G in card U by H5,ORDINAL1:22; then
+      reconsider r = rng G as Element of U by F3,CLASSES1:2;
+      union r in U; then
+      Union G in On U by ORDINAL1:def 10; then
+      Union G in Union G by F2;
+      hence thesis;
+    end;
+ZZ: rng (U-Veblen.l) c= On U
+    proof
+      let x; assume x in rng(U-Veblen.l); then
+      consider y such that
+C1:   y in dom (U-Veblen.l) & x = (U-Veblen.l).y by FUNCT_1:def 5;
+      reconsider y as Ordinal by C1;
+C2:   0 in l by ORDINAL3:10; then
+      x is_a_fixpoint_of (U-Veblen|l).0 by A1,C1,A2,ThA2; then
+      x in dom ((U-Veblen|l).0) by ABIAN:def 3; then
+      x in dom (U-Veblen.0) & U-Veblen.0 is Ordinal-Sequence of U
+      by Z1,C2,FUNCT_1:72;
+      hence thesis by FUNCT_2:def 1;
+    end;
+    now let a;
+      assume
+B1:   a in l; then
+      (U-Veblen|l).a = U-Veblen.a by FUNCT_1:72;
+      hence (U-Veblen|l).a is normal by Z1,B1;
+    end; then
+    U-Veblen.l is continuous by A1,A2,ThAA;
+    hence U-Veblen.l is normal Ordinal-Sequence of U by A1,YY,ZZ,FUNCT_2:4;
+  end;
+
+theorem Th23:
+  omega in U & a in U implies U-Veblen.a is normal Ordinal-Sequence of U
+  proof assume
+Z0: omega in U;
+    defpred P[Ordinal] means
+    $1 in U implies U-Veblen.$1 is normal Ordinal-Sequence of U;
+00: P[0] by Z0,Th21;
+01: P[b] implies P[succ b]
+    proof
+      b in succ b by ORDINAL1:10;
+      then succ b in U implies b in U by ORDINAL1:19;
+      hence thesis by Z0,Th22;
+    end;
+02: b <> {} & b is limit_ordinal & (for c st c in b holds P[c]) implies P[b]
+    proof assume that
+A1:   b <> {} & b is limit_ordinal and
+A2:   for c st c in b holds P[c] and
+A3:   b in U;
+      now
+        let a; assume
+A4:     a in b;
+        then a in U by A3,ORDINAL1:19;
+        hence U-Veblen.a is normal Ordinal-Sequence of U by A2,A4;
+      end;
+      hence thesis by A1,A3,Th61;
+    end;
+    P[b] from ORDINAL2:sch 1(00,01,02);
+    hence thesis;
+  end;
+
+theorem Th24:
+  omega in U & U c= W & a in U implies U-Veblen.a c= W-Veblen.a
+  proof assume
+A0: omega in U & U c= W; then
+B0: On U c= On W by ORDINAL2:11;
+    defpred P[ordinal number] means
+    $1 in U implies U-Veblen.$1 c= W-Veblen.$1;
+A1: U-Veblen.0 = U exp omega & W-Veblen.0 = W exp omega by V;
+A2: dom (U exp omega) = On U & dom (W exp omega) = On W by FUNCT_2:def 1;
+    now let x; assume
+      x in On U; then
+      reconsider a = x as Ordinal of U by ORDINAL1:def 10;
+      a in U; then
+      reconsider b = a as Ordinal of W by A0;
+      (U exp omega).a = exp(omega,b) by A0,EXP;
+      hence (U exp omega).x = (W exp omega).x by A0,EXP;
+    end; then
+00: P[0] by B0,A1,A2,GRFUNC_1:8;
+01: P[b] implies P[succ b]
+    proof assume
+S2:   P[b]; assume
+S4:   succ b in U;
+S5:   b in succ b by ORDINAL1:10;
+      succ b in On U & succ b in On W by A0,S4,ORDINAL1:def 10; then
+      U-Veblen.succ b = criticals (U-Veblen.b) &
+      W-Veblen.succ b = criticals (W-Veblen.b) by V;
+      hence thesis by S2,S5,Th0A,S4,ORDINAL1:19;
+    end;
+02: b <> {} & b is limit_ordinal & (for c st c in b holds P[c]) implies P[b]
+    proof assume that
+A1:   b <> {} & b is limit_ordinal and
+A2:   for c st c in b holds P[c] and
+A3:   b in U;
+      set g1 = U-Veblen|b, g2 = W-Veblen|b;
+A5:   b in On U & b in On W by A0,A3,ORDINAL1:def 10; then
+A4:   U-Veblen.b = criticals g1 & W-Veblen.b = criticals g2 by A1,V;
+      dom(U-Veblen) = On U & dom(W-Veblen) = On W by V; then
+      b c= dom(U-Veblen) & b c= dom(W-Veblen) by A5,ORDINAL1:def 2; then
+A6:   dom g1 = b & dom g2 = b by RELAT_1:91;
+      now
+        let a; assume
+A7:     a in dom g1; then
+A8:     g1.a = U-Veblen.a & g2.a = W-Veblen.a by A6,FUNCT_1:70;
+        a in U by A3,A6,A7,ORDINAL1:19;
+        hence g1.a c= g2.a by A2,A6,A7,A8;
+      end;
+      hence thesis by A1,A4,A6,ThAC;
+    end;
+    P[b] from ORDINAL2:sch 1(00,01,02);
+    hence thesis;
+  end;
+
+theorem Th25:
+  omega in U & a in U & b in U & omega in W & a in W & b in W implies
+  U-Veblen.b.a = W-Veblen.b.a
+  proof assume
+A0: omega in U & a in U & b in U & omega in W & a in W & b in W; then
+A1: a in On U & a in On W by ORDINAL1:def 10;
+    W-Veblen.b is Ordinal-Sequence of W &
+    U-Veblen.b is Ordinal-Sequence of U by A0,Th23; then
+A2: dom(U-Veblen.b) = On U & dom(W-Veblen.b) = On W by FUNCT_2:def 1;
+    U c= W or W in U by CLASSES2:57; then
+    U c= W or W c= U by ORDINAL1:def 2; then
+    U-Veblen.b c= W-Veblen.b or W-Veblen.b c= U-Veblen.b by A0,Th24;
+    hence thesis by A1,A2,GRFUNC_1:8;
+  end;
+
+theorem
+  l in U & (for a st a in l holds
+  U-Veblen.a is normal Ordinal-Sequence of U)
+  implies lims(U-Veblen|l) is non-decreasing continuous Ordinal-Sequence of U
+  proof set G = U-Veblen;
+    assume that
+A1: l in U and
+A2: for a st a in l holds G.a is normal Ordinal-Sequence of U;
+    0 in l by ORDINAL3:10; then
+    omega c= l by ORDINAL1:def 12; then
+A3: omega in U & l in On U by A1,ORDINAL1:def 10,CLASSES1:def 1; then
+A4: G.l = criticals(G|l) & dom G = On U by V;
+    l c= On U by A3,ORDINAL1:def 2; then
+A5: dom(G|l) = l by A4,RELAT_1:91;
+    set g = G|l;
+    now let a; assume
+A6:   a in dom g; then
+      g.a = G.a by A5,FUNCT_1:72;
+      hence g.a is Ordinal-Sequence of U by A2,A5,A6;
+    end; then
+    reconsider f = lims g as Ordinal-Sequence of U by A1,A5,ThL1;
+    g.0 = G.0 by FUNCT_1:72,ORDINAL3:10; then
+    reconsider g0 = g.0 as Ordinal-Sequence of U by A2,ORDINAL3:10;
+A8: dom f = On U by FUNCT_2:def 1;
+    deffunc X(set) = {g.b.$1 where b is Element of dom g: b in dom g};
+A7: f is non-decreasing
+    proof
+      let a,b; assume
+B1:   a in b & b in dom f; then
+      a in dom f by ORDINAL1:19; then
+B3:   f.a = union X(a) & f.b = union X(b) by B1,LIM;
+      let c; assume c in f.a; then
+      consider x such that
+B4:   c in x & x in X(a) by B3,TARSKI:def 4;
+      consider xa being Element of dom g such that
+B5:   x = g.xa.a & xa in dom g by B4;
+      g.xa = G.xa by A5,FUNCT_1:72; then
+      reconsider h = g.xa as increasing Ordinal-Sequence of U by A2,A5;
+      dom h = On U by FUNCT_2:def 1; then
+      h.a in h.b by A8,B1,ORDINAL2:def 16; then
+      h.a c= h.b by ORDINAL1:def 2; then
+      c in h.b & h.b in X(b) by B4,B5;
+      hence c in f.b by B3,TARSKI:def 4;
+    end;
+    f is continuous
+    proof let a,b; assume
+C1:   a in dom f & a <> {} & a is limit_ordinal & b = f.a; then
+C2:   b = union X(a) by LIM;
+D1:   a c= dom f by C1,ORDINAL1:def 2; then
+C3:   dom(f|a) = a by RELAT_1:91;
+C4:   b = Union(f|a)
+      proof
+        thus b c= Union(f|a)
+        proof
+          let c; assume c in b; then
+          consider x such that
+B4:       c in x & x in X(a) by C2,TARSKI:def 4;
+          consider xa being Element of dom g such that
+B5:       x = g.xa.a & xa in dom g by B4;
+          g.xa = G.xa by A5,FUNCT_1:72; then
+          reconsider h = g.xa as normal Ordinal-Sequence of U
+          by A2,A5;
+C6:       dom h = On U by FUNCT_2:def 1; then
+C5:       h.a is_limes_of h|a by A8,C1,ORDINAL2:def 17;
+C7:       h|a is increasing by ORDINAL4:15;
+C8:       dom(h|a) = a by A8,D1,C6,RELAT_1:91; then
+          Union(h|a) is_limes_of h|a by C1,C7,ORDINAL5:6; then
+          lim(h|a) = Union(h|a) by ORDINAL2:def 14; then
+          h.a = Union(h|a) by C5,ORDINAL2:def 14; then
+          consider y such that
+C9:       y in a & c in (h|a).y by B4,B5,C8,CARD_5:10;
+D3:       y in On U by A8,C1,C9,ORDINAL1:19;
+          (h|a).y = h.y by C9,FUNCT_1:72; then
+          (h|a).y in X(y) by B5; then
+          c in union X(y) by C9,TARSKI:def 4; then
+          c in f.y by A8,D3,LIM; then
+          c in (f|a).y by C9,FUNCT_1:72;
+          hence thesis by C3,C9,CARD_5:10;
+        end;
+        let c; assume c in Union(f|a); then
+        consider x such that
+E1:     x in dom(f|a) & c in (f|a).x by CARD_5:10;
+E2:     (f|a).x = f.x by C3,E1,FUNCT_1:72;
+        x in dom f by E1,RELAT_1:86; then
+        f.x = union X(x) by LIM; then
+        consider y such that
+E4:     c in y & y in X(x) by E1,E2,TARSKI:def 4;
+        consider z being Element of dom g such that
+E5:     y = g.z.x & z in dom g by E4;
+        g.z = G.z by A5,FUNCT_1:72; then
+        reconsider h = g.z as normal Ordinal-Sequence of U
+        by A2,A5;
+        dom h = On U by FUNCT_2:def 1; then
+        h.x in h.a by E1,C3,C1,A8,ORDINAL2:def 16; then
+        h.x c= h.a by ORDINAL1:def 2; then
+        c in h.a & h.a in X(a) by E4,E5;
+        hence c in b by C2,TARSKI:def 4;
+      end;
+      f|a is non-decreasing by A7,ThND;
+      hence b is_limes_of f|a by C1,C3,C4,ORDINAL5:6;
+    end;
+    hence thesis by A7;
+  end;
+
+registration
+  let a;
+  cluster Tarski-Class(a \/ omega) -> uncountable;
+  coherence
+  proof
+    set U = Tarski-Class(a \/ omega);
+    omega c= a \/ omega & a \/ omega in U by XBOOLE_1:7,CLASSES1:5; then
+    omega in U by CLASSES1:def 1;
+    hence thesis by Unc1;
+  end;
+end;
+
+definition
+  let a,b;
+  func a-Veblen(b) -> Ordinal equals
+  (Tarski-Class(a \/ b \/ omega))-Veblen.a.b;
+  coherence;
+end;
+
+definition
+  let n,b;
+  redefine func n-Veblen(b) -> Ordinal equals
+  (Tarski-Class(b \/ omega))-Veblen.n.b;
+  coherence;
+  compatibility
+  proof
+    n c= omega; then
+    n\/omega = omega by XBOOLE_1:12;
+    hence thesis by XBOOLE_1:4;
+  end;
+end;
+
+theorem LemT:
+  a in Tarski-Class(a\/b\/c)
+  proof set U = Tarski-Class(a\/b\/c);
+    a c= a\/b & a\/b c= a\/b\/c by XBOOLE_1:7; then
+    a c= a\/b\/c & a\/b\/c in U by XBOOLE_1:1,CLASSES1:5;
+    hence thesis by CLASSES1:def 1;
+  end;
+
+theorem Th26:
+  omega in U & a in U & b in U implies b-Veblen a = U-Veblen.b.a
+  proof assume
+Z0: omega in U & a in U & b in U;
+    set W = Tarski-Class(b\/a\/omega);
+    omega in W & a in W & b in W by Unc1,LemT;
+    hence b-Veblen a = U-Veblen.b.a by Z0,Th25;
+  end;
+
+theorem Th10:
+  0-Veblen(a) = exp(omega,a)
+  proof
+    set b = 0\/a\/omega;
+    set U = Tarski-Class b;
+    b in U by CLASSES1:5; then
+00: b in On U by ORDINAL1:def 10;
+    omega in On U by 00,XBOOLE_1:7,ORDINAL1:22; then
+A0: omega in U by ORDINAL1:def 10;
+    a in On U by 00,XBOOLE_1:7,ORDINAL1:22; then
+A1: a in U by ORDINAL1:def 10;
+    thus 0-Veblen(a) = (U exp omega).a by V
+    .= exp(omega,a) by A1,A0,EXP;
+  end;
+
+theorem Th11:
+  b-Veblen((succ b)-Veblen a) = (succ b)-Veblen a
+  proof set U = Tarski-Class(b\/a\/omega);
+A2: omega in U by Unc1;
+    reconsider b1 = b as Ordinal of U by LemT;
+    succ b1 in On U by ORDINAL1:def 10; then
+A4: U-Veblen.(succ b) = criticals (U-Veblen.b) by V;
+    reconsider f = U-Veblen.b1, g = U-Veblen.(succ b1) as
+    normal Ordinal-Sequence of U by A2,Th23;
+A1: a in U by LemT; then
+A3: a in On U by ORDINAL1:def 10;
+A5: dom f = On U & dom g = On U by FUNCT_2:def 1;
+    set W = Tarski-Class(b\/(g.a)\/omega);
+    omega in U by Unc1;
+    then
+A7: (succ b1)-Veblen a = g.a & b1-Veblen(g.a) = f.(g.a) by A1,Th26; then
+    (succ b)-Veblen a is_a_fixpoint_of U-Veblen.b by A3,A4,A5,Th02;
+    hence b-Veblen((succ b)-Veblen a) = (succ b)-Veblen a by A7,ABIAN:def 3;
+  end;
+
+theorem Th11a:
+  b in c implies b-Veblen(c-Veblen a) = c-Veblen a
+  proof assume
+Z0: b in c;
+    set U = Tarski-Class(c\/a\/omega);
+A0: omega in U by Unc1;
+A1: a in U & c in U by LemT; then
+A2: b in U by Z0,ORDINAL1:19; then
+    reconsider f = U-Veblen.b, g = U-Veblen.c as normal Ordinal-Sequence of U
+    by A0,LemT,Th23;
+    dom g = On U by FUNCT_2:def 1; then
+    a in dom g by A1,ORDINAL1:def 10; then
+    g.a is_a_fixpoint_of f by Z0,A0,LemT,Th51; then
+    g.a = f.(g.a) by ABIAN:def 3;
+    hence b-Veblen(c-Veblen a) = c-Veblen a by A0,A2,Th26;
+  end;
+
+theorem Th15:
+  a c= b iff c-Veblen a c= c-Veblen b
+  proof
+    set U = Tarski-Class(c\/b\/omega);
+    set W = Tarski-Class(c\/a\/omega);
+A0: n in omega & omega in U & omega in W by Unc1,ORDINAL1:def 13;
+A1: b in U & c in U by LemT;
+A2: a in W & c in W by LemT;
+    reconsider f = U-Veblen.c as increasing Ordinal-Sequence of U
+    by A0,LemT,Th23;
+    reconsider g = W-Veblen.c as increasing Ordinal-Sequence of W
+    by A0,LemT,Th23;
+A3: dom f = On U & dom g = On W by FUNCT_2:def 1;
+A4: b in On U & a in On W by A1,A2,ORDINAL1:def 10;
+    hereby
+      assume
+B1:   a c= b; then
+B2:   a in U by A1,CLASSES1:def 1;
+      per cases by B1,XBOOLE_0:def 8;
+      suppose a = b;
+        hence c-Veblen a c= c-Veblen b;
+      end;
+      suppose a c< b; then
+        a in b by ORDINAL1:21; then
+        f.a in f.b by A3,A4,ORDINAL2:def 16; then
+        c-Veblen a in c-Veblen b by B2,A0,A1,A2,Th25;
+        hence c-Veblen a c= c-Veblen b by ORDINAL1:def 2;
+      end;
+    end;
+    assume
+A5: c-Veblen a c= c-Veblen b & a c/= b; then
+A6: b in a by ORDINAL1:26; then
+A7: b in W by A2,ORDINAL1:19;
+    g.b in g.a by A3,A4,A6,ORDINAL2:def 16; then
+    c-Veblen b in c-Veblen a by A0,A1,A2,A7,Th25; then
+    c-Veblen b in c-Veblen b by A5;
+    hence thesis;
+  end;
+
+theorem Th15a:
+  a in b iff c-Veblen a in c-Veblen b
+  proof
+    b c= a iff c-Veblen b c= c-Veblen a by Th15;
+    hence thesis by EXCH1;
+  end;
+
+theorem
+  a-Veblen b in c-Veblen d iff
+    a = c & b in d or
+    a in c & b in c-Veblen d or
+    c in a & a-Veblen b in d
+    proof
+      hereby
+        assume
+Z0:     a-Veblen b in c-Veblen d;
+        per cases by ORDINAL1:24;
+        case a = c;
+          hence b in d by Z0,Th15a;
+        end;
+        case a in c; then
+          a-Veblen(c-Veblen d) = c-Veblen d by Th11a;
+          hence b in c-Veblen d by Z0,Th15a;
+        end;
+        case c in a; then
+          c-Veblen(a-Veblen b) = a-Veblen b by Th11a;
+          hence a-Veblen b in d by Z0,Th15a;
+        end;
+      end;
+      assume
+Z3:   a = c & b in d or a in c & b in c-Veblen d or c in a & a-Veblen b in d;
+      per cases by Z3;
+      suppose a = c & b in d;
+        hence a-Veblen b in c-Veblen d by Th15a;
+      end;
+      suppose
+Z4:     a in c & b in c-Veblen d; then
+        a-Veblen(c-Veblen d) = c-Veblen d by Th11a;
+        hence a-Veblen b in c-Veblen d by Z4,Th15a;
+      end;
+      suppose
+Z5:     c in a & a-Veblen b in d; then
+        c-Veblen(a-Veblen b) = a-Veblen b by Th11a;
+        hence a-Veblen b in c-Veblen d by Z5,Th15a;
+      end;
+    end;
+
+begin :: Epsilon Numbers
+
+reserve U for uncountable Universe;
+
+theorem Th12:
+  U-Veblen.1 = criticals(U exp omega)
+  proof set o = succ(0-element_of U);
+    o in On U by ORDINAL1:def 10; then
+    U-Veblen.1 = criticals(U-Veblen.0) by V;
+    hence thesis by V;
+  end;
+
+theorem Th13:
+  1-Veblen(a) is epsilon
+  proof set U = Tarski-Class(a\/omega);
+    0-Veblen(1-Veblen a) = (succ 0)-Veblen a by Th11;
+    hence exp(omega,1-Veblen a) = 1-Veblen a by Th10;
+  end;
+
+theorem Th14:
+  for e being epsilon Ordinal ex a st e = 1-Veblen a
+  proof
+    let e be epsilon Ordinal;
+    set U = Tarski-Class(e\/omega);
+A0: omega in U by Unc1;
+    0-element_of U = 0 & 1-element_of U = 1; then
+    reconsider f = U-Veblen.0, g = U-Veblen.1 as
+    normal Ordinal-Sequence of U by A0,Th23;
+A1: g = criticals(U exp omega) by Th12
+    .= criticals f by V;
+A2: f.e = 0-Veblen e .= exp(omega,e) by Th10 .= e by ORDINAL5:def 5;
+A3: dom f = On U by FUNCT_2:def 1;
+    e c= e\/omega & e\/omega in U by XBOOLE_1:7,CLASSES1:5; then
+A5: e in U by CLASSES1:def 1; then
+    e in On U by ORDINAL1:def 10; then
+    e is_a_fixpoint_of f by A2,A3,ABIAN:def 3; then
+    consider a such that
+A4: a in dom criticals f & e = (criticals f).a by Th06;
+    take a;
+    set W = Tarski-Class(a\/omega);
+A6: a c= a\/omega & a\/omega in W by XBOOLE_1:7,CLASSES1:5;
+    a c= e by A4,ORDINAL4:10; then
+    omega in W & a in W & a in U & 1-element_of U = 1-element_of W
+    by A5,A6,Unc1,CLASSES1:def 1;
+    hence e = 1-Veblen a by A0,A1,A4,Th25;
+  end;
+
+Th16:
+  1-Veblen 0 = epsilon_0
+  proof
+    consider b such that
+A0: 1-Veblen 0 = epsilon_b by Th13,ORDINAL5:51;
+    consider a such that
+A1: epsilon_0 = 1-Veblen a by Th14;
+    now assume b <> 0; then
+      epsilon_0 in epsilon_b by ORDINAL3:10,ORDINAL5:44;
+      hence contradiction by A0,A1,Th15a;
+    end;
+    hence thesis by A0;
+  end;
+
+Th17:
+  1-Veblen a = epsilon_a implies 1-Veblen succ a = epsilon_succ a
+  proof
+    assume
+Z0: 1-Veblen a = epsilon_a;
+    consider b such that
+A0: 1-Veblen succ a = epsilon_b by Th13,ORDINAL5:51;
+    consider c such that
+A1: epsilon_succ a = 1-Veblen c by Th14;
+A2: a in succ a by ORDINAL1:10;
+    epsilon_a in epsilon_succ a by ORDINAL1:10,ORDINAL5:44; then
+    a in c by Z0,A1,Th15a; then
+    succ a c= c by ORDINAL1:33;
+    hence 1-Veblen succ a c= epsilon_succ a by A1,Th15;
+    assume epsilon_succ a c/= 1-Veblen succ a; then
+    epsilon_b in epsilon_succ a by A0,EXCH1; then
+    b in succ a by LemE2; then
+    b c= a by ORDINAL1:34; then
+    epsilon_b c= epsilon_a by LemE1; then
+    succ a c= a by Z0,A0,Th15; then
+    a in a by A2;
+    hence thesis;
+  end;
+
+Th18:
+  (for a st a in l holds 1-Veblen(a) = epsilon_a)
+  implies 1-Veblen(l) = epsilon_l
+  proof assume
+Z0: for a st a in l holds 1-Veblen(a) = epsilon_a;
+    set U = Tarski-Class(l\/omega);
+    0 in l by ORDINAL3:10; then
+    omega c= l by ORDINAL1:def 12; then
+    l\/omega = l by XBOOLE_1:12; then
+A1: l in U by CLASSES1:5;
+A2: omega in U by Unc1;
+    1-element_of U = 1; then
+    reconsider g = U-Veblen.1 as normal Ordinal-Sequence of U
+    by A2,Th23;
+    reconsider o = omega as non trivial Ordinal of U by Unc1;
+    set f = U exp o;
+A4: g = criticals f by Th12;
+B0: dom g = On U by FUNCT_2:def 1; then
+B1: l in dom g by A1,ORDINAL1:def 10; then
+A5: g.l = Union(g|l) by A4,Th09 .= union rng(g|l);
+    l c= dom g by B1,ORDINAL1:def 2; then
+B2: dom(g|l) = l by RELAT_1:91;
+    now let x;
+      assume x in rng(g|l); then
+      consider y such that
+A6:   y in dom(g|l) & x = (g|l).y by FUNCT_1:def 5;
+      reconsider y as Ordinal by A6;
+A7:   x = g.y by A6,FUNCT_1:70;
+      y in dom g by B1,B2,A6,ORDINAL1:19; then
+      y in U & 1-element_of U in U by B0,ORDINAL1:def 10; then
+      x = 1-Veblen y by A2,A7,Th26; then
+      x = epsilon_y by Z0,B2,A6; then
+      x in epsilon_l by B2,A6,LemE2;
+      hence x c= epsilon_l by ORDINAL1:def 2;
+    end;
+    hence 1-Veblen(l) c= epsilon_l by A5,ZFMISC_1:94;
+    let a; assume a in epsilon_l; then
+    consider b such that
+A8: b in l & a in epsilon_b by ORDINAL5:47;
+    epsilon_b = 1-Veblen b by Z0,A8; then
+    epsilon_b in 1-Veblen l by A8,Th15a;
+    hence thesis by A8,ORDINAL1:19;
+  end;
+
+theorem
+  1-Veblen(a) = epsilon_a
+  proof set U = Tarski-Class(a\/omega);
+    defpred P[Ordinal] means 1-Veblen $1 = epsilon_$1;
+00: P[0] by Th16;
+01: P[b] implies P[succ b] by Th17;
+02: b <> {} & b is limit_ordinal & (for c st c in b holds P[c]) implies P[b]
+    by Th18;
+    P[b] from ORDINAL2:sch 1(00,01,02);
+    hence thesis;
+  end;

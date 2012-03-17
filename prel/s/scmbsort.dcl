@@ -32,14 +32,12 @@
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="AMI_2"/>
-<ArticleID name="SCMFSA_1"/>
 <ArticleID name="SCMFSA_2"/>
 <ArticleID name="SCMBSORT"/>
 </Signature>
 <FCluster aid="SCMBSORT" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="361"/>
+<Func kind="K" nr="324"/>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
@@ -47,30 +45,30 @@
 </Adjective>
 <Adjective nr="4">
 <Func kind="U" nr="1">
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Func>
 </Adjective>
 <Adjective nr="5">
-<Func kind="U" nr="6">
+<Func kind="U" nr="5">
 <Func kind="K" nr="73">
 <Func kind="K" nr="83"/>
 <Func kind="K" nr="300">
 <Func kind="K" nr="83"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="10">
-<Func kind="U" nr="8">
+<Func kind="U" nr="7">
 <Func kind="K" nr="73">
 <Func kind="K" nr="83"/>
 <Func kind="K" nr="300">
 <Func kind="K" nr="83"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Func>
 </Adjective>
 <Adjective nr="11" value="false"/>
@@ -83,7 +81,7 @@
 <Func kind="K" nr="83"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Adjective>
 </Cluster>
 </FCluster>

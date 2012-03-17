@@ -1,0 +1,2734 @@
+:: The Axiomatization of Propositional Linear Time Temporal Logic
+::  by Mariusz Giero
+:: 
+:: Received November 20, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies FINSEQ_1, CARD_1, ORDINAL4, SUBSET_1, NUMBERS, ARYTM_3, TARSKI,
+      RELAT_1, XBOOLE_0, FUNCT_1, QC_LANG1, XBOOLEAN, HILBERT1, MODELC_2,
+      CQC_THE1, NAT_1, XXREAL_0, LTLAXIO1, ORDINAL1, ARYTM_1, ZF_LANG,
+      PARTFUN1, MARGREL1, FUNCT_2, HILBERT2, ZFMISC_1, FUNCOP_1, ZF_MODEL,
+      PBOOLE, GLIB_000;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, DOMAIN_1, SUBSET_1, RELAT_1, PARTFUN1,
+      NUMBERS, XCMPLX_0, NAT_1, XXREAL_0, NAT_D, FUNCT_1, FUNCT_2, BINOP_1,
+      ORDINAL1, FINSEQ_1, HILBERT1, HILBERT2, PBOOLE, XBOOLEAN, MARGREL1,
+      AOFA_I00;
+ constructors XXREAL_0, NAT_D, RELSET_1, AOFA_I00, HILBERT2, DOMAIN_1;
+ registrations SUBSET_1, ORDINAL1, FUNCT_1, XXREAL_0, NAT_1, XBOOLEAN,
+      RELSET_1, MARGREL1, XBOOLE_0, XREAL_0, FUNCT_2, HILBERT1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+ definitions XBOOLEAN, TARSKI, MARGREL1;
+ theorems TARSKI, NAT_1, XBOOLE_0, XXREAL_0, FINSEQ_1, NAT_D, XBOOLEAN,
+      FUNCT_2, PARTFUN1, XREAL_1, ZFMISC_1, ORDINAL1, FUNCOP_1, HILBERT2,
+      BINOP_1, XREAL_0;
+ schemes NAT_1, XBOOLE_0, FUNCT_2, FINSEQ_1, BINOP_1, HILBERT2;
+
+begin :: Preliminaries
+
+Th1:
+ for X be set,f be FinSequence of X,i be Nat st 1<=i & i<=len f holds f.i=f/.i
+ proof
+  let X be set,f be FinSequence of X,i be Nat;
+  assume 1<=i & i<=len f;
+  then i in Seg len f by FINSEQ_1:3;
+  then i in dom f by FINSEQ_1:def 3;
+  hence thesis by PARTFUN1:def 8;
+ end;
+
+reserve a,b,c for boolean number;
+
+theorem Th2:
+  (a=>(b '&' c))=>(a=>b)=1
+ proof
+  A1: b=0 or b=1 by XBOOLEAN:def 3;
+  a=0 or a=1 by XBOOLEAN:def 3;
+  hence (a=>(b '&' c))=>(a=>b)=1 by A1;
+ end;
+
+theorem Th3:
+  (a=>(b=>c))=>((a '&' b)=>c)=1
+ proof
+  A1: a=0 or a=1 by XBOOLEAN:def 3;
+  A2: b=0 or b=1 by XBOOLEAN:def 3;
+  c =0 or c =1 by XBOOLEAN:def 3;
+  hence thesis by A1,A2;
+ end;
+
+theorem Th4:
+  ((a '&' b)=>c)=>(a=>(b=>c))=1
+ proof
+  A1: a=0 or a=1 by XBOOLEAN:def 3;
+  A2: b=0 or b=1 by XBOOLEAN:def 3;
+  c =0 or c =1 by XBOOLEAN:def 3;
+  hence thesis by A1,A2;
+ end;
+
+begin :: The Language. Basic Operators. Further Operators as Abbreviations
+
+notation
+  synonym LTLB_WFF for HP-WFF;
+end;
+
+reserve p,q,r,s,A,B,C for Element of LTLB_WFF,
+        F,G,X,Y for Subset of LTLB_WFF,
+        i,j,k,n for Element of NAT,
+        f,f1,f2,g for FinSequence of LTLB_WFF;
+
+notation
+  synonym TFALSUM for VERUM;
+end;
+
+notation let p,q;
+  synonym p 'Us' q for p '&' q;
+end;
+
+theorem Th5:
+  for A holds A=TFALSUM or
+  ex n st A=prop n or ex p,q st A=p=>q or ex p,q st A=p 'Us' q
+ proof
+  let A;
+  A=VERUM or A is simple or A is conjunctive or A is conditional by HILBERT2:9;
+  hence thesis by HILBERT2:def 6,def 7,def 8;
+ end;
+
+definition let p;
+  func 'not' p -> Element of LTLB_WFF equals
+  p => TFALSUM;
+  correctness;
+  func 'X' p -> Element of LTLB_WFF equals
+  TFALSUM 'Us' p;
+  correctness;
+end;
+
+definition
+  func TVERUM -> Element of LTLB_WFF equals
+  'not' TFALSUM;
+  correctness;
+end;
+
+definition let p,q;
+  func p '&&' q -> Element of LTLB_WFF equals
+  (p=>(q=>TFALSUM))=>TFALSUM;
+  correctness;
+end;
+
+definition let p,q;
+  func p 'or' q -> Element of LTLB_WFF equals
+  'not'(('not' p)'&&'('not' q));
+  correctness;
+end;
+
+definition let p;
+  func 'G' p -> Element of LTLB_WFF equals
+  'not'(('not' p)'or'(TVERUM '&&'(TVERUM 'Us'('not' p))));
+  correctness;
+end;
+
+definition let p;
+  func 'F' p -> Element of LTLB_WFF equals
+  'not'('G'('not' p));
+  correctness;
+end;
+
+definition let p,q;
+  func p 'U' q -> Element of LTLB_WFF equals
+  q 'or'(p '&&'(p 'Us' q));
+  correctness;
+end;
+
+definition let p,q;
+  func p 'R' q -> Element of LTLB_WFF equals
+  'not'(('not' p)'U'('not' q));
+  correctness;
+end;
+
+begin :: The Semantics
+
+definition
+  func props -> Subset of LTLB_WFF means
+  for x be set holds x in it iff ex n be Element of NAT st x=prop n;
+ existence
+ proof
+  defpred P1[set] means
+   ex n be Element of NAT st$1=prop n;
+  consider X being set such that
+   A1: for x being set holds(x in X iff x in LTLB_WFF & P1[x]) from XBOOLE_0:
+sch 1;
+  X c=LTLB_WFF
+  proof
+   let x be set;
+   assume x in X;
+   hence thesis by A1;
+  end;
+  then reconsider X as Subset of LTLB_WFF;
+  take X;
+  thus for x being set holds (x in X iff ex n be Element of NAT st x=prop n)
+  by A1;
+ end;
+ uniqueness
+ proof
+  let A,B be Subset of LTLB_WFF such that
+   A2: for x be set holds x in A iff ex n be Element of NAT st x=prop n and
+   A3: for x be set holds x in B iff ex n be Element of NAT st x=prop n;
+  A4: B c=A
+  proof
+   let x be set;
+   assume x in B;
+   then consider n be Element of NAT such that
+    A5: x=prop n by A3;
+   thus x in A by A2,A5;
+  end;
+  A c=B
+  proof
+   let x be set;
+   assume x in A;
+   then consider n be Element of NAT such that
+    A6: x=prop n by A2;
+   thus x in B by A3,A6;
+  end;
+  hence A=B by A4,XBOOLE_0:def 10;
+ end;
+end;
+
+definition
+  mode LTLModel is sequence of bool props;
+end;
+
+reserve M for LTLModel;
+
+definition let M be LTLModel;
+  func SAT M -> Function of[:NAT,LTLB_WFF:],BOOLEAN means :Def12:
+  for n holds it.[n,TFALSUM]=0 &
+  (for k holds it.[n,prop k]=1 iff prop k in M.n) &
+  for p,q holds it.[n,p=>q]=it.[n,p]=>it.[n,q] &
+  (it.[n,p 'Us' q]=1 iff ex i st 0<i & it.[n+i,q]=1 &
+  for j st 1<=j & j<i holds it.[n+j,p]=1);
+ existence
+ proof
+  set FNB=Funcs(NAT,BOOLEAN);
+  defpred I[Element of LTLB_WFF,Element of LTLB_WFF,set,set,set] means
+   ($3 is sequence of BOOLEAN & $4 is sequence of BOOLEAN implies ex s3,s4,s5
+be sequence of BOOLEAN st s3=$3 & s4=$4 & s5=$5 & for n holds s5.n=s3.n=>s4.n)
+& (not($3 is sequence of BOOLEAN & $4 is sequence of BOOLEAN) implies $5=NAT-->
+FALSE);
+  defpred C[Element of LTLB_WFF,Element of LTLB_WFF,set,set,set] means
+   ($3 is sequence of BOOLEAN & $4 is sequence of BOOLEAN implies ex s3,s4,s5
+be sequence of BOOLEAN st s3=$3 & s4=$4 & s5=$5 & for n holds(s5.n=1 iff (ex i
+st 0<i & s4.(n+i)=1 & for j st 1<=j & j<i holds s3.(n+j)=1))) & (not($3 is
+sequence of BOOLEAN & $4 is sequence of BOOLEAN) implies $5=NAT-->FALSE);
+  defpred P1[Element of NAT,Function] means
+   for n holds($2.n=1 iff prop$1 in M.n);
+  A1: for p,q for a,b being set ex d being set st C[p,q,a,b,d]
+  proof
+   let p,q;
+   let a,b be set;
+   per cases;
+   suppose a is sequence of BOOLEAN & b is sequence of BOOLEAN;
+    then reconsider a1=a,b1=b as sequence of BOOLEAN;
+    defpred PP[Element of NAT,Element of BOOLEAN] means
+     $2=1 iff (ex i st 0<i & b1.($1+i)=1 & for j st 1<=j & j<i holds a1.($1+j)=
+1);
+    A2: now let n;
+     per cases;
+     suppose ex i st 0<i & b1.(n+i)=1 & for j st 1<=j & j<i holds a1.(n+j)=1;
+      hence ex y be Element of BOOLEAN st PP[n,y];
+     end;
+     suppose not ex i st 0<i & b1.(n+i)=1 & for j st 1<=j & j<i holds a1.(n+j)=
+1;
+      then PP[n,FALSE];
+      hence ex y be Element of BOOLEAN st PP[n,y];
+     end;
+    end;
+    consider c be Function of NAT,BOOLEAN such that
+     A3: for n holds PP[n,c.n] from FUNCT_2:sch 3(A2);
+    thus thesis by A3;
+   end;
+   suppose not(a is sequence of BOOLEAN & b is sequence of BOOLEAN);
+    hence thesis;
+   end;
+  end;
+  A4: for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d] holds c =d
+  proof
+   let p,q;
+   let a,b,c,d be set;
+   assume that
+    A5: C[p,q,a,b,c] and
+    A6: C[p,q,a,b,d];
+   per cases;
+   suppose A7: a is sequence of BOOLEAN & b is sequence of BOOLEAN;
+    then consider s31,s41,s51 be sequence of BOOLEAN such that
+     A8: s31=a & s41=b and
+     A9: s51=d and
+     A10: for n holds(s51.n=1 iff ex i st 0<i & s41.(n+i)=1 & for j st 1<=j & j
+<i holds s31.(n+j)=1) by A6;
+    consider s3,s4,s5 be sequence of BOOLEAN such that
+     A11: s3=a & s4=b and
+     A12: s5=c and
+     A13: for n holds(s5.n=1 iff ex i st 0<i & s4.(n+i)=1 & for j st 1<=j & j<i
+holds s3.(n+j)=1) by A5,A7;
+    now let x be set;
+     assume x in NAT;
+     then reconsider x1=x as Element of NAT;
+     per cases by XBOOLEAN:def 3;
+     suppose A14: s5.x1=1;
+      then ex i st 0<i & s41.(x1+i)=1 & for j st 1<=j & j<i holds s31.(x1+j)=1
+by A11,A13,A8;
+      hence s5.x=s51.x by A10,A14;
+     end;
+     suppose A15: s5.x1=0;
+      then not ex i st 0<i & s41.(x1+i)=1 & for j st 1<=j & j<i holds s31.(x1+j
+)=1 by A11,A13,A8;
+      then not s51.x1=1 by A10;
+      hence s5.x=s51.x by A15,XBOOLEAN:def 3;
+     end;
+    end;
+    hence c =d by A12,A9,FUNCT_2:18;
+   end;
+   suppose not(a is sequence of BOOLEAN & b is sequence of BOOLEAN);
+    hence c =d by A5,A6;
+   end;
+  end;
+  A16: for x be Element of NAT ex y being Element of Funcs(NAT,BOOLEAN) st P1[x
+,y]
+  proof
+   let x be Element of NAT;
+   defpred P2[Element of NAT,Element of BOOLEAN] means
+    $2=1 iff prop x in M.$1;
+   A17: now let x1 be Element of NAT;
+    per cases;
+    suppose prop x in M.x1;
+     then P2[x1,TRUE];
+     hence ex y1 being Element of BOOLEAN st P2[x1,y1];
+    end;
+    suppose not prop x in M.x1;
+     then P2[x1,FALSE];
+     hence ex y1 being Element of BOOLEAN st P2[x1,y1];
+    end;
+   end;
+   consider y be Function of NAT,BOOLEAN such that
+    A18: for n holds P2[n,y.n] from FUNCT_2:sch 3(A17);
+   reconsider y as Element of Funcs(NAT,BOOLEAN) by FUNCT_2:11;
+   P1[x,y] by A18;
+   hence ex y being Element of Funcs(NAT,BOOLEAN) st P1[x,y];
+  end;
+  consider f1 be Function of NAT,Funcs(NAT,BOOLEAN) such that
+   A19: for k holds P1[k,f1.k] from FUNCT_2:sch 3(A16);
+  A20: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c =d
+  proof
+   let p,q;
+   let a,b,c,d be set;
+   assume that
+    A21: I[p,q,a,b,c] and
+    A22: I[p,q,a,b,d];
+   per cases;
+   suppose A23: a is sequence of BOOLEAN & b is sequence of BOOLEAN;
+    then consider s31,s41,s51 be sequence of BOOLEAN such that
+     A24: s31=a and
+     A25: s41=b and
+     A26: s51=d and
+     A27: for n holds s51.n=s31.n=>s41.n by A22;
+    consider s3,s4,s5 be sequence of BOOLEAN such that
+     A28: s3=a and
+     A29: s4=b and
+     A30: s5=c and
+     A31: for n holds s5.n=s3.n=>s4.n by A21,A23;
+    now let x be set;
+     assume x in NAT;
+     then reconsider x1=x as Element of NAT;
+     thus s5.x=s31.x1=>s4.x1 by A28,A31,A24
+      .=s51.x by A29,A25,A27;
+    end;
+    hence c =d by A30,A26,FUNCT_2:18;
+   end;
+   suppose not(a is sequence of BOOLEAN & b is sequence of BOOLEAN);
+    hence c =d by A21,A22;
+   end;
+  end;
+  deffunc P(Element of NAT)=f1.$1;
+  A32: for p,q for a,b being set ex d being set st I[p,q,a,b,d]
+  proof
+   let p,q;
+   let a,b be set;
+   per cases;
+   suppose a is sequence of BOOLEAN & b is sequence of BOOLEAN;
+    then reconsider a1=a,b1=b as sequence of BOOLEAN;
+    deffunc F3(Element of NAT)='not'(a1.$1'&' 'not' b1.$1);
+    consider d be Function of NAT,BOOLEAN such that
+     A33: for n holds d.n=F3(n) from FUNCT_2:sch 4;
+    for n holds d.n=a1.n=>b1.n by A33;
+    hence thesis;
+   end;
+   suppose not(a is sequence of BOOLEAN & b is sequence of BOOLEAN);
+    hence thesis;
+   end;
+  end;
+  consider sat being ManySortedSet of LTLB_WFF such that
+   A34: sat.TFALSUM=NAT-->FALSE & (for n holds sat.(prop n)=P(n)) & for p,q
+holds C[p,q,sat.p,sat.q,sat.(p 'Us' q)] & I[p,q,sat.p,sat.q,sat.(p=>q)] from
+HILBERT2:sch 3(A1,A32,A4,A20);
+  A35: now A36: now let A,B;
+    A37: I[A,B,sat.A,sat.B,sat.(A=>B)] by A34;
+    per cases;
+    suppose sat.A is sequence of BOOLEAN & sat.B is sequence of BOOLEAN;
+     then consider s3,s4,s5 be sequence of BOOLEAN such that
+      s3=sat.A and
+      s4=sat.B and
+      A38: s5=sat.(A=>B) and
+      for n holds s5.n=s3.n=>s4.n by A34;
+     thus sat.(A=>B) in FNB by A38,FUNCT_2:11;
+    end;
+    suppose not(sat.A is sequence of BOOLEAN & sat.B is sequence of BOOLEAN);
+     hence sat.(A=>B) in FNB by A37;
+    end;
+   end;
+   A39: now let A,B;
+    A40: C[A,B,sat.A,sat.B,sat.(A 'Us' B)] by A34;
+    per cases;
+    suppose sat.A is sequence of BOOLEAN & sat.B is sequence of BOOLEAN;
+     then consider s3,s4,s5 be sequence of BOOLEAN such that
+      s3=sat.A and
+      s4=sat.B and
+      A41: s5=sat.(A 'Us' B) and
+      for n holds(s5.n=1 iff ex i st 0<i & s4.(n+i)=1 & for j st 1<=j & j<i
+holds s3.(n+j)=1) by A34;
+     thus sat.(A 'Us' B) in FNB by A41,FUNCT_2:11;
+    end;
+    suppose not(sat.A is sequence of BOOLEAN & sat.B is sequence of BOOLEAN);
+     hence sat.(A 'Us' B) in FNB by A40;
+    end;
+   end;
+   let x be set;
+   assume x in LTLB_WFF;
+   then reconsider x1=x as Element of LTLB_WFF;
+   A42: now let n;
+    sat.(prop n)=f1.n by A34;
+    hence sat.(prop n) in FNB;
+   end;
+   per cases by Th5;
+   suppose x1=TFALSUM;
+    hence sat.x in FNB by A34;
+   end;
+   suppose ex n be Element of NAT st x1=prop n;
+    hence sat.x in FNB by A42;
+   end;
+   suppose ex p,q be Element of LTLB_WFF st x1=p 'Us' q;
+    hence sat.x in FNB by A39;
+   end;
+   suppose ex p,q be Element of LTLB_WFF st x1=p=>q;
+    hence sat.x in FNB by A36;
+   end;
+  end;
+  dom sat=LTLB_WFF by PARTFUN1:def 4;
+  then reconsider sat as Function of LTLB_WFF,Funcs(NAT,BOOLEAN) by A35,FUNCT_2
+:5;
+  deffunc satpom(Element of NAT,Element of LTLB_WFF)=(sat.$2).$1;
+  consider sat2 be Function of[:NAT,LTLB_WFF:],BOOLEAN such that
+   A43: for n,A holds sat2.(n,A)=satpom(n,A) from BINOP_1:sch 4;
+  A44: now let A,n;
+   thus sat2.[n,A]=sat2.(n,A) by BINOP_1:def 1
+    .=(sat.A).n by A43;
+  end;
+  A45: now let k,n;
+   sat2.[n,prop k]=(sat.(prop k)).n by A44
+    .=(f1.k).n by A34;
+   hence sat2.[n,prop k]=1 iff prop k in M.n by A19;
+  end;
+  A46: now let p,q,n;
+   reconsider satp=sat.p,satq=sat.q as sequence of BOOLEAN by FUNCT_2:121;
+   consider s31,s41,s51 be sequence of BOOLEAN such that
+    A47: s31=satp and
+    A48: s41=satq and
+    A49: s51=sat.(p 'Us' q) and
+    A50: for n holds(s51.n=1 iff ex i st 0<i & s41.(n+i)=1 & for j st 1<=j & j<
+i holds s31.(n+j)=1) by A34;
+   consider s3,s4,s5 be sequence of BOOLEAN such that
+    A51: s3=satp and
+    A52: s4=satq and
+    A53: s5=sat.(p=>q) & for n holds s5.n=s3.n=>s4.n by A34;
+   thus sat2.[n,p=>q]=(sat.(p=>q)).n by A44
+    .=((sat.p).n)=>s4.n by A51,A53
+    .=sat2.[n,p]=>(sat.q).n by A44,A52
+    .=sat2.[n,p]=>sat2.[n,q] by A44;
+   thus sat2.[n,p 'Us' q]=1 iff ex i st 0<i & sat2.[n+i,q]=1 & for j st 1<=j &
+j<i holds sat2.[n+j,p]=1
+   proof
+    hereby assume sat2.[n,p 'Us' q]=1;
+     then s51.n=1 by A44,A49;
+     then consider i such that
+      A54: 0<i and
+      A55: s41.(n+i)=1 and
+      A56: for j st 1<=j & j<i holds s31.(n+j)=1 by A50;
+     A57: now let j;
+      assume A58: 1<=j & j<i;
+      thus sat2.[n+j,p]=(sat.p).(n+j) by A44
+       .=1 by A47,A56,A58;
+     end;
+     sat2.[n+i,q]=1 by A44,A48,A55;
+     hence ex i st 0<i & sat2.[n+i,q]=1 & for j st 1<=j & j<i holds sat2.[n
++j,p]=1 by A54,A57;
+    end;
+    assume ex i st 0<i & sat2.[n+i,q]=1 & for j st 1<=j & j<i holds sat2.[n+j,p
+]=1;
+    then consider i such that
+     A59: 0<i and
+     A60: sat2.[n+i,q]=1 and
+     A61: for j st 1<=j & j<i holds sat2.[n+j,p]=1;
+    A62: s41.(n+i)=1 by A44,A48,A60;
+    A63: for j st 1<=j & j<i holds s31.(n+j)=1
+    proof
+     let j;
+     assume A64: 1<=j & j<i;
+     thus s31.(n+j)=sat2.[n+j,p] by A44,A47
+      .=1 by A61,A64;
+    end;
+    thus sat2.[n,p 'Us' q]=s51.n by A44,A49
+     .=1 by A50,A59,A62,A63;
+   end;
+  end;
+  take sat2;
+  now let n;
+   thus sat2.[n,TFALSUM]=(sat.TFALSUM).n by A44
+    .=0 by A34,FUNCOP_1:13;
+  end;
+  hence thesis by A45,A46;
+ end;
+ uniqueness
+ proof
+  let v1,v2 be Function of[:NAT,LTLB_WFF:],BOOLEAN;
+  assume A65: for n be Element of NAT holds v1.[n,TFALSUM]=0 & (for k holds v1.
+[n,prop k]=1 iff prop k in M.n) & for p,q holds v1.[n,p=>q]=v1.[n,p]=>v1.[n,q]
+& (v1.[n,p 'Us' q]=1 iff ex i st 0<i & v1.[n+i,q]=1 & for j st 1<=j & j<i holds
+v1.[n+j,p]=1);
+  assume A66: for n be Element of NAT holds v2.[n,TFALSUM]=0 & (for k holds v2.
+[n,prop k]=1 iff prop k in M.n) & for p,q holds v2.[n,p=>q]=v2.[n,p]=>v2.[n,q]
+& (v2.[n,p 'Us' q]=1 iff ex i st 0<i & v2.[n+i,q]=1 & for j st 1<=j & j<i holds
+v2.[n+j,p]=1);
+  thus v1=v2
+  proof
+   defpred P1[Element of LTLB_WFF] means
+    for n be Element of NAT holds v1.[n,$1]=v2.[n,$1];
+   A67: for n being Element of NAT holds P1[prop n]
+   proof
+    let k be Element of NAT;
+    now let n be Element of NAT;
+     per cases;
+     suppose A68: prop k in M.n;
+      hence v1.[n,prop k]=1 by A65
+       .=v2.[n,prop k] by A66,A68;
+     end;
+     suppose A69: not prop k in M.n;
+      then not v1.[n,prop k]=1 by A65;
+      then A70: v1.[n,prop k]=0 by XBOOLEAN:def 3;
+      not v2.[n,prop k]=1 by A66,A69;
+      hence v1.[n,prop k]=v2.[n,prop k] by A70,XBOOLEAN:def 3;
+     end;
+    end;
+    hence P1[prop k];
+   end;
+   A71: for p,q st P1[p] & P1[q] holds P1[p 'Us' q] & P1[p=>q]
+   proof
+    let p,q;
+    assume that
+     A72: P1[p] and
+     A73: P1[q];
+    thus P1[p 'Us' q]
+    proof
+     let n;
+     per cases;
+     suppose A74: ex i st 0<i & v1.[n+i,q]=1 & for j st 1<=j & j<i holds v1.[n+
+j,p]=1;
+      then consider i such that
+       A75: 0<i and
+       A76: v1.[n+i,q]=1 and
+       A77: for j st 1<=j & j<i holds v1.[n+j,p]=1;
+      A78: v2.[n+i,q]=1 by A73,A76;
+      A79: now let j;
+       assume 1<=j & j<i;
+       then v1.[n+j,p]=1 by A77;
+       hence v2.[n+j,p]=1 by A72;
+      end;
+      thus v1.[n,p 'Us' q]=1 by A65,A74
+       .=v2.[n,p 'Us' q] by A66,A75,A78,A79;
+     end;
+     suppose A80: not ex i st 0<i & v1.[n+i,q]=1 & for j st 1<=j & j<i holds v1
+.[n+j,p]=1;
+      now let i;
+       per cases by A80;
+       suppose not 0<i;
+        hence not(0<i & v2.[n+i,q]=1 & for j st 1<=j & j<i holds v2.[n+j,p]
+=1);
+       end;
+       suppose not v1.[n+i,q]=1;
+        hence not(0<i & v2.[n+i,q]=1 & for j st 1<=j & j<i holds v2.[n+j,p]
+=1) by A73;
+       end;
+       suppose not for j st 1<=j & j<i holds v1.[n+j,p]=1;
+        then consider j such that
+         A81: 1<=j & j<i and
+         A82: not v1.[n+j,p]=1;
+        not v2.[n+j,p]=1 by A72,A82;
+        hence not(0<i & v2.[n+i,q]=1 & for j st 1<=j & j<i holds v2.[n+j,p]
+=1) by A81;
+       end;
+      end;
+      then A83: not v2.[n,p 'Us' q]=1 by A66;
+      not v1.[n,p 'Us' q]=1 by A65,A80;
+      then v1.[n,p 'Us' q]=0 by XBOOLEAN:def 3;
+      hence v1.[n,p 'Us' q]=v2.[n,p 'Us' q] by A83,XBOOLEAN:def 3;
+     end;
+    end;
+    thus P1[p=>q]
+    proof
+     let n be Element of NAT;
+     thus v1.[n,p=>q]=v1.[n,p]=>v1.[n,q] by A65
+      .=v2.[n,p]=>v1.[n,q] by A72
+      .=v2.[n,p]=>v2.[n,q] by A73
+      .=v2.[n,p=>q] by A66;
+    end;
+   end;
+   now let n be Element of NAT;
+    thus v1.[n,TFALSUM]=0 by A65
+     .=v2.[n,TFALSUM] by A66;
+   end;
+   then A84: P1[TFALSUM];
+   A85: for A holds P1[A] from HILBERT2:sch 2(A84,A67,A71);
+   A86: for x be Element of[:NAT,LTLB_WFF:] st x in dom v1 holds v1.x=v2.x
+   proof
+    let x be Element of[:NAT,LTLB_WFF:];
+    consider y,z be set such that
+     A87: y in NAT and
+     A88: z in LTLB_WFF and
+     A89: x=[y,z] by ZFMISC_1:def 2;
+    reconsider y1=y as Element of NAT by A87;
+    assume x in dom v1;
+    thus v1.x=v2.x by A85,A87,A88,A89;
+    reconsider z1=z as Element of LTLB_WFF by A88;
+   end;
+   dom v1=[:NAT,LTLB_WFF:] by FUNCT_2:def 1
+    .=dom v2 by FUNCT_2:def 1;
+   hence thesis by A86,PARTFUN1:34;
+  end;
+ end;
+end;
+
+theorem Th6:
+  (SAT M).[n,'not' A]=1 iff (SAT M).[n,A]=0
+ proof
+  hereby assume(SAT M).[n,'not' A]=1;
+   then A1: (SAT M).[n,A]=>(SAT M).[n,TFALSUM]=1 by Def12;
+   (SAT M).[n,A]=1 or(SAT M).[n,A]=0 by XBOOLEAN:def 3;
+   hence (SAT M).[n,A]=0 by A1,Def12;
+  end;
+  assume A2: (SAT M).[n,A]=0;
+  thus(SAT M).[n,'not' A]=(SAT M).[n,A]=>(SAT M).[n,TFALSUM] by Def12
+   .=1 by A2;
+ end;
+
+theorem Th7:
+  (SAT M).[n,TVERUM]=1
+ proof
+  assume not(SAT M).[n,TVERUM]=1;
+  then not(SAT M).[n,TFALSUM]=0 by Th6;
+  hence contradiction by Def12;
+ end;
+
+theorem Th8:
+  (SAT M).[n,A '&&' B]=1 iff (SAT M).[n,A]=1 & (SAT M).[n,B]=1
+ proof
+  hereby assume(SAT M).[n,A '&&' B]=1;
+   then (SAT M).[n,A=>(B=>TFALSUM)]=>(SAT M).[n,TFALSUM]=1 by Def12;
+   then (SAT M).[n,A=>(B=>TFALSUM)]=>FALSE=1 by Def12;
+   then ((SAT M).[n,A]=>(SAT M).[n,B=>TFALSUM])=0 by Def12;
+   then (SAT M).[n,A]=>((SAT M).[n,B]=>(SAT M).[n,TFALSUM])=0 by Def12;
+   then A1: (SAT M).[n,A]=>((SAT M).[n,B]=>FALSE)=0 by Def12;
+   (SAT M).[n,A]=0 or(SAT M).[n,A]=1 by XBOOLEAN:def 3;
+   hence (SAT M).[n,A]=1 & (SAT M).[n,B]=1 by A1;
+  end;
+  assume that
+   A2: (SAT M).[n,A]=1 and
+   A3: (SAT M).[n,B]=1;
+  (SAT M).[n,B]=>(SAT M).[n,TFALSUM]=0 by A3,Def12;
+  then (SAT M).[n,A]=>(SAT M).[n,B=>TFALSUM]=0 by A2,Def12;
+  then (SAT M).[n,A=>(B=>TFALSUM)]=0 by Def12;
+  then (SAT M).[n,A=>(B=>TFALSUM)]=>(SAT M).[n,TFALSUM]=1;
+  hence (SAT M).[n,A '&&' B]=1 by Def12;
+ end;
+
+theorem Th9:
+  (SAT M).[n,A 'or' B]=1 iff ((SAT M).[n,A]=1 or(SAT M).[n,B]=1)
+ proof
+  hereby assume(SAT M).[n,A 'or' B]=1;
+   then A1: (SAT M).[n,('not' A)'&&'('not' B)]=0 by Th6;
+   per cases by A1,Th8;
+   suppose not(SAT M).[n,('not' A)]=1;
+    then not(SAT M).[n,A]=0 by Th6;
+    hence (SAT M).[n,A]=1 or(SAT M).[n,B]=1 by XBOOLEAN:def 3;
+   end;
+   suppose not(SAT M).[n,('not' B)]=1;
+    then not(SAT M).[n,B]=0 by Th6;
+    hence (SAT M).[n,A]=1 or(SAT M).[n,B]=1 by XBOOLEAN:def 3;
+   end;
+  end;
+  assume A2: (SAT M).[n,A]=1 or(SAT M).[n,B]=1;
+  per cases by A2;
+  suppose(SAT M).[n,A]=1;
+   then not(SAT M).[n,'not' A]=1 by Th6;
+   then not(SAT M).[n,('not' A)'&&'('not' B)]=1 by Th8;
+   then (SAT M).[n,('not' A)'&&'('not' B)]=0 by XBOOLEAN:def 3;
+   hence thesis by Th6;
+  end;
+  suppose(SAT M).[n,B]=1;
+   then not(SAT M).[n,'not' B]=1 by Th6;
+   then not(SAT M).[n,('not' A)'&&'('not' B)]=1 by Th8;
+   then (SAT M).[n,('not' A)'&&'('not' B)]=0 by XBOOLEAN:def 3;
+   hence thesis by Th6;
+  end;
+ end;
+
+theorem Th10:
+  (SAT M).[n,'X' A]=(SAT M).[n+1,A]
+ proof
+  set f=TFALSUM,sm=SAT M;
+  per cases by XBOOLEAN:def 3;
+  suppose A1: (SAT M).[n,f 'Us' A]=1;
+   then consider i such that
+    A2: 0<i & sm.[n+i,A]=1 and
+    A3: for j st 1<=j & j<i holds sm.[n+j,f]=1 by Def12;
+   now assume A4: 1<i;
+    not sm.[n+1,f]=1 by Def12;
+    hence contradiction by A3,A4;
+   end;
+   hence thesis by A1,A2,NAT_1:26;
+  end;
+  suppose A5: (SAT M).[n,f 'Us' A]=0;
+   now assume A6: sm.[n+1,A]=1;
+    not 0<1 or not sm.[n+1,A]=1 or not for j st 1<=j & j<1 holds sm.[n+j,f]=1
+by A5,Def12;
+    hence contradiction by A6;
+   end;
+   hence thesis by A5,XBOOLEAN:def 3;
+  end;
+ end;
+
+theorem Th11:
+  (SAT M).[n,'G' A]=1 iff for i holds(SAT M).[n+i,A]=1
+ proof
+  set f=TFALSUM,t=TVERUM,sm=SAT M;
+  hereby assume sm.[n,'G' A]=1;
+   then A1: sm.[n,('not' A)'or'(t '&&'(t 'Us'('not' A)))]=0 by Th6;
+   then not sm.[n,('not' A)]=1 by Th9;
+   then A2: not sm.[n,A]=0 by Th6;
+   let i;
+   not sm.[n,t '&&'(t 'Us'('not' A))]=1 by A1,Th9;
+   then A3: not sm.[n,t]=1 or not sm.[n,t 'Us'('not' A)]=1 by Th8;
+   per cases;
+   suppose i=0;
+    hence sm.[n+i,A]=1 by A2,XBOOLEAN:def 3;
+   end;
+   suppose 0<i;
+    then not sm.[n+i,'not' A]=1 or ex j st 1<=j & j<i & not sm.[n+j,t]=1 by A3,
+Def12,Th7;
+    then not sm.[n+i,A]=0 by Th6,Th7;
+    hence sm.[n+i,A]=1 by XBOOLEAN:def 3;
+   end;
+  end;
+  assume A4: for i holds sm.[n+i,A]=1;
+  now assume sm.[n,'G' A]=0;
+   then not sm.[n,('not' A)'or'(t '&&'(t 'Us'('not' A)))]=0 by Th6;
+   then A5: sm.[n,('not' A)'or'(t '&&'(t 'Us'('not' A)))]=1 by XBOOLEAN:def 3;
+   per cases by A5,Th9;
+   suppose sm.[n,('not' A)]=1;
+    then sm.[n+0,A]=0 by Th6;
+    hence contradiction by A4;
+   end;
+   suppose sm.[n,t '&&'(t 'Us'('not' A))]=1;
+    then sm.[n,t 'Us'('not' A)]=1 by Th8;
+    then consider i such that
+     0<i and
+     A6: sm.[n+i,'not' A]=1 and
+     for j st 1<=j & j<i holds sm.[n+j,t]=1 by Def12;
+    sm.[n+i,A]=0 by A6,Th6;
+    hence contradiction by A4;
+   end;
+  end;
+  hence sm.[n,'G' A]=1 by XBOOLEAN:def 3;
+ end;
+
+theorem Th12:
+  (SAT M).[n,'F' A]=1 iff ex i st(SAT M).[n+i,A]=1
+ proof
+  hereby assume(SAT M).[n,'F' A]=1;
+   then (SAT M).[n,'G'('not' A)]=0 by Th6;
+   then consider i such that
+    A1: not(SAT M).[n+i,'not' A]=1 by Th11;
+   not(SAT M).[n+i,A]=0 by A1,Th6;
+   then (SAT M).[n+i,A]=1 by XBOOLEAN:def 3;
+   hence ex i st(SAT M).[n+i,A]=1;
+  end;
+  assume ex i st(SAT M).[n+i,A]=1;
+  then consider i such that
+   A2: (SAT M).[n+i,A]=1;
+  not(SAT M).[n+i,'not' A]=1 by A2,Th6;
+  then not(SAT M).[n,'G'('not' A)]=1 by Th11;
+  then (SAT M).[n,'G'('not' A)]=0 by XBOOLEAN:def 3;
+  hence (SAT M).[n,'F' A]=1 by Th6;
+ end;
+
+theorem Th13:
+  (SAT M).[n,p 'U' q]=1 iff
+  ex i st (SAT M).[n+i,q]=1 & for j st j<i holds (SAT M).[n+j,p]=1
+ proof
+  set sm=SAT M;
+  hereby assume A1: sm.[n,p 'U' q]=1;
+   per cases by A1,Th9;
+   suppose A2: sm.[n,q]=1;
+    A3: for j st j<0 holds sm.[n+j,p]=1;
+    sm.[n+0,q]=1 by A2;
+    hence ex i st sm.[n+i,q]=1 & for j st j<i holds sm.[n+j,p]=1 by A3;
+   end;
+   suppose A4: sm.[n,p '&&'(p 'Us' q)]=1;
+    then sm.[n,p 'Us' q]=1 by Th8;
+    then consider i such that
+     0<i and
+     A5: sm.[n+i,q]=1 and
+     A6: for j st 1<=j & j<i holds sm.[n+j,p]=1 by Def12;
+    now let j;
+     assume A7: j<i;
+     per cases;
+     suppose j=0;
+      hence sm.[n+j,p]=1 by A4,Th8;
+     end;
+     suppose not j=0;
+      then 1<=j by NAT_1:26;
+      hence sm.[n+j,p]=1 by A6,A7;
+     end;
+    end;
+    hence ex i st sm.[n+i,q]=1 & for j st j<i holds sm.[n+j,p]=1 by A5;
+   end;
+  end;
+  assume ex i st sm.[n+i,q]=1 & for j st j<i holds sm.[n+j,p]=1;
+  then consider i such that
+   A8: sm.[n+i,q]=1 and
+   A9: for j st j<i holds sm.[n+j,p]=1;
+  per cases;
+  suppose i=0;
+   hence sm.[n,p 'U' q]=1 by A8,Th9;
+  end;
+  suppose A10: not i=0;
+   for j st 1 <= j & j<i holds sm.[n+j,p]=1 by A9;
+   then A12: sm.[n,p 'Us' q]=1 by A8,A10,Def12;
+   sm.[n+0,p]=1 by A9,A10;
+   then sm.[n,p '&&'(p 'Us' q)]=1 by A12,Th8;
+   hence sm.[n,p 'U' q]=1 by Th9;
+  end;
+ end;
+
+theorem
+  (SAT M).[n,p 'R' q]=1 iff
+  ((ex i st(SAT M).[n+i,p]=1 &
+  for j st j<=i holds (SAT M).[n+j,q]=1) or
+  for i holds (SAT M).[n+i,q]=1)
+ proof
+  set sm=SAT M,notp='not' p,notq='not' q;
+  thus sm.[n,p 'R' q]=1 implies ((ex i st sm.[n+i,p]=1 & for j st j<=i holds sm
+.[n+j,q]=1) or for i holds sm.[n+i,q]=1)
+  proof
+   defpred P[Nat] means
+    (sm.[n+$1,q]=1 & sm.[n+$1,p]=0);
+   assume sm.[n,p 'R' q]=1;
+   then A1: sm.[n,('not' p)'U'('not' q)]=0 by Th6;
+   A2: now let i be Nat;
+    reconsider ii=i as Element of NAT by ORDINAL1:def 13;
+    per cases by A1,Th13;
+    suppose not sm.[n+ii,'not' q]=1;
+     hence not sm.[n+i,'not' q]=1 or ex j be Nat st j<i & not sm.[n+j,'not'
+p]=1;
+    end;
+    suppose ex j st j<i & not sm.[n+j,'not' p]=1;
+     hence not sm.[n+i,'not' q]=1 or ex j be Nat st j<i & not sm.[n+j,'not'
+p]=1;
+    end;
+   end;
+   assume that
+    A3: not(ex i st sm.[n+i,p]=1 & for j st j<=i holds sm.[n+j,q]=1) and
+    A4: not(for i holds sm.[n+i,q]=1);
+   A5: now let i be Nat;
+    reconsider ii=i as Element of NAT by ORDINAL1:def 13;
+    not sm.[n+ii,p]=1 or ex j st j<=ii & not sm.[n+j,q]=1 by A3;
+    hence not sm.[n+i,p]=1 or ex j be Nat st j<=i & not sm.[n+j,q]=1;
+   end;
+   A6: for k being Nat st(for m being Nat st m<k holds P[m]) holds P[k]
+   proof
+    let k be Nat;
+    assume A7: for m being Nat st m<k holds P[m];
+    now assume ex j be Nat st j<k & not sm.[n+j,'not' p]=1;
+     then consider j be Nat such that
+      A8: j<k and
+      A9: not sm.[n+j,'not' p]=1;
+     not sm.[n+j,p]=0 by A9,Th6;
+     hence contradiction by A7,A8;
+    end;
+    then not sm.[n+k,'not' q]=1 by A2;
+    then A10: not sm.[n+k,q]=0 by Th6;
+    then A11: sm.[n+k,q]=1 by XBOOLEAN:def 3;
+    now assume ex j be Nat st j<=k & not sm.[n+j,q]=1;
+     then consider j be Nat such that
+      A12: j<=k and
+      A13: not sm.[n+j,q]=1;
+     per cases;
+     suppose j<k;
+      hence contradiction by A7,A13;
+     end;
+     suppose not j<k;
+      hence contradiction by A11,A12,A13,XXREAL_0:1;
+     end;
+    end;
+    then not sm.[n+k,p]=1 by A5;
+    hence P[k] by A10,XBOOLEAN:def 3;
+   end;
+   for i be Nat holds P[i] from NAT_1:sch 4(A6);
+   hence contradiction by A4;
+  end;
+  thus((ex i st sm.[n+i,p]=1 & for j st j<=i holds sm.[n+j,q]=1) or for i holds
+sm.[n+i,q]=1) implies sm.[n,p 'R' q]=1
+  proof
+   assume A14: (ex i st sm.[n+i,p]=1 & for j st j<=i holds sm.[n+j,q]=1) or for
+i holds sm.[n+i,q]=1;
+   assume not sm.[n,p 'R' q]=1;
+   then not sm.[n,notp 'U' notq]=0 by Th6;
+   then A15: sm.[n,notp 'U' notq]=1 by XBOOLEAN:def 3;
+   per cases by A14;
+   suppose ex i st sm.[n+i,p]=1 & for j st j<=i holds sm.[n+j,q]=1;
+    then consider i such that
+     A16: sm.[n+i,p]=1 and
+     A17: for j st j<=i holds sm.[n+j,q]=1;
+    consider k such that
+     A18: sm.[n+k,notq]=1 and
+     A19: for j st j<k holds sm.[n+j,notp]=1 by A15,Th13;
+    per cases;
+    suppose k<=i;
+     then sm.[n+k,q]=1 by A17;
+     hence contradiction by A18,Th6;
+    end;
+    suppose not k<=i;
+     then sm.[n+i,notp]=1 by A19;
+     hence contradiction by A16,Th6;
+    end;
+   end;
+   suppose A20: for i holds sm.[n+i,q]=1;
+    consider i such that
+     A21: sm.[n+i,notq]=1 and
+     for j st j<i holds sm.[n+j,notp]=1 by A15,Th13;
+    sm.[n+i,q]=0 by A21,Th6;
+    hence contradiction by A20;
+   end;
+  end;
+ end;
+
+theorem Th15:
+  (SAT M).[n,'not'('X' B)]=(SAT M).[n,'X'('not' B)]
+ proof
+  thus(SAT M).[n,'not'('X' B)]=(SAT M).[n,('X' B)]=>(SAT M).[n,TFALSUM] by
+Def12
+   .=(SAT M).[n+1,B]=>(SAT M).[n,TFALSUM] by Th10
+   .=(SAT M).[n+1,B]=>FALSE by Def12
+   .=(SAT M).[n+1,B]=>(SAT M).[n+1,TFALSUM] by Def12
+   .=(SAT M).[n+1,B=>TFALSUM] by Def12
+   .=(SAT M).[n,'X'('not' B)] by Th10;
+ end;
+
+theorem Th16:
+  (SAT M).[n,('not'('X' B))=>('X'('not' B))]=1
+ proof
+  A1: (SAT M).[n,('not'('X' B))]=0 or(SAT M).[n,('not'('X' B))]=1 by XBOOLEAN:
+def 3;
+  thus(SAT M).[n,('not'('X' B))=>('X'('not' B))]=(SAT M).[n,('not'('X' B))]=>(
+SAT M).[n,('X'('not' B))] by Def12
+   .=1 by A1,Th15;
+ end;
+
+theorem Th17:
+  (SAT M).[n,('X'('not' B))=>('not'('X' B))]=1
+ proof
+  A1: (SAT M).[n,('not'('X' B))]=0 or(SAT M).[n,('not'('X' B))]=1 by XBOOLEAN:
+def 3;
+  thus(SAT M).[n,('X'('not' B))=>('not'('X' B))]=(SAT M).[n,('X'('not' B))]=>(
+SAT M).[n,('not'('X' B))] by Def12
+   .=1 by A1,Th15;
+ end;
+
+theorem Th18:
+  (SAT M).[n,('X'(B=>C))=>(('X' B)=>('X' C))]=1
+ proof
+  A1: (SAT M).[n+1,B]=0 or(SAT M).[n+1,B]=1 by XBOOLEAN:def 3;
+  A2: (SAT M).[n+1,C]=0 or(SAT M).[n+1,C]=1 by XBOOLEAN:def 3;
+  thus(SAT M).[n,('X'(B=>C))=>(('X' B)=>('X' C))]=(SAT M).[n,'X'(B=>C)]=>(SAT M
+).[n,('X' B)=>('X' C)] by Def12
+   .=(SAT M).[n+1,B=>C]=>(SAT M).[n,('X' B)=>('X' C)] by Th10
+   .=(SAT M).[n+1,B=>C]=>((SAT M).[n,'X' B]=>(SAT M).[n,'X' C]) by Def12
+   .=(SAT M).[n+1,B=>C]=>((SAT M).[n+1,B]=>(SAT M).[n,'X' C]) by Th10
+   .=(SAT M).[n+1,B=>C]=>((SAT M).[n+1,B]=>(SAT M).[n+1,C]) by Th10
+   .=1 by A1,A2,Def12;
+ end;
+
+theorem Th19:
+  (SAT M).[n,('G' B)=>(B '&&'('X'('G' B)))]=1
+ proof
+  A1: (SAT M).[n,('G' B)=>(B '&&'('X'('G' B)))]=(SAT M).[n,('G' B)]=>(SAT M).[n
+,B '&&'('X'('G' B))] by Def12;
+  per cases by XBOOLEAN:def 3;
+  suppose(SAT M).[n,('G' B)]=0;
+   hence thesis by A1;
+  end;
+  suppose A2: (SAT M).[n,('G' B)]=1;
+   now let i be Element of NAT;
+    (SAT M).[n+(i+1),B]=1 by A2,Th11;
+    hence (SAT M).[n+1+i,B]=1;
+   end;
+   then (SAT M).[n+1,'G' B]=1 by Th11;
+   then A3: (SAT M).[n,'X'('G' B)]=1 by Th10;
+   (SAT M).[n+0,B]=1 by A2,Th11;
+   then (SAT M).[n,B '&&'('X'('G' B))]=1 by A3,Th8;
+   hence thesis by A1;
+  end;
+ end;
+
+theorem Th20:
+  (SAT M).[n,(B 'Us' C)=>(('X' C)'or'('X'(B '&&'(B 'Us' C))))]=1
+ proof
+  set sm=SAT M;
+  A1: now assume that
+    A2: sm.[n,(('X' C)'or'('X'(B '&&'(B 'Us' C))))]=0 and
+    A3: sm.[n,(B 'Us' C)]=1;
+   consider i such that
+    A4: 0<i and
+    A5: sm.[n+i,C]=1 and
+    A6: for j st 1<=j & j<i holds sm.[n+j,B]=1 by A3,Def12;
+   A7: not sm.[n,'X' C]=1 by A2,Th9;
+   not sm.[n,'X'(B '&&'(B 'Us' C))]=1 by A2,Th9;
+   then sm.[n,'X'(B '&&'(B 'Us' C))]=0 by XBOOLEAN:def 3;
+   then A8: sm.[n+1,B '&&'(B 'Us' C)]=0 by Th10;
+   per cases by A4,NAT_1:26;
+   suppose i=1;
+    hence contradiction by A5,A7,Th10;
+   end;
+   suppose A9: i>1;
+    A10: now let j;
+     assume that
+      A11: 1<=j and
+      A12: j<i-' 1;
+     j+1<i-' 1+1 by A12,XREAL_1:10;
+     then A13: j+1<i-1+1 by A12,XREAL_0:def 2;
+     1<=j+1 by A11,NAT_1:19;
+     then sm.[n+(j+1),B]=1 by A6,A13;
+     hence sm.[n+1+j,B]=1;
+    end;
+    A14: not sm.[n+1,B]=1 or not sm.[n+1,B 'Us' C]=1 by A8,Th8;
+    A15: i+(-1)>1+(-1) by A9,XREAL_1:10;
+    n+i=n+1+(i-1)
+     .=n+1+(i-' 1) by A15,XREAL_0:def 2;
+    hence contradiction by A5,A6,A9,A15,A10,A14,Def12;
+   end;
+  end;
+  sm.[n,(('X' C)'or'('X'(B '&&'(B 'Us' C))))]=0 or sm.[n,(('X' C)'or'('X'(B
+'&&'(B 'Us' C))))]=1 by XBOOLEAN:def 3;
+  then sm.[n,(B 'Us' C)]=>sm.[n,(('X' C)'or'('X'(B '&&'(B 'Us' C))))]=1 by A1,
+XBOOLEAN:def 3;
+  hence thesis by Def12;
+ end;
+
+theorem Th21:
+  (SAT M).[n,(('X' C)'or'('X'(B '&&'(B 'Us' C))))=>(B 'Us' C)]=1
+ proof
+  set sm=SAT M;
+  A1: now assume that
+    A2: sm.[n,(('X' C)'or'('X'(B '&&'(B 'Us' C))))]=1 and
+    A3: sm.[n,(B 'Us' C)]=0;
+   per cases by A2,Th9;
+   suppose A4: sm.[n,'X' C]=1;
+    A5: for j st 1<=j & j<1 holds sm.[n+j,B]=1;
+    sm.[n+1,C]=1 by A4,Th10;
+    hence contradiction by A3,A5,Def12;
+   end;
+   suppose sm.[n,'X'(B '&&'(B 'Us' C))]=1;
+    then A6: sm.[n+1,B '&&'(B 'Us' C)]=1 by Th10;
+    then sm.[n+1,B 'Us' C]=1 by Th8;
+    then consider i such that
+     i>0 and
+     A7: sm.[n+1+i,C]=1 and
+     A8: for j st 1<=j & j<i holds sm.[n+1+j,B]=1 by Def12;
+    A9: now let j;
+     assume A10: 1<=j & j<1+i;
+     per cases by A10,NAT_1:26;
+     suppose 1=j;
+      hence sm.[n+j,B]=1 by A6,Th8;
+     end;
+     suppose A11: 1<j & j<i+1;
+      then A12: 1+(-1)<j+(-1) by XREAL_1:10;
+      then j-1>0;
+      then j-' 1>0 by XREAL_0:def 2;
+      then A13: 1<=j-' 1 by NAT_1:26;
+      A14: n+j+1-1=n+1+(j-1)
+       .=n+1+(j-' 1) by A12,XREAL_0:def 2;
+      j+(-1)<i+1+(-1) by A11,XREAL_1:10;
+      hence sm.[n+j,B]=1 by A8,A14,A13;
+     end;
+    end;
+    sm.[n+(1+i),C]=1 by A7;
+    hence contradiction by A3,A9,Def12;
+   end;
+  end;
+  sm.[n,(('X' C)'or'('X'(B '&&'(B 'Us' C))))]=0 or sm.[n,(('X' C)'or'('X'(B
+'&&'(B 'Us' C))))]=1 by XBOOLEAN:def 3;
+  then sm.[n,(('X' C)'or'('X'(B '&&'(B 'Us' C))))]=>sm.[n,(B 'Us' C)]=1 by A1,
+XBOOLEAN:def 3;
+  hence thesis by Def12;
+ end;
+
+theorem Th22:
+  (SAT M).[n,(B 'Us' C)=>('X'('F' C))]=1
+ proof
+  set sm=SAT M;
+  A1: now assume that
+    A2: sm.[n,B 'Us' C]=1 and
+    A3: sm.[n,'X'('F' C)]=0;
+   consider i such that
+    A4: 0<i and
+    A5: sm.[n+i,C]=1 and
+    for j st 1<=j & j<i holds sm.[n+j,B]=1 by A2,Def12;
+   i>=1 by A4,NAT_1:26;
+   then i+(-1)>=1+(-1) by XREAL_1:8;
+   then A6: n+1+(i-' 1)=n+1+(i-1) by XREAL_0:def 2
+    .=n+i;
+   sm.[n+1,'F' C]=0 by A3,Th10;
+   hence contradiction by A5,A6,Th12;
+  end;
+  sm.[n,B 'Us' C]=0 or sm.[n,B 'Us' C]=1 by XBOOLEAN:def 3;
+  then sm.[n,B 'Us' C]=>sm.[n,'X'('F' C)]=1 by A1,XBOOLEAN:def 3;
+  hence thesis by Def12;
+ end;
+
+begin :: Validity. Consequence. Some Facts about the Semantical Notions
+
+definition let M,p;
+  pred M|=p means :Def13:
+  for n be Element of NAT holds(SAT M).[n,p]=1;
+end;
+
+definition let M,F;
+  pred M|=F means :Def14:
+  for p st p in F holds M|=p;
+end;
+
+definition let F,p;
+  pred F|=p means :Def15:
+  for M holds(M|=F implies M|=p);
+end;
+
+theorem Th23:
+  M|=F & M|=G iff M|=F\/G
+ proof
+  hereby assume A1: M|=F & M|=G;
+   thus M|=F\/G
+   proof
+    let p;
+    assume p in F\/G;
+    then p in F or p in G by XBOOLE_0:def 3;
+    hence M|=p by A1,Def14;
+   end;
+  end;
+  assume A2: M|=F\/G;
+  thus M|=F
+  proof
+   let p;
+   assume p in F;
+   then p in F\/G by XBOOLE_0:def 3;
+   hence M|=p by A2,Def14;
+  end;
+  thus M|=G
+  proof
+   let p;
+   assume p in G;
+   then p in F\/G by XBOOLE_0:def 3;
+   hence M|=p by A2,Def14;
+  end;
+ end;
+
+theorem Th24:
+  M|=A iff M |= {A}
+ proof
+  hereby assume A1: M|=A;
+   thus M |= {A}
+   proof
+    let p;
+    assume p in {A};
+    hence M|=p by A1,TARSKI:def 1;
+   end;
+  end;
+  A2: A in {A} by TARSKI:def 1;
+  assume M|={A};
+  hence M|=A by A2,Def14;
+ end;
+
+theorem Th25:
+ F|=A & F|=A=>B implies F|=B
+ proof
+  assume that
+   A1: F|=A and
+   A2: F|=A=>B;
+  let M;
+  assume A3: M|=F;
+  let n be Element of NAT;
+  M|=A=>B by A2,A3,Def15;
+  then (SAT M).[n,A=>B]=1 by Def13;
+  then A4: (SAT M).[n,A]=>(SAT M).[n,B]=1 by Def12;
+  M|=A by A1,A3,Def15;
+  then (SAT M).[n,A]=1 by Def13;
+  hence (SAT M).[n,B]=1 by A4;
+ end;
+
+theorem Th26:
+  F|=A implies F|='X' A
+ proof
+  assume A1: F|=A;
+  let M;
+  assume M|=F;
+  then A2: M|=A by A1,Def15;
+  let n be Element of NAT;
+  thus(SAT M).[n,'X' A]=(SAT M).[n+1,A] by Th10
+   .=1 by A2,Def13;
+ end;
+
+theorem
+  F|=A implies F|='G' A
+ proof
+  assume A1: F|=A;
+  let M;
+  assume A2: M|=F;
+  let n be Element of NAT;
+  M|=A by A1,A2,Def15;
+  then for i be Element of NAT holds(SAT M).[n+i,A]=1 by Def13;
+  hence (SAT M).[n,'G' A]=1 by Th11;
+ end;
+
+theorem Th28:
+  F|=A=>B & F|=A=>('X' A) implies F|=A=>('G' B)
+ proof
+  assume that
+   A1: F|=A=>B and
+   A2: F|=A=>('X' A);
+  let M;
+  assume A3: M|=F;
+  then A4: M|=A=>B by A1,Def15;
+  A5: M|=A=>('X' A) by A2,A3,Def15;
+  let n be Element of NAT;
+  defpred P1[Nat] means
+   (SAT M).[n+$1,A]=1;
+  per cases by XBOOLEAN:def 3;
+  suppose A6: (SAT M).[n,A]=1;
+   A7: for k being Element of NAT st P1[k] holds P1[k+1]
+   proof
+    let k be Element of NAT such that
+     A8: P1[k];
+    (SAT M).[n+k,A=>('X' A)]=1 by A5,Def13;
+    then (SAT M).[n+k,A]=>(SAT M).[n+k,'X' A]=1 by Def12;
+    then (SAT M).[n+k+1,A]=1 by A8,Th10;
+    hence P1[k+1];
+   end;
+   A9: P1[0] by A6;
+   A10: for i be Element of NAT holds P1[i] from NAT_1:sch 1(A9,A7);
+   now let i be Element of NAT;
+    (SAT M).[n+i,A=>B]=1 by A4,Def13;
+    then A11: (SAT M).[n+i,A]=>(SAT M).[n+i,B]=1 by Def12;
+    (SAT M).[n+i,A]=1 by A10;
+    hence (SAT M).[n+i,B]=1 by A11;
+   end;
+   then (SAT M).[n,'G' B]=1 by Th11;
+   then (SAT M).[n,A]=>(SAT M).[n,'G' B]=1;
+   hence (SAT M).[n,A=>('G' B)]=1 by Def12;
+  end;
+  suppose(SAT M).[n,A]=0;
+   then (SAT M).[n,A]=>(SAT M).[n,'G' B]=1;
+   hence (SAT M).[n,A=>('G' B)]=1 by Def12;
+  end;
+ end;
+
+theorem Th29:
+ (SAT(M^\i)).[j,A]=(SAT M).[i+j,A]
+ proof
+  defpred P1[Element of LTLB_WFF] means
+   for k holds(SAT(M^\i)).[k,$1]=(SAT M).[i+k,$1];
+  A1: for n being Element of NAT holds P1[prop n]
+  proof
+   let n,k;
+   per cases;
+   suppose A2: prop n in (M^\i).k;
+    then A3: prop n in M.(i+k) by NAT_1:def 3;
+    thus(SAT(M^\i)).[k,prop n]=1 by A2,Def12
+     .=(SAT M).[i+k,prop n] by A3,Def12;
+   end;
+   suppose A4: not prop n in (M^\i).k;
+    then not prop n in M.(i+k) by NAT_1:def 3;
+    then A5: not(SAT M).[i+k,prop n]=1 by Def12;
+    not(SAT(M^\i)).[k,prop n]=1 by A4,Def12;
+    hence (SAT(M^\i)).[k,prop n]=0 by XBOOLEAN:def 3
+     .=(SAT M).[i+k,prop n] by A5,XBOOLEAN:def 3;
+   end;
+  end;
+  A6: for r,s st P1[r] & P1[s] holds P1[r 'Us' s] & P1[r=>s]
+  proof
+   let r,s being Element of LTLB_WFF;
+   assume that
+    A7: P1[r] and
+    A8: P1[s];
+   thus P1[r 'Us' s]
+   proof
+    let k;
+    A9: (SAT(M^\i)).[k,r 'Us' s]=1 iff (SAT M).[i+k,r 'Us' s]=1
+    proof
+     hereby assume(SAT(M^\i)).[k,r 'Us' s]=1;
+      then consider m be Element of NAT such that
+       A10: 0<m and
+       A11: (SAT(M^\i)).[k+m,s]=1 and
+       A12: for j st 1<=j & j<m holds(SAT(M^\i)).[k+j,r]=1 by Def12;
+      A13: now let j;
+       assume 1<=j & j<m;
+       then (SAT(M^\i)).[k+j,r]=1 by A12;
+       then (SAT M).[i+(k+j),r]=1 by A7;
+       hence (SAT M).[(i+k)+j,r]=1;
+      end;
+      (SAT M).[i+(k+m),s]=1 by A8,A11;
+      then (SAT M).[(i+k)+m,s]=1;
+      hence (SAT M).[i+k,r 'Us' s]=1 by A10,A13,Def12;
+     end;
+     assume(SAT M).[i+k,r 'Us' s]=1;
+     then consider m be Element of NAT such that
+      A14: 0<m and
+      A15: (SAT M).[(i+k)+m,s]=1 and
+      A16: for j st 1<=j & j<m holds(SAT M).[(i+k)+j,r]=1 by Def12;
+     A17: now let j;
+      assume 1<=j & j<m;
+      then (SAT M).[(i+k)+j,r]=1 by A16;
+      then (SAT M).[i+(k+j),r]=1;
+      hence (SAT(M^\i)).[k+j,r]=1 by A7;
+     end;
+     (SAT M).[i+(k+m),s]=1 by A15;
+     then (SAT(M^\i)).[k+m,s]=1 by A8;
+     hence (SAT(M^\i)).[k,r 'Us' s]=1 by A14,A17,Def12;
+    end;
+    per cases;
+    suppose(SAT(M^\i)).[k,r 'Us' s]=1;
+     hence thesis by A9;
+    end;
+    suppose not(SAT(M^\i)).[k,r 'Us' s]=1;
+     then (SAT(M^\i)).[k,r 'Us' s]=0 by XBOOLEAN:def 3;
+     hence thesis by A9,XBOOLEAN:def 3;
+    end;
+   end;
+   thus P1[r=>s]
+   proof
+    let k be Element of NAT;
+    thus(SAT(M^\i)).[k,r=>s]=(SAT(M^\i)).[k,r]=>(SAT(M^\i)).[k,s] by Def12
+     .=(SAT M).[i+k,r]=>(SAT(M^\i)).[k,s] by A7
+     .=(SAT M).[i+k,r]=>(SAT M).[i+k,s] by A8
+     .=(SAT M).[i+k,r=>s] by Def12;
+   end;
+  end;
+  now let k;
+   thus(SAT(M^\i)).[k,TFALSUM]=0 by Def12
+    .=(SAT M).[i+k,TFALSUM] by Def12;
+  end;
+  then A18: P1[TFALSUM];
+  for r being Element of LTLB_WFF holds P1[r] from HILBERT2:sch 2(A18,A1,A6);
+  hence (SAT(M^\i)).[j,A]=(SAT M).[i+j,A];
+ end;
+
+theorem Th30:
+  M|=F implies M^\i|=F
+ proof
+  assume A1: M|=F;
+  thus M^\i|=F
+  proof
+   let p;
+   assume p in F;
+   then A2: M|=p by A1,Def14;
+   thus M^\i|=p
+   proof
+    let n;
+    (SAT M).[i+n,p]=1 by A2,Def13;
+    hence (SAT(M^\i)).[n,p]=1 by Th29;
+   end;
+  end;
+ end;
+
+theorem
+  F\/{A}|=B iff F|=('G' A)=>B
+ proof
+  hereby assume A1: F\/{A}|=B;
+   thus F|=('G' A)=>B
+   proof
+    let M;
+    assume A2: M|=F;
+    thus M|=('G' A)=>B
+    proof
+     let n;
+     per cases by XBOOLEAN:def 3;
+     suppose A3: (SAT M).[n,'G' A]=0;
+      thus(SAT M).[n,('G' A)=>B]=(SAT M).[n,'G' A]=>(SAT M).[n,B] by Def12
+       .=1 by A3;
+     end;
+     suppose A4: (SAT M).[n,'G' A]=1;
+      now let j;
+       (SAT M).[n+j,A]=1 by A4,Th11;
+       hence (SAT(M^\n)).[j,A]=1 by Th29;
+      end;
+      then M^\n|=A by Def13;
+      then A5: M^\n|={A} by Th24;
+      M^\n|=F by A2,Th30;
+      then M^\n|=F\/{A} by A5,Th23;
+      then M^\n|=B by A1,Def15;
+      then (SAT(M^\n)).[0,B]=1 by Def13;
+      then A6: (SAT M).[n+0,B]=1 by Th29;
+      thus(SAT M).[n,('G' A)=>B]=(SAT M).[n,'G' A]=>(SAT M).[n,B] by Def12
+       .=1 by A6;
+     end;
+    end;
+   end;
+  end;
+  assume A7: F|=('G' A)=>B;
+  let M;
+  assume A8: M|=F\/{A};
+  let i;
+  M|={A} by A8,Th23;
+  then M|=A by Th24;
+  then for j holds(SAT M).[i+j,A]=1 by Def13;
+  then A9: (SAT M).[i,'G' A]=1 by Th11;
+  M|=F by A8,Th23;
+  then M|=('G' A)=>B by A7,Def15;
+  then (SAT M).[i,('G' A)=>B]=1 by Def13;
+  then (SAT M).[i,('G' A)]=>(SAT M).[i,B]=1 by Def12;
+  hence (SAT M).[i,B]=1 by A9;
+ end;
+
+definition let f be Function of LTLB_WFF,BOOLEAN;
+  func VAL f -> Function of LTLB_WFF,BOOLEAN means :Def16:
+  it.TFALSUM=0 & it.(prop n)=f.(prop n) &
+  it.(A=>B)=it.A=>it.B & it.(A 'Us' B)=f.(A 'Us' B);
+ existence
+ proof
+  defpred P3[Element of LTLB_WFF,Element of LTLB_WFF,set,set,set] means
+   ($3 is Element of BOOLEAN & $4 is Element of BOOLEAN implies ex a,b,c be
+Element of BOOLEAN st a=$3 & b=$4 & c =$5 & c =a=>b) & (not$3 is Element of
+BOOLEAN or not$4 is Element of BOOLEAN implies $5={});
+  defpred P1[Element of LTLB_WFF,Element of LTLB_WFF,set,set,set] means
+   $5=f.($1'Us'$2);
+  deffunc F2(Element of NAT)=f.(prop$1);
+  A1: for A,B for x,y be set ex z be set st P3[A,B,x,y,z]
+  proof
+   let A,B;
+   let x,y be set;
+   per cases;
+   suppose that
+     A2: x is Element of BOOLEAN and
+     A3: y is Element of BOOLEAN;
+    reconsider b=y as Element of BOOLEAN by A3;
+    reconsider a=x as Element of BOOLEAN by A2;
+    per cases by XBOOLEAN:def 3;
+    suppose A4: a=0;
+     set c =TRUE;
+     c =a=>b by A4;
+     hence thesis;
+    end;
+    suppose A5: a=1;
+     per cases by XBOOLEAN:def 3;
+     suppose A6: b=0;
+      set c =FALSE;
+      c =a=>b by A5,A6;
+      hence thesis;
+     end;
+     suppose A7: b=1;
+      set c =TRUE;
+      c =a=>b by A7;
+      hence thesis;
+     end;
+    end;
+   end;
+   suppose not x is Element of BOOLEAN or not y is Element of BOOLEAN;
+    hence thesis;
+   end;
+  end;
+  A8: for p,q for a,b,c,d be set st P1[p,q,a,b,c] & P1[p,q,a,b,d] holds c =d;
+  A9: for p,q for a,b,c,d be set st P3[p,q,a,b,c] & P3[p,q,a,b,d] holds c =d;
+  A10: for A,B for x,y be set ex z be set st P1[A,B,x,y,z];
+  consider val being ManySortedSet of LTLB_WFF such that
+   A11: val.TFALSUM=0 & (for n holds val.(prop n)=F2(n)) & for p,q holds P1[p,q
+,val.p,val.q,val.(p 'Us' q)] & P3[p,q,val.p,val.q,val.(p=>q)] from HILBERT2:sch
+3(A10,A1,A8,A9);
+  A12: now A13: now let A,B;
+    per cases;
+    suppose val.A is Element of BOOLEAN & val.B is Element of BOOLEAN;
+     then consider a,b,c be Element of BOOLEAN such that
+      a=val.A and
+      b=val.B and
+      A14: c =val.(A=>B) and
+      c =a=>b by A11;
+     thus val.(A=>B) in BOOLEAN by A14;
+    end;
+    suppose not(val.A is Element of BOOLEAN & val.B is Element of BOOLEAN);
+     then val.(A=>B)=FALSE by A11;
+     hence val.(A=>B) in BOOLEAN;
+    end;
+   end;
+   let x be set;
+   assume x in LTLB_WFF;
+   then reconsider x1=x as Element of LTLB_WFF;
+   A15: now let n;
+    val.(prop n)=f.(prop n) by A11;
+    hence val.(prop n) in BOOLEAN;
+   end;
+   A16: now let A,B;
+    val.(A 'Us' B)=f.(A 'Us' B) by A11;
+    hence val.(A 'Us' B) in BOOLEAN;
+   end;
+   per cases by Th5;
+   suppose x1=TFALSUM;
+    hence val.x in BOOLEAN by A11,TARSKI:def 2;
+   end;
+   suppose ex n be Element of NAT st x1=prop n;
+    hence val.x in BOOLEAN by A15;
+   end;
+   suppose ex p,q st x1=p 'Us' q;
+    hence val.x in BOOLEAN by A16;
+   end;
+   suppose ex p,q st x1=p=>q;
+    hence val.x in BOOLEAN by A13;
+   end;
+  end;
+  dom val=LTLB_WFF by PARTFUN1:def 4;
+  then reconsider val as Function of LTLB_WFF,BOOLEAN by A12,FUNCT_2:5;
+  take val;
+  now let A,B;
+   P3[A,B,val.A,val.B,val.(A=>B)] by A11;
+   hence val.(A=>B)=val.A=>val.B;
+  end;
+  hence thesis by A11;
+ end;
+ uniqueness
+ proof
+  let v1,v2 be Function of LTLB_WFF,BOOLEAN;
+  assume A17: v1.TFALSUM=0 & v1.(prop n)=f.(prop n) & v1.(A=>B)=v1.A=>v1.B & v1
+.(A 'Us' B)=f.(A 'Us' B);
+  assume A18: v2.TFALSUM=0 & v2.(prop n)=f.(prop n) & v2.(A=>B)=v2.A=>v2.B & v2
+.(A 'Us' B)=f.(A 'Us' B);
+  thus v1=v2
+  proof
+   defpred P1[Element of LTLB_WFF] means
+    v1.$1=v2.$1;
+   A19: for n holds P1[prop n]
+   proof
+    let n;
+    v1.(prop n)=f.(prop n) by A17
+     .=v2.(prop n) by A18;
+    hence P1[prop n];
+   end;
+   A20: for r,s st P1[r] & P1[s] holds P1[r 'Us' s] & P1[r=>s]
+   proof
+    let r,s;
+    assume A21: (P1[r]) & P1[s];
+    A22: v1.(r 'Us' s)=f.(r 'Us' s) by A17
+     .=v2.(r 'Us' s) by A18;
+    v1.(r=>s)=v1.r=>v1.s by A17
+     .=v2.(r=>s) by A18,A21;
+    hence thesis by A22;
+   end;
+   A23: P1[TFALSUM] by A17,A18;
+   for x be Element of LTLB_WFF holds P1[x] from HILBERT2:sch 2(A23,A19,A20);
+   then A24: for x be Element of LTLB_WFF st x in dom v1 holds P1[x];
+   dom v1=LTLB_WFF by FUNCT_2:def 1
+    .=dom v2 by FUNCT_2:def 1;
+   hence thesis by A24,PARTFUN1:34;
+  end;
+ end;
+end;
+
+theorem Th32:
+  for f be Function of LTLB_WFF,BOOLEAN,p,q holds
+  (VAL f).(p '&&' q)=(VAL f).p'&'(VAL f).q
+ proof
+  let f be Function of LTLB_WFF,BOOLEAN,p,q;
+  A1: (VAL f).p=0 or(VAL f).p=1 by XBOOLEAN:def 3;
+  A2: (VAL f).q=0 or(VAL f).q=1 by XBOOLEAN:def 3;
+  thus(VAL f).(p '&&' q)=(VAL f).(p=>(q=>TFALSUM))=>(VAL f).(TFALSUM) by Def16
+   .=((VAL f).p=>(VAL f).(q=>TFALSUM))=>(VAL f).(TFALSUM) by Def16
+   .=((VAL f).p=>((VAL f).q=>(VAL f).(TFALSUM)))=>(VAL f).(TFALSUM) by Def16
+   .=((VAL f)/.p=>((VAL f).q=>FALSE))=>(VAL f).(TFALSUM) by Def16
+   .=(VAL f).p '&'(VAL f).q by A1,A2,Def16;
+ end;
+
+theorem Th33:
+  for f be Function of LTLB_WFF,BOOLEAN st
+  (for B be set st B in LTLB_WFF holds f.B=(SAT M).[n,B]) holds
+  (VAL f).A=(SAT M).[n,A]
+ proof
+  let f be Function of LTLB_WFF,BOOLEAN;
+  defpred P1[Element of LTLB_WFF] means (VAL f).$1=(SAT M).[n,$1];
+  assume A1: for B be set st B in LTLB_WFF holds f.B=(SAT M).[n,B];
+  A2: for k holds P1[prop k]
+  proof
+   let k;
+   (SAT M).[n,prop k]=f.(prop k) by A1
+    .=(VAL f).(prop k) by Def16;
+   hence thesis;
+  end;
+  A3: for r,s st P1[r] & P1[s] holds P1[r 'Us' s] & P1[r=>s]
+  proof
+   let r,s;
+   assume A4: (P1[r]) & P1[s];
+   (VAL f).(r 'Us' s)=f.(r 'Us' s) by Def16
+    .=(SAT M).[n,r 'Us' s] by A1;
+   hence P1[r 'Us' s];
+   (SAT M).[n,r=>s]=(SAT M).[n,r]=>(SAT M).[n,s] by Def12
+    .=(VAL f).(r=>s) by A4,Def16;
+   hence P1[r=>s];
+  end;
+  (SAT M).[n,TFALSUM]=0 by Def12
+   .=(VAL f).TFALSUM by Def16;
+  then A5: P1[TFALSUM];
+  for r holds P1[r] from HILBERT2:sch 2(A5,A2,A3);
+  hence (VAL f).A=(SAT M).[n,A];
+ end;
+
+definition let p;
+  attr p is LTL_TAUT_OF_PL means :Def17:
+  for f be Function of LTLB_WFF,BOOLEAN holds(VAL f).p=1;
+end;
+
+theorem Th34:
+  A is LTL_TAUT_OF_PL implies F|=A
+ proof
+  assume A1: A is LTL_TAUT_OF_PL;
+  let M be LTLModel;
+  assume M|=F;
+  let n;
+  defpred P[set,set] means
+   $2=(SAT M).[n,$1];
+  A2: for x be set st x in LTLB_WFF ex y be set st y in BOOLEAN & P[x,y]
+  proof
+   let x be set;
+   set y=(SAT M).[n,x];
+   assume x in LTLB_WFF;
+   then reconsider x1=x as Element of LTLB_WFF;
+   take y;
+   (SAT M).[n,x1] in BOOLEAN;
+   hence y in BOOLEAN & P[x,y];
+  end;
+  consider f be Function of LTLB_WFF,BOOLEAN such that
+   A3: for B be set st B in LTLB_WFF holds P[B,f.B] from FUNCT_2:sch 1(A2);
+  thus(SAT M).[n,A]=(VAL f).A by A3,Th33
+   .=1 by A1,Def17;
+ end;
+
+begin :: Axioms. Derivation Rules. Derivability. Soundness Theorem for LTL
+
+definition let D be set;
+  attr D is with_LTL_axioms means :Def18:
+  for p,q holds (p is LTL_TAUT_OF_PL implies p in D) &
+  ('not'('X' p))=>('X'('not' p)) in D &
+  ('X'('not' p))=>('not'('X' p)) in D &
+  ('X'(p=>q))=>(('X' p)=>('X' q)) in D &
+  ('G' p)=>(p '&&'('X'('G' p))) in D &
+  (p 'Us' q)=>(('X' q)'or'('X'(p '&&'(p 'Us' q)))) in D &
+  (('X' q)'or'('X'(p '&&'(p 'Us' q))))=>(p 'Us' q) in D &
+  (p 'Us' q)=>('X'('F' q)) in D;
+end;
+
+definition
+  func LTL_axioms -> Subset of LTLB_WFF means :Def19:
+  it is with_LTL_axioms &
+  for D be Subset of LTLB_WFF st D is with_LTL_axioms holds it c=D;
+ existence
+ proof
+  defpred S1[set] means
+   for D being set st D is with_LTL_axioms holds$1 in D;
+  consider D0 being set such that
+   A1: for x being set holds(x in D0 iff x in LTLB_WFF & S1[x]) from XBOOLE_0:
+sch 1;
+  D0 c=LTLB_WFF
+  proof
+   let x be set;
+   assume x in D0;
+   hence thesis by A1;
+  end;
+  then reconsider D0 as Subset of LTLB_WFF;
+  take D0;
+  thus D0 is with_LTL_axioms
+  proof
+   let p,q be Element of LTLB_WFF;
+   thus p is LTL_TAUT_OF_PL implies p in D0
+   proof
+    assume p is LTL_TAUT_OF_PL;
+    then for D being set st D is with_LTL_axioms holds p in D by Def18;
+    hence thesis by A1;
+   end;
+   for D being set st D is with_LTL_axioms holds('not'('X' p))=>('X'('not' p))
+in D by Def18;
+   hence ('not'('X' p))=>('X'('not' p)) in D0 by A1;
+   for D being set st D is with_LTL_axioms holds('X'('not' p))=>('not'('X' p))
+in D by Def18;
+   hence ('X'('not' p))=>('not'('X' p)) in D0 by A1;
+   for D being set st D is with_LTL_axioms holds('X'(p=>q))=>(('X' p)=>('X' q))
+in D by Def18;
+   hence ('X'(p=>q))=>(('X' p)=>('X' q)) in D0 by A1;
+   for D being set st D is with_LTL_axioms holds('G' p)=>(p '&&'('X'('G' p)))
+in D by Def18;
+   hence ('G' p)=>(p '&&'('X'('G' p))) in D0 by A1;
+   for D being set st D is with_LTL_axioms holds(p 'Us' q)=>(('X' q)'or'('X'(p
+'&&'(p 'Us' q)))) in D by Def18;
+   hence (p 'Us' q)=>(('X' q)'or'('X'(p '&&'(p 'Us' q)))) in D0 by A1;
+   for D being set st D is with_LTL_axioms holds(('X' q)'or'('X'(p '&&'(p 'Us'
+q))))=>(p 'Us' q) in D by Def18;
+   hence (('X' q)'or'('X'(p '&&'(p 'Us' q))))=>(p 'Us' q) in D0 by A1;
+   for D being set st D is with_LTL_axioms holds(p 'Us' q)=>('X'('F' q)) in D
+by Def18;
+   hence (p 'Us' q)=>('X'('F' q)) in D0 by A1;
+  end;
+  let D be Subset of LTLB_WFF;
+  assume A2: D is with_LTL_axioms;
+  let x be set;
+  assume x in D0;
+  hence x in D by A1,A2;
+ end;
+ uniqueness
+ proof
+  let D1,D2 be Subset of LTLB_WFF;
+  assume(D1 is with_LTL_axioms) & (for D be Subset of LTLB_WFF st D is
+with_LTL_axioms holds D1 c=D) & D2 is with_LTL_axioms & for D be Subset of
+LTLB_WFF st D is with_LTL_axioms holds D2 c=D;
+  then D1 c=D2 & D2 c=D1;
+  hence D1=D2 by XBOOLE_0:def 10;
+ end;
+end;
+
+registration
+  cluster LTL_axioms -> with_LTL_axioms;
+  coherence by Def19;
+end;
+
+theorem Th36:
+  p=>(q=>p) in LTL_axioms
+ proof
+  p=>(q=>p) is LTL_TAUT_OF_PL
+  proof
+   let f be Function of LTLB_WFF,BOOLEAN;
+   A1: (VAL f).p=0 or(VAL f).p=1 by XBOOLEAN:def 3;
+   thus(VAL f).(p=>(q=>p))=(VAL f).p=>(VAL f).(q=>p) by Def16
+    .=(VAL f).p=>((VAL f).q=>(VAL f).p) by Def16
+    .=1 by A1;
+  end;
+  hence p=>(q=>p) in LTL_axioms by Def18;
+ end;
+
+theorem Th37:
+ (p=>(q=>r))=>((p=>q)=>(p=>r)) in LTL_axioms
+ proof
+  (p=>(q=>r))=>((p=>q)=>(p=>r)) is LTL_TAUT_OF_PL
+  proof
+   let f be Function of LTLB_WFF,BOOLEAN;
+   A1: (VAL f).p=0 or(VAL f).p=1 by XBOOLEAN:def 3;
+   A2: (VAL f).q=0 or(VAL f).q=1 by XBOOLEAN:def 3;
+   A3: (VAL f).r=0 or(VAL f).r=1 by XBOOLEAN:def 3;
+   thus(VAL f).((p=>(q=>r))=>((p=>q)=>(p=>r)))=(VAL f).(p=>(q=>r))=>(VAL f).((p
+=>q)=>(p=>r)) by Def16
+    .=((VAL f).p=>(VAL f).(q=>r))=>(VAL f).((p=>q)=>(p=>r)) by Def16
+    .=((VAL f).p=>((VAL f).q=>(VAL f).r))=>(VAL f).((p=>q)=>(p=>r)) by Def16
+    .=((VAL f).p=>((VAL f).q=>(VAL f).r))=>((VAL f).(p=>q)=>(VAL f).(p=>r)) by
+Def16
+    .=((VAL f).p=>((VAL f).q=>(VAL f).r))=>(((VAL f).p=>(VAL f).q)=>(VAL f).(p
+=>r)) by Def16
+    .=1 by A1,A2,A3,Def16;
+  end;
+  hence (p=>(q=>r))=>((p=>q)=>(p=>r)) in LTL_axioms by Def18;
+ end;
+
+definition let p,q;
+  pred p NEX_rule q means :Def20:
+  q='X' p;
+  let r;
+  pred p,q MP_rule r means :Def21:
+  q=p=>r;
+  pred p,q IND_rule r means :Def22:
+  ex A,B st p=A=>B & q=A=>('X' A) & r=A=>('G' B);
+end;
+
+registration
+  cluster LTL_axioms -> non empty;
+  coherence by Def18;
+end;
+
+definition let A;
+  attr A is axltl1 means :Def23:
+  ex B st A=('not'('X' B))=>('X'('not' B));
+  attr A is axltl1a means :Def24:
+  ex B st A=('X'('not' B))=>('not'('X' B));
+  attr A is axltl2 means :Def25:
+  ex B,C st A=('X'(B=>C))=>(('X' B)=>('X' C));
+  attr A is axltl3 means :Def26:
+  ex B st A=('G' B)=>(B '&&'('X'('G' B)));
+  attr A is axltl4 means :Def27:
+  ex B,C st A=(B 'Us' C)=>(('X' C)'or'('X'(B '&&'(B 'Us' C))));
+  attr A is axltl5 means :Def28:
+  ex B,C st A=(('X' C)'or'('X'(B '&&'(B 'Us' C))))=>(B 'Us' C);
+  attr A is axltl6 means :Def29:
+  ex B,C st A=(B 'Us' C)=>('X'('F' C));
+end;
+
+theorem Th38:
+  for A be Element of LTL_axioms holds
+  (A is LTL_TAUT_OF_PL or A is axltl1 or A is axltl1a or
+  A is axltl2 or A is axltl3 or A is axltl4 or A is axltl5 or A is axltl6)
+ proof
+  defpred P1[Element of LTL_axioms] means
+   $1 is LTL_TAUT_OF_PL or$1 is axltl1 or$1 is axltl1a or$1 is axltl2 or$1 is
+axltl3 or$1 is axltl4 or$1 is axltl5 or$1 is axltl6;
+  set X={p where p is Element of LTL_axioms:P1[p]};
+  X c=LTLB_WFF
+  proof
+   let x be set;
+   assume x in X;
+   then ex p be Element of LTL_axioms st x=p & P1[p];
+   hence x in LTLB_WFF;
+  end;
+  then reconsider X as Subset of LTLB_WFF;
+  let A be Element of LTL_axioms;
+  X is with_LTL_axioms
+  proof
+   let p,q;
+   thus p is LTL_TAUT_OF_PL implies p in X
+   proof
+    assume A1: p is LTL_TAUT_OF_PL;
+    then reconsider p1=p as Element of LTL_axioms by Def18;
+    P1[p1] by A1;
+    hence thesis;
+   end;
+   thus('not'('X' p))=>('X'('not' p)) in X
+   proof
+    reconsider pp=('not'('X' p))=>('X'('not' p)) as Element of LTL_axioms by
+Def18;
+    P1[pp] by Def23;
+    hence thesis;
+   end;
+   thus('X'('not' p))=>('not'('X' p)) in X
+   proof
+    reconsider pp=('X'('not' p))=>('not'('X' p)) as Element of LTL_axioms by
+Def18;
+    P1[pp] by Def24;
+    hence thesis;
+   end;
+   thus('X'(p=>q))=>(('X' p)=>('X' q)) in X
+   proof
+    reconsider pp=('X'(p=>q))=>(('X' p)=>('X' q)) as Element of LTL_axioms by
+Def18;
+    P1[pp] by Def25;
+    hence thesis;
+   end;
+   thus('G' p)=>(p '&&'('X'('G' p))) in X
+   proof
+    reconsider pp=('G' p)=>(p '&&'('X'('G' p))) as Element of LTL_axioms by
+Def18;
+    P1[pp] by Def26;
+    hence thesis;
+   end;
+   thus(p 'Us' q)=>(('X' q)'or'('X'(p '&&'(p 'Us' q)))) in X
+   proof
+    reconsider pp=(p 'Us' q)=>(('X' q)'or'('X'(p '&&'(p 'Us' q)))) as Element
+of LTL_axioms by Def18;
+    P1[pp] by Def27;
+    hence thesis;
+   end;
+   thus(('X' q)'or'('X'(p '&&'(p 'Us' q))))=>(p 'Us' q) in X
+   proof
+    reconsider pp=(('X' q)'or'('X'(p '&&'(p 'Us' q))))=>(p 'Us' q) as Element
+of LTL_axioms by Def18;
+    P1[pp] by Def28;
+    hence thesis;
+   end;
+   thus(p 'Us' q)=>('X'('F' q)) in X
+   proof
+    reconsider pp=(p 'Us' q)=>('X'('F' q)) as Element of LTL_axioms by Def18;
+    P1[pp] by Def29;
+    hence thesis;
+   end;
+  end;
+  then A in LTL_axioms & LTL_axioms c=X by Def19;
+  then A in X;
+  then ex p be Element of LTL_axioms st A=p & P1[p];
+  hence P1[A];
+ end;
+
+theorem Th39:
+  A is axltl1 or A is axltl1a or A is axltl2 or A is axltl3 or
+  A is axltl4 or A is axltl5 or A is axltl6 implies F|=A
+ proof
+  assume A1: A is axltl1 or A is axltl1a or A is axltl2 or A is axltl3 or A is
+axltl4 or A is axltl5 or A is axltl6;
+  let M;
+  assume M|=F;
+  let n be Element of NAT;
+  per cases by A1;
+  suppose A is axltl1;
+   then consider B be Element of LTLB_WFF such that
+    A2: A=('not'('X' B))=>('X'('not' B)) by Def23;
+   thus thesis by A2,Th16;
+  end;
+  suppose A is axltl1a;
+   then consider B be Element of LTLB_WFF such that
+    A3: A=('X'('not' B))=>('not'('X' B)) by Def24;
+   thus thesis by A3,Th17;
+  end;
+  suppose A is axltl2;
+   then consider B,C be Element of LTLB_WFF such that
+    A4: A=('X'(B=>C))=>(('X' B)=>('X' C)) by Def25;
+   thus thesis by A4,Th18;
+  end;
+  suppose A is axltl3;
+   then consider B be Element of LTLB_WFF such that
+    A5: A=('G' B)=>(B '&&'('X'('G' B))) by Def26;
+   thus thesis by A5,Th19;
+  end;
+  suppose A is axltl4;
+   then consider B,C such that
+    A6: A=(B 'Us' C)=>(('X' C)'or'('X'(B '&&'(B 'Us' C)))) by Def27;
+   thus thesis by A6,Th20;
+  end;
+  suppose A is axltl5;
+   then consider B,C such that
+    A7: A=(('X' C)'or'('X'(B '&&'(B 'Us' C))))=>(B 'Us' C) by Def28;
+   thus thesis by A7,Th21;
+  end;
+  suppose A is axltl6;
+   then consider B,C such that
+    A8: A=(B 'Us' C)=>('X'('F' C)) by Def29;
+   thus thesis by A8,Th22;
+  end;
+ end;
+
+definition let i be Nat,f,X;
+  pred prc f,X,i means :Def30:
+  f.i in LTL_axioms or f.i in X or
+  (ex j,k be Nat st 1<=j & j<i & 1<=k & k<i & (
+  f/.j,f/.k MP_rule f/.i or f/.j,f/.k IND_rule f/.i)) or
+  ex j be Nat st 1<=j & j<i & f/.j NEX_rule f/.i;
+end;
+
+definition let X,p;
+  pred X|-p means :Def31:
+  ex f st f.len f=p & 1<=len f &
+  for i be Nat st 1<=i & i<=len f holds prc f,X,i;
+end;
+
+theorem Th40:
+  for i,n be Nat st
+  n+len f<=len f2 & (for k be Nat st 1<=k & k<=len f holds f.k=f2.(k+n)) &
+  1 <=i & i<=len f holds prc f,X,i implies prc f2,X,(i+n)
+ proof
+  let i,n be Nat;
+  assume that
+   A1: n+len f<=len f2 and
+   A2: for k be Nat st 1<=k & k<=len f holds f.k=f2.(k+n) and
+   A3: 1<=i and
+   A4: i<=len f;
+  i+n<=len f+n by A4,XREAL_1:8;
+  then A5: i+n<=len f2 by A1,XXREAL_0:2;
+  A6: f/.i=f.i by A3,A4,Th1
+   .=f2.(i+n) by A2,A3,A4
+   .=f2/.(i+n) by A3,A5,Th1,NAT_1:12;
+  assume A7: prc f,X,i;
+  per cases by A7,Def30;
+  suppose f.i in LTL_axioms;
+   then f2.(i+n) in LTL_axioms by A2,A3,A4;
+   hence prc f2,X,i+n by Def30;
+  end;
+  suppose f.i in X;
+   then f2.(i+n) in X by A2,A3,A4;
+   hence prc f2,X,i+n by Def30;
+  end;
+  suppose ex j,k be Nat st 1<=j & j<i & 1<=k & k<i & (f/.j,f/.k MP_rule f/.i or
+f/.j,f/.k IND_rule f/.i);
+   then consider j,k be Nat such that
+    A8: 1<=j and
+    A9: j<i and
+    A10: 1<=k and
+    A11: k<i and
+    A12: f/.j,f/.k MP_rule f/.i or f/.j,f/.k IND_rule f/.i;
+   A13: 1<=j+n & j+n<i+n by A8,A9,NAT_1:12,XREAL_1:10;
+   A14: k<=len f by A4,A11,XXREAL_0:2;
+   then k+n<=len f+n by XREAL_1:8;
+   then A15: k+n<=len f2 by A1,XXREAL_0:2;
+   A16: j<=len f by A4,A9,XXREAL_0:2;
+   then j+n<=len f+n by XREAL_1:8;
+   then A17: j+n<=len f2 by A1,XXREAL_0:2;
+   A18: f/.k=f.k by A10,A14,Th1
+    .=f2.(k+n) by A2,A10,A14
+    .=f2/.(k+n) by A10,A15,Th1,NAT_1:12;
+   A19: 1<=k+n & k+n<i+n by A10,A11,NAT_1:12,XREAL_1:10;
+   f/.j=f.j by A8,A16,Th1
+    .=f2.(j+n) by A2,A8,A16
+    .=f2/.(j+n) by A8,A17,Th1,NAT_1:12;
+   hence prc f2,X,i+n by A6,A12,A13,A19,A18,Def30;
+  end;
+  suppose ex j be Nat st 1<=j & j<i & f/.j NEX_rule f/.i;
+   then consider j be Nat such that
+    A20: 1<=j and
+    A21: j<i and
+    A22: f/.j NEX_rule f/.i;
+   A23: 1<=j+n & j+n<i+n by A20,A21,NAT_1:12,XREAL_1:10;
+   A24: j<=len f by A4,A21,XXREAL_0:2;
+   then j+n<=len f+n by XREAL_1:8;
+   then A25: j+n<=len f2 by A1,XXREAL_0:2;
+   f/.j=f.j by A20,A24,Th1
+    .=f2.(j+n) by A2,A20,A24
+    .=f2/.(j+n) by A20,A25,Th1,NAT_1:12;
+   hence prc f2,X,i+n by A6,A22,A23,Def30;
+  end;
+ end;
+
+theorem Th41:
+  f2=f^f1 & 1<=len f & 1<=len f1 &
+  (for i be Nat st 1<=i & i<=len f holds prc f,X,i) &
+  (for i be Nat st 1<=i & i<=len f1 holds prc f1,X,i) implies
+  for i be Nat st 1<=i & i<=len f2 holds prc f2,X,i
+ proof
+  assume that
+   A1: f2=f^f1 and
+   1<=len f and
+   1<=len f1 and
+   A2: for i be Nat st 1<=i & i<=len f holds prc f,X,i and
+   A3: for i be Nat st 1<=i & i<=len f1 holds prc f1,X,i;
+  A4: len f2=len f+len f1 by A1,FINSEQ_1:35;
+  A5: for k be Nat st 1<=k & k<=len f1 holds f1.k=f2.(k+len f) by A1,FINSEQ_1:
+86;
+  let i be Nat;
+  assume that
+   A6: 1<=i and
+   A7: i<=len f2;
+  per cases by NAT_1:13;
+  suppose A8: i<=len f;
+   then A9: f/.i=f.i by A6,Th1
+    .=f2.i by A1,A6,A8,FINSEQ_1:85
+    .=f2/.i by A6,A7,Th1;
+   A10: prc f,X,i by A2,A6,A8;
+   per cases by A10,Def30;
+   suppose f.i in LTL_axioms;
+    then f2.i in LTL_axioms by A1,A6,A8,FINSEQ_1:85;
+    hence prc f2,X,i by Def30;
+   end;
+   suppose f.i in X;
+    then f2.i in X by A1,A6,A8,FINSEQ_1:85;
+    hence prc f2,X,i by Def30;
+   end;
+   suppose ex j,k be Nat st 1<=j & j<i & 1<=k & k<i & (f/.j,f/.k MP_rule f/.i
+or f/.j,f/.k IND_rule f/.i);
+    then consider j,k be Nat such that
+     A11: 1<=j and
+     A12: j<i and
+     A13: 1<=k and
+     A14: k<i and
+     A15: f/.j,f/.k MP_rule f/.i or f/.j,f/.k IND_rule f/.i;
+    A16: k<=len f by A8,A14,XXREAL_0:2;
+    then A17: k<=len f2 by A4,NAT_1:12;
+    A18: f/.k=f.k by A13,A16,Th1
+     .=f2.k by A1,A13,A16,FINSEQ_1:85
+     .=f2/.k by A13,A17,Th1;
+    A19: j<=len f by A8,A12,XXREAL_0:2;
+    then A20: j<=len f2 by A4,NAT_1:12;
+    f/.j=f.j by A11,A19,Th1
+     .=f2.j by A1,A11,A19,FINSEQ_1:85
+     .=f2/.j by A11,A20,Th1;
+    hence prc f2,X,i by A9,A11,A12,A13,A14,A15,A18,Def30;
+   end;
+   suppose ex j be Nat st 1<=j & j<i & f/.j NEX_rule f/.i;
+    then consider j be Nat such that
+     A21: 1<=j and
+     A22: j<i and
+     A23: f/.j NEX_rule f/.i;
+    A24: j<=len f by A8,A22,XXREAL_0:2;
+    then A25: j<=len f2 by A4,NAT_1:12;
+    f/.j=f.j by A21,A24,Th1
+     .=f2.j by A1,A21,A24,FINSEQ_1:85
+     .=f2/.j by A21,A25,Th1;
+    hence prc f2,X,i by A9,A21,A22,A23,Def30;
+   end;
+  end;
+  suppose A26: len f+1<=i;
+   set i1=i-' len f;
+   i<=len f+len f1 by A1,A7,FINSEQ_1:35;
+   then i-' len f<=len f+len f1-' len f by NAT_D:42;
+   then A27: i1<=len f1 by NAT_D:34;
+   1<=i1 by A26,NAT_D:55;
+   then prc f2,X,i1+len f by A3,A4,A5,A27,Th40;
+   hence prc f2,X,i by A26,NAT_D:43,55;
+  end;
+ end;
+
+theorem Th42:
+  (f=f1^<*p*> & 1<=len f1 &
+  for i be Nat st 1<=i & i<=len f1 holds prc f1,X,i) &
+  prc f,X,len f implies (for i be Nat st 1<=i & i<=len f holds prc f,X,i) &
+  X|-p
+ proof
+   assume that
+   A1: f=f1^<*p*> and
+   1<=len f1 and
+   A2: for i be Nat st 1<=i & i<=len f1 holds prc f1,X,i;
+  A3: len f=(len f1+len<*p*>) by A1,FINSEQ_1:35
+   .=len f1+1 by FINSEQ_1:56;
+  then A4: 1<=len f by XREAL_1:33;
+  assume A5: prc f,X,len f;
+  A6: 0+len f1<=len f by A3,NAT_1:12;
+  A7: now let i be Nat;
+   assume that
+    A8: 1<=i and
+    A9: i<=len f;
+   A10: i<len f1+1 or i=len f1+1 by A3,A9,XXREAL_0:1;
+   A11: for k be Nat st 1<=k & k<=len f1 holds f1.k=f.(k+0) by A1,FINSEQ_1:85;
+   per cases by A3,A10,NAT_1:13;
+   suppose i<=len f1;
+    then prc f,X,(i+0) by A2,A6,A8,A11,Th40;
+    hence prc f,X,i;
+   end;
+   suppose i=len f;
+    hence prc f,X,i by A5;
+   end;
+  end;
+  hence for i be Nat st 1<=i & i<=len f holds prc f,X,i;
+  f.len f=f.(len f1+len<*p*>) by A1,FINSEQ_1:35
+   .=f.(len f1+1) by FINSEQ_1:56
+   .=p by A1,FINSEQ_1:59;
+  hence X|-p by A4,A7,Def31;
+ end;
+
+theorem
+  F|-A implies F|=A
+ proof
+  assume F|-A;
+  then consider f such that
+   A1: f.len f=A and
+   A2: 1<=len f and
+   A3: for i be Nat st 1<=i & i<=len f holds prc f,F,i by Def31;
+  defpred P[Nat] means
+   1<=$1 & $1<=len f implies F|=f/.$1;
+  A4: for i being Nat st for j being Nat st j<i holds P[j] holds P[i]
+  proof
+   let i being Nat;
+   assume A5: for j being Nat st j<i holds P[j];
+   per cases by NAT_1:14;
+   suppose i=0;
+    hence P[i];
+   end;
+   suppose not i<1;
+    assume that
+     A6: 1<=i and
+     A7: i<=len f;
+    A8: prc f,F,i by A3,A6,A7;
+    per cases by A8,Def30;
+    suppose f.i in LTL_axioms;
+     then A9: f/.i in LTL_axioms by A6,A7,Th1;
+     per cases by A9,Th38;
+     suppose f/.i is LTL_TAUT_OF_PL;
+      hence F|=f/.i by Th34;
+     end;
+     suppose f/.i is axltl1 or f/.i is axltl1a or f/.i is axltl2 or f/.i is
+axltl3 or f/.i is axltl4 or f/.i is axltl5 or f/.i is axltl6;
+      hence F|=f/.i by Th39;
+     end;
+    end;
+    suppose f.i in F;
+     then A10: f/.i in F by A6,A7,Th1;
+     thus F|=f/.i
+     proof
+      let M;
+      assume M|=F;
+      hence M|=f/.i by A10,Def14;
+     end;
+    end;
+    suppose ex j,k be Nat st 1<=j & j<i & 1<=k & k<i & (f/.j,f/.k MP_rule f/.i
+or f/.j,f/.k IND_rule f/.i);
+     then consider j,k be Nat such that
+      A11: 1<=j and
+      A12: j<i and
+      A13: 1<=k and
+      A14: k<i and
+      A15: f/.j,f/.k MP_rule f/.i or f/.j,f/.k IND_rule f/.i;
+     k<=len f by A7,A14,XXREAL_0:2;
+     then A16: F|=f/.k by A5,A13,A14;
+     A17: j<=len f by A7,A12,XXREAL_0:2;
+     per cases by A15;
+     suppose f/.j,f/.k MP_rule f/.i;
+      then F|=f/.j=>f/.i by A16,Def21;
+      hence F|=f/.i by A5,A11,A12,A17,Th25;
+     end;
+     suppose f/.j,f/.k IND_rule f/.i;
+      then consider A,B such that
+       A18: f/.j=A=>B and
+       A19: f/.k=A=>('X' A) & f/.i=A=>('G' B) by Def22;
+      F|=A=>B by A5,A11,A12,A17,A18;
+      hence F|=f/.i by A16,A19,Th28;
+     end;
+    end;
+    suppose ex j be Nat st 1<=j & j<i & f/.j NEX_rule f/.i;
+     then consider j be Nat such that
+      A20: 1<=j and
+      A21: j<i and
+      A22: f/.j NEX_rule f/.i;
+     P[j] by A5,A21;
+     then F|='X'(f/.j) by A7,A20,A21,Th26,XXREAL_0:2;
+     hence F|=f/.i by A22,Def20;
+    end;
+   end;
+  end;
+  A23: for i be Nat holds P[i] from NAT_1:sch 4(A4);
+  f/.len f=A by A1,A2,Th1;
+  hence F|=A by A2,A23;
+ end;
+
+begin :: Derivation of Some Formulas. Deduction Theorem of LTL
+
+theorem Th44:
+  p in LTL_axioms or p in X implies X|-p
+ proof
+  defpred P1[set,set] means $2=p;
+  A1: for k being Nat st k in Seg 1 holds ex x being Element of LTLB_WFF st P1[
+k,x];
+  consider g such that
+   A2: dom g=Seg 1 & for k being Nat st k in Seg 1 holds P1[k,g.k] from
+FINSEQ_1:sch 5(A1);
+  A3: len g=1 by A2,FINSEQ_1:def 3;
+  1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
+  then A4: g.1=p by A2;
+  assume A5: p in LTL_axioms or p in X;
+  for j be Nat st 1<=j & j<=len g holds prc g,X,j
+  proof
+   let j be Nat;
+   assume A6: 1<=j & j<=len g;
+   per cases by A5;
+   suppose p in LTL_axioms;
+    then g.j in LTL_axioms by A3,A4,A6,XXREAL_0:1;
+    hence thesis by Def30;
+   end;
+   suppose p in X;
+    then g.j in X by A3,A4,A6,XXREAL_0:1;
+    hence thesis by Def30;
+   end;
+  end;
+  hence X|-p by A3,A4,Def31;
+ end;
+
+theorem Th45:
+  X|-p & X|-p=>q implies X|-q
+ proof
+  assume X|-p;
+  then consider f such that
+   A1: f.len f=p and
+   A2: 1<=len f and
+   A3: for i be Nat st 1<=i & i<=len f holds prc f,X,i by Def31;
+  set j=len f;
+  assume X|-p=>q;
+  then consider f1 such that
+   A4: f1.len f1=p=>q and
+   A5: 1<=len f1 and
+   A6: for i be Nat st 1<=i & i<=len f1 holds prc f1,X,i by Def31;
+  A7: 1<=len f+len f1 by A2,NAT_1:12;
+  set g=f^f1^<*q*>;
+  A8: g=f^(f1^<*q*>) by FINSEQ_1:45;
+  A9: for i be Nat st 1<=i & i<=len f1 holds g.(len f+i)=f1.i
+  proof
+   let i be Nat;
+   assume that
+    A10: 1<=i and
+    A11: i<=len f1;
+   len(f1^<*q*>)=len f1+len<*q*> by FINSEQ_1:35
+    .=len f1+1 by FINSEQ_1:56;
+   then i<=len(f1^<*q*>) by A11,NAT_1:12;
+   hence g.(len f+i)=(f1^<*q*>).i by A8,A10,FINSEQ_1:86
+    .=f1.i by A10,A11,FINSEQ_1:85;
+  end;
+  A12: len g=len(f^f1)+len<*q*> by FINSEQ_1:35
+   .=len(f^f1)+1 by FINSEQ_1:56;
+  then A13: len g=len f+len f1+1 by FINSEQ_1:35;
+  then len g=len f+(len f1+1);
+  then A14: j<len g by NAT_1:16;
+  then A15: g/.j=g.j by A2,Th1
+   .=p by A1,A2,A8,FINSEQ_1:85;
+  set k=len f+len f1;
+  A16: 1<=k by A2,NAT_1:12;
+  g.len g=q & 1<=len g by A12,FINSEQ_1:59,NAT_1:11;
+  then A17: g/.len g=q by Th1;
+  A18: k<len g by A13,NAT_1:16;
+  then g/.k=g.k by A2,Th1,NAT_1:12
+   .=p=>q by A4,A5,A9;
+  then g/.j,g/.k MP_rule g/.len g by A15,A17,Def21;
+  then A19: len(f^f1)=len f+len f1 & prc g,X,len g by A2,A14,A16,A18,Def30,
+FINSEQ_1:35;
+  for i be Nat st 1<=i & i<=len(f^f1) holds prc f^f1,X,i by A2,A3,A5,A6,Th41;
+  hence X|-q by A7,A19,Th42;
+ end;
+
+theorem Th46:
+  X|-p implies X|-'X' p
+ proof
+  assume X|-p;
+  then consider f such that
+   A1: f.len f=p and
+   A2: 1<=len f and
+   A3: for i be Nat st 1<=i & i<=len f holds prc f,X,i by Def31;
+  set g=f^<*('X' p)*>;
+  A4: len g=len f+len<*('X' p)*> by FINSEQ_1:35
+   .=len f+1 by FINSEQ_1:56;
+  then A5: len f<len g by NAT_1:16;
+  then A6: g/.len f=g.len f by A2,Th1
+   .=p by A1,A2,FINSEQ_1:85;
+  1<=len g by A2,A4,NAT_1:16;
+  then g/.len g=g.len g by Th1
+   .='X'(g/.len f) by A4,A6,FINSEQ_1:59;
+  then g/.len f NEX_rule g/.len g by Def20;
+  then prc g,X,len g by A2,A5,Def30;
+  hence X|-'X' p by A2,A3,Th42;
+ end;
+
+theorem Th47:
+  X|-p=>q & X|-p=>('X' p) implies X|-p=>('G' q)
+ proof
+  assume that
+   A1: X|-p=>q and
+   A2: X|-p=>('X' p);
+  consider f such that
+   A3: f.len f=p=>q and
+   A4: 1<=len f and
+   A5: for i be Nat st 1<=i & i<=len f holds prc f,X,i by A1,Def31;
+  consider g such that
+   A6: g.len g=p=>('X' p) and
+   A7: 1<=len g and
+   A8: for i be Nat st 1<=i & i<=len g holds prc g,X,i by A2,Def31;
+  A9: for i be Nat st 1<=i & i<=len(f^g) holds prc f^g,X,i by A4,A5,A7,A8,Th41;
+  set h=f^g^<*p=>('G' q)*>;
+  A10: h=f^(g^<*p=>('G' q)*>) by FINSEQ_1:45;
+  A11: len(f^g)=len f+len g by FINSEQ_1:35;
+  then A12: 1<=len(f^g) by A4,NAT_1:12;
+  A13: len h=len(f^g)+len<*p=>('G' q)*> by FINSEQ_1:35
+   .=len(f^g)+1 by FINSEQ_1:56;
+  then 1<=len h by A4,A11,NAT_1:16;
+  then A14: h/.len h=h.len h by Th1
+   .=p=>('G' q) by A13,FINSEQ_1:59;
+  len h=len f+(len g+1) by A11,A13;
+  then A15: len f<len h by NAT_1:16;
+  then A16: h/.len f=h.len f by A4,Th1
+   .=p=>q by A3,A4,A10,FINSEQ_1:85;
+  A17: len(f^g)<len h by A13,NAT_1:16;
+  then h/.len(f^g)=h.len(f^g) by A12,Th1
+   .=(f^g).len(f^g) by A12,FINSEQ_1:85
+   .=(f^g).(len f+len g) by FINSEQ_1:35
+   .=p=>('X' p) by A6,A7,FINSEQ_1:86;
+  then h/.len f,h/.len(f^g)IND_rule h/.len h by A16,A14,Def22;
+  then prc h,X,len h by A4,A12,A15,A17,Def30;
+  hence X|-p=>('G' q) by A12,A9,Th42;
+ end;
+
+theorem Th48:
+  X|-r=>(p '&&' q) implies X|-r=>p & X|-r=>q
+ proof
+  assume A1: X|-r=>(p '&&' q);
+  set A=(r=>(p '&&' q))=>(r=>p);
+  A is LTL_TAUT_OF_PL
+  proof
+   let f be Function of LTLB_WFF,BOOLEAN;
+   thus(VAL f).A=(VAL f).(r=>(p '&&' q))=>(VAL f).(r=>p) by Def16
+    .=(VAL f).r=>(VAL f).(p '&&' q)=>(VAL f).(r=>p) by Def16
+    .=(VAL f).r=>((VAL f).p '&'(VAL f).q)=>(VAL f).(r=>p) by Th32
+    .=(VAL f).r=>((VAL f).p '&'(VAL f).q)=>((VAL f).r=>(VAL f).p) by Def16
+    .=1 by Th2;
+  end;
+  then A in LTL_axioms by Def18;
+  then X|-A by Th44;
+  hence X|-r=>p by A1,Th45;
+  set A=(r=>(p '&&' q))=>(r=>q);
+  A is LTL_TAUT_OF_PL
+  proof
+   let f be Function of LTLB_WFF,BOOLEAN;
+   thus(VAL f).A=(VAL f).(r=>(p '&&' q))=>(VAL f).(r=>q) by Def16
+    .=(VAL f).r=>(VAL f).(p '&&' q)=>(VAL f).(r=>q) by Def16
+    .=(VAL f).r=>((VAL f).p '&'(VAL f).q)=>(VAL f).(r=>q) by Th32
+    .=(VAL f).r=>((VAL f).p '&'(VAL f).q)=>((VAL f).r=>(VAL f).q) by Def16
+    .=1 by Th2;
+  end;
+  then A in LTL_axioms by Def18;
+  then X|-A by Th44;
+  hence X|-r=>q by A1,Th45;
+ end;
+
+theorem Th49:
+  X|-p=>q & X|-q=>r implies X|-p=>r
+ proof
+  assume that
+   A1: X|-p=>q and
+   A2: X|-q=>r;
+  set A=(p=>q)=>((q=>r)=>(p=>r));
+  now let f be Function of LTLB_WFF,BOOLEAN;
+   thus(VAL f).A=(VAL f).(p=>q)=>(VAL f).((q=>r)=>(p=>r)) by Def16
+    .=((VAL f).p=>(VAL f).q)=>(VAL f).((q=>r)=>(p=>r)) by Def16
+    .=((VAL f).p=>(VAL f).q)=>((VAL f).(q=>r)=>(VAL f).(p=>r)) by Def16
+    .=((VAL f).p=>(VAL f).q)=>((VAL f).q=>(VAL f).r=>(VAL f).(p=>r)) by Def16
+    .=((VAL f).p=>(VAL f).q)=>((VAL f).q=>(VAL f).r=>((VAL f).p=>(VAL f).r)) by
+Def16
+    .=1 by XBOOLEAN:106;
+  end;
+  then (p=>q)=>((q=>r)=>(p=>r)) is LTL_TAUT_OF_PL by Def17;
+  then (p=>q)=>((q=>r)=>(p=>r)) in LTL_axioms by Def18;
+  then X|-(p=>q)=>((q=>r)=>(p=>r)) by Th44;
+  then X|-(q=>r)=>(p=>r) by A1,Th45;
+  hence X|-p=>r by A2,Th45;
+ end;
+
+theorem Th50:
+  X|-p=>(q=>r) implies X|-(p '&&' q)=>r
+ proof
+  set A=(p=>(q=>r))=>((p '&&' q)=>r);
+  now let f be Function of LTLB_WFF,BOOLEAN;
+   thus(VAL f).A=(VAL f).(p=>(q=>r))=>(VAL f).((p '&&' q)=>r) by Def16
+    .=((VAL f).p=>(VAL f).(q=>r))=>(VAL f).((p '&&' q)=>r) by Def16
+    .=(VAL f).p=>((VAL f).q=>(VAL f).r)=>(VAL f).((p '&&' q)=>r) by Def16
+    .=(VAL f).p=>((VAL f).q=>(VAL f).r)=>((VAL f).(p '&&' q)=>(VAL f).r) by
+Def16
+    .=(VAL f).p=>((VAL f).q=>(VAL f).r)=>((VAL f).p '&'(VAL f).q=>(VAL f).r) by
+Th32
+    .=1 by Th3;
+  end;
+  then A is LTL_TAUT_OF_PL by Def17;
+  then A in LTL_axioms by Def18;
+  then A1: X|-A by Th44;
+  assume X|-p=>(q=>r);
+  hence X|-(p '&&' q)=>r by A1,Th45;
+ end;
+
+theorem Th51:
+  X|-(p '&&' q)=>r implies X|-p=>(q=>r)
+ proof
+  set A=((p '&&' q)=>r)=>(p=>(q=>r));
+  now let f be Function of LTLB_WFF,BOOLEAN;
+   thus(VAL f).A=(VAL f).((p '&&' q)=>r)=>(VAL f).(p=>(q=>r)) by Def16
+    .=((VAL f).(p '&&' q)=>(VAL f).r)=>(VAL f).(p=>(q=>r)) by Def16
+    .=(((VAL f).p '&'(VAL f).q)=>(VAL f).r)=>(VAL f).(p=>(q=>r)) by Th32
+    .=(((VAL f).p '&'(VAL f).q)=>(VAL f).r)=>((VAL f).p=>(VAL f).(q=>r)) by
+Def16
+    .=(((VAL f).p '&'(VAL f).q)=>(VAL f).r)=>((VAL f).p=>((VAL f).q=>(VAL f).r)
+) by Def16
+    .=1 by Th4;
+  end;
+  then A is LTL_TAUT_OF_PL by Def17;
+  then A in LTL_axioms by Def18;
+  then A1: X|-A by Th44;
+  assume X|-(p '&&' q)=>r;
+  hence X|-p=>(q=>r) by A1,Th45;
+ end;
+
+theorem Th52:
+  X|-(p '&&' q)=>r & X|-p=>s implies X|-(p '&&' q)=>(s '&&' r)
+ proof
+  assume that
+   A1: X|-(p '&&' q)=>r and
+   A2: X|-p=>s;
+  set A=((p '&&' q)=>r)=>((p=>s)=>((p '&&' q)=>(s '&&' r)));
+  now let f be Function of LTLB_WFF,BOOLEAN;
+   A3: (VAL f).p=0 or(VAL f).p=1 by XBOOLEAN:def 3;
+   A4: (VAL f).q=0 or(VAL f).q=1 by XBOOLEAN:def 3;
+   A5: (VAL f).s=0 or(VAL f).s=1 by XBOOLEAN:def 3;
+   A6: (VAL f).r=0 or(VAL f).r=1 by XBOOLEAN:def 3;
+   thus(VAL f).A=(VAL f).((p '&&' q)=>r)=>(VAL f).((p=>s)=>((p '&&' q)=>(s '&&'
+r))) by Def16
+    .=((VAL f).(p '&&' q)=>(VAL f).r)=>(VAL f).((p=>s)=>((p '&&' q)=>(s '&&' r)
+)) by Def16
+    .=(((VAL f).p '&'(VAL f).q)=>(VAL f).r)=>(VAL f).((p=>s)=>((p '&&' q)=>(s
+'&&' r))) by Th32
+    .=(((VAL f).p '&'(VAL f).q)=>(VAL f).r)=>((VAL f).(p=>s)=>(VAL f).((p '&&'
+q)=>(s '&&' r))) by Def16
+    .=(((VAL f).p '&'(VAL f).q)=>(VAL f).r)=>(((VAL f).p=>(VAL f).s)=>(VAL f).(
+(p '&&' q)=>(s '&&' r))) by Def16
+    .=(((VAL f).p '&'(VAL f).q)=>(VAL f).r)=>(((VAL f).p=>(VAL f).s)=>((VAL f).
+(p '&&' q)=>(VAL f).(s '&&' r))) by Def16
+    .=(((VAL f).p '&'(VAL f).q)=>(VAL f).r)=>(((VAL f).p=>(VAL f).s)=>(((VAL f)
+.p '&'(VAL f).q)=>(VAL f).(s '&&' r))) by Th32
+    .=1 by A3,A4,A6,A5,Th32;
+  end;
+  then A is LTL_TAUT_OF_PL by Def17;
+  then A in LTL_axioms by Def18;
+  then X|-A by Th44;
+  then X|-((p=>s)=>((p '&&' q)=>(s '&&' r))) by A1,Th45;
+  hence thesis by A2,Th45;
+ end;
+
+theorem Th53:
+  X|-p=>(q=>r) & X|-r=>s implies X|-p=>(q=>s)
+ proof
+  assume that
+   A1: X|-p=>(q=>r) and
+   A2: X|-r=>s;
+  set A=(p=>(q=>r))=>((r=>s)=>(p=>(q=>s)));
+  now let f be Function of LTLB_WFF,BOOLEAN;
+   A3: (VAL f).p=0 or(VAL f).p=1 by XBOOLEAN:def 3;
+   A4: (VAL f).r=0 or(VAL f).r=1 by XBOOLEAN:def 3;
+   set B=(VAL f).(p=>(q=>r)),C=(VAL f).(r=>s),D=(VAL f).(p=>(q=>s));
+   A5: (VAL f).q=0 or(VAL f).q=1 by XBOOLEAN:def 3;
+   A6: (VAL f).s=0 or(VAL f).s=1 by XBOOLEAN:def 3;
+   A7: (VAL f).(p=>(q=>s))=(VAL f).p=>(VAL f).(q=>s) by Def16
+    .=(VAL f).p=>((VAL f).q=>(VAL f).s) by Def16;
+   A8: (VAL f).(p=>(q=>r))=(VAL f).p=>(VAL f).(q=>r) by Def16
+    .=(VAL f).p=>((VAL f).q=>(VAL f).r) by Def16;
+   thus(VAL f).A=B=>(VAL f).((r=>s)=>(p=>(q=>s))) by Def16
+    .=B=>(C=>D) by Def16
+    .=1 by A3,A5,A4,A6,A8,A7,Def16;
+  end;
+  then A is LTL_TAUT_OF_PL by Def17;
+  then A in LTL_axioms by Def18;
+  then X|-A by Th44;
+  then X|-((r=>s)=>(p=>(q=>s))) by A1,Th45;
+  hence X|-p=>(q=>s) by A2,Th45;
+ end;
+
+theorem Th54:
+  X|-p=>q implies X|-('not' q)=>('not' p)
+ proof
+  set A=(p=>q)=>(('not' q)=>('not' p));
+  now let f be Function of LTLB_WFF,BOOLEAN;
+   A1: (VAL f).p=0 or(VAL f).p=1 by XBOOLEAN:def 3;
+   A2: (VAL f).q=0 or(VAL f).q=1 by XBOOLEAN:def 3;
+   thus(VAL f).A=(VAL f).(p=>q)=>(VAL f).(('not' q)=>('not' p)) by Def16
+    .=((VAL f).p=>(VAL f).q)=>(VAL f).(('not' q)=>('not' p)) by Def16
+    .=((VAL f).p=>(VAL f).q)=>((VAL f).(q=>TFALSUM)=>(VAL f).(p=>TFALSUM)) by
+Def16
+    .=((VAL f).p=>(VAL f).q)=>(((VAL f).q=>(VAL f).TFALSUM)=>((VAL f).(p=>
+TFALSUM))) by Def16
+    .=((VAL f).p=>(VAL f).q)=>(((VAL f).q=>FALSE)=>((VAL f).(p=>TFALSUM))) by
+Def16
+    .=((VAL f).p=>(VAL f).q)=>(((VAL f).q=>FALSE)=>(((VAL f).p=>(VAL f).TFALSUM
+))) by Def16
+    .=1 by A1,A2;
+  end;
+  then A is LTL_TAUT_OF_PL by Def17;
+  then A in LTL_axioms by Def18;
+  then A3: X|-A by Th44;
+  assume X|-p=>q;
+  hence thesis by A3,Th45;
+ end;
+
+theorem Th55:
+  X|-(('X' p)'&&'('X' q))=>('X'(p '&&' q))
+ proof
+  set Xp='X' p,nq='not' q,nXq='not' 'X' q,Xnq='X' 'not' q;
+  Xnq=>nXq in LTL_axioms by Def18;
+  then A1: X|-Xnq=>nXq by Th44;
+  ('not'('X'(p=>nq)))=>('X'('not'(p=>nq))) in LTL_axioms by Def18;
+  then A2: X|-('not'('X'(p=>nq)))=>('X'('not'(p=>nq))) by Th44;
+  ('X'(p=>nq))=>(Xp=>Xnq) in LTL_axioms by Def18;
+  then X|-('X'(p=>nq))=>(Xp=>Xnq) by Th44;
+  then X|-('X'(p=>nq))=>(Xp=>nXq) by A1,Th53;
+  then X|-('not'(Xp=>nXq))=>('not'('X'(p=>nq))) by Th54;
+  hence thesis by A2,Th49;
+ end;
+
+theorem Th56:
+  F|-p implies F|-'G' p
+ proof
+  assume A1: F|-p;
+  p=>(p=>p) in LTL_axioms by Th36;
+  then F|-p=>(p=>p) by Th44;
+  then A2: F|-p=>p by A1,Th45;
+  ('X' p)=>(p=>('X' p)) in LTL_axioms by Th36;
+  then A3: F|-('X' p)=>(p=>('X' p)) by Th44;
+  F|-'X' p by A1,Th46;
+  then F|-p=>('X' p) by A3,Th45;
+  then F|-p=>('G' p) by A2,Th47;
+  hence F|-'G' p by A1,Th45;
+ end;
+
+theorem Th57:
+  p=>q in F implies F\/{p}|-'G' q
+ proof
+  p in {p} by TARSKI:def 1;
+  then p in F\/{p} by XBOOLE_0:def 3;
+  then A1: F\/{p}|-p by Th44;
+  assume p=>q in F;
+  then p=>q in F\/{p} by XBOOLE_0:def 3;
+  then F\/{p}|-p=>q by Th44;
+  then F\/{p}|-q by A1,Th45;
+  hence F\/{p}|-'G' q by Th56;
+ end;
+
+theorem Th58:
+  F|-q implies F\/{p}|-q
+ proof
+  assume F|-q;
+  then consider f such that
+   A1: f.len f=q & 1<=len f and
+   A2: for i be Nat st 1<=i & i<=len f holds prc f,F,i by Def31;
+  now let i be Nat;
+   assume 1<=i & i<=len f;
+   then prc f,F,i by A2;
+   then f.i in LTL_axioms or f.i in F or ex j,k be Nat st 1<=j & j<i & 1<=k & k
+<i & (f/.j,f/.k MP_rule f/.i or f/.j,f/.k IND_rule f/.i) or ex j be Nat st 1<=j
+& j<i & f/.j NEX_rule f/.i by Def30;
+   then f.i in LTL_axioms or f.i in F\/{p} or ex j,k be Nat st 1<=j & j<i & 1<=
+k & k<i & (f/.j,f/.k MP_rule f/.i or f/.j,f/.k IND_rule f/.i) or ex j be Nat st
+1<=j & j<i & f/.j NEX_rule f/.i by XBOOLE_0:def 3;
+   hence prc f,F\/{p},i by Def30;
+  end;
+  hence F\/{p}|-q by A1,Def31;
+ end;
+
+theorem Th59:
+  F\/{p}|-q implies F|-('G' p)=>q
+ proof
+  set G=F\/{p};
+  assume G|-q;
+  then consider f such that
+   A1: f.len f=q and
+   A2: 1<=len f and
+   A3: for i be Nat st 1<=i & i<=len f holds prc f,G,i by Def31;
+  defpred P[Nat] means
+   1<=$1 & $1<=len f implies F|-('G' p)=>f/.$1;
+  A4: for i being Nat st for j being Nat st j<i holds P[j] holds P[i]
+  proof
+   let i be Nat;
+   assume A5: for j be Nat st j<i holds P[j];
+   per cases by NAT_1:14;
+   suppose i=0;
+    hence P[i];
+   end;
+   suppose not i<1;
+    assume that
+     A6: 1<=i and
+     A7: i<=len f;
+    A8: prc f,G,i by A3,A6,A7;
+    per cases by A8,Def30;
+    suppose A9: f.i in LTL_axioms;
+     set t=f/.i;
+     t=>(('G' p)=>t) in LTL_axioms by Th36;
+     then A10: F|-t=>(('G' p)=>t) by Th44;
+     f/.i in LTL_axioms by A6,A7,A9,Th1;
+     then F|-t by Th44;
+     hence thesis by A10,Th45;
+    end;
+    suppose A11: f.i in G;
+     per cases by A11,XBOOLE_0:def 3;
+     suppose A12: f.i in F;
+      set t=f/.i;
+      t=>(('G' p)=>t) in LTL_axioms by Th36;
+      then A13: F|-t=>(('G' p)=>t) by Th44;
+      f/.i in F by A6,A7,A12,Th1;
+      then F|-t by Th44;
+      hence thesis by A13,Th45;
+     end;
+     suppose A14: f.i in {p};
+      ('G' p)=>(p '&&'('X'('G' p))) in LTL_axioms by Def18;
+      then A15: F|-('G' p)=>(p '&&'('X'('G' p))) by Th44;
+      f.i=p by A14,TARSKI:def 1;
+      then f/.i=p by A6,A7,Th1;
+      hence thesis by A15,Th48;
+     end;
+    end;
+    suppose ex j,k be Nat st 1<=j & j<i & 1<=k & k<i & (f/.j,f/.k MP_rule f/.i
+or f/.j,f/.k IND_rule f/.i);
+     then consider j,k be Nat such that
+      A16: 1<=j and
+      A17: j<i and
+      A18: 1<=k and
+      A19: k<i and
+      A20: f/.j,f/.k MP_rule f/.i or f/.j,f/.k IND_rule f/.i;
+     j<=len f by A7,A17,XXREAL_0:2;
+     then A21: F|-('G' p)=>f/.j by A5,A16,A17;
+     k<=len f by A7,A19,XXREAL_0:2;
+     then A22: F|-('G' p)=>f/.k by A5,A18,A19;
+     per cases by A20;
+     suppose A23: f/.j,f/.k MP_rule f/.i;
+      set t3=(('G' p)=>(f/.j=>f/.i))=>((('G' p)=>f/.j)=>(('G' p)=>f/.i));
+      t3 in LTL_axioms by Th37;
+      then A24: F|-t3 by Th44;
+      F|-('G' p)=>(f/.j=>f/.i) by A22,A23,Def21;
+      then F|-((('G' p)=>f/.j)=>(('G' p)=>f/.i)) by A24,Th45;
+      hence F|-('G' p)=>f/.i by A21,Th45;
+     end;
+     suppose f/.j,f/.k IND_rule f/.i;
+      then consider A,B such that
+       A25: f/.j=A=>B and
+       A26: f/.k=A=>('X' A) and
+       A27: f/.i=A=>('G' B) by Def22;
+      set Gp='G' p,XGp='X' 'G' p,XA='X' A,Xq='X' q,GB='G' B;
+      Gp=>(p '&&' XGp) in LTL_axioms by Def18;
+      then F|-Gp=>(p '&&' XGp) by Th44;
+      then A28: F|-Gp=>XGp by Th48;
+      F|-(Gp '&&' A)=>XA by A22,A26,Th50;
+      then A29: F|-(Gp '&&' A)=>(XGp '&&' XA) by A28,Th52;
+      F|-(XGp '&&' XA)=>('X'(Gp '&&' A)) by Th55;
+      then A30: F|-(Gp '&&' A)=>('X'(Gp '&&' A)) by A29,Th49;
+      F|-(Gp '&&' A)=>B by A21,A25,Th50;
+      then F|-(Gp '&&' A)=>GB by A30,Th47;
+      hence thesis by A27,Th51;
+     end;
+    end;
+    suppose A31: ex j be Nat st 1<=j & j<i & f/.j NEX_rule f/.i;
+     A32: LTL_axioms is with_LTL_axioms;
+     ('G' p)=>(p '&&'('X'('G' p))) in LTL_axioms by Def18;
+     then F|-('G' p)=>(p '&&'('X'('G' p))) by Th44;
+     then A33: F|-('G' p)=>('X'('G' p)) by Th48;
+     consider j be Nat,q,r such that
+      A34: 1<=j and
+      A35: j<i and
+      A36: f/.j NEX_rule f/.i by A31;
+     ('X'(('G' p)=>f/.j))=>(('X'('G' p))=>'X' f/.j) in LTL_axioms by Def18;
+     then A37: F|-('X'(('G' p)=>f/.j))=>(('X'('G' p))=>'X' f/.j) by Th44;
+     j<=len f by A7,A35,XXREAL_0:2;
+     then F|-'X'(('G' p)=>f/.j) by A5,A34,A35,Th46;
+     then A38: F|-('X'('G' p))=>'X' f/.j by A37,Th45;
+     f/.i='X' f/.j by A36,Def20;
+     hence thesis by A38,A33,Th49;
+    end;
+   end;
+  end;
+  A39: for i be Nat holds P[i] from NAT_1:sch 4(A4);
+  q=f/.len f by A1,A2,Th1;
+  hence F|-('G' p)=>q by A2,A39;
+ end;
+
+theorem
+  F|-p=>q implies F\/{p}|-q
+ proof
+  p in {p} by TARSKI:def 1;
+  then p in F\/{p} by XBOOLE_0:def 3;
+  then A1: F\/{p}|-p by Th44;
+  assume F|-p=>q;
+  then F\/{p}|-p=>q by Th58;
+  hence F\/{p}|-q by A1,Th45;
+ end;
+
+theorem
+  F|-('G' p)=>q implies F\/{p}|-q
+ proof
+  p in {p} by TARSKI:def 1;
+  then p in F\/{p} by XBOOLE_0:def 3;
+  then F\/{p}|-p by Th44;
+  then A1: F\/{p}|-'G' p by Th56;
+  assume F|-('G' p)=>q;
+  then F\/{p}|-('G' p)=>q by Th58;
+  hence F\/{p}|-q by A1,Th45;
+ end;
+
+theorem
+  F|-('G'(p=>q))=>(('G' p)=>('G' q))
+ proof
+  reconsider G=F\/{p=>q}\/{p} as Subset of LTLB_WFF;
+  p=>q in {p=>q} by TARSKI:def 1;
+  then p=>q in F\/{p=>q} by XBOOLE_0:def 3;
+  then G|-'G' q by Th57;
+  then F\/{p=>q}|-('G' p)=>('G' q) by Th59;
+  hence thesis by Th59;
+ end;

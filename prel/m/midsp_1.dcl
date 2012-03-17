@@ -24,7 +24,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="79"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MIDSP_1" nr="2">
@@ -33,7 +33,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
+<Adjective nr="33" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MIDSP_1" nr="3">
@@ -42,25 +42,25 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="79"/>
+<Adjective nr="33" value="false"/>
 <Adjective nr="80"/>
+<Adjective nr="81"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MIDSP_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="108"/>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="79"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="80"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MIDSP_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="80"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="81"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -87,8 +87,8 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="80"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="81"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -103,8 +103,8 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="80"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="81"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -112,8 +112,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="50"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 </Registrations>

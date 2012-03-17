@@ -1,0 +1,330 @@
+:: Linear Transformations of Euclidean Topological Spaces
+::  by Karol P\kak
+:: 
+:: Received October 26, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies ALGSTR_0, ARYTM_1, ARYTM_3, BINOP_2, CARD_1, CARD_3, CLASSES1,
+      COMPLEX1, CONNSP_2, EUCLID, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSET_1,
+      FINSOP_1, FUNCT_1, FUNCT_2, FVSUM_1, INCSP_1, LMOD_7, MATRIX_1, MATRIX_3,
+      MATRIX_6, MATRIX13, MATRIX15, MATRIXR1, MATRLIN, MATRLIN2, MESFUNC1,
+      METRIC_1, NAT_1, NUMBERS, ORDINAL1, ORDINAL2, ORDINAL4, PARTFUN1,
+      PARTFUN3, PRE_POLY, PRE_TOPC, PRVECT_1, QC_LANG1, RANKNULL, REAL_1,
+      RELAT_1, RLSUB_1, RLVECT_3, RLVECT_5, RVSUM_1, SETWISEO, SQUARE_1,
+      STRUCT_0, SUBSET_1, SUPINF_2, TARSKI, TOPS_1, TOPS_2, TREES_1, VALUED_0,
+      VALUED_1, VECTSP_1, VECTSP10, XBOOLE_0, XREAL_0, XXREAL_0, ZFMISC_1,
+      FUNCOP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, CARD_1, NUMBERS,
+      XXREAL_0, NAT_1, FINSET_1, TOPS_1, TOPS_2, FUNCT_1, PARTFUN1, VALUED_0,
+      VALUED_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, BINOP_1, STRUCT_0,
+      VECTSP_1, MATRIX_1, FVSUM_1, MATRIX_3, VECTSP_4, VECTSP_7, VECTSP_9,
+      MATRIX13, SETWOP_2, XREAL_0, REAL_1, RVSUM_1, ALGSTR_0, RANKNULL,
+      MATRIX11, ORDINAL1, COMPLEX1, BINOP_2, FUNCOP_1, SQUARE_1, PRE_TOPC,
+      PARTFUN3, MATRIX_6, MATRLIN, MATRLIN2, NAT_D, MATRIX15, CONNSP_2,
+      METRIC_1, EUCLID, FINSOP_1, PNPROC_1, RUSUB_4, PRVECT_1;
+ constructors BINARITH, CONNSP_2, FINSOP_1, FVSUM_1, LAPLACE, MATRIX_6,
+      MATRIX11, MATRIX13, MATRIX15, MATRLIN2, MONOID_0, PARTFUN3, PNPROC_1,
+      RANKNULL, RELSET_1, RUSUB_5, SEQ_1, SETWISEO, SQUARE_1, TOPS_1, TOPS_2,
+      VECTSP_9, VECTSP10, WELLORD2, SEQ_4;
+ registrations BINOP_2, CARD_1, EUCLID, EUCLID_9, FINSEQ_1, FINSEQ_2, FINSET_1,
+      FUNCT_1, FUNCT_2, GRCAT_1, MATRIX13, MATRLIN2, MEMBERED, MOD_2, MONOID_0,
+      NAT_1, NUMBERS, PARTFUN3, PNPROC_1, PRVECT_1, RELAT_1, RELSET_1, RVSUM_1,
+      STRUCT_0, VALUED_0, VALUED_1, VECTSP_1, VECTSP_9, XBOOLE_0, XREAL_0,
+      XXREAL_0;
+ requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
+
+
+begin :: Preliminaries
+
+ reserve X,Y for set,
+         n,m,k,i for Nat,
+         r for real number,
+         R for Element of F_Real,
+         K for Field,
+         f,f1,f2,g1,g2 for FinSequence,
+         rf,rf1,rf2 for real-valued FinSequence,
+         cf,cf1,cf2 for complex-valued FinSequence,
+         F for Function;
+
+registration
+  let X,Y;
+  let F be positive-yielding PartFunc of X,REAL;
+  cluster F|Y -> positive-yielding;
+end;
+
+registration
+  let X,Y;
+  let F be negative-yielding PartFunc of X,REAL;
+  cluster F|Y -> negative-yielding;
+end;
+
+registration
+  let X,Y;
+  let F be nonpositive-yielding PartFunc of X,REAL;
+  cluster F|Y -> nonpositive-yielding;
+end;
+
+registration
+  let X,Y;
+  let F be nonnegative-yielding PartFunc of X,REAL;
+  cluster F|Y -> nonnegative-yielding;
+end;
+
+registration
+  let rf;
+  cluster sqrt rf -> FinSequence-like;
+end;
+
+definition
+  let rf;
+  func @rf -> FinSequence of F_Real equals
+:: MATRTOP1:def 1
+    rf;
+end;
+
+definition
+  let p be FinSequence of F_Real;
+  func @p -> FinSequence of REAL equals
+:: MATRTOP1:def 2
+    p;
+end;
+
+theorem :: MATRTOP1:1
+  @rf1 + @rf2 = rf1 + rf2;
+
+theorem :: MATRTOP1:2
+  sqrt (rf1^rf2) = (sqrt rf1) ^ (sqrt rf2);
+
+theorem :: MATRTOP1:3
+  sqrt <*r*> = <*sqrt r*>;
+
+theorem :: MATRTOP1:4
+  sqrt(rf^2)=abs rf;
+
+theorem :: MATRTOP1:5
+  rf is nonnegative-yielding implies sqrt Sum rf <= Sum sqrt rf;
+
+theorem :: MATRTOP1:6
+  ex X st X c= dom F & rng F = rng(F|X) & (F|X) is one-to-one;
+
+registration
+  let cf,X;
+  cluster cf-X -> complex-valued;
+end;
+
+registration
+  let rf,X;
+  cluster rf-X -> real-valued;
+end;
+
+registration
+  let cf be complex-valued FinSubsequence;
+  cluster Seq cf -> complex-valued;
+end;
+
+registration
+  let rf be real-valued FinSubsequence;
+  cluster Seq rf -> real-valued;
+end;
+
+theorem :: MATRTOP1:7
+  for P be Permutation of dom f st f1 = f*P
+    ex Q be Permutation of dom(f-X) st f1-X = (f-X)*Q;
+
+theorem :: MATRTOP1:8
+  for P be Permutation of dom cf st cf1 = cf*P holds Sum (cf1-X) = Sum(cf-X);
+
+theorem :: MATRTOP1:9
+  for f,f1 be FinSubsequence for P be Permutation of dom f st f1 = f*P
+   ex Q be Permutation of dom Seq(f1|P"X) st Seq(f|X) = Seq(f1|P"X) * Q;
+
+theorem :: MATRTOP1:10
+  for cf,cf1 be complex-valued FinSubsequence
+    for P be Permutation of dom cf st cf1 = cf * P
+  holds Sum Seq(cf|X) = Sum Seq(cf1|P"X);
+
+theorem :: MATRTOP1:11
+  for f be FinSubsequence for n be Element of NAT st
+     for i holds i+n in X iff i in Y
+  holds (n Shift f) |X = n Shift(f|Y);
+
+theorem :: MATRTOP1:12
+  ex Y be Subset of NAT st
+    Seq((f1^f2) |X) = Seq(f1|X)^Seq(f2|Y) &
+    for n st n>0 holds n in Y iff n+len f1 in X/\dom(f1^f2);
+
+theorem :: MATRTOP1:13
+  len g1 = len f1 & len g2 <= len f2 implies
+     Seq((f1^f2) | (g1^g2)"X) = Seq(f1|g1"X) ^ Seq(f2|g2"X);
+
+theorem :: MATRTOP1:14
+  for D be non empty set for M be Matrix of n,m,D holds
+    M-X is Matrix of n-'card(M"X),m,D;
+
+theorem :: MATRTOP1:15
+  for F be Function of Seg n,Seg n,D be non empty set
+    for M be Matrix of n,m,D for i st i in Seg width M
+  holds Col(M*F,i) = Col(M,i)*F;
+
+theorem :: MATRTOP1:16
+  for A be Matrix of n,m,K st the_rank_of A = n
+    ex B be Matrix of m-' n,m,K st the_rank_of(A^B) = m;
+
+theorem :: MATRTOP1:17
+  for A be Matrix of n,m,K st the_rank_of A = m
+    ex B be Matrix of n,n-' m,K st the_rank_of(A^^B) = n;
+
+reserve f,f1,f2 for n-element real-valued FinSequence,
+        p,p1,p2 for Point of TOP-REAL n,
+        M,M1,M2 for Matrix of n,m,F_Real,
+        A,B for Matrix of n,F_Real;
+
+begin :: Linear Transformations of Euclidean Topological Spaces
+      :: given by a Transformation Matrix
+
+definition
+  let n,m,M;
+  func Mx2Tran M -> Function of TOP-REAL n,TOP-REAL m means
+:: MATRTOP1:def 3
+   it.f = Line(LineVec2Mx(@f)*M,1) if n <> 0 otherwise it.f = 0.TOP-REAL m;
+end;
+
+registration
+  let n,m,M;
+  let x be set;
+  cluster (Mx2Tran M).x -> Function-like Relation-like;
+  cluster (Mx2Tran M).x -> real-valued FinSequence-like;
+end;
+
+registration
+  let n,m,M,f;
+  cluster (Mx2Tran M).f -> m-element;
+end;
+
+theorem :: MATRTOP1:18
+  1 <= i & i <= m & n <> 0 implies (Mx2Tran M).f.i = @f"*"Col(M,i);
+
+theorem :: MATRTOP1:19
+  len MX2FinS 1.(K,n) = n;
+
+theorem :: MATRTOP1:20
+  for Bn be OrdBasis of n-VectSp_over F_Real,
+      Bm be OrdBasis of m-VectSp_over F_Real st
+    Bn = MX2FinS 1.(F_Real,n) & Bm = MX2FinS 1.(F_Real,m)
+  for M1 be Matrix of len Bn,len Bm,F_Real st M1 = M
+    holds Mx2Tran M = Mx2Tran(M1,Bn,Bm);
+
+theorem :: MATRTOP1:21
+  for P be Permutation of Seg n holds
+   (Mx2Tran M).f = (Mx2Tran(M*P)).(f*P) & f*P is n-element FinSequence of REAL;
+
+theorem :: MATRTOP1:22
+  (Mx2Tran M).(f1+f2) = (Mx2Tran M).f1 + (Mx2Tran M).f2;
+
+theorem :: MATRTOP1:23
+  (Mx2Tran M).(r*f) = r * ((Mx2Tran M).f);
+
+theorem :: MATRTOP1:24
+  (Mx2Tran M).(f1-f2) = (Mx2Tran M).f1 - (Mx2Tran M).f2;
+
+theorem :: MATRTOP1:25
+  (Mx2Tran(M1+M2)).f = (Mx2Tran M1).f + (Mx2Tran M2).f;
+
+theorem :: MATRTOP1:26
+  r = R implies r * (Mx2Tran M).f = (Mx2Tran(R*M)).f;
+
+theorem :: MATRTOP1:27
+  (Mx2Tran M).(p1+p2) = (Mx2Tran M).p1 + (Mx2Tran M).p2;
+
+theorem :: MATRTOP1:28
+  (Mx2Tran M).(p1-p2) = (Mx2Tran M).p1-(Mx2Tran M).p2;
+
+theorem :: MATRTOP1:29
+  (Mx2Tran M).0.TOP-REAL n = 0.TOP-REAL m;
+
+theorem :: MATRTOP1:30
+  for A be Subset of TOP-REAL n holds
+   (Mx2Tran M).:(p+A) = (Mx2Tran M).p + (Mx2Tran M).:A;
+
+theorem :: MATRTOP1:31
+  for A be Subset of TOP-REAL m holds
+   (Mx2Tran M)"(((Mx2Tran M).p)+A) = p + (Mx2Tran M)"A;
+
+theorem :: MATRTOP1:32
+  for A be Matrix of n,m,F_Real,
+      B be Matrix of width A,k,F_Real st
+      (n = 0 implies m = 0) & (m = 0 implies k = 0)
+    holds (Mx2Tran B) * (Mx2Tran A) = Mx2Tran(A*B);
+
+theorem :: MATRTOP1:33
+  Mx2Tran 1.(F_Real,n) = id TOP-REAL n;
+
+theorem :: MATRTOP1:34
+  Mx2Tran M1 = Mx2Tran M2 implies M1 = M2;
+
+theorem :: MATRTOP1:35
+  for A be Matrix of n,m,F_Real,
+      B be Matrix of k,m,F_Real
+  holds
+  (Mx2Tran(A^B)).(f^(k|->0)) = (Mx2Tran A).f &
+  (Mx2Tran(B^A)).((k|->0)^f) = (Mx2Tran A).f;
+
+theorem :: MATRTOP1:36
+  for A be Matrix of n,m,F_Real,
+      B be Matrix of k,m,F_Real
+  for g be k-element real-valued FinSequence holds
+    (Mx2Tran(A^B)).(f^g) = (Mx2Tran A).f+(Mx2Tran B).g;
+
+theorem :: MATRTOP1:37
+  for A be Matrix of n,k,F_Real,
+      B be Matrix of n,m,F_Real
+   st n = 0 implies k+m = 0
+   holds (Mx2Tran(A^^B)).f = (Mx2Tran A).f^(Mx2Tran B).f;
+
+theorem :: MATRTOP1:38
+  M = 1.(F_Real,m) |n implies ((Mx2Tran M).f) |n = f;
+
+begin :: Selected Properties of the Mx2Tran Operator
+
+theorem :: MATRTOP1:39
+  Mx2Tran M is one-to-one iff the_rank_of M = n;
+
+theorem :: MATRTOP1:40
+  Mx2Tran A is one-to-one iff Det A <> 0.F_Real;
+
+theorem :: MATRTOP1:41
+  Mx2Tran M is onto iff the_rank_of M = m;
+
+theorem :: MATRTOP1:42
+  Mx2Tran A is onto iff Det A <> 0.F_Real;
+
+theorem :: MATRTOP1:43
+  for A,B st Det A <> 0.F_Real holds (Mx2Tran A)" = Mx2Tran B iff A~ = B;
+
+theorem :: MATRTOP1:44
+  ex L be m-element FinSequence of REAL st
+     (for i st i in dom L holds L.i=|.@Col(M,i).|) &
+      for f holds|.(Mx2Tran M).f.|<=Sum L*|.f.|;
+
+theorem :: MATRTOP1:45
+  ex L be Real st L>0 & for f holds |.(Mx2Tran M).f.| <= L*|.f.|;
+
+theorem :: MATRTOP1:46
+  the_rank_of M = n implies
+    ex L be Real st L > 0 & for f holds |.f.| <= L*|.(Mx2Tran M).f.|;
+
+theorem :: MATRTOP1:47
+  Mx2Tran M is continuous;
+
+registration
+  let n,K;
+  cluster invertible Matrix of n,K;
+end;
+
+registration
+  let n;
+  let A be invertible Matrix of n,F_Real;
+  cluster Mx2Tran A -> being_homeomorphism;
+end;

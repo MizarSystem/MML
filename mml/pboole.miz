@@ -50,7 +50,7 @@ A2: f <> {};
         then i = {} by A1,FUNCT_1:def 14;
         hence i in { {} } by TARSKI:def 1;
       end;
-      consider e being Element of dom f;
+      set e =the  Element of dom f;
       let i;
       assume i in { {} };
       then
@@ -105,7 +105,7 @@ proof
   defpred P[set,set] means $2 in F($1);
 A2: now
     let e;
-    consider fe being Element of F(e);
+    set fe =the  Element of F(e);
     assume
 A3: e in A();
     reconsider fe as set;
@@ -1784,7 +1784,7 @@ reserve I for non empty set,
 theorem
   X overlaps Y implies X meets Y
 proof
-  consider i being Element of I;
+  set i =the  Element of I;
   assume X overlaps Y;
   then X.i meets Y.i by Def10;
   hence thesis by Def11;
@@ -1793,7 +1793,7 @@ end;
 theorem Th136:
   not ex x st x in [[0]]I
 proof
-  consider i being Element of I;
+  set i =the  Element of I;
   given x such that
 A1: x in [[0]]I;
   x.i in [[0]]I.i by A1,Def4;
@@ -1875,7 +1875,7 @@ registration
   cluster non-empty ManySortedSet of I;
   existence
   proof
-    consider e;
+    set e =the  set;
     reconsider M = I --> {e} as ManySortedSet of I;
     take M;
     let i;
@@ -1889,7 +1889,7 @@ registration
   cluster non-empty -> non empty-yielding ManySortedSet of I;
   coherence
   proof
-    consider i being Element of I;
+    set i =the  Element of I;
     let M be ManySortedSet of I;
     assume
 A1: M is non-empty;
@@ -2132,7 +2132,7 @@ registration
   cluster Function-yielding ManySortedSet of I;
   existence
   proof
-    consider f being Function;
+    set f =the  Function;
     reconsider F = I --> f as ManySortedSet of I;
     take F;
     let x be set;
@@ -2201,7 +2201,7 @@ A1: for i st i in I ex j st Q[i,j]
     proof
       let i such that
       i in I;
-      consider j being Element of B.i;
+      set j =the  Element of B.i;
       reconsider j as set;
       take j;
       thus thesis;
@@ -2227,7 +2227,7 @@ A1: for i st i in I ex j st P[i,j]
     proof
       let i such that
       i in I;
-      consider j being Function of A.i,B.i;
+      set j =the  Function of A.i,B.i;
       reconsider j as set;
       take j;
       thus thesis;
@@ -2663,7 +2663,7 @@ registration
   cluster -> non empty ManySortedSet of X;
   coherence
   proof
-    consider x be Element of X;
+    set x =the  Element of X;
     let f be ManySortedSet of X;
     dom f = X by PARTFUN1:def 4;
     then [x,f.x] in f by FUNCT_1:def 4;
@@ -2715,12 +2715,12 @@ registration
     deffunc F(set) = f.$1;
 A1: for e st e in I holds F(e) <> {};
    consider g being ManySortedSet of I such that
-W:  for e st e in I holds g.e in F(e) from KuratowskiFunction(A1);
+A2:  for e st e in I holds g.e in F(e) from KuratowskiFunction(A1);
     g is f-compatible
     proof let x be set;
      assume x in dom g;
       then x in I by PARTFUN1:def 4;
-     hence g.x in f.x by W;
+     hence g.x in f.x by A2;
     end;
     then reconsider g as I-defined f-compatible Function;
    take g;
@@ -2734,9 +2734,9 @@ theorem Th155:
   holds s in product f
  proof let I be set, f be non-empty ManySortedSet of I;
   let s be f-compatible ManySortedSet of I;
-A: dom s = I by PARTFUN1:def 4 .= dom f by PARTFUN1:def 4;
+A1: dom s = I by PARTFUN1:def 4 .= dom f by PARTFUN1:def 4;
    then for x being set st x in dom f holds s.x in f.x by FUNCT_1:def 20;
-  hence s in product f by A,CARD_3:18;
+  hence s in product f by A1,CARD_3:18;
  end;
 
 theorem
@@ -2783,9 +2783,9 @@ registration
  existence
   proof
    take M = Y --> the Element of X;
-A:  {the Element of X} c= X by ZFMISC_1:37;
+A1:  {the Element of X} c= X by ZFMISC_1:37;
     rng M c= {the Element of X} by FUNCOP_1:19;
-   hence rng M c= X by A,XBOOLE_1:1;
+   hence rng M c= X by A1,XBOOLE_1:1;
   end;
 end;
 
@@ -2808,12 +2808,23 @@ theorem
  proof
   let F be total (NAT-defined Function), p be NAT-defined Function,
      n be Element of NAT such that
-Z: Shift(p,n) c= F;
+A1: Shift(p,n) c= F;
   let i be Element of NAT;
   assume
-ZZ: i in dom p;
+A2: i in dom p;
    then n+i in dom Shift(p,n) by VALUED_1:25;
-  hence F.(n+i) = Shift(p,n).(n+i) by Z,GRFUNC_1:8
-      .= p.i by VALUED_1:def 12,ZZ;
+  hence F.(n+i) = Shift(p,n).(n+i) by A1,GRFUNC_1:8
+      .= p.i by VALUED_1:def 12,A2;
  end;
 
+theorem
+ for f being Function, M being ManySortedSet of I
+   holds (f+*M)|I = M
+proof
+ let f be Function, M be ManySortedSet of I;
+A1: dom(f|I) c= I by RELAT_1:87;
+A2: dom M = I by PARTFUN1:def 4;
+ thus (f+*M)|I = f|I +* M|I by FUNCT_4:75
+   .= f|I +* M by A2,RELAT_1:98
+   .= M by A1,A2,FUNCT_4:20;
+end;

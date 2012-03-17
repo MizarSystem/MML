@@ -44,7 +44,7 @@
 <Cluster>
 <Adjective nr="13"/>
 <Adjective nr="18"/>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster aid="INTEGR16" nr="2">
@@ -60,7 +60,7 @@
 <Cluster>
 <Adjective nr="13"/>
 <Adjective nr="18"/>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster aid="INTEGR16" nr="3">

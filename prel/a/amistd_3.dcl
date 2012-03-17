@@ -29,9 +29,9 @@
 <ArticleID name="AFINSQ_1"/>
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="EXTPRO_1"/>
-<ArticleID name="AMISTD_1"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
+<ArticleID name="AMISTD_1"/>
 <ArticleID name="AMISTD_3"/>
 </Signature>
 <FCluster aid="AMISTD_3" nr="1">
@@ -54,7 +54,7 @@
 <Adjective nr="66">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="87">
+<Adjective nr="92">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

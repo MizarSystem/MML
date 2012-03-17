@@ -10,13 +10,13 @@ environ
       FUNCOP_1, RELAT_1, FUNCT_1, TARSKI, XBOOLE_0, CARD_1, CAT_1, NAT_1,
       ARYTM_3, FINSET_1, STRUCT_0, XXREAL_0, AMISTD_2, VALUED_1, FSM_1,
       GRAPHSP, FUNCT_7, ARYTM_1, INT_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      TURING_1, SCMFSA6A, ORDINAL1, RELOC;
+      TURING_1, SCMFSA6A, ORDINAL1, RELOC, SCMFSA6C;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
       NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
       FUNCOP_1, FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1, AFINSQ_1, STRUCT_0,
       COMPOS_1, EXTPRO_1, AMI_1, FUNCT_7, SCMFSA_2, AMISTD_2, XXREAL_0;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, INT_2, AMISTD_2, SCMFSA_2,
-      RELSET_1, VALUED_1, AMI_3, AMI_1, PRE_POLY;
+      RELSET_1, VALUED_1, AMI_3, AMI_1, PRE_POLY, AMISTD_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
       FINSET_1, NUMBERS, XREAL_0, INT_1, STRUCT_0, AMI_1, SCMFSA_2, FUNCT_4,
       RELAT_1, VALUED_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1;
@@ -30,7 +30,7 @@ reserve l, m, n for Element of NAT,
   I,J,K for Program of SCM+FSA;
 
 definition
-  let P be preProgram of SCM+FSA;
+  let P be NAT-defined (the Instructions of SCM+FSA)-valued finite Function;
   let l be Element of NAT;
   func Directed(P,l) -> preProgram of SCM+FSA equals
 :: SCMFSA6A:def 1
@@ -38,7 +38,7 @@ definition
 end;
 
 definition
-  let P be preProgram of SCM+FSA;
+  let P be NAT-defined (the Instructions of SCM+FSA)-valued finite Function;
   func Directed P -> preProgram of SCM+FSA equals
 :: SCMFSA6A:def 2
   Directed(P, card P);
@@ -51,50 +51,40 @@ registration
   cluster Directed I -> initial non empty;
 end;
 
-canceled;
-
-theorem :: SCMFSA6A:16
-  dom I misses dom ProgramPart Relocated(J, card I);
-
-theorem :: SCMFSA6A:17
-  for I being preProgram of SCM+FSA holds card ProgramPart
-  Relocated(I, m) = card I;
+canceled 3;
 
 theorem :: SCMFSA6A:18
   not halt SCM+FSA in rng Directed I;
 
 theorem :: SCMFSA6A:19
-  ProgramPart Relocated(Directed I, m) = ((id the Instructions of
-SCM+FSA) +* (halt SCM+FSA .--> goto (m + card I)))* ProgramPart Relocated
-  (I, m);
-
-canceled;
-
-theorem :: SCMFSA6A:21
-  for I,J being FinPartState of SCM+FSA holds ProgramPart
-Relocated(I +* J, n) = ProgramPart Relocated(I,n) +* ProgramPart Relocated(J,n)
-;
-
-theorem :: SCMFSA6A:22
-  ProgramPart Relocated(ProgramPart Relocated(I,m), n) =
-  ProgramPart Relocated(I, m + n);
+  Reloc(ProgramPart Directed I, m) = ((id the Instructions of
+SCM+FSA) +* (halt SCM+FSA .--> goto (m + card I)))* Reloc
+  (ProgramPart I, m);
 
 reserve a,b for Int-Location,
   f for FinSeq-Location,
   s,s1,s2 for State of SCM+FSA;
+
+registration
+  let n be Nat;
+  let i be Integer;
+  cluster (intloc n) .--> i -> (the Object-Kind of SCM+FSA)-compatible;
+end;
 
 definition
  canceled;
   let I be PartState of SCM+FSA;
   func Initialized I -> PartState of SCM+FSA equals
 :: SCMFSA6A:def 4
-  I +* ((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA);
+  I +* Initialize ((intloc 0) .--> 1);
 end;
 
 registration
   let I be FinPartState of SCM+FSA;
  cluster Initialized I -> finite;
 end;
+
+canceled 3;
 
 theorem :: SCMFSA6A:23
   InsCode i in {0,6,7,8} or Exec(i,s).IC SCM+FSA = succ IC s;
@@ -113,14 +103,10 @@ registration
   cluster Initialized I -> non halt-free;
 end;
 
-canceled 5;
-
-theorem :: SCMFSA6A:32
-  s1,s2 equal_outside NAT implies Exec(i,s1),Exec(i,s2) equal_outside
-  NAT;
+canceled 6;
 
 theorem :: SCMFSA6A:33
-  (Initialized I)|NAT = I;
+  (Initialized I) | NAT = I;
 
 scheme :: SCMFSA6A:sch 1
 
@@ -129,9 +115,7 @@ Integer, H(set) -> FinSequence of INT, I() -> Element of NAT }
 : ex S being State of SCM+FSA st IC S = I() & for i being Element of NAT holds
   S. i = F(i) & S.intloc i = G(i) & S.fsloc i = H(i);
 
-theorem :: SCMFSA6A:34
-  for s being State of SCM+FSA holds dom s = Int-Locations \/
-  FinSeq-Locations \/ {IC SCM+FSA} \/ NAT;
+canceled;
 
 theorem :: SCMFSA6A:35
   for s being State of SCM+FSA, x being set st x in dom s holds x is
@@ -144,19 +128,14 @@ theorem :: SCMFSA6A:36
 
 theorem :: SCMFSA6A:37
   for i being Element of NAT holds not i in
-  Int-Locations \/ FinSeq-Locations & not IC SCM+FSA in Int-Locations \/
-  FinSeq-Locations;
+  Data-Locations SCM+FSA & not IC SCM+FSA in Data-Locations SCM+FSA;
 
 theorem :: SCMFSA6A:38
   for s1,s2 being State of SCM+FSA holds ((for a being
 Int-Location holds s1.a = s2.a) & for f being FinSeq-Location holds s1.f = s2.f
   ) iff DataPart s1 = DataPart s2;
 
-theorem :: SCMFSA6A:39
-  for s1,s2 being State of SCM+FSA st s1,s2 equal_outside NAT holds
-  DataPart s1 = DataPart s2;
-
-canceled;
+canceled 2;
 
 theorem :: SCMFSA6A:41
   for s1,s2 being State of SCM+FSA, n being Element of NAT, i being
@@ -175,8 +154,7 @@ theorem :: SCMFSA6A:44
   Initialized I holds x in dom I or x = intloc 0 or x = IC SCM+FSA;
 
 theorem :: SCMFSA6A:45
-  for I being Program of SCM+FSA holds intloc 0 in dom Initialized
-  I;
+  for I being Program of SCM+FSA holds intloc 0 in dom Initialized I;
 
 theorem :: SCMFSA6A:46
   for I being Program of SCM+FSA holds (Initialized I).intloc 0 =
@@ -215,7 +193,7 @@ definition
   let I,J be Program of SCM+FSA;
   func I ';' J -> Program of SCM+FSA equals
 :: SCMFSA6A:def 5
-  Directed I +* ProgramPart Relocated(J, card I);
+  Directed I +* Reloc(J, card I);
 end;
 
 registration
@@ -289,15 +267,11 @@ theorem :: SCMFSA6A:63
   for I being preProgram of SCM+FSA, l being Element of NAT
    holds I is halt-free implies Directed(I,l) = I;
 
-theorem :: SCMFSA6A:64
-  for I being preProgram of SCM+FSA, x being set, k being Element
-of NAT holds x in dom ProgramPart Relocated(I,k) implies (ProgramPart Relocated
-  (I,k)).x = Relocated(I,k).x;
+canceled;
 
 theorem :: SCMFSA6A:65
   for I being preProgram of SCM+FSA, k being Element of NAT holds
-  ProgramPart Relocated(Directed I,k) = Directed(ProgramPart Relocated(I,k),
-   (card I + k));
+  Reloc(Directed I,k) = Directed(Reloc(I,k),(card I + k));
 
 theorem :: SCMFSA6A:66
   for I,J being Program of SCM+FSA holds Directed (I ';' J) = I

@@ -28,10 +28,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="42"/>
-<Adjective nr="52"/>
-<Adjective nr="58"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="43"/>
+<Adjective nr="53"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NECKLA_2" nr="1">

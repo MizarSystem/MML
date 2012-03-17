@@ -10,21 +10,22 @@ environ
       FUNCT_1, FINSEQ_1, SUBSTUT1, RELAT_1, TARSKI, FUNCT_4, FUNCOP_1,
       PARTFUN1, FUNCT_2, MCART_1, REALSET1, XBOOLEAN, ZF_MODEL, ORDINAL4,
       ZF_LANG, ARYTM_3, NAT_1, XXREAL_0, ZFMISC_1, BVFUNC_2, CLASSES2,
-      ZF_LANG1, SUBLEMMA;
+      ZF_LANG1, SUBLEMMA, CARD_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, FUNCT_1, NAT_1,
-      QC_LANG1, QC_LANG3, PARTFUN1, NUMBERS, XXREAL_0, FUNCOP_1, CQC_LANG,
+      QC_LANG1, QC_LANG3, PARTFUN1, CARD_1, NUMBERS, XXREAL_0, FUNCOP_1,
+      CQC_LANG,
       RELAT_1, FUNCT_4, SEQ_4, VALUAT_1, RELSET_1, FUNCT_2, MARGREL1, DOMAIN_1,
       MCART_1, SUBSTUT1;
  constructors DOMAIN_1, FUNCT_4, XXREAL_0, SEQ_4, QC_LANG3, VALUAT_1, SUBSTUT1,
       RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      MEMBERED, QC_LANG1, CQC_LANG, SUBSTUT1, XXREAL_0, XXREAL_2;
+      MEMBERED, QC_LANG1, CQC_LANG, SUBSTUT1, XXREAL_0, XXREAL_2, CARD_1;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, FUNCOP_1;
  theorems TARSKI, FINSEQ_1, FUNCT_1, MCART_1, VALUAT_1, XBOOLE_0, XBOOLE_1,
       FINSEQ_2, CQC_LANG, QC_LANG1, ZFMISC_1, RELAT_1, QC_LANG3, FUNCOP_1,
       FUNCT_2, RELSET_1, QC_LANG2, SUBSTUT1, FUNCT_4, FUNCT_7, ORDINAL1,
-      XXREAL_2;
+      XXREAL_2, CARD_1;
  schemes CQC_LANG, XBOOLE_0, SUBSTUT1;
 
 begin :: Preliminaries
@@ -318,7 +319,7 @@ proof
   reconsider ll as FinSequence of bound_QC-variables by SUBSTUT1:34;
   reconsider s = CQC_Subst(ll,Sub) as FinSequence of bound_QC-variables;
 A1: s = CQC_Subst(@ll,Sub) by SUBSTUT1:def 5;
-  len ll = k by FINSEQ_1:def 18;
+  len ll = k by CARD_1:def 13;
   then len @ll = k by SUBSTUT1:def 4;
   then len s = k by A1,SUBSTUT1:def 3;
   then s is CQC-variable_list of k by SUBSTUT1:34;
@@ -327,7 +328,7 @@ end;
 
 registration
   let k, ll, Sub;
-  cluster CQC_Subst(ll,Sub) -> bound_QC-variables -valued k-long;
+  cluster CQC_Subst(ll,Sub) -> bound_QC-variables -valued k-element;
   coherence by Th11;
 end;
 
@@ -359,7 +360,7 @@ theorem Th14:
 proof
   set S9 = Sub_P(P,ll,Sub);
   set ll9 = CQC_Subst(ll,Sub);
-A1: len ll = k by FINSEQ_1:def 18;
+A1: len ll = k by CARD_1:def 13;
   S9 = [P!ll,Sub] by SUBSTUT1:9;
   then
 A2: (S9)`2 = Sub by MCART_1:7;
@@ -373,7 +374,7 @@ A5: for j be Nat st j in dom ((v.Val_S(v,S9))*'ll) holds (v.Val_S(v,S9))*'ll
 A6: j in dom ((v.Val_S(v,S9))*'ll);
 A7: 1 <= j & j <= k by A4,A6,FINSEQ_1:3;
     reconsider j as Element of NAT by ORDINAL1:def 13;
-    j in Seg (len ll) by A4,A6,FINSEQ_1:def 18;
+    j in Seg (len ll) by A4,A6,CARD_1:def 13;
     then j in dom ll by FINSEQ_1:def 3;
     then reconsider x = ll.j as bound_QC-variable by Th5;
 A8: now
@@ -583,7 +584,7 @@ registration
   cluster CQC-WFF-like Element of [:QC-Sub-WFF,bound_QC-variables:];
   existence
   proof
-    consider Sub,x;
+    set Sub =the  CQC_Substitution,x =the  bound_QC-variable;
     set B = [[VERUM,Sub],x];
     reconsider S = [VERUM,Sub] as Element of QC-Sub-WFF by QC_LANG1:def 13,
     SUBSTUT1:def 16;
@@ -1726,7 +1727,7 @@ A6: for a holds J,v.(x|a) |= p;
   end;
   hence thesis by A4,Th51;
 end;
- 
+
 :: Coincidence Lemma (Ebb et al, Chapter III, 5.1)
 
 canceled;
@@ -2844,7 +2845,7 @@ P being (QC-pred_symbol of k), e being Element of vSUB holds Pro[Sub_P(P,ll,e)]
   Pro[S] implies Pro[Sub_All([S,x], SQ)]) by A1,A2;
   thus thesis from SUBSTUT1:sch 5(A7);
 end;
- 
+
 :: Substitution Lemma (Ebb et al, Chapter III, 8.3)
 
 theorem

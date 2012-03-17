@@ -10,20 +10,21 @@ environ
       SQUARE_1, FUNCOP_1, RVSUM_1, RVSUM_2, CARD_3, XBOOLE_0, COMPLEX1,
       XCMPLX_0, VALUED_0, BINOP_2, ZFMISC_1, NUMBERS, SUBSET_1, NAT_1, TARSKI,
       ORDINAL4, ORDINAL1, ARYTM_3, CARD_1, VALUED_1, XREAL_0;
- notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, VALUED_0, XBOOLE_0,
+ notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1,
+      CARD_1, NUMBERS, VALUED_0, XBOOLE_0,
       XCMPLX_0, XREAL_0, COMPLEX1, NAT_1, SQUARE_1, RELAT_1, FUNCT_1, PARTFUN1,
       BINOP_2, FUNCT_2, BINOP_1, FUNCOP_1, FINSEQ_1, FINSEQ_2, VALUED_1, SEQ_4,
       FINSEQOP, SETWOP_2, RVSUM_1;
  constructors BINOP_1, COMPLEX1, SETWISEO, SQUARE_1, BINOP_2, FINSEQOP,
-      FINSOP_1, RELSET_1, RVSUM_1, SEQ_4;
+      FINSOP_1, RELSET_1, RVSUM_1, SEQ_4, CARD_1;
  registrations FUNCT_1, FUNCT_2, FUNCOP_1, NUMBERS, XREAL_0, BINOP_2, MEMBERED,
-      FINSEQ_1, FINSEQ_2, VALUED_0, VALUED_1, RELAT_1, RVSUM_1, NEWTON;
+      FINSEQ_1, FINSEQ_2, VALUED_0, VALUED_1, RELAT_1, RVSUM_1, NEWTON, CARD_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions BINOP_1, FINSEQOP, FINSEQ_1, SQUARE_1, FINSEQ_2, TARSKI, VALUED_1,
-      XCMPLX_0, RVSUM_1, COMPLEX1, XBOOLE_0, SEQ_4;
+      XCMPLX_0, RVSUM_1, COMPLEX1, XBOOLE_0, SEQ_4, CARD_1;
  theorems FUNCT_1, FUNCT_2, FINSEQ_1, FUNCOP_1, FINSEQ_2, FINSEQOP, SETWOP_2,
       RELAT_1, FINSOP_1, ZFMISC_1, XCMPLX_0, BINOP_2, FINSEQ_3, VALUED_0,
-      VALUED_1, RFUNCT_1, RVSUM_1, SEQ_4;
+      VALUED_1, RFUNCT_1, RVSUM_1, SEQ_4, CARD_1;
  schemes NAT_1, FUNCT_2;
 
 begin :: Auxiliary theorems
@@ -53,10 +54,10 @@ reserve s for set,
   x,x1,x2 for Element of COMPLEX,
   c,c1,c2,c3 for complex number,
   F,F1,F2 for complex-valued FinSequence,
-  R,R1,R2 for i-long FinSequence of COMPLEX;
+  R,R1,R2 for i-element FinSequence of COMPLEX;
 
 definition
-  func sqrcomplex -> UnOp of COMPLEX means :Def2:
+  func sqrcomplex -> UnOp of COMPLEX means :Def1:
   for c holds it.c = c^2;
   existence
   proof
@@ -86,16 +87,16 @@ theorem
 proof
   let x1,x2;
   thus sqrcomplex.(multcomplex.(x1,x2)) = sqrcomplex.(x1*x2) by BINOP_2:def 5
-     .= (x1*x2)^2 by Def2
+     .= (x1*x2)^2 by Def1
      .= x1^2*x2^2
      .= multcomplex.(x1^2,x2^2) by BINOP_2:def 5
-     .= multcomplex.(sqrcomplex.x1,x2^2) by Def2
-     .= multcomplex.(sqrcomplex.x1,sqrcomplex.x2) by Def2;
+     .= multcomplex.(sqrcomplex.x1,x2^2) by Def1
+     .= multcomplex.(sqrcomplex.x1,sqrcomplex.x2) by Def1;
 end;
- 
+
 ::: generalized COMPLSP1:16
 
-Lm3: (multcomplex[;](c,id COMPLEX)).c1 = c*c1
+Lm1: (multcomplex[;](c,id COMPLEX)).c1 = c*c1
 proof
   reconsider a=c, s=c1 as Element of COMPLEX by XCMPLX_0:def 2;
   thus (multcomplex[;](c,id COMPLEX)).c1 = multcomplex.(a,(id COMPLEX).s)
@@ -113,7 +114,7 @@ end;
 
 begin :: Some Functors on the i-tuples on Complex
 
-Lm4: F is FinSequence of COMPLEX
+Lm2: F is FinSequence of COMPLEX
 proof
   thus rng F c= COMPLEX;
 end;
@@ -121,10 +122,10 @@ end;
 definition let F1,F2;
   redefine func F1 + F2 -> FinSequence of COMPLEX equals
   addcomplex.:(F1,F2);
-  coherence by Lm4;
+  coherence by Lm2;
   compatibility
   proof
-    reconsider F3=F1,F4=F2 as FinSequence of COMPLEX by Lm4;
+    reconsider F3=F1,F4=F2 as FinSequence of COMPLEX by Lm2;
     let F be FinSequence of COMPLEX;
     dom addcomplex = [:COMPLEX,COMPLEX:] by FUNCT_2:def 1; then
     [:rng F3, rng F4:] c= dom addcomplex by ZFMISC_1:119; then
@@ -157,7 +158,7 @@ A2: dom (F1+F2) = dom F1 /\ dom F2 by VALUED_1:def 1;
     let F1,F2;
     assume
 A5: F = addcomplex.:(F1,F2);
-    reconsider F1,F2 as FinSequence of COMPLEX by Lm4;
+    reconsider F1,F2 as FinSequence of COMPLEX by Lm2;
 A6: dom addcomplex = [:COMPLEX,COMPLEX:] by FUNCT_2:def 1; then
 A7: [:rng F2, rng F1:] c= dom addcomplex by ZFMISC_1:119;
     [:rng F1, rng F2:] c= dom addcomplex by A6,ZFMISC_1:119; then
@@ -203,7 +204,7 @@ end;
 theorem
   <*>COMPLEX + F = <*>COMPLEX
 proof
-  F is FinSequence of COMPLEX by Lm4;
+  F is FinSequence of COMPLEX by Lm2;
   hence thesis by FINSEQ_2:87;
 end;
 
@@ -228,7 +229,7 @@ end;
 definition let F;
   redefine func -F -> FinSequence of COMPLEX equals
   compcomplex*F;
-  coherence by Lm4;
+  coherence by Lm2;
   compatibility
   proof
     let F1 be FinSequence of COMPLEX;
@@ -273,7 +274,7 @@ proof
   hence thesis;
 end;
 
-theorem Th39:
+theorem Th8:
   -(i|->c) = i|->-c
 proof
   reconsider s=c as Element of COMPLEX by XCMPLX_0:def 2;
@@ -293,7 +294,7 @@ A1: R1 + (R + -R)= R2 + (R + -R) by FINSEQOP:29;
   hence thesis by BINOP_2:1,FINSEQOP:57;
 end;
 
-theorem Th45:
+theorem Th10:
   -(F1 + F2) = -F1 + -F2
 proof
 A1: dom -(F1 + F2) = dom(F1+F2) by VALUED_1:8;
@@ -317,10 +318,10 @@ end;
 definition let F1,F2;
   redefine func F1 - F2 -> FinSequence of COMPLEX equals
   diffcomplex.:(F1,F2);
-  coherence by Lm4;
+  coherence by Lm2;
   compatibility
   proof
-    reconsider F3=F1,F4=F2 as FinSequence of COMPLEX by Lm4;
+    reconsider F3=F1,F4=F2 as FinSequence of COMPLEX by Lm2;
     let F be FinSequence of COMPLEX;
 A1: dom (F1-F2) = dom F1 /\ dom F2 by VALUED_1:12;
     dom diffcomplex = [:COMPLEX,COMPLEX:] by FUNCT_2:def 1; then
@@ -377,7 +378,7 @@ end;
 theorem
   <*>COMPLEX - F = <*>COMPLEX & F - <*>COMPLEX = <*>COMPLEX
 proof
-  F is FinSequence of COMPLEX by Lm4;
+  F is FinSequence of COMPLEX by Lm2;
   hence thesis by FINSEQ_2:87;
 end;
 
@@ -402,21 +403,21 @@ end;
 theorem
   R - (i|-> 0c) = R
 proof
-  thus R - (i|-> 0c) = R + (i|->(-0)) by Th39
+  thus R - (i|-> 0c) = R + (i|->(-0)) by Th8
     .= R by BINOP_2:1,FINSEQOP:57;
 end;
 
 theorem
   -(F1 - F2) = F2 - F1
 proof
-  thus -(F1 - F2) = -F1 + --F2 by Th45
+  thus -(F1 - F2) = -F1 + --F2 by Th10
     .= F2 - F1;
 end;
 
 theorem
   -(F1 - F2) = -F1 + F2
 proof
-  thus -(F1 - F2) = -F1 +--F2 by Th45
+  thus -(F1 - F2) = -F1 +--F2 by Th10
     .= -F1 + F2;
 end;
 
@@ -451,7 +452,7 @@ end;
 definition let F,c;
   redefine func c*F -> FinSequence of COMPLEX equals
   (c multcomplex)*F;
-  coherence by Lm4;
+  coherence by Lm2;
   compatibility
   proof
     let F1 be FinSequence of COMPLEX;
@@ -465,7 +466,7 @@ A3: dom((c multcomplex)*F) = dom F by RELAT_1:46;
         let s;
         assume A5: s in dom F1;
         hence F1.s = c*(F.s) by A4,VALUED_1:def 5
-          .= (c multcomplex).(F.s) by Lm3
+          .= (c multcomplex).(F.s) by Lm1
           .= ((c multcomplex)*F).s by A1,A4,A5,FUNCT_1:23;
       end;
       hence thesis by A1,A3,A4,FUNCT_1:9;
@@ -475,7 +476,7 @@ A3: dom((c multcomplex)*F) = dom F by RELAT_1:46;
       let s;
       assume A7: s in dom F1;
       thus (c*F).s = c*(F.s) by VALUED_1:6
-        .= (c multcomplex).(F.s) by Lm3
+        .= (c multcomplex).(F.s) by Lm1
         .= ((c multcomplex)*F).s by A6,A7,FUNCT_1:22;
     end;
     hence thesis by A1,A2,A6,FUNCT_1:9,RELAT_1:46;
@@ -492,16 +493,16 @@ theorem
 proof
   reconsider s=c, s1=c1 as Element of COMPLEX by XCMPLX_0:def 2;
   s*<*s1*> = <*(multcomplex[;](s,id COMPLEX)).s1*> by FINSEQ_2:39
-          .= <*c*c1*> by Lm3;
+          .= <*c*c1*> by Lm1;
   hence thesis;
 end;
 
-theorem Th70:
+theorem Th22:
   c1*(i|->c2) = i|->(c1*c2)
 proof
   reconsider s1=c1, s2=c2 as  Element of COMPLEX by XCMPLX_0:def 2;
   s1*(i|->s2) = i|->((multcomplex[;](s1,id COMPLEX)).s2) by FINSEQOP:17
-             .= i|->(c1*c2) by Lm3;
+             .= i|->(c1*c2) by Lm1;
   hence thesis;
 end;
 
@@ -540,10 +541,10 @@ end;
 definition let F1,F2;
   redefine func mlt(F1,F2) -> FinSequence of COMPLEX equals
   multcomplex.:(F1,F2);
-  coherence by Lm4;
+  coherence by Lm2;
   compatibility
   proof
-    reconsider F3=F1,F4=F2 as FinSequence of COMPLEX by Lm4;
+    reconsider F3=F1,F4=F2 as FinSequence of COMPLEX by Lm2;
     let F be FinSequence of COMPLEX;
     dom multcomplex = [:COMPLEX,COMPLEX:] by FUNCT_2:def 1; then
     [:rng F3, rng F4:] c= dom multcomplex by ZFMISC_1:119; then
@@ -575,7 +576,7 @@ A2: dom mlt(F1,F2) = dom F1 /\ dom F2 by VALUED_1:def 4;
   proof
     let F be FinSequence of COMPLEX;
     let F1,F2;
-    reconsider F3=F1,F4=F2 as FinSequence of COMPLEX by Lm4;
+    reconsider F3=F1,F4=F2 as FinSequence of COMPLEX by Lm2;
 A5: dom multcomplex = [:COMPLEX,COMPLEX:] by FUNCT_2:def 1; then
 A6: [:rng F4, rng F3:] c= dom multcomplex by ZFMISC_1:119;
     [:rng F3, rng F4:] c= dom multcomplex by A5,ZFMISC_1:119; then
@@ -604,7 +605,7 @@ end;
 theorem
   mlt(<*>COMPLEX,F) = <*>COMPLEX
 proof
-  F is FinSequence of COMPLEX by Lm4;
+  F is FinSequence of COMPLEX by Lm2;
   hence thesis by FINSEQ_2:87;
 end;
 
@@ -617,7 +618,7 @@ proof
   hence thesis;
 end;
 
-theorem Th92:
+theorem Th27:
   mlt(i|->c,R) = c*R
 proof
   reconsider s=c as Element of COMPLEX by XCMPLX_0:def 2;
@@ -630,14 +631,14 @@ theorem
   mlt(i|->c1,i|->c2) = i|->(c1*c2)
 proof
   reconsider s1=c1, s2=c2 as Element of COMPLEX by XCMPLX_0:def 2;
-  mlt(i|->s1,i|->s2) = s1*(i|->s2) by Th92
-    .= i|->(c1*c2) by Th70;
+  mlt(i|->s1,i|->s2) = s1*(i|->s2) by Th27
+    .= i|->(c1*c2) by Th22;
   hence thesis;
 end;
 
 begin :: Finite Sum of Finite Sequence of Complex Numbers
 
-theorem Th102:
+theorem Th29:
   Sum(<*> COMPLEX) = 0c by BINOP_2:1,FINSOP_1:11;
 
 theorem
@@ -648,21 +649,21 @@ proof
   hence thesis;
 end;
 
-theorem Th104:
+theorem Th31:
   Sum(F^<*c*>) = Sum F + c
 proof
   reconsider s=c as Element of COMPLEX by XCMPLX_0:def 2;
-  reconsider F1=F as FinSequence of COMPLEX by Lm4;
+  reconsider F1=F as FinSequence of COMPLEX by Lm2;
   thus Sum(F^<*c*>) = Sum(F1^<*s*>)
     .= addcomplex.(addcomplex $$ F1,s) by FINSOP_1:5
     .= Sum F1 + c by BINOP_2:def 3
     .= Sum F + c;
 end;
 
-theorem Th105:
+theorem Th32:
   Sum(F1^F2) = Sum F1 + Sum F2
 proof
-  reconsider F3=F1,F4=F2 as FinSequence of COMPLEX by Lm4;
+  reconsider F3=F1,F4=F2 as FinSequence of COMPLEX by Lm2;
   thus Sum(F1^F2) = Sum(F3^F4)
     .= addcomplex.(addcomplex $$ F3,addcomplex $$ F4) by FINSOP_1:6
     .= Sum F3 + Sum F4 by BINOP_2:def 3
@@ -673,26 +674,26 @@ theorem
   Sum(<*c*>^F) = c + Sum F
 proof
   reconsider s=c as Element of COMPLEX by XCMPLX_0:def 2;
-  thus Sum(<*c*>^F) = Sum <*s*> + Sum F by Th105
+  thus Sum(<*c*>^F) = Sum <*s*> + Sum F by Th32
     .= c + Sum F by FINSOP_1:12;
 end;
 
-theorem Th107:
+theorem Th34:
   Sum<*c1,c2*> = c1 + c2
 proof
   reconsider s1=c1 as Element of COMPLEX by XCMPLX_0:def 2;
-  thus Sum<*c1,c2*> = Sum<*s1*> + c2 by Th104
+  thus Sum<*c1,c2*> = Sum<*s1*> + c2 by Th31
     .= c1 + c2 by FINSOP_1:12;
 end;
 
 theorem
   Sum<*c1,c2,c3*> = c1 + c2 + c3
 proof
-  thus Sum<*c1,c2,c3*> = Sum<*c1,c2*> + c3 by Th104
-    .= c1 + c2 + c3 by Th107;
+  thus Sum<*c1,c2,c3*> = Sum<*c1,c2*> + c3 by Th31
+    .= c1 + c2 + c3 by Th34;
 end;
 
-theorem Th110:
+theorem Th36:
   Sum(i |-> c) = i*c
 proof
   reconsider c as Element of COMPLEX by XCMPLX_0:def 2;
@@ -702,10 +703,10 @@ A1: for i st P[i] holds P[(i+1)]
     let i such that
 A2: Sum(i |-> c) = i*c;
     thus Sum((i+1) |-> c) = Sum((i |-> c)^<*c*>) by FINSEQ_2:74
-      .= i*c + 1*c by A2,Th104
+      .= i*c + 1*c by A2,Th31
       .= (i+1)*c;
   end;
-A3: P[0] by Th102;
+A3: P[0] by Th29;
   for i holds P[i] from NAT_1:sch 2(A3,A1);
   hence thesis;
 end;
@@ -713,31 +714,31 @@ end;
 theorem
   Sum(i |-> 0c) = 0c
 proof
-  thus Sum(i |-> 0c) = i*0 by Th110
+  thus Sum(i |-> 0c) = i*0 by Th36
     .= 0c;
 end;
 
 theorem
   Sum(c*F) = c*(Sum F)
 proof
-  reconsider F1=F as FinSequence of COMPLEX by Lm4;
+  reconsider F1=F as FinSequence of COMPLEX by Lm2;
   reconsider s=c as Element of COMPLEX by XCMPLX_0:def 2;
   set cM = multcomplex[;](s,id COMPLEX);
   thus Sum (c*F) = cM.(addcomplex $$ F1) by SEQ_4:71,68,SETWOP_2:41
-    .= c*(Sum F1) by Lm3
+    .= c*(Sum F1) by Lm1
     .= c*(Sum F);
 end;
 
-theorem Th118:
+theorem Th39:
   Sum -F = -(Sum F)
 proof
-  reconsider F1=F as FinSequence of COMPLEX by Lm4;
+  reconsider F1=F as FinSequence of COMPLEX by Lm2;
   thus Sum -F = compcomplex.(addcomplex $$ F1) by SEQ_4:68,69,SETWOP_2:42
     .= -(Sum F1) by BINOP_2:def 1
     .= -(Sum F);
 end;
 
-theorem Th119:
+theorem Th40:
   Sum(R1 + R2) = Sum R1 + Sum R2
 proof
   reconsider T1=R1, T2=R2 as Element of i-tuples_on COMPLEX by FINSEQ_2:151;
@@ -748,20 +749,20 @@ end;
 theorem
   Sum(R1 - R2) = Sum R1 - Sum R2
 proof
-  thus Sum(R1 - R2) = Sum R1 + Sum -R2 by Th119
-  .= Sum R1 - Sum R2 by Th118;
+  thus Sum(R1 - R2) = Sum R1 + Sum -R2 by Th40
+  .= Sum R1 - Sum R2 by Th39;
 end;
 
 begin :: The Product of Finite Sequences of Complex Numbers
 
-Lm5: for F being empty FinSequence holds Product F = 1
+Lm3: for F being empty FinSequence holds Product F = 1
 proof
   Product <*>COMPLEX = 1 by BINOP_2:6,FINSOP_1:11;
   hence thesis;
 end;
 
 theorem
-  Product <*>COMPLEX = 1 by Lm5;
+  Product <*>COMPLEX = 1 by Lm3;
 
 theorem
   Product (<*c*>^F) = c * Product F
@@ -771,7 +772,7 @@ proof
 end;
 
 theorem
-  for R being Element of 0-tuples_on COMPLEX holds Product R = 1 by Lm5;
+  for R being Element of 0-tuples_on COMPLEX holds Product R = 1 by Lm3;
 
 theorem
   Product ((i+j) |->c) = (Product (i|->c))*(Product (j|->c))
@@ -802,7 +803,7 @@ proof
   hence thesis;
 end;
 
-theorem Th137:
+theorem Th48:
   Product mlt(R1,R2) = Product R1 * Product R2
 proof
   reconsider T1=R1, T2=R2 as Element of i-tuples_on COMPLEX by FINSEQ_2:151;
@@ -815,8 +816,8 @@ theorem
   Product (c*R) = Product (i|->c) * Product R
 proof
   reconsider s=c as Element of COMPLEX by XCMPLX_0:def 2;
-  thus Product (c*R) = Product mlt(i|->s,R) by Th92
-    .= Product (i|->c) * Product R by Th137;
+  thus Product (c*R) = Product mlt(i|->s,R) by Th27
+    .= Product (i|->c) * Product R by Th48;
 end;
 
 begin :: from EUCLID_2 (partially modified)
@@ -835,8 +836,8 @@ theorem
 proof
   let x1,x2 be complex-valued FinSequence;
   set n=len x1;
-A1: x2 is FinSequence of COMPLEX by Lm4;
-  x1 is FinSequence of COMPLEX by Lm4; then
+A1: x2 is FinSequence of COMPLEX by Lm2;
+  x1 is FinSequence of COMPLEX by Lm2; then
   reconsider z1=x1 as Element of (len x1)-tuples_on COMPLEX by FINSEQ_2:110;
   assume len x1=len x2; then
   reconsider z2=x2 as Element of n-tuples_on COMPLEX by A1,FINSEQ_2:110;
@@ -850,8 +851,8 @@ theorem
 proof
   let x1,x2 be complex-valued FinSequence;
   set n=len x1;
-A1: x2 is FinSequence of COMPLEX by Lm4;
-  x1 is FinSequence of COMPLEX by Lm4; then
+A1: x2 is FinSequence of COMPLEX by Lm2;
+  x1 is FinSequence of COMPLEX by Lm2; then
   reconsider z1=x1 as Element of (len x1)-tuples_on COMPLEX by FINSEQ_2:110;
   assume len x1=len x2; then
   reconsider z2=x2 as Element of n-tuples_on COMPLEX by A1,FINSEQ_2:110;
@@ -865,9 +866,9 @@ theorem
 proof
   let a be real number, x be complex-valued FinSequence;
   set n=len x;
-  x is FinSequence of COMPLEX by Lm4; then
+  x is FinSequence of COMPLEX by Lm2; then
   reconsider z=x as Element of n-tuples_on COMPLEX by FINSEQ_2:110;
-  len (a*z)=n by FINSEQ_1:def 18;
+  len (a*z)=n by CARD_1:def 13;
   hence thesis;
 end;
 
@@ -876,18 +877,18 @@ theorem
   holds mlt(x+y,z) = mlt(x,z)+mlt(y,z)
 proof
   let x,y,z be complex-valued FinSequence;
-A0:x is FinSequence of COMPLEX & y is FinSequence of COMPLEX &
-  z is FinSequence of COMPLEX by Lm4;
+A1:x is FinSequence of COMPLEX & y is FinSequence of COMPLEX &
+  z is FinSequence of COMPLEX by Lm2;
   assume len x=len y & len y=len z; then
   reconsider x2=x, y2=y, z2=z as Element of (len x)-tuples_on COMPLEX
-  by A0,FINSEQ_2:110;
-A1: dom (mlt(x+y,z))=Seg len(mlt(x2+y2,z2)) by FINSEQ_1:def 3
-    .=Seg len x by FINSEQ_1:def 18
-    .=Seg len (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_1:def 18
+  by A1,FINSEQ_2:110;
+A2: dom (mlt(x+y,z))=Seg len(mlt(x2+y2,z2)) by FINSEQ_1:def 3
+    .=Seg len x by CARD_1:def 13
+    .=Seg len (mlt(x2,z2)+mlt(y2,z2)) by CARD_1:def 13
     .=dom (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_1:def 3;
-A2: dom (mlt(x,z))=Seg len(mlt(x2,z2)) by FINSEQ_1:def 3
-    .=Seg len x by FINSEQ_1:def 18
-    .=Seg len (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_1:def 18
+A3: dom (mlt(x,z))=Seg len(mlt(x2,z2)) by FINSEQ_1:def 3
+    .=Seg len x by CARD_1:def 13
+    .=Seg len (mlt(x2,z2)+mlt(y2,z2)) by CARD_1:def 13
     .=dom (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_1:def 3;
   for i being Nat st i in dom (mlt(x+y,z)) holds mlt(x+y,z).i=(mlt(x,z)+
   mlt(y,z)).i
@@ -895,16 +896,16 @@ A2: dom (mlt(x,z))=Seg len(mlt(x2,z2)) by FINSEQ_1:def 3
     let i be Nat;
     assume A4: i in dom mlt(x+y,z);
     set a=x.i, b=y.i, d=(x+y).i, e=z.i;
-    len (x2+y2)=len x by FINSEQ_1:def 18; then
+    len (x2+y2)=len x by CARD_1:def 13; then
     dom (x2+y2)=Seg len x by FINSEQ_1:def 3
-      .=Seg len(mlt(x2,z2)) by FINSEQ_1:def 18
+      .=Seg len(mlt(x2,z2)) by CARD_1:def 13
       .=dom (mlt(x,z)) by FINSEQ_1:def 3; then
-A5: d=a+b by A1,A2,A4,VALUED_1:def 1;
+A5: d=a+b by A2,A3,A4,VALUED_1:def 1;
     thus mlt(x+y,z).i=d*e by VALUED_1:5
       .=a*e+b*e by A5
       .=mlt(x,z).i +b*e by VALUED_1:5
       .=mlt(x,z).i +mlt(y,z).i by VALUED_1:5
-      .=(mlt(x,z)+mlt(y,z)).i by A1,A4,VALUED_1:def 1;
+      .=(mlt(x,z)+mlt(y,z)).i by A2,A4,VALUED_1:def 1;
   end;
-  hence thesis by A1,FINSEQ_1:17;
+  hence thesis by A2,FINSEQ_1:17;
 end;

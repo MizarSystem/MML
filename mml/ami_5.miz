@@ -7,24 +7,26 @@
 environ
 
  vocabularies NUMBERS, AMI_3, SUBSET_1, AMI_2, AMI_1, STRUCT_0, XBOOLE_0,
-      FSM_1, RELAT_1, FUNCT_1, TARSKI, FINSET_1, QC_LANG1, CARD_1, XXREAL_0,
+      FSM_1, RELAT_1, FUNCT_1, TARSKI, FINSET_1, CARD_1, XXREAL_0, PBOOLE,
       FINSEQ_1, GRAPHSP, ARYTM_3, ARYTM_1, INT_1, FUNCT_4, FUNCOP_1,
-      CIRCUIT2, ORDINAL1, PARTFUN1, SCMNORM, RECDEF_2, CAT_1;
+      CIRCUIT2, ORDINAL1, PARTFUN1, SCMNORM, RECDEF_2, CAT_1, AMISTD_5,
+      CARD_5, UNIALG_1, GLIB_000, AMISTD_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, XCMPLX_0, MCART_1, DOMAIN_1,
+      SETFAM_1, PBOOLE,
       RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, NUMBERS, INT_1, NAT_1, RECDEF_2,
       STRUCT_0, FINSET_1, FINSEQ_1, COMPOS_1, EXTPRO_1,
-      AMI_2, AMI_3, XXREAL_0;
+      AMI_1, AMI_2, AMI_3, XXREAL_0, AMISTD_5;
  constructors DOMAIN_1, XXREAL_0, FINSEQ_4, AMI_3, AMI_2, NUMBERS, PRE_POLY,
-      RECDEF_2, MCART_2, AMISTD_2, AMI_1;
+      RECDEF_2, MCART_2, AMISTD_2, AMI_1, AMISTD_5, AMISTD_1, PBOOLE;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS,
       XREAL_0, INT_1, CARD_3, AMI_1, AMI_2, AMI_3, FINSET_1, CARD_1, RELSET_1,
-      FUNCT_2, COMPOS_1, EXTPRO_1;
+      FUNCT_2, COMPOS_1, EXTPRO_1, AMISTD_5, PBOOLE;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, EXTPRO_1, AMI_3, FUNCOP_1, CARD_1, AMI_2,
-      RELAT_1, COMPOS_1;
- theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, TARSKI, FUNCOP_1, FUNCT_4,
+      RELAT_1, COMPOS_1, AMISTD_5;
+ theorems AMI_1, AMI_3, GRFUNC_1, TARSKI, FUNCOP_1, FUNCT_4,
       FUNCT_1, ZFMISC_1, ENUMSET1, RELAT_1, XBOOLE_0, XBOOLE_1,
-      PBOOLE, PARTFUN1, RECDEF_2, COMPOS_1, EXTPRO_1;
+      PBOOLE, PARTFUN1, RECDEF_2, COMPOS_1, EXTPRO_1, AMISTD_5;
 
 begin
 
@@ -69,9 +71,7 @@ end;
 
 reserve i, j, k for Element of NAT;
 
-theorem
-  the carrier of SCM = {IC SCM} \/ Data-Locations SCM \/ NAT
-    by AMI_3:4,72;
+canceled;
 
 theorem
   for s being State of SCM, d being Data-Location
@@ -95,15 +95,15 @@ proof
 A1: IC(s1) = IC(s2) and
 A2: for a being Data-Location holds s1.a = s2.a and
 A3: for i being Element of NAT holds s1.i = s2.i;
-A5: dom s1 = the carrier of SCM by PARTFUN1:def 4;
-A7: dom s2 = the carrier of SCM by PARTFUN1:def 4;
-A8: now
+A4: dom s1 = the carrier of SCM by PARTFUN1:def 4;
+A5: dom s2 = the carrier of SCM by PARTFUN1:def 4;
+A6: now
     let x be set;
     assume x in the carrier of SCM;
     then
-A9: x in {IC SCM} \/ Data-Locations SCM or x in NAT
+A7: x in {IC SCM} \/ Data-Locations SCM or x in NAT
     by AMI_3:4,72,XBOOLE_0:def 3;
-    per cases by A9,XBOOLE_0:def 3;
+    per cases by A7,XBOOLE_0:def 3;
     suppose
       x in {IC SCM};
       then x = IC SCM by TARSKI:def 1;
@@ -121,39 +121,31 @@ A9: x in {IC SCM} \/ Data-Locations SCM or x in NAT
       hence s1.x = s2.x;
     end;
   end;
-   the carrier of SCM = dom s1 by A5;
-  hence thesis by A7,A8,FUNCT_1:9;
+   the carrier of SCM = dom s1 by A4;
+  hence thesis by A5,A6,FUNCT_1:9;
 end;
-
-canceled 6;
 
 registration
   cluster Data-Locations SCM -> infinite;
   coherence by AMI_3:72;
 end;
 
-definition
- canceled 3;
-  let loc be Element of Data-Locations SCM;
-  func loc@ -> Data-Location equals
-  loc;
-  coherence
-   proof
-     loc in Data-Locations SCM by AMI_3:72;
-     then reconsider loc as Object of SCM;
-     loc is Data-Location by AMI_3:72,def 2;
-    hence thesis;
-   end;
-end;
-
 reserve I,J,K for Element of Segm 9,
   a,a1 for Element of NAT,
-  b,b1,c for
-  Element of Data-Locations SCM;
+  b,b1,c for Element of Data-Locations SCM;
 
-canceled 3;
+Lm1:
+ b is Data-Location
+ proof
+   b in Data-Locations SCM by AMI_3:72;
+   then reconsider b as Object of SCM;
+   b is Data-Location by AMI_3:72,def 2;
+  hence thesis;
+ end;
 
-theorem Th36:
+canceled 9;
+
+theorem
   for l being Instruction of SCM holds InsCode(l) <= 8
 proof
   let l be Instruction of SCM;
@@ -204,14 +196,13 @@ theorem Th37:
 
 reserve I,J,K for Element of Segm 9,
   a,a1 for Element of NAT,
-  b,b1,c for
-  Element of Data-Locations SCM,
+  b,b1,c for Element of Data-Locations SCM,
   da,db for Data-Location,
   loc for Element of NAT;
 
 canceled 8;
 
-theorem Th46:
+theorem
   for ins being Instruction of SCM st InsCode ins = 0 holds ins =
   halt SCM
 proof
@@ -242,7 +233,7 @@ A3: ins in { [SCM-Halt,{},{}] }
   hence thesis by AMI_3:71,TARSKI:def 1;
 end;
 
-theorem Th47:
+theorem
   for ins being Instruction of SCM st InsCode ins = 1 holds ex da,
   db st ins = da:=db
 proof
@@ -272,12 +263,12 @@ XBOOLE_0:def 3;
   then consider I,b,c such that
 A6: ins = [I,{},<*b,c*>] and
   I in { 1,2,3,4,5};
-  reconsider da = b@ ,db = c@ as Data-Location;
+  reconsider da = b ,db = c as Data-Location by Lm1;
   take da,db;
   thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
-theorem Th48:
+theorem
   for ins being Instruction of SCM st InsCode ins = 2 holds ex da,
   db st ins = AddTo(da,db)
 proof
@@ -307,12 +298,12 @@ XBOOLE_0:def 3;
   then consider I,b,c such that
 A6: ins = [I,{},<*b,c*>] and
   I in { 1,2,3,4,5};
-  reconsider da = b@ ,db = c@ as Data-Location;
+  reconsider da = b ,db = c as Data-Location by Lm1;
   take da,db;
   thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
-theorem Th49:
+theorem
   for ins being Instruction of SCM st InsCode ins = 3 holds ex da,
   db st ins = SubFrom(da,db)
 proof
@@ -342,12 +333,12 @@ XBOOLE_0:def 3;
   then consider I,b,c such that
 A6: ins = [I,{},<*b,c*>] and
   I in { 1,2,3,4,5};
-  reconsider da = b@ ,db = c@ as Data-Location;
+  reconsider da = b ,db = c as Data-Location by Lm1;
   take da,db;
   thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
-theorem Th50:
+theorem
   for ins being Instruction of SCM st InsCode ins = 4 holds ex da,
   db st ins = MultBy(da,db)
 proof
@@ -377,12 +368,12 @@ XBOOLE_0:def 3;
   then consider I,b,c such that
 A6: ins = [I,{},<*b,c*>] and
   I in { 1,2,3,4,5};
-  reconsider da = b@ ,db = c@ as Data-Location;
+  reconsider da = b ,db = c as Data-Location by Lm1;
   take da,db;
   thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
-theorem Th51:
+theorem
   for ins being Instruction of SCM st InsCode ins = 5 holds ex da,
   db st ins = Divide(da,db)
 proof
@@ -412,12 +403,12 @@ XBOOLE_0:def 3;
   then consider I,b,c such that
 A6: ins = [I,{},<*b,c*>] and
   I in { 1,2,3,4,5};
-  reconsider da = b@ ,db = c@ as Data-Location;
+  reconsider da = b ,db = c as Data-Location by Lm1;
   take da,db;
   thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
-theorem Th52:
+theorem
   for ins being Instruction of SCM st InsCode ins = 6 holds ex loc
   st ins = SCM-goto loc
 proof
@@ -455,7 +446,7 @@ A8: ins = [J,<*a*>,{}] & J = 6;
   thus thesis by A8;
 end;
 
-theorem Th53:
+theorem
   for ins being Instruction of SCM st InsCode ins = 7 holds ex loc
   ,da st ins = da=0_goto loc
 proof
@@ -485,13 +476,13 @@ XBOOLE_0:def 3;
   then consider K,a1,b1 such that
 A6: ins = [K,<*a1*>,<*b1*>] and
   K in { 7,8 };
-  reconsider da = b1@ as Data-Location;
+  reconsider da = b1 as Data-Location by Lm1;
   reconsider loc = a1 as Element of NAT;
   take loc,da;
   thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
-theorem Th54:
+theorem
   for ins being Instruction of SCM st InsCode ins = 8 holds ex loc
   ,da st ins = da>0_goto loc
 proof
@@ -520,515 +511,15 @@ XBOOLE_0:def 3;
   then consider K,a1,b1 such that
 A6: ins = [K,<*a1*>,<*b1*>] and
   K in { 7,8 };
-  reconsider da = b1@ as Data-Location;
+  reconsider da = b1 as Data-Location by Lm1;
   reconsider loc = a1 as Element of NAT;
   take loc,da;
   thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
-canceled 3;
-
-theorem
-  for s1,s2 being State of SCM st (s1 | (Data-Locations SCM \/ {IC SCM})
-) = (s2 | (Data-Locations SCM \/ {IC SCM})) for l being Instruction of SCM
-  holds Exec
-(l,s1) | (Data-Locations SCM \/ {IC SCM})
-= Exec (l,s2) | (Data-Locations SCM \/ {IC SCM})
-proof
-  IC SCM in {IC SCM} by TARSKI:def 1;
-  then
-A1: IC SCM in (Data-Locations SCM \/ {IC SCM}) by XBOOLE_0:def 3;
-  let s1,s2 be State of SCM such that
-A2: (s1 | (Data-Locations SCM \/ {IC SCM}))
-   = (s2 | (Data-Locations SCM \/ {IC SCM})
-  );
-A3: (Data-Locations SCM \/ {IC SCM}) c= the carrier of SCM
-   by AMI_3:4,72,XBOOLE_1:7;
-  then (Data-Locations SCM \/ {IC SCM}) c= dom s2 by PARTFUN1:def 4;
-  then
-A4: IC SCM in dom (s2 | (Data-Locations SCM \/ {IC SCM})) by A1,RELAT_1:91;
-  (Data-Locations SCM \/ {IC SCM}) c= dom s1 by A3,PARTFUN1:def 4;
-  then IC SCM in dom (s1 | (Data-Locations SCM \/ {IC SCM})) by A1,RELAT_1:91;
-  then
-A5: IC s1 = (s2 | (Data-Locations SCM \/ {IC SCM})).IC SCM by A2,FUNCT_1:70
-    .= IC s2 by A4,FUNCT_1:70;
-  let l be Instruction of SCM;
-A6: dom Exec(l,s1) = the carrier of SCM & dom Exec(l,s2) = the carrier of
-  SCM by PARTFUN1:def 4;
-A7: Data-Locations SCM c= (Data-Locations SCM \/ {IC SCM}) by XBOOLE_1:7;
-  per cases by Th36,NAT_1:33;
-  suppose
-    InsCode (l) = 0;
-    then
-A8: l = halt SCM by Th46;
-    hence Exec (l,s1) | (Data-Locations SCM \/ {IC SCM})
-      = s2 | (Data-Locations SCM \/ {IC
-    SCM}) by A2,EXTPRO_1:def 3
-      .= Exec (l,s2) | (Data-Locations SCM \/ {IC SCM}) by A8,EXTPRO_1:def 3;
-  end;
-  suppose
-    InsCode (l) = 1;
-    then consider da,db such that
-A9: l = da:=db by Th47;
-A10: for x being set st x in ((Data-Locations SCM) \ {da}) holds (Exec (l,s1) |
-    (Data-Locations SCM \ {da})).x
-    = (Exec (l,s2) | (Data-Locations SCM \ {da})).x
-    proof
-      let x be set;
-      assume
-A11:  x in ((Data-Locations SCM) \ {da});
-      then
-A12:  x in Data-Locations SCM by XBOOLE_0:def 5;
-      then reconsider a = x as Data-Location by AMI_3:72,def 2;
-A13:  a in (Data-Locations SCM \/ {IC SCM}) by A12,XBOOLE_0:def 3;
-      not x in {da} by A11,XBOOLE_0:def 5;
-      then
-A14:  a <> da by TARSKI:def 1;
-      thus (Exec (l,s1) | (Data-Locations SCM \ {da})).x
-      = (Exec (l,s1)).a by A11,FUNCT_1:72
-        .= s1.a by A9,A14,AMI_3:8
-        .= (s1 | (Data-Locations SCM \/ {IC SCM})).a by A13,FUNCT_1:72
-        .= s2.a by A2,A13,FUNCT_1:72
-        .= (Exec (l,s2)).a by A9,A14,AMI_3:8
-        .= (Exec (l,s2) | (Data-Locations SCM \ {da})).x by A11,FUNCT_1:72;
-    end;
-    dom ((Exec (l,s1)) | (Data-Locations SCM \ {da}))
-    = (Data-Locations SCM \ {da}) &
-    dom (( Exec (l,s2)) | (Data-Locations SCM \ {da}))
-    = (Data-Locations SCM \ {da}) by A6,RELAT_1:91;
-    then
-A15: Exec (l,s1) | (Data-Locations SCM \ {da} )
-= Exec (l,s2) | (Data-Locations SCM \
-    {da} ) by A10,FUNCT_1:9;
-A16: db in Data-Locations SCM by AMI_3:72,def 2;
-    Exec (l,s1).IC SCM = succ IC s1 by A9,AMI_3:8
-      .= Exec (l,s2).IC SCM by A5,A9,AMI_3:8;
-    then
-A17: Exec (l,s1) | {IC SCM} = Exec (l,s2) | {IC SCM} by A6,GRFUNC_1:90;
-    da in Data-Locations SCM by AMI_3:72,def 2;
-    then
-A18: Data-Locations SCM = Data-Locations SCM \/ {da} by ZFMISC_1:46
-      .= (Data-Locations SCM \ {da} ) \/ {da} by XBOOLE_1:39;
-    Exec (l,s1).da = s1.db by A9,AMI_3:8
-      .= (s1 | (Data-Locations SCM \/ {IC SCM})).db by A7,A16,FUNCT_1:72
-      .= s2.db by A2,A7,A16,FUNCT_1:72
-      .= Exec (l,s2).da by A9,AMI_3:8;
-    then Exec (l,s1) | {da} = Exec(l,s2) | {da} by A6,GRFUNC_1:90;
-    then DataPart Exec (l,s1) = DataPart Exec (l,s2) by A18,A15,RELAT_1:185;
-    hence thesis by A17,RELAT_1:185;
-  end;
-  suppose
-    InsCode (l) = 2;
-    then consider da,db such that
-A19: l = AddTo(da,db) by Th48;
-A20: for x being set st x in ((Data-Locations SCM) \ {da}) holds (Exec (l,s1) |
-    (Data-Locations SCM \ {da})).x
-     = (Exec (l,s2) | (Data-Locations SCM \ {da})).x
-    proof
-      let x be set;
-      assume
-A21:  x in ((Data-Locations SCM) \ {da});
-      then
-A22:  x in Data-Locations SCM by XBOOLE_0:def 5;
-      then reconsider a = x as Data-Location by AMI_3:72,def 2;
-A23:  a in (Data-Locations SCM \/ {IC SCM}) by A22,XBOOLE_0:def 3;
-      not x in {da} by A21,XBOOLE_0:def 5;
-      then
-A24:  a <> da by TARSKI:def 1;
-      thus (Exec (l,s1) | (Data-Locations SCM \ {da})).x
-       = (Exec (l,s1)).a by A21,FUNCT_1:72
-        .= s1.a by A19,A24,AMI_3:9
-        .= (s1 | (Data-Locations SCM \/ {IC SCM})).a by A23,FUNCT_1:72
-        .= s2.a by A2,A23,FUNCT_1:72
-        .= (Exec (l,s2)).a by A19,A24,AMI_3:9
-        .= (Exec (l,s2) | (Data-Locations SCM \ {da})).x by A21,FUNCT_1:72;
-    end;
-    dom ((Exec (l,s1)) | (Data-Locations SCM \ {da}))
-     = (Data-Locations SCM \ {da}) &
-    dom (( Exec (l,s2)) | (Data-Locations SCM \ {da}))
-     = (Data-Locations SCM \ {da}) by A6,RELAT_1:91;
-    then
-A25: Exec (l,s1) | (Data-Locations SCM \ {da} )
- = Exec (l,s2) | (Data-Locations SCM \
-    {da} ) by A20,FUNCT_1:9;
-    da in Data-Locations SCM by AMI_3:72,def 2;
-    then
-A26: Data-Locations SCM = Data-Locations SCM \/ {da} by ZFMISC_1:46
-      .= (Data-Locations SCM \ {da} ) \/ {da} by XBOOLE_1:39;
-    Exec (l,s1).IC SCM = succ IC s1 by A19,AMI_3:9
-      .= Exec (l,s2).IC SCM by A5,A19,AMI_3:9;
-    then
-A27: Exec (l,s1) | {IC SCM} = Exec (l,s2) | {IC SCM} by A6,GRFUNC_1:90;
-A28: da in Data-Locations SCM by AMI_3:72,def 2;
-    then
-A29: s1.da = (s1 | (Data-Locations SCM \/ {IC SCM})).da by A7,FUNCT_1:72
-      .= s2.da by A2,A7,A28,FUNCT_1:72;
-A30: db in Data-Locations SCM by AMI_3:72,def 2;
-    then
-A31: s1.db = (s1 | (Data-Locations SCM \/ {IC SCM})).db by A7,FUNCT_1:72
-      .= s2.db by A2,A7,A30,FUNCT_1:72;
-    Exec (l,s1).da = s1.da + s1.db by A19,AMI_3:9
-      .= Exec (l,s2).da by A19,A29,A31,AMI_3:9;
-    then Exec (l,s1) | {da} = Exec(l,s2) | {da} by A6,GRFUNC_1:90;
-    then DataPart Exec (l,s1) = DataPart Exec (l,s2) by A26,A25,RELAT_1:185;
-    hence thesis by A27,RELAT_1:185;
-  end;
-  suppose
-    InsCode (l) = 3;
-    then consider da,db such that
-A32: l = SubFrom(da,db) by Th49;
-A33: for x being set st x in ((Data-Locations SCM) \ {da}) holds (Exec (l,s1) |
-    (Data-Locations SCM \ {da})).x
-     = (Exec (l,s2) | (Data-Locations SCM \ {da})).x
-    proof
-      let x be set;
-      assume
-A34:  x in ((Data-Locations SCM) \ {da});
-      then
-A35:  x in Data-Locations SCM by XBOOLE_0:def 5;
-      then reconsider a = x as Data-Location by AMI_3:72,def 2;
-A36:  a in (Data-Locations SCM \/ {IC SCM}) by A35,XBOOLE_0:def 3;
-      not x in {da} by A34,XBOOLE_0:def 5;
-      then
-A37:  a <> da by TARSKI:def 1;
-      thus (Exec (l,s1) | (Data-Locations SCM \ {da})).x
-       = (Exec (l,s1)).a by A34,FUNCT_1:72
-        .= s1.a by A32,A37,AMI_3:10
-        .= (s1 | (Data-Locations SCM \/ {IC SCM})).a by A36,FUNCT_1:72
-        .= s2.a by A2,A36,FUNCT_1:72
-        .= (Exec (l,s2)).a by A32,A37,AMI_3:10
-        .= (Exec (l,s2) | (Data-Locations SCM \ {da})).x by A34,FUNCT_1:72;
-    end;
-    dom ((Exec (l,s1)) | (Data-Locations SCM \ {da}))
-     = (Data-Locations SCM \ {da}) &
-    dom (( Exec (l,s2)) | (Data-Locations SCM \ {da}))
-     = (Data-Locations SCM \ {da}) by A6,RELAT_1:91;
-    then
-A38: Exec (l,s1) | (Data-Locations SCM \ {da} )
- = Exec (l,s2) | (Data-Locations SCM \
-    {da} ) by A33,FUNCT_1:9;
-    da in Data-Locations SCM by AMI_3:72,def 2;
-    then
-A39: Data-Locations SCM = Data-Locations SCM \/ {da} by ZFMISC_1:46
-      .= (Data-Locations SCM \ {da} ) \/ {da} by XBOOLE_1:39;
-    Exec (l,s1).IC SCM = succ IC s1 by A32,AMI_3:10
-      .= Exec (l,s2).IC SCM by A5,A32,AMI_3:10;
-    then
-A40: Exec (l,s1) | {IC SCM} = Exec (l,s2) | {IC SCM} by A6,GRFUNC_1:90;
-A41: da in Data-Locations SCM by AMI_3:72,def 2;
-    then
-A42: s1.da = (s1 | (Data-Locations SCM \/ {IC SCM})).da by A7,FUNCT_1:72
-      .= s2.da by A2,A7,A41,FUNCT_1:72;
-A43: db in Data-Locations SCM by AMI_3:72,def 2;
-    then
-A44: s1.db = (s1 | (Data-Locations SCM \/ {IC SCM})).db by A7,FUNCT_1:72
-      .= s2.db by A2,A7,A43,FUNCT_1:72;
-    Exec (l,s1).da = s1.da - s1.db by A32,AMI_3:10
-      .= Exec (l,s2).da by A32,A42,A44,AMI_3:10;
-    then Exec (l,s1) | {da} = Exec(l,s2) | {da} by A6,GRFUNC_1:90;
-    then DataPart Exec (l,s1) = DataPart Exec (l,s2) by A39,A38,RELAT_1:185;
-    hence thesis by A40,RELAT_1:185;
-  end;
-  suppose
-    InsCode (l) = 4;
-    then consider da,db such that
-A45: l = MultBy(da,db) by Th50;
-A46: for x being set st x in ((Data-Locations SCM) \ {da}) holds (Exec (l,s1) |
-    (Data-Locations SCM \ {da})).x
-     = (Exec (l,s2) | (Data-Locations SCM \ {da})).x
-    proof
-      let x be set;
-      assume
-A47:  x in ((Data-Locations SCM) \ {da});
-      then
-A48:  x in Data-Locations SCM by XBOOLE_0:def 5;
-      then reconsider a = x as Data-Location by AMI_3:72,def 2;
-A49:  a in (Data-Locations SCM \/ {IC SCM}) by A48,XBOOLE_0:def 3;
-      not x in {da} by A47,XBOOLE_0:def 5;
-      then
-A50:  a <> da by TARSKI:def 1;
-      thus (Exec (l,s1) | (Data-Locations SCM \ {da})).x
-       = (Exec (l,s1)).a by A47,FUNCT_1:72
-        .= s1.a by A45,A50,AMI_3:11
-        .= (s1 | (Data-Locations SCM \/ {IC SCM})).a by A49,FUNCT_1:72
-        .= s2.a by A2,A49,FUNCT_1:72
-        .= (Exec (l,s2)).a by A45,A50,AMI_3:11
-        .= (Exec (l,s2) | (Data-Locations SCM \ {da})).x by A47,FUNCT_1:72;
-    end;
-    dom ((Exec (l,s1)) | (Data-Locations SCM \ {da}))
-     = (Data-Locations SCM \ {da}) &
-    dom (( Exec (l,s2)) | (Data-Locations SCM \ {da}))
-     = (Data-Locations SCM \ {da}) by A6,RELAT_1:91;
-    then
-A51: Exec (l,s1) | (Data-Locations SCM \ {da} )
- = Exec (l,s2) | (Data-Locations SCM \
-    {da} ) by A46,FUNCT_1:9;
-    da in Data-Locations SCM by AMI_3:72,def 2;
-    then
-A52: Data-Locations SCM = Data-Locations SCM \/ {da} by ZFMISC_1:46
-      .= (Data-Locations SCM \ {da} ) \/ {da} by XBOOLE_1:39;
-    Exec (l,s1).IC SCM = succ IC s1 by A45,AMI_3:11
-      .= Exec (l,s2).IC SCM by A5,A45,AMI_3:11;
-    then
-A53: Exec (l,s1) | {IC SCM} = Exec (l,s2) | {IC SCM} by A6,GRFUNC_1:90;
-A54: da in Data-Locations SCM by AMI_3:72,def 2;
-    then
-A55: s1.da = (s1 | (Data-Locations SCM \/ {IC SCM})).da by A7,FUNCT_1:72
-      .= s2.da by A2,A7,A54,FUNCT_1:72;
-A56: db in Data-Locations SCM by AMI_3:72,def 2;
-    then
-A57: s1.db = (s1 | (Data-Locations SCM \/ {IC SCM})).db by A7,FUNCT_1:72
-      .= s2.db by A2,A7,A56,FUNCT_1:72;
-    Exec (l,s1).da = s1.da * s1.db by A45,AMI_3:11
-      .= Exec (l,s2).da by A45,A55,A57,AMI_3:11;
-    then Exec (l,s1) | {da} = Exec(l,s2) | {da} by A6,GRFUNC_1:90;
-    then DataPart Exec (l,s1) = DataPart Exec (l,s2) by A52,A51,RELAT_1:185;
-    hence thesis by A53,RELAT_1:185;
-  end;
-  suppose
-    InsCode (l) = 5;
-    then consider da,db such that
-A58: l = Divide(da,db) by Th51;
-    thus thesis
-    proof
-      per cases;
-      suppose
-A59:    da=db;
-A60:    for x being set st x in ((Data-Locations SCM) \ {da}) holds (Exec (l,
-s1) | (Data-Locations SCM \ {da})).x
- = (Exec (l,s2) | (Data-Locations SCM \ {da})).x
-        proof
-          let x be set;
-          assume
-A61:      x in ((Data-Locations SCM) \ {da});
-          then
-A62:      x in Data-Locations SCM by XBOOLE_0:def 5;
-          then reconsider a = x as Data-Location by AMI_3:72,def 2;
-A63:      a in (Data-Locations SCM \/ {IC SCM}) by A62,XBOOLE_0:def 3;
-          not x in {da} by A61,XBOOLE_0:def 5;
-          then
-A64:      a <> da by TARSKI:def 1;
-          thus (Exec (l,s1) | (Data-Locations SCM \ {da})).x
-           = (Exec (l,s1)).a by A61,FUNCT_1:72
-            .= s1.a by A58,A59,A64,AMI_3:12
-            .= (s1 | (Data-Locations SCM \/ {IC SCM})).a by A63,FUNCT_1:72
-            .= s2.a by A2,A63,FUNCT_1:72
-            .= (Exec (l,s2)).a by A58,A59,A64,AMI_3:12
-            .= (Exec (l,s2) | (Data-Locations SCM \ {da})).x by A61,FUNCT_1:72;
-        end;
-        dom ((Exec (l,s1)) | (Data-Locations SCM \ {da}))
-         = (Data-Locations SCM \ {
-da}) & dom (( Exec (l,s2)) | (Data-Locations SCM \ {da}))
- = (Data-Locations SCM \ {da}) by A6,RELAT_1:91;
-        then
-A65:    Exec (l,s1) | (Data-Locations SCM \ {da} ) = Exec (l,s2) | (
-        Data-Locations SCM \ {da} ) by A60,FUNCT_1:9;
-        da in Data-Locations SCM by AMI_3:72,def 2;
-        then
-A66:    Data-Locations SCM = Data-Locations SCM \/ {da} by ZFMISC_1:46
-          .= (Data-Locations SCM \ {da} ) \/ {da} by XBOOLE_1:39;
-        Exec (l,s1).IC SCM = succ IC s1 by A58,AMI_3:12
-          .= Exec (l,s2).IC SCM by A5,A58,AMI_3:12;
-        then
-A67:    Exec (l,s1) | {IC SCM} = Exec (l,s2) | {IC SCM} by A6,GRFUNC_1:90;
-A68:    da in Data-Locations SCM by AMI_3:72,def 2;
-        then
-A69:    s1.da = (s1 | (Data-Locations SCM \/ {IC SCM})).da by A7,FUNCT_1:72
-          .= s2.da by A2,A7,A68,FUNCT_1:72;
-        Exec (l,s1).da = s1.da mod s1.da by A58,A59,AMI_3:12
-          .= Exec (l,s2).da by A58,A59,A69,AMI_3:12;
-        then Exec (l,s1) | {da} = Exec(l,s2) | {da} by A6,GRFUNC_1:90;
-        then DataPart Exec (l,s1) = DataPart Exec (l,s2) by A66,A65,RELAT_1:185
-;
-        hence thesis by A67,RELAT_1:185;
-      end;
-      suppose
-A70:    da <> db;
-        Exec (l,s1).IC SCM = succ IC s1 by A58,AMI_3:12
-          .= Exec (l,s2).IC SCM by A5,A58,AMI_3:12;
-        then
-A71:    Exec (l,s1) | {IC SCM} = Exec (l,s2) | {IC SCM} by A6,GRFUNC_1:90;
-A72:    db in Data-Locations SCM by AMI_3:72,def 2;
-        then
-A73:    s1.db = (s1 | (Data-Locations SCM \/ {IC SCM})).db by A7,FUNCT_1:72
-          .= s2.db by A2,A7,A72,FUNCT_1:72;
-A74:    for x being set st x in ((Data-Locations SCM) \ {da,db}) holds (Exec (
-l,s1) | (Data-Locations SCM \ {da,db})).x
- = (Exec (l,s2) | (Data-Locations SCM \ {da,db})).
-        x
-        proof
-          let x be set;
-          assume
-A75:      x in ((Data-Locations SCM) \ {da,db});
-          then
-A76:      x in Data-Locations SCM by XBOOLE_0:def 5;
-          then reconsider a = x as Data-Location by AMI_3:72,def 2;
-A77:      a in (Data-Locations SCM \/ {IC SCM}) by A76,XBOOLE_0:def 3;
-          not x in {da,db} by A75,XBOOLE_0:def 5;
-          then
-A78:      a <> da & a <> db by TARSKI:def 2;
-          thus (Exec (l,s1) | (Data-Locations SCM \ {da,db})).x
-           = (Exec (l,s1)).a by A75,FUNCT_1:72
-            .= s1.a by A58,A78,AMI_3:12
-            .= (s1 | (Data-Locations SCM \/ {IC SCM})).a by A77,FUNCT_1:72
-            .= s2.a by A2,A77,FUNCT_1:72
-            .= (Exec (l,s2)).a by A58,A78,AMI_3:12
-            .= (Exec (l,s2) | (Data-Locations SCM \ {da,db})).x
-                  by A75,FUNCT_1:72;
-        end;
-        dom ((Exec (l,s1)) | (Data-Locations SCM \ {da,db}))
-         = (Data-Locations SCM \
-{da,db}) & dom ((Exec (l,s2)) | (Data-Locations SCM \ {da,db}))
- = (Data-Locations SCM \ {
-        da,db}) by A6,RELAT_1:91;
-        then
-A79:    Exec (l,s1) | (Data-Locations SCM \ {da,db} ) = Exec (l,s2) | (
-        Data-Locations SCM \ {da,db} ) by A74,FUNCT_1:9;
-        da in Data-Locations SCM & db in Data-Locations SCM
-          by AMI_3:72,def 2;
-        then
-A80:    Data-Locations SCM = Data-Locations SCM \/ {da,db} by ZFMISC_1:48
-          .= (Data-Locations SCM \ {da,db} ) \/ {da,db} by XBOOLE_1:39;
-A81:    da in Data-Locations SCM by AMI_3:72,def 2;
-        then
-A82:    s1.da = (s1 | (Data-Locations SCM \/ {IC SCM})).da by A7,FUNCT_1:72
-          .= s2.da by A2,A7,A81,FUNCT_1:72;
-A83:    Exec (l,s1).db = s1.da mod s1.db by A58,AMI_3:12
-          .= Exec (l,s2).db by A58,A82,A73,AMI_3:12;
-        Exec (l,s1).da = s1.da div s1.db by A58,A70,AMI_3:12
-          .= Exec (l,s2).da by A58,A70,A82,A73,AMI_3:12;
-        then Exec (l,s1) | {da,db} = Exec(l,s2) | {da,db} by A6,A83,GRFUNC_1:91
-;
-        then DataPart Exec (l,s1) = DataPart Exec (l,s2) by A80,A79,RELAT_1:185
-;
-        hence thesis by A71,RELAT_1:185;
-      end;
-    end;
-  end;
-  suppose
-    InsCode (l) = 6;
-    then consider loc such that
-A84: l = SCM-goto loc by Th52;
-A85: for x being set st x in Data-Locations SCM holds (DataPart Exec (l,s1)).x
-    = (DataPart Exec (l,s2)).x
-    proof
-      let x be set;
-      assume
-A86:  x in Data-Locations SCM;
-      then reconsider a = x as Data-Location by AMI_3:72,def 2;
-A87:  a in (Data-Locations SCM \/ {IC SCM}) by A86,XBOOLE_0:def 3;
-      thus (DataPart Exec (l,s1)).x = (Exec (l,s1)).a by A86,FUNCT_1:72
-        .= s1.a by A84,AMI_3:13
-        .= (s1 | (Data-Locations SCM \/ {IC SCM})).a by A87,FUNCT_1:72
-        .= s2.a by A2,A87,FUNCT_1:72
-        .= (Exec (l,s2)).a by A84,AMI_3:13
-        .= (DataPart Exec (l,s2)).x by A86,FUNCT_1:72;
-    end;
-    Exec (l,s1).IC SCM = loc by A84,AMI_3:13
-      .= Exec (l,s2).IC SCM by A84,AMI_3:13;
-    then
-A88: Exec (l,s1) | {IC SCM} = Exec (l,s2) | {IC SCM} by A6,GRFUNC_1:90;
-    dom DataPart Exec(l,s1) = Data-Locations SCM & dom DataPart Exec (l,s2) =
-    Data-Locations SCM by A6,RELAT_1:91;
-    then Exec (l,s1) | (Data-Locations SCM )
-     = Exec (l,s2) | (Data-Locations SCM ) by A85,FUNCT_1:9;
-    hence thesis by A88,RELAT_1:185;
-  end;
-  suppose
-    InsCode (l) = 7;
-    then consider loc,da such that
-A89: l = da=0_goto loc by Th53;
-    Exec (l,s1).IC SCM = Exec (l,s2).IC SCM
-    proof
-A90:  da in Data-Locations SCM by AMI_3:72,def 2;
-      then
-A91:  s1.da = (s1 | (Data-Locations SCM \/ {IC SCM})).da by A7,FUNCT_1:72
-        .= s2.da by A2,A7,A90,FUNCT_1:72;
-      per cases;
-      suppose
-A92:    s1.da = 0;
-        hence Exec (l,s1).IC SCM = loc by A89,AMI_3:14
-          .= Exec (l,s2).IC SCM by A89,A91,A92,AMI_3:14;
-      end;
-      suppose
-A93:    s1.da <> 0;
-        hence Exec (l,s1).IC SCM = succ IC s1 by A89,AMI_3:14
-          .= Exec (l,s2).IC SCM by A5,A89,A91,A93,AMI_3:14;
-      end;
-    end;
-    then
-A94: Exec (l,s1) | {IC SCM} = Exec (l,s2) | {IC SCM} by A6,GRFUNC_1:90;
-A95: for x being set st x in Data-Locations SCM holds (DataPart Exec (l,s1)).x
-    = (DataPart Exec (l,s2)).x
-    proof
-      let x be set;
-      assume
-A96:  x in Data-Locations SCM;
-      then reconsider a = x as Data-Location by AMI_3:72,def 2;
-A97:  a in (Data-Locations SCM \/ {IC SCM}) by A96,XBOOLE_0:def 3;
-      thus (DataPart Exec (l,s1)).x = (Exec (l,s1)).a by A96,FUNCT_1:72
-        .= s1.a by A89,AMI_3:14
-        .= (s1 | (Data-Locations SCM \/ {IC SCM})).a by A97,FUNCT_1:72
-        .= s2.a by A2,A97,FUNCT_1:72
-        .= (Exec (l,s2)).a by A89,AMI_3:14
-        .= (DataPart Exec (l,s2)).x by A96,FUNCT_1:72;
-    end;
-    dom (DataPart (Exec (l,s1))) = Data-Locations SCM & dom ((DataPart Exec (l
-    ,s2))) = Data-Locations SCM by A6,RELAT_1:91;
-    then Exec (l,s1) | (Data-Locations SCM )
-     = Exec (l,s2) | (Data-Locations SCM ) by A95,FUNCT_1:9;
-    hence thesis by A94,RELAT_1:185;
-  end;
-  suppose
-    InsCode (l) = 8;
-    then consider loc,da such that
-A98: l = da>0_goto loc by Th54;
-    Exec (l,s1).IC SCM = Exec (l,s2).IC SCM
-    proof
-A99:  da in Data-Locations SCM by AMI_3:72,def 2;
-      then
-A100: s1.da = (s1 | (Data-Locations SCM \/ {IC SCM})).da by A7,FUNCT_1:72
-        .= s2.da by A2,A7,A99,FUNCT_1:72;
-      per cases;
-      suppose
-A101:   s1.da > 0;
-        hence Exec (l,s1).IC SCM = loc by A98,AMI_3:15
-          .= Exec (l,s2).IC SCM by A98,A100,A101,AMI_3:15;
-      end;
-      suppose
-A102:   s1.da <= 0;
-        hence Exec (l,s1).IC SCM = succ IC s1 by A98,AMI_3:15
-          .= Exec (l,s2).IC SCM by A5,A98,A100,A102,AMI_3:15;
-      end;
-    end;
-    then
-A103: Exec (l,s1) | {IC SCM} = Exec (l,s2) | {IC SCM} by A6,GRFUNC_1:90;
-A104: for x being set st x in Data-Locations SCM holds (DataPart Exec (l,s1)).x
-    = (DataPart Exec (l,s2)).x
-    proof
-      let x be set;
-      assume
-A105: x in Data-Locations SCM;
-      then reconsider a = x as Data-Location by AMI_3:72,def 2;
-A106: a in (Data-Locations SCM \/ {IC SCM}) by A105,XBOOLE_0:def 3;
-      thus (DataPart Exec (l,s1)).x = (Exec (l,s1)).a by A105,FUNCT_1:72
-        .= s1.a by A98,AMI_3:15
-        .= (s1 | (Data-Locations SCM \/ {IC SCM})).a by A106,FUNCT_1:72
-        .= s2.a by A2,A106,FUNCT_1:72
-        .= (Exec (l,s2)).a by A98,AMI_3:15
-        .= (DataPart Exec (l,s2)).x by A105,FUNCT_1:72;
-    end;
-    dom (DataPart Exec (l,s1)) = Data-Locations SCM & dom (DataPart Exec (l,s2
-    )) = Data-Locations SCM by A6,RELAT_1:91;
-    then Exec (l,s1) | (Data-Locations SCM )
-     = Exec (l,s2) | (Data-Locations SCM ) by A104,FUNCT_1:9;
-    hence thesis by A103,RELAT_1:185;
-  end;
-end;
-
 begin :: Finite partial states of SCM
 
-canceled 21;
+canceled 25;
 
 theorem
   for s being State of SCM, iloc being Element of NAT, a
@@ -1048,138 +539,142 @@ end;
 
 begin :: Autonomic finite partial states of SCM
 
-canceled 2;
-
-theorem Th83:
-  for p being autonomic FinPartState of SCM st DataPart p <> {}
-  holds IC SCM in dom p
-proof
-  let p be autonomic FinPartState of SCM;
-  assume DataPart p <> {};
-  then
-A1: dom DataPart p <> {};
-  assume
-A2: not IC SCM in dom p;
-  p is not autonomic
+registration
+ cluster SCM -> IC-recognized;
+ coherence
   proof
-    dom p misses {IC SCM} by A2,ZFMISC_1:56;
+   for p being autonomic FinPartState of SCM st DataPart p <> {}
+     holds IC SCM in dom p
+   proof let p be autonomic FinPartState of SCM;
+    assume DataPart p <> {};
+     then
+A1:  dom DataPart p <> {};
+    assume
+A2:  not IC SCM in dom p;
+    then dom p misses {IC SCM} by ZFMISC_1:56;
     then
 A3: dom p /\ {IC SCM} = {} by XBOOLE_0:def 7;
-    consider il being Element of (NAT) \ dom p;
-    consider d2 being Element of Data-Locations SCM \ dom p;
-    consider d1 being Element of dom DataPart p;
+  p is not autonomic
+  proof
+    set il =the  Element of (NAT) \ dom p;
+    set d2 =the  Element of Data-Locations SCM \ dom p;
+    set d1 =the  Element of dom DataPart p;
 A4: d1 in dom DataPart p by A1;
+    DataPart p c= NPP p by COMPOS_1:169;
+    then dom DataPart p c= dom NPP p by RELAT_1:25;
+    then
+A5: d1 in dom NPP p by A4;
     dom DataPart p c= the carrier of SCM by RELAT_1:def 18;
     then reconsider d1 as Element of SCM by A4;
     not Data-Locations SCM c= dom p;
     then
-A5: Data-Locations SCM \ dom p <> {} by XBOOLE_1:37;
+A6: Data-Locations SCM \ dom p <> {} by XBOOLE_1:37;
     then d2 in Data-Locations SCM by XBOOLE_0:def 5;
     then reconsider d2 as Data-Location by AMI_3:72,def 2;
-A6: not d2 in dom p by A5,XBOOLE_0:def 5;
+A7: not d2 in dom p by A6,XBOOLE_0:def 5;
     then dom p misses {d2} by ZFMISC_1:56;
     then
-A7: dom p /\ {d2} = {} by XBOOLE_0:def 7;
+A8: dom p /\ {d2} = {} by XBOOLE_0:def 7;
     not NAT c= dom p;
     then
-A8: (NAT) \ dom p <> {} by XBOOLE_1:37;
+A9: (NAT) \ dom p <> {} by XBOOLE_1:37;
     then il is Element of NAT by XBOOLE_0:def 5;
     then reconsider il as Element of NAT;
-A9: not il in dom p by A8,XBOOLE_0:def 5;
+A10: not il in dom p by A9,XBOOLE_0:def 5;
     then
-A10: dom p misses {il} by ZFMISC_1:56;
+A11: dom p misses {il} by ZFMISC_1:56;
     dom DataPart p c= Data-Locations SCM by RELAT_1:87;
     then reconsider d1 as Data-Location by A4,AMI_3:72,def 2;
-A11: dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) = dom (il .--> (d1:=d2)) \/
+A12: dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) = dom (il .--> (d1:=d2)) \/
     dom ( d2.--> 0) by FUNCT_4:def 1;
     set p2 = p +* ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM));
     set p1 = p +* ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM));
     consider s1 being State of SCM such that
-A12: p1 c= s1 by PBOOLE:156;
-    dom p misses {d2} by A6,ZFMISC_1:56;
+A13: p1 c= s1 by PBOOLE:156;
+    dom p misses {d2} by A7,ZFMISC_1:56;
     then
-A13: dom p /\ {d2} = {} by XBOOLE_0:def 7;
-A14: dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)) = dom ((il
+A14: dom p /\ {d2} = {} by XBOOLE_0:def 7;
+A15: dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)) = dom ((il
     .--> (d1:=d2)) +* ( d2.--> 1)) \/ dom(Start-At(il,SCM)) by FUNCT_4:def 1;
     consider s2 being State of SCM such that
-A15: p2 c= s2 by PBOOLE:156;
-X:  dom p c= the carrier of SCM by RELAT_1:def 18;
+A16: p2 c= s2 by PBOOLE:156;
+A17:  dom p c= the carrier of SCM by RELAT_1:def 18;
+A18:  dom NPP p c= the carrier of SCM by RELAT_1:def 18;
     dom ( Comput(ProgramPart(s2),s2,1)) = the carrier of SCM by PARTFUN1:def 4;
     then
-A16: dom ( Comput(ProgramPart(s2),s2,1)|dom p) = dom p by X,RELAT_1:91;
-    dom ( Comput(ProgramPart(s1),s1,1)) = the carrier of SCM by PARTFUN1:def 4;
-    then
-A17: dom ( Comput(ProgramPart(s1),s1,1)|dom p) = dom p by X,RELAT_1:91;
-A18: dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) = dom (il .--> (d1:=d2)) \/
+A19: dom ( Comput(ProgramPart(s2),s2,1)|dom NPP p) = dom NPP p
+ by RELAT_1:91,A18;
+A20
+: dom ( Comput(ProgramPart(s1),s1,1)) = the carrier of SCM by PARTFUN1:def 4;
+A21: dom ( Comput(ProgramPart(s1),s1,1)|dom NPP p) = dom NPP p
+ by RELAT_1:91,A18,A20;
+A22: dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) = dom (il .--> (d1:=d2)) \/
     dom ( d2.--> 1) by FUNCT_4:def 1;
-A19: dom p misses {il} by A9,ZFMISC_1:56;
-A20: dom p2 = dom p \/ dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(
+A23: dom p misses {il} by A10,ZFMISC_1:56;
+A24: dom p2 = dom p \/ dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(
     il,SCM)) by FUNCT_4:def 1;
-A21: dom(Start-At(il,SCM)) = {IC SCM} by FUNCOP_1:19;
+A25: dom(Start-At(il,SCM)) = {IC SCM} by FUNCOP_1:19;
     then
-A22: IC SCM in dom (Start-At(il,SCM)) by TARSKI:def 1;
+A26: IC SCM in dom (Start-At(il,SCM)) by TARSKI:def 1;
     then
-A23: IC SCM in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM))
- by A14,XBOOLE_0:def 3;
-    then IC SCM in dom p2 by A20,XBOOLE_0:def 3;
+A27: IC SCM in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM))
+ by A15,XBOOLE_0:def 3;
+    then IC SCM in dom p2 by A24,XBOOLE_0:def 3;
     then
-A24: IC s2 = p2.IC SCM by A15,GRFUNC_1:8
-      .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)).IC SCM by A23,
+A28: IC s2 = p2.IC SCM by A16,GRFUNC_1:8
+      .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)).IC SCM by A27,
 FUNCT_4:14
-      .= (Start-At(il,SCM)).IC SCM by A22,FUNCT_4:14
+      .= (Start-At(il,SCM)).IC SCM by A26,FUNCT_4:14
       .= il by FUNCOP_1:87;
     d2 <> IC SCM by Th20;
     then
-A25: not d2 in dom (Start-At(il,SCM)) by A21,TARSKI:def 1;
-A26: dom (d2 .--> 1) = {d2} by FUNCOP_1:19;
+A29: not d2 in dom (Start-At(il,SCM)) by A25,TARSKI:def 1;
+A30: dom (d2 .--> 1) = {d2} by FUNCOP_1:19;
     then
-A27: d2 in dom (d2 .--> 1) by TARSKI:def 1;
-    then d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) by A18,XBOOLE_0:def 3;
+A31: d2 in dom (d2 .--> 1) by TARSKI:def 1;
+    then d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) by A22,XBOOLE_0:def 3;
     then
-A28: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)) by A14,
+A32: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)) by A15,
 XBOOLE_0:def 3;
-    then d2 in dom p2 by A20,XBOOLE_0:def 3;
+    then d2 in dom p2 by A24,XBOOLE_0:def 3;
     then
-A29: s2.d2 = p2.d2 by A15,GRFUNC_1:8
-      .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)).d2 by A28,
+A33: s2.d2 = p2.d2 by A16,GRFUNC_1:8
+      .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)).d2 by A32,
 FUNCT_4:14
-      .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).d2 by A25,FUNCT_4:12
-      .= (d2.--> 1).d2 by A27,FUNCT_4:14
+      .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).d2 by A29,FUNCT_4:12
+      .= (d2.--> 1).d2 by A31,FUNCT_4:14
       .= 1 by FUNCOP_1:87;
     il <> IC SCM by COMPOS_1:3;
     then
-A30: not il in dom (Start-At(il,SCM)) by A21,TARSKI:def 1;
+A34: not il in dom (Start-At(il,SCM)) by A25,TARSKI:def 1;
     il <> d2 by Th22;
     then
-A31: not il in dom (d2 .--> 1) by A26,TARSKI:def 1;
+A35: not il in dom (d2 .--> 1) by A30,TARSKI:def 1;
     dom (il .--> (d1:=d2)) = {il} by FUNCOP_1:19;
     then il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
-    then il in dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) by A18,XBOOLE_0:def 3;
+    then il in dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) by A22,XBOOLE_0:def 3;
     then
-A32: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)) by A14,
+A36: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)) by A15,
 XBOOLE_0:def 3;
-    then il in dom p2 by A20,XBOOLE_0:def 3;
+    then il in dom p2 by A24,XBOOLE_0:def 3;
     then
-A33: s2.il = p2.il by A15,GRFUNC_1:8
-      .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)).il by A32,
+A37: s2.il = p2.il by A16,GRFUNC_1:8
+      .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)).il by A36,
 FUNCT_4:14
-      .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).il by A30,FUNCT_4:12
-      .= (il .--> (d1:=d2)).il by A31,FUNCT_4:12
+      .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).il by A34,FUNCT_4:12
+      .= (il .--> (d1:=d2)).il by A35,FUNCT_4:12
       .=(d1:=d2) by FUNCOP_1:87;
-Y:  (ProgramPart s2)/.IC s2
+A38:  (ProgramPart s2)/.IC s2
  = s2.IC s2 by COMPOS_1:38;
-A34: Comput(ProgramPart(s2),s2,0+1).d1
+A39: Comput(ProgramPart(s2),s2,0+1).d1
  = (Following(ProgramPart s2,Comput(ProgramPart(s2),
 s2,0))).d1 by EXTPRO_1:4
       .= (Following(ProgramPart s2,s2)).d1 by EXTPRO_1:3
-      .= 1 by A24,A33,A29,Y,AMI_3:8;
+      .= 1 by A28,A37,A33,A38,AMI_3:8;
     dom p misses {IC SCM} by A2,ZFMISC_1:56;
     then
-A35: dom p /\ {IC SCM} = {} by XBOOLE_0:def 7;
-    DataPart p c= p by RELAT_1:88;
-    then
-A36: dom DataPart p c= dom p by RELAT_1:25;
-    take s1,s2;
+A40: dom p /\ {IC SCM} = {} by XBOOLE_0:def 7;
+    take P = ProgramPart s1, Q = ProgramPart s2;
     dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)) = dom((il .-->
     (d1:=d2)) +* ( d2.--> 0)) \/ dom(Start-At(il,SCM)) by FUNCT_4:def 1
       .= dom((il .--> (d1:=d2)) +* ( d2.--> 0)) \/ {IC SCM} by FUNCOP_1:19
@@ -1188,15 +683,17 @@ A36: dom DataPart p c= dom p by RELAT_1:25;
       .= {il} \/ {d2} \/ {IC SCM} by FUNCOP_1:19;
     then
     dom p /\ dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)) = dom
-    p /\ ({il} \/ {d2}) \/ {} by A35,XBOOLE_1:23
-      .= dom p /\ {il} \/ {} by A7,XBOOLE_1:23
-      .= {} by A10,XBOOLE_0:def 7;
+    p /\ ({il} \/ {d2}) \/ {} by A40,XBOOLE_1:23
+      .= dom p /\ {il} \/ {} by A8,XBOOLE_1:23
+      .= {} by A11,XBOOLE_0:def 7;
     then dom p misses
      dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM))
     by XBOOLE_0:def 7;
     then p c= p1 by FUNCT_4:33;
-    hence p c= s1 by A12,XBOOLE_1:1;
-A37: dom p1 = dom p \/ dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(
+    then
+A41:  p c= s1 by A13,XBOOLE_1:1;
+    hence ProgramPart p c= P by RELAT_1:105;
+A42: dom p1 = dom p \/ dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(
     il,SCM)) by FUNCT_4:def 1;
     dom ((il .--> (d1:=d2)) +* (d2.--> 1) +* Start-At(il,SCM)) = dom((il .-->
     (d1:=d2)) +* ( d2.--> 1)) \/ dom(Start-At(il,SCM)) by FUNCT_4:def 1
@@ -1207,197 +704,105 @@ A37: dom p1 = dom p \/ dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(
     then
     dom p /\ dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM)) = dom
     p /\ ({il} \/ {d2}) \/ {} by A3,XBOOLE_1:23
-      .= dom p /\ {il} \/ {} by A13,XBOOLE_1:23
-      .= {} by A19,XBOOLE_0:def 7;
+      .= dom p /\ {il} \/ {} by A14,XBOOLE_1:23
+      .= {} by A23,XBOOLE_0:def 7;
     then dom p misses
      dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At(il,SCM))
     by XBOOLE_0:def 7;
     then p c= p2 by FUNCT_4:33;
-    hence p c= s2 by A15,XBOOLE_1:1;
+    then
+A43: p c= s2 by A16,XBOOLE_1:1;
+    hence ProgramPart p c= Q by RELAT_1:105;
+    take s1,s2;
+    thus p c= s1 by A41;
+    thus p c= s2 by A43;
     take 1;
-A38: dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)) = dom ((il
+A44: dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)) = dom ((il
     .--> (d1:=d2)) +* ( d2.--> 0)) \/ dom(Start-At(il,SCM)) by FUNCT_4:def 1;
-A39: dom(Start-At(il,SCM)) = {IC SCM} by FUNCOP_1:19;
+A45: dom(Start-At(il,SCM)) = {IC SCM} by FUNCOP_1:19;
     then
-A40: IC SCM in dom (Start-At(il,SCM)) by TARSKI:def 1;
+A46: IC SCM in dom (Start-At(il,SCM)) by TARSKI:def 1;
     then
-A41: IC SCM in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM))
-by A38,XBOOLE_0:def 3;
-    then IC SCM in dom p1 by A37,XBOOLE_0:def 3;
+A47: IC SCM in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM))
+by A44,XBOOLE_0:def 3;
+    then IC SCM in dom p1 by A42,XBOOLE_0:def 3;
     then
-A42: IC s1 = p1.IC SCM by A12,GRFUNC_1:8
-      .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)).IC SCM by A41,
+A48: IC s1 = p1.IC SCM by A13,GRFUNC_1:8
+      .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)).IC SCM by A47,
 FUNCT_4:14
-      .= (Start-At(il,SCM)).IC SCM by A40,FUNCT_4:14
+      .= (Start-At(il,SCM)).IC SCM by A46,FUNCT_4:14
       .= il by FUNCOP_1:87;
     d2 <> IC SCM by Th20;
     then
-A43: not d2 in dom (Start-At(il,SCM)) by A39,TARSKI:def 1;
-A44: dom (d2 .--> 0) = {d2} by FUNCOP_1:19;
+A49: not d2 in dom (Start-At(il,SCM)) by A45,TARSKI:def 1;
+A50: dom (d2 .--> 0) = {d2} by FUNCOP_1:19;
     then
-A45: d2 in dom (d2 .--> 0) by TARSKI:def 1;
-    then d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) by A11,XBOOLE_0:def 3;
+A51: d2 in dom (d2 .--> 0) by TARSKI:def 1;
+    then d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) by A12,XBOOLE_0:def 3;
     then
-A46: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)) by A38,
+A52: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)) by A44,
 XBOOLE_0:def 3;
-    then d2 in dom p1 by A37,XBOOLE_0:def 3;
+    then d2 in dom p1 by A42,XBOOLE_0:def 3;
     then
-A47: s1.d2 = p1.d2 by A12,GRFUNC_1:8
-      .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)).d2 by A46,
+A53: s1.d2 = p1.d2 by A13,GRFUNC_1:8
+      .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)).d2 by A52,
 FUNCT_4:14
-      .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).d2 by A43,FUNCT_4:12
-      .= (d2.--> 0).d2 by A45,FUNCT_4:14
+      .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).d2 by A49,FUNCT_4:12
+      .= (d2.--> 0).d2 by A51,FUNCT_4:14
       .= 0 by FUNCOP_1:87;
     il <> IC SCM by COMPOS_1:3;
     then
-A48: not il in dom (Start-At(il,SCM)) by A39,TARSKI:def 1;
+A54: not il in dom (Start-At(il,SCM)) by A45,TARSKI:def 1;
     il <> d2 by Th22;
     then
-A49: not il in dom (d2 .--> 0) by A44,TARSKI:def 1;
+A55: not il in dom (d2 .--> 0) by A50,TARSKI:def 1;
     dom (il .--> (d1:=d2)) = {il} by FUNCOP_1:19;
     then il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
-    then il in dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) by A11,XBOOLE_0:def 3;
+    then il in dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) by A12,XBOOLE_0:def 3;
     then
-A50: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)) by A38,
+A56: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)) by A44,
 XBOOLE_0:def 3;
-    then il in dom p1 by A37,XBOOLE_0:def 3;
+    then il in dom p1 by A42,XBOOLE_0:def 3;
     then
-A51: s1.il = p1.il by A12,GRFUNC_1:8
-      .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)).il by A50,
+A57: s1.il = p1.il by A13,GRFUNC_1:8
+      .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At(il,SCM)).il by A56,
 FUNCT_4:14
-      .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).il by A48,FUNCT_4:12
-      .= (il .--> (d1:=d2)).il by A49,FUNCT_4:12
+      .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).il by A54,FUNCT_4:12
+      .= (il .--> (d1:=d2)).il by A55,FUNCT_4:12
       .=(d1:=d2) by FUNCOP_1:87;
-Y:  (ProgramPart s1)/.IC s1
+A58:  (ProgramPart s1)/.IC s1
  = s1.IC s1 by COMPOS_1:38;
     Comput(ProgramPart(s1),s1,0+1).d1
      = (Following(ProgramPart s1,Comput(ProgramPart(s1),s1,0))).d1
      by EXTPRO_1:4
       .= (Following(ProgramPart s1,s1)).d1 by EXTPRO_1:3
-      .= 0 by A42,A51,A47,Y,AMI_3:8;
-    then ( Comput(ProgramPart(s1),s1,1)|dom p).d1 = 0 by A4,A36,A17,FUNCT_1:70;
-    hence thesis by A4,A36,A16,A34,FUNCT_1:70;
+      .= 0 by A48,A57,A53,A58,AMI_3:8;
+    then (Comput(P,s1,1)|dom NPP p).d1 = 0 by FUNCT_1:70,A5,A21;
+    hence Comput(P,s1,1)|dom NPP p
+      <> Comput(Q,s2,1)|dom NPP p by A19,A39,FUNCT_1:70,A5;
   end;
   hence contradiction;
 end;
-
-theorem Th84:
-  for p being autonomic non NAT-defined FinPartState of SCM holds
-  IC SCM in dom p
-proof
-  let p be autonomic non NAT-defined FinPartState of SCM;
-   dom p c= the carrier of SCM by RELAT_1:def 18;
-   then
-A1: dom p = dom p /\ the carrier of SCM by XBOOLE_1:28
-    .= dom p /\ ({IC SCM} \/ Data-Locations SCM) \/ dom p /\ NAT
-        by AMI_3:4,72,XBOOLE_1:23;
-  not dom p c= NAT by RELAT_1:def 18;
-  then dom p /\ ({IC SCM} \/ Data-Locations SCM) <> {} by A1,XBOOLE_1:17;
-  then
-A2: dom p /\ {IC SCM} \/ dom p /\ Data-Locations SCM <> {} by XBOOLE_1:23;
-  per cases by A2;
-  suppose
-    dom p /\ {IC SCM} <> {};
-    then dom p meets {IC SCM} by XBOOLE_0:def 7;
-    hence thesis by ZFMISC_1:56;
-  end;
-  suppose
-    dom p /\ Data-Locations SCM <> {};
-    then DataPart p <> {} by RELAT_1:60,90;
-    hence thesis by Th83;
+   hence thesis by AMISTD_5:3;
   end;
 end;
 
-theorem
-  for p being autonomic FinPartState of SCM st IC SCM in dom p holds IC
-  p in dom p
-proof
-  let p be autonomic FinPartState of SCM;
-  assume
-A1: IC SCM in dom p;
-  set il = IC p;
-  set p1 = p +* ((il .--> SCM-goto 0));
-  set p2 = p +* ((il .--> SCM-goto 1));
-  consider s1 being State of SCM such that
-A2: p1 c= s1 by PBOOLE:156;
-  consider s2 being State of SCM such that
-A3: p2 c= s2 by PBOOLE:156;
-  assume
-A4: not IC p in dom p;
-  p is not autonomic
-  proof
-    take s1,s2;
-A5: dom (il .--> (SCM-goto 1)) = {il} by FUNCOP_1:19;
-    then
-A6: il in dom (il .--> (SCM-goto 1)) by TARSKI:def 1;
-A7: dom p misses {il} by A4,ZFMISC_1:56;
-    then
-A8: p c= p2 by A5,FUNCT_4:33;
-    dom p2 = dom p \/ dom ((il .--> SCM-goto 1)) by FUNCT_4:def 1;
-    then il in dom p2 by A6,XBOOLE_0:def 3;
-    then
-X:   s2.il = p2.il by A3,GRFUNC_1:8
-      .= ((il .--> SCM-goto 1)).il by A6,FUNCT_4:14
-      .= SCM-goto 1 by FUNCOP_1:87;
-Y:  (ProgramPart s2)/.IC s2
- = s2.IC s2 by COMPOS_1:38;
-    p c= s2 by A3,A8,XBOOLE_1:1;
-    then
-A9: (Following(ProgramPart s2,s2)).IC SCM = Exec (SCM-goto 1,s2).IC SCM
-by A1,X,Y,GRFUNC_1:8
-      .= 1 by AMI_3:13;
-A10: dom (il .--> (SCM-goto 0)) = {il} by FUNCOP_1:19;
-    then
-A11: il in dom (il .--> (SCM-goto 0)) by TARSKI:def 1;
-A12: p c= p1 by A10,A7,FUNCT_4:33;
-    hence p c= s1 & p c= s2 by A2,A3,A8,XBOOLE_1:1;
-    take 1;
-    assume
-A13: Comput(ProgramPart(s1),s1,1)|dom p = Comput(ProgramPart(s2),s2,1)|dom p;
-A14: Following(ProgramPart s1,s1)|dom p
- = (Following(ProgramPart s1,Comput(ProgramPart(s1),
-s1,0)))|dom p
- by EXTPRO_1:3
-      .= Comput(ProgramPart(s1),s1,0+1)|dom p by EXTPRO_1:4
-      .= (Following(ProgramPart s2,Comput(ProgramPart
-(s2),s2,0)))|dom p
-       by A13,EXTPRO_1:4
-      .= (Following(ProgramPart s2,s2))|dom p by EXTPRO_1:3;
-    dom p1 = dom p \/ dom ((il .--> SCM-goto 0)) by FUNCT_4:def 1;
-    then il in dom p1 by A11,XBOOLE_0:def 3;
-    then
-X:    s1.il = p1.il by A2,GRFUNC_1:8
-      .= ((il .--> SCM-goto 0)).il by A11,FUNCT_4:14
-      .= SCM-goto 0 by FUNCOP_1:87;
-Y:  (ProgramPart s1)/.IC s1
- = s1.IC s1 by COMPOS_1:38;
-    p c= s1 by A2,A12,XBOOLE_1:1;
-    then (Following(ProgramPart s1,s1)).IC SCM
-     = Exec (SCM-goto 0,s1).IC SCM by A1,X,Y,GRFUNC_1:8
-      .= 0 by AMI_3:13;
-    then 0 = (Following(ProgramPart s1,s1)|dom p).IC SCM by A1,FUNCT_1:72
-      .= 1 by A1,A9,A14,FUNCT_1:72;
-    hence contradiction;
-  end;
-  hence contradiction;
-end;
-
-theorem Th86:
-  for p being autonomic non NAT-defined FinPartState of SCM, s
-being State of SCM st p c= s for i being Element of NAT holds IC Comput(
-ProgramPart(s),s,
-  i) in dom ProgramPart(p)
+registration
+ cluster SCM -> CurIns-recognized;
+ coherence
 proof
   let p be autonomic non NAT-defined FinPartState of SCM, s be State of SCM
   such that
 A1: p c= s;
+  let P be (the Instructions of SCM)-valued ManySortedSet of NAT such that
+A2: ProgramPart p c= P;
   let i be Element of NAT;
-  set Csi = Comput(ProgramPart(s),s,i);
+  set Csi = Comput(P,s,i);
   set loc = IC Csi;
   reconsider ll = loc as Element of NAT;
   set loc1 = (ll+1);
 A3: loc in dom ProgramPart p iff loc in dom p /\ NAT by RELAT_1:90;
-  assume not IC Comput(ProgramPart(s),s,i) in dom ProgramPart(p);
+  assume not IC Comput(P,s,i) in dom ProgramPart(p);
   then
 A4: not loc in dom p by A3,XBOOLE_0:def 4;
   set p2 = p +* (loc .--> SCM-goto loc1);
@@ -1442,7 +847,7 @@ A18: Cs2i.loc = SCM-goto loc1 by AMI_1:54;
     then s1.loc = SCM-goto loc by A14,A11,GRFUNC_1:8;
     then
 A19: Cs1i.loc = SCM-goto loc by AMI_1:54;
-    take s1, s2;
+    take P1 = ProgramPart s1, P2 = ProgramPart s2;
 A20: now
       let x be set;
       assume
@@ -1455,513 +860,467 @@ A22:  p.x = p1.x by A21,FUNCT_4:17;
     end;
     dom s1 = the carrier of SCM by PARTFUN1:def 4;
     then dom p c= dom s1 by RELAT_1:def 18;
-    hence
-A23: p c= s1 by A20,GRFUNC_1:8;
     then
-A24: (Cs1i|dom p) = (Csi|dom p) by A1,EXTPRO_1:def 9;
+A23: p c= s1 by A20,GRFUNC_1:8;
+    hence
+A24:  ProgramPart p c= P1 by RELAT_1:105;
     dom s2 = the carrier of SCM by PARTFUN1:def 4;
     then dom p c= dom s2 by RELAT_1:def 18;
-    hence p c= s2 by A15,GRFUNC_1:8;
     then
-A25: (Cs1i|dom p) = (Cs2i|dom p) by A23,EXTPRO_1:def 9;
+A25: p c= s2 by A15,GRFUNC_1:8;
+    hence
+A26: ProgramPart p c= P2 by RELAT_1:105;
+    take s1, s2;
+    thus p c= s1 by A23;
+    then
+A27: (Cs1i|dom NPP p) = (Csi|dom NPP p) by A1,EXTPRO_1:def 9,A2,A24;
+    thus p c= s2 by A25;
+    then
+A28: (Cs1i|dom NPP p) = (Cs2i|dom NPP p) by A27,A1,EXTPRO_1:def 9,A2,A26;
     take k = i+1;
     set Cs1k = Comput(ProgramPart(s1),s1,k);
-T: ProgramPart s1 = ProgramPart Cs1i
+A29: ProgramPart s1 = ProgramPart Cs1i
 by AMI_1:123;
-Y:  (ProgramPart Cs1i)/.IC Cs1i
+A30:  (ProgramPart Cs1i)/.IC Cs1i
  = Cs1i.IC Cs1i by COMPOS_1:38;
-A26: Cs1k = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-      .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-T: ProgramPart s2 = ProgramPart Cs2i
+A31: Cs1k = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
+      .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by A29;
+A32: ProgramPart s2 = ProgramPart Cs2i
 by AMI_1:123;
-A27: Csi.IC SCM = (Csi|dom p).IC SCM by Th84,FUNCT_1:72;
-    then Cs1i.IC SCM = loc by A24,Th84,FUNCT_1:72;
+ IC SCM in dom p by AMISTD_5:6;
+  then
+A33: IC SCM in dom NPP p by COMPOS_1:179;
+   then
+A34: Csi.IC SCM = (Csi|dom NPP p).IC SCM by FUNCT_1:72;
+    then Cs1i.IC SCM = loc by A27,FUNCT_1:72,A33;
     then
-A28: Cs1k.IC SCM = loc by A26,A19,Y,AMI_3:13;
+A35: Cs1k.IC SCM = loc by A31,A19,A30,AMI_3:13;
     set Cs2k = Comput(ProgramPart(s2),s2,k);
-A29: Cs2k = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-      .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
-Y:  (ProgramPart Cs2i)/.IC Cs2i
+A36: Cs2k = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
+      .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by A32;
+A37:  (ProgramPart Cs2i)/.IC Cs2i
  = Cs2i.IC Cs2i by COMPOS_1:38;
-    Cs2i.IC SCM = loc by A24,A27,A25,Th84,FUNCT_1:72;
+    Cs2i.IC SCM = loc by A27,A34,A28,FUNCT_1:72,A33;
     then
-A30: Cs2k.IC SCM = loc1 by A29,A18,Y,AMI_3:13;
-    (Cs1k|dom p).IC SCM = Cs1k.IC SCM & (Cs2k|dom p).IC SCM = Cs2k.IC SCM
-    by Th84,FUNCT_1:72;
-    hence thesis by A28,A30;
+A38: Cs2k.IC SCM = loc1 by A36,A18,A37,AMI_3:13;
+    (Cs1k|dom NPP p).IC SCM = Cs1k.IC SCM &
+    (Cs2k|dom NPP p).IC SCM = Cs2k.IC SCM
+    by FUNCT_1:72,A33;
+    hence thesis by A35,A38;
   end;
   hence contradiction;
 end;
+end;
 
-theorem Th87:
-  for p being autonomic non NAT-defined FinPartState of SCM, s1,
-s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT, I being
-Instruction of SCM st I
- = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,
-i))
- holds IC Comput(ProgramPart(s1),s1,i) = IC Comput(ProgramPart(s2),s2,i) &
-   I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2)
-,s2,i))
+canceled 7;
+
+Lm2:
+ for p being PartState of SCM
+ holds da in dom p implies da in dom NPP p
 proof
-  let p be autonomic non NAT-defined FinPartState of SCM, s1, s2 be State of
-  SCM such that
-A1: p c= s1 and
-A2: p c= s2;
-  let i be Element of NAT, I be Instruction of SCM such that
-A3: I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1
-),s1,i));
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-  thus
-A4: IC Cs1i = IC Cs2i
-  proof
-    assume
-A5: IC Comput(ProgramPart(s1),s1,i) <> IC Comput(ProgramPart(s2),s2,i);
-    (Cs1i|dom p).IC SCM = Cs1i.IC SCM & (Cs2i|dom p).IC SCM = Cs2i.IC SCM
-    by Th84,FUNCT_1:72;
-    hence contradiction by A1,A2,A5,EXTPRO_1:def 9;
-  end;
-  thus I = CurInstr(ProgramPart s2,Comput(ProgramPart
-(s2),s2,i))
-  proof
-    ProgramPart p c= p by RELAT_1:88;
-    then
-A6: dom ProgramPart p c= dom p by GRFUNC_1:8;
-    IC Cs2i in dom ProgramPart p by A2,Th86;
-    then
-A7: (Cs2i|dom p).IC Cs2i = Cs2i.IC Cs2i by A6,FUNCT_1:72;
-    IC Cs1i in dom ProgramPart p by A1,Th86;
-    then
-A8: (Cs1i|dom p).IC Cs1i = Cs1i.IC Cs1i by A6,FUNCT_1:72;
-TX: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-TY: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-Y:  (ProgramPart s2)/.IC Comput(ProgramPart(s2),s2,i)
- = Comput(ProgramPart(s2),s2,i).IC Comput(ProgramPart(s2),s2,i)
-  by TY,COMPOS_1:38;
-Z:  (ProgramPart s1)/.IC Comput(ProgramPart(s1),s1,i)
- = Comput(ProgramPart(s1),s1,i).IC Comput(ProgramPart(s1),s1,i)
-       by TX,COMPOS_1:38;
-    assume
-ZZ:  I <> CurInstr(ProgramPart s2,Comput(ProgramPart(
-s2),s2,i));
-     Cs1i|dom p = Cs2i|dom p by A1,A2,EXTPRO_1:def 9;
-     then (Cs1i|dom p).IC Cs1i = Cs2i.IC Cs1i by A7,A4;
-    hence contradiction by A3,A4,A8,Y,ZZ,Z;
-  end;
+ let p be PartState of SCM;
+  da in SCM-Data-Loc by AMI_3:def 2;
+  then
+A1: da in Data-Locations SCM by AMI_3:72;
+ assume da in dom p;
+  then
+A2:  da in dom DataPart p by A1,RELAT_1:86;
+   DataPart p c= NPP p by COMPOS_1:169;
+   then dom DataPart p c= dom NPP p by RELAT_1:25;
+ hence da in dom NPP p by A2;
 end;
 
 theorem
-  for p being autonomic non NAT-defined FinPartState of SCM, s1, s2
-  being State of SCM st p c= s1 & p c= s2 for i being Element of NAT, da, db
-being Data-Location, I being Instruction of SCM st I =
- CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,i)
-)
-   holds I = da := db & da in dom p implies Comput(ProgramPart(s1),s1,i).db =
-  Comput(ProgramPart(s2),s2,i).db
+  for p being autonomic non NAT-defined FinPartState of SCM,
+      s1, s2 being State of SCM st p c= s1 & p c= s2
+  for P1,P2 being (the Instructions of SCM)-valued ManySortedSet of NAT
+      st ProgramPart p c= P1 & ProgramPart p c= P2
+  for i being Element of NAT, da, db being Data-Location,
+      I being Instruction of SCM
+       st I = CurInstr(P1,Comput(P1,s1,i))
+   holds I = da := db & da in dom p implies
+    Comput(P1,s1,i).db = Comput(P2,s2,i).db
 proof
   let p be autonomic non NAT-defined FinPartState of SCM, s1, s2 be State of
   SCM such that
 A1: p c= s1 & p c= s2;
+  let P1,P2 be (the Instructions of SCM)-valued ManySortedSet of NAT
+  such that
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT, da, db be Data-Location, I be Instruction of SCM
   such that
-A2: I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1
-),s1,i));
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A3: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+A3: I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs2i1 = Comput(P2,s2,i+1);
+  set Cs2i = Comput(P2,s2,i);
+A4: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
   assume that
-A4: I = da := db and
-A5: da in dom p & Comput(ProgramPart(s1),s1,i).db <> Comput(ProgramPart(s2),s2,
+A5: I = da := db and
+A6: da in dom p & Comput(P1,s1,i).db <> Comput(P2,s2,
 i).db;
-TY: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-  I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
-s2,i)) by A1,A2,Th87;
+A7: da in dom NPP p by A6,Lm2;
+  I = CurInstr(P2,Comput(P2,s2,i)) by A1,A3,AMISTD_5:7,A2;
   then
-A6: Cs2i1.da = Cs2i.db by A3,A4,TY,AMI_3:8;
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-A7: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
-  Cs2i1.da by FUNCT_1:72;
-TX: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-  then Cs1i1.da = Cs1i.db by A2,A4,TX,AMI_3:8;
-  hence contradiction by A1,A7,A5,A6,EXTPRO_1:def 9;
+A8: Cs2i1.da = Cs2i.db by A4,A5,AMI_3:8;
+  set Cs1i1 = Comput(P1,s1,i+1);
+  set Cs1i = Comput(P1,s1,i);
+A9: da in dom NPP p implies (Cs1i1|dom NPP p).da = Cs1i1.da &
+  (Cs2i1|dom NPP p).da = Cs2i1.da by FUNCT_1:72;
+  Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
+  then Cs1i1.da = Cs1i.db by A3,A5,AMI_3:8;
+  hence contradiction by A1,A9,A6,A8,EXTPRO_1:def 9,A2,A7;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCM, s1, s2
-  being State of SCM st p c= s1 & p c= s2 for i being Element of NAT, da, db
+  being State of SCM st p c= s1 & p c= s2
+  for P1,P2 being (the Instructions of SCM)-valued ManySortedSet of NAT
+      st ProgramPart p c= P1 & ProgramPart p c= P2
+  for i being Element of NAT, da, db
 being Data-Location, I being Instruction of SCM st
- I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),
+ I = CurInstr(P1,Comput(P1,
 s1,i))
-  holds I = AddTo(da, db) & da in dom p implies Comput(ProgramPart(s1),s1,i).da
+  holds I = AddTo(da, db) & da in dom p implies Comput(P1,s1,i).da
 +
-  Comput(ProgramPart(s1),s1,i).db = Comput(ProgramPart(s2),s2,i).da + Comput(
-ProgramPart(s2),s2,i).db
+  Comput(P1,s1,i).db = Comput(P2,s2,i).da + Comput(
+P2,s2,i).db
 proof
   let p be autonomic non NAT-defined FinPartState of SCM, s1, s2 be State of
   SCM such that
 A1: p c= s1 & p c= s2;
+  let P1,P2 be (the Instructions of SCM)-valued ManySortedSet of NAT
+  such that
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT, da, db be Data-Location, I be Instruction of SCM
   such that
-A2: I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1
-),s1,i));
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A3: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+A3: I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs2i1 = Comput(P2,s2,i+1);
+  set Cs2i = Comput(P2,s2,i);
+A4: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
   assume that
-A4: I = AddTo(da, db) and
-A5: da in dom p & Comput(ProgramPart(s1),s1,i).da + Comput(ProgramPart(s1),s1,i
+A5: I = AddTo(da, db) and
+A6: da in dom p & Comput(P1,s1,i).da + Comput(P1,s1,i
 ).db <>
-  Comput(ProgramPart(s2),s2, i).da + Comput(ProgramPart(s2),s2,i).db;
-TY: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-  I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
-s2,i)) by A1,A2,Th87;
+  Comput(P2,s2, i).da + Comput(P2,s2,i).db;
+A7: da in dom NPP p by A6,Lm2;
+  I = CurInstr(P2,Comput(P2,
+s2,i)) by A1,A3,AMISTD_5:7,A2;
   then
-A6: Cs2i1.da = Cs2i.da + Cs2i.db by A3,A4,TY,AMI_3:9;
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-A7: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
+A8: Cs2i1.da = Cs2i.da + Cs2i.db by A4,A5,AMI_3:9;
+  set Cs1i1 = Comput(P1,s1,i+1);
+  set Cs1i = Comput(P1,s1,i);
+A9: da in dom NPP p implies
+ (Cs1i1|dom NPP p).da = Cs1i1.da & (Cs2i1|dom NPP p).da =
   Cs2i1.da by FUNCT_1:72;
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-TX: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-  then Cs1i1.da = Cs1i.da + Cs1i.db by A2,A4,TX,AMI_3:9;
-  hence contradiction by A1,A7,A5,A6,EXTPRO_1:def 9;
+  Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
+  then Cs1i1.da = Cs1i.da + Cs1i.db by A3,A5,AMI_3:9;
+  hence contradiction by A1,A9,A6,A8,EXTPRO_1:def 9,A2,A7;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCM, s1, s2
-  being State of SCM st p c= s1 & p c= s2 for i being Element of NAT, da, db
+  being State of SCM st p c= s1 & p c= s2
+  for P1,P2 being (the Instructions of SCM)-valued ManySortedSet of NAT
+      st ProgramPart p c= P1 & ProgramPart p c= P2
+  for i being Element of NAT, da, db
 being Data-Location, I being Instruction of SCM st
- I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),
+ I = CurInstr(P1,Comput(P1,
 s1,i))
-  holds I = SubFrom(da, db) & da in dom p implies Comput(ProgramPart(s1),s1,i).
+  holds I = SubFrom(da, db) & da in dom p implies Comput(P1,s1,i).
 da -
-  Comput(ProgramPart(s1),s1,i).db = Comput(ProgramPart(s2),s2,i).da - Comput(
-ProgramPart(s2),s2,i).db
+  Comput(P1,s1,i).db = Comput(P2,s2,i).da - Comput(
+P2,s2,i).db
 proof
   let p be autonomic non NAT-defined FinPartState of SCM, s1, s2 be State of
   SCM such that
 A1: p c= s1 & p c= s2;
+  let P1,P2 be (the Instructions of SCM)-valued ManySortedSet of NAT
+  such that
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT, da, db be Data-Location, I be Instruction of SCM
   such that
-A2: I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1
-),s1,i));
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A3: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+A3: I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs2i1 = Comput(P2,s2,i+1);
+  set Cs2i = Comput(P2,s2,i);
+A4: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
   assume that
-A4: I = SubFrom(da, db) and
-A5: da in dom p & Comput(ProgramPart(s1),s1,i).da - Comput(ProgramPart(s1),s1,i
+A5: I = SubFrom(da, db) and
+A6: da in dom p & Comput(P1,s1,i).da - Comput(P1,s1,i
 ).db <>
-  Comput(ProgramPart(s2),s2, i).da - Comput(ProgramPart(s2),s2,i).db;
-TY: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-  I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
-s2,i)) by A1,A2,Th87;
+  Comput(P2,s2, i).da - Comput(P2,s2,i).db;
+A7: da in dom NPP p by A6,Lm2;
+  I = CurInstr(P2,Comput(P2,
+s2,i)) by A1,A3,AMISTD_5:7,A2;
   then
-A6: Cs2i1.da = Cs2i.da - Cs2i.db by A3,A4,TY,AMI_3:10;
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-A7: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
+A8: Cs2i1.da = Cs2i.da - Cs2i.db by A4,A5,AMI_3:10;
+  set Cs1i1 = Comput(P1,s1,i+1);
+  set Cs1i = Comput(P1,s1,i);
+A9: da in dom NPP p implies
+ (Cs1i1|dom NPP p).da = Cs1i1.da & (Cs2i1|dom NPP p).da =
   Cs2i1.da by FUNCT_1:72;
-TX: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-  then Cs1i1.da = Cs1i.da - Cs1i.db by A2,A4,TX,AMI_3:10;
-  hence contradiction by A1,A7,A5,A6,EXTPRO_1:def 9;
+  Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
+  then Cs1i1.da = Cs1i.da - Cs1i.db by A3,A5,AMI_3:10;
+  hence contradiction by A1,A9,A6,A8,EXTPRO_1:def 9,A2,A7;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCM, s1, s2
-  being State of SCM st p c= s1 & p c= s2 for i being Element of NAT, da, db
+  being State of SCM st p c= s1 & p c= s2
+  for P1,P2 being (the Instructions of SCM)-valued ManySortedSet of NAT
+      st ProgramPart p c= P1 & ProgramPart p c= P2
+  for i being Element of NAT, da, db
 being Data-Location, I being Instruction of SCM
- st I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1
-),s1,i))
-  holds I = MultBy(da, db) & da in dom p implies Comput(ProgramPart(s1),s1,i).
+ st I = CurInstr(P1,Comput(P1,s1,i))
+  holds I = MultBy(da, db) & da in dom p implies Comput(P1,s1,i).
 da *
-  Comput(ProgramPart(s1),s1,i).db = Comput(ProgramPart(s2),s2,i).da * Comput(
-ProgramPart(s2),s2,i).db
+  Comput(P1,s1,i).db = Comput(P2,s2,i).da * Comput(
+P2,s2,i).db
 proof
   let p be autonomic non NAT-defined FinPartState of SCM, s1, s2 be State of
   SCM such that
 A1: p c= s1 & p c= s2;
+  let P1,P2 be (the Instructions of SCM)-valued ManySortedSet of NAT
+  such that
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT, da, db be Data-Location, I be Instruction of SCM
   such that
-A2: I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1
-),s1,i));
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A3: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+A3: I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs2i1 = Comput(P2,s2,i+1);
+  set Cs2i = Comput(P2,s2,i);
+A4: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
   assume that
-A4: I = MultBy(da, db) and
-A5: da in dom p & Comput(ProgramPart(s1),s1,i).da * Comput(ProgramPart(s1),s1,i
+A5: I = MultBy(da, db) and
+A6: da in dom p & Comput(P1,s1,i).da * Comput(P1,s1,i
 ).db <>
-  Comput(ProgramPart(s2),s2, i).da * Comput(ProgramPart(s2),s2,i).db;
-TY: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-  I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
-s2,i)) by A1,A2,Th87;
+  Comput(P2,s2, i).da * Comput(P2,s2,i).db;
+A7: da in dom NPP p by A6,Lm2;
+  I = CurInstr(P2,Comput(P2,s2,i)) by A1,A3,AMISTD_5:7,A2;
   then
-A6: Cs2i1.da = Cs2i.da * Cs2i.db by A3,A4,TY,AMI_3:11;
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-A7: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
+A8: Cs2i1.da = Cs2i.da * Cs2i.db by A4,A5,AMI_3:11;
+  set Cs1i1 = Comput(P1,s1,i+1);
+  set Cs1i = Comput(P1,s1,i);
+A9: da in dom NPP p implies
+ (Cs1i1|dom NPP p).da = Cs1i1.da & (Cs2i1|dom NPP p).da =
   Cs2i1.da by FUNCT_1:72;
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-TX: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-  then Cs1i1.da = Cs1i.da * Cs1i.db by A2,A4,TX,AMI_3:11;
-  hence contradiction by A1,A7,A5,A6,EXTPRO_1:def 9;
+  Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
+  then Cs1i1.da = Cs1i.da * Cs1i.db by A3,A5,AMI_3:11;
+  hence contradiction by A1,A9,A6,A8,EXTPRO_1:def 9,A2,A7;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCM, s1, s2
-  being State of SCM st p c= s1 & p c= s2 for i being Element of NAT, da, db
+  being State of SCM st p c= s1 & p c= s2
+  for P1,P2 being (the Instructions of SCM)-valued ManySortedSet of NAT
+      st ProgramPart p c= P1 & ProgramPart p c= P2
+  for i being Element of NAT, da, db
 being Data-Location, I being Instruction of SCM
- st I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1
-),s1,i))
-  holds I = Divide(da, db) & da in dom p & da <> db implies Comput(ProgramPart(
-s1
-),s1
-,i).da div Comput(ProgramPart(s1),s1,i).db = Comput(ProgramPart(s2),s2,i).da
-div Comput(ProgramPart(s2),s2,i).db
+ st I = CurInstr(P1,Comput(P1,s1,i))
+  holds I = Divide(da, db) & da in dom p & da <> db implies
+   Comput(P1,s1
+,i).da div Comput(P1,s1,i).db = Comput(P2,s2,i).da
+div Comput(P2,s2,i).db
 proof
   let p be autonomic non NAT-defined FinPartState of SCM, s1, s2 be State of
   SCM such that
 A1: p c= s1 & p c= s2;
+  let P1,P2 be (the Instructions of SCM)-valued ManySortedSet of NAT
+  such that
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT, da, db be Data-Location, I be Instruction of SCM
   such that
-A2: I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1
-),s1,i));
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A3: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+A3: I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs2i1 = Comput(P2,s2,i+1);
+  set Cs2i = Comput(P2,s2,i);
+A4: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
   assume that
-A4: I = Divide(da, db) and
-A5: da in dom p and
-A6: da <> db and
-A7: Comput(ProgramPart(s1),s1,i).da div Comput(ProgramPart(s1),s1,i).db <>
-Comput(ProgramPart(s2),s2,i).
-  da div Comput(ProgramPart(s2),s2,i).db;
-TY: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-  I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
-s2,i)) by A1,A2,Th87;
+A5: I = Divide(da, db) and
+A6: da in dom p and
+A7: da <> db and
+A8: Comput(P1,s1,i).da div Comput(P1,s1,i).db <> Comput(P2,s2,i).
+  da div Comput(P2,s2,i).db;
+A9: da in dom NPP p by A6,Lm2;
+  I = CurInstr(P2,Comput(P2,s2,i)) by A1,A3,AMISTD_5:7,A2;
   then
-A8: Cs2i1.da = Cs2i.da div Cs2i.db by A3,A4,A6,TY,AMI_3:12;
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-A9: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
+A10: Cs2i1.da = Cs2i.da div Cs2i.db by A4,A5,A7,AMI_3:12;
+  set Cs1i1 = Comput(P1,s1,i+1);
+  set Cs1i = Comput(P1,s1,i);
+A11: da in dom NPP p implies
+(Cs1i1|dom NPP p).da = Cs1i1.da & (Cs2i1|dom NPP p).da =
   Cs2i1.da by FUNCT_1:72;
-TX: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-  then Cs1i1.da = Cs1i.da div Cs1i.db by A2,A4,A6,TX,AMI_3:12;
-  hence contradiction by A1,A9,A5,A7,A8,EXTPRO_1:def 9;
+  Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
+  then Cs1i1.da = Cs1i.da div Cs1i.db by A3,A5,A7,AMI_3:12;
+  hence contradiction by A1,A11,A8,A10,EXTPRO_1:def 9,A2,A9;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCM, s1, s2
-  being State of SCM st p c= s1 & p c= s2 for i being Element of NAT, da, db
+  being State of SCM st p c= s1 & p c= s2
+  for P1,P2 being (the Instructions of SCM)-valued ManySortedSet of NAT
+      st ProgramPart p c= P1 & ProgramPart p c= P2
+  for i being Element of NAT, da, db
 being Data-Location, I being Instruction of SCM st
- I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),
-s1,i))
-  holds I = Divide(da, db) & db in dom p implies Comput(ProgramPart(s1),s1,i).
+ I = CurInstr(P1,Comput(P1,s1,i))
+  holds I = Divide(da, db) & db in dom p implies Comput(P1,s1,i).
 da mod
-  Comput(ProgramPart(s1),s1,i).db = Comput(ProgramPart(s2),s2,i).da mod Comput(
-ProgramPart(s2),s2,i).db
+  Comput(P1,s1,i).db = Comput(P2,s2,i).da mod Comput(P2,s2,i).db
 proof
   let p be autonomic non NAT-defined FinPartState of SCM, s1, s2 be State of
   SCM such that
 A1: p c= s1 & p c= s2;
+  let P1,P2 be (the Instructions of SCM)-valued ManySortedSet of NAT
+  such that
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT, da, db be Data-Location, I be Instruction of SCM
   such that
-A2: I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1
-),s1,i));
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A3: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+A3: I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs1i1 = Comput(P1,s1,i+1);
+  set Cs1i = Comput(P1,s1,i);
+  set Cs2i1 = Comput(P2,s2,i+1);
+  set Cs2i = Comput(P2,s2,i);
+A4: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
   assume that
-A4: I = Divide(da, db) and
-A5: db in dom p and
-A6: Comput(ProgramPart(s1),s1,i).da mod Comput(ProgramPart(s1),s1,i).db <>
-Comput(ProgramPart(s2),s2,i).
-  da mod Comput(ProgramPart(s2),s2,i).db;
-A7: (Cs1i1|dom p).db = Cs1i1.db & (Cs2i1|dom p).db = Cs2i1.db by A5,FUNCT_1:72;
-TY: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-  I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
-s2,i)) by A1,A2,Th87;
+A5: I = Divide(da, db) and
+A6: db in dom p and
+A7: Comput(P1,s1,i).da mod Comput(P1,s1,i).db <>
+Comput(P2,s2,i).
+  da mod Comput(P2,s2,i).db;
+ db in dom NPP p by A6,Lm2;
+   then
+A8: (Cs1i1|dom NPP p).db = Cs1i1.db &
+    (Cs2i1|dom NPP p).db = Cs2i1.db by FUNCT_1:72;
+  I = CurInstr(P2,Comput(P2,s2,i)) by A1,A3,AMISTD_5:7,A2;
   then
-A8: Cs2i1.db = Cs2i.da mod Cs2i.db by A3,A4,TY,AMI_3:12;
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-TX: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-  then Cs1i1.db = Cs1i.da mod Cs1i.db by A2,A4,TX,AMI_3:12;
-  hence contradiction by A1,A6,A7,A8,EXTPRO_1:def 9;
+A9: Cs2i1.db = Cs2i.da mod Cs2i.db by A4,A5,AMI_3:12;
+  Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
+  then Cs1i1.db = Cs1i.da mod Cs1i.db by A3,A5,AMI_3:12;
+  hence contradiction by A1,A7,A8,A9,EXTPRO_1:def 9,A2;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCM, s1, s2
-  being State of SCM st p c= s1 & p c= s2 for i being Element of NAT, da being
+  being State of SCM st p c= s1 & p c= s2
+  for P1,P2 being (the Instructions of SCM)-valued ManySortedSet of NAT
+      st ProgramPart p c= P1 & ProgramPart p c= P2
+  for i being Element of NAT, da being
   Data-Location, loc being Element of NAT, I being Instruction of
-SCM st I = CurInstr(ProgramPart s1,Comput(ProgramPart
-(s1),s1,i))
+SCM st I = CurInstr(P1,Comput(P1,s1,i))
  holds I = da=0_goto loc & loc <> succ
-(IC Comput(ProgramPart(s1),s1,i)) implies ( Comput(ProgramPart(s1),s1,i).da = 0
-iff Comput(ProgramPart(s2),s2,i)
+(IC Comput(P1,s1,i)) implies ( Comput(P1,s1,i).da = 0
+iff Comput(P2,s2,i)
   .da = 0)
 proof
   let p be autonomic non NAT-defined FinPartState of SCM, s1, s2 be State of
   SCM such that
 A1: p c= s1 & p c= s2;
+  let P1,P2 be (the Instructions of SCM)-valued ManySortedSet of NAT
+  such that
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT, da be Data-Location, loc be Element of NAT
   , I be Instruction of SCM such that
-A2: I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1
-),s1,i));
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-S: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A4: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by S;
-A5: (Cs1i1|dom p).IC SCM = Cs1i1.IC SCM & (Cs2i1|dom p).IC SCM = Cs2i1.IC
-  SCM by Th84,FUNCT_1:72;
+A3: I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs2i1 = Comput(P2,s2,i+1);
+  set Cs1i1 = Comput(P1,s1,i+1);
+  set Cs2i = Comput(P2,s2,i);
+  set Cs1i = Comput(P1,s1,i);
+A4: Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
+A5: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
+   IC SCM in dom p by AMISTD_5:6;
+   then IC SCM in dom NPP p by COMPOS_1:179;
+   then
+A6: (Cs1i1|dom NPP p).IC SCM = Cs1i1.IC SCM &
+    (Cs2i1|dom NPP p).IC SCM = Cs2i1.IC
+  SCM by FUNCT_1:72;
   assume that
-A6: I = da=0_goto loc and
-A7: loc <> succ (IC Comput(ProgramPart(s1),s1,i));
-A8: I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2
-),s2,i))
- by A1,A2,Th87;
-TX: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-TY: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A9: now
+A7: I = da=0_goto loc and
+A8: loc <> succ (IC Comput(P1,s1,i));
+A9: I = CurInstr(P2,Comput(P2,s2,i)) by A1,A3,AMISTD_5:7,A2;
+A10: now
     assume
-    Comput(ProgramPart(s2),s2,i).da = 0 & Comput(ProgramPart(s1),s1,i).da <> 0;
-    then Cs2i1.IC SCM = loc & Cs1i1.IC SCM = succ IC Cs1i by A2,A8,A3,A4,A6,TX
-,TY,AMI_3:14;
-    hence contradiction by A1,A5,A7,EXTPRO_1:def 9;
+    Comput(P2,s2,i).da = 0 & Comput(P1,s1,i).da <> 0;
+    then Cs2i1.IC SCM = loc & Cs1i1.IC SCM = succ IC Cs1i by A3,A9,A4,A5,A7,
+AMI_3:14;
+    hence contradiction by A1,A6,A8,EXTPRO_1:def 9,A2;
   end;
-A10: (Cs1i1|dom p) = (Cs2i1|dom p) by A1,EXTPRO_1:def 9;
+A11: (Cs1i1|dom NPP p) = (Cs2i1|dom NPP p) by A1,EXTPRO_1:def 9,A2;
   now
     assume
-    Comput(ProgramPart(s1),s1,i).da = 0 & Comput(ProgramPart(s2),s2,i).da <> 0;
-    then Cs1i1.IC SCM = loc & Cs2i1.IC SCM = succ IC Cs2i by A2,A8,A3,A4,A6,TX
-,TY,AMI_3:14;
-    hence contradiction by A1,A2,A5,A10,A7,Th87;
+    Comput(P1,s1,i).da = 0 & Comput(P2,s2,i).da <> 0;
+    then Cs1i1.IC SCM = loc & Cs2i1.IC SCM = succ IC Cs2i by A3,A9,A4,A5,A7,
+AMI_3:14;
+    hence contradiction by A1,A6,A11,A8,AMISTD_5:7,A2;
   end;
-  hence thesis by A9;
+  hence thesis by A10;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCM, s1, s2
-  being State of SCM st p c= s1 & p c= s2 for i being Element of NAT, da being
+  being State of SCM st p c= s1 & p c= s2
+  for P1,P2 being (the Instructions of SCM)-valued ManySortedSet of NAT
+      st ProgramPart p c= P1 & ProgramPart p c= P2
+  for i being Element of NAT, da being
   Data-Location, loc being Element of NAT, I being Instruction of
-SCM st I = CurInstr(ProgramPart s1,Comput(ProgramPart
-(s1),s1,i))
+SCM st I = CurInstr(P1,Comput(P1,s1,i))
  holds I = da>0_goto loc & loc <> succ
-(IC Comput(ProgramPart(s1),s1,i)) implies ( Comput(ProgramPart(s1),s1,i).da > 0
-iff Comput(ProgramPart(s2),s2,i)
+(IC Comput(P1,s1,i)) implies ( Comput(P1,s1,i).da > 0
+iff Comput(P2,s2,i)
   .da > 0)
 proof
   let p be autonomic non NAT-defined FinPartState of SCM, s1, s2 be State of
   SCM such that
 A1: p c= s1 & p c= s2;
+  let P1,P2 be (the Instructions of SCM)-valued ManySortedSet of NAT
+  such that
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT, da be Data-Location, loc be Element of NAT
  , I be Instruction of SCM such that
-A2: I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,i));
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-A3: (Cs1i1|dom p) = (Cs2i1|dom p) by A1,EXTPRO_1:def 9;
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-A4: Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-S: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A5: (Cs1i1|dom p).IC SCM = Cs1i1.IC SCM & (Cs2i1|dom p).IC SCM = Cs2i1.IC
-  SCM by Th84,FUNCT_1:72;
-A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by S;
+A3: I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs2i1 = Comput(P2,s2,i+1);
+  set Cs1i1 = Comput(P1,s1,i+1);
+A4: (Cs1i1|dom NPP p) = (Cs2i1|dom NPP p) by A1,EXTPRO_1:def 9,A2;
+  set Cs2i = Comput(P2,s2,i);
+  set Cs1i = Comput(P1,s1,i);
+A5: Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
+   IC SCM in dom p by AMISTD_5:6;
+   then IC SCM in dom NPP p by COMPOS_1:179;
+   then
+A6: (Cs1i1|dom NPP p).IC SCM = Cs1i1.IC SCM &
+    (Cs2i1|dom NPP p).IC SCM = Cs2i1.IC
+  SCM by FUNCT_1:72;
+A7: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
   assume that
-A7: I = da>0_goto loc and
-A8: loc <> succ (IC Comput(ProgramPart(s1),s1,i));
-A9: I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,i))
- by A1,A2,Th87;
-TX: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-TY: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A10: now
+A8: I = da>0_goto loc and
+A9: loc <> succ (IC Comput(P1,s1,i));
+A10: I = CurInstr(P2,Comput(P2,s2,i)) by A1,A3,AMISTD_5:7,A2;
+A11: now
     assume that
-A11: Comput(ProgramPart(s2),s2,i).da > 0 and
-A12: Comput(ProgramPart(s1),s1,i).da <= 0;
-    Cs2i1.IC SCM = loc by A9,A6,A7,A11,TY,AMI_3:15;
-    hence contradiction by A2,A4,A5,A3,A7,A8,A12,TX,AMI_3:15;
+A12: Comput(P2,s2,i).da > 0 and
+A13: Comput(P1,s1,i).da <= 0;
+    Cs2i1.IC SCM = loc by A10,A7,A8,A12,AMI_3:15;
+    hence contradiction by A3,A5,A6,A4,A8,A9,A13,AMI_3:15;
   end;
-A13: IC Cs1i = IC Cs2i by A1,A2,Th87;
+A14: IC Cs1i = IC Cs2i by A1,AMISTD_5:7,A2;
   now
     assume that
-A14: Comput(ProgramPart(s1),s1,i).da > 0 and
-A15: Comput(ProgramPart(s2),s2,i).da <= 0;
-    Cs1i1.IC SCM = loc by A2,A4,A7,A14,TX,AMI_3:15;
-    hence contradiction by A13,A9,A6,A5,A3,A7,A8,A15,TY,AMI_3:15;
+A15: Comput(P1,s1,i).da > 0 and
+A16: Comput(P2,s2,i).da <= 0;
+    Cs1i1.IC SCM = loc by A3,A5,A8,A15,AMI_3:15;
+    hence contradiction by A14,A10,A7,A6,A4,A8,A9,A16,AMI_3:15;
   end;
-  hence thesis by A10;
+  hence thesis by A11;
 end;
 

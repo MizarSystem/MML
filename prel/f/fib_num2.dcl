@@ -105,7 +105,7 @@
 </Func>
 <Cluster>
 <Adjective nr="17"/>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM2" nr="4">

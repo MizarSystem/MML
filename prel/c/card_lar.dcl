@@ -28,8 +28,8 @@
 <Adjective nr="18" value="false"/>
 <Adjective nr="21" value="false"/>
 <Adjective nr="25"/>
-<Adjective nr="32" value="false"/>
-<Adjective nr="34"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CARD_LAR" nr="2">
@@ -38,7 +38,7 @@
 <Cluster>
 <Adjective nr="21" value="false"/>
 <Adjective nr="25"/>
-<Adjective nr="32" value="false"/>
+<Adjective nr="33" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -113,7 +113,7 @@
 <Cluster>
 <Adjective nr="21" value="false"/>
 <Adjective nr="25"/>
-<Adjective nr="32" value="false"/>
+<Adjective nr="33" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

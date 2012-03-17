@@ -32,6 +32,9 @@
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="AMI_3"/>
+<ArticleID name="AMISTD_2"/>
+<ArticleID name="AMI_1"/>
+<ArticleID name="AMISTD_5"/>
 </Signature>
 <FCluster aid="RELOC" nr="1">
 <ArgTypes>
@@ -144,85 +147,39 @@
 </Cluster>
 </FCluster>
 <FCluster aid="RELOC" nr="6">
-<ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="67"/>
-</Typ>
-<Typ kind="M" nr="1">
+<ArgTypes/>
+<Func kind="K" nr="298"/>
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="7">
-<Func kind="U" nr="1">
-<Func kind="K" nr="298"/>
-</Func>
-</Adjective>
-<Adjective nr="9"/>
-<Adjective nr="13">
-<Func kind="U" nr="8">
+<Adjective nr="82">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="298"/>
-</Func>
 </Adjective>
-<Adjective nr="21"/>
-<Adjective nr="70">
+<Adjective nr="95">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="298"/>
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="85">
-<Func kind="K" nr="1">
-<Func kind="K" nr="66"/>
-</Func>
-<Func kind="K" nr="298"/>
-</Adjective>
-<Adjective nr="86">
-<Func kind="K" nr="1">
-<Func kind="K" nr="66"/>
-</Func>
-<Func kind="K" nr="298"/>
 </Adjective>
 </Cluster>
-</Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="67"/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="286">
-<Func kind="K" nr="1">
-<Func kind="K" nr="66"/>
-</Func>
+</FCluster>
+<FCluster aid="RELOC" nr="7">
+<ArgTypes/>
 <Func kind="K" nr="298"/>
-<LocusVar nr="3"/>
-<LocusVar nr="2"/>
-</Func>
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="7">
-<Func kind="U" nr="1">
-<Func kind="K" nr="298"/>
-</Func>
-</Adjective>
-<Adjective nr="9"/>
-<Adjective nr="13">
-<Func kind="U" nr="8">
+<Adjective nr="82">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="298"/>
-</Func>
 </Adjective>
-<Adjective nr="21"/>
-<Adjective nr="86">
+<Adjective nr="98">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="298"/>
+</Adjective>
+<Adjective nr="99">
+<Func kind="K" nr="1">
+<Func kind="K" nr="66"/>
+</Func>
 </Adjective>
 </Cluster>
 </FCluster>

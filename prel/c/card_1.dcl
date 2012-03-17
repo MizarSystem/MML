@@ -62,6 +62,42 @@
 <Adjective nr="21" value="false"/>
 </Cluster>
 </RCluster>
+<RCluster aid="CARD_1" nr="5">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="25"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="27">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</RCluster>
+<RCluster aid="CARD_1" nr="6">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="25"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="27">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</RCluster>
 <FCluster aid="CARD_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -238,6 +274,47 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
+<FCluster aid="CARD_1" nr="13">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="16">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="27">
+<Num nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="CARD_1" nr="14">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="25"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="27">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="1">
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="27">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
 <CCluster aid="CARD_1" nr="1">
 <ArgTypes/>
 <Cluster>
@@ -308,6 +385,34 @@
 </Typ>
 <Cluster>
 <Adjective nr="17"/>
+</Cluster>
+</CCluster>
+<CCluster aid="CARD_1" nr="7">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="27">
+<Func kind="K" nr="26"/>
+</Adjective>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="18"/>
+</Cluster>
+</CCluster>
+<CCluster aid="CARD_1" nr="8">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="18"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="27">
+<Func kind="K" nr="26"/>
+</Adjective>
 </Cluster>
 </CCluster>
 </Registrations>

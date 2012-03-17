@@ -11,23 +11,27 @@ environ
       AMISTD_2, RELAT_1, TARSKI, XXREAL_0, ARYTM_3, FSM_1, XBOOLE_0, FUNCT_4,
       NUMBERS, SCMFSA6C, UNIALG_2, CIRCUIT2, FUNCT_1, MSUALG_1, SUBSET_1,
       NAT_1, FUNCT_7, STRUCT_0, FINSET_1, SCMFSA_1, ZFMISC_1, SCMNORM, PRE_FF,
-      ARYTM_1, SFMASTR1, PARTFUN1, RELOC;
+      ARYTM_1, SFMASTR1, PARTFUN1, RELOC, PBOOLE, FUNCOP_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
       XCMPLX_0, FINSET_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
-      FUNCT_7, PRE_FF, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, AMISTD_2, SCMFSA_1,
-      SCMFSA_2, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A,
-      SCMFSA8B, SCMFSA8C, XXREAL_0, SEQ_4;
+      FUNCOP_1, PBOOLE, FUNCT_7, PRE_FF, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1,
+      AMISTD_2, SCMFSA_1, SCMFSA_2, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C,
+      SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA8C, XXREAL_0, SEQ_4;
  constructors DOMAIN_1, SETWISEO, SEQ_4, PRE_FF, SCM_1, SCMFSA6A, SF_MASTR,
       SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, RELSET_1, PRE_POLY,
-      AMISTD_2, SCMFSA7B, AMI_1;
+      AMISTD_2, SCMFSA7B, AMI_1, SCMFSA_1, PBOOLE;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, FINSET_1,
       NUMBERS, XREAL_0, NAT_1, INT_1, MEMBERED, AMI_5, SCMFSA_2, SF_MASTR,
       SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8C, SCMFSA_9, XXREAL_2,
-      RELAT_1, AMI_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1;
+      RELAT_1, AMI_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1, PBOOLE, FUNCT_4,
+      FUNCOP_1, SCMFSA6A, STRUCT_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Good instructions and good macro instructions
+
+reserve p,P,P1,P2
+ for (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
 
 definition
   let i be Instruction of SCM+FSA;
@@ -120,14 +124,11 @@ begin :: Composition of non parahalting macro instructions
 
 reserve s, S for State of SCM+FSA,
   I, J for Program of SCM+FSA,
-  Ig for good
-  Program of SCM+FSA,
+  Ig for good Program of SCM+FSA,
   i for good parahalting Instruction of SCM+FSA,
-  j for
-  parahalting Instruction of SCM+FSA,
+  j for parahalting Instruction of SCM+FSA,
   a, b for Int-Location,
-  f for
-  FinSeq-Location;
+  f for FinSeq-Location;
 :: set D = Int-Locations U FinSeq-Locations;
 :: NOTE:
 :: The definition of parahalting seems to be too weak
@@ -135,96 +136,93 @@ reserve s, S for State of SCM+FSA,
 ::           Initialized I is halting
 
 theorem :: SFMASTR1:2
-  DataPart(I +* Start-At( 0,SCM+FSA)) = {};
+  DataPart Initialize I = {};
 
 theorem :: SFMASTR1:3
-  I is_halting_on Initialized S & I is_closed_on Initialized S & J
-  is_closed_on IExec(I, S) implies I ';' J is_closed_on Initialized S;
+  I is_halting_on Initialized S,P & I is_closed_on Initialized S,P &
+  J is_closed_on IExec(I,P,S),P implies I ';' J is_closed_on Initialized S,P;
 
 theorem :: SFMASTR1:4  :: SCMFSA6B:27
-  I is_halting_on Initialized S & J is_halting_on IExec(I, S) & I
-  is_closed_on Initialized S & J is_closed_on IExec(I, S) implies I ';' J
-  is_halting_on Initialized S;
+  I is_halting_on Initialized S,P & J is_halting_on IExec(I,P,S),P & I
+  is_closed_on Initialized S,P & J is_closed_on IExec(I,P,S),P implies
+   I ';' J is_halting_on Initialized S,P;
 
 theorem :: SFMASTR1:5  :: SCMFSA6B:27
-  I is_closed_on s & I +* Start-At( 0,SCM+FSA) c= s &
-  ProgramPart s halts_on s
-implies for m being Element of NAT st m <= LifeSpan(ProgramPart(s),s) holds
-Comput(ProgramPart(s), s,m),
-  Comput(ProgramPart((s+*(I ';' J))),(s+*(I ';' J)),m) equal_outside NAT;
+  I is_closed_on s,p & Initialize I c= s & I c= p &
+  p halts_on s
+implies for m being Element of NAT st m <= LifeSpan(p,s) holds
+Comput(p, s,m),
+  Comput(p+*(I ';' J),(s+*(I ';' J)),m) equal_outside NAT;
 
 theorem :: SFMASTR1:6
-  Ig is_halting_on Initialized s & J is_halting_on IExec(Ig, s) & Ig
-is_closed_on Initialized s & J is_closed_on IExec(Ig, s) implies LifeSpan(
-ProgramPart(s +*
-Initialized (Ig ';' J)),s +*
-Initialized (Ig ';' J)) = LifeSpan(ProgramPart(s +* Initialized Ig),s +*
-Initialized Ig) + 1 + LifeSpan(ProgramPart(Result(ProgramPart(s +* Initialized
-Ig),s +* Initialized Ig) +* Initialized J),Result(ProgramPart(s +* Initialized
-Ig),s +* Initialized Ig) +* Initialized J);
+  Ig is_halting_on Initialized s,p & J is_halting_on IExec(Ig,p,s),p & Ig
+is_closed_on Initialized s,p & J is_closed_on IExec(Ig,p,s),p
+ implies LifeSpan(p +* (Ig ';' J),s +* Initialized (Ig ';' J))
+ = LifeSpan(p +* Ig,s +* Initialized Ig) + 1 +
+   LifeSpan(p +* Ig +* J,Result(p +* Ig,s +* Initialized Ig) +* Initialized J);
 
 theorem :: SFMASTR1:7  :: Main theorem
-  Ig is_halting_on Initialized s & J is_halting_on IExec(Ig, s) & Ig
-is_closed_on Initialized s & J is_closed_on IExec(Ig, s)
-implies IExec(Ig ';' J,
-  s) = IExec(J, IExec(Ig, s))+*
-  Start-At(IC IExec(J, IExec(Ig, s))+card Ig,SCM+FSA);
+  Ig is_halting_on Initialized s,p & J is_halting_on IExec(Ig,p,s),p & Ig
+is_closed_on Initialized s,p & J is_closed_on IExec(Ig,p,s),p
+implies IExec(Ig ';' J,p,s) = IExec(J,p,IExec(Ig,p,s))+*
+  Start-At(IC IExec(J,p,IExec(Ig,p,s))+card Ig,SCM+FSA);
 
 theorem :: SFMASTR1:8
-  (Ig is parahalting or Ig is_halting_on Initialized s & Ig
-is_closed_on Initialized s) & (J is parahalting or J is_halting_on IExec(Ig, s)
-& J is_closed_on IExec(Ig, s)) implies IExec(Ig ';' J, s).a = IExec(J, IExec(Ig
-  , s)).a;
+  (Ig is parahalting or Ig is_halting_on Initialized s,p & Ig
+is_closed_on Initialized s,p) & (J is parahalting or
+    J is_halting_on IExec(Ig,p,s),p
+& J is_closed_on IExec(Ig,p,s),p) implies IExec(Ig ';' J,p,s).a
+ = IExec(J,p,IExec(Ig,p,s)).a;
 
 theorem :: SFMASTR1:9
-  (Ig is parahalting or Ig is_halting_on Initialized s & Ig
-is_closed_on Initialized s) & (J is parahalting or J is_halting_on IExec(Ig, s)
-& J is_closed_on IExec(Ig, s)) implies IExec(Ig ';' J, s).f = IExec(J, IExec(Ig
-  , s)).f;
+  (Ig is parahalting or Ig is_halting_on Initialized s,p & Ig
+is_closed_on Initialized s,p) & (J is parahalting or
+ J is_halting_on IExec(Ig,p,s),p
+& J is_closed_on IExec(Ig,p,s),p) implies IExec(Ig ';' J,p,s).f
+ = IExec(J,p,IExec(Ig,p,s)).f;
 
 theorem :: SFMASTR1:10
-  (Ig is parahalting or Ig is_halting_on Initialized s & Ig is_closed_on
-  Initialized s) & (J is parahalting or J is_halting_on IExec(Ig, s) & J
-is_closed_on IExec(Ig, s)) implies DataPart IExec(Ig ';' J, s) = DataPart IExec
-  (J, IExec(Ig, s));
+  (Ig is parahalting or Ig is_halting_on Initialized s,p & Ig is_closed_on
+  Initialized s,p) & (J is parahalting or J is_halting_on IExec(Ig,p,s),p & J
+is_closed_on IExec(Ig,p,s),p) implies DataPart IExec(Ig ';' J,p,s)
+ = DataPart IExec
+  (J,p,IExec(Ig,p,s));
 
 theorem :: SFMASTR1:11
-  Ig is parahalting or Ig is_closed_on Initialized s & Ig
-is_halting_on Initialized s implies DataPart Initialized IExec(Ig, s)
+  Ig is parahalting or Ig is_closed_on Initialized s,p & Ig
+is_halting_on Initialized s,p implies DataPart Initialized IExec(Ig,p,s)
 = DataPart
-  IExec(Ig, s);
+  IExec(Ig,p,s);
 
 theorem :: SFMASTR1:12
-  Ig is parahalting or Ig is_halting_on Initialized s & Ig
-is_closed_on Initialized s implies IExec(Ig ';' j, s).a
-= Exec(j, IExec(Ig, s)).a;
+  Ig is parahalting or Ig is_halting_on Initialized s,p & Ig
+is_closed_on Initialized s,p implies IExec(Ig ';' j,p,s).a
+= Exec(j, IExec(Ig,p,s)).a;
 
 theorem :: SFMASTR1:13
-  Ig is parahalting or Ig is_halting_on Initialized s & Ig
-is_closed_on Initialized s implies IExec(Ig ';' j, s).f
-= Exec(j, IExec(Ig, s)).f;
+  Ig is parahalting or Ig is_halting_on Initialized s,p & Ig
+is_closed_on Initialized s,p implies IExec(Ig ';' j,p,s).f
+= Exec(j, IExec(Ig,p,s)).f;
 
 theorem :: SFMASTR1:14
-  Ig is parahalting or Ig is_halting_on Initialized s & Ig is_closed_on
-Initialized s implies DataPart IExec(Ig ';' j, s) =
-DataPart Exec(j, IExec(Ig, s));
+  Ig is parahalting or Ig is_halting_on Initialized s,p & Ig is_closed_on
+Initialized s,p implies DataPart IExec(Ig ';' j,p,s) =
+DataPart Exec(j, IExec(Ig,p,s));
 
 theorem :: SFMASTR1:15
-  J is parahalting or J is_halting_on Exec(i, Initialized s) & J
-is_closed_on Exec(i, Initialized s) implies IExec(i ';' J, s).a
-= IExec(J, Exec(
-  i, Initialized s)).a;
+  J is parahalting or J is_halting_on Exec(i, Initialized s),p & J
+is_closed_on Exec(i, Initialized s),p implies IExec(i ';' J,p,s).a
+= IExec(J,p,Exec(i,Initialized s)).a;
 
 theorem :: SFMASTR1:16
-  J is parahalting or J is_halting_on Exec(i, Initialized s) & J
-is_closed_on Exec(i, Initialized s) implies IExec(i ';' J, s).f
-= IExec(J, Exec(
-  i, Initialized s)).f;
+  J is parahalting or J is_halting_on Exec(i, Initialized s),p & J
+is_closed_on Exec(i, Initialized s),p implies IExec(i ';' J,p,s).f
+= IExec(J,p,Exec(i,Initialized s)).f;
 
 theorem :: SFMASTR1:17
-  J is parahalting or J is_halting_on Exec(i, Initialized s) & J
-  is_closed_on Exec(i, Initialized s) implies DataPart IExec(i ';' J, s) =
-  DataPart IExec(J, Exec(i, Initialized s));
+  J is parahalting or J is_halting_on Exec(i, Initialized s),p & J
+  is_closed_on Exec(i, Initialized s),p implies DataPart IExec(i ';' J,p,s) =
+  DataPart IExec(J,p,Exec(i,Initialized s));
 
 begin :: Memory allocation
 
@@ -325,7 +323,7 @@ definition
   UsedIntLoc swap(result, 1-stRWNotIn {N, result}) := N ';' (SubFrom(result,
 result)) ';' (1-stRWNotIn {N, result} := intloc 0) ';' ((1-stRWNotIn UsedIntLoc
 swap(result, 1-stRWNotIn {N, result})) := (2-ndRWNotIn UsedIntLoc swap(result,
-  1-stRWNotIn {N, result}))) ';' Times( 1-stRWNotIn UsedIntLoc swap(result, 1
+  1-stRWNotIn {N, result}))) ';' Times(1-stRWNotIn UsedIntLoc swap(result, 1
 -stRWNotIn {N, result}), AddTo(result, 1-stRWNotIn {N, result}) ';' swap(result
   , 1-stRWNotIn {N, result}) ) ';' (N := (2-ndRWNotIn UsedIntLoc swap(result, 1
   -stRWNotIn {N, result})));
@@ -342,6 +340,7 @@ end;
 
 theorem :: SFMASTR1:24
   for N, result being read-write Int-Location st N <> result for n being
-Element of NAT st n = s.N holds IExec(Fib_macro(N, result), s).result = Fib n &
-  IExec(Fib_macro(N, result), s).N = s.N;
+Element of NAT
+ st n = s.N holds IExec(Fib_macro(N, result),p,s).result = Fib n &
+  IExec(Fib_macro(N, result),p,s).N = s.N;
 

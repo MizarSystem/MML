@@ -52,9 +52,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="37" value="false"/>
 <Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPGEN_3" nr="3">
@@ -73,9 +73,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="37" value="false"/>
 <Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPGEN_3" nr="4">
@@ -94,9 +94,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="37" value="false"/>
 <Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 </Registrations>

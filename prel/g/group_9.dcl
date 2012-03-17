@@ -349,8 +349,8 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="27"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 <Adjective nr="100">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

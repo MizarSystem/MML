@@ -9,37 +9,43 @@ environ
  vocabularies NUMBERS, RLVECT_1, STRUCT_0, SUBSET_1, ALGSTR_0, BINOP_1,
       FUNCT_1, ZFMISC_1, XBOOLE_0, REAL_1, PRE_TOPC, SUPINF_2, PROB_2, RLSUB_1,
       FUNCOP_1, CARD_1, ARYTM_3, RELAT_1, XXREAL_0, XREAL_0, ORDINAL1, ARYTM_1,
-      COMPLEX1, SQUARE_1, FUNCT_3, RVSUM_1, NORMSP_1, METRIC_1, NAT_1, BHSP_1;
+      COMPLEX1, SQUARE_1, FUNCT_3, RVSUM_1, NORMSP_1, METRIC_1, NAT_1, BHSP_1,
+      PARTFUN1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, FUNCT_1, FUNCT_2, FUNCOP_1, BINOP_1, NAT_1, STRUCT_0,
-      ALGSTR_0, DOMAIN_1, PRE_TOPC, RLVECT_1, RLSUB_1, SQUARE_1, NORMSP_1,
-      QUIN_1, XXREAL_0;
+      COMPLEX1, REAL_1, RELAT_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1, BINOP_1, NAT_1, STRUCT_0,
+      ALGSTR_0, DOMAIN_1, PRE_TOPC, RLVECT_1, RLSUB_1, SQUARE_1, VFUNCT_1,
+      NORMSP_1, QUIN_1, XXREAL_0;
  constructors BINOP_1, DOMAIN_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, MEMBERED,
-      COMPLEX1, SEQ_1, QUIN_1, RLSUB_1, NORMSP_1, RELSET_1;
+      COMPLEX1, SEQ_1, QUIN_1, RLSUB_1, NORMSP_1, RELSET_1, VFUNCT_1;
  registrations SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      SQUARE_1, MEMBERED, STRUCT_0, XBOOLE_0, ALGSTR_0;
+      SQUARE_1, MEMBERED, STRUCT_0, XBOOLE_0, ALGSTR_0, FUNCT_2, VFUNCT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions NORMSP_1, STRUCT_0, SQUARE_1, ALGSTR_0, RLVECT_1, VALUED_0,
       FUNCT_2;
  theorems TARSKI, SQUARE_1, ABSVALUE, RLVECT_1, RLSUB_1, QUIN_1, FUNCT_2,
       NORMSP_1, XREAL_0, COMPLEX1, FUNCOP_1, XREAL_1, XXREAL_0, ALGSTR_0,
-      VALUED_0, ORDINAL1;
+      VALUED_0, ORDINAL1, VFUNCT_1;
  schemes FUNCT_2;
 
 begin
 
 definition
-  struct(RLSStruct) UNITSTR (# carrier -> set, ZeroF -> Element of the carrier
-, addF -> BinOp of the carrier, Mult -> Function of [:REAL, the carrier:], the
-    carrier, scalar -> Function of [: the carrier, the carrier :], REAL #);
+  struct(RLSStruct) UNITSTR (#
+  carrier -> set,
+  ZeroF -> Element of the carrier,
+  addF -> BinOp of the carrier,
+  Mult -> Function of [:REAL, the carrier:], the carrier,
+  scalar -> Function of [: the carrier, the carrier :], REAL #);
 end;
 
 registration
   cluster non empty strict UNITSTR;
   existence
   proof
-    consider D being non empty set, Z being Element of D, a being BinOp of D,m
-    being Function of [:REAL, D:], D, s being Function of [: D,D:],REAL;
+
+set D =the  non empty set,Z =the  Element of D,a =the  BinOp of D,m =the
+Function of [:REAL, D:], D,s =the  Function of [: D,D:],REAL;
     take UNITSTR (#D,Z,a,m,s#);
     thus the carrier of UNITSTR (#D,Z,a,m,s#) is non empty;
     thus thesis;
@@ -67,7 +73,7 @@ definition
   correctness;
 end;
 
-consider V0 being RealLinearSpace;
+set V0 =the  RealLinearSpace;
 
 Lm1: the carrier of (0).V0 = {0.V0} by RLSUB_1:def 3;
 
@@ -134,9 +140,9 @@ definition
   let IT be non empty UNITSTR;
   attr IT is RealUnitarySpace-like means
   :Def2:
-  for x, y, z being Point of IT,
-a holds ( x .|. x = 0 iff x = 0.IT ) & 0 <= x .|. x & x .|. y = y .|. x & (x+y)
-  .|. z = x .|. z + y .|. z & (a*x) .|. y = a * ( x .|. y );
+  for x, y, z being Point of IT, a holds
+  ( x .|. x = 0 iff x = 0.IT ) & 0 <= x .|. x & x .|. y = y .|. x &
+  (x+y) .|. z = x .|. z + y .|. z & (a*x) .|. y = a * ( x .|. y );
 end;
 
 registration
@@ -228,8 +234,7 @@ reserve X for RealUnitarySpace;
 reserve x, y, z, u, v for Point of X;
 
 definition
-  let X;
-  let x, y;
+  let X, x, y;
   redefine func x .|. y;
   commutativity by Def2;
 end;
@@ -399,8 +404,7 @@ A4: abs(x .|. y) <= sqrt (x .|. x * y .|. y) by COMPLEX1:132,SQUARE_1:89;
 end;
 
 definition
-  let X;
-  let x, y;
+  let X, x, y;
   pred x, y are_orthogonal means
   :Def3:
   x .|. y = 0;
@@ -686,35 +690,8 @@ reserve  n for Element of NAT;
 definition
   let X be non empty addLoopStr;
   let seq be sequence of X;
-  canceled 4;
-  func - seq -> sequence of X means
-  :Def10:
-  for n holds it.n = - seq.n;
-  existence
-  proof
-    deffunc F(Element of NAT) = -seq.$1;
-    ex seq be sequence of X st for n holds seq.n = F(n) from FUNCT_2:sch 4;
-    hence thesis;
-  end;
-  uniqueness
-  proof
-    let seq1, seq2 be sequence of X such that
-A1: for n holds seq1.n = - seq.n and
-A2: for n holds seq2.n = - seq.n;
-    now
-      let n;
-      seq1.n = - seq.n by A1;
-      hence seq1.n = seq2.n by A2;
-    end;
-    hence seq1 = seq2 by FUNCT_2:113;
-  end;
-end;
-
-definition
-  let X be non empty addLoopStr;
-  let seq be sequence of X;
   let x be Point of X;
-  canceled;
+  canceled 6;
   func seq + x -> sequence of X means
   :Def12:
   for n holds it.n = seq.n + x;
@@ -730,17 +707,24 @@ definition
     assume that
 A1: for n holds seq1.n = seq.n + x and
 A2: for n holds seq2.n = seq.n + x;
-    for n holds seq1.n = seq2.n
-    proof
-      let n;
-      seq1.n = seq.n + x by A1;
-      hence thesis by A2;
-    end;
-    hence thesis by FUNCT_2:113;
+    let n;
+    seq1.n = seq.n + x by A1;
+    hence thesis by A2;
   end;
 end;
 
-canceled 5;
+theorem ThDef10:
+  for X being non empty addLoopStr, seq being sequence of X holds
+  (-seq).n = - seq.n
+  proof
+    let X be non empty addLoopStr, seq be sequence of X;
+A1: dom -seq = NAT by FUNCT_2:def 1;
+    thus (-seq).n = (-seq)/.n
+    .= -seq/.n by A1,VFUNCT_1:def 6
+    .= - seq.n;
+  end;
+  
+canceled 4;
 
 definition
   let X, seq1, seq2;
@@ -756,25 +740,21 @@ end;
 theorem
   seq1 + (seq2 + seq3) = (seq1 + seq2) + seq3
 proof
-  now
-    let n;
-    thus (seq1 + (seq2 + seq3)).n = seq1.n + (seq2 + seq3).n by NORMSP_1:def 5
-      .= seq1.n + (seq2.n + seq3.n) by NORMSP_1:def 5
-      .= (seq1.n + seq2.n) + seq3.n by RLVECT_1:def 6
-      .= (seq1 + seq2).n + seq3.n by NORMSP_1:def 5
-      .= ((seq1 + seq2) + seq3).n by NORMSP_1:def 5;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (seq1 + (seq2 + seq3)).n = seq1.n + (seq2 + seq3).n by NORMSP_1:def 5
+    .= seq1.n + (seq2.n + seq3.n) by NORMSP_1:def 5
+    .= (seq1.n + seq2.n) + seq3.n by RLVECT_1:def 6
+    .= (seq1 + seq2).n + seq3.n by NORMSP_1:def 5
+    .= ((seq1 + seq2) + seq3).n by NORMSP_1:def 5;
 end;
 
 theorem
-  seq1 is constant & seq2 is constant & seq = seq1 + seq2 implies seq is
-  constant
+  seq1 is constant & seq2 is constant implies seq1 + seq2 is constant
 proof
   assume that
 A1: seq1 is constant and
-A2: seq2 is constant and
-A3: seq = seq1 + seq2;
+A2: seq2 is constant;
+    set seq = seq1 + seq2;
   consider x such that
 A4: for n being Nat holds seq1.n = x by A1,VALUED_0:def 18;
   consider y such that
@@ -782,19 +762,18 @@ A5: for n being Nat holds seq2.n = y by A2,VALUED_0:def 18;
   take z = x + y;
   let n be Nat;
   n in NAT by ORDINAL1:def 13;
-  hence seq.n = seq1.n + seq2.n by A3,NORMSP_1:def 5
+  hence seq.n = seq1.n + seq2.n by NORMSP_1:def 5
     .= x + seq2.n by A4
     .= z by A5;
 end;
 
 theorem
-  seq1 is constant & seq2 is constant & seq = seq1 - seq2 implies seq is
-  constant
+  seq1 is constant & seq2 is constant implies seq1 - seq2 is constant
 proof
   assume that
 A1: seq1 is constant and
-A2: seq2 is constant and
-A3: seq = seq1 - seq2;
+A2: seq2 is constant;
+    set seq = seq1 - seq2;
   consider x such that
 A4: for n being Nat holds seq1.n = x by A1,VALUED_0:def 18;
   consider y such that
@@ -802,23 +781,23 @@ A5: for n being Nat holds seq2.n = y by A2,VALUED_0:def 18;
   take z = x - y;
   let n be Nat;
   n in NAT by ORDINAL1:def 13;
-  hence seq.n = seq1.n - seq2.n by A3,NORMSP_1:def 6
+  hence seq.n = seq1.n - seq2.n by NORMSP_1:def 6
     .= x - seq2.n by A4
     .= z by A5;
 end;
 
 theorem
-  seq1 is constant & seq = a * seq1 implies seq is constant
+  seq1 is constant implies a * seq1 is constant
 proof
-  assume that
-A1: seq1 is constant and
-A2: seq = a * seq1;
+  assume
+A1: seq1 is constant;
+    set seq = a * seq1;
   consider x such that
 A3: for n being Nat holds seq1.n = x by A1,VALUED_0:def 18;
   take z = a * x;
   let n be Nat;
   n in NAT by ORDINAL1:def 13;
-  hence seq.n = a * seq1.n by A2,NORMSP_1:def 8
+  hence seq.n = a * seq1.n by NORMSP_1:def 8
     .= z by A3;
 end;
 
@@ -827,191 +806,146 @@ canceled 11;
 theorem
   seq1 - seq2 = seq1 + -seq2
 proof
-  now
-    let n;
-    thus (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
-      .= seq1.n + (-seq2).n by Def10
-      .= (seq1 + -seq2).n by NORMSP_1:def 5;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
+    .= seq1.n + (-seq2).n by ThDef10
+    .= (seq1 + -seq2).n by NORMSP_1:def 5;
 end;
 
 theorem
   seq = seq + 0.X
 proof
-  now
-    let n;
-    thus (seq + 09(X)).n = seq.n + 09(X) by Def12
-      .= seq.n by RLVECT_1:10;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (seq + 09(X)).n = seq.n + 09(X) by Def12
+    .= seq.n by RLVECT_1:10;
 end;
 
 theorem
   a * (seq1 + seq2) = a * seq1 + a * seq2
 proof
-  now
-    let n;
-    thus (a * (seq1 + seq2)).n = a * (seq1 + seq2).n by NORMSP_1:def 8
-      .= a * (seq1.n + seq2.n) by NORMSP_1:def 5
-      .= a * seq1.n + a * seq2.n by RLVECT_1:def 8
-      .= (a * seq1).n + a * seq2.n by NORMSP_1:def 8
-      .= (a * seq1).n + (a * seq2).n by NORMSP_1:def 8
-      .= (a * seq1 + a * seq2).n by NORMSP_1:def 5;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (a * (seq1 + seq2)).n = a * (seq1 + seq2).n by NORMSP_1:def 8
+    .= a * (seq1.n + seq2.n) by NORMSP_1:def 5
+    .= a * seq1.n + a * seq2.n by RLVECT_1:def 8
+    .= (a * seq1).n + a * seq2.n by NORMSP_1:def 8
+    .= (a * seq1).n + (a * seq2).n by NORMSP_1:def 8
+    .= (a * seq1 + a * seq2).n by NORMSP_1:def 5;
 end;
 
 theorem
   (a + b) * seq = a * seq + b * seq
 proof
-  now
-    let n;
-    thus ((a + b) * seq).n = (a + b) * seq.n by NORMSP_1:def 8
-      .= a * seq.n + b * seq.n by RLVECT_1:def 9
-      .= (a * seq).n + b * seq.n by NORMSP_1:def 8
-      .= (a * seq).n + (b * seq).n by NORMSP_1:def 8
-      .= (a * seq + b * seq).n by NORMSP_1:def 5;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus ((a + b) * seq).n = (a + b) * seq.n by NORMSP_1:def 8
+    .= a * seq.n + b * seq.n by RLVECT_1:def 9
+    .= (a * seq).n + b * seq.n by NORMSP_1:def 8
+    .= (a * seq).n + (b * seq).n by NORMSP_1:def 8
+    .= (a * seq + b * seq).n by NORMSP_1:def 5;
 end;
 
 theorem
   (a * b) * seq = a * (b * seq)
 proof
-  now
-    let n;
-    thus ((a * b) * seq).n = (a * b) * seq.n by NORMSP_1:def 8
-      .= a * (b * seq.n) by RLVECT_1:def 10
-      .= a * (b * seq).n by NORMSP_1:def 8
-      .= (a * (b * seq)).n by NORMSP_1:def 8;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus ((a * b) * seq).n = (a * b) * seq.n by NORMSP_1:def 8
+    .= a * (b * seq.n) by RLVECT_1:def 10
+    .= a * (b * seq).n by NORMSP_1:def 8
+    .= (a * (b * seq)).n by NORMSP_1:def 8;
 end;
 
 theorem
   1 * seq = seq
 proof
-  now
-    let n;
-    thus (1 * seq).n = 1 * seq.n by NORMSP_1:def 8
-      .= seq.n by RLVECT_1:def 11;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (1 * seq).n = 1 * seq.n by NORMSP_1:def 8
+    .= seq.n by RLVECT_1:def 11;
 end;
 
 theorem
   (-1) * seq = - seq
 proof
-  now
-    let n;
-    thus ((-1) * seq).n = (-1) * seq.n by NORMSP_1:def 8
-      .= - seq.n by RLVECT_1:29
-      .= (-seq).n by Def10;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus ((-1) * seq).n = (-1) * seq.n by NORMSP_1:def 8
+    .= - seq.n by RLVECT_1:29
+    .= (-seq).n by ThDef10;
 end;
 
 theorem
   seq - x = seq + -x
 proof
-  now
-    let n;
-    thus (seq - x).n = seq.n - x by NORMSP_1:def 7
-      .= (seq + -x).n by Def12;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (seq - x).n = seq.n - x by NORMSP_1:def 7
+    .= (seq + -x).n by Def12;
 end;
 
 theorem
   seq1 - seq2 = - (seq2 - seq1)
 proof
-  now
-    let n;
-    thus (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
-      .= - (seq2.n - seq1.n) by RLVECT_1:47
-      .= - (seq2 - seq1).n by NORMSP_1:def 6
-      .= (- (seq2 - seq1)).n by Def10;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
+    .= - (seq2.n - seq1.n) by RLVECT_1:47
+    .= - (seq2 - seq1).n by NORMSP_1:def 6
+    .= (- (seq2 - seq1)).n by ThDef10;
 end;
 
 theorem
   seq = seq - 0.X
 proof
-  now
-    let n;
-    thus (seq - 09(X)).n = seq.n - 09(X) by NORMSP_1:def 7
-      .= seq.n by RLVECT_1:26;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (seq - 09(X)).n = seq.n - 09(X) by NORMSP_1:def 7
+    .= seq.n by RLVECT_1:26;
 end;
 
 theorem
   seq = - ( - seq )
 proof
-  now
-    let n;
-    thus (- ( - seq )).n = - (- seq).n by Def10
-      .= - ( - seq.n) by Def10
-      .= seq.n by RLVECT_1:30;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (- ( - seq )).n = - (- seq).n by ThDef10
+    .= - ( - seq.n) by ThDef10
+    .= seq.n by RLVECT_1:30;
 end;
 
 theorem
   seq1 - (seq2 + seq3) = (seq1 - seq2) - seq3
 proof
-  now
-    let n;
-    thus (seq1 - (seq2 + seq3)).n = seq1.n - (seq2 + seq3).n by NORMSP_1:def 6
-      .= seq1.n - (seq2.n + seq3.n) by NORMSP_1:def 5
-      .= (seq1.n - seq2.n) - seq3.n by RLVECT_1:41
-      .= (seq1 - seq2).n - seq3.n by NORMSP_1:def 6
-      .= ((seq1 - seq2) - seq3).n by NORMSP_1:def 6;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (seq1 - (seq2 + seq3)).n = seq1.n - (seq2 + seq3).n by NORMSP_1:def 6
+    .= seq1.n - (seq2.n + seq3.n) by NORMSP_1:def 5
+    .= (seq1.n - seq2.n) - seq3.n by RLVECT_1:41
+    .= (seq1 - seq2).n - seq3.n by NORMSP_1:def 6
+    .= ((seq1 - seq2) - seq3).n by NORMSP_1:def 6;
 end;
 
 theorem
   (seq1 + seq2) - seq3 = seq1 + (seq2 - seq3)
 proof
-  now
-    let n;
-    thus ((seq1 + seq2) - seq3).n = (seq1 + seq2).n - seq3.n by NORMSP_1:def 6
-      .= (seq1.n + seq2.n) - seq3.n by NORMSP_1:def 5
-      .= seq1.n + (seq2.n - seq3.n) by RLVECT_1:def 6
-      .= seq1.n + (seq2 - seq3).n by NORMSP_1:def 6
-      .= (seq1 + (seq2 - seq3)).n by NORMSP_1:def 5;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus ((seq1 + seq2) - seq3).n = (seq1 + seq2).n - seq3.n by NORMSP_1:def 6
+    .= (seq1.n + seq2.n) - seq3.n by NORMSP_1:def 5
+    .= seq1.n + (seq2.n - seq3.n) by RLVECT_1:def 6
+    .= seq1.n + (seq2 - seq3).n by NORMSP_1:def 6
+    .= (seq1 + (seq2 - seq3)).n by NORMSP_1:def 5;
 end;
 
 theorem
   seq1 - (seq2 - seq3) = (seq1 - seq2) + seq3
 proof
-  now
-    let n;
-    thus (seq1 - (seq2 - seq3)).n = seq1.n - (seq2 - seq3).n by NORMSP_1:def 6
-      .= seq1.n - (seq2.n - seq3.n) by NORMSP_1:def 6
-      .= (seq1.n - seq2.n) + seq3.n by RLVECT_1:43
-      .= (seq1 - seq2).n + seq3.n by NORMSP_1:def 6
-      .= ((seq1 - seq2) + seq3).n by NORMSP_1:def 5;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (seq1 - (seq2 - seq3)).n = seq1.n - (seq2 - seq3).n by NORMSP_1:def 6
+    .= seq1.n - (seq2.n - seq3.n) by NORMSP_1:def 6
+    .= (seq1.n - seq2.n) + seq3.n by RLVECT_1:43
+    .= (seq1 - seq2).n + seq3.n by NORMSP_1:def 6
+    .= ((seq1 - seq2) + seq3).n by NORMSP_1:def 5;
 end;
 
 theorem
   a * (seq1 - seq2) = a * seq1 - a * seq2
 proof
-  now
-    let n;
-    thus (a * (seq1 - seq2)).n = a * (seq1 - seq2).n by NORMSP_1:def 8
-      .= a * (seq1.n - seq2.n) by NORMSP_1:def 6
-      .= a * seq1.n - a * seq2.n by RLVECT_1:48
-      .= (a * seq1).n - a * seq2.n by NORMSP_1:def 8
-      .= (a * seq1).n - (a * seq2).n by NORMSP_1:def 8
-      .= (a * seq1 - a * seq2).n by NORMSP_1:def 6;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (a * (seq1 - seq2)).n = a * (seq1 - seq2).n by NORMSP_1:def 8
+    .= a * (seq1.n - seq2.n) by NORMSP_1:def 6
+    .= a * seq1.n - a * seq2.n by RLVECT_1:48
+    .= (a * seq1).n - a * seq2.n by NORMSP_1:def 8
+    .= (a * seq1).n - (a * seq2).n by NORMSP_1:def 8
+    .= (a * seq1 - a * seq2).n by NORMSP_1:def 6;
 end;

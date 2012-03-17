@@ -126,8 +126,8 @@
 <Adjective nr="6"/>
 <Adjective nr="18"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="40"/>
 <Adjective nr="45">
 <LocusVar nr="1"/>

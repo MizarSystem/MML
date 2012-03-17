@@ -24,7 +24,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PETRI_2" nr="2">
@@ -33,10 +33,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PETRI_2" nr="3">
@@ -45,22 +45,22 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="45"/>
-<Adjective nr="50"/>
-<Adjective nr="52"/>
+<Adjective nr="46"/>
+<Adjective nr="51"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PETRI_2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="120"/>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 </FCluster>
 </Registrations>

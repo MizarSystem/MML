@@ -33,13 +33,13 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="84"/>
-<Adjective nr="87"/>
-<Adjective nr="89"/>
-<Adjective nr="91"/>
-<Adjective nr="93"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="62"/>
+<Adjective nr="85"/>
+<Adjective nr="88"/>
+<Adjective nr="90"/>
+<Adjective nr="92"/>
+<Adjective nr="94"/>
 <Adjective nr="108"/>
 <Adjective nr="109"/>
 <Adjective nr="110"/>
@@ -60,7 +60,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
+<Adjective nr="39" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FUNCSDOM" nr="4">
@@ -69,12 +69,12 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="87"/>
-<Adjective nr="89"/>
-<Adjective nr="91"/>
-<Adjective nr="93"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="62"/>
+<Adjective nr="88"/>
+<Adjective nr="90"/>
+<Adjective nr="92"/>
+<Adjective nr="94"/>
 <Adjective nr="108"/>
 <Adjective nr="109"/>
 <Adjective nr="110"/>
@@ -97,8 +97,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="84"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="85"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCSDOM" nr="2">
@@ -113,8 +113,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="84"/>
 <Adjective nr="85"/>
+<Adjective nr="86"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCSDOM" nr="3">
@@ -129,7 +129,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="38" value="false"/>
+<Adjective nr="39" value="false"/>
 <Adjective nr="116"/>
 </Cluster>
 </FCluster>
@@ -145,7 +145,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="85"/>
+<Adjective nr="86"/>
 <Adjective nr="116"/>
 </Cluster>
 </FCluster>
@@ -159,7 +159,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="38" value="false"/>
+<Adjective nr="39" value="false"/>
 <Adjective nr="116"/>
 </Cluster>
 </FCluster>
@@ -173,11 +173,11 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="61"/>
-<Adjective nr="87"/>
-<Adjective nr="89"/>
-<Adjective nr="91"/>
-<Adjective nr="93"/>
+<Adjective nr="62"/>
+<Adjective nr="88"/>
+<Adjective nr="90"/>
+<Adjective nr="92"/>
+<Adjective nr="94"/>
 <Adjective nr="108"/>
 <Adjective nr="109"/>
 <Adjective nr="110"/>

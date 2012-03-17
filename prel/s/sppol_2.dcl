@@ -62,8 +62,8 @@
 </Adjective>
 <Adjective nr="17"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="160"/>
 </Cluster>
 </RCluster>
@@ -90,8 +90,8 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="157"/>
 <Adjective nr="158"/>
 <Adjective nr="159"/>

@@ -26,7 +26,7 @@
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -35,15 +35,15 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="46"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LATSUM_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
@@ -55,8 +55,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="46"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 </Registrations>

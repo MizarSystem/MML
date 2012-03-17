@@ -9,21 +9,21 @@ environ
  vocabularies CARD_1, SUPINF_1, ARYTM_3, REAL_1, ARYTM_1, XBOOLE_0, SUBSET_1,
       NUMBERS, TARSKI, XXREAL_0, MEMBERED, ORDINAL2, ORDINAL1, XXREAL_2,
       FUNCT_1, RELAT_1, VALUED_0, FUNCT_3, CARD_3, FUNCT_4, FUNCOP_1, PARTFUN1,
-      NAT_1, SERIES_1, SUPINF_2;
+      NAT_1, SERIES_1, SUPINF_2, MEMBER_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, MEMBERED, XXREAL_0,
       XXREAL_3, XCMPLX_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FUNCT_2, FUNCT_3, FUNCOP_1, VALUED_0, FUNCT_4, NAT_1, CARD_3, XXREAL_2,
-      SUPINF_1;
+      SUPINF_1, MEMBER_1;
  constructors FUNCT_3, FUNCOP_1, FUNCT_4, FINSET_1, REAL_1, NAT_1, SUPINF_1,
-      VALUED_1, XXREAL_2, XXREAL_3, CARD_3, RELSET_1;
+      VALUED_1, XXREAL_2, XXREAL_3, CARD_3, RELSET_1, MEMBER_1;
  registrations RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FINSET_1, NUMBERS, XREAL_0,
-      MEMBERED, VALUED_0, XXREAL_3, RELSET_1;
+      MEMBERED, VALUED_0, XXREAL_3, RELSET_1, MEMBER_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, XCMPLX_0, XXREAL_0, XXREAL_3;
+ definitions TARSKI, XBOOLE_0, XCMPLX_0, XXREAL_0, XXREAL_3, MEMBER_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, NAT_1, RELSET_1, CARD_4, SUBSET_1, FUNCT_4,
       FUNCOP_1, RELAT_1, ZFMISC_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0,
-      ORDINAL1, NUMBERS, XXREAL_2, XXREAL_3, CARD_3;
- schemes SUBSET_1, FUNCT_2, RECDEF_1, NAT_1;
+      ORDINAL1, NUMBERS, XXREAL_2, XXREAL_3, CARD_3, MEMBER_1, MEMBERED;
+ schemes FUNCT_2, RECDEF_1, NAT_1;
 
 begin :: operations " + "," - " in R_eal numbers
 
@@ -32,38 +32,27 @@ notation
 end;
 
 definition
-  canceled;
   redefine func 0. -> R_eal;
   coherence by XXREAL_0:def 1;
-end;
-
-definition
-  let x,y be R_eal;
-  redefine func x + y -> R_eal;
-  coherence by XXREAL_0:def 1;
-end;
-
-theorem
-  for x,y being R_eal, a,b being Real st x = a & y = b holds x + y = a +
-  b by XXREAL_3:def 2;
-
-definition
   let x be R_eal;
   redefine func - x -> R_eal;
   coherence by XXREAL_0:def 1;
-end;
-
-definition
-  let x,y be R_eal;
+  let y be R_eal;
+  redefine func x + y -> R_eal;
+  coherence by XXREAL_0:def 1;
   redefine func x - y -> R_eal;
   coherence by XXREAL_0:def 1;
 end;
 
+theorem
+  for x,y being R_eal, a,b being Real st x = a & y = b holds
+  x + y = a + b by XXREAL_3:def 2;
+
 canceled;
 
 theorem
-  for x being R_eal, a being Real st x = a holds - x = - a by XXREAL_3:
-  def 3;
+  for x being R_eal, a being Real st x = a holds - x = - a
+  by XXREAL_3:def 3;
 
 canceled;
 
@@ -84,190 +73,41 @@ canceled 15;
 ::       operations " + "," - " in a subset of ExtREAL
 ::
 
-definition
-  canceled 3;
-  let X,Y be non empty Subset of ExtREAL;
-  func X + Y -> Subset of ExtREAL means
-  :Def5:
-  for z being R_eal holds z in it
-  iff ex x,y being R_eal st x in X & y in Y & z = x + y;
-  existence
-  proof
-    consider y being Element of Y;
-    consider x being Element of X;
-    defpred P[R_eal] means ex x,y being R_eal st x in X & y in Y & $1 = x + y;
-    consider Z being Subset of ExtREAL such that
-A1: for z being R_eal holds z in Z iff P[z] from SUBSET_1:sch 3;
-    x + y = x + y;
-    then reconsider Z as non empty Subset of ExtREAL by A1;
-    take Z;
-    thus thesis by A1;
-  end;
-  uniqueness
-  proof
-    let Z1,Z2 be Subset of ExtREAL such that
-A2: for z being R_eal holds z in Z1 iff ex x,y being R_eal st x in X &
-    y in Y & z = x + y and
-A3: for z being R_eal holds z in Z2 iff ex x,y being R_eal st x in X &
-    y in Y & z = x + y;
-    for z being set holds z in Z1 iff z in Z2
-    proof
-      let z be set;
-      hereby
-        assume
-A4:     z in Z1;
-        then reconsider z9 = z as R_eal;
-        ex x,y being R_eal st x in X & y in Y & z9 = x + y by A2,A4;
-        hence z in Z2 by A3;
-      end;
-      assume
-A5:   z in Z2;
-      then reconsider z as R_eal;
-      ex x,y being R_eal st x in X & y in Y & z = x + y by A3,A5;
-      hence thesis by A2;
-    end;
-    hence thesis by TARSKI:2;
-  end;
-end;
-
-registration
-  let X,Y be non empty Subset of ExtREAL;
-  cluster X + Y -> non empty;
-  coherence
-  proof
-    consider y being Element of Y;
-    consider x being Element of X;
-    reconsider x,y as R_eal;
-    x + y = x + y;
-    hence thesis by Def5;
-  end;
+notation
+  let X,Y be Subset of ExtREAL;
+  synonym X + Y for X ++ Y;
 end;
 
 definition
-  let X be non empty Subset of ExtREAL;
-  func - X -> Subset of ExtREAL means
-  :Def6:
-  for z being R_eal holds z in it iff ex x being R_eal st x in X & z = - x;
-  existence
-  proof
-    consider x being Element of X;
-    defpred P[R_eal] means ex x being R_eal st x in X & $1 = - x;
-    consider Z being Subset of ExtREAL such that
-A1: for z being R_eal holds z in Z iff P[z] from SUBSET_1:sch 3;
-    -x = -x;
-    then reconsider Z as non empty Subset of ExtREAL by A1;
-    take Z;
-    thus thesis by A1;
-  end;
-  uniqueness
-  proof
-    let Z1,Z2 be Subset of ExtREAL such that
-A2: for z being R_eal holds z in Z1 iff ex x being R_eal st x in X & z
-    = - x and
-A3: for z being R_eal holds z in Z2 iff ex x being R_eal st x in X & z = - x;
-    for z being set holds z in Z1 iff z in Z2
-    proof
-      let z be set;
-      thus z in Z1 implies z in Z2
-      proof
-        assume
-A4:     z in Z1;
-        then reconsider z as R_eal;
-        ex x being R_eal st x in X & z = - x by A2,A4;
-        hence thesis by A3;
-      end;
-      assume
-A5:   z in Z2;
-      then reconsider z as R_eal;
-      ex x being R_eal st x in X & z = - x by A3,A5;
-      hence thesis by A2;
-    end;
-    hence thesis by TARSKI:2;
-  end;
+  canceled 6;
+  let X,Y be Subset of ExtREAL;
+  redefine func X + Y -> Subset of ExtREAL;
+  coherence by MEMBERED:2;
 end;
 
-registration
-  let X be non empty Subset of ExtREAL;
-  cluster - X -> non empty;
-  coherence
-  proof
-    consider x being Element of X;
-    -x = -x;
-    hence thesis by Def6;
-  end;
+notation
+  let X be Subset of ExtREAL;
+  synonym -X for --X;
+end;
+
+definition
+  let X be Subset of ExtREAL;
+  redefine func - X -> Subset of ExtREAL;
+  coherence by MEMBERED:2;
 end;
 
 canceled;
 
-theorem Th22:
-  for X being non empty Subset of ExtREAL holds --X = X
-proof
-  let X be non empty Subset of ExtREAL;
-  for z being R_eal holds z in X iff ex x being R_eal st x in - X & z = - x
-  proof
-    let z be R_eal;
-    thus z in X implies ex x being R_eal st x in - X & z = - x
-    proof
-      set x = - z;
-      assume z in X;
-      then
-A1:   x in - X by Def6;
-      z = - x;
-      hence thesis by A1;
-    end;
-    given x being R_eal such that
-A2: x in - X and
-A3: z = - x;
-    ex a being R_eal st a in X & x = - a by A2,Def6;
-    hence thesis by A3;
-  end;
-  hence thesis by Def6;
-end;
+theorem
+  for X being non empty Subset of ExtREAL holds - -X = X;
 
-theorem Th23:
-  for X being non empty Subset of ExtREAL, z being R_eal holds z
-  in X iff - z in - X
-proof
-  let X be non empty Subset of ExtREAL, z be R_eal;
-  - z in - X implies z in X
-  proof
-    assume - z in - X;
-    then
-A1: ex x being R_eal st x in X & - z = - x by Def6;
-    --z = z;
-    hence thesis by A1;
-  end;
-  hence thesis by Def6;
-end;
+theorem
+  for X being non empty Subset of ExtREAL, z being R_eal holds
+  z in X iff - z in - X by MEMBER_1:1;
 
 theorem
   for X,Y being non empty Subset of ExtREAL holds X c= Y iff - X c= - Y
-proof
-  let X,Y be non empty Subset of ExtREAL;
-  hereby
-    assume
-A1: X c= Y;
-    thus - X c= - Y
-    proof
-      let x be set;
-      assume
-A2:   x in - X;
-      then reconsider x as R_eal;
-      - x in --X by A2,Th23;
-      then -x in X by Th22;
-      then --x in - Y by A1,Th23;
-      hence thesis;
-    end;
-  end;
-  assume
-A3: - X c= - Y;
-  let x be set;
-  assume
-A4: x in X;
-  then reconsider x as R_eal;
-  - x in - X by A4,Th23;
-  hence thesis by A3,Th23;
-end;
+  by MEMBER_1:3;
 
 theorem
   for z being R_eal holds z in REAL iff - z in REAL
@@ -283,7 +123,7 @@ A2: - z in REAL or - z in {-infty,+infty} by XBOOLE_0:def 3;
   - z in REAL implies z in REAL
   proof
     assume -z in REAL;
-    then --z in REAL by A1;
+    then - -z in REAL by A1;
     hence thesis;
   end;
   hence thesis by A1;
@@ -306,9 +146,9 @@ proof
     let z be ext-real number;
     assume z in X + Y;
     then consider x,y being R_eal such that
+A3: z = x + y and
 A1: x in X and
-A2: y in Y and
-A3: z = x + y by Def5;
+A2: y in Y;
 A4: y <= sup Y by A2,XXREAL_2:4;
     x <= sup X by A1,XXREAL_2:4;
     hence thesis by A3,A4,XXREAL_3:38;
@@ -326,9 +166,9 @@ proof
     let z be ext-real number;
     assume z in X + Y;
     then consider x,y being R_eal such that
+A3: z = x + y and
 A1: x in X and
-A2: y in Y and
-A3: z = x + y by Def5;
+A2: y in Y;
 A4: inf Y <= y by A2,XXREAL_2:3;
     inf X <= x by A1,XXREAL_2:3;
     hence thesis by A3,A4,XXREAL_3:38;
@@ -346,8 +186,8 @@ theorem
   bounded_below holds inf X + inf Y <= inf (X + Y) by Th27;
 
 theorem Th30:
-  for X being non empty Subset of ExtREAL, a being R_eal holds a
-  is UpperBound of X iff - a is LowerBound of - X
+  for X being non empty Subset of ExtREAL, a being R_eal holds
+  a is UpperBound of X iff - a is LowerBound of - X
 proof
   let X be non empty Subset of ExtREAL;
   let a be R_eal;
@@ -360,10 +200,9 @@ A1: a is UpperBound of X;
       assume
 A2:   x in - X;
       reconsider x as Element of ExtREAL by XXREAL_0:def 1;
-      - x in --X by A2,Th23;
-      then - x in X by Th22;
+      - x in - -X by A2;
       then - x <= a by A1,XXREAL_2:def 1;
-      then - a <= --x by XXREAL_3:40;
+      then - a <= - -x by XXREAL_3:40;
       hence thesis;
     end;
     hence - a is LowerBound of - X by XXREAL_2:def 2;
@@ -376,7 +215,7 @@ A3: - a is LowerBound of - X;
     assume
 A4: x in X;
     reconsider x as Element of ExtREAL by XXREAL_0:def 1;
-    - x in - X by A4,Th23;
+    - x in - X by A4;
     then - a <= - x by A3,XXREAL_2:def 2;
     hence thesis by XXREAL_3:40;
   end;
@@ -398,8 +237,7 @@ A1: a is LowerBound of X;
       assume
 A2:   x in - X;
       reconsider x as Element of ExtREAL by XXREAL_0:def 1;
-      - x in - (- X) by A2,Th23;
-      then - x in X by Th22;
+      - x in - (- X) by A2;
       then a <= - x by A1,XXREAL_2:def 2;
       then - (- x) <= - a by XXREAL_3:40;
       hence thesis;
@@ -414,7 +252,7 @@ A3: - a is UpperBound of - X;
     assume
 A4: x in X;
     reconsider x as Element of ExtREAL by XXREAL_0:def 1;
-    - x in - X by A4,Th23;
+    - x in - X by A4;
     then - x <= - a by A3,XXREAL_2:def 1;
     hence thesis by XXREAL_3:40;
   end;
@@ -429,7 +267,6 @@ proof
   set b = sup X;
   a is LowerBound of - X by XXREAL_2:def 4;
   then - a is UpperBound of -(-X) by Th31;
-  then - a is UpperBound of X by Th22;
   then b <= - a by XXREAL_2:def 3;
   then
 A1: - (- a) <= - b by XXREAL_3:40;
@@ -447,7 +284,6 @@ proof
   set b = inf X;
   a is UpperBound of - X by XXREAL_2:def 3;
   then - a is LowerBound of - (- X) by Th30;
-  then - a is LowerBound of X by Th22;
   then - a <= b by XXREAL_2:def 4;
   then
 A1: - b <= - (-a) by XXREAL_3:40;
@@ -464,24 +300,25 @@ definition
   redefine func rng F -> non empty Subset of ExtREAL;
   coherence
   proof
-    consider x being Element of X;
+    set x =the  Element of X;
     F.x in rng F by FUNCT_2:6;
     hence thesis by XBOOLE_1:1;
   end;
 end;
- 
+
 ::
 ::       sup F and inf F for Function of X,ExtREAL
 ::
 
 definition
-  let X be non empty set;
-  let Y be non empty Subset of ExtREAL;
-  let F be Function of X,Y;
-  func sup F -> R_eal equals
+  let D be ext-real-membered set;
+  let X be set;
+  let Y be Subset of D;
+  let F be PartFunc of X,Y;
+  func sup F -> Element of ExtREAL equals
   sup rng F;
   coherence;
-  func inf F -> R_eal equals
+  func inf F -> Element of ExtREAL equals
   inf rng F;
   coherence;
 end;
@@ -509,7 +346,7 @@ A1: for x being Element of X holds F(x) in Y + Z
       let x be Element of X;
 A2:   G.x in Z by FUNCT_2:7;
       F.x in Y by FUNCT_2:7;
-      hence thesis by A2,Def5;
+      hence thesis by A2;
     end;
     ex H being Function of X,Y + Z st for x being Element of X holds H.x =
     F(x) from FUNCT_2:sch 8(A1);
@@ -537,9 +374,9 @@ A5: for x being Element of X holds H2.x = F.x + G.x;
 end;
 
 theorem Th34:
-  for X being non empty set, Y,Z being non empty Subset of ExtREAL
-, F being Function of X,Y, G being Function of X,Z holds rng(F + G) c= rng F +
-  rng G
+  for X being non empty set, Y,Z being non empty Subset of ExtREAL,
+     F being Function of X,Y, G being Function of X,Z holds
+  rng(F + G) c= rng F + rng G
 proof
   let X be non empty set, Y,Z be non empty Subset of ExtREAL, F be Function of
   X,Y, G be Function of X,Z;
@@ -552,7 +389,7 @@ A1: for x being set st x in X holds (F + G).x in rng F + rng G
 A2: a in rng F by FUNCT_2:6;
 A3: b in rng G by FUNCT_2:6;
     (F + G).x = a + b by Def9;
-    hence thesis by A2,A3,Def5;
+    hence thesis by A2,A3;
   end;
   dom (F + G) = X by FUNCT_2:def 1;
   then F + G is Function of X,rng F + rng G by A1,FUNCT_2:5;
@@ -600,7 +437,7 @@ A1: for x being Element of X holds F(x) in - Y
     proof
       let x be Element of X;
       F.x in Y by FUNCT_2:7;
-      hence thesis by Th23;
+      hence thesis;
     end;
     ex H being Function of X,- Y st for x being Element of X holds H.x = F
     (x) from FUNCT_2:sch 8(A1);
@@ -647,7 +484,7 @@ A4: y = (- F).a by A2,FUNCT_1:def 5;
     reconsider a as Element of X by A3;
     y = - F.a by A4,Def10;
     then - y in rng F by A1,FUNCT_1:def 5;
-    then - (- y) in - rng F by Th23;
+    then - (- y) in - rng F;
     hence thesis;
   end;
   thus - rng F c= rng(- F)
@@ -656,9 +493,7 @@ A4: y = (- F).a by A2,FUNCT_1:def 5;
     assume
 A5: y in - rng F;
     then reconsider y as R_eal;
-    - y in - (- rng F) by A5,Th23;
-    then
-A6: - y in rng F by Th22;
+A6: - y in - (- rng F) by A5;
     dom F = X by FUNCT_2:def 1;
     then consider a being set such that
 A7: a in X and
@@ -673,9 +508,8 @@ A9: y = (- F).a by Def10;
 end;
 
 theorem Th38:
-  for X being non empty set holds for Y being non empty Subset of
-ExtREAL holds for F being Function of X,Y holds inf(- F) = - sup F & sup(- F) =
-  - inf F
+  for X being non empty set, Y being non empty Subset of ExtREAL
+  for F being Function of X,Y holds inf(- F) = - sup F & sup(- F) = - inf F
 proof
   let X be non empty set;
   let Y be non empty Subset of ExtREAL;
@@ -685,34 +519,33 @@ proof
   thus sup(- F) = sup(- rng F) by Th37
     .= - inf F by Th33;
 end;
- 
+
 ::
 ::       Bounded Function of X,ExtREAL
 ::
 
 definition
-  let X be non empty set;
-  let Y be non empty Subset of ExtREAL;
+  let X be set;
+  let Y be Subset of ExtREAL;
   let F be Function of X,Y;
   attr F is bounded_above means
   :Def11:
-  sup F <+infty;
+  sup F < +infty;
   attr F is bounded_below means
   :Def12:
-  -infty <inf F;
+  -infty < inf F;
 end;
 
 definition
-  let X be non empty set, Y be non empty Subset of ExtREAL, F be Function of X
-  ,Y;
+  let X be set, Y be Subset of ExtREAL, F be Function of X,Y;
   attr F is bounded means
   :Def13:
   F is bounded_above bounded_below;
 end;
 
 registration
-  let X be non empty set;
-  let Y be non empty Subset of ExtREAL;
+  let X be set;
+  let Y be Subset of ExtREAL;
   cluster bounded -> bounded_above bounded_below Function of X, Y;
   coherence by Def13;
   cluster bounded_above bounded_below -> bounded Function of X, Y;
@@ -838,7 +671,7 @@ proof
   assume
 A1: Y c= REAL;
   hereby
-    consider x being Element of X;
+    set x =the  Element of X;
     X = dom F by FUNCT_2:def 1;
     then
 A2: F.x in rng F by FUNCT_1:def 5;
@@ -868,7 +701,7 @@ proof
 A1: Y c= REAL;
   thus F is bounded_below implies inf F in REAL
   proof
-    consider x being Element of X;
+    set x =the  Element of X;
     X = dom F by FUNCT_2:def 1;
     then
 A2: F.x in rng F by FUNCT_1:def 5;
@@ -997,27 +830,15 @@ A3: F1 + F2 is bounded_below by A1,A2,Th50;
 end;
 
 theorem Th52:
-  ex F being Function of NAT,ExtREAL st F is one-to-one & NAT =
-  rng F & rng F is non empty Subset of ExtREAL
+  incl NAT is Function of NAT,ExtREAL &
+  incl NAT is one-to-one & NAT = rng incl NAT &
+  rng incl NAT is non empty Subset of ExtREAL
 proof
   reconsider F = incl NAT as Function of NAT,ExtREAL by FUNCT_2:9,NUMBERS:31;
-  take F;
-A1: dom F = NAT by FUNCT_2:def 1;
-  for y being set holds y in NAT iff ex x being set st x in dom F & y = F. x
-  proof
-    let y be set;
-    y in NAT implies ex x being set st x in dom F & y = F.x
-    proof
-      assume
-A2:   y in NAT;
-      take y;
-      thus thesis by A2,FUNCT_1:35,FUNCT_2:def 1;
-    end;
-    hence thesis by A1,FUNCT_1:35;
-  end;
-  hence thesis by FUNCT_1:def 5;
+  rng F c= ExtREAL;
+  hence thesis by RELAT_1:71;
 end;
- 
+
 ::
 ::       Series of Elements of ExtREAL numbers
 ::
@@ -1110,7 +931,7 @@ registration
   cluster countable (non empty Subset of ExtREAL);
   existence
   proof
-    consider F being Function of NAT,ExtREAL;
+    set F =the  Function of NAT,ExtREAL;
     reconsider A = rng F as non empty Subset of ExtREAL;
     take A;
     assume A is non empty;
@@ -1182,9 +1003,9 @@ definition
   let N be Num of D;
   func Ser(D,N) -> Function of NAT,ExtREAL means
   :Def17:
-  it.0 = N.0 & for n
-being Element of NAT holds for y being R_eal st y = it.n holds it.(n + 1) = y +
-  N.(n + 1);
+  it.0 = N.0 &
+  for n being Element of NAT for y being R_eal st y = it.n holds
+  it.(n + 1) = y + N.(n + 1);
   existence by Th53;
   uniqueness
   proof
@@ -1281,21 +1102,9 @@ definition
     ex N being Num of D st it = rng Ser(D,N);
   existence
   proof
-    consider N being Num of D;
-    set S = Ser(D,N);
-    reconsider SER = rng S as non empty Subset of ExtREAL;
-    take SER;
+    take rng Ser(D,the Num of D);
     thus thesis;
   end;
-end;
-
-Lm1: for F being Function of NAT,ExtREAL holds rng F is non empty Subset of
-ExtREAL;
-
-definition
-  let F be Function of NAT,ExtREAL;
-  redefine func rng F -> non empty Subset of ExtREAL;
-  coherence by Lm1;
 end;
 
 definition
@@ -1314,8 +1123,8 @@ definition
 end;
 
 theorem Th57:
-  for F being Function of NAT,ExtREAL holds rng F is
-  Denum_Set_of_R_EAL by Def14;
+  for F being Function of NAT,ExtREAL holds rng F is Denum_Set_of_R_EAL
+  by Def14;
 
 definition
   let F be Function of NAT,ExtREAL;
@@ -1689,7 +1498,7 @@ A7: Ser(F).n in REAL by Th68;
   SUM(F) = Ser(F).n by A1,A2,Th67;
   hence thesis by A7,Def24;
 end;
- 
+
 :: Added by AK, 2006.02.06
 
 theorem

@@ -31,12 +31,12 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="38" value="false"/>
-<Adjective nr="80"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="39" value="false"/>
 <Adjective nr="81"/>
-<Adjective nr="84"/>
-<Adjective nr="87"/>
+<Adjective nr="82"/>
+<Adjective nr="85"/>
+<Adjective nr="88"/>
 <Adjective nr="93"/>
 <Adjective nr="94"/>
 <Adjective nr="95"/>
@@ -50,8 +50,8 @@
 <ArgTypes/>
 <Func kind="K" nr="158"/>
 <Cluster>
-<Adjective nr="80"/>
-<Adjective nr="87"/>
+<Adjective nr="81"/>
+<Adjective nr="88"/>
 </Cluster>
 </FCluster>
 </Registrations>

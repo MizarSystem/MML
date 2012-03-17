@@ -36,8 +36,8 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
@@ -50,7 +50,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

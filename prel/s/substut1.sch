@@ -49,7 +49,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="33">
+<Adjective nr="31">
 <Var nr="1"/>
 </Adjective>
 </Cluster>
@@ -950,7 +950,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="113"/>
 </Adjective>
-<Adjective nr="33">
+<Adjective nr="31">
 <Var nr="5"/>
 </Adjective>
 </Cluster>

@@ -37,8 +37,8 @@
 </Adjective>
 <Adjective nr="16"/>
 <Adjective nr="21"/>
-<Adjective nr="27"/>
 <Adjective nr="28"/>
+<Adjective nr="29"/>
 <Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
@@ -65,8 +65,8 @@
 </Adjective>
 <Adjective nr="16"/>
 <Adjective nr="21"/>
-<Adjective nr="27"/>
 <Adjective nr="28"/>
+<Adjective nr="29"/>
 <Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
@@ -100,7 +100,7 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -111,7 +111,7 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FINSEQ_6" nr="3">
@@ -120,7 +120,7 @@
 <Cluster>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -137,7 +137,7 @@
 </Func>
 <Cluster>
 <Adjective nr="11"/>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FINSEQ_6" nr="4">

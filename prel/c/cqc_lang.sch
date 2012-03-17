@@ -62,7 +62,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="4"/>
 </Adjective>
 </Cluster>
@@ -227,7 +227,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="5"/>
 </Adjective>
 </Cluster>
@@ -437,7 +437,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="4"/>
 </Adjective>
 </Cluster>
@@ -579,7 +579,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="4"/>
 </Adjective>
 </Cluster>
@@ -788,7 +788,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="6"/>
 </Adjective>
 </Cluster>
@@ -973,7 +973,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>
@@ -1145,7 +1145,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>
@@ -1386,7 +1386,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>
@@ -1561,7 +1561,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>
@@ -1716,7 +1716,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Func kind="F" nr="5"/>
 </Adjective>
 </Cluster>
@@ -1834,7 +1834,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>
@@ -2009,7 +2009,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>
@@ -2263,7 +2263,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>
@@ -2438,7 +2438,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>
@@ -2701,7 +2701,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>
@@ -2876,7 +2876,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>
@@ -3137,7 +3137,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>
@@ -3312,7 +3312,7 @@
 <Adjective nr="5">
 <Func kind="K" nr="131"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <Var nr="7"/>
 </Adjective>
 </Cluster>

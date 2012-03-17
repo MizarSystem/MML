@@ -72,7 +72,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="97">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

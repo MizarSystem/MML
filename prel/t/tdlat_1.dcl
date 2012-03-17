@@ -23,7 +23,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -38,7 +38,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -53,7 +53,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
 </ArgTypes>

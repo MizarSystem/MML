@@ -343,7 +343,7 @@
 <Adjective nr="4"/>
 <Adjective nr="9"/>
 <Adjective nr="28"/>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -359,7 +359,7 @@
 <Adjective nr="4"/>
 <Adjective nr="9"/>
 <Adjective nr="28"/>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 <Not>

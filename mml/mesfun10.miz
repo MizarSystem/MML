@@ -3,7 +3,7 @@
 ::
 :: Received July 22, 2008
 :: Copyright (c) 2008 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, XBOOLE_0, MESFUNC8, SEQFUNC, MESFUNC5, SUBSET_1,
@@ -20,9 +20,9 @@ environ
       MESFUNC5, RINFSUP2, EXTREAL2, MESFUNC9, SUPINF_1, MESFUNC8, SEQFUNC,
       RELSET_1, BINOP_2;
  registrations NAT_1, XREAL_0, MEMBERED, ORDINAL1, PARTFUN1, RELAT_1, XBOOLE_0,
-      SUPINF_2, NUMBERS, XXREAL_0, MESFUNC8, RINFSUP2, VALUED_0;
+      SUPINF_2, NUMBERS, XXREAL_0, MESFUNC8, RINFSUP2, VALUED_0, MEMBER_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions MESFUNC1, MEASURE6, RINFSUP2, XXREAL_3;
+ definitions MESFUNC1, MEASURE6, RINFSUP2, XXREAL_3, MEMBER_1;
  theorems TARSKI, PARTFUN1, FUNCT_1, SUPINF_2, EXTREAL1, EXTREAL2, MESFUNC1,
       XREAL_0, XBOOLE_0, XBOOLE_1, MESFUNC2, XREAL_1, XXREAL_0, MESFUNC5,
       NAT_1, RELAT_1, FUNCT_2, SEQFUNC, ORDINAL1, MESFUNC8, RINFSUP2, MESFUNC7,
@@ -148,9 +148,8 @@ end;
 reserve S for SigmaField of X,
   M for sigma_Measure of S,
   E for Element of S;
- 
-:: Fatou's Lemma
 
+::$N Fatou's Lemma
 theorem Th7:
   E = dom(F.0) & (for n holds F.n is nonnegative & F.n
   is_measurable_on E) implies ex I be ExtREAL_sequence st (for n holds I.n =
@@ -306,13 +305,13 @@ end;
 begin :: Lebesgue's Convergence Theorem
 
 theorem Th8:
-  for X,Y being non empty Subset of ExtREAL, r be R_eal st X = {r}
-  & r in REAL holds sup(X + Y) = sup X + sup Y
+  for Y being non empty Subset of ExtREAL, r be R_eal st r in REAL
+  holds sup({r} + Y) = sup {r} + sup Y
 proof
-  let X,Y be non empty Subset of ExtREAL;
+  let Y be non empty Subset of ExtREAL;
   let r be R_eal;
-  assume that
-A1: X = {r} and
+  set X = {r};
+  assume
 A2: r in REAL;
   set W = X+Y;
 A3: -r <> -infty by A2,XXREAL_3:23;
@@ -321,24 +320,24 @@ A4: -r <> +infty by A2,XXREAL_3:23;
     let z be set;
     assume z in -X + W;
     then consider x,y be R_eal such that
+A7: z = x + y and
 A5: x in -X and
-A6: y in W and
-A7: z = x + y by SUPINF_2:def 5;
+A6: y in W;
     consider x1,y1 be R_eal such that
+A10: y = x1 + y1 and
 A8: x1 in X and
-A9: y1 in Y and
-A10: y = x1 + y1 by A6,SUPINF_2:def 5;
+A9: y1 in Y by A6;
     -x in --X by A5,SUPINF_2:23;
     then -x in X by SUPINF_2:22;
-    then -x = r by A1,TARSKI:def 1;
-    then z = -r + (r + y1) by A1,A7,A8,A10,TARSKI:def 1;
+    then -x = r by TARSKI:def 1;
+    then z = -r + (r + y1) by A7,A8,A10,TARSKI:def 1;
     then z = (-r + r) + y1 by A2,A4,A3,XXREAL_3:30;
     then z = 0. + y1 by XXREAL_3:7;
     hence z in Y by A9,XXREAL_3:4;
   end;
   then
 A11: -X + W c= Y by TARSKI:def 3;
-A12: r in X by A1,TARSKI:def 1;
+A12: r in X by TARSKI:def 1;
   now
     let z be set;
     assume
@@ -348,30 +347,30 @@ A13: z in Y;
     then r + y - r = 0. + y by XXREAL_3:7;
     then
 A14: y = r + y - r by XXREAL_3:4;
-A15: -r in -X by A12,SUPINF_2:def 6;
-    r + y in W by A12,A13,SUPINF_2:def 5;
-    hence z in -X + W by A15,A14,SUPINF_2:def 5;
+A15: -r in -X by A12;
+    r + y in W by A12,A13;
+    hence z in -X + W by A15,A14;
   end;
   then Y c= -X + W by TARSKI:def 3;
   then Y = -X + W by A11,XBOOLE_0:def 10;
   then sup Y <= sup W + sup -X by SUPINF_2:26;
   then sup Y <= sup(X+Y) + -inf X by SUPINF_2:33;
-  then sup Y <= sup(X+Y) -r by A1,XXREAL_2:13;
+  then sup Y <= sup(X+Y) -r by XXREAL_2:13;
   then r + sup Y <= sup(X+Y) by A2,XXREAL_3:68;
   then
-A16: sup X + sup Y <= sup(X+Y) by A1,XXREAL_2:11;
+A16: sup X + sup Y <= sup(X+Y) by XXREAL_2:11;
   sup(X + Y) <= sup X + sup Y by SUPINF_2:26;
   hence thesis by A16,XXREAL_0:1;
 end;
 
 theorem Th9:
-  for X,Y being non empty Subset of ExtREAL, r be R_eal st X = {r}
-  & r in REAL holds inf(X + Y) = inf X + inf Y
+  for Y being non empty Subset of ExtREAL, r be R_eal st r in REAL
+  holds inf({r} + Y) = inf {r} + inf Y
 proof
-  let X,Y be non empty Subset of ExtREAL;
+  let Y be non empty Subset of ExtREAL;
   let r be R_eal;
-  assume that
-A1: X = {r} and
+  set X = {r};
+  assume
 A2: r in REAL;
   set W = X+Y;
   set Z = -X;
@@ -381,24 +380,24 @@ A4: -r <> +infty by A2,XXREAL_3:23;
     let z be set;
     assume z in Z + W;
     then consider x,y be R_eal such that
+A7: z = x + y and
 A5: x in Z and
-A6: y in W and
-A7: z = x + y by SUPINF_2:def 5;
+A6: y in W;
     consider x1,y1 be R_eal such that
+A10: y = x1 + y1 and
 A8: x1 in X and
-A9: y1 in Y and
-A10: y = x1 + y1 by A6,SUPINF_2:def 5;
+A9: y1 in Y by A6;
     -x in -Z by A5,SUPINF_2:23;
     then -x in X by SUPINF_2:22;
-    then -x = r by A1,TARSKI:def 1;
-    then z = -r + (r + y1) by A1,A7,A8,A10,TARSKI:def 1;
+    then -x = r by TARSKI:def 1;
+    then z = -r + (r + y1) by A7,A8,A10,TARSKI:def 1;
     then z = (-r + r) + y1 by A2,A4,A3,XXREAL_3:30;
     then z = 0. + y1 by XXREAL_3:7;
     hence z in Y by A9,XXREAL_3:4;
   end;
   then
 A11: Z + W c= Y by TARSKI:def 3;
-A12: r in X by A1,TARSKI:def 1;
+A12: r in X by TARSKI:def 1;
   now
     let z be set;
     assume
@@ -408,18 +407,18 @@ A13: z in Y;
     then r + y - r = 0. + y by XXREAL_3:7;
     then
 A14: y = r + y - r by XXREAL_3:4;
-A15: -r in Z by A12,SUPINF_2:def 6;
-    r + y in W by A12,A13,SUPINF_2:def 5;
-    hence z in Z + W by A15,A14,SUPINF_2:def 5;
+A15: -r in Z by A12;
+    r + y in W by A12,A13;
+    hence z in Z + W by A15,A14;
   end;
   then Y c= Z + W by TARSKI:def 3;
   then Y = Z + W by A11,XBOOLE_0:def 10;
   then inf Y >= inf W + inf Z by SUPINF_2:27;
   then inf Y >= inf(X+Y) + -sup X by SUPINF_2:32;
-  then inf Y >= inf(X+Y) -r by A1,XXREAL_2:11;
+  then inf Y >= inf(X+Y) -r by XXREAL_2:11;
   then r + inf Y >= inf(X+Y) by A2,XXREAL_3:63;
   then
-A16: inf X + inf Y >= inf(X+Y) by A1,XXREAL_2:13;
+A16: inf X + inf Y >= inf(X+Y) by XXREAL_2:13;
   inf(X + Y) >= inf X + inf Y by SUPINF_2:27;
   hence thesis by A16,XXREAL_0:1;
 end;
@@ -438,9 +437,9 @@ A2: for n be Nat holds seq1.n = r + seq2.n;
     let z be set;
     assume z in {r} + R2;
     then consider z2,z3 be R_eal such that
+A5: z = z2 + z3 and
 A3: z2 in {r} and
-A4: z3 in R2 and
-A5: z = z2 + z3 by SUPINF_2:def 5;
+A4: z3 in R2;
     consider n be set such that
 A6: n in NAT and
 A7: (inferior_realsequence seq2).n = z3 by A4,FUNCT_2:17;
@@ -461,7 +460,7 @@ A14:  n <= k1 by A10;
       reconsider w1=w as R_eal by A13;
 A15:  seq2.k1 in Y2 by A8,A14;
       w1 = r + seq2.k1 by A2,A13;
-      hence w in {r} + Y2 by A12,A15,SUPINF_2:def 5;
+      hence w in {r} + Y2 by A12,A15;
     end;
     then
 A16: Y1 c= {r} + Y2 by TARSKI:def 3;
@@ -469,9 +468,9 @@ A16: Y1 c= {r} + Y2 by TARSKI:def 3;
       let w be set;
       assume w in {r} + Y2;
       then consider w1,w2 be R_eal such that
+A19:  w = w1 + w2 and
 A17:  w1 in {r} and
-A18:  w2 in Y2 and
-A19:  w = w1 + w2 by SUPINF_2:def 5;
+A18:  w2 in Y2;
       consider k2 be Element of NAT such that
 A20:  w2 = seq2.k2 and
 A21:  n <= k2 by A8,A18;
@@ -493,9 +492,9 @@ A22: {r} + R2 c= R1 by TARSKI:def 3;
     let z be set;
     assume z in {r} + P2;
     then consider z2,z3 be R_eal such that
+A25: z = z2 + z3 and
 A23: z2 in {r} and
-A24: z3 in P2 and
-A25: z = z2 + z3 by SUPINF_2:def 5;
+A24: z3 in P2;
     consider n be set such that
 A26: n in NAT and
 A27: (superior_realsequence seq2).n = z3 by A24,FUNCT_2:17;
@@ -516,7 +515,7 @@ A34:  n <= k1 by A30;
       reconsider w1=w as R_eal by A33;
 A35:  seq2.k1 in Y2 by A28,A34;
       w1 = r + seq2.k1 by A2,A33;
-      hence w in {r} + Y2 by A32,A35,SUPINF_2:def 5;
+      hence w in {r} + Y2 by A32,A35;
     end;
     then
 A36: Y1 c= {r} + Y2 by TARSKI:def 3;
@@ -524,9 +523,9 @@ A36: Y1 c= {r} + Y2 by TARSKI:def 3;
       let w be set;
       assume w in {r} + Y2;
       then consider w1,w2 be R_eal such that
+A39:  w = w1 + w2 and
 A37:  w1 in {r} and
-A38:  w2 in Y2 and
-A39:  w = w1 + w2 by SUPINF_2:def 5;
+A38:  w2 in Y2;
       consider k2 be Element of NAT such that
 A40:  w2 = seq2.k2 and
 A41:  n <= k2 by A28,A38;
@@ -567,7 +566,7 @@ A51:  n <= k1 by A45;
       reconsider w1=w as R_eal by A50;
 A52:  seq2.k1 in Y2 by A47,A51;
       w1 = r + seq2.k1 by A2,A50;
-      hence w in {r} + Y2 by A49,A52,SUPINF_2:def 5;
+      hence w in {r} + Y2 by A49,A52;
     end;
     then
 A53: Y1 c= {r} + Y2 by TARSKI:def 3;
@@ -575,9 +574,9 @@ A53: Y1 c= {r} + Y2 by TARSKI:def 3;
       let w be set;
       assume w in {r} + Y2;
       then consider w1,w2 be R_eal such that
+A56:  w = w1 + w2 and
 A54:  w1 in {r} and
-A55:  w2 in Y2 and
-A56:  w = w1 + w2 by SUPINF_2:def 5;
+A55:  w2 in Y2;
       consider k2 be Element of NAT such that
 A57:  w2 = seq2.k2 and
 A58:  n <= k2 by A47,A55;
@@ -592,7 +591,7 @@ A58:  n <= k2 by A47,A55;
 A59: inf Y1 = r + inf Y2 by XXREAL_2:13;
 A60: (inferior_realsequence seq2).n in R2 by FUNCT_2:6;
     r in {r} by TARSKI:def 1;
-    hence z in {r} + R2 by A46,A48,A59,A60,SUPINF_2:def 5;
+    hence z in {r} + R2 by A46,A48,A59,A60;
   end;
   then R1 c= {r} + R2 by TARSKI:def 3;
   then R1 = {r} + R2 by A22,XBOOLE_0:def 10;
@@ -621,7 +620,7 @@ A69:  n <= k1 by A63;
       reconsider w1=w as R_eal by A68;
 A70:  seq2.k1 in Y2 by A65,A69;
       w1 = r + seq2.k1 by A2,A68;
-      hence w in {r} + Y2 by A67,A70,SUPINF_2:def 5;
+      hence w in {r} + Y2 by A67,A70;
     end;
     then
 A71: Y1 c= {r} + Y2 by TARSKI:def 3;
@@ -629,9 +628,9 @@ A71: Y1 c= {r} + Y2 by TARSKI:def 3;
       let w be set;
       assume w in {r} + Y2;
       then consider w1,w2 be R_eal such that
+A74:  w = w1 + w2 and
 A72:  w1 in {r} and
-A73:  w2 in Y2 and
-A74:  w = w1 + w2 by SUPINF_2:def 5;
+A73:  w2 in Y2;
       consider k2 be Element of NAT such that
 A75:  w2 = seq2.k2 and
 A76:  n <= k2 by A65,A73;
@@ -646,7 +645,7 @@ A76:  n <= k2 by A65,A73;
 A77: sup Y1 = r + sup Y2 by XXREAL_2:11;
 A78: (superior_realsequence seq2).n in P2 by FUNCT_2:6;
     r in {r} by TARSKI:def 1;
-    hence z in {r} + P2 by A64,A66,A77,A78,SUPINF_2:def 5;
+    hence z in {r} + P2 by A64,A66,A77,A78;
   end;
   then P1 c= {r} + P2 by TARSKI:def 3;
   then P1 = {r} + P2 by A42,XBOOLE_0:def 10;
@@ -836,8 +835,8 @@ A9: R1 c= -R2 by TARSKI:def 3;
       let x be set;
       assume x in -R2;
       then consider y be R_eal such that
-A10:  y in R2 and
-A11:  x = -y by SUPINF_2:def 6;
+A11:  x = -y and
+A10:  y in R2;
       consider k be Element of NAT such that
 A12:  y = seq2.k and
 A13:  n <= k by A4,A10;
@@ -850,7 +849,7 @@ A13:  n <= k by A4,A10;
     then
 A14: z1 in rng(superior_realsequence seq1) by FUNCT_2:6;
     z2 = -z1;
-    hence z in -rng(superior_realsequence seq1) by A14,SUPINF_2:def 6;
+    hence z in -rng(superior_realsequence seq1) by A14;
   end;
   then
 A15: rng (inferior_realsequence seq2) c= -(rng (superior_realsequence seq1))
@@ -890,8 +889,8 @@ A23: R1 c= -R2 by TARSKI:def 3;
       let x be set;
       assume x in -R2;
       then consider y be R_eal such that
-A24:  y in R2 and
-A25:  x = -y by SUPINF_2:def 6;
+A25:  x = -y and
+A24:  y in R2;
       consider k be Element of NAT such that
 A26:  y = seq2.k and
 A27:  n <= k by A18,A24;
@@ -904,7 +903,7 @@ A27:  n <= k by A18,A24;
     then
 A28: z1 in rng(inferior_realsequence seq1) by FUNCT_2:6;
     z2 = -z1;
-    hence z in -rng(inferior_realsequence seq1) by A28,SUPINF_2:def 6;
+    hence z in -rng(inferior_realsequence seq1) by A28;
   end;
   then
 A29: rng (superior_realsequence seq2) c= -(rng (inferior_realsequence seq1))
@@ -913,8 +912,8 @@ A29: rng (superior_realsequence seq2) c= -(rng (inferior_realsequence seq1))
     let z be set;
     assume z in -(rng (superior_realsequence seq1));
     then consider t be R_eal such that
-A30: t in rng (superior_realsequence seq1) and
-A31: z = -t by SUPINF_2:def 6;
+A31: z = -t and
+A30: t in rng (superior_realsequence seq1);
     consider n be set such that
 A32: n in dom (superior_realsequence seq1) and
 A33: t = (superior_realsequence seq1).n by A30,FUNCT_1:def 5;
@@ -946,8 +945,8 @@ A39: R2 c= -R1 by TARSKI:def 3;
       let x be set;
       assume x in -R1;
       then consider y be R_eal such that
-A40:  y in R1 and
-A41:  x = -y by SUPINF_2:def 6;
+A41:  x = -y and
+A40:  y in R1;
       consider k be Element of NAT such that
 A42:  y = seq1.k and
 A43:  n <= k by A34,A40;
@@ -969,8 +968,8 @@ A43:  n <= k by A34,A40;
     let z be set;
     assume z in -(rng (inferior_realsequence seq1));
     then consider t be R_eal such that
-A44: t in rng (inferior_realsequence seq1) and
-A45: z = -t by SUPINF_2:def 6;
+A45: z = -t and
+A44: t in rng (inferior_realsequence seq1);
     consider n be set such that
 A46: n in dom (inferior_realsequence seq1) and
 A47: t = (inferior_realsequence seq1).n by A44,FUNCT_1:def 5;
@@ -1002,8 +1001,8 @@ A53: R2 c= -R1 by TARSKI:def 3;
       let x be set;
       assume x in -R1;
       then consider y be R_eal such that
-A54:  y in R1 and
-A55:  x = -y by SUPINF_2:def 6;
+A55:  x = -y and
+A54:  y in R1;
       consider k be Element of NAT such that
 A56:  y = seq1.k and
 A57:  n <= k by A48,A54;
@@ -1643,7 +1642,7 @@ A110: lim I <= Integral(M,lim F) by A98,A106,A104,PARTFUN1:34;
   end;
   hence thesis by A49,A57,A98;
 end;
- 
+
 :: Lebesgue's Convergence theorem
 
 theorem Th18:
@@ -1966,9 +1965,8 @@ definition
   ex K be real number st for n be Nat
   , x be set st x in dom(F.0) holds |. (F.n).x .| <= K;
 end;
- 
-:: Lebesgue's Bounded Convergence Theorem
 
+::$N Lebesgue's Bounded Convergence Theorem
 theorem
   M.E < +infty & E = dom(F.0) & (for n be Nat holds F.n is_measurable_on
   E) & F is uniformly_bounded & (for x be Element of X st x in E holds F#x is

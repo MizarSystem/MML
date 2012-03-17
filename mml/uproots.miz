@@ -3,7 +3,7 @@
 ::
 :: Received December 30, 2003
 :: Copyright (c) 2003 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, FINSEQ_1, SUBSET_1, RELAT_1, FUNCT_1, CARD_1, CARD_3,
@@ -16,19 +16,20 @@ environ
  notations TARSKI, XBOOLE_0, XCMPLX_0, XXREAL_0, SUBSET_1, ORDINAL1, CARD_1,
       NUMBERS, XREAL_0, ZFMISC_1, REAL_1, VECTSP_2, BINOP_1, RELAT_1, FUNCT_1,
       PBOOLE, RELSET_1, PARTFUN1, FINSEQ_1, FINSEQ_2, DOMAIN_1, FUNCT_2,
-      XXREAL_2, VALUED_0, NAT_1, NAT_D, STRUCT_0, ALGSTR_0, RLVECT_1, VECTSP_1,
+      XXREAL_2, VALUED_0, NAT_1, NAT_D, STRUCT_0, ALGSTR_0, RLVECT_1,
+      VFUNCT_1, VECTSP_1,
       FINSOP_1, NORMSP_1, GROUP_4, RVSUM_1, ALGSEQ_1, COMPLFLD, BHSP_1,
       POLYNOM3, POLYNOM4, POLYNOM5, FINSET_1, MCART_1, FUNCT_4, FUNCOP_1,
       CLASSES1, FVSUM_1, WSIERP_1, MEMBERED, GROUP_1, RECDEF_1, PRE_POLY;
  constructors WELLORD2, SETWISEO, REAL_1, FINSEQOP, FINSOP_1, NAT_D, WSIERP_1,
       VECTSP_2, REALSET2, ALGSTR_1, GROUP_4, BHSP_1, MATRIX_2, MONOID_0,
       GOBOARD1, POLYNOM2, POLYNOM4, POLYNOM5, SEQ_1, RECDEF_1, BINOP_2,
-      CLASSES1, XXREAL_2, RELSET_1, FUNCT_7, FVSUM_1;
+      CLASSES1, XXREAL_2, RELSET_1, FUNCT_7, FVSUM_1, VFUNCT_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, CARD_1,
       MEMBERED, FINSEQ_1, STRUCT_0, VECTSP_1, COMPLFLD, ALGSTR_1, MONOID_0,
       PRE_POLY, POLYNOM3, POLYNOM4, POLYNOM5, FINSEQ_2, VALUED_0, XXREAL_2,
-      FUNCT_2, RELSET_1, GROUP_1;
+      FUNCT_2, RELSET_1, GROUP_1, VFUNCT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, VECTSP_2, FUNCT_1, POLYNOM3, POLYNOM5, FINSEQ_2, RVSUM_1,
       GROUP_4, RLVECT_1, FUNCOP_1, RELAT_1, STRUCT_0;
@@ -98,7 +99,7 @@ A15:    j in Seg len g;
         then 0 qua Nat+1 <= g.a by NAT_1:13;
         hence h1.j <= g1.j by A15,FUNCOP_1:13;
       end;
-      len h1 = len g1 by FINSEQ_1:def 18;
+      len h1 = len g1 by CARD_1:def 13;
       then
 A16:  Sum h1 <= Sum g1 by A14,RVSUM_1:112;
       Sum h = n*1 by A9,RVSUM_1:110
@@ -137,7 +138,7 @@ A22: len f = 0 and
   for n being Element of NAT holds P[n] from NAT_1:sch 1(A21, A1);
   hence thesis;
 end;
- 
+
 :: Stolen from POLYNOM2
 
 scheme
@@ -869,7 +870,7 @@ A18: b = (S, 1)-bag;
 A19: rng cS = S by FUNCT_2:def 3;
   now
     thus len f = card S by A4,A2,FINSEQ_3:31;
-    thus len g = card S by FINSEQ_1:def 18;
+    thus len g = card S by CARD_1:def 13;
     let i be Nat;
 A20: dom f = Seg card S by A4,A2,FINSEQ_1:def 3;
     assume
@@ -1024,7 +1025,7 @@ A41:  x in dom (cs"*cS) by A38,XBOOLE_0:def 4;
       hence contradiction by A41,A39,A37,FUNCT_1:21;
     end;
     len F = len g + len h by FINSEQ_1:35
-      .= card S by A10,A19,FINSEQ_1:def 18;
+      .= card S by A10,A19,CARD_1:def 13;
     then
 A42: dom F = Seg card S by FINSEQ_1:def 3;
     now
@@ -1111,7 +1112,7 @@ A60:    p.x = (cs"*cS).x by FUNCT_4:12;
     end;
 A61: dom p = dom (cs"*cS) \/ dom z by FUNCT_4:def 1;
     reconsider p as Function of dom F, dom F by A47,A56,FUNCT_2:5;
-    len h = d by FINSEQ_1:def 18;
+    len h = d by CARD_1:def 13;
     then
 A62: dom h = Seg d by FINSEQ_1:def 3;
 A63: rng cdd = dd by FUNCT_2:def 3;
@@ -1418,7 +1419,7 @@ registration
   cluster non-zero Polynomial of L;
   existence
   proof
-    consider a being Element of NonZero L;
+    set a =the  Element of NonZero L;
     reconsider a as Element of L;
     take p = <%a%>;
 A1: ( not a in {0.L})& (0_. L).0 = 0.L by FUNCOP_1:13,XBOOLE_0:def 5;
@@ -2476,6 +2477,7 @@ A2: eval(<%-x,1.L%>,x) = (-x)+x by POLYNOM5:48
     .= 0.L by A2,VECTSP_1:39;
 end;
 
+::$N Little Bezout Theorem (Factor Theorem)
 theorem Th52: :: Factor theorem (Bezout)
   for L being non degenerated comRing, r being Element of L, p
 being Polynomial of L st r is_a_root_of p holds p = <%-r,1.L%>*'poly_quotient(p
@@ -3142,7 +3144,7 @@ definition
     f = n |-> <% -c, 1.L%> as FinSequence of Polynom-Ring L by FINSEQ_2:77;
     take f;
     thus
-A1: len f = n by FINSEQ_1:def 18;
+A1: len f = n by CARD_1:def 13;
     let i be Element of NAT;
     assume i in dom f;
     then i in Seg n by A1,FINSEQ_1:def 3;
@@ -3372,7 +3374,7 @@ A3: for i being Element of NAT st i in dom f holds f.i = fpoly_mult_root
   (s/.i,b.(s/.i));
  len f = len s by A1,A2,Th5;
   then
-A5: dom f = dom s by FINSEQ_3:31;
+A4: dom f = dom s by FINSEQ_3:31;
   hereby
     set X = { k where k is Element of NAT : k < b.c };
     set ff = FlattenSeq f;
@@ -3380,118 +3382,118 @@ A5: dom f = dom s by FINSEQ_3:31;
     assume c in support b;
     then c in rng s by A2,FUNCT_2:def 3;
     then consider i being Nat such that
-A6: i in dom s and
-A7: s.i = c by FINSEQ_2:11;
+A5: i in dom s and
+A6: s.i = c by FINSEQ_2:11;
     defpred P[set,set] means ex n being Element of NAT st n = $1 & $2 = (Sum
     Card(f|(i-'1)))+(1+n);
-A8: for x being set st x in X ex y being set st P[x,y]
+A7: for x being set st x in X ex y being set st P[x,y]
     proof
       let x be set;
       assume x in X;
       then consider k being Element of NAT such that
-A9:   x = k and
+A8:   x = k and
       k < b.c;
       take (Sum Card(f|(i-'1)))+(1+k);
-      thus thesis by A9;
+      thus thesis by A8;
     end;
     consider g being Function such that
-A10: dom g = X and
-A11: for x being set st x in X holds P[x,g.x] from CLASSES1:sch 1(A8);
-A12: s/.i = c by A6,A7,PARTFUN1:def 8;
+A9: dom g = X and
+A10: for x being set st x in X holds P[x,g.x] from CLASSES1:sch 1(A7);
+A11: s/.i = c by A5,A6,PARTFUN1:def 8;
     now
       let y be set;
-A13:  <% -c, 1.L%>.0 = -c by POLYNOM5:39;
+A12:  <% -c, 1.L%>.0 = -c by POLYNOM5:39;
       hereby
         assume y in rng g;
         then consider x being set such that
-A14:    x in dom g and
-A15:    y = g.x by FUNCT_1:def 5;
+A13:    x in dom g and
+A14:    y = g.x by FUNCT_1:def 5;
         consider n being Element of NAT such that
-A16:    n = x and
-A17:    g.x = (Sum Card(f|(i-'1)))+(1+n) by A10,A11,A14;
-        ex k being Element of NAT st x = k & k < b.c by A10,A14;
+A15:    n = x and
+A16:    g.x = (Sum Card(f|(i-'1)))+(1+n) by A9,A10,A13;
+        ex k being Element of NAT st x = k & k < b.c by A9,A13;
         then
-A18:    1 <= 1+n & 1+n <= b.c by A16,NAT_1:12,13;
-A19:    f.i = fpoly_mult_root(s/.i,b.(s/.i)) by A3,A5,A6;
-        then len (f.i) = b.c by A12,Def10;
+A17:    1 <= 1+n & 1+n <= b.c by A15,NAT_1:12,13;
+A18:    f.i = fpoly_mult_root(s/.i,b.(s/.i)) by A3,A4,A5;
+        then len (f.i) = b.c by A11,Def10;
         then
-A20:    1+n in dom (f.i) by A18,FINSEQ_3:27;
-        then (f.i).(1+n) = <% -c, 1.L%> by A12,A19,Def10;
+A19:    1+n in dom (f.i) by A17,FINSEQ_3:27;
+        then (f.i).(1+n) = <% -c, 1.L%> by A11,A18,Def10;
         then
-A21:    (f.i).(1+n) in {<% -c, 1.L%>} by TARSKI:def 1;
+A20:    (f.i).(1+n) in {<% -c, 1.L%>} by TARSKI:def 1;
         (Sum Card (f|(i-'1))) + (1+n) in dom ff & (f.i).(1+n) = ff.((Sum
-        Card (f|(i -'1))) + (1+n)) by A5,A6,A20,PRE_POLY:30;
-        hence y in Y by A15,A17,A21,FUNCT_1:def 13;
+        Card (f|(i -'1))) + (1+n)) by A4,A5,A19,PRE_POLY:30;
+        hence y in Y by A14,A16,A20,FUNCT_1:def 13;
       end;
       assume
-A22:  y in Y;
+A21:  y in Y;
       then reconsider yn = y as Element of NAT;
-A23:  ff.y in {<% -c, 1.L%>} by A22,FUNCT_1:def 13;
-      y in dom ff by A22,FUNCT_1:def 13;
+A22:  ff.y in {<% -c, 1.L%>} by A21,FUNCT_1:def 13;
+      y in dom ff by A21,FUNCT_1:def 13;
       then consider i1, j being Element of NAT such that
-A24:  i1 in dom f and
-A25:  j in dom (f.i1) and
-A26:  yn = (Sum Card (f|(i1-'1))) + j and
-A27:  (f.i1).j = ff.yn by PRE_POLY:29;
-A28:  f.i1 = fpoly_mult_root(s/.i1,b.(s/.i1)) by A3,A24;
-      then (f.i1).j = <%-s/.i1, 1.L%> by A25,Def10;
-      then <% -c, 1.L%> = <%-s/.i1, 1.L%> by A23,A27,TARSKI:def 1;
+A23:  i1 in dom f and
+A24:  j in dom (f.i1) and
+A25:  yn = (Sum Card (f|(i1-'1))) + j and
+A26:  (f.i1).j = ff.yn by PRE_POLY:29;
+A27:  f.i1 = fpoly_mult_root(s/.i1,b.(s/.i1)) by A3,A23;
+      then (f.i1).j = <%-s/.i1, 1.L%> by A24,Def10;
+      then <% -c, 1.L%> = <%-s/.i1, 1.L%> by A22,A26,TARSKI:def 1;
       then
-A29:  c = s/.i1 by A13,POLYNOM5:39,RLVECT_1:31;
-      i1 in dom s & s/.i1 = s.i1 by A5,A24,PARTFUN1:def 8;
+A28:  c = s/.i1 by A12,POLYNOM5:39,RLVECT_1:31;
+      i1 in dom s & s/.i1 = s.i1 by A4,A23,PARTFUN1:def 8;
       then
-A30:  i1 = i by A2,A6,A7,A29,FUNCT_1:def 8;
+A29:  i1 = i by A2,A5,A6,A28,FUNCT_1:def 8;
       consider j1 being Nat such that
-A31:  j = j1 + 1 by A25,FINSEQ_3:26,NAT_1:6;
+A30:  j = j1 + 1 by A24,FINSEQ_3:26,NAT_1:6;
       reconsider j1 as Element of NAT by ORDINAL1:def 13;
-      len (f.i1) = b.c by A28,A29,Def10;
-      then j <= b.c by A25,FINSEQ_3:27;
-      then j1 < b.c by A31,NAT_1:13;
+      len (f.i1) = b.c by A27,A28,Def10;
+      then j <= b.c by A24,FINSEQ_3:27;
+      then j1 < b.c by A30,NAT_1:13;
       then
-A32:  j1 in X;
+A31:  j1 in X;
       then
       ex n being Element of NAT st n = j1 & g.j1 = (Sum Card(f |(i-'1)))+(
-      1+n) by A11;
-      hence y in rng g by A10,A26,A31,A30,A32,FUNCT_1:12;
+      1+n) by A10;
+      hence y in rng g by A9,A25,A30,A29,A31,FUNCT_1:12;
     end;
     then
-A33: rng g = Y by TARSKI:2;
+A32: rng g = Y by TARSKI:2;
     g is one-to-one
     proof
       let x1,x2 be set such that
-A34:  x1 in dom g & x2 in dom g and
-A35:  g.x1 = g.x2;
+A33:  x1 in dom g & x2 in dom g and
+A34:  g.x1 = g.x2;
       (ex n1 being Element of NAT st n1 = x1 & g.x1 = (Sum Card (f|(i-'1)
 ))+(1+n1) )& ex n2 being Element of NAT st n2 = x2 & g.x2 = (Sum Card (f|(i-'1)
-      ))+(1+ n2) by A10,A11,A34;
-      hence thesis by A35;
+      ))+(1+ n2) by A9,A10,A33;
+      hence thesis by A34;
     end;
     then b.c = { k where k is Element of NAT : k < b.c } & X,Y are_equipotent
-    by A10,A33,AXIOMS:30,WELLORD2:def 4;
+    by A9,A32,AXIOMS:30,WELLORD2:def 4;
     hence card ((FlattenSeq f)"{<% -c, 1.L%>}) = b.c by CARD_1:def 5;
   end;
   assume that
-A36: not c in support b and
-A37: card ((FlattenSeq f)"{<% -c, 1.L%>}) <> 0;
+A35: not c in support b and
+A36: card ((FlattenSeq f)"{<% -c, 1.L%>}) <> 0;
   consider x being set such that
-A38: x in (FlattenSeq f)"{<% -c, 1.L%>} by A37,CARD_1:47,XBOOLE_0:def 1;
-A39: x in dom FlattenSeq f by A38,FUNCT_1:def 13;
-  reconsider x as Element of NAT by A38;
+A37: x in (FlattenSeq f)"{<% -c, 1.L%>} by A36,CARD_1:47,XBOOLE_0:def 1;
+A38: x in dom FlattenSeq f by A37,FUNCT_1:def 13;
+  reconsider x as Element of NAT by A37;
   consider i, j being Element of NAT such that
-A40: i in dom f and
-A41: j in dom (f.i) and
+A39: i in dom f and
+A40: j in dom (f.i) and
   x = (Sum Card (f|(i-'1))) + j and
-A42: (f.i).j = (FlattenSeq f).x by A39,PRE_POLY:29;
-A43: s/.i = s.i & s.i in rng s by A5,A40,FUNCT_1:12,PARTFUN1:def 8;
-  (FlattenSeq f).x in {<% -c, 1.L%>} by A38,FUNCT_1:def 13;
+A41: (f.i).j = (FlattenSeq f).x by A38,PRE_POLY:29;
+A42: s/.i = s.i & s.i in rng s by A4,A39,FUNCT_1:12,PARTFUN1:def 8;
+  (FlattenSeq f).x in {<% -c, 1.L%>} by A37,FUNCT_1:def 13;
   then
-A44: (FlattenSeq f).x = <% -c, 1.L%> by TARSKI:def 1;
-  f.i = fpoly_mult_root(s/.i,b.(s/.i)) by A3,A40;
+A43: (FlattenSeq f).x = <% -c, 1.L%> by TARSKI:def 1;
+  f.i = fpoly_mult_root(s/.i,b.(s/.i)) by A3,A39;
   then
-A45: (f.i).j = <% -s/.i, 1.L%> by A41,Def10;
+A44: (f.i).j = <% -s/.i, 1.L%> by A40,Def10;
   <% -c, 1.L%>.0 = -c by POLYNOM5:39;
-  then c = s/.i by A42,A44,A45,POLYNOM5:39,RLVECT_1:31;
-  hence contradiction by A2,A36,A43,FUNCT_2:def 3;
+  then c = s/.i by A41,A43,A44,POLYNOM5:39,RLVECT_1:31;
+  hence contradiction by A2,A35,A42,FUNCT_2:def 3;
 end;
 
 theorem Th66:

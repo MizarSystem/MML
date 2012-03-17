@@ -44,11 +44,11 @@
 <Adjective nr="6"/>
 <Adjective nr="34"/>
 <Adjective nr="48"/>
-<Adjective nr="58"/>
-<Adjective nr="59"/>
-<Adjective nr="60">
+<Adjective nr="58">
 <LocusVar nr="1"/>
 </Adjective>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RVSUM_1" nr="2">
@@ -61,8 +61,8 @@
 <Adjective nr="6"/>
 <Adjective nr="31"/>
 <Adjective nr="48"/>
-<Adjective nr="58"/>
 <Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RVSUM_1" nr="3">
@@ -76,8 +76,8 @@
 <Adjective nr="29"/>
 <Adjective nr="31"/>
 <Adjective nr="48"/>
-<Adjective nr="58"/>
 <Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RVSUM_1" nr="1">
@@ -107,7 +107,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="31"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -117,7 +117,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RVSUM_1" nr="2">
@@ -237,7 +237,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="31"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RVSUM_1" nr="7">
@@ -247,7 +247,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="31"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -255,7 +255,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="31"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -267,7 +267,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="31"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RVSUM_1" nr="8">
@@ -277,7 +277,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="31"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -296,7 +296,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="31"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -378,7 +378,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="29"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -386,7 +386,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="29"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -398,7 +398,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="29"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </FCluster>
 <CCluster aid="RVSUM_1" nr="1">

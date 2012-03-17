@@ -7,25 +7,24 @@
 environ
 
  vocabularies SUBSET_1, NUMBERS, AMI_1, AMI_3, AMISTD_2, ARYTM_3, GRAPHSP,
-      CARD_1, FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, TARSKI, VALUED_1, FUNCT_4,
-      XBOOLE_0, FSM_1, CIRCUIT2, SCMNORM, ARYTM_1, INT_1, XXREAL_0, GLIB_000,
-      STRUCT_0, MSUALG_1, TURING_1, ORDINAL1, RELOC, FINSEQ_1;
+      CARD_1, RELAT_1, FUNCT_1, PARTFUN1, TARSKI, FUNCT_4, XBOOLE_0, FSM_1,
+      CIRCUIT2, SCMNORM, ARYTM_1, INT_1, XXREAL_0, GLIB_000, STRUCT_0,
+      TURING_1, ORDINAL1, RELOC, FINSEQ_1, NAT_1, AMISTD_5, PBOOLE, COMPOS_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, INT_1, NAT_1,
-      VALUED_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FINSET_1, FINSEQ_1, NAT_D,
-      STRUCT_0, COMPOS_1, EXTPRO_1, AMI_3, XXREAL_0, AMISTD_2;
- constructors DOMAIN_1, XXREAL_0, AMI_5, NAT_D, PRE_POLY, RECDEF_2, AMISTD_2,
-      VALUED_1, AMI_2, AMI_1;
+      VALUED_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, PBOOLE, FINSEQ_1, NAT_D,
+      STRUCT_0, COMPOS_1, EXTPRO_1, AMI_3, XXREAL_0, AMISTD_2, AMISTD_5;
+ constructors DOMAIN_1, XXREAL_0, AMI_3, NAT_D, PRE_POLY, RECDEF_2, AMISTD_2,
+      VALUED_1, AMI_2, AMI_1, AMISTD_1, AMISTD_5, PBOOLE;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS,
-      XREAL_0, INT_1, CARD_3, AMI_1, AMI_3, FINSET_1, RELAT_1, VALUED_1,
-      GRFUNC_1, FUNCT_2, AMI_6, VALUED_0, AMISTD_2, COMPOS_1, EXTPRO_1;
+      XREAL_0, INT_1, CARD_3, AMI_1, AMI_3, RELAT_1, GRFUNC_1, FUNCT_2, AMI_6,
+      VALUED_0, AMISTD_2, COMPOS_1, EXTPRO_1, NAT_1, FINSEQ_1, AMISTD_5, AMI_5,
+      PBOOLE;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin  :: Relocatability
 
 reserve j, k, m for Element of NAT;
-
-canceled 4;
 
 registration
  let a,b be Data-Location;
@@ -36,160 +35,51 @@ registration
  cluster Divide(a,b) -> ins-loc-free;
 end;
 
-canceled 5;
-
-theorem :: RELOC:10
-  for k being Element of NAT,loc being Element of NAT
+theorem :: RELOC:1
+  for k,loc being Nat
   holds IncAddr(SCM-goto loc,k) = SCM-goto (loc + k);
 
-theorem :: RELOC:11
-  for k being Element of NAT,loc being Element of NAT
-  , a being Data-Location holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k);
+theorem :: RELOC:2
+  for k,loc being Nat, a being Data-Location
+   holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k);
 
-theorem :: RELOC:12
-  for k being Element of NAT,loc being Element of NAT
-  , a being Data-Location holds IncAddr(a>0_goto loc,k) = a>0_goto (loc + k);
+theorem :: RELOC:3
+  for k,loc being Nat, a being Data-Location
+   holds IncAddr(a>0_goto loc,k) = a>0_goto (loc + k);
 
-theorem :: RELOC:13
+theorem :: RELOC:4
   for I being Instruction of SCM, k being Element of NAT st
 InsCode I = 0 or InsCode I = 1 or InsCode I = 2 or InsCode I = 3 or InsCode I =
   4 or InsCode I = 5 holds IncAddr (I, k) = I;
 
-theorem :: RELOC:14
+theorem :: RELOC:5
   for II, I being Instruction of SCM, k being Element of NAT st (
 InsCode I = 0 or InsCode I = 1 or InsCode I = 2 or InsCode I = 3 or InsCode I =
   4 or InsCode I = 5) & IncAddr (II, k) = I holds II = I;
 
-canceled 4;
-
-theorem :: RELOC:19
-  for i being Element of NAT, p being finite
-   NAT-defined (the Instructions of SCM)-valued Function
-    holds Shift(IncAddr(p,i),i) = Reloc(p,i);
-
-canceled 6;
-
-theorem :: RELOC:26
-  for p being FinPartState of SCM, k being Element of NAT
-   st IC SCM in dom p
-   holds IC Relocated (p,k) = (IC p) + k;
-
-theorem :: RELOC:27
-  for p being FinPartState of SCM, k being Element of NAT, loc
-being Element of NAT, I being Instruction of SCM st loc in dom ProgramPart p &
-  I = p.loc holds IncAddr(I, k) = (Relocated (p, k)).(loc + k);
-
-theorem :: RELOC:28
-  for p being FinPartState of SCM,k being Element of NAT
-    st IC SCM in dom p
-   holds Start-At(IC p+k,SCM) c= Relocated (p,k);
-
-theorem :: RELOC:29
-  for s being data-only FinPartState of SCM, p being FinPartState of SCM,
-      k being Element of NAT
- holds Relocated((p +* s), k) = Relocated (p,k) +* s;
-
-theorem :: RELOC:30
-  for k being Element of NAT, p being  FinPartState of
-  SCM , s1, s2 being State of SCM st p c= s1 & Relocated (p,k) c= s2 holds p c=
-  s1 +* DataPart s2;
-
-theorem :: RELOC:31
-  for s being State of SCM
-   holds Exec(IncAddr(CurInstr(ProgramPart s, s),k),s +*
-  Start-At(IC s+k,SCM)) = Following(ProgramPart s,s) +*
-  Start-At(IC Following(ProgramPart s,s)+k,SCM);
-
-theorem :: RELOC:32
-  for INS being Instruction of SCM, s being State of SCM, j, k
-being Element of NAT st IC s = j+k
- holds Exec(INS, s +* Start-At (IC s -' k,SCM)) =
-  Exec(IncAddr(INS, k), s) +* Start-At (IC Exec(IncAddr(INS,k), s) -' k,SCM);
-
-begin :: Main theorems of Relocatability
-
-theorem :: RELOC:33
-  for k being Element of NAT for p being autonomic FinPartState of SCM
-  st IC SCM in dom p for s being State of SCM st p c= s for i being Element of
-NAT holds Comput(ProgramPart(s +* Relocated (p,k)),s +* Relocated (p,k),i) =
-Comput(ProgramPart(s),s,i) +* Start-At (
-  IC Comput(ProgramPart(s),s,i) +k,SCM) +* ProgramPart (Relocated (p,k));
-
-theorem :: RELOC:34
-  for k being Element of NAT, p being autonomic FinPartState of SCM , s1
-  , s2 being State of SCM st IC SCM in dom p & p c= s1 & Relocated (p,k) c= s2
-for i being Element of NAT holds IC Comput(ProgramPart(s1),s1,i) + k = IC
-Comput(ProgramPart(s2),s2,i);
-
-theorem :: RELOC:35
-  for k being Element of NAT, p being autonomic FinPartState of
-SCM , s1, s2 being State of SCM st IC SCM in dom p & p c= s1 & Relocated (p,k)
-c= s2 for i being Element of NAT
- holds IncAddr(CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,i)), k)
-  = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,i));
-
-theorem :: RELOC:36
-  for k being Element of NAT, p being autonomic FinPartState of SCM , s1
-  , s2 being State of SCM st IC SCM in dom p & p c= s1 & Relocated (p,k) c= s2
-  for i being Element of NAT holds Comput(ProgramPart(s1),s1,i)|dom (DataPart p
-) =
-  Comput(ProgramPart(s2),s2,i)|dom (DataPart (Relocated (p,k)));
-
-theorem :: RELOC:37
-  for k being Element of NAT, p being autonomic FinPartState of SCM , s1
-  , s2, s3 being State of SCM st IC SCM in dom p & p c= s1 & Relocated (p,k) c=
-  s2 & s3 = s1 +* DataPart s2 holds for i being Element of NAT holds DataPart
-  Comput(ProgramPart(s1),s3,i) = DataPart Comput(ProgramPart(s2),s2,i);
-
-theorem :: RELOC:38
-  for p being autonomic FinPartState of SCM , k being Element of
-  NAT st IC SCM in dom p holds p is halting iff Relocated (p,k) is halting;
-
-theorem :: RELOC:39
-  for k being Element of NAT for p being autonomic FinPartState of
-  SCM st IC SCM in dom p for s being State of SCM st Relocated(p,k) c= s holds
-  for i being Element of NAT holds Comput(ProgramPart(s),s,i) = Comput(
-ProgramPart(s+*p),s+*p,i) +*
-  Start-At (IC Comput(ProgramPart(s+*p),s+*p,i) +k,SCM) +* s|dom ProgramPart p
-+*
-   ProgramPart (Relocated (p,k));
-
-theorem :: RELOC:40
-  for k being Element of NAT for p being FinPartState of SCM st IC
-  SCM in dom p for s being State of SCM st p c= s & Relocated(p,k) is autonomic
-  holds for i being Element of NAT holds Comput(ProgramPart(s),s,i) = Comput(
-ProgramPart(s+*
-Relocated(p,k)),s+*
-Relocated(p,k),i) +* Start-At (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*
-Relocated(p,k),i) -'k,SCM)
- +* s|dom ProgramPart Relocated(p,k) +* ProgramPart (p);
-
-theorem :: RELOC:41
-  for p being FinPartState of SCM st IC SCM in dom p for k being
-  Element of NAT holds p is autonomic iff Relocated (p,k) is autonomic;
-
-theorem :: RELOC:42
-  for p being halting autonomic non program-free FinPartState of SCM
-   st IC SCM in dom p
-  for k being Element of NAT holds DataPart(Result(ProgramPart(p),p)) =
-   DataPart Result(Reloc(ProgramPart p,k),Relocated(p,k));
-
-:: Relocatability
-
 registration
-  let l be Element of NAT;
-  let p be l-started autonomic halting FinPartState of SCM,
-    k be Element of NAT;
-  cluster Relocated(p,k) -> halting;
+ cluster SCM -> relocable;
 end;
 
-theorem :: RELOC:43
-  for F being PartFunc of FinPartSt SCM, FinPartSt SCM,
-      l being Element of NAT,
-      p being autonomic halting non program-free
-       l-started FinPartState of SCM
-        st IC SCM in dom p & F is data-only
-  for k being Element of
-   NAT holds ProgramPart p, p computes F
-    iff ProgramPart Relocated(p,k), Relocated(p,k) computes F;
+begin
 
+theorem :: RELOC:6
+  for k being Element of NAT, p being autonomic FinPartState of SCM , s1
+  , s2 being State of SCM st IC SCM in dom p & p c= s1 & Relocated (p,k) c= s2
+for P1,P2 being (the Instructions of SCM)-valued ManySortedSet of NAT
+  st ProgramPart p c= P1 & Reloc(ProgramPart p,k) c= P2
+for i being Element of NAT holds IC Comput(P1,s1,i) + k = IC
+Comput(P2,s2,i);
+
+registration
+ cluster SCM -> relocable1 relocable2;
+end;
+
+theorem :: RELOC:7
+  for k being Element of NAT, p being autonomic FinPartState of SCM , s1
+  , s2, s3 being State of SCM st IC SCM in dom p & p c= s1 & Relocated (p,k) c=
+  s2 & s3 = s1 +* DataPart s2 holds
+  for P1,P2 being (the Instructions of SCM)-valued ManySortedSet of NAT
+  st ProgramPart p c= P1 & Reloc(ProgramPart p,k) c= P2
+  for i being Element of NAT holds DataPart
+  Comput(P1,s3,i) = DataPart Comput(P2,s2,i);

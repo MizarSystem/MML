@@ -60,8 +60,8 @@
 <Adjective nr="6"/>
 <Adjective nr="8" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="157">
 <LocusVar nr="1"/>
 </Adjective>

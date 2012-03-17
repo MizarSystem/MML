@@ -23,7 +23,7 @@ environ
       PDIFF_1, CFDIFF_1, COMSEQ_2, COMSEQ_3, RVSUM_1, RELSET_1;
  registrations RELSET_1, STRUCT_0, ORDINAL1, MEMBERED, NUMBERS, XBOOLE_0,
       XREAL_0, XXREAL_0, XCMPLX_0, FUNCT_2, REAL_NS1, COMSEQ_3, VALUED_0,
-      VALUED_1, SEQ_4, FDIFF_1, CFDIFF_1, FINSEQ_2;
+      VALUED_1, SEQ_4, FDIFF_1, CFDIFF_1, FINSEQ_2, CARD_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions LOPBAN_1, EUCLID, COMPLEX1, PCOMPS_1, PDIFF_1, VALUED_0, VALUED_1,
       RVSUM_1, XCMPLX_0, NAT_1, ORDINAL1;
@@ -33,7 +33,7 @@ environ
       FUNCT_2, NORMSP_1, LOPBAN_1, PARTFUN1, NFCONT_1, FDIFF_1, NDIFF_1,
       REAL_NS1, NUMBERS, FUNCT_3, SQUARE_1, CFUNCT_1, CFDIFF_1, PDIFF_1,
       XCMPLX_0, COMSEQ_1, COMSEQ_2, COMSEQ_3, JGRAPH_1, VALUED_0, ORDINAL1,
-      GRCAT_1, NORMSP_0;
+      GRCAT_1, NORMSP_0, CARD_1;
  schemes SEQ_1, FUNCT_2;
 
 begin
@@ -192,7 +192,7 @@ A6: seq is convergent by CFUNCT_1:35;
   then <i> * lim seq = 0 by A6,COMSEQ_2:18;
   hence seq is convergent_to_0 by A6,A5,CFDIFF_1:def 1;
 end;
- 
+
 :: Cauchy-Riemann
 
 theorem Th2:
@@ -263,30 +263,30 @@ A14: diff(f,z0) = L/.1r & for z be Complex st z in N holds f/.z-f/.z0 = L
   deffunc RF4(Real) = (Im R).($1*<i>);
   consider R4 be Function of REAL, REAL such that
 A15: for y be Real holds R4.y =RF4(y) from FUNCT_2:sch 4;
-a1:  for z be Complex st z in N holds f/.z-f/.z0 = diff(f,z0)*(z-z0)+R/.(z-z0)
+A16:  for z be Complex st z in N holds f/.z-f/.z0 = diff(f,z0)*(z-z0)+R/.(z-z0)
   proof
     let z be Complex;
     assume
-A16: z in N;
+A17: z in N;
     consider a0 be Complex such that
-A17: for w be Complex holds L/.w = a0*w by CFDIFF_1:def 4;
-    L/.(1r*(z-z0)) = a0*1r*(z-z0) by A17
-      .= (L/.1r)*(z-z0) by A17;
-    hence thesis by A14,A16;
+A18: for w be Complex holds L/.w = a0*w by CFDIFF_1:def 4;
+    L/.(1r*(z-z0)) = a0*1r*(z-z0) by A18
+      .= (L/.1r)*(z-z0) by A18;
+    hence thesis by A14,A17;
   end;
-A18: for x,y be Real st x+y*<i> in N & x0+y0*<i> in N holds
+A19: for x,y be Real st x+y*<i> in N & x0+y0*<i> in N holds
      f.(x+y*<i>)-f.(x0+y0*<i>) =
   diff(f,z0)*((x+y*<i>)-(x0+y0*<i>)) + R/.((x+y*<i>)-(x0+y0*<i>))
   proof
     let x,y be Real;
     assume
-b1: x+y*<i> in N & x0+y0*<i> in N;
+A20: x+y*<i> in N & x0+y0*<i> in N;
     then x+y*<i> in dom f & x0+y0*<i> in dom f by A12;
     then f.(x+y*<i>) = f/.(x+y*<i>) & f.(x0+y0*<i>) = f/.(x0+y0*<i>)
     by PARTFUN1:def 8;
-    hence thesis by a1,b1,A3;
+    hence thesis by A16,A20,A3;
   end;
-b2: dom R = COMPLEX by PARTFUN1:def 4;
+A21: dom R = COMPLEX by PARTFUN1:def 4;
   for h be convergent_to_0 Real_Sequence holds (h")(#)(R4/*h) is
   convergent & lim ((h")(#)(R4/*h)) = 0
   proof
@@ -297,42 +297,42 @@ b2: dom R = COMPLEX by PARTFUN1:def 4;
     set hz=<i>(#)hz0;
     reconsider hz as convergent_to_0 Complex_Sequence by Lm6;
     now
-A19:  rng hz c= dom R by b2;
+A22:  rng hz c= dom R by A21;
       dom R4=REAL by PARTFUN1:def 4;
       then
-A20:  rng h c= dom R4;
+A23:  rng h c= dom R4;
       let n be Element of NAT;
-A21:  Im ((h.n)" ) = 0 & Re ((h.n)") = (h.n)" by COMPLEX1:def 2,def 3;
-A22:  hz.n = (h.n)*<i> by VALUED_1:6;
+A24:  Im ((h.n)" ) = 0 & Re ((h.n)") = (h.n)" by COMPLEX1:def 2,def 3;
+A25:  hz.n = (h.n)*<i> by VALUED_1:6;
       (h.n)*<i> in COMPLEX by XCMPLX_0:def 2;
       then
-A23:  (h.n)*<i> in dom Im R by Th1;
+A26:  (h.n)*<i> in dom Im R by Th1;
       thus ((h")(#)(R4/*h)).n = (h").n*((R4/*h).n) by SEQ_1:12
         .= (h.n)"*((R4/*h).n) by VALUED_1:10
-        .= (h.n)"*(R4.(h.n)) by A20,FUNCT_2:185
+        .= (h.n)"*(R4.(h.n)) by A23,FUNCT_2:185
         .= (h.n)"* (Im R).((h.n)*<i>) by A15
         .= Re ((h.n)" )* Im (R.((h.n)*<i>)) + Re (R.((h.n)*<i>)) * Im ((h.
-      n)") by A23,A21,COMSEQ_3:def 4
-        .= Im (((hz.n)/<i>) "* (R.(hz.n))) by A22,COMPLEX1:24
+      n)") by A26,A24,COMSEQ_3:def 4
+        .= Im (((hz.n)/<i>) "* (R.(hz.n))) by A25,COMPLEX1:24
         .= Im ((<i> /(hz.n)) * (R.(hz.n))) by XCMPLX_1:215
         .= Im ( <i>*(hz").n * (R.(hz.n))) by VALUED_1:10
         .= Im ( <i>*((hz").n * (R.(hz.n))))
         .= Re ( <i> ) * Im ((hz").n * (R/.(hz.n))) + Re ((hz").n * (R/.(hz.n
       )))*Im ( <i> ) by COMPLEX1:24
-        .= Re ((hz").n * (R/*hz).n ) by A19,COMPLEX1:17,FUNCT_2:186
+        .= Re ((hz").n * (R/*hz).n ) by A22,COMPLEX1:17,FUNCT_2:186
         .= Re (( (hz")(#)(R/*hz)).n ) by VALUED_1:5;
     end;
     then
-A24: (h")(#)(R4/*h) = Re ((hz")(#)(R/*hz)) by COMSEQ_3:def 5;
+A27: (h")(#)(R4/*h) = Re ((hz")(#)(R/*hz)) by COMSEQ_3:def 5;
     (hz")(#)(R/*hz) is convergent & lim ((hz")(#)(R/*hz)) = 0 by CFDIFF_1:def 3
 ;
-    hence thesis by A24,COMPLEX1:12,COMSEQ_3:41;
+    hence thesis by A27,COMPLEX1:12,COMSEQ_3:41;
   end;
   then reconsider R4 as REST by FDIFF_1:def 3;
   deffunc RF2(Real) = (Re R).($1*<i>);
-A25: dom R = COMPLEX by PARTFUN1:def 4;
+A28: dom R = COMPLEX by PARTFUN1:def 4;
   consider R2 be Function of REAL,REAL such that
-A26: for y be Real holds R2.y =RF2(y) from FUNCT_2:sch 4;
+A29: for y be Real holds R2.y =RF2(y) from FUNCT_2:sch 4;
   for h be convergent_to_0 Real_Sequence holds (h")(#)(R2/*h) is
   convergent & lim ((h")(#)(R2/*h)) = 0
   proof
@@ -342,64 +342,64 @@ A26: for y be Real holds R2.y =RF2(y) from FUNCT_2:sch 4;
     reconsider hz0 as convergent_to_0 Complex_Sequence by Lm4;
     set hz=<i>(#)hz0;
     reconsider hz as convergent_to_0 Complex_Sequence by Lm6;
-A27: (hz")(#)(R/*hz) is convergent by CFDIFF_1:def 3;
+A30: (hz")(#)(R/*hz) is convergent by CFDIFF_1:def 3;
     now
       dom R= COMPLEX by PARTFUN1:def 4;
       then
-A28:  rng hz c= dom R;
+A31:  rng hz c= dom R;
       dom R2=REAL by PARTFUN1:def 4;
       then
-A29:  rng h c= dom R2;
+A32:  rng h c= dom R2;
       let n be Element of NAT;
-A30:  Im ((h.n)" ) = 0 & Re ((h.n)") = (h.n)" by COMPLEX1:def 2,def 3;
-A31:  hz.n=(h.n)*<i> by VALUED_1:6;
+A33:  Im ((h.n)" ) = 0 & Re ((h.n)") = (h.n)" by COMPLEX1:def 2,def 3;
+A34:  hz.n=(h.n)*<i> by VALUED_1:6;
       dom Re R = COMPLEX by Th1;
       then
-A32:  (h.n)*<i> in dom Re R by XCMPLX_0:def 2;
-e1:   R.(hz.n) = R/.(hz.n);
+A35:  (h.n)*<i> in dom Re R by XCMPLX_0:def 2;
+A36:   R.(hz.n) = R/.(hz.n);
       thus ((h")(#)(R2/*h)).n = (h").n*((R2/*h).n) by SEQ_1:12
         .= (h.n)"*((R2/*h).n) by VALUED_1:10
-        .= (h.n)"*(R2.(h.n)) by A29,FUNCT_2:185
-        .= (h.n)"* (Re R).((h.n)*<i>) by A26
+        .= (h.n)"*(R2.(h.n)) by A32,FUNCT_2:185
+        .= (h.n)"* (Re R).((h.n)*<i>) by A29
         .= Re ((h.n)" )* Re (R.((h.n)*<i>)) -Im ((h.n)") *Im (R.((h.n)*<i>
-      )) by A32,A30,COMSEQ_3:def 3
-        .= Re (((hz.n)/<i>) "* (R.(hz.n))) by A31,COMPLEX1:24
+      )) by A35,A33,COMSEQ_3:def 3
+        .= Re (((hz.n)/<i>) "* (R.(hz.n))) by A34,COMPLEX1:24
         .= Re ((<i> /(hz.n)) * (R.(hz.n))) by XCMPLX_1:215
         .= Re ( <i>*(hz").n * (R.(hz.n))) by VALUED_1:10
         .= Re ( <i>*((hz").n * (R.(hz.n))))
         .= Re <i> * Re ((hz").n * (R.(hz.n))) -
            Im <i> * Im ((hz").n * (R.(hz.n))) by COMPLEX1:24
-        .= -Im ((hz").n * (R/*hz).n ) by e1,A28,COMPLEX1:17,FUNCT_2:186
+        .= -Im ((hz").n * (R/*hz).n ) by A36,A31,COMPLEX1:17,FUNCT_2:186
         .= -Im (( (hz")(#)(R/*hz)).n ) by VALUED_1:5
         .= - (Im ((hz")(#)(R/*hz))).n by COMSEQ_3:def 6;
     end;
     then
-A33: (h")(#)(R2/*h) = - Im ((hz")(#)(R/*hz)) by SEQ_1:14;
+A37: (h")(#)(R2/*h) = - Im ((hz")(#)(R/*hz)) by SEQ_1:14;
     lim ((hz")(#)(R/*hz)) = 0 by CFDIFF_1:def 3;
-    then lim Im ((hz")(#)(R/*hz)) = Im 0 by A27,COMSEQ_3:41;
-    then lim ((h")(#)(R2/*h)) = -Im 0 by A33,A27,SEQ_2:24
+    then lim Im ((hz")(#)(R/*hz)) = Im 0 by A30,COMSEQ_3:41;
+    then lim ((h")(#)(R2/*h)) = -Im 0 by A37,A30,SEQ_2:24
       .= 0 by COMPLEX1:12;
-    hence thesis by A33,A27,SEQ_2:23;
+    hence thesis by A37,A30,SEQ_2:23;
   end;
   then reconsider R2 as REST by FDIFF_1:def 3;
   consider r0 be Real such that
-A34: 0<r0 and
-A35: {y where y is Complex: |.y-z0.| < r0} c= N by CFDIFF_1:def 5;
+A38: 0<r0 and
+A39: {y where y is Complex: |.y-z0.| < r0} c= N by CFDIFF_1:def 5;
   set Ny0 = ].y0-r0,y0+r0.[;
-  reconsider Ny0 as Neighbourhood of y0 by A34,RCOMP_1:def 7;
-A36: for y be Real st y in Ny0 holds x0+y*<i> in N
+  reconsider Ny0 as Neighbourhood of y0 by A38,RCOMP_1:def 7;
+A40: for y be Real st y in Ny0 holds x0+y*<i> in N
   proof
     let y be Real;
     |. (x0+y*<i>) - z0 .| = |.(y-y0)*<i>.| by A3;
     then
-A37: |. (x0+y*<i>) - z0 .| = |.(y-y0).|*|.<i>.| by COMPLEX1:151;
+A41: |. (x0+y*<i>) - z0 .| = |.(y-y0).|*|.<i>.| by COMPLEX1:151;
     assume y in Ny0;
-    then x0+y*<i> is Complex & |. (x0+y*<i>) - z0 .| < r0 by A37,COMPLEX1:135
+    then x0+y*<i> is Complex & |. (x0+y*<i>) - z0 .| < r0 by A41,COMPLEX1:135
 ,RCOMP_1:8,XCMPLX_0:def 2;
     then (x0+y*<i>) in {w where w is Complex : |.w-z0.| < r0};
-    hence (x0+y*<i>) in N by A35;
+    hence (x0+y*<i>) in N by A39;
   end;
-A38: for x, y be Real holds diff(f,z0)*((x+y*<i>)-(x0+y0*<i>)) = ((Re diff(f
+A42: for x, y be Real holds diff(f,z0)*((x+y*<i>)-(x0+y0*<i>)) = ((Re diff(f
 ,z0)) * (x-x0)-(Im diff(f,z0))*(y-y0)) + ((Im diff(f,z0)) * (x-x0)+(Re diff(f,
   z0))*(y-y0))*<i>
   proof
@@ -409,119 +409,119 @@ A38: for x, y be Real holds diff(f,z0)*((x+y*<i>)-(x0+y0*<i>)) = ((Re diff(f
       .= ((Re diff(f,z0)) * (x-x0)-(Im diff(f,z0))*(y-y0)) + ((Im diff(f,z0)
     ) * (x-x0)+(Re diff(f,z0))*(y-y0))*<i>;
   end;
-A39: for x,y be Real holds Re (diff(f,z0)*((x+y*<i>)-(x0+y0*<i>))) = (Re
+A43: for x,y be Real holds Re (diff(f,z0)*((x+y*<i>)-(x0+y0*<i>))) = (Re
   diff(f,z0)) * (x-x0)-(Im diff(f,z0))*(y-y0)
   proof
     let x, y be Real;
     thus Re (diff(f,z0)*((x+y*<i>)-(x0+y0*<i>))) = Re (((Re diff(f,z0)) * (x-
 x0)-(Im diff(f,z0))*(y-y0)) + ((Im diff(f,z0)) * (x-x0)+(Re diff(f,z0))*(y-y0))
-    *<i> ) by A38
+    *<i> ) by A42
       .= (Re diff(f,z0)) * (x-x0)-(Im diff(f,z0))*(y-y0) by COMPLEX1:28;
   end;
-A40: for y be Real st y in Ny0 holds u.<*x0,y*> - u.<*x0,y0*> = -(Im diff(f,
+A44: for y be Real st y in Ny0 holds u.<*x0,y*> - u.<*x0,y0*> = -(Im diff(f,
   z0))*(y-y0) + (Re R).((x0-x0)+ (y-y0)*<i>)
   proof
     let y be Real;
-    (x0+y*<i>)-(x0+y0*<i>) in dom R by A25,XCMPLX_0:def 2;
+    (x0+y*<i>)-(x0+y0*<i>) in dom R by A28,XCMPLX_0:def 2;
     then
-A41: (y-y0)*<i> in dom Re R by COMSEQ_3:def 3;
+A45: (y-y0)*<i> in dom Re R by COMSEQ_3:def 3;
     assume y in Ny0;
     then
-A43: x0+y*<i> in N by A36;
+A46: x0+y*<i> in N by A40;
     then x0+y*<i> in dom f by A12;
     then
-A44: x0+y*<i> in dom Re f by COMSEQ_3:def 3;
-A45: x0+y0*<i> in N by A3,CFDIFF_1:7;
+A47: x0+y*<i> in dom Re f by COMSEQ_3:def 3;
+A48: x0+y0*<i> in N by A3,CFDIFF_1:7;
     then x0+y0*<i> in dom f by A12;
     then
-A46: x0+y0*<i> in dom Re f by COMSEQ_3:def 3;
+A49: x0+y0*<i> in dom Re f by COMSEQ_3:def 3;
     (x0+y*<i>)-(x0+y0*<i>) in COMPLEX by XCMPLX_0:def 2;
     then
-a2: R.((x0+y*<i>)-(x0+y0*<i>)) = R/.((x0+y*<i>)-(x0+y0*<i>))
-    by b2,PARTFUN1:def 8;
-    u.<*x0,y*> - u.<*x0,y0*> = (Re f).(x0+y*<i>) - u.<*x0,y0*> by A1,A12,A43
-      .=(Re f).(x0+y*<i>) - (Re f).(x0+y0*<i>) by A1,A12,A45
-      .= Re (f.(x0+y*<i>)) -(Re f).(x0+y0*<i>) by A44,COMSEQ_3:def 3
-      .= Re (f.(x0+y*<i>)) -Re (f.(x0+y0*<i>)) by A46,COMSEQ_3:def 3
+A50: R.((x0+y*<i>)-(x0+y0*<i>)) = R/.((x0+y*<i>)-(x0+y0*<i>))
+    by A21,PARTFUN1:def 8;
+    u.<*x0,y*> - u.<*x0,y0*> = (Re f).(x0+y*<i>) - u.<*x0,y0*> by A1,A12,A46
+      .=(Re f).(x0+y*<i>) - (Re f).(x0+y0*<i>) by A1,A12,A48
+      .= Re (f.(x0+y*<i>)) -(Re f).(x0+y0*<i>) by A47,COMSEQ_3:def 3
+      .= Re (f.(x0+y*<i>)) -Re (f.(x0+y0*<i>)) by A49,COMSEQ_3:def 3
       .= Re (f.(x0+y*<i>)-f.(x0+y0*<i>)) by COMPLEX1:48
       .= Re ( diff(f,z0)*((x0+y*<i>)-(x0+y0*<i>)) +R/.((x0+y*<i>)-(x0+y0*<i>
-    ))) by A18,A43,A45
+    ))) by A19,A46,A48
       .= Re ( diff(f,z0)*((x0+y*<i>)-(x0+y0*<i>))) +Re (R/.((x0+y*<i>)-(x0+
     y0*<i>))) by COMPLEX1:19
       .= (Re diff(f,z0))*(x0-x0)-(Im diff(f,z0))*(y-y0) +Re (R/.((x0+y*<i>)-
-    (x0+y0*<i>))) by A39
+    (x0+y0*<i>))) by A43
       .= -(Im diff(f,z0))*(y-y0) + (Re R).((x0-x0)+ (y-y0)*<i>)
-      by a2,A41,COMSEQ_3:def 3;
+      by A50,A45,COMSEQ_3:def 3;
     hence thesis;
   end;
-A47: for y be Real st y in Ny0 holds (u*reproj(2,xy0)).y - (u*reproj(2,xy0)
+A51: for y be Real st y in Ny0 holds (u*reproj(2,xy0)).y - (u*reproj(2,xy0)
   ).y0 = LD3.(y-y0) + R2.(y-y0)
   proof
     let y be Real;
     assume
-A48: y in Ny0;
+A52: y in Ny0;
     thus (u*reproj(2,xy0)).y - (u*reproj(2,xy0)).y0 = u.<*x0,y*> - (u*reproj(2
     ,xy0)).y0 by A9
       .= u.<*x0,y*> - u.<*x0,y0*> by A9
-      .= -(Im diff(f,z0))*(y-y0) + (Re R).((x0-x0)+(y-y0)*<i>) by A40,A48
+      .= -(Im diff(f,z0))*(y-y0) + (Re R).((x0-x0)+(y-y0)*<i>) by A44,A52
       .= LD3.(y-y0) + (Re R).((x0-x0)+ (y-y0)*<i>) by A11
-      .= LD3.(y-y0) + R2.(y-y0) by A26;
+      .= LD3.(y-y0) + R2.(y-y0) by A29;
   end;
-A49: for x,y be Real holds Im (diff(f,z0)*((x+y*<i>)-(x0+y0*<i>))) = (Im
+A53: for x,y be Real holds Im (diff(f,z0)*((x+y*<i>)-(x0+y0*<i>))) = (Im
   diff(f,z0)) * (x-x0)+(Re diff(f,z0))*(y-y0)
   proof
     let x, y be Real;
     thus Im (diff(f,z0)*((x+y*<i>)-(x0+y0*<i>))) = Im (((Re diff(f,z0)) * (x-
 x0)-(Im diff(f,z0))*(y-y0)) + ((Im diff(f,z0)) * (x-x0)+(Re diff(f,z0))*(y-y0))
-    *<i> ) by A38
+    *<i> ) by A42
       .= (Im diff(f,z0)) * (x-x0)+(Re diff(f,z0))*(y-y0) by COMPLEX1:28;
   end;
-A50: for y be Real st y in Ny0 holds v.<*x0,y*> - v.<*x0,y0*> = (Re diff(f,
+A54: for y be Real st y in Ny0 holds v.<*x0,y*> - v.<*x0,y0*> = (Re diff(f,
   z0))*(y-y0) + (Im R).((x0-x0)+(y-y0)*<i>)
   proof
     let y be Real;
-    (x0+y*<i>)-(x0+y0*<i>) in dom R by A25,XCMPLX_0:def 2;
+    (x0+y*<i>)-(x0+y0*<i>) in dom R by A28,XCMPLX_0:def 2;
     then
-A51: (y-y0)*<i> in dom Im R by COMSEQ_3:def 4;
+A55: (y-y0)*<i> in dom Im R by COMSEQ_3:def 4;
     assume y in Ny0;
     then
-A53: x0+y*<i> in N by A36;
+A56: x0+y*<i> in N by A40;
     then x0+y*<i> in dom f by A12;
     then
-A54: x0+y*<i> in dom Im f by COMSEQ_3:def 4;
-A55: x0+y0*<i> in N by A3,CFDIFF_1:7;
+A57: x0+y*<i> in dom Im f by COMSEQ_3:def 4;
+A58: x0+y0*<i> in N by A3,CFDIFF_1:7;
     then x0+y0*<i> in dom f by A12;
     then
-A56: x0+y0*<i> in dom Im f by COMSEQ_3:def 4;
+A59: x0+y0*<i> in dom Im f by COMSEQ_3:def 4;
      (x0+y*<i>)-(x0+y0*<i>) in COMPLEX by XCMPLX_0:def 2;
      then
-a3:  R.((x0+y*<i>)-(x0+y0*<i>)) = R/.((x0+y*<i>)-(x0+y0*<i>))
-     by b2,PARTFUN1:def 8;
-    v.<*x0,y*> - v.<*x0,y0*> = (Im f).(x0+y*<i>) - v.<*x0,y0*> by A2,A12,A53
-      .=(Im f).(x0+y*<i>) - (Im f).(x0+y0*<i>) by A2,A12,A55
-      .= Im (f.(x0+y*<i>)) -(Im f).(x0+y0*<i>) by A54,COMSEQ_3:def 4
-      .= Im (f.(x0+y*<i>)) -Im (f.(x0+y0*<i>)) by A56,COMSEQ_3:def 4
+A60:  R.((x0+y*<i>)-(x0+y0*<i>)) = R/.((x0+y*<i>)-(x0+y0*<i>))
+     by A21,PARTFUN1:def 8;
+    v.<*x0,y*> - v.<*x0,y0*> = (Im f).(x0+y*<i>) - v.<*x0,y0*> by A2,A12,A56
+      .=(Im f).(x0+y*<i>) - (Im f).(x0+y0*<i>) by A2,A12,A58
+      .= Im (f.(x0+y*<i>)) -(Im f).(x0+y0*<i>) by A57,COMSEQ_3:def 4
+      .= Im (f.(x0+y*<i>)) -Im (f.(x0+y0*<i>)) by A59,COMSEQ_3:def 4
       .= Im (f.(x0+y*<i>)-f.(x0+y0*<i>)) by COMPLEX1:48
       .= Im ( diff(f,z0)*((x0+y*<i>)-(x0+y0*<i>)) +R/.((x0+y*<i>)-(x0+y0*<i>
-    ))) by A18,A53,A55
+    ))) by A19,A56,A58
       .= Im ( diff(f,z0)*((x0+y*<i>)-(x0+y0*<i>))) + Im (R/.((x0+y*<i>)-(x0+
     y0*<i>))) by COMPLEX1:19
       .= (Im diff(f,z0)) * (x0-x0)+(Re diff(f,z0))*(y-y0) + Im (R/.((x0+y*
-    <i>)-(x0+y0*<i>))) by A49
+    <i>)-(x0+y0*<i>))) by A53
       .= (Re diff(f,z0))*(y-y0) + (Im R).((x0-x0)+(y-y0)*<i>)
-      by a3,A51,COMSEQ_3:def 4;
+      by A60,A55,COMSEQ_3:def 4;
     hence thesis;
   end;
-A57: for y be Real st y in Ny0 holds (v*reproj(2,xy0)).y - (v*reproj(2,xy0)
+A61: for y be Real st y in Ny0 holds (v*reproj(2,xy0)).y - (v*reproj(2,xy0)
   ).y0 = LD1.(y-y0) + R4.(y-y0)
   proof
     let y be Real;
     assume
-A58: y in Ny0;
+A62: y in Ny0;
     thus (v*reproj(2,xy0)).y - (v*reproj(2,xy0)).y0 = v.<*x0,y*> - (v*reproj(2
     ,xy0)).y0 by A8
       .= v.<*x0,y*> - v.<*x0,y0*> by A8
-      .= (Re diff(f,z0))*(y-y0) + (Im R).((x0-x0)+(y-y0)*<i>) by A50,A58
+      .= (Re diff(f,z0))*(y-y0) + (Im R).((x0-x0)+(y-y0)*<i>) by A54,A62
       .= LD1.(y-y0) + (Im R).((x0-x0)+(y-y0) *<i>) by A7
       .= LD1.(y-y0) + R4.(y-y0) by A15;
   end;
@@ -529,21 +529,21 @@ A58: y in Ny0;
     let s be set;
     assume s in (reproj(2,xy0)).:Ny0;
     then consider y being Element of REAL such that
-A59: y in Ny0 and
-A60: s = (reproj(2,xy0)).y by FUNCT_2:116;
-A61: x0+y*<i> in N by A36,A59;
-    s=Replace(xy0,2,y) by A60,PDIFF_1:def 5
+A63: y in Ny0 and
+A64: s = (reproj(2,xy0)).y by FUNCT_2:116;
+A65: x0+y*<i> in N by A40,A63;
+    s=Replace(xy0,2,y) by A64,PDIFF_1:def 5
       .= <* x0, y *> by A4,FINSEQ_7:16;
-    hence s in dom v by A2,A12,A61;
+    hence s in dom v by A2,A12,A65;
   end;
   then dom (reproj(2,xy0)) = REAL & (reproj(2,xy0)).:Ny0 c= dom v by
 FUNCT_2:def 1,TARSKI:def 3;
   then
-A62: Ny0 c= dom (v*reproj(2,xy0)) by FUNCT_3:3;
+A66: Ny0 c= dom (v*reproj(2,xy0)) by FUNCT_3:3;
   then
-A63: v*reproj(2,xy0) is_differentiable_in proj(2,2).xy0 by A10,A57,
+A67: v*reproj(2,xy0) is_differentiable_in proj(2,2).xy0 by A10,A61,
 FDIFF_1:def 5;
-A64: for x be Real holds (v*reproj(1,xy0)).x=v.<*x,y0*>
+A68: for x be Real holds (v*reproj(1,xy0)).x=v.<*x,y0*>
   proof
     let x be Real;
     x in REAL;
@@ -556,34 +556,34 @@ A64: for x be Real holds (v*reproj(1,xy0)).x=v.<*x,y0*>
     let s be set;
     assume s in (reproj(2,xy0)).:Ny0;
     then consider y being Element of REAL such that
-A65: y in Ny0 and
-A66: s = (reproj(2,xy0)).y by FUNCT_2:116;
-A67: x0+y*<i> in N by A36,A65;
-    s=Replace(xy0,2,y) by A66,PDIFF_1:def 5
+A69: y in Ny0 and
+A70: s = (reproj(2,xy0)).y by FUNCT_2:116;
+A71: x0+y*<i> in N by A40,A69;
+    s=Replace(xy0,2,y) by A70,PDIFF_1:def 5
       .= <* x0, y *> by A4,FINSEQ_7:16;
-    hence s in dom u by A1,A12,A67;
+    hence s in dom u by A1,A12,A71;
   end;
   then dom (reproj(2,xy0)) = REAL & (reproj(2,xy0)).:Ny0 c= dom u by
 FUNCT_2:def 1,TARSKI:def 3;
   then
-A68: Ny0 c= dom (u*reproj(2,xy0)) by FUNCT_3:3;
+A72: Ny0 c= dom (u*reproj(2,xy0)) by FUNCT_3:3;
   then
-A69: u*reproj(2,xy0) is_differentiable_in proj(2,2).xy0 by A10,A47,
+A73: u*reproj(2,xy0) is_differentiable_in proj(2,2).xy0 by A10,A51,
 FDIFF_1:def 5;
   LD3.1 = - (Im diff(f,z0))*1 by A11
     .= - (Im diff(f,z0));
   then
-A70: partdiff(u,xy0,2) = -Im diff(f,z0) by A10,A47,A68,A69,FDIFF_1:def 6;
-A71: LD1.1 = (Re diff(f,z0))*1 by A7
+A74: partdiff(u,xy0,2) = -Im diff(f,z0) by A10,A51,A72,A73,FDIFF_1:def 6;
+A75: LD1.1 = (Re diff(f,z0))*1 by A7
     .= Re diff(f,z0);
-A72: proj(1,2).xy0 = xy0.1 by PDIFF_1:def 1
+A76: proj(1,2).xy0 = xy0.1 by PDIFF_1:def 1
     .= x0 by A4,FINSEQ_1:61;
   set Nx0 = ].x0-r0,x0+r0.[;
-  reconsider Nx0 as Neighbourhood of x0 by A34,RCOMP_1:def 7;
+  reconsider Nx0 as Neighbourhood of x0 by A38,RCOMP_1:def 7;
   deffunc RF3(Real) = (Im R).$1;
   consider R3 be Function of REAL, REAL such that
-A73: for y be Real holds R3.y =RF3(y) from FUNCT_2:sch 4;
-A74: for h be convergent_to_0 Real_Sequence holds (h")(#)(R3/*h) is
+A77: for y be Real holds R3.y =RF3(y) from FUNCT_2:sch 4;
+A78: for h be convergent_to_0 Real_Sequence holds (h")(#)(R3/*h) is
   convergent & lim ((h")(#)(R3/*h)) = 0
   proof
     let h be convergent_to_0 Real_Sequence;
@@ -591,98 +591,98 @@ A74: for h be convergent_to_0 Real_Sequence holds (h")(#)(R3/*h) is
     then reconsider hz =h as Complex_Sequence by FUNCT_2:8;
     reconsider hz as convergent_to_0 Complex_Sequence by Lm4;
     now
-d2:   dom R = COMPLEX by PARTFUN1:def 4;
+A79:   dom R = COMPLEX by PARTFUN1:def 4;
       then
-A75:  rng hz c= dom R;
+A80:  rng hz c= dom R;
       let n be Element of NAT;
-A76:  Im ((h.n)") = 0 & Re ((h.n)") = (h.n)" by COMPLEX1:def 2,def 3;
-A77:  dom R3=REAL by PARTFUN1:def 4;
+A81:  Im ((h.n)") = 0 & Re ((h.n)") = (h.n)" by COMPLEX1:def 2,def 3;
+A82:  dom R3=REAL by PARTFUN1:def 4;
       then
-A78:  rng h c= dom R3;
-      dom R3 c= dom Im R by A77,Th1,NUMBERS:11;
+A83:  rng h c= dom R3;
+      dom R3 c= dom Im R by A82,Th1,NUMBERS:11;
       then
-A79:  h.n in dom Im R by A77,TARSKI:def 3;
+A84:  h.n in dom Im R by A82,TARSKI:def 3;
       h.n in COMPLEX by XCMPLX_0:def 2;
       then
-d1:   R/.(h.n) = R.(h.n) by d2,PARTFUN1:def 8;
+A85:   R/.(h.n) = R.(h.n) by A79,PARTFUN1:def 8;
       thus ((h")(#)(R3/*h)).n = (h").n*((R3/*h).n) by SEQ_1:12
         .= (h.n)"*((R3/*h).n) by VALUED_1:10
-        .= (h.n)"*(R3.(h.n)) by A78,FUNCT_2:185
-        .= (h.n)"* (Im R).(h.n) by A73
+        .= (h.n)"*(R3.(h.n)) by A83,FUNCT_2:185
+        .= (h.n)"* (Im R).(h.n) by A77
         .= Re ((h.n)")*Im (R/.(h.n)) + Re (R/.(h.n))*Im ((h.n)")
-        by d1,A79,A76,COMSEQ_3:def 4
+        by A85,A84,A81,COMSEQ_3:def 4
         .= Im ((h.n)"* (R/.(h.n))) by COMPLEX1:24
         .= Im ((hz").n * (R/.(hz.n))) by VALUED_1:10
-        .= Im ((hz").n * (R/*hz).n) by A75,FUNCT_2:186
+        .= Im ((hz").n * (R/*hz).n) by A80,FUNCT_2:186
         .= Im (((hz")(#)(R/*hz)).n) by VALUED_1:5;
     end;
     then
-A80: (h")(#)(R3/*h) = Im ((hz")(#)(R/*hz)) by COMSEQ_3:def 6;
+A86: (h")(#)(R3/*h) = Im ((hz")(#)(R/*hz)) by COMSEQ_3:def 6;
     (hz")(#)(R/*hz) is convergent & lim ((hz")(#)(R/*hz)) = 0
     by CFDIFF_1:def 3;
-    hence thesis by A80,COMPLEX1:12,COMSEQ_3:41;
+    hence thesis by A86,COMPLEX1:12,COMSEQ_3:41;
   end;
   deffunc RF1(Real) = (Re R).$1;
   consider R1 be Function of REAL,REAL such that
-A81: for x be Real holds R1.x = RF1(x) from FUNCT_2:sch 4;
-  reconsider R3 as REST by A74,FDIFF_1:def 3;
-A82: for x be Real st x in Nx0 holds x+y0*<i> in N
+A87: for x be Real holds R1.x = RF1(x) from FUNCT_2:sch 4;
+  reconsider R3 as REST by A78,FDIFF_1:def 3;
+A88: for x be Real st x in Nx0 holds x+y0*<i> in N
   proof
     let x be Real;
     assume x in Nx0;
     then |.x-x0.| < r0 by RCOMP_1:8;
     then x+y0*<i> is Complex & |. (x+y0*<i>) - z0 .| < r0 by A3,XCMPLX_0:def 2;
     then (x+y0*<i>) in {y where y is Complex : |.y-z0.| < r0};
-    hence (x+y0*<i>) in N by A35;
+    hence (x+y0*<i>) in N by A39;
   end;
-A83: for x be Real st x in Nx0 holds v.<*x,y0*> - v.<*x0,y0*> = (Im diff(f,
+A89: for x be Real st x in Nx0 holds v.<*x,y0*> - v.<*x0,y0*> = (Im diff(f,
   z0)) * (x-x0)+ (Im R).((x-x0) + 0 *<i>)
   proof
     let x be Real;
-    (x+y0*<i>)-(x0+y0*<i>) in dom R by A25,XCMPLX_0:def 2;
+    (x+y0*<i>)-(x0+y0*<i>) in dom R by A28,XCMPLX_0:def 2;
     then
-A84: x-x0 in dom Im R by COMSEQ_3:def 4;
+A90: x-x0 in dom Im R by COMSEQ_3:def 4;
     assume x in Nx0;
     then
-A86: x+y0*<i> in N by A82;
+A91: x+y0*<i> in N by A88;
     then x+y0*<i> in dom f by A12;
     then
-A87: x+y0*<i> in dom Im f by COMSEQ_3:def 4;
-A88: x0+y0*<i> in N by A3,CFDIFF_1:7;
+A92: x+y0*<i> in dom Im f by COMSEQ_3:def 4;
+A93: x0+y0*<i> in N by A3,CFDIFF_1:7;
     then x0+y0*<i> in dom f by A12;
     then
-A89: x0+y0*<i> in dom Im f by COMSEQ_3:def 4;
+A94: x0+y0*<i> in dom Im f by COMSEQ_3:def 4;
      (x+y0*<i>)-(x0+y0*<i>) in COMPLEX by XCMPLX_0:def 2;
      then
-a4:  R.((x+y0*<i>)-(x0+y0*<i>)) = R/.((x+y0*<i>)-(x0+y0*<i>))
-     by b2,PARTFUN1:def 8;
-    v.<*x,y0*> - v.<*x0,y0*> = (Im f).(x+y0*<i>) - v.<*x0,y0*> by A2,A12,A86
-      .=(Im f).(x+y0*<i>) - (Im f).(x0+y0*<i>) by A2,A12,A88
-      .= Im (f.(x+y0*<i>)) -(Im f).(x0+y0*<i>) by A87,COMSEQ_3:def 4
-      .= Im (f.(x+y0*<i>)) -Im (f.(x0+y0*<i>)) by A89,COMSEQ_3:def 4
+A95:  R.((x+y0*<i>)-(x0+y0*<i>)) = R/.((x+y0*<i>)-(x0+y0*<i>))
+     by A21,PARTFUN1:def 8;
+    v.<*x,y0*> - v.<*x0,y0*> = (Im f).(x+y0*<i>) - v.<*x0,y0*> by A2,A12,A91
+      .=(Im f).(x+y0*<i>) - (Im f).(x0+y0*<i>) by A2,A12,A93
+      .= Im (f.(x+y0*<i>)) -(Im f).(x0+y0*<i>) by A92,COMSEQ_3:def 4
+      .= Im (f.(x+y0*<i>)) -Im (f.(x0+y0*<i>)) by A94,COMSEQ_3:def 4
       .= Im (f.(x+y0*<i>)-f.(x0+y0*<i>)) by COMPLEX1:48
       .= Im ( diff(f,z0)*((x+y0*<i>)-(x0+y0*<i>)) +R/.((x+y0*<i>)-(x0+y0*<i>
-    ))) by A18,A86,A88
+    ))) by A19,A91,A93
       .= Im ( diff(f,z0)*((x+y0*<i>)-(x0+y0*<i>))) + Im (R/.((x+y0*<i>)-(x0+
     y0*<i>))) by COMPLEX1:19
       .= (Im diff(f,z0)) * (x-x0)+(Re diff(f,z0))*(y0-y0) + Im (R/.((x+y0*
-    <i>)-(x0+y0*<i>))) by A49
+    <i>)-(x0+y0*<i>))) by A53
       .= (Im diff(f,z0)) * (x-x0)+ (Im R).((x-x0) + 0 *<i>)
-      by a4,A84,COMSEQ_3:def 4;
+      by A95,A90,COMSEQ_3:def 4;
     hence thesis;
   end;
-A90: for x be Real st x in Nx0 holds (v*reproj(1,xy0)).x - (v*reproj(1,xy0)
+A96: for x be Real st x in Nx0 holds (v*reproj(1,xy0)).x - (v*reproj(1,xy0)
   ).x0 = LD2.(x-x0)+ R3.(x-x0)
   proof
     let x be Real;
     assume
-A91: x in Nx0;
+A97: x in Nx0;
     thus (v*reproj(1,xy0)).x - (v*reproj(1,xy0)).x0 = v.<*x,y0*> - (v*reproj(1
-    ,xy0)).x0 by A64
-      .= v.<*x,y0*> - v.<*x0,y0*> by A64
-      .= (Im diff(f,z0))*(x-x0) + (Im R).((x-x0)+ 0 *<i>) by A83,A91
+    ,xy0)).x0 by A68
+      .= v.<*x,y0*> - v.<*x0,y0*> by A68
+      .= (Im diff(f,z0))*(x-x0) + (Im R).((x-x0)+ 0 *<i>) by A89,A97
       .= LD2.(x-x0) + (Im R).((x-x0)+ 0 *<i>) by A6
-      .= LD2.(x-x0) + R3.(x-x0) by A73;
+      .= LD2.(x-x0) + R3.(x-x0) by A77;
   end;
   for h be convergent_to_0 Real_Sequence holds (h")(#)(R1/*h) is
   convergent & lim ((h")(#)(R1/*h)) = 0
@@ -694,36 +694,36 @@ A91: x in Nx0;
     now
       dom R= COMPLEX by PARTFUN1:def 4;
       then
-A92:  rng hz c= dom R;
+A98:  rng hz c= dom R;
       let n be Element of NAT;
-A93:  Im ((h.n)") = 0 & Re ((h.n)") = (h.n)" by COMPLEX1:def 2,def 3;
-A94:  dom R1=REAL by PARTFUN1:def 4;
+A99:  Im ((h.n)") = 0 & Re ((h.n)") = (h.n)" by COMPLEX1:def 2,def 3;
+A100:  dom R1=REAL by PARTFUN1:def 4;
       then
-A95:  rng h c= dom R1;
-      dom R1 c= dom Re R by A94,Th1,NUMBERS:11;
+A101:  rng h c= dom R1;
+      dom R1 c= dom Re R by A100,Th1,NUMBERS:11;
       then
-A96:  h.n in dom Re R by A94,TARSKI:def 3;
+A102:  h.n in dom Re R by A100,TARSKI:def 3;
       thus ((h")(#)(R1/*h)).n = (h").n*((R1/*h).n) by SEQ_1:12
         .= (h.n)"*((R1/*h).n) by VALUED_1:10
-        .= (h.n)"*(R1/.(h.n)) by A95,FUNCT_2:186
-        .= (h.n)"* (Re R).(h.n) by A81
-        .= Re ((h.n)")* Re (R.(h.n)) - Im ((h.n)")* Im (R.(h.n)) by A96,A93
+        .= (h.n)"*(R1/.(h.n)) by A101,FUNCT_2:186
+        .= (h.n)"* (Re R).(h.n) by A87
+        .= Re ((h.n)")* Re (R.(h.n)) - Im ((h.n)")* Im (R.(h.n)) by A102,A99
 ,COMSEQ_3:def 3
         .= Re ((h.n)"* (R.(h.n))) by COMPLEX1:24
         .= Re ((hz").n * (R/.(hz.n))) by VALUED_1:10
-        .= Re ((hz").n * (R/*hz).n) by A92,FUNCT_2:186
+        .= Re ((hz").n * (R/*hz).n) by A98,FUNCT_2:186
         .= Re (( (hz")(#)(R/*hz) ).n ) by VALUED_1:5;
     end;
     then
-A97: (h")(#)(R1/*h) = Re ((hz")(#)(R/*hz)) by COMSEQ_3:def 5;
+A103: (h")(#)(R1/*h) = Re ((hz")(#)(R/*hz)) by COMSEQ_3:def 5;
     (hz")(#)(R/*hz) is convergent & lim ((hz")(#)(R/*hz)) = 0
     by CFDIFF_1:def 3;
-    hence thesis by A97,COMPLEX1:12,COMSEQ_3:41;
+    hence thesis by A103,COMPLEX1:12,COMSEQ_3:41;
   end;
   then reconsider R1 as REST by FDIFF_1:def 3;
-A98: LD2.1 = (Im diff(f,z0))*1 by A6
+A104: LD2.1 = (Im diff(f,z0))*1 by A6
     .= Im diff(f,z0);
-A99: for x be Real holds (u*reproj(1,xy0)).x=u.<*x,y0*>
+A105: for x be Real holds (u*reproj(1,xy0)).x=u.<*x,y0*>
   proof
     let x be Real;
     x in REAL;
@@ -732,91 +732,91 @@ A99: for x be Real holds (u*reproj(1,xy0)).x=u.<*x,y0*>
       .= u.(Replace(xy0,1,x)) by PDIFF_1:def 5
       .= u.<*x,y0*> by A4,FINSEQ_7:15;
   end;
-A100: for x be Real st x in Nx0 holds u.<*x,y0*> - u.<*x0,y0*> = (Re diff(f,
+A106: for x be Real st x in Nx0 holds u.<*x,y0*> - u.<*x0,y0*> = (Re diff(f,
   z0)) * (x-x0) + (Re R).((x-x0)+0 *<i>)
   proof
     let x be Real;
-    (x+y0*<i>)-(x0+y0*<i>) in dom R by A25,XCMPLX_0:def 2;
+    (x+y0*<i>)-(x0+y0*<i>) in dom R by A28,XCMPLX_0:def 2;
     then
-A101: (x-x0) in dom Re R by COMSEQ_3:def 3;
+A107: (x-x0) in dom Re R by COMSEQ_3:def 3;
     assume x in Nx0;
     then
-A103: x+y0*<i> in N by A82;
+A108: x+y0*<i> in N by A88;
     then x+y0*<i> in dom f by A12;
     then
-A104: x+y0*<i> in dom Re f by COMSEQ_3:def 3;
-A105: x0+y0*<i> in N by A3,CFDIFF_1:7;
+A109: x+y0*<i> in dom Re f by COMSEQ_3:def 3;
+A110: x0+y0*<i> in N by A3,CFDIFF_1:7;
     then x0+y0*<i> in dom f by A12;
     then
-A106: x0+y0*<i> in dom Re f by COMSEQ_3:def 3;
+A111: x0+y0*<i> in dom Re f by COMSEQ_3:def 3;
       (x+y0*<i>)-(x0+y0*<i>) in COMPLEX by XCMPLX_0:def 2;
       then
-a5:   R.((x+y0*<i>)-(x0+y0*<i>)) = R/.((x+y0*<i>)-(x0+y0*<i>))
-      by b2,PARTFUN1:def 8;
-    u.<*x,y0*> - u.<*x0,y0*> = (Re f).(x+y0*<i>) - u.<*x0,y0*> by A1,A12,A103
-      .=(Re f).(x+y0*<i>) - (Re f).(x0+y0*<i>) by A1,A12,A105
-      .= Re (f.(x+y0*<i>)) -(Re f).(x0+y0*<i>) by A104,COMSEQ_3:def 3
-      .= Re (f.(x+y0*<i>)) -Re (f.(x0+y0*<i>)) by A106,COMSEQ_3:def 3
+A112:   R.((x+y0*<i>)-(x0+y0*<i>)) = R/.((x+y0*<i>)-(x0+y0*<i>))
+      by A21,PARTFUN1:def 8;
+    u.<*x,y0*> - u.<*x0,y0*> = (Re f).(x+y0*<i>) - u.<*x0,y0*> by A1,A12,A108
+      .=(Re f).(x+y0*<i>) - (Re f).(x0+y0*<i>) by A1,A12,A110
+      .= Re (f.(x+y0*<i>)) -(Re f).(x0+y0*<i>) by A109,COMSEQ_3:def 3
+      .= Re (f.(x+y0*<i>)) -Re (f.(x0+y0*<i>)) by A111,COMSEQ_3:def 3
       .= Re (f.(x+y0*<i>)-f.(x0+y0*<i>)) by COMPLEX1:48
       .= Re ( diff(f,z0)*((x+y0*<i>)-(x0+y0*<i>)) + R/.((x+y0*<i>)-(x0+y0*
-    <i>))) by A18,A103,A105
+    <i>))) by A19,A108,A110
       .= Re ( diff(f,z0)*((x+y0*<i>)-(x0+y0*<i>))) + Re (R/.((x+y0*<i>)-(x0+
     y0*<i>))) by COMPLEX1:19
       .= (Re diff(f,z0)) * (x-x0)-(Im diff(f,z0))*(y0-y0) + Re (R/.((x+y0*
-    <i>)-(x0+y0*<i>))) by A39
+    <i>)-(x0+y0*<i>))) by A43
       .= (Re diff(f,z0)) * (x-x0) + (Re R).((x-x0)+0 *<i>)
-      by a5,A101,COMSEQ_3:def 3;
+      by A112,A107,COMSEQ_3:def 3;
     hence thesis;
   end;
-A107: for x be Real st x in Nx0 holds (u*reproj(1,xy0)).x - (u*reproj(1,xy0)
+A113: for x be Real st x in Nx0 holds (u*reproj(1,xy0)).x - (u*reproj(1,xy0)
   ).x0 = LD1.(x-x0) + R1.(x-x0)
   proof
     let x be Real;
     assume
-A108: x in Nx0;
+A114: x in Nx0;
     thus (u*reproj(1,xy0)).x - (u*reproj(1,xy0)).x0 = u.<*x,y0*> - (u*reproj(1
-    ,xy0)).x0 by A99
-      .= u.<*x,y0*> - u.<*x0,y0*> by A99
-      .= (Re diff(f,z0)) * (x-x0) + (Re R).((x-x0)+0 *<i>) by A100,A108
+    ,xy0)).x0 by A105
+      .= u.<*x,y0*> - u.<*x0,y0*> by A105
+      .= (Re diff(f,z0)) * (x-x0) + (Re R).((x-x0)+0 *<i>) by A106,A114
       .= LD1.(x-x0) + (Re R).((x-x0)+0 *<i>) by A7
-      .= LD1.(x-x0) + R1.(x-x0) by A81;
+      .= LD1.(x-x0) + R1.(x-x0) by A87;
   end;
   now
     let s be set;
     assume s in (reproj(1,xy0)).:Nx0;
     then consider x being Element of REAL such that
-A109: x in Nx0 and
-A110: s = (reproj(1,xy0)).x by FUNCT_2:116;
-A111: x+y0*<i> in N by A82,A109;
-    s=Replace(xy0,1,x) by A110,PDIFF_1:def 5
+A115: x in Nx0 and
+A116: s = (reproj(1,xy0)).x by FUNCT_2:116;
+A117: x+y0*<i> in N by A88,A115;
+    s=Replace(xy0,1,x) by A116,PDIFF_1:def 5
       .= <* x, y0 *> by A4,FINSEQ_7:15;
-    hence s in dom v by A2,A12,A111;
+    hence s in dom v by A2,A12,A117;
   end;
   then dom (reproj(1,xy0)) = REAL & (reproj(1,xy0)).:Nx0 c= dom v by
 FUNCT_2:def 1,TARSKI:def 3;
   then
-A112: Nx0 c= dom (v*reproj(1,xy0)) by FUNCT_3:3;
+A118: Nx0 c= dom (v*reproj(1,xy0)) by FUNCT_3:3;
   then
-A113: v*reproj(1,xy0) is_differentiable_in proj(1,2).xy0 by A72,A90,
+A119: v*reproj(1,xy0) is_differentiable_in proj(1,2).xy0 by A76,A96,
 FDIFF_1:def 5;
   now
     let s be set;
     assume s in (reproj(1,xy0)).:Nx0;
     then consider x being Element of REAL such that
-A114: x in Nx0 and
-A115: s = (reproj(1,xy0)).x by FUNCT_2:116;
-A116: x+y0*<i> in N by A82,A114;
-    s=Replace(xy0,1,x) by A115,PDIFF_1:def 5
+A120: x in Nx0 and
+A121: s = (reproj(1,xy0)).x by FUNCT_2:116;
+A122: x+y0*<i> in N by A88,A120;
+    s=Replace(xy0,1,x) by A121,PDIFF_1:def 5
       .= <* x, y0 *> by A4,FINSEQ_7:15;
-    hence s in dom u by A1,A12,A116;
+    hence s in dom u by A1,A12,A122;
   end;
   then dom (reproj(1,xy0)) = REAL & (reproj(1,xy0)).:Nx0 c= dom u by
 FUNCT_2:def 1,TARSKI:def 3;
   then
-A117: Nx0 c= dom (u*reproj(1,xy0)) by FUNCT_3:3;
-  then u*reproj(1,xy0) is_differentiable_in proj(1,2).xy0 by A72,A107,
+A123: Nx0 c= dom (u*reproj(1,xy0)) by FUNCT_3:3;
+  then u*reproj(1,xy0) is_differentiable_in proj(1,2).xy0 by A76,A113,
 FDIFF_1:def 5;
-  hence thesis by A72,A10,A107,A90,A57,A117,A69,A70,A98,A112,A113,A71,A62,A63,
+  hence thesis by A76,A10,A113,A96,A61,A123,A73,A74,A104,A118,A119,A75,A66,A67,
 FDIFF_1:def 6,PDIFF_1:def 11;
 end;
 
@@ -931,7 +931,7 @@ A4: |.xx.| = ||.v.|| & Re z = x by A1,A2,COMPLEX1:28,REAL_NS1:1;
   then
 A5: (sqr xx).2 = y^2 by VALUED_1:11;
   xx1`1 = x by FINSEQ_1:61;
-  then len sqr xx = 2 & (sqr xx).1 = x^2 by FINSEQ_1:def 18,VALUED_1:11;
+  then len sqr xx = 2 & (sqr xx).1 = x^2 by CARD_1:def 13,VALUED_1:11;
   then sqr xx = <*x^2,y^2*> by A5,FINSEQ_1:61;
   hence thesis by A4,A3,RVSUM_1:107;
 end;
@@ -1030,7 +1030,7 @@ A1: ||.vx.|| = |.xx.| by REAL_NS1:1;
   then
 A2: (sqr xx).2 = 0^2 by VALUED_1:11;
   xx1`1 = x by FINSEQ_1:61;
-  then len sqr xx = 2 & (sqr xx).1 = x^2 by FINSEQ_1:def 18,VALUED_1:11;
+  then len sqr xx = 2 & (sqr xx).1 = x^2 by CARD_1:def 13,VALUED_1:11;
   then sqr xx = <*x^2,0^2*> by A2,FINSEQ_1:61;
   then sqrt Sum sqr xx = sqrt ( x^2+0^2 ) by RVSUM_1:107
     .= sqrt ( x^2+0 * 0) by SQUARE_1:def 3;
@@ -1050,7 +1050,7 @@ A1: ||.vx.|| = |.xx.| by REAL_NS1:1;
   then
 A2: (sqr xx).2 = x^2 by VALUED_1:11;
   xx1`1 = 0 by FINSEQ_1:61;
-  then len sqr xx = 2 & (sqr xx).1 = 0^2 by FINSEQ_1:def 18,VALUED_1:11;
+  then len sqr xx = 2 & (sqr xx).1 = 0^2 by CARD_1:def 13,VALUED_1:11;
   then sqr xx = <*0^2,x^2*> by A2,FINSEQ_1:61;
   then sqrt Sum sqr xx = sqrt ( 0^2+x^2 ) by RVSUM_1:107
     .= sqrt ( (0 * 0)+x^2 ) by SQUARE_1:def 3
@@ -1076,7 +1076,7 @@ proof
   let v be Element of REAL-NS 1;
   reconsider x=proj(1,1).v as Real;
   reconsider w=v as Element of REAL 1 by REAL_NS1:def 4;
-  len w = 1 & w.1 = x by FINSEQ_1:def 18,PDIFF_1:def 1;
+  len w = 1 & w.1 = x by CARD_1:def 13,PDIFF_1:def 1;
   then <* x *> = w by FINSEQ_1:57;
   hence thesis by Lm21;
 end;
@@ -1831,12 +1831,12 @@ A67: (v.<*x,y*>-v.<*x0,y0*>)*<i> = (partdiff(v,xy0,1)*(x-x0)+partdiff(u,
 A68: x+y*<i> in dom f by A1,A19,A34,A52;
     then
 A69: x+y*<i> in dom (Re f) by COMSEQ_3:def 3;
-c1:  f/.(x+y*<i>) = f.(x+y*<i>) & f/.(x0+y0*<i>) = f.(x0+y0*<i>)
+A70:  f/.(x+y*<i>) = f.(x+y*<i>) & f/.(x0+y0*<i>) = f.(x0+y0*<i>)
      by A53,A68,PARTFUN1:def 8;
-A70: x+y*<i> in dom (Im f ) by A68,COMSEQ_3:def 4;
+A71: x+y*<i> in dom (Im f ) by A68,COMSEQ_3:def 4;
     f.(x+y*<i>) = Re (f.(x+y*<i>)) + Im(f.(x+y*<i>))*<i> by COMPLEX1:29
       .= (Re f).(x+y*<i>) + Im(f.(x+y*<i>))*<i> by A69,COMSEQ_3:def 3
-      .=(Re f).(x+y*<i>) + (Im f).(x+y*<i>)*<i> by A70,COMSEQ_3:def 4;
+      .=(Re f).(x+y*<i>) + (Im f).(x+y*<i>)*<i> by A71,COMSEQ_3:def 4;
     then f.(x+y*<i>) - f.(x0+y0*<i>) = (u.<*x,y*> + ((Im f).(x+y*<i>))*<i>)
     -((Re f).(x0+y0*<i>) + ((Im f).(x0+y0*<i>))*<i>) by A2,A68,A56
       .=(u.<*x,y*> + ( v.<*x,y*> ) * <i> ) -((Re f).(x0+y0*<i>) + ((Im f).(
@@ -1849,63 +1849,63 @@ A70: x+y*<i> in dom (Im f ) by A68,COMSEQ_3:def 4;
     hence
     f/.(x+y*<i>) - f/.(x0+y0*<i>) =(partdiff(u,xy0,1)+<i>*partdiff(v,xy0,
 1)) *((x-x0)+(y-y0)*<i>) + (proj(1,1).(Ru.<*x-x0,y-y0*>) + (proj(1,1).(Rv.<*x-
-    x0,y-y0*>))*<i>) by c1,A62,A67;
+    x0,y-y0*>))*<i>) by A70,A62,A67;
   end;
-A71: for x,y be Element of REAL st x+y*<i> in N holds abs(x-x0)<r1/2 & abs(y
+A72: for x,y be Element of REAL st x+y*<i> in N holds abs(x-x0)<r1/2 & abs(y
   -y0)<r1/2 & abs(x-x0)<r2/2 & abs(y-y0)<r2/2
   proof
     let x, y be Element of REAL;
     assume x+y*<i> in N;
     then
-A72: ex w be Complex st w=x+y*<i> & |.w-z0.| < r0;
+A73: ex w be Complex st w=x+y*<i> & |.w-z0.| < r0;
     abs(x-x0) <= |. (x-x0) + (y-y0)*<i> .| by Lm17;
     then
-A73: abs(x-x0) < r0 by A4,A72,XXREAL_0:2;
-A74: r0 <=r1/2 by XXREAL_0:17;
-    hence abs(x-x0) < r1/2 by A73,XXREAL_0:2;
+A74: abs(x-x0) < r0 by A4,A73,XXREAL_0:2;
+A75: r0 <=r1/2 by XXREAL_0:17;
+    hence abs(x-x0) < r1/2 by A74,XXREAL_0:2;
     abs(y-y0) <= |. (x-x0) + (y-y0)*<i> .| by Lm17;
     then
-A75: abs(y-y0) < r0 by A4,A72,XXREAL_0:2;
-    hence abs(y-y0) < r1/2 by A74,XXREAL_0:2;
-A76: r0 <=r2/2 by XXREAL_0:17;
-    hence abs(x-x0) < r2/2 by A73,XXREAL_0:2;
-    thus abs(y-y0) < r2/2 by A76,A75,XXREAL_0:2;
+A76: abs(y-y0) < r0 by A4,A73,XXREAL_0:2;
+    hence abs(y-y0) < r1/2 by A75,XXREAL_0:2;
+A77: r0 <=r2/2 by XXREAL_0:17;
+    hence abs(x-x0) < r2/2 by A74,XXREAL_0:2;
+    thus abs(y-y0) < r2/2 by A77,A76,XXREAL_0:2;
   end;
   reconsider N as Neighbourhood of z0 by A17,A36,CFDIFF_1:6,XXREAL_0:21;
   now
     let z be set;
     assume
-A77: z in N;
+A78: z in N;
     then reconsider zz=z as Complex;
     set x=Re zz, y=Im zz;
-    x+y*<i> in N by A77,COMPLEX1:29;
-    then abs(x-x0) < r2/2 & abs(y-y0) < r2/2 by A71;
+    x+y*<i> in N by A78,COMPLEX1:29;
+    then abs(x-x0) < r2/2 & abs(y-y0) < r2/2 by A72;
     then
-A78: abs(x-x0) + abs(y-y0) < r2/2+r2/2 by XREAL_1:10;
+A79: abs(x-x0) + abs(y-y0) < r2/2+r2/2 by XREAL_1:10;
     <*x,y*> in REAL 2 by FINSEQ_2:121;
     then reconsider xy=<*x,y*> as Point of REAL-NS 2 by REAL_NS1:def 4;
     xy-gvxy0 = <* x-x0,y-y0 *> by A5,A20,Lm11;
     then ||.xy-gvxy0.|| <=abs(x-x0) + abs(y-y0) by Lm18;
-    then ||.xy-gvxy0.|| < r2 by A78,XXREAL_0:2;
+    then ||.xy-gvxy0.|| < r2 by A79,XXREAL_0:2;
     then xy in {wxy where wxy is Point of REAL-NS 2 : ||.wxy-gvxy0.|| < r2 };
     then
-A79: <*x,y *> in Nv by A37;
+A80: <*x,y *> in Nv by A37;
     rng v c= dom (proj(1,1)qua Function") by PDIFF_1:2;
     then z=x+y*<i> & dom <>*v = dom v by COMPLEX1:29,RELAT_1:46;
-    hence z in dom f by A1,A19,A34,A79;
+    hence z in dom f by A1,A19,A34,A80;
   end;
   then
-A80: N c= dom f by TARSKI:def 3;
+A81: N c= dom f by TARSKI:def 3;
   defpred R0[Element of COMPLEX, Element of COMPLEX] means $2 = proj(1,1).(Ru.
   <* Re $1, Im $1 *>) + (proj(1,1).(Rv.<* Re $1, Im $1 *>))*<i>;
   reconsider a = (partdiff(u,xy0,1)+<i>*partdiff(v,xy0,1)) as Complex by
 XCMPLX_0:def 2;
   deffunc L0(Element of COMPLEX) = a* $1;
   consider L be Function of COMPLEX,COMPLEX such that
-A81: for x be Element of COMPLEX holds L.x= L0(x) from FUNCT_2:sch 4;
-  L/.z = a*z by A81;
+A82: for x be Element of COMPLEX holds L.x= L0(x) from FUNCT_2:sch 4;
+  L/.z = a*z by A82;
   then reconsider L as C_LINEAR by CFDIFF_1:def 4;
-A82: now
+A83: now
     let z be Element of COMPLEX;
     reconsider y = proj(1,1).(Ru.<* Re z, Im z *>) + (proj(1,1).(Rv.<* Re z,
     Im z *>))*<i> as Element of COMPLEX by XCMPLX_0:def 2;
@@ -1913,38 +1913,38 @@ A82: now
     thus R0[z,y];
   end;
   consider R be Function of COMPLEX,COMPLEX such that
-A83: for z be Element of COMPLEX holds R0[z, R.z] from FUNCT_2:sch 10(
-  A82);
+A84: for z be Element of COMPLEX holds R0[z, R.z] from FUNCT_2:sch 10(
+  A83);
   for h be convergent_to_0 Complex_Sequence holds (h")(#)(R/*h) is
   convergent & lim ((h")(#)(R/*h)) = 0
   proof
     let h be convergent_to_0 Complex_Sequence;
-A84: now
+A85: now
       let r be Real;
       assume
-A85:  0 < r;
+A86:  0 < r;
       Rv is total by NDIFF_1:def 5;
       then consider d2 be Real such that
-A86:  d2 > 0 and
-A87:  for z be Point of REAL-NS 2 st z <> 0.(REAL-NS 2) & ||.z.|| <
-      d2 holds ||.z.||" * ||. Rv/.z .|| < r/2 by A85,NDIFF_1:26;
+A87:  d2 > 0 and
+A88:  for z be Point of REAL-NS 2 st z <> 0.(REAL-NS 2) & ||.z.|| <
+      d2 holds ||.z.||" * ||. Rv/.z .|| < r/2 by A86,NDIFF_1:26;
       Ru is total by NDIFF_1:def 5;
       then consider d1 be Real such that
-A88:  d1 > 0 and
-A89:  for z be Point of REAL-NS 2 st z <> 0.(REAL-NS 2) & ||.z.|| <
-      d1 holds ||.z.||" * ||. Ru/.z .|| < r/2 by A85,NDIFF_1:26;
+A89:  d1 > 0 and
+A90:  for z be Point of REAL-NS 2 st z <> 0.(REAL-NS 2) & ||.z.|| <
+      d1 holds ||.z.||" * ||. Ru/.z .|| < r/2 by A86,NDIFF_1:26;
       set d = min(d1,d2);
-      lim h = 0 & 0 < d by A88,A86,CFDIFF_1:def 1,XXREAL_0:21;
+      lim h = 0 & 0 < d by A89,A87,CFDIFF_1:def 1,XXREAL_0:21;
       then consider M be Element of NAT such that
-A90:  for n be Element of NAT st M<=n holds |. h.n-0 .| < d by COMSEQ_2:def 5;
-A91:  d <=d2 by XXREAL_0:17;
-A92:  d <= d1 by XXREAL_0:17;
+A91:  for n be Element of NAT st M<=n holds |. h.n-0 .| < d by COMSEQ_2:def 5;
+A92:  d <=d2 by XXREAL_0:17;
+A93:  d <= d1 by XXREAL_0:17;
       now
         let n be Element of NAT;
         set x = Re (h.n), y = Im (h.n);
         <*x,y*> in REAL 2 by FINSEQ_2:121;
         then reconsider z=<*x,y*> as Point of REAL-NS 2 by REAL_NS1:def 4;
-A93:    z <> 0.(REAL-NS 2)
+A94:    z <> 0.(REAL-NS 2)
         proof
           assume z = 0.(REAL-NS 2);
           then z = 0*2 by REAL_NS1:def 4
@@ -1955,46 +1955,46 @@ A93:    z <> 0.(REAL-NS 2)
         end;
         h.n <> 0 by COMSEQ_1:4;
         then
-A94:    0 < |.h.n.| by COMPLEX1:133;
+A95:    0 < |.h.n.| by COMPLEX1:133;
         R/.(h.n) = proj(1,1).(Ru.<* Re (h.n), Im (h.n) *>) + (proj(1,1).
-        (Rv.<* Re (h.n), Im (h.n) *>))*<i> by A83;
+        (Rv.<* Re (h.n), Im (h.n) *>))*<i> by A84;
         then
-A95:    |.h.n.|"* |. R/.(h.n) .| <= |.h.n.|"* (abs(proj(1,1).(Ru.<* Re (
+A96:    |.h.n.|"* |. R/.(h.n) .| <= |.h.n.|"* (abs(proj(1,1).(Ru.<* Re (
         h.n), Im (h.n) *>)) + abs(proj(1,1).(Rv.<* Re (h.n), Im (h.n) *>))) by
-A94,Lm16,XREAL_1:66;
+A95,Lm16,XREAL_1:66;
         Ru is total by NDIFF_1:def 5;
         then dom Ru = the carrier of REAL-NS 2 by PARTFUN1:def 4;
         then
-A96:    abs(proj(1,1).(Ru.<* Re (h.n), Im (h.n) *>)) = abs(proj(1,1).(Ru
+A97:    abs(proj(1,1).(Ru.<* Re (h.n), Im (h.n) *>)) = abs(proj(1,1).(Ru
         /.z )) by PARTFUN1:def 8
           .= ||. Ru/.z .|| by Lm22;
         Rv is total by NDIFF_1:def 5;
         then dom Rv = the carrier of REAL-NS 2 by PARTFUN1:def 4;
         then
-A97:    abs(proj(1,1).(Rv.<* Re (h.n), Im (h.n) *>)) = abs(proj(1,1).(Rv
+A98:    abs(proj(1,1).(Rv.<* Re (h.n), Im (h.n) *>)) = abs(proj(1,1).(Rv
         /.z )) by PARTFUN1:def 8
           .= ||. Rv/.z .|| by Lm22;
         h.n = x+y*<i> by COMPLEX1:29;
         then
-A98:    ||.z.|| = |.h.n.| by Lm15;
+A99:    ||.z.|| = |.h.n.| by Lm15;
         assume M <= n;
         then
-A99:    |. h.n-0 .| < d by A90;
-        then ||.z.|| < d2 by A91,A98,XXREAL_0:2;
+A100:    |. h.n-0 .| < d by A91;
+        then ||.z.|| < d2 by A92,A99,XXREAL_0:2;
         then
-A100:   ||.z.||"* ||. Rv/.z .|| < r/2 by A87,A93;
-        ||.z.|| < d1 by A92,A99,A98,XXREAL_0:2;
-        then ||.z.||"* ||. Ru/.z .|| < r/2 by A89,A93;
+A101:   ||.z.||"* ||. Rv/.z .|| < r/2 by A88,A94;
+        ||.z.|| < d1 by A93,A100,A99,XXREAL_0:2;
+        then ||.z.||"* ||. Ru/.z .|| < r/2 by A90,A94;
         then |.h.n.|"* abs(proj(1,1).(Ru.<* Re (h.n), Im (h.n) *>)) + |.h.n.|
-        "* abs(proj(1,1).(Rv.<* Re (h.n), Im (h.n) *>)) < r/2 +r/2 by A98,A100
-,A96,A97,XREAL_1:10;
-        then |.h.n.|"* |. R/.(h.n) .| < r by A95,XXREAL_0:2;
+        "* abs(proj(1,1).(Rv.<* Re (h.n), Im (h.n) *>)) < r/2 +r/2 by A99,A101
+,A97,A98,XREAL_1:10;
+        then |.h.n.|"* |. R/.(h.n) .| < r by A96,XXREAL_0:2;
         then |.(h.n)".|* |. R/.(h.n) .| < r by COMPLEX1:152;
         then
-A101:   |.(h.n)"* (R/.(h.n)) .| < r by COMPLEX1:151;
+A102:   |.(h.n)"* (R/.(h.n)) .| < r by COMPLEX1:151;
         dom R = COMPLEX by FUNCT_2:def 1;
         then rng h c= dom R;
-        then |. (h.n)"*((R/*h).n) .| < r by A101,FUNCT_2:186;
+        then |. (h.n)"*((R/*h).n) .| < r by A102,FUNCT_2:186;
         then |. (h".n)*((R/*h).n) .| < r by VALUED_1:10;
         hence |.((h")(#)(R/*h)).n-0 .| < r by VALUED_1:5;
       end;
@@ -2002,26 +2002,26 @@ A101:   |.(h.n)"* (R/.(h.n)) .| < r by COMPLEX1:151;
       |.((h")(#)(R/*h)).n-0c .| < r;
     end;
     then (h")(#)(R/*h) is convergent by COMSEQ_2:def 4;
-    hence thesis by A84,COMSEQ_2:def 5;
+    hence thesis by A85,COMSEQ_2:def 5;
   end;
   then reconsider R as C_REST by CFDIFF_1:def 3;
   now
     let z be Complex;
     set x = Re z, y = Im z;
-A102: z = x+y*<i> by COMPLEX1:29;
+A103: z = x+y*<i> by COMPLEX1:29;
     then
-A103: z-z0 = (x-x0)+(y-y0)*<i> by A4;
+A104: z-z0 = (x-x0)+(y-y0)*<i> by A4;
     then Re (z-z0)=x-x0 by COMPLEX1:28;
     then
-A104: <* Re(z-z0), Im(z-z0) *> = <* x-x0, y-y0 *> by A103,COMPLEX1:28;
+A105: <* Re(z-z0), Im(z-z0) *> = <* x-x0, y-y0 *> by A104,COMPLEX1:28;
     assume z in N;
     hence f/.z - f/.z0 = (partdiff(u,xy0,1)+<i>*partdiff(v,xy0,1))*((x-x0)+(y-
 y0)*<i>) + (proj(1,1).(Ru.<*x-x0,y-y0*>) + (proj(1,1).(Rv.<*x-x0,y-y0*>))*<i>)
-    by A4,A50,A102
+    by A4,A50,A103
       .= L/.(z-z0) + (proj(1,1).(Ru.<*x-x0,y-y0*>) + (proj(1,1).(Rv.<*x-x0,y
-    -y0*>))*<i>) by A4,A81,A102
-      .= L/.(z-z0) + R/.(z-z0) by A83,A104;
+    -y0*>))*<i>) by A4,A82,A103
+      .= L/.(z-z0) + R/.(z-z0) by A84,A105;
   end;
-  then f is_differentiable_in z0 by A80,CFDIFF_1:def 6;
+  then f is_differentiable_in z0 by A81,CFDIFF_1:def 6;
   hence thesis by A2,A3,A4,A5,Th2;
 end;

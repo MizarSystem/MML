@@ -1,0 +1,2201 @@
+:: Linear Transformations of Euclidean Topological Spaces
+::  by Karol P\kak
+:: 
+:: Received October 26, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies ALGSTR_0, ARYTM_1, ARYTM_3, BINOP_2, CARD_1, CARD_3, CLASSES1,
+      COMPLEX1, CONNSP_2, EUCLID, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSET_1,
+      FINSOP_1, FUNCT_1, FUNCT_2, FVSUM_1, INCSP_1, LMOD_7, MATRIX_1, MATRIX_3,
+      MATRIX_6, MATRIX13, MATRIX15, MATRIXR1, MATRLIN, MATRLIN2, MESFUNC1,
+      METRIC_1, NAT_1, NUMBERS, ORDINAL1, ORDINAL2, ORDINAL4, PARTFUN1,
+      PARTFUN3, PRE_POLY, PRE_TOPC, PRVECT_1, QC_LANG1, RANKNULL, REAL_1,
+      RELAT_1, RLSUB_1, RLVECT_3, RLVECT_5, RVSUM_1, SETWISEO, SQUARE_1,
+      STRUCT_0, SUBSET_1, SUPINF_2, TARSKI, TOPS_1, TOPS_2, TREES_1, VALUED_0,
+      VALUED_1, VECTSP_1, VECTSP10, XBOOLE_0, XREAL_0, XXREAL_0, ZFMISC_1,
+      FUNCOP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1,CARD_1, NUMBERS,
+      XXREAL_0, NAT_1, FINSET_1, TOPS_1, TOPS_2, FUNCT_1, PARTFUN1, VALUED_0,
+      VALUED_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, BINOP_1, STRUCT_0,
+      VECTSP_1, MATRIX_1, FVSUM_1, MATRIX_3, VECTSP_4, VECTSP_7, VECTSP_9,
+      MATRIX13, SETWOP_2, XREAL_0, REAL_1, RVSUM_1, ALGSTR_0, RANKNULL,
+      MATRIX11, ORDINAL1, COMPLEX1, BINOP_2, FUNCOP_1, SQUARE_1, PRE_TOPC,
+      PARTFUN3, MATRIX_6, MATRLIN, MATRLIN2, NAT_D, MATRIX15, CONNSP_2,
+      METRIC_1, EUCLID, FINSOP_1, PNPROC_1, RUSUB_4, PRVECT_1;
+ constructors BINARITH, CONNSP_2, FINSOP_1, FVSUM_1, LAPLACE, MATRIX_6,
+      MATRIX11, MATRIX13, MATRIX15, MATRLIN2, MONOID_0, PARTFUN3, PNPROC_1,
+      RANKNULL, RELSET_1, RUSUB_5, SEQ_1, SETWISEO, SQUARE_1, TOPS_1, TOPS_2,
+      VECTSP_9, VECTSP10, WELLORD2, SEQ_4;
+ registrations BINOP_2, CARD_1, EUCLID, EUCLID_9, FINSEQ_1, FINSEQ_2, FINSET_1,
+      FUNCT_1, FUNCT_2, GRCAT_1, MATRIX13, MATRLIN2, MEMBERED, MOD_2, MONOID_0,
+      NAT_1, NUMBERS, PARTFUN3, PNPROC_1, PRVECT_1, RELAT_1, RELSET_1, RVSUM_1,
+      STRUCT_0, VALUED_0, VALUED_1, VECTSP_1, VECTSP_9, XBOOLE_0, XREAL_0,
+      XXREAL_0;
+ requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
+ definitions BORSUK_1, EUCLID, FINSEQ_1, MATRIX13, PARTFUN3, RANKNULL,
+      SQUARE_1, STRUCT_0, TARSKI, VECTSP_1, VECTSP_4, XBOOLE_0;
+ theorems ABSVALUE, BINOP_2, CARD_1, CARD_2, CONNSP_2, EUCLID, EUCLID_2,
+      FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQOP, FINSOP_1, FUNCOP_1,
+      FUNCT_1, FUNCT_2, FVSUM_1, GOBOARD6, JORDAN2C, LAPLACE, MATRIX_1,
+      MATRIX_2, MATRIX_3, MATRIX_4, MATRIX_6, MATRIX11, MATRIX13, MATRIX14,
+      MATRIX15, MATRIXR1, MATRLIN, MATRLIN2, MATRPROB, METRIC_1, NAT_1,
+      ORDINAL1, PARTFUN3, PNPROC_1, RANKNULL, RELAT_1, RLVECT_1, RUSUB_4,
+      RVSUM_1, SPPOL_1, SQUARE_1, STIRL2_1, STRUCT_0, TARSKI, TOPREAL6,
+      TOPREAL7, TOPS_2, VALUED_0, VALUED_1, VECTSP_4, VECTSP_7, VECTSP_9,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_0, XREAL_1, XXREAL_0, ZFMISC_1;
+ schemes FINSEQ_1, FUNCT_2, NAT_1;
+
+begin :: Preliminaries
+
+ reserve X,Y for set,
+         n,m,k,i for Nat,
+         r for real number,
+         R for Element of F_Real,
+         K for Field,
+         f,f1,f2,g1,g2 for FinSequence,
+         rf,rf1,rf2 for real-valued FinSequence,
+         cf,cf1,cf2 for complex-valued FinSequence,
+         F for Function;
+
+registration
+  let X,Y;
+  let F be positive-yielding PartFunc of X,REAL;
+  cluster F|Y -> positive-yielding;
+  coherence
+    proof
+      let r be real number;
+      assume
+A1:     r in rng(F|Y);
+      rng(F|Y)c=rng F by RELAT_1:99;
+      hence thesis by A1,PARTFUN3:def 1;
+    end;
+end;
+
+registration
+  let X,Y;
+  let F be negative-yielding PartFunc of X,REAL;
+  cluster F|Y -> negative-yielding;
+  coherence
+    proof
+      let r be real number;
+      assume
+A1:     r in rng(F|Y);
+      rng(F|Y)c=rng F by RELAT_1:99;
+      hence thesis by A1,PARTFUN3:def 2;
+    end;
+end;
+
+registration
+  let X,Y;
+  let F be nonpositive-yielding PartFunc of X,REAL;
+  cluster F|Y -> nonpositive-yielding;
+  coherence
+    proof
+      let r be real number;
+      assume
+A1:     r in rng(F|Y);
+      rng(F|Y)c=rng F by RELAT_1:99;
+      hence thesis by A1,PARTFUN3:def 3;
+    end;
+end;
+
+registration
+  let X,Y;
+  let F be nonnegative-yielding PartFunc of X,REAL;
+  cluster F|Y -> nonnegative-yielding;
+  coherence
+    proof
+      let r be real number;
+      assume
+A1:     r in rng(F|Y);
+      rng(F|Y)c=rng F by RELAT_1:99;
+      hence thesis by A1,PARTFUN3:def 4;
+    end;
+end;
+
+registration
+  let rf;
+  cluster sqrt rf -> FinSequence-like;
+  coherence
+    proof
+      dom rf=dom sqrt rf & ex n st dom rf=Seg n
+        by FINSEQ_1:def 2,PARTFUN3:def 5;
+      hence thesis by FINSEQ_1:def 2;
+    end;
+end;
+
+definition
+  let rf;
+  func @rf -> FinSequence of F_Real equals
+    rf;
+  coherence
+    proof
+      rng rf c=REAL;
+      hence thesis by FINSEQ_1:def 4;
+    end;
+end;
+
+definition
+  let p be FinSequence of F_Real;
+  func @p -> FinSequence of REAL equals
+    p;
+  coherence;
+end;
+
+theorem Th1:
+  @rf1 + @rf2 = rf1 + rf2
+proof
+  thus @rf1+@rf2 = (the addF of F_Real).:(rf1,rf2) by FVSUM_1:def 3
+                .= rf1+rf2 by RVSUM_1:def 4;
+end;
+
+theorem Th2:
+  sqrt (rf1^rf2) = (sqrt rf1) ^ (sqrt rf2)
+proof
+  set rf12=rf1^rf2;
+  set s12=sqrt rf12,s1=sqrt rf1,s2=sqrt rf2;
+A1: dom s12=dom rf12 by PARTFUN3:def 5;
+A2: dom s2=dom rf2 by PARTFUN3:def 5;
+  then
+A3: len s2=len rf2 by FINSEQ_3:31;
+A4: dom s1=dom rf1 by PARTFUN3:def 5;
+  then
+A5: len s1=len rf1 by FINSEQ_3:31;
+A6: 1<=n & n<=len s12 implies s12.n=(s1^s2).n
+    proof
+      assume 1<=n & n<=len s12;
+      then
+A7:     n in dom s12 by FINSEQ_3:27;
+      then
+A8:     s12.n=sqrt(rf12.n) by PARTFUN3:def 5;
+      per cases by A1,A7,FINSEQ_1:38;
+        suppose
+A9:       n in dom rf1;
+          then rf12.n=rf1.n & s1.n=sqrt(rf1.n)
+            by A4,FINSEQ_1:def 7,PARTFUN3:def 5;
+          hence thesis by A4,A8,A9,FINSEQ_1:def 7;
+        end;
+        suppose ex m st m in dom rf2 & n=len rf1+m;
+          then consider m such that
+A10:        m in dom rf2 & n=len rf1+m;
+          rf12.n=rf2.m & s2.m=sqrt(rf2.m)
+            by A2,A10,FINSEQ_1:def 7,PARTFUN3:def 5;
+          hence thesis by A2,A5,A8,A10,FINSEQ_1:def 7;
+        end;
+    end;
+  len s12=len rf12 by A1,FINSEQ_3:31;
+  then len s12=len s1+len s2 by A5,A3,FINSEQ_1:35;
+  then len s12=len(s1^s2) by FINSEQ_1:35;
+  hence thesis by A6,FINSEQ_1:18;
+end;
+
+theorem Th3:
+  sqrt <*r*> = <*sqrt r*>
+proof
+  set R=<*r*>;
+A1: R.1=r by FINSEQ_1:57;
+A2: dom R=dom sqrt R by PARTFUN3:def 5;
+  then
+A3: len R=len sqrt R by FINSEQ_3:31;
+  1 in Seg 1 & dom R=Seg 1 by FINSEQ_1:55;
+  then len R=1 & (sqrt R).1=sqrt r by A2,A1,FINSEQ_1:57,PARTFUN3:def 5;
+  hence thesis by A3,FINSEQ_1:57;
+ end;
+
+theorem Th4:
+  sqrt(rf^2)=abs rf
+proof
+  set F=rf^2;
+  set S=sqrt F;
+A1: dom S=dom F by PARTFUN3:def 5;
+A2: dom abs rf=dom rf & dom F=dom rf by VALUED_1:11,def 11;
+  now let x be set;
+    reconsider fx=rf.x as Real by XREAL_0:def 1;
+A3:   fx>=0 or fx<0;
+    assume
+A4:   x in dom abs rf;
+    then F.x=fx^2 & S.x=sqrt(F.x) by A2,A1,PARTFUN3:def 5,VALUED_1:11;
+    then
+A5:   S.x=fx & fx>=0 or S.x=-fx & fx<0 by A3,SQUARE_1:89,90;
+    (abs rf).x=abs fx by A4,VALUED_1:def 11;
+    hence (abs rf).x=S.x by A5,ABSVALUE:def 1;
+  end;
+  hence thesis by A2,A1,FUNCT_1:9;
+end;
+
+theorem Th5:
+  rf is nonnegative-yielding implies sqrt Sum rf <= Sum sqrt rf
+proof
+  defpred P[Nat] means
+    for f be real-valued FinSequence st len f=$1 & f is nonnegative-yielding
+    holds sqrt Sum f<=Sum sqrt f & 0<=Sum f;
+A1: P[n] implies P[n+1]
+    proof
+      assume
+A2:  P[n];
+      set n1=n+1;
+      let f be real-valued FinSequence such that
+A3:     len f=n1 and
+A4:     f is nonnegative-yielding;
+      rng f c=REAL;
+      then reconsider F=f as FinSequence of REAL by FINSEQ_1:def 4;
+      reconsider fn=F|n as FinSequence of REAL;
+A5:     F=fn^<*F.n1*> by A3,FINSEQ_3:61;
+      then sqrt F = (sqrt fn)^sqrt<*F.n1*> by Th2
+                 .= (sqrt fn)^<*sqrt(F.n1)*> by Th3;
+      then
+A6:     Sum sqrt F=Sum(sqrt fn)+sqrt(F.n1) by RVSUM_1:104;
+A7:     len fn=n by A3,FINSEQ_3:59;
+      then sqrt(Sum fn)<=Sum sqrt fn by A2,A4;
+      then
+A8:     sqrt(Sum fn)+sqrt(f.n1)<=Sum sqrt F by A6,XREAL_1:8;
+A9:     Sum f=(Sum fn)+(f.n1) by A5,RVSUM_1:104;
+      n1>=1 by NAT_1:11;
+      then n1 in dom f by A3,FINSEQ_3:27;
+      then f.n1 in rng f by FUNCT_1:def 5;
+      then
+A10:    f.n1>=0 by A4,PARTFUN3:def 4;
+A11:    (Sum fn)>=0 by A2,A4,A7;
+      then sqrt Sum f<=sqrt(Sum fn)+sqrt(f.n1) by A9,A10,TOPREAL6:6;
+      hence thesis by A9,A11,A10,A8,XXREAL_0:2;
+    end;
+A12: P[0 qua Nat]
+    proof
+      let f be real-valued FinSequence such that
+A13:    len f=0 and
+        f is nonnegative-yielding;
+      dom f=dom sqrt f by PARTFUN3:def 5;
+      then len f=len sqrt f by FINSEQ_3:31;
+      then
+A14:    sqrt f=<*>REAL by A13;
+      f=<*>REAL by A13;
+      hence thesis by A14,RVSUM_1:102,SQUARE_1:82;
+    end;
+  P[n] from NAT_1:sch 2(A12,A1);
+  then P[len rf];
+  hence thesis;
+end;
+
+theorem
+  ex X st X c= dom F & rng F = rng(F|X) & (F|X) is one-to-one
+proof
+  defpred P[set,set] means
+   F.$2=$1;
+A1: for x be set st x in rng F ex y be set st y in dom F & P[x,y]
+    by FUNCT_1:def 5;
+  consider g being Function of rng F,dom F such that
+A2:  for x be set st x in rng F holds P[x,g.x] from FUNCT_2:sch 1(A1);
+  take X=rng g;
+  set FX=F|X;
+  dom F={} iff rng F={} by RELAT_1:65;
+  then
+A3: dom g=rng F by FUNCT_2:def 1;
+  thus
+A4: X c=dom F by RELAT_1:def 19;
+A5: rng F c=rng FX
+    proof
+      let y be set;
+      assume y in rng F;
+      then g.y in X & F.(g.y)=y by A2,A3,FUNCT_1:def 5;
+      hence thesis by A4,FUNCT_1:73;
+    end;
+  rng FX c=rng F by RELAT_1:99;
+  hence rng F=rng FX by A5,XBOOLE_0:def 10;
+  now let x1,x2 be set;
+    assume that
+A6:   x1 in dom FX and
+A7:   x2 in dom FX and
+A8:   FX.x1=FX.x2;
+A9:   FX.x1=F.x1 & FX.x2=F.x2 by A6,A7,FUNCT_1:70;
+A10:  dom FX c=X by RELAT_1:87;
+    then consider y1 be set such that
+A11:  y1 in dom g and
+A12:  g.y1=x1 by A6,FUNCT_1:def 5;
+    consider y2 be set such that
+A13:  y2 in dom g & g.y2=x2 by A7,A10,FUNCT_1:def 5;
+   F.x1=y1 by A2,A3,A11,A12;
+    hence x1=x2 by A2,A3,A8,A9,A12,A13;
+  end;
+  hence thesis by FUNCT_1:def 8;
+end;
+
+registration
+  let cf,X;
+  cluster cf-X -> complex-valued;
+  coherence
+  proof
+    rng cf c=COMPLEX & rng(cf-X)c=rng cf by FINSEQ_3:73,VALUED_0:def 1;
+    then rng(cf-X)c=COMPLEX by XBOOLE_1:1;
+    hence thesis by VALUED_0:def 1;
+  end;
+end;
+
+registration
+  let rf,X;
+  cluster rf-X -> real-valued;
+  coherence
+  proof
+    rng(rf-X)c=rng rf by FINSEQ_3:73;
+    then rng(rf-X)c=REAL by XBOOLE_1:1;
+    hence thesis by VALUED_0:def 3;
+  end;
+end;
+
+registration
+  let cf be complex-valued FinSubsequence;
+  cluster Seq cf -> complex-valued;
+  coherence;
+end;
+
+registration
+  let rf be real-valued FinSubsequence;
+  cluster Seq rf -> real-valued;
+  coherence;
+end;
+
+theorem Th7:
+  for P be Permutation of dom f st f1 = f*P
+    ex Q be Permutation of dom(f-X) st f1-X = (f-X)*Q
+proof
+  let P be Permutation of dom f such that
+   A1: f1=f*P;
+  reconsider p=P as one-to-one Function;
+  A2: rng P=dom f by FUNCT_2:def 3;
+  then A3: dom(p")=dom f by FUNCT_1:55;
+  A4: P.:(f1"X)=P.:(P"(f"X)) by A1,RELAT_1:181
+   .=f"X by A2,FUNCT_1:147,RELAT_1:167;
+  A5: dom P=dom f by FUNCT_2:67;
+  then A6: dom f1=dom f by A1,A2,RELAT_1:46;
+  set DfX=(dom f1)\f1"X;
+  set DX=(dom f)\f"X;
+  A7: card DX=card(dom f)-card(f"X) by CARD_2:63,RELAT_1:167;
+  A8: dom f=Seg len f by FINSEQ_1:def 3;
+  then A9: dom Sgm DX=Seg card DX by FINSEQ_3:45,XBOOLE_1:36;
+  A10: p"(f"X)=(p").:(f"X) by FUNCT_1:155;
+  f1"X=P"(f"X) by A1,RELAT_1:181;
+  then A11: f"X,f1"X are_equipotent by A3,A10,CARD_1:60,RELAT_1:167;
+  A12: DfX c=dom f1 by XBOOLE_1:36;
+  A13: rng(P*Sgm DfX)=P.:(rng Sgm DfX) by RELAT_1:160
+   .=P.:DfX by A6,A8,A12,FINSEQ_1:def 13
+   .=(P.:(dom P))\P.:(f1"X) by A5,A6,FUNCT_1:123
+   .=DX by A4,A2,RELAT_1:146;
+  reconsider SDX=Sgm DX as one-to-one Function by A8,FINSEQ_3:99,XBOOLE_1:36;
+  A14: dom(SDX")=rng SDX by FUNCT_1:55;
+  card(dom f)=len f by CARD_1:104;
+  then A15: dom(f-X)=dom SDX by A7,A9,FINSEQ_3:69;
+  card DfX=card(dom f1)-card(f1"X) by CARD_2:63,RELAT_1:167;
+  then card DX=card DfX by A11,A6,A7,CARD_1:21;
+  then A16: dom SDX=dom Sgm DfX by A6,A8,A9,FINSEQ_3:45,XBOOLE_1:36;
+  DX c=dom f by XBOOLE_1:36;
+  then A17: rng Sgm DX=DX by A8,FINSEQ_1:def 13;
+  rng(SDX")=dom SDX by FUNCT_1:55;
+  then A18: rng((SDX")*(P*Sgm DfX))=dom SDX by A17,A14,A13,RELAT_1:47;
+  rng Sgm DfX=DfX by A6,A8,A12,FINSEQ_1:def 13;
+  then dom(P*Sgm DfX)=dom Sgm DfX by A5,A6,RELAT_1:46,XBOOLE_1:36;
+  then dom((SDX")*(P*Sgm DfX))=dom Sgm DfX by A17,A14,A13,RELAT_1:46;
+  then reconsider Q=(SDX")*(P*Sgm DfX) as Function of dom(f-X),dom(f-X)
+    by A18,A15,A16,FUNCT_2:3;
+  A19: Q is onto by A18,A15,FUNCT_2:def 3;
+  Sgm DfX is one-to-one by A6,A8,FINSEQ_3:99,XBOOLE_1:36;
+  then reconsider Q as Permutation of dom(f-X) by A19;
+  SDX*(SDX")=id DX by A17,FUNCT_1:61;
+  then A20: SDX*Q=(id DX)*(P*Sgm DfX) by RELAT_1:55
+   .=P*Sgm DfX by A13,RELAT_1:79;
+  (f-X)*Q=f*SDX*Q by FINSEQ_3:def 1
+   .=f*(P*Sgm DfX) by A20,RELAT_1:55
+   .=f1*Sgm DfX by A1,RELAT_1:55
+   .=f1-X by FINSEQ_3:def 1;
+  hence thesis;
+end;
+
+theorem
+  for P be Permutation of dom cf st cf1 = cf*P holds Sum (cf1-X) = Sum(cf-X)
+proof
+  rng(cf1-X)c=COMPLEX by VALUED_0:def 1;
+  then reconsider fPX=cf1-X as FinSequence of COMPLEX by FINSEQ_1:def 4;
+  rng(cf-X)c=COMPLEX by VALUED_0:def 1;
+  then reconsider fX=cf-X as FinSequence of COMPLEX by FINSEQ_1:def 4;
+  let P be Permutation of dom cf such that
+   A1: cf1=cf*P;
+  consider Q be Permutation of dom(cf-X) such that
+   A2: cf1-X=(cf-X)*Q by A1,Th7;
+  thus Sum(cf1-X)=addcomplex"**"fPX by RVSUM_1:def 12
+   .=addcomplex"**"fX by A2,FINSOP_1:8
+   .=Sum(cf-X) by RVSUM_1:def 12;
+end;
+
+theorem Th9:
+  for f,f1 be FinSubsequence for P be Permutation of dom f st f1 = f*P
+   ex Q be Permutation of dom Seq(f1|P"X) st Seq(f|X) = Seq(f1|P"X) * Q
+proof
+  let f,f1 be FinSubsequence;
+  consider n be Nat such that
+   A1: dom f c=Seg n by FINSEQ_1:def 12;
+  let P be Permutation of dom f such that
+   A2: f1=f*P;
+  set SPX=Sgm(P"X);
+  A3: P"X c=dom P by RELAT_1:167;
+  then A4: dom(P|P"X)=P"X by RELAT_1:91;
+  A5: dom P=dom f by FUNCT_2:67;
+  then A6: SPX is one-to-one by A1,A3,FINSEQ_3:99,XBOOLE_1:1;
+  set dfX=dom f/\X;
+  set SdX=Sgm dfX;
+  A7: dfX c=dom f by XBOOLE_1:17;
+  then dfX c=Seg n by A1,XBOOLE_1:1;
+  then A8: rng SdX=dfX by FINSEQ_1:def 13;
+  A9: rng P=dom f by FUNCT_2:def 3;
+  then A10: P"X=P"dfX by RELAT_1:168;
+  then A11: P"X=(P").:dfX by FUNCT_1:155;
+  set PS=(P|P"X)*SPX;
+  A12: P|P"X is one-to-one by FUNCT_1:84;
+  P"X c=Seg n by A1,A5,A3,XBOOLE_1:1;
+  then A13: rng SPX=P"X by FINSEQ_1:def 13;
+  rng(P|P"X)=P.:(P"dfX) by A10,RELAT_1:148
+   .=dfX by A9,FUNCT_1:147,XBOOLE_1:17;
+  then A14: rng PS=dfX by A4,A13,RELAT_1:47;
+  then A15: dom(PS")=dfX by A6,A12,FUNCT_1:55;
+  dom(P")=rng P by FUNCT_1:55;
+  then dfX,(P").:dfX are_equipotent by A9,CARD_1:60,XBOOLE_1:17;
+  then card dfX=card(P"X) by A11,CARD_1:21;
+  then A16: dom SPX=Seg card dfX by A1,A5,A3,FINSEQ_3:45,XBOOLE_1:1;
+  then dom PS=Seg card dfX by A4,A13,RELAT_1:46;
+  then rng(PS")=Seg card dfX by A6,A12,FUNCT_1:55;
+  then A17: rng((PS")*SdX)=Seg card dfX by A15,A8,RELAT_1:47;
+  dom f1=dom P by A2,A9,RELAT_1:46;
+  then A18: dom(f1|P"X)=P"X by RELAT_1:91,167;
+  then A19: dom Seq(f1|P"X)=Seg card dfX by A16,A13,RELAT_1:46;
+  dom SdX=Seg card dfX by A1,A7,FINSEQ_3:45,XBOOLE_1:1;
+  then dom((PS")*SdX)=Seg card dfX by A15,A8,RELAT_1:46;
+  then reconsider PSS=(PS")*SdX as Function of dom Seq(f1|P"X),dom Seq(f1|P"X)
+    by A19,A17,FUNCT_2:3;
+  A20: PSS is onto by A19,A17,FUNCT_2:def 3;
+  SdX is one-to-one by A1,A7,FINSEQ_3:99,XBOOLE_1:1;
+  then reconsider PSS as Permutation of dom Seq(f1|P"X) by A6,A12,A20;
+  A21: PS*PSS=(PS*PS")*SdX by RELAT_1:55
+   .=(id dfX)*SdX by A6,A12,A14,FUNCT_1:61;
+  set fX=f|X;
+  A22: fX=f|dfX by RELAT_1:192;
+  take PSS;
+  f1|P"X=f*(P|P"X) by A2,RELAT_1:112;
+  hence Seq(f1|P"X)*PSS=f*PS*PSS by A18,RELAT_1:55
+   .=f*((id dfX)*SdX) by A21,RELAT_1:55
+   .=(f*(id dfX))*SdX by RELAT_1:55
+   .=fX*SdX by A22,RELAT_1:94
+   .=Seq fX by RELAT_1:90;
+end;
+
+theorem
+  for cf,cf1 be complex-valued FinSubsequence
+    for P be Permutation of dom cf st cf1 = cf * P
+  holds Sum Seq(cf|X) = Sum Seq(cf1|P"X)
+proof
+  let cf,cf1 be complex-valued FinSubsequence;
+  rng Seq(cf|X)c=COMPLEX by VALUED_0:def 1;
+  then reconsider SfX=Seq(cf|X) as FinSequence of COMPLEX by FINSEQ_1:def 4;
+  let P be Permutation of dom cf such that
+   A1: cf1=cf*P;
+  consider Q be Permutation of dom Seq(cf1|P"X) such that
+   A2: Seq(cf|X)=Seq(cf1|P"X)*Q by A1,Th9;
+  rng Seq(cf1|P"X)c=COMPLEX by VALUED_0:def 1;
+  then reconsider SfPX=Seq(cf1|P"X) as FinSequence of COMPLEX
+    by FINSEQ_1:def 4;
+  thus Sum Seq(cf1|P"X)=addcomplex"**"SfPX by RVSUM_1:def 12
+   .=addcomplex"**"SfX by A2,FINSOP_1:8
+   .=Sum Seq(cf|X) by RVSUM_1:def 12;
+end;
+
+theorem Th11:
+  for f be FinSubsequence for n be Element of NAT st
+     for i holds i+n in X iff i in Y
+  holds (n Shift f) |X = n Shift(f|Y)
+proof
+  let f be FinSubsequence;
+  let n be Element of NAT such that
+   A1: i+n in X iff i in Y;
+  set fY=f|Y;
+  set nf=n Shift f;
+  set nfX=nf|X;
+  set nfY=n Shift fY;
+  A2: dom nfY={n+k where k is Element of NAT:k in dom fY} by PNPROC_1:def 15;
+  A3: now let x be set;
+   assume x in dom nfY;
+   then consider k be Element of NAT such that
+    A4: x=n+k and
+    A5: k in dom fY by A2;
+   A6: k in dom f by A5,RELAT_1:86;
+   A7: k in Y by A5,RELAT_1:86;
+   then x in X by A1,A4;
+   hence nfX.x=nf.x by FUNCT_1:72
+    .=f.k by A4,A6,PNPROC_1:def 15
+    .=fY.k by A7,FUNCT_1:72
+    .=nfY.x by A4,A5,PNPROC_1:def 15;
+  end;
+  A8: dom nf={n+k where k is Element of NAT:k in dom f} by PNPROC_1:def 15;
+  A9: dom nfY c=dom nfX
+  proof
+   let x be set;
+   assume x in dom nfY;
+   then consider k be Element of NAT such that
+    A10: x=n+k and
+    A11: k in dom fY by A2;
+   k in Y by A11,RELAT_1:86;
+   then A12: x in X by A1,A10;
+   k in dom f by A11,RELAT_1:86;
+   then x in dom nf by A8,A10;
+   hence thesis by A12,RELAT_1:86;
+  end;
+  dom nfX c=dom nfY
+  proof
+   let x be set;
+   assume A13: x in dom nfX;
+   then x in dom nf by RELAT_1:86;
+   then consider k be Element of NAT such that
+    A14: x=n+k and
+    A15: k in dom f by A8;
+   x in X by A13,RELAT_1:86;
+   then k in Y by A1,A14;
+   then k in dom fY by A15,RELAT_1:86;
+   hence thesis by A2,A14;
+  end;
+  then dom nfY=dom nfX by A9,XBOOLE_0:def 10;
+  hence thesis by A3,FUNCT_1:9;
+end;
+
+theorem Th12:
+  ex Y be Subset of NAT st
+    Seq((f1^f2) |X) = Seq(f1|X)^Seq(f2|Y) &
+    for n st n>0 holds n in Y iff n+len f1 in X/\dom(f1^f2)
+proof
+  set f12=f1^f2;
+  set n1=len f1,n2=len f2;
+  set X12=X/\dom f12;
+  set X1=X12/\Seg n1,X2=X12\(Seg n1);
+  set Y2={i where i is Element of NAT:i+n1 in X2};
+  Y2 c=NAT
+  proof
+   let x be set;
+   assume x in Y2;
+   then ex i be Element of NAT st i=x & i+n1 in X2;
+   hence thesis;
+  end;
+  then reconsider Y2 as Subset of NAT;
+  set Sf2=n1 Shift f2;
+  A1: f12=f1\/Sf2 by PNPROC_1:64;
+  take Y2;
+  A2: X12/\dom Sf2 c=X2
+  proof
+   let x be set;
+   assume A3: x in X12/\dom Sf2;
+   then x in dom Sf2 by XBOOLE_0:def 4;
+   then x in {n1+k where k is Element of NAT:k in dom f2} by PNPROC_1:def 15;
+   then consider k be Element of NAT such that
+    A4: x=n1+k and
+    A5: k in dom f2;
+   1<=k by A5,FINSEQ_3:27;
+   then 1+n1<=k+n1 by XREAL_1:8;
+   then n1<k+n1 by NAT_1:13;
+   then A6: not x in Seg n1 by A4,FINSEQ_1:3;
+   x in X12 by A3,XBOOLE_0:def 4;
+   hence thesis by A6,XBOOLE_0:def 5;
+  end;
+  A7: now let i;
+   thus i+n1 in X2 implies i in Y2
+   proof
+    assume A8: i+n1 in X2;
+    i in NAT by ORDINAL1:def 13;
+    hence thesis by A8;
+   end;
+   assume i in Y2;
+   then ex j be Element of NAT st i=j & j+n1 in X2;
+   hence i+n1 in X2;
+  end;
+  f1|X1 c=f1 & f2|Y2 c=f2 by RELAT_1:88;
+  then consider ss be FinSubsequence such that
+   A9: ss=(f1|X1)\/(n1 Shift(f2|Y2)) & (Seq(f1|X1))^(Seq(f2|Y2))=Seq ss
+    by PNPROC_1:82;
+  A10: dom f1=Seg n1 by FINSEQ_1:def 3;
+  then (dom f12)/\Seg n1=Seg n1 by FINSEQ_1:39,XBOOLE_1:28;
+  then A11: f1|X=f1| (X/\((dom f12)/\Seg n1)) by A10,RELAT_1:192
+   .=f1|X1 by XBOOLE_1:16;
+  X2 c=X12/\dom Sf2
+  proof
+   let x be set;
+   assume A12: x in X2;
+   then A13: not x in Seg n1 by XBOOLE_0:def 5;
+   A14: x in X12 by A12,XBOOLE_0:def 5;
+   then x in dom f12 by XBOOLE_0:def 4;
+   then consider k be Nat such that
+    A15: k in dom f2 & x=n1+k by A10,A13,FINSEQ_1:38;
+   x in {n1+i where i is Element of NAT:i in dom f2} by A15;
+   then x in dom Sf2 by PNPROC_1:def 15;
+   hence thesis by A14,XBOOLE_0:def 4;
+  end;
+  then A16: X2=X12/\dom Sf2 by A2,XBOOLE_0:def 10;
+  f12|X=f12|X12 by RELAT_1:192;
+  then f12|X=f12*(id X12) by RELAT_1:94
+   .=(f1*(id X12))\/(Sf2*(id X12)) by A1,RELAT_1:51
+   .=(f1|X12)\/(Sf2*(id X12)) by RELAT_1:94
+   .=(f1|X12)\/(Sf2|X12) by RELAT_1:94
+   .=(f1|X12)\/(Sf2|X2) by A16,RELAT_1:192
+   .=(f1|X1)\/(Sf2|X2) by A10,RELAT_1:192;
+  hence Seq((f1^f2) |X)=Seq(f1|X)^Seq(f2|Y2) by A7,A11,A9,Th11;
+  let n;
+  assume n>0;
+  then n+n1>0+n1 by XREAL_1:8;
+  then A17: not n+n1 in Seg n1 by FINSEQ_1:3;
+  hereby assume n in Y2;
+   then n+n1 in X2 by A7;
+   hence n+n1 in X12 by XBOOLE_0:def 5;
+  end;
+  assume n+n1 in X12;
+  then n+n1 in X2 by A17,XBOOLE_0:def 5;
+  hence n in Y2 by A7;
+end;
+
+theorem
+  len g1 = len f1 & len g2 <= len f2 implies
+     Seq((f1^f2) | (g1^g2)"X) = Seq(f1|g1"X) ^ Seq(f2|g2"X)
+proof
+  assume that
+   A1: len f1=len g1 and
+   A2: len g2<=len f2;
+  set f12=f1^f2,g12=g1^g2;
+  A3: dom f12=Seg len f12 & dom g12=Seg len g12 by FINSEQ_1:def 3;
+  set g12X=g12"X;
+  consider Y be Subset of NAT such that
+   A4: Seq(f12|g12X)=Seq(f1|g12X)^Seq(f2|Y) and
+   A5: for n st n>0 holds n in Y iff n+len f1 in g12X/\dom f12 by Th12;
+  A6: Y/\dom f2 c=g2"X
+  proof
+   let x be set;
+   assume A7: x in Y/\dom f2;
+   then reconsider i=x as Nat;
+   x in dom f2 by A7,XBOOLE_0:def 4;
+   then A8: i>0 by FINSEQ_3:27;
+   then i+len f1>len f1+0 by XREAL_1:8;
+   then A9: not i+len f1 in dom g1 by A1,FINSEQ_3:27;
+   x in Y by A7,XBOOLE_0:def 4;
+   then i+len f1 in g12X/\dom f12 by A5,A8;
+   then A10: i+len f1 in g12X by XBOOLE_0:def 4;
+   then A11: g12.(i+len f1) in X by FUNCT_1:def 13;
+   i+len f1 in dom g12 by A10,FUNCT_1:def 13;
+   then A12: ex j be Nat st j in dom g2 & i+len f1=len g1+j by A9,FINSEQ_1:38;
+   then g12.(i+len f1)=g2.i by A1,FINSEQ_1:def 7;
+   hence thesis by A1,A11,A12,FUNCT_1:def 13;
+  end;
+  A13: dom f1=dom g1 by A1,FINSEQ_3:31;
+  A14: g1"X c=g12X/\dom f1
+  proof
+   let x be set;
+   assume A15: x in g1"X;
+   then A16: x in dom g1 by FUNCT_1:def 13;
+   A17: g1.x in X by A15,FUNCT_1:def 13;
+   dom g1 c=dom g12 & g12.x=g1.x by A16,FINSEQ_1:39,def 7;
+   then x in g12X by A16,A17,FUNCT_1:def 13;
+   hence thesis by A13,A16,XBOOLE_0:def 4;
+  end;
+  len f12=len f1+len f2 & len g12=len g1+len g2 by FINSEQ_1:35;
+  then len g12<=len f12 by A1,A2,XREAL_1:8;
+  then A18: dom g12 c=dom f12 by A3,FINSEQ_1:7;
+  g12X/\dom f1 c=g1"X
+  proof
+   let x be set;
+   assume A19: x in g12X/\dom f1;
+   then x in g12X by XBOOLE_0:def 4;
+   then A20: g12.x in X by FUNCT_1:def 13;
+   A21: x in dom f1 by A19,XBOOLE_0:def 4;
+   then g12.x=g1.x by A13,FINSEQ_1:def 7;
+   hence thesis by A13,A21,A20,FUNCT_1:def 13;
+  end;
+  then g12X/\dom f1=g1"X by A14,XBOOLE_0:def 10;
+  then A22: f1|g1"X=f1|g12X by RELAT_1:192;
+  dom f2=Seg len f2 & dom g2=Seg len g2 by FINSEQ_1:def 3;
+  then A23: dom g2 c=dom f2 by A2,FINSEQ_1:7;
+  g2"X c=Y/\dom f2
+  proof
+   let x be set;
+   assume A24: x in g2"X;
+   then A25: x in dom g2 by FUNCT_1:def 13;
+   then reconsider i=x as Nat;
+   A26: g2.x in X by A24,FUNCT_1:def 13;
+   A27: i+len g1 in dom g12 by A25,FINSEQ_1:41;
+   g12.(i+len g1)=g2.i by A25,FINSEQ_1:def 7;
+   then i+len g1 in g12X by A26,A27,FUNCT_1:def 13;
+   then A28: i+len g1 in g12X/\dom f12 by A18,A27,XBOOLE_0:def 4;
+   i>0 by A25,FINSEQ_3:27;
+   then i in Y by A1,A5,A28;
+   hence thesis by A23,A25,XBOOLE_0:def 4;
+  end;
+  then Y/\dom f2=g2"X by A6,XBOOLE_0:def 10;
+  hence thesis by A4,A22,RELAT_1:192;
+end;
+
+theorem
+  for D be non empty set for M be Matrix of n,m,D holds
+    M-X is Matrix of n-'card(M"X),m,D
+proof
+  let D be non empty set;
+  let M be Matrix of n,m,D;
+  A1: rng(M-X)c=rng M by FINSEQ_3:73;
+  rng M c=D* by FINSEQ_1:def 4;
+  then rng(M-X)c=D* by A1,XBOOLE_1:1;
+  then reconsider MX=M-X as FinSequence of D* by FINSEQ_1:def 4;
+  A2: len MX=len M-card(M"X) by FINSEQ_3:66;
+  then len M >= card(M"X) by XREAL_1:51;
+  then
+A3: len M=n & len MX=len M-' card(M"X) by A2,MATRIX_1:def 3,XREAL_1:235;
+  per cases;
+  suppose A4: len MX=0;
+   then MX={};
+   hence thesis by A3,A4,MATRIX_1:13;
+  end;
+  suppose len MX>0;
+   A5: for x be set st x in rng MX ex s be FinSequence st s=x & len s=m
+   proof
+    let x be set;
+    consider nn be Nat such that
+     A6: for x be set st x in rng M ex p be FinSequence of D st
+      x=p & len p=nn by MATRIX_1:9;
+    assume A7: x in rng MX;
+    then ex p be FinSequence of D st x=p & len p=nn by A1,A6;
+    then reconsider p=x as FinSequence of D;
+    len p=m by A1,A7,MATRIX_1:def 3;
+    hence thesis;
+   end;
+   then reconsider MX as Matrix of D by MATRIX_1:def 1;
+   now let p be FinSequence of D;
+    assume p in rng MX;
+    then ex s be FinSequence st s=p & len s=m by A5;
+    hence len p=m;
+   end;
+   hence thesis by A3,MATRIX_1:def 3;
+  end;
+end;
+
+theorem Th15:
+  for F be Function of Seg n,Seg n,D be non empty set
+    for M be Matrix of n,m,D for i st i in Seg width M
+  holds Col(M*F,i) = Col(M,i)*F
+proof
+  let F be Function of Seg n,Seg n,D be non empty set;
+  let M be Matrix of n,m,D;
+  let i;
+  assume A1: i in Seg width M;
+  A2: len M=n by MATRIX_1:def 3;
+  then A3: dom M=Seg n by FINSEQ_1:def 3;
+  len Col(M,i)=n by A2,CARD_1:def 13;
+  then A4: dom Col(M,i)=Seg n by FINSEQ_1:def 3;
+  dom F=Seg n & rng F c=Seg n by FUNCT_2:67,RELAT_1:def 19;
+  then A5: dom(Col(M,i)*F)=Seg n by A4,RELAT_1:46;
+  A6: len(M*F)=n by MATRIX_1:def 3;
+  then A7: dom(M*F)=Seg n by FINSEQ_1:def 3;
+  A8: now let x be set;
+   assume A9: x in Seg n;
+   then reconsider j=x as Element of NAT;
+   Indices M=[:dom M,Seg width M:] by MATRIX_1:def 5;
+   then A10: [j,i] in Indices M by A1,A3,A9,ZFMISC_1:106;
+   A11: F.x in Seg n by A4,A5,A9,FUNCT_1:21;
+   then reconsider Fj=F.x as Element of NAT;
+   thus (Col(M,i)*F).x=Col(M,i).Fj by A5,A9,FUNCT_1:22
+    .=M*(Fj,i) by A3,A11,MATRIX_1:def 9
+    .=(M*F)*(j,i) by A10,MATRIX11:def 4
+    .=Col(M*F,i).x by A7,A9,MATRIX_1:def 9;
+  end;
+  len Col(M*F,i)=n by A6,CARD_1:def 13;
+  then dom Col(M*F,i)=Seg n by FINSEQ_1:def 3;
+  hence thesis by A5,A8,FUNCT_1:9;
+ end;
+
+Lm1: for A be Matrix of n,m,K st(n=0 implies m=0) & the_rank_of A=n
+   ex B be Matrix of m-' n,m,K st the_rank_of(A^B)=m
+proof
+  let A be Matrix of n,m,K;
+  set V=m-VectSp_over K,L=lines A;
+  assume that
+   A1: n=0 implies m=0 and
+   A2: the_rank_of A=n;
+  A3: len A=n by A1,MATRIX13:1;
+  L is linearly-independent by A2,MATRIX13:121;
+  then consider B be Subset of V such that
+   A4: L c=B and
+   A5: B is linearly-independent and
+   A6: Lin(B)=the VectSpStr of V by VECTSP_7:22;
+  reconsider B as finite Subset of V by A5,VECTSP_9:25;
+  B is Basis of V by A5,A6,VECTSP_7:def 3;
+  then A7: card B=dim V by VECTSP_9:def 2
+   .=m by MATRIX13:112;
+  width A=m by A1,MATRIX13:1;
+  then A8: m-n>=0 by A2,MATRIX13:74,XREAL_1:50;
+  then A9: m-n=m-' n by XREAL_0:def 2;
+  A10: A is without_repeated_line by A2,MATRIX13:121;
+  then A11: len A=card L by FINSEQ_4:77;
+  set BL=B\L;
+  consider p be FinSequence such that
+   A12: rng p=BL and
+   A13: p is one-to-one by FINSEQ_4:73;
+  reconsider p as FinSequence of V by A12,FINSEQ_1:def 4;
+  len p=card BL by A12,A13,FINSEQ_4:77
+   .=card B-card L by A4,CARD_2:63
+   .=m-' n by A3,A11,A7,A8,XREAL_0:def 2;
+  then reconsider P=FinS2MX p as Matrix of m-' n,m,K;
+  rng A misses rng P by A12,XBOOLE_1:79;
+  then A14: A^P is without_repeated_line by A10,A13,FINSEQ_3:98;
+  take P;
+  lines(A^P)=L\/rng P by FINSEQ_1:44
+   .=L\/B by A12,XBOOLE_1:39
+   .=B by A4,XBOOLE_1:12;
+  hence thesis by A5,A9,A14,MATRIX13:121;
+ end;
+
+theorem Th16:
+  for A be Matrix of n,m,K st the_rank_of A = n
+    ex B be Matrix of m-' n,m,K st the_rank_of(A^B) = m
+proof
+  let A be Matrix of n,m,K such that
+   A1: the_rank_of A=n;
+  per cases;
+  suppose A2: n=0;
+   then m-' n=m-n by XREAL_0:def 2;
+   then reconsider ONE=1.(K,m) as Matrix of m-' n,m,K by A2;
+   1.(K,m) is invertible by MATRIX_6:8;
+   then Det 1.(K,m)<>0.K by LAPLACE:34;
+   then A3: the_rank_of ONE=m by MATRIX13:83;
+   len A=0 by A2,MATRIX_1:def 3;
+   then A is empty;
+   then A^ONE=ONE by FINSEQ_1:47;
+   hence thesis by A3;
+  end;
+  suppose n>0;
+   hence thesis by A1,Lm1;
+  end;
+end;
+
+theorem
+  for A be Matrix of n,m,K st the_rank_of A = m
+    ex B be Matrix of n,n-' m,K st the_rank_of(A^^B) = n
+proof
+  let A be Matrix of n,m,K such that
+   A1: the_rank_of A=m;
+  A2: len A=n by MATRIX_1:def 3;
+  per cases;
+  suppose A3: m=0;
+   then n-' m=n-m by XREAL_0:def 2;
+   then reconsider ONE=1.(K,n) as Matrix of n,n-' m,K by A3;
+   A4: len 1.(K,n)=n by MATRIX_1:25;
+   1.(K,n) is invertible by MATRIX_6:8;
+   then Det 1.(K,n)<>0.K by LAPLACE:34;
+   then A5: the_rank_of ONE=n by MATRIX13:83;
+   width A=m by A3,MATRIX13:1;
+   then A^^ONE=ONE by A2,A3,A4,MATRIX15:22;
+   hence thesis by A5;
+  end;
+  suppose A6: m>0;
+   n-m>=0 by A1,A2,MATRIX13:74,XREAL_1:50;
+   then A7: n-' m=n-m by XREAL_0:def 2;
+   A8: n>0 by A1,A2,A6,MATRIX13:74;
+   then A9: width A=m by MATRIX13:1;
+   per cases;
+   suppose A10: n=m;
+    take B=the Matrix of n,n-' m,K;
+    len B=n & width B=0 by A6,A7,A10,MATRIX_1:24;
+    hence thesis by A1,A2,A10,MATRIX15:22;
+   end;
+   suppose A11: n<>m;
+    A12: width(A@)=n by A2,A6,A9,MATRIX_2:12;
+    len(A@)=m by A6,A9,MATRIX_2:12;
+    then reconsider A1=A@ as Matrix of m,n,K by A12,MATRIX_2:7;
+    the_rank_of A1=m by A1,MATRIX13:84;
+    then consider B be Matrix of n-' m,n,K such that
+     A13: the_rank_of(A1^B)=n by Th16;
+    A14: n-' m<>0 by A7,A11;
+    then A15: width B=n by MATRIX13:1;
+    then A16: len(B@)=n by A8,MATRIX_2:12;
+    len B=n-' m by A14,MATRIX13:1;
+    then width(B@)=n-' m by A8,A15,MATRIX_2:12;
+    then reconsider B1=B@ as Matrix of n,n-' m,K by A16,MATRIX_2:7;
+    A1@=A by A2,A6,A8,A9,MATRIX_2:15;
+    then A17: (A1^B)@=A^^B1 by A12,A15,MATRLIN:32;
+    the_rank_of((A1^B)@)=n by A13,MATRIX13:84;
+    hence thesis by A17;
+   end;
+  end;
+end;
+
+reserve f,f1,f2 for n-element real-valued FinSequence,
+        p,p1,p2 for Point of TOP-REAL n,
+        M,M1,M2 for Matrix of n,m,F_Real,
+        A,B for Matrix of n,F_Real;
+
+Lm2: f is Point of TOP-REAL n
+ proof
+  len f=n & @@f=f by CARD_1:def 13;
+  hence thesis by TOPREAL7:18;
+ end;
+
+begin :: Linear Transformations of Euclidean Topological Spaces
+      :: given by a Transformation Matrix
+
+definition
+  let n,m,M;
+  func Mx2Tran M -> Function of TOP-REAL n,TOP-REAL m means :Def3:
+   it.f = Line(LineVec2Mx(@f)*M,1) if n <> 0 otherwise it.f = 0.TOP-REAL m;
+  existence
+  proof
+    set Tm=TOP-REAL m;
+    set Tn=TOP-REAL n;
+    A1: now
+      assume A2: n <> 0;
+      defpred P[Element of Tn,Element of Tm] means
+      $2=Line(LineVec2Mx(@$1)*M,1);
+      A3: for x being Element of Tn ex y being Element of Tm st P[x,y]
+      proof
+        let x be Element of Tn;
+        set L=LineVec2Mx(@x);
+        set LL=Line(L*M,1);
+        len x=n by CARD_1:def 13;
+        then A4: width L=n by MATRIX13:1;
+        len M=n & width M=m by A2,MATRIX13:1;
+        then width(L*M)=m by A4,MATRIX_3:def 4;
+        then LL in REAL m;
+        then reconsider LL as Element of Tm by EUCLID:25;
+        P[x,LL];
+        hence thesis;
+      end;
+      consider F being Function of Tn,Tm such that
+      A5: for x being Element of Tn holds P[x,F.x] from FUNCT_2:sch 3(A3);
+      take F;
+      let f;
+      (@f is FinSequence of REAL) & len f=n by CARD_1:def 13;
+      then f is Element of n-tuples_on REAL by FINSEQ_2:110;
+      then f in REAL n;
+      then f is Element of Tn by EUCLID:25;
+      hence F.f = Line(LineVec2Mx(@f)*M,1) by A5;
+    end;
+    now
+      assume n = 0;
+      defpred P[Element of Tn,Element of Tm] means $2=0.Tm;
+      A6: for x being Element of Tn ex y being Element of Tm st P[x,y];
+      consider F being Function of Tn,Tm such that
+      A7: for x being Element of Tn holds P[x,F.x] from FUNCT_2:sch 3(A6);
+      take F;
+      let f;
+      (@f is FinSequence of REAL) & len f=n by CARD_1:def 13;
+      then f is Element of n-tuples_on REAL by FINSEQ_2:110;
+      then f in REAL n;
+      then f is Element of Tn by EUCLID:25;
+      hence F.f = 0.Tm by A7;
+    end;
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    let F1,F2 be Function of TOP-REAL n,TOP-REAL m;
+    A8: now
+      assume n <> 0;
+      assume
+      A9: F1.f=Line(LineVec2Mx(@f)*M,1);
+      assume
+      A10: F2.f=Line(LineVec2Mx(@f)*M,1);
+      now let x be Element of TOP-REAL n;
+        thus F1.x=Line(LineVec2Mx(@x)*M,1) by A9
+        .=F2.x by A10;
+      end;
+      hence F1 = F2 by FUNCT_2:113;
+    end;
+    now assume n = 0;
+      assume
+      A11: F1.f = 0.TOP-REAL m;
+      assume
+      A12: F2.f = 0.TOP-REAL m;
+      now let x be Element of TOP-REAL n;
+        thus F1.x = 0.TOP-REAL m by A11 .= F2.x by A12;
+      end;
+      hence F1 = F2 by FUNCT_2:113;
+    end;
+    hence thesis by A8;
+  end;
+  correctness;
+end;
+
+Lm3: now let n,m,M;let x be set;
+ set T=Mx2Tran M;
+ per cases;
+ suppose A1: x in dom T;
+  A2: rng T c=the carrier of TOP-REAL m by RELAT_1:def 19;
+  T.x in rng T by A1,FUNCT_1:def 5;
+  hence T.x is real-valued FinSequence by A2;
+ end;
+ suppose not x in dom T;
+  hence T.x is real-valued FinSequence by FUNCT_1:def 4;
+ end;
+end;
+
+registration
+  let n,m,M;
+  let x be set;
+  cluster (Mx2Tran M).x -> Function-like Relation-like;
+  coherence by Lm3;
+  cluster (Mx2Tran M).x -> real-valued FinSequence-like;
+  coherence by Lm3;
+end;
+
+registration
+  let n,m,M,f;
+  cluster (Mx2Tran M).f -> m-element;
+  coherence
+  proof
+  set T=Mx2Tran M;
+  (@f is FinSequence of REAL) & len f=n by CARD_1:def 13;
+  then f is Element of n-tuples_on REAL by FINSEQ_2:110;
+  then f in REAL n;
+  then f in the carrier of TOP-REAL n by EUCLID:25;
+  then f in dom T by FUNCT_2:def 1;
+  then A1: T.f in rng T by FUNCT_1:def 5;
+  rng T c=the carrier of TOP-REAL m by RELAT_1:def 19;
+  hence thesis by A1;
+  end;
+end;
+
+theorem Th18:
+  1 <= i & i <= m & n <> 0 implies (Mx2Tran M).f.i = @f"*"Col(M,i)
+proof
+  assume that
+   A1: 1<=i & i<=m and
+   A2: n<>0;
+  A3: len M=n by A2,MATRIX13:1;
+  set Lf=LineVec2Mx(@f);
+  set LfM=Lf*M;
+  len f=n by CARD_1:def 13;
+  then A4: width Lf=n by MATRIX13:1;
+  width M=m by A2,MATRIX13:1;
+  then A5: width LfM=m by A4,A3,MATRIX_3:def 4;
+  len Lf=1 by MATRIX13:1;
+  then len LfM=1 by A4,A3,MATRIX_3:def 4;
+  then A6: [1,i] in Indices LfM by A1,A5,MATRIX_1:37;
+  set LM=Line(LfM,1);
+  i in Seg m & (Mx2Tran M).f=LM by A1,A2,Def3,FINSEQ_1:3;
+  hence (Mx2Tran M).f.i=LfM*(1,i) by A5,MATRIX_1:def 8
+   .=Line(Lf,1)"*"Col(M,i) by A4,A3,A6,MATRIX_3:def 4
+   .=@f"*"Col(M,i) by MATRIX15:25;
+end;
+
+theorem Th19:
+  len MX2FinS 1.(K,n) = n
+proof
+  MX2FinS 1.(K,n) is OrdBasis of n-VectSp_over K by MATRLIN2:45;
+  hence len MX2FinS 1.(K,n)=dim(n-VectSp_over K) by MATRLIN2:21
+   .=n by MATRIX13:112;
+end;
+
+theorem Th20:
+  for Bn be OrdBasis of n-VectSp_over F_Real,
+      Bm be OrdBasis of m-VectSp_over F_Real st
+    Bn = MX2FinS 1.(F_Real,n) & Bm = MX2FinS 1.(F_Real,m)
+  for M1 be Matrix of len Bn,len Bm,F_Real st M1 = M
+    holds Mx2Tran M = Mx2Tran(M1,Bn,Bm)
+proof
+  let Bn be OrdBasis of n-VectSp_over F_Real,
+      Bm be OrdBasis of m-VectSp_over F_Real such that
+   A1: Bn=MX2FinS 1.(F_Real,n) and
+   A2: Bm=MX2FinS 1.(F_Real,m);
+  set T=Mx2Tran M;
+  let M1 be Matrix of len Bn,len Bm,F_Real such that
+   A3: M1=M;
+  set Tb=Mx2Tran(M1,Bn,Bm);
+  dom Tb=the carrier of n-VectSp_over F_Real by FUNCT_2:def 1;
+  then A4: dom Tb =REAL n by MATRIX13:102
+   .=the carrier of TOP-REAL n by EUCLID:25;
+  A5: for x be set st x in dom T holds T.x=Tb.x
+  proof
+   let x be set;
+   assume x in dom T;
+   then reconsider v=x as Element of TOP-REAL n by FUNCT_2:def 1;
+   reconsider g=v as Vector of n-VectSp_over F_Real by A4,FUNCT_2:def 1;
+   set L=LineVec2Mx(@v);
+   len v=n by CARD_1:def 13;
+   then A6: len L=1 & width L=n by MATRIX13:1;
+   A7: len Bn=n by A1,Th19;
+   A8: len Bm=m by A2,Th19;
+   per cases;
+   suppose A9: n=0;
+    then Tb.g = 0.(m-VectSp_over F_Real) by A1,Th19,MATRLIN2:33
+     .= m |-> 0.F_Real by MATRIX13:102
+     .= 0* m
+     .= 0.TOP-REAL m by EUCLID:74
+     .= T.v by A9,Def3;
+    hence thesis;
+   end;
+   suppose A10: n>0;
+    A11: (Tb.g) |--Bm=Tb.g by A2,A8,MATRLIN2:46;
+    A12: g|--Bn=g & AutMt(Tb,Bn,Bm)=M by A1,A3,A7,MATRLIN2:36,46;
+    1 in dom L & len M=width L by A10,A6,FINSEQ_3:27,MATRIX13:1;
+    then LineVec2Mx(Line(L*M,1))=LineVec2Mx(Line(L,1))*M by MATRLIN2:35
+     .=L*M by MATRIX15:25
+     .=LineVec2Mx(Tb.g|--Bm) by A7,A10,A12,MATRLIN2:31;
+    hence Tb.x=Line(LineVec2Mx(Line(L*M,1)),1) by A11,MATRIX15:25
+     .=Line(L*M,1) by MATRIX15:25
+     .=T.x by A10,Def3;
+   end;
+  end;
+  dom T=the carrier of TOP-REAL n by FUNCT_2:def 1;
+  hence thesis by A4,A5,FUNCT_1:9;
+end;
+
+theorem
+  for P be Permutation of Seg n holds
+   (Mx2Tran M).f = (Mx2Tran(M*P)).(f*P) & f*P is n-element FinSequence of REAL
+proof
+  let P be Permutation of Seg n;
+  A1: len f=n by CARD_1:def 13;
+  then A2: rng P=Seg n & dom f=Seg n by FINSEQ_1:def 3,FUNCT_2:def 3;
+  dom P=Seg n by FUNCT_2:67;
+  then A3: dom(f*P)=Seg n by A2,RELAT_1:46;
+  then reconsider fP=f*P as FinSequence by FINSEQ_1:def 2;
+  rng(f*P)=rng f by A2,RELAT_1:47;
+  then reconsider fP as FinSequence of REAL by FINSEQ_1:def 4;
+  A4: len fP=n by A1,A3,FINSEQ_1:def 3;
+  then A5: fP is n-element by CARD_1:def 13;
+  (Mx2Tran M).f = (Mx2Tran(M*P)).(f*P)
+  proof
+   per cases;
+   suppose A6: n<>0;
+    then A7: width M=m by MATRIX13:1;
+    set MP=M*P;
+    A8: len M=n by A6,MATRIX13:1;
+    A9: now let i be Nat;
+    A10: ((the multF of F_Real).:(f,Col(M,i)))=mlt(@f,Col(M,i))
+     by FVSUM_1:def 7;
+    assume A11: 1<=i & i<=m;
+    then i in Seg m by FINSEQ_1:3;
+    then Col(MP,i)=Col(M,i)*P by A7,Th15;
+    then A12: mlt(@fP,Col(MP,i))=(the multF of F_Real).:(fP,Col(M,i)*P) by
+     FVSUM_1:def 7
+    .=mlt(@f,Col(M,i))*P by A10,FUNCOP_1:31;
+    len Col(M,i)=n by A8,CARD_1:def 13;
+    then len mlt(@f,Col(M,i))=n by A1,MATRIX_3:8;
+    then A13: dom mlt(@f,Col(M,i))=Seg n by FINSEQ_1:def 3;
+    (Mx2Tran MP).fP.i=@fP"*"Col(MP,i) by A6,A5,A11,Th18
+     .=Sum mlt(@fP,Col(MP,i)) by FVSUM_1:def 10
+     .=(the addF of F_Real)"**"mlt(@fP,Col(MP,i)) by FVSUM_1:def 8;
+    hence (Mx2Tran MP).fP.i=(the addF of F_Real)"**"mlt(@f,Col(M,i)) by A13,
+     A12,FINSOP_1:8
+     .=Sum mlt(@f,Col(M,i)) by FVSUM_1:def 8
+     .=@f"*"Col(M,i) by FVSUM_1:def 10
+     .=(Mx2Tran M).f.i by A6,A11,Th18;
+     end;
+     len((Mx2Tran M).f)=m & len((Mx2Tran MP).fP)=m by A5,CARD_1:def 13;
+     hence thesis by A9,FINSEQ_1:18;
+   end;
+   suppose A14: n = 0;
+    hence (Mx2Tran M).f = 0.TOP-REAL m by Def3
+     .= (Mx2Tran(M*P)).(f*P) by A14,Def3;
+   end;
+  end;
+  hence thesis by A4,CARD_1:def 13;
+end;
+
+theorem Th22:
+  (Mx2Tran M).(f1+f2) = (Mx2Tran M).f1 + (Mx2Tran M).f2
+proof
+  set f12=f1+f2;
+  set T=Mx2Tran M;
+  per cases;
+  suppose A1: n<>0;
+   per cases;
+   suppose A2: m=0;
+     T.f12=0.REAL 0 by A2;
+    hence thesis by A2;
+   end;
+   suppose m>0;
+    then A3: m>=1 by NAT_1:14;
+    A4: len M=n by A1,MATRIX13:1;
+    set L2=LineVec2Mx@f2;
+    set L1=LineVec2Mx@f1;
+    A5: len L2=1 by MATRIX13:1;
+    A6: len f2=n by CARD_1:def 13;
+    then A7: width L2=n by MATRIX13:1;
+    A8: width M=m by A1,MATRIX13:1;
+    then A9: width(L2*M)=m by A7,A4,MATRIX_3:def 4;
+    A10: len f1=n by CARD_1:def 13;
+    then A11: width L1=n by MATRIX13:1;
+    then A12: width(L1*M)=m by A4,A8,MATRIX_3:def 4;
+    A13: len L1=1 by MATRIX13:1;
+    then len(L1*M)=1 by A11,A4,MATRIX_3:def 4;
+    then A14: [1,1] in Indices(L1*M) by A12,A3,MATRIX_1:37;
+    A15: @(T.f1)=Line(L1*M,1) & @(T.f2)=Line(L2*M,1) by A1,Def3;
+    @f12=@f1+@f2 by Th1;
+    then (LineVec2Mx@f12)*M=(L1+L2)*M by A10,A6,MATRIX15:27
+     .=L1*M+L2*M by A1,A13,A5,A11,A7,A4,MATRIX_4:63;
+    hence T.f12=Line(L1*M+L2*M,1) by A1,Def3
+     .=Line(L1*M,1)+Line(L2*M,1) by A12,A9,A14,MATRIX_4:59
+     .=T.f1+T.f2 by A15,Th1;
+   end;
+  end;
+  suppose A16: n=0;
+    A17: 0.TOP-REAL m = 0* m by EUCLID:74 .= m |-> 0;
+    then A18: T.f2 = m |-> 0 by A16,Def3;
+    thus T.(f1+f2) = m |-> (0+0) by A16,A17,Def3
+     .= m |-> 0 + m |-> 0 by RVSUM_1:30
+     .= T.f1 + T.f2 by A16,A18;
+  end;
+end;
+
+theorem Th23:
+  (Mx2Tran M).(r*f) = r * ((Mx2Tran M).f)
+proof
+  set rf=r*f;
+  set T=Mx2Tran M;
+  per cases;
+  suppose A1: n<>0;
+   per cases;
+   suppose A2: m=0;
+    then T.rf=0.REAL 0;
+    hence thesis by A2;
+   end;
+   suppose m>0;
+    reconsider R=r as Element of F_Real by XREAL_0:def 1;
+    set Lr=LineVec2Mx@rf;
+    set L=LineVec2Mx@f;
+    A3: R*@f=@rf by MATRIXR1:17;
+    len f=n by CARD_1:def 13;
+    then A4: width L=n by MATRIX13:1;
+    A5: len M=n by A1,MATRIX13:1;
+    len L=1 by MATRIX13:1;
+    then A6: len(L*M)=1 by A4,A5,MATRIX_3:def 4;
+    T.@f=Line(L*M,1) by A1,Def3;
+    hence r*(T.f)=R*Line(L*M,1) by MATRIXR1:17
+     .=Line(R*(L*M),1) by A6,MATRIXR1:20
+     .=Line((R*L)*M,1) by A4,A5,MATRIX15:1
+     .=Line(Lr*M,1) by A3,MATRIX15:29
+     .=T.(r*f) by A1,Def3;
+   end;
+  end;
+  suppose A7: n = 0;
+    A8: 0.TOP-REAL m = 0* m by EUCLID:74 .= m |-> 0;
+    hence T.rf = m |-> (r*0) by A7,Def3
+    .= r * (m |-> 0) by RVSUM_1:70
+    .= r * T.f by A7,A8,Def3;
+  end;
+end;
+
+theorem Th24:
+  (Mx2Tran M).(f1-f2) = (Mx2Tran M).f1 - (Mx2Tran M).f2
+proof
+  f1-f2=f1+-f2 by RVSUM_1:52
+   .=f1+(-1)*f2 by RVSUM_1:76;
+  hence (Mx2Tran M).(f1-f2)=(Mx2Tran M).f1+(Mx2Tran M).((-1)*f2) by Th22
+   .=(Mx2Tran M).f1+(-1)*(Mx2Tran M).f2 by Th23
+   .=(Mx2Tran M).f1+-(Mx2Tran M).f2 by RVSUM_1:76
+   .=(Mx2Tran M).f1-(Mx2Tran M).f2 by RVSUM_1:52;
+end;
+
+theorem
+  (Mx2Tran(M1+M2)).f = (Mx2Tran M1).f + (Mx2Tran M2).f
+proof
+  set T12=Mx2Tran(M1+M2);
+  set T2=Mx2Tran M2;
+  set T1=Mx2Tran M1;
+  per cases;
+  suppose A1: n<>0;
+   per cases;
+   suppose A2: m=0;
+    then T12.f=0.REAL 0;
+    hence thesis by A2;
+   end;
+   suppose A3: m>0;
+    set L=LineVec2Mx@f;
+    len f=n by CARD_1:def 13;
+    then A4: width L=n by MATRIX13:1;
+    A5: len M2=n & width M2=m by A1,MATRIX13:1;
+    then A6: width(L*M2)=m by A4,MATRIX_3:def 4;
+    A7: 1<=m by A3,NAT_1:14;
+    A8: len M1=n by A1,MATRIX13:1;
+    A9: width M1=m by A1,MATRIX13:1;
+    then A10: width(L*M1)=m by A4,A8,MATRIX_3:def 4;
+    A11: len L=1 by MATRIX13:1;
+    then len(L*M1)=1 by A4,A8,MATRIX_3:def 4;
+    then A12: [1,1] in Indices(L*M1) by A10,A7,MATRIX_1:37;
+    @(T1.f)=Line(L*M1,1) & @(T2.f)=Line(L*M2,1) by A1,Def3;
+    hence T1.f+T2.f=Line(L*M1,1)+Line(L*M2,1) by Th1
+     .=Line(L*M1+L*M2,1) by A10,A6,A12,MATRIX_4:59
+     .=Line(L*(M1+M2),1) by A1,A11,A4,A8,A9,A5,MATRIX_4:62
+     .=T12.f by A1,Def3;
+   end;
+  end;
+  suppose A13: n=0;
+    A14: 0.TOP-REAL m = 0* m by EUCLID:74 .= m |-> 0;
+    then A15: T2.f = m |-> 0 by A13,Def3;
+    thus T12.f = m |-> (0+0) by A13,A14,Def3
+     .= m |-> 0 + m |-> 0 by RVSUM_1:30
+     .= T1.f + T2.f by A13,A14,A15,Def3;
+  end;
+end;
+
+theorem
+  r = R implies r * (Mx2Tran M).f = (Mx2Tran(R*M)).f
+proof
+  set L=LineVec2Mx@f;
+  set RM=R*M;
+  set T=Mx2Tran M;
+  set TR=Mx2Tran RM;
+  assume that
+   A1: r=R;
+  per cases;
+  suppose A2: n<>0;
+   A3: len M=n by A2,MATRIX13:1;
+   len f=n by CARD_1:def 13;
+   then A4: width L=n by MATRIX13:1;
+   len L=1 by MATRIX13:1;
+   then A5: len(L*M)=1 by A4,A3,MATRIX_3:def 4;
+   T.f=Line(L*M,1) by A2,Def3;
+   hence r*(T.f)=R*Line(L*M,1) by A1,MATRIXR1:17
+    .=Line(R*(L*M),1) by A5,MATRIXR1:20
+    .=Line(L*RM,1) by A4,A3,MATRIXR1:22
+    .=TR.f by A2,Def3;
+  end;
+  suppose A6: n=0;
+    A7: 0.TOP-REAL m = 0* m by EUCLID:74 .= m |-> 0;
+    hence r * T.f = r * (m |-> 0) by A6,Def3
+    .= m |-> (r*0) by RVSUM_1:70
+    .= TR.f by A6,A7,Def3;
+  end;
+end;
+
+theorem Th27:
+  (Mx2Tran M).(p1+p2) = (Mx2Tran M).p1 + (Mx2Tran M).p2
+proof
+  reconsider f1=p1,f2=p2 as n-element real-valued FinSequence;
+  thus(Mx2Tran M).(p1+p2)=(Mx2Tran M).(f1+f2) by EUCLID:68
+   .=(Mx2Tran M).f1+(Mx2Tran M).f2 by Th22
+   .=(Mx2Tran M).p1+(Mx2Tran M).p2 by EUCLID:68;
+end;
+
+theorem Th28:
+  (Mx2Tran M).(p1-p2) = (Mx2Tran M).p1-(Mx2Tran M).p2
+proof
+  reconsider f1=p1,f2=p2 as real-valued FinSequence;
+  thus(Mx2Tran M).(p1-p2)=(Mx2Tran M).(f1-f2) by EUCLID:73
+   .=(Mx2Tran M).f1-(Mx2Tran M).f2 by Th24
+   .=(Mx2Tran M).p1-(Mx2Tran M).p2 by EUCLID:73;
+end;
+
+theorem Th29:
+  (Mx2Tran M).0.TOP-REAL n = 0.TOP-REAL m
+proof
+  set TRn=the Element of TOP-REAL n;
+  set MT=Mx2Tran M;
+  0.TOP-REAL n =TRn-TRn by EUCLID:46;
+  hence MT.0.TOP-REAL n=(MT.TRn)-(MT.TRn) by Th28
+   .=0.TOP-REAL m by EUCLID:46;
+end;
+
+theorem
+  for A be Subset of TOP-REAL n holds
+   (Mx2Tran M).:(p+A) = (Mx2Tran M).p + (Mx2Tran M).:A
+proof
+  set TRn=TOP-REAL n;
+  set TRm=TOP-REAL m;
+  set MT=Mx2Tran M;
+  let A be Subset of TRn;
+  A1: dom MT=[#]TRn by FUNCT_2:def 1;
+  thus MT.:(p+A)c=MT.p+MT.:A
+  proof
+   let y be set;
+   assume y in MT.:(p+A);
+   then consider x be set such that
+    x in dom MT and
+    A2: x in p+A and
+    A3: MT.x=y by FUNCT_1:def 12;
+   x in {p+w where w is Element of TRn:w in A} by A2,RUSUB_4:def 9;
+   then consider w be Element of TRn such that
+    A4: x=p+w & w in A;
+   MT.w in MT.:A & MT.x=MT.p+MT.w by A1,A4,Th27,FUNCT_1:def 12;
+   then MT.x in {MT.p+u where u is Element of TRm:u in MT.:A};
+   hence thesis by A3,RUSUB_4:def 9;
+  end;
+  let y be set;
+  assume y in MT.p+MT.:A;
+  then y in {MT.p+u where u is Element of TRm:u in MT.:A} by RUSUB_4:def 9;
+  then consider u be Element of TRm such that
+   A5: y=MT.p+u and
+   A6: u in MT.:A;
+  consider w be set such that
+   w in dom MT and
+   A7: w in A and
+   A8: MT.w=u by A6,FUNCT_1:def 12;
+  reconsider w as Element of TRn by A7;
+  p+w in {p+L where L is Element of TRn:L in A} by A7;
+  then A9: p+w in p+A by RUSUB_4:def 9;
+  y =MT.(p+w) by A5,A8,Th27;
+  hence thesis by A1,A9,FUNCT_1:def 12;
+end;
+
+theorem
+  for A be Subset of TOP-REAL m holds
+   (Mx2Tran M)"(((Mx2Tran M).p)+A) = p + (Mx2Tran M)"A
+proof
+  set MT=Mx2Tran M;
+  set TRn=TOP-REAL n;
+  set TRm=TOP-REAL m;
+  let A be Subset of TRm;
+  set w=p;
+  set MTw=MT.w;
+  A1: w+MT"A={w+v where v is Element of TRn:v in MT"A} by RUSUB_4:def 9;
+  A2: MTw+A={MTw+v where v is Element of TRm:v in A} by RUSUB_4:def 9;
+  A3: dom MT=[#]TRn by FUNCT_2:def 1;
+  hereby let x be set;
+   assume A4: x in MT"(MTw+A);
+   then reconsider f=x as Element of TRn;
+   MT.x in MTw+A by A4,FUNCT_1:def 13;
+   then consider v be Element of TRm such that
+    A5: MT.x=MTw+v and
+    A6: v in A by A2;
+   MT.f-MTw =(v+MTw)-MTw by A5,RLVECT_1:def 5
+    .=v+(MTw-MTw) by RLVECT_1:42
+    .=v+0.TRm by RLVECT_1:28
+    .=v by RLVECT_1:10;
+   then v=MT.(f-w) by Th28;
+   then A7: f-w in MT"A by A3,A6,FUNCT_1:def 13;
+   w+(f-w)=(f-w)+w by RLVECT_1:def 5
+    .=f-(w-w) by RLVECT_1:43
+    .=f-0.TRn by RLVECT_1:28
+    .=f by RLVECT_1:26;
+   hence x in w+MT"A by A1,A7;
+  end;
+  let x be set;
+  assume x in w+MT"A;
+  then consider v be Element of TRn such that
+   A8: x=w+v and
+   A9: v in MT"A by A1;
+  A10: MT.v in A by A9,FUNCT_1:def 13;
+  MT.(w+v)=MTw+MT.v by Th27;
+  then MT.x in MTw+A by A2,A8,A10;
+  hence thesis by A3,A8,FUNCT_1:def 13;
+ end;
+
+theorem Th32:
+  for A be Matrix of n,m,F_Real,
+      B be Matrix of width A,k,F_Real st
+      (n = 0 implies m = 0) & (m = 0 implies k = 0)
+    holds (Mx2Tran B) * (Mx2Tran A) = Mx2Tran(A*B)
+proof
+  let A be Matrix of n,m,F_Real,B be Matrix of width A,k,F_Real such that
+   A1: n=0 implies m=0 and
+   A2: m=0 implies k=0;
+  reconsider Bk=MX2FinS 1.(F_Real,k) as OrdBasis of k-VectSp_over F_Real
+    by MATRLIN2:45;
+  reconsider Bm=MX2FinS 1.(F_Real,m) as OrdBasis of m-VectSp_over F_Real
+    by MATRLIN2:45;
+  reconsider Bn=MX2FinS 1.(F_Real,n) as OrdBasis of n-VectSp_over F_Real
+    by MATRLIN2:45;
+  A3: len A=n by A1,MATRIX13:1;
+  A4: len Bn=n by Th19;
+  then reconsider A1=A as Matrix of len Bn,len Bm,F_Real by Th19;
+  A5: Mx2Tran A=Mx2Tran(A1,Bn,Bm) by Th20;
+  A6: width A=m by A1,MATRIX13:1;
+  then A7: width B=k by A2,MATRIX13:1;
+  then reconsider AB=A*B as Matrix of len Bn,len Bk,F_Real by A3,A4,Th19;
+  len Bm=m by Th19;
+  then reconsider B1=B as Matrix of len Bm,len Bk,F_Real by A6,Th19;
+  A8: len B1=m by A2,A6,MATRIX13:1;
+  Mx2Tran(A*B)=Mx2Tran(AB,Bn,Bk) by A3,A7,Th20;
+  then Mx2Tran(A*B)=Mx2Tran(B1,Bm,Bk)*Mx2Tran(A1,Bn,Bm) by A6,A8,MATRLIN2:40;
+  hence thesis by A6,A5,Th20;
+end;
+
+theorem Th33:
+  Mx2Tran 1.(F_Real,n) = id TOP-REAL n
+proof
+  set V=n-VectSp_over F_Real;
+  reconsider Bn=MX2FinS 1.(F_Real,n) as OrdBasis of V by MATRLIN2:45;
+  A1: len Bn=n by Th19;
+  then reconsider ONE=1.(F_Real,n) as Matrix of len Bn,len Bn,F_Real;
+  A2: Mx2Tran 1.(F_Real,n)=Mx2Tran(ONE,Bn,Bn) by Th20;
+  A3: [#]TOP-REAL n=dom Mx2Tran 1.(F_Real,n) by FUNCT_2:def 1
+   .=[#]V by A2,FUNCT_2:def 1;
+  thus Mx2Tran 1.(F_Real,n)
+   =Mx2Tran(AutMt(id V,Bn,Bn),Bn,Bn) by A1,MATRLIN2:28,Th20
+   .=id TOP-REAL n by A3,MATRLIN2:34;
+end;
+
+theorem Th34:
+  Mx2Tran M1 = Mx2Tran M2 implies M1 = M2
+proof
+  assume that
+   A1: Mx2Tran M1=Mx2Tran M2;
+  set Vn=n-VectSp_over F_Real,Vm=m-VectSp_over F_Real;
+  reconsider Bn=MX2FinS 1.(F_Real,n) as OrdBasis of Vn by MATRLIN2:45;
+  reconsider Bm=MX2FinS 1.(F_Real,m) as OrdBasis of Vm by MATRLIN2:45;
+  len Bn=n by Th19;
+  then reconsider A1=M1,B1=M2 as Matrix of len Bn,len Bm,F_Real by Th19;
+  A2: Mx2Tran(A1,Bn,Bm)=Mx2Tran M1 by Th20
+   .=Mx2Tran(B1,Bn,Bm) by A1,Th20;
+  thus M1=AutMt(Mx2Tran(A1,Bn,Bm),Bn,Bm) by MATRLIN2:36
+   .=M2 by A2,MATRLIN2:36;
+end;
+
+theorem Th35:
+  for A be Matrix of n,m,F_Real,
+      B be Matrix of k,m,F_Real
+  holds
+  (Mx2Tran(A^B)).(f^(k|->0)) = (Mx2Tran A).f &
+  (Mx2Tran(B^A)).((k|->0)^f) = (Mx2Tran A).f
+proof
+  let A be Matrix of n,m,F_Real,B be Matrix of k,m,F_Real;
+  reconsider k0=k|->0 as k-element FinSequence of REAL by FINSEQ_2:77;
+  A1: len B=k by MATRIX_1:def 3;
+  set kf=k0^f;
+  per cases;
+   suppose A2: n<>0;
+   then A3: width A=m by MATRIX13:1;
+   A4: len f=n & len k0=k by CARD_1:def 13;
+   then len kf=n+k by FINSEQ_1:35;
+   then A5: kf is(n+k)-element by CARD_1:def 13;
+   A6: len A=n by A2,MATRIX13:1;
+   thus(Mx2Tran(A^B)).(f^(k|->0))=(Mx2Tran A).f
+   proof
+    set fk=f^k0;
+    len fk=n+k by A4,FINSEQ_1:35;
+    then A7: fk is(n+k)-element by CARD_1:def 13;
+    per cases;
+    suppose A8: k=0;
+     then B is empty by A1;
+     then A9: Mx2Tran(A^B)=Mx2Tran A by A8,FINSEQ_1:47;
+     k0 is empty by A8;
+     hence thesis by A9,FINSEQ_1:47;
+    end;
+    suppose A10: k<>0;
+     set Mab=Mx2Tran(A^B),Ma=Mx2Tran A;
+     A11: width B=m by A10,MATRIX_1:24;
+     A12: now let i;
+      reconsider S1=Sum mlt(@k0,Col(B,i)),S2=Sum mlt(@f,Col(A,i))
+        as Element of F_Real;
+      assume A13: 1<=i & i<=m;
+      then A14: i in Seg m by FINSEQ_1:3;
+      mlt(@k0,Col(B,i))=(0.F_Real)*Col(B,i) by A1,FVSUM_1:80
+       .=k|->0.F_Real by A1,FVSUM_1:71;
+      then A15: Sum mlt(@k0,Col(B,i))=Sum(k|->0) by MATRPROB:36
+       .=0.(F_Real qua Field) by RVSUM_1:111;
+      A16: len Col(A,i)=n & len Col(B,i)=k by A6,A1,MATRIX_1:def 9;
+      mlt(@fk,Col(A^B,i))=mlt((@f)^(@k0),Col(A,i)^Col(B,i))
+        by A3,A11,A14,MATRLIN:30
+       .=mlt(@f,Col(A,i))^mlt(@k0,Col(B,i)) by A4,A16,MATRIX14:7;
+      then Sum(mlt(@fk,Col(A^B,i)))=
+       (the addF of F_Real)$$(mlt(@f,Col(A,i))^mlt(@k0,Col(B,i)))
+           by FVSUM_1:def 8
+       .=(the addF of F_Real).((the addF of F_Real)$$
+       mlt(@f,Col(A,i)),(the addF of F_Real)$$mlt(@k0,Col(B,i))) by FINSOP_1:6
+       .=(the addF of F_Real).(Sum mlt(@f,Col(A,i)),(the addF of F_Real)
+         $$mlt(@k0,Col(B,i))) by FVSUM_1:def 8
+       .=addreal.(Sum mlt(@f,Col(A,i)),Sum mlt(@k0,Col(B,i))) by FVSUM_1:def 8
+       .=Sum mlt(@f,Col(A,i))+Sum mlt(@k0,Col(B,i)) by BINOP_2:def 9
+       .=@f"*"Col(A,i) by A15,FVSUM_1:def 10;
+      hence Ma.f.i=Sum(mlt(@fk,Col(A^B,i))) by A2,A13,Th18
+       .=@fk"*"Col(A^B,i) by FVSUM_1:def 10
+       .=Mab.fk.i by A2,A7,A13,Th18;
+     end;
+     len(Mab.fk)=m & len(Ma.f)=m by A7,CARD_1:def 13;
+     hence thesis by A12,FINSEQ_1:18;
+    end;
+   end;
+   per cases;
+   suppose A17: k=0;
+    then B is empty by A1;
+    then A18: Mx2Tran(B^A)=Mx2Tran A by A17,FINSEQ_1:47;
+    k0 is empty by A17;
+    hence thesis by A18,FINSEQ_1:47;
+   end;
+   suppose A19: k<>0;
+    set Mba=Mx2Tran(B^A),Ma=Mx2Tran A;
+    A20: width B=m by A19,MATRIX_1:24;
+    A21: now let i;
+    reconsider S1=Sum mlt(@k0,Col(B,i)),S2=Sum mlt(@f,Col(A,i)) as
+      Element of F_Real;
+     assume A22: 1<=i & i<=m;
+     then A23: i in Seg m by FINSEQ_1:3;
+     mlt(@k0,Col(B,i))=(0.F_Real)*Col(B,i) by A1,FVSUM_1:80
+      .=k|->0.F_Real by A1,FVSUM_1:71;
+     then A24: Sum mlt(@k0,Col(B,i))=Sum(k|->0) by MATRPROB:36
+      .=0.(F_Real qua Field) by RVSUM_1:111;
+     A25: len Col(A,i)=n & len Col(B,i)=k by A6,A1,MATRIX_1:def 9;
+     mlt(@kf,Col(B^A,i)) =mlt((@k0)^(@f),Col(B,i)^Col(A,i))
+       by A3,A20,A23,MATRLIN:30
+     .=mlt(@k0,Col(B,i))^mlt(@f,Col(A,i)) by A4,A25,MATRIX14:7;
+     then Sum(mlt(@kf,Col(B^A,i)))=(the addF of F_Real)$$
+           (mlt(@k0,Col(B,i))^mlt(@f,Col(A,i))) by FVSUM_1:def 8
+      .=(the addF of F_Real).((the addF of F_Real)$$
+        mlt(@k0,Col(B,i)),(the addF of F_Real)$$mlt(@f,Col(A,i))) by FINSOP_1:6
+      .=(the addF of F_Real).(Sum mlt(@k0,Col(B,i)),(the addF of F_Real)$$
+              mlt(@f,Col(A,i))) by FVSUM_1:def 8
+      .=addreal.(Sum mlt(@k0,Col(B,i)),Sum mlt(@f,Col(A,i))) by FVSUM_1:def 8
+      .=Sum mlt(@f,Col(A,i))+0.F_Real by A24,BINOP_2:def 9
+      .=@f"*"Col(A,i) by FVSUM_1:def 10;
+     hence Ma.f.i=Sum(mlt(@kf,Col(B^A,i))) by A2,A22,Th18
+      .=@kf"*"Col(B^A,i) by FVSUM_1:def 10
+      .=Mba.kf.i by A2,A5,A22,Th18;
+    end;
+    len(Mba.kf)=m & len(Ma.f)=m by A5,CARD_1:def 13;
+    hence thesis by A21,FINSEQ_1:18;
+   end;
+  end;
+  suppose A26: n=0;
+    A27: 0.TOP-REAL k = 0* k by EUCLID:74 .= k |-> 0;
+    f = {} by A26;
+    then A28: f^(k|->0) = k|->0 & (k|->0)^f = k|->0 by FINSEQ_1:47;
+    thus (Mx2Tran(A^B)).(f^(k|->0))
+       = 0.TOP-REAL m by A27,A28,Th29,A26
+      .= (Mx2Tran A).f by A26,Def3;
+    thus (Mx2Tran(B^A)).((k|->0)^f)
+       = 0.TOP-REAL m by A27,A28,Th29,A26
+      .= (Mx2Tran A).f by A26,Def3;
+  end;
+end;
+
+theorem
+  for A be Matrix of n,m,F_Real,
+      B be Matrix of k,m,F_Real
+  for g be k-element real-valued FinSequence holds
+    (Mx2Tran(A^B)).(f^g) = (Mx2Tran A).f+(Mx2Tran B).g
+proof
+  A1: len f=n by CARD_1:def 13;
+  rng f c=REAL;
+  then f is FinSequence of REAL by FINSEQ_1:def 4;
+  then reconsider F=f,n0=n|->0 as Element of n-tuples_on REAL by A1,FINSEQ_2:
+110,132;
+  let A be Matrix of n,m,F_Real,B be Matrix of k,m,F_Real;
+  let g be k-element real-valued FinSequence;
+  A2: len g=k by CARD_1:def 13;
+  rng g c=REAL;
+  then g is FinSequence of REAL by FINSEQ_1:def 4;
+  then reconsider G=g,k0=k|->0 as Element of k-tuples_on REAL
+    by A2,FINSEQ_2:110,132;
+  len(n|->0)=n by CARD_1:def 13;
+  then len(n0^G)=n+k by A2,FINSEQ_1:35;
+  then A3: n0^G is n+k-element by CARD_1:def 13;
+  len(k|->0)=k by CARD_1:def 13;
+  then len(F^k0)=n+k by A1,FINSEQ_1:35;
+  then A4: F^k0 is n+k-element by CARD_1:def 13;
+  f=F+n0 by RVSUM_1:33;
+  then g=G+k0 & f=addreal.:(f,n0) by RVSUM_1:33,def 4;
+  then f^g=(addreal.:(F,n0))^(addreal.:(k0,G)) by RVSUM_1:def 4
+   .=addreal.:(F^k0,n0^G) by FINSEQOP:12
+   .=(F^k0)+(n0^G) by RVSUM_1:def 4;
+  hence (Mx2Tran(A^B)).(f^g)=(Mx2Tran(A^B)).(F^k0)+(Mx2Tran(A^B)).(n0^G)
+  by A4,A3,Th22
+   .=(Mx2Tran A).f+(Mx2Tran(A^B)).(n0^G) by Th35
+   .=(Mx2Tran A).f+(Mx2Tran B).g by Th35;
+end;
+
+theorem
+  for A be Matrix of n,k,F_Real,
+      B be Matrix of n,m,F_Real
+   st n = 0 implies k+m = 0
+   holds (Mx2Tran(A^^B)).f = (Mx2Tran A).f^(Mx2Tran B).f
+proof
+  let A be Matrix of n,k,F_Real,B be Matrix of n,m,F_Real;
+  set L=LineVec2Mx(@f);
+  set MAB=(Mx2Tran(A^^B)).f,MA=(Mx2Tran A).f,MB=(Mx2Tran B).f;
+  A1: len MA=k by CARD_1:def 13;
+  assume A2: n=0 implies k+m=0;
+  then n=0 implies k=0;
+  then A3: width A=k by MATRIX13:1;
+  n=0 implies m=0 by A2;
+  then A4: width B=m by MATRIX13:1;
+  A5: len MB=m by CARD_1:def 13;
+  then A6: len(MA^MB)=k+m by A1,FINSEQ_1:35;
+  A7: for i st 1<=i & i<=k+m holds(MA^MB).i=MAB.i
+  proof
+   let i;
+   assume that
+    A8: 1<=i and
+    A9: i<=k+m;
+   A10: i in dom(MA^MB) by A6,A8,A9,FINSEQ_3:27;
+   A11: MAB.i=@f"*"Col(A^^B,i) by A2,A3,A4,A8,A9,Th18;
+   per cases by A10,FINSEQ_1:38;
+   suppose A12: i in dom MA;
+    then i<=k by A1,FINSEQ_3:27;
+    then A13: MA.i=@f"*"Col(A,i) by A2,A8,Th18;
+    i in Seg width A & (MA^MB).i=MA.i by A3,A1,A12,FINSEQ_1:def 3,def 7;
+    hence (MA^MB).i=MAB.i by A11,A13,MATRIX15:16;
+   end;
+   suppose ex j be Nat st j in dom MB & i=len MA+j;
+    then consider j be Nat such that
+     A14: j in dom MB and
+     A15: i=len MA+j;
+    1<=j & j<=m by A5,A14,FINSEQ_3:27;
+    then A16: MB.j=@f"*"Col(B,j) by A2,Th18;
+    j in Seg width B & (MA^MB).i=MB.j by A4,A5,A14,A15,FINSEQ_1:def 3,def 7;
+    hence (MA^MB).i=MAB.i by A3,A1,A11,A15,A16,MATRIX15:17;
+   end;
+  end;
+  len MAB=k+m by A3,A4,CARD_1:def 13;
+  hence thesis by A6,A7,FINSEQ_1:18;
+end;
+
+theorem
+  M = 1.(F_Real,m) |n implies ((Mx2Tran M).f) |n = f
+proof
+  set ONE=1.(F_Real,m);
+  assume A1: M=ONE|n;
+  per cases;
+  suppose A2: n=0;
+   then ((Mx2Tran M).f) |n is empty;
+   hence thesis by A2;
+  end;
+  suppose A3: n>0;
+   set TRm=TOP-REAL m;
+   set V=m-VectSp_over F_Real;
+   A4: len ONE=m by MATRIX_1:25;
+   A5: len f=n by CARD_1:def 13;
+   consider A be FinSequence such that
+    A6: ONE=M^A by A1,FINSEQ_1:101;
+   ONE=MX2FinS ONE;
+   then reconsider A as FinSequence of V by A6,FINSEQ_1:50;
+   set L=len A;
+   len M=n by A3,MATRIX13:1;
+   then n+L=m by A4,A6,FINSEQ_1:35;
+   then A7: f^(L|->0) is Element of TRm by Lm2;
+   set A1=FinS2MX A;
+   A8: (f^(L|->0)) |n=(f^(L|->0)) |dom f by A5,FINSEQ_1:def 3
+    .=f by FINSEQ_1:33;
+   (Mx2Tran(M^A1)).(f^(L|->0))=(Mx2Tran ONE).(f^(L|->0))
+      by A3,A4,A6,MATRIX13:1
+    .=(id TRm).(f^(L|->0)) by Th33
+    .=f^(L|->0) by A7,FUNCT_1:35;
+   hence thesis by A8,Th35;
+  end;
+end;
+
+begin :: Selected Properties of the Mx2Tran Operator
+
+theorem Th39:
+  Mx2Tran M is one-to-one iff the_rank_of M = n
+proof
+  set MM=Mx2Tran M;
+  per cases;
+  suppose A1: n=0 iff m=0;
+  set nV=n-VectSp_over F_Real,mV=m-VectSp_over F_Real;
+  reconsider Bn=MX2FinS 1.(F_Real,n) as OrdBasis of nV by MATRLIN2:45;
+  reconsider Bm=MX2FinS 1.(F_Real,m) as OrdBasis of mV by MATRLIN2:45;
+  A2: len Bn=n by Th19;
+  then reconsider M1=M as Matrix of len Bn,len Bm,F_Real by Th19;
+  A3: len M1=n by A1,MATRIX13:1;
+  A4: len Bm=m by Th19;
+  set T=Mx2Tran(M1,Bn,Bm);
+  A5: T is one-to-one iff ker T=(0).nV by MATRLIN2:43;
+  A6: width M1=m by A1,MATRIX13:1;
+  per cases;
+  suppose A7: m=0;
+   A8: the carrier of TOP-REAL 0 ={0.TOP-REAL 0} by JORDAN2C:113,EUCLID:25;
+   then rng MM c={0.TOP-REAL 0} by A7,RELAT_1:def 19;
+   then rng MM={0.TOP-REAL 0} by ZFMISC_1:39;
+   then card{0.TOP-REAL 0}=card{0.TOP-REAL 0} & MM is onto
+     by A7,A8,FUNCT_2:def 3;
+   hence thesis by A1,A3,A7,A8,MATRIX13:74,STIRL2_1:70;
+  end;
+  suppose A9: m>0;
+   then reconsider SS=Space_of_Solutions_of(M1@) as Subspace of nV
+     by A3,A6,MATRIX_2:12;
+   A10: width(M1@)=n by A3,A6,A9,MATRIX_2:12;
+   hereby assume A11: Mx2Tran M is one-to-one;
+    [#]SS c={0.nV}
+    proof
+     let x be set;
+     assume A12: x in [#]SS;
+     then reconsider v=x as Vector of nV by VECTSP_4:18;
+     v=v|--Bn by A2,MATRLIN2:46;
+     then v|--Bn in SS by A12,STRUCT_0:def 5;
+     then v in ker T by A1,A2,A4,A9,MATRLIN2:41;
+     then v=0.nV by A5,A11,Th20,VECTSP_4:46;
+     hence thesis by TARSKI:def 1;
+    end;
+    then [#]SS={0.nV} by ZFMISC_1:39;
+    then SS=(0).nV by VECTSP_4:def 3;
+    then dim SS=0 by RANKNULL:16;
+    then 0=n-the_rank_of(M1@) by A1,A9,A10,MATRIX15:68;
+    hence the_rank_of M=n by MATRIX13:84;
+   end;
+   A13: the_rank_of(M1@)=the_rank_of M by MATRIX13:84;
+   assume the_rank_of M=n;
+   then dim SS=n-n by A1,A9,A10,A13,MATRIX15:68;
+   then A14: SS is trivial by MATRLIN2:42;
+   [#]ker T c={0.nV}
+   proof
+    let x be set;
+    assume A15: x in [#]ker T;
+    then reconsider v=x as Vector of nV by VECTSP_4:18;
+    v in ker T by A15,STRUCT_0:def 5;
+    then v|--Bn in SS by A1,A2,A4,A9,MATRLIN2:41;
+    then v in SS by A2,MATRLIN2:46;
+    then v in the carrier of SS by STRUCT_0:def 5;
+    then v=0.SS by A14,STRUCT_0:def 19;
+    then v=0.nV by VECTSP_4:19;
+    hence thesis by TARSKI:def 1;
+   end;
+   then [#]ker T={0.nV} by ZFMISC_1:39;
+   hence thesis by A5,Th20,VECTSP_4:def 3;
+  end;
+  end;
+  suppose A16: n=0 & m<>0;
+    A17: now
+      let x1,x2 be set such that
+       A18: x1 in dom MM & x2 in dom MM & MM.x1 = MM.x2;
+      A19: dom MM = [#]TOP-REAL 0 by A16,FUNCT_2:def 1
+       .= {0.TOP-REAL 0} by JORDAN2C:113,EUCLID:25;
+      hence x1 = 0.TOP-REAL 0 by A18,TARSKI:def 1
+       .= x2 by A18,A19,TARSKI:def 1;
+    end;
+    len M = n by MATRIX_1:def 3;
+    hence thesis by A17,A16,MATRIX13:74,FUNCT_1:def 8;
+  end;
+  suppose A20: n<>0 & m=0;
+    reconsider x1 = n |-> 1 as Point of TOP-REAL n by Lm2;
+    reconsider x2 = n |-> 2 as Point of TOP-REAL n by Lm2;
+    A21: dom MM = [#]TOP-REAL n by FUNCT_2:def 1;
+    A22: MM.x1 = 0.TOP-REAL 0 by A20 .=MM.x2 by A20;
+    A23: x1 <> x2
+    proof
+      assume A24: x1 = x2;
+      A25: x1 = (Seg n) --> 1 by FINSEQ_2:def 2
+      .= [:Seg n,{1}:] by FUNCOP_1:def 2;
+      x2 = (Seg n) --> 2 by FINSEQ_2:def 2
+      .= [:Seg n,{2}:] by FUNCOP_1:def 2;
+      then {1} = {2} by A24,A25,A20,ZFMISC_1:134;
+      then 2 in {1} by TARSKI:def 1;
+      hence contradiction by TARSKI:def 1;
+    end;
+    width M = m by A20,MATRIX13:1;
+    hence thesis by A23,A20,MATRIX13:74,A22,A21,FUNCT_1:def 8;
+  end;
+end;
+
+theorem Th40:
+  Mx2Tran A is one-to-one iff Det A <> 0.F_Real
+proof
+  Mx2Tran A is one-to-one iff the_rank_of A=n by Th39;
+  hence thesis by MATRIX13:83;
+end;
+
+theorem Th41:
+  Mx2Tran M is onto iff the_rank_of M = m
+proof
+  set MM=Mx2Tran M;
+  set nV=n-VectSp_over F_Real,mV=m-VectSp_over F_Real;
+  reconsider Bn=MX2FinS 1.(F_Real,n) as OrdBasis of nV by MATRLIN2:45;
+  reconsider Bm=MX2FinS 1.(F_Real,m) as OrdBasis of mV by MATRLIN2:45;
+  A1: [#]mV =REAL m by MATRIX13:102
+   .=[#]TOP-REAL m by EUCLID:25;
+  len Bn=n by Th19;
+  then reconsider M1=M as Matrix of len Bn,len Bm,F_Real by Th19;
+  set T=Mx2Tran(M1,Bn,Bm);
+  A2: dom T=[#]nV by FUNCT_2:def 1;
+  A3: [#]im T=T.:[#]nV by RANKNULL:def 2
+   .=rng T by A2,RELAT_1:146;
+  A4: MM=T by Th20;
+  hereby assume MM is onto;
+   then [#]im T=[#](Omega).mV by A4,A1,A3,FUNCT_2:def 3;
+   then rank T=dim(Omega).mV by VECTSP_4:37
+    .=m by MATRIX13:112;
+   hence the_rank_of M=m by MATRLIN2:49;
+  end;
+  A5: dim mV=m by MATRIX13:112;
+  assume the_rank_of M=m;
+  then m=rank T by MATRLIN2:49
+   .=dim im T;
+  then (Omega).(im T)=(Omega).mV by A5,VECTSP_9:32;
+  hence thesis by A4,A1,A3,FUNCT_2:def 3;
+end;
+
+theorem Th42:
+  Mx2Tran A is onto iff Det A <> 0.F_Real
+proof
+  Mx2Tran A is onto iff the_rank_of A=n by Th41;
+  hence thesis by MATRIX13:83;
+end;
+
+theorem Th43:
+  for A,B st Det A <> 0.F_Real holds (Mx2Tran A)" = Mx2Tran B iff A~ = B
+proof
+  A1: n=0 implies n=0;
+  let A,B such that
+   A2: Det A<>0.F_Real;
+  A3: A is invertible by A2,LAPLACE:34;
+  set MA=Mx2Tran A,MB=Mx2Tran B;
+  A4: width B=n by MATRIX_1:25;
+  reconsider ma=MA,mb=MB as Function;
+  A5: width A=n & len A=n by MATRIX_1:25;
+  A6: MA is one-to-one by A2,Th40;
+  hereby assume MA"=MB;
+   then A7: mb*ma=id dom ma by A6,FUNCT_1:61
+    .=id TOP-REAL n by FUNCT_2:def 1
+    .=Mx2Tran 1.(F_Real,n) by Th33;
+   MB*MA=Mx2Tran(A*B) by A5,A4,A1,Th32;
+   then B is_reverse_of A by A3,MATRIX_6:39,A7,Th34;
+   hence A~=B by A3,MATRIX_6:def 4;
+  end;
+  assume A8: A~=B;
+  MA is onto by A2,Th42;
+  then A9: dom MB=[#]TOP-REAL n & rng MA=[#]TOP-REAL n by FUNCT_2:def 1,def 3;
+  A10: n in NAT by ORDINAL1:def 13;
+  MB*MA=Mx2Tran(A*B) by A5,A4,A1,Th32
+   .=Mx2Tran 1.(F_Real,n) by A3,A10,A8,MATRIX14:18
+   .=id TOP-REAL n by Th33
+   .=id dom MA by FUNCT_2:def 1;
+  hence thesis by A6,A9,FUNCT_1:63;
+end;
+
+Lm4: for f be n-element real-valued FinSequence
+ex L be m-element FinSequence of REAL st |.(Mx2Tran M).f.|<=Sum L*|.f.| &
+for i be Nat st i in dom L holds L.i=|.@Col(M,i).|
+ proof
+  let f be n-element real-valued FinSequence;
+  set Lf=LineVec2Mx(@f);
+  set LfM=Lf*M;
+  set LM=Line(LfM,1);
+  deffunc L(Nat)=|.@Col(M,$1).|;
+  consider L be FinSequence such that
+   A1: len L=m & for k be Nat st k in dom L holds L.k=L(k) from FINSEQ_1:sch 2;
+  rng L c=REAL
+  proof
+   let y be set;
+   assume y in rng L;
+   then consider x be set such that
+    A2: x in dom L and
+    A3: L.x=y by FUNCT_1:def 5;
+   reconsider x as Nat by A2;
+   L.x=L(x) by A1,A2;
+   hence thesis by A3;
+  end;
+  then L is FinSequence of REAL by FINSEQ_1:def 4;
+  then reconsider L1=L as Element of m-tuples_on REAL by A1,FINSEQ_2:110;
+  take L1;
+  per cases;
+  suppose A4: n<>0; then
+   A5: len M=n by MATRIX13:1;
+   (Mx2Tran M).f=LM by A4,Def3;
+   then A6: len LM=m by CARD_1:def 13;
+   A7: |.(Mx2Tran M).f.|=sqrt Sum sqr@LM by A4,Def3;
+   reconsider LM as Element of m-tuples_on REAL by A6,FINSEQ_2:110;
+   len(abs LM)=m by CARD_1:def 13;
+   then reconsider aLM=abs LM as Element of m-tuples_on REAL by FINSEQ_2:110;
+   A8: len f=n by CARD_1:def 13;
+   then A9: width Lf=n by MATRIX13:1;
+   width M=m by A4,MATRIX13:1;
+   then A10: width LfM=m by A5,A9,MATRIX_3:def 4;
+   len Lf=1 by MATRIX13:1;
+   then A11: len LfM=1 by A5,A9,MATRIX_3:def 4;
+   now let i be Nat;
+    A12: len Col(M,i)=n by A5,MATRIX_1:def 9;
+    then A13: abs|(f,@Col(M,i))|<=|.f.|*L(i) by A8,EUCLID_2:37;
+    assume A14: i in Seg m;
+    then A15: 1<=i & i<=m by FINSEQ_1:3;
+    then A16: [1,i] in Indices LfM by A11,A10,MATRIX_1:37;
+    i in dom L by A1,A15,FINSEQ_3:27;
+    then A17: L.i=L(i) by A1;
+    LM.i=LfM*(1,i) by A10,A14,MATRIX_1:def 8
+     .=Line(Lf,1)"*"Col(M,i) by A5,A9,A16,MATRIX_3:def 4
+     .=@f"*"Col(M,i) by MATRIX15:25
+     .=Sum(mlt(@f,Col(M,i))) by FVSUM_1:def 10
+     .=Sum mlt(f,@Col(M,i)) by A8,A12,MATRPROB:35,36
+     .=|(f,@Col(M,i))| by RVSUM_1:def 17;
+    then aLM.i<=|.f.|*L(i) by A13,VALUED_1:18;
+    hence (aLM).i<=(|.f.|*L1).i by A17,RVSUM_1:66;
+   end;
+   then A18: Sum aLM<=Sum(|.f.|*L1) by RVSUM_1:112;
+   sqr LM=LM(#)LM by VALUED_1:def 8;
+   then sqrt Sum(sqr LM)<=Sum sqrt(sqr LM) by Th5;
+   then Sum(|.f.|*L1)=|.f.|*Sum L1 & sqrt Sum(sqr LM)<=Sum aLM by Th4,RVSUM_1:
+117;
+   hence thesis by A7,A1,A18,XXREAL_0:2;
+ end;
+ suppose A19: n=0;
+  now let i be Nat;
+    assume i in dom L1;
+    then L1.i = |.@Col(M,i).| by A1;
+    hence 0 <= L1.i;
+  end;
+  then A20: Sum L1 >= 0 by RVSUM_1:114;
+  |.(Mx2Tran M).f.| = |.0.TOP-REAL m.| by A19,Def3
+   .= 0 by EUCLID_2:61;
+  hence thesis by A1,A20;
+ end;
+end;
+
+theorem Th44:
+  ex L be m-element FinSequence of REAL st
+     (for i st i in dom L holds L.i=|.@Col(M,i).|) &
+      for f holds|.(Mx2Tran M).f.|<=Sum L*|.f.|
+proof
+  set F=the n-element real-valued FinSequence;
+  consider L be m-element FinSequence of REAL such that
+   |.(Mx2Tran M).F.|<=Sum L*|.F.| and
+   A1: for i be Nat st i in dom L holds L.i=|.@Col(M,i).| by Lm4;
+  take L;
+  thus for i st i in dom L holds L.i=|.@Col(M,i).| by A1;
+  let f be n-element real-valued FinSequence;
+  consider L1 be m-element FinSequence of REAL such that
+   A2: |.(Mx2Tran M).f.|<=Sum L1*|.f.| and
+   A3: for i be Nat st i in dom L1 holds L1.i=|.@Col(M,i).| by Lm4;
+  len L1=m & len L=m by CARD_1:def 13;
+  then A4: dom L=dom L1 by FINSEQ_3:31;
+  now let i be Nat;
+   assume A5: i in dom L;
+   hence L.i=|.@Col(M,i).| by A1
+    .=L1.i by A3,A4,A5;
+  end;
+  hence thesis by A2,A4,FINSEQ_1:17;
+end;
+
+theorem Th45:
+  ex L be Real st L>0 & for f holds |.(Mx2Tran M).f.| <= L*|.f.|
+proof
+  consider L be m-element FinSequence of REAL such that
+    A1: for i st i in dom L holds L.i=|.@Col(M,i).| and
+    A2: for f be n-element real-valued FinSequence
+    holds|.(Mx2Tran M).f.|<=Sum L*|.f.| by Th44;
+  take S1=1+Sum L;
+  now let i;
+   assume i in dom L;
+   then L.i=|.@Col(M,i).| by A1;
+   hence 0<=L.i;
+  end;
+  then Sum L>=0 by RVSUM_1:114;
+  hence S1>0;
+  let f;
+  Sum L<=S1 by XREAL_1:31;
+  then A3: Sum L*|.f.|<=S1*|.f.| by XREAL_1:66;
+  |.(Mx2Tran M).f.|<=Sum L*|.f.| by A2;
+  hence thesis by A3,XXREAL_0:2;
+end;
+
+theorem
+  the_rank_of M = n implies
+    ex L be Real st L > 0 & for f holds |.f.| <= L*|.(Mx2Tran M).f.|
+proof
+  assume that
+   A1: the_rank_of M=n;
+  per cases;
+  suppose A2: n<>0;
+   consider N be Matrix of m-' n,m,F_Real such that
+    A3: the_rank_of(M^N)=m by A1,Th16;
+   width M=m by A2,MATRIX13:1;
+   then m-n>=0 by A1,MATRIX13:74,XREAL_1:50;
+   then A4: m-n=m-' n by XREAL_0:def 2;
+   then reconsider MN=M^N as Matrix of m,F_Real;
+   A5: dom id TOP-REAL m=[#]TOP-REAL m by RELAT_1:71;
+   set mn=(m-' n) |->0;
+   A6: m=0 iff m=0;
+   sqr mn=(m-' n) |->((0 qua real number)^2) by RVSUM_1:82
+    .=(m-' n) |->(0*0);
+   then A7: Sum sqr mn=(m-' n)*0 by RVSUM_1:110;
+   set MN1=MN~;
+   consider L be Real such that
+    A8: L>0 and
+    A9: for f be m-element real-valued FinSequence holds
+     |.(Mx2Tran MN1).f.|<=L*|.f.| by Th45;
+   take L;
+   thus L>0 by A8;
+   let f be n-element real-valued FinSequence;
+   set fm=f^mn;
+   set Mfm=(Mx2Tran MN).fm;
+   A10: Mfm =(Mx2Tran M).f by A4,Th35;
+   Det MN<>0.F_Real by A3,MATRIX13:83;
+   then A11: MN is invertible by LAPLACE:34;
+   reconsider MN2=MN1 as Matrix of width MN,m,F_Real by MATRIX_1:25;
+   A12: width MN1=m & len MN=m by MATRIX_1:25;
+   A13: (Mx2Tran MN1)*(Mx2Tran MN)=(Mx2Tran MN2)*(Mx2Tran MN) by MATRIX_1:25
+    .=Mx2Tran(MN*MN2) by A6,Th32
+    .=Mx2Tran 1.(F_Real,m) by A11,A12,MATRIX14:18
+    .=id TOP-REAL m by Th33;
+   f=@@f & mn=@@mn;
+   then sqr fm=sqr f^sqr mn by TOPREAL7:11;
+   then Sum sqr fm=Sum sqr f+Sum sqr mn by RVSUM_1:105
+    .=Sum sqr f by A7;
+   then A14: |.fm.|  =|.f.|;
+   A15: fm is Point of TOP-REAL m by A4,Lm2;
+   then fm=(id TOP-REAL m).fm by FUNCT_1:34
+    .=(Mx2Tran MN1).Mfm by A15,A13,A5,FUNCT_1:22;
+   hence thesis by A9,A10,A14;
+  end;
+  suppose A16: n=0;
+   A17: |. 0*n .| = 0 by EUCLID:10;
+   take L=1;
+   thus thesis by A16,A17;
+  end;
+end;
+
+theorem Th47:
+  Mx2Tran M is continuous
+proof
+  set Tn=TOP-REAL n;
+  set Tm=TOP-REAL m;
+  set TM=Mx2Tran M;
+  A1: n in NAT by ORDINAL1:def 13;
+  consider L be Real such that
+   A2: L>0 and
+   A3: for f be n-element real-valued FinSequence holds|.TM.f.|<=L*|.f.|
+    by Th45;
+  let x being Point of Tn,U being a_neighborhood of TM.x;
+  reconsider TMx=TM.x as Point of Tm;
+  reconsider tmx=TMx as Point of Euclid m by EUCLID:71;
+  reconsider X=x as Point of Euclid n by EUCLID:71;
+  A4: m in NAT by ORDINAL1:def 13;
+  tmx in Int(U) by CONNSP_2:def 1;
+  then consider r be real number such that
+   A5: r>0 and
+   A6: Ball(tmx,r)c=U by A4,GOBOARD6:8;
+  reconsider B=Ball(X,r/L) as Subset of Tn by EUCLID:71;
+  r/L>0 by A5,A2,XREAL_1:141;
+  then x in Int B by A1,GOBOARD6:8;
+  then reconsider Bx=B as a_neighborhood of x by CONNSP_2:def 1;
+  take Bx;
+  let y be set;
+  assume y in TM.:Bx;
+  then consider p be set such that
+   p in dom TM and
+   A7: p in Bx and
+   A8: TM.p=y by FUNCT_1:def 12;
+  reconsider p as Point of Tn by A7;
+  A9: r/L*L=r by A2,XCMPLX_1:88;
+  reconsider TMp=TM.p as Point of Tm;
+  reconsider tmp=TMp as Point of Euclid m by EUCLID:71;
+  dist(tmx,tmp)=|.TM.x-TM.p.| by A4,SPPOL_1:62
+   .=|.TM.(x-p).| by Th28;
+  then A10: dist(tmx,tmp)<=L*|.x-p.| by A3;
+  reconsider P=p as Point of Euclid n by EUCLID:71;
+  dist(X,P)<r/L by A7,METRIC_1:12;
+  then A11: dist(X,P)*L<r/L*L by A2,XREAL_1:70;
+  dist(X,P)=|.x-p.| by A1,SPPOL_1:62;
+  then dist(tmx,tmp)<r by A11,A9,A10,XXREAL_0:2;
+  then tmp in Ball(tmx,r) by METRIC_1:12;
+  hence thesis by A6,A8;
+end;
+
+registration
+  let n,K;
+  cluster invertible Matrix of n,K;
+  existence
+proof
+  1.(K,n) is invertible by MATRIX_6:8;
+  hence thesis;
+end;
+end;
+
+registration
+  let n;
+  let A be invertible Matrix of n,F_Real;
+  cluster Mx2Tran A -> being_homeomorphism;
+  coherence
+proof
+  set T=Mx2Tran A;
+  A1: (T is continuous) & Mx2Tran(A~) is continuous by Th47;
+  A2: Det A<>0.F_Real by LAPLACE:34;
+  then A3: T"=Mx2Tran(A~) by Th43;
+  A4: T is onto one-to-one by A2,Th40,Th42;
+  then A5: rng T=[#]TOP-REAL n by FUNCT_2:def 3;
+  then dom T=[#]TOP-REAL n & T/"=T" by A4,FUNCT_2:def 1,TOPS_2:def 4;
+  hence thesis by A4,A3,A1,A5,TOPS_2:def 5;
+end;
+end;

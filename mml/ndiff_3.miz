@@ -1,0 +1,1723 @@
+:: Differentiable Functions into Real Normed Spaces
+::  by Hiroyuki Okazaki , Noboru Endou , Keiko Narita and Yasunari Shidama
+::
+:: Received October 13, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies NUMBERS, REAL_1, ZFMISC_1, NORMSP_1, PRE_TOPC, PARTFUN1, FUNCT_1,
+      NAT_1, FDIFF_1, SUBSET_1, RELAT_1, RCOMP_1, TARSKI, SEQ_1, ARYTM_3,
+      VALUED_1, FUNCT_2, ARYTM_1, SEQ_2, ORDINAL2, SUPINF_2, FCONT_1, COMPLEX1,
+      STRUCT_0, CARD_1, VALUED_0, XXREAL_0, FUNCOP_1, XREAL_0, ORDINAL1,
+      XXREAL_2, XBOOLE_0, XXREAL_1;
+ notations TARSKI, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, PARTFUN1, FUNCT_2,
+      FUNCOP_1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, NAT_1, VALUED_0, COMPLEX1,
+      BINOP_2, VALUED_1, SEQ_1, SEQ_2, RCOMP_1, FDIFF_1, STRUCT_0, PRE_TOPC,
+      RLVECT_1, VFUNCT_1, NORMSP_0, NORMSP_1, NDIFF_1, NFCONT_3;
+ constructors REAL_1, FDIFF_1, VFUNCT_1, NDIFF_1, SEQ_1, RELSET_1, RVSUM_1,
+      BINOP_2, INTEGR15, NAT_D, MEASURE6, NFCONT_3;
+ registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, FUNCT_2,
+      NUMBERS, XBOOLE_0, VALUED_0, NORMSP_0, NORMSP_1, RELAT_1, SUBSET_1,
+      XXREAL_0, LOPBAN_2, FUNCOP_1, NAT_1, RCOMP_1, VALUED_1, SEQ_4, FDIFF_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ definitions RCOMP_1, SUBSET_1, XBOOLE_0, TARSKI;
+ theorems TARSKI, ABSVALUE, XBOOLE_0, XBOOLE_1, RLVECT_1, XCMPLX_0, XCMPLX_1,
+      ZFMISC_1, SEQ_1, SEQ_2, NAT_1, RELAT_1, FUNCT_1, VFUNCT_1, FUNCT_2,
+      ORDINAL1, SEQ_4, NORMSP_1, LOPBAN_1, LOPBAN_3, PARTFUN1, PARTFUN2,
+      FDIFF_1, NDIFF_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, VALUED_1,
+      VALUED_0, NORMSP_0, XREAL_0, RCOMP_1, SEQM_3, RFUNCT_2, NFCONT_3;
+ schemes FUNCT_2, SEQ_1;
+
+begin :: Differentiable of Functions into a Real Normed Space
+
+reserve F for non trivial RealNormSpace;
+reserve G for RealNormSpace;
+reserve X for set;
+reserve x,x0,g,r,s,p for Real;
+reserve n,m,k for Element of NAT;
+reserve Y for Subset of REAL;
+reserve Z for open Subset of REAL;
+reserve s1,s3 for Real_Sequence;
+reserve seq for sequence of G;
+reserve f,f1,f2 for PartFunc of REAL,the carrier of F;
+reserve h for convergent_to_0 Real_Sequence;
+reserve c for constant Real_Sequence;
+
+ reconsider cs = NAT --> 0 as Real_Sequence by FUNCOP_1:57;
+
+theorem Th1:
+  (for n holds ||. seq.n .|| <= s1.n) & s1 is convergent & lim s1=0 implies
+    seq is convergent & lim(seq)=0.G
+  proof
+    assume that
+    A1: for n holds ||. seq.n .|| <= s1.n and
+    A2: s1 is convergent and
+    A3: lim(s1)=0;
+    now
+      let p be real number;
+      assume 0<p;
+      then consider n such that
+      A4: for m st n<=m holds abs(s1.m-0)<p by A2,A3,SEQ_2:def 7;
+      now
+        let m;
+        assume n<=m; then
+        A5: abs(s1.m-0)<p by A4;
+        A6: ||. seq.m-0.G .|| = ||. seq.m .|| by RLVECT_1:26;
+        A7: s1.m <= abs(s1.m) by ABSVALUE:11;
+        ||. seq.m .|| <= s1.m by A1;
+        then ||. seq.m - 0.G .|| <= abs(s1.m) by A6,A7,XXREAL_0:2;
+        hence ||. seq.m - 0.G .|| < p by A5,XXREAL_0:2;
+      end;
+      hence ex n st for m st n<=m holds ||. seq.m - (0.G) .|| < p;
+    end; then
+A8: for p be Real st 0<p ex n st for m st n<=m
+    holds ||. seq.m - 0.G .|| < p;
+    hence seq is convergent by NORMSP_1:def 9;
+    hence thesis by A8,NORMSP_1:def 11;
+  end;
+
+theorem Th2:
+  (s1^\k)(#)(seq^\k)= (s1(#)seq) ^\k
+  proof
+    now let n;
+      thus ((s1(#)seq) ^\k).n=(s1(#)seq).(n+k) by NAT_1:def 3
+      .=s1.(n+k)*seq.(n+k) by NDIFF_1:def 2
+      .=(s1 ^\k).n*seq.(n+k) by NAT_1:def 3
+      .=(s1 ^\k).n*(seq ^\k).n by NAT_1:def 3
+      .=((s1 ^\k)(#)(seq ^\k)).n by NDIFF_1:def 2;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+
+definition let F;
+  let IT be PartFunc of REAL,the carrier of F;
+  attr IT is REST-like means :Def1:
+  IT is total & for h holds (h")(#)(IT/*h) is convergent &
+  lim ((h")(#)(IT/*h)) = 0.F;
+end;
+
+registration let F;
+  cluster REST-like PartFunc of REAL,the carrier of F;
+  existence
+  proof
+    take f = REAL --> 0.F;
+    thus f is total;
+A1: dom f = REAL by FUNCOP_1:19;
+    now
+      let h;
+      now let n be Nat;
+        A2: rng h c= dom f by A1;
+        A3: n in NAT by ORDINAL1:def 13;
+        hence ((h")(#)(f/*h)).n = (h").n*((f/*h).n) by NDIFF_1:def 2
+        .= (h").n*(f.(h.n)) by A3,A2,FUNCT_2:185
+        .= 0.F by RLVECT_1:23,FUNCOP_1:13;
+      end;
+      then (h")(#)(f/*h) is constant & ((h")(#)(f/*h)).0 = 0.F by
+      VALUED_0:def 18;
+      hence (h")(#)(f/*h) is convergent & lim ((h")(#)(f/*h))
+      = 0.F by NDIFF_1:21;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let F;
+  mode REST of F is REST-like PartFunc of REAL,the carrier of F;
+end;
+
+definition let F;
+  let IT be Function of REAL,the carrier of F;
+  attr IT is linear means :Def2:
+  ex r be Point of F st for p be Real holds IT.p = p*r;
+end;
+
+registration let F;
+  cluster linear Function of REAL,the carrier of F;
+  existence
+  proof
+    deffunc FG(Element of REAL) = $1*(0.F);
+    consider f be Function of REAL, the carrier of F such that
+A1: for x being Element of REAL holds f.x = FG(x) from FUNCT_2:sch 4;
+    take f;
+    thus thesis by Def2,A1;
+  end;
+end;
+
+definition let F;
+  mode LINEAR of F is linear Function of REAL,the carrier of F;
+end;
+
+reserve R,R1,R2 for REST of F;
+reserve L,L1,L2 for LINEAR of F;
+
+theorem Th3:
+  L1+L2 is LINEAR of F & L1-L2 is LINEAR of F
+  proof
+    consider g1 be Point of F such that
+A1: for p be Real holds L1.p = p*g1 by Def2;
+    consider g2 be Point of F such that
+A2: for p be Real holds L2.p = p*g2 by Def2;
+A3: L1+L2 is total by VFUNCT_1:38; then
+A4: dom (L1+L2) = REAL by FUNCT_2:def 1;
+    now
+      let p be Real;
+      thus (L1+L2).p = (L1+L2)/.p by A4,PARTFUN1:def 8
+      .= L1/.p + L2/.p by VFUNCT_1:43
+      .= p*g1 + L2.p by A1
+      .= p*g1 + p*g2 by A2
+      .= p*(g1+g2) by RLVECT_1:def 8;
+    end;
+    hence L1+L2 is LINEAR of F by A3,Def2;
+A5: L1-L2 is total by VFUNCT_1:38; then
+A6: dom (L1-L2) = REAL by FUNCT_2:def 1;
+    now
+      let p be Real;
+      thus (L1-L2).p = (L1-L2)/.p by A6,PARTFUN1:def 8
+      .= L1/.p - L2/.p by VFUNCT_1:43
+      .= p*g1 - L2.p by A1
+      .= p*g1 - p*g2 by A2
+      .= p*(g1-g2) by RLVECT_1:48;
+    end;
+    hence thesis by A5,Def2;
+  end;
+
+theorem Th4:
+  r(#)L is LINEAR of F
+  proof
+    consider g be Point of F such that
+A1: for p be Real holds L.p = p*g by Def2;
+A2: r(#)L is total by VFUNCT_1:40; then
+A3: dom (r(#)L) = REAL by FUNCT_2:def 1;
+    now
+      let p be Real;
+      thus (r(#)L).p =(r(#)L)/.p by A3,PARTFUN1:def 8
+      .= r*L/.p by VFUNCT_1:45
+      .= r*(p*g) by A1
+      .= (r*p)*g by RLVECT_1:def 10
+      .= p*(r*g) by RLVECT_1:def 10;
+    end;
+    hence thesis by A2,Def2;
+  end;
+
+theorem Th5:
+  for h1,h2 be PartFunc of REAL, the carrier of F
+  for seq be Real_Sequence st rng seq c= dom h1 /\ dom h2 holds
+  (h1+h2)/*seq = h1/*seq+h2/*seq & (h1-h2)/*seq=h1/*seq - h2/*seq
+  proof
+    let h1,h2 be PartFunc of REAL,the carrier of F;
+    let seq be Real_Sequence;
+    A1: dom h1 /\ dom h2 c= dom h1 by XBOOLE_1:17;
+    A2: dom h1 /\ dom h2 c= dom h2 by XBOOLE_1:17;
+    assume
+    A3: rng seq c= dom h1 /\ dom h2; then
+    A4: rng seq c= dom (h1 + h2) by VFUNCT_1:def 1;
+    now let n;
+      A5:seq.n in rng seq by FUNCT_2:6;
+      thus ((h1+h2)/*seq).n = (h1+h2)/.(seq.n) by A4,FUNCT_2:186
+      .= h1/.(seq.n) + h2/.(seq.n) by A4,A5,VFUNCT_1:def 1
+      .= (h1/*seq).n + h2/.(seq.n) by A3,A1,FUNCT_2:186,XBOOLE_1:1
+      .= (h1/*seq).n + (h2/*seq).n by A3,A2,FUNCT_2:186,XBOOLE_1:1;
+    end;
+    hence (h1+h2)/*seq=h1/*seq+h2/*seq by NORMSP_1:def 5;
+    A6: rng seq c= dom (h1 - h2) by A3,VFUNCT_1:def 2;
+    now
+      let n;
+      A7:seq.n in rng seq by FUNCT_2:6;
+      thus ((h1-h2)/*seq).n = (h1-h2)/.(seq.n) by A6,FUNCT_2:186
+      .= h1/.(seq.n) - h2/.(seq.n) by A6,A7,VFUNCT_1:def 2
+      .= (h1/*seq).n - h2/.(seq.n) by A3,A1,FUNCT_2:186,XBOOLE_1:1
+      .= (h1/*seq).n - (h2/*seq).n by A3,A2,FUNCT_2:186,XBOOLE_1:1;
+    end;
+    hence thesis by NORMSP_1:def 6;
+  end;
+
+theorem Th6:
+  for h1,h2 be PartFunc of REAL,the carrier of F
+  for seq be Real_Sequence st h1 is total & h2 is total holds
+  (h1+h2)/*seq = h1/*seq + h2/*seq & (h1-h2)/*seq = h1/*seq - h2/*seq
+  proof
+    let h1,h2 be PartFunc of REAL,the carrier of F;
+    let seq be Real_Sequence;
+    assume h1 is total & h2 is total;
+    then h1+h2 is total by VFUNCT_1:38;
+    then dom (h1+h2) = REAL by PARTFUN1:def 4;
+    then dom h1 /\ dom h2 = REAL by VFUNCT_1:def 1;then
+A1: rng seq c= dom h1 /\ dom h2;
+    hence (h1+h2)/*seq = h1/*seq + h2/*seq by Th5;
+    thus thesis by A1,Th5;
+  end;
+
+theorem Th7:
+  R1+R2 is REST of F & R1-R2 is REST of F
+  proof
+    A1: R1 is total & R2 is total by Def1;
+    A2: now
+    let h;
+    A3: (h")(#)((R1+R2)/*h) = (h")(#)((R1/*h)+(R2/*h)) by A1,Th6
+    .= ((h")(#)(R1/*h))+((h")(#)(R2/*h)) by NDIFF_1:9;
+    A4: (h")(#)(R1/*h) is convergent & (h")(#)(R2/*h) is convergent by Def1;
+    hence (h")(#)((R1+R2)/*h) is convergent by A3,NORMSP_1:34;
+    lim ((h")(#)(R1/*h)) = 0.F & lim ((h")(#)(R2/*h)) = 0.F by Def1;
+    hence lim ((h")(#)((R1+R2)/*h)) = 0.F+0.F by A4,A3,NORMSP_1:42
+    .= 0.F by RLVECT_1:def 7;
+  end;
+  R1+R2 is total by A1,VFUNCT_1:38;
+  hence R1+R2 is REST of F by A2,Def1;
+  A5: now let h;
+  A6: (h")(#)((R1-R2)/*h) = (h")(#)((R1/*h)-(R2/*h)) by A1,Th6
+  .= ((h")(#)(R1/*h))-((h")(#)(R2/*h)) by NDIFF_1:12;
+  A7: (h")(#)(R1/*h) is convergent & (h")(#)(R2/*h) is convergent by Def1;
+  hence (h")(#)((R1-R2)/*h) is convergent by A6,NORMSP_1:35;
+  lim ((h")(#)(R1/*h)) = 0.F & lim ((h")(#)(R2/*h)) = 0.F by Def1;
+  hence lim ((h")(#)((R1-R2)/*h)) = 0.F-0.F by A7,A6,NORMSP_1:43
+  .= 0.F by RLVECT_1:26;
+end;
+R1-R2 is total by A1,VFUNCT_1:38;
+hence R1-R2 is REST of F by A5,Def1;
+end;
+
+theorem Th8:
+  r(#)R is REST of F
+  proof
+    A1: R is total by Def1; then
+    A2:r(#)R is total by VFUNCT_1:40;
+    now let h;
+      dom R = REAL by A1,FUNCT_2:def 1; then
+      rng h c= dom R; then
+      A3: (h")(#)((r(#)R)/*h) = (h")(#)(r*(R/*h)) by NFCONT_3:4
+      .= r*((h")(#)(R/*h)) by NDIFF_1:10;
+      A4: (h")(#)(R/*h) is convergent by Def1;
+      hence (h")(#)((r(#)R)/*h) is convergent by A3,NORMSP_1:37;
+      lim ((h")(#)(R/*h)) = 0.F by Def1;
+      hence lim ((h")(#)((r(#)R)/*h)) = r*0.F by A4,A3,NORMSP_1:45
+      .= 0.F by RLVECT_1:23;
+    end;
+    hence thesis by A2,Def1;
+  end;
+
+definition let F,f;
+  let x0 be real number;
+  pred f is_differentiable_in x0 means :Def3:
+  ex N being Neighbourhood of x0
+  st N c= dom f & ex L,R st for x st x in N
+  holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0);
+end;
+
+definition
+  let F,f;
+  let x0 be real number;
+  assume
+  A1: f is_differentiable_in x0;
+  func diff(f,x0) -> Point of F means  :Def4:
+  ex N being Neighbourhood of x0 st N c= dom f & ex L,R st it=L.1
+  & for x st x in N holds f/.x-f/.x0 = L.(x-x0) + R/.(x-x0);
+  existence
+  proof
+    consider N being Neighbourhood of x0 such that
+    A2: N c= dom f and
+    A3: ex L,R st for x st x in N
+    holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0) by A1,Def3;
+    consider L,R such that
+    A4: for x st x in N holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0) by A3;
+    consider r be Point of F such that
+    A5: for p be Real holds L.p = p*r by Def2;
+    take r;
+    L.1=1*r by A5
+    .=r by RLVECT_1:def 11;
+    hence thesis by A2,A4;
+  end;
+  uniqueness
+  proof
+    let r,s be Point of F;
+    assume that
+    A6: ex N being Neighbourhood of x0 st N c= dom f & ex L,R st r=L.1 &
+    for x be Real st x in N holds f/.x-f/.x0 = L.(x-x0)+R/.(x-x0) and
+    A7: ex N being Neighbourhood of x0 st N c= dom f & ex L,R st s=L.1 &
+    for x be Real st x in N holds f/.x-f/.x0 = L.(x-x0) + R/.(x-x0);
+    consider N being Neighbourhood of x0 such that
+    N c= dom f and
+    A8: ex L,R st r=L.1 & for x be Real
+    st x in N holds f/.x-f/.x0 = L.(x-x0)+R/.(x-x0) by A6;
+    consider L,R such that
+    A9: r=L.1 and
+    A10: for x be Real st x in N holds f/.x-f/.x0 = L.(x-x0) + R/.(x-x0) by A8;
+    consider r1 be Point of F such that
+    A11: for p be Real holds L.p = p*r1 by Def2;
+    consider N1 being Neighbourhood of x0 such that
+    N1 c= dom f and
+    A12: ex L,R st s=L.1 & for x be Real st x in N1
+    holds f/.x-f/.x0=L.(x-x0)+R/.(x-x0) by A7;
+    consider L1,R1 such that
+    A13: s =L1.1 and
+    A14: for x be Real st x in N1
+    holds f/.x-f/.x0 = L1.(x-x0) + R1/.(x-x0) by A12;
+    consider p1 be Point of F such that
+    A15: for p be Real holds L1.p = p*p1 by Def2;
+    consider N0 be Neighbourhood of x0 such that
+    A16: N0 c= N & N0 c= N1 by RCOMP_1:38;
+    consider g be real number such that
+    A17: 0<g and
+    A18: N0 = ].x0-g,x0+g.[ by RCOMP_1:def 7;
+    deffunc F(Element of NAT) = g/($1+2);
+    consider s1 such that
+    A19: for n holds s1.n = F(n) from SEQ_1:sch 1;
+    now
+      let n;
+      0<>g/(n+2) by A17,XREAL_1:141;
+      hence 0<>s1.n by A19;
+    end; then
+    A20: s1 is non-zero by SEQ_1:7;
+    s1 is convergent & lim s1 = 0 by A19,SEQ_4:46;
+    then reconsider h = s1 as convergent_to_0 Real_Sequence
+      by A20,FDIFF_1:def 1;
+    A21: for n ex x be Real st x in N & x in N1 & h.n=x-x0
+    proof
+      let n;
+      take x=x0+g/(n+2);
+      reconsider z0=0 as Element of NAT;
+      z0 + 1 < n+1+1 by XREAL_1:8;
+      then g/(n+2)<g/1 by A17,XREAL_1:78; then
+      A22: x0 + g/(n+2)<x0 + g by XREAL_1:8;
+      0<g/(n+2) by A17,XREAL_1:141;
+      then x0+-g<x0+g/(n+2) by A17,XREAL_1:8;
+      then x0+g/(n+2) in ].x0-g,x0+g.[ by A22;
+      hence thesis by A16,A18,A19;
+    end;
+    A23: s=1*p1 by A13,A15;
+    A24: r=1*r1 by A9,A11;
+    A25: now
+    let x be Real;
+    assume that
+    A26: x in N and
+    A27: x in N1;
+    f/.x-f/.x0 = L.(x-x0) + R/.(x-x0) by A10,A26;
+    then L.(x-x0) + R/.(x-x0) = L1.(x-x0) + R1/.(x-x0) by A14,A27;
+    then (x-x0)*r1 + R/.(x-x0) = L1.(x-x0) + R1/.(x-x0) by A11;
+    then ((x-x0)*1) *r1 + R/.(x-x0) = ((x-x0)*1)*p1 + R1/.(x-x0) by A15;
+    then ((x-x0)*1) *r + R/.(x-x0) = ((x-x0)*1)*p1 + R1/.(x-x0)
+    by RLVECT_1:def 10,A24;
+    hence (x-x0)*r + R/.(x-x0) = (x-x0)*s + R1/.(x-x0) by RLVECT_1:def 10,A23;
+  end;
+  now
+    R1 is total by Def1;
+    then dom R1 = REAL by PARTFUN1:def 4; then
+    A28: rng h c= dom R1;
+    let n be Nat;
+    R is total by Def1;
+    then dom R = REAL by PARTFUN1:def 4; then
+    A29: rng h c= dom R;
+    A30: n in NAT by ORDINAL1:def 13;
+    then ex x be Real st x in N & x in N1 & h.n=x-x0 by A21;
+    then (h.n)*r + R/.(h.n) = (h.n)*s + R1/.(h.n) by A25; then
+    (1/(h.n))*((h.n)*r)+(1/(h.n))*(R/.(h.n))
+    =(1/(h.n))*((h.n)*s+R1/.(h.n)) by RLVECT_1:def 8; then
+    ((1/(h.n))*(h.n))*r +(1/(h.n))*(R/.(h.n))
+    =(1/(h.n))*((h.n)*s+R1/.(h.n)) by RLVECT_1:def 10;
+    then A31:
+    ((1/(h.n))*(h.n))*r +(1/(h.n))*(R/.(h.n))
+    =(1/(h.n))*((h.n)*s)+ (1/(h.n))*(R1/.(h.n)) by RLVECT_1:def 8;
+    A32: (1/(h.n))*(R/.(h.n)) = (h.n)"*(R/.(h.n)) by XCMPLX_1:217
+    .= (h".n)*(R/.(h.n)) by VALUED_1:10
+    .= (h".n)*((R/*h).n) by A30,A29,FUNCT_2:186
+    .= ((h")(#)(R/*h)).n by A30,NDIFF_1:def 2;
+    h is non-zero by FDIFF_1:def 1; then
+    A33: h.n <> 0 by A30,SEQ_1:7;
+    A34: (1/(h.n))*(R1/.(h.n)) = (h.n)"*(R1/.(h.n)) by XCMPLX_1:217
+    .= (h".n)*(R1/.(h.n)) by VALUED_1:10
+    .= (h".n)*((R1/*h).n) by A30,A28,FUNCT_2:186
+    .= ((h")(#)(R1/*h)).n by A30,NDIFF_1:def 2;
+    A35: ((1/(h.n))*(h.n))*s = 1*s by A33,XCMPLX_1:107
+    .= s by RLVECT_1:def 11;
+    ((1/(h.n))*(h.n))*r = 1*r by A33,XCMPLX_1:107
+    .= r by RLVECT_1:def 11;
+    then r + ((h")(#)(R/*h)).n
+    = s + ((h")(#)(R1/*h)).n by RLVECT_1:def 10,A31, A35, A32,A34; then
+    r +( ((h")(#)(R/*h)).n - ((h")(#)(R/*h)).n )
+    = s + ((h")(#)(R1/*h)).n - ((h")(#)(R/*h)).n by RLVECT_1:42; then
+    r +( ((h")(#)(R/*h)).n - ((h")(#)(R/*h)).n )
+    = s +( ((h")(#)(R1/*h)).n - ((h")(#)(R/*h)).n ) by RLVECT_1:42; then
+    r + 0.F = s +( ((h")(#)(R1/*h)).n - ((h")(#)(R/*h)).n ) by RLVECT_1:28;
+    then r = s + (((h")(#)(R1/*h)).n - ((h")(#)(R/*h)).n) by RLVECT_1:10;
+    then
+    r -s = (((h")(#)(R1/*h)).n - ((h")(#)(R/*h)).n) +(s-s) by RLVECT_1:42;
+    then
+    r -s = (((h")(#)(R1/*h)).n - ((h")(#)(R/*h)).n) +0.F by RLVECT_1:28;
+    then
+    A36: r -s = ((h")(#)(R1/*h)).n - ((h")(#)(R/*h)).n by RLVECT_1:10;
+    n is Element of NAT by ORDINAL1:def 13;
+    hence r - s = (((h")(#)(R1/*h))-((h")(#)(R/*h))).n by A36,NORMSP_1:def 6;
+  end; then
+  ((h")(#)(R1/*h))-((h")(#)(R/*h)) is constant & (((h")(#)(R1/*h))-((h"
+  )(#)(R /*h))).0 = r-s by VALUED_0:def 18; then
+  A37: lim ( (h")(#)(R1/*h)-(h")(#)(R/*h) ) = r-s by NDIFF_1:21;
+  A38: (h")(#)(R1/*h) is convergent & lim ((h")(#)(R1/*h)) = 0.F by Def1;
+  (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0.F by Def1;
+  then r-s = 0.F-0.F by A37,A38,NORMSP_1:43;
+  hence thesis by RLVECT_1:35,RLVECT_1:26;
+end;
+end;
+
+definition let F,f,X;
+  pred f is_differentiable_on X means :Def5:
+  X c= dom f & for x st x in X holds f|X is_differentiable_in x;
+end;
+
+theorem Th9:
+  f is_differentiable_on X implies X is Subset of REAL
+  proof
+    assume f is_differentiable_on X;
+    then X c=dom f by Def5;
+    hence thesis by XBOOLE_1:1;
+  end;
+
+theorem Th10:
+  f is_differentiable_on Z iff Z c= dom f & for x st x in Z holds
+  f is_differentiable_in x
+  proof
+    thus f is_differentiable_on Z implies Z c=dom f & for x st x in Z holds
+    f is_differentiable_in x
+    proof
+      assume
+      A1: f is_differentiable_on Z;
+      hence A2: Z c=dom f by Def5;
+      let x0;
+      assume
+      A3: x0 in Z;
+      then f|Z is_differentiable_in x0 by A1,Def5;
+      then consider N being Neighbourhood of x0 such that
+A4:   N c= dom(f|Z) and
+A5:   ex L,R st for x st x in N
+      holds (f|Z)/.x-(f|Z)/.x0=L.(x-x0)+R/.(x-x0) by Def3;
+      take N;
+      dom(f|Z)=dom f/\Z by RELAT_1:90;
+      then dom(f|Z) c=dom f by XBOOLE_1:17;
+      hence N c= dom f by A4,XBOOLE_1:1;
+      consider L,R such that
+A6:   for x st x in N holds (f|Z)/.x - (f|Z)/.x0
+      = L.(x-x0) + R/.(x-x0) by A5;
+      now let x;
+        assume
+        A7: x in N;
+        then A8: (f|Z)/.x-(f|Z)/.x0=L.(x-x0)+R/.(x-x0) by A6;
+        f/.x-(f|Z)/.x0=L.(x-x0)+R/.(x-x0) by A8,PARTFUN2:32,A4,A7;
+        hence f/.x-f/.x0=L.(x-x0)+R/.(x-x0) by A2, A3,PARTFUN2:35;
+      end;
+      hence thesis;
+    end;
+    assume that
+    A9: Z c=dom f and
+    A10: for x st x in Z holds f is_differentiable_in x;
+    thus Z c=dom f by A9;
+    let x0;
+    assume
+    A11: x0 in Z;
+    then consider N1 being Neighbourhood of x0 such that
+    A12: N1 c= Z by RCOMP_1:39;
+    f is_differentiable_in x0 by A10,A11;
+    then consider N being Neighbourhood of x0 such that
+    A13: N c= dom f and
+    A14: ex L,R st for x st x in N holds f/.x-f/.x0=L.(x-x0)+R/.(x-x0) by
+    Def3;
+    consider N2 being Neighbourhood of x0 such that
+    A15: N2 c= N1 and
+    A16: N2 c= N by RCOMP_1:38;
+    A17: N2 c= Z by A12,A15,XBOOLE_1:1;
+    take N2;
+    N2 c= dom f by A13,A16,XBOOLE_1:1;
+    then N2 c= dom f/\Z by A17,XBOOLE_1:19;
+    hence
+    A18: N2 c= dom(f|Z) by RELAT_1:90;
+    consider L,R such that
+    A19: for x st x in N holds f/.x-f/.x0=L.(x-x0)+R/.(x-x0) by A14;
+    A20: x0 in N2 by RCOMP_1:37;
+    take L,R;
+    now let x;
+      assume
+      A21: x in N2;
+      then f/.x-f/.x0=L.(x-x0)+R/.(x-x0) by A16,A19;
+      then (f|Z)/.x-f/.x0=L.(x-x0)+R/.(x-x0) by PARTFUN2:32,A21,A18;
+      hence (f|Z)/.x-(f|Z)/.x0=L.(x-x0)+R/.(x-x0) by PARTFUN2:32,A20,A18;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  f is_differentiable_on Y implies Y is open
+  proof
+    assume
+A1: f is_differentiable_on Y;
+    now
+      let x0 be real number;
+      assume x0 in Y;
+      then f|Y is_differentiable_in x0 by A1,Def5;
+      then consider N being Neighbourhood of x0 such that
+      A2: N c= dom(f|Y) and
+      ex L,R st for x st x in N
+      holds (f|Y)/.x-(f|Y)/.x0=L.(x-x0)+R/.(x-x0) by Def3;
+      take N;
+      dom(f|Y)=dom f/\Y by RELAT_1:90;
+      then dom(f|Y) c=Y by XBOOLE_1:17;
+      hence N c= Y by A2,XBOOLE_1:1;
+    end;
+    hence thesis by RCOMP_1:41;
+  end;
+
+definition let F,f,X;
+  assume
+  A1: f is_differentiable_on X;
+  func f`|X -> PartFunc of REAL,the carrier of F means  :Def6:
+  dom it = X & for x st x in X holds it.x = diff(f,x);
+  existence
+  proof
+    deffunc FG(Real) = diff(f,$1);
+    defpred P[set] means $1 in X;
+    consider F0 being PartFunc of REAL,the carrier of F such that
+    A2: (for x holds x in dom F0 iff P[x]) & for x st x in dom F0
+    holds F0.x = FG(x) from SEQ_1:sch 3;
+    take F0;
+    now
+      A3: X is Subset of REAL by A1,Th9;
+      let y be set;
+      assume y in X;
+      hence y in dom F0 by A2,A3;
+    end; then
+    A4: X c= dom F0 by TARSKI:def 3;
+    for y be set st y in dom F0 holds y in X by A2;
+    then dom F0 c= X by TARSKI:def 3;
+    hence dom F0 = X by A4,XBOOLE_0:def 10;
+    now
+      let x;
+      assume x in X;
+      then x in dom F0 by A2;
+      hence F0.x = diff(f,x) by A2;
+    end;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F0,G0 be PartFunc of REAL,the carrier of F;
+    assume that
+    A5: dom F0 = X and
+    A6: for x st x in X holds F0.x = diff(f,x) and
+    A7: dom G0 = X and
+    A8: for x st x in X holds G0.x = diff(f,x);
+    now
+      let x;
+      assume
+      A9: x in dom F0;
+      then F0.x = diff(f,x) by A5,A6;
+      hence F0.x=G0.x by A5,A8,A9;
+    end;
+    hence thesis by A5,A7,PARTFUN1:34;
+  end;
+end;
+
+theorem
+  (Z c= dom f & ex r be Point of F st rng f = {r})
+  implies f is_differentiable_on Z &
+  for x st x in Z holds (f`|Z)/.x = 0.F
+  proof
+    set R = REAL --> 0.F;
+    A1: dom R = REAL by FUNCOP_1:19;
+    now let h;
+      now let n be Nat;
+        A2: rng h c= dom R by A1;
+        A3: n in NAT by ORDINAL1:def 13;
+        hence ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by NDIFF_1:def 2
+        .= (h".n)*(R/.(h.n)) by A3,A2,FUNCT_2:185
+        .= 0.F by RLVECT_1:23,FUNCOP_1:13;
+      end; then
+      (h")(#)(R/*h) is constant
+      & ((h")(#)(R/*h)).0 = 0.F by VALUED_0:def 18;
+      hence (h")(#)(R/*h) is convergent &
+      lim ((h")(#)(R/*h)) = 0.F by NDIFF_1:21;
+    end;
+    then reconsider R as REST of F by Def1;
+    reconsider L = (REAL --> 0.F) as Function of REAL,F;
+    now let p be Real;
+      thus L.p = (0.F) by FUNCOP_1:13
+      .= p*(0.F) by RLVECT_1:23;
+    end;
+    then reconsider L as LINEAR of F by Def2;
+    assume
+    A4: Z c= dom f;
+    given r be Point of F such that
+    A5: rng f = {r};
+    A6: now let x0;
+    assume A7: x0 in dom f;
+    then f/.x0 = f.x0 by PARTFUN1:def 8;
+    then f/.x0 in {r} by A5,A7,FUNCT_1:def 5;
+    hence f/.x0 = r by TARSKI:def 1;
+  end;
+  A8: now
+  let x0;
+  assume
+  A9: x0 in Z;
+  then consider N being Neighbourhood of x0 such that
+  A10: N c= Z by RCOMP_1:39;
+  A11: N c= dom f by A4,A10,XBOOLE_1:1;
+  for x st x in N holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0)
+  proof
+    let x;
+    A12: R/.(x-x0)=R.(x-x0) by PARTFUN1:def 8,A1
+    .= 0.F by FUNCOP_1:13;
+    assume x in N;
+    hence f/.x - f/.x0 = r - f/.x0 by A6,A11
+    .= r - r by A4,A6,A9
+    .=0.F by RLVECT_1:28
+    .=L.(x-x0) by FUNCOP_1:13
+    .=L.(x-x0) + R/.(x-x0) by A12,RLVECT_1:10;
+  end;
+  hence f is_differentiable_in x0 by A11,Def3;
+end;
+hence
+A13: f is_differentiable_on Z by A4,Th10;
+let x0;
+assume
+A14: x0 in Z; then
+A15: f is_differentiable_in x0 by A8;
+then ex N being Neighbourhood of x0 st N c= dom f & ex L,R st for x st x in
+N holds f/.x-f/.x0=L.(x-x0)+R/.(x-x0) by Def3;
+then consider N being Neighbourhood of x0 such that
+A16: N c= dom f;
+A17: for x st x in N holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0)
+proof
+  let x;
+  A18: R/.(x-x0)=R.(x-x0) by PARTFUN1:def 8,A1
+  .= 0.F by FUNCOP_1:13;
+  assume x in N;
+  hence f/.x - f/.x0 = r - f/.x0 by A6,A16
+  .=r - r by A4,A6,A14
+  .=0.F by RLVECT_1:28
+  .=L.(x-x0) by FUNCOP_1:13
+  .=L.(x-x0) + R/.(x-x0) by A18,RLVECT_1:10;
+end;
+dom ((f`|Z)) = Z by A13,Def6;
+hence (f`|Z)/.x0 =(f`|Z).x0 by PARTFUN1:def 8,A14
+.= diff(f,x0) by A13,A14,Def6
+.= L.1 by A15,A16,A17,Def4
+.=0.F by FUNCOP_1:13;
+end;
+
+theorem Th13:
+  for x0 being real number for N being Neighbourhood of x0 st
+  f is_differentiable_in x0 & N c= dom f holds for h,c st rng c = {x0}
+  & rng (h+c)c= N
+  holds h"(#)((f/*(h+c)) - f/*c) is convergent
+  & diff(f,x0) = lim (h"(#)((f/*(h+c)) - f/*c))
+  proof
+    let x0 be real number;
+    let N be Neighbourhood of x0;
+    assume that
+    A1: f is_differentiable_in x0 and
+    A2: N c= dom f;
+    consider N1 be Neighbourhood of x0 such that
+    N1 c= dom f and
+    A3: ex L,R st for x st x in N1 holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0) by
+    A1,Def3;
+    consider N2 be Neighbourhood of x0 such that
+    A4: N2 c= N and
+    A5: N2 c= N1 by RCOMP_1:38;
+    A6: N2 c= dom f by A2,A4,XBOOLE_1:1;
+    let h,c such that
+    A7: rng c = {x0} and
+    A8: rng (h+c) c= N;
+    consider g be real number such that
+    A9: 0<g and
+    A10: N2 = ].x0-g,x0+g.[ by RCOMP_1:def 7;
+    reconsider z0=0 as Nat;
+    x0 + z0 < x0 + g & x0 - g < x0 - 0 by A9,XREAL_1:10,17; then
+    A11: x0 in N2 by A10;
+    now let y be set;
+      assume y in rng c;
+      then y = x0 by A7,TARSKI:def 1;
+      then y in N by A4,A11;
+      hence y in dom f by A2;
+    end; then
+    A12: rng c c= dom f by TARSKI:def 3;
+    ex n st rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2
+    proof
+      x0 in rng c by A7,TARSKI:def 1; then
+      A13: lim c = x0 by SEQ_4:40;
+      A14: h is convergent by FDIFF_1:def 1; then
+      A15: h + c is convergent by SEQ_2:19;
+      reconsider z0=0 as Real;
+      lim h = z0 by FDIFF_1:def 1;
+      then lim (h + c) = z0 + x0 by A13,A14,SEQ_2:20
+      .= x0;
+      then consider n such that
+      A16: for m being Element of NAT st n<=m holds abs((h+c).m-x0)<g by A9
+      ,A15,SEQ_2:def 7;
+      take n;
+      A17: rng (c^\n) = {x0} by A7,VALUED_0:26;
+      for y be set st y in rng (c^\n) holds
+      y in N2 by A11,A17,TARSKI:def 1;
+      hence rng(c^\n) c= N2 by TARSKI:def 3;
+      now let y be set;
+        assume y in rng ((h+c)^\n);
+        then consider m such that
+        A18: y = ((h+c)^\n).m by FUNCT_2:190;
+        reconsider z0=0 as Nat;
+        n + z0 <= n+m by XREAL_1:9; then
+        A19: abs((h+c).(n+m)-x0)<g by A16;
+        then (h+c).(m+n) - x0 < g by SEQ_2:9;
+        then ((h+c)^\n).m - x0 < g by NAT_1:def 3; then
+        A20: ((h+c)^\n).m < x0 + g by XREAL_1:21;
+        -g < (h+c).(m+n) - x0 by A19,SEQ_2:9;
+        then -g < ((h+c)^\n).m - x0 by NAT_1:def 3;
+        then x0 +-g < ((h+c)^\n).m by XREAL_1:22;
+        hence y in N2 by A10,A18,A20;
+      end;
+      hence rng ((h+c)^\n) c= N2 by TARSKI:def 3;
+    end;
+    then consider n such that
+    rng (c^\n) c= N2 and
+    A21: rng ((h+c)^\n) c= N2;
+    consider L,R such that
+    A22: for x st x in N1 holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0) by A3;
+    now let y be set;
+      assume
+      A23: y in rng (c^\n);
+      rng (c^\n) = rng c by VALUED_0:26;
+      then y = x0 by A7,A23,TARSKI:def 1;
+      then y in N by A4,A11;
+      hence y in dom f by A2;
+    end;
+    then
+    A24: rng (c^\n) c= dom f by TARSKI:def 3;
+    A25: (h^\n)"(#)(L/*(h^\n) + R/*(h^\n)) is convergent &
+    lim ((h^\n)"(#)(L/*(h^\n) + R/*(h^\n))) = L.1
+    proof
+      deffunc F0(Element of NAT) = L.1 + ((h^\n)"(#)(R/*(h^\n))).$1;
+      consider s1 be sequence of the carrier of F such that
+      A26: for k holds s1.k = F0(k) from FUNCT_2:sch 4;
+      A27: now
+      A28: ((h^\n)")(#)(R/*(h^\n)) is convergent & lim (((h^\n)")(#) (R/*(h^\n
+      )))=0.F by Def1;
+      let r be Real;
+      assume 0<r;
+      then consider m be Element of NAT such that
+      A29: for k be Element of NAT
+      st m<=k holds ||.(((h^\n)")(#) (R/*(h^\n))).k
+      - 0.F .|| <r by A28,NORMSP_1:def 11;
+      take n1=m;
+      let k such that
+      A30: n1<=k;
+      A31: ||. s1.k -L.1 .||
+      = ||. L.1 + ((h^\n)"(#)(R/*(h^\n))).k - L.1 .|| by A26
+      .= ||. (((h^\n)")(#)(R/*(h^\n))).k + (L.1 - L.1) .|| by RLVECT_1:42
+      .= ||. (((h^\n)")(#)(R/*(h^\n))).k + 0.F .|| by RLVECT_1:28
+      .= ||. (((h^\n)")(#)(R/*(h^\n))).k .|| by RLVECT_1:10;
+      ||. (((h^\n)")(#)(R/*(h^\n))).k -0.F .|| < r by A29,A30;
+      hence ||. s1.k -L.1 .|| <r by A31,RLVECT_1:26;
+    end;
+    consider s be Point of F such that
+    A32: for p1 be Real holds L.p1=p1*s by Def2;
+    A33: L.1 = 1*s by A32
+    .= s by RLVECT_1:def 11;
+    now
+      let m;
+      h^\n is non-zero by FDIFF_1:def 1; then
+      A34: (h^\n).m <> 0 by SEQ_1:7;
+      thus ((h^\n)"(#)(L/*(h^\n) + R/*(h^\n))).m
+      = ((h^\n)"(#)(L/*(h^\n)) + (h^\n)"(#)(R/*(h^\n))).m by NDIFF_1:9
+      .= ((h^\n)"(#)(L/*(h^\n))).m + ((h^\n)"(#)(R/*(h^\n))).m
+        by NORMSP_1:def 5
+      .= ((h^\n)").m*(L/*(h^\n)).m + ((h^\n)"(#)(R/*(h^\n))).m
+        by NDIFF_1:def 2
+      .= ((h^\n)").m*(L.((h^\n).m)) + ((h^\n)"(#)(R/*(h^\n))).m
+        by FUNCT_2:192
+      .= ((h^\n)").m*(((h^\n).m)*s) + ((h^\n)"(#)(R/*(h^\n))).m by A32
+      .= ((h^\n).m)"*(((h^\n).m) *s) + ((h^\n)"(#)(R/*(h^\n))).m
+        by VALUED_1:10
+      .= ((h^\n).m)"*(((h^\n).m)) *s + ((h^\n)"(#)(R/*(h^\n))).m
+        by RLVECT_1:def 10
+      .= 1*s + ((h^\n)"(#)(R/*(h^\n))).m by A34,XCMPLX_0:def 7
+      .= s + ((h^\n)"(#)(R/*(h^\n))).m by RLVECT_1:def 11
+      .= s1.m by A26,A33;
+    end; then
+    A35: (h^\n)"(#)(L/*(h^\n) + R/*(h^\n)) = s1 by FUNCT_2:113;
+    hence (h^\n)"(#)(L/*(h^\n) + R/*(h^\n)) is convergent
+      by A27,NORMSP_1:def 9;
+    hence thesis by A35,A27,NORMSP_1:def 11;
+  end;
+  now let y be set;
+    assume y in rng ((h+c)^\n);
+    then y in N2 by A21;
+    then y in N by A4;
+    hence y in dom f by A2;
+  end; then
+  A36: rng ((h+c)^\n) c= dom f by TARSKI:def 3;
+  now let y be set;
+    assume y in rng (h+c);
+    then y in N by A8;
+    hence y in dom f by A2;
+  end; then
+  A37: rng (h+c) c= dom f by TARSKI:def 3;
+  A38: for k holds f/.(((h+c)^\n).k) - f/.((c^\n).k)
+  = L.((h^\n).k) + R/.((h^\n). k)
+  proof
+    let k;
+    ((h+c)^\n).k in rng ((h+c)^\n) by VALUED_0:28; then
+    A39: ((h+c)^\n).k in N2 by A21;
+    (c^\n).k in rng (c^\n) & rng (c^\n) = rng c by VALUED_0:26,28; then
+    A40: (c^\n).k = x0 by A7,TARSKI:def 1;
+    ((h+c)^\n).k - (c^\n).k = (h^\n + c^\n).k - (c^\n).k by SEQM_3:37
+    .= (h^\n).k + (c^\n).k - (c^\n).k by SEQ_1:11
+    .= (h^\n).k;
+    hence thesis by A22,A5,A39,A40;
+  end;
+  A41: R is total by Def1;
+  now
+    let k;
+    dom R = REAL by FUNCT_2:def 1,A41; then
+    A42:rng (h^\n) c= dom R;
+    thus (f/*((h+c)^\n)-f/*(c^\n)).k
+    = (f/*((h+c)^\n)).k-(f/*(c^\n)).k by NORMSP_1:def 6
+    .= f/.(((h+c)^\n).k) - (f/*(c^\n)).k by A36,FUNCT_2:186
+    .= f/.(((h+c)^\n).k) - f/.((c^\n).k) by A24,FUNCT_2:186
+    .= L.((h^\n).k) + R/.((h^\n).k) by A38
+    .= (L/*(h^\n)).k + R/.((h^\n).k) by FUNCT_2:192
+    .= (L/*(h^\n)).k + (R/*(h^\n)).k by A42,FUNCT_2:186
+    .= (L/*(h^\n) + R/*(h^\n)).k by NORMSP_1:def 5;
+  end;
+  then f/*((h+c)^\n) - f/*(c^\n) = L/*(h^\n) + R/*(h^\n) by FUNCT_2:113; then
+  A43: ((h^\n)"(#)(L/*(h^\n) + R/*(h^\n)))
+  = ( ( h^\n)"(#)(((f/*(h+c))^\n)-f/*(c^\n))) by A37,VALUED_0:27
+  .=((h^\n)"(#)(((f/*(h+c))^\n)-((f/*c)^\n))) by A12,VALUED_0:27
+  .=((h^\n)"(#)(((f/*(h+c))-(f/*c))^\n)) by NDIFF_1:16
+  .=(((h")^\n)(#)(((f/*(h+c))-(f/*c))^\n)) by SEQM_3:41
+  .=(( h"(#)((f/*(h+c))-(f/*c)))^\n) by Th2; then
+  A44: L.1 = lim ((h")(#)((f/*(h+c)) - (f/*c))) by A25,LOPBAN_3:16;
+  thus h" (#) (f/*(h+c) - f/*c) is convergent by A25,A43,LOPBAN_3:15;
+  for x st x in N2 holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0) by A22,A5;
+  hence thesis by A1,A6,A44,Def4;
+end;
+
+theorem Th14:
+  f1 is_differentiable_in x0 & f2 is_differentiable_in x0 implies
+  f1+f2 is_differentiable_in x0 & diff(f1+f2,x0)=diff(f1,x0)+diff(f2,x0)
+  proof
+    assume that
+    A1: f1 is_differentiable_in x0 and
+    A2: f2 is_differentiable_in x0;
+    consider N1 be Neighbourhood of x0 such that
+    A3: N1 c= dom f1 and
+    A4: ex L,R st for x st x in N1 holds f1/.x - f1/.x0 = L.(x-x0) + R/.(x-x0)
+    by A1,Def3;
+    consider L1,R1 such that
+    A5: for x st x in N1 holds f1/.x - f1/.x0 = L1.(x-x0) + R1/.(x-x0) by A4;
+    consider N2 be Neighbourhood of x0 such that
+    A6: N2 c= dom f2 and
+    A7: ex L,R st for x st x in N2 holds f2/.x - f2/.x0 = L.(x-x0) + R/.(x-x0)
+    by A2,Def3;
+    consider L2,R2 such that
+    A8: for x st x in N2 holds f2/.x - f2/.x0 = L2.(x-x0) + R2/.(x-x0) by A7;
+    reconsider R=R1+R2 as REST of F by Th7;
+    reconsider L=L1+L2 as LINEAR of F by Th3;
+    A9: dom L1= REAL & dom L2= REAL by FUNCT_2:def 1;
+    consider N be Neighbourhood of x0 such that
+    A10: N c= N1 and
+    A11: N c= N2 by RCOMP_1:38;
+    A12: N c= dom f2 by A6,A11,XBOOLE_1:1;
+    N c= dom f1 by A3,A10,XBOOLE_1:1;
+    then N /\ N c= dom f1 /\ dom f2 by A12,XBOOLE_1:27; then
+    A13: N c= dom (f1+f2) by VFUNCT_1:def 1;
+    R1 is total & R2 is total by Def1; then
+    R1+R2 is total by VFUNCT_1:38; then
+    A14: dom (R1+R2) = REAL by FUNCT_2:def 1;
+    L1+L2 is total by VFUNCT_1:38; then
+    A15: dom (L1+L2) = REAL by FUNCT_2:def 1;
+    A16: now let x;
+    A17: x0 in N by RCOMP_1:37;
+    assume
+    A18: x in N;
+    hence (f1+f2)/.x - (f1+f2)/.x0 = (f1/.x+f2/.x) - (f1+f2)/.x0 by A13,
+    VFUNCT_1:def 1
+    .=f1/.x+f2/.x - (f1/.x0+f2/.x0) by A13,A17,VFUNCT_1:def 1
+    .=f1/.x+(f2/.x - (f1/.x0+f2/.x0)) by RLVECT_1:42
+    .=f1/.x+((f2/.x - f2/.x0) - f1/.x0 ) by RLVECT_1:41
+    .=f1/.x+(f2/.x - f2/.x0) - f1/.x0 by RLVECT_1:42
+    .= (f2/.x - f2/.x0) + (f1/.x - f1/.x0) by RLVECT_1:42
+    .=L1.(x-x0)+R1/.(x-x0) + (f2/.x - f2/.x0) by A5,A10,A18
+    .=L1.(x-x0)+R1/.(x-x0) + (L2.(x-x0) + R2/.(x-x0)) by A8,A11,A18
+    .=L1.(x-x0)+R1/.(x-x0) + L2.(x-x0) + R2/.(x-x0) by RLVECT_1:def 6
+    .=(L1.(x-x0)+L2.(x-x0)) + R1/.(x-x0) + R2/.(x-x0) by RLVECT_1:def 6
+    .=(L1/.(x-x0)+L2/.(x-x0)) + (R1/.(x-x0) + R2/.(x-x0)) by RLVECT_1:def 6
+    .=L/.(x-x0)+(R1/.(x-x0) + R2/.(x-x0)) by A15,VFUNCT_1:def 1
+    .=L.(x-x0)+R/.(x-x0) by A14,VFUNCT_1:def 1;
+  end;
+  hence f1+f2 is_differentiable_in x0 by A13,Def3;
+  hence diff(f1+f2,x0)=L.1 by A13,A16,Def4
+  .=L/.1 by A15,PARTFUN1:def 8
+  .=L1/.1 + L2/.1 by A15,VFUNCT_1:def 1
+  .=L1.1 + L2/.1 by A9,PARTFUN1:def 8
+  .=L1.1 + L2.1 by A9,PARTFUN1:def 8
+  .=diff(f1,x0) + L2.1 by A1,A3,A5,Def4
+  .=diff(f1,x0) + diff(f2,x0) by A2,A6,A8,Def4;
+end;
+
+theorem Th15:
+  f1 is_differentiable_in x0 & f2 is_differentiable_in x0 implies
+  f1-f2 is_differentiable_in x0 & diff(f1-f2,x0)=diff(f1,x0)-diff(f2,x0)
+  proof
+    assume that
+    A1: f1 is_differentiable_in x0 and
+    A2: f2 is_differentiable_in x0;
+    consider N1 be Neighbourhood of x0 such that
+    A3: N1 c= dom f1 and
+    A4: ex L,R st for x st x in N1 holds f1/.x - f1/.x0 = L.(x-x0) + R/.(x-x0)
+    by A1,Def3;
+    consider L1,R1 such that
+    A5: for x st x in N1 holds f1/.x - f1/.x0 = L1.(x-x0) + R1/.(x-x0) by A4;
+    consider N2 be Neighbourhood of x0 such that
+    A6: N2 c= dom f2 and
+    A7: ex L,R st for x st x in N2 holds f2/.x - f2/.x0 = L.(x-x0) + R/.(x-x0)
+    by A2,Def3;
+    consider L2,R2 such that
+    A8: for x st x in N2 holds f2/.x - f2/.x0 = L2.(x-x0) + R2/.(x-x0) by A7;
+    reconsider R=R1-R2 as REST of F by Th7;
+    reconsider L=L1-L2 as LINEAR of F by Th3;
+    A9: dom L1= REAL & dom L2= REAL by FUNCT_2:def 1;
+    consider N be Neighbourhood of x0 such that
+    A10: N c= N1 and
+    A11: N c= N2 by RCOMP_1:38;
+    A12: N c= dom f2 by A6,A11,XBOOLE_1:1;
+    N c= dom f1 by A3,A10,XBOOLE_1:1;
+    then N /\ N c= dom f1 /\ dom f2 by A12,XBOOLE_1:27; then
+    A13: N c= dom (f1-f2) by VFUNCT_1:def 2;
+    R1 is total & R2 is total by Def1; then
+    R1-R2 is total by VFUNCT_1:38; then
+    A14: dom (R1-R2) = REAL by FUNCT_2:def 1;
+    L1-L2 is total by VFUNCT_1:38; then
+    A15: dom (L1-L2) = REAL by FUNCT_2:def 1;
+    A16: now
+    let x;
+    A17: x0 in N by RCOMP_1:37;
+    assume
+    A18: x in N;
+    hence (f1-f2)/.x - (f1-f2)/.x0
+    = (f1/.x-f2/.x) - (f1-f2)/.x0 by A13,VFUNCT_1:def 2
+    .=f1/.x-f2/.x - (f1/.x0-f2/.x0) by A13,A17,VFUNCT_1:def 2
+    .=f1/.x-(f2/.x + (f1/.x0-f2/.x0)) by RLVECT_1:41
+    .=f1/.x-(f2/.x + f1/.x0-f2/.x0) by RLVECT_1:42
+    .=f1/.x-(f1/.x0+ (f2/.x -f2/.x0)) by RLVECT_1:42
+    .=(f1/.x-f1/.x0) - (f2/.x -f2/.x0) by RLVECT_1:41
+    .=L1.(x-x0)+R1/.(x-x0) - (f2/.x - f2/.x0) by A5,A10,A18
+    .=L1.(x-x0)+R1/.(x-x0) - (L2.(x-x0) + R2/.(x-x0)) by A8,A11,A18
+    .=L1.(x-x0)+(R1/.(x-x0) - (L2.(x-x0) + R2/.(x-x0))) by RLVECT_1:42
+    .=L1.(x-x0)+( (R1/.(x-x0) - R2/.(x-x0)) - L2.(x-x0)) by RLVECT_1:41
+    .=L1.(x-x0)+((R1/.(x-x0) - R2/.(x-x0))) - L2.(x-x0) by RLVECT_1:42
+    .=(L1/.(x-x0)-L2/.(x-x0)) + (R1/.(x-x0) - R2/.(x-x0)) by RLVECT_1:42
+    .=L/.(x-x0)+(R1/.(x-x0) - R2/.(x-x0)) by A15,VFUNCT_1:def 2
+    .=L.(x-x0)+R/.(x-x0) by A14,VFUNCT_1:def 2;
+  end;
+  hence f1-f2 is_differentiable_in x0 by A13,Def3;
+  hence diff(f1-f2,x0)=L.1 by A13,A16,Def4
+  .=L/.1 by A15,PARTFUN1:def 8
+  .=L1/.1 - L2/.1 by A15,VFUNCT_1:def 2
+  .=L1.1 - L2/.1 by A9,PARTFUN1:def 8
+  .=L1.1 - L2.1 by A9,PARTFUN1:def 8
+  .=diff(f1,x0) - L2.1 by A1,A3,A5,Def4
+  .=diff(f1,x0) - diff(f2,x0) by A2,A6,A8,Def4;
+end;
+
+theorem Th16:
+  for r be Real st
+  f is_differentiable_in x0 holds r(#)f is_differentiable_in x0
+  & diff((r(#)f),x0) = r*diff(f,x0)
+  proof
+    let r be Real;
+    assume
+    A1: f is_differentiable_in x0;
+    then consider N1 be Neighbourhood of x0 such that
+    A2: N1 c= dom f and
+    A3: ex L,R st for x st x in N1 holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0) by
+    Def3;
+    consider L1,R1 such that
+    A4: for x st x in N1 holds f/.x - f/.x0 = L1.(x-x0) + R1/.(x-x0) by A3;
+    reconsider R = r(#)R1 as REST of F by Th8;
+    reconsider L = r(#)L1 as LINEAR of F by Th4;
+    A5: dom L1= REAL by FUNCT_2:def 1;
+    A6: N1 c= dom(r(#)f) by A2,VFUNCT_1:def 4;
+    R1 is total by Def1; then
+    r(#)R1 is total by VFUNCT_1:40; then
+    A7: dom (r(#)R1) = REAL by FUNCT_2:def 1;
+    r(#)L1 is total by VFUNCT_1:40; then
+    A8: dom (r(#)L1) = REAL by FUNCT_2:def 1;
+    A9: now
+    let x;
+    A10: x0 in N1 by RCOMP_1:37;
+    assume
+    A11: x in N1;
+    hence (r(#)f)/.x - (r(#)f)/.x0
+     = r*(f/.x) - (r(#)f)/.x0 by A6,VFUNCT_1:def 4
+    .= r*f/.x - r*f/.x0 by A6,A10,VFUNCT_1:def 4
+    .= r*(f/.x - f/.x0) by RLVECT_1:48
+    .= r*(L1.(x-x0) + R1/.(x-x0)) by A4,A11
+    .= r*L1/.(x-x0) + r*R1/.(x-x0) by RLVECT_1:def 8
+    .= L/.(x-x0) + r*R1/.(x-x0) by A8,VFUNCT_1:def 4
+    .= L.(x-x0) + R/.(x-x0) by A7,VFUNCT_1:def 4;
+  end;
+  hence r(#)f is_differentiable_in x0 by A6,Def3;
+  hence diff((r(#)f),x0) = L.1 by A6,A9,Def4
+  .=L/.1 by A8,PARTFUN1:def 8
+  .=r*L1/.1 by A8,VFUNCT_1:def 4
+  .= r*L1.1 by A5,PARTFUN1:def 8
+  .= r*diff(f,x0) by A1,A2,A4,Def4;
+end;
+
+theorem
+  Z c= dom (f1+f2) & f1 is_differentiable_on Z &
+  f2 is_differentiable_on Z implies
+  f1+f2 is_differentiable_on Z &
+  for x st x in Z holds
+  ((f1+f2)`|Z).x = diff(f1,x) + diff(f2,x)
+  proof
+    assume that
+    A1: Z c= dom (f1+f2) and
+    A2: f1 is_differentiable_on Z & f2 is_differentiable_on Z;
+    now
+      let x0;
+      assume x0 in Z;
+      then f1 is_differentiable_in x0 & f2 is_differentiable_in x0 by A2,
+      Th10;
+      hence f1+f2 is_differentiable_in x0 by Th14;
+    end;
+    hence
+    A3: f1+f2 is_differentiable_on Z by A1,Th10;
+      let x;
+      assume
+      A4: x in Z; then
+      A5: f1 is_differentiable_in x & f2 is_differentiable_in x by A2,Th10;
+      thus ((f1+f2)`|Z).x = diff((f1+f2),x) by A3,A4,Def6
+      .= diff(f1,x) + diff(f2,x) by A5,Th14;
+  end;
+
+theorem
+  Z c= dom (f1-f2) &
+  f1 is_differentiable_on Z &
+  f2 is_differentiable_on Z implies
+  f1-f2 is_differentiable_on Z &
+  for x st x in Z holds ((f1-f2)`|Z).x = diff(f1,x) - diff(f2,x)
+  proof
+    assume that
+    A1: Z c= dom (f1-f2) and
+    A2: f1 is_differentiable_on Z & f2 is_differentiable_on Z;
+    now
+      let x0;
+      assume x0 in Z;
+      then f1 is_differentiable_in x0 & f2 is_differentiable_in x0 by A2,
+      Th10;
+      hence f1-f2 is_differentiable_in x0 by Th15;
+    end;
+    hence
+    A3: f1-f2 is_differentiable_on Z by A1,Th10;
+    let x;
+    assume
+    A4: x in Z; then
+    A5: f1 is_differentiable_in x & f2 is_differentiable_in x by A2,Th10;
+    thus ((f1-f2)`|Z).x = diff((f1-f2),x) by A3,A4,Def6
+    .= diff(f1,x) - diff(f2,x) by A5,Th15;
+  end;
+
+theorem
+  Z c= dom (r(#)f) & f is_differentiable_on Z implies
+  r(#)f is_differentiable_on Z &
+  for x st x in Z holds ((r(#) f)`|Z).x =r*diff(f,x)
+  proof
+    assume that
+    A1: Z c= dom (r(#)f) and
+    A2: f is_differentiable_on Z;
+    now
+      let x0;
+      assume x0 in Z;
+      then f is_differentiable_in x0 by A2,Th10;
+      hence r(#)f is_differentiable_in x0 by Th16;
+    end;
+    hence
+    A3: r(#)f is_differentiable_on Z by A1,Th10;
+    let x;
+    assume
+    A4: x in Z; then
+    A5: f is_differentiable_in x by A2,Th10;
+    thus ((r(#)f)`|Z).x = diff((r(#)f),x) by A3,A4,Def6
+     .= r*diff(f,x) by A5,Th16;
+  end;
+
+theorem
+  Z c= dom f & f|Z is constant implies f is_differentiable_on Z & for x
+  st x in Z holds (f`|Z).x = 0.F
+  proof
+    set R = REAL --> 0.F;
+    A1: dom R = REAL by FUNCOP_1:19;
+    now let h;
+      now let n be Nat;
+        A2: rng h c= dom R by A1;
+        A3: n in NAT by ORDINAL1:def 13;
+        hence ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by NDIFF_1:def 2
+        .=(h".n)*(R/.(h.n)) by A3,A2,FUNCT_2:185
+        .=0.F by RLVECT_1:23,FUNCOP_1:13;
+      end; then
+      (h")(#)(R/*h) is constant
+      & ((h")(#)(R/*h)).0 = 0.F by VALUED_0:def 18;
+      hence (h")(#)(R/*h) is convergent &
+      lim ((h")(#)(R/*h)) = 0.F by NDIFF_1:21;
+    end;
+    then reconsider R as REST of F by Def1;
+    set L = REAL --> 0.F;
+    now let p be Real;
+      thus L.p = (0.F) by FUNCOP_1:13
+      .= p*(0.F) by RLVECT_1:23;
+    end;
+    then reconsider L as LINEAR of F by Def2;
+    assume that
+    A4: Z c= dom f and
+    A5: f|Z is constant;
+    consider r be Point of F such that
+    A6: for x st x in Z/\dom f holds f.x=r by A5,PARTFUN2:76;
+    A7: now let x;
+    assume A8: x in Z/\dom f;
+    then x in dom f by XBOOLE_0:def 4;
+    hence f/.x= f.x by PARTFUN1:def 8
+    .= r by A8,A6;
+  end;
+  A9: now
+  let x0;
+  assume
+  A10: x0 in Z;
+  then consider N being Neighbourhood of x0 such that
+  A11: N c= Z by RCOMP_1:39;
+  A12: N c= dom f by A4,A11,XBOOLE_1:1;
+  A13: x0 in Z/\dom f by A4,A10,XBOOLE_0:def 4;
+  for x st x in N holds f/.x-f/.x0=L.(x-x0)+R/.(x-x0)
+  proof
+    let x;
+    A14: R/.(x-x0)=R.(x-x0) by PARTFUN1:def 8,A1
+    .= 0.F by FUNCOP_1:13;
+    assume x in N;
+    then x in Z/\dom f by A11,A12,XBOOLE_0:def 4;
+    hence f/.x-f/.x0=r-f/.x0 by A7
+    .=r - r by A7,A13
+    .=0.F by RLVECT_1:28
+    .=L.(x-x0) by FUNCOP_1:13
+    .=L.(x-x0) + R/.(x-x0) by A14,RLVECT_1:10;
+  end;
+  hence f is_differentiable_in x0 by A12,Def3;
+end;
+hence
+A15: f is_differentiable_on Z by A4,Th10;
+let x0;
+assume
+A16: x0 in Z;
+then consider N being Neighbourhood of x0 such that
+A17: N c= Z by RCOMP_1:39;
+A18: N c= dom f by A4,A17,XBOOLE_1:1;
+A19: x0 in Z/\dom f by A4,A16,XBOOLE_0:def 4;
+A20: for x st x in N holds f/.x-f/.x0=L.(x-x0)+R/.(x-x0)
+proof
+  let x;
+  A21: R/.(x-x0)=R.(x-x0) by PARTFUN1:def 8,A1
+  .= 0.F by FUNCOP_1:13;
+  assume x in N;
+  then x in Z/\dom f by A17,A18,XBOOLE_0:def 4;
+  hence f/.x - f/.x0 = r - f/.x0 by A7
+  .=r - r by A7,A19
+  .=0.F by RLVECT_1:28
+  .=L.(x-x0) by FUNCOP_1:13
+  .=L.(x-x0) + R/.(x-x0) by A21,RLVECT_1:10;
+end;
+A22: f is_differentiable_in x0 by A9,A16;
+thus (f`|Z).x0 = diff(f,x0) by A15,A16,Def6
+.=L.1 by A22,A18,A20,Def4
+.=0.F by FUNCOP_1:13;
+end;
+
+theorem Th21:
+  for r,p be Point of F,Z,f
+  st Z c= dom f & (for x st x in Z holds f/.x = x*r + p)
+  holds f is_differentiable_on Z
+  & for x st x in Z holds (f`|Z).x = r
+  proof
+    let r,p be Point of F;
+    let Z,f;
+    set R = (REAL --> 0.F);
+    defpred P[set] means $1 in REAL;
+    A1: dom R = REAL by FUNCOP_1:19;
+    now let h;
+      now let n be Nat;
+        A2: rng h c= dom R by A1;
+        A3: n in NAT by ORDINAL1:def 13;
+        hence ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by NDIFF_1:def 2
+        .=(h".n)*(R/.(h.n)) by A3,A2,FUNCT_2:185
+        .=0.F by RLVECT_1:23,FUNCOP_1:13;
+      end; then
+      (h")(#)(R/*h) is constant
+      & ((h")(#)(R/*h)).0 = 0.F by VALUED_0:def 18;
+      hence (h")(#)(R/*h) is convergent &
+      lim ((h")(#)(R/*h)) = 0.F by NDIFF_1:21;
+    end;
+    then reconsider R as REST of F by Def1;
+    assume that
+    A4: Z c= dom f and
+    A5: for x st x in Z holds f/.x = x*r + p;
+    deffunc G(Real) = $1*r;
+    consider L being PartFunc of REAL,the carrier of F such that
+    A6: (for x holds x in dom L iff P[x]) & for x st x in dom L holds
+    L.x=G(x) from SEQ_1:sch 3;
+    dom L = REAL by A6,FDIFF_1:1; then
+    A7: L is total by PARTFUN1:def 4;
+    A8: now
+    let x;
+    x in dom L by A6;
+    hence L.x=x*r by A6;
+  end;
+  then reconsider L as LINEAR of F by A7,Def2;
+  A9: now
+  let x0;
+  assume
+  A10: x0 in Z;
+  then consider N being Neighbourhood of x0 such that
+  A11: N c= Z by RCOMP_1:39;
+  A12: for x st x in N holds f/.x-f/.x0=L.(x-x0)+R/.(x-x0)
+  proof
+    let x be Real;
+    A13: R/.(x-x0)=R.(x-x0) by PARTFUN1:def 8,A1
+    .= 0.F by FUNCOP_1:13;
+    assume x in N;
+    hence f/.x-f/.x0=x*r+p-f/.x0 by A5,A11
+    .=x*r+p - (x0*r+p) by A5,A10
+    .=x*r+p - x0*r-p by RLVECT_1:41
+    .=p+(x*r- x0*r)-p by RLVECT_1:42
+    .=(x*r- x0*r)+(p-p) by RLVECT_1:42
+    .=(x*r- x0*r)+0.F by RLVECT_1:28
+    .=(x-x0)*r + 0.F by RLVECT_1:49
+    .=L.(x-x0) + R/.(x-x0) by A13,A8;
+  end;
+  N c= dom f by A4,A11,XBOOLE_1:1;
+  hence f is_differentiable_in x0 by A12,Def3;
+end;
+hence
+A14: f is_differentiable_on Z by A4,Th10;
+let x0;
+assume
+A15: x0 in Z;
+then consider N being Neighbourhood of x0 such that
+A16: N c= Z by RCOMP_1:39;
+A17: for x st x in N holds f/.x-f/.x0=L.(x-x0)+R/.(x-x0)
+proof
+  let x;
+  A18: R/.(x-x0)=R.(x-x0) by PARTFUN1:def 8,A1
+  .= 0.F by FUNCOP_1:13;
+  assume x in N;
+  hence f/.x - f/.x0 = x*r+p - f/.x0 by A5,A16
+  .=x*r+p - (x0*r+p) by A5,A15
+  .=x*r+p - x0*r-p by RLVECT_1:41
+  .=p+(x*r- x0*r)-p by RLVECT_1:42
+  .=(x*r- x0*r)+(p-p) by RLVECT_1:42
+  .=(x*r- x0*r)+0.F by RLVECT_1:28
+  .=(x-x0)*r + 0.F by RLVECT_1:49
+  .=L.(x-x0) + R/.(x-x0) by A18,A8;
+end;
+A19: N c= dom f by A4,A16,XBOOLE_1:1;
+A20: f is_differentiable_in x0 by A9,A15;
+thus (f`|Z).x0 = diff(f,x0) by A14,A15,Def6
+.=L.1 by A20,A19,A17,Def4
+.=1*r by A8
+.=r by RLVECT_1:def 11;
+end;
+
+theorem Th22:
+  for x0 being Real st f is_differentiable_in x0 holds
+  f is_continuous_in x0
+  proof
+    let x0 be Real;
+    assume
+    A1: f is_differentiable_in x0;
+    then consider N being Neighbourhood of x0 such that
+    A2: N c= dom f and
+    ex L,R st for x st x in N holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0) by
+    Def3;
+    A3:x0 in N by RCOMP_1:37;
+    now
+      consider g be real number such that
+      A4: 0<g and
+      A5: N=].x0-g,x0+g.[ by RCOMP_1:def 7;
+      reconsider s2 = NAT --> x0 as Real_Sequence;
+      let s1 such that
+      A6: rng s1 c= dom f and
+      A7: s1 is convergent and
+      A8: lim s1 = x0 and
+      A9: for n holds s1.n<>x0;
+      consider l be Element of NAT such that
+      A10: for m st l<=m holds abs(s1.m-x0)<g by A7,A8,A4,SEQ_2:def 7;
+      reconsider c =s2^\l as constant Real_Sequence;
+      deffunc G(Real) = s1.$1-s2.$1;
+      consider s3 such that
+      A11: for n holds s3.n=G(n) from SEQ_1:sch 1;
+      A12: s3=s1-s2 by A11,RFUNCT_2:6;
+      then
+      A13: s3 is convergent by A7,SEQ_2:25;
+      A14: rng c = {x0}
+      proof
+        thus rng c c= {x0}
+        proof let y be set;
+          assume y in rng c;
+          then consider n such that
+          A15: y=(s2^\l).n by FUNCT_2:190;
+          y=s2.(n+l) by A15,NAT_1:def 3;
+          then y=x0 by FUNCOP_1:13;
+          hence y in {x0} by TARSKI:def 1;
+        end;
+        let y be set;
+        assume y in {x0}; then
+   A16: y=x0 by TARSKI:def 1;
+        reconsider z0 = 0 as Element of NAT;
+        c.z0 = s2.(z0 + l) by NAT_1:def 3
+          .= y by A16,FUNCOP_1:13;
+        hence y in rng c by VALUED_0:28;
+      end;
+      A17: now
+      let p be Real such that
+      A18: 0<p;
+      take n=0;
+      let m such that n<=m;
+      x0 in N by RCOMP_1:37;
+      then rng c c= dom f by A2,A14,ZFMISC_1:37;
+      then ||.(f/*c).m-f/.x0 .||=||.f/.(c.m)-f/.x0 .|| by FUNCT_2:186
+      .=||.f/.(s2.(m+l))-f/.x0 .|| by NAT_1:def 3
+      .=||.f/.x0-f/.x0 .|| by FUNCOP_1:13
+      .=||. 0.F .|| by RLVECT_1:28
+      .=0;
+      hence ||.(f/*c).m-f/.x0 .||<p by A18;
+    end; then
+    A19: f/*c is convergent by NORMSP_1:def 9;
+    lim s2 = s2.0 by SEQ_4:41
+    .=x0 by FUNCOP_1:13;
+    then lim s3 =x0-x0 by A7,A8,A12,SEQ_2:26
+    .=0; then
+    A20: lim(s3^\l)=0 by A13,SEQ_4:33;
+    A21: now
+    given n such that
+    A22: s3.n=0;
+    s1.n-s2.n=0 by A11,A22;
+    hence contradiction by A9,FUNCOP_1:13;
+  end;
+  A23: now
+  given n such that
+  A24: (s3^\l).n=0;
+  s3.(n+l)=0 by A24,NAT_1:def 3;
+  hence contradiction by A21;
+end;
+then s3^\l is non-zero by SEQ_1:7;
+then reconsider h=s3^\l as convergent_to_0 Real_Sequence
+by A13,A20,FDIFF_1:def 1;
+now
+  let n;
+  thus (f/*(h+c)-f/*c+f/*c).n
+  =(f/*(h+c)-f/*c).n+(f/*c).n by NORMSP_1:def 5
+  .=(f/*(h+c)).n-(f/*c).n+(f/*c).n by NORMSP_1:def 6
+  .=(f/*(h+c)).n-((f/*c).n-(f/*c).n) by RLVECT_1:43
+  .=(f/*(h+c)).n-0.F by RLVECT_1:28
+  .=(f/*(h+c)).n by RLVECT_1:26;
+end; then
+A25: f/*(h+c)-f/*c+(f/*c)=f/*(h+c) by FUNCT_2:113;
+now
+  let n;
+  thus (h+c).n=((s1-s2+s2)^\l).n by A12,SEQM_3:37
+  .=(s1-s2+s2).(n+l) by NAT_1:def 3
+  .=(s1-s2).(n+l)+s2.(n+l) by SEQ_1:11
+  .=s1.(n+l)-s2.(n+l)+s2.(n+l) by RFUNCT_2:6
+  .=(s1^\l).n by NAT_1:def 3;
+end; then
+A26: f/*(h+c)-f/*c+(f/*c)=f/*(s1^\l) by A25,FUNCT_2:113
+.=(f/*s1)^\l by A6,VALUED_0:27;
+now let y be set;
+  assume y in rng(h+c);
+  then consider n such that
+  A27: y=(h+c).n by FUNCT_2:190;
+  (h+c).n=((s1-s2+s2)^\l).n by A12,SEQM_3:37
+  .=(s1-s2+s2).(n+l) by NAT_1:def 3
+  .=(s1-s2).(n+l)+s2.(n+l) by SEQ_1:11
+  .=s1.(n+l)-s2.(n+l)+s2.(n+l) by RFUNCT_2:6
+  .=s1.(l+n);
+  then abs((h+c).n-x0)<g by A10,NAT_1:12;
+  hence y in N by A5,A27,RCOMP_1:8;
+end; then
+A28:rng(h+c) c= N by TARSKI:def 3;
+A29: lim (h(#)(h"(#)(f/*(h+c) - f/*c)))
+= 0 * lim(h"(#) (f/*(h+c) - f/*c)) by A13,A20,NDIFF_1:14,A1,A2,A14,Th13,A28
+.=0.F by RLVECT_1:23;
+now
+  let n;
+  A30: h.n<>0 by A23;
+  thus (h(#)(h"(#)(f/*(h+c) - f/*c))).n = h.n *(h"(#)(f/*(h+c) - f/*c)).n
+  by NDIFF_1:def 2
+  .=h.n*((h").n*(f/*(h+c) - f/*c).n) by NDIFF_1:def 2
+  .=h.n*(((h.n)")*(f/*(h+c) - f/*c).n) by VALUED_1:10
+  .=h.n*((h.n)")*(f/*(h+c) - f/*c).n by RLVECT_1:def 10
+  .=1*(f/*(h+c) - f/*c).n by A30,XCMPLX_0:def 7
+  .=(f/*(h+c) - f/*c).n by RLVECT_1:def 11;
+end; then
+A31: h(#)(h"(#)(f/*(h+c) - f/*c))=f/*(h+c)-f/*c by FUNCT_2:113; then
+A32: f/*(h+c)-f/*c is convergent by A13,A28,NDIFF_1:13,A1,A2,A14,Th13; then
+f/*(h+c)-f/*c+f/*c is convergent by A19,NORMSP_1:34;
+hence f/*s1 is convergent by A26,LOPBAN_3:15;
+lim(f/*c)=f/.x0 by A17,A19,NORMSP_1:def 11;
+then lim(f/*(h+c)-f/*c+f/*c)=0.F+f/.x0 by A29,A31,A32,A19,NORMSP_1:42
+.=f/.x0 by RLVECT_1:10;
+hence f/.x0=lim(f/*s1) by A32,A26,LOPBAN_3:16,A19,NORMSP_1:34;
+end;
+hence thesis by A3,NFCONT_3:7,A2;
+end;
+
+theorem
+  f is_differentiable_on X implies (f|X) is continuous
+  proof
+    assume
+    A1: f is_differentiable_on X;
+    now let x be real number;
+      assume x in dom(f|X);
+      then x is Real & x in X by RELAT_1:86;
+      then A2: f|X is_differentiable_in x by A1,Def5;
+      x is Real by XREAL_0:def 1;
+      hence f|X is_continuous_in x by A2,Th22;
+    end;
+    hence thesis by NFCONT_3:def 2;
+  end;
+
+theorem Th24:
+  f is_differentiable_on X & Z c= X implies f is_differentiable_on Z
+  proof
+    assume that
+    A1: f is_differentiable_on X and
+    A2: Z c= X;
+    X c= dom f by A1,Def5; then
+    A3:Z c= dom f by A2,XBOOLE_1:1;
+    now let x0;
+      assume
+      A4: x0 in Z;
+      then f|X is_differentiable_in x0 by A1,A2,Def5;
+      then consider N being Neighbourhood of x0 such that
+      A5: N c= dom(f|X) and
+      A6: ex L,R st for x st x in N
+      holds (f|X)/.x-(f|X)/.x0=L.(x-x0)+R/.(x-x0) by Def3;
+      consider N1 being Neighbourhood of x0 such that
+      A7: N1 c= Z by A4,RCOMP_1:39;
+      consider N2 being Neighbourhood of x0 such that
+      A8: N2 c= N and
+      A9: N2 c= N1 by RCOMP_1:38;
+      A10: N2 c= Z by A7,A9,XBOOLE_1:1;
+      dom(f|X)=dom f/\X by RELAT_1:90;
+      then dom(f|X) c=dom f by XBOOLE_1:17;
+      then N c= dom f by A5,XBOOLE_1:1;
+      then N2 c=dom f by A8,XBOOLE_1:1;
+      then N2 c=dom f/\Z by A10,XBOOLE_1:19; then
+      A11: N2 c=dom(f|Z) by RELAT_1:90;
+      A12: N2 c= dom(f|X) by A8,A5,XBOOLE_1:1;
+      consider L,R such that
+      A13: for x st x in N holds
+      (f|X)/.x-(f|X)/.x0=L.(x-x0)+R/.(x-x0) by A6;
+      for x st x in N2 holds
+      (f|Z)/.x-(f|Z)/.x0=L.(x-x0)+R/.(x-x0)
+      proof
+        let x;
+        assume
+        A14: x in N2;
+        then A15:(f|X)/.x-(f|X)/.x0=L.(x-x0)+R/.(x-x0) by A8,A13;
+        A16: x0 in N2 by RCOMP_1:37;
+        (f|X)/.x-f/.x0=L.(x-x0)+R/.(x-x0) by A15,PARTFUN2:32,A16,A12;
+        then f/.x-f/.x0=L.(x-x0)+R/.(x-x0) by A14,A12,PARTFUN2:32;
+        then f/.x-(f|Z)/.x0=L.(x-x0)+R/.(x-x0) by PARTFUN2:32,A16,A11;
+        hence thesis by A14,A11,PARTFUN2:32;
+      end;
+      hence (f|Z) is_differentiable_in x0 by Def3,A11;
+    end;
+    hence thesis by Def5,A3;
+  end;
+
+Lm1: {} REAL is closed
+proof
+  let a be Real_Sequence;
+  assume rng a c= {} REAL & a is convergent;
+  hence lim a in {}REAL;
+end;
+
+theorem
+  ex R be REST of F st R/.0=0.F & R is_continuous_in 0
+  proof
+    ([#] REAL)` = {} REAL & REAL c= REAL & [#]REAL = REAL by XBOOLE_1:37;
+    then
+    reconsider Z = [#]REAL as open Subset of REAL by RCOMP_1:def 5,Lm1;
+    set R = (REAL --> 0.F);
+    reconsider f=R as PartFunc of REAL,the carrier of F;
+A1: dom R = REAL by FUNCOP_1:19;
+    now
+      let h;
+      now
+        let n be Nat;
+        A2: rng h c= dom R by A1;
+        A3: n in NAT by ORDINAL1:def 13;
+        hence ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by NDIFF_1:def 2
+        .= (h".n)*(R/.(h.n)) by A3,A2,FUNCT_2:185
+        .= 0.F by RLVECT_1:23,FUNCOP_1:13;
+      end;
+      then (h")(#)(R/*h) is constant
+      & ((h")(#)(R/*h)).0 = 0.F by VALUED_0:def 18;
+      hence (h")(#)(R/*h) is convergent &
+      lim ((h")(#)(R/*h)) = 0.F by NDIFF_1:21;
+    end;
+    then reconsider R as REST of F by Def1;
+    set L = (REAL --> 0.F);
+    now let p be Real;
+      thus L.p = (0.F) by FUNCOP_1:13
+      .= p*(0.F) by RLVECT_1:23;
+    end;
+    then reconsider L as LINEAR of F by Def2;
+A4: Z c= dom f by FUNCOP_1:19;
+A5: f|Z is constant;
+    consider r be Point of F such that
+    A6: for x st x in Z/\dom f holds f.x=r by A5,PARTFUN2:76;
+A7: now let x;
+    assume A8: x in Z/\dom f;
+    then x in dom f by XBOOLE_0:def 4;
+    hence f/.x= f.x by PARTFUN1:def 8
+    .= r by A8,A6;
+  end;
+  A9: now
+  let x0;
+  assume x0 in Z;
+  set N =the  Neighbourhood of x0;
+  A10: N c= dom f by A4,XBOOLE_1:1;
+  for x st x in N holds f/.x-f/.x0=L.(x-x0)+R/.(x-x0)
+  proof
+    let x;
+    A11: R/.(x-x0)=R.(x-x0) by PARTFUN1:def 8,A1
+    .= 0.F by FUNCOP_1:13;
+    assume x in N;
+    then x in Z/\dom f by A10,XBOOLE_0:def 4;
+    hence f/.x-f/.x0=r-f/.x0 by A7
+    .=r - r by A7,A1
+    .=0.F by RLVECT_1:28
+    .=L.(x-x0) by FUNCOP_1:13
+    .=L.(x-x0) + R/.(x-x0) by A11,RLVECT_1:10;
+  end;
+  hence f is_differentiable_in x0 by A10,Def3;
+end;
+set x0 =the  Real;
+
+f is_differentiable_in x0 by A9; then
+consider N being Neighbourhood of x0 such that
+N c= dom f and
+A12: ex L,R st for x st x in N holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0) by
+Def3;
+consider L,R such that
+A13: for x st x in N holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0) by A12;
+take R;
+consider p be Point of F such that
+A14: for r holds L.r = r*p by Def2;
+f/.x0 - f/.x0 = L.(x0-x0) + R/.(x0-x0) by A13,RCOMP_1:37; then
+0.F = L.(x0-x0) + R/.(x0-x0) by RLVECT_1:28; then
+0.F = 0 * p+ R/.0 by A14; then
+0.F = 0.F + R/.0 by RLVECT_1:23;
+hence
+A15: R/.0=0.F by RLVECT_1:10;
+A16: now
+set s3 = cs;
+let h;
+A17: s3.1 = 0 by FUNCOP_1:13;
+(h")(#)(R/*h) is convergent &
+lim ((h")(#)(R/*h)) = 0.F by Def1;
+then ||.(h")(#)(R/*h).|| is bounded by SEQ_2:27,LOPBAN_1:24;
+then consider M being real number such that M>0 and
+A18: for n holds abs((||.((h")(#)(R/*h)) .||).n ) <M by SEQ_2:15;
+A19: now let n;
+abs((||.((h")(#)(R/*h)) .||).n ) <M by A18; then
+abs( ||.((h")(#)(R/*h)).n .|| ) <M by NORMSP_0:def 4;
+hence ||.((h")(#)(R/*h)).n .|| < M by ABSVALUE:def 1;
+end;
+A20: h is convergent by FDIFF_1:def 1; then
+A21: abs(h) is convergent by SEQ_4:26;
+A22: h is non-zero by FDIFF_1:def 1;
+reconsider z0=0 as Real;
+A23: now
+let n be Element of NAT;
+||.((h")(#)(R/*h)).n .||=||.((h").n)*(R/*h).n .|| by NDIFF_1:def 2
+.=||.(h.n)"*(R/*h).n .|| by VALUED_1:10; then
+A24: ||.(h.n)"*(R/*h).n .||<=M by A19;
+abs((h.n))>=0 by COMPLEX1:132;
+then abs((h.n))*||.(h.n)"*(R/*h).n .|| <=M*abs((h.n)) by A24,XREAL_1:66;
+then ||.(h.n)*((h.n)"*(R/*h).n) .|| <=M*abs((h.n)) by NORMSP_1:def 2; then
+A25: ||.(h.n)*(h.n)"*(R/*h).n .||<=M*abs((h.n)) by RLVECT_1:def 10;
+h.n <>0 by A22,SEQ_1:7;
+then ||.1*(R/*h).n.|| <=M*abs((h.n)) by A25,XCMPLX_0:def 7;
+then ||.(R/*h).n.|| <=M*abs((h.n)) by RLVECT_1:def 11;
+then ||.(R/*h).n .|| <=M*abs(h).n by SEQ_1:16;
+hence ||.(R/*h).n .|| <=(M(#)abs(h)).n by SEQ_1:13;
+end;
+lim h=z0 by FDIFF_1:def 1;
+then lim abs(h) = abs(z0) by A20,SEQ_4:27
+.=z0 by ABSVALUE:7; then
+A26: lim (M(#)abs(h)) = M*z0 by A21,SEQ_2:22
+.=lim s3 by A17,SEQ_4:40;
+A27: M(#)abs(h) is convergent by A21,SEQ_2:21;
+reconsider z0=0 as Real;
+lim (M(#)abs(h)) = 0 by A26,A17,SEQ_4:40;
+hence R/*h is convergent & lim (R/*h)=R/.0 by A15,A27,A23,Th1;
+end;
+R is total by Def1; then
+A28:dom R=REAL by FUNCT_2:def 1;
+now
+  let s1;
+  assume that rng s1 c= dom R and
+  A29: s1 is convergent & lim s1 = 0 and
+  A30: for n holds s1.n <> 0;
+  s1 is non-zero by A30,SEQ_1:7;
+  then s1 is convergent_to_0 Real_Sequence by A29,FDIFF_1:def 1;
+  hence R/*s1 is convergent & R/.0=lim (R/*s1) by A16;
+end;
+hence thesis by NFCONT_3:7,A28;
+end;
+
+definition let F;
+  let f be PartFunc of REAL, the carrier of F;
+  attr f is differentiable means  :Def7:
+  f is_differentiable_on dom f;
+end;
+
+Lm2: [#] REAL is open
+proof
+  ([#] REAL)` = {} REAL by XBOOLE_1:37;
+  hence thesis by Lm1,RCOMP_1:def 5;
+end;
+
+registration let F;
+  cluster differentiable Function of REAL, the carrier of F;
+  existence
+  proof
+    reconsider Z = REAL as open Subset of REAL by Lm2;
+    reconsider f = (REAL --> 0.F) as Function of REAL, the carrier of F;
+    take f;
+A1: Z = dom f by FUNCT_2:def 1;
+    now let x;
+      assume x in Z;
+      thus f/.x = 0.F by FUNCOP_1:13
+      .= x*(0.F) by RLVECT_1:23
+      .= x*(0.F) + 0.F by RLVECT_1:10;
+    end;
+    then f is_differentiable_on Z by A1,Th21;
+    hence thesis by A1,Def7;
+  end;
+end;
+
+theorem
+  for f being differentiable PartFunc of REAL, the carrier of F
+  st Z c= dom f holds f is_differentiable_on Z
+  proof
+    let f be differentiable PartFunc of REAL, the carrier of F;
+    assume
+A1: Z c= dom f;
+    f is_differentiable_on dom f by Def7;
+    hence thesis by A1,Th24;
+  end;

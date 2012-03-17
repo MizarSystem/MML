@@ -230,7 +230,6 @@
 <ArgTypes/>
 <Func kind="K" nr="400"/>
 <Cluster>
-<Adjective nr="68"/>
 <Adjective nr="69"/>
 <Adjective nr="75"/>
 </Cluster>

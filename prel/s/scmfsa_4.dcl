@@ -32,9 +32,10 @@
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="AMI_2"/>
-<ArticleID name="SCMFSA_1"/>
 <ArticleID name="SCMFSA_2"/>
+<ArticleID name="AMISTD_2"/>
+<ArticleID name="AMI_1"/>
+<ArticleID name="AMISTD_5"/>
 </Signature>
 <FCluster aid="SCMFSA_4" nr="1">
 <ArgTypes>
@@ -45,7 +46,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="345">
+<Func kind="K" nr="308">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -57,7 +58,7 @@
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -70,7 +71,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="346">
+<Func kind="K" nr="309">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -82,7 +83,7 @@
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -95,7 +96,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="347">
+<Func kind="K" nr="310">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -107,7 +108,7 @@
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -120,7 +121,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="348">
+<Func kind="K" nr="311">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -132,7 +133,7 @@
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -145,7 +146,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="349">
+<Func kind="K" nr="312">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -157,7 +158,7 @@
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -173,7 +174,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="353">
+<Func kind="K" nr="316">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
@@ -186,7 +187,7 @@
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -202,7 +203,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="354">
+<Func kind="K" nr="317">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
@@ -215,7 +216,7 @@
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -228,7 +229,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="355">
+<Func kind="K" nr="318">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -240,7 +241,7 @@
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -253,7 +254,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="356">
+<Func kind="K" nr="319">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -265,7 +266,29 @@
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="303"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="SCMFSA_4" nr="10">
+<ArgTypes/>
+<Func kind="K" nr="303"/>
+<Cluster>
+<Adjective nr="82">
+<Func kind="K" nr="2">
+<Func kind="K" nr="66"/>
+<Func kind="K" nr="300">
+<Func kind="K" nr="66"/>
+</Func>
+</Func>
+</Adjective>
+<Adjective nr="95">
+<Func kind="K" nr="2">
+<Func kind="K" nr="66"/>
+<Func kind="K" nr="300">
+<Func kind="K" nr="66"/>
+</Func>
+</Func>
 </Adjective>
 </Cluster>
 </FCluster>

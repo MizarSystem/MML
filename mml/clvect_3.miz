@@ -3,7 +3,7 @@
 ::
 :: Received March 18, 2004
 :: Copyright (c) 2004 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, CSSPACE, PRE_TOPC, NAT_1, SEQ_1, COMSEQ_1, CFUNCT_1,
@@ -13,14 +13,15 @@ environ
       ORDINAL1, METRIC_1, CSSPACE2;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, COMPLEX1,
       REAL_1, FUNCOP_1, VALUED_1, SEQ_1, SEQ_2, NAT_1, NEWTON, SERIES_1,
-      VALUED_0, PRE_TOPC, COMSEQ_1, STRUCT_0, RLVECT_1, NORMSP_1, BHSP_1,
+      VALUED_0, PRE_TOPC, COMSEQ_1, STRUCT_0, RLVECT_1,
+      VFUNCT_1, NORMSP_1, BHSP_1,
       BHSP_4, POWER, INT_1, CFUNCT_1, COMSEQ_2, COMSEQ_3, CLVECT_1, CSSPACE,
       CLVECT_2, CSSPACE2;
  constructors PARTFUN1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMSEQ_2, COMSEQ_3,
       BHSP_3, BHSP_4, CLVECT_2, SEQ_1, VALUED_1, SERIES_1, SEQ_2, RELSET_1,
-      ABIAN;
+      ABIAN, VFUNCT_1;
  registrations ORDINAL1, FUNCT_2, XXREAL_0, XREAL_0, INT_1, MEMBERED, STRUCT_0,
-      XBOOLE_0, VALUED_1, NUMBERS, VALUED_0, RELSET_1, FUNCOP_1;
+      XBOOLE_0, VALUED_1, NUMBERS, VALUED_0, RELSET_1, FUNCOP_1, VFUNCT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, VALUED_1;
  theorems NAT_1, FUNCT_2, SEQ_1, SEQ_2, SEQM_3, SERIES_1, ABSVALUE, RLVECT_1,
@@ -439,17 +440,17 @@ proof
   >= k holds ||.Sum(seq, n) - Sum(seq, m).|| < r
   proof
     assume
-A2: seq is summable;
+A1: seq is summable;
     now
       let r;
       assume r > 0;
       then consider k such that
-A3:   for n, m st n >= k & m >= k holds ||.(Partial_Sums(seq)).n - (
-      Partial_Sums(seq)).m.|| < r by A2,Th10;
+A2:   for n, m st n >= k & m >= k holds ||.(Partial_Sums(seq)).n - (
+      Partial_Sums(seq)).m.|| < r by A1,Th10;
       take k;
       let n, m;
       assume n >= k & m >= k;
-      hence ||.Sum(seq, n) - Sum(seq, m).|| < r by A3;
+      hence ||.Sum(seq, n) - Sum(seq, m).|| < r by A2;
     end;
     hence thesis;
   end;
@@ -457,18 +458,18 @@ A3:   for n, m st n >= k & m >= k holds ||.(Partial_Sums(seq)).n - (
   seq, n) - Sum(seq, m).|| < r ) implies seq is summable
   proof
     assume
-A4: for r st r > 0 ex k st for n, m st n >= k & m >= k holds ||.Sum(
+A3: for r st r > 0 ex k st for n, m st n >= k & m >= k holds ||.Sum(
     seq, n) - Sum(seq, m).|| < r;
     now
       let r;
       assume r > 0;
       then consider k such that
-A5:   for n, m st n >= k & m >= k holds ||.Sum(seq, n) - Sum(seq, m)
-      .|| < r by A4;
+A4:   for n, m st n >= k & m >= k holds ||.Sum(seq, n) - Sum(seq, m)
+      .|| < r by A3;
       take k;
       let n, m;
       assume n >= k & m >= k;
-      then ||.Sum(seq, n) - Sum(seq, m).|| < r by A5;
+      then ||.Sum(seq, n) - Sum(seq, m).|| < r by A4;
       hence ||.(Partial_Sums(seq)).n - (Partial_Sums(seq)).m.|| < r;
     end;
     hence thesis by Th10;
@@ -485,17 +486,17 @@ proof
   >= k holds ||.Sum(seq, n, m).|| < r
   proof
     assume
-A2: seq is summable;
+A1: seq is summable;
     now
       let r;
       assume r > 0;
       then consider k such that
-A3:   for n, m st n >= k & m >= k holds ||.Sum(seq, n) - Sum(seq, m)
-      .|| < r by A2,Th23;
+A2:   for n, m st n >= k & m >= k holds ||.Sum(seq, n) - Sum(seq, m)
+      .|| < r by A1,Th23;
       take k;
       let n, m;
       assume n >= k & m >= k;
-      hence ||.Sum(seq, n, m).|| < r by A3;
+      hence ||.Sum(seq, n, m).|| < r by A2;
     end;
     hence thesis;
   end;
@@ -503,17 +504,17 @@ A3:   for n, m st n >= k & m >= k holds ||.Sum(seq, n) - Sum(seq, m)
   seq, n, m).|| < r ) implies seq is summable
   proof
     assume
-A4: for r st r > 0 ex k st for n, m st n >= k & m >= k holds ||.Sum(
+A3: for r st r > 0 ex k st for n, m st n >= k & m >= k holds ||.Sum(
     seq, n, m).|| < r;
     now
       let r;
       assume r > 0;
       then consider k such that
-A5:   for n, m st n >= k & m >= k holds ||.Sum(seq, n, m).|| < r by A4;
+A4:   for n, m st n >= k & m >= k holds ||.Sum(seq, n, m).|| < r by A3;
       take k;
       let n, m;
       assume n >= k & m >= k;
-      then ||.Sum(seq, n, m).|| < r by A5;
+      then ||.Sum(seq, n, m).|| < r by A4;
       hence ||.Sum(seq, n) - Sum(seq, m).|| < r;
     end;
     hence thesis by Th23;
@@ -1009,26 +1010,26 @@ theorem
   summable
 proof
   let X be ComplexHilbertSpace, seq be sequence of X such that
-A2: seq is absolutely_summable;
-A3: ||.seq.|| is summable by A2,Def8;
+A1: seq is absolutely_summable;
+A2: ||.seq.|| is summable by A1,Def8;
   now
     let r;
     assume r > 0;
     then r/2 > 0 by XREAL_1:217;
     then consider k such that
-A4: for m st m >= k holds abs(Partial_Sums(||.seq.||).m - Partial_Sums
-    (||.seq.||).k) < r/2 by A3,SERIES_1:25;
+A3: for m st m >= k holds abs(Partial_Sums(||.seq.||).m - Partial_Sums
+    (||.seq.||).k) < r/2 by A2,SERIES_1:25;
     take k;
     now
       let m, n;
-A5:   ||.Partial_Sums(seq).n - Partial_Sums(seq).m.|| <= abs(Partial_Sums
+A4:   ||.Partial_Sums(seq).n - Partial_Sums(seq).m.|| <= abs(Partial_Sums
       (||.seq.||).n - Partial_Sums(||.seq.||).m) by Th39;
       assume m >= k & n >= k;
       then
       abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).k) < r /2 &
-      abs( Partial_Sums(||.seq.||).n - Partial_Sums(||.seq.||).k) < r/2 by A4;
+      abs( Partial_Sums(||.seq.||).n - Partial_Sums(||.seq.||).k) < r/2 by A3;
       then
-A6:   abs(Partial_Sums(||.seq.||).n - Partial_Sums(||.seq.||).k) + abs(
+A5:   abs(Partial_Sums(||.seq.||).n - Partial_Sums(||.seq.||).k) + abs(
       Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).k) < r/2 + r/2 by
 XREAL_1:10;
       abs(Partial_Sums(||.seq.||).n - Partial_Sums(||.seq.||).m) = abs((
@@ -1037,9 +1038,9 @@ Partial_Sums(||.seq.||).n - Partial_Sums(||.seq.||).k) - (Partial_Sums(||.seq
       then abs(Partial_Sums(||.seq.||).n - Partial_Sums(||.seq.||).m) <= abs(
 Partial_Sums(||.seq.||).n - Partial_Sums(||.seq.||).k) + abs(Partial_Sums(||.
       seq.||).m - Partial_Sums(||.seq.||).k) by COMPLEX1:143;
-      then abs(Partial_Sums(||.seq.||).n - Partial_Sums(||.seq.||).m) < r by A6
+      then abs(Partial_Sums(||.seq.||).n - Partial_Sums(||.seq.||).m) < r by A5
 ,XXREAL_0:2;
-      hence ||.Partial_Sums(seq).n - Partial_Sums(seq).m.|| < r by A5,
+      hence ||.Partial_Sums(seq).n - Partial_Sums(seq).m.|| < r by A4,
 XXREAL_0:2;
     end;
     hence for n, m st n >= k & m >= k holds ||.Partial_Sums(seq).n -
@@ -1137,7 +1138,7 @@ proof
   now
     let n;
     thus (Cseq * (- seq)).n = Cseq.n * (-seq).n by Def9
-      .= Cseq.n * (-(seq.n)) by BHSP_1:def 10
+      .= Cseq.n * (-(seq.n)) by BHSP_1:51
       .= (-(Cseq.n)) * seq.n by CLVECT_1:7
       .= (- Cseq).n * seq.n by VALUED_1:8
       .= ((- Cseq) * seq).n by Def9;
@@ -1425,20 +1426,20 @@ theorem
 proof
  let X be ComplexHilbertSpace, seq be sequence of X;
   assume that
-A2: seq is Cauchy and
-A3: Cseq is Cauchy;
+A1: seq is Cauchy and
+A2: Cseq is Cauchy;
   now
     let r be Real;
     assume r > 0;
     then consider k such that
-A4: for n, m st n >= k & m >= k holds |.((Cseq.n - Cseq.m)).| < r by A3,Def10;
+A3: for n, m st n >= k & m >= k holds |.((Cseq.n - Cseq.m)).| < r by A2,Def10;
     take k;
-    thus for n st n >= k holds |.((Cseq.n - Cseq.k)).| < r by A4;
+    thus for n st n >= k holds |.((Cseq.n - Cseq.k)).| < r by A3;
   end;
   then
-A5: Cseq is convergent by COMSEQ_3:46;
-   seq is convergent by A2,CLVECT_2:def 12;
-  hence thesis by A5,Th48,CLVECT_2:65;
+A4: Cseq is convergent by COMSEQ_3:46;
+   seq is convergent by A1,CLVECT_2:def 12;
+  hence thesis by A4,Th48,CLVECT_2:65;
 end;
 
 theorem Th52:

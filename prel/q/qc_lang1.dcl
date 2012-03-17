@@ -34,11 +34,11 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="21"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
-<Adjective nr="29">
+<Adjective nr="27">
 <LocusVar nr="1"/>
 </Adjective>
+<Adjective nr="28"/>
+<Adjective nr="29"/>
 </Cluster>
 </RCluster>
 <FCluster aid="QC_LANG1" nr="1">

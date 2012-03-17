@@ -8,13 +8,13 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, SEQ_1, VALUED_0, FUNCT_1,
       ARYTM_1, ARYTM_3, COMPLEX1, XXREAL_0, CARD_1, RELAT_1, XXREAL_2, NAT_1,
-      ORDINAL2, REAL_1, VALUED_1, SEQ_2;
+      ORDINAL2, REAL_1, VALUED_1, SEQ_2, FUNCOP_1;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1,
-      NAT_1, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, SEQ_1, XXREAL_0;
+      NAT_1, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, FUNCOP_1, SEQ_1, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, PARTFUN1, VALUED_1, SEQ_1,
-      RELSET_1;
+      RELSET_1, FUNCOP_1;
  registrations ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED, XBOOLE_0,
-      VALUED_0, VALUED_1, FUNCT_2, NUMBERS;
+      VALUED_0, VALUED_1, FUNCT_2, NUMBERS, FUNCOP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -116,8 +116,21 @@ end;
 
 canceled 2;
 
+registration
+  cluster constant -> convergent Real_Sequence;
+end;
+
+registration
+  cluster constant Real_Sequence;
+end;
+
 theorem :: SEQ_2:19
   seq is convergent & seq9 is convergent implies seq + seq9 is convergent;
+
+registration
+  let seq1,seq2 be convergent Real_Sequence;
+  cluster seq1 + seq2 -> convergent Real_Sequence;
+end;
 
 theorem :: SEQ_2:20
   seq is convergent & seq9 is convergent implies
@@ -126,17 +139,33 @@ theorem :: SEQ_2:20
 theorem :: SEQ_2:21
   seq is convergent implies r(#)seq is convergent;
 
+registration
+  let r be real number;
+  let seq be convergent Real_Sequence;
+  cluster r(#)seq -> convergent Real_Sequence;
+end;
+
 theorem :: SEQ_2:22
   seq is convergent implies lim(r(#)seq)=r*(lim seq);
 
 theorem :: SEQ_2:23
-  seq is convergent implies - seq is convergent;
+  seq is convergent implies -seq is convergent;
+
+registration
+  let seq be convergent Real_Sequence;
+  cluster -seq -> convergent Real_Sequence;
+end;
 
 theorem :: SEQ_2:24
   seq is convergent implies lim(-seq) = -(lim seq);
 
 theorem :: SEQ_2:25
   seq is convergent & seq9 is convergent implies seq - seq9 is convergent;
+
+registration
+  let seq1,seq2 be convergent Real_Sequence;
+  cluster seq1 - seq2 -> convergent Real_Sequence;
+end;
 
 theorem :: SEQ_2:26
   seq is convergent & seq9 is convergent implies
@@ -145,8 +174,17 @@ theorem :: SEQ_2:26
 theorem :: SEQ_2:27
   seq is convergent implies seq is bounded;
 
+registration
+  cluster convergent -> bounded Real_Sequence;
+end;
+
 theorem :: SEQ_2:28
   seq is convergent & seq9 is convergent implies seq (#) seq9 is convergent;
+
+registration
+  let seq1,seq2 be convergent Real_Sequence;
+  cluster seq1 (#) seq2 -> convergent Real_Sequence;
+end;
 
 theorem :: SEQ_2:29
   seq is convergent & seq9 is convergent implies
@@ -171,22 +209,22 @@ theorem :: SEQ_2:33
 theorem :: SEQ_2:34
   seq is convergent & seq9 is convergent &
   (for n holds seq.n<=(seq1.n) & seq1.n<=seq9.n) &
-  (lim seq)=(lim seq9) implies (lim seq1)=(lim seq);
+  lim seq = lim seq9 implies lim seq1 = lim seq;
 
 theorem :: SEQ_2:35
-  seq is convergent & (lim seq)<>0 & seq is non-zero implies seq" is convergent
+  seq is convergent & lim seq <> 0 & seq is non-zero implies seq" is convergent
 ;
 
 theorem :: SEQ_2:36
-  seq is convergent & (lim seq)<>0 & seq is non-zero
+  seq is convergent & lim seq <> 0 & seq is non-zero
   implies lim seq"=(lim seq)";
 
 theorem :: SEQ_2:37
-  seq9 is convergent & seq is convergent & (lim seq)<>0
+  seq9 is convergent & seq is convergent & lim seq <> 0
   & seq is non-zero implies seq9/"seq is convergent;
 
 theorem :: SEQ_2:38
-  seq9 is convergent & seq is convergent & (lim seq)<>0
+  seq9 is convergent & seq is convergent & lim seq <> 0
   & seq is non-zero implies lim(seq9/"seq)=(lim seq9)/(lim seq);
 
 theorem :: SEQ_2:39

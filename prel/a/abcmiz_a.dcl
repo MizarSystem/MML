@@ -79,8 +79,8 @@
 <Adjective nr="9"/>
 <Adjective nr="10"/>
 <Adjective nr="25"/>
-<Adjective nr="40"/>
 <Adjective nr="41"/>
+<Adjective nr="42"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ABCMIZ_A" nr="2">

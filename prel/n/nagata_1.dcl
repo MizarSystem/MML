@@ -36,8 +36,8 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="52"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="53"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -52,7 +52,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="105">
+<Adjective nr="106">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -61,8 +61,8 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="52"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="53"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -78,7 +78,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="105">
+<Adjective nr="106">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -87,66 +87,8 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="52"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="11">
-<Func kind="K" nr="84"/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="10">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Func>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="4"/>
-<Adjective nr="7">
-<Func kind="K" nr="84"/>
-</Adjective>
-<Adjective nr="8">
-<Func kind="K" nr="10">
-<Func kind="K" nr="10">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Func>
-</Adjective>
-<Adjective nr="9"/>
-<Adjective nr="14">
-<Func kind="K" nr="84"/>
-</Adjective>
-<Adjective nr="15">
-<Func kind="K" nr="84"/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="10">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Func>
-</Adjective>
-<Adjective nr="106">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-</RCluster>
-<RCluster aid="NAGATA_1" nr="4">
-<ArgTypes>
-<Typ kind="G" nr="6">
-<Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="52"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="53"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -199,17 +141,75 @@
 </Adjective>
 </Cluster>
 </RCluster>
+<RCluster aid="NAGATA_1" nr="4">
+<ArgTypes>
+<Typ kind="G" nr="6">
+<Cluster>
+<Adjective nr="41" value="false"/>
+<Adjective nr="53"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="11">
+<Func kind="K" nr="84"/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Func>
+</Func>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="4"/>
+<Adjective nr="7">
+<Func kind="K" nr="84"/>
+</Adjective>
+<Adjective nr="8">
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Func>
+</Adjective>
+<Adjective nr="9"/>
+<Adjective nr="14">
+<Func kind="K" nr="84"/>
+</Adjective>
+<Adjective nr="15">
+<Func kind="K" nr="84"/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Func>
+</Adjective>
+<Adjective nr="108">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</RCluster>
 <FCluster aid="NAGATA_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="52"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="53"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="105">
+<Adjective nr="106">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -227,7 +227,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="105">
+<Adjective nr="106">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -235,7 +235,7 @@
 <CCluster aid="NAGATA_1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="36" value="false"/>
+<Adjective nr="37" value="false"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

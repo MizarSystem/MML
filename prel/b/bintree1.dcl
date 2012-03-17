@@ -91,6 +91,28 @@
 </Cluster>
 </RCluster>
 <FCluster aid="BINTREE1" nr="1">
+<ArgTypes/>
+<Func kind="K" nr="162">
+<Func kind="K" nr="68"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="36"/>
+<Adjective nr="66"/>
+</Cluster>
+</FCluster>
+<FCluster aid="BINTREE1" nr="2">
+<ArgTypes/>
+<Func kind="K" nr="162">
+<Num nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="36"/>
+<Adjective nr="66"/>
+</Cluster>
+</FCluster>
+<FCluster aid="BINTREE1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

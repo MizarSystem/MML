@@ -3,7 +3,7 @@
 ::
 :: Received April 6, 2004
 :: Copyright (c) 2004 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, CLOPBAN2, SUBSET_1, NAT_1, SEQ_1, RELAT_1, COMSEQ_3,
@@ -21,7 +21,8 @@ environ
       SIN_COS, BHSP_4, LOPBAN_4, CSSPACE3, CLOPBAN3, SEQ_1, SERIES_1, SEQ_4,
       NORMSP_1, RELSET_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
-      MEMBERED, STRUCT_0, CLOPBAN2, CLOPBAN3, VALUED_0, SEQ_2, XBOOLE_0, SEQ_4;
+      MEMBERED, STRUCT_0, CLOPBAN2, CLOPBAN3, VALUED_0, SEQ_2, XBOOLE_0, SEQ_4,
+      NEWTON, NAT_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions CLVECT_1;
  theorems ABSVALUE, RLVECT_1, XCMPLX_0, XCMPLX_1, XREAL_0, SEQ_2, SEQM_3,
@@ -601,22 +602,22 @@ definition
   let X,z;
   func z ExpSeq -> sequence of X means
   :Def2:
-  for n holds it.n = 1r/(n!c) * (z #N n);
+  for n holds it.n = 1r/(n!) * (z #N n);
   existence
   proof
-    deffunc U(Element of NAT) = 1r/(($1)!c) *(z #N $1);
+    deffunc U(Element of NAT) = 1r/(($1)!) *(z #N $1);
     thus ex s being sequence of X st for n holds s.n = U(n) from FUNCT_2:sch 4;
   end;
   uniqueness
   proof
     let S1,S2 be sequence of X;
     assume that
-A1: for n be Element of NAT holds S1.n = 1r/(n!c) *(z #N n) and
-A2: for n be Element of NAT holds S2.n = 1r/(n!c) *(z #N n);
+A1: for n be Element of NAT holds S1.n = 1r/(n!) *(z #N n) and
+A2: for n be Element of NAT holds S2.n = 1r/(n!) *(z #N n);
     for n be Element of NAT holds S1.n = S2.n
     proof
       let n be Element of NAT;
-      S1.n = 1r/(n!c) *(z #N n) by A1;
+      S1.n = 1r/(n!) *(z #N n) by A1;
       hence thesis by A2;
     end;
     hence thesis by FUNCT_2:113;
@@ -840,20 +841,20 @@ theorem Th13:
   & ||.(z ExpSeq).n.|| <= (||.z.|| rExpSeq ).n
 proof
   defpred X[Nat] means ||. ((z ExpSeq)).$1 .|| <=( ||.z.|| rExpSeq ).$1;
-A1: (z ExpSeq).0=1r/(0!c) * z #N 0 by Def2
-    .=1r/(0!c)*(z GeoSeq).0 by CLOPBAN3:def 13
+A1: (z ExpSeq).0=1r/(0!) * z #N 0 by Def2
+    .=1r/(0!)*(z GeoSeq).0 by CLOPBAN3:def 13
     .=1r * 1.X by CLOPBAN3:def 12,SIN_COS:1
     .=1.X by CLVECT_1:def 5;
 A2: now
     let n be Element of NAT;
-    thus (z ExpSeq).(n+1)=1r/((n+1)!c) * z #N (n+1) by Def2
-      .=1r/((n+1)!c) * (z GeoSeq).(n+1) by CLOPBAN3:def 13
-      .=1r/((n+1)!c) * ((z GeoSeq).n * z) by CLOPBAN3:def 12
-      .=1r/((n+1)!c) * (z #N n * z) by CLOPBAN3:def 13
-      .=1r/(n!c * (n+1))*(z #N n * z) by SIN_COS:1
-      .=((1r*1r)/(n!c * (n+1)))*(z* z #N n ) by Lm1,COMPLEX1:def 7
-      .=((1r/(n!c)) * (1r/(n+1)) )*(z* z #N n ) by XCMPLX_1:77
-      .=((1r/(n+1))*z)*((1r/(n!c)) * z #N n ) by CLOPBAN3:42
+    thus (z ExpSeq).(n+1)=1r/((n+1)!) * z #N (n+1) by Def2
+      .=1r/((n+1)!) * (z GeoSeq).(n+1) by CLOPBAN3:def 13
+      .=1r/((n+1)!) * ((z GeoSeq).n * z) by CLOPBAN3:def 12
+      .=1r/((n+1)!) * (z #N n * z) by CLOPBAN3:def 13
+      .=1r/(n! * (n+1))*(z #N n * z) by SIN_COS:1
+      .=((1r*1r)/(n! * (n+1)))*(z* z #N n ) by Lm1,COMPLEX1:def 7
+      .=((1r/(n!)) * (1r/(n+1)) )*(z* z #N n ) by XCMPLX_1:77
+      .=((1r/(n+1))*z)*((1r/(n!)) * z #N n ) by CLOPBAN3:42
       .=((1r/(n+1))*z)*(z ExpSeq.n) by Def2;
   end;
 A3: for n be Element of NAT st X[n] holds X[n+1]
@@ -948,10 +949,10 @@ A10:        (n-'k)+1=n-k+1 by XREAL_1:235
               .=(n+1-'k) by A7,XREAL_1:235;
             (n+1-k) <> 0 by A7;
             then
-A11:        n!c /( (k!c) * ((n-'k)!c) ) =(n!c * (n+1-k))/(((k!c) * ((n-'k
-            )!c)) * (n+1-k+0*<i>)) by XCMPLX_1:92
-              .=(n!c * (n+1-k))/((k!c) * (((n-'k)!c) * (n+1-k+0*<i>)))
-              .=(n!c * (n+1-k))/((k!c) * ((n+1-'k)!c)) by A9,SIN_COS:3;
+A11:        n! /( (k!) * ((n-'k)!) ) =(n! * (n+1-k))/(((k!) * ((n-'k
+            )!)) * (n+1-k+0*<i>)) by XCMPLX_1:92
+              .=(n! * (n+1-k))/((k!) * (((n-'k)!) * (n+1-k+0*<i>)))
+              .=(n! * (n+1-k))/((k!) * ((n+1-'k)!)) by A9,SIN_COS:3;
             assume
 A12:        k<>0;
             then
@@ -971,23 +972,23 @@ A17:        (n-'(k-'1)) =n-(k-'1) by XREAL_1:235
               .=n-(k-1) by A14,XREAL_1:235
               .=n+1-k
               .=n+1-'k by A7,XREAL_1:235;
-            (((k-'1)!c) * (((n-'(k-'1)))!c)) * k = k * ((k-'1)!c) * (((n
-            -'(k-'1)))!c)
-              .=(k+0*<i>) * ((k-'1)!c) * (((n-'(k-'1)))!c)
-              .=(k!c ) * ((n+1-'k)!c ) by A13,A17,SIN_COS:3;
+            (((k-'1)!) * (((n-'(k-'1)))!)) * k = k * ((k-'1)!) * (((n
+            -'(k-'1)))!)
+              .=(k+0*<i>) * ((k-'1)!) * (((n-'(k-'1)))!)
+              .=(k! ) * ((n+1-'k)! ) by A13,A17,SIN_COS:3;
             then
-A18:        n!c / (((k-'1)!c) * (((n-'(k-'1)))!c)) =(n!c * k)/((k!c ) * (
-            (n+1-'k)!c )) by A12,XCMPLX_1:92;
-            (Coef(n)).k +(Coef(n)).(k -' 1) =n!c /( (k!c) * ((n-'k)!c) )
+A18:        n! / (((k-'1)!) * (((n-'(k-'1)))!)) =(n! * k)/((k! ) * (
+            (n+1-'k)! )) by A12,XCMPLX_1:92;
+            (Coef(n)).k +(Coef(n)).(k -' 1) =n! /( (k!) * ((n-'k)!) )
             +(Coef(n)).(k-'1) by A9,SIN_COS:def 10
-              .=n!c /( (k!c) * ((n-'k)!c) ) +n!c /(((k-'1)!c)*(((n-'(k-'1)))
-            !c)) by A16,SIN_COS:def 10;
+              .=n! /( (k!) * ((n-'k)!) ) +n! /(((k-'1)!)*(((n-'(k-'1)))
+            !)) by A16,SIN_COS:def 10;
             then
-A19:        (Coef(n)).k +(Coef(n)).(k-'1) =((n!c * (n+1-k))+(n!c * k)) /
-            ((k!c) * ((n+1-'k)!c)) by A11,A18,XCMPLX_1:63
-              .= ( n!c * (n+1-k+k) ) / ((k!c) * ((n+1-'k)!c))
-              .= ( n!c * (n+1-k+k+(0+0)*<i>) ) / ((k!c) * ((n+1-'k)!c))
-              .=((n+1)!c ) / ((k!c ) * ((n+1-'k)!c )) by SIN_COS:1
+A19:        (Coef(n)).k +(Coef(n)).(k-'1) =((n! * (n+1-k))+(n! * k)) /
+            ((k!) * ((n+1-'k)!)) by A11,A18,XCMPLX_1:63
+              .= ( n! * (n+1-k+k) ) / ((k!) * ((n+1-'k)!))
+              .= ( n! * (n+1-k+k+(0+0)*<i>) ) / ((k!) * ((n+1-'k)!))
+              .=((n+1)! ) / ((k! ) * ((n+1-'k)! )) by SIN_COS:1
               .=(Coef(n+1)).k by A7,SIN_COS:def 10;
 A20:        (n-'(k-'1))=n-(k-'1) by A16,XREAL_1:235
               .=n-(k-1) by A14,XREAL_1:235
@@ -1036,11 +1037,11 @@ LOPBAN_4:15,NAT_1:3
           now
 A21:        n+1-'0 =n+1-0 by NAT_1:2,XREAL_1:235;
             then
-A22:        (Coef(n+1)).0 = (n+1)!c /(1 * ((n+1)!c)) by SIN_COS:1,def 10
+A22:        (Coef(n+1)).0 = (n+1)! /(1 * ((n+1)!)) by SIN_COS:1,def 10
               .= 1 by SIN_COS:1,XCMPLX_1:60;
 A23:        n-'0 =n-0 by NAT_1:2,XREAL_1:235;
             then
-A24:        (Coef(n)).0 = n!c /(1 * (n!c)) by SIN_COS:1,def 10
+A24:        (Coef(n)).0 = n! /(1 * (n!)) by SIN_COS:1,def 10
               .= 1 by SIN_COS:1,XCMPLX_1:60;
 A25:        0 <= n+1 by NAT_1:2;
 A26:        0 <= n by NAT_1:2;
@@ -1069,13 +1070,13 @@ A28:    now
 A29:      n+1-'(n+1)= n+1-(n+1) by XREAL_1:235
             .= 0;
           then
-A30:      (Coef(n+1)).(n+1) = (n+1)!c /(((n+1)!c) * 1) by SIN_COS:1,def 10
+A30:      (Coef(n+1)).(n+1) = (n+1)! /(((n+1)!) * 1) by SIN_COS:1,def 10
             .= 1 by SIN_COS:1,XCMPLX_1:60;
 A31:      n < n+1 by XREAL_1:31;
 A32:      n-'n= n-n by XREAL_1:235
             .= 0;
           then
-A33:      (Coef(n)).n = n!c /((n!c) * 1) by SIN_COS:1,def 10
+A33:      (Coef(n)).n = n! /((n!) * 1) by SIN_COS:1,def 10
             .= 1 by SIN_COS:1,XCMPLX_1:60;
           assume
 A34:      k=n+1;
@@ -1209,55 +1210,56 @@ A49: X[0] by A47;
 end;
 
 theorem Th17:
-  Expan_e(n,z,w)=(1r/(n!c)) * Expan(n,z,w)
+  Expan_e(n,z,w) = (1r/(n!)) * Expan(n,z,w)
 proof
   now
     let k be Element of NAT;
 A1: now
-A2:   1r/((k!c) * ((n-'k)!c)) =(((n!c) * 1r)/(n!c)) /((k!c) * ((n-'k)!c))
+      reconsider s = n! as Element of COMPLEX by XCMPLX_0:def 2;
+A2:   1r/((k!) * ((n-'k)!)) =(((n!) * 1r)/(n!)) /((k!) * ((n-'k)!))
       by COMPLEX1:def 7,SIN_COS:1,XCMPLX_1:60
-        .= (1r/(n!c)) * (n!c) /((k!c) * ((n-'k)!c)) by XCMPLX_1:75;
+        .= (1r/(n!)) * (n!) /((k!) * ((n-'k)!)) by XCMPLX_1:75;
       assume
 A3:   k <= n;
       hence Expan_e(n,z,w).k = (Coef_e(n)).k * (z #N k) * (w #N (n -' k))
       by Def5
-        .= 1r/((k!c) * ((n-'k)!c)) * (z #N k) * (w #N (n-'k)) by A3,
-SIN_COS:def 11;
-      hence Expan_e(n,z,w).k = (1r/(n!c)) * (n!c) /((k!c) * ((n-'k)!c)) * ((z
+        .= 1r/((k!) * ((n-'k)!)) * (z #N k) * (w #N (n-'k))
+        by A3,SIN_COS:def 11;
+      hence Expan_e(n,z,w).k = (1r/(n!)) * (n!) /((k!) * ((n-'k)!)) * ((z
       #N k) * (w #N (n-'k))) by A2,CLOPBAN3:42
-        .= (1r/(n!c)) * ((n!c) /((k!c) * ((n-'k)!c))) * ((z #N k) * (w #N (n
+        .= (1r/(n!)) * ((n!) /((k!) * ((n-'k)!))) * ((z #N k) * (w #N (n
       -'k))) by XCMPLX_1:75
-        .= (1r/(n!c)) * (((n!c) /((k!c) * ((n-'k)!c))) * ((z #N k) * (w #N (
-      n-'k)))) by CLOPBAN3:42
-        .= (1r/(n!c)) * ((n!c) /((k!c) * ((n-'k)!c)) * (z #N k) * (w #N (n-'
-      k))) by CLOPBAN3:42
-        .= (1r/(n!c)) * ((Coef(n)).k * ((z #N k)) * (w #N (n-'k))) by A3,
-SIN_COS:def 10
-        .= (1r/(n!c)) * Expan(n,z,w).k by A3,Def4
-        .= ( (1r/(n!c)) * Expan(n,z,w) ).k by CLVECT_1:def 15;
+        .= (1r/s) * ((s /((k!) * ((n-'k)!))) * ((z #N k) * (w #N (n-'k))))
+        by CLOPBAN3:42
+        .= (1r/s) * (s /((k!) * ((n-'k)!)) * (z #N k) * (w #N (n-' k)))
+        by CLOPBAN3:42
+        .= (1r/(n!)) * ((Coef(n)).k * ((z #N k)) * (w #N (n-'k)))
+        by A3,SIN_COS:def 10
+        .= (1r/(n!)) * Expan(n,z,w).k by A3,Def4
+        .= ( (1r/(n!)) * Expan(n,z,w) ).k by CLVECT_1:def 15;
     end;
     now
       assume
 A4:   n <k;
       hence Expan_e(n,z,w).k = 0.X by Def5
-        .=(1r/(n!c)) * 0.X by CLOPBAN3:42
-        .=(1r/(n!c)) * Expan(n,z,w).k by A4,Def4
-        .=((1r/(n!c)) * Expan(n,z,w)).k by CLVECT_1:def 15;
+        .=(1r/(n!)) * 0.X by CLOPBAN3:42
+        .=(1r/(n!)) * Expan(n,z,w).k by A4,Def4
+        .=((1r/(n!)) * Expan(n,z,w)).k by CLVECT_1:def 15;
     end;
-    hence Expan_e(n,z,w).k = ( (1r/(n!c)) * Expan(n,z,w) ).k by A1;
+    hence Expan_e(n,z,w).k = ( (1r/(n!)) * Expan(n,z,w) ).k by A1;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem Th18:
-  for z,w st z,w are_commutative holds 1r/(n!c) *((z+w) #N n) =
+  for z,w st z,w are_commutative holds 1r/(n!) *((z+w) #N n) =
   Partial_Sums(Expan_e(n,z,w)).n
 proof
   let z,w;
   assume z,w are_commutative;
-  hence 1r/(n!c)*((z+w) #N n) = 1r/(n!c)*(Partial_Sums(Expan(n,z,w)).n) by Th16
-    .= ((1r/(n!c)) * (Partial_Sums(Expan(n,z,w)))).n by CLVECT_1:def 15
-    .= Partial_Sums((1r/(n!c)) * Expan(n,z,w)).n by CLOPBAN3:23
+  hence 1r/(n!)*((z+w) #N n) = 1r/(n!)*(Partial_Sums(Expan(n,z,w)).n) by Th16
+    .= ((1r/(n!)) * (Partial_Sums(Expan(n,z,w)))).n by CLVECT_1:def 15
+    .= Partial_Sums((1r/(n!)) * Expan(n,z,w)).n by CLOPBAN3:23
     .= Partial_Sums(Expan_e(n,z,w)).n by Th17;
 end;
 
@@ -1330,8 +1332,8 @@ end;
 theorem Th20:
   (z ExpSeq).0 = 1.X & Expan(0,z,w).0 = 1.X
 proof
-  thus (z ExpSeq).0 = 1r/(0!c)*(z #N 0) by Def2
-    .= 1r/(0!c)*(z GeoSeq).0 by CLOPBAN3:def 13
+  thus (z ExpSeq).0 = 1r/(0!)*(z #N 0) by Def2
+    .= 1r/(0!)*(z GeoSeq).0 by CLOPBAN3:def 13
     .= 1r * 1.X by CLOPBAN3:def 12,SIN_COS:1
     .= 1.X by CLOPBAN3:42;
 A1: 0-'0=0 by XREAL_1:234;
@@ -1353,12 +1355,12 @@ A1: l <= k;
 A2: k < k+1 by XREAL_1:31;
   then
 A3: l <= k+1 by A1,XXREAL_0:2;
-A4: (z ExpSeq).l * (w ExpSeq).(((k+1)-' l)) =1r/(l!c)*(z #N l) * (w ExpSeq).
+A4: (z ExpSeq).l * (w ExpSeq).(((k+1)-' l)) =1r/(l!)*(z #N l) * (w ExpSeq).
   (((k+1)-' l)) by Def2
-    .=1r/(l!c)*(z #N l) * (1r/(((k+1)-'l )!c)*(w #N (((k+1)-'l)))) by Def2
-    .=(1r/(l!c)* (1r/(((k+1)-'l)!c))*((z #N l) *(w #N (((k+1)-'l))))) by
+    .=1r/(l!)*(z #N l) * (1r/(((k+1)-'l )!)*(w #N (((k+1)-'l)))) by Def2
+    .=(1r/(l!)* (1r/(((k+1)-'l)!))*((z #N l) *(w #N (((k+1)-'l))))) by
 CLOPBAN3:42
-    .=((1r*1r)/((l!c) * (((k+1)-'l)!c) )*((z #N l) *(w #N (((k+1)-'l))))) by
+    .=((1r*1r)/((l!) * (((k+1)-'l)!) )*((z #N l) *(w #N (((k+1)-'l))))) by
 XCMPLX_1:77
     .= ((Coef_e(k+1)).l) * ((z #N l) * (w #N (((k+1)-'l)))) by A3,
 COMPLEX1:def 7,SIN_COS:def 11
@@ -1406,7 +1408,7 @@ A1: k-'k=0 by XREAL_1:235;
   hence (Expan_e(k,z,w)).(k)=((Coef_e(k)).k) * (z #N k) * (w #N 0) by Def5
     .=( (Coef_e(k)).k) * (z #N k) * 1.X by CLOPBAN3:43
     .=( (Coef_e(k)).k) * (z #N k) by CLOPBAN3:42
-    .=(1r/((k!c) * 1r)) * (z #N k) by A1,COMPLEX1:def 7,SIN_COS:1,def 11
+    .=(1r/((k!) * 1r)) * (z #N k) by A1,COMPLEX1:def 7,SIN_COS:1,def 11
     .=(z ExpSeq).k by Def2,COMPLEX1:def 7;
 end;
 
@@ -1432,7 +1434,7 @@ A3: Partial_Sums((z+w) ExpSeq).k=Partial_Sums(Alfa(k,z,w)).k;
     then
 A4: (Partial_Sums(( Expan_e(k+1,z,w) ))).k + (Alfa(k+1,z,w)).(k+1) =(
     Partial_Sums(( Expan_e(k+1,z,w) ))).(k+1) by BHSP_4:def 1
-      .=1r/((k+1)!c) * (z+w) #N (k+1) by A1,Th18;
+      .=1r/((k+1)!) * (z+w) #N (k+1) by A1,Th18;
     Partial_Sums((Alfa(k+1,z,w))).(k+1) =Partial_Sums((Alfa(k+1,z,w))).k+(
     Alfa(k+1,z,w)).(k+1) by BHSP_4:def 1
       .=((Partial_Sums(Alfa(k,z,w))).k + (Partial_Sums(Expan_e(k+1,z,w))).k)
@@ -1550,8 +1552,8 @@ A6: Partial_Sums((||.z.|| rExpSeq)).k + (||.z.|| rExpSeq).(k+1) =
     hence thesis by A3,A6,XXREAL_0:2;
   end;
   ||. Partial_Sums(( z ExpSeq)).0 .|| = ||. ((z ExpSeq)).0 .|| by BHSP_4:def 1
-    .= ||. 1r/ (0!c)*(z #N 0).|| by Def2
-    .= ||. 1r/(0!c)*((z GeoSeq)).0 .|| by CLOPBAN3:def 13
+    .= ||. 1r/ (0!)*(z #N 0).|| by Def2
+    .= ||. 1r/(0!)*((z GeoSeq)).0 .|| by CLOPBAN3:def 13
     .= ||. 1r * 1.X.|| by CLOPBAN3:def 12,SIN_COS:1
     .= ||. 1.X.|| by CLOPBAN3:42
     .= 1 by CLOPBAN3:42;
@@ -1953,10 +1955,10 @@ A1: z1,z2 are_commutative;
   now
     let n be Element of NAT;
     thus (z1*(z2 ExpSeq)).n =z1*(z2 ExpSeq).n by CLOPBAN3:def 8
-      .=z1*(1r/(n!c)*(z2 #N n)) by Def2
-      .=(1r/(n!c))*(z1*(z2 #N n)) by CLOPBAN3:42
-      .=(1r/(n!c))*((z2 #N n)*z1) by A1,Lm2
-      .=(1r/(n!c)*(z2 #N n))*z1 by CLOPBAN3:42
+      .=z1*(1r/(n!)*(z2 #N n)) by Def2
+      .=(1r/(n!))*(z1*(z2 #N n)) by CLOPBAN3:42
+      .=(1r/(n!))*((z2 #N n)*z1) by A1,Lm2
+      .=(1r/(n!)*(z2 #N n))*z1 by CLOPBAN3:42
       .=((z2 ExpSeq).n)*z1 by Def2
       .=((z2 ExpSeq)*z1).n by CLOPBAN3:def 9;
   end;

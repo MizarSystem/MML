@@ -1,0 +1,437 @@
+:: The Axiomatization of Propositional Linear Time Temporal Logic
+::  by Mariusz Giero
+:: 
+:: Received November 20, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies FINSEQ_1, CARD_1, ORDINAL4, SUBSET_1, NUMBERS, ARYTM_3, TARSKI,
+      RELAT_1, XBOOLE_0, FUNCT_1, QC_LANG1, XBOOLEAN, HILBERT1, MODELC_2,
+      CQC_THE1, NAT_1, XXREAL_0, LTLAXIO1, ORDINAL1, ARYTM_1, ZF_LANG,
+      PARTFUN1, MARGREL1, FUNCT_2, HILBERT2, ZFMISC_1, FUNCOP_1, ZF_MODEL,
+      PBOOLE, GLIB_000;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, DOMAIN_1, SUBSET_1, RELAT_1, PARTFUN1,
+      NUMBERS, XCMPLX_0, NAT_1, XXREAL_0, NAT_D, FUNCT_1, FUNCT_2, BINOP_1,
+      ORDINAL1, FINSEQ_1, HILBERT1, HILBERT2, PBOOLE, XBOOLEAN, MARGREL1,
+      AOFA_I00;
+ constructors XXREAL_0, NAT_D, RELSET_1, AOFA_I00, HILBERT2, DOMAIN_1;
+ registrations SUBSET_1, ORDINAL1, FUNCT_1, XXREAL_0, NAT_1, XBOOLEAN,
+      RELSET_1, MARGREL1, XBOOLE_0, XREAL_0, FUNCT_2, HILBERT1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin
+
+reserve a,b,c for boolean number;
+
+theorem :: LTLAXIO1:1
+  (a=>(b '&' c))=>(a=>b)=1;
+
+theorem :: LTLAXIO1:2
+  (a=>(b=>c))=>((a '&' b)=>c)=1;
+
+theorem :: LTLAXIO1:3
+  ((a '&' b)=>c)=>(a=>(b=>c))=1;
+
+begin :: The Language. Basic Operators. Further Operators as Abbreviations
+
+notation
+  synonym LTLB_WFF for HP-WFF;
+end;
+
+reserve p,q,r,s,A,B,C for Element of LTLB_WFF,
+        F,G,X,Y for Subset of LTLB_WFF,
+        i,j,k,n for Element of NAT,
+        f,f1,f2,g for FinSequence of LTLB_WFF;
+
+notation
+  synonym TFALSUM for VERUM;
+end;
+
+notation let p,q;
+  synonym p 'Us' q for p '&' q;
+end;
+
+theorem :: LTLAXIO1:4
+  for A holds A=TFALSUM or
+  ex n st A=prop n or ex p,q st A=p=>q or ex p,q st A=p 'Us' q;
+
+definition let p;
+  func 'not' p -> Element of LTLB_WFF equals
+:: LTLAXIO1:def 1
+  p => TFALSUM;
+  func 'X' p -> Element of LTLB_WFF equals
+:: LTLAXIO1:def 2
+  TFALSUM 'Us' p;
+end;
+
+definition
+  func TVERUM -> Element of LTLB_WFF equals
+:: LTLAXIO1:def 3
+  'not' TFALSUM;
+end;
+
+definition let p,q;
+  func p '&&' q -> Element of LTLB_WFF equals
+:: LTLAXIO1:def 4
+  (p=>(q=>TFALSUM))=>TFALSUM;
+end;
+
+definition let p,q;
+  func p 'or' q -> Element of LTLB_WFF equals
+:: LTLAXIO1:def 5
+  'not'(('not' p)'&&'('not' q));
+end;
+
+definition let p;
+  func 'G' p -> Element of LTLB_WFF equals
+:: LTLAXIO1:def 6
+  'not'(('not' p)'or'(TVERUM '&&'(TVERUM 'Us'('not' p))));
+end;
+
+definition let p;
+  func 'F' p -> Element of LTLB_WFF equals
+:: LTLAXIO1:def 7
+  'not'('G'('not' p));
+end;
+
+definition let p,q;
+  func p 'U' q -> Element of LTLB_WFF equals
+:: LTLAXIO1:def 8
+  q 'or'(p '&&'(p 'Us' q));
+end;
+
+definition let p,q;
+  func p 'R' q -> Element of LTLB_WFF equals
+:: LTLAXIO1:def 9
+  'not'(('not' p)'U'('not' q));
+end;
+
+begin :: The Semantics
+
+definition
+  func props -> Subset of LTLB_WFF means
+:: LTLAXIO1:def 10
+  for x be set holds x in it iff ex n be Element of NAT st x=prop n;
+end;
+
+definition
+  mode LTLModel is sequence of bool props;
+end;
+
+reserve M for LTLModel;
+
+definition let M be LTLModel;
+  func SAT M -> Function of[:NAT,LTLB_WFF:],BOOLEAN means
+:: LTLAXIO1:def 11
+  for n holds it.[n,TFALSUM]=0 &
+  (for k holds it.[n,prop k]=1 iff prop k in M.n) &
+  for p,q holds it.[n,p=>q]=it.[n,p]=>it.[n,q] &
+  (it.[n,p 'Us' q]=1 iff ex i st 0<i & it.[n+i,q]=1 &
+  for j st 1<=j & j<i holds it.[n+j,p]=1);
+end;
+
+theorem :: LTLAXIO1:5
+  (SAT M).[n,'not' A]=1 iff (SAT M).[n,A]=0;
+
+theorem :: LTLAXIO1:6
+  (SAT M).[n,TVERUM]=1;
+
+theorem :: LTLAXIO1:7
+  (SAT M).[n,A '&&' B]=1 iff (SAT M).[n,A]=1 & (SAT M).[n,B]=1;
+
+theorem :: LTLAXIO1:8
+  (SAT M).[n,A 'or' B]=1 iff ((SAT M).[n,A]=1 or(SAT M).[n,B]=1);
+
+theorem :: LTLAXIO1:9
+  (SAT M).[n,'X' A]=(SAT M).[n+1,A];
+
+theorem :: LTLAXIO1:10
+  (SAT M).[n,'G' A]=1 iff for i holds(SAT M).[n+i,A]=1;
+
+theorem :: LTLAXIO1:11
+  (SAT M).[n,'F' A]=1 iff ex i st(SAT M).[n+i,A]=1;
+
+theorem :: LTLAXIO1:12
+  (SAT M).[n,p 'U' q]=1 iff
+  ex i st (SAT M).[n+i,q]=1 & for j st j<i holds (SAT M).[n+j,p]=1;
+
+theorem :: LTLAXIO1:13
+  (SAT M).[n,p 'R' q]=1 iff
+  ((ex i st(SAT M).[n+i,p]=1 &
+  for j st j<=i holds (SAT M).[n+j,q]=1) or
+  for i holds (SAT M).[n+i,q]=1);
+
+theorem :: LTLAXIO1:14
+  (SAT M).[n,'not'('X' B)]=(SAT M).[n,'X'('not' B)];
+
+theorem :: LTLAXIO1:15
+  (SAT M).[n,('not'('X' B))=>('X'('not' B))]=1;
+
+theorem :: LTLAXIO1:16
+  (SAT M).[n,('X'('not' B))=>('not'('X' B))]=1;
+
+theorem :: LTLAXIO1:17
+  (SAT M).[n,('X'(B=>C))=>(('X' B)=>('X' C))]=1;
+
+theorem :: LTLAXIO1:18
+  (SAT M).[n,('G' B)=>(B '&&'('X'('G' B)))]=1;
+
+theorem :: LTLAXIO1:19
+  (SAT M).[n,(B 'Us' C)=>(('X' C)'or'('X'(B '&&'(B 'Us' C))))]=1;
+
+theorem :: LTLAXIO1:20
+  (SAT M).[n,(('X' C)'or'('X'(B '&&'(B 'Us' C))))=>(B 'Us' C)]=1;
+
+theorem :: LTLAXIO1:21
+  (SAT M).[n,(B 'Us' C)=>('X'('F' C))]=1;
+
+begin :: Validity. Consequence. Some Facts about the Semantical Notions
+
+definition let M,p;
+  pred M|=p means
+:: LTLAXIO1:def 12
+  for n be Element of NAT holds(SAT M).[n,p]=1;
+end;
+
+definition let M,F;
+  pred M|=F means
+:: LTLAXIO1:def 13
+  for p st p in F holds M|=p;
+end;
+
+definition let F,p;
+  pred F|=p means
+:: LTLAXIO1:def 14
+  for M holds(M|=F implies M|=p);
+end;
+
+theorem :: LTLAXIO1:22
+  M|=F & M|=G iff M|=F\/G;
+
+theorem :: LTLAXIO1:23
+  M|=A iff M |= {A};
+
+theorem :: LTLAXIO1:24
+ F|=A & F|=A=>B implies F|=B;
+
+theorem :: LTLAXIO1:25
+  F|=A implies F|='X' A;
+
+theorem :: LTLAXIO1:26
+  F|=A implies F|='G' A;
+
+theorem :: LTLAXIO1:27
+  F|=A=>B & F|=A=>('X' A) implies F|=A=>('G' B);
+
+theorem :: LTLAXIO1:28
+ (SAT(M^\i)).[j,A]=(SAT M).[i+j,A];
+
+theorem :: LTLAXIO1:29
+  M|=F implies M^\i|=F;
+
+theorem :: LTLAXIO1:30
+  F\/{A}|=B iff F|=('G' A)=>B;
+
+definition let f be Function of LTLB_WFF,BOOLEAN;
+  func VAL f -> Function of LTLB_WFF,BOOLEAN means
+:: LTLAXIO1:def 15
+  it.TFALSUM=0 & it.(prop n)=f.(prop n) &
+  it.(A=>B)=it.A=>it.B & it.(A 'Us' B)=f.(A 'Us' B);
+end;
+
+theorem :: LTLAXIO1:31
+  for f be Function of LTLB_WFF,BOOLEAN,p,q holds
+  (VAL f).(p '&&' q)=(VAL f).p'&'(VAL f).q;
+
+theorem :: LTLAXIO1:32
+  for f be Function of LTLB_WFF,BOOLEAN st
+  (for B be set st B in LTLB_WFF holds f.B=(SAT M).[n,B]) holds
+  (VAL f).A=(SAT M).[n,A];
+
+definition let p;
+  attr p is LTL_TAUT_OF_PL means
+:: LTLAXIO1:def 16
+  for f be Function of LTLB_WFF,BOOLEAN holds(VAL f).p=1;
+end;
+
+theorem :: LTLAXIO1:33
+  A is LTL_TAUT_OF_PL implies F|=A;
+
+begin :: Axioms. Derivation Rules. Derivability. Soundness Theorem for LTL
+
+definition let D be set;
+  attr D is with_LTL_axioms means
+:: LTLAXIO1:def 17
+  for p,q holds (p is LTL_TAUT_OF_PL implies p in D) &
+  ('not'('X' p))=>('X'('not' p)) in D &
+  ('X'('not' p))=>('not'('X' p)) in D &
+  ('X'(p=>q))=>(('X' p)=>('X' q)) in D &
+  ('G' p)=>(p '&&'('X'('G' p))) in D &
+  (p 'Us' q)=>(('X' q)'or'('X'(p '&&'(p 'Us' q)))) in D &
+  (('X' q)'or'('X'(p '&&'(p 'Us' q))))=>(p 'Us' q) in D &
+  (p 'Us' q)=>('X'('F' q)) in D;
+end;
+
+definition
+  func LTL_axioms -> Subset of LTLB_WFF means
+:: LTLAXIO1:def 18
+  it is with_LTL_axioms &
+  for D be Subset of LTLB_WFF st D is with_LTL_axioms holds it c=D;
+end;
+
+registration
+  cluster LTL_axioms -> with_LTL_axioms;
+end;
+
+theorem :: LTLAXIO1:34
+  p=>(q=>p) in LTL_axioms;
+
+theorem :: LTLAXIO1:35
+ (p=>(q=>r))=>((p=>q)=>(p=>r)) in LTL_axioms;
+
+definition let p,q;
+  pred p NEX_rule q means
+:: LTLAXIO1:def 19
+  q='X' p;
+  let r;
+  pred p,q MP_rule r means
+:: LTLAXIO1:def 20
+  q=p=>r;
+  pred p,q IND_rule r means
+:: LTLAXIO1:def 21
+  ex A,B st p=A=>B & q=A=>('X' A) & r=A=>('G' B);
+end;
+
+registration
+  cluster LTL_axioms -> non empty;
+end;
+
+definition let A;
+  attr A is axltl1 means
+:: LTLAXIO1:def 22
+  ex B st A=('not'('X' B))=>('X'('not' B));
+  attr A is axltl1a means
+:: LTLAXIO1:def 23
+  ex B st A=('X'('not' B))=>('not'('X' B));
+  attr A is axltl2 means
+:: LTLAXIO1:def 24
+  ex B,C st A=('X'(B=>C))=>(('X' B)=>('X' C));
+  attr A is axltl3 means
+:: LTLAXIO1:def 25
+  ex B st A=('G' B)=>(B '&&'('X'('G' B)));
+  attr A is axltl4 means
+:: LTLAXIO1:def 26
+  ex B,C st A=(B 'Us' C)=>(('X' C)'or'('X'(B '&&'(B 'Us' C))));
+  attr A is axltl5 means
+:: LTLAXIO1:def 27
+  ex B,C st A=(('X' C)'or'('X'(B '&&'(B 'Us' C))))=>(B 'Us' C);
+  attr A is axltl6 means
+:: LTLAXIO1:def 28
+  ex B,C st A=(B 'Us' C)=>('X'('F' C));
+end;
+
+theorem :: LTLAXIO1:36
+  for A be Element of LTL_axioms holds
+  (A is LTL_TAUT_OF_PL or A is axltl1 or A is axltl1a or
+  A is axltl2 or A is axltl3 or A is axltl4 or A is axltl5 or A is axltl6);
+
+theorem :: LTLAXIO1:37
+  A is axltl1 or A is axltl1a or A is axltl2 or A is axltl3 or
+  A is axltl4 or A is axltl5 or A is axltl6 implies F|=A;
+
+definition let i be Nat,f,X;
+  pred prc f,X,i means
+:: LTLAXIO1:def 29
+  f.i in LTL_axioms or f.i in X or
+  (ex j,k be Nat st 1<=j & j<i & 1<=k & k<i & (
+  f/.j,f/.k MP_rule f/.i or f/.j,f/.k IND_rule f/.i)) or
+  ex j be Nat st 1<=j & j<i & f/.j NEX_rule f/.i;
+end;
+
+definition let X,p;
+  pred X|-p means
+:: LTLAXIO1:def 30
+  ex f st f.len f=p & 1<=len f &
+  for i be Nat st 1<=i & i<=len f holds prc f,X,i;
+end;
+
+theorem :: LTLAXIO1:38
+  for i,n be Nat st
+  n+len f<=len f2 & (for k be Nat st 1<=k & k<=len f holds f.k=f2.(k+n)) &
+  1 <=i & i<=len f holds prc f,X,i implies prc f2,X,(i+n);
+
+theorem :: LTLAXIO1:39
+  f2=f^f1 & 1<=len f & 1<=len f1 &
+  (for i be Nat st 1<=i & i<=len f holds prc f,X,i) &
+  (for i be Nat st 1<=i & i<=len f1 holds prc f1,X,i) implies
+  for i be Nat st 1<=i & i<=len f2 holds prc f2,X,i;
+
+theorem :: LTLAXIO1:40
+  (f=f1^<*p*> & 1<=len f1 &
+  for i be Nat st 1<=i & i<=len f1 holds prc f1,X,i) &
+  prc f,X,len f implies (for i be Nat st 1<=i & i<=len f holds prc f,X,i) &
+  X|-p;
+
+theorem :: LTLAXIO1:41
+  F|-A implies F|=A;
+
+begin :: Derivation of Some Formulas. Deduction Theorem of LTL
+
+theorem :: LTLAXIO1:42
+  p in LTL_axioms or p in X implies X|-p;
+
+theorem :: LTLAXIO1:43
+  X|-p & X|-p=>q implies X|-q;
+
+theorem :: LTLAXIO1:44
+  X|-p implies X|-'X' p;
+
+theorem :: LTLAXIO1:45
+  X|-p=>q & X|-p=>('X' p) implies X|-p=>('G' q);
+
+theorem :: LTLAXIO1:46
+  X|-r=>(p '&&' q) implies X|-r=>p & X|-r=>q;
+
+theorem :: LTLAXIO1:47
+  X|-p=>q & X|-q=>r implies X|-p=>r;
+
+theorem :: LTLAXIO1:48
+  X|-p=>(q=>r) implies X|-(p '&&' q)=>r;
+
+theorem :: LTLAXIO1:49
+  X|-(p '&&' q)=>r implies X|-p=>(q=>r);
+
+theorem :: LTLAXIO1:50
+  X|-(p '&&' q)=>r & X|-p=>s implies X|-(p '&&' q)=>(s '&&' r);
+
+theorem :: LTLAXIO1:51
+  X|-p=>(q=>r) & X|-r=>s implies X|-p=>(q=>s);
+
+theorem :: LTLAXIO1:52
+  X|-p=>q implies X|-('not' q)=>('not' p);
+
+theorem :: LTLAXIO1:53
+  X|-(('X' p)'&&'('X' q))=>('X'(p '&&' q));
+
+theorem :: LTLAXIO1:54
+  F|-p implies F|-'G' p;
+
+theorem :: LTLAXIO1:55
+  p=>q in F implies F\/{p}|-'G' q;
+
+theorem :: LTLAXIO1:56
+  F|-q implies F\/{p}|-q;
+
+theorem :: LTLAXIO1:57
+  F\/{p}|-q implies F|-('G' p)=>q;
+
+theorem :: LTLAXIO1:58
+  F|-p=>q implies F\/{p}|-q;
+
+theorem :: LTLAXIO1:59
+  F|-('G' p)=>q implies F\/{p}|-q;
+
+theorem :: LTLAXIO1:60
+  F|-('G'(p=>q))=>(('G' p)=>('G' q));

@@ -30,7 +30,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 <Not>

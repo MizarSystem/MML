@@ -9,24 +9,28 @@ environ
  vocabularies NUMBERS, RLVECT_1, STRUCT_0, SUBSET_1, ALGSTR_0, BINOP_1,
       FUNCT_1, ZFMISC_1, XBOOLE_0, REAL_1, PRE_TOPC, SUPINF_2, PROB_2, RLSUB_1,
       FUNCOP_1, CARD_1, ARYTM_3, RELAT_1, XXREAL_0, XREAL_0, ORDINAL1, ARYTM_1,
-      COMPLEX1, SQUARE_1, FUNCT_3, RVSUM_1, NORMSP_1, METRIC_1, NAT_1, BHSP_1;
+      COMPLEX1, SQUARE_1, FUNCT_3, RVSUM_1, NORMSP_1, METRIC_1, NAT_1, BHSP_1,
+      PARTFUN1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, FUNCT_1, FUNCT_2, FUNCOP_1, BINOP_1, NAT_1, STRUCT_0,
-      ALGSTR_0, DOMAIN_1, PRE_TOPC, RLVECT_1, RLSUB_1, SQUARE_1, NORMSP_1,
-      QUIN_1, XXREAL_0;
+      COMPLEX1, REAL_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1, BINOP_1,
+      NAT_1, STRUCT_0, ALGSTR_0, DOMAIN_1, PRE_TOPC, RLVECT_1, RLSUB_1,
+      SQUARE_1, VFUNCT_1, NORMSP_1, QUIN_1, XXREAL_0;
  constructors BINOP_1, DOMAIN_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, MEMBERED,
-      COMPLEX1, SEQ_1, QUIN_1, RLSUB_1, NORMSP_1, RELSET_1;
+      COMPLEX1, SEQ_1, QUIN_1, RLSUB_1, NORMSP_1, RELSET_1, VFUNCT_1;
  registrations SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      SQUARE_1, MEMBERED, STRUCT_0, XBOOLE_0, ALGSTR_0;
+      SQUARE_1, MEMBERED, STRUCT_0, XBOOLE_0, ALGSTR_0, FUNCT_2, VFUNCT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin
 
 definition
-  struct(RLSStruct) UNITSTR (# carrier -> set, ZeroF -> Element of the carrier
-, addF -> BinOp of the carrier, Mult -> Function of [:REAL, the carrier:], the
-    carrier, scalar -> Function of [: the carrier, the carrier :], REAL #);
+  struct(RLSStruct) UNITSTR (#
+  carrier -> set,
+  ZeroF -> Element of the carrier,
+  addF -> BinOp of the carrier,
+  Mult -> Function of [:REAL, the carrier:], the carrier,
+  scalar -> Function of [: the carrier, the carrier :], REAL #);
 end;
 
 registration
@@ -56,9 +60,9 @@ definition
   attr IT is RealUnitarySpace-like means
 :: BHSP_1:def 2
 
-  for x, y, z being Point of IT,
-a holds ( x .|. x = 0 iff x = 0.IT ) & 0 <= x .|. x & x .|. y = y .|. x & (x+y)
-  .|. z = x .|. z + y .|. z & (a*x) .|. y = a * ( x .|. y );
+  for x, y, z being Point of IT, a holds
+  ( x .|. x = 0 iff x = 0.IT ) & 0 <= x .|. x & x .|. y = y .|. x &
+  (x+y) .|. z = x .|. z + y .|. z & (a*x) .|. y = a * ( x .|. y );
 end;
 
 registration
@@ -77,8 +81,7 @@ reserve X for RealUnitarySpace;
 reserve x, y, z, u, v for Point of X;
 
 definition
-  let X;
-  let x, y;
+  let X, x, y;
   redefine func x .|. y;
   commutativity;
 end;
@@ -143,8 +146,7 @@ theorem :: BHSP_1:24
   abs(x .|. y) <= sqrt (x .|. x) * sqrt (y .|. y);
 
 definition
-  let X;
-  let x, y;
+  let X, x, y;
   pred x, y are_orthogonal means
 :: BHSP_1:def 3
 
@@ -249,25 +251,19 @@ reserve  n for Element of NAT;
 definition
   let X be non empty addLoopStr;
   let seq be sequence of X;
-  canceled 4;
-  func - seq -> sequence of X means
-:: BHSP_1:def 10
-
-  for n holds it.n = - seq.n;
-end;
-
-definition
-  let X be non empty addLoopStr;
-  let seq be sequence of X;
   let x be Point of X;
-  canceled;
+  canceled 6;
   func seq + x -> sequence of X means
 :: BHSP_1:def 12
 
   for n holds it.n = seq.n + x;
 end;
 
-canceled 5;
+theorem :: BHSP_1:51
+  for X being non empty addLoopStr, seq being sequence of X holds
+  (-seq).n = - seq.n;
+
+canceled 4;
 
 definition
   let X, seq1, seq2;
@@ -279,15 +275,13 @@ theorem :: BHSP_1:56
   seq1 + (seq2 + seq3) = (seq1 + seq2) + seq3;
 
 theorem :: BHSP_1:57
-  seq1 is constant & seq2 is constant & seq = seq1 + seq2 implies seq is
-  constant;
+  seq1 is constant & seq2 is constant implies seq1 + seq2 is constant;
 
 theorem :: BHSP_1:58
-  seq1 is constant & seq2 is constant & seq = seq1 - seq2 implies seq is
-  constant;
+  seq1 is constant & seq2 is constant implies seq1 - seq2 is constant;
 
 theorem :: BHSP_1:59
-  seq1 is constant & seq = a * seq1 implies seq is constant;
+  seq1 is constant implies a * seq1 is constant;
 
 canceled 11;
 

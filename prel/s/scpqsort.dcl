@@ -31,7 +31,6 @@
 <ArticleID name="AFINSQ_1"/>
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="EXTPRO_1"/>
-<ArticleID name="AMI_2"/>
 <ArticleID name="SCMPDS_2"/>
 <ArticleID name="SCMPDS_4"/>
 <ArticleID name="SCMPDS_6"/>
@@ -47,24 +46,24 @@
 </Adjective>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="315"/>
+<Func kind="K" nr="298"/>
 </Func>
 </Adjective>
 <Adjective nr="16">
-<Func kind="U" nr="6">
+<Func kind="U" nr="5">
 <Func kind="K" nr="20">
 <Func kind="K" nr="31"/>
 </Func>
-<Func kind="K" nr="315"/>
+<Func kind="K" nr="298"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
 <Adjective nr="21">
-<Func kind="U" nr="8">
+<Func kind="U" nr="7">
 <Func kind="K" nr="20">
 <Func kind="K" nr="31"/>
 </Func>
-<Func kind="K" nr="315"/>
+<Func kind="K" nr="298"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>
@@ -81,24 +80,24 @@
 </Adjective>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="315"/>
+<Func kind="K" nr="298"/>
 </Func>
 </Adjective>
 <Adjective nr="16">
-<Func kind="U" nr="6">
+<Func kind="U" nr="5">
 <Func kind="K" nr="20">
 <Func kind="K" nr="31"/>
 </Func>
-<Func kind="K" nr="315"/>
+<Func kind="K" nr="298"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
 <Adjective nr="21">
-<Func kind="U" nr="8">
+<Func kind="U" nr="7">
 <Func kind="K" nr="20">
 <Func kind="K" nr="31"/>
 </Func>
-<Func kind="K" nr="315"/>
+<Func kind="K" nr="298"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>
@@ -115,7 +114,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="342">
+<Func kind="K" nr="325">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 <LocusVar nr="1"/>
@@ -129,24 +128,24 @@
 </Adjective>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="315"/>
+<Func kind="K" nr="298"/>
 </Func>
 </Adjective>
 <Adjective nr="16">
-<Func kind="U" nr="6">
+<Func kind="U" nr="5">
 <Func kind="K" nr="20">
 <Func kind="K" nr="31"/>
 </Func>
-<Func kind="K" nr="315"/>
+<Func kind="K" nr="298"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
 <Adjective nr="21">
-<Func kind="U" nr="8">
+<Func kind="U" nr="7">
 <Func kind="K" nr="20">
 <Func kind="K" nr="31"/>
 </Func>
-<Func kind="K" nr="315"/>
+<Func kind="K" nr="298"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>

@@ -1,0 +1,700 @@
+:: Veblen Hierarchy
+::  by Grzegorz Bancerek
+::
+:: Received October 18, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies ORDINAL6, CARD_1, RELAT_1, FUNCT_1, CLASSES2, NUMBERS, TARSKI,
+      XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, WELLORD1, WELLORD2, ABIAN,
+      CARD_3, MATROID0, ORDINAL4, NAT_1, ARYTM_3, CLASSES1, VALUED_0, AFINSQ_1,
+      ORDINAL5, ZFMISC_1, FINSET_1, MESFUNC8, NAGATA_1, ORDINAL3, PRE_TOPC,
+      AOFA_000;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, FINSET_1, ORDINAL1, ORDINAL2, NAT_1, ORDINAL3, ABIAN, WELLORD1,
+      WELLORD2, CARD_1, ORDINAL4, CARD_3, NAGATA_1, AFINSQ_1, CLASSES1,
+      CLASSES2, NUMBERS, MATROID0, ORDINAL5, AOFA_000;
+ constructors WELLORD1, WELLORD2, CLASSES1, ABIAN, CARD_3, AFINSQ_1, ORDINAL3,
+      ORDINAL5, NAT_1, RELSET_1;
+ registrations XBOOLE_0, RELAT_1, RELSET_1, FUNCT_1, FINSET_1, FUNCT_2,
+      ORDINAL1, ORDINAL2, CARD_1, WELLORD2, ORDINAL3, CLASSES2, CARD_5,
+      ORDINAL4, CARD_LAR, ORDINAL5, CLASSES1, AFINSQ_1, SUBSET_1;
+ requirements SUBSET, BOOLE, NUMERALS;
+
+
+begin :: Preliminaries
+
+reserve a,b,c,d for ordinal number;
+reserve l for non empty limit_ordinal Ordinal;
+reserve u for Element of l;
+reserve A for non empty ordinal number;
+reserve e for Element of A;
+reserve X,Y,x,y,z for set;
+reserve n,m for Nat;
+
+definition
+  let X be set;
+  attr X is ordinal-membered means
+:: ORDINAL6:def 1
+  ex a st X c= a;
+end;
+
+registration
+  cluster ordinal -> ordinal-membered set;
+  let X;
+  cluster On X -> ordinal-membered;
+end;
+
+theorem :: ORDINAL6:1
+  X is ordinal-membered iff for x st x in X holds x is ordinal;
+
+registration
+  cluster ordinal-membered set;
+end;
+
+registration
+  let X be ordinal-membered set;
+  cluster -> ordinal Element of X;
+end;
+
+theorem :: ORDINAL6:2
+  X is ordinal-membered iff On X = X;
+
+theorem :: ORDINAL6:3
+  for X being ordinal-membered set holds X c= sup X;
+
+theorem :: ORDINAL6:4
+  a c= b iff b nin a;
+
+theorem :: ORDINAL6:5
+  x in a\b iff b c= x & x in a;
+
+registration let a,b;
+  cluster a\b -> ordinal-membered;
+end;
+
+theorem :: ORDINAL6:6
+  for f being Function st f is_isomorphism_of RelIncl X, RelIncl Y
+  for x,y st x in X & y in X holds x c= y iff f.x c= f.y;
+
+theorem :: ORDINAL6:7
+  for X,Y being ordinal-membered set
+  for f being Function st f is_isomorphism_of RelIncl X, RelIncl Y
+  for x,y st x in X & y in X holds x in y iff f.x in f.y;
+
+theorem :: ORDINAL6:8
+  [x,y] in RelIncl X implies x c= y;
+
+theorem :: ORDINAL6:9
+  for f1,f2 being T-Sequence holds f1 c= f1^f2;
+
+theorem :: ORDINAL6:10
+  for f1,f2 being T-Sequence holds rng(f1^f2) = rng f1 \/ rng f2;
+
+theorem :: ORDINAL6:11
+  a c= b iff epsilon_a c= epsilon_b;
+
+theorem :: ORDINAL6:12
+  a in b iff epsilon_a in epsilon_b;
+
+registration
+  let X be ordinal-membered set;
+  cluster union X -> ordinal;
+end;
+
+registration
+  let f be Ordinal-yielding Function;
+  cluster rng f -> ordinal-membered;
+end;
+
+registration
+  let a;
+  cluster id a -> T-Sequence-like Ordinal-yielding;
+end;
+
+registration
+  let a;
+  cluster id a -> increasing Ordinal-Sequence;
+end;
+
+registration
+  let a;
+  cluster id a -> continuous Ordinal-Sequence;
+end;
+
+registration
+  cluster non empty increasing continuous Ordinal-Sequence;
+end;
+
+definition
+  let f be T-Sequence;
+  attr f is normal means
+:: ORDINAL6:def 2
+  f is increasing continuous Ordinal-Sequence;
+end;
+
+definition
+  let f be Ordinal-Sequence;
+  redefine attr f is normal means
+:: ORDINAL6:def 3
+  f is increasing continuous;
+end;
+
+registration
+  cluster normal -> Ordinal-yielding T-Sequence;
+  cluster normal -> increasing continuous Ordinal-Sequence;
+  cluster increasing continuous -> normal Ordinal-Sequence;
+end;
+
+registration
+  cluster non empty normal T-Sequence;
+end;
+
+theorem :: ORDINAL6:13
+  for f being Ordinal-Sequence holds
+  f is non-decreasing implies f|a is non-decreasing;
+
+definition
+  let X;
+  func ord-type X -> ordinal number equals
+:: ORDINAL6:def 4
+  order_type_of RelIncl On X;
+end;
+
+definition
+  let X be ordinal-membered set;
+  redefine func ord-type X equals
+:: ORDINAL6:def 5
+order_type_of RelIncl X;
+end;
+
+registration
+  let X be ordinal-membered set;
+  cluster RelIncl X -> well-ordering;
+end;
+
+registration
+  let E be empty set;
+  cluster On E -> empty;
+end;
+
+registration
+  let E be empty set;
+  cluster order_type_of E -> empty;
+end;
+
+theorem :: ORDINAL6:14
+  ord-type {} = 0;
+
+theorem :: ORDINAL6:15
+  ord-type {a} = 1;
+
+theorem :: ORDINAL6:16
+  a <> b implies ord-type {a,b} = 2;
+
+theorem :: ORDINAL6:17
+  ord-type a = a;
+
+definition
+  let X;
+  func numbering X -> Ordinal-Sequence equals
+:: ORDINAL6:def 6
+  canonical_isomorphism_of(RelIncl ord-type X, RelIncl On X);
+end;
+
+theorem :: ORDINAL6:18
+  dom numbering X = ord-type X & rng numbering X = On X;
+
+theorem :: ORDINAL6:19
+  for X being ordinal-membered set holds rng numbering X = X;
+
+theorem :: ORDINAL6:20
+  card dom numbering X = card On X;
+
+theorem :: ORDINAL6:21
+  numbering X is_isomorphism_of RelIncl ord-type X, RelIncl On X;
+
+reserve f for Ordinal-Sequence;
+
+theorem :: ORDINAL6:22
+  f = numbering X & x in dom f & y in dom f implies (x c= y iff f.x c= f.y);
+
+theorem :: ORDINAL6:23
+  f = numbering X & x in dom f & y in dom f implies (x in y iff f.x in f.y);
+
+registration
+  let X;
+  cluster numbering X -> increasing;
+end;
+
+registration
+  let X,Y be ordinal-membered set;
+  cluster X \/ Y -> ordinal-membered;
+end;
+
+registration
+  let X be ordinal-membered set, Y be set;
+  cluster X \ Y -> ordinal-membered;
+end;
+
+theorem :: ORDINAL6:24
+  for X,Y being ordinal-membered set
+  st for x,y st x in X & y in Y holds x in y
+  holds (numbering X)^(numbering Y) is_isomorphism_of
+  RelIncl ((ord-type X)+^(ord-type Y)), RelIncl (X \/ Y);
+
+theorem :: ORDINAL6:25
+  for X,Y being ordinal-membered set
+  st for x,y st x in X & y in Y holds x in y
+  holds numbering(X \/ Y) = (numbering X)^(numbering Y);
+
+theorem :: ORDINAL6:26
+  for X,Y being ordinal-membered set
+  st for x,y st x in X & y in Y holds x in y
+  holds ord-type(X \/ Y) = (ord-type X)+^(ord-type Y);
+
+begin :: Fixpoints of a Normal Function
+
+theorem :: ORDINAL6:27
+  for f being Function st x is_a_fixpoint_of f holds x in rng f;
+
+definition
+  let f be Ordinal-Sequence;
+  func criticals f -> Ordinal-Sequence equals
+:: ORDINAL6:def 7
+  numbering {a where a is Element of dom f: a is_a_fixpoint_of f};
+end;
+
+theorem :: ORDINAL6:28
+  On {a where a is Element of dom f: a is_a_fixpoint_of f}
+  = {a where a is Element of dom f: a is_a_fixpoint_of f};
+
+theorem :: ORDINAL6:29
+  x in dom criticals f implies (criticals f).x is_a_fixpoint_of f;
+
+theorem :: ORDINAL6:30
+  rng criticals f = {a where a is Element of dom f: a is_a_fixpoint_of f} &
+  rng criticals f c= rng f;
+
+registration let f;
+  cluster criticals f -> increasing;
+end;
+
+theorem :: ORDINAL6:31
+  x in dom criticals f implies x c= (criticals f).x;
+
+theorem :: ORDINAL6:32
+  dom criticals f c= dom f;
+
+theorem :: ORDINAL6:33
+  b is_a_fixpoint_of f implies
+  ex a st a in dom criticals f & b = (criticals f).a;
+
+theorem :: ORDINAL6:34
+  a in dom criticals f & b is_a_fixpoint_of f & (criticals f).a in b
+  implies succ a in dom criticals f;
+
+theorem :: ORDINAL6:35
+  succ a in dom criticals f & b is_a_fixpoint_of f & (criticals f).a in b
+  implies (criticals f).succ a c= b;
+
+theorem :: ORDINAL6:36
+  f is normal & union X in dom f & X is non empty &
+  (for x st x in X ex y st x c= y & y in X & y is_a_fixpoint_of f)
+  implies union X = f.union X;
+
+theorem :: ORDINAL6:37
+  f is normal & union X in dom f & X is non empty &
+  (for x st x in X holds x is_a_fixpoint_of f)
+  implies union X = f.union X;
+
+theorem :: ORDINAL6:38
+  l c= dom criticals f & a is_a_fixpoint_of f &
+  (for x st x in l holds (criticals f).x in a)
+  implies l in dom criticals f;
+
+theorem :: ORDINAL6:39
+  f is normal & l in dom criticals f implies
+  (criticals f).l = Union ((criticals f)|l);
+
+registration
+  let f be normal Ordinal-Sequence;
+  cluster criticals f -> continuous;
+end;
+
+theorem :: ORDINAL6:40
+  for f1,f2 being Ordinal-Sequence st f1 c= f2
+  holds criticals f1 c= criticals f2;
+
+begin :: Fixpoints in a Universal Set
+
+reserve U,W for Universe;
+
+registration
+  let U;
+  cluster normal Ordinal-Sequence of U;
+end;
+
+definition
+  let U,a;
+  mode Ordinal-Sequence of a,U is Function of a, On U;
+end;
+
+registration
+  let U,a;
+  cluster -> T-Sequence-like Ordinal-yielding Ordinal-Sequence of a,U;
+end;
+
+definition
+  let U,a;
+  let f be Ordinal-Sequence of a,U;
+  let x;
+  redefine func f.x -> Ordinal of U;
+end;
+
+theorem :: ORDINAL6:41
+  a in U implies for f being Ordinal-Sequence of a,U holds Union f in U;
+
+theorem :: ORDINAL6:42
+  a in U implies for f being Ordinal-Sequence of a,U holds sup f in U;
+
+scheme :: ORDINAL6:sch 1
+ CriticalNumber2
+  {U() -> Universe, a() -> Ordinal of U(),
+  f() -> Ordinal-Sequence of omega, U(),
+  phi(Ordinal) -> Ordinal}:
+   a() c= Union f() & phi(Union f()) = Union f() &
+   for b st a() c= b & b in U() & phi(b) = b holds Union f() c= b
+  provided
+  omega in U()
+  and
+ for a st a in U() holds phi(a) in U()
+  and
+  for a,b st a in b & b in U() holds phi(a) in phi(b)
+  and
+ for a being Ordinal of U() st a is non empty limit_ordinal
+    for phi being Ordinal-Sequence
+      st dom phi = a & for b st b in a holds phi.b = phi(b)
+    holds phi(a) is_limes_of phi
+  and
+  f().0 = a()
+  and
+  for a st a in omega holds f().(succ a) = phi(f().a);
+
+scheme :: ORDINAL6:sch 2
+ CriticalNumber3
+  {U() -> Universe, a() -> Ordinal of U(), phi(Ordinal) -> Ordinal}:
+  ex a being Ordinal of U() st a() in a & phi(a) = a
+  provided
+ omega in U()
+    and
+ for a st a in U() holds phi(a) in U()
+    and
+ for a,b st a in b & b in U() holds phi(a) in phi(b)
+    and
+ for a being Ordinal of U() st a is non empty limit_ordinal
+    for phi being Ordinal-Sequence
+      st dom phi = a & for b st b in a holds phi.b = phi(b)
+    holds phi(a) is_limes_of phi;
+
+reserve F,phi for normal Ordinal-Sequence of W;
+
+theorem :: ORDINAL6:43
+  omega in W & b in W implies ex a st b in a & a is_a_fixpoint_of phi;
+
+theorem :: ORDINAL6:44
+  omega in W implies criticals F is Ordinal-Sequence of W;
+
+theorem :: ORDINAL6:45
+  f is normal implies
+  for a st a in dom criticals f holds f.a c= (criticals f).a;
+
+begin :: Sequences of Sequences of Ordinals
+
+definition
+  let U;
+  let a,b be Ordinal of U;
+  redefine func exp(a,b) -> Ordinal of U;
+end;
+
+definition
+  let U,a such that
+ a in U;
+  func U exp a -> Ordinal-Sequence of U means
+:: ORDINAL6:def 8
+  for b being Ordinal of U holds it.b = exp(a,b);
+end;
+
+registration
+  cluster omega -> non trivial;
+end;
+
+registration
+  let U;
+  cluster non trivial finite Ordinal of U;
+end;
+
+registration
+  cluster non trivial finite Ordinal;
+end;
+
+registration
+  let U;
+  let a be non trivial Ordinal of U;
+  cluster U exp a -> normal;
+end;
+
+definition
+  let g be Function;
+  attr g is Ordinal-Sequence-valued means
+:: ORDINAL6:def 9
+  x in rng g implies x is Ordinal-Sequence;
+end;
+
+registration
+  let f be Ordinal-Sequence;
+  cluster <%f%> -> Ordinal-Sequence-valued;
+end;
+
+definition ::: MESFUNC8:def 1 generalized
+  let f be Function;
+  attr f is with_the_same_dom means
+:: ORDINAL6:def 10
+  rng f is with_common_domain;
+end;
+
+registration
+  let f be Function;
+  cluster {f} -> with_common_domain;
+end;
+
+registration
+  let f be Function;
+  cluster <%f%> -> with_the_same_dom;
+end;
+
+registration
+  cluster non empty Ordinal-Sequence-valued with_the_same_dom T-Sequence;
+end;
+
+registration
+  let g be Ordinal-Sequence-valued Function;
+  let x;
+  cluster g.x -> Relation-like Function-like;
+end;
+
+registration
+  let g be Ordinal-Sequence-valued Function;
+  let x;
+  cluster g.x -> T-Sequence-like Ordinal-yielding;
+end;
+
+registration
+  let g be T-Sequence;
+  let a;
+  cluster g|a -> T-Sequence-like;
+end;
+
+registration
+  let g be Ordinal-Sequence-valued Function;
+  let X;
+  cluster g|X -> Ordinal-Sequence-valued;
+end;
+
+registration
+  let a,b;
+  cluster -> Ordinal-yielding T-Sequence-like Function of a,b;
+end;
+
+definition
+  let g be Ordinal-Sequence-valued T-Sequence;
+  func criticals g -> Ordinal-Sequence equals
+:: ORDINAL6:def 11
+  numbering {a where a is Element of dom(g.0): a in dom(g.0) &
+  for f st f in rng g holds a is_a_fixpoint_of f};
+end;
+
+reserve g for Ordinal-Sequence-valued T-Sequence;
+
+theorem :: ORDINAL6:46
+  for g holds
+  {a where a is Element of dom(g.0): a in dom(g.0) &
+  for f st f in rng g holds a is_a_fixpoint_of f} is ordinal-membered;
+
+theorem :: ORDINAL6:47
+  a in dom g & b in dom criticals g
+  implies (criticals g).b is_a_fixpoint_of g.a;
+
+theorem :: ORDINAL6:48
+  x in dom criticals g implies x c= (criticals g).x;
+
+theorem :: ORDINAL6:49
+  f in rng g implies dom criticals g c= dom f;
+
+theorem :: ORDINAL6:50
+  dom g <> {} & (for c st c in dom g holds b is_a_fixpoint_of g.c) implies
+  ex a st a in dom criticals g & b = (criticals g).a;
+
+theorem :: ORDINAL6:51
+  dom g <> {} & l c= dom criticals g &
+  (for f st f in rng g holds a is_a_fixpoint_of f) &
+  (for x st x in l holds (criticals g).x in a)
+  implies l in dom criticals g;
+
+theorem :: ORDINAL6:52
+  for g st dom g <> {} & for a st a in dom g holds g.a is normal
+  holds l in dom criticals g implies
+  (criticals g).l = Union ((criticals g)|l);
+
+theorem :: ORDINAL6:53
+  for g st dom g <> {} & for a st a in dom g holds g.a is normal
+  holds criticals g is continuous;
+
+theorem :: ORDINAL6:54
+  for g st dom g <> {} & for a st a in dom g holds g.a is normal
+  for a,f st a in dom criticals g & f in rng g holds f.a c= (criticals g).a;
+
+theorem :: ORDINAL6:55
+  for g1,g2 being Ordinal-Sequence-valued T-Sequence
+  st dom g1 = dom g2 & dom g1 <> {} & for a st a in dom g1 holds g1.a c= g2.a
+  holds criticals g1 c= criticals g2;
+
+definition
+  let g be Ordinal-Sequence-valued T-Sequence;
+  func lims g -> Ordinal-Sequence means
+:: ORDINAL6:def 12
+
+  dom it = dom (g.0) & for a st a in dom it holds
+  it.a = union {g.b.a where b is Element of dom g: b in dom g};
+end;
+
+theorem :: ORDINAL6:56
+  for g being Ordinal-Sequence-valued T-Sequence
+  st dom g <> {} & dom g in U &
+  for a st a in dom g holds g.a is Ordinal-Sequence of U
+  holds lims g is Ordinal-Sequence of U;
+
+begin :: Veblen Hierarchy
+
+definition
+  let x;
+  func OS@ x -> Ordinal-Sequence equals
+:: ORDINAL6:def 13
+  x if x is Ordinal-Sequence otherwise the Ordinal-Sequence;
+  func OSV@ x -> Ordinal-Sequence-valued T-Sequence equals
+:: ORDINAL6:def 14
+  x if x is Ordinal-Sequence-valued T-Sequence
+  otherwise the Ordinal-Sequence-valued T-Sequence;
+end;
+
+definition
+  let U;
+  func U-Veblen -> Ordinal-Sequence-valued T-Sequence means
+:: ORDINAL6:def 15
+  dom it = On U & it.0 = U exp omega &
+  (for b st succ b in On U holds it.succ b = criticals (it.b)) &
+  (for l st l in On U holds it.l = criticals (it|l));
+end;
+
+registration
+  cluster uncountable Universe;
+end;
+
+theorem :: ORDINAL6:57
+  for U being Universe holds U is uncountable iff omega in U;
+
+theorem :: ORDINAL6:58
+  a in b & b in U & omega in U & c in dom(U-Veblen.b)
+  implies U-Veblen.b.c is_a_fixpoint_of U-Veblen.a;
+
+theorem :: ORDINAL6:59
+  l in U & (for c st c in l holds a is_a_fixpoint_of U-Veblen.c)
+  implies a is_a_fixpoint_of lims(U-Veblen|l);
+
+theorem :: ORDINAL6:60
+  a c= b & b in U & omega in U & c in dom(U-Veblen.b) &
+  (for c st c in b holds U-Veblen.c is normal)
+  implies U-Veblen.a.c c= U-Veblen.b.c;
+
+theorem :: ORDINAL6:61
+  l in U & a in U & b in l &
+  (for c st c in l holds U-Veblen.c is normal Ordinal-Sequence of U)
+  implies (lims(U-Veblen|l)).a is_a_fixpoint_of U-Veblen.b;
+
+theorem :: ORDINAL6:62
+  omega in U & a in U implies U-Veblen.a is normal Ordinal-Sequence of U;
+
+theorem :: ORDINAL6:63
+  omega in U & U c= W & a in U implies U-Veblen.a c= W-Veblen.a;
+
+theorem :: ORDINAL6:64
+  omega in U & a in U & b in U & omega in W & a in W & b in W implies
+  U-Veblen.b.a = W-Veblen.b.a;
+
+theorem :: ORDINAL6:65
+  l in U & (for a st a in l holds
+  U-Veblen.a is normal Ordinal-Sequence of U)
+  implies lims(U-Veblen|l) is non-decreasing continuous Ordinal-Sequence of U;
+
+registration
+  let a;
+  cluster Tarski-Class(a \/ omega) -> uncountable;
+end;
+
+definition
+  let a,b;
+  func a-Veblen(b) -> Ordinal equals
+:: ORDINAL6:def 16
+  (Tarski-Class(a \/ b \/ omega))-Veblen.a.b;
+end;
+
+definition
+  let n,b;
+  redefine func n-Veblen(b) -> Ordinal equals
+:: ORDINAL6:def 17
+  (Tarski-Class(b \/ omega))-Veblen.n.b;
+end;
+
+theorem :: ORDINAL6:66
+  a in Tarski-Class(a\/b\/c);
+
+theorem :: ORDINAL6:67
+  omega in U & a in U & b in U implies b-Veblen a = U-Veblen.b.a;
+
+theorem :: ORDINAL6:68
+  0-Veblen(a) = exp(omega,a);
+
+theorem :: ORDINAL6:69
+  b-Veblen((succ b)-Veblen a) = (succ b)-Veblen a;
+
+theorem :: ORDINAL6:70
+  b in c implies b-Veblen(c-Veblen a) = c-Veblen a;
+
+theorem :: ORDINAL6:71
+  a c= b iff c-Veblen a c= c-Veblen b;
+
+theorem :: ORDINAL6:72
+  a in b iff c-Veblen a in c-Veblen b;
+
+theorem :: ORDINAL6:73
+  a-Veblen b in c-Veblen d iff
+    a = c & b in d or
+    a in c & b in c-Veblen d or
+    c in a & a-Veblen b in d;
+
+begin :: Epsilon Numbers
+
+reserve U for uncountable Universe;
+
+theorem :: ORDINAL6:74
+  U-Veblen.1 = criticals(U exp omega);
+
+theorem :: ORDINAL6:75
+  1-Veblen(a) is epsilon;
+
+theorem :: ORDINAL6:76
+  for e being epsilon Ordinal ex a st e = 1-Veblen a;
+
+theorem :: ORDINAL6:77
+  1-Veblen(a) = epsilon_a;

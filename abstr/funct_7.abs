@@ -255,12 +255,10 @@ theorem :: FUNCT_7:32
   for f be Function, d,i be set holds dom(f+*(i,d)) = dom f;
 
 theorem :: FUNCT_7:33
-  for f be Function, d,i be set st i in dom f holds (f+*(i,d)).i =
-  d;
+  for f be Function, d,i be set st i in dom f holds (f+*(i,d)).i = d;
 
 theorem :: FUNCT_7:34
-  for f be Function, d,i,j be set st i <> j holds (f+*(i,d)).j = f
-  .j;
+  for f be Function, d,i,j be set st i <> j holds (f+*(i,d)).j = f.j;
 
 theorem :: FUNCT_7:35
   for f be Function, d,e,i,j be set st i <> j holds f+*(i,d)+*(j,e) = f
@@ -320,8 +318,7 @@ end;
 
 reserve X,Y,x for set,
   p,q for Function-yielding FinSequence,
-  f,g,h for
-  Function;
+  f,g,h for Function;
 
 theorem :: FUNCT_7:41
   compose({},X) = id X;
@@ -504,15 +501,15 @@ definition
   func iter (f,n) -> Function means
 :: FUNCT_7:def 11
 
-  ex p being Function of NAT,PFuncs(
-  dom f \/ rng f,dom f \/ rng f) st it = p.n & p.0 = id(dom f \/ rng f) & for k
-  being Nat ex g being Function st g = p.k & p.(k+1) = g*f;
+  ex p being Function of NAT,PFuncs(field f,field f) st
+  it = p.n & p.0 = id(field f) &
+  for k being Nat holds p.(k+1) = (p.k)*f;
 end;
 
 reserve m,n,k for Element of NAT;
 
 theorem :: FUNCT_7:70
-  iter (f,0) = id(dom f \/ rng f);
+  iter (f,0) = id(field f);
 
 theorem :: FUNCT_7:71
   for n be Nat holds iter(f,n+1) = iter(f,n)*f;
@@ -524,8 +521,7 @@ theorem :: FUNCT_7:73
   for n being Nat holds iter(f,n+1) = f*iter(f,n);
 
 theorem :: FUNCT_7:74
-  dom iter(f,n) c= dom f \/ rng f & rng iter(f,n) c= dom f \/ rng
-  f;
+  dom iter(f,n) c= field f & rng iter(f,n) c= field f;
 
 theorem :: FUNCT_7:75
   n <> 0 implies dom iter(f,n) c= dom f & rng iter(f,n) c= rng f;
@@ -535,10 +531,10 @@ theorem :: FUNCT_7:76
   rng iter(f,n) c= dom f;
 
 theorem :: FUNCT_7:77
-  iter(f,n)*id(dom f \/ rng f) = iter(f,n);
+  iter(f,n)*id(field f) = iter(f,n);
 
 theorem :: FUNCT_7:78
-  id(dom f \/ rng f)*iter(f,n) = iter(f,n);
+  id(field f)*iter(f,n) = iter(f,n);
 
 theorem :: FUNCT_7:79
   iter(f,n)*iter(f,m) = iter(f,n+m);
@@ -576,7 +572,7 @@ theorem :: FUNCT_7:89
 
 theorem :: FUNCT_7:90
   for f being Function, n being Element of NAT holds iter(f,n) = compose
-  (n|->f,dom f \/ rng f);
+  (n|->f,field f);
 
 begin :: Addenda
 
@@ -854,4 +850,23 @@ reserve n for Element of NAT;
 theorem :: FUNCT_7:135
   for I being NAT-defined Function holds card Shift(I,m) = card I;
 
+theorem :: FUNCT_7:136
+ dom f = dom g & dom f c= A \/ B & f|B = g|B
+  implies f,g equal_outside A;
 
+theorem :: FUNCT_7:137
+ dom f = dom g & B c= dom f & A misses B & f,g equal_outside A
+  implies f|B = g|B;
+
+reserve A,B,I for set, X,Y for ManySortedSet of I;
+
+theorem :: FUNCT_7:138
+ I c= A \/ B & X|B = Y|B implies X,Y equal_outside A;
+
+theorem :: FUNCT_7:139
+ B c= I & A misses B & X,Y equal_outside A implies X|B = Y|B;
+
+registration let V be non empty set;
+ let f be V-valued Function, x be set, y be Element of V;
+ cluster f+*(x,y) -> V-valued;
+end;

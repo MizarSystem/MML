@@ -25,7 +25,7 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="36" value="false"/>
+<Adjective nr="37" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -167,7 +167,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="36" value="false"/>
+<Adjective nr="37" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

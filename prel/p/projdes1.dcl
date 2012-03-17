@@ -26,7 +26,7 @@
 <CCluster aid="PROJDES1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="33" value="false"/>
+<Adjective nr="34" value="false"/>
 <Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
@@ -38,7 +38,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
+<Adjective nr="34" value="false"/>
 <Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>

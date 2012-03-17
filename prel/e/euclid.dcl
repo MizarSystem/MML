@@ -39,6 +39,7 @@
 <ArticleID name="MONOID_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
+<ArticleID name="VALUED_2"/>
 <ArticleID name="EUCLID"/>
 </Signature>
 <FCluster aid="EUCLID" nr="1">
@@ -47,12 +48,12 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="21"/>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 <Adjective nr="137"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="340">
+<Func kind="K" nr="432">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -68,13 +69,13 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="329">
+<Func kind="K" nr="421">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="340">
-<Func kind="K" nr="336">
+<Func kind="K" nr="432">
+<Func kind="K" nr="428">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
@@ -92,7 +93,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="342">
+<Func kind="K" nr="434">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -112,7 +113,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="343">
+<Func kind="K" nr="435">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -128,7 +129,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="343">
+<Func kind="K" nr="435">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -152,12 +153,63 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="343">
+<Func kind="K" nr="435">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="160"/>
 <Adjective nr="189"/>
+</Cluster>
+</FCluster>
+<FCluster aid="EUCLID" nr="7">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="10"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="136">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="41"/>
+</Cluster>
+</FCluster>
+<FCluster aid="EUCLID" nr="8">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="10"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="421">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="41"/>
+</Cluster>
+</FCluster>
+<FCluster aid="EUCLID" nr="9">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="10"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="421">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="196"/>
 </Cluster>
 </FCluster>
 <CCluster aid="EUCLID" nr="1">
@@ -171,12 +223,12 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="329">
+<Func kind="K" nr="421">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="40">
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -193,13 +245,13 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="343">
+<Func kind="K" nr="435">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </CCluster>
 <CCluster aid="EUCLID" nr="3">
@@ -214,7 +266,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="343">
+<Func kind="K" nr="435">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -235,13 +287,13 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="343">
+<Func kind="K" nr="435">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="40">
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

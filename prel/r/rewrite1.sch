@@ -27,14 +27,14 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 </ArgTypes>

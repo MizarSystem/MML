@@ -216,7 +216,7 @@
 <FCluster aid="TOPREALC" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="538">
-<Func kind="K" nr="16"/>
+<Func kind="K" nr="85"/>
 </Func>
 <Cluster>
 <Adjective nr="11"/>
@@ -371,7 +371,7 @@
 <FCluster aid="TOPREALC" nr="11">
 <ArgTypes/>
 <Func kind="K" nr="405">
-<Func kind="K" nr="16"/>
+<Func kind="K" nr="85"/>
 </Func>
 <Cluster>
 <Adjective nr="164"/>
@@ -381,7 +381,7 @@
 <FCluster aid="TOPREALC" nr="12">
 <ArgTypes/>
 <Func kind="K" nr="405">
-<Func kind="K" nr="16"/>
+<Func kind="K" nr="85"/>
 </Func>
 <Cluster>
 <Adjective nr="57"/>
@@ -559,7 +559,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPREALC" nr="21">
@@ -589,7 +589,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPREALC" nr="22">
@@ -619,7 +619,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPREALC" nr="23">
@@ -649,7 +649,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPREALC" nr="24">

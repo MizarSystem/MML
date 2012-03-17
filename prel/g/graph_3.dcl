@@ -59,8 +59,8 @@
 <Adjective nr="13"/>
 <Adjective nr="14"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="90">
 <LocusVar nr="1"/>
 </Adjective>

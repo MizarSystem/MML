@@ -113,8 +113,8 @@
 <Adjective nr="28"/>
 <Adjective nr="32"/>
 <Adjective nr="38"/>
-<Adjective nr="44"/>
 <Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SEQM_3" nr="4">
@@ -137,8 +137,8 @@
 <Adjective nr="27"/>
 <Adjective nr="28"/>
 <Adjective nr="38"/>
-<Adjective nr="44"/>
 <Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 </RCluster>
 <FCluster aid="SEQM_3" nr="1">

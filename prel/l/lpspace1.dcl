@@ -39,6 +39,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_2"/>
+<ArticleID name="MEMBER_1"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
 <ArticleID name="RAT_1"/>
@@ -83,7 +84,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="420">
+<Func kind="K" nr="446">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -143,7 +144,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="422">
+<Func kind="K" nr="448">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -151,12 +152,12 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="126">
-<Func kind="K" nr="420">
+<Func kind="K" nr="446">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="199">
-<Func kind="K" nr="420">
+<Func kind="K" nr="446">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -207,7 +208,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="423">
+<Func kind="K" nr="449">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -269,7 +270,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="424">
+<Func kind="K" nr="450">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -277,14 +278,14 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="126">
-<Func kind="K" nr="423">
+<Func kind="K" nr="449">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
 <Adjective nr="199">
-<Func kind="K" nr="423">
+<Func kind="K" nr="449">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -337,7 +338,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="423">
+<Func kind="K" nr="449">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -399,7 +400,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="433">
+<Func kind="K" nr="459">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

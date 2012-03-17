@@ -10,18 +10,20 @@ environ
       SUBSET_1, FINSUB_1, SETWISEO, CARD_1, TARSKI, CARD_3, RELAT_1, ZFMISC_1,
       SCMNORM, FINSET_1, NUMBERS, FUNCT_4, VALUED_1, ARYTM_3, AMISTD_2,
       XXREAL_0, SCMFSA6A, TURING_1, FSM_1, CIRCUIT2, STRUCT_0, ARYTM_1, INT_1,
-      COMPLEX1, PARTFUN1, FINSEQ_2, NAT_1, SF_MASTR, ORDINAL1, RELOC;
+      COMPLEX1, PARTFUN1, FINSEQ_2, NAT_1, SF_MASTR, ORDINAL1, RELOC, AMI_2,
+      PBOOLE, SCMFSA6C;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
       XCMPLX_0, FINSET_1, FINSUB_1, NAT_1, INT_1, VALUED_1, STRUCT_0, SETWISEO,
       SEQ_4, CARD_3, FINSEQ_1, FINSEQ_2, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
-      FUNCT_2, FUNCT_4, FUNCT_7, COMPOS_1, EXTPRO_1, AMI_1, AMI_3, SCMFSA_2,
-      AMISTD_2, SCMFSA6A, INT_2, XXREAL_0;
- constructors SETWISEO, INT_2, SEQ_4, AMI_5, SCMFSA6A, RELSET_1, VALUED_1,
-      AMISTD_2, AMI_1;
+      FUNCT_2, FUNCT_4, PBOOLE, FUNCT_7, COMPOS_1, AMI_2, EXTPRO_1, AMI_1,
+      AMI_3, SCMFSA_2, AMISTD_2, SCMFSA6A, INT_2, XXREAL_0;
+ constructors SETWISEO, INT_2, SEQ_4, AMI_3, SCMFSA6A, RELSET_1, VALUED_1,
+      AMISTD_2, AMI_1, AMISTD_1, AMI_2, SCMFSA_1, CARD_5, PRE_POLY, DOMAIN_1,
+      PBOOLE;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1,
-      FINSUB_1, NUMBERS, XREAL_0, INT_1, MEMBERED, CARD_3, AMI_1, AMI_5,
-      SCMFSA_2, XBOOLE_0, XXREAL_2, VALUED_1, FINSEQ_1, AMISTD_2, SCMFSA10,
-      COMPOS_1, EXTPRO_1;
+      FINSUB_1, NUMBERS, XREAL_0, INT_1, MEMBERED, CARD_3, AMI_1, SCMFSA_2,
+      XBOOLE_0, XXREAL_2, VALUED_1, FINSEQ_1, AMISTD_2, AMI_3, SCMFSA10,
+      COMPOS_1, EXTPRO_1, CARD_5, ZFMISC_1, AMI_2, CARD_1, PBOOLE;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -31,18 +33,17 @@ registration
   cluster Int-Locations -> non empty;
 end;
 
-registration
-  cluster FinSeq-Locations -> non empty;
-end;
+:::registration
+:::  cluster FinSeq-Locations -> non empty;
+:::  coherence by SCMFSA_2:10;
+:::end;
 
 begin :: Uniqueness of instruction components
 
 reserve a, b, c, a1, a2, b1, b2 for Int-Location,
-  l, l1, l2 for
-  Element of NAT,
+  l, l1, l2 for Element of NAT,
   f, g, f1, f2 for FinSeq-Location,
-  i, j for
-  Instruction of SCM+FSA;
+  i, j for Instruction of SCM+FSA;
 
 canceled 4;
 
@@ -136,8 +137,7 @@ end;
 
 reserve p, r for preProgram of SCM+FSA,
   I, J for Program of SCM+FSA,
-  k, m, n
-  for Element of NAT;
+  k, m, n for Element of NAT;
 
 theorem :: SF_MASTR:23
   i in rng p implies UsedIntLoc i c= UsedIntLoc p;
@@ -159,7 +159,7 @@ theorem :: SF_MASTR:28
   UsedIntLoc p = UsedIntLoc IncAddr(p, k);
 
 theorem :: SF_MASTR:29
-  UsedIntLoc I = UsedIntLoc ProgramPart Relocated (I, k);
+  UsedIntLoc I = UsedIntLoc Reloc(ProgramPart I, k);
 
 theorem :: SF_MASTR:30
   UsedIntLoc I = UsedIntLoc Directed I;
@@ -239,7 +239,7 @@ theorem :: SF_MASTR:44
   UsedInt*Loc p = UsedInt*Loc IncAddr(p, k);
 
 theorem :: SF_MASTR:45
-  UsedInt*Loc I = UsedInt*Loc ProgramPart Relocated (I, k);
+  UsedInt*Loc I = UsedInt*Loc Reloc(ProgramPart I, k);
 
 theorem :: SF_MASTR:46
   UsedInt*Loc I = UsedInt*Loc Directed I;
@@ -376,6 +376,7 @@ theorem :: SF_MASTR:63
 begin :: Semantics
 
 reserve s, t for State of SCM+FSA;
+reserve P for (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
 
 canceled 4;
 
@@ -383,18 +384,17 @@ theorem :: SF_MASTR:68
   not c in UsedIntLoc i implies Exec(i, s).c = s.c;
 
 theorem :: SF_MASTR:69
-  I+*Start-At( 0,SCM+FSA) c= s & (for m st m < n
-   holds IC Comput(ProgramPart(s),s,m)
-  in dom I) & not a in UsedIntLoc I implies Comput(ProgramPart(s),s,n).a = s.a;
+  Initialize I c= s & I c= P &
+   (for m st m < n holds IC Comput(P,s,m) in dom I) &
+    not a in UsedIntLoc I implies Comput(P,s,n).a = s.a;
 
 theorem :: SF_MASTR:70
   not f in UsedInt*Loc i implies Exec(i, s).f = s.f;
 
 theorem :: SF_MASTR:71
-  I+*Start-At( 0,SCM+FSA) c= s & (for m st m < n
-   holds IC Comput(ProgramPart(s),s,m)
-  in dom I) & not f in UsedInt*Loc I implies Comput(ProgramPart(s),s,n).f = s.f
-;
+  Initialize I c= s & I c= P &
+   (for m st m < n holds IC Comput(P,s,m) in dom I) &
+    not f in UsedInt*Loc I implies Comput(P,s,n).f = s.f;
 
 theorem :: SF_MASTR:72
   s | UsedIntLoc i = t | UsedIntLoc i & s | UsedInt*Loc i = t |
@@ -403,16 +403,19 @@ UsedInt*Loc i & IC s = IC t implies IC Exec(i, s) = IC Exec(i, t) & Exec(i, s)
   i, t) | UsedInt*Loc i;
 
 theorem :: SF_MASTR:73
-  I+*Start-At( 0,SCM+FSA) c= s & I+*Start-At( 0,SCM+FSA) c= t &
+ for P,Q being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+  st I c= P & I c= Q
+ holds
+  Initialize I c= s & Initialize I c= t &
    s | UsedIntLoc
 I = t | UsedIntLoc I & s | UsedInt*Loc I = t | UsedInt*Loc I & (for m st m < n
-  holds IC Comput(ProgramPart(s),s,m) in dom I) implies (for m st m < n holds
+  holds IC Comput(P,s,m) in dom I) implies (for m st m < n holds
 IC
-  Comput(ProgramPart(t),t,m) in dom I) & for m st m <= n holds IC Comput(
-ProgramPart(s),s,m) = IC
-  Comput(ProgramPart(t),t,m) & (for a st a in UsedIntLoc I holds Comput(
-ProgramPart(s),s,m).a =
-  Comput(ProgramPart(t),t,m).a) & for f st f in UsedInt*Loc I holds Comput(
-ProgramPart(s),s,m).f =
-  Comput(ProgramPart(t),t,m).f;
+  Comput(Q,t,m) in dom I) & for m st m <= n holds IC Comput(
+P,s,m) = IC
+  Comput(Q,t,m) & (for a st a in UsedIntLoc I holds Comput(
+P,s,m).a =
+  Comput(Q,t,m).a) & for f st f in UsedInt*Loc I holds Comput(
+P,s,m).f =
+  Comput(Q,t,m).f;
 

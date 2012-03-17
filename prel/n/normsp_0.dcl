@@ -24,7 +24,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NORMSP_0" nr="2">
@@ -33,8 +33,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="43"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NORMSP_0" nr="3">
@@ -43,7 +43,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NORMSP_0" nr="4">
@@ -52,8 +52,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="45"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NORMSP_0" nr="5">
@@ -62,17 +62,17 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="33" value="false"/>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NORMSP_0" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="32" value="false"/>
+<Adjective nr="33" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -103,8 +103,8 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="46"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 </ArgTypes>

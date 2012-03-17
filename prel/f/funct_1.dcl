@@ -466,6 +466,35 @@
 </Adjective>
 </Cluster>
 </FCluster>
+<FCluster aid="FUNCT_1" nr="17">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="15"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="11">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="45">
+<LocusVar nr="3"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="12"/>
+</Cluster>
+</FCluster>
 <CCluster aid="FUNCT_1" nr="1">
 <ArgTypes/>
 <Cluster>

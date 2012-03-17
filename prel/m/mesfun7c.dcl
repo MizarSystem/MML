@@ -21,6 +21,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_3"/>
+<ArticleID name="MEMBER_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
@@ -65,7 +66,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="344">
+<Func kind="K" nr="370">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -109,7 +110,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="359">
+<Func kind="K" nr="385">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -161,7 +162,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="369">
+<Func kind="K" nr="395">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -213,7 +214,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="370">
+<Func kind="K" nr="396">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -9,7 +9,7 @@ environ
  vocabularies NUMBERS, ALGSTR_0, STRUCT_0, SUBSET_1, BINOP_1, FUNCT_1,
       ZFMISC_1, XBOOLE_0, XREAL_0, ORDINAL1, RELAT_1, REAL_1, ARYTM_3,
       SUPINF_2, FUNCT_5, MCART_1, ARYTM_1, CARD_1, FINSEQ_1, ORDINAL4, CARD_3,
-      TARSKI, XXREAL_0, FUNCOP_1, NAT_1, VALUED_0, RLVECT_1;
+      TARSKI, XXREAL_0, FUNCOP_1, NAT_1, VALUED_0, RLVECT_1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1, REAL_1,
       FINSEQ_1, NAT_1, FUNCT_3, FUNCT_5, STRUCT_0, ALGSTR_0;
@@ -37,8 +37,9 @@ registration
   cluster non empty RLSStruct;
   existence
   proof
-    consider ZS being non empty set, O being Element of ZS, F being BinOp of
-    ZS, G being Function of [:REAL,ZS:],ZS;
+
+set ZS =the  non empty set,O =the  Element of ZS,F =the  BinOp of ZS,G =the
+Function of [:REAL,ZS:],ZS;
     take RLSStruct(#ZS,O,F,G#);
     thus the carrier of RLSStruct(#ZS,O,F,G#) is non empty;
   end;
@@ -85,8 +86,8 @@ end;
 canceled;
 
 theorem
-  for V being non empty addLoopStr, v,w being Element of V holds v + w =
-  (the addF of V).(v,w);
+  for V being non empty addMagma, v,w being Element of V holds
+  v + w = (the addF of V).(v,w);
 
 registration
   let ZS be non empty set, O be Element of ZS, F be BinOp of ZS, G be Function
@@ -96,13 +97,17 @@ registration
 end;
 
 definition
-  let IT be addLoopStr;
+  let IT be addMagma;
   attr IT is Abelian means
   :Def5:
   for v,w being Element of IT holds v + w = w + v;
   attr IT is add-associative means
   :Def6:
   for u,v,w being Element of IT holds (u + v) + w = u + (v + w);
+end;
+
+definition
+  let IT be addLoopStr;
   attr IT is right_zeroed means
 :Def7: for v being Element of IT holds v + 0.IT = v;
 end;
@@ -131,8 +136,28 @@ registration
 end;
 
 registration
-  cluster strict Abelian add-associative right_zeroed right_complementable (
-    non empty addLoopStr);
+  cluster strict Abelian add-associative non empty addMagma;
+  existence
+  proof
+    take S = Trivial-addMagma;
+    thus S is strict;
+    thus S is Abelian
+    proof
+      let x be Element of S;
+      thus thesis by STRUCT_0:def 10;
+    end;
+    thus S is add-associative
+    proof
+      let x be Element of S;
+      thus thesis by STRUCT_0:def 10;
+    end;
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster strict Abelian add-associative right_zeroed right_complementable
+    non empty addLoopStr;
   existence
   proof
     take S = Trivial-addLoopStr;
@@ -203,7 +228,7 @@ definition
 end;
 
 definition
-  let V be Abelian (non empty addLoopStr), v,w be Element of V;
+  let V be Abelian addMagma, v,w be Element of V;
   redefine func v + w;
   commutativity by Def5;
 end;
@@ -318,7 +343,7 @@ end;
 definition
   let V be addLoopStr;
   let v,w be Element of V;
-  redefine func v - w equals :Def14:
+  redefine func v - w equals
   v + (- w);
   correctness;
 end;
@@ -650,7 +675,7 @@ proof
     .= (- w) - v by Th44;
 end;
 
-theorem Th47:
+theorem
   for V being add-associative right_zeroed right_complementable (non
   empty addLoopStr), v,w being Element of V holds - (v - w) = w + (- v)
 proof
@@ -705,7 +730,7 @@ end;
 definition
   let V be non empty 1-sorted;
   let v,u be Element of V;
-  redefine func <* v,u *> -> FinSequence of the carrier of V;
+  redefine func <* v,u *> -> FinSequence of V;
   coherence
   proof
     <* v,u *> = <* v *> ^ <* u *> by FINSEQ_1:def 9;
@@ -716,7 +741,7 @@ end;
 definition
   let V be non empty 1-sorted;
   let v,u,w be Element of V;
-  redefine func <* v,u,w *> -> FinSequence of the carrier of V;
+  redefine func <* v,u,w *> -> FinSequence of V;
   coherence
   proof
     <* v,u,w *> = <* v,u *> ^ <* w *> by FINSEQ_1:60;
@@ -725,14 +750,13 @@ definition
 end;
 
 reserve V for non empty addLoopStr;
-reserve F,G,H for FinSequence of the carrier of V;
-reserve f,f9,g for Function of NAT, the carrier of V;
+reserve F for FinSequence-like PartFunc of NAT,V;
+reserve f,f9,g for Function of NAT,V;
 reserve v,u for Element of V;
 reserve j,k,n for Element of NAT;
 
 definition
-  let V;
-  let F;
+  let V; let F be FinSequence-like PartFunc of NAT,V;
   func Sum(F) -> Element of V means
   :Def15:
   ex f st it = f.(len F) & f.0 = 0.V
@@ -747,9 +771,9 @@ definition
 A1:   for F st len F = n ex u st ex f st u = f.(len F) & f.0 = 0.V &
       for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v;
       let F;
-      reconsider G = F | Seg(n) as FinSequence of the carrier of V by FINSEQ_1
-      :23;
-A2:   rng F c= the carrier of V by FINSEQ_1:def 4;
+A2:   rng F c= the carrier of V by RELAT_1:def 19;
+      then reconsider F1 = F as FinSequence of V by FINSEQ_1:def 4;
+      reconsider G = F1 | Seg(n) as FinSequence of V by FINSEQ_1:23;
       assume
 A3:   len F = n + 1;
       then dom F = Seg(n + 1) by FINSEQ_1:def 3;
@@ -863,7 +887,7 @@ A30: f9.0 = 0.V and
 A31: for j,v st j < len F & v = F.(j + 1) holds f9.(j + 1) = f9.j + v;
     defpred P[Element of NAT] means $1 <= len F implies f.$1 = f9.$1;
     now
-A32:  rng F c= the carrier of V by FINSEQ_1:def 4;
+A32:  rng F c= the carrier of V by RELAT_1:def 19;
       let k;
       assume
 A33:  k <= len F implies f.k = f9.k;
@@ -903,9 +927,11 @@ end;
 canceled 3;
 
 theorem Th55:
-  len F = len G + 1 & G = F | (dom G) & v = F.(len F) implies Sum(
-  F) = Sum(G) + v
+  for F,G being FinSequence of V holds
+  len F = len G + 1 & G = F | (dom G) & v = F.(len F) implies
+  Sum(F) = Sum(G) + v
 proof
+  let F,G be FinSequence of V;
   assume that
 A1: len F = len G + 1 and
 A2: G = F | (dom G) and
@@ -913,21 +939,21 @@ A3: v = F.(len F);
   consider g such that
 A4: Sum(G) = g.(len G) and
 A5: g.0 = 0.V and
-A6: for j,v st j < len G & v = G.(j + 1) holds g.(j + 1) = g.j + v by
-  Def15;
+A6: for j,v st j < len G & v = G.(j + 1) holds g.(j + 1) = g.j + v by Def15;
   consider f such that
 A7: Sum(F) = f.(len F) and
 A8: f.0 = 0.V and
 A9: for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v by
   Def15;
-  defpred P[Element of NAT] means for H holds len H = $1 & H = F | (Seg $1) &
+  defpred P[Element of NAT] means
+  for H being FinSequence of V holds len H = $1 & H = F | (Seg $1) &
   len H <= len G implies f.(len H) = g.(len H);
   now
     let k;
     assume
-A10: for H st len H = k & H = F | (Seg k) & len H <= len G holds f.(
-    len H) = g.(len H);
-    let H;
+A10: for H be FinSequence of V st len H = k & H = F | (Seg k) & len H <= len G
+     holds f.(len H) = g.(len H);
+    let H be FinSequence of V;
     assume that
 A11: len H = k + 1 and
 A12: H = F | (Seg (k + 1)) and
@@ -940,8 +966,8 @@ A13: len H <= len G;
     then k + 1 in dom G by FINSEQ_1:def 3;
     then
 A14: v = G.(k + 1) by A2,FUNCT_1:70;
-    reconsider p = H | (Seg k) as FinSequence of the carrier of V by FINSEQ_1:
-    23;
+    reconsider H1 = H as FinSequence of V;
+    reconsider p = H1 | (Seg k) as FinSequence of V by FINSEQ_1:23;
 A15: k <= len H by A11,NAT_1:12;
     then Seg k c= Seg(k + 1) by A11,FINSEQ_1:7;
     then
@@ -962,14 +988,17 @@ A19: f.(k + 1) = f.k + v by A9;
 A20: for k st P[k] holds P[k+1];
 A21: dom G = Seg len G by FINSEQ_1:def 3;
 A22: P[0] by A8,A5;
+   rng G c= the carrier of V by RELAT_1:def 19;
+   then
+A23: G is FinSequence of V by FINSEQ_1:def 4;
   for k holds P[k] from NAT_1:sch 1(A22,A20);
-  then f.(len G) = g.(len G) by A2,A21;
+  then f.(len G) = g.(len G) by A2,A21,A23;
   hence thesis by A1,A3,A7,A9,A4,XREAL_1:31;
 end;
 
 reserve V for RealLinearSpace;
 reserve v for VECTOR of V;
-reserve F,G,H,I for FinSequence of the carrier of V;
+reserve F,G,H,I for FinSequence of V;
 
 theorem
   len F = len G & (for k,v st k in dom F & v = G.k holds F.k = a * v)
@@ -1039,23 +1068,23 @@ end;
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-  (non empty addLoopStr), F,G being FinSequence of the carrier of V st len F =
+  (non empty addLoopStr), F,G being FinSequence of V st len F =
 len G & (for k for v being Element of V st k in dom F & v = G.k holds F.k = - v
   ) holds Sum(F) = - Sum(G)
 proof
   let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), F,G be FinSequence of the carrier of V;
-  defpred P[set] means for H,I being FinSequence of the carrier of V st len H
+  empty addLoopStr), F,G be FinSequence of V;
+  defpred P[set] means for H,I being FinSequence of V st len H
 = len I & len H = $1 & (for k for v being Element of V st k in Seg len H & v =
   I.k holds H.k = - v) holds Sum(H) = - Sum(I);
 A1: dom F = Seg len F by FINSEQ_1:def 3;
   now
     let n;
     assume
-A2: for H,I being FinSequence of the carrier of V st len H = len I &
+A2: for H,I being FinSequence of V st len H = len I &
 len H = n & for k for v being Element of V st k in Seg len H & v = I.k holds H.
     k = - v holds Sum(H) = - Sum(I);
-    let H,I be FinSequence of the carrier of V;
+    let H,I be FinSequence of V;
     assume that
 A3: len H = len I and
 A4: len H = n + 1 and
@@ -1097,7 +1126,7 @@ A15: dom q = Seg len q by FINSEQ_1:def 3;
   then
 A16: for n st P[n] holds P[n+1];
   now
-    let H,I be FinSequence of the carrier of V;
+    let H,I be FinSequence of V;
     assume that
 A17: len H = len I & len H = 0 and
     for k for v being Element of V st k in Seg len H & v = I.k holds H.k = - v;
@@ -1112,20 +1141,20 @@ end;
 
 theorem Th58:
   for V being add-associative right_zeroed (non empty addLoopStr),
-  F,G being FinSequence of the carrier of V holds Sum(F ^ G) = Sum(F) + Sum(G)
+  F,G being FinSequence of V holds Sum(F ^ G) = Sum(F) + Sum(G)
 proof
   let V be add-associative right_zeroed (non empty addLoopStr), F,G be
-  FinSequence of the carrier of V;
-  defpred P[set] means for G be FinSequence of the carrier of V st len G = $1
+  FinSequence of V;
+  defpred P[set] means for G be FinSequence of V st len G = $1
   holds Sum(F ^ G) = Sum(F) + Sum(G);
 A1: for k st P[k] holds P[k+1]
   proof
     let k;
     assume
-A2: for G being FinSequence of the carrier of V st len G = k holds Sum
+A2: for G being FinSequence of V st len G = k holds Sum
     (F ^ G) = Sum(F) + Sum(G);
-    let H be FinSequence of the carrier of V;
-    reconsider p = H | (Seg k) as FinSequence of the carrier of V by FINSEQ_1:
+    let H be FinSequence of V;
+    reconsider p = H | (Seg k) as FinSequence of V by FINSEQ_1:
     23;
 A3: rng H c= the carrier of V by FINSEQ_1:def 4;
     assume
@@ -1220,7 +1249,7 @@ A27: len(F ^ H) = len(F ^ p) + 1 by FINSEQ_1:56;
   end;
 A28: P[0]
   proof
-    let G be FinSequence of the carrier of V;
+    let G be FinSequence of V;
     assume len G = 0;
     then G = <*>(the carrier of V);
     then F ^ G = F & Sum(G) = 0.V by Lm4,FINSEQ_1:47;
@@ -1233,7 +1262,7 @@ end;
 
 reserve V for add-associative right_zeroed right_complementable (non empty
   addLoopStr);
-reserve F for FinSequence of the carrier of V;
+reserve F for FinSequence of V;
 reserve v,v1,v2,u,w for Element of V;
 reserve j,k for Element of NAT;
 
@@ -1262,21 +1291,21 @@ end;
 
 theorem
   for V being Abelian add-associative right_zeroed (non empty addLoopStr
-), F,G being FinSequence of the carrier of V st rng F = rng G & F is one-to-one
+), F,G being FinSequence of V st rng F = rng G & F is one-to-one
   & G is one-to-one holds Sum(F) = Sum(G)
 proof
   let V be Abelian add-associative right_zeroed (non empty addLoopStr), F,G be
-  FinSequence of the carrier of V;
-  defpred P[set] means for H,I being FinSequence of the carrier of V st len H
+  FinSequence of V;
+  defpred P[set] means for H,I being FinSequence of V st len H
 = $1 & rng H = rng I & H is one-to-one & I is one-to-one holds Sum(H) = Sum (I)
   ;
 A1: len F = len F;
   now
     let k;
     assume
-A2: for H,I being FinSequence of the carrier of V st len H = k & rng
+A2: for H,I being FinSequence of V st len H = k & rng
     H = rng I & H is one-to-one & I is one-to-one holds Sum(H) = Sum(I);
-    let H,I be FinSequence of the carrier of V;
+    let H,I be FinSequence of V;
     assume that
 A3: len H = k + 1 and
 A4: rng H = rng I and
@@ -1323,7 +1352,7 @@ A20:  1 <= n + y by NAT_1:12;
       xx in the carrier of V;
       hence thesis by A15,A16,A18,A19;
     end;
-    reconsider p = H | (Seg k) as FinSequence of the carrier of V by FINSEQ_1:
+    reconsider p = H | (Seg k) as FinSequence of V by FINSEQ_1:
     23;
 A21: p is one-to-one by A5,FUNCT_1:84;
     Seg k = Seg(k + 1) \ {k + 1} by FINSEQ_1:12;
@@ -1333,9 +1362,9 @@ A22: H .: (Seg k) = H .: Seg(k + 1) \ Im(H,k + 1) by A5, FUNCT_1:
 A23: 1 <= n by A11,FINSEQ_1:3;
     then consider m1 being Nat such that
 A24: 1 + m1 = n by NAT_1:10;
-    reconsider q1 = I | (Seg m1) as FinSequence of the carrier of V by
+    reconsider q1 = I | (Seg m1) as FinSequence of V by
     FINSEQ_1:23;
-    reconsider q2 as FinSequence of the carrier of V by A17,FINSEQ_1:def 4;
+    reconsider q2 as FinSequence of V by A17,FINSEQ_1:def 4;
     m1 <= n by A24,NAT_1:11;
     then
 A25: m1 <= k + 1 by A12,XXREAL_0:2;
@@ -1353,7 +1382,7 @@ A28:  j in dom q2;
 A29: m1 < n by A24,XREAL_1:31;
 A30: {v} misses rng q
     proof
-      consider y being Element of {v} /\ rng q;
+      set y =the  Element of {v} /\ rng q;
       assume not thesis;
       then
 A31:  {v} /\ rng q <> {} by XBOOLE_0:def 7;
@@ -1580,7 +1609,7 @@ A101: Sum(H) = Sum(p) + Sum<* v *> by Th58;
   then
 A102: for k st P[k] holds P[k+1];
   now
-    let H,I be FinSequence of the carrier of V;
+    let H,I be FinSequence of V;
     assume that
 A103: len H = 0 and
 A104: rng H = rng I and

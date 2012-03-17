@@ -429,7 +429,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -439,7 +439,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCTOR0" nr="5">
@@ -553,7 +553,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCTOR0" nr="8">
@@ -1246,7 +1246,7 @@
 <LocusVar nr="5"/>
 </Typ>
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FUNCTOR0" nr="2">

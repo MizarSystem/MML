@@ -8,18 +8,19 @@ environ
 
  vocabularies AMI_1, SCMFSA_2, FSM_1, CARD_1, SCMFSA6B, TURING_1, FUNCT_1,
       RELAT_1, ARYTM_3, FUNCT_4, SCMFSA6A, TARSKI, XBOOLE_0, CIRCUIT2, NUMBERS,
-      SUBSET_1, GRAPHSP, AMI_3, XXREAL_0, SF_MASTR, FUNCOP_1, NAT_1, FUNCT_7,
+      SUBSET_1, GRAPHSP, AMI_3, XXREAL_0, SF_MASTR, FUNCOP_1, FUNCT_7,
       STRUCT_0, ARYTM_1, INT_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      MSUALG_1, AOFA_I00, SCMFSA6C, ORDINAL1, SCMNORM;
+      MSUALG_1, AOFA_I00, ORDINAL1, SCMNORM, PBOOLE, SCMFSA6C;
  notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, INT_1, COMPLEX1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      FUNCOP_1, FUNCT_4, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, FUNCT_7,
+      FUNCOP_1, FUNCT_4, PBOOLE, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, FUNCT_7,
       SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B, XXREAL_0;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, INT_2, SCMFSA6A, SF_MASTR,
-      SCMFSA6B, RELSET_1, PRE_POLY, AMISTD_2, AMI_1;
+      SCMFSA6B, RELSET_1, PRE_POLY, AMISTD_2, AMI_1, PBOOLE;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       NUMBERS, XREAL_0, INT_1, AMI_1, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B,
-      ORDINAL1, RELSET_1, COMPOS_1, STRUCT_0, EXTPRO_1;
+      ORDINAL1, RELSET_1, COMPOS_1, STRUCT_0, EXTPRO_1, SCMFSA10, PBOOLE,
+      FUNCT_4;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -30,17 +31,18 @@ reserve x for set,
   a,b for Int-Location,
   f for FinSeq-Location,
   l, l1 for Element of NAT,
-  s,s1,s2 for State of SCM+FSA;
+  s,s1,s2 for State of SCM+FSA,
+  P,P1,P2 for (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
 
 theorem :: SCMFSA6C:1
   for I being keeping_0 parahalting Program of SCM+FSA, J being
-parahalting Program of SCM+FSA holds IExec(I ';' J, s).a = IExec(J,IExec(I,s)).
-  a;
+parahalting Program of SCM+FSA holds IExec(I ';' J,P,s).a
+ = IExec(J,P,IExec(I,P,s)).a;
 
 theorem :: SCMFSA6C:2
   for I being keeping_0 parahalting Program of SCM+FSA, J being
 parahalting Program of SCM+FSA
- holds IExec(I ';' J, s).f = IExec(J,IExec(I,s)).f;
+ holds IExec(I ';' J,P,s).f = IExec(J,P,IExec(I,P,s)).f;
 
 begin :: Properties of simple macro instructions
 
@@ -160,37 +162,34 @@ theorem :: SCMFSA6C:3
   being read-write Int-Location holds (Initialized s).a = s.a) & (for f holds (
   Initialized s).f = s.f) & for l holds (Initialized s).l = s.l;
 
-theorem :: SCMFSA6C:4
-  s1, s2 equal_outside NAT iff (s1 | (Int-Locations \/
-  FinSeq-Locations \/ {IC SCM+FSA})) = (s2 | (Int-Locations \/ FinSeq-Locations
-  \/ {IC SCM+FSA}));
+canceled;
 
 theorem :: SCMFSA6C:5
   DataPart s1 = DataPart s2 implies DataPart Exec (i, s1) =
   DataPart Exec (i, s2);
 
 theorem :: SCMFSA6C:6
-  for i being parahalting Instruction of SCM+FSA holds Exec(i,
-  Initialized s) = IExec(Macro i, s);
+  for i being parahalting Instruction of SCM+FSA
+   holds Exec(i,Initialized s) = IExec(Macro i,P,s);
 
 theorem :: SCMFSA6C:7
   for I being keeping_0 parahalting Program of SCM+FSA, j being
-parahalting Instruction of SCM+FSA holds IExec(I ';' j, s).a = Exec(j, IExec(I,
-  s)).a;
+parahalting Instruction of SCM+FSA holds IExec(I ';' j,P,s).a
+ = Exec(j,IExec(I,P,s)).a;
 
 theorem :: SCMFSA6C:8
   for I being keeping_0 parahalting Program of SCM+FSA, j being
-parahalting Instruction of SCM+FSA holds IExec(I ';' j, s).f = Exec(j, IExec(I,
-  s)).f;
+parahalting Instruction of SCM+FSA holds IExec(I ';' j,P,s).f
+ = Exec(j,IExec(I,P,s)).f;
 
 theorem :: SCMFSA6C:9
   for i being keeping_0 parahalting Instruction of SCM+FSA, j being
-parahalting Instruction of SCM+FSA holds IExec(i ';' j, s).a = Exec(j, Exec(i,
-  Initialized s)).a;
+parahalting Instruction of SCM+FSA holds IExec(i ';' j,P,s).a
+ = Exec(j, Exec(i,Initialized s)).a;
 
 theorem :: SCMFSA6C:10
   for i being keeping_0 parahalting Instruction of SCM+FSA, j being
-parahalting Instruction of SCM+FSA holds IExec(i ';' j, s).f = Exec(j, Exec(i,
+parahalting Instruction of SCM+FSA holds IExec(i ';' j,P,s).f = Exec(j, Exec(i,
   Initialized s)).f;
 
 begin :: An example
@@ -215,9 +214,14 @@ registration
 end;
 
 theorem :: SCMFSA6C:11
-  for a, b being read-write Int-Location holds IExec (swap(a, b), s).a =
-  s.b & IExec (swap(a, b), s).b = s.a;
+  for a, b being read-write Int-Location holds IExec(swap(a,b),P,s).a =
+  s.b & IExec(swap(a,b),P,s).b = s.a;
 
 theorem :: SCMFSA6C:12
   UsedInt*Loc swap(a, b) = {};
 
+theorem :: SCMFSA6C:13
+ s.a = (NPP s).a;
+
+theorem :: SCMFSA6C:14
+ (NPP s).f = s.f;

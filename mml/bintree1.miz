@@ -3,7 +3,7 @@
 ::
 :: Received December 30, 1993
 :: Copyright (c) 1993 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, XBOOLE_0, TREES_2, SUBSET_1, FUNCT_1, TREES_4, TREES_3,
@@ -16,7 +16,8 @@ environ
  constructors DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, FINSEQOP, DTCONSTR,
       RELSET_1, PRE_POLY;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, MEMBERED, FINSEQ_1,
-      TREES_2, TREES_3, STRUCT_0, DTCONSTR, FINSET_1, PRE_POLY, TREES_4;
+      TREES_2, TREES_3, STRUCT_0, DTCONSTR, FINSET_1, PRE_POLY, TREES_4,
+      TREES_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions DTCONSTR;
  theorems TARSKI, NAT_1, MCART_1, ZFMISC_1, ENUMSET1, MODAL_1, RELSET_1,
@@ -67,7 +68,7 @@ proof
     then not t^<*0*> in T;
     hence t in Leaves T by TREES_1:91;
   end;
-  consider x being Element of succ t;
+  set x =the  Element of succ t;
   assume t in Leaves T;
   then
 A1: not t^<*0*> in T by TREES_1:91;
@@ -83,29 +84,30 @@ A2: t^<*n*> in T;
   hence contradiction by A1,A2,TREES_1:def 5;
 end;
 
-theorem Th6:
-  elementary_tree 0 is binary
-proof
-  set T = elementary_tree 0;
-  let t be Element of T;
-  now
-    let s be FinSequence of NAT;
-    assume s in T;
-    then s = {} by TARSKI:def 1,TREES_1:56;
-    hence not t is_a_proper_prefix_of s by TARSKI:def 1,TREES_1:56;
+registration
+  cluster elementary_tree 0 -> binary;
+  coherence
+  proof
+    set T = elementary_tree 0;
+    let t be Element of T;
+    now
+      let s be FinSequence of NAT;
+      assume s in T;
+      then s = {} by TARSKI:def 1,TREES_1:56;
+      hence not t is_a_proper_prefix_of s by TARSKI:def 1,TREES_1:56;
+    end;
+    hence thesis by TREES_1:def 8;
   end;
-  hence thesis by TREES_1:def 8;
-end;
 
-theorem :: BinEx2:
-  elementary_tree 2 is binary
-proof
-  set T = elementary_tree 2;
-  let t be Element of T;
-  assume
+  cluster elementary_tree 2 -> binary;
+  coherence
+  proof
+    set T = elementary_tree 2;
+    let t be Element of T;
+    assume
 A1: not t in Leaves T;
-  per cases by ENUMSET1:def 1,MODAL_1:10;
-  suppose
+    per cases by ENUMSET1:def 1,MODAL_1:10;
+    suppose
 A2: t = {};
 A3: for x being set holds x in { t^<*n*> where n is Element of NAT : t^<*n
     *> in T} iff x in {t^<*0*>,t^<*1*>}
@@ -193,10 +195,21 @@ A10:  t^<*0*> in T;
     hence thesis by A1,TREES_1:91;
   end;
 end;
+end;
+
+theorem
+  elementary_tree 0 is binary;
+
+theorem
+  elementary_tree 2 is binary;
 
 registration
   cluster binary finite Tree;
-  existence by Th6;
+  existence
+  proof
+    take elementary_tree 0;
+    thus thesis;
+  end;
 end;
 
 definition
@@ -211,8 +224,8 @@ registration
   cluster binary finite DecoratedTree of D;
   existence
   proof
-    consider t being binary finite Tree;
-    consider T being Function of t, D;
+    set t =the  binary finite Tree;
+    set T =the  Function of t, D;
     rng T c= D;
     then reconsider T as DecoratedTree of D by RELAT_1:def 19;
     take T;
@@ -224,7 +237,7 @@ registration
   cluster binary finite DecoratedTree;
   existence
   proof
-    consider t being binary finite DecoratedTree of {{}};
+    set t =the  binary finite DecoratedTree of {{}};
     take t;
     thus thesis;
   end;
@@ -1328,7 +1341,7 @@ registration
     defpred P[DecoratedTree] means $1 is binary;
 A1: now
       let s be Terminal of G;
-      dom root-tree s is binary by Th6,TREES_4:3;
+      dom root-tree s is binary by TREES_4:3;
       hence P[root-tree s] by Def3;
     end;
 A2: for nt being NonTerminal of G, tl, tr being Element of TS(G) st nt ==>

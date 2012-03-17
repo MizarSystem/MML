@@ -52,7 +52,7 @@
 <Func kind="K" nr="84"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="155"/>
 </Cluster>
 </RCluster>

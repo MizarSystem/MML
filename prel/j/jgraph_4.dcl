@@ -68,7 +68,7 @@
 <Func kind="K" nr="333"/>
 </Func>
 </Adjective>
-<Adjective nr="51">
+<Adjective nr="52">
 <Func kind="K" nr="360">
 <LocusVar nr="1"/>
 </Func>

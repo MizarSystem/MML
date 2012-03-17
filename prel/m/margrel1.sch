@@ -42,7 +42,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <And>
@@ -92,7 +92,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <For>
@@ -100,7 +100,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Not>

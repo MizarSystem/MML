@@ -64,7 +64,7 @@
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="39" value="false"/>
+<Adjective nr="40" value="false"/>
 <Adjective nr="119"/>
 <Adjective nr="120"/>
 <Adjective nr="121"/>
@@ -75,10 +75,10 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="87"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="65"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AUTALG_1" nr="2">
@@ -176,8 +176,8 @@
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="48" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="49" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="18">
@@ -194,10 +194,10 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="87"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="65"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
 </Cluster>
 </FCluster>
 </Registrations>

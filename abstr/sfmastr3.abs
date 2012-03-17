@@ -11,12 +11,12 @@ environ
       AMISTD_2, RELAT_1, GRAPHSP, AMI_3, PARTFUN1, COMPLEX1, SCMFSA8B,
       TURING_1, SCMFSA_9, ARYTM_3, FUNCOP_1, SCMFSA8A, CARD_3, SFMASTR1,
       ARYTM_1, XXREAL_0, SCMFSA6A, TARSKI, SCMFSA9A, FINSEQ_1, GRAPH_2,
-      AOFA_I00, FUNCT_2, FINSEQ_2, SFMASTR3, NAT_1, SCMNORM;
+      AOFA_I00, FUNCT_2, FINSEQ_2, SFMASTR3, NAT_1, SCMNORM, PBOOLE;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, CARD_3,
-      INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCT_7, GRAPH_2,
-      FINSEQ_1, FINSEQ_2, COMPOS_1, EXTPRO_1, AMI_1, SCMFSA_2, SCMFSA6A,
-      SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9,
-      SFMASTR1, SCMFSA9A, XXREAL_0, NAT_1;
+      INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCT_7, PBOOLE,
+      GRAPH_2, FINSEQ_1, FINSEQ_2, COMPOS_1, EXTPRO_1, AMI_1, SCMFSA_2,
+      SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
+      SCMFSA_9, SFMASTR1, SCMFSA9A, XXREAL_0, NAT_1;
  constructors SETWISEO, REAL_1, INT_2, MESFUNC1, SCMFSA6A, SCMFSA6B, SCMFSA6C,
       SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMFSA9A, RELSET_1, PBOOLE,
       GRAPH_2, SCMFSA7B, AMI_1;
@@ -24,7 +24,7 @@ environ
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2,
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9,
       SFMASTR1, XBOOLE_0, VALUED_0, AMI_1, AFINSQ_1, FUNCOP_1, COMPOS_1,
-      EXTPRO_1;
+      EXTPRO_1, PBOOLE, FUNCT_4;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -38,16 +38,17 @@ reserve s for State of SCM+FSA,
   I, J for Program of SCM+FSA,
   Ig
   for good Program of SCM+FSA,
-  i, k for Element of NAT;
+  i, k for Element of NAT,
+  p for (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
 
 canceled 6;
 
 theorem :: SFMASTR3:7
-  I is_closed_on Initialized s & I is_halting_on Initialized s & I
-  does not destroy aa implies IExec(I,s).aa = (Initialized s).aa;
+  I is_closed_on Initialized s,p & I is_halting_on Initialized s,p & I
+  does not destroy aa implies IExec(I,p,s).aa = (Initialized s).aa;
 
 theorem :: SFMASTR3:8
-  s.intloc 0 = 1 implies DataPart IExec(Stop SCM+FSA, s) = DataPart s;
+  s.intloc 0 = 1 implies DataPart IExec(Stop SCM+FSA,p,s) = DataPart s;
 
 theorem :: SFMASTR3:9
   Stop SCM+FSA does not refer aa;
@@ -80,78 +81,102 @@ theorem :: SFMASTR3:15
 
 begin :: The for-up macro instruction
 
-definition
+definition  let p;
   let a, b, c be Int-Location, I be Program of SCM+FSA, s be State of SCM+FSA;
   canceled 5;
-  func StepForUp(a, b, c, I, s) -> Function of NAT, product the Object-Kind of
+  func StepForUp(a, b, c, I, p,s) ->
+   Function of NAT, product the Object-Kind of
   SCM+FSA equals
 :: SFMASTR3:def 6
-  StepWhile>0(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), I ';' AddTo
-(a, intloc 0) ';' SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0), s
-  +*(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), s.c-s.b+1)+*(a, s.b));
+  StepWhile>0(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I),
+     I ';' AddTo(a, intloc 0) ';'
+      SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0), p,
+    s+*(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), s.c-s.b+1)+*(a, s.b));
 end;
 
 theorem :: SFMASTR3:16
-  s.intloc 0 = 1 implies StepForUp(a, bb, cc, I, s).0.intloc 0 = 1;
+  s.intloc 0 = 1 implies StepForUp(a,bb,cc,I,p,s).0.intloc 0 = 1;
 
 theorem :: SFMASTR3:17
-  StepForUp(a, bb, cc, I, s).0.a = s.bb;
+  StepForUp(a,bb,cc,I,p,s).0.a = s.bb;
 
 theorem :: SFMASTR3:18
-  a <> bb implies StepForUp(a, bb, cc, I, s).0.bb = s.bb;
+  a <> bb implies StepForUp(a,bb,cc,I,p,s).0.bb = s.bb;
 
 theorem :: SFMASTR3:19
-  a <> cc implies StepForUp(a, bb, cc, I, s).0.cc = s.cc;
+  a <> cc implies StepForUp(a,bb,cc,I,p,s).0.cc = s.cc;
 
 theorem :: SFMASTR3:20
-  a <> dd & dd in UsedIntLoc I implies StepForUp(a, bb, cc, I, s).
+  a <> dd & dd in UsedIntLoc I implies StepForUp(a,bb,cc,I,p,s).
   0.dd = s.dd;
 
 theorem :: SFMASTR3:21
-  StepForUp(a, bb, cc, I, s).0.f = s.f;
+  StepForUp(a,bb,cc,I,p,s).0.f = s.f;
 
 theorem :: SFMASTR3:22
   s.intloc 0 = 1 implies for aux being read-write Int-Location st
-aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I) holds DataPart IExec( aux := cc
-';' SubFrom(aux, bb) ';' AddTo(aux, intloc 0) ';' (a := bb), s) = DataPart(s+*(
-  aux, s.cc-s.bb+1)+*(a, s.bb));
+aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I)
+ holds DataPart IExec( aux := cc
+';' SubFrom(aux, bb) ';' AddTo(aux, intloc 0) ';' (a := bb),p,s)
+ = DataPart(s+*(aux, s.cc-s.bb+1)+*(a, s.bb));
 
-definition
+definition let p;
   let a, b, c be Int-Location, I be Program of SCM+FSA, s be State of SCM+FSA;
-  pred ProperForUpBody a, b, c, I, s means
+  pred ProperForUpBody a, b, c, I, s, p means
 :: SFMASTR3:def 7
 
   for i being Element of NAT
-  st i < s.c-s.b+1 holds I is_closed_on StepForUp(a, b, c, I, s).i & I
-  is_halting_on StepForUp(a, b, c, I, s).i;
+  st i < s.c-s.b+1 holds
+  I is_closed_on StepForUp(a, b, c, I,p,s).i,
+   p +* while>0(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I),
+     I ';' AddTo(a, intloc 0) ';'
+      SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0)) &
+  I is_halting_on StepForUp(a, b, c, I,p,s).i,
+   p +* while>0(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I),
+     I ';' AddTo(a, intloc 0) ';'
+      SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0));
 end;
 
 theorem :: SFMASTR3:23
   for I being parahalting Program of SCM+FSA holds ProperForUpBody
-  aa, bb, cc, I, s;
+  aa, bb, cc, I, s, p;
 
 theorem :: SFMASTR3:24
-  StepForUp(a, bb, cc, Ig, s).k.intloc 0 = 1 & Ig is_closed_on
-StepForUp(a, bb, cc, Ig, s).k & Ig is_halting_on StepForUp(a, bb, cc, Ig, s).k
-  implies StepForUp(a, bb, cc, Ig, s).(k+1).intloc 0 = 1;
+  StepForUp(a,bb,cc,Ig,p,s).k.intloc 0 = 1 &
+  Ig is_closed_on StepForUp(a,bb,cc,Ig,p,s).k,
+   p +* while>0(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig),
+     Ig ';' AddTo(a, intloc 0) ';'
+      SubFrom(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig), intloc 0)) &
+  Ig is_halting_on StepForUp(a,bb,cc,Ig,p,s).k,
+   p +* while>0(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig),
+     Ig ';' AddTo(a, intloc 0) ';'
+      SubFrom(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig), intloc 0))
+  implies StepForUp(a,bb,cc,Ig,p,s).(k+1).intloc 0 = 1;
 
 theorem :: SFMASTR3:25
-  s.intloc 0 = 1 & ProperForUpBody a, bb, cc, Ig, s implies for k
-  st k <= s.cc-s.bb+1 holds StepForUp(a, bb, cc, Ig, s).k.intloc 0 = 1 & (Ig
-does not destroy a implies StepForUp(a, bb, cc, Ig, s).k.a = k+s.bb & StepForUp
-(a, bb, cc, Ig, s).k.a <= s.cc+1) & StepForUp(a, bb, cc, Ig, s).k.(1-stRWNotIn
+  s.intloc 0 = 1 & ProperForUpBody a,bb,cc,Ig,s,p implies for k
+  st k <= s.cc-s.bb+1 holds StepForUp(a,bb,cc,Ig,p,s).k.intloc 0 = 1 & (Ig
+does not destroy a implies StepForUp(a,bb,cc,Ig,p,s).k.a = k+s.bb &
+ StepForUp(a, bb, cc, Ig,p, s).k.a <= s.cc+1) &
+ StepForUp(a,bb,cc,Ig,p,s).k.(1-stRWNotIn
   ({a, bb, cc} \/ UsedIntLoc Ig)) + k = s.cc-s.bb+1;
 
 theorem :: SFMASTR3:26
-  s.intloc 0 = 1 & ProperForUpBody a, bb, cc, Ig, s implies for k
-holds StepForUp(a, bb, cc, Ig, s).k.(1-stRWNotIn({a, bb, cc} \/ UsedIntLoc Ig))
+  s.intloc 0 = 1 & ProperForUpBody a,bb,cc,Ig,s,p implies for k
+holds StepForUp(a,bb,cc,Ig,p,s).k.(1-stRWNotIn({a, bb, cc} \/ UsedIntLoc Ig))
   > 0 iff k < s.cc-s.bb+1;
 
 theorem :: SFMASTR3:27
-  s.intloc 0 = 1 & ProperForUpBody a, bb, cc, Ig, s & k < s.cc-s.
-bb+1 implies StepForUp(a, bb, cc, Ig, s).(k+1) | (({a, bb, cc} \/ UsedIntLoc Ig
-) \/ FinSeq-Locations) = IExec(Ig ';' AddTo(a, intloc 0), StepForUp(a, bb, cc,
-  Ig, s).k) | (({a, bb, cc} \/ UsedIntLoc Ig) \/ FinSeq-Locations);
+  s.intloc 0 = 1 & ProperForUpBody a,bb,cc,Ig,s,p & k < s.cc-s.
+bb+1 implies
+  StepForUp(a,bb,cc,Ig,p,s).(k+1) |
+    ({a, bb, cc} \/ UsedIntLoc Ig \/ FinSeq-Locations)
+ = IExec(Ig ';' AddTo(a, intloc 0),
+   p +* while>0(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig),
+     Ig ';' AddTo(a, intloc 0) ';'
+      SubFrom(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig), intloc 0)),
+   StepForUp(a, bb, cc, Ig, p, s).k) |
+     ({a, bb, cc} \/ UsedIntLoc Ig \/ FinSeq-Locations);
 
 definition
   let a, b, c be Int-Location, I be Program of SCM+FSA;
@@ -179,18 +204,21 @@ theorem :: SFMASTR3:29
 
 theorem :: SFMASTR3:30
   s.intloc 0 = 1 & s.bb > s.cc implies (for x st x <> a & x in {bb
-  , cc} \/ UsedIntLoc I holds IExec(for-up(a, bb, cc, I), s).x = s.x) & for f
-  holds IExec(for-up(a, bb, cc, I), s).f = s.f;
+  , cc} \/ UsedIntLoc I holds IExec(for-up(a, bb, cc, I),p,s).x = s.x) &
+  for f
+  holds IExec(for-up(a, bb, cc, I),p,s).f = s.f;
 
 theorem :: SFMASTR3:31
   s.intloc 0 = 1 & k = s.cc-s.bb+1 & (ProperForUpBody a, bb, cc,
-Ig, s or Ig is parahalting) implies DataPart IExec(for-up(a, bb, cc, Ig), s) =
-  DataPart StepForUp(a, bb, cc, Ig, s).k;
+Ig, s,p or Ig is parahalting)
+ implies DataPart IExec(for-up(a, bb, cc, Ig),p, s) =
+  DataPart StepForUp(a,bb,cc,Ig,p,s).k;
 
 theorem :: SFMASTR3:32
-  s.intloc 0 = 1 & (ProperForUpBody a, bb, cc, Ig, s or Ig is
-  parahalting) implies for-up(a, bb, cc, Ig) is_closed_on s & for-up(a, bb, cc,
-  Ig) is_halting_on s;
+  s.intloc 0 = 1 & (ProperForUpBody a,bb,cc,Ig,s,p or Ig is
+  parahalting) implies
+   for-up(a, bb, cc, Ig) is_closed_on s,p &
+   for-up(a, bb, cc, Ig) is_halting_on s,p;
 
 begin :: Finding minimum in a section of an array
 
@@ -222,18 +250,19 @@ theorem :: SFMASTR3:34
   {aa, bb, c} c= UsedIntLoc FinSeqMin(f, aa, bb, c);
 
 theorem :: SFMASTR3:35
-  s.intloc 0 = 1 implies FinSeqMin(f, aa, bb, c) is_closed_on s &
-  FinSeqMin(f, aa, bb, c) is_halting_on s;
+  s.intloc 0 = 1 implies FinSeqMin(f, aa, bb, c) is_closed_on s,p &
+  FinSeqMin(f, aa, bb, c) is_halting_on s,p;
 
 theorem :: SFMASTR3:36
-  aa <> c & bb <> c & s.intloc 0 = 1 implies IExec(FinSeqMin(f, aa
-  , bb, c), s).f = s.f & IExec(FinSeqMin(f, aa, bb, c), s).aa = s.aa & IExec(
-  FinSeqMin(f, aa, bb, c), s).bb = s.bb;
+  aa <> c & bb <> c & s.intloc 0 = 1 implies
+   IExec(FinSeqMin(f, aa, bb, c),p, s).f = s.f &
+   IExec(FinSeqMin(f, aa, bb, c),p, s).aa = s.aa &
+   IExec(FinSeqMin(f, aa, bb, c),p, s).bb = s.bb;
 
 theorem :: SFMASTR3:37
   1 <= s.aa & s.aa <= s.bb & s.bb <= len (s.f) & aa <> c & bb <> c
-& s.intloc 0 = 1 implies IExec(FinSeqMin(f, aa, bb, c), s).c = min_at(s.f, abs(
-  s.aa), abs(s.bb));
+& s.intloc 0 = 1 implies IExec(FinSeqMin(f, aa, bb, c),p,s).c
+ = min_at(s.f, abs(s.aa), abs(s.bb));
 
 begin :: A swap macro instruction
 
@@ -259,13 +288,14 @@ theorem :: SFMASTR3:38
 
 theorem :: SFMASTR3:39
   1 <= s.aa & s.aa <= len (s.f) & 1 <= s.bb & s.bb <= len (s.f) &
-s.intloc 0 = 1 implies IExec(swap(f, aa, bb), s).f = s.f+*(s.aa, s.f.(s.bb))+*(
+s.intloc 0 = 1
+ implies IExec(swap(f,aa,bb),p,s).f = s.f+*(s.aa, s.f.(s.bb))+*(
   s.bb, s.f.(s.aa));
 
 theorem :: SFMASTR3:40
   1 <= s.aa & s.aa <= len (s.f) & 1 <= s.bb & s.bb <= len (s.f) & s.
-  intloc 0 = 1 implies IExec(swap(f, aa, bb), s).f.(s.aa) = s.f.(s.bb) & IExec(
-  swap(f, aa, bb), s).f.(s.bb) = s.f.(s.aa);
+  intloc 0 = 1 implies IExec(swap(f,aa,bb),p,s).f.(s.aa) = s.f.(s.bb) &
+  IExec(swap(f,aa,bb),p,s).f.(s.bb) = s.f.(s.aa);
 
 theorem :: SFMASTR3:41
   {aa, bb} c= UsedIntLoc swap(f, aa, bb);
@@ -289,8 +319,8 @@ definition
 end;
 
 theorem :: SFMASTR3:43
-  for S being State of SCM+FSA st S = IExec(Selection-sort f, s) holds S
-.f is_non_decreasing_on 1, len (S.f) & ex p being Permutation of dom(s.f) st S.
-  f = (s.f) * p;
+  for S being State of SCM+FSA st S = IExec(Selection-sort f,p,s)
+   holds S.f is_non_decreasing_on 1, len (S.f) &
+   ex p being Permutation of dom(s.f) st S.f = (s.f) * p;
 
 

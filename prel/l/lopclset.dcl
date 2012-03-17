@@ -28,9 +28,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="44" value="false"/>
-<Adjective nr="65"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="45" value="false"/>
 <Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
@@ -44,6 +43,7 @@
 <Adjective nr="76"/>
 <Adjective nr="77"/>
 <Adjective nr="78"/>
+<Adjective nr="79"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LOPCLSET" nr="2">
@@ -69,8 +69,8 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="51"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="52"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -85,8 +85,8 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="51"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="52"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -94,19 +94,19 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="71"/>
-<Adjective nr="78"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="72"/>
+<Adjective nr="79"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LOPCLSET" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="44" value="false"/>
-<Adjective nr="71"/>
-<Adjective nr="78"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="45" value="false"/>
+<Adjective nr="72"/>
+<Adjective nr="79"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -121,10 +121,10 @@
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="44" value="false"/>
-<Adjective nr="71"/>
-<Adjective nr="78"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="45" value="false"/>
+<Adjective nr="72"/>
+<Adjective nr="79"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -139,10 +139,10 @@
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="44" value="false"/>
-<Adjective nr="71"/>
-<Adjective nr="78"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="45" value="false"/>
+<Adjective nr="72"/>
+<Adjective nr="79"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -150,19 +150,19 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="50"/>
+<Adjective nr="40" value="false"/>
 <Adjective nr="51"/>
+<Adjective nr="52"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LOPCLSET" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="44" value="false"/>
-<Adjective nr="71"/>
-<Adjective nr="78"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="45" value="false"/>
+<Adjective nr="72"/>
+<Adjective nr="79"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -179,10 +179,10 @@
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="44" value="false"/>
-<Adjective nr="71"/>
-<Adjective nr="78"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="45" value="false"/>
+<Adjective nr="72"/>
+<Adjective nr="79"/>
 </Cluster>
 </Typ>
 </ArgTypes>

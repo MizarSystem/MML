@@ -73,8 +73,8 @@
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="49" value="false"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="50" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">
@@ -91,15 +91,15 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="53"/>
-<Adjective nr="65"/>
+<Adjective nr="54"/>
+<Adjective nr="66"/>
 </Cluster>
 </FCluster>
 <CCluster aid="MSUALG_5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="41" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">

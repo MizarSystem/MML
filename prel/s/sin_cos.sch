@@ -20,9 +20,10 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="81"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="25"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <For>

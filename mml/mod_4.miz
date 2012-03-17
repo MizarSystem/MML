@@ -3,7 +3,7 @@
 ::
 :: Received June 22, 1992
 :: Copyright (c) 1992 Association of Mizar Users
- 
+
 environ
 
  vocabularies XBOOLE_0, FUNCT_1, ZFMISC_1, RELAT_1, SUBSET_1, ALGSTR_0,
@@ -16,14 +16,25 @@ environ
  constructors PARTFUN1, DOMAIN_1, VECTSP_2, GRCAT_1, GROUP_6, RINGCAT1,
       FUNCOP_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, VECTSP_2,
-      ALGSTR_0;
+      ALGSTR_0, GRCAT_1, FUNCT_2, RINGCAT1;
  requirements SUBSET, BOOLE;
  definitions RLVECT_1, STRUCT_0, GROUP_1, GROUP_6, GRCAT_1, RINGCAT1, VECTSP_1,
       ALGSTR_0, FUNCT_2;
  theorems FUNCT_1, FUNCT_2, RINGCAT1, VECTSP_1, VECTSP_2, FUNCT_4, RLVECT_1,
       RELAT_1, GROUP_1, FUNCOP_1, GRCAT_1, GROUP_6, ALGSTR_0, STRUCT_0;
 
-begin :: Funkcje przeciwne
+begin :: Opposite Functions
+
+registration let G be non empty addMagma;
+  cluster id G -> bijective;
+  coherence
+  proof
+    set f = id G;
+    rng f = the carrier of G by RELAT_1:71; then
+    f is one-to-one onto by FUNCT_1:52,FUNCT_2:def 3;
+    hence thesis;
+  end;
+end;
 
 reserve A,B,C for non empty set,
   f for Function of [:A,B:],C;
@@ -44,20 +55,18 @@ proof
   hence thesis by FUNCT_4:44;
 end;
 
-begin :: Pierscienie przeciwne
+begin :: Opposite Rings
 
 reserve K for non empty doubleLoopStr;
 
-definition
-  let K;
+definition let K;
   func opp K -> strict doubleLoopStr equals
-  doubleLoopStr (# the carrier of K,
-    the addF of K, ~(the multF of K), 1.K, 0.K #);
+  doubleLoopStr
+    (# the carrier of K, the addF of K, ~(the multF of K), 1.K, 0.K #);
   correctness;
 end;
 
-registration
-  let K;
+registration let K;
   cluster opp(K) -> non empty;
   coherence;
 end;
@@ -250,12 +259,6 @@ registration
 end;
 
 registration
-  let K be well-unital (non empty doubleLoopStr);
-  cluster opp K -> well-unital;
-  coherence;
-end;
-
-registration
   let K be distributive (non empty doubleLoopStr);
   cluster opp K -> distributive;
   coherence
@@ -274,21 +277,7 @@ end;
 theorem
   for K being Ring holds opp(K) is strict Ring;
 
-registration
-  let K be Ring;
-  cluster opp(K) -> Abelian add-associative right_zeroed right_complementable
-    unital distributive;
-  coherence;
-end;
-
-theorem
-  for K being Ring holds opp(K) is Ring;
-
-registration
-  let K be Ring;
-  cluster opp(K) -> associative;
-  coherence;
-end;
+canceled;
 
 theorem Th7:
   for K being Skew-Field holds opp(K) is Skew-Field
@@ -339,18 +328,16 @@ proof
   hence thesis by GROUP_1:def 16;
 end;
 
-registration
-  let K be Field;
-  cluster opp(K) -> strict almost_left_invertible;
+registration let K be Field;
+  cluster opp(K) -> almost_left_invertible;
   coherence;
 end;
 
-begin :: Moduly przeciwne
+begin :: Opposite Modules
 
 reserve V for non empty VectSpStr over K;
 
-definition
-  let K,V;
+definition let K,V;
   func opp(V) -> strict RightModStr over opp(K) means
   :Def2:
   for o being
@@ -380,8 +367,7 @@ A2: for o being Function of [:the carrier of V, the carrier of opp(K)
   end;
 end;
 
-registration
-  let K,V;
+registration let K,V;
   cluster opp(V) -> non empty;
   coherence
   proof
@@ -429,10 +415,8 @@ end;
 
 reserve W for non empty RightModStr over K;
 
-definition
-  let K,W;
-  func opp(W) -> strict VectSpStr over opp(K) means
-  :Def4:
+definition let K,W;
+  func opp(W) -> strict VectSpStr over opp(K) means :Def4:
   for o being
 Function of [:the carrier of opp(K), the carrier of W:], the carrier of W st o
 = ~(the rmult of W) holds it = VectSpStr (# the carrier of W, the addF of W, 0.
@@ -460,8 +444,7 @@ A2: for o being Function of [:the carrier of opp(K), the carrier of W
   end;
 end;
 
-registration
-  let K,W;
+registration let K,W;
   cluster opp(W) -> non empty;
   coherence
   proof
@@ -486,8 +469,7 @@ A1: opp(W) = VectSpStr (# the carrier of W, the addF of W, 0.W, p #) by Def4;
   thus thesis by A1;
 end;
 
-definition
-  let K,W;
+definition let K,W;
   let o be Function of [:the carrier of W, the carrier of K:], the carrier of
   W;
   func opp(o) -> Function of [:the carrier of opp(K), the carrier of opp(W):],
@@ -681,16 +663,15 @@ A7: a*p=v*x by Th17;
   hence thesis by A3,VECTSP_2:def 23;
 end;
 
-registration
-  let K be Ring, V be LeftMod of K;
+registration let K be Ring, V be LeftMod of K;
   cluster opp(V) -> Abelian add-associative right_zeroed right_complementable
     RightMod-like;
   coherence by Th25;
 end;
 
 theorem Th26:
-  for K being Ring, W being RightMod of K holds opp W is strict
-  LeftMod of opp K
+  for K being Ring, W being RightMod of K holds
+    opp W is strict LeftMod of opp K
 proof
   let K be Ring, W be RightMod of K;
   set R=opp(K);
@@ -760,21 +741,19 @@ registration
   coherence by Th26;
 end;
 
-begin :: Morfizmy pierscieni
+begin :: Ring Morphisms
 
 definition
   let K,L be non empty multMagma;
   let IT be Function of K,L;
-  attr IT is antimultiplicative means
-  :Def6:
+  attr IT is antimultiplicative means  :Def6:
   for x,y being Scalar of K holds IT.(x*y) = IT.y*IT.x;
 end;
 
 definition
   let K,L be non empty doubleLoopStr;
   let IT be Function of K,L;
-  attr IT is antilinear means
-  :Def7:
+  attr IT is antilinear means  :Def7:
   IT is additive antimultiplicative unity-preserving;
 end;
 
@@ -791,34 +770,28 @@ end;
 definition
   let K,L be non empty doubleLoopStr;
   let IT be Function of K,L;
-  attr IT is monomorphism means
-  :Def8:
-  IT is linear & IT is one-to-one;
-  attr IT is antimonomorphism means
-  :Def9:
-  IT is antilinear & IT is one-to-one;
+  attr IT is monomorphism means  :Def8:
+  IT is linear one-to-one;
+  attr IT is antimonomorphism means  :Def9:
+  IT is antilinear one-to-one;
 end;
 
 definition
   let K,L be non empty doubleLoopStr;
   let IT be Function of K,L;
-  attr IT is epimorphism means
-  :Def10:
-  IT is linear & rng IT = the carrier of L;
-  attr IT is antiepimorphism means
-  :Def11:
-  IT is antilinear & rng IT = the carrier of L;
+  attr IT is epimorphism means  :Def10:
+  IT is linear onto;
+  attr IT is antiepimorphism means  :Def11:
+  IT is antilinear onto;
 end;
 
 definition
   let K,L be non empty doubleLoopStr;
   let IT be Function of K,L;
-  attr IT is isomorphism means
-  :Def12:
-  IT is monomorphism & rng IT = the carrier of L;
-  attr IT is antiisomorphism means
-  :Def13:
-  IT is antimonomorphism & rng IT = the carrier of L;
+  attr IT is isomorphism means  :Def12:
+  IT is monomorphism onto;
+  attr IT is antiisomorphism means  :Def13:
+  IT is antimonomorphism onto;
 end;
 
 reserve J for Function of K,K;
@@ -826,99 +799,75 @@ reserve J for Function of K,K;
 definition
   let K be non empty doubleLoopStr;
   let IT be Function of K,K;
-  attr IT is endomorphism means
-  :Def14:
+  attr IT is endomorphism means  :Def14:
   IT is linear;
-  attr IT is antiendomorphism means
-  :Def15:
+  attr IT is antiendomorphism means  :Def15:
   IT is antilinear;
-  attr IT is automorphism means
-  :Def16:
-  IT is isomorphism;
-  attr IT is antiautomorphism means
-  :Def17:
-  IT is antiisomorphism;
+  canceled 2;
 end;
 
 theorem
-  J is automorphism iff (for x,y being Scalar of K holds J.(x+y) = J.x+J
-  .y) & (for x,y being Scalar of K holds J.(x*y) = J.x*J.y) & J.(1_K) = 1_K & J
-  is one-to-one & rng J = the carrier of K
+  J is isomorphism iff J is additive &
+  (for x,y being Scalar of K holds J.(x*y) = J.x*J.y) & J.(1_K) = 1_K & J
+  is one-to-one onto
 proof
 A1: now
-    assume J is automorphism;
-    then
-A2: J is isomorphism by Def16;
-    then
+    assume A2: J is isomorphism; then
 A3: J is monomorphism by Def12;
     then J is linear by Def8;
-    then J is additive multiplicative unity-preserving by RINGCAT1:def 2;
-    hence for x,y being Scalar of K holds J.(x+y) = J.x+J.y & for x,y being
-    Scalar of K holds J.(x*y) = J.x*J.y & J.(1_K) = 1_K by GRCAT_1:def 13
-,GROUP_1:def 17,GROUP_6:def 7;
+    hence J is additive & for x,y being
+    Scalar of K holds J.(x*y) = J.x*J.y & J.(1_K) = 1_K by
+      GROUP_1:def 17,GROUP_6:def 7;
     thus J is one-to-one by A3,Def8;
-    thus rng J = the carrier of K by A2,Def12;
+    thus J is onto by A2,Def12;
   end;
   now
     assume that
-A4: ( ( for x,y being Scalar of K holds J.(x+y) = J.x+J.y)& for x,y
+A4: ( J is additive & for x,y
     being Scalar of K holds J.(x*y) = J.x*J.y )& J.(1_K) = 1_K and
 A5: J is one-to-one and
-A6: rng J = the carrier of K;
-    J is additive multiplicative unity-preserving by A4,GRCAT_1:def 13
-,GROUP_1:def 17,GROUP_6:def 7;
-    then J is linear by RINGCAT1:def 2;
-    then J is monomorphism by A5,Def8;
-    then J is isomorphism by A6,Def12;
-    hence J is automorphism by Def16;
+A6: J is onto;
+    J is multiplicative unity-preserving by A4,GROUP_1:def 17,GROUP_6:def 7;
+    then J is monomorphism by A5,Def8,A4;
+    hence J is isomorphism by A6,Def12;
   end;
   hence thesis by A1;
 end;
 
 theorem Th28:
-  J is antiautomorphism iff (for x,y being Scalar of K holds J.(x+
-y) = J.x+J.y) & (for x,y being Scalar of K holds J.(x*y) = J.y*J.x) & J.(1_K) =
-  1_K & J is one-to-one & rng J = the carrier of K
+  J is antiisomorphism iff J is additive
+  & (for x,y being Scalar of K holds J.(x*y) = J.y*J.x) & J.(1_K) =
+  1_K & J is one-to-one & J is onto
 proof
 A1: now
-    assume J is antiautomorphism;
-    then
-A2: J is antiisomorphism by Def17;
-    then
+    assume A2: J is antiisomorphism; then
 A3: J is antimonomorphism by Def13;
     then J is antilinear by Def9;
-    hence for x,y being Scalar of K holds J.(x+y) = J.x+J.y & for x,y being
-    Scalar of K holds J.(x*y) = J.y*J.x & J.(1_K) = 1_K by Def6,GRCAT_1:def 13
-,GROUP_1:def 17;
+    hence J is additive &
+     for x,y being
+    Scalar of K holds J.(x*y) = J.y*J.x & J.(1_K) = 1_K by Def6
+     ,GROUP_1:def 17;
     thus J is one-to-one by A3,Def9;
-    thus rng J = the carrier of K by A2,Def13;
+    thus J is onto by A2,Def13;
   end;
   now
     assume that
-A4: ( ( for x,y being Scalar of K holds J.(x+y) = J.x+J.y)& for x,y
+A4: ( J is additive & for x,y
     being Scalar of K holds J.(x*y) = J.y*J.x )& J.(1_K) = 1_K and
 A5: J is one-to-one and
-A6: rng J = the carrier of K;
-    J is additive antimultiplicative unity-preserving by A4,Def6,GRCAT_1:def 13
-,GROUP_1:def 17;
+A6: J is onto;
+    J is additive antimultiplicative unity-preserving
+      by A4,Def6,GROUP_1:def 17;
     then J is antimonomorphism by A5,Def9;
-    then J is antiisomorphism by A6,Def13;
-    hence J is antiautomorphism by Def17;
+    hence J is antiisomorphism by A6,Def13;
   end;
   hence thesis by A1;
 end;
 
-Lm6: (for x,y being Scalar of K holds (id K).(x+y) = (id K).x+(id K).y) & (for
-x,y being Scalar of K holds (id K).(x*y) = (id K).x*(id K).y) & (id K).(1_K) =
-1_K & id K is one-to-one & rng (id K) = the carrier of K
+Lm6: (for x,y being Scalar of K holds (id K).(x*y) = (id K).x*(id K).y) &
+(id K).(1_K) = 1_K
 proof
   set J = id K;
-  thus for x,y being Scalar of K holds J.(x+y) = J.x+J.y
-  proof
-    let x,y be Scalar of K;
-    J.(x+y) = x+y & J.x = x by FUNCT_1:35;
-    hence thesis by FUNCT_1:35;
-  end;
   thus for x,y being Scalar of K holds J.(x*y) = J.x*J.y
   proof
     let x,y be Scalar of K;
@@ -926,38 +875,29 @@ proof
     hence thesis by FUNCT_1:35;
   end;
   thus (id K).(1_K) = 1_K by FUNCT_1:35;
-  thus J is one-to-one by FUNCT_1:52;
-  thus thesis by RELAT_1:71;
 end;
 
-theorem
-  id K is automorphism
+registration let K;
+  cluster id K -> isomorphism;
+  coherence
 proof
   set J = id K;
-A1: J.(1_K) = 1_K by Lm6;
-  ( for x,y being Scalar of K holds J.(x+y) = J.x+J.y)& for x,y being
-  Scalar of K holds J.(x*y) = J.x*J.y by Lm6;
-  then J is additive multiplicative unity-preserving by A1,GRCAT_1:def 13
-,GROUP_1:def 17,GROUP_6:def 7;
-  then
-A2: J is linear by RINGCAT1:def 2;
-A3: rng J = the carrier of K by Lm6;
-  J is one-to-one by Lm6;
-  then J is monomorphism by A2,Def8;
-  then J is isomorphism by A3,Def12;
-  hence thesis by Def16;
+  J is monomorphism by Def8;
+  hence thesis by Def12;
 end;
+end;
+
+canceled;
 
 reserve K,L for Ring;
 reserve J for Function of K,L;
 reserve x,y for Scalar of K;
 
-Lm7: J is linear implies J.(0.K) = 0.L
+Lm7: J is additive implies J.(0.K) = 0.L
 proof
   set a = 0.K;
-  assume J is linear;
-  then
-A1: J is additive by RINGCAT1:def 2;
+  assume
+A1: J is additive;
   a+a = a by RLVECT_1:10;
   then J.a+J.a = J.a by A1,GRCAT_1:def 13
     .= J.a+(0.L) by RLVECT_1:10;
@@ -971,7 +911,6 @@ A1: x+-x = a by RLVECT_1:16;
 A2: y+-y = b by RLVECT_1:16;
   assume
 A3: J is linear;
-  then J is additive by RINGCAT1:def 2;
   then y+J.(-x) = J.a by A1,GRCAT_1:def 13
     .= b by A3,Lm7;
   hence thesis by A2,RLVECT_1:21;
@@ -981,7 +920,6 @@ Lm9: J is linear implies J.(x-y) = J.x-J.y
 proof
   assume
 A1: J is linear;
-  then J is additive by RINGCAT1:def 2;
   hence J.(x-y) = J.x+J.(-y) by GRCAT_1:def 13
     .= J.x-J.y by A1,Lm8;
 end;
@@ -1025,7 +963,7 @@ theorem
   J.y by Lm10,Lm11,Lm12;
 
 theorem
-  for K being Ring holds id K is antiautomorphism iff K is comRing
+  for K being Ring holds id K is antiisomorphism iff K is comRing
 proof
   let K be Ring;
   set J = id K;
@@ -1039,19 +977,18 @@ A4:   J.y = y by FUNCT_1:35;
       J.(x*y) = x*y & J.x = x by FUNCT_1:35;
       hence thesis by A2,A4,Lm5;
     end;
-A5: J is one-to-one & rng J = the carrier of K by Lm6;
-    ( for x,y being Scalar of K holds J.(x+y) = J.x+J.y)& J.(1_K) = 1_K by Lm6;
-    hence J is antiautomorphism by A3,A5,Th28;
+    J.(1_K) = 1_K by Lm6;
+    hence J is antiisomorphism by A3,Th28;
   end;
   now
     assume
-A6: J is antiautomorphism;
+A5: J is antiisomorphism;
     for x,y being Element of K holds x*y = y*x
     proof
       let x,y be Element of K;
-A7:   J.y = y by FUNCT_1:35;
+A6:   J.y = y by FUNCT_1:35;
       J.(x*y) = x*y & J.x = x by FUNCT_1:35;
-      hence thesis by A6,A7,Th28;
+      hence thesis by A5,A6,Th28;
     end;
     hence K is comRing by GROUP_1:def 16;
   end;
@@ -1059,7 +996,7 @@ A7:   J.y = y by FUNCT_1:35;
 end;
 
 theorem
-  for K being Skew-Field holds id K is antiautomorphism iff K is Field
+  for K being Skew-Field holds id K is antiisomorphism iff K is Field
 proof
   let K be Skew-Field;
   set J = id K;
@@ -1073,26 +1010,25 @@ A4:   J.y = y by FUNCT_1:35;
       J.(x*y) = x*y & J.x = x by FUNCT_1:35;
       hence thesis by A2,A4,GROUP_1:def 16;
     end;
-A5: J is one-to-one & rng J = the carrier of K by Lm6;
-    ( for x,y being Scalar of K holds J.(x+y) = J.x+J.y)& J.(1_K) = 1_K by Lm6;
-    hence J is antiautomorphism by A3,A5,Th28;
+    J.(1_K) = 1_K by Lm6;
+    hence J is antiisomorphism by A3,Th28;
   end;
   now
     assume
-A6: J is antiautomorphism;
+A5: J is antiisomorphism;
     for x,y being Scalar of K holds x*y = y*x
     proof
       let x,y be Scalar of K;
-A7:   J.y = y by FUNCT_1:35;
+A6:   J.y = y by FUNCT_1:35;
       J.(x*y) = x*y & J.x = x by FUNCT_1:35;
-      hence thesis by A6,A7,Th28;
+      hence thesis by A5,A6,Th28;
     end;
     hence K is Field by GROUP_1:def 16;
   end;
   hence thesis by A1;
 end;
 
-begin :: Morfizmy przeciwne do morfizmow pierscieni
+begin :: Opposite Morphisms
 
 definition
   let K,L be non empty doubleLoopStr, J be Function of K,L;
@@ -1106,7 +1042,7 @@ reserve K,L for add-associative right_zeroed right_complementable (non empty
 reserve J for Function of K,L;
 
 theorem
-  opp(opp(J)) = J;
+  opp opp J = J;
 
 reserve K for add-associative right_zeroed right_complementable (non empty
   doubleLoopStr);
@@ -1114,20 +1050,23 @@ reserve L for add-associative right_zeroed right_complementable well-unital (
   non empty doubleLoopStr);
 reserve J for Function of K,L;
 
+Lm13:
+  J is linear implies opp J is additive
+proof
+  set J9 = opp J;
+  assume A1: J is linear;
+  let x,y be Scalar of K;
+  thus J9.(x+y) = J.x+J.y by A1,GRCAT_1:def 13
+      .= J9.x+J9.y;
+end;
+
 theorem Th35:
   J is linear iff opp(J) is antilinear
 proof
   set J9 = opp(J), L9 = opp(L);
 A1: now
-    assume J is linear;
-    then
-A2: J is additive multiplicative unity-preserving by RINGCAT1:def 2;
-A3: for x,y being Scalar of K holds J9.(x+y) = J9.x+J9.y
-    proof
-      let x,y be Scalar of K;
-      thus J9.(x+y) = J.x+J.y by A2,GRCAT_1:def 13
-        .= J9.x+J9.y;
-    end;
+    assume A2: J is linear; then
+A3: J is additive multiplicative unity-preserving;
 A4: for x,y being Scalar of K holds J9.(x*y) = J9.y*J9.x
     proof
       let x,y be Scalar of K;
@@ -1136,8 +1075,8 @@ A4: for x,y being Scalar of K holds J9.(x*y) = J9.y*J9.x
     end;
     J9.(1_K) = 1_L by A2,GROUP_1:def 17
       .= 1_L9;
-    then J9 is additive antimultiplicative unity-preserving by A3,A4,Def6,
-GRCAT_1:def 13,GROUP_1:def 17;
+    then J9 is additive antimultiplicative unity-preserving by Lm13,A4,Def6,
+       GROUP_1:def 17,A2;
     hence J9 is antilinear;
   end;
   now
@@ -1159,7 +1098,7 @@ A7: for x,y being Scalar of K holds J.(x*y) = J.x*J.y
       .= 1_L;
     then J is additive multiplicative unity-preserving by A6,A7,GRCAT_1:def 13
 ,GROUP_1:def 17,GROUP_6:def 7;
-    hence J is linear by RINGCAT1:def 2;
+    hence J is linear;
   end;
   hence thesis by A1;
 end;
@@ -1186,7 +1125,7 @@ A3: J9 is multiplicative
     J9.(1_K) = 1_L by A1,GROUP_1:def 17
       .= 1_L9;
     then J9 is unity-preserving by GROUP_1:def 17;
-    hence J9 is linear by A2,A3,RINGCAT1:def 2;
+    hence J9 is linear by A2,A3;
   end;
   assume
 A4: J9 is additive multiplicative unity-preserving;
@@ -1226,7 +1165,7 @@ theorem
   J is epimorphism iff opp(J) is antiepimorphism
 proof
   set J9 = opp(J), L9 = opp(L);
-A1: rng J = the carrier of L iff rng J9 = the carrier of L9;
+A1: J is onto iff J9 is onto;
   J is linear iff J9 is antilinear by Th35;
   hence thesis by A1,Def10,Def11;
 end;
@@ -1235,7 +1174,7 @@ theorem
   J is antiepimorphism iff opp(J) is epimorphism
 proof
   set J9 = opp(J), L9 = opp(L);
-A1: rng J = the carrier of L iff rng J9 = the carrier of L9;
+A1: J is onto iff J9 is onto;
   J is antilinear iff J9 is linear by Th36;
   hence thesis by A1,Def10,Def11;
 end;
@@ -1244,7 +1183,7 @@ theorem Th41:
   J is isomorphism iff opp(J) is antiisomorphism
 proof
   set J9 = opp(J), L9 = opp(L);
-A1: rng J = the carrier of L iff rng J9 = the carrier of L9;
+A1: J is onto iff J9 is onto;
   J is monomorphism iff J9 is antimonomorphism by Th37;
   hence thesis by A1,Def12,Def13;
 end;
@@ -1253,7 +1192,7 @@ theorem Th42:
   J is antiisomorphism iff opp(J) is isomorphism
 proof
   set J9 = opp(J), L9 = opp(L);
-A1: rng J = the carrier of L iff rng J9 = the carrier of L9;
+A1: J is onto iff J9 is onto;
   J is antimonomorphism iff J9 is monomorphism by Th38;
   hence thesis by A1,Def12,Def13;
 end;
@@ -1277,162 +1216,80 @@ proof
 end;
 
 theorem
-  J is automorphism iff opp(J) is antiisomorphism
-proof
   J is isomorphism iff opp(J) is antiisomorphism by Th41;
-  hence thesis by Def16;
-end;
 
 theorem
-  J is antiautomorphism iff opp(J) is isomorphism
-proof
   J is antiisomorphism iff opp(J) is isomorphism by Th42;
-  hence thesis by Def17;
+
+begin :: Morphisms of Groups
+
+definition let G,H be AddGroup;
+  mode Homomorphism of G,H is additive Function of G,H;
 end;
 
-begin :: Morfizmy grup i grup abelowych
-
-reserve G,H for AddGroup;
-
-Lm13: for x,y being Element of G holds ZeroMap(G,H).(x+y) = ZeroMap(G,H).x+
-ZeroMap(G,H).y
-proof
-  set f = ZeroMap(G,H);
-  thus for x,y being Element of G holds f.(x+y) = f.x+f.y
-  proof
-    let x,y be Element of G;
-A1: f.y = 0.H by FUNCOP_1:13;
-    f.(x+y) = 0.H & f.x = 0.H by FUNCOP_1:13;
-    hence thesis by A1,RLVECT_1:def 7;
-  end;
-end;
-
-definition
-  let G,H;
-  mode Homomorphism of G,H -> Function of G,H means
-    :Def19:
-    for x,y being Element of G holds it.(x+y) = it.x+it.y;
-  existence
-  proof
-    take ZeroMap(G,H);
-    thus thesis by Lm13;
-  end;
-end;
-
-definition
-  let G,H;
-  redefine func ZeroMap(G,H) -> Homomorphism of G,H;
-  coherence
-  proof
-    for x,y being Element of G holds ZeroMap(G,H).(x+y) = ZeroMap(G,H).x+
-    ZeroMap(G,H).y by Lm13;
-    hence thesis by Def19;
-  end;
-end;
-
-reserve f for Homomorphism of G,H;
-
-definition
-  let G;
+definition let G be AddGroup;
   mode Endomorphism of G is Homomorphism of G,G;
 end;
 
-Lm14: (for x,y being Element of G holds (id G).(x+y) = (id G).x+(id G).y) & id
-G is one-to-one onto
-proof
-  set f = id G;
-  thus for x,y being Element of G holds f.(x+y) = f.x+f.y
-  proof
-    let x,y be Element of G;
-    f.(x+y) = x+y & f.x = x by FUNCT_1:35;
-    hence thesis by FUNCT_1:35;
-  end;
-  thus f is one-to-one by FUNCT_1:52;
-  thus rng f = the carrier of G by RELAT_1:71;
-end;
-
-registration
-  let G;
+registration let G be AddGroup;
   cluster bijective Endomorphism of G;
   existence
   proof
-    set f = id G;
-    for x,y being Element of G holds f.(x+y) = f.x+f.y by Lm14;
-    then reconsider f as Homomorphism of G,G by Def19;
-    take f;
-    f is one-to-one & f is onto by Lm14;
-    hence thesis by FUNCT_2:def 4;
+    take id G;
+    thus thesis;
   end;
 end;
 
-definition
-  let G;
+definition let G be AddGroup;
   mode Automorphism of G is bijective Endomorphism of G;
 end;
 
-definition
-  let G;
-  redefine func id G -> Automorphism of G;
-  coherence
-  proof
-    set f = id G;
-    for x,y being Element of G holds f.(x+y) = f.x+f.y by Lm14;
-    then reconsider f as Homomorphism of G,G by Def19;
-    f is one-to-one & f is onto by Lm14;
-    hence thesis by FUNCT_2:def 4;
-  end;
-end;
-
+reserve G,H for AddGroup;
+reserve f for Homomorphism of G,H;
 reserve x,y for Element of G;
 
-Lm15: f.(0.G) = 0.H
+Lm14: f.(0.G) = 0.H
 proof
   set a = 0.G;
   a+a = a by RLVECT_1:def 7;
-  then f.a+f.a = f.a by Def19
+  then f.a+f.a = f.a by GRCAT_1:def 13
     .= f.a+(0.H) by RLVECT_1:def 7;
   hence thesis by RLVECT_1:21;
 end;
 
-Lm16: f.(-x) = -f.x
+Lm15: f.(-x) = -f.x
 proof
   set a = 0.G, b = 0.H, y = f.x;
   x+-x = a by RLVECT_1:def 13;
-  then y+f.(-x) = f.a by Def19
-    .= b by Lm15;
+  then y+f.(-x) = f.a by GRCAT_1:def 13
+    .= b by Lm14;
   hence thesis by VECTSP_1:63;
 end;
 
-Lm17: f.(x-y) = f.x-f.y
+Lm16: f.(x-y) = f.x-f.y
 proof
-  thus f.(x-y) = f.x+f.(-y) by Def19
-    .= f.x-f.y by Lm16;
+  thus f.(x-y) = f.x+f.(-y) by GRCAT_1:def 13
+    .= f.x-f.y by Lm15;
 end;
 
 canceled;
 
 theorem
-  f.(0.G) = 0.H & f.(-x) = -f.x & f.(x-y) = f.x-f.y by Lm15,Lm16,Lm17;
+  f.(0.G) = 0.H & f.(-x) = -f.x & f.(x-y) = f.x-f.y by Lm14,Lm15,Lm16;
+
+canceled;
+
+begin :: Semilinear Maps
 
 reserve G,H for AbGroup;
 reserve f for Homomorphism of G,H;
 reserve x,y for Element of G;
-
-theorem
-  f.(x-y) = f.x-f.y
-proof
-  thus f.(x-y) = f.x+f.(-y) by Def19
-    .= f.x-f.y by Lm16;
-end;
-
-begin :: Odwzorowania semiliniowe
-
 reserve K,L for Ring;
 reserve J for Function of K,L;
 reserve V for LeftMod of K;
 reserve W for LeftMod of L;
 
-Lm18: for x,y being Vector of V holds ZeroMap(V,W).(x+y) = ZeroMap(V,W).x+
+Lm17: for x,y being Vector of V holds ZeroMap(V,W).(x+y) = ZeroMap(V,W).x+
 ZeroMap(V,W).y
 proof
   set f = ZeroMap(V,W);
@@ -1445,7 +1302,7 @@ A1: f.y = 0.W by FUNCOP_1:13;
   end;
 end;
 
-Lm19: for a being Scalar of K, x being Vector of V holds ZeroMap(V,W).(a*x) =
+Lm18: for a being Scalar of K, x being Vector of V holds ZeroMap(V,W).(a*x) =
 J.a*ZeroMap(V,W).x
 proof
   let a be Scalar of K, x be Vector of V;
@@ -1454,18 +1311,15 @@ proof
   hence thesis by VECTSP_1:59;
 end;
 
-definition
-  let K,L,J,V,W;
+definition let K,L,J,V,W;
   canceled 4;
-  mode Homomorphism of J,V,W -> Function of V,W means
-    :Def24:
-    (for x,y being
-    Vector of V holds it.(x+y) = it.x+it.y) & for a being Scalar of K, x being
-    Vector of V holds it.(a*x) = J.a*it.x;
+  mode Homomorphism of J,V,W -> Function of V,W means  :Def23:
+    (for x,y being Vector of V holds it.(x+y) = it.x+it.y) &
+    for a being Scalar of K, x being Vector of V holds it.(a*x) = J.a*it.x;
   existence
   proof
     take ZeroMap(V,W);
-    thus thesis by Lm18,Lm19;
+    thus thesis by Lm17,Lm18;
   end;
 end;
 
@@ -1474,47 +1328,26 @@ theorem
 proof
   set z = ZeroMap(V,W);
   ( for x,y being Vector of V holds z.(x+y) = z.x+z.y)& for a being Scalar
-  of K, x being Vector of V holds z.(a*x) = J.a*z.x by Lm18,Lm19;
-  hence thesis by Def24;
-end;
-
-reserve f for Homomorphism of J,V,W;
-
-definition
-  let K,L,J,V,W,f;
-  pred f is_monomorphism_wrp J means
-  f is one-to-one;
-  pred f is_epimorphism_wrp J means
-  rng f = the carrier of W;
-  pred f is_isomorphism_wrp J means
-  f is one-to-one & rng f = the carrier of W;
+  of K, x being Vector of V holds z.(a*x) = J.a*z.x by Lm17,Lm18;
+  hence thesis by Def23;
 end;
 
 reserve J for Function of K,K;
 reserve f for Homomorphism of J,V,V;
+reserve W for LeftMod of K;
 
-definition
-  let K,J,V;
+definition let K,J,V;
   mode Endomorphism of J,V is Homomorphism of J,V,V;
 end;
 
-definition
-  let K,J,V,f;
-  pred f is_automorphism_wrp J means
-  f is one-to-one & rng f = the carrier of V;
-end;
-
-reserve W for LeftMod of K;
-
-definition
-  let K,V,W;
+definition let K,V,W;
   mode Homomorphism of V,W is Homomorphism of (id K),V,W;
 end;
 
 theorem
-  for f being Function of V,W holds f is Homomorphism of V,W iff (for x,
-y being Vector of V holds f.(x+y) = f.x+f.y) & for a being Scalar of K, x being
-  Vector of V holds f.(a*x) = a*f.x
+  for f being Function of V,W holds f is Homomorphism of V,W iff
+  (for x, y being Vector of V holds f.(x+y) = f.x+f.y) &
+  for a being Scalar of K, x being Vector of V holds f.(a*x) = a*f.x
 proof
   let f be Function of V,W;
   set J = id K;
@@ -1532,28 +1365,10 @@ A3: for a being Scalar of K, x being Vector of V holds f.(a*x) = J.a*f .x;
     J.a = a by FUNCT_1:35;
     hence f.(a*x) = a*f.x by A3;
   end;
-  hence thesis by A1,Def24;
+  hence thesis by A1,Def23;
 end;
 
-definition
-  let K,V,W;
-  let IT be Homomorphism of V,W;
-  attr IT is monomorphism means
-  IT is one-to-one;
-  attr IT is epimorphism means
-  rng IT = the carrier of W;
-  attr IT is isomorphism means
-  IT is one-to-one & rng IT = the carrier of W;
-end;
-
-definition
-  let K,V;
+definition let K,V;
   mode Endomorphism of V is Homomorphism of V,V;
 end;
 
-definition
-  let K,V;
-  let IT be Endomorphism of V;
-  attr IT is automorphism means
-  IT is one-to-one & rng IT = the carrier of V;
-end;

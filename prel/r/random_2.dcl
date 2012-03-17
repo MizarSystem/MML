@@ -29,6 +29,7 @@
 <ArticleID name="NAT_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBER_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
@@ -130,7 +131,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="249">
+<Func kind="K" nr="276">
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
@@ -164,19 +165,19 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="518">
+<Func kind="K" nr="544">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="11" value="false"/>
 <Adjective nr="213">
-<Func kind="K" nr="374">
+<Func kind="K" nr="400">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="214">
-<Func kind="K" nr="374">
+<Func kind="K" nr="400">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -206,7 +207,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="519">
+<Func kind="K" nr="545">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

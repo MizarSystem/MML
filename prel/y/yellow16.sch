@@ -43,8 +43,8 @@
 <Adjective nr="22">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="89"/>
-<Adjective nr="92"/>
+<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -57,8 +57,8 @@
 <Adjective nr="22">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="89"/>
-<Adjective nr="92"/>
+<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -157,7 +157,7 @@
 </Func>
 <Typ kind="M" nr="10">
 <Cluster>
-<Adjective nr="80">
+<Adjective nr="81">
 <Func kind="K" nr="134">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -230,16 +230,16 @@
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="68"/>
+<Adjective nr="41" value="false"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
+<Adjective nr="71"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="10">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="80">
+<Adjective nr="41" value="false"/>
+<Adjective nr="81">
 <Func kind="F" nr="2"/>
 </Adjective>
 </Cluster>
@@ -367,8 +367,8 @@
 <Adjective nr="22">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="89"/>
-<Adjective nr="92"/>
+<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -381,8 +381,8 @@
 <Adjective nr="22">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="89"/>
-<Adjective nr="92"/>
+<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -481,7 +481,7 @@
 </Func>
 <Typ kind="M" nr="10">
 <Cluster>
-<Adjective nr="80">
+<Adjective nr="81">
 <Func kind="K" nr="134">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -554,16 +554,16 @@
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="68"/>
+<Adjective nr="41" value="false"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
+<Adjective nr="71"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="10">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="80">
+<Adjective nr="41" value="false"/>
+<Adjective nr="81">
 <Func kind="F" nr="2"/>
 </Adjective>
 </Cluster>

@@ -32,7 +32,6 @@
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="AMI_3"/>
-<ArticleID name="AMI_2"/>
 <ArticleID name="SCM_1"/>
 </Signature>
 <RCluster aid="SCM_1" nr="1">
@@ -43,11 +42,11 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="315"/>
+<Func kind="K" nr="67"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="315"/>
+<Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="13">
@@ -64,7 +63,7 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="13">
-<Func kind="U" nr="8">
+<Func kind="U" nr="7">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>

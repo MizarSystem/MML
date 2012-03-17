@@ -10,7 +10,7 @@ environ
       FUNCT_4, FUNCOP_1, RELAT_1, TARSKI, STRUCT_0, FUNCT_1, CARD_3, ZFMISC_1,
       CIRCUIT2, CAT_1, NAT_1, GLIB_000, XXREAL_0, PARTFUN1, FINSEQ_1, ARYTM_3,
       CARD_1, GOBOARD5, FUNCT_2, FINSEQ_4, ARYTM_1, FINSET_1, FRECHET, RCOMP_1,
-      AMISTD_1, SCMNORM, AFINSQ_1, COMPOS_1;
+      AMISTD_1, SCMNORM, AFINSQ_1, COMPOS_1, AMISTD_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, ORDINAL1,
       CARD_1, XXREAL_0, NUMBERS, XCMPLX_0, NAT_1, MEMBERED, FUNCT_1, RELSET_1,
       PARTFUN1, MCART_1, VALUED_1, DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4,
@@ -37,8 +37,7 @@ reserve
   N for with_non-empty_elements non empty set,
   S for
   IC-Ins-separated definite (non empty stored-program AMI-Struct over N),
-  i
-  for Element of the Instructions of S,
+  i for Element of the Instructions of S,
   l, l1, l2, l3 for Element of NAT,
   s for State of S;
 
@@ -59,7 +58,7 @@ definition
   attr T is jump-only means
 :: AMISTD_1:def 3
   for s being State of S, o being Object of S, I
-  being Instruction of S st InsCode I = T & ::: o <> IC S
+  being Instruction of S st InsCode I = T &
    o in Data-Locations S
   holds Exec(I, s).o = s.o;
 end;
@@ -147,7 +146,7 @@ definition
   func STC N -> strict AMI-Struct over N means
 :: AMISTD_1:def 11
 
-  the carrier of it = NAT \/ {NAT} & the Instruction-Counter of it = NAT &
+  the carrier of it = NAT \/ {NAT} & the ZeroF of it = NAT &
   the Instructions of it = {[0,0,0],[1,0,0]} &
   the haltF of it = [0,0,0] &
   the Object-Kind of it = (NAT --> {[1,0,0],[0,0,0]}) +* (NAT .-->NAT) &
@@ -189,6 +188,10 @@ theorem :: AMISTD_1:22
 theorem :: AMISTD_1:23
   for i being Instruction of STC N holds i is jump-only;
 
+registration let N;
+ cluster -> ins-loc-free Instruction of STC N;
+end;
+
 theorem :: AMISTD_1:24
   for l being Element of NAT st l = z holds SUCC(l,STC N)
   = {z, z+1};
@@ -229,16 +232,16 @@ theorem :: AMISTD_1:40
 definition
  canceled 4;
   let N be with_non-empty_elements non empty set,
-  S be standard (IC-Ins-separated
-definite (non empty stored-program AMI-Struct over N)), i be Instruction of
-  S;
+  S be IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N),
+  i be Instruction of S;
   attr i is sequential means
 :: AMISTD_1:def 16
   for s being State of S holds Exec(i, s).IC S = succ IC s;
 end;
 
 theorem :: AMISTD_1:41
-  for S being standard realistic (IC-Ins-separated definite
+  for S being realistic (IC-Ins-separated definite
    (non
 empty stored-program AMI-Struct over N)), il being Element of NAT,
   i being Instruction of S st i is sequential holds NIC(i,il)
@@ -246,8 +249,8 @@ empty stored-program AMI-Struct over N)), il being Element of NAT,
 
 registration
   let N;
-  let S be realistic standard (IC-Ins-separated definite
-   (non empty stored-program AMI-Struct over N));
+  let S be realistic IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
   cluster sequential -> non halting Instruction of S;
   cluster halting -> non sequential Instruction of S;
 end;
@@ -255,12 +258,15 @@ end;
 canceled;
 
 theorem :: AMISTD_1:43
+ for T being IC-Ins-separated definite (non empty stored-program
+  AMI-Struct over N)
   for i being Instruction of T st JUMP i is non empty holds i is non
   sequential;
 
 begin :: Closedness of finite partial states
 
 definition
+
   let N be with_non-empty_elements non empty set;
   let S be IC-Ins-separated definite (non empty stored-program AMI-Struct over
   N);
@@ -367,3 +373,10 @@ being IC-Ins-separated definite (non empty stored-program AMI-Struct over N),
  i being Instruction of S, l being Element of NAT
  holds JUMP(i) c= NIC(i,l);
 
+theorem :: AMISTD_1:59
+ for i being Instruction of STC N, s being State of STC N st InsCode i = 1
+  holds Exec(i,s) = IncIC(s,1);
+
+registration let N; let p be PartState of STC N;
+ cluster DataPart p -> empty;
+end;

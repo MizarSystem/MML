@@ -22,7 +22,7 @@ environ
       SETFAM_1, VALUED_0;
  registrations XBOOLE_0, RELSET_1, PARTFUN1, FINSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, RFINSEQ, VALUED_0, FUNCT_1,
-      CARD_1;
+      CARD_1, FUNCT_3;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, BINOP_1, SETWISEO, RFINSEQ, XBOOLE_0, SUBSET_1, FINSEQ_2,
       RVSUM_1, LIMFUNC1, VALUED_1, RELAT_1;
@@ -164,7 +164,7 @@ proof
 A1: not x in rng f;
   rng f misses {x}
   proof
-    consider y being Element of rng f /\ {x};
+    set y =the  Element of rng f /\ {x};
     assume rng f /\ {x} <> {};
     then y in rng f & y in {x} by XBOOLE_0:def 4;
     hence contradiction by A1,TARSKI:def 1;
@@ -346,7 +346,7 @@ proof
   let D be non empty set, F be PartFunc of D,REAL, r;
   assume
 A1: r<0;
-  consider x being Element of abs(F)"{r};
+  set x =the  Element of abs(F)"{r};
   assume
 A2: abs(F)"{r} <> {};
   then reconsider x as Element of D by TARSKI:def 3;
@@ -811,9 +811,9 @@ A19: P[ 0 ]
     let f,g be FinSequence of PFuncs(D,REAL);
     assume f,g are_fiberwise_equipotent & len f = 0;
     then
-X:   len g = 0 & f =<*>PFuncs(D,REAL) by RFINSEQ:16;
+A20:   len g = 0 & f =<*>PFuncs(D,REAL) by RFINSEQ:16;
      then g =<*>PFuncs(D,REAL);
-    hence thesis by X;
+    hence thesis by A20;
   end;
   for n holds P[n] from NAT_1:sch 1(A19,A3);
   hence thesis by A1,A2;
@@ -871,9 +871,9 @@ definition
   of REAL;
   func R (#) f -> FinSequence of PFuncs(D,REAL) means
   :Def7:
-  len it = min(len
-R,len f) & for n st n in dom it for F be PartFunc of D,REAL, r st r = R.n & F =
-  f.n holds it.n = r(#)F;
+  len it = min(len R,len f) &
+  for n st n in dom it for F be PartFunc of D,REAL, r st r = R.n &
+  F = f.n holds it.n = r(#)F;
   existence
   proof
     defpred P[Nat,set] means for F be PartFunc of D,REAL, r st r=R.$1 & F = f.
@@ -938,17 +938,14 @@ A14:  n<=len f by A12,XXREAL_0:2;
 end;
 
 definition
-  let D be non empty set, f be FinSequence of PFuncs(D,REAL), d be Element of
-  D;
+  let D be non empty set, f be FinSequence of PFuncs(D,REAL),
+      d be Element of D;
   func f#d -> FinSequence of REAL means
   :Def8:
-  len it = len f & for n be
-  Element of NAT, G be Element of PFuncs(D,REAL) st n in dom it & f.n = G holds
-  it.n = G.d;
+  len it = len f & for n be Element of NAT st n in dom it holds it.n = f.n.d;
   existence
   proof
-    defpred P[Nat,set] means for G be Element of PFuncs(D,REAL) st f.$1=G
-    holds $2=G.d;
+    defpred P[Nat,set] means $2 = f.$1.d;
 A1: for n be Nat st n in Seg len f ex x being Element of REAL st P[n,x]
     proof
       let n be Nat;
@@ -960,33 +957,26 @@ A1: for n be Nat st n in Seg len f ex x being Element of REAL st P[n,x]
     end;
     consider p being FinSequence of REAL such that
 A2: dom p = Seg len f and
-A3: for n be Nat st n in Seg len f holds P[n,p.n] from FINSEQ_1:sch 5(
-    A1);
+A3: for n be Nat st n in Seg len f holds P[n,p.n] from FINSEQ_1:sch 5(A1);
     take p;
     thus len p = len f by A2,FINSEQ_1:def 3;
-    let n be Element of NAT, G be Element of PFuncs(D,REAL);
-    assume n in dom p & f.n = G;
-    hence thesis by A2,A3;
+    thus thesis by A2,A3;
   end;
   uniqueness
   proof
     let p1,p2 be FinSequence of REAL;
     assume that
 A4: len p1 = len f and
-A5: for n be Element of NAT, G be Element of PFuncs(D,REAL) st n in
-    dom p1 & f.n = G holds p1.n = G.d and
+A5: for n be Element of NAT st n in dom p1 holds p1.n = f.n.d and
 A6: len p2 = len f and
-A7: for n be Element of NAT, G be Element of PFuncs(D,REAL) st n in
-    dom p2 & f.n = G holds p2.n = G.d;
+A7: for n be Element of NAT st n in dom p2 holds p2.n = f.n.d;
 A8: dom p1=Seg len p1 by FINSEQ_1:def 3;
 A9: dom p2=Seg len p2 by FINSEQ_1:def 3;
     now
       let n be Nat;
       assume
 A10:  n in dom p1;
-      then n in dom f by A4,A8,FINSEQ_1:def 3;
-      then reconsider G = f.n as Element of PFuncs(D,REAL) by FINSEQ_2:13;
-      p1.n = G.d by A5,A10;
+      then p1.n = f.n.d by A5;
       hence p1.n = p2.n by A4,A6,A7,A8,A9,A10;
     end;
     hence thesis by A4,A6,FINSEQ_2:10;
@@ -997,23 +987,23 @@ definition
   let D,C be non empty set, f be FinSequence of PFuncs(D,C), d be Element of D;
   pred d is_common_for_dom f means
   :Def9:
-  for G be Element of PFuncs(D,C), n
-  be Element of NAT st n in dom f & f.n = G holds d in dom G;
+  for n be Element of NAT st n in dom f holds d in dom (f.n);
 end;
 
 theorem Th29:
   for D,C be non empty set, f be FinSequence of PFuncs(D,C), d be
-  Element of D, n be Element of NAT st d is_common_for_dom f & n <> 0 holds d
-  is_common_for_dom f|n
+  Element of D, n be Element of NAT st d is_common_for_dom f & n <> 0 holds
+  d is_common_for_dom f|n
 proof
   let D1,D2 be non empty set, f be FinSequence of PFuncs(D1,D2), d1 be Element
   of D1, n;
   assume that
 A1: d1 is_common_for_dom f and
 A2: n<> 0;
-  let G be Element of PFuncs(D1,D2), m;
+  let m;
   assume
-A3: m in dom (f|n) & (f|n).m = G;
+A3: m in dom (f|n);
+    set G = (f|n).m;
   now
     per cases;
     case
@@ -1043,11 +1033,11 @@ proof
   of D1, n;
   assume
 A1: d1 is_common_for_dom f;
-  let G be Element of PFuncs(D1,D2), m;
+  let m;
   set fn = f /^ n;
-  assume that
-A2: m in dom fn and
-A3: fn.m = G;
+  assume
+A2: m in dom fn;
+  set G = fn.m;
   now
     per cases;
     case
@@ -1064,7 +1054,7 @@ A6:   m<=len fn by A2,FINSEQ_3:27;
       then m+n<=len f by A6,XREAL_1:21;
       then
 A7:   m+n in dom f by A5,FINSEQ_3:27;
-      G= f.(m+n) by A2,A3,A4,RFINSEQ:def 2;
+      G= f.(m+n) by A2,A4,RFINSEQ:def 2;
       hence thesis by A1,A7,Def9;
     end;
   end;
@@ -1103,9 +1093,8 @@ A7:     1 in dom f by A4,FINSEQ_3:27;
 A8:     Sum(f) = G by FINSOP_1:12;
         hence d is_common_for_dom f implies d in dom Sum(f) by A7,Def9;
         assume d in dom Sum(f);
-        then
-        for F be Element of PFuncs(D,REAL), m st m in dom f & f.m=F holds
-        d in dom F by A4,A5,A6,A8,FINSEQ_1:4,TARSKI:def 1;
+        then for m st m in dom f holds
+        d in dom (f.m) by A4,A5,A6,A8,FINSEQ_1:4,TARSKI:def 1;
         hence d is_common_for_dom f by Def9;
       end;
       case
@@ -1141,17 +1130,17 @@ A17:    d in dom(Sum(fn)) /\ dom G by A14,VALUED_1:def 1;
         then
 A18:    d is_common_for_dom fn by A3,A9,A13;
         now
-          let F be Element of PFuncs(D,REAL), m;
+          let m;
           assume that
-A19:      m in dom f and
-A20:      f.m=F;
+A19:      m in dom f;
+          set F = f.m;
 A21:      m<=len f by A19,FINSEQ_3:27;
 A22:      1<=m by A19,FINSEQ_3:27;
           now
             per cases;
             case
               m=len f;
-              hence d in dom F by A4,A17,A20,XBOOLE_0:def 4;
+              hence d in dom F by A4,A17,XBOOLE_0:def 4;
             end;
             case
               m<>len f;
@@ -1159,8 +1148,8 @@ A22:      1<=m by A19,FINSEQ_3:27;
               then m<=n by A4,NAT_1:13;
               then
 A23:          m in Seg n by A22,FINSEQ_1:3;
-              then dom fn = Seg len fn & F = fn.m by A11,A20,FINSEQ_1:def
-              3,RFINSEQ:19;
+              then dom fn = Seg len fn & F = fn.m
+              by A11,FINSEQ_1:def 3,RFINSEQ:19;
               hence d in dom F by A13,A18,A23,Def9;
             end;
           end;
@@ -1239,10 +1228,10 @@ theorem Th33:
   holds d is_common_for_dom CHI(f,D)
 proof
   let D be non empty set, f be FinSequence, d be Element of D;
-  let G be Element of PFuncs(D,REAL), n;
-  assume n in dom CHI(f,D) & CHI(f,D).n = G;
-  then G = chi(f.n,D) by Def6;
-  then dom G = D by RFUNCT_1:77;
+  let n;
+  assume n in dom CHI(f,D);
+  then CHI(f,D).n = chi(f.n,D) by Def6;
+  then dom (CHI(f,D).n) = D by RFUNCT_1:77;
   hence thesis;
 end;
 
@@ -1256,10 +1245,10 @@ proof
   assume
 A1: d is_common_for_dom f;
   set m = min(len R,len f);
-  let G be Element of PFuncs(D,REAL), n;
-  assume that
-A2: n in dom (R(#)f) and
-A3: (R(#)f).n = G;
+  let n;
+  assume
+A2: n in dom (R(#)f);
+    set G = (R(#)f).n;
   len(R(#)f) = m by Def7;
   then m<=len f & n<=m by A2,FINSEQ_3:27,XXREAL_0:17;
   then
@@ -1270,7 +1259,7 @@ A5: n in dom f by A4,FINSEQ_3:27;
   then reconsider F=f.n as Element of PFuncs(D,REAL) by FINSEQ_2:13;
 A6: d in dom F by A1,A5,Def9;
   reconsider r=R.n as Real;
-  G=r(#)F by A2,A3,Def7;
+  G=r(#)F by A2,Def7;
   hence thesis by A6,VALUED_1:def 5;
 end;
 
@@ -2703,7 +2692,7 @@ A17:        z in {1};
         case
 A18:      y <> F.x;
 A19:      now
-            consider z be Element of <*F.x*>"{y};
+            set z =the  Element of <*F.x*>"{y};
             assume
 A20:        <*F.x*>"{y} <> {};
             then <*F.x*>.z in {y} by FUNCT_1:def 13;
@@ -2714,7 +2703,7 @@ A21:        <*F.x*>.z=y by TARSKI:def 1;
             hence contradiction by A18,A21,FINSEQ_1:57;
           end;
           now
-            consider z be Element of (F|{x})"{y};
+            set z =the  Element of (F|{x})"{y};
             assume
 A22:        (F|{x})"{y} <> {};
             then (F|{x}).z in {y} by FUNCT_1:def 13;
@@ -3332,7 +3321,7 @@ A25:  y in Y by A23,XBOOLE_0:def 5;
 A26: card dy = card dx - card {d} by A12,A19,CARD_2:63
       .= n+1-1 by A3,A8,CARD_1:50
       .= n;
-    then len nr = n & len fy = n by Th70,FINSEQ_1:def 18;
+    then len nr = n & len fy = n by Th70,CARD_1:def 13;
     then
 A27: len (fy - nr) = n by FINSEQ_2:86;
     (F-r).d = frx.(len frx) by A10,A11,FUNCT_1:70;
@@ -3346,7 +3335,7 @@ A28: frx = frx|n ^ <*(F-r).d*> by A8,A5,RFINSEQ:20;
     RFINSEQ:14,33;
     then
 A29: fry = frx|n by RFINSEQ:36;
-    len n1r = n+1 by FINSEQ_1:def 18;
+    len n1r = n+1 by CARD_1:def 13;
     then
 A30: len (fx - n1r) = n+1 by A9,FINSEQ_2:86;
     then
@@ -3503,7 +3492,7 @@ A5: Z = dom(F|Y) and
 A6: dom(F|(X \/ Y)) is finite and
 A7: X /\ Y = {} and
 A8: n+1 = card Z;
-    consider x being Element of dom(F|Y);
+    set x =the  Element of dom(F|Y);
     reconsider x as Element of D by A5,A8,CARD_1:47,TARSKI:def 3;
     set y1 = Y\{x};
 A9: dom(F|Y)= dom F /\ Y by RELAT_1:90;
@@ -3744,7 +3733,7 @@ A4: P[n];
 A5: card(dx) = n+1 and
 A6: dx = dom(F|X) and
 A7: dom(F|X) = dom(G|X);
-    consider x being Element of dx;
+    set x =the  Element of dx;
     reconsider x as Element of D by A5,A6,CARD_1:47,TARSKI:def 3;
 A8: dx=dom F /\ X by A6,RELAT_1:90;
     then

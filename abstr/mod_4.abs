@@ -16,11 +16,15 @@ environ
  constructors PARTFUN1, DOMAIN_1, VECTSP_2, GRCAT_1, GROUP_6, RINGCAT1,
       FUNCOP_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, VECTSP_2,
-      ALGSTR_0;
+      ALGSTR_0, GRCAT_1, FUNCT_2, RINGCAT1;
  requirements SUBSET, BOOLE;
 
 
-begin :: Funkcje przeciwne
+begin :: Opposite Functions
+
+registration let G be non empty addMagma;
+  cluster id G -> bijective;
+end;
 
 reserve A,B,C for non empty set,
   f for Function of [:A,B:],C;
@@ -33,20 +37,18 @@ end;
 theorem :: MOD_4:1
   for x being Element of A, y being Element of B holds f.(x,y) = ~f .(y,x);
 
-begin :: Pierscienie przeciwne
+begin :: Opposite Rings
 
 reserve K for non empty doubleLoopStr;
 
-definition
-  let K;
+definition let K;
   func opp K -> strict doubleLoopStr equals
 :: MOD_4:def 1
-  doubleLoopStr (# the carrier of K,
-    the addF of K, ~(the multF of K), 1.K, 0.K #);
+  doubleLoopStr
+    (# the carrier of K, the addF of K, ~(the multF of K), 1.K, 0.K #);
 end;
 
-registration
-  let K;
+registration let K;
   cluster opp(K) -> non empty;
 end;
 
@@ -102,11 +104,6 @@ registration
 end;
 
 registration
-  let K be well-unital (non empty doubleLoopStr);
-  cluster opp K -> well-unital;
-end;
-
-registration
   let K be distributive (non empty doubleLoopStr);
   cluster opp K -> distributive;
 end;
@@ -114,19 +111,7 @@ end;
 theorem :: MOD_4:5
   for K being Ring holds opp(K) is strict Ring;
 
-registration
-  let K be Ring;
-  cluster opp(K) -> Abelian add-associative right_zeroed right_complementable
-    unital distributive;
-end;
-
-theorem :: MOD_4:6
-  for K being Ring holds opp(K) is Ring;
-
-registration
-  let K be Ring;
-  cluster opp(K) -> associative;
-end;
+canceled;
 
 theorem :: MOD_4:7
   for K being Skew-Field holds opp(K) is Skew-Field;
@@ -140,17 +125,15 @@ end;
 theorem :: MOD_4:8
   for K being Field holds opp(K) is strict Field;
 
-registration
-  let K be Field;
-  cluster opp(K) -> strict almost_left_invertible;
+registration let K be Field;
+  cluster opp(K) -> almost_left_invertible;
 end;
 
-begin :: Moduly przeciwne
+begin :: Opposite Modules
 
 reserve V for non empty VectSpStr over K;
 
-definition
-  let K,V;
+definition let K,V;
   func opp(V) -> strict RightModStr over opp(K) means
 :: MOD_4:def 2
 
@@ -160,8 +143,7 @@ Function of [:the carrier of V, the carrier of opp(K):], the carrier of V st o
     0.V, o #);
 end;
 
-registration
-  let K,V;
+registration let K,V;
   cluster opp(V) -> non empty;
 end;
 
@@ -184,19 +166,16 @@ theorem :: MOD_4:10
 
 reserve W for non empty RightModStr over K;
 
-definition
-  let K,W;
+definition let K,W;
   func opp(W) -> strict VectSpStr over opp(K) means
 :: MOD_4:def 4
-
   for o being
 Function of [:the carrier of opp(K), the carrier of W:], the carrier of W st o
 = ~(the rmult of W) holds it = VectSpStr (# the carrier of W, the addF of W, 0.
     W, o #);
 end;
 
-registration
-  let K,W;
+registration let K,W;
   cluster opp(W) -> non empty;
 end;
 
@@ -206,8 +185,7 @@ theorem :: MOD_4:12
   the addLoopStr of opp(W) = the addLoopStr of W & for x being set
   holds x is Vector of W iff x is Vector of opp(W);
 
-definition
-  let K,W;
+definition let K,W;
   let o be Function of [:the carrier of W, the carrier of K:], the carrier of
   W;
   func opp(o) -> Function of [:the carrier of opp(K), the carrier of opp(W):],
@@ -267,15 +245,14 @@ theorem :: MOD_4:25
   for K being Ring, V being LeftMod of K holds opp V is strict
   RightMod of opp K;
 
-registration
-  let K be Ring, V be LeftMod of K;
+registration let K be Ring, V be LeftMod of K;
   cluster opp(V) -> Abelian add-associative right_zeroed right_complementable
     RightMod-like;
 end;
 
 theorem :: MOD_4:26
-  for K being Ring, W being RightMod of K holds opp W is strict
-  LeftMod of opp K;
+  for K being Ring, W being RightMod of K holds
+    opp W is strict LeftMod of opp K;
 
 registration
   let K be Ring, W be RightMod of K;
@@ -283,14 +260,13 @@ registration
     vector-distributive scalar-distributive scalar-associative scalar-unital;
 end;
 
-begin :: Morfizmy pierscieni
+begin :: Ring Morphisms
 
 definition
   let K,L be non empty multMagma;
   let IT be Function of K,L;
   attr IT is antimultiplicative means
 :: MOD_4:def 6
-
   for x,y being Scalar of K holds IT.(x*y) = IT.y*IT.x;
 end;
 
@@ -299,7 +275,6 @@ definition
   let IT be Function of K,L;
   attr IT is antilinear means
 :: MOD_4:def 7
-
   IT is additive antimultiplicative unity-preserving;
 end;
 
@@ -316,12 +291,10 @@ definition
   let IT be Function of K,L;
   attr IT is monomorphism means
 :: MOD_4:def 8
-
-  IT is linear & IT is one-to-one;
+  IT is linear one-to-one;
   attr IT is antimonomorphism means
 :: MOD_4:def 9
-
-  IT is antilinear & IT is one-to-one;
+  IT is antilinear one-to-one;
 end;
 
 definition
@@ -329,12 +302,10 @@ definition
   let IT be Function of K,L;
   attr IT is epimorphism means
 :: MOD_4:def 10
-
-  IT is linear & rng IT = the carrier of L;
+  IT is linear onto;
   attr IT is antiepimorphism means
 :: MOD_4:def 11
-
-  IT is antilinear & rng IT = the carrier of L;
+  IT is antilinear onto;
 end;
 
 definition
@@ -342,12 +313,10 @@ definition
   let IT be Function of K,L;
   attr IT is isomorphism means
 :: MOD_4:def 12
-
-  IT is monomorphism & rng IT = the carrier of L;
+  IT is monomorphism onto;
   attr IT is antiisomorphism means
 :: MOD_4:def 13
-
-  IT is antimonomorphism & rng IT = the carrier of L;
+  IT is antimonomorphism onto;
 end;
 
 reserve J for Function of K,K;
@@ -357,34 +326,28 @@ definition
   let IT be Function of K,K;
   attr IT is endomorphism means
 :: MOD_4:def 14
-
   IT is linear;
   attr IT is antiendomorphism means
 :: MOD_4:def 15
-
   IT is antilinear;
-  attr IT is automorphism means
-:: MOD_4:def 16
-
-  IT is isomorphism;
-  attr IT is antiautomorphism means
-:: MOD_4:def 17
-
-  IT is antiisomorphism;
+  canceled 2;
 end;
 
 theorem :: MOD_4:27
-  J is automorphism iff (for x,y being Scalar of K holds J.(x+y) = J.x+J
-  .y) & (for x,y being Scalar of K holds J.(x*y) = J.x*J.y) & J.(1_K) = 1_K & J
-  is one-to-one & rng J = the carrier of K;
+  J is isomorphism iff J is additive &
+  (for x,y being Scalar of K holds J.(x*y) = J.x*J.y) & J.(1_K) = 1_K & J
+  is one-to-one onto;
 
 theorem :: MOD_4:28
-  J is antiautomorphism iff (for x,y being Scalar of K holds J.(x+
-y) = J.x+J.y) & (for x,y being Scalar of K holds J.(x*y) = J.y*J.x) & J.(1_K) =
-  1_K & J is one-to-one & rng J = the carrier of K;
+  J is antiisomorphism iff J is additive
+  & (for x,y being Scalar of K holds J.(x*y) = J.y*J.x) & J.(1_K) =
+  1_K & J is one-to-one & J is onto;
 
-theorem :: MOD_4:29
-  id K is automorphism;
+registration let K;
+  cluster id K -> isomorphism;
+end;
+
+canceled;
 
 reserve K,L for Ring;
 reserve J for Function of K,L;
@@ -398,12 +361,12 @@ theorem :: MOD_4:31
   J.y;
 
 theorem :: MOD_4:32
-  for K being Ring holds id K is antiautomorphism iff K is comRing;
+  for K being Ring holds id K is antiisomorphism iff K is comRing;
 
 theorem :: MOD_4:33
-  for K being Skew-Field holds id K is antiautomorphism iff K is Field;
+  for K being Skew-Field holds id K is antiisomorphism iff K is Field;
 
-begin :: Morfizmy przeciwne do morfizmow pierscieni
+begin :: Opposite Morphisms
 
 definition
   let K,L be non empty doubleLoopStr, J be Function of K,L;
@@ -417,7 +380,7 @@ reserve K,L for add-associative right_zeroed right_complementable (non empty
 reserve J for Function of K,L;
 
 theorem :: MOD_4:34
-  opp(opp(J)) = J;
+  opp opp J = J;
 
 reserve K for add-associative right_zeroed right_complementable (non empty
   doubleLoopStr);
@@ -460,50 +423,31 @@ theorem :: MOD_4:44
   J is antiendomorphism iff opp(J) is linear;
 
 theorem :: MOD_4:45
-  J is automorphism iff opp(J) is antiisomorphism;
+  J is isomorphism iff opp(J) is antiisomorphism;
 
 theorem :: MOD_4:46
-  J is antiautomorphism iff opp(J) is isomorphism;
+  J is antiisomorphism iff opp(J) is isomorphism;
 
-begin :: Morfizmy grup i grup abelowych
+begin :: Morphisms of Groups
 
-reserve G,H for AddGroup;
-
-definition
-  let G,H;
-  mode Homomorphism of G,H -> Function of G,H means
-:: MOD_4:def 19
-
-    for x,y being Element of G holds it.(x+y) = it.x+it.y;
+definition let G,H be AddGroup;
+  mode Homomorphism of G,H is additive Function of G,H;
 end;
 
-definition
-  let G,H;
-  redefine func ZeroMap(G,H) -> Homomorphism of G,H;
-end;
-
-reserve f for Homomorphism of G,H;
-
-definition
-  let G;
+definition let G be AddGroup;
   mode Endomorphism of G is Homomorphism of G,G;
 end;
 
-registration
-  let G;
+registration let G be AddGroup;
   cluster bijective Endomorphism of G;
 end;
 
-definition
-  let G;
+definition let G be AddGroup;
   mode Automorphism of G is bijective Endomorphism of G;
 end;
 
-definition
-  let G;
-  redefine func id G -> Automorphism of G;
-end;
-
+reserve G,H for AddGroup;
+reserve f for Homomorphism of G,H;
 reserve x,y for Element of G;
 
 canceled;
@@ -511,99 +455,47 @@ canceled;
 theorem :: MOD_4:48
   f.(0.G) = 0.H & f.(-x) = -f.x & f.(x-y) = f.x-f.y;
 
+canceled;
+
+begin :: Semilinear Maps
+
 reserve G,H for AbGroup;
 reserve f for Homomorphism of G,H;
 reserve x,y for Element of G;
-
-theorem :: MOD_4:49
-  f.(x-y) = f.x-f.y;
-
-begin :: Odwzorowania semiliniowe
-
 reserve K,L for Ring;
 reserve J for Function of K,L;
 reserve V for LeftMod of K;
 reserve W for LeftMod of L;
 
-definition
-  let K,L,J,V,W;
+definition let K,L,J,V,W;
   canceled 4;
   mode Homomorphism of J,V,W -> Function of V,W means
-:: MOD_4:def 24
-
-    (for x,y being
-    Vector of V holds it.(x+y) = it.x+it.y) & for a being Scalar of K, x being
-    Vector of V holds it.(a*x) = J.a*it.x;
+:: MOD_4:def 23
+    (for x,y being Vector of V holds it.(x+y) = it.x+it.y) &
+    for a being Scalar of K, x being Vector of V holds it.(a*x) = J.a*it.x;
 end;
 
 theorem :: MOD_4:50
   ZeroMap(V,W) is Homomorphism of J,V,W;
 
-reserve f for Homomorphism of J,V,W;
-
-definition
-  let K,L,J,V,W,f;
-  pred f is_monomorphism_wrp J means
-:: MOD_4:def 25
-  f is one-to-one;
-  pred f is_epimorphism_wrp J means
-:: MOD_4:def 26
-  rng f = the carrier of W;
-  pred f is_isomorphism_wrp J means
-:: MOD_4:def 27
-  f is one-to-one & rng f = the carrier of W;
-end;
-
 reserve J for Function of K,K;
 reserve f for Homomorphism of J,V,V;
+reserve W for LeftMod of K;
 
-definition
-  let K,J,V;
+definition let K,J,V;
   mode Endomorphism of J,V is Homomorphism of J,V,V;
 end;
 
-definition
-  let K,J,V,f;
-  pred f is_automorphism_wrp J means
-:: MOD_4:def 28
-  f is one-to-one & rng f = the carrier of V;
-end;
-
-reserve W for LeftMod of K;
-
-definition
-  let K,V,W;
+definition let K,V,W;
   mode Homomorphism of V,W is Homomorphism of (id K),V,W;
 end;
 
 theorem :: MOD_4:51
-  for f being Function of V,W holds f is Homomorphism of V,W iff (for x,
-y being Vector of V holds f.(x+y) = f.x+f.y) & for a being Scalar of K, x being
-  Vector of V holds f.(a*x) = a*f.x;
+  for f being Function of V,W holds f is Homomorphism of V,W iff
+  (for x, y being Vector of V holds f.(x+y) = f.x+f.y) &
+  for a being Scalar of K, x being Vector of V holds f.(a*x) = a*f.x;
 
-definition
-  let K,V,W;
-  let IT be Homomorphism of V,W;
-  attr IT is monomorphism means
-:: MOD_4:def 29
-  IT is one-to-one;
-  attr IT is epimorphism means
-:: MOD_4:def 30
-  rng IT = the carrier of W;
-  attr IT is isomorphism means
-:: MOD_4:def 31
-  IT is one-to-one & rng IT = the carrier of W;
-end;
-
-definition
-  let K,V;
+definition let K,V;
   mode Endomorphism of V is Homomorphism of V,V;
 end;
 
-definition
-  let K,V;
-  let IT be Endomorphism of V;
-  attr IT is automorphism means
-:: MOD_4:def 32
-  IT is one-to-one & rng IT = the carrier of V;
-end;

@@ -53,19 +53,19 @@ definition
    for a,b being FinSequence st a in IT & b in IT holds len a = len b
      proof
       assume
-Z:     IT is with_common_domain;
+A1:     IT is with_common_domain;
       let a,b being FinSequence;
       assume a in IT & b in IT;
-       then dom a = dom b by Z,CARD_3:def 10;
+       then dom a = dom b by A1,CARD_3:def 10;
       hence len a = len b by FINSEQ_3:31;
      end;
     assume
-Z1:  for a,b being FinSequence st a in IT & b in IT holds len a = len b;
+A2:  for a,b being FinSequence st a in IT & b in IT holds len a = len b;
     let f,g be Function;
     assume
-Z2:    f in IT & g in IT;
+A3:    f in IT & g in IT;
      then reconsider f,g as FinSequence;
-     len f = len g by Z1,Z2;
+     len f = len g by A2,A3;
     hence thesis by FINSEQ_3:31;
    end;
 end;
@@ -131,11 +131,11 @@ A2: x in X iff x in A() & P1[x] from XBOOLE_0:sch 1;
   proof
     let a,b;
     assume that
-A4: a in X and
-A5: b in X;
-A6: ex d being FinSequence st P[d] & b = d by A2,A5;
-    ex c being FinSequence st P[c] & a = c by A2,A4;
-    hence thesis by A1,A6;
+A3: a in X and
+A4: b in X;
+A5: ex d being FinSequence st P[d] & b = d by A2,A4;
+    ex c being FinSequence st P[c] & a = c by A2,A3;
+    hence thesis by A1,A5;
   end;
   then reconsider r = X as relation;
   for a holds a in r iff a in A() & P[a]
@@ -143,9 +143,9 @@ A6: ex d being FinSequence st P[d] & b = d by A2,A5;
     let a;
     now
       assume
-A7:   a in r;
+A6:   a in r;
       then ex c being FinSequence st P[c] & a = c by A2;
-      hence a in A() & P[a] by A2,A7;
+      hence a in A() & P[a] by A2,A6;
     end;
     hence thesis by A2;
   end;
@@ -174,10 +174,10 @@ registration
   proof
     let X be set;
     assume
-Z:   X is empty;
+A1:   X is empty;
     then
     for a,b being FinSequence st a in X & b in X holds len a = len b;
-   hence thesis by Def1,Z;
+   hence thesis by Def1,A1;
   end;
 end;
 
@@ -529,7 +529,7 @@ theorem
 proof
   assume
 A1: not thesis;
-  consider x being Element of empty_rel(D);
+  set x =the  Element of empty_rel(D);
   empty_rel(D) is Subset of D* by Def8;
   then x in D* by A1,TARSKI:def 3;
   then reconsider a = x as FinSequence of D by FINSEQ_1:def 11;
@@ -963,7 +963,7 @@ reserve A,z for set,
 definition
   let IT be Relation;
   attr IT is homogeneous means
-:Def1: dom IT is with_common_domain;
+:Def22: dom IT is with_common_domain;
 end;
 
 definition
@@ -999,7 +999,7 @@ registration
   cluster homogeneous quasi_total non empty PartFunc of A*,A;
   existence
   proof
-    consider a be Element of A;
+    set a =the  Element of A;
     set f = <*>A .-->a;
 A1: dom f = {<*>A} by FUNCOP_1:19;
 A2: dom f c= A*
@@ -1046,7 +1046,7 @@ registration
   cluster homogeneous non empty Function;
   existence
   proof
-    consider f being homogeneous non empty PartFunc of {{}}*,{{}};
+    set f =the  homogeneous non empty PartFunc of {{}}*,{{}};
     take f;
     thus thesis;
   end;
@@ -1054,7 +1054,7 @@ end;
 
 registration let R be homogeneous Relation;
  cluster dom R -> with_common_domain;
- coherence by Def1;
+ coherence by Def22;
 end;
 
 theorem Th54:
@@ -1155,7 +1155,7 @@ definition
   let A;
   let IT be PFuncFinSequence of A;
   attr IT is homogeneous means
-  :Def4:
+  :Def24:
   for n,h st n in dom IT & h = IT.n holds h is homogeneous;
 end;
 
@@ -1163,7 +1163,7 @@ definition
   let A;
   let IT be PFuncFinSequence of A;
   attr IT is quasi_total means
-  :Def5:
+  :Def25:
   for n,h st n in dom IT & h = IT.n holds h is quasi_total;
 end;
 
@@ -1183,7 +1183,7 @@ registration
   cluster homogeneous quasi_total non-empty PFuncFinSequence of A;
   existence
   proof
-    consider a being Element of A;
+    set a =the  Element of A;
     reconsider f = <*>A .-->a as PartFunc of A*,A by Th54;
     reconsider f as Element of PFuncs(A*,A) by PARTFUN1:119;
     take <*f*>;
@@ -1237,7 +1237,7 @@ A1:   i in dom f;
 A2:   rng f c= PFuncs(A*,A) by RELAT_1:def 19;
       f.i in rng f by A1,FUNCT_1:12;
       then f.i is PartFunc of A*,A by A2,PARTFUN1:120;
-      hence thesis by A1,Def4;
+      hence thesis by A1,Def24;
     end;
     suppose
 A3:   not i in dom f;
@@ -1288,7 +1288,7 @@ A7: h =<*x*>.n;
     then <*x*>.n = <*x*>.1 by TARSKI:def 1;
     hence thesis by A1,FINSEQ_1:def 8;
   end;
-  hence thesis by A2,A5,Def4,Def5,FUNCT_1:def 15;
+  hence thesis by A2,A5,Def24,Def25,FUNCT_1:def 15;
 end;
 
 definition
@@ -1358,28 +1358,28 @@ theorem
 proof
   let D be non empty set;
   let f be homogeneous quasi_total non empty PartFunc of D*,D;
-  consider y be Element of dom f;
-A2: dom f c= D* by RELAT_1:def 18;
+  set y =the  Element of dom f;
+A1: dom f c= D* by RELAT_1:def 18;
   then
-A3: y in D* by TARSKI:def 3;
+A2: y in D* by TARSKI:def 3;
   thus dom f c= (arity(f))-tuples_on D
   proof
     let x be set;
     assume
-A4: x in dom f;
-    then reconsider x9 = x as FinSequence of D by A2,FINSEQ_1:def 11;
-    len x9 = arity f by A4,Def26;
+A3: x in dom f;
+    then reconsider x9 = x as FinSequence of D by A1,FINSEQ_1:def 11;
+    len x9 = arity f by A3,Def26;
     then x9 is Element of (arity(f))-tuples_on D by FINSEQ_2:110;
     hence thesis;
   end;
-  reconsider y as FinSequence of D by A3,FINSEQ_1:def 11;
+  reconsider y as FinSequence of D by A2,FINSEQ_1:def 11;
   let x be set;
   assume x in (arity(f))-tuples_on D;
   then x in {s where s is Element of D* : len s = arity(f)} by FINSEQ_2:def 4;
   then
-A5: ex s being Element of D* st x = s & len s = arity(f);
+A4: ex s being Element of D* st x = s & len s = arity(f);
   len y = arity f by Def26;
-  hence thesis by A5,Def23;
+  hence thesis by A4,Def23;
 end;
 
 
@@ -1387,12 +1387,12 @@ end;
 definition
   let D be non empty set;
   mode PFuncsDomHQN of D -> non empty set means
-    :Def1:
+    :Def27:
     for x be Element of it
     holds x is homogeneous quasi_total non empty PartFunc of D*,D;
   existence
   proof
-    consider a be Element of D;
+    set a =the  Element of D;
     reconsider A = {{<*>D} -->a} as non empty set;
     take A;
     let x be Element of A;
@@ -1405,5 +1405,5 @@ definition
   let D be non empty set, P be PFuncsDomHQN of D;
   redefine mode Element of P -> homogeneous quasi_total non empty PartFunc of
     D*,D;
-  coherence by Def1;
+  coherence by Def27;
 end;

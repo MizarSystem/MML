@@ -44,12 +44,12 @@
 </Typ>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="5"/>
+<Func kind="K" nr="85"/>
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="5"/>
+<Func kind="K" nr="85"/>
 </Pred>
 </And>
 </For>

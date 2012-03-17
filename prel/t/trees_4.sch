@@ -44,7 +44,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 <And>

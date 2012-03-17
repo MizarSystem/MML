@@ -1,0 +1,2887 @@
+:: Conway's Games and Some of Their Basic Properties
+::  by Robin Nittka
+::
+:: Received October 13, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies CGAMES_1, RELAT_1, TARSKI, XBOOLE_0, ORDINAL1, FUNCT_1, CARD_1,
+      SUBSET_1, XXREAL_0, ORDINAL2, SUPINF_2, ARYTM_1, PARTFUN1, MSUALG_6,
+      FINSEQ_1, ARYTM_3, NAT_1, ORDINAL4, MESFUNC5, XCMPLX_0;
+ notations TARSKI, XBOOLE_0, XXREAL_0, RELAT_1, ORDINAL1, FUNCT_1, NAT_1,
+      CARD_1, PARTFUN1, ORDINAL2, SUBSET_1, COMPUT_1, FINSEQ_1, XCMPLX_0;
+ constructors ORDINAL2, COMPUT_1;
+ registrations XBOOLE_0, XREAL_0, XXREAL_0, ORDINAL1, FUNCT_1, CARD_1,
+      SUBSET_1, RELAT_1, COMPUT_1, FINSEQ_1, NAT_1;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+ definitions FUNCT_1, TARSKI, XBOOLE_0, PARTFUN1, FINSEQ_1;
+ theorems TARSKI, ORDINAL1, FUNCT_1, ZFMISC_1, RELAT_1, XBOOLE_0, ORDINAL2,
+      XBOOLE_1, PARTFUN1, COMPUT_1, NAT_1, FINSEQ_1, XXREAL_0, XREAL_1,
+      FINSEQ_2, FINSEQ_3, FINSEQ_5, GRFUNC_1, SETWISEO;
+ schemes ORDINAL1, NAT_1, TARSKI;
+
+begin :: Construction of days
+
+reserve x,y,y1,y2,z,e,s for set;
+reserve alpha,beta,gamma for Ordinal;
+reserve n,m,k for Nat;
+
+definition
+  struct left-right(# LeftOptions,RightOptions -> set #);
+end;
+
+definition
+  func ConwayZero equals left-right(#{},{}#);
+  coherence;
+end;
+
+registration
+  cluster strict left-right;
+  existence
+  proof
+    take ConwayZero;
+    thus thesis;
+  end;
+end;
+
+deffunc ConwayNextDay(T-Sequence) = { left-right(#x,y#)
+    where x,y is Subset of union(rng $1) : not contradiction };
+defpred ConwayIteration[T-Sequence] means
+    for beta st beta in dom $1 holds $1.beta = ConwayNextDay($1|beta);
+
+Lm1:
+  for f being T-Sequence st ConwayIteration[f] holds
+    for alpha holds ConwayIteration[f|alpha]
+proof
+  let f be T-Sequence;
+  assume
+A1: ConwayIteration[f];
+  let alpha,beta;
+  assume
+A2: beta in dom (f|alpha);
+  dom (f|alpha) c= dom f by RELAT_1:89;
+  then
+A3: f.beta = ConwayNextDay(f|beta) by A1,A2;
+  dom (f|alpha) c= alpha by RELAT_1:87;
+  then beta c= alpha by A2,ORDINAL1:def 2;
+  then (f|alpha)|beta = f|beta by FUNCT_1:82;
+  hence thesis by A3,A2,FUNCT_1:70;
+end;
+
+definition
+  let alpha;
+  func ConwayDay(alpha) -> set means
+  :Def2:
+    ex f being T-Sequence st alpha in dom f & f.alpha = it
+      & for beta st beta in dom f holds f.beta = { left-right(#x,y#)
+          where x,y is Subset of union(rng (f|beta)) : not contradiction };
+  existence
+  proof
+    consider f being T-Sequence such that
+A1:   dom f = succ alpha
+        & for beta for f1 being T-Sequence st beta in succ alpha & f1 = f|beta
+          holds f.beta = ConwayNextDay(f1) from ORDINAL1:sch 4;
+    take f.alpha;
+    take f;
+    thus alpha in dom f by ORDINAL1:10, A1;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let x,y;
+    assume ex f1 being T-Sequence st alpha in dom f1 & f1.alpha = x
+        & ConwayIteration[f1];
+    then consider f1 being T-Sequence such that
+A2:   alpha in dom f1 & f1.alpha = x & ConwayIteration[f1];
+    set f1r = f1|succ alpha;
+    assume ex f2 being T-Sequence st alpha in dom f2 & f2.alpha = y
+        & ConwayIteration[f2];
+    then consider f2 being T-Sequence such that
+A3:   alpha in dom f2 & f2.alpha = y & ConwayIteration[f2];
+    set f2r = f2|succ alpha;
+A4: dom f1r = succ alpha & for beta for f being T-Sequence st
+      beta in succ alpha & f=f1r|beta holds f1r.beta=ConwayNextDay(f)
+    proof
+      succ alpha c= dom f1 by ORDINAL1:33,A2;
+      hence
+A5:     dom f1r = succ alpha by RELAT_1:91;
+      let beta;
+      let f be T-Sequence;
+      assume beta in succ alpha & f=f1r|beta;
+      hence thesis by A5,Lm1,A2;
+    end;
+A6: dom f2r = succ alpha & for beta for f being T-Sequence st
+      beta in succ alpha & f=f2r|beta holds f2r.beta=ConwayNextDay(f)
+    proof
+      succ alpha c= dom f2 by ORDINAL1:33,A3;
+      hence
+A7:     dom f2r = succ alpha by RELAT_1:91;
+      let beta;
+      let f be T-Sequence;
+      assume beta in succ alpha & f=f2r|beta;
+      hence thesis by A7,Lm1,A3;
+    end;
+A8: f1r.alpha = f1.alpha & f2r.alpha = f2.alpha by FUNCT_1:72,ORDINAL1:10;
+    f1r = f2r from ORDINAL1:sch 3(A4,A6);
+    hence x=y by A2,A3,A8;
+  end;
+end;
+
+theorem Th1:
+  z in ConwayDay(alpha) iff ex w being strict left-right st z = w &
+    for x st x in (the LeftOptions of w) \/ (the RightOptions of w)
+      ex beta st beta in alpha & x in ConwayDay(beta)
+proof
+  consider f being T-Sequence such that
+A1: alpha in dom f & f.alpha = ConwayDay(alpha) & ConwayIteration[f]
+    by Def2;
+  hereby
+    assume z in ConwayDay(alpha);
+    then z in ConwayNextDay(f|alpha) by A1;
+    then consider x,y being Subset of union(rng (f|alpha)) such that
+A2:   z = left-right(#x,y#) & not contradiction;
+    reconsider w = z as strict left-right by A2;
+    take w;
+    thus z = w;
+    let e;
+    assume e in (the LeftOptions of w) \/ (the RightOptions of w);
+    then e in x or e in y by A2,XBOOLE_0:def 3;
+    then consider r being set such that
+A3:   e in r & r in rng (f|alpha) by TARSKI:def 4;
+    ex beta being set st beta in dom (f|alpha) & r = (f|alpha).beta
+      by A3,FUNCT_1:def 5;
+    then consider beta such that
+A4:   beta in dom (f|alpha) & r = (f|alpha).beta;
+    take beta;
+    dom (f|alpha) c= alpha by RELAT_1:87;
+    hence beta in alpha by A4;
+    dom (f|alpha) c= dom f by RELAT_1:89;
+    then f.beta = ConwayDay(beta) by A1,Def2,A4;
+    hence e in ConwayDay(beta) by A3,A4,FUNCT_1:70;
+  end;
+
+  hereby
+    assume ex w being strict left-right st z = w &
+      for x st x in (the LeftOptions of w) \/ (the RightOptions of w)
+        ex beta st beta in alpha & x in ConwayDay(beta);
+    then consider w being strict left-right such that
+A5:   w = z & for x st x in (the LeftOptions of w) \/ (the RightOptions of w)
+        ex beta st beta in alpha & x in ConwayDay(beta);
+
+    the LeftOptions of w is Subset of union(rng (f|alpha))
+      & the RightOptions of w is Subset of union(rng (f|alpha))
+    proof
+      (the LeftOptions of w) \/ (the RightOptions of w) c= union(rng (f|alpha))
+      proof
+        let e;
+        assume e in (the LeftOptions of w) \/ (the RightOptions of w);
+        then consider beta such that
+A6:       beta in alpha & e in ConwayDay(beta) by A5;
+
+A7:     alpha c= dom f by A1,ORDINAL1:def 2;
+        then f.beta = ConwayDay(beta) by Def2,A1,A6;
+        then ConwayDay(beta) c= union(rng (f|alpha))
+          by ZFMISC_1:92,FUNCT_1:73,A6,A7;
+        hence e in union(rng (f|alpha)) by A6;
+      end;
+      hence thesis by XBOOLE_1:11;
+    end;
+    then w in ConwayNextDay(f|alpha);
+    hence z in ConwayDay(alpha) by A1,A5;
+  end;
+end;
+
+theorem Th2:
+  ConwayDay(0) = { ConwayZero }
+proof
+A1:
+  ConwayDay(0) c= { ConwayZero }
+  proof
+    let z;
+    assume z in ConwayDay(0);
+    then consider w being strict left-right such that
+A2:   z = w & for e st e in (the LeftOptions of w) \/ (the RightOptions of w)
+        ex beta st beta in 0 & e in ConwayDay(beta) by Th1;
+
+    (the LeftOptions of w) \/ (the RightOptions of w) = {}
+    proof
+      assume not thesis;
+      then consider e such that
+A3:     e in (the LeftOptions of w) \/ (the RightOptions of w)
+        by XBOOLE_0:def 1;
+      ex beta st beta in 0 & e in ConwayDay(beta) by A2,A3;
+      hence contradiction;
+    end;
+    then the LeftOptions of w = {} & the RightOptions of w = {};
+    hence z in { ConwayZero } by A2,TARSKI:def 1;
+  end;
+  for e st e in {} \/ {} ex beta st beta in 0 & e in ConwayDay(beta);
+  then ConwayZero in ConwayDay(0) by Th1;
+  then { ConwayZero } c= ConwayDay(0) by ZFMISC_1:37;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th3:
+  alpha c= beta implies ConwayDay(alpha) c= ConwayDay(beta)
+proof
+  assume
+A1: alpha c= beta;
+  let z;
+  assume z in ConwayDay(alpha);
+  then consider w being strict left-right such that
+A2: w = z & (for e st e in (the LeftOptions of w) \/ (the RightOptions of w)
+      ex gamma st gamma in alpha & e in ConwayDay(gamma)) by Th1;
+  now
+    let e;
+    assume e in (the LeftOptions of w) \/ (the RightOptions of w);
+    then ex gamma st gamma in alpha & e in ConwayDay(gamma) by A2;
+    hence ex gamma st gamma in beta & e in ConwayDay(gamma) by A1;
+  end;
+  hence z in ConwayDay(beta) by Th1,A2;
+end;
+
+registration
+  let alpha;
+  cluster ConwayDay(alpha) -> non empty;
+  coherence
+  proof
+    0 c= alpha;
+    then ConwayDay(0) c= ConwayDay(alpha) by Th3;
+    hence thesis by Th2;
+  end;
+end;
+
+begin :: Games
+
+definition
+  let x;
+  attr x is ConwayGame-like means
+    :Def3:
+    ex alpha st x in ConwayDay(alpha);
+end;
+
+registration
+  let alpha;
+  cluster -> ConwayGame-like Element of ConwayDay(alpha);
+  coherence
+  proof
+    let x be Element of ConwayDay(alpha);
+    take alpha;
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster ConwayZero -> ConwayGame-like;
+  coherence
+  proof
+    ConwayZero in ConwayDay(0) by Th2,TARSKI:def 1;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster ConwayGame-like strict left-right;
+  existence
+  proof
+    take ConwayZero;
+    thus thesis;
+  end;
+  cluster ConwayGame-like set;
+  existence
+  proof
+    take ConwayZero;
+    thus thesis;
+  end;
+end;
+
+definition
+  mode ConwayGame is ConwayGame-like set;
+end;
+
+definition
+  redefine func ConwayZero -> Element of ConwayDay(0);
+  coherence by Th2,TARSKI:def 1;
+end;
+
+definition
+  func ConwayOne -> Element of ConwayDay(1) equals
+    left-right(#{ConwayZero},{}#);
+  coherence
+  proof
+    set w = left-right(#{ConwayZero},{}#);
+    for x st x in (the LeftOptions of w) \/ (the RightOptions of w)
+        ex beta st beta in 1 & x in ConwayDay(beta)
+    proof
+      let x;
+      assume x in (the LeftOptions of w) \/ (the RightOptions of w);
+      then
+A1:     x = ConwayZero by TARSKI:def 1;
+      take 0;
+      1 = succ 0;
+      hence thesis by A1,ORDINAL1:10;
+    end;
+    hence thesis by Th1;
+  end;
+
+  func ConwayStar -> Element of ConwayDay(1) equals
+    left-right(#{ConwayZero},{ConwayZero}#);
+  coherence
+  proof
+    set w = left-right(#{ConwayZero},{ConwayZero}#);
+    for x st x in (the LeftOptions of w) \/ (the RightOptions of w)
+        ex beta st beta in 1 & x in ConwayDay(beta)
+    proof
+      let x;
+      assume x in (the LeftOptions of w) \/ (the RightOptions of w);
+      then
+A2:     x = ConwayZero by TARSKI:def 1;
+      take 0;
+      1 = succ 0;
+      hence thesis by A2,ORDINAL1:10;
+    end;
+    hence thesis by Th1;
+  end;
+end;
+
+reserve g,g0,g1,g2,gO,gL,gR,gLL,gLR,gRL,gRR for ConwayGame;
+
+theorem Th4:
+  g is strict left-right
+proof
+  consider alpha such that
+A1: g in ConwayDay(alpha) by Def3;
+  ex w being strict left-right st w = g &
+    for x st x in (the LeftOptions of w) \/ (the RightOptions of w)
+      ex beta st beta in alpha & x in ConwayDay(beta) by A1,Th1;
+  hence thesis;
+end;
+
+registration
+  cluster ConwayGame-like -> strict left-right;
+  coherence by Th4;
+end;
+
+definition
+  let g;
+  func the_LeftOptions_of g means
+    :Def6:
+    ex w being left-right st g = w & it = the LeftOptions of w;
+  existence
+  proof
+    reconsider w = g as left-right by Th4;
+    take the LeftOptions of w;
+    thus thesis;
+  end;
+  uniqueness;
+
+  func the_RightOptions_of g means
+    :Def7:
+    ex w being left-right st g = w & it = the RightOptions of w;
+  existence
+  proof
+    reconsider w = g as left-right by Th4;
+    take the RightOptions of w;
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+definition
+  let g;
+  func the_Options_of g equals
+    (the_LeftOptions_of g) \/ (the_RightOptions_of g);
+  correctness;
+end;
+
+theorem Th5:
+  g1 = g2 iff
+    (the_LeftOptions_of g1 = the_LeftOptions_of g2
+      & the_RightOptions_of g1 = the_RightOptions_of g2)
+proof
+  thus g1 = g2 implies (the_LeftOptions_of g1 = the_LeftOptions_of g2
+                        & the_RightOptions_of g1 = the_RightOptions_of g2);
+  reconsider w1 = g1 as strict left-right by Th4;
+  reconsider w2 = g2 as strict left-right by Th4;
+  assume
+A1: the_LeftOptions_of g1 = the_LeftOptions_of g2
+      & the_RightOptions_of g1 = the_RightOptions_of g2;
+  the LeftOptions of w1 = the_LeftOptions_of g1
+    & the LeftOptions of w2 = the_LeftOptions_of g2
+    & the RightOptions of w1 = the_RightOptions_of g1
+    & the RightOptions of w2 = the_RightOptions_of g2
+    by Def6,Def7;
+  hence g1 = g2 by A1;
+end;
+
+registration
+  cluster the_LeftOptions_of ConwayZero -> empty;
+  coherence by Def6;
+
+  cluster the_RightOptions_of ConwayZero -> empty;
+  coherence by Def7;
+
+  cluster the_RightOptions_of ConwayOne -> empty;
+  coherence by Def7;
+end;
+
+theorem Th6:
+  g = ConwayZero iff the_Options_of g = {}
+proof
+  hereby
+    assume g = ConwayZero;
+    then the_LeftOptions_of g = {} & the_RightOptions_of g = {};
+    hence the_Options_of g = {};
+  end;
+  hereby
+    reconsider w = g as strict left-right by Th4;
+    assume the_Options_of g = {};
+    then the_LeftOptions_of g = {} & the_RightOptions_of g = {};
+    then the LeftOptions of w = {} & the RightOptions of w = {}
+      by Def6,Def7;
+    hence g = ConwayZero;
+  end;
+end;
+
+theorem Th7:
+  x in the_LeftOptions_of ConwayOne iff x = ConwayZero
+proof
+  the_LeftOptions_of ConwayOne = {ConwayZero} by Def6;
+  hence thesis by TARSKI:def 1;
+end;
+
+theorem Th8:
+  (x in the_Options_of ConwayStar iff x = ConwayZero)
+    & (x in the_LeftOptions_of ConwayStar iff x = ConwayZero)
+    & (x in the_RightOptions_of ConwayStar iff x = ConwayZero)
+proof
+  the_LeftOptions_of ConwayStar = {ConwayZero}
+    & the_RightOptions_of ConwayStar = {ConwayZero}
+    by Def6,Def7;
+  hence thesis by TARSKI:def 1;
+end;
+
+theorem Th9:
+  g in ConwayDay(alpha) iff
+    for x st x in the_Options_of g
+      ex beta st beta in alpha & x in ConwayDay(beta)
+proof
+  hereby
+    assume g in ConwayDay(alpha);
+    then consider w being strict left-right such that
+A1:   g = w & for x st x in (the LeftOptions of w) \/ (the RightOptions of w)
+        ex beta st beta in alpha & x in ConwayDay(beta) by Th1;
+    let x;
+A2: the LeftOptions of w = the_LeftOptions_of g
+      & the RightOptions of w = the_RightOptions_of g
+      by A1,Def6,Def7;
+    assume x in the_Options_of g;
+    hence ex beta st beta in alpha & x in ConwayDay(beta) by A1,A2;
+  end;
+  hereby
+    assume
+A3:   for x st x in the_Options_of g
+        ex beta st beta in alpha & x in ConwayDay(beta);
+
+    ex w being left-right st g = w &
+      for x st x in (the LeftOptions of w) \/ (the RightOptions of w)
+        ex beta st beta in alpha & x in ConwayDay(beta)
+    proof
+      reconsider w = g as strict left-right by Th4;
+      take w;
+      the LeftOptions of w = the_LeftOptions_of g
+        & the RightOptions of w = the_RightOptions_of g
+        by Def6,Def7;
+      hence thesis by A3;
+    end;
+    hence g in ConwayDay(alpha) by Th1;
+  end;
+end;
+
+definition
+  let g be set;
+  assume
+A1: g is ConwayGame;
+  func ConwayRank(g) -> Ordinal means
+    :Def9:
+    g in ConwayDay(it) & for beta st beta in it holds not g in ConwayDay(beta);
+  existence
+  proof
+    defpred Included[Ordinal] means
+      g in ConwayDay($1);
+A2: ex alpha st Included[alpha] by Def3,A1;
+    consider alpha such that
+A3:   Included[alpha] & for beta st Included[beta] holds alpha c= beta
+      from ORDINAL1:sch 1(A2);
+    take alpha;
+    thus g in ConwayDay(alpha) by A3;
+    let beta;
+    assume
+A4:   beta in alpha;
+    assume g in ConwayDay(beta);
+    then alpha c= beta by A3;
+    then beta in beta by A4;
+    hence contradiction;
+  end;
+  uniqueness
+  proof
+    let alpha1,alpha2 be Ordinal;
+    assume
+A5:   g in ConwayDay(alpha1) &
+      for beta st beta in alpha1 holds not g in ConwayDay(beta);
+    assume
+A6:   g in ConwayDay(alpha2) &
+      for beta st beta in alpha2 holds not g in ConwayDay(beta);
+    assume
+A7:   alpha1 <> alpha2;
+    per cases by A7,ORDINAL1:24;
+    suppose alpha1 in alpha2;
+      hence contradiction by A5,A6;
+    end;
+    suppose alpha2 in alpha1;
+      hence contradiction by A5,A6;
+    end;
+  end;
+end;
+
+theorem Th10:
+  g in ConwayDay(alpha) & x in the_Options_of g implies x in ConwayDay(alpha)
+proof
+  assume g in ConwayDay(alpha) & x in the_Options_of g;
+  then consider beta such that
+A1: beta in alpha & x in ConwayDay(beta) by Th9;
+  beta c= alpha by A1,ORDINAL1:def 2;
+  then ConwayDay(beta) c= ConwayDay(alpha) by Th3;
+  hence x in ConwayDay(alpha) by A1;
+end;
+
+theorem Th11:
+  g in ConwayDay(alpha) &
+    (x in the_LeftOptions_of g or x in the_RightOptions_of g)
+    implies x in ConwayDay(alpha)
+proof
+  (x in the_LeftOptions_of g or x in the_RightOptions_of g)
+    implies x in the_Options_of g by XBOOLE_0:def 3;
+  hence thesis by Th10;
+end;
+
+theorem Th12:
+  g in ConwayDay(alpha) iff ConwayRank(g) c= alpha
+proof
+  hereby
+    assume
+A1:   g in ConwayDay(alpha);
+    assume not ConwayRank(g) c= alpha;
+    then alpha in ConwayRank(g) by ORDINAL1:26;
+    hence contradiction by A1,Def9;
+  end;
+  hereby
+    assume ConwayRank(g) c= alpha;
+    then
+A2:   ConwayDay(ConwayRank(g)) c= ConwayDay(alpha) by Th3;
+    g in ConwayDay(ConwayRank(g)) by Def9;
+    hence g in ConwayDay(alpha) by A2;
+  end;
+end;
+
+theorem Th13:
+  ConwayRank(g) in alpha iff ex beta st beta in alpha & g in ConwayDay(beta)
+proof
+  hereby
+    assume
+A1:   ConwayRank(g) in alpha;
+    take beta = ConwayRank(g);
+    thus beta in alpha by A1;
+    thus g in ConwayDay(beta) by Th12;
+  end;
+  hereby
+    assume ex beta st beta in alpha & g in ConwayDay(beta);
+    then consider beta such that
+A2:   beta in alpha & g in ConwayDay(beta);
+    ConwayRank(g) c= beta by Th12,A2;
+    hence ConwayRank(g) in alpha by A2,ORDINAL1:22;
+  end;
+end;
+
+theorem Th14:
+  gO in the_Options_of g implies ConwayRank(gO) in ConwayRank(g)
+proof
+  set alpha = ConwayRank(g);
+A1:
+  g in ConwayDay(alpha) by Def9;
+  assume gO in the_Options_of g;
+  then consider beta such that
+A2: beta in alpha & gO in ConwayDay(beta) by A1,Th9;
+  ConwayRank(gO) c= beta by A2,Th12;
+  hence thesis by A2,ORDINAL1:22;
+end;
+
+theorem
+  (gO in the_LeftOptions_of g or gO in the_RightOptions_of g)
+    implies ConwayRank(gO) in ConwayRank(g)
+proof
+  assume gO in the_LeftOptions_of g or gO in the_RightOptions_of g;
+  then gO in the_Options_of g by XBOOLE_0:def 3;
+  hence thesis by Th14;
+end;
+
+theorem Th16:
+  not g in the_Options_of g
+proof
+  assume not thesis;
+  then ConwayRank(g) in ConwayRank(g) by Th14;
+  hence contradiction;
+end;
+
+theorem Th17:
+  x in the_Options_of g implies x is ConwayGame-like left-right
+proof
+  consider alpha such that
+A1: g in ConwayDay(alpha) by Def3;
+  assume x in the_Options_of g;
+  then x in ConwayDay(alpha) by Th10,A1;
+  hence thesis by Th4;
+end;
+
+theorem Th18:
+  (x in the_LeftOptions_of g or x in the_RightOptions_of g)
+    implies x is ConwayGame-like left-right
+proof
+  assume x in the_LeftOptions_of g or x in the_RightOptions_of g;
+  then x in the_Options_of g by XBOOLE_0:def 3;
+  hence thesis by Th17;
+end;
+
+theorem Th19:
+  for w being strict left-right holds w is ConwayGame iff
+    for z st z in (the LeftOptions of w) \/ (the RightOptions of w)
+      holds z is ConwayGame
+proof
+  let w be strict left-right;
+  hereby
+    assume w is ConwayGame;
+    then reconsider g = w as ConwayGame;
+    the LeftOptions of w = the_LeftOptions_of g
+      & the RightOptions of w = the_RightOptions_of g
+      by Def6,Def7;
+    then
+      (the LeftOptions of w) \/ (the RightOptions of w) = the_Options_of g;
+    hence for z st z in (the LeftOptions of w) \/ (the RightOptions of w)
+      holds z is ConwayGame by Th17;
+  end;
+  hereby
+    assume
+A1:   for z st z in (the LeftOptions of w) \/ (the RightOptions of w)
+        holds z is ConwayGame;
+    set Z = { ConwayRank(z) where
+        z is Element of (the LeftOptions of w) \/ (the RightOptions of w)
+        : not contradiction };
+    set alpha = sup Z;
+
+    now
+      let z;
+      assume
+A2:     z in (the LeftOptions of w) \/ (the RightOptions of w);
+      then ConwayRank(z) in Z;
+      then ConwayRank(z) in On Z & On Z c= alpha
+        by ORDINAL1:def 10,ORDINAL2:def 7;
+      then
+A3:     ConwayRank(z) c= alpha by ORDINAL1:def 2;
+
+      take beta = alpha;
+      thus beta in succ alpha by ORDINAL1:10;
+      z is ConwayGame by A1,A2;
+      hence z in ConwayDay(beta) by A3,Th12;
+    end;
+    then w in ConwayDay(succ alpha) by Th1;
+    hence w is ConwayGame;
+  end;
+end;
+
+begin :: Schemes of induction
+
+scheme ConwayGameMinTot { P[ConwayGame] } :
+    ex g st P[g] & for g1 st ConwayRank(g1) in ConwayRank(g) holds not P[g1]
+provided
+A1: ex g st P[g]
+proof
+  defpred Empty[Ordinal] means
+    for g st g in ConwayDay($1) holds not P[g];
+  assume
+A2: not thesis;
+A3:
+  for alpha st
+      for beta st beta in alpha holds Empty[beta]
+    holds Empty[alpha]
+  proof
+    let alpha;
+    assume
+A4:   for beta st beta in alpha holds Empty[beta];
+    let g;
+    assume
+A5:   g in ConwayDay(alpha) & P[g];
+    then consider g1 such that
+A6:   ConwayRank(g1) in ConwayRank(g) & P[g1] by A2;
+
+    ConwayRank(g) c= alpha by Th12,A5;
+    then consider beta such that
+A7:   beta in alpha & g1 in ConwayDay(beta) by Th13,A6;
+    thus contradiction by A4,A7,A6;
+  end;
+A8:
+  for alpha holds Empty[alpha] from ORDINAL1:sch 2(A3);
+
+  consider g such that
+A9: P[g] by A1;
+  consider alpha such that
+A10:g in ConwayDay(alpha) by Def3;
+  thus contradiction by A8,A9,A10;
+end;
+
+scheme ConwayGameMin { P[ConwayGame] } :
+    ex g st P[g] & for gO st gO in the_Options_of g holds not P[gO]
+provided
+A1: ex g st P[g]
+proof
+  consider g such that
+A2: P[g] & for g1 st ConwayRank(g1) in ConwayRank(g) holds not P[g1]
+    from ConwayGameMinTot(A1);
+  take g;
+  thus P[g] by A2;
+  let gO;
+  assume gO in the_Options_of g;
+  then ConwayRank(gO) in ConwayRank(g) by Th14;
+  hence not P[gO] by A2;
+end;
+
+scheme ConwayGameInd { P[ConwayGame] } : for g holds P[g]
+provided
+A1: for g st (for gO st gO in the_Options_of g holds P[gO]) holds P[g]
+proof
+  defpred NP[ConwayGame] means not P[$1];
+  assume
+A2: ex g st NP[g];
+  ex g st NP[g] & for gO st gO in the_Options_of g holds not NP[gO]
+    from ConwayGameMin(A2);
+  hence contradiction by A1;
+end;
+
+begin :: Tree of a game
+
+definition
+  let f be Function;
+  attr f is ConwayGame-valued means
+    :Def10:
+    for x st x in dom f holds f.x is ConwayGame;
+end;
+
+registration
+  let g;
+  cluster <*g*> -> ConwayGame-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom <*g*>;
+    then x = 1 by FINSEQ_1:111;
+    hence thesis by FINSEQ_1:def 8;
+  end;
+end;
+
+registration
+  cluster ConwayGame-valued non empty FinSequence;
+  existence
+  proof
+    take <*ConwayZero*>;
+    thus thesis;
+  end;
+end;
+
+registration
+  let f be non empty FinSequence;
+  cluster -> natural non empty Element of dom f;
+  coherence by FINSEQ_3:26;
+end;
+
+registration
+  let f be ConwayGame-valued non empty Function;
+  let x be Element of dom f;
+  cluster f.x -> ConwayGame-like;
+  coherence by Def10;
+end;
+
+definition
+  let f be ConwayGame-valued non empty FinSequence;
+  attr f is ConwayGameChain-like means
+    :Def11:
+    for n being Element of dom f st n > 1 holds
+      f.(n-1) in the_Options_of f.n;
+end;
+
+theorem Th20:
+  for f being FinSequence for n st n in dom f & n > 1
+    holds n-1 in dom f
+proof
+  let f be FinSequence;
+  consider l being Nat such that
+A1: dom f = Seg l by FINSEQ_1:def 2;
+  thus thesis by A1,FINSEQ_3:13;
+end;
+
+registration
+  let g;
+  cluster <*g*> -> ConwayGameChain-like;
+  coherence
+  proof
+    let n be Element of dom <*g*>;
+    dom <*g*> = { 1 } by FINSEQ_1:def 8,FINSEQ_1:4;
+    hence thesis by TARSKI:def 1;
+  end;
+end;
+
+registration
+  cluster ConwayGameChain-like (ConwayGame-valued non empty FinSequence);
+  existence
+  proof
+    set g =the  ConwayGame;
+    take <*g*>;
+    thus thesis;
+  end;
+end;
+
+definition
+  mode ConwayGameChain is
+    ConwayGameChain-like (ConwayGame-valued non empty FinSequence);
+end;
+
+theorem Th21:
+  for f being ConwayGameChain
+    for n,m being Element of dom f st n < m holds
+      ConwayRank(f.n) in ConwayRank(f.m)
+proof
+  let f be ConwayGameChain;
+  let n,m be Element of dom f such that
+A1: n < m;
+
+  consider l being Nat such that
+A2: dom f = Seg l by FINSEQ_1:def 2;
+
+  defpred True[Nat] means
+    m-$1 in dom f implies ConwayRank(f.(m-$1)) in ConwayRank(f.m);
+
+  n >= 1 by A2,FINSEQ_1:3;
+  then
+A3: m > 1 by A1,XXREAL_0:2;
+
+A4:
+  True[1]
+  proof
+    assume m-1 in dom f;
+    then reconsider m1 = m-1 as Element of dom f;
+    f.m1 in the_Options_of f.m by A3,Def11;
+    hence thesis by Th14;
+  end;
+
+A5:
+  for k being non empty Nat st True[k] holds True[k+1]
+  proof
+    let k be non empty Nat;
+    assume
+A6:   True[k];
+    assume m-(k+1) in dom f;
+    then reconsider mk1 = m-(k+1) as Element of dom f;
+    k <= k+1 by XREAL_1:33;
+    then 1 <= mk1 & mk1 <= m-k & m-k <= m & m <= l
+      by XREAL_1:12,A2,FINSEQ_1:3,XREAL_1:45;
+    then
+A7:   1 <= m-k & m-k <= l by XXREAL_0:2;
+    then m >= k+1 & k <= k+1 by XREAL_1:21,XREAL_1:33;
+    then m-k is Nat by NAT_1:21,XXREAL_0:2;
+    then reconsider mk = m-k as Element of dom f by A7,A2,FINSEQ_1:3;
+
+    mk1+1 > 1 & mk1 = mk-1 by XREAL_1:31;
+    then f.mk1 in the_Options_of f.mk by Def11;
+    then ConwayRank(f.mk1) in ConwayRank(f.mk)
+      & ConwayRank(f.mk) in ConwayRank(f.m) by Th14,A6;
+    hence thesis by ORDINAL1:19;
+  end;
+
+A8:
+  for k being non empty Nat holds True[k] from NAT_1:sch 10(A4,A5);
+  reconsider k = m-n as non empty Nat by A1,NAT_1:21;
+  m-k = n;
+  hence thesis by A8;
+end;
+
+theorem Th22:
+  for f being ConwayGameChain
+    for n,m being Element of dom f st n <= m holds
+      ConwayRank(f.n) c= ConwayRank(f.m)
+proof
+  let f be ConwayGameChain;
+  let n,m be Element of dom f such that
+A1: n <= m;
+  per cases by A1,XXREAL_0:1;
+    suppose n < m;
+      then ConwayRank(f.n) in ConwayRank(f.m) by Th21;
+      hence thesis by ORDINAL1:def 2;
+    end;
+    suppose n = m;
+      hence thesis;
+    end;
+end;
+
+theorem Th23:
+  for f being ConwayGameChain st f.(len f) in ConwayDay(alpha)
+    holds f.1 in ConwayDay(alpha)
+proof
+  let f be ConwayGameChain;
+  assume
+A1: f.(len f) in ConwayDay(alpha);
+
+  reconsider n = 1 as Element of dom f by FINSEQ_5:6;
+  reconsider m = len f as Element of dom f by FINSEQ_5:6;
+
+  n <= m by NAT_1:14;
+  then ConwayRank(f.n) c= ConwayRank(f.m)
+    & ConwayRank(f.m) c= alpha by Th22,A1,Th12;
+  then ConwayRank(f.n) c= alpha by XBOOLE_1:1;
+  hence f.1 in ConwayDay(alpha) by Th12;
+end;
+
+Lm2:
+  ex f being ConwayGameChain st f.1 = g & f.(len f) = g
+proof
+  take f = <*g*>;
+  len f = 1 by FINSEQ_1:57;
+  hence thesis by FINSEQ_1:57;
+end;
+
+definition
+  let g;
+  func the_Tree_of g -> set means
+    :Def12:
+    z in it iff ex f being ConwayGameChain st f.1 = z & f.(len f) = g;
+  existence
+  proof
+    consider alpha such that
+A1:   g in ConwayDay(alpha) by Def3;
+    take s = { x where x is Element of ConwayDay(alpha) :
+                ex f being ConwayGameChain st f.1 = x & f.(len f) = g };
+    let z;
+    hereby
+      assume z in s;
+      then consider x being Element of ConwayDay(alpha) such that
+A2:     x = z & ex f being ConwayGameChain st f.1 = x & f.(len f) = g;
+      thus ex f being ConwayGameChain st f.1 = z & f.(len f) = g by A2;
+    end;
+    assume ex f being ConwayGameChain st f.1 = z & f.(len f) = g;
+    then consider f being ConwayGameChain such that
+A3: f.1 = z & f.(len f) = g;
+    f.1 in ConwayDay(alpha) by Th23,A1,A3;
+    hence z in s by A3;
+  end;
+  uniqueness
+  proof
+    let t1,t2 be set;
+    assume
+A4:   z in t1 iff ex f being ConwayGameChain st f.1 = z & f.(len f) = g;
+    assume
+A5:   z in t2 iff ex f being ConwayGameChain st f.1 = z & f.(len f) = g;
+
+    now
+      let z;
+      hereby
+        assume z in t1;
+        then ex f being ConwayGameChain st f.1 = z & f.(len f) = g by A4;
+        hence z in t2 by A5;
+      end;
+      hereby
+        assume z in t2;
+        then ex f being ConwayGameChain st f.1 = z & f.(len f) = g by A5;
+        hence z in t1 by A4;
+      end;
+    end;
+    hence t1 = t2 by TARSKI:2;
+  end;
+end;
+
+registration
+  let g;
+  cluster the_Tree_of g -> non empty;
+  coherence
+  proof
+    ex f being ConwayGameChain st f.1 = g & f.(len f) = g by Lm2;
+    hence thesis by Def12;
+  end;
+end;
+
+definition
+  let g;
+  func the_proper_Tree_of g -> Subset of the_Tree_of g equals
+    the_Tree_of g \ {g};
+  coherence;
+end;
+
+theorem Th24:
+  g in the_Tree_of g
+proof
+  ex f being ConwayGameChain st f.1 = g & f.(len f) = g by Lm2;
+  hence thesis by Def12;
+end;
+
+definition
+  let alpha;
+  let g be Element of ConwayDay(alpha);
+  redefine func the_Tree_of g -> Subset of ConwayDay(alpha);
+  coherence
+  proof
+    the_Tree_of(g) c= ConwayDay(alpha)
+    proof
+      let z;
+      assume z in the_Tree_of g;
+      then consider f being ConwayGameChain such that
+A1:     f.1 = z & f.(len f) = g by Def12;
+      thus z in ConwayDay(alpha) by A1,Th23;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  let g;
+  cluster -> ConwayGame-like Element of the_Tree_of g;
+  coherence
+  proof
+    let g1 be Element of the_Tree_of g;
+    consider alpha such that
+A1:   g in ConwayDay(alpha) by Def3;
+    ex f being ConwayGameChain st f.1 = g1 & f.(len f) = g by Def12;
+    then g1 in ConwayDay(alpha) by Th23,A1;
+    hence thesis;
+  end;
+end;
+
+theorem Th25:
+  for f being ConwayGameChain for n being non empty Nat holds
+    f|n is ConwayGameChain
+proof
+  let f be ConwayGameChain;
+  let n be non empty Nat;
+  set ls = len (f|n);
+
+A1:
+  f|n is ConwayGame-valued
+  proof
+    let x such that
+A2:   x in dom (f|n);
+    dom (f|n) c= dom f by RELAT_1:89;
+    then f.x is ConwayGame by A2;
+    hence (f|n).x is ConwayGame by FUNCT_1:70,A2;
+  end;
+  len f >= 1 & n >= 1 & ls = min(n,len f) by NAT_1:14,FINSEQ_2:24;
+  then reconsider fs = (f|n) as
+    ConwayGame-valued non empty FinSequence by A1,XXREAL_0:20;
+
+  fs is ConwayGameChain-like
+  proof
+    let n be Element of dom fs such that
+A3:   n > 1;
+    dom fs c= dom f & n in dom fs & n-1 in dom fs by RELAT_1:89,Th20,A3;
+    then n in dom f & f.n = fs.n & f.(n-1) = fs.(n-1) by FUNCT_1:70;
+    hence thesis by Def11,A3;
+  end;
+  hence thesis;
+end;
+
+theorem Th26:
+  for f1,f2 being ConwayGameChain st
+    ex g st g = f2.1 & f1.(len f1) in the_Options_of g
+    holds f1^f2 is ConwayGameChain
+proof
+  let f1,f2 be ConwayGameChain;
+  assume
+A1: ex g st g = f2.1 & f1.(len f1) in the_Options_of g;
+  then reconsider g = f2.1 as ConwayGame;
+
+  f1^f2 is ConwayGame-valued
+  proof
+    let x;
+    set y = (f1^f2).x;
+    assume x in dom (f1^f2);
+    then y in rng (f1^f2) by FUNCT_1:12;
+    then
+A2:   y in rng f1 \/ rng f2 by FINSEQ_1:44;
+    per cases by A2,XBOOLE_0:def 3;
+      suppose y in rng f1;
+        then ex z st z in dom f1 & y = f1.z by FUNCT_1:def 5;
+        hence y is ConwayGame;
+      end;
+      suppose y in rng f2;
+        then ex z st z in dom f2 & y = f2.z by FUNCT_1:def 5;
+        hence y is ConwayGame;
+      end;
+  end;
+  then reconsider f12 = f1^f2 as ConwayGame-valued non empty FinSequence;
+
+  f12 is ConwayGameChain-like
+  proof
+    let n be Element of dom f12;
+    assume
+A3:   n > 1;
+    per cases by XXREAL_0:1;
+      suppose n < len f1 + 1;
+        then n <= len f1 by NAT_1:22;
+        then reconsider n0 = n as Element of dom f1 by A3,FINSEQ_3:27;
+        n0 - 1 in dom f1 by Th20,A3;
+        then f1.n0 = f12.n0 & f1.(n0-1) = f12.(n0-1) by FINSEQ_1:def 7;
+        hence thesis by A3,Def11;
+      end;
+      suppose
+A4:       n = len f1 + 1;
+        len f1 in dom f1 & 1 in dom f2 by FINSEQ_5:6;
+        then f12.(n-1) = f1.(len f1) & f12.n = f2.1 by A4,FINSEQ_1:def 7;
+        hence thesis by A1;
+      end;
+      suppose
+A5:       n > len f1 + 1;
+        n <= len f12 & len f12 = len f1 + len f2 & n >= len f1
+          by FINSEQ_3:27,FINSEQ_1:35,A5,XREAL_1:40;
+        then
+A6:       (n - len f1) > 1 & (n - len f1) <= len f2 & n - len f1 is Nat
+          by A5,XREAL_1:22,NAT_1:21;
+        then reconsider k = n - len f1 as Element of dom f2
+          by FINSEQ_3:27;
+        k-1 in dom f2 by A6,Th20;
+        then f12.(len f1 + k) = f2.k & f12.(len f1 + (k-1)) = f2.(k-1)
+          by FINSEQ_1:def 7;
+        hence thesis by A6,Def11;
+      end;
+  end;
+  hence thesis;
+end;
+
+theorem Th27:
+  x in the_Tree_of g iff
+    (x = g or ex gO st gO in the_Options_of g & x in the_Tree_of gO)
+proof
+  hereby
+    assume x in the_Tree_of g;
+    then consider f being ConwayGameChain such that
+A1:   f.1 = x & f.(len f) = g by Def12;
+    reconsider n = len f as Element of dom f by FINSEQ_5:6;
+
+    assume
+A2:    x <> g;
+    then
+A3:   n > 1 by A1,NAT_1:54;
+    reconsider n1 = n-1 as Element of dom f by Th20,A1,NAT_1:54,A2;
+    take gO = f.n1;
+    thus gO in the_Options_of g by Def11,A3,A1;
+
+    reconsider nf = f|n1 as ConwayGameChain by Th25;
+    n1 < n & 1 in dom nf & len nf in dom nf by XREAL_1:46,FINSEQ_5:6;
+    then len nf = n1 & nf.1 = f.1 & nf.(len nf) = f.(len nf)
+      by FINSEQ_1:80,FUNCT_1:70;
+    hence x in the_Tree_of gO by Def12,A1;
+  end;
+  hereby
+    assume
+A4:   x = g or ex gO st gO in the_Options_of g & x in the_Tree_of gO;
+    per cases by A4;
+      suppose x = g;
+        hence x in the_Tree_of g by Th24;
+      end;
+      suppose ex gO st gO in the_Options_of g & x in the_Tree_of gO;
+        then consider gO such that
+A5:       gO in the_Options_of g & x in the_Tree_of gO;
+        consider f being ConwayGameChain such that
+A6:       f.1 = x & f.(len f) = gO by A5,Def12;
+
+        ex g1 st g1 = <*g*>.1 & f.(len f) in the_Options_of g1
+        proof
+          take g;
+          thus thesis by FINSEQ_1:def 8,A5,A6;
+        end;
+        then reconsider nf = f^<*g*> as ConwayGameChain by Th26;
+
+        1 in dom f & len nf = len f + 1 by FINSEQ_5:6,FINSEQ_2:19;
+        then nf.1 = x & nf.(len nf) = g by FINSEQ_1:def 7,A6,FINSEQ_1:59;
+        hence x in the_Tree_of g by Def12;
+      end;
+  end;
+end;
+
+theorem Th28:
+  gO in the_Tree_of g implies (gO = g or ConwayRank(gO) in ConwayRank(g))
+proof
+  assume gO in the_Tree_of g;
+  then consider f being ConwayGameChain such that
+A1: f.1 = gO & f.(len f) = g by Def12;
+
+  reconsider n = 1 as Element of dom f by FINSEQ_5:6;
+  reconsider m = len f as Element of dom f by FINSEQ_5:6;
+
+A2:
+  m >= 1 by NAT_1:14;
+  per cases by A2,XXREAL_0:1;
+    suppose m = 1;
+      hence thesis by A1;
+    end;
+    suppose m > 1;
+      then ConwayRank(f.n) in ConwayRank(f.m) by Th21;
+      hence thesis by A1;
+    end;
+end;
+
+theorem Th29:
+  gO in the_Tree_of g implies ConwayRank(gO) c= ConwayRank(g)
+proof
+  assume
+A1: gO in the_Tree_of g;
+  per cases by A1,Th28;
+    suppose gO = g;
+      hence thesis;
+    end;
+    suppose
+      ConwayRank(gO) in ConwayRank(g);
+      hence thesis by ORDINAL1:def 2;
+    end;
+end;
+
+theorem
+  for s being set st g in s & for g1 st g1 in s holds the_Options_of g1 c= s
+    holds the_Tree_of g c= s
+proof
+  let s be set such that
+A1: g in s & for g1 st g1 in s holds the_Options_of g1 c= s;
+  hereby
+    let z;
+    assume z in the_Tree_of g;
+    then consider f being ConwayGameChain such that
+A2:   f.1 = z & f.(len f) = g by Def12;
+
+    defpred OK[Nat] means $1+1 <= len f & f.($1+1) in s;
+    len f > 0;
+    then reconsider m = len f - 1 as Nat by NAT_1:20;
+    OK[m] by A2,A1;
+    then
+A3:   ex k st OK[k];
+
+A4: for k st k <> 0 & OK[k] ex n st n < k & OK[n]
+    proof
+      let k;
+      assume
+A5:     k <> 0 & OK[k];
+      then reconsider m = k-1 as Nat by NAT_1:20;
+
+      take m;
+      thus m < k by XREAL_1:149;
+      then m+1 < k+1 by XREAL_1:8;
+      hence m+1 <= len f by XXREAL_0:2,A5;
+
+A6:   k+1 > 1 by A5,XREAL_1:31;
+      then reconsider k1 = k+1 as Element of dom f by A5,FINSEQ_3:27;
+      f.(k1-1) in the_Options_of f.k1 & the_Options_of f.k1 c= s
+        by Def11,A1,A5,A6;
+      hence f.(m+1) in s;
+    end;
+
+    OK[0] from NAT_1:sch 7(A3,A4);
+    hence z in s by A2;
+  end;
+end;
+
+theorem Th31:
+  g1 in the_Tree_of g2 implies the_Tree_of g1 c= the_Tree_of g2
+proof
+  assume g1 in the_Tree_of g2;
+  then consider f2 being ConwayGameChain such that
+A1: f2.1 = g1 & f2.(len f2) = g2 by Def12;
+
+  hereby
+    let x;
+    assume x in the_Tree_of g1;
+    then consider f1 being ConwayGameChain such that
+A2:   f1.1 = x & f1.(len f1) = g1 by Def12;
+
+A3: len f1 >= 1 by NAT_1:14;
+    per cases by A3,XXREAL_0:1;
+      suppose len f1 = 1;
+        hence x in the_Tree_of g2 by A1,A2,Def12;
+      end;
+      suppose
+A4:     len f1 > 1;
+        then reconsider n0 = len f1 - 1 as non empty Nat by NAT_1:21;
+        reconsider f0 = f1|n0 as ConwayGameChain by Th25;
+
+        len f1 is Element of dom f1 & n0 <= len f1 by FINSEQ_5:6,XREAL_1:45;
+        then f1.n0 in the_Options_of g1 & f0.n0 = f1.n0 & len f0 = n0
+          by Def11,A2,A4,FINSEQ_3:121,FINSEQ_1:80;
+        then reconsider f = f0 ^ f2 as ConwayGameChain by Th26,A1;
+
+        n0 >= 1 by NAT_1:14;
+        then 1 in dom f0 & len f2 in dom f2 & f0.1 = f1.1
+          & len f = len f0 + len f2 by FINSEQ_5:6,FINSEQ_3:121,FINSEQ_1:35;
+        then f.1 = x & f.(len f) = g2 by A1,A2,FINSEQ_1:def 7;
+        hence x in the_Tree_of g2 by Def12;
+      end;
+  end;
+end;
+
+theorem Th32:
+  g1 in the_Tree_of g2 implies the_proper_Tree_of g1 c= the_proper_Tree_of g2
+proof
+  assume
+A1: g1 in the_Tree_of g2;
+  then
+A2: the_Tree_of g1 c= the_Tree_of g2 by Th31;
+
+  hereby
+    let x;
+    assume
+A3:   x in the_proper_Tree_of g1;
+    then
+A4:   x in the_Tree_of g1 & x <> g1 by ZFMISC_1:64;
+
+    assume
+A5:   not x in the_proper_Tree_of g2;
+    then
+A6:   x = g2 by ZFMISC_1:64,A2,A4;
+
+    per cases by Th28,A1;
+      suppose g1 = g2;
+        hence contradiction by A3,A5;
+      end;
+      suppose
+A7:     ConwayRank(g1) in ConwayRank(g2);
+        reconsider g = x as ConwayGame by A3;
+        ConwayRank(g) in ConwayRank(g2) by A7,ORDINAL1:22,Th29,A4;
+        hence contradiction by A6;
+      end;
+  end;
+end;
+
+theorem Th33:
+  the_Options_of g c= the_proper_Tree_of g
+proof
+  let x such that
+A1: x in the_Options_of g;
+  reconsider gO = x as ConwayGame by A1,Th17;
+  gO in the_Tree_of gO by Th24;
+  then gO in the_Tree_of g by A1,Th27;
+  then gO = g or gO in the_proper_Tree_of g by ZFMISC_1:64;
+  hence thesis by A1,Th16;
+end;
+
+theorem Th34:
+  the_Options_of g c= the_Tree_of g
+proof
+  the_Options_of g c= the_proper_Tree_of g by Th33;
+  hence thesis by XBOOLE_1:1;
+end;
+
+theorem Th35:
+  g1 in the_proper_Tree_of g2 implies the_Tree_of g1 c= the_proper_Tree_of g2
+proof
+  assume
+A1:  g1 in the_proper_Tree_of g2;
+  then
+A2: g1 in the_Tree_of g2 & g1 <> g2 by ZFMISC_1:64;
+A3:
+  the_Tree_of g1 c= the_Tree_of g2 by Th31,A1;
+  not g2 in the_Tree_of g1
+  proof
+A4: ConwayRank(g1) in ConwayRank(g2) by A2,Th28;
+    assume g2 in the_Tree_of g1;
+    then ConwayRank(g2) c= ConwayRank(g1) by Th29;
+    then ConwayRank(g1) in ConwayRank(g1) by A4;
+    hence contradiction;
+  end;
+  hence thesis by A3,ZFMISC_1:40;
+end;
+
+theorem
+  gO in the_Options_of g implies the_Tree_of gO c= the_proper_Tree_of g
+proof
+  assume
+A1: gO in the_Options_of g;
+  the_Options_of g c= the_proper_Tree_of g by Th33;
+  hence thesis by Th35,A1;
+end;
+
+theorem
+  the_Tree_of ConwayZero = { ConwayZero } by Th2,ZFMISC_1:39;
+
+theorem
+  ConwayZero in the_Tree_of g
+proof
+  defpred Bad[ConwayGame] means not ConwayZero in the_Tree_of $1;
+  assume not thesis;
+  then
+A1: ex g st Bad[g];
+  consider g such that
+A2: Bad[g] & for gO st gO in the_Options_of g holds not Bad[gO]
+    from ConwayGameMin(A1);
+  per cases by Th6;
+    suppose g = ConwayZero;
+      hence contradiction by Th24,A2;
+    end;
+    suppose the_Options_of g <> {};
+      then consider x such that
+A3:     x in the_Options_of g by XBOOLE_0:def 1;
+      reconsider gO = x as ConwayGame by Th17,A3;
+A4:   ConwayZero in the_Tree_of gO by A2,A3;
+      the_Options_of g c= the_Tree_of g by Th34;
+      then the_Tree_of gO c= the_Tree_of g by Th31,A3;
+      hence contradiction by A2,A4;
+    end;
+end;
+
+scheme ConwayGameMin2 { P[ConwayGame] } :
+  ex g st P[g] & for gO st gO in the_proper_Tree_of g holds not P[gO]
+provided
+A1: ex g st P[g]
+proof
+  consider g such that
+A2: P[g] & for g1 st ConwayRank(g1) in ConwayRank(g) holds not P[g1]
+    from ConwayGameMinTot(A1);
+  take g;
+  now
+    let gO;
+    assume gO in the_proper_Tree_of g;
+    then gO in the_Tree_of g & gO <> g by ZFMISC_1:64;
+    then ConwayRank(gO) in ConwayRank(g) by Th28;
+    hence not P[gO] by A2;
+  end;
+  hence thesis by A2;
+end;
+
+begin :: Scheme about definability of functions by recursion
+
+scheme Func1RecUniq { F(ConwayGame,Function) -> set } :
+  for g for f1,f2 being Function st
+    dom f1 = the_Tree_of g & dom f2 = the_Tree_of g
+    & (for g1 st g1 in dom f1 holds f1.g1 = F(g1,f1|the_proper_Tree_of g1))
+    & (for g1 st g1 in dom f2 holds f2.g1 = F(g1,f2|the_proper_Tree_of g1))
+  holds f1 = f2
+proof
+  let g;
+  let f1,f2 be Function such that
+A1: dom f1 = the_Tree_of g & dom f2 = the_Tree_of g
+  & (for g1 st g1 in dom f1 holds f1.g1 = F(g1,f1|the_proper_Tree_of g1))
+  & (for g1 st g1 in dom f2 holds f2.g1 = F(g1,f2|the_proper_Tree_of g1));
+
+  defpred Bad[ConwayGame] means $1 in the_Tree_of g & f1.$1 <> f2.$1;
+  assume f1 <> f2;
+  then ex x st x in the_Tree_of g & f1.x <> f2.x by FUNCT_1:def 17,A1;
+  then
+A2: ex g0 st Bad[g0];
+  consider gm being ConwayGame such that
+A3: Bad[gm] & for gO st gO in the_proper_Tree_of gm holds not Bad[gO]
+    from ConwayGameMin2(A2);
+
+A4:
+  f1|the_proper_Tree_of gm = f2|the_proper_Tree_of gm
+  proof
+    now
+      set f1r = f1|the_proper_Tree_of gm;
+      set f2r = f2|the_proper_Tree_of gm;
+A5:    the_Tree_of gm c= the_Tree_of g by A3,Th31;
+      then
+A6:     the_proper_Tree_of gm c= the_Tree_of g by XBOOLE_1:1;
+A7:   dom f1r = the_proper_Tree_of gm & dom f2r = the_proper_Tree_of gm
+        by A1,RELAT_1:91,A5,XBOOLE_1:1;
+      hence dom f1r = dom f2r;
+      hereby
+        let x such that
+A8:       x in dom f1r;
+        reconsider g0 = x as ConwayGame by A7,A8;
+        f1.x = f2.x & f1r.x = f1.x & f2r.x = f2.x by A3,A6,A7,A8,FUNCT_1:70;
+        hence f1r.x = f2r.x;
+      end;
+    end;
+    hence thesis by FUNCT_1:def 17;
+  end;
+  f1.gm = F(gm,f1|the_proper_Tree_of gm)
+    & f2.gm = F(gm,f2|the_proper_Tree_of gm) by A1,A3;
+  hence contradiction by A4,A3;
+end;
+
+scheme Func1RecEx { F(ConwayGame,Function) -> set } :
+  ex f being Function st dom f = the_Tree_of g &
+    for g1 st g1 in dom f holds f.g1 = F(g1,f|the_proper_Tree_of g1)
+proof
+  defpred GoodFun[Function] means
+    for g st g in dom $1 holds $1.g = F(g,$1|the_proper_Tree_of g);
+  defpred GoodG[ConwayGame] means
+    ex f being Function st dom f = the_Tree_of $1 & GoodFun[f];
+  defpred GF[set,set] means ex g being ConwayGame st $1 = g
+    & ex f being Function st $2 = f & dom f = the_Tree_of g & GoodFun[f];
+
+A1:
+  for g for f1,f2 being Function st
+    dom f1 = the_Tree_of g & dom f2 = the_Tree_of g
+    & (for g1 st g1 in dom f1 holds f1.g1 = F(g1,f1|the_proper_Tree_of g1))
+    & (for g1 st g1 in dom f2 holds f2.g1 = F(g1,f2|the_proper_Tree_of g1))
+   holds f1 = f2 from Func1RecUniq;
+  then
+A2: for x,y,z st GF[x,y] & GF[x,z] holds y=z;
+
+A3:
+  for g for f being Function st GoodFun[f] holds GoodFun[f|(the_Tree_of g)]
+  proof
+    let g;
+    let f be Function such that
+A4:   GoodFun[f];
+    let g1 such that
+A5:   g1 in dom (f|(the_Tree_of g));
+
+    dom (f|(the_Tree_of g)) c= dom f by RELAT_1:89;
+    then
+A6:   f.g1 = F(g1,f|the_proper_Tree_of g1)
+        & f.g1 = (f|(the_Tree_of g)).g1 by A4,A5,FUNCT_1:70;
+    dom (f|(the_Tree_of g)) c= the_Tree_of g by RELAT_1:87;
+    then the_Tree_of g1 c= the_Tree_of g by Th31,A5;
+    hence thesis by A6,RELAT_1:103,XBOOLE_1:1;
+  end;
+
+A7:
+  for g st (for gO st gO in the_Options_of g holds GoodG[gO]) holds GoodG[g]
+  proof
+    let g;
+    assume
+A8:  for gO st gO in the_Options_of g holds GoodG[gO];
+    consider FUNCS being set such that
+A9:  y in FUNCS iff ex x st x in the_Tree_of g & GF[x,y]
+      from TARSKI:sch 1(A2);
+
+    FUNCS is functional compatible
+    proof
+      thus FUNCS is functional
+      proof
+        let y;
+        assume y in FUNCS;
+        then ex x st x in the_Tree_of g & GF[x,y] by A9;
+        hence thesis;
+      end;
+      now
+        let f1,f2 be Function;
+        assume f1 in FUNCS;
+        then ex x st x in the_Tree_of g & GF[x,f1] by A9;
+        then consider g1 such that
+A10:      g1 in the_Tree_of g & dom f1 = the_Tree_of g1 & GoodFun[f1];
+        assume f2 in FUNCS;
+        then ex x st x in the_Tree_of g & GF[x,f2] by A9;
+        then consider g2 such that
+A11:      g2 in the_Tree_of g & dom f2 = the_Tree_of g2 & GoodFun[f2];
+
+        thus f1 tolerates f2
+        proof
+          let x;
+          assume x in dom f1 /\ dom f2;
+          then
+A12:        x in the_Tree_of g1 & x in the_Tree_of g2
+            by XBOOLE_0:def 4,A10,A11;
+          then reconsider g0 = x as ConwayGame;
+          set T = the_Tree_of g0;
+          T c= dom f1 & T c= dom f2 by Th31,A10,A11,A12;
+          then dom (f1|T) = T & dom (f2|T) = T & GoodFun[f1|T] & GoodFun[f2|T]
+            by RELAT_1:91,A3,A10,A11;
+          then f1|T = f2|T & g0 in dom (f1|T) & g0 in dom (f2|T) by A1,Th24;
+          then f1|T = f2|T & f1.g0 = (f1|T).g0 & f2.g0 = (f2|T).g0
+            by FUNCT_1:70;
+          hence thesis;
+        end;
+      end;
+      hence FUNCS is compatible by COMPUT_1:def 1;
+    end;
+    then reconsider FS = FUNCS as functional compatible set;
+    reconsider f = union FS as Function;
+    take f;
+
+A13:the_proper_Tree_of g c= dom f
+    proof
+      let x;
+      assume x in the_proper_Tree_of g;
+      then x in the_Tree_of g & x <> g by ZFMISC_1:64;
+      then consider gO such that
+A14:    gO in the_Options_of g & x in the_Tree_of gO by Th27;
+      consider fO being Function such that
+A15:    dom fO = the_Tree_of gO & GoodFun[fO] by A8,A14;
+      the_Options_of g c= the_Tree_of g by Th34;
+      then fO in FUNCS by A9,A14,A15;
+      then dom fO c= dom f & x in dom fO by COMPUT_1:16,A14,A15;
+      hence thesis;
+    end;
+
+A16:
+    dom f c= the_Tree_of g
+    proof
+      let x;
+      assume x in dom f;
+      then [x,f.x] in f by FUNCT_1:def 4;
+      then ex y st [x,f.x] in y & y in FUNCS by TARSKI:def 4;
+      then consider f1 being Function such that
+A17:    [x,f.x] in f1 & f1 in FUNCS;
+      ex y st y in the_Tree_of g & GF[y,f1] by A17,A9;
+      then consider g1 such that
+A18:    g1 in the_Tree_of g & dom f1 = the_Tree_of g1;
+      x in dom f1 & dom f1 c= the_Tree_of g
+        by A17,RELAT_1:def 4,A18,Th31;
+      hence x in the_Tree_of g;
+   end;
+
+A19:GoodFun[f]
+    proof
+      let g1;
+      assume g1 in dom f;
+      then [g1,f.g1] in f by FUNCT_1:def 4;
+      then ex x st [g1,f.g1] in x & x in FUNCS by TARSKI:def 4;
+      then consider fO being Function such that
+A20:    [g1,f.g1] in fO & fO in FUNCS;
+      ex x st x in the_Tree_of g & GF[x,fO] by A9,A20;
+      then consider gO such that
+A21:    gO in the_Tree_of g & dom fO = the_Tree_of gO & GoodFun[fO];
+
+A22:  fO|the_proper_Tree_of g1 = f|the_proper_Tree_of g1
+      proof
+        now
+          g1 in the_Tree_of gO by A20,A21,FUNCT_1:8;
+          then the_Tree_of g1 c= the_Tree_of gO by Th31;
+          then
+A23:        the_proper_Tree_of g1 c= dom fO by A21,XBOOLE_1:1;
+          dom fO c= dom f by A20,COMPUT_1:16;
+          then
+A24:        dom (fO|the_proper_Tree_of g1) = the_proper_Tree_of g1
+              & dom (f|the_proper_Tree_of g1) = the_proper_Tree_of g1
+            by RELAT_1:91,A23,XBOOLE_1:1;
+          hence
+            dom (fO|the_proper_Tree_of g1) = dom (f|the_proper_Tree_of g1);
+          hereby
+            let x;
+            assume
+A25:          x in dom (fO|the_proper_Tree_of g1);
+            then x in dom fO & x in dom (f|the_proper_Tree_of g1)
+              by RELAT_1:86,A24;
+            then fO.x = f.x
+              & (fO|the_proper_Tree_of g1).x = fO.x
+              & (f|the_proper_Tree_of g1).x = f.x
+              by COMPUT_1:16,FUNCT_1:70,A25,A20;
+            hence
+              (fO|the_proper_Tree_of g1).x = (f|the_proper_Tree_of g1).x;
+          end;
+        end;
+        hence thesis by FUNCT_1:def 17;
+      end;
+
+      g1 in the_Tree_of gO by A20,A21,FUNCT_1:8;
+      then fO.g1 = F(g1,fO|the_proper_Tree_of g1)
+        & fO.g1 = f.g1 by A21,COMPUT_1:16,A20;
+      hence f.g1 = F(g1,f|the_proper_Tree_of g1) by A22;
+    end;
+
+    g in dom f
+    proof
+      assume
+A26:    not g in dom f;
+      set v = F(g, f|the_proper_Tree_of g);
+      dom { [g,v] } = { g } by RELAT_1:23;
+      then { [g,v] } tolerates f by PARTFUN1:138,A26,ZFMISC_1:56;
+      then ex h being Function st h = { [g,v] } \/ f by PARTFUN1:130;
+      then reconsider h = { [g,v] } \/ f as Function;
+A27:    dom h = dom f \/ dom { [g,v] } by RELAT_1:13;
+      then
+A28:    dom h = dom f \/ {g} by RELAT_1:23;
+
+A29:  GF[g,h]
+      proof
+        take g;
+        thus g = g;
+        take h;
+        thus h = h;
+
+        now
+          hereby
+            let x;
+            assume x in the_Tree_of g;
+            then
+A30:          x in ({g} /\ the_Tree_of g) \/ (the_Tree_of g \ {g})
+              by XBOOLE_1:51;
+            per cases by A30,XBOOLE_0:def 3;
+              suppose x in {g} /\ the_Tree_of g;
+                then x in {g} & {g} c= dom h by XBOOLE_0:def 4,XBOOLE_1:7,A28;
+                hence x in dom h;
+              end;
+              suppose x in the_proper_Tree_of g;
+                then x in dom f & dom f c= dom h by A13,XBOOLE_1:7,A27;
+                hence x in dom h;
+              end;
+          end;
+          hereby
+            let x;
+            assume
+A31:          x in dom h;
+            per cases by A31,A28,SETWISEO:6;
+              suppose x = g;
+                hence x in the_Tree_of g by Th24;
+              end;
+              suppose x in dom f;
+                hence x in the_Tree_of g by A16;
+              end;
+          end;
+        end;
+        hence
+A32:      dom h = the_Tree_of g by TARSKI:2;
+
+        thus GoodFun[h]
+        proof
+          let g1;
+          assume
+A33:        g1 in dom h;
+          now
+            thus f|the_proper_Tree_of g1 c= h|the_proper_Tree_of g1
+              by RELAT_1:105,XBOOLE_1:7;
+A34:          the_proper_Tree_of g1 c= the_proper_Tree_of g by Th32,A32,A33;
+            then
+A35:          the_proper_Tree_of g1 c= dom f by A13,XBOOLE_1:1;
+            thus dom (f|the_proper_Tree_of g1) = the_proper_Tree_of g1
+              by RELAT_1:91,A34,A13,XBOOLE_1:1;
+            f c= h by XBOOLE_1:7;
+            then dom f c= dom h by RELAT_1:25;
+            hence dom (h|the_proper_Tree_of g1) = the_proper_Tree_of g1
+              by RELAT_1:91,A35,XBOOLE_1:1;
+          end;
+          then
+A36:        h|the_proper_Tree_of g1 = f|the_proper_Tree_of g1
+            by GRFUNC_1:9;
+
+          per cases by A33,A28,SETWISEO:6;
+            suppose
+A37:          g1 = g;
+              [g,v] in h by SETWISEO:6;
+              hence thesis by A36,A33,A37,FUNCT_1:def 4;
+            end;
+            suppose
+A38:          g1 in dom f;
+              f c= h by XBOOLE_1:7;
+              then f.g1 = h.g1 by GRFUNC_1:8,A38;
+              hence thesis by A19,A38,A36;
+            end;
+        end;
+      end;
+      g in the_Tree_of g by Th24;
+      then h in FUNCS by A9,A29;
+      then h c= f by ZFMISC_1:92;
+      hence contradiction by A26,A28,ZFMISC_1:45,RELAT_1:25;
+    end;
+    then
+A39:  {g} c= dom f by ZFMISC_1:37;
+    the_Tree_of g = the_proper_Tree_of g \/ {g} by ZFMISC_1:140,Th24;
+    then the_Tree_of g c= dom f by A39,A13,XBOOLE_1:8;
+    hence dom f = the_Tree_of g by A16,XBOOLE_0:def 10;
+    thus GoodFun[f] by A19;
+  end;
+  for g holds GoodG[g] from ConwayGameInd(A7);
+  hence thesis;
+end;
+
+begin :: The negative and signs
+
+Lm3:
+  for f being Function holds
+      { (f|the_proper_Tree_of g1).gR
+          where gR is Element of the_RightOptions_of g1 :
+          the_RightOptions_of g1 <> {} }
+      = { f.gR where gR is Element of the_RightOptions_of g1 :
+          the_RightOptions_of g1 <> {} }
+    & { (f|the_proper_Tree_of g1).gL
+          where gL is Element of the_LeftOptions_of g1 :
+          the_LeftOptions_of g1 <> {} }
+      = { f.gL where gL is Element of the_LeftOptions_of g1 :
+          the_LeftOptions_of g1 <> {} }
+proof
+  let f be Function;
+  set R1 = { (f|the_proper_Tree_of g1).gR where
+    gR is Element of the_RightOptions_of g1 : the_RightOptions_of g1 <> {} };
+  set R2 = { f.gR where
+    gR is Element of the_RightOptions_of g1 : the_RightOptions_of g1 <> {} };
+  set L1 = { (f|the_proper_Tree_of g1).gL where
+    gL is Element of the_LeftOptions_of g1 : the_LeftOptions_of g1 <> {} };
+  set L2 = { f.gL where
+    gL is Element of the_LeftOptions_of g1 : the_LeftOptions_of g1 <> {} };
+
+A1:
+  for gO st (gO in the_LeftOptions_of g1 or gO in the_RightOptions_of g1)
+    holds (f|the_proper_Tree_of g1).gO = f.gO
+  proof
+    let gO;
+    assume gO in the_LeftOptions_of g1 or gO in the_RightOptions_of g1;
+    then gO in the_Options_of g1 & the_Options_of g1 c= the_proper_Tree_of g1
+      by XBOOLE_0:def 3,Th33;
+    hence thesis by FUNCT_1:72;
+  end;
+
+  now
+    hereby
+      let x;
+      assume x in R1;
+      then consider gR being Element of the_RightOptions_of g1 such that
+A2:     x = (f|the_proper_Tree_of g1).gR & the_RightOptions_of g1 <> {};
+      gR in the_RightOptions_of g1 & gR is ConwayGame by A2,Th18;
+      then (f|the_proper_Tree_of g1).gR = f.gR by A1;
+      hence x in R2 by A2;
+    end;
+    hereby
+      let x;
+      assume x in R2;
+      then consider gR being Element of the_RightOptions_of g1 such that
+A3:     x = f.gR & the_RightOptions_of g1 <> {};
+      gR in the_RightOptions_of g1 & gR is ConwayGame by A3,Th18;
+      then (f|the_proper_Tree_of g1).gR = f.gR by A1;
+      hence x in R1 by A3;
+    end;
+  end;
+  hence R1 = R2 by TARSKI:2;
+
+  now
+    hereby
+      let x;
+      assume x in L1;
+      then consider gL being Element of the_LeftOptions_of g1 such that
+A4:     x = (f|the_proper_Tree_of g1).gL & the_LeftOptions_of g1 <> {};
+      gL in the_LeftOptions_of g1 & gL is ConwayGame by A4,Th18;
+      then (f|the_proper_Tree_of g1).gL = f.gL by A1;
+      hence x in L2 by A4;
+    end;
+    hereby
+      let x;
+      assume x in L2;
+      then consider gL being Element of the_LeftOptions_of g1 such that
+A5:     x = f.gL & the_LeftOptions_of g1 <> {};
+      gL in the_LeftOptions_of g1 & gL is ConwayGame by A5,Th18;
+      then (f|the_proper_Tree_of g1).gL = f.gL by A1;
+      hence x in L1 by A5;
+    end;
+  end;
+  hence L1 = L2 by TARSKI:2;
+end;
+
+definition
+  let g;
+  func -g means
+    :Def14:
+    ex f being Function st dom f = the_Tree_of g & it = f.g
+      & for g1 st g1 in dom f holds f.g1 = left-right(#
+        { f.gR where gR is Element of the_RightOptions_of g1 :
+            the_RightOptions_of g1 <> {} },
+        { f.gL where gL is Element of the_LeftOptions_of g1 :
+            the_LeftOptions_of g1 <> {} } #);
+  existence
+  proof
+    deffunc F(ConwayGame,Function) = left-right(#
+      { $2.gR where gR is Element of the_RightOptions_of $1 :
+          the_RightOptions_of $1 <> {} },
+      { $2.gL where gL is Element of the_LeftOptions_of $1 :
+          the_LeftOptions_of $1 <> {} } #);
+    for g ex f being Function st dom f = the_Tree_of g
+      & for g1 st g1 in dom f holds f.g1 = F(g1,f|the_proper_Tree_of g1)
+      from Func1RecEx;
+    then consider f being Function such that
+A1:   dom f = the_Tree_of g & for g1 st g1 in dom f holds
+        f.g1 = F(g1,f|the_proper_Tree_of g1);
+    take v = f.g;
+    take f;
+    thus dom f = the_Tree_of g by A1;
+    thus f.g = v;
+    let g1 such that
+A2:   g1 in dom f;
+    { (f|the_proper_Tree_of g1).gR where gR is Element of
+          the_RightOptions_of g1 : the_RightOptions_of g1 <> {} }
+      = { f.gR where gR is Element of
+          the_RightOptions_of g1 : the_RightOptions_of g1 <> {} }
+    & { (f|the_proper_Tree_of g1).gL where gL is Element of
+          the_LeftOptions_of g1 : the_LeftOptions_of g1 <> {} }
+      = { f.gL where gL is Element of
+          the_LeftOptions_of g1 : the_LeftOptions_of g1 <> {} } by Lm3;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    deffunc F(ConwayGame,Function) = left-right(#
+      { $2.gR where gR is Element of the_RightOptions_of $1 :
+          the_RightOptions_of $1 <> {} },
+      { $2.gL where gL is Element of the_LeftOptions_of $1 :
+          the_LeftOptions_of $1 <> {} } #);
+
+    let g1,g2 be set;
+    assume ex f1 being Function st dom f1 = the_Tree_of g & g1 = f1.g
+      & for g0 st g0 in dom f1 holds f1.g0 = F(g0,f1);
+    then consider f1 being Function such that
+A3:   dom f1 = the_Tree_of g & g1 = f1.g
+        & for g0 st g0 in dom f1 holds f1.g0 = F(g0,f1);
+
+    assume ex f2 being Function st dom f2 = the_Tree_of g & g2 = f2.g
+      & for g0 st g0 in dom f2 holds f2.g0 = F(g0,f2);
+    then consider f2 being Function such that
+A4:   dom f2 = the_Tree_of g & g2 = f2.g
+        & for g0 st g0 in dom f2 holds f2.g0 = F(g0,f2);
+
+A5: for g0 st g0 in dom f1 holds f1.g0 = F(g0, f1|the_proper_Tree_of g0)
+    proof
+      let g0;
+      set LOr = { (f1|the_proper_Tree_of g0).gR where gR is
+        Element of the_RightOptions_of g0 : the_RightOptions_of g0 <> {} };
+      set ROr = { (f1|the_proper_Tree_of g0).gL where gL is
+        Element of the_LeftOptions_of g0 : the_LeftOptions_of g0 <> {} };
+      set LOu = { f1.gR where gR is
+        Element of the_RightOptions_of g0 : the_RightOptions_of g0 <> {} };
+      set ROu = { f1.gL where gL is
+        Element of the_LeftOptions_of g0 : the_LeftOptions_of g0 <> {} };
+      LOu = LOr & ROu = ROr by Lm3;
+      hence thesis by A3;
+    end;
+A6: for g0 st g0 in dom f2 holds f2.g0 = F(g0, f2|the_proper_Tree_of g0)
+    proof
+      let g0;
+      set LOr = { (f2|the_proper_Tree_of g0).gR where gR is
+        Element of the_RightOptions_of g0 : the_RightOptions_of g0 <> {} };
+      set ROr = { (f2|the_proper_Tree_of g0).gL where gL is
+        Element of the_LeftOptions_of g0 : the_LeftOptions_of g0 <> {} };
+      set LOu = { f2.gR where gR is
+        Element of the_RightOptions_of g0 : the_RightOptions_of g0 <> {} };
+      set ROu = { f2.gL where gL is
+        Element of the_LeftOptions_of g0 : the_LeftOptions_of g0 <> {} };
+      LOu = LOr & ROu = ROr by Lm3;
+      hence thesis by A4;
+    end;
+
+    for g for f1,f2 being Function st
+      dom f1 = the_Tree_of g & dom f2 = the_Tree_of g
+      & (for g1 st g1 in dom f1 holds f1.g1 = F(g1,f1|the_proper_Tree_of g1))
+      & (for g1 st g1 in dom f2 holds f2.g1 = F(g1,f2|the_proper_Tree_of g1))
+      holds f1 = f2
+      from Func1RecUniq;
+    hence thesis by A3,A4,A5,A6;
+  end;
+end;
+
+registration
+  let g;
+  cluster -g -> ConwayGame-like;
+  coherence
+  proof
+    consider f being Function such that
+A1:   dom f = the_Tree_of g & -g = f.g
+      & for g1 st g1 in dom f holds f.g1 = left-right(#
+        { f.gR where gR is Element of the_RightOptions_of g1 :
+            the_RightOptions_of g1 <> {} },
+        { f.gL where gL is Element of the_LeftOptions_of g1 :
+            the_LeftOptions_of g1 <> {} } #) by Def14;
+    defpred GV[ConwayGame] means
+      $1 in dom f implies f.$1 is ConwayGame;
+A2: for g1 st (for gO st gO in the_Options_of g1 holds GV[gO]) holds GV[g1]
+    proof
+      let g1;
+      assume
+A3:     for gO st gO in the_Options_of g1 holds GV[gO];
+      assume
+A4:     g1 in dom f;
+      set L = { f.gR where gR is Element of the_RightOptions_of g1
+                  : the_RightOptions_of g1 <> {} };
+      set R = { f.gL where gL is Element of the_LeftOptions_of g1
+                  : the_LeftOptions_of g1 <> {} };
+A5:   f.g1 = left-right(#L,R#) by A1,A4;
+
+      now
+        let z;
+        assume
+A6:       z in L \/ R;
+        ex gO st gO in the_Options_of g1 & z = f.gO
+        proof
+          per cases by A6,XBOOLE_0:def 3;
+            suppose z in L;
+              then consider gR being Element of the_RightOptions_of g1
+                such that
+A7:             z = f.gR & the_RightOptions_of g1 <> {};
+              reconsider gO = gR as ConwayGame by Th18,A7;
+              take gO;
+              thus thesis by A7,XBOOLE_0:def 3;
+            end;
+            suppose z in R;
+              then consider gL being Element of the_LeftOptions_of g1
+                such that
+A8:             z = f.gL & the_LeftOptions_of g1 <> {};
+              reconsider gO = gL as ConwayGame by Th18,A8;
+              take gO;
+              thus thesis by A8,XBOOLE_0:def 3;
+            end;
+        end;
+        then consider gO such that
+A9:       gO in the_Options_of g1 & z = f.gO;
+        the_Options_of g1 c= the_Tree_of g1 & the_Tree_of g1 c= dom f
+          by Th34,Th31,A4,A1;
+        then the_Options_of g1 c= dom f by XBOOLE_1:1;
+        hence z is ConwayGame by A3,A9;
+      end;
+      hence thesis by A5,Th19;
+    end;
+A10:for g holds GV[g] from ConwayGameInd(A2);
+    g in the_Tree_of g by Th24;
+    hence thesis by A1,A10;
+  end;
+end;
+
+Lm4:
+  for f being Function st dom f = the_Tree_of g
+    & for g1 st g1 in dom f holds f.g1 = left-right(#
+        { f.gR where gR is Element of the_RightOptions_of g1 :
+            the_RightOptions_of g1 <> {} },
+        { f.gL where gL is Element of the_LeftOptions_of g1 :
+            the_LeftOptions_of g1 <> {} } #)
+  for g1 st g1 in dom f holds f.g1 = -g1
+proof
+  let f be Function such that
+A1: dom f = the_Tree_of g
+      & for g1 st g1 in dom f holds f.g1 = left-right(#
+          { f.gR where gR is Element of the_RightOptions_of g1 :
+              the_RightOptions_of g1 <> {} },
+          { f.gL where gL is Element of the_LeftOptions_of g1 :
+              the_LeftOptions_of g1 <> {} } #);
+  let g1 such that
+A2: g1 in dom f;
+
+  set f1 = f|(the_Tree_of g1);
+A3:
+  dom f1 = the_Tree_of g1 by RELAT_1:91,A1,A2,Th31;
+
+  now
+    let g2 such that
+A4:   g2 in dom f1;
+
+    set L = { f.gR where gR is Element of the_RightOptions_of g2 :
+          the_RightOptions_of g2 <> {} };
+    set L1 = { f1.gR where gR is Element of the_RightOptions_of g2 :
+          the_RightOptions_of g2 <> {} };
+    set R = { f.gL where gL is Element of the_LeftOptions_of g2 :
+            the_LeftOptions_of g2 <> {} };
+    set R1 = { f1.gL where gL is Element of the_LeftOptions_of g2 :
+            the_LeftOptions_of g2 <> {} };
+
+    dom f1 c= dom f by RELAT_1:89;
+    then
+A5:   f.g2 = left-right(#L,R#) by A1,A4;
+
+A6: for gO st (gO in the_LeftOptions_of g2 or gO in the_RightOptions_of g2)
+      holds f1.gO = f.gO
+    proof
+      let gO;
+      assume gO in the_LeftOptions_of g2 or gO in the_RightOptions_of g2;
+      then gO in the_Options_of g2 & the_Options_of g2 c= the_Tree_of g2
+        by XBOOLE_0:def 3,Th34;
+      then gO in the_Tree_of g2 & the_Tree_of g2 c= dom f1 by Th31,A4,A3;
+      hence thesis by FUNCT_1:70;
+    end;
+
+    now
+      hereby
+        let x;
+        assume x in L;
+        then consider gR being Element of the_RightOptions_of g2 such that
+A7:       x = f.gR & the_RightOptions_of g2 <> {};
+        gR in the_RightOptions_of g2 & gR is ConwayGame by A7,Th18;
+        then f1.gR = f.gR by A6;
+        hence x in L1 by A7;
+      end;
+      hereby
+        let x;
+        assume x in L1;
+        then consider gR being Element of the_RightOptions_of g2 such that
+A8:       x = f1.gR & the_RightOptions_of g2 <> {};
+        gR in the_RightOptions_of g2 & gR is ConwayGame by A8,Th18;
+        then f1.gR = f.gR by A6;
+        hence x in L by A8;
+      end;
+    end;
+    then
+A9:   L = L1 by TARSKI:2;
+    now
+      hereby
+        let x;
+        assume x in R;
+        then consider gL being Element of the_LeftOptions_of g2 such that
+A10:      x = f.gL & the_LeftOptions_of g2 <> {};
+        gL in the_LeftOptions_of g2 & gL is ConwayGame by A10,Th18;
+        then f1.gL = f.gL by A6;
+        hence x in R1 by A10;
+      end;
+      hereby
+        let x;
+        assume x in R1;
+        then consider gL being Element of the_LeftOptions_of g2 such that
+A11:      x = f1.gL & the_LeftOptions_of g2 <> {};
+        gL in the_LeftOptions_of g2 & gL is ConwayGame by A11,Th18;
+        then f1.gL = f.gL by A6;
+        hence x in R by A11;
+      end;
+    end;
+    then R = R1 by TARSKI:2;
+    hence f1.g2 = left-right(#L1,R1#) by A4,A5,A9,FUNCT_1:70;
+  end;
+  then f1.g1 = -g1 & g1 in dom f1 by Def14,A3,Th24;
+  hence thesis by FUNCT_1:70;
+end;
+
+theorem Th39:
+  (for x holds x in the_LeftOptions_of -g iff
+    ex gR st gR in the_RightOptions_of g & x = -gR)
+  & (for x holds x in the_RightOptions_of -g iff
+    ex gL st gL in the_LeftOptions_of g & x = -gL)
+proof
+  consider f being Function such that
+A1: dom f = the_Tree_of g & f.g = -g
+      & for g1 st g1 in dom f holds f.g1 = left-right(#
+          { f.gR where gR is Element of the_RightOptions_of g1 :
+              the_RightOptions_of g1 <> {} },
+          { f.gL where gL is Element of the_LeftOptions_of g1 :
+              the_LeftOptions_of g1 <> {} } #) by Def14;
+
+A2:
+  (gO in the_RightOptions_of g or gO in the_LeftOptions_of g)
+    implies f.gO = -gO
+  proof
+    assume gO in the_RightOptions_of g or gO in the_LeftOptions_of g;
+    then gO in the_Options_of g & the_Options_of g c= the_Tree_of g
+      by XBOOLE_0:def 3,Th34;
+    hence thesis by Lm4,A1;
+  end;
+
+  set L = { f.gR where gR is Element of the_RightOptions_of g
+            : the_RightOptions_of g <> {} };
+  set R = { f.gL where gL is Element of the_LeftOptions_of g
+            : the_LeftOptions_of g <> {} };
+  -g = left-right(#L,R#) by A1,Th24;
+  then
+A3: the_LeftOptions_of -g = L & the_RightOptions_of -g = R
+    by Def6,Def7;
+
+  hereby
+    let x;
+    hereby
+      assume x in the_LeftOptions_of -g;
+      then consider gR0 being Element of the_RightOptions_of g such that
+A4:     x = f.gR0 & the_RightOptions_of g <> {} by A3;
+      reconsider gR = gR0 as ConwayGame by Th18,A4;
+      take gR;
+      thus gR in the_RightOptions_of g & x = -gR by A4,A2;
+    end;
+    hereby
+      assume ex gR st gR in the_RightOptions_of g & x = -gR;
+      then consider gR such that
+A5:     x = -gR & gR in the_RightOptions_of g;
+      f.gR = -gR by A2,A5;
+      hence x in the_LeftOptions_of -g by A3,A5;
+    end;
+  end;
+
+  hereby
+    let x;
+    hereby
+      assume x in the_RightOptions_of -g;
+      then consider gL0 being Element of the_LeftOptions_of g such that
+A6:     x = f.gL0 & the_LeftOptions_of g <> {} by A3;
+      reconsider gL = gL0 as ConwayGame by Th18,A6;
+      take gL;
+      thus gL in the_LeftOptions_of g & x = -gL by A6,A2;
+    end;
+    hereby
+      assume ex gL st gL in the_LeftOptions_of g & x = -gL;
+      then consider gL such that
+A7:     x = -gL & gL in the_LeftOptions_of g;
+      f.gL = -gL by A2,A7;
+      hence x in the_RightOptions_of -g by A3,A7;
+    end;
+  end;
+end;
+
+theorem Th40:
+  -(-g) = g
+proof
+  defpred Bad[ConwayGame] means -(-$1) <> $1;
+  assume not thesis;
+  then
+A1: ex g st Bad[g];
+  consider g such that
+A2: Bad[g] & for gO st gO in the_Options_of g holds not Bad[gO]
+    from ConwayGameMin(A1);
+
+  now
+    hereby
+      let x;
+      assume x in the_LeftOptions_of -(-g);
+      then consider gR such that
+A3:     gR in the_RightOptions_of -g & x = -gR by Th39;
+      consider gL such that
+A4:     gL in the_LeftOptions_of g & gR = -gL by Th39,A3;
+      gL in the_Options_of g by A4,XBOOLE_0:def 3;
+      hence x in the_LeftOptions_of g by A2,A3,A4;
+    end;
+    hereby
+      let x;
+      assume
+A5:     x in the_LeftOptions_of g;
+      reconsider gL = x as ConwayGame by Th18,A5;
+      -gL in the_RightOptions_of -g & gL in the_Options_of g
+        by Th39,A5,XBOOLE_0:def 3;
+      then -(-gL) in the_LeftOptions_of -(-g) & -(-gL) = gL
+        by Th39,A2;
+      hence x in the_LeftOptions_of -(-g);
+    end;
+  end;
+  then
+A6: the_LeftOptions_of -(-g) = the_LeftOptions_of g by TARSKI:2;
+
+  now
+    hereby
+      let x;
+      assume x in the_RightOptions_of -(-g);
+      then consider gL such that
+A7:     gL in the_LeftOptions_of -g & x = -gL by Th39;
+      consider gR such that
+A8:     gR in the_RightOptions_of g & gL = -gR by Th39,A7;
+      gR in the_Options_of g by A8,XBOOLE_0:def 3;
+      hence x in the_RightOptions_of g by A2,A7,A8;
+    end;
+    hereby
+      let x;
+      assume
+A9:     x in the_RightOptions_of g;
+      reconsider gR = x as ConwayGame by Th18,A9;
+      -gR in the_LeftOptions_of -g & gR in the_Options_of g
+        by Th39,A9,XBOOLE_0:def 3;
+      then -(-gR) in the_RightOptions_of -(-g) & -(-gR) = gR
+        by Th39,A2;
+      hence x in the_RightOptions_of -(-g);
+    end;
+  end;
+  then the_RightOptions_of -(-g) = the_RightOptions_of g by TARSKI:2;
+  hence contradiction by A2,A6,Th5;
+end;
+
+theorem
+  (gO in the_LeftOptions_of -g iff -gO in the_RightOptions_of g)
+    & (gO in the_LeftOptions_of g iff -gO in the_RightOptions_of -g)
+    & (gO in the_RightOptions_of -g iff -gO in the_LeftOptions_of g)
+    & (gO in the_RightOptions_of g iff -gO in the_LeftOptions_of -g)
+proof
+  g = -(-g) & gO = -(-gO) by Th40;
+  hence thesis by Th39;
+end;
+
+definition
+  let g;
+  attr g is nonnegative means
+    :Def15:
+    ex s st g in s & for g1 st g1 in s for gR st gR in the_RightOptions_of g1
+      ex gRL st gRL in the_LeftOptions_of gR & gRL in s;
+end;
+
+definition
+  let g;
+  attr g is nonpositive means
+    :Def16:
+    -g is nonnegative;
+end;
+
+definition
+  let g;
+  attr g is zero means
+    :Def17:
+    g is nonnegative & g is nonpositive;
+  attr g is fuzzy means
+    :Def18:
+    not g is nonnegative & not g is nonpositive;
+end;
+
+definition
+  let g;
+  attr g is positive means
+    :Def19:
+    g is nonnegative & not g is zero;
+  attr g is negative means
+    :Def20:
+    g is nonpositive & not g is zero;
+end;
+
+registration
+  cluster zero -> nonnegative nonpositive ConwayGame;
+  coherence by Def17;
+  cluster nonpositive nonnegative -> zero ConwayGame;
+  coherence by Def17;
+  cluster negative -> nonpositive non zero ConwayGame;
+  coherence by Def20;
+  cluster nonpositive non zero -> negative ConwayGame;
+  coherence by Def20;
+  cluster positive -> nonnegative non zero ConwayGame;
+  coherence by Def19;
+  cluster nonnegative non zero -> positive ConwayGame;
+  coherence by Def19;
+  cluster fuzzy -> non nonnegative non nonpositive ConwayGame;
+  coherence by Def18;
+  cluster non nonnegative non nonpositive -> fuzzy ConwayGame;
+  coherence by Def18;
+end;
+
+theorem Th42:
+  g is zero or g is positive or g is negative or g is fuzzy
+proof
+  assume g is non zero non positive non negative;
+  then g is non nonnegative non nonpositive;
+  hence g is fuzzy;
+end;
+
+theorem Th43:
+  g is nonnegative iff
+    for gR st gR in the_RightOptions_of g
+      ex gRL st gRL in the_LeftOptions_of gR & gRL is nonnegative
+proof
+  defpred S[set] means
+    for g st g in $1 for gR st gR in the_RightOptions_of g
+      ex gRL st gRL in the_LeftOptions_of gR & gRL in $1;
+  A1:
+    S[s] implies S[s /\ ConwayDay(alpha)]
+  proof
+    assume
+  A2: S[s];
+    let g;
+    assume g in s /\ ConwayDay(alpha);
+    then
+  A3: g in s & g in ConwayDay(alpha) by XBOOLE_0:def 4;
+    let gR;
+    assume
+  A4: gR in the_RightOptions_of g;
+    then consider gRL such that
+  A5: gRL in the_LeftOptions_of gR & gRL in s by A2,A3;
+    take gRL;
+    gR in ConwayDay(alpha) by Th11,A3,A4;
+    then gRL in ConwayDay(alpha) by Th11,A5;
+    hence thesis by A5,XBOOLE_0:def 4;
+  end;
+
+  hereby
+    assume g is nonnegative;
+    then consider s such that
+A6:   g in s & S[s] by Def15;
+    let gR;
+    assume gR in the_RightOptions_of g;
+    then consider gRL such that
+A7:   gRL in the_LeftOptions_of gR & gRL in s by A6;
+    take gRL;
+    thus gRL in the_LeftOptions_of gR by A7;
+    thus gRL is nonnegative
+    proof
+      take s;
+      thus thesis by A6,A7;
+    end;
+  end;
+
+  hereby
+    assume
+A8:   for gR st gR in the_RightOptions_of g
+        ex gRL st gRL in the_LeftOptions_of gR & gRL is nonnegative;
+
+    consider alpha such that
+A9:   g in ConwayDay(alpha) by Def3;
+
+    now
+      set ss = { s1 where s1 is Subset of ConwayDay(alpha) : S[s1] };
+      take s = union ss;
+
+A10:   S[s]
+      proof
+        let g1;
+        assume g1 in s;
+        then consider s2 being set such that
+A11:       g1 in s2 & s2 in ss by TARSKI:def 4;
+        consider s1 being Subset of ConwayDay(alpha) such that
+A12:       s1 = s2 & S[s1] by A11;
+        let gR;
+        assume gR in the_RightOptions_of g1;
+        then consider gRL such that
+A13:       gRL in the_LeftOptions_of gR & gRL in s1 by A11,A12;
+        take gRL;
+        s2 c= s by A11,ZFMISC_1:92;
+        hence thesis by A12,A13;
+      end;
+
+      thus g in s
+      proof
+        now
+          let x;
+          assume x in ss;
+          then ex s1 being Subset of ConwayDay(alpha) st x = s1 & S[s1];
+          hence x c= ConwayDay(alpha);
+        end;
+        then
+A14:       s c= ConwayDay(alpha) by ZFMISC_1:94;
+
+        {g} c= ConwayDay(alpha) by A9,ZFMISC_1:37;
+        then reconsider sg = s \/ {g} as Subset of ConwayDay(alpha)
+          by A14,XBOOLE_1:8;
+
+        S[sg]
+        proof
+          let g1 such that
+A15:         g1 in sg;
+          let gR such that
+A16:        gR in the_RightOptions_of g1;
+          per cases by A15,XBOOLE_0:def 3;
+            suppose g1 in s;
+              then consider gRL such that
+A17:            gRL in the_LeftOptions_of gR & gRL in s by A10,A16;
+              take gRL;
+              thus gRL in the_LeftOptions_of gR by A17;
+              s c= sg by XBOOLE_1:7;
+              hence gRL in sg by A17;
+            end;
+            suppose g1 in {g};
+              then g1 = g by TARSKI:def 1;
+              then consider gRL such that
+A18:            gRL in the_LeftOptions_of gR & gRL is nonnegative by A8,A16;
+              consider s0 being set such that
+A19:            gRL in s0 & S[s0] by Def15,A18;
+              take gRL;
+              thus gRL in the_LeftOptions_of gR by A18;
+
+              reconsider s1 = s0 /\ ConwayDay(alpha)
+                as Subset of ConwayDay(alpha) by XBOOLE_1:17;
+
+              S[s1] by A19,A1;
+              then s1 in ss;
+              then
+A20:            s1 c= s by ZFMISC_1:92;
+
+              gR in ConwayDay(alpha) by A15,A16,Th11;
+              then gRL in ConwayDay(alpha) by A18,Th11;
+              then gRL in s1 by A19,XBOOLE_0:def 4;
+              hence gRL in sg by A20,XBOOLE_0:def 3;
+            end;
+        end;
+        then
+A21:       sg in ss;
+
+        g in {g} by TARSKI:def 1;
+        then g in sg by XBOOLE_0:def 3;
+        hence g in s by A21,TARSKI:def 4;
+      end;
+      thus S[s] by A10;
+    end;
+    hence g is nonnegative by Def15;
+  end;
+end;
+
+theorem Th44:
+  g is nonpositive iff
+    for gL st gL in the_LeftOptions_of g
+      ex gLR st gLR in the_RightOptions_of gL & gLR is nonpositive
+proof
+  hereby
+    assume g is nonpositive;
+    then
+A1:   -g is nonnegative by Def16;
+    let gL;
+    assume gL in the_LeftOptions_of g;
+    then -gL in the_RightOptions_of -g by Th39;
+    then consider gRL such that
+A2:   gRL in the_LeftOptions_of -gL & gRL is nonnegative by A1,Th43;
+    take gLR = -gRL;
+    gLR in the_RightOptions_of -(-gL) & -(-gL) = gL & -gLR = gRL
+      by A2,Th39,Th40;
+    hence gLR in the_RightOptions_of gL & gLR is nonpositive by Def16,A2;
+  end;
+
+  assume
+A3: for gL st gL in the_LeftOptions_of g
+      ex gLR st gLR in the_RightOptions_of gL & gLR is nonpositive;
+  now
+    let gR;
+    assume gR in the_RightOptions_of -g;
+    then -gR in the_LeftOptions_of -(-g) & -(-g) = g
+      by Th39,Th40;
+    then consider gLR such that
+A4:   gLR in the_RightOptions_of -gR & gLR is nonpositive by A3;
+    take gRL = -gLR;
+    gRL in the_LeftOptions_of -(-gR) & -(-gR) = gR
+      by A4,Th39,Th40;
+    hence gRL in the_LeftOptions_of gR & gRL is nonnegative
+      by A4,Def16;
+  end;
+  then -g is nonnegative by Th43;
+  hence g is nonpositive by Def16;
+end;
+
+theorem Th45:
+  (g is nonnegative iff
+    for gR st gR in the_RightOptions_of g holds gR is fuzzy or gR is positive)
+  & (g is nonpositive iff
+    for gL st gL in the_LeftOptions_of g holds gL is fuzzy or gL is negative)
+proof
+  defpred Good[ConwayGame] means
+    ($1 is nonnegative iff for gR st gR in the_RightOptions_of $1
+      holds gR is fuzzy or gR is positive)
+    & ($1 is nonpositive iff for gL st gL in the_LeftOptions_of $1
+      holds gL is fuzzy or gL is negative);
+
+A1:
+  for g st (for gO st gO in the_Options_of g holds Good[gO]) holds Good[g]
+  proof
+    let g;
+    assume
+A2:   for gO st gO in the_Options_of g holds Good[gO];
+    hereby
+      assume
+A3:     g is nonnegative;
+      let gR such that
+A4:     gR in the_RightOptions_of g;
+      consider gRL such that
+A5:     gRL in the_LeftOptions_of gR & gRL is nonnegative
+        by A3,A4,Th43;
+      now
+        gR in the_Options_of g by A4,XBOOLE_0:def 3;
+        hence Good[gR] by A2;
+        hereby
+          take gRL;
+          thus gRL in the_LeftOptions_of gR by A5;
+          thus gRL is non fuzzy non negative by A5;
+        end;
+      end;
+      then gR is non negative non zero;
+      hence gR is fuzzy or gR is positive by Th42;
+    end;
+    hereby
+      assume
+A6:     for gR st gR in the_RightOptions_of g holds
+          gR is fuzzy or gR is positive;
+      now
+        let gR;
+        assume
+A7:       gR in the_RightOptions_of g;
+        now
+          gR in the_Options_of g by A7,XBOOLE_0:def 3;
+          hence Good[gR] by A2;
+          gR is fuzzy or gR is positive by A6,A7;
+          hence gR is non nonpositive;
+        end;
+        then consider gRL such that
+A8:       gRL in the_LeftOptions_of gR & gRL is non fuzzy non negative;
+        take gRL;
+        gRL is zero or gRL is positive by A8,Th42;
+        hence gRL in the_LeftOptions_of gR & gRL is nonnegative by A8;
+      end;
+      hence g is nonnegative by Th43;
+    end;
+    hereby
+      assume
+A9:     g is nonpositive;
+      let gL such that
+A10:     gL in the_LeftOptions_of g;
+      consider gLR such that
+A11:     gLR in the_RightOptions_of gL & gLR is nonpositive
+        by A9,A10,Th44;
+      now
+        gL in the_Options_of g by A10,XBOOLE_0:def 3;
+        hence Good[gL] by A2;
+        hereby
+          take gLR;
+          thus gLR in the_RightOptions_of gL by A11;
+          thus gLR is non fuzzy non positive by A11;
+        end;
+      end;
+      then gL is non positive non zero;
+      hence gL is fuzzy or gL is negative by Th42;
+    end;
+    hereby
+      assume
+A12:     for gL st gL in the_LeftOptions_of g holds
+          gL is fuzzy or gL is negative;
+      now
+        let gL;
+        assume
+A13:       gL in the_LeftOptions_of g;
+        now
+          gL in the_Options_of g by A13,XBOOLE_0:def 3;
+          hence Good[gL] by A2;
+          gL is fuzzy or gL is negative by A12,A13;
+          hence gL is non nonnegative;
+        end;
+        then consider gLR such that
+A14:       gLR in the_RightOptions_of gL & gLR is non fuzzy non positive;
+        take gLR;
+        gLR is zero or gLR is negative by A14,Th42;
+        hence gLR in the_RightOptions_of gL & gLR is nonpositive by A14;
+      end;
+      hence g is nonpositive by Th44;
+    end;
+  end;
+  for g holds Good[g] from ConwayGameInd(A1);
+  hence thesis;
+end;
+
+theorem Th46:
+  g is fuzzy iff
+    (ex gL st gL in the_LeftOptions_of g & gL is nonnegative) &
+    (ex gR st gR in the_RightOptions_of g & gR is nonpositive)
+proof
+  hereby
+    assume
+A1:   g is fuzzy;
+    hereby
+      consider gL such that
+A2:     gL in the_LeftOptions_of g &
+          for gLR st gLR in the_RightOptions_of gL holds gLR is non nonpositive
+        by A1,Th44;
+      take gL;
+      thus gL in the_LeftOptions_of g by A2;
+      now
+        let gLR;
+        assume gLR in the_RightOptions_of gL;
+        then gLR is non negative & gLR is non zero by A2;
+        hence gLR is fuzzy or gLR is positive by Th42;
+      end;
+      hence gL is nonnegative by Th45;
+    end;
+    hereby
+      consider gR such that
+A3:     gR in the_RightOptions_of g &
+          for gRL st gRL in the_LeftOptions_of gR holds gRL is non nonnegative
+        by A1,Th43;
+      take gR;
+      thus gR in the_RightOptions_of g by A3;
+      now
+        let gRL;
+        assume gRL in the_LeftOptions_of gR;
+        then gRL is non positive & gRL is non zero by A3;
+        hence gRL is fuzzy or gRL is negative by Th42;
+      end;
+      hence gR is nonpositive by Th45;
+    end;
+  end;
+  hereby
+    assume ex gL st gL in the_LeftOptions_of g & gL is nonnegative;
+    then consider gL such that
+A4:   gL in the_LeftOptions_of g & gL is nonnegative;
+    assume ex gR st gR in the_RightOptions_of g & gR is nonpositive;
+    then consider gR such that
+A5:   gR in the_RightOptions_of g & gR is nonpositive;
+
+    gL is non fuzzy non negative & gR is non fuzzy non positive by A4,A5;
+    then g is non nonpositive & g is non nonnegative by Th45,A4,A5;
+    hence g is fuzzy;
+  end;
+end;
+
+theorem Th47:
+  g is zero iff
+   (for gL st gL in the_LeftOptions_of g holds gL is fuzzy or gL is negative) &
+   (for gR st gR in the_RightOptions_of g holds gR is fuzzy or gR is positive)
+proof
+  thus g is zero implies
+   (for gL st gL in the_LeftOptions_of g holds gL is fuzzy or gL is negative) &
+   (for gR st gR in the_RightOptions_of g holds gR is fuzzy or gR is positive)
+   by Th45;
+  assume
+    (for gL st gL in the_LeftOptions_of g holds gL is fuzzy or gL is negative)
+   & for gR st gR in the_RightOptions_of g holds gR is fuzzy or gR is positive;
+  then g is nonpositive & g is nonnegative by Th45;
+  hence thesis;
+end;
+
+theorem Th48:
+  g is positive iff
+    (for gR st gR in the_RightOptions_of g holds gR is fuzzy or gR is positive)
+    & (ex gL st gL in the_LeftOptions_of g & gL is nonnegative)
+proof
+  hereby
+    assume
+A1:   g is positive;
+    hence
+A2:   for gR st gR in the_RightOptions_of g holds
+        gR is fuzzy or gR is positive by Th45;
+    consider gL such that
+A3:   gL in the_LeftOptions_of g & gL is non fuzzy non negative
+      by Th47,A1,A2;
+    take gL;
+    gL is zero or gL is positive by A3,Th42;
+    hence gL in the_LeftOptions_of g & gL is nonnegative by A3;
+  end;
+  hereby
+    assume
+     for gR st gR in the_RightOptions_of g holds gR is fuzzy or gR is positive;
+    then
+A4:   g is nonnegative by Th45;
+    assume ex gL st gL in the_LeftOptions_of g & gL is nonnegative;
+    then consider gL such that
+A5:   gL in the_LeftOptions_of g & gL is nonnegative;
+    gL is non fuzzy non negative by A5;
+    then not g is zero by Th47,A5;
+    hence g is positive by A4;
+  end;
+end;
+
+theorem
+  g is negative iff
+    (for gL st gL in the_LeftOptions_of g holds gL is fuzzy or gL is negative)
+    & (ex gR st gR in the_RightOptions_of g & gR is nonpositive)
+proof
+  hereby
+    assume
+A1:   g is negative;
+    hence
+A2:   for gL st gL in the_LeftOptions_of g holds
+        gL is fuzzy or gL is negative by Th45;
+    consider gR such that
+A3:   gR in the_RightOptions_of g & gR is non fuzzy non positive
+      by Th47,A1,A2;
+    take gR;
+    gR is zero or gR is negative by A3,Th42;
+    hence gR in the_RightOptions_of g & gR is nonpositive by A3;
+  end;
+  hereby
+    assume
+     for gL st gL in the_LeftOptions_of g holds gL is fuzzy or gL is negative;
+    then
+A4:   g is nonpositive by Th45;
+    assume ex gR st gR in the_RightOptions_of g & gR is nonpositive;
+    then consider gR such that
+A5:   gR in the_RightOptions_of g & gR is nonpositive;
+    gR is non fuzzy non positive by A5;
+    then not g is zero by Th47,A5;
+    hence g is negative by A4;
+  end;
+end;
+
+registration
+  cluster ConwayZero -> zero;
+  coherence
+  proof
+    (for gL st gL in the_LeftOptions_of ConwayZero holds
+      gL is fuzzy or gL is negative) &
+    (for gR st gR in the_RightOptions_of ConwayZero holds
+      gR is fuzzy or gR is positive);
+    hence thesis by Th47;
+  end;
+end;
+
+registration
+  cluster ConwayOne -> positive;
+  coherence
+  proof
+    now
+      thus for gR st gR in the_RightOptions_of ConwayOne holds
+        gR is fuzzy or gR is positive;
+      hereby
+        take gL = ConwayZero;
+        thus gL in the_LeftOptions_of ConwayOne by Th7;
+        thus gL is nonnegative;
+      end;
+    end;
+    hence thesis by Th48;
+  end;
+
+  cluster ConwayStar -> fuzzy;
+  coherence
+  proof
+    now
+      hereby
+        take gL = ConwayZero;
+        thus gL in the_LeftOptions_of ConwayStar by Th8;
+        thus gL is nonnegative;
+      end;
+      hereby
+        take gR = ConwayZero;
+        thus gR in the_RightOptions_of ConwayStar by Th8;
+        thus gR is nonpositive;
+      end;
+    end;
+    hence thesis by Th46;
+  end;
+end;
+
+registration
+  cluster zero ConwayGame;
+  existence
+  proof
+    take ConwayZero;
+    thus thesis;
+  end;
+  cluster positive ConwayGame;
+  existence
+  proof
+    take ConwayOne;
+    thus thesis;
+  end;
+  cluster fuzzy ConwayGame;
+  existence
+  proof
+    take ConwayStar;
+    thus thesis;
+  end;
+end;
+
+registration
+  let g be nonpositive ConwayGame;
+  cluster -g -> nonnegative;
+  coherence by Def16;
+end;
+
+registration
+  let g be nonnegative ConwayGame;
+  cluster -g -> nonpositive;
+  coherence
+  proof
+    g = -(-g) by Th40;
+    hence thesis by Def16;
+  end;
+end;
+
+registration
+  let g be positive ConwayGame;
+  cluster -g -> negative;
+  coherence
+  proof
+    g = -(-g) by Th40;
+    then -g is non zero nonpositive;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster negative ConwayGame;
+  existence
+  proof
+    take -ConwayOne;
+    thus thesis;
+  end;
+end;
+
+registration
+  let g be negative ConwayGame;
+  cluster -g -> positive;
+  coherence
+  proof
+    g = -(-g) by Th40;
+    then -g is non zero nonnegative;
+    hence thesis;
+  end;
+end;
+
+registration
+  let g be fuzzy ConwayGame;
+  cluster -g -> fuzzy;
+  coherence
+  proof
+    g = -(-g) by Th40;
+    then -g is non positive non negative non zero;
+    hence thesis by Th42;
+  end;
+end;

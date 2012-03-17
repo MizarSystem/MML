@@ -75,8 +75,8 @@
 <Adjective nr="13"/>
 <Adjective nr="16"/>
 <Adjective nr="25"/>
-<Adjective nr="31"/>
 <Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TREES_9" nr="1">

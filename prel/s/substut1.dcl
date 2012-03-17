@@ -94,7 +94,7 @@
 </Typ>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="33">
+<Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

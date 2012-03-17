@@ -26,6 +26,7 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_2"/>
 <ArticleID name="XXREAL_3"/>
+<ArticleID name="MEMBER_1"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
 <ArticleID name="MEASURE2"/>
@@ -41,16 +42,16 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="188">
+<Func kind="K" nr="214">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="43">
+<Adjective nr="44">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="85">
+<Adjective nr="86">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -65,24 +66,24 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="190">
+<Func kind="K" nr="216">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="23">
-<Func kind="K" nr="188">
+<Func kind="K" nr="214">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Func kind="K" nr="56"/>
 </Adjective>
-<Adjective nr="69"/>
-<Adjective nr="81"/>
-<Adjective nr="86">
+<Adjective nr="70"/>
+<Adjective nr="82"/>
+<Adjective nr="87">
 <LocusVar nr="1"/>
-<Func kind="K" nr="188">
+<Func kind="K" nr="214">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -1,0 +1,753 @@
+:: Sorting by Exchanging
+::  by Grzegorz Bancerek
+::
+:: Received October 18, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies ORDINAL6, EXCHSORT, ZFMISC_1, XBOOLE_0, RELAT_1, FUNCT_1,
+      ORDINAL1, ORDINAL2, ORDINAL4, FINSET_1, RELAT_2, FUNCT_4, FINSEQ_1,
+      AOFA_000, FUNCT_3, VALUED_0, WELLFND1, CARD_1, TARSKI, FUNCT_2, PARTFUN1,
+      FUNCT_7, REARRAN1, ORDINAL3, XREAL_0, NAT_1, SUBSET_1, XXREAL_0, ARYTM_3,
+      AFINSQ_1, REWRITE1, NUMBERS, MSUALG_1, MEMBERED, STRUCT_0, ORDERS_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, FINSEQ_1, BINOP_1, FUNCT_4,
+      FUNCT_7, NUMBERS, MEMBERED, VALUED_0, ORDINAL1, CARD_1, ORDINAL2,
+      ORDINAL3, ORDINAL4, AFINSQ_1, STRUCT_0, ORDERS_2, WAYBEL_0, XXREAL_0,
+      XREAL_0, NAT_1, AOFA_000, ORDINAL5, FUNCT_3, ORDINAL6;
+ constructors MEMBERED, XXREAL_0, VALUED_0, CATALAN2, ORDINAL3, INT_1, FUNCT_7,
+      ORDINAL5, WELLORD2, RELAT_2, FACIRC_1, BINOP_1, WAYBEL_0, RELSET_1,
+      ORDINAL6;
+ registrations MEMBERED, SUBSET_1, RELSET_1, NAT_1, XXREAL_0, XBOOLE_0,
+      FINSET_1, RELAT_1, FUNCT_1, ORDINAL1, STIRL2_1, VALUED_0, ORDINAL5,
+      AFINSQ_1, CARD_1, FUNCT_2, FUNCT_7, FUNCTOR1, STRUCT_0, WAYBEL_0,
+      ORDINAL6;
+ requirements NUMERALS, SUBSET, BOOLE, REAL;
+
+
+begin :: Preliminaries
+
+reserve a,a1,a2,b,c,d for ordinal number,
+  n,m,k for natural number,
+  x,y,z,t,X,Y,Z for set;
+
+theorem :: EXCHSORT:1
+  x in (a+^b)\a iff ex c st x = a+^c & c in b;
+
+theorem :: EXCHSORT:2
+  a in b & c in d implies
+  c <> a & c <> b & d <> a & d <> b     or
+  c in a & d = a   or   c in a & d = b  or
+  c = a & d in b   or   c = a & d = b   or   c = a & b in d  or
+  a in c & d = b   or   c = b & b in d;
+
+theorem :: EXCHSORT:3
+  x nin y implies (y\/{x})\y = {x};
+
+theorem :: EXCHSORT:4
+  (succ x)\x = {x};
+
+theorem :: EXCHSORT:5
+  for f being Function, r being Relation
+  for x holds x in f.:r iff ex y,z st [y,z] in r & [y,z] in dom f & f.(y,z) = x
+;
+
+theorem :: EXCHSORT:6
+  a\b <> {} implies inf(a\b) = b & sup(a\b) = a & union(a\b) = union a;
+
+theorem :: EXCHSORT:7
+  a\b is non empty finite implies
+  ex n being Nat st a = b+^n;
+
+begin :: Arrays
+
+definition let f be set;
+  attr f is segmental means
+:: EXCHSORT:def 1
+  ex a,b st proj1 f = a\b;
+end;
+
+reserve f,g for Function;
+
+theorem :: EXCHSORT:8
+  dom f = dom g & f is segmental implies g is segmental;
+
+theorem :: EXCHSORT:9
+  f is segmental implies
+  for a,b,c st a c= b & b c= c & a in dom f & c in dom f holds b in dom f;
+
+registration
+  cluster T-Sequence-like -> segmental Function;
+  cluster FinSequence-like -> segmental Function;
+end;
+
+definition
+  let a;
+  let s be set;
+  attr s is a-based means
+:: EXCHSORT:def 2
+ b in proj1 s implies a in proj1 s & a c= b;
+  attr s is a-limited means
+:: EXCHSORT:def 3
+ a = sup proj1 s;
+end;
+
+theorem :: EXCHSORT:10
+  f is a-based segmental iff ex b st dom f = b\a & a c= b;
+
+theorem :: EXCHSORT:11
+  f is b-limited non empty segmental iff ex a st dom f = b\a & a in b;
+
+registration
+  cluster T-Sequence-like -> 0-based Function;
+  cluster FinSequence-like -> 1-based Function;
+end;
+
+theorem :: EXCHSORT:12
+  f is (inf dom f)-based;
+
+theorem :: EXCHSORT:13
+  f is (sup dom f)-limited;
+
+theorem :: EXCHSORT:14
+  f is b-limited & a in dom f implies a in b;
+
+definition let f;
+  func base-f -> ordinal number means
+:: EXCHSORT:def 4
+
+  f is it-based if ex a st a in dom f
+  otherwise it = 0;
+  func limit-f -> ordinal number means
+:: EXCHSORT:def 5
+
+  f is it-limited if ex a st a in dom f
+  otherwise it = 0;
+end;
+
+definition
+  let f;
+  func len-f -> ordinal number equals
+:: EXCHSORT:def 6
+(limit-f)-^(base-f);
+end;
+
+theorem :: EXCHSORT:15
+  base-{} = 0 & limit-{} = 0 & len-{} = 0;
+
+theorem :: EXCHSORT:16
+  limit-f = sup dom f;
+
+theorem :: EXCHSORT:17
+  f is (limit-f)-limited;
+
+theorem :: EXCHSORT:18
+  for A being empty set holds A is a-based;
+
+registration let a,X,Y;
+  cluster Y-defined X-valued a-based segmental finite empty T-Sequence;
+end;
+
+definition
+  mode array is segmental Function;
+end;
+
+registration
+  let A be array;
+  cluster dom A -> ordinal-membered;
+end;
+
+theorem :: EXCHSORT:19
+  for f being array holds f is 0-limited iff f is empty;
+
+registration
+  cluster 0-based -> T-Sequence-like array;
+end;
+
+definition
+  let X;
+  mode array of X is X-valued array;
+end;
+
+definition
+  let X be 1-sorted;
+  mode array of X is array of the carrier of X;
+end;
+
+definition
+  let a,X;
+  mode array of a,X is a-defined array of X;
+end;
+
+reserve A,B,C for array;
+
+theorem :: EXCHSORT:20
+  base-f = inf dom f;
+
+theorem :: EXCHSORT:21
+  f is (base-f)-based;
+
+theorem :: EXCHSORT:22
+  dom A = (limit-A) \ (base-A);
+
+theorem :: EXCHSORT:23
+  dom A = a\b & A is non empty implies base-A = b & limit-A = a;
+
+theorem :: EXCHSORT:24
+  for f be T-Sequence holds
+  base-f = 0 & limit-f = dom f & len-f = dom f;
+
+registration
+  let a,b,X;
+  cluster b-based natural-valued integer-valued real-valued complex-valued
+  finite array of a,X;
+end;
+
+registration
+  let a,x;
+  cluster {[a,x]} -> segmental;
+end;
+
+registration
+  let a; let x be natural number;
+  cluster {[a,x]} -> natural-valued array;
+end;
+
+registration
+  let a; let x be real number;
+  cluster {[a,x]} -> real-valued array;
+end;
+
+registration
+  let a; let X be non empty set;
+  let x be Element of X;
+  cluster {[a,x]} -> X-valued array;
+end;
+
+registration
+  let a,x;
+  cluster {[a,x]} -> a-based succ a-limited array;
+end;
+
+registration
+  let b;
+  cluster non empty b-based natural-valued integer-valued real-valued
+  complex-valued finite array;
+  let X be non empty set;
+  cluster non empty b-based finite X-valued array;
+end;
+
+notation
+  let s be T-Sequence;
+  synonym s last for last s;
+end;
+
+definition
+  let A be array;
+  func last A equals
+:: EXCHSORT:def 7
+A.union dom A;
+end;
+
+registration
+  let A be T-Sequence;
+  identify A last with last A;
+end;
+
+begin :: Descending sequence
+
+definition
+  let f be Function;
+  attr f is descending means
+:: EXCHSORT:def 8
+
+  for a,b st a in dom f & b in dom f & a in b holds f.b c< f.a;
+end;
+
+theorem :: EXCHSORT:25
+  for f being finite array
+  st for a st a in dom f & succ a in dom f holds f.succ a c< f.a
+  holds f is descending;
+
+theorem :: EXCHSORT:26
+  for f being array st len-f = omega &
+     for a st a in dom f & succ a in dom f holds f.succ a c< f.a
+  holds f is descending;
+
+theorem :: EXCHSORT:27
+  for f being T-Sequence st f is descending & f.0 is finite
+  holds f is finite;
+
+theorem :: EXCHSORT:28
+  for f being T-Sequence st f is descending & f.0 is finite &
+  for a st f.a <> {} holds succ a in dom f
+  holds last f = {};
+
+scheme :: EXCHSORT:sch 1
+ A{A() -> T-Sequence, F(set)->set}:
+  A() is finite
+  provided
+ F(A().0) is finite and
+ for a st succ a in dom A() & F(A().a) is finite
+    holds F(A().succ a) c< F(A().a);
+
+begin :: Swap
+
+registration
+  let X;
+  let f be X-defined Function;
+  let a,b be set;
+  cluster Swap(f,a,b) -> X-defined;
+end;
+
+registration
+  let X be set;
+  let f be X-valued Function;
+  let x,y be set;
+  cluster Swap(f,x,y) -> X-valued;
+end;
+
+theorem :: EXCHSORT:29
+  x in dom f & y in dom f implies Swap(f,x,y).x = f.y;
+
+theorem :: EXCHSORT:30
+  for f being array of X st x in dom f & y in dom f
+  holds Swap(f,x,y)/.x = f/.y;
+
+theorem :: EXCHSORT:31
+  x in dom f & y in dom f implies Swap(f,x,y).y = f.x;
+
+theorem :: EXCHSORT:32
+  for f being array of X st x in dom f & y in dom f
+  holds Swap(f,x,y)/.y = f/.x;
+
+theorem :: EXCHSORT:33
+  z <> x & z <> y implies Swap(f,x,y).z = f.z;
+
+theorem :: EXCHSORT:34
+  for f being array of X st z in dom f & z <> x & z <> y
+  holds Swap(f,x,y)/.z = f/.z;
+
+theorem :: EXCHSORT:35
+  x in dom f & y in dom f implies Swap(f,x,y) = Swap(f,y,x);
+
+registration
+  let X be non empty set;
+  cluster onto (X-valued non empty Function);
+end;
+
+registration
+  let X be non empty set;
+  let f be onto (X-valued non empty Function);
+  let x,y be Element of dom f;
+  cluster Swap(f,x,y) -> onto;
+end;
+
+registration
+  let A;
+  let x,y;
+  cluster Swap(A,x,y) -> segmental;
+end;
+
+theorem :: EXCHSORT:36
+  x in dom A & y in dom A implies Swap(Swap(A,x,y),x,y) = A;
+
+registration
+  let A be real-valued array;
+  let x,y;
+  cluster Swap(A,x,y) -> real-valued array;
+end;
+
+begin :: Permutations
+
+definition
+  let A be array;
+  mode permutation of A -> array means
+:: EXCHSORT:def 9
+
+  ex f being Permutation of dom A st it = A*f;
+end;
+
+theorem :: EXCHSORT:37
+  for B being permutation of A holds dom B = dom A & rng B = rng A;
+
+theorem :: EXCHSORT:38
+  A is permutation of A;
+
+theorem :: EXCHSORT:39
+  A is permutation of B implies B is permutation of A;
+
+theorem :: EXCHSORT:40
+  A is permutation of B & B is permutation of C implies A is permutation of C;
+
+theorem :: EXCHSORT:41
+  Swap(id X,x,y) is one-to-one;
+
+registration
+  let X be non empty set;
+  let x,y be Element of X;
+  cluster Swap(id X,x,y) -> one-to-one X-valued X-defined;
+end;
+
+registration
+  let X be non empty set;
+  let x,y be Element of X;
+  cluster Swap(id X,x,y) -> onto total;
+end;
+
+definition
+  let X,Y be non empty set;
+  let f be Function of X,Y;
+  let x,y be Element of X;
+  redefine func Swap(f,x,y) -> Function of X,Y;
+end;
+
+theorem :: EXCHSORT:42
+  x in X & y in X & f = Swap(id X,x,y) & X = dom A implies
+  Swap(A,x,y) = A*f;
+
+theorem :: EXCHSORT:43
+  x in dom A & y in dom A implies
+  Swap(A,x,y) is permutation of A & A is permutation of Swap(A,x,y);
+
+theorem :: EXCHSORT:44
+  x in dom A & y in dom A & A is permutation of B implies
+  Swap(A,x,y) is permutation of B & A is permutation of Swap(B,x,y);
+
+begin :: Exchanging
+
+definition
+  let O be RelStr;
+  let A be array of O;
+  attr A is ascending means
+:: EXCHSORT:def 10
+  for a,b st a in dom A & b in dom A & a in b holds A/.a <= A/.b;
+  func inversions A equals
+:: EXCHSORT:def 11
+  {[a,b] where a,b is Element of dom A: a in b & not A/.a <= A/.b};
+end;
+
+registration
+  let O be RelStr;
+  cluster -> ascending (empty array of O);
+  let A be empty array of O;
+  cluster inversions A -> empty;
+end;
+
+reserve O for connected (non empty Poset);
+reserve R,Q for array of O;
+
+theorem :: EXCHSORT:45
+  for O for x,y being Element of O holds x > y iff not x <= y;
+
+definition
+  let O,R;
+  redefine func inversions R equals
+:: EXCHSORT:def 12
+  {[a,b] where a,b is Element of dom R: a in b & R/.a > R/.b};
+end;
+
+theorem :: EXCHSORT:46
+  [x,y] in inversions R iff x in dom R & y in dom R & x in y & R/.x > R/.y;
+
+theorem :: EXCHSORT:47
+  inversions R c= [:dom R, dom R:];
+
+registration
+  let O;
+  let R be finite array of O;
+  cluster inversions R -> finite;
+end;
+
+theorem :: EXCHSORT:48
+  R is ascending iff inversions R = {};
+
+theorem :: EXCHSORT:49
+  [x,y] in inversions R implies [y,x] nin inversions R;
+
+theorem :: EXCHSORT:50
+  [x,y] in inversions R & [y,z] in inversions R implies [x,z] in inversions R;
+
+registration
+  let O,R;
+  cluster inversions R -> Relation-like;
+end;
+
+registration
+  let O,R;
+  cluster inversions R -> asymmetric transitive Relation;
+end;
+
+definition
+  let O;
+  let a,b be Element of O;
+  redefine pred a < b;
+  asymmetry;
+end;
+
+theorem :: EXCHSORT:51
+  [x,y] in inversions R implies [x,y] nin inversions Swap(R,x,y);
+
+theorem :: EXCHSORT:52
+  x in dom R & y in dom R & z <> x & z <> y & t <> x & t <> y
+  implies
+  ([z,t] in inversions R iff [z,t] in inversions Swap(R,x,y));
+
+theorem :: EXCHSORT:53
+  [x,y] in inversions R implies
+  ([z,y] in inversions R & z in x iff [z,x] in inversions Swap(R,x,y));
+
+theorem :: EXCHSORT:54
+  [x,y] in inversions R implies
+  ([z,x] in inversions R iff z in x & [z,y] in inversions Swap(R,x,y));
+
+theorem :: EXCHSORT:55
+  [x,y] in inversions R & z in y & [x,z] in inversions Swap(R,x,y) implies
+  [x,z] in inversions R;
+
+theorem :: EXCHSORT:56
+  [x,y] in inversions R & x in z & [z,y] in inversions Swap(R,x,y) implies
+  [z,y] in inversions R;
+
+theorem :: EXCHSORT:57
+  [x,y] in inversions R & y in z & [x,z] in inversions Swap(R,x,y) implies
+  [y,z] in inversions R;
+
+theorem :: EXCHSORT:58
+  [x,y] in inversions R implies
+  (y in z & [x,z] in inversions R iff [y,z] in inversions Swap(R,x,y));
+
+definition
+  let O,R,x,y;
+  func (R,x,y)incl -> Function equals
+:: EXCHSORT:def 13
+  [:Swap(id dom R,x,y), Swap(id dom R,x,y):] +*
+  id([:{x},(succ y)\x:]\/[:(succ y)\x,{y}:]);
+end;
+
+theorem :: EXCHSORT:59
+  c in (succ b)\a iff a c= c & c c= b;
+
+reserve T for non empty array of O;
+reserve p,q,r,s for Element of dom T;
+
+theorem :: EXCHSORT:60
+  (succ q)\p c= dom T;
+
+theorem :: EXCHSORT:61
+  dom (T,p,q)incl = [:dom T, dom T:] & rng (T,p,q)incl c= [:dom T, dom T:];
+
+theorem :: EXCHSORT:62
+  p c= r & r c= q implies
+  (T,p,q)incl.(p,r) = [p, r] & (T,p,q)incl.(r,q) = [r,q];
+
+theorem :: EXCHSORT:63
+  r <> p & s <> q & f = Swap(id dom T,p,q)
+  implies (T,p,q)incl.(r,s) = [f.r,f.s];
+
+theorem :: EXCHSORT:64
+  r in p & f = Swap(id dom T,p,q) implies
+  (T,p,q)incl.(r,q) = [f.r,f.q] & (T,p,q)incl.(r,p) = [f.r,f.p];
+
+theorem :: EXCHSORT:65
+  q in r & f = Swap(id dom T,p,q) implies
+  (T,p,q)incl.(p,r) = [f.p,f.r] & (T,p,q)incl.(q,r) = [f.q,f.r];
+
+theorem :: EXCHSORT:66
+  p in q implies (T,p,q)incl.(p,q) = [p,q];
+
+theorem :: EXCHSORT:67
+  p in q & r <> p & r <> q & s <> p & s <> q implies (T,p,q)incl.(r,s) = [r,s];
+
+theorem :: EXCHSORT:68
+  r in p & p in q implies (T,p,q)incl.(r,p) = [r,q] & (T,p,q)incl.(r,q) = [r,p]
+;
+
+theorem :: EXCHSORT:69
+  p in s & s in q implies (T,p,q)incl.(p,s) = [p,s] & (T,p,q)incl.(s,q) = [s,q]
+;
+
+theorem :: EXCHSORT:70
+  p in q & q in s implies (T,p,q)incl.(p,s) = [q,s] & (T,p,q)incl.(q,s) = [p,s]
+;
+
+theorem :: EXCHSORT:71
+  p in q implies (T,p,q)incl|(inversions Swap(T,p,q) qua set) is one-to-one;
+
+registration
+  let O,R,x,y,z;
+  cluster (R,x,y)incl.:z -> Relation-like;
+end;
+
+begin :: Correctness of sorting by exchanging
+
+theorem :: EXCHSORT:72
+  [x,y] in inversions R implies
+  (R,x,y)incl.:inversions Swap(R,x,y) c< inversions R;
+
+registration
+  let R be finite Function;
+  let x,y;
+  cluster Swap(R,x,y) -> finite;
+end;
+
+theorem :: EXCHSORT:73
+  for R being array of O
+  st [x,y] in inversions R & inversions R is finite
+  holds card inversions Swap(R,x,y) in card inversions R;
+
+theorem :: EXCHSORT:74
+  for R being finite array of O st [x,y] in inversions R
+  holds card inversions Swap(R,x,y) < card inversions R;
+
+definition
+  let O,R;
+  mode arr_computation of R -> non empty array means
+:: EXCHSORT:def 14
+
+  it.(base-it) = R & (for a st a in dom it holds it.a is array of O) &
+  for a st a in dom it & succ a in dom it
+  ex R,x,y st [x,y] in inversions R & it.a = R & it.succ a = Swap(R,x,y);
+end;
+
+theorem :: EXCHSORT:75
+  {[a,R]} is arr_computation of R;
+
+registration
+  let O,R,a;
+  cluster a-based finite arr_computation of R;
+end;
+
+registration
+  let O,R;
+  let C be arr_computation of R;
+  let x;
+  cluster C.x -> segmental Function-like Relation-like;
+end;
+
+registration
+  let O,R;
+  let C be arr_computation of R;
+  let x;
+  cluster C.x -> the carrier of O-valued;
+end;
+
+registration
+  let O,R;
+  let C be arr_computation of R;
+  cluster last C -> segmental Relation-like Function-like;
+end;
+
+registration
+  let O,R;
+  let C be arr_computation of R;
+  cluster last C -> the carrier of O-valued;
+end;
+
+definition
+  let O,R;
+  let C be arr_computation of R;
+  attr C is complete means
+:: EXCHSORT:def 15
+last C is ascending;
+end;
+
+theorem :: EXCHSORT:76
+  for C being 0-based arr_computation of R st R is finite array of O
+  holds C is finite;
+
+theorem :: EXCHSORT:77
+  for C being 0-based arr_computation of R st R is finite array of O &
+  for a st inversions (C.a) <> {} holds succ a in dom C
+  holds C is complete;
+
+theorem :: EXCHSORT:78
+  for C being finite arr_computation of R
+  holds last C is permutation of R &
+  for a st a in dom C holds C.a is permutation of R;
+
+begin :: Existence of Complete Computations
+
+theorem :: EXCHSORT:79
+  for A being 0-based finite array of X st A <> {} holds last A in X;
+
+theorem :: EXCHSORT:80
+  last <%x%> = x;
+
+theorem :: EXCHSORT:81
+  for A being 0-based finite array holds last (A^<%x%>) = x;
+
+registration
+  let X be set;
+  cluster -> X-valued Element of X^omega;
+end;
+
+scheme :: EXCHSORT:sch 2
+ A{F(set)->set, X()->non empty set, P[set,set], s()->set}:
+  ex f being finite 0-based non empty array, k being Element of X() st
+  k = last f & F(k) = {} & f.0 = s() &
+  for a st succ a in dom f
+  ex x,y being Element of X() st x = f.a & y = f.succ a & P[x,y]
+ provided
+ s() in X() and
+ F(s()) is finite and
+ for x being Element of X() st F(x) <> {}
+    ex y being Element of X() st P[x,y] & F(y) c< F(x);
+
+reserve A for array, B for permutation of A;
+
+theorem :: EXCHSORT:82
+  B in Funcs(dom A, rng A);
+
+registration
+  let A be real-valued array;
+  cluster -> real-valued permutation of A;
+end;
+
+registration
+  let a;
+  let X be non empty set;
+  cluster -> T-Sequence-like Element of Funcs(a,X);
+end;
+
+registration
+  let X;
+  let Y be real-membered non empty set;
+  cluster -> real-valued Element of Funcs(X,Y);
+end;
+
+registration
+  let X;
+  let A be array of X;
+  cluster -> X-valued permutation of A;
+end;
+
+registration
+  let X be set;
+  let Z be set;
+  let Y be Subset of Z;
+  cluster -> Z-valued Element of Funcs(X,Y);
+end;
+
+theorem :: EXCHSORT:83
+  for r being X-defined Y-valued Relation holds r is Relation of X,Y;
+
+theorem :: EXCHSORT:84
+ for a being finite Ordinal, x st x in a
+      holds x = 0 or ex b st x = succ b;
+
+theorem :: EXCHSORT:85
+  for A being 0-based finite non empty array of O
+  ex C being 0-based arr_computation of A st C is complete;
+
+theorem :: EXCHSORT:86
+  for A being 0-based finite non empty array of O
+  ex B being permutation of A st B is ascending;
+
+registration
+  let O;
+  let A be 0-based finite array of O;
+  cluster ascending permutation of A;
+end;
+

@@ -78,7 +78,7 @@
 <Adjective nr="8">
 <Func kind="K" nr="125"/>
 </Adjective>
-<Adjective nr="33">
+<Adjective nr="31">
 <Var nr="5"/>
 </Adjective>
 </Cluster>

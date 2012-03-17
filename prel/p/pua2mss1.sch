@@ -518,14 +518,14 @@
 <Cluster>
 <Adjective nr="12"/>
 <Adjective nr="17"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="12"/>
 <Adjective nr="17"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -548,7 +548,7 @@
 <Cluster>
 <Adjective nr="12"/>
 <Adjective nr="17"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <For>
@@ -556,7 +556,7 @@
 <Cluster>
 <Adjective nr="12"/>
 <Adjective nr="17"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <For>

@@ -26,6 +26,7 @@
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="XXREAL_2"/>
 <ArticleID name="XXREAL_3"/>
+<ArticleID name="MEMBER_1"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
 <ArticleID name="MEASURE2"/>
@@ -40,10 +41,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="62">
+<Adjective nr="63">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="65">
+<Adjective nr="66">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -93,7 +94,7 @@
 <Func kind="K" nr="32"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="192">
+<Func kind="K" nr="218">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

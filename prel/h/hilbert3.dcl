@@ -179,7 +179,7 @@
 <Cluster>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="49"/>
 </Cluster>
 </RCluster>

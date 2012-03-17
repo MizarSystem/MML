@@ -112,7 +112,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="16"/>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -121,7 +121,7 @@
 <Adjective nr="1"/>
 <Adjective nr="16"/>
 <Adjective nr="27"/>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
 <CCluster aid="PNPROC_1" nr="2">
@@ -129,7 +129,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="16"/>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -137,7 +137,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="16"/>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
 </Registrations>

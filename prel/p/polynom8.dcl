@@ -33,9 +33,9 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="57"/>
-<Adjective nr="88"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="58"/>
+<Adjective nr="89"/>
 <Adjective nr="105"/>
 <Adjective nr="106"/>
 </Cluster>
@@ -106,12 +106,12 @@
 <CCluster aid="POLYNOM8" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="57"/>
-<Adjective nr="77"/>
-<Adjective nr="83"/>
-<Adjective nr="87"/>
-<Adjective nr="90"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="58"/>
+<Adjective nr="78"/>
+<Adjective nr="84"/>
+<Adjective nr="88"/>
+<Adjective nr="91"/>
 <Adjective nr="105"/>
 <Adjective nr="106"/>
 </Cluster>
@@ -119,11 +119,11 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="57"/>
-<Adjective nr="83"/>
-<Adjective nr="87"/>
-<Adjective nr="90"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="58"/>
+<Adjective nr="84"/>
+<Adjective nr="88"/>
+<Adjective nr="91"/>
 <Adjective nr="105"/>
 <Adjective nr="106"/>
 <Adjective nr="112"/>

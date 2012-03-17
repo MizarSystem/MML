@@ -71,8 +71,8 @@
 </Adjective>
 <Adjective nr="18"/>
 <Adjective nr="27"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 <Adjective nr="164">
 <Func kind="U" nr="1">
 <Func kind="K" nr="295">
@@ -113,8 +113,8 @@
 <Adjective nr="18"/>
 <Adjective nr="20" value="false"/>
 <Adjective nr="27"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 <Adjective nr="164">
 <Func kind="U" nr="1">
 <Func kind="K" nr="295">

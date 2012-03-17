@@ -96,8 +96,8 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="33"/>
-<Adjective nr="39"/>
 <Adjective nr="40"/>
+<Adjective nr="41"/>
 <Adjective nr="165"/>
 <Adjective nr="176"/>
 <Adjective nr="177"/>

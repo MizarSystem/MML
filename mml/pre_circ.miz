@@ -3,7 +3,7 @@
 ::
 :: Received November 17, 1994
 :: Copyright (c) 1994 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, FINSET_1, XBOOLE_0, SUBSET_1, TARSKI, FUNCT_1, RELAT_1,
@@ -12,11 +12,12 @@ environ
       TREES_3, TREES_2, ORDINAL4, TREES_A, XXREAL_0, TREES_4, ARYTM_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
       MCART_1, CARD_1, RELAT_1, FUNCT_1, FINSET_1, PARTFUN1, FUNCT_2, XXREAL_0,
-      XXREAL_2, BINOP_1, FUNCOP_1, FUNCT_4, CARD_3, TREES_2, TREES_1, TREES_3,
+      XXREAL_2, BINOP_1, FUNCOP_1, FUNCT_4, FUNCT_7,
+      CARD_3, TREES_2, TREES_1, TREES_3,
       TREES_4, FUNCT_5, FUNCT_6, PBOOLE, FINSEQ_1, FINSEQ_2, NAT_1;
  constructors WELLORD2, BINOP_1, FUNCT_4, SETWISEO, XXREAL_0, NAT_1, FUNCT_5,
       CARD_3, SEQ_4, PBOOLE, TREES_4, BINARITH, INT_1, SEQ_1, XXREAL_2,
-      PARTFUN1, RELSET_1;
+      PARTFUN1, RELSET_1, FUNCT_7;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, XREAL_0, MEMBERED, FINSEQ_1, CARD_3, PBOOLE, TREES_2, TREES_3,
       XXREAL_2, CARD_1, RELSET_1, TREES_1;
@@ -27,7 +28,7 @@ environ
       FUNCT_4, FUNCT_5, TREES_1, TREES_2, TREES_3, TREES_4, NAT_1, RELAT_1,
       CARD_3, FUNCOP_1, MCART_1, PBOOLE, CARD_2, CARD_1, FUNCT_6, FINSET_1,
       XBOOLE_0, XBOOLE_1, XCMPLX_1, ORDERS_1, XREAL_1, XXREAL_0, XXREAL_2,
-      XREAL_0, PARTFUN1;
+      XREAL_0, PARTFUN1, FUNCT_7;
  schemes DOMAIN_1, PBOOLE, FUNCT_1, FRAENKEL, FINSEQ_1, NAT_1;
 
 begin
@@ -102,7 +103,7 @@ A1: f +* h c= g +* h by Th3;
 end;
 
 begin
- 
+
 ::---------------------------------------------------------------------------
 :: Many Sorted Sets and Functions
 ::---------------------------------------------------------------------------
@@ -117,7 +118,7 @@ proof
 end;
 
 reserve i,j,x,y for set,
-  g for Function;
+  f,g for Function;
 
 scheme
   MSSLambda2Part { I() -> set, P [set], F, G (set) -> set }: ex f being
@@ -200,7 +201,7 @@ theorem Th6:
   holds union rng B is non empty
 proof
   let I be non empty set, B be non-empty ManySortedSet of I;
-  consider i being Element of I;
+  set i =the  Element of I;
   i in I;
   then i in dom B by PARTFUN1:def 4;
   then B.i in rng B by FUNCT_1:def 5;
@@ -226,7 +227,7 @@ proof
   end;
 end;
 
-consider A,I being set;
+
 
 theorem
   for I being non empty set, A being set, B being non-empty
@@ -474,7 +475,7 @@ A7: now
 end;
 
 begin
- 
+
 ::---------------------------------------------------------------------------
 :: Trees
 ::---------------------------------------------------------------------------
@@ -1136,7 +1137,7 @@ proof
   card F - 1 >= 0 by NAT_1:14,XREAL_1:50;
   hence thesis by XREAL_0:def 2;
 end;
- 
+
 :: from AMISTD_2, 2006.03.26, A.T.
 
 theorem
@@ -1167,7 +1168,7 @@ A1: dom f misses dom g;
     .= card dom f + card g by CARD_1:104
     .= card f + card g by CARD_1:104;
 end;
- 
+
 :: from SCMPDS_9. 2008.05.06, A.T.
 
 canceled;
@@ -1197,3 +1198,21 @@ A4: k > 1;
   then m+1 <= m+0 by XXREAL_2:def 8;
   hence contradiction by XREAL_1:10;
 end;
+
+theorem
+ f c= g & not x in dom f implies f c= g+*(x,y)
+ proof assume that
+A1: f c= g;
+  assume not x in dom f;
+  then
+A2: f c= f +*(x .--> y) by FUNCT_4:115;
+  per cases;
+  suppose x in dom g;
+   then g+*(x,y) = g+*(x.-->y) by FUNCT_7:def 3;
+   then f +*(x .--> y) c= g+*(x,y) by A1,Th3;
+  hence f c= g+*(x,y) by A2,XBOOLE_1:1;
+  end;
+  suppose not x in dom g;
+  hence f c= g+*(x,y) by A1,FUNCT_7:def 3;
+  end;
+ end;

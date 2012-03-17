@@ -10,17 +10,18 @@ environ
       AMI_1, XBOOLE_0, RELAT_1, TARSKI, FUNCOP_1, GLIB_000, GOBOARD5, AMISTD_1,
       UNIALG_1, FUNCT_1, CARD_3, CARD_5, FRECHET, RCOMP_1, STRUCT_0, VALUED_1,
       FSM_1, FUNCT_4, FUNCT_7, TURING_1, CIRCUIT2, AMISTD_2, PARTFUN1, CAT_1,
-      SCMNORM;
+      SCMNORM, NAT_1, RELOC, PBOOLE, XXREAL_0, COMPOS_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, MCART_1, SETFAM_1, MEMBERED,
-      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, CARD_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, NAT_1, CARD_3, FINSEQ_1, FUNCOP_1, NAT_D, FUNCT_7, VALUED_0,
-      VALUED_1, AFINSQ_1, STRUCT_0, COMPOS_1, EXTPRO_1, AMISTD_1;
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, PBOOLE, CARD_1, NUMBERS,
+      XCMPLX_0, XXREAL_0, NAT_1, CARD_3, FINSEQ_1, FUNCOP_1, NAT_D, FUNCT_7,
+      VALUED_0, VALUED_1, AFINSQ_1, STRUCT_0, COMPOS_1, EXTPRO_1, AMISTD_1;
  constructors WELLORD2, REALSET1, NAT_D, AMISTD_1, XXREAL_2, PRE_POLY,
-      AFINSQ_1, ORDINAL4, RECDEF_2, VALUED_1;
+      AFINSQ_1, ORDINAL4, RECDEF_2, VALUED_1, NAT_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, CARD_3, REALSET1, FUNCT_7,
       STRUCT_0, AMISTD_1, CARD_1, FUNCT_4, XXREAL_2, RELSET_1, GRFUNC_1,
-      FUNCT_2, ORDINAL1, AFINSQ_1, VALUED_1, VALUED_0, COMPOS_1, EXTPRO_1;
+      FUNCT_2, ORDINAL1, AFINSQ_1, VALUED_1, VALUED_0, COMPOS_1, EXTPRO_1,
+      XCMPLX_0, REAL_1, PBOOLE;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -175,7 +176,7 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be standard with_explicit_jumps
+  S be with_explicit_jumps
    standard-ins (IC-Ins-separated definite
   (standard-ins non empty stored-program AMI-Struct over N));
   cluster sequential -> ins-loc-free Instruction of S;
@@ -193,7 +194,7 @@ begin  :: On the composition of macro instructions
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be halting standard with_explicit_jumps
+  S be halting with_explicit_jumps
   realistic regular homogeneous J/A-independent
    (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
@@ -214,25 +215,26 @@ theorem :: AMISTD_2:36
 definition
  canceled 8;
   let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent standard halting realistic
+  S be regular homogeneous J/A-independent halting realistic
    (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)), I be Instruction of S;
-  attr I is IC-good means
+  attr I is IC-relocable means
 :: AMISTD_2:def 18
 
-  for k being natural number, s1 being State of S
-  holds IC Exec(I,s1) + k = IC Exec(IncAddr(I,k),IncrIC(s1,k));
+  for j,k being natural number, s being State of S
+  holds IC Exec(IncAddr(I,j),s) + k = IC Exec(IncAddr(I,j+k),IncIC(s,k));
 end;
 
 definition
   let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent standard halting realistic
+  S be regular homogeneous J/A-independent :::standard
+  halting realistic
    (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
-  attr S is IC-good means
+  attr S is IC-relocable means
 :: AMISTD_2:def 19
 
-  for I being Instruction of S holds I is IC-good;
+  for I being Instruction of S holds I is IC-relocable;
 end;
 
 definition
@@ -256,20 +258,20 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent standard
+  S be regular homogeneous J/A-independent :::standard
   with_explicit_jumps
   (standard-ins IC-Ins-separated definite halting realistic
   (non empty stored-program AMI-Struct over N));
-  cluster sequential -> IC-good Instruction of S;
+  cluster sequential -> IC-relocable Instruction of S;
 end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent standard
+  S be regular homogeneous J/A-independent ::: standard
   realistic with_explicit_jumps
   (standard-ins IC-Ins-separated definite halting realistic
   (non empty stored-program AMI-Struct over N));
-  cluster halting -> IC-good Instruction of S;
+  cluster halting -> IC-relocable Instruction of S;
 end;
 
 registration
@@ -287,7 +289,7 @@ theorem :: AMISTD_2:46
 
 registration
   let N be with_non-empty_elements non empty set;
-  cluster STC N -> IC-good Exec-preserving;
+  cluster STC N -> IC-relocable Exec-preserving;
 end;
 
 registration
@@ -300,7 +302,7 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  cluster IC-good (homogeneous realistic
+  cluster IC-relocable (homogeneous realistic
     with_explicit_jumps Exec-preserving halting
     (regular J/A-independent standard (standard-ins IC-Ins-separated definite
     (non empty stored-program AMI-Struct over N))));
@@ -314,10 +316,10 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be IC-good (regular homogeneous J/A-independent standard
+  S be IC-relocable (regular homogeneous J/A-independent :::standard
   (standard-ins IC-Ins-separated definite halting realistic
   (non empty stored-program AMI-Struct over N)));
-  cluster -> IC-good Instruction of S;
+  cluster -> IC-relocable Instruction of S;
 end;
 
 registration
@@ -328,8 +330,27 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be IC-good (homogeneous Exec-preserving
-  (regular J/A-independent standard realistic halting (standard-ins
+  S be regular homogeneous J/A-independent :::standard
+  realistic with_explicit_jumps
+  (standard-ins IC-Ins-separated definite halting realistic
+  (non empty stored-program AMI-Struct over N));
+ cluster IC-relocable Instruction of S;
+end;
+
+theorem :: AMISTD_2:47
+  for S be regular homogeneous J/A-independent halting
+  realistic with_explicit_jumps
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N)),
+  I being IC-relocable Instruction of S
+  for k being natural number, s being State of S
+  holds IC Exec(I,s) + k = IC Exec(IncAddr(I,k),IncIC(s,k));
+
+registration
+  let N be with_non-empty_elements non empty set,
+  S be IC-relocable (homogeneous Exec-preserving
+  (regular J/A-independent standard realistic with_explicit_jumps
+  halting (standard-ins
   IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)))),
   F, G be closed initial non empty (NAT-defined
@@ -337,7 +358,7 @@ registration
   cluster F ';' G -> closed;
 end;
 
-canceled 16;
+canceled 15;
 
 theorem :: AMISTD_2:63
   for I being Instruction of Trivial-AMI N holds JumpPart I = 0;
@@ -345,3 +366,24 @@ theorem :: AMISTD_2:63
 theorem :: AMISTD_2:64
   for T being InsType of Trivial-AMI N holds JumpParts T = {0};
 
+theorem :: AMISTD_2:65
+  for S being Exec-preserving realistic
+   (stored-program non empty AMI-Struct over N)
+  for s1,s2 being State of S
+   st (s1 | (Data-Locations S \/ {IC S}))
+    = (s2 | (Data-Locations S \/ {IC S}))
+for l being Instruction of S holds
+ Exec (l,s1) | (Data-Locations S \/ {IC S})
+  = Exec (l,s2) | (Data-Locations S \/ {IC S});
+
+reserve n,m for Element of NAT;
+
+theorem :: AMISTD_2:66
+ for S being Exec-preserving IC-Ins-separated definite realistic
+  (non empty stored-program AMI-Struct over N)
+ for s1,s2 being State of S, I being Program of S
+ for P1,P2 being (the Instructions of S)-valued ManySortedSet of NAT
+  st I c= P1 & I c= P2 & s1,s2 equal_outside NAT &
+   (for m st m < n holds IC Comput(P2,s2,m) in dom I)
+ for m st m <= n holds
+    Comput(P1,s1,m), Comput(P2,s2,m) equal_outside NAT;

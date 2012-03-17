@@ -30,6 +30,7 @@
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="XXREAL_3"/>
+<ArticleID name="MEMBER_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>

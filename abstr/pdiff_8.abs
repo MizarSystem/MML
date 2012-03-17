@@ -1,0 +1,197 @@
+:: Partial Differentiation, Differentiation and Continuity on $n$-Dimensional
+:: Real Normed Linear Spaces
+::  by Takao Inou\'e , Adam Naumowicz , Noboru Endou and Yasunari Shidama
+::
+:: Received October 13, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies PRE_TOPC, RLVECT_1, FUNCT_1, ARYTM_3, ARYTM_1, FINSEQ_1,
+      FINSEQ_2, XXREAL_2, FINSET_1, MEMBERED, RVSUM_1, RELAT_1, COMPLEX1,
+      SQUARE_1, RCOMP_1, XBOOLE_0, PARTFUN1, NORMSP_1, LOPBAN_1, FDIFF_1,
+      PDIFF_1, REAL_NS1, BORSUK_1, EUCLID, XREAL_0, NUMBERS, STRUCT_0,
+      CFCONT_1, FUNCT_4, REAL_1, SUBSET_1, CARD_1, TARSKI, XXREAL_0, CARD_3,
+      NAT_1, SEQ_4, UNIALG_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, SQUARE_1, NAT_1,
+      MEMBERED, COMPLEX1, BINOP_2, XXREAL_2, FINSEQ_1, FINSEQ_2, SEQ_1,
+      RVSUM_1, SEQ_4, FUNCT_7, STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_0, EUCLID,
+      LOPBAN_1, NFCONT_1, NDIFF_1, REAL_NS1, PDIFF_1;
+ constructors RELSET_1, REAL_1, SQUARE_1, NAT_D, BINOP_2, SEQ_1, FINSEQOP,
+      SEQ_4, FINSEQ_7, MONOID_0, RSSPACE3, NFCONT_1, NDIFF_1, PDIFF_1;
+ registrations FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      XREAL_0, NAT_1, MEMBERED, VALUED_0, XXREAL_2, FINSEQ_1, FINSEQ_2,
+      STRUCT_0, MONOID_0, EUCLID, LOPBAN_1, JORDAN2B, REAL_NS1, PDIFF_6,
+      CARD_1;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+
+
+begin
+:: Some properties of partial differentiation
+:: of PartFunc of REAL-NS m,REAL-NS n
+
+theorem :: PDIFF_8:1
+  for n,i be Element of NAT,
+      q be Element of REAL n,
+      p be Point of TOP-REAL n
+  st i in Seg n & q = p holds abs(p/.i) <= |.q.|;
+
+theorem :: PDIFF_8:2
+  for x be Real, vx be Element of REAL-NS 1
+  st vx = <* x *> holds ||.vx.|| = abs x;
+
+theorem :: PDIFF_8:3
+  for n be non empty Element of NAT,
+      x be Point of REAL-NS n,
+      i be Element of NAT st 1 <= i & i <= n holds
+    ||. Proj(i,n).x .|| <= ||. x .||;
+
+theorem :: PDIFF_8:4
+  for n be non empty Element of NAT,
+      x be Element of REAL-NS n,
+      i be Element of NAT holds
+   ||. Proj(i,n).x .|| = |. proj(i,n).x .|;
+
+theorem :: PDIFF_8:5
+  for n be non empty Element of NAT,
+      x be Element of REAL n,
+      i be Element of NAT st 1 <= i & i <= n holds
+   |. proj(i,n).x .| <= |. x .|;
+
+theorem :: PDIFF_8:6
+  for m,n be non empty Element of NAT,
+      s be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      i be Element of NAT st 1 <= i & i <= n holds
+  Proj(i,n) is bounded LinearOperator of REAL-NS n,REAL-NS 1 &
+  BoundedLinearOperatorsNorm(REAL-NS n,REAL-NS 1).(Proj(i,n)) <= 1;
+
+theorem :: PDIFF_8:7
+  for m,n be non empty Element of NAT,
+      s be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      i be Element of NAT st 1 <= i & i <= n holds
+  Proj(i,n)*s is Point of
+    R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1)
+  & BoundedLinearOperatorsNorm(REAL-NS m,REAL-NS 1).(Proj(i,n)*s)
+    <= ( BoundedLinearOperatorsNorm(REAL-NS n,REAL-NS 1).(Proj(i,n)))
+         *(BoundedLinearOperatorsNorm(REAL-NS m,REAL-NS n).s);
+
+theorem :: PDIFF_8:8
+  for n be non empty Element of NAT, i be Element of NAT holds
+    Proj(i,n) is homogeneous;
+
+theorem :: PDIFF_8:9
+  for n be non empty Element of NAT,
+      x be Element of REAL n, r be Real, i be Element of NAT holds
+    proj(i,n).(r*x) = r*(proj(i,n).x);
+
+theorem :: PDIFF_8:10
+  for n be non empty Element of NAT,
+      x,y be Element of REAL n,
+      i be Element of NAT
+  holds proj(i,n).(x + y) = proj(i,n).x + proj(i,n).y;
+
+theorem :: PDIFF_8:11
+  for n be non empty Element of NAT,
+      x,y be Point of REAL-NS n,
+      i be Element of NAT
+  holds Proj(i,n).(x - y) = Proj(i,n).x - Proj(i,n).y;
+
+theorem :: PDIFF_8:12
+  for n be non empty Element of NAT,
+      x,y be Element of REAL n,
+      i be Element of NAT
+  holds proj(i,n).(x - y) = proj(i,n).x - proj(i,n).y;
+
+theorem :: PDIFF_8:13
+  for m,n be non empty Element of NAT,
+      s be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      i be Element of NAT,
+      si be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1)
+      st si = Proj(i,n)*s & 1 <=i & i <= n
+  holds ||. si .|| <= ||. s .||;
+
+theorem :: PDIFF_8:14
+  for m,n be non empty Element of NAT,
+      s,t be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      si,ti be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1),
+      i be Element of NAT st
+      si = Proj(i,n)*s & ti = Proj(i,n)*t & 1 <= i & i <= n
+  holds ||. si - ti .|| <= ||. s - t .||;
+
+theorem :: PDIFF_8:15
+  for K be Real, n be Element of NAT,
+      s be Element of REAL n st
+      for i be Element of NAT st 1 <= i & i <= n holds abs( s.i ) <= K
+  holds |.s.| <= n*K;
+
+theorem :: PDIFF_8:16
+  for K be Real,
+      n be non empty Element of NAT,
+      s be Element of REAL-NS n st
+      for i be Element of NAT st 1 <=i & i <= n holds ||. Proj(i,n).s .|| <= K
+  holds ||. s .|| <= n*K;
+
+theorem :: PDIFF_8:17
+  for K be Real,
+      n be non empty Element of NAT,
+      s be Element of REAL n st
+  for i be Element of NAT st 1 <= i & i <= n holds |. proj(i,n).s .| <= K
+    holds |. s .| <= n*K;
+
+theorem :: PDIFF_8:18
+  for m,n be non empty Element of NAT,
+      s be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      K be Real st
+      for i be Element of NAT, si be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1)
+      st si=Proj(i,n)*s & 1 <=i & i <= n holds ||. si .|| <= K
+  holds ||. s .|| <= n*K;
+
+theorem :: PDIFF_8:19
+  for m,n be non empty Element of NAT,
+      s,t be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      K be Real st
+      for i be Element of NAT, si,ti be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1)
+      st si = Proj(i,n)*s & ti = Proj(i,n)*t &  1 <=i & i <= n
+      holds ||. si - ti .|| <= K
+  holds ||. s-t .|| <= n*K;
+
+theorem :: PDIFF_8:20
+  for m,n be non empty Element of NAT,
+      f be PartFunc of REAL-NS m,REAL-NS n,
+      X be Subset of REAL-NS m,
+      i be Element of NAT st 1 <=i & i <= m & X is open holds
+  (f is_partial_differentiable_on X,i &
+  f`partial|(X,i) is_continuous_on X)
+  iff
+  for j be Element of NAT st 1 <=j & j <= n holds
+  (Proj(j,n)*f) is_partial_differentiable_on X,i &
+   (Proj(j,n)*f)`partial|(X,i) is_continuous_on X;
+
+theorem :: PDIFF_8:21
+  for m,n be non empty Element of NAT,
+      f be PartFunc of REAL-NS m,REAL-NS n,
+      X be Subset of REAL-NS m st X is open holds
+  (f is_differentiable_on X & f`|X is_continuous_on X)
+  iff
+  for j be Element of NAT st 1 <=j & j <= n holds
+  Proj(j,n)*f is_differentiable_on X &
+  (Proj(j,n)*f)`|X is_continuous_on X;
+
+theorem :: PDIFF_8:22
+  for m,n be non empty Element of NAT,
+  f be PartFunc of REAL-NS m,REAL-NS n,
+  X be Subset of REAL-NS m st X is open holds
+  (for i be Element of NAT st 1 <= i & i <= m holds
+  f is_partial_differentiable_on X,i &
+  f`partial|(X,i) is_continuous_on X)
+  iff
+  f is_differentiable_on X & f`|X is_continuous_on X;

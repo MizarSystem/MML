@@ -30,7 +30,7 @@
 <Func kind="K" nr="50"/>
 </Func>
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FCONT_3" nr="2">
@@ -39,7 +39,7 @@
 <Func kind="K" nr="50"/>
 </Func>
 <Cluster>
-<Adjective nr="49"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FCONT_3" nr="3">
@@ -54,7 +54,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FCONT_3" nr="4">
@@ -69,7 +69,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FCONT_3" nr="5">
@@ -84,7 +84,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="49"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FCONT_3" nr="6">
@@ -99,7 +99,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="49"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <CCluster aid="FCONT_3" nr="1">
@@ -114,7 +114,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FCONT_3" nr="2">
@@ -129,7 +129,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="49"/>
+<Adjective nr="50"/>
 </Cluster>
 </CCluster>
 </Registrations>

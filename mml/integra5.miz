@@ -4,7 +4,7 @@
 ::
 :: Received March 23, 2000
 :: Copyright (c) 2000 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, SUBSET_1, REAL_1, INTEGRA1, FINSEQ_1, ORDINAL4, CARD_3,
@@ -331,12 +331,22 @@ A1: A c= dom f;
   then
 A2: f.:A is bounded by A1,FCONT_1:30,RCOMP_1:28;
   then consider a be real number such that
-B3: a is UpperBound of f.:A by XXREAL_2:def 10;
-A3: for r be real number st r in f.:A holds r <= a by B3,XXREAL_2:def 1;
+A3: a is UpperBound of f.:A by XXREAL_2:def 10;
+A4: for r be real number st r in f.:A holds r <= a by A3,XXREAL_2:def 1;
   consider b be real number such that
-B4: b is LowerBound of f.:A by A2,XXREAL_2:def 9;
-A4: for r be real number st r in f.:A holds b <= r by B4,XXREAL_2:def 2;
+A5: b is LowerBound of f.:A by A2,XXREAL_2:def 9;
+A6: for r be real number st r in f.:A holds b <= r by A5,XXREAL_2:def 2;
   for x being set st x in A /\ dom f holds b <= f.x
+  proof
+    let x be set;
+    assume x in A /\ dom f;
+    then x in A & x in dom f by XBOOLE_0:def 4;
+    then f.x in f.:A by FUNCT_1:def 12;
+    hence thesis by A6;
+  end;
+  then
+A7: f|A is bounded_below by RFUNCT_1:88;
+  for x being set st x in A /\ dom f holds f.x <= a
   proof
     let x be set;
     assume x in A /\ dom f;
@@ -344,18 +354,8 @@ A4: for r be real number st r in f.:A holds b <= r by B4,XXREAL_2:def 2;
     then f.x in f.:A by FUNCT_1:def 12;
     hence thesis by A4;
   end;
-  then
-A5: f|A is bounded_below by RFUNCT_1:88;
-  for x being set st x in A /\ dom f holds f.x <= a
-  proof
-    let x be set;
-    assume x in A /\ dom f;
-    then x in A & x in dom f by XBOOLE_0:def 4;
-    then f.x in f.:A by FUNCT_1:def 12;
-    hence thesis by A3;
-  end;
   then f|A is bounded_above by RFUNCT_1:87;
-  hence thesis by A5;
+  hence thesis by A7;
 end;
 
 theorem Th11:
@@ -1144,6 +1144,7 @@ FINSEQ_1:def 3;
   hence thesis by A102;
 end;
 
+::$N Fundamental Theorem of Integral Calculus
 theorem Th13:
   for f being PartFunc of REAL,REAL st A c= X & f
   is_differentiable_on X & f`|X is_integrable_on A & (f`|X)|A is bounded holds

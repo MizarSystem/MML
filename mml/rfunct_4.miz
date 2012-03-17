@@ -18,13 +18,13 @@ environ
  constructors BINOP_1, REAL_1, NAT_1, BINOP_2, COMPLEX1, FINSEQOP, RCOMP_1,
       RVSUM_1, FCONT_1, RFUNCT_3, MEASURE5, SEQ_1, XXREAL_2, RELSET_1;
  registrations RELSET_1, NUMBERS, XXREAL_0, XREAL_0, BINOP_2, MEMBERED,
-      FINSEQ_2, XBOOLE_0, VALUED_0;
+      FINSEQ_2, XBOOLE_0, VALUED_0, CARD_1;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
  definitions FINSEQ_2, RVSUM_1;
  theorems RCOMP_1, RFUNCT_3, TARSKI, PARTFUN1, FINSEQ_1, FINSEQ_2, RVSUM_1,
       NAT_1, FCONT_1, ABSVALUE, FUNCT_1, XREAL_0, XBOOLE_1, XCMPLX_0, XCMPLX_1,
       XREAL_1, COMPLEX1, XXREAL_0, FINSEQOP, FUNCOP_1, VALUED_1, XXREAL_2,
-      RELAT_1;
+      RELAT_1, CARD_1;
  schemes NAT_1;
 
 begin :: Some useful properties of n-tuples_on REAL
@@ -56,20 +56,20 @@ proof
   let n be Element of NAT;
   let R1,R2 be Element of n-tuples_on REAL;
   let r1,r2 be Real;
-  len(mlt(R1,R2))= n by FINSEQ_1:def 18;
+  len(mlt(R1,R2))= n by CARD_1:def 13;
   then len(mlt(R1,R2)^<*r1*r2*>)= n+1 by FINSEQ_2:19;
   then
 A1: mlt(R1,R2)^<*r1*r2*> is Element of (n+1)-tuples_on REAL by
   FINSEQ_2:
   110;
   len (R1^<*r1*>) = len R1 + 1 by FINSEQ_2:19
-    .= n+1 by FINSEQ_1:def 18
-    .= len R2 + 1 by FINSEQ_1:def 18
+    .= n+1 by CARD_1:def 13
+    .= len R2 + 1 by CARD_1:def 13
     .= len (R2^<*r2*>) by FINSEQ_2:19;
   then
 A2: len(mlt(R1^<*r1*>,R2^<*r2*>)) = len (R1^<*r1*>) by FINSEQ_2:86
     .= len R1 + 1 by FINSEQ_2:19
-    .= n+1 by FINSEQ_1:def 18;
+    .= n+1 by CARD_1:def 13;
 A3: for k being Nat st k in Seg (n+1) holds mlt(R1^<*r1*>,R2^<*r2*>).k = (
   mlt(R1,R2)^<*r1*r2*>).k
   proof
@@ -85,33 +85,33 @@ A6:     k<=n by NAT_1:13;
         1<=k by A4,FINSEQ_1:3;
         then
 A7:     k in Seg n by A6,FINSEQ_1:3;
-        then k in Seg len R1 by FINSEQ_1:def 18;
+        then k in Seg len R1 by CARD_1:def 13;
         then k in dom R1 by FINSEQ_1:def 3;
         then
 A8:     (R1^<*r1*>).k = R1.k by FINSEQ_1:def 7;
-        k in Seg len R2 by A7,FINSEQ_1:def 18;
+        k in Seg len R2 by A7,CARD_1:def 13;
         then k in dom R2 by FINSEQ_1:def 3;
         then
      (R2^<*r2*>).k = R2.k by FINSEQ_1:def 7;
-then A10:    mlt(R1^<*r1*>,R2^<*r2*>).k = (R1.k)*(R2.k) by A8,
+then A9:    mlt(R1^<*r1*>,R2^<*r2*>).k = (R1.k)*(R2.k) by A8,
         RVSUM_1:86;
-        len (mlt(R1,R2)) = n by FINSEQ_1:def 18;
+        len (mlt(R1,R2)) = n by CARD_1:def 13;
         then
     k in dom mlt(R1,R2) by A7,FINSEQ_1:def 3;
         then (mlt(R1,R2)^<*r1*r2*>).k = mlt(R1,R2).k by FINSEQ_1:def 7;
-        hence thesis by A10,RVSUM_1:86;
+        hence thesis by A9,RVSUM_1:86;
       end;
       suppose
-A12:    k=n+1;
-        then k=len R1+1 by FINSEQ_1:def 18;
+A10:    k=n+1;
+        then k=len R1+1 by CARD_1:def 13;
         then
-A13:    (R1^<*r1*>).k=r1 by FINSEQ_1:59;
-A14:    n+1 = len (mlt(R1,R2)) + 1 by FINSEQ_1:def 18;
-        k=len R2+1 by A12,FINSEQ_1:def 18;
+A11:    (R1^<*r1*>).k=r1 by FINSEQ_1:59;
+A12:    n+1 = len (mlt(R1,R2)) + 1 by CARD_1:def 13;
+        k=len R2+1 by A10,CARD_1:def 13;
         then
     (R2^<*r2*>).k=r2 by FINSEQ_1:59;
-        then mlt(R1^<*r1*>,R2^<*r2*>).k = r1*r2 by A13,RVSUM_1:86;
-        hence thesis by A12,A14,FINSEQ_1:59;
+        then mlt(R1^<*r1*>,R2^<*r2*>).k = r1*r2 by A11,RVSUM_1:86;
+        hence thesis by A10,A12,FINSEQ_1:59;
       end;
     end;
     hence thesis;
@@ -153,11 +153,11 @@ A3: k in Seg len R by FINSEQ_1:3;
     then k in dom R by FINSEQ_1:def 3;
     then
 A4: R.k = 0 by A1;
-    k in Seg n by A3,FINSEQ_1:def 18;
+    k in Seg n by A3,CARD_1:def 13;
     hence thesis by A4,FUNCOP_1:13;
   end;
-  len R = n by FINSEQ_1:def 18
-    .= len (n |-> 0) by FINSEQ_1:def 18;
+  len R = n by CARD_1:def 13
+    .= len (n |-> 0) by CARD_1:def 13;
   hence thesis by A2,FINSEQ_1:18;
 end;
 
@@ -166,7 +166,7 @@ theorem Th5:
   holds mlt(n |-> (0 qua Real),R) = n |-> (0 qua Real)
 proof
   let n be Element of NAT, R be Element of n-tuples_on REAL;
-A1: len(mlt(n |-> (0 qua Real),R)) =n by FINSEQ_1:def 18;
+A1: len(mlt(n |-> (0 qua Real),R)) =n by CARD_1:def 13;
 A2: for k be Nat st 1 <= k & k <= len mlt(n |-> (0 qua Real),R) holds mlt(n
   |-> (0 qua Real),R).k = (n |-> (0 qua Real)).k
   proof
@@ -178,7 +178,7 @@ A3: k in Seg len mlt(n |-> (0 qua Real),R) by FINSEQ_1:3;
       .=0*R.k by A1,A3,FUNCOP_1:13;
     hence thesis by A1,A3,FUNCOP_1:13;
   end;
-  len (n |-> (0 qua Real)) = n by FINSEQ_1:def 18;
+  len (n |-> (0 qua Real)) = n by CARD_1:def 13;
   hence thesis by A1,A2,FINSEQ_1:18;
 end;
 
@@ -1115,7 +1115,7 @@ A28:  (p*f.a+(1-p)*f.b)*(b-a)= (b-a)*p*f.a+(b-a)*((1-p)*f.b)
   end;
   hence thesis by A1;
 end;
- 
+
 :: Jensen's Inequality
 
 theorem
@@ -1158,15 +1158,15 @@ A7:       E=E1^<*e1*> by FINSEQ_2:137;
           consider F1 being Element of k-tuples_on REAL, f1 being Real such
           that
 A8:       F=F1^<*f1*> by FINSEQ_2:137;
-          len F1 + 1 = k + 1 by FINSEQ_1:def 18
-            .= len P by FINSEQ_1:def 18;
+          len F1 + 1 = k + 1 by CARD_1:def 13
+            .= len P by CARD_1:def 13;
           then len F1 + 1 in Seg len P by FINSEQ_1:6;
           then
 A9:       len F1 + 1 in dom P by FINSEQ_1:def 3;
 A10:      f1=F.(len F1 + 1) by A8,FINSEQ_1:59
             .= f.(E.(len F1 + 1)) by A6,A9
-            .= f.(E.(k+1)) by FINSEQ_1:def 18
-            .= f.(E.(len E1+1)) by FINSEQ_1:def 18
+            .= f.(E.(k+1)) by CARD_1:def 13
+            .= f.(E.(len E1+1)) by CARD_1:def 13
             .= f.e1 by A7,FINSEQ_1:59;
           consider P1 being Element of k-tuples_on REAL, p1 being Real such
           that
@@ -1186,11 +1186,11 @@ A16:        i in Seg len P1 by A15,FINSEQ_1:def 3;
 A17:        1 <= i by FINSEQ_1:3;
             i <= len P1 by A16,FINSEQ_1:3;
             then
-A18:        i <= k by FINSEQ_1:def 18;
+A18:        i <= k by CARD_1:def 13;
             k <= k+1 by NAT_1:11;
             then i <= k+1 by A18,XXREAL_0:2;
             then i in Seg (k+1) by A17,FINSEQ_1:3;
-            then i in Seg len P by FINSEQ_1:def 18;
+            then i in Seg len P by CARD_1:def 13;
             then
 A19:        i in dom P by FINSEQ_1:def 3;
             P1.i = P.i by A11,A15,FINSEQ_1:def 7;
@@ -1226,28 +1226,28 @@ A27:          for i being Element of NAT st i in dom ((Sum P1)"*P1)
                 then
 A28:            i in Seg len ((Sum P1)"*P1) by FINSEQ_1:def 3;
                 then
-A29:            i in Seg k by FINSEQ_1:def 18;
+A29:            i in Seg k by CARD_1:def 13;
                 then
-A30:            i in Seg len P1 by FINSEQ_1:def 18;
+A30:            i in Seg len P1 by CARD_1:def 13;
                 then i <= len P1 by FINSEQ_1:3;
                 then
-A31:            i <= k by FINSEQ_1:def 18;
+A31:            i <= k by CARD_1:def 13;
 A32:            1 <= i by A28,FINSEQ_1:3;
                 k <= k+1 by NAT_1:11;
                 then i <= k+1 by A31,XXREAL_0:2;
                 then i in Seg (k+1) by A32,FINSEQ_1:3;
-                then i in Seg len P by FINSEQ_1:def 18;
+                then i in Seg len P by CARD_1:def 13;
                 then
 A33:            i in dom P by FINSEQ_1:def 3;
                 i in dom P1 by A30,FINSEQ_1:def 3;
                 then
                 ((Sum P1)"*P1).i = (Sum P1)"*P1.i & P1.i >=0 by A14,RVSUM_1:67;
                 hence ((Sum P1)"*P1).i >= 0 by A26;
-                i in Seg len E1 by A29,FINSEQ_1:def 18;
+                i in Seg len E1 by A29,CARD_1:def 13;
                 then i in dom E1 by FINSEQ_1:def 3;
                 then
 A34:            E.i = E1.i by A7,FINSEQ_1:def 7;
-                i in Seg len F1 by A29,FINSEQ_1:def 18;
+                i in Seg len F1 by A29,CARD_1:def 13;
                 then i in dom F1 by FINSEQ_1:def 3;
                 then F.i = F1.i by A8,FINSEQ_1:def 7;
                 hence thesis by A6,A33,A34;
@@ -1320,7 +1320,7 @@ A44:  p<=1;
 A45:  for i being Element of NAT st i in dom P holds P.i >=0 & F.i=f.(E.i )
       proof
 A46:    dom P = Seg len P by FINSEQ_1:def 3
-          .= Seg 2 by FINSEQ_1:def 18;
+          .= Seg 2 by CARD_1:def 13;
         let i be Element of NAT such that
 A47:    i in dom P;
         now

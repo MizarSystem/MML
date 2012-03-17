@@ -245,9 +245,9 @@
 </Adjective>
 <Adjective nr="12"/>
 <Adjective nr="33"/>
-<Adjective nr="42"/>
-<Adjective nr="44"/>
+<Adjective nr="43"/>
 <Adjective nr="45"/>
+<Adjective nr="46"/>
 <Adjective nr="83"/>
 </Cluster>
 </RCluster>
@@ -273,9 +273,9 @@
 </Adjective>
 <Adjective nr="12"/>
 <Adjective nr="33"/>
-<Adjective nr="42"/>
-<Adjective nr="44"/>
+<Adjective nr="43"/>
 <Adjective nr="45"/>
+<Adjective nr="46"/>
 <Adjective nr="83"/>
 </Cluster>
 </RCluster>
@@ -554,7 +554,7 @@
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="12"/>
-<Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

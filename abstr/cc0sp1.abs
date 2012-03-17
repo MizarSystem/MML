@@ -1,0 +1,335 @@
+:: Banach Algebra of Bounded Complex-Valued Functionals
+::  by Katuhiko Kanazashi , Hiroyuki Okazaki and Yasunari Shidama
+:: 
+:: Received November 20, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies STRUCT_0, XREAL_0, ORDINAL1, FUNCOP_1, NUMBERS, PRE_TOPC,
+      ORDINAL2, SUBSET_1, RELAT_1, XBOOLE_0, FUNCT_1, TARSKI, CARD_1, ARYTM_3,
+      ARYTM_1, COMPLEX1, RLVECT_1, ALGSTR_0, FUNCSDOM, REAL_1, FUNCT_2, C0SP1,
+      IDEAL_1, VALUED_1, MESFUNC1, RSSPACE, BINOP_1, SUPINF_2, GROUP_1,
+      REALSET1, ZFMISC_1, XXREAL_2, XXREAL_0, NORMSP_1, REWRITE1, NAT_1,
+      RSSPACE3, SEQ_2, PARTFUN1, SEQ_1, LOPBAN_1, SEQ_4, CFUNCDOM, CLVECT_1,
+      VECTSP_1, RELAT_2, CC0SP1, CFUNCT_1, CLOPBAN2, LOPBAN_2, METRIC_1,
+      COMSEQ_1, CSSPACE4;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
+      RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, NUMBERS,
+      XXREAL_0, XREAL_0, REAL_1, COMPLEX1, BINOP_2, XXREAL_2, REALSET1,
+      VALUED_1, SEQ_1, SEQ_2, SEQ_4, CFUNCT_1, STRUCT_0, ALGSTR_0, PRE_TOPC,
+      RLVECT_1, GROUP_1, VECTSP_1, NORMSP_0, IDEAL_1, CLVECT_1, CFUNCDOM,
+      CLOPBAN2, C0SP1, CLOPBAN1, COMSEQ_1, CSSPACE3, COMSEQ_2;
+ constructors REAL_1, REALSET1, COMPLEX1, IDEAL_1, SEQ_1, C0SP1, PARTFUN3,
+      BINOP_2, TOPMETR, SEQ_4, MEASURE6, CLOPBAN2, CSSPACE3, COMSEQ_2;
+ registrations XBOOLE_0, SUBSET_1, STRUCT_0, XREAL_0, REALSET1, ALGSTR_0,
+      NUMBERS, ORDINAL1, MEMBERED, RELAT_1, VECTSP_1, VECTSP_2, VALUED_0,
+      C0SP1, XXREAL_0, FUNCT_2, VALUED_1, RFUNCT_1, COMPLEX1, FUNCOP_1,
+      CFUNCDOM, CLVECT_1, XCMPLX_0, COMSEQ_2, CLOPBAN2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin :: Banach Algebra of Bounded Complex-Valued Functionals
+
+definition
+  let V be ComplexAlgebra;
+  mode ComplexSubAlgebra of V -> ComplexAlgebra means
+:: CC0SP1:def 1
+    the carrier of it c= the carrier of V
+    & the addF of it = (the addF of V)||the carrier of it
+    & the multF of it = (the multF of V)||the carrier of it
+    & the Mult of it = (the Mult of V) | [:COMPLEX,the carrier of it:]
+    & 1.it = 1.V & 0.it = 0.V;
+end;
+
+theorem :: CC0SP1:1
+  for X being non empty set,
+      V being ComplexAlgebra,
+      V1 being non empty Subset of V,
+      d1,d2 being Element of X,
+      A being BinOp of X,
+      M being Function of [:X,X:],X,
+      MR being Function of [:COMPLEX,X:],X st
+  (V1 = X & d1 = 0.V & d2 = 1.V
+  & A = (the addF of V)||V1 & M = (the multF of V)||V1
+  & MR = (the Mult of V) | [:COMPLEX,V1:]
+  & V1 is having-inverse)
+  holds ComplexAlgebraStr(#X,M,A,MR,d2,d1#) is ComplexSubAlgebra of V;
+
+registration let V be ComplexAlgebra;
+  cluster strict ComplexSubAlgebra of V;
+end;
+
+definition let V be ComplexAlgebra, V1 be Subset of V;
+  attr V1 is Cadditively-linearly-closed means
+:: CC0SP1:def 2
+  V1 is add-closed having-inverse &
+  for a be Complex, v be Element of V st v in V1 holds a * v in V1;
+end;
+
+definition let V be ComplexAlgebra, V1 be Subset of V such that
+ V1 is Cadditively-linearly-closed non empty;
+  func Mult_(V1,V) -> Function of [:COMPLEX,V1:], V1 equals
+:: CC0SP1:def 3
+  (the Mult of V) | [:COMPLEX,V1:];
+end;
+
+definition let X be non empty set;
+  func ComplexBoundedFunctions(X) -> non empty Subset of CAlgebra X equals
+:: CC0SP1:def 4
+  { f where f is Function of X,COMPLEX : f|X is bounded };
+end;
+
+registration let X be non empty set;
+  cluster CAlgebra X -> scalar-unital;
+end;
+
+registration let X be non empty set;
+  cluster ComplexBoundedFunctions(X) -> Cadditively-linearly-closed
+      multiplicatively-closed;
+end;
+
+registration let V be ComplexAlgebra;
+  cluster Cadditively-linearly-closed multiplicatively-closed
+    (non empty Subset of V);
+end;
+
+definition let V be non empty CLSStruct;
+  attr V is scalar-mult-cancelable means
+:: CC0SP1:def 5
+  for a be Complex, v be Element of V st a*v=0.V holds a=0 or v=0.V;
+end;
+
+theorem :: CC0SP1:2
+  for V being ComplexAlgebra,
+      V1 being Cadditively-linearly-closed multiplicatively-closed
+    (non empty Subset of V) holds
+  ComplexAlgebraStr(# V1,mult_(V1,V), Add_(V1,V), Mult_(V1,V), One_(V1,V),
+    Zero_(V1,V) #) is ComplexSubAlgebra of V;
+
+theorem :: CC0SP1:3
+  for V be ComplexAlgebra, V1 be ComplexSubAlgebra of V holds
+  ( for v1,w1 be Element of V1, v,w be Element of V st
+     v1=v & w1=w holds v1+w1=v+w ) &
+  ( for v1,w1 be Element of V1, v,w be Element of V st
+     v1=v & w1=w holds v1*w1=v*w ) &
+  ( for v1 be Element of V1, v be Element of V, a be Complex st
+     v1=v holds a*v1=a*v ) &
+  1_V1 = 1_V & 0.V1=0.V;
+
+definition let X be non empty set;
+  func C_Algebra_of_BoundedFunctions X -> ComplexAlgebra equals
+:: CC0SP1:def 6
+  ComplexAlgebraStr (#
+    ComplexBoundedFunctions(X),
+    mult_(ComplexBoundedFunctions(X),CAlgebra(X)),
+    Add_(ComplexBoundedFunctions(X),CAlgebra(X)),
+    Mult_(ComplexBoundedFunctions(X),CAlgebra(X)),
+    One_(ComplexBoundedFunctions(X),CAlgebra(X)),
+    Zero_(ComplexBoundedFunctions(X),CAlgebra(X)) #);
+end;
+
+theorem :: CC0SP1:4
+  for X being non empty set holds C_Algebra_of_BoundedFunctions(X) is
+    ComplexSubAlgebra of CAlgebra(X);
+
+registration let X be non empty set;
+  cluster C_Algebra_of_BoundedFunctions(X) ->
+    vector-distributive scalar-unital;
+end;
+
+theorem :: CC0SP1:5
+  for X being non empty set,
+      F, G, H being VECTOR of C_Algebra_of_BoundedFunctions(X),
+      f, g, h being Function of X,COMPLEX st f=F & g=G & h=H holds
+  ( H = F+G iff (for x be Element of X holds h.x = (f.x) + (g.x)) );
+
+theorem :: CC0SP1:6
+  for X being non empty set, a being Complex,
+      F, G being VECTOR of C_Algebra_of_BoundedFunctions(X),
+      f, g being Function of X,COMPLEX st f=F & g=G holds
+  ( G = a*F iff for x be Element of X holds g.x = a*(f.x) );
+
+theorem :: CC0SP1:7
+  for X being non empty set,
+      F, G, H being VECTOR of C_Algebra_of_BoundedFunctions(X),
+      f, g, h being Function of X,COMPLEX st f=F & g=G & h=H holds
+  ( H = F*G iff for x be Element of X holds h.x = (f.x)*(g.x));
+
+theorem :: CC0SP1:8
+  for X being non empty set holds
+    0.C_Algebra_of_BoundedFunctions X = X -->0;
+
+theorem :: CC0SP1:9
+  for X being non empty set holds
+    1_C_Algebra_of_BoundedFunctions X = X --> 1r;
+
+definition let X be non empty set, F be set;
+  assume
+ F in ComplexBoundedFunctions(X);
+  func modetrans(F,X) -> Function of X,COMPLEX means
+:: CC0SP1:def 7
+  it = F & it|X is bounded;
+end;
+
+definition let X be non empty set, f be Function of X,COMPLEX;
+  func PreNorms f -> non empty Subset of REAL equals
+:: CC0SP1:def 8
+  { |.f.x.| where x is Element of X : not contradiction };
+end;
+
+theorem :: CC0SP1:10
+  for X being non empty set,
+      f being Function of X,COMPLEX st f | X is bounded holds
+                    PreNorms f is bounded_above;
+
+theorem :: CC0SP1:11
+  for X being non empty set,
+      f being Function of X,COMPLEX holds
+  f|X is bounded iff PreNorms f is bounded_above;
+
+theorem :: CC0SP1:12
+  for X being non empty set
+  ex NORM be Function of ComplexBoundedFunctions(X),REAL st
+     for F be set st F in ComplexBoundedFunctions(X) holds
+          NORM.F = upper_bound PreNorms(modetrans(F,X));
+
+definition let X be non empty set;
+  func ComplexBoundedFunctionsNorm(X) ->
+              Function of ComplexBoundedFunctions(X),REAL means
+:: CC0SP1:def 9
+  for x be set st x in ComplexBoundedFunctions(X) holds
+  it.x = upper_bound PreNorms(modetrans(x,X));
+end;
+
+theorem :: CC0SP1:13
+  for X being non empty set,
+      f being Function of X,COMPLEX st f|X is bounded holds
+                             modetrans(f,X) = f;
+
+theorem :: CC0SP1:14
+  for X being non empty set,
+      f being Function of X,COMPLEX st f|X is bounded holds
+  (ComplexBoundedFunctionsNorm(X)).f = upper_bound PreNorms f;
+
+definition let X be non empty set;
+  func C_Normed_Algebra_of_BoundedFunctions(X) -> Normed_Complex_AlgebraStr
+  equals
+:: CC0SP1:def 10
+  Normed_Complex_AlgebraStr(# ComplexBoundedFunctions(X),
+    mult_(ComplexBoundedFunctions(X),CAlgebra(X)),
+    Add_(ComplexBoundedFunctions(X),CAlgebra(X)),
+    Mult_(ComplexBoundedFunctions(X),CAlgebra(X)),
+    One_(ComplexBoundedFunctions(X),CAlgebra(X)),
+    Zero_(ComplexBoundedFunctions(X),CAlgebra(X)),
+    ComplexBoundedFunctionsNorm(X) #);
+end;
+
+registration let X be non empty set;
+  cluster C_Normed_Algebra_of_BoundedFunctions(X) -> non empty;
+end;
+
+registration let X be non empty set;
+  cluster C_Normed_Algebra_of_BoundedFunctions(X) -> unital;
+end;
+
+theorem :: CC0SP1:15
+  for W being Normed_Complex_AlgebraStr,
+      V being ComplexAlgebra st
+      ComplexAlgebraStr(# the carrier of W,the multF of W,
+                  the addF of W,the Mult of W,
+                  the OneF of W,the ZeroF of W #) = V holds
+     W is ComplexAlgebra;
+
+theorem :: CC0SP1:16
+  for X being non empty set holds
+    C_Normed_Algebra_of_BoundedFunctions(X) is ComplexAlgebra;
+
+theorem :: CC0SP1:17
+  for X being non empty set,
+      F being Point of C_Normed_Algebra_of_BoundedFunctions(X) holds
+          Mult_(ComplexBoundedFunctions(X),CAlgebra(X)).(1r,F) = F;
+
+theorem :: CC0SP1:18
+  for X being non empty set holds
+    C_Normed_Algebra_of_BoundedFunctions(X) is ComplexLinearSpace;
+
+theorem :: CC0SP1:19
+  for X being non empty set holds
+    X --> 0 = 0.(C_Normed_Algebra_of_BoundedFunctions(X));
+
+theorem :: CC0SP1:20
+  for X being non empty set,
+      x being Element of X,
+      f being Function of X,COMPLEX,
+      F being Point of C_Normed_Algebra_of_BoundedFunctions(X) st
+        f = F & f | X is bounded holds |.f.x.| <= ||.F.||;
+
+theorem :: CC0SP1:21
+  for X being non empty set,
+      F being Point of C_Normed_Algebra_of_BoundedFunctions(X) holds
+            0 <= ||.F.||;
+
+theorem :: CC0SP1:22
+  for X being non empty set,
+      F being Point of C_Normed_Algebra_of_BoundedFunctions(X) st
+        F = 0.(C_Normed_Algebra_of_BoundedFunctions X) holds
+                           0 = ||.F.||;
+
+theorem :: CC0SP1:23
+  for X being non empty set,
+      f, g, h being Function of X,COMPLEX,
+      F, G, H being Point of C_Normed_Algebra_of_BoundedFunctions(X)
+                                   st f = F & g = G & h = H holds
+  (H = F+G iff for x being Element of X holds h.x = (f.x) + (g.x));
+
+theorem :: CC0SP1:24
+  for X being non empty set,
+      a being Complex,
+      f, g being Function of X,COMPLEX,
+      F, G being Point of C_Normed_Algebra_of_BoundedFunctions(X)
+                               st f = F & g = G holds
+  ( G = a*F iff for x being Element of X holds g.x = a*(f.x));
+
+theorem :: CC0SP1:25
+  for X being non empty set,
+      f, g, h being Function of X,COMPLEX,
+      F, G, H being Point of C_Normed_Algebra_of_BoundedFunctions(X)
+                            st f = F & g = G & h = H holds
+  (H = F*G iff for x being Element of X holds h.x = (f.x)*(g.x));
+
+theorem :: CC0SP1:26
+  for X being non empty set,
+      a being Complex,
+      F, G being Point of C_Normed_Algebra_of_BoundedFunctions(X) holds
+  ((||.F.|| = 0 implies F = 0.C_Normed_Algebra_of_BoundedFunctions(X))
+  & (F = 0.C_Normed_Algebra_of_BoundedFunctions(X) implies ||.F.|| = 0)
+  & ||.(a*F).|| = (|.a.|)*||.F.|| & ||.(F + G).|| <= ||.F.|| + ||.G.||);
+
+registration let X be non empty set;
+  cluster C_Normed_Algebra_of_BoundedFunctions(X) -> right_complementable
+      Abelian add-associative right_zeroed vector-distributive
+      scalar-distributive scalar-associative scalar-unital discerning
+      reflexive ComplexNormSpace-like;
+end;
+
+theorem :: CC0SP1:27
+  for X being non empty set,
+      f, g, h being Function of X,COMPLEX,
+      F, G, H being Point of C_Normed_Algebra_of_BoundedFunctions(X)
+                              st f = F & g = G & h = H holds
+  ( H = F-G iff for x being Element of X holds h.x = (f.x)-(g.x));
+
+theorem :: CC0SP1:28
+  for X being non empty set,
+      seq being sequence of C_Normed_Algebra_of_BoundedFunctions(X)
+                    st seq is CCauchy holds seq is convergent;
+
+registration let X be non empty set;
+  cluster C_Normed_Algebra_of_BoundedFunctions(X) -> complete;
+end;
+
+theorem :: CC0SP1:29
+  for X being non empty set holds
+    C_Normed_Algebra_of_BoundedFunctions(X) is Complex_Banach_Algebra;
+

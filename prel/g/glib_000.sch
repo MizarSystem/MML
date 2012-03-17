@@ -30,8 +30,8 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -47,8 +47,8 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Not>
@@ -85,8 +85,8 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Not>
@@ -115,8 +115,8 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Not>
@@ -154,8 +154,8 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -171,8 +171,8 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Not>
@@ -207,8 +207,8 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Not>
@@ -237,8 +237,8 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Not>

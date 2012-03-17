@@ -3,7 +3,7 @@
 ::
 :: Received September 22, 1999
 :: Copyright (c) 1999 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, STRUCT_0, ZFMISC_1, RLVECT_1, ALGSTR_0, VECTSP_1,
@@ -16,20 +16,21 @@ environ
       PBOOLE, RELSET_1, FINSET_1, ORDINAL1, PARTFUN1, FUNCT_2, FINSEQ_1,
       STRUCT_0, ALGSTR_0, FUNCT_3, XXREAL_0, BINOP_1, NAT_1, ALGSTR_1,
       RLVECT_1, FINSEQ_2, GROUP_1, VECTSP_1, FUNCOP_1, FUNCT_7, MATRLIN,
+      VFUNCT_1,
       FVSUM_1, PRE_POLY, RECDEF_1;
  constructors BINOP_1, FINSEQOP, SETWISEO, FINSEQ_4, RFUNCT_3, FUNCT_7,
-      ALGSTR_1, FVSUM_1, MATRLIN, RECDEF_1, RELSET_1, PBOOLE;
+      ALGSTR_1, FVSUM_1, MATRLIN, RECDEF_1, RELSET_1, PBOOLE, VFUNCT_1;
  registrations SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1, XREAL_0, CARD_1,
       MEMBERED, FINSEQ_1, FINSEQ_2, STRUCT_0, VECTSP_1, ALGSTR_1, VALUED_0,
-      PRE_POLY;
+      PRE_POLY, RELSET_1, VFUNCT_1, FUNCT_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, RLVECT_1, FUNCT_1, VECTSP_1, GROUP_1, FINSEQ_2,
-      STRUCT_0, ALGSTR_0, FUNCOP_1;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, FUNCT_2, RLVECT_1, VECTSP_1, GROUP_1,
+      FINSEQ_2, STRUCT_0, ALGSTR_0, FUNCOP_1;
  theorems FUNCT_1, FINSET_1, FINSEQ_3, FINSEQ_4, ZFMISC_1, FINSEQ_1, FUNCT_2,
       RLVECT_1, VECTSP_1, FUNCOP_1, TARSKI, FUNCT_7, BINOP_1, RELAT_1, MATRLIN,
       FINSEQ_2, ORDINAL1, FINSEQ_5, NAT_1, PBOOLE, SUBSET_1, FVSUM_1, FUNCT_3,
       GROUP_1, XBOOLE_0, XBOOLE_1, RLVECT_2, PARTFUN1, XREAL_1, XXREAL_0,
-      PRE_POLY;
+      PRE_POLY, VFUNCT_1;
  schemes FRAENKEL, FUNCT_2, FINSEQ_2, FINSEQ_1, FINSEQ_4, SUBSET_1, BINOP_1;
 
 begin
@@ -42,10 +43,10 @@ registration
   proof
    let L be add-associative right_zeroed right_complementable right_unital
             right-distributive (non empty doubleLoopStr) such that
-Z:  0.L = 1.L;
+A1:  0.L = 1.L;
   let u be Element of L;
   thus u = u*1.L by VECTSP_1:def 13
-      .= 0.L by Z,VECTSP_1:36;
+      .= 0.L by A1,VECTSP_1:36;
   end;
 end;
 
@@ -70,7 +71,6 @@ A2: rng <:p1,p2:> c= [:rng p1,rng p2:] & [:rng p1,rng p2:] c= [:the carrier
 A3: [:the carrier of K,the carrier of K:] = dom (the addF of K) by
 FUNCT_2:def 1;
   thus dom (p1+p2) = dom ((the addF of K).:(p1,p2)) by FVSUM_1:def 3
-    .= dom ((the addF of K)*<:p1,p2:>)
     .= dom <:p1,p2:> by A2,A3,RELAT_1:46,XBOOLE_1:1
     .= dom p1 /\ dom p2 by FUNCT_3:def 8
     .= dom p1 by A1;
@@ -565,38 +565,126 @@ end;
 
 definition
  canceled 10;
-  let n be set, L be non empty addLoopStr, p, q be Series of n, L;
-  func p+q -> Series of n, L means
-  :Def21:
-  for x being bag of n holds it.x = p .x+q.x;
-  existence
+  let n be set, L be non empty addLoopStr, p,q be Series of n, L;
+  func p+q -> Series of n, L equals
+  p + q;
+  coherence
   proof
-    deffunc F(Element of Bags n) = p.$1+q.$1;
-    consider f being Function of Bags n, the carrier of L such that
-A1: for x being Element of Bags n holds f.x = F(x) from FUNCT_2:sch 4;
-    reconsider f as Function of Bags n, L;
-    reconsider f as Series of n, L;
-    take f;
-    let x be bag of n;
-    x in Bags n by PRE_POLY:def 12;
-    hence thesis by A1;
-  end;
-  uniqueness
-  proof
-    let it1, it2 be Series of n, L such that
-A2: for x being bag of n holds it1.x = p.x+q.x and
-A3: for x being bag of n holds it2.x = p.x+q.x;
-    now
-      let x be Element of Bags n;
-      reconsider x9 = x as bag of n;
-      thus it1.x = p.x9+q.x9 by A2
-        .= it2.x by A3;
-    end;
-    hence it1 = it2 by FUNCT_2:113;
+A1: dom p = Bags n & dom q = Bags n by FUNCT_2:def 1;
+    dom (p+q) = dom p /\ dom q by VFUNCT_1:def 1;
+    hence thesis by A1,FUNCT_2:130;
   end;
 end;
 
-canceled 44;
+theorem TDef21:
+  for n being set, L being non empty addLoopStr, p,q being Series of n, L
+  for x being bag of n holds (p+q).x = p.x + q.x
+  proof
+    let n be set;
+    let L be non empty addLoopStr;
+    let p, q be Series of n, L;
+    let x be bag of n;
+A1: dom p = Bags n & dom q = Bags n by FUNCT_2:def 1;
+A3: x in Bags n by PRE_POLY:def 12;
+    then
+A2: p/.x = p.x & q/.x = q.x by A1,PARTFUN1:def 8;
+A4: dom (p+q) = dom p /\ dom q by VFUNCT_1:def 1;
+    hence (p+q).x = (p+q)/.x by A1,A3,PARTFUN1:def 8
+    .= p.x + q.x by A1,A3,A2,A4,VFUNCT_1:def 1;
+  end;
+
+theorem
+  for n being set, L being non empty addLoopStr, p,q,r being Series of n, L
+  st for x being bag of n holds r.x = p.x + q.x holds
+  r = p + q
+  proof
+    let n be set;
+    let L be non empty addLoopStr;
+    let p,q,r be Series of n, L;
+    assume
+A1: for x being bag of n holds r.x = p.x + q.x;
+    let x be Element of Bags n;
+A2: dom (p+q) = Bags n by FUNCT_2:def 1;
+    then
+A3: (p+q)/.x = (p+q).x by PARTFUN1:def 8;
+    dom p = Bags n & dom q = Bags n by FUNCT_2:def 1;
+    then
+A5: p/.x = p.x & q/.x = q.x by PARTFUN1:def 8;
+    thus r.x = p.x + q.x by A1
+    .= (p + q).x by A2,A3,A5,VFUNCT_1:def 1;
+  end;
+
+theorem TDef22:
+  for n being set,
+      L being add-associative right_zeroed right_complementable
+      (non empty addLoopStr),
+      p being Series of n, L
+  for x being bag of n holds (-p).x = -(p.x)
+  proof
+    let n be set;
+    let L be add-associative right_zeroed right_complementable
+    (non empty addLoopStr);
+    let p be Series of n, L;
+    let x be bag of n;
+A1: dom p = Bags n by FUNCT_2:def 1;
+A3: x in Bags n by PRE_POLY:def 12;
+    then
+A2: p/.x = p.x by A1,PARTFUN1:def 8;
+A4: dom (-p) = dom p by VFUNCT_1:def 6;
+    hence (-p).x = (-p)/.x by A1,A3,PARTFUN1:def 8
+    .= -p.x by A1,A3,A2,A4,VFUNCT_1:def 6;
+  end;
+
+theorem
+  for n being set,
+      L being add-associative right_zeroed right_complementable
+      (non empty addLoopStr),
+      p,r being Series of n, L
+  st for x being bag of n holds r.x = -(p.x) holds
+  r = -p
+  proof
+    let n be set;
+    let L be add-associative right_zeroed right_complementable
+    (non empty addLoopStr);
+    let p,r be Series of n, L;
+    assume
+A1: for x being bag of n holds r.x = -p.x;
+    let x be Element of Bags n;
+A2: dom (-p) = Bags n by FUNCT_2:def 1;
+    then
+A3: (-p)/.x = (-p).x by PARTFUN1:def 8;
+    dom p = Bags n by FUNCT_2:def 1;
+    then
+A5: p/.x = p.x by PARTFUN1:def 8;
+    thus r.x = -p.x by A1
+    .= (-p).x by A2,A3,A5,VFUNCT_1:def 6;
+  end;
+
+theorem
+  for n be set, L be add-associative right_zeroed right_complementable
+  (non empty addLoopStr), p be Series of n, L holds p = - -p
+   proof
+     let n be set,L be add-associative right_zeroed right_complementable
+     (non empty addLoopStr), p be Series of n, L;
+     set r = -p;
+A2: dom p = Bags n by FUNCT_2:def 1;
+A3: dom r = Bags n by FUNCT_2:def 1;
+A4: dom -p = dom p by VFUNCT_1:def 6;
+A8: dom -r = dom r by VFUNCT_1:def 6;
+A7: dom - -p = dom -p by VFUNCT_1:def 6;
+    now
+      let x be Element of Bags n;
+      assume x in dom p;
+A5:   p.x = p/.x by A2,PARTFUN1:def 8;
+      thus p.x = - - (p.x) by RLVECT_1:30
+      .= - ((-p)/.x) by A2,A4,A5,VFUNCT_1:def 6
+      .= (- -p)/.x by A2,A4,A7,VFUNCT_1:def 6
+      .= (-r).x by A2,A4,A7,PARTFUN1:def 8;
+    end;
+    hence thesis by A2,A3,A8,PARTFUN1:34;
+  end;
+
+canceled 39;
 
 theorem Th79:
   for n being set, L being right_zeroed (non empty addLoopStr), p,
@@ -610,7 +698,7 @@ proof
 A1: x in Support f;
   then reconsider x9 = x as Element of Bags n;
   f.x9 <> 0.L by A1,Def9;
-  then p.x9+q.x9 <> 0.L by Def21;
+  then p.x9+q.x9 <> 0.L by TDef21;
   then not(p.x9 = 0.L & q.x9 = 0.L) by RLVECT_1:def 7;
   then x9 in Sp or x9 in Sq by Def9;
   hence thesis by XBOOLE_0:def 3;
@@ -625,8 +713,8 @@ definition
     let p, q be Series of n, L;
     now
       let b be Element of Bags n;
-      thus (p + q).b = q.b + p.b by Def21
-        .= (q + p).b by Def21;
+      thus (p + q).b = q.b + p.b by TDef21
+        .= (q + p).b by TDef21;
     end;
     hence p+q = q+p by FUNCT_2:113;
   end;
@@ -640,56 +728,17 @@ proof
   , q, r be Series of n, L;
   now
     let b be Element of Bags n;
-    thus ((p+q)+r).b = (p+q).b+r.b by Def21
-      .= p.b+q.b+r.b by Def21
+    thus ((p+q)+r).b = (p+q).b+r.b by TDef21
+      .= p.b+q.b+r.b by TDef21
       .= p.b+(q.b+r.b) by RLVECT_1:def 6
-      .= p.b+(q+r).b by Def21
-      .= (p+(q+r)).b by Def21;
+      .= p.b+(q+r).b by TDef21
+      .= (p+(q+r)).b by TDef21;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 definition
-  let n be set, L be add-associative right_zeroed right_complementable (non
-  empty addLoopStr), p be Series of n, L;
-  func -p -> Series of n, L means
-  :Def22:
-  for x being bag of n holds it.x = -( p.x);
-  existence
-  proof
-    deffunc F(Element of Bags n) = -(p.$1);
-    consider f being Function of Bags n, the carrier of L such that
-A1: for x being Element of Bags n holds f.x = F(x) from FUNCT_2:sch 4;
-    reconsider f as Function of Bags n, L;
-    reconsider f as Series of n, L;
-    take f;
-    let x be bag of n;
-    x in Bags n by PRE_POLY:def 12;
-    hence thesis by A1;
-  end;
-  uniqueness
-  proof
-    let it1, it2 be Series of n, L such that
-A2: for x being bag of n holds it1.x = -(p.x) and
-A3: for x being bag of n holds it2.x = -(p.x);
-    now
-      let b be Element of Bags n;
-      thus it1.b = -(p.b) by A2
-        .= it2.b by A3;
-    end;
-    hence it1 = it2 by FUNCT_2:113;
-  end;
-  involutiveness
-  proof
-    let p,q be Series of n, L such that
-A4: for x being bag of n holds p.x = -(q.x);
-    let x be bag of n;
-    thus q.x = - - (q.x) by RLVECT_1:30
-      .= -(p.x) by A4;
-  end;
-end;
-
-definition
+  canceled;
   let n be set, L be add-associative right_zeroed right_complementable (non
   empty addLoopStr), p, q be Series of n, L;
   func p-q -> Series of n, L equals
@@ -721,7 +770,7 @@ proof
   reconsider ls = p+0_(n,L), p9 = p as Function of (Bags n), the carrier of L;
   now
     let b be Element of Bags n;
-    thus ls.b = p.b + 0_(n,L).b by Def21
+    thus ls.b = p.b + 0_(n,L).b by TDef21
       .= p9.b+0.L by Th81
       .= p9.b by RLVECT_1:def 7;
   end;
@@ -745,8 +794,8 @@ proof
   reconsider pp = p-p, Z = 0_(n,L) as Function of Bags n, the carrier of L;
   now
     let b be Element of Bags n;
-    thus pp.b = p.b+(-p).b by Def21
-      .= p.b + -p.b by Def22
+    thus pp.b = p.b+(-p).b by TDef21
+      .= p.b + -p.b by TDef22
       .= 0.L by RLVECT_1:def 13
       .= Z.b by Th81;
   end;
@@ -929,14 +978,14 @@ A21:  (decomp b)/.i = <*tb1, tb2*> and
 A22:  t/.i = p.tb1*q.tb2 by A9,A11,A14;
 A23:  sb1 = tb1 & sb2 = tb2 by A15,A21,FINSEQ_1:98;
       s/.i = s.i by A14,PARTFUN1:def 8;
-      hence s.i = p.sb1*(q.sb2+r.sb2) by A16,Def21
+      hence s.i = p.sb1*(q.sb2+r.sb2) by A16,TDef21
         .= p.sb1*q.sb2+p.sb1*r.sb2 by VECTSP_1:def 18
         .= (t + u).i by A12,A14,A22,A19,A23,A20,A17,FVSUM_1:21;
     end;
     len (t+u) = len s by A12,FINSEQ_3:31;
     then s = t + u by A13,FINSEQ_2:10;
     hence (p*'(q+r)).b = Sum t + Sum u by A1,FVSUM_1:95
-      .= (p*'q+p*'r).b by A7,A4,Def21;
+      .= (p*'q+p*'r).b by A7,A4,TDef21;
   end;
   hence thesis by FUNCT_2:113;
 end;
@@ -1676,7 +1725,7 @@ A1: Support f c= Support p
 A2:   x in Support f;
       then reconsider x9 = x as Element of Bags n;
       f.x9 <> 0.L by A2,Def9;
-      then -(p.x9) <> 0.L by Def22;
+      then -(p.x9) <> 0.L by TDef22;
       then p.x9 <> 0.L by RLVECT_1:25;
       hence thesis by Def9;
     end;
@@ -1811,7 +1860,7 @@ holds x+y = p+q) & (for x, y being Element of it, p, q being Polynomial of n, L
     $1 & q = $2 & r = $3 & p*'q=r;
     defpred A[set, set, set] means ex p, q, r being Polynomial of n, L st p =
     $1 & q = $2 & r = $3 & p+q=r;
-    consider x9 being finite-Support Series of n, L;
+    set x9 =the  finite-Support Series of n, L;
     defpred Q[set] means ex x9 being Series of n, L st x9 = $1 & x9 is
     finite-Support;
     consider P being Subset of Funcs(Bags n, the carrier of L) such that
@@ -2083,7 +2132,7 @@ A1: y*z = q*'r by Def27;
   end;
 end;
 
-Lm5: now
+Lm1: now
   let n be Ordinal, L be right_zeroed Abelian add-associative
   right_complementable well-unital distributive associative non trivial (non
   empty doubleLoopStr);
@@ -2110,7 +2159,7 @@ registration
     thus Pm is well-unital
     proof
       let x be Element of Pm;
-      thus thesis by Lm5;
+      thus thesis by Lm1;
     end;
     let x, y, z be Element of Pm;
     reconsider p = x, q = y, r = z as Polynomial of n, L by Def27;

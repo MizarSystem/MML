@@ -39,30 +39,30 @@ begin :: Differentiation Formulas
  reserve f,f1 for PartFunc of REAL,REAL;
  reserve Z for open Subset of REAL;
 
-Lm0:
+Lm1:
   0 in Z implies (id Z)"{0} = {0}
   proof
-    assume A: 0 in Z;
+    assume A1: 0 in Z;
     thus (id Z)"{0} c= {0}
     proof
       let x be set; assume
-A3:   x in (id Z)"{0};
+A2:   x in (id Z)"{0};
       then x in dom id Z by FUNCT_1:def 13; then
-A4:   x in Z by FUNCT_1:34;
-      (id Z).x in {0} by A3,FUNCT_1:def 13;
-      hence thesis by A4,FUNCT_1:35;
+A3:   x in Z by FUNCT_1:34;
+      (id Z).x in {0} by A2,FUNCT_1:def 13;
+      hence thesis by A3,FUNCT_1:35;
     end;
     let x be set; assume x in {0}; then
-Z0: x = 0 by TARSKI:def 1; then
-    (id Z).x = 0 by A,FUNCT_1:35; then
-Z1: (id Z).x in {0} by TARSKI:def 1;
-    x in dom id Z by A,Z0,FUNCT_1:34;
-    hence thesis by Z1,FUNCT_1:def 13;
+A4: x = 0 by TARSKI:def 1; then
+    (id Z).x = 0 by A1,FUNCT_1:35; then
+A5: (id Z).x in {0} by TARSKI:def 1;
+    x in dom id Z by A1,A4,FUNCT_1:34;
+    hence thesis by A5,FUNCT_1:def 13;
   end;
- 
+
 :: f.x = -sec.(1/x)
 
-A: -1 is Real by XREAL_0:def 1;
+Lm2: -1 is Real by XREAL_0:def 1;
 
 theorem Th1:
   Z c= dom (sec*((id Z)^)) implies (-sec*((id Z)^)) is_differentiable_on Z &
@@ -75,28 +75,28 @@ then A2:Z c= dom (-sec*((id Z)^)) by VALUED_1:def 5;
 A3:Z c= dom ((id Z)^) by A1,FUNCT_1:171;
 A4:not 0 in Z
    proof
-     assume K: 0 in Z;
+     assume A5: 0 in Z;
      dom ((id Z)^) = dom id Z \ (id Z)"{0} by RFUNCT_1:def 8
-                  .= dom id Z \ {0} by Lm0,K; then
-     not 0 in {0} by XBOOLE_0:def 5,K,A3;
+                  .= dom id Z \ {0} by Lm1,A5; then
+     not 0 in {0} by XBOOLE_0:def 5,A5,A3;
      hence thesis by TARSKI:def 1;
    end;
-then A5:(sec*((id Z)^)) is_differentiable_on Z by A1,FDIFF_9:8;
-then A6:(-1)(#)(sec*((id Z)^)) is_differentiable_on Z by A2,FDIFF_1:28,A;
+then A6:(sec*((id Z)^)) is_differentiable_on Z by A1,FDIFF_9:8;
+then A7:(-1)(#)(sec*((id Z)^)) is_differentiable_on Z by A2,FDIFF_1:28,Lm2;
  for x st x in Z holds ((-sec*((id Z)^))`|Z).x = sin.(1/x)/(x^2*(cos.(1/x))^2)
   proof
    let x;
    assume
-A7:x in Z;
-  ((-sec*((id Z)^))`|Z).x=((-1)(#)((sec*((id Z)^))`|Z)).x by A5,FDIFF_2:19,A
+A8:x in Z;
+  ((-sec*((id Z)^))`|Z).x=((-1)(#)((sec*((id Z)^))`|Z)).x by A6,FDIFF_2:19,Lm2
                  .=(-1)*(((sec*((id Z)^))`|Z).x) by VALUED_1:6
-                 .=(-1)*(-sin.(1/x)/(x^2*(cos.(1/x))^2)) by A1,A4,A7,FDIFF_9:8
+                 .=(-1)*(-sin.(1/x)/(x^2*(cos.(1/x))^2)) by A1,A4,A8,FDIFF_9:8
                  .=sin.(1/x)/(x^2*(cos.(1/x))^2);
    hence thesis;
   end;
-  hence thesis by A6;
+  hence thesis by A7;
 end;
- 
+
 ::f.x=-cosec.(exp_R.x)
 
 theorem Th2:
@@ -108,14 +108,14 @@ proof
 A1:Z c= dom (cosec*exp_R);
 then A2:Z c= dom (-cosec*exp_R) by VALUED_1:8;
 A3:cosec*exp_R is_differentiable_on Z by A1,FDIFF_9:13;
-then A4:(-1)(#)(cosec*exp_R) is_differentiable_on Z by A2,FDIFF_1:28,A;
+then A4:(-1)(#)(cosec*exp_R) is_differentiable_on Z by A2,FDIFF_1:28,Lm2;
  for x st x in Z holds ((-cosec*exp_R)`|Z).x
   = exp_R.x*cos.(exp_R.x)/(sin.(exp_R.x))^2
   proof
     let x;
     assume
 A5:x in Z;
- ((-cosec*exp_R)`|Z).x=((-1)(#)((cosec*exp_R)`|Z)).x by A3,FDIFF_2:19,A
+ ((-cosec*exp_R)`|Z).x=((-1)(#)((cosec*exp_R)`|Z)).x by A3,FDIFF_2:19,Lm2
                  .=(-1)*(((cosec*exp_R)`|Z).x) by VALUED_1:6
                  .=(-1)*(-exp_R.x*cos.(exp_R.x)/(sin.(exp_R.x))^2)
     by A1,A5,FDIFF_9:13
@@ -124,7 +124,7 @@ A5:x in Z;
    end;
    hence thesis by A4;
 end;
- 
+
 :: f.x = -cosec.(ln.x)
 
 theorem Th3:
@@ -135,13 +135,13 @@ proof
 A1:Z c= dom (cosec*ln);
 then A2:Z c= dom (-cosec*ln) by VALUED_1:8;
 A3:cosec*ln is_differentiable_on Z by A1,FDIFF_9:15;
-then A4:(-1)(#)(cosec*ln) is_differentiable_on Z by A2,FDIFF_1:28,A;
+then A4:(-1)(#)(cosec*ln) is_differentiable_on Z by A2,FDIFF_1:28,Lm2;
   for x st x in Z holds ((-cosec*ln)`|Z).x = cos.(ln.x)/(x*(sin.(ln.x))^2)
   proof
     let x;
     assume
 A5: x in Z;
- ((-cosec*ln)`|Z).x=((-1)(#)((cosec*ln)`|Z)).x by A3,FDIFF_2:19,A
+ ((-cosec*ln)`|Z).x=((-1)(#)((cosec*ln)`|Z)).x by A3,FDIFF_2:19,Lm2
                  .=(-1)*(((cosec*ln)`|Z).x) by VALUED_1:6
                  .=(-1)*(-cos.(ln.x)/(x*(sin.(ln.x))^2))
    by A1,A5,FDIFF_9:15
@@ -150,7 +150,7 @@ A5: x in Z;
   end;
   hence thesis by A4;
 end;
- 
+
 :: f.x = -exp_R.(cosec.x)
 
 theorem Th4:
@@ -162,13 +162,13 @@ proof
 A1:Z c= dom (exp_R*cosec);
 then A2:Z c= dom (-exp_R*cosec) by VALUED_1:8;
 A3:exp_R*cosec is_differentiable_on Z by A1,FDIFF_9:17;
-then A4:(-1)(#)(exp_R*cosec) is_differentiable_on Z by A2,FDIFF_1:28,A;
+then A4:(-1)(#)(exp_R*cosec) is_differentiable_on Z by A2,FDIFF_1:28,Lm2;
  for x st x in Z holds ((-exp_R*cosec)`|Z).x = exp_R.(cosec.x)*cos.x/(sin.x)^2
    proof
      let x;
      assume
 A5:x in Z;
- ((-exp_R*cosec)`|Z).x=((-1)(#)((exp_R*cosec)`|Z)).x by A3,FDIFF_2:19,A
+ ((-exp_R*cosec)`|Z).x=((-1)(#)((exp_R*cosec)`|Z)).x by A3,FDIFF_2:19,Lm2
                  .=(-1)*(((exp_R*cosec)`|Z).x) by VALUED_1:6
                  .=(-1)*(-exp_R.(cosec.x)*cos.x/(sin.x)^2)
    by A1,A5,FDIFF_9:17
@@ -177,7 +177,7 @@ A5:x in Z;
    end;
   hence thesis by A4;
 end;
- 
+
 :: f.x = -ln.(cosec.x)
 
 theorem Th5:
@@ -188,7 +188,7 @@ proof
 A1:Z c= dom (ln*cosec);
 then A2:Z c= dom (-ln*cosec) by VALUED_1:8;
 A3:ln*cosec is_differentiable_on Z by A1,FDIFF_9:19;
-then A4:(-1)(#)(ln*cosec) is_differentiable_on Z by A2,FDIFF_1:28,A;
+then A4:(-1)(#)(ln*cosec) is_differentiable_on Z by A2,FDIFF_1:28,Lm2;
 A5:for x st x in Z holds sin.x<>0
   proof
     let x;
@@ -201,7 +201,7 @@ A5:for x st x in Z holds sin.x<>0
      let x;
      assume
 A6:  x in Z;
-     ((-ln*cosec)`|Z).x =((-1)(#)((ln*cosec)`|Z)).x by A3,FDIFF_2:19,A
+     ((-ln*cosec)`|Z).x =((-1)(#)((ln*cosec)`|Z)).x by A3,FDIFF_2:19,Lm2
                  .=(-1)*(((ln*cosec)`|Z).x) by VALUED_1:6
                  .=(-1)*(-cos.x/sin.x) by A1,A6,FDIFF_9:19
                  .=cot(x)
@@ -210,7 +210,7 @@ A6:  x in Z;
   end;
   hence thesis by A4;
 end;
- 
+
 ::f.x=-(cosec.x) #Z n
 
 theorem Th6:
@@ -222,13 +222,13 @@ proof
 A1:Z c= dom (( #Z n)*cosec) & 1<=n;
 then A2:Z c= dom (-( #Z n)*cosec) & 1<=n by VALUED_1:8;
 A3:( #Z n)*cosec is_differentiable_on Z by A1,FDIFF_9:21;
-then A4:(-1)(#)(( #Z n)*cosec) is_differentiable_on Z by A2,FDIFF_1:28,A;
+then A4:(-1)(#)(( #Z n)*cosec) is_differentiable_on Z by A2,FDIFF_1:28,Lm2;
  for x st x in Z holds ((-( #Z n)*cosec)`|Z).x = n*cos.x/(sin.x) #Z (n+1)
   proof
     let x;
     assume
 A5:x in Z;
-  ((-( #Z n)*cosec)`|Z).x=((-1)(#)((( #Z n)*cosec)`|Z)).x by A3,FDIFF_2:19,A
+  ((-( #Z n)*cosec)`|Z).x=((-1)(#)((( #Z n)*cosec)`|Z)).x by A3,FDIFF_2:19,Lm2
    .=(-1)*(((( #Z n)*cosec)`|Z).x) by VALUED_1:6
    .=(-1)*(-n*cos.x/(sin.x) #Z (n+1)) by A1,A5,FDIFF_9:21
    .=n*cos.x/(sin.x) #Z (n+1);
@@ -236,7 +236,7 @@ A5:x in Z;
    end;
    hence thesis by A4;
 end;
- 
+
 ::f.x= -1/x*sec.x
 
 theorem Th7:
@@ -251,29 +251,29 @@ then A2:Z c= dom (-(id Z)^(#)sec) by VALUED_1:8;
 A3:Z c= dom ((id Z)^) by XBOOLE_1:18;
 A4:not 0 in Z
    proof
-     assume K: 0 in Z;
+     assume A5: 0 in Z;
      dom ((id Z)^) = dom id Z \ (id Z)"{0} by RFUNCT_1:def 8
-                  .= dom id Z \ {0} by Lm0,K; then
-     not 0 in {0} by XBOOLE_0:def 5,K,A3;
+                  .= dom id Z \ {0} by Lm1,A5; then
+     not 0 in {0} by XBOOLE_0:def 5,A5,A3;
      hence thesis by TARSKI:def 1;
    end;
-then A5:((id Z)^(#)sec) is_differentiable_on Z by A1,FDIFF_9:32;
-then A6:(-1)(#)((id Z)^(#)sec) is_differentiable_on Z by A2,FDIFF_1:28,A;
+then A6:((id Z)^(#)sec) is_differentiable_on Z by A1,FDIFF_9:32;
+then A7:(-1)(#)((id Z)^(#)sec) is_differentiable_on Z by A2,FDIFF_1:28,Lm2;
  for x st x in Z holds ((-(id Z)^(#)sec)`|Z).x = 1/cos.x/x^2-sin.x/x/(cos.x)^2
    proof
      let x;
      assume
-A7:  x in Z;
+A8:  x in Z;
      ((-(id Z)^(#)sec)`|Z).x
-   = ((-1)(#)(((id Z)^(#)sec)`|Z)).x by A5,FDIFF_2:19,A
+   = ((-1)(#)(((id Z)^(#)sec)`|Z)).x by A6,FDIFF_2:19,Lm2
   .= (-1)*((((id Z)^(#)sec)`|Z).x) by VALUED_1:6
-  .= (-1)*(-1/cos.x/x^2+sin.x/x/(cos.x)^2) by A1,A4,A7,FDIFF_9:32
+  .= (-1)*(-1/cos.x/x^2+sin.x/x/(cos.x)^2) by A1,A4,A8,FDIFF_9:32
   .= 1/cos.x/x^2-sin.x/x/(cos.x)^2;
      hence thesis;
    end;
-   hence thesis by A6;
+   hence thesis by A7;
 end;
- 
+
 ::f.x=-1/x*cosec.x
 
 theorem Th8:
@@ -288,30 +288,30 @@ then A2:Z c= dom (-(id Z)^(#)cosec) by VALUED_1:8;
 A3:Z c= dom ((id Z)^) by XBOOLE_1:18;
 A4:not 0 in Z
    proof
-     assume K: 0 in Z;
+     assume A5: 0 in Z;
      dom ((id Z)^) = dom id Z \ (id Z)"{0} by RFUNCT_1:def 8
-                  .= dom id Z \ {0} by Lm0,K; then
-     not 0 in {0} by XBOOLE_0:def 5,K,A3;
+                  .= dom id Z \ {0} by Lm1,A5; then
+     not 0 in {0} by XBOOLE_0:def 5,A5,A3;
      hence thesis by TARSKI:def 1;
    end;
-then A5:((id Z)^(#)cosec) is_differentiable_on Z by A1,FDIFF_9:33;
-then A6:(-1)(#)((id Z)^(#)cosec) is_differentiable_on Z by A,A2,FDIFF_1:28;
+then A6:((id Z)^(#)cosec) is_differentiable_on Z by A1,FDIFF_9:33;
+then A7:(-1)(#)((id Z)^(#)cosec) is_differentiable_on Z by Lm2,A2,FDIFF_1:28;
  for x st x in Z holds
   ((-(id Z)^(#)cosec)`|Z).x = 1/sin.x/x^2+cos.x/x/(sin.x)^2
    proof
      let x;
      assume
-A7:x in Z;
+A8:x in Z;
   ((-(id Z)^(#)cosec)`|Z).x
-   = ((-1)(#)(((id Z)^(#)cosec)`|Z)).x by A5,FDIFF_2:19,A
+   = ((-1)(#)(((id Z)^(#)cosec)`|Z)).x by A6,FDIFF_2:19,Lm2
   .= (-1)*((((id Z)^(#)cosec)`|Z).x) by VALUED_1:6
-  .= (-1)*(-1/sin.x/x^2-cos.x/x/(sin.x)^2) by A1,A4,A7,FDIFF_9:33
+  .= (-1)*(-1/sin.x/x^2-cos.x/x/(sin.x)^2) by A1,A4,A8,FDIFF_9:33
   .= 1/sin.x/x^2+cos.x/x/(sin.x)^2;
     hence thesis;
    end;
-   hence thesis by A6;
+   hence thesis by A7;
 end;
- 
+
 ::f.x = -cosec.(sin.x)
 
 theorem Th9:
@@ -323,13 +323,13 @@ proof
 A1:Z c= dom (cosec*sin);
 then A2:Z c= dom (-cosec*sin) by VALUED_1:8;
 A3:cosec*sin is_differentiable_on Z by A1,FDIFF_9:36;
-then A4:(-1)(#)(cosec*sin) is_differentiable_on Z by A2,FDIFF_1:28,A;
+then A4:(-1)(#)(cosec*sin) is_differentiable_on Z by A2,FDIFF_1:28,Lm2;
  for x st x in Z holds ((-cosec*sin)`|Z).x = cos.x*cos.(sin.x)/(sin.(sin.x))^2
     proof
        let x;
        assume
 A5:x in Z;
-  ((-cosec*sin)`|Z).x=((-1)(#)((cosec*sin)`|Z)).x by A3,FDIFF_2:19,A
+  ((-cosec*sin)`|Z).x=((-1)(#)((cosec*sin)`|Z)).x by A3,FDIFF_2:19,Lm2
    .=(-1)*(((cosec*sin)`|Z).x) by VALUED_1:6
    .=(-1)*(-cos.x*cos.(sin.x)/(sin.(sin.x))^2) by A1,A5,FDIFF_9:36
    .=cos.x*cos.(sin.x)/(sin.(sin.x))^2;
@@ -337,7 +337,7 @@ A5:x in Z;
    end;
    hence thesis by A4;
 end;
- 
+
 ::f.x=-sec.(cot.x)
 
 theorem Th10:
@@ -349,14 +349,14 @@ proof
 A1:Z c= dom (sec*cot);
 then A2:Z c= dom (-sec*cot) by VALUED_1:8;
 A3:sec*cot is_differentiable_on Z by A1,FDIFF_9:39;
-then A4:(-1)(#)(sec*cot) is_differentiable_on Z by A2,FDIFF_1:28,A;
+then A4:(-1)(#)(sec*cot) is_differentiable_on Z by A2,FDIFF_1:28,Lm2;
  for x st x in Z holds
    ((-sec*cot)`|Z).x = sin.(cot.x)/(sin.x)^2/(cos.(cot.x))^2
    proof
      let x;
      assume
 A5:  x in Z;
-     ((-sec*cot)`|Z).x=((-1)(#)((sec*cot)`|Z)).x by A3,FDIFF_2:19,A
+     ((-sec*cot)`|Z).x=((-1)(#)((sec*cot)`|Z)).x by A3,FDIFF_2:19,Lm2
      .=(-1)*(((sec*cot)`|Z).x) by VALUED_1:6
      .=(-1)*(-sin.(cot.x)/(sin.x)^2/(cos.(cot.x))^2) by A1,A5,FDIFF_9:39
      .=sin.(cot.x)/(sin.x)^2/(cos.(cot.x))^2;
@@ -364,7 +364,7 @@ A5:  x in Z;
    end;
    hence thesis by A4;
 end;
- 
+
 ::f.x=-cosec.(tan.x)
 
 theorem Th11:
@@ -377,9 +377,9 @@ A1:Z c= dom (cosec*tan);
 then A2:Z c= dom (-cosec*tan) by VALUED_1:8;
 A3:cosec*tan is_differentiable_on Z by A1,FDIFF_9:40;
   dom (cosec*tan) c= dom tan by RELAT_1:44; then
-AA: Z c= dom tan by A1,XBOOLE_1:1;
-A4:(-1)(#)(cosec*tan) is_differentiable_on Z by A2,A3,FDIFF_1:28,A;
-A5:for x st x in Z holds sin.(tan.x)<>0
+A4: Z c= dom tan by A1,XBOOLE_1:1;
+A5:(-1)(#)(cosec*tan) is_differentiable_on Z by A2,A3,FDIFF_1:28,Lm2;
+A6:for x st x in Z holds sin.(tan.x)<>0
   proof
     let x;
     assume x in Z;
@@ -391,23 +391,23 @@ A5:for x st x in Z holds sin.(tan.x)<>0
     proof
       let x;
       assume
-A6:   x in Z; then
-A7:   cos.x<>0 by AA,FDIFF_8:1; then
-A8:   tan is_differentiable_in x by FDIFF_7:46;
-A9:   sin.(tan.x)<>0 by A5,A6;then
-A10:  cosec is_differentiable_in tan.x by FDIFF_9:2;
-A11:  cosec*tan is_differentiable_in x by A3,A6,FDIFF_1:16;
-      ((-cosec*tan)`|Z).x=diff(-cosec*tan,x) by A4,A6,FDIFF_1:def 8
-    .=(-1)*(diff(cosec*tan,x)) by A11,FDIFF_1:23,A
-    .=(-1)*(diff(cosec, tan.x)*diff(tan,x)) by A8,A10,FDIFF_2:13
-    .=(-1)*((-cos.(tan.x)/(sin.(tan.x))^2) * diff(tan,x)) by A9,FDIFF_9:2
-    .=(-1)*((1/(cos.x)^2)*(-cos.(tan.x)/(sin.(tan.x))^2)) by A7,FDIFF_7:46
+A7:   x in Z; then
+A8:   cos.x<>0 by A4,FDIFF_8:1; then
+A9:   tan is_differentiable_in x by FDIFF_7:46;
+A10:   sin.(tan.x)<>0 by A6,A7;then
+A11:  cosec is_differentiable_in tan.x by FDIFF_9:2;
+A12:  cosec*tan is_differentiable_in x by A3,A7,FDIFF_1:16;
+      ((-cosec*tan)`|Z).x=diff(-cosec*tan,x) by A5,A7,FDIFF_1:def 8
+    .=(-1)*(diff(cosec*tan,x)) by A12,FDIFF_1:23,Lm2
+    .=(-1)*(diff(cosec, tan.x)*diff(tan,x)) by A9,A11,FDIFF_2:13
+    .=(-1)*((-cos.(tan.x)/(sin.(tan.x))^2) * diff(tan,x)) by A10,FDIFF_9:2
+    .=(-1)*((1/(cos.x)^2)*(-cos.(tan.x)/(sin.(tan.x))^2)) by A8,FDIFF_7:46
     .=cos.(tan.x)/(cos.x)^2/(sin.(tan.x))^2;
      hence thesis;
     end;
-    hence thesis by A4;
+    hence thesis by A5;
 end;
- 
+
 ::f.x=-cot.x*sec.x
 
 theorem Th12:
@@ -419,14 +419,14 @@ proof
 A1:Z c= dom (cot(#)sec);
 then A2:Z c= dom (-cot(#)sec) by VALUED_1:8;
 A3:cot(#)sec is_differentiable_on Z by A1,FDIFF_9:43;
-then A4:(-1)(#)(cot(#)sec) is_differentiable_on Z by A,A2,FDIFF_1:28;
+then A4:(-1)(#)(cot(#)sec) is_differentiable_on Z by Lm2,A2,FDIFF_1:28;
  for x st x in Z holds
    ((-cot(#)sec)`|Z).x = 1/(sin.x)^2/cos.x-cot.x*sin.x/(cos.x)^2
    proof
      let x;
      assume
 A5:  x in Z;
-     ((-cot(#)sec)`|Z).x = ((-1)(#)((cot(#)sec)`|Z)).x by A,A3,FDIFF_2:19
+     ((-cot(#)sec)`|Z).x = ((-1)(#)((cot(#)sec)`|Z)).x by Lm2,A3,FDIFF_2:19
        .=(-1)*(((cot(#)sec)`|Z).x) by VALUED_1:6
        .=(-1)*(-1/(sin.x)^2/cos.x+cot.x*sin.x/(cos.x)^2) by A1,A5,FDIFF_9:43
        .=1/(sin.x)^2/cos.x-cot.x*sin.x/(cos.x)^2;
@@ -434,7 +434,7 @@ A5:  x in Z;
    end;
    hence thesis by A4;
 end;
- 
+
 ::f.x=-cot.x*cosec.x
 
 theorem Th13:
@@ -446,14 +446,14 @@ proof
 A1:Z c= dom (cot(#)cosec);
 then A2:Z c= dom (-cot(#)cosec) by VALUED_1:8;
 A3:(cot(#)cosec) is_differentiable_on Z by A1,FDIFF_9:45;
-then A4:(-1)(#)(cot(#)cosec) is_differentiable_on Z by A2,FDIFF_1:28,A;
+then A4:(-1)(#)(cot(#)cosec) is_differentiable_on Z by A2,FDIFF_1:28,Lm2;
  for x st x in Z holds
    ((-cot(#)cosec)`|Z).x = 1/(sin.x)^2/sin.x+cot.x*cos.x/(sin.x)^2
    proof
       let x;
       assume
 A5:x in Z;
-  ((-cot(#)cosec)`|Z).x = ((-1)(#)((cot(#)cosec)`|Z)).x by A,A3,FDIFF_2:19
+  ((-cot(#)cosec)`|Z).x = ((-1)(#)((cot(#)cosec)`|Z)).x by Lm2,A3,FDIFF_2:19
    .=(-1)*(((cot(#)cosec)`|Z).x) by VALUED_1:6
    .=(-1)*(-1/(sin.x)^2/sin.x-cot.x*cos.x/(sin.x)^2) by A1,A5,FDIFF_9:45
    .=1/(sin.x)^2/sin.x+cot.x*cos.x/(sin.x)^2;
@@ -461,7 +461,7 @@ A5:x in Z;
    end;
    hence thesis by A4;
 end;
- 
+
 ::f.x=-cos.x * cot.x
 
 theorem Th14:
@@ -472,13 +472,13 @@ proof
 A1:Z c= dom (cos (#) cot);
 then A2:Z c= dom (-cos (#) cot) by VALUED_1:8;
 A3:(cos (#) cot) is_differentiable_on Z by A1,FDIFF_10:11;
-then A4:(-1)(#)(cos (#) cot) is_differentiable_on Z by A2,FDIFF_1:28,A;
+then A4:(-1)(#)(cos (#) cot) is_differentiable_on Z by A2,FDIFF_1:28,Lm2;
  for x st x in Z holds ((-cos (#) cot)`|Z).x = cos.x+cos.x/(sin.x)^2
     proof
       let x;
       assume
 A5:   x in Z;
-     ((-cos (#) cot)`|Z).x = ((-1)(#)((cos (#) cot)`|Z)).x by A3,FDIFF_2:19,A
+     ((-cos (#) cot)`|Z).x = ((-1)(#)((cos (#) cot)`|Z)).x by A3,FDIFF_2:19,Lm2
    .=(-1)*(((cos (#) cot)`|Z).x) by VALUED_1:6
    .=(-1)*(-cos.x-cos.x/(sin.x)^2) by A1,A5,FDIFF_10:11
    .=cos.x+cos.x/(sin.x)^2;
@@ -515,7 +515,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((-sec*((id Z)^))`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=cos.(1/x)/(x^2*(sin.(1/x))^2)
 
 theorem
@@ -532,27 +532,27 @@ A2:f is_integrable_on A & f|A is bounded by INTEGRA5:10,11;
 A3:Z c= dom ((id Z)^) by A1,FUNCT_1:171;
 A4:not 0 in Z
    proof
-     assume K: 0 in Z;
+     assume A5: 0 in Z;
      dom ((id Z)^) = dom id Z \ (id Z)"{0} by RFUNCT_1:def 8
-                  .= dom id Z \ {0} by Lm0,K; then
-     not 0 in {0} by XBOOLE_0:def 5,K,A3;
+                  .= dom id Z \ {0} by Lm1,A5; then
+     not 0 in {0} by XBOOLE_0:def 5,A5,A3;
      hence thesis by TARSKI:def 1;
    end;
-then A5:(cosec*((id Z)^)) is_differentiable_on Z by A1,FDIFF_9:9;
-A6:for x st x in dom ((cosec*((id Z)^))`|Z) holds ((cosec*((id Z)^))`|Z).x=f.x
+then A6:(cosec*((id Z)^)) is_differentiable_on Z by A1,FDIFF_9:9;
+A7:for x st x in dom ((cosec*((id Z)^))`|Z) holds ((cosec*((id Z)^))`|Z).x=f.x
  proof
    let x;
    assume x in dom ((cosec*((id Z)^))`|Z);then
-A7:x in Z by A5,FDIFF_1:def 8;then
+A8:x in Z by A6,FDIFF_1:def 8;then
 ((cosec*((id Z)^))`|Z).x = cos.(1/x)/(x^2*(sin.(1/x))^2) by A1,A4,FDIFF_9:9
-                        .=f.x by A1,A7;
+                        .=f.x by A1,A8;
   hence thesis;
   end;
-  dom ((cosec*((id Z)^))`|Z)=dom f by A1,A5,FDIFF_1:def 8;
-  then ((cosec*((id Z)^))`|Z)= f by A6,PARTFUN1:34;
-  hence thesis by A1,A2,A5,INTEGRA5:13;
+  dom ((cosec*((id Z)^))`|Z)=dom f by A1,A6,FDIFF_1:def 8;
+  then ((cosec*((id Z)^))`|Z)= f by A7,PARTFUN1:34;
+  hence thesis by A1,A2,A6,INTEGRA5:13;
 end;
- 
+
 ::f.x=exp_R.x*sin.(exp_R.x)/(cos.(exp_R.x))^2
 
 theorem
@@ -578,7 +578,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((sec*exp_R)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=exp_R.x*cos.(exp_R.x)/(sin.(exp_R.x))^2
 
 theorem
@@ -604,7 +604,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((-cosec*exp_R)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=sin.(ln.x)/(x*(cos.(ln.x))^2)
 
 theorem
@@ -631,7 +631,7 @@ A5:  x in Z by A3,FDIFF_1:def 8;then
   then ((sec*ln)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=cos.(ln.x)/(x*(sin.(ln.x))^2)
 
 theorem
@@ -657,7 +657,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((-cosec*ln)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=exp_R.(sec.x)*sin.x/(cos.x)^2
 
 theorem
@@ -669,34 +669,34 @@ A1:A c= Z & f=(exp_R*sec)(#)(sin/cos^2) & Z = dom f & f|A is continuous;
    then
 A2:f is_integrable_on A & f|A is bounded by INTEGRA5:10,11;
    Z = dom (exp_R*sec) /\ dom (sin/cos^2) by A1,VALUED_1:def 4;then
-B1:Z c= dom (exp_R*sec) & Z c= dom (sin/cos^2) by XBOOLE_1:18;
-then A3:exp_R*sec is_differentiable_on Z by FDIFF_9:16;
-B2:for x st x in Z holds f.x=exp_R.(sec.x)*sin.x/(cos.x)^2
+A3:Z c= dom (exp_R*sec) & Z c= dom (sin/cos^2) by XBOOLE_1:18;
+then A4:exp_R*sec is_differentiable_on Z by FDIFF_9:16;
+A5:for x st x in Z holds f.x=exp_R.(sec.x)*sin.x/(cos.x)^2
    proof
    let x;
    assume
-B3:x in Z;
+A6:x in Z;
    ((exp_R*sec)(#)(sin/cos^2)).x =(exp_R*sec).x*(sin/cos^2).x by VALUED_1:5
- .=exp_R.(sec.x)*(sin/cos^2).x by B3,FUNCT_1:22,B1
- .=exp_R.(sec.x)*(sin.x/(cos^2).x) by RFUNCT_1:def 4,B1,B3
+ .=exp_R.(sec.x)*(sin/cos^2).x by A6,FUNCT_1:22,A3
+ .=exp_R.(sec.x)*(sin.x/(cos^2).x) by RFUNCT_1:def 4,A3,A6
  .=exp_R.(sec.x)*(sin.x/(cos.x)^2) by VALUED_1:11
  .=exp_R.(sec.x)*sin.x/(cos.x)^2 ;
    hence thesis by A1;
    end;
-A4:for x st x in dom ((exp_R*sec)`|Z) holds ((exp_R*sec)`|Z).x=f.x
+A7:for x st x in dom ((exp_R*sec)`|Z) holds ((exp_R*sec)`|Z).x=f.x
  proof
    let x;
    assume x in dom ((exp_R*sec)`|Z);then
-A5:x in Z by A3,FDIFF_1:def 8;then
-  ((exp_R*sec)`|Z).x=exp_R.(sec.x)*sin.x/(cos.x)^2 by B1,FDIFF_9:16
-                   .=f.x by B2,A5;
+A8:x in Z by A4,FDIFF_1:def 8;then
+  ((exp_R*sec)`|Z).x=exp_R.(sec.x)*sin.x/(cos.x)^2 by A3,FDIFF_9:16
+                   .=f.x by A5,A8;
   hence thesis;
   end;
-  dom ((exp_R*sec)`|Z)=dom f by A1,A3,FDIFF_1:def 8;
-  then ((exp_R*sec)`|Z)= f by A4,PARTFUN1:34;
-  hence thesis by A1,A2,A3,INTEGRA5:13;
+  dom ((exp_R*sec)`|Z)=dom f by A1,A4,FDIFF_1:def 8;
+  then ((exp_R*sec)`|Z)= f by A7,PARTFUN1:34;
+  hence thesis by A1,A2,A4,INTEGRA5:13;
 end;
- 
+
 ::f.x=exp_R.(cosec.x)*cos.x/(sin.x)^2
 
 theorem
@@ -709,34 +709,34 @@ A1:A c= Z & f=(exp_R*cosec)(#)(cos/sin^2) & Z = dom f & f|A is continuous;
     then
 A2:f is_integrable_on A & f|A is bounded by INTEGRA5:10,11;
    Z = dom (exp_R*cosec) /\ dom (cos/sin^2) by A1,VALUED_1:def 4;then
-B1:Z c= dom (exp_R*cosec) & Z c= dom (cos/sin^2) by XBOOLE_1:18;
-then A3:-exp_R*cosec is_differentiable_on Z by Th4;
-B2:for x st x in Z holds f.x=exp_R.(cosec.x)*cos.x/(sin.x)^2
+A3:Z c= dom (exp_R*cosec) & Z c= dom (cos/sin^2) by XBOOLE_1:18;
+then A4:-exp_R*cosec is_differentiable_on Z by Th4;
+A5:for x st x in Z holds f.x=exp_R.(cosec.x)*cos.x/(sin.x)^2
     proof
    let x;
    assume
-B3:x in Z;
+A6:x in Z;
    ((exp_R*cosec)(#)(cos/sin^2)).x =(exp_R*cosec).x*(cos/sin^2).x by VALUED_1:5
- .=exp_R.(cosec.x)*(cos/sin^2).x by B3,FUNCT_1:22,B1
- .=exp_R.(cosec.x)*(cos.x/(sin^2).x) by RFUNCT_1:def 4,B1,B3
+ .=exp_R.(cosec.x)*(cos/sin^2).x by A6,FUNCT_1:22,A3
+ .=exp_R.(cosec.x)*(cos.x/(sin^2).x) by RFUNCT_1:def 4,A3,A6
  .=exp_R.(cosec.x)*(cos.x/(sin.x)^2) by VALUED_1:11
  .=exp_R.(cosec.x)*cos.x/(sin.x)^2 ;
    hence thesis by A1;
    end;
-A4:for x st x in dom ((-exp_R*cosec)`|Z) holds ((-exp_R*cosec)`|Z).x=f.x
+A7:for x st x in dom ((-exp_R*cosec)`|Z) holds ((-exp_R*cosec)`|Z).x=f.x
  proof
    let x;
    assume x in dom ((-exp_R*cosec)`|Z);then
-A5:x in Z by A3,FDIFF_1:def 8;then
-  ((-exp_R*cosec)`|Z).x=exp_R.(cosec.x)*cos.x/(sin.x)^2 by B1,Th4
-                   .=f.x by B2,A5;
+A8:x in Z by A4,FDIFF_1:def 8;then
+  ((-exp_R*cosec)`|Z).x=exp_R.(cosec.x)*cos.x/(sin.x)^2 by A3,Th4
+                   .=f.x by A5,A8;
   hence thesis;
   end;
-  dom ((-exp_R*cosec)`|Z)=dom f by A1,A3,FDIFF_1:def 8;
-  then ((-exp_R*cosec)`|Z)= f by A4,PARTFUN1:34;
-  hence thesis by A1,A2,A3,INTEGRA5:13;
+  dom ((-exp_R*cosec)`|Z)=dom f by A1,A4,FDIFF_1:def 8;
+  then ((-exp_R*cosec)`|Z)= f by A7,PARTFUN1:34;
+  hence thesis by A1,A2,A4,INTEGRA5:13;
 end;
- 
+
 ::f.x=tan.x
 
 theorem
@@ -748,28 +748,28 @@ A1:A c= Z & Z c= dom (ln*sec) & Z = dom tan & tan|A is continuous;
    then
 A2:tan is_integrable_on A & tan|A is bounded by INTEGRA5:10,11;
 A3:ln*sec is_differentiable_on Z by A1,FDIFF_9:18;
-B:for x st x in Z holds cos.x<>0
+A4:for x st x in Z holds cos.x<>0
   proof
     let x;
     assume x in Z;
     then x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
-A4:for x st x in dom ((ln*sec)`|Z) holds ((ln*sec)`|Z).x = tan.x
+A5:for x st x in dom ((ln*sec)`|Z) holds ((ln*sec)`|Z).x = tan.x
    proof
      let x;
      assume x in dom ((ln*sec)`|Z);then
-A5:  x in Z by A3,FDIFF_1:def 8;then
-A6:  cos.x<>0 by B;
-     ((ln*sec)`|Z).x = tan x by A1,A5,FDIFF_9:18
-                 .=tan.x by A6,SIN_COS9:15;
+A6:  x in Z by A3,FDIFF_1:def 8;then
+A7:  cos.x<>0 by A4;
+     ((ln*sec)`|Z).x = tan x by A1,A6,FDIFF_9:18
+                 .=tan.x by A7,SIN_COS9:15;
      hence thesis;
    end;
   dom ((ln*sec)`|Z)=dom tan by A1,A3,FDIFF_1:def 8;
-  then ((ln*sec)`|Z)= tan by A4,PARTFUN1:34;
+  then ((ln*sec)`|Z)= tan by A5,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=-cot.x
 
 theorem
@@ -779,33 +779,33 @@ implies integral((-cot),A)=(ln*cosec).(upper_bound A)-
 proof
   assume
 A1:A c= Z & Z c= dom (ln*cosec) & Z = dom cot & (-cot)|A is continuous;
-then B1:Z = dom (-cot) by VALUED_1:8;
+then A2:Z = dom (-cot) by VALUED_1:8;
     then
-A2:(-cot) is_integrable_on A & (-cot)|A is bounded by A1,INTEGRA5:10,11;
-A3:ln*cosec is_differentiable_on Z by A1,FDIFF_9:19;
-AA:for x st x in Z holds sin.x<>0
+A3:(-cot) is_integrable_on A & (-cot)|A is bounded by A1,INTEGRA5:10,11;
+A4:ln*cosec is_differentiable_on Z by A1,FDIFF_9:19;
+A5:for x st x in Z holds sin.x<>0
   proof
     let x;
     assume x in Z;
     then x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
-A4:for x st x in dom ((ln*cosec)`|Z) holds ((ln*cosec)`|Z).x = (-cot).x
+A6:for x st x in dom ((ln*cosec)`|Z) holds ((ln*cosec)`|Z).x = (-cot).x
    proof
      let x;
      assume x in dom ((ln*cosec)`|Z);then
-A5:  x in Z by A3,FDIFF_1:def 8;then
-A6:  sin.x<>0 by AA;
-     ((ln*cosec)`|Z).x = -cot(x) by A1,A5,FDIFF_9:19
-                 .=-cot.x by A6,SIN_COS9:16
+A7:  x in Z by A4,FDIFF_1:def 8;then
+A8:  sin.x<>0 by A5;
+     ((ln*cosec)`|Z).x = -cot(x) by A1,A7,FDIFF_9:19
+                 .=-cot.x by A8,SIN_COS9:16
                  .=(-cot).x by VALUED_1:8;
      hence thesis;
    end;
-  dom ((ln*cosec)`|Z)=dom (-cot) by B1,A3,FDIFF_1:def 8;
-  then ((ln*cosec)`|Z)= -cot by A4,PARTFUN1:34;
-  hence thesis by A1,A2,A3,INTEGRA5:13;
+  dom ((ln*cosec)`|Z)=dom (-cot) by A2,A4,FDIFF_1:def 8;
+  then ((ln*cosec)`|Z)= -cot by A6,PARTFUN1:34;
+  hence thesis by A1,A3,A4,INTEGRA5:13;
 end;
- 
+
 ::f.x=cot.x
 
 theorem
@@ -829,7 +829,7 @@ A4:for x st x in dom ((-ln*cosec)`|Z) holds ((-ln*cosec)`|Z).x = cot.x
   then ((-ln*cosec)`|Z)= cot by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=n*sin.x/(cos.x) #Z (n+1)
 
 theorem
@@ -856,7 +856,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((( #Z n)*sec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=n*cos.x/(sin.x) #Z (n+1)
 
 theorem
@@ -883,7 +883,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((-( #Z n)*cosec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=exp_R.x/cos.x+exp_R.x*sin.x/(cos.x)^2
 
 theorem
@@ -912,7 +912,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((exp_R(#)sec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=exp_R.x/sin.x-exp_R.x*cos.x/(sin.x)^2
 
 theorem
@@ -940,7 +940,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((exp_R(#)cosec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=(sin.(a*x)-(cos.(a*x))^2)/(cos.(a*x))^2
 
 theorem
@@ -971,7 +971,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then (((1/a)(#)(sec*f1)-id Z)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=(cos.(a*x)-(sin.(a*x))^2)/(sin.(a*x))^2
 
 theorem
@@ -1002,7 +1002,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then (((-1/a)(#)(cosec*f1)-id Z)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/cos.x/x+ln.x*sin.x/(cos.x)^2
 
 theorem
@@ -1028,7 +1028,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((ln(#)sec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/sin.x/x-ln.x*cos.x/(sin.x)^2
 
 theorem
@@ -1054,7 +1054,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((ln(#)cosec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/cos.x/x^2-sin.x/x/(cos.x)^2
 
 theorem
@@ -1081,7 +1081,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((-(id Z)^(#)sec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/sin.x/x^2+cos.x/x/(sin.x)^2
 
 theorem
@@ -1110,7 +1110,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((-(id Z)^(#)cosec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=cos.x*sin.(sin.x)/(cos.(sin.x))^2
 
 theorem
@@ -1136,7 +1136,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((sec*sin)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=sin.x*sin.(cos.x)/(cos.(cos.x))^2
 
 theorem
@@ -1150,13 +1150,13 @@ A1:A c= Z & (for x st x in Z holds f.x=sin.x*sin.(cos.x)/(cos.(cos.x))^2)
 A2:f is_integrable_on A & f|A is bounded by INTEGRA5:10,11;
 A3:Z c= dom (-sec*cos) by A1,VALUED_1:8;
 A4:sec*cos is_differentiable_on Z by A1,FDIFF_9:35;
-then A5:(-1)(#)(sec*cos) is_differentiable_on Z by A3,FDIFF_1:28,A;
+then A5:(-1)(#)(sec*cos) is_differentiable_on Z by A3,FDIFF_1:28,Lm2;
 A6:for x st x in Z holds ((-sec*cos)`|Z).x = sin.x*sin.(cos.x)/(cos.(cos.x))^2
   proof
     let x;
     assume
 A7:x in Z;
-  ((-sec*cos)`|Z).x=((-1)(#)((sec*cos)`|Z)).x by A4,FDIFF_2:19,A
+  ((-sec*cos)`|Z).x=((-1)(#)((sec*cos)`|Z)).x by A4,FDIFF_2:19,Lm2
    .=(-1)*(((sec*cos)`|Z).x) by VALUED_1:6
    .=(-1)*(-sin.x*sin.(cos.x)/(cos.(cos.x))^2) by A1,A7,FDIFF_9:35
    .=sin.x*sin.(cos.x)/(cos.(cos.x))^2;
@@ -1175,7 +1175,7 @@ A9:x in Z by A5,FDIFF_1:def 8;then
   then ((-sec*cos)`|Z)= f by A8,PARTFUN1:34;
   hence thesis by A1,A2,A5,INTEGRA5:13;
 end;
- 
+
 ::f.x=cos.x*cos.(sin.x)/(sin.(sin.x))^2
 
 theorem
@@ -1201,7 +1201,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((-cosec*sin)`|Z)= f by A4,PARTFUN1:34;
    hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=sin.x*cos.(cos.x)/(sin.(cos.x))^2
 
 theorem
@@ -1227,7 +1227,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((cosec*cos)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=sin.(tan.x)/(cos.x)^2/(cos.(tan.x))^2
 
 theorem
@@ -1253,7 +1253,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((sec*tan)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=sin.(cot.x)/(sin.x)^2/(cos.(cot.x))^2
 
 theorem
@@ -1280,7 +1280,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((-sec*cot)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x= cos.(tan.x)/(cos.x)^2/(sin.(tan.x))^2
 
 theorem
@@ -1306,7 +1306,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((-cosec*tan)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=cos.(cot.x)/(sin.x)^2/(sin.(cot.x))^2
 
 theorem
@@ -1332,7 +1332,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((cosec*cot)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/(cos.x)^2/cos.x+tan.x*sin.x/(cos.x)^2
 
 theorem
@@ -1359,7 +1359,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((tan(#)sec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/(sin.x)^2/cos.x-cot.x*sin.x/(cos.x)^2
 
 theorem
@@ -1386,7 +1386,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((-cot(#)sec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/(cos.x)^2/sin.x-tan.x*cos.x/(sin.x)^2
 
 theorem
@@ -1414,7 +1414,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((tan(#)cosec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/(sin.x)^2/sin.x+cot.x*cos.x/(sin.x)^2
 
 theorem
@@ -1441,7 +1441,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((-cot(#)cosec)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/(cos.(cot.x))^2*(1/(sin.x)^2)
 
 theorem
@@ -1455,13 +1455,13 @@ A1:A c= Z & (for x st x in Z holds f.x=1/(cos.(cot.x))^2*(1/(sin.x)^2))
 A2:f is_integrable_on A & f|A is bounded by INTEGRA5:10,11;
 A3:Z c= dom (-tan*cot) by A1,VALUED_1:8;
 A4:tan*cot is_differentiable_on Z by A1,FDIFF_10:1;
-then A5:(-1)(#)(tan*cot) is_differentiable_on Z by A3,FDIFF_1:28,A;
+then A5:(-1)(#)(tan*cot) is_differentiable_on Z by A3,FDIFF_1:28,Lm2;
 A6:for x st x in Z holds ((-tan*cot)`|Z).x = 1/(cos.(cot.x))^2*(1/(sin.x)^2)
   proof
     let x;
     assume
 A7:x in Z;
-  ((-tan*cot)`|Z).x=((-1)(#)((tan*cot)`|Z)).x by A4,FDIFF_2:19,A
+  ((-tan*cot)`|Z).x=((-1)(#)((tan*cot)`|Z)).x by A4,FDIFF_2:19,Lm2
    .=(-1)*(((tan*cot)`|Z).x) by VALUED_1:6
    .=(-1)*(1/(cos.(cot.x))^2*(-1/(sin.x)^2)) by A1,A7,FDIFF_10:1
    .=1/(cos.(cot.x))^2*(1/(sin.x)^2);
@@ -1480,7 +1480,7 @@ A9:x in Z by A5,FDIFF_1:def 8;then
   then ((-tan*cot)`|Z)= f by A8,PARTFUN1:34;
   hence thesis by A1,A2,A5,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/(cos.(tan.x))^2 *(1/(cos.x)^2)
 
 theorem
@@ -1506,7 +1506,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((tan*tan)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=(1/(sin.(cot.x))^2) *(1/(sin.x)^2)
 
 theorem
@@ -1532,7 +1532,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((cot*cot)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=(1/(sin.(tan.x))^2)*(1/(cos.x)^2)
 
 theorem
@@ -1547,13 +1547,13 @@ A1:A c= Z & (for x st x in Z holds f.x=(1/(sin.(tan.x))^2)*(1/(cos.x)^2))
 A2:f is_integrable_on A & f|A is bounded by INTEGRA5:10,11;
 A3:Z c= dom (-cot*tan) by A1,VALUED_1:8;
 A4:cot*tan is_differentiable_on Z by A1,FDIFF_10:4;
-then A5:(-1)(#)(cot*tan) is_differentiable_on Z by A3,FDIFF_1:28,A;
+then A5:(-1)(#)(cot*tan) is_differentiable_on Z by A3,FDIFF_1:28,Lm2;
 A6:for x st x in Z holds ((-cot*tan)`|Z).x = (1/(sin.(tan.x))^2)*(1/(cos.x)^2)
   proof
     let x;
     assume
 A7:x in Z;
-  ((-cot*tan)`|Z).x=((-1)(#)((cot*tan)`|Z)).x by A4,FDIFF_2:19,A
+  ((-cot*tan)`|Z).x=((-1)(#)((cot*tan)`|Z)).x by A4,FDIFF_2:19,Lm2
    .=(-1)*(((cot*tan)`|Z).x) by VALUED_1:6
    .=(-1)*((-1/(sin.(tan.x))^2)*(1/(cos.x)^2)) by A1,A7,FDIFF_10:4
    .=(1/(sin.(tan.x))^2)*(1/(cos.x)^2);
@@ -1572,7 +1572,7 @@ A9:x in Z by A5,FDIFF_1:def 8;then
   then ((-cot*tan)`|Z)= f by A8,PARTFUN1:34;
   hence thesis by A1,A2,A5,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/(cos.x)^2+1/(sin.x)^2
 
 theorem
@@ -1598,7 +1598,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((tan-cot)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=1/(cos.x)^2-1/(sin.x)^2
 
 theorem
@@ -1625,7 +1625,7 @@ A5:x in Z by A3,FDIFF_1:def 8;then
   then ((tan+cot)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=cos.(sin.x)*cos.x
 
 theorem
@@ -1651,7 +1651,7 @@ A5: x in Z by A3,FDIFF_1:def 8;then
   then ((sin*sin)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=cos.(cos.x)*sin.x
 
 theorem
@@ -1666,15 +1666,15 @@ A2:f is_integrable_on A & f|A is bounded by INTEGRA5:10,11;
    dom cos = REAL & rng cos c= dom cos & dom sin = dom cos by SIN_COS:27;
    then
 dom (sin*cos) = REAL by RELAT_1:46;
-then B: dom (-sin*cos) = REAL by VALUED_1:8;
+then A3: dom (-sin*cos) = REAL by VALUED_1:8;
 A4:sin*cos is_differentiable_on Z by FDIFF_10:8;
-then A5:(-1)(#)(sin*cos) is_differentiable_on Z by B,FDIFF_1:28,A;
+then A5:(-1)(#)(sin*cos) is_differentiable_on Z by A3,FDIFF_1:28,Lm2;
 A6:for x st x in Z holds ((-sin*cos)`|Z).x = cos.(cos.x)*sin.x
   proof
     let x;
     assume
 A7:x in Z;
-  ((-sin*cos)`|Z).x=((-1)(#)((sin*cos)`|Z)).x by A4,FDIFF_2:19,A
+  ((-sin*cos)`|Z).x=((-1)(#)((sin*cos)`|Z)).x by A4,FDIFF_2:19,Lm2
    .=(-1)*(((sin*cos)`|Z).x) by VALUED_1:6
    .=(-1)*((-cos.(cos.x)*sin.x)) by A7,FDIFF_10:8
    .=cos.(cos.x)*sin.x;
@@ -1693,7 +1693,7 @@ A9:x in Z by A5,FDIFF_1:def 8;then
   then ((-sin*cos)`|Z)= f by A8,PARTFUN1:34;
   hence thesis by A1,A2,A5,INTEGRA5:13;
 end;
- 
+
 ::f.x=sin.(sin.x)*cos.x
 
 theorem
@@ -1705,37 +1705,37 @@ proof
 A1:A c= Z & (for x st x in Z holds f.x=sin.(sin.x)*cos.x)
  & Z = dom f & f|A is continuous; then
 A2:f is_integrable_on A & f|A is bounded by INTEGRA5:10,11;
-B1: dom sin = REAL by SIN_COS:27;
+A3: dom sin = REAL by SIN_COS:27;
   rng sin c= dom sin & dom sin = dom cos by SIN_COS:27; then
-dom (cos*sin) = REAL by B1,RELAT_1:46;
-then B2:dom (-cos*sin) = REAL by VALUED_1:8;
-A4:cos*sin is_differentiable_on Z by FDIFF_10:9;
-then A5:(-1)(#)(cos*sin) is_differentiable_on Z by B2,FDIFF_1:28,A;
-A6:for x st x in Z holds ((-cos*sin)`|Z).x = sin.(sin.x)*cos.x
+dom (cos*sin) = REAL by A3,RELAT_1:46;
+then A4:dom (-cos*sin) = REAL by VALUED_1:8;
+A5:cos*sin is_differentiable_on Z by FDIFF_10:9;
+then A6:(-1)(#)(cos*sin) is_differentiable_on Z by A4,FDIFF_1:28,Lm2;
+A7:for x st x in Z holds ((-cos*sin)`|Z).x = sin.(sin.x)*cos.x
   proof
     let x;
     assume
-A7:x in Z;
-  ((-cos*sin)`|Z).x=((-1)(#)((cos*sin)`|Z)).x by A4,FDIFF_2:19,A
+A8:x in Z;
+  ((-cos*sin)`|Z).x=((-1)(#)((cos*sin)`|Z)).x by A5,FDIFF_2:19,Lm2
    .=(-1)*(((cos*sin)`|Z).x) by VALUED_1:6
-   .=(-1)*((-sin.(sin.x)*cos.x)) by A7,FDIFF_10:9
+   .=(-1)*((-sin.(sin.x)*cos.x)) by A8,FDIFF_10:9
    .=sin.(sin.x)*cos.x;
      hence thesis;
    end;
-A8:for x st x in dom ((-cos*sin)`|Z) holds ((-cos*sin)`|Z).x=f.x
+A9:for x st x in dom ((-cos*sin)`|Z) holds ((-cos*sin)`|Z).x=f.x
   proof
     let x;
     assume x in dom ((-cos*sin)`|Z);then
-A9: x in Z by A5,FDIFF_1:def 8;then
-    ((-cos*sin)`|Z).x =sin.(sin.x)*cos.x by A6
-      .= f.x by A1,A9;
+A10: x in Z by A6,FDIFF_1:def 8;then
+    ((-cos*sin)`|Z).x =sin.(sin.x)*cos.x by A7
+      .= f.x by A1,A10;
     hence thesis;
    end;
-  dom ((-cos*sin)`|Z)=dom f by A1,A5,FDIFF_1:def 8;
-  then ((-cos*sin)`|Z)= f by A8,PARTFUN1:34;
-  hence thesis by A1,A2,A5,INTEGRA5:13;
+  dom ((-cos*sin)`|Z)=dom f by A1,A6,FDIFF_1:def 8;
+  then ((-cos*sin)`|Z)= f by A9,PARTFUN1:34;
+  hence thesis by A1,A2,A6,INTEGRA5:13;
 end;
- 
+
 ::f.x=sin.(cos.x)*sin.x
 
 theorem
@@ -1761,7 +1761,7 @@ A5: x in Z by A3,FDIFF_1:def 8;then
   then ((cos*cos)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=cos.x+cos.x/(sin.x)^2
 
 theorem
@@ -1789,7 +1789,7 @@ A5: x in Z by A3,FDIFF_1:def 8;then
   then ((-cos (#) cot)`|Z)= f by A4,PARTFUN1:34;
   hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
- 
+
 ::f.x=sin.x + sin.x/(cos.x)^2
 
 theorem

@@ -9,18 +9,18 @@ environ
  vocabularies ORDINAL1, SUBSET_1, NUMBERS, XBOOLE_0, SETFAM_1, SCMFSA7B,
       FUNCSDOM, AMI_3, AMI_1, FSM_1, STRUCT_0, AMI_2, FUNCT_1, TARSKI, RELAT_1,
       AMISTD_2, ARYTM_3, FUNCT_4, CIRCUIT2, CARD_1, GRAPHSP, ARYTM_1, SUPINF_2,
-      FUNCOP_1, ZFMISC_1, GLIB_000, VALUED_1, MSUALG_1, PARTFUN1, TURING_1,
-      SCMNORM, FINSET_1, RELOC;
+      FUNCOP_1, ZFMISC_1, GLIB_000, PARTFUN1, SCMNORM, RELOC, NAT_1, AMISTD_5,
+      COMPOS_1, CARD_5, UNIALG_1, PBOOLE;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, DOMAIN_1, ORDINAL1, RELAT_1,
-      NUMBERS, FUNCT_1, PARTFUN1, FINSET_1, STRUCT_0, ALGSTR_0, FUNCSDOM,
-      FUNCOP_1, XCMPLX_0, NAT_1, FUNCT_4, NAT_D, VALUED_1, COMPOS_1, EXTPRO_1,
-      AMI_1, AMI_2, AMI_3, SCMRING1, SCMRING2, SCMRING3, AMISTD_2;
- constructors XXREAL_0, REALSET2, AMI_5, AMISTD_2, SCMRING3, PRE_POLY, NAT_D,
-      AMI_1;
+      NUMBERS, FUNCT_1, PARTFUN1, STRUCT_0, ALGSTR_0, FUNCSDOM, FUNCOP_1,
+      XCMPLX_0, NAT_1, FUNCT_4, NAT_D, VALUED_1, PBOOLE, COMPOS_1, EXTPRO_1,
+      AMI_1, AMI_2, AMI_3, SCMRING1, SCMRING2, SCMRING3, AMISTD_2, AMISTD_5;
+ constructors XXREAL_0, REALSET2, AMI_3, AMISTD_2, SCMRING3, PRE_POLY, NAT_D,
+      AMI_1, AMISTD_1, AMISTD_5, PBOOLE;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, XREAL_0, NAT_1,
-      CARD_3, STRUCT_0, AMI_1, AMI_3, AMI_5, SCMRING2, AMISTD_2, SCMRING3,
-      FINSET_1, ORDINAL1, RELSET_1, GRFUNC_1, FUNCT_2, VALUED_1, COMPOS_1,
-      EXTPRO_1;
+      CARD_3, STRUCT_0, AMI_1, AMI_3, SCMRING2, AMISTD_2, SCMRING3, FINSET_1,
+      ORDINAL1, RELSET_1, GRFUNC_1, FUNCT_2, VALUED_1, COMPOS_1, EXTPRO_1,
+      AMISTD_5, AMI_5, PBOOLE;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -33,66 +33,46 @@ reserve i, j, k for Element of NAT,
 
 begin :: SCM R
 
-reserve R for good Ring,
+reserve R for non trivial good Ring,
   a, b for Data-Location of R,
-  loc for
-  Element of NAT,
+  loc for Element of NAT,
   I for Instruction of SCM R,
   p for FinPartState of SCM R,
   s, s1, s2 for State of SCM R,
+  P,P1,P2 for (the Instructions of SCM R)-valued ManySortedSet of NAT,
+
   q for FinPartState of SCM;
 
 theorem :: SCMRING4:1
-  the carrier of SCM R = {IC SCM R} \/ Data-Locations SCM \/ NAT;
-
-theorem :: SCMRING4:2
   (the Object-Kind of SCM R).loc = SCM-Instr R;
 
-theorem :: SCMRING4:3
+theorem :: SCMRING4:2
   dl.(R,n) = [1,n];
 
-canceled;
-
-theorem :: SCMRING4:5
+theorem :: SCMRING4:3
   for dl being Data-Location of R ex i being Element of NAT st dl = dl.(
   R,i);
 
-theorem :: SCMRING4:6
+theorem :: SCMRING4:4
   for i,j being Element of NAT holds i <> j implies dl.(R,i) <> dl.(R,j);
 
-theorem :: SCMRING4:7
+theorem :: SCMRING4:5
   a <> loc;
 
-theorem :: SCMRING4:8
+theorem :: SCMRING4:6
   Data-Locations SCM c= dom s;
 
-theorem :: SCMRING4:9
-  dom DataPart s = Data-Locations SCM;
-
-canceled 3;
-
-theorem :: SCMRING4:13
-  dom DataPart p c= Data-Locations SCM;
-
-canceled 8;
-
-theorem :: SCMRING4:22
+theorem :: SCMRING4:7
   s.a = (s +* Start-At(loc,SCM R)).a;
 
-theorem :: SCMRING4:23
+theorem :: SCMRING4:8
   IC(s1) = IC(s2) & (for a being Data-Location of R holds s1.a =
   s2.a) & (for i being Element of NAT holds s1.i = s2.i) implies
   s1 = s2;
 
-theorem :: SCMRING4:24
-  Exec(IncAddr(CurInstr(ProgramPart s,s),k),s +*
-  Start-At(IC s + k,SCM R))
-   = Following(ProgramPart s,s) +*
-   Start-At(IC Following(ProgramPart s,s) +k,SCM R);
-
-theorem :: SCMRING4:25
-  IC s = j+k implies Exec(I, s +* Start-At(IC s -' k,SCM R))
-  = Exec(IncAddr(I, k), s) +* Start-At (IC Exec(IncAddr(I,k), s) -' k,SCM R);
+registration let R;
+ cluster SCM R -> relocable;
+end;
 
 definition
   let R;
@@ -101,154 +81,82 @@ definition
   redefine func a .--> r -> FinPartState of SCM R;
 end;
 
-theorem :: SCMRING4:26
-  R is non trivial implies for p being autonomic FinPartState of
-  SCM R st DataPart p <> {} holds IC SCM R in dom p;
+registration let R be non trivial good Ring;
+ cluster SCM R -> IC-recognized;
+end;
 
-theorem :: SCMRING4:27
-  R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R holds IC SCM R in dom p;
+registration let R be non trivial good Ring;
+ cluster SCM R -> CurIns-recognized;
+end;
 
-theorem :: SCMRING4:28
-  for p being autonomic FinPartState of SCM R st IC SCM R in dom p holds
-  IC p in dom p;
+reserve N for with_non-empty_elements non empty set,
+   S for relocable1 (relocable IC-recognized proper-halt
+    (regular homogeneous J/A-independent
+    Exec-preserving
+     halting realistic  steady-programmed
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N))));
 
-theorem :: SCMRING4:29
-  R is non trivial implies for p being autonomic non NAT-defined
-FinPartState of SCM R st p c= s holds IC Comput(ProgramPart(s),s,n) in dom
-ProgramPart(p);
-
-theorem :: SCMRING4:30
-  R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R st p c= s1 & p c= s2 holds IC Comput(ProgramPart(s1),s1
-,n) = IC
-Comput(ProgramPart(s2),s2,n) &
-CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n),Comput(ProgramPart(s1),s1,n))
-=
-CurInstr(ProgramPart Comput(ProgramPart(s2),s2,n),Comput(ProgramPart(s2),s2,n))
-;
-
-theorem :: SCMRING4:31
+theorem :: SCMRING4:9
   R is non trivial implies for p being autonomic non NAT-defined
   FinPartState of SCM R st p c= s1 & p c= s2 &
-  CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n),Comput(ProgramPart(s1),s1,n
-)) = a
-  := b & a in dom p holds Comput(ProgramPart(s1),s1,n).b = Comput(ProgramPart(
-s2),s2,n).b;
+  ProgramPart p c= P1 & ProgramPart p c= P2 &
+  CurInstr(P1,Comput(P1,s1,n)) = a := b &
+  a in dom p
+   holds Comput(P1,s1,n).b = Comput(P2,s2,n).b;
 
-theorem :: SCMRING4:32
+theorem :: SCMRING4:10
   R is non trivial implies for p being autonomic non NAT-defined
   FinPartState of SCM R st p c= s1 & p c= s2 &
-  CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n),Comput(ProgramPart(s1),s1,n
-)) =
-  AddTo(a,b) & a in dom p holds Comput(ProgramPart(s1),s1,n).a + Comput(
-ProgramPart(s1),s1,n).b =
-  Comput(ProgramPart(s2),s2,n).a + Comput(ProgramPart(s2),s2,n).b;
+  ProgramPart p c= P1 & ProgramPart p c= P2 &
+  CurInstr(P1,Comput(P1,s1,n)) =
+  AddTo(a,b) & a in dom p holds Comput(P1,s1,n).a + Comput(P1,s1,n).b =
+     Comput(P2,s2,n).a + Comput(P2,s2,n).b;
 
-theorem :: SCMRING4:33
+theorem :: SCMRING4:11
   R is non trivial implies for p being autonomic non NAT-defined
   FinPartState of SCM R st p c= s1 & p c= s2 &
-  CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n),Comput(ProgramPart(s1),s1,n
-)) =
-  SubFrom(a, b) & a in dom p holds Comput(ProgramPart(s1),s1,n).a - Comput(
-ProgramPart(s1),s1,n).b =
-  Comput(ProgramPart(s2),s2,n).a - Comput(ProgramPart(s2),s2,n).b;
+  ProgramPart p c= P1 & ProgramPart p c= P2 &
+  CurInstr(P1,Comput(P1,s1,n)) =
+  SubFrom(a, b) & a in dom p holds Comput(P1,s1,n).a - Comput(
+P1,s1,n).b =
+  Comput(P2,s2,n).a - Comput(P2,s2,n).b;
 
-theorem :: SCMRING4:34
+theorem :: SCMRING4:12
   R is non trivial implies for p being autonomic non NAT-defined
   FinPartState of SCM R st p c= s1 & p c= s2 &
-  CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n),Comput(ProgramPart(s1),s1,n
-)) =
-  MultBy(a, b) & a in dom p holds Comput(ProgramPart(s1),s1,n).a * Comput(
-ProgramPart(s1),s1,n).b =
-  Comput(ProgramPart(s2),s2,n).a * Comput(ProgramPart(s2),s2,n).b;
+  ProgramPart p c= P1 & ProgramPart p c= P2 &
+  CurInstr(P1,Comput(P1,s1,n)) =
+  MultBy(a, b) & a in dom p holds Comput(P1,s1,n).a * Comput(
+P1,s1,n).b =
+  Comput(P2,s2,n).a * Comput(P2,s2,n).b;
 
-theorem :: SCMRING4:35
+theorem :: SCMRING4:13
   R is non trivial implies for p being autonomic non NAT-defined
   FinPartState of SCM R st p c= s1 & p c= s2 &
-  CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n),Comput(ProgramPart(s1),s1,n
-)) = a
-=0_goto loc & loc <> succ (IC Comput(ProgramPart(s1),s1,n)) holds Comput(
-ProgramPart(s1),s1,n).a = 0.
-  R iff Comput(ProgramPart(s2),s2,n).a = 0.R;
+  ProgramPart p c= P1 & ProgramPart p c= P2 &
+  CurInstr(P1,Comput(P1,s1,n)) = a
+=0_goto loc & loc <> succ (IC Comput(P1,s1,n)) holds Comput(
+P1,s1,n).a = 0.
+  R iff Comput(P2,s2,n).a = 0.R;
 
 begin :: Relocability
 
-theorem :: SCMRING4:36
-  for p being autonomic FinPartState of SCM R st p c= s1 &
-  Relocated (p,k) c= s2 holds p c= s1 +* DataPart s2;
-
-theorem :: SCMRING4:37
+theorem :: SCMRING4:14
   R is non trivial implies for p being autonomic FinPartState of
-  SCM R st IC SCM R in dom p & p c= s1 & Relocated (p,k) c= s2 & s = s1 +*
-  DataPart s2 for i being Element of NAT
-   holds IC Comput(ProgramPart(s1),s1,i) + k = IC
-  Comput(ProgramPart(s2),s2,i) & IncAddr(CurInstr(ProgramPart Comput(
-ProgramPart(s1),s1,i),
-  Comput(ProgramPart(s1),s1,i)), k) =
-   CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),s2,
-i))
-    & Comput(ProgramPart(s1),s1,i)|dom (DataPart p) = Comput(ProgramPart(s2),s2
-,i)|dom
-(DataPart (Relocated (p,k))) & DataPart Comput(ProgramPart(s),s,i) = DataPart
-Comput(ProgramPart(s2),s2,i);
-
-theorem :: SCMRING4:38
-  R is non trivial implies for p being autonomic FinPartState of
-  SCM R st IC SCM R in dom p holds p is halting iff Relocated (p,k) is halting;
-
-theorem :: SCMRING4:39
-  R is non trivial implies for p being autonomic FinPartState of SCM R
-st IC SCM R in dom p & p c= s for i being Element of NAT holds Comput(
-ProgramPart(s+*
-  Relocated(p,k)),s+*
-  Relocated(p,k),i) = Comput(ProgramPart(s),s,i) +*
-  Start-At(IC Comput(ProgramPart(s),s,i) +k,SCM R) +*
-  ProgramPart (Relocated (p,k));
-
-theorem :: SCMRING4:40
-  R is non trivial implies for p being autonomic FinPartState of
-  SCM R st IC SCM R in dom p & Relocated(p,k) c= s holds for i being Element of
-NAT holds Comput(ProgramPart(s),s,i) = Comput(ProgramPart(s+*p),s+*p,i) +*
-Start-At (IC Comput(ProgramPart(s
-  +*p),s
-  +*p,i) + k,SCM R) +* s|dom ProgramPart p
-   +* ProgramPart (Relocated (p,k));
-
-theorem :: SCMRING4:41
-  R is non trivial & IC SCM R in dom p & p c= s & Relocated(p,k)
-  is autonomic implies for i being Element of NAT holds Comput(ProgramPart(s),s
-,i) =
-Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) +* Start-At (IC
-Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),
-  i) -' k,SCM R) +* s|dom ProgramPart Relocated(p,k) +* ProgramPart (p);
-
-theorem :: SCMRING4:42
-  R is non trivial & IC SCM R in dom p implies (p is autonomic iff
-  Relocated (p,k) is autonomic);
+  SCM R st IC SCM R in dom p & p c= s1 & Relocated (p,k) c= s2
+for P1,P2 being (the Instructions of SCM R)-valued ManySortedSet of NAT
+  st ProgramPart p c= P1 & Reloc(ProgramPart p,k) c= P2
+  for i being Element of NAT
+   holds IC Comput(P1,s1,i) + k = IC
+  Comput(P2,s2,i) & IncAddr(CurInstr(P1,
+  Comput(P1,s1,i)), k) =
+   CurInstr(P2,Comput(P2,s2,i))
+    & Comput(P1,s1,i)|dom (DataPart p)
+     = Comput(P2,s2,i)|dom(DataPart (Relocated (p,k))) &
+   DataPart Comput(P1,s1 +* DataPart s2,i) = DataPart Comput(P2,s2,i);
 
 registration let R be non trivial good Ring;
-  let l be Element of NAT;
-  let p be l-started autonomic halting FinPartState of SCM R,
-    k be Element of NAT;
-  cluster Relocated(p,k) -> halting;
+ cluster SCM R -> relocable1 relocable2;
 end;
-
-reserve R for non trivial good Ring;
-
-theorem :: SCMRING4:43
- for l being Element of NAT
- for p being halting autonomic l-started
-  non program-free FinPartState of SCM R st IC SCM R in dom p
-   holds DataPart Result(ProgramPart(p),p) =
-    DataPart Result(ProgramPart(Relocated(p,k)),Relocated(p,k));
-
-theorem :: SCMRING4:44
- for l being Element of NAT
- for p being halting autonomic l-started
-  non program-free FinPartState of SCM R
- for F being PartFunc of FinPartSt SCM R,
-  FinPartSt SCM R st IC SCM R in dom p & F is data-only
-   holds ProgramPart p, p computes F
-    iff ProgramPart Relocated (p,k), Relocated (p,k) computes F;
 

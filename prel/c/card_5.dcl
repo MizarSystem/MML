@@ -233,7 +233,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

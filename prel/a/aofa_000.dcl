@@ -272,7 +272,7 @@
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="19"/>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -280,7 +280,7 @@
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="19"/>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -292,7 +292,7 @@
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="19"/>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AOFA_000" nr="3">

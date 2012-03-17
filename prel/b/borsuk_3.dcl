@@ -33,16 +33,16 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35"/>
-<Adjective nr="46"/>
+<Adjective nr="36"/>
 <Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BORSUK_3" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -77,7 +77,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="60">
+<Adjective nr="61">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -104,21 +104,21 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="35"/>
-<Adjective nr="46"/>
+<Adjective nr="36"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="35"/>
-<Adjective nr="47"/>
+<Adjective nr="36"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -127,22 +127,22 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="35"/>
-<Adjective nr="46"/>
+<Adjective nr="36"/>
 <Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_3" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="35"/>
-<Adjective nr="47"/>
+<Adjective nr="36"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -151,24 +151,24 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="35"/>
-<Adjective nr="46"/>
+<Adjective nr="36"/>
 <Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_3" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="61"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="48"/>
+<Adjective nr="62"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -191,23 +191,23 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="61"/>
+<Adjective nr="48"/>
+<Adjective nr="62"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_3" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="47"/>
-<Adjective nr="61"/>
+<Adjective nr="48"/>
+<Adjective nr="62"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="47"/>
-<Adjective nr="61"/>
+<Adjective nr="48"/>
+<Adjective nr="62"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -216,21 +216,21 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="61"/>
+<Adjective nr="48"/>
+<Adjective nr="62"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_3" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="62">
+<Adjective nr="63">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -246,22 +246,22 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="46"/>
-<Adjective nr="61"/>
+<Adjective nr="47"/>
+<Adjective nr="62"/>
 </Cluster>
 </FCluster>
 <CCluster aid="BORSUK_3" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="35"/>
-<Adjective nr="47"/>
+<Adjective nr="36"/>
+<Adjective nr="48"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="47"/>
-<Adjective nr="61"/>
+<Adjective nr="48"/>
+<Adjective nr="62"/>
 </Cluster>
 </CCluster>
 </Registrations>

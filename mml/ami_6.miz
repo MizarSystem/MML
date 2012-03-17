@@ -10,13 +10,13 @@ environ
       FUNCT_7, FUNCT_1, RELAT_1, STRUCT_0, FINSEQ_1, CARD_1, AMISTD_2, GRAPHSP,
       CARD_3, AMISTD_1, SUBSET_1, CIRCUIT2, FUNCT_4, FUNCOP_1, SETFAM_1,
       ZFMISC_1, XXREAL_0, TARSKI, ARYTM_3, GOBOARD5, FRECHET, ARYTM_1,
-      INT_1, UNIALG_1, CARD_5, PARTFUN1, NAT_1, SCMNORM;
+      INT_1, UNIALG_1, CARD_5, PARTFUN1, NAT_1, SCMNORM, COMPOS_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2,
       REALSET1, ORDINAL1, NAT_1, NUMBERS, XCMPLX_0, INT_1, FUNCOP_1, PARTFUN1,
       FINSEQ_1, FUNCT_4, XXREAL_0, MCART_1, VALUED_1, STRUCT_0, CARD_3,
       FUNCT_7, COMPOS_1, EXTPRO_1, AMI_2, AMI_3, AMISTD_1, AMISTD_2;
- constructors XXREAL_0, NAT_1, NAT_D, REALSET1, AMI_5, AMISTD_2, RELSET_1,
-      RECDEF_2, MCART_1, VALUED_1, AMI_2, EXTPRO_1, AMI_1;
+ constructors XXREAL_0, NAT_1, NAT_D, REALSET1, AMI_3, AMISTD_2, RELSET_1,
+      RECDEF_2, MCART_1, VALUED_1, AMI_2, EXTPRO_1, AMI_1, AMISTD_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_3, AMISTD_2,
       RELSET_1, ZFMISC_1, FUNCT_2, FUNCT_4, VALUED_0, COMPOS_1, EXTPRO_1;
@@ -52,8 +52,9 @@ theorem Th3:
   Data-Location
 proof
   let o be Object of SCM;
-  o in {IC SCM} \/ Data-Locations SCM or
-   o in NAT by AMI_5:23,XBOOLE_0:def 3;
+  the carrier of SCM = {IC SCM} \/ Data-Locations SCM \/ NAT
+                   by COMPOS_1:160;
+  then o in {IC SCM} \/ Data-Locations SCM or o in NAT by XBOOLE_0:def 3;
   then o in {IC SCM} or o in Data-Locations SCM
    or o in NAT by XBOOLE_0:def 3;
   hence thesis by AMI_3:72,def 2,TARSKI:def 1;
@@ -88,27 +89,27 @@ end;
 canceled;
 
 theorem
-Lm3: T = 0 or T = 1 or T = 2 or T = 3 or T = 4 or T = 5 or T = 6 or T = 7 or T
+Th7: T = 0 or T = 1 or T = 2 or T = 3 or T = 4 or T = 5 or T = 6 or T = 7 or T
 = 8
 
 proof
   consider y being set such that
-B1: [T,y] in proj1 the Instructions of SCM by RELAT_1:def 4;
+A1: [T,y] in proj1 the Instructions of SCM by RELAT_1:def 4;
   consider x being set such that
-A1: [[T,y],x] in the Instructions of SCM by B1,RELAT_1:def 4;
-   reconsider I = [T,y,x] as Instruction of SCM by A1;
+A2: [[T,y],x] in the Instructions of SCM by A1,RELAT_1:def 4;
+   reconsider I = [T,y,x] as Instruction of SCM by A2;
    T = InsCode I by RECDEF_2:def 1;
   hence thesis by AMI_5:36,NAT_1:33;
 end;
 
 canceled;
 
-theorem Th7:
+theorem Th9:
   JumpPart halt SCM = {};
 
 canceled 8;
 
-theorem Th16:
+theorem Th18:
   T = 0 implies JumpParts T = {0}
 proof
   assume
@@ -120,15 +121,15 @@ A1: T = 0;
 A2: a = JumpPart I and
 A3: InsCode I = T;
     I = halt SCM by A1,A3,AMI_5:46;
-    hence a in {0} by A2,Th7,TARSKI:def 1;
+    hence a in {0} by A2,Th9,TARSKI:def 1;
   end;
   let a be set;
   assume a in {0};
   then a = 0 by TARSKI:def 1;
-  hence thesis by A1,Th7,AMI_5:37;
+  hence thesis by A1,Th9,AMI_5:37;
 end;
 
-theorem Th17:
+theorem Th19:
   T = 1 implies JumpParts T = {{}}
 proof
   assume
@@ -137,11 +138,11 @@ A1: T = 1;
     let x be set;
     assume x in JumpParts T;
      then consider I being Instruction of SCM such that
-W1:   x = JumpPart I and
-W2:   InsCode I = T;
+A2:   x = JumpPart I and
+A3:   InsCode I = T;
      consider a,b such that
-W3:   I = a:=b by A1,W2,AMI_5:47;
-     x = {} by W1,W3,RECDEF_2:def 2;
+A4:   I = a:=b by A1,A3,AMI_5:47;
+     x = {} by A2,A4,RECDEF_2:def 2;
     hence x in {{}} by TARSKI:def 1;
   end;
   set a = the Data-Location;
@@ -149,12 +150,12 @@ W3:   I = a:=b by A1,W2,AMI_5:47;
   assume x in {{}};
    then x = {} by TARSKI:def 1;
    then
-X:  x = JumpPart(a:= a) by RECDEF_2:def 2;
+A5:  x = JumpPart(a:= a) by RECDEF_2:def 2;
     InsCode(a:= a) = 1 by RECDEF_2:def 1;
-  hence thesis by X,A1;
+  hence thesis by A5,A1;
 end;
 
-theorem Th18:
+theorem Th20:
   T = 2 implies JumpParts T = {{}}
 proof
   assume
@@ -163,11 +164,11 @@ A1: T = 2;
     let x be set;
     assume x in JumpParts T;
      then consider I being Instruction of SCM such that
-W1:   x = JumpPart I and
-W2:   InsCode I = T;
+A2:   x = JumpPart I and
+A3:   InsCode I = T;
      consider a,b such that
-W3:   I = AddTo(a,b) by A1,W2,AMI_5:48;
-     x = {} by W1,W3,RECDEF_2:def 2;
+A4:   I = AddTo(a,b) by A1,A3,AMI_5:48;
+     x = {} by A2,A4,RECDEF_2:def 2;
     hence x in {{}} by TARSKI:def 1;
   end;
   set a = the Data-Location;
@@ -175,12 +176,12 @@ W3:   I = AddTo(a,b) by A1,W2,AMI_5:48;
   assume x in {{}};
    then x = {} by TARSKI:def 1;
    then
-X:  x = JumpPart AddTo(a,a) by RECDEF_2:def 2;
+A5:  x = JumpPart AddTo(a,a) by RECDEF_2:def 2;
     InsCode AddTo(a,a) = 2 by RECDEF_2:def 1;
-  hence thesis by X,A1;
+  hence thesis by A5,A1;
 end;
 
-theorem Th19:
+theorem Th21:
   T = 3 implies JumpParts T = {{}}
 proof
   assume
@@ -189,11 +190,11 @@ A1: T = 3;
     let x be set;
     assume x in JumpParts T;
      then consider I being Instruction of SCM such that
-W1:   x = JumpPart I and
-W2:   InsCode I = T;
+A2:   x = JumpPart I and
+A3:   InsCode I = T;
      consider a,b such that
-W3:   I = SubFrom(a,b) by A1,W2,AMI_5:49;
-     x = {} by W1,W3,RECDEF_2:def 2;
+A4:   I = SubFrom(a,b) by A1,A3,AMI_5:49;
+     x = {} by A2,A4,RECDEF_2:def 2;
     hence x in {{}} by TARSKI:def 1;
   end;
   set a = the Data-Location;
@@ -201,12 +202,12 @@ W3:   I = SubFrom(a,b) by A1,W2,AMI_5:49;
   assume x in {{}};
    then x = {} by TARSKI:def 1;
    then
-X:  x = JumpPart SubFrom(a,a) by RECDEF_2:def 2;
+A5:  x = JumpPart SubFrom(a,a) by RECDEF_2:def 2;
     InsCode SubFrom(a,a) = 3 by RECDEF_2:def 1;
-  hence thesis by X,A1;
+  hence thesis by A5,A1;
 end;
 
-theorem Th20:
+theorem Th22:
   T = 4 implies JumpParts T = {{}}
 proof
   assume
@@ -215,11 +216,11 @@ A1: T = 4;
     let x be set;
     assume x in JumpParts T;
      then consider I being Instruction of SCM such that
-W1:   x = JumpPart I and
-W2:   InsCode I = T;
+A2:   x = JumpPart I and
+A3:   InsCode I = T;
      consider a,b such that
-W3:   I = MultBy(a,b) by A1,W2,AMI_5:50;
-     x = {} by W1,W3,RECDEF_2:def 2;
+A4:   I = MultBy(a,b) by A1,A3,AMI_5:50;
+     x = {} by A2,A4,RECDEF_2:def 2;
     hence x in {{}} by TARSKI:def 1;
   end;
   set a = the Data-Location;
@@ -227,12 +228,12 @@ W3:   I = MultBy(a,b) by A1,W2,AMI_5:50;
   assume x in {{}};
    then x = {} by TARSKI:def 1;
    then
-X:  x = JumpPart MultBy(a,a) by RECDEF_2:def 2;
+A5:  x = JumpPart MultBy(a,a) by RECDEF_2:def 2;
     InsCode MultBy(a,a) = 4 by RECDEF_2:def 1;
-  hence thesis by X,A1;
+  hence thesis by A5,A1;
 end;
 
-theorem Th21:
+theorem Th23:
   T = 5 implies JumpParts T = {{}}
 proof
   assume
@@ -241,11 +242,11 @@ A1: T = 5;
     let x be set;
     assume x in JumpParts T;
      then consider I being Instruction of SCM such that
-W1:   x = JumpPart I and
-W2:   InsCode I = T;
+A2:   x = JumpPart I and
+A3:   InsCode I = T;
      consider a,b such that
-W3:   I = Divide(a,b) by A1,W2,AMI_5:51;
-     x = {} by W1,W3,RECDEF_2:def 2;
+A4:   I = Divide(a,b) by A1,A3,AMI_5:51;
+     x = {} by A2,A4,RECDEF_2:def 2;
     hence x in {{}} by TARSKI:def 1;
   end;
   set a = the Data-Location;
@@ -253,15 +254,15 @@ W3:   I = Divide(a,b) by A1,W2,AMI_5:51;
   assume x in {{}};
    then x = {} by TARSKI:def 1;
    then
-X:  x = JumpPart Divide(a,a) by RECDEF_2:def 2;
+A5:  x = JumpPart Divide(a,a) by RECDEF_2:def 2;
     InsCode Divide(a,a) = 5 by RECDEF_2:def 1;
-  hence thesis by X,A1;
+  hence thesis by A5,A1;
 end;
 
-theorem Th22:
+theorem Th24:
   T = 6 implies dom product" JumpParts T = {1}
 proof
-  consider i1;
+  set i1 =the  Element of NAT;
   assume
 A1: T = 6;
 A2: JumpPart SCM-goto i1 = <*i1*> by RECDEF_2:def 2;
@@ -292,10 +293,10 @@ A7: I = SCM-goto i1 by A1,A6,AMI_5:52;
   hence thesis by CARD_3:def 13;
 end;
 
-theorem Th23:
+theorem Th25:
   T = 7 implies dom product" JumpParts T = {1}
 proof
-  consider i1, a;
+  set i1 =the  Element of NAT,a =the  Data-Location;
   assume
 A1: T = 7;
 A2: JumpPart (a =0_goto i1) = <*i1*> by RECDEF_2:def 2;
@@ -326,10 +327,10 @@ A7: I = a =0_goto i1 by A1,A6,AMI_5:53;
   hence thesis by CARD_3:def 13;
 end;
 
-theorem Th24:
+theorem Th26:
   T = 8 implies dom product" JumpParts T = {1}
 proof
-  consider i1, a;
+  set i1 =the  Element of NAT,a =the  Data-Location;
   assume
 A1: T = 8;
 A2: JumpPart (a >0_goto i1) = <*i1*> by RECDEF_2:def 2;
@@ -362,12 +363,12 @@ end;
 
 canceled 10;
 
-theorem Th35:
+theorem Th37:
   (product" JumpParts InsCode SCM-goto k1).1 = NAT
 proof
  InsCode SCM-goto k1 = 6 by RECDEF_2:def 1;
  then dom product" JumpParts InsCode SCM-goto k1 = {1}
-   by Th22;
+   by Th24;
   then
 A1: 1 in dom product" JumpParts InsCode SCM-goto k1 by TARSKI:def 1;
   hereby
@@ -400,11 +401,11 @@ A7: <*x*> in JumpParts InsCode SCM-goto k1;
   hence thesis by A1,CARD_3:93;
 end;
 
-theorem Th36:
+theorem Th38:
   (product" JumpParts InsCode (a =0_goto k1)).1 = NAT
 proof
  InsCode (a =0_goto k1) = 7 by RECDEF_2:def 1;
- then dom product" JumpParts InsCode (a =0_goto k1) = {1} by Th23;
+ then dom product" JumpParts InsCode (a =0_goto k1) = {1} by Th25;
   then
 A1: 1 in dom product" JumpParts InsCode (a =0_goto k1) by TARSKI:def 1;
   hereby
@@ -439,11 +440,11 @@ end;
 
 canceled;
 
-theorem Th38:
+theorem Th40:
   (product" JumpParts InsCode (a >0_goto k1)).1 = NAT
 proof
  InsCode (a >0_goto k1) = 8 by RECDEF_2:def 1;
- then dom product" JumpParts InsCode (a >0_goto k1) = {1} by Th24;
+ then dom product" JumpParts InsCode (a >0_goto k1) = {1} by Th26;
   then
 A1: 1 in dom product" JumpParts InsCode (a >0_goto k1) by TARSKI:def 1;
   hereby
@@ -476,12 +477,12 @@ A7: <*x*> in JumpParts InsCode (a >0_goto k1);
   hence thesis by A1,CARD_3:93;
 end;
 
-Lm4: for l being Element of NAT, i being Instruction of SCM holds
+Lm1: for l being Element of NAT, i being Instruction of SCM holds
 (for s being State of SCM st IC s = l holds Exec(i,s).IC SCM = succ
 IC s) implies NIC(i, l) = {succ l}
 
 proof
-  consider t being State of SCM;
+  set t =the  State of SCM;
   let l be Element of NAT, i be Instruction of SCM;
   reconsider I = i as Element of (the Object-Kind of SCM).l by COMPOS_1:def 8;
   assume
@@ -495,8 +496,8 @@ A1: for s being State of SCM st IC s = l holds Exec(i, s).IC
 
     then consider s being Element of product the Object-Kind of SCM
      such that
-W:      x = IC Exec(i,s) & IC s = l;
-    x = succ l by A1,W;
+A2:      x = IC Exec(i,s) & IC s = l;
+    x = succ l by A1,A2;
     hence x in {succ l} by TARSKI:def 1;
   end;
   reconsider il1 = l as Element of ObjectKind IC SCM by COMPOS_1:def 6;
@@ -505,16 +506,16 @@ W:      x = IC Exec(i,s) & IC s = l;
   reconsider u = t+*p
    as Element of product the Object-Kind of SCM by PBOOLE:155;
   let x be set;
-X:  (ProgramPart u)/.l = u.l by COMPOS_1:38;
+A3:  (ProgramPart u)/.l = u.l by COMPOS_1:38;
   assume x in {succ l};
   then
-A2: x = succ l by TARSKI:def 1;
-A3: IC u = n & u.n = i by EXTPRO_1:26;
-  then IC Following(ProgramPart u,u) = succ l by A1,X;
-  hence thesis by A2,A3,X;
+A4: x = succ l by TARSKI:def 1;
+A5: IC u = n & u.n = i by EXTPRO_1:26;
+  then IC Following(ProgramPart u,u) = succ l by A1,A3;
+  hence thesis by A4,A5,A3;
 end;
 
-Lm5: for i being Instruction of SCM holds (for l being Element of NAT
+Lm2: for i being Instruction of SCM holds (for l being Element of NAT
 holds NIC(i,l)={succ l}) implies JUMP i is empty
 
 proof
@@ -543,7 +544,7 @@ end;
 
 canceled;
 
-theorem Th40:
+theorem Th42:
   NIC(halt SCM, il) = {il}
 proof
   now
@@ -552,7 +553,7 @@ A1: now
       reconsider il1 = il as Element of ObjectKind IC SCM by COMPOS_1:def 6;
       reconsider I = halt SCM as Element of (the Object-Kind of SCM).il
        by COMPOS_1:def 8;
-      consider t being State of SCM;
+      set t =the  State of SCM;
       assume
 A2:   x = il;
       reconsider p = (IC SCM, il)-->(il1, I) as PartState of SCM by COMPOS_1:37
@@ -563,14 +564,14 @@ A2:   x = il;
       dom ((IC SCM, il)-->(il1, I)) = {IC SCM, il} by FUNCT_4:65;
       then
 A3:   IC SCM in dom ((IC SCM, il)-->(il1, I)) by TARSKI:def 2;
-X:  (ProgramPart u)/.il = u.il by COMPOS_1:38;
-A4:   u.n = halt SCM & IC u = n by EXTPRO_1:26;
-      then IC Following(ProgramPart u,u) = u.IC SCM by X,EXTPRO_1:def 3
+A4:  (ProgramPart u)/.il = u.il by COMPOS_1:38;
+A5:   u.n = halt SCM & IC u = n by EXTPRO_1:26;
+      then IC Following(ProgramPart u,u) = u.IC SCM by A4,EXTPRO_1:def 3
         .= ((IC SCM, il)-->(il1, I)).IC SCM by A3,FUNCT_4:14
         .= il by COMPOS_1:3,FUNCT_4:66;
       hence x in {IC Exec(halt SCM,s)
        where s is Element of product the Object-Kind of SCM
-       : IC s = il} by A2,A4,X;
+       : IC s = il} by A2,A5,A4;
     end;
     now
       assume x in {IC Exec(halt SCM,s)
@@ -592,13 +593,13 @@ registration
   coherence;
 end;
 
-theorem Th41:
+theorem Th43:
   NIC(a := b, il) = {succ il}
 proof
   set i = a:=b;
   for s being State of SCM st IC s = il holds Exec(i,s).IC SCM
   = succ IC s by AMI_3:8;
-  hence thesis by Lm4;
+  hence thesis by Lm1;
 end;
 
 registration
@@ -606,18 +607,18 @@ registration
   cluster JUMP (a := b) -> empty;
   coherence
   proof
-    for l being Element of NAT holds NIC(a:=b,l)={succ l} by Th41;
-    hence thesis by Lm5;
+    for l being Element of NAT holds NIC(a:=b,l)={succ l} by Th43;
+    hence thesis by Lm2;
   end;
 end;
 
-theorem Th42:
+theorem Th44:
   NIC(AddTo(a,b), il) = {succ il}
 proof
   set i = AddTo(a,b);
   for s being State of SCM st IC s = il holds Exec(i,s).IC SCM
   = succ IC s by AMI_3:9;
-  hence thesis by Lm4;
+  hence thesis by Lm1;
 end;
 
 registration
@@ -626,18 +627,18 @@ registration
   coherence
   proof
     for l being Element of NAT holds NIC(AddTo(a,b),l)={succ
-    l} by Th42;
-    hence thesis by Lm5;
+    l} by Th44;
+    hence thesis by Lm2;
   end;
 end;
 
-theorem Th43:
+theorem Th45:
   NIC(SubFrom(a,b), il) = {succ il}
 proof
   set i = SubFrom(a,b);
   for s being State of SCM st IC s = il holds Exec(i,s).IC SCM
   = succ IC s by AMI_3:10;
-  hence thesis by Lm4;
+  hence thesis by Lm1;
 end;
 
 registration
@@ -646,18 +647,18 @@ registration
   coherence
   proof
     for l being Element of NAT holds NIC(SubFrom(a,b),l)={
-    succ l} by Th43;
-    hence thesis by Lm5;
+    succ l} by Th45;
+    hence thesis by Lm2;
   end;
 end;
 
-theorem Th44:
+theorem Th46:
   NIC(MultBy(a,b), il) = {succ il}
 proof
   set i = MultBy(a,b);
   for s being State of SCM st IC s = il holds Exec(i,s).IC SCM
   = succ IC s by AMI_3:11;
-  hence thesis by Lm4;
+  hence thesis by Lm1;
 end;
 
 registration
@@ -666,18 +667,18 @@ registration
   coherence
   proof
     for l being Element of NAT holds NIC(MultBy(a,b),l)={succ
-    l} by Th44;
-    hence thesis by Lm5;
+    l} by Th46;
+    hence thesis by Lm2;
   end;
 end;
 
-theorem Th45:
+theorem Th47:
   NIC(Divide(a,b), il) = {succ il}
 proof
   set i = Divide(a,b);
   for s being State of SCM st IC s = il holds Exec(i,s).IC SCM
   = succ IC s by AMI_3:12;
-  hence thesis by Lm4;
+  hence thesis by Lm1;
 end;
 
 registration
@@ -686,12 +687,12 @@ registration
   coherence
   proof
     for l being Element of NAT holds NIC(Divide(a,b),l)={succ
-    l} by Th45;
-    hence thesis by Lm5;
+    l} by Th47;
+    hence thesis by Lm2;
   end;
 end;
 
-theorem Th46:
+theorem Th48:
   NIC(SCM-goto k, il) = {k}
 proof
   now
@@ -700,7 +701,7 @@ A1: now
       reconsider il1 = il as Element of ObjectKind IC SCM by COMPOS_1:def 6;
       reconsider I = SCM-goto k as Element of (the Object-Kind of SCM).il
        by COMPOS_1:def 8;
-      consider t being State of SCM;
+      set t =the  State of SCM;
       assume
 A2:   x = k;
       reconsider n = il as Element of NAT;
@@ -708,12 +709,12 @@ A2:   x = k;
 ;
       reconsider u = t+*p
        as Element of product the Object-Kind of SCM by PBOOLE:155;
-X:  (ProgramPart u)/.il = u.il by COMPOS_1:38;
-A3:   IC u = n & u.n = SCM-goto k by EXTPRO_1:26;
-      then IC Following(ProgramPart u,u) = k by X,AMI_3:13;
+A3:  (ProgramPart u)/.il = u.il by COMPOS_1:38;
+A4:   IC u = n & u.n = SCM-goto k by EXTPRO_1:26;
+      then IC Following(ProgramPart u,u) = k by A3,AMI_3:13;
       hence x in {IC Exec(SCM-goto k,s)
        where s is Element of product the Object-Kind of SCM
-       : IC s = il} by A2,A3,X;
+       : IC s = il} by A2,A4,A3;
     end;
     now
       assume x in {IC Exec(SCM-goto k,s)
@@ -731,7 +732,7 @@ A3:   IC u = n & u.n = SCM-goto k by EXTPRO_1:26;
   hence thesis by TARSKI:2;
 end;
 
-theorem Th47:
+theorem Th49:
   JUMP SCM-goto k = {k}
 proof
   set X = { NIC(SCM-goto k, il) : not contradiction };
@@ -742,7 +743,7 @@ proof
 A1:   NIC(SCM-goto k, il1) in X;
       assume x in meet X;
       then x in NIC(SCM-goto k, il1) by A1,SETFAM_1:def 1;
-      hence x in {k} by Th46;
+      hence x in {k} by Th48;
     end;
     assume x in {k};
     then
@@ -752,7 +753,7 @@ A3: now
       assume Y in X;
       then consider il being Element of NAT such that
 A4:   Y = NIC(SCM-goto k, il);
-      NIC(SCM-goto k, il) = {k} by Th46;
+      NIC(SCM-goto k, il) = {k} by Th48;
       hence k in Y by A4,TARSKI:def 1;
     end;
     reconsider k as Element of NAT by ORDINAL1:def 13;
@@ -767,15 +768,15 @@ registration
   cluster JUMP SCM-goto i1 -> non empty trivial;
   coherence
   proof
-    JUMP SCM-goto i1 = {i1} by Th47;
+    JUMP SCM-goto i1 = {i1} by Th49;
     hence thesis;
   end;
 end;
 
-theorem Th48:
+theorem Th50:
   NIC(a=0_goto k, il) = {k, succ il}
 proof
-  consider t being State of SCM;
+  set t =the  State of SCM;
   hereby
     let x be set;
     assume x in NIC(a=0_goto k, il);
@@ -815,38 +816,38 @@ A6: dom (a .--> 0) = {a} by FUNCOP_1:19;
     then
 A7: IC v = IC u by FUNCT_4:12
       .= n by EXTPRO_1:26;
-U:    not il in dom (a .--> 0) by A3,A6,TARSKI:def 1;
-A8: (ProgramPart v)/.il = v.il by COMPOS_1:38
-.= u.n by U,FUNCT_4:12
+A8:    not il in dom (a .--> 0) by A3,A6,TARSKI:def 1;
+A9: (ProgramPart v)/.il = v.il by COMPOS_1:38
+.= u.n by A8,FUNCT_4:12
       .= I by EXTPRO_1:26;
     a in dom (a .--> 0) by A6,TARSKI:def 1;
     then v.a = (a .--> 0).a by FUNCT_4:14
       .= 0 by FUNCOP_1:87;
-    then IC Following(ProgramPart v,v) = k by A7,A8,AMI_3:14;
-    hence thesis by A5,A7,A8;
+    then IC Following(ProgramPart v,v) = k by A7,A9,AMI_3:14;
+    hence thesis by A5,A7,A9;
   end;
   suppose
-A9: x = succ il;
+A10: x = succ il;
     reconsider v = u+*(a .--> 1)
      as Element of product the Object-Kind of SCM by PBOOLE:155;
-A10: dom (a .--> 1) = {a} by FUNCOP_1:19;
+A11: dom (a .--> 1) = {a} by FUNCOP_1:19;
     then not IC SCM in dom (a .--> 1) by A2,TARSKI:def 1;
     then
-A11: IC v = IC u by FUNCT_4:12
+A12: IC v = IC u by FUNCT_4:12
       .= n by EXTPRO_1:26;
-U:    not il in dom (a .--> 1) by A3,A10,TARSKI:def 1;
-A12: (ProgramPart v)/.il = v.il by COMPOS_1:38
-.= u.n by U,FUNCT_4:12
+A13:    not il in dom (a .--> 1) by A3,A11,TARSKI:def 1;
+A14: (ProgramPart v)/.il = v.il by COMPOS_1:38
+.= u.n by A13,FUNCT_4:12
       .= I by EXTPRO_1:26;
-    a in dom (a .--> 1) by A10,TARSKI:def 1;
+    a in dom (a .--> 1) by A11,TARSKI:def 1;
     then v.a = (a .--> 1).a by FUNCT_4:14
       .= 1 by FUNCOP_1:87;
-    then IC Following(ProgramPart v,v) = succ il by A11,A12,AMI_3:14;
-    hence thesis by A9,A11,A12;
+    then IC Following(ProgramPart v,v) = succ il by A12,A14,AMI_3:14;
+    hence thesis by A10,A12,A14;
   end;
 end;
 
-theorem Th49:
+theorem Th51:
   JUMP (a=0_goto k) = {k}
 proof
   set X = { NIC(a=0_goto k, il) : not contradiction };
@@ -857,19 +858,19 @@ A1: now
       assume Y in X;
       then consider il being Element of NAT such that
 A2:   Y = NIC(a=0_goto k, il);
-      NIC(a=0_goto k, il) = {k, succ il} by Th48;
+      NIC(a=0_goto k, il) = {k, succ il} by Th50;
       hence k in Y by A2,TARSKI:def 2;
     end;
     hereby
       set il1 = 1, il2 = 2;
       assume
 A3:   x in meet X;
-A4:   NIC(a=0_goto k, il2) = {k, succ il2} by Th48;
+A4:   NIC(a=0_goto k, il2) = {k, succ il2} by Th50;
       NIC(a=0_goto k, il2) in X;
       then x in NIC(a=0_goto k, il2) by A3,SETFAM_1:def 1;
       then
 A5:   x = k or x = succ il2 by A4,TARSKI:def 2;
-A6:   NIC(a=0_goto k, il1) = {k, succ il1} by Th48;
+A6:   NIC(a=0_goto k, il1) = {k, succ il1} by Th50;
       NIC(a=0_goto k, il1) in X;
       then x in NIC(a=0_goto k, il1) by A3,SETFAM_1:def 1;
       then x = k or x = succ il1 by A6,TARSKI:def 2;
@@ -890,15 +891,15 @@ registration
   cluster JUMP (a =0_goto i1) -> non empty trivial;
   coherence
   proof
-    JUMP (a =0_goto i1) = {i1} by Th49;
+    JUMP (a =0_goto i1) = {i1} by Th51;
     hence thesis;
   end;
 end;
 
-theorem Th50:
+theorem Th52:
   NIC(a>0_goto k, il) = {k, succ il}
 proof
-  consider t being State of SCM;
+  set t =the  State of SCM;
   hereby
     let x be set;
     assume x in NIC(a>0_goto k, il);
@@ -938,38 +939,38 @@ A6: dom (a .--> 1) = {a} by FUNCOP_1:19;
     then
 A7: IC v = IC u by FUNCT_4:12
       .= n by EXTPRO_1:26;
-U:    not il in dom (a .--> 1) by A3,A6,TARSKI:def 1;
-A8: (ProgramPart v)/.il = v.il by COMPOS_1:38
-.= u.n by U,FUNCT_4:12
+A8:    not il in dom (a .--> 1) by A3,A6,TARSKI:def 1;
+A9: (ProgramPart v)/.il = v.il by COMPOS_1:38
+.= u.n by A8,FUNCT_4:12
       .= I by EXTPRO_1:26;
     a in dom (a .--> 1) by A6,TARSKI:def 1;
     then v.a = (a .--> 1).a by FUNCT_4:14
       .= 1 by FUNCOP_1:87;
-    then IC Following(ProgramPart v,v) = k by A7,A8,AMI_3:15;
-    hence thesis by A5,A7,A8;
+    then IC Following(ProgramPart v,v) = k by A7,A9,AMI_3:15;
+    hence thesis by A5,A7,A9;
   end;
   suppose
-A9: x = succ il;
+A10: x = succ il;
     reconsider v = u+*(a .--> 0)
      as Element of product the Object-Kind of SCM by PBOOLE:155;
-A10: dom (a .--> 0) = {a} by FUNCOP_1:19;
+A11: dom (a .--> 0) = {a} by FUNCOP_1:19;
     then not IC SCM in dom (a .--> 0) by A2,TARSKI:def 1;
     then
-A11: IC v = IC u by FUNCT_4:12
+A12: IC v = IC u by FUNCT_4:12
       .= n by EXTPRO_1:26;
-U:    not il in dom (a .--> 0) by A3,A10,TARSKI:def 1;
-A12: (ProgramPart v)/.il = v.il by COMPOS_1:38
-.= u.n by U,FUNCT_4:12
+A13:    not il in dom (a .--> 0) by A3,A11,TARSKI:def 1;
+A14: (ProgramPart v)/.il = v.il by COMPOS_1:38
+.= u.n by A13,FUNCT_4:12
       .= I by EXTPRO_1:26;
-    a in dom (a .--> 0) by A10,TARSKI:def 1;
+    a in dom (a .--> 0) by A11,TARSKI:def 1;
     then v.a = (a .--> 0).a by FUNCT_4:14
       .= 0 by FUNCOP_1:87;
-    then IC Following(ProgramPart v,v) = succ il by A11,A12,AMI_3:15;
-    hence thesis by A9,A11,A12;
+    then IC Following(ProgramPart v,v) = succ il by A12,A14,AMI_3:15;
+    hence thesis by A10,A12,A14;
   end;
 end;
 
-theorem Th51:
+theorem Th53:
   JUMP (a>0_goto k) = {k}
 proof
   set X = { NIC(a>0_goto k, il) : not contradiction };
@@ -980,19 +981,19 @@ A1: now
       assume Y in X;
       then consider il being Element of NAT such that
 A2:   Y = NIC(a>0_goto k, il);
-      NIC(a>0_goto k, il) = {k, succ il} by Th50;
+      NIC(a>0_goto k, il) = {k, succ il} by Th52;
       hence k in Y by A2,TARSKI:def 2;
     end;
     hereby
       set il1 = 1, il2 = 2;
       assume
 A3:   x in meet X;
-A4:   NIC(a>0_goto k, il2) = {k, succ il2} by Th50;
+A4:   NIC(a>0_goto k, il2) = {k, succ il2} by Th52;
       NIC(a>0_goto k, il2) in X;
       then x in NIC(a>0_goto k, il2) by A3,SETFAM_1:def 1;
       then
 A5:   x = k or x = succ il2 by A4,TARSKI:def 2;
-A6:   NIC(a>0_goto k, il1) = {k, succ il1} by Th50;
+A6:   NIC(a>0_goto k, il1) = {k, succ il1} by Th52;
       NIC(a>0_goto k, il1) in X;
       then x in NIC(a>0_goto k, il1) by A3,SETFAM_1:def 1;
       then x = k or x = succ il1 by A6,TARSKI:def 2;
@@ -1013,12 +1014,12 @@ registration
   cluster JUMP (a >0_goto i1) -> non empty trivial;
   coherence
   proof
-    JUMP (a >0_goto i1) = {i1} by Th51;
+    JUMP (a >0_goto i1) = {i1} by Th53;
     hence thesis;
   end;
 end;
 
-theorem Th52:
+theorem Th54:
   SUCC(il,SCM) = {il, succ il}
 proof
   set X = { NIC(I, il) \ JUMP I where I is Element of the Instructions of SCM:
@@ -1036,7 +1037,7 @@ A3:   Y = NIC(i, il) \ JUMP i by A2;
       per cases by AMI_3:69;
       suppose
         i = [0,{},{}];
-        then x in {il} \ JUMP halt SCM by A1,A3,Th40,AMI_3:71;
+        then x in {il} \ JUMP halt SCM by A1,A3,Th42,AMI_3:71;
         then x = il by TARSKI:def 1;
         hence x in N by TARSKI:def 2;
       end;
@@ -1044,7 +1045,7 @@ A3:   Y = NIC(i, il) \ JUMP i by A2;
         ex a,b st i = a:=b;
         then consider a, b such that
 A4:     i = a:=b;
-        x in {succ il} \ JUMP (a:=b) by A1,A3,A4,Th41;
+        x in {succ il} \ JUMP (a:=b) by A1,A3,A4,Th43;
         then x = succ il by TARSKI:def 1;
         hence x in N by TARSKI:def 2;
       end;
@@ -1052,7 +1053,7 @@ A4:     i = a:=b;
         ex a,b st i = AddTo(a,b);
         then consider a, b such that
 A5:     i = AddTo(a,b);
-        x in {succ il} \ JUMP AddTo(a,b) by A1,A3,A5,Th42;
+        x in {succ il} \ JUMP AddTo(a,b) by A1,A3,A5,Th44;
         then x = succ il by TARSKI:def 1;
         hence x in N by TARSKI:def 2;
       end;
@@ -1060,7 +1061,7 @@ A5:     i = AddTo(a,b);
         ex a,b st i = SubFrom(a,b);
         then consider a, b such that
 A6:     i = SubFrom(a,b);
-        x in {succ il} \ JUMP SubFrom(a,b) by A1,A3,A6,Th43;
+        x in {succ il} \ JUMP SubFrom(a,b) by A1,A3,A6,Th45;
         then x = succ il by TARSKI:def 1;
         hence x in N by TARSKI:def 2;
       end;
@@ -1068,7 +1069,7 @@ A6:     i = SubFrom(a,b);
         ex a,b st i = MultBy(a,b);
         then consider a, b such that
 A7:     i = MultBy(a,b);
-        x in {succ il} \ JUMP MultBy(a,b) by A1,A3,A7,Th44;
+        x in {succ il} \ JUMP MultBy(a,b) by A1,A3,A7,Th46;
         then x = succ il by TARSKI:def 1;
         hence x in N by TARSKI:def 2;
       end;
@@ -1076,7 +1077,7 @@ A7:     i = MultBy(a,b);
         ex a,b st i = Divide(a,b);
         then consider a, b such that
 A8:     i = Divide(a,b);
-        x in {succ il} \ JUMP Divide(a,b) by A1,A3,A8,Th45;
+        x in {succ il} \ JUMP Divide(a,b) by A1,A3,A8,Th47;
         then x = succ il by TARSKI:def 1;
         hence x in N by TARSKI:def 2;
       end;
@@ -1084,19 +1085,19 @@ A8:     i = Divide(a,b);
         ex k st i = SCM-goto k;
         then consider k such that
 A9:     i = SCM-goto k;
-        x in {k} \ JUMP i by A1,A3,A9,Th46;
-        then x in {k} \ {k} by A9,Th47;
+        x in {k} \ JUMP i by A1,A3,A9,Th48;
+        then x in {k} \ {k} by A9,Th49;
         hence x in N by XBOOLE_1:37;
       end;
       suppose
         ex a,k st i = a=0_goto k;
         then consider a, k such that
 A10:    i = a=0_goto k;
-A11:    NIC(i, il) = {k, succ il} by A10,Th48;
+A11:    NIC(i, il) = {k, succ il} by A10,Th50;
         x in NIC(i, il) by A1,A3,XBOOLE_0:def 5;
         then
 A12:    x = k or x = succ il by A11,TARSKI:def 2;
-        x in NIC(i, il) \ {k} by A1,A3,A10,Th49;
+        x in NIC(i, il) \ {k} by A1,A3,A10,Th51;
         then not x in {k} by XBOOLE_0:def 5;
         hence x in N by A12,TARSKI:def 1,def 2;
       end;
@@ -1104,11 +1105,11 @@ A12:    x = k or x = succ il by A11,TARSKI:def 2;
         ex a,k st i = a>0_goto k;
         then consider a, k such that
 A13:    i = a>0_goto k;
-A14:    NIC(i, il) = {k, succ il} by A13,Th50;
+A14:    NIC(i, il) = {k, succ il} by A13,Th52;
         x in NIC(i, il) by A1,A3,XBOOLE_0:def 5;
         then
 A15:    x = k or x = succ il by A14,TARSKI:def 2;
-        x in NIC(i, il) \ {k} by A1,A3,A13,Th51;
+        x in NIC(i, il) \ {k} by A1,A3,A13,Th53;
         then not x in {k} by XBOOLE_0:def 5;
         hence x in N by A15,TARSKI:def 1,def 2;
       end;
@@ -1119,7 +1120,7 @@ A16: x in {il, succ il};
     suppose
 A17:  x = il;
       set i = halt SCM;
-      NIC(i, il) \ JUMP i = {il} by Th40;
+      NIC(i, il) \ JUMP i = {il} by Th42;
       then
 A18:  {il} in X;
       x in {il} by A17,TARSKI:def 1;
@@ -1127,9 +1128,9 @@ A18:  {il} in X;
     end;
     suppose
 A19:  x = succ il;
-      consider a, b being Data-Location;
-      set i = AddTo(a,b);
-      NIC(i, il) \ JUMP i = {succ il} by Th42;
+      set a =the  Data-Location;
+      set i = AddTo(a,a);
+      NIC(i, il) \ JUMP i = {succ il} by Th44;
       then
 A20:  {succ il} in X;
       x in {succ il} by A19,TARSKI:def 1;
@@ -1139,19 +1140,19 @@ A20:  {succ il} in X;
   hence thesis by TARSKI:2;
 end;
 
-theorem Th53:
+theorem Th55:
 for k being Element of NAT holds k+1 in SUCC(k,SCM) &
  for j being Element of NAT st j in SUCC(k,SCM) holds k <= j
 proof
   let k be Element of NAT;
   reconsider fk = k as Element of NAT;
-A8: SUCC(k,SCM) = {k, succ (fk)} by Th52;
+A1: SUCC(k,SCM) = {k, succ (fk)} by Th54;
   hence k+1 in SUCC(k,SCM) by TARSKI:def 2;
   let j be Element of NAT;
   assume
-A10: j in SUCC(k,SCM);
+A2: j in SUCC(k,SCM);
   reconsider fk = k as Element of NAT;
-  per cases by A8,A10,TARSKI:def 2;
+  per cases by A1,A2,TARSKI:def 2;
   suppose
     j = k;
     hence thesis;
@@ -1164,7 +1165,7 @@ end;
 
 registration
   cluster SCM -> standard;
-  coherence by Th53,AMISTD_1:19;
+  coherence by Th55,AMISTD_1:19;
 end;
 
 registration
@@ -1175,7 +1176,6 @@ registration
       let s be State of SCM, o be Object of SCM, I be Instruction of SCM;
       assume that
 A1:   InsCode I = InsCode halt SCM and
-:::      o <> IC SCM;
       o in Data-Locations SCM;
       I = halt SCM by A1,AMI_5:37,46;
       hence Exec(I, s).o = s.o by EXTPRO_1:def 3;
@@ -1197,29 +1197,17 @@ registration
   cluster InsCode SCM-goto i1 -> jump-only InsType of SCM;
   coherence
   proof
-    set S = SCM;
-    now
-      let s be State of S, o be Object of S, I be Instruction of S;
+   let T be InsType of SCM such that
+A1:  T = InsCode SCM-goto i1;
+      let s be State of SCM, o be Object of SCM, I be Instruction of SCM;
       assume that
-A1:   InsCode I = InsCode SCM-goto i1 and
-:::A2:   o <> IC S;
-A2:   o in Data-Locations SCM;
-      InsCode I = 6 by A1,RECDEF_2:def 1;
+A2:   InsCode I = T and
+A3:   o in Data-Locations SCM;
+      InsCode I = 6 by A2,A1,RECDEF_2:def 1;
       then
-A3:   ex i2 st I = SCM-goto i2 by AMI_5:52;
-:::      per cases by A2,Th3;
-:::      suppose
-:::        o in NAT;
-:::        then reconsider l=o as Element of NAT;
-:::        l=o;
-:::        hence Exec(I, s).o = s.o by AMI_1:def 13;
-:::      end;
-:::      suppose
-        o is Data-Location by A2,AMI_3:72,def 2;
-        hence Exec(I, s).o = s.o by A3,AMI_3:13;
-:::      end;
-    end;
-    hence thesis by AMISTD_1:def 3;
+A4:   ex i2 st I = SCM-goto i2 by AMI_5:52;
+        o is Data-Location by A3,AMI_3:72,def 2;
+        hence Exec(I, s).o = s.o by A4,AMI_3:13;
   end;
 end;
 
@@ -1319,14 +1307,14 @@ registration
   end;
 end;
 
-Lm6: dl.0 <> dl.1 by AMI_3:52;
+Lm3: dl.0 <> dl.1 by AMI_3:52;
 
 registration
   let a, b;
   cluster InsCode (a:=b) -> non jump-only InsType of SCM;
   coherence
   proof
-    consider w being State of SCM;
+    set w =the  State of SCM;
     set t = w+*((dl.0, dl.1)-->(0,1));
 A1: InsCode (a:=b) = 1 by RECDEF_2:def 1
       .= InsCode (dl.0:=dl.1) by RECDEF_2:def 1;
@@ -1347,7 +1335,7 @@ A5: t.dl.0 = (dl.0, dl.1)-->(0,1).dl.0 by FUNCT_4:14
   cluster InsCode AddTo(a,b) -> non jump-only InsType of SCM;
   coherence
   proof
-    consider w being State of SCM;
+    set w =the  State of SCM;
     set t = w+*((dl.0, dl.1)-->(0,1));
 A6: InsCode AddTo(a,b) = 2 by RECDEF_2:def 1
       .= InsCode AddTo(dl.0, dl.1) by RECDEF_2:def 1;
@@ -1356,77 +1344,77 @@ A7: dom ((dl.0, dl.1)-->(0,1)) = {dl.0, dl.1} by FUNCT_4:65;
     then
 A8: t.dl.0 = (dl.0, dl.1)-->(0,1).dl.0 by FUNCT_4:14
       .= 0 by AMI_3:52,FUNCT_4:66;
-XX: dl.0 in Data-Locations SCM by AMI_3:73;
+A9: dl.0 in Data-Locations SCM by AMI_3:73;
     dl.1 in dom ((dl.0, dl.1)-->(0,1)) by A7,TARSKI:def 2;
     then t.dl.1 = (dl.0, dl.1)-->(0,1).dl.1 by FUNCT_4:14
       .= 1 by FUNCT_4:66;
     then dl.0 <> IC SCM &
     Exec(AddTo(dl.0, dl.1), t).dl.0 = (0 qua Nat)+1 by A8,AMI_3:9,57;
-    hence thesis by A6,A8,AMISTD_1:def 3,XX;
+    hence thesis by A6,A8,AMISTD_1:def 3,A9;
   end;
   cluster InsCode SubFrom(a,b) -> non jump-only InsType of SCM;
   coherence
   proof
-    consider w being State of SCM;
+    set w =the  State of SCM;
     set t = w+*((dl.0, dl.1)-->(0,1));
-A9: InsCode SubFrom(a,b) = 3 by RECDEF_2:def 1
+A10: InsCode SubFrom(a,b) = 3 by RECDEF_2:def 1
       .= InsCode SubFrom(dl.0, dl.1) by RECDEF_2:def 1;
-A10: dom ((dl.0, dl.1)-->(0,1)) = {dl.0, dl.1} by FUNCT_4:65;
+A11: dom ((dl.0, dl.1)-->(0,1)) = {dl.0, dl.1} by FUNCT_4:65;
     then dl.0 in dom ((dl.0, dl.1)-->(0,1)) by TARSKI:def 2;
     then
-A11: t.dl.0 = (dl.0, dl.1)-->(0,1).dl.0 by FUNCT_4:14
+A12: t.dl.0 = (dl.0, dl.1)-->(0,1).dl.0 by FUNCT_4:14
       .= 0 by AMI_3:52,FUNCT_4:66;
-XX: dl.0 in Data-Locations SCM by AMI_3:73;
-    dl.1 in dom ((dl.0, dl.1)-->(0,1)) by A10,TARSKI:def 2;
+A13: dl.0 in Data-Locations SCM by AMI_3:73;
+    dl.1 in dom ((dl.0, dl.1)-->(0,1)) by A11,TARSKI:def 2;
     then
-A13: t.dl.1 = (dl.0, dl.1)-->(0,1).dl.1 by FUNCT_4:14
+A14: t.dl.1 = (dl.0, dl.1)-->(0,1).dl.1 by FUNCT_4:14
       .= 1 by FUNCT_4:66;
     Exec(SubFrom(dl.0, dl.1), t).dl.0 = t.dl.0 - t.dl.1 by AMI_3:10
-      .= -1 by A11,A13;
-    hence thesis by A9,A11,AMISTD_1:def 3,XX;
+      .= -1 by A12,A14;
+    hence thesis by A10,A12,AMISTD_1:def 3,A13;
   end;
   cluster InsCode MultBy(a,b) -> non jump-only InsType of SCM;
   coherence
   proof
-    consider w being State of SCM;
+    set w =the  State of SCM;
     set t = w+*((dl.0, dl.1)-->(1,0));
-A14: InsCode MultBy(a,b) = 4 by RECDEF_2:def 1
+A15: InsCode MultBy(a,b) = 4 by RECDEF_2:def 1
       .= InsCode MultBy(dl.0, dl.1) by RECDEF_2:def 1;
-A15: dom ((dl.0, dl.1)-->(1,0)) = {dl.0, dl.1} by FUNCT_4:65;
+A16: dom ((dl.0, dl.1)-->(1,0)) = {dl.0, dl.1} by FUNCT_4:65;
     then dl.0 in dom ((dl.0, dl.1)-->(1,0)) by TARSKI:def 2;
     then
-A16: t.dl.0 = (dl.0, dl.1)-->(1,0).dl.0 by FUNCT_4:14
+A17: t.dl.0 = (dl.0, dl.1)-->(1,0).dl.0 by FUNCT_4:14
       .= 1 by AMI_3:52,FUNCT_4:66;
-XX: dl.0 in Data-Locations SCM by AMI_3:73;
-    dl.1 in dom ((dl.0, dl.1)-->(1,0)) by A15,TARSKI:def 2;
+A18: dl.0 in Data-Locations SCM by AMI_3:73;
+    dl.1 in dom ((dl.0, dl.1)-->(1,0)) by A16,TARSKI:def 2;
     then
-A18: t.dl.1 = (dl.0, dl.1)-->(1,0).dl.1 by FUNCT_4:14
+A19: t.dl.1 = (dl.0, dl.1)-->(1,0).dl.1 by FUNCT_4:14
       .= 0 by FUNCT_4:66;
     Exec(MultBy(dl.0, dl.1), t).dl.0 = t.dl.0 * t.dl.1 by AMI_3:11
-      .= 0 by A18;
-    hence thesis by A14,A16,AMISTD_1:def 3,XX;
+      .= 0 by A19;
+    hence thesis by A15,A17,AMISTD_1:def 3,A18;
   end;
   cluster InsCode Divide(a,b) -> non jump-only InsType of SCM;
   coherence
   proof
-    consider w being State of SCM;
+    set w =the  State of SCM;
     set t = w+*((dl.0, dl.1)-->(7,3));
-A19: InsCode Divide(a,b) = 5 by RECDEF_2:def 1
+A20: InsCode Divide(a,b) = 5 by RECDEF_2:def 1
       .= InsCode Divide(dl.0, dl.1) by RECDEF_2:def 1;
-A20: dom ((dl.0, dl.1)-->(7,3)) = {dl.0, dl.1} by FUNCT_4:65;
+A21: dom ((dl.0, dl.1)-->(7,3)) = {dl.0, dl.1} by FUNCT_4:65;
     then dl.0 in dom ((dl.0, dl.1)-->(7,3)) by TARSKI:def 2;
     then
-A21: t.dl.0 = (dl.0, dl.1)-->(7,3).dl.0 by FUNCT_4:14
+A22: t.dl.0 = (dl.0, dl.1)-->(7,3).dl.0 by FUNCT_4:14
       .= 7 by AMI_3:52,FUNCT_4:66;
-A22: 7 = 2 * 3 + 1;
-XX: dl.0 in Data-Locations SCM by AMI_3:73;
-    dl.1 in dom ((dl.0, dl.1)-->(7,3)) by A20,TARSKI:def 2;
+A23: 7 = 2 * 3 + 1;
+A24: dl.0 in Data-Locations SCM by AMI_3:73;
+    dl.1 in dom ((dl.0, dl.1)-->(7,3)) by A21,TARSKI:def 2;
     then t.dl.1 = (dl.0, dl.1)-->(7,3).dl.1 by FUNCT_4:14
       .= 3 by FUNCT_4:66;
-    then Exec(Divide(dl.0, dl.1), t).dl.0 = 7 div (3 qua Element of NAT) by A21
-,Lm6,AMI_3:12
-      .= 2 by A22,NAT_D:def 1;
-    hence thesis by A19,A21,AMISTD_1:def 3,XX;
+    then Exec(Divide(dl.0, dl.1), t).dl.0 = 7 div (3 qua Element of NAT) by A22
+,Lm3,AMI_3:12
+      .= 2 by A23,NAT_D:def 1;
+    hence thesis by A20,A22,AMISTD_1:def 3,A24;
   end;
 end;
 
@@ -1750,110 +1738,110 @@ A28:    ex k st I = SCM-goto k;
         consider k1 such that
 A29:    I = SCM-goto k1 by A28;
 A30:    JumpPart SCM-goto k1 = <*k1*> by RECDEF_2:def 2;
-X:      rng<*k1*> = {k1} by FINSEQ_1:56;
-        JUMP SCM-goto k1 = {k1} by Th47;
+A31:      rng<*k1*> = {k1} by FINSEQ_1:56;
+        JUMP SCM-goto k1 = {k1} by Th49;
         then f = k1 by A27,A29,TARSKI:def 1;
-        hence thesis by A29,A30,X,TARSKI:def 1;
+        hence thesis by A29,A30,A31,TARSKI:def 1;
       end;
       suppose
-A31:    ex a,k1 st I = a=0_goto k1;
+A32:    ex a,k1 st I = a=0_goto k1;
         consider a, k1 such that
-A32:    I = a=0_goto k1 by A31;
-A33:    JumpPart (a=0_goto k1) = <*k1*> by RECDEF_2:def 2;
-X:      rng<*k1*> = {k1} by FINSEQ_1:56;
-        JUMP (a=0_goto k1) = {k1} by Th49;
-        then f = k1 by A27,A32,TARSKI:def 1;
-        hence thesis by A32,A33,X,TARSKI:def 1;
+A33:    I = a=0_goto k1 by A32;
+A34:    JumpPart (a=0_goto k1) = <*k1*> by RECDEF_2:def 2;
+A35:      rng<*k1*> = {k1} by FINSEQ_1:56;
+        JUMP (a=0_goto k1) = {k1} by Th51;
+        then f = k1 by A27,A33,TARSKI:def 1;
+        hence thesis by A33,A34,A35,TARSKI:def 1;
       end;
       suppose
-A34:    ex a,k1 st I = a>0_goto k1;
+A36:    ex a,k1 st I = a>0_goto k1;
         consider a, k1 such that
-A35:    I = a>0_goto k1 by A34;
-A36:    JumpPart (a>0_goto k1) = <*k1*> by RECDEF_2:def 2;
-X:      rng<*k1*> = {k1} by FINSEQ_1:56;
-        JUMP (a>0_goto k1) = {k1} by Th51;
-        then f = k1 by A27,A35,TARSKI:def 1;
-        hence thesis by A35,A36,X,TARSKI:def 1;
+A37:    I = a>0_goto k1 by A36;
+A38:    JumpPart (a>0_goto k1) = <*k1*> by RECDEF_2:def 2;
+A39:      rng<*k1*> = {k1} by FINSEQ_1:56;
+        JUMP (a>0_goto k1) = {k1} by Th53;
+        then f = k1 by A27,A37,TARSKI:def 1;
+        hence thesis by A37,A38,A39,TARSKI:def 1;
       end;
     end;
     let f being set;
     assume f in rng JumpPart I;
     then consider k being set such that
-A37: k in dom JumpPart I and
-B37: f = (JumpPart I).k by FUNCT_1:def 5;
+A40: k in dom JumpPart I and
+A41: f = (JumpPart I).k by FUNCT_1:def 5;
     per cases by AMI_3:69;
     suppose
       I = [0,{},{}];
       then dom JumpPart I = dom {} by RECDEF_2:def 2;
-      hence thesis by A37;
+      hence thesis by A40;
     end;
     suppose
       ex a,b st I = a:=b;
       then consider a, b such that
-A40:  I = a:=b;
-      k in dom {} by A37,A40,RECDEF_2:def 2;
+A42:  I = a:=b;
+      k in dom {} by A40,A42,RECDEF_2:def 2;
       hence thesis;
     end;
     suppose
       ex a,b st I = AddTo(a,b);
       then consider a, b such that
-A41:  I = AddTo(a,b);
-      k in dom {} by A37,A41,RECDEF_2:def 2;
+A43:  I = AddTo(a,b);
+      k in dom {} by A40,A43,RECDEF_2:def 2;
       hence thesis;
     end;
     suppose
       ex a,b st I = SubFrom(a,b);
       then consider a, b such that
-A42:  I = SubFrom(a,b);
-      k in dom {} by A37,A42,RECDEF_2:def 2;
+A44:  I = SubFrom(a,b);
+      k in dom {} by A40,A44,RECDEF_2:def 2;
       hence thesis;
     end;
     suppose
       ex a,b st I = MultBy(a,b);
       then consider a, b such that
-A43:  I = MultBy(a,b);
-      k in dom {} by A37,A43,RECDEF_2:def 2;
+A45:  I = MultBy(a,b);
+      k in dom {} by A40,A45,RECDEF_2:def 2;
       hence thesis;
     end;
     suppose
       ex a,b st I = Divide(a,b);
       then consider a, b such that
-A44:  I = Divide(a,b);
-      k in dom {} by A37,A44,RECDEF_2:def 2;
+A46:  I = Divide(a,b);
+      k in dom {} by A40,A46,RECDEF_2:def 2;
       hence thesis;
     end;
     suppose
       ex k st I = SCM-goto k;
       then consider k1 such that
-A45:  I = SCM-goto k1;
-A46:  JumpPart I = <*k1*> by A45,RECDEF_2:def 2;
-      then k = 1 by A37,FINSEQ_1:111;
+A47:  I = SCM-goto k1;
+A48:  JumpPart I = <*k1*> by A47,RECDEF_2:def 2;
+      then k = 1 by A40,FINSEQ_1:111;
       then
-A47:  f = k1 by A46,B37,FINSEQ_1:def 8;
-      JUMP I = {k1} by A45,Th47;
-      hence thesis by A47,TARSKI:def 1;
+A49:  f = k1 by A48,A41,FINSEQ_1:def 8;
+      JUMP I = {k1} by A47,Th49;
+      hence thesis by A49,TARSKI:def 1;
     end;
     suppose
       ex a,k st I = a=0_goto k;
       then consider a, k1 such that
-A48:  I = a=0_goto k1;
-A49:  JumpPart I = <*k1*> by A48,RECDEF_2:def 2;
-      then k = 1  by A37,FINSEQ_1:111;
+A50:  I = a=0_goto k1;
+A51:  JumpPart I = <*k1*> by A50,RECDEF_2:def 2;
+      then k = 1  by A40,FINSEQ_1:111;
       then
-A50:  f = k1 by A49,B37,FINSEQ_1:57;
-      JUMP I = {k1} by A48,Th49;
-      hence thesis by A50,TARSKI:def 1;
+A52:  f = k1 by A51,A41,FINSEQ_1:57;
+      JUMP I = {k1} by A50,Th51;
+      hence thesis by A52,TARSKI:def 1;
     end;
     suppose
       ex a,k1 st I = a>0_goto k1;
       then consider a, k1 such that
-A51:  I = a>0_goto k1;
-A52:  JumpPart I = <*k1*> by A51,RECDEF_2:def 2;
-      then k = 1 by A37,FINSEQ_1:111;
+A53:  I = a>0_goto k1;
+A54:  JumpPart I = <*k1*> by A53,RECDEF_2:def 2;
+      then k = 1 by A40,FINSEQ_1:111;
       then
-A53:  f = k1 by A52,B37,FINSEQ_1:57;
-      JUMP I = {k1} by A51,Th51;
-      hence thesis by A53,TARSKI:def 1;
+A55:  f = k1 by A54,A41,FINSEQ_1:57;
+      JUMP I = {k1} by A53,Th53;
+      hence thesis by A55,TARSKI:def 1;
     end;
    end;
   end;
@@ -1867,308 +1855,309 @@ registration
     proof
     let I be Instruction of SCM;
      set T = InsCode I;
-X:   JumpPart I in JumpParts T;
-    per cases by Lm3;
+A1:   JumpPart I in JumpParts T;
+    per cases by Th7;
     suppose T = 0;
       then I = halt SCM by AMI_5:46;
      hence thesis;
     end;
     suppose T = 1;
-      then JumpParts T = {{}} by Th17;
-      then JumpPart I = {} by X,TARSKI:def 1;
+      then JumpParts T = {{}} by Th19;
+      then JumpPart I = {} by A1,TARSKI:def 1;
      hence thesis;
     end;
     suppose T = 2;
-      then JumpParts T = {{}} by Th18;
-      then JumpPart I = {} by X,TARSKI:def 1;
+      then JumpParts T = {{}} by Th20;
+      then JumpPart I = {} by A1,TARSKI:def 1;
      hence thesis;
     end;
     suppose T = 3;
-      then JumpParts T = {{}} by Th19;
-      then JumpPart I = {} by X,TARSKI:def 1;
+      then JumpParts T = {{}} by Th21;
+      then JumpPart I = {} by A1,TARSKI:def 1;
      hence thesis;
     end;
     suppose T = 4;
-      then JumpParts T = {{}} by Th20;
-      then JumpPart I = {} by X,TARSKI:def 1;
+      then JumpParts T = {{}} by Th22;
+      then JumpPart I = {} by A1,TARSKI:def 1;
      hence thesis;
     end;
     suppose T = 5;
-      then JumpParts T = {{}} by Th21;
-      then JumpPart I = {} by X,TARSKI:def 1;
+      then JumpParts T = {{}} by Th23;
+      then JumpPart I = {} by A1,TARSKI:def 1;
      hence thesis;
     end;
     suppose
-A122: T = 6;
+A2: T = 6;
      then consider i2 such that
-W:    I = SCM-goto i2 by AMI_5:52;
+A3:    I = SCM-goto i2 by AMI_5:52;
      let k be set;
      assume
-Z:      k in dom JumpPart I;
+A4:      k in dom JumpPart I;
       for f being Function st f in JumpParts T holds k in dom f
        proof let f be Function;
         assume f in JumpParts T;
          then consider J being Instruction of SCM such that
-W1:       f = JumpPart J and
-W2:       InsCode J = T;
-        thus k in dom f by Z,W1,W2,COMPOS_1:def 33;
+A5:       f = JumpPart J and
+A6:       InsCode J = T;
+        thus k in dom f by A4,A5,A6,COMPOS_1:def 33;
        end;
       then k in dom product" JumpParts T by CARD_3:def 13;
-      then k in {1} by A122,Th22;
+      then k in {1} by A2,Th24;
       then k = 1 by TARSKI:def 1;
-     hence (product" JumpParts InsCode I).k = NAT by W,Th35;
+     hence (product" JumpParts InsCode I).k = NAT by A3,Th37;
     end;
     suppose
-A135: T = 7;
+A7: T = 7;
      then consider i1,a such that
-W:    I = a=0_goto i1 by AMI_5:53;
+A8:    I = a=0_goto i1 by AMI_5:53;
      let k be set;
      assume
-Z:      k in dom JumpPart I;
+A9:      k in dom JumpPart I;
       for f being Function st f in JumpParts T holds k in dom f
        proof let f be Function;
         assume f in JumpParts T;
          then consider J being Instruction of SCM such that
-W1:       f = JumpPart J and
-W2:       InsCode J = T;
-        thus k in dom f by Z,W1,W2,COMPOS_1:def 33;
+A10:       f = JumpPart J and
+A11:       InsCode J = T;
+        thus k in dom f by A9,A10,A11,COMPOS_1:def 33;
        end;
       then k in dom product" JumpParts T by CARD_3:def 13;
-      then k in {1} by A135,Th23;
+      then k in {1} by A7,Th25;
       then k = 1 by TARSKI:def 1;
-     hence (product" JumpParts InsCode I).k = NAT by W,Th36;
+     hence (product" JumpParts InsCode I).k = NAT by A8,Th38;
     end;
     suppose
-A159: T = 8;
+A12: T = 8;
      then consider i1,a such that
-W:    I = a>0_goto i1 by AMI_5:54;
+A13:    I = a>0_goto i1 by AMI_5:54;
      let k be set;
      assume
-Z:      k in dom JumpPart I;
+A14:      k in dom JumpPart I;
       for f being Function st f in JumpParts T holds k in dom f
        proof let f be Function;
         assume f in JumpParts T;
          then consider J being Instruction of SCM such that
-W1:       f = JumpPart J and
-W2:       InsCode J = T;
-        thus k in dom f by Z,W1,W2,COMPOS_1:def 33;
+A15:       f = JumpPart J and
+A16:       InsCode J = T;
+        thus k in dom f by A14,A15,A16,COMPOS_1:def 33;
        end;
       then k in dom product" JumpParts T by CARD_3:def 13;
-      then k in {1} by A159,Th24;
+      then k in {1} by A12,Th26;
       then k = 1 by TARSKI:def 1;
-     hence (product" JumpParts InsCode I).k = NAT by W,Th38;
+     hence (product" JumpParts InsCode I).k = NAT by A13,Th40;
     end;
    end;
    let T be InsType of SCM, f1,f2 be Function, p be set such that
-Z1: f1 in JumpParts T and
-Z2: f2 in product product" JumpParts T and
-Z3: [T,f1,p] in the Instructions of SCM;
-    per cases by Lm3;
+A17: f1 in JumpParts T and
+A18: f2 in product product" JumpParts T and
+A19: [T,f1,p] in the Instructions of SCM;
+    per cases by Th7;
     suppose T = 0 or T = 1 or T = 2 or T = 3 or T = 4 or T = 5;
      then
-A:  JumpParts T = {0} by Th16,Th17,Th18,Th19,Th20,Th21;
-     f1 = 0 by A,Z1,TARSKI:def 1 .= f2 by Z2,A,CARD_3:19,156,TARSKI:def 1;
-    hence [T,f2,p] in the Instructions of SCM by Z3;
+A20:  JumpParts T = {0} by Th18,Th19,Th20,Th21,Th22,Th23;
+     f1 = 0 by A20,A17,TARSKI:def 1 .= f2 by A18,A20
+,CARD_3:19,156,TARSKI:def 1;
+    hence [T,f2,p] in the Instructions of SCM by A19;
     end;
     suppose
-S:    T = 6;
-    reconsider J = [T,f1,p] as Instruction of SCM by Z3;
-SS: InsCode J = 6 by S,RECDEF_2:def 1;
+A21:    T = 6;
+    reconsider J = [T,f1,p] as Instruction of SCM by A19;
+A22: InsCode J = 6 by A21,RECDEF_2:def 1;
     then consider i1 being Element of NAT such that
-B7:  J = SCM-goto i1 by AMI_5:52;
-P:   p = {} by B7,MCART_1:28;
-U1: dom f2 = dom product" JumpParts T  by Z2,CARD_3:18;
-XX: dom f2 = {1} by S,U1,Th22;
+A23:  J = SCM-goto i1 by AMI_5:52;
+A24:   p = {} by A23,MCART_1:28;
+A25: dom f2 = dom product" JumpParts T  by A18,CARD_3:18;
+A26: dom f2 = {1} by A21,A25,Th24;
     then 1 in dom f2 by TARSKI:def 1;
-    then f2.1 in (product" JumpParts T).1 by U1,Z2,CARD_3:18;
-    then reconsider l = f2.1 as Element of NAT by B7,S,SS,Th35;
+    then f2.1 in (product" JumpParts T).1 by A25,A18,CARD_3:18;
+    then reconsider l = f2.1 as Element of NAT by A23,A21,A22,Th37;
     set I = [T,f2,{}];
-    I = SCM-goto l by S,XX,FINSEQ_1:4,def 8;
+    I = SCM-goto l by A21,A26,FINSEQ_1:4,def 8;
     then  reconsider I as Instruction of SCM;
     f2 = JumpPart I by RECDEF_2:def 2;
-    hence [T,f2,p] in the Instructions of SCM by P;
+    hence [T,f2,p] in the Instructions of SCM by A24;
     end;
     suppose
-S:    T = 7;
-    reconsider J = [T,f1,p] as Instruction of SCM by Z3;
-SS: InsCode J = T by RECDEF_2:def 1;
+A27:    T = 7;
+    reconsider J = [T,f1,p] as Instruction of SCM by A19;
+A28: InsCode J = T by RECDEF_2:def 1;
     then consider i1,a such that
-B7:  J = a=0_goto i1 by S,AMI_5:53;
-P:   p = <*a*> by B7,MCART_1:28;
-U1: dom f2 = dom product" JumpParts T  by Z2,CARD_3:18;
-XX: dom f2 = {1} by S,U1,Th23;
+A29:  J = a=0_goto i1 by A27,AMI_5:53;
+A30:   p = <*a*> by A29,MCART_1:28;
+A31: dom f2 = dom product" JumpParts T  by A18,CARD_3:18;
+A32: dom f2 = {1} by A27,A31,Th25;
     then 1 in dom f2 by TARSKI:def 1;
-    then f2.1 in (product" JumpParts T).1 by U1,Z2,CARD_3:18;
-    then reconsider l = f2.1 as Element of NAT by B7,SS,Th36;
+    then f2.1 in (product" JumpParts T).1 by A31,A18,CARD_3:18;
+    then reconsider l = f2.1 as Element of NAT by A29,A28,Th38;
     set I = [T,f2,p];
-    I = a=0_goto l by P,S,XX,FINSEQ_1:4,def 8;
+    I = a=0_goto l by A30,A27,A32,FINSEQ_1:4,def 8;
     then  reconsider I as Instruction of SCM;
-A6: InsCode I = T by RECDEF_2:def 1;
+A33: InsCode I = T by RECDEF_2:def 1;
     consider i2,b such that
-A7: I = b=0_goto i2 by S,A6,AMI_5:53;
-    thus [T,f2,p] in the Instructions of SCM by A7;
+A34: I = b=0_goto i2 by A27,A33,AMI_5:53;
+    thus [T,f2,p] in the Instructions of SCM by A34;
     end;
     suppose
-S:    T = 8;
-    reconsider J = [T,f1,p] as Instruction of SCM by Z3;
-SS: InsCode J = T by RECDEF_2:def 1;
+A35:    T = 8;
+    reconsider J = [T,f1,p] as Instruction of SCM by A19;
+A36: InsCode J = T by RECDEF_2:def 1;
     then consider i1,a such that
-B7:  J = a>0_goto i1 by S,AMI_5:54;
-P:   p = <*a*> by B7,MCART_1:28;
-U1: dom f2 = dom product" JumpParts T  by Z2,CARD_3:18;
-XX: dom f2 = {1} by S,U1,Th24;
+A37:  J = a>0_goto i1 by A35,AMI_5:54;
+A38:   p = <*a*> by A37,MCART_1:28;
+A39: dom f2 = dom product" JumpParts T  by A18,CARD_3:18;
+A40: dom f2 = {1} by A35,A39,Th26;
     then 1 in dom f2 by TARSKI:def 1;
-    then f2.1 in (product" JumpParts T).1 by U1,Z2,CARD_3:18;
-    then reconsider l = f2.1 as Element of NAT by B7,SS,Th38;
+    then f2.1 in (product" JumpParts T).1 by A39,A18,CARD_3:18;
+    then reconsider l = f2.1 as Element of NAT by A37,A36,Th40;
     set I = [T,f2,p];
-    I = a>0_goto l by P,S,XX,FINSEQ_1:4,def 8;
+    I = a>0_goto l by A38,A35,A40,FINSEQ_1:4,def 8;
     then  reconsider I as Instruction of SCM;
-A6: InsCode I = T by RECDEF_2:def 1;
+A41: InsCode I = T by RECDEF_2:def 1;
     consider i2,b such that
-A7: I = b>0_goto i2 by S,A6,AMI_5:54;
-    thus [T,f2,p] in the Instructions of SCM by A7;
+A42: I = b>0_goto i2 by A35,A41,AMI_5:54;
+    thus [T,f2,p] in the Instructions of SCM by A42;
     end;
   end;
 end;
 
 canceled 3;
 
-theorem Th57:
+theorem Th59:
   IncAddr(SCM-goto i1,k) = SCM-goto(i1+k)
 proof
-X1: JumpPart IncAddr(SCM-goto i1,k) = k + JumpPart SCM-goto i1
+A1: JumpPart IncAddr(SCM-goto i1,k) = k + JumpPart SCM-goto i1
    by COMPOS_1:def 38;
  then
-A1: dom JumpPart IncAddr(SCM-goto i1,k) = dom JumpPart SCM-goto i1
+A2: dom JumpPart IncAddr(SCM-goto i1,k) = dom JumpPart SCM-goto i1
    by VALUED_1:def 2;
-A2: dom JumpPart SCM-goto(i1+k)
+A3: dom JumpPart SCM-goto(i1+k)
  = dom <*i1+k*> by RECDEF_2:def 2
     .= Seg 1 by FINSEQ_1:def 8
     .= dom <*i1*> by FINSEQ_1:def 8
     .= dom JumpPart SCM-goto i1 by RECDEF_2:def 2;
-A3: for x being set st x in dom JumpPart SCM-goto i1 holds (JumpPart
+A4: for x being set st x in dom JumpPart SCM-goto i1 holds (JumpPart
   IncAddr(SCM-goto i1,k)).x = (JumpPart SCM-goto(i1+k)).x
   proof
     let x be set;
     assume
-A4: x in dom JumpPart SCM-goto i1;
+A5: x in dom JumpPart SCM-goto i1;
     then x in dom <*i1*> by RECDEF_2:def 2;
     then
-A5: x = 1 by FINSEQ_1:111;
+A6: x = 1 by FINSEQ_1:111;
     set f = (JumpPart SCM-goto i1).x;
-A7: (JumpPart IncAddr(SCM-goto i1,k)).x = k + f by A4,A1,X1,VALUED_1:def 2;
+A7: (JumpPart IncAddr(SCM-goto i1,k)).x = k + f by A5,A2,A1,VALUED_1:def 2;
     f = <*i1*>.x by RECDEF_2:def 2
-      .= i1 by A5,FINSEQ_1:def 8;
+      .= i1 by A6,FINSEQ_1:def 8;
     hence
     (JumpPart IncAddr(SCM-goto i1,k)).x = <*i1+k*>.x
-     by A5,A7,FINSEQ_1:def 8
+     by A6,A7,FINSEQ_1:def 8
       .= (JumpPart SCM-goto(i1+k)).x
        by RECDEF_2:def 2;
   end;
-AA: AddressPart IncAddr(SCM-goto i1,k) = AddressPart SCM-goto i1
+A8: AddressPart IncAddr(SCM-goto i1,k) = AddressPart SCM-goto i1
           by COMPOS_1:def 38
     .= {} by RECDEF_2:def 3
     .= AddressPart SCM-goto(i1+k) by RECDEF_2:def 3;
-BB: InsCode IncAddr(SCM-goto i1,k) = InsCode SCM-goto i1 by COMPOS_1:def 38
+A9: InsCode IncAddr(SCM-goto i1,k) = InsCode SCM-goto i1 by COMPOS_1:def 38
     .= 6 by RECDEF_2:def 1
     .= InsCode SCM-goto(i1+k) by RECDEF_2:def 1;
    JumpPart IncAddr(SCM-goto i1,k) = JumpPart SCM-goto(i1+k)
-     by A1,A2,A3,FUNCT_1:9;
-  hence thesis by AA,BB,COMPOS_1:7;
+     by A2,A3,A4,FUNCT_1:9;
+  hence thesis by A8,A9,COMPOS_1:7;
 end;
 
-theorem Th58:
+theorem Th60:
   IncAddr(a=0_goto i1,k) = a=0_goto(i1+k)
 proof
-X1: JumpPart IncAddr(a=0_goto i1,k) = k + JumpPart (a=0_goto i1)
+A1: JumpPart IncAddr(a=0_goto i1,k) = k + JumpPart (a=0_goto i1)
   by COMPOS_1:def 38;
   then
-A1: dom JumpPart IncAddr(a=0_goto i1,k) = dom JumpPart (a=0_goto i1)
+A2: dom JumpPart IncAddr(a=0_goto i1,k) = dom JumpPart (a=0_goto i1)
   by VALUED_1:def 2;
-A2: dom JumpPart (a=0_goto(i1+k)) = dom <*i1 + k*> by RECDEF_2:def 2
+A3: dom JumpPart (a=0_goto(i1+k)) = dom <*i1 + k*> by RECDEF_2:def 2
     .= Seg 1 by FINSEQ_1:55
     .= dom <*i1*> by FINSEQ_1:55
     .= dom JumpPart (a=0_goto i1) by RECDEF_2:def 2;
-A3: for x being set st x in dom JumpPart (a=0_goto i1) holds (JumpPart
+A4: for x being set st x in dom JumpPart (a=0_goto i1) holds (JumpPart
 IncAddr(a=0_goto i1,k)).x =
  (JumpPart (a=0_goto(i1+k))).x
   proof
     let x be set;
     assume
-A4: x in dom JumpPart (a=0_goto i1);
+A5: x in dom JumpPart (a=0_goto i1);
     then x in dom <*i1*> by RECDEF_2:def 2;
     then
 A6:   x = 1 by FINSEQ_1:111;
     set f = (JumpPart (a=0_goto i1)).x;
-A8:   (JumpPart IncAddr(a=0_goto i1,k)).x = k + f by X1,A1,A4,VALUED_1:def 2;
+A7:   (JumpPart IncAddr(a=0_goto i1,k)).x = k + f by A1,A2,A5,VALUED_1:def 2;
       f = <*i1*>.x by RECDEF_2:def 2
         .= i1 by A6,FINSEQ_1:57;
       hence
       (JumpPart IncAddr(a=0_goto i1,k)).x
-         = <*i1+k*>.x by A6,A8,FINSEQ_1:57
+         = <*i1+k*>.x by A6,A7,FINSEQ_1:57
         .= (JumpPart (a=0_goto(i1+k))).x
          by RECDEF_2:def 2;
   end;
-AA: AddressPart IncAddr(a=0_goto i1,k) = AddressPart (a=0_goto i1)
+A8: AddressPart IncAddr(a=0_goto i1,k) = AddressPart (a=0_goto i1)
        by COMPOS_1:def 38
     .= <*a*> by RECDEF_2:def 3
     .= AddressPart (a=0_goto(i1+k)) by RECDEF_2:def 3;
-BB: InsCode IncAddr(a=0_goto i1,k) = InsCode (a=0_goto i1) by COMPOS_1:def 38
+A9: InsCode IncAddr(a=0_goto i1,k) = InsCode (a=0_goto i1) by COMPOS_1:def 38
     .= 7 by RECDEF_2:def 1
     .= InsCode (a=0_goto(i1+k)) by RECDEF_2:def 1;
    JumpPart IncAddr(a=0_goto i1,k) = JumpPart (a=0_goto(i1+k))
-       by A1,A2,A3,FUNCT_1:9;
-  hence thesis by AA,BB,COMPOS_1:7;
+       by A2,A3,A4,FUNCT_1:9;
+  hence thesis by A8,A9,COMPOS_1:7;
 end;
 
-theorem Th59:
+theorem Th61:
   IncAddr(a>0_goto i1,k) = a>0_goto(i1+k)
 proof
-X1: JumpPart IncAddr(a>0_goto i1,k) = k + JumpPart (a>0_goto i1)
+A1: JumpPart IncAddr(a>0_goto i1,k) = k + JumpPart (a>0_goto i1)
   by COMPOS_1:def 38;
   then
-A1: dom JumpPart IncAddr(a>0_goto i1,k) = dom JumpPart (a>0_goto i1)
+A2: dom JumpPart IncAddr(a>0_goto i1,k) = dom JumpPart (a>0_goto i1)
   by VALUED_1:def 2;
-A2: dom JumpPart (a>0_goto(i1+k)) = dom <*i1 + k*> by RECDEF_2:def 2
+A3: dom JumpPart (a>0_goto(i1+k)) = dom <*i1 + k*> by RECDEF_2:def 2
     .= Seg 1 by FINSEQ_1:55
     .= dom <*i1*> by FINSEQ_1:55
     .= dom JumpPart (a>0_goto i1) by RECDEF_2:def 2;
-A3: for x being set st x in dom JumpPart (a>0_goto i1) holds (JumpPart
+A4: for x being set st x in dom JumpPart (a>0_goto i1) holds (JumpPart
 IncAddr(a>0_goto i1,k)).x = (JumpPart (a>0_goto(i1+k))).x
   proof
     let x be set;
     assume
-A4: x in dom JumpPart (a>0_goto i1);
+A5: x in dom JumpPart (a>0_goto i1);
     then x in dom <*i1*> by RECDEF_2:def 2;
       then
 A6:   x = 1 by FINSEQ_1:111;
      set f = (JumpPart (a>0_goto i1)).x;
-A8:   (JumpPart IncAddr(a>0_goto i1,k)).x = k + f by X1,A1,A4,VALUED_1:def 2;
+A7:   (JumpPart IncAddr(a>0_goto i1,k)).x = k + f by A1,A2,A5,VALUED_1:def 2;
       f = <*i1*>.x by RECDEF_2:def 2
         .= i1 by A6,FINSEQ_1:57;
       hence
       (JumpPart IncAddr(a>0_goto i1,k)).x
-         = <*i1+k*>.x by A6,A8,FINSEQ_1:57
+         = <*i1+k*>.x by A6,A7,FINSEQ_1:57
         .= (JumpPart (a>0_goto(i1+k))).x
          by RECDEF_2:def 2;
   end;
-AA: AddressPart IncAddr(a>0_goto i1,k) = AddressPart (a>0_goto i1)
+A8: AddressPart IncAddr(a>0_goto i1,k) = AddressPart (a>0_goto i1)
            by COMPOS_1:def 38
     .= <*a*> by RECDEF_2:def 3
     .= AddressPart (a>0_goto(i1+k)) by RECDEF_2:def 3;
-BB:  InsCode IncAddr(a>0_goto i1,k) = InsCode (a>0_goto i1) by COMPOS_1:def 38
+A9:  InsCode IncAddr(a>0_goto i1,k) = InsCode (a>0_goto i1) by COMPOS_1:def 38
     .= 8 by RECDEF_2:def 1
     .= InsCode (a>0_goto(i1+k)) by RECDEF_2:def 1;
    JumpPart IncAddr(a>0_goto i1,k) = JumpPart (a>0_goto(i1+k))
-      by A1,A2,A3,FUNCT_1:9;
-  hence thesis by AA,BB,COMPOS_1:7;
+      by A2,A3,A4,FUNCT_1:9;
+  hence thesis by A8,A9,COMPOS_1:7;
 end;
 
 registration
-  cluster SCM -> IC-good Exec-preserving;
+  cluster SCM -> IC-relocable Exec-preserving;
   coherence
   proof
-    thus SCM is IC-good
+    thus SCM is IC-relocable
     proof
       let I be Instruction of SCM;
       per cases by AMI_3:69;
@@ -2198,54 +2187,58 @@ registration
       end;
       suppose
 A1:     ex k st I = SCM-goto k;
-        let k be Nat, s1 be State of SCM;
-        set s2 = IncrIC(s1,k);
+
+        let j,k be Nat, s1 be State of SCM;
+        set s2 = IncIC(s1,k);
         consider k1 such that
 A2:     I = SCM-goto k1 by A1;
         reconsider i1=k1 as Element of NAT by ORDINAL1:def 13;
-        IC Exec(I,s1) = k1 by A2,AMI_3:13;
-        hence IC Exec(I,s1) + k =
-         IC Exec(SCM-goto(i1+k),s2) by AMI_3:13
-          .= IC Exec(IncAddr(I,k), s2) by A2,Th57;
+       IC Exec(I,s1) = k1 by A2,AMI_3:13;
+        hence IC Exec(IncAddr(I,j),s1) + k
+         = IC Exec(SCM-goto(j+k1),s1) + k by A2,Th59
+        .= j+k1+k by AMI_3:13
+        .= IC Exec(SCM-goto(j+i1+k),s2) by AMI_3:13
+        .= IC Exec(SCM-goto(j+k+i1),s2)
+        .= IC Exec(IncAddr(I,j+k), s2) by A2,Th59;
       end;
       suppose
         ex a,k st I = a=0_goto k;
         then consider a, k1 such that
 A3:     I = a=0_goto k1;
         reconsider i1=k1 as Element of NAT by ORDINAL1:def 13;
-        let k be natural number, s1 be State of SCM;
-        set s2 = IncrIC(s1,k);
+        let j,k be natural number, s1 be State of SCM;
+        set s2 = IncIC(s1,k);
         a <> IC SCM & dom (IC SCM .--> (IC s1 + k)) = {IC SCM}
         by AMI_5:20,FUNCOP_1:19;
         then not a in dom (IC SCM .--> (IC s1 + k)) by TARSKI:def 1;
         then
-A5:     s1.a = s2.a by FUNCT_4:12;
+A4:     s1.a = s2.a by FUNCT_4:12;
         now
           per cases;
           suppose
-A6:         s1.a = 0;
+A5:         s1.a = 0;
             then IC Exec(I,s1) = k1 by A3,AMI_3:14;
-            hence
-            IC Exec(I,s1) + k
-             = IC Exec(a=0_goto(i1+k),s2) by A5,A6,AMI_3:14
-              .= IC Exec(IncAddr(I,k), s2) by A3,Th58;
+            hence IC Exec(IncAddr(I,j),s1) + k
+         = IC Exec(a=0_goto(j+k1),s1) + k by A3,Th60
+        .= j+k1+k by A5,AMI_3:14
+        .= IC Exec(a=0_goto(j+i1+k),s2) by A4,A5,AMI_3:14
+        .= IC Exec(a=0_goto(j+k+i1),s2)
+            .= IC Exec(IncAddr(I,j+k), s2) by A3,Th60;
           end;
           suppose
-A7:         s1.a <> 0;
+A6:         s1.a <> 0;
+A7:         IncAddr(I,j) = a=0_goto(i1+j) by A3,Th60;
+A8:         IncAddr(I,j+k) = a=0_goto(i1+(j+k)) by A3,Th60;
             dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by FUNCOP_1:19;
             then IC SCM in dom (IC SCM .--> (IC s1 + k)) by TARSKI:def 1;
             then
-A8:         IC s2 = (IC SCM .--> (IC s1 + k)).IC SCM by FUNCT_4:14
+A9:         IC s2 = (IC SCM .--> (IC s1 + k)).IC SCM by FUNCT_4:14
               .= (IC s1 + k) by FUNCOP_1:87;
-A9:         IC Exec(I,s1) = succ IC s1 by A3,A7,AMI_3:14
-              .= IC s1 + 1;
-            IC Exec(I, s2) = succ IC s2 by A3,A5,A7,AMI_3:14
-              .= IC s1 + 1 + k by A8;
-            hence IC Exec(I,s1) + k
-              = succ IC s2 by A3,A5,A7,A9,AMI_3:14
-              .= IC Exec(a=0_goto(i1+k),s2)
-               by A5,A7,AMI_3:14
-              .= IC Exec(IncAddr(I,k), s2) by A3,Th58;
+            thus IC Exec(IncAddr(I,j),s1) + k
+              = succ IC s1 + k by A7,A6,AMI_3:14
+             .= IC s1 + 1 + k
+             .= succ IC s2 by A9
+             .= IC Exec(IncAddr(I,j+k), s2) by A8,A6,A4,AMI_3:14;
           end;
         end;
         hence thesis;
@@ -2255,341 +2248,339 @@ A9:         IC Exec(I,s1) = succ IC s1 by A3,A7,AMI_3:14
         then consider a, k1 such that
 A10:    I = a>0_goto k1;
         reconsider i1=k1 as Element of NAT by ORDINAL1:def 13;
-        let k be natural number, s1 be State of SCM;
-        set s2 = IncrIC(s1,k);
+        let j,k be natural number, s1 be State of SCM;
+        set s2 = IncIC(s1,k);
         a <> IC SCM & dom (IC SCM .--> (IC s1 + k)) = {IC SCM}
         by AMI_5:20,FUNCOP_1:19;
         then not a in dom (IC SCM .--> (IC s1 + k)) by TARSKI:def 1;
         then
-A12:    s1.a = s2.a by FUNCT_4:12;
-        now
+A11:    s1.a = s2.a by FUNCT_4:12;
           per cases;
           suppose
-A13:        s1.a > 0;
+A12:        s1.a > 0;
             then IC Exec(I,s1) = k1 by A10,AMI_3:15;
-            hence
-            IC Exec(I,s1) + k
-            = IC Exec(a>0_goto(i1+k),s2) by A12,A13,AMI_3:15
-              .= IC Exec(IncAddr(I,k), s2) by A10,Th59;
+            hence IC Exec(IncAddr(I,j),s1) + k
+         = IC Exec(a>0_goto(j+k1),s1) + k by A10,Th61
+        .= j+k1+k by A12,AMI_3:15
+        .= IC Exec(a>0_goto(j+i1+k),s2) by A11,A12,AMI_3:15
+        .= IC Exec(a>0_goto(j+k+i1),s2)
+            .= IC Exec(IncAddr(I,j+k), s2) by A10,Th61;
           end;
           suppose
-A14:        s1.a <= 0;
+A13:         s1.a <= 0;
+A14:         IncAddr(I,j) = a>0_goto(i1+j) by A10,Th61;
+A15:         IncAddr(I,j+k) = a>0_goto(i1+(j+k)) by A10,Th61;
             dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by FUNCOP_1:19;
             then IC SCM in dom (IC SCM .--> (IC s1 + k)) by TARSKI:def 1;
             then
-A15:        IC s2 = (IC SCM .--> (IC s1 + k)).IC SCM by FUNCT_4:14
+A16:         IC s2 = (IC SCM .--> (IC s1 + k)).IC SCM by FUNCT_4:14
               .= (IC s1 + k) by FUNCOP_1:87;
-A16:        IC Exec(I,s1) = succ IC s1 by A10,A14,AMI_3:15
-              .= IC s1+ 1;
-            IC Exec(I, s2) = succ IC s2 by A10,A12,A14,AMI_3:15
-              .= IC s1+ 1 + k by A15;
-            hence IC Exec(I,s1) + k
-              = succ IC s2 by A10,A12,A14,A16,AMI_3:15
-              .= IC Exec(a>0_goto(i1+k),s2) by A12,A14,AMI_3:15
-              .= IC Exec(IncAddr(I,k), s2) by A10,Th59;
+            thus IC Exec(IncAddr(I,j),s1) + k
+              = succ IC s1 + k by A14,A13,AMI_3:15
+             .= IC s1 + 1 + k
+             .= succ IC s2 by A16
+             .= IC Exec(IncAddr(I,j+k), s2) by A15,A13,A11,AMI_3:15;
           end;
-        end;
-        hence thesis;
       end;
     end;
     let I be Instruction of SCM;
     let s1, s2 be State of SCM such that
-A18: s1, s2 equal_outside NAT;
-A19: IC s1 = IC s2 by A18,COMPOS_1:24;
-A20: dom Exec(I,s1) = the carrier of SCM
+A17: s1, s2 equal_outside NAT;
+A18: IC s1 = IC s2 by A17,COMPOS_1:24;
+A19: dom Exec(I,s1) = the carrier of SCM
  by PARTFUN1:def 4;
     then
-A21: dom Exec(I,s1) = dom Exec(I,s2) by PARTFUN1:def 4;
+A20: dom Exec(I,s1) = dom Exec(I,s2) by PARTFUN1:def 4;
     per cases by AMI_3:69;
     suppose
       I = [0,{},{}];
-      hence thesis by A18,AMISTD_2:def 20,AMI_3:71;
+      hence thesis by A17,AMISTD_2:def 20,AMI_3:71;
     end;
     suppose
       ex a,b st I = a:=b;
       then consider a, b such that
-A22:  I = a:=b;
+A21:  I = a:=b;
       for x being set st x in dom Exec(I,s1) \ NAT holds Exec(I,s1).x =
       Exec(I,s2).x
       proof
         let x be set;
         assume
-A23:    x in dom Exec(I,s1) \ NAT;
+A22:    x in dom Exec(I,s1) \ NAT;
         then
-A24:    not x in NAT by XBOOLE_0:def 5;
-        per cases by A20,A23,A24,Th3;
+A23:    not x in NAT by XBOOLE_0:def 5;
+        per cases by A19,A22,A23,Th3;
         suppose
-A25:      x = IC SCM;
-          hence Exec(I,s1).x = succ IC s1 by A22,AMI_3:8
-            .= Exec(I,s2).x by A19,A22,A25,AMI_3:8;
+A24:      x = IC SCM;
+          hence Exec(I,s1).x = succ IC s1 by A21,AMI_3:8
+            .= Exec(I,s2).x by A18,A21,A24,AMI_3:8;
         end;
         suppose
-A26:      x = a;
-          hence Exec(I,s1).x = s1.b by A22,AMI_3:8
-            .= s2.b by A18,Th5
-            .= Exec(I,s2).x by A22,A26,AMI_3:8;
+A25:      x = a;
+          hence Exec(I,s1).x = s1.b by A21,AMI_3:8
+            .= s2.b by A17,Th5
+            .= Exec(I,s2).x by A21,A25,AMI_3:8;
         end;
         suppose that
-A27:      x is Data-Location and
-A28:      x <> a;
-          thus Exec(I,s1).x = s1.x by A22,A27,A28,AMI_3:8
-            .= s2.x by A18,A27,Th5
-            .= Exec(I,s2).x by A22,A27,A28,AMI_3:8;
+A26:      x is Data-Location and
+A27:      x <> a;
+          thus Exec(I,s1).x = s1.x by A21,A26,A27,AMI_3:8
+            .= s2.x by A17,A26,Th5
+            .= Exec(I,s2).x by A21,A26,A27,AMI_3:8;
         end;
       end;
       hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) = Exec(I,s2)|(dom Exec(I,s2) \
-      NAT) by A21,FUNCT_1:165;
+      NAT) by A20,FUNCT_1:165;
     end;
     suppose
       ex a,b st I = AddTo(a,b);
       then consider a, b such that
-A29:  I = AddTo(a,b);
+A28:  I = AddTo(a,b);
       for x being set st x in dom Exec(I,s1) \ NAT holds Exec(I,s1).x =
       Exec(I,s2).x
       proof
         let x be set;
         assume
-A30:    x in dom Exec(I,s1) \ NAT;
+A29:    x in dom Exec(I,s1) \ NAT;
         then
-A31:    not x in NAT by XBOOLE_0:def 5;
-        per cases by A20,A30,A31,Th3;
+A30:    not x in NAT by XBOOLE_0:def 5;
+        per cases by A19,A29,A30,Th3;
         suppose
-A32:      x = IC SCM;
-          hence Exec(I,s1).x = succ IC s1 by A29,AMI_3:9
-            .= Exec(I,s2).x by A19,A29,A32,AMI_3:9;
+A31:      x = IC SCM;
+          hence Exec(I,s1).x = succ IC s1 by A28,AMI_3:9
+            .= Exec(I,s2).x by A18,A28,A31,AMI_3:9;
         end;
         suppose
-A33:      x = a;
-          hence Exec(I,s1).x = s1.a + s1.b by A29,AMI_3:9
-            .= s1.a + s2.b by A18,Th5
-            .= s2.a + s2.b by A18,Th5
-            .= Exec(I,s2).x by A29,A33,AMI_3:9;
+A32:      x = a;
+          hence Exec(I,s1).x = s1.a + s1.b by A28,AMI_3:9
+            .= s1.a + s2.b by A17,Th5
+            .= s2.a + s2.b by A17,Th5
+            .= Exec(I,s2).x by A28,A32,AMI_3:9;
         end;
         suppose that
-A34:      x is Data-Location and
-A35:      x <> a;
-          thus Exec(I,s1).x = s1.x by A29,A34,A35,AMI_3:9
-            .= s2.x by A18,A34,Th5
-            .= Exec(I,s2).x by A29,A34,A35,AMI_3:9;
+A33:      x is Data-Location and
+A34:      x <> a;
+          thus Exec(I,s1).x = s1.x by A28,A33,A34,AMI_3:9
+            .= s2.x by A17,A33,Th5
+            .= Exec(I,s2).x by A28,A33,A34,AMI_3:9;
         end;
       end;
       hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) = Exec(I,s2)|(dom Exec(I,s2) \
-      NAT) by A21,FUNCT_1:165;
+      NAT) by A20,FUNCT_1:165;
     end;
     suppose
       ex a,b st I = SubFrom(a,b);
       then consider a, b such that
-A36:  I = SubFrom(a,b);
+A35:  I = SubFrom(a,b);
       for x being set st x in dom Exec(I,s1) \ NAT holds Exec(I,s1).x =
       Exec(I,s2).x
       proof
         let x be set;
         assume
-A37:    x in dom Exec(I,s1) \ NAT;
+A36:    x in dom Exec(I,s1) \ NAT;
         then
-A38:    not x in NAT by XBOOLE_0:def 5;
-        per cases by A20,A37,A38,Th3;
+A37:    not x in NAT by XBOOLE_0:def 5;
+        per cases by A19,A36,A37,Th3;
         suppose
-A39:      x = IC SCM;
-          hence Exec(I,s1).x = succ IC s1 by A36,AMI_3:10
-            .= Exec(I,s2).x by A19,A36,A39,AMI_3:10;
+A38:      x = IC SCM;
+          hence Exec(I,s1).x = succ IC s1 by A35,AMI_3:10
+            .= Exec(I,s2).x by A18,A35,A38,AMI_3:10;
         end;
         suppose
-A40:      x = a;
-          hence Exec(I,s1).x = s1.a - s1.b by A36,AMI_3:10
-            .= s1.a - s2.b by A18,Th5
-            .= s2.a - s2.b by A18,Th5
-            .= Exec(I,s2).x by A36,A40,AMI_3:10;
+A39:      x = a;
+          hence Exec(I,s1).x = s1.a - s1.b by A35,AMI_3:10
+            .= s1.a - s2.b by A17,Th5
+            .= s2.a - s2.b by A17,Th5
+            .= Exec(I,s2).x by A35,A39,AMI_3:10;
         end;
         suppose that
-A41:      x is Data-Location and
-A42:      x <> a;
-          thus Exec(I,s1).x = s1.x by A36,A41,A42,AMI_3:10
-            .= s2.x by A18,A41,Th5
-            .= Exec(I,s2).x by A36,A41,A42,AMI_3:10;
+A40:      x is Data-Location and
+A41:      x <> a;
+          thus Exec(I,s1).x = s1.x by A35,A40,A41,AMI_3:10
+            .= s2.x by A17,A40,Th5
+            .= Exec(I,s2).x by A35,A40,A41,AMI_3:10;
         end;
       end;
       hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) = Exec(I,s2)|(dom Exec(I,s2) \
-      NAT) by A21,FUNCT_1:165;
+      NAT) by A20,FUNCT_1:165;
     end;
     suppose
       ex a,b st I = MultBy(a,b);
       then consider a, b such that
-A43:  I = MultBy(a,b);
+A42:  I = MultBy(a,b);
       for x being set st x in dom Exec(I,s1) \ NAT holds Exec(I,s1).x =
       Exec(I,s2).x
       proof
         let x be set;
         assume
-A44:    x in dom Exec(I,s1) \ NAT;
+A43:    x in dom Exec(I,s1) \ NAT;
         then
-A45:    not x in NAT by XBOOLE_0:def 5;
-        per cases by A20,A44,A45,Th3;
+A44:    not x in NAT by XBOOLE_0:def 5;
+        per cases by A19,A43,A44,Th3;
         suppose
-A46:      x = IC SCM;
-          hence Exec(I,s1).x = succ IC s1 by A43,AMI_3:11
-            .= Exec(I,s2).x by A19,A43,A46,AMI_3:11;
+A45:      x = IC SCM;
+          hence Exec(I,s1).x = succ IC s1 by A42,AMI_3:11
+            .= Exec(I,s2).x by A18,A42,A45,AMI_3:11;
         end;
         suppose
-A47:      x = a;
-          hence Exec(I,s1).x = s1.a * s1.b by A43,AMI_3:11
-            .= s1.a * s2.b by A18,Th5
-            .= s2.a * s2.b by A18,Th5
-            .= Exec(I,s2).x by A43,A47,AMI_3:11;
+A46:      x = a;
+          hence Exec(I,s1).x = s1.a * s1.b by A42,AMI_3:11
+            .= s1.a * s2.b by A17,Th5
+            .= s2.a * s2.b by A17,Th5
+            .= Exec(I,s2).x by A42,A46,AMI_3:11;
         end;
         suppose that
-A48:      x is Data-Location and
-A49:      x <> a;
-          thus Exec(I,s1).x = s1.x by A43,A48,A49,AMI_3:11
-            .= s2.x by A18,A48,Th5
-            .= Exec(I,s2).x by A43,A48,A49,AMI_3:11;
+A47:      x is Data-Location and
+A48:      x <> a;
+          thus Exec(I,s1).x = s1.x by A42,A47,A48,AMI_3:11
+            .= s2.x by A17,A47,Th5
+            .= Exec(I,s2).x by A42,A47,A48,AMI_3:11;
         end;
       end;
       hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) = Exec(I,s2)|(dom Exec(I,s2) \
-      NAT) by A21,FUNCT_1:165;
+      NAT) by A20,FUNCT_1:165;
     end;
     suppose
       ex a,b st I = Divide(a,b);
       then consider a, b such that
-A50:  I = Divide(a,b);
+A49:  I = Divide(a,b);
       for x being set st x in dom Exec(I,s1) \ NAT holds Exec(I,s1).x =
       Exec(I,s2).x
       proof
         let x be set;
         assume
-A51:    x in dom Exec(I,s1) \ NAT;
+A50:    x in dom Exec(I,s1) \ NAT;
         then
-A52:    not x in NAT by XBOOLE_0:def 5;
-        per cases by A20,A51,A52,Th3;
+A51:    not x in NAT by XBOOLE_0:def 5;
+        per cases by A19,A50,A51,Th3;
         suppose
-A53:      x = IC SCM;
-          hence Exec(I,s1).x = succ IC s1 by A50,AMI_3:12
-            .= Exec(I,s2).x by A19,A50,A53,AMI_3:12;
+A52:      x = IC SCM;
+          hence Exec(I,s1).x = succ IC s1 by A49,AMI_3:12
+            .= Exec(I,s2).x by A18,A49,A52,AMI_3:12;
         end;
         suppose
-A54:      x is Data-Location;
-A55:      s1.a = s2.a & s1.b = s2.b by A18,Th5;
+A53:      x is Data-Location;
+A54:      s1.a = s2.a & s1.b = s2.b by A17,Th5;
           now
             let c be Data-Location;
             per cases;
             suppose
-A56:          c = b;
-              hence Exec(I,s1).c = s2.a mod s2.b by A50,A55,AMI_3:12
-                .= Exec(I,s2).c by A50,A56,AMI_3:12;
+A55:          c = b;
+              hence Exec(I,s1).c = s2.a mod s2.b by A49,A54,AMI_3:12
+                .= Exec(I,s2).c by A49,A55,AMI_3:12;
             end;
             suppose
-A57:          c = a & c <> b;
-              hence Exec(I,s1).c = s2.a div s2.b by A50,A55,AMI_3:12
-                .= Exec(I,s2).c by A50,A57,AMI_3:12;
+A56:          c = a & c <> b;
+              hence Exec(I,s1).c = s2.a div s2.b by A49,A54,AMI_3:12
+                .= Exec(I,s2).c by A49,A56,AMI_3:12;
             end;
             suppose
-A58:          c <> a & c <> b;
-              hence Exec(I,s1).c = s1.c by A50,AMI_3:12
-                .= s2.c by A18,Th5
-                .= Exec(I,s2).c by A50,A58,AMI_3:12;
+A57:          c <> a & c <> b;
+              hence Exec(I,s1).c = s1.c by A49,AMI_3:12
+                .= s2.c by A17,Th5
+                .= Exec(I,s2).c by A49,A57,AMI_3:12;
             end;
           end;
-          hence thesis by A54;
+          hence thesis by A53;
         end;
       end;
       hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) = Exec(I,s2)|(dom Exec(I,s2) \
-      NAT) by A21,FUNCT_1:165;
+      NAT) by A20,FUNCT_1:165;
     end;
     suppose
       ex k st I = SCM-goto k;
       then consider k1 such that
-A59:  I = SCM-goto k1;
+A58:  I = SCM-goto k1;
       for x being set st x in dom Exec(I,s1) \ NAT holds Exec(I,s1).x =
       Exec(I,s2).x
       proof
         let x be set;
         assume
-A60:    x in dom Exec(I,s1) \ NAT;
+A59:    x in dom Exec(I,s1) \ NAT;
         then
-A61:    not x in NAT by XBOOLE_0:def 5;
-        per cases by A20,A60,A61,Th3;
+A60:    not x in NAT by XBOOLE_0:def 5;
+        per cases by A19,A59,A60,Th3;
         suppose
-A62:      x = IC SCM;
-          hence Exec(I,s1).x = k1 by A59,AMI_3:13
-            .= Exec(I,s2).x by A59,A62,AMI_3:13;
+A61:      x = IC SCM;
+          hence Exec(I,s1).x = k1 by A58,AMI_3:13
+            .= Exec(I,s2).x by A58,A61,AMI_3:13;
         end;
         suppose
-A63:      x is Data-Location;
-          hence Exec(I,s1).x = s1.x by A59,AMI_3:13
-            .= s2.x by A18,A63,Th5
-            .= Exec(I,s2).x by A59,A63,AMI_3:13;
+A62:      x is Data-Location;
+          hence Exec(I,s1).x = s1.x by A58,AMI_3:13
+            .= s2.x by A17,A62,Th5
+            .= Exec(I,s2).x by A58,A62,AMI_3:13;
         end;
       end;
       hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) = Exec(I,s2)|(dom Exec(I,s2) \
-      NAT) by A21,FUNCT_1:165;
+      NAT) by A20,FUNCT_1:165;
     end;
     suppose
       ex a,k st I = a=0_goto k;
       then consider a, k1 such that
-A64:  I = a=0_goto k1;
+A63:  I = a=0_goto k1;
       for x being set st x in dom Exec(I,s1) \ NAT holds Exec(I,s1).x =
       Exec(I,s2).x
       proof
         let x be set;
         assume
-A65:    x in dom Exec(I,s1) \ NAT;
+A64:    x in dom Exec(I,s1) \ NAT;
         then
-A66:    not x in NAT by XBOOLE_0:def 5;
-A67:    s1.a = s2.a by A18,Th5;
-        per cases by A20,A65,A66,Th3;
+A65:    not x in NAT by XBOOLE_0:def 5;
+A66:    s1.a = s2.a by A17,Th5;
+        per cases by A19,A64,A65,Th3;
         suppose that
-A68:      x = IC SCM & s1.a = 0;
-          thus Exec(I,s1).x = k1 by A64,A68,AMI_3:14
-            .= Exec(I,s2).x by A64,A67,A68,AMI_3:14;
+A67:      x = IC SCM & s1.a = 0;
+          thus Exec(I,s1).x = k1 by A63,A67,AMI_3:14
+            .= Exec(I,s2).x by A63,A66,A67,AMI_3:14;
         end;
         suppose that
-A69:      x = IC SCM & s1.a <> 0;
-          thus Exec(I,s1).x = succ IC s1 by A64,A69,AMI_3:14
-            .= Exec(I,s2).x by A19,A64,A67,A69,AMI_3:14;
+A68:      x = IC SCM & s1.a <> 0;
+          thus Exec(I,s1).x = succ IC s1 by A63,A68,AMI_3:14
+            .= Exec(I,s2).x by A18,A63,A66,A68,AMI_3:14;
         end;
         suppose
-A70:      x is Data-Location;
-          hence Exec(I,s1).x = s1.x by A64,AMI_3:14
-            .= s2.x by A18,A70,Th5
-            .= Exec(I,s2).x by A64,A70,AMI_3:14;
+A69:      x is Data-Location;
+          hence Exec(I,s1).x = s1.x by A63,AMI_3:14
+            .= s2.x by A17,A69,Th5
+            .= Exec(I,s2).x by A63,A69,AMI_3:14;
         end;
       end;
       hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) = Exec(I,s2)|(dom Exec(I,s2) \
-      NAT) by A21,FUNCT_1:165;
+      NAT) by A20,FUNCT_1:165;
     end;
     suppose
       ex a,k st I = a>0_goto k;
       then consider a, k such that
-A71:  I = a>0_goto k;
+A70:  I = a>0_goto k;
       for x being set st x in dom Exec(I,s1) \ NAT holds Exec(I,s1).x =
       Exec(I,s2).x
       proof
         let x be set;
         assume
-A72:    x in dom Exec(I,s1) \ NAT;
+A71:    x in dom Exec(I,s1) \ NAT;
         then
-A73:    not x in NAT by XBOOLE_0:def 5;
-A74:    s1.a = s2.a by A18,Th5;
-        per cases by A20,A72,A73,Th3;
+A72:    not x in NAT by XBOOLE_0:def 5;
+A73:    s1.a = s2.a by A17,Th5;
+        per cases by A19,A71,A72,Th3;
         suppose that
-A75:      x = IC SCM & s1.a > 0;
-          thus Exec(I,s1).x = k by A71,A75,AMI_3:15
-            .= Exec(I,s2).x by A71,A74,A75,AMI_3:15;
+A74:      x = IC SCM & s1.a > 0;
+          thus Exec(I,s1).x = k by A70,A74,AMI_3:15
+            .= Exec(I,s2).x by A70,A73,A74,AMI_3:15;
         end;
         suppose that
-A76:      x = IC SCM & s1.a <= 0;
-          thus Exec(I,s1).x = succ IC s1 by A71,A76,AMI_3:15
-            .= Exec(I,s2).x by A19,A71,A74,A76,AMI_3:15;
+A75:      x = IC SCM & s1.a <= 0;
+          thus Exec(I,s1).x = succ IC s1 by A70,A75,AMI_3:15
+            .= Exec(I,s2).x by A18,A70,A73,A75,AMI_3:15;
         end;
         suppose
-A77:      x is Data-Location;
-          hence Exec(I,s1).x = s1.x by A71,AMI_3:15
-            .= s2.x by A18,A77,Th5
-            .= Exec(I,s2).x by A71,A77,AMI_3:15;
+A76:      x is Data-Location;
+          hence Exec(I,s1).x = s1.x by A70,AMI_3:15
+            .= s2.x by A17,A76,Th5
+            .= Exec(I,s2).x by A70,A76,AMI_3:15;
         end;
       end;
       hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) = Exec(I,s2)|(dom Exec(I,s2) \
-      NAT) by A21,FUNCT_1:165;
+      NAT) by A20,FUNCT_1:165;
     end;
   end;
 end;

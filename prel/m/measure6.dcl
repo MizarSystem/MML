@@ -22,6 +22,7 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_2"/>
 <ArticleID name="XXREAL_3"/>
+<ArticleID name="MEMBER_1"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="RCOMP_1"/>
@@ -29,7 +30,6 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="MEMBER_1"/>
 <ArticleID name="MEASURE6"/>
 </Signature>
 <RCluster aid="MEASURE6" nr="1">

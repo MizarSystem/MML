@@ -317,7 +317,7 @@
 <Adjective nr="8">
 <Func kind="K" nr="175"/>
 </Adjective>
-<Adjective nr="39">
+<Adjective nr="37">
 <Var nr="2"/>
 </Adjective>
 </Cluster>
@@ -632,7 +632,7 @@
 <Adjective nr="8">
 <Func kind="K" nr="175"/>
 </Adjective>
-<Adjective nr="39">
+<Adjective nr="37">
 <Var nr="1"/>
 </Adjective>
 </Cluster>
@@ -803,7 +803,7 @@
 <Adjective nr="8">
 <Func kind="K" nr="175"/>
 </Adjective>
-<Adjective nr="39">
+<Adjective nr="37">
 <Var nr="1"/>
 </Adjective>
 </Cluster>
@@ -1105,7 +1105,7 @@
 <Adjective nr="8">
 <Func kind="K" nr="175"/>
 </Adjective>
-<Adjective nr="39">
+<Adjective nr="37">
 <Var nr="1"/>
 </Adjective>
 </Cluster>

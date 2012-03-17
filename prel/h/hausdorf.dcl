@@ -38,11 +38,11 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="66"/>
+<Adjective nr="34" value="false"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
+<Adjective nr="70"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -50,18 +50,18 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="51"/>
+<Adjective nr="52"/>
 </Cluster>
 </FCluster>
 <FCluster aid="HAUSDORF" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="66"/>
+<Adjective nr="34" value="false"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
+<Adjective nr="70"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -87,7 +87,7 @@
 <Func kind="K" nr="211"/>
 </Func>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="49">
 <Func kind="K" nr="216">
 <LocusVar nr="1"/>
 </Func>
@@ -99,17 +99,17 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="66"/>
+<Adjective nr="34" value="false"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
+<Adjective nr="70"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="57">
+<Adjective nr="58">
 <Func kind="K" nr="216">
 <LocusVar nr="1"/>
 </Func>
@@ -140,7 +140,7 @@
 <Func kind="K" nr="211"/>
 </Func>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="49">
 <Func kind="K" nr="216">
 <LocusVar nr="1"/>
 </Func>
@@ -152,17 +152,17 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="66"/>
+<Adjective nr="34" value="false"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
+<Adjective nr="70"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="57">
+<Adjective nr="58">
 <Func kind="K" nr="216">
 <LocusVar nr="1"/>
 </Func>
@@ -193,7 +193,7 @@
 <Func kind="K" nr="211"/>
 </Func>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="49">
 <Func kind="K" nr="216">
 <LocusVar nr="1"/>
 </Func>

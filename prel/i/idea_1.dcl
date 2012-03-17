@@ -75,7 +75,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="30"/>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster aid="IDEA_1" nr="4">
@@ -111,7 +111,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="30"/>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <CCluster aid="IDEA_1" nr="1">
@@ -122,7 +122,7 @@
 <Func kind="K" nr="232"/>
 </Typ>
 <Cluster>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </CCluster>
 </Registrations>

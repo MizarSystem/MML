@@ -29,6 +29,7 @@
 <ArticleID name="XXREAL_2"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="XXREAL_3"/>
+<ArticleID name="MEMBER_1"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
 <ArticleID name="MEASURE7"/>
@@ -42,7 +43,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="206">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

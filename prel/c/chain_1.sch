@@ -36,18 +36,14 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
-<ArticleID name="VECTSP_2"/>
+<ArticleID name="FUNCT_4"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="FUNCT_4"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="CAT_2"/>
 <ArticleID name="GRCAT_1"/>
-<ArticleID name="MOD_4"/>
 <ArticleID name="CHAIN_1"/>
 </Signature>
 <Scheme>
@@ -301,7 +297,7 @@
 <Func kind="K" nr="28"/>
 <Func kind="K" nr="32"/>
 </Typ>
-<Typ kind="M" nr="30">
+<Typ kind="M" nr="28">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -313,7 +309,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="6">
-<Func kind="K" nr="461">
+<Func kind="K" nr="433">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -325,7 +321,7 @@
 <Func kind="F" nr="4"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="462">
+<Func kind="K" nr="434">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -339,7 +335,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="461">
+<Func kind="K" nr="433">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -354,7 +350,7 @@
 <Not>
 <Pred kind="P" nr="1">
 <Func kind="K" nr="115">
-<Func kind="K" nr="461">
+<Func kind="K" nr="433">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -370,7 +366,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="6">
-<Func kind="K" nr="461">
+<Func kind="K" nr="433">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -381,7 +377,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="6">
-<Func kind="K" nr="461">
+<Func kind="K" nr="433">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -406,7 +402,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="464">
+<Func kind="K" nr="436">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>

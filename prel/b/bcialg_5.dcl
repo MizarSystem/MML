@@ -27,12 +27,12 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="52"/>
-<Adjective nr="77"/>
+<Adjective nr="51"/>
+<Adjective nr="53"/>
+<Adjective nr="78"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BCIALG_5" nr="2">
@@ -41,13 +41,13 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 <Adjective nr="53"/>
-<Adjective nr="77"/>
+<Adjective nr="54"/>
+<Adjective nr="78"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BCIALG_5" nr="3">
@@ -77,67 +77,67 @@
 <LocusVar nr="4"/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 <Adjective nr="53"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 <FCluster aid="BCIALG_5" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="109"/>
 <Cluster>
-<Adjective nr="77"/>
+<Adjective nr="78"/>
 </Cluster>
 </FCluster>
 <CCluster aid="BCIALG_5" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 <Adjective nr="53"/>
-<Adjective nr="76"/>
+<Adjective nr="54"/>
+<Adjective nr="77"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 <Adjective nr="53"/>
-<Adjective nr="66"/>
+<Adjective nr="54"/>
+<Adjective nr="67"/>
 </Cluster>
 </CCluster>
 <CCluster aid="BCIALG_5" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 <Adjective nr="53"/>
-<Adjective nr="76"/>
+<Adjective nr="54"/>
+<Adjective nr="77"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 <Adjective nr="53"/>
-<Adjective nr="75"/>
+<Adjective nr="54"/>
+<Adjective nr="76"/>
 </Cluster>
 </CCluster>
 </Registrations>

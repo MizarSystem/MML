@@ -53,8 +53,8 @@
 </Adjective>
 <Adjective nr="18"/>
 <Adjective nr="29"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="115"/>
 <Adjective nr="116"/>
 <Adjective nr="117"/>
@@ -82,8 +82,8 @@
 </Adjective>
 <Adjective nr="18"/>
 <Adjective nr="29"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="108"/>
 <Adjective nr="140"/>
 <Adjective nr="145"/>
@@ -110,8 +110,8 @@
 </Adjective>
 <Adjective nr="18"/>
 <Adjective nr="29"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="108"/>
 <Adjective nr="140"/>
 <Adjective nr="147"/>

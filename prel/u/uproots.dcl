@@ -75,8 +75,8 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="31"/>
-<Adjective nr="37"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 <Adjective nr="173"/>
 </Cluster>
 </RCluster>

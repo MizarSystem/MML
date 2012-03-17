@@ -22,8 +22,8 @@ environ
       FUNCOP_1, FUNCT_4, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, FUNCT_2,
       RELSET_1, XXREAL_0, VALUED_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, FUNCT_1, FUNCOP_1, BINOP_1, FINSEQ_2, FUNCT_2,
-      FUNCT_4;
+ definitions TARSKI, XBOOLE_0, RELAT_1, FUNCT_1, FUNCT_2,  FUNCOP_1, BINOP_1,
+      FINSEQ_2, FUNCT_4;
  theorems FINSEQ_1, RELAT_1, TARSKI, AXIOMS, ZFMISC_1, INT_1, FUNCT_1,
       FINSEQ_2, FUNCT_4, SUBSET_1, FINSET_1, CARD_1, NAT_1, FUNCT_2, FUNCOP_1,
       SETFAM_1, MCART_1, FINSEQ_3, ENUMSET1, REWRITE1, FINSEQ_4, RELSET_1,
@@ -721,8 +721,7 @@ proof
   suppose
 A3: A() = {};
     now
-      consider a being Element of { F(d) where d is Element of D() : G(d) in A
-      () };
+      set a =the  Element of { F(d) where d is Element of D() : G(d) in A () };
       assume { F(d) where d is Element of D() : G(d) in A() } <> {};
       then a in { F(d) where d is Element of D() : G(d) in A() };
       then ex d being Element of D() st a = F(d) & G(d) in A();
@@ -815,7 +814,7 @@ proof
   suppose
 A3: A() = {};
     now
-      consider a being Element of D;
+      set a =the  Element of D;
       assume D <> {};
       then a in D;
       then ex d being Element of D() st a = d & G(d) in A();
@@ -875,8 +874,7 @@ proof
   suppose
 A3: A() = {};
     now
-      consider a being Element of { G(d) where d is Element of D() : d in A()
-      };
+      set a =the  Element of { G(d) where d is Element of D() : d in A() };
       assume { G(d) where d is Element of D() : d in A() } <> {};
       then a in { G(d) where d is Element of D() : d in A() };
       then ex d being Element of D() st a = G(d) & d in A();
@@ -1062,8 +1060,7 @@ A2: {i} c= dom f by ZFMISC_1:37;
 end;
 
 theorem Th33:
-  for f be Function, d,i be set st i in dom f holds (f+*(i,d)).i =
-  d
+  for f be Function, d,i be set st i in dom f holds (f+*(i,d)).i = d
 proof
   let f be Function, d,i be set;
   dom(i.-->d) = {i} by FUNCOP_1:19;
@@ -1076,8 +1073,7 @@ A1: i in dom(i.-->d) by TARSKI:def 1;
 end;
 
 theorem Th34:
-  for f be Function, d,i,j be set st i <> j holds (f+*(i,d)).j = f
-  .j
+  for f be Function, d,i,j be set st i <> j holds (f+*(i,d)).j = f.j
 proof
   let f be Function, d,i,j be set such that
 A1: i <> j;
@@ -1445,8 +1441,7 @@ end;
 
 reserve X,Y,x for set,
   p,q for Function-yielding FinSequence,
-  f,g,h for
-  Function;
+  f,g,h for Function;
 
 theorem Th41:
   compose({},X) = id X
@@ -1987,7 +1982,7 @@ registration
   cluster FuncSeq-like non empty non-empty FinSequence;
   existence
   proof
-    consider f being non empty Function;
+    set f =the  non empty Function;
     take p = <*f*>;
     thus p is FuncSeq-like;
     thus p is non empty;
@@ -2330,7 +2325,7 @@ A1: Y is empty implies X is empty;
     lastrng it c= Y;
   existence
   proof
-    consider f being Function of X,Y;
+    set f =the  Function of X,Y;
     take p = <*f*>;
 A2: p^{} = p & {}^p = p by FINSEQ_1:47;
     dom f = X & rng f c= Y by A1,FUNCT_2:def 1;
@@ -2389,7 +2384,7 @@ A6:   i <= n+1 by A4,XXREAL_0:2;
       i >= 1 by A3,FINSEQ_1:3;
       then i in dom q by A1,A6,FINSEQ_3:27;
       then reconsider X = q.i, Y = q.(i+1) as non empty set by A5;
-      consider y being Function of X,Y;
+      set y =the  Function of X,Y;
       take y,i;
       thus thesis by FUNCT_2:11;
     end;
@@ -2485,22 +2480,23 @@ proof
   hence thesis;
 end;
 
-Lm2: for n being Element of NAT for p1,p2 being Function of NAT,PFuncs(dom f
-\/ rng f,dom f \/ rng f) st p1.0 = id(dom f \/ rng f) & (for k being Nat ex g
-being Function st g = p1.k & p1.(k+1) = g*f) & p2.0 = id(dom f \/ rng f) & (for
-k being Nat ex g being Function st g = p2.k & p2.(k+1) = g*f) holds p1 = p2
-
+Lm2: for n being Element of NAT
+     for p1,p2 being Function of NAT,PFuncs(field f,field f) st
+     p1.0 = id(field f) &
+     (for k being Nat holds p1.(k+1) = p1.k*f) &
+     p2.0 = id(field f) & (for k being Nat holds p2.(k+1) = p2.k*f)
+     holds p1 = p2
 proof
   let n be Element of NAT;
-  let p1,p2 be Function of NAT,PFuncs(dom f \/ rng f,dom f \/ rng f) such that
-A1: p1.0 = id(dom f \/ rng f) and
-A2: for k being Nat ex g being Function st g = p1.k & p1.(k+1) = g * f and
-A3: p2.0 = id(dom f \/ rng f) and
-A4: for k being Nat ex g being Function st g = p2.k & p2.(k+1) = g * f;
-  defpred P[Nat,set,set] means ex g being Function st g = $2 & $3 = g*f;
+  let p1,p2 be Function of NAT,PFuncs(field f,field f) such that
+A1: p1.0 = id(field f) and
+A2: for k being Nat holds p1.(k+1) = p1.k * f and
+A3: p2.0 = id(field f) and
+A4: for k being Nat holds p2.(k+1) = p2.k * f;
+   defpred P[Nat,Function,set] means $3 = $2*f;
 A5: for k being Nat holds P[k,p1.k,p1.(k+1)] by A2;
-  set FX = PFuncs(dom f \/ rng f,dom f \/ rng f);
-  reconsider ID = id(dom f \/ rng f) as Element of FX by PARTFUN1:119;
+  set FX = PFuncs(field f,field f);
+  reconsider ID = id(field f) as Element of FX by PARTFUN1:119;
 A6: p2.0 = ID by A3;
 
 A7: for k being Nat for x,y1,y2 being Element of FX st P[k,x,y1] & P[k,x,y2]
@@ -2517,24 +2513,24 @@ definition
   let n be Nat;
   func iter (f,n) -> Function means
   :Def11:
-  ex p being Function of NAT,PFuncs(
-  dom f \/ rng f,dom f \/ rng f) st it = p.n & p.0 = id(dom f \/ rng f) & for k
-  being Nat ex g being Function st g = p.k & p.(k+1) = g*f;
+  ex p being Function of NAT,PFuncs(field f,field f) st
+  it = p.n & p.0 = id(field f) &
+  for k being Nat holds p.(k+1) = (p.k)*f;
   existence
   proof
     reconsider n9=n as Element of NAT by ORDINAL1:def 13;
-    defpred P[Nat,set,set] means ex g being Function st g = $2 & $3 = g * f;
-    set FX = PFuncs(dom f \/ rng f,dom f \/ rng f);
-    reconsider ID = id(dom f \/ rng f) as Element of FX by PARTFUN1:119;
+    defpred P[Nat,Function,set] means $3 = $2 * f;
+    set FX = PFuncs(field f,field f);
+    reconsider ID = id(field f) as Element of FX by PARTFUN1:119;
 A1: for n being Element of NAT for x being Element of FX ex y being
     Element of FX st P[n,x,y]
     proof
-      dom f c= dom f \/ rng f & rng f c= dom f \/ rng f by XBOOLE_1:7;
-      then reconsider h = f as PartFunc of dom f \/ rng f, dom f \/ rng f by
+      dom f c= field f & rng f c= field f by XBOOLE_1:7;
+      then reconsider h = f as PartFunc of field f, field f by
 RELSET_1:11;
       let n be Element of NAT;
       let x be Element of FX;
-      reconsider g = x as PartFunc of dom f \/ rng f,dom f \/ rng f by
+      reconsider g = x as PartFunc of field f,field f by
 PARTFUN1:120;
       g * h is Element of FX by PARTFUN1:119;
       hence thesis;
@@ -2548,7 +2544,7 @@ A3: for n being Nat holds P[n,p.n,p.(n+1)]
       n in NAT by ORDINAL1:def 13;
       hence thesis by A2;
     end;
-    p.n9 is PartFunc of dom f \/ rng f,dom f \/ rng f by PARTFUN1:120;
+    p.n9 is PartFunc of field f,field f by PARTFUN1:120;
     hence thesis by A2,A3;
   end;
   uniqueness by Lm2;
@@ -2556,25 +2552,25 @@ end;
 
 reserve m,n,k for Element of NAT;
 
-Lm3: id(dom f \/ rng f)*f = f & f*id(dom f \/ rng f) = f
+Lm3: id(field f)*f = f & f*id(field f) = f
 proof
-  dom f c= dom f \/ rng f & rng f c= dom f \/ rng f by XBOOLE_1:7;
+  dom f c= field f & rng f c= field f by XBOOLE_1:7;
   hence thesis by RELAT_1:77,79;
 end;
 
 theorem Th70:
-  iter (f,0) = id(dom f \/ rng f)
+  iter (f,0) = id(field f)
 proof
-  ex p being Function of NAT,PFuncs(dom f \/ rng f,dom f \/ rng f) st iter
-(f,0) = p.0 & p.0 = id(dom f \/ rng f) & for k being Nat ex g being Function st
-  g = p.k & p.(k+1) = g*f by Def11;
+  ex p being Function of NAT,PFuncs(field f,field f) st iter
+(f,0) = p.0 & p.0 = id(field f) & for k being Nat holds p.(k+1) = p.k*f
+by Def11;
   hence thesis;
 end;
 
 Lm4: rng f c= dom f implies iter (f,0) = id(dom f)
 proof
   assume rng f c= dom f;
-  then dom f \/ rng f = dom f by XBOOLE_1:12;
+  then field f = dom f by XBOOLE_1:12;
   hence thesis by Th70;
 end;
 
@@ -2582,12 +2578,11 @@ theorem Th71:
   for n be Nat holds iter(f,n+1) = iter(f,n)*f
 proof
   let n be Nat;
-  reconsider n as Element of NAT by ORDINAL1:def 13;
-  consider p being Function of NAT,PFuncs(dom f \/ rng f,dom f \/ rng f) such
+  consider p being Function of NAT,PFuncs(field f,field f) such
   that
-A1: p.(n+1) = iter(f,n+1) & p.0 = id(dom f \/ rng f) and
-A2: for k being Nat ex g being Function st g = p.k & p.(k+1) = g*f by Def11;
-  ex g being Function st g = p.n & p.(n+1) = g*f by A2;
+A1: p.(n+1) = iter(f,n+1) & p.0 = id(field f) and
+A2: for k being Nat holds p.(k+1) = p.k*f by Def11;
+  p.(n+1) = p.n*f by A2;
   hence thesis by A1,A2,Def11;
 end;
 
@@ -2596,7 +2591,7 @@ theorem Th72:
 proof
   thus iter(f,1) = iter(f,0+1)
     .= iter(f,0)*f by Th71
-    .= id(dom f \/ rng f)*f by Th70
+    .= id(field f)*f by Th70
     .= f by Lm3;
 end;
 
@@ -2615,7 +2610,7 @@ A2: iter(f,k+1) = f*iter(f,k);
       .= iter(f,k+1+1) by A2,Th71;
   end;
   iter(f,0+1) = f by Th72
-    .= f*id(dom f \/ rng f) by Lm3
+    .= f*id(field f) by Lm3
     .= f*iter(f,0) by Th70;
   then
 A3: P[ 0];
@@ -2624,11 +2619,10 @@ A3: P[ 0];
 end;
 
 theorem Th74:
-  dom iter(f,n) c= dom f \/ rng f & rng iter(f,n) c= dom f \/ rng
-  f
+  dom iter(f,n) c= field f & rng iter(f,n) c= field f
 proof
-  defpred P[Element of NAT] means dom iter(f,$1) c= dom f \/ rng f & rng iter(
-  f,$1) c= dom f \/ rng f;
+  defpred P[Element of NAT] means dom iter(f,$1) c= field f & rng iter(
+  f,$1) c= field f;
 A1: P[k] implies P[k+1]
   proof
     iter(f,k+1) = f*iter(f,k) by Th73;
@@ -2637,10 +2631,10 @@ A2: dom iter(f,k+1) c= dom iter(f,k) by RELAT_1:44;
     iter(f,k+1) = iter(f,k)*f by Th71;
     then
 A3: rng iter(f,k+1) c= rng iter(f,k) by RELAT_1:45;
-    assume dom iter(f,k) c= dom f \/ rng f & rng iter(f,k) c= dom f \/ rng f;
+    assume dom iter(f,k) c= field f & rng iter(f,k) c= field f;
     hence thesis by A2,A3,XBOOLE_1:1;
   end;
-  iter(f,0) = id(dom f \/ rng f) by Th70;
+  iter(f,0) = id(field f) by Th70;
   then
 A4: P[ 0] by RELAT_1:71;
   P[k] from NAT_1:sch 1(A4,A1);
@@ -2694,16 +2688,16 @@ A4: P[ 0] by RELAT_1:71;
 end;
 
 theorem Th77:
-  iter(f,n)*id(dom f \/ rng f) = iter(f,n)
+  iter(f,n)*id(field f) = iter(f,n)
 proof
-  dom iter(f,n) c= dom f \/ rng f by Th74;
+  dom iter(f,n) c= field f by Th74;
   hence thesis by RELAT_1:77;
 end;
 
 theorem
-  id(dom f \/ rng f)*iter(f,n) = iter(f,n)
+  id(field f)*iter(f,n) = iter(f,n)
 proof
-  rng iter(f,n) c= dom f \/ rng f by Th74;
+  rng iter(f,n) c= field f by Th74;
   hence thesis by RELAT_1:79;
 end;
 
@@ -2720,7 +2714,7 @@ A2: iter(f,n)*iter(f,k) = iter(f,n+k);
       .= iter(f,n+k+1) by A2,Th71
       .= iter(f,n+(k+1));
   end;
-  iter(f,n)*iter(f,0) = iter(f,n)*id(dom f \/ rng f) by Th70
+  iter(f,n)*iter(f,0) = iter(f,n)*id(field f) by Th70
     .= iter(f,n+0) by Th77;
   then
 A3: P[ 0];
@@ -2761,9 +2755,9 @@ proof
   assume
 A1: rng f c= dom f;
   then dom iter(f,m) = dom f by Th76;
-  then dom iter(f,m) \/ rng iter(f,m) = dom f by A1,Th76,XBOOLE_1:12;
+  then field iter(f,m) = dom f by A1,Th76,XBOOLE_1:12;
   then iter(iter(f,m),0) = id(dom f) by Th70
-    .= id(dom f \/ rng f) by A1,XBOOLE_1:12
+    .= id(field f) by A1,XBOOLE_1:12
     .= iter(f,m*0) by Th70;
   then
 A2: P[ 0];
@@ -2782,7 +2776,7 @@ A1: P[k] implies P[k+1]
     thus iter({},k+1) = iter({},k)*{} by Th71
       .= {};
   end;
-  iter({},0) = id (dom {} \/ rng {}) by Th70
+  iter({},0) = id (field {}) by Th70
     .= {};
   then
 A2: P[0 ];
@@ -2802,7 +2796,7 @@ A2: P[k];
       .= id(X) by A2,FUNCT_2:23;
   end;
   dom id X = X & rng id X = X by RELAT_1:71;
-  then id(dom id X \/ rng id X) = id X;
+  then id(field id X) = id X;
   then
 A3: P[ 0] by Th70;
   P[k] from NAT_1:sch 1(A3,A1);
@@ -2840,7 +2834,7 @@ theorem
   for f being Function of X,X holds iter(f,0) = id X
 proof
   let f be Function of X,X;
-  iter(f,0) = id(dom f \/ rng f) & dom f \/ rng f = dom f by Lm1,Th70,
+  iter(f,0) = id(field f) & field f = dom f by Lm1,Th70,
 XBOOLE_1:12;
   hence thesis by FUNCT_2:67;
 end;
@@ -2857,11 +2851,12 @@ theorem
   for f being PartFunc of X,X holds iter(f,n) is PartFunc of X,X
 proof
   let f be PartFunc of X,X;
-  rng iter(f,n) c= dom f \/ rng f by Th74;
+A2: field f = dom f \/ rng f;
+  rng iter(f,n) c= field f by Th74;
   then
-A1: rng iter(f,n) c= X by XBOOLE_1:1;
-  dom iter(f,n) c= dom f \/ rng f by Th74;
-  then dom iter(f,n) c= X by XBOOLE_1:1;
+A1: rng iter(f,n) c= X by A2,XBOOLE_1:1;
+  dom iter(f,n) c= field f by Th74;
+  then dom iter(f,n) c= X by A2,XBOOLE_1:1;
   hence thesis by A1,RELSET_1:11;
 end;
 
@@ -2903,21 +2898,21 @@ end;
 
 theorem
   for f being Function, n being Element of NAT holds iter(f,n) = compose
-  (n|->f,dom f \/ rng f)
+  (n|->f,field f)
 proof
   let f be Function;
-  defpred P[Element of NAT] means iter(f,$1) = compose($1|->f,dom f \/ rng f);
+  defpred P[Element of NAT] means iter(f,$1) = compose($1|->f,field f);
 A1: now
     let n be Element of NAT;
     assume P[n];
-    then iter(f,n+1) = f*compose(n|->f,dom f \/ rng f) by Th73
-      .= compose((n|->f)^<*f*>,dom f \/ rng f) by Th43
-      .= compose((n+1)|->f,dom f \/ rng f) by FINSEQ_2:74;
+    then iter(f,n+1) = f*compose(n|->f,field f) by Th73
+      .= compose((n|->f)^<*f*>,field f) by Th43
+      .= compose((n+1)|->f,field f) by FINSEQ_2:74;
     hence P[n+1];
   end;
-  iter(f,0) = id (dom f \/ rng f) by Th70
-    .= compose({},dom f \/ rng f) by Th41
-    .= compose(0|->f,dom f \/ rng f);
+  iter(f,0) = id (field f) by Th70
+    .= compose({},field f) by Th41
+    .= compose(0|->f,field f);
   then
 A2: P[ 0];
   thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A2, A1);
@@ -3399,8 +3394,7 @@ A5: A() c= D;
   suppose
 A6: A() = {};
     now
-      consider a being Element of { G(d) where d is Element of D() : d in A()
-      };
+      set a =the  Element of { G(d) where d is Element of D() : d in A() };
       assume { G(d) where d is Element of D() : d in A() } <> {};
       then a in { G(d) where d is Element of D() : d in A() };
       then ex d being Element of D() st a = G(d) & d in A();
@@ -4321,11 +4315,11 @@ proof
  let f,g be A-defined Function;
   dom g c= A by RELAT_1:def 18;
   then
-A: dom g \ A = {} by XBOOLE_1:37;
+A1: dom g \ A = {} by XBOOLE_1:37;
   dom f c= A by RELAT_1:def 18;
   then dom f \ A = {} by XBOOLE_1:37;
   hence f|(dom f \ A) = {}
-       .= g|(dom g \ A) by A;
+       .= g|(dom g \ A) by A1;
 end;
 
 theorem
@@ -4335,9 +4329,9 @@ proof
  let f,g be A-defined Function, h be Function;
    h, h+*f equal_outside A by Th132;
    then
-A: h+*f,h equal_outside A by Th28;
+A1: h+*f,h equal_outside A by Th28;
    h, h+*g equal_outside A by Th132;
- hence thesis by A,Th29;
+ hence thesis by A1,Th29;
 end;
 
 reserve n for Element of NAT;
@@ -4411,4 +4405,52 @@ A17: dom Shift(I,m),dom I are_equipotent by A4,A16,A10,A14,WELLORD2:22;
     .= card I by CARD_1:104;
 end;
 
+theorem Th136:
+ dom f = dom g & dom f c= A \/ B & f|B = g|B
+  implies f,g equal_outside A
+proof
+ assume that
+A1: dom f = dom g and
+A2:  dom f c= A \/ B;
+ assume f|B = g|B;
+ hence f|(dom f \ A) = g|(dom g \ A) by A1,A2,RELAT_1:188,XBOOLE_1:43;
+end;
 
+theorem Th137:
+ dom f = dom g & B c= dom f & A misses B & f,g equal_outside A
+  implies f|B = g|B
+proof
+ assume that
+A1: dom f = dom g and
+A2:  B c= dom f & A misses B;
+   assume f|(dom f \ A) = g|(dom g \ A);
+   hence thesis by A1,A2,RELAT_1:188,XBOOLE_1:86;
+end;
+
+reserve A,B,I for set, X,Y for ManySortedSet of I;
+
+theorem
+ I c= A \/ B & X|B = Y|B implies X,Y equal_outside A
+proof
+  dom X = I & dom Y = I by PARTFUN1:def 4;
+ hence thesis by Th136;
+end;
+
+theorem
+ B c= I & A misses B & X,Y equal_outside A implies X|B = Y|B
+proof
+  dom X = I & dom Y = I by PARTFUN1:def 4;
+ hence thesis by Th137;
+end;
+
+registration let V be non empty set;
+ let f be V-valued Function, x be set, y be Element of V;
+ cluster f+*(x,y) -> V-valued;
+ coherence
+  proof
+A1:  rng f c= V by RELAT_1:def 19;
+A3:  rng(f+*(x,y)) c= rng f \/ {y} by Th102;
+    rng f \/ {y} c= V by A1,XBOOLE_1:8;
+   hence rng(f+*(x,y)) c= V by A3,XBOOLE_1:1;
+  end;
+end;

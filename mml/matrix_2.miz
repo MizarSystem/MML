@@ -3,7 +3,7 @@
 ::
 :: Received May 20, 1992
 :: Copyright (c) 1992 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, NAT_1, XBOOLE_0, VECTSP_1, FINSEQ_1, SUBSET_1, FUNCOP_1,
@@ -23,7 +23,7 @@ environ
  definitions STRUCT_0, FINSEQ_2, MATRIX_1, TARSKI, ALGSTR_0;
  theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, TARSKI, GROUP_1, FUNCT_1, FUNCT_2,
       ZFMISC_1, NAT_1, BINOP_1, FINSUB_1, FINSET_1, GROUP_4, FRAENKEL,
-      MATRIX_1, RELAT_1, XBOOLE_0, FUNCOP_1, ORDINAL1, NAT_D;
+      MATRIX_1, RELAT_1, XBOOLE_0, FUNCOP_1, ORDINAL1, NAT_D, CARD_1;
  schemes BINOP_1, MATRIX_1, XBOOLE_0;
 
 begin :: Some Examples of Matrices
@@ -85,8 +85,7 @@ A3: [i,j] in Indices ((n,n)-->(a9+b9));
     then ((n,n)-->a9)*(i,j)=a9 by A1,Th1;
     then ((n,n)-->a9)*(i,j) +((n,n)-->b9)*(i,j)=a9+b9 by A2,A1,A3,Th1;
     hence
-    ((n,n)-->a9)*(i,j) +((n,n)-->b9)*(i,j)=((n,n)-->(a9+b9))*(i,j) by A3,
-    Th1;
+    ((n,n)-->a9)*(i,j) +((n,n)-->b9)*(i,j)=((n,n)-->(a9+b9))*(i,j) by A3,Th1;
   end;
   hence thesis by A1,MATRIX_1:def 14;
 end;
@@ -123,7 +122,7 @@ theorem Th4:
 proof
 A1: 2 in Seg 2 by FINSEQ_1:4,TARSKI:def 2;
   Indices (x1,x2)][(y1,y2)=[:Seg 2,Seg 2:] & 1 in Seg 2 by Th3,FINSEQ_1:4
-  ,TARSKI:def 2;
+,TARSKI:def 2;
   hence thesis by A1,ZFMISC_1:106;
 end;
 
@@ -141,7 +140,7 @@ definition
   redefine func <*p*> -> Matrix of 1,n,D;
   coherence
   proof
-    len p = n by FINSEQ_1:def 18;
+    len p = n by CARD_1:def 13;
     hence thesis by MATRIX_1:11;
   end;
 end;
@@ -150,8 +149,8 @@ theorem
   [1,1] in Indices <*<*a*>*> & <*<*a*>*>*(1,1)=a
 proof
   set M=<*<*a*>*>;
-  Indices M= [:Seg 1,Seg 1:] & 1 in Seg 1 by FINSEQ_1:4,MATRIX_1:25 ,
-  TARSKI:def 1;
+  Indices M= [:Seg 1,Seg 1:] & 1 in Seg 1 by FINSEQ_1:4,MATRIX_1:25
+,TARSKI:def 1;
   hence
 A1: [1,1] in Indices <*<*a*>*> by ZFMISC_1:106;
   M.1= <*a*> & <*a*>.1=a by FINSEQ_1:57;
@@ -194,11 +193,10 @@ registration
   coherence
   proof
     let M be Diagonal of n,K;
-    for i,j st [i,j] in Indices M & i>j holds M*(i,j) = 0.K by MATRIX_1:
-    def 15;
+    for i,j st [i,j] in Indices M & i>j holds M*(i,j) = 0.K by MATRIX_1:def 15;
     hence M is upper_triangular by Def3;
-    thus for i,j st [i,j] in Indices M & i<j holds M*(i,j) = 0.K by MATRIX_1:
-    def 15;
+    thus for i,j st [i,j] in Indices M & i<j holds M*(i,j) = 0.K by
+MATRIX_1:def 15;
   end;
 end;
 
@@ -207,7 +205,7 @@ registration
   cluster lower_triangular upper_triangular Matrix of n,K;
   existence
   proof
-    consider M being Diagonal of n,K;
+    set M =the  Diagonal of n,K;
     take M;
     thus thesis;
   end;
@@ -296,9 +294,8 @@ A7: for j st j in Seg width M holds p.j = M*(k,j)
       assume j in Seg width M;
       then [k,j] in [:Seg n,Seg m:] by A1,A6,ZFMISC_1:106;
       then [k,j] in Indices M by A3,MATRIX_1:24;
-      then ex q being FinSequence of D st q=M.k & M*(k,j)=q.j by
-      MATRIX_1:
-      def 6;
+      then ex q being FinSequence of D st q=M.k & M*(k,j)=q.j by MATRIX_1:def 6
+;
       hence thesis by A5;
     end;
     len p=width M by A2,A6,A5,MATRIX_1:def 3;
@@ -344,12 +341,12 @@ A4:   i in Seg width M;
       defpred P[Nat,Nat,Element of K] means $3=Del(Line(M,$1),i).$2;
       per cases;
       suppose
-S:      len M=0;
+A5:      len M=0;
         then Seg len M = {};
-        hence thesis by A4,MATRIX_1:def 4,S;
+        hence thesis by A4,A5,MATRIX_1:def 4;
       end;
       suppose
-A5:     len M>0;
+A6:     len M>0;
         set n1=width M;
         per cases;
         suppose
@@ -359,77 +356,77 @@ A5:     len M>0;
         suppose
           n1>0;
           then consider m being Nat such that
-A6:       n1=m+1 by NAT_1:6;
+A7:       n1=m+1 by NAT_1:6;
           reconsider m as Element of NAT by ORDINAL1:def 13;
-A7:       for k st k in dom M holds len (Del(Line(M,k),i))=m
+A8:       for k st k in dom M holds len (Del(Line(M,k),i))=m
           proof
             let k;
             assume k in dom M;
-A8:         len Line(M,k) = n1 by MATRIX_1:def 8;
+A9:         len Line(M,k) = n1 by MATRIX_1:def 8;
             then i in dom Line(M,k) by A4,FINSEQ_1:def 3;
             then ex l being Nat st len Line(M,k)=l+1 & len Del(Line(M,k),i)=l
             by FINSEQ_3:113;
-            hence thesis by A6,A8;
+            hence thesis by A7,A9;
           end;
-A9:       for k,l st [k,l] in [:Seg len M, Seg m:] ex x being Element of
+A10:       for k,l st [k,l] in [:Seg len M, Seg m:] ex x being Element of
           K st P[k,l,x]
           proof
             let k,l;
             assume
-A10:        [k,l] in [:Seg len M, Seg m:];
+A11:        [k,l] in [:Seg len M, Seg m:];
             reconsider p=Del(Line(M,k),i) as FinSequence of K by FINSEQ_3:114;
             dom M = Seg len M by FINSEQ_1:def 3;
-            then k in dom M by A10,ZFMISC_1:106;
+            then k in dom M by A11,ZFMISC_1:106;
             then
-A11:        len p = m by A7;
-A12:        dom p = Seg len p by FINSEQ_1:def 3;
-            l in Seg m by A10,ZFMISC_1:106;
-            then reconsider x=p.l as Element of (the carrier of K) by A11,A12,
-            FINSEQ_2:13;
+A12:        len p = m by A8;
+A13:        dom p = Seg len p by FINSEQ_1:def 3;
+            l in Seg m by A11,ZFMISC_1:106;
+            then reconsider x=p.l as Element of (the carrier of K) by A12,A13,
+FINSEQ_2:13;
             take x;
             thus thesis;
           end;
-A13:      for k,l st [k,l] in [:Seg len M, Seg m:] for x1,x2 being
+A14:      for k,l st [k,l] in [:Seg len M, Seg m:] for x1,x2 being
           Element of K st P[k,l,x1] & P[k,l,x2] holds x1 = x2;
           consider N being Matrix of len M,m,K such that
-A14:      for k,l st [k,l] in Indices N holds P[k,l,N*(k,l)] from
-          MATRIX_1:sch 2(A13,A9);
+A15:      for k,l st [k,l] in Indices N holds P[k,l,N*(k,l)] from
+          MATRIX_1:sch 2(A14,A10);
           dom M = Seg len M by FINSEQ_1:def 3;
           then
-A15:      Indices N = [:dom M, Seg m :] by A5,MATRIX_1:24;
-A16:      for k,l st k in dom M & l in Seg m holds N*(k,l)=Del(Line(M,k), i).l
+A16:      Indices N = [:dom M, Seg m :] by A6,MATRIX_1:24;
+A17:      for k,l st k in dom M & l in Seg m holds N*(k,l)=Del(Line(M,k), i).l
           proof
             let k,l;
             assume k in dom M & l in Seg m;
-            then [k,l] in Indices N by A15,ZFMISC_1:106;
-            hence thesis by A14;
+            then [k,l] in Indices N by A16,ZFMISC_1:106;
+            hence thesis by A15;
           end;
-A17:      width N = m by A5,MATRIX_1:24;
+A18:      width N = m by A6,MATRIX_1:24;
           reconsider N as Matrix of K;
           take N;
           for k st k in dom M holds N.k=Del(Line(M,k),i)
           proof
             let k;
             assume
-A18:        k in dom M;
+A19:        k in dom M;
             then k in Seg len M by FINSEQ_1:def 3;
             then
-A19:        N.k=Line(N,k) by Th10;
+A20:        N.k=Line(N,k) by Th10;
             then reconsider s=N.k as FinSequence;
-A20:        len s= m by A17,A19,MATRIX_1:def 8;
+A21:        len s= m by A18,A20,MATRIX_1:def 8;
             then
-A21:        dom s = Seg m by FINSEQ_1:def 3;
-A22:        now
+A22:        dom s = Seg m by FINSEQ_1:def 3;
+A23:        now
               let j be Nat;
               assume
-A23:          j in dom s;
-              then Line(N,k).j=N*(k,j) by A17,A21,MATRIX_1:def 8;
-              hence s.j=Del(Line(M,k),i).j by A16,A18,A19,A21,A23;
+A24:          j in dom s;
+              then Line(N,k).j=N*(k,j) by A18,A22,MATRIX_1:def 8;
+              hence s.j=Del(Line(M,k),i).j by A17,A19,A20,A22,A24;
             end;
-            len Del (Line(M,k),i)=m by A7,A18;
-            hence thesis by A20,A22,FINSEQ_2:10;
+            len Del (Line(M,k),i)=m by A8,A19;
+            hence thesis by A21,A23,FINSEQ_2:10;
           end;
-          hence thesis by A5,MATRIX_1:24;
+          hence thesis by A6,MATRIX_1:24;
         end;
       end;
     end;
@@ -438,19 +435,19 @@ A23:          j in dom s;
   proof
     let M1,M2 be Matrix of K;
     assume that
-A24: len M1=len M and
-A25: for k st k in dom M holds M1.k=Del(Line(M,k),i) and
-A26: len M2=len M and
-A27: for k st k in dom M holds M2.k=Del(Line(M,k),i);
-A28: dom M1 = dom M by A24,FINSEQ_3:31;
+A25: len M1=len M and
+A26: for k st k in dom M holds M1.k=Del(Line(M,k),i) and
+A27: len M2=len M and
+A28: for k st k in dom M holds M2.k=Del(Line(M,k),i);
+A29: dom M1 = dom M by A25,FINSEQ_3:31;
     now
       let k be Nat;
       assume
-A29:  k in dom M1;
-      hence M1.k=Del(Line(M,k),i) by A25,A28
-        .=M2.k by A27,A28,A29;
+A30:  k in dom M1;
+      hence M1.k=Del(Line(M,k),i) by A26,A29
+        .=M2.k by A28,A29,A30;
     end;
-    hence thesis by A24,A26,FINSEQ_2:10;
+    hence thesis by A25,A27,FINSEQ_2:10;
   end;
 end;
 
@@ -610,9 +607,8 @@ A5: now
 A6: dom (M@) = Seg len (M@) by FINSEQ_1:def 3;
     assume
 A7: j in dom Col(M@,i);
-    then Line(M,i).j=M*(i,j) & [i,j] in Indices M by A4,A3,
-    MATRIX_1:def 8 ,
-    ZFMISC_1:106;
+    then Line(M,i).j=M*(i,j) & [i,j] in Indices M by A4,A3,MATRIX_1:def 8
+,ZFMISC_1:106;
     hence Line(M,i).j=M@*(j,i) by MATRIX_1:def 7
       .=Col(M@,i).j by A1,A3,A7,A6,MATRIX_1:def 9;
   end;
@@ -633,12 +629,12 @@ A1: j in Seg width M;
 A2: j in dom (M@) by FINSEQ_1:def 3;
   per cases;
   suppose
-S:  len M=0;
+A3:  len M=0;
         then Seg len M = {};
-    hence thesis by A1,MATRIX_1:def 4,S;
+    hence thesis by A1,A3,MATRIX_1:def 4;
   end;
   suppose
-A3: len M>0;
+A4: len M>0;
     per cases;
     suppose
       width M=0;
@@ -646,7 +642,7 @@ A3: len M>0;
     end;
     suppose
       width M>0;
-      then (M@)@=M by A3,Th15;
+      then (M@)@=M by A4,Th15;
       hence thesis by A2,Th16;
     end;
   end;
@@ -675,8 +671,7 @@ A6: for j st j in Seg (width M) holds M*(i,j) =p.j
     let j;
     assume j in Seg(width M);
     then [i,j] in Indices M by A1,ZFMISC_1:106;
-    then ex q being FinSequence of D st q=M.i & q.j=M*(i,j) by MATRIX_1:
-    def 6;
+    then ex q being FinSequence of D st q=M.i & q.j=M*(i,j) by MATRIX_1:def 6;
     hence thesis;
   end;
   now
@@ -703,7 +698,7 @@ registration
   proof
     consider n being Nat such that
 A1: for x st x in rng M ex s being FinSequence st s=x & len s = n by
-    MATRIX_1:def 1;
+MATRIX_1:def 1;
     take n;
     let x;
 A2: rng DelLine(M,i) c= rng M by FINSEQ_3:115;
@@ -741,8 +736,8 @@ registration
   cluster permutational non empty set;
   existence
   proof
-    consider n;
-    consider p being Permutation of Seg n;
+    set n =the  Nat;
+    set p =the  Permutation of Seg n;
     take P={p};
     thus P is permutational
     proof
@@ -762,7 +757,7 @@ definition
   ex s st s in P & it=len s;
   existence
   proof
-    consider x being Element of P;
+    set x =the  Element of P;
     consider n such that
 A1: for y st y in P holds y is Permutation of Seg n by Def9;
     reconsider n as Element of NAT by ORDINAL1:def 13;
@@ -820,7 +815,7 @@ end;
 theorem
   ex P being permutational non empty set st len P =n
 proof
-  consider p being Permutation of Seg n;
+  set p =the  Permutation of Seg n;
   set P={p};
   now
     take n;
@@ -832,7 +827,7 @@ proof
   take P;
   len P= n
   proof
-    consider x being Element of P;
+    set x =the  Element of P;
     reconsider y=x as Function of Seg n,Seg n by TARSKI:def 1;
 A1: dom y=Seg n by FUNCT_2:67;
     then reconsider s=y as FinSequence by FINSEQ_1:def 2;
@@ -916,7 +911,7 @@ end;
 theorem
   len Permutations(n)=n
 proof
-  consider x being Element of Permutations(n);
+  set x =the  Element of Permutations(n);
   reconsider q=x as Permutation of Seg n by Def11;
 A1: dom q=Seg n by FUNCT_2:67;
   then reconsider q as FinSequence by FINSEQ_1:def 2;
@@ -1163,12 +1158,10 @@ proof
   0=2 * 0 + 0;
   then
 A1: (len l) mod 2=0 by NAT_D:def 2;
-  Product <*> the carrier of Group_of_Perm(n)=1_Group_of_Perm(n) by
-  GROUP_4:11;
+  Product <*> the carrier of Group_of_Perm(n)=1_Group_of_Perm(n) by GROUP_4:11;
   then
 A2: idseq n=Product l by Th28;
-  for i st i in dom l ex q st l.i=q & q is being_transposition by RELAT_1:
-  60;
+  for i st i in dom l ex q st l.i=q & q is being_transposition by RELAT_1:60;
   hence thesis by A1,A2,Def15;
 end;
 

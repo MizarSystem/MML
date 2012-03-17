@@ -293,7 +293,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ARMSTRNG" nr="2">

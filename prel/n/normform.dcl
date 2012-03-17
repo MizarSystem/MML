@@ -127,8 +127,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="52"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NORMFORM" nr="5">
@@ -141,8 +141,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="52"/>
-<Adjective nr="59"/>
+<Adjective nr="53"/>
+<Adjective nr="60"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NORMFORM" nr="6">
@@ -155,9 +155,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="52"/>
-<Adjective nr="60"/>
-<Adjective nr="62"/>
+<Adjective nr="53"/>
+<Adjective nr="61"/>
+<Adjective nr="63"/>
 </Cluster>
 </FCluster>
 </Registrations>

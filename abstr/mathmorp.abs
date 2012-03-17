@@ -9,67 +9,67 @@ environ
  vocabularies NUMBERS, SUBSET_1, PRE_TOPC, EUCLID, ARYTM_3, STRUCT_0, REALSET1,
       ARYTM_1, VALUED_2, TARSKI, SUPINF_2, XBOOLE_0, XREAL_0, ORDINAL1,
       RELAT_1, CARD_1, MONOID_0, RLVECT_1, CONVEX1, XXREAL_0, REAL_1, RLTOPSP1,
-      MATHMORP;
+      MATHMORP, ALGSTR_0;
  notations TARSKI, ORDINAL1, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
-      DOMAIN_1, STRUCT_0, PRE_TOPC, XREAL_0, REAL_1, RLVECT_1, RLTOPSP1,
-      EUCLID;
- constructors DOMAIN_1, XXREAL_0, REAL_1, JORDAN1, CONVEX1, BINOP_2;
- registrations XBOOLE_0, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, EUCLID;
+      DOMAIN_1, STRUCT_0, ALGSTR_0, PRE_TOPC, XREAL_0, REAL_1, RLVECT_1,
+      RLTOPSP1, EUCLID, RUSUB_4;
+ constructors DOMAIN_1, XXREAL_0, REAL_1, JORDAN1, CONVEX1, BINOP_2, RUSUB_4;
+ registrations XBOOLE_0, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, EUCLID,
+      RLTOPSP1, ALGSTR_0, RLVECT_1;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
 
 
-begin
-
-:: 1.The definition of Erosion and Dilation and their Algebraic Properties
+begin :: 1. The definition of Erosion and Dilation and their
+::          Algebraic Properties
 :: Translation of X according to p
 
 definition
-  let n be Element of NAT,p be Point of TOP-REAL n, X be Subset of TOP-REAL n;
-  func X+p -> Subset of TOP-REAL n equals
+  let T be non empty addMagma, p be Element of T, X be Subset of T;
+  func X+p -> Subset of T equals
 :: MATHMORP:def 1
-  {q+p where q is Point of TOP-REAL n:
-  q in X};
+  {q + p where q is Element of T : q in X};
 end;
 
 :: Reflected of X
 
 definition
-  let n be Element of NAT,X be Subset of TOP-REAL n;
-  func X! -> Subset of TOP-REAL n equals
+  let T be non empty addLoopStr, X be Subset of T;
+  func X! -> Subset of T equals
 :: MATHMORP:def 2
-  {-q where q is Point of TOP-REAL n: q
-  in X};
+  {-q where q is Point of T : q in X};
 end;
 
 :: Set Erosion
 
 definition
-  let n be Element of NAT,X,B be Subset of TOP-REAL n;
-  func X (-) B -> Subset of TOP-REAL n equals
+  let T be non empty addMagma, X,B be Subset of T;
+  func X (-) B -> Subset of T equals
 :: MATHMORP:def 3
-  {y where y is Point of TOP-REAL
-n: B+y c= X};
+  {y where y is Point of T : B+y c= X};
+  canceled;
 end;
 
 :: Set Dilation
 
-definition
-  let n be Element of NAT,X,B be Subset of TOP-REAL n;
-  func X (+) B -> Subset of TOP-REAL n equals
-:: MATHMORP:def 4
-  {y+b where y,b is Point of
-  TOP-REAL n: y in X & b in B};
+notation
+  let T be non empty addLoopStr;
+  let A, B be Subset of T;
+  synonym A(+)B for A + B;
 end;
 
-reserve n for Element of NAT,
-  X,Y,Z,B,C,B1,B2 for Subset of TOP-REAL n,
-  x,y,p for Point of TOP-REAL n;
+reserve T for non empty Abelian
+  add-associative right_zeroed right_complementable RLSStruct,
+  X,Y,Z,B,C,B1,B2 for Subset of T,
+  x,y,p for Point of T;
 
 theorem :: MATHMORP:1
+  for T being add-associative right_zeroed right_complementable
+    (non empty RLSStruct),
+       B being Subset of T holds
   (B!)! = B;
 
 theorem :: MATHMORP:2
-  {0.TOP-REAL n} + x = {x};
+  {0.T} + x = {x};
 
 theorem :: MATHMORP:3
   B1 c= B2 implies B1+p c= B2+p;
@@ -78,16 +78,16 @@ theorem :: MATHMORP:4
   for X st X = {} holds X+x = {};
 
 theorem :: MATHMORP:5
-  X (-) {0.TOP-REAL n} = X;
+  X (-) {0.T} = X;
 
 theorem :: MATHMORP:6
-  X (+) {0.TOP-REAL n} = X;
+  X (+) {0.T} = X;
 
 theorem :: MATHMORP:7
   X (+) {x} = X+x;
 
 theorem :: MATHMORP:8
-  for X,Y st Y = {} holds X (-) Y = REAL n;
+  for X,Y st Y = {} holds X (-) Y = the carrier of T;
 
 theorem :: MATHMORP:9
   X c= Y implies X (-) B c= Y (-) B & X (+) B c= Y (+) B;
@@ -96,7 +96,7 @@ theorem :: MATHMORP:10
   B1 c= B2 implies X (-) B2 c= X (-) B1 & X (+) B1 c= X (+) B2;
 
 theorem :: MATHMORP:11
-  0.TOP-REAL n in B implies X (-) B c= X & X c= X (+) B;
+  0.T in B implies X (-) B c= X & X c= X (+) B;
 
 theorem :: MATHMORP:12
   X (+) Y = Y (+) X;
@@ -126,7 +126,7 @@ theorem :: MATHMORP:20
   X c= (X (+) B) (-) B;
 
 theorem :: MATHMORP:21
-  X+0.TOP-REAL n = X;
+  X+0.T = X;
 
 theorem :: MATHMORP:22
   X (-) {x} = X+(-x);
@@ -180,14 +180,13 @@ theorem :: MATHMORP:38
   (X (-) B)` = X` (+) B!;
 
 begin
-
 :: 2. The definition of Adjunction Opening and Closing and
 ::    their Algebraic Properties
 :: Adjunction Opening
 
 definition
-  let n be Element of NAT,X,B be Subset of TOP-REAL n;
-  func X (O) B -> Subset of TOP-REAL n equals
+  let T be non empty addLoopStr,X,B be Subset of T;
+  func X (O) B -> Subset of T equals
 :: MATHMORP:def 5
   (X (-) B) (+) B;
 end;
@@ -195,8 +194,8 @@ end;
 :: Adjunction Closing
 
 definition
-  let n be Element of NAT,X,B be Subset of TOP-REAL n;
-  func X (o) B -> Subset of TOP-REAL n equals
+  let T be non empty addLoopStr,X,B be Subset of T;
+  func X (o) B -> Subset of T equals
 :: MATHMORP:def 6
   (X (+) B) (-) B;
 end;
@@ -253,25 +252,27 @@ theorem :: MATHMORP:55
   B = B (O) B1 implies X (O) B c= X (O) B1;
 
 begin
-
 :: 3.The definition of Scaling transformation and its Algebraic Properties
 :: Scaling transformation
 
 definition
-  let t be real number, n be Element of NAT,A be Subset of TOP-REAL n;
-  func t(.)A -> Subset of TOP-REAL n equals
+  let t be real number, T be non empty RLSStruct,A be Subset of T;
+  func t(.)A -> Subset of T equals
 :: MATHMORP:def 7
-  {t*a where a is Point of TOP-REAL
-n: a in A};
+  {t*a where a is Point of T : a in A};
 end;
 
 reserve t,s,r1 for real number;
 
 theorem :: MATHMORP:56
-  for X being Subset of TOP-REAL n st X = {} holds 0(.)X = {};
+  for X being Subset of T st X = {} holds 0(.)X = {};
+
+reserve n for Element of NAT;
+reserve X,Y,B1,B2 for Subset of TOP-REAL n;
+reserve x,y for Point of TOP-REAL n;
 
 theorem :: MATHMORP:57
-  for X being non empty Subset of TOP-REAL n holds 0(.)X = {0.TOP-REAL n };
+  for X being non empty Subset of TOP-REAL n holds 0(.)X = {0.TOP-REAL n};
 
 theorem :: MATHMORP:58
   1(.)X = X;
@@ -301,12 +302,12 @@ theorem :: MATHMORP:66
   t<>0 implies t(.)(X (o) Y) = t(.)X (o) t(.)Y;
 
 begin :: 4. The definition of Thinning and Thickening and their
-::    Algebraic Properties
+::    Algebraic Properties.
 :: "Hit or Miss" Transformation
 
 definition
-  let n be Element of NAT,X,B1,B2 be Subset of TOP-REAL n;
-  func X (*) (B1,B2) -> Subset of TOP-REAL n equals
+  let T be non empty RLSStruct,X,B1,B2 be Subset of T;
+  func X (*) (B1,B2) -> Subset of T equals
 :: MATHMORP:def 8
   (X (-) B1) /\ (X` (-) B2);
 end;
@@ -314,8 +315,8 @@ end;
 :: Thickening
 
 definition
-  let n be Element of NAT,X,B1,B2 be Subset of TOP-REAL n;
-  func X (&) (B1,B2) -> Subset of TOP-REAL n equals
+  let T be non empty RLSStruct,X,B1,B2 be Subset of T;
+  func X (&) (B1,B2) -> Subset of T equals
 :: MATHMORP:def 9
   X \/ (X (*) (B1,B2));
 end;
@@ -323,8 +324,8 @@ end;
 :: Thinning
 
 definition
-  let n be Element of NAT,X,B1,B2 be Subset of TOP-REAL n;
-  func X (@) (B1,B2) -> Subset of TOP-REAL n equals
+  let T be non empty RLSStruct,X,B1,B2 be Subset of T;
+  func X (@) (B1,B2) -> Subset of T equals
 :: MATHMORP:def 10
   X \ (X (*) (B1,B2));
 end;
@@ -352,14 +353,13 @@ canceled;
 theorem :: MATHMORP:74
   X (@) (B2,B1) = (X` (&) (B1,B2))`;
 
-begin
-
-:: 5. Properties of Erosion, Dilation, Adjunction Opening,
+begin :: 5. Properties of Erosion, Dilation, Adjunction Opening,
 ::    Adjunction Closing on Convex sets
 
 theorem :: MATHMORP:75
-  for V being RealLinearSpace, B being Subset of V holds B is
-convex iff for x,y be Point of V,r be real number st 0 <= r & r <= 1 & x in B &
+  for V being RealLinearSpace, B being Subset of V holds
+  B is convex iff
+  for x,y be Point of V,r be real number st 0 <= r & r <= 1 & x in B &
   y in B holds r*x + (1-r)*y in B;
 
 definition
@@ -367,9 +367,12 @@ definition
   redefine attr B is convex means
 :: MATHMORP:def 11
 
-  for x,y be Point of V,r be real
-  number st 0 <= r & r <= 1 & x in B & y in B holds r*x + (1-r)*y in B;
+  for x,y be Point of V,r be real number st
+  0 <= r & r <= 1 & x in B & y in B holds r*x + (1-r)*y in B;
 end;
+
+reserve n for Element of NAT;
+reserve X,B for Subset of TOP-REAL n;
 
 theorem :: MATHMORP:76
   X is convex implies X! is convex;

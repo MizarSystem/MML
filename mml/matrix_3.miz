@@ -3,7 +3,7 @@
 ::
 :: Received May 17, 1993
 :: Copyright (c) 1993 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, NAT_1, XBOOLE_0, VECTSP_1, SUPINF_2, MATRIX_1, FINSEQ_2,
@@ -28,7 +28,7 @@ environ
       FUNCT_1, SETWISEO, VECTSP_1, ZFMISC_1, FVSUM_1, SETWOP_2, MATRIX_1,
       MATRIX_2, FUNCT_3, FINSEQOP, FUNCOP_1, FINSUB_1, FUNCT_5, FINSEQ_3,
       RLVECT_1, RELAT_1, FINSOP_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, GROUP_1,
-      ORDINAL1, XXREAL_0;
+      ORDINAL1, XXREAL_0, CARD_1;
  schemes FUNCT_2, FINSEQ_2, MATRIX_1, FINSEQ_1, FUNCT_3, SETWISEO, FUNCT_1,
       BINOP_1;
 
@@ -248,22 +248,22 @@ A2: width A=width B;
 A3: width A=width (A+B) by Def3;
   then
 A4: width (A+B)=width (B+A) by A2,Def3;
-A6: len A=len (A+B) by Def3;
+A5: len A=len (A+B) by Def3;
   then dom A = dom(A+B) by FINSEQ_3:31;
   then
-A7: Indices A = Indices (A + B) by A3;
+A6: Indices A = Indices (A + B) by A3;
   dom A = dom B by A1,FINSEQ_3:31;
   then
-A8: Indices B=[:dom A,Seg width A:] by A2;
-A9: now
+A7: Indices B=[:dom A,Seg width A:] by A2;
+A8: now
     let i,j;
     assume
-A10: [i,j] in Indices (A + B);
-    hence (A + B)*(i,j)=B*(i,j) + A*(i,j) by A7,Def3
-      .=( B + A)*(i,j) by A8,A7,A10,Def3;
+A9: [i,j] in Indices (A + B);
+    hence (A + B)*(i,j)=B*(i,j) + A*(i,j) by A6,Def3
+      .=( B + A)*(i,j) by A7,A6,A9,Def3;
   end;
-  len (A+B)=len (B+A) by A1,A6,Def3;
-  hence thesis by A4,A9,MATRIX_1:21;
+  len (A+B)=len (B+A) by A1,A5,Def3;
+  hence thesis by A4,A8,MATRIX_1:21;
 end;
 
 theorem
@@ -309,34 +309,34 @@ proof
   per cases;
   suppose
 A1: n > 0;
-A3: width A= width (A+0.(K,n,m)) by Def3;
-A5: Indices A=[:Seg n,Seg m:] by A1,MATRIX_1:24;
-A6: len A= len (A+0.(K,n,m)) by Def3;
+A2: width A= width (A+0.(K,n,m)) by Def3;
+A3: Indices A=[:Seg n,Seg m:] by A1,MATRIX_1:24;
+A4: len A= len (A+0.(K,n,m)) by Def3;
     then dom A = dom(A+0.(K,n,m)) by FINSEQ_3:31;
     then
-A7: Indices A= Indices (A+0.(K,n,m)) by A3;
-A8: Indices (0.(K,n,m))=[:Seg n,Seg m:] by A1,MATRIX_1:24;
+A5: Indices A= Indices (A+0.(K,n,m)) by A2;
+A6: Indices (0.(K,n,m))=[:Seg n,Seg m:] by A1,MATRIX_1:24;
     now
       let i,j;
       assume
-A9:   [i,j] in Indices (A+ 0.(K,n,m));
-      hence (A+ 0.(K,n,m)) *(i,j)=A*(i,j) + 0.(K,n,m)*(i,j) by A7,Def3
-        .=A*(i,j) +0.K by A5,A8,A7,A9,Th3
+A7:   [i,j] in Indices (A+ 0.(K,n,m));
+      hence (A+ 0.(K,n,m)) *(i,j)=A*(i,j) + 0.(K,n,m)*(i,j) by A5,Def3
+        .=A*(i,j) +0.K by A3,A6,A5,A7,Th3
         .=A*(i,j) by RLVECT_1:10;
     end;
-    hence thesis by A6,A3,MATRIX_1:21;
+    hence thesis by A4,A2,MATRIX_1:21;
   end;
   suppose
-A10: n=0;
-A11: width A= width (A+0.(K,n,m)) by Def3;
-A12: len A= len (A+0.(K,n,m)) by Def3;
+A8: n=0;
+A9: width A= width (A+0.(K,n,m)) by Def3;
+A10: len A= len (A+0.(K,n,m)) by Def3;
     then dom A= dom(A+0.(K,n,m)) by FINSEQ_3:31;
     then Indices A= [:dom A,Seg width A:] & Indices (A+0.(K,n,m))=[:dom A,Seg
-    width A :] by A11;
+    width A :] by A9;
     then
     for i,j st [i,j] in Indices (A+ 0.(K,n,m)) holds (A+ 0.(K,n,m))*(i,j)
-    = A*(i,j) by A10,MATRIX_1:23;
-    hence thesis by A12,A11,MATRIX_1:21;
+    = A*(i,j) by A8,MATRIX_1:23;
+    hence thesis by A10,A9,MATRIX_1:21;
   end;
 end;
 
@@ -361,23 +361,23 @@ MATRIX_1:24;
       Indices A= Indices (-A) & Indices A= Indices (A + (-A)) by A1,A3;
     end;
     case
-A9:   n=0;
+A7:   n=0;
       then
-A10:  width A=0 by MATRIX_1:23;
+A8:  width A=0 by MATRIX_1:23;
       then
-B10:  Seg width(-A) = Seg 0 by A1;
-A11:  len A=0 by A9,MATRIX_1:23;
+A9:  Seg width(-A) = Seg 0 by A1;
+A10:  len A=0 by A7,MATRIX_1:23;
       then
-B11:   dom(-A) = Seg 0 by A4,FINSEQ_1:def 3;
-A12:  Indices (-A) = [:dom(-A),Seg width -A:] .= [:Seg 0,Seg width(-A):] by B11
-          .= [:Seg 0,Seg 0 qua set:] by B10;
-      dom(A+ -A) = Seg 0 by A2,A11,FINSEQ_1:def 3;
+A11:   dom(-A) = Seg 0 by A4,FINSEQ_1:def 3;
+A12:  Indices (-A) = [:dom(-A),Seg width -A:] .= [:Seg 0,Seg width(-A):] by A11
+          .= [:Seg 0,Seg 0 qua set:] by A9;
+      dom(A+ -A) = Seg 0 by A2,A10,FINSEQ_1:def 3;
       then
-A13:  Indices (A+ -A)=[:Seg 0,Seg 0 qua set:] by A3,A10;
-      len (0.(K,n,m))=0 & width (0.(K,n,m))=0 by A9,MATRIX_1:23;
+A13:  Indices (A+ -A)=[:Seg 0,Seg 0 qua set:] by A3,A8;
+      len (0.(K,n,m))=0 & width (0.(K,n,m))=0 by A7,MATRIX_1:23;
       hence len (0.(K,n,m))=len (A+ -A) & width (0.(K,n,m))=width (A+ -A) by
-A11,A10,Def3;
-      Indices A= {} by A9,MATRIX_1:23;
+A10,A8,Def3;
+      Indices A= {} by A7,MATRIX_1:23;
       hence Indices A= Indices (-A)& Indices A= Indices (A + (-A)) by A12,A13,
 ZFMISC_1:113;
     end;
@@ -502,22 +502,22 @@ A4:     len M= 0;
   proof
     let A,B be Matrix of K;
     assume that
-A6: len A=len M and
-A7: width A =width M and
-A8: for i,j st [i,j] in Indices M holds A*(i,j)=a*(M*(i,j)) and
-A9: len B=len M & width B =width M and
-A10: for i,j st [i,j] in Indices M holds B*(i,j)=a*(M*(i,j));
+A5: len A=len M and
+A6: width A =width M and
+A7: for i,j st [i,j] in Indices M holds A*(i,j)=a*(M*(i,j)) and
+A8: len B=len M & width B =width M and
+A9: for i,j st [i,j] in Indices M holds B*(i,j)=a*(M*(i,j));
     now
       let i,j;
-      dom A = dom M by A6,FINSEQ_3:31;
+      dom A = dom M by A5,FINSEQ_3:31;
       then
-A12:  Indices A=[:dom M,Seg width M:] by A7;
+A10:  Indices A=[:dom M,Seg width M:] by A6;
       assume
-A13:  [i,j] in Indices A;
-      hence A*(i,j)=a*(M*(i,j)) by A8,A12
-        .=B*(i,j) by A10,A13,A12;
+A11:  [i,j] in Indices A;
+      hence A*(i,j)=a*(M*(i,j)) by A7,A10
+        .=B*(i,j) by A9,A11,A10;
     end;
-    hence thesis by A6,A7,A9,MATRIX_1:21;
+    hence thesis by A5,A6,A8,MATRIX_1:21;
   end;
 end;
 
@@ -733,10 +733,10 @@ A22: j in dom p3;
     hence p3.j =0.K by A16,A13
       .= (len p3 |->0.K).j by A13,A22,FINSEQ_2:71;
   end;
-  len (len p3 |->0.K)=len p3 by FINSEQ_1:def 18;
+  len (len p3 |->0.K)=len p3 by CARD_1:def 13;
   then
 A23: p3=len p3 |->0.K by A21,FINSEQ_2:10;
-  len (len p2 |->0.K)=len p2 by FINSEQ_1:def 18;
+  len (len p2 |->0.K)=len p2 by CARD_1:def 13;
   then p2=len p2 |->0.K by A11,FINSEQ_2:10;
   then Sum p=Sum(p3^<*x*>) + Sum(len p2 |->0.K) by A5,A4,RLVECT_1:58
     .=Sum(p3^<*x*>) + 0.K by Th13
@@ -911,36 +911,36 @@ A5: now
     let i,j;
     assume
 A6: [i,j] in Indices (A*B);
-then A8: j in Seg width B by A4,ZFMISC_1:106;
+then A7: j in Seg width B by A4,ZFMISC_1:106;
     then j in Seg len (Col(B,j)) by A3,A1,MATRIX_1:def 9;
     then
-A9: j in dom (Col(B,j)) by FINSEQ_1:def 3;
-A10: j in Seg width A by A1,A2,A4,A6,ZFMISC_1:106;
-A11: now
+A8: j in dom (Col(B,j)) by FINSEQ_1:def 3;
+A9: j in Seg width A by A1,A2,A4,A6,ZFMISC_1:106;
+A10: now
       let k;
       assume that
-A12:  k in dom (Col(B,j)) and
-A13:  k<>j;
-      k in Seg len (Col(B,j)) by A12,FINSEQ_1:def 3;
+A11:  k in dom (Col(B,j)) and
+A12:  k<>j;
+      k in Seg len (Col(B,j)) by A11,FINSEQ_1:def 3;
       then k in Seg len B by MATRIX_1:def 9;
       then k in dom B by FINSEQ_1:def 3;
-      then [k,j] in [:dom B,Seg width B:] by A8,ZFMISC_1:106;
+      then [k,j] in [:dom B,Seg width B:] by A7,ZFMISC_1:106;
       then [k,j] in Indices B;
-      hence (Col(B,j)).k=0.K by A13,Th18;
+      hence (Col(B,j)).k=0.K by A12,Th18;
     end;
-    j in dom B by A3,A1,A8,FINSEQ_1:def 3;
-    then [j,j] in [:dom B,Seg width B:] by A1,A2,A10,ZFMISC_1:106;
+    j in dom B by A3,A1,A7,FINSEQ_1:def 3;
+    then [j,j] in [:dom B,Seg width B:] by A1,A2,A9,ZFMISC_1:106;
     then [j,j] in Indices B;
     then
-A14: (Col(B,j)).j=1.K by Th18;
-    j in Seg len (Line(A,i)) by A1,A2,A8,MATRIX_1:def 8;
+A13: (Col(B,j)).j=1.K by Th18;
+    j in Seg len (Line(A,i)) by A1,A2,A7,MATRIX_1:def 8;
     then
-A15: j in dom (Line(A,i)) by FINSEQ_1:def 3;
+A14: j in dom (Line(A,i)) by FINSEQ_1:def 3;
     thus (A*B)*(i,j)= Line(A,i) "*" Col(B,j) by A3,A2,A6,Def4
       .=Col(B,j) "*" Line(A,i) by FVSUM_1:115
       .=Sum(mlt(Col(B,j),Line(A,i))) by FVSUM_1:def 10
-      .=Line(A,i).j by A9,A15,A11,A14,Th19
-      .=A*(i,j) by A10,MATRIX_1:def 8;
+      .=Line(A,i).j by A8,A14,A10,A13,Th19
+      .=A*(i,j) by A9,MATRIX_1:def 8;
   end;
   len (A*B)=len A by A3,A2,Def4;
   hence thesis by A1,A2,A4,A5,MATRIX_1:21;

@@ -355,8 +355,16 @@ end;
 theorem
   SCMPDS-OK.d1 = INT by Th19;
 
+Lm2: NAT c= SCM-Memory by XBOOLE_1:7;
+
 theorem
+  SCMPDS-OK.i1 = SCMPDS-Instr
+proof
+ i1 in NAT;
+  then reconsider i1 as Element of SCM-Memory by Lm2;
   SCMPDS-OK.i1 = SCMPDS-Instr by Th20;
+ hence thesis;
+end;
 
 registration
  cluster SCMPDS-OK -> non-empty;
@@ -382,8 +390,10 @@ end;
 theorem
   pi(product SCMPDS-OK,i1) = SCMPDS-Instr
 proof
+  i1 in NAT;
+  then reconsider n=i1 as Element of SCM-Memory by Lm2;
   dom SCMPDS-OK = SCM-Memory by FUNCT_2:def 1;
-  hence pi(product SCMPDS-OK,i1) = SCMPDS-OK.i1 by CARD_3:22
+  hence pi(product SCMPDS-OK,i1) = SCMPDS-OK.n by CARD_3:22
     .= SCMPDS-Instr by Th20;
 end;
 
@@ -460,11 +470,13 @@ theorem
   for s being SCMPDS-State, u, v being Nat holds SCM-Chg(s,u).v = s.v
 proof
   let s be SCMPDS-State, u, v be Nat;
-  v in NAT by ORDINAL1:def 13;
-  then
-A1: SCMPDS-OK.v = SCMPDS-Instr by Th20;
+A1:  v in NAT by ORDINAL1:def 13;
+  then reconsider v as Element of SCM-Memory by Lm2;
+:::  v in NAT by ORDINAL1:def 13;
+:::  then
+A2: SCMPDS-OK.v = SCMPDS-Instr by Th20,A1;
   SCMPDS-OK.NAT = NAT & {NAT} = dom(NAT .--> u) by Th18,AMI_2:30,FUNCOP_1:19;
-  then not v in dom(NAT .--> u) by A1,Th17,TARSKI:def 1;
+  then not v in dom(NAT .--> u) by A2,Th17,TARSKI:def 1;
   hence thesis by FUNCT_4:12;
 end;
 
@@ -550,6 +562,8 @@ proof
   let s be SCMPDS-State, t be Element of SCM-Data-Loc, u be Integer, v be
   Element of NAT;
 A1: {t} = dom(t .--> u) by FUNCOP_1:19;
+  v in NAT;
+  then reconsider v as Element of SCM-Memory by Lm2;
   SCMPDS-OK.v = SCMPDS-Instr & SCMPDS-OK.t = INT by Th19,Th20;
   then not v in dom(t .--> u) by A1,Th17,TARSKI:def 1;
   hence thesis by FUNCT_4:12;
@@ -896,7 +910,7 @@ definition
   abs(s.a)+2;
   coherence;
 end;
- 
+
 :: RetSP: Return Stack Pointer
 :: RetIC: Return Instruction-Counter
 

@@ -10,16 +10,18 @@ environ
       MEASURE7, XBOOLE_0, XXREAL_2, XXREAL_0, SEQ_4, CARD_1, REAL_1, ARYTM_3,
       XREAL_0, ORDINAL1, ARYTM_1, CARD_3, FINSEQ_2, INTEGRA2, SEQ_1, SEQ_2,
       ORDINAL2, COMPLEX1, XXREAL_1, FUNCT_3, REAL_NS1, STRUCT_0, PARTFUN1,
-      VALUED_1, TARSKI, PRE_TOPC, INTEGRA5, REALSET1, INTEGR15;
+      VALUED_1, TARSKI, PRE_TOPC, INTEGRA5, REALSET1, INTEGR15, VALUED_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
       XXREAL_2, NAT_1, FUNCT_1, FUNCT_2, STRUCT_0, REAL_1, RCOMP_1, VALUED_1,
       RELSET_1, PARTFUN1, SEQ_1, SEQ_2, SEQ_4, FINSEQ_1, FINSEQ_2, FINSEQOP,
-      RVSUM_1, PRE_TOPC, XXREAL_0, EUCLID, PDIFF_1, INTEGRA1, INTEGRA2,
-      INTEGRA3, INTEGRA5, NORMSP_1, REAL_NS1;
+      VALUED_2, RVSUM_1, PRE_TOPC, XXREAL_0, EUCLID, PDIFF_1, INTEGRA1,
+      INTEGRA2, INTEGRA3, INTEGRA5, NORMSP_1, REAL_NS1;
  constructors REAL_1, FINSEQOP, MONOID_0, SEQ_4, PSCOMP_1, NAT_D, VFUNCT_1,
-      PDIFF_1, BINOP_2, SEQ_1, INTEGRA2, INTEGRA5, RELSET_1, SEQ_2, INTEGRA3;
+      PDIFF_1, BINOP_2, SEQ_1, INTEGRA2, INTEGRA5, RELSET_1, SEQ_2, INTEGRA3,
+      VALUED_2;
  registrations NUMBERS, XREAL_0, FINSEQ_2, SEQ_2, INTEGRA1, FUNCT_2, NAT_1,
-      MEMBERED, XXREAL_0, ORDINAL1, VALUED_0, VALUED_1, REAL_NS1, RELSET_1;
+      MEMBERED, XXREAL_0, ORDINAL1, VALUED_0, VALUED_1, REAL_NS1, RELSET_1,
+      EUCLID, VALUED_2, CARD_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -189,31 +191,25 @@ definition
 end;
 
 definition
-  let n be Element of NAT;
-  let Z be non empty set;
+  let n be Nat;
+  let Z be set;
   let f,g be PartFunc of Z,REAL n;
-  func f+g -> PartFunc of Z, REAL n means
+  func f+g -> PartFunc of Z, REAL n equals
 :: INTEGR15:def 9
-
-  dom it = dom f /\ dom g & for
-  c be Element of Z st c in dom it holds it/.c = (f/.c) + (g/.c);
-  func f-g -> PartFunc of Z, REAL n means
+  f <++> g;
+  func f-g -> PartFunc of Z, REAL n equals
 :: INTEGR15:def 10
-
-  dom it = dom f /\ dom g &
-  for c be Element of Z st c in dom it holds it/.c = (f/.c) - (g/.c);
+  f <--> g;
 end;
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   let r be real number;
-  let Z be non empty set;
+  let Z be set;
   let f be PartFunc of Z,REAL n;
-  func r(#)f -> PartFunc of Z, REAL n means
+  func r(#)f -> PartFunc of Z, REAL n equals
 :: INTEGR15:def 11
-
-  dom it = dom f & for c be
-  Element of Z st c in dom it holds it/.c = r * (f/.c);
+  f [#] r;
 end;
 
 begin :: Definition of Riemann Integral on Functions REAL to REAL n
@@ -300,8 +296,8 @@ theorem :: INTEGR15:13
 
 theorem :: INTEGR15:14
   for n be Element of NAT, A be closed-interval Subset of REAL, f be
-PartFunc of REAL,REAL n, g be Function of A,REAL n st f|A = g holds integral(f,
-  A) = integral(g);
+  PartFunc of REAL,REAL n, g be Function of A,REAL n st f|A = g holds
+  integral(f,A) = integral(g);
 
 definition
   let a,b be real number;
@@ -317,13 +313,13 @@ end;
 begin :: Linearity of the Integration Operator
 
 theorem :: INTEGR15:15
-  for n be Element of NAT, f1,f2 be PartFunc of REAL, REAL n, i be
-Element of NAT holds proj(i,n)*(f1+f2) = proj(i,n)*f1 + proj(i,n)*f2 & proj(i,n
-  )*(f1-f2) = proj(i,n)*f1 - proj(i,n)*f2;
+  for n, i be Element of NAT, f1,f2 be PartFunc of REAL, REAL n holds
+  proj(i,n)*(f1+f2) = proj(i,n)*f1 + proj(i,n)*f2 &
+  proj(i,n)*(f1-f2) = proj(i,n)*f1 - proj(i,n)*f2;
 
 theorem :: INTEGR15:16
-  for n be Element of NAT, r be Real, f be PartFunc of REAL, REAL
-  n, i be Element of NAT holds proj(i,n)*(r(#)f) = r(#)(proj(i,n)*f);
+  for n,i be Element of NAT, r be Real, f be PartFunc of REAL, REAL n
+  holds proj(i,n)*(r(#)f) = r(#)(proj(i,n)*f);
 
 theorem :: INTEGR15:17
   for n be Element of NAT for A be closed-interval Subset of REAL for f1
@@ -347,3 +343,16 @@ theorem :: INTEGR15:20
   for n be Element of NAT for f being PartFunc of REAL,REAL n, A being
 closed-interval Subset of REAL, a,b be Real st A=[.b,a.] holds -integral(f,A)=
   integral(f,a,b);
+
+theorem :: INTEGR15:21
+  for n being Nat, Z,x being set, f,g being PartFunc of Z,REAL n
+  st x in dom (f+g) holds (f+g)/.x = (f/.x) + (g/.x);
+
+theorem :: INTEGR15:22
+  for n being Nat, Z,x being set, f,g being PartFunc of Z,REAL n
+  st x in dom (f-g) holds (f-g)/.x = (f/.x) - (g/.x);
+
+theorem :: INTEGR15:23
+  for n being Nat, Z,x being set, f being PartFunc of Z,REAL n
+  for r being real number
+  st x in dom (r(#)f) holds (r(#)f)/.x = r* (f/.x);

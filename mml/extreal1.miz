@@ -65,10 +65,10 @@ proof
 A1: x = a & y = b;
   reconsider a,b as real number;
   consider c being complex number such that
-W1: y = c and
-W2: y" = c" by A1, XXREAL_3:def 6;
-   x / y = x * y" .= a * c" by A1, W2, XXREAL_3:def 5
-    .= a / b by A1,W1;
+A2: y = c and
+A3: y" = c" by A1, XXREAL_3:def 6;
+   x / y = x * y" .= a * c" by A1, A3, XXREAL_3:def 5
+    .= a / b by A1,A2;
   hence thesis;
 end;
 
@@ -112,7 +112,7 @@ begin :: Sum of Finite Sequence of Extended Real Numbers
 definition
   let F be FinSequence of ExtREAL;
   func Sum(F) -> R_eal means
-  :Def5:
+  :Def4:
   ex f being Function of NAT, ExtREAL st it
 = f.(len F) & f.0 = 0. & for i being Element of NAT st i < len F holds f.(i+1)=
   f.i+F.(i+1);
@@ -233,16 +233,16 @@ A26: P[0] by A18,A21;
   end;
 end;
 
-theorem Th4:
+theorem Th40:
   Sum(<*> ExtREAL) = 0.
 proof
   reconsider F = <*> ExtREAL as FinSequence of ExtREAL;
   ex f being Function of NAT, ExtREAL st Sum F = f.(len F) & f.0 = 0. &
-  for i being Element of NAT st i < len F holds f.(i+1) = f.i+F.(i+1) by Def5;
+  for i being Element of NAT st i < len F holds f.(i+1) = f.i+F.(i+1) by Def4;
   hence thesis;
 end;
 
-theorem Th5:
+theorem Th41:
   for a being R_eal holds Sum<*a*> = a
 proof
   let a be R_eal;
@@ -251,7 +251,7 @@ proof
 A1: Sum F = f.(len F) and
 A2: f.0 = 0. and
 A3: for i being Element of NAT st i < len F holds f.(i+1) = f.i+F.(i+1)
-  by Def5;
+  by Def4;
 A4: f.(0+1) = f.0+F.(0+1) by A3;
   Sum F = f.1 by A1,FINSEQ_1:56;
   then Sum F = F.1 by A2,A4,XXREAL_3:4
@@ -259,7 +259,7 @@ A4: f.(0+1) = f.0+F.(0+1) by A3;
   hence thesis;
 end;
 
-Lm4: for F being FinSequence of ExtREAL, x being Element of ExtREAL holds Sum(
+Lm1: for F being FinSequence of ExtREAL, x being Element of ExtREAL holds Sum(
 F^<*x*>) = Sum F + x
 proof
   let F be FinSequence of ExtREAL, x be Element of ExtREAL;
@@ -267,7 +267,7 @@ proof
 A1: Sum(F^<*x*>) = f.(len(F^<*x*>)) and
 A2: f.0 = 0. and
 A3: for i being Element of NAT st i < len (F^<*x*>) holds f.(i+1)=f.i+(F
-  ^<*x*>).(i+1) by Def5;
+  ^<*x*>).(i+1) by Def4;
 A4: len(F^<*x*>) = (len F)+(len <*x*>) by FINSEQ_1:35
     .= (len F)+1 by FINSEQ_1:56;
   for i being Element of NAT st i < len F holds f.(i+1)=f.i+F.(i+1)
@@ -285,7 +285,7 @@ A7: i+1 in dom F by FINSEQ_1:def 3;
     hence thesis by A7,FINSEQ_1:def 7;
   end;
   then
-A8: Sum F = f.(len F) by A2,Def5;
+A8: Sum F = f.(len F) by A2,Def4;
   len F < len(F^<*x*>) by A4,NAT_1:13;
   then f.((len F)+1)=f.(len F)+(F^<*x*>).((len F)+1) by A3;
   hence thesis by A1,A4,A8,FINSEQ_1:59;
@@ -296,11 +296,11 @@ theorem
 proof
   let a,b be R_eal;
   thus Sum<*a,b*> = Sum(<*a*>^<*b*>) by FINSEQ_1:def 9
-    .= Sum<*a*> + b by Lm4
-    .= a + b by Th5;
+    .= Sum<*a*> + b by Lm1
+    .= a + b by Th41;
 end;
 
-Lm5: for F being FinSequence of ExtREAL st not -infty in rng F holds Sum F <>
+Lm2: for F being FinSequence of ExtREAL st not -infty in rng F holds Sum F <>
 -infty
 proof
   defpred P[FinSequence of ExtREAL] means not -infty in rng $1 implies Sum $1
@@ -312,7 +312,7 @@ A1: for F being FinSequence of ExtREAL for x being Element of ExtREAL st P[F
     let x be Element of ExtREAL;
     assume
 A2: P[F];
-A3: Sum(F^<*x*>) = Sum F + x by Lm4;
+A3: Sum(F^<*x*>) = Sum F + x by Lm1;
     assume not -infty in rng(F^<*x*>);
     then
 A4: not -infty in rng F \/ rng <*x*> by FINSEQ_1:44;
@@ -321,12 +321,12 @@ A4: not -infty in rng F \/ rng <*x*> by FINSEQ_1:44;
     then x <> -infty by TARSKI:def 1;
     hence thesis by A2,A4,A3,XBOOLE_0:def 3,XXREAL_3:17;
   end;
-A5: P[<*> ExtREAL] by Th4;
+A5: P[<*> ExtREAL] by Th40;
   thus for F being FinSequence of ExtREAL holds P[F] from FINSEQ_2:sch 2 (A5,
   A1);
 end;
 
-theorem Th7:
+theorem Th43:
   for F,G being FinSequence of ExtREAL st not -infty in rng F & not
   -infty in rng G holds Sum(F^G) = Sum(F)+Sum(G)
 proof
@@ -349,16 +349,16 @@ A3: P[H];
 A4:   not -infty in rng H \/ rng <*x*> by FINSEQ_1:44;
       then not -infty in rng H by XBOOLE_0:def 3;
       then
-A5:   Sum H <> -infty by Lm5;
+A5:   Sum H <> -infty by Lm2;
       not -infty in rng <*x*> by A4,XBOOLE_0:def 3;
       then not -infty in {x} by FINSEQ_1:55;
       then
 A6:   x <> -infty by TARSKI:def 1;
-A7:   Sum F <> -infty by A1,Lm5;
+A7:   Sum F <> -infty by A1,Lm2;
       F^(H^<*x*>) = F^H^<*x*> by FINSEQ_1:45;
-      hence Sum(F^(H^<*x*>)) = Sum F + Sum H + x by A3,A4,Lm4,XBOOLE_0:def 3
+      hence Sum(F^(H^<*x*>)) = Sum F + Sum H + x by A3,A4,Lm1,XBOOLE_0:def 3
         .= Sum F + (Sum H + x) by A6,A7,A5,XXREAL_3:30
-        .= Sum F + Sum(H^<*x*>) by Lm4;
+        .= Sum F + Sum(H^<*x*>) by Lm1;
     end;
   end;
   assume
@@ -368,14 +368,14 @@ A9: P[<*> ExtREAL]
     set H = <*> ExtREAL;
     assume not -infty in rng H;
     thus Sum(F^H) = Sum F by FINSEQ_1:47
-      .= Sum F + Sum H by Th4,XXREAL_3:4;
+      .= Sum F + Sum H by Th40,XXREAL_3:4;
   end;
   for H being FinSequence of ExtREAL holds P[H] from FINSEQ_2:sch 2 (A9,
   A2);
   hence thesis by A8;
 end;
 
-Lm9: for n,q being Nat st q in Seg(n+1) ex p being Permutation of Seg(n+1) st
+Lm3: for n,q being Nat st q in Seg(n+1) ex p being Permutation of Seg(n+1) st
 for i being Element of NAT st i in Seg(n+1) holds (i<q implies p.i=i) & (i=q
 implies p.i=n+1) & (i>q implies p.i=i-1)
 proof
@@ -597,7 +597,7 @@ A42:  i2 <> q by A8,A32,A33,A34,A35,A39;
   thus thesis by A11;
 end;
 
-Lm10: for n,q being Nat, s,p being Permutation of Seg(n+1), s9 being
+Lm4: for n,q being Nat, s,p being Permutation of Seg(n+1), s9 being
 FinSequence of Seg(n+1) st s9=s & q=s.(n+1) & for i being Element of NAT st i
 in Seg(n+1) holds (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.
 i=i-1) holds p*s9|n is Permutation of Seg n
@@ -733,7 +733,7 @@ A42: rng r = Seg n by TARSKI:2;
   hence thesis by A42,A7,FUNCT_2:83;
 end;
 
-Lm11: for n,q being Nat, p being Permutation of Seg(n+1), F,H being
+Lm5: for n,q being Nat, p being Permutation of Seg(n+1), F,H being
 FinSequence of ExtREAL st F=H*p & q in Seg(n+1) & len H = n+1 & not -infty in
 rng H & for i being Element of NAT st i in Seg(n+1) holds (i<q implies p.i=i) &
 (i=q implies p.i=n+1) & (i>q implies p.i=i-1) holds Sum F = Sum H
@@ -843,26 +843,26 @@ A47: not -infty in rng((F|(q-'1))^<*F.q*>) by A41,XBOOLE_0:def 3;
 A48: not -infty in rng(F|(q-'1)) \/ rng<*F.q*> by FINSEQ_1:44;
   then not -infty in rng(F|(q-'1)) by XBOOLE_0:def 3;
   then
-A49: Sum(F|(q-'1)) <> -infty by Lm5;
+A49: Sum(F|(q-'1)) <> -infty by Lm2;
   not -infty in rng<*F.q*> by A48,XBOOLE_0:def 3;
   then not -infty in {F.q} by FINSEQ_1:56;
   then
 A50: -infty <> F.q by TARSKI:def 1;
 A51: not -infty in rng(F/^q) by A46,A41,XBOOLE_0:def 3;
   then
-A52: Sum(F/^q) <> -infty by Lm5;
+A52: Sum(F/^q) <> -infty by Lm2;
 A53: H|(n+1) = H | Seg(n+1) by FINSEQ_1:def 15;
   H|(n+1) = H by A3,FINSEQ_1:79;
   then
 A54: H = H1^<*H.(n+1)*> by A12,A43,A53,FINSEQ_1:6,FINSEQ_5:11;
 A55: not -infty in rng(H1/^(q-'1)) by A44,XBOOLE_0:def 3;
-  thus Sum F = Sum((F|(q-'1))^<*F.q*>) + Sum(F/^q) by A40,A47,A51,Th7
-    .= Sum(F|(q-'1)) + F.q + Sum(F/^q) by Lm4
+  thus Sum F = Sum((F|(q-'1))^<*F.q*>) + Sum(F/^q) by A40,A47,A51,Th43
+    .= Sum(F|(q-'1)) + F.q + Sum(F/^q) by Lm1
     .= Sum(F|(q-'1)) + Sum(F/^q) + F.q by A50,A49,A52,XXREAL_3:30
     .= Sum(H1|(q-'1)) + Sum(H1/^(q-'1)) + H.(n+1) by A16,A27,A18,A42,A39,
 FINSEQ_1:18
-    .= Sum H1 + H.(n+1) by A8,A45,A55,Th7
-    .= Sum H by A54,Lm4;
+    .= Sum H1 + H.(n+1) by A8,A45,A55,Th43
+    .= Sum H by A54,Lm1;
 end;
 
 theorem
@@ -903,7 +903,7 @@ A11:  s.(n+1) in Seg(n+1) by A9,FUNCT_1:def 5;
       then reconsider q=s.(n+1) as Element of NAT;
       consider p being Permutation of Seg(n+1) such that
 A12:  for i being Element of NAT st i in Seg(n+1) holds (i<q implies
-      p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1) by A11,Lm9;
+      p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1) by A11,Lm3;
       reconsider p2 = p" as FinSequence of Seg(n+1) by FINSEQ_2:28;
 A13:  dom p = Seg(n+1) by FUNCT_2:def 1;
       p.q = n+1 by A11,A12;
@@ -926,7 +926,7 @@ A20:  len G = n+1 by A7,A18,FINSEQ_2:37;
 A21:  dom G = Seg(n+1) by FINSEQ_1:def 3;
       then
 A22:  G.(n+1) = F.(s.(n+1)) by A7,FINSEQ_1:6,FUNCT_1:22;
-      reconsider p1 = p*s9|n as Permutation of Seg n by A12,Lm10;
+      reconsider p1 = p*s9|n as Permutation of Seg n by A12,Lm4;
 A23:  dom p1 = Seg n by FUNCT_2:def 1;
       reconsider p19 = p1 as FinSequence of Seg n by FINSEQ_2:28;
 A24:  not -infty in rng H by A8,FUNCT_1:25;
@@ -982,17 +982,17 @@ A40:      (G|n).i = G.i by A33,FINSEQ_3:121;
       G|n = G | Seg n by FINSEQ_1:def 15;
       then G = (G|n)^<*G.(n+1)*> by A20,FINSEQ_3:61;
       then
-A41:  Sum G = Sum(G|n)+G.(n+1) by Lm4;
+A41:  Sum G = Sum(G|n)+G.(n+1) by Lm1;
 A42:  H|n = H | Seg n by FINSEQ_1:def 15;
       then H = (H|n)^<*H.(n+1)*> by A25,FINSEQ_3:61;
       then
-A43:  Sum H = Sum(H|n)+H.(n+1) by Lm4;
+A43:  Sum H = Sum(H|n)+H.(n+1) by Lm1;
       rng(H|n) c= rng H by A42,RELAT_1:99;
       then not -infty in rng (H|n) by A8,FUNCT_1:25;
       then
 A44:  Sum(G|n) = Sum(H|n) by A5,A27,A28;
       H.(n+1) = F.(p2.(n+1)) by A26,FINSEQ_1:6,FUNCT_1:22;
-      hence thesis by A11,A12,A25,A44,A14,A22,A41,A43,A24,A19,Lm11;
+      hence thesis by A11,A12,A25,A44,A14,A22,A41,A43,A24,A19,Lm5;
     end;
   end;
 A45: P[1]

@@ -73,7 +73,7 @@
 <Adjective nr="1"/>
 <Adjective nr="13"/>
 <Adjective nr="14"/>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 </Registrations>

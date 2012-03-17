@@ -32,10 +32,13 @@
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="AMI_3"/>
+<ArticleID name="AMISTD_2"/>
+<ArticleID name="AMI_1"/>
+<ArticleID name="AMISTD_5"/>
 </Signature>
 <FCluster aid="AMI_5" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="261">
+<Func kind="K" nr="260">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
@@ -43,6 +46,38 @@
 </Func>
 <Cluster>
 <Adjective nr="21" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster aid="AMI_5" nr="2">
+<ArgTypes/>
+<Func kind="K" nr="298"/>
+<Cluster>
+<Adjective nr="82">
+<Func kind="K" nr="1">
+<Func kind="K" nr="66"/>
+</Func>
+</Adjective>
+<Adjective nr="96">
+<Func kind="K" nr="1">
+<Func kind="K" nr="66"/>
+</Func>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="AMI_5" nr="3">
+<ArgTypes/>
+<Func kind="K" nr="298"/>
+<Cluster>
+<Adjective nr="82">
+<Func kind="K" nr="1">
+<Func kind="K" nr="66"/>
+</Func>
+</Adjective>
+<Adjective nr="97">
+<Func kind="K" nr="1">
+<Func kind="K" nr="66"/>
+</Func>
+</Adjective>
 </Cluster>
 </FCluster>
 </Registrations>

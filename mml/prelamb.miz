@@ -3,7 +3,7 @@
 ::
 :: Received February 13, 1991
 :: Copyright (c) 1991 Association of Mizar Users
- 
+
 environ
 
  vocabularies XBOOLE_0, STRUCT_0, BINOP_1, SUBSET_1, FINSEQ_1, FUNCT_1,
@@ -15,9 +15,10 @@ environ
       RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, FUNCT_5, RVSUM_1, XCMPLX_0, NAT_1,
       TREES_1, TREES_2, XXREAL_0;
  constructors BINOP_1, FUNCT_3, XXREAL_0, NAT_1, RVSUM_1, TREES_2, MIDSP_1,
-      FUNCT_5, RELSET_1, BINOP_2, FUNCOP_1;
+      FUNCT_5, RELSET_1, BINOP_2, FUNCOP_1, REAL_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
-      NUMBERS, MEMBERED, FINSEQ_1, TREES_2, STRUCT_0, VALUED_0, RELSET_1;
+      NUMBERS, MEMBERED, FINSEQ_1, TREES_2, STRUCT_0, VALUED_0, RELSET_1,
+      CARD_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0, XBOOLE_0, BINOP_1;
  theorems FINSEQ_1, ZFMISC_1, TREES_2, FUNCOP_1, FUNCT_2, TARSKI, MCART_1,
@@ -36,9 +37,9 @@ registration
   cluster non empty strict typealg;
   existence
   proof
-    consider l,r,i being BinOp of {{}};
-    take typealg(#{{}},l,r,i#);
-    thus the carrier of typealg(#{{}},l,r,i#) is non empty;
+    set l =the  BinOp of {{}};
+    take typealg(#{{}},l,l,l#);
+    thus the carrier of typealg(#{{}},l,l,l#) is non empty;
     thus thesis;
   end;
 end;
@@ -198,7 +199,7 @@ definition
     dom it is finite & for v being Element of dom it holds v is correct;
   existence
   proof
-    consider x;
+    set x =the  type of s;
     set Tr = {{}} --> [[<*x*>,x],0];
 A1: dom Tr = {{}} by FUNCOP_1:19;
     reconsider Tr as finite DecoratedTree
@@ -211,7 +212,7 @@ A2: [[<*x*>,x],0] in [:PAIRSOF(s), NAT:] by ZFMISC_1:106;
     thus dom Tr is finite;
     let v be Element of dom Tr;
 A3: v = {} by A1,TARSKI:def 1;
-A4: now consider x being Element of dom Tr-level 1;
+A4: now set x =the  Element of dom Tr-level 1;
       assume dom Tr-level 1 <> {};
       then x in dom Tr-level 1;
       then x in {w where w is Element of dom Tr: len w = 1} by
@@ -238,7 +239,7 @@ proof
   assume branchdeg v = 1;
   then
 A1: succ v <> {} by CARD_1:47,TREES_2:def 13;
-  consider x being Element of succ v;
+  set x =the  Element of succ v;
   x in succ v by A1;
   then x in {v^<*n*> where n is Element of NAT: v^<*n*> in dom p}
   by TREES_2:def 5;
@@ -448,7 +449,7 @@ A1: f*T is FinSequence of NAT by FINSEQ_2:36;
 end;
 end;
 
-Lm3: for D being non empty set, T being FinSequence of D
+Lm1: for D being non empty set, T being FinSequence of D
 for f being Function of D, NAT holds Sum(f*T) is Nat
 proof
   let D be non empty set, T be FinSequence of D;
@@ -505,7 +506,7 @@ A4:   u = v^<*1*> and
 A5:   (p.v)`1 = [X^T^Y,z] and
 A6:   (p.w)`1 = [T,y] and
 A7:   (p.u)`1 = [X^<*y*>^Y,z] by Th10;
-      reconsider a = Sum((size_w.r.t. s)*(X^T^Y)) as Nat by Lm3;
+      reconsider a = Sum((size_w.r.t. s)*(X^T^Y)) as Nat by Lm1;
       take (size_w.r.t. s).y + (size_w.r.t. s).z + a;
       thus thesis by A1,A2,A3,A4,A5,A6,A7;
     end;
@@ -545,7 +546,7 @@ A15:  y = [T,y]`2 by MCART_1:7
   end;
   consistency;
 end;
- 
+
 :: Models for the Lambek calculus
 
 reserve A for non empty set,
@@ -584,8 +585,10 @@ A3: {} is Element of A* by FINSEQ_1:66;
       proof
         let t be set;
         assume t in f.(x*y);
-        then t = {} by A1; then
-A4:     t = {}^{};
+        then
+x:       t = {} by A1;
+y:      {}^{} = {} by FINSEQ_1:47;
+A4:     t = {}^{} by x,y;
 A5:     {} in f.x by A2;
         {} in f.y by A2;
         hence thesis by A4,A5;
@@ -657,7 +660,7 @@ A15:  for b st b in f.y holds b ^ a in f.x;
     end;
   end;
 end;
- 
+
 :: Axioms, rules, and some of their consequences
 
 definition
@@ -670,9 +673,9 @@ registration
   cluster non empty strict typestr;
   existence
   proof
-    consider l,r,i being BinOp of {{}}, d being Relation of {{}}*,{{}};
-    take typestr(#{{}},l,r,i,d#);
-    thus the carrier of typestr(#{{}},l,r,i,d#) is non empty;
+    set l =the  BinOp of {{}},d =the  Relation of {{}}*,{{}};
+    take typestr(#{{}},l,l,l,d#);
+    thus the carrier of typestr(#{{}},l,l,l,d#) is non empty;
     thus thesis;
   end;
 end;
@@ -736,7 +739,7 @@ reserve s for SynTypes_Calculus,
 
 deffunc e(typestr) = <*>the carrier of $1;
 
-Lm4: T ==>. y & X^<*x*> ==>. z implies X^<*x/"y*>^T ==>. z
+Lm2: T ==>. y & X^<*x*> ==>. z implies X^<*x/"y*>^T ==>. z
 proof
   assume that
 A1: T ==>. y and
@@ -746,7 +749,7 @@ A2: X^<*x*> ==>. z;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm5: T ==>. y & <*x*>^Y ==>. z implies <*x/"y*>^T^Y ==>. z
+Lm3: T ==>. y & <*x*>^Y ==>. z implies <*x/"y*>^T^Y ==>. z
 proof
   assume that
 A1: T ==>. y and
@@ -756,17 +759,17 @@ A2: <*x*>^Y ==>. z;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm6: T ==>. y & <*x*> ==>. z implies <*x/"y*>^T ==>. z
+Lm4: T ==>. y & <*x*> ==>. z implies <*x/"y*>^T ==>. z
 proof
   assume that
 A1: T ==>. y and
 A2: <*x*> ==>. z;
   e(s)^<*x*> ==>. z by A2,FINSEQ_1:47;
-  then e(s)^<*x/"y*>^T ==>. z by A1,Lm4;
+  then e(s)^<*x/"y*>^T ==>. z by A1,Lm2;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm7: T ==>. y & X^<*x*> ==>. z implies X^T^<*y\x*> ==>. z
+Lm5: T ==>. y & X^<*x*> ==>. z implies X^T^<*y\x*> ==>. z
 proof
   assume that
 A1: T ==>. y and
@@ -776,7 +779,7 @@ A2: X^<*x*> ==>. z;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm8: T ==>. y & <*x*>^Y ==>. z implies T^<*y\x*>^Y ==>. z
+Lm6: T ==>. y & <*x*>^Y ==>. z implies T^<*y\x*>^Y ==>. z
 proof
   assume that
 A1: T ==>. y and
@@ -786,17 +789,17 @@ A2: <*x*>^Y ==>. z;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm9: T ==>. y & <*x*> ==>. z implies T^<*y\x*> ==>. z
+Lm7: T ==>. y & <*x*> ==>. z implies T^<*y\x*> ==>. z
 proof
   assume that
 A1: T ==>. y and
 A2: <*x*> ==>. z;
   e(s)^<*x*> ==>. z by A2,FINSEQ_1:47;
-  then e(s)^T^<*y\x*> ==>. z by A1,Lm7;
+  then e(s)^T^<*y\x*> ==>. z by A1,Lm5;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm10: <*x*>^<*y*>^Y ==>. z implies <*x*y*>^Y ==>. z
+Lm8: <*x*>^<*y*>^Y ==>. z implies <*x*y*>^Y ==>. z
 proof
   assume <*x*>^<*y*>^Y ==>. z;
   then e(s)^<*x*>^<*y*>^Y ==>. z by FINSEQ_1:47;
@@ -804,7 +807,7 @@ proof
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm11: X^<*x*>^<*y*> ==>. z implies X^<*x*y*> ==>. z
+Lm9: X^<*x*>^<*y*> ==>. z implies X^<*x*y*> ==>. z
 proof
   assume X^<*x*>^<*y*> ==>. z;
   then X^<*x*>^<*y*>^e(s) ==>. z by FINSEQ_1:47;
@@ -812,11 +815,11 @@ proof
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm12: <*x*>^<*y*> ==>. z implies <*x*y*> ==>. z
+Lm10: <*x*>^<*y*> ==>. z implies <*x*y*> ==>. z
 proof
   assume <*x*>^<*y*> ==>. z;
   then e(s)^<*x*>^<*y*> ==>. z by FINSEQ_1:47;
-  then e(s)^<*x*y*> ==>. z by Lm11;
+  then e(s)^<*x*y*> ==>. z by Lm9;
   hence thesis by FINSEQ_1:47;
 end;
 
@@ -825,7 +828,7 @@ theorem Th12:
 proof
 A1: <*x*> ==>. x by Def19;
   <*y*> ==>. y by Def19;
-  hence thesis by A1,Lm6,Lm9;
+  hence thesis by A1,Lm4,Lm7;
 end;
 
 theorem Th13:
@@ -841,7 +844,7 @@ theorem Th14:
 proof
 A1: <*x/"y*>^<*y*> ==>. x by Th12;
   <*z*> ==>. z by Def19;
-  then <*x/"y*>^<*y/"z*>^<*z*> ==>. x by A1,Lm4;
+  then <*x/"y*>^<*y/"z*>^<*z*> ==>. x by A1,Lm2;
   then <*x/"y*>^<*y/"z*> ==>. x/"z by Def19;
   hence thesis by Def19;
 end;
@@ -851,7 +854,7 @@ theorem Th15:
 proof
 A1: <*y*>^<*y\x*> ==>. x by Th12;
   <*z*> ==>. z by Def19;
-  then <*z*>^<*z\y*>^<*y\x*> ==>. x by A1,Lm8;
+  then <*z*>^<*z\y*>^<*y\x*> ==>. x by A1,Lm6;
   then <*z*>^(<*z\y*>^<*y\x*>) ==>. x by FINSEQ_1:45;
   then <*z\y*>^<*y\x*> ==>. z\x by Def19;
   hence thesis by Def19;
@@ -864,8 +867,8 @@ proof
 A1: <*x*> ==>. y;
 A2: <*z*> ==>. z by Def19;
   then
-A3: <*x/"z*>^<*z*> ==>. y by A1,Lm6;
-  <*z*>^<*z\x*> ==>. y by A1,A2,Lm9;
+A3: <*x/"z*>^<*z*> ==>. y by A1,Lm4;
+  <*z*>^<*z\x*> ==>. y by A1,A2,Lm7;
   hence thesis by A3,Def19;
 end;
 
@@ -876,8 +879,8 @@ proof
 A1: <*x*> ==>. y;
 A2: <*z*> ==>. z by Def19;
   then
-A3: <*z/"y*>^<*x*> ==>. z by A1,Lm6;
-  <*x*>^<*y\z*> ==>. z by A1,A2,Lm9;
+A3: <*z/"y*>^<*x*> ==>. z by A1,Lm4;
+  <*x*>^<*y\z*> ==>. z by A1,A2,Lm7;
   hence thesis by A3,Def19;
 end;
 
@@ -935,8 +938,8 @@ A3: <*y*>^e(s) ==>. y by A1,FINSEQ_1:47;
   assume
 A4: e(s) ==>. x;
   then
-A5: e(s)^<*y/"x*>^e(s) ==>. y by A2,Lm4;
-A6: e(s)^<*x\y*>^e(s) ==>. y by A3,A4,Lm8;
+A5: e(s)^<*y/"x*>^e(s) ==>. y by A2,Lm2;
+A6: e(s)^<*x\y*>^e(s) ==>. y by A3,A4,Lm6;
 A7: e(s)^<*y/"x*> ==>. y by A5,FINSEQ_1:47;
   <*x\y*>^e(s) ==>. y by A6,FINSEQ_1:47;
   hence thesis by A7,Def19;
@@ -946,7 +949,7 @@ theorem
   <*x/"(y/"y)*> ==>. x
 proof
   <*x*> ==>. x by Def19;
-  then <*x/"(y/"y)*>^e(s) ==>. x by Lm6,Th20;
+  then <*x/"(y/"y)*>^e(s) ==>. x by Lm4,Th20;
   hence thesis by FINSEQ_1:47;
 end;
 
@@ -976,14 +979,14 @@ A1: <*z*> ==>. z by Def19;
 A2: <*y*> ==>. y by Def19;
 A3: <*x*> ==>. x by Def19;
   <*z*>^<*y*> ==>. z*y by A1,A2,Def19;
-  then <*x/"(z*y)*>^(<*z*>^<*y*>) ==>. x by A3,Lm6;
+  then <*x/"(z*y)*>^(<*z*>^<*y*>) ==>. x by A3,Lm4;
   then <*x/"(z*y)*>^<*z*>^<*y*> ==>. x by FINSEQ_1:45;
   then <*x/"(z*y)*>^<*z*> ==>. x/"y by Def19;
   then
 A4: <*x/"(z*y)*> ==>. (x/"y)/"z by Def19;
-  <*x/"y*>^<*y*> ==>. x by A2,A3,Lm6;
-  then <*(x/"y)/"z*>^<*z*>^<*y*> ==>. x by A1,Lm5;
-  then <*(x/"y)/"z*>^<*z*y*> ==>. x by Lm11;
+  <*x/"y*>^<*y*> ==>. x by A2,A3,Lm4;
+  then <*(x/"y)/"z*>^<*z*>^<*y*> ==>. x by A1,Lm3;
+  then <*(x/"y)/"z*>^<*z*y*> ==>. x by Lm9;
   then <*(x/"y)/"z*> ==>. x/"(z*y) by Def19;
   hence thesis by A4,Def20;
 end;
@@ -995,8 +998,8 @@ A1: <*x*> ==>. x by Def19;
   <*y*> ==>. y by Def19; then
 A2: <*x*>^<*y*> ==>. x*y by A1,Def19;
   <*z*> ==>. z by Def19;
-  then <*x*>^<*y/"z*>^<*z*> ==>. x*y by A2,Lm4;
-  then <*x*(y/"z)*>^<*z*> ==>. x*y by Lm10;
+  then <*x*>^<*y/"z*>^<*z*> ==>. x*y by A2,Lm2;
+  then <*x*(y/"z)*>^<*z*> ==>. x*y by Lm8;
   hence thesis by Def19;
 end;
 
@@ -1019,13 +1022,13 @@ A2: <*y*> ==>. y by Def19;
 A3: <*z*> ==>. z by Def19;
   <*x*>^<*y*> ==>. x*y by A1,A2,Def19;
   then <*x*>^<*y*>^<*z*> ==>. (x*y)*z by A3,Def19;
-  then <*x*>^<*y*z*> ==>. (x*y)*z by Lm11;
+  then <*x*>^<*y*z*> ==>. (x*y)*z by Lm9;
   then
-A4: <*x*(y*z)*> ==>. (x*y)*z by Lm12;
+A4: <*x*(y*z)*> ==>. (x*y)*z by Lm10;
   <*y*>^<*z*> ==>. y*z by A2,A3,Def19;
   then <*x*>^(<*y*>^<*z*>) ==>. x*(y*z) by A1,Def19;
   then <*x*>^<*y*>^<*z*> ==>. x*(y*z) by FINSEQ_1:45;
-  then <*x*y*>^<*z*> ==>. x*(y*z) by Lm10;
-  then <*x*y*z*> ==>. x*(y*z) by Lm12;
+  then <*x*y*>^<*z*> ==>. x*(y*z) by Lm8;
+  then <*x*y*z*> ==>. x*(y*z) by Lm10;
   hence thesis by A4,Def20;
 end;

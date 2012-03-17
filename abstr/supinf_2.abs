@@ -9,15 +9,15 @@ environ
  vocabularies CARD_1, SUPINF_1, ARYTM_3, REAL_1, ARYTM_1, XBOOLE_0, SUBSET_1,
       NUMBERS, TARSKI, XXREAL_0, MEMBERED, ORDINAL2, ORDINAL1, XXREAL_2,
       FUNCT_1, RELAT_1, VALUED_0, FUNCT_3, CARD_3, FUNCT_4, FUNCOP_1, PARTFUN1,
-      NAT_1, SERIES_1, SUPINF_2;
+      NAT_1, SERIES_1, SUPINF_2, MEMBER_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, MEMBERED, XXREAL_0,
       XXREAL_3, XCMPLX_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FUNCT_2, FUNCT_3, FUNCOP_1, VALUED_0, FUNCT_4, NAT_1, CARD_3, XXREAL_2,
-      SUPINF_1;
+      SUPINF_1, MEMBER_1;
  constructors FUNCT_3, FUNCOP_1, FUNCT_4, FINSET_1, REAL_1, NAT_1, SUPINF_1,
-      VALUED_1, XXREAL_2, XXREAL_3, CARD_3, RELSET_1;
+      VALUED_1, XXREAL_2, XXREAL_3, CARD_3, RELSET_1, MEMBER_1;
  registrations RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FINSET_1, NUMBERS, XREAL_0,
-      MEMBERED, VALUED_0, XXREAL_3, RELSET_1;
+      MEMBERED, VALUED_0, XXREAL_3, RELSET_1, MEMBER_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -28,28 +28,17 @@ notation
 end;
 
 definition
-  canceled;
   redefine func 0. -> R_eal;
-end;
-
-definition
-  let x,y be R_eal;
+  let x be R_eal;
+  redefine func - x -> R_eal;
+  let y be R_eal;
   redefine func x + y -> R_eal;
+  redefine func x - y -> R_eal;
 end;
 
 theorem :: SUPINF_2:1
-  for x,y being R_eal, a,b being Real st x = a & y = b holds x + y = a +
-  b;
-
-definition
-  let x be R_eal;
-  redefine func - x -> R_eal;
-end;
-
-definition
-  let x,y be R_eal;
-  redefine func x - y -> R_eal;
-end;
+  for x,y being R_eal, a,b being Real st x = a & y = b holds
+  x + y = a + b;
 
 canceled;
 
@@ -67,42 +56,35 @@ canceled 15;
 ::       operations " + "," - " in a subset of ExtREAL
 ::
 
-definition
-  canceled 3;
-  let X,Y be non empty Subset of ExtREAL;
-  func X + Y -> Subset of ExtREAL means
-:: SUPINF_2:def 5
-
-  for z being R_eal holds z in it
-  iff ex x,y being R_eal st x in X & y in Y & z = x + y;
-end;
-
-registration
-  let X,Y be non empty Subset of ExtREAL;
-  cluster X + Y -> non empty;
+notation
+  let X,Y be Subset of ExtREAL;
+  synonym X + Y for X ++ Y;
 end;
 
 definition
-  let X be non empty Subset of ExtREAL;
-  func - X -> Subset of ExtREAL means
-:: SUPINF_2:def 6
-
-  for z being R_eal holds z in it iff ex x being R_eal st x in X & z = - x;
+  canceled 6;
+  let X,Y be Subset of ExtREAL;
+  redefine func X + Y -> Subset of ExtREAL;
 end;
 
-registration
-  let X be non empty Subset of ExtREAL;
-  cluster - X -> non empty;
+notation
+  let X be Subset of ExtREAL;
+  synonym -X for --X;
+end;
+
+definition
+  let X be Subset of ExtREAL;
+  redefine func - X -> Subset of ExtREAL;
 end;
 
 canceled;
 
 theorem :: SUPINF_2:22
-  for X being non empty Subset of ExtREAL holds --X = X;
+  for X being non empty Subset of ExtREAL holds - -X = X;
 
 theorem :: SUPINF_2:23
-  for X being non empty Subset of ExtREAL, z being R_eal holds z
-  in X iff - z in - X;
+  for X being non empty Subset of ExtREAL, z being R_eal holds
+  z in X iff - z in - X;
 
 theorem :: SUPINF_2:24
   for X,Y being non empty Subset of ExtREAL holds X c= Y iff - X c= - Y;
@@ -131,8 +113,8 @@ theorem :: SUPINF_2:29
   bounded_below holds inf X + inf Y <= inf (X + Y);
 
 theorem :: SUPINF_2:30
-  for X being non empty Subset of ExtREAL, a being R_eal holds a
-  is UpperBound of X iff - a is LowerBound of - X;
+  for X being non empty Subset of ExtREAL, a being R_eal holds
+  a is UpperBound of X iff - a is LowerBound of - X;
 
 theorem :: SUPINF_2:31
   for X being non empty Subset of ExtREAL holds for a being R_eal
@@ -156,13 +138,14 @@ end;
 ::
 
 definition
-  let X be non empty set;
-  let Y be non empty Subset of ExtREAL;
-  let F be Function of X,Y;
-  func sup F -> R_eal equals
+  let D be ext-real-membered set;
+  let X be set;
+  let Y be Subset of D;
+  let F be PartFunc of X,Y;
+  func sup F -> Element of ExtREAL equals
 :: SUPINF_2:def 7
   sup rng F;
-  func inf F -> R_eal equals
+  func inf F -> Element of ExtREAL equals
 :: SUPINF_2:def 8
   inf rng F;
 end;
@@ -185,9 +168,9 @@ definition
 end;
 
 theorem :: SUPINF_2:34
-  for X being non empty set, Y,Z being non empty Subset of ExtREAL
-, F being Function of X,Y, G being Function of X,Z holds rng(F + G) c= rng F +
-  rng G;
+  for X being non empty set, Y,Z being non empty Subset of ExtREAL,
+     F being Function of X,Y, G being Function of X,Z holds
+  rng(F + G) c= rng F + rng G;
 
 theorem :: SUPINF_2:35
   for X being non empty set, Y,Z being non empty Subset of ExtREAL
@@ -214,31 +197,29 @@ theorem :: SUPINF_2:37
   F being Function of X,Y holds rng(- F) = - rng F;
 
 theorem :: SUPINF_2:38
-  for X being non empty set holds for Y being non empty Subset of
-ExtREAL holds for F being Function of X,Y holds inf(- F) = - sup F & sup(- F) =
-  - inf F;
+  for X being non empty set, Y being non empty Subset of ExtREAL
+  for F being Function of X,Y holds inf(- F) = - sup F & sup(- F) = - inf F;
 
 ::
 ::       Bounded Function of X,ExtREAL
 ::
 
 definition
-  let X be non empty set;
-  let Y be non empty Subset of ExtREAL;
+  let X be set;
+  let Y be Subset of ExtREAL;
   let F be Function of X,Y;
   attr F is bounded_above means
 :: SUPINF_2:def 11
 
-  sup F <+infty;
+  sup F < +infty;
   attr F is bounded_below means
 :: SUPINF_2:def 12
 
-  -infty <inf F;
+  -infty < inf F;
 end;
 
 definition
-  let X be non empty set, Y be non empty Subset of ExtREAL, F be Function of X
-  ,Y;
+  let X be set, Y be Subset of ExtREAL, F be Function of X,Y;
   attr F is bounded means
 :: SUPINF_2:def 13
 
@@ -246,8 +227,8 @@ definition
 end;
 
 registration
-  let X be non empty set;
-  let Y be non empty Subset of ExtREAL;
+  let X be set;
+  let Y be Subset of ExtREAL;
   cluster bounded -> bounded_above bounded_below Function of X, Y;
   cluster bounded_above bounded_below -> bounded Function of X, Y;
 end;
@@ -314,8 +295,9 @@ for F1 being Function of X,Y, F2 being Function of X,Z st F1 is bounded & F2 is
   bounded holds F1 + F2 is bounded;
 
 theorem :: SUPINF_2:52
-  ex F being Function of NAT,ExtREAL st F is one-to-one & NAT =
-  rng F & rng F is non empty Subset of ExtREAL;
+  incl NAT is Function of NAT,ExtREAL &
+  incl NAT is one-to-one & NAT = rng incl NAT &
+  rng incl NAT is non empty Subset of ExtREAL;
 
 ::
 ::       Series of Elements of ExtREAL numbers
@@ -372,9 +354,9 @@ definition
   func Ser(D,N) -> Function of NAT,ExtREAL means
 :: SUPINF_2:def 17
 
-  it.0 = N.0 & for n
-being Element of NAT holds for y being R_eal st y = it.n holds it.(n + 1) = y +
-  N.(n + 1);
+  it.0 = N.0 &
+  for n being Element of NAT for y being R_eal st y = it.n holds
+  it.(n + 1) = y + N.(n + 1);
 end;
 
 theorem :: SUPINF_2:54
@@ -397,11 +379,6 @@ definition
 end;
 
 definition
-  let F be Function of NAT,ExtREAL;
-  redefine func rng F -> non empty Subset of ExtREAL;
-end;
-
-definition
   let D be Pos_Denum_Set_of_R_EAL;
   let N be Num of D;
   func SUM(D,N) -> R_eal equals
@@ -418,8 +395,7 @@ definition
 end;
 
 theorem :: SUPINF_2:57
-  for F being Function of NAT,ExtREAL holds rng F is
-  Denum_Set_of_R_EAL;
+  for F being Function of NAT,ExtREAL holds rng F is Denum_Set_of_R_EAL;
 
 definition
   let F be Function of NAT,ExtREAL;

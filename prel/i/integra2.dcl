@@ -48,8 +48,8 @@
 <Adjective nr="28"/>
 <Adjective nr="29"/>
 <Adjective nr="46"/>
-<Adjective nr="52"/>
 <Adjective nr="53"/>
+<Adjective nr="54"/>
 <Adjective nr="66"/>
 </Cluster>
 </RCluster>

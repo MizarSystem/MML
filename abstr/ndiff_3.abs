@@ -1,0 +1,228 @@
+:: Differentiable Functions into Real Normed Spaces
+::  by Hiroyuki Okazaki , Noboru Endou , Keiko Narita and Yasunari Shidama
+::
+:: Received October 13, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies NUMBERS, REAL_1, ZFMISC_1, NORMSP_1, PRE_TOPC, PARTFUN1, FUNCT_1,
+      NAT_1, FDIFF_1, SUBSET_1, RELAT_1, RCOMP_1, TARSKI, SEQ_1, ARYTM_3,
+      VALUED_1, FUNCT_2, ARYTM_1, SEQ_2, ORDINAL2, SUPINF_2, FCONT_1, COMPLEX1,
+      STRUCT_0, CARD_1, VALUED_0, XXREAL_0, FUNCOP_1, XREAL_0, ORDINAL1,
+      XXREAL_2, XBOOLE_0, XXREAL_1;
+ notations TARSKI, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, PARTFUN1, FUNCT_2,
+      FUNCOP_1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, NAT_1, VALUED_0, COMPLEX1,
+      BINOP_2, VALUED_1, SEQ_1, SEQ_2, RCOMP_1, FDIFF_1, STRUCT_0, PRE_TOPC,
+      RLVECT_1, VFUNCT_1, NORMSP_0, NORMSP_1, NDIFF_1, NFCONT_3;
+ constructors REAL_1, FDIFF_1, VFUNCT_1, NDIFF_1, SEQ_1, RELSET_1, RVSUM_1,
+      BINOP_2, INTEGR15, NAT_D, MEASURE6, NFCONT_3;
+ registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, FUNCT_2,
+      NUMBERS, XBOOLE_0, VALUED_0, NORMSP_0, NORMSP_1, RELAT_1, SUBSET_1,
+      XXREAL_0, LOPBAN_2, FUNCOP_1, NAT_1, RCOMP_1, VALUED_1, SEQ_4, FDIFF_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Differentiable of Functions into a Real Normed Space
+
+reserve F for non trivial RealNormSpace;
+reserve G for RealNormSpace;
+reserve X for set;
+reserve x,x0,g,r,s,p for Real;
+reserve n,m,k for Element of NAT;
+reserve Y for Subset of REAL;
+reserve Z for open Subset of REAL;
+reserve s1,s3 for Real_Sequence;
+reserve seq for sequence of G;
+reserve f,f1,f2 for PartFunc of REAL,the carrier of F;
+reserve h for convergent_to_0 Real_Sequence;
+reserve c for constant Real_Sequence;
+
+theorem :: NDIFF_3:1
+  (for n holds ||. seq.n .|| <= s1.n) & s1 is convergent & lim s1=0 implies
+    seq is convergent & lim(seq)=0.G;
+
+theorem :: NDIFF_3:2
+  (s1^\k)(#)(seq^\k)= (s1(#)seq) ^\k;
+
+definition let F;
+  let IT be PartFunc of REAL,the carrier of F;
+  attr IT is REST-like means
+:: NDIFF_3:def 1
+  IT is total & for h holds (h")(#)(IT/*h) is convergent &
+  lim ((h")(#)(IT/*h)) = 0.F;
+end;
+
+registration let F;
+  cluster REST-like PartFunc of REAL,the carrier of F;
+end;
+
+definition let F;
+  mode REST of F is REST-like PartFunc of REAL,the carrier of F;
+end;
+
+definition let F;
+  let IT be Function of REAL,the carrier of F;
+  attr IT is linear means
+:: NDIFF_3:def 2
+  ex r be Point of F st for p be Real holds IT.p = p*r;
+end;
+
+registration let F;
+  cluster linear Function of REAL,the carrier of F;
+end;
+
+definition let F;
+  mode LINEAR of F is linear Function of REAL,the carrier of F;
+end;
+
+reserve R,R1,R2 for REST of F;
+reserve L,L1,L2 for LINEAR of F;
+
+theorem :: NDIFF_3:3
+  L1+L2 is LINEAR of F & L1-L2 is LINEAR of F;
+
+theorem :: NDIFF_3:4
+  r(#)L is LINEAR of F;
+
+theorem :: NDIFF_3:5
+  for h1,h2 be PartFunc of REAL, the carrier of F
+  for seq be Real_Sequence st rng seq c= dom h1 /\ dom h2 holds
+  (h1+h2)/*seq = h1/*seq+h2/*seq & (h1-h2)/*seq=h1/*seq - h2/*seq;
+
+theorem :: NDIFF_3:6
+  for h1,h2 be PartFunc of REAL,the carrier of F
+  for seq be Real_Sequence st h1 is total & h2 is total holds
+  (h1+h2)/*seq = h1/*seq + h2/*seq & (h1-h2)/*seq = h1/*seq - h2/*seq;
+
+theorem :: NDIFF_3:7
+  R1+R2 is REST of F & R1-R2 is REST of F;
+
+theorem :: NDIFF_3:8
+  r(#)R is REST of F;
+
+definition let F,f;
+  let x0 be real number;
+  pred f is_differentiable_in x0 means
+:: NDIFF_3:def 3
+  ex N being Neighbourhood of x0
+  st N c= dom f & ex L,R st for x st x in N
+  holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0);
+end;
+
+definition
+  let F,f;
+  let x0 be real number;
+  assume
+   f is_differentiable_in x0;
+  func diff(f,x0) -> Point of F means
+:: NDIFF_3:def 4
+  ex N being Neighbourhood of x0 st N c= dom f & ex L,R st it=L.1
+  & for x st x in N holds f/.x-f/.x0 = L.(x-x0) + R/.(x-x0);
+end;
+
+definition let F,f,X;
+  pred f is_differentiable_on X means
+:: NDIFF_3:def 5
+  X c= dom f & for x st x in X holds f|X is_differentiable_in x;
+end;
+
+theorem :: NDIFF_3:9
+  f is_differentiable_on X implies X is Subset of REAL;
+
+theorem :: NDIFF_3:10
+  f is_differentiable_on Z iff Z c= dom f & for x st x in Z holds
+  f is_differentiable_in x;
+
+theorem :: NDIFF_3:11
+  f is_differentiable_on Y implies Y is open;
+
+definition let F,f,X;
+  assume
+   f is_differentiable_on X;
+  func f`|X -> PartFunc of REAL,the carrier of F means
+:: NDIFF_3:def 6
+  dom it = X & for x st x in X holds it.x = diff(f,x);
+end;
+
+theorem :: NDIFF_3:12
+  (Z c= dom f & ex r be Point of F st rng f = {r})
+  implies f is_differentiable_on Z &
+  for x st x in Z holds (f`|Z)/.x = 0.F;
+
+theorem :: NDIFF_3:13
+  for x0 being real number for N being Neighbourhood of x0 st
+  f is_differentiable_in x0 & N c= dom f holds for h,c st rng c = {x0}
+  & rng (h+c)c= N
+  holds h"(#)((f/*(h+c)) - f/*c) is convergent
+  & diff(f,x0) = lim (h"(#)((f/*(h+c)) - f/*c));
+
+theorem :: NDIFF_3:14
+  f1 is_differentiable_in x0 & f2 is_differentiable_in x0 implies
+  f1+f2 is_differentiable_in x0 & diff(f1+f2,x0)=diff(f1,x0)+diff(f2,x0);
+
+theorem :: NDIFF_3:15
+  f1 is_differentiable_in x0 & f2 is_differentiable_in x0 implies
+  f1-f2 is_differentiable_in x0 & diff(f1-f2,x0)=diff(f1,x0)-diff(f2,x0);
+
+theorem :: NDIFF_3:16
+  for r be Real st
+  f is_differentiable_in x0 holds r(#)f is_differentiable_in x0
+  & diff((r(#)f),x0) = r*diff(f,x0);
+
+theorem :: NDIFF_3:17
+  Z c= dom (f1+f2) & f1 is_differentiable_on Z &
+  f2 is_differentiable_on Z implies
+  f1+f2 is_differentiable_on Z &
+  for x st x in Z holds
+  ((f1+f2)`|Z).x = diff(f1,x) + diff(f2,x);
+
+theorem :: NDIFF_3:18
+  Z c= dom (f1-f2) &
+  f1 is_differentiable_on Z &
+  f2 is_differentiable_on Z implies
+  f1-f2 is_differentiable_on Z &
+  for x st x in Z holds ((f1-f2)`|Z).x = diff(f1,x) - diff(f2,x);
+
+theorem :: NDIFF_3:19
+  Z c= dom (r(#)f) & f is_differentiable_on Z implies
+  r(#)f is_differentiable_on Z &
+  for x st x in Z holds ((r(#) f)`|Z).x =r*diff(f,x);
+
+theorem :: NDIFF_3:20
+  Z c= dom f & f|Z is constant implies f is_differentiable_on Z & for x
+  st x in Z holds (f`|Z).x = 0.F;
+
+theorem :: NDIFF_3:21
+  for r,p be Point of F,Z,f
+  st Z c= dom f & (for x st x in Z holds f/.x = x*r + p)
+  holds f is_differentiable_on Z
+  & for x st x in Z holds (f`|Z).x = r;
+
+theorem :: NDIFF_3:22
+  for x0 being Real st f is_differentiable_in x0 holds
+  f is_continuous_in x0;
+
+theorem :: NDIFF_3:23
+  f is_differentiable_on X implies (f|X) is continuous;
+
+theorem :: NDIFF_3:24
+  f is_differentiable_on X & Z c= X implies f is_differentiable_on Z;
+
+theorem :: NDIFF_3:25
+  ex R be REST of F st R/.0=0.F & R is_continuous_in 0;
+
+definition let F;
+  let f be PartFunc of REAL, the carrier of F;
+  attr f is differentiable means
+:: NDIFF_3:def 7
+  f is_differentiable_on dom f;
+end;
+
+registration let F;
+  cluster differentiable Function of REAL, the carrier of F;
+end;
+
+theorem :: NDIFF_3:26
+  for f being differentiable PartFunc of REAL, the carrier of F
+  st Z c= dom f holds f is_differentiable_on Z;

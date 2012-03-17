@@ -40,7 +40,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
+<Adjective nr="35" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PARSP_1" nr="3">
@@ -49,7 +49,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
+<Adjective nr="35" value="false"/>
 <Adjective nr="112"/>
 <Adjective nr="113"/>
 </Cluster>
@@ -58,14 +58,14 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="38" value="false"/>
-<Adjective nr="57"/>
-<Adjective nr="77"/>
-<Adjective nr="83"/>
-<Adjective nr="85"/>
-<Adjective nr="90"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="58"/>
+<Adjective nr="78"/>
+<Adjective nr="84"/>
+<Adjective nr="86"/>
 <Adjective nr="91"/>
+<Adjective nr="92"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
 <Adjective nr="106"/>
@@ -83,14 +83,14 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="38" value="false"/>
-<Adjective nr="57"/>
-<Adjective nr="77"/>
-<Adjective nr="83"/>
-<Adjective nr="85"/>
-<Adjective nr="90"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="58"/>
+<Adjective nr="78"/>
+<Adjective nr="84"/>
+<Adjective nr="86"/>
 <Adjective nr="91"/>
+<Adjective nr="92"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
 <Adjective nr="106"/>
@@ -108,14 +108,14 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="38" value="false"/>
-<Adjective nr="57"/>
-<Adjective nr="77"/>
-<Adjective nr="83"/>
-<Adjective nr="85"/>
-<Adjective nr="90"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="58"/>
+<Adjective nr="78"/>
+<Adjective nr="84"/>
+<Adjective nr="86"/>
 <Adjective nr="91"/>
+<Adjective nr="92"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
 <Adjective nr="106"/>
@@ -126,7 +126,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34" value="false"/>
+<Adjective nr="35" value="false"/>
 <Adjective nr="112"/>
 </Cluster>
 </FCluster>

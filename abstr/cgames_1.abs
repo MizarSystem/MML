@@ -1,0 +1,573 @@
+:: Conway's Games and Some of Their Basic Properties
+::  by Robin Nittka
+::
+:: Received October 13, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies CGAMES_1, RELAT_1, TARSKI, XBOOLE_0, ORDINAL1, FUNCT_1, CARD_1,
+      SUBSET_1, XXREAL_0, ORDINAL2, SUPINF_2, ARYTM_1, PARTFUN1, MSUALG_6,
+      FINSEQ_1, ARYTM_3, NAT_1, ORDINAL4, MESFUNC5, XCMPLX_0;
+ notations TARSKI, XBOOLE_0, XXREAL_0, RELAT_1, ORDINAL1, FUNCT_1, NAT_1,
+      CARD_1, PARTFUN1, ORDINAL2, SUBSET_1, COMPUT_1, FINSEQ_1, XCMPLX_0;
+ constructors ORDINAL2, COMPUT_1;
+ registrations XBOOLE_0, XREAL_0, XXREAL_0, ORDINAL1, FUNCT_1, CARD_1,
+      SUBSET_1, RELAT_1, COMPUT_1, FINSEQ_1, NAT_1;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Construction of days
+
+reserve x,y,y1,y2,z,e,s for set;
+reserve alpha,beta,gamma for Ordinal;
+reserve n,m,k for Nat;
+
+definition
+  struct left-right(# LeftOptions,RightOptions -> set #);
+end;
+
+definition
+  func ConwayZero equals
+:: CGAMES_1:def 1
+left-right(#{},{}#);
+end;
+
+registration
+  cluster strict left-right;
+end;
+
+definition
+  let alpha;
+  func ConwayDay(alpha) -> set means
+:: CGAMES_1:def 2
+
+    ex f being T-Sequence st alpha in dom f & f.alpha = it
+      & for beta st beta in dom f holds f.beta = { left-right(#x,y#)
+          where x,y is Subset of union(rng (f|beta)) : not contradiction };
+end;
+
+theorem :: CGAMES_1:1
+  z in ConwayDay(alpha) iff ex w being strict left-right st z = w &
+    for x st x in (the LeftOptions of w) \/ (the RightOptions of w)
+      ex beta st beta in alpha & x in ConwayDay(beta);
+
+theorem :: CGAMES_1:2
+  ConwayDay(0) = { ConwayZero };
+
+theorem :: CGAMES_1:3
+  alpha c= beta implies ConwayDay(alpha) c= ConwayDay(beta);
+
+registration
+  let alpha;
+  cluster ConwayDay(alpha) -> non empty;
+end;
+
+begin :: Games
+
+definition
+  let x;
+  attr x is ConwayGame-like means
+:: CGAMES_1:def 3
+
+    ex alpha st x in ConwayDay(alpha);
+end;
+
+registration
+  let alpha;
+  cluster -> ConwayGame-like Element of ConwayDay(alpha);
+end;
+
+registration
+  cluster ConwayZero -> ConwayGame-like;
+end;
+
+registration
+  cluster ConwayGame-like strict left-right;
+  cluster ConwayGame-like set;
+end;
+
+definition
+  mode ConwayGame is ConwayGame-like set;
+end;
+
+definition
+  redefine func ConwayZero -> Element of ConwayDay(0);
+end;
+
+definition
+  func ConwayOne -> Element of ConwayDay(1) equals
+:: CGAMES_1:def 4
+    left-right(#{ConwayZero},{}#);
+
+  func ConwayStar -> Element of ConwayDay(1) equals
+:: CGAMES_1:def 5
+    left-right(#{ConwayZero},{ConwayZero}#);
+end;
+
+reserve g,g0,g1,g2,gO,gL,gR,gLL,gLR,gRL,gRR for ConwayGame;
+
+theorem :: CGAMES_1:4
+  g is strict left-right;
+
+registration
+  cluster ConwayGame-like -> strict left-right;
+end;
+
+definition
+  let g;
+  func the_LeftOptions_of g means
+:: CGAMES_1:def 6
+
+    ex w being left-right st g = w & it = the LeftOptions of w;
+
+  func the_RightOptions_of g means
+:: CGAMES_1:def 7
+
+    ex w being left-right st g = w & it = the RightOptions of w;
+end;
+
+definition
+  let g;
+  func the_Options_of g equals
+:: CGAMES_1:def 8
+    (the_LeftOptions_of g) \/ (the_RightOptions_of g);
+end;
+
+theorem :: CGAMES_1:5
+  g1 = g2 iff
+    (the_LeftOptions_of g1 = the_LeftOptions_of g2
+      & the_RightOptions_of g1 = the_RightOptions_of g2);
+
+registration
+  cluster the_LeftOptions_of ConwayZero -> empty;
+
+  cluster the_RightOptions_of ConwayZero -> empty;
+
+  cluster the_RightOptions_of ConwayOne -> empty;
+end;
+
+theorem :: CGAMES_1:6
+  g = ConwayZero iff the_Options_of g = {};
+
+theorem :: CGAMES_1:7
+  x in the_LeftOptions_of ConwayOne iff x = ConwayZero;
+
+theorem :: CGAMES_1:8
+  (x in the_Options_of ConwayStar iff x = ConwayZero)
+    & (x in the_LeftOptions_of ConwayStar iff x = ConwayZero)
+    & (x in the_RightOptions_of ConwayStar iff x = ConwayZero);
+
+theorem :: CGAMES_1:9
+  g in ConwayDay(alpha) iff
+    for x st x in the_Options_of g
+      ex beta st beta in alpha & x in ConwayDay(beta);
+
+definition
+  let g be set;
+  assume
+ g is ConwayGame;
+  func ConwayRank(g) -> Ordinal means
+:: CGAMES_1:def 9
+
+    g in ConwayDay(it) & for beta st beta in it holds not g in ConwayDay(beta);
+end;
+
+theorem :: CGAMES_1:10
+  g in ConwayDay(alpha) & x in the_Options_of g implies x in ConwayDay(alpha);
+
+theorem :: CGAMES_1:11
+  g in ConwayDay(alpha) &
+    (x in the_LeftOptions_of g or x in the_RightOptions_of g)
+    implies x in ConwayDay(alpha);
+
+theorem :: CGAMES_1:12
+  g in ConwayDay(alpha) iff ConwayRank(g) c= alpha;
+
+theorem :: CGAMES_1:13
+  ConwayRank(g) in alpha iff ex beta st beta in alpha & g in ConwayDay(beta);
+
+theorem :: CGAMES_1:14
+  gO in the_Options_of g implies ConwayRank(gO) in ConwayRank(g);
+
+theorem :: CGAMES_1:15
+  (gO in the_LeftOptions_of g or gO in the_RightOptions_of g)
+    implies ConwayRank(gO) in ConwayRank(g);
+
+theorem :: CGAMES_1:16
+  not g in the_Options_of g;
+
+theorem :: CGAMES_1:17
+  x in the_Options_of g implies x is ConwayGame-like left-right;
+
+theorem :: CGAMES_1:18
+  (x in the_LeftOptions_of g or x in the_RightOptions_of g)
+    implies x is ConwayGame-like left-right;
+
+theorem :: CGAMES_1:19
+  for w being strict left-right holds w is ConwayGame iff
+    for z st z in (the LeftOptions of w) \/ (the RightOptions of w)
+      holds z is ConwayGame;
+
+begin :: Schemes of induction
+
+scheme :: CGAMES_1:sch 1
+ ConwayGameMinTot { P[ConwayGame] } :
+    ex g st P[g] & for g1 st ConwayRank(g1) in ConwayRank(g) holds not P[g1]
+provided
+ ex g st P[g];
+
+scheme :: CGAMES_1:sch 2
+ ConwayGameMin { P[ConwayGame] } :
+    ex g st P[g] & for gO st gO in the_Options_of g holds not P[gO]
+provided
+ ex g st P[g];
+
+scheme :: CGAMES_1:sch 3
+ ConwayGameInd { P[ConwayGame] } : for g holds P[g]
+provided
+ for g st (for gO st gO in the_Options_of g holds P[gO]) holds P[g];
+
+begin :: Tree of a game
+
+definition
+  let f be Function;
+  attr f is ConwayGame-valued means
+:: CGAMES_1:def 10
+
+    for x st x in dom f holds f.x is ConwayGame;
+end;
+
+registration
+  let g;
+  cluster <*g*> -> ConwayGame-valued;
+end;
+
+registration
+  cluster ConwayGame-valued non empty FinSequence;
+end;
+
+registration
+  let f be non empty FinSequence;
+  cluster -> natural non empty Element of dom f;
+end;
+
+registration
+  let f be ConwayGame-valued non empty Function;
+  let x be Element of dom f;
+  cluster f.x -> ConwayGame-like;
+end;
+
+definition
+  let f be ConwayGame-valued non empty FinSequence;
+  attr f is ConwayGameChain-like means
+:: CGAMES_1:def 11
+
+    for n being Element of dom f st n > 1 holds
+      f.(n-1) in the_Options_of f.n;
+end;
+
+theorem :: CGAMES_1:20
+  for f being FinSequence for n st n in dom f & n > 1
+    holds n-1 in dom f;
+
+registration
+  let g;
+  cluster <*g*> -> ConwayGameChain-like;
+end;
+
+registration
+  cluster ConwayGameChain-like (ConwayGame-valued non empty FinSequence);
+end;
+
+definition
+  mode ConwayGameChain is
+    ConwayGameChain-like (ConwayGame-valued non empty FinSequence);
+end;
+
+theorem :: CGAMES_1:21
+  for f being ConwayGameChain
+    for n,m being Element of dom f st n < m holds
+      ConwayRank(f.n) in ConwayRank(f.m);
+
+theorem :: CGAMES_1:22
+  for f being ConwayGameChain
+    for n,m being Element of dom f st n <= m holds
+      ConwayRank(f.n) c= ConwayRank(f.m);
+
+theorem :: CGAMES_1:23
+  for f being ConwayGameChain st f.(len f) in ConwayDay(alpha)
+    holds f.1 in ConwayDay(alpha);
+
+definition
+  let g;
+  func the_Tree_of g -> set means
+:: CGAMES_1:def 12
+
+    z in it iff ex f being ConwayGameChain st f.1 = z & f.(len f) = g;
+end;
+
+registration
+  let g;
+  cluster the_Tree_of g -> non empty;
+end;
+
+definition
+  let g;
+  func the_proper_Tree_of g -> Subset of the_Tree_of g equals
+:: CGAMES_1:def 13
+    the_Tree_of g \ {g};
+end;
+
+theorem :: CGAMES_1:24
+  g in the_Tree_of g;
+
+definition
+  let alpha;
+  let g be Element of ConwayDay(alpha);
+  redefine func the_Tree_of g -> Subset of ConwayDay(alpha);
+end;
+
+registration
+  let g;
+  cluster -> ConwayGame-like Element of the_Tree_of g;
+end;
+
+theorem :: CGAMES_1:25
+  for f being ConwayGameChain for n being non empty Nat holds
+    f|n is ConwayGameChain;
+
+theorem :: CGAMES_1:26
+  for f1,f2 being ConwayGameChain st
+    ex g st g = f2.1 & f1.(len f1) in the_Options_of g
+    holds f1^f2 is ConwayGameChain;
+
+theorem :: CGAMES_1:27
+  x in the_Tree_of g iff
+    (x = g or ex gO st gO in the_Options_of g & x in the_Tree_of gO);
+
+theorem :: CGAMES_1:28
+  gO in the_Tree_of g implies (gO = g or ConwayRank(gO) in ConwayRank(g));
+
+theorem :: CGAMES_1:29
+  gO in the_Tree_of g implies ConwayRank(gO) c= ConwayRank(g);
+
+theorem :: CGAMES_1:30
+  for s being set st g in s & for g1 st g1 in s holds the_Options_of g1 c= s
+    holds the_Tree_of g c= s;
+
+theorem :: CGAMES_1:31
+  g1 in the_Tree_of g2 implies the_Tree_of g1 c= the_Tree_of g2;
+
+theorem :: CGAMES_1:32
+  g1 in the_Tree_of g2 implies the_proper_Tree_of g1 c= the_proper_Tree_of g2;
+
+theorem :: CGAMES_1:33
+  the_Options_of g c= the_proper_Tree_of g;
+
+theorem :: CGAMES_1:34
+  the_Options_of g c= the_Tree_of g;
+
+theorem :: CGAMES_1:35
+  g1 in the_proper_Tree_of g2 implies the_Tree_of g1 c= the_proper_Tree_of g2;
+
+theorem :: CGAMES_1:36
+  gO in the_Options_of g implies the_Tree_of gO c= the_proper_Tree_of g;
+
+theorem :: CGAMES_1:37
+  the_Tree_of ConwayZero = { ConwayZero };
+
+theorem :: CGAMES_1:38
+  ConwayZero in the_Tree_of g;
+
+scheme :: CGAMES_1:sch 4
+ ConwayGameMin2 { P[ConwayGame] } :
+  ex g st P[g] & for gO st gO in the_proper_Tree_of g holds not P[gO]
+provided
+ ex g st P[g];
+
+begin :: Scheme about definability of functions by recursion
+
+scheme :: CGAMES_1:sch 5
+ Func1RecUniq { F(ConwayGame,Function) -> set } :
+  for g for f1,f2 being Function st
+    dom f1 = the_Tree_of g & dom f2 = the_Tree_of g
+    & (for g1 st g1 in dom f1 holds f1.g1 = F(g1,f1|the_proper_Tree_of g1))
+    & (for g1 st g1 in dom f2 holds f2.g1 = F(g1,f2|the_proper_Tree_of g1))
+  holds f1 = f2;
+
+scheme :: CGAMES_1:sch 6
+ Func1RecEx { F(ConwayGame,Function) -> set } :
+  ex f being Function st dom f = the_Tree_of g &
+    for g1 st g1 in dom f holds f.g1 = F(g1,f|the_proper_Tree_of g1);
+
+begin
+
+definition
+  let g;
+  func -g means
+:: CGAMES_1:def 14
+
+    ex f being Function st dom f = the_Tree_of g & it = f.g
+      & for g1 st g1 in dom f holds f.g1 = left-right(#
+        { f.gR where gR is Element of the_RightOptions_of g1 :
+            the_RightOptions_of g1 <> {} },
+        { f.gL where gL is Element of the_LeftOptions_of g1 :
+            the_LeftOptions_of g1 <> {} } #);
+end;
+
+registration
+  let g;
+  cluster -g -> ConwayGame-like;
+end;
+
+theorem :: CGAMES_1:39
+  (for x holds x in the_LeftOptions_of -g iff
+    ex gR st gR in the_RightOptions_of g & x = -gR)
+  & (for x holds x in the_RightOptions_of -g iff
+    ex gL st gL in the_LeftOptions_of g & x = -gL);
+
+theorem :: CGAMES_1:40
+  -(-g) = g;
+
+theorem :: CGAMES_1:41
+  (gO in the_LeftOptions_of -g iff -gO in the_RightOptions_of g)
+    & (gO in the_LeftOptions_of g iff -gO in the_RightOptions_of -g)
+    & (gO in the_RightOptions_of -g iff -gO in the_LeftOptions_of g)
+    & (gO in the_RightOptions_of g iff -gO in the_LeftOptions_of -g);
+
+definition
+  let g;
+  attr g is nonnegative means
+:: CGAMES_1:def 15
+
+    ex s st g in s & for g1 st g1 in s for gR st gR in the_RightOptions_of g1
+      ex gRL st gRL in the_LeftOptions_of gR & gRL in s;
+end;
+
+definition
+  let g;
+  attr g is nonpositive means
+:: CGAMES_1:def 16
+
+    -g is nonnegative;
+end;
+
+definition
+  let g;
+  attr g is zero means
+:: CGAMES_1:def 17
+
+    g is nonnegative & g is nonpositive;
+  attr g is fuzzy means
+:: CGAMES_1:def 18
+
+    not g is nonnegative & not g is nonpositive;
+end;
+
+definition
+  let g;
+  attr g is positive means
+:: CGAMES_1:def 19
+
+    g is nonnegative & not g is zero;
+  attr g is negative means
+:: CGAMES_1:def 20
+
+    g is nonpositive & not g is zero;
+end;
+
+registration
+  cluster zero -> nonnegative nonpositive ConwayGame;
+  cluster nonpositive nonnegative -> zero ConwayGame;
+  cluster negative -> nonpositive non zero ConwayGame;
+  cluster nonpositive non zero -> negative ConwayGame;
+  cluster positive -> nonnegative non zero ConwayGame;
+  cluster nonnegative non zero -> positive ConwayGame;
+  cluster fuzzy -> non nonnegative non nonpositive ConwayGame;
+  cluster non nonnegative non nonpositive -> fuzzy ConwayGame;
+end;
+
+theorem :: CGAMES_1:42
+  g is zero or g is positive or g is negative or g is fuzzy;
+
+theorem :: CGAMES_1:43
+  g is nonnegative iff
+    for gR st gR in the_RightOptions_of g
+      ex gRL st gRL in the_LeftOptions_of gR & gRL is nonnegative;
+
+theorem :: CGAMES_1:44
+  g is nonpositive iff
+    for gL st gL in the_LeftOptions_of g
+      ex gLR st gLR in the_RightOptions_of gL & gLR is nonpositive;
+
+theorem :: CGAMES_1:45
+  (g is nonnegative iff
+    for gR st gR in the_RightOptions_of g holds gR is fuzzy or gR is positive)
+  & (g is nonpositive iff
+    for gL st gL in the_LeftOptions_of g holds gL is fuzzy or gL is negative);
+
+theorem :: CGAMES_1:46
+  g is fuzzy iff
+    (ex gL st gL in the_LeftOptions_of g & gL is nonnegative) &
+    (ex gR st gR in the_RightOptions_of g & gR is nonpositive);
+
+theorem :: CGAMES_1:47
+  g is zero iff
+   (for gL st gL in the_LeftOptions_of g holds gL is fuzzy or gL is negative) &
+   (for gR st gR in the_RightOptions_of g holds gR is fuzzy or gR is positive);
+
+theorem :: CGAMES_1:48
+  g is positive iff
+    (for gR st gR in the_RightOptions_of g holds gR is fuzzy or gR is positive)
+    & (ex gL st gL in the_LeftOptions_of g & gL is nonnegative);
+
+theorem :: CGAMES_1:49
+  g is negative iff
+    (for gL st gL in the_LeftOptions_of g holds gL is fuzzy or gL is negative)
+    & (ex gR st gR in the_RightOptions_of g & gR is nonpositive);
+
+registration
+  cluster ConwayZero -> zero;
+end;
+
+registration
+  cluster ConwayOne -> positive;
+
+  cluster ConwayStar -> fuzzy;
+end;
+
+registration
+  cluster zero ConwayGame;
+  cluster positive ConwayGame;
+  cluster fuzzy ConwayGame;
+end;
+
+registration
+  let g be nonpositive ConwayGame;
+  cluster -g -> nonnegative;
+end;
+
+registration
+  let g be nonnegative ConwayGame;
+  cluster -g -> nonpositive;
+end;
+
+registration
+  let g be positive ConwayGame;
+  cluster -g -> negative;
+end;
+
+registration
+  cluster negative ConwayGame;
+end;
+
+registration
+  let g be negative ConwayGame;
+  cluster -g -> positive;
+end;
+
+registration
+  let g be fuzzy ConwayGame;
+  cluster -g -> fuzzy;
+end;

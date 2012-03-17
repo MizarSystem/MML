@@ -79,8 +79,8 @@
 </Adjective>
 <Adjective nr="21"/>
 <Adjective nr="26"/>
-<Adjective nr="38"/>
 <Adjective nr="39"/>
+<Adjective nr="40"/>
 <Adjective nr="78"/>
 <Adjective nr="180"/>
 <Adjective nr="181"/>

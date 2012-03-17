@@ -28,8 +28,8 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XXREAL_3"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="MEMBER_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE6"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>

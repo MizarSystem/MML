@@ -4,7 +4,7 @@
 ::
 :: Received January 30, 2003
 :: Copyright (c) 2003 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, XBOOLE_0, NAT_1, INT_1, XXREAL_0, CARD_1, RELAT_1,
@@ -18,13 +18,14 @@ environ
  constructors XXREAL_0, REAL_1, NAT_D, FINSEQOP, NEWTON, SERIES_1, BINARITH,
       BINARI_2, EUCLID, BINARI_3, RVSUM_1, RELSET_1;
  registrations XBOOLE_0, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED,
-      XBOOLEAN, MARGREL1, VALUED_0, FINSEQ_1, FINSEQ_2, RELAT_1, FUNCT_1;
+      XBOOLEAN, MARGREL1, VALUED_0, FINSEQ_1, FINSEQ_2, RELAT_1, FUNCT_1,
+      CARD_1;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions FINSEQ_2, XBOOLEAN, EUCLID;
  theorems POWER, NAT_1, PRE_FF, ABSVALUE, BINARI_3, INT_1, BINARITH, NAT_2,
       BINARI_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCOP_1, RVSUM_1, FUNCT_2,
       ZFMISC_1, INT_3, EULER_2, PEPIN, PREPOWER, XREAL_1, XXREAL_0, XBOOLEAN,
-      NAT_D, VALUED_1, XREAL_0;
+      NAT_D, VALUED_1, XREAL_0, CARD_1;
  schemes NAT_1;
 
 begin :: Preliminaries
@@ -77,8 +78,8 @@ theorem
 proof
   let m be Nat;
 A1: dom(0*m) = Seg m by FUNCOP_1:19;
-  dom addreal = [:REAL,REAL:] & rng 0*m c= REAL by FINSEQ_1:def 4 ,FUNCT_2
-  :def 1;
+  dom addreal = [:REAL,REAL:] & rng 0*m c= REAL by FINSEQ_1:def 4,FUNCT_2:def 1
+;
   then
 A2: [:rng 0*m, rng 0*m:] c= dom addreal by ZFMISC_1:119;
 A3: dom(0*m + 0*m) = dom(addreal.:(0*m,0*m)) by RVSUM_1:def 4
@@ -134,19 +135,19 @@ A5: j <= n;
 A6: 1 <= k & k < n by A4,A5,NAT_1:13;
     then
 A7: k in Seg n by FINSEQ_1:3;
-    len(0*n) = n by FINSEQ_1:def 18;
+    len(0*n) = n by CARD_1:def 13;
     then
 A8: x/.k = (0*n).k by A1,A6,FINSEQ_4:24
       .= FALSE by A7,FUNCOP_1:13;
 A9: j = k + 1;
-    len carry(x,y) = n by FINSEQ_1:def 18;
+    len carry(x,y) = n by CARD_1:def 13;
     then carry(x,y).j = carry(x,y)/.j by A4,A5,FINSEQ_4:24
       .= FALSE '&' FALSE 'or' FALSE '&' (carry(x,y)/.k) 'or' FALSE '&' (
     carry(x,y)/.k) by A1,A2,A6,A9,A8,BINARITH:def 5
       .= FALSE;
     hence thesis;
   end;
-  len carry(x,y) = n by FINSEQ_1:def 18;
+  len carry(x,y) = n by CARD_1:def 13;
   then 1 <= len carry(x,y) by NAT_1:14;
   then
 A10: carry(x,y).1 = carry(x,y)/.1 by FINSEQ_4:24
@@ -186,16 +187,16 @@ A3: k in Seg n;
     reconsider k as Nat;
 A4: (0*n).k = FALSE by A3,FUNCOP_1:13;
 A5: 1 <= k by A3,FINSEQ_1:3;
-    len x = n by FINSEQ_1:def 18;
+    len x = n by CARD_1:def 13;
     then k <= len x by A3,FINSEQ_1:3;
     then
 A6: y/.k = FALSE by A1,A2,A4,A5,FINSEQ_4:24;
-    len carry(x,y) = n by FINSEQ_1:def 18;
+    len carry(x,y) = n by CARD_1:def 13;
     then k <= len carry(x,y) by A3,FINSEQ_1:3;
     then
 A7: carry(x,y)/.k = carry(x,y).k by A5,FINSEQ_4:24
       .= FALSE by A1,A2,A4,Th5;
-    len(x+y) = n by FINSEQ_1:def 18;
+    len(x+y) = n by CARD_1:def 13;
     then k <= len(x+y) by A3,FINSEQ_1:3;
     then (x+y).k = (x+y)/.k by A5,FINSEQ_4:24
       .= FALSE 'xor' FALSE by A1,A2,A3,A6,A7,BINARITH:def 8
@@ -215,7 +216,7 @@ A1: F = 0*n;
 A2: 1 <= n by NAT_1:14;
   then
 A3: n in Seg n by FINSEQ_1:3;
-  n <= len F by FINSEQ_1:def 18;
+  n <= len F by CARD_1:def 13;
   then F/.n = F.n by A2,FINSEQ_4:24
     .= FALSE by A1,A3,FUNCOP_1:13;
   then Intval F = Absval F by BINARI_2:def 3;
@@ -271,9 +272,7 @@ A2: l + m <= 2 to_power n - 1;
 A3: l < 2 to_power n by Th8;
   assume add_ovfl(L,M) <> FALSE;
   then
-A4: IFEQ(add_ovfl(L,M),FALSE,0,2 to_power n) = 2 to_power n by
-  FUNCOP_1:
-  def 8;
+A4: IFEQ(add_ovfl(L,M),FALSE,0,2 to_power n) = 2 to_power n by FUNCOP_1:def 8;
 A5: m < 2 to_power n by A2,Th8;
   Absval(L+M) + IFEQ(add_ovfl(L,M),FALSE,0,2 to_power n) = Absval(L)+
   Absval(M) by BINARITH:47
@@ -318,12 +317,11 @@ A4: n + 1 >= 1 by NAT_1:11;
     then n + 1 - 1 >= 1 - 1 by XREAL_1:11;
     then
 A5: n + 1 -' 1 = n by XREAL_0:def 2;
-    len z = n+1 by FINSEQ_1:def 18;
+    len z = n+1 by CARD_1:def 13;
     then
 A6: z/.(n+1) = (x^<*a*>).(n+1) by A3,A4,FINSEQ_4:24
       .= a by FINSEQ_2:136;
-    Absval(z) = Absval(x) + IFEQ(a,FALSE,0,2 to_power n) by A3, BINARITH
-    :46
+    Absval(z) = Absval(x) + IFEQ(a,FALSE,0,2 to_power n) by A3,BINARITH:46
       .= Absval(x) + 2 to_power n by A2,A6,FUNCOP_1:def 8;
     hence thesis by A5,NAT_1:11;
   end;
@@ -331,7 +329,7 @@ A7: P[1]
   proof
     let z be Tuple of 1,BOOLEAN such that
 A8: z/.1 = TRUE;
-A9: len z = 1 by FINSEQ_1:def 18;
+A9: len z = 1 by CARD_1:def 13;
     then z.1 = z/.1 by FINSEQ_4:24;
     then z = <*TRUE*> by A8,A9,FINSEQ_1:57;
     then
@@ -365,8 +363,7 @@ A5: m < 2 to_power (n-'1) by A1,Th8;
   then
 A6: n in Seg n by FINSEQ_1:3;
   then
-A7: M/.n = IFEQ((m div 2 to_power (n-'1)) mod 2,0,F,T) by
-  BINARI_3:def 1
+A7: M/.n = IFEQ((m div 2 to_power (n-'1)) mod 2,0,F,T) by BINARI_3:def 1
     .= IFEQ(0 mod 2,0,F,T) by A5,NAT_D:27
     .= IFEQ(0,0,F,T) by NAT_D:26
     .= F by FUNCOP_1:def 8;
@@ -401,8 +398,7 @@ A4: m < 2 to_power (n-'1) by A1,Th8;
   then
 A5: n in Seg n by FINSEQ_1:3;
   then
-A6: M/.n = IFEQ((m div 2 to_power (n-'1)) mod 2,0,F,T) by
-  BINARI_3:def 1
+A6: M/.n = IFEQ((m div 2 to_power (n-'1)) mod 2,0,F,T) by BINARI_3:def 1
     .= IFEQ(0 mod 2,0,F,T) by A4,NAT_D:27
     .= IFEQ(0,0,F,T) by NAT_D:26
     .= F by FUNCOP_1:def 8;
@@ -421,7 +417,7 @@ theorem Th15:
 proof
   let z be Tuple of 1,BOOLEAN such that
 A1: z = <*TRUE*>;
-  len z = 1 by FINSEQ_1:def 18;
+  len z = 1 by CARD_1:def 13;
   then z/.1 = z.1 by FINSEQ_4:24
     .= TRUE by A1,FINSEQ_1:57;
   then Intval(z) = Absval(z) - 2 to_power 1 by BINARI_2:def 3
@@ -436,7 +432,7 @@ theorem
 proof
   let z be Tuple of 1,BOOLEAN such that
 A1: z = <*FALSE*>;
-  len z = 1 by FINSEQ_1:def 18;
+  len z = 1 by CARD_1:def 13;
   then z/.1 = z.1 by FINSEQ_4:24
     .= FALSE by A1,FINSEQ_1:57;
   then Intval(z) = Absval(z) by BINARI_2:def 3;
@@ -478,7 +474,7 @@ A2: y = 0*n;
 A3: 1 <= n by NAT_1:14;
   then
 A4: n in Seg n by FINSEQ_1:3;
-  len x = n by FINSEQ_1:def 18;
+  len x = n by CARD_1:def 13;
   then x/.n = (0*n).n by A1,A3,FINSEQ_4:24
     .= FALSE by A4,FUNCOP_1:13;
   then add_ovfl(x,y) = FALSE '&' FALSE 'or' FALSE '&' (carry(x,y)/.n) 'or'
@@ -666,7 +662,7 @@ A10:  k < 2 to_power (n-'1) + (2 to_power (n-'1));
 A11:  2 to_power n + i < 2 to_power n + 0 by A7,XREAL_1:8;
       2 to_power n + -(2 to_power (n-'1)) = 2 to_power n - (2 to_power (n -'1))
         .= (2 to_power 1) * (2 to_power (n-'1)) - (2 to_power (n-'1)) by
-      NAT_1:14,NAT_2:12
+NAT_1:14,NAT_2:12
         .= 2*(2 to_power (n-'1)) - (2 to_power (n-'1)) by POWER:30
         .= 2 to_power (n-'1);
       then
@@ -828,20 +824,20 @@ A7: 1 <= j by A5,FINSEQ_1:3;
     then j-'1 = j - 1 by XREAL_0:def 2;
     then
 A8: j-'1 < n by A6,XREAL_1:148,XXREAL_0:2;
-    len(n-BinarySequence(abs(i))) = n by FINSEQ_1:def 18;
+    len(n-BinarySequence(abs(i))) = n by CARD_1:def 13;
     then
-A9: (n-BinarySequence(abs(i))).j = (n-BinarySequence(abs(i)))/.j by A7,A6
-    ,FINSEQ_4:24
+A9: (n-BinarySequence(abs(i))).j = (n-BinarySequence(abs(i)))/.j by A7,A6,
+FINSEQ_4:24
       .= IFEQ((abs(i) div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A5,
-    BINARI_3:def 1;
-    len(n-BinarySequence(abs(h))) = n by FINSEQ_1:def 18;
+BINARI_3:def 1;
+    len(n-BinarySequence(abs(h))) = n by CARD_1:def 13;
     then
-    (n-BinarySequence(abs(h))).j = (n-BinarySequence(abs(h)))/.j by A7,A6
-    ,FINSEQ_4:24
+    (n-BinarySequence(abs(h))).j = (n-BinarySequence(abs(h)))/.j by A7,A6,
+FINSEQ_4:24
       .= IFEQ((abs(h) div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A5,
-    BINARI_3:def 1
-      .= IFEQ((abs(i) div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A2,A8,
-    A4,Lm3;
+BINARI_3:def 1
+      .= IFEQ((abs(i) div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A2,A8,A4
+,Lm3;
     hence thesis by A9;
   end;
   2sComplement(n,h) = n-BinarySequence(abs(h)) & 2sComplement(n,i) = n
@@ -859,19 +855,18 @@ A3: h mod 2 to_power n = i mod 2 to_power n;
   abs i = -i by A2,ABSVALUE:def 1;
   then 2 to_power MajP(n,abs i) >= -i by Def1;
   then 2 to_power MajP(n,abs i) + i >= -i+i by XREAL_1:8;
-  then reconsider I = 2 to_power MajP(n,abs i) + i as Element of NAT by INT_1:
-  16;
+  then reconsider I = 2 to_power MajP(n,abs i) + i as Element of NAT by
+INT_1:16;
   abs h = -h by A1,ABSVALUE:def 1;
   then 2 to_power MajP(n,abs h) >= -h by Def1;
   then 2 to_power MajP(n,abs h) + h >= -h+h by XREAL_1:8;
   then reconsider H = 2 to_power MajP(n,abs h) + h as Element of NAT by
-  INT_1:16;
-A4: (H qua Nat) mod (2 to_power n) = (I qua Nat) mod (2 to_power n) by A3,
-  Lm4;
+INT_1:16;
+A4: (H qua Nat) mod (2 to_power n) = (I qua Nat) mod (2 to_power n) by A3,Lm4;
 A5: for j be Nat st j in Seg n holds (n-BinarySequence(abs H)).j = (n
   -BinarySequence(abs I)).j
   proof
-A6: len(n-BinarySequence(I)) = n by FINSEQ_1:def 18;
+A6: len(n-BinarySequence(I)) = n by CARD_1:def 13;
     let j be Nat such that
 A7: j in Seg n;
 A8: 1 <= j by A7,FINSEQ_1:3;
@@ -881,27 +876,26 @@ A9: j <= n by A7,FINSEQ_1:3;
     then j-'1 = j - 1 by XREAL_0:def 2;
     then
 A10: j-'1 < n by A9,XREAL_1:148,XXREAL_0:2;
-    len(n-BinarySequence(H)) = n & abs H = H by ABSVALUE:def 1,FINSEQ_1:
-    def 18;
+    len(n-BinarySequence(H)) = n & abs H = H by ABSVALUE:def 1,CARD_1:def 13;
     then
     (n-BinarySequence(abs H)).j = (n-BinarySequence(H))/.j by A8,A9,FINSEQ_4:24
       .= IFEQ((H div (2 to_power (j-'1))) mod 2,0,FALSE,TRUE) by A7,
-    BINARI_3:def 1
+BINARI_3:def 1
       .= IFEQ((I div (2 to_power (j-'1))) mod 2,0,FALSE,TRUE) by A4,A10,Lm3
       .= (n-BinarySequence(I))/.j by A7,BINARI_3:def 1
       .= (n-BinarySequence(I)).j by A8,A9,A6,FINSEQ_4:24;
     hence thesis by ABSVALUE:def 1;
   end;
   2sComplement(n,h) = n-BinarySequence(abs((2 to_power MajP(n,abs(h)))+h))
-  & 2sComplement(n,i) = n-BinarySequence(abs((2 to_power MajP(n,abs(i)))+i)) by
-  A1,A2,Def2;
+  & 2sComplement(n,i) = n-BinarySequence(abs((2 to_power MajP(n,abs(i)))+i))
+by A1,A2,Def2;
   hence thesis by A5,FINSEQ_2:139;
 end;
 
 theorem
   for h,i be Integer st ( h >= 0 & i >= 0 or h < 0 & i < 0 ) & h mod 2
 to_power n = i mod 2 to_power n holds 2sComplement(n,h) = 2sComplement(n,i) by
-  Lm5,Lm6;
+Lm5,Lm6;
 
 theorem
   for h,i be Integer st ( h >= 0 & i >= 0 or h < 0 & i < 0 ) & h,i
@@ -935,7 +929,7 @@ proof
   let l,m be Nat;
   assume l,m are_congruent_mod 2 to_power n;
   then (l qua Integer) mod 2 to_power n = (m qua Integer) mod 2 to_power n by
-  INT_3:12;
+INT_3:12;
   hence thesis by Th30;
 end;
 
@@ -986,8 +980,7 @@ A12: j -' 1 < P by A11,XXREAL_0:2;
     then Q >= -i by A7,ABSVALUE:def 1;
     then Q + i >= -i + i by XREAL_1:8;
     then N = Q + i by ABSVALUE:def 1;
-    then N mod Q = (((Q qua Integer) mod Q) + (i mod Q)) mod Q by
-    INT_3:14
+    then N mod Q = (((Q qua Integer) mod Q) + (i mod Q)) mod Q by INT_3:14
       .= (i mod Q) mod Q by A10;
     hence thesis by A9,A12,Lm3;
   end;
@@ -997,23 +990,23 @@ A12: j -' 1 < P by A11,XXREAL_0:2;
     then reconsider i as Element of NAT by INT_1:16;
 A13: 2sComplement(n,i)/.j = (n-BinarySequence(abs i))/.j by Def2
       .= (n-BinarySequence(i))/.j by ABSVALUE:def 1
-      .= IFEQ((i div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A3,BINARI_3:
-    def 1;
+      .= IFEQ((i div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A3,
+BINARI_3:def 1;
     2sComplement(n+1,i)/.j = ((n+1)-BinarySequence(abs i))/.j by Def2
       .= ((n+1)-BinarySequence(i))/.j by ABSVALUE:def 1
-      .= IFEQ((i div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A4,BINARI_3:
-    def 1;
+      .= IFEQ((i div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A4,
+BINARI_3:def 1;
     hence thesis by A13;
   end;
   suppose
 A14: i < 0;
     then
 A15: 2sComplement(n,i)/.j = (n-BinarySequence(N))/.j by Def2
-      .= IFEQ((N div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A3,BINARI_3:
-    def 1;
+      .= IFEQ((N div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A3,
+BINARI_3:def 1;
     2sComplement(n+1,i)/.j = ((n+1)-BinarySequence(M))/.j by A14,Def2
-      .= IFEQ((M div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A4,BINARI_3:
-    def 1;
+      .= IFEQ((M div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A4,
+BINARI_3:def 1;
     hence thesis by A5,A14,A15;
   end;
 end;
@@ -1031,21 +1024,19 @@ A1: 2sComplement(m+1,i) = a^<*b*> by FINSEQ_2:137;
       then reconsider m as non empty Nat;
       for j be Nat st j in Seg m holds 2sComplement(m,i).j = a.j
       proof
-A2:     len 2sComplement(m,i) = m by FINSEQ_1:def 18;
+A2:     len 2sComplement(m,i) = m by CARD_1:def 13;
         let j be Nat such that
 A3:     j in Seg m;
         reconsider j as Nat;
 A4:     1 <= j by A3,FINSEQ_1:3;
-        len a = m by FINSEQ_1:def 18;
+        len a = m by CARD_1:def 13;
         then
 A5:     j in dom a by A3,FINSEQ_1:def 3;
 A6:     j <= m by A3,FINSEQ_1:3;
         m <= m + 1 by NAT_1:11;
-        then len 2sComplement(m+1,i) = m+1 & j <= m + 1 by A6,
-        FINSEQ_1:def
-        18 ,XXREAL_0:2;
-        then 2sComplement(m+1,i).j = 2sComplement(m+1,i)/.j by A4,
-        FINSEQ_4:24
+        then len 2sComplement(m+1,i) = m+1 & j <= m + 1 by A6,CARD_1:def 13
+,XXREAL_0:2;
+        then 2sComplement(m+1,i).j = 2sComplement(m+1,i)/.j by A4,FINSEQ_4:24
           .= 2sComplement(m,i)/.j by A4,A6,Th32
           .= 2sComplement(m,i).j by A2,A4,A6,FINSEQ_4:24;
         hence thesis by A1,A5,FINSEQ_1:def 7;
@@ -1112,12 +1103,11 @@ A11: 2 to_power N + i < 0 + 2 to_power N by A3,XREAL_1:10;
     N-1 = n;
     then
 A12: N-'1 = n by XREAL_0:def 2;
-    0 <= 2 to_power N + h & 0 <= 2 to_power N + i by A4,A5,A8,XREAL_1:
-    8;
+    0 <= 2 to_power N + h & 0 <= 2 to_power N + i by A4,A5,A8,XREAL_1:8;
     then reconsider
     NH = 2 to_power N + h, NI = 2 to_power N + i as Element of NAT
     by INT_1:16;
-A13: len(N-BinarySequence(NI)) = N by FINSEQ_1:def 18;
+A13: len(N-BinarySequence(NI)) = N by CARD_1:def 13;
 A14: 1 <= N by NAT_1:11;
     then
 A15: H1/.N = H/.N & I1/.N = I/.N by Th32;
@@ -1131,7 +1121,7 @@ A18: I/.N = (N-BinarySequence(abs NI))/.N by A3,Def2
       .= (N-BinarySequence(NI))/.N by ABSVALUE:def 1
       .= (N-BinarySequence(NI)).N by A14,A13,FINSEQ_4:24
       .= T by A12,A10,A11,BINARI_3:30;
-A19: len (N-BinarySequence(NH)) = N by FINSEQ_1:def 18;
+A19: len (N-BinarySequence(NH)) = N by CARD_1:def 13;
     abs h = -h by A2,ABSVALUE:def 1;
     then --2 to_power (N-'1) >= abs h by A4,XREAL_1:26;
     then MajP(N,abs h) = N by A7,Th24,XXREAL_0:2;
@@ -1188,7 +1178,7 @@ A33: h = -1 by A27,XXREAL_0:1;
     then 2 to_power 0 = abs h by POWER:29;
     then MajP(2,abs h) = 2 by A31,Th24;
     then abs(2 to_power MajP(2,abs h) + h) = abs(4 + -1) by A27,A32,A30,
-    XXREAL_0:1
+XXREAL_0:1
       .= 3 by ABSVALUE:def 1;
     then (2sComplement(2,h))/.1 = (2-BinarySequence(3))/.1 by A24,Def2
       .= IFEQ(1,0,FALSE,TRUE) by A21,A29,BINARI_3:def 1
@@ -1260,7 +1250,7 @@ A15: MajP(n+1,abs h) = n+1 by A12,Th24,XXREAL_0:2;
   then
 A16: H1 = (n+1)-BinarySequence(abs(2 to_power (n+1)+h)) by A2,Def2
     .= (n+1)-BinarySequence(NH) by ABSVALUE:def 1;
-  len H1 = n + 1 by FINSEQ_1:def 18;
+  len H1 = n + 1 by CARD_1:def 13;
   then
 A17: H1/.(n+1) = H1.(n+1) by A11,FINSEQ_4:24
     .= ((n+1)-BinarySequence(abs(2 to_power (n+1)+h))).(n+1) by A2,A15,Def2
@@ -1275,7 +1265,7 @@ A20: MajP(n+1,abs i) = n+1 by A12,Th24,XXREAL_0:2;
   then
 A21: I1 = (n+1)-BinarySequence(abs(2 to_power (n+1)+i)) by A3,Def2
     .= (n+1)-BinarySequence(NI) by ABSVALUE:def 1;
-  len I1 = n + 1 by FINSEQ_1:def 18;
+  len I1 = n + 1 by CARD_1:def 13;
   then
 A22: I1/.(n+1) = I1.(n+1) by A11,FINSEQ_4:24
     .= ((n+1)-BinarySequence(abs(2 to_power (n+1)+i))).(n+1) by A3,A20,Def2
@@ -1287,8 +1277,7 @@ A23: Intval(I1) = Absval(I1) - 2 to_power (n+1) by BINARI_2:def 3
     .= i;
 A24: carry(H1,I1)/.(n+1) = T by A2,A3,A4,A6,Th35;
   then
-A25: Int_add_ovfl(H1,I1) = F '&' 'not' T '&' T by A17,A22,
-  BINARI_2:def 4
+A25: Int_add_ovfl(H1,I1) = F '&' 'not' T '&' T by A17,A22,BINARI_2:def 4
     .= F;
 A26: Int_add_udfl(H1,I1) = T '&' T '&' 'not' T by A17,A22,A24,BINARI_2:def 5
     .= F;
@@ -1347,8 +1336,8 @@ A13:    h >= 0 & i < 0;
           .= 2 to_power n;
         then
 A14:    2 to_power n <= 2 to_power (n+1) + i by A11,XREAL_1:8;
-        then reconsider NI = 2 to_power (n+1) + i as Element of NAT by
-        INT_1:16;
+        then reconsider NI = 2 to_power (n+1) + i as Element of NAT by INT_1:16
+;
         n < n+1 by XREAL_1:31;
         then
 A15:    2 to_power n < 2 to_power (n+1) by POWER:44;
@@ -1357,8 +1346,7 @@ A15:    2 to_power n < 2 to_power (n+1) by POWER:44;
         then
 A16:    MajP(n+1,abs i) = n+1 by A15,Th24,XXREAL_0:2;
         then
-A17:    I1 = (n+1)-BinarySequence(abs(2 to_power (n+1)+i)) by A13,
-        Def2
+A17:    I1 = (n+1)-BinarySequence(abs(2 to_power (n+1)+i)) by A13,Def2
           .= (n+1)-BinarySequence(NI) by ABSVALUE:def 1;
 A18:    2 to_power (n+1) + i < 2 to_power (n+1) + 0 by A13,XREAL_1:10;
         reconsider h as Element of NAT by A13,INT_1:16;
@@ -1372,7 +1360,7 @@ A21:    H1.(n+1) = F by A19,BINARI_3:27;
         then
 A22:    h < 2 to_power (n+1) by A19,XXREAL_0:2;
 A23:    1 <= n + 1 by NAT_1:11;
-        len I1 = n+1 by FINSEQ_1:def 18;
+        len I1 = n+1 by CARD_1:def 13;
         then
 A24:    I1/.(n+1) = I1.(n+1) by A23,FINSEQ_4:24;
 A25:    I1.(n+1) = ((n+1)-BinarySequence(abs(2 to_power (n+1)+i))).(n+1)
@@ -1380,19 +1368,18 @@ A25:    I1.(n+1) = ((n+1)-BinarySequence(abs(2 to_power (n+1)+i))).(n+1)
           .= ((n+1)-BinarySequence(NI)).(n+1) by ABSVALUE:def 1
           .= T by A18,A14,BINARI_3:30;
         then
-A26:    Intval(I1) = Absval(I1) - 2 to_power (n+1) by A24, BINARI_2:
-        def 3
+A26:    Intval(I1) = Absval(I1) - 2 to_power (n+1) by A24,BINARI_2:def 3
           .= NI - 2 to_power (n+1) by A18,A17,BINARI_3:36
           .= i;
-        len H1 = n+1 by FINSEQ_1:def 18;
+        len H1 = n+1 by CARD_1:def 13;
         then
 A27:    H1/.(n+1) = H1.(n+1) by A23,FINSEQ_4:24;
         then
 A28:    Int_add_ovfl(H1,I1) = 'not' F '&' 'not' T '&' (carry(H1,I1)/.(n+1
         )) by A21,A25,A24,BINARI_2:def 4
           .= F;
-A29:    Int_add_udfl(H1,I1) = F '&' T '&' 'not' (carry(H1,I1)/.(n+1)) by
-        A21,A25,A27,A24,BINARI_2:def 5
+A29:    Int_add_udfl(H1,I1) = F '&' T '&' 'not' (carry(H1,I1)/.(n+1)) by A21
+,A25,A27,A24,BINARI_2:def 5
           .= F;
         Intval(H1) = Absval(H1) by A21,A27,BINARI_2:def 3
           .= h by A20,A22,BINARI_3:36;
@@ -1410,8 +1397,8 @@ A30:    h < 0 & i >= 0;
           .= 2 to_power n;
         then
 A31:    2 to_power n <= 2 to_power (n+1) + h by A8,XREAL_1:8;
-        then reconsider NH = 2 to_power (n+1) + h as Element of NAT by
-        INT_1:16;
+        then reconsider NH = 2 to_power (n+1) + h as Element of NAT by INT_1:16
+;
         n < n+1 by XREAL_1:31;
         then
 A32:    2 to_power n < 2 to_power (n+1) by POWER:44;
@@ -1420,8 +1407,7 @@ A32:    2 to_power n < 2 to_power (n+1) by POWER:44;
         then
 A33:    MajP(n+1,abs h) = n+1 by A32,Th24,XXREAL_0:2;
         then
-A34:    H1 = (n+1)-BinarySequence(abs(2 to_power (n+1)+h)) by A30,
-        Def2
+A34:    H1 = (n+1)-BinarySequence(abs(2 to_power (n+1)+h)) by A30,Def2
           .= (n+1)-BinarySequence(NH) by ABSVALUE:def 1;
 A35:    2 to_power (n+1) + h < 2 to_power (n+1) + 0 by A30,XREAL_1:10;
         reconsider i as Element of NAT by A30,INT_1:16;
@@ -1435,7 +1421,7 @@ A38:    I1.(n+1) = F by A36,BINARI_3:27;
         then
 A39:    i < 2 to_power (n+1) by A36,XXREAL_0:2;
 A40:    1 <= n + 1 by NAT_1:11;
-        len H1 = n+1 by FINSEQ_1:def 18;
+        len H1 = n+1 by CARD_1:def 13;
         then
 A41:    H1/.(n+1) = H1.(n+1) by A40,FINSEQ_4:24;
 A42:    H1.(n+1) = ((n+1)-BinarySequence(abs(2 to_power (n+1)+h))).(n+1)
@@ -1443,19 +1429,18 @@ A42:    H1.(n+1) = ((n+1)-BinarySequence(abs(2 to_power (n+1)+h))).(n+1)
           .= ((n+1)-BinarySequence(NH)).(n+1) by ABSVALUE:def 1
           .= T by A35,A31,BINARI_3:30;
         then
-A43:    Intval(H1) = Absval(H1) - 2 to_power (n+1) by A41, BINARI_2:
-        def 3
+A43:    Intval(H1) = Absval(H1) - 2 to_power (n+1) by A41,BINARI_2:def 3
           .= NH - 2 to_power (n+1) by A35,A34,BINARI_3:36
           .= h;
-        len I1 = n+1 by FINSEQ_1:def 18;
+        len I1 = n+1 by CARD_1:def 13;
         then
 A44:    I1/.(n+1) = I1.(n+1) by A40,FINSEQ_4:24;
         then
 A45:    Int_add_ovfl(H1,I1) = 'not' T '&' 'not' F '&' (carry(H1,I1)/.(n+1
         )) by A38,A42,A41,BINARI_2:def 4
           .= F;
-A46:    Int_add_udfl(H1,I1) = T '&' F '&' 'not' (carry(H1,I1)/.(n+1)) by
-        A38,A42,A44,A41,BINARI_2:def 5
+A46:    Int_add_udfl(H1,I1) = T '&' F '&' 'not' (carry(H1,I1)/.(n+1)) by A38
+,A42,A44,A41,BINARI_2:def 5
           .= F;
         Intval(I1) = Absval(I1) by A38,A44,BINARI_2:def 3
           .= i by A37,A39,BINARI_3:36;
@@ -1476,8 +1461,7 @@ A48: abs(-1) = --1 by ABSVALUE:def 1
     >= 1 by POWER:30;
     then MajP(1,abs(-1)) = 1 by A48,Def1;
     then
-A49: 2sComplement(1,-1) = 1-BinarySequence(abs((2 to_power 1)+-1)) by
-    Def2
+A49: 2sComplement(1,-1) = 1-BinarySequence(abs((2 to_power 1)+-1)) by Def2
       .= 1-BinarySequence(abs(2+-1)) by POWER:30
       .= 1-BinarySequence(1) by ABSVALUE:def 1
       .= (0+1)-BinarySequence(2 to_power 0) by POWER:29

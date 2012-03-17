@@ -158,7 +158,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="58">
+<Adjective nr="59">
 <Func kind="K" nr="281">
 <LocusVar nr="1"/>
 </Func>

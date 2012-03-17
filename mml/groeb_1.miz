@@ -3,7 +3,7 @@
 ::
 :: Received June 11, 2003
 :: Copyright (c) 2003 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, ORDINAL1, RLVECT_1, ALGSTR_0, VECTSP_1, LATTICES,
@@ -17,15 +17,16 @@ environ
       FUNCT_1, PARTFUN1, ORDINAL1, ALGSTR_0, ALGSTR_1, RLVECT_1, FINSET_1,
       FUNCT_7, DICKSON, CARD_3, CARD_1, SUBSET_1, MCART_1, FINSEQ_1, YELLOW_1,
       ORDERS_1, PRALG_1, STRUCT_0, POLYNOM7, PBOOLE, FUNCOP_1, ORDERS_2,
-      POLYNOM1, IDEAL_1, REWRITE1, BAGORDER, VECTSP_1, TERMORD, GROUP_1,
-      NUMBERS, NAT_1, PRE_POLY, POLYRED, RECDEF_1;
+      VFUNCT_1, POLYNOM1, IDEAL_1, REWRITE1, BAGORDER, VECTSP_1, TERMORD,
+      GROUP_1, NUMBERS, NAT_1, PRE_POLY, POLYRED, RECDEF_1;
  constructors XXREAL_0, REWRITE1, VECTSP_2, PRALG_1, YELLOW_1, IDEAL_1,
       DICKSON, BAGORDER, TERMORD, POLYRED, RECDEF_1, DOMAIN_1, RELSET_1,
-      PBOOLE, FUNCT_7;
+      PBOOLE, FUNCT_7, VFUNCT_1;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FINSET_1, XREAL_0, NAT_1, INT_1,
       CARD_1, REWRITE1, STRUCT_0, VECTSP_1, ORDERS_2, ALGSTR_1, YELLOW_1,
       GCD_1, POLYNOM1, POLYNOM2, POLYNOM4, IDEAL_1, POLYNOM7, DICKSON, TERMORD,
-      POLYRED, VALUED_0, ALGSTR_0, FINSEQ_1, SUBSET_1, PRE_POLY, FUNCOP_1;
+      POLYRED, VALUED_0, ALGSTR_0, FINSEQ_1, SUBSET_1, PRE_POLY, FUNCOP_1,
+      VFUNCT_1, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions RELAT_2, RELAT_1, STRUCT_0;
  theorems TARSKI, RELSET_1, FINSEQ_1, RELAT_1, ZFMISC_1, VECTSP_1, POLYNOM1,
@@ -96,27 +97,27 @@ A2: f.b <> 0.L by POLYNOM1:def 9;
  p <> 0_(n,L) by A1,POLYRED:def 5;
   then reconsider p as non-zero Polynomial of n,L by POLYNOM7:def 2;
   consider s being bag of n such that
-A4: s + HT(p,T) = b and
-A5: g = f - (f.b/HC(p,T)) * (s *' p) by A1,POLYRED:def 5;
+A3: s + HT(p,T) = b and
+A4: g = f - (f.b/HC(p,T)) * (s *' p) by A1,POLYRED:def 5;
   set m = Monom(f.b/HC(p,T),s);
-A6: HC(p,T)" <> 0.L by VECTSP_1:74;
+A5: HC(p,T)" <> 0.L by VECTSP_1:74;
   f.b/HC(p,T) = f.b * (HC(p,T)") by VECTSP_1:def 23;
   then
-A7: f.b/HC(p,T) <> 0.L by A2,A6,VECTSP_2:def 5;
+A6: f.b/HC(p,T) <> 0.L by A2,A5,VECTSP_2:def 5;
   then
-A8: f.b/HC(p,T) is non zero by STRUCT_0:def 12;
-  coefficient(m) <> 0.L by A7,POLYNOM7:9;
+A7: f.b/HC(p,T) is non zero by STRUCT_0:def 12;
+  coefficient(m) <> 0.L by A6,POLYNOM7:9;
   then HC(m,T) <> 0.L by TERMORD:23;
   then m <> 0_(n,L) by TERMORD:17;
   then reconsider m as non-zero Monomial of n,L by POLYNOM7:def 2;
-A9: HT(m*'p,T) = HT(m,T) + HT(p,T) by TERMORD:31
+A8: HT(m*'p,T) = HT(m,T) + HT(p,T) by TERMORD:31
     .= term(m) + HT(p,T) by TERMORD:23
-    .= s + HT(p,T) by A8,POLYNOM7:10;
-  then HT(m*'p,T) in Support f by A1,A4,POLYRED:def 5;
+    .= s + HT(p,T) by A7,POLYNOM7:10;
+  then HT(m*'p,T) in Support f by A1,A3,POLYRED:def 5;
   then
   (f.b/HC(p,T)) * (s *' p) = Monom(f.b/HC(p,T),s) *' p & HT(m*'p,T) <= HT
   (f,T) ,T by POLYRED:22,TERMORD:def 6;
-  hence thesis by A1,A4,A5,A9,POLYRED:39;
+  hence thesis by A1,A3,A4,A8,POLYRED:39;
 end;
 
 Lm1: for L being add-associative left_zeroed right_zeroed add-cancelable
@@ -259,7 +260,7 @@ A3: p.u9 <> 0.L by A2,POLYNOM1:def 9;
     now
       assume (-p).u9 = 0.L;
       then (-p).u9 = -(-(0.L)) by RLVECT_1:30;
-      then -(p.u9) = -(-(0.L)) by POLYNOM1:def 22
+      then -(p.u9) = -(-(0.L)) by POLYNOM1:37
         .= 0.L by RLVECT_1:30;
       then p.u9 = -(0.L) by RLVECT_1:30;
       hence contradiction by A3,RLVECT_1:25;
@@ -273,7 +274,7 @@ A4: u in Support(-p);
     then reconsider u9 = u as Element of Bags n;
 A5: (-p).u9 <> 0.L by A4,POLYNOM1:def 9;
     now
-A6:   (-p).u9 = -(p.u9) by POLYNOM1:def 22;
+A6:   (-p).u9 = -(p.u9) by POLYNOM1:37;
       assume p.u9 = 0.L;
       hence contradiction by A5,A6,RLVECT_1:25;
     end;
@@ -666,11 +667,12 @@ A34:          pc = pa - mc *' p by A21,Th1;
               end;
               then reconsider hh = -mb + mc as non-zero Polynomial of n,L by
 POLYNOM7:def 2;
+a1:      --(mc *' p) = mc *' p by POLYNOM1:39;
               h = (pa - mb *' p) + -(pa - mc *' p) by A33,A34,POLYNOM1:def 23
                 .= (pa - mb *' p) + -(pa + -(mc *' p)) by POLYNOM1:def 23
                 .= (pa - mb *' p) + (-pa + --(mc *' p)) by POLYRED:1
                 .= (pa + -(mb *' p)) + (-pa + --(mc *' p)) by POLYNOM1:def 23
-                .= ((pa + -(mb *' p)) + -pa) + (mc *' p) by POLYNOM1:80
+                .= ((pa + -(mb *' p)) + -pa) + (mc *' p) by a1,POLYNOM1:80
                 .= ((pa + -pa) + -(mb *' p)) + (mc *' p) by POLYNOM1:80
                 .= (0_(n,L) + -(mb *' p)) + (mc *' p) by POLYRED:3
                 .= -(mb *' p) + (mc *' p) by POLYRED:2
@@ -2181,7 +2183,7 @@ Polynom-Ring({},L), P being non empty Subset of Polynom-Ring({},L) st P c= I &
   P <> {0_({},L)} holds P is_Groebner_basis_of I,T
 proof
   now
-    consider j being Element of {i where i is Element of NAT: i < 0};
+    set j =the  Element of {i where i is Element of NAT: i < 0};
     assume {i where i is Element of NAT: i < 0} <> {};
     then j in {i where i is Element of NAT: i < 0};
     then ex i being Element of NAT st i = j & i < 0;
@@ -2337,12 +2339,12 @@ A16: Support q = {1bag} by A11,TARSKI:2;
   set q1 = q - (q.HT(q,T)/HC(q,T)) * ((EmptyBag n) *' q);
   Support q <> {} by A15,POLYNOM7:1;
   then
-A18: HT(q,T) in Support q by TERMORD:def 6;
+A17: HT(q,T) in Support q by TERMORD:def 6;
   EmptyBag n + HT(q,T) = HT(q,T) by PRE_POLY:53;
-  then q reduces_to q1,q,HT(q,T),T by A15,A18,POLYRED:def 5;
+  then q reduces_to q1,q,HT(q,T),T by A15,A17,POLYRED:def 5;
   then
-A19: q reduces_to q1,q,T by POLYRED:def 6;
-A20: q1 = q - (HC(q,T)/HC(q,T)) * ((EmptyBag n) *' q) by TERMORD:def 7
+A18: q reduces_to q1,q,T by POLYRED:def 6;
+A19: q1 = q - (HC(q,T)/HC(q,T)) * ((EmptyBag n) *' q) by TERMORD:def 7
     .= q - (HC(q,T)*(HC(q,T))") * ((EmptyBag n) *' q) by VECTSP_1:def 23
     .= q - 1.L * ((EmptyBag n) *' q) by VECTSP_1:def 22
     .= q - 1.L * q by POLYRED:17
@@ -2350,66 +2352,66 @@ A20: q1 = q - (HC(q,T)/HC(q,T)) * ((EmptyBag n) *' q) by TERMORD:def 7
     .= q - 1_(n,L) *' q by POLYNOM7:20
     .= q - q by POLYNOM1:89
     .= 0_(n,L) by POLYNOM1:83;
-A21: dom((1.L) |(n,L)) = Bags n by FUNCT_2:def 1;
+A20: dom((1.L) |(n,L)) = Bags n by FUNCT_2:def 1;
   then
-A22: p.(1bag) = 1.L by FUNCT_7:33;
+A21: p.(1bag) = 1.L by FUNCT_7:33;
   then
-A23: p <> 0_(n,L) by A1,POLYNOM1:81;
-A24: p.(EmptyBag n) = ((1.L) |(n,L)).(EmptyBag n) by A8,FUNCT_7:34
+A22: p <> 0_(n,L) by A1,POLYNOM1:81;
+A23: p.(EmptyBag n) = ((1.L) |(n,L)).(EmptyBag n) by A8,FUNCT_7:34
     .= (1_(n,L)).(EmptyBag n) by POLYNOM7:20
     .= 1.L by POLYNOM1:84;
   now
     let u be set;
     assume
-A25: u in {EmptyBag n,1bag};
+A24: u in {EmptyBag n,1bag};
     now
-      per cases by A25,TARSKI:def 2;
+      per cases by A24,TARSKI:def 2;
       case
         u = EmptyBag n;
-        hence u in Support p by A1,A24,POLYNOM1:def 9;
+        hence u in Support p by A1,A23,POLYNOM1:def 9;
       end;
       case
         u = 1bag;
-        hence u in Support p by A1,A22,POLYNOM1:def 9;
+        hence u in Support p by A1,A21,POLYNOM1:def 9;
       end;
     end;
     hence u in Support p;
   end;
   then
-A26: Support p = {EmptyBag n,1bag} by A5,TARSKI:2;
+A25: Support p = {EmptyBag n,1bag} by A5,TARSKI:2;
   then reconsider p as Polynomial of n,L by POLYNOM1:def 10;
-  reconsider p as non-zero Polynomial of n,L by A23,POLYNOM7:def 2;
-A27: EmptyBag n + HT(p,T) = HT(p,T) by PRE_POLY:53;
-A28: now
-A29: EmptyBag n <= 1bag,T by TERMORD:9;
+  reconsider p as non-zero Polynomial of n,L by A22,POLYNOM7:def 2;
+A26: EmptyBag n + HT(p,T) = HT(p,T) by PRE_POLY:53;
+A27: now
+A28: EmptyBag n <= 1bag,T by TERMORD:9;
     assume
-A30: HT(p,T) = EmptyBag n;
-    1bag in Support p by A26,TARSKI:def 2;
-    then 1bag <= EmptyBag n,T by A30,TERMORD:def 6;
-    hence contradiction by A8,A29,TERMORD:7;
+A29: HT(p,T) = EmptyBag n;
+    1bag in Support p by A25,TARSKI:def 2;
+    then 1bag <= EmptyBag n,T by A29,TERMORD:def 6;
+    hence contradiction by A8,A28,TERMORD:7;
   end;
   set p1 = q - (q.HT(p,T)/HC(p,T)) * ((EmptyBag n) *' p);
-  Support p <> {} by A23,POLYNOM7:1;
+  Support p <> {} by A22,POLYNOM7:1;
   then
-A31: HT(p,T) in Support p by TERMORD:def 6;
+A30: HT(p,T) in Support p by TERMORD:def 6;
   then
-A32: HT(p,T) = 1bag by A26,A28,TARSKI:def 2;
+A31: HT(p,T) = 1bag by A25,A27,TARSKI:def 2;
   then HT(p,T) in Support q by A16,TARSKI:def 1;
-  then q reduces_to p1,p,HT(p,T),T by A23,A15,A27,POLYRED:def 5;
+  then q reduces_to p1,p,HT(p,T),T by A22,A15,A26,POLYRED:def 5;
   then
-A33: q reduces_to p1,p,T by POLYRED:def 6;
-A34: now
+A32: q reduces_to p1,p,T by POLYRED:def 6;
+A33: now
     assume Support q = Support p;
-    then EmptyBag n in {1bag} by A26,A16,TARSKI:def 2;
+    then EmptyBag n in {1bag} by A25,A16,TARSKI:def 2;
     hence contradiction by A8,TARSKI:def 1;
   end;
-A35: now
+A34: now
     assume q - p = 0_(n,L);
     then p = (q-p)+p by POLYRED:2
       .= (q+-p)+p by POLYNOM1:def 23
       .= q+(-p+p) by POLYNOM1:80
       .= q + 0_(n,L) by POLYRED:3;
-    hence contradiction by A34,POLYNOM1:82;
+    hence contradiction by A33,POLYNOM1:82;
   end;
   set P = {p,q};
   now
@@ -2422,24 +2424,24 @@ A35: now
   reconsider P as Subset of Polynom-Ring(n,L);
   set R = PolyRedRel(P,T);
   take P;
-A36: p in P by TARSKI:def 2;
+A35: p in P by TARSKI:def 2;
   q in P by TARSKI:def 2;
-  then q reduces_to 0_(n,L),P,T by A19,A20,POLYRED:def 7;
+  then q reduces_to 0_(n,L),P,T by A18,A19,POLYRED:def 7;
   then
-A37: [q,0_(n,L)] in R by POLYRED:def 13;
-  p1 = q - (1.L/p.1bag) * ((EmptyBag n) *' p) by A14,A32,TERMORD:def 7
-    .= q - (1.L/1.L) * ((EmptyBag n) *' p) by A21,FUNCT_7:33
+A36: [q,0_(n,L)] in R by POLYRED:def 13;
+  p1 = q - (1.L/p.1bag) * ((EmptyBag n) *' p) by A14,A31,TERMORD:def 7
+    .= q - (1.L/1.L) * ((EmptyBag n) *' p) by A20,FUNCT_7:33
     .= q - (1.L*(1.L)") * ((EmptyBag n) *' p) by VECTSP_1:def 23
     .= q - 1.L * ((EmptyBag n) *' p) by VECTSP_1:def 22
     .= q - 1.L * p by POLYRED:17
     .= q - (1.L) |(n,L) *' p by POLYNOM7:27
     .= q - 1_(n,L) *' p by POLYNOM7:20
     .= q - p by POLYNOM1:89;
-  then q reduces_to q-p,P,T by A33,A36,POLYRED:def 7;
+  then q reduces_to q-p,P,T by A32,A35,POLYRED:def 7;
   then
-A38: [q,q-p] in R by POLYRED:def 13;
+A37: [q,q-p] in R by POLYRED:def 13;
   now
-A39: now
+A38: now
       let u be set;
       now
         let u be set;
@@ -2449,65 +2451,65 @@ A39: now
       end;
       then {1bag} c= {EmptyBag n,1bag} by TARSKI:def 3;
       then
-A40:  {1bag} \/ {EmptyBag n,1bag} = {EmptyBag n,1bag} by XBOOLE_1:12;
-A41:  (q-p).1bag = (q+-p).1bag by POLYNOM1:def 23
-        .= q.1bag + (-p).1bag by POLYNOM1:def 21
-        .= q.1bag + -(p.1bag) by POLYNOM1:def 22
-        .= 1.L + -1.L by A21,A14,FUNCT_7:33
+A39:  {1bag} \/ {EmptyBag n,1bag} = {EmptyBag n,1bag} by XBOOLE_1:12;
+A40:  (q-p).1bag = (q+-p).1bag by POLYNOM1:def 23
+        .= q.1bag + (-p).1bag by POLYNOM1:35
+        .= q.1bag + -(p.1bag) by POLYNOM1:37
+        .= 1.L + -1.L by A20,A14,FUNCT_7:33
         .= 0.L by RLVECT_1:16;
       Support(q-p) = Support (q+-p) by POLYNOM1:def 23;
       then Support(q-p) c= Support(q) \/ Support(-p) by POLYNOM1:79;
       then
-A42:  Support(q-p) c= {1bag} \/ {EmptyBag n,1bag} by A26,A16,Th5;
+A41:  Support(q-p) c= {1bag} \/ {EmptyBag n,1bag} by A25,A16,Th5;
       assume
-A43:  u in Support(q-p);
+A42:  u in Support(q-p);
       then (q-p).u <> 0.L by POLYNOM1:def 9;
-      then u = EmptyBag n by A43,A42,A40,A41,TARSKI:def 2;
+      then u = EmptyBag n by A42,A41,A39,A40,TARSKI:def 2;
       hence u in {EmptyBag n} by TARSKI:def 1;
     end;
     assume R is locally-confluent;
-    then 0_(n,L),q-p are_convergent_wrt R by A38,A37,REWRITE1:def 24;
+    then 0_(n,L),q-p are_convergent_wrt R by A37,A36,REWRITE1:def 24;
     then consider c being set such that
-A44: R reduces 0_(n,L),c and
-A45: R reduces q-p,c by REWRITE1:def 7;
-    reconsider c as Polynomial of n,L by A44,Lm4;
+A43: R reduces 0_(n,L),c and
+A44: R reduces q-p,c by REWRITE1:def 7;
+    reconsider c as Polynomial of n,L by A43,Lm4;
     consider s being FinSequence such that
-A46: len s > 0 and
-A47: s.1 = 0_(n,L) and
-A48: s.len s = c and
-A49: for i being Element of NAT st i in dom s & i+1 in dom s holds [s.
-    i, s.(i+1)] in R by A44,REWRITE1:12;
+A45: len s > 0 and
+A46: s.1 = 0_(n,L) and
+A47: s.len s = c and
+A48: for i being Element of NAT st i in dom s & i+1 in dom s holds [s.
+    i, s.(i+1)] in R by A43,REWRITE1:12;
     now
-A50:  0 + 1 <= len s by A46,NAT_1:13;
-A51:  dom s = Seg(len s) by FINSEQ_1:def 3;
+A49:  0 + 1 <= len s by A45,NAT_1:13;
+A50:  dom s = Seg(len s) by FINSEQ_1:def 3;
       assume len s <> 1;
-      then 1 < len s by A50,XXREAL_0:1;
+      then 1 < len s by A49,XXREAL_0:1;
       then 1+1 <= len s by NAT_1:13;
       then
-A52:  1+1 in dom s by A51,FINSEQ_1:3;
-A53:  1 in dom s by A50,A51,FINSEQ_1:3;
+A51:  1+1 in dom s by A50,FINSEQ_1:3;
+A52:  1 in dom s by A49,A50,FINSEQ_1:3;
       then consider f9,h9 being set such that
-A54:  [0_(n,L),s.2] = [f9,h9] and
+A53:  [0_(n,L),s.2] = [f9,h9] and
       f9 in NonZero Polynom-Ring(n,L) and
-A55:  h9 in (the carrier of Polynom-Ring(n,L)) by A47,A49,A52,RELSET_1:6;
-      s.2 = [f9,h9]`2 by A54,MCART_1:def 2
+A54:  h9 in (the carrier of Polynom-Ring(n,L)) by A46,A48,A51,RELSET_1:6;
+      s.2 = [f9,h9]`2 by A53,MCART_1:def 2
         .= h9 by MCART_1:def 2;
-      then reconsider c9 = s.2 as Polynomial of n,L by A55,POLYNOM1:def 27;
-      [s.1,s.2] in R by A49,A53,A52;
-      then 0_(n,L) reduces_to c9,P,T by A47,POLYRED:def 13;
+      then reconsider c9 = s.2 as Polynomial of n,L by A54,POLYNOM1:def 27;
+      [s.1,s.2] in R by A48,A52,A51;
+      then 0_(n,L) reduces_to c9,P,T by A46,POLYRED:def 13;
       then consider g being Polynomial of n,L such that
       g in P and
-A56:  0_(n,L) reduces_to c9,g,T by POLYRED:def 7;
-      0_(n,L) is_reducible_wrt g,T by A56,POLYRED:def 8;
+A55:  0_(n,L) reduces_to c9,g,T by POLYRED:def 7;
+      0_(n,L) is_reducible_wrt g,T by A55,POLYRED:def 8;
       hence contradiction by POLYRED:37;
     end;
     then consider s being FinSequence such that
-A57: len s > 0 and
-A58: s.1 = q-p and
-A59: s.len s = 0_(n,L) and
-A60: for i being Element of NAT st i in dom s & i+1 in dom s holds [s
-    .i, s.(i+1)] in R by A45,A47,A48,REWRITE1:12;
-A61: now
+A56: len s > 0 and
+A57: s.1 = q-p and
+A58: s.len s = 0_(n,L) and
+A59: for i being Element of NAT st i in dom s & i+1 in dom s holds [s
+    .i, s.(i+1)] in R by A44,A46,A47,REWRITE1:12;
+A60: now
       assume -1.L = 0.L;
       then --1.L = 0.L by RLVECT_1:25;
       hence contradiction by RLVECT_1:30;
@@ -2515,71 +2517,71 @@ A61: now
     now
       let u be set;
       assume
-A62:  u in {EmptyBag n};
+A61:  u in {EmptyBag n};
       then reconsider u9 = u as Element of Bags n by TARSKI:def 1;
       (q-p).u9 = (q+-p).u9 by POLYNOM1:def 23
-        .= q.u9 + (-p).u9 by POLYNOM1:def 21
-        .= q.u9 + -(p.u9) by POLYNOM1:def 22
-        .= 0.L + -(p.u9) by A9,A62,TARSKI:def 1
-        .= 0.L + -1.L by A24,A62,TARSKI:def 1
+        .= q.u9 + (-p).u9 by POLYNOM1:35
+        .= q.u9 + -(p.u9) by POLYNOM1:37
+        .= 0.L + -(p.u9) by A9,A61,TARSKI:def 1
+        .= 0.L + -1.L by A23,A61,TARSKI:def 1
         .= -1.L by ALGSTR_1:def 5;
-      hence u in Support(q-p) by A61,POLYNOM1:def 9;
+      hence u in Support(q-p) by A60,POLYNOM1:def 9;
     end;
     then
-A63: Support(q-p) = {EmptyBag n} by A39,TARSKI:2;
-A64: now
+A62: Support(q-p) = {EmptyBag n} by A38,TARSKI:2;
+A63: now
       assume q-p is_reducible_wrt P,T;
       then consider g being Polynomial of n,L such that
-A65:  q-p reduces_to g,P,T by POLYRED:def 9;
+A64:  q-p reduces_to g,P,T by POLYRED:def 9;
       consider h being Polynomial of n,L such that
-A66:  h in P and
-A67:  q-p reduces_to g,h,T by A65,POLYRED:def 7;
-      ex b being bag of n st q-p reduces_to g,h,b,T by A67,POLYRED:def 6;
+A65:  h in P and
+A66:  q-p reduces_to g,h,T by A64,POLYRED:def 7;
+      ex b being bag of n st q-p reduces_to g,h,b,T by A66,POLYRED:def 6;
       then h <> 0_(n,L) by POLYRED:def 5;
       then reconsider h as non-zero Polynomial of n,L by POLYNOM7:def 2;
-      q-p is_reducible_wrt h,T by A67,POLYRED:def 8;
+      q-p is_reducible_wrt h,T by A66,POLYRED:def 8;
       then consider b9 being bag of n such that
-A68:  b9 in Support(q-p) and
-A69:  HT(h,T) divides b9 by POLYRED:36;
-A70:  HT(h,T) = 1bag
+A67:  b9 in Support(q-p) and
+A68:  HT(h,T) divides b9 by POLYRED:36;
+A69:  HT(h,T) = 1bag
       proof
         now
-          per cases by A66,TARSKI:def 2;
+          per cases by A65,TARSKI:def 2;
           case
             h = p;
-            hence thesis by A26,A31,A28,TARSKI:def 2;
+            hence thesis by A25,A30,A27,TARSKI:def 2;
           end;
           case
             h = q;
-            hence thesis by A16,A18,TARSKI:def 1;
+            hence thesis by A16,A17,TARSKI:def 1;
           end;
         end;
         hence thesis;
       end;
-      b9 = EmptyBag n by A63,A68,TARSKI:def 1;
-      hence contradiction by A8,A69,A70,PRE_POLY:58;
+      b9 = EmptyBag n by A62,A67,TARSKI:def 1;
+      hence contradiction by A8,A68,A69,PRE_POLY:58;
     end;
     now
-A71:  0 + 1 <= len s by A57,NAT_1:13;
-A72:  dom s = Seg(len s) by FINSEQ_1:def 3;
+A70:  0 + 1 <= len s by A56,NAT_1:13;
+A71:  dom s = Seg(len s) by FINSEQ_1:def 3;
       assume len s <> 1;
-      then 1 < len s by A71,XXREAL_0:1;
+      then 1 < len s by A70,XXREAL_0:1;
       then 1+1 <= len s by NAT_1:13;
       then
-A73:  1+1 in dom s by A72,FINSEQ_1:3;
-A74:  1 in dom s by A71,A72,FINSEQ_1:3;
+A72:  1+1 in dom s by A71,FINSEQ_1:3;
+A73:  1 in dom s by A70,A71,FINSEQ_1:3;
       then consider f9,h9 being set such that
-A75:  [q-p,s.2] = [f9,h9] and
+A74:  [q-p,s.2] = [f9,h9] and
       f9 in NonZero Polynom-Ring(n,L) and
-A76:  h9 in (the carrier of Polynom-Ring(n,L)) by A58,A60,A73,RELSET_1:6;
-      s.2 = [f9,h9]`2 by A75,MCART_1:def 2
+A75:  h9 in (the carrier of Polynom-Ring(n,L)) by A57,A59,A72,RELSET_1:6;
+      s.2 = [f9,h9]`2 by A74,MCART_1:def 2
         .= h9 by MCART_1:def 2;
-      then reconsider c9 = s.2 as Polynomial of n,L by A76,POLYNOM1:def 27;
-      [q-p,s.2] in R by A58,A60,A74,A73;
+      then reconsider c9 = s.2 as Polynomial of n,L by A75,POLYNOM1:def 27;
+      [q-p,s.2] in R by A57,A59,A73,A72;
       then q-p reduces_to c9,P,T by POLYRED:def 13;
-      hence contradiction by A64,POLYRED:def 9;
+      hence contradiction by A63,POLYRED:def 9;
     end;
-    hence contradiction by A35,A58,A59;
+    hence contradiction by A34,A57,A58;
   end;
   hence thesis by Def3;
 end;
@@ -2996,7 +2998,7 @@ A14: q <> 0_(n,L);
 A15: S is_Dickson-basis_of hti,R by Th34;
     set M = { {p where p is Polynomial of n,L : p in I & HT(p,T) = s & p <> 0_
     (n,L)} where s is Element of Bags n : s in S};
-    consider s being Element of S;
+    set s =the  Element of S;
     reconsider q as Polynomial of n,L by POLYNOM1:def 27;
     set hq = HT(q,T);
     reconsider hq as Element of R;
@@ -3025,7 +3027,7 @@ A21:  x = {p where p is Polynomial of n,L : p in I & HT(p,T) = s & p
       <> 0_(n, L)} and
       s in S by A17;
       now
-        consider u being Element of x /\ y;
+        set u =the  Element of x /\ y;
         assume
 A22:    x /\ y <> {};
         then u in y by XBOOLE_0:def 4;
@@ -3057,7 +3059,7 @@ A27:  s = HT(q,T) & q in I & q <> 0_(n,L);
     then consider G9 being set such that
 A28: for x being set st x in M ex y being set st G9 /\ x = {y} by A16,
 WELLORD2:27;
-    consider xx being Element of M;
+    set xx =the  Element of M;
 A29: M is finite
     proof
       defpred P[set,set] means $2 = {p where p is Polynomial of n,L : p in I &
@@ -3090,7 +3092,7 @@ A36:    s in S;
       hence thesis by A31,FINSET_1:26;
     end;
 A37: ex y being set st G9 /\ xx = {y} by A28;
-    consider xx being Element of M;
+    set xx =the  Element of M;
     reconsider G9 as non empty set by A37;
     set G = { x where x is Element of G9 : ex y being set st y in M & G9 /\ y
     = {x}};
@@ -3401,10 +3403,10 @@ A4: G-Ideal = I by A3,Def4;
 A5: PolyRedRel(G,T) is locally-confluent by A3,Def4;
     set G9 = G \ {0_(n,L)}, R9 = PolyRedRel(G9,T);
     reconsider G9 as finite Subset of Polynom-Ring(n,L);
-A7: now
+A6: now
       per cases;
       case
-A8:     G9 = {};
+A7:     G9 = {};
         now
           per cases;
           case
@@ -3412,30 +3414,30 @@ A8:     G9 = {};
             hence G9-Ideal = I by A3,Def4;
           end;
           case
-A9:         G <> {};
-A10:        now
+A8:         G <> {};
+A9:        now
               let u be set;
               assume u in {0_(n,L)};
               then
-A11:          u = 0_(n,L) by TARSKI:def 1;
-A12:          G c= {0_(n,L)} by A8,XBOOLE_1:37;
+A10:          u = 0_(n,L) by TARSKI:def 1;
+A11:          G c= {0_(n,L)} by A7,XBOOLE_1:37;
               now
                 assume not u in G;
-                then for v being set holds not v in G by A11,A12,TARSKI:def 1;
+                then for v being set holds not v in G by A10,A11,TARSKI:def 1;
                 hence G = {} by XBOOLE_0:def 1;
               end;
-              hence u in G by A9;
+              hence u in G by A8;
             end;
-A13:        0_(n,L) = 0.(Polynom-Ring(n,L)) by POLYNOM1:def 27;
+A12:        0_(n,L) = 0.(Polynom-Ring(n,L)) by POLYNOM1:def 27;
             now
               let u be set;
               assume
-A14:          u in G;
-              G c= {0_(n,L)} by A8,XBOOLE_1:37;
-              hence u in {0_(n,L)} by A14;
+A13:          u in G;
+              G c= {0_(n,L)} by A7,XBOOLE_1:37;
+              hence u in {0_(n,L)} by A13;
             end;
-            then G = {0_(n,L)} by A10,TARSKI:2;
-            hence G9-Ideal = I by A1,A4,A13,IDEAL_1:44;
+            then G = {0_(n,L)} by A9,TARSKI:2;
+            hence G9-Ideal = I by A1,A4,A12,IDEAL_1:44;
           end;
         end;
         hence G9-Ideal = I;
@@ -3444,58 +3446,58 @@ A14:          u in G;
         G9 <> {};
         then reconsider
         GG = G,GG9 = G9 as non empty Subset of Polynom-Ring(n,L);
-A15:    0.(Polynom-Ring(n,L)) = 0_(n,L) by POLYNOM1:def 27;
-A16:    now
+A14:    0.(Polynom-Ring(n,L)) = 0_(n,L) by POLYNOM1:def 27;
+A15:    now
           let u be set;
           assume u in G-Ideal;
           then ex f being LinearCombination of GG st u = Sum f by IDEAL_1:60;
-          then ex g being LinearCombination of GG9 st u = Sum g by A15,Lm9;
+          then ex g being LinearCombination of GG9 st u = Sum g by A14,Lm9;
           hence u in G9-Ideal by IDEAL_1:60;
         end;
         now
           let u be set;
-A17:      GG9-Ideal c= GG-Ideal by IDEAL_1:57,XBOOLE_1:36;
+A16:      GG9-Ideal c= GG-Ideal by IDEAL_1:57,XBOOLE_1:36;
           assume u in G9-Ideal;
-          hence u in G-Ideal by A17;
+          hence u in G-Ideal by A16;
         end;
-        hence G9-Ideal = I by A4,A16,TARSKI:2;
+        hence G9-Ideal = I by A4,A15,TARSKI:2;
       end;
     end;
-A18: now
+A17: now
       assume 0_(n,L) in G9;
       then not(0_(n,L)) in {0_(n,L)} by XBOOLE_0:def 5;
       hence contradiction by TARSKI:def 1;
     end;
-A19: for u being set holds u in R implies u in R9
+A18: for u being set holds u in R implies u in R9
     proof
       let u be set;
       assume
-A20:  u in R;
+A19:  u in R;
       then consider p,q being set such that
-A21:  p in NonZero Polynom-Ring(n,L) and
-A22:  q in the carrier of Polynom-Ring(n,L) and
-A23:  u = [p,q] by ZFMISC_1:def 2;
-      reconsider q as Polynomial of n,L by A22,POLYNOM1:def 27;
-      not p in {0_(n,L)} by A2,A21,XBOOLE_0:def 5;
+A20:  p in NonZero Polynom-Ring(n,L) and
+A21:  q in the carrier of Polynom-Ring(n,L) and
+A22:  u = [p,q] by ZFMISC_1:def 2;
+      reconsider q as Polynomial of n,L by A21,POLYNOM1:def 27;
+      not p in {0_(n,L)} by A2,A20,XBOOLE_0:def 5;
       then p <> 0_(n,L) by TARSKI:def 1;
-      then reconsider p as non-zero Polynomial of n,L by A21,POLYNOM1:def 27
+      then reconsider p as non-zero Polynomial of n,L by A20,POLYNOM1:def 27
 ,POLYNOM7:def 2;
-      p reduces_to q,G,T by A20,A23,POLYRED:def 13;
+      p reduces_to q,G,T by A19,A22,POLYRED:def 13;
       then consider f being Polynomial of n,L such that
-A24:  f in G and
-A25:  p reduces_to q,f,T by POLYRED:def 7;
-      ex b being bag of n st p reduces_to q,f,b,T by A25,POLYRED:def 6;
+A23:  f in G and
+A24:  p reduces_to q,f,T by POLYRED:def 7;
+      ex b being bag of n st p reduces_to q,f,b,T by A24,POLYRED:def 6;
       then f <> 0_(n,L) by POLYRED:def 5;
       then not f in {0_(n,L)} by TARSKI:def 1;
-      then f in G9 by A24,XBOOLE_0:def 5;
-      then p reduces_to q,G9,T by A25,POLYRED:def 7;
-      hence thesis by A23,POLYRED:def 13;
+      then f in G9 by A23,XBOOLE_0:def 5;
+      then p reduces_to q,G9,T by A24,POLYRED:def 7;
+      hence thesis by A22,POLYRED:def 13;
     end;
     R9 c= R by Th4,XBOOLE_1:36;
     then for u being set holds u in R9 implies u in R;
-    then R9 is locally-confluent by A5,A19,TARSKI:2;
-    then G9 is_Groebner_basis_of I,T by A7,Def4;
-    hence thesis by A18;
+    then R9 is locally-confluent by A5,A18,TARSKI:2;
+    then G9 is_Groebner_basis_of I,T by A6,Def4;
+    hence thesis by A17;
 end;
 
 definition
@@ -3590,8 +3592,8 @@ A14:    HT(f-g,T) in Support(f-g) by TERMORD:def 6;
 A15:    now
           assume HT(f-g,T) = HT(f,T);
           then (f-g).HT(f-g,T) = (f+-g).HT(f,T) by POLYNOM1:def 23
-            .= f.HT(f,T) + (-g).HT(g,T) by A5,POLYNOM1:def 21
-            .= f.HT(f,T) + -(g.HT(g,T)) by POLYNOM1:def 22
+            .= f.HT(f,T) + (-g).HT(g,T) by A5,POLYNOM1:35
+            .= f.HT(f,T) + -(g.HT(g,T)) by POLYNOM1:37
             .= HC(f,T) + -(g.HT(g,T)) by TERMORD:def 7
             .= HC(f,T) + -HC(g,T) by TERMORD:def 7
             .= 0.L by A6,RLVECT_1:16;
@@ -3605,8 +3607,8 @@ A15:    now
         then
 A16:    (f-g).(HT(f,T)) = 0.L by POLYNOM1:def 9;
 A17:    h.(HT(f,T)) = (f + (-(c * (f - g)))).(HT(f,T)) by POLYNOM1:def 23
-          .= f.HT(f,T) + (-(c * (f - g))).(HT(f,T)) by POLYNOM1:def 21
-          .= f.HT(f,T) + -((c * (f - g)).(HT(f,T))) by POLYNOM1:def 22
+          .= f.HT(f,T) + (-(c * (f - g))).(HT(f,T)) by POLYNOM1:35
+          .= f.HT(f,T) + -((c * (f - g)).(HT(f,T))) by POLYNOM1:37
           .= f.HT(f,T) + -(c * 0.L) by A16,POLYNOM7:def 10
           .= f.HT(f,T) + -0.L by VECTSP_1:39
           .= f.HT(f,T) + 0.L by RLVECT_1:25
@@ -3658,8 +3660,8 @@ POLYNOM1:def 27;
         reconsider f9 = f, g9 = g as Element of Polynom-Ring(n,L) by
 POLYNOM1:def 27;
 A29:    (f-g).s = (f+-g).s by POLYNOM1:def 23
-          .= f.s + (-g).s by POLYNOM1:def 21
-          .= f.s + -(g.s) by POLYNOM1:def 22
+          .= f.s + (-g).s by POLYNOM1:35
+          .= f.s + -(g.s) by POLYNOM1:37
           .= f.s - g.s by RLVECT_1:def 14;
 A30:    s in Support(f-g) by A13,TERMORD:def 6;
 A31:    now
@@ -3671,7 +3673,7 @@ GROUP_1:def 4
           assume
 A34:      Support h = Support f;
           h.s = (f + -(c * (f - g))).s by POLYNOM1:def 23
-            .= f.s + (-(c * (f - g))).s by POLYNOM1:def 21
+            .= f.s + (-(c * (f - g))).s by POLYNOM1:35
             .= f.s + ((-c) * (f - g)).s by POLYRED:9
             .= f.s + (-c) * (f - g).s by POLYNOM7:def 10
             .= f.s + -(f.s) by A29,A33,VECTSP_1:41
@@ -3890,7 +3892,7 @@ A10: S c= hti by A6,DICKSON:def 9;
   set M = {{p where p is Polynomial of n,L : p in I & HM(p,T) = Monom(1.L,s) &
 p <> 0_(n,L) & not(ex q being Polynomial of n,L st q in I & q < p,T & q <> 0_(n
   ,L) & HM(q,T) = Monom(1.L,s))} where s is Element of Bags n : s in S};
-  consider s being Element of S;
+  set s =the  Element of S;
   hq in {HT(p,T) where p is Polynomial of n,L : p in I & p <> 0_(n,L) } by A5;
   then
 A11: ex b being Element of R st b in S & b <= hq by A6,DICKSON:def 9;
@@ -4157,7 +4159,7 @@ A72:  u = f.s by FUNCT_1:def 5;
   then reconsider G as Subset of Polynom-Ring(n,L) by TARSKI:def 3;
   G <> {}
   proof
-    consider z being Element of M;
+    set z =the  Element of M;
     consider r being Polynomial of n,L such that
     r in I and
 A73: z = {r} and
@@ -4603,8 +4605,8 @@ A50: HT(h,T) = HT(g,T) by A49,TERMORD:7;
     then
 A51: HT(f,T) in Support f by TERMORD:def 6;
     f.(HT(g,T)) = (g + -h).HT(g,T) by POLYNOM1:def 23
-      .= g.HT(g,T) + (-h).HT(g,T) by POLYNOM1:def 21
-      .= g.HT(g,T) + -(h.HT(h,T)) by A50,POLYNOM1:def 22
+      .= g.HT(g,T) + (-h).HT(g,T) by POLYNOM1:35
+      .= g.HT(g,T) + -(h.HT(h,T)) by A50,POLYNOM1:37
       .= HC(g,T) + -(h.HT(h,T)) by TERMORD:def 7
       .= HC(g,T) + - HC(h,T) by TERMORD:def 7
       .= 1.L + - HC(h,T) by A24,A33
@@ -4734,8 +4736,8 @@ A88: HT(h,T) = HT(g,T) by A87,TERMORD:7;
     then
 A89: HT(f,T) in Support f by TERMORD:def 6;
     f.(HT(g,T)) = (g + -h).HT(g,T) by POLYNOM1:def 23
-      .= g.HT(g,T) + (-h).HT(g,T) by POLYNOM1:def 21
-      .= g.HT(g,T) + -(h.HT(h,T)) by A88,POLYNOM1:def 22
+      .= g.HT(g,T) + (-h).HT(g,T) by POLYNOM1:35
+      .= g.HT(g,T) + -(h.HT(h,T)) by A88,POLYNOM1:37
       .= HC(g,T) + -(h.HT(h,T)) by TERMORD:def 7
       .= HC(g,T) + - HC(h,T) by TERMORD:def 7
       .= 1.L + - HC(h,T) by A24,A72

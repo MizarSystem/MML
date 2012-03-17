@@ -84,11 +84,11 @@
 <Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34">
+<Adjective nr="32">
 <LocusVar nr="1"/>
 </Adjective>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="40"/>
 <Adjective nr="103"/>
 </Cluster>
@@ -103,8 +103,8 @@
 <Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="40"/>
 <Adjective nr="103"/>
 </Cluster>

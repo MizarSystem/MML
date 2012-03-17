@@ -80,8 +80,8 @@
 <Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="25"/>
-<Adjective nr="31"/>
 <Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="95">
 <LocusVar nr="1"/>
 </Adjective>

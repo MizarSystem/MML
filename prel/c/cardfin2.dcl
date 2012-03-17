@@ -23,85 +23,49 @@
 <ArticleID name="POWER"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="SIN_COS"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_2"/>
-<ArticleID name="NEWTON"/>
 <ArticleID name="CARDFIN2"/>
 </Signature>
 <FCluster aid="CARDFIN2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="279">
+<Func kind="K" nr="214">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="10"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CARDFIN2" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="1">
+<ArgTypes/>
+<Func kind="K" nr="118"/>
 <Cluster>
-<Adjective nr="10"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="279">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="63"/>
+<Adjective nr="12"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CARDFIN2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="12"/>
+<Adjective nr="40"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="241">
+<Func kind="K" nr="223">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="63"/>
+<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CARDFIN2" nr="4">
-<ArgTypes/>
-<Func kind="K" nr="118"/>
-<Cluster>
-<Adjective nr="12"/>
-<Adjective nr="63"/>
-</Cluster>
-</FCluster>
-<FCluster aid="CARDFIN2" nr="5">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="40"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="291">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="40"/>
-</Cluster>
-</FCluster>
-<FCluster aid="CARDFIN2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -134,7 +98,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </FCluster>
-<FCluster aid="CARDFIN2" nr="7">
+<FCluster aid="CARDFIN2" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -159,7 +123,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster aid="CARDFIN2" nr="8">
+<FCluster aid="CARDFIN2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -172,7 +136,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="293">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -43,8 +43,8 @@
 </Adjective>
 <Adjective nr="16"/>
 <Adjective nr="21"/>
-<Adjective nr="27"/>
 <Adjective nr="28"/>
+<Adjective nr="29"/>
 </Cluster>
 </RCluster>
 <RCluster aid="HALLMAR1" nr="2">
@@ -75,8 +75,8 @@
 </Adjective>
 <Adjective nr="16"/>
 <Adjective nr="21"/>
-<Adjective nr="27"/>
 <Adjective nr="28"/>
+<Adjective nr="29"/>
 <Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
@@ -108,8 +108,8 @@
 </Adjective>
 <Adjective nr="16"/>
 <Adjective nr="21"/>
-<Adjective nr="27"/>
 <Adjective nr="28"/>
+<Adjective nr="29"/>
 <Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>

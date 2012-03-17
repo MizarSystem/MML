@@ -9,15 +9,15 @@ environ
  vocabularies NUMBERS, SUBSET_1, SCMPDS_2, INT_1, FSM_1, AMI_1, COMPLEX1,
       ARYTM_3, FUNCT_1, AMI_2, STRUCT_0, XBOOLE_0, RELAT_1, TARSKI, CARD_1,
       AMI_3, SCMPDS_1, GRAPHSP, SCMNORM, XXREAL_0, ARYTM_1, FUNCT_4, FUNCOP_1,
-      CIRCUIT2, ORDINAL1, PARTFUN1;
+      CIRCUIT2, ORDINAL1, PARTFUN1, AMISTD_5, PBOOLE;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_4, INT_1, NAT_1, STRUCT_0, FUNCOP_1, INT_2, XXREAL_0,
-      COMPOS_1, EXTPRO_1, AMI_1, AMI_2, SCMPDS_1, SCMPDS_2;
- constructors DOMAIN_1, XXREAL_0, INT_2, AMI_5, SCMPDS_1, SCMPDS_2, REAL_1,
-      PRE_POLY, AMI_1;
+      PARTFUN1, PBOOLE, FUNCT_4, INT_1, NAT_1, STRUCT_0, FUNCOP_1, INT_2,
+      XXREAL_0, COMPOS_1, EXTPRO_1, AMI_1, AMI_2, AMISTD_5, SCMPDS_1, SCMPDS_2;
+ constructors DOMAIN_1, XXREAL_0, INT_2, SCMPDS_1, SCMPDS_2, REAL_1, PRE_POLY,
+      AMI_1, AMI_3, AMISTD_5, PBOOLE;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS,
       XREAL_0, INT_1, CARD_3, AMI_1, AMI_3, SCMPDS_2, FINSET_1, RELSET_1,
-      FUNCT_2, COMPOS_1, EXTPRO_1;
+      FUNCT_2, COMPOS_1, EXTPRO_1, AMISTD_5, PBOOLE, AMISTD_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
 
 
@@ -26,6 +26,8 @@ begin :: Preliminaries
 reserve j, k, m, n for Element of NAT,
   a,b for Int_position,
   k1,k2 for Integer;
+
+reserve P,P1,P2 for (the Instructions of SCMPDS)-valued ManySortedSet of NAT;
 
 canceled;
 
@@ -41,8 +43,7 @@ theorem :: SCMPDS_3:4
   for a be Int_position,s1,s2 being State of SCMPDS st DataPart s1
   = DataPart s2 holds s1.a=s2.a;
 
-theorem :: SCMPDS_3:5
-  the carrier of SCMPDS = {IC SCMPDS } \/ SCM-Data-Loc \/ NAT;
+canceled;
 
 theorem :: SCMPDS_3:6
   not IC SCMPDS in SCM-Data-Loc;
@@ -73,13 +74,11 @@ definition
   redefine func la .--> a -> FinPartState of SCMPDS;
 end;
 
-theorem :: SCMPDS_3:16
-  for p being autonomic FinPartState of SCMPDS st DataPart p <> {}
-  holds IC SCMPDS in dom p;
+registration
+ cluster SCMPDS -> IC-recognized;
+end;
 
-theorem :: SCMPDS_3:17
-  for p being autonomic non NAT-defined FinPartState of SCMPDS
-  holds IC SCMPDS in dom p;
+canceled 2;
 
 theorem :: SCMPDS_3:18
   for s1,s2 being State of SCMPDS,k1,k2,m be Integer st IC s1= IC
@@ -93,110 +92,108 @@ theorem :: SCMPDS_3:19
 theorem :: SCMPDS_3:20
   for s being State of SCMPDS holds succ IC s= ICplusConst(s,1);
 
-theorem :: SCMPDS_3:21
-  for p being autonomic FinPartState of SCMPDS st IC SCMPDS in dom p
-  holds IC p in dom p;
+registration
+ cluster SCMPDS -> CurIns-recognized;
+end;
+
+canceled;
 
 theorem :: SCMPDS_3:22
   for p being autonomic non NAT-defined FinPartState of SCMPDS , s
-being State of SCMPDS st p c= s for i being Element of NAT holds IC Comput(
-ProgramPart(s),s,i) in dom ProgramPart(p);
+being State of SCMPDS st p c= s
+  for P st ProgramPart p c= P
+for i being Element of NAT holds IC Comput(P,s,i) in dom ProgramPart(p);
 
-theorem :: SCMPDS_3:23
-  for p being autonomic non NAT-defined FinPartState of SCMPDS ,
-  s1, s2 being State of SCMPDS st p c= s1 & p c= s2 for i being Element of NAT
-holds IC Comput(ProgramPart(s1),s1,i) = IC Comput(ProgramPart(s2),s2,i) &
- CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,i)
-)
-  = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),s2
-,i));
+canceled;
 
 theorem :: SCMPDS_3:24
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i being Element of NAT,k1,k2 be
-Integer,a,b be Int_position st CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i
-),
-Comput(ProgramPart(s1),s1,i)) = (a,k1) := (b,k2)
-& a in dom p & DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) in dom p holds Comput
-(ProgramPart(s1),s1,i)
-.DataLoc(Comput(ProgramPart(s1),s1,i).b,k2) = Comput(ProgramPart(s2),s2,i).
-DataLoc(Comput(ProgramPart(s2),s2,i).
-  b,k2);
+being State of SCMPDS st p c= s1 & p c= s2 &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+ for i being Element of NAT,k1,k2 be
+Integer,a,b be Int_position st CurInstr(P1,
+Comput(P1,s1,i)) = (a,k1) := (b,k2)
+& a in dom p & DataLoc(Comput(P1,s1,i).a,k1) in dom p holds Comput
+(P1,s1,i)
+.DataLoc(Comput(P1,s1,i).b,k2) = Comput(P2,s2,i).
+DataLoc(Comput(P2,s2,i).b,k2);
 
 theorem :: SCMPDS_3:25
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i being Element of NAT,k1,k2 be
-Integer,a,b be Int_position st CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i
-),
-Comput(ProgramPart(s1),s1,i)) = AddTo(a,k1,b,k2)
-& a in dom p & DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) in dom p holds Comput
-(ProgramPart(s1),s1,i)
-.DataLoc(Comput(ProgramPart(s1),s1,i).b,k2) = Comput(ProgramPart(s2),s2,i).
-DataLoc(Comput(ProgramPart(s2),s2,i).
+being State of SCMPDS st p c= s1 & p c= s2  &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i being Element of NAT,k1,k2 be
+Integer,a,b be Int_position st CurInstr(P1,
+Comput(P1,s1,i)) = AddTo(a,k1,b,k2)
+& a in dom p & DataLoc(Comput(P1,s1,i).a,k1) in dom p holds Comput
+(P1,s1,i)
+.DataLoc(Comput(P1,s1,i).b,k2) = Comput(P2,s2,i).
+DataLoc(Comput(P2,s2,i).
   b,k2);
 
 theorem :: SCMPDS_3:26
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i being Element of NAT,k1,k2 be
-Integer,a,b be Int_position st CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i
-),
-Comput(ProgramPart(s1),s1,i)) = SubFrom(a,k1,b,k2
-) & a in dom p & DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) in dom p holds
-Comput(ProgramPart(s1),s1,
-i).DataLoc(Comput(ProgramPart(s1),s1,i).b,k2) = Comput(ProgramPart(s2),s2,i).
-DataLoc(Comput(ProgramPart(s2),s2,i
+being State of SCMPDS st p c= s1 & p c= s2 &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i being Element of NAT,k1,k2 be
+Integer,a,b be Int_position st CurInstr(P1,
+Comput(P1,s1,i)) = SubFrom(a,k1,b,k2
+) & a in dom p & DataLoc(Comput(P1,s1,i).a,k1) in dom p holds
+Comput(P1,s1,
+i).DataLoc(Comput(P1,s1,i).b,k2) = Comput(P2,s2,i).
+DataLoc(Comput(P2,s2,i
   ).b,k2);
 
 theorem :: SCMPDS_3:27
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i being Element of NAT,k1,k2 be
-Integer,a,b be Int_position st CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i
-),
-Comput(ProgramPart(s1),s1,i)) = MultBy(a,k1,b,k2)
-& a in dom p & DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) in dom p holds Comput
-(ProgramPart(s1),s1,i)
-.DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) * Comput(ProgramPart(s1),s1,i).
-DataLoc(Comput(ProgramPart(s1),s1,i).
-b,k2) = Comput(ProgramPart(s2),s2,i).DataLoc(Comput(ProgramPart(s2),s2,i).a,k1)
-* Comput(ProgramPart(s2),s2,i).
-  DataLoc(Comput(ProgramPart(s2),s2,i).b,k2);
+being State of SCMPDS st p c= s1 & p c= s2 &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i being Element of NAT,k1,k2 be
+Integer,a,b be Int_position st CurInstr(P1,
+Comput(P1,s1,i)) = MultBy(a,k1,b,k2)
+& a in dom p & DataLoc(Comput(P1,s1,i).a,k1) in dom p holds Comput
+(P1,s1,i)
+.DataLoc(Comput(P1,s1,i).a,k1) * Comput(P1,s1,i).
+DataLoc(Comput(P1,s1,i).
+b,k2) = Comput(P2,s2,i).DataLoc(Comput(P2,s2,i).a,k1)
+* Comput(P2,s2,i).
+  DataLoc(Comput(P2,s2,i).b,k2);
 
 theorem :: SCMPDS_3:28
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i,m being Element of NAT,a being
-Int_position,k1,k2 be Integer st CurInstr(ProgramPart Comput(ProgramPart(s1),s1
-,i),
-Comput(ProgramPart(s1),s1,i)) = (a,k1)<>0_goto
-  k2 & m= IC Comput(ProgramPart(s1),s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
-ProgramPart(s1),s1,i).
-DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) = 0 iff Comput(ProgramPart(s2),s2,i)
-.DataLoc(Comput(ProgramPart(
-  s2),
-  s2,i).a,k1) = 0 );
+being State of SCMPDS st p c= s1 & p c= s2  &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i,m being Element of NAT,a being
+Int_position,k1,k2 be Integer st CurInstr(P1,
+Comput(P1,s1,i)) = (a,k1)<>0_goto
+  k2 & m= IC Comput(P1,s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
+P1,s1,i).
+DataLoc(Comput(P1,s1,i).a,k1) = 0 iff Comput(P2,s2,i)
+.DataLoc(Comput(P2,s2,i).a,k1) = 0 );
 
 theorem :: SCMPDS_3:29
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i,m being Element of NAT,a being
-Int_position,k1,k2 be Integer st CurInstr(ProgramPart Comput(ProgramPart(s1),s1
-,i),
-Comput(ProgramPart(s1),s1,i)) = (a,k1)<=0_goto
-  k2 & m= IC Comput(ProgramPart(s1),s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
-ProgramPart(s1),s1,i).
-DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) > 0 iff Comput(ProgramPart(s2),s2,i)
-.DataLoc(Comput(ProgramPart(
-  s2),
+being State of SCMPDS st p c= s1 & p c= s2 &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i,m being Element of NAT,a being
+Int_position,k1,k2 be Integer st CurInstr(P1,
+Comput(P1,s1,i)) = (a,k1)<=0_goto
+  k2 & m= IC Comput(P1,s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
+P1,s1,i).
+DataLoc(Comput(P1,s1,i).a,k1) > 0 iff Comput(P2,s2,i)
+.DataLoc(Comput(P2,
   s2,i).a,k1) > 0 );
 
 theorem :: SCMPDS_3:30
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i,m being Element of NAT,a being
-Int_position,k1,k2 be Integer st CurInstr(ProgramPart Comput(ProgramPart(s1),s1
-,i),
-Comput(ProgramPart(s1),s1,i)) = (a,k1)>=0_goto
-  k2 & m= IC Comput(ProgramPart(s1),s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
-ProgramPart(s1),s1,i).
-DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) < 0 iff Comput(ProgramPart(s2),s2,i)
-.DataLoc(Comput(ProgramPart(
-  s2),
+being State of SCMPDS st p c= s1 & p c= s2  &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i,m being Element of NAT,a being
+Int_position,k1,k2 be Integer st CurInstr(P1,
+Comput(P1,s1,i)) = (a,k1)>=0_goto
+  k2 & m= IC Comput(P1,s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
+P1,s1,i).
+DataLoc(Comput(P1,s1,i).a,k1) < 0 iff Comput(P2,s2,i)
+.DataLoc(Comput(P2,
   s2,i).a,k1) < 0 );
 

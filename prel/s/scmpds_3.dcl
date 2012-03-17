@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Definientia>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -11,16 +11,16 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="PARTFUN1"/>
-<ArticleID name="FUNCT_2"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="RECDEF_2"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCOP_1"/>
@@ -31,28 +31,41 @@
 <ArticleID name="AFINSQ_1"/>
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="EXTPRO_1"/>
-<ArticleID name="AMI_3"/>
-<ArticleID name="AMI_5"/>
+<ArticleID name="SCMPDS_2"/>
+<ArticleID name="AMI_1"/>
+<ArticleID name="AMISTD_2"/>
+<ArticleID name="AMISTD_5"/>
 </Signature>
-<Definiens constrkind="K" constrnr="311" aid="AMI_5" defnr="4">
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="262">
+<FCluster aid="SCMPDS_3" nr="1">
+<ArgTypes/>
+<Func kind="K" nr="298"/>
+<Cluster>
+<Adjective nr="82">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="298"/>
+</Adjective>
+<Adjective nr="96">
+<Func kind="K" nr="1">
+<Func kind="K" nr="66"/>
 </Func>
-</Typ>
-<Typ kind="M" nr="12">
-<Cluster/>
-</Typ>
-<Essentials>
-<Int x="1"/>
-<Int x="2"/>
-</Essentials>
-<DefMeaning kind="e">
-<LocusVar nr="1"/>
-</DefMeaning>
-</Definiens>
-</Definientia>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="SCMPDS_3" nr="2">
+<ArgTypes/>
+<Func kind="K" nr="298"/>
+<Cluster>
+<Adjective nr="82">
+<Func kind="K" nr="1">
+<Func kind="K" nr="66"/>
+</Func>
+</Adjective>
+<Adjective nr="97">
+<Func kind="K" nr="1">
+<Func kind="K" nr="66"/>
+</Func>
+</Adjective>
+</Cluster>
+</FCluster>
+</Registrations>

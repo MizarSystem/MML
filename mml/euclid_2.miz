@@ -17,12 +17,12 @@ environ
  constructors REAL_1, SQUARE_1, BINOP_2, COMPLEX1, QUIN_1, FINSEQOP, MONOID_0,
       TOPRNS_1, SEQ_1, RELSET_1;
  registrations FUNCT_1, RELSET_1, FUNCOP_1, NUMBERS, XREAL_0, SQUARE_1,
-      BINOP_2, MEMBERED, FINSEQ_2, RVSUM_1, MONOID_0, EUCLID, VALUED_0;
+      BINOP_2, MEMBERED, FINSEQ_2, RVSUM_1, MONOID_0, EUCLID, VALUED_0, CARD_1;
  requirements REAL, SUBSET, NUMERALS, ARITHM, BOOLE;
  definitions SQUARE_1, FINSEQ_2, RVSUM_1, VALUED_1, ALGSTR_0;
  theorems EUCLID, RVSUM_1, FINSEQ_2, FINSEQ_1, FINSEQ_3, SQUARE_1, QUIN_1,
       ABSVALUE, TOPRNS_1, JORDAN2C, COMPLEX1, XREAL_1, XXREAL_0, FUNCOP_1,
-      XCMPLX_1, FINSEQOP, ORDINAL1, FUNCT_1;
+      XCMPLX_1, FINSEQOP, ORDINAL1, FUNCT_1, CARD_1;
 
 begin :: Preliminaries
 
@@ -36,21 +36,21 @@ theorem Th1:
 proof
 A1: 0*n = n |-> (0 qua set) by EUCLID:def 4;
   set v0 = (0*n).i;
-A3: dom(0*n) = Seg n by FINSEQ_2:144;
+A2: dom(0*n) = Seg n by FINSEQ_2:144;
   i in Seg n or not i in Seg n;
   then
-A2: v0=0 by A1,A3,FUNCOP_1:13,FUNCT_1:def 4;
+A3: v0=0 by A1,A2,FUNCOP_1:13,FUNCT_1:def 4;
   mlt(v,0*n).i = v.i * v0 by RVSUM_1:87
-    .= 0 by A2;
+    .= 0 by A3;
   hence thesis;
 end;
 
 theorem Th2:
   mlt(v, 0*n) = 0*n
 proof
-  len 0*n = n by FINSEQ_1:def 18;
+  len 0*n = n by CARD_1:def 13;
   then reconsider z= 0*n as Element of n-tuples_on REAL by FINSEQ_2:110;
-A1: len 0*n = n by FINSEQ_1:def 18;
+A1: len 0*n = n by CARD_1:def 13;
   then
 A2: dom 0*n = Seg n by FINSEQ_1:def 3;
 A3: for j be Nat st j in dom 0*n holds mlt(v,0*n).j=(0*n).j
@@ -62,7 +62,7 @@ A4: j in dom 0*n;
       .= (n |-> 0).j by A2,A4,FUNCOP_1:13
       .= (0*n).j by EUCLID:def 4;
   end;
-  len mlt(v, z) = n by FINSEQ_1:def 18;
+  len mlt(v, z) = n by CARD_1:def 13;
   then dom mlt(v, 0*n) = dom 0*n by A1,FINSEQ_3:31;
   hence thesis by A3,FINSEQ_1:17;
 end;
@@ -96,19 +96,19 @@ A6: 2*mlt(w1,w2) +sqr w2+ 2*mlt(w1,w2) = 2*mlt(w1,w2)+(2*mlt(w1,w2) + sqr w2 )
 A7: sqr w1 + (2*mlt(w1,w2) + sqr w2) = (2*mlt(w1,w2) + sqr w2) + sqr w1;
   v1-v2=sqr w1 + 2*mlt(w1,w2) + sqr w2 -sqr (w1-w2) by RVSUM_1:98
     .= sqr w1 + 2*mlt(w1,w2) + sqr w2 -(sqr w1 - 2*mlt(w1,w2) + sqr w2) by
-  RVSUM_1:99
+RVSUM_1:99
     .= 2*mlt(w1,w2) +sqr w2+ sqr w1 -(sqr w1 - 2*mlt(w1,w2) + sqr w2) by A7,
-  FINSEQOP:29
+FINSEQOP:29
     .= 2*mlt(w1,w2) +sqr w2+ sqr w1 -(sqr w1 - 2*mlt(w1,w2))- sqr w2 by
-  RVSUM_1:60
+RVSUM_1:60
     .= 2*mlt(w1,w2) +sqr w2+ sqr w1 - sqr w1 + 2*mlt(w1,w2)- sqr w2 by
-  RVSUM_1:62
+RVSUM_1:62
     .= (2*mlt(w1,w2) +sqr w2+ 2*mlt(w1,w2))- sqr w2 by RVSUM_1:63
     .= 2*mlt(w1,w2)+2*mlt(w1,w2) by A6,RVSUM_1:63
     .= (2+2)*mlt(w1,w2) by RVSUM_1:72
     .= 4*mlt(w1,w2);
-  then 1/4*((|.(x1+x2).|)^2-(|.(x1-x2).|)^2) = 1/4*(4*Sum(mlt(w1,w2))) by A2,
-  A3,A5,A4,RVSUM_1:117
+  then 1/4*((|.(x1+x2).|)^2-(|.(x1-x2).|)^2) = 1/4*(4*Sum(mlt(w1,w2))) by A2,A3
+,A5,A4,RVSUM_1:117
     .= Sum(mlt(w1,w2));
   hence thesis by A1;
 end;
@@ -145,7 +145,7 @@ theorem Th14:
   for x being real-valued FinSequence holds 0 <= |.x.|
 proof
   let x be real-valued FinSequence;
-  |.x.| = sqrt |(x,x)| & 0 <= |(x,x)| by RVSUM_1:149,Th13;
+  |.x.| = sqrt |(x,x)| & 0 <= |(x,x)| by Th13,RVSUM_1:149;
   hence thesis by SQUARE_1:def 4;
 end;
 
@@ -237,8 +237,7 @@ proof
   assume
 A1: len x=len y;
   then
-  |.x+y.|^2 + |.x-y.|^2 = (|.x.|^2 + 2*|(y, x)| + |.y.|^2) + |.x-y.|^2 by
-  Th33
+  |.x+y.|^2 + |.x-y.|^2 = (|.x.|^2 + 2*|(y, x)| + |.y.|^2) + |.x-y.|^2 by Th33
     .= (|.x.|^2 + 2*|(x, y)| + |.y.|^2) + (|.x.|^2 - 2*|(y, x)| + |.y.|^2)
   by A1,Th34
     .= 2*(|.x.|^2 + |.y.|^2);
@@ -253,7 +252,7 @@ proof
   assume
 A1: len x=len y;
   then |.x+y.|^2 - |.x-y.|^2 = (|.x.|^2 + 2*|(y,x)| + |.y.|^2) - |.x-y.|^2 by
-  Th33
+Th33
     .= (|.x.|^2 + 2*|(x, y)| + |.y.|^2) - (|.x.|^2 - 2*|(y, x)| + |.y.|^2)
   by A1,Th34
     .= 4*|(x, y)|;
@@ -284,11 +283,10 @@ A5:   len (t * x)=len x by RVSUM_1:147;
       |((t * x + y),(t * x + y))| >= 0 by RVSUM_1:149;
       then
       |((t * x) , (t * x))| + 2 * (|((t*x),y)|) + |(y,y)| >= 0 by A1,A5,
-      RVSUM_1:158;
-      then t * ( |(t*x,x)|) + 2 * |((t*x),y)| + |(y,y)| >= 0 by A5,
-      RVSUM_1:151;
+RVSUM_1:158;
+      then t * ( |(t*x,x)|) + 2 * |((t*x),y)| + |(y,y)| >= 0 by A5,RVSUM_1:151;
       then t * ( t * |(x,x)|) + 2 * |((t*x),y)| + |(y,y)| >= 0 by A1,
-      RVSUM_1:151;
+RVSUM_1:151;
       then |(x,x)| * s + 2 * (|(x,y)| * t) + |(y,y)| >= 0 by A1,RVSUM_1:151;
       hence thesis;
     end;
@@ -302,14 +300,12 @@ A6: |(x,x)| >= 0 by RVSUM_1:149;
     then 4 * ((( u )^2) - (|(x,x)|) * (|(y,y)|)) <= 0;
     then ((|(x,y)|)^2) - (|(x,x)|) * (|(y,y)|) <= 0/4 by XREAL_1:79;
     then (|(x,y)|)^2 <= (|(x,x)|) * (|(y,y)|) by XREAL_1:52;
-    then 0 <= w^2 & (abs(|(x,y)|))^2 <= (|(x,x)|) * (|(y,y)|) by
-    COMPLEX1:
-    161 ,XREAL_1:65;
-    then (sqrt (abs(|(x,y)|))^2) <= sqrt ((|(x,x)|) * (|(y,y)|)) by
-    SQUARE_1:94;
+    then 0 <= w^2 & (abs(|(x,y)|))^2 <= (|(x,x)|) * (|(y,y)|) by COMPLEX1:161
+,XREAL_1:65;
+    then (sqrt (abs(|(x,y)|))^2) <= sqrt ((|(x,x)|) * (|(y,y)|)) by SQUARE_1:94
+;
     then
-A7: abs(|(x,y)|) <= sqrt (|(x,x)| * |(y,y)|) by COMPLEX1:132 ,
-    SQUARE_1:89;
+A7: abs(|(x,y)|) <= sqrt (|(x,x)| * |(y,y)|) by COMPLEX1:132,SQUARE_1:89;
     |(y,y)| >= 0 by RVSUM_1:149;
     hence thesis by A6,A7,SQUARE_1:97;
   end;
@@ -325,7 +321,7 @@ proof
   assume
 A1: len x=len y;
   then |(x,y)| <= abs(|(x,y)|) & abs(|(x,y)|) <= |.x.|*|.y.| by Th37,
-  ABSVALUE:11;
+ABSVALUE:11;
   then |(x,y)| <= |.x.|*|.y.| by XXREAL_0:2;
   then 2*|(x,y)| <= 2*(|.x.|*|.y.|) by XREAL_1:66;
   then
@@ -358,9 +354,9 @@ theorem Th40:
 proof
   reconsider f1=p1, f2=p2, f3=p3 as FinSequence of REAL by EUCLID:27;
   reconsider q1 = p1, q2=p2 as Element of REAL n by EUCLID:25;
-  len f2=n by FINSEQ_1:def 18;
+  len f2=n by CARD_1:def 13;
   then
-A1: len f1=len f2 & len f2=len f3 by FINSEQ_1:def 18;
+A1: len f1=len f2 & len f2=len f3 by CARD_1:def 13;
   p1 + p2 = q1 + q2 by EUCLID:68;
   hence thesis by A1,RVSUM_1:150;
 end;
@@ -372,7 +368,7 @@ proof
   reconsider f1=p1,f2=p2 as FinSequence of REAL by EUCLID:27;
   reconsider q1 = p1 as Element of REAL n by EUCLID:25;
 A1: x*p1 = x*q1 by EUCLID:69;
-  len f1=n & len f2=n by FINSEQ_1:def 18;
+  len f1=n & len f2=n by CARD_1:def 13;
   hence thesis by A1,RVSUM_1:151;
 end;
 
@@ -460,7 +456,7 @@ theorem Th54:
   |(p, 0.TOP-REAL n)| = 0
 proof
   reconsider f1=p as FinSequence of REAL by EUCLID:27;
-  len f1=n by FINSEQ_1:def 18;
+  len f1=n by CARD_1:def 13;
   then 0*(len f1) = 0.TOP-REAL n by EUCLID:74;
   hence thesis by Th17;
 end;
@@ -583,8 +579,7 @@ theorem
   |.p+q.|^2 + |.p-q.|^2 = 2*(|.p.|^2 + |.q.|^2)
 proof
 A1: (|.p.|^2 - 2*|(p, q)| + |.q.|^2) = (|.p.|^2 + |.q.|^2 -2*|(p, q)| );
-  |.p+q.|^2 + |.p-q.|^2 = (|.p.|^2 + 2*|(p, q)| + |.q.|^2) + |.p-q.|^2 by
-  Th67
+  |.p+q.|^2 + |.p-q.|^2 = (|.p.|^2 + 2*|(p, q)| + |.q.|^2) + |.p-q.|^2 by Th67
     .= (|.p.|^2 + |.q.|^2 + 2*|(p, q)|) + (|.p.|^2 + |.q.|^2 - 2*|(p, q)|)
   by A1,Th68
     .= 2*(|.p.|^2 + |.q.|^2);
@@ -594,8 +589,7 @@ end;
 theorem
   |.p+q.|^2 - |.p-q.|^2 = 4* |(p,q)|
 proof
-  |.p+q.|^2 - |.p-q.|^2 = (|.p.|^2 + 2*|(p,q)| + |.q.|^2) - |.p-q.|^2 by
-  Th67
+  |.p+q.|^2 - |.p-q.|^2 = (|.p.|^2 + 2*|(p,q)| + |.q.|^2) - |.p-q.|^2 by Th67
     .= (|.p.|^2 + 2*|(p, q)| + |.q.|^2) - (|.p.|^2 - 2*|(p, q)| + |.q.|^2)
   by Th68
     .= 4*|(p, q)|;
@@ -605,8 +599,7 @@ end;
 theorem
   |(p,q)| = (1/4)*(|.p+q.|^2 - |.p-q.|^2)
 proof
-  |.p+q.|^2 - |.p-q.|^2 = (|.p.|^2 + 2*|(p,q)| + |.q.|^2) - |.p-q.|^2 by
-  Th67
+  |.p+q.|^2 - |.p-q.|^2 = (|.p.|^2 + 2*|(p,q)| + |.q.|^2) - |.p-q.|^2 by Th67
     .= (|.p.|^2 + 2*|(p, q)| + |.q.|^2) - (|.p.|^2 - 2*|(p, q)| + |.q.|^2)
   by Th68
     .= 4*|(p, q)|;
@@ -625,21 +618,21 @@ A1: 0/2 <= (|(p,p)| + |(q,q)|)/2 by XREAL_1:74;
   then 2*|(p,q)| <= |(p,p)| + |(q,q)| - 0 by Th57,XREAL_1:13;
   then (2*|(p,q)|)/2 <= (|(p,p)| + |(q,q)|)/2 by XREAL_1:74;
   then 0 + |(p,q)| <= (|(p,p)| + |(q,q)|)/2 + (|(p,p)| + |(q,q)|)/2 by A1,
-  XREAL_1:9;
+XREAL_1:9;
   hence thesis;
 end;
 
 theorem :: Schwartz
   abs |(p,q)| <= |.p.|*|.q.|
 proof
-  len p = n & len q = n by FINSEQ_1:def 18;
+  len p = n & len q = n by CARD_1:def 13;
   hence thesis by Th37;
 end;
 
 theorem :: Triangle
   |.p+q.| <= |.p.| + |.q.|
 proof
-A1: len p = n & len q = n by FINSEQ_1:def 18;
+A1: len p = n & len q = n by CARD_1:def 13;
   p+q = p qua real-valued FinSequence+q by EUCLID:68;
   hence thesis by A1,Th38;
 end;

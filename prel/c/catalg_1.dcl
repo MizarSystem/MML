@@ -311,7 +311,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CATALG_1" nr="9">
@@ -333,7 +333,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CATALG_1" nr="10">
@@ -355,7 +355,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CATALG_1" nr="11">

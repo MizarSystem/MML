@@ -12,7 +12,7 @@ environ
       PARTFUN1, MCART_1, ZFMISC_1, FUNCT_7, AMI_1, ARYTM_3, SCMNORM, PBOOLE,
       GROUP_9, RECDEF_2, COMPOS_1, SCMFSA6C, FINSEQ_1, UNIALG_1, CARD_5, RELOC,
       TURING_1, XXREAL_0, VALUED_0, SCMFSA_7, INT_1, SCMPDS_4, ORDINAL4,
-      SCMFSA6A;
+      SCMFSA6A, SUPINF_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, ORDINAL1,
       PBOOLE, FUNCT_7, CARD_1, CARD_3, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1,
       FINSET_1, NUMBERS, INT_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, AFINSQ_1,
@@ -32,14 +32,14 @@ begin :: General concepts
 
 reserve N for non empty with_non-empty_elements set;
 reserve x,A for set,
-  i,j,k,m,n, l, l1, l2, l3 for Element of NAT;
+  i,j,k,m,n, l, l1, l2 for Element of NAT;
 reserve D for non empty set,
   z for natural number;
 
 definition
   let N be set;
-  struct (1-sorted) COM-Struct over N (# carrier -> set,
-    Instruction-Counter -> Element of the carrier,
+  struct (ZeroStr) COM-Struct over N (# carrier -> set,
+    ZeroF -> Element of the carrier,
     Instructions -> non empty set,
     haltF -> Element of the Instructions,
     Object-Kind -> Function of the carrier, N \/ { the Instructions, NAT }
@@ -51,7 +51,7 @@ definition
   func Trivial-COM N -> strict COM-Struct over N means
 :: COMPOS_1:def 1
 
-  the carrier of it = succ NAT & the Instruction-Counter of it = NAT &
+  the carrier of it = succ NAT & the ZeroF of it = NAT &
   the Instructions of it = {[0,{},{}]} &
   the haltF of it = [0,{},{}] &
   the Object-Kind of it = (NAT --> {[0,{},{}]}) +* (NAT .--> NAT);
@@ -87,15 +87,14 @@ definition
   mode Instruction of S is Element of the Instructions of S;
 end;
 
-definition
+notation
   let N be set;
   let S be non empty COM-Struct over N;
-  func IC S -> Object of S equals
-:: COMPOS_1:def 3
-  the Instruction-Counter of S;
+  synonym IC S for 0.S;
 end;
 
 definition
+ canceled;
   let N be set;
   let S be non empty COM-Struct over N;
   let o be Object of S;
@@ -201,7 +200,7 @@ definition
 end;
 
 definition
-  let N be with_non-empty_elements set;
+  let N be set;
   let S be COM-Struct over N;
   let s be PartState of S;
   func ProgramPart s -> PartState of S equals
@@ -219,7 +218,8 @@ end;
 reserve S for IC-Ins-separated definite
   (non empty stored-program COM-Struct over N),
   s,s1,s2 for State of S;
-reserve ins for Element of the Instructions of S;
+reserve
+  ins for Element of the Instructions of S;
 reserve ss for Element of product the Object-Kind of S;
 reserve p for FinPartState of S;
 
@@ -237,7 +237,7 @@ definition
   attr IT is realistic means
 :: COMPOS_1:def 12
 
-  not the Instruction-Counter of IT in NAT;
+  not the ZeroF of IT in NAT;
 end;
 
 theorem :: COMPOS_1:2
@@ -661,7 +661,8 @@ theorem :: COMPOS_1:17
 
 theorem :: COMPOS_1:18
   for S being IC-Ins-separated definite realistic (non empty
-  stored-program COM-Struct over N) for p being PartState of S st IC S in
+  stored-program COM-Struct over N)
+  for p being PartState of S st IC S in
   dom p holds p = Start-At(IC p,S) +* ProgramPart p +* DataPart p;
 
 definition
@@ -816,6 +817,7 @@ theorem :: COMPOS_1:40
 
 begin :: AMISTD_2
 
+
 theorem :: COMPOS_1:41
   for S being definite (non empty stored-program COM-Struct over
 N), I being Element of the Instructions of S, s being State of S holds s +*
@@ -833,6 +835,7 @@ registration
 end;
 
 registration
+
   let N be with_non-empty_elements non empty set,
   S be IC-Ins-separated definite (non
   empty stored-program COM-Struct over N);
@@ -883,7 +886,7 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  let S be realistic (IC-Ins-separated definite
+  let S be   realistic (IC-Ins-separated definite
     (non empty
   stored-program COM-Struct over N));
   cluster trivial initial non empty
@@ -928,8 +931,6 @@ definition
   redefine func succ l -> Element of NAT;
 end;
 
-reserve m,j for Element of NAT;
-
 registration
   let N be set;
   let S be COM-Struct over N;
@@ -959,7 +960,7 @@ end;
 
 definition
   let N be non empty with_non-empty_elements set;
-  let S be definite (non empty stored-program COM-Struct over N);
+  let S be  definite (non empty stored-program COM-Struct over N);
   func Stop S -> preProgram of S equals
 :: COMPOS_1:def 27
   <% halt S %>;
@@ -967,19 +968,19 @@ end;
 
 registration
   let N be non empty with_non-empty_elements set;
-  let S be definite (non empty stored-program COM-Struct over N);
+  let S be  definite (non empty stored-program COM-Struct over N);
   cluster Stop S -> initial non empty;
 end;
 
 registration
   let N be non empty with_non-empty_elements set;
-  let S be definite (non empty stored-program COM-Struct over N);
+  let S be  definite (non empty stored-program COM-Struct over N);
   cluster initial non empty preProgram of S;
 end;
 
 definition
   let N be non empty with_non-empty_elements set;
-  let S be definite (non empty stored-program COM-Struct over N);
+  let S be  definite (non empty stored-program COM-Struct over N);
   mode Program of S is initial non empty preProgram of S;
 end;
 
@@ -997,12 +998,10 @@ registration
   cluster ProgramPart I -> initial Function;
 end;
 
-reserve i,j,k for Element of NAT;
-
 definition
   let N,S;
   let p be PartState of S, k be Nat;
-  func IncrIC(p,k) -> PartState of S equals
+  func IncIC(p,k) -> PartState of S equals
 :: COMPOS_1:def 28
   p +* Start-At(IC p+k,S);
 end;
@@ -1010,7 +1009,7 @@ end;
 registration
   let N,S;
   let p be FinPartState of S, k be Nat;
-  cluster IncrIC(p,k) -> finite;
+  cluster IncIC(p,k) -> finite;
 end;
 
 theorem :: COMPOS_1:47
@@ -1020,7 +1019,7 @@ theorem :: COMPOS_1:47
 
 theorem :: COMPOS_1:48
   for p being FinPartState of S, k being Element of NAT
-  holds DataPart IncrIC(p,k) = DataPart p;
+  holds DataPart IncIC(p,k) = DataPart p;
 
 theorem :: COMPOS_1:49
   Data-Locations S c= dom s;
@@ -1029,20 +1028,22 @@ theorem :: COMPOS_1:50
   dom DataPart s = Data-Locations S;
 
 theorem :: COMPOS_1:51
-  NAT misses Data-Locations S;
+ for S being non empty COM-Struct over N
+  holds NAT misses Data-Locations S;
 
 theorem :: COMPOS_1:52
-  IC S in dom Start-At(l,S);
+ for l being Nat
+ holds IC S in dom Start-At(l,S);
 
 theorem :: COMPOS_1:53
-  IC S in dom IncrIC(p,k);
+ for p being PartState of S
+  holds IC S in dom IncIC(p,k);
 
 theorem :: COMPOS_1:54
-  for p being FinPartState of S, k being Element of NAT
-   holds IC IncrIC (p,k) = IC p + k;
+  for p being PartState of S, k being Nat
+   holds IC IncIC (p,k) = IC p + k;
 
-theorem :: COMPOS_1:55
-  IncrIC(p,k).IC S = IC p + k;
+canceled;
 
 theorem :: COMPOS_1:56
   not IC S in Data-Locations S;
@@ -1052,7 +1053,7 @@ theorem :: COMPOS_1:57
   holds not IC S in dom d;
 
 theorem :: COMPOS_1:58
-  for d being data-only FinPartState of S
+  for p being PartState of S, d being data-only FinPartState of S
   holds IC (p+*d) = IC p;
 
 theorem :: COMPOS_1:59
@@ -1061,7 +1062,7 @@ theorem :: COMPOS_1:59
 
 theorem :: COMPOS_1:60
   for d being data-only FinPartState of S
-  holds IncrIC(p+*d,k) = IncrIC(p,k) +* d;
+  holds IncIC(p+*d,k) = IncIC(p,k) +* d;
 
 theorem :: COMPOS_1:61
   for d being data-only FinPartState of S,
@@ -1070,18 +1071,20 @@ theorem :: COMPOS_1:61
 
 theorem :: COMPOS_1:62
   for d being data-only PartState of S
-  holds ProgramPart IncrIC(d,k) = {};
+  holds ProgramPart IncIC(d,k) = {};
 
 theorem :: COMPOS_1:63
   for p being FinPartState of S,k being Element of NAT holds
-  Start-At(IC p+k,S) c= IncrIC (p,k);
+  Start-At(IC p+k,S) c= IncIC (p,k);
 
 theorem :: COMPOS_1:64
  IC Start-At(l,S) = l;
 
 :: pomocnicze pojecia na czas rewizji:
 
-definition let N,S; let p be PartState of S;
+definition
+ let N be set, S be COM-Struct over N;
+ let p be PartState of S;
  attr p is program-free means
 :: COMPOS_1:def 29
  p|NAT = {};
@@ -1091,18 +1094,20 @@ definition let N,S; let p be PartState of S;
 end;
 
 theorem :: COMPOS_1:65
+ for S being COM-Struct over N
  for p being PartState of S
   holds NPP p = p|((the carrier of S)\NAT);
 
-registration let N,S; let p be FinPartState of S;
+registration let N; let S be non empty COM-Struct over N;
+ let p be FinPartState of S;
  cluster NPP p -> finite;
 end;
 
-registration let N,S;
+registration let N; let S be non empty COM-Struct over N;
  cluster data-only -> program-free PartState of S;
 end;
 
-registration let N,S;
+registration let N; let S be non empty COM-Struct over N;
  cluster program-free FinPartState of S;
 end;
 
@@ -1111,7 +1116,7 @@ theorem :: COMPOS_1:66
   holds ProgramPart(p+*d) = ProgramPart p;
 
 theorem :: COMPOS_1:67
- for p being PartState of S, d being data-only PartState of S
+ for p being PartState of S, d being program-free PartState of S
   holds NPP(p+*d) = NPP p +* d;
 
 theorem :: COMPOS_1:68
@@ -1123,6 +1128,8 @@ theorem :: COMPOS_1:69
   holds the carrier of S = dom NPP s \/ dom ProgramPart s;
 
 theorem :: COMPOS_1:70
+ for S being IC-Ins-separated definite realistic (non empty
+ stored-program COM-Struct over N)
  for p being PartState of S st IC S in dom p
   holds dom NPP p = {IC S} \/ dom DataPart p;
 
@@ -1131,6 +1138,8 @@ theorem :: COMPOS_1:71
   holds dom NPP s = {IC S} \/ dom DataPart s;
 
 theorem :: COMPOS_1:72
+ for S being IC-Ins-separated definite realistic (non empty
+ stored-program COM-Struct over N)
  for p being PartState of S st IC S in dom p
   holds IC NPP p = IC p;
 
@@ -1141,7 +1150,7 @@ theorem :: COMPOS_1:73
 registration
   let N,S;
   let p be program-free PartState of S, k be Element of NAT;
-  cluster IncrIC(p,k) -> program-free;
+  cluster IncIC(p,k) -> program-free;
 end;
 
 theorem :: COMPOS_1:74
@@ -1150,7 +1159,7 @@ theorem :: COMPOS_1:74
 
 theorem :: COMPOS_1:75
  for p being PartState of S st IC S in dom p
-  holds IncrIC(NPP p,k) = DataPart p +* Start-At ((IC p) +k,S);
+  holds IncIC(NPP p,k) = DataPart p +* Start-At ((IC p) +k,S);
 
 registration
   let N,S;
@@ -1161,7 +1170,7 @@ end;
 registration
   let N,S;
   let s be State of S, k be Nat;
-  cluster IncrIC(s,k) -> total;
+  cluster IncIC(s,k) -> total;
 end;
 
 begin :: inicjalizacja licznika rozkazow, 2010.05.14, A.T.
@@ -1172,7 +1181,7 @@ definition let N;
   let p be PartState of S;
   func Initialize p -> PartState of S equals
 :: COMPOS_1:def 31
-  p +* Start-At( 0,S);
+  p +* Start-At(0,S);
   projectivity;
 end;
 
@@ -1185,8 +1194,6 @@ registration let N,S;
   let p be FinPartState of S;
   cluster Initialize p -> finite;
 end;
-
-reserve p for PartState of S;
 
 theorem :: COMPOS_1:76
   dom Initialize p = dom p \/ {IC S};
@@ -1432,7 +1439,7 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be (IC-Ins-separated definite
+  S be   (IC-Ins-separated definite
   (non empty stored-program COM-Struct over N));
   cluster trivial -> unique-halt (non empty NAT-defined FinPartState of S);
 end;
@@ -1456,14 +1463,14 @@ registration
 end;
 
 theorem :: COMPOS_1:88
-  for S being (IC-Ins-separated definite
+  for S being   (IC-Ins-separated definite
   (non empty stored-program COM-Struct over N)) holds card Stop S = 1;
 
 theorem :: COMPOS_1:89
   for F being pre-Macro of S st card F = 1 holds F = Stop S;
 
 theorem :: COMPOS_1:90
-  for S being (IC-Ins-separated definite
+  for S being   (IC-Ins-separated definite
   (non empty stored-program COM-Struct over N))
   holds LastLoc Stop S = 0;
 
@@ -1569,7 +1576,7 @@ theorem :: COMPOS_1:95
 
 theorem :: COMPOS_1:96
   for S being regular homogeneous J/A-independent proper-halt
-  realistic (standard-ins IC-Ins-separated definite
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program COM-Struct over N)),
   I being Instruction of S st IncAddr(I,k) = halt S holds I = halt S;
 
@@ -1811,7 +1818,7 @@ theorem :: COMPOS_1:107
 
 theorem :: COMPOS_1:108
   for k being Element of NAT
-  for S being (IC-Ins-separated definite
+  for S being   (IC-Ins-separated definite
   (non empty stored-program COM-Struct over N))
   holds Shift(Stop S, k) = k .--> halt S;
 
@@ -1863,7 +1870,7 @@ definition
   k be Element of NAT, p be FinPartState of S;
   func Relocated (p,k) -> FinPartState of S equals
 :: COMPOS_1:def 43
-   IncrIC(NPP p,k) +* Reloc(ProgramPart p,k);
+   IncIC(NPP p,k) +* Reloc(ProgramPart p,k);
 end;
 
 reserve S for regular homogeneous J/A-independent
@@ -1879,7 +1886,7 @@ theorem :: COMPOS_1:115
 
 theorem :: COMPOS_1:116
   for k being Element of NAT holds
-  ProgramPart(Relocated(g,k)) = Reloc(ProgramPart(g),k);
+  ProgramPart Relocated(g,k) = Reloc(ProgramPart(g),k);
 
 theorem :: COMPOS_1:117
   for k being Element of NAT holds
@@ -1887,9 +1894,7 @@ theorem :: COMPOS_1:117
    holds dom Reloc(p,k) =
     { j+k where j is Element of NAT:j in dom p };
 
-theorem :: COMPOS_1:118
-  for k being Element of NAT holds
-  il in dom g iff il + k in dom Relocated(g,k);
+canceled;
 
 theorem :: COMPOS_1:119
   for k being Element of NAT holds
@@ -1901,14 +1906,15 @@ theorem :: COMPOS_1:120
 
 theorem :: COMPOS_1:121
   for i,j being Element of NAT holds
-  for p being NAT-defined (the Instructions of S)-valued FinPartState of S
+  for p being NAT-defined (the Instructions of S)-valued finite Function
   holds Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i);
 
 theorem :: COMPOS_1:122
+  for g being NAT-defined (the Instructions of S)-valued finite Function
   for k being Element of NAT holds
   for I being Instruction of S holds
-  il in dom ProgramPart g & I = g.il implies
-  IncAddr(I, k) = (Relocated (g, k)).(il + k);
+  il in dom g & I = g.il implies
+  IncAddr(I, k) = Reloc(g, k).(il + k);
 
 theorem :: COMPOS_1:123
   for k being Element of NAT st IC S in dom g
@@ -1972,7 +1978,7 @@ theorem :: COMPOS_1:133
 reserve l,l1,loc for Element of NAT;
 
 definition let N;
-  let S be definite (non empty stored-program COM-Struct over N);
+  let S be  definite (non empty stored-program COM-Struct over N);
   let I be Program of S;
   func stop I -> Program of S equals
 :: COMPOS_1:def 44
@@ -1990,8 +1996,7 @@ definition let N,S;
   redefine func (la,lb) --> (a,b) -> FinPartState of S;
 end;
 
-reserve l1,l2 for Element of NAT,
-  i1,i2 for Instruction of S;
+reserve i1,i2 for Instruction of S;
 
 theorem :: COMPOS_1:134
   s +*((l1,l2) --> (i1, i2)) = s +* (l1,i1) +* (l2,i2);
@@ -2031,7 +2036,8 @@ theorem :: COMPOS_1:138
   DataPart s1 = DataPart s2;
 
 theorem :: COMPOS_1:139
-  for I being Program of S holds not IC S in dom I;
+  for I being NAT-defined Function
+  holds not IC S in dom I;
 
 begin ::SF_MASTR
 
@@ -2042,10 +2048,11 @@ theorem :: COMPOS_1:141
   IC S in dom (p +* Start-At( n,S));
 
 theorem :: COMPOS_1:142
-  IC(p +* Start-At( n,S)) =  n;
+ for n being Nat
+ holds IC(p +* Start-At( n,S)) =  n;
 
 theorem :: COMPOS_1:143
-  I +* Start-At( n,S) c= s implies IC s =  n;
+  p +* Start-At( n,S) c= s implies IC s =  n;
 
 begin :: SCMFSA6B
 
@@ -2056,14 +2063,14 @@ theorem :: COMPOS_1:145
   x in dom I implies I.x = (I +* Start-At( n,S)).x;
 
 theorem :: COMPOS_1:146
-    0 in dom (I +* Start-At( 0,S));
+    0 in dom (Initialize I);
 
 theorem :: COMPOS_1:147
   x in dom Macro i iff x =  0 or x =  1;
 
 theorem :: COMPOS_1:148
   (Macro i).( 0) = i & (Macro i).( 1) = halt S &
-  ((Macro i) +* Start-At( 0,S)). 0 = i;
+  (Initialize (Macro i)). 0 = i;
 
 begin :: SCMFSA7B
 
@@ -2077,7 +2084,7 @@ theorem :: COMPOS_1:150
 
 registration
   let N be non empty with_non-empty_elements set;
-  let S be definite (non empty stored-program COM-Struct over N);
+  let S be  definite (non empty stored-program COM-Struct over N);
   cluster Stop S -> non halt-free;
 end;
 
@@ -2096,7 +2103,7 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  let S be definite (non empty stored-program COM-Struct over N);
+  let S be  definite (non empty stored-program COM-Struct over N);
   let p be PartState of S,
       q be non halt-free
        (NAT-defined (the Instructions of S)-valued Function);
@@ -2105,7 +2112,7 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  let S be definite (non empty stored-program COM-Struct over N);
+  let S be  definite (non empty stored-program COM-Struct over N);
   let p be (NAT-defined (the Instructions of S)-valued Function),
       q be non halt-free
        (NAT-defined (the Instructions of S)-valued Function);
@@ -2125,7 +2132,7 @@ end;
 
 registration
   let N be non empty with_non-empty_elements set;
-  let S be definite (non empty stored-program COM-Struct over N);
+  let S be  definite (non empty stored-program COM-Struct over N);
   cluster non halt-free Program of S;
 end;
 
@@ -2148,7 +2155,7 @@ end;
 
 theorem :: COMPOS_1:152
   for p being program-free PartState of S, k being Element of NAT
-  holds ProgramPart IncrIC(p,k) = {};
+  holds ProgramPart IncIC(p,k) = {};
 
 registration
   let N be with_non-empty_elements non empty set,
@@ -2163,3 +2170,352 @@ registration let N,S; let k be Element of NAT;
  let p be k-started PartState of S, d be data-only PartState of S;
  cluster p +* d -> k-started;
 end;
+
+theorem :: COMPOS_1:153
+ for S being regular homogeneous J/A-independent
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program COM-Struct over N))
+  for p,q being
+   finite NAT-defined (the Instructions of S)-valued Function
+    holds IncAddr(p +* q, n) = IncAddr(p,n) +* IncAddr(q,n);
+
+theorem :: COMPOS_1:154
+ for S being regular homogeneous J/A-independent
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program COM-Struct over N))
+ for p,q being finite NAT-defined (the Instructions of S)-valued Function,
+     k be Element of NAT
+  holds Reloc(p+*q,k) = Reloc(p,k)+*Reloc(q,k);
+
+theorem :: COMPOS_1:155
+ for S being regular homogeneous J/A-independent realistic
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program COM-Struct over N))
+ for p being finite NAT-defined (the Instructions of S)-valued Function,
+     m,n be Element of NAT
+ holds Reloc(Reloc(p,m), n) = Reloc(p, m + n);
+
+theorem :: COMPOS_1:156
+ for S being regular homogeneous J/A-independent realistic
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program COM-Struct over N))
+  for P,Q being NAT-defined (the Instructions of S)-valued finite Function,
+   k being Element of NAT st
+  P c= Q holds Reloc(P,k) c= Reloc(Q,k);
+
+theorem :: COMPOS_1:157
+ for S being regular homogeneous J/A-independent realistic
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program COM-Struct over N))
+  for P being preProgram of S holds Reloc(P,0) = P;
+
+theorem :: COMPOS_1:158
+ for S being regular homogeneous J/A-independent realistic
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program COM-Struct over N))
+  for k being Element of NAT holds
+    for P being preProgram of S holds
+    il in dom P iff il + k in dom Reloc(P,k);
+
+theorem :: COMPOS_1:159
+ for S being regular homogeneous J/A-independent realistic
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program COM-Struct over N))
+  for i being Element of NAT,
+      p being finite NAT-defined (the Instructions of S)-valued Function
+    holds Shift(IncAddr(p,i),i) = Reloc(p,i);
+
+theorem :: COMPOS_1:160
+ for N being set, S being non empty stored-program COM-Struct over N
+ holds the carrier of S = {IC S} \/ Data-Locations S \/ NAT;
+
+theorem :: COMPOS_1:161
+ for S being regular homogeneous J/A-independent realistic
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program COM-Struct over N))
+  for k being Element of NAT, p being FinPartState of S ,
+      s1, s2 being State of S st p c= s1 & Relocated (p,k) c= s2
+   holds p c= s1 +* DataPart s2;
+
+theorem :: COMPOS_1:162
+ for p being PartState of S, i,j being Nat
+ holds IncIC(IncIC(p,i),j) = IncIC(p,i+j);
+
+theorem :: COMPOS_1:163
+ for p being PartState of S, j,k being Nat
+ holds IncIC(p +* Start-At(j,S),k) = p +* Start-At(j+k,S);
+
+theorem :: COMPOS_1:164
+  Start-At(IC s,S) c= s;
+
+theorem :: COMPOS_1:165
+ for s being State of S
+  holds s +* Start-At(IC s,S) = s;
+
+theorem :: COMPOS_1:166
+ for k being Nat
+ holds IC IncIC(s,k) -' k = IC s;
+
+theorem :: COMPOS_1:167
+  for N be with_non-empty_elements non empty set
+  for S be regular J/A-independent homogeneous proper-halt
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program COM-Struct over N))
+  for i being Instruction of S
+  for f being Function of the Instructions of S, the Instructions of S
+   st f = (id the Instructions of S) +* (halt S .--> i)
+  for s being finite NAT-defined (the Instructions of S)-valued Function
+  holds IncAddr(f*s,n)
+   = ((id the Instructions of S) +* (halt S .--> IncAddr(i,n)))* IncAddr(s,n);
+
+theorem :: COMPOS_1:168
+  for p,q being PartState of S holds DataPart p misses ProgramPart q;
+
+theorem :: COMPOS_1:169
+  for p being PartState of S holds DataPart p c= NPP p;
+
+theorem :: COMPOS_1:170
+ p c= q implies NPP p c= NPP q;
+
+theorem :: COMPOS_1:171
+ dom NPP p c= {IC S} \/ dom DataPart p;
+
+theorem :: COMPOS_1:172
+ dom s = {IC S} \/ Data-Locations S \/ NAT;
+
+reserve S for regular J/A-independent homogeneous
+   (standard-ins IC-Ins-separated definite realistic
+  (non empty stored-program COM-Struct over N));
+reserve I,J for Program of S,
+  p for PartState of S;
+
+theorem :: COMPOS_1:173
+  dom I misses dom Reloc(ProgramPart J, card I);
+
+theorem :: COMPOS_1:174
+ for I being preProgram of S
+  holds card Reloc(ProgramPart I, m) = card I;
+
+theorem :: COMPOS_1:175
+ for S being realistic stored-program non empty COM-Struct over N
+ for s1,s2 be State of S holds
+ s1,s2 equal_outside NAT iff
+   s1|(Data-Locations S \/ {IC S}) = s2|(Data-Locations S \/ {IC S});
+
+theorem :: COMPOS_1:176
+ for S being non empty COM-Struct over N,
+  p being data-only PartState of S
+  holds NPP p = p;
+
+canceled 2;
+
+theorem :: COMPOS_1:179
+ for S being IC-Ins-separated definite realistic (non empty
+ stored-program COM-Struct over N)
+ for p being PartState of S st IC S in dom p
+ holds IC S in dom NPP p;
+
+theorem :: COMPOS_1:180
+ for S being regular homogeneous J/A-independent realistic
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program COM-Struct over N))
+ for p being FinPartState of S
+  for k being Element of NAT holds
+  NPP(Relocated(p,k)) = IncIC(NPP p,k);
+
+theorem :: COMPOS_1:181
+ IC S in dom p implies NPP p = Start-At(IC p,S) +* DataPart p;
+
+theorem :: COMPOS_1:182
+ dom NPP p /\ Data-Locations S = dom DataPart p;
+
+canceled;
+
+theorem :: COMPOS_1:184
+  p = ProgramPart p +* NPP p;
+
+theorem :: COMPOS_1:185
+for s being State of S
+ holds Data-Locations S c= dom NPP s;
+
+reserve S for IC-Ins-separated definite realistic
+  (non empty stored-program COM-Struct over N),
+  s for State of S,
+  p for PartState of S;
+
+definition
+  let N,S;
+  let p be PartState of S, k be Nat;
+  func DecIC(p,k) -> PartState of S equals
+:: COMPOS_1:def 46
+
+  p +* Start-At(IC p-'k,S);
+end;
+
+registration
+  let N,S;
+  let p be FinPartState of S, k be Nat;
+  cluster DecIC(p,k) -> finite;
+end;
+
+theorem :: COMPOS_1:186
+  for p being FinPartState of S, k being Element of NAT
+  holds DataPart DecIC(p,k) = DataPart p;
+
+theorem :: COMPOS_1:187
+ for k being Nat holds IC S in dom DecIC(p,k);
+
+theorem :: COMPOS_1:188
+  for p being PartState of S, k being Nat
+   holds IC DecIC (p,k) = IC p -' k;
+
+theorem :: COMPOS_1:189
+  for p being PartState of S,
+   d being data-only FinPartState of S, k being Nat
+  holds DecIC(p+*d,k) = DecIC(p,k) +* d;
+
+theorem :: COMPOS_1:190
+  for d being data-only PartState of S, k being Nat
+  holds ProgramPart DecIC(d,k) = {};
+
+theorem :: COMPOS_1:191
+  for p being FinPartState of S,k being Element of NAT holds
+  Start-At(IC p-'k,S) c= DecIC (p,k);
+
+registration
+  let N,S;
+  let p be program-free PartState of S, k be Element of NAT;
+  cluster DecIC(p,k) -> program-free;
+end;
+
+theorem :: COMPOS_1:192
+ for p being PartState of S, k being Nat st IC S in dom p
+  holds DecIC(NPP p,k) = DataPart p +* Start-At ((IC p) -'k,S);
+
+registration
+  let N,S;
+  let s be State of S, k be Nat;
+  cluster DecIC(s,k) -> total;
+end;
+
+theorem :: COMPOS_1:193
+  for p being program-free PartState of S, k being Element of NAT
+  holds ProgramPart DecIC(p,k) = {};
+
+theorem :: COMPOS_1:194
+ for p being PartState of S, i,j being Nat
+ holds DecIC(DecIC(p,i),j) = DecIC(p,i+j);
+
+theorem :: COMPOS_1:195
+ for p being PartState of S, j,k being Nat
+ holds DecIC(p +* Start-At(j,S),k) = p +* Start-At(j-'k,S);
+
+theorem :: COMPOS_1:196
+ for s being State of S, k being Nat st k <= IC s
+ holds IC DecIC(s,k) + k = IC s;
+
+theorem :: COMPOS_1:197
+ for p,q being PartState of S, k being Nat st IC S in dom q
+  holds IncIC(p+*q,k) = p +* IncIC(q,k);
+
+theorem :: COMPOS_1:198
+ for p,q being PartState of S, k being Nat st IC S in dom q
+  holds DecIC(p+*q,k) = p +* DecIC(q,k);
+
+registration
+  let N be with_non-empty_elements non empty set;
+  let S be IC-Ins-separated definite realistic
+   (non empty stored-program COM-Struct over N),
+         l be Nat;
+ let p be l-started PartState of S;
+ cluster NPP p -> l-started;
+end;
+
+theorem :: COMPOS_1:199
+ for p being PartState of S, k,l being Nat
+  holds p +* Start-At(k,S) +* Start-At(l,S)  = p +* Start-At(l,S);
+
+theorem :: COMPOS_1:200
+ for p being PartState of S st IC S in dom p
+  holds p +* Start-At(IC p,S) = p;
+
+
+theorem :: COMPOS_1:201
+ for p being PartState of S, k being Nat
+   st IC S in dom p
+  holds DecIC(IncIC(p,k),k) = p;
+
+theorem :: COMPOS_1:202
+ for p,q being PartState of S, k being Nat st IC S in dom q
+  holds DecIC(p+*IncIC(q,k),k) = p +* q;
+
+theorem :: COMPOS_1:203
+ for S being
+  regular homogeneous J/A-independent  (IC-Ins-separated definite
+   realistic
+  (standard-ins non empty stored-program COM-Struct over N))
+  for k being Element of NAT, p being FinPartState of S ,
+      s1, s2 being State of S st NPP p c= s1 & NPP Relocated (p,k) c= s2
+   holds NPP p c= s1 +* DataPart s2;
+
+theorem :: COMPOS_1:204
+ for k being Nat
+ holds Start-At(k,S) c= p iff Start-At(k,S) c= NPP p;
+
+theorem :: COMPOS_1:205
+  for S being regular homogeneous J/A-independent
+   (IC-Ins-separated definite realistic
+  (standard-ins non empty stored-program COM-Struct over N))
+ for k being Element of NAT, p being FinPartState of S
+  st IC S in dom p
+ holds NPP Relocated(p,k) = IncIC(NPP p,k);
+
+theorem :: COMPOS_1:206
+   for S being regular homogeneous J/A-independent
+   (IC-Ins-separated definite realistic
+  (standard-ins non empty stored-program COM-Struct over N))
+ for p being FinPartState of S
+ holds ProgramPart Initialize p = ProgramPart p;
+
+theorem :: COMPOS_1:207
+  for S being regular homogeneous J/A-independent
+   (IC-Ins-separated definite realistic
+  (standard-ins non empty stored-program COM-Struct over N))
+ for p being FinPartState of S
+ holds NPP Initialize p = Initialize NPP p;
+
+theorem :: COMPOS_1:208
+ for I being NAT-defined PartState of S
+ holds NPP I = {};
+
+theorem :: COMPOS_1:209
+  for I being NAT-defined PartState of S
+ holds DataPart I = 0;
+
+theorem :: COMPOS_1:210
+  for I being NAT-defined PartState of S
+ holds NPP Initialize I = Start-At(0,S);
+
+registration let N,S;
+ let p be program-free PartState of S;
+ cluster Initialize p -> program-free;
+end;
+
+theorem :: COMPOS_1:211
+  for N for S be non empty COM-Struct over N
+  for d be program-free PartState of S
+  holds dom d misses NAT;
+
+theorem :: COMPOS_1:212
+ for p being program-free PartState of S
+  holds NPP p = p;
+
+theorem :: COMPOS_1:213
+ for S being regular homogeneous J/A-independent realistic
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program COM-Struct over N))
+  for k being Element of NAT, p being FinPartState of S
+    st IC S in dom p
+  for s1, s2 being State of S st NPP p c= s1 & NPP Relocated (p,k) c= s2
+   holds NPP p c= s1 +* DataPart s2;
+

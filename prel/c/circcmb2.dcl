@@ -60,10 +60,10 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="49"/>
-<Adjective nr="51">
+<Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
 </ArgTypes>

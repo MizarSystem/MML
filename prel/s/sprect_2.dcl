@@ -71,8 +71,8 @@
 <Adjective nr="11" value="false"/>
 <Adjective nr="12" value="false"/>
 <Adjective nr="27"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 <Adjective nr="163">
 <Func kind="U" nr="1">
 <Func kind="K" nr="281">

@@ -3,7 +3,7 @@
 ::
 :: Received November 14, 2006
 :: Copyright (c) 2006 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, NAT_1, ARYTM_3, XXREAL_0, SUBSET_1, CARD_1, FUNCT_1,
@@ -29,7 +29,7 @@ environ
  schemes NAT_1, FUNCT_2, XBOOLE_0, BINOP_1, BINOP_2;
 
 begin
- 
+
 :: definition of CTL(Computation Tree Logic) language.
 ::    refer to (reuse) construction & proof of ZF_LANG
 
@@ -91,7 +91,7 @@ reserve k,n for Element of NAT,
   a,Y for set,
   D,D1,D2 for non empty set,
   p,q for FinSequence of NAT;
- 
+
 :: The operations to make CTL-formulae
 
 definition
@@ -146,7 +146,7 @@ A1: len(<*n*>)+len(p^q) = len(<*n*>)+len(p)+len(q);
     .= len(<*n*>)+len(p^q) by FINSEQ_1:35;
   hence thesis by A1,FINSEQ_1:57;
 end;
- 
+
 :: The set of all well formed formulae of CTL-language
 
 definition
@@ -323,7 +323,7 @@ registration
   cluster CTL-formula-like FinSequence of NAT;
   existence
   proof
-    consider x being Element of CTL_WFF;
+    set x =the  Element of CTL_WFF;
     reconsider x as FinSequence of NAT by Def12;
     take x;
     thus x is Element of CTL_WFF;
@@ -1063,7 +1063,7 @@ definition
   otherwise atom.0;
   correctness by Th1;
 end;
- 
+
 ::***************************************************
 ::**
 ::** definition of Kripke structure & CTL model structure.
@@ -1089,7 +1089,7 @@ definition
   let V be CTLModelStr;
   mode Assign of V is Element of the carrier of V;
 end;
- 
+
 ::  Preparation to define semantics for CTL-language
 ::  definition of evaluate function of CTL
 
@@ -1170,7 +1170,7 @@ end;
 
 definition let C be CTLModelStr;
  attr C is with_basic means
-:Defx: the BasicAssign of C is non empty;
+:Def29: the BasicAssign of C is non empty;
 end;
 
 definition
@@ -1212,7 +1212,7 @@ end;
 
 registration let C be CTLModel;
  cluster the BasicAssign of C -> non empty;
- coherence by Defx;
+ coherence by Def29;
 end;
 
 reserve V for CTLModel;
@@ -1707,7 +1707,7 @@ definition
   let x be set;
   func CastEval(V,x,v0) ->Function of CTL_WFF,the carrier of V equals
   :
-  Def30: x
+  Def32: x
  if x in Funcs(CTL_WFF,the carrier of V) otherwise CTL_WFF --> v0;
   correctness by FUNCT_2:121;
 end;
@@ -1716,7 +1716,7 @@ definition
   let V be CTLModel;
   let Kai be Function of atomic_WFF,the BasicAssign of V;
   func EvalFamily(V,Kai) -> non empty set means
-  :Def31:
+  :Def33:
   for p being set holds
 p in it iff p in bool Funcs(CTL_WFF,the carrier of V) & ex n being Element
   of NAT st p=EvalSet(V,Kai,n);
@@ -1766,19 +1766,19 @@ proof
     is-PreEvaluation-for n,Kai;
     hence thesis by FUNCT_2:11;
   end;
-  hence thesis by Def31;
+  hence thesis by Def33;
 end;
 
 theorem Th3:
   ex f st f is-Evaluation-for Kai
 proof
   set M = EvalFamily(V,Kai);
-  consider v0 being Element of the carrier of V;
+  set v0 =the  Element of the carrier of V;
   for X being set st X in M holds X <> {}
   proof
     let X being set;
     assume X in M;
-    then ex n being Element of NAT st X = EvalSet(V,Kai,n) by Def31;
+    then ex n being Element of NAT st X = EvalSet(V,Kai,n) by Def33;
     hence thesis;
   end;
   then consider Choice being Function such that
@@ -1849,7 +1849,7 @@ A13:        H in CTL_WFF by Th1;
               .= F(len(H)) by A6;
             then
 A14:        CastEval(V,f1.len(CastCTLformula(H)),v0) = F(len H ) by
-            Def30;
+            Def32;
             then reconsider f2 as Function of CTL_WFF,the carrier of V;
 A15:        f2 = Choice.EvalSet(V,Kai,len(H)) by Def2;
             Choice.EvalSet(V,Kai,len(H)) in EvalSet(V,Kai,len(H)) by A1,
@@ -1988,7 +1988,7 @@ definition
   let Kai be Function of atomic_WFF,the BasicAssign of V;
   let H be CTL-formula;
   func Evaluate(H,Kai) -> Assign of V means
-  :Def32:
+  :Def34:
   ex f being Function of
   CTL_WFF,the carrier of V st f is-Evaluation-for Kai & it = f.H;
   existence
@@ -2034,7 +2034,7 @@ definition
   'not'('not'(f) '&' 'not'(g));
   correctness;
 end;
- 
+
 ::Some properties of evaluate function of CTL
 
 theorem Th5:
@@ -2042,9 +2042,9 @@ theorem Th5:
 proof
   consider f1 be Function of CTL_WFF,the carrier of V such that
 A1: f1 is-Evaluation-for Kai and
-A2: Evaluate('not' H,Kai) = f1.('not' H) by Def32;
+A2: Evaluate('not' H,Kai) = f1.('not' H) by Def34;
 A3: ex f2 be Function of CTL_WFF,the carrier of V st f2
-  is-Evaluation-for Kai & Evaluate(H,Kai) = f2.H by Def32;
+  is-Evaluation-for Kai & Evaluate(H,Kai) = f2.H by Def34;
 A4: 'not' H is negative by Def15;
   then
   Evaluate('not' H,Kai) = (the Compl of V).(f1.(the_argument_of('not' H)) )
@@ -2059,13 +2059,13 @@ theorem Th6:
 proof
   consider f0 be Function of CTL_WFF,the carrier of V such that
 A1: f0 is-Evaluation-for Kai and
-A2: Evaluate(H1 '&' H2,Kai) = f0.(H1 '&' H2) by Def32;
+A2: Evaluate(H1 '&' H2,Kai) = f0.(H1 '&' H2) by Def34;
   consider f1 be Function of CTL_WFF,the carrier of V such that
 A3: f1 is-Evaluation-for Kai and
-A4: Evaluate(H1,Kai) = f1.H1 by Def32;
+A4: Evaluate(H1,Kai) = f1.H1 by Def34;
   consider f2 be Function of CTL_WFF,the carrier of V such that
 A5: f2 is-Evaluation-for Kai and
-A6: Evaluate(H2,Kai) = f2.H2 by Def32;
+A6: Evaluate(H2,Kai) = f2.H2 by Def34;
 A7: f0=f2 by A1,A5,Th4;
 A8: H1 '&' H2 is conjunctive by Def16;
   then
@@ -2080,9 +2080,9 @@ theorem Th7:
 proof
   consider f1 be Function of CTL_WFF,the carrier of V such that
 A1: f1 is-Evaluation-for Kai and
-A2: Evaluate(EX H,Kai) = f1.(EX H) by Def32;
+A2: Evaluate(EX H,Kai) = f1.(EX H) by Def34;
 A3: ex f2 be Function of CTL_WFF,the carrier of V st f2
-  is-Evaluation-for Kai & Evaluate(H,Kai) = f2.H by Def32;
+  is-Evaluation-for Kai & Evaluate(H,Kai) = f2.H by Def34;
 A4: EX H is ExistNext by Def17;
   then Evaluate(EX H,Kai) = (the EneXt of V).(f1.(the_argument_of(EX H)) ) by
   A1,A2,Def26
@@ -2096,9 +2096,9 @@ theorem Th8:
 proof
   consider f1 be Function of CTL_WFF,the carrier of V such that
 A1: f1 is-Evaluation-for Kai and
-A2: Evaluate(EG H,Kai) = f1.(EG H) by Def32;
+A2: Evaluate(EG H,Kai) = f1.(EG H) by Def34;
 A3: ex f2 be Function of CTL_WFF,the carrier of V st f2
-  is-Evaluation-for Kai & Evaluate(H,Kai) = f2.H by Def32;
+  is-Evaluation-for Kai & Evaluate(H,Kai) = f2.H by Def34;
 A4: EG H is ExistGlobal by Def18;
   then
 A5: not EG H is negative by Lm18;
@@ -2115,13 +2115,13 @@ theorem Th9:
 proof
   consider f0 be Function of CTL_WFF,the carrier of V such that
 A1: f0 is-Evaluation-for Kai and
-A2: Evaluate(H1 EU H2,Kai) = f0.(H1 EU H2) by Def32;
+A2: Evaluate(H1 EU H2,Kai) = f0.(H1 EU H2) by Def34;
   consider f1 be Function of CTL_WFF,the carrier of V such that
 A3: f1 is-Evaluation-for Kai and
-A4: Evaluate(H1,Kai) = f1.H1 by Def32;
+A4: Evaluate(H1,Kai) = f1.H1 by Def34;
   consider f2 be Function of CTL_WFF,the carrier of V such that
 A5: f2 is-Evaluation-for Kai and
-A6: Evaluate(H2,Kai) = f2.H2 by Def32;
+A6: Evaluate(H2,Kai) = f2.H2 by Def34;
 A7: f0=f2 by A1,A5,Th4;
 A8: H1 EU H2 is ExistUntill by Def19;
   then (H1 EU H2).1 = 4 by Lm7;
@@ -2143,7 +2143,7 @@ proof
     .= 'not' (('not' Evaluate(H1,Kai)) '&' Evaluate('not' H2,Kai)) by Th5;
   hence thesis by Th5;
 end;
- 
+
 ::  definition of iteration of function: f|**n
 
 notation
@@ -2164,7 +2164,7 @@ definition
     hence thesis;
   end;
 end;
- 
+
 ::  Lemma of total Relation
 
 Lm31: for S being set, R being Relation of S,S holds R is total implies for x
@@ -2219,7 +2219,7 @@ end;
 reserve S for non empty set;
 reserve R for total Relation of S,S;
 reserve s,s0,s1 for Element of S;
- 
+
 ::  existence of (infinite) path for total Relation
 
 Lm33: R.:{s} is non empty
@@ -2228,7 +2228,7 @@ A1: s in {s} by TARSKI:def 1;
   ex p being set st p in S & [s,p] in R by Lm31;
   hence thesis by A1,RELAT_1:def 13;
 end;
- 
+
 ::  scheme for path with condition F
 
 scheme
@@ -2340,18 +2340,18 @@ A4: f.0=s0 & for n holds [f.n,f.(n+1)] in R & f.(n+1) in F(f.n) from
   take f;
   thus thesis by A4;
 end;
- 
+
 ::  definition of infinity path
 
 definition
   let S be non empty set;
   let R be total Relation of S,S;
   mode inf_path of R -> Function of NAT,S means
-    :Def39:
+    :Def41:
     for n being Element of NAT holds [it.n,it.(n+1)] in R;
   existence
   proof
-    consider b being Element of S;
+    set b =the  Element of S;
     consider IT being Function of NAT,S such that
     IT.0=b and
 A1: for n being Element of NAT holds [IT.n,IT.(n+1)] in R by Lm34;
@@ -2359,7 +2359,7 @@ A1: for n being Element of NAT holds [IT.n,IT.(n+1)] in R by Lm34;
     thus thesis by A1;
   end;
 end;
- 
+
 ::definition of concrete object of CTL model
 
 definition
@@ -2374,14 +2374,14 @@ registration
   cluster ModelSP(S) -> non empty;
   coherence;
 end;
- 
+
 :: definition Fid:ModelSP(S) -> Function of S,BOOLEAN
 
 definition
   let S be non empty set;
   let f be set;
   func Fid(f,S) -> Function of S,BOOLEAN equals
-  :Def41:
+  :Def43:
   f if f in ModelSP(S)
   otherwise S --> FALSE;
   correctness by FUNCT_2:121;
@@ -2389,7 +2389,7 @@ end;
 
 Lm35: for f being set holds (Fid(f,S)).s <> TRUE implies (Fid(f,S)).s = FALSE
 by TARSKI:def 2;
- 
+
 ::schemes for existence & uniqueness of 1 Operand functor
 
 scheme
@@ -2402,7 +2402,7 @@ A1: for s being set st s in S() holds G(s) in BOOLEAN by MARGREL1:def 13;
 A2: for s being set st s in S() holds IT.s =G(s) from FUNCT_2:sch 2(A1);
   take IT;
   IT in ModelSP(S()) by FUNCT_2:11;
-  then Fid(IT,S()) = IT by Def41;
+  then Fid(IT,S()) = IT by Def43;
   hence thesis by A2,FUNCT_2:11;
 end;
 
@@ -2438,12 +2438,12 @@ A9:   F1<>TRUE;
       hence thesis by A6,A8,A9,Lm35;
     end;
   end;
-  g1 = Fid(g1,S()) by A1,Def41
+  g1 = Fid(g1,S()) by A1,Def43
     .= Fid(g2,S()) by A5,FUNCT_2:18
-    .= g2 by A3,Def41;
+    .= g2 by A3,Def43;
   hence thesis;
 end;
- 
+
 ::schemes for existence & uniqueness of Unary Operation
 
 scheme
@@ -2472,7 +2472,7 @@ A2: for f being set st f in M() holds o2.f = F(f);
   end;
   hence thesis by FUNCT_2:113;
 end;
- 
+
 ::schemes for existence & uniqueness of 2 Operands functor .
 
 scheme
@@ -2486,7 +2486,7 @@ A1: for s being set st s in S() holds G(s) in BOOLEAN by MARGREL1:def 13;
 A2: for s being set st s in S() holds IT.s =G(s) from FUNCT_2:sch 2(A1);
   take IT;
   IT in ModelSP(S()) by FUNCT_2:11;
-  then Fid(IT,S()) = IT by Def41;
+  then Fid(IT,S()) = IT by Def43;
   hence thesis by A2,FUNCT_2:11;
 end;
 
@@ -2524,19 +2524,19 @@ A9:   F1<>TRUE;
       hence thesis by A6,A8,A9,Lm35;
     end;
   end;
-  h1 = Fid(h1,S()) by A1,Def41
+  h1 = Fid(h1,S()) by A1,Def43
     .= Fid(h2,S()) by A5,FUNCT_2:18
-    .= h2 by A3,Def41;
+    .= h2 by A3,Def43;
   hence thesis;
 end;
- 
+
 :: definition of Not_ unary operation of Model Space.
 
 definition
   let S be non empty set;
   let f be set;
   func Not_0(f,S) -> Element of ModelSP(S) means
-  :Def42:
+  :Def44:
   for s being set st s
   in S holds 'not' (Castboolean (Fid(f,S)).s) = TRUE iff (Fid(it,S)).s = TRUE;
   existence
@@ -2584,12 +2584,12 @@ end;
 definition
   let S be non empty set;
   func Not_(S) -> UnOp of ModelSP(S) means
-  :Def43:
+  :Def45:
   for f being set st f in ModelSP(S) holds it.f = Not_0(f,S);
   existence by Lm36;
   uniqueness by Lm37;
 end;
- 
+
 :: definition of EneXt_  unary operation of Model Space.
 
 definition
@@ -2598,7 +2598,7 @@ definition
   let f be Function of S,BOOLEAN;
   let x be set;
   func EneXt_univ(x,f,R) -> Element of BOOLEAN equals
-  :Def44:
+  :Def46:
   TRUE if x in S &
   ex pai being inf_path of R st pai.0 = x & f.(pai.1) =TRUE otherwise FALSE;
   correctness;
@@ -2609,7 +2609,7 @@ definition
   let R be total Relation of S,S;
   let f be set;
   func EneXt_0(f,R) -> Element of ModelSP(S) means
-  :Def45:
+  :Def47:
   for s being set st
   s in S holds EneXt_univ(s,Fid(f,S),R)=TRUE iff (Fid(it,S)).s=TRUE;
   existence
@@ -2658,12 +2658,12 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   func EneXt_(R) -> UnOp of ModelSP(S) means
-  :Def46:
+  :Def48:
   for f being set st f in ModelSP(S) holds it.f = EneXt_0(f,R);
   existence by Lm38;
   uniqueness by Lm39;
 end;
- 
+
 :: definition of EGlobal_  unary operation of Model Space.
 
 definition
@@ -2672,7 +2672,7 @@ definition
   let f be Function of S,BOOLEAN;
   let x be set;
   func EGlobal_univ(x,f,R) -> Element of BOOLEAN equals
-  :Def47:
+  :Def49:
   TRUE if x in S
 & ex pai being inf_path of R st (pai.0 = x & for n being Element of NAT holds f
   .(pai.n) =TRUE) otherwise FALSE;
@@ -2684,7 +2684,7 @@ definition
   let R be total Relation of S,S;
   let f be set;
   func EGlobal_0(f,R) -> Element of ModelSP(S) means
-  :Def48:
+  :Def50:
   for s being set
   st s in S holds EGlobal_univ(s,Fid(f,S),R)=TRUE iff (Fid(it,S)).s=TRUE;
   existence
@@ -2733,19 +2733,19 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   func EGlobal_(R) -> UnOp of ModelSP(S) means
-  :Def49:
+  :Def51:
   for f being set st f in ModelSP(S) holds it.f = EGlobal_0(f,R);
   existence by Lm40;
   uniqueness by Lm41;
 end;
- 
+
 :: definition of And_ Binary Operation of Model Space.
 
 definition
   let S be non empty set;
   let f,g be set;
   func And_0(f,g,S) -> Element of ModelSP(S) means
-  :Def50:
+  :Def52:
   for s being set st
 s in S holds (Castboolean (Fid(f,S)).s ) '&' (Castboolean (Fid(g,S)).s ) =TRUE
   iff (Fid(it,S)).s=TRUE;
@@ -2810,13 +2810,13 @@ end;
 definition
   let S be non empty set;
   func And_(S) -> BinOp of ModelSP(S) means
-  :Def51:
+  :Def53:
   for f,g being set st f in
   ModelSP(S) & g in ModelSP(S) holds it.(f,g) = And_0(f,g,S);
   existence by Lm42;
   uniqueness by Lm43;
 end;
- 
+
 :: definition of EUntill_  Binary Operation of Model Space.
 
 definition
@@ -2825,7 +2825,7 @@ definition
   let f,g be Function of S,BOOLEAN;
   let x be set;
   func EUntill_univ(x,f,g,R) -> Element of BOOLEAN equals
-  :Def52:
+  :Def54:
   TRUE if x in
   S & ex pai being inf_path of R st (pai.0 = x & ex m being Element of NAT st (
 for j being Element of NAT st j<m holds f.(pai.j) =TRUE ) & g.(pai.m) = TRUE )
@@ -2838,7 +2838,7 @@ definition
   let R be total Relation of S,S;
   let f,g be set;
   func EUntill_0(f,g,R) -> Element of ModelSP(S) means
-  :Def53:
+  :Def55:
   for s being set
 st s in S holds EUntill_univ(s,Fid(f,S),Fid(g,S),R)=TRUE iff (Fid(it,S)).s=TRUE
   ;
@@ -2905,13 +2905,13 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   func EUntill_(R) -> BinOp of ModelSP(S) means
-  :Def54:
+  :Def56:
   for f,g being set st f
   in ModelSP(S) & g in ModelSP(S) holds it.(f,g) = EUntill_0(f,g,R);
   existence by Lm44;
   uniqueness by Lm45;
 end;
- 
+
 ::  definition of concrete object of CTL model by ModelSP
 
 definition
@@ -2919,7 +2919,7 @@ definition
   let X be non empty Subset of ModelSP(S);
   let s be set;
   func F_LABEL(s,X) -> Subset of X means
-  :Def55:
+  :Def57:
   for x being set holds x in it
   iff x in X & ex f being Function of S,BOOLEAN st f=x & f.s=TRUE;
   existence
@@ -2947,7 +2947,7 @@ definition
   let S be non empty set;
   let X be non empty Subset of ModelSP(S);
   func Label_(X) -> Function of S,bool X means
-  :Def56:
+  :Def58:
   for x being set st x in S holds it.x = F_LABEL(x,X);
   existence
   proof
@@ -3035,7 +3035,7 @@ end;
 
 reserve BASSIGN for non empty Subset of ModelSP(S);
 reserve kai for Function of atomic_WFF,the BasicAssign of BASSModel(R,BASSIGN);
- 
+
 :: definition of correctness of Assign of BASSModel(R,BASSIGN)
 
 definition
@@ -3045,7 +3045,7 @@ definition
   let s be Element of S;
   let f be Assign of BASSModel(R,BASSIGN);
   pred s |= f means
-  :Def59:
+  :Def61:
   (Fid(f,S)).s=TRUE;
 end;
 
@@ -3069,42 +3069,42 @@ A1: a in BASSIGN;
     set f = Fid(a,S);
     assume s |= a;
     then
-A2: f.s=TRUE by Def59;
-    a= f by Def41;
-    then a in F_LABEL(s,BASSIGN) by A1,A2,Def55;
-    hence thesis by Def56;
+A2: f.s=TRUE by Def61;
+    a= f by Def43;
+    then a in F_LABEL(s,BASSIGN) by A1,A2,Def57;
+    hence thesis by Def58;
   end;
   assume a in (Label_(BASSIGN)).s;
-  then a in F_LABEL(s,BASSIGN) by Def56;
+  then a in F_LABEL(s,BASSIGN) by Def58;
   then consider f being Function of S,BOOLEAN such that
 A3: f =a and
-A4: f.s=TRUE by Def55;
-  Fid(a,S)=f by A3,Def41;
-  hence thesis by A4,Def59;
+A4: f.s=TRUE by Def57;
+  Fid(a,S)=f by A3,Def43;
+  hence thesis by A4,Def61;
 end;
 
 theorem Th12:
   for f being Assign of BASSModel(R,BASSIGN) holds s |= 'not'(f) iff s |/= f
 proof
   let f be Assign of BASSModel(R,BASSIGN);
-A1: 'not' f = Not_0(f,S) by Def43;
+A1: 'not' f = Not_0(f,S) by Def45;
 A2: s |/= f implies s |= ('not' f)
   proof
     assume s |/= f;
-    then not (Fid(f,S)).s =TRUE by Def59;
+    then not (Fid(f,S)).s =TRUE by Def61;
     then not Castboolean (Fid(f,S)).s = TRUE by Def4;
     then Castboolean (Fid(f,S)).s = FALSE by XBOOLEAN:def 3;
     then 'not' (Castboolean (Fid(f,S)).s) =TRUE;
-    then (Fid('not'(f),S)).s =TRUE by A1,Def42;
-    hence thesis by Def59;
+    then (Fid('not'(f),S)).s =TRUE by A1,Def44;
+    hence thesis by Def61;
   end;
   s |= 'not'(f) implies s |/= f
   proof
     assume s |= ('not' f);
-    then (Fid(Not_0(f,S),S)).s = TRUE by A1,Def59;
-    then 'not' (Castboolean (Fid(f,S)).s) =TRUE by Def42;
+    then (Fid(Not_0(f,S),S)).s = TRUE by A1,Def61;
+    then 'not' (Castboolean (Fid(f,S)).s) =TRUE by Def44;
     then (Fid(f,S)).s = FALSE by Def4;
-    hence thesis by Def59;
+    hence thesis by Def61;
   end;
   hence thesis by A2;
 end;
@@ -3114,32 +3114,32 @@ theorem Th13:
   iff s|=f & s|=g
 proof
   let f,g be Assign of BASSModel(R,BASSIGN);
-A1: f '&' g = And_0(f,g,S) by Def51;
+A1: f '&' g = And_0(f,g,S) by Def53;
 A2: s |= f '&' g implies s|= f & s|= g
   proof
     assume s|= f '&' g;
-    then (Fid(And_0(f,g,S),S)).s=TRUE by A1,Def59;
+    then (Fid(And_0(f,g,S),S)).s=TRUE by A1,Def61;
     then
 A3: (Castboolean (Fid(f,S)).s) '&' (Castboolean (Fid(g,S)).s) =TRUE by
-    Def50;
+    Def52;
     then Castboolean (Fid(g,S)).s=TRUE by XBOOLEAN:101;
     then
 A4: (Fid(g,S)).s=TRUE by Def4;
     Castboolean (Fid(f,S)).s =TRUE by A3,XBOOLEAN:101;
     then (Fid(f,S)).s =TRUE by Def4;
-    hence thesis by A4,Def59;
+    hence thesis by A4,Def61;
   end;
   s|= f & s|= g implies s |= f '&' g
   proof
     assume that
 A5: s|= f and
 A6: s|= g;
-A7: (Fid(g,S)).s=TRUE by A6,Def59;
-    (Fid(f,S)).s=TRUE by A5,Def59;
+A7: (Fid(g,S)).s=TRUE by A6,Def61;
+    (Fid(f,S)).s=TRUE by A5,Def61;
     then (Castboolean (Fid(f,S)).s) '&' (Castboolean (Fid(g,S)).s) =TRUE by
     A7,Def4;
-    then (Fid(f '&' g,S)).s=TRUE by A1,Def50;
-    hence thesis by Def59;
+    then (Fid(f '&' g,S)).s=TRUE by A1,Def52;
+    hence thesis by Def61;
   end;
   hence thesis by A2;
 end;
@@ -3149,7 +3149,7 @@ theorem Th14:
   ex pai being inf_path of R st pai.0 = s & (pai.1) |= f
 proof
   let f be Assign of BASSModel(R,BASSIGN);
-A1: EX(f) = EneXt_0(f,R) by Def46;
+A1: EX(f) = EneXt_0(f,R) by Def48;
 A2: (ex pai being inf_path of R st pai.0 = s & (pai.1) |= f) implies s |= EX
   (f)
   proof
@@ -3161,22 +3161,22 @@ A3: ex pai being inf_path of R st pai.0 = s & (pai.1) |= f;
 A4:   pai.0 = s and
 A5:   (pai.1) |= f by A3;
       take pai;
-      thus thesis by A4,A5,Def59;
+      thus thesis by A4,A5,Def61;
     end;
-    then EneXt_univ(s,Fid(f,S),R)=TRUE by Def44;
-    then (Fid(EX(f),S)).s=TRUE by A1,Def45;
-    hence thesis by Def59;
+    then EneXt_univ(s,Fid(f,S),R)=TRUE by Def46;
+    then (Fid(EX(f),S)).s=TRUE by A1,Def47;
+    hence thesis by Def61;
   end;
   s |= EX(f) implies ex pai being inf_path of R st pai.0 = s & (pai.1) |= f
   proof
     assume s|= EX(f);
-    then (Fid(EneXt_0(f,R),S)).s=TRUE by A1,Def59;
-    then EneXt_univ(s,Fid(f,S),R)=TRUE by Def45;
+    then (Fid(EneXt_0(f,R),S)).s=TRUE by A1,Def61;
+    then EneXt_univ(s,Fid(f,S),R)=TRUE by Def47;
     then consider pai being inf_path of R such that
 A6: pai.0 = s and
-A7: (Fid(f,S)).(pai.1) =TRUE by Def44;
+A7: (Fid(f,S)).(pai.1) =TRUE by Def46;
     take pai;
-    thus thesis by A6,A7,Def59;
+    thus thesis by A6,A7,Def61;
   end;
   hence thesis by A2;
 end;
@@ -3187,7 +3187,7 @@ ex pai being inf_path of R st pai.0 = s & for n being Element of NAT holds (pai
   .n) |= f
 proof
   let f be Assign of BASSModel(R,BASSIGN);
-A1: EG(f) = EGlobal_0(f,R) by Def49;
+A1: EG(f) = EGlobal_0(f,R) by Def51;
 A2: (ex pai being inf_path of R st pai.0 = s & for n being Element of NAT
   holds (pai.n) |= f) implies s |= EG(f)
   proof
@@ -3205,30 +3205,30 @@ A5:   for n being Element of NAT holds (pai.n) |= f by A3;
       proof
         let n be Element of NAT;
         (pai.n) |= f by A5;
-        hence thesis by Def59;
+        hence thesis by Def61;
       end;
       hence thesis by A4;
     end;
-    then EGlobal_univ(s,Fid(f,S),R)=TRUE by Def47;
-    then (Fid(EG(f),S)).s=TRUE by A1,Def48;
-    hence thesis by Def59;
+    then EGlobal_univ(s,Fid(f,S),R)=TRUE by Def49;
+    then (Fid(EG(f),S)).s=TRUE by A1,Def50;
+    hence thesis by Def61;
   end;
   s |= EG(f) implies ex pai being inf_path of R st pai.0 = s & for n being
   Element of NAT holds (pai.n) |= f
   proof
     assume s|= EG(f);
-    then (Fid(EGlobal_0(f,R),S)).s=TRUE by A1,Def59;
-    then EGlobal_univ(s,Fid(f,S),R)=TRUE by Def48;
+    then (Fid(EGlobal_0(f,R),S)).s=TRUE by A1,Def61;
+    then EGlobal_univ(s,Fid(f,S),R)=TRUE by Def50;
     then consider pai being inf_path of R such that
 A6: pai.0 = s and
 A7: for n being Element of NAT holds (Fid(f,S)).(pai.n) =TRUE by
-    Def47;
+    Def49;
     take pai;
     for n being Element of NAT holds (pai.n) |= f
     proof
       let n be Element of NAT;
       (Fid(f,S)).(pai.n) =TRUE by A7;
-      hence thesis by Def59;
+      hence thesis by Def61;
     end;
     hence thesis by A6;
   end;
@@ -3241,7 +3241,7 @@ iff ex pai being inf_path of R st pai.0 = s & ex m being Element of NAT st (for
   j being Element of NAT st j<m holds pai.j |= f) & pai.m |= g
 proof
   let f,g be Assign of BASSModel(R,BASSIGN);
-A1: f EU g = EUntill_0(f,g,R) by Def54;
+A1: f EU g = EUntill_0(f,g,R) by Def56;
 A2: (ex pai being inf_path of R st pai.0 = s & ex m being Element of NAT st
 (for j being Element of NAT st j<m holds (pai.j) |= f) & (pai.m) |= g) implies
   s |= f EU g
@@ -3270,27 +3270,27 @@ A7:     (pai.m) |= g by A5;
           let j be Element of NAT;
           assume j<m;
           then (pai.j) |= f by A6;
-          hence thesis by Def59;
+          hence thesis by Def61;
         end;
-        hence thesis by A7,Def59;
+        hence thesis by A7,Def61;
       end;
       hence thesis by A4;
     end;
-    then EUntill_univ(s,Fid(f,S),Fid(g,S),R)=TRUE by Def52;
-    then (Fid(f EU g,S)).s=TRUE by A1,Def53;
-    hence thesis by Def59;
+    then EUntill_univ(s,Fid(f,S),Fid(g,S),R)=TRUE by Def54;
+    then (Fid(f EU g,S)).s=TRUE by A1,Def55;
+    hence thesis by Def61;
   end;
   s |= f EU g implies ex pai being inf_path of R st pai.0 = s & ex m being
 Element of NAT st (for j being Element of NAT st j<m holds pai.j |= f) & pai.m
   |= g
   proof
     assume s|= f EU g;
-    then (Fid(EUntill_0(f,g,R),S)).s=TRUE by A1,Def59;
-    then EUntill_univ(s,Fid(f,S),Fid(g,S),R)=TRUE by Def53;
+    then (Fid(EUntill_0(f,g,R),S)).s=TRUE by A1,Def61;
+    then EUntill_univ(s,Fid(f,S),Fid(g,S),R)=TRUE by Def55;
     then consider pai being inf_path of R such that
 A8: pai.0 = s and
 A9: ex m being Element of NAT st (for j being Element of NAT st j<m
-    holds (Fid(f,S)).(pai.j) =TRUE ) & (Fid(g,S)).(pai.m) =TRUE by Def52;
+    holds (Fid(f,S)).(pai.j) =TRUE ) & (Fid(g,S)).(pai.m) =TRUE by Def54;
     take pai;
     ex m being Element of NAT st (for j being Element of NAT st j<m holds
     (pai.j) |= f ) & (pai.m) |= g
@@ -3304,9 +3304,9 @@ A11:  (Fid(g,S)).(pai.m) =TRUE by A9;
         let j be Element of NAT;
         assume j<m;
         then (Fid(f,S)).(pai.j) =TRUE by A10;
-        hence thesis by Def59;
+        hence thesis by Def61;
       end;
-      hence thesis by A11,Def59;
+      hence thesis by A11,Def61;
     end;
     hence thesis by A8;
   end;
@@ -3322,7 +3322,7 @@ proof
   then s |= f 'or' g iff not s|= 'not'(f) or not s|= 'not'(g) by Th13;
   hence thesis by Th12;
 end;
- 
+
 :: definition of correctness of CTL-formula & its basic properties.
 
 definition
@@ -3333,7 +3333,7 @@ definition
   let s be Element of S;
   let H be CTL-formula;
   pred s,kai|= H means
-  :Def60:
+  :Def62:
   s|= Evaluate(H,kai);
 end;
 
@@ -3353,10 +3353,10 @@ proof
   assume
 A1: H is atomic;
   ex f be Function of CTL_WFF,the carrier of BASSModel(R, BASSIGN) st
-  f is-Evaluation-for kai & Evaluate(H,kai) = f.H by Def32;
+  f is-Evaluation-for kai & Evaluate(H,kai) = f.H by Def34;
   then
 A2: Evaluate(H,kai) = kai.H by A1,Def26;
-A3: s,kai |= H iff s|= Evaluate(H,kai) by Def60;
+A3: s,kai |= H iff s|= Evaluate(H,kai) by Def62;
   H in atomic_WFF by A1;
   then Evaluate(H,kai) in BASSIGN by A2,FUNCT_2:7;
   hence thesis by A2,A3,Th11;
@@ -3365,32 +3365,32 @@ end;
 theorem
   s,kai|= 'not' H iff s,kai|/= H
 proof
-  s,kai |= 'not' H iff s |= Evaluate('not' H,kai) by Def60;
+  s,kai |= 'not' H iff s |= Evaluate('not' H,kai) by Def62;
   then s,kai|= 'not' H iff s|= 'not' Evaluate(H,kai) by Th5;
   then s,kai|= 'not' H iff s|/= Evaluate(H,kai) by Th12;
-  hence thesis by Def60;
+  hence thesis by Def62;
 end;
 
 theorem
   s,kai|= H1 '&' H2 iff s,kai|= H1 & s,kai|= H2
 proof
-  s,kai|= H1 '&' H2 iff s|= Evaluate(H1 '&' H2,kai) by Def60;
+  s,kai|= H1 '&' H2 iff s|= Evaluate(H1 '&' H2,kai) by Def62;
   then s,kai|= H1 '&' H2 iff s|= Evaluate(H1,kai) '&' Evaluate(H2,kai) by
   Th6;
   then s,kai|= H1 '&' H2 iff s|= Evaluate(H1,kai) & s|= Evaluate(H2,kai) by
   Th13;
-  hence thesis by Def60;
+  hence thesis by Def62;
 end;
 
 theorem
   s,kai|= H1 'or' H2 iff s,kai|= H1 or s,kai|= H2
 proof
-  s,kai|= H1 'or' H2 iff s|= Evaluate(H1 'or' H2,kai) by Def60;
+  s,kai|= H1 'or' H2 iff s|= Evaluate(H1 'or' H2,kai) by Def62;
   then s,kai|= H1 'or' H2 iff s|= Evaluate(H1,kai) 'or' Evaluate(H2,kai) by
   Th10;
   then s,kai|= H1 'or' H2 iff s|= Evaluate(H1,kai) or s|= Evaluate(H2,kai) by
   Th17;
-  hence thesis by Def60;
+  hence thesis by Def62;
 end;
 
 theorem
@@ -3403,7 +3403,7 @@ A1: (ex pai being inf_path of R st pai.0 = s & (pai.1) |= Evaluate(H,kai) )
 A2: pai.0 = s and
 A3: (pai.1) |= Evaluate(H,kai);
     take pai;
-    thus thesis by A2,A3,Def60;
+    thus thesis by A2,A3,Def62;
   end;
 A4: (ex pai being inf_path of R st pai.0 = s & (pai.1),kai|= H ) implies ex
   pai being inf_path of R st pai.0 = s & (pai.1) |= Evaluate(H,kai)
@@ -3412,9 +3412,9 @@ A4: (ex pai being inf_path of R st pai.0 = s & (pai.1),kai|= H ) implies ex
 A5: pai.0 = s and
 A6: (pai.1),kai|= H;
     take pai;
-    thus thesis by A5,A6,Def60;
+    thus thesis by A5,A6,Def62;
   end;
-  s,kai |= EX H iff s |= Evaluate(EX H,kai) by Def60;
+  s,kai |= EX H iff s |= Evaluate(EX H,kai) by Def62;
   then s,kai|= EX H iff s|= EX Evaluate(H,kai) by Th7;
   hence thesis by A1,A4,Th14;
 end;
@@ -3435,7 +3435,7 @@ A3: for n being Element of NAT holds (pai.n)|= Evaluate(H,kai);
     proof
       let n be Element of NAT;
       (pai.n)|= Evaluate(H,kai) by A3;
-      hence thesis by Def60;
+      hence thesis by Def62;
     end;
     hence thesis by A2;
   end;
@@ -3451,11 +3451,11 @@ A6: for n being Element of NAT holds (pai.n),kai|= H;
     proof
       let n be Element of NAT;
       (pai.n),kai|= H by A6;
-      hence thesis by Def60;
+      hence thesis by Def62;
     end;
     hence thesis by A5;
   end;
-  s,kai |= EG H iff s |= Evaluate(EG H,kai) by Def60;
+  s,kai |= EG H iff s |= Evaluate(EG H,kai) by Def62;
   then s,kai|= EG H iff s|= EG Evaluate(H,kai) by Th8;
   hence thesis by A1,A4,Th15;
 end;
@@ -3484,9 +3484,9 @@ A6: for j being Element of NAT st j<m holds pai.j,kai|= H1
       let j be Element of NAT;
       assume j<m;
       then pai.j |= Evaluate(H1,kai) by A4;
-      hence thesis by Def60;
+      hence thesis by Def62;
     end;
-    pai.m |= Evaluate(H2,kai) iff pai.m,kai|= H2 by Def60;
+    pai.m |= Evaluate(H2,kai) iff pai.m,kai|= H2 by Def62;
     hence thesis by A2,A5,A6;
   end;
 A7: (ex pai being inf_path of R st pai.0 = s & ex m being Element of NAT st
@@ -3508,17 +3508,17 @@ A12: for j being Element of NAT st j<m holds pai.j |= Evaluate(H1,kai)
       let j be Element of NAT;
       assume j<m;
       then pai.j,kai|= H1 by A10;
-      hence thesis by Def60;
+      hence thesis by Def62;
     end;
-    pai.m |= Evaluate(H2,kai) iff pai.m,kai |=H2 by Def60;
+    pai.m |= Evaluate(H2,kai) iff pai.m,kai |=H2 by Def62;
     hence thesis by A8,A11,A12;
   end;
-  s,kai |= H1 EU H2 iff s |= Evaluate(H1 EU H2,kai) by Def60;
+  s,kai |= H1 EU H2 iff s |= Evaluate(H1 EU H2,kai) by Def62;
   then s,kai|= H1 EU H2 iff s|= Evaluate(H1,kai) EU Evaluate(H2,kai) by
   Th9;
   hence thesis by A1,A7,Th16;
 end;
- 
+
 ::Some basic theorems for external Mizar files.
 
 theorem Th25:
@@ -3528,7 +3528,7 @@ proof
   consider pai being Function of NAT,S such that
 A1: pai.0=s0 and
 A2: for n being Element of NAT holds [pai.n,pai.(n+1)] in R by Lm34;
-  reconsider pai as inf_path of R by A2,Def39;
+  reconsider pai as inf_path of R by A2,Def41;
   take pai;
   thus thesis by A1;
 end;
@@ -3536,7 +3536,7 @@ end;
 theorem
   for R being Relation of S,S holds R is total iff for x being set st x
   in S holds ex y being set st y in S & [x,y] in R by Lm31,Lm32;
- 
+
 ::*************
 ::
 ::Verification of the basic algorithm
@@ -3554,7 +3554,7 @@ definition
   let pai be inf_path of R;
   let n be set;
   func PrePath(n,s0,pai) -> Element of S equals
-  :Def61:
+  :Def63:
   s0 if n=0 otherwise
   pai.(k_nat(k_nat(n)-1));
   correctness;
@@ -3583,31 +3583,31 @@ A5:   n = 0;
 A6:   k_nat(k_nat(n1)-1) = k_nat(1-1) by Def2
         .= 0 by Def2;
 A7:   pai.n = F(n) by A3
-        .= s0 by A5,Def61;
+        .= s0 by A5,Def63;
       pai.n1 = F(n1) by A3
-        .= s1 by A1,A6,Def61;
+        .= s1 by A1,A6,Def63;
       hence thesis by A4,A7;
     end;
     suppose
 A8:   n<>0;
       then reconsider n0 as Element of NAT by NAT_1:20;
 A9:   pai.n1 = F(n1) by A3
-        .= pai1.(k_nat(k_nat(n1)-1)) by Def61
+        .= pai1.(k_nat(k_nat(n1)-1)) by Def63
         .= pai1.(k_nat(n1-1)) by Def2
         .= pai1.(n0+1) by Def2;
       pai.n = F(n) by A3
-        .= pai1.(k_nat(k_nat(n)-1)) by A8,Def61
+        .= pai1.(k_nat(k_nat(n)-1)) by A8,Def63
         .= pai1.(k_nat(n-1)) by Def2
         .= pai1.n0 by Def2;
-      hence thesis by A9,Def39;
+      hence thesis by A9,Def41;
     end;
   end;
-  then reconsider pai as inf_path of R by Def39;
+  then reconsider pai as inf_path of R by Def41;
 A10: pai.0= F(0) by A3
-    .= s0 by Def61;
+    .= s0 by Def63;
   take pai;
   pai.1 = F(1) by A3
-    .= pai1.(k_nat(k_nat(1)-1)) by Def61
+    .= pai1.(k_nat(k_nat(1)-1)) by Def63
     .= pai1.(k_nat(1-1)) by Def2
     .= s1 by A1,Def2;
   hence thesis by A10;
@@ -3624,7 +3624,7 @@ A1: s |= EX(f) implies ex s1 being Element of S st [s,s1] in R & s1 |= f
     then consider pai be inf_path of R such that
 A2: pai.0 = s and
 A3: (pai.1) |= f by Th14;
-    [pai.0,pai.(0+1)] in R by Def39;
+    [pai.0,pai.(0+1)] in R by Def41;
     hence thesis by A2,A3;
   end;
   (ex s1 being Element of S st [s,s1] in R & s1 |= f ) implies s |= EX(f)
@@ -3637,7 +3637,7 @@ A5: s1 |= f;
   end;
   hence thesis by A1;
 end;
- 
+
 ::   definition of predecessor
 
 definition
@@ -3663,7 +3663,7 @@ definition
     hence thesis;
   end;
 end;
- 
+
 ::   definition of SIGMA
 
 definition
@@ -3699,7 +3699,7 @@ A1: for x being set holds x in { s where s is Element of S : (Fid(f,S)).s=
     then consider s be Element of S such that
 A2: x=s and
 A3: (Fid(f,S)).s=TRUE;
-    s|= f by A3,Def59;
+    s|= f by A3,Def61;
     hence thesis by A2;
   end;
   for x being set holds x in SIGMA(f) implies x in { s where s is Element
@@ -3710,7 +3710,7 @@ A3: (Fid(f,S)).s=TRUE;
     then consider s be Element of S such that
 A4: x=s and
 A5: s|= f;
-    (Fid(f,S)).s=TRUE by A5,Def59;
+    (Fid(f,S)).s=TRUE by A5,Def61;
     hence thesis by A4;
   end;
   hence thesis by A1,TARSKI:2;
@@ -3766,10 +3766,10 @@ Lm48: for f, g being Assign of BASSModel(R,BASSIGN) holds Fid(f,S) = Fid(g,S)
 implies f =g
 proof
   let f,g be Assign of BASSModel(R,BASSIGN);
-  Fid(f,S) = f by Def41;
-  hence thesis by Def41;
+  Fid(f,S) = f by Def43;
+  hence thesis by Def43;
 end;
- 
+
 ::   SIGMA is one to one.
 
 theorem
@@ -3784,7 +3784,7 @@ A1: SIGMA(f) = SIGMA(g);
   Element of S : (Fid(g,S)).s=TRUE } by A1,Lm46;
   hence thesis by Lm47,Lm48;
 end;
- 
+
 ::   definition of Tau (inverse of SIGMA).
 
 definition
@@ -3793,7 +3793,7 @@ definition
   let BASSIGN be non empty Subset of ModelSP(S);
   let T be Subset of S;
   func Tau(T,R,BASSIGN) -> Assign of BASSModel(R,BASSIGN) means
-  :Def64:
+  :Def66:
   for s being set st s in S holds (Fid(it,S)).s = chi(T,S).s;
   existence
   proof
@@ -3818,7 +3818,7 @@ A2:   x in S;
 A3: for x being set st x in S holds IT.x = F(x) from FUNCT_2:sch 2(A1);
     reconsider IT as Assign of BASSModel(R,BASSIGN) by FUNCT_2:11;
     take IT;
-    Fid(IT,S) = IT by Def41;
+    Fid(IT,S) = IT by Def43;
     hence thesis by A3;
   end;
   uniqueness
@@ -3837,7 +3837,7 @@ A6:   s in S;
     hence thesis by Lm48,FUNCT_2:18;
   end;
 end;
- 
+
 ::   Tau is one to one.
 
 theorem
@@ -3855,8 +3855,8 @@ A2: for s being set holds s in T2 implies s in T1
     assume
 A3: s in T2;
     then chi(T2,S).s =1 by FUNCT_3:def 3;
-    then (Fid(h2,S)).s =TRUE by A3,Def64;
-    then chi(T1,S).s = 1 by A1,A3,Def64;
+    then (Fid(h2,S)).s =TRUE by A3,Def66;
+    then chi(T1,S).s = 1 by A1,A3,Def66;
     hence thesis by FUNCT_3:42;
   end;
   for s being set holds s in T1 implies s in T2
@@ -3865,13 +3865,13 @@ A3: s in T2;
     assume
 A4: s in T1;
     then chi(T1,S).s =1 by FUNCT_3:def 3;
-    then (Fid(h1,S)).s =TRUE by A4,Def64;
-    then chi(T2,S).s = 1 by A1,A4,Def64;
+    then (Fid(h1,S)).s =TRUE by A4,Def66;
+    then chi(T2,S).s = 1 by A1,A4,Def66;
     hence thesis by FUNCT_3:42;
   end;
   hence thesis by A2,TARSKI:2;
 end;
- 
+
 ::   Tau is on to.
 
 theorem Th31:
@@ -3889,7 +3889,7 @@ A1: T = { s where s is Element of S : (Fid(f,S)).s=TRUE } by Lm46;
     per cases;
     suppose
 A2:   s in T;
-A3:   Fid(g,S).s = chi(T,S).s by Def64
+A3:   Fid(g,S).s = chi(T,S).s by Def66
         .= 1 by A2,FUNCT_3:def 3;
       ex x being Element of S st x=s & (Fid(f,S)).x=TRUE by A1,A2;
       hence thesis by A3;
@@ -3902,14 +3902,14 @@ A5:   (Fid(f,S)).s=FALSE
         then (Fid(f,S)).s= TRUE by TARSKI:def 2;
         hence contradiction by A1,A4;
       end;
-      Fid(g,S).s = chi(T,S).s by Def64
+      Fid(g,S).s = chi(T,S).s by Def66
         .=0 by A4,FUNCT_3:def 3;
       hence thesis by A5;
     end;
   end;
   hence thesis by Lm48,FUNCT_2:18;
 end;
- 
+
 ::   SIGMA is on to.
 
 theorem Th32:
@@ -3926,18 +3926,18 @@ A1: U = { s where s is Element of S : (Fid(f,S)).s=TRUE } by Lm46;
     proof
       assume s in U;
       then ex t being Element of S st s = t & (Fid(f,S)).t=TRUE by A1;
-      then chi(T,S).s =TRUE by Def64;
+      then chi(T,S).s =TRUE by Def66;
       hence thesis by FUNCT_3:42;
     end;
     assume
 A2: s in T;
-    then (Fid(f,S)).s = chi(T,S).s by Def64
+    then (Fid(f,S)).s = chi(T,S).s by Def66
       .= 1 by A2,FUNCT_3:def 3;
     hence thesis by A1,A2;
   end;
   hence thesis by TARSKI:2;
 end;
- 
+
 ::   SIGMA is homomorphism .
 
 theorem Th33:
@@ -4053,7 +4053,7 @@ A20: ex x being Element of S st x = s & x |= f;
   end;
   hence thesis by A1,A6,TARSKI:2;
 end;
- 
+
 ::   Tau is monotonic.
 
 theorem Th34:
@@ -4067,14 +4067,14 @@ proof
 A1: G1 c= G2;
   let s be Element of S;
   assume s|= Tau1;
-  then (Fid(Tau1,S)).s = TRUE by Def59;
-  then chi(G1,S).s =1 by Def64;
+  then (Fid(Tau1,S)).s = TRUE by Def61;
+  then chi(G1,S).s =1 by Def66;
   then s in G1 by FUNCT_3:def 3;
   then chi(G2,S).s =1 by A1,FUNCT_3:def 3;
-  then (Fid(Tau2,S)).s = TRUE by Def64;
-  hence thesis by Def59;
+  then (Fid(Tau2,S)).s = TRUE by Def66;
+  hence thesis by Def61;
 end;
- 
+
 ::   SIGMA is monotonic.
 
 theorem Th35:
@@ -4092,7 +4092,7 @@ A3: s|= f1;
   s|= f2 by A1,A3;
   hence thesis by A2;
 end;
- 
+
 ::   theorems for translation
 ::      problem of
 ::          (1)find status s st s |= EG(f)
@@ -4109,7 +4109,7 @@ definition
   f '&' EX(g);
   correctness;
 end;
- 
+
 ::   Fax(f,*) is monotonic.
 
 theorem Th36:
@@ -4133,7 +4133,7 @@ A5: s|= EX(g2) by A3,Th14;
   s|= f by A2,Th13;
   hence thesis by A5,Th13;
 end;
- 
+
 ::commutative
 ::              Fax(f,*)
 ::     Assigns ------> Assigns
@@ -4155,7 +4155,7 @@ definition
   BASSIGN)));
   coherence;
 end;
- 
+
 ::   SigFaxTau(f,*) is monotonic.
 
 theorem Th37:
@@ -4173,7 +4173,7 @@ proof
   Fax(f,Tau(G2,R,BASSIGN)) by Th36;
   hence thesis by Th35;
 end;
- 
+
 ::   Some tools to treat path.
 
 definition
@@ -4182,7 +4182,7 @@ definition
   let pai be inf_path of R;
   let k be Element of NAT;
   func PathShift(pai,k) -> inf_path of R means
-  :Def67:
+  :Def69:
   for n being Element of NAT holds it.n = pai.(n+k);
   existence
   proof
@@ -4205,9 +4205,9 @@ A3: for n being Element of NAT holds IT.n = pai.(n+k)
 A4:   IT.(n+1) = pai.(n1+k) by A3
         .= pai.(n2+1);
       IT.n = pai.n2 by A3;
-      hence thesis by A4,Def39;
+      hence thesis by A4,Def41;
     end;
-    then reconsider IT as inf_path of R by Def39;
+    then reconsider IT as inf_path of R by Def41;
     take IT;
     thus thesis by A3;
   end;
@@ -4241,7 +4241,7 @@ definition
   let pai1,pai2 be inf_path of R;
   let n,k be Element of NAT;
   func PathChange(pai1,pai2,k,n) -> set equals
-  :Def68:
+  :Def70:
   pai1.n if n<k otherwise
   pai2.(n-k);
   correctness;
@@ -4253,7 +4253,7 @@ definition
   let pai1,pai2 be inf_path of R;
   let k be Element of NAT;
   func PathConc(pai1,pai2,k) -> Function of NAT,S means
-  :Def69:
+  :Def71:
   for n being Element of NAT holds it.n = PathChange(pai1,pai2,k,n);
   existence
   proof
@@ -4268,14 +4268,14 @@ A2:   F1(n) = PathChange(pai1,pai2,k,n) by Def2;
       per cases;
       suppose
         n < k;
-        then x = pai1.n by Def68;
+        then x = pai1.n by Def70;
         hence thesis by A2;
       end;
       suppose
 A3:     not n < k;
         set m = n - k;
         reconsider m as Element of NAT by A3,NAT_1:21;
-        x = pai2.m by A3,Def68;
+        x = pai2.m by A3,Def70;
         hence thesis by A2;
       end;
     end;
@@ -4323,39 +4323,39 @@ A1: pai1.k = pai2.0;
 A2:   n1 < k;
       then
 A3:   n < k by NAT_1:13;
-A4:   pai.n = PathChange(pai1,pai2,k,n) by Def69
-        .= pai1.n by A3,Def68;
-      pai.n1 = PathChange(pai1,pai2,k,n1) by Def69
-        .=pai1.n1 by A2,Def68;
-      hence thesis by A4,Def39;
+A4:   pai.n = PathChange(pai1,pai2,k,n) by Def71
+        .= pai1.n by A3,Def70;
+      pai.n1 = PathChange(pai1,pai2,k,n1) by Def71
+        .=pai1.n1 by A2,Def70;
+      hence thesis by A4,Def41;
     end;
     suppose
 A5:   n1 = k;
       then
 A6:   n < k by NAT_1:13;
-A7:   pai.n = PathChange(pai1,pai2,k,n) by Def69
-        .= pai1.n by A6,Def68;
-      pai.n1 = PathChange(pai1,pai2,k,n1) by Def69
-        .= pai2.(n1-k) by A5,Def68
+A7:   pai.n = PathChange(pai1,pai2,k,n) by Def71
+        .= pai1.n by A6,Def70;
+      pai.n1 = PathChange(pai1,pai2,k,n1) by Def71
+        .= pai2.(n1-k) by A5,Def70
         .= pai1.n1 by A1,A5;
-      hence thesis by A7,Def39;
+      hence thesis by A7,Def41;
     end;
     suppose
 A8:   k < n1;
       then
 A9:   k <= n by NAT_1:13;
       then reconsider m = n - k as Element of NAT by NAT_1:21;
-A10:  pai.n1 = PathChange(pai1,pai2,k,n1) by Def69
-        .= pai2.(n1-k) by A8,Def68
+A10:  pai.n1 = PathChange(pai1,pai2,k,n1) by Def71
+        .= pai2.(n1-k) by A8,Def70
         .= pai2.(m+1);
-      pai.n = PathChange(pai1,pai2,k,n) by Def69
-        .= pai2.m by A9,Def68;
-      hence thesis by A10,Def39;
+      pai.n = PathChange(pai1,pai2,k,n) by Def71
+        .= pai2.m by A9,Def70;
+      hence thesis by A10,Def41;
     end;
   end;
-  hence thesis by Def39;
+  hence thesis by Def41;
 end;
- 
+
 ::   EG(f) is fixpoint of Fax(f,*).
 
 theorem Th39:
@@ -4377,10 +4377,10 @@ A3: for n being Element of NAT holds pai1.n |= f
     proof
       let n be Element of NAT;
       set n1 = n+1;
-      pai1.n = pai.n1 by Def67;
+      pai1.n = pai.n1 by Def69;
       hence thesis by A2;
     end;
-    pai.(0+1) = pai1.0 by Def67;
+    pai.(0+1) = pai1.0 by Def69;
     then pai.1 |= g by A3,Th15;
     then
 A4: s |= EX(g) by A1,Th14;
@@ -4398,8 +4398,8 @@ A8: pai2.0 = pai1.1 and
 A9: for n being Element of NAT holds (pai2.n) |= f by A7,Th15;
   set pai = PathConc(pai1,pai2,1);
   reconsider pai as inf_path of R by A8,Th38;
-A10: pai.0 = PathChange(pai1,pai2,1,0) by Def69
-    .= s by A6,Def68;
+A10: pai.0 = PathChange(pai1,pai2,1,0) by Def71
+    .= s by A6,Def70;
   for n being Element of NAT holds pai.n |= f
   proof
     let n be Element of NAT;
@@ -4418,14 +4418,14 @@ A12:    n <> 0;
     suppose
 A13:  not n < 1;
       then reconsider m = n-1 as Element of NAT by NAT_1:21;
-      pai.n = PathChange(pai1,pai2,1,n) by Def69
-        .= pai2.m by A13,Def68;
+      pai.n = PathChange(pai1,pai2,1,n) by Def71
+        .= pai2.m by A13,Def70;
       hence thesis by A9;
     end;
   end;
   hence thesis by A10,Th15;
 end;
- 
+
 ::   Existence path for fixpoint of Fax(f,*).
 
 theorem Th40:
@@ -4497,7 +4497,7 @@ A14:  s0 in dom (h|**k) by A11,FUNCT_2:def 1;
 A15:  pai01.0 = p0 and
 A16:  (pai01.1) |= g by Th14;
       set x1 = pai01.1;
-      [pai01.0,pai01.(0+1)] in R by Def39;
+      [pai01.0,pai01.(0+1)] in R by Def41;
       then
 A17:  x1 in Next(p0) by A15;
       x1 in SIGMA(g) by A16;
@@ -4525,7 +4525,7 @@ A21:  ex q1 be Element of S st q1=p1 & q1|= g;
 A22:  pai02.0 = p1 and
 A23:  (pai02.1) |= g by Th14;
       set x2 = pai02.1;
-      [pai02.0,pai02.(0+1)] in R by Def39;
+      [pai02.0,pai02.(0+1)] in R by Def41;
       then
 A24:  x2 in Next(p1) by A22;
       x2 in SIGMA(g) by A23;
@@ -4559,7 +4559,7 @@ A29: P[0]
 A30:  pai01.0 = s0 and
 A31:  (pai01.1) |= g by Th14;
       set x = pai01.1;
-      [pai01.0,pai01.(0+1)] in R by Def39;
+      [pai01.0,pai01.(0+1)] in R by Def41;
       then
 A32:  x in Next(s0) by A30;
       x in SIGMA(g) by A31;
@@ -4590,11 +4590,11 @@ A38:  t = s1 and
     for k being Element of NAT holds P[k] from NAT_1:sch 1(A29,A13);
     hence thesis;
   end;
-  then reconsider pai as inf_path of R by Def39;
+  then reconsider pai as inf_path of R by Def41;
   take pai;
   thus thesis by A10,A12;
 end;
- 
+
 ::   EG(f) is the maximum fixpoint of Fax(f,*)
 
 theorem Th41:
@@ -4630,7 +4630,7 @@ A4: for n being Element of NAT holds pai.n |= g by A2,Th40;
   end;
   hence thesis;
 end;
- 
+
 ::   definition of TransEG(f)::translated function for EG(f)
 
 definition
@@ -4639,7 +4639,7 @@ definition
   let BASSIGN be non empty Subset of ModelSP(S);
   let f be Assign of BASSModel(R,BASSIGN);
   func TransEG(f) -> c=-monotone Function of bool S, bool S means
-  :Def70:
+  :Def72:
   for G being Subset of S holds it.G = SigFaxTau(f,G,R,BASSIGN);
   existence
   proof
@@ -4684,7 +4684,7 @@ A7: for G being Subset of S holds F2.G = SigFaxTau(f,G,R,BASSIGN);
     hence thesis by FUNCT_2:18;
   end;
 end;
- 
+
 ::   fixpoint of TransEG(f)
 
 theorem Th42:
@@ -4695,7 +4695,7 @@ proof
   let f,g be Assign of BASSModel(R,BASSIGN);
   set G = SIGMA(g);
   set Q = SIGMA(Fax(f,g));
-A1: (TransEG(f)).G = SigFaxTau(f,G,R,BASSIGN) by Def70
+A1: (TransEG(f)).G = SigFaxTau(f,G,R,BASSIGN) by Def72
     .= Q by Th31;
 A2: G is_a_fixpoint_of TransEG(f) implies for s being Element of S holds s
   |= g iff s|= Fax(f,g)
@@ -4777,7 +4777,7 @@ A5: s|= h;
   then SIGMA(g) c= gfp(S,TransEG(f)) by KNASTER:10;
   hence thesis by A1,A3,XBOOLE_0:def 10;
 end;
- 
+
 :: definition Foax(g,f,*):carrier ->carrier
 
 definition
@@ -4789,7 +4789,7 @@ definition
   g 'or' Fax(f,h);
   coherence;
 end;
- 
+
 ::   Foax(g,f,*) is monotonic.
 
 theorem Th44:
@@ -4822,7 +4822,7 @@ A6: s|= EX(h2) by A4,Th14;
     hence thesis by Th17;
   end;
 end;
- 
+
 ::commutative
 ::            Foax(g,f,*)
 ::     Assigns ------> Assigns
@@ -4844,7 +4844,7 @@ definition
   R,BASSIGN)));
   coherence;
 end;
- 
+
 ::   SigFoaxTau(g,f,*) is monotonic.
 
 theorem Th45:
@@ -4863,7 +4863,7 @@ proof
   |= Foax(g,f,Tau(H2,R,BASSIGN)) by Th44;
   hence thesis by Th35;
 end;
- 
+
 ::    f EU g is fixpoint of Foax(g,f,*).
 
 theorem Th46:
@@ -4898,8 +4898,8 @@ A9:   ex m being Element of NAT st (for j being Element of NAT st j<m
       holds pai1.j |= f) & pai1.m |= g by A7,Th16;
       set PAI = PathConc(pai,pai1,1);
       reconsider PAI as inf_path of R by A8,Th38;
-A10:  PAI.0 = PathChange(pai,pai1,1,0) by Def69
-        .= s by A6,Def68;
+A10:  PAI.0 = PathChange(pai,pai1,1,0) by Def71
+        .= s by A6,Def70;
       consider m be Element of NAT such that
 A11:  for j being Element of NAT st j<m holds pai1.j |= f and
 A12:  pai1.m |= g by A9;
@@ -4922,13 +4922,13 @@ A17:      not k < 1;
           (k-1) +1 <= m by A16,INT_1:20;
           then
 A18:      k0 < m by NAT_1:13;
-          PAI.k = PathChange(pai,pai1,1,k) by Def69
-            .= pai1.k0 by A17,Def68;
+          PAI.k = PathChange(pai,pai1,1,k) by Def71
+            .= pai1.k0 by A17,Def70;
           hence thesis by A11,A18;
         end;
       end;
-      PAI.m1 = PathChange(pai,pai1,1,m1) by Def69
-        .= pai1.(m1-1) by A13,Def68
+      PAI.m1 = PathChange(pai,pai1,1,m1) by Def71
+        .= pai1.(m1-1) by A13,Def70
         .= pai1.m;
       hence thesis by A12,A10,A15,Th16;
     end;
@@ -4954,7 +4954,7 @@ A23:  m >0;
       reconsider k as Element of NAT by A23,NAT_1:20;
       set h = f EU g;
       set pai1 = PathShift(pai,1);
-A24:  pai1.k = pai.(k+1) by Def67
+A24:  pai1.k = pai.(k+1) by Def69
         .= pai.m;
 A25:  for j being Element of NAT st j<k holds pai1.j |= f
       proof
@@ -4963,9 +4963,9 @@ A25:  for j being Element of NAT st j<k holds pai1.j |= f
         then j +1 <= k by INT_1:20;
         then j+1 < k+1 by NAT_1:13;
         then pai.(j+1) |= f by A21;
-        hence thesis by Def67;
+        hence thesis by Def69;
       end;
-      pai1.0 = pai.(0+1) by Def67
+      pai1.0 = pai.(0+1) by Def69
         .= pai.1;
       then pai.1 |= h by A22,A24,A25,Th16;
       then
@@ -4977,7 +4977,7 @@ A26:  s |= EX h by A19,Th14;
   end;
   hence thesis by A1;
 end;
- 
+
 ::   f EU g is the minimum fixpoint of Foax(g,f,*)
 
 theorem Th47:
@@ -5012,13 +5012,13 @@ A7:   P[j];
 A8:     j1 <=m;
         then reconsider k as Element of NAT by NAT_1:21;
         set pai1 = PathShift(pai,k);
-A9:     pai1.0 = pai.(k+0) by Def67
+A9:     pai1.0 = pai.(k+0) by Def69
           .= pai.k;
         k<= k+j by NAT_1:12;
         then k < (k+j) +1 by NAT_1:13;
         then
 A10:    pai.k |= f by A4;
-A11:    pai1.1 = pai.(k+1) by Def67;
+A11:    pai1.1 = pai.(k+1) by Def69;
         pai.(k+1) |= h by A7,A8,Def2,NAT_1:13;
         then pai.k |= EX(h) by A9,A11,Th14;
         then pai.k |= Fax(f,h) by A10,Th13;
@@ -5042,7 +5042,7 @@ A14:  k_nat(m-0) = m by Def2;
   then pai.k_nat(m-m) |= h;
   hence thesis by A2,Def2;
 end;
- 
+
 ::   definition of TransEU(f,g)::translated function for f EU g
 
 definition
@@ -5051,7 +5051,7 @@ definition
   let BASSIGN be non empty Subset of ModelSP(S);
   let f,g be Assign of BASSModel(R,BASSIGN);
   func TransEU(f,g) -> c=-monotone Function of bool S, bool S means
-  :Def73:
+  :Def75:
   for H being Subset of S holds it.H = SigFoaxTau(g,f,H,R,BASSIGN);
   existence
   proof
@@ -5096,7 +5096,7 @@ A7: for H being Subset of S holds F2.H = SigFoaxTau(g,f,H,R,BASSIGN);
     hence thesis by FUNCT_2:18;
   end;
 end;
- 
+
 ::   fixpoint of TransEU(f,g)
 
 theorem Th48:
@@ -5107,7 +5107,7 @@ proof
   let f,g,h be Assign of BASSModel(R,BASSIGN);
   set H = SIGMA(h);
   set Q = SIGMA(Foax(g,f,h));
-A1: (TransEU(f,g)).H = SigFoaxTau(g,f,H,R,BASSIGN) by Def73
+A1: (TransEU(f,g)).H = SigFoaxTau(g,f,H,R,BASSIGN) by Def75
     .= Q by Th31;
 A2: H is_a_fixpoint_of TransEU(f,g) implies for s being Element of S holds
   s|= h iff s|= Foax(g,f,h)
@@ -5190,7 +5190,7 @@ A5: s|= h;
   then lfp(S,TransEU(f,g)) c= SIGMA(h) by KNASTER:10;
   hence thesis by A1,A3,XBOOLE_0:def 10;
 end;
- 
+
 :: Solver for EX and TransEG,TransEU
 
 theorem Th50:
@@ -5237,7 +5237,7 @@ proof
   let f be Assign of BASSModel(R,BASSIGN);
   let X be Subset of S;
   set g = Tau(X,R,BASSIGN);
-  (TransEG(f)).X = SigFaxTau(f,X,R,BASSIGN) by Def70
+  (TransEG(f)).X = SigFaxTau(f,X,R,BASSIGN) by Def72
     .= SIGMA(f) /\ SIGMA(EX(g)) by Th33
     .= SIGMA(f) /\ Pred(SIGMA(g),R) by Th50;
   hence thesis by Th32;
@@ -5250,7 +5250,7 @@ proof
   let f,g be Assign of BASSModel(R,BASSIGN);
   let X be Subset of S;
   set h = Tau(X,R,BASSIGN);
-  (TransEU(f,g)).X = SigFoaxTau(g,f,X,R,BASSIGN) by Def73
+  (TransEU(f,g)).X = SigFoaxTau(g,f,X,R,BASSIGN) by Def75
     .= SIGMA(g) \/ SIGMA(Fax(f,h)) by Th33
     .= SIGMA(g) \/ (SIGMA(f) /\ SIGMA(EX(h))) by Th33
     .= SIGMA(g) \/ (SIGMA(f) /\ Pred(SIGMA(h),R)) by Th50;

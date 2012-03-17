@@ -134,8 +134,8 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="23"/>
-<Adjective nr="29"/>
 <Adjective nr="30"/>
+<Adjective nr="31"/>
 <Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>

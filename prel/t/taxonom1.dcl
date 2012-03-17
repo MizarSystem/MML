@@ -33,23 +33,23 @@
 <Adjective nr="4"/>
 <Adjective nr="6" value="false"/>
 <Adjective nr="14"/>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TAXONOM1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="56"/>
-<Adjective nr="58"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="57"/>
 <Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="68">
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

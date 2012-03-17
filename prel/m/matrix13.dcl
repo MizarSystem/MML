@@ -113,8 +113,8 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="29"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="118"/>
 <Adjective nr="119">
 <LocusVar nr="1"/>

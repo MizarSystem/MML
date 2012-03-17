@@ -77,8 +77,8 @@
 </Adjective>
 <Adjective nr="14"/>
 <Adjective nr="39"/>
-<Adjective nr="45"/>
 <Adjective nr="46"/>
+<Adjective nr="47"/>
 <Adjective nr="116"/>
 <Adjective nr="130">
 <LocusVar nr="1"/>
@@ -140,7 +140,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="14"/>
-<Adjective nr="45"/>
+<Adjective nr="46"/>
 <Adjective nr="116"/>
 </Cluster>
 </FCluster>

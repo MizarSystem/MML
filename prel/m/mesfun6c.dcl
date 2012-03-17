@@ -21,6 +21,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="XXREAL_3"/>
+<ArticleID name="MEMBER_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -54,7 +55,7 @@
 <Adjective nr="27"/>
 <Adjective nr="28"/>
 <Adjective nr="29"/>
-<Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MESFUN6C" nr="1">
@@ -73,7 +74,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 <Func kind="K" nr="6">
 <Func kind="K" nr="7">
@@ -83,14 +84,14 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="188">
+<Func kind="K" nr="214">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 </FCluster>
 </Registrations>

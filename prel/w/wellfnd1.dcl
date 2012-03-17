@@ -51,7 +51,7 @@
 <Adjective nr="20"/>
 <Adjective nr="26" value="false"/>
 <Adjective nr="30"/>
-<Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WELLFND1" nr="2">

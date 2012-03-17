@@ -46,6 +46,78 @@
 </Cluster>
 </RCluster>
 <FCluster aid="TREES_1" nr="1">
+<ArgTypes/>
+<Func kind="K" nr="13">
+<Func kind="K" nr="21"/>
+</Func>
+<Cluster>
+<Adjective nr="31"/>
+</Cluster>
+</FCluster>
+<FCluster aid="TREES_1" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="31"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="31"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="22">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="31"/>
+</Cluster>
+</FCluster>
+<FCluster aid="TREES_1" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="31"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="31"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="23">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="31"/>
+</Cluster>
+</FCluster>
+<FCluster aid="TREES_1" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="44"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="76">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="21"/>
+<Adjective nr="31"/>
+</Cluster>
+</FCluster>
+<FCluster aid="TREES_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -69,7 +141,7 @@
 <Adjective nr="31"/>
 </Cluster>
 </FCluster>
-<FCluster aid="TREES_1" nr="2">
+<FCluster aid="TREES_1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -101,13 +173,13 @@
 <Adjective nr="31"/>
 </Cluster>
 </FCluster>
-<FCluster aid="TREES_1" nr="3">
+<FCluster aid="TREES_1" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="16"/>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -118,7 +190,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster aid="TREES_1" nr="4">
+<FCluster aid="TREES_1" nr="8">
 <ArgTypes/>
 <Func kind="K" nr="82"/>
 <Cluster>
@@ -126,7 +198,7 @@
 <Adjective nr="31"/>
 </Cluster>
 </FCluster>
-<FCluster aid="TREES_1" nr="5">
+<FCluster aid="TREES_1" nr="9">
 <ArgTypes/>
 <Func kind="K" nr="82"/>
 <Cluster>

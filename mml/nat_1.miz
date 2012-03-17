@@ -96,6 +96,7 @@ end;
 
 :: Now we can form and prove the scheme of induction.
 
+::$N The Principle of Mathematical Induction
 scheme
   Ind { P[Nat] } : for k being Element of NAT holds P[k]
 provided
@@ -943,7 +944,7 @@ end;
 
 definition
   let A be set;
-  func min* A -> Element of NAT means :MinS:
+  func min* A -> Element of NAT means :Def1:
   it in A & for k st k in A holds it <= k
   if A is non empty Subset of NAT otherwise it = 0;
   existence
@@ -952,7 +953,7 @@ definition
     k in A holds i <= k
     proof
       defpred P[Nat] means $1 in A;
-      consider x being Element of A;
+      set x =the  Element of A;
       assume
 A1:   A is non empty Subset of NAT;
       then x is Element of NAT by TARSKI:def 3;
@@ -1481,10 +1482,10 @@ theorem
     defpred P[Nat] means $1 <= n;
     defpred Q[Nat] means $1 < n+1;
     deffunc F(Nat) = $1;
-A:   for l holds Q[l] iff P[l] by Th13;
+A1:   for l holds Q[l] iff P[l] by Th13;
    thus succ n = n+1
      .= {F(l) : Q[l]} by AXIOMS:30
-     .= {F(l) : P[l]} from FRAENKEL:sch 3(A);
+     .= {F(l) : P[l]} from FRAENKEL:sch 3(A1);
   end;
 
 scheme MinPred { F(Element of NAT) -> Element of NAT, P[set]} :
@@ -1496,37 +1497,37 @@ proof
   now
     consider f being Function of NAT, NAT such that
 A2: for k be Element of NAT holds f.k = F(k) from FUNCT_2:sch 4;
-A:  f.0 in rng f by FUNCT_2:6;
+A3:  f.0 in rng f by FUNCT_2:6;
     rng f c= NAT
     proof
       let x be set; assume x in rng f; then
       consider y being set such that
-B:    y in dom f & x = f.y by FUNCT_1:def 5;
-      reconsider y1 = y as Element of NAT by B,FUNCT_2:def 1;
-      x = F(y1) by B,A2;
+A4:    y in dom f & x = f.y by FUNCT_1:def 5;
+      reconsider y1 = y as Element of NAT by A4,FUNCT_2:def 1;
+      x = F(y1) by A4,A2;
       hence thesis;
     end; then
-    reconsider rf = rng f as non empty Subset of NAT by A;
+    reconsider rf = rng f as non empty Subset of NAT by A3;
     set m = min* rf;
-    m in rf by MinS;
+    m in rf by Def1;
     then consider x being set such that
-A3: x in dom f and
-A4: m = f.x by FUNCT_1:def 5;
-    reconsider x as Element of NAT by A3,FUNCT_2:def 1;
+A5: x in dom f and
+A6: m = f.x by FUNCT_1:def 5;
+    reconsider x as Element of NAT by A5,FUNCT_2:def 1;
     f.x = F(x) & f.(x+1) = F(x+1) by A2; then
-A5: f.(x+1) < f.x or P[x] by A1;
+A7: f.(x+1) < f.x or P[x] by A1;
     assume
-A6: for k holds not P[k];
+A8: for k holds not P[k];
     f.(x+1) in rf by FUNCT_2:6;
-    hence contradiction by MinS,A6,A4,A5;
+    hence contradiction by Def1,A8,A6,A7;
   end; then
-A7: ex k be Nat st P[k];
+A9: ex k be Nat st P[k];
   consider k be Nat such that
-A8: P[k] and
-A9: for n be Nat st P[n] holds k <= n from Min(A7);
+A10: P[k] and
+A11: for n be Nat st P[n] holds k <= n from Min(A9);
   k in NAT & for n be Element of NAT st P[n] holds k <= n
-    by A9,ORDINAL1:def 13;
-  hence thesis by A8;
+    by A11,ORDINAL1:def 13;
+  hence thesis by A10;
 end;
 
 registration let k be Ordinal, x be set;

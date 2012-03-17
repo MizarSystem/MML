@@ -1,0 +1,3127 @@
+:: Sorting by Exchanging
+::  by Grzegorz Bancerek
+::
+:: Received October 18, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies ORDINAL6, EXCHSORT, ZFMISC_1, XBOOLE_0, RELAT_1, FUNCT_1,
+      ORDINAL1, ORDINAL2, ORDINAL4, FINSET_1, RELAT_2, FUNCT_4, FINSEQ_1,
+      AOFA_000, FUNCT_3, VALUED_0, WELLFND1, CARD_1, TARSKI, FUNCT_2, PARTFUN1,
+      FUNCT_7, REARRAN1, ORDINAL3, XREAL_0, NAT_1, SUBSET_1, XXREAL_0, ARYTM_3,
+      AFINSQ_1, REWRITE1, NUMBERS, MSUALG_1, MEMBERED, STRUCT_0, ORDERS_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, FINSEQ_1, BINOP_1, FUNCT_4,
+      FUNCT_7, NUMBERS, MEMBERED, VALUED_0, ORDINAL1, CARD_1, ORDINAL2,
+      ORDINAL3, ORDINAL4, AFINSQ_1, STRUCT_0, ORDERS_2, WAYBEL_0, XXREAL_0,
+      XREAL_0, NAT_1, AOFA_000, ORDINAL5, FUNCT_3, ORDINAL6;
+ constructors MEMBERED, XXREAL_0, VALUED_0, CATALAN2, ORDINAL3, INT_1, FUNCT_7,
+      ORDINAL5, WELLORD2, RELAT_2, FACIRC_1, BINOP_1, WAYBEL_0, RELSET_1,
+      ORDINAL6;
+ registrations MEMBERED, SUBSET_1, RELSET_1, NAT_1, XXREAL_0, XBOOLE_0,
+      FINSET_1, RELAT_1, FUNCT_1, ORDINAL1, STIRL2_1, VALUED_0, ORDINAL5,
+      AFINSQ_1, CARD_1, FUNCT_2, FUNCT_7, FUNCTOR1, STRUCT_0, WAYBEL_0,
+      ORDINAL6;
+ requirements NUMERALS, SUBSET, BOOLE, REAL;
+ definitions TARSKI, XBOOLE_0, RELAT_1, RELAT_2, PARTFUN1, FUNCT_2, ORDINAL1,
+      ORDINAL2, WELLORD2, FUNCT_1, VALUED_0, BINOP_1, ORDINAL5, ORDINAL6;
+ theorems TARSKI, CARD_1, ZFMISC_1, ORDINAL1, ORDINAL2, RELAT_1, RELSET_1,
+      MEMBERED, FINSET_1, CARD_2, VALUED_0, TREES_1, GRFUNC_1, FUNCT_2,
+      XBOOLE_1, FINSEQ_3, NAT_1, XBOOLE_0, ORDINAL3, XXREAL_0, SETFAM_1,
+      ORDINAL4, FUNCT_1, FUNCT_7, SUBSET_1, FUNCT_3, FUNCT_4, FUNCT_5,
+      AFINSQ_1, WELLORD2, PARTFUN1, ORDERS_2, YELLOW_0, WAYBEL_0, ORDINAL6;
+ schemes NAT_1, ORDINAL2, RECDEF_1;
+
+begin :: Preliminaries
+
+reserve a,a1,a2,b,c,d for ordinal number,
+  n,m,k for natural number,
+  x,y,z,t,X,Y,Z for set;
+
+theorem OM1:
+  x in (a+^b)\a iff ex c st x = a+^c & c in b
+  proof
+A0: x in (a+^b)\a iff a c= x & x in a+^b by ORDINAL6:5;
+    hereby assume
+Z0:   x in (a+^b)\a; then
+      reconsider c = x as Ordinal;
+      take d = c-^a;
+      thus x = a+^d by A0,Z0,ORDINAL3:def 6;
+      hence d in b by Z0,ORDINAL3:25;
+    end;
+    given c such that
+Z1: x = a+^c & c in b;
+    a c= x & x in a+^b by Z1,ORDINAL2:49,ORDINAL3:27;
+    hence thesis by ORDINAL6:5;
+  end;
+
+defpred Case1[set,set,set,set] means
+  $3 <> $1 & $3 <> $2 & $4 <> $1 & $4 <> $2;
+defpred Case2[set,set,set,set] means
+  $3 in $1 & $4 = $1;
+defpred Case3[set,set,set,set] means
+  $3 in $1 & $4 = $2;
+defpred Case4[set,set,set,set] means
+  $3 = $1 & $4 in $2;
+defpred Case5[set,set,set,set] means
+  $3 = $1 & $4 = $2;
+defpred Case6[set,set,set,set] means
+  $3 = $1 & $2 in $4;
+defpred Case7[set,set,set,set] means
+  $1 in $3 & $4 = $2;
+defpred Case8[set,set,set,set] means
+  $3 = $2 & $2 in $4;
+
+theorem Eight:
+  a in b & c in d implies
+  c <> a & c <> b & d <> a & d <> b     or
+  c in a & d = a   or   c in a & d = b  or
+  c = a & d in b   or   c = a & d = b   or   c = a & b in d  or
+  a in c & d = b   or   c = b & b in d
+  proof assume
+Z0: a in b & c in d;
+    per cases by ORDINAL1:24;
+    suppose
+      c in a;
+      hence thesis by Z0;
+    end;
+    suppose
+      c = a;
+      hence thesis by ORDINAL1:24;
+    end;
+    suppose
+F3:   a in c & c in b;
+      per cases by ORDINAL1:24;
+      suppose d in b;
+        hence thesis by Z0;
+      end;
+      suppose d = b;
+        hence thesis by F3;
+      end;
+      suppose b in d;
+        hence thesis by Z0;
+      end;
+    end;
+    suppose
+      c = b;
+      hence thesis by Z0;
+    end;
+    suppose
+      b in c;
+      hence thesis by Z0;
+    end;
+  end;
+
+theorem
+  x nin y implies (y\/{x})\y = {x} by XBOOLE_1:88,ZFMISC_1:56;
+
+theorem Lem2:
+  (succ x)\x = {x}
+  proof
+    succ x = x\/{x} & x nin x;
+    hence thesis by XBOOLE_1:88,ZFMISC_1:56;
+  end;
+
+theorem Lem3:
+  for f being Function, r being Relation
+  for x holds x in f.:r iff ex y,z st [y,z] in r & [y,z] in dom f & f.(y,z) = x
+  proof
+    let f be Function;
+    let r be Relation;
+    let x;
+    hereby assume x in f.:r; then
+      consider t such that
+A1:   t in dom f & t in r & x = f.t by FUNCT_1:def 12;
+      consider y,z such that
+A2:   t = [y,z] by A1,RELAT_1:def 1;
+      f.(y,z) = f.[y,z];
+      hence ex y,z st [y,z] in r & [y,z] in dom f & f.(y,z) = x by A1,A2;
+    end;
+    thus thesis by FUNCT_1:def 12;
+  end;
+
+theorem Th008:
+  a\b <> {} implies inf(a\b) = b & sup(a\b) = a & union(a\b) = union a
+  proof assume
+Z0: a\b <> {};
+    set x =the  Element of a\b;
+A0: x in a\b by Z0;
+A1: x in a & x nin b by Z0,XBOOLE_0:def 5; then
+    b c= x by ORDINAL6:4; then
+    b in a & b nin b by A1,ORDINAL1:22; then
+A2: b in a\b by XBOOLE_0:def 5;
+    hence inf(a\b) c= b by ORDINAL2:22;
+    inf(a\b) in a\b by A0,ORDINAL2:25; then
+    inf(a\b) nin b by XBOOLE_0:def 5;
+    hence b c= inf(a\b) by ORDINAL6:4;
+A3: On(a\b) = a\b by ORDINAL6:2;
+    thus sup(a\b) c= a by A3,ORDINAL2:def 7;
+    thus a c= sup(a\b)
+    proof
+      let c; assume
+Z1:   c in a;
+A5:   b in sup(a\b) by A2,ORDINAL2:27;
+      per cases;
+      suppose c in b;
+        hence thesis by A5,ORDINAL1:19;
+      end;
+      suppose c nin b; then
+        c in a\b by Z1,XBOOLE_0:def 5;
+        hence thesis by ORDINAL2:27;
+      end;
+    end;
+    thus union(a\b) c= union a by ZFMISC_1:95;
+    for y be set st y in union a holds y in union(a\b)
+    proof
+      let y be set; assume y in union a; then
+      consider x such that
+A6:   y in x & x in a by TARSKI:def 4;
+      reconsider x as Ordinal by A6;
+      per cases by ORDINAL6:4;
+      suppose x in b; then
+        y in b by A6,ORDINAL1:19;
+        hence thesis by A2,TARSKI:def 4;
+      end;
+      suppose b c= x; then
+        x in a\b by A6,ORDINAL6:5;
+        hence thesis by A6,TARSKI:def 4;
+      end;
+    end;
+    hence union a c= union(a\b) by TARSKI:def 3;
+  end;
+
+theorem Th009:
+  a\b is non empty finite implies
+  ex n being Nat st a = b+^n
+  proof assume
+Z0: a\b is non empty finite;
+    set x =the  Element of a\b;
+A0: x in a & x nin b by Z0,XBOOLE_0:def 5; then
+    b c= x by ORDINAL6:4; then
+    consider c such that
+A1: a = b+^c & c <> {} by A0,ORDINAL1:22,ORDINAL3:31;
+    deffunc F(Ordinal) = b+^$1;
+    consider f being T-Sequence such that
+F0: dom f = omega & for d st d in omega holds f.d = F(d) from ORDINAL2:sch 2;
+    f is one-to-one
+    proof
+      let x,y; assume
+B1:   x in dom f & y in dom f & f.x = f.y & x <> y; then
+      reconsider x,y as Element of omega by F0;
+B2:   f.x = F(x) & f.y = F(y) by F0;
+      x in y or y in x by B1,ORDINAL1:24; then
+      b+^x in b+^y or b+^y in b+^x by ORDINAL2:49;
+      hence contradiction by B1,B2;
+    end; then
+F2: omega, rng f are_equipotent by F0,WELLORD2:def 4;
+    now assume
+      omega c= c; then
+A2:   F(omega) c= a by A1,ORDINAL2:50;
+      rng f c= a\b
+      proof
+        let y; assume y in rng f; then
+        consider x such that
+A3:     x in dom f & y = f.x by FUNCT_1:def 5;
+        reconsider x as Element of omega by F0,A3;
+A4:     y = F(x) by F0,A3;
+        b c= F(x) & F(x) in F(omega) by ORDINAL2:49,ORDINAL3:27; then
+        y nin b & y in a by A2,A4,ORDINAL6:4;
+        hence thesis by XBOOLE_0:def 5;
+      end;
+      hence contradiction by Z0,F2,CARD_1:68;
+    end; then
+    c in omega by ORDINAL6:4;
+    hence thesis by A1;
+  end;
+
+begin :: Arrays
+
+definition let f be set;
+  attr f is segmental means :SEG:
+  ex a,b st proj1 f = a\b;
+end;
+
+reserve f,g for Function;
+
+theorem
+  dom f = dom g & f is segmental implies g is segmental
+  proof assume
+Z0: dom f = dom g;
+    given a,b such that
+Z1: dom f = a\b;
+    take a,b; thus thesis by Z0,Z1;
+end;
+
+theorem OM2:
+  f is segmental implies
+  for a,b,c st a c= b & b c= c & a in dom f & c in dom f holds b in dom f
+  proof given x,y being Ordinal such that
+Z0: dom f = x\y;
+    let a,b,c; assume
+Z1: a c= b & b c= c & a in dom f & c in dom f; then
+    y c= a & c in x by Z0,ORDINAL6:5; then
+    y c= b & b in x by Z1,XBOOLE_1:1,ORDINAL1:22;
+    hence thesis by Z0,ORDINAL6:5;
+  end;
+
+registration
+  cluster T-Sequence-like -> segmental Function;
+  coherence
+  proof
+    let f;
+    assume f is T-Sequence-like; then
+    reconsider f as T-Sequence;
+    take dom f, 0; thus thesis;
+  end;
+  cluster FinSequence-like -> segmental Function;
+  coherence
+  proof
+    let f;
+    assume f is FinSequence-like; then
+    reconsider g = f as FinSequence;
+    take a = succ len g, b = 1;
+    reconsider c = len g as Nat;
+    thus dom f c= a\b
+    proof
+      let x; assume
+A2:   x in dom f; then x in dom g; then reconsider x as Nat;
+      x <= c by A2,FINSEQ_3:27; then
+A1:   1 <= x & x <= c by A2,FINSEQ_3:27; then
+      succ 0 c= x & x c= c by NAT_1:40; then
+A3:   0 in x & x in a by ORDINAL1:34,33;
+      not x in b by A1,TARSKI:def 1,CARD_1:87;
+      hence thesis by A3,XBOOLE_0:def 5;
+    end;
+    reconsider d = a as Element of NAT by ORDINAL1:def 13;
+    let x; assume
+A5: x in a\b; then
+A4: x in d & not x in b by XBOOLE_0:def 5;
+    reconsider x as Nat by A5;
+    x c= c & b c= x by A4,ORDINAL1:26,34; then
+    1 <= x & x <= c by NAT_1:40;
+    hence thesis by FINSEQ_3:27;
+  end;
+end;
+
+definition
+  let a;
+  let s be set;
+  attr s is a-based means:
+AB: b in proj1 s implies a in proj1 s & a c= b;
+  attr s is a-limited means:
+LI: a = sup proj1 s;
+end;
+
+theorem
+  f is a-based segmental iff ex b st dom f = b\a & a c= b
+  proof
+    thus f is a-based segmental implies ex b st dom f = b\a & a c= b
+    proof
+      assume
+A1:   b in dom f implies a in dom f & a c= b;
+      given c,d such that
+A2:   dom f = c\d;
+      set x =the  Element of c\d;
+      per cases;
+      suppose dom f = {}; then
+        a\a = dom f by XBOOLE_1:37;
+        hence thesis;
+      end;
+      suppose
+        dom f <> {}; then
+        x in dom f by A2; then
+        a in dom f by A1; then
+A4:     d c= a & a in c by A2,ORDINAL6:5; then
+        d in c by ORDINAL1:22; then
+        d in dom f by A2,ORDINAL6:5; then
+        a c= d by A1; then
+        a = d & a c= c by A4,XBOOLE_0:def 10,ORDINAL1:def 2;
+        hence thesis by A2;
+      end;
+    end;
+    given b such that
+B1: dom f = b\a & a c= b;
+    thus f is a-based
+    proof
+      let c; assume
+B2:   c in dom f; then
+      a c= c & c in b by B1,ORDINAL6:5; then
+      a in b by ORDINAL1:22;
+      hence thesis by B1,B2,ORDINAL6:5;
+    end;
+    take b,a; thus thesis by B1;
+  end;
+
+theorem
+  f is b-limited non empty segmental iff ex a st dom f = b\a & a in b
+  proof
+    thus f is b-limited non empty segmental implies
+    ex a st dom f = b\a & a in b
+    proof assume
+A1:   b = sup dom f;
+      assume
+Z0:   f is non empty;
+      given c,d such that
+A2:   dom f = c\d;
+      set x =the  Element of c\d;
+      take a = d;
+A3:   b = c by Z0,A1,A2,Th008;
+      thus dom f = b\a by Z0,A1,A2,Th008;
+      a c= x & x in b by Z0,A2,A3,ORDINAL6:5;
+      hence a in b by ORDINAL1:22;
+    end;
+    given a such that
+Z1: dom f = b\a & a in b;
+    a in dom f by Z1,ORDINAL6:5;
+    hence b = sup dom f by Z1,Th008;
+    thus f is non empty by Z1,ORDINAL6:5;
+    take b,a;
+    thus thesis by Z1;
+  end;
+
+registration
+  cluster T-Sequence-like -> 0-based Function;
+  coherence
+  proof
+    let f; assume f is T-Sequence-like; then
+    reconsider g = f as T-Sequence;
+    let b; assume b in dom f; then b in dom g;
+    hence thesis by ORDINAL3:10;
+  end;
+  cluster FinSequence-like -> 1-based Function;
+  coherence
+  proof
+    let f; assume
+    f is FinSequence-like; then
+    reconsider g = f as FinSequence;
+    let b; assume b in dom f; then
+A1: b in dom g; then
+    reconsider b as Nat;
+A2: 1 <= b & b <= len g by A1,FINSEQ_3:27; then
+    1 <= len g by XXREAL_0:2;
+    hence thesis by A2,NAT_1:40,FINSEQ_3:27;
+  end;
+end;
+
+theorem Th003:
+  f is (inf dom f)-based
+  proof
+    set b = inf dom f;
+    let c; assume
+    c in dom f;
+    hence b in dom f & b c= c by ORDINAL2:25,22;
+  end;
+
+theorem
+  f is (sup dom f)-limited by LI;
+
+theorem
+  f is b-limited & a in dom f implies a in b
+  proof assume
+    b = sup dom f;
+    hence thesis by ORDINAL2:27;
+  end;
+
+definition let f;
+  func base-f -> ordinal number means:
+BA:
+  f is it-based if ex a st a in dom f
+  otherwise it = 0;
+  existence
+  proof set b = inf dom f;
+    hereby
+      given a such that a in dom f;
+      take b; thus f is b-based by Th003;
+    end;
+    assume not ex a st a in dom f;
+    take 0; thus thesis;
+  end;
+  uniqueness
+  proof let b,c;
+    hereby
+      given a such that
+A1:   a in dom f;
+      assume
+A2:   f is b-based & f is c-based;
+      thus b = c
+      proof
+        c in dom f by A1,A2,AB;
+        hence b c= c by A2,AB;
+        b in dom f by A1,A2,AB;
+        hence c c= b by A2,AB;
+      end;
+    end;
+    thus thesis;
+  end;
+  consistency;
+  func limit-f -> ordinal number means:
+LIM:
+  f is it-limited if ex a st a in dom f
+  otherwise it = 0;
+  existence
+  proof set b = sup dom f;
+    hereby
+      given a such that a in dom f;
+      take b; thus f is b-limited by LI;
+    end;
+    assume not ex a st a in dom f;
+    take 0; thus thesis;
+  end;
+  uniqueness
+  proof let b,c;
+    hereby
+      given a such that a in dom f;
+      assume
+A2:   f is b-limited & f is c-limited;
+      thus b = sup dom f by A2,LI .= c by A2,LI;
+    end;
+    thus thesis;
+  end;
+  consistency;
+end;
+
+definition
+  let f;
+  func len-f -> ordinal number equals (limit-f)-^(base-f);
+  coherence;
+end;
+
+theorem EE:
+  base-{} = 0 & limit-{} = 0 & len-{} = 0
+  proof
+    not ex a st a in dom {};
+    hence base-{} = 0 & limit-{} = 0 by BA,LIM;
+    hence thesis by ORDINAL3:69;
+  end;
+
+theorem Th005:
+  limit-f = sup dom f
+  proof
+    per cases;
+    suppose
+A1:   a nin dom f;
+      On dom f c= 0
+      proof
+        let x; assume x in On dom f; then
+        x in dom f & x is ordinal by ORDINAL1:def 10;
+        hence thesis by A1;
+      end; then
+      sup dom f c= 0 by ORDINAL2:def 7; then
+      sup dom f = 0;
+      hence thesis by A1,LIM;
+    end;
+    suppose
+A2:   ex a st a in dom f;
+      f is (sup dom f)-limited by LI;
+      hence thesis by A2,LIM;
+    end;
+  end;
+
+theorem
+  f is (limit-f)-limited
+  proof
+    limit-f = sup dom f by Th005;
+    hence thesis by LI;
+  end;
+
+theorem Th002:
+  for A being empty set holds A is a-based
+  proof
+    let A be empty set;
+    let b; thus thesis;
+  end;
+
+registration let a,X,Y;
+  cluster Y-defined X-valued a-based segmental finite empty T-Sequence;
+  existence
+  proof
+    take A = {}[:Y,X:];
+    thus thesis by Th002;
+  end;
+end;
+
+definition
+  mode array is segmental Function;
+end;
+
+registration
+  let A be array;
+  cluster dom A -> ordinal-membered;
+  coherence
+  proof
+    consider a,b such that
+A1: dom A = a\b by SEG;
+    take a; thus thesis by A1;
+  end;
+end;
+
+theorem
+  for f being array holds f is 0-limited iff f is empty
+  proof let f be array;
+    thus f is 0-limited implies f is empty
+    proof assume sup dom f = 0; then
+      dom f c= 0 by ORDINAL6:3;
+      hence f is empty;
+    end;
+    assume f is empty;
+    hence sup dom f = 0 by ORDINAL2:26;
+  end;
+
+registration
+  cluster 0-based -> T-Sequence-like array;
+  coherence
+  proof
+    let s be array;
+    assume
+Z0: b in proj1 s implies 0 in proj1 s & 0 c= b;
+    consider c,a such that
+A1: dom s = c\a by SEG;
+    set x =the  Element of c\a;
+    now assume
+A2:   c\a <> {}; then
+      x in c by XBOOLE_0:def 5; then
+      0 in dom s by Z0,A1,A2; then
+      0 nin a by A1,XBOOLE_0:def 5; then
+      a c= 0 by ORDINAL6:4; then
+      a = 0;
+      hence dom s = c by A1;
+    end;
+    hence dom s is ordinal by A1;
+  end;
+end;
+
+definition
+  let X;
+  mode array of X is X-valued array;
+end;
+
+definition
+  let X be 1-sorted;
+  mode array of X is array of the carrier of X;
+end;
+
+definition
+  let a,X;
+  mode array of a,X is a-defined array of X;
+end;
+
+reserve A,B,C for array;
+
+theorem Th007:
+  base-f = inf dom f
+  proof set A = f;
+    set b = inf dom A;
+A0: A is b-based by Th003;
+    per cases;
+    suppose ex a st a in dom A;
+      hence thesis by A0,BA;
+    end;
+    suppose
+A1:   not ex a st a in dom A;
+      set x =the  Element of On dom A;
+      now
+        assume On dom A <> {}; then
+        x in dom A by ORDINAL1:def 10;
+        hence contradiction by A1;
+      end; then
+      b = 0 by SETFAM_1:def 1;
+      hence thesis by A1,BA;
+    end;
+  end;
+
+theorem
+  f is (base-f)-based
+  proof
+    base-f = inf dom f by Th007;
+    hence thesis by Th003;
+  end;
+
+theorem
+  dom A = (limit-A) \ (base-A)
+  proof
+    consider a,b such that
+A0: dom A = a\b by SEG;
+A1: limit-A = sup dom A by Th005;
+A2: base-A = inf dom A by Th007;
+    thus dom A c= (limit-A) \ (base-A)
+    proof let x; assume x in dom A; then
+A3:   base-A c= x & x in limit-A by A1,A2,ORDINAL2:22,27; then
+      x in base-A implies x in x;
+      hence thesis by A3,XBOOLE_0:def 5;
+    end;
+    let x; assume
+A5: x in (limit-A) \ (base-A); then
+    reconsider x as Ordinal;
+    ex c st c in dom A & x c= c by A1,A5,ORDINAL2:29; then
+    a = limit-A & b = base-A by A0,A1,A2,Th008;
+    hence thesis by A0,A5;
+  end;
+
+theorem Th011:
+  dom A = a\b & A is non empty implies base-A = b & limit-A = a
+  proof assume
+A0: dom A = a\b & A is non empty;
+    set x =the  Element of dom A;
+    dom A <> {} by A0; then
+A1: x in a\b by A0;
+    b c= x & x in a by A0,ORDINAL6:5; then
+A2: b in a & b nin b by ORDINAL1:22; then
+    b in a\b by XBOOLE_0:def 5; then
+A5: b in sup dom A by A0,ORDINAL2:27;
+    A is b-based
+    proof
+      let c; thus thesis by A0,A2,ORDINAL6:5;
+    end;
+    hence base-A = b by BA,A0,A1;
+A3: a c= sup dom A
+    proof
+      let x be Ordinal; assume
+A4:   x in a;
+      per cases;
+      suppose
+        x in b;
+        hence thesis by A5,ORDINAL1:19;
+      end;
+      suppose
+        x nin b; then
+        x in a\b by A4,XBOOLE_0:def 5;
+        hence thesis by A0,ORDINAL2:27;
+      end;
+    end;
+    sup dom A c= sup a by A0,ORDINAL2:30; then
+    sup dom A c= a by ORDINAL2:26; then
+    a = sup dom A by A3,XBOOLE_0:def 10;
+    hence thesis by Th005;
+  end;
+
+theorem TT0:
+  for f be T-Sequence holds
+  base-f = 0 & limit-f = dom f & len-f = dom f
+  proof
+    let f be T-Sequence;
+    per cases;
+    suppose f = {};
+      hence thesis by EE;
+    end;
+    suppose
+A1:   f <> {};
+      (dom f)\0 = dom f;
+      hence base-f = 0 & limit-f = dom f by A1,Th011;
+      hence len-f = dom f by ORDINAL3:69;
+    end;
+  end;
+
+registration
+  let a,b,X;
+  cluster b-based natural-valued integer-valued real-valued complex-valued
+  finite array of a,X;
+  existence
+  proof
+    set A =the  empty array of a,X;
+    take A; thus thesis by Th002;
+  end;
+end;
+
+registration
+  let a,x;
+  cluster {[a,x]} -> segmental;
+  coherence
+  proof
+    take succ a, a;
+    thus dom {[a,x]} = {a} by FUNCT_5:15
+    .= (succ a)\a by Lem2;
+  end;
+end;
+
+registration
+  let a; let x be natural number;
+  cluster {[a,x]} -> natural-valued array;
+  coherence
+  proof let A; assume A = {[a,x]}; then
+    rng A = {x} by FUNCT_5:15; then
+    rng A c= NAT by MEMBERED:6;
+    hence A is natural-valued by VALUED_0:def 6;
+  end;
+end;
+
+registration
+  let a; let x be real number;
+  cluster {[a,x]} -> real-valued array;
+  coherence
+  proof let A; assume A = {[a,x]}; then
+    rng A = {x} by FUNCT_5:15; then
+    rng A c= REAL by MEMBERED:3;
+    hence A is real-valued by VALUED_0:def 3;
+  end;
+end;
+
+registration
+  let a; let X be non empty set;
+  let x be Element of X;
+  cluster {[a,x]} -> X-valued array;
+  coherence
+  proof let A; assume A = {[a,x]}; then
+    rng A = {x} by FUNCT_5:15;
+    hence rng A c= X by ZFMISC_1:37;
+  end;
+end;
+
+registration
+  let a,x;
+  cluster {[a,x]} -> a-based succ a-limited array;
+  coherence
+  proof
+    let s be array such that
+A0: s = {[a,x]};
+A2: dom s = {a} by A0,FUNCT_5:15;
+    thus s is a-based
+    proof
+      let b such that
+A1:   b in proj1 s;
+      thus a in proj1 s & a c= b by A1,A2,TARSKI:def 1;
+    end;
+    sup dom s = succ a by A2,ORDINAL2:31;
+    hence thesis by LI;
+  end;
+end;
+
+registration
+  let b;
+  cluster non empty b-based natural-valued integer-valued real-valued
+  complex-valued finite array;
+  existence
+  proof
+    set x =the  natural number;
+    reconsider A = {[b,x]} as natural-valued array;
+    take A; thus thesis;
+  end;
+  let X be non empty set;
+  cluster non empty b-based finite X-valued array;
+  existence
+  proof
+    set x =the  Element of X;
+    reconsider A = {[b,x]} as array of X;
+    take A; thus thesis;
+  end;
+end;
+
+notation
+  let s be T-Sequence;
+  synonym s last for last s;
+end;
+
+definition
+  let A be array;
+  func last A equals A.union dom A;
+  coherence;
+end;
+
+registration
+  let A be T-Sequence;
+  identify A last with last A;
+  compatibility;
+end;
+
+begin :: Descending sequence
+
+definition
+  let f be Function;
+  attr f is descending means:
+DSC:
+  for a,b st a in dom f & b in dom f & a in b holds f.b c< f.a;
+end;
+
+theorem
+  for f being finite array
+  st for a st a in dom f & succ a in dom f holds f.succ a c< f.a
+  holds f is descending
+  proof
+    let f be finite array;  assume
+Z0: for a st a in dom f & succ a in dom f holds f.succ a c< f.a;
+    let a,b; assume
+Z1: a in dom f & b in dom f & a in b;
+    consider c,d such that
+A0: dom f = c\d by SEG;
+    consider n being Nat such that
+A1: c = d+^n by Z1,A0,Th009;
+    consider e1 being Ordinal such that
+01: a = d+^e1 & e1 in n by Z1,A0,A1,OM1;
+    consider e2 being Ordinal such that
+02: b = d+^e2 & e2 in n by Z1,A0,A1,OM1;
+    reconsider e1,e2 as Nat by 01,02;
+    reconsider se1 = succ e1 as Element of NAT by ORDINAL1:def 13;
+03: succ a = d+^succ e1 by 01,ORDINAL2:45;
+    e1 in e2 by Z1,01,02,ORDINAL3:25; then
+    succ e1 c= e2 by ORDINAL1:33; then
+    succ e1 <= e2 by NAT_1:40; then
+    consider k being Nat such that
+04: e2 = se1+k by NAT_1:10;
+    reconsider k as Element of NAT by ORDINAL1:def 13;
+    deffunc Y(Ordinal) = (succ a)+^$1;
+    defpred P[Nat] means Y($1) in dom f implies f.Y($1) c< f.a;
+    Y(0) = succ a by ORDINAL2:44; then
+A2: P[ 0 ] by Z0,Z1;
+A3: for k being Nat st P[k] holds P[k+1]
+    proof let k be Nat;
+      k+1 = succ k by NAT_1:39; then
+B2:   Y(k+1) = succ Y(k) by ORDINAL2:45; then
+B3:   Y(k) in Y(k+1) & a in succ a by ORDINAL1:10; then
+B5:   Y(k) c= Y(k+1) & a c= succ a by ORDINAL1:def 2;
+      succ a c= Y(k) by ORDINAL3:27; then
+B4:   a c= Y(k) by B3,ORDINAL1:def 2;
+      assume
+Z2:   P[k] & Y(k+1) in dom f; then
+      Y(k) in dom f by Z1,B5,B4,OM2; then
+      f.Y(k) c< f.a & f.Y(k+1) c< f.Y(k) by Z0,B2,Z2;
+      hence f.Y(k+1) c< f.a by XBOOLE_1:56;
+    end;
+A4: for k being Nat holds P[k] from NAT_1:sch 2(A2,A3);
+    b = d+^(se1+^k) by 02,04,CARD_2:49
+    .= (succ a)+^k by 03,ORDINAL3:33;
+    hence f.b c< f.a by Z1,A4;
+  end;
+
+theorem DSC2:
+  for f being array st len-f = omega &
+     for a st a in dom f & succ a in dom f holds f.succ a c< f.a
+  holds f is descending
+  proof
+    let f be array; assume
+ZZ: len-f = omega; assume
+Z0: for a st a in dom f & succ a in dom f holds f.succ a c< f.a;
+    let a,b; assume
+Z1: a in dom f & b in dom f & a in b;
+    consider c,d such that
+A0: dom f = c\d by SEG;
+    f is non empty by Z1; then
+B1: base-f = d & limit-f = c by A0,Th011;
+    d c= a & a in c by Z1,A0,ORDINAL6:5; then
+    d in c by ORDINAL1:22; then
+    d c= c by ORDINAL1:def 2; then
+A1: c = d+^omega by B1,ZZ,ORDINAL3:def 6;
+    consider e1 being Ordinal such that
+01: a = d+^e1 & e1 in omega by Z1,A0,A1,OM1;
+    consider e2 being Ordinal such that
+02: b = d+^e2 & e2 in omega by Z1,A0,A1,OM1;
+    reconsider e1,e2 as Nat by 01,02;
+    reconsider se1 = succ e1 as Element of NAT by ORDINAL1:def 13;
+03: succ a = d+^succ e1 by 01,ORDINAL2:45;
+    e1 in e2 by Z1,01,02,ORDINAL3:25; then
+    succ e1 c= e2 by ORDINAL1:33; then
+    succ e1 <= e2 by NAT_1:40; then
+    consider k being Nat such that
+04: e2 = se1+k by NAT_1:10;
+    reconsider k as Element of NAT by ORDINAL1:def 13;
+    deffunc Y(Ordinal) = (succ a)+^$1;
+    defpred P[Nat] means Y($1) in dom f implies f.Y($1) c< f.a;
+    Y(0) = succ a by ORDINAL2:44; then
+A2: P[ 0 ] by Z0,Z1;
+A3: for k being Nat st P[k] holds P[k+1]
+    proof let k be Nat;
+      k+1 = succ k by NAT_1:39; then
+B2:   Y(k+1) = succ Y(k) by ORDINAL2:45; then
+B3:   Y(k) in Y(k+1) & a in succ a by ORDINAL1:10; then
+B5:   Y(k) c= Y(k+1) & a c= succ a by ORDINAL1:def 2;
+      succ a c= Y(k) by ORDINAL3:27; then
+B4:   a c= Y(k) by B3,ORDINAL1:def 2;
+      assume
+Z2:   P[k] & Y(k+1) in dom f; then
+      Y(k) in dom f by Z1,B5,B4,OM2; then
+      f.Y(k) c< f.a & f.Y(k+1) c< f.Y(k) by Z0,B2,Z2;
+      hence f.Y(k+1) c< f.a by XBOOLE_1:56;
+    end;
+A4: for k being Nat holds P[k] from NAT_1:sch 2(A2,A3);
+    b = d+^(se1+^k) by 02,04,CARD_2:49
+    .= (succ a)+^k by 03,ORDINAL3:33;
+    hence f.b c< f.a by Z1,A4;
+  end;
+
+theorem TD1:
+  for f being T-Sequence st f is descending & f.0 is finite
+  holds f is finite
+  proof let f be T-Sequence;
+    assume
+Z0: f is descending;
+    assume
+Z1: f.0 is finite;
+    deffunc G(set) = card (f.$1);
+    consider g being T-Sequence such that
+A1: dom g = dom f & for a st a in dom f holds g.a = G(a)
+    from ORDINAL2:sch 2;
+    defpred P[set] means f.$1 is finite;
+A2: P[{}] by Z1;
+A3: P[a] implies P[succ a]
+    proof
+      per cases;
+      suppose succ a nin dom f;
+        hence thesis by FUNCT_1:def 4;
+      end;
+      suppose
+C2:     succ a in dom f;
+C3:     a in succ a by ORDINAL1:10; then
+        a in dom f by C2,ORDINAL1:19; then
+        f.succ a c< f.a by Z0,C2,C3,DSC; then
+        f.succ a c= f.a by XBOOLE_0:def 8;
+        hence thesis;
+      end;
+    end;
+A4: for a st a <> {} & a is limit_ordinal & for b st b in a holds P[b]
+    holds P[a]
+    proof let a;
+      assume a <> {}; then
+B2:   0 in a by ORDINAL3:10;
+      per cases;
+      suppose a in dom f; then
+        0 in dom f & a in dom f by ORDINAL3:10; then
+        f.a c< f.0 by Z0,B2,DSC; then
+        f.a c= f.0 by XBOOLE_0:def 8;
+        hence thesis by Z1;
+      end;
+      suppose a nin dom f;
+        hence thesis by FUNCT_1:def 4;
+      end;
+    end;
+A5: P[a] from ORDINAL2:sch 1(A2,A3,A4);
+    g is decreasing
+    proof
+      let a,b; assume
+B3:   a in b & b in dom g; then
+      a in dom f by A1,ORDINAL1:19; then
+      g.a = G(a) & f.a is finite & f.b c< f.a & g.b = G(b) & f.b is finite
+      by Z0,A1,B3,A5,DSC;
+      hence g.b in g.a by CARD_2:67;
+    end;
+    hence f is finite by A1,FINSET_1:29;
+  end;
+
+theorem
+  for f being T-Sequence st f is descending & f.0 is finite &
+  for a st f.a <> {} holds succ a in dom f
+  holds last f = {}
+  proof
+    let f be T-Sequence such that
+Z0: f is descending & f.0 is finite and
+Z1: for a st f.a <> {} holds succ a in dom f;
+    f is finite by Z0,TD1; then
+    reconsider d = dom f as finite Ordinal;
+    set u = union d;
+    per cases;
+    suppose d = 0;
+      hence last f = {} by FUNCT_1:def 4;
+    end;
+    suppose d <> 0; then
+      consider n being Nat such that
+A3:   d = n+1 by NAT_1:6;
+A4:   d = succ n by A3,NAT_1:39; then
+A5:   u = n by ORDINAL2:2;
+      f.u <> 0 implies d in d by Z1,A4,A5;
+      hence last f = {};
+    end;
+  end;
+
+scheme A{A() -> T-Sequence, F(set)->set}:
+  A() is finite
+  provided
+C1: F(A().0) is finite and
+C2: for a st succ a in dom A() & F(A().a) is finite
+    holds F(A().succ a) c< F(A().a)
+  proof
+    deffunc G(set) = F(A().$1);
+    consider F being T-Sequence such that
+A0: dom F = dom A() & for a st a in dom A() holds F.a = G(a)
+    from ORDINAL2:sch 2;
+    per cases by ORDINAL6:4;
+    suppose dom F in omega;
+      hence thesis by A0,FINSET_1:29;
+    end;
+    suppose
+A1:   omega c= dom F;
+      set f = F|omega;
+A2:   dom f = omega by A1,RELAT_1:91;
+A3:   len-f = dom f by TT0;
+B1:   0 in omega by ORDINAL1:def 12;
+A4:   f.0 = F.0 by B1,A2,FUNCT_1:70 .= G(0) by A0,B1,A1;
+      defpred P[Nat] means f.$1 is finite;
+J0:   P[ 0] by C1,A4;
+J1:   P[n] implies P[n+1]
+      proof set a = n;
+        assume
+B4:     P[n];
+B6:     n in omega & succ n in omega by ORDINAL1:def 13; then
+B3:     a in dom F & succ a in dom F & f.a = F.a & f.succ a = F.succ a
+        by FUNCT_1:70,A1,A2;
+        F.a = G(a) & F.succ a = G(succ a) by A0,A1,B6; then
+        f.succ a c< f.a by C2,A0,B4,B3; then
+        f.succ a c= f.a by XBOOLE_0:def 8;
+        hence thesis by B4,NAT_1:39;
+      end;
+JJ:   P[n] from NAT_1:sch 2(J0,J1);
+      for a st a in dom f & succ a in dom f holds f.succ a c< f.a
+      proof
+        let a; assume
+Z0:     a in dom f & succ a in dom f; then
+        reconsider n = a as Nat by A2;
+B4:     P[n] & f.a = F.a & f.succ a = F.succ a by Z0,JJ,FUNCT_1:70;
+        F.a = G(a) & F.succ a = G(succ a) by A0,Z0,A1,A2;
+        hence f.succ a c< f.a by C2,A0,B4,Z0,A1,A2;
+      end; then
+      f is descending by A3,DSC2,A1,RELAT_1:91; then
+      f is finite by C1,A4,TD1;
+      hence thesis by A2;
+    end;
+  end;
+
+begin :: Swap
+
+registration
+  let X;
+  let f be X-defined Function;
+  let a,b be set;
+  cluster Swap(f,a,b) -> X-defined;
+  coherence
+  proof
+    dom Swap(f,a,b) = dom f by FUNCT_7:101;
+    hence dom Swap(f,a,b) c= X by RELAT_1:def 18;
+  end;
+end;
+
+registration
+  let X be set;
+  let f be X-valued Function;
+  let x,y be set;
+  cluster Swap(f,x,y) -> X-valued;
+  coherence
+  proof
+    rng Swap(f,x,y) = rng f by FUNCT_7:105;
+    hence rng Swap(f,x,y) c= X by RELAT_1:def 19;
+  end;
+end;
+
+theorem TSa:
+  x in dom f & y in dom f implies Swap(f,x,y).x = f.y
+  proof assume
+Z0: x in dom f & y in dom f; then
+A1: Swap(f,x,y) = f+*(x,f.y)+*(y,f.x) by FUNCT_7:def 12;
+A2: dom f = dom(f+*(x,f.y)) by FUNCT_7:32;
+    now assume x <> y; then
+      Swap(f,x,y).x = (f+*(x,f.y)).x by A1,FUNCT_7:34;
+      hence thesis by Z0,FUNCT_7:33;
+    end;
+    hence Swap(f,x,y).x = f.y by A2,Z0,A1,FUNCT_7:33;
+  end;
+
+theorem TSa2:
+  for f being array of X st x in dom f & y in dom f
+  holds Swap(f,x,y)/.x = f/.y
+  proof
+    let f be array of X;
+    assume
+Z0: x in dom f & y in dom f;
+    dom Swap(f,x,y) = dom f by FUNCT_7:101;
+    hence Swap(f,x,y)/.x = Swap(f,x,y).x by Z0,PARTFUN1:def 8
+    .= f.y by Z0,TSa .= f/.y by Z0,PARTFUN1:def 8;
+  end;
+
+theorem TSb:
+  x in dom f & y in dom f implies Swap(f,x,y).y = f.x
+  proof assume
+Z0: x in dom f & y in dom f; then
+A1: Swap(f,x,y) = f+*(x,f.y)+*(y,f.x) by FUNCT_7:def 12;
+    dom f = dom(f+*(x,f.y)) by FUNCT_7:32;
+    hence thesis by Z0,A1,FUNCT_7:33;
+  end;
+
+theorem TSb2:
+  for f being array of X st x in dom f & y in dom f
+  holds Swap(f,x,y)/.y = f/.x
+  proof
+    let f be array of X;
+    assume
+Z0: x in dom f & y in dom f;
+    dom Swap(f,x,y) = dom f by FUNCT_7:101;
+    hence Swap(f,x,y)/.y = Swap(f,x,y).y by Z0,PARTFUN1:def 8
+    .= f.x by Z0,TSb .= f/.x by Z0,PARTFUN1:def 8;
+  end;
+
+theorem TSc:
+  z <> x & z <> y implies Swap(f,x,y).z = f.z
+  proof assume
+Z0: z <> x & z <> y;
+    per cases;
+    suppose
+      x in dom f & y in dom f; then
+      Swap(f,x,y) = f+*(x,f.y)+*(y,f.x) by FUNCT_7:def 12;
+      hence Swap(f,x,y).z = (f+*(x,f.y)).z by Z0,FUNCT_7:34
+      .= f.z by Z0,FUNCT_7:34;
+    end;
+    suppose
+      not (x in dom f & y in dom f);
+      hence Swap(f,x,y).z = f.z by FUNCT_7:def 12;
+    end;
+  end;
+
+theorem TSc2:
+  for f being array of X st z in dom f & z <> x & z <> y
+  holds Swap(f,x,y)/.z = f/.z
+  proof
+    let f be array of X;
+    assume
+Z0: z in dom f & z <> x & z <> y;
+    dom Swap(f,x,y) = dom f by FUNCT_7:101;
+    hence Swap(f,x,y)/.z = Swap(f,x,y).z by Z0,PARTFUN1:def 8
+    .= f.z by Z0,TSc .= f/.z by Z0,PARTFUN1:def 8;
+  end;
+
+theorem
+  x in dom f & y in dom f implies Swap(f,x,y) = Swap(f,y,x)
+  proof assume
+Z0: x in dom f & y in dom f;
+A0: dom Swap(f,x,y) = dom f & dom Swap(f,y,x) = dom f by FUNCT_7:101;
+    now let z such that
+      z in dom f;
+      per cases;
+      suppose z = x & z = y;
+        hence Swap(f,x,y).z = Swap(f,y,x).z;
+      end;
+      suppose z = x & z <> y; then
+        Swap(f,x,y).z = f.y & Swap(f,y,x).z = f.y by Z0,TSa,TSb;
+        hence Swap(f,x,y).z = Swap(f,y,x).z;
+      end;
+      suppose z <> x & z = y; then
+        Swap(f,x,y).z = f.x & Swap(f,y,x).z = f.x by Z0,TSa,TSb;
+        hence Swap(f,x,y).z = Swap(f,y,x).z;
+      end;
+      suppose z <> x & z <> y; then
+        Swap(f,x,y).z = f.z & Swap(f,y,x).z = f.z by TSc;
+        hence Swap(f,x,y).z = Swap(f,y,x).z;
+      end;
+    end;
+    hence Swap(f,x,y) = Swap(f,y,x) by A0,FUNCT_1:9;
+  end;
+
+registration
+  let X be non empty set;
+  cluster onto (X-valued non empty Function);
+  existence
+  proof
+    take id X; thus thesis;
+  end;
+end;
+
+registration
+  let X be non empty set;
+  let f be onto (X-valued non empty Function);
+  let x,y be Element of dom f;
+  cluster Swap(f,x,y) -> onto;
+  coherence
+  proof
+    rng Swap(f,x,y) = rng f by FUNCT_7:105;
+    hence rng Swap(f,x,y) = X by FUNCT_2:def 3;
+  end;
+end;
+
+registration
+  let A;
+  let x,y;
+  cluster Swap(A,x,y) -> segmental;
+  coherence
+  proof
+    consider a1,a2 such that
+A1: dom A = a1\a2 by SEG;
+    take a1,a2; thus thesis by A1,FUNCT_7:101;
+  end;
+end;
+
+theorem
+  x in dom A & y in dom A implies Swap(Swap(A,x,y),x,y) = A
+  proof assume
+Z0: x in dom A & y in dom A;
+    set B = Swap(A,x,y);
+    set C = Swap(B,x,y);
+A0: dom C = dom B & dom B = dom A by FUNCT_7:101;
+    now let z;
+      assume
+      z in dom B;
+      per cases;
+      suppose
+C1:     z <> x & z <> y;
+        hence C.z = B.z by TSc .= A.z by C1,TSc;
+      end;
+      suppose
+C1:     z = x;
+        hence C.z = B.y by Z0,A0,TSa .= A.z by Z0,C1,TSb;
+      end;
+      suppose
+C1:     z = y;
+        hence C.z = B.x by Z0,A0,TSb .= A.z by Z0,C1,TSa;
+      end;
+    end;
+    hence C = A by A0,FUNCT_1:9;
+  end;
+
+registration
+  let A be real-valued array;
+  let x,y;
+  cluster Swap(A,x,y) -> real-valued array;
+  coherence
+  proof
+    let B be array; assume
+A1: B = Swap(A,x,y);
+    let z; assume z in dom B; then
+A2: z in dom A & (x = z or x <> z) & (y = z or y <> z) by A1,FUNCT_7:101;
+    not x in dom A or not y in dom A implies B = A by A1,FUNCT_7:def 12; then
+    B.z = A.y or B.z = A.x or B.z = A.z by A1,A2,TSa,TSb,TSc;
+    hence thesis;
+  end;
+end;
+
+begin :: Permutations
+
+definition
+  let A be array;
+  mode permutation of A -> array means:
+PERM:
+  ex f being Permutation of dom A st it = A*f;
+  existence
+  proof
+    take A;
+    take id dom A; thus thesis by RELAT_1:77;
+  end;
+end;
+
+theorem ThDom:
+  for B being permutation of A holds dom B = dom A & rng B = rng A
+  proof
+    let B be permutation of A;
+    consider f being Permutation of dom A such that
+A0: B = A*f by PERM;
+    dom A <> {} implies dom A <> {}; then
+    rng f = dom A & dom f = dom A by FUNCT_2:def 1,def 3;
+    hence thesis by A0,RELAT_1:46,47;
+  end;
+
+theorem ThRef:
+  A is permutation of A
+  proof
+    take id dom A; thus thesis by RELAT_1:77;
+  end;
+
+theorem ThSym:
+  A is permutation of B implies B is permutation of A
+  proof assume
+Z2: A is permutation of B; then
+Z0: dom A = dom B by ThDom;
+    consider f being Permutation of dom B such that
+Z1: A = B*f by Z2,PERM;
+    reconsider g = f" as Permutation of dom A by Z0;
+    take g;
+    thus B = B*id dom B by RELAT_1:78
+    .= B*(f*g) by FUNCT_2:88
+    .= A*g by Z1,RELAT_1:55;
+  end;
+
+theorem ThTr:
+  A is permutation of B & B is permutation of C implies A is permutation of C
+  proof assume
+ZZ: A is permutation of B & B is permutation of C; then
+Z0: dom C = dom B by ThDom;
+    consider f being Permutation of dom B such that
+Z1: A = B*f by ZZ,PERM;
+    consider g being Permutation of dom C such that
+Z3: B = C*g by ZZ,PERM;
+    reconsider h = g*f as Permutation of dom C by Z0;
+    take h;
+    thus A = C*h by Z1,Z3,RELAT_1:55;
+  end;
+
+theorem Th11:
+  Swap(id X,x,y) is one-to-one
+  proof
+A0: dom id X = X by RELAT_1:71;
+    per cases;
+    suppose
+Z0:   x in X & y in X;
+      set g = id X;
+      set f = Swap(g,x,y);
+      let z,t; assume
+Z1:   z in dom f & t in dom f & f.z = f.t;
+      dom f = X by A0,FUNCT_7:101; then
+A2:   g.z = z & g.t = t & g.x = x & g.y = y by Z0,Z1,FUNCT_1:34; then
+A3:   (z = x implies f.z = y) & (z = y implies f.z = x) &
+      (z <> x & z <> y implies f.z = z)
+      by Z0,A0,TSa,TSb,TSc;
+      (t = x implies f.t = y) & (t = y implies f.t = x) &
+      (t <> x & t <> y implies f.t = t)
+      by Z0,A0,A2,TSa,TSb,TSc;
+      hence z = t by Z1,A3;
+    end;
+    suppose
+      not (x in X & y in X);
+      hence thesis by A0,FUNCT_7:def 12;
+    end;
+  end;
+
+registration
+  let X be non empty set;
+  let x,y be Element of X;
+  cluster Swap(id X,x,y) -> one-to-one X-valued X-defined;
+  coherence by Th11;
+end;
+
+registration
+  let X be non empty set;
+  let x,y be Element of X;
+  cluster Swap(id X,x,y) -> onto total;
+  coherence
+  proof
+A1: dom id X = X by RELAT_1:71;
+    reconsider a=x, b=y as Element of dom id X by RELAT_1:71;
+    Swap(id X,a,b) is onto;
+    hence Swap(id X,x,y) is onto;
+    thus dom Swap(id X,x,y) = X by A1,FUNCT_7:101;
+  end;
+end;
+
+definition
+  let X,Y be non empty set;
+  let f be Function of X,Y;
+  let x,y be Element of X;
+  redefine func Swap(f,x,y) -> Function of X,Y;
+  coherence
+  proof
+    set g = Swap(f,x,y);
+A0: dom f = X by FUNCT_2:def 1;
+A1: dom g = dom f & rng g = rng f by FUNCT_7:101,105;
+    rng f c= Y by RELAT_1:def 19;
+    hence thesis by A0,A1,FUNCT_2:4;
+  end;
+end;
+
+theorem Th12:
+  x in X & y in X & f = Swap(id X,x,y) & X = dom A implies
+  Swap(A,x,y) = A*f
+  proof assume that
+Z0: x in X & y in X and
+Z1: f = Swap(id X,x,y) & X = dom A;
+    set g = id X;
+    set s = Swap(A,x,y);
+A0: dom g = X & rng g = X by RELAT_1:71; then
+A1: dom f = X & rng f = X by Z1,FUNCT_7:101,105;
+A2: dom s = dom A by FUNCT_7:101;
+A3: dom (A*f) = dom f by Z1,A1,RELAT_1:46;
+    now
+      let z; assume
+A4:   z in X;
+A6:   g.x = x & g.y = y & g.z = z by Z0,A4,FUNCT_1:34;
+      z = x or z = y or z <> x & z <> y; then
+      s.z = A.y & f.z = g.y or
+      s.z = A.x & f.z = g.x or
+      s.z = A.z & f.z = g.z by Z0,Z1,A0,TSa,TSb,TSc;
+      hence s.z = (A*f).z by A4,A6,A1,FUNCT_1:23;
+    end;
+    hence Swap(A,x,y) = A*f by Z1,A1,A2,A3,FUNCT_1:9;
+  end;
+
+theorem Th13:
+  x in dom A & y in dom A implies
+  Swap(A,x,y) is permutation of A & A is permutation of Swap(A,x,y)
+  proof set X = dom A;
+    assume
+Z0: x in X & y in X;
+    thus Swap(A,x,y) is permutation of A
+    proof
+      reconsider X as non empty set by Z0;
+      reconsider x,y as Element of X by Z0;
+      reconsider f = Swap(id X,x,y) as Permutation of dom A;
+      take f;
+      thus thesis by Th12;
+    end;
+    hence A is permutation of Swap(A,x,y) by ThSym;
+  end;
+
+theorem
+  x in dom A & y in dom A & A is permutation of B implies
+  Swap(A,x,y) is permutation of B & A is permutation of Swap(B,x,y)
+  proof set X = dom A;
+    assume
+Z0: x in X & y in X & A is permutation of B; then
+    X = dom B by ThDom; then
+    Swap(A,x,y) is permutation of A &
+    B is permutation of Swap(B,x,y) by Z0,Th13;
+    hence thesis by Z0,ThTr;
+  end;
+
+begin :: Exchanging
+
+definition
+  let O be RelStr;
+  let A be array of O;
+  attr A is ascending means
+  for a,b st a in dom A & b in dom A & a in b holds A/.a <= A/.b;
+  func inversions A equals
+  {[a,b] where a,b is Element of dom A: a in b & not A/.a <= A/.b};
+  coherence;
+end;
+
+registration
+  let O be RelStr;
+  cluster -> ascending (empty array of O);
+  coherence
+  proof
+    let R be empty array of O;
+    let a; thus thesis;
+  end;
+  let A be empty array of O;
+  cluster inversions A -> empty;
+  coherence
+  proof
+    set w =the  Element of inversions A;
+    assume inversions A is non empty; then
+    w in inversions A; then
+    consider a,b being Element of dom A such that
+A0: w = [a,b] & a in b & not A/.a <= A/.b;
+    thus thesis by A0,SUBSET_1:def 2;
+  end;
+end;
+
+reserve O for connected (non empty Poset);
+reserve R,Q for array of O;
+
+theorem LemO:
+  for O for x,y being Element of O holds x > y iff not x <= y
+     proof
+       let O; let x,y be Element of O;
+A1:    x <= y & y <= x implies x = y by YELLOW_0:def 3;
+       (x <= y or x >= y) & x <= x by WAYBEL_0:def 29;
+       hence x > y iff not x <= y by A1,ORDERS_2:def 10;
+     end;
+
+definition
+  let O,R;
+  redefine func inversions R equals
+  {[a,b] where a,b is Element of dom R: a in b & R/.a > R/.b};
+  compatibility
+  proof
+    set N = {[a,b] where a,b is Element of dom R: a in b & R/.a > R/.b};
+    inversions R = N
+    proof
+      thus inversions R c= N
+      proof
+        let x; assume x in inversions R; then
+        consider a,b being Element of dom R such that
+A1:     x = [a,b] & a in b & not R/.a <= R/.b;
+        R/.a > R/.b by A1,LemO;
+        hence thesis by A1;
+      end;
+      let x; assume x in N; then
+      consider a,b being Element of dom R such that
+A1:   x = [a,b] & a in b & R/.a > R/.b;
+      not R/.a <= R/.b by A1,LemO;
+      hence thesis by A1;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem TW0:
+  [x,y] in inversions R iff x in dom R & y in dom R & x in y & R/.x > R/.y
+  proof
+    hereby
+      assume
+A1:   [x,y] in inversions R; then
+      reconsider R1 = R as non empty Function;
+      consider a,b being Element of dom R1 such that
+A0:   [x,y] = [a,b] & a in b & not R/.a <= R/.b by A1;
+      x = a & y = b by A0,ZFMISC_1:33;
+      hence x in dom R & y in dom R & x in y & R/.x > R/.y by A0,LemO;
+    end;
+    thus thesis;
+  end;
+
+theorem TW1:
+  inversions R c= [:dom R, dom R:]
+  proof
+    let x; assume
+A1: x in inversions R; then
+    consider a,b being Element of dom R such that
+A0: x = [a,b] & a in b & R/.a > R/.b;
+    a in dom R & b in dom R by A0,A1,TW0;
+    hence thesis by A0,ZFMISC_1:def 2;
+  end;
+
+registration
+  let O;
+  let R be finite array of O;
+  cluster inversions R -> finite;
+  coherence
+  proof
+    inversions R c= [:dom R, dom R:] by TW1;
+    hence thesis;
+  end;
+end;
+
+theorem SORT:
+  R is ascending iff inversions R = {}
+  proof
+    thus R is ascending implies inversions R = {}
+    proof assume
+A0:   for a,b st a in dom R & b in dom R & a in b holds R/.a <= R/.b;
+      set x =the  Element of inversions R;
+      assume
+Z0:   inversions R <> {}; then x in inversions R; then
+      consider a,b being Element of dom R such that
+A1:   x = [a,b] & a in b & R/.a > R/.b;
+      R <> {} by Z0; then
+      R/.a <= R/.b by A0,A1;
+      hence thesis by A1,LemO;
+    end;
+    assume
+Z1: inversions R = {};
+    let a,b; assume
+    a in dom R & b in dom R & a in b; then
+    R/.a > R/.b implies [a,b] in inversions R;
+    hence thesis by Z1,LemO;
+  end;
+
+theorem TW2:
+  [x,y] in inversions R implies [y,x] nin inversions R
+  proof assume [x,y] in inversions R; then
+    y nin x by TW0;
+    hence [y,x] nin inversions R by TW0;
+  end;
+
+theorem TW3:
+  [x,y] in inversions R & [y,z] in inversions R implies [x,z] in inversions R
+  proof assume
+Z0: [x,y] in inversions R & [y,z] in inversions R; then
+    reconsider x,y,z as Element of dom R by TW0;
+    x in y & R/.x > R/.y & y in z & R/.y > R/.z by Z0,TW0; then
+    x in z & R/.x > R/.z by ORDERS_2:29,ORDINAL1:19;
+    hence thesis;
+  end;
+
+registration
+  let O,R;
+  cluster inversions R -> Relation-like;
+  coherence
+  proof
+    inversions R c= [:dom R, dom R:] by TW1;
+    hence thesis;
+  end;
+end;
+
+registration
+  let O,R;
+  cluster inversions R -> asymmetric transitive Relation;
+  coherence
+  proof
+    let r be Relation; assume
+Z0: r = inversions R;
+    thus r is asymmetric
+    proof
+      let x,y;
+      thus thesis by Z0,TW2;
+    end;
+    let x,y;
+    thus thesis by Z0,TW3;
+  end;
+end;
+
+definition
+  let O;
+  let a,b be Element of O;
+  redefine pred a < b;
+  asymmetry by ORDERS_2:29;
+end;
+
+theorem TC5:
+  [x,y] in inversions R implies [x,y] nin inversions Swap(R,x,y)
+  proof assume
+Z0: [x,y] in inversions R; then
+A0: x in dom R & y in dom R & R/.x > R/.y by TW0;
+A1: not R/.x < R/.y by Z0,TW0;
+    Swap(R,x,y)/.x = R/.y & Swap(R,x,y)/.y = R/.x by A0,TSa2,TSb2;
+    hence [x,y] nin inversions Swap(R,x,y) by A1,TW0;
+  end;
+
+theorem TC1:
+  x in dom R & y in dom R & z <> x & z <> y & t <> x & t <> y
+  implies
+  ([z,t] in inversions R iff [z,t] in inversions Swap(R,x,y))
+  proof set s = Swap(R,x,y);
+    assume
+    x in dom R & y in dom R & z <> x & z <> y & t <> x & t <> y; then
+A0: (z in dom R implies s/.z = R/.z) & (t in dom R implies s/.t = R/.t) &
+    dom s = dom R by FUNCT_7:101,TSc2;
+    hereby
+      assume [z,t] in inversions R; then
+      z in dom R & t in dom R & z in t & R/.z > R/.t by TW0;
+      hence [z,t] in inversions Swap(R,x,y) by A0;
+    end;
+    assume [z,t] in inversions Swap(R,x,y); then
+    z in dom R & t in dom R & z in t & s/.z > s/.t by A0,TW0;
+    hence thesis by A0;
+  end;
+
+theorem TC2:
+  [x,y] in inversions R implies
+  ([z,y] in inversions R & z in x iff [z,x] in inversions Swap(R,x,y))
+  proof set s = Swap(R,x,y);
+    assume [x,y] in inversions R; then
+A0: x in dom R & y in dom R & x in y & R/.x > R/.y by TW0; then
+A1: s/.x = R/.y & s/.y = R/.x & dom s = dom R by FUNCT_7:101,TSa2,TSb2;
+    hereby assume
+Z1:   [z,y] in inversions R & z in x; then
+A2:   z in dom R & z in y & R/.z > R/.y by TW0; then
+      x <> z & y <> z by Z1; then
+      s/.z = R/.z by A2,TSc2;
+      hence [z,x] in inversions Swap(R,x,y) by Z1,A0,A1,A2;
+    end;
+    assume [z,x] in inversions Swap(R,x,y); then
+A2: z in dom R & z in x & s/.z > s/.x by A1,TW0; then
+A3: z in y by A0,ORDINAL1:19;
+    s/.z = R/.z by A0,A2,TSc2;
+    hence thesis by A0,A1,A2,A3;
+  end;
+
+theorem TC3:
+  [x,y] in inversions R implies
+  ([z,x] in inversions R iff z in x & [z,y] in inversions Swap(R,x,y))
+  proof assume
+    [x,y] in inversions R; then
+A0: x in dom R & y in dom R & x in y & R/.x > R/.y by TW0;
+A1: dom Swap(R,x,y) = dom R by FUNCT_7:101;
+    hereby assume
+      [z,x] in inversions R; then
+A2:   z in dom R & z in x & R/.z > R/.x by TW0; then
+A3:   z in y by A0,ORDINAL1:19;
+      Swap(R,x,y)/.y = R/.x & Swap(R,x,y)/.z = R/.z
+      by A0,A2,TSb2,TSc2;
+      hence z in x & [z,y] in inversions Swap(R,x,y) by A0,A1,A2,A3;
+    end;
+    assume
+Z1: z in x & [z,y] in inversions Swap(R,x,y); then
+A2: z in dom R & z in y & Swap(R,x,y)/.z > Swap(R,x,y)/.y by A1,TW0; then
+    z <> x & z <> y by Z1; then
+    Swap(R,x,y)/.y = R/.x & Swap(R,x,y)/.z = R/.z by A0,A2,TSb2,TSc2;
+    hence [z,x] in inversions R by A0,A2,Z1;
+  end;
+
+theorem TC4:
+  [x,y] in inversions R & z in y & [x,z] in inversions Swap(R,x,y) implies
+  [x,z] in inversions R
+  proof assume
+    [x,y] in inversions R; then
+A0: x in dom R & y in dom R & x in y & R/.x > R/.y by TW0;
+A1: dom Swap(R,x,y) = dom R by FUNCT_7:101;
+    assume
+Z2: z in y;
+    assume
+    [x,z] in inversions Swap(R,x,y); then
+A2: z in dom R & x in z & Swap(R,x,y)/.x > Swap(R,x,y)/.z by A1,TW0; then
+    z <> x & z <> y by Z2; then
+    Swap(R,x,y)/.x = R/.y & Swap(R,x,y)/.z = R/.z by A0,A2,TSa2,TSc2; then
+    R/.x > R/.z by A0,A2,ORDERS_2:29;
+    hence [x,z] in inversions R by A0,A2;
+  end;
+
+theorem TC8:
+  [x,y] in inversions R & x in z & [z,y] in inversions Swap(R,x,y) implies
+  [z,y] in inversions R
+  proof assume
+    [x,y] in inversions R; then
+A0: x in dom R & y in dom R & x in y & R/.x > R/.y by TW0;
+A1: dom Swap(R,x,y) = dom R by FUNCT_7:101;
+    assume
+Z2: x in z;
+    assume
+    [z,y] in inversions Swap(R,x,y); then
+A2: z in dom R & z in y & Swap(R,x,y)/.z > Swap(R,x,y)/.y by A1,TW0; then
+    z <> x & z <> y by Z2; then
+    Swap(R,x,y)/.y = R/.x & Swap(R,x,y)/.z = R/.z by A0,A2,TSb2,TSc2; then
+    R/.z > R/.y by A0,A2,ORDERS_2:29;
+    hence [z,y] in inversions R by A0,A2;
+  end;
+
+theorem TC6:
+  [x,y] in inversions R & y in z & [x,z] in inversions Swap(R,x,y) implies
+  [y,z] in inversions R
+  proof assume
+    [x,y] in inversions R; then
+A0: x in dom R & y in dom R & x in y & R/.x > R/.y by TW0;
+A1: dom Swap(R,x,y) = dom R by FUNCT_7:101;
+    assume
+Z2: y in z;
+    assume
+    [x,z] in inversions Swap(R,x,y); then
+A2: z in dom R & x in z & Swap(R,x,y)/.x > Swap(R,x,y)/.z by A1,TW0; then
+    z <> x & z <> y by Z2; then
+    Swap(R,x,y)/.x = R/.y & Swap(R,x,y)/.z = R/.z by A0,A2,TSa2,TSc2;
+    hence [y,z] in inversions R by A0,A2,Z2;
+  end;
+
+theorem TC7:
+  [x,y] in inversions R implies
+  (y in z & [x,z] in inversions R iff [y,z] in inversions Swap(R,x,y))
+  proof assume
+    [x,y] in inversions R; then
+A0: x in dom R & y in dom R & x in y & R/.x > R/.y by TW0;
+A1: dom Swap(R,x,y) = dom R by FUNCT_7:101;
+    hereby assume
+Z1:   y in z & [x,z] in inversions R; then
+A2:   z in dom R & x in z & R/.z < R/.x by TW0; then
+      z <> x & z <> y by Z1; then
+      Swap(R,x,y)/.y = R/.x & Swap(R,x,y)/.z = R/.z by A0,A2,TSb2,TSc2;
+      hence [y,z] in inversions Swap(R,x,y) by A0,A1,A2,Z1;
+    end;
+    assume
+    [y,z] in inversions Swap(R,x,y); then
+A2: z in dom R & y in z & Swap(R,x,y)/.y > Swap(R,x,y)/.z by A1,TW0; then
+A3: x in z by A0,ORDINAL1:19;
+    Swap(R,x,y)/.y = R/.x & Swap(R,x,y)/.z = R/.z by A0,TSb2,TSc2,A2;
+    hence thesis by A0,A2,A3;
+  end;
+
+definition
+  let O,R,x,y;
+  func (R,x,y)incl -> Function equals
+  [:Swap(id dom R,x,y), Swap(id dom R,x,y):] +*
+  id([:{x},(succ y)\x:]\/[:(succ y)\x,{y}:]);
+  coherence;
+end;
+
+theorem TT:
+  c in (succ b)\a iff a c= c & c c= b
+  proof
+    a c= c iff c nin a by ORDINAL6:4; then
+    c in (succ b)\a iff c in succ b & a c= c by XBOOLE_0:def 5;
+    hence thesis by ORDINAL1:34;
+  end;
+
+reserve T for non empty array of O;
+reserve p,q,r,s for Element of dom T;
+
+theorem FF1:
+  (succ q)\p c= dom T
+  proof
+    let x; assume
+Z0: x in (succ q)\p;
+A1: p c= x & x c= q by Z0,TT;
+    consider a,b such that
+A2: dom T = a\b by SEG;
+    q in a & p nin b by A2,XBOOLE_0:def 5; then
+    x in a & x nin b by Z0,A1,ORDINAL1:22;
+    hence thesis by A2,XBOOLE_0:def 5;
+  end;
+
+theorem FF2:
+  dom (T,p,q)incl = [:dom T, dom T:] & rng (T,p,q)incl c= [:dom T, dom T:]
+  proof
+    set X = dom T;
+    set i = id X;
+    set s = Swap(i,p,q);
+    set f = [:s,s:];
+    set Y = (succ q)\p;
+    set Z1 = [:{p},Y:], Z2 = [:Y,{q}:];
+    set g = id(Z1\/Z2);
+    dom i = X by RELAT_1:71; then
+A0: dom s = X by FUNCT_7:101;
+A1: {p} c= X & {q} c= X & Y c= X by FF1,ZFMISC_1:37;
+A2: [:X, X:] \/ (Z1\/Z2) = [:X, X:] \/ Z1 \/Z2 by XBOOLE_1:4
+    .= [:X, X:] \/Z2 by A1,XBOOLE_1:12,ZFMISC_1:119
+    .= [:X,X:] by A1,XBOOLE_1:12,ZFMISC_1:119;
+    thus dom (T,p,q)incl = dom f \/ dom g by FUNCT_4:def 1
+    .= dom f \/ (Z1\/Z2) by RELAT_1:71
+    .= [:X, X:] by A0,A2,FUNCT_3:def 9;
+A3: rng g = Z1\/Z2 & rng i = X by RELAT_1:71;
+    rng s = X by A3,FUNCT_7:105; then
+    rng f = [:X,X:] by FUNCT_3:88;
+    hence rng (T,p,q)incl c= [:X,X:] by A2,A3,FUNCT_4:18;
+  end;
+
+theorem FF3:
+  p c= r & r c= q implies
+  (T,p,q)incl.(p,r) = [p, r] & (T,p,q)incl.(r,q) = [r,q]
+  proof assume
+Z0: p c= r & r c= q;
+    set Y = (succ q)\p;
+    set Z1 = [:{p},Y:], Z2 = [:Y,{q}:];
+    set g = id(Z1\/Z2);
+    p in {p} & q in {q} & r in Y by Z0,TT,TARSKI:def 1; then
+    [p,r] in Z1 & [r,q] in Z2 by ZFMISC_1:def 2; then
+A1: [p,r] in Z1\/Z2 & [r,q] in Z1\/Z2 by XBOOLE_0:def 3;
+A2: dom g = Z1\/Z2 by RELAT_1:71;
+    hence (T,p,q)incl.(p,r) = g.(p,r) by A1,FUNCT_4:14
+    .= [p, r] by A1,FUNCT_1:34;
+    thus (T,p,q)incl.(r,q) = g.(r,q) by A1,A2,FUNCT_4:14
+    .= [r, q] by A1,FUNCT_1:34;
+  end;
+
+theorem FF5:
+  r <> p & s <> q & f = Swap(id dom T,p,q)
+  implies (T,p,q)incl.(r,s) = [f.r,f.s]
+  proof assume that
+Z0: r <> p & s <> q and
+Z1: f = Swap(id dom T,p,q);
+    set Y = (succ q)\p;
+    set Z1 = [:{p},Y:], Z2 = [:Y,{q}:];
+    set g = id(Z1\/Z2);
+A0: dom f = dom id dom T by Z1,FUNCT_7:101 .= dom T by RELAT_1:71;
+    r nin {p} & s nin {q} by Z0,TARSKI:def 1; then
+    [r,s] nin Z1 & [r,s] nin Z2 by ZFMISC_1:106; then
+    [r,s] nin dom g by XBOOLE_0:def 3;
+    hence (T,p,q)incl.(r,s) = [:f,f:].(r,s) by Z1,FUNCT_4:12
+    .= [f.r,f.s] by A0,FUNCT_3:def 9;
+  end;
+
+theorem FF6:
+  r in p & f = Swap(id dom T,p,q) implies
+  (T,p,q)incl.(r,q) = [f.r,f.q] & (T,p,q)incl.(r,p) = [f.r,f.p]
+  proof assume that
+Z0: r in p and
+Z1: f = Swap(id dom T,p,q);
+    set X = dom T;
+    set i = id X;
+    set s = Swap(i,p,q);
+    set h = [:s,s:];
+    set Y = (succ q)\p;
+    set Z1 = [:{p},Y:], Z2 = [:Y,{q}:];
+    set g = id(Z1\/Z2);
+    dom i = X by RELAT_1:71; then
+A4: dom s = X by FUNCT_7:101;
+    not p c= r by Z0,ORDINAL6:4; then
+    r nin {p} & r nin Y by TT,TARSKI:def 1; then
+    [r,p] nin Z1 & [r,p] nin Z2 & [r,q] nin Z1 & [r,q] nin Z2
+    by ZFMISC_1:106; then
+A3: [r,q] nin dom g & [r,p] nin dom g by XBOOLE_0:def 3;
+    hence (T,p,q)incl.(r,q) = h.(r,q) by FUNCT_4:12
+    .= [f.r,f.q] by Z1,A4,FUNCT_3:def 9;
+    thus (T,p,q)incl.(r,p) = h.(r,p) by A3,FUNCT_4:12
+    .= [f.r,f.p] by Z1,A4,FUNCT_3:def 9;
+  end;
+
+theorem FF7:
+  q in r & f = Swap(id dom T,p,q) implies
+  (T,p,q)incl.(p,r) = [f.p,f.r] & (T,p,q)incl.(q,r) = [f.q,f.r]
+  proof assume that
+Z0: q in r and
+Z1: f = Swap(id dom T,p,q);
+    set X = dom T;
+    set i = id X;
+    set s = Swap(i,p,q);
+    set h = [:s,s:];
+    set Y = (succ q)\p;
+    set Z1 = [:{p},Y:], Z2 = [:Y,{q}:];
+    set g = id(Z1\/Z2);
+    dom i = X by RELAT_1:71; then
+A4: dom s = X by FUNCT_7:101;
+    not r c= q by Z0,ORDINAL6:4; then
+    r nin {q} & r nin Y by TT,TARSKI:def 1; then
+    [p,r] nin Z1 & [p,r] nin Z2 & [q,r] nin Z1 & [q,r] nin Z2
+    by ZFMISC_1:106; then
+A3: [p,r] nin dom g & [q,r] nin dom g by XBOOLE_0:def 3;
+    hence (T,p,q)incl.(p,r) = h.(p,r) by FUNCT_4:12
+    .= [f.p,f.r] by Z1,A4,FUNCT_3:def 9;
+    thus (T,p,q)incl.(q,r) = h.(q,r) by A3,FUNCT_4:12
+    .= [f.q,f.r] by Z1,A4,FUNCT_3:def 9;
+  end;
+
+theorem Case5:
+  p in q implies (T,p,q)incl.(p,q) = [p,q]
+  proof assume
+    p in q; then
+    p c= q by ORDINAL1:def 2;
+    hence thesis by FF3;
+  end;
+
+theorem Case1:
+  p in q & r <> p & r <> q & s <> p & s <> q implies (T,p,q)incl.(r,s) = [r,s]
+  proof assume
+Z0: p in q & r <> p & r <> q & s <> p & s <> q;
+    set X = dom T;
+    set i = id X;
+    set f = Swap(i,p,q);
+    set h = [:f,f:];
+    set Y = (succ q)\p;
+    thus (T,p,q)incl.(r,s) = [f.r,f.s] by Z0,FF5
+    .= [i.r,f.s] by Z0,TSc .= [i.r,i.s] by Z0,TSc
+    .= [r,i.s] by FUNCT_1:34
+    .= [r,s] by FUNCT_1:34;
+  end;
+
+theorem Case23:
+  r in p & p in q implies (T,p,q)incl.(r,p) = [r,q] & (T,p,q)incl.(r,q) = [r,p]
+  proof assume
+Z0: r in p & p in q;
+    set X = dom T;
+    set i = id X;
+    set f = Swap(i,p,q);
+    set h = [:f,f:];
+    set Y = (succ q)\p;
+A0: dom i = X by RELAT_1:71;
+A2: r <> p & r <> q by Z0;
+    thus (T,p,q)incl.(r,p) = [f.r,f.p] by Z0,FF6
+    .= [i.r,f.p] by A2,TSc
+    .= [r,f.p] by FUNCT_1:34
+    .= [r,i.q] by A0,TSa
+    .= [r,q] by FUNCT_1:34;
+    thus (T,p,q)incl.(r,q) = [f.r,f.q] by Z0,FF6
+    .= [i.r,f.q] by A2,TSc
+    .= [r,f.q] by FUNCT_1:34
+    .= [r,i.p] by A0,TSb
+    .= [r,p] by FUNCT_1:34;
+  end;
+
+theorem Case47:
+  p in s & s in q implies (T,p,q)incl.(p,s) = [p,s] & (T,p,q)incl.(s,q) = [s,q]
+  proof assume
+    p in s & s in q; then
+    p c= s & s c= q by ORDINAL1:def 2;
+    hence thesis by FF3;
+  end;
+
+theorem Case68:
+  p in q & q in s implies (T,p,q)incl.(p,s) = [q,s] & (T,p,q)incl.(q,s) = [p,s]
+  proof assume
+Z0: p in q & q in s;
+    set X = dom T;
+    set i = id X;
+    set f = Swap(i,p,q);
+    set h = [:f,f:];
+    set Y = (succ q)\p;
+A0: dom i = X by RELAT_1:71;
+A2: s <> p & s <> q by Z0;
+    thus (T,p,q)incl.(p,s) = [f.p,f.s] by Z0,FF7
+    .= [f.p,i.s] by A2,TSc
+    .= [f.p,s] by FUNCT_1:34
+    .= [i.q,s] by A0,TSa
+    .= [q,s] by FUNCT_1:34;
+    thus (T,p,q)incl.(q,s) = [f.q,f.s] by Z0,FF7
+    .= [f.q,i.s] by A2,TSc
+    .= [f.q,s] by FUNCT_1:34
+    .= [i.p,s] by A0,TSb
+    .= [p,s] by FUNCT_1:34;
+  end;
+
+O2O: p in q & f = (T,p,q)incl implies
+  for x1,x2,y1,y2 being Element of dom T st x1 in y1 & x2 in y2
+  holds f.(x1,y1) = f.(x2,y2) implies x1 = x2 & y1 = y2
+  proof assume
+Z0: p in q & f = (T,p,q)incl; then
+Z1: p <> q;
+    let x1,x2,y1,y2 be Element of dom T such that
+Z2: x1 in y1 & x2 in y2 and
+Z4: f.(x1,y1) = f.(x2,y2);
+    set X = dom T;
+    set i = id X;
+    set s = Swap(i,p,q);
+    set h = [:s,s:];
+    set Y = (succ q)\p;
+    set Z1 = [:{p},Y:], Z2 = [:Y,{q}:];
+    set g = id(Z1\/Z2);
+    per cases by Z0,Z2,Eight;
+    suppose
+C1:   x1 <> p & x1 <> q & y1 <> p & y1 <> q; then
+D1:   f.(x1,y1) = [x1,y1] by Z0,Case1;
+      per cases by Z0,Z2,Eight;
+      suppose Case1[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case1;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case2[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,q] by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case3[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,p] by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case4[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case5[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case5;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case6[p,q,x2,y2]; then
+        f.(x2,y2) = [q,y2] by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case7[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case8[p,q,x2,y2]; then
+        f.(x2,y2) = [p,y2] by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by C1,Z4,D1,ZFMISC_1:33;
+      end;
+    end;
+    suppose
+C1:   x1 = p & y1 in q; then
+D1:   f.(x1,y1) = [x1,y1] by Z0,Z2,Case47;
+      per cases by Z0,Z2,Eight;
+      suppose Case1[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case1;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case2[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,q] & x2 <> p by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case3[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,p] & x2 <> p  by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case4[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case5[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case5;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case6[p,q,x2,y2]; then
+        f.(x2,y2) = [q,y2] by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by Z1,C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case7[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case8[p,q,x2,y2]; then
+        f.(x2,y2) = [p,y2] by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by C1,C2,Z4,D1,ZFMISC_1:33;
+      end;
+    end;
+    suppose
+C1:   x1 = p & y1 = q; then
+D1:   f.(x1,y1) = [x1,y1] by Z0,Case5;
+      per cases by Z0,Z2,Eight;
+      suppose Case1[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case1;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case2[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,q] & x2 <> p by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case3[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,p] by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by Z1,C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case4[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case5[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case5;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case6[p,q,x2,y2]; then
+        f.(x2,y2) = [q,y2] by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by Z1,C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case7[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+        Case8[p,q,x2,y2]; then
+        f.(x2,y2) = [p,y2] & y2 <> q by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by C1,Z4,D1,ZFMISC_1:33;
+      end;
+    end;
+    suppose
+C1:   p in x1 & y1 = q; then
+D1:   f.(x1,y1) = [x1,y1] by Z0,Z2,Case47;
+      per cases by Z0,Z2,Eight;
+      suppose Case1[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case1;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case2[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,q] by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by C2,C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case3[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,p] by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by C2,C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case4[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case5[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case5;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case6[p,q,x2,y2]; then
+        f.(x2,y2) = [q,y2] & y2 <> q by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case7[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case8[p,q,x2,y2]; then
+        f.(x2,y2) = [p,y2] & y2 <> q by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by C1,Z4,D1,ZFMISC_1:33;
+      end;
+    end;
+    suppose
+C1:   x1 in p & y1 = p; then
+D1:   f.(x1,y1) = [x1,q] by Z0,Case23;
+      per cases by Z0,Z2,Eight;
+      suppose
+C2:     Case1[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case1;
+        hence x1 = x2 & y1 = y2 by C2,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case2[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,q] by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by C2,C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case3[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,p] by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by Z1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case4[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] & x2 <> x1 by C1,Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case5[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] & x2 <> x1 by C1,Z0,Case5;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case6[p,q,x2,y2]; then
+        f.(x2,y2) = [q,y2] & y2 <> q by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case7[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by C1,C2,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case8[p,q,x2,y2]; then
+        f.(x2,y2) = [p,y2] & x1 <> p by C1,Z0,Case68;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+    end;
+    suppose
+C1:   x1 in p & y1 = q; then
+D1:   f.(x1,y1) = [x1,p] by Z0,Case23;
+      per cases by Z0,Z2,Eight;
+      suppose
+C2:     Case1[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case1;
+        hence x1 = x2 & y1 = y2 by C2,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case2[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,q] by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by Z1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case3[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,p] by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by C2,C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case4[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] & x1 <> p by C1,Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by C2,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case5[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case5;
+        hence x1 = x2 & y1 = y2 by C2,Z1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+        Case6[p,q,x2,y2]; then
+        f.(x2,y2) = [q,y2] by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by Z0,C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case7[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z1,C2,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case8[p,q,x2,y2]; then
+        f.(x2,y2) = [p,y2] & x1 <> p by C1,Z0,Case68;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+    end;
+    suppose
+C1:   x1 = p & q in y1; then
+D1:   f.(x1,y1) = [q,y1] by Z0,Case68;
+      per cases by Z0,Z2,Eight;
+      suppose
+C2:     Case1[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case1;
+        hence x1 = x2 & y1 = y2 by C2,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case2[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,q] by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by Z0,C2,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+        Case3[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,p] by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by Z0,C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case4[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] & x2 <> q by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case5[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case5;
+        hence x1 = x2 & y1 = y2 by Z1,C2,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case6[p,q,x2,y2]; then
+        f.(x2,y2) = [q,y2] by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by C2,C1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case7[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] & x2 <> q by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case8[p,q,x2,y2]; then
+        f.(x2,y2) = [p,y2] by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by Z1,Z4,D1,ZFMISC_1:33;
+      end;
+    end;
+    suppose
+C1:   x1 = q & q in y1; then
+D1:   f.(x1,y1) = [p,y1] by Z0,Case68;
+      per cases by Z0,Z2,Eight;
+      suppose
+C2:     Case1[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Case1;
+        hence x1 = x2 & y1 = y2 by C2,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case2[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,q] & p <> x2 by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case3[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,p] & p <> x2 by Z0,Case23;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case4[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] by Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by C1,C2,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case5[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] & y1 <> y2 by C1,Z0,Case5;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case6[p,q,x2,y2]; then
+        f.(x2,y2) = [q,y2] by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by Z1,Z4,D1,ZFMISC_1:33;
+      end;
+      suppose Case7[p,q,x2,y2]; then
+        f.(x2,y2) = [x2,y2] & y2 <> y1 by C1,Z0,Z2,Case47;
+        hence x1 = x2 & y1 = y2 by Z4,D1,ZFMISC_1:33;
+      end;
+      suppose
+C2:     Case8[p,q,x2,y2]; then
+        f.(x2,y2) = [p,y2] by Z0,Case68;
+        hence x1 = x2 & y1 = y2 by C2,C1,Z4,D1,ZFMISC_1:33;
+      end;
+    end;
+  end;
+
+theorem one2one:
+  p in q implies (T,p,q)incl|(inversions Swap(T,p,q) qua set) is one-to-one
+  proof assume
+Z0: p in q;
+    set f = (T,p,q)incl;
+    set s = Swap(T,p,q);
+    set w = inversions s;
+    set fw = f|(w qua set);
+A0: dom s = dom T by FUNCT_7:101;
+    let x,y; assume x in dom fw & y in dom fw; then
+A1: x in w & y in w by RELAT_1:86; then
+    consider x1,y1 being Element of dom T such that
+01: x = [x1,y1] & x1 in y1 & s/.x1 > s/.y1 by A0;
+    consider x2,y2 being Element of dom T such that
+02: y = [x2,y2] & x2 in y2 & s/.x2 > s/.y2 by A0,A1;
+    assume fw.x = fw.y; then
+    f.(x1,y1) = fw.y by 01,A1,FUNCT_1:72 .= f.(x2,y2) by 02,A1,FUNCT_1:72; then
+    x1 = x2 & y1 = y2 by Z0,01,02,O2O;
+    hence thesis by 01,02;
+  end;
+
+registration
+  let O,R,x,y,z;
+  cluster (R,x,y)incl.:z -> Relation-like;
+  coherence
+  proof
+    set X = dom R;
+    set i = id X;
+    set s = Swap(i,x,y);
+    set h = [:s,s:];
+    set Y = (succ y)\x;
+    set Z1 = [:{x},Y:], Z2 = [:Y,{y}:];
+    set g = id(Z1\/Z2);
+A0: (R,x,y)incl.:z c= rng (R,x,y)incl by RELAT_1:144;
+A1: rng h = [:rng s, rng s:] by FUNCT_3:88;
+A2: rng g = Z1\/Z2 by RELAT_1:71;
+    rng (R,x,y)incl c= rng h \/ rng g by FUNCT_4:18;
+    hence thesis by A0,A1,A2;
+  end;
+end;
+
+begin :: Correctness of sorting by exchanging
+
+theorem MAIN1:
+  [x,y] in inversions R implies
+  (R,x,y)incl.:inversions Swap(R,x,y) c< inversions R
+  proof assume
+Z0: [x,y] in inversions R; then
+A1: x in dom R & y in dom R & x in y & R/.x > R/.y by TW0;
+    reconsider T=R as non empty array of O by Z0;
+    reconsider p=x, q=y as Element of dom T by Z0,TW0;
+    set j = (R,x,y)incl, k = (T,p,q)incl;
+    set s = Swap(R,x,y), t = Swap(T,p,q);
+    set ws = inversions s, w = inversions R;
+A2: dom t = dom T by FUNCT_7:101;
+    thus j.:ws c= w
+    proof
+      let z,t; assume
+      [z,t] in j.:ws; then
+      consider a,b being set such that
+A0:   [a,b] in ws & [a,b] in dom j & [z,t] = j.(a,b) by Lem3;
+A3:   a in b & a in dom T & b in dom T by A0,A2,TW0;
+      reconsider a,b as Element of dom T by A0,A2,TW0;
+      per cases by A1,A3,Eight;
+      suppose
+C1:     a <> p & a <> q & b <> p & b <> q; then
+        [z,t] = [a,b] by A0,A1,Case1;
+        hence thesis by A0,C1,TC1;
+      end;
+      suppose
+C2:     a in p & b = p; then
+        [z,t] = [a,q] by A0,A1,Case23;
+        hence thesis by Z0,A0,C2,TC2;
+      end;
+      suppose
+C3:     a in p & b = q; then
+        [z,t] = [a,p] by A0,A1,Case23;
+        hence thesis by Z0,A0,C3,TC3;
+      end;
+      suppose
+C4:     a = p & b in q; then
+        [z,t] = [a,b] by A3,A0,Case47;
+        hence thesis by Z0,A0,C4,TC4;
+      end;
+      suppose
+        a = p & b = q;
+        hence thesis by Z0,A0,A1,Case5;
+      end;
+      suppose
+C6:     a = p & q in b; then
+        [z,t] = [q,b] by A0,A1,Case68;
+        hence thesis by Z0,A0,C6,TC6;
+      end;
+      suppose
+C7:     a = q & q in b; then
+        [z,t] = [p,b] by A0,A1,Case68;
+        hence thesis by Z0,A0,C7,TC7;
+      end;
+      suppose
+C8:     p in a & q = b; then
+        [z,t] = [a,b] by A0,A3,Case47;
+        hence thesis by Z0,A0,C8,TC8;
+      end;
+    end;
+    now assume
+      [x,y] in j.:ws;  then
+      consider a,b being set such that
+A0:   [a,b] in ws & [a,b] in dom j & [x,y] = j.(a,b) by Lem3;
+A5:   j.(p,q) = [p,q] by A1,Case5;
+A6:   a in b & a in dom T & b in dom T by A0,A2,TW0;
+      reconsider a,b as Element of dom T by A0,A2,TW0;
+      a = p & b = q by A1,A0,A5,A6,O2O;
+      hence [x,y] in ws by A0;
+    end;
+    hence thesis by Z0,TC5;
+  end;
+
+registration
+  let R be finite Function;
+  let x,y;
+  cluster Swap(R,x,y) -> finite;
+  coherence
+  proof
+    dom Swap(R,x,y) = dom R by FUNCT_7:101;
+    hence thesis by FINSET_1:29;
+  end;
+end;
+
+theorem MAIN3:
+  for R being array of O
+  st [x,y] in inversions R & inversions R is finite
+  holds card inversions Swap(R,x,y) in card inversions R
+  proof
+    let R be array of O;
+    set s = Swap(R,x,y);
+    set h = (R,x,y)incl, ws = inversions s;
+    assume
+Z0: [x,y] in inversions R & inversions R is finite; then
+    reconsider w = inversions R as finite set;
+    h.:ws c< inversions R by Z0,MAIN1; then
+    h.:ws c= w by XBOOLE_0:def 8; then
+    reconsider hws = h.:ws as finite set;
+    card (hws) < card w by Z0,MAIN1,TREES_1:24; then
+A3: card (hws) in card w by NAT_1:45;
+A1: x in dom R & y in dom R & x in y by Z0,TW0;
+A2: R is non empty by Z0;
+    ws,h.:ws are_equipotent
+    proof
+      take hw = h|(ws qua set);
+      thus hw is one-to-one by A1,A2,one2one;
+      dom s = dom R by FUNCT_7:101; then
+      ws c= [:dom R, dom R:] by TW1; then
+      ws c= dom h by A1,A2,FF2;
+      hence dom hw = ws by RELAT_1:91;
+      thus thesis by RELAT_1:148;
+    end;
+    hence card inversions Swap(R,x,y) in card inversions R by A3,CARD_1:21;
+  end;
+
+theorem
+  for R being finite array of O st [x,y] in inversions R
+  holds card inversions Swap(R,x,y) < card inversions R
+  proof
+    let R be finite array of O;
+    assume [x,y] in inversions R; then
+    card inversions Swap(R,x,y) in card inversions R by MAIN3;
+    hence thesis by NAT_1:45;
+  end;
+
+definition
+  let O,R;
+  mode arr_computation of R -> non empty array means:
+COMP:
+  it.(base-it) = R & (for a st a in dom it holds it.a is array of O) &
+  for a st a in dom it & succ a in dom it
+  ex R,x,y st [x,y] in inversions R & it.a = R & it.succ a = Swap(R,x,y);
+  existence
+  proof
+    reconsider C = <%R%> as 0-based non empty array;
+    take C;
+A0: dom C = 1 & 0 in 1 by NAT_1:45,AFINSQ_1:def 5; then
+    base-C = 0 by BA;
+    hence C.(base-C) = R by AFINSQ_1:def 5;
+    hereby let a; assume
+      a in dom C; then
+      a = 0 by A0,ORDINAL3:18,TARSKI:def 1;
+      hence C.a is array of O by AFINSQ_1:def 5;
+    end;
+    let a; assume
+    a in dom C & succ a in dom C;
+    hence thesis by A0,ORDINAL3:18,TARSKI:def 1;
+  end;
+end;
+
+theorem TC0:
+  {[a,R]} is arr_computation of R
+  proof
+    reconsider C = {[a,R]} as a-based non empty array;
+    C is arr_computation of R
+    proof
+A0:   dom C = {a} & a in {a} by FUNCT_5:15,TARSKI:def 1; then
+      base-C = a by BA;
+      hence C.(base-C) = R by GRFUNC_1:16;
+      hereby let b; assume
+        b in dom C; then
+        a = b by A0,TARSKI:def 1;
+        hence C.b is array of O by GRFUNC_1:16;
+      end;
+      let b; assume
+      b in dom C & succ b in dom C; then
+      a = b & a = succ b by A0,TARSKI:def 1; then
+      a in a by ORDINAL1:10;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+
+registration
+  let O,R,a;
+  cluster a-based finite arr_computation of R;
+  existence
+  proof
+    reconsider C = {[a,R]} as a-based non empty finite array;
+    C is arr_computation of R by TC0;
+    hence thesis;
+  end;
+end;
+
+registration
+  let O,R;
+  let C be arr_computation of R;
+  let x;
+  cluster C.x -> segmental Function-like Relation-like;
+  coherence
+  proof
+    per cases;
+    suppose x nin dom C;
+      hence thesis by FUNCT_1:def 4;
+    end;
+    suppose x in dom C;
+      hence thesis by COMP;
+    end;
+  end;
+end;
+
+registration
+  let O,R;
+  let C be arr_computation of R;
+  let x;
+  cluster C.x -> the carrier of O-valued;
+  coherence
+  proof
+    per cases;
+    suppose x nin dom C;
+      then C.x = {} by FUNCT_1:def 4;
+      then rng (C.x) = {};
+      hence rng (C.x) c= the carrier of O by XBOOLE_1:2;
+    end;
+    suppose x in dom C;
+      hence thesis by COMP;
+    end;
+  end;
+end;
+
+registration
+  let O,R;
+  let C be arr_computation of R;
+  cluster last C -> segmental Relation-like Function-like;
+  coherence;
+end;
+
+registration
+  let O,R;
+  let C be arr_computation of R;
+  cluster last C -> the carrier of O-valued;
+  coherence;
+end;
+
+definition
+  let O,R;
+  let C be arr_computation of R;
+  attr C is complete means: COMPL: last C is ascending;
+end;
+
+theorem MAIN4:
+  for C being 0-based arr_computation of R st R is finite array of O
+  holds C is finite
+  proof
+    let C be 0-based arr_computation of R;
+    assume R is finite array of O; then
+    reconsider R as finite array of O;
+A0: C.(base-C) = R by COMP;
+    deffunc F(array of O) = card inversions $1;
+    base-C = 0 by TT0; then
+A1: F(C.0) is finite by A0;
+A2: for a st succ a in dom C & F(C.a) is finite holds F(C.succ a) c< F(C.a)
+    proof let a; assume
+Z1:   succ a in dom C & F(C.a) is finite;
+      a in succ a by ORDINAL1:10; then
+      a in dom C by Z1,ORDINAL1:19; then
+      consider R,x,y such that
+A3:   [x,y] in inversions R & C.a = R & C.succ a = Swap(R,x,y) by Z1,COMP;
+      inversions R is finite by Z1,A3; then
+      F(C.succ a) in F(C.a) by A3,MAIN3; then
+      F(C.succ a) c= F(C.a) & F(C.succ a) <> F(C.a) by ORDINAL1:def 2;
+      hence F(C.succ a) c< F(C.a) by XBOOLE_0:def 8;
+    end;
+    thus C is finite from A(A1,A2);
+  end;
+
+theorem
+  for C being 0-based arr_computation of R st R is finite array of O &
+  for a st inversions (C.a) <> {} holds succ a in dom C
+  holds C is complete
+  proof
+    let C be 0-based arr_computation of R;
+    assume R is finite array of O; then
+    C is finite by MAIN4; then
+    reconsider d = dom C as non empty finite Ordinal;
+    assume
+Z1: for a st inversions (C.a) <> {} holds succ a in dom C;
+    set u = union d;
+    consider n being Nat such that
+A3: d = n+1 by NAT_1:6;
+A4: d = succ n by A3,NAT_1:39; then
+A5: u = n by ORDINAL2:2;
+    inversions (C.u) <> 0 implies d in d by Z1,A4,A5;
+    hence last C is ascending by SORT;
+  end;
+
+theorem Th83:
+  for C being finite arr_computation of R
+  holds last C is permutation of R &
+  for a st a in dom C holds C.a is permutation of R
+  proof
+    let C be finite arr_computation of R;
+    consider a,b such that
+A0: dom C = a\b by SEG;
+    consider n such that
+A1: a = b+^n by A0,Th009;
+    defpred P[Nat] means
+    b+^$1 in dom C implies C.(b+^$1) is permutation of R;
+B1: b+^(0 qua Ordinal) = b by ORDINAL2:44; then
+    n <> 0 by A0,A1,XBOOLE_1:37; then
+    consider m being Nat such that
+B2: n = m+1 by NAT_1:6;
+B5: a = b+^succ m by A1,B2,NAT_1:39 .= succ(b+^m) by ORDINAL2:45; then
+B4: b+^m = union a by ORDINAL2:2 .= union (a\b) by A0,Th008;
+    C.(base-C) = R by COMP; then
+    C.b = R by A0,Th011; then
+A2: P[ 0] by B1,ThRef;
+A3: P[k] implies P[k+1]
+    proof assume
+C1:   P[k] & b+^(k+1) in dom C;
+      k+1 = succ k by NAT_1:39; then
+C2:   b+^(k+1) = succ(b+^k) by ORDINAL2:45; then
+      b+^k in b+^(k+1) & b+^(k+1) in a by A0,C1,ORDINAL1:10; then
+C3:   b c= b+^k & b+^k in a by ORDINAL1:19,ORDINAL3:27; then
+      b+^k in dom C by A0,ORDINAL6:5; then
+      consider Q,x,y such that
+C4:   [x,y] in inversions Q & C.(b+^k) = Q & C.(b+^(k+1)) = Swap(Q,x,y)
+      by C1,C2,COMP;
+      x in dom Q & y in dom Q by C4,TW0; then
+      Swap(Q,x,y) is permutation of Q by Th13;
+      hence thesis by C1,A0,ORDINAL6:5,C3,C4,ThTr;
+    end;
+A4: P[k] from NAT_1:sch 2(A2,A3);
+    b c= b+^m & b+^m in a by B5,ORDINAL1:10,ORDINAL3:27; then
+    P[m] & b+^m in dom C by A0,A4,ORDINAL6:5;
+    hence last C is permutation of R by A0,B4;
+    let c; assume
+A7: c in dom C; then
+A5: b c= c & c in a by A0,ORDINAL6:5; then
+    c = b+^(c-^b) by ORDINAL3:def 6; then
+    c-^b in n by A1,A7,A0,ORDINAL3:25; then
+    reconsider k = c-^b as Nat;
+    P[k] by A4;
+    hence thesis by A7,A5,ORDINAL3:def 6;
+  end;
+
+begin :: Existence of Complete Computations
+
+theorem Lem3:
+  for A being 0-based finite array of X st A <> {} holds last A in X
+  proof
+    let A be 0-based finite array of X;
+    assume A <> {}; then
+    consider n such that
+A1: dom A = n+1 by NAT_1:6;
+    n+1 = succ n by NAT_1:39; then
+    n in dom A & union dom A = n by A1,ORDINAL1:10,ORDINAL2:2;
+    hence last A in X by FUNCT_1:172;
+  end;
+
+theorem Lem4:
+  last <%x%> = x
+  proof
+    dom <%x%> = succ 0 by AFINSQ_1:def 5; then
+    union dom <%x%> = 0 by ORDINAL2:2;
+    hence thesis by AFINSQ_1:def 5;
+  end;
+
+theorem Lem5:
+  for A being 0-based finite array holds last (A^<%x%>) = x
+  proof
+    let A be 0-based finite array;
+    dom <%x%> = 1 by AFINSQ_1:def 5; then
+    dom(A^<%x%>) = (dom A)+^1 by ORDINAL4:def 1
+    .= succ dom A by ORDINAL2:48; then
+    union dom (A^<%x%>) = len A by ORDINAL2:2;
+    hence thesis by AFINSQ_1:40;
+  end;
+
+registration
+  let X be set;
+  cluster -> X-valued Element of X^omega;
+  coherence by AFINSQ_1:46;
+end;
+
+scheme A{F(set)->set, X()->non empty set, P[set,set], s()->set}:
+  ex f being finite 0-based non empty array, k being Element of X() st
+  k = last f & F(k) = {} & f.0 = s() &
+  for a st succ a in dom f
+  ex x,y being Element of X() st x = f.a & y = f.succ a & P[x,y]
+ provided
+A0: s() in X() and
+A1: F(s()) is finite and
+A2: for x being Element of X() st F(x) <> {}
+    ex y being Element of X() st P[x,y] & F(y) c< F(x)
+  proof
+    set D = X()^omega;
+    reconsider s0 = s() as Element of X() by A0;
+    reconsider f0 = <%s0%> as Element of D by AFINSQ_1:46;
+
+    defpred P[set,Element of D,Element of D] means
+    ($2 = {} or F(last $2) = {} implies $2 = $3) &
+    ($2 <> {} & F(last $2) <> {} implies
+      ex y being Element of X() st
+      P[last $2,y] & F(y) c< F(last $2) & $2^<%y%> = $3);
+A3: for a being Element of NAT
+    for x being Element of D
+    ex y being Element of D st P[a,x,y]
+    proof
+      let a be Element of NAT;
+      let x be Element of D;
+      per cases;
+      suppose
+C1:     x = {} or F(last x) = {};
+        take y = x;
+        thus P[a,x,y] by C1;
+      end;
+      suppose
+C2:     x <> {} & F(last x) <> {}; then
+        last x in X() by Lem3; then
+        consider y being Element of X() such that
+C3:     P[last x,y] & F(y) c< F(last x) by A2,C2;
+        reconsider z = x^<%y%> as Element of D by AFINSQ_1:46;
+        take z;
+        thus P[a,x,z] by C2,C3;
+      end;
+    end;
+    consider F being Function of NAT,D such that
+B1: F.0 = f0 & for a being Element of NAT holds
+    P[a,F.a qua Element of D,F.(a+1) qua Element of D]
+    from RECDEF_1:sch 2(A3);
+    defpred S[Nat] means F.$1 <> {};
+B8: S[0] by B1;
+B9: S[m] implies S[m+1]
+    proof assume
+      S[m]; then
+      reconsider f = F.m as non empty T-Sequence;
+      m in NAT by ORDINAL1:def 13; then
+      P[m,F.m qua Element of D,F.(m+1) qua Element of D] by B1; then
+      F.(m+1) = f or ex x st F.(m+1) = f^<%x%>;
+      hence thesis;
+    end;
+N0: S[m] from NAT_1:sch 2(B8,B9);
+
+    defpred X[Function] means $1.0 = s() &
+    for a st succ a in dom $1
+    ex x,y being Element of X() st x = $1.a & y = $1.succ a & P[x,y];
+
+    defpred T[Nat] means X[F.$1];
+D1: T[0]
+    proof
+      thus F.0.0 = s() by B1,AFINSQ_1:def 5;
+      let a; assume succ a in dom(F.0); then
+      succ a in 1 by B1,AFINSQ_1:def 5;
+      hence thesis by TARSKI:def 1,CARD_1:87;
+    end;
+D2: T[m] implies T[m+1]
+    proof assume
+F1:   T[m];
+F0:   m in NAT by ORDINAL1:def 13; then
+F2:   P[m,F.m qua Element of D,F.(m+1) qua Element of D] by B1;
+      per cases;
+      suppose F.m = {} or F(last(F.m qua Element of D)) = {};
+        hence thesis by F1,F2;
+      end;
+      suppose
+F3:     F.m <> {} & F(last(F.m qua Element of D)) <> {};
+        reconsider fm = F.m as non empty finite T-Sequence of X() by F3;
+        reconsider fm1 = F.(m+1) as finite T-Sequence of X();
+        consider y being Element of X() such that
+F4:     P[last fm,y] & F(y) c< F(last fm) & fm^<%y%> = F.(m+1) by B1,F0,F3;
+        0 in dom fm by ORDINAL3:10;
+        hence F.(m+1).0 = s() by F1,F4,ORDINAL4:def 1;
+        let a; assume
+F5:     succ a in dom(F.(m+1));
+F7:     a in succ a by ORDINAL1:10; then
+F6:     a in dom fm1 by F5,ORDINAL1:19;
+        reconsider n = a as Nat by F5,F7;
+        reconsider x = fm1.a, z = fm1.succ a as Element of X()
+        by F5,F6,FUNCT_1:172;
+F8:     dom <%y%> = 1 by AFINSQ_1:def 5; then
+        dom fm1 = (dom fm)+^1 by F4,ORDINAL4:def 1
+        .= succ dom fm by ORDINAL2:48; then
+F9:     a in dom fm by F5,ORDINAL3:5;
+        take x,z;
+        thus x = (F.(m+1)).a & z = (F.(m+1)).succ a;
+        per cases by ORDINAL6:4;
+        suppose
+G1:       succ a in dom fm; then
+          a in dom fm by F7,ORDINAL1:19; then
+G2:       x = fm.a & z = fm.succ a by F4,G1,ORDINAL4:def 1;
+          ex x,y being Element of X() st x = fm.a & y = fm.succ a & P[x,y]
+          by F1,G1;
+          hence P[x,z] by G2;
+        end;
+        suppose
+G3:       dom fm c= succ a;
+          succ a c= dom fm by F9,ORDINAL1:33; then
+G4:       dom fm = succ a by G3,XBOOLE_0:def 10; then
+          union dom fm = a by ORDINAL2:2; then
+G5:       last fm = fm1.a by F4,F9,ORDINAL4:def 1;
+          0 in 1 & (succ a)+^(0 qua Ordinal) = succ a
+          by ORDINAL2:44,NAT_1:45; then
+          z = <%y%>.0 by F8,F4,G4,ORDINAL4:def 1;
+          hence P[x,z] by F4,G5,AFINSQ_1:def 5;
+        end;
+      end;
+    end;
+D3: T[m] from NAT_1:sch 2(D1,D2);
+    defpred Q[Nat] means ex n st card F(last(F.n qua Element of D)) = $1;
+B3: ex n st Q[n]
+    proof
+      last f0 = s0 by Lem4; then
+      reconsider n = card F(last(F.0 qua Element of D)) as Nat by A1,B1;
+      take n;
+      thus thesis;
+    end;
+B4: for n st n <> 0 & Q[n] ex m st m < n & Q[m]
+    proof
+      let n; assume
+Z0:   n <> 0;
+      given k being Nat such that
+Z1:   card F(last(F.k qua Element of D)) = n;
+      reconsider fk = F.k, fk1 = F.(k+1) as Element of D;
+      k in NAT by ORDINAL1:def 13; then
+      P[k,fk,fk1] & fk <> {} by N0,B1; then
+      consider y being Element of X() such that
+H1:   P[last fk,y] & F(y) c< F(last fk) & fk^<%y%> = fk1 by Z0,Z1;
+H4:   F(last fk) is finite & F(y) c= F(last fk) by Z1,H1,XBOOLE_0:def 8;
+H3:   last fk1 = y by H1,Lem5; then
+      reconsider m = card F(last fk1) as Nat by H4;
+      take m;
+      thus m < n by Z1,H1,H4,H3,TREES_1:24;
+      thus Q[m];
+    end;
+    Q[0] from NAT_1:sch 7(B3,B4); then
+    consider n such that
+B6: card F(last(F.n qua Element of D)) = 0;
+    reconsider f = F.n as non empty XFinSequence of X() by N0;
+    take f;
+    reconsider k = last f as Element of X() by Lem3;
+    take k;
+    thus k = last f & F(k) = {} by B6;
+    thus X[f] by D3;
+  end;
+
+reserve A for array, B for permutation of A;
+
+theorem ThF:
+  B in Funcs(dom A, rng A)
+  proof
+    dom B = dom A & rng B = rng A by ThDom;
+    hence thesis by FUNCT_2:def 2;
+  end;
+
+registration
+  let A be real-valued array;
+  cluster -> real-valued permutation of A;
+  coherence
+  proof
+    let B be permutation of A;
+    ex f being Permutation of dom A st B = A*f by PERM;
+    hence thesis;
+  end;
+end;
+
+registration
+  let a;
+  let X be non empty set;
+  cluster -> T-Sequence-like Element of Funcs(a,X);
+  coherence
+  proof
+    let x be Element of Funcs(a,X);
+    dom x = a by FUNCT_2:169;
+    hence thesis by ORDINAL1:def 7;
+  end;
+end;
+
+registration
+  let X;
+  let Y be real-membered non empty set;
+  cluster -> real-valued Element of Funcs(X,Y);
+  coherence;
+end;
+
+registration
+  let X;
+  let A be array of X;
+  cluster -> X-valued permutation of A;
+  coherence
+  proof
+    let B be permutation of A;
+    ex f being Permutation of dom A st B = A*f by PERM;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be set;
+  let Z be set;
+  let Y be Subset of Z;
+  cluster -> Z-valued Element of Funcs(X,Y);
+  coherence
+  proof
+    let f be Element of Funcs(X,Y);
+    per cases by SUBSET_1:def 2;
+    suppose f = {};
+      then rng f = {};
+      hence rng f c= Z by XBOOLE_1:2;
+    end;
+    suppose Funcs(X,Y) <> {};
+      then rng f c= Y by FUNCT_2:169;
+      hence rng f c= Z by XBOOLE_1:1;
+    end;
+  end;
+end;
+
+theorem
+  for r being X-defined Y-valued Relation holds r is Relation of X,Y
+  proof
+    let r be X-defined Y-valued Relation;
+    dom r c= X & rng r c= Y by RELAT_1:def 19,def 18; then
+    [:dom r, rng r:] c= [:X,Y:] & r c= [:dom r, rng r:]
+      by ZFMISC_1:119,RELAT_1:21;
+    hence r is Relation of X,Y by XBOOLE_1:1;
+  end;
+
+theorem
+Lem1: for a being finite Ordinal, x st x in a
+      holds x = 0 or ex b st x = succ b
+   proof
+     let a be finite Ordinal;
+     let x;
+     assume
+Z0:  x in a & x <> 0; then
+A1:  {} in x by ORDINAL3:10;
+     now assume x is limit_ordinal; then
+       omega c= x & x c= a by Z0,A1,ORDINAL1:def 2,def 12;
+       hence contradiction;
+     end;
+     hence thesis by Z0,ORDINAL1:42;
+   end;
+
+theorem ThComp:
+  for A being 0-based finite non empty array of O
+  ex C being 0-based arr_computation of A st C is complete
+  proof
+    let A be 0-based finite non empty array of O;
+    reconsider rA = rng A as non empty Subset of O by RELAT_1:def 19;
+    reconsider a = dom A as Ordinal;
+    set X = Funcs(a, rA);
+    deffunc F(array of O) = card inversions $1;
+    defpred P[Element of X, Element of X] means
+    ex p,q being Element of dom A
+    st [p,q] in inversions
+    (($1 qua Element of Funcs(a, rA qua Subset of O)) qua array of O) &
+    $2 = Swap($1,p,q);
+    A is permutation of A by ThRef; then
+A0: A in X by ThF;
+A1: F(A) is finite;
+A2: for x being Element of X st
+    F((x qua Element of Funcs(a, rA qua Subset of O)) qua array of O) <> {}
+    ex y being Element of X st P[x,y] &
+    F((y qua Element of Funcs(a, rA qua Subset of O)) qua array of O) c<
+    F((x qua Element of Funcs(a, rA qua Subset of O)) qua array of O)
+    proof
+      let x be Element of X;
+      reconsider c = x as array of O;
+      set z =the  Element of inversions c;
+      set Fx = F((x qua Element of Funcs(a, rA qua Subset of O))
+      qua array of O);
+      assume Fx <> {}; then
+B0:   inversions c <> {}; then
+      z in inversions c &
+      inversions c is Relation of dom x,dom x by TW1; then
+      consider p,q being set such that
+B1:   z = [p,q] & p in dom x & q in dom x by RELSET_1:6;
+      set y = Swap(x,p,q);
+B2:   dom y = dom x & rng y = rng x by FUNCT_7:101,105;
+      dom x = dom A & rng x c= rng A by FUNCT_2:169; then
+      reconsider y as Element of X by B2,FUNCT_2:def 2;
+      reconsider b = y as array of O;
+      set Fy = F((y qua Element of Funcs(a, rA qua Subset of O))
+        qua array of O);
+      take y;
+      thus P[x,y] by B0,B1;
+      F(b) in F(c) by B0,B1,MAIN3;
+      hence Fy c= Fx & Fy <> Fx by ORDINAL1:def 2;
+    end;
+    consider f being finite 0-based non empty array, k being Element of X
+    such that
+A3: k = last f &
+    F((k qua Element of Funcs(a, rA qua Subset of O)) qua array of O) = {} &
+    f.0 = A and
+A4: for a st succ a in dom f
+    ex x,y being Element of X st x = f.a & y = f.succ a & P[x,y]
+    from A(A0,A1,A2);
+    f is arr_computation of A
+    proof
+      thus f.(base-f) = A by A3,TT0;
+      thus for a st a in dom f holds f.a is array of O
+      proof
+        let a; assume
+Z1:     a in dom f;
+        per cases by Z1,Lem1;
+        suppose a = 0;
+          hence f.a is array of O by A3;
+        end;
+        suppose ex b st a = succ b; then
+          consider b such that
+Z2:       a = succ b;
+          ex x,y being Element of X st x = f.b & y = f.a & P[x,y] by A4,Z1,Z2;
+          hence f.a is array of O;
+        end;
+      end;
+      let a; assume
+      a in dom f & succ a in dom f; then
+      ex x,y being Element of X st x = f.a & y = f.succ a & P[x,y] by A4;
+      hence thesis;
+    end; then
+    reconsider f as 0-based arr_computation of A;
+    take f;
+    inversions last f = {} by A3;
+    hence last f is ascending by SORT;
+  end;
+
+theorem ThSort:
+  for A being 0-based finite non empty array of O
+  ex B being permutation of A st B is ascending
+  proof
+    let A be 0-based finite non empty array of O;
+    consider C being 0-based arr_computation of A such that
+A0: C is complete by ThComp;
+    C is finite by MAIN4; then
+    reconsider B = last C as permutation of A by Th83;
+    take B;
+    thus B is ascending by A0,COMPL;
+  end;
+
+registration
+  let O;
+  let A be 0-based finite array of O;
+  cluster ascending permutation of A;
+  existence
+  proof
+A1: A is permutation of A by ThRef;
+    A is empty implies A is ascending;
+    hence thesis by A1,ThSort;
+  end;
+end;
+

@@ -1,4 +1,4 @@
-:: Externally programmed machines
+:: Externally Programmed Machines
 ::  by Yatsuka Nakamura and Andrzej Trybulec
 ::
 :: Received June 30, 2010
@@ -28,7 +28,7 @@ begin :: General concepts
 definition
   let N be set;
   struct (COM-Struct over N) AMI-Struct over N (# carrier -> set,
-    Instruction-Counter -> Element of the carrier,
+    ZeroF -> Element of the carrier,
     Instructions -> non empty set,
     haltF -> Element of the Instructions,
     Object-Kind -> Function of the carrier, N \/ { the Instructions, NAT },
@@ -41,7 +41,7 @@ definition
   func Trivial-AMI N -> strict AMI-Struct over N means
 :: EXTPRO_1:def 1
 
-  the carrier of it = succ NAT & the Instruction-Counter of it = NAT &
+  the carrier of it = succ NAT & the ZeroF of it = NAT &
   the Instructions of it = {[0,{},{}]} &
   the haltF of it = [0,{},{}] &
   the Object-Kind of it = (NAT --> {[0,{},{}]}) +* (NAT .--> NAT) &
@@ -257,9 +257,10 @@ definition
   attr IT is autonomic means
 :: EXTPRO_1:def 9
 
-  for s1,s2 being State of S st IT c= s1 &
-  IT c= s2 for i holds Comput(ProgramPart s1,s1,i)|dom IT
-   = Comput(ProgramPart s2,s2,i)|dom IT;
+  for P,Q being (the Instructions of S)-valued ManySortedSet of NAT
+   st ProgramPart IT c= P & ProgramPart IT c= Q
+  for s1,s2 being State of S st IT c= s1 & IT c= s2
+  for i holds Comput(P,s1,i)|dom NPP IT = Comput(Q,s2,i)|dom NPP IT;
 end;
 
 definition
@@ -270,7 +271,10 @@ definition
   attr IT is halting means
 :: EXTPRO_1:def 10
 
-  for s being State of S st IT c= s holds ProgramPart s halts_on s;
+  for s being State of S st IT c= s
+  for P being (the Instructions of S)-valued ManySortedSet of NAT
+   st ProgramPart IT c= P
+  holds P halts_on s;
 end;
 
 registration
@@ -302,8 +306,8 @@ theorem :: EXTPRO_1:11
   for P being NAT-defined (the Instructions of S)-valued Function
    st l .--> halt S c= P
   for p being l-started PartState of S
-  for s being State of S st p +* P c= s
-   for i holds Comput(ProgramPart s,s,i) = s;
+  for s being State of S st p c= s
+   for i holds Comput(P,s,i) = s;
 
 theorem :: EXTPRO_1:12
   for S be realistic halting IC-Ins-separated definite
@@ -346,7 +350,7 @@ definition
   func Result(p,d) -> FinPartState of S means
 :: EXTPRO_1:def 12
   for s being State of S st d c= s
-  holds it = (Result(ProgramPart(s),s))|dom d;
+  holds it = (Result(ProgramPart s,s))|dom NPP d;
 end;
 
 begin :: Computability
@@ -615,6 +619,5 @@ theorem :: EXTPRO_1:36
    (NAT-defined (the Instructions of S)-valued Function)
   for s being State of S, k being Element of NAT
    st F halts_on Comput(F,s,k)
-   holds Result(F,Comput(F,s,k))
-    = Result(F,s);
+   holds Result(F,Comput(F,s,k)) = Result(F,s);
 

@@ -104,8 +104,8 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="29"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="205">
 <LocusVar nr="1"/>
 </Adjective>
@@ -157,8 +157,8 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="29"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="203">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -219,8 +219,8 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="29"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="203">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>

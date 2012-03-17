@@ -36,8 +36,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="3">
@@ -46,8 +46,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="57"/>
 <Adjective nr="67"/>
 </Cluster>
@@ -58,8 +58,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="57"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
@@ -80,8 +80,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="7">
@@ -90,8 +90,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="57"/>
 <Adjective nr="70"/>
 </Cluster>
@@ -102,8 +102,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="57"/>
 <Adjective nr="70"/>
 <Adjective nr="71"/>
@@ -123,8 +123,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="67"/>
 </Cluster>
 </FCluster>
@@ -160,8 +160,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="70"/>
 </Cluster>
 </FCluster>
@@ -179,8 +179,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="57"/>
 <Adjective nr="70"/>
 </Cluster>

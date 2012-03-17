@@ -9,27 +9,29 @@ environ
  vocabularies NUMBERS, SUBSET_1, SCMPDS_2, INT_1, FSM_1, AMI_1, COMPLEX1,
       ARYTM_3, FUNCT_1, AMI_2, STRUCT_0, XBOOLE_0, RELAT_1, TARSKI, CARD_1,
       AMI_3, SCMPDS_1, GRAPHSP, SCMNORM, XXREAL_0, ARYTM_1, FUNCT_4, FUNCOP_1,
-      CIRCUIT2, ORDINAL1, PARTFUN1;
+      CIRCUIT2, ORDINAL1, PARTFUN1, AMISTD_5, PBOOLE;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_4, INT_1, NAT_1, STRUCT_0, FUNCOP_1, INT_2, XXREAL_0,
-      COMPOS_1, EXTPRO_1, AMI_1, AMI_2, SCMPDS_1, SCMPDS_2;
- constructors DOMAIN_1, XXREAL_0, INT_2, AMI_5, SCMPDS_1, SCMPDS_2, REAL_1,
-      PRE_POLY, AMI_1;
+      PARTFUN1, PBOOLE, FUNCT_4, INT_1, NAT_1, STRUCT_0, FUNCOP_1, INT_2,
+      XXREAL_0, COMPOS_1, EXTPRO_1, AMI_1, AMI_2, AMISTD_5, SCMPDS_1, SCMPDS_2;
+ constructors DOMAIN_1, XXREAL_0, INT_2, SCMPDS_1, SCMPDS_2, REAL_1,
+      PRE_POLY, AMI_1, AMI_3, AMISTD_5, PBOOLE;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS,
       XREAL_0, INT_1, CARD_3, AMI_1, AMI_3, SCMPDS_2, FINSET_1, RELSET_1,
-      FUNCT_2, COMPOS_1, EXTPRO_1;
+      FUNCT_2, COMPOS_1, EXTPRO_1, AMISTD_5, PBOOLE, AMISTD_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
  definitions AMI_1, EXTPRO_1, AMI_2, AMI_3, FUNCOP_1, SCMPDS_2, NAT_1,
- COMPOS_1;
+ COMPOS_1, AMISTD_5, STRUCT_0;
  theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, FUNCOP_1, TARSKI, FUNCT_4, FUNCT_1,
-      ZFMISC_1, INT_1, RELAT_1, ABSVALUE, SCMPDS_2, XBOOLE_0, XBOOLE_1, AMI_2,
-      NUMBERS, PBOOLE, PARTFUN1, COMPOS_1, EXTPRO_1;
+      ZFMISC_1, INT_1, RELAT_1, ABSVALUE, SCMPDS_2, XBOOLE_0, XBOOLE_1,
+      NUMBERS, PBOOLE, PARTFUN1, COMPOS_1, EXTPRO_1, AMISTD_5;
 
 begin :: Preliminaries
 
 reserve j, k, m, n for Element of NAT,
   a,b for Int_position,
   k1,k2 for Integer;
+
+reserve P,P1,P2 for (the Instructions of SCMPDS)-valued ManySortedSet of NAT;
 
 canceled;
 
@@ -73,8 +75,7 @@ A2: a in SCM-Data-Loc by SCMPDS_2:def 2;
     .= s2.a by A1,A2,FUNCT_1:72,SCMPDS_2:100;
 end;
 
-theorem
-  the carrier of SCMPDS = {IC SCMPDS } \/ SCM-Data-Loc \/ NAT by AMI_3:4;
+canceled;
 
 theorem
   not IC SCMPDS in SCM-Data-Loc
@@ -85,7 +86,7 @@ proof
   hence contradiction by COMPOS_1:def 6,NUMBERS:27;
 end;
 
-theorem Th7:
+theorem
   for s1,s2 being State of SCMPDS st s1 | (SCM-Data-Loc \/ {IC
   SCMPDS }) = s2 | (SCM-Data-Loc \/ {IC SCMPDS }) for l being Instruction of
   SCMPDS holds Exec (l,s1) | (SCM-Data-Loc \/ {IC SCMPDS }) = Exec (l,s2) | (
@@ -778,47 +779,54 @@ definition
   end;
 end;
 
-theorem Th16:
-  for p being autonomic FinPartState of SCMPDS st DataPart p <> {}
-  holds IC SCMPDS in dom p
-proof
-  let p be autonomic FinPartState of SCMPDS;
-  assume DataPart p <> {};
-  then
-A1: dom DataPart p <> {};
-  assume
+registration
+ cluster SCMPDS -> IC-recognized;
+ coherence
+  proof let p be autonomic FinPartState of SCMPDS such that
+A1:  NPP p is non empty;
+   assume
 A2: not IC SCMPDS in dom p;
+  dom NPP p c= dom p by RELAT_1:25;
+  then not IC SCMPDS in dom NPP p by A2;
+  then
+A3: dom NPP p misses {IC SCMPDS} by ZFMISC_1:56;
+  dom NPP p c= {IC SCMPDS} \/ dom DataPart p by COMPOS_1:171;
+  then
+A4: dom NPP p c= dom DataPart p by A3,XBOOLE_1:73;
+A5: dom DataPart p <> {} by A1,A4,XBOOLE_1:3;
+    DataPart p c= NPP p by COMPOS_1:169;
+    then
+A6:  dom DataPart p c= dom NPP p by RELAT_1:25;
   p is not autonomic
   proof
-    consider il being Element of (NAT) \ dom p;
-    consider d1 being Element of dom DataPart p;
-A3: d1 in dom DataPart p by A1;
+    set il =the  Element of (NAT) \ dom p;
+    set d1 =the  Element of dom DataPart p;
+A7: d1 in dom DataPart p by A5;
     dom DataPart p c= the carrier of SCMPDS by RELAT_1:def 18;
-    then reconsider d1 as Element of SCMPDS by A3;
+    then reconsider d1 as Element of SCMPDS by A7;
     not NAT c= dom p;
     then
-A4: (NAT) \ dom p <> {} by XBOOLE_1:37;
-    then il is Element of NAT by XBOOLE_0:def 5;
-    then reconsider il as Element of NAT;
-    not il in dom p by A4,XBOOLE_0:def 5;
+A8: (NAT) \ dom p <> {} by XBOOLE_1:37;
+    then reconsider il as Element of NAT by XBOOLE_0:def 5;
+    not il in dom p by A8,XBOOLE_0:def 5;
     then
-A5: dom p misses {il} by ZFMISC_1:56;
+A9: dom p misses {il} by ZFMISC_1:56;
     dom DataPart p c= SCM-Data-Loc by RELAT_1:87,SCMPDS_2:100;
-    then reconsider d1 as Int_position by A3,SCMPDS_2:9;
-A6: dom (Start-At(il,SCMPDS)) = {IC SCMPDS} by FUNCOP_1:19;
+    then reconsider d1 as Int_position by A7,SCMPDS_2:9;
+A10: dom (Start-At(il,SCMPDS)) = {IC SCMPDS} by FUNCOP_1:19;
     then
-A7: IC SCMPDS in dom (Start-At(il,SCMPDS)) by TARSKI:def 1;
+A11: IC SCMPDS in dom (Start-At(il,SCMPDS)) by TARSKI:def 1;
     il <> IC SCMPDS by COMPOS_1:3;
     then
-A8: not il in dom (Start-At(il,SCMPDS)) by A6,TARSKI:def 1;
-A9: dom p misses {IC SCMPDS} by A2,ZFMISC_1:56;
+A12: not il in dom (Start-At(il,SCMPDS)) by A10,TARSKI:def 1;
+A13: dom p misses {IC SCMPDS} by A2,ZFMISC_1:56;
     set p2 = p +* ((il .--> (d1:=1)) +* Start-At(il,SCMPDS));
     set p1 = p +* ((il .--> (d1:=0)) +* Start-At(il,SCMPDS));
     consider s1 being State of SCMPDS such that
-A10: p1 c= s1 by PBOOLE:156;
+A14: p1 c= s1 by PBOOLE:156;
     consider s2 being State of SCMPDS such that
-A11: p2 c= s2 by PBOOLE:156;
-    take s1,s2;
+A15: p2 c= s2 by PBOOLE:156;
+    take P1 = ProgramPart s1, P2 = ProgramPart s2;
     dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS))
      = dom (il .--> (d1:=0)) \/ dom
     (Start-At(il,SCMPDS)) by FUNCT_4:def 1
@@ -827,12 +835,14 @@ A11: p2 c= s2 by PBOOLE:156;
     then dom p /\ dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS))
      = dom p /\ {il} \/
     dom p /\ {IC SCMPDS} by XBOOLE_1:23
-      .= dom p /\ {il} \/ {} by A9,XBOOLE_0:def 7
-      .= {} by A5,XBOOLE_0:def 7;
+      .= dom p /\ {il} \/ {} by A13,XBOOLE_0:def 7
+      .= {} by A9,XBOOLE_0:def 7;
     then dom p misses dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS))
     by XBOOLE_0:def 7;
     then p c= p1 by FUNCT_4:33;
-    hence p c= s1 by A10,XBOOLE_1:1;
+    then
+A16: p c= s1 by A14,XBOOLE_1:1;
+    hence ProgramPart p c= P1 by RELAT_1:105;
     dom ((il .--> (d1:=1)) +* Start-At(il,SCMPDS))
      = dom (il .--> (d1:=1)) \/ dom
     (Start-At(il,SCMPDS)) by FUNCT_4:def 1
@@ -841,126 +851,103 @@ A11: p2 c= s2 by PBOOLE:156;
     then dom p /\ dom ((il .--> (d1:=1)) +* Start-At(il,SCMPDS))
      = dom p /\ {il} \/
     dom p /\ {IC SCMPDS} by XBOOLE_1:23
-      .= dom p /\ {il} \/ {} by A9,XBOOLE_0:def 7
-      .= {} by A5,XBOOLE_0:def 7;
+      .= dom p /\ {il} \/ {} by A13,XBOOLE_0:def 7
+      .= {} by A9,XBOOLE_0:def 7;
     then dom p misses dom ((il .--> (d1:=1)) +* Start-At(il,SCMPDS))
     by XBOOLE_0:def 7;
     then p c= p2 by FUNCT_4:33;
-    hence p c= s2 by A11,XBOOLE_1:1;
+    then
+A17: p c= s2 by A15,XBOOLE_1:1;
+    hence ProgramPart p c= P2 by RELAT_1:105;
+    take s1,s2;
+    thus p c= s1 by A16;
+    thus p c= s2 by A17;
     take 1;
-A12: dom p2 = dom p \/ dom ((il .--> (d1:=1)) +* Start-At(il,SCMPDS))
+A18: dom p2 = dom p \/ dom ((il .--> (d1:=1)) +* Start-At(il,SCMPDS))
 by FUNCT_4:def 1;
-A13: dom ((il .--> (d1:=1)) +* Start-At(il,SCMPDS)) =
+A19: dom ((il .--> (d1:=1)) +* Start-At(il,SCMPDS)) =
  dom ((il .--> (d1:=1))) \/
     dom (Start-At(il,SCMPDS)) by FUNCT_4:def 1;
     then
-A14: IC SCMPDS in dom ((il .--> (d1:=1)) +* Start-At(il,SCMPDS))
-by A7,XBOOLE_0:def 3;
-    then IC SCMPDS in dom p2 by A12,XBOOLE_0:def 3;
+A20: IC SCMPDS in dom ((il .--> (d1:=1)) +* Start-At(il,SCMPDS))
+by A11,XBOOLE_0:def 3;
+    then IC SCMPDS in dom p2 by A18,XBOOLE_0:def 3;
     then
-A15: IC s2 = p2.IC SCMPDS by A11,GRFUNC_1:8
-      .= ((il .--> (d1:=1)) +* Start-At(il,SCMPDS)).IC SCMPDS by A14,FUNCT_4:14
-      .= (Start-At(il,SCMPDS)).IC SCMPDS by A7,FUNCT_4:14
+A21: IC s2 = p2.IC SCMPDS by A15,GRFUNC_1:8
+      .= ((il .--> (d1:=1)) +* Start-At(il,SCMPDS)).IC SCMPDS by A20,FUNCT_4:14
+      .= (Start-At(il,SCMPDS)).IC SCMPDS by A11,FUNCT_4:14
       .= il by FUNCOP_1:87;
     dom (il .--> (d1:=1)) = {il} by FUNCOP_1:19;
     then il in dom (il .--> (d1:=1)) by TARSKI:def 1;
     then
-A16: il in dom ((il .--> (d1:=1)) +* Start-At(il,SCMPDS))
-by A13,XBOOLE_0:def 3;
-    then il in dom p2 by A12,XBOOLE_0:def 3;
+A22: il in dom ((il .--> (d1:=1)) +* Start-At(il,SCMPDS))
+by A19,XBOOLE_0:def 3;
+    then il in dom p2 by A18,XBOOLE_0:def 3;
     then
-A17: s2.il = p2.il by A11,GRFUNC_1:8
-      .= ((il .--> (d1:=1)) +* Start-At(il,SCMPDS)).il by A16,FUNCT_4:14
-      .= (il .--> (d1:=1)).il by A8,FUNCT_4:12
+A23: s2.il = p2.il by A15,GRFUNC_1:8
+      .= ((il .--> (d1:=1)) +* Start-At(il,SCMPDS)).il by A22,FUNCT_4:14
+      .= (il .--> (d1:=1)).il by A12,FUNCT_4:12
       .=(d1:=1) by FUNCOP_1:87;
-Y:  (ProgramPart s2)/.IC s2
+A24:  (ProgramPart s2)/.IC s2
  = s2.IC s2 by COMPOS_1:38;
-A18: Comput(ProgramPart(s2),s2,0+1).d1 =
-(Following(ProgramPart s2,Comput(ProgramPart(s2),s2,0
-))).d1
+A25: Comput(ProgramPart(s2),s2,0+1).d1 =
+(Following(ProgramPart s2,Comput(ProgramPart(s2),s2,0))).d1
 by EXTPRO_1:4
       .= (Following(ProgramPart s2,s2)).d1 by EXTPRO_1:3
-      .= 1 by A15,A17,Y,SCMPDS_2:57;
-X:  dom p c= the carrier of SCMPDS by RELAT_1:def 18;
-    dom (Comput(ProgramPart(s1),s1,1)) = the carrier of SCMPDS by
-PARTFUN1:def 4;
+      .= 1 by A21,A23,A24,SCMPDS_2:57;
+A26:  dom NPP p c= the carrier of SCMPDS by RELAT_1:def 18;
+    dom Comput(ProgramPart(s1),s1,1) = the carrier of SCMPDS by PARTFUN1:def 4;
     then
-A19: dom (Comput(ProgramPart(s1),s1,1)|dom p) = dom p by X,RELAT_1:91;
+A27: dom (Comput(ProgramPart(s1),s1,1)|dom NPP p) = dom NPP p by A26
+,RELAT_1:91;
     il <> IC SCMPDS by COMPOS_1:3;
     then
-A20: not il in dom (Start-At(il,SCMPDS)) by A6,TARSKI:def 1;
-    dom (Comput(ProgramPart(s2),s2,1)) = the carrier of SCMPDS by
-PARTFUN1:def 4;
-    then
-A21: dom (Comput(ProgramPart(s2),s2,1)|dom p) = dom p by X,RELAT_1:91;
-A22: dom p1 = dom p \/ dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS))
+A28: not il in dom (Start-At(il,SCMPDS)) by A10,TARSKI:def 1;
+A29: dom p1 = dom p \/ dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS))
 by FUNCT_4:def 1;
-A23: dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS)) =
+A30: dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS)) =
 dom ((il .--> (d1:=0))) \/
     dom (Start-At(il,SCMPDS)) by FUNCT_4:def 1;
     then
-A24: IC SCMPDS in dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS))
-by A7,XBOOLE_0:def 3;
-    then IC SCMPDS in dom p1 by A22,XBOOLE_0:def 3;
+A31: IC SCMPDS in dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS))
+by A11,XBOOLE_0:def 3;
+    then IC SCMPDS in dom p1 by A29,XBOOLE_0:def 3;
     then
-A25: IC s1 = p1.IC SCMPDS by A10,GRFUNC_1:8
-      .= ((il .--> (d1:=0)) +* Start-At(il,SCMPDS)).IC SCMPDS by A24,FUNCT_4:14
-      .= (Start-At(il,SCMPDS)).IC SCMPDS by A7,FUNCT_4:14
+A32: IC s1 = p1.IC SCMPDS by A14,GRFUNC_1:8
+      .= ((il .--> (d1:=0)) +* Start-At(il,SCMPDS)).IC SCMPDS by A31,FUNCT_4:14
+      .= (Start-At(il,SCMPDS)).IC SCMPDS by A11,FUNCT_4:14
       .= il by FUNCOP_1:87;
     dom (il .--> (d1:=0)) = {il} by FUNCOP_1:19;
     then il in dom (il .--> (d1:=0)) by TARSKI:def 1;
     then
-A26: il in dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS))
-by A23,XBOOLE_0:def 3;
-    then il in dom p1 by A22,XBOOLE_0:def 3;
+A33: il in dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS))
+by A30,XBOOLE_0:def 3;
+    then il in dom p1 by A29,XBOOLE_0:def 3;
     then
-A27: s1.il = p1.il by A10,GRFUNC_1:8
-      .= ((il .--> (d1:=0)) +* Start-At(il,SCMPDS)).il by A26,FUNCT_4:14
-      .= (il .--> (d1:=0)).il by A20,FUNCT_4:12
+A34: s1.il = p1.il by A14,GRFUNC_1:8
+      .= ((il .--> (d1:=0)) +* Start-At(il,SCMPDS)).il by A33,FUNCT_4:14
+      .= (il .--> (d1:=0)).il by A28,FUNCT_4:12
       .=(d1:=0) by FUNCOP_1:87;
-    DataPart p c= p by RELAT_1:88;
-    then
-A28: dom DataPart p c= dom p by RELAT_1:25;
-Y:  (ProgramPart s1)/.IC s1
- = s1.IC s1 by COMPOS_1:38;
+A35:  (ProgramPart s1)/.IC s1 = s1.IC s1 by COMPOS_1:38;
+A36: dom ( Comput(ProgramPart(s2),s2,1)) = the carrier of SCMPDS
+       by PARTFUN1:def 4;
+A37: dom ( Comput(ProgramPart(s2),s2,1)|dom NPP p) = dom NPP p
+       by RELAT_1:91,A26,A36;
     Comput(ProgramPart(s1),s1,0+1).d1 =
-    (Following(ProgramPart s1,Comput(ProgramPart(s1),
-s1,0))).d1
+    (Following(ProgramPart s1,Comput(ProgramPart(s1),s1,0))).d1
     by EXTPRO_1:4
       .= (Following(ProgramPart s1,s1)).d1 by EXTPRO_1:3
-      .= 0 by A25,A27,Y,SCMPDS_2:57;
-    then (Comput(ProgramPart(s1),s1,1)|dom p).d1 = 0 by A3,A28,A19,FUNCT_1:70;
-    hence thesis by A3,A28,A21,A18,FUNCT_1:70;
+      .= 0 by A32,A34,A35,SCMPDS_2:57;
+    then
+   (Comput(ProgramPart(s1),s1,1)|dom NPP p).d1 = 0
+     by A7,A27,FUNCT_1:70,A6;
+    hence thesis by A25,FUNCT_1:70,A7,A37,A6;
   end;
   hence contradiction;
+  end;
 end;
 
-theorem Th17:
-  for p being autonomic non NAT-defined FinPartState of SCMPDS
-  holds IC SCMPDS in dom p
-proof
-  let p be autonomic non NAT-defined FinPartState of SCMPDS;
-   dom p c= the carrier of SCMPDS by RELAT_1:def 18;
-   then
-A1: dom p = dom p /\ the carrier of SCMPDS by XBOOLE_1:28
-    .= dom p /\ (SCM-Data-Loc \/ {IC SCMPDS }) \/ dom p /\ NAT by AMI_3:4
-,XBOOLE_1:23;
-  not dom p c= NAT by RELAT_1:def 18;
-  then dom p /\ (SCM-Data-Loc \/ {IC SCMPDS }) <> {} by A1,XBOOLE_1:17;
-  then
-A2: dom p /\ {IC SCMPDS } \/ dom p /\ (SCM-Data-Loc ) <> {} by XBOOLE_1:23;
-  per cases by A2;
-  suppose
-    dom p /\ {IC SCMPDS } <> {};
-    then dom p meets {IC SCMPDS } by XBOOLE_0:def 7;
-    hence thesis by ZFMISC_1:56;
-  end;
-  suppose
-    dom p /\ (SCM-Data-Loc ) <> {};
-    then DataPart p <> {} by RELAT_1:60,90,SCMPDS_2:100;
-    hence thesis by Th16;
-  end;
-end;
+canceled 2;
 
 theorem Th18:
   for s1,s2 being State of SCMPDS,k1,k2,m be Integer st IC s1= IC
@@ -1019,97 +1006,20 @@ A3: j*1 >= 0 by NAT_1:2;
   hence thesis by A1,A2;
 end;
 
-theorem
-  for p being autonomic FinPartState of SCMPDS st IC SCMPDS in dom p
-  holds IC p in dom p
-proof
-  let p be autonomic FinPartState of SCMPDS;
-  assume
-A1: IC SCMPDS in dom p;
-  set il = IC p;
-  set p1 = p +* ((il .--> goto 0));
-  set p2 = p +* ((il .--> goto 1));
-  consider s1 being State of SCMPDS such that
-A2: p1 c= s1 by PBOOLE:156;
-  consider s2 being State of SCMPDS such that
-A3: p2 c= s2 by PBOOLE:156;
-  assume
-A4: not IC p in dom p;
-  p is not autonomic
-  proof
-    take s1,s2;
-A5: dom (il .--> (goto 1)) = {il} by FUNCOP_1:19;
-    then
-A6: il in dom (il .--> (goto 1)) by TARSKI:def 1;
-A7: dom (il .--> (goto 0)) = {il} by FUNCOP_1:19;
-    then
-A8: il in dom (il .--> (goto 0)) by TARSKI:def 1;
-A9: dom p misses {il} by A4,ZFMISC_1:56;
-    then
-A10: p c= p1 by A7,FUNCT_4:33;
-A11: p c= p2 by A5,A9,FUNCT_4:33;
-    hence p c= s1 & p c= s2 by A2,A3,A10,XBOOLE_1:1;
-    dom p2 = dom p \/ dom ((il .--> goto 1)) by FUNCT_4:def 1;
-    then il in dom p2 by A6,XBOOLE_0:def 3;
-    then
-X:    s2.il = p2.il by A3,GRFUNC_1:8
-      .= ((il .--> goto 1)).il by A6,FUNCT_4:14
-      .= goto 1 by FUNCOP_1:87;
-Y:  (ProgramPart s2)/.IC s2
- = s2.IC s2 by COMPOS_1:38;
-x:  p c= s2 by A3,A11,XBOOLE_1:1;
-    then
-A12: (Following(ProgramPart s2,s2)).IC SCMPDS = Exec (goto 1,s2).IC SCMPDS
-by A1,X,Y,GRFUNC_1:8
-      .= ICplusConst(s2,1) by SCMPDS_2:66;
-    take 1;
-    assume
-A13: Comput(ProgramPart(s1),s1,1)|dom p = Comput(ProgramPart(s2),s2,1)|dom p;
-A14: (Following(ProgramPart s1,s1))|dom p =
-(Following(ProgramPart s1,Comput(ProgramPart(s1),s1,0
-)))|dom p
-by EXTPRO_1:3
-      .= Comput(ProgramPart(s1),s1,0+1)|dom p by EXTPRO_1:4
-      .= (Following(ProgramPart s2,Comput(ProgramPart
-(s2),s2,0)))|dom p
-      by A13,EXTPRO_1:4
-      .= (Following(ProgramPart s2,s2))|dom p by EXTPRO_1:3;
-    dom p1 = dom p \/ dom ((il .--> goto 0)) by FUNCT_4:def 1;
-    then il in dom p1 by A8,XBOOLE_0:def 3;
-    then
-Y:   s1.il = p1.il by A2,GRFUNC_1:8
-      .= ((il .--> goto 0)).il by A8,FUNCT_4:14
-      .= goto 0 by FUNCOP_1:87;
-Z:  (ProgramPart s1)/.IC s1
- = s1.IC s1 by COMPOS_1:38;
-y:  p c= s1 by A2,A10,XBOOLE_1:1;
-    then (Following(ProgramPart s1,s1)).IC SCMPDS =
-    Exec (goto 0,s1).IC SCMPDS by A1,Y,Z,GRFUNC_1:8
-      .= ICplusConst(s1,0) by SCMPDS_2:66;
-    then
-A15: ICplusConst(s1,0) = ((Following(ProgramPart s1,s1))|dom p).IC SCMPDS
-by A1,FUNCT_1:72
-      .= ICplusConst(s2,1) by A1,A12,A14,FUNCT_1:72;
-    IC s2 = il by A1,x,GRFUNC_1:8
-      .= IC s1 by A1,y,GRFUNC_1:8;
-    hence contradiction by A15,Th19;
-  end;
-  hence contradiction;
-end;
-
-theorem Th22:
-  for p being autonomic non NAT-defined FinPartState of SCMPDS , s
-being State of SCMPDS st p c= s for i being Element of NAT holds IC Comput(
-ProgramPart(s),s,i) in dom ProgramPart(p)
+registration
+ cluster SCMPDS -> CurIns-recognized;
+ coherence
 proof
   let p be autonomic non NAT-defined FinPartState of SCMPDS, s be State of
   SCMPDS such that
 A1: p c= s;
+  let P such that
+A2: ProgramPart p c= P;
   let i be Element of NAT;
-  set Csi = Comput(ProgramPart(s),s,i);
+  set Csi = Comput(P,s,i);
   set loc = IC Csi;
 A3: loc in dom ProgramPart p iff loc in dom p /\ NAT by RELAT_1:90;
-  assume not IC Comput(ProgramPart(s),s,i) in dom ProgramPart(p);
+  assume not IC Comput(P,s,i) in dom ProgramPart(p);
   then
 A4: not loc in dom p by A3,XBOOLE_0:def 4;
   set p2 = p +* (loc .--> goto 1 );
@@ -1154,7 +1064,7 @@ A18: Cs2i.loc = goto 1 by AMI_1:54;
     then s1.loc = goto 0 by A14,A11,GRFUNC_1:8;
     then
 A19: Cs1i.loc = goto 0 by AMI_1:54;
-    take s1, s2;
+    take P1 = ProgramPart s1, P2 = ProgramPart s2;
 A20: now
       let x be set;
       assume
@@ -1167,501 +1077,609 @@ A22:  p.x = p1.x by A21,FUNCT_4:17;
     end;
     dom s1 = the carrier of SCMPDS by PARTFUN1:def 4;
     then dom p c= dom s1 by RELAT_1:def 18;
-    hence
-A23: p c= s1 by A20,GRFUNC_1:8;
     then
-A24: (Cs1i|dom p) = (Csi|dom p) by A1,EXTPRO_1:def 9;
+A23: p c= s1 by A20,GRFUNC_1:8;
+    hence
+A24: ProgramPart p c= P1 by RELAT_1:105;
+A25: (Cs1i|dom NPP p) = (Csi|dom NPP p) by A1,EXTPRO_1:def 9,A23,A2,A24;
     dom s2 = the carrier of SCMPDS by PARTFUN1:def 4;
     then dom p c= dom s2 by RELAT_1:def 18;
-    hence p c= s2 by A15,GRFUNC_1:8;
     then
-A25: (Cs1i|dom p) = (Cs2i|dom p) by A23,EXTPRO_1:def 9;
+A26: p c= s2 by A15,GRFUNC_1:8;
+    hence
+A27:  ProgramPart p c= P2 by RELAT_1:105;
+    take s1, s2;
+    thus p c= s1 by A23;
+    thus p c= s2 by A26;
+A28: (Cs1i|dom NPP p) = (Cs2i|dom NPP p) by EXTPRO_1:def 9,A2,A27,A25,A1,A26;
     take k = i+1;
     set Cs2k = Comput(ProgramPart(s2),s2,k);
-T: ProgramPart s2 = ProgramPart Cs2i
+A29: P2 = ProgramPart Cs2i
 by AMI_1:123;
-A26: Cs2k = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-      .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
-Y:  (ProgramPart Cs2i)/.IC Cs2i
+A30: Cs2k = Following(P2,Cs2i) by EXTPRO_1:4
+      .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by A29;
+A31:  (ProgramPart Cs2i)/.IC Cs2i
  = Cs2i.IC Cs2i by COMPOS_1:38;
-A27: Csi.IC SCMPDS = (Csi|dom p).IC SCMPDS by Th17,FUNCT_1:72;
-    then Cs2i.IC SCMPDS = loc by A24,A25,Th17,FUNCT_1:72;
+A32:IC SCMPDS in dom p by AMISTD_5:6;
+A33: Csi.IC SCMPDS = (Csi|dom NPP p).IC SCMPDS by COMPOS_1:179,FUNCT_1:72,A32;
+    then Cs2i.IC SCMPDS = loc by A25,A28,COMPOS_1:179,FUNCT_1:72,A32;
     then
-A28: Cs2k.IC SCMPDS = ICplusConst(Cs2i,1) by A26,A18,Y,SCMPDS_2:66;
-A29: Cs1i.IC SCMPDS = (Cs1i|dom p).IC SCMPDS by Th17,FUNCT_1:72;
+A34: Cs2k.IC SCMPDS = ICplusConst(Cs2i,1) by A30,A18,A31,SCMPDS_2:66;
+A35: Cs1i.IC SCMPDS = (Cs1i|dom NPP p).IC SCMPDS
+              by COMPOS_1:179,FUNCT_1:72,A32;
     then
-A30: IC Cs1i = IC Cs2i by A25,Th17,FUNCT_1:72;
+A36: IC Cs1i = IC Cs2i by A28,COMPOS_1:179,FUNCT_1:72,A32;
     set Cs1k = Comput(ProgramPart(s1),s1,k);
-A31: (Cs1k|dom p).IC SCMPDS = Cs1k.IC SCMPDS & (Cs2k|dom p).IC SCMPDS =
-    Cs2k.IC SCMPDS by Th17,FUNCT_1:72;
-Y:  (ProgramPart Cs1i)/.IC Cs1i
+A37:  (ProgramPart Cs1i)/.IC Cs1i
  = Cs1i.IC Cs1i by COMPOS_1:38;
-T: ProgramPart s1 = ProgramPart Cs1i
+A38: P1 = ProgramPart Cs1i
 by AMI_1:123;
-    Cs1k = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-      .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-    then Cs1k.IC SCMPDS = ICplusConst(Cs1i,0) by A19,A24,A29,A27,Y,SCMPDS_2:66;
-    hence thesis by A28,A30,A31,Th19;
+    Cs1k = Following(P1,Cs1i) by EXTPRO_1:4
+      .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by A38;
+    then
+A39: Cs1k.IC SCMPDS = ICplusConst(Cs1i,0) by A19,A25,A35,A33,A37,SCMPDS_2:66;
+  (Cs1k|dom NPP p).IC SCMPDS = Cs1k.IC SCMPDS &
+    (Cs2k|dom NPP p).IC SCMPDS = Cs2k.IC SCMPDS
+    by FUNCT_1:72,A32,COMPOS_1:179;
+    hence thesis by A34,A36,Th19,A39;
+  end;
+  hence contradiction;
+end;
+end;
+
+canceled;
+
+theorem
+  for p being autonomic non NAT-defined FinPartState of SCMPDS , s
+being State of SCMPDS st p c= s
+  for P st ProgramPart p c= P
+for i being Element of NAT holds IC Comput(P,s,i) in dom ProgramPart(p)
+proof
+  let p be autonomic non NAT-defined FinPartState of SCMPDS, s be State of
+  SCMPDS such that
+A1: p c= s;
+  let P such that
+A2: ProgramPart p c= P;
+  let i be Element of NAT;
+  set Csi = Comput(P,s,i);
+  set loc = IC Csi;
+A3: loc in dom ProgramPart p iff loc in dom p /\ NAT by RELAT_1:90;
+  assume not IC Comput(P,s,i) in dom ProgramPart(p);
+  then
+A4: not loc in dom p by A3,XBOOLE_0:def 4;
+  set p2 = p +* (loc .--> goto 1 );
+  set p1 = p +* (loc .--> goto 0 );
+A5: dom p1 = dom p \/ dom (loc .--> goto 0 ) by FUNCT_4:def 1;
+A6: dom (loc .--> goto 1 ) = {loc} by FUNCOP_1:19;
+  then
+A7: loc in dom (loc .--> goto 1) by TARSKI:def 1;
+A8: dom p2 = dom p \/ dom (loc .--> goto 1 ) by FUNCT_4:def 1;
+  then
+A9: loc in dom p2 by A7,XBOOLE_0:def 3;
+  consider s2 being State of SCMPDS such that
+A10: p2 c= s2 by PBOOLE:156;
+  set Cs2i = Comput(ProgramPart(s2),s2,i);
+  consider s1 being State of SCMPDS such that
+A11: p1 c= s1 by PBOOLE:156;
+  set Cs1i = Comput(ProgramPart(s1),s1,i);
+A12: dom (loc .--> goto 0 ) = {loc} by FUNCOP_1:19;
+  then
+A13: loc in dom (loc .--> goto 0 ) by TARSKI:def 1;
+  then
+A14: loc in dom p1 by A5,XBOOLE_0:def 3;
+  p is not autonomic
+  proof
+A15: now
+      let x be set;
+      assume
+A16:  x in dom p;
+      dom p misses dom (loc .--> goto 1 ) by A4,A6,ZFMISC_1:56;
+      then
+A17:  p.x = p2.x by A16,FUNCT_4:17;
+      x in dom p2 by A8,A16,XBOOLE_0:def 3;
+      hence p.x = s2.x by A10,A17,GRFUNC_1:8;
+    end;
+    (loc .--> goto 1 ).loc = goto 1 by FUNCOP_1:87;
+    then p2.loc = goto 1 by A7,FUNCT_4:14;
+    then s2.loc = goto 1 by A9,A10,GRFUNC_1:8;
+    then
+A18: Cs2i.loc = goto 1 by AMI_1:54;
+    (loc .--> goto 0 ).loc = goto 0 by FUNCOP_1:87;
+    then p1.loc = goto 0 by A13,FUNCT_4:14;
+    then s1.loc = goto 0 by A14,A11,GRFUNC_1:8;
+    then
+A19: Cs1i.loc = goto 0 by AMI_1:54;
+    take P1 = ProgramPart s1, P2 = ProgramPart s2;
+A20: now
+      let x be set;
+      assume
+A21:  x in dom p;
+      dom p misses dom (loc .--> goto 0 ) by A4,A12,ZFMISC_1:56;
+      then
+A22:  p.x = p1.x by A21,FUNCT_4:17;
+      x in dom p1 by A5,A21,XBOOLE_0:def 3;
+      hence p.x = s1.x by A11,A22,GRFUNC_1:8;
+    end;
+    dom s1 = the carrier of SCMPDS by PARTFUN1:def 4;
+    then dom p c= dom s1 by RELAT_1:def 18;
+    then
+A23: p c= s1 by A20,GRFUNC_1:8;
+    hence
+A24: ProgramPart p c= P1 by RELAT_1:105;
+A25: (Cs1i|dom NPP p) = (Csi|dom NPP p) by A1,EXTPRO_1:def 9,A23,A2,A24;
+    dom s2 = the carrier of SCMPDS by PARTFUN1:def 4;
+    then dom p c= dom s2 by RELAT_1:def 18;
+    then
+A26: p c= s2 by A15,GRFUNC_1:8;
+    hence
+A27:  ProgramPart p c= P2 by RELAT_1:105;
+    take s1, s2;
+    thus p c= s1 by A23;
+    thus p c= s2 by A26;
+    then
+A28: (Cs1i|dom NPP p) = (Cs2i|dom NPP p) by EXTPRO_1:def 9,A2,A27,A25,A1;
+    take k = i+1;
+    set Cs2k = Comput(ProgramPart(s2),s2,k);
+A29: P2 = ProgramPart Cs2i
+by AMI_1:123;
+A30: Cs2k = Following(P2,Cs2i) by EXTPRO_1:4
+      .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by A29;
+A31:  (ProgramPart Cs2i)/.IC Cs2i
+ = Cs2i.IC Cs2i by COMPOS_1:38;
+A32:IC SCMPDS in dom p by AMISTD_5:6;
+A33: Csi.IC SCMPDS = (Csi|dom NPP p).IC SCMPDS by COMPOS_1:179,FUNCT_1:72,A32;
+    then Cs2i.IC SCMPDS = loc by A25,A28,COMPOS_1:179,FUNCT_1:72,A32;
+    then
+A34: Cs2k.IC SCMPDS = ICplusConst(Cs2i,1) by A30,A18,A31,SCMPDS_2:66;
+A35: Cs1i.IC SCMPDS = (Cs1i|dom NPP p).IC SCMPDS
+              by COMPOS_1:179,FUNCT_1:72,A32;
+    then
+A36: IC Cs1i = IC Cs2i by A28,COMPOS_1:179,FUNCT_1:72,A32;
+    set Cs1k = Comput(ProgramPart(s1),s1,k);
+A37:  (ProgramPart Cs1i)/.IC Cs1i
+ = Cs1i.IC Cs1i by COMPOS_1:38;
+A38: P1 = ProgramPart Cs1i
+by AMI_1:123;
+    Cs1k = Following(P1,Cs1i) by EXTPRO_1:4
+      .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by A38;
+    then
+A39: Cs1k.IC SCMPDS = ICplusConst(Cs1i,0) by A19,A25,A35,A33,A37,SCMPDS_2:66;
+  (Cs1k|dom NPP p).IC SCMPDS = Cs1k.IC SCMPDS &
+    (Cs2k|dom NPP p).IC SCMPDS = Cs2k.IC SCMPDS
+    by FUNCT_1:72,A32,COMPOS_1:179;
+    hence thesis by A34,A36,Th19,A39;
   end;
   hence contradiction;
 end;
 
-theorem Th23:
-  for p being autonomic non NAT-defined FinPartState of SCMPDS ,
-  s1, s2 being State of SCMPDS st p c= s1 & p c= s2 for i being Element of NAT
-holds IC Comput(ProgramPart(s1),s1,i) = IC Comput(ProgramPart(s2),s2,i) &
- CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,i)
-)
-  = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),s2
-,i))
+canceled;
+
+Lm1:
+ for p being PartState of SCMPDS
+ holds a in dom p implies a in dom NPP p
 proof
-  let p be autonomic non NAT-defined FinPartState of SCMPDS , s1, s2 be State
-  of SCMPDS such that
-A1: p c= s1 and
-A2: p c= s2;
-  let i be Element of NAT;
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-  thus
-A3: IC Cs1i = IC Cs2i
-  proof
-    assume
-A4: IC Comput(ProgramPart(s1),s1,i) <> IC Comput(ProgramPart(s2),s2,i);
-    (Cs1i|dom p).IC SCMPDS = Cs1i.IC SCMPDS & (Cs2i|dom p).IC SCMPDS =
-    Cs2i.IC SCMPDS by Th17,FUNCT_1:72;
-    hence contradiction by A1,A2,A4,EXTPRO_1:def 9;
-  end;
-  set I = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
-s1),s1,i));
-  thus I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart
-(s2),s2,i))
-  proof
-    ProgramPart p c= p by RELAT_1:88;
-    then
-A5: dom ProgramPart p c= dom p by GRFUNC_1:8;
-    IC Cs2i in dom ProgramPart p by A2,Th22;
-    then
-A6: (Cs2i|dom p).IC Cs2i = Cs2i.IC Cs2i by A5,FUNCT_1:72;
-    IC Cs1i in dom ProgramPart p by A1,Th22;
-    then
-A7: (Cs1i|dom p).IC Cs1i = Cs1i.IC Cs1i by A5,FUNCT_1:72;
-Y:  (ProgramPart Comput(ProgramPart(s2),s2,i))/.IC Comput(ProgramPart(s2),s2,i)
- = Comput(ProgramPart(s2),s2,i).IC Comput(ProgramPart(s2),s2,i) by COMPOS_1:38;
-Z:  (ProgramPart Comput(ProgramPart(s1),s1,i))/.IC Comput(ProgramPart(s1),s1,i)
- = Comput(ProgramPart(s1),s1,i).IC Comput(ProgramPart(s1),s1,i) by COMPOS_1:38;
-    assume
-ZZ:    I <> CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(
-ProgramPart(s2),s2,i));
-      Comput(ProgramPart(s1),s1,i)|dom p = Comput(ProgramPart(s2),s2,i)|dom p
-                            by A1,A2,EXTPRO_1:def 9;
-    hence contradiction by A3,A7,A6,Y,ZZ,Z;
-  end;
+ let p be PartState of SCMPDS;
+  a in SCM-Data-Loc by SCMPDS_2:def 2;
+  then
+A1: a in Data-Locations SCMPDS by SCMPDS_2:100;
+ assume a in dom p;
+  then
+A2:  a in dom DataPart p by A1,RELAT_1:86;
+   DataPart p c= NPP p by COMPOS_1:169;
+   then dom DataPart p c= dom NPP p by RELAT_1:25;
+ hence a in dom NPP p by A2;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i being Element of NAT,k1,k2 be
-Integer,a,b be Int_position st CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i
-),
-Comput(ProgramPart(s1),s1,i)) = (a,k1) := (b,k2)
-& a in dom p & DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) in dom p holds Comput
-(ProgramPart(s1),s1,i)
-.DataLoc(Comput(ProgramPart(s1),s1,i).b,k2) = Comput(ProgramPart(s2),s2,i).
-DataLoc(Comput(ProgramPart(s2),s2,i).
-  b,k2)
+being State of SCMPDS st p c= s1 & p c= s2 &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+ for i being Element of NAT,k1,k2 be
+Integer,a,b be Int_position st CurInstr(P1,
+Comput(P1,s1,i)) = (a,k1) := (b,k2)
+& a in dom p & DataLoc(Comput(P1,s1,i).a,k1) in dom p holds Comput
+(P1,s1,i)
+.DataLoc(Comput(P1,s1,i).b,k2) = Comput(P2,s2,i).
+DataLoc(Comput(P2,s2,i).b,k2)
 proof
   let p be autonomic non NAT-defined FinPartState of SCMPDS, s1, s2 be State
   of SCMPDS such that
-A1: p c= s1 & p c= s2;
+A1: p c= s1 & p c= s2 and
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT,k1,k2 be Integer,a,b be Int_position;
-  set I = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
-s1),s1,i));
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
+  set I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs1i = Comput(P1,s1,i);
+  set Cs2i = Comput(P2,s2,i);
   assume that
-A2: I = (a,k1) := (b,k2) and
-A3: a in dom p and
-A4: DataLoc(Cs1i.a,k1) in dom p;
-  a in dom p implies (Cs1i|dom p).a = Cs1i.a & (Cs2i|dom p).a = Cs2i.a by
-FUNCT_1:72;
+A3: I = (a,k1) := (b,k2) and
+A4: a in dom p and
+A5: DataLoc(Cs1i.a,k1) in dom p;
+  a in dom NPP p implies (Cs1i|dom NPP p).a = Cs1i.a &
+      (Cs2i|dom NPP p).a = Cs2i.a
+    by FUNCT_1:72;
   then
-A5: Cs1i.a=Cs2i.a by A1,A3,EXTPRO_1:def 9;
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
+A6: Cs1i.a=Cs2i.a by A1,A4,EXTPRO_1:def 9,A2,Lm1;
+  set Cs1i1 = Comput(P1,s1,i+1);
+  Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
   then
-A6: Cs1i1.DataLoc(Cs1i.a,k1) = Cs1i.DataLoc(Cs1i.b,k2) by A2,SCMPDS_2:59;
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A7: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
-A8: DataLoc(Cs1i.a,k1) in dom p implies (Cs1i1|dom p).DataLoc(Cs1i.a,k1) =
-  Cs1i1.DataLoc(Cs1i.a,k1) & (Cs2i1|dom p).DataLoc(Cs1i.a,k1) = Cs2i1.DataLoc(
+A7: Cs1i1.DataLoc(Cs1i.a,k1) = Cs1i.DataLoc(Cs1i.b,k2)
+     by A3,SCMPDS_2:59;
+
+  set Cs2i1 = Comput(P2,s2,i+1);
+A8: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
+A9: DataLoc(Cs1i.a,k1) in dom NPP p implies
+ (Cs1i1|dom NPP p).DataLoc(Cs1i.a,k1) =
+  Cs1i1.DataLoc(Cs1i.a,k1) &
+   (Cs2i1|dom NPP p).DataLoc(Cs1i.a,k1) = Cs2i1.DataLoc(
   Cs1i.a,k1) by FUNCT_1:72;
-  I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),
-s2,i)) by A1,Th23;
-  then Cs2i1.DataLoc(Cs2i.a,k1) = Cs2i.DataLoc(Cs2i.b,k2) by A7,A2,SCMPDS_2:59;
-  hence thesis by A1,A8,A4,A5,A6,EXTPRO_1:def 9;
+  I = CurInstr(P2,Comput(P2,s2,i))
+   by A1,AMISTD_5:7,A2;
+  then Cs2i1.DataLoc(Cs2i.a,k1) = Cs2i.DataLoc(Cs2i.b,k2)
+   by A8,A3,SCMPDS_2:59;
+  hence thesis by A1,A9,A5,A6,A7,EXTPRO_1:def 9,A2,Lm1;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i being Element of NAT,k1,k2 be
-Integer,a,b be Int_position st CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i
-),
-Comput(ProgramPart(s1),s1,i)) = AddTo(a,k1,b,k2)
-& a in dom p & DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) in dom p holds Comput
-(ProgramPart(s1),s1,i)
-.DataLoc(Comput(ProgramPart(s1),s1,i).b,k2) = Comput(ProgramPart(s2),s2,i).
-DataLoc(Comput(ProgramPart(s2),s2,i).
+being State of SCMPDS st p c= s1 & p c= s2  &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i being Element of NAT,k1,k2 be
+Integer,a,b be Int_position st CurInstr(P1,
+Comput(P1,s1,i)) = AddTo(a,k1,b,k2)
+& a in dom p & DataLoc(Comput(P1,s1,i).a,k1) in dom p holds Comput
+(P1,s1,i)
+.DataLoc(Comput(P1,s1,i).b,k2) = Comput(P2,s2,i).
+DataLoc(Comput(P2,s2,i).
   b,k2)
 proof
   let p be autonomic non NAT-defined FinPartState of SCMPDS, s1, s2 be State
   of SCMPDS such that
-A1: p c= s1 & p c= s2;
+A1: p c= s1 & p c= s2 and
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT,k1,k2 be Integer,a,b be Int_position;
-  set I = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
-s1),s1,i));
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
+  set I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs1i = Comput(P1,s1,i);
+  set Cs2i = Comput(P2,s2,i);
   assume that
-A2: I = AddTo(a,k1,b,k2) and
-A3: a in dom p and
-A4: DataLoc(Cs1i.a,k1) in dom p;
-  a in dom p implies (Cs1i|dom p).a = Cs1i.a & (Cs2i|dom p).a = Cs2i.a by
+A3: I = AddTo(a,k1,b,k2) and
+A4: a in dom p and
+A5: DataLoc(Cs1i.a,k1) in dom p;
+  a in dom NPP p implies
+   (Cs1i|dom NPP p).a = Cs1i.a & (Cs2i|dom NPP p).a = Cs2i.a by
 FUNCT_1:72;
   then
-A5: Cs1i.a=Cs2i.a by A1,A3,EXTPRO_1:def 9;
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
+A6: Cs1i.a=Cs2i.a by A1,A4,EXTPRO_1:def 9,Lm1,A2;
+  set Cs2i1 = Comput(P2,s2,i+1);
+  set Cs1i1 = Comput(P1,s1,i+1);
   set D11=Cs1i1.DataLoc(Cs1i.a,k1), D21=Cs2i1.DataLoc(Cs2i.a,k1), C11=Cs1i.
   DataLoc(Cs1i.a,k1), C12=Cs1i.DataLoc(Cs1i.b,k2), C21=Cs2i.DataLoc(Cs2i.a,k1),
   C22=Cs2i.DataLoc(Cs2i.b,k2);
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
-  DataLoc(Cs1i.a,k1) in dom p implies (Cs1i1|dom p).DataLoc(Cs1i.a,k1) =
-  Cs1i1.DataLoc(Cs1i.a,k1) & (Cs2i1|dom p).DataLoc(Cs1i.a,k1) = Cs2i1.DataLoc(
+A7: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
+  DataLoc(Cs1i.a,k1) in dom NPP p implies
+   (Cs1i1|dom NPP p).DataLoc(Cs1i.a,k1) =
+  Cs1i1.DataLoc(Cs1i.a,k1) &
+   (Cs2i1|dom NPP p).DataLoc(Cs1i.a,k1) = Cs2i1.DataLoc(
   Cs1i.a,k1) by FUNCT_1:72;
   then
-A7: D11 = D21 by A1,A4,A5,EXTPRO_1:def 9;
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
+A8: D11 = D21 by A1,A5,A6,EXTPRO_1:def 9,A2,Lm1;
+  Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
   then
-A8: D11 = C11+ C12 by A2,SCMPDS_2:61;
-  DataLoc(Cs1i.a,k1) in dom p implies (Cs1i|dom p).DataLoc(Cs1i.a,k1) =
-Cs1i.DataLoc(Cs1i.a,k1) & (Cs2i|dom p).DataLoc(Cs1i.a,k1) = Cs2i.DataLoc(Cs1i.a
+A9: D11 = C11+ C12 by A3,SCMPDS_2:61;
+  DataLoc(Cs1i.a,k1) in dom NPP p
+   implies (Cs1i|dom NPP p).DataLoc(Cs1i.a,k1) =
+Cs1i.DataLoc(Cs1i.a,k1) &
+ (Cs2i|dom NPP p).DataLoc(Cs1i.a,k1) = Cs2i.DataLoc(Cs1i.a
   ,k1) by FUNCT_1:72;
   then
-A9: C11=C21 by A1,A4,A5,EXTPRO_1:def 9;
-  I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),
-s2,i)) by A1,Th23;
-  then D21 = C21 + C22 by A6,A2,SCMPDS_2:61;
-  hence thesis by A9,A7,A8;
+A10: C11=C21 by A1,A5,A6,EXTPRO_1:def 9,A2,Lm1;
+  I = CurInstr(P2,Comput(P2,s2,i))
+   by A1,AMISTD_5:7,A2;
+  then D21 = C21 + C22 by A7,A3,SCMPDS_2:61;
+  hence thesis by A10,A8,A9;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i being Element of NAT,k1,k2 be
-Integer,a,b be Int_position st CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i
-),
-Comput(ProgramPart(s1),s1,i)) = SubFrom(a,k1,b,k2
-) & a in dom p & DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) in dom p holds
-Comput(ProgramPart(s1),s1,
-i).DataLoc(Comput(ProgramPart(s1),s1,i).b,k2) = Comput(ProgramPart(s2),s2,i).
-DataLoc(Comput(ProgramPart(s2),s2,i
+being State of SCMPDS st p c= s1 & p c= s2 &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i being Element of NAT,k1,k2 be
+Integer,a,b be Int_position st CurInstr(P1,
+Comput(P1,s1,i)) = SubFrom(a,k1,b,k2
+) & a in dom p & DataLoc(Comput(P1,s1,i).a,k1) in dom p holds
+Comput(P1,s1,
+i).DataLoc(Comput(P1,s1,i).b,k2) = Comput(P2,s2,i).
+DataLoc(Comput(P2,s2,i
   ).b,k2)
 proof
   let p be autonomic non NAT-defined FinPartState of SCMPDS, s1, s2 be State
   of SCMPDS such that
-A1: p c= s1 & p c= s2;
+A1: p c= s1 & p c= s2 and
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT,k1,k2 be Integer,a,b be Int_position;
-  set I = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
-s1),s1,i));
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
+  set I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs1i = Comput(P1,s1,i);
+  set Cs2i = Comput(P2,s2,i);
   assume that
-A2: I = SubFrom(a,k1,b,k2) and
-A3: a in dom p and
-A4: DataLoc(Cs1i.a,k1) in dom p;
-  a in dom p implies (Cs1i|dom p).a = Cs1i.a & (Cs2i|dom p).a = Cs2i.a by
+A3: I = SubFrom(a,k1,b,k2) and
+A4: a in dom p and
+A5: DataLoc(Cs1i.a,k1) in dom p;
+  a in dom NPP p implies
+   (Cs1i|dom NPP p).a = Cs1i.a & (Cs2i|dom NPP p).a = Cs2i.a by
 FUNCT_1:72;
   then
-A5: Cs1i.a=Cs2i.a by A1,A3,EXTPRO_1:def 9;
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
+A6: Cs1i.a=Cs2i.a by A1,A4,EXTPRO_1:def 9,Lm1,A2;
+  set Cs2i1 = Comput(P2,s2,i+1);
+  set Cs1i1 = Comput(P1,s1,i+1);
   set D11=Cs1i1.DataLoc(Cs1i.a,k1), D21=Cs2i1.DataLoc(Cs2i.a,k1), C11=Cs1i.
   DataLoc(Cs1i.a,k1), C12=Cs1i.DataLoc(Cs1i.b,k2), C21=Cs2i.DataLoc(Cs2i.a,k1),
   C22=Cs2i.DataLoc(Cs2i.b,k2);
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
-  DataLoc(Cs1i.a,k1) in dom p implies (Cs1i1|dom p).DataLoc(Cs1i.a,k1) =
-  Cs1i1.DataLoc(Cs1i.a,k1) & (Cs2i1|dom p).DataLoc(Cs1i.a,k1) = Cs2i1.DataLoc(
+A7: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
+  DataLoc(Cs1i.a,k1) in dom NPP p
+   implies (Cs1i1|dom NPP p).DataLoc(Cs1i.a,k1) =
+  Cs1i1.DataLoc(Cs1i.a,k1) &
+  (Cs2i1|dom NPP p).DataLoc(Cs1i.a,k1) = Cs2i1.DataLoc(
   Cs1i.a,k1) by FUNCT_1:72;
   then
-A7: D11 = D21 by A1,A4,A5,EXTPRO_1:def 9;
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
+A8: D11 = D21 by A1,A5,A6,EXTPRO_1:def 9,A2,Lm1;
+  Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
   then
-A8: D11 = C11- C12 by A2,SCMPDS_2:62;
-  DataLoc(Cs1i.a,k1) in dom p implies (Cs1i|dom p).DataLoc(Cs1i.a,k1) =
-Cs1i.DataLoc(Cs1i.a,k1) & (Cs2i|dom p).DataLoc(Cs1i.a,k1) = Cs2i.DataLoc(Cs1i.a
+A9: D11 = C11- C12 by A3,SCMPDS_2:62;
+  DataLoc(Cs1i.a,k1) in dom NPP p
+   implies (Cs1i|dom NPP p).DataLoc(Cs1i.a,k1) =
+Cs1i.DataLoc(Cs1i.a,k1) &
+ (Cs2i|dom NPP p).DataLoc(Cs1i.a,k1) = Cs2i.DataLoc(Cs1i.a
   ,k1) by FUNCT_1:72;
   then
-A9: C11=C21 by A1,A4,A5,EXTPRO_1:def 9;
-  I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),
-s2,i)) by A1,Th23;
-  then D21 = C21 - C22 by A6,A2,SCMPDS_2:62;
-  hence thesis by A9,A7,A8;
+A10: C11=C21 by A1,A5,A6,EXTPRO_1:def 9,A2,Lm1;
+  I = CurInstr(P2,Comput(P2,s2,i))
+   by A1,AMISTD_5:7,A2;
+  then D21 = C21 - C22 by A7,A3,SCMPDS_2:62;
+  hence thesis by A10,A8,A9;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i being Element of NAT,k1,k2 be
-Integer,a,b be Int_position st CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i
-),
-Comput(ProgramPart(s1),s1,i)) = MultBy(a,k1,b,k2)
-& a in dom p & DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) in dom p holds Comput
-(ProgramPart(s1),s1,i)
-.DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) * Comput(ProgramPart(s1),s1,i).
-DataLoc(Comput(ProgramPart(s1),s1,i).
-b,k2) = Comput(ProgramPart(s2),s2,i).DataLoc(Comput(ProgramPart(s2),s2,i).a,k1)
-* Comput(ProgramPart(s2),s2,i).
-  DataLoc(Comput(ProgramPart(s2),s2,i).b,k2)
+being State of SCMPDS st p c= s1 & p c= s2 &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i being Element of NAT,k1,k2 be
+Integer,a,b be Int_position st CurInstr(P1,
+Comput(P1,s1,i)) = MultBy(a,k1,b,k2)
+& a in dom p & DataLoc(Comput(P1,s1,i).a,k1) in dom p holds Comput
+(P1,s1,i)
+.DataLoc(Comput(P1,s1,i).a,k1) * Comput(P1,s1,i).
+DataLoc(Comput(P1,s1,i).
+b,k2) = Comput(P2,s2,i).DataLoc(Comput(P2,s2,i).a,k1)
+* Comput(P2,s2,i).
+  DataLoc(Comput(P2,s2,i).b,k2)
 proof
   let p be autonomic non NAT-defined FinPartState of SCMPDS, s1, s2 be State
   of SCMPDS such that
-A1: p c= s1 & p c= s2;
+A1: p c= s1 & p c= s2 and
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i be Element of NAT,k1,k2 be Integer,a,b be Int_position;
-  set I = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
-s1),s1,i));
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
+  set I = CurInstr(P1,Comput(P1,s1,i));
+  set Cs1i = Comput(P1,s1,i);
+  set Cs2i = Comput(P2,s2,i);
   assume that
-A2: I = MultBy (a,k1,b,k2) and
-A3: a in dom p and
-A4: DataLoc(Cs1i.a,k1) in dom p;
-  a in dom p implies (Cs1i|dom p).a = Cs1i.a & (Cs2i|dom p).a = Cs2i.a by
+A3: I = MultBy (a,k1,b,k2) and
+A4: a in dom p and
+A5: DataLoc(Cs1i.a,k1) in dom p;
+  a in dom NPP p implies
+   (Cs1i|dom NPP p).a = Cs1i.a & (Cs2i|dom NPP p).a = Cs2i.a by
 FUNCT_1:72;
   then
-A5: Cs1i.a=Cs2i.a by A1,A3,EXTPRO_1:def 9;
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
+A6: Cs1i.a=Cs2i.a by A1,A4,EXTPRO_1:def 9,Lm1,A2;
+  set Cs2i1 = Comput(P2,s2,i+1);
+  set Cs1i1 = Comput(P1,s1,i+1);
   set D11=Cs1i1.DataLoc(Cs1i.a,k1), D21=Cs2i1.DataLoc(Cs2i.a,k1);
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
+  Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
   then
-A6: D11 = Cs1i.DataLoc(Cs1i.a,k1) * Cs1i.DataLoc(Cs1i.b,k2) by A2,SCMPDS_2:63;
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A7: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
-A8: DataLoc(Cs1i.a,k1) in dom p implies (Cs1i1|dom p).DataLoc(Cs1i.a,k1) =
-  Cs1i1.DataLoc(Cs1i.a,k1) & (Cs2i1|dom p).DataLoc(Cs1i.a,k1) = Cs2i1.DataLoc(
+A7: D11 = Cs1i.DataLoc(Cs1i.a,k1) * Cs1i.DataLoc(Cs1i.b,k2) by A3,SCMPDS_2:63;
+A8: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
+A9: DataLoc(Cs1i.a,k1) in dom NPP p
+ implies (Cs1i1|dom NPP p).DataLoc(Cs1i.a,k1) =
+  Cs1i1.DataLoc(Cs1i.a,k1) &
+   (Cs2i1|dom NPP p).DataLoc(Cs1i.a,k1) = Cs2i1.DataLoc(
   Cs1i.a,k1) by FUNCT_1:72;
-  I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),
-s2,i)) by A1,Th23;
-  then D21 = Cs2i.DataLoc(Cs2i.a,k1) * Cs2i.DataLoc(Cs2i.b,k2) by A7,A2,
+  I = CurInstr(P2,Comput(P2,s2,i))
+   by A1,AMISTD_5:7,A2;
+  then D21 = Cs2i.DataLoc(Cs2i.a,k1) * Cs2i.DataLoc(Cs2i.b,k2) by A8,A3,
 SCMPDS_2:63;
-  hence thesis by A1,A8,A4,A5,A6,EXTPRO_1:def 9;
+  hence thesis by A1,A9,A5,A6,A7,EXTPRO_1:def 9,A2,Lm1;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i,m being Element of NAT,a being
-Int_position,k1,k2 be Integer st CurInstr(ProgramPart Comput(ProgramPart(s1),s1
-,i),
-Comput(ProgramPart(s1),s1,i)) = (a,k1)<>0_goto
-  k2 & m= IC Comput(ProgramPart(s1),s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
-ProgramPart(s1),s1,i).
-DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) = 0 iff Comput(ProgramPart(s2),s2,i)
-.DataLoc(Comput(ProgramPart(
-  s2),
-  s2,i).a,k1) = 0 )
+being State of SCMPDS st p c= s1 & p c= s2  &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i,m being Element of NAT,a being
+Int_position,k1,k2 be Integer st CurInstr(P1,
+Comput(P1,s1,i)) = (a,k1)<>0_goto
+  k2 & m= IC Comput(P1,s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
+P1,s1,i).
+DataLoc(Comput(P1,s1,i).a,k1) = 0 iff Comput(P2,s2,i)
+.DataLoc(Comput(P2,s2,i).a,k1) = 0 )
 proof
   let p be autonomic non NAT-defined FinPartState of SCMPDS, s1, s2 be State
   of SCMPDS such that
-A1: p c= s1 & p c= s2;
+A1: p c= s1 & p c= s2 and
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i,m be Element of NAT,a be Int_position,k1,k2 be Integer;
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: IC Cs1i = IC Cs2i & (Cs1i1|dom p) = (Cs2i1|dom p) by A1,Th23,EXTPRO_1:def 9
-;
-  set I = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
-s1),s1,i));
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-A4: m+1>=0 by NAT_1:2;
-A5: (Cs1i1|dom p).IC SCMPDS = Cs1i1.IC SCMPDS & (Cs2i1|dom p).IC SCMPDS =
-  Cs2i1. IC SCMPDS by Th17,FUNCT_1:72;
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+  set Cs1i = Comput(P1,s1,i);
+  set Cs2i = Comput(P2,s2,i);
+  set Cs1i1 = Comput(P1,s1,i+1);
+  set Cs2i1 = Comput(P2,s2,i+1);
+A3: IC Cs1i = IC Cs2i & (Cs1i1|dom NPP p) = (Cs2i1|dom NPP p)
+       by A1,AMISTD_5:7,EXTPRO_1:def 9,A2;
+  set I = CurInstr(P1,Comput(P1,s1,i));
+A4: Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
+A5: m+1>=0 by NAT_1:2;
+ IC SCMPDS in dom p by AMISTD_5:6;
+ then IC SCMPDS in dom NPP p by COMPOS_1:179;
+ then
+A6: (Cs1i1|dom NPP p).IC SCMPDS = Cs1i1.IC SCMPDS &
+ (Cs2i1|dom NPP p).IC SCMPDS =
+  Cs2i1. IC SCMPDS by FUNCT_1:72;
+A7: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
   assume that
-A7: I = (a,k1)<>0_goto k2 and
-A8: m= IC Cs1i & m+k2 >= 0 & k2 <> 1;
-A9: I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2
-),s2,i)) by A1,Th23;
-A10: now
+A8: I = (a,k1)<>0_goto k2 and
+A9: m= IC Cs1i & m+k2 >= 0 & k2 <> 1;
+A10: I = CurInstr(P2,Comput(P2,s2,i))
+ by A1,AMISTD_5:7,A2;
+A11: now
     assume that
-A11: Comput(ProgramPart(s2),s2,i).DataLoc(Cs2i.a,k1) = 0 and
-A12: Comput(ProgramPart(s1),s1,i).DataLoc(Cs1i.a,k1) <> 0;
-A13: Cs1i1.IC SCMPDS = ICplusConst(Cs1i,k2) by A3,A7,A12,SCMPDS_2:67;
-    Cs2i1.IC SCMPDS = succ IC Cs2i by A9,A6,A7,A11,SCMPDS_2:67
+A12: Comput(P2,s2,i).DataLoc(Cs2i.a,k1) = 0 and
+A13: Comput(P1,s1,i).DataLoc(Cs1i.a,k1) <> 0;
+A14: Cs1i1.IC SCMPDS = ICplusConst(Cs1i,k2) by A4,A8,A13,SCMPDS_2:67;
+    Cs2i1.IC SCMPDS = succ IC Cs2i by A10,A7,A8,A12,SCMPDS_2:67
       .=ICplusConst(Cs2i,1) by Th20;
-    hence contradiction by A5,A2,A8,A4,A13,Th18;
+    hence contradiction by A6,A3,A9,A5,A14,Th18;
   end;
   now
     assume that
-A14: Comput(ProgramPart(s1),s1,i).DataLoc(Cs1i.a,k1) = 0 and
-A15: Comput(ProgramPart(s2),s2,i).DataLoc(Cs2i.a,k1) <> 0;
-A16: Cs2i1.IC SCMPDS = ICplusConst(Cs2i,k2) by A9,A6,A7,A15,SCMPDS_2:67;
-    Cs1i1.IC SCMPDS = succ IC Cs1i by A3,A7,A14,SCMPDS_2:67
+A15: Comput(P1,s1,i).DataLoc(Cs1i.a,k1) = 0 and
+A16: Comput(P2,s2,i).DataLoc(Cs2i.a,k1) <> 0;
+A17: Cs2i1.IC SCMPDS = ICplusConst(Cs2i,k2) by A10,A7,A8,A16,SCMPDS_2:67;
+    Cs1i1.IC SCMPDS = succ IC Cs1i by A4,A8,A15,SCMPDS_2:67
       .=ICplusConst(Cs1i,1) by Th20;
-    hence contradiction by A5,A2,A8,A4,A16,Th18;
+    hence contradiction by A6,A3,A9,A5,A17,Th18;
   end;
-  hence thesis by A10;
+  hence thesis by A11;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i,m being Element of NAT,a being
-Int_position,k1,k2 be Integer st CurInstr(ProgramPart Comput(ProgramPart(s1),s1
-,i),
-Comput(ProgramPart(s1),s1,i)) = (a,k1)<=0_goto
-  k2 & m= IC Comput(ProgramPart(s1),s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
-ProgramPart(s1),s1,i).
-DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) > 0 iff Comput(ProgramPart(s2),s2,i)
-.DataLoc(Comput(ProgramPart(
-  s2),
+being State of SCMPDS st p c= s1 & p c= s2 &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i,m being Element of NAT,a being
+Int_position,k1,k2 be Integer st CurInstr(P1,
+Comput(P1,s1,i)) = (a,k1)<=0_goto
+  k2 & m= IC Comput(P1,s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
+P1,s1,i).
+DataLoc(Comput(P1,s1,i).a,k1) > 0 iff Comput(P2,s2,i)
+.DataLoc(Comput(P2,
   s2,i).a,k1) > 0 )
 proof
   let p be autonomic non NAT-defined FinPartState of SCMPDS, s1, s2 be State
   of SCMPDS such that
-A1: p c= s1 & p c= s2;
+A1: p c= s1 & p c= s2 and
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i,m be Element of NAT,a be Int_position,k1,k2 be Integer;
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: IC Cs1i = IC Cs2i & (Cs1i1|dom p) = (Cs2i1|dom p) by A1,Th23,EXTPRO_1:def 9
+  set Cs1i = Comput(P1,s1,i);
+  set Cs2i = Comput(P2,s2,i);
+  set Cs1i1 = Comput(P1,s1,i+1);
+  set Cs2i1 = Comput(P2,s2,i+1);
+A3: IC Cs1i = IC Cs2i & (Cs1i1|dom NPP p) = (Cs2i1|dom NPP p)
+           by A1,AMISTD_5:7,EXTPRO_1:def 9,A2
 ;
-  set I = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
-s1),s1,i));
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-A4: m+1>=0 by NAT_1:2;
-A5: (Cs1i1|dom p).IC SCMPDS = Cs1i1.IC SCMPDS & (Cs2i1|dom p).IC SCMPDS =
-  Cs2i1. IC SCMPDS by Th17,FUNCT_1:72;
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+  set I = CurInstr(P1,Comput(P1,s1,i));
+A4: Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
+A5: m+1>=0 by NAT_1:2;
+ IC SCMPDS in dom p by AMISTD_5:6;
+ then IC SCMPDS in dom NPP p by COMPOS_1:179;
+ then
+A6: (Cs1i1|dom NPP p).IC SCMPDS =
+ Cs1i1.IC SCMPDS & (Cs2i1|dom NPP p).IC SCMPDS =
+  Cs2i1. IC SCMPDS by FUNCT_1:72;
+A7: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
   assume that
-A7: I = (a,k1)<=0_goto k2 and
-A8: m= IC Cs1i & m+k2 >= 0 & k2 <> 1;
-A9: I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2
-),s2,i)) by A1,Th23;
-A10: now
+A8: I = (a,k1)<=0_goto k2 and
+A9: m= IC Cs1i & m+k2 >= 0 & k2 <> 1;
+A10: I = CurInstr(P2,Comput(P2,s2,i))
+ by A1,AMISTD_5:7,A2;
+A11: now
     assume that
-A11: Comput(ProgramPart(s2),s2,i).DataLoc(Cs2i.a,k1) > 0 and
-A12: Comput(ProgramPart(s1),s1,i).DataLoc(Cs1i.a,k1) <= 0;
-A13: Cs1i1.IC SCMPDS = ICplusConst(Cs1i,k2) by A3,A7,A12,SCMPDS_2:68;
-    Cs2i1.IC SCMPDS = succ IC Cs2i by A9,A6,A7,A11,SCMPDS_2:68
+A12: Comput(P2,s2,i).DataLoc(Cs2i.a,k1) > 0 and
+A13: Comput(P1,s1,i).DataLoc(Cs1i.a,k1) <= 0;
+A14: Cs1i1.IC SCMPDS = ICplusConst(Cs1i,k2) by A4,A8,A13,SCMPDS_2:68;
+    Cs2i1.IC SCMPDS = succ IC Cs2i by A10,A7,A8,A12,SCMPDS_2:68
       .=ICplusConst(Cs2i,1) by Th20;
-    hence contradiction by A5,A2,A8,A4,A13,Th18;
+    hence contradiction by A6,A3,A9,A5,A14,Th18;
   end;
   now
     assume that
-A14: Comput(ProgramPart(s1),s1,i).DataLoc(Cs1i.a,k1) > 0 and
-A15: Comput(ProgramPart(s2),s2,i).DataLoc(Cs2i.a,k1) <= 0;
-A16: Cs2i1.IC SCMPDS = ICplusConst(Cs2i,k2) by A9,A6,A7,A15,SCMPDS_2:68;
-    Cs1i1.IC SCMPDS = succ IC Cs1i by A3,A7,A14,SCMPDS_2:68
+A15: Comput(P1,s1,i).DataLoc(Cs1i.a,k1) > 0 and
+A16: Comput(P2,s2,i).DataLoc(Cs2i.a,k1) <= 0;
+A17: Cs2i1.IC SCMPDS = ICplusConst(Cs2i,k2) by A10,A7,A8,A16,SCMPDS_2:68;
+    Cs1i1.IC SCMPDS = succ IC Cs1i by A4,A8,A15,SCMPDS_2:68
       .=ICplusConst(Cs1i,1) by Th20;
-    hence contradiction by A5,A2,A8,A4,A16,Th18;
+    hence contradiction by A6,A3,A9,A5,A17,Th18;
   end;
-  hence thesis by A10;
+  hence thesis by A11;
 end;
 
 theorem
   for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st p c= s1 & p c= s2 for i,m being Element of NAT,a being
-Int_position,k1,k2 be Integer st CurInstr(ProgramPart Comput(ProgramPart(s1),s1
-,i),
-Comput(ProgramPart(s1),s1,i)) = (a,k1)>=0_goto
-  k2 & m= IC Comput(ProgramPart(s1),s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
-ProgramPart(s1),s1,i).
-DataLoc(Comput(ProgramPart(s1),s1,i).a,k1) < 0 iff Comput(ProgramPart(s2),s2,i)
-.DataLoc(Comput(ProgramPart(
-  s2),
+being State of SCMPDS st p c= s1 & p c= s2  &
+ ProgramPart p c= P1 & ProgramPart p c= P2
+for i,m being Element of NAT,a being
+Int_position,k1,k2 be Integer st CurInstr(P1,
+Comput(P1,s1,i)) = (a,k1)>=0_goto
+  k2 & m= IC Comput(P1,s1,i) & m+k2 >= 0 & k2 <> 1 holds (Comput(
+P1,s1,i).
+DataLoc(Comput(P1,s1,i).a,k1) < 0 iff Comput(P2,s2,i)
+.DataLoc(Comput(P2,
   s2,i).a,k1) < 0 )
 proof
   let p be autonomic non NAT-defined FinPartState of SCMPDS, s1, s2 be State
   of SCMPDS such that
-A1: p c= s1 & p c= s2;
+A1: p c= s1 & p c= s2 and
+A2: ProgramPart p c= P1 & ProgramPart p c= P2;
   let i,m be Element of NAT,a be Int_position,k1,k2 be Integer;
-  set Cs1i = Comput(ProgramPart(s1),s1,i);
-  set Cs2i = Comput(ProgramPart(s2),s2,i);
-  set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
-  set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: IC Cs1i = IC Cs2i & (Cs1i1|dom p) = (Cs2i1|dom p) by A1,Th23,EXTPRO_1:def 9
+  set Cs1i = Comput(P1,s1,i);
+  set Cs2i = Comput(P2,s2,i);
+  set Cs1i1 = Comput(P1,s1,i+1);
+  set Cs2i1 = Comput(P2,s2,i+1);
+A3: IC Cs1i = IC Cs2i & (Cs1i1|dom NPP p) = (Cs2i1|dom NPP p)
+        by A1,AMISTD_5:7,EXTPRO_1:def 9,A2
 ;
-  set I = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
-s1),s1,i));
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
-A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-A4: m+1>=0 by NAT_1:2;
-A5: (Cs1i1|dom p).IC SCMPDS = Cs1i1.IC SCMPDS & (Cs2i1|dom p).IC SCMPDS =
-  Cs2i1. IC SCMPDS by Th17,FUNCT_1:72;
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
-A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+  set I = CurInstr(P1,Comput(P1,s1,i));
+A4: Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:4
+    .= Exec (CurInstr(P1,Cs1i), Cs1i);
+A5: m+1>=0 by NAT_1:2;
+ IC SCMPDS in dom p by AMISTD_5:6;
+ then IC SCMPDS in dom NPP p by COMPOS_1:179;
+ then
+A6: (Cs1i1|dom NPP p).IC SCMPDS = Cs1i1.IC SCMPDS &
+(Cs2i1|dom NPP p).IC SCMPDS =
+  Cs2i1. IC SCMPDS by FUNCT_1:72;
+A7: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:4
+    .= Exec (CurInstr(P2,Cs2i), Cs2i);
   assume that
-A7: I = (a,k1)>=0_goto k2 and
-A8: m= IC Cs1i & m+k2 >= 0 & k2 <> 1;
-A9: I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2
-),s2,i))
- by A1,Th23;
-A10: now
+A8: I = (a,k1)>=0_goto k2 and
+A9: m= IC Cs1i & m+k2 >= 0 & k2 <> 1;
+A10: I = CurInstr(P2,Comput(P2,s2,i))
+ by A1,AMISTD_5:7,A2;
+A11: now
     assume that
-A11: Comput(ProgramPart(s2),s2,i).DataLoc(Cs2i.a,k1) < 0 and
-A12: Comput(ProgramPart(s1),s1,i).DataLoc(Cs1i.a,k1) >= 0;
-A13: Cs1i1.IC SCMPDS = ICplusConst(Cs1i,k2) by A3,A7,A12,SCMPDS_2:69;
-    Cs2i1.IC SCMPDS = succ IC Cs2i by A9,A6,A7,A11,SCMPDS_2:69
+A12: Comput(P2,s2,i).DataLoc(Cs2i.a,k1) < 0 and
+A13: Comput(P1,s1,i).DataLoc(Cs1i.a,k1) >= 0;
+A14: Cs1i1.IC SCMPDS = ICplusConst(Cs1i,k2) by A4,A8,A13,SCMPDS_2:69;
+    Cs2i1.IC SCMPDS = succ IC Cs2i by A10,A7,A8,A12,SCMPDS_2:69
       .=ICplusConst(Cs2i,1) by Th20;
-    hence contradiction by A5,A2,A8,A4,A13,Th18;
+    hence contradiction by A6,A3,A9,A5,A14,Th18;
   end;
   now
     assume that
-A14: Comput(ProgramPart(s1),s1,i).DataLoc(Cs1i.a,k1) < 0 and
-A15: Comput(ProgramPart(s2),s2,i).DataLoc(Cs2i.a,k1) >= 0;
-A16: Cs2i1.IC SCMPDS = ICplusConst(Cs2i,k2) by A9,A6,A7,A15,SCMPDS_2:69;
-    Cs1i1.IC SCMPDS = succ IC Cs1i by A3,A7,A14,SCMPDS_2:69
+A15: Comput(P1,s1,i).DataLoc(Cs1i.a,k1) < 0 and
+A16: Comput(P2,s2,i).DataLoc(Cs2i.a,k1) >= 0;
+A17: Cs2i1.IC SCMPDS = ICplusConst(Cs2i,k2) by A10,A7,A8,A16,SCMPDS_2:69;
+    Cs1i1.IC SCMPDS = succ IC Cs1i by A4,A8,A15,SCMPDS_2:69
       .=ICplusConst(Cs1i,1) by Th20;
-    hence contradiction by A5,A2,A8,A4,A16,Th18;
+    hence contradiction by A6,A3,A9,A5,A17,Th18;
   end;
-  hence thesis by A10;
+  hence thesis by A11;
 end;
 

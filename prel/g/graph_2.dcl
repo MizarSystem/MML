@@ -29,8 +29,8 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="25"/>
-<Adjective nr="31"/>
 <Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="56"/>
 <Adjective nr="57"/>
 </Cluster>
@@ -59,8 +59,8 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="25"/>
-<Adjective nr="31"/>
 <Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="58">
 <LocusVar nr="1"/>
 </Adjective>
@@ -91,8 +91,8 @@
 <Adjective nr="6"/>
 <Adjective nr="7"/>
 <Adjective nr="25"/>
-<Adjective nr="31"/>
 <Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="58">
 <LocusVar nr="1"/>
 </Adjective>
@@ -116,7 +116,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </CCluster>
 <CCluster aid="GRAPH_2" nr="2">

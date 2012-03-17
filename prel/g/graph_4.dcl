@@ -42,8 +42,8 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="25"/>
-<Adjective nr="31"/>
 <Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="53">
 <LocusVar nr="1"/>
 </Adjective>
@@ -73,8 +73,8 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="25"/>
-<Adjective nr="31"/>
 <Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="53">
 <LocusVar nr="1"/>
 </Adjective>

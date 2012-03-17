@@ -1,0 +1,1130 @@
+:: Partial Differentiation, Differentiation and Continuity on $n$-Dimensional
+:: Real Normed Linear Spaces
+::  by Takao Inou\'e , Adam Naumowicz , Noboru Endou and Yasunari Shidama
+::
+:: Received October 13, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies PRE_TOPC, RLVECT_1, FUNCT_1, ARYTM_3, ARYTM_1, FINSEQ_1,
+      FINSEQ_2, XXREAL_2, FINSET_1, MEMBERED, RVSUM_1, RELAT_1, COMPLEX1,
+      SQUARE_1, RCOMP_1, XBOOLE_0, PARTFUN1, NORMSP_1, LOPBAN_1, FDIFF_1,
+      PDIFF_1, REAL_NS1, BORSUK_1, EUCLID, XREAL_0, NUMBERS, STRUCT_0,
+      CFCONT_1, FUNCT_4, REAL_1, SUBSET_1, CARD_1, TARSKI, XXREAL_0, CARD_3,
+      NAT_1, SEQ_4, UNIALG_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, SQUARE_1, NAT_1,
+      MEMBERED, COMPLEX1, BINOP_2, XXREAL_2, FINSEQ_1, FINSEQ_2, SEQ_1,
+      RVSUM_1, SEQ_4, FUNCT_7, STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_0, EUCLID,
+      LOPBAN_1, NFCONT_1, NDIFF_1, REAL_NS1, PDIFF_1;
+ constructors RELSET_1, REAL_1, SQUARE_1, NAT_D, BINOP_2, SEQ_1, FINSEQOP,
+      SEQ_4, FINSEQ_7, MONOID_0, RSSPACE3, NFCONT_1, NDIFF_1, PDIFF_1;
+ registrations FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      XREAL_0, NAT_1, MEMBERED, VALUED_0, XXREAL_2, FINSEQ_1, FINSEQ_2,
+      STRUCT_0, MONOID_0, EUCLID, LOPBAN_1, JORDAN2B, REAL_NS1, PDIFF_6,
+      CARD_1;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+ definitions XBOOLE_0, SQUARE_1, FINSEQ_1, FINSEQ_2, NORMSP_0, EUCLID,
+      LOPBAN_1;
+ theorems ABSVALUE, EUCLID, XREAL_1, COMPLEX1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
+      ORDINAL1, NAT_1, FINSET_1, XXREAL_0, FUNCT_7, RVSUM_1, RELAT_1, FUNCT_1,
+      FUNCT_2, SQUARE_1, NORMSP_1, LOPBAN_1, PARTFUN1, NFCONT_1, NDIFF_1,
+      REAL_NS1, VALUED_1, PDIFF_1, XXREAL_2, XCMPLX_1, PDIFF_6, SEQ_4,
+      FUNCOP_1, GRCAT_1, PDIFF_7, LOPBAN_2, JORDAN2B, SERIES_3, CARD_1;
+ schemes NAT_1, FINSEQ_1;
+
+begin
+:: Some properties of partial differentiation
+:: of PartFunc of REAL-NS m,REAL-NS n
+
+theorem Th1:
+  for n,i be Element of NAT,
+      q be Element of REAL n,
+      p be Point of TOP-REAL n
+  st i in Seg n & q = p holds abs(p/.i) <= |.q.|
+proof
+let n,i be Element of NAT;
+let q be Element of REAL n;
+let p be Point of TOP-REAL n;
+assume that
+A1: i in Seg n and
+A2: q = p;
+A3: Sum( (0*n)+*(i,(p/.i)^2)) = (p/.i)^2 by A1,JORDAN2B:14;
+len (0*n) = n by CARD_1:def 13; then
+len ((0*n)+*(i,(p/.i)^2)) = n by FUNCT_7:99; then
+reconsider w1 = (0*n)+*(i,(p/.i)^2) as Element of n-tuples_on REAL
+  by FINSEQ_2:110;
+A4: len w1 = n by CARD_1:def 13;
+reconsider w2 = sqr q as Element of n-tuples_on REAL;
+A5: Sum sqr q >= 0 by RVSUM_1:116;
+A6: len q=n by CARD_1:def 13;
+for j be Nat st j in Seg n holds w1.j <= w2.j
+    proof
+    let j be Nat such that
+A7: j in Seg n;
+    set r1 = w1.j, r2 = w2.j;
+    per cases;
+    suppose
+A8:   j = i; then
+      j in dom q by A1,A6,FINSEQ_1:def 3; then
+A9:  q/.j = q.j by PARTFUN1:def 8;
+A10:  dom 0*n = Seg len 0*n by FINSEQ_1:def 3
+             .= Seg n by CARD_1:def 13;
+      i in dom w1 by A1,A4,FINSEQ_1:def 3;
+      then r1 = w1/.i by A8,PARTFUN1:def 8
+             .= (q/.i)^2 by A2,A1,A10,FUNCT_7:38;
+      hence thesis by A8,A9,VALUED_1:11;
+    end;
+    suppose
+A11:  j<>i;
+A12:  dom 0*n = Seg len 0*n by FINSEQ_1:def 3
+             .=Seg n by CARD_1:def 13;
+      dom q = Seg n by A6,FINSEQ_1:def 3; then
+      q/.j = q.j by A7,PARTFUN1:def 8; then
+A13:  r2 = (q/.j)^2 by VALUED_1:11;
+      j in dom w1 by A4,A7,FINSEQ_1:def 3; then
+      r1 = w1/.j by PARTFUN1:def 8
+        .= (0*n)/.j by A7,A11,A12,FUNCT_7:39
+        .= (n|->0).j by A7,A12,PARTFUN1:def 8
+        .= 0 by A7,FUNCOP_1:13;
+      hence thesis by A13,XREAL_1:65;
+    end;
+  end; then
+  Sum w1 <= Sum w2 by RVSUM_1:112; then
+  0 <= (p/.i)^2 & (p/.i)^2 <= (sqrt Sum sqr q)^2
+    by A5,A3,SQUARE_1:def 4,XREAL_1:65; then
+  sqrt((p/.i)^2) <= sqrt((sqrt Sum sqr q)^2) by SQUARE_1:94; then
+  abs(abs(p/.i)) <= sqrt((sqrt Sum sqr q)^2) by COMPLEX1:158; then
+  0 <= |.q.| & abs(p/.i) <= abs sqrt Sum sqr q by COMPLEX1:158;
+  hence thesis by ABSVALUE:def 1;
+end;
+
+theorem Th2:
+  for x be Real, vx be Element of REAL-NS 1
+  st vx = <* x *> holds ||.vx.|| = abs x
+proof
+let x be Real;
+let vx be Element of REAL-NS 1;
+reconsider xx = vx as Element of REAL 1 by REAL_NS1:def 4;
+assume vx = <* x *>; then
+sqrt Sum sqr xx = sqrt Sum <*x^2*> by RVSUM_1:81; then
+A1: sqrt Sum sqr xx = sqrt (x^2) by RVSUM_1:103;
+||.vx.|| = |.xx.| by REAL_NS1:1;
+hence thesis by A1,COMPLEX1:158;
+end;
+
+theorem Th3:
+  for n be non empty Element of NAT,
+      x be Point of REAL-NS n,
+      i be Element of NAT st 1 <= i & i <= n holds
+    ||. Proj(i,n).x .|| <= ||. x .||
+proof
+let n be non empty Element of NAT;
+let x be Point of REAL-NS n;
+let i be Element of NAT;
+assume
+A1:  1 <=i & i <= n;
+reconsider y = x as Element of REAL n by REAL_NS1:def 4;
+A2: ||. x .|| = |.y.| by REAL_NS1:1;
+Proj(i,n).x = <* proj(i,n).x *> by PDIFF_1:def 4
+           .= <* y.i *> by PDIFF_1:def 1; then
+A3: ||. Proj(i,n).x .|| = abs(y.i) by Th2;
+reconsider p = y as Element of TOP-REAL n by EUCLID:25;
+A4: i in Seg n by A1; then
+A5: abs(p/.i) <= |.y.| by Th1;
+i in dom y by A4,FINSEQ_1:110;
+hence thesis by A2,A3,A5,PARTFUN1:def 8;
+end;
+
+theorem Th4:
+  for n be non empty Element of NAT,
+      x be Element of REAL-NS n,
+      i be Element of NAT holds
+   ||. Proj(i,n).x .|| = |. proj(i,n).x .|
+proof
+let n be non empty Element of NAT;
+let x be Element of REAL-NS n;
+let i be Element of NAT;
+reconsider y = x as Element of REAL n by REAL_NS1:def 4;
+Proj(i,n).x = <* proj(i,n).x *> by PDIFF_1:def 4
+           .= <* y.i *> by PDIFF_1:def 1; then
+||. Proj(i,n).x .|| = abs(y.i) by Th2;
+hence thesis by PDIFF_1:def 1;
+end;
+
+theorem
+  for n be non empty Element of NAT,
+      x be Element of REAL n,
+      i be Element of NAT st 1 <= i & i <= n holds
+   |. proj(i,n).x .| <= |. x .|
+proof
+let n be non empty Element of NAT;
+let x be Element of REAL n;
+let i be Element of NAT;
+assume
+A1:  1 <=i & i <= n;
+reconsider y = x as Element of REAL-NS n by REAL_NS1:def 4;
+A2: ||. Proj(i,n).y .|| = |. proj(i,n).y .| by Th4;
+||. Proj(i,n).y .|| <= ||.y.|| by A1,Th3;
+hence thesis by A2,REAL_NS1:1;
+end;
+
+theorem Th6:
+  for m,n be non empty Element of NAT,
+      s be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      i be Element of NAT st 1 <= i & i <= n holds
+  Proj(i,n) is bounded LinearOperator of REAL-NS n,REAL-NS 1 &
+  BoundedLinearOperatorsNorm(REAL-NS n,REAL-NS 1).(Proj(i,n)) <= 1
+proof
+let m,n be non empty Element of NAT;
+let s be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n);
+let i be Element of NAT;
+assume
+A1: 1 <=i & i <= n;
+A2: for y be Point of REAL-NS n, r be Real holds
+    Proj(i,n).(r*y) = r*(Proj(i,n).y) by PDIFF_6:27;
+for y1,y2 be Point of REAL-NS n holds
+    Proj(i,n).(y1 + y2) = Proj(i,n).y1 + Proj(i,n).y2 by PDIFF_6:26;
+  hence A3: Proj(i,n) is bounded LinearOperator of REAL-NS n,REAL-NS 1
+    by A2,LOPBAN_1:def 6,GRCAT_1:def 13;
+  deffunc BLONorm(Element of NAT,Element of NAT)
+          = BoundedLinearOperatorsNorm(REAL-NS $1,REAL-NS $2);
+A4: Proj(i,n) in BoundedLinearOperators(REAL-NS n,REAL-NS 1)
+      by A3,LOPBAN_1:def 10;
+set s0 = modetrans(Proj(i,n),REAL-NS n,REAL-NS 1);
+   upper_bound PreNorms(s0) <= 1
+proof
+A5: for x be real set st x in PreNorms(s0) holds x <= 1
+    proof
+    let x be real set;
+    assume x in PreNorms(s0); then
+    consider y being VECTOR of REAL-NS n such that
+A6:  x = ||. s0.y .|| & ||. y .|| <= 1;
+A7:  ||. Proj(i,n).y .|| <= ||. y .|| by A1,Th3;
+    Proj(i,n) = s0 by A3,LOPBAN_1:35;
+    hence thesis by A6,A7,XXREAL_0:2;
+    end;
+A8: PreNorms(s0) is bounded_above
+    proof
+    for x being ext-real set st x in PreNorms(s0) holds x <= 1 by A5; then
+    1 is UpperBound of PreNorms(s0) by XXREAL_2:def 1;
+    hence thesis by XXREAL_2:def 10;
+    end;
+    assume
+A9: upper_bound PreNorms(s0) > 1;
+    set dif = upper_bound PreNorms(s0) - 1;
+A10: dif > 0 by A9,XREAL_1:52;
+    ex w being real set st
+      w in PreNorms(s0) & upper_bound PreNorms(s0) - dif < w
+      by A10,A8,SEQ_4:def 4;
+    hence contradiction by A5;
+   end;
+  hence thesis by A4,LOPBAN_1:def 14;
+end;
+
+theorem Th7:
+  for m,n be non empty Element of NAT,
+      s be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      i be Element of NAT st 1 <= i & i <= n holds
+  Proj(i,n)*s is Point of
+    R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1)
+  & BoundedLinearOperatorsNorm(REAL-NS m,REAL-NS 1).(Proj(i,n)*s)
+    <= ( BoundedLinearOperatorsNorm(REAL-NS n,REAL-NS 1).(Proj(i,n)))
+         *(BoundedLinearOperatorsNorm(REAL-NS m,REAL-NS n).s)
+proof
+let m,n be non empty Element of NAT;
+let s be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n);
+let i be Element of NAT;
+deffunc BLONorm(Element of NAT,Element of NAT)
+          = BoundedLinearOperatorsNorm(REAL-NS $1,REAL-NS $2);
+assume 1 <=i & i <= n; then
+A1: Proj(i,n) is bounded LinearOperator of REAL-NS n,REAL-NS 1 by Th6;
+    s is bounded LinearOperator of REAL-NS m,REAL-NS n
+      by LOPBAN_1:def 10; then
+    Proj(i,n)*s is bounded LinearOperator of REAL-NS m,REAL-NS 1 &
+    BLONorm(m,1).(Proj(i,n)*s) <= ( BLONorm(n,1).(Proj(i,n)))*(BLONorm(m,n).s)
+      by LOPBAN_2:2,A1;
+  hence thesis by LOPBAN_1:def 10;
+end;
+
+theorem
+  for n be non empty Element of NAT, i be Element of NAT holds
+    Proj(i,n) is homogeneous
+proof
+  let n be non empty Element of NAT, i be Element of NAT;
+  thus for x be Point of REAL-NS n, r be Real
+    holds Proj(i,n).(r*x) = r*(Proj(i,n).x) by PDIFF_6:27;
+end;
+
+theorem
+  for n be non empty Element of NAT,
+      x be Element of REAL n, r be Real, i be Element of NAT holds
+    proj(i,n).(r*x) = r*(proj(i,n).x)
+proof
+  let n be non empty Element of NAT,
+    x be Element of REAL n, r be Real, i be Element of NAT;
+ thus proj(i,n).(r*x) = (r*x).i by PDIFF_1:def 1
+               .= r*(x.i) by RVSUM_1:66
+               .= r*(proj(i,n).x) by PDIFF_1:def 1;
+end;
+
+theorem
+  for n be non empty Element of NAT,
+      x,y be Element of REAL n,
+      i be Element of NAT
+  holds proj(i,n).(x + y) = proj(i,n).x + proj(i,n).y
+proof
+  let n be non empty Element of NAT,
+      x,y be Element of REAL n, i be Element of NAT;
+ thus proj(i,n).(x + y) = (x + y).i by PDIFF_1:def 1
+                 .= x.i + y.i by RVSUM_1:27
+                 .= proj(i,n).x + y.i by PDIFF_1:def 1
+                 .= proj(i,n).x + proj(i,n).y by PDIFF_1:def 1;
+end;
+
+theorem Th11:
+  for n be non empty Element of NAT,
+      x,y be Point of REAL-NS n,
+      i be Element of NAT
+  holds Proj(i,n).(x - y) = Proj(i,n).x - Proj(i,n).y
+proof
+let n be non empty Element of NAT,
+    x,y be Point of REAL-NS n,
+    i be Element of NAT;
+reconsider x1 = x, y1 = y as Element of REAL n by REAL_NS1:def 4;
+reconsider rx = x1.i, ry = y1.i as Element of REAL;
+Proj(i,n).x = <* proj(i,n).x *> & Proj(i,n).y = <* proj(i,n).y *>
+  by PDIFF_1:def 4; then
+A1: Proj(i,n).x = <* rx *> & Proj(i,n).y = <* ry *> by PDIFF_1:def 1;
+A2: <* rx *> is Element of REAL 1 & <* ry *> is Element of REAL 1
+      by FINSEQ_2:118;
+Proj(i,n).(x - y) = <* proj(i,n).(x - y) *> by PDIFF_1:def 4
+  .= <* proj(i,n).(x1 - y1) *> by REAL_NS1:5
+  .= <* (x1 - y1).i *> by PDIFF_1:def 1
+  .= <* (x1.i - y1.i) *> by RVSUM_1:48
+  .= <* rx *> - <* ry *> by RVSUM_1:50;
+hence thesis by A1,A2,REAL_NS1:5;
+end;
+
+theorem
+  for n be non empty Element of NAT,
+      x,y be Element of REAL n,
+      i be Element of NAT
+  holds proj(i,n).(x - y) = proj(i,n).x - proj(i,n).y
+proof
+  let n be non empty Element of NAT,
+      x,y be Element of REAL n, i be Element of NAT;
+  thus proj(i,n).(x - y) = (x - y).i by PDIFF_1:def 1
+                   .= x.i - y.i by RVSUM_1:48
+                   .= proj(i,n).x - y.i by PDIFF_1:def 1
+                   .= proj(i,n).x - proj(i,n).y by PDIFF_1:def 1;
+end;
+
+Lm1:
+for m,n be non empty Element of NAT,
+    s,t be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+    i be Element of NAT,
+    si,ti be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1)
+  st si = Proj(i,n)*s & ti = Proj(i,n)*t & 1 <=i & i <= n holds
+  si - ti = Proj(i,n)*(s - t)
+proof
+let m,n be non empty Element of NAT,
+    s,t be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+    i be Element of NAT,
+    si,ti be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1);
+assume
+A1: si = Proj(i,n)*s & ti = Proj(i,n)*t & 1 <=i & i <= n;
+deffunc RealNormSpaceOfBLO(non empty Element of NAT, non empty Element of NAT)
+  = R_NormSpace_of_BoundedLinearOperators(REAL-NS $1,REAL-NS $2);
+A2: the carrier of REAL-NS m = REAL m by REAL_NS1:def 4;
+A3: Proj(i,n) is bounded LinearOperator of REAL-NS n,REAL-NS 1 by Th6,A1;
+A4: dom (si - ti) = REAL m
+    proof
+    si - ti is LinearOperator of REAL-NS m,REAL-NS 1 by LOPBAN_1:def 10;
+    hence thesis by A2,FUNCT_2:def 1;
+    end;
+A5: dom (si - ti) = dom (Proj(i,n)*(s - t))
+    proof
+    s - t is bounded LinearOperator of REAL-NS m,REAL-NS n
+      by LOPBAN_1:def 10; then
+    Proj(i,n)*(s - t) is LinearOperator of REAL-NS m,REAL-NS 1
+      by A3,LOPBAN_2:1;
+    hence thesis by A4,A2,FUNCT_2:def 1;
+    end;
+A6: dom si = REAL m
+     proof
+     si is LinearOperator of REAL-NS m,REAL-NS 1 by LOPBAN_1:def 10;
+     hence thesis by A2,FUNCT_2:def 1;
+     end;
+A7: dom ti = REAL m
+     proof
+     ti is LinearOperator of REAL-NS m,REAL-NS 1 by LOPBAN_1:def 10;
+     hence thesis by A2,FUNCT_2:def 1;
+     end;
+A8: for x be Point of REAL-NS m
+    holds (si - ti).x = (Proj(i,n)*(s - t)).x
+    proof
+    let x be Point of REAL-NS m;
+    reconsider x as Element of REAL m by REAL_NS1:def 4;
+    reconsider y = x as Point of REAL-NS m;
+    (Proj(i,n)*(s - t)).x = Proj(i,n).((s - t).x) by A4,A5,FUNCT_1:22
+     .= Proj(i,n).(s.y - t.y) by LOPBAN_1:46
+     .= Proj(i,n).(s.y) - Proj(i,n).(t.y) by Th11
+     .= si.y - Proj(i,n).(t.y) by A1,A6,FUNCT_1:22
+     .= si.y - ti.y by A1,A7,FUNCT_1:22
+     .= (si - ti).x by LOPBAN_1:46;
+      hence thesis;
+    end;
+    for x be set st x in dom (si - ti)
+    holds (si - ti).x = (Proj(i,n)*(s - t)).x
+    proof
+    let x be set;
+    assume
+A9: x in dom (si - ti);
+    reconsider x as Point of REAL-NS m by A9,A4,REAL_NS1:def 4;
+    (si - ti).x = (Proj(i,n)*(s - t)).x by A8;
+    hence thesis;
+    end;
+  hence thesis by A5,FUNCT_1:9;
+end;
+
+theorem Th13:
+  for m,n be non empty Element of NAT,
+      s be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      i be Element of NAT,
+      si be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1)
+      st si = Proj(i,n)*s & 1 <=i & i <= n
+  holds ||. si .|| <= ||. s .||
+proof
+let m,n be non empty Element of NAT,
+    s be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+    i be Element of NAT,
+    si be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1);
+assume
+A1: si = Proj(i,n)*s & 1 <=i & i <= n;
+deffunc BLONorm(Element of NAT,Element of NAT)
+    = BoundedLinearOperatorsNorm(REAL-NS $1,REAL-NS $2);
+ A2: Proj(i,n) is bounded LinearOperator of REAL-NS n,REAL-NS 1
+     & BLONorm(n,1).(Proj(i,n)) <=1 by Th6,A1;
+s is bounded LinearOperator of REAL-NS m,REAL-NS n
+  by LOPBAN_1:def 10; then
+A3: ||. si .|| <= (BLONorm(n,1).(Proj(i,n))) * ||. s .|| by A2,A1,LOPBAN_2:2;
+0 <= ||. s .|| by NORMSP_1:8; then
+(BLONorm(n,1).(Proj(i,n))) * ||. s .|| <= 1* ||. s .|| by Th6,A1,XREAL_1:66;
+hence thesis by A3,XXREAL_0:2;
+end;
+
+theorem Th14:
+  for m,n be non empty Element of NAT,
+      s,t be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      si,ti be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1),
+      i be Element of NAT st
+      si = Proj(i,n)*s & ti = Proj(i,n)*t & 1 <= i & i <= n
+  holds ||. si - ti .|| <= ||. s - t .||
+proof
+let m,n be non empty Element of NAT,
+    s,t be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+    si,ti be Point of
+       R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1),
+    i be Element of NAT;
+deffunc BLONorm(Element of NAT,Element of NAT)
+    = BoundedLinearOperatorsNorm(REAL-NS $1,REAL-NS $2);
+  assume
+A1: si = Proj(i,n)*s & ti = Proj(i,n)*t & 1 <=i & i <= n;
+  si - ti = Proj(i,n)*(s-t) by Lm1,A1;
+  hence thesis by A1,Th13;
+end;
+
+theorem Th15:
+  for K be Real, n be Element of NAT,
+      s be Element of REAL n st
+      for i be Element of NAT st 1 <= i & i <= n holds abs( s.i ) <= K
+  holds |.s.| <= n*K
+proof
+let K be Real;
+defpred P[Nat] means for s be Element of REAL $1 st
+   for i be Element of NAT st 1 <= i & i <= $1
+      holds abs( s.i ) <= K holds |.s.| <= $1*K;
+A1: P[0]
+proof
+ let s be Element of REAL 0;
+ s = 0*0;
+ hence thesis by EUCLID:10;
+end;
+A2: for n be Element of NAT st P[n] holds P[n+1]
+proof
+  let n be Element of NAT;
+  assume A3: P[n];
+  let s be Element of REAL (n+1);
+  assume A4:for i be Element of NAT st 1 <=i & i <= n+1 holds abs(s.i) <= K;
+  set sn = s | n;
+  len s = n+1 by CARD_1:def 13; then
+  len sn = n by FINSEQ_3:59;
+  then reconsider sn as Element of REAL n by FINSEQ_2:110;
+A5:now let i be Element of NAT;
+      assume A6:1 <=i & i <= n;
+      n <= n+1 by NAT_1:11; then
+      1 <=i & i <= n+1 by XXREAL_0:2,A6; then
+      abs(s.i) <= K by A4;
+      hence abs(sn.i) <= K by FINSEQ_3:121,A6;
+   end;
+   1 <= (n+1) & (n+1) <= (n+1) by NAT_1:11; then
+A7:  abs( s.(n+1)) <= K by A4;
+A8:  |.s.|^2 = |.sn.|^2 + (s. (n+1))^2 by REAL_NS1:10;
+A9:   K >= 0 by A7,COMPLEX1:132;
+A10: |.sn.|^2 <= (n*K)^2 by A3,A5,SQUARE_1:77;
+A11: (s.(n+1))^2 <= K^2 by A7,SERIES_3:24;
+A12:  ((n*K )^2 + K^2) + 2*(n*K)*K >= ((n*K )^2 + K^2) by A9,XREAL_1:40;
+  |.sn.|^2 + (s.(n+1))^2 <= (n*K )^2 + K^2 by A10,A11,XREAL_1:9; then
+A13:  |.s.|^2 <= ((n+1)*K )^2 by A8,A12,XXREAL_0:2;
+A14:  sqrt(((n+1)*K )^2) = |.(n+1)*K .| by COMPLEX1:158;
+  sqrt(|.s.|^2 ) <= sqrt(((n+1)*K )^2) by A13,SQUARE_1:94; then
+  abs(abs |.s.|) <= sqrt(((n+1)*K )^2) by COMPLEX1:158; then
+  |.s.| <= sqrt(((n+1)*K )^2) by ABSVALUE:def 1;
+hence thesis by A9,A14,ABSVALUE:def 1;
+end;
+ thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+end;
+
+theorem Th16:
+  for K be Real,
+      n be non empty Element of NAT,
+      s be Element of REAL-NS n st
+      for i be Element of NAT st 1 <=i & i <= n holds ||. Proj(i,n).s .|| <= K
+  holds ||. s .|| <= n*K
+proof
+let K be Real,
+    n be non empty Element of NAT,
+    s be Element of REAL-NS n;
+assume
+A1: for i be Element of NAT st 1 <=i & i <= n
+    holds ||. Proj(i,n).s .|| <= K;
+consider m be Nat such that
+A2: n = m + 1 by NAT_1:6;
+reconsider m as Element of NAT by ORDINAL1:def 13;
+reconsider s0 = s as Element of REAL n by REAL_NS1:def 4;
+now
+  let i be Element of NAT;
+  assume 1 <=i & i <= m+1; then
+A3: ||. Proj(i,n).s .|| <= K by A2,A1;
+  Proj(i,n).s = <* proj(i,n).s0 *> by PDIFF_1:def 4
+               .= <* s0.i *> by PDIFF_1:def 1;
+  hence abs( s0.i ) <= K by A3,Th2;
+end; then
+|. s0 .| <= n*K by A2,Th15;
+hence thesis by REAL_NS1:1;
+end;
+
+theorem
+  for K be Real,
+      n be non empty Element of NAT,
+      s be Element of REAL n st
+  for i be Element of NAT st 1 <= i & i <= n holds |. proj(i,n).s .| <= K
+    holds |. s .| <= n*K
+proof
+let K be Real,
+    n be non empty Element of NAT,
+    s be Element of REAL n;
+assume
+A1: for i be Element of NAT st 1 <= i & i <= n
+    holds |. proj(i,n).s .| <= K;
+reconsider t = s as Element of REAL-NS n by REAL_NS1:def 4;
+for i be Element of NAT st 1 <= i & i <= n holds ||. Proj(i,n).t .|| <= K
+  proof
+  let i be Element of NAT;
+  assume 1 <=i & i <= n;
+  then |. proj(i,n).t .| <= K by A1;
+  hence ||. Proj(i,n).t .|| <= K by Th4;
+  end; then
+  ||. t .|| <= n*K by Th16;
+  hence thesis by REAL_NS1:1;
+end;
+
+theorem Th18:
+  for m,n be non empty Element of NAT,
+      s be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      K be Real st
+      for i be Element of NAT, si be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1)
+      st si=Proj(i,n)*s & 1 <=i & i <= n holds ||. si .|| <= K
+  holds ||. s .|| <= n*K
+proof
+deffunc RealNormSpaceOfBLO(non empty Element of NAT, non empty Element of NAT)
+  = R_NormSpace_of_BoundedLinearOperators(REAL-NS $1,REAL-NS $2);
+let m,n be non empty Element of NAT,
+    s be Point of RealNormSpaceOfBLO(m,n), K be Real;
+  assume
+A1: for i be Element of NAT,
+         si be Point of RealNormSpaceOfBLO(m,1)
+       st si = Proj(i,n)*s & 1 <=i & i <= n holds ||. si .|| <= K;
+  reconsider s0 = s as bounded LinearOperator of REAL-NS m,REAL-NS n
+    by LOPBAN_1:def 10;
+A2: now
+    let x be Point of REAL-NS m;
+    assume
+A3: ||.x.|| <= 1;
+    now let i be Element of NAT;
+      assume A4: 1 <=i & i <= n;
+      set si = Proj(i,n)*s;
+      reconsider si as Point of RealNormSpaceOfBLO(m,1) by Th7,A4;
+      reconsider sii = si as bounded LinearOperator of REAL-NS m,REAL-NS 1
+        by LOPBAN_1:def 10;
+A5:   ||. sii.x .|| <= ||. si .|| * ||.x.|| by LOPBAN_1:38;
+A6: the carrier of REAL-NS m = REAL m by REAL_NS1:def 4;
+A7: Proj(i,n) is bounded LinearOperator of REAL-NS n,REAL-NS 1
+    by A4,Th6;
+s is bounded LinearOperator of REAL-NS m,REAL-NS n
+  by LOPBAN_1:def 10; then
+Proj(i,n)*s is LinearOperator of REAL-NS m,REAL-NS 1
+  by A7,LOPBAN_2:1; then
+  dom (Proj(i,n)*s) = REAL m by A6,FUNCT_2:def 1; then
+A8:   sii.x = Proj(i,n).(s.x) by FUNCT_1:22,A6;
+A9:   0 <= ||. x .|| by NORMSP_1:8;
+      ||. si .|| * ||.x.|| <= K * ||.x.|| by A4,A1,A9,XREAL_1:66;
+      hence ||. Proj(i,n).(s.x) .|| <= K * ||.x.|| by A5,A8,XXREAL_0:2;
+   end; then
+A10: ||. (s.x) .|| <= n*(K * ||.x.||) by Th16;
+A11: 1 <=1 & 1 <= n by NAT_1:14; then
+ reconsider s1 =Proj(1,n)*s  as Point of RealNormSpaceOfBLO(m,1) by Th7;
+ ||. s1 .|| <= K by A11,A1; then
+A12: 0 <= K by NORMSP_1:8;
+ (n*K)*||.x.|| <= (n*K)*1 by A12,A3,XREAL_1:66;
+ hence ||. (s0.x) .|| <= (n*K) by A10,XXREAL_0:2;
+ end;
+     set PreNormS = PreNorms(modetrans(s,REAL-NS m,REAL-NS n));
+A13: for y be ext-real set st
+       y in PreNorms(modetrans(s,REAL-NS m,REAL-NS n)) holds y <= (n*K)
+     proof
+     let y be ext-real set;
+     assume A14: y in PreNormS;
+     consider x be VECTOR of REAL-NS m such that
+A15: y = ||.modetrans(s,REAL-NS m,REAL-NS n).x.|| & ||. x .|| <= 1 by A14;
+     y = ||. s0.x .|| by A15,LOPBAN_1:35;
+     hence thesis by A2,A15;
+     end;
+A16: PreNormS is bounded_above
+     proof
+     n*K is UpperBound of PreNormS by A13,XXREAL_2:def 1;
+     hence thesis by XXREAL_2:def 10;
+     end;
+  set UBPreNormS = upper_bound PreNormS;
+  not UBPreNormS > n*K
+  proof
+  assume
+A17: UBPreNormS > n*K;
+  set dif = UBPreNormS - n*K;
+A18: dif > 0 by A17,XREAL_1:52;
+  consider w being real set such that
+A19: w in PreNormS & UBPreNormS - dif < w by A18,A16,SEQ_4:def 4;
+  thus contradiction by A19,A13;
+  end; then
+upper_bound PreNorms(s0) <= (n*K) by LOPBAN_1:def 12;
+hence thesis by LOPBAN_1:36;
+end;
+
+theorem Th19:
+  for m,n be non empty Element of NAT,
+      s,t be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+      K be Real st
+      for i be Element of NAT, si,ti be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1)
+      st si = Proj(i,n)*s & ti = Proj(i,n)*t &  1 <=i & i <= n
+      holds ||. si - ti .|| <= K
+  holds ||. s-t .|| <= n*K
+proof
+deffunc RealNormSpaceOfBLO(non empty Element of NAT, non empty Element of NAT)
+  = R_NormSpace_of_BoundedLinearOperators(REAL-NS $1,REAL-NS $2);
+let m,n be non empty Element of NAT,
+    s,t be Point of RealNormSpaceOfBLO(m,n), K be Real;
+  assume
+A1: for i be Element of NAT,
+        si,ti be Point of RealNormSpaceOfBLO(m,1)
+      st si = Proj(i,n)*s & ti = Proj(i,n)*t &  1 <=i & i <= n
+    holds ||. si - ti .|| <= K;
+now
+  let i be Element of NAT, sti be Point of RealNormSpaceOfBLO(m,1);
+  assume
+A2: sti = Proj(i,n)*(s-t) & 1 <=i & i <= n;
+  reconsider si = Proj(i,n)*s,
+    ti = Proj(i,n)*t as Point of RealNormSpaceOfBLO(m,1) by Th7,A2;
+   si - ti = sti by A2,Lm1;
+   hence ||. sti .|| <= K by A2,A1;
+end;
+hence thesis by Th18;
+end;
+
+theorem Th20:
+  for m,n be non empty Element of NAT,
+      f be PartFunc of REAL-NS m,REAL-NS n,
+      X be Subset of REAL-NS m,
+      i be Element of NAT st 1 <=i & i <= m & X is open holds
+  (f is_partial_differentiable_on X,i &
+  f`partial|(X,i) is_continuous_on X)
+  iff
+  for j be Element of NAT st 1 <=j & j <= n holds
+  (Proj(j,n)*f) is_partial_differentiable_on X,i &
+   (Proj(j,n)*f)`partial|(X,i) is_continuous_on X
+proof
+let m,n be non empty Element of NAT,
+    f be PartFunc of REAL-NS m,REAL-NS n,
+    X be Subset of REAL-NS m, i be Element of NAT;
+assume A1: 1 <=i & i <= m & X is open;
+hereby assume A2:
+  f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X;
+then
+A3:X c= dom f by A1,PDIFF_7:8;
+thus for j be Element of NAT st 1 <=j & j <= n holds
+ ( (Proj(j,n)*f) is_partial_differentiable_on X,i &
+   (Proj(j,n)*f)`partial|(X,i) is_continuous_on X )
+  proof
+   let j be Element of NAT;
+    assume A4: 1 <=j & j <= n;
+    A5:dom (Proj(j,n)) = the carrier of (REAL-NS n) by FUNCT_2:def 1;
+    rng f c= the carrier of (REAL-NS n); then
+    A6: X c= dom (Proj(j,n)*f) by A5,RELAT_1:46,A3;
+    now let x0 be Point of REAL-NS m;
+     assume x0 in X; then
+     f is_partial_differentiable_in x0,i by PDIFF_7:8,A2,A1; then
+     f*reproj(i,x0) is_differentiable_in Proj(i,m).x0 by PDIFF_1:def 9;
+     then Proj(j,n)*(f*reproj(i,x0)) is_differentiable_in Proj(i,m).x0
+         by PDIFF_6:29,A4; then
+      (Proj(j,n)*f)*reproj(i,x0) is_differentiable_in Proj(i,m).x0
+         by RELAT_1:55;
+  hence (Proj(j,n)*f) is_partial_differentiable_in x0,i by PDIFF_1:def 9;
+    end;
+    hence A7:(Proj(j,n)*f) is_partial_differentiable_on X,i
+        by A6,PDIFF_7:8,A1; then
+    A8:X c= dom((Proj(j,n)*f)`partial|(X,i) ) by PDIFF_1:def 20;
+ A9: for x0 be Point of REAL-NS m st x0 in X
+      holds ((Proj(j,n)*f)`partial|(X,i))/.x0
+            = Proj(j,n)*(f`partial|(X,i)/.x0)
+      proof
+       let x0 be Point of REAL-NS m;
+      assume A10:x0 in X; then
+      f is_partial_differentiable_in x0,i by PDIFF_7:8,A2,A1; then
+      A11: f*reproj(i,x0) is_differentiable_in Proj(i,m).x0 by PDIFF_1:def 9;
+   thus ((Proj(j,n)*f)`partial|(X,i))/.x0
+             = partdiff((Proj(j,n)*f),x0,i)
+                    by PDIFF_1:def 20,A7,A10
+            .= diff((Proj(j,n)*f)*reproj(i,x0),Proj(i,m).x0)
+                    by PDIFF_1:def 10
+            .= diff(Proj(j,n)*(f*reproj(i,x0)),Proj(i,m).x0)
+                    by RELAT_1:55
+            .= Proj(j,n)*(diff(f*reproj(i,x0),Proj(i,m).x0))
+                    by PDIFF_6:28,A11,A4
+            .= Proj(j,n)*(partdiff(f,x0,i)) by PDIFF_1:def 10
+          .= Proj(j,n)*(f`partial|(X,i)/.x0) by PDIFF_1:def 20,A2,A10;
+  end;
+for x0 be Point of REAL-NS m, r be Real st x0 in X & 0 <r
+ ex s be Real st 0 < s & for x1 be Point of REAL-NS m
+    st x1 in X & ||. x1- x0 .|| < s holds
+   ||. ((Proj(j,n)*f)`partial|(X,i) )/.x1
+       - ((Proj(j,n)*f)`partial|(X,i) )/.x0 .|| < r
+proof
+let x0 be Point of REAL-NS m, r be Real;
+ assume A12: x0 in X & 0 <r; then
+ consider s be Real such that
+  A13: 0< s & for x1 be Point of REAL-NS m
+    st x1 in X & ||. x1- x0 .|| < s holds
+   ||. (f`partial|(X,i) )/.x1 - (f`partial|(X,i) )/.x0 .|| < r
+  by A2,NFCONT_1:26;
+ take s;
+ thus 0 < s by A13;
+  let x1 be Point of REAL-NS m;
+    assume A14: x1 in X & ||. x1- x0 .|| < s; then
+    A15: ||. (f`partial|(X,i) )/.x1
+       - (f`partial|(X,i) )/.x0 .|| < r by A13;
+   A16:  ((Proj(j,n)*f)`partial|(X,i) )/.x0
+    = Proj(j,n)*(f`partial|(X,i)/.x0) by A9,A12;
+  reconsider p1=Proj(j,n)*(f`partial|(X,i)/.x1) as Point of
+    R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS 1)
+      by Th7,A4;
+  reconsider p0=Proj(j,n)*(f`partial|(X,i)/.x0) as Point of
+    R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS 1) by Th7,A4;
+    ||. ((Proj(j,n)*f)`partial|(X,i) )/.x1
+       - ((Proj(j,n)*f)`partial|(X,i) )/.x0 .||
+    = ||. p1 - p0 .|| by A9,A14,A16; then
+   ||. ((Proj(j,n)*f)`partial|(X,i))/.x1
+       - ((Proj(j,n)*f)`partial|(X,i))/.x0 .||
+    <= ||. (f`partial|(X,i) )/.x1 - (f`partial|(X,i) )/.x0 .|| by Th14,A4;
+ hence ||. ((Proj(j,n)*f)`partial|(X,i) )/.x1
+       - ((Proj(j,n)*f)`partial|(X,i) )/.x0 .|| < r by A15,XXREAL_0:2;
+end;
+hence (Proj(j,n)*f)`partial|(X,i) is_continuous_on X by A8,NFCONT_1:26;
+end;
+end;
+assume
+A17:  for j be Element of NAT st 1 <=j & j <= n holds
+ ( (Proj(j,n)*f) is_partial_differentiable_on X,i &
+   (Proj(j,n)*f)`partial|(X,i) is_continuous_on X);
+  1<=n by NAT_1:14; then
+  (Proj(1,n)*f) is_partial_differentiable_on X,i by A17; then
+  A18: X c= dom (Proj(1,n)*f) by PDIFF_1:def 19;
+  A19:dom (Proj(1,n)) = the carrier of (REAL-NS n) by FUNCT_2:def 1;
+  rng f c= the carrier of (REAL-NS n); then
+  A20: X c= dom f by A18,A19,RELAT_1:46;
+  A21: now let x0 be Point of REAL-NS m;
+         assume A22:x0 in X;
+      now let j be Element of NAT;
+          assume 1 <=j & j <= n; then
+         (Proj(j,n)*f) is_partial_differentiable_on X,i by A17; then
+         (Proj(j,n)*f) is_partial_differentiable_in x0,i
+           by PDIFF_7:8,A22,A1; then
+        (Proj(j,n)*f)*reproj(i,x0) is_differentiable_in Proj(i,m).x0
+         by PDIFF_1:def 9;
+        hence Proj(j,n)*(f*reproj(i,x0)) is_differentiable_in Proj(i,m).x0
+         by RELAT_1:55;
+       end; then
+    (f*reproj(i,x0)) is_differentiable_in Proj(i,m).x0 by PDIFF_6:29;
+    hence f is_partial_differentiable_in x0,i by PDIFF_1:def 9;
+  end;
+  hence
+ A23: f is_partial_differentiable_on X,i by PDIFF_7:8,A1,A20; then
+  A24: X c= dom (f`partial|(X,i)) by PDIFF_1:def 20;
+ A25:for x0 be Point of REAL-NS m, j be Element of NAT
+      st x0 in X & 1 <=j & j <= n holds
+      Proj(j,n)*( (f`partial|(X,i))/.x0)
+         = ((Proj(j,n)*f)`partial|(X,i))/.x0
+  proof
+    let x0 be Point of REAL-NS m,j be Element of NAT;
+    assume A26:x0 in X & 1 <=j & j <= n; then
+    f is_partial_differentiable_in x0,i by A21; then
+    A27: f*reproj(i,x0) is_differentiable_in Proj(i,m).x0 by PDIFF_1:def 9;
+        A28: ( Proj(j,n)*f ) is_partial_differentiable_on X,i by A17,A26;
+        thus Proj(j,n)*( (f`partial|(X,i))/.x0  )
+       =Proj(j,n)*(partdiff(f,x0,i)) by PDIFF_1:def 20,A26,A23
+       .=Proj(j,n)*(diff(f*reproj(i,x0),Proj(i,m).x0)) by PDIFF_1:def 10
+      .=diff(Proj(j,n)*(f*reproj(i,x0)),Proj(i,m).x0) by PDIFF_6:28,A27,A26
+      .=diff((Proj(j,n)*f)*reproj(i,x0),Proj(i,m).x0) by RELAT_1:55
+      .= partdiff((Proj(j,n)*f),x0,i) by PDIFF_1:def 10
+      .= ((Proj(j,n)*f)`partial|(X,i) )/.x0 by PDIFF_1:def 20,A28,A26;
+end;
+for x0 be Point of REAL-NS m, r be Real
+  st x0 in X & 0 <r ex s be Real st 0< s &
+  for x1 be Point of REAL-NS m
+    st x1 in X & ||. x1- x0 .|| < s holds
+   ||. (f`partial|(X,i))/.x1 - (f`partial|(X,i))/.x0 .|| < r
+proof
+let x0 be Point of REAL-NS m, r0 be Real;
+ assume A29: x0 in X & 0 <r0;
+ set r=r0/2;
+defpred P[set,set] means
+  ex j be Element of NAT, sj be Real st $2=sj & $1=j & 0 < sj &
+      for x1 be Point of REAL-NS m
+     st x1 in X & ||. x1- x0 .|| < sj holds
+      ||. ((Proj(j,n)*f)`partial|(X,i))/.x1
+         - ((Proj(j,n)*f)`partial|(X,i))/.x0 .|| < (r/n);
+  A30: for j0 be Nat st j0 in Seg n holds
+    ex x be Element of REAL st P[j0,x]
+  proof
+   let j0 be Nat;
+    assume j0 in Seg n; then
+    A31: 1 <=j0 & j0 <= n by FINSEQ_1:3;
+    reconsider j=j0 as Element of NAT by ORDINAL1:def 13;
+   (Proj(j,n)*f)`partial|(X,i) is_continuous_on X by A17,A31; then
+   consider sj be Real such that
+   A32: 0 < sj & for x1 be Point of REAL-NS m
+     st x1 in X & ||. x1- x0 .|| < sj holds
+      ||. ((Proj(j,n)*f)`partial|(X,i))/.x1
+         - ((Proj(j,n)*f)`partial|(X,i))/.x0 .|| < (r/n) by NFCONT_1:26,A29;
+   thus thesis by A32;
+ end;
+consider s0 be FinSequence of REAL such that
+A33: dom s0 = Seg n &
+for k be Nat st k in Seg n holds P[k,s0.k] from FINSEQ_1:sch 5(A30);
+A34:rng s0 is finite by A33,FINSET_1:26;
+     n in Seg n by FINSEQ_1:5;
+ then reconsider rs0= rng s0 as non empty ext-real-membered set
+      by A33,FUNCT_1:12;
+ reconsider rs0 as left_end right_end (non empty ext-real-membered set)
+      by A34;
+A35:min rs0 in rng s0 by XXREAL_2:def 7;
+    then reconsider s = min rs0 as Real;
+   take s;
+   consider i1 be set such that
+A36: i1 in dom s0 & s = s0.i1 by A35,FUNCT_1:def 5;
+ex j be Element of NAT, sj be Real st
+   s0.i1=sj & i1=j & 0 < sj &
+      for x1 be Point of REAL-NS m
+     st x1 in X & ||. x1- x0 .|| < sj holds
+       ||. ((Proj(j,n)*f)`partial|(X,i))/.x1
+         - ((Proj(j,n)*f)`partial|(X,i))/.x0 .|| < (r/n) by A33,A36;
+  hence 0 < s by A36;
+  let x1 be Point of REAL-NS m;
+  assume A37: x1 in X & ||. x1- x0 .|| < s;
+ now
+ let j be Element of NAT,p1,p0 be Point of
+    R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS 1);
+ assume A38:
+    p1=Proj(j,n)*((f`partial|(X,i))/.x1)
+  & p0=Proj(j,n)*((f`partial|(X,i))/.x0) & 1 <=j & j <= n; then
+     A39:j in Seg n; then
+     consider jj be Element of NAT,sj be Real such that
+     A40: s0.j=sj & jj = j & 0 < sj &
+      for x1 be Point of REAL-NS m
+      st x1 in X & ||. x1- x0 .|| < sj holds
+    ||. ((Proj(jj,n)*f)`partial|(X,i))/.x1
+         - ((Proj(jj,n)*f)`partial|(X,i))/.x0 .|| < (r/n) by A33;
+    A41: Proj(j,n)*( (f`partial|(X,i))/.x0)
+     = ((Proj(j,n)*f)`partial|(X,i))/.x0 by A25,A29,A38;
+    A42: Proj(j,n)*( (f`partial|(X,i))/.x1)
+     = ((Proj(j,n)*f)`partial|(X,i))/.x1 by A25,A37,A38;
+    sj in rng s0 by A39,A40,A33,FUNCT_1:12;
+    then s <= sj by XXREAL_2:def 7; then
+     ||. x1- x0 .|| < sj by A37,XXREAL_0:2;
+    hence ||. p1 - p0 .|| <= (r/n) by A40,A37,A38,A41,A42;
+ end; then
+  ||. (f`partial|(X,i))/.x1 - (f`partial|(X,i))/.x0 .|| <= n*(r/n) by Th19;
+ then
+A43: ||. (f`partial|(X,i))/.x1 - (f`partial|(X,i))/.x0 .|| <= r by XCMPLX_1:88;
+r < r0 by A29,XREAL_1:218;
+  hence ||. (f`partial|(X,i) )/.x1
+    - (f`partial|(X,i))/.x0 .|| < r0 by XXREAL_0:2,A43;
+end;
+hence thesis by A24,NFCONT_1:26;
+end;
+
+theorem Th21:
+  for m,n be non empty Element of NAT,
+      f be PartFunc of REAL-NS m,REAL-NS n,
+      X be Subset of REAL-NS m st X is open holds
+  (f is_differentiable_on X & f`|X is_continuous_on X)
+  iff
+  for j be Element of NAT st 1 <=j & j <= n holds
+  Proj(j,n)*f is_differentiable_on X &
+  (Proj(j,n)*f)`|X is_continuous_on X
+proof
+let m,n be non empty Element of NAT,
+    f be PartFunc of REAL-NS m,REAL-NS n,
+    X be Subset of REAL-NS m;
+assume A1: X is open;
+hereby assume A2:
+f is_differentiable_on X & f`|X is_continuous_on X; then
+A3:X c= dom f by A1,NDIFF_1:36;
+thus for j be Element of NAT st 1 <=j & j <= n holds
+ ( (Proj(j,n)*f) is_differentiable_on X &
+ (Proj(j,n)*f)`|X is_continuous_on X )
+  proof
+   let j be Element of NAT;
+    assume A4: 1 <=j & j <= n;
+    A5:dom (Proj(j,n)) = the carrier of (REAL-NS n) by FUNCT_2:def 1;
+    rng f c= the carrier of (REAL-NS n); then
+    A6: X c= dom (Proj(j,n)*f) by A3,A5,RELAT_1:46;
+    now let x0 be Point of REAL-NS m;
+     assume x0 in X;
+     then f is_differentiable_in x0 by NDIFF_1:36,A2,A1;
+       hence (Proj(j,n)*f) is_differentiable_in x0 by PDIFF_6:29,A4;
+    end;
+    hence A7:(Proj(j,n)*f) is_differentiable_on X by A6,NDIFF_1:36,A1; then
+    A8: X c= dom((Proj(j,n)*f)`|X) by NDIFF_1:def 9;
+ A9:for x0 be Point of REAL-NS m st x0 in X
+    holds ((Proj(j,n)*f)`|X)/.x0 = Proj(j,n)*((f`|X)/.x0)
+ proof
+  let x0 be Point of REAL-NS m;
+      assume A10:x0 in X; then
+      A11: f is_differentiable_in x0 by NDIFF_1:36,A2,A1;
+     thus ((Proj(j,n)*f)`|X)/.x0 = diff((Proj(j,n)*f),x0)
+                                   by NDIFF_1:def 9,A7,A10
+             .= Proj(j,n)*(diff(f,x0)) by PDIFF_6:28,A11,A4
+             .= Proj(j,n)*((f`|X)/.x0) by NDIFF_1:def 9,A2,A10;
+  end;
+for x0 be Point of REAL-NS m, r be Real
+  st x0 in X & 0 <r
+ ex s be Real st 0< s & for x1 be Point of REAL-NS m
+    st x1 in X & ||. x1- x0 .|| < s holds
+   ||. ((Proj(j,n)*f)`|X )/.x1 - ((Proj(j,n)*f)`|X )/.x0 .|| < r
+proof
+let x0 be Point of REAL-NS m, r be Real;
+ assume A12: x0 in X & 0 <r; then
+ consider s be Real such that
+  A13: 0< s & for x1 be Point of REAL-NS m
+    st x1 in X & ||. x1- x0 .|| < s holds
+   ||. ((f`|X) )/.x1 - ((f`|X) )/.x0 .|| < r by A2,NFCONT_1:26;
+ take s;
+ thus 0 < s by A13;
+  let x1 be Point of REAL-NS m;
+    assume A14: x1 in X & ||. x1- x0 .|| < s; then
+   A15: ||. ((f`|X))/.x1 - ((f`|X) )/.x0 .|| < r by A13;
+   A16: ((Proj(j,n)*f)`|X )/.x0 = Proj(j,n)*((f`|X)/.x0) by A9,A12;
+  reconsider p1=Proj(j,n)*((f`|X)/.x1) as Point of
+    R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1) by Th7,A4;
+  reconsider p0=Proj(j,n)*((f`|X)/.x0) as Point of
+    R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1) by Th7,A4;
+    ||. ((Proj(j,n)*f)`|X )/.x1 - ((Proj(j,n)*f)`|X )/.x0 .||
+    = ||. p1 - p0 .|| by A9,A14,A16; then
+   ||. ((Proj(j,n)*f)`|X )/.x1 - ((Proj(j,n)*f)`|X)/.x0 .||
+    <= ||. ((f`|X) )/.x1 - ((f`|X) )/.x0 .|| by Th14,A4;
+ hence ||. ((Proj(j,n)*f)`|X)/.x1 - ((Proj(j,n)*f)`|X )/.x0 .|| < r
+    by A15,XXREAL_0:2;
+end;
+hence (Proj(j,n)*f)`|X is_continuous_on X by A8,NFCONT_1:26;
+end;
+end;
+assume
+A17:  for j be Element of NAT st 1 <=j & j <= n holds
+ ( (Proj(j,n)*f) is_differentiable_on X &
+   (Proj(j,n)*f)`|X is_continuous_on X);
+  1<=n by NAT_1:14; then
+  (Proj(1,n)*f) is_differentiable_on X by A17; then
+  A18: X c= dom (Proj(1,n)*f) by A1,NDIFF_1:36;
+  A19:dom (Proj(1,n)) = the carrier of (REAL-NS n) by FUNCT_2:def 1;
+  rng f c= the carrier of (REAL-NS n); then
+  A20: X c= dom f by A18,A19,RELAT_1:46;
+  A21: now let x0 be Point of REAL-NS m;
+      assume A22:x0 in X;
+       now let j be Element of NAT;
+        assume 1 <=j & j <= n; then
+        (Proj(j,n)*f) is_differentiable_on X by A17;
+        hence (Proj(j,n)*f) is_differentiable_in x0 by NDIFF_1:36,A22,A1;
+       end;
+    hence f is_differentiable_in x0 by PDIFF_6:29;
+  end;
+  hence
+ A23: f is_differentiable_on X by NDIFF_1:36,A1,A20; then
+ A24: X c= dom ((f`|X)) by NDIFF_1:def 9;
+ A25: for x0 be Point of REAL-NS m, j be Element of NAT
+    st x0 in X & 1 <=j & j <= n
+     holds Proj(j,n)*( (f`|X)/.x0) = ((Proj(j,n)*f)`|X)/.x0
+ proof
+    let x0 be Point of REAL-NS m, j be Element of NAT;
+    assume A26:x0 in X & 1 <=j & j <= n; then
+    A27:  f is_differentiable_in x0 by A21;
+      A28: ( Proj(j,n)*f ) is_differentiable_on X by A17,A26;
+    thus Proj(j,n)*( (f`|X)/.x0 )
+      =Proj(j,n)*(diff(f,x0)) by NDIFF_1:def 9,A26,A23
+     .=diff((Proj(j,n)*f),x0) by PDIFF_6:28,A27,A26
+     .= ((Proj(j,n)*f)`|X)/.x0 by NDIFF_1:def 9,A28,A26;
+ end;
+for x0 be Point of REAL-NS m, r0 be Real st x0 in X & 0 <r0
+ ex s be Real st 0< s & for x1 be Point of REAL-NS m
+    st x1 in X & ||. x1- x0 .|| < s holds
+   ||. (f`|X )/.x1 - (f`|X )/.x0 .|| < r0
+proof
+let x0 be Point of REAL-NS m, r0 be Real;
+ assume A29: x0 in X & 0 <r0;
+ set r=r0/2;
+ defpred P[set,set] means
+  ex j be Element of NAT, sj be Real st
+   $2=sj & $1=j & 0 < sj &
+      for x1 be Point of REAL-NS m
+     st x1 in X & ||. x1- x0 .|| < sj holds
+      ||. ((Proj(j,n)*f)`|X)/.x1
+         - ((Proj(j,n)*f)`|X)/.x0 .|| < (r/n);
+  A30: for j0 be Nat st j0 in Seg n holds
+    ex x be Element of REAL st P[j0,x]
+  proof
+   let j0 be Nat;
+    assume j0 in Seg n; then
+    A31: 1 <=j0 & j0 <= n by FINSEQ_1:3;
+    reconsider j=j0 as Element of NAT by ORDINAL1:def 13;
+   (Proj(j,n)*f)`|X is_continuous_on X by A17,A31; then
+   consider sj be Real such that
+   A32: 0 < sj & for x1 be Point of REAL-NS m
+     st x1 in X & ||. x1- x0 .|| < sj holds
+      ||. ((Proj(j,n)*f)`|X)/.x1
+         - ((Proj(j,n)*f)`|X)/.x0 .|| < (r/n) by NFCONT_1:26,A29;
+   thus thesis by A32;
+ end;
+consider s0 be FinSequence of REAL such that
+A33: dom s0 = Seg n & for k be Nat
+ st k in Seg n holds P[k,s0.k] from FINSEQ_1:sch 5(A30);
+A34:rng s0 is finite by A33,FINSET_1:26;
+     n in Seg n by FINSEQ_1:5;
+ then reconsider rs0= rng s0 as non empty ext-real-membered set
+      by A33,FUNCT_1:12;
+ reconsider rs0 as left_end right_end (non empty ext-real-membered set)
+      by A34;
+A35:min rs0 in rng s0 by XXREAL_2:def 7;
+    then reconsider s = min rs0 as Real;
+   take s;
+   consider i1 be set such that
+A36: i1 in dom s0 & s = s0.i1 by A35,FUNCT_1:def 5;
+ex j be Element of NAT, sj be Real st
+  s0.i1=sj & i1=j & 0 < sj &
+      for x1 be Point of REAL-NS m
+     st x1 in X & ||. x1- x0 .|| < sj holds
+      ||. ((Proj(j,n)*f)`|X)/.x1
+         - ((Proj(j,n)*f)`|X)/.x0 .|| < (r/n) by A33,A36;
+hence 0 < s by A36;
+ let x1 be Point of REAL-NS m;
+  assume A37: x1 in X & ||. x1- x0 .|| < s;
+ now let j be Element of NAT,p1,p0 be Point of
+    R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS 1);
+ assume A38:
+    p1=Proj(j,n)*((f`|X)/.x1) & p0=Proj(j,n)*((f`|X)/.x0) & 1 <=j & j <= n;
+     then
+     A39:j in Seg n; then
+     consider jj be Element of NAT,sj be Real such that
+     A40: s0.j=sj & jj = j & 0 < sj &
+      for x1 be Point of REAL-NS m
+      st x1 in X & ||. x1- x0 .|| < sj holds
+    ||. ((Proj(jj,n)*f)`|X)/.x1
+         - ((Proj(jj,n)*f)`|X)/.x0 .|| < (r/n) by A33;
+    A41: Proj(j,n)*( (f`|X)/.x0  )
+     = ((Proj(j,n)*f)`|X)/.x0 by A25,A29,A38;
+    A42: Proj(j,n)*( (f`|X)/.x1  )
+     = ((Proj(j,n)*f)`|X)/.x1 by A25,A37,A38;
+    sj in rng s0 by A39,A40,A33,FUNCT_1:12;
+    then s <= sj by XXREAL_2:def 7;
+    then ||. x1- x0 .|| < sj by A37,XXREAL_0:2;
+    hence ||. p1 - p0 .|| <= (r/n) by A40,A37,A38,A41,A42;
+ end; then
+    ||. (f`|X )/.x1 - (f`|X )/.x0 .|| <= n*(r/n) by Th19; then
+A43: ||. (f`|X )/.x1 - (f`|X )/.x0 .|| <= r by XCMPLX_1:88;
+r < r0 by A29,XREAL_1:218;
+hence ||. (f`|X )/.x1 - (f`|X )/.x0 .|| < r0 by XXREAL_0:2,A43;
+end;
+hence thesis by A24,NFCONT_1:26;
+end;
+
+theorem
+  for m,n be non empty Element of NAT,
+  f be PartFunc of REAL-NS m,REAL-NS n,
+  X be Subset of REAL-NS m st X is open holds
+  (for i be Element of NAT st 1 <= i & i <= m holds
+  f is_partial_differentiable_on X,i &
+  f`partial|(X,i) is_continuous_on X)
+  iff
+  f is_differentiable_on X & f`|X is_continuous_on X
+proof
+  let m,n be non empty Element of NAT, f be PartFunc of REAL-NS m,REAL-NS n,
+  X be Subset of REAL-NS m;
+assume A1: X is open;
+hereby assume A2:for i be Element of NAT st 1 <=i & i <= m holds
+  f is_partial_differentiable_on X,i &
+  f`partial|(X,i) is_continuous_on X;
+now let j be Element of NAT;
+  assume A3: 1 <=j & j <= n;
+  now let i be Element of NAT;
+    assume A4: 1 <=i & i <= m; then
+    f is_partial_differentiable_on X,i &
+    f`partial|(X,i) is_continuous_on X by A2;
+    hence (Proj(j,n)*f) is_partial_differentiable_on X,i &
+   (Proj(j,n)*f)`partial|(X,i) is_continuous_on X by Th20,A1,A3,A4;
+ end;
+ hence (Proj(j,n)*f) is_differentiable_on X
+   & (Proj(j,n)*f)`|X is_continuous_on X by PDIFF_7:49,A1;
+end;
+hence f is_differentiable_on X & f`|X is_continuous_on X by A1,Th21;
+end;
+assume A5:f is_differentiable_on X & f`|X is_continuous_on X;
+ let i be Element of NAT;
+  assume A6: 1 <=i & i <= m;
+ now let j be Element of NAT;
+  assume 1 <=j & j <= n; then
+  (Proj(j,n)*f) is_differentiable_on X &
+  (Proj(j,n)*f)`|X is_continuous_on X by A1,A5,Th21;
+  hence (Proj(j,n)*f) is_partial_differentiable_on X,i &
+  (Proj(j,n)*f)`partial|(X,i) is_continuous_on X by A1,PDIFF_7:49,A6;
+ end;
+hence thesis by A6,A1,Th20;
+end;

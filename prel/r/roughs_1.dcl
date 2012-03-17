@@ -72,9 +72,9 @@
 </Adjective>
 <Adjective nr="20"/>
 <Adjective nr="40"/>
-<Adjective nr="55"/>
-<Adjective nr="57"/>
+<Adjective nr="56"/>
 <Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ROUGHS_1" nr="3">
@@ -100,9 +100,9 @@
 </Adjective>
 <Adjective nr="20"/>
 <Adjective nr="40"/>
-<Adjective nr="55"/>
-<Adjective nr="57"/>
+<Adjective nr="56"/>
 <Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ROUGHS_1" nr="4">
@@ -446,7 +446,7 @@
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="20"/>
-<Adjective nr="55"/>
+<Adjective nr="56"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ROUGHS_1" nr="6">

@@ -54,8 +54,8 @@
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="58"/>
 <Adjective nr="187"/>
 </Cluster>
@@ -70,8 +70,8 @@
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="58"/>
 <Adjective nr="188"/>
 </Cluster>
@@ -83,7 +83,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="187"/>
 </Cluster>
 </Typ>
@@ -111,7 +111,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="188"/>
 </Cluster>
 </Typ>
@@ -143,7 +143,7 @@
 <Adjective nr="2"/>
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -157,7 +157,7 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </CCluster>
 <CCluster aid="PRVECT_2" nr="2">
@@ -165,7 +165,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="188"/>
 </Cluster>
 <Typ kind="M" nr="1">
@@ -174,7 +174,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="187"/>
 </Cluster>
 </CCluster>

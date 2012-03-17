@@ -61,8 +61,8 @@
 <Adjective nr="8"/>
 <Adjective nr="11" value="false"/>
 <Adjective nr="30"/>
-<Adjective nr="36"/>
 <Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SPRECT_1" nr="2">
@@ -126,8 +126,8 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="30"/>
-<Adjective nr="36"/>
 <Adjective nr="37"/>
+<Adjective nr="38"/>
 <Adjective nr="184"/>
 </Cluster>
 </RCluster>

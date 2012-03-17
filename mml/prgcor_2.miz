@@ -21,7 +21,7 @@ environ
  definitions TARSKI;
  theorems FUNCT_1, NAT_1, RELAT_1, ORDINAL1, FINSEQ_1, FUNCOP_1, AFINSQ_1,
       RVSUM_1, FINSEQ_4, FINSEQ_2, XREAL_1, XXREAL_0, PARTFUN1, VALUED_1,
-      XREAL_0, FINSEQ_5;
+      XREAL_0, FINSEQ_5, CARD_1;
  schemes NAT_1, AFINSQ_1;
 
 begin
@@ -160,12 +160,12 @@ A23: i in n by NAT_1:45;
       .=IFLGT(i,len q,q.i,q.i,d) by A20,FUNCOP_1:def 8
       .=q.i by A22,Def6;
   end;
-A25: len p2=len p by AFINSQ_1:48;
+A24: len p2=len p by AFINSQ_1:48;
   p2.0 =len q by A2,A4,A5,AFINSQ_1:48;
-  then p2 is_an_xrep_of q by A1,A2,A5,A25,A19,Def5;
-  hence thesis by A5,A25;
+  then p2 is_an_xrep_of q by A1,A2,A5,A24,A19,Def5;
+  hence thesis by A5,A24;
 end;
- 
+
 :: Non-overwriting program calculating inner product of vectors
 ::#define V_SIZE 1024
 :: float inner_prd_prg(float a[V_SIZE],float b[V_SIZE]){
@@ -473,25 +473,25 @@ A5: n=pb.0 and
 A6: n<>0 implies for i being Nat st i<n holds s.(i+1)=s.i + (pa.(i+1))*
   (pb.(i+1)) and
 A7: ri=s.n by A1,A2,A3,Def7;
-A8: len mlt(ra,rb)=len a by FINSEQ_1:def 18;
+A8: len mlt(ra,rb)=len a by CARD_1:def 13;
   for i st i<len mlt(a,b) holds s.(i+1)=s.i+(mlt(a,b)).(i+1)
   proof
     let i;
     assume
-A10: i<len mlt(a,b);
+A9: i<len mlt(a,b);
     then
  1<=i+1 & i+1<=len a by A8,NAT_1:11,13;
-then A13: pa.(i+1)=a.(i+1) & pb.(i+1)=b.(i+1) by A1,A2,AFINSQ_1:def 11;
-A14: i<n by A1,A2,A5,A8,A10,AFINSQ_1:def 11;
+then A10: pa.(i+1)=a.(i+1) & pb.(i+1)=b.(i+1) by A1,A2,AFINSQ_1:def 11;
+A11: i<n by A1,A2,A5,A8,A9,AFINSQ_1:def 11;
     now
       per cases;
       case n<>0;
-        s.(i+1)=s.i + (pa.(i+1))*(pb.(i+1)) by A6,A14
-          .=s.i+(mlt(a,b)).(i+1) by A13,RVSUM_1:86;
+        s.(i+1)=s.i + (pa.(i+1))*(pb.(i+1)) by A6,A11
+          .=s.i+(mlt(a,b)).(i+1) by A10,RVSUM_1:86;
         hence thesis;
       end;
       case n=0;
-        hence contradiction by A1,A2,A5,A8,A10,AFINSQ_1:def 11;
+        hence contradiction by A1,A2,A5,A8,A9,AFINSQ_1:def 11;
       end;
     end;
     hence thesis;
@@ -499,7 +499,7 @@ A14: i<n by A1,A2,A5,A8,A10,AFINSQ_1:def 11;
   then Sum mlt(a,b) =s.n by A1,A3,A4,A5,A8,Th8;
   hence thesis by A7,RVSUM_1:def 17;
 end;
- 
+
 :: Vector Calculation Program: Scalar Product of Vector
 ::
 :: The following C program is correct if it is used under some limited
@@ -586,19 +586,19 @@ A13: 0 < len b;
     assume
 A14: m scalar_prd_prg c,a,b;
     then consider n being Integer such that
-A16: c.0=b.0 and
-A17: n=b.0 and
-A18: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i=a*(b.i) by Def8;
-A19: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
+A15: c.0=b.0 and
+A16: n=b.0 and
+A17: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i=a*(b.i) by Def8;
+A18: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
     i being Nat st 1<=i & i<=n holds c.i=a*(b.i)) by A14,Def8;
     then
-A20: len (XFS2FS*(c)) = (c.0) by A5,AFINSQ_1:def 12;
+A19: len (XFS2FS*(c)) = (c.0) by A5,AFINSQ_1:def 12;
     now
       per cases;
       case
         n=0;
         then
-        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL by A13,A19,A17,AFINSQ_1:68;
+        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL by A13,A18,A16,AFINSQ_1:68;
         hence thesis by RVSUM_1:68;
       end;
       case
@@ -608,25 +608,25 @@ A20: len (XFS2FS*(c)) = (c.0) by A5,AFINSQ_1:def 12;
         proof
           let k3 be Nat;
           assume that
-A21:      1 <=k3 and
-A22:      k3 <= len p3;
-A23:      (c.0) in len c by A1,A3,A19,NAT_1:45;
+A20:      1 <=k3 and
+A21:      k3 <= len p3;
+A22:      (c.0) in len c by A1,A3,A18,NAT_1:45;
           then
-A24:      k3 <= n by A16,A17,A22,AFINSQ_1:def 12;
+A23:      k3 <= n by A15,A16,A21,AFINSQ_1:def 12;
           then
-A25:      b.k3 = (XFS2FS*(b)).k3 by A2,A5,A17,A21,AFINSQ_1:def 12;
-          len p3=n by A16,A17,A23,AFINSQ_1:def 12;
-          then p3.k3=c.k3 by A16,A17,A21,A22,A23,AFINSQ_1:def 12
-            .=a*(b.k3) by A18,A21,A24;
-          hence thesis by A25,RVSUM_1:66;
+A24:      b.k3 = (XFS2FS*(b)).k3 by A2,A5,A16,A20,AFINSQ_1:def 12;
+          len p3=n by A15,A16,A22,AFINSQ_1:def 12;
+          then p3.k3=c.k3 by A15,A16,A20,A21,A22,AFINSQ_1:def 12
+            .=a*(b.k3) by A17,A20,A23;
+          hence thesis by A24,RVSUM_1:66;
         end;
-        hence thesis by A6,A16,A20,FINSEQ_1:18;
+        hence thesis by A6,A15,A19,FINSEQ_1:18;
       end;
     end;
     hence thesis;
   end;
 end;
- 
+
 :: Vector Calculation Program: Minus Vector
 ::#define V_SIZE 1024
 ::void vector_minus_prg(float c[V_SIZE], float b[V_SIZE])
@@ -697,19 +697,19 @@ A13: 0 < len b;
     assume
 A14: m vector_minus_prg c,b;
     then consider n being Integer such that
-A16: c.0=b.0 and
-A17: n=b.0 and
-A18: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i= -(b.i) by Def9;
-A19: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
+A15: c.0=b.0 and
+A16: n=b.0 and
+A17: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i= -(b.i) by Def9;
+A18: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
     i being Nat st 1<=i & i<=n holds c.i= -(b.i)) by A14,Def9;
     then
-A20: len (XFS2FS*(c)) = (c.0) by A5,AFINSQ_1:def 12;
+A19: len (XFS2FS*(c)) = (c.0) by A5,AFINSQ_1:def 12;
     now
       per cases;
       case
-A21:    n=0;
-        then (XFS2FS*(b))=<*>REAL by A13,A17,AFINSQ_1:68;
-        hence thesis by A19,A17,A21,AFINSQ_1:68,RVSUM_1:37;
+A20:    n=0;
+        then (XFS2FS*(b))=<*>REAL by A13,A16,AFINSQ_1:68;
+        hence thesis by A18,A16,A20,AFINSQ_1:68,RVSUM_1:37;
       end;
       case
         n<>0;
@@ -717,24 +717,24 @@ A21:    n=0;
         for k3 being Nat st 1 <=k3 & k3 <= len p3 holds p3.k3=c2.k3
         proof
           let k3 be Nat;
-A22:      (c.0) in len c by A1,A3,A19,NAT_1:45;
+A21:      (c.0) in len c by A1,A3,A18,NAT_1:45;
           then
-A23:      len p3=n by A16,A17,AFINSQ_1:def 12;
+A22:      len p3=n by A15,A16,AFINSQ_1:def 12;
           assume
-A24:      1 <=k3 & k3 <= len p3;
+A23:      1 <=k3 & k3 <= len p3;
           then
-A25:      b.k3 = (XFS2FS*b).k3 by A2,A5,A17,A23,AFINSQ_1:def 12;
-          p3.k3=c.k3 by A16,A17,A24,A22,A23,AFINSQ_1:def 12
-            .= -(b.k3) by A18,A24,A23;
-          hence thesis by A25,RVSUM_1:35;
+A24:      b.k3 = (XFS2FS*b).k3 by A2,A5,A16,A22,AFINSQ_1:def 12;
+          p3.k3=c.k3 by A15,A16,A23,A21,A22,AFINSQ_1:def 12
+            .= -(b.k3) by A17,A23,A22;
+          hence thesis by A24,RVSUM_1:35;
         end;
-        hence thesis by A6,A16,A20,FINSEQ_1:18;
+        hence thesis by A6,A15,A19,FINSEQ_1:18;
       end;
     end;
     hence thesis;
   end;
 end;
- 
+
 :: Vector Calculation Program: Sum of Vectors
 ::
 :: The following program is the same type of scalar_prd_prg, but gives a result
@@ -822,20 +822,20 @@ A18: 0 < len b;
     assume
 A19: m vector_add_prg c,a,b;
     then consider n being Integer such that
-A21: c.0=b.0 and
-A22: n=b.0 and
-A23: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i=(a.i)+(b.i)
+A20: c.0=b.0 and
+A21: n=b.0 and
+A22: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i=(a.i)+(b.i)
     by Def10;
-A24: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
+A23: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
     i being Nat st 1<=i & i<=n holds c.i=(a.i)+(b.i)) by A19,Def10;
     then
-A25: len (XFS2FS*(c)) = (c.0) by A6,AFINSQ_1:def 12;
+A24: len (XFS2FS*(c)) = (c.0) by A6,AFINSQ_1:def 12;
     now
       per cases;
       case
         n=0;
         then
-        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL by A18,A24,A22,AFINSQ_1:68;
+        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL by A18,A23,A21,AFINSQ_1:68;
         hence thesis by RVSUM_1:28;
       end;
       case
@@ -845,29 +845,29 @@ A25: len (XFS2FS*(c)) = (c.0) by A6,AFINSQ_1:def 12;
         proof
           let k3 be Nat;
           assume that
-A26:      1 <=k3 and
-A27:      k3 <= len p3;
-A28:      (c.0) in len c by A1,A5,A24,NAT_1:45;
+A25:      1 <=k3 and
+A26:      k3 <= len p3;
+A27:      (c.0) in len c by A1,A5,A23,NAT_1:45;
           then
-A29:      k3 <= n by A21,A22,A27,AFINSQ_1:def 12;
+A28:      k3 <= n by A20,A21,A26,AFINSQ_1:def 12;
           then
-A30:      a.k3 = (XFS2FS*(a)).k3 & b.k3 = (XFS2FS*(b)).k3 by A2,A3,A4,A6,A22
-,A26,AFINSQ_1:def 12;
-          k3 in Seg len c2 by A10,A22,A26,A29,FINSEQ_1:3;
+A29:      a.k3 = (XFS2FS*(a)).k3 & b.k3 = (XFS2FS*(b)).k3 by A2,A3,A4,A6,A21
+,A25,AFINSQ_1:def 12;
+          k3 in Seg len c2 by A10,A21,A25,A28,FINSEQ_1:3;
           then
-A31:      k3 in dom c2 by FINSEQ_1:def 3;
-          len p3=n by A21,A22,A28,AFINSQ_1:def 12;
-          then p3.k3=c.k3 by A21,A22,A26,A27,A28,AFINSQ_1:def 12
-            .=(a.k3)+(b.k3) by A23,A26,A29;
-          hence thesis by A31,A30,VALUED_1:def 1;
+A30:      k3 in dom c2 by FINSEQ_1:def 3;
+          len p3=n by A20,A21,A27,AFINSQ_1:def 12;
+          then p3.k3=c.k3 by A20,A21,A25,A26,A27,AFINSQ_1:def 12
+            .=(a.k3)+(b.k3) by A22,A25,A28;
+          hence thesis by A30,A29,VALUED_1:def 1;
         end;
-        hence thesis by A10,A21,A25,FINSEQ_1:18;
+        hence thesis by A10,A20,A24,FINSEQ_1:18;
       end;
     end;
     hence thesis;
   end;
 end;
- 
+
 :: Vector Calculation Program: Subtraction of Vectors
 ::
 :: The following program is the same type of scalar_prd_prg, but gives a result
@@ -951,19 +951,19 @@ A18: 0 < len b;
     assume
 A19: m vector_sub_prg c,a,b;
     then consider n being Integer such that
-A21: c.0=b.0 and
-A22: n=b.0 and
-A23: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i=(a.i)-(b.i)
+A20: c.0=b.0 and
+A21: n=b.0 and
+A22: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i=(a.i)-(b.i)
     by Def11;
-A24: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
+A23: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
     i being Nat st 1<=i & i<=n holds c.i=(a.i)-(b.i)) by A19,Def11;
     then
-A25: len (XFS2FS*(c)) = (c.0) by A6,AFINSQ_1:def 12;
+A24: len (XFS2FS*(c)) = (c.0) by A6,AFINSQ_1:def 12;
     now
       per cases;
       case n=0;
         then
-        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL by A18,A24,A22,AFINSQ_1:68;
+        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL by A18,A23,A21,AFINSQ_1:68;
         hence thesis by RVSUM_1:49;
       end;
       case n<>0;
@@ -972,23 +972,23 @@ A25: len (XFS2FS*(c)) = (c.0) by A6,AFINSQ_1:def 12;
         proof
           let k3 be Nat;
           assume that
-A26:      1 <=k3 and
-A27:      k3 <= len p3;
-A28:      (c.0) in len c by A1,A5,A24,NAT_1:45;
+A25:      1 <=k3 and
+A26:      k3 <= len p3;
+A27:      (c.0) in len c by A1,A5,A23,NAT_1:45;
           then
-A29:      k3 <= n by A21,A22,A27,AFINSQ_1:def 12;
+A28:      k3 <= n by A20,A21,A26,AFINSQ_1:def 12;
           then
-A30:      a.k3 = (XFS2FS*(a)).k3 & b.k3 = (XFS2FS*(b)).k3 by A2,A3,A4,A6,A22
-,A26,AFINSQ_1:def 12;
-          k3 in Seg len c2 by A10,A22,A26,A29,FINSEQ_1:3;
+A29:      a.k3 = (XFS2FS*(a)).k3 & b.k3 = (XFS2FS*(b)).k3 by A2,A3,A4,A6,A21
+,A25,AFINSQ_1:def 12;
+          k3 in Seg len c2 by A10,A21,A25,A28,FINSEQ_1:3;
           then
-A31:      k3 in dom c2 by FINSEQ_1:def 3;
-A32:      len p3=n by A21,A22,A28,AFINSQ_1:def 12;
-          then p3.k3=c.k3 by A21,A22,A26,A27,A28,AFINSQ_1:def 12
-            .=(a.k3)-(b.k3) by A23,A26,A27,A32;
-          hence thesis by A31,A30,VALUED_1:13;
+A30:      k3 in dom c2 by FINSEQ_1:def 3;
+A31:      len p3=n by A20,A21,A27,AFINSQ_1:def 12;
+          then p3.k3=c.k3 by A20,A21,A25,A26,A27,AFINSQ_1:def 12
+            .=(a.k3)-(b.k3) by A22,A25,A26,A31;
+          hence thesis by A30,A29,VALUED_1:13;
         end;
-        hence thesis by A10,A21,A25,FINSEQ_1:18;
+        hence thesis by A10,A20,A24,FINSEQ_1:18;
       end;
     end;
     hence thesis;

@@ -13,7 +13,7 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, REALSET1,
       MCART_1, NUMBERS, FUNCOP_1, FUNCT_4, NAT_1,
       STRUCT_0, COMPOS_1, EXTPRO_1, FUNCT_7, AMISTD_1, AMISTD_2;
- constructors REALSET1, AMISTD_2, NAT_1, PRE_POLY, EXTPRO_1;
+ constructors REALSET1, AMISTD_2, NAT_1, PRE_POLY, EXTPRO_1, AMISTD_1;
  registrations SETFAM_1, FUNCOP_1, STRUCT_0, AMISTD_1, AMISTD_2,
       REALSET1, CARD_1, RELSET_1, ORDINAL1, COMPOS_1, EXTPRO_1;
  requirements SUBSET, BOOLE;
@@ -144,8 +144,9 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  cluster with_explicit_jumps IC-good Exec-preserving
-  with_non_trivial_ObjectKinds with_non_trivial_Instructions
+  cluster with_explicit_jumps
+    IC-relocable Exec-preserving with_non_trivial_ObjectKinds
+with_non_trivial_Instructions
  (regular J/A-independent homogeneous standard halting realistic
   (standard-ins IC-Ins-separated
     definite (non empty stored-program AMI-Struct over N)));
@@ -169,15 +170,15 @@ registration
   coherence
   proof
     let A be definite (non empty stored-program AMI-Struct over N);
-    consider l being Element of NAT;
+    set l =the  Element of NAT;
 A1: (the Object-Kind of A).l = the Instructions of A by COMPOS_1:def 8;
     assume
-Z:    for o being Object of A holds ObjectKind o is non trivial;
-X: l in NAT;
+A2:    for o being Object of A holds ObjectKind o is non trivial;
+A3: l in NAT;
   NAT c= the carrier of A by COMPOS_1:def 2;
-  then reconsider l as Object of A by X;
+  then reconsider l as Object of A by A3;
      ObjectKind l = the Instructions of A by A1;
-    hence the Instructions of A is non trivial by Z;
+    hence the Instructions of A is non trivial by A2;
   end;
 end;
 
@@ -334,7 +335,7 @@ proof
   for o being Object of A holds o in Out_\_Inp I implies o in Output I
   proof
     let o be Object of A;
-    consider s being State of A, a being Element of ObjectKind o;
+    set s =the  State of A,a =the  Element of ObjectKind o;
     consider w being set such that
 A1: w in ObjectKind o and
 A2: w <> a by YELLOW15:4;
@@ -623,7 +624,8 @@ end;
 
 registration
   let N;
-  cluster with_non_trivial_Instructions IC-Ins-separated
+  cluster with_non_trivial_Instructions :::steady-programmed
+  IC-Ins-separated
     definite (non empty stored-program AMI-Struct over N);
   existence
   proof
@@ -641,9 +643,9 @@ theorem
 proof
   let A be standard (IC-Ins-separated definite (non empty stored-program
   AMI-Struct over N)), I be Instruction of A;
-  consider t being State of A;
+  set t =the  State of A;
   set l = IC A;
-   reconsider sICt = succ IC t as Element of NAT;
+   reconsider sICt = succ IC t as Element of NAT by ORDINAL1:def 13;
    reconsider w = sICt as Element of ObjectKind l by COMPOS_1:def 6;
   set s = t +* (l,w);
   assume for s being State of A holds Exec(I,s).IC A = succ IC s;
@@ -678,7 +680,7 @@ proof
   let A be standard (IC-Ins-separated definite (non empty stored-program
   AMI-Struct over N)), I be Instruction of A such that
 A1: for s being State of A holds Exec(I, s).IC A = succ IC s;
-  consider s being State of A;
+  set s =the  State of A;
   Exec(I,s).IC A = succ IC s by A1;
   then Exec(I,s).IC A <> IC s by ORDINAL1:14;
   hence thesis by Def3;
@@ -705,7 +707,7 @@ theorem
 proof
   let A be standard (IC-Ins-separated definite (non empty stored-program
   AMI-Struct over N)), I be Instruction of A;
-  consider s being State of A;
+  set s =the  State of A;
   assume for s being State of A holds Exec(I,s).IC A = succ IC s;
   then Exec(I,s).IC A = succ IC s;
   then Exec(I,s).IC A <> IC s by ORDINAL1:14;
@@ -723,23 +725,23 @@ proof
 A1: for s being State of A, p being NAT-defined FinPartState of A holds
   Exec (I, s +* p) = Exec (I,s) +* p;
   assume
-Z: f in Out_U_Inp I;
-X: f in NAT;
+A2: f in Out_U_Inp I;
+A3: f in NAT;
   NAT c= the carrier of A by COMPOS_1:def 2;
-  then reconsider ff=f as Object of A by X;
+  then reconsider ff=f as Object of A by A3;
   consider s being State of A, w being Element of ObjectKind ff
   such that
-A2: Exec(I,s+*(ff,w)) <> Exec(I,s) +* (ff,w) by Z,Def5;
+A4: Exec(I,s+*(ff,w)) <> Exec(I,s) +* (ff,w) by A2,Def5;
   set p = ff .--> w;
   f in NAT & dom p = {f} by FUNCOP_1:19;
   then dom p c= NAT by ZFMISC_1:37;
-  then reconsider p as NAT-defined FinPartState of A;
+  then reconsider p as NAT-defined FinPartState of A by RELAT_1:def 18;
   dom s = the carrier of A by PARTFUN1:def 4;
   then
-A3: dom Exec(I,s) = the carrier of A & s+*(f,w) = s +* p by FUNCT_7:def 3
+A5: dom Exec(I,s) = the carrier of A & s+*(f,w) = s +* p by FUNCT_7:def 3
 ,PARTFUN1:def 4;
   Exec (I, s +* p) = Exec (I,s) +* p by A1;
-  hence thesis by A2,A3,FUNCT_7:def 3;
+  hence thesis by A4,A5,FUNCT_7:def 3;
 end;
 
 :: Twierdzenie to moze zostac przywrocone, jak zostanie wyrzucona

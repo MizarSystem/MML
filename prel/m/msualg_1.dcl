@@ -169,7 +169,7 @@
 </Func>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="32">
+<Adjective nr="33">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

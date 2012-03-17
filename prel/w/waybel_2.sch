@@ -24,13 +24,13 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="66"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="67"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -45,8 +45,8 @@
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="66"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="67"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

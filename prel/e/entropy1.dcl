@@ -58,8 +58,8 @@
 </Adjective>
 <Adjective nr="19"/>
 <Adjective nr="29"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="98"/>
 <Adjective nr="99"/>
 <Adjective nr="100"/>
@@ -92,8 +92,8 @@
 </Adjective>
 <Adjective nr="19"/>
 <Adjective nr="29"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="96"/>
 <Adjective nr="169">
 <LocusVar nr="1"/>

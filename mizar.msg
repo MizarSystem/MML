@@ -124,7 +124,7 @@ It is only meaningful for unary functors
 # 84
 The result type is not invariant under swapping the arguments
 # 85
-The type of the argument must be equal to the result type
+The result type must widen to the type of the argument
 # 89
 As yet not implemented for redefined functors
 # 90
@@ -404,7 +404,9 @@ It is not allowed for expandable modes
 # 271
 Redefined mode cannot be expandable
 # 272
-It's meaningless to redefine cluster
+It is meaningless to redefine a cluster
+# 273
+"redefine" is not allowed here
 # 274
 "means" not allowed in a definition of an expandable mode
 # 300
@@ -437,6 +439,8 @@ Scheme reference is not allowed in a simple justification
 "sch" expected
 # 314
 Incorrect beginning of a pattern
+# 315
+Mode "set" cannot be parametrized
 # 320
 Selector or structure symbol expected
 # 321
@@ -526,7 +530,7 @@ Functor pattern expected
 # 400
 Still not implemented
 # 401
-'not' expected
+"not" expected
 # 402
 A bare infinitive expected
 # 450
@@ -570,7 +574,7 @@ Too many selectors in one structure definition
 # 472
 Too many references
 # 473
-Too many justifications
+Too many premisses in a simple justification
 # 474
 Too complicated term
 # 476

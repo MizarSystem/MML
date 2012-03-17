@@ -11,12 +11,12 @@ environ
       TARSKI, COMPLEX1, XXREAL_0, XXREAL_2, XREAL_0, ORDINAL1, RLVECT_1,
       VFUNCT_1, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
-      REAL_1, STRUCT_0, RELSET_1, PARTFUN1, PARTFUN2, ALGSTR_0, RLVECT_1,
-      VALUED_1, SEQ_1, SEQ_2, XXREAL_0, NORMSP_0, NORMSP_1;
+      REAL_1, RELSET_1, PARTFUN1, FUNCT_2, PARTFUN2, VALUED_1, SEQ_1, SEQ_2,
+      XXREAL_0, STRUCT_0, ALGSTR_0, RLVECT_1, NORMSP_0, NORMSP_1;
  constructors PARTFUN1, XXREAL_0, REAL_1, COMPLEX1, PARTFUN2, RFUNCT_1,
       NORMSP_1, SEQ_1, VALUED_1, SEQ_2, RELSET_1;
  registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, STRUCT_0, VALUED_0,
-      RFUNCT_1, NORMSP_1, ALGSTR_0, RLVECT_1, NORMSP_0;
+      RFUNCT_1, NORMSP_1, ALGSTR_0, RLVECT_1, NORMSP_0, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -26,7 +26,7 @@ reserve x,X,Y for set;
 reserve C for non empty set;
 reserve c for Element of C;
 reserve V for RealNormSpace;
-reserve f,f1,f2,f3 for PartFunc of C,the carrier of V;
+reserve f,f1,f2,f3 for PartFunc of C,V;
 reserve r,r1,r2,p for Real;
 
 ::
@@ -36,51 +36,82 @@ reserve r,r1,r2,p for Real;
 definition
   let C;
   let V be non empty addLoopStr;
-  let f1,f2 be PartFunc of C,the carrier of V;
-  func f1+f2 -> PartFunc of C,the carrier of V means
+  let f1,f2 be PartFunc of C,V;
+  func f1+f2 -> PartFunc of C,V means
 :: VFUNCT_1:def 1
 
   dom it = dom f1 /\ dom f2 &
   for c st c in dom it holds it/.c = (f1/.c) + (f2/.c);
-  func f1-f2 -> PartFunc of C,the carrier of V means
+  func f1-f2 -> PartFunc of C,V means
 :: VFUNCT_1:def 2
 
   dom it = dom f1 /\ dom f2 &
   for c st c in dom it holds it/.c = (f1/.c) - (f2/.c);
 end;
 
+registration
+  let C;
+  let V be non empty addLoopStr;
+  let f1,f2 be Function of C,V;
+  cluster f1+f2 -> total;
+  cluster f1-f2 -> total;
+end;
+
 definition
   let C;
   let V be non empty RLSStruct;
   let f1 be PartFunc of C,REAL;
-  let f2 be PartFunc of C,the carrier of V;
-  func f1(#)f2 -> PartFunc of C,the carrier of V means
+  let f2 be PartFunc of C,V;
+  func f1(#)f2 -> PartFunc of C,V means
 :: VFUNCT_1:def 3
 
   dom it = dom f1 /\ dom f2 &
   for c st c in dom it holds it/.c = f1.c * (f2/.c);
 end;
 
+registration
+  let C;
+  let V be non empty RLSStruct;
+  let f1 be Function of C,REAL;
+  let f2 be Function of C,V;
+  cluster f1(#)f2 -> total;
+end;
+
 definition
   let C;
   let V be non empty RLSStruct;
-  let f be PartFunc of C,the carrier of V;
+  let f be PartFunc of C,V;
   let r;
-  func r(#)f -> PartFunc of C,the carrier of V means
+  func r(#)f -> PartFunc of C,V means
 :: VFUNCT_1:def 4
 
   dom it = dom f & for c st c in dom it holds it/.c = r * (f/.c);
+end;
+
+registration
+  let C;
+  let V be non empty RLSStruct;
+  let f be Function of C,V;
+  let r;
+  cluster r(#)f -> total;
 end;
 
 definition
  canceled;
   let C;
   let V be non empty addLoopStr;
-  let f be PartFunc of C,the carrier of V;
-  func -f ->PartFunc of C,the carrier of V means
+  let f be PartFunc of C,V;
+  func -f -> PartFunc of C,V means
 :: VFUNCT_1:def 6
 
   dom it = dom f & for c st c in dom it holds it/.c = -(f/.c);
+end;
+
+registration
+  let C;
+  let V be non empty addLoopStr;
+  let f be Function of C,V;
+  cluster -f -> total;
 end;
 
 canceled 6;
@@ -112,7 +143,7 @@ theorem :: VFUNCT_1:11
   (f1 + f2) + f3 = f1 + (f2 + f3);
 
 theorem :: VFUNCT_1:12
-  for f1,f2 be PartFunc of C,REAL,f3 be PartFunc of C,the carrier of V
+  for f1,f2 be PartFunc of C,REAL,f3 be PartFunc of C,V
   holds (f1 (#) f2) (#) f3 = f1 (#) (f2 (#) f3);
 
 theorem :: VFUNCT_1:13
@@ -213,12 +244,12 @@ theorem :: VFUNCT_1:42
   f is total iff ||.f.|| is total;
 
 theorem :: VFUNCT_1:43
-  f1 is total & f2 is total implies (f1+f2)/.c = (f1/.c) + (f2/.c) & (f1
-  -f2)/.c = (f1/.c) - (f2/.c);
+  f1 is total & f2 is total implies (f1+f2)/.c = (f1/.c) + (f2/.c) &
+  (f1-f2)/.c = (f1/.c) - (f2/.c);
 
 theorem :: VFUNCT_1:44
-  for f1 be PartFunc of C,REAL holds f1 is total & f2 is total implies (
-  f1(#)f2)/.c = f1.c * (f2/.c);
+  for f1 be PartFunc of C,REAL holds f1 is total & f2 is total implies
+  (f1(#)f2)/.c = f1.c * (f2/.c);
 
 theorem :: VFUNCT_1:45
   f is total implies (r(#)f)/.c = r * (f/.c);
@@ -233,7 +264,7 @@ theorem :: VFUNCT_1:46
 definition
   let C;
   let V be non empty NORMSTR;
-  let f be PartFunc of C,the carrier of V;
+  let f be PartFunc of C,V;
   let Y;
   pred f is_bounded_on Y means
 :: VFUNCT_1:def 7

@@ -194,7 +194,7 @@
 <Adjective nr="4"/>
 <Adjective nr="9"/>
 <Adjective nr="10"/>
-<Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 <Not>

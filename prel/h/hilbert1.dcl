@@ -106,7 +106,7 @@
 <Func kind="K" nr="75"/>
 </Typ>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -27,7 +27,7 @@ environ
  theorems BINOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSOP_1, FUNCT_1,
       GROUP_1, GROUP_2, GROUP_3, INT_1, LATTICES, NAT_1, RLSUB_2, SETFAM_1,
       SUBSET_1, TARSKI, ZFMISC_1, RELAT_1, XBOOLE_0, XBOOLE_1, ORDERS_1,
-      XREAL_1, XXREAL_0, NAT_D, STRUCT_0, PARTFUN1, ABSVALUE;
+      XREAL_1, XXREAL_0, NAT_D, STRUCT_0, PARTFUN1, ABSVALUE, CARD_1;
  schemes BINOP_1, DOMAIN_1, FINSEQ_1, FINSEQ_2, NAT_1, ORDERS_1, XBOOLE_0;
 
 begin
@@ -547,15 +547,15 @@ A3: len F = len F2;
   assume
 A4: for k st k in dom F holds F.k = (F1/.k) * (F2/.k);
     now
-A6: dom F2 = Seg len F2 by FINSEQ_1:def 3;
-A7: dom F1 = Seg len F1 by FINSEQ_1:def 3;
+A5: dom F2 = Seg len F2 by FINSEQ_1:def 3;
+A6: dom F1 = Seg len F1 by FINSEQ_1:def 3;
     let k;
-A8: dom F = Seg len F by FINSEQ_1:def 3;
+A7: dom F = Seg len F by FINSEQ_1:def 3;
     assume
-A9: k in dom F;
+A8: k in dom F;
     hence F.k = (F1/.k) * (F2/.k) by A4
-      .= g.(F1.k,F2/.k) by A2,A9,A8,A7,PARTFUN1:def 8
-      .= g.(F1.k,F2.k) by A3,A9,A8,A6,PARTFUN1:def 8;
+      .= g.(F1.k,F2/.k) by A2,A8,A7,A6,PARTFUN1:def 8
+      .= g.(F1.k,F2.k) by A3,A8,A7,A5,PARTFUN1:def 8;
   end;
   hence thesis by A1,A2,A3,FINSOP_1:10;
 end;
@@ -802,7 +802,7 @@ A1: for F,a st P[F] holds P[F ^ <* a *>]
     assume
 A2: P[F];
 A3: len<* a *> = 1 by FINSEQ_1:57;
-A4: len<* @(1) *> = 1 & len(len F |-> @(1)) = len F by FINSEQ_1:def 18;
+A4: len<* @(1) *> = 1 & len(len F |-> @(1)) = len F by CARD_1:def 13;
     len A = len F + len<* a *> by FINSEQ_1:35;
     hence A |^ (len A |-> @(1)) = A |^ ((len F |-> @(1)) ^ <* @(1) *>) by A3
     ,FINSEQ_2:74
@@ -832,7 +832,7 @@ A1: for F,a st P[F] holds P[F ^ <* a *>]
     assume
 A2: P[F];
 A3: len<* a *> = 1 by FINSEQ_1:57;
-A4: len<* @(0) *> = 1 & len(len F |-> @(0)) = len F by FINSEQ_1:def 18;
+A4: len<* @(0) *> = 1 & len(len F |-> @(0)) = len F by CARD_1:def 13;
 A5: len A = len F + len<* a *> by FINSEQ_1:35;
     hence A |^ (len A |-> @(0)) = A |^ ((len F |-> @(0)) ^ <* @(0) *>) by A3
     ,FINSEQ_2:74
@@ -877,7 +877,7 @@ A6: rng I c= INT by FINSEQ_1:def 4;
     then reconsider i = I.(k + 1) as Integer by A6;
 A7: len<* 1_G *> = 1 & len<* @i *> = 1 by FINSEQ_1:57;
 A8: (k + 1) |-> 1_G = (k |-> 1_G) ^ <* 1_G *> & len(k |-> 1_G) = k by
-    FINSEQ_1:def 18,FINSEQ_2:74;
+    CARD_1:def 13,FINSEQ_2:74;
     I = J ^ <* @i *> by A3,FINSEQ_3:61;
     then
     ((k + 1) |-> 1_G) |^ I = ((k |-> 1_G) |^ J) ^ (<* 1_G *> |^ <* @i *>)
@@ -1387,13 +1387,14 @@ A3: H is Subgroup of gr(carr H \/ {a}) by Th40;
   then H <> gr(carr H \/ {a}) by A2,Th38;
   hence thesis by A1,A3,Def7;
 end;
- 
+
 ::
 ::  Frattini subgroup.
 ::
 
 definition
   let G be Group;
+::$N Frattini subgroup
   func Phi(G) -> strict Subgroup of G means
   :Def8:
   the carrier of it = meet{A
@@ -1604,7 +1605,7 @@ A23:  for x,y being Element of X st x in Y & y in Y holds P[x,y] or P [y,x];
         per cases;
         suppose
 A24:      Y = {};
-          consider y being Element of X;
+          set y =the  Element of X;
           take y;
           let x be Element of X;
           assume x in Y;
@@ -1672,7 +1673,7 @@ A46:        D = carr H1 by A45;
             a" in carr H1 by A42,A44,A46,GROUP_2:90;
             hence a" in E by A43,A44,A46,TARSKI:def 4;
           end;
-          consider s being Element of Y;
+          set s =the  Element of Y;
 A47:      s in X by A22,A25,TARSKI:def 3;
           then reconsider s as strict Subgroup of G by A13,GROUP_3:def 1;
 A48:      carr s in C by A25;

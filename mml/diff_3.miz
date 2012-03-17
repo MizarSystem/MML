@@ -29,7 +29,7 @@ reserve h,k,r,r1,r2,x,x0,x1,x2,x3 for Real;
 reserve f,f1,f2 for Function of REAL,REAL;
 
 
-theorem Th4:
+theorem Th1:
   cD(f,h).x = fD(f,h/2).x - fD(f,-h/2).x
 proof
   cD(f,h).x = f.(x+h/2) - f.x + f.x - f.(x-h/2) by DIFF_1:5
@@ -39,7 +39,7 @@ proof
   hence thesis;
 end;
 
-theorem Th9:
+theorem Th2:
   fD(f,-h/2).x = -bD(f,h/2).x
 proof
   fD(f,-h/2).x = f.(x-h/2) - f.x by DIFF_1:3
@@ -58,8 +58,8 @@ proof
       .= -bD(f,-h/2).x by DIFF_1:4;
     hence thesis;
   end;
-  then cD(f,h).x = -bD(f,-h/2).x - fD(f,-h/2).x by Th4
-    .= -bD(f,-h/2).x - (-bD(f,h/2).x) by Th9
+  then cD(f,h).x = -bD(f,-h/2).x - fD(f,-h/2).x by Th1
+    .= -bD(f,-h/2).x - (-bD(f,h/2).x) by Th2
     .= bD(f,h/2).x - bD(f,-h/2).x;
   hence thesis;
 end;
@@ -138,7 +138,7 @@ proof
   hence thesis;
 end;
 
-theorem Th18:
+theorem Th11:
   bdif(f,h).1 = bD(f,h)
 proof
   bdif(f,h).1 = bdif(f,h).(0+1) .=bD(bdif(f,h).0,h) by DIFF_1:def 7
@@ -207,7 +207,7 @@ proof
   hence thesis;
 end;
 
-theorem Th23:
+theorem Th16:
   cdif(f,h).1 = cD(f,h)
 proof
   cdif(f,h).1 = cdif(f,h).(0+1) .= cD(cdif(f,h).0,h) by DIFF_1:def 8
@@ -326,11 +326,11 @@ theorem
   [!f,x-h,x!] = (bD(f,h).x)/h
 proof
   [!f,x-h,x!] = (bdif(f,h).1.x)/h by DIFF_2:3
-    .= (bD(f,h).x)/h by Th18;
+    .= (bD(f,h).x)/h by Th11;
   hence thesis;
 end;
 
-theorem Th29:
+theorem Th22:
   [!f,x-h/2,x+h/2!] = (cD(f,h).x)/h
 proof
   [!f,x-h/2,x+h/2!] = [!f,x+h/2,x-h/2!] by DIFF_1:29
@@ -338,11 +338,11 @@ proof
   hence thesis;
 end;
 
-theorem Th30:
+theorem Th23:
   [!f,x-h/2,x+h/2!] = (cdif(f,h).1.x)/h
 proof
-  [!f,x-h/2,x+h/2!] = (cD(f,h).x)/h by Th29
-    .= (cdif(f,h).1.x)/h by Th23;
+  [!f,x-h/2,x+h/2!] = (cD(f,h).x)/h by Th22
+    .= (cdif(f,h).1.x)/h by Th16;
   hence thesis;
 end;
 
@@ -359,9 +359,9 @@ A2: cdif(f,h).1 is Function of REAL,REAL by DIFF_1:19;
     .= ([!f,(x+h/2)-h/2,(x+h/2)+h/2!]
        -[!f,(x-h/2)-h/2,(x-h/2)+h/2!])/((x+h)-(x-h)) by DIFF_1:29
     .= ((cdif(f,h).1.(x+h/2))/h
-       -[!f,(x-h/2)-h/2,(x-h/2)+h/2!])/((x+h)-(x-h)) by Th30
+       -[!f,(x-h/2)-h/2,(x-h/2)+h/2!])/((x+h)-(x-h)) by Th23
     .= ((cdif(f,h).1.(x+h/2))/h
-       -(cdif(f,h).1.(x-h/2))/h)/((x+h)-(x-h)) by Th30
+       -(cdif(f,h).1.(x-h/2))/h)/((x+h)-(x-h)) by Th23
     .= ((cdif(f,h).1.(x+h/2)-cdif(f,h).1.(x-h/2)))/h/((x+h)-(x-h))
     .= ((cD(cdif(f,h).1,h).x)/h)/(2*h) by A2,DIFF_1:5
     .= ((cdif(f,h).(1+1).x)/h)/(2*h) by DIFF_1:def 8
@@ -369,7 +369,7 @@ A2: cdif(f,h).1 is Function of REAL,REAL by DIFF_1:19;
   hence thesis;
 end;
 
-theorem Th32:
+theorem Th25:
   [!(f1-f2),x0,x1!] = [!f1,x0,x1!] - [!f2,x0,x1!]
 proof
   [!(f1-f2),x0,x1!] = (f1.x0-f2.x0-(f1-f2).x1)/(x0-x1) by VALUED_1:15
@@ -391,7 +391,7 @@ theorem
   [!(r(#)f1-f2),x0,x1!] = r* [!f1,x0,x1!] - [!f2,x0,x1!]
 proof
   set g=r(#)f1;
-  [!(r(#)f1-f2),x0,x1!] = [!g,x0,x1!] - [!f2,x0,x1!] by Th32
+  [!(r(#)f1-f2),x0,x1!] = [!g,x0,x1!] - [!f2,x0,x1!] by Th25
     .= r* [!f1,x0,x1!] - [!f2,x0,x1!] by DIFF_1:31;
   hence thesis;
 end;
@@ -409,7 +409,7 @@ theorem
   [!(f1-r(#)f2),x0,x1!] = [!f1,x0,x1!] - r* [!f2,x0,x1!]
 proof
   set g=r(#)f2;
-  [!(f1-r(#)f2),x0,x1!] = [!f1,x0,x1!] - [!g,x0,x1!] by Th32
+  [!(f1-r(#)f2),x0,x1!] = [!f1,x0,x1!] - [!g,x0,x1!] by Th25
     .= [!f1,x0,x1!] - r* [!f2,x0,x1!] by DIFF_1:31;
   hence thesis;
 end;
@@ -419,13 +419,13 @@ theorem
 proof
   set g1=r1(#)f1;
   set g2=r2(#)f2;
-  [!(r1(#)f1-r2(#)f2),x0,x1!] = [!g1,x0,x1!] - [!g2,x0,x1!] by Th32
+  [!(r1(#)f1-r2(#)f2),x0,x1!] = [!g1,x0,x1!] - [!g2,x0,x1!] by Th25
     .= r1* [!f1,x0,x1!] - [!g2,x0,x1!] by DIFF_1:31
     .= r1* [!f1,x0,x1!] - r2* [!f2,x0,x1!] by DIFF_1:31;
   hence thesis;
 end;
 
-theorem Th38:
+theorem Th31:
  (bdif(f1(#)f2,h).1).x = f1.x* (bdif(f2,h).1).x + f2.(x-h)* (bdif(f1,h).1).x
 proof
   (bdif(f1(#)f2,h).1).x = (bdif(f1(#)f2,h).(0+1)).x
@@ -498,7 +498,7 @@ A5: (S.1).1 = (1 choose 1) * (bdif(f1,h).1).x * bdif(f2,h).(1-'1).(x-1*h) by A1
 A6: Sum(S.1, 1) = Partial_Sums(S.1).(0+1) by SERIES_1:def 6
     .= Partial_Sums(S.1).0 + (S.1).1 by SERIES_1:def 1
     .= (S.1).0 + (S.1).1 by SERIES_1:def 1
-    .= (bdif(f1(#)f2,h).1).x by A3,A5,Th38;
+    .= (bdif(f1(#)f2,h).1).x by A3,A5,Th31;
 A7: bdif(f1(#)f2,h).1 is Function of REAL,REAL by DIFF_1:12;
 A8: bdif(f2,h).1 is Function of REAL,REAL by DIFF_1:12;
 A9: bdif(f1,h).1 is Function of REAL,REAL by DIFF_1:12;
@@ -506,10 +506,10 @@ A10: bdif(f1(#)f2,h).2.x = bdif(f1(#)f2,h).(1+1).x
     .= bD(bdif(f1(#)f2,h).1,h).x by DIFF_1:def 7
     .= bdif(f1(#)f2,h).1.x - bdif(f1(#)f2,h).1.(x-h) by A7,DIFF_1:4
     .= f1.x * bdif(f2,h).1.x + bdif(f1,h).1.x * f2.(x-h)
-       - bdif(f1(#)f2,h).1.(x-h) by Th38
+       - bdif(f1(#)f2,h).1.(x-h) by Th31
     .= f1.x * bdif(f2,h).1.x + bdif(f1,h).1.x * f2.(x-h)
        - (f1.(x-h) * (bdif(f2,h).1).(x-h)
-       + (bdif(f1,h).1).(x-h) * f2.((x-h)-h)) by Th38
+       + (bdif(f1,h).1).(x-h) * f2.((x-h)-h)) by Th31
     .= f1.x * (bdif(f2,h).1.x - bdif(f2,h).1.(x-h))
        + (f1.x - f1.(x-h)) * bdif(f2,h).1.(x-h)
        - (bdif(f1,h).1.(x-h) - bdif(f1,h).1.x) * f2.(x-2*h)
@@ -577,7 +577,7 @@ A16: (S.2).2 = (2 choose 2) * (bdif(f1,h).2).x
   hence thesis by A6;
 end;
 
-theorem Th42:
+theorem Th34:
   (cdif(f1(#)f2,h).1).x
      = f1.(x+h/2)* (cdif(f2,h).1).x + f2.(x-h/2)* (cdif(f1,h).1).x
 proof
@@ -629,7 +629,7 @@ A5: (S.1).1 = (1 choose 1) * (cdif(f1,h).1).(x+(1-'1)*(h/2))
 A6: Sum(S.1, 1) = Partial_Sums(S.1).(0+1) by SERIES_1:def 6
     .= Partial_Sums(S.1).0 + (S.1).1 by SERIES_1:def 1
     .= (S.1).0 + (S.1).1 by SERIES_1:def 1
-    .= (cdif(f1(#)f2,h).1).x by A3,A5,Th42;
+    .= (cdif(f1(#)f2,h).1).x by A3,A5,Th34;
 A7: cdif(f1(#)f2,h).1 is Function of REAL,REAL by DIFF_1:19;
 A8: cdif(f1,h).1 is Function of REAL,REAL by DIFF_1:19;
 A9: cdif(f2,h).1 is Function of REAL,REAL by DIFF_1:19;
@@ -638,11 +638,11 @@ A10: (cdif(f1(#)f2,h).2).x = (cdif(f1(#)f2,h).(1+1)).x
     .= (cdif(f1(#)f2,h).1).(x+h/2) - (cdif(f1(#)f2,h).1).(x-h/2) by A7,DIFF_1:5
     .= f1.((x+h/2)+h/2) * (cdif(f2,h).1).(x+h/2)
        + (cdif(f1,h).1).(x+h/2) * f2.((x+h/2)-h/2)
-       - (cdif(f1(#)f2,h).1).(x-h/2) by Th42
+       - (cdif(f1(#)f2,h).1).(x-h/2) by Th34
     .= f1.(x+h) * (cdif(f2,h).1).(x+h/2)
        + (cdif(f1,h).1).(x+h/2) * f2.x
        - (f1.((x-h/2)+h/2) * (cdif(f2,h).1).(x-h/2)
-       + (cdif(f1,h).1).(x-h/2) * f2.((x-h/2)-h/2)) by Th42
+       + (cdif(f1,h).1).(x-h/2) * f2.((x-h/2)-h/2)) by Th34
     .= f1.(x+h) * ((cdif(f2,h).1).(x+h/2) - (cdif(f2,h).1).(x-h/2))
        + (f1.(x+h) - f1.x) * (cdif(f2,h).1).(x-h/2)
        - ((cdif(f1,h).1).(x-h/2) - (cdif(f1,h).1).(x+h/2)) * f2.(x-h)
@@ -671,7 +671,7 @@ A10: (cdif(f1(#)f2,h).2).x = (cdif(f1(#)f2,h).(1+1)).x
     .= f1.(x+h) * (cdif(f2,h).2).x
        + (cdif(f1,h).1).(x+h/2) * (cdif(f2,h).1).(x-h/2)
        + cD(cdif(f1,h).1,h).x * f2.(x-h)
-       + (cdif(f1,h).1).(x+h/2) * cD(f2,h).(x-h/2) by Th23
+       + (cdif(f1,h).1).(x+h/2) * cD(f2,h).(x-h/2) by Th16
     .= f1.(x+h) * (cdif(f2,h).2).x
        + (cdif(f1,h).1).(x+h/2) * (cdif(f2,h).1).(x-h/2)
        + (cdif(f1,h).(1+1)).x * f2.(x-h)
@@ -679,7 +679,7 @@ A10: (cdif(f1(#)f2,h).2).x = (cdif(f1(#)f2,h).(1+1)).x
     .= f1.(x+h) * (cdif(f2,h).2).x
        + (cdif(f1,h).1).(x+h/2) * (cdif(f2,h).1).(x-h/2)
        + (cdif(f1,h).2).x * f2.(x-h)
-       + (cdif(f1,h).1).(x+h/2) * (cdif(f2,h).1).(x-h/2) by Th23
+       + (cdif(f1,h).1).(x+h/2) * (cdif(f2,h).1).(x-h/2) by Th16
     .= f1.(x+h) * (cdif(f2,h).2).x
        + 2 * (cdif(f1,h).1).(x+h/2) * (cdif(f2,h).1).(x-h/2)
        +(cdif(f1,h).2).x * f2.(x-h);
@@ -709,7 +709,7 @@ A16: (S.2).2 = (2 choose 2) * (cdif(f1,h).2).(x+(2-'2)*(h/2))
     .= (cdif(f1(#)f2,h).2).x by A10,A12,A14,A16,SERIES_1:def 1;
   hence thesis by A6;
 end;
- 
+
 ::  f.x=sqrt x
 
 theorem
@@ -737,15 +737,15 @@ A2:x0,x1,x2 are_mutually_different and
 A3:x0>0 & x1>0 & x2>0;
 A4:f.x0 = sqrt x0 & f.x1 = sqrt x1 & f.x2 = sqrt x2 by A1;
 sqrt x0>0 & sqrt x1>0 & sqrt x2>0 by A3,SQUARE_1:93;
-then A6:sqrt x0+sqrt x1>0 & sqrt x1+sqrt x2>0 by XREAL_1:36;
-A7:x0<>x1 & x1<>x2 & x2<>x0 by A2,ZFMISC_1:def 5;
+then A5:sqrt x0+sqrt x1>0 & sqrt x1+sqrt x2>0 by XREAL_1:36;
+A6:x0<>x1 & x1<>x2 & x2<>x0 by A2,ZFMISC_1:def 5;
   then
 [!f,x0,x1,x2!] = (1/(sqrt x0 + sqrt x1) - (sqrt x1-sqrt x2)/(x1-x2))/(x0-x2)
                                                   by A3,A4,SQUARE_1:105
     .= (1/(sqrt x0 + sqrt x1) - 1/(sqrt x1 + sqrt x2))/(x0-x2)
-                                                     by A3,A7,SQUARE_1:105
+                                                     by A3,A6,SQUARE_1:105
     .= ((1*(sqrt x1 + sqrt x2)-1*(sqrt x0 + sqrt x1))
-       /((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)))/(x0-x2) by A6,XCMPLX_1:131
+       /((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)))/(x0-x2) by A5,XCMPLX_1:131
     .= ((sqrt x2-sqrt x0)/((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)))
        /(-(x2-x0))
     .= -((sqrt x2-sqrt x0)/((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)))
@@ -753,7 +753,7 @@ A7:x0<>x1 & x1<>x2 & x2<>x0 by A2,ZFMISC_1:def 5;
     .= -1/((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2))
        *((sqrt x2 - sqrt x0)/(x2-x0))
     .= -1/((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2))
-       *(1/(sqrt x2 + sqrt x0)) by A3,A7,SQUARE_1:105
+       *(1/(sqrt x2 + sqrt x0)) by A3,A6,SQUARE_1:105
     .= -1/((sqrt x0+sqrt x1)*(sqrt x1+sqrt x2)*(sqrt x2+sqrt x0))
                                                        by XCMPLX_1:103;
   hence thesis;
@@ -772,31 +772,31 @@ A2:x0,x1,x2,x3 are_mutually_different and
 A3:x0>0 & x1>0 & x2>0 & x3>0;
 A4:f.x0 = sqrt x0 & f.x1 = sqrt x1 & f.x2 = sqrt x2 & f.x3 = sqrt x3 by A1;
 sqrt x0>0 & sqrt x1>0 & sqrt x2>0 & sqrt x3>0 by A3,SQUARE_1:93;
-then A6:sqrt x0+sqrt x1>0 & sqrt x1+sqrt x2>0 & sqrt x2+sqrt x3>0
+then A5:sqrt x0+sqrt x1>0 & sqrt x1+sqrt x2>0 & sqrt x2+sqrt x3>0
    & sqrt x2+sqrt x0>0 & sqrt x3+sqrt x1>0 by XREAL_1:36;
-A7:x0<>x1 & x0<>x2 & x0<>x3 & x1<>x2 & x1<>x3 & x2<>x3 by A2,ZFMISC_1:def 6;
+A6:x0<>x1 & x0<>x2 & x0<>x3 & x1<>x2 & x1<>x3 & x2<>x3 by A2,ZFMISC_1:def 6;
   then [!f,x0,x1,x2,x3!] = ((1/(sqrt x0 + sqrt x1)
        - (sqrt x1-sqrt x2)/(x1-x2))/(x0-x2)
        - ((sqrt x1-sqrt x2)/(x1-x2) - (sqrt x2-sqrt x3)/(x2-x3))/(x1-x3))
        /(x0-x3) by A3,A4,SQUARE_1:105
     .= ((1/(sqrt x0 + sqrt x1) - 1/(sqrt x1 + sqrt x2))/(x0-x2)
        - ((sqrt x1-sqrt x2)/(x1-x2) - (sqrt x2-sqrt x3)/(x2-x3))/(x1-x3))
-       /(x0-x3) by A3,A7,SQUARE_1:105
+       /(x0-x3) by A3,A6,SQUARE_1:105
     .= ((1/(sqrt x0 + sqrt x1) - 1/(sqrt x1 + sqrt x2))/(x0-x2)
        - (1/(sqrt x1 + sqrt x2) - (sqrt x2 - sqrt x3)/(x2-x3))/(x1-x3))/(x0-x3)
-                                                     by A3,A7,SQUARE_1:105
+                                                     by A3,A6,SQUARE_1:105
     .= ((1/(sqrt x0 + sqrt x1) - 1/(sqrt x1 + sqrt x2))/(x0-x2)
        - (1/(sqrt x1 + sqrt x2) - 1/(sqrt x2 + sqrt x3))/(x1-x3))/(x0-x3)
-                                                     by A3,A7,SQUARE_1:105
+                                                     by A3,A6,SQUARE_1:105
     .= (((1*(sqrt x1 + sqrt x2)-1*(sqrt x0 + sqrt x1))
        /((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)))/(x0-x2)
        - (1/(sqrt x1 + sqrt x2) - 1/(sqrt x2 + sqrt x3))/(x1-x3))/(x0-x3)
-                                                           by A6,XCMPLX_1:131
+                                                           by A5,XCMPLX_1:131
     .= (((1*(sqrt x1 + sqrt x2)-1*(sqrt x0 + sqrt x1))
        /((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)))/(x0-x2)
        - ((1*(sqrt x2 + sqrt x3)-1*(sqrt x1 + sqrt x2))
        /((sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x3)))/(x1-x3))/(x0-x3)
-                                                          by A6,XCMPLX_1:131
+                                                          by A5,XCMPLX_1:131
     .= (((sqrt x2-sqrt x0)/((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)))
        /(-(x2-x0))- ((sqrt x3-sqrt x1)/((sqrt x1+sqrt x2)*(sqrt x2+sqrt x3)))
        /(-(x3-x1)))/(x0-x3)
@@ -808,13 +808,13 @@ A7:x0<>x1 & x0<>x2 & x0<>x3 & x1<>x2 & x1<>x3 & x2<>x3 by A2,ZFMISC_1:def 6;
        *(sqrt x2 + sqrt x3)))/(x3-x1))/(x0-x3) by XCMPLX_1:189
     .= (-(1/((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)))*(1/(sqrt x2+sqrt x0))
        - -((sqrt x3-sqrt x1)/((sqrt x1 + sqrt x2)
-       *(sqrt x2 + sqrt x3)))/(x3-x1))/(x0-x3) by A3,A7,SQUARE_1:105
+       *(sqrt x2 + sqrt x3)))/(x3-x1))/(x0-x3) by A3,A6,SQUARE_1:105
     .= (-1/((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x0))
        + (1/((sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x3)))
        *((sqrt x3-sqrt x1)/(x3-x1)))/(x0-x3) by XCMPLX_1:103
     .= (-1/((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x0))
        + (1/((sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x3)))
-       *(1/(sqrt x3+sqrt x1)))/(x0-x3) by A3,A7,SQUARE_1:105
+       *(1/(sqrt x3+sqrt x1)))/(x0-x3) by A3,A6,SQUARE_1:105
     .= (1/((sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x3)*(sqrt x3 + sqrt x1))
        -1/((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x0)))
        /(x0-x3) by XCMPLX_1:103
@@ -822,7 +822,7 @@ A7:x0<>x1 & x0<>x2 & x0<>x3 & x1<>x2 & x1<>x3 & x2<>x3 by A2,ZFMISC_1:def 6;
        -1*((sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x3)*(sqrt x3 + sqrt x1)))
        /(((sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x3)*(sqrt x3 + sqrt x1))
        *((sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x0))))
-       /(x0-x3) by A6,XCMPLX_1:131
+       /(x0-x3) by A5,XCMPLX_1:131
     .= (((sqrt x0 + sqrt x1)*(sqrt x2 + sqrt x0)
        -(sqrt x2 + sqrt x3)*(sqrt x3 + sqrt x1))*(sqrt x1 + sqrt x2))
        /((sqrt x2 + sqrt x3)*(sqrt x3 + sqrt x1)*(sqrt x0 + sqrt x1)
@@ -830,7 +830,7 @@ A7:x0<>x1 & x0<>x2 & x0<>x3 & x1<>x2 & x1<>x3 & x2<>x3 by A2,ZFMISC_1:def 6;
     .= (sqrt x0*sqrt x2+sqrt x0*sqrt x0+sqrt x1*sqrt x2+sqrt x1*sqrt x0
        -(sqrt x2*sqrt x3+sqrt x2*sqrt x1+sqrt x3*sqrt x3+sqrt x3*sqrt x1))
        /((sqrt x2 + sqrt x3)*(sqrt x3 + sqrt x1)*(sqrt x0 + sqrt x1)
-       *(sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x0))/(x0-x3) by A6,XCMPLX_1:92
+       *(sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x0))/(x0-x3) by A5,XCMPLX_1:92
     .= (sqrt x0*sqrt x2+sqrt x0^2+sqrt x1*sqrt x2+sqrt x1*sqrt x0
        -(sqrt x2*sqrt x3+sqrt x2*sqrt x1+sqrt x3*sqrt x3+sqrt x3*sqrt x1))
        /((sqrt x2 + sqrt x3)*(sqrt x3 + sqrt x1)*(sqrt x0 + sqrt x1)
@@ -862,7 +862,7 @@ A7:x0<>x1 & x0<>x2 & x0<>x3 & x1<>x2 & x1<>x3 & x2<>x3 by A2,ZFMISC_1:def 6;
        *(sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x0))) by XCMPLX_1:77
     .= (1/(sqrt x0+sqrt x3))*((sqrt x2+sqrt x1+sqrt x0+sqrt x3)
        /((sqrt x2 + sqrt x3)*(sqrt x3 + sqrt x1)*(sqrt x0 + sqrt x1)
-       *(sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x0))) by A3,A7,SQUARE_1:105
+       *(sqrt x1 + sqrt x2)*(sqrt x2 + sqrt x0))) by A3,A6,SQUARE_1:105
     .= (sqrt x2+sqrt x1+sqrt x0+sqrt x3)/((sqrt x2 + sqrt x3)
        *(sqrt x3 + sqrt x1)*(sqrt x0 + sqrt x1)*(sqrt x1 + sqrt x2)
        *(sqrt x2 + sqrt x0)*(sqrt x0+sqrt x3)) by XCMPLX_1:104
@@ -907,7 +907,7 @@ A1:for x holds f.x = sqrt x;
     .= sqrt (x+h/2) - sqrt (x-h/2) by A1;
   hence thesis;
 end;
- 
+
 :: f.x=x^2
 
 theorem
@@ -1006,7 +1006,7 @@ A1:for x holds f.x = x^2;
     .= h*(2*x);
   hence thesis;
 end;
- 
+
 ::  f.x=k/(x^2)
 
 theorem
@@ -1194,7 +1194,7 @@ A2:x+h/2<>0 & x-h/2<>0;
     .= (-2*h*k*x)/((x^2-(h/2)^2)^2);
   hence thesis;
 end;
- 
+
 ::  f.x=(sin x)^3
 
 theorem
@@ -1307,7 +1307,7 @@ proof
     .= (1/2)*(3*cos(x)*sin(h/2)-cos(3*x)*sin(3*h/2));
   hence thesis;
 end;
- 
+
 :: f.x=(cos x)^3
 
 theorem
@@ -1425,7 +1425,7 @@ proof
     .= -((1/2))*(3*(sin(x)*sin(h/2))+(sin(3*x)*sin(3*h/2)));
   hence thesis;
 end;
- 
+
 ::  f.x=1/sin(x)
 
 theorem
@@ -1502,7 +1502,7 @@ A2:sin(x+h/2)<>0 & sin(x-h/2)<>0;
     .= (-2)*((sin(x-h/2)-sin(x+h/2))/(cos(2*x)-cos(h)));
   hence thesis;
 end;
- 
+
 ::  f.x=1/cos(x)
 
 theorem
@@ -1575,7 +1575,7 @@ A2:cos(x+h/2)<>0 & cos(x-h/2)<>0;
     .= 2*((cos(x-h/2)-cos(x+h/2))/(cos(2*x)+cos(h)));
   hence thesis;
 end;
- 
+
 ::  f.x=1/(sin(x))^2
 
 theorem
@@ -1694,7 +1694,7 @@ A2:sin(x+h/2)<>0 & sin(x-h/2)<>0;
     .= 16*cos(x)*sin((-h)/2)*cos((-h)/2)*sin(x)/((cos(2*x)-cos(h))^2);
   hence thesis;
 end;
- 
+
 :: f.x=1/(cos(x)^2)
 
 theorem
@@ -1813,7 +1813,7 @@ A2:cos(x+h/2)<>0 & cos(x-h/2)<>0;
     .= (-16)*sin(x)*sin((-h)/2)*cos(x)*cos((-h)/2)/((cos(2*x)+cos(h))^2);
   hence thesis;
 end;
- 
+
 :: f.x=tan(x)*sin(x)
 
 theorem
@@ -1944,7 +1944,7 @@ A2:x+h/2 in dom tan & x-h/2 in dom tan;
     .= 1/cos(x+h/2)-cos(x+h/2)-1/cos(x-h/2)+cos(x-h/2);
   hence thesis;
 end;
- 
+
 :: f.x=tan(x)*cos(x)
 
 theorem
@@ -2046,7 +2046,7 @@ A2:x+h/2 in dom tan & x-h/2 in dom tan;
     .= sin(x+h/2)-sin(x-h/2);
   hence thesis;
 end;
- 
+
 :: f.x=cot(x)*cos(x)
 
 theorem
@@ -2186,7 +2186,7 @@ A2:x+h/2 in dom cot & x-h/2 in dom cot;
     .= 1/sin(x+h/2)-sin(x+h/2)-1/sin(x-h/2)+sin(x-h/2);
   hence thesis;
 end;
- 
+
 :: f.x=cot(x)*sin(x)
 
 theorem
@@ -2289,7 +2289,7 @@ A2:x+h/2 in dom cot & x-h/2 in dom cot;
     .= cos(x+h/2)-cos(x-h/2);
   hence thesis;
 end;
- 
+
 ::  f.x=(tan(x))^2
 
 theorem

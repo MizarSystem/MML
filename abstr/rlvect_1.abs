@@ -9,7 +9,7 @@ environ
  vocabularies NUMBERS, ALGSTR_0, STRUCT_0, SUBSET_1, BINOP_1, FUNCT_1,
       ZFMISC_1, XBOOLE_0, XREAL_0, ORDINAL1, RELAT_1, REAL_1, ARYTM_3,
       SUPINF_2, FUNCT_5, MCART_1, ARYTM_1, CARD_1, FINSEQ_1, ORDINAL4, CARD_3,
-      TARSKI, XXREAL_0, FUNCOP_1, NAT_1, VALUED_0, RLVECT_1;
+      TARSKI, XXREAL_0, FUNCOP_1, NAT_1, VALUED_0, RLVECT_1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1, REAL_1,
       FINSEQ_1, NAT_1, FUNCT_3, FUNCT_5, STRUCT_0, ALGSTR_0;
@@ -68,8 +68,8 @@ end;
 canceled;
 
 theorem :: RLVECT_1:5
-  for V being non empty addLoopStr, v,w being Element of V holds v + w =
-  (the addF of V).(v,w);
+  for V being non empty addMagma, v,w being Element of V holds
+  v + w = (the addF of V).(v,w);
 
 registration
   let ZS be non empty set, O be Element of ZS, F be BinOp of ZS, G be Function
@@ -78,7 +78,7 @@ registration
 end;
 
 definition
-  let IT be addLoopStr;
+  let IT be addMagma;
   attr IT is Abelian means
 :: RLVECT_1:def 5
 
@@ -87,6 +87,10 @@ definition
 :: RLVECT_1:def 6
 
   for u,v,w being Element of IT holds (u + v) + w = u + (v + w);
+end;
+
+definition
+  let IT be addLoopStr;
   attr IT is right_zeroed means
 :: RLVECT_1:def 7
  for v being Element of IT holds v + 0.IT = v;
@@ -119,8 +123,12 @@ registration
 end;
 
 registration
-  cluster strict Abelian add-associative right_zeroed right_complementable (
-    non empty addLoopStr);
+  cluster strict Abelian add-associative non empty addMagma;
+end;
+
+registration
+  cluster strict Abelian add-associative right_zeroed right_complementable
+    non empty addLoopStr;
 end;
 
 registration
@@ -137,7 +145,7 @@ definition
 end;
 
 definition
-  let V be Abelian (non empty addLoopStr), v,w be Element of V;
+  let V be Abelian addMagma, v,w be Element of V;
   redefine func v + w;
   commutativity;
 end;
@@ -321,24 +329,23 @@ theorem :: RLVECT_1:51
 definition
   let V be non empty 1-sorted;
   let v,u be Element of V;
-  redefine func <* v,u *> -> FinSequence of the carrier of V;
+  redefine func <* v,u *> -> FinSequence of V;
 end;
 
 definition
   let V be non empty 1-sorted;
   let v,u,w be Element of V;
-  redefine func <* v,u,w *> -> FinSequence of the carrier of V;
+  redefine func <* v,u,w *> -> FinSequence of V;
 end;
 
 reserve V for non empty addLoopStr;
-reserve F,G,H for FinSequence of the carrier of V;
-reserve f,f9,g for Function of NAT, the carrier of V;
+reserve F for FinSequence-like PartFunc of NAT,V;
+reserve f,f9,g for Function of NAT,V;
 reserve v,u for Element of V;
 reserve j,k,n for Element of NAT;
 
 definition
-  let V;
-  let F;
+  let V; let F be FinSequence-like PartFunc of NAT,V;
   func Sum(F) -> Element of V means
 :: RLVECT_1:def 15
 
@@ -349,12 +356,13 @@ end;
 canceled 3;
 
 theorem :: RLVECT_1:55
-  len F = len G + 1 & G = F | (dom G) & v = F.(len F) implies Sum(
-  F) = Sum(G) + v;
+  for F,G being FinSequence of V holds
+  len F = len G + 1 & G = F | (dom G) & v = F.(len F) implies
+  Sum(F) = Sum(G) + v;
 
 reserve V for RealLinearSpace;
 reserve v for VECTOR of V;
-reserve F,G,H,I for FinSequence of the carrier of V;
+reserve F,G,H,I for FinSequence of V;
 
 theorem :: RLVECT_1:56
   len F = len G & (for k,v st k in dom F & v = G.k holds F.k = a * v)
@@ -362,23 +370,23 @@ theorem :: RLVECT_1:56
 
 theorem :: RLVECT_1:57
   for V being Abelian add-associative right_zeroed right_complementable
-  (non empty addLoopStr), F,G being FinSequence of the carrier of V st len F =
+  (non empty addLoopStr), F,G being FinSequence of V st len F =
 len G & (for k for v being Element of V st k in dom F & v = G.k holds F.k = - v
   ) holds Sum(F) = - Sum(G);
 
 theorem :: RLVECT_1:58
   for V being add-associative right_zeroed (non empty addLoopStr),
-  F,G being FinSequence of the carrier of V holds Sum(F ^ G) = Sum(F) + Sum(G);
+  F,G being FinSequence of V holds Sum(F ^ G) = Sum(F) + Sum(G);
 
 reserve V for add-associative right_zeroed right_complementable (non empty
   addLoopStr);
-reserve F for FinSequence of the carrier of V;
+reserve F for FinSequence of V;
 reserve v,v1,v2,u,w for Element of V;
 reserve j,k for Element of NAT;
 
 theorem :: RLVECT_1:59
   for V being Abelian add-associative right_zeroed (non empty addLoopStr
-), F,G being FinSequence of the carrier of V st rng F = rng G & F is one-to-one
+), F,G being FinSequence of V st rng F = rng G & F is one-to-one
   & G is one-to-one holds Sum(F) = Sum(G);
 
 theorem :: RLVECT_1:60

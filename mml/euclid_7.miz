@@ -86,7 +86,7 @@ end;
 
 canceled;
 
-Th3: for X being set, Y being non empty set, f being Function of X,Y
+Lm1: for X being set, Y being non empty set, f being Function of X,Y
   st f is bijective holds card X = card Y by EULER_1:12;
 
 theorem
@@ -141,7 +141,7 @@ A1: [: rng f1,rng f2 :] c= [:D,D:] by ZFMISC_1:119;
   end;
 end;
 
-Lm1: n<m implies ex k being Nat st m=n+1+k
+Lm2: n<m implies ex k being Nat st m=n+1+k
 proof
   assume
 A1: n<m;
@@ -204,7 +204,7 @@ A14:  X[0] by A7;
 A15:  for k being Nat holds X[k] from NAT_1:sch 2(A14,A10);
       assume n < m;
       then consider k being Nat such that
-A16:  m1 = n1+1+k by Lm1;
+A16:  m1 = n1+1+k by Lm2;
       m <= len h by A9,FINSEQ_3:27;
       then m1-1 < len h-0 by XREAL_1:17;
       then n1+k < len h by A16;
@@ -697,7 +697,7 @@ proof
   assume that
 A1: B0 is orthogonal_basis and
 A2: B0 <> {};
-  consider x being Element of B0;
+  set x =the  Element of B0;
   x in B0 by A2;
   then reconsider x0=x as Element of REAL 0;
   |( (0*(len x0)),0*(len x0) )| =0 by EUCLID_2:17; then
@@ -720,7 +720,7 @@ A2: for x being Element of REAL n st x in B0 holds |(x,y)|=0;
     y1 in {y1} by TARSKI:def 1;
     then
 A3: y1 in B1 by XBOOLE_0:def 3;
-A4: len y=n by FINSEQ_1:def 18;
+A4: len y=n by CARD_1:def 13;
     for x2,y2 being real-valued FinSequence st x2 in B1 & y2 in B1 & x2<>
     y2 holds |(x2,y2)|=0
     proof
@@ -730,7 +730,7 @@ A5:   x2 in B1 and
 A6:   y2 in B1 and
 A7:   x2<>y2;
       reconsider X2=x2, Y2=y2 as Element of REAL n by A5,A6;
-A8:   len Y2=n by FINSEQ_1:def 18;
+A8:   len Y2=n by CARD_1:def 13;
       per cases by A5,XBOOLE_0:def 3;
       suppose
 A9:     x2 in B0;
@@ -741,7 +741,7 @@ A9:     x2 in B0;
         end;
         suppose
 A10:      y2 in {y1};
-A11:      len X2=n by FINSEQ_1:def 18;
+A11:      len X2=n by CARD_1:def 13;
           |(x2,y)|=0 by A2,A9;
           then
 A12:      (1/(|.y.|))*|(x2,y)|=0;
@@ -776,7 +776,7 @@ A16: |.y1.|= (abs(1/(|.y.|)))*(|.y.|) by EUCLID:14
     end;
     then
 A17: B1 is R-normal by Def4;
-A18: len y1=n by FINSEQ_1:def 18;
+A18: len y1=n by CARD_1:def 13;
 A19: now
       assume y1 in B0;
       then |(y1,y)|=0 by A2;
@@ -891,7 +891,7 @@ end;
 
 definition
   let n be Nat,f be FinSequence of REAL n;
-  func accum f -> FinSequence of REAL n means :Def11:
+  func accum f -> FinSequence of REAL n means :Def10:
   len f = len it & f.1 = it.1 &
   for i being Nat st 1<=i & i<len f holds it.(i+1) = (it/.i) + (f/.(i+1));
   existence
@@ -1043,11 +1043,11 @@ end;
 definition
   let n be Nat;
   let f be FinSequence of REAL n;
-  func Sum f -> Element of REAL n equals :Def10:
+  func Sum f -> Element of REAL n equals :Def11:
     (accum f).len f if len f > 0 otherwise 0*n;
   coherence
   proof
-A1: len f = len accum f by Def11;
+A1: len f = len accum f by Def10;
     now per cases;
       case len f > 0;
         then 0+1 <= len f by NAT_1:13;
@@ -1084,486 +1084,486 @@ A6: dom h=dom F by FUNCT_2:def 1;
 A7: dom F2=dom h by A1,RELAT_1:46; then
 A8: Seg len F2=dom F by A6,FINSEQ_1:def 3;
     set gF = accum F;
-A9: len F = len gF by Def11;
-A11: for i being Nat st 1<=i & i<len F holds gF.(i+1)=(gF/.i)+(F/.(i+1))
-     by Def11;
+A9: len F = len gF by Def10;
+A10: for i being Nat st 1<=i & i<len F holds gF.(i+1)=(gF/.i)+(F/.(i+1))
+     by Def10;
     defpred P[Nat] means
     for h2 being Permutation of dom F st $1<len F &
     (for i being Nat st $1+1<i & i<=len F holds h2.i=i) holds
     gF.($1+1)=(accum (F(*)h2)).($1+1);
-A13: dom F=Seg len F by FINSEQ_1:def 3;
+A11: dom F=Seg len F by FINSEQ_1:def 3;
     1 in Seg len F2 by A5,A6,A7,FINSEQ_1:def 3;
     then
-A14: 1<=len F2 by FINSEQ_1:3;
-A15: len F-'1=len F-1 by A3,XREAL_1:235;
+A12: 1<=len F2 by FINSEQ_1:3;
+A13: len F-'1=len F-1 by A3,XREAL_1:235;
     then
-A16: for i being Nat st len F -'1+1<i & i<=len F holds h.i=i;
-A17: dom F <> {} by A4,FINSEQ_1:def 3;
-A18: for k being Nat st P[k] holds P[k+1]
+A14: for i being Nat st len F -'1+1<i & i<=len F holds h.i=i;
+A15: dom F <> {} by A4,FINSEQ_1:def 3;
+A16: for k being Nat st P[k] holds P[k+1]
     proof
       let k be Nat;
       assume
-A19:  P[k];
+A17:  P[k];
       for h2 being Permutation of dom F st k+1<len F & (for i being Nat
 st k+1+1<i & i<=len F holds h2.i=i) holds gF.(k+1+1)=(accum (F(*)h2)).(k+1+1)
       proof
-A20:    1<=k+1 by NAT_1:11;
-A21:    k+1<k+1+1 by XREAL_1:31;
+A18:    1<=k+1 by NAT_1:11;
+A19:    k+1<k+1+1 by XREAL_1:31;
         let h2 be Permutation of dom F;
         assume that
-A22:    k+1<len F and
-A23:    for i being Nat st k+1+1<i & i<=len F holds h2.i=i;
-A24:    k+1+1<=len F by A22,NAT_1:13;
+A20:    k+1<len F and
+A21:    for i being Nat st k+1+1<i & i<=len F holds h2.i=i;
+A22:    k+1+1<=len F by A20,NAT_1:13;
         k<k+1 by XREAL_1:31;
         then
-A25:    k<len F by A22,XXREAL_0:2;
-A26:    1<k+1+1 by XREAL_1:31;
+A23:    k<len F by A20,XXREAL_0:2;
+A24:    1<k+1+1 by XREAL_1:31;
         then
-A27:    k+1+1 in Seg len F by A24,FINSEQ_1:3;
+A25:    k+1+1 in Seg len F by A22,FINSEQ_1:3;
         then
-A28:    k+1+1 in dom F by FINSEQ_1:def 3;
-A29:    dom h2=dom F by A5,FUNCT_2:def 1;
+A26:    k+1+1 in dom F by FINSEQ_1:def 3;
+A27:    dom h2=dom F by A5,FUNCT_2:def 1;
         then
-A30:    rng h2=dom h2 by FUNCT_2:def 3;
+A28:    rng h2=dom h2 by FUNCT_2:def 3;
         then
-A31:    dom (F(*)h2)=dom h2 by RELAT_1:46
+A29:    dom (F(*)h2)=dom h2 by RELAT_1:46
           .=dom F by A5,FUNCT_2:def 1;
         then
-A32:    Seg len (F(*)h2)=dom F by FINSEQ_1:def 3;
+A30:    Seg len (F(*)h2)=dom F by FINSEQ_1:def 3;
         then
-A33:    Seg len (F(*)h2)=Seg len F by FINSEQ_1:def 3;
-A34:    len (F(*)h2)=len F by A32,FINSEQ_1:def 3;
-        h2 is FinSequence by A13,A29,FINSEQ_1:def 2;
-        then reconsider h2r=h2 as FinSequence of NAT by A29,A30,FINSEQ_1:def 4;
-        dom h2=Seg len F by A2,A13,FUNCT_2:def 1;
+A31:    Seg len (F(*)h2)=Seg len F by FINSEQ_1:def 3;
+A32:    len (F(*)h2)=len F by A30,FINSEQ_1:def 3;
+        h2 is FinSequence by A11,A27,FINSEQ_1:def 2;
+        then reconsider h2r=h2 as FinSequence of NAT by A27,A28,FINSEQ_1:def 4;
+        dom h2=Seg len F by A2,A11,FUNCT_2:def 1;
         then
-A35:    len h2r=len F by FINSEQ_1:def 3;
+A33:    len h2r=len F by FINSEQ_1:def 3;
         consider x being set such that
-A36:    x in dom h2 and
-A37:    k+1+1=h2.x by A13,A29,A30,A27,FUNCT_1:def 5;
-        reconsider nx=x as Element of NAT by A29,A36;
-A38:    nx<=len F by A13,A36,FINSEQ_1:3;
+A34:    x in dom h2 and
+A35:    k+1+1=h2.x by A11,A27,A28,A25,FUNCT_1:def 5;
+        reconsider nx=x as Element of NAT by A27,A34;
+A36:    nx<=len F by A11,A34,FINSEQ_1:3;
         reconsider h2b=Swap (h2r,nx,k+1+1) as FinSequence of NAT;
-A39:    rng h2b =rng h2 by FINSEQ_7:24
+A37:    rng h2b =rng h2 by FINSEQ_7:24
           .=dom F by FUNCT_2:def 3;
-A40:    len h2b=len h2r by FINSEQ_7:20;
+A38:    len h2b=len h2r by FINSEQ_7:20;
         then dom h2b=Seg len h2r by FINSEQ_1:def 3;
         then
-A41:    dom h2b=dom h2 by FINSEQ_1:def 3
-          .= dom F by A17,FUNCT_2:def 1;
-        then reconsider h2d=h2b as Function of dom F,dom F by A39,FUNCT_2:3;
-A42:    h2d is one-to-one by INT_5:39;
-        h2d is onto by A39,FUNCT_2:def 3;
-        then reconsider h4=h2d as Permutation of dom F by A42;
-A43:    1<=nx by A13,A36,FINSEQ_1:3;
+A39:    dom h2b=dom h2 by FINSEQ_1:def 3
+          .= dom F by A15,FUNCT_2:def 1;
+        then reconsider h2d=h2b as Function of dom F,dom F by A37,FUNCT_2:3;
+A40:    h2d is one-to-one by INT_5:39;
+        h2d is onto by A37,FUNCT_2:def 3;
+        then reconsider h4=h2d as Permutation of dom F by A40;
+A41:    1<=nx by A11,A34,FINSEQ_1:3;
         then
-A44:    h4.nx=h2r.(k+1+1) by A24,A26,A38,A35,Th11;
-A45:    dom h4=dom F by A5,FUNCT_2:def 1;
+A42:    h4.nx=h2r.(k+1+1) by A22,A24,A36,A33,Th11;
+A43:    dom h4=dom F by A5,FUNCT_2:def 1;
         rng h4 c= dom F;
         then
-A46:    dom (F(*)h4)=dom h4 by RELAT_1:46
+A44:    dom (F(*)h4)=dom h4 by RELAT_1:46
           .=dom F by A5,FUNCT_2:def 1;
         then Seg len (F(*)h4)=dom F by FINSEQ_1:def 3;
         then
-A47:    len (F(*)h4)=len F by FINSEQ_1:def 3;
+A45:    len (F(*)h4)=len F by FINSEQ_1:def 3;
         per cases;
         suppose
-A48:      nx<=k+1;
-A49:      k+1+1<=len h2r by A22,A35,NAT_1:13;
-A50:      nx<=len h2r by A13,A36,A35,FINSEQ_1:3;
-A51:      F.(k+1+1)=(F(*)h2).nx by A36,A37,FUNCT_1:23;
-A52:      len (accum (F(*)h4))=len (F(*)h4) by Def11;
-A53:      1<=nx by A13,A36,FINSEQ_1:3;
-A54:      1<=k+1+1 by NAT_1:11;
+A46:      nx<=k+1;
+A47:      k+1+1<=len h2r by A20,A33,NAT_1:13;
+A48:      nx<=len h2r by A11,A34,A33,FINSEQ_1:3;
+A49:      F.(k+1+1)=(F(*)h2).nx by A34,A35,FUNCT_1:23;
+A50:      len (accum (F(*)h4))=len (F(*)h4) by Def10;
+A51:      1<=nx by A11,A34,FINSEQ_1:3;
+A52:      1<=k+1+1 by NAT_1:11;
           then
-A55:      h2b.(k+1+1)=k+1+1 by A37,A53,A50,A49,Th11;
-A56:      for i being Nat st k+1<i & i<=len F holds h4.i=i
+A53:      h2b.(k+1+1)=k+1+1 by A35,A51,A48,A47,Th11;
+A54:      for i being Nat st k+1<i & i<=len F holds h4.i=i
           proof
             let i be Nat;
             assume that
-A57:        k+1<i and
-A58:        i<=len F;
-A59:        k+1+1<=i by A57,NAT_1:13;
+A55:        k+1<i and
+A56:        i<=len F;
+A57:        k+1+1<=i by A55,NAT_1:13;
             per cases;
             suppose
-A60:          k+1+1<i;
+A58:          k+1+1<i;
               1<=k+1 by NAT_1:11;
               then
-A61:          1<i by A57,XXREAL_0:2;
-              then h4.i=h2b/.i by A35,A40,A58,FINSEQ_4:24
-                .=h2r/.i by A35,A48,A57,A58,A60,A61,FINSEQ_7:32
-                .=h2.i by A35,A58,A61,FINSEQ_4:24
-                .=i by A23,A58,A60;
+A59:          1<i by A55,XXREAL_0:2;
+              then h4.i=h2b/.i by A33,A38,A56,FINSEQ_4:24
+                .=h2r/.i by A33,A46,A55,A56,A58,A59,FINSEQ_7:32
+                .=h2.i by A33,A56,A59,FINSEQ_4:24
+                .=i by A21,A56,A58;
               hence h4.i=i;
             end;
             suppose
               k+1+1>=i;
-              then i=k+1+1 by A59,XXREAL_0:1;
-              hence h4.i=i by A37,A53,A50,A54,A49,Th11;
+              then i=k+1+1 by A57,XXREAL_0:1;
+              hence h4.i=i by A35,A51,A48,A52,A47,Th11;
             end;
           end;
-A62:      F/.(k+1+1)=F.(k+1+1) by A24,A26,FINSEQ_4:24;
-A63:      1<=k+1 by NAT_1:11;
-A64:      len (accum (F(*)h2))=len (F(*)h2) by Def11;
-A65:      nx<k+1+1 by A21,A48,XXREAL_0:2;
-A66:      for i4 being Nat st 1<=i4 & i4<nx holds (accum (F(*)h2)).i4=(
+A60:      F/.(k+1+1)=F.(k+1+1) by A22,A24,FINSEQ_4:24;
+A61:      1<=k+1 by NAT_1:11;
+A62:      len (accum (F(*)h2))=len (F(*)h2) by Def10;
+A63:      nx<k+1+1 by A19,A46,XXREAL_0:2;
+A64:      for i4 being Nat st 1<=i4 & i4<nx holds (accum (F(*)h2)).i4=(
           accum (F(*)h4)).i4
           proof
             defpred T[Nat] means 1+$1<nx implies (accum (F(*)h2)).(1+$1)=(
             accum (F(*)h4)).(1+$1);
             let i4 be Nat;
             assume that
-A67:        1<=i4 and
-A68:        i4<nx;
-A69:        1+(i4-'1)=i4-1+1 by A67,XREAL_1:235
+A65:        1<=i4 and
+A66:        i4<nx;
+A67:        1+(i4-'1)=i4-1+1 by A65,XREAL_1:235
               .=i4;
-A70:        for k3 being Nat st T[k3] holds T[k3+1]
+A68:        for k3 being Nat st T[k3] holds T[k3+1]
             proof
               let k3 be Nat;
-A71:          1<=k3+1 by NAT_1:11;
+A69:          1<=k3+1 by NAT_1:11;
               assume
-A72:          T[k3];
+A70:          T[k3];
               1+(k3+1)<nx implies (accum (F(*)h2)).(1+(k3+1))=(accum (F
               (*)h4)).(1+(k3+1))
               proof
                 assume
-A73:            1+(k3+1)<nx;
+A71:            1+(k3+1)<nx;
                 then
-A74:            1+(k3+1) <len F by A38,XXREAL_0:2;
+A72:            1+(k3+1) <len F by A36,XXREAL_0:2;
                 then
-A75:            h2r/.(k3+1+1)=h2r.(k3+1+1) by A35,FINSEQ_4:24,NAT_1:11;
-A76:            (k3+1+1)<k+1+1 by A65,A73,XXREAL_0:2;
-A77:            h2b/.(k3+1+1)=h2b.(k3+1+1) by A35,A40,A74,FINSEQ_4:24,NAT_1:11;
+A73:            h2r/.(k3+1+1)=h2r.(k3+1+1) by A33,FINSEQ_4:24,NAT_1:11;
+A74:            (k3+1+1)<k+1+1 by A63,A71,XXREAL_0:2;
+A75:            h2b/.(k3+1+1)=h2b.(k3+1+1) by A33,A38,A72,FINSEQ_4:24,NAT_1:11;
                 1<=1+(k3+1) by NAT_1:11;
-                then k3+1+1 in Seg len F by A74,FINSEQ_1:3;
+                then k3+1+1 in Seg len F by A72,FINSEQ_1:3;
                 then
-A78:            k3+1+1 in dom (F(*)h2) by A31,FINSEQ_1:def 3;
+A76:            k3+1+1 in dom (F(*)h2) by A29,FINSEQ_1:def 3;
                 then
-A79:            (F(*)h2).(k3+1+1)= F.(h2.(k3+1+1)) by FUNCT_1:22
-                  .=F.(h4.(k3+1+1)) by A35,A73,A74,A76,A75,A77,FINSEQ_7:32
+A77:            (F(*)h2).(k3+1+1)= F.(h2.(k3+1+1)) by FUNCT_1:22
+                  .=F.(h4.(k3+1+1)) by A33,A71,A72,A74,A73,A75,FINSEQ_7:32
 ,NAT_1:11
-                  .= (F(*)h4).(k3+1+1) by A46,A31,A78,FUNCT_1:22;
-A80:            (F(*)h4)/.(k3+1+1)=(F(*)h4).(k3+1+1) by A47,A74,FINSEQ_4:24
+                  .= (F(*)h4).(k3+1+1) by A44,A29,A76,FUNCT_1:22;
+A78:            (F(*)h4)/.(k3+1+1)=(F(*)h4).(k3+1+1) by A45,A72,FINSEQ_4:24
 ,NAT_1:11;
-A81:            k3+1<1+(k3+1) by XREAL_1:31;
+A79:            k3+1<1+(k3+1) by XREAL_1:31;
                 then
-A82:            k3+1<nx by A73,XXREAL_0:2;
+A80:            k3+1<nx by A71,XXREAL_0:2;
                 then
-A83:            k3+1<len F by A38,XXREAL_0:2;
-                k3+1<len (F(*)h2) by A38,A34,A82,XXREAL_0:2;
+A81:            k3+1<len F by A36,XXREAL_0:2;
+                k3+1<len (F(*)h2) by A36,A32,A80,XXREAL_0:2;
                 then
-A84:            (accum (F(*)h4))/.(1+k3)=(accum (F(*)h4)).(1+k3) by A47,A34,A52
+A82:            (accum (F(*)h4))/.(1+k3)=(accum (F(*)h4)).(1+k3) by A45,A32,A50
 ,FINSEQ_4:24,NAT_1:11;
-                (accum (F(*)h2))/.(1+k3)=(accum (F(*)h2)).(1+k3) by A34,A64,A83
+                (accum (F(*)h2))/.(1+k3)=(accum (F(*)h2)).(1+k3) by A32,A62,A81
 ,FINSEQ_4:24,NAT_1:11;
                 then (accum (F(*)h2)).(1+(k3+1))= (accum (F(*)h4))/.(k3+1)+(F
-(*)h2)/.(k3+1+1) by A34,A72,A71,A73,A81,A83,A84,Def11,XXREAL_0:2
-                  .=(accum (F(*)h4))/.(k3+1)+(F(*)h4)/.(k3+1+1) by A34,A74,A79
-,A80,FINSEQ_4:24,NAT_1:11;
+(*)h2)/.(k3+1+1) by A32,A70,A69,A71,A79,A81,A82,Def10,XXREAL_0:2
+                  .=(accum (F(*)h4))/.(k3+1)+(F(*)h4)/.(k3+1+1) by A32,A72,A77
+,A78,FINSEQ_4:24,NAT_1:11;
                 hence (accum (F(*)h2)).(1+(k3+1))=(accum (F(*)h4)).(1+(k3+1))
-                by A47,A71,A83,Def11;
+                by A45,A69,A81,Def10;
               end;
               hence T[k3+1];
             end;
             0<k+1;
             then
-A85:        1<>k+1+1;
-A86:        h2b/.1=h2b.1 by A3,A35,A40,FINSEQ_4:24;
-A87:        h2r/.1=h2r.1 by A3,A35,FINSEQ_4:24;
-            (F(*)h2).1= F.(h2.1) by A5,A31,FUNCT_1:22
-              .=F.(h4.1) by A3,A35,A67,A68,A85,A87,A86,FINSEQ_7:32
-              .= (F(*)h4).1 by A5,A46,FUNCT_1:22;
-            then (accum (F(*)h2)).(1+0)=(F(*)h4).1 by Def11
-              .=(accum (F(*)h4)).(1+0) by Def11;
+A83:        1<>k+1+1;
+A84:        h2b/.1=h2b.1 by A3,A33,A38,FINSEQ_4:24;
+A85:        h2r/.1=h2r.1 by A3,A33,FINSEQ_4:24;
+            (F(*)h2).1= F.(h2.1) by A5,A29,FUNCT_1:22
+              .=F.(h4.1) by A3,A33,A65,A66,A83,A85,A84,FINSEQ_7:32
+              .= (F(*)h4).1 by A5,A44,FUNCT_1:22;
+            then (accum (F(*)h2)).(1+0)=(F(*)h4).1 by Def10
+              .=(accum (F(*)h4)).(1+0) by Def10;
             then
-A88:        T[0];
-            for k3 being Nat holds T[k3] from NAT_1:sch 2(A88,A70);
-            hence (accum (F(*)h2)).i4=(accum (F(*)h4)).i4 by A68,A69;
+A86:        T[0];
+            for k3 being Nat holds T[k3] from NAT_1:sch 2(A86,A68);
+            hence (accum (F(*)h2)).i4=(accum (F(*)h4)).i4 by A66,A67;
           end;
-A89:      for i being Nat st nx<=i & i<k+1+1 holds (accum (F(*)h2)).i= (
+A87:      for i being Nat st nx<=i & i<k+1+1 holds (accum (F(*)h2)).i= (
           accum (F(*)h4))/.i-(F(*)h2)/.(k+1+1)+(F(*)h2)/.nx
           proof
             defpred S[Nat] means nx<=nx+$1 & nx+$1<k+1+1 implies (accum (F(*)
 h2)).(nx+$1) =(accum (F(*)h4))/.(nx+$1)-(F(*)h2)/.(k+1+1)+(F(*)h2)/.nx;
             let i be Nat;
             assume that
-A90:        nx<=i and
-A91:        i<k+1+1;
-A92:        len (accum (F(*)h4))=len (F(*)h4) by Def11;
-A93:        len (accum (F(*)h2))=len (F(*)h2) by Def11;
-A94:        for k3 being Nat st S[k3] holds S[k3+1]
+A88:        nx<=i and
+A89:        i<k+1+1;
+A90:        len (accum (F(*)h4))=len (F(*)h4) by Def10;
+A91:        len (accum (F(*)h2))=len (F(*)h2) by Def10;
+A92:        for k3 being Nat st S[k3] holds S[k3+1]
             proof
               let k3 be Nat;
               assume
-A95:          S[k3];
+A93:          S[k3];
               nx<=nx+(k3+1) & nx+(k3+1)<k+1+1 implies (accum (F(*)h2)).(
 nx+(k3+1)) =(accum (F(*)h4))/.(nx+(k3+1))-(F(*)h2)/.(k+1+1)+(F(*)h2)/.nx
               proof
                 reconsider f3 = (F(*)h2)/.(nx+k3+1) as Element of REAL n;
-A96:            nx<=nx+k3 by NAT_1:11;
+A94:            nx<=nx+k3 by NAT_1:11;
                 reconsider f2 = (F(*)h2)/.(k+1+1) as Element of REAL n;
-A97:            nx+k3<nx+k3+1 by XREAL_1:31;
+A95:            nx+k3<nx+k3+1 by XREAL_1:31;
                 reconsider f4 = (F(*)h2)/.nx as Element of REAL n;
                 reconsider f1 = (accum (F(*)h4))/.(nx+k3) as Element of REAL n;
                 assume that
                 nx<=nx+(k3+1) and
-A98:            nx+(k3+1)<k+1+1;
-A99:            nx+(k3+1)<len (accum (F(*)h4)) by A24,A47,A92,A98,XXREAL_0:2;
-A100:           nx+k3<nx+k3+1 by XREAL_1:31;
-                then nx+k3<k+1+1 by A98,XXREAL_0:2;
+A96:            nx+(k3+1)<k+1+1;
+A97:            nx+(k3+1)<len (accum (F(*)h4)) by A22,A45,A90,A96,XXREAL_0:2;
+A98:           nx+k3<nx+k3+1 by XREAL_1:31;
+                then nx+k3<k+1+1 by A96,XXREAL_0:2;
                 then
-A101:           nx+k3< len (F(*)h2) by A35,A34,A49,XXREAL_0:2;
+A99:           nx+k3< len (F(*)h2) by A33,A32,A47,XXREAL_0:2;
                 then
-A102:           nx+k3+1<=len (F(*)h2) by NAT_1:13;
-                nx+k3>=0+1 by A43,NAT_1:13;
+A100:           nx+k3+1<=len (F(*)h2) by NAT_1:13;
+                nx+k3>=0+1 by A41,NAT_1:13;
                 then
-A103:           1<nx+(k3+1) by A100,XXREAL_0:2;
+A101:           1<nx+(k3+1) by A98,XXREAL_0:2;
                 then
-A104:           (F(*)h4)/.(nx+k3+1)=(F(*)h4).(nx+k3+1) by A47,A34,A102,
+A102:           (F(*)h4)/.(nx+k3+1)=(F(*)h4).(nx+k3+1) by A45,A32,A100,
 FINSEQ_4:24;
-                nx+k3+1 in Seg len (F(*)h2) by A103,A102,FINSEQ_1:3;
+                nx+k3+1 in Seg len (F(*)h2) by A101,A100,FINSEQ_1:3;
                 then
-A105:           nx+k3+1 in dom (F(*)h2) by FINSEQ_1:def 3;
+A103:           nx+k3+1 in dom (F(*)h2) by FINSEQ_1:def 3;
                 then
-A106:           (F(*)h4).(nx+k3+1)=F.(h4.(nx+k3+1)) by A46,A31,FUNCT_1:22
-                  .=F.(h2b/.(nx+k3+1)) by A35,A40,A34,A103,A102,FINSEQ_4:24
-                  .=F.(h2r/.(nx+k3+1)) by A35,A34,A98,A103,A102,A97,A96,
+A104:           (F(*)h4).(nx+k3+1)=F.(h4.(nx+k3+1)) by A44,A29,FUNCT_1:22
+                  .=F.(h2b/.(nx+k3+1)) by A33,A38,A32,A101,A100,FINSEQ_4:24
+                  .=F.(h2r/.(nx+k3+1)) by A33,A32,A96,A101,A100,A95,A94,
 FINSEQ_7:32
-                  .=F.(h2r.(nx+k3+1)) by A35,A34,A103,A102,FINSEQ_4:24
-                  .=(F(*)h2).(nx+k3+1) by A105,FUNCT_1:22;
+                  .=F.(h2r.(nx+k3+1)) by A33,A32,A101,A100,FINSEQ_4:24
+                  .=(F(*)h2).(nx+k3+1) by A103,FUNCT_1:22;
                 nx<=nx+k3 by NAT_1:11;
                 then
-A107:           1<=nx+k3 by A53,XXREAL_0:2;
+A105:           1<=nx+k3 by A51,XXREAL_0:2;
                 then (accum (F(*)h4)).(nx+(k3+1))=(accum (F(*)h4))/.(nx+k3) +
-                (F(*)h4)/.(nx+k3+1) by A47,A34,A101,Def11
-                  .=(accum (F(*)h4))/.(nx+k3) +(F(*)h2)/.(nx+k3+1) by A103,A102
-,A106,A104,FINSEQ_4:24;
+                (F(*)h4)/.(nx+k3+1) by A45,A32,A99,Def10
+                  .=(accum (F(*)h4))/.(nx+k3) +(F(*)h2)/.(nx+k3+1) by A101,A100
+,A104,A102,FINSEQ_4:24;
                 then
-A108:           (accum (F(*)h4))/.(nx+(k3+1))-(F(*)h2)/.(k+1+1)+ (F(*)h2
-                )/.nx = f1 + f3 - f2 + f4 by A103,A99,FINSEQ_4:24
+A106:           (accum (F(*)h4))/.(nx+(k3+1))-(F(*)h2)/.(k+1+1)+ (F(*)h2
+                )/.nx = f1 + f3 - f2 + f4 by A101,A97,FINSEQ_4:24
                   .= f1 - f2 + f3 + f4 by RFUNCT_1:19
                   .= f1 - f2 + f4 + f3 by RFUNCT_1:19;
                 (accum (F(*)h2)).(nx+(k3+1))=(accum (F(*)h2))/.(nx+k3) +
-                (F(*)h2)/.(nx+k3+1) by A107,A101,Def11
+                (F(*)h2)/.(nx+k3+1) by A105,A99,Def10
                   .=(accum (F(*)h4))/.(nx+k3)-(F(*)h2)/.(k+1+1) +(F(*)h2)/.
-nx +(F(*)h2)/.(nx+k3+1) by A93,A95,A98,A100,A107,A101,FINSEQ_4:24,NAT_1:11
+nx +(F(*)h2)/.(nx+k3+1) by A91,A93,A96,A98,A105,A99,FINSEQ_4:24,NAT_1:11
 ,XXREAL_0:2;
                 hence
                 (accum (F(*)h2)).(nx+(k3+1)) =(accum (F(*)h4))/.(nx+(k3+1
-                ))-(F(*)h2)/.(k+1+1)+ (F(*)h2)/.nx by A108;
+                ))-(F(*)h2)/.(k+1+1)+ (F(*)h2)/.nx by A106;
               end;
               hence S[k3+1];
             end;
             now
-              per cases by A43,XXREAL_0:1;
+              per cases by A41,XXREAL_0:1;
               case
-A109:           1=nx;
-A110:           n in NAT by ORDINAL1:def 13;
-                (accum (F(*)h4))/.(nx+0)=(accum (F(*)h4)).1 by A3,A47,A92,A109,
+A107:           1=nx;
+A108:           n in NAT by ORDINAL1:def 13;
+                (accum (F(*)h4))/.(nx+0)=(accum (F(*)h4)).1 by A3,A45,A90,A107,
 FINSEQ_4:24
-                  .=(F(*)h4).1 by Def11
-                  .=F.(h2.(k+1+1)) by A5,A45,A44,A109,FUNCT_1:23
-                  .=(F(*)h2).(k+1+1) by A29,A28,FUNCT_1:23
-                  .=(F(*)h2)/.(k+1+1) by A24,A26,A34,FINSEQ_4:24;
+                  .=(F(*)h4).1 by Def10
+                  .=F.(h2.(k+1+1)) by A5,A43,A42,A107,FUNCT_1:23
+                  .=(F(*)h2).(k+1+1) by A27,A26,FUNCT_1:23
+                  .=(F(*)h2)/.(k+1+1) by A22,A24,A32,FINSEQ_4:24;
                 then
-A111:           (accum (F(*)h4))/.(nx+0)-(F(*)h2)/.(k+1+1)+(F(*)h2)/.nx
-                = 0*n +(F(*)h2)/.nx by A110,EUCLIDLP:7
+A109:           (accum (F(*)h4))/.(nx+0)-(F(*)h2)/.(k+1+1)+(F(*)h2)/.nx
+                = 0*n +(F(*)h2)/.nx by A108,EUCLIDLP:7
                   .=(F(*)h2)/.nx by EUCLID_4:1;
-                (accum (F(*)h2)).(nx+0) =(F(*)h2).1 by A109,Def11
-                  .=(F(*)h2)/.nx by A38,A34,A109,FINSEQ_4:24;
+                (accum (F(*)h2)).(nx+0) =(F(*)h2).1 by A107,Def10
+                  .=(F(*)h2)/.nx by A36,A32,A107,FINSEQ_4:24;
                 hence
                 (accum (F(*)h2)).(nx+0) =(accum (F(*)h4))/.(nx+0)-(F(*)h2
-                )/.(k+1+1)+(F(*)h2)/.nx by A111;
+                )/.(k+1+1)+(F(*)h2)/.nx by A109;
               end;
               case
-A112:           1<nx;
-A113:           (F(*)h4)/.(nx)=(F(*)h4).nx by A43,A38,A47,FINSEQ_4:24
-                  .=F.(h2.(k+1+1)) by A36,A45,A44,FUNCT_1:23
-                  .=(F(*)h2).(k+1+1) by A29,A28,FUNCT_1:23
-                  .=(F(*)h2)/.(k+1+1) by A24,A26,A34,FINSEQ_4:24;
-A114:           nx-'1=nx-1 by A112,XREAL_1:235;
-                then nx-'1>0 by A112,XREAL_1:52;
+A110:           1<nx;
+A111:           (F(*)h4)/.(nx)=(F(*)h4).nx by A41,A36,A45,FINSEQ_4:24
+                  .=F.(h2.(k+1+1)) by A34,A43,A42,FUNCT_1:23
+                  .=(F(*)h2).(k+1+1) by A27,A26,FUNCT_1:23
+                  .=(F(*)h2)/.(k+1+1) by A22,A24,A32,FINSEQ_4:24;
+A112:           nx-'1=nx-1 by A110,XREAL_1:235;
+                then nx-'1>0 by A110,XREAL_1:52;
                 then
-A115:           nx-'1>=0+1 by NAT_1:13;
+A113:           nx-'1>=0+1 by NAT_1:13;
                 nx<nx+1 by XREAL_1:31;
                 then
-A116:           nx-1<nx+1-1 by XREAL_1:11;
+A114:           nx-1<nx+1-1 by XREAL_1:11;
                 then
-A117:           nx-'1<len (F(*)h2) by A35,A34,A50,A114,XXREAL_0:2;
+A115:           nx-'1<len (F(*)h2) by A33,A32,A48,A112,XXREAL_0:2;
                 then
-A118:           (accum (F(*)h2))/.(nx-'1)=(accum (F(*)h2)).(nx-'1) by A93,A115,
+A116:           (accum (F(*)h2))/.(nx-'1)=(accum (F(*)h2)).(nx-'1) by A91,A113,
 FINSEQ_4:24;
                 (accum (F(*)h4)).(nx+0)=(accum (F(*)h4))/.(nx-'1) +(F(*)
-                h4)/.(nx-'1+1) by A47,A34,A114,A115,A117,Def11
-                  .=(accum (F(*)h4))/.(nx-'1)+(F(*)h2)/.(k+1+1) by A114,A113;
+                h4)/.(nx-'1+1) by A45,A32,A112,A113,A115,Def10
+                  .=(accum (F(*)h4))/.(nx-'1)+(F(*)h2)/.(k+1+1) by A112,A111;
                 then
-A119:           (accum (F(*)h4))/.(nx+0)-(F(*)h2)/.(k+1+1) =(accum (F(*)
-h4))/.(nx-'1) +(F(*)h2)/.(k+1+1) -(F(*)h2)/.(k+1+1) by A35,A47,A53,A50,A92,
+A117:           (accum (F(*)h4))/.(nx+0)-(F(*)h2)/.(k+1+1) =(accum (F(*)
+h4))/.(nx-'1) +(F(*)h2)/.(k+1+1) -(F(*)h2)/.(k+1+1) by A33,A45,A51,A48,A90,
 FINSEQ_4:24
                   .=(accum (F(*)h4))/.(nx-'1) by RVSUM_1:63;
-A120:           (accum (F(*)h4))/.(nx-'1)=(accum (F(*)h4)).(nx-'1) by A47,A34
-,A92,A115,A117,FINSEQ_4:24;
+A118:           (accum (F(*)h4))/.(nx-'1)=(accum (F(*)h4)).(nx-'1) by A45,A32
+,A90,A113,A115,FINSEQ_4:24;
                 (accum (F(*)h2)).(nx+0)=(accum (F(*)h2))/.(nx-'1) +(F(*)
-                h2)/.(nx-'1+1) by A114,A115,A117,Def11
-                  .=(accum (F(*)h4))/.(nx-'1) +(F(*)h2)/.(nx) by A66,A114,A115
-,A116,A118,A120;
+                h2)/.(nx-'1+1) by A112,A113,A115,Def10
+                  .=(accum (F(*)h4))/.(nx-'1) +(F(*)h2)/.(nx) by A64,A112,A113
+,A114,A116,A118;
                 hence
                 (accum (F(*)h2)).(nx+0) =(accum (F(*)h4))/.(nx+0)-(F(*)h2
-                )/.(k+1+1)+(F(*)h2)/.nx by A119;
+                )/.(k+1+1)+(F(*)h2)/.nx by A117;
               end;
             end;
             then
-A121:       S[0];
-A122:       for k3 being Nat holds S[k3] from NAT_1:sch 2(A121,A94);
-A123:       i-'nx=i-nx by A90,XREAL_1:235;
-            then nx<=nx+(i-'nx) by A90;
+A119:       S[0];
+A120:       for k3 being Nat holds S[k3] from NAT_1:sch 2(A119,A92);
+A121:       i-'nx=i-nx by A88,XREAL_1:235;
+            then nx<=nx+(i-'nx) by A88;
             hence (accum (F(*)h2)).i =(accum (F(*)h4))/.i-(F(*)h2)/.(k+1+1)+(F
-            (*)h2)/.nx by A91,A122,A123;
+            (*)h2)/.nx by A89,A120,A121;
           end;
-A124:     (F(*)h2)/.nx=(F(*)h2).nx by A43,A38,A34,FINSEQ_4:24;
-A125:     k+1+1 in dom h4 by A27,A41,FINSEQ_1:def 3;
-A126:     (F(*)h4)/.(k+1+1)=(F(*)h4).(k+1+1) by A24,A26,A47,FINSEQ_4:24;
-A127:     for i being Nat st k+1+1<=i & i<=len F holds (accum (F(*)h2)).
+A122:     (F(*)h2)/.nx=(F(*)h2).nx by A41,A36,A32,FINSEQ_4:24;
+A123:     k+1+1 in dom h4 by A25,A39,FINSEQ_1:def 3;
+A124:     (F(*)h4)/.(k+1+1)=(F(*)h4).(k+1+1) by A22,A24,A45,FINSEQ_4:24;
+A125:     for i being Nat st k+1+1<=i & i<=len F holds (accum (F(*)h2)).
           i=(accum (F(*)h4)).i
           proof
             defpred Y[Nat] means k+1+1+$1<=len F implies (accum (F(*)h2)).(k+1
             +1+$1)=(accum (F(*)h4)).(k+1+1+$1);
             let i be Nat;
             assume that
-A128:       k+1+1<=i and
-A129:       i<=len F;
-A130:       for k3 being Nat st Y[k3] holds Y[k3+1]
+A126:       k+1+1<=i and
+A127:       i<=len F;
+A128:       for k3 being Nat st Y[k3] holds Y[k3+1]
             proof
               let k3 be Nat;
               assume
-A131:         Y[k3];
+A129:         Y[k3];
               k+1+1+(k3+1)<=len F implies (accum (F(*)h2)).(k+1+1+(k3+1)
               )=(accum (F(*)h4)).(k+1+1+(k3+1))
               proof
-A132:           k+1+1<=k+1+1+k3 by NAT_1:11;
-A133:           k+1+1+k3<k+1+1+k3+1 by XREAL_1:31;
+A130:           k+1+1<=k+1+1+k3 by NAT_1:11;
+A131:           k+1+1+k3<k+1+1+k3+1 by XREAL_1:31;
                 then
-A134:           k+1+1<k+1+1+k3+1 by A132,XXREAL_0:2;
+A132:           k+1+1<k+1+1+k3+1 by A130,XXREAL_0:2;
                 assume
-A135:           k+1+1+(k3+1)<=len F;
+A133:           k+1+1+(k3+1)<=len F;
                 then
-A136:           (
-F(*)h4)/.(k+1+1+k3+1)=(F(*)h4).(k+1+1+k3+1) by A47,FINSEQ_4:24,NAT_1:11;
+A134:           (
+F(*)h4)/.(k+1+1+k3+1)=(F(*)h4).(k+1+1+k3+1) by A45,FINSEQ_4:24,NAT_1:11;
                 1<=k+1+1+k3+1 by NAT_1:11;
-                then k+1+1+k3+1 in Seg len (F(*)h2) by A33,A135,FINSEQ_1:3;
+                then k+1+1+k3+1 in Seg len (F(*)h2) by A31,A133,FINSEQ_1:3;
                 then
-A137:           k+1+1+k3+1 in dom (F(*)h2) by FINSEQ_1:def 3;
+A135:           k+1+1+k3+1 in dom (F(*)h2) by FINSEQ_1:def 3;
                 then
-A138:           (F(*)h4).(k+1+1+k3+1)=F.(h4.(k+1+1+k3+1)) by A46,A31,FUNCT_1:22
-                  .=F.(h2b/.(k+1+1+k3+1)) by A35,A40,A135,FINSEQ_4:24,NAT_1:11
-                  .=F.(h2r/.(k+1+1+k3+1)) by A35,A65,A135,A134,FINSEQ_7:32
+A136:           (F(*)h4).(k+1+1+k3+1)=F.(h4.(k+1+1+k3+1)) by A44,A29,FUNCT_1:22
+                  .=F.(h2b/.(k+1+1+k3+1)) by A33,A38,A133,FINSEQ_4:24,NAT_1:11
+                  .=F.(h2r/.(k+1+1+k3+1)) by A33,A63,A133,A132,FINSEQ_7:32
 ,NAT_1:11
-                  .=F.(h2r.(k+1+1+k3+1)) by A35,A135,FINSEQ_4:24,NAT_1:11
-                  .=(F(*)h2).(k+1+1+k3+1) by A137,FUNCT_1:22;
+                  .=F.(h2r.(k+1+1+k3+1)) by A33,A133,FINSEQ_4:24,NAT_1:11
+                  .=(F(*)h2).(k+1+1+k3+1) by A135,FUNCT_1:22;
                 1<=k+1+1 by NAT_1:11;
                 then
-A139:           1<=k+1+1+k3 by A132,XXREAL_0:2;
-A140:           k+1+1+k3<len F by A135,A133,XXREAL_0:2;
+A137:           1<=k+1+1+k3 by A130,XXREAL_0:2;
+A138:           k+1+1+k3<len F by A133,A131,XXREAL_0:2;
                 then
-A141:           (accum (F(*)h4))/.(k+1+1+k3)=(accum (F(*)h4)).(k+1+1+k3)
-                by A47,A52,A139,FINSEQ_4:24;
+A139:           (accum (F(*)h4))/.(k+1+1+k3)=(accum (F(*)h4)).(k+1+1+k3)
+                by A45,A50,A137,FINSEQ_4:24;
                 (accum (F(*)h2)).(k+1+1+(k3+1)) =(accum (F(*)h2))/.(k+1+
-                1+k3)+((F(*)h2)/.(k+1+1+k3+1)) by A34,A140,A139,Def11
+                1+k3)+((F(*)h2)/.(k+1+1+k3+1)) by A32,A138,A137,Def10
                   .=(accum (F(*)h4))/.(k+1+1+k3)+((F(*)h2)/.(k+1+1+k3+1)) by
-A34,A64,A131,A140,A139,A141,FINSEQ_4:24
+A32,A62,A129,A138,A137,A139,FINSEQ_4:24
                   .=(accum (F(*)h4))/.(k+1+1+k3)+((F(*)h4)/.(k+1+1+k3+1)) by
-A34,A135,A138,A136,FINSEQ_4:24,NAT_1:11;
+A32,A133,A136,A134,FINSEQ_4:24,NAT_1:11;
                 hence
                 (accum (F(*)h2)).(k+1+1+(k3+1)) =(accum (F(*)h4)).(k+1+1+
-                (k3+1)) by A47,A140,A139,Def11;
+                (k3+1)) by A45,A138,A137,Def10;
               end;
               hence Y[k3+1];
             end;
-A142:       len (accum (F(*)h2))=len (F(*)h2) by Def11;
-A143:       (accum (F(*)h2)).(k+1) =(accum (F(*)h4))/.(k+1)-(F(*)h2)/.(k
-            +1+1)+(F(*)h2)/.nx by A21,A48,A89;
-A144:       1<=k+1 by NAT_1:11;
-            k+1<len (F(*)h2) by A22,A32,FINSEQ_1:def 3;
+A140:       len (accum (F(*)h2))=len (F(*)h2) by Def10;
+A141:       (accum (F(*)h2)).(k+1) =(accum (F(*)h4))/.(k+1)-(F(*)h2)/.(k
+            +1+1)+(F(*)h2)/.nx by A19,A46,A87;
+A142:       1<=k+1 by NAT_1:11;
+            k+1<len (F(*)h2) by A20,A30,FINSEQ_1:def 3;
             then (accum (F(*)h2)).(k+1+1) =((accum (F(*)h2))/.(k+1))+((F(*)h2
-            )/.(k+1+1)) by A144,Def11
+            )/.(k+1+1)) by A142,Def10
               .=(accum (F(*)h4))/.(k+1)-((F(*)h2)/.(k+1+1))+(F(*)h2)/.nx +((
-            F(*)h2)/.(k+1+1)) by A22,A34,A142,A143,FINSEQ_4:24,NAT_1:11
+            F(*)h2)/.(k+1+1)) by A20,A32,A140,A141,FINSEQ_4:24,NAT_1:11
               .= (accum (F(*)h4))/.(k+1) +(F(*)h2)/.nx by Th6
-              .= ((accum (F(*)h4))/.(k+1))+((F(*)h4)/.(k+1+1)) by A125,A55,A51
-,A126,A124,FUNCT_1:23;
+              .= ((accum (F(*)h4))/.(k+1))+((F(*)h4)/.(k+1+1)) by A123,A53,A49
+,A124,A122,FUNCT_1:23;
             then
-A145:       Y[0] by A22,A20,A47,Def11;
-A146:       for k3 being Nat holds Y[k3] from NAT_1:sch 2(A145,A130);
-            k+1+1+(i-'(k+1+1))=i-(k+1+1)+(k+1+1) by A128,XREAL_1:235
+A143:       Y[0] by A20,A18,A45,Def10;
+A144:       for k3 being Nat holds Y[k3] from NAT_1:sch 2(A143,A128);
+            k+1+1+(i-'(k+1+1))=i-(k+1+1)+(k+1+1) by A126,XREAL_1:235
               .=i;
-            hence (accum (F(*)h2)).i=(accum (F(*)h4)).i by A129,A146;
+            hence (accum (F(*)h2)).i=(accum (F(*)h4)).i by A127,A144;
           end;
-A147:     gF/.(k+1)=gF.(k+1) by A9,A22,FINSEQ_4:24,NAT_1:11;
-A148:     dom h4=dom F by A5,FUNCT_2:def 1;
+A145:     gF/.(k+1)=gF.(k+1) by A9,A20,FINSEQ_4:24,NAT_1:11;
+A146:     dom h4=dom F by A5,FUNCT_2:def 1;
           rng h4 c= dom F;
           then
-A149:     dom (F(*)h4)=dom h4 by RELAT_1:46;
+A147:     dom (F(*)h4)=dom h4 by RELAT_1:46;
           then Seg len (F(*)h4)=dom h4 by FINSEQ_1:def 3;
           then
-A150:     k+1<len (F(*)h4) by A22,A148,FINSEQ_1:def 3;
-          Seg len (F(*)h4)=dom F by A148,A149,FINSEQ_1:def 3;
+A148:     k+1<len (F(*)h4) by A20,A146,FINSEQ_1:def 3;
+          Seg len (F(*)h4)=dom F by A146,A147,FINSEQ_1:def 3;
           then len (F(*)h4)=len F by FINSEQ_1:def 3;
           then
-A151:     (F(*)h4)/.(k+1+1)=(F(*)h4).(k+1+1) by A24,A26,FINSEQ_4:24;
-          len (accum (F(*)h4))=len (F(*)h4) by Def11;
+A149:     (F(*)h4)/.(k+1+1)=(F(*)h4).(k+1+1) by A22,A24,FINSEQ_4:24;
+          len (accum (F(*)h4))=len (F(*)h4) by Def10;
           then
-A152:     (accum (F(*)h4))/.(k+1)=(accum (F(*)h4)).(k+1) by A150,FINSEQ_4:24
+A150:     (accum (F(*)h4))/.(k+1)=(accum (F(*)h4)).(k+1) by A148,FINSEQ_4:24
 ,NAT_1:11;
-          gF.(k+1+1)=gF/.(k+1) + F/.(k+1+1) by A11,A22,NAT_1:11
-            .=(accum (F(*)h4))/.(k+1)+F/.(k+1+1) by A19,A25,A56,A152,A147
-            .=(accum (F(*)h4))/.(k+1) + (F(*)h4)/.(k+1+1) by A125,A55,A151,A62,
+          gF.(k+1+1)=gF/.(k+1) + F/.(k+1+1) by A10,A20,NAT_1:11
+            .=(accum (F(*)h4))/.(k+1)+F/.(k+1+1) by A17,A23,A54,A150,A145
+            .=(accum (F(*)h4))/.(k+1) + (F(*)h4)/.(k+1+1) by A123,A53,A149,A60,
 FUNCT_1:23
-            .=(accum (F(*)h4)).(k+1+1) by A63,A150,Def11;
-          hence gF.(k+1+1)=(accum (F(*)h2)).(k+1+1) by A24,A127;
+            .=(accum (F(*)h4)).(k+1+1) by A61,A148,Def10;
+          hence gF.(k+1+1)=(accum (F(*)h2)).(k+1+1) by A22,A125;
         end;
         suppose
           nx>k+1;
           then
-A153:     k+1+1<=nx by NAT_1:13;
-          per cases by A153,XXREAL_0:1;
+A151:     k+1+1<=nx by NAT_1:13;
+          per cases by A151,XXREAL_0:1;
           suppose
-A154:       k+1+1=nx;
-A155:       for i being Nat st k+1<i & i<=len F holds h2.i=i
+A152:       k+1+1=nx;
+A153:       for i being Nat st k+1<i & i<=len F holds h2.i=i
             proof
               let i be Nat;
               assume that
-A156:         k+1<i and
-A157:         i<=len F;
-A158:         k+1+1<=i by A156,NAT_1:13;
-              per cases by A158,XXREAL_0:1;
+A154:         k+1<i and
+A155:         i<=len F;
+A156:         k+1+1<=i by A154,NAT_1:13;
+              per cases by A156,XXREAL_0:1;
               suppose
                 k+1+1<i;
-                hence h2.i=i by A23,A157;
+                hence h2.i=i by A21,A155;
               end;
               suppose
                 k+1+1=i;
-                hence h2.i=i by A37,A154;
+                hence h2.i=i by A35,A152;
               end;
             end;
-A159:       k+1<len (F(*)h2) by A22,A32,FINSEQ_1:def 3;
-            len (accum (F(*)h2))=len (F(*)h2) by Def11;
+A157:       k+1<len (F(*)h2) by A20,A30,FINSEQ_1:def 3;
+            len (accum (F(*)h2))=len (F(*)h2) by Def10;
             then
-A160:       (accum (F(*)h2))/.(k+1)=(accum (F(*)h2)).(k+1) by A22,A34,
+A158:       (accum (F(*)h2))/.(k+1)=(accum (F(*)h2)).(k+1) by A20,A32,
 FINSEQ_4:24,NAT_1:11;
-A161:       1<=k+1 by NAT_1:11;
-A162:       F.(k+1+1)=(F(*)h2).nx by A36,A37,FUNCT_1:23;
-A163:       gF/.(k+1)=gF.(k+1) by A9,A22,FINSEQ_4:24,NAT_1:11;
-A164:       F/.(k+1+1)=F.(k+1+1) by A24,A26,FINSEQ_4:24;
-            gF.(k+1+1)=gF/.(k+1) + F/.(k+1+1) by A11,A22,NAT_1:11
-              .=(accum (F(*)h2))/.(k+1)+F/.(k+1+1) by A19,A25,A155,A160,A163
-              .=(accum (F(*)h2))/.(k+1) + (F(*)h2)/.(k+1+1) by A24,A26,A34,A154
-,A164,A162,FINSEQ_4:24
-              .=(accum (F(*)h2)).(k+1+1) by A161,A159,Def11;
+A159:       1<=k+1 by NAT_1:11;
+A160:       F.(k+1+1)=(F(*)h2).nx by A34,A35,FUNCT_1:23;
+A161:       gF/.(k+1)=gF.(k+1) by A9,A20,FINSEQ_4:24,NAT_1:11;
+A162:       F/.(k+1+1)=F.(k+1+1) by A22,A24,FINSEQ_4:24;
+            gF.(k+1+1)=gF/.(k+1) + F/.(k+1+1) by A10,A20,NAT_1:11
+              .=(accum (F(*)h2))/.(k+1)+F/.(k+1+1) by A17,A23,A153,A158,A161
+              .=(accum (F(*)h2))/.(k+1) + (F(*)h2)/.(k+1+1) by A22,A24,A32,A152
+,A162,A160,FINSEQ_4:24
+              .=(accum (F(*)h2)).(k+1+1) by A159,A157,Def10;
             hence gF.(k+1+1)=(accum (F(*)h2)).(k+1+1);
           end;
           suppose
             k+1+1<nx;
-            hence gF.(k+1+1)=(accum (F(*)h2)).(k+1+1) by A23,A37,A38;
+            hence gF.(k+1+1)=(accum (F(*)h2)).(k+1+1) by A21,A35,A36;
           end;
         end;
       end;
@@ -1573,45 +1573,45 @@ A164:       F/.(k+1+1)=F.(k+1+1) by A24,A26,FINSEQ_4:24;
     len F holds h2.i=i holds gF.(0+1)=(accum (F(*)h2)).(0+1)
     proof
       let h2 be Permutation of dom F;
-A165: rng h2=dom F by FUNCT_2:def 3;
-A166: dom h2=dom F by A5,FUNCT_2:def 1;
+A163: rng h2=dom F by FUNCT_2:def 3;
+A164: dom h2=dom F by A5,FUNCT_2:def 1;
       assume
-A167: for i being Nat st 0+1<i & i<=len F holds h2.i=i;
-A168: now
+A165: for i being Nat st 0+1<i & i<=len F holds h2.i=i;
+A166: now
         assume
-A169:   h2.1<>1;
+A167:   h2.1<>1;
         consider x being set such that
-A170:   x in dom h2 and
-A171:   h2.x=1 by A5,A165,FUNCT_1:def 5;
-        reconsider nx=x as Element of NAT by A166,A170;
-        1<=nx by A13,A170,FINSEQ_1:3;
-        then nx=1 or 1<nx & nx<=len F by A13,A170,FINSEQ_1:3,XXREAL_0:1;
-        hence contradiction by A167,A169,A171;
+A168:   x in dom h2 and
+A169:   h2.x=1 by A5,A163,FUNCT_1:def 5;
+        reconsider nx=x as Element of NAT by A164,A168;
+        1<=nx by A11,A168,FINSEQ_1:3;
+        then nx=1 or 1<nx & nx<=len F by A11,A168,FINSEQ_1:3,XXREAL_0:1;
+        hence contradiction by A165,A167,A169;
       end;
-      (accum (F(*)h2)).1=(F(*)h2).1 by Def11
-        .=F.1 by A5,A166,A168,FUNCT_1:23;
-      hence gF.(0+1)=(accum (F(*)h2)).(0+1) by Def11;
+      (accum (F(*)h2)).1=(F(*)h2).1 by Def10
+        .=F.1 by A5,A164,A166,FUNCT_1:23;
+      hence gF.(0+1)=(accum (F(*)h2)).(0+1) by Def10;
     end;
     then
-A172: P[0];
-    for k being Nat holds P[k] from NAT_1:sch 2(A172,A18);
-    then gF.(len F)=(accum (F(*)h)).(len F) by A15,A16,XREAL_1:46
+A170: P[0];
+    for k being Nat holds P[k] from NAT_1:sch 2(A170,A16);
+    then gF.(len F)=(accum (F(*)h)).(len F) by A13,A14,XREAL_1:46
       .=(accum F2).(len F2) by A1,A8,FINSEQ_1:def 3
-      .= Sum F2 by A14,Def10;
-    hence Sum F2=Sum F by A2,Def10;
+      .= Sum F2 by A12,Def11;
+    hence Sum F2=Sum F by A2,Def11;
   end;
   suppose
-A173: len F<=0;
+A171: len F<=0;
     rng h c= dom F;
     then
-A174: dom (F(*)h)=dom h by RELAT_1:46;
-    Seg len F = {} by A173;
+A172: dom (F(*)h)=dom h by RELAT_1:46;
+    Seg len F = {} by A171;
     then dom F={} by FINSEQ_1:def 3;
-    then Seg len F=dom F2 by A1,A174,FINSEQ_1:def 3;
+    then Seg len F=dom F2 by A1,A172,FINSEQ_1:def 3;
     then
-A175: len F=len F2 by FINSEQ_1:def 3;
-    Sum F=0*n by A173,Def10;
-    hence Sum F2=Sum F by A173,A175,Def10;
+A173: len F=len F2 by FINSEQ_1:def 3;
+    Sum F=0*n by A171,Def11;
+    hence Sum F2=Sum F by A171,A173,Def11;
   end;
 end;
 
@@ -1631,31 +1631,31 @@ A1: for i being Nat st i in dom g holds g.i= 0*n
   suppose
 A2: len g>0;
     set g3 = accum g;
-A3: len g=len g3 by Def11;
-A4: g.1=g3.1 by Def11;
+A3: len g=len g3 by Def10;
+A4: g.1=g3.1 by Def10;
     defpred P[Nat] means $1<len g implies g3.($1+1)=0*n;
-A7: for k being Nat st P[k] holds P[k+1]
+A5: for k being Nat st P[k] holds P[k+1]
     proof
       let k be Nat;
       assume
-A8:   P[k];
-A9:   k<k+1 by XREAL_1:31;
+A6:   P[k];
+A7:   k<k+1 by XREAL_1:31;
       per cases;
       suppose
-A10:    k+1<len g;
+A8:    k+1<len g;
         then
-A11:    k+1+1<=len g by NAT_1:13;
+A9:    k+1+1<=len g by NAT_1:13;
         per cases;
         suppose
-A12:      1<=k+1;
-A13:      1<=k+1+1 by XREAL_1:31;
-          then k+1+1 in Seg len g by A11,FINSEQ_1:3;
+A10:      1<=k+1;
+A11:      1<=k+1+1 by XREAL_1:31;
+          then k+1+1 in Seg len g by A9,FINSEQ_1:3;
           then k+1+1 in dom g by FINSEQ_1:def 3;
           then
-A14:      g.(k+1+1)=0*n by A1;
-A15:      g3/.(k+1)=g3.(k+1) by A3,A10,A12,FINSEQ_4:24;
-          g3.(k+1+1)=(g3/.(k+1))+(g/.(k+1+1)) by Def11,A10,A12;
-          then g3.(k+1+1)=0*n + 0*n by A8,A9,A10,A11,A15,A13,A14,FINSEQ_4:24
+A12:      g.(k+1+1)=0*n by A1;
+A13:      g3/.(k+1)=g3.(k+1) by A3,A8,A10,FINSEQ_4:24;
+          g3.(k+1+1)=(g3/.(k+1))+(g/.(k+1+1)) by Def10,A8,A10;
+          then g3.(k+1+1)=0*n + 0*n by A6,A7,A8,A9,A13,A11,A12,FINSEQ_4:24
 ,XXREAL_0:2
             .= 0*n by EUCLID_4:1;
           hence P[k+1];
@@ -1670,19 +1670,19 @@ A15:      g3/.(k+1)=g3.(k+1) by A3,A10,A12,FINSEQ_4:24;
         hence P[k+1];
       end;
     end;
-A16: 0+1<=len g by A2,NAT_1:13;
+A14: 0+1<=len g by A2,NAT_1:13;
     then 1 in Seg len g by FINSEQ_1:3;
     then 1 in dom g by FINSEQ_1:def 3;
     then
-A17: P[0] by A1,A4;
-    for k being Nat holds P[k] from NAT_1:sch 2(A17,A7);
+A15: P[0] by A1,A4;
+    for k being Nat holds P[k] from NAT_1:sch 2(A15,A5);
     then
-A18: P[ len g3 -'1];
-    len g3-'1=len g3-1 by A3,A16,XREAL_1:235;
-    hence Sum g= 0*n by A3,Def10,A18,XREAL_1:46;
+A16: P[ len g3 -'1];
+    len g3-'1=len g3-1 by A3,A14,XREAL_1:235;
+    hence Sum g= 0*n by A3,Def11,A16,XREAL_1:46;
   end;
   suppose len g<=0;
-    hence Sum g= 0*n by Def10;
+    hence Sum g= 0*n by Def11;
   end;
 end;
 
@@ -1780,17 +1780,17 @@ A29: len g -'1=len g-1 by XREAL_1:235;
 A30: h.(len h)<=len g-'1+1 by A20,FINSEQ_1:3;
 A31: 1<=j by A25,FINSEQ_1:3;
     set g4 = accum g;
-A32: len g=len g4 by Def11;
-A33: g.1=g4.1 by Def11;
+A32: len g=len g4 by Def10;
+A33: g.1=g4.1 by Def10;
 A34: for i being Nat st 1<=i & i<len g holds g4.(i+1)=(g4/.i)+(g/.(i+1) )
-      by Def11;
-A35: Sum g=g4.(len g) by A7,A14,A15,Def10;
+      by Def10;
+A35: Sum g=g4.(len g) by A7,A14,A15,Def11;
     set g2 = accum F;
-A36: len F=len g2 by Def11;
-A37: F.1=g2.1 by Def11;
+A36: len F=len g2 by Def10;
+A37: F.1=g2.1 by Def10;
 A38: for i being Nat st 1<=i & i<len F holds g2.(i+1)=(g2/.i)+(F/.(i+1) )
-       by Def11;
-A39: Sum F=g2.(len F) by A15,Def10;
+       by Def10;
+A39: Sum F=g2.(len F) by A15,Def11;
     defpred Q[Nat] means 1<=$1+1 & $1+1<j implies g4.($1+1)= 0*n;
 A40: for k being Nat st Q[k] holds Q[k+1]
     proof
@@ -1893,7 +1893,7 @@ A73:    j-'1<j-'1+1 by XREAL_1:31;
         then
 A74:    j-'1<len g by A27,A70,XXREAL_0:2;
         then g4/.(j-'1)=g4.(j-'1) by A32,A27,A65,FINSEQ_4:24;
-        then g4.j= 0*n + g2/.1 by Def11,A27,A65,A73,A74,A68,A66,A71,A72,A67
+        then g4.j= 0*n + g2/.1 by Def10,A27,A65,A73,A74,A68,A66,A71,A72,A67
           .=g2/.1 by EUCLID_4:1;
         hence P[0] by FINSEQ_4:24;
       end;
@@ -2047,7 +2047,7 @@ A121:       g4
 ,A121,A118,FINSEQ_4:24,NAT_1:11
               .= g4/.(h.(k+1+1)-'1) +g/.(h.(k+1+1)) by A36,A77,A78,A117,A116,
 FINSEQ_4:24
-              .=g4.(h.(k+1+1)-'1+1) by Def11,A113,A114,A120;
+              .=g4.(h.(k+1+1)-'1+1) by Def10,A113,A114,A120;
             hence g4.(h.(k+1+1))=g2.(k+1+1) by A114;
           end;
           case
@@ -2103,7 +2103,7 @@ A137:       g4/.(h.(k+1+1)-'1)=g4.((h.(1+1)-'1)) by A122,A124,A133,FINSEQ_4:24
 A138:       h.(k+1+1)-'1<len g by A122,A125,NAT_1:13;
             1<=h.(k+1+1)-'1 by A122,A132,A125,NAT_1:13;
             then g4.(h.(k+1+1)-'1+1)=g4/.(h.(k+1+1)-'1) +g/.(h.(k+1+1))
-              by Def11,A122,A124,A138
+              by Def10,A122,A124,A138
               .=F/.1 +F/.(1+1) by A19,A22,A128,A137,A136,FINSEQ_4:24;
             hence g4.(h.(k+1+1))=g2.(k+1+1) by A122,A124,A127;
           end;
@@ -2191,7 +2191,7 @@ A160: R[0];
   suppose
 A161: len F <=0;
     then
-A162: Sum F= 0*n by Def10;
+A162: Sum F= 0*n by Def11;
 A163: dom g = Seg len g by FINSEQ_1:def 3;
     Seg len F = {} by A161;
     then dom F= {} by FINSEQ_1:def 3;
@@ -2446,7 +2446,7 @@ A2: i<=n and
 A3: i<>j;
   set x1=Base_FinSeq(n,i),x2=Base_FinSeq(n,j);
 A4: dom (0*n)=Seg len (n |-> (0 qua Real)) by FINSEQ_1:def 3
-    .=Seg n by FINSEQ_1:def 18;
+    .=Seg n by CARD_1:def 13;
 A5: dom x2=Seg len x2 by FINSEQ_1:def 3
     .=Seg n by MATRIXR2:74;
 A6: dom x1=Seg len x1 by FINSEQ_1:def 3
@@ -2501,7 +2501,7 @@ proof
 A1: 1<=i and
 A2: i<=n;
   set x2=Base_FinSeq(n,i);
-A3: len x=n by FINSEQ_1:def 18;
+A3: len x=n by CARD_1:def 13;
 A4: len x2=n by MATRIXR2:74;
   then
 A5: len (mlt(x,x2))=n by A3,MATRPROB:30;
@@ -2615,125 +2615,125 @@ proof
     case
 A1:   len f>0;
       set g2 = accum f;
-A2:   len f=len g2 by Def11;
-A3:   f.1=g2.1 by Def11;
+A2:   len f=len g2 by Def10;
+A3:   f.1=g2.1 by Def10;
       defpred P[Nat] means for i being Nat st 1<=i & i<=len f & 1<=$1 & $1<=
 len f holds (i<= $1 implies (g2/.$1).i= x0.i)& (i> $1 implies (g2/.$1).i=0);
-A5:   len f=n by Def12;
-A6:   0+1<=len f by A1,NAT_1:13;
-A7:   for k being Nat st P[k] holds P[k+1]
+A4:   len f=n by Def12;
+A5:   0+1<=len f by A1,NAT_1:13;
+A6:   for k being Nat st P[k] holds P[k+1]
       proof
         let k be Nat;
         reconsider k2=k as Element of NAT by ORDINAL1:def 13;
         assume
-A8:     P[k];
+A7:     P[k];
         for i being Nat st 1<=i & i<=len f & 1<=k+1 & k+1<=len f holds (i
         <= k+1 implies (g2/.(k+1)).i= x0.i)& (i> k+1 implies (g2/.(k+1)).i=0)
         proof
           let i be Nat;
           assume that
-A9:       1<=i and
-A10:      i<=len f and
-A11:      1<=k+1 and
-A12:      k+1<=len f;
+A8:       1<=i and
+A9:      i<=len f and
+A10:      1<=k+1 and
+A11:      k+1<=len f;
           g2/.(k+1) is Element of REAL n;
-          then reconsider r=g2.(k+1) as Element of REAL n by A2,A11,A12,
+          then reconsider r=g2.(k+1) as Element of REAL n by A2,A10,A11,
 FINSEQ_4:24;
           reconsider i2=i as Element of NAT by ORDINAL1:def 13;
-A13:      g2/.(k+1)=g2.(k+1) by A2,A11,A12,FINSEQ_4:24;
+A12:      g2/.(k+1)=g2.(k+1) by A2,A10,A11,FINSEQ_4:24;
           now
             per cases;
             case
-A14:          1<=k;
+A13:          1<=k;
               reconsider r3=f/.(k+1) as Element of REAL n;
               reconsider r2=g2/.k as Element of REAL n;
-A15:          (ProjFinSeq x0)/.(k+1)=(ProjFinSeq x0).(k+1) by A11,A12,
+A14:          (ProjFinSeq x0)/.(k+1)=(ProjFinSeq x0).(k+1) by A10,A11,
 FINSEQ_4:24
-                .=(|( x0,Base_FinSeq(n2,k+1) )|)*(Base_FinSeq(n2,k+1) ) by A5
-,A11,A12,Def12;
-A16:          k<k+1 by XREAL_1:31;
+                .=(|( x0,Base_FinSeq(n2,k+1) )|)*(Base_FinSeq(n2,k+1) ) by A4
+,A10,A11,Def12;
+A15:          k<k+1 by XREAL_1:31;
               then
-A17:          k<len f by A12,XXREAL_0:2;
-              then r=g2/.k + f/.(k+1) by Def11,A14;
+A16:          k<len f by A11,XXREAL_0:2;
+              then r=g2/.k + f/.(k+1) by Def10,A13;
               then
-A18:          r.i=r2.i+r3.i by RVSUM_1:27;
-A19:          now
+A17:          r.i=r2.i+r3.i by RVSUM_1:27;
+A18:          now
                 assume
-A20:            i<=k+1;
-                per cases by A20,XXREAL_0:1;
+A19:            i<=k+1;
+                per cases by A19,XXREAL_0:1;
                 suppose
-A21:              i<k+1;
+A20:              i<k+1;
                   then
-A22:              i<=k by NAT_1:13;
+A21:              i<=k by NAT_1:13;
                   (f/.(k+1)).i = |(x0,Base_FinSeq(n2,k+1))|*((Base_FinSeq
-                  (n2,k2+1) ).i2) by A15,RVSUM_1:66
-                    .= |( x0,Base_FinSeq(n2,k+1) )|* 0 by A5,A9,A10,A21,
+                  (n2,k2+1) ).i2) by A14,RVSUM_1:66
+                    .= |( x0,Base_FinSeq(n2,k+1) )|* 0 by A4,A8,A9,A20,
 MATRIXR2:76;
                   hence
-                  (g2/.(k+1)).i= x0.i by A8,A9,A10,A13,A14,A17,A18,A22;
+                  (g2/.(k+1)).i= x0.i by A7,A8,A9,A12,A13,A16,A17,A21;
                 end;
                 suppose
-A23:              i=k+1;
+A22:              i=k+1;
                   then
-A24:              (g2/.k).i= 0 by A8,A9,A10,A14,A16,A17;
+A23:              (g2/.k).i= 0 by A7,A8,A9,A13,A15,A16;
                   (f/.(k+1)).i = |(x0,Base_FinSeq(n2,k+1))|*((Base_FinSeq
-                  (n2,k2+1) ).i2) by A15,RVSUM_1:66
-                    .= (|( x0,Base_FinSeq(n2,k+1) )|)* 1 by A5,A9,A10,A23,
+                  (n2,k2+1) ).i2) by A14,RVSUM_1:66
+                    .= (|( x0,Base_FinSeq(n2,k+1) )|)* 1 by A4,A8,A9,A22,
 MATRIXR2:75
-                    .= x0.(k+1) by A5,A11,A12,Th32;
-                  hence (g2/.(k+1)).i= x0.i by A2,A9,A10,A18,A23,A24,
-FINSEQ_4:24;
+                    .= x0.(k+1) by A4,A10,A11,Th32;
+                  hence (g2/.(k+1)).i= x0.i by A2,A8,A9,A17,A22,A23,FINSEQ_4:24
+;
                 end;
               end;
               now
                 assume
-A25:            i>k+1; then
-A26:            i>k by A16,XXREAL_0:2;
+A24:            i>k+1; then
+A25:            i>k by A15,XXREAL_0:2;
                 (f/.(k+1)).i = (|( x0,Base_FinSeq(n2,k+1) )|)*((
-                Base_FinSeq(n2,k2+1) ).i2) by A15,RVSUM_1:66
-                  .= (|( x0,Base_FinSeq(n2,k+1) )|)* 0 by A5,A9,A10,A25,
+                Base_FinSeq(n2,k2+1) ).i2) by A14,RVSUM_1:66
+                  .= (|( x0,Base_FinSeq(n2,k+1) )|)* 0 by A4,A8,A9,A24,
 MATRIXR2:76
                   .= 0;
-                hence (g2/.(k+1)).i=0 by A8,A9,A10,A13,A14,A17,A18,A26;
+                hence (g2/.(k+1)).i=0 by A7,A8,A9,A12,A13,A16,A17,A25;
               end;
               hence (i<= k+1 implies (g2/.(k+1)).i= x0.i)& (i> k+1 implies (g2
-              /.(k+1)).i= 0) by A19;
+              /.(k+1)).i= 0) by A18;
             end;
             case
               k<1;
               then
-A27:          k+1<= 0+1 by NAT_1:13;
+A26:          k+1<= 0+1 by NAT_1:13;
               then
-A28:          k=0 by XREAL_1:8;
-A29:          now
+A27:          k=0 by XREAL_1:8;
+A28:          now
                 assume
-A30:            i> 0+1;
-                (g2/.1)=f.1 by A6,A2,A3,FINSEQ_4:24;
+A29:            i> 0+1;
+                (g2/.1)=f.1 by A5,A2,A3,FINSEQ_4:24;
                 then
                 (g2/.1).i= ((|( x0,Base_FinSeq(n2,1) )|)*(Base_FinSeq(n2,
-                1) )).i by A6,A5,Def12
+                1) )).i by A5,A4,Def12
                   .= (|( x0,Base_FinSeq(n2,1) )|)*((Base_FinSeq(n2,1) ).i2)
                 by RVSUM_1:66
-                  .= (|( x0,Base_FinSeq(n2,1) )|)* 0 by A5,A10,A30,MATRIXR2:76
+                  .= (|( x0,Base_FinSeq(n2,1) )|)* 0 by A4,A9,A29,MATRIXR2:76
                   .= 0;
-                hence (g2/.(k+1)).i= 0 by A28;
+                hence (g2/.(k+1)).i= 0 by A27;
               end;
-A31:          now
+A30:          now
                 assume i<= 0+1; then
-A32:            i=1 by A9,XXREAL_0:1;
-                (g2/.1)=f.1 by A6,A2,A3,FINSEQ_4:24;
+A31:            i=1 by A8,XXREAL_0:1;
+                (g2/.1)=f.1 by A5,A2,A3,FINSEQ_4:24;
                 then
                 (g2/.1).1= ((|( x0,Base_FinSeq(n2,1) )|)*(Base_FinSeq(n2,
-                1) )).1 by A6,A5,Def12
+                1) )).1 by A5,A4,Def12
                   .= (|( x0,Base_FinSeq(n2,1) )|)*((Base_FinSeq(n2,1) ).1)
                 by RVSUM_1:66
-                  .= (|( x0,Base_FinSeq(n2,1) )|)* 1 by A6,A5,MATRIXR2:75
-                  .= x0.1 by A6,A5,Th32;
-                hence (g2/.(0+1)).i= x0.i by A32;
+                  .= (|( x0,Base_FinSeq(n2,1) )|)* 1 by A5,A4,MATRIXR2:75
+                  .= x0.1 by A5,A4,Th32;
+                hence (g2/.(0+1)).i= x0.i by A31;
               end;
-              k<=0 by A27,XREAL_1:8;
+              k<=0 by A26,XREAL_1:8;
               hence (i<= k+1 implies (g2/.(k+1)).i= x0.i)& (i> k+1 implies (g2
-              /.(k+1)).i= 0) by A31,A29;
+              /.(k+1)).i= 0) by A30,A28;
             end;
           end;
           hence thesis;
@@ -2741,31 +2741,31 @@ A32:            i=1 by A9,XXREAL_0:1;
         hence P[k+1];
       end;
       reconsider r4=g2/.(len f) as Element of REAL n;
-A33:  len x0=n by FINSEQ_1:def 18;
+A32:  len x0=n by CARD_1:def 13;
       then
-A34:  len x0 = len r4 by FINSEQ_1:def 18;
-A35:  P[0];
-A36:  for k being Nat holds P[k] from NAT_1:sch 2(A35,A7);
+A33:  len x0 = len r4 by CARD_1:def 13;
+A34:  P[0];
+A35:  for k being Nat holds P[k] from NAT_1:sch 2(A34,A6);
       for i being Nat st 1<=i & i<=len (r4) holds (g2/.(len f)).i=x0.i
       proof
         let i be Nat;
         assume that
-A37:    1<=i and
-A38:    i<=len r4;
-A39:    i<=len f by A5,A38,FINSEQ_1:def 18;
-        1<=len f by A5,A33,A34,A37,A38,XXREAL_0:2;
-        hence (g2/.(len f)).i=x0.i by A36,A37,A39;
+A36:    1<=i and
+A37:    i<=len r4;
+A38:    i<=len f by A4,A37,CARD_1:def 13;
+        1<=len f by A4,A32,A33,A36,A37,XXREAL_0:2;
+        hence (g2/.(len f)).i=x0.i by A35,A36,A38;
       end;
-      then x0=g2/.(len f) by A34,FINSEQ_1:18;
-      hence x0=g2.(len f) by A6,A2,FINSEQ_4:24;
+      then x0=g2/.(len f) by A33,FINSEQ_1:18;
+      hence x0=g2.(len f) by A5,A2,FINSEQ_4:24;
     end;
     case len f<=0; then
-A41:  n=0 by Def12;
+A39:  n=0 by Def12;
       then x0=<*>REAL;
-      hence x0 = 0*n by A41;
+      hence x0 = 0*n by A39;
     end;
   end;
-  hence x0=Sum (ProjFinSeq x0) by Def10;
+  hence x0=Sum (ProjFinSeq x0) by Def11;
 end;
 
 definition
@@ -3225,11 +3225,11 @@ A1: f=g;
     case
 A2:   len f>0;
       set g2 = accum f;
-A3:   len f=len g2 by Def11;
-A4:   f.1=g2.1 by Def11;
-A6:   Sum f=g2.(len f) by A2,Def10;
+A3:   len f=len g2 by Def10;
+A4:   f.1=g2.1 by Def10;
+A5:   Sum f=g2.(len f) by A2,Def11;
       deffunc F(set)=IFIN($1,len f+1,IFEQ($1,0, 0.V, g2/.$1),0.V);
-A7:   for x being set st x in NAT holds F(x) in the carrier of V
+A6:   for x being set st x in NAT holds F(x) in the carrier of V
       proof
         let x be set;
         assume x in NAT;
@@ -3238,18 +3238,18 @@ A7:   for x being set st x in NAT holds F(x) in the carrier of V
         suppose
           nx in len f+1;
           then
-A8:       F(x)=IFEQ(x,0, 0.V, g2/.nx) by MATRIX_7:def 1;
+A7:       F(x)=IFEQ(x,0, 0.V, g2/.nx) by MATRIX_7:def 1;
           per cases;
           suppose
             x=0;
-            then F(x)=0.V by A8,FUNCOP_1:def 8;
+            then F(x)=0.V by A7,FUNCOP_1:def 8;
             hence F(x) in the carrier of V;
           end;
           suppose
-A9:         x<>0;
-A10:        the carrier of V=REAL n by REAL_NS1:def 6;
-            F(x)=g2/.nx by A8,A9,FUNCOP_1:def 8;
-            hence F(x) in the carrier of V by A10;
+A8:         x<>0;
+A9:        the carrier of V=REAL n by REAL_NS1:def 6;
+            F(x)=g2/.nx by A7,A8,FUNCOP_1:def 8;
+            hence F(x) in the carrier of V by A9;
           end;
         end;
         suppose
@@ -3259,87 +3259,87 @@ A10:        the carrier of V=REAL n by REAL_NS1:def 6;
         end;
       end;
       consider f3 being Function of NAT,the carrier of V such that
-A11:  for x being set st x in NAT holds f3.x = F(x) from FUNCT_2:sch
-      2( A7);
-A12:  for j being Element of NAT for v being Element of V st j < len g &
+A10:  for x being set st x in NAT holds f3.x = F(x) from FUNCT_2:sch
+      2( A6);
+A11:  for j being Element of NAT for v being Element of V st j < len g &
       v = g . (j + 1) holds f3 . (j + 1) = (f3 . j) + v
       proof
         let j be Element of NAT;
         let v be Element of V;
         assume that
-A13:    j < len g and
-A14:    v = g . (j + 1);
-A15:    j+1<=len f by A1,A13,NAT_1:13;
+A12:    j < len g and
+A13:    v = g . (j + 1);
+A14:    j+1<=len f by A1,A12,NAT_1:13;
         per cases;
         suppose
-A16:      j=0;
+A15:      j=0;
           then j+1<len f+1 by A2,XREAL_1:8;
           then
-A17:      (j+1) in (len f+1) by NAT_1:45;
-A18:      0 in (len f +1) by NAT_1:45;
-A19:      f3.j=IFIN(j,len f+1,IFEQ(j,0, 0.V, g2/.j),0.V) by A11
-            .= IFEQ(j,0, 0.V, g2/.j) by A16,A18,MATRIX_7:def 1
-            .= 0.V by A16,FUNCOP_1:def 8;
+A16:      (j+1) in (len f+1) by NAT_1:45;
+A17:      0 in (len f +1) by NAT_1:45;
+A18:      f3.j=IFIN(j,len f+1,IFEQ(j,0, 0.V, g2/.j),0.V) by A10
+            .= IFEQ(j,0, 0.V, g2/.j) by A15,A17,MATRIX_7:def 1
+            .= 0.V by A15,FUNCOP_1:def 8;
           thus f3.(j+1)=IFIN(j+1,len f+1,IFEQ(j+1,0, 0.V, g2/.(j+1)),0.V) by
-A11
-            .=IFEQ(j+1,0, 0.V, g2/.(j+1)) by A17,MATRIX_7:def 1
-            .=g2/.1 by A16,FUNCOP_1:def 8
-            .=g.(j+1) by A1,A3,A4,A15,A16,FINSEQ_4:24
-            .= (f3.j)+v by A14,A19,RLVECT_1:10;
+A10
+            .=IFEQ(j+1,0, 0.V, g2/.(j+1)) by A16,MATRIX_7:def 1
+            .=g2/.1 by A15,FUNCOP_1:def 8
+            .=g.(j+1) by A1,A3,A4,A14,A15,FINSEQ_4:24
+            .= (f3.j)+v by A13,A18,RLVECT_1:10;
         end;
         suppose
-A20:      j<>0;
+A19:      j<>0;
           len f<len f+1 by XREAL_1:31;
-          then j< len f+1 by A1,A13,XXREAL_0:2;
+          then j< len f+1 by A1,A12,XXREAL_0:2;
           then
-A21:      j in (len f +1) by NAT_1:45;
-A22:      f3.j=IFIN(j,len f+1,IFEQ(j,0, 0.V, g2/.j),0.V) by A11
-            .= IFEQ(j,0, 0.V, g2/.j) by A21,MATRIX_7:def 1
-            .= g2/.j by A20,FUNCOP_1:def 8;
-A23:      0+1<=j+1 by NAT_1:13;
-A24:      0+1<=j by A20,NAT_1:13;
-          j+1<len f+1 by A1,A13,XREAL_1:8;
+A20:      j in (len f +1) by NAT_1:45;
+A21:      f3.j=IFIN(j,len f+1,IFEQ(j,0, 0.V, g2/.j),0.V) by A10
+            .= IFEQ(j,0, 0.V, g2/.j) by A20,MATRIX_7:def 1
+            .= g2/.j by A19,FUNCOP_1:def 8;
+A22:      0+1<=j+1 by NAT_1:13;
+A23:      0+1<=j by A19,NAT_1:13;
+          j+1<len f+1 by A1,A12,XREAL_1:8;
           then
-A25:      (j+1) in (len f+1) by NAT_1:45;
+A24:      (j+1) in (len f+1) by NAT_1:45;
           thus f3.(j+1)=IFIN(j+1,len f+1,IFEQ(j+1,0, 0.V, g2/.(j+1)),0.V) by
-A11
-            .=IFEQ(j+1,0, 0.V, g2/.(j+1)) by A25,MATRIX_7:def 1
+A10
+            .=IFEQ(j+1,0, 0.V, g2/.(j+1)) by A24,MATRIX_7:def 1
             .=g2/.(j+1) by FUNCOP_1:def 8
-            .=g2.(j+1) by A3,A15,A23,FINSEQ_4:24
-            .=(g2/.j)+(f/.(j+1)) by A1,Def11,A13,A24
-            .=(f3.j)+v by A1,A14,A15,A23,A22,FINSEQ_4:24;
+            .=g2.(j+1) by A3,A14,A22,FINSEQ_4:24
+            .=(g2/.j)+(f/.(j+1)) by A1,Def10,A12,A23
+            .=(f3.j)+v by A1,A13,A14,A22,A21,FINSEQ_4:24;
         end;
       end;
       len f <len f+1 by XREAL_1:31;
       then
-A26:  len f in len f+1 by NAT_1:45;
-A27:  0+1<=len f by A2,NAT_1:13;
-A28:  0 in len f +1 by NAT_1:45;
-A29:  f3.0=IFIN(0,len f+1,IFEQ(0,0, 0.V, g2/.0),0.V) by A11
-        .=IFEQ(0,0, 0.V, g2/.0) by A28,MATRIX_7:def 1
+A25:  len f in len f+1 by NAT_1:45;
+A26:  0+1<=len f by A2,NAT_1:13;
+A27:  0 in len f +1 by NAT_1:45;
+A28:  f3.0=IFIN(0,len f+1,IFEQ(0,0, 0.V, g2/.0),0.V) by A10
+        .=IFEQ(0,0, 0.V, g2/.0) by A27,MATRIX_7:def 1
         .=0.V by FUNCOP_1:def 8;
-      f3.(len g)=F(len f) by A1,A11
-        .=IFEQ(len f,0,0.V,g2/.(len f)) by A26,MATRIX_7:def 1
+      f3.(len g)=F(len f) by A1,A10
+        .=IFEQ(len f,0,0.V,g2/.(len f)) by A25,MATRIX_7:def 1
         .=g2/.(len f) by A2,FUNCOP_1:def 8
-        .=Sum f by A3,A6,A27,FINSEQ_4:24;
+        .=Sum f by A3,A5,A26,FINSEQ_4:24;
       hence
       ex f2 being Function of NAT,the carrier of V st Sum f = f2 . (len g
 ) & f2 . 0 = 0. V & for j being Element of NAT for v being Element of V st j <
-      len g & v = g . (j + 1) holds f2 . (j + 1) = (f2 . j) + v by A29,A12;
+      len g & v = g . (j + 1) holds f2 . (j + 1) = (f2 . j) + v by A28,A11;
     end;
     case
-A30:  len f<=0;
+A29:  len f<=0;
       set f3 = NAT --> 0.V;
-A31:  for j being Element of NAT for v being Element of V st j < len g &
-      v = g . (j + 1) holds f3 . (j + 1) = (f3 . j) + v by A1,A30;
-A32:  f3.(len g)=0.V by FUNCOP_1:13
+A30:  for j being Element of NAT for v being Element of V st j < len g &
+      v = g . (j + 1) holds f3 . (j + 1) = (f3 . j) + v by A1,A29;
+A31:  f3.(len g)=0.V by FUNCOP_1:13
         .= 0*n by REAL_NS1:def 6;
-A33:  f3.0=0.V by FUNCOP_1:13;
-      Sum f = 0*n by A30,Def10;
+A32:  f3.0=0.V by FUNCOP_1:13;
+      Sum f = 0*n by A29,Def11;
       hence
       ex f2 being Function of NAT,the carrier of V st Sum f = f2 . (len g
 ) & f2 . 0 = 0. V & for j being Element of NAT for v being Element of V st j <
-      len g & v = g . (j + 1) holds f2 . (j + 1) = (f2 . j) + v by A32,A33,A31;
+      len g & v = g . (j + 1) holds f2 . (j + 1) = (f2 . j) + v by A31,A32,A30;
     end;
   end;
   hence Sum f=Sum g by RLVECT_1:def 15;
@@ -3488,7 +3488,7 @@ A3: b*y in the carrier of X by A2,Th38;
   hence a*x+b*y in the carrier of X by A3,Th39;
 end;
 
-Lm2: for X being Subspace of RealVectSpace(Seg n), x,y being Element of REAL n
+Lm3: for X being Subspace of RealVectSpace(Seg n), x,y being Element of REAL n
 ,a being Real st x in the carrier of X & y in the carrier of X holds a*x+y in
 the carrier of X
 proof
@@ -3719,7 +3719,7 @@ A1: Bn is R-orthonormal;
     let l be Linear_Combination of Bn;
     assume
 A2: Sum l = 0.(RealVectSpace(Seg n));
-    consider v0 being Element of Carrier l;
+    set v0 =the  Element of Carrier l;
     consider F being FinSequence of the carrier of RealVectSpace(Seg n) such
     that
 A3: F is one-to-one and
@@ -3776,7 +3776,7 @@ A1: Bn is R-orthonormal;
     let l be Linear_Combination of Bn;
     assume
 A2: Sum l = 0.(REAL-US n);
-    consider v0 being Element of Carrier l;
+    set v0 =the  Element of Carrier l;
     consider F being FinSequence of the carrier of (REAL-US n) such that
 A3: F is one-to-one and
 A4: rng F = Carrier l and
@@ -3845,7 +3845,7 @@ A5: A is linearly-independent by A1,RLVECT_3:6;
   hence x=y by A5,RLVECT_3:13;
 end;
 
-Lm3: now
+Lm4: now
   let n;
   thus RN_Base n is finite & card RN_Base n = n
   proof
@@ -3913,7 +3913,7 @@ A18:    i in Seg n by A16,A17,FINSEQ_1:3;
       end;
       then rng f = RN_Base n by A3,XBOOLE_0:def 10;
       then f2 is onto by FUNCT_2:def 3;
-      then card Seg n = card RN_Base n by A14,Th3;
+      then card Seg n = card RN_Base n by A14,Lm1;
       hence thesis by FINSEQ_1:78;
     end;
   end;
@@ -3923,11 +3923,11 @@ begin :: 6. Finite Dimensionality of the Spaces
 
 registration let n;
   cluster RN_Base n -> finite;
-  coherence by Lm3;
+  coherence by Lm4;
 end;
 
 theorem
-  card RN_Base n = n by Lm3;
+  card RN_Base n = n by Lm4;
 
 theorem Th45:
   for f being FinSequence of REAL n, g being FinSequence of the
@@ -3944,11 +3944,11 @@ A2: REAL(n) = the carrier of V by FINSEQ_2:111;
     case
 A3:   len f>0;
       set g2 = accum f;
-A4:   len f=len g2 by Def11;
-A5:   f.1=g2.1 by Def11;
-A7:   Sum f=g2.(len f) by Def10,A3;
+A4:   len f=len g2 by Def10;
+A5:   f.1=g2.1 by Def10;
+A6:   Sum f=g2.(len f) by Def11,A3;
       deffunc F(set)=IFIN($1,len f+1,IFEQ($1,0, 0.V, g2/.$1),0.V);
-A8:   for x being set st x in NAT holds F(x) in the carrier of V
+A7:   for x being set st x in NAT holds F(x) in the carrier of V
       proof
         let x be set;
         assume x in NAT;
@@ -3957,14 +3957,14 @@ A8:   for x being set st x in NAT holds F(x) in the carrier of V
         suppose
           nx in (len f+1);
           then
-A9:       F(x)=IFEQ(x,0, 0.V, g2/.nx) by MATRIX_7:def 1;
+A8:       F(x)=IFEQ(x,0, 0.V, g2/.nx) by MATRIX_7:def 1;
           per cases;
           suppose x=0;
-            then F(x)=0.V by A9,FUNCOP_1:def 8;
+            then F(x)=0.V by A8,FUNCOP_1:def 8;
             hence F(x) in the carrier of V;
           end;
           suppose x<>0;
-            then F(x)=g2/.nx by A9,FUNCOP_1:def 8;
+            then F(x)=g2/.nx by A8,FUNCOP_1:def 8;
             hence F(x) in the carrier of V by A2;
           end;
         end;
@@ -3974,86 +3974,84 @@ A9:       F(x)=IFEQ(x,0, 0.V, g2/.nx) by MATRIX_7:def 1;
         end;
       end;
       consider f3 being Function of NAT,the carrier of V such that
-A10:  for x being set st x in NAT holds f3.x = F(x) from FUNCT_2:sch
-      2(A8);
-A11:  for j being Element of NAT for v being Element of V st j < len g &
+A9:  for x being set st x in NAT holds f3.x = F(x) from FUNCT_2:sch
+      2(A7);
+A10:  for j being Element of NAT for v being Element of V st j < len g &
       v = g . (j + 1) holds f3 . (j + 1) = (f3 . j) + v
       proof
         let j be Element of NAT;
         let v be Element of V;
         assume that
-A12:    j < len g and
-A13:    v = g . (j + 1);
-A14:    j+1<=len f by A1,A12,NAT_1:13;
+A11:    j < len g and
+A12:    v = g . (j + 1);
+A13:    j+1<=len f by A1,A11,NAT_1:13;
         per cases;
         suppose
-A15:      j=0;
+A14:      j=0;
           then j+1<len f+1 by A3,XREAL_1:8;
           then
-A16:      (j+1) in (len f+1) by NAT_1:45;
-A17:      0 in (len f +1) by NAT_1:45;
-A18:      f3.j=IFIN(j,len f+1,IFEQ(j,0, 0.V, g2/.j),0.V) by A10
-            .= IFEQ(j,0, 0.V, g2/.j) by A15,A17,MATRIX_7:def 1
-            .= 0.V by A15,FUNCOP_1:def 8;
-          thus f3.(j+1)=IFIN(j+1,len f+1,IFEQ(j+1,0, 0.V, g2/.(j+1)),0.V) by
-A10
-            .=IFEQ(j+1,0, 0.V, g2/.(j+1)) by A16,MATRIX_7:def 1
-            .=g2/.1 by A15,FUNCOP_1:def 8
-            .=g.(j+1) by A1,A4,A5,A14,A15,FINSEQ_4:24
-            .= (f3.j)+v by A13,A18,RLVECT_1:10;
+A15:      (j+1) in (len f+1) by NAT_1:45;
+A16:      0 in (len f +1) by NAT_1:45;
+A17:      f3.j=IFIN(j,len f+1,IFEQ(j,0, 0.V, g2/.j),0.V) by A9
+            .= IFEQ(j,0, 0.V, g2/.j) by A14,A16,MATRIX_7:def 1
+            .= 0.V by A14,FUNCOP_1:def 8;
+          thus f3.(j+1)=IFIN(j+1,len f+1,IFEQ(j+1,0, 0.V, g2/.(j+1)),0.V) by A9
+            .=IFEQ(j+1,0, 0.V, g2/.(j+1)) by A15,MATRIX_7:def 1
+            .=g2/.1 by A14,FUNCOP_1:def 8
+            .=g.(j+1) by A1,A4,A5,A13,A14,FINSEQ_4:24
+            .= (f3.j)+v by A12,A17,RLVECT_1:10;
         end;
         suppose
-A19:      j<>0;
+A18:      j<>0;
           len f<len f+1 by XREAL_1:31;
-          then j< len f+1 by A1,A12,XXREAL_0:2;
+          then j< len f+1 by A1,A11,XXREAL_0:2;
           then
-A20:      j in (len f +1) by NAT_1:45;
-A21:      f3.j=IFIN(j,len f+1,IFEQ(j,0, 0.V, g2/.j),0.V) by A10
-            .= IFEQ(j,0, 0.V, g2/.j) by A20,MATRIX_7:def 1
-            .= g2/.j by A19,FUNCOP_1:def 8;
-A22:      0+1<=j+1 by NAT_1:13;
-A23:      0+1<=j by A19,NAT_1:13;
-          j+1<len f+1 by A1,A12,XREAL_1:8;
+A19:      j in (len f +1) by NAT_1:45;
+A20:      f3.j=IFIN(j,len f+1,IFEQ(j,0, 0.V, g2/.j),0.V) by A9
+            .= IFEQ(j,0, 0.V, g2/.j) by A19,MATRIX_7:def 1
+            .= g2/.j by A18,FUNCOP_1:def 8;
+A21:      0+1<=j+1 by NAT_1:13;
+A22:      0+1<=j by A18,NAT_1:13;
+          j+1<len f+1 by A1,A11,XREAL_1:8;
           then
-A24:      (j+1) in (len f+1) by NAT_1:45;
-          thus f3.(j+1)=IFIN(j+1,len f+1,IFEQ(j+1,0, 0.V, g2/.(j+1)),0.V) by
-A10
-            .=IFEQ(j+1,0, 0.V, g2/.(j+1)) by A24,MATRIX_7:def 1
+A23:      (j+1) in (len f+1) by NAT_1:45;
+          thus f3.(j+1)=IFIN(j+1,len f+1,IFEQ(j+1,0, 0.V, g2/.(j+1)),0.V) by A9
+            .=IFEQ(j+1,0, 0.V, g2/.(j+1)) by A23,MATRIX_7:def 1
             .=g2/.(j+1) by FUNCOP_1:def 8
-            .=g2.(j+1) by A4,A14,A22,FINSEQ_4:24
-            .=(g2/.j)+(f/.(j+1)) by A1,Def11,A12,A23
-            .=(f3.j)+v by A1,A13,A14,A22,A21,FINSEQ_4:24;
+            .=g2.(j+1) by A4,A13,A21,FINSEQ_4:24
+            .=(g2/.j)+(f/.(j+1)) by A1,Def10,A11,A22
+            .=(f3.j)+v by A1,A12,A13,A21,A20,FINSEQ_4:24;
         end;
       end;
       len f <len f+1 by XREAL_1:31;
       then
-A25:  len f in (len f+1) by NAT_1:45;
-A26:  0+1<=len f by A3,NAT_1:13;
-A27:  0 in (len f +1) by NAT_1:45;
-A28:  f3.0=IFIN(0,len f+1,IFEQ(0,0, 0.V, g2/.0),0.V) by A10
-        .=IFEQ(0,0, 0.V, g2/.0) by A27,MATRIX_7:def 1
+A24:  len f in (len f+1) by NAT_1:45;
+A25:  0+1<=len f by A3,NAT_1:13;
+A26:  0 in (len f +1) by NAT_1:45;
+A27:  f3.0=IFIN(0,len f+1,IFEQ(0,0, 0.V, g2/.0),0.V) by A9
+        .=IFEQ(0,0, 0.V, g2/.0) by A26,MATRIX_7:def 1
         .=0.V by FUNCOP_1:def 8;
-      f3.(len g)=F(len f) by A1,A10
-        .=IFEQ(len f,0,0.V,g2/.(len f)) by A25,MATRIX_7:def 1
+      f3.(len g)=F(len f) by A1,A9
+        .=IFEQ(len f,0,0.V,g2/.(len f)) by A24,MATRIX_7:def 1
         .=g2/.(len f) by A3,FUNCOP_1:def 8
-        .=Sum f by A4,A7,A26,FINSEQ_4:24;
+        .=Sum f by A4,A6,A25,FINSEQ_4:24;
       hence
       ex f2 being Function of NAT,the carrier of V st Sum f = f2 . (len g
 ) & f2 . 0 = 0. V & for j being Element of NAT for v being Element of V st j <
-      len g & v = g . (j + 1) holds f2 . (j + 1) = (f2 . j) + v by A28,A11;
+      len g & v = g . (j + 1) holds f2 . (j + 1) = (f2 . j) + v by A27,A10;
     end;
     case
-A29:  len f<=0;
+A28:  len f<=0;
       set f3 = NAT --> 0.V;
-A30:  for j being Element of NAT for v being Element of V st j < len g &
-      v = g . (j + 1) holds f3 . (j + 1) = (f3 . j) + v by A1,A29;
-A31:  f3.(len g)= 0*n by FUNCOP_1:13;
-A32:  f3.0=0.V by FUNCOP_1:13;
-      Sum f = 0*n by A29,Def10;
+A29:  for j being Element of NAT for v being Element of V st j < len g &
+      v = g . (j + 1) holds f3 . (j + 1) = (f3 . j) + v by A1,A28;
+A30:  f3.(len g)= 0*n by FUNCOP_1:13;
+A31:  f3.0=0.V by FUNCOP_1:13;
+      Sum f = 0*n by A28,Def11;
       hence
       ex f2 being Function of NAT,the carrier of V st Sum f = f2 . (len g
 ) & f2 . 0 = 0. V & for j being Element of NAT for v being Element of V st j <
-      len g & v = g . (j + 1) holds f2 . (j + 1) = (f2 . j) + v by A31,A32,A30;
+      len g & v = g . (j + 1) holds f2 . (j + 1) = (f2 . j) + v by A30,A31,A29;
     end;
   end;
   hence Sum f=Sum g by RLVECT_1:def 15;
@@ -4222,7 +4220,7 @@ A31: Seg n={} implies B0={}
     assume
 A32: Seg n={};
     now
-      consider y being Element of B0;
+      set y =the  Element of B0;
       assume B0 <> {};
       then y in B0;
       then ex x being Element of REAL n st x=y & ex i being Element of NAT st
@@ -4318,7 +4316,7 @@ A57: rng F0 =Carrier l0 by A54,A20,A21,XBOOLE_0:def 10;
 A58: for i being Element of NAT st i in dom F2 holds F2 . i = (l0 . (F0 /.
   i)) * (F0 /. i)
   proof
-    consider i7 being Element of NAT;
+
     let i be Element of NAT;
 A59: Sgm (rng f) is one-to-one by FINSEQ_3:99;
     assume i in dom F2; then
@@ -4551,7 +4549,7 @@ A31: ex i2 being Element of NAT st f.x2=i2 & 1<=i2 & i2<=n & x2=
 A32: f is one-to-one by FUNCT_1:def 8;
 A33: Seg n={} implies B0={}
   proof
-    consider y being Element of B0;
+    set y =the  Element of B0;
     assume
 A34: Seg n={};
     assume B0 <> {};
@@ -4771,7 +4769,7 @@ A1: for I being Basis of RealVectSpace(Seg n) holds n = card I
     let I be Basis of RealVectSpace(Seg n);
     B is Basis of RealVectSpace(Seg n) by Th48;
     then card B=card I by RLVECT_5:26;
-    hence n = card I by Lm3;
+    hence n = card I by Lm4;
   end;
   n in NAT by ORDINAL1:def 13;
   hence thesis by A1,RLVECT_5:def 3;
@@ -4787,7 +4785,7 @@ A1: B is Basis of RealVectSpace(Seg n);
   reconsider Br=RN_Base n as Subset of RealVectSpace(Seg n) by FINSEQ_2:111;
   Br is Basis of RealVectSpace(Seg n) by Th48;
   then card Br=card B by A1,RLVECT_5:26;
-  hence card B=n by Lm3;
+  hence card B=n by Lm4;
 end;
 
 theorem Th51:
@@ -5038,7 +5036,7 @@ A64:                q1.(j+1+1) in the carrier of Lin B;
                     q1/.(j+1+1)+( |( a2,b2 )| )*(p0/.(j+1)) =(q0/.(j+1))
                     by A59,A63,A62,RVSUM_1:64;
                     then (q0/.(j+1)) in the carrier of Lin B by A11,A57,A62,A60
-,A61,A64,Lm2;
+,A61,A64,Lm3;
                     then
 A65:                (q0/.(j+1)) in Lin B by STRUCT_0:def 5;
 A66:                not q1.(j+1) in Lin B by A56,A59,STRUCT_0:def 5,XREAL_1:31;
@@ -5069,7 +5067,7 @@ A76:                q1.(j+1+1) in the carrier of Lin B;
                     q0/.(j+1+1)+( |( a11,b11 )| )*(p0/.(j+1)) =(q0/.(j+1)
                     ) by A75,A69,RVSUM_1:64;
                     then (q0/.(j+1)) in the carrier of Lin B by A11,A57,A69,A73
-,A71,A74,A76,Lm2;
+,A71,A74,A76,Lm3;
                     then
 A77:                (q0/.(j+1)) in Lin B by STRUCT_0:def 5;
                     k<k+1 by XREAL_1:31;
@@ -5360,7 +5358,7 @@ proof
     let I be Basis of REAL-US n;
     B is Basis of REAL-US n by Th52;
     then card B=card I by RUSUB_4:5;
-    hence n = card I by Lm3;
+    hence n = card I by Lm4;
   end;
   hence thesis by RUSUB_4:def 3;
 end;

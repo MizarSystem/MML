@@ -11,7 +11,8 @@ environ
       BINOP_1, BINOP_2, ARYTM_1, ARYTM_3, SQUARE_1, FUNCOP_1, REAL_1, FINSEQOP,
       ZFMISC_1, VALUED_1, XXREAL_0, CARD_3, XCMPLX_0, SETWISEO, SETWOP_2,
       FINSOP_1, RVSUM_1;
- notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, VALUED_0, XBOOLE_0,
+ notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, CARD_1, NUMBERS, VALUED_0,
+      XBOOLE_0,
       XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, SQUARE_1, RELAT_1, FUNCT_1,
       PARTFUN1, BINOP_2, SETWISEO, FUNCT_2, BINOP_1, FUNCOP_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_4, VALUED_1, NAT_1, SEQ_1, FINSOP_1, FINSEQOP, SETWOP_2;
@@ -35,7 +36,7 @@ begin :: Auxiliary theorems
 
 registration
   let n be Nat;
-  cluster n-long natural-valued FinSequence;
+  cluster n-element natural-valued FinSequence;
   existence
   proof
     take n|->0;
@@ -246,7 +247,7 @@ definition
   end;
 end;
 
-Lm3: (multreal[;](r,id REAL)).r1 = r*r1
+Lm1: (multreal[;](r,id REAL)).r1 = r*r1
 proof
   reconsider a=r, s=r1 as Element of REAL by XREAL_0:def 1;
   thus (multreal[;](r,id REAL)).r1 = multreal.(a,(id REAL).s) by FUNCOP_1:66
@@ -257,7 +258,7 @@ end;
 canceled;
 
 theorem
-  (r multreal).r1 = r*r1 by Lm3;
+  (r multreal).r1 = r*r1 by Lm1;
 
 theorem
   r multreal is_distributive_wrt addreal
@@ -289,7 +290,7 @@ theorem
 
 :: Some Functors on the i-tuples on Real
 
-Lm4: F is FinSequence of REAL
+Lm2: F is FinSequence of REAL
 proof
   thus rng F c= REAL;
 end;
@@ -298,10 +299,10 @@ definition
   let F1,F2;
   redefine func F1 + F2 -> FinSequence of REAL equals
   addreal.:(F1,F2);
-  coherence by Lm4;
+  coherence by Lm2;
   compatibility
   proof
-    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm4;
+    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm2;
     let F be FinSequence of REAL;
     dom addreal = [:REAL,REAL:] by FUNCT_2:def 1;
     then [:rng F3, rng F4:] c= dom addreal by ZFMISC_1:119;
@@ -338,7 +339,7 @@ A4: F = addreal.:(F1,F2);
     let F1,F2;
     assume
 A5: F = addreal.:(F1,F2);
-    reconsider F1,F2 as FinSequence of REAL by Lm4;
+    reconsider F1,F2 as FinSequence of REAL by Lm2;
 A6: dom addreal = [:REAL,REAL:] by FUNCT_2:def 1;
     then
 A7: [:rng F2, rng F1:] c= dom addreal by ZFMISC_1:119;
@@ -392,7 +393,7 @@ end;
 theorem
   <*>REAL + F = <*>REAL
 proof
-  F is FinSequence of REAL by Lm4;
+  F is FinSequence of REAL by Lm2;
   hence thesis by FINSEQ_2:87;
 end;
 
@@ -431,7 +432,7 @@ definition
   let F;
   redefine func -F -> FinSequence of REAL equals
   compreal*F;
-  coherence by Lm4;
+  coherence by Lm2;
   compatibility
   proof
     let F1 be FinSequence of REAL;
@@ -529,32 +530,32 @@ theorem Th45:
   -(F1 + F2) = -F1 + -F2
 proof
 A1: dom -(F1 + F2) = dom(F1+F2) by VALUED_1:8;
-A4: dom(F1+F2) = dom F1 /\ dom F2 by VALUED_1:def 1;
-A2: dom (-F1 + -F2) = dom (-F1) /\ dom -F2 by VALUED_1:def 1
+A2: dom(F1+F2) = dom F1 /\ dom F2 by VALUED_1:def 1;
+A3: dom (-F1 + -F2) = dom (-F1) /\ dom -F2 by VALUED_1:def 1
     .= dom F1 /\ dom -F2 by VALUED_1:8
     .= dom F1 /\ dom F2 by VALUED_1:8;
   now
     let i;
     assume
-A3: i in dom -(F1+F2);
+A4: i in dom -(F1+F2);
     thus (-(F1 + F2)).i = -((F1+F2).i) by VALUED_1:8
-    .= -(F1.i+F2.i) by A1,A3,VALUED_1:def 1
+    .= -(F1.i+F2.i) by A1,A4,VALUED_1:def 1
     .= -(F1.i)+-(F2.i)
     .= -(F1.i) + (-F2).i by VALUED_1:8
     .= (-F1).i + (-F2).i by VALUED_1:8
-    .= (-F1 + -F2).i by A1,A4,A2,A3,VALUED_1:def 1;
+    .= (-F1 + -F2).i by A1,A2,A3,A4,VALUED_1:def 1;
   end;
-  hence thesis by A4,A2,FINSEQ_1:17,VALUED_1:8;
+  hence thesis by A2,A3,FINSEQ_1:17,VALUED_1:8;
 end;
 
 definition
   let F1,F2;
   redefine func F1 - F2 -> FinSequence of REAL equals
   diffreal.:(F1,F2);
-  coherence by Lm4;
+  coherence by Lm2;
   compatibility
   proof
-    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm4;
+    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm2;
     let F be FinSequence of REAL;
 A1: dom (F1-F2) = dom F1 /\ dom F2 by VALUED_1:12;
     dom diffreal = [:REAL,REAL:] by FUNCT_2:def 1;
@@ -620,7 +621,7 @@ end;
 theorem
   <*>REAL - F = <*>REAL & F - <*>REAL = <*>REAL
 proof
-  F is FinSequence of REAL by Lm4;
+  F is FinSequence of REAL by Lm2;
   hence thesis by FINSEQ_2:87;
 end;
 
@@ -722,7 +723,7 @@ definition
   let F,r;
   redefine func r*F -> FinSequence of REAL equals
   (r multreal)*F;
-  coherence by Lm4;
+  coherence by Lm2;
   compatibility
   proof
     let F1 be FinSequence of REAL;
@@ -739,7 +740,7 @@ A4:   F1 = r*F;
         assume
 A5:     c in dom F1;
         hence F1.c = r*(F.c) by A4,VALUED_1:def 5
-          .= (r multreal).(F.c) by Lm3
+          .= (r multreal).(F.c) by Lm1
           .= ((r multreal)*F).c by A1,A4,A5,FUNCT_1:23;
       end;
       hence thesis by A1,A3,A4,FUNCT_1:9;
@@ -751,7 +752,7 @@ A6: F1 = (r multreal)*F;
       assume
 A7:   c in dom F1;
       thus (r*F).c = r*(F.c) by VALUED_1:6
-        .= (r multreal).(F.c) by Lm3
+        .= (r multreal).(F.c) by Lm1
         .= ((r multreal)*F).c by A6,A7,FUNCT_1:22;
     end;
     hence thesis by A1,A2,A6,FUNCT_1:9,RELAT_1:46;
@@ -775,7 +776,7 @@ theorem
 proof
   reconsider s=r, s1=r1 as Element of REAL by XREAL_0:def 1;
   s*<*s1*> = <*(multreal[;](s,id REAL)).s1*> by FINSEQ_2:39
-    .= <*r*r1*> by Lm3;
+    .= <*r*r1*> by Lm1;
   hence thesis;
 end;
 
@@ -784,7 +785,7 @@ theorem Th70:
 proof
   reconsider s1=r1, s2=r2 as Element of REAL by XREAL_0:def 1;
   s1*(i|->s2) = i|->((multreal[;](s1,id REAL)).s2) by FINSEQOP:17
-    .= i|->(r1*r2) by Lm3;
+    .= i|->(r1*r2) by Lm1;
   hence thesis;
 end;
 
@@ -859,7 +860,7 @@ A3:   k in dom sqr F by FINSEQ_3:27;
     end;
     hence thesis;
   end;
-  coherence by Lm4;
+  coherence by Lm2;
 end;
 
 definition
@@ -909,9 +910,9 @@ end;
 theorem Th84:
   sqr (r*F) = r^2 * sqr F
 proof
-A2: dom (r*F) = dom F by VALUED_1:def 5;
-A3: dom (r^2 * sqr F) = dom sqr F by VALUED_1:def 5;
-A4: dom sqr F = dom F by VALUED_1:11;
+A1: dom (r*F) = dom F by VALUED_1:def 5;
+A2: dom (r^2 * sqr F) = dom sqr F by VALUED_1:def 5;
+A3: dom sqr F = dom F by VALUED_1:11;
     now
       let i;
       assume i in dom sqr (r*F);
@@ -921,7 +922,7 @@ A4: dom sqr F = dom F by VALUED_1:11;
       .= r^2 * (sqr F).i by VALUED_1:11
       .= (r^2 * sqr F).i by VALUED_1:6;
     end;
-    hence thesis by A2,A3,A4,FINSEQ_1:17,VALUED_1:11;
+    hence thesis by A1,A2,A3,FINSEQ_1:17,VALUED_1:11;
   end;
 
 notation
@@ -933,10 +934,10 @@ definition
   let F1,F2;
   redefine func mlt(F1,F2) -> FinSequence of REAL equals
   multreal.:(F1,F2);
-  coherence by Lm4;
+  coherence by Lm2;
   compatibility
   proof
-    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm4;
+    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm2;
     let F be FinSequence of REAL;
     dom multreal = [:REAL,REAL:] by FUNCT_2:def 1;
     then [:rng F3, rng F4:] c= dom multreal by ZFMISC_1:119;
@@ -971,7 +972,7 @@ A4: F = multreal.:(F1,F2);
   proof
     let F be FinSequence of REAL;
     let F1,F2;
-    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm4;
+    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm2;
 A5: dom multreal = [:REAL,REAL:] by FUNCT_2:def 1;
     then
 A6: [:rng F4, rng F3:] c= dom multreal by ZFMISC_1:119;
@@ -1012,7 +1013,7 @@ theorem ::=VALUED_1:5
 theorem
   mlt(<*>REAL,F) = <*>REAL
 proof
-  F is FinSequence of REAL by Lm4;
+  F is FinSequence of REAL by Lm2;
   hence thesis by FINSEQ_2:87;
 end;
 
@@ -1060,36 +1061,36 @@ theorem Th98:
   sqr(F1 + F2) = sqr F1 + 2*mlt(F1,F2) + sqr F2
 proof
 A1: dom sqr(F1 + F2) = dom (F1+F2) by VALUED_1:11;
-A3: dom(F1+F2) = dom F1 /\ dom F2 by VALUED_1:def 1;
-A5: dom(sqr F1 + 2*mlt(F1,F2))
+A2: dom(F1+F2) = dom F1 /\ dom F2 by VALUED_1:def 1;
+A3: dom(sqr F1 + 2*mlt(F1,F2))
     = dom(sqr F1) /\ dom (2*mlt(F1,F2)) by VALUED_1:def 1
     .= dom F1 /\ dom (2*mlt(F1,F2)) by VALUED_1:11
     .= dom F1 /\ dom (mlt(F1,F2)) by VALUED_1:def 5
     .= dom F1 /\ (dom F1 /\ dom F2) by VALUED_1:def 4
     .= dom F1 /\ dom F1 /\ dom F2 by XBOOLE_1:16
     .= dom F1 /\ dom F2;
-then A2: dom(sqr F1 + 2*mlt(F1,F2) + sqr F2)
+then A4: dom(sqr F1 + 2*mlt(F1,F2) + sqr F2)
     = dom F1 /\ dom F2 /\ dom sqr F2 by VALUED_1:def 1
     .= dom F1 /\ dom F2 /\ dom F2 by VALUED_1:11
     .= dom F1 /\ (dom F2 /\ dom F2) by XBOOLE_1:16;
   now
     let j;
     assume
-A4: j in dom sqr(F1+F2);
+A5: j in dom sqr(F1+F2);
     set r1r2 = (F1 + F2).j, r1 = F1.j, r2 = F2.j, r192 = (sqr F1).j,
     r292 = (sqr F2).j, r1r2a = mlt(F1,F2).j, 2r1r2 = (2*mlt(F1,F2)).j,
     r1922r1r2 = (sqr F1 + 2*mlt(F1,F2)).j;
     thus (sqr(F1 + F2)).j = r1r2^2 by VALUED_1:11
-      .= (r1 + r2)^2 by A1,A4,VALUED_1:def 1
+      .= (r1 + r2)^2 by A1,A5,VALUED_1:def 1
       .= r1^2+2*r1*r2+r2^2
       .= r192+2*(r1*r2)+r2^2 by VALUED_1:11
       .= r192+2*(r1*r2)+r292 by VALUED_1:11
       .= r192+2*(r1r2a)+r292 by VALUED_1:5
       .= r192+2r1r2+r292 by VALUED_1:6
-      .= r1922r1r2+r292 by A1,A3,A5,A4,VALUED_1:def 1
-      .= (sqr F1 + 2*mlt(F1,F2) + sqr F2).j by A1,A3,A2,A4,VALUED_1:def 1;
+      .= r1922r1r2+r292 by A1,A2,A3,A5,VALUED_1:def 1
+      .= (sqr F1 + 2*mlt(F1,F2) + sqr F2).j by A1,A2,A4,A5,VALUED_1:def 1;
   end;
-  hence thesis by A3,A2,FINSEQ_1:17,VALUED_1:11;
+  hence thesis by A2,A4,FINSEQ_1:17,VALUED_1:11;
 end;
 
 theorem Th99:
@@ -1105,10 +1106,10 @@ end;
 theorem
   sqr mlt(F1,F2) = mlt(sqr F1,sqr F2)
 proof
-A2: dom mlt(F1,F2) = dom F1 /\ dom F2 by VALUED_1:def 4;
-A3: dom mlt(sqr F1,sqr F2) = dom sqr F1 /\ dom sqr F2 by VALUED_1:def 4;
-A4: dom sqr F1 = dom F1 by VALUED_1:11;
-A5: dom sqr F2 = dom F2 by VALUED_1:11;
+A1: dom mlt(F1,F2) = dom F1 /\ dom F2 by VALUED_1:def 4;
+A2: dom mlt(sqr F1,sqr F2) = dom sqr F1 /\ dom sqr F2 by VALUED_1:def 4;
+A3: dom sqr F1 = dom F1 by VALUED_1:11;
+A4: dom sqr F2 = dom F2 by VALUED_1:11;
     now
       let i;
       assume i in dom sqr mlt(F1,F2);
@@ -1119,7 +1120,7 @@ A5: dom sqr F2 = dom F2 by VALUED_1:11;
       .= (sqr F1).i * (sqr F2).i by VALUED_1:11
       .= (mlt(sqr F1,sqr F2)).i by VALUED_1:5;
     end;
-    hence thesis by A2,A3,A4,A5,FINSEQ_1:17,VALUED_1:11;
+    hence thesis by A1,A2,A3,A4,FINSEQ_1:17,VALUED_1:11;
   end;
 
 :: Finite sum of Finite Sequence of Real Numbers
@@ -1292,7 +1293,7 @@ theorem Th104:
   Sum(F^<*r*>) = Sum F + r
 proof
   reconsider s=r as Element of REAL by XREAL_0:def 1;
-  reconsider F1=F as FinSequence of REAL by Lm4;
+  reconsider F1=F as FinSequence of REAL by Lm2;
   thus Sum(F^<*r*>) = Sum(F1^<*s*>) .= addreal.(addreal $$ F1,s) by FINSOP_1:5
     .= Sum F1 + r by BINOP_2:def 9
     .= Sum F + r;
@@ -1301,7 +1302,7 @@ end;
 theorem Th105:
   Sum(F1^F2) = Sum F1 + Sum F2
 proof
-  reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm4;
+  reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm2;
   thus Sum(F1^F2) = Sum(F3^F4)
     .= addreal.(addreal $$ F3,addreal $$ F4) by FINSOP_1:6
     .= Sum F3 + Sum F4 by BINOP_2:def 9
@@ -1380,10 +1381,10 @@ A5: R2 = R29^<*x2*> by FINSEQ_2:137;
     proof
       let j such that
 A6:   j in Seg i;
-      Seg len R29 = dom R29 & len R29 = i by FINSEQ_1:def 3,def 18;
+      Seg len R29 = dom R29 & len R29 = i by FINSEQ_1:def 3,CARD_1:def 13;
       then
 A7:   R29.j = R2.j by A5,A6,FINSEQ_1:def 7;
-      Seg len R19 = dom R19 & len R19 = i by FINSEQ_1:def 3,def 18;
+      Seg len R19 = dom R19 & len R19 = i by FINSEQ_1:def 3,CARD_1:def 13;
       then R19.j = R1.j by A4,A6,FINSEQ_1:def 7;
       hence thesis by A3,A6,A7,FINSEQ_2:9;
     end;
@@ -1425,10 +1426,10 @@ A7: for j st j in Seg i holds R19.j <= R29.j
     proof
       let j such that
 A8:   j in Seg i;
-      Seg len R29 = dom R29 & len R29 = i by FINSEQ_1:def 3,def 18;
+      Seg len R29 = dom R29 & len R29 = i by FINSEQ_1:def 3,CARD_1:def 13;
       then
 A9:   R29.j = R2.j by A6,A8,FINSEQ_1:def 7;
-      Seg len R19 = dom R19 & len R19 = i by FINSEQ_1:def 3,def 18;
+      Seg len R19 = dom R19 & len R19 = i by FINSEQ_1:def 3,CARD_1:def 13;
       then R19.j = R1.j by A5,A8,FINSEQ_1:def 7;
       hence thesis by A2,A8,A9,FINSEQ_2:9;
     end;
@@ -1438,12 +1439,12 @@ A11: R1.(i+1) = x1 by A5,FINSEQ_2:136;
       per cases by A3,FINSEQ_2:8;
       suppose
 A12:    j in Seg i;
-        Seg len R29 = dom R29 & len R29 = i by FINSEQ_1:def 3,def 18;
+        Seg len R29 = dom R29 & len R29 = i by FINSEQ_1:def 3,CARD_1:def 13;
         then
 A13:    R29.j = R2.j by A6,A12,FINSEQ_1:def 7;
 A14:    Sum R1 = Sum R19 + x1 & Sum R2 = Sum R29 + x2 by A5,A6,Th104;
 A15:    x1 <= x2 by A2,A11,A10,FINSEQ_1:6;
-        Seg len R19 = dom R19 & len R19 = i by FINSEQ_1:def 3,def 18;
+        Seg len R19 = dom R19 & len R19 = i by FINSEQ_1:def 3,CARD_1:def 13;
         then R19.j = R1.j by A5,A12,FINSEQ_1:def 7;
         then Sum R19 < Sum R29 by A1,A4,A7,A12,A13;
         hence Sum R1 < Sum R2 by A14,A15,XREAL_1:10;
@@ -1467,7 +1468,7 @@ end;
 theorem Th114:
   (for i st i in dom F holds 0 <= F.i) implies 0 <= Sum F
 proof
-  reconsider F1 = F as FinSequence of REAL by Lm4;
+  reconsider F1 = F as FinSequence of REAL by Lm2;
   set i = len F;
   set R1 = i|->(0 qua Real);
   reconsider R2 = F1 as Element of i-tuples_on REAL by FINSEQ_2:110;
@@ -1489,7 +1490,7 @@ theorem Th115:
   (for i st i in dom F holds 0 <= F.i) & (ex i st i in dom F & 0
   < F.i) implies 0 < Sum F
 proof
-  reconsider F1 = F as FinSequence of REAL by Lm4;
+  reconsider F1 = F as FinSequence of REAL by Lm2;
   set i = len F, R1 = i|->(0 qua Real);
   reconsider R2 = F1 as Element of i-tuples_on REAL by FINSEQ_2:110;
 A1: Seg len F = dom F by FINSEQ_1:def 3;
@@ -1524,18 +1525,18 @@ end;
 theorem Th117:
   Sum(r*F) = r*(Sum F)
 proof
-  reconsider F1=F as FinSequence of REAL by Lm4;
+  reconsider F1=F as FinSequence of REAL by Lm2;
   reconsider s=r as Element of REAL by XREAL_0:def 1;
   set rM = multreal[;](s,id REAL);
   thus Sum (r*F) = rM.(addreal $$ F1) by Th16,Th22,SETWOP_2:41
-    .= r*(Sum F1) by Lm3
+    .= r*(Sum F1) by Lm1
     .= r*(Sum F);
 end;
 
 theorem Th118:
   Sum -F = -(Sum F)
 proof
-  reconsider F1=F as FinSequence of REAL by Lm4;
+  reconsider F1=F as FinSequence of REAL by Lm2;
   thus Sum -F = compreal.(addreal $$ F1) by Th22,Th23,SETWOP_2:42
     .= -(Sum F1) by BINOP_2:def 7
     .= -(Sum F);
@@ -1561,8 +1562,8 @@ theorem
 proof
   assume
 A1: Sum sqr R = 0;
-A2: len R = i by FINSEQ_1:def 18;
-A3: len(i |-> 0) = i by FINSEQ_1:def 18;
+A2: len R = i by CARD_1:def 13;
+A3: len(i |-> 0) = i by CARD_1:def 13;
   assume R <> i |-> 0;
   then consider j such that
 A4: j in dom R and
@@ -1802,14 +1803,14 @@ definition
   compatibility by Th123;
 end;
 
-Lm5: for F being empty FinSequence holds Product F = 1
+Lm3: for F being empty FinSequence holds Product F = 1
 proof
   Product <*>REAL = 1 by BINOP_2:7,FINSOP_1:11;
   hence thesis;
 end;
 
 theorem Th124:
-  Product <*>REAL = 1 by Lm5;
+  Product <*>REAL = 1 by Lm3;
 
 registration
   let r be complex number;
@@ -1922,7 +1923,7 @@ proof
 end;
 
 theorem
-  for R being Element of 0-tuples_on REAL holds Product R = 1 by Lm5;
+  for R being Element of 0-tuples_on REAL holds Product R = 1 by Lm3;
 
 theorem
   Product (i|->1) = 1
@@ -1932,7 +1933,7 @@ proof
   hence thesis by BINOP_2:7;
 end;
 
-Lm6: for p being complex-valued FinSequence st len p <> 0 ex q being
+Lm4: for p being complex-valued FinSequence st len p <> 0 ex q being
 complex-valued FinSequence, d being complex number st p = q^<*d*>
 proof
   let p be complex-valued FinSequence;
@@ -1975,7 +1976,7 @@ A4: len F = i+1;
     then consider
     F9 being complex-valued FinSequence, x being complex number
     such that
-A5: F = F9^<*x*> by Lm6;
+A5: F = F9^<*x*> by Lm4;
 A6: len F = len F9 + 1 by A5,FINSEQ_2:19;
 A7: Product F = Product F9 * x by A5,Th126;
     thus (ex k st k in Seg (i+1) & F.k = 0) implies Product F = 0
@@ -2108,7 +2109,7 @@ reserve  n for Nat,
   x, y, a for real number,
    p, p1, p2, p3, q, q1, q2 for Element of n-tuples_on REAL;
 
-theorem Th5:
+theorem Th144:
   for x being real-valued FinSequence holds len (-x)=len x
 proof
   let x be real-valued FinSequence;
@@ -2116,14 +2117,14 @@ proof
   hence thesis by FINSEQ_3:31;
 end;
 
-theorem Th6:
+theorem Th145:
   for x1,x2 being real-valued FinSequence st len x1=len x2 holds
   len (x1+x2)=len x1
 proof
   let x1,x2 be real-valued FinSequence;
   set n=len x1;
-A1: x2 is FinSequence of REAL by Lm4;
-  x1 is FinSequence of REAL by Lm4;
+A1: x2 is FinSequence of REAL by Lm2;
+  x1 is FinSequence of REAL by Lm2;
   then reconsider z1=x1 as Element of (len x1)-tuples_on REAL by FINSEQ_2:110;
   assume len x1=len x2;
   then reconsider z2=x2 as Element of n-tuples_on REAL by A1,FINSEQ_2:110;
@@ -2131,14 +2132,14 @@ A1: x2 is FinSequence of REAL by Lm4;
   hence thesis by FINSEQ_1:def 3;
 end;
 
-theorem Th7:
+theorem Th146:
   for x1,x2 being real-valued FinSequence st len x1=len x2 holds
   len (x1-x2)=len x1
 proof
   let x1,x2 be real-valued FinSequence;
   set n=len x1;
-A1: x2 is FinSequence of REAL by Lm4;
-  x1 is FinSequence of REAL by Lm4;
+A1: x2 is FinSequence of REAL by Lm2;
+  x1 is FinSequence of REAL by Lm2;
   then reconsider z1=x1 as Element of (len x1)-tuples_on REAL by FINSEQ_2:110;
   assume len x1=len x2;
   then reconsider z2=x2 as Element of n-tuples_on REAL by A1,FINSEQ_2:110;
@@ -2146,35 +2147,35 @@ A1: x2 is FinSequence of REAL by Lm4;
   hence thesis by FINSEQ_1:def 3;
 end;
 
-theorem Th8:
+theorem Th147:
   for a being real number, x being real-valued FinSequence
    holds len (a*x)=len x
 proof
   let a be real number, x be real-valued FinSequence;
   set n=len x;
-  x is FinSequence of REAL by Lm4;
+  x is FinSequence of REAL by Lm2;
   then reconsider z=x as Element of n-tuples_on REAL by FINSEQ_2:110;
-  len (a*z)=n by FINSEQ_1:def 18;
+  len (a*z)=n by CARD_1:def 13;
   hence thesis;
 end;
 
-theorem Th9:
+theorem Th148:
   for x,y,z being real-valued FinSequence st len x=len y & len y=len z
   holds mlt(x+y,z) = mlt(x,z)+mlt(y,z)
 proof
   let x,y,z be real-valued FinSequence;
-A0:x is FinSequence of REAL & y is FinSequence of REAL &
-  z is FinSequence of REAL by Lm4;
+A1:x is FinSequence of REAL & y is FinSequence of REAL &
+  z is FinSequence of REAL by Lm2;
   assume len x=len y & len y=len z;
   then reconsider x2=x, y2=y, z2=z as Element of (len x)-tuples_on REAL by
-  A0,FINSEQ_2:110;
-A1: dom (mlt(x+y,z))=Seg len(mlt(x2+y2,z2)) by FINSEQ_1:def 3
-    .=Seg len x by FINSEQ_1:def 18
-    .=Seg len (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_1:def 18
+  A1,FINSEQ_2:110;
+A2: dom (mlt(x+y,z))=Seg len(mlt(x2+y2,z2)) by FINSEQ_1:def 3
+    .=Seg len x by CARD_1:def 13
+    .=Seg len (mlt(x2,z2)+mlt(y2,z2)) by CARD_1:def 13
     .= dom (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_1:def 3;
-A2: dom (mlt(x,z))=Seg len(mlt(x2,z2)) by FINSEQ_1:def 3
-    .=Seg len x by FINSEQ_1:def 18
-    .=Seg len (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_1:def 18
+A3: dom (mlt(x,z))=Seg len(mlt(x2,z2)) by FINSEQ_1:def 3
+    .=Seg len x by CARD_1:def 13
+    .=Seg len (mlt(x2,z2)+mlt(y2,z2)) by CARD_1:def 13
     .= dom (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_1:def 3;
   for i being Nat st i in dom (mlt(x+y,z)) holds mlt(x+y,z).i=(mlt(x,z)+
   mlt(y,z)).i
@@ -2183,19 +2184,19 @@ A2: dom (mlt(x,z))=Seg len(mlt(x2,z2)) by FINSEQ_1:def 3
     assume
 A4: i in dom mlt(x+y,z);
     set a=x.i, b=y.i, d=(x+y).i, e=z.i;
-    len (x2+y2)=len x by FINSEQ_1:def 18;
+    len (x2+y2)=len x by CARD_1:def 13;
     then dom (x2+y2)=Seg len x by FINSEQ_1:def 3
-      .=Seg len(mlt(x2,z2)) by FINSEQ_1:def 18
+      .=Seg len(mlt(x2,z2)) by CARD_1:def 13
       .=dom (mlt(x,z)) by FINSEQ_1:def 3;
     then
-A5: d=a+b by A1,A2,A4,VALUED_1:def 1;
+A5: d=a+b by A2,A3,A4,VALUED_1:def 1;
     thus mlt(x+y,z).i=d*e by VALUED_1:5
       .=a*e+b*e by A5
       .=mlt(x,z).i +b*e by VALUED_1:5
       .=mlt(x,z).i +mlt(y,z).i by VALUED_1:5
-      .=(mlt(x,z)+mlt(y,z)).i by A1,A4,VALUED_1:def 1;
+      .=(mlt(x,z)+mlt(y,z)).i by A2,A4,VALUED_1:def 1;
   end;
-  hence thesis by A1,FINSEQ_1:17;
+  hence thesis by A2,FINSEQ_1:17;
 end;
 
 begin :: Inner Product of Finite Sequences
@@ -2215,56 +2216,56 @@ definition
   commutativity;
 end;
 
-theorem Th11:
+theorem Th149:
   for x being real-valued FinSequence holds |(x,x)| >= 0
 proof
   let x be real-valued FinSequence;
   set n=len x;
-  x is FinSequence of REAL by Lm4;
+  x is FinSequence of REAL by Lm2;
   then reconsider w = x as Element of n-tuples_on REAL by FINSEQ_2:110;
   |(x, x)| = Sum sqr(w);
   hence thesis by Th116;
 end;
 
-theorem Th19:
+theorem Th150:
   for x,y,z being real-valued FinSequence st len x=len y & len y=len z
   holds |((x+y),z)| = |(x,z)| + |(y,z)|
 proof
   let x,y,z be real-valued FinSequence;
-A0:x is FinSequence of REAL & y is FinSequence of REAL &
-  z is FinSequence of REAL by Lm4;
+A1:x is FinSequence of REAL & y is FinSequence of REAL &
+  z is FinSequence of REAL by Lm2;
   assume
-A1: len x=len y & len y=len z;
+A2: len x=len y & len y=len z;
   then reconsider x2=x,y2=y,z2=z as Element of (len x)-tuples_on REAL by
-  A0,FINSEQ_2:110;
-  |((x+y),z)|= Sum(mlt(x,z)+mlt(y,z)) by A1,Th9
+  A1,FINSEQ_2:110;
+  |((x+y),z)|= Sum(mlt(x,z)+mlt(y,z)) by A2,Th148
     .= Sum(mlt(x2,z2))+Sum(mlt(y2,z2)) by Th119
     .= |(x,z)| + |(y,z)|;
   hence thesis;
 end;
 
-theorem Th20:
+theorem Th151:
   for x,y being real-valued FinSequence,a being real number st len x=
   len y holds |(a*x,y)| = a*|(x,y)|
 proof
   let x,y be real-valued FinSequence,a be real number;
   reconsider a2=a as Element of REAL by XREAL_0:def 1;
-A0:x is FinSequence of REAL & y is FinSequence of REAL by Lm4;
+A1:x is FinSequence of REAL & y is FinSequence of REAL by Lm2;
   assume len x=len y;
   then reconsider x2=x, y2 = y as Element of (len x)-tuples_on REAL by
-  A0,FINSEQ_2:110;
+  A1,FINSEQ_2:110;
   |(a*x,y)| =Sum(a2*mlt(x2,y2)) by FINSEQOP:27
     .=a*|(x,y)| by Th117;
   hence thesis;
 end;
 
-theorem Th22:
+theorem Th152:
   for x1,x2 being real-valued FinSequence st len x1=len x2 holds
   |(-x1, x2)| = -|(x1, x2)|
 proof
   let x1,x2 be real-valued FinSequence;
   assume len x1=len x2;
-  then |(-x1, x2)| = (-1)*|(x1, x2)| by Th20;
+  then |(-x1, x2)| = (-1)*|(x1, x2)| by Th151;
   hence thesis;
 end;
 
@@ -2275,13 +2276,13 @@ proof
   let x1,x2 be real-valued FinSequence;
   assume
 A1: len x1=len x2;
-  then len (-x2)=len x1 by Th5;
-  then |(-x1, -x2)| = -|(x1, -x2)| by Th22
-    .= --|(x1, x2)| by A1,Th22;
+  then len (-x2)=len x1 by Th144;
+  then |(-x1, -x2)| = -|(x1, -x2)| by Th152
+    .= --|(x1, x2)| by A1,Th152;
   hence thesis;
 end;
 
-theorem Th25:
+theorem Th154:
   for x1,x2,x3 being real-valued FinSequence st len x1=len x2 & len x2
   =len x3 holds |(x1-x2, x3)| = |(x1, x3)| - |(x2, x3)|
 proof
@@ -2289,9 +2290,9 @@ proof
   assume that
 A1: len x1=len x2 and
 A2: len x2=len x3;
-  len (-x2)=len x2 by Th5;
-  then |(x1 - x2, x3)| = |(x1, x3)| + |(-x2, x3)| by A1,A2,Th19
-    .= |(x1, x3)| + - |(x2, x3)| by A2,Th22;
+  len (-x2)=len x2 by Th144;
+  then |(x1 - x2, x3)| = |(x1, x3)| + |(-x2, x3)| by A1,A2,Th150
+    .= |(x1, x3)| + - |(x2, x3)| by A2,Th152;
   hence thesis;
 end;
 
@@ -2303,14 +2304,14 @@ proof
   assume that
 A1: len x1=len x2 and
 A2: len x2=len x3;
-  len (x*x1)=len x1 & len (y*x2)=len x2 by Th8;
-  then |(x*x1 + y*x2, x3)| = |(x*x1, x3)| + |(y*x2, x3)| by A1,A2,Th19
-    .= x*|(x1,x3)| + |(y*x2,x3)| by A1,A2,Th20
-    .= x*|(x1,x3)| + y*|(x2,x3)| by A2,Th20;
+  len (x*x1)=len x1 & len (y*x2)=len x2 by Th147;
+  then |(x*x1 + y*x2, x3)| = |(x*x1, x3)| + |(y*x2, x3)| by A1,A2,Th150
+    .= x*|(x1,x3)| + |(y*x2,x3)| by A1,A2,Th151
+    .= x*|(x1,x3)| + y*|(x2,x3)| by A2,Th151;
   hence thesis;
 end;
 
-theorem Th29:
+theorem Th156:
   for x1,x2,y1,y2 being real-valued FinSequence st len x1=len x2 & len
 x2=len y1 & len y1=len y2 holds |(x1+x2, y1+y2)| = |(x1, y1)| + |(x1, y2)| + |(
   x2, y1)| + |(x2, y2)|
@@ -2320,15 +2321,15 @@ proof
 A1: len x1=len x2 and
 A2: len x2=len y1 and
 A3: len y1=len y2;
-  |(x1+x2, y2)| = |(x1, y2)| + |(x2, y2)| by A1,A2,A3,Th19;
+  |(x1+x2, y2)| = |(x1, y2)| + |(x2, y2)| by A1,A2,A3,Th150;
   then
 A4: |(x1+x2, y1)| +|(x1+x2, y2)| = (|(x1, y1)|+|(x2, y1)|) + (|(x1, y2)| +
-  |(x2, y2)|) by A1,A2,Th19;
-  len (x1+x2)=len x1 by A1,Th6;
-  hence thesis by A1,A2,A3,A4,Th19;
+  |(x2, y2)|) by A1,A2,Th150;
+  len (x1+x2)=len x1 by A1,Th145;
+  hence thesis by A1,A2,A3,A4,Th150;
 end;
 
-theorem Th30:
+theorem Th157:
   for x1,x2,y1,y2 being real-valued FinSequence st len x1=len x2 & len
 x2=len y1 & len y1=len y2 holds |(x1-x2, y1-y2)| = |(x1, y1)| - |(x1, y2)| - |(
   x2, y1)| + |(x2, y2)|
@@ -2338,12 +2339,12 @@ proof
 A1: len x1=len x2 and
 A2: len x2=len y1 and
 A3: len y1=len y2;
-  |(x1,y1-y2)| = |(x1,y1)| - |(x1,y2)| by A1,A2,A3,Th25;
+  |(x1,y1-y2)| = |(x1,y1)| - |(x1,y2)| by A1,A2,A3,Th154;
   then
 A4: |(x1,y1-y2)| - |(x2,y1-y2)| = (|(x1,y1)|-|(x1,y2)|)-(|(x2,y1)|-|(x2,y2)|
-  ) by A2,A3,Th25;
-  len (y1 - y2)=len y1 by A3,Th7;
-  hence thesis by A1,A2,A4,Th25;
+  ) by A2,A3,Th154;
+  len (y1 - y2)=len y1 by A3,Th146;
+  hence thesis by A1,A2,A4,Th154;
 end;
 
 theorem
@@ -2353,7 +2354,7 @@ proof
   let x,y be real-valued FinSequence;
 A1: |(x, x)| + |(x, y)| + |(x, y)| = |(x, x)| + 2*|(x, y)|;
   assume len x=len y;
-  hence thesis by A1,Th29;
+  hence thesis by A1,Th156;
 end;
 
 theorem
@@ -2362,77 +2363,77 @@ theorem
 proof
   let x,y be real-valued FinSequence;
   assume len x=len y;
-  then |(x-y, x-y)| = |(x,x)| - |(x,y)| - |(y,x)| + |(y, y)| by Th30
+  then |(x-y, x-y)| = |(x,x)| - |(x,y)| - |(y,x)| + |(y, y)| by Th157
     .= |(x,x)| - 2*|(x,y)| + |(y, y)|;
   hence thesis;
 end;
 
-theorem Th40:
+theorem Th160:
   |(p1 + p2, p3)| = |(p1, p3)| + |(p2, p3)|
 proof
   reconsider f1=p1, f2=p2, f3=p3 as real-valued FinSequence;
-  len f2=n by FINSEQ_1:def 18;
-  then len f1=len f2 & len f2=len f3 by FINSEQ_1:def 18;
-  hence thesis by Th19;
+  len f2=n by CARD_1:def 13;
+  then len f1=len f2 & len f2=len f3 by CARD_1:def 13;
+  hence thesis by Th150;
 end;
 
-theorem Th41:
+theorem Th161:
   for x being real number holds |(x*p1, p2)| = x*|(p1, p2)|
 proof
   let x be real number;
   reconsider f1=p1,f2=p2 as real-valued FinSequence;
-  len f1=n & len f2=n by FINSEQ_1:def 18;
-  hence thesis by Th20;
+  len f1=n & len f2=n by CARD_1:def 13;
+  hence thesis by Th151;
 end;
 
-theorem Th43:
+theorem Th162:
   |(-p1, p2)| = -|(p1, p2)|
 proof
-  |(-p1, p2)| = |((-1)*p1, p2)| .= (-1)*|(p1, p2)| by Th41;
+  |(-p1, p2)| = |((-1)*p1, p2)| .= (-1)*|(p1, p2)| by Th161;
   hence thesis;
 end;
 
 theorem
   |(-p1, -p2)| = |(p1, p2)|
 proof
-  |(-p1, -p2)| = -|(p1, -p2)| by Th43
-    .= --|(p1, p2)| by Th43;
+  |(-p1, -p2)| = -|(p1, -p2)| by Th162
+    .= --|(p1, p2)| by Th162;
   hence thesis;
 end;
 
-theorem Th46:
+theorem Th164:
   |(p1-p2, p3)| = |(p1, p3)| - |(p2, p3)|
 proof
-  |(p1 - p2, p3)| = |(p1, p3)| + |(-p2, p3)| by Th40
-    .= |(p1, p3)| + - |(p2, p3)| by Th43;
+  |(p1 - p2, p3)| = |(p1, p3)| + |(-p2, p3)| by Th160
+    .= |(p1, p3)| + - |(p2, p3)| by Th162;
   hence thesis;
 end;
 
 theorem
   |((x*p1+y*p2), p3)| = x*|(p1,p3)| + y*|(p2,p3)|
 proof
-  |(x*p1 + y*p2, p3)| = |(x*p1, p3)| + |(y*p2, p3)| by Th40
-    .= x*|(p1,p3)| + |(y*p2,p3)| by Th41
-    .= x*|(p1,p3)| + y*|(p2,p3)| by Th41;
+  |(x*p1 + y*p2, p3)| = |(x*p1, p3)| + |(y*p2, p3)| by Th160
+    .= x*|(p1,p3)| + |(y*p2,p3)| by Th161
+    .= x*|(p1,p3)| + y*|(p2,p3)| by Th161;
   hence thesis;
 end;
 
-theorem Th50:
+theorem Th166:
   |(p1+p2, q1+q2)| = |(p1, q1)| + |(p1, q2)| + |(p2, q1)| + |(p2, q2)|
 proof
 A1: |(p1+p2, q1)| = |(p1, q1)| + |(p2, q1)| & |(p1+p2, q2)| = |(p1, q2)| +
-  |(p2, q2)| by Th40;
-  |(p1+p2, q1+q2)| = |(p1+p2, q1)| + |(p1+p2, q2)| by Th40
+  |(p2, q2)| by Th160;
+  |(p1+p2, q1+q2)| = |(p1+p2, q1)| + |(p1+p2, q2)| by Th160
     .= |(p1, q1)|+|(p1, q2)|+|(p2, q1)|+|(p2, q2)| by A1;
   hence thesis;
 end;
 
-theorem Th51:
+theorem Th167:
   |(p1-p2, q1-q2)| = |(p1, q1)| - |(p1, q2)| - |(p2, q1)| + |(p2, q2)|
 proof
 A1: |(p1,q1-q2)| = |(p1,q1)| - |(p1,q2)| & |(p2,q1-q2)| = |(p2,q1)| - |(p2,
-  q2)| by Th46;
-  |(p1-p2, q1-q2)| = |(p1, q1-q2)| - |(p2, q1-q2)| by Th46
+  q2)| by Th164;
+  |(p1-p2, q1-q2)| = |(p1, q1-q2)| - |(p2, q1-q2)| by Th164
     .= |(p1,q1)|-|(p1,q2)|-|(p2,q1)|+|(p2,q2)| by A1;
   hence thesis;
 end;
@@ -2441,13 +2442,13 @@ theorem
   |(p+q, p+q)| = |(p, p)| + 2*|(p, q)| + |(q, q)|
 proof
   |(p, p)| + |(p, q)| + |(p, q)| = |(p, p)| + 2*|(p, q)|;
-  hence thesis by Th50;
+  hence thesis by Th166;
 end;
 
-theorem Th53:
+theorem Th169:
   |(p-q, p-q)| = |(p, p)| - 2*|(p, q)| + |(q, q)|
 proof
-  |(p-q, p-q)| = |(p,p)| - |(p,q)| - |(p,q)| + |(q, q)| by Th51
+  |(p-q, p-q)| = |(p,p)| - |(p,q)| - |(p,q)| + |(q, q)| by Th167
     .= |(p,p)| - 2*|(p,q)| + |(q, q)|;
   hence thesis;
 end;
@@ -2455,12 +2456,12 @@ end;
 theorem
   |(p,q)| <= |(p,p)| + |(q,q)|
 proof
-  0 <= |(p,p)| & 0 <= |(q,q)| by Th11;
+  0 <= |(p,p)| & 0 <= |(q,q)| by Th149;
   then
 A1: 0/2 <= (|(p,p)| + |(q,q)|)/2;
-  |(p-q, p-q)| = |(p,p)| - 2*|(p,q)| + |(q,q)| by Th53
+  |(p-q, p-q)| = |(p,p)| - 2*|(p,q)| + |(q,q)| by Th169
     .= |(p,p)| + |(q,q)| - 2*|(p,q)|;
-  then 2*|(p,q)| <= |(p,p)| + |(q,q)| - 0 by Th11,XREAL_1:13;
+  then 2*|(p,q)| <= |(p,p)| + |(q,q)| - 0 by Th149,XREAL_1:13;
   then (2*|(p,q)|)/2 <= (|(p,p)| + |(q,q)|)/2 by XREAL_1:74;
   then (0 qua Element of NAT) + |(p,q)|
    <= (|(p,p)| + |(q,q)|)/2 + (|(p,p)| + |(q,q)|)/2 by A1,
@@ -2471,7 +2472,7 @@ end;
 definition
   let p, q be real-valued FinSequence;
   pred p,q are_orthogonal means
-  :Def3:
+  :Def18:
   |(p,q)| = 0;
   symmetry;
 end;
@@ -2480,12 +2481,12 @@ theorem
   p, q are_orthogonal implies a*p,q are_orthogonal
 proof
   assume p, q are_orthogonal;
-  then |(p,q)|=0 by Def3;
+  then |(p,q)|=0 by Def18;
   then a*(|(p,q)|)=0;
-  then |(a*p,q)|=0 by Th41;
-  hence thesis by Def3;
+  then |(a*p,q)|=0 by Th161;
+  hence thesis by Def18;
 end;
- 
+
 :: 2009.08.15, from TURING_0, A.T.
 
 theorem

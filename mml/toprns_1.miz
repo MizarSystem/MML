@@ -8,23 +8,27 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, SEQ_1, NAT_1, EUCLID, REAL_1, PRE_TOPC,
       FUNCT_1, RELAT_1, VALUED_0, TARSKI, STRUCT_0, SUPINF_2, ARYTM_3, ARYTM_1,
-      COMPLEX1, VALUED_1, CARD_1, XXREAL_0, XXREAL_2, SEQ_2, ORDINAL2;
- notations TARSKI, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, VALUED_1, COMPLEX1,
-      REAL_1, PRE_TOPC, XXREAL_0, NAT_1, SEQ_1, STRUCT_0, RLVECT_1, EUCLID;
+      COMPLEX1, VALUED_1, CARD_1, XXREAL_0, XXREAL_2, SEQ_2, ORDINAL2,
+      XBOOLE_0, PARTFUN1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, VALUED_1,
+      PARTFUN1,
+      COMPLEX1, REAL_1, PRE_TOPC, XXREAL_0, NAT_1, SEQ_1, STRUCT_0, RLVECT_1,
+      VFUNCT_1, EUCLID;
  constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, MONOID_0, EUCLID, SEQ_1,
-      RELSET_1, VALUED_0, BINOP_2;
+      RELSET_1, VALUED_0, BINOP_2, VFUNCT_1;
  registrations ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0,
-      MONOID_0, EUCLID, XBOOLE_0, VALUED_1, FUNCT_2, NUMBERS, VALUED_0;
+      MONOID_0, EUCLID, XBOOLE_0, VALUED_1, FUNCT_2, NUMBERS, VALUED_0,
+      NAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions STRUCT_0;
+ definitions FUNCT_2, STRUCT_0, VFUNCT_1;
  theorems FUNCT_1, FUNCT_2, TARSKI, EUCLID, SEQ_1, NAT_1, XBOOLE_0, NORMSP_1,
-      XCMPLX_0, XREAL_1, COMPLEX1, XXREAL_0;
- schemes SEQ_1, NAT_1, FUNCT_2;
+      XCMPLX_0, XREAL_1, COMPLEX1, XXREAL_0, VFUNCT_1, ORDINAL1;
+ schemes SEQ_1, NAT_1;
 
 begin
 
 definition
-  let N be Element of NAT;
+  let N be Nat;
   mode Real_Sequence of N is sequence of TOP-REAL N;
 end;
 
@@ -102,94 +106,55 @@ proof
 end;
 
 definition
-  let N,seq1,seq2;
-  func seq1 + seq2 -> Real_Sequence of N means
-  :Def2:
-  for n holds it.n = seq1. n + seq2.n;
-  existence
+  let N be Nat,seq1,seq2 be Real_Sequence of N;
+  func seq1 + seq2 -> Real_Sequence of N equals
+  seq1 + seq2;
+  coherence
   proof
-    deffunc U(Element of NAT) = seq1.$1 + seq2.$1;
-    thus ex s being Real_Sequence of N st for n holds s.n = U(n) from FUNCT_2:
-    sch 4;
-  end;
-  uniqueness
-  proof
-    let seq,seq9 such that
-A1: for n holds seq.n=seq1.n+seq2.n and
-A2: for n holds seq9.n=seq1.n+seq2.n;
-    now
-      let n;
-      seq.n=seq1.n+seq2.n by A1;
-      hence seq.n=seq9.n by A2;
-    end;
-    hence thesis by FUNCT_2:113;
+A1: dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
+    dom (seq1+seq2) = dom seq1 /\ dom seq2 by VFUNCT_1:def 1;
+    hence thesis by A1,FUNCT_2:130;
   end;
 end;
 
 definition
-  let r,N,seq;
-  func r*seq -> Real_Sequence of N means
-  : Def3:
-  for n holds it.n = r*seq.n;
-  existence
+  let r;
+  let N be Nat,seq be Real_Sequence of N;
+  func r * seq -> Real_Sequence of N equals
+  r(#)seq;
+  coherence
   proof
-    deffunc U(Element of NAT) = r * seq.$1;
-    thus ex s being Real_Sequence of N st for n holds s.n = U(n) from FUNCT_2:
-    sch 4;
-  end;
-  uniqueness
-  proof
-    let seq1,seq2 such that
-A1: for n holds seq1.n=r*seq.n and
-A2: for n holds seq2.n=r*seq.n;
-    now
-      let n;
-      seq1.n=r*seq.n by A1;
-      hence seq1.n=seq2.n by A2;
-    end;
-    hence thesis by FUNCT_2:113;
+A1: dom seq = NAT by FUNCT_2:def 1;
+    dom (r(#)seq) = dom seq by VFUNCT_1:def 4;
+    hence thesis by A1,FUNCT_2:130;
   end;
 end;
 
 definition
-  let N,seq;
-  func - seq -> Real_Sequence of N means
-  :Def4:
-  for n holds it.n = -seq.n;
-  existence
+  let N be Nat,seq be Real_Sequence of N;
+  func - seq -> Real_Sequence of N equals
+  - seq;
+  coherence
   proof
-    take seq1=(-1)*seq;
-    let n;
-    thus seq1.n=(-1)*seq.n by Def3
-      .=-(seq.n) by EUCLID:43;
-  end;
-  uniqueness
-  proof
-    let seq1,seq2 such that
-A1: for n holds seq1.n=-seq.n and
-A2: for n holds seq2.n=-seq.n;
-    now
-      let n;
-      seq1.n=-seq.n by A1;
-      hence seq1.n=seq2.n by A2;
-    end;
-    hence thesis by FUNCT_2:113;
+A1: dom seq = NAT by FUNCT_2:def 1;
+    dom (-seq) = dom seq by VFUNCT_1:def 6;
+    hence thesis by A1,FUNCT_2:130;
   end;
 end;
 
 definition
-  let N,seq1,seq2;
-  func seq1-seq2 -> Real_Sequence of N equals
+  let N be Nat,seq1,seq2 be Real_Sequence of N;
+  func seq1 - seq2 -> Real_Sequence of N equals
   seq1 +- seq2;
   correctness;
 end;
 
 definition
   canceled;
-  let N,seq;
+  let N be Nat,seq be Real_Sequence of N;
   func |.seq.| -> Real_Sequence means
   :Def7:
-  for n holds it.n=|.seq.n.|;
+  for n holds it.n = |.seq.n.|;
   existence
   proof
     deffunc U(Element of NAT) = |.seq.$1.|;
@@ -200,17 +165,48 @@ definition
     let seq8,seq9 be Real_Sequence such that
 A1: for n holds seq8.n=|.seq.n.| and
 A2: for n holds seq9.n=|.seq.n.|;
-    now
-      let n;
-      seq9.n=|.seq.n.| by A2;
-      hence seq8.n=seq9.n by A1;
-    end;
-    hence thesis by FUNCT_2:113;
+    let n;
+    seq9.n=|.seq.n.| by A2;
+    hence seq8.n=seq9.n by A1;
   end;
 end;
 
-canceled 3;
+theorem LmDef2:
+  for N,n be Nat,seq1,seq2 be Real_Sequence of N holds
+  (seq1+seq2).n = seq1.n + seq2.n
+  proof
+    let N,n be Nat,seq1,seq2 be Real_Sequence of N;
+    reconsider m = n as Element of NAT by ORDINAL1:def 13;
+A1: dom(seq1+seq2) = NAT by FUNCT_2:def 1;
+    thus (seq1+seq2).n = (seq1+seq2)/.m
+    .= seq1/.m + seq2/.m by A1,VFUNCT_1:def 1
+    .= seq1.n + seq2.n;
+  end;
 
+theorem LmDef3:
+  for N,n be Nat,seq be Real_Sequence of N holds
+  (r*seq).n = r*seq.n
+  proof
+    let N,n be Nat,seq be Real_Sequence of N;
+    reconsider m = n as Element of NAT by ORDINAL1:def 13;
+A1: dom(r*seq) = NAT by FUNCT_2:def 1;
+    thus (r*seq).n = (r*seq)/.m
+    .= r*seq/.m by A1,VFUNCT_1:def 4
+    .= r*seq.n;
+ end;
+
+theorem LmDef4:
+  for N,n be Nat,seq be Real_Sequence of N holds
+  (-seq).n = -seq.n 
+  proof
+    let N,n be Nat,seq be Real_Sequence of N;
+    reconsider m = n as Element of NAT by ORDINAL1:def 13;
+A1: dom(-seq) = NAT by FUNCT_2:def 1;
+    thus (-seq).n = (-seq)/.m
+    .= -seq/.m by A1,VFUNCT_1:def 6
+    .= -seq.n;
+  end;
+  
 theorem Th8:
   abs(r)*|.w.| = |.r*w.|
 proof
@@ -222,80 +218,62 @@ end;
 theorem
   |.r*seq.| = abs(r)(#)|.seq.|
 proof
-  now
-    let n;
-    thus |.r*seq.|.n=|.(r*seq).n.| by Def7
-      .=|.r*(seq.n).| by Def3
-      .=abs(r)*|.seq.n.| by Th8
-      .=abs(r)*(|.seq.|).n by Def7
-      .=(abs(r)(#)|.seq.|).n by SEQ_1:13;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus |.r*seq.|.n=|.(r*seq).n.| by Def7
+    .=|.r*(seq.n).| by LmDef3
+    .=abs(r)*|.seq.n.| by Th8
+    .=abs(r)*(|.seq.|).n by Def7
+    .=(abs(r)(#)|.seq.|).n by SEQ_1:13;
 end;
 
 theorem
   seq1 + seq2 = seq2 + seq1
 proof
-  now
-    let n;
-    thus (seq1+seq2).n = seq2.n + seq1.n by Def2
-      .= (seq2 + seq1).n by Def2;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (seq1+seq2).n = seq1.n + seq2.n by LmDef2
+    .= (seq2 + seq1).n by LmDef2;
 end;
 
 theorem Th11:
   (seq1 + seq2) + seq3 = seq1 + (seq2 + seq3)
 proof
-  now
-    let n;
-    thus ((seq1+seq2)+seq3).n = (seq1+seq2).n+ seq3.n by Def2
-      .= seq1.n+seq2.n+seq3.n by Def2
-      .=seq1.n+(seq2.n+seq3.n) by EUCLID:30
-      .=seq1.n+(seq2+seq3).n by Def2
-      .=(seq1+(seq2+seq3)).n by Def2;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus ((seq1+seq2)+seq3).n = (seq1+seq2).n+ seq3.n by LmDef2
+    .= seq1.n+seq2.n+seq3.n by LmDef2
+    .=seq1.n+(seq2.n+seq3.n) by EUCLID:30
+    .=seq1.n+(seq2+seq3).n by LmDef2
+    .=(seq1+(seq2+seq3)).n by LmDef2;
 end;
 
 theorem Th12:
   -seq = (-1)*seq
 proof
-  now
-    let n;
-    thus ((-1)*seq).n=(-1)*seq.n by Def3
-      .=-seq.n by EUCLID:43
-      .=(-seq).n by Def4;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus ((-1)*seq).n=(-1)*seq.n by LmDef3
+    .=-seq.n by EUCLID:43
+    .=(-seq).n by LmDef4;
 end;
 
 theorem Th13:
   r*(seq1 + seq2) = r*seq1 + r*seq2
 proof
-  now
-    let n;
-    thus (r*(seq1 + seq2)).n=r*(seq1+seq2).n by Def3
-      .=r*(seq1.n+seq2.n) by Def2
-      .=r*seq1.n+r*seq2.n by EUCLID:36
-      .=(r*seq1).n+r*seq2.n by Def3
-      .=(r*seq1).n+(r*seq2).n by Def3
-      .=((r*seq1)+(r*seq2)).n by Def2;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (r*(seq1 + seq2)).n=r*(seq1+seq2).n by LmDef3
+    .=r*(seq1.n+seq2.n) by LmDef2
+    .=r*seq1.n+r*seq2.n by EUCLID:36
+    .=(r*seq1).n+r*seq2.n by LmDef3
+    .=(r*seq1).n+(r*seq2).n by LmDef3
+    .=((r*seq1)+(r*seq2)).n by LmDef2;
 end;
 
 theorem Th14:
   (r*q)*seq = r*(q*seq)
 proof
-  now
-    let n;
-    thus ((r*q)*seq).n=(r*q)*seq.n by Def3
-      .=r*(q*seq.n) by EUCLID:34
-      .=r*(q*seq).n by Def3
-      .=(r*(q*seq)).n by Def3;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus ((r*q)*seq).n=(r*q)*seq.n by LmDef3
+    .=r*(q*seq.n) by EUCLID:34
+    .=r*(q*seq).n by LmDef3
+    .=(r*(q*seq)).n by LmDef3;
 end;
 
 theorem Th15:
@@ -321,12 +299,9 @@ end;
 theorem Th17:
   1*seq=seq
 proof
-  now
-    let n;
-    thus (1*seq).n=1*seq.n by Def3
-      .=seq.n by EUCLID:33;
-  end;
-  hence thesis by FUNCT_2:113;
+  let n;
+  thus (1*seq).n=1*seq.n by LmDef3
+    .=seq.n by EUCLID:33;
 end;
 
 theorem Th18:
@@ -365,7 +340,7 @@ A3: not r*seq is non-zero;
   consider n1 such that
 A4: (r*seq).n1=0.TOP-REAL N by A3,Th4;
 A5: seq.n1 <> 0.TOP-REAL N by A2,Th4;
-  r*seq.n1=0.TOP-REAL N by A4,Def3;
+  r*seq.n1=0.TOP-REAL N by A4,LmDef3;
   hence contradiction by A1,A5,EUCLID:35;
 end;
 
@@ -548,7 +523,7 @@ A13: X[0]
     thus 0<r;
     let m;
     assume m<=0;
-    then 0=m by NAT_1:2;
+    then 0=m;
     then |.seq.m.|+0<r by XREAL_1:10;
     hence thesis;
   end;
@@ -647,7 +622,7 @@ A8: k<=m;
   then n2<=m by A8,XXREAL_0:2;
   then
 A9: |.seq9.m-g2.|<r/2 by A7;
-A10: |.(seq+seq9).m-g.|=|.seq.m+seq9.m-(g1+g2).| by Def2
+A10: |.(seq+seq9).m-g.|=|.seq.m+seq9.m-(g1+g2).| by LmDef2
     .=|.seq.m+(seq9.m-(g1+g2)).| by EUCLID:49
     .=|.seq.m+((-(g1+g2))+seq9.m).| by EUCLID:45
     .=|.seq.m+-(g1+g2)+seq9.m.| by EUCLID:30
@@ -689,7 +664,7 @@ A7: k<=m;
 A8: |.seq9.m-(lim seq9).|<r/2 by A6;
 A9: |.((seq+seq9).m)-((lim seq)+(lim seq9)).| =|.((seq+seq9).m)-(lim seq)
     -(lim seq9).| by EUCLID:50
-      .=|.seq.m+seq9.m-(lim seq)-(lim seq9).| by Def2
+      .=|.seq.m+seq9.m-(lim seq)-(lim seq9).| by LmDef2
       .=|.seq.m+(seq9.m-(lim seq))-(lim seq9).| by EUCLID:49
       .=|.seq.m+(-(lim seq)+seq9.m)-(lim seq9).| by EUCLID:45
       .=|.seq.m+-(lim seq)+seq9.m-(lim seq9).| by EUCLID:30
@@ -737,7 +712,7 @@ A9: abs(r)*(q/abs(r))=abs(r)*(abs(r)"*q) by XCMPLX_0:def 9
       .=abs(r)*abs(r)"*q
       .=1*q by A8,XCMPLX_0:def 7
       .=q;
-    |.((r*seq).m)-g.|=|.r*seq.m-r*g1.| by Def3
+    |.((r*seq).m)-g.|=|.r*seq.m-r*g1.| by LmDef3
       .=|.r*(seq.m-g1).| by EUCLID:53
       .=abs(r)*|.seq.m-g1.| by Th8;
     hence |.((r*seq).m)-g.|<q by A5,A7,A9,XREAL_1:70;
@@ -755,7 +730,7 @@ A11: 0<q;
       .=|.0.TOP-REAL N+-((0 * seq).m).| by EUCLID:45
       .=|.-((0 * seq).m).| by EUCLID:31
       .=|.(0 * seq).m.| by EUCLID:75
-      .=|.0 * seq.m.| by Def3
+      .=|.0 * seq.m.| by LmDef3
       .=|.0.TOP-REAL N.| by EUCLID:33
       .=0 by Th24;
     hence |.((r*seq).m)-g.|<q by A11;
@@ -775,7 +750,7 @@ A3: 0<q;
     let m such that
     k<=m;
     r*(lim seq)=0.TOP-REAL N by A2,EUCLID:33;
-    then |.((r*seq).m)-r*(lim seq).|=|.0 * seq.m-0.TOP-REAL N.| by A2,Def3
+    then |.((r*seq).m)-r*(lim seq).|=|.0 * seq.m-0.TOP-REAL N.| by A2,LmDef3
       .=|.0.TOP-REAL N-0 * seq.m.| by Th28
       .=|.0.TOP-REAL N+-0 * seq.m.| by EUCLID:45
       .=|.-0 * seq.m.| by EUCLID:31
@@ -807,7 +782,7 @@ A12: abs(r)*(q/abs(r))=abs(r)*(abs(r)"*q) by XCMPLX_0:def 9
       .=abs(r)*abs(r)"*q
       .=1*q by A11,XCMPLX_0:def 7
       .=q;
-    |.((r*seq).m)-r*(lim seq).|=|.r*seq.m-r*(lim seq).| by Def3
+    |.((r*seq).m)-r*(lim seq).|=|.r*seq.m-r*(lim seq).| by LmDef3
       .=|.r*(seq.m-(lim seq)).| by EUCLID:53
       .=abs(r)*|.seq.m-(lim seq).| by Th8;
     hence |.((r*seq).m)-r*(lim seq).|<q by A8,A10,A12,XREAL_1:70;
@@ -845,8 +820,8 @@ A2: seq9 is convergent;
 end;
 
 theorem
-  seq is convergent & seq9 is convergent implies lim(seq - seq9)=(lim
-  seq)-(lim seq9)
+  seq is convergent & seq9 is convergent implies
+  lim(seq - seq9) = (lim seq)-(lim seq9)
 proof
   assume that
 A1: seq is convergent and

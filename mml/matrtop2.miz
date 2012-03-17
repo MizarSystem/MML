@@ -1,0 +1,1806 @@
+:: Linear Transformations of Euclidean Topological Spaces. Part {II}
+::  by Karol P\kak
+::
+:: Received October 26, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies ALGSTR_0, ARYTM_1, ARYTM_3, CARD_1, CARD_3, CLASSES1, ENTROPY1,
+      EUCLID, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSET_1, FUNCT_1, FUNCT_2,
+      FVSUM_1, INCSP_1, LMOD_7, MATRIX_1, MATRIX_3, MATRIX13, MATRLIN,
+      MATRLIN2, MESFUNC1, NAT_1, NUMBERS, ORDINAL4, PARTFUN1, PBOOLE, PRE_TOPC,
+      PRVECT_1, QC_LANG1, RANKNULL, RELAT_1, RLAFFIN1, RLSUB_1, RLVECT_1,
+      RLVECT_2, RLVECT_3, RLVECT_5, RVSUM_1, SEMI_AF1, STRUCT_0, SUBSET_1,
+      SUPINF_2, TARSKI, TREES_1, VALUED_0, VALUED_1, VECTSP_1, VECTSP10,
+      XBOOLE_0, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, CARD_1, NUMBERS, XXREAL_0,
+      NAT_1, FINSET_1, FUNCT_1, RELSET_1, PARTFUN1, VALUED_0, FUNCT_2,
+      FINSEQ_1, FINSEQ_2, FINSEQ_3, STRUCT_0, RLVECT_1, RLVECT_2, RLVECT_3,
+      VECTSP_1, MATRIX_1, FVSUM_1, MATRIX_3, VECTSP_4, VECTSP_6, VECTSP_7,
+      MATRIX13, RVSUM_1, ALGSTR_0, RANKNULL, BINOP_2, PRE_TOPC, MATRIX_6,
+      MATRLIN, MATRLIN2, NAT_D, EUCLID, GROUP_1, MATRIX11, FINSEQOP, ENTROPY1,
+      RLSUB_1, RUSUB_4, PRVECT_1, RLAFFIN1, MATRTOP1;
+ constructors BINARITH, ENTROPY1, FVSUM_1, LAPLACE, MATRIX_6, MATRIX11,
+      MATRIX13, MATRLIN2, MATRTOP1, MONOID_0, RANKNULL, REALSET1, RELSET_1,
+      RLAFFIN1, RLVECT_3, RUSUB_5, SEQ_1, SQUARE_1, VECTSP10, MATRIX15;
+ registrations CARD_1, EUCLID, FINSEQ_1, FINSEQ_2, FINSET_1, FUNCT_1, FUNCT_2,
+      MATRIX13, MATRLIN2, MATRTOP1, MEMBERED, MONOID_0, NAT_1, NUMBERS,
+      PRVECT_1, REALSET1, RELAT_1, RELSET_1, RLAFFIN1, RLVECT_3, RVSUM_1,
+      STRUCT_0, RLVECT_2, VALUED_0, VECTSP_1, VECTSP_9, XBOOLE_0, XREAL_0,
+      XXREAL_0;
+ requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
+ definitions EUCLID, FINSEQ_1, MATRIX13, MATRTOP1, STRUCT_0, TARSKI, VECTSP_1,
+      XBOOLE_0;
+ theorems CARD_1, CARD_2, ENTROPY1, EUCLID, FINSEQ_1, FINSEQ_2, FINSEQ_3,
+      FINSEQ_4, FINSEQ_6, FUNCT_1, FUNCT_2, FVSUM_1, LAPLACE, MATRIX_1,
+      MATRIX_2, MATRIX_6, MATRIX13, MATRIXR1, MATRLIN, MATRLIN2, MATRPROB,
+      MATRTOP1, NAT_1, ORDINAL1, PARTFUN1, PRE_POLY, RANKNULL, RELAT_1,
+      RLAFFIN1, RLSUB_1, RLVECT_1, RLVECT_2, RLVECT_3, RLVECT_5, RVSUM_1,
+      STRUCT_0, SUBSET_1, TARSKI, TOPREAL7, VECTSP_1, VECTSP_4, VECTSP_6,
+      VECTSP_7, VECTSP_9, XBOOLE_0, XBOOLE_1, XREAL_0, XREAL_1, ZFMISC_1;
+ schemes FINSEQ_1, FUNCT_2, NAT_1;
+
+begin :: Correspondence Between Euclidean Topological Space and Vector
+      :: Space over F_Real
+
+reserve X for set,
+        n,m,k for Nat,
+        K for Field,
+        f for n-element real-valued FinSequence,
+        M for Matrix of n,m,F_Real;
+
+Lm1: the carrier of n-VectSp_over F_Real=the carrier of TOP-REAL n
+proof
+  thus the carrier of n-VectSp_over F_Real=REAL n by MATRIX13:102
+   .=the carrier of TOP-REAL n by EUCLID:25;
+end;
+
+Lm2: 0.(n-VectSp_over F_Real)=0.(TOP-REAL n)
+proof
+  thus 0.(n-VectSp_over F_Real)=n|->(0.F_Real) by MATRIX13:102
+   .=0*n
+   .=0.(TOP-REAL n) by EUCLID:74;
+end;
+
+Lm3: f is Point of TOP-REAL n
+proof
+  len f=n & @@f = f by CARD_1:def 13;
+  hence thesis by TOPREAL7:18;
+end;
+
+theorem Th1:
+  X is Linear_Combination of n-VectSp_over F_Real
+iff
+  X is Linear_Combination of TOP-REAL n
+proof
+  set V=n-VectSp_over F_Real;
+  set T=TOP-REAL n;
+  hereby assume X is Linear_Combination of V;
+   then reconsider L=X as Linear_Combination of V;
+   consider S be finite Subset of V such that
+    A1: for v be Element of V st not v in S holds L.v=0.F_Real
+    by VECTSP_6:def 4;
+   A2: now let v be Element of T;
+    assume A3: not v in S;
+    v is Element of V by Lm1;
+    hence 0=L.v by A1,A3;
+   end;
+   (L is Element of Funcs(the carrier of T,REAL)) & S is finite Subset of T
+   by Lm1;
+   hence X is Linear_Combination of T by A2,RLVECT_2:def 5;
+  end;
+  assume X is Linear_Combination of T;
+  then reconsider L=X as Linear_Combination of T;
+  consider S be finite Subset of T such that
+   A4: for v be Element of T st not v in S holds L.v=0 by RLVECT_2:def 5;
+  A5: now let v be Element of V;
+   assume A6: not v in S;
+   v is Element of T by Lm1;
+   hence 0.F_Real=L.v by A4,A6;
+  end;
+  L is Element of Funcs(the carrier of V,the carrier of F_Real) &
+   S is finite Subset of V by Lm1;
+  hence thesis by A5,VECTSP_6:def 4;
+end;
+
+theorem Th2:
+  for Lv be Linear_Combination of n-VectSp_over F_Real,
+      Lr be Linear_Combination of TOP-REAL n st Lr = Lv
+  holds Carrier Lr = Carrier Lv
+proof
+  set V=n-VectSp_over F_Real;
+  set T=TOP-REAL n;
+  let Lv be Linear_Combination of V,
+      Lr be Linear_Combination of T such that
+   A1: Lr=Lv;
+  thus Carrier Lr c=Carrier Lv
+  proof
+   let x be set;
+   assume A2: x in Carrier Lr;
+   then reconsider v=x as Element of T;
+   reconsider u=v as Element of V by Lm1;
+   Lv.u<>0.F_Real by A1,A2,RLVECT_2:28;
+   hence thesis by VECTSP_6:19;
+  end;
+  let x be set;
+  assume x in Carrier Lv;
+  then consider u be Element of V such that
+   A3: x=u and
+   A4: Lv.u<>0.F_Real by VECTSP_6:19;
+  reconsider v=u as Element of T by Lm1;
+  v in Carrier Lr by A1,A4,RLVECT_2:28;
+  hence thesis by A3;
+end;
+
+theorem Th3:
+  for F be FinSequence of TOP-REAL n,
+      fr be Function of TOP-REAL n,REAL,
+      Fv be FinSequence of n-VectSp_over F_Real,
+      fv be Function of n-VectSp_over F_Real,F_Real st fr = fv & F = Fv
+  holds fr(#)F = fv(#)Fv
+proof
+  let F be FinSequence of TOP-REAL n,
+   fr be Function of TOP-REAL n,REAL,
+   Fv be FinSequence of n-VectSp_over F_Real,
+   fv be Function of n-VectSp_over F_Real,F_Real;
+  assume that
+   A1: fr=fv and
+   A2: F=Fv;
+  A3: len(fv(#)Fv)=len Fv by VECTSP_6:def 8;
+  A4: len(fr(#)F)=len F by RLVECT_2:def 9;
+  now reconsider T=TOP-REAL n as RealLinearSpace;
+   let i be Nat;
+   reconsider Fi=F/.i as FinSequence of REAL by EUCLID:27;
+   reconsider Fvi=Fv/.i as Element of n-tuples_on the carrier of F_Real
+     by MATRIX13:102;
+   reconsider Fii=F/.i as Element of T;
+   assume A5: 1<=i & i<=len F;
+   then A6: i in dom(fv(#)Fv) by A2,A3,FINSEQ_3:27;
+   i in dom F by A5,FINSEQ_3:27;
+   then A7: F/.i=F.i by PARTFUN1:def 8;
+   i in dom Fv by A2,A5,FINSEQ_3:27;
+   then A8: Fv/.i=Fv.i by PARTFUN1:def 8;
+   i in dom(fr(#)F) by A4,A5,FINSEQ_3:27;
+   hence (fr(#)F).i=fr.Fii*Fii by RLVECT_2:def 9
+    .=fr.Fi*Fi by EUCLID:69
+    .=fv.(Fv/.i)*Fvi by A1,A2,A7,A8,MATRIXR1:17
+    .=fv.(Fv/.i)*(Fv/.i) by MATRIX13:102
+    .=(fv(#)Fv).i by A6,VECTSP_6:def 8;
+  end;
+  hence thesis by A2,A4,A3,FINSEQ_1:18;
+end;
+
+theorem Th4:
+  for F be FinSequence of TOP-REAL n,
+      Fv be FinSequence of n-VectSp_over F_Real st Fv = F
+  holds Sum F = Sum Fv
+proof
+  set T=TOP-REAL n;
+  set V=n-VectSp_over F_Real;
+  let F be FinSequence of T;
+  let Fv be FinSequence of V such that
+   A1: Fv=F;
+  reconsider T=TOP-REAL n as RealLinearSpace;
+  consider f be Function of NAT,the carrier of T such that
+   A2: Sum F=f.(len F) and
+   A3: f.0=0.T and
+   A4: for j be Element of NAT,v be Element of T st j<len F & v=F.(j+1)
+     holds f.(j+1)=f.j+v by RLVECT_1:def 15;
+  consider fv be Function of NAT,the carrier of V such that
+   A5: Sum Fv=fv.(len Fv) and
+   A6: fv.0=0.V and
+   A7: for j be Element of NAT,v be Element of V st j<len Fv & v=Fv.(j+1)
+    holds fv.(j+1)=fv.j+v by RLVECT_1:def 15;
+  defpred P[Nat] means
+   $1<=len F implies f.$1=fv.$1;
+  A8: for i be Element of NAT st P[i] holds P[i+1]
+  proof
+   let i be Element of NAT such that
+    A9: P[i];
+   set i1=i+1;
+   reconsider Fvi1=Fv/.i1,fvi=fv.i as Element of n-tuples_on
+     the carrier of F_Real by MATRIX13:102;
+   A10: @@Fvi1=Fvi1 & @@fvi=fvi;
+   reconsider Fi1=F/.i1 as Element of T;
+   assume A11: i1<=len F;
+   then A12: i<len F by NAT_1:13;
+   1<=i1 by NAT_1:11;
+   then A13: i1 in dom F by A11,FINSEQ_3:27;
+   then F.i1=F/.i1 by PARTFUN1:def 8;
+   then A14: f.i1=f.i+Fi1 by A4,A12;
+   A15: Fv/.i1=Fv.i1 by A1,A13,PARTFUN1:def 8;
+   then Fvi1=F/.i1 by A1,A13,PARTFUN1:def 8;
+   hence f.i1=@fvi+@Fvi1 by A9,A11,A14,EUCLID:68,NAT_1:13
+    .=fvi+Fvi1 by A10,MATRTOP1:1
+    .=fv.i+Fv/.i1 by MATRIX13:102
+    .=fv.i1 by A1,A7,A12,A15;
+  end;
+  A16: P[0] by A3,A6,Lm2;
+  for n be Element of NAT holds P[n] from NAT_1:sch 1(A16,A8);
+  hence thesis by A1,A2,A5;
+end;
+
+theorem Th5:
+  for Lv be Linear_Combination of n-VectSp_over F_Real,
+      Lr be Linear_Combination of TOP-REAL n st Lr = Lv
+  holds Sum Lr = Sum Lv
+proof
+  set V=n-VectSp_over F_Real;
+  set T=TOP-REAL n;
+  let Lv be Linear_Combination of V;
+  let Lr be Linear_Combination of T such that
+   A1: Lr=Lv;
+  consider F be FinSequence of the carrier of T such that
+   A2: (F is one-to-one) & rng F=Carrier(Lr) and
+   A3: Sum Lr=Sum(Lr(#)F) by RLVECT_2:def 10;
+  reconsider F1=F as FinSequence of the carrier of V by Lm1;
+  A4: Lr(#)F=Lv(#)F1 by A1,Th3;
+  Carrier(Lr)=Carrier(Lv) by A1,Th2;
+  hence Sum Lv=Sum(Lv(#)F1) by A2,VECTSP_6:def 9
+   .=Sum Lr by A3,A4,Th4;
+end;
+
+theorem Th6:
+  for Af be Subset of n-VectSp_over F_Real,
+      Ar be Subset of TOP-REAL n st Af = Ar
+  holds [#]Lin Ar = [#]Lin Af
+proof
+  set V=n-VectSp_over F_Real;
+  set T=TOP-REAL n;
+  let Af be Subset of V;
+  let Ar be Subset of T such that
+   A1: Af=Ar;
+  hereby let x be set;
+   assume x in [#]Lin Ar;
+   then x in Lin Ar by STRUCT_0:def 5;
+   then consider L be Linear_Combination of Ar such that
+    A2: x=Sum L by RLVECT_3:17;
+   reconsider L1=L as Linear_Combination of V by Th1;
+   Carrier L1=Carrier L & Carrier L c=Ar by Th2,RLVECT_2:def 8;
+   then A3: L1 is Linear_Combination of Af by A1,VECTSP_6:def 7;
+   Sum L1=Sum L by Th5;
+   then x in Lin Af by A2,A3,VECTSP_7:12;
+   hence x in [#]Lin Af by STRUCT_0:def 5;
+  end;
+  let x be set;
+  assume x in [#]Lin Af;
+  then x in Lin Af by STRUCT_0:def 5;
+  then consider L be Linear_Combination of Af such that
+   A4: x=Sum L by VECTSP_7:12;
+  reconsider L1=L as Linear_Combination of T by Th1;
+  Carrier L1=Carrier L & Carrier L c=Af by Th2,VECTSP_6:def 7;
+  then A5: L1 is Linear_Combination of Ar by A1,RLVECT_2:def 8;
+  Sum L1=Sum L by Th5;
+  then x in Lin Ar by A4,A5,RLVECT_3:17;
+  hence thesis by STRUCT_0:def 5;
+end;
+
+theorem Th7:
+  for Af be Subset of n-VectSp_over F_Real,
+      Ar be Subset of TOP-REAL n st Af = Ar
+  holds
+    Af is linearly-independent
+  iff
+    Ar is linearly-independent
+proof
+  set V=n-VectSp_over F_Real;
+  let AV be Subset of V;
+  set T=TOP-REAL n;
+  let AR be Subset of T such that
+   A1: AV=AR;
+  hereby assume A2: AV is linearly-independent;
+   now let L be Linear_Combination of AR;
+    reconsider L1=L as Linear_Combination of V by Th1;
+    A3: Carrier L1=Carrier L by Th2;
+    assume Sum L=0.T;
+    then A4: 0.V=Sum L by Lm2
+     .=Sum L1 by Th5;
+    Carrier L c=AR by RLVECT_2:def 8;
+    then L1 is Linear_Combination of AV by A1,A3,VECTSP_6:def 7;
+    hence Carrier L={} by A2,A3,A4,VECTSP_7:def 1;
+   end;
+   hence AR is linearly-independent by RLVECT_3:def 1;
+  end;
+  assume A5: AR is linearly-independent;
+  now let L be Linear_Combination of AV;
+   reconsider L1=L as Linear_Combination of T by Th1;
+   A6: Carrier L1=Carrier L by Th2;
+   Carrier L c=AV by VECTSP_6:def 7;
+   then reconsider L1 as Linear_Combination of AR by A1,A6,RLVECT_2:def 8;
+   assume Sum L=0.V;
+   then 0.T=Sum L by Lm2
+    .=Sum L1 by Th5;
+   hence Carrier L={} by A5,A6,RLVECT_3:def 1;
+  end;
+  hence thesis by VECTSP_7:def 1;
+end;
+
+theorem Th8:
+  for V be VectSp of K, W be Subspace of V, L be Linear_Combination of V
+  holds L|the carrier of W is Linear_Combination of W
+proof
+  let V be VectSp of K;
+  let W be Subspace of V;
+  let L be Linear_Combination of V;
+  set cW=the carrier of W;
+  cW c=[#]V by VECTSP_4:def 2;
+  then L|cW is Function of cW,the carrier of K by FUNCT_2:38;
+  then reconsider L1=L|cW as Element of Funcs(cW,the carrier of K)
+    by FUNCT_2:11;
+  A1: for v be Element of W st not v in Carrier L/\cW holds L1.v=0.K
+  proof
+   let v be Element of W;
+   reconsider w=v as Element of V by VECTSP_4:18;
+   assume not v in Carrier L/\cW;
+   then A2: not v in Carrier L by XBOOLE_0:def 4;
+   L.w=L1.v by FUNCT_1:72;
+   hence thesis by A2,VECTSP_6:20;
+  end;
+  Carrier L/\cW c=cW by XBOOLE_1:17;
+  hence thesis by A1,VECTSP_6:def 4;
+end;
+
+theorem
+  for V be VectSp of K, A be linearly-independent Subset of V
+  for L1,L2 be Linear_Combination of V st
+     Carrier L1 c= A & Carrier L2 c= A & Sum L1 = Sum L2
+  holds L1 = L2
+proof
+  let V be VectSp of K;
+  let A be linearly-independent Subset of V;
+  let L1,L2 be Linear_Combination of V such that
+   A1: Carrier L1 c=A & Carrier L2 c=A and
+   A2: Sum L1=Sum L2;
+  (L1 is Linear_Combination of A) & L2 is Linear_Combination of A
+    by A1,VECTSP_6:def 7;
+  then A3: L1-L2 is Linear_Combination of A by VECTSP_6:75;
+  Sum(L1-L2)=Sum L1-Sum L2 by VECTSP_6:80
+   .=0.V by A2,RLVECT_1:28;
+  then Carrier(L1-L2)={} by A3,VECTSP_7:def 1;
+  then ZeroLC(V)=L1-L2 by VECTSP_6:def 6
+   .=L1+-L2 by VECTSP_6:def 14
+   .=-L2+L1 by VECTSP_6:53;
+  then L1=--L2 by VECTSP_6:68;
+  hence thesis;
+end;
+
+theorem
+  for V be RealLinearSpace, W be Subspace of V
+  for L be Linear_Combination of V
+  holds L|the carrier of W is Linear_Combination of W
+proof
+  let V be RealLinearSpace;
+  let W be Subspace of V;
+  let L be Linear_Combination of V;
+  set cW=the carrier of W;
+  cW c=[#]V by RLSUB_1:def 2;
+  then L|cW is Function of cW,REAL by FUNCT_2:38;
+  then reconsider L1=L|cW as Element of Funcs(cW,REAL) by FUNCT_2:11;
+  A1: for v be Element of W st not v in Carrier L/\cW holds L1.v=0
+  proof
+   let v be Element of W;
+   reconsider w=v as Element of V by RLSUB_1:18;
+   assume not v in Carrier L/\cW;
+   then A2: not v in Carrier L by XBOOLE_0:def 4;
+   L.w=L1.v by FUNCT_1:72;
+   hence thesis by A2,RLVECT_2:28;
+  end;
+  Carrier L/\cW c=cW by XBOOLE_1:17;
+  hence thesis by A1,RLVECT_2:def 5;
+end;
+
+theorem
+  for U be Subspace of n-VectSp_over F_Real,
+      W be Subspace of TOP-REAL n st [#]U = [#]W
+  holds
+    X is Linear_Combination of U
+  iff
+    X is Linear_Combination of W
+proof
+  set V=n-VectSp_over F_Real;
+  set T=TOP-REAL n;
+  let U be Subspace of V,W be Subspace of T such that
+   A1: [#]U=[#]W;
+  hereby assume X is Linear_Combination of U;
+   then reconsider L=X as Linear_Combination of U;
+   ex S be finite Subset of U st
+     for v be Element of U st not v in S holds L.v=0.F_Real
+     by VECTSP_6:def 4;
+   hence X is Linear_Combination of W by A1,RLVECT_2:def 5;
+  end;
+  assume X is Linear_Combination of W;
+  then reconsider L=X as Linear_Combination of W;
+  consider S be finite Subset of W such that
+   A2: for v be Element of W st not v in S holds L.v=0 by RLVECT_2:def 5;
+  for v be Element of U st not v in S holds 0.F_Real=L.v by A1,A2;
+  hence thesis by A1,VECTSP_6:def 4;
+end;
+
+theorem
+  for U be Subspace of n-VectSp_over F_Real, W be Subspace of TOP-REAL n
+  for LU be Linear_Combination of U, LW be Linear_Combination of W st LU = LW
+  holds Carrier LU = Carrier LW & Sum LU = Sum LW
+proof
+  set V=n-VectSp_over F_Real;
+  set T=TOP-REAL n;
+  let U be Subspace of V,W be Subspace of TOP-REAL n;
+  let LU be Linear_Combination of U,LW be Linear_Combination of W such that
+   A1: LU=LW;
+  reconsider LW9=LW as Function of the carrier of W,REAL;
+  defpred P[set,set] means
+   ($1 in W & $2=LW.$1) or(not$1 in W & $2=0);
+  A2: dom LU=[#]U & dom LW=[#]W by FUNCT_2:def 1;
+  A3: for x be set st x in the carrier of T ex y be set st y in REAL & P[x,y]
+  proof
+   let x be set;
+   assume x in the carrier of T;
+   then reconsider x as VECTOR of T;
+   per cases;
+   suppose A4: x in W;
+    then reconsider x as VECTOR of W by STRUCT_0:def 5;
+    P[x,LW.x] by A4;
+    hence thesis;
+   end;
+   suppose not x in W;
+    hence thesis;
+   end;
+  end;
+  consider L be Function of the carrier of T,REAL such that
+   A5: for x be set st x in the carrier of T holds P[x,L.x] from FUNCT_2:sch 1
+(A3);
+  A6: the carrier of W c=the carrier of T by RLSUB_1:def 2;
+  then reconsider C=Carrier(LW) as finite Subset of T by XBOOLE_1:1;
+  A7: L is Element of Funcs(the carrier of T,REAL) by FUNCT_2:11;
+  now let v be VECTOR of T;
+   assume not v in C;
+   then P[v,LW.v] & not v in C & v in the carrier of W or P[v,0]
+     by STRUCT_0:def 5;
+   then P[v,LW.v] & LW.v=0 or P[v,0] by RLVECT_2:28;
+   hence L.v=0 by A5;
+  end;
+  then reconsider L as Linear_Combination of T by A7,RLVECT_2:def 5;
+  reconsider L9=L|the carrier of W as Function of the carrier of W,REAL
+    by A6,FUNCT_2:38;
+  now let x be set;
+   assume A8: x in the carrier of W;
+   then P[x,L.x] by A6,A5;
+   hence LW9.x=L9.x by A8,FUNCT_1:72,STRUCT_0:def 5;
+  end;
+  then A9: LW=L9 by FUNCT_2:18;
+  reconsider K=L as Linear_Combination of V by Th1;
+  now let x be set;
+   assume that
+    A10: x in Carrier(L) and
+    A11: not x in the carrier of W;
+   consider v being VECTOR of T such that
+    A12: x=v and
+    A13: L.v<>0 by A10,RLVECT_5:3;
+   P[v,0] by A11,A12,STRUCT_0:def 5;
+   hence contradiction by A5,A13;
+  end;
+  then A14: Carrier(L)c=the carrier of W by TARSKI:def 3;
+  then A15: Carrier(L)=Carrier(LW) & Sum(L)=Sum(LW) by A9,RLVECT_5:11;
+  A16: Carrier(L)=Carrier(K) by Th2;
+  then Sum K=Sum LU by A1,A2,A14,A9,VECTSP_9:11;
+  hence thesis by A1,A2,A9,A15,A16,Th5,VECTSP_9:11;
+end;
+
+registration
+  let m,K;
+  let A be Subset of m-VectSp_over K;
+  cluster Lin A -> finite-dimensional;
+  coherence;
+end;
+
+Lm4: lines M c=[#]Lin lines M
+proof
+  let x be set;
+  assume x in lines M;
+  then x in Lin lines M by VECTSP_7:13;
+  hence thesis by STRUCT_0:def 5;
+end;
+
+begin :: Correspondence Between the Mx2Tran Operator and Decomposition of
+      :: a Vector in Basis
+
+theorem
+  the_rank_of M = n implies M is OrdBasis of Lin lines M
+proof
+  A1: lines M c=[#]Lin lines M by Lm4;
+  then reconsider L=lines M as Subset of Lin lines M;
+  reconsider B=M as FinSequence of Lin lines M by A1,FINSEQ_1:def 4;
+  assume that
+   A2: the_rank_of M=n;
+  A3: M is one-to-one by A2,MATRIX13:121;
+  lines M is linearly-independent by A2,MATRIX13:121;
+  then A4: L is linearly-independent by VECTSP_9:16;
+  Lin L=Lin lines M by VECTSP_9:21;
+  then L is Basis of Lin lines M by A4,VECTSP_7:def 3;
+  then B is OrdBasis of Lin lines M by A3,MATRLIN:def 4;
+  hence thesis;
+end;
+
+theorem Th14:
+  for V,W be VectSp of K
+  for T be linear-transformation of V,W
+  for A be Subset of V for L be Linear_Combination of A st T|A is one-to-one
+  holds T.(Sum L) = Sum (T@L)
+proof
+  let V,W be VectSp of K;
+  let T be linear-transformation of V,W;
+  let A be Subset of V;
+  let L be Linear_Combination of A;
+  consider G being FinSequence of V such that
+   A1: G is one-to-one and
+   A2: rng G=Carrier L and
+   A3: Sum L=Sum(L(#)G) by VECTSP_6:def 9;
+  set H=T*G;
+  reconsider H as FinSequence of W;
+  Carrier L c=A by VECTSP_6:def 7;
+  then A4: (T|A) | (Carrier L)=T| (Carrier L) by RELAT_1:103;
+  assume A5: T|A is one-to-one;
+  then A6: T| (Carrier L) is one-to-one by A4,FUNCT_1:84;
+  A7: rng H=T.:(Carrier L) by A2,RELAT_1:160
+   .=Carrier(T@L) by A6,RANKNULL:39;
+  dom T=[#]V by FUNCT_2:def 1;
+  then H is one-to-one by A5,A4,A1,A2,FUNCT_1:84,RANKNULL:1;
+  then A8: Sum(T@L)=Sum((T@L)(#)H) by A7,VECTSP_6:def 9;
+  T*(L(#)G)=(T@L)(#)H by A6,A2,RANKNULL:38;
+  hence thesis by A3,A8,MATRLIN:20;
+end;
+
+Lm5: card lines M=1 implies ex L be Linear_Combination of
+lines M st Sum L=(Mx2Tran M).f &
+  for k  st k in Seg n holds L.Line(M,k)=Sum f & M"{Line(M,k)}=dom f
+proof
+ assume that
+  A2: card lines M=1;
+ per cases;
+ suppose A1: n<>0;
+  deffunc F(set)=0.F_Real;
+  A3: len M=n by A1,MATRIX13:1;
+  reconsider Sf=Sum f as Element of F_Real by XREAL_0:def 1;
+  set Mf=(Mx2Tran M).f;
+  A4: len Mf=m by CARD_1:def 13;
+  A5: len f=n by CARD_1:def 13;
+  set V=m-VectSp_over F_Real;
+  consider x be set such that
+   A6: lines M={x} by A2,CARD_2:60;
+  x in lines M by A6,TARSKI:def 1;
+  then consider j be set such that
+   A7: j in dom M and
+   A8: M.j=x by FUNCT_1:def 5;
+  reconsider j as Nat by A7;
+  A9: width M=m by A1,MATRIX13:1;
+  then reconsider LMj=Line(M,j) as Element of V by MATRIX13:102;
+  consider L be Function of the carrier of V,the carrier of F_Real such that
+   A10: L.LMj=1.F_Real and
+   A11: for z be Element of V st z<>LMj holds L.z=F(z) from FUNCT_2:sch 6;
+  reconsider L as Element of Funcs(the carrier of V,the carrier of F_Real)
+    by FUNCT_2:11;
+  A12: x=Line(M,j) by A7,A8,MATRIX_2:18;
+  A13: now let z be Vector of V such that
+    A14: not z in lines M;
+   z<>LMj by A6,A12,A14,TARSKI:def 1;
+   hence L.z=0.F_Real by A11;
+  end;
+  A15: len(Sf*Line(M,j))=m by A9,CARD_1:def 13;
+  A16: now len@f=n by CARD_1:def 13;
+   then reconsider F=@f as Element of n-tuples_on the carrier of F_Real
+     by FINSEQ_2:110;
+   let w be Nat;
+   set Mjw=M*(j,w);
+   A17: n in NAT by ORDINAL1:def 13;
+   assume A18: 1<=w & w<=m;
+   then A19: w in dom(Sf*Line(M,j)) by A15,FINSEQ_3:27;
+   A20: w in Seg m by A18,FINSEQ_1:3;
+   then A21: Line(M,j).w=Mjw by A9,MATRIX_1:def 8;
+   A22: now let z be Nat;
+    assume A23: 1<=z & z<=n;
+    then A24: z in Seg n by FINSEQ_1:3;
+    then A25: Line(M,z) in lines M by MATRIX13:103;
+    z in dom M by A3,A23,FINSEQ_3:27;
+    hence Col(M,w).z=M*(z,w) by MATRIX_1:def 9
+     .=Line(M,z).w by A9,A20,MATRIX_1:def 8
+     .=Mjw by A6,A12,A21,A25,TARSKI:def 1
+     .=(n|->Mjw).z by A24,FINSEQ_2:71;
+   end;
+   len Col(M,w)=n & len(n|->Mjw)=n by A3,CARD_1:def 13;
+   then A26: Col(M,w)=(n|->Mjw) by A22,FINSEQ_1:18;
+   thus Mf.w=@f"*"Col(M,w) by A1,A18,MATRTOP1:18
+    .=Sum mlt(@f,Col(M,w)) by FVSUM_1:def 10
+    .=Sum(Mjw*F) by A26,A17,FVSUM_1:80
+    .=Mjw*Sum@f by FVSUM_1:92
+    .=Mjw*Sf by MATRPROB:36
+    .=(Sf*Line(M,j)).w by A19,A21,FVSUM_1:62;
+  end;
+  reconsider L as Linear_Combination of V by A13,VECTSP_6:def 4;
+  Carrier L c={LMj}
+  proof
+   let x be set such that
+    A27: x in Carrier L;
+   L.x<>0.F_Real by A27,VECTSP_6:20;
+   then x=LMj by A11,A27;
+   hence thesis by TARSKI:def 1;
+  end;
+  then reconsider L as Linear_Combination of lines M by A6,A12,VECTSP_6:def 7;
+  A28: Sum L=1.F_Real*LMj by A6,A12,A10,VECTSP_6:43
+   .=LMj by VECTSP_1:def 29;
+  reconsider SfL=Sf*L as Linear_Combination of lines M by VECTSP_6:61;
+  take SfL;
+  Sum SfL=Sf*Sum L by VECTSP_6:78
+   .=Sf*Line(M,j) by A9,A28,MATRIX13:102;
+  hence Sum SfL=Mf by A15,A4,A16,FINSEQ_1:18;
+  let w be Nat such that
+   A29: w in Seg n;
+  Line(M,w) in lines M by A29,MATRIX13:103;
+  then A30: Line(M,w)=LMj by A6,A12,TARSKI:def 1;
+  thus Sum f = Sf*1.F_Real
+   .=SfL.Line(M,w) by A10,A30,VECTSP_6:def 12;
+  thus M"{Line(M,w)}=dom M by A6,A12,A30,RELAT_1:169
+   .=dom f by A3,A5,FINSEQ_3:31;
+ end;
+ suppose B1: n=0;
+  reconsider L=ZeroLC(m-VectSp_over F_Real)
+    as Linear_Combination of lines M by VECTSP_6:26;
+  take L;
+  thus Sum L = 0.(m-VectSp_over F_Real) by VECTSP_6:41
+  .= 0.(TOP-REAL m) by Lm2
+  .= (Mx2Tran M).f by B1,MATRTOP1:def 3;
+  thus thesis by B1;
+ end;
+end;
+
+theorem Th15:
+  for S be Subset of Seg n st M|S is one-to-one & rng(M|S) = lines M
+  ex L be Linear_Combination of lines M st
+    Sum L = (Mx2Tran M).f &
+    for k st k in S holds L.Line(M,k) = Sum Seq(f|M"{Line(M,k)})
+proof
+  defpred P[Nat] means
+   for n,m,M,f for S be Subset of Seg n st
+     (n=0 implies m=0) & M|S is one-to-one
+     & rng(M|S)=lines M & card lines M=$1
+   ex L be Linear_Combination of lines M st
+     Sum L=(Mx2Tran M).f &
+     for i be Nat st i in S holds L.Line(M,i)=Sum Seq(f|M"{Line(M,i)});
+  A1: for i be Nat st P[i] holds P[i+1]
+  proof
+   let i be Nat such that
+    A2: P[i];
+   let n,m,M,f;
+   let S be Subset of Seg n such that
+    A3: n=0 implies m=0 and
+    A4: M|S is one-to-one and
+    A5: rng(M|S)=lines M and
+    A6: card lines M=i+1;
+   A7: len M=n by A3,MATRIX13:1;
+   A8: width M=m by A3,MATRIX13:1;
+   per cases;
+   suppose i=0;
+    then consider L be Linear_Combination of lines M such that
+     A9: Sum L=(Mx2Tran M).f and
+     A10: for i be Nat st i in Seg n holds L.Line(M,i)=Sum f &
+      M"{Line(M,i)}= dom f by A6,Lm5;
+    take L;
+    thus Sum L=(Mx2Tran M).f by A9;
+    let w be Nat such that
+     A11: w in S;
+    M"{Line(M,w)}=dom f by A10,A11;
+    then A12: f|M"{Line(M,w)}=f by RELAT_1:98;
+    L.Line(M,w)=Sum f by A10,A11;
+    hence Sum Seq(f|M"{Line(M,w)})=L.Line(M,w) by A12,FINSEQ_3:125;
+   end;
+   suppose A13: i>0;
+    lines M<>{} by A6;
+    then consider x be set such that
+     A14: x in lines M by XBOOLE_0:def 1;
+    reconsider LM={x} as Subset of lines M by A14,ZFMISC_1:37;
+    set n1=n-' card(M"LM);
+    reconsider ML1=M-LM as Matrix of n1,m,F_Real by MATRTOP1:14;
+    A15: LM`=(lines M)\LM by SUBSET_1:def 5;
+    then A16: LM misses LM` by XBOOLE_1:79;
+    LM\/LM`=[#]lines M by SUBSET_1:25
+     .=lines M by SUBSET_1:def 4;
+    then A17: M"LM\/M"(LM`)=M"(rng M) by RELAT_1:175
+     .=dom M by RELAT_1:169;
+    A18: len ML1=len M-card(M"LM) by FINSEQ_3:66;
+    then A19: n-card(M"LM)=n1 by A7,XREAL_1:51,235;
+    LM misses LM` by A15,XBOOLE_1:79;
+    then A20: card(M"LM)+card(M"(LM`))=card dom M by A17,CARD_2:53,FUNCT_1:141
+     .=n by A7,CARD_1:104;
+    A21: n1<>0
+    proof
+     assume n1=0;
+     then M"LM`={} by A7,A18,A20,XREAL_1:51,235;
+     then LM`misses rng M by RELAT_1:173;
+     then {}=(lines M)\LM by A15,XBOOLE_1:67;
+     then lines M c=LM by XBOOLE_1:37;
+     then lines M=LM by XBOOLE_0:def 10;
+     then i+1=1 by A6,CARD_2:60;
+     hence contradiction by A13;
+    end;
+    set n2=n-' card(M"LM`);
+    reconsider ML2=M-LM` as Matrix of n2,m,F_Real by MATRTOP1:14;
+    rng ML2=rng M\LM` by FINSEQ_3:72;
+    then A22: rng ML2=LM`` by SUBSET_1:def 5;
+    reconsider FR=F_Real as Field;
+    set Mf=(Mx2Tran M).f;
+    set V=m-VectSp_over F_Real;
+    len f=n by CARD_1:def 13;
+    then A23: dom f=Seg n by FINSEQ_1:def 3;
+    consider j be set such that
+     A24: j in dom(M|S) and
+     A25: (M|S).j=x by A5,A14,FUNCT_1:def 5;
+    A26: x=M.j by A24,A25,FUNCT_1:70;
+    A27: j in dom M by A24,RELAT_1:86;
+    A28: j in S by A24,RELAT_1:86;
+    reconsider j as Nat by A24;
+    A29: x=Line(M,j) by A27,A26,MATRIX_2:18;
+    A30: len ML2=len M-card(M"LM`) by FINSEQ_3:66;
+    then A31: n-card(M"LM`)=n2 by A7,XREAL_1:51,235;
+    A33: rng ML1=rng M\LM by FINSEQ_3:72;
+    then A34: rng ML1=LM` by SUBSET_1:def 5;
+    reconsider LMj=Line(M,j) as Element of V by A8,MATRIX13:102;
+    A35: card rng ML1=card(rng M)-card LM by A33,CARD_2:63
+     .=i+1-1 by A6,CARD_2:60;
+    LM``=LM;
+    then consider P be Permutation of dom M such that
+     A36: (M-LM)^(M-LM`)=M*P by FINSEQ_3:124;
+    dom M=Seg n by A7,FINSEQ_1:def 3;
+    then reconsider p=P as Permutation of Seg n;
+    A37: (M|S)*P=(M|S)*(p|dom p) by RELAT_1:98
+     .=(M*p) | (dom p/\(p"S)) by FUNCT_1:170
+     .=(M*p) | (p"S) by RELAT_1:167,XBOOLE_1:28;
+    reconsider pp=P as one-to-one Function;
+    len(M*p)=n by MATRIX_1:def 3;
+    then A38: dom(M*p)=Seg n by FINSEQ_1:def 3;
+    set ppj=(pp").j;
+    A39: rng p=Seg n by FUNCT_2:def 3;
+    then A40: p"S=(pp").:S & dom(pp")=Seg n by FUNCT_1:55,155;
+    then A41: ppj in p"S by A28,FUNCT_1:def 12;
+    A42: p.ppj=j by A28,A39,FUNCT_1:57;
+    A43: not ppj in dom ML1
+    proof
+     assume A44: ppj in dom ML1;
+     (M*P).ppj=M.j by A41,A42,A38,FUNCT_1:22;
+     then (M*P).ppj=LMj by A27,MATRIX_2:18;
+     then ML1.ppj=LMj by A36,A44,FINSEQ_1:def 7;
+     then A45: ML1.ppj in LM by A29,TARSKI:def 1;
+     ML1.ppj in LM` by A34,A44,FUNCT_1:def 5;
+     hence contradiction by A16,A45,XBOOLE_0:3;
+    end;
+    set pSj=(p"S)\{ppj};
+    dom M=Seg n by A7,FINSEQ_1:def 3;
+    then A46: dom(M|S)=S by RELAT_1:91;
+    A47: pSj c=dom ML1
+    proof
+     let y be set;
+     assume A48: y in pSj;
+     then reconsider Y=y as Nat;
+     A49: (M*p).y=M.(p.y) by A38,A48,FUNCT_1:22;
+     not y in {ppj} by A48,XBOOLE_0:def 5;
+     then A50: y<>ppj by TARSKI:def 1;
+     A51: ppj in dom P by A41,FUNCT_1:def 13;
+     A52: y in p"S by A48,XBOOLE_0:def 5;
+     then A53: p.y in dom(M|S) by A46,FUNCT_1:def 13;
+     y in dom P by A52,FUNCT_1:def 13;
+     then p.y<>j by A42,A50,A51,FUNCT_1:def 8;
+     then (M|S).(p.y)<>(M|S).j by A4,A24,A53,FUNCT_1:def 8;
+     then (M*p).y<>LMj by A25,A29,A49,A53,FUNCT_1:70;
+     then A54: not(M*p).y in LM by A29,TARSKI:def 1;
+     assume not y in dom ML1;
+     then consider w be Nat such that
+      A55: w in dom ML2 and
+      A56: Y=len ML1+w by A36,A38,A48,FINSEQ_1:38;
+     (M*p).Y=ML2.w by A36,A55,A56,FINSEQ_1:def 7;
+     hence contradiction by A22,A54,A55,FUNCT_1:def 5;
+    end;
+    then (M*p) |pSj=((M*p) | (p"S)) |pSj & (M*p) |pSj=ML1|pSj
+      by A36,FINSEQ_6:13,RELAT_1:103,XBOOLE_1:36;
+    then A57: ML1|pSj is one-to-one by A4,A37,FUNCT_1:84;
+    dom p=Seg n & p.ppj=j by A28,A39,FUNCT_1:57,FUNCT_2:67;
+    then A58: ppj in dom((M|S)*p) by A24,A41,FUNCT_1:21;
+    then ((M|S)*p).ppj=LMj by A25,A29,A42,FUNCT_1:22;
+    then A59: LM=Im(((M|S)*p),ppj) by A29,A58,FUNCT_1:117
+     .=((M*p) | (p"S)).:{ppj} by A37,RELAT_1:def 16;
+    rng M = rng((M*p) | (p"S)) by A5,A37,A39,A46,RELAT_1:47
+     .=(M*p).:(p"S) by RELAT_1:148
+     .=((M*p) | (p"S)).:(p"S) by RELAT_1:162;
+    then A60: rng ML1=((M*p) | (p"S)).:pSj by A4,A37,A33,A59,FUNCT_1:123
+     .=rng((M*p) | (p"S) |pSj) by RELAT_1:148
+     .=rng((M*p) |pSj) by RELAT_1:103,XBOOLE_1:36
+     .=rng(ML1|pSj) by A36,A47,FINSEQ_6:13;
+    reconsider fp=f*p as n-element FinSequence of REAL by MATRTOP1:21;
+    A61: n1+n2=len(ML1^ML2) by MATRIX_1:def 3
+     .=len(M*p) by A36
+     .=n by MATRIX_1:def 3;
+    len fp=n by CARD_1:def 13;
+    then consider fp1,fp2 be FinSequence of REAL such that
+     A62: len fp1=n1 and
+     A63: len fp2=n2 and
+     A64: fp=fp1^fp2 by A61,FINSEQ_2:26;
+    A65: fp2 is n2-element by A63,CARD_1:def 13;
+    then A66: len((Mx2Tran ML2).fp2)=m by CARD_1:def 13;
+    card LM=1 by CARD_2:60;
+    then consider L2 be Linear_Combination of lines ML2 such that
+     A67: Sum L2=(Mx2Tran ML2).fp2 and
+     A68: for i be Nat st i in Seg n2 holds L2.Line(ML2,i)=Sum fp2 &
+      ML2"{Line(ML2,i)}=dom fp2 by A65,A22,Lm5;
+    A69: fp1 is n1-element by A62,CARD_1:def 13;
+    then len((Mx2Tran ML1).fp1)=m by CARD_1:def 13;
+    then reconsider Mf1=@((Mx2Tran ML1).fp1),Mf2=@((Mx2Tran ML2).fp2)
+      as Element of m-tuples_on the carrier of F_Real by A66,FINSEQ_2:110;
+    A70: Carrier L2 c=lines ML2 by VECTSP_6:def 7;
+    len ML1=n1 by A7,A18,XREAL_1:51,235;
+    then pSj is Subset of Seg n1 by A47,FINSEQ_1:def 3;
+    then consider L1 be Linear_Combination of lines ML1 such that
+     A71: Sum L1=(Mx2Tran ML1).fp1 and
+     A72: for i be Nat st i in pSj holds
+       L1.Line(ML1,i)=Sum Seq(fp1|ML1"{Line(ML1,i)}) by A2,A69,A21,A57,A60,A35;
+    A73: Carrier L1 c=lines ML1 by VECTSP_6:def 7;
+    rng ML1\/rng ML2=[#]lines M by A22,A34,SUBSET_1:25
+     .=lines M by SUBSET_1:def 4;
+    then (L1 is Linear_Combination of lines M) & L2 is Linear_Combination of
+      lines M by VECTSP_6:25,XBOOLE_1:7;
+    then reconsider L12=L1+L2 as Linear_Combination of lines M by VECTSP_6:52;
+    take L12;
+    thus(Mx2Tran M).f=(Mx2Tran(ML1^ML2)).(fp1^fp2)
+      by A36,A61,A64,MATRTOP1:21
+     .=(Mx2Tran ML1).fp1+(Mx2Tran ML2).fp2 by A69,A65,MATRTOP1:36
+     .=Mf1+Mf2 by MATRTOP1:1
+     .=Sum L1+Sum L2 by A71,A67,MATRIX13:102
+     .=Sum L12 by VECTSP_6:77;
+    let w be Nat such that
+     A74: w in S;
+    Line(M,w) in lines M by A74,MATRIX13:103;
+    then reconsider LMw=Line(M,w) as Element of V;
+    p"(M"{LMw})=(M*p)"{LMw} by RELAT_1:181;
+    then A75: Sum Seq(f|M"{LMw})=Sum Seq(fp| (M*p)"{LMw}) by A23,MATRTOP1:10
+     .=Sum(Seq(fp1|ML1"{LMw})^Seq(fp2|ML2"{LMw}))
+       by A7,A36,A62,A63,A64,A18,A30,A19,A31,MATRTOP1:13
+     .=Sum Seq(fp1|ML1"{LMw})+Sum Seq(fp2|ML2"{LMw}) by RVSUM_1:105;
+    set ppw=(pp").w;
+    A76: ppw in p"S by A40,A74,FUNCT_1:def 12;
+    p.ppw=w by A39,A74,FUNCT_1:57;
+    then A77: (M*P).ppw=M.w by A38,A76,FUNCT_1:22;
+    reconsider ppw as Nat by A76;
+    A78: M.w=LMw by A74,MATRIX_2:10;
+    reconsider L1w=L1.LMw,L2w=L2.LMw as Element of FR;
+    A79: L12.LMw=L1w+L2w by VECTSP_6:48;
+    per cases by A36,A38,A76,FINSEQ_1:38;
+    suppose A80: ppw in dom ML1;
+     then A81: ML1.ppw=LMw by A36,A77,A78,FINSEQ_1:def 7;
+     then A82: LMw in rng ML1 by A80,FUNCT_1:def 5;
+     then not LMw in Carrier L2 by A22,A34,A70,A16,XBOOLE_0:3;
+     then A83: L2.LMw=0.F_Real by VECTSP_6:20;
+     not LMw in rng ML2 by A22,A34,A16,A82,XBOOLE_0:3;
+     then {LMw}misses rng ML2 by ZFMISC_1:56;
+     then ML2"{LMw}={} by RELAT_1:173;
+     then A84: Sum Seq(fp2|ML2"{LMw})=0 by RVSUM_1:102;
+     Line(ML1,ppw)=ML1.ppw & ppw in pSj
+       by A76,A43,A80,MATRIX_2:18,ZFMISC_1:64;
+     then L1.LMw=Sum Seq(fp1|ML1"{LMw}) by A72,A81;
+     hence thesis by A75,A79,A83,A84,RLVECT_1:def 7;
+    end;
+    suppose ex z be Nat st z in dom ML2 & ppw=len ML1+z;
+     then consider z be Nat such that
+      A85: z in dom ML2 and
+      A86: ppw=len ML1+z;
+     A87: ML2.z=LMw by A36,A77,A78,A85,A86,FINSEQ_1:def 7;
+     then A88: LMw in rng ML2 by A85,FUNCT_1:def 5;
+     then not LMw in Carrier L1 by A22,A34,A73,A16,XBOOLE_0:3;
+     then A89: L1.LMw=0.F_Real by VECTSP_6:20;
+     not LMw in LM` by A22,A16,A88,XBOOLE_0:3;
+     then {LMw}misses rng ML1 by A34,ZFMISC_1:56;
+     then ML1"{LMw}={} by RELAT_1:173;
+     then A90: Seq(fp1|ML1"{LMw})=<*>REAL;
+     L1w+L2w=L2w+L1w by RLVECT_1:def 5;
+     then A91: L12.LMw=L2.LMw by A79,A89,RLVECT_1:def 7;
+     A92: dom ML2=Seg n2 by A7,A30,A31,FINSEQ_1:def 3;
+     A93: ML2.z=Line(ML2,z) by A85,MATRIX_2:18;
+     then ML2"{LMw}=dom fp2 by A68,A85,A87,A92;
+     then A94: fp2|ML2"{LMw}=fp2 by RELAT_1:98;
+     L2.LMw=Sum fp2 by A68,A85,A87,A93,A92;
+     hence thesis by A75,A91,A90,A94,FINSEQ_3:125,RVSUM_1:102;
+    end;
+   end;
+  end;
+  A95: P[0]
+  proof
+   let n,m,M,f;
+   let S be Subset of Seg n such that
+    A96: n=0 implies m=0 and
+    M|S is one-to-one and
+    rng(M|S)=lines M and
+    A97: card lines M=0;
+   reconsider L=ZeroLC(m-VectSp_over F_Real)
+     as Linear_Combination of lines M by VECTSP_6:26;
+   take L;
+   A98: Sum L=0.(m-VectSp_over F_Real) by VECTSP_6:41
+    .=0.(TOP-REAL m) by Lm2;
+   A99: len M=n & M={} by A96,A97,MATRIX13:1;
+   then 0.(TOP-REAL m)={} by A96;
+   hence Sum L=(Mx2Tran M).f by A96,A99,A98;
+   let i be Nat;
+   thus thesis by A99;
+  end;
+  for i be Nat holds P[i] from NAT_1:sch 2(A95,A1);
+  then A100: P[card lines M];
+  per cases;
+  suppose n<>0; hence thesis by A100; end;
+  suppose B1: n=0;
+   let S be Subset of Seg n such that
+     M|S is one-to-one & rng(M|S) = lines M;
+   reconsider L=ZeroLC(m-VectSp_over F_Real)
+     as Linear_Combination of lines M by VECTSP_6:26;
+   take L;
+   thus Sum L = 0.(m-VectSp_over F_Real) by VECTSP_6:41
+    .= 0.(TOP-REAL m) by Lm2
+    .= (Mx2Tran M).f by B1,MATRTOP1:def 3;
+   thus thesis by B1;
+  end;
+end;
+
+theorem Th16:
+  M is without_repeated_line implies
+  ex L be Linear_Combination of lines M st
+    Sum L=(Mx2Tran M).f &
+    for k st k in dom f holds L.Line(M,k)=f.k
+proof
+  assume that
+   A2: M is without_repeated_line;
+  A3: len M=n by MATRIX_1:def 3;
+  then dom M c=Seg n by FINSEQ_1:def 3;
+  then reconsider D=dom M as Subset of Seg n;
+  len f=n by CARD_1:def 13;
+  then A4: dom f=dom M by A3,FINSEQ_3:31;
+  M|dom M=M by RELAT_1:98;
+  then consider L be Linear_Combination of lines M such that
+   A5: Sum L=(Mx2Tran M).f and
+   A6: for i be Nat st i in D holds L.Line(M,i)=Sum Seq(f|M"{Line(M,i)})
+    by A2,Th15;
+  take L;
+  thus Sum L=(Mx2Tran M).f by A5;
+  let i be Nat such that
+   A7: i in dom f;
+  i>=1 by A7,FINSEQ_3:27;
+  then A8: Sgm{i}=<*i*> by FINSEQ_3:50;
+  set LM=Line(M,i);
+  A9: LM in {LM} by TARSKI:def 1;
+  dom M=Seg n by A3,FINSEQ_1:def 3;
+  then LM in lines M by A4,A7,MATRIX13:103;
+  then consider x be set such that
+   A10: M"{LM}={x} by A2,FUNCT_1:144;
+  A11: dom(f|{i})=dom f/\{i} by RELAT_1:90;
+  {i}c=dom f by A7,ZFMISC_1:37;
+  then A12: dom(f|{i})={i} by A11,XBOOLE_1:28;
+  then i in dom(f|{i}) by TARSKI:def 1;
+  then A13: (f|{i}).i=f.i by FUNCT_1:70;
+  rng<*i*>={i} by FINSEQ_1:55;
+  then A14: <*i*> is FinSequence of{i} by FINSEQ_1:def 4;
+  rng(f|{i})<>{} & f|{i} is Function of{i},rng(f|{i})
+    by A12,FUNCT_2:3,RELAT_1:65;
+  then Seq(f|{i})=<*f.i*> by A12,A8,A14,A13,FINSEQ_2:39;
+  then A15: Sum Seq(f|{i})=f.i by RVSUM_1:103;
+  M.i=LM by A4,A7,MATRIX_2:18;
+  then i in M"{LM} by A4,A7,A9,FUNCT_1:def 13;
+  then f|M"{LM}=f|{i} by A10,TARSKI:def 1;
+  hence thesis by A6,A4,A7,A15;
+end;
+
+theorem
+  for B be OrdBasis of Lin lines M st B = M
+  for Mf be Element of Lin lines M st Mf = (Mx2Tran M).f holds Mf|--B = f
+proof
+  set LM=lines M;
+  let B be OrdBasis of Lin LM such that
+   A1: B=M;
+  A3: B is one-to-one by MATRLIN:def 4;
+  let Mf be Element of Lin LM such that
+   A4: Mf=(Mx2Tran M).f;
+  consider L be Linear_Combination of LM such that
+   A5: Sum L=Mf and
+   A6: for i be Nat st i in dom f holds L.Line(M,i)=f.i by A1,A4,A3,Th16;
+  reconsider L1=L|the carrier of Lin LM as Linear_Combination of Lin LM by Th8;
+  A7: len M=n by MATRIX_1:def 3;
+  A8: len f=n by CARD_1:def 13;
+  A9: LM c=[#]Lin LM by Lm4;
+  A10: now let k;
+   assume A11: 1<=k & k<=n;
+   then k in Seg n by FINSEQ_1:3;
+   then A12: M.k=Line(M,k) by MATRIX_2:10;
+   A13: k in dom M by A7,A11,FINSEQ_3:27;
+   then A14: B/.k=M.k by A1,PARTFUN1:def 8;
+   M.k in LM by A13,FUNCT_1:def 5;
+   then A15: L.(M.k)=L1.(M.k) by A9,FUNCT_1:72;
+   A16: k in dom f by A8,A11,FINSEQ_3:27;
+   then f.k=@f/.k by PARTFUN1:def 8;
+   hence @f/.k=L1.(B/.k) by A6,A16,A14,A12,A15;
+  end;
+  A17: Carrier L c=LM by VECTSP_6:def 7;
+  then Carrier L c=[#]Lin LM by A9,XBOOLE_1:1;
+  then Carrier L=Carrier L1 & Sum L1=Sum L by VECTSP_9:11;
+  hence thesis by A1,A5,A7,A8,A17,A10,MATRLIN:def 9;
+end;
+
+theorem Th18:
+  rng(Mx2Tran M) = [#]Lin lines M
+proof
+  consider X be set such that
+   A1: X c=dom M and
+   A2: lines M=rng(M|X) and
+   A3: M|X is one-to-one by MATRTOP1:6;
+  set V=m-VectSp_over F_Real;
+  set TM=Mx2Tran M;
+  A5: len M=n by MATRIX_1:def 3;
+  then reconsider X as Subset of Seg n by A1,FINSEQ_1:def 3;
+  hereby let y be set;
+   assume y in rng TM;
+   then consider x be set such that
+    A6: x in dom TM and
+    A7: TM.x=y by FUNCT_1:def 5;
+   reconsider x as Element of TOP-REAL n by A6;
+   consider L be Linear_Combination of lines M such that
+    A8: Sum L=y and
+    for i be Nat st i in X holds L.Line(M,i)=Sum Seq(x|M"{Line(M,i)})
+    by A2,A3,A7,Th15;
+   Sum L in Lin lines M by VECTSP_7:12;
+   hence y in [#]Lin lines M by A8,STRUCT_0:def 5;
+  end;
+  let y be set;
+  assume y in [#]Lin lines M;
+  then y in Lin lines M by STRUCT_0:def 5;
+  then consider L be Linear_Combination of lines M such that
+   A9: y=Sum L by VECTSP_7:12;
+  defpred P[set,set] means
+   ($1 in X implies $2=L.(M.$1)) & (not$1 in X implies $2=0);
+  A10: for i be Nat st i in Seg n ex x be set st P[i,x]
+  proof
+   let i be Nat such that
+    i in Seg n;
+   i in X or not i in X;
+   hence thesis;
+  end;
+  consider f be FinSequence such that
+   A11: dom f=Seg n & for j be Nat st j in Seg n holds P[j,f.j]
+    from FINSEQ_1:sch 1(A10);
+  A12: dom M=Seg n by A5,FINSEQ_1:def 3;
+  rng f c=REAL
+  proof
+   let z be set;
+   assume z in rng f;
+   then consider x be set such that
+    A13: x in dom f and
+    A14: f.x=z by FUNCT_1:def 5;
+   reconsider x as Nat by A13;
+   A15: P[x,f.x] by A11,A13;
+   M.x=Line(M,x) by A12,A11,A13,MATRIX_2:18;
+   then M.x in lines M by A11,A13,MATRIX13:103;
+   then reconsider Mx=M.x as Element of V;
+   per cases;
+   suppose not x in X;
+    then f.x=0 by A11,A13;
+    hence thesis by A14;
+   end;
+   suppose x in X;
+    thus thesis by A14,A15,XREAL_0:def 1;
+   end;
+  end;
+  then reconsider f as FinSequence of REAL by FINSEQ_1:def 4;
+  len f=n by A5,A11,FINSEQ_1:def 3;
+  then A16: f is n-element by CARD_1:def 13;
+  then consider K be Linear_Combination of lines M such that
+   A17: Sum K=TM.f and
+   A18: for i be Nat st i in X holds K.Line(M,i)=Sum Seq(f|M"{Line(M,i)})
+    by A2,A3,Th15;
+  now let v be Element of V;
+   per cases;
+   suppose v in lines M;
+    then consider i be set such that
+     A19: i in dom(M|X) and
+     A20: (M|X).i=v by A2,FUNCT_1:def 5;
+    A21: M.i=v by A19,A20,FUNCT_1:70;
+    set D=dom(f|M"{v});
+    Seq(f|M"{v})=@@Seq(f|M"{v});
+    then reconsider F=Seq(f|M"{v}) as FinSequence of REAL;
+    A22: rng Sgm D=D by FINSEQ_1:71;
+    then A23: dom F=dom Sgm D by RELAT_1:46;
+    A24: i in dom M by A19,RELAT_1:86;
+    A25: i in X by A19,RELAT_1:86;
+    reconsider i as Nat by A19;
+    M.i=Line(M,i) by A24,MATRIX_2:18;
+    then A26: K.v=Sum Seq(f|M"{v}) by A18,A25,A21;
+    v in {v} by TARSKI:def 1;
+    then i in M"{v} by A24,A21,FUNCT_1:def 13;
+    then i in D by A11,A25,RELAT_1:86;
+    then consider j be set such that
+     A27: j in dom Sgm D and
+     A28: (Sgm D).j=i by A22,FUNCT_1:def 5;
+    reconsider j as Element of NAT by A27;
+    F.j=(f|M"{v}).i & i in D by A23,A27,A28,FUNCT_1:21,22;
+    then A29: F.j=f.i by FUNCT_1:70;
+    D c=dom f by RELAT_1:89;
+    then A30: Sgm D is one-to-one by A11,FINSEQ_3:99;
+    now let w be Element of NAT;
+     assume that
+      A31: w in dom F and
+      A32: w<>j;
+     A33: (Sgm D).w in D by A22,A23,A31,FUNCT_1:def 5;
+     then (Sgm D).w in M"{v} by RELAT_1:86;
+     then M.((Sgm D).w) in {v} by FUNCT_1:def 13;
+     then A34: M.((Sgm D).w)=v by TARSKI:def 1;
+     A35: not(Sgm D).w in X
+     proof
+      assume(Sgm D).w in X;
+      then A36: (Sgm D).w in dom(M|X) by A12,RELAT_1:86;
+      then v=(M|X).((Sgm D).w) by A34,FUNCT_1:70;
+      then i=(Sgm D).w by A3,A19,A20,A36,FUNCT_1:def 8;
+      hence contradiction by A23,A30,A27,A28,A31,A32,FUNCT_1:def 8;
+     end;
+     F.w=(f|M"{v}).((Sgm D).w) by A31,FUNCT_1:22;
+     then A37: F.w=f.((Sgm D).w) by A33,FUNCT_1:70;
+     (Sgm D).w in dom f by A33,RELAT_1:86;
+     hence F.w=0 by A11,A37,A35;
+    end;
+    then A38: F has_onlyone_value_in j by A23,A27,ENTROPY1:def 2;
+    f.i=L.v by A11,A25,A21;
+    hence L.v=K.v by A26,A29,A38,ENTROPY1:13;
+   end;
+   suppose A39: not v in lines M;
+    Carrier L c=lines M by VECTSP_6:def 7;
+    then not v in Carrier L by A39;
+    then A40: L.v=0.F_Real by VECTSP_6:20;
+    Carrier K c=lines M by VECTSP_6:def 7;
+    then not v in Carrier K by A39;
+    hence L.v=K.v by A40,VECTSP_6:20;
+   end;
+  end;
+  then A41: Sum K=Sum L by VECTSP_6:def 10;
+  dom TM=[#](TOP-REAL n) & f is Point of TOP-REAL n by A16,Lm3,FUNCT_2:def 1;
+  hence thesis by A9,A17,A41,FUNCT_1:def 5;
+end;
+
+theorem Th19:
+  for F be one-to-one FinSequence of TOP-REAL n st
+    rng F is linearly-independent
+  ex M be Matrix of n,F_Real st M is invertible & M|len F = F
+proof
+  let F be one-to-one FinSequence of TOP-REAL n such that
+   A1: rng F is linearly-independent;
+  reconsider f=F as FinSequence of n-VectSp_over F_Real by Lm1;
+  set M=FinS2MX f;
+  lines M is linearly-independent by A1,Th7;
+  then A2: the_rank_of M=len F by MATRIX13:121;
+  then consider A be Matrix of n-' len F,n,F_Real such that
+   A3: the_rank_of(M^A)=n by MATRTOP1:16;
+  len F<=width M by A2,MATRIX13:74;
+  then len F<=n by MATRIX_1:24;
+  then n-len F=n-' len F by XREAL_1:235;
+  then reconsider MA=M^A as Matrix of n,F_Real;
+  take MA;
+  Det MA<>0.F_Real by A3,MATRIX13:83;
+  hence MA is invertible by LAPLACE:34;
+  thus F=MA|dom F by FINSEQ_1:33
+   .=MA|len F by FINSEQ_1:def 3;
+end;
+
+theorem Th20:
+  for B be OrdBasis of n-VectSp_over F_Real st B = MX2FinS 1.(F_Real,n) holds
+    f in Lin rng(B|k)
+  iff
+    f = (f|k)^((n-' k) |->0)
+proof
+  set V=n-VectSp_over F_Real;
+  set nk0=(n-' k) |->0;
+  let B be OrdBasis of n-VectSp_over F_Real such that
+   A1: B=MX2FinS 1.(F_Real,n);
+  A2: len B=n by A1,MATRIX_1:def 3;
+  A3: f is Point of TOP-REAL n by Lm3;
+  then A4: f is Point of V by Lm1;
+  A5: rng B is Basis of V by MATRLIN:def 4;
+  then A6: rng B is linearly-independent by VECTSP_7:def 3;
+  Lin rng B=the VectSpStr of V by A5,VECTSP_7:def 3;
+  then A7: f in Lin rng B by A4,STRUCT_0:def 5;
+  A8: B is one-to-one by MATRLIN:def 4;
+  reconsider F=f as Point of V by A3,Lm1;
+  A9: len f=n by CARD_1:def 13;
+  per cases;
+  suppose A10: k>=n;
+   then n-k<=0 by XREAL_1:49;
+   then n-' k=0 by XREAL_0:def 2;
+   then A11: nk0={};
+   f|k=f by A9,A10,FINSEQ_1:79;
+   hence thesis by A2,A7,A10,A11,FINSEQ_1:47,79;
+  end;
+  suppose A12: k<n;
+   then A13: len(f|k)=k by A9,FINSEQ_1:80;
+   A14: len nk0=n-' k by CARD_1:def 13;
+   then A15: dom nk0=Seg(n-' k) by FINSEQ_1:def 3;
+   consider KL be Linear_Combination of V such that
+    A16: F=Sum(KL) and
+    A17: Carrier KL c=rng B and
+    A18: for k st 1<=k & k<=len(F|--B) holds(F|--B)/.k=KL.(B/.k)
+    by MATRLIN:def 9;
+   reconsider KL as Linear_Combination of rng B by A17,VECTSP_6:def 7;
+   A19: F|--B=F by A1,A2,MATRLIN2:46;
+   n-' k=n-k by A12,XREAL_1:235;
+   then len((f|k)^nk0)=k+(n-k) by A13,A14,FINSEQ_1:35;
+   then A20: dom((f|k)^nk0)=dom f by A9,FINSEQ_3:31;
+   hereby assume f in Lin rng(B|k);
+    then consider L be Linear_Combination of rng(B|k) such that
+     A21: Sum L=f by VECTSP_7:12;
+    reconsider L1=L as Linear_Combination of rng B by RELAT_1:99,VECTSP_6:25;
+    A22: KL-L1 is Linear_Combination of rng B by VECTSP_6:75;
+    Sum(KL-L1)=Sum KL-Sum L1 by VECTSP_6:80
+     .=0.V by A16,A21,VECTSP_1:66;
+    then Carrier(KL-L1)={} by A6,A22,VECTSP_7:def 1;
+    then A23: ZeroLC(V)=KL-L1 by VECTSP_6:def 6
+     .=KL+-L1 by VECTSP_6:def 14
+     .=-L1+KL by VECTSP_6:53;
+    reconsider M1=-1.F_Real as Element of F_Real;
+    A24: Carrier L c=rng(B|k) by VECTSP_6:def 7;
+    L1=--L1;
+    then A25: KL=L1 by A23,VECTSP_6:68;
+    now let i be Nat;
+     assume A26: i in dom f;
+     per cases by A13,A20,A26,FINSEQ_1:38;
+     suppose A27: i in dom(f|k);
+      then (f|k).i=f.i by FUNCT_1:70;
+      hence ((f|k)^nk0).i=f.i by A27,FINSEQ_1:def 7;
+     end;
+     suppose A28: ex j be Nat st j in dom nk0 & i=k+j;
+      A29: i in dom B by A9,A2,A26,FINSEQ_3:31;
+      then A30: B/.i=B.i by PARTFUN1:def 8;
+      consider j be Nat such that
+       A31: j in dom nk0 and
+       A32: i=k+j by A28;
+      A33: 1<=j by A31,FINSEQ_3:27;
+      not B.i in rng(B|k)
+      proof
+       assume B.i in rng(B|k);
+       then consider x be set such that
+        A34: x in dom(B|k) and
+        A35: (B|k).x=B.i by FUNCT_1:def 5;
+       B.x=B.i & x in dom B by A34,A35,FUNCT_1:70,RELAT_1:86;
+       then A36: i=x by A8,A29,FUNCT_1:def 8;
+       x in Seg k by A34,RELAT_1:86;
+       then A37: i<=k by A36,FINSEQ_1:3;
+       i>=k+1 by A32,A33,XREAL_1:8;
+       hence contradiction by A37,NAT_1:13;
+      end;
+      then A38: not B.i in Carrier L by A24;
+      1<=i & i<=n by A9,A26,FINSEQ_3:27;
+      then A39: (F|--B)/.i=KL.(B/.i) by A9,A19,A18;
+      f.i=(F|--B)/.i by A19,A26,PARTFUN1:def 8;
+      hence f.i=0.F_Real by A25,A39,A30,A38,VECTSP_6:20
+       .=nk0.j by A15,A31,FINSEQ_2:71
+       .=((f|k)^nk0).i by A13,A31,A32,FINSEQ_1:def 7;
+     end;
+    end;
+    hence (f|k)^((n-' k) |->0)=f by A20,FINSEQ_1:17;
+   end;
+   assume A40: (f|k)^nk0=f;
+   Carrier KL c=rng(B|k)
+   proof
+
+    let x be set;
+    assume A41: x in Carrier KL;
+    Carrier KL c=rng B by VECTSP_6:def 7;
+    then consider i be set such that
+     A42: i in dom B and
+     A43: B.i=x by A41,FUNCT_1:def 5;
+    reconsider i as Element of NAT by A42;
+    A44: B/.i=B.i by A42,PARTFUN1:def 8;
+    A45: dom B=dom f by A9,A2,FINSEQ_3:31;
+    assume A46: not x in rng(B|k);
+    not i in Seg k
+    proof
+     assume i in Seg k;
+     then A47: i in dom(B|k) by A42,RELAT_1:86;
+     then (B|k).i=B.i by FUNCT_1:70;
+     hence contradiction by A43,A46,A47,FUNCT_1:def 5;
+    end;
+    then not i in dom(f|k) by A13,FINSEQ_1:def 3;
+    then consider j be Nat such that
+     A48: j in dom nk0 and
+     A49: i=k+j by A13,A20,A42,A45,FINSEQ_1:38;
+    A50: nk0.j=0 by A15,A48,FINSEQ_2:71;
+    A51: 1<=i & i<=n by A2,A42,FINSEQ_3:27;
+    (F|--B)/.i=(F|--B).i by A19,A42,A45,PARTFUN1:def 8;
+    then KL.(B/.i)=f.i by A9,A19,A18,A51
+     .=0.F_Real by A13,A40,A48,A49,A50,FINSEQ_1:def 7;
+    hence contradiction by A41,A43,A44,VECTSP_6:20;
+   end;
+   then KL is Linear_Combination of rng(B|k) by VECTSP_6:def 7;
+   hence thesis by A16,VECTSP_7:12;
+  end;
+end;
+
+theorem Th21:
+  for F be one-to-one FinSequence of TOP-REAL n st
+    rng F is linearly-independent
+  for B be OrdBasis of n-VectSp_over F_Real st B = MX2FinS 1.(F_Real,n)
+  for M be Matrix of n,F_Real st M is invertible & M|len F = F
+  holds (Mx2Tran M).:[#]Lin rng(B|len F) = [#]Lin rng F
+proof
+  let F be one-to-one FinSequence of TOP-REAL n such that
+   A1: rng F is linearly-independent;
+  reconsider f=F as FinSequence of n-VectSp_over F_Real by Lm1;
+  set MF=FinS2MX f;
+  set n1=n-' len F;
+  set L=len F;
+  lines MF is linearly-independent by A1,Th7;
+  then the_rank_of MF=len F by MATRIX13:121;
+  then L<=width MF by MATRIX13:74;
+  then A2: L<=n by MATRIX_1:24;
+  then A3: n-L=n1 by XREAL_1:235;
+  set V=n-VectSp_over F_Real;
+  let B be OrdBasis of n-VectSp_over F_Real such that
+   A5: B=MX2FinS 1.(F_Real,n);
+  let M be Matrix of n,F_Real such that
+   M is invertible and
+   A7: M|len F=F;
+  consider q being FinSequence such that
+   A8: M=F^q by A7,FINSEQ_1:101;
+  M=MX2FinS M;
+  then reconsider q as FinSequence of n-VectSp_over F_Real by A8,FINSEQ_1:50;
+  A9: len M=len F+len q by A8,FINSEQ_1:35;
+  set Mq=FinS2MX q;
+  set MT=Mx2Tran M;
+  A11: len M=n by MATRIX_1:def 3;
+  A12: dom MT=[#]TOP-REAL n by FUNCT_2:67;
+   A21: dom Mx2Tran MF=[#]TOP-REAL L by FUNCT_2:def 1;
+   A22: the carrier of TOP-REAL n=REAL n by EUCLID:25
+    .=n-tuples_on REAL;
+   A23: rng(Mx2Tran MF)=[#]Lin lines MF by Th18
+    .=[#]Lin rng F by Th6;
+   A24: (n|->0)=0*n
+    .=0.TOP-REAL n by EUCLID:74;
+   A25: (n1|->0)=0*n1
+    .=0.TOP-REAL n1 by EUCLID:74;
+   then A26: (Mx2Tran Mq).(n1|->0)=0.TOP-REAL n by A3,A11,A9,MATRTOP1:29;
+   thus MT.:[#]Lin rng(B|L)c=[#]Lin rng F
+   proof
+    let y be set;
+    assume y in MT.:[#]Lin rng(B|L);
+    then consider x be set such that
+     A27: x in dom MT and
+     A28: x in [#]Lin rng(B|L) and
+     A29: MT.x=y by FUNCT_1:def 12;
+    reconsider x as Element of TOP-REAL n by A27;
+    len x=n by CARD_1:def 13;
+    then len(x|L)=L by A2,FINSEQ_1:80;
+    then A30: x|L is L-element by CARD_1:def 13;
+    then A31: x|L is Element of TOP-REAL L by Lm3;
+    A32: (Mx2Tran MF).(x|L) is Element of n-tuples_on REAL by A22,A30,Lm3;
+    x in Lin rng(B|L) by A28,STRUCT_0:def 5;
+    then x=(x|L)^((n-' L) |->0) by A5,Th20;
+    then y=(Mx2Tran MF).(x|L)+(Mx2Tran Mq).(n1|->0)
+      by A3,A11,A8,A9,A29,A30,MATRTOP1:36
+     .=(Mx2Tran MF).(x|L) by A24,A26,A32,RVSUM_1:33;
+    hence thesis by A23,A21,A31,FUNCT_1:def 5;
+   end;
+   let y be set;
+   assume y in [#]Lin rng F;
+   then consider x be set such that
+    A33: x in dom(Mx2Tran MF) and
+    A34: (Mx2Tran MF).x=y by A23,FUNCT_1:def 5;
+   reconsider x as Element of TOP-REAL L by A33;
+   (Mx2Tran MF).x is Element of TOP-REAL n by Lm3;
+   then A35: y=(Mx2Tran MF).x+0.TOP-REAL n by A22,A24,A34,RVSUM_1:33
+    .=(Mx2Tran MF).x+(Mx2Tran Mq).(n1|->0) by A3,A11,A9,A25,MATRTOP1:29
+    .=MT.(x^(n1|->0)) by A8,A3,A11,A9,MATRTOP1:36;
+   set xx=(x^(n1|->0));
+   len x=L by CARD_1:def 13;
+   then dom x=Seg L by FINSEQ_1:def 3;
+   then xx=(xx|L)^(n1|->0) by FINSEQ_1:33;
+   then xx in Lin rng(B|L) by A5,A3,Th20;
+   then A36: xx in [#]Lin rng(B|L) by STRUCT_0:def 5;
+   xx is Element of TOP-REAL n by A3,Lm3;
+   hence thesis by A12,A35,A36,FUNCT_1:def 12;
+end;
+
+theorem
+  for A,B be linearly-independent Subset of TOP-REAL n st card A = card B
+  ex M be Matrix of n,F_Real st
+   M is invertible & (Mx2Tran M).:[#]Lin A = [#]Lin B
+proof
+  set TRn=TOP-REAL n;
+  let A,B be linearly-independent Subset of TRn such that
+   A1: card A=card B;
+  reconsider BB=MX2FinS 1.(F_Real,n) as OrdBasis of n-VectSp_over F_Real
+    by MATRLIN2:45;
+  set V=n-VectSp_over F_Real;
+  A is linearly-independent Subset of V by Lm1,Th7;
+  then A is finite by VECTSP_9:25;
+  then consider fA be FinSequence such that
+   A2: rng fA=A and
+   A3: fA is one-to-one by FINSEQ_4:73;
+  A4: len fA=card A by A2,A3,PRE_POLY:19;
+  B is linearly-independent Subset of V by Lm1,Th7;
+  then B is finite by VECTSP_9:25;
+  then consider fB be FinSequence such that
+   A5: rng fB=B and
+   A6: fB is one-to-one by FINSEQ_4:73;
+  A7: len fB=card B by A5,A6,PRE_POLY:19;
+  reconsider fA,fB as FinSequence of TRn by A2,A5,FINSEQ_1:def 4;
+  consider MA be Matrix of n,F_Real such that
+   A8: MA is invertible and
+   A9: MA|len fA=fA by A2,A3,Th19;
+  A10: [#]Lin rng(BB|len fA)c=[#]V by VECTSP_4:def 2;
+  set Ma=Mx2Tran MA;
+  A11: Det MA<>0.F_Real by A8,LAPLACE:34;
+  then A12: Ma is one-to-one by MATRTOP1:40;
+  then A13: rng(Ma")=dom Ma by FUNCT_1:55;
+  A14: [#]TOP-REAL n=[#]V & dom Ma=[#]TRn by Lm1,FUNCT_2:67;
+  (Ma")"[#]Lin rng(BB|len fA)=Ma.:[#]Lin rng(BB|len fA) by A12,FUNCT_1:154
+   .=[#]Lin A by A2,A3,A8,A9,Th21;
+  then A15: (Ma").:[#]Lin A=[#]Lin rng(BB|len fB)
+    by A1,A4,A7,A14,A13,A10,FUNCT_1:147;
+  consider MB be Matrix of n,F_Real such that
+   A16: MB is invertible and
+   A17: MB|len fB=fB by A5,A6,Th19;
+  set Mb=Mx2Tran MB;
+  A18: n=0 implies n=0;
+  then reconsider mb=MB as Matrix of width(MA~),n,F_Real by MATRIX13:1;
+  A19: width MB=n by A18,MATRIX13:1;
+  then reconsider MM=(MA~)*mb as Matrix of n,F_Real by A18,MATRIX13:1;
+  take MM;
+  MA~ is invertible by A8,MATRIX_6:16;
+  hence MM is invertible by A16,MATRIX_6:46;
+  Mb*(Ma")=(Mx2Tran mb)*(Ma") by A18,MATRIX13:1
+   .=(Mx2Tran mb)*(Mx2Tran(MA~)) by A11,MATRTOP1:43
+   .=Mx2Tran((MA~)*mb) by A18,MATRTOP1:32
+   .=Mx2Tran MM by A18,A19,MATRIX13:1;
+  hence (Mx2Tran MM).:[#]Lin A=Mb.:[#]Lin rng(BB|len fB) by A15,RELAT_1:159
+   .=[#]Lin B by A5,A6,A16,A17,Th21;
+end;
+
+begin :: Preservation of Linear and Affine Independence of Vectors by the
+      :: Mx2Tran Operator
+
+theorem Th23:
+  for A be linearly-independent Subset of TOP-REAL n st the_rank_of M = n
+  holds (Mx2Tran M).:A is linearly-independent
+proof
+  let A be linearly-independent Subset of TOP-REAL n such that
+   A2: the_rank_of M=n;
+  set nV=n-VectSp_over F_Real,mV=m-VectSp_over F_Real;
+  reconsider Bn=MX2FinS 1.(F_Real,n) as OrdBasis of nV by MATRLIN2:45;
+  reconsider Bm=MX2FinS 1.(F_Real,m) as OrdBasis of mV by MATRLIN2:45;
+  len Bn=n by MATRTOP1:19;
+  then reconsider M1=M as Matrix of len Bn,len Bm,F_Real by MATRTOP1:19;
+  set MT=Mx2Tran(M1,Bn,Bm);
+  A3: Mx2Tran M=MT by MATRTOP1:20;
+  reconsider A1=A as Subset of nV by Lm1;
+  A4: A1 is linearly-independent by Th7;
+  MT.:A1 is linearly-independent
+  proof
+    assume MT.:A1 is non linearly-independent;
+    then consider L be Linear_Combination of MT.:A1 such that
+     A7: Carrier L<>{} and
+     A8: Sum L=0.mV by RANKNULL:41;
+     A5: MT is one-to-one by A2,A3,MATRTOP1:39;
+     then A6: ker MT=(0).nV by RANKNULL:15;
+     A9: MT|A1 is one-to-one by A5,FUNCT_1:84;
+     then A10: MT@(MT#L)=L by RANKNULL:43;
+     MT|Carrier(MT#L) is one-to-one by A5,FUNCT_1:84;
+     then MT.:Carrier(MT#L)=Carrier L by A10,RANKNULL:39;
+     then A11: Carrier(MT#L)<>{} by A7,RELAT_1:149;
+     MT.(Sum(MT#L))=0.mV by A8,A9,A10,Th14;
+     then Sum(MT#L) in ker MT by RANKNULL:10;
+     then Sum(MT#L)=0.nV by A6,VECTSP_4:46;
+     hence contradiction by A4,A11,VECTSP_7:def 1;
+  end;
+  hence thesis by A3,Th7;
+end;
+
+theorem Th24:
+  for A be affinely-independent Subset of TOP-REAL n st the_rank_of M = n
+  holds (Mx2Tran M).:A is affinely-independent
+proof
+  set MT=Mx2Tran M;
+  set TRn=TOP-REAL n,TRm=TOP-REAL m;
+  let A be affinely-independent Subset of TRn such that
+   A2: the_rank_of M=n;
+  per cases;
+  suppose A is empty;
+   then MT.:A is empty by RELAT_1:149;
+   hence thesis;
+  end;
+  suppose A is non empty;
+   then consider v be Element of TRn such that
+    A3: v in A and
+    A4: (-v+A)\{0.TRn} is linearly-independent by RLAFFIN1:def 4;
+    A5: dom MT=[#]TRn by FUNCT_2:def 1;
+    then A6: MT.v in MT.:A by A3,FUNCT_1:def 12;
+    MT.0.TRn=0.TRm by MATRTOP1:29;
+    then A7: {0.TRm}=Im(MT,0.TRn) by A5,FUNCT_1:117
+     .=MT.:{0.TRn} by RELAT_1:def 16;
+    -v=0.TRn-v by RLVECT_1:27;
+    then A8: MT.(-v)=(MT.(0.TRn))-(MT.v) by MATRTOP1:28
+    .=(0.TRm)-(MT.v) by MATRTOP1:29
+    .=-(MT.v) by RLVECT_1:27;
+    MT is one-to-one by A2,MATRTOP1:39;
+    then A9: MT.:((-v+A)\{0.TRn})=(MT.:(-v+A))\MT.:{0.TRn} by FUNCT_1:123
+     .=(-(MT.v)+MT.:A)\{0.TRm} by A7,A8,MATRTOP1:30;
+    MT.:((-v+A)\{0.TRn}) is linearly-independent by A2,A4,Th23;
+    hence thesis by A6,A9,RLAFFIN1:def 4;
+  end;
+end;
+
+theorem
+  for A be affinely-independent Subset of TOP-REAL n st the_rank_of M = n
+  for v be Element of TOP-REAL n st v in Affin A holds
+   (Mx2Tran M).v in Affin(Mx2Tran M).:A &
+   for f holds (v|--A).f = ((Mx2Tran M).v|--(Mx2Tran M).:A).((Mx2Tran M).f)
+proof
+  reconsider Z=0 as Element of NAT;
+  set TRn=TOP-REAL n;
+  set TRm=TOP-REAL m;
+  let A be affinely-independent Subset of TRn such that
+   A2: the_rank_of M=n;
+  set MT=Mx2Tran M;
+  let v be Element of TRn such that
+   A3: v in Affin A;
+  set vA=v|--A;
+  set C=Carrier vA;
+  defpred P[set,set] means
+   (not$1 in rng MT implies $2=0) & ($1 in rng MT implies for f st MT.f=$1
+    holds $2=vA.f);
+  consider H be FinSequence of the carrier of TRn such that
+   A4: H is one-to-one and
+   A5: rng H=C and
+   A6: Sum(vA(#)H)=Sum vA by RLVECT_2:def 10;
+  A7: Sum vA=v by A3,RLAFFIN1:def 7;
+  reconsider MTR=MT*H as FinSequence of TRm;
+  A8: dom MT=[#]TRn by FUNCT_2:def 1;
+  then rng H c=dom MT;
+  then A9: len MTR=len H by FINSEQ_2:33;
+  A10: MT is one-to-one by A2,MATRTOP1:39;
+  A11: for x be set st x in the carrier of TRm ex y be set st y in REAL &
+    P[x,y]
+  proof
+   let y be set such that
+    y in the carrier of TRm;
+   per cases;
+   suppose A12: y in rng MT;
+    then consider x be set such that
+     A13: x in dom MT and
+     A14: MT.x=y by FUNCT_1:def 5;
+    reconsider x as Element of TRn by A13;
+    take vA.x;
+    thus vA.x in REAL & (not y in rng MT implies vA.x=0) by A12;
+    assume y in rng MT;
+    let f;
+    assume A15: MT.f=y;
+    f is Element of TRn by Lm3;
+    hence thesis by A8,A10,A14,A15,FUNCT_1:def 8;
+   end;
+   suppose A16: not y in rng MT;
+    take x=0;
+    thus thesis by A16;
+   end;
+  end;
+  consider F be Function of the carrier of TRm,REAL such that
+   A17: for x be set st x in the carrier of TRm holds P[x,F.x]
+   from FUNCT_2:sch 1(A11);
+  reconsider F as Element of Funcs(the carrier of TRm,REAL) by FUNCT_2:11;
+  A18: now let w be Element of TRm;
+   assume A19: not w in MT.:C;
+   assume A20: F.w<>0;
+   then w in rng MT by A17;
+   then consider f be set such that
+    A21: f in dom MT and
+    A22: MT.f=w by FUNCT_1:def 5;
+   reconsider f as Element of TRn by A21;
+   vA.f=F.w by A17,A20,A22;
+   then f in C by A20,RLVECT_2:28;
+   hence contradiction by A19,A21,A22,FUNCT_1:def 12;
+  end;
+  then reconsider F as Linear_Combination of TRm by RLVECT_2:def 5;
+  A23: MT.:C c=Carrier F
+  proof
+   let y be set;
+   assume A24: y in MT.:C;
+   then consider x be set such that
+    A25: x in dom MT and
+    A26: x in C and
+    A27: MT.x=y by FUNCT_1:def 12;
+   reconsider x as Element of TRn by A25;
+   A28: vA.x<>0 by A26,RLVECT_2:28;
+   reconsider f=y as Element of TRm by A24;
+   P[f,F.f] by A17;
+   then F.f=vA.x by A25,A27,FUNCT_1:def 5;
+   hence thesis by A28,RLVECT_2:28;
+  end;
+  Carrier F c=MT.:C
+  proof
+   let x be set;
+   assume A29: x in Carrier F;
+   then reconsider w=x as Element of TRm;
+   F.w<>0 by A29,RLVECT_2:28;
+   hence thesis by A18;
+  end;
+  then A30: Carrier F=MT.:C by A23,XBOOLE_0:def 10;
+  C c=A by RLVECT_2:def 8;
+  then MT.:C c=MT.:A by RELAT_1:156;
+  then reconsider F as Linear_Combination of MT.:A by A30,RLVECT_2:def 8;
+  set Fm=F(#)MTR;
+  consider fm be Function of NAT,TRm such that
+   A31: Sum Fm=fm.len Fm and
+   A32: fm.0=0.TRm and
+   A33: for j be Element of NAT,v be Element of TRm st j<len Fm & v=Fm.(j+1)
+holds fm.(j+1)=fm.j+v by RLVECT_1:def 15;
+  A34: rng MTR=MT.:C by A5,RELAT_1:160;
+  dom vA=[#]TRn by FUNCT_2:def 1;
+  then A35: len(vA*H)=len H by A5,FINSEQ_2:33;
+  set vAH=vA(#)H;
+  consider h be Function of NAT,TRn such that
+   A36: Sum vAH=h.len vAH and
+   A37: h.0=0.TRn and
+   A38: for j be Element of NAT,v be Element of TRn st j<len vAH & v=vAH.(j+1)
+holds h.(j+1)=h.j+v by RLVECT_1:def 15;
+  A39: len vAH=len H by RLVECT_2:def 9;
+  defpred P[Nat] means
+   $1<=len Fm implies fm.$1=MT.(h.$1);
+  A40: len Fm=len MTR by RLVECT_2:def 9;
+  A41: MT.:C c=rng MT by RELAT_1:144;
+  A42: for j be Nat st P[j] holds P[j+1]
+  proof
+   reconsider TRM=TRm as RealLinearSpace;
+   reconsider TRN=TRn as RealLinearSpace;
+   let j be Nat;
+   reconsider J=j as Element of NAT by ORDINAL1:def 13;
+   set j1=J+1;
+   assume A43: P[j];
+   reconsider MTRj1=MTR/.j1 as Element of TRM;
+   reconsider hj1=H/.j1 as n-element real-valued FinSequence;
+   reconsider Hj1=H/.j1 as Element of TRN;
+   assume A44: j+1<=len Fm;
+   A45: 1<=j1 by NAT_1:11;
+   then A46: j1 in dom MTR by A40,A44,FINSEQ_3:27;
+   then A47: MTRj1=MTR.j1 by PARTFUN1:def 8;
+   A48: MTR.j1 in MT.:C by A34,A46,FUNCT_1:def 5;
+   j1 in dom H by A40,A9,A44,A45,FINSEQ_3:27;
+   then A49: Hj1=H.j1 by PARTFUN1:def 8;
+   then MTR.j1=MT.Hj1 by A46,FUNCT_1:22;
+   then A50: F.MTRj1=vA.Hj1 by A17,A41,A47,A48;
+   A51: j1 in dom vAH by A40,A39,A9,A44,A45,FINSEQ_3:27;
+   then vAH.j1 in rng vAH by FUNCT_1:def 5;
+   then reconsider vAHj1=vAH.j1 as Element of TRn;
+   A52: j1 in dom Fm by A44,A45,FINSEQ_3:27;
+   then Fm.j1 in rng Fm by FUNCT_1:def 5;
+   then reconsider Fmj1=Fm.j1 as Element of TRm;
+   A53: MT.vAHj1=MT.((vA.Hj1)*Hj1) by A51,RLVECT_2:def 9
+    .=MT.((vA.Hj1)*hj1) by EUCLID:69
+    .=(vA.Hj1)*MT.(hj1) by MATRTOP1:23
+    .=F.MTRj1*MTRj1 by A46,A49,A47,A50,EUCLID:69,FUNCT_1:22
+    .=Fmj1 by A52,RLVECT_2:def 9;
+   A54: j<len Fm by A44,NAT_1:13;
+   then h.j1=h.J+vAHj1 by A38,A40,A39,A9;
+   hence MT.(h.(j+1))=MT.(h.J)+MT.vAHj1 by MATRTOP1:27
+    .=fm.(j+1) by A33,A53,A54,A43;
+  end;
+  A55: P[0] by A37,A32,MATRTOP1:29;
+  for j be Nat holds P[j] from NAT_1:sch 2(A55,A42);
+  then Sum Fm=MT.(Sum vAH) by A36,A31,A40,A39,A9;
+  then A56: Sum F=MT.v by A10,A30,A4,A6,A7,A34,RLVECT_2:def 10;
+  A57: now let i be Nat;
+   assume A58: 1<=i & i<=len H;
+   then A59: i in dom H by FINSEQ_3:27;
+   then A60: (vA*H).i=vA.(H.i) by FUNCT_1:23;
+   H.i in rng H by A59,FUNCT_1:def 5;
+   then reconsider Hi=H.i as Element of TRn;
+   A61: MTR.i=MT.(H.i) by A59,FUNCT_1:23;
+   A62: i in dom MTR by A9,A58,FINSEQ_3:27;
+   then A63: MTR.i in rng MTR by FUNCT_1:def 5;
+   (F*MTR).i=F.(MTR.i) by A62,FUNCT_1:23;
+   then P[MT.Hi,(F*MTR).i] by A17,A61;
+   hence (F*MTR).i=(vA*H).i by A34,A41,A60,A61,A63;
+  end;
+  dom F=[#]TRm by FUNCT_2:def 1;
+  then len(F*MTR)=len MTR by A34,FINSEQ_2:33;
+  then vA*H=F*MTR by A9,A35,A57,FINSEQ_1:18;
+  then Sum(F*MTR)=sum vA by A4,A5,RLAFFIN1:def 3
+   .=1 by A3,RLAFFIN1:def 7;
+  then A64: sum F=1 by A10,A30,A4,A34,RLAFFIN1:def 3;
+  then Sum F in {Sum L where L is Linear_Combination of MT.:A:sum L=1};
+  hence A65: MT.v in Affin(MT.:A) by A56,RLAFFIN1:59;
+  let f;
+  f is Element of TRn by Lm3;
+  then A66: MT.f in rng MT by A8,FUNCT_1:def 5;
+  MT.:A is affinely-independent by A2,Th24;
+  then F=MT.v|--MT.:A by A56,A64,A65,RLAFFIN1:def 7;
+  hence thesis by A17,A66;
+end;
+
+theorem Th26:
+  for A be linearly-independent Subset of TOP-REAL m st the_rank_of M = n
+  holds (Mx2Tran M)"A is linearly-independent
+proof
+  let A be linearly-independent Subset of TOP-REAL m such that
+   A2: the_rank_of M=n;
+  set nV=n-VectSp_over F_Real,mV=m-VectSp_over F_Real;
+  reconsider Bm=MX2FinS 1.(F_Real,m) as OrdBasis of mV by MATRLIN2:45;
+  reconsider A1=A as Subset of mV by Lm1;
+  reconsider Bn=MX2FinS 1.(F_Real,n) as OrdBasis of nV by MATRLIN2:45;
+  len Bn=n by MATRTOP1:19;
+  then reconsider M1=M as Matrix of len Bn,len Bm,F_Real by MATRTOP1:19;
+  set MT=Mx2Tran(M1,Bn,Bm);
+  A3: Mx2Tran M=MT by MATRTOP1:20;
+  A4: MT is one-to-one by A2,A3,MATRTOP1:39;
+  reconsider R=A/\rng MT as Subset of mV;
+  A5:R c= A by XBOOLE_1:17;
+  A1 is linearly-independent by Th7;
+  then A6: dom MT=[#]nV & R is linearly-independent
+    by A5,FUNCT_2:def 1,VECTSP_7:2;
+  MT"R is linearly-independent
+  proof
+   assume MT"R is non linearly-independent;
+   then consider L be Linear_Combination of MT"R such that
+    A7: Carrier L<>{} and
+    A8: Sum L=0.nV by RANKNULL:41;
+   set C=Carrier L;
+   A9: C c=MT"R by VECTSP_6:def 7;
+   MT.:(MT"R)=R & MT@L is Linear_Combination of MT.:C
+     by FUNCT_1:147,RANKNULL:29,XBOOLE_1:17;
+   then A10: MT@L is Linear_Combination of R by A9,RELAT_1:156,VECTSP_6:25;
+   MT|C is one-to-one by A4,FUNCT_1:84;
+   then A11: Carrier(MT@L)=MT.:C by RANKNULL:39;
+   MT| (MT"R) is one-to-one by A4,FUNCT_1:84;
+   then Sum(MT@L)=MT.(Sum L) by Th14
+    .=0.mV by A8,RANKNULL:9;
+   hence contradiction by A6,A7,A11,A10,VECTSP_7:def 1;
+  end;
+  then MT"A is linearly-independent by RELAT_1:168;
+  hence thesis by A3,Th7;
+end;
+
+theorem
+  for A be affinely-independent Subset of TOP-REAL m st the_rank_of M = n
+  holds (Mx2Tran M)"A is affinely-independent
+proof
+  set MT=Mx2Tran M;
+  set TRn=TOP-REAL n,TRm=TOP-REAL m;
+  let A be affinely-independent Subset of TRm such that
+   A2: the_rank_of M=n;
+  reconsider R=A/\rng MT as affinely-independent Subset of TRm by RLAFFIN1:43,
+XBOOLE_1:17;
+  A3: MT"A=MT"(A/\rng MT) by RELAT_1:168;
+  per cases;
+  suppose R is empty;
+   then MT"A is empty by A3,RELAT_1:171;
+   hence thesis;
+  end;
+  suppose R is non empty;
+   then consider v be Element of TRm such that
+    A4: v in R and
+    A5: (-v+R)\{0.TRm} is linearly-independent by RLAFFIN1:def 4;
+   v in rng MT by A4,XBOOLE_0:def 4;
+   then consider x be set such that
+    A6: x in dom MT and
+    A7: MT.x=v by FUNCT_1:def 5;
+   reconsider x as Element of TRn by A6;
+   -x=0.TRn-x by RLVECT_1:27;
+   then A8: MT.(-x)=(MT.(0.TRn))-(MT.x) by MATRTOP1:28
+    .=(0.TRm)-(MT.x) by MATRTOP1:29
+    .=-v by A7,RLVECT_1:27;
+   A9: dom MT=[#]TRn by FUNCT_2:def 1;
+   MT.0.TRn=0.TRm by MATRTOP1:29;
+   then A10: {0.TRm}=Im(MT,0.TRn) by A9,FUNCT_1:117
+    .=MT.:{0.TRn} by RELAT_1:def 16;
+   MT is one-to-one by A2,MATRTOP1:39;
+   then A11: MT"{0.TRm}c={0.TRn} by A10,FUNCT_1:152;
+   {0.TRn}c=[#]TRn by ZFMISC_1:37;
+   then {0.TRn}c=MT"{0.TRm} by A9,A10,FUNCT_1:146;
+   then MT"{0.TRm}={0.TRn} by A11,XBOOLE_0:def 10;
+   then MT"((-v+R)\{0.TRm})=MT"(-v+R)\{0.TRn} by FUNCT_1:138
+    .=-x+(MT"R)\{0.TRn} by A8,MATRTOP1:31;
+   then A12: -x+(MT"R)\{0.TRn} is linearly-independent by A2,A5,Th26;
+   x in MT"R by A4,A6,A7,FUNCT_1:def 13;
+   hence thesis by A3,A12,RLAFFIN1:def 4;
+  end;
+end;

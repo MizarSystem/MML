@@ -52,9 +52,9 @@
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
 <Adjective nr="25"/>
-<Adjective nr="34"/>
-<Adjective nr="37"/>
+<Adjective nr="35"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRALG_1" nr="2">
@@ -150,7 +150,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 <Adjective nr="66"/>
 </Cluster>
 </RCluster>
@@ -256,7 +256,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -299,7 +299,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

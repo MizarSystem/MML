@@ -3,7 +3,7 @@
 ::
 :: Received November 10, 2009
 :: Copyright (c) 2009 Association of Mizar Users
- 
+
 environ
 
  vocabularies POSET_1, ORDERS_1, RELAT_1, RELAT_2, XBOOLE_0, FUNCT_1, FUNCT_2,
@@ -19,32 +19,32 @@ environ
  registrations XBOOLE_0, ORDINAL1, FUNCT_1, PARTFUN1, STRUCT_0, ORDERS_2,
       XREAL_0, NAT_1, RELAT_1, WAYBEL10, YELLOW_0, WAYBEL24;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions LATTICE3, STRUCT_0;
+ definitions RELAT_1, LATTICE3, STRUCT_0;
  theorems RELAT_1, RELSET_1, RELAT_2, ORDERS_2, TARSKI, FUNCT_1, FUNCT_2,
       XBOOLE_0, XBOOLE_1, ORDERS_1, ORDERS_3, FUNCOP_1, FUNCT_7, NAT_1,
       LATTICE3, YELLOW_0, ABIAN, YELLOW_2, WAYBEL_0;
  schemes NAT_1, RELSET_1, FUNCT_2;
 
 begin
- 
+
 :: 1. Monotone function, chain and chain-complete Poset
 
-Lemiter01: for f being Function st rng f c= dom f holds iter (f,0) = id(dom f)
+Lm1: for f being Function st rng f c= dom f holds iter (f,0) = id(dom f)
 proof
   let f be Function;
   assume rng f c= dom f;
-  then dom f \/ rng f = dom f by XBOOLE_1:12;
+  then field f = dom f by XBOOLE_1:12;
   hence thesis by FUNCT_7:70;
 end;
 
-Lemiter02: for f being Function, n be Nat st
+Lm2: for f being Function, n be Nat st
   rng f c= dom f holds dom iter(f,n) = dom f & rng iter(f,n) c= dom f
 proof
   let f be Function, n be Nat;
   defpred U[Nat] means
   dom iter(f,$1) = dom f & rng iter(f,$1) c= dom f;
   assume rng f c= dom f;
-  then iter(f,0) = id dom f by Lemiter01;
+  then iter(f,0) = id dom f by Lm1;
   then
 A1: U[ 0] by RELAT_1:71;
 A2: for k be Nat holds U[k] implies U[k+1]
@@ -62,16 +62,16 @@ A3: dom iter(f,k) = dom f & rng iter(f,k) c= dom f;
   hence thesis;
 end;
 
-Lemiter03:
+Lm3:
   for X be set, f being Function of X,X, n be Nat holds
     iter(f,n) is Function of X,X
 proof
   let X be set, f be Function of X,X, n be Nat;
 A1: X = {} implies X = {}; then
 A2: dom f = X & rng f c= X by FUNCT_2:def 1;
-  then dom iter(f,n) = X & rng iter(f,n) c= X by Lemiter02;
+  then dom iter(f,n) = X & rng iter(f,n) c= X by Lm2;
   then reconsider R = iter(f,n) as Relation of X,X by RELSET_1:11;
-  dom R = X & rng R c= X by A2,Lemiter02;
+  dom R = X & rng R c= X by A2,Lm2;
   hence thesis by A1,FUNCT_2:def 1;
 end;
 
@@ -81,7 +81,7 @@ registration let P be non empty Poset; :: move to ORDERS_2
   proof
     ex L being Chain of P st L is non empty
     proof
-      consider z being Element of P;
+      set z =the  Element of P;
       set IT={z};
       reconsider IT as Chain of P by ORDERS_2:35;
       IT is non empty;
@@ -91,18 +91,18 @@ registration let P be non empty Poset; :: move to ORDERS_2
   end;
 end;
 
-LemMin01:
+Lm4:
   for A being non empty RelStr, a being Element of A holds
   a is_<=_than the carrier of A iff for x being Element of A holds a <= x
 proof
   let A be non empty RelStr, a be Element of A;
   (for x being Element of A holds a <= x) implies a is_<=_than the carrier of A
   proof
-    assume A2:for x being Element of A holds a <= x;
+    assume A1:for x being Element of A holds a <= x;
     a is_<=_than the carrier of A
     proof
       let x be Element of A;
-      thus thesis by A2;
+      thus thesis by A1;
     end;
     hence thesis;
   end;
@@ -110,12 +110,12 @@ proof
 end;
 
 definition let IT be RelStr;
-  attr IT is chain-complete means :DefchainComplete:
+  attr IT is chain-complete means :Def1:
   IT is lower-bounded &
   for L being Chain of IT st L is non empty holds ex_sup_of L,IT;
 end;
 
-theorem ThChain1:
+theorem Th1:
   for P1, P2 being non empty Poset, K being non empty Chain of P1,
       h being monotone Function of P1, P2 holds
     h.:K is non empty Chain of P2
@@ -128,18 +128,18 @@ theorem ThChain1:
   for x, y be set st x in K2 & y in K2 & x <>y holds [x,y] in R or [y,x] in R
   proof
     let x, y be set;
-    assume B1:x in K2 & y in K2 & x <>y;
+    assume A1:x in K2 & y in K2 & x <>y;
     then reconsider x,y as Element of P2;
-    consider a be set such that B2: a in dom h & a in K & x = h.a
-                                            by B1,FUNCT_1:def 12;
-    consider b be set such that B3: b in dom h & b in K & y = h.b
-                                            by B1,FUNCT_1:def 12;
-    reconsider a,b as Element of P1 by B2,B3;
-    a<=b or b<=a by ORDERS_2:38,B2,B3;
-    then x<=y or y<=x by ORDERS_3:def 5,B2,B3;
+    consider a be set such that A2: a in dom h & a in K & x = h.a
+                                            by A1,FUNCT_1:def 12;
+    consider b be set such that A3: b in dom h & b in K & y = h.b
+                                            by A1,FUNCT_1:def 12;
+    reconsider a,b as Element of P1 by A2,A3;
+    a<=b or b<=a by ORDERS_2:38,A2,A3;
+    then x<=y or y<=x by ORDERS_3:def 5,A2,A3;
     hence thesis by ORDERS_2:def 9;
   end;
-  then A1:R is_connected_in K2 by RELAT_2:def 6;
+  then A4:R is_connected_in K2 by RELAT_2:def 6;
   for x be set st x in K2 holds [x,x] in R
   proof
     let x be set;
@@ -149,12 +149,12 @@ theorem ThChain1:
     hence thesis by ORDERS_2:def 9;
   end;
   then R is_reflexive_in K2 by RELAT_2:def 1;
-  then R is_strongly_connected_in K2 by A1,ORDERS_1:92;
+  then R is_strongly_connected_in K2 by A4,ORDERS_1:92;
   then reconsider K2 as Chain of P2 by ORDERS_2:def 11;
-  consider a be set such that A2:a in K by XBOOLE_0:7;
-  a in the carrier of P1 by A2;
+  consider a be set such that A5:a in K by XBOOLE_0:7;
+  a in the carrier of P1 by A5;
   then a in dom h by FUNCT_2:def 1;
-  then h.a in K2 by FUNCT_1:def 12,A2;
+  then h.a in K2 by FUNCT_1:def 12,A5;
   hence thesis;
   end;
 
@@ -162,7 +162,7 @@ registration
   cluster strict chain-complete non empty Poset;
   existence
   proof
-    consider z be set;
+    set z =the  set;
     set A = {z};
     reconsider R = id A as Relation of A;
     reconsider R as Order of A;
@@ -173,18 +173,18 @@ registration
       let L be Chain of IT;
       assume L is non empty;
       for x being Element of IT st x in L holds x <= z by TARSKI:def 1;
-      then B2: L is_<=_than z by LATTICE3:def 9;
+      then A1: L is_<=_than z by LATTICE3:def 9;
       for y being Element of IT holds
             L is_<=_than y implies z <= y by TARSKI:def 1;
-      hence thesis by B2,YELLOW_0:15;
+      hence thesis by A1,YELLOW_0:15;
     end;
-    hence thesis by DefchainComplete;
+    hence thesis by Def1;
   end;
 end;
 
 registration
   cluster chain-complete -> lower-bounded RelStr;
-  coherence by DefchainComplete;
+  coherence by Def1;
 end;
 
 reserve n,m,k for Nat;
@@ -196,37 +196,37 @@ reserve p,p1,p2,p3,p4 for Element of P;
 reserve q,q1,q2 for Element of Q;
 reserve f for monotone Function of P,Q;
 reserve g,g1,g2 for monotone Function of P,P;
- 
+
 :: Minimum and sup.
 
-theorem Thmonotone02:
+theorem Th2:
   sup (f.:L) <= f.(sup L)
   proof
-  reconsider M=f.:L as non empty Chain of Q by ThChain1;
+  reconsider M=f.:L as non empty Chain of Q by Th1;
   set r = sup L;
   set u = f.(sup L);
-  A01:ex_sup_of L,P & ex_sup_of M,Q by DefchainComplete;
+  A1:ex_sup_of L,P & ex_sup_of M,Q by Def1;
   for q st q in M holds q <= u
     proof
     let q;
     assume q in M;
     then consider x such that
-B1: x in dom f & x in L & q = f.x by FUNCT_1:def 12;
-    reconsider x as Element of P by B1;
-    L is_<=_than r by A01,YELLOW_0:def 9;
-    then x <= r by B1,LATTICE3:def 9;
-    hence thesis by ORDERS_3:def 5,B1;
+A2: x in dom f & x in L & q = f.x by FUNCT_1:def 12;
+    reconsider x as Element of P by A2;
+    L is_<=_than r by A1,YELLOW_0:def 9;
+    then x <= r by A2,LATTICE3:def 9;
+    hence thesis by ORDERS_3:def 5,A2;
     end;
   then M is_<=_than u by LATTICE3:def 9;
-  hence thesis by A01,YELLOW_0:def 9;
+  hence thesis by A1,YELLOW_0:def 9;
   end;
 
 begin
- 
+
 :: 2. Fix-point theorem for continuous function on chain-complete Poset
 :: Primaries--Iteration of monotone functions
 
-Lemiter10:
+Lm5:
   for P be non empty Poset, g be monotone Function of P, P,
       p be Element of P holds
   iter(g,0).p=p
@@ -251,7 +251,7 @@ definition let P be non empty Poset,
                         : ex n being Nat st x = iter(g,n).p};
     IT is non empty
     proof
-      iter(g,0).p = p by Lemiter10;
+      iter(g,0).p = p by Lm5;
       then p in IT;
       hence thesis;
     end;
@@ -259,25 +259,25 @@ definition let P be non empty Poset,
   end;
 end;
 
-Lemiter11:
+Lm6:
   iter(g,n).p is Element of P
   proof
     set X = the carrier of P;
-    reconsider g1 = iter(g,n) as Function of X,X by Lemiter03;
+    reconsider g1 = iter(g,n) as Function of X,X by Lm3;
     g1.p in X;
     hence thesis;
   end;
 
-Lemiter12:
+Lm7:
   (g*iter(g,n)).p = g.(iter(g,n).p) & (iter(g,n)*g).p = iter(g,n).(g.p)
   proof
     set X = the carrier of P;
-    reconsider g1 = iter(g,n) as Function of X,X by Lemiter03;
+    reconsider g1 = iter(g,n) as Function of X,X by Lm3;
     (g*g1).p = g.(g1.p) & (g1*g).p = g1.(g.p) by FUNCT_2:21;
     hence thesis;
   end;
 
-Lemiter13:
+Lm8:
   p<=p3 & p1=iter(g,n).p & p4= iter(g,n).p3 implies p1 <= p4
   proof
   defpred U[Nat] means
@@ -287,7 +287,7 @@ Lemiter13:
     proof
     let p,p3,p1,p4;
     assume p<=p3 & p1=iter(g,0).p & p4= iter(g,0).p3;
-    then p<=p3 & p1=p & p4=p3 by Lemiter10;
+    then p<=p3 & p1=p & p4=p3 by Lm5;
     hence thesis;
     end;
   A2: U[k] implies U[k+1]
@@ -298,13 +298,13 @@ Lemiter13:
     U[k+1]
      proof
      let p,p3,p1,p4;
-     assume B1:p<=p3 & p1=iter(g,k+1).p & p4= iter(g,k+1).p3;
-     reconsider x1=iter(g,k).p as Element of P by Lemiter11;
-     reconsider y1=iter(g,k).p3 as Element of P by Lemiter11;
-     B2:x1<=y1 by B1,A3;
+     assume A4:p<=p3 & p1=iter(g,k+1).p & p4= iter(g,k+1).p3;
+     reconsider x1=iter(g,k).p as Element of P by Lm6;
+     reconsider y1=iter(g,k).p3 as Element of P by Lm6;
+     A5:x1<=y1 by A4,A3;
      iter(g,k+1) = g*iter(g,k) by FUNCT_7:73;
-     then p1 = g.(iter(g,k).p) & p4 = g.(iter(g,k).p3) by Lemiter12,B1;
-     hence thesis by B2,ORDERS_3:def 5;
+     then p1 = g.(iter(g,k).p) & p4 = g.(iter(g,k).p3) by Lm7,A4;
+     hence thesis by A5,ORDERS_3:def 5;
      end;
     hence thesis;
     end;
@@ -312,7 +312,7 @@ Lemiter13:
   hence thesis;
   end;
 
-Lemiter14:
+Lm9:
   p3= g.p & p<=p3 & p1=iter(g,n).p & p4= iter(g,n+k).p implies p1 <= p4
   proof
   defpred U[Nat] means
@@ -329,13 +329,13 @@ Lemiter14:
     U[k+1]
      proof
      let p,p3,p1,p4;
-     assume B1:p3= g.p & p<=p3 & p1=iter(g,n).p & p4= iter(g,n+(k+1)).p;
-     reconsider y1=iter(g,n+k).p as Element of P by Lemiter11;
-     B2:p1<=y1 by B1,A3;
+     assume A4:p3= g.p & p<=p3 & p1=iter(g,n).p & p4= iter(g,n+(k+1)).p;
+     reconsider y1=iter(g,n+k).p as Element of P by Lm6;
+     A5:p1<=y1 by A4,A3;
      iter(g,n+(k+1)) = iter(g,(n+k)+1).=iter(g,n+k)*g by FUNCT_7:71;
-     then p4 = iter(g,n+k).p3 by Lemiter12,B1;
-     then y1<=p4 by B1,Lemiter13;
-     hence thesis by B2,ORDERS_2:26;
+     then p4 = iter(g,n+k).p3 by Lm7,A4;
+     then y1<=p4 by A4,Lm8;
+     hence thesis by A5,ORDERS_2:26;
      end;
     hence thesis;
     end;
@@ -343,20 +343,20 @@ Lemiter14:
   hence thesis;
   end;
 
-Lemiter15:
+Lm10:
   n<=m & p3 = g.p & p<=p3 & p1=iter(g,n).p & p4 = iter(g,m).p implies p1 <= p4
 proof
   assume A1:n<=m & p3= g.p & p<=p3 & p1=iter(g,n).p & p4 = iter(g,m).p;
   then consider k such that A2:m=n+k by NAT_1:10;
-  thus thesis by A1,A2,Lemiter14;
+  thus thesis by A1,A2,Lm9;
 end;
 
-Lemiter16:
+Lm11:
   p is_a_fixpoint_of g implies iter(g,n).p = p
   proof
   defpred U[Nat] means
   for p holds p is_a_fixpoint_of g implies iter(g,$1).p = p;
-  A1:U[0] by Lemiter10;
+  A1:U[0] by Lm5;
   A2:for k be Nat st U[k] holds U[k+1]
     proof
     let k;
@@ -364,11 +364,11 @@ Lemiter16:
     U[k+1]
      proof
      let p;
-     assume B1:p is_a_fixpoint_of g;
+     assume A4:p is_a_fixpoint_of g;
      iter(g,k+1) = g*iter(g,k) by FUNCT_7:73;
-     then iter(g,k+1).p = g.(iter(g,k).p) by Lemiter12
-                       .= g.p by B1,A3
-                       .= p by B1,ABIAN:def 3;
+     then iter(g,k+1).p = g.(iter(g,k).p) by Lm7
+                       .= g.p by A4,A3
+                       .= p by A4,ABIAN:def 3;
      hence thesis;
      end;
     hence thesis;
@@ -377,7 +377,7 @@ Lemiter16:
   hence thesis;
   end;
 
-Lemiter17:
+Lm12:
   g1 <= g2 & p1 = iter(g1,n).p & p2 = iter(g2,n).p implies p1 <= p2
   proof
   defpred U[Nat] means
@@ -388,7 +388,7 @@ Lemiter17:
   proof
      let p,p1,p2;
      assume g1 <= g2 & p1 = iter(g1,0).p & p2 = iter(g2,0).p;
-     then p1 = p & p2 = p by Lemiter10;
+     then p1 = p & p2 = p by Lm5;
      hence thesis;
      end;
   A2:for k be Nat st U[k] holds U[k+1]
@@ -398,18 +398,18 @@ Lemiter17:
     U[k+1]
       proof
       let p,p1,p2;
-      assume B1:g1 <= g2 & p1 = iter(g1,k+1).p & p2 = iter(g2,k+1).p;
-      reconsider q1 = iter(g1,k).p as Element of P by Lemiter11;
-      reconsider q2 = iter(g2,k).p as Element of P by Lemiter11;
+      assume A4:g1 <= g2 & p1 = iter(g1,k+1).p & p2 = iter(g2,k+1).p;
+      reconsider q1 = iter(g1,k).p as Element of P by Lm6;
+      reconsider q2 = iter(g2,k).p as Element of P by Lm6;
       set r = g1.q2;
-B2:   q1 <= q2 by B1,A3;
+A5:   q1 <= q2 by A4,A3;
   iter(g1,k+1) = g1*iter(g1,k) by FUNCT_7:73;
-then B3:   p1 = g1.q1 by Lemiter12,B1;
+then A6:   p1 = g1.q1 by Lm7,A4;
   iter(g2,k+1) = g2*iter(g2,k) by FUNCT_7:73;
-then B4:   p2 = g2.q2 by Lemiter12,B1;
-B5:   p1 <= r by B2,B3,ORDERS_3:def 5;
-      r <= p2 by YELLOW_2:10,B1,B4;
-      hence thesis by B5,ORDERS_2:26;
+then A7:   p2 = g2.q2 by Lm7,A4;
+A8:   p1 <= r by A5,A6,ORDERS_3:def 5;
+      r <= p2 by YELLOW_2:10,A4,A7;
+      hence thesis by A8,ORDERS_2:26;
       end;
     hence thesis;
     end;
@@ -417,7 +417,7 @@ B5:   p1 <= r by B2,B3,ORDERS_3:def 5;
   hence thesis;
   end;
 
-theorem ThiterSet1:
+theorem Th3:
   iterSet(g,Bottom P) is non empty Chain of P
   proof
   set a = Bottom P;
@@ -427,8 +427,8 @@ theorem ThiterSet1:
     proof
     assume x in L;
     then consider y being Element of P such that
-B1: x=y & ex n being Nat st y = iter(g,n).a;
-    thus thesis by B1;
+A2: x=y & ex n being Nat st y = iter(g,n).a;
+    thus thesis by A2;
     end;
   x in L implies x in the carrier of P
     proof
@@ -439,27 +439,27 @@ B1: x=y & ex n being Nat st y = iter(g,n).a;
   then reconsider L as Subset of P by TARSKI:def 3;
   x in L & y in L & x <>y implies [x,y] in R  or [y,x] in R
     proof
-    assume B1:x in L & y in L & x <>y;
+    assume A3:x in L & y in L & x <>y;
     then reconsider x,y as Element of P;
-    consider p such that B2: x=p & ex n st p = iter(g,n).a by B1;
-    consider p1 such that B3: y=p1 & ex m st p1 = iter(g,m).a by B1;
-    consider n such that B4:p = iter(g,n).a by B2;
-    consider m such that B5:p1 = iter(g,m).a by B3;
+    consider p such that A4: x=p & ex n st p = iter(g,n).a by A3;
+    consider p1 such that A5: y=p1 & ex m st p1 = iter(g,m).a by A3;
+    consider n such that A6:p = iter(g,n).a by A4;
+    consider m such that A7:p1 = iter(g,m).a by A5;
     p<=p1 or p1<=p
       proof
       set a1 = iter(g,1).a;
-      C1:a1=g.a by FUNCT_7:72;
+      A8:a1=g.a by FUNCT_7:72;
       per cases;
         suppose n<=m;
-          hence thesis by B4,B5,C1,YELLOW_0:44,Lemiter15;
+          hence thesis by A6,A7,A8,YELLOW_0:44,Lm10;
           end;
         suppose m<=n;
-          hence thesis by B4,B5,C1,YELLOW_0:44,Lemiter15;
+          hence thesis by A6,A7,A8,YELLOW_0:44,Lm10;
           end;
       end;
-    hence thesis by ORDERS_2:def 9,B2,B3;
+    hence thesis by ORDERS_2:def 9,A4,A5;
     end;
-  then A1:R is_connected_in L by RELAT_2:def 6;
+  then A9:R is_connected_in L by RELAT_2:def 6;
   x in L implies [x,x] in R
     proof
     assume x in L;
@@ -468,7 +468,7 @@ B1: x=y & ex n being Nat st y = iter(g,n).a;
     hence thesis by ORDERS_2:def 9;
     end;
   then R is_reflexive_in L by RELAT_2:def 1;
-  then R is_strongly_connected_in L by A1,ORDERS_1:92;
+  then R is_strongly_connected_in L by A9,ORDERS_1:92;
   then reconsider L as Chain of P by ORDERS_2:def 11;
   L is non empty Chain of P;
   hence thesis;
@@ -477,94 +477,94 @@ end;
 definition let P; let g be monotone Function of P,P;
   func iter_min(g) -> non empty Chain of P equals
     iterSet(g,Bottom P);
-  correctness by ThiterSet1;
+  correctness by Th3;
 end;
 
-theorem ThiterSet2:
+theorem Th4:
   sup iter_min(g) = sup (g.:iter_min(g))
   proof
-  reconsider L=g.:iter_min(g) as non empty Chain of P by ThChain1;
-  A00:ex_sup_of iter_min(g),P & ex_sup_of L,P by DefchainComplete;
+  reconsider L=g.:iter_min(g) as non empty Chain of P by Th1;
+  A1:ex_sup_of iter_min(g),P & ex_sup_of L,P by Def1;
   set a = Bottom P;
   set s1=sup iter_min(g);
   set s2=sup L;
-  A201:iter_min(g) is_<=_than s1 by A00,YELLOW_0:def 9;
-  A301:L is_<=_than s2 by A00,YELLOW_0:def 9;
+  A2:iter_min(g) is_<=_than s1 by A1,YELLOW_0:def 9;
+  A3:L is_<=_than s2 by A1,YELLOW_0:def 9;
   for x being Element of P st x in iter_min(g) holds x <= s2
     proof
     let x be Element of P;
     assume x in iter_min(g);
-    then consider p such that B2:x=p & ex n st p = iter(g,n).a;
-    consider n such that B3:p=iter(g,n).a by B2;
-    B4:1<=n implies p in L
+    then consider p such that A4:x=p & ex n st p = iter(g,n).a;
+    consider n such that A5:p=iter(g,n).a by A4;
+    A6:1<=n implies p in L
       proof
       assume 1<=n;
-      then consider k such that C1:n=1+k by NAT_1:10;
-      reconsider z=iter(g,k).a as Element of P by Lemiter11;
+      then consider k such that A7:n=1+k by NAT_1:10;
+      reconsider z=iter(g,k).a as Element of P by Lm6;
       z in the carrier of P; then
-C2:   z in dom g & z in iter_min(g) by FUNCT_2:def 1;
-      p = (g*iter(g,k)).a by FUNCT_7:73,B3,C1
-       .= g.z by Lemiter12;
-      hence thesis by C2,FUNCT_1:def 12;
+A8:   z in dom g & z in iter_min(g) by FUNCT_2:def 1;
+      p = (g*iter(g,k)).a by FUNCT_7:73,A5,A7
+       .= g.z by Lm7;
+      hence thesis by A8,FUNCT_1:def 12;
       end;
-    n=0 implies p=a by B3,Lemiter10;
-    hence thesis by B4,NAT_1:14,B2,YELLOW_0:44,A301,LATTICE3:def 9;
+    n=0 implies p=a by A5,Lm5;
+    hence thesis by A6,NAT_1:14,A4,YELLOW_0:44,A3,LATTICE3:def 9;
     end;
   then iter_min(g) is_<=_than s2 by LATTICE3:def 9;
-  then A4:s1<=s2 by A00,YELLOW_0:30;
+  then A9:s1<=s2 by A1,YELLOW_0:30;
   for x being Element of P st x in L holds x <= s1
     proof
     let x be Element of P;
     assume x in L;
     then consider z such that
-B2: z in dom g & z in iter_min(g) & x = g.z by FUNCT_1:def 12;
+A10: z in dom g & z in iter_min(g) & x = g.z by FUNCT_1:def 12;
     consider z1 be Element of P such that
-               B3:z=z1 & ex n st z1 = iter(g,n).a by B2;
-    consider n such that B4:z1=iter(g,n).a by B3;
+               A11:z=z1 & ex n st z1 = iter(g,n).a by A10;
+    consider n such that A12:z1=iter(g,n).a by A11;
     set n1=n+1;
-    g.z = (g*iter(g,n)).a by Lemiter12,B3,B4
+    g.z = (g*iter(g,n)).a by Lm7,A11,A12
        .= iter(g,n1).a by FUNCT_7:73;
-    then x in iterSet(g,a) by B2;
-    hence thesis by A201,LATTICE3:def 9;
+    then x in iterSet(g,a) by A10;
+    hence thesis by A2,LATTICE3:def 9;
     end;
   then L is_<=_than s1 by LATTICE3:def 9;
-  then s2<=s1 by YELLOW_0:def 9,A00;
-  hence thesis by A4,ORDERS_2:25;
+  then s2<=s1 by YELLOW_0:def 9,A1;
+  hence thesis by A9,ORDERS_2:25;
   end;
 
-theorem ThiterSet3:
+theorem Th5:
   g1 <= g2 implies sup iter_min(g1) <= sup iter_min(g2)
   proof
   assume A1:g1 <= g2;
   set p2 = sup iter_min(g2);
   set a = Bottom P;
-  A2:ex_sup_of iter_min(g1),P & ex_sup_of iter_min(g2),P by DefchainComplete;
+  A2:ex_sup_of iter_min(g1),P & ex_sup_of iter_min(g2),P by Def1;
   then A3:iter_min(g2) is_<=_than p2 by YELLOW_0:def 9;
   for x being Element of P st x in iter_min(g1) holds x <= p2
     proof
     let x be Element of P;
     assume x in iter_min(g1);
-    then consider p such that B1:x=p & ex n st p = iter(g1,n).a;
-    consider n such that B2:p=iter(g1,n).a by B1;
-    reconsider y = iter(g2,n).a as Element of P by Lemiter11;
+    then consider p such that A4:x=p & ex n st p = iter(g1,n).a;
+    consider n such that A5:p=iter(g1,n).a by A4;
+    reconsider y = iter(g2,n).a as Element of P by Lm6;
     y in iter_min(g2);
-    then B3:y <= p2 by LATTICE3:def 9,A3;
-    p <= y by A1,B2,Lemiter17;
-    hence thesis by B1,B3,ORDERS_2:26;
+    then A6:y <= p2 by LATTICE3:def 9,A3;
+    p <= y by A1,A5,Lm12;
+    hence thesis by A4,A6,ORDERS_2:26;
     end;
   then iter_min(g1) is_<=_than p2 by LATTICE3:def 9;
   hence thesis by A2,YELLOW_0:30;
   end;
- 
+
 :: Continuous function on chain-complete Poset
 
 definition let P,Q be non empty Poset;
   let f be Function of P,Q;
-  attr f is continuous means :Defcontinuous:
+  attr f is continuous means :Def4:
   f is monotone & for L be non empty Chain of P holds f preserves_sup_of L;
 end;
 
-theorem Thcontinuous01:
+theorem Th6:
   for f being Function of P,Q holds f is continuous iff
           (f is monotone & for L holds f.(sup L) = sup (f.:L))
    proof
@@ -576,25 +576,25 @@ theorem Thcontinuous01:
      for L holds f.(sup L) = sup (f.:L)
      proof
        let L;
-    B1:f preserves_sup_of L by A1,Defcontinuous;
-       ex_sup_of L,P by DefchainComplete;
-       hence thesis by WAYBEL_0:def 31,B1;
+    A2:f preserves_sup_of L by A1,Def4;
+       ex_sup_of L,P by Def1;
+       hence thesis by WAYBEL_0:def 31,A2;
      end;
-     hence thesis by A1,Defcontinuous;
+     hence thesis by A1,Def4;
      end;
-     assume that B1:f is monotone and
-B2:  for L holds f.(sup L) = sup (f.:L);
+     assume that A3:f is monotone and
+A4:  for L holds f.(sup L) = sup (f.:L);
      for L holds f preserves_sup_of L
      proof
        let L;
-       reconsider M = f.:L as non empty Chain of Q by B1,ThChain1;
-       ex_sup_of M,Q & f.(sup L) = sup M by DefchainComplete,B2;
+       reconsider M = f.:L as non empty Chain of Q by A3,Th1;
+       ex_sup_of M,Q & f.(sup L) = sup M by Def1,A4;
        hence thesis by WAYBEL_0:def 31;
      end;
-     hence thesis by B1,Defcontinuous;
+     hence thesis by A3,Def4;
    end;
 
-theorem Thcontinuous02:
+theorem Th7:
   for z being Element of Q holds (P-->z) is continuous
   proof
     let z be Element of Q;
@@ -608,109 +608,109 @@ theorem Thcontinuous02:
         let x be Element of Q;
         assume x in M;
         then consider a be set such that
-    D1: a in dom IT & a in L & x = IT.a by FUNCT_1:def 12;
-        thus thesis by D1,FUNCOP_1:13;
+    A1: a in dom IT & a in L & x = IT.a by FUNCT_1:def 12;
+        thus thesis by A1,FUNCOP_1:13;
         end;
-      then B3:M is_<=_than z by LATTICE3:def 9;
+      then A2:M is_<=_than z by LATTICE3:def 9;
       for y being Element of Q st M is_<=_than y holds z <= y
         proof
         let y be Element of Q;
-        assume D1:M is_<=_than y;
-        consider a be set such that D2:a in L by XBOOLE_0:def 1;
-        a in the carrier of P by D2;
-        then D3:a in dom IT by FUNCOP_1:19;
-        IT.a = z by D2,FUNCOP_1:13;
-        then z in M by D2,D3,FUNCT_1:def 12;
-        hence thesis by D1,LATTICE3:def 9;
+        assume A3:M is_<=_than y;
+        consider a be set such that A4:a in L by XBOOLE_0:def 1;
+        a in the carrier of P by A4;
+        then A5:a in dom IT by FUNCOP_1:19;
+        IT.a = z by A4,FUNCOP_1:13;
+        then z in M by A4,A5,FUNCT_1:def 12;
+        hence thesis by A3,LATTICE3:def 9;
         end;
-      then z = "\/"(M,Q) by B3,YELLOW_0:30;
+      then z = "\/"(M,Q) by A2,YELLOW_0:30;
       hence thesis by FUNCOP_1:13;
       end;
-    hence thesis by Thcontinuous01;
+    hence thesis by Th6;
   end;
 
 registration let P,Q;
   cluster continuous Function of P, Q;
   existence
   proof
-    consider z being Element of Q;
+    set z =the  Element of Q;
     take P-->z;
-    thus thesis by Thcontinuous02;
+    thus thesis by Th7;
   end;
 end;
 
 registration let P,Q;
   cluster continuous -> monotone Function of P, Q;
-  correctness by Defcontinuous;
+  correctness by Def4;
 end;
 
-theorem Thcontinuous03:
+theorem Th8:
   for f being monotone Function of P,Q holds
     (for L holds f.(sup L) <= sup (f.:L)) implies f is continuous
   proof
   let f be monotone Function of P,Q;
-  assume B1:for L holds f.(sup L) <= sup (f.:L);
+  assume A1:for L holds f.(sup L) <= sup (f.:L);
   for L holds f.(sup L) = sup (f.:L)
     proof
     let L;
     set a1=f.(sup L);
     set a2=sup (f.:L);
-    C2:a2<=a1 by Thmonotone02;
-    a1<=a2 by B1;
-    hence thesis by ORDERS_2:25,C2;
+    A2:a2<=a1 by Th2;
+    a1<=a2 by A1;
+    hence thesis by ORDERS_2:25,A2;
     end;
-  hence thesis by Thcontinuous01;
+  hence thesis by Th6;
   end;
- 
+
 :: Fix-point theorem for continuous function on chain-complete Poset
 
-Lemfixpoint01:
+Lm13:
   g is continuous & p=sup iter_min(g) implies p is_a_fixpoint_of g
 proof
-A01:dom g = the carrier of P by FUNCT_2:def 1;
-  reconsider L=g.:iter_min(g) as non empty Chain of P by ThChain1;
-  assume A1:g is continuous & p=sup iter_min(g);
-  then g.p = sup L by Thcontinuous01
-          .= p by A1,ThiterSet2;
-  hence thesis by A01,ABIAN:def 3;
+A1:dom g = the carrier of P by FUNCT_2:def 1;
+  reconsider L=g.:iter_min(g) as non empty Chain of P by Th1;
+  assume A2:g is continuous & p=sup iter_min(g);
+  then g.p = sup L by Th6
+          .= p by A2,Th4;
+  hence thesis by A1,ABIAN:def 3;
 end;
 
-Lemfixpoint02:
+Lm14:
   p4=sup iter_min(g) implies for p st p is_a_fixpoint_of g holds p4 <= p
 proof
-  assume A0:p4=sup iter_min(g);
+  assume A1:p4=sup iter_min(g);
   for p st p is_a_fixpoint_of g holds p4 <= p
   proof
     let p;
-    assume A1:p is_a_fixpoint_of g;
+    assume A2:p is_a_fixpoint_of g;
     set M = iter_min(g);
     set a = Bottom P;
-    A2:ex_sup_of M,P by DefchainComplete;
+    A3:ex_sup_of M,P by Def1;
     for p1 st p1 in M holds p1 <= p
     proof
       let p1;
       assume p1 in M;
-      then consider p2 such that B1:p1=p2 & ex n st p2 = iter(g,n).a;
-      consider n such that B2:p1=iter(g,n).a by B1;
-      reconsider q = iter(g,n).p as Element of P by Lemiter11;
-      p1 <= q by B2,YELLOW_0:44,Lemiter13;
-      hence thesis by A1,Lemiter16;
+      then consider p2 such that A4:p1=p2 & ex n st p2 = iter(g,n).a;
+      consider n such that A5:p1=iter(g,n).a by A4;
+      reconsider q = iter(g,n).p as Element of P by Lm6;
+      p1 <= q by A5,YELLOW_0:44,Lm8;
+      hence thesis by A2,Lm11;
     end;
     then M is_<=_than p by LATTICE3:def 9;
-    hence thesis by A2,YELLOW_0:def 9,A0;
+    hence thesis by A3,YELLOW_0:def 9,A1;
   end;
   hence thesis;
 end;
 
 definition let P; let g be monotone Function of P,P;
-  assume A0:g is continuous;
-  func least_fix_point(g) -> Element of P means  :Defleastfixpoint:
+  assume A1:g is continuous;
+  func least_fix_point(g) -> Element of P means  :Def5:
     it is_a_fixpoint_of g & for p st p is_a_fixpoint_of g holds it <= p;
   existence
   proof
     set IT = sup iter_min(g);
     take IT;
-    thus thesis by A0,Lemfixpoint01,Lemfixpoint02;
+    thus thesis by A1,Lm13,Lm14;
   end;
   uniqueness
   proof
@@ -724,21 +724,21 @@ definition let P; let g be monotone Function of P,P;
   end;
 end;
 
-theorem Thfixpoint01:
+theorem Th9:
   for g being continuous Function of P,P holds
     least_fix_point(g) = sup iter_min(g)
 proof
   let g be continuous Function of P,P;
   set p = sup iter_min(g);
   set q = least_fix_point(g);
-  p is_a_fixpoint_of g by Lemfixpoint01;
-  then A2:q <= p by Defleastfixpoint;
-  q is_a_fixpoint_of g by Defleastfixpoint;
-  then p <= q by Lemfixpoint02;
-  hence thesis by A2,ORDERS_2:25;
+  p is_a_fixpoint_of g by Lm13;
+  then A1:q <= p by Def5;
+  q is_a_fixpoint_of g by Def5;
+  then p <= q by Lm14;
+  hence thesis by A1,ORDERS_2:25;
 end;
 
-theorem Thfixpoint02:
+theorem Th10:
   for g1,g2 being continuous Function of P,P st g1 <= g2 holds
     least_fix_point(g1) <= least_fix_point(g2)
 proof
@@ -746,12 +746,12 @@ proof
   assume A1: g1 <= g2;
   set p1 = sup iter_min(g1);
   set p2 = sup iter_min(g2);
-  p1 = least_fix_point(g1) & p2 = least_fix_point(g2) by Thfixpoint01;
-  hence thesis by A1,ThiterSet3;
+  p1 = least_fix_point(g1) & p2 = least_fix_point(g2) by Th9;
+  hence thesis by A1,Th5;
 end;
 
 begin
- 
+
 :: 3. Function space of continuous functions on chain-complete Posets
 
 definition let P,Q;
@@ -764,8 +764,8 @@ definition let P,Q;
                :ex f be continuous Function of P,Q st f=x };
     IT is non empty
     proof
-      consider z being Element of Q;
-      reconsider f = P-->z as continuous Function of P,Q by Thcontinuous02;
+      set z =the  Element of Q;
+      reconsider f = P-->z as continuous Function of P,Q by Th7;
       f is Element of Funcs(the carrier of P,the carrier of Q) by FUNCT_2:11;
       then f in IT;
       hence thesis;
@@ -774,7 +774,7 @@ definition let P,Q;
     end;
   end;
 
-Lemlessthan01:
+Lm15:
   for f be Function of P,Q holds f <= f
 proof
   let f be Function of P,Q;
@@ -782,7 +782,7 @@ proof
   hence thesis by YELLOW_2:10;
 end;
 
-Lemlessthan02:
+Lm16:
   for f,g,h be Function of P,Q st f <= g & g <= h holds f <= h
   proof
   let f,g,h be Function of P,Q;
@@ -792,9 +792,9 @@ Lemlessthan02:
     let p;
     q=f.p & q2=h.p implies q<=q2
       proof
-      assume C1:q=f.p & q2=h.p;
+      assume A2:q=f.p & q2=h.p;
       set q1=g.p;
-      q<=q1 & q1<=q2 by C1,A1,YELLOW_2:10;
+      q<=q1 & q1<=q2 by A2,A1,YELLOW_2:10;
       hence thesis by ORDERS_2:26;
       end;
     hence thesis;
@@ -802,7 +802,7 @@ Lemlessthan02:
   hence thesis by YELLOW_2:10;
   end;
 
-Lemlessthan03:
+Lm17:
   for f,g be Function of P,Q st f <= g & g <= f holds f=g
 proof
   let f,g be Function of P,Q;
@@ -814,15 +814,15 @@ proof
     then reconsider p=x as Element of P;
     set q1=f.p;
     set q2=g.p;
-    B1:q1<=q2 by A1,YELLOW_2:10;
+    A2:q1<=q2 by A1,YELLOW_2:10;
     q2<=q1 by A1,YELLOW_2:10;
-    hence thesis by B1,ORDERS_2:25;
+    hence thesis by A2,ORDERS_2:25;
   end;
   hence thesis by FUNCT_2:18;
 end;
 
 definition let P,Q;
-  func ConRelat(P,Q) -> Relation of ConFuncs(P,Q) means  :DefConRelat:
+  func ConRelat(P,Q) -> Relation of ConFuncs(P,Q) means  :Def7:
    for x,y holds [x,y] in it iff (x in ConFuncs(P,Q) & y in ConFuncs(P,Q)
         & ex f,g being Function of P,Q st x=f & y=g & f <= g);
    existence
@@ -848,73 +848,73 @@ definition let P,Q;
       for x,y holds ([x,y] in Y2 iff P1[x,y]) )
           implies Y1=Y2
        proof
-       assume B1:for x,y holds ([x,y] in Y1 iff P1[x,y]) &
+       assume A2:for x,y holds ([x,y] in Y1 iff P1[x,y]) &
                  for x,y holds ([x,y] in Y2 iff P1[x,y]);
-       then B2:for x1 being Element of X, y1 being Element of X
+       then A3:for x1 being Element of X, y1 being Element of X
             holds ([x1,y1] in Y1 iff P1[x1,y1] );
-       B3:for x being Element of X, y being Element of X
-            holds [x,y] in Y2 iff P1[x,y] by B1;
-       thus thesis from RELSET_1:sch 4(B2,B3);
+       A4:for x being Element of X, y being Element of X
+            holds [x,y] in Y2 iff P1[x,y] by A2;
+       thus thesis from RELSET_1:sch 4(A3,A4);
        end;
      hence thesis;
      end;
   end;
 
-LemConRelat01:
+Lm18:
   field ConRelat(P,Q) c= ConFuncs(P,Q)
   proof
     ConFuncs(P,Q) \/ ConFuncs(P,Q) c= ConFuncs(P,Q);
     hence thesis by RELSET_1:19;
   end;
 
-LemConRelat02:
+Lm19:
   ConRelat(P,Q) is_reflexive_in ConFuncs(P,Q)
   proof
     set R = ConRelat(P,Q);
     x in ConFuncs(P,Q) implies [x,x] in R
     proof
-      assume B1:x in ConFuncs(P,Q);
+      assume A1:x in ConFuncs(P,Q);
       then consider x1 be Element of Funcs(the carrier of P,the carrier of Q)
          such that
-   B3:x=x1 and B4: ex f be continuous Function of P,Q st f=x1;
-      consider f be continuous Function of P,Q such that B5:f=x1 by B4;
-      f <= f by Lemlessthan01;
-      hence thesis by B1,B3,B5,DefConRelat;
+   A2:x=x1 and A3: ex f be continuous Function of P,Q st f=x1;
+      consider f be continuous Function of P,Q such that A4:f=x1 by A3;
+      f <= f by Lm15;
+      hence thesis by A1,A2,A4,Def7;
     end;
     hence thesis by RELAT_2:def 1;
   end;
 
-LemConRelat03:
+Lm20:
   ConRelat(P,Q) is_transitive_in ConFuncs(P,Q)
   proof
     set X = ConFuncs(P,Q);
     set R = ConRelat(P,Q);
     x in X & y in X & z in X & [x,y] in R & [y,z] in R implies [x,z] in R
     proof
-      assume B1:x in X & y in X & z in X & [x,y] in R & [y,z] in R;
+      assume A1:x in X & y in X & z in X & [x,y] in R & [y,z] in R;
       then consider f,g being Function of P,Q such that
-      B2:x=f & y=g & f <= g by DefConRelat;
+      A2:x=f & y=g & f <= g by Def7;
       consider g1,h being Function of P,Q such that
-      B3:y=g1 & z=h & g1 <= h by B1,DefConRelat;
-      f <= h by B3,B2,Lemlessthan02;
-      hence thesis by B1,B2,B3,DefConRelat;
+      A3:y=g1 & z=h & g1 <= h by A1,Def7;
+      f <= h by A3,A2,Lm16;
+      hence thesis by A1,A2,A3,Def7;
     end;
     hence thesis by RELAT_2:def 8;
   end;
 
-LemConRelat04:
+Lm21:
   ConRelat(P,Q) is_antisymmetric_in ConFuncs(P,Q)
   proof
     set X = ConFuncs(P,Q);
     reconsider R = ConRelat(P,Q) as Relation of ConFuncs(P,Q);
     x in X & y in X & [x,y] in R & [y,x] in R implies x = y
     proof
-      assume B1:x in X & y in X & [x,y] in R & [y,x] in R;
+      assume A1:x in X & y in X & [x,y] in R & [y,x] in R;
       then consider f,g being Function of P,Q such that
-      B2:x=f & y=g & f <= g by DefConRelat;
+      A2:x=f & y=g & f <= g by Def7;
       consider g1,f1 being Function of P,Q such that
-      B3:y=g1 & x=f1 & g1 <= f1 by B1,DefConRelat;
-      thus thesis by B2,B3,Lemlessthan03;
+      A3:y=g1 & x=f1 & g1 <= f1 by A1,Def7;
+      thus thesis by A2,A3,Lm17;
     end;
     hence thesis by RELAT_2:def 4;
   end;
@@ -928,10 +928,10 @@ registration let P,Q;
       reconsider R = ConRelat(P,Q)  as Relation of ConFuncs(P,Q);
       x in field R implies [x,x] in R
       proof
-        assume B0:x in field R;
-        B1:field R c= ConFuncs(P,Q) by LemConRelat01;
-        R is_reflexive_in ConFuncs(P,Q) by LemConRelat02;
-        hence thesis by B0,B1,RELAT_2:def 1;
+        assume A1:x in field R;
+        A2:field R c= ConFuncs(P,Q) by Lm18;
+        R is_reflexive_in ConFuncs(P,Q) by Lm19;
+        hence thesis by A1,A2,RELAT_2:def 1;
       end;
       hence thesis by RELAT_2:def 1;
     end;
@@ -946,11 +946,11 @@ registration let P,Q;
       set R = ConRelat(P,Q);
       x in X & y in X & z in X & [x,y] in R & [y,z] in R implies [x,z] in R
       proof
-        assume B0:x in X & y in X & z in X & [x,y] in R & [y,z] in R;
+        assume A3:x in X & y in X & z in X & [x,y] in R & [y,z] in R;
         set X1=ConFuncs(P,Q);
-        B1:field R c= X1 by LemConRelat01;
-        R is_transitive_in X1 by LemConRelat03;
-        hence thesis by B0,B1,RELAT_2:def 8;
+        A4:field R c= X1 by Lm18;
+        R is_transitive_in X1 by Lm20;
+        hence thesis by A3,A4,RELAT_2:def 8;
       end;
       hence thesis by RELAT_2:def 8;
     end;
@@ -965,11 +965,11 @@ registration let P,Q;
       reconsider R = ConRelat(P,Q) as Relation of ConFuncs(P,Q);
       x in X & y in X & [x,y] in R & [y,x] in R implies x = y
       proof
-        assume B0:x in X & y in X & [x,y] in R & [y,x] in R;
+        assume A5:x in X & y in X & [x,y] in R & [y,x] in R;
         set X1=ConFuncs(P,Q);
-        B1:field R c= X1 by LemConRelat01;
-        R is_antisymmetric_in X1 by LemConRelat04;
-        hence thesis by B0,B1,RELAT_2:def 4;
+        A6:field R c= X1 by Lm18;
+        R is_antisymmetric_in X1 by Lm21;
+        hence thesis by A5,A6,RELAT_2:def 4;
       end;
       hence thesis by RELAT_2:def 4;
     end;
@@ -983,10 +983,10 @@ definition let P,Q;
   correctness
   proof
     set IT = RelStr(#ConFuncs(P,Q),ConRelat(P,Q)#);
-A1: the InternalRel of IT is_reflexive_in the carrier of IT by LemConRelat02;
-A2: the InternalRel of IT is_transitive_in the carrier of IT by LemConRelat03;
+A1: the InternalRel of IT is_reflexive_in the carrier of IT by Lm19;
+A2: the InternalRel of IT is_transitive_in the carrier of IT by Lm20;
     the InternalRel of IT is_antisymmetric_in the carrier of IT
-                                                            by LemConRelat04;
+                                                            by Lm21;
     hence thesis by A1,A2,ORDERS_2:def 4,ORDERS_2:def 5,ORDERS_2:def 6;
   end;
 end;
@@ -1006,40 +1006,40 @@ definition let P,Q,F,p;
     proof
       assume x in IT;
       then consider a being Element of Q such that
-      B1:x=a & ex f being continuous Function of P,Q st f in F & a=f.p;
-      reconsider x as Element of the carrier of Q by B1;
+      A1:x=a & ex f being continuous Function of P,Q st f in F & a=f.p;
+      reconsider x as Element of the carrier of Q by A1;
       x in the carrier of Q;
       hence thesis;
     end;
     then reconsider IT as Subset of Q by TARSKI:def 3;
     x in IT & y in IT & x <>y implies [x,y] in R  or [y,x] in R
       proof
-      assume B1:x in IT & y in IT & x <>y;
+      assume A2:x in IT & y in IT & x <>y;
       then consider a being Element of Q such that
-B2:   x=a & ex f being continuous Function of P,Q st f in F & a=f.p;
+A3:   x=a & ex f being continuous Function of P,Q st f in F & a=f.p;
       consider f being continuous Function of P,Q such that
-B3:   f in F & a=f.p by B2;
+A4:   f in F & a=f.p by A3;
       consider b being Element of Q such that
-B5:   y=b & ex g being continuous Function of P,Q st g in F & b=g.p by B1;
+A5:   y=b & ex g being continuous Function of P,Q st g in F & b=g.p by A2;
       consider g being continuous Function of P,Q such that
-B6:   g in F & b=g.p by B5;
+A6:   g in F & b=g.p by A5;
       set S =the InternalRel of ConPoset(P,Q);
-      B9:S is_strongly_connected_in F by ORDERS_2:def 11;
-      per cases by B9,RELAT_2:def 7,B3,B6;
+      A7:S is_strongly_connected_in F by ORDERS_2:def 11;
+      per cases by A7,RELAT_2:def 7,A4,A6;
         suppose [f,g] in S;
            then consider f1,g1 being Function of P,Q such that
-        C1:f=f1 & g=g1 & f1 <= g1 by DefConRelat;
-           a <= b by C1,YELLOW_2:10,B3,B6;
-           hence thesis by B2,B5,ORDERS_2:def 9;
+        A8:f=f1 & g=g1 & f1 <= g1 by Def7;
+           a <= b by A8,YELLOW_2:10,A4,A6;
+           hence thesis by A3,A5,ORDERS_2:def 9;
            end;
         suppose [g,f] in S;
            then consider g1,f1 being Function of P,Q such that
-              C2:g=g1 & f=f1 & g1 <= f1 by DefConRelat;
-           b<= a by C2,YELLOW_2:10,B3,B6;
-           hence thesis by B2,B5,ORDERS_2:def 9;
+              A9:g=g1 & f=f1 & g1 <= f1 by Def7;
+           b<= a by A9,YELLOW_2:10,A4,A6;
+           hence thesis by A3,A5,ORDERS_2:def 9;
            end;
         end;
-    then A1:R is_connected_in IT by RELAT_2:def 6;
+    then A10:R is_connected_in IT by RELAT_2:def 6;
     x in IT implies [x,x] in R
       proof
       assume x in IT;
@@ -1048,22 +1048,22 @@ B6:   g in F & b=g.p by B5;
       hence thesis by ORDERS_2:def 9;
       end;
     then R is_reflexive_in IT by RELAT_2:def 1;
-    then R is_strongly_connected_in IT by A1,ORDERS_1:92;
+    then R is_strongly_connected_in IT by A10,ORDERS_1:92;
     then reconsider IT as Chain of Q by ORDERS_2:def 11;
-    consider a be set such that A2:a in F by XBOOLE_0:7;
-    a in ConFuncs(P,Q) by A2; then
+    consider a be set such that A11:a in F by XBOOLE_0:7;
+    a in ConFuncs(P,Q) by A11; then
     consider b being Element of Funcs(the carrier of P,the carrier of Q)
          such that
-A3: a=b & ex f be continuous Function of P,Q st f=b;
-    consider f be continuous Function of P,Q such that A4:f=b by A3;
+A12: a=b & ex f be continuous Function of P,Q st f=b;
+    consider f be continuous Function of P,Q such that A13:f=b by A12;
     reconsider c = f.p as Element of Q;
-    c in IT by A2,A3,A4;
+    c in IT by A11,A12,A13;
     hence thesis;
     end;
   end;
 
 definition let P,Q,F;
-  func sup_func(F) -> Function of P,Q means  :Defsupfunc:
+  func sup_func(F) -> Function of P,Q means  :Def10:
     for p,M holds M=F-image p implies it.p=sup M;
   existence
     proof
@@ -1092,7 +1092,7 @@ A2: for x st x in X holds U[x,IT.x] from FUNCT_2:sch 1(A1);
       (for p,M holds M=F-image p implies f.p=sup M) &
       (for p,M holds M=F-image p implies g.p=sup M) implies f=g
         proof
-        assume C1:(for p,M holds M=F-image p implies f.p=sup M) &
+        assume A3:(for p,M holds M=F-image p implies f.p=sup M) &
                   (for p,M holds M=F-image p implies g.p=sup M);
         set X = the carrier of P;
         for x st x in X holds f.x = g.x
@@ -1101,7 +1101,7 @@ A2: for x st x in X holds U[x,IT.x] from FUNCT_2:sch 1(A1);
           assume x in X;
           then reconsider p= x as Element of P;
           reconsider M = F-image p as non empty Chain of Q;
-          f.x = sup M by C1 .= g.x by C1;
+          f.x = sup M by A3 .= g.x by A3;
           hence thesis;
         end;
         hence thesis by FUNCT_2:18;
@@ -1110,7 +1110,7 @@ A2: for x st x in X holds U[x,IT.x] from FUNCT_2:sch 1(A1);
     end;
 end;
 
-Lemsup01:
+Lm22:
   sup_func(F) is monotone
   proof
   reconsider f=sup_func(F) as Function of P,Q;
@@ -1124,104 +1124,104 @@ Lemsup01:
       assume A2:q = f.p & q1 = f.p1;
       reconsider X= F-image p as non empty Chain of Q;
       reconsider X1= F-image p1 as non empty Chain of Q;
-      A00:ex_sup_of X,Q & ex_sup_of X1,Q by DefchainComplete;
-      A3:q=sup X by A2,Defsupfunc;
-      q1=sup X1 by A2,Defsupfunc;
-      then A4:X1 is_<=_than q1 by A00,YELLOW_0:def 9;
+      A3:ex_sup_of X,Q & ex_sup_of X1,Q by Def1;
+      A4:q=sup X by A2,Def10;
+      q1=sup X1 by A2,Def10;
+      then A5:X1 is_<=_than q1 by A3,YELLOW_0:def 9;
       for x being Element of Q st x in X holds x <= q1
         proof
         let x be Element of Q;
         assume x in X;
         then consider a being Element of Q such that
-        B2:x=a & ex g being continuous Function of P,Q st g in F & a=g.p;
+        A6:x=a & ex g being continuous Function of P,Q st g in F & a=g.p;
         consider g being continuous Function of P,Q such that
-        B3: g in F & a=g.p by B2;
+        A7: g in F & a=g.p by A6;
         reconsider b=g.p1 as Element of Q;
-        B4:a <= b by A1,B3,ORDERS_3:def 5;
-        b in X1 by B3;
-        then b <= q1 by A4,LATTICE3:def 9;
-        hence thesis by B2,B4,ORDERS_2:26;
+        A8:a <= b by A1,A7,ORDERS_3:def 5;
+        b in X1 by A7;
+        then b <= q1 by A5,LATTICE3:def 9;
+        hence thesis by A6,A8,ORDERS_2:26;
       end;
       then X is_<=_than q1 by LATTICE3:def 9;
-      hence thesis by A00,A3,YELLOW_0:def 9;
+      hence thesis by A3,A4,YELLOW_0:def 9;
       end;
     hence thesis;
     end;
   hence thesis by ORDERS_3:def 5;
   end;
 
-Lem201:
+Lm23:
 q in M implies q <= sup M
   proof
   assume A1:q in M;
-  A00:ex_sup_of M,Q by DefchainComplete;
+  A2:ex_sup_of M,Q by Def1;
   set x = sup M;
-  M is_<=_than x by YELLOW_0:def 9,A00;
+  M is_<=_than x by YELLOW_0:def 9,A2;
   hence thesis by LATTICE3:def 9,A1;
   end;
 
-Lem202:
+Lm24:
 (for q st q in M holds q<=q1) implies sup M <= q1
 proof
   assume for q st q in M holds q<=q1;
   then A1:M is_<=_than q1 by LATTICE3:def 9;
-  A00:ex_sup_of M,Q by DefchainComplete;
-  thus thesis by YELLOW_0:def 9,A00,A1;
+  A2:ex_sup_of M,Q by Def1;
+  thus thesis by YELLOW_0:def 9,A2,A1;
 end;
 
-Lemsup02:
+Lm25:
   sup_func(F) is continuous
   proof
-  reconsider f=sup_func(F) as monotone Function of P,Q by Lemsup01;
+  reconsider f=sup_func(F) as monotone Function of P,Q by Lm22;
   for L holds f.(sup L) <= sup (f.:L)
     proof
     let L;
-    reconsider M1 = f.:L as non empty Chain of Q by ThChain1;
+    reconsider M1 = f.:L as non empty Chain of Q by Th1;
     set q1 = sup M1;
     set a = sup L;
     set M = F-image a;
-    A2:f.a = sup M by Defsupfunc;
+    A1:f.a = sup M by Def10;
     for q st q in M holds q <=q1
       proof
       let q;
       assume q in M;
       then consider q0 be Element of Q such that
-   B1:q=q0 & ex g being continuous Function of P,Q st g in F & q0=g.a;
+   A2:q=q0 & ex g being continuous Function of P,Q st g in F & q0=g.a;
       consider g being continuous Function of P,Q such that
-  B2: g in F & q0=g.a by B1;
-      reconsider M2=g.:L as non empty Chain of Q by ThChain1;
-   B3:q = sup M2 by Thcontinuous01,B1,B2;
+  A3: g in F & q0=g.a by A2;
+      reconsider M2=g.:L as non empty Chain of Q by Th1;
+   A4:q = sup M2 by Th6,A2,A3;
       for q2 st q2 in M2 holds q2 <= q1
       proof
         let q2;
         assume q2 in M2;
-        then consider x such that C1: x in dom g & x in L & q2 = g.x
+        then consider x such that A5: x in dom g & x in L & q2 = g.x
                                             by FUNCT_1:def 12;
-        reconsider x as Element of P by C1;
+        reconsider x as Element of P by A5;
         set Mx=F-image x;
-        C2:f.x= sup Mx by Defsupfunc;
+        A6:f.x= sup Mx by Def10;
         set y = f.x;
         x in the carrier of P;
         then x in dom f by FUNCT_2:def 1;
-        then y in M1 by C1,FUNCT_1:def 12;
-        then C3:y <= q1 by Lem201;
-        q2 in F-image x by C1,B2;
-        then q2 <= sup Mx by Lem201;
-        hence thesis by C3,ORDERS_2:26,C2;
+        then y in M1 by A5,FUNCT_1:def 12;
+        then A7:y <= q1 by Lm23;
+        q2 in F-image x by A5,A3;
+        then q2 <= sup Mx by Lm23;
+        hence thesis by A7,ORDERS_2:26,A6;
       end;
-      hence thesis by B3,Lem202;
+      hence thesis by A4,Lm24;
     end;
-    hence thesis by A2,Lem202;
+    hence thesis by A1,Lm24;
     end;
-  hence thesis by Thcontinuous03;
+  hence thesis by Th8;
   end;
 
 registration let P,Q,F;
   cluster sup_func(F) -> continuous;
-  correctness by Lemsup02;
+  correctness by Lm25;
 end;
 
-Lemsup03:
+Lm26:
   sup_func(F) is Element of ConPoset(P,Q)
   proof
     set x = sup_func(F);
@@ -1231,93 +1231,93 @@ A1: x is Element of Funcs(the carrier of P,the carrier of Q) by FUNCT_2:11;
     hence thesis;
   end;
 
-Lem301:
+Lm27:
 for x st x in F holds ex g being continuous Function of P,Q st x=g
   proof
   let x;
   assume x in F;
   then x in ConFuncs(P,Q);
   then consider y be Element of Funcs(the carrier of P,the carrier of Q)
-     such that A2:x = y & ex g be continuous Function of P,Q st g=y;
-  thus thesis by A2;
+     such that A1:x = y & ex g be continuous Function of P,Q st g=y;
+  thus thesis by A1;
   end;
 
-theorem ThConPoset01:
+theorem Th11:
   ex_sup_of F, ConPoset(P,Q) & sup_func(F) = "\/"(F,ConPoset(P,Q))
   proof
   set X = ConPoset(P,Q);
   set f1 = sup_func(F);
-  reconsider f=f1 as Element of ConPoset(P,Q) by Lemsup03;
+  reconsider f=f1 as Element of ConPoset(P,Q) by Lm26;
   for x being Element of X st x in F holds x <= f
     proof
     let x be Element of X;
-    assume B1:x in F;
+    assume A1:x in F;
     then consider g1 being continuous Function of P,Q such that
-B2: x = g1 by Lem301;
-    reconsider g = g1 as Element of X by B2;
+A2: x = g1 by Lm27;
+    reconsider g = g1 as Element of X by A2;
     for p holds g1.p <= f1.p
     proof
       let p;
       q1=g1.p & q2=f1.p implies q1<=q2
       proof
-        assume C1:q1=g1.p & q2=f1.p;
-        then C2:q1 in F-image p by B1,B2;
+        assume A3:q1=g1.p & q2=f1.p;
+        then A4:q1 in F-image p by A1,A2;
         reconsider M = F-image p as non empty Chain of Q;
-        q2 = sup M by Defsupfunc,C1;
-        hence thesis by C2,Lem201;
+        q2 = sup M by Def10,A3;
+        hence thesis by A4,Lm23;
       end;
       hence thesis;
     end;
     then g1 <= f1 by YELLOW_2:10;
-    then [g,f] in ConRelat(P,Q) by DefConRelat;
-    hence thesis by B2,ORDERS_2:def 9;
+    then [g,f] in ConRelat(P,Q) by Def7;
+    hence thesis by A2,ORDERS_2:def 9;
     end;
-   then A1:F is_<=_than f by LATTICE3:def 9;
+   then A5:F is_<=_than f by LATTICE3:def 9;
    for y being Element of X holds F is_<=_than y implies f <= y
     proof
     let y be Element of X;
     y in ConFuncs(P,Q);
     then consider y1 being Element of Funcs(the carrier of P,the carrier of Q)
-        such that B01:y = y1 & ex gy be continuous Function of P,Q st gy =y1;
+        such that A6:y = y1 & ex gy be continuous Function of P,Q st gy =y1;
     consider gy being continuous Function of P,Q
-        such that B02:gy = y1 by B01;
+        such that A7:gy = y1 by A6;
     F is_<=_than y implies f <= y
       proof
-      assume B1:F is_<=_than y;
+      assume A8:F is_<=_than y;
       for p holds f1.p <= gy.p
         proof
         let p;
         q1=f1.p & q2=gy.p implies q1<=q2
           proof
-          assume C1:q1=f1.p & q2=gy.p;
+          assume A9:q1=f1.p & q2=gy.p;
           reconsider M=F-image p as non empty Chain of Q;
           for q st q in M holds q<=q2
             proof
             let q;
             assume q in M;
             then consider a being Element of Q such that
-         D1:q=a & ex g being continuous Function of P,Q st g in F & a=g.p;
+         A10:q=a & ex g being continuous Function of P,Q st g in F & a=g.p;
             consider g be continuous Function of P,Q such that
-              D2: g in F & a=g.p by D1;
-            reconsider g1 = g as Element of ConPoset(P,Q) by D2;
-            g1 <= y by B1,LATTICE3:def 9,D2;
+              A11: g in F & a=g.p by A10;
+            reconsider g1 = g as Element of ConPoset(P,Q) by A11;
+            g1 <= y by A8,LATTICE3:def 9,A11;
             then [g1,y] in ConRelat(P,Q) by ORDERS_2:def 9;
             then consider g2,g3 being Function of P,Q such that
-         D3:g1=g2 & y=g3 & g2 <= g3 by DefConRelat;
-            thus thesis by D3,B01,B02,D1,D2,C1,YELLOW_2:10;
+         A12:g1=g2 & y=g3 & g2 <= g3 by Def7;
+            thus thesis by A12,A6,A7,A10,A11,A9,YELLOW_2:10;
             end;
-          then sup M <= q2 by Lem202;
-          hence thesis by C1,Defsupfunc;
+          then sup M <= q2 by Lm24;
+          hence thesis by A9,Def10;
           end;
         hence thesis;
         end;
       then f1 <= gy by YELLOW_2:10;
-      then [f,y] in ConRelat(P,Q) by B01,B02,DefConRelat;
+      then [f,y] in ConRelat(P,Q) by A6,A7,Def7;
       hence thesis by ORDERS_2:def 9;
       end;
     hence thesis;
     end;
-  hence thesis by A1,YELLOW_0:30;
+  hence thesis by A5,YELLOW_0:30;
   end;
 
 definition let P,Q;
@@ -1328,10 +1328,10 @@ end;
 
 registration let P,Q;
   cluster min_func(P,Q) -> continuous;
-  coherence by Thcontinuous02;
+  coherence by Th7;
 end;
 
-LemMinFunc01:
+Lm28:
   min_func(P,Q) is Element of ConPoset(P,Q)
   proof
     reconsider f = min_func(P,Q) as continuous Function of P,Q;
@@ -1341,7 +1341,7 @@ LemMinFunc01:
     hence thesis;
   end;
 
-theorem ThConPoset02:
+theorem Th12:
   for f being Element of ConPoset(P,Q) st f = min_func(P,Q)
     holds f is_<=_than the carrier of ConPoset(P,Q)
 proof
@@ -1354,9 +1354,9 @@ proof
     x in ConFuncs(P,Q);
     then consider x1 being Element of Funcs(the carrier of P,the carrier of Q)
       such that
-B1: x = x1 & ex g be continuous Function of P,Q st g=x1;
+A2: x = x1 & ex g be continuous Function of P,Q st g=x1;
     consider g being continuous Function of P,Q such that
-B2: g=x1 by B1;
+A3: g=x1 by A2;
     for p holds f1.p <= g.p
       proof
       let p;
@@ -1369,10 +1369,10 @@ B2: g=x1 by B1;
       hence thesis;
       end;
     then f1 <= g by YELLOW_2:10;
-    then [f,x] in ConRelat(P,Q) by B1,B2,DefConRelat,A1;
+    then [f,x] in ConRelat(P,Q) by A2,A3,Def7,A1;
     hence thesis by ORDERS_2:def 9;
   end;
-  hence thesis by LemMin01;
+  hence thesis by Lm4;
 end;
 
 registration let P,Q;
@@ -1383,22 +1383,22 @@ registration let P,Q;
     ex a being Element of IT st a is_<=_than the carrier of IT
     proof
     reconsider a = min_func(P,Q) as Element of ConPoset(P,Q)
-      by LemMinFunc01;
+      by Lm28;
     take a;
-    thus thesis by ThConPoset02;
+    thus thesis by Th12;
     end; then
 A1: IT is lower-bounded by YELLOW_0:def 4;
     for L being Chain of IT st L is non empty holds ex_sup_of L,IT
-      by ThConPoset01;
-    hence thesis by DefchainComplete,A1;
+      by Th11;
+    hence thesis by Def1,A1;
   end;
 end;
 
 begin
- 
+
 :: 4. Continuity of fix-point function from ConPoset(P,P) to P
 
-LemCastFunc01:
+Lm29:
   x is Element of ConPoset(P,P) implies x is continuous Function of P,P
 proof
   assume x is Element of ConPoset(P,P);
@@ -1408,7 +1408,7 @@ proof
   thus thesis by A1;
 end;
 
-LemCastFunc02:
+Lm30:
   g is continuous Function of P,P implies g is Element of ConPoset(P,P)
 proof
   assume A1:g is continuous Function of P,P;
@@ -1419,7 +1419,7 @@ proof
 end;
 
 definition let P;
-  func fix_func(P) -> Function of ConPoset(P,P), P means  :Deffixfunc:
+  func fix_func(P) -> Function of ConPoset(P,P), P means  :Def12:
     for g being Element of ConPoset(P,P),
         h being continuous Function of P, P st g = h holds
     it.g = least_fix_point h;
@@ -1436,7 +1436,7 @@ A1: for x st x in X ex y st y in Y & U[x,y]
       let x;
       assume x in X;
       then reconsider x as Element of ConPoset(P,P);
-      reconsider h = x as continuous Function of P, P by LemCastFunc01;
+      reconsider h = x as continuous Function of P, P by Lm29;
       take least_fix_point h;
       thus thesis;
     end;
@@ -1450,7 +1450,7 @@ A2: for x st x in X holds U[x,IT.x] from FUNCT_2:sch 1(A1);
   uniqueness
   proof
     let h1,h2 be Function of ConPoset(P,P),P such that
-A1: (for g being Element of ConPoset(P,P),
+A3: (for g being Element of ConPoset(P,P),
          h being continuous Function of P, P st g = h holds
         h1.g = least_fix_point h) &
     (for g being Element of ConPoset(P,P),
@@ -1462,16 +1462,16 @@ A1: (for g being Element of ConPoset(P,P),
       let x;
       assume x in X;
       then reconsider g = x as Element of ConPoset(P,P);
-      reconsider h = g as continuous Function of P, P by LemCastFunc01;
-      h1.x = least_fix_point h by A1
-          .= h2.x by A1;
+      reconsider h = g as continuous Function of P, P by Lm29;
+      h1.x = least_fix_point h by A3
+          .= h2.x by A3;
       hence thesis;
     end;
     hence thesis by FUNCT_2:18;
   end;
 end;
 
-LemFix01:
+Lm31:
   for p1,p2 being Element of ConPoset(P,P) st p1 <= p2
     holds (p1 in ConFuncs(P,P) & p2 in ConFuncs(P,P) &
       ex g1,g2 being continuous Function of P,P st
@@ -1483,20 +1483,20 @@ LemFix01:
     ex g1,g2 being continuous Function of P,P st p1=g1 & p2=g2 & g1 <= g2
     proof
       consider g1,g2 being Function of P,P such that
-B1:   p1=g1 & p2=g2 & g1 <= g2 by A1,DefConRelat;
+A2:   p1=g1 & p2=g2 & g1 <= g2 by A1,Def7;
       reconsider h1 = p1, h2 = p2 as continuous Function of P, P
-        by LemCastFunc01;
-      g1 = h1 by B1;
+        by Lm29;
+      g1 = h1 by A2;
       then reconsider g1 as continuous Function of P, P;
-      g2 = h2 by B1;
+      g2 = h2 by A2;
       then reconsider g2 as continuous Function of P, P;
       take g1,g2;
-      thus thesis by B1;
+      thus thesis by A2;
     end;
     hence thesis;
   end;
 
-LemFix0201:
+Lm32:
   fix_func(P) is monotone Function of ConPoset(P,P),P
   proof
     set IT = fix_func(P);
@@ -1505,18 +1505,18 @@ LemFix0201:
                st a = IT.p1 & b = IT.p2 holds a <= b
     proof
       let p1,p2 be Element of ConPoset(P,P);
-      assume B1:p1 <= p2;
+      assume A1:p1 <= p2;
       let a, b be Element of P;
-      assume B2:a = IT.p1 & b = IT.p2;
+      assume A2:a = IT.p1 & b = IT.p2;
       consider g1,g2 being continuous Function of P,P such that
-B3:   p1=g1 & p2=g2 & g1 <= g2 by B1,LemFix01;
-      a = least_fix_point(g1) & b = least_fix_point(g2) by B2,Deffixfunc,B3;
-      hence thesis by B3,Thfixpoint02;
+A3:   p1=g1 & p2=g2 & g1 <= g2 by A1,Lm31;
+      a = least_fix_point(g1) & b = least_fix_point(g2) by A2,Def12,A3;
+      hence thesis by A3,Th10;
     end;
     hence thesis by ORDERS_3:def 5;
   end;
 
-LemFix02:
+Lm33:
 for G being non empty Chain of ConPoset(P,P),n,X,x
     st X = {p where p is Element of P
                   : ex g being Element of ConPoset(P,P),
@@ -1540,7 +1540,7 @@ A1:x=p & ex g being Element of ConPoset(P,P),
   thus thesis by A1;
   end;
 
-LemFix0301:
+Lm34:
 for G being non empty Chain of ConPoset(P,P) ,n, X
     st X = {p where p is Element of P
                   : ex g being Element of ConPoset(P,P),
@@ -1550,7 +1550,7 @@ for G being non empty Chain of ConPoset(P,P) ,n, X
   proof
   let G be non empty Chain of ConPoset(P,P);
   let n,X;
-  assume A0:X = {p where p is Element of P
+  assume A1:X = {p where p is Element of P
                   : ex g being Element of ConPoset(P,P),
                        h being continuous Function of P,P
                      st h = g & g in G & p = iter(h,n).(Bottom P)};
@@ -1558,15 +1558,15 @@ for G being non empty Chain of ConPoset(P,P) ,n, X
     proof
     assume x in X;
     then consider p being Element of P such that
-B1: x=p & ex g being Element of ConPoset(P,P),
+A2: x=p & ex g being Element of ConPoset(P,P),
              h being continuous Function of P,P
-        st h = g & g in G & p = iter(h,n).(Bottom P) by A0;
-    thus thesis by B1;
+        st h = g & g in G & p = iter(h,n).(Bottom P) by A1;
+    thus thesis by A2;
     end;
   hence thesis;
   end;
 
-LemFix03:
+Lm35:
 for G being non empty Chain of ConPoset(P,P), n, X
     st X = {p where p is Element of P
                   : ex g being Element of ConPoset(P,P),
@@ -1576,25 +1576,25 @@ for G being non empty Chain of ConPoset(P,P), n, X
   proof
   let G be non empty Chain of ConPoset(P,P);
   let n,X;
-  assume A0:X = {p where p is Element of P
+  assume A1:X = {p where p is Element of P
                   : ex g being Element of ConPoset(P,P),
                        h being continuous Function of P,P
                   st h = g & g in G & p = iter(h,n).(Bottom P)};
-  consider g be set such that A1:g in G by XBOOLE_0:def 1;
-  reconsider g as Element of ConPoset(P,P) by A1;
-  reconsider gg = g as continuous Function of P,P by LemCastFunc01;
-  reconsider p = iter(gg,n).(Bottom P) as Element of P by Lemiter11;
-  A2:p in X by A0,A1;
+  consider g be set such that A2:g in G by XBOOLE_0:def 1;
+  reconsider g as Element of ConPoset(P,P) by A2;
+  reconsider gg = g as continuous Function of P,P by Lm29;
+  reconsider p = iter(gg,n).(Bottom P) as Element of P by Lm6;
+  A3:p in X by A1,A2;
   x in X implies x in the carrier of P
   proof
     assume x in X;
-    then x is Element of the carrier of P by LemFix0301,A0;
+    then x is Element of the carrier of P by Lm34,A1;
     hence thesis;
   end;
-  hence thesis by TARSKI:def 3,A2;
+  hence thesis by TARSKI:def 3,A3;
 end;
 
-LemFix0401:
+Lm36:
 for G being non empty Chain of ConPoset(P,P),
     f,g being monotone Function of P,P st f in G & g in G
    holds f <= g or g <= f
@@ -1607,17 +1607,17 @@ for G being non empty Chain of ConPoset(P,P),
   per cases by A2,RELAT_2:def 7,A1;
     suppose [f,g] in S;
       then consider f1,g1 being Function of P,P such that
-      B1:f=f1 & g=g1 & f1 <= g1 by DefConRelat;
-      thus thesis by B1;
+      A3:f=f1 & g=g1 & f1 <= g1 by Def7;
+      thus thesis by A3;
     end;
     suppose [g,f] in S;
       then consider g1,f1 being Function of P,P such that
-      B2:g=g1 & f=f1 & g1 <= f1 by DefConRelat;
-      thus thesis by B2;
+      A4:g=g1 & f=f1 & g1 <= f1 by Def7;
+      thus thesis by A4;
     end;
   end;
 
-LemFix04:
+Lm37:
 for G being non empty Chain of ConPoset(P,P) ,n, X
     st X = {p where p is Element of P
                   : ex g being Element of ConPoset(P,P),
@@ -1627,32 +1627,32 @@ for G being non empty Chain of ConPoset(P,P) ,n, X
   proof
   let G be non empty Chain of ConPoset(P,P);
   let n,X;
-  assume A0: X = {p where p is Element of P
+  assume A1: X = {p where p is Element of P
                   : ex g being Element of ConPoset(P,P),
                        h being continuous Function of P,P
                      st h = g & g in G & p = iter(h,n).(Bottom P)};
   set R = the InternalRel of P;
-  reconsider X as non empty Subset of P by A0,LemFix03;
+  reconsider X as non empty Subset of P by A1,Lm35;
   x in X & y in X & x <>y implies [x,y] in R or [y,x] in R
     proof
-    assume B1:x in X & y in X & x <>y;
+    assume A2:x in X & y in X & x <>y;
     then consider p1 being Element of P,
              g1 being continuous Function of P,P such that
-B2: x=p1 & g1 in G & p1 = iter(g1,n).(Bottom P) by A0,LemFix02;
+A3: x=p1 & g1 in G & p1 = iter(g1,n).(Bottom P) by A1,Lm33;
     consider p2 being Element of P,
              g2 being continuous Function of P,P such that
-B3: y=p2 & g2 in G & p2 = iter(g2,n).(Bottom P) by A0,B1,LemFix02;
-    per cases by B2,B3,LemFix0401;
+A4: y=p2 & g2 in G & p2 = iter(g2,n).(Bottom P) by A1,A2,Lm33;
+    per cases by A3,A4,Lm36;
     suppose g1 <= g2;
-      then p1 <= p2 by Lemiter17,B2,B3;
-      hence thesis by B2,B3,ORDERS_2:def 9;
+      then p1 <= p2 by Lm12,A3,A4;
+      hence thesis by A3,A4,ORDERS_2:def 9;
     end;
     suppose g2 <= g1;
-      then p2 <= p1 by Lemiter17,B2,B3;
-      hence thesis by B2,B3,ORDERS_2:def 9;
+      then p2 <= p1 by Lm12,A3,A4;
+      hence thesis by A3,A4,ORDERS_2:def 9;
     end;
   end;
-  then A1:R is_connected_in X by RELAT_2:def 6;
+  then A5:R is_connected_in X by RELAT_2:def 6;
   x in X implies [x,x] in R
     proof
     assume x in X;
@@ -1661,11 +1661,11 @@ B3: y=p2 & g2 in G & p2 = iter(g2,n).(Bottom P) by A0,B1,LemFix02;
     hence thesis by ORDERS_2:def 9;
     end;
   then R is_reflexive_in X by RELAT_2:def 1;
-  then R is_strongly_connected_in X by A1,ORDERS_1:92;
+  then R is_strongly_connected_in X by A5,ORDERS_1:92;
   hence thesis by ORDERS_2:def 11;
   end;
 
-LemFix0503:
+Lm38:
   for h being Function of ConPoset(P,P),P,
       G being non empty Chain of ConPoset(P,P),x
      holds x in G implies h.x in h.:G
@@ -1682,7 +1682,7 @@ LemFix0503:
    hence thesis by A1,FUNCT_1:def 12;
    end;
 
-LemFix0504:
+Lm39:
 for g being continuous Function of P,P ,p,p1,n
    holds p = (fix_func(P)).g & p1 = (iter(g,n)).(Bottom P)
                  implies p1 <= p
@@ -1692,14 +1692,14 @@ for g being continuous Function of P,P ,p,p1,n
    set a = Bottom P;
    assume A1: p = (fix_func(P)).g & p1 = (iter(g,n)).a;
    then A2:p1 in iterSet(g,a);
-   reconsider g1 = g as Element of ConPoset(P,P) by LemCastFunc02;
+   reconsider g1 = g as Element of ConPoset(P,P) by Lm30;
    reconsider G1 = g1 as continuous Function of P,P;
-   p = least_fix_point(G1) by Deffixfunc,A1
-    .= sup iter_min(g) by Thfixpoint01;
-   hence thesis by Lem201,A2;
+   p = least_fix_point(G1) by Def12,A1
+    .= sup iter_min(g) by Th9;
+   hence thesis by Lm23,A2;
  end;
 
-LemFix0505:
+Lm40:
 for G being non empty Chain of ConPoset(P,P), x being set, n being Nat,
     M being non empty Chain of P,
     g1 being monotone Function of P,P
@@ -1731,54 +1731,54 @@ A3:y = p & ex g being Element of ConPoset(P,P),
    thus thesis by A2,A3;
    end;
 
-LemFix05:
+Lm41:
 for G being non empty Chain of ConPoset(P,P)
    holds (fix_func(P)).(sup G) <= sup ((fix_func(P)).:G)
    proof
    let G be non empty Chain of ConPoset(P,P);
    reconsider h = fix_func(P) as monotone Function of ConPoset(P,P),P
-                                       by LemFix0201;
+                                       by Lm32;
    h.(sup G) <= sup (h.:G)
      proof
-     reconsider L = h.:G as non empty Chain of P by ThChain1;
+     reconsider L = h.:G as non empty Chain of P by Th1;
      set g0 = sup G;
      set p0 = h.g0;
-     reconsider G0 = g0 as continuous Function of P,P by LemCastFunc01;
-  B2:p0 = least_fix_point(G0) by Deffixfunc;
-  B3:sup G = sup_func(G) by ThConPoset01;
+     reconsider G0 = g0 as continuous Function of P,P by Lm29;
+  A1:p0 = least_fix_point(G0) by Def12;
+  A2:sup G = sup_func(G) by Th11;
      then reconsider g0 as continuous Function of P,P;
      set a = Bottom P;
-     reconsider I0 = iterSet(g0,a) as non empty Chain of P by ThiterSet1;
-B4:  p0 = sup iter_min(g0) by Thfixpoint01,B2
+     reconsider I0 = iterSet(g0,a) as non empty Chain of P by Th3;
+A3:  p0 = sup iter_min(g0) by Th9,A1
        .= sup I0;
-  B5:ex_sup_of I0,P by DefchainComplete;
+  A4:ex_sup_of I0,P by Def1;
      for x being Element of P st x in I0 holds x <= sup L
        proof
        let x be Element of P;
        assume x in I0;
        then consider y being Element of P such that
-   C1: x=y & ex n being Nat st y = iter(g0,n).a;
-       consider n0 being Nat such that C2:x = iter(g0,n0).a by C1;
+   A5: x=y & ex n being Nat st y = iter(g0,n).a;
+       consider n0 being Nat such that A6:x = iter(g0,n0).a by A5;
        set M0 = {p where p is Element of P
                   : ex g being Element of ConPoset(P,P),
                        h being continuous Function of P,P
                      st h = g & g in G & p = iter(h,n0).a};
-       reconsider M0 as non empty Chain of P by LemFix04;
+       reconsider M0 as non empty Chain of P by Lm37;
        for p st p in M0 holds p <= sup L
          proof
          let p;
          assume p in M0;
          then consider p0 being Element of P,
          g being continuous Function of P,P such that
-D1:      p=p0 & g in G & p0 = iter(g,n0).a by LemFix02;
+A7:      p=p0 & g in G & p0 = iter(g,n0).a by Lm33;
          set r = h.g;
-         r in L by D1,LemFix0503;
+         r in L by A7,Lm38;
          then reconsider r as Element of P;
-      D4:r <= sup L by Lem201,D1,LemFix0503;
-         p <= r by D1,LemFix0504;
-         hence thesis by D4,ORDERS_2:26;
+      A8:r <= sup L by Lm23,A7,Lm38;
+         p <= r by A7,Lm39;
+         hence thesis by A8,ORDERS_2:26;
          end; then
-     C3: sup M0 <= sup L by Lem202;
+     A9: sup M0 <= sup L by Lm24;
        defpred U[Nat] means
           for z being Element of P,M being non empty Chain of P
             st z = iter(g0,$1).a &
@@ -1787,17 +1787,17 @@ D1:      p=p0 & g in G & p0 = iter(g,n0).a by LemFix02;
                          h being continuous Function of P,P
                         st h = g & g in G & p = iter(h,$1).a}
                 holds z <= sup M;
-       C4:U[0]
+       A10:U[0]
          proof
          let z be Element of P;
          let M be non empty Chain of P;
          assume z = iter(g0,0).a;
-         then z = a by Lemiter10;
+         then z = a by Lm5;
          hence thesis by YELLOW_0:44;
          end;
-       C5: U[k] implies U[k+1]
+       A11: U[k] implies U[k+1]
          proof
-         assume D1:U[k];
+         assume A12:U[k];
          for z1 being Element of P,M1 being non empty Chain of P
             st z1 = iter(g0,k+1).a &
                M1 = {p where p is Element of P
@@ -1809,85 +1809,85 @@ D1:      p=p0 & g in G & p0 = iter(g,n0).a by LemFix02;
            let z1 be Element of P;
            let M1 be non empty Chain of P;
            assume
-        E1:z1 = iter(g0,k+1).a & M1 = {p where p is Element of P
+        A13:z1 = iter(g0,k+1).a & M1 = {p where p is Element of P
                      :ex g being Element of ConPoset(P,P),
                          h being continuous Function of P,P
                         st h = g & g in G & p = iter(h,k+1).a};
-            reconsider z = iter(g0,k).a as Element of P by Lemiter11;
-            E2:z1 = (g0*iter(g0,k)).a by E1,FUNCT_7:73
-                 .= g0.z by Lemiter12;
+            reconsider z = iter(g0,k).a as Element of P by Lm6;
+            A14:z1 = (g0*iter(g0,k)).a by A13,FUNCT_7:73
+                 .= g0.z by Lm7;
             reconsider M = {p where p is Element of P
                      :ex g being Element of ConPoset(P,P),
                          h being continuous Function of P,P
                         st h = g & g in G & p = iter(h,k).a}
-                             as non empty Chain of P by LemFix04;
-            reconsider M0 = g0.:M as non empty Chain of P by ThChain1;
-            E3:g0.(sup M) = sup M0 by Thcontinuous01;
-            E401:ex_sup_of M0,P by DefchainComplete;
+                             as non empty Chain of P by Lm37;
+            reconsider M0 = g0.:M as non empty Chain of P by Th1;
+            A15:g0.(sup M) = sup M0 by Th6;
+            A16:ex_sup_of M0,P by Def1;
             for q being Element of P st q in M0 holds q <= sup M1
               proof
               let q be Element of P;
               assume q in M0;
               then consider g being continuous Function of P,P such that
-          F1: g in G & q = g0.(iter(g,k).a) by LemFix0505;
-              reconsider a1 = iter(g,k).a as Element of P by Lemiter11;
+          A17: g in G & q = g0.(iter(g,k).a) by Lm40;
+              reconsider a1 = iter(g,k).a as Element of P by Lm6;
               reconsider W = G-image a1 as non empty Chain of P;
-              F2:q = sup W by F1,Defsupfunc,B3;
-              F3:ex_sup_of W,P by DefchainComplete;
+              A18:q = sup W by A17,Def10,A2;
+              A19:ex_sup_of W,P by Def1;
               for q1 being Element of P st q1 in W holds q1 <= sup M1
                 proof
                 let q1 be Element of P;
                 assume q1 in W;
                 then consider q2 being Element of P such that
-           F401:q1 = q2 & ex g1 being continuous Function of P,P
+           A20:q1 = q2 & ex g1 being continuous Function of P,P
                 st g1 in G & q2=g1.a1;
                 consider g1 be continuous Function of P,P
-                such that F402:g1 in G & q1=g1.a1 by F401;
-                per cases by F1,F402,LemFix0401;
+                such that A21:g1 in G & q1=g1.a1 by A20;
+                per cases by A17,A21,Lm36;
                   suppose g1 <= g;
-                  then F404:q1 <= g.a1 by YELLOW_2:10,F402;
+                  then A22:q1 <= g.a1 by YELLOW_2:10,A21;
                   set a2 = g.a1;
                   reconsider g2 = g as Element of ConPoset(P,P)
-                                          by LemCastFunc02;
+                                          by Lm30;
                   reconsider gg = g2 as continuous Function of P,P;
-                  a2 = (g*iter(g,k)).a by Lemiter12
+                  a2 = (g*iter(g,k)).a by Lm7
                     .= iter(gg,k+1).a by FUNCT_7:73;
-                  then a2 in M1 by E1,F1;
-                  then a2 <= sup M1 by Lem201;
-                  hence thesis by F404,ORDERS_2:26;
+                  then a2 in M1 by A13,A17;
+                  then a2 <= sup M1 by Lm23;
+                  hence thesis by A22,ORDERS_2:26;
                   end;
-                  suppose F405:g <= g1;
-                  reconsider a2 = iter(g1,k).a as Element of P by Lemiter11;
-                  a1 <= a2 by F405,Lemiter17;
-                  then F406:q1 <= g1.a2 by ORDERS_3:def 5,F402;
+                  suppose A23:g <= g1;
+                  reconsider a2 = iter(g1,k).a as Element of P by Lm6;
+                  a1 <= a2 by A23,Lm12;
+                  then A24:q1 <= g1.a2 by ORDERS_3:def 5,A21;
                   set a3 = g1.a2;
                   reconsider g2 = g1 as Element of ConPoset(P,P)
-                                          by LemCastFunc02;
+                                          by Lm30;
                   reconsider gg = g2 as continuous Function of P,P;
-                  a3 = (g1*iter(g1,k)).a by Lemiter12
+                  a3 = (g1*iter(g1,k)).a by Lm7
                     .= iter(gg,k+1).a by FUNCT_7:73;
-                  then a3 in M1 by E1,F402;
-                  then a3 <= sup M1 by Lem201;
-                  hence thesis by F406,ORDERS_2:26;
+                  then a3 in M1 by A13,A21;
+                  then a3 <= sup M1 by Lm23;
+                  hence thesis by A24,ORDERS_2:26;
                   end;
                 end;
               then W is_<=_than sup M1 by LATTICE3:def 9;
-              hence thesis by F2,F3,YELLOW_0:def 9;
+              hence thesis by A18,A19,YELLOW_0:def 9;
               end;
             then M0 is_<=_than sup M1 by LATTICE3:def 9;
-            then E4:sup M0 <= sup M1 by E401,YELLOW_0:def 9;
-            z <= sup M by D1;
-            then z1 <= sup M0 by E2,E3,ORDERS_3:def 5;
-            hence thesis by E4,ORDERS_2:26;
+            then A25:sup M0 <= sup M1 by A16,YELLOW_0:def 9;
+            z <= sup M by A12;
+            then z1 <= sup M0 by A14,A15,ORDERS_3:def 5;
+            hence thesis by A25,ORDERS_2:26;
             end;
          hence thesis;
          end;
-       U[k] from NAT_1:sch 2(C4,C5);
-       then x <= sup M0 by C2;
-       hence thesis by C3, ORDERS_2:26;
+       U[k] from NAT_1:sch 2(A10,A11);
+       then x <= sup M0 by A6;
+       hence thesis by A9, ORDERS_2:26;
        end;
      then I0 is_<=_than sup L by LATTICE3:def 9;
-     hence thesis by B4,B5,YELLOW_0:def 9;
+     hence thesis by A3,A4,YELLOW_0:def 9;
      end;
    hence thesis;
    end;
@@ -1897,9 +1897,9 @@ registration let P;
   coherence
   proof
     reconsider f = fix_func(P) as monotone Function of ConPoset(P,P),P
-      by LemFix0201;
+      by Lm32;
     for L be non empty Chain of ConPoset(P,P)
-      holds f.(sup L) <= sup (f.:L) by LemFix05;
-    hence thesis by Thcontinuous03;
+      holds f.(sup L) <= sup (f.:L) by Lm41;
+    hence thesis by Th8;
   end;
 end;

@@ -58,8 +58,8 @@
 </Adjective>
 <Adjective nr="18"/>
 <Adjective nr="28"/>
-<Adjective nr="34"/>
 <Adjective nr="35"/>
+<Adjective nr="36"/>
 <Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68">

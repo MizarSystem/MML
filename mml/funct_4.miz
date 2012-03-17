@@ -177,7 +177,7 @@ theorem
 proof
   assume
 A1: X <> {};
-  consider x being Element of X;
+  set x =the  Element of X;
   assume
 A2: X --> a c= Y --> b;
   then X c= Y by Th6;
@@ -2260,11 +2260,11 @@ definition let X,Y be set;
   redefine func f+* g ->  PartFunc of X,Y;
  coherence
   proof
-C:  dom(f+* g) c= dom f \/ dom g by Def1;
-A:  dom(f+* g) c= X by C,XBOOLE_1:1;
-D:  rng(f+* g) c= rng f \/ rng g by Th18;
-    rng(f+* g) c= Y by D,XBOOLE_1:1;
-    then f+* g is Relation of X,Y by A,RELSET_1:11;
+A1:  dom(f+* g) c= dom f \/ dom g by Def1;
+A2:  dom(f+* g) c= X by A1,XBOOLE_1:1;
+A3:  rng(f+* g) c= rng f \/ rng g by Th18;
+    rng(f+* g) c= Y by A3,XBOOLE_1:1;
+    then f+* g is Relation of X,Y by A2,RELSET_1:11;
    hence thesis;
   end;
 end;
@@ -2304,8 +2304,8 @@ registration let f,g be Function-yielding Function;
    let x be set;
    assume x in dom(f+*g);
     then
-pc:   x in dom f \/ dom g by Def1;
-   per cases by pc,XBOOLE_0:def 3;
+A1:   x in dom f \/ dom g by Def1;
+   per cases by A1,XBOOLE_0:def 3;
    suppose
    x in dom g;
     then (f+*g).x = g.x by Th14;
@@ -2351,10 +2351,10 @@ A1: dom g c= I by RELAT_1:def 18;
   cluster g+*f -> total (I-defined Function);
   coherence
   proof
-A1: dom g c= I by RELAT_1:def 18;
+A2: dom g c= I by RELAT_1:def 18;
     dom f = I by PARTFUN1:def 4;
     then dom (g+*f) = I \/ dom g by Def1
-      .= I by A1,XBOOLE_1:12;
+      .= I by A2,XBOOLE_1:12;
     hence thesis by PARTFUN1:def 4;
   end;
 end;
@@ -2364,10 +2364,10 @@ registration let I be set;
   cluster g+*h -> I-valued;
  coherence
   proof
-X:  rng(g+*h) c= rng g \/ rng h by Th18;
+A1:  rng(g+*h) c= rng g \/ rng h by Th18;
    rng g c= I & rng h c= I by RELAT_1:def 19;
    then rng g \/ rng h c= I by XBOOLE_1:8;
-   then rng(g+*h) c= I by X,XBOOLE_1:1;
+   then rng(g+*h) c= I by A1,XBOOLE_1:1;
    hence thesis by RELAT_1:def 19;
   end;
 end;
@@ -2379,18 +2379,18 @@ registration let f be Function;
   proof
    let x;
    assume
-Z:  x in dom(g+*h);
-pc: dom(g+*h) = dom g \/ dom h by Def1;
-   per cases by Z,pc,XBOOLE_0:def 3;
+A1:  x in dom(g+*h);
+A2: dom(g+*h) = dom g \/ dom h by Def1;
+   per cases by A1,A2,XBOOLE_0:def 3;
    suppose
-S:   x in dom g & not x in dom h;
+A3:   x in dom g & not x in dom h;
     then g.x in f.x by FUNCT_1:def 20;
-   hence (g+*h).x in f.x by S,Th12;
+   hence (g+*h).x in f.x by A3,Th12;
    end;
    suppose
-S:  x in dom h;
+A4:  x in dom h;
     then h.x in f.x by FUNCT_1:def 20;
-   hence (g+*h).x in f.x by S,Th14;
+   hence (g+*h).x in f.x by A4,Th14;
    end;
 
   end;
@@ -2471,39 +2471,156 @@ end;
 theorem
   dom g misses dom h implies f +* g +* h +* g = f +* g +* h
  proof assume
-Z: dom g misses dom h;
+A1: dom g misses dom h;
   thus f +* g +* h +* g
      = f +* (g +* h) +* g by Th15
     .= f +* (g +* h +* g) by Th15
-    .= f +* (h +* g +* g) by Z,Th36
+    .= f +* (h +* g +* g) by A1,Th36
     .= f +* (h +* g) by Th99
-    .= f +* (g +* h) by Z,Th36
+    .= f +* (g +* h) by A1,Th36
     .= f +* g +* h by Th15;
  end;
 
 theorem
   dom f misses dom h & f c= g +* h implies f c= g
 proof assume that
-Z1: dom f misses dom h and
-Z2: f c= g +* h;
-A: (g +* h)|dom f = g|dom f +* h|dom f by Th75
-      .= g|dom f +* {} by Z1,RELAT_1:95
+A1: dom f misses dom h and
+A2: f c= g +* h;
+A3: (g +* h)|dom f = g|dom f +* h|dom f by Th75
+      .= g|dom f +* {} by A1,RELAT_1:95
       .= g|dom f by Th22;
   f|dom f = f by RELAT_1:98;
-  then f c= g|dom f by Z2,A,RELAT_1:105;
+  then f c= g|dom f by A2,A3,RELAT_1:105;
  hence f c= g by RELAT_1:219;
 end;
 
 theorem
   dom f misses dom h & f c= g implies f c= g +* h
 proof assume that
-Z1: dom f misses dom h and
-Z2: f c= g;
-A: (g +* h)|dom f = g|dom f +* h|dom f by Th75
-      .= g|dom f +* {} by Z1,RELAT_1:95
+A1: dom f misses dom h and
+A2: f c= g;
+A3: (g +* h)|dom f = g|dom f +* h|dom f by Th75
+      .= g|dom f +* {} by A1,RELAT_1:95
       .= g|dom f by Th22;
   f|dom f = f by RELAT_1:98;
-  then f c= (g +* h)|dom f by Z2,A,RELAT_1:105;
+  then f c= (g +* h)|dom f by A2,A3,RELAT_1:105;
  hence f c= g +* h by RELAT_1:219;
 end;
 
+theorem
+ dom g misses dom h implies f +* g +* h = f +* h +* g
+proof assume
+A1: dom g misses dom h;
+ thus f +* g +* h = f +* (g +* h) by Th15
+  .= f +* (h +* g) by A1,Th36
+  .= f +* h +* g by Th15;
+end;
+
+theorem
+ dom f misses dom g implies (f +* g) \ g = f
+proof assume
+A1: dom f misses dom g;
+  then
+A2: f misses g by RELAT_1:214;
+ thus (f +* g) \ g
+     = (f \/ g) \ g by A1,Th32
+    .= f by A2,XBOOLE_1:88;
+end;
+
+theorem
+  dom f misses dom g implies f \ g = f
+  proof
+    assume dom f misses dom g;
+    then f misses g by RELAT_1:214;
+    hence thesis by XBOOLE_1:83;
+  end;
+
+theorem
+  dom g misses dom h implies (f \ g) +* h = (f +* h) \ g
+  proof
+    assume
+A1: dom g misses dom h;
+A2: dom(f+*h) = dom f \/ dom h by Def1;
+A3: dom((f\g)+*h) = dom(f\g) \/ dom h by Def1;
+A4: dom((f\g)+*h) = dom((f+*h)\g)
+    proof
+      thus dom((f\g)+*h) c= dom((f+*h)\g)
+      proof
+        let x be set;
+        assume
+A5:     x in dom((f\g)+*h);
+        per cases by A3,A5,XBOOLE_0:def 3;
+        suppose that
+A6:       x in dom(f\g) and
+A7:       not x in dom h;
+          consider y being set such that
+A8:       [x,y] in f\g by A6,RELAT_1:def 4;
+A9:       x in dom f by A8,RELAT_1:def 4;
+          then
+A10:       x in dom(f+*h) by A2,XBOOLE_0:def 3;
+A11:       not [x,y] in g by A8,XBOOLE_0:def 5;
+A12:       (f+*h).x = f.x by A7,Th12;
+          f.x = y by A8,A9,FUNCT_1:def 4;
+          then [x,y] in f+*h by A12,A10,FUNCT_1:def 4;
+          then [x,y] in (f+*h)\g by A11,XBOOLE_0:def 5;
+          hence thesis by RELAT_1:def 4;
+        end;
+        suppose
+A13:       x in dom h;
+          then
+A14:       not x in dom g by A1,XBOOLE_0:3;
+          x in dom(f+*h) by A2,A13,XBOOLE_0:def 3;
+          then
+A15:       x in dom(f+*h) \ dom g by A14,XBOOLE_0:def 5;
+          dom(f+*h) \ dom g c= dom((f+*h)\g) by RELAT_1:15;
+          hence thesis by A15;
+        end;
+      end;
+      let x be set;
+      assume x in dom((f+*h)\g);
+      then consider y being set such that
+A16:   [x,y] in (f+*h)\g by RELAT_1:def 4;
+A17:   x in dom(f+*h) by A16,RELAT_1:def 4;
+      then
+A18:   y = (f+*h).x by A16,FUNCT_1:def 4;
+      per cases by A2,A17,XBOOLE_0:def 3;
+      suppose that
+A19:     x in dom f and
+A20:     not x in dom h;
+A21:     not [x,y] in g by A16,XBOOLE_0:def 5;
+        (f+*h).x = f.x by A20,Th12;
+        then [x,y] in f by A19,A18,FUNCT_1:def 4;
+        then [x,y] in f\g by A21,XBOOLE_0:def 5;
+        then x in dom(f\g) by RELAT_1:def 4;
+        hence thesis by A3,XBOOLE_0:def 3;
+      end;
+      suppose x in dom h;
+        hence thesis by A3,XBOOLE_0:def 3;
+      end;
+    end;
+    now
+      let x be set;
+      assume
+A22:   x in dom((f\g)+*h);
+      per cases by A3,A22,XBOOLE_0:def 3;
+      suppose that
+A23:     x in dom(f\g) and
+A24:     not x in dom h;
+        thus ((f\g)+*h).x = (f\g).x by A24,Th12
+        .= f.x by A23,GRFUNC_1:8
+        .= (f+*h).x by A24,Th12
+        .= ((f+*h)\g).x by A4,A22,GRFUNC_1:8;
+      end;
+      suppose
+A25:     x in dom h;
+        then
+A26:     not x in dom g by A1,XBOOLE_0:3;
+        x in dom(f+*h) by A25,A2,XBOOLE_0:def 3;
+        then x in dom(f+*h) \ dom g by A26,XBOOLE_0:def 5;
+        hence ((f+*h)\g).x = (f+*h).x by GRFUNC_1:93
+        .= h.x by A25,Th14
+        .= ((f\g)+*h).x by A25,Th14;
+      end;
+    end;
+    hence thesis by A4,FUNCT_1:9;
+  end;
