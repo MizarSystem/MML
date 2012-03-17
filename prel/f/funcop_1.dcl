@@ -9,8 +9,11 @@ RELSET_1
 FUNCT_2
 FUNCOP_1
 #
+«V2 ;V4 ;V9 ;;;M1 ;
 fV2 ;V4 ;;M1 ;M1 ;;K55 A1 A2 ;
 fV2 ;V4 ;;M1 V2 ;V4 ;;M1 V2 ;V4 ;;M1 V2 ;V4 ;;;K56 A1 A2 A3 ;
 fV2 ;V4 ;;M1 V2 ;V4 ;;M1 V2 ;V4 ;;M1 ;;K57 A1 A2 A3 ;
 fV2 ;V4 ;;M1 V2 ;V4 ;;M1 ;M1 V2 ;V4 ;;;K58 A1 A2 A3 ;
+fV2 ;V4 ;;M1 V2 ;V4 ;V9 ;;M1 ;;K32 A1 A2 ;
+fV2 ;V4 ;V9 ;;M1 V2 ;V4 ;V9 ;;M1 V2 ;V4 ;;;K26 A2 A1 ;
 !

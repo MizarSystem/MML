@@ -118,62 +118,70 @@ A7:  x in A2 iff x in X & x in Y;
     let A1, A2 be set such that
 A8: x in A1 iff x in X & not x in Y and
 A9: x in A2 iff x in X & not x in Y;
-        now
-      let x;
-          x in A1 iff x in X & not x in Y by A8;
+    now let x;
+      x in A1 iff x in X & not x in Y by A8;
       hence x in A1 iff x in A2 by A9;
-     end;
+    end;
     hence A1 = A2 by TARSKI:2;
    end;
 end;
 
 definition let X be set;
- attr X is empty means
+  attr X is empty means
 :Def5:    X = {};
 
- let Y be set;
- func X \+\ Y -> set equals
+  let Y be set;
+  func X \+\ Y -> set equals
 :Def6:  (X \ Y) \/ (Y \ X);
- correctness;
- commutativity;
+  correctness;
+  commutativity;
 
- pred X misses Y means :Def7:
-   X /\ Y = {};
+  pred X misses Y means :Def7:
+    X /\ Y = {};
   symmetry;
-  pred X c< Y means
-     X c= Y & X <> Y;
- irreflexivity;
 
- pred X,Y are_c=-comparable means
-     X c= Y or Y c= X;
- reflexivity;
- symmetry;
- redefine pred X = Y means
-     X c= Y & Y c= X;
+  pred X c< Y means
+    X c= Y & X <> Y;
+  irreflexivity;
+  asymmetry
+  proof let X,Y;
+    assume
+A1: X c= Y;
+    assume X <> Y;
+    assume Y c= X;
+    then for x holds x in X iff x in Y by A1,TARSKI:def 3;
+    hence Y = X by TARSKI:2;
+  end;
+
+  pred X,Y are_c=-comparable means
+    X c= Y or Y c= X;
+  reflexivity;
+  symmetry;
+  redefine pred X = Y means
+    X c= Y & Y c= X;
   compatibility
-   proof
+  proof
     thus X = Y implies X c= Y & Y c= X;
     assume X c= Y & Y c= X;
-     then for x holds x in X iff x in Y by TARSKI:def 3;
+    then for x holds x in X iff x in Y by TARSKI:def 3;
     hence X = Y by TARSKI:2;
-   end;
+  end;
 end;
 
-notation let X be set;
- let Y be set;
- antonym X meets Y for X misses Y;
+notation let X, Y be set;
+  antonym X meets Y for X misses Y;
 end;
 
 theorem
-     x in X \+\ Y iff not (x in X iff x in Y)
+  x in X \+\ Y iff not (x in X iff x in Y)
 proof
-     X \+\ Y = (X \ Y) \/ (Y \ X) by Def6;
+  X \+\ Y = (X \ Y) \/ (Y \ X) by Def6;
   then x in X \+\ Y iff x in X \ Y or x in Y \ X by Def2;
   hence thesis by Def4;
 end;
 
 theorem :: BOOLE'25:
-     (for x holds not x in X iff (x in Y iff x in Z)) implies X = Y \+\ Z
+  (for x holds not x in X iff (x in Y iff x in Z)) implies X = Y \+\ Z
 proof
   assume A1: not x in X iff (x in Y iff x in Z);
      now let x;
@@ -186,15 +194,15 @@ proof
 end;
 
 registration
- cluster {} -> empty;
+  cluster {} -> empty;
   coherence by Def5;
- cluster empty set;
+  cluster empty set;
   existence
-   proof {} is empty; hence thesis; end;
- cluster non empty set;
+  proof {} is empty; hence thesis; end;
+  cluster non empty set;
   existence
    proof consider x;
-       x in {x} by TARSKI:def 1;
+    x in {x} by TARSKI:def 1;
     then {x} <> {} by Def1;
     then {x} is non empty by Def5;
     hence thesis;
@@ -207,7 +215,7 @@ registration let D be non empty set, X be set;
   proof
     consider x being set such that
 A1: x in D by Def1;
-       x in D \/ X by A1,Def2;
+    x in D \/ X by A1,Def2;
     then D \/ X <> {} by Def1;
     hence thesis by Def5;
   end;
@@ -216,7 +224,7 @@ A1: x in D by Def1;
   proof
     consider x being set such that
 A2: x in D by Def1;
-       x in X \/ D by A2,Def2;
+    x in X \/ D by A2,Def2;
     then X \/ D <> {} by Def1;
     hence thesis by Def5;
   end;

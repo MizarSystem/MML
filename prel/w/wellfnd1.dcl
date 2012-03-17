@@ -35,9 +35,9 @@ FRAENKEL
 WELLFND1
 #
 «W1 ;V6 ;V7 ;V8 ;W17 ;V18 ;V29 ;;;M1 ;
-«W27 ;V78 ;;;G3 ;
-«V79 A1 ;;G3 ;;M3 K40 U1 A1 ;;;
-fW1 ;V77 ;;M1 ;M1 ;;K181 A1 A2 ;
+«W27 ;V79 ;;;G3 ;
+«V80 A1 ;;G3 ;;M3 K40 U1 A1 ;;;
+fW1 ;V78 ;;M1 ;M1 ;;K182 A1 A2 ;
 fW1 ;V6 ;V7 ;V8 ;V18 ;;M1 ;;K65 A1 ;
-fV63 A1 ;V79 A1 ;;G3 ;;K233 A1 ;
+fV64 A1 ;V80 A1 ;;G3 ;;K234 A1 ;
 !

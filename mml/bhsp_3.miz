@@ -9,12 +9,14 @@ environ
  vocabulary BHSP_1, PRE_TOPC, NORMSP_1, ORDINAL2, SEQM_3, SEQ_1, RLVECT_1,
       METRIC_1, FUNCT_1, ARYTM_1, ARYTM_3, ABSVALUE, RELAT_1, SEQ_2, LATTICES,
       BHSP_3, ARYTM;
- notation TARSKI, ORDINAL1, NUMBERS, XREAL_0, REAL_1, NAT_1, RELAT_1, FUNCT_1,
+ notation TARSKI, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, NAT_1,
+      COMPLEX1, RELAT_1, FUNCT_1,
       SEQ_1, SEQM_3, ABSVALUE, STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_1, BHSP_1,
       BHSP_2;
- constructors REAL_1, NAT_1, SEQ_1, ABSVALUE, BHSP_2, MEMBERED, XBOOLE_0;
+ constructors REAL_1, NAT_1, SEQ_1, ABSVALUE, BHSP_2, MEMBERED,
+      COMPLEX1, XBOOLE_0;
  clusters FUNCT_1, SEQM_3, STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED,
-      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+      ZFMISC_1, XBOOLE_0, NUMBERS, COMPLEX1, ORDINAL2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems REAL_1, NAT_1, REAL_2, AXIOMS, FUNCT_1, SEQ_2, SEQM_3, SEQ_4,
       FUNCT_2, ABSVALUE, RLVECT_1, BHSP_1, BHSP_2, NORMSP_1, RELAT_1, RELSET_1,
@@ -37,18 +39,16 @@ definition
           let X;
           let seq;
           attr seq is Cauchy means
-:Def1:    for r st r > 0 ex k st for n, m st ( n >= k & m >= k )
-          holds dist((seq.n), (seq.m)) < r;
+:Def1:    for r st r > 0 ex k st for n, m st n >= k & m >= k
+          holds dist(seq.n, seq.m) < r;
   end;
 
-notation
-          let X;
-          let seq;
-          synonym seq is_Cauchy_sequence for seq is Cauchy;
+notation let X, seq;
+  synonym seq is_Cauchy_sequence for seq is Cauchy;
 end;
 
 theorem
-     seq is constant implies seq is_Cauchy_sequence
+  seq is constant implies seq is_Cauchy_sequence
 proof
      assume
 A1:     seq is constant;
@@ -195,19 +195,19 @@ A6:        a <> 0;
            let r such that
      A8:   r > 0;
      A9:   abs(a) <> 0 by A6,ABSVALUE:6;
-              0/abs(a) = 0;
+           0/abs(a) = 0;
            then r/abs(a) > 0 by A7,A8,REAL_1:73;
            then consider m1 such that
-     A10:   for n, m st ( n >= m1 & m >= m1 ) holds
-           dist((seq.n), (seq.m)) < r/abs(a) by A1,Def1;
+     A10:   for n, m st n >= m1 & m >= m1 holds
+           dist(seq.n, seq.m) < r/abs(a) by A1,Def1;
            take k = m1;
            let n, m; assume n >= k & m >= k;
-     then A11:   dist((seq.n), (seq.m)) < r/abs(a) by A10;
+     then A11:   dist(seq.n, seq.m) < r/abs(a) by A10;
      A12:   dist(a * (seq.n), a * (seq.m))
          = ||.(a * (seq.n)) - (a * (seq.m)).|| by BHSP_1:def 5
         .= ||.a * ((seq.n) - (seq.m)).|| by RLVECT_1:48
         .= abs(a) * ||.(seq.n) - (seq.m).|| by BHSP_1:33
-        .= abs(a) * dist((seq.n), (seq.m)) by BHSP_1:def 5;
+        .= abs(a) * dist(seq.n, seq.m) by BHSP_1:def 5;
               abs(a) * (r/abs(a)) = abs(a) * (abs(a)" * r) by XCMPLX_0:def 9
                             .= abs(a) *abs(a)" * r
                             .= 1 * r by A9,XCMPLX_0:def 7
@@ -1308,8 +1308,7 @@ definition
              X is RealUnitarySpace & X is_complete_space;
   end;
 
-notation
-          let X;
-          synonym X is_Hilbert_space for X is Hilbert; 
+notation let X;
+  synonym X is_Hilbert_space for X is Hilbert;
 end;
 

@@ -7,11 +7,12 @@
 environ
 
  vocabulary RELAT_1, BOOLE, FUNCT_1, FUNCT_3, PARTFUN1, BINOP_1, MCART_1,
-      FUNCOP_1;
+      FUNCOP_1, PRALG_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELSET_1, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1;
  constructors MCART_1, FUNCT_3, BINOP_1, PARTFUN1, RELAT_2, XBOOLE_0;
- clusters FUNCT_1, RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1, PARTFUN1, FUNCT_2;
+ clusters FUNCT_1, RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1, PARTFUN1, FUNCT_2,
+      RELAT_1;
  requirements SUBSET, BOOLE;
 
 
@@ -51,6 +52,7 @@ definition let f;
   for x st x in dom f holds
    (for y,z st f.x = [y,z] holds it.x = [z,y])
    & (f.x = it.x or ex y,z st f.x =[y,z]);
+ involutiveness;
 end;
 
 canceled;
@@ -375,3 +377,26 @@ theorem :: FUNCOP_1:83
 theorem :: FUNCOP_1:84
     for F,f,g being Function st [:rng f, rng g:] c= dom F
   holds dom(F.:(f,g)) = dom f /\ dom g;
+
+:: from PRALG_1, 2004.07.23
+
+definition let IT be Function;
+attr IT is Function-yielding means
+:: FUNCOP_1:def 6
+for x being set st x in dom IT holds IT.x is Function;
+end;
+
+registration
+cluster Function-yielding Function;
+end;
+
+registration
+ let B be Function-yielding Function, j be set;
+  cluster B.j -> Function-like Relation-like;
+end;
+
+registration
+  let F be Function-yielding Function, f be Function;
+  cluster F * f -> Function-yielding;
+end;
+

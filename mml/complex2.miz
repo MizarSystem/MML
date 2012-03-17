@@ -16,17 +16,17 @@ environ
       COMPLSP1, SIN_COS, HAHNBAN1, COMPTRIG, COMPLEX1, MEMBERED, ARYTM_0,
       ARYTM_3, FUNCT_4, BINOP_2, INT_2;
  clusters RELSET_1, SIN_COS, INT_1, COMPLEX1, XREAL_0, XCMPLX_0, MEMBERED,
-      NUMBERS;
+      NUMBERS, COMPLFLD;
  requirements BOOLE, SUBSET, REAL, NUMERALS, ARITHM;
  theorems AXIOMS, REAL_1, REAL_2, SQUARE_1, JGRAPH_3, COMPLEX1, SIN_COS,
       COMPLFLD, HAHNBAN1, JORDAN6, COMPTRIG, XCMPLX_0, XCMPLX_1, RFUNCT_2,
-      SIN_COS2, XREAL_0, XBOOLE_0, JGRAPH_5, INT_1, ABSVALUE, STRUCT_0,
-      ARYTM_0;
+      SIN_COS2, XREAL_0, XBOOLE_0, JGRAPH_5, INT_1, ABSVALUE, ARYTM_0;
 
 begin
 
-Lm1:
-for a, b, c be complex number holds a+b-c = a+(b-c);
+Lm0: 0.F_Complex = 0 by COMPLFLD:9;
+
+Lm1: for a, b, c be complex number holds a+b-c = a+(b-c);
 
 Lm2:
 now let a, b, c be complex number; assume a-b = -c; then a - b = -c-0;
@@ -236,82 +236,47 @@ COMPTRIG:33;
 end;
 end;
 
-Lm4: the carrier of F_Complex=COMPLEX by COMPLFLD:def 1;
-
 begin :: More on the argument of a complex number
       :: ALL these to be changed (mainly deleted) after the change in COMPTRIG
-
-registration
-  cluster F_Complex -> non empty;
-  coherence by Lm4,STRUCT_0:def 1;
-end;
 
 definition let z be Element of COMPLEX;
  func F_tize(z) -> Element of F_Complex equals :Def1: z;
  correctness by COMPLFLD:def 1;
 end;
 
-theorem Th13:
-for z being Element of COMPLEX holds Re z = Re F_tize z & Im z = Im F_tize z
-proof let z be Element of COMPLEX;
-     z=F_tize(z) by Def1; hence thesis by HAHNBAN1:def 3,def 4;
-end;
+canceled;
 
 theorem
    for x, y being Element of COMPLEX holds F_tize(x+y) = F_tize(x)+F_tize(y)
 proof let z1, z2 be Element of COMPLEX;
-A1: F_tize(z1+z2)=z1+z2 by Def1;A2:F_tize(z1)=z1 by Def1;   F_tize(z2)=z2 by
-Def1
-;
- hence thesis by A1,A2,COMPLFLD:3;
+A1: F_tize(z1+z2)=z1+z2 by Def1;
+ F_tize(z1)=z1 by Def1;
+ hence thesis by A1,Def1;
 end;
 
 theorem
   for z being Element of COMPLEX holds z = 0c iff F_tize z = 0.F_Complex
  by Def1,COMPLFLD:9;
 
-theorem Th16:
-for z being Element of COMPLEX holds |.z.| = |. F_tize z .|
-proof let z be Element of COMPLEX; consider z' be Element of COMPLEX such that
-A1: F_tize(z) = z' & |.F_tize(z).| = |.z'.| by COMPLFLD:def 3;
- thus |.z.|=|.F_tize(z).| by A1,Def1;
-end;
+canceled 2;
 
-definition let z be Element of COMPLEX;
- func Arg(z) -> Real equals :Def2:
-   Arg(F_tize(z));
- correctness;
-end;
-
-theorem Th17:
-for z being Element of COMPLEX, u being Element of F_Complex
- st z = u holds Arg z = Arg u
-proof let z be Element of COMPLEX, z1 be Element of F_Complex;
- assume z=z1; then z1=F_tize(z) by Def1; hence Arg(z)=Arg(z1) by Def2;
+definition
+  canceled;
 end;
 
 theorem Th18:
-for z being Element of COMPLEX holds 0 <= Arg z & Arg z < 2*PI
-proof let z be Element of COMPLEX;
-     0<=Arg(F_tize(z)) & Arg(F_tize(z))<2*PI by COMPTRIG:52;
- hence thesis by Def2;
-end;
+for z being complex number holds 0 <= Arg z & Arg z < 2*PI
+  by COMPTRIG:52;
 
 Lm5: 0c = [*0,0*] by ARYTM_0:def 7;
 
 theorem Th19:
-for z being Element of COMPLEX holds z = [* |.z.|*cos Arg z, |.z.|*sin Arg z *]
-proof let a be Element of COMPLEX;
- set Fa = F_tize a;
+for z being complex number holds z = [* |.z.|*cos Arg z, |.z.|*sin Arg z *]
+proof let a be complex number;
  per cases;
- suppose a <> 0; then A1: Fa <> 0.F_Complex by Def1,COMPLFLD:9;
-A2: Fa = a by Def1;
-A3: Arg Fa = Arg a by Def2;
-   consider z' being Element of COMPLEX such that
-A4: Fa = z' & |.Fa.| = |.z'.| by COMPLFLD:def 3;
- thus a = Fa by Def1
-       .= [** |.Fa.|*cos Arg Fa, |.Fa.|*sin Arg Fa **] by A1,COMPTRIG:def 1
-       .= [* |.a.|*cos Arg a, |.a.|*sin Arg a *] by A2,A3,A4,HAHNBAN1:def 1;
+ suppose a <> 0;
+ hence a = |.a.|*cos Arg a + |.a.|*sin Arg a *<i> by COMPTRIG:def 1
+        .= [* |.a.|*cos Arg a, |.a.|*sin Arg a *] by COMPLEX1:27;
   end;
   suppose a = 0c;
    hence thesis by ARYTM_0:def 7,COMPLEX1:130;
@@ -319,34 +284,27 @@ end;
 end;
 
 theorem Th20:
-Arg 0c = 0
-proof thus Arg(0c)=Arg F_tize(0c) by Def2 .=Arg(0.F_Complex) by Def1,COMPLFLD:
-9
- .=0
-            by COMPTRIG:def 1;
-end;
+  Arg 0 = 0 by COMPTRIG:10,53;
 
 theorem Th21:
-for z being Element of COMPLEX, r being Real
+for z being complex number, r being Real
  st z <> 0 & z = [* |.z.|*cos r, |.z.|*sin r *] & 0 <= r & r < 2*PI
   holds r = Arg z
-proof let z be Element of COMPLEX, r being Real such that
+proof let z be complex number, r being Real such that
 A1: z <> 0 and
 A2: z = [* |.z.|*cos r, |.z.|*sin r *] and
 A3: 0 <= r and
-A4: r < 2*PI; set zf = F_tize(z);
-A5: z = zf by Def1;
-A6: |.z.| = |.zf.| by Th16;
-A7: zf <> 0.F_Complex by A1,Def1,COMPLFLD:9;
-      zf = [** |.zf.|*cos r, |.zf.|*sin r **] by A2,A5,A6,HAHNBAN1:def 1;
- hence r = Arg zf by A3,A4,A7,COMPTRIG:def 1 .= Arg z by Def2;
+A4: r < 2*PI;
+    z = [* |.z.|*cos r, |.z.|*sin r *] by A2
+     .= |.z.|*cos r + |.z.|*sin r * <i> by COMPLEX1:27;
+ hence r = Arg z by A3,A4,COMPTRIG:def 1,A1;
 end;
 
 theorem Th22:
-for z being Element of COMPLEX st z <> 0c
+for z being complex number st z <> 0c
  holds (Arg z < PI implies Arg -z = Arg z +PI) &
        (Arg z >= PI implies Arg -z = Arg z -PI)
-proof let z be Element of COMPLEX; assume A1: z <> 0c;
+proof let z be complex number; assume A1: z <> 0c;
 then A2: |.z.| <> 0 by COMPLEX1:131;
 A3: -z <> 0c by A1,XCMPLX_1:135;
 A4: z = [* |.z.|*cos Arg z, |.z.|*sin Arg z *] by Th19;
@@ -366,11 +324,9 @@ then A9: sin Arg -z = sin (Arg z +PI) & sin Arg -z = sin (Arg z -PI)
     hence Arg -z = Arg z +PI by A3,A5,A8,A9,A10,Th21;
   end;
   assume Arg z >= PI; then A11: Arg z -PI >= PI-PI by REAL_1:49;
-         Arg z < 2*PI by Th18; then Arg z +0 < 2*PI+PI by COMPTRIG:21,REAL_1:
-67
-;
-      then Arg z -PI < 2*PI by REAL_1:84;
-    hence Arg -z = Arg z -PI by A3,A5,A8,A9,A11,Th21;
+  Arg z < 2*PI by Th18; then Arg z +0 < 2*PI+PI by COMPTRIG:21,REAL_1:67;
+  then Arg z -PI < 2*PI by REAL_1:84;
+  hence Arg -z = Arg z -PI by A3,A5,A8,A9,A11,Th21;
 end;
 
 theorem Th23:
@@ -388,78 +344,63 @@ then A3: r =|.[*r,0*].|*cos Arg[*r,0*]&0=|.[*r,0*].|*sin Arg [*r,0*] by ARYTM_0
    end;
    suppose A4: r > 0;
    then A5: cos Arg [*r,0*] = 1 by A2,A3,XCMPLX_1:7;
-   A6: sin Arg [*r,0*] = 0 by A2,A3,A4,XCMPLX_1:6;
-          0 <= Arg [*r,0*] & Arg [*r,0*] < 2*PI by Th18;
+A6: sin Arg [*r,0*] = 0 by A2,A3,A4,XCMPLX_1:6;
+    0 <= Arg [*r,0*] & Arg [*r,0*] < 2*PI by Th18;
     hence Arg [*r,0*] = 0 by A5,A6,Th12,SIN_COS:34;
 end;
 end;
 
 theorem Th24:
-for z being Element of COMPLEX holds Arg z = 0 iff z = [* |.z.|,0 *]
-proof let z be Element of COMPLEX;
- hereby
- assume A1: Arg z=0;
-  A2: z=F_tize(z) by Def1;
-  A3: Arg(z)=Arg(F_tize(z)) by Def2;
-  A4: |.z.|=|.F_tize(z).| by Th16;
-     now per cases;
-  case z<>0.F_Complex;
-    then A5: z=[** |.z.|*cos 0,|.z.|*sin 0 **] by A1,A2,A3,A4,COMPTRIG:def 1;
-  Im z=Im (F_tize(z)) by Th13;
-   hence z=[* |.z.|,0 *] & Im z=0 by A2,A5,HAHNBAN1:15,def 1,SIN_COS:34;
-  end;
-  case z=0.F_Complex;
-   hence z=[* |.z.|,0 *] & Im z=0 by ARYTM_0:def 7,COMPLEX1:12,130,COMPLFLD:9;
-  end;
-  end;
- hence z=[* |.z.|,0 *];
+for z being complex number holds Arg z = 0 iff z = [* |.z.|,0 *]
+proof let z be complex number;
+ hereby assume A1: Arg z=0;
+   z=[* |.z.|*cos 0,|.z.|*sin 0 *] by A1,Th19;
+   hence z=[* |.z.|,0 *] by SIN_COS:34;
  end;
- assume A6: z=[* |.z.|,0 *];   |.z.| >= 0 by COMPLEX1:132;
+ assume A6: z=[* |.z.|,0 *];
+ |.z.| >= 0 by COMPLEX1:132;
  hence Arg z = 0 by A6,Th23;
 end;
 
 theorem Th25:
-for z being Element of COMPLEX st z <> 0c holds Arg(z) < PI iff Arg -z >= PI
-proof let z be Element of COMPLEX;
+for z being complex number st z <> 0c holds Arg(z) < PI iff Arg -z >= PI
+proof let z be complex number;
  assume A1: z<>0c;
   thus Arg(z)<PI implies Arg(-z)>=PI
    proof assume A2: Arg(z)<PI;
-        Arg(z)>=0 by Th18; then PI+0<=PI+Arg(z) by REAL_1:55;
+   Arg(z)>=0 by Th18; then PI+0<=PI+Arg(z) by REAL_1:55;
     hence Arg(-z)>=PI by A1,A2,Th22;
    end;
   thus Arg(-z)>=PI implies Arg(z)<PI
    proof assume Arg(-z)>=PI; then A3: Arg(--z)=Arg(-z)-PI by A1,Th22,REAL_1:26
-;   2*PI>Arg(-z) by Th18; then PI+PI-PI>Arg(-z)-PI by REAL_1:54
-;
+;   2*PI>Arg(-z) by Th18; then PI+PI-PI>Arg(-z)-PI by REAL_1:54;
     hence Arg(z)<PI by A3;
    end;
 end;
 
 theorem Th26:
-for x, y being Element of COMPLEX st x <> y or x-y <> 0c
- holds Arg(x-y) < PI iff Arg(y-x) >= PI
-proof let z1,z2 be Element of COMPLEX; assume z1<>z2 or z1-z2<>0c;
-  then z1-z2<>0c by XCMPLX_1:15; then (Arg(z1-z2)<PI iff Arg(-(z1-z2))>=PI)
+for x, y being complex number st x <> y or x - y <> 0c holds
+  Arg(x-y) < PI iff Arg(y-x) >= PI
+proof let z1,z2 be complex number; assume z1<>z2 or z1 - z2 <> 0c;
+  then z1-z2<>0c by XCMPLX_1:15; then Arg(z1-z2)<PI iff Arg(-(z1-z2))>=PI
 by Th25;
- hence (Arg(z1-z2)<PI iff Arg(z2-z1)>=PI);
+ hence Arg(z1-z2)<PI iff Arg(z2-z1)>=PI;
 end;
 
 theorem Th27:
-for z being Element of COMPLEX holds Arg z in ].0,PI.[ iff Im z > 0
-proof let z be Element of COMPLEX;
-  A1: Arg(z)=Arg(F_tize(z)) by Def2;
+for z being complex number holds Arg z in ].0,PI.[ iff Im z > 0
+proof let z be complex number;
  thus Arg z in ].0,PI.[ implies Im z > 0 proof assume Arg z in ].0,PI.[;
   then A2: 0<Arg(z) & Arg(z)<PI by JORDAN6:45;
   A3: Arg(z)<PI/2 or Arg(z)=PI/2 or Arg(z)>PI/2 by REAL_1:def 5;
      now per cases by A2,A3,JORDAN6:45;
-  case Arg(z) in ].0,PI/2.[; then Im F_tize(z) >0 by A1,COMPTRIG:59;
-   hence Im z>0 by Th13;
+  case Arg(z) in ].0,PI/2.[;
+   hence Im z>0 by COMPTRIG:59;
   end;
-  case Arg(z)=PI/2; then Im (F_tize(z))>0 by A1,COMPTRIG:66,SIN_COS:82;
-   hence Im z>0 by Th13;
+  case Arg(z)=PI/2; hence Im z>0 by COMPTRIG:66,SIN_COS:82;
   end;
-  case Arg(z) in ].PI/2,PI.[; then Im F_tize(z) >0 by A1,COMPTRIG:60;
-   hence Im z>0 by Th13;
+  case Arg(z) in ].PI/2,PI.[;
+   hence Im z>0 by COMPTRIG:60;
   end;
   end;
   hence Im z>0;
@@ -467,18 +408,17 @@ proof let z be Element of COMPLEX;
  A4: ].0,PI/2.[ c= ].0,PI.[ by COMPTRIG:21,JGRAPH_3:9;
  A5: ].PI/2,PI.[ c= ].0,PI.[ by COMPTRIG:21,JGRAPH_3:9;
  thus Im z > 0 implies Arg z in ].0,PI.[
- proof assume Im z >0;
-   then A6: Im F_tize(z) >0 by Th13;
-      now per cases;
-   case Re F_tize(z)>0; then Arg(F_tize(z)) in ].0,PI/2.[ by A6,COMPTRIG:59;
-     hence Arg(z) in ].0,PI.[ by A1,A4;
+ proof assume A6:Im z >0;
+  now per cases;
+   case Re z>0; then Arg(z) in ].0,PI/2.[ by A6,COMPTRIG:59;
+     hence Arg(z) in ].0,PI.[ by A4;
    end;
-   case Re F_tize(z)=0; then F_tize(z)=[** 0,Im F_tize(z) **] by COMPTRIG:9;
-     then Arg(F_tize(z))=PI/2 by A6,COMPTRIG:55;
-     hence Arg(z) in ].0,PI.[ by A1,COMPTRIG:21,JORDAN6:45;
+   case Re z=0; then z=[** 0,Im z **] by COMPTRIG:9;
+     then Arg(z)=PI/2 by A6,COMPTRIG:55;
+     hence Arg(z) in ].0,PI.[ by COMPTRIG:21,JORDAN6:45;
    end;
-   case Re F_tize(z)<0; then Arg(F_tize(z)) in ].PI/2,PI.[ by A6,COMPTRIG:60;
-     hence Arg(z) in ].0,PI.[ by A1,A5;
+   case Re z<0; then Arg z in ].PI/2,PI.[ by A6,COMPTRIG:60;
+     hence Arg(z) in ].0,PI.[ by A5;
    end;
    end;
   hence Arg z in ].0,PI.[;
@@ -486,30 +426,28 @@ proof let z be Element of COMPLEX;
 end;
 
 theorem
-   for z being Element of COMPLEX st Arg z <> 0 holds Arg z < PI iff sin Arg z
->
-0
-proof let z be Element of COMPLEX;
+  for z being complex number st Arg z <> 0 holds
+    Arg z < PI iff sin Arg z> 0
+proof let z be complex number;
  assume A1: Arg(z)<>0; A2: Arg(z)>=0 by Th18;
-  A3: Arg(z)=Arg(F_tize(z)) by Def2;
- thus Arg(z)<PI implies sin (Arg(z))>0
-  proof assume Arg(z)<PI; then Arg(z) in ].0,PI.[ by A1,A2,JORDAN6:45;
-   then Im (z)>0 by Th27; then Im (F_tize(z))>0 by Th13;
-   hence sin (Arg(z))>0 by A3,COMPTRIG:63;
+  hereby assume Arg(z)<PI; then Arg(z) in ].0,PI.[ by A1,A2,JORDAN6:45;
+   then Im (z)>0 by Th27;
+   hence sin (Arg(z))>0 by COMPTRIG:63;
   end;
  A4: ].0,PI/2.[ c= ].0,PI.[ by COMPTRIG:21,JGRAPH_3:9;
  thus sin (Arg(z))>0 implies Arg(z)<PI
- proof assume sin (Arg(z))>0;
-   then A5: Im (F_tize(z))>0 by A3,COMPTRIG:66;
-      now per cases;
-   case Re F_tize(z)>0; then Arg(F_tize(z)) in ].0,PI/2.[ by A5,COMPTRIG:59;
-     hence Arg(z)<PI by A3,A4,JORDAN6:45;
+ proof
+  assume sin (Arg(z))>0;
+  then A5: Im (z)>0 by COMPTRIG:66;
+  now per cases;
+   suppose Re z>0; then Arg(z) in ].0,PI/2.[ by A5,COMPTRIG:59;
+     hence Arg(z)<PI by A4,JORDAN6:45;
    end;
-   case Re F_tize(z)=0; then F_tize(z)=[** 0,Im F_tize(z) **] by COMPTRIG:9;
-    hence Arg(z)<PI by A3,A5,COMPTRIG:21,55;
+   suppose Re z=0; then z=[** 0,Im z **] by COMPTRIG:9;
+    hence Arg(z)<PI by A5,COMPTRIG:21,55;
    end;
-   case Re F_tize(z)<0; then Arg(F_tize(z)) in ].PI/2,PI.[ by A5,COMPTRIG:60;
-    hence Arg(z)<PI by A3,JORDAN6:45;
+   suppose Re z<0; then Arg(z) in ].PI/2,PI.[ by A5,COMPTRIG:60;
+    hence Arg(z)<PI by JORDAN6:45;
    end;
    end;
   hence Arg(z)<PI;
@@ -517,12 +455,10 @@ proof let z be Element of COMPLEX;
 end;
 
 theorem
-   for x, y being Element of COMPLEX st Arg x < PI & Arg y < PI
- holds Arg(x+y) < PI
-proof let z1,z2 be Element of COMPLEX;
+  for x, y being complex number st Arg x < PI & Arg y < PI holds
+    Arg(x+y) < PI
+proof let z1,z2 be complex number;
  assume A1: Arg(z1)<PI & Arg(z2)<PI;
-  A2: Arg(z1+z2)=Arg(F_tize(z1+z2)) by Def2;
-  A3: z1+z2=F_tize(z1+z2) by Def1;
      now per cases by Th18;
   case Arg(z1)=0; then A4: z1=[* |.z1.|,0 *] by Th24;
    then A5: z1=[* |.z1.|,0 *] & Im z1=0 by COMPLEX1:7;
@@ -533,8 +469,8 @@ proof let z1,z2 be Element of COMPLEX;
      A9: Re z2=|.z2.| by A6,COMPLEX1:7;
         now per cases;
      case A10: z1+z2=0c;
-          Arg (z1+z2)=Arg(F_tize(z1+z2)) by Def2 .=Arg(0.F_Complex) by A10,Def1
-,COMPLFLD:9
+          Arg (z1+z2)=Arg(z1+z2) .=Arg(0.F_Complex)
+            by A10,COMPLFLD:9 .= Arg 0 by Lm0
                 .=0 by COMPTRIG:def 1;
       hence Arg(z1+z2)<PI by COMPTRIG:21;
      end;
@@ -545,7 +481,7 @@ COMPLEX1:7;
        then A11: z1+z2=[** |.z1.| + |.z2.|,0 **] by HAHNBAN1:def 1;
        A12: 0<= |.z1.| by COMPLEX1:132;   0<= |.z2.| by COMPLEX1:132;
        then 0+0 <= |.z1.| + |.z2.| by A12,REAL_1:55;
-      hence Arg(z1+z2)<PI by A2,A3,A11,COMPTRIG:21,53;
+      hence Arg(z1+z2)<PI by A11,COMPTRIG:21,53;
      end;
      end;
     hence Arg(z1+z2)<PI;
@@ -581,101 +517,71 @@ Th27;
 end;
 
 theorem Th30:
-for x be Real st x > 0 holds Arg [*0,x*] = PI/2
+  for x be Real st x > 0 holds Arg [*0,x*] = PI/2
 proof let x be Real such that
-A1: x > 0; A2: F_tize [*0,x*] = [*0,x*] by Def1.= [** 0, x **] by HAHNBAN1:def
-1;
-  thus Arg [*0,x*] = Arg F_tize [*0,x*] by Def2
-   .= PI/2 by A1,A2,COMPTRIG:55;
+A1: x > 0; A2: [*0,x*] = [** 0, x **] by HAHNBAN1:def 1;
+  thus Arg [*0,x*] = PI/2 by A1,A2,COMPTRIG:55;
 end;
 
 theorem Th31:
-for z be Element of COMPLEX holds Arg z in ].0,PI/2.[ iff Re z > 0 & Im z > 0
-proof let z be Element of COMPLEX;
-A1: F_tize z = z by Def1;
-   consider z' being Element of COMPLEX such that
-A2: F_tize z = z' & Re F_tize z = Re z' by HAHNBAN1:def 3;
-   consider z'' being Element of COMPLEX such that
-A3: F_tize z = z'' & Im F_tize z = Im z'' by HAHNBAN1:def 4;
-      Arg z = Arg F_tize z by Def2;
-  hence Arg z in ].0,PI/2.[ iff Re z > 0 & Im z > 0 by A1,A2,A3,COMPTRIG:59;
-end;
+for z be complex number holds Arg z in ].0,PI/2.[ iff Re z > 0 & Im z > 0
+  by COMPTRIG:59;
 
 theorem Th32:
-for z be Element of COMPLEX holds Arg z in ].PI/2,PI.[ iff Re z < 0 & Im z > 0
-proof let z be Element of COMPLEX;
-A1: F_tize z = z by Def1;
-   consider z' being Element of COMPLEX such that
-A2: F_tize z = z' & Re F_tize z = Re z' by HAHNBAN1:def 3;
-   consider z'' being Element of COMPLEX such that
-A3: F_tize z = z'' & Im F_tize z = Im z'' by HAHNBAN1:def 4;
-      Arg z = Arg F_tize z by Def2;
-  hence Arg z in ].PI/2,PI.[ iff Re z < 0 & Im z > 0 by A1,A2,A3,COMPTRIG:60;
-end;
+for z be complex number holds Arg z in ].PI/2,PI.[ iff Re z < 0 & Im z > 0
+  by COMPTRIG:60;
 
 theorem Th33:
-for z be Element of COMPLEX st Im z > 0 holds sin Arg z > 0
-proof let z be Element of COMPLEX; assume
-A1: Im z > 0;
-A2: F_tize z = z by Def1; consider z'' being Element of COMPLEX such that
-A3: F_tize z = z'' & Im F_tize z = Im z'' by HAHNBAN1:def 4;
-      Arg z = Arg F_tize z by Def2;
- hence sin Arg z > 0 by A1,A2,A3,COMPTRIG:63;
-end;
+for z be complex number st Im z > 0 holds sin Arg z > 0 by COMPTRIG:63;
 
 theorem Th34:
-for z being Element of COMPLEX holds Arg z = 0 iff Re z >= 0 & Im z = 0
-proof let z being Element of COMPLEX;
+for z being complex number holds Arg z = 0 iff Re z >= 0 & Im z = 0
+proof let z being complex number;
   hereby assume Arg z = 0; then z = [*|.z.|,0*] by Th24;
-     then Re z = |.z.| & Im z = 0 by COMPLEX1:7;
+   then Re z = |.z.| & Im z = 0 by COMPLEX1:7;
    hence Re z >= 0 & Im z = 0 by COMPLEX1:132;
   end;
-A1: Arg z = Arg F_tize z by Def2;
- assume A2: Re z >= 0 & Im z = 0; then z = [* Re z, 0 *] by COMPLEX1:8;
-  then F_tize z = [*Re z,0*] by Def1.= [** Re z, 0 **] by HAHNBAN1:def 1;
- hence Arg z = 0 by A1,A2,COMPTRIG:53;
+ assume A2: Re z >= 0 & Im z = 0; then z = [* Re z, 0 *] by COMPLEX1:8
+  .= [**Re z,0**] by HAHNBAN1:def 1;
+ hence Arg z = 0 by A2,COMPTRIG:53;
 end;
 
 theorem Th35:
-for z being Element of COMPLEX holds Arg z = PI iff Re z < 0 & Im z=0
-proof let z be Element of COMPLEX;
-  A1: z=F_tize(z) by Def1;
-  A2: Arg(z)=Arg(F_tize(z)) by Def2;
-  A3: |.z.|=|.F_tize(z).| by Th16;
+for z being complex number holds Arg z = PI iff Re z < 0 & Im z=0
+proof let z be complex number;
  hereby assume A4: Arg z = PI;
   per cases;
   suppose A5: z<>0.F_Complex;
-    then z=[** |.z.|*cos PI,|.z.|*sin PI **] by A1,A2,A3,A4,COMPTRIG:def 1;
-    then z=[* |.z.|*-1,0 *] by HAHNBAN1:def 1,SIN_COS:82;
-    then A6: Re z = -|.z.| & Im z = 0 by COMPLEX1:7;   --|.z.| > 0 by A5,
-COMPLEX1:133,COMPLFLD:9;
+    then z=|.z.|*cos PI+|.z.|*sin PI *<i> by A4,COMPTRIG:def 1,Lm0;
+    then z=|.z.|*-1+0 by SIN_COS:82;
+    then A6: Re z = -|.z.| & Im z = 0 by COMPLEX1:def 2,def 3;
+    --|.z.| > 0 by A5,COMPLEX1:133,COMPLFLD:9;
     hence Re z < 0 & Im z = 0 by A6,REAL_1:66;
   end;
   suppose z=0.F_Complex;
-    hence Re z < 0 & Im z = 0 by A4,Th20,COMPLFLD:9,COMPTRIG:21;
+   hence Re z < 0 & Im z = 0 by A4,Th20,COMPLFLD:9,COMPTRIG:21;
  end;
  end;
-A7: Arg z = Arg F_tize z by Def2;
  assume A8: Re z < 0 & Im z=0; then z = [* Re z, 0 *] by COMPLEX1:8;
-  then F_tize z = [*Re z,0*] by Def1.= [** Re z, 0 **] by HAHNBAN1:def 1;
- hence Arg z = PI by A7,A8,COMPTRIG:54;
+  then z = [** Re z, 0 **] by HAHNBAN1:def 1;
+ hence Arg z = PI by A8,COMPTRIG:54;
 end;
 
 theorem Th36:
-for z being Element of COMPLEX holds Im z = 0 iff Arg z = 0 or Arg z = PI
-proof let z be Element of COMPLEX;
+for z being complex number holds Im z = 0 iff Arg z = 0 or Arg z = PI
+proof let z be complex number;
  hereby assume A1: Im z = 0;   Re z >= 0 or Re z < 0;
  then A2: Arg [**Re z,0**] = 0 or Arg [**Re z,0**] = PI by COMPTRIG:53,54;
-       [**Re z,0**] = [*Re z,0*] by HAHNBAN1:def 1 .= z by A1,COMPLEX1:8;
-  hence Arg z = 0 or Arg z = PI by A2,Th17;
+  [**Re z,0**] = [*Re z,0*] by HAHNBAN1:def 1 .= z by A1,COMPLEX1:8;
+  hence Arg z = 0 or Arg z = PI by A2;
  end;
  assume Arg z = 0 or Arg z = PI;
  hence Im z = 0 by Th34,Th35;
 end;
 
 theorem Th37:
-for z being Element of COMPLEX st Arg z <= PI holds Im z >= 0
-proof let z be Element of COMPLEX;
+for z being complex number st Arg z <= PI holds Im z >= 0
+proof let z be complex number;
  assume A1: Arg z <= PI;
  per cases by A1,Th18,REAL_1:def 5;
   suppose Arg z = PI or Arg z = 0; hence Im z >= 0 by Th36;
@@ -707,9 +613,9 @@ XCMPLX_1:6;
 end;
 
 theorem Th39:
-for a being Element of COMPLEX st a <> 0
+for a being complex number st a <> 0
  holds cos Arg a = Re a / |.a.| & sin Arg a = Im a / |.a.|
-proof let a be Element of COMPLEX; assume a <> 0;
+proof let a be complex number; assume a <> 0;
 then A1: |.a.|<>0 by COMPLEX1:131;   a = [* |.a.|*cos Arg a,|.a.|*sin Arg a*]
 by Th19;
    then Re a = |.a.|*cos Arg a & Im a = |.a.|*sin Arg a by COMPLEX1:7;
@@ -717,9 +623,9 @@ by Th19;
 end;
 
 theorem Th40:
-for a being Element of COMPLEX, r being Real st r > 0
+for a being complex number, r being Real st r > 0
  holds Arg(a*[*r,0*]) = Arg a
-proof let a be Element of COMPLEX, r be Real such that
+proof let a be complex number, r be Real such that
  A1: r > 0;
  per cases; suppose a = 0; hence Arg(a*[*r,0*]) = Arg a;
  end;
@@ -729,8 +635,7 @@ proof let a be Element of COMPLEX, r be Real such that
   A5: Im b = Re a * 0 + r * Im a by A3,COMPLEX1:24 .= r*Im a;
   A6: |.b.| = |.a.|*|.[*r,0*].| by COMPLEX1:151
           .= |.a.|*abs r by A3,COMPLEX1:136 .= |.a.|*r by A1,ABSVALUE:def 1;
-         |.a.| <> 0 by A2,COMPLEX1:131; then A7: |.b.| <> 0 by A1,A6,XCMPLX_1:6
-;
+   |.a.| <> 0 by A2,COMPLEX1:131; then A7: |.b.| <> 0 by A1,A6,XCMPLX_1:6;
   A8: cos Arg a = Re a/|.a.| & sin Arg a = Im a/|.a.| by A2,Th39;
   A9: cos Arg b = Re b/|.b.|by A7,Th39,COMPLEX1:130 .=cos Arg a by A1,A4,A6,A8,
 XCMPLX_1:92;
@@ -742,13 +647,14 @@ end;
 end;
 
 theorem Th41:
-for a being Element of COMPLEX, r being Real st r < 0
+for a being complex number, r being Real st r < 0
  holds Arg(a*[*r,0*]) = Arg -a
-proof let a be Element of COMPLEX, r be Real such that
+proof let a be complex number, r be Real such that
 A1: r < 0;
  per cases; suppose a = 0; hence Arg(a*[*r,0*]) = Arg -a;
  end;
  suppose A2: a <> 0; set b = a*[*r,0*];
+X1:  a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
   A3: Re [*r,0*] = r & Im [*r,0*] = 0 by COMPLEX1:7;
   then A4: Re b = Re a * r - 0*Im a by COMPLEX1:24 .= r*Re a;
   A5: Im b = Re a * 0 + r * Im a by A3,COMPLEX1:24 .= r*Im a;
@@ -759,10 +665,10 @@ A1: r < 0;
   A9: cos Arg a = Re a/|.a.| & sin Arg a = Im a/|.a.| by A2,Th39;
   A10: cos Arg b = r*Re a/(-|.a.|*r) by A4,A6,A8,Th39,COMPLEX1:130 .= -r*Re a/(
 |.a.|*r) by XCMPLX_1:189
-     .= -cos Arg a by A1,A9,XCMPLX_1:92 .= cos Arg -a by A2,Th38;
+     .= -cos Arg a by A1,A9,XCMPLX_1:92 .= cos Arg -a by A2,Th38,X1;
   A11: sin Arg b = r*Im a/(-|.a.|*r) by A5,A6,A8,Th39,COMPLEX1:130 .= -r*Im a/(
 |.a.|*r) by XCMPLX_1:189
-     .= -sin Arg a by A1,A9,XCMPLX_1:92 .= sin Arg -a by A2,Th38;
+     .= -sin Arg a by A1,A9,XCMPLX_1:92 .= sin Arg -a by A2,Th38,X1;
         0 <= Arg b & Arg b < 2*PI & 0 <= Arg -a & Arg -a < 2*PI by Th18;
   hence Arg(a*[*r,0*]) = Arg -a by A10,A11,Th12;
 end;
@@ -770,7 +676,7 @@ end;
 
 begin :: Inner product
 
-definition ::Inner product of complex numbers
+definition :: Inner product of complex numbers
   let x, y be Element of COMPLEX;
   func x .|. y -> Element of COMPLEX equals :Def3:
   x*(y*');
@@ -965,7 +871,7 @@ end;
 begin :: Rotation
 
 definition
- let a be Element of COMPLEX, r be Real;
+ let a be complex number, r be Real;
  func Rotate(a, r) -> Element of COMPLEX equals :Def4:
   [* |.a.|*cos (r+Arg a), |.a.|*sin (r+Arg a) *];
   correctness;
@@ -1108,11 +1014,7 @@ end;
 
 theorem Th74:
 Rotate(a, PI) = -a
-proof per cases;
- suppose a = 0.F_Complex;
-  hence Rotate(a, PI) = -a by Th66,COMPLFLD:9,REAL_1:26;
- end;
- suppose a <> 0.F_Complex;
+proof
  A1:  a = [* |.a.|*cos Arg a, |.a.|*sin Arg a *] by Th19;
  A2: |.a.|*-cos Arg a = -(|.a.|*cos Arg a) .= - Re a by A1,COMPLEX1:7;
  A3: |.a.|*-sin Arg a = -(|.a.|*sin Arg a) .= - Im a by A1,COMPLEX1:7;
@@ -1121,7 +1023,6 @@ proof per cases;
   .= [* |.a.|*-cos Arg a, |.a.|*sin (PI+Arg a) *] by SIN_COS:84
   .= [* |.a.|*-cos Arg a, |.a.|*-sin Arg a *] by SIN_COS:84
   .= -a by A2,A3,COMPLEX1:def 11;
-end;
 end;
 
 begin :: Angles
@@ -1676,9 +1577,8 @@ Im a = 0 & Re a > 0 & 0 < Arg(b) & Arg(b) < PI
 proof assume that
 A1: Im a = 0 and A2: Re a > 0 and A3: 0 < Arg(b) and A4: Arg(b) < PI;
    a = [*Re a, 0*] by A1,COMPLEX1:8;
-then A5: a = [**Re a, 0**] by HAHNBAN1:def 1;
-       Arg [**Re a, 0**] = 0 by A2,COMPTRIG:53;
-then A6: Arg(a) = 0 by A5,Th17;
+then a = [**Re a, 0**] by HAHNBAN1:def 1;
+then A6: Arg(a) = 0 by A2,COMPTRIG:53;
 then A7: Arg(-a) = Arg(a)+PI by A2,Th22,COMPLEX1:12,COMPTRIG:21 .= PI by A6;
       Arg b in ].0,PI.[ by A3,A4,JORDAN6:45;
 then A8: Im b > 0 by Th27;
@@ -1768,8 +1668,8 @@ then Arg(b-a)-Arg(b) > 0 by A1,A2,A3,A4;
 then A42: Arg(a-b)-Arg(0c-b) > 0 by XCMPLX_1:150;
 then angle(0c,b,a) = Arg(a-b)-Arg(0c-b) by Def6;
 then A43: angle(0c,b,a) = Arg(a-b)-Arg(-b) by XCMPLX_1:150;
-        Arg(b-a) <= PI by A10,A11,Th26,COMPLEX1:12; then -Arg(b-a) >= -PI by
-REAL_1:50;
+     Arg(b-a) <= PI by A10,A11,Th26,COMPLEX1:12; then
+     -Arg(b-a) >= -PI by REAL_1:50;
      then Arg(-a)+-Arg(b-a) >= 0-PI+PI by A7,REAL_1:55;
      then Arg(-a)-Arg(b-a) >= 0;
      then Arg(0c-a)-Arg(b-a) >= 0 by XCMPLX_1:150;
@@ -1874,8 +1774,7 @@ proof assume that
 A1: Im a = 0 and A2: Re a > 0 and A3: Arg(b) = PI;   a = [*Re a, 0*] by A1,
 COMPLEX1:8;
 then A4: a = [**Re a, 0**] by HAHNBAN1:def 1;
-       Arg [**Re a, 0**] = 0 by A2,COMPTRIG:53;
-then A5: Arg(a) = 0 by A4,Th17;
+A5: Arg(a) = 0 by A4,A2,COMPTRIG:53;
 then A6: Arg(-a) = Arg(a)+PI by A2,Th22,COMPLEX1:12,COMPTRIG:21 .= PI by A5;
 A7: Re b < 0 & Im b = 0 by A3,Th35;
 A8:  Im (a-b) = Im a - Im b by COMPLEX1:48 .= - Im b by A1,XCMPLX_1:150;
@@ -1989,7 +1888,7 @@ end;
 end;
 
 theorem
-        angle(a,b,c)+angle(b,c,a)+angle(c,a,b) = PI or
+  angle(a,b,c)+angle(b,c,a)+angle(c,a,b) = PI or
      angle(a,b,c)+angle(b,c,a)+angle(c,a,b) = 5*PI
  iff a <> b & a <> c & b <> c
 proof

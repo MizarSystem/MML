@@ -15,6 +15,6 @@ YELLOW_0
 WAYBEL_0
 #
 G3 W11 ;;G4 W11 ;F1 ;;;
-&ª&R26 F1 ;F2 ;èM2 U1 F2 ;;;;K82 F1 ;F2 ;B1 ;P1 K82 F1 ;F2 ;B1 ;;;M2 U1 F2 ;;;ªM2 U1 F2 ;;;ª&R21 F2 ;B1 B2 ;ªP1 K82 F1 ;F2 ;B2 ;;;;ª&ªM2 U1 F2 ;;;ªM2 U1 F2 ;;;ª&R21 F2 ;B1 B2 ;ªP1 K82 F1 ;F2 ;B2 ;;;ªR26 F1 ;F2 ;èM2 U1 F2 ;;;;K82 F1 ;F2 ;B1 ;P1 K82 F1 ;F2 ;B1 ;;;;;M2 U1 F1 ;;;&ª&P1 B1 ;ªP1 B1 ;;ª&P1 B1 ;ªP1 B1 ;;;;
+&ª&R26 F1 ;F2 ;èM2 U1 F2 ;;;;K83 F1 ;F2 ;B1 ;P1 K83 F1 ;F2 ;B1 ;;;M2 U1 F2 ;;;ªM2 U1 F2 ;;;ª&R21 F2 ;B1 B2 ;ªP1 K83 F1 ;F2 ;B2 ;;;;ª&ªM2 U1 F2 ;;;ªM2 U1 F2 ;;;ª&R21 F2 ;B1 B2 ;ªP1 K83 F1 ;F2 ;B2 ;;;ªR26 F1 ;F2 ;èM2 U1 F2 ;;;;K83 F1 ;F2 ;B1 ;P1 K83 F1 ;F2 ;B1 ;;;;;M2 U1 F1 ;;;&ª&P1 B1 ;ªP1 B1 ;;ª&P1 B1 ;ªP1 B1 ;;;;
 #
 !

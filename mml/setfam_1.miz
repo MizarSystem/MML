@@ -1040,3 +1040,123 @@ A8:        X`` = X;
       end;
    hence thesis by A2,XBOOLE_0:def 10;
 end;
+
+begin :: Addendum
+
+:: from YELLOW_8, 2004.07.25
+
+theorem
+for X being set, F being Subset-Family of X
+ for P being Subset of X holds P` in COMPLEMENT F iff P in F
+proof let X be set, F be Subset-Family of X;
+ let P be Subset of X;
+      P = P``;
+ hence P` in COMPLEMENT F iff P in F by Def8;
+end;
+
+theorem
+    for X being set, F being Subset-Family of X
+ for P being Subset of X holds P` in COMPLEMENT F iff P in F
+proof let X be set, F be Subset-Family of X;
+ let P be Subset of X;
+      P = P``;
+ hence P` in COMPLEMENT F iff P in F by Def8;
+end;
+
+theorem Th8:
+for X being set, F,G being Subset-Family of X
+  st COMPLEMENT F c= COMPLEMENT G
+ holds F c= G
+ proof let X be set, F,G be Subset-Family of X such that
+A1: COMPLEMENT F c= COMPLEMENT G;
+  let x be set;
+  assume
+A2:  x in F;
+   then reconsider A = x as Subset of X;
+       A in COMPLEMENT COMPLEMENT F by A2;
+   then A` in COMPLEMENT F by Def8;
+   then A`` in G by A1,Def8;
+  hence x in G;
+ end;
+
+theorem
+for X being set, F,G being Subset-Family of X
+ holds COMPLEMENT F c= G iff F c= COMPLEMENT G
+proof let X be set, F,G be Subset-Family of X;
+ hereby assume COMPLEMENT F c= G;
+   then COMPLEMENT F c= COMPLEMENT COMPLEMENT G;
+  hence F c= COMPLEMENT G by Th8;
+ end;
+ assume F c= COMPLEMENT G;
+  then COMPLEMENT COMPLEMENT F c= COMPLEMENT G;
+ hence COMPLEMENT F c= G by Th8;
+end;
+
+theorem
+for X being set, F,G being Subset-Family of X
+  st COMPLEMENT F = COMPLEMENT G
+ holds F = G
+proof let X be set, F,G be Subset-Family of X; assume
+A1: COMPLEMENT F = COMPLEMENT G;
+then A2: F c= G by Th8;
+      G c= F by A1,Th8;
+ hence F = G by A2,XBOOLE_0:def 10;
+end;
+
+definition let X be set; let F,G be Subset of bool X;
+  redefine func F \/ G -> Subset-Family of X;
+  coherence
+  proof
+        F \/ G is Subset of bool X;
+    hence thesis by Def7;
+  end;
+end;
+
+theorem
+for X being set, F,G being Subset-Family of X
+ holds COMPLEMENT(F \/ G) = COMPLEMENT F \/ COMPLEMENT G
+proof let X be set, F,G be Subset-Family of X;
+      for P being Subset of X holds P in COMPLEMENT F \/ COMPLEMENT G iff
+   P` in F \/ G
+   proof let P be Subset of X;
+        P in COMPLEMENT F or P in COMPLEMENT G iff P` in F or P` in G
+    by Def8;
+    hence thesis by XBOOLE_0:def 2;
+   end;
+ hence thesis by Def8;
+end;
+
+theorem
+for X being set, F being Subset-Family of X st F = {X}
+ holds COMPLEMENT F = {{}}
+proof let X be set, F be Subset-Family of X such that
+A1: F = {X};
+      {} c= X by XBOOLE_1:2;
+  then reconsider G = {{}} as Subset of bool X by ZFMISC_1:37;
+  reconsider G as Subset-Family of X by Def7;
+      for P being Subset of X holds P in G iff P` in F
+   proof let P be Subset of X;
+    hereby assume P in G;
+      then P = {}X by TARSKI:def 1;
+      then P` = [#]X by SUBSET_1:22 .= X by SUBSET_1:def 4;
+     hence P` in F by A1,TARSKI:def 1;
+    end;
+    assume P` in F;
+     then A2:    P` = X by A1,TARSKI:def 1 .= [#]X by SUBSET_1:def 4;
+         P = P`` .= {}X by A2,SUBSET_1:21 .= {};
+    hence P in G by TARSKI:def 1;
+   end;
+ hence COMPLEMENT F = {{}} by Def8;
+end;
+
+registration let X be set, F be empty Subset-Family of X;
+ cluster COMPLEMENT F -> empty;
+ coherence
+  proof
+   assume COMPLEMENT F is not empty;
+    then ex x being Subset of X st
+     x in COMPLEMENT F by SUBSET_1:10;
+   hence contradiction by Def8;
+  end;
+end;
+

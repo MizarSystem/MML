@@ -6,53 +6,52 @@
 
 environ
 
- vocabulary ARYTM, ARYTM_1, ARYTM_3, RELAT_1, ABSVALUE;
- notation ORDINAL1, XCMPLX_0, XREAL_0, REAL_1;
- constructors REAL_1, XCMPLX_0, XREAL_0, XBOOLE_0;
- clusters XREAL_0, REAL_1, ARYTM_3, ZFMISC_1, XBOOLE_0;
+ vocabulary ARYTM, ARYTM_1, ARYTM_3, RELAT_1, ABSVALUE, COMPLEX1, XCMPLX_0,
+      SQUARE_1;
+ notation ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, COMPLEX1, SQUARE_1;
+ constructors REAL_1, XCMPLX_0, XREAL_0, XBOOLE_0, COMPLEX1, SQUARE_1;
+ clusters XREAL_0, REAL_1, ARYTM_3, ZFMISC_1, XBOOLE_0, XCMPLX_0, COMPLEX1;
  requirements REAL, NUMERALS, SUBSET, ARITHM;
 
 
-begin
+begin :: Absolute value
 
  reserve x, y, z, s, t for real number;
 
-definition let x;
-     func abs x -> real number equals
+definition let x be real number;
+  redefine func |.x.| equals
 :: ABSVALUE:def 1
-             x if 0 <= x
-             otherwise -x;
-     projectivity;
+    x if 0 <= x
+    otherwise -x;
 end;
 
-definition let x be Real;
-   redefine func abs x -> Real;
-end;
+theorem :: ABSVALUE:1
+  abs x = x or abs x = -x;
 
-canceled 4;
+canceled 3;
 
 theorem :: ABSVALUE:5
-  0 <= abs(x);
+  0 <= abs x;
 
 theorem :: ABSVALUE:6
-  x <> 0 implies 0 < abs(x);
+  x <> 0 implies 0 < abs x;
 
 theorem :: ABSVALUE:7
-     x = 0 iff abs(x) = 0;
+  x = 0 iff abs x = 0;
 
 canceled;
 
 theorem :: ABSVALUE:9
-     abs(x) = -x & x <> 0 implies x < 0;
+  abs x = -x & x <> 0 implies x < 0;
 
 theorem :: ABSVALUE:10
   abs(x*y) = abs(x) * abs(y);
 
 theorem :: ABSVALUE:11
-  -abs(x) <= x & x <= abs(x);
+  -abs x <= x & x <= abs x;
 
 theorem :: ABSVALUE:12
-  -y <= x & x <= y iff abs(x) <= y;
+  -y <= x & x <= y iff abs x <= y;
 
 theorem :: ABSVALUE:13
   abs(x+y) <= abs(x) + abs(y);
@@ -64,74 +63,78 @@ theorem :: ABSVALUE:15
   abs(1/x) = 1/abs(x);
 
 theorem :: ABSVALUE:16
-     abs(x/y) = abs(x)/abs(y);
+  abs(x/y) = abs(x)/abs(y);
 
 theorem :: ABSVALUE:17
-  abs(x) = abs(-x);
+  abs x = abs(-x);
 
 theorem :: ABSVALUE:18
   abs(x) - abs(y) <= abs(x-y);
 
 theorem :: ABSVALUE:19
-     abs(x-y) <= abs(x) + abs(y);
+  abs(x-y) <= abs(x) + abs(y);
 
-canceled;
+theorem :: ABSVALUE:20 :: SQUARE_1:98
+   0 <= x*y implies sqrt (x*y) = sqrt abs(x)*sqrt abs(y);
 
 theorem :: ABSVALUE:21
-     abs(x) <= z & abs(y) <= t implies abs(x+y) <= z + t;
+  abs x <= z & abs y <= t implies abs(x+y) <= z + t;
 
 theorem :: ABSVALUE:22
-     abs(abs(x) - abs(y)) <= abs(x-y);
+  abs(abs(x) - abs(y)) <= abs(x-y);
 
-canceled;
+theorem :: ABSVALUE:23 :: SQUARE_1:100
+   0 < x/y implies sqrt (x/y) = sqrt abs(x) / sqrt abs(y);
 
 theorem :: ABSVALUE:24
-     0 <= x * y implies abs(x+y) = abs(x) + abs(y);
+  0 <= x * y implies abs (x+y) = abs(x) + abs(y);
 
 theorem :: ABSVALUE:25
-     abs(x+y) = abs(x) + abs(y) implies 0 <= x * y;
+  abs(x+y) = abs(x) + abs(y) implies 0 <= x * y;
 
 theorem :: ABSVALUE:26
-     abs(x+y)/(1 + abs(x+y)) <= abs(x)/(1 + abs(x)) + abs(y)/(1 +abs(y));
+  abs(x + y)/(1 + abs(x+y)) <= abs(x)/(1 + abs(x)) + abs(y)/(1 + abs(y));
+
+:: Signum function
 
 definition let x;
-            func sgn x equals
+  func sgn x equals
 :: ABSVALUE:def 2
-        1 if 0 < x,
-             -1 if x < 0
-            otherwise 0;
+      1 if 0 < x,
+     -1 if x < 0
+     otherwise 0;
 end;
 
 registration let x;
-    cluster sgn x -> real;
+  cluster sgn x -> real;
 end;
 
 definition let x be Real;
-    redefine func sgn x -> Real;
+  redefine func sgn x -> Real;
 end;
 
 canceled 4;
 
 theorem :: ABSVALUE:31
-     sgn x = 1 implies 0 < x;
+  sgn x = 1 implies 0 < x;
 
 theorem :: ABSVALUE:32
-     sgn x = -1 implies x < 0;
+  sgn x = -1 implies x < 0;
 
 theorem :: ABSVALUE:33
   sgn x = 0 implies x = 0;
 
 theorem :: ABSVALUE:34
-     x = abs(x) * sgn x;
+  x = abs(x) * sgn x;
 
 theorem :: ABSVALUE:35
   sgn (x * y) = sgn x * sgn y;
 
 theorem :: ABSVALUE:36
-     sgn sgn x = sgn x;
+  sgn sgn x = sgn x;
 
 theorem :: ABSVALUE:37
-     sgn (x + y) <= sgn x + sgn y + 1;
+  sgn (x + y) <= sgn x + sgn y + 1;
 
 theorem :: ABSVALUE:38
   x <> 0 implies sgn x * sgn (1/x) = 1;
@@ -140,10 +143,10 @@ theorem :: ABSVALUE:39
   1/(sgn x) = sgn (1/x);
 
 theorem :: ABSVALUE:40
-     sgn x + sgn y - 1 <= sgn ( x + y );
+  sgn x + sgn y - 1 <= sgn ( x + y );
 
 theorem :: ABSVALUE:41
-      sgn x = sgn (1/x);
+  sgn x = sgn (1/x);
 
 theorem :: ABSVALUE:42
-     sgn (x/y) = (sgn x)/(sgn y);
+  sgn (x/y) = (sgn x)/(sgn y);

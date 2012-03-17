@@ -15,7 +15,7 @@ environ
       AMI_5, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCM_1, SF_MASTR, SCMFSA6A, SCMFSA6B,
       SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, BINARITH;
  constructors ENUMSET1, AMI_5, SCM_1, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B,
-      SCMFSA6C, SCMFSA8A, SCMFSA8B, BINARITH, MEMBERED;
+      SCMFSA6C, SCMFSA8A, SCMFSA8B, BINARITH, MEMBERED, PARTFUN1;
  clusters FUNCT_1, TREES_2, AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA6A, SF_MASTR,
       SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, INT_1, CQC_LANG, NAT_1, FRAENKEL,
       XREAL_0, MEMBERED;
@@ -1535,29 +1535,15 @@ theorem Th53: ::T1702
 
 Lm2:
  for l being Instruction-Location of SCM+FSA holds
-     goto l <> halt SCM+FSA
- proof
-   let l be Instruction-Location of SCM+FSA;
-   thus thesis by SCMFSA_2:47,124;
- end;
+     goto l <> halt SCM+FSA by SCMFSA_2:47,124;
 
 Lm3:
  for a being Int-Location, l being Instruction-Location of SCM+FSA holds
-     a =0_goto l <> halt SCM+FSA
- proof
-   let a be Int-Location;
-   let l be Instruction-Location of SCM+FSA;
-   thus thesis by SCMFSA_2:48,124;
- end;
+     a =0_goto l <> halt SCM+FSA by SCMFSA_2:48,124;
 
 Lm4:
  for a being Int-Location, l being Instruction-Location of SCM+FSA holds
-     a >0_goto l <> halt SCM+FSA
- proof
-   let a be Int-Location;
-   let l be Instruction-Location of SCM+FSA;
-   thus thesis by SCMFSA_2:49,124;
- end;
+     a >0_goto l <> halt SCM+FSA by SCMFSA_2:49,124;
 
 Lm5:
  for I,J being Macro-Instruction holds
@@ -5102,40 +5088,10 @@ A3: I +* Start-At insloc 0 c= s by A1,SCMFSA6B:8;
    set s2 = s +* loop I;
    set m = LifeSpan s;
    set A = the Instruction-Locations of SCM+FSA;
-       A4: (Computation s).m, (Computation s2).m equal_outside A by A2,A3,Th113
-;
    set l1 = IC (Computation s).m;
-A5: IC (Computation s).m in dom I by A3,SCMFSA6B:def 2;
-then IC (Computation s2).m in dom I by A4,SCMFSA6A:29;
-then A6: IC (Computation s2).m in dom loop I by Th106;
-A7:  l1 = IC (Computation s2).m by A4,SCMFSA6A:29;
-      I c= Initialized I by SCMFSA6A:26;
-   then dom I c= dom Initialized I by GRFUNC_1:8;
-   then s.l1 = (Initialized I).l1 by A1,A5,GRFUNC_1:8;
-then A8: I.l1 = s.l1 by A5,SCMFSA6A:50
-   .= (Computation s).m.IC (Computation s).m by AMI_1:54
-   .= CurInstr (Computation s).m by AMI_1:def 17
-   .= halt SCM+FSA by A2,SCM_1:def 2;
-      {halt SCM+FSA} = dom (halt SCM+FSA .--> goto insloc 0)
-       by CQC_LANG:5;
-then A9: halt SCM+FSA in dom (halt SCM+FSA .--> goto insloc 0)
-       by TARSKI:def 1;
-A10: (halt SCM+FSA .--> goto insloc 0).halt SCM+FSA
-    = goto insloc 0 by CQC_LANG:6;
-A11: s2.l1 = (loop I).l1 by A6,A7,FUNCT_4:14
-   .= (((id the Instructions of SCM+FSA) +* (halt SCM+FSA .-->
-       goto insloc 0))*I).l1 by Def4
-   .= ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .-->
-       goto insloc 0)).(halt SCM+FSA) by A5,A8,FUNCT_1:23
-   .= goto insloc 0 by A9,A10,FUNCT_4:14;
-A12: CurInstr (Computation s2).m
-    = (Computation s2).m.l1 by A7,AMI_1:def 17
-   .= goto insloc 0 by A11,AMI_1:54;
    hereby let k be Nat;
       assume A13: k <= LifeSpan s;
       set lk = IC (Computation s).k;
-      per cases;
-      suppose k <> LifeSpan s;
   A14: (Computation s).k, (Computation s2).k equal_outside A by A2,A3,A13,Th113
 ;
        A15: IC (Computation s).k in dom I by A3,SCMFSA6B:def 2;
@@ -5148,11 +5104,6 @@ A12: CurInstr (Computation s2).m
        .= (loop I).lk by A15,A17,FUNCT_4:14;
           (loop I).lk in rng loop I by A15,A17,FUNCT_1:def 5;
        hence contradiction by A18,A19,Th107;
-      end;
-      suppose A20: k = LifeSpan s;
-       assume CurInstr (Computation (s +* loop I)).k = halt SCM+FSA;
-       hence contradiction by A12,A20,SCMFSA_2:47,124;
-     end;
      end;
  end;
 

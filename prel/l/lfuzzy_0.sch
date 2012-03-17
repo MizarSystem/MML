@@ -22,10 +22,10 @@ FILTER_1
 LATTICE3
 #
 G3 V16 ;V17 ;V18 ;V57 ;V58 ;V59 ;;M1 W1 ;;M1 W1 ;;M2 U1 F1 ;;;;
-R1 K75 F1 ;ËM2 F2 ;;;K75 F1 ;ËM2 F3 ;;;F4 B1 B2 ;P2 B2 ;;P1 B1 ;;K75 F1 ;ËM2 F2 ;;M2 F3 ;;;F4 B1 B2 ;&P1 B1 ;P2 B2 ;;;;;
+R1 K76 F1 ;ËM2 F2 ;;;K76 F1 ;ËM2 F3 ;;;F4 B1 B2 ;P2 B2 ;;P1 B1 ;;K76 F1 ;ËM2 F2 ;;M2 F3 ;;;F4 B1 B2 ;&P1 B1 ;P2 B2 ;;;;;
 #
 G3 V16 ;V17 ;V18 ;V57 ;V58 ;V59 ;;M1 W1 ;;M1 W1 ;;M2 U1 F1 ;;;;
-R1 K75 F1 ;ËM2 F3 ;;;K75 F1 ;ËM2 F2 ;;;F4 B2 B1 ;P1 B2 ;;P2 B1 ;;K75 F1 ;ËM2 F2 ;;M2 F3 ;;;F4 B1 B2 ;&P1 B1 ;P2 B2 ;;;;;
+R1 K76 F1 ;ËM2 F3 ;;;K76 F1 ;ËM2 F2 ;;;F4 B2 B1 ;P1 B2 ;;P2 B1 ;;K76 F1 ;ËM2 F2 ;;M2 F3 ;;;F4 B1 B2 ;&P1 B1 ;P2 B2 ;;;;;
 #
 M1 W1 ;;M1 W1 ;;M1 ;M1 ;;
 R1 ËM2 F1 ;;M2 F2 ;;;F3 B1 B2 ;P1 B1 B2 ;ËM2 F1 ;;M2 F2 ;;;F4 B1 B2 ;P1 B1 B2 ;;ùM2 F1 ;;ùM2 F2 ;;™&P1 B1 B2 ;™R1 F3 B1 B2 ;F4 B1 B2 ;;;;
@@ -34,6 +34,6 @@ M1 W1 ;;M1 W1 ;;M1 ;M1 ;;
 R1 ËM2 F1 ;;M2 F2 ;;;F3 B1 B2 ;P1 B1 B2 ;ËM2 F1 ;;M2 F2 ;;;F4 B1 B2 ;P2 B1 B2 ;;ùM2 F1 ;;ùM2 F2 ;;&™&P1 B1 B2 ;™P2 B1 B2 ;;™&P2 B1 B2 ;™P1 B1 B2 ;;;ùM2 F1 ;;ùM2 F2 ;;™&P1 B1 B2 ;™R1 F3 B1 B2 ;F4 B1 B2 ;;;;
 #
 G3 V16 ;V17 ;V18 ;V57 ;V58 ;V59 ;;M1 W1 ;;M1 W1 ;;M2 U1 F1 ;;;M2 U1 F1 ;;;;
-R1 K75 F1 ;ËM2 F2 ;;;K75 F1 ;ËM2 F3 ;;;F4 B1 B2 ;P2 B2 ;;P1 B1 ;;K75 F1 ;ËM2 F3 ;;;K75 F1 ;ËM2 F2 ;;;F5 B2 B1 ;P1 B2 ;;P2 B1 ;;;ùM2 F2 ;;ùM2 F3 ;;™&P1 B1 ;P2 B2 ;™R1 F4 B1 B2 ;F5 B1 B2 ;;;;
+R1 K76 F1 ;ËM2 F2 ;;;K76 F1 ;ËM2 F3 ;;;F4 B1 B2 ;P2 B2 ;;P1 B1 ;;K76 F1 ;ËM2 F3 ;;;K76 F1 ;ËM2 F2 ;;;F5 B2 B1 ;P1 B2 ;;P2 B1 ;;;ùM2 F2 ;;ùM2 F3 ;;™&P1 B1 ;P2 B2 ;™R1 F4 B1 B2 ;F5 B1 B2 ;;;;
 #
 !

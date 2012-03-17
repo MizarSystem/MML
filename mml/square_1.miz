@@ -9,12 +9,12 @@ environ
 
  vocabulary ARYTM, ARYTM_3, RELAT_1, ARYTM_1, ABSVALUE, SQUARE_1, XCMPLX_0,
       COMPLEX1;
- notation TARSKI, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, ABSVALUE;
- constructors REAL_1, ABSVALUE, XCMPLX_0, XREAL_0, XBOOLE_0;
+ notation TARSKI, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0;
+ constructors REAL_1, XCMPLX_0, XREAL_0, XBOOLE_0;
  clusters XREAL_0, REAL_1, NUMBERS, ARYTM_3, ZFMISC_1, XBOOLE_0, XCMPLX_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, REAL_1, XREAL_0;
- theorems AXIOMS, REAL_1, ABSVALUE, XREAL_0, XCMPLX_0, XCMPLX_1;
+ theorems AXIOMS, REAL_1, XREAL_0, XCMPLX_0, XCMPLX_1;
 
 begin
 
@@ -28,15 +28,15 @@ end;
 canceled;
 
 theorem
-   1 < x implies 1/x < 1
+  1 < x implies 1/x < 1
  proof
-  assume
+   assume
 A1: 1<x;
 then A2: 0<x by AXIOMS:22;
    then 0<x" by REAL_1:72;
    then 1*x"<x*x" by A1,REAL_1:70;
    then 1"*(1*x")<1"*1 by A2,XCMPLX_0:def 7;
-  hence 1/x < 1 by XCMPLX_0:def 9;
+   hence 1/x < 1 by XCMPLX_0:def 9;
  end;
 
 canceled 8;
@@ -192,25 +192,9 @@ definition let x,y be Element of REAL;
  coherence by XREAL_0:def 1;
 end;
 
-canceled 4;
+canceled 5;
 
-theorem Th34:
-   min(x,y) = (x + y - abs(x - y)) / 2
- proof
-    per cases;
-   suppose
-A1:   x <= y; then A2: 0 <= y - x by Th12;
-    thus min(x,y) = ((x+y)- (y - x))/2 by A1,Def1
-                 .= ((x+y)-abs(-(x - y)))/2 by A2,ABSVALUE:def 1
-                 .= ((x+y)-abs(x - y))/2 by ABSVALUE:17;
-   end;
-   suppose
-A3:   y <= x;
-then A4:   0 <= x - y by Th12;
-    thus min(x,y) = ((x+y)- (x - y))/2 by A3,Def1
-                 .= ((x+y)-abs(x-y))/2 by A4,ABSVALUE:def 1;
-  end;
- end;
+:: SQUARE_1:34 -> COMPLEX1:159
 
 theorem Th35:
   min(x,y) <= x
@@ -252,25 +236,9 @@ Th38;
  end;
  end;
 
-canceled 4;
+canceled 5;
 
-theorem Th45:
-  max(x,y) = (x + y + abs(x-y)) / 2
-proof
-  per cases;
-   suppose
-A1:   y <= x;
-then A2:   0 <= x - y by Th12;
-  thus max(x,y) = ((x+y)+ (x - y))/2 by A1,Def2
-                .= ((x+y)+abs(x-y))/2 by A2,ABSVALUE:def 1;
-   end;
-   suppose
-A3:   x <= y; then A4: 0 <= y - x by Th12;
-  thus max(x,y) = ((x+y)+ -(x - y))/2 by A3,Def2
-                .= ((x+y)+abs(-(x-y)))/2 by A4,ABSVALUE:def 1
-                .= ((x+y)+abs(x-y))/2 by ABSVALUE:17;
-  end;
-end;
+:: SQUARE_1:45 -> COMPLEX1:160
 
 theorem Th46:
   x <= max(x,y)
@@ -317,9 +285,15 @@ canceled;
 theorem
    min(x,y) + max(x,y) = x + y
  proof
-   thus min(x,y) + max(x,y) = (x + y - abs(x-y)) / 2 + max(x,y) by Th34
-      .= (x + y - abs(x-y)) / 2 + (x + y + abs(x-y)) / 2 by Th45
-      .= x + y;
+   per cases;
+   suppose x <= y; then
+     min(x,y) = x & max (x,y) = y by Def1,Def2;
+     hence min(x,y) + max(x,y) = x + y;
+   end;
+   suppose x > y; then
+     min(x,y) = y & max (x,y) = x by Def1,Def2;
+     hence min(x,y) + max(x,y) = x + y;
+   end;
  end;
 
 theorem Th54:
@@ -456,12 +430,7 @@ theorem Th61:
          .= (-a)^2 by Def3;
  end;
 
-theorem
-   (abs a)^2 = a^2
- proof 0 <= a or not 0 <= a;
-  then abs(a) = a or abs(a) = -a by ABSVALUE:def 1;
-  hence thesis by Th61;
- end;
+canceled; :: SQUARE_1:62 -> COMPLEX1:161
 
 theorem Th63:
   for a, b being complex number holds
@@ -777,31 +746,20 @@ theorem Th85:
   sqrt 4 = 2 by Def4,Lm7;
 
 theorem
-   sqrt 2 < 2 by Lm6,Th85;
+  sqrt 2 < 2 by Lm6,Th85;
 
 canceled 2;
 
 theorem  0 <= a implies sqrt a^2 = a by Lm5;
 
-theorem Th90:
+theorem
   a <= 0 implies sqrt a^2 = -a
  proof assume a <= 0;
   then 0 <= -a & a^2 = (-a)^2 by Th61,REAL_1:26,50;
   hence sqrt a^2 = -a by Lm5;
  end;
 
-theorem
-   sqrt a^2 = abs(a)
- proof
-   per cases;
-    suppose 0 <= a; then sqrt a^2 = a & abs(a) = a by Lm5,ABSVALUE:def 1;
-     hence thesis;
-    end;
-    suppose not 0 <= a;
-      then abs(a) = -a & a <= 0 by ABSVALUE:def 1;
-     hence thesis by Th90;
-   end;
- end;
+canceled; :: SQUARE_1:91 -> COMPLEX1:158
 
 theorem
    0 <= a & sqrt a = 0 implies a = 0 by Def4,Th60;
@@ -814,7 +772,7 @@ theorem
  end;
 
 theorem
-   0 <= x & x <= y implies sqrt x <= sqrt y
+  0 <= x & x <= y implies sqrt x <= sqrt y
   proof
      per cases;
      suppose x = y; hence thesis;
@@ -840,7 +798,7 @@ A2: sqrt x = sqrt y;
   hence contradiction by A1,A2,Lm6;
  end;
 
-theorem Th97:
+theorem
   0 <= a & 0 <= b implies sqrt (a*b) = sqrt a * sqrt b
  proof assume
 A1:  0 <= a & 0 <= b;
@@ -854,13 +812,7 @@ then A4: 0 <= sqrt(a*b) & 0 <= sqrt a*sqrt b by A2,Def4,Th19;
      .= sqrt a*sqrt b by A4,Lm5;
  end;
 
-theorem
-   0 <= a*b implies sqrt (a*b) = sqrt abs(a)*sqrt abs(b)
- proof assume 0 <= a*b;
-   then abs(a*b) = a*b by ABSVALUE:def 1;
-   then abs(a)*abs(b) = a*b & 0 <= abs(a) & 0 <= abs(b) by ABSVALUE:5,10;
-   hence thesis by Th97;
- end;
+canceled; :: SQUARE_1:98 -> ABSVALUE:20
 
 theorem Th99:
   0 <= a & 0 <= b implies sqrt (a/b) = sqrt a/sqrt b
@@ -873,22 +825,15 @@ then A2: 0 <= sqrt a & 0 <= sqrt b by Def4;
   hence thesis by Def4;
  end;
 
-theorem
-   0 < a/b implies sqrt (a/b) = sqrt abs(a) / sqrt abs(b)
- proof assume 0 < a/b;
-  then (a/b) = abs(a/b) & 0 <= abs(b) by ABSVALUE:5,def 1;
-  then (a/b) = abs(a)/abs(b) & 0 <= abs(a) & 0 <= abs(b)
-          by ABSVALUE:5,16;
-  hence thesis by Th99;
- end;
+canceled; :: SQUARE_1:100 -> ABSVALUE:23
 
 theorem
-   0 < a implies sqrt (1/a) = 1/sqrt a by Th83,Th99;
+  0 < a implies sqrt (1/a) = 1/sqrt a by Th83,Th99;
 
 theorem
-   0 < a implies sqrt a/a = 1/sqrt a
+  0 < a implies sqrt a/a = 1/sqrt a
 proof assume A1: 0 < a;
-   then sqrt a <> 0 by Def4,Th60;
+  then sqrt a <> 0 by Def4,Th60;
   hence sqrt a/a = (sqrt a*sqrt a)/(a*sqrt a) by XCMPLX_1:92
             .= (sqrt a)^2/(a*sqrt a) by Def3
             .= (1*a)/(sqrt a*a) by A1,Def4
@@ -896,7 +841,7 @@ proof assume A1: 0 < a;
  end;
 
 theorem
-   0 < a implies a /sqrt a = sqrt a
+   0 < a implies a / sqrt a = sqrt a
  proof assume A1: 0 < a;
    then sqrt a <> 0 by Def4,Th60;
    hence a /sqrt a = (a*sqrt a) /(sqrt a*sqrt a) by XCMPLX_1:92
@@ -939,7 +884,7 @@ theorem
    0 <= b & b < a implies 1/(sqrt a+sqrt b) = (sqrt a - sqrt b)/(a-b)
  proof assume A1: 0 <= b & b < a;
 then A2: 0 < a;
-     0 <= a & b <> a by A1,AXIOMS:22;
+  0 <= a & b <> a by A1,AXIOMS:22;
   then (sqrt a)^2-(sqrt b)^2 <> 0 by A1,Lm8;
   hence 1/(sqrt a+sqrt b) = (sqrt a - sqrt b)/((sqrt a)^2-(sqrt b)^2) by Th70
                  .= (sqrt a - sqrt b)/(a-(sqrt b)^2) by A2,Def4

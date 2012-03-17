@@ -15,7 +15,7 @@ FINSET_1
 CARD_1
 CARD_3
 #
-«V2 ;V4 ;V22 ;;;M1 ;
-fV2 ;V4 ;V22 ;;M1 V2 ;V4 ;V22 ;;M1 ;;K16 A1 A2 ;
-fV2 ;V4 ;V22 ;;M1 ;M1 V20 ;;;K78 A1 A2 ;
+«V2 ;V4 ;V23 ;;;M1 ;
+fV2 ;V4 ;V23 ;;M1 V2 ;V4 ;V23 ;;M1 ;;K16 A1 A2 ;
+fV2 ;V4 ;V23 ;;M1 ;M1 V21 ;;;K78 A1 A2 ;
 !

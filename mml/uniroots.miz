@@ -12,14 +12,15 @@ environ
       INT_2, NAT_1, RAT_1, TARSKI, CARD_1, CARD_3, ALGSEQ_1, POLYNOM3,
       POLYNOM2, FUNCT_4, VECTSP_2, COMPTRIG, ABSVALUE, POLYNOM5, UNIROOTS,
       COMPLSP1, SIN_COS, PREPOWER, FINSET_1, SGRAPH1, MOD_2, GRAPH_2, ANPROJ_1,
-      GROUP_2, UPROOTS;
+      GROUP_2, UPROOTS, XCMPLX_0;
  notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, NUMBERS, ARYTM_0, XCMPLX_0,
-      XREAL_0, ZFMISC_1, REAL_1, SQUARE_1, INT_1, INT_2, NAT_1, POWER,
+      XREAL_0, ZFMISC_1, REAL_1, SQUARE_1, INT_1, INT_2, NAT_1, COMPLEX1,
+      PREPOWER, POWER,
       RLVECT_1, VECTSP_1, VECTSP_2, BINOP_1, RELAT_1, FUNCT_1, FUNCT_2,
       FINSEQ_1, RAT_1, FINSEQ_2, FINSEQ_4, FINSOP_1, PARTFUN1, TOPREAL1,
-      COMPLEX1, NORMSP_1, BINARITH, RVSUM_1, ALGSEQ_1, COMPLFLD, HAHNBAN1,
+      NORMSP_1, BINARITH, RVSUM_1, ALGSEQ_1, COMPLFLD, HAHNBAN1,
       POLYNOM3, POLYNOM4, POLYNOM5, COMPTRIG, CARD_1, GROUP_2, SIN_COS, NEWTON,
-      PREPOWER, FINSET_1, GROUP_1, MOD_2, GRAPH_2, ORDINAL1, BINOP_2, RLVECT_2,
+      FINSET_1, GROUP_1, MOD_2, GRAPH_2, ORDINAL1, BINOP_2, RLVECT_2,
       POLYNOM1, FVSUM_1, UPROOTS;
  constructors ARYTM_0, REAL_1, FINSOP_1, POWER, WELLORD2, INT_2, TOPREAL1,
       COMPLSP1, BINARITH, HAHNBAN1, POLYNOM4, COMPTRIG, COMPLEX1, FVSUM_1,
@@ -29,7 +30,7 @@ environ
  clusters XREAL_0, STRUCT_0, RELSET_1, SEQ_1, BINARITH, VECTSP_2, GROUP_1,
       FINSEQ_2, COMPLFLD, POLYNOM1, POLYNOM3, MONOID_0, NAT_1, INT_1, COMPLEX1,
       POLYNOM5, FINSEQ_1, FINSET_1, CARD_1, FSM_1, MEMBERED, ORDINAL2, ARYTM_3,
-      ORDINAL1, WSIERP_1, RFINSEQ, PRALG_1, BINOP_2;
+      ORDINAL1, WSIERP_1, RFINSEQ, PRALG_1, BINOP_2, XCMPLX_0, PREPOWER;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, GROUP_1, VECTSP_1, XBOOLE_0;
  theorems GROUP_1, CARD_1, FINSEQ_1, ZFMISC_1, NAT_1, FUNCT_1, FUNCT_2,
@@ -46,8 +47,8 @@ environ
 
 begin :: Preliminaries
 
-theorem Th1: ::Nat012:
-for n being Nat holds n = 0 or n = 1 or n >= 2
+theorem Th1:
+  for n being Nat holds n = 0 or n = 1 or n >= 2
 proof let n be Nat;
 A1: 0 < n implies 0+1 <= n by NAT_1:38;
   per cases by A1,NAT_1:19,REAL_1:def 5;
@@ -59,7 +60,7 @@ A1: 0 < n implies 0+1 <= n by NAT_1:38;
 end;
 end;
 
-Lm1: ::NEN:
+Lm1:
 for k being Nat holds k is non empty iff 1 <= k
 proof let k be Nat;
   hereby assume k is non empty; then 0 < k by NAT_1:19;
@@ -89,12 +90,13 @@ A2: now let k being Nat such that
     hence R[k];
    end;
 A6: for k being Nat st k>=1 holds R[k] from INT_2:sch 2(A2);
-   let k be non empty Nat;       k >= 1 by Lm1;
+   let k be non empty Nat;
+    k >= 1 by Lm1;
     then ex m being non empty Nat st m = k & P[m] by A6;
    hence P[k];
 end;
 
-theorem Th2: ::FS1:
+theorem Th2:
 for f being FinSequence st 1 <= len f holds f | Seg 1 = <*f.1*>
 proof let f be FinSequence such that
 A1: 1 <= len f;
@@ -103,8 +105,7 @@ A1: 1 <= len f;
 def 3;
    then dom f1 = Seg 1 by RELAT_1:91;
 then A2: len f1 = 1 by FINSEQ_1:def 3;
-       0+1 in Seg 1 by FINSEQ_1:6; then (f | Seg 1).1 = f.1 by FUNCT_1:72
-;
+    0+1 in Seg 1 by FINSEQ_1:6; then (f | Seg 1).1 = f.1 by FUNCT_1:72;
   hence f | Seg 1 = <*f.1*> by A2,FINSEQ_1:57;
 end;
 
@@ -119,7 +120,7 @@ end;
    set FC = F_Complex;
    set cFC = the carrier of F_Complex;
 
-theorem Th3: :: Prmod:
+theorem Th3:
 for f being FinSequence of F_Complex, g being FinSequence of REAL
  st len f = len g & for i being Nat st i in dom f holds |. f/.i .| = g.i
   holds |. Product f .| = Product g
@@ -134,12 +135,12 @@ A3: P[0] proof
      let f be FinSequence of F_Complex, g be FinSequence of REAL such that
     A4: len f = len g and
            for i being Nat st i in dom f holds |. f/.i .| = g.i and
-    A5: 0 = len f;     consider Pf being Element of COMPLEX such that
-    A6: Product f = Pf & |.Product f.| = |.Pf.| by COMPLFLD:def 3;
+    A5: 0 = len f;
+    reconsider Pf = Product f as Element of COMPLEX by COMPLFLD:def 1;
             f = <*>(the carrier of F_Complex) by A5,FINSEQ_1:32;
          then Product f = 1r by COMPLFLD:10,FVSUM_1:98;
      hence |.Product f.|
-       = Product g by A4,A5,A6,COMPLEX1:134,FINSEQ_1:32,RVSUM_1:124;
+       = Product g by A4,A5,COMPLEX1:134,FINSEQ_1:32,RVSUM_1:124;
     end;
 A7: for i being Nat st P[i] holds P[i+1] proof let i being Nat such that
     A8: P[i];
@@ -151,14 +152,12 @@ A7: for i being Nat st P[i] holds P[i+1] proof let i being Nat such that
     A12: f = f1^<*c*> by A11,FINSEQ_2:22;
        consider g1 being FinSequence of REAL, r being Real such that
     A13: g = g1^<*r*> by A9,A11,FINSEQ_2:22;
-        Product f = Product f1 * c by A12,FVSUM_1:100;
-       then consider Pf1c being Element of COMPLEX such that
-    A14: Product f1 * c = Pf1c & |. Product f .| = |.Pf1c.| by COMPLFLD:def 3;
-       consider Pf1 being Element of COMPLEX such that
-    A15: Product f1 = Pf1 & |. Product f1 .| = |.Pf1.| by COMPLFLD:def 3;
-       consider cc being Element of COMPLEX such that
-    A16: cc = c & |.c.| = |.cc.| by COMPLFLD:def 3;
-       A17: Product f1 * c = Pf1 * cc by A15,A16,COMPLFLD:6;
+XX:    Product f = Product f1 * c by A12,FVSUM_1:100;
+       reconsider Pf1c = Product f1 * c as Element of COMPLEX
+          by COMPLFLD:def 1;
+       reconsider Pf1 = Product f1 as Element of COMPLEX by COMPLFLD:def 1;
+       reconsider cc = c as Element of COMPLEX by COMPLFLD:def 1;
+       A17: Product f1 * c = Pf1 * cc by COMPLFLD:6;
     A18: Product g = Product g1 * r by A13,RVSUM_1:126;
     A19: len f = len f1 + len <*c*> by A12,FINSEQ_1:35
       .= len f1 + 1 by FINSEQ_1:56;
@@ -169,21 +168,20 @@ A7: for i being Nat st P[i] holds P[i+1] proof let i being Nat such that
     then A23: dom f1 = dom g1 by A20,FINSEQ_3:31;
     A24: now let i be Nat; assume
        A25: i in dom f1;  A26: dom f1 c= dom f by A12,FINSEQ_1:39;
-               f1/.i = f1.i by A25,FINSEQ_4:def 4 .= f.i by A12,A25,FINSEQ_1:
-def 7
+      f1/.i = f1.i by A25,FINSEQ_4:def 4 .= f.i by A12,A25,FINSEQ_1:def 7
                 .= f/.i by A25,A26,FINSEQ_4:def 4;
         hence |. f1/.i .| = g.i by A10,A25,A26
            .= g1.i by A13,A23,A25,FINSEQ_1:def 7;
        end;
-           f <> {} by A11,FINSEQ_1:25;
+    f <> {} by A11,FINSEQ_1:25;
     then A27: len f in dom f by FINSEQ_5:6;
     then A28: f/.len f = f.len f by FINSEQ_4:def 4 .= c by A12,A19,FINSEQ_1:59;
-            g.len f = r by A9,A13,A21,FINSEQ_1:59;
-    then A29: |.cc.| = r by A10,A16,A27,A28;
-     thus |. Product f .| = |. Pf1 .|*|.cc.| by A14,A17,COMPLEX1:151 .=
-Product g by A8,A15,A18,A20,A22,A24,A29;
+    g.len f = r by A9,A13,A21,FINSEQ_1:59;
+    then A29: |.cc.| = r by A10,A27,A28;
+    thus |. Product f .| = |. Pf1 .|*|.cc.| by A17,COMPLEX1:151,XX
+       .= Product g by A8,A18,A20,A22,A24,A29;
     end;
-       for i being Nat holds P[i] from NAT_1:sch 1(A3,A7);
+    for i being Nat holds P[i] from NAT_1:sch 1(A3,A7);
   hence |. Product f .| = Product g by A1,A2;
 end;
 
@@ -244,7 +242,7 @@ then A15: eval(poly_with_roots((s,1)-bag),x) = Product(f) by A1,A9,UPROOTS:68;
 ;
 end;
 
-theorem Th5: ::FSSum:
+theorem Th5:
 for f being FinSequence of F_Complex
  st for i being Nat st i in dom f holds f.i is integer
   holds Sum f is integer
@@ -288,7 +286,7 @@ A12: for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
   hence Sum f is integer by A1,A12;
 end;
 
-theorem Th6:   :: WEDDWITT ::RC:   :: WEDDWITT
+theorem Th6:   :: WEDDWITT
 for r being Real holds ex z being Element of COMPLEX st z = r & z = [*r,0*]
 proof let r be Real;
     consider z1 being Element of COMPLEX such that A1: z1 = [*r,0*];
@@ -300,7 +298,7 @@ by XCMPLX_0:def 2;
   hence thesis by A1;
 end;
 
-theorem Th7: ::Help2a:
+theorem Th7:
 for x, y being Element of F_Complex, r1, r2 being Real
  st r1=x & r2=y holds r1*r2 = x*y & r1+r2=x+y
 proof let x,y be Element of F_Complex;  let r1,r2 be Real such that
@@ -339,11 +337,7 @@ A7: Re[**q-a,-b**] = q-a & Im[**q-a,-b**] = -b by HAHNBAN1:15;
 by REAL_1:67;
 then A8: q^2 - 2*q*a + 1 > q^2 - 2*q + 1 by REAL_1:67;
     reconsider qc = [**q, 0**] as Element of F_Complex;
-A9: now assume A10: |.qc - r.| < 0;
-           ex z being Element of COMPLEX st z = qc-r & |.qc - r.| = |.z.|
-          by COMPLFLD:def 3;
-     hence contradiction by A10,COMPLEX1:132;
-    end;
+A9: |.qc - r.| >= 0 by COMPLEX1:132;
        (|.qc - r.|)^2 = |.[**q, 0**] - [**a, b**].|^2 by COMPTRIG:9
     .= |.[**q - a, 0-b**].|^2 by POLYNOM5:6
     .= (q-a)^2 + (-b)^2 by A7,COMPTRIG:7
@@ -354,7 +348,7 @@ A9: now assume A10: |.qc - r.| < 0;
   hence thesis by A9,JGRAPH_2:6;
 end;
 
-theorem Th9: ::FinProduct:
+theorem Th9:
 for ps being non empty FinSequence of REAL, x being Real
  st x >= 1 & for i being Nat st i in dom ps holds ps.i > x
   holds Product(ps) > x
@@ -425,7 +419,7 @@ A27: for k being Nat holds P[k] from NAT_1:sch 1(A10,A12);
   hence thesis by A3,RVSUM_1:126;
 end;
 
-theorem Th10: ::Th0:
+theorem Th10:
 for n being Nat holds 1_(F_Complex) = (power F_Complex).(1_(F_Complex),n)
 proof let n be Nat;
 A1: 1_(F_Complex) = [*1,0*] by ARYTM_0:def 7,COMPLEX1:def 7,COMPLFLD:10
@@ -436,7 +430,7 @@ COMPTRIG:16
   hence thesis;
 end;
 
-theorem Th11: ::sincos1:
+theorem Th11:
 for n being non empty Nat for i being Nat holds
   cos((2*PI*i)/n) = cos((2*PI*(i mod n))/n) &
   sin((2*PI*i)/n) = sin((2*PI*(i mod n))/n)
@@ -478,7 +472,7 @@ then A2:  cos((2*PI*i)/n)
   hence thesis by A2;
 end;
 
-theorem Th12: ::Th4:
+theorem Th12:
 for n being non empty Nat for i being Nat holds
    [** cos((2*PI*i)/n), sin((2*PI*i)/n)**] =
    [** cos((2*PI*(i mod n))/n), sin((2*PI*(i mod n))/n) **]
@@ -489,7 +483,7 @@ proof let n be non empty Nat, i be Nat;
   hence thesis;
 end;
 
-theorem Th13: ::Th5:
+theorem Th13:
 for n being non empty Nat, i, j being Nat holds
 [** cos((2*PI*i)/n),sin((2*PI*i)/n) **]*[** cos((2*PI*j)/n),sin((2*PI*j)/n) **]
  = [** cos((2*PI*((i+j) mod n))/n), sin((2*PI*((i+j)mod n))/n)**]
@@ -507,7 +501,7 @@ then A2:  cos((2*PI*i)/n) * cos((2*PI*j)/n) - sin((2*PI*i)/n) * sin((2*PI*j)/n)
   hence thesis;
 end;
 
-theorem Th14: ::Power1:
+theorem Th14:
 for L being unital associative (non empty HGrStr),
     x being Element of L, n,m being Nat
  holds (power L).(x,n*m) = (power L).((power L).(x,n),m)
@@ -526,7 +520,7 @@ A2: for m being Nat st P[m] holds P[m+1] proof let m be Nat such that
  thus for m being Nat holds P[m] from NAT_1:sch 1(A1,A2);
 end;
 
-theorem Th15: ::Help2b:
+theorem Th15:
 for n being Nat, x being Element of F_Complex st x is Integer
   holds (power F_Complex).(x,n) is Integer
 proof let n be Nat, x be Element of F_Complex such that
@@ -547,7 +541,7 @@ A3: now let k be Nat such that
   hence thesis;
 end;
 
-theorem Th16: ::Help2c:
+theorem Th16:
 for F being FinSequence of F_Complex
  st for i being Nat st i in dom F holds F.i is Integer
   holds Sum F is Integer
@@ -601,15 +595,14 @@ A15: for k being Nat holds P[k] from NAT_1:sch 1(A2,A4);
   hence thesis by A1,A15;
 end;
 
-theorem Th17: ::G_Th5H2:
+theorem Th17:
 for a being Real st 0 <= a & a < 2*PI & cos(a) = 1 holds a = 0
 proof
  let a be Real such that
 A1: 0 <= a & a < 2*PI and
 A2: cos(a) = 1;
-       1*1+(sin a)*(sin a) = 1 by A2,SIN_COS:32;
-   then (sin a)*(sin a) = 0 by XCMPLX_1:3; then sin a = 0 by XCMPLX_1:6
-;
+   1*1+(sin a)*(sin a) = 1 by A2,SIN_COS:32;
+   then (sin a)*(sin a) = 0 by XCMPLX_1:3; then sin a = 0 by XCMPLX_1:6;
    then a = 0 or a = PI by A1,COMPTRIG:33;
  hence a = 0 by A2,SIN_COS:82;
 end;
@@ -701,7 +694,7 @@ by A2;
   uniqueness;
 end;
 
-theorem :: MultG00:  :: WEDDWITT
+theorem :: WEDDWITT
     for R being Skew-Field
  holds the carrier of R = (the carrier of MultGroup R) \/ {0.R}
 proof let R being Skew-Field;
@@ -710,7 +703,7 @@ proof let R being Skew-Field;
 ;
 end;
 
-theorem Th19: ::MGmult:
+theorem Th19:
 for R being Skew-Field,
     a, b being Element of R, c, d being Element of MultGroup R
  st a = c & b = d holds c*d = a*b
@@ -728,8 +721,8 @@ A3: [c,d] in [:cMGR,cMGR:] by ZFMISC_1:def 2;
   .= a*b by VECTSP_1:def 10;
 end;
 
-theorem Th20: ::MultG01:
-for R being Skew-Field  holds 1_ R = 1.(MultGroup R)
+theorem Th20:
+for R being Skew-Field holds 1_ R = 1.(MultGroup R)
 proof let R be Skew-Field;
 A1: the carrier of MultGroup R = (the carrier of R) \ {0.R} by Def1;
        0.R <> 1_ R by VECTSP_1:def 21;
@@ -753,7 +746,7 @@ registration let R be finite Skew-Field;
   end;
 end;
 
-theorem :: MultG1 WEDDWITT
+theorem :: WEDDWITT
     for R being finite Skew-Field
   holds ord MultGroup R = card (the carrier of R) - 1
 proof let R be finite Skew-Field;   set G = MultGroup R;
@@ -764,7 +757,7 @@ proof let R be finite Skew-Field;   set G = MultGroup R;
   hence thesis by GROUP_1:def 14;
 end;
 
-theorem Th22: ::MultG2:
+theorem Th22:
 for R being Skew-Field, s being set
   st s in the carrier of MultGroup R holds s in the carrier of R
 proof let R be Skew-Field, s be set; assume
@@ -773,7 +766,7 @@ proof let R be Skew-Field, s be set; assume
   hence thesis by XBOOLE_0:def 4;
 end;
 
-theorem  ::MultG3:
+theorem
   for R being Skew-Field holds the carrier of MultGroup R c= the carrier of R
 proof let R be Skew-Field, s be set; assume
         s in the carrier of MultGroup R;
@@ -804,7 +797,7 @@ definition let n be non empty Nat;
   end;
 end;
 
-theorem Th24: ::Th1:
+theorem Th24:
 for n being non empty Nat, x being Element of  F_Complex
   holds x in n-roots_of_1 iff x is CRoot of n,1_(F_Complex)
 proof let n be non empty Nat, x be Element of F_Complex;
@@ -823,7 +816,7 @@ proof let n be non empty Nat, x be Element of F_Complex;
   hence thesis;
 end;
 
-theorem Th25:  ::Th2:
+theorem Th25:
 for n being non empty Nat holds 1_(F_Complex) in n-roots_of_1
 proof let n be non empty Nat;
         1_(F_Complex) = (power F_Complex).(1_(F_Complex),n) by Th10;
@@ -831,7 +824,7 @@ proof let n be non empty Nat;
   hence thesis by Th24;
 end;
 
-theorem Th26: ::Th3a:
+theorem Th26:
 for n being non empty Nat, x being Element of F_Complex
  st x in n-roots_of_1 holds |.x.| = 1
 proof let n be non empty Nat, x be Element of F_Complex such that
@@ -853,8 +846,7 @@ A6: |.x.| > 0 by A4,COMPLFLD:96;
 A7: |.x.| <> 1;
    per cases by A7,REAL_1:def 5;
    suppose A8: |.x.| < 1;     reconsider n' = n as Rational;
-           0 < n by NAT_1:19; then |.x.| #Q n' < 1 by A6,A8,PREPOWER:76
-;
+           0 < n by NAT_1:19; then |.x.| #Q n' < 1 by A6,A8,PREPOWER:76;
        then |.x.| |^ n < 1 by A6,PREPOWER:60;
     hence contradiction by A5,A6,POWER:46;
    end;
@@ -863,7 +855,7 @@ A7: |.x.| <> 1;
 end;
 end;
 
-theorem Th27: ::Th3:
+theorem Th27:
 for n being non empty Nat for x being Element of F_Complex
  holds x in n-roots_of_1
   iff ex k being Nat st x = [** cos((2*PI*k)/n), sin((2*PI*k)/n) **]
@@ -877,10 +869,14 @@ A1: |.z.| = 1 by COMPLFLD:10,97,def 1;
                by A3,CFUNCT_1:47,COMPLFLD:9,10,COMPTRIG:14;
             then not x is CRoot of n, 1_(F_Complex) by COMPTRIG:def 2;
            hence contradiction by A2,Th24;
-         end;
-     then A5: x = [**|.x.|*cos (Arg x),|.x.|*sin (Arg x)**] &
-        0 <= Arg x &  Arg x < 2*PI by COMPTRIG:def 1;
-            x is CRoot of n,(1_(F_Complex)) by A2,Th24;
+         end; then x <> 0c by COMPLFLD:9; then x <> 0;
+     then a5: x = |.x.|*cos (Arg x) + |.x.|*sin (Arg x) * <i> &
+        0 <= Arg x & Arg x < 2*PI by COMPTRIG:def 1;
+     then x = [*|.x.|*cos (Arg x),|.x.|*sin (Arg x)*]
+        by COMPLEX1:27;
+     then A5: x = [**|.x.|*cos (Arg x),|.x.|*sin (Arg x)**]
+       by HAHNBAN1:def 1;
+        x is CRoot of n,(1_(F_Complex)) by A2,Th24;
         then (power F_Complex).(x,n) = 1_(F_Complex) by COMPTRIG:def 2;
      then A6: 1 = |.x.| to_power n by A1,A4,POLYNOM5:8;
          A7: now assume A8: |.x.| <> 1;
@@ -888,11 +884,11 @@ A1: |.z.| = 1 by COMPLFLD:10,97,def 1;
          per cases by A8,REAL_1:def 5;
          suppose A10: |.x.| < 1;
            reconsider n' = n as Rational;
-               0 < n by NAT_1:19; then |.x.| #Q n' < 1 by A9,A10,PREPOWER:76;
+           0 < n by NAT_1:19; then |.x.| #Q n' < 1 by A9,A10,PREPOWER:76;
            then |.x.| |^ n < 1 by A9,PREPOWER:60;
           hence contradiction by A6,A9,POWER:46;
          end;
-         suppose A11: |.x.| > 1;                       0 < n by NAT_1:19;
+         suppose A11: |.x.| > 1; 0 < n by NAT_1:19;
           hence contradiction by A6,A11,POWER:40;
          end;
          end;
@@ -910,7 +906,7 @@ A1: |.z.| = 1 by COMPLFLD:10,97,def 1;
         0 <= r & r < (2*PI) by COMPLEX2:2,COMPTRIG:21;
      A16: r in REAL by XREAL_0:def 1;
         set a = ((2*PI) * [\ ((n*Arg x)/(2*PI)) /]);
-            n > 0 by NAT_1:19; then 0 <= n*Arg x by A5,REAL_2:121;
+        n > 0 by NAT_1:19; then 0 <= n*Arg x by a5,REAL_2:121;
      then A17: 0 <= (n*Arg x)/(2*PI) by COMPTRIG:21,REAL_2:125;
         set m2 = [\ ((n*Arg x)/(2*PI))/];
            A18: 0+-1 <= (n*Arg x)/(2*PI) +-1 by A17,REAL_1:55;
@@ -929,13 +925,9 @@ by A16,SIN_COS2:10
 *1) = (2*PI*m)/n by A6,A13,A19,A20,COMPTRIG:8,SIN_COS:82;
         then ((n/n)*Arg x)/1 = (2*PI*m)/n by XCMPLX_1:84;
         then (Arg x)/1 = (2*PI*m)/n by XCMPLX_1:89;
-      hence ex k being Nat st x=[**cos((2*PI*k)/n),sin((2*PI*k)/n)**] by A5,A7
-;
+    hence ex k being Nat st x=[**cos((2*PI*k)/n),sin((2*PI*k)/n)**] by A5,A7;
     end;
-        now assume ex k being Nat st x=[**cos((2*PI*k)/n),sin((2*PI*k
-)/
-n)
-**];
+    now assume ex k being Nat st x=[**cos((2*PI*k)/n),sin((2*PI*k)/n)**];
         then consider k being Nat such that
      A21: x = [**cos((2*PI*k)/n),sin((2*PI*k)/n)**];
         set 1F = Arg 1_(F_Complex);
@@ -952,7 +944,7 @@ n)
   hence thesis;
 end;
 
-theorem Th28: :: Th7
+theorem Th28:
 for n being non empty Nat for x,y being Element of COMPLEX
  st x in n-roots_of_1 & y in n-roots_of_1 holds x*y in n-roots_of_1
 proof let n be non empty Nat;
@@ -973,7 +965,7 @@ A5: b = [** cos((2*PI*j)/n), sin((2*PI*j)/n) **] by A2,Th27;
  hence thesis by A3,Th27;
 end;
 
-theorem Th29: ::CRU0a:
+theorem Th29:
 for n being non empty Nat holds
  n-roots_of_1 = {[**cos((2*PI*k)/n),sin((2*PI*k)/n)**] where k is Nat: k < n }
 proof let n be non empty Nat;
@@ -994,7 +986,7 @@ proof let n be non empty Nat;
  hence thesis by TARSKI:2;
 end;
 
-theorem Th30: ::CRU0:
+theorem Th30:
 for n being non empty Nat holds Card (n-roots_of_1) = n
 proof let n be non empty Nat;
  set X = {[**cos((2*PI*k)/n),sin((2*PI*k)/n)**] where k is Nat: k < n };
@@ -1086,7 +1078,7 @@ registration let n be non empty Nat;
   end;
 end;
 
-theorem Th31: ::Th8:
+theorem Th31:
 for n, ni being non empty Nat
  st ni divides n holds ni-roots_of_1 c= n-roots_of_1
 proof let n,ni be non empty Nat such that A1: ni divides n;
@@ -1105,7 +1097,7 @@ Th10;
  hence thesis by TARSKI:def 3;
 end;
 
-theorem Th32: ::G_Th5H_MGFC:
+theorem Th32:
 for R being Skew-Field, x being Element of MultGroup R, y being Element of R
  st y = x
   for k being Nat holds (power (MultGroup R)).(x,k) = (power R).(y,k)
@@ -1127,7 +1119,7 @@ A5: for k be Nat st P[k] holds P[k+1] proof let k be Nat such that
  thus for k be Nat holds P[k] from NAT_1:sch 1(A4,A5);
 end;
 
-theorem Th33: ::G_Th5_0:
+theorem Th33:
 for n being non empty Nat, x being Element of MultGroup F_Complex
  st x in n-roots_of_1 holds x is_not_of_order_0
 proof let n be non empty Nat, x be Element of cMGFC such that
@@ -1144,7 +1136,7 @@ A4: 1.MGFC = 1_ FC by Th20;
  hence x is_not_of_order_0 by GROUP_1:def 10;
 end;
 
-theorem Th34: ::G_Th5_MGCF:
+theorem Th34:
 for n being non empty Nat, k being Nat, x being Element of MultGroup F_Complex
  st x = [** cos((2*PI*k)/n), sin((2*PI*k)/n) **] holds ord x = n div (k gcd n)
 proof let n be non empty Nat, k be Nat;
@@ -1160,8 +1152,7 @@ then A5: n gcd k > 0 by INT_2:def 3;
 then A6: kgn <= n by NAT_1:54;
         kgn divides n by A3,SCPINVAR:2; then consider vn being Nat such that
 A7: n = kgn * vn by NAT_1:def 3;
-        (k gcd n) divides k by INT_2:31; then kgn divides k by SCPINVAR:2
-;
+    (k gcd n) divides k by INT_2:31; then kgn divides k by SCPINVAR:2;
     then consider i being Nat such that
 A8: k = kgn * i by NAT_1:def 3;
 A9: now assume n div kgn = 0; then n = kgn * 0 + (n mod kgn) by A5,NAT_1:47;
@@ -1245,7 +1236,7 @@ by A5,REAL_1:71;
   hence thesis by SCMFSA9A:5;
 end;
 
-theorem Th35: ::ORDCF0:
+theorem Th35:
 for n being non empty Nat
  holds n-roots_of_1 c= the carrier of MultGroup F_Complex
 proof let n be non empty Nat;
@@ -1263,7 +1254,7 @@ A6: cMGFC = cFC \ {0.FC} by Def1;
  hence a in cMGFC by A2,A6,XBOOLE_0:def 4;
 end;
 
-theorem  ::G_Th4b:
+theorem
    for n being non empty Nat
  holds ex x being Element of MultGroup F_Complex st ord x = n
 proof let n be non empty Nat;
@@ -1277,7 +1268,7 @@ A2: ord y = n div (1 gcd n) by Th34;
   hence thesis;
 end;
 
-theorem Th37: ::G_Th4c:
+theorem Th37:
 for n being non empty Nat, x being Element of MultGroup F_Complex
  holds ord x divides n iff x in n-roots_of_1
 proof let n be non empty Nat, x be Element of MultGroup F_Complex;
@@ -1305,7 +1296,7 @@ A2: 1.MGFC = 1_ FC by Th20;
  hence ord x divides n by GROUP_1:86;
 end;
 
-theorem Th38: ::ORDCF1:
+theorem Th38:
 for n being non empty Nat holds
 n-roots_of_1 = { x where x is Element of MultGroup F_Complex : ord x divides n}
 proof let n be non empty Nat;
@@ -1326,7 +1317,7 @@ divides n;
   hence n-roots_of_1 = S by A1,TARSKI:2;
 end;
 
-theorem Th39: ::ORDCF2:
+theorem Th39:
 for n being non empty Nat, x being set
  holds x in n-roots_of_1
    iff ex y being Element of MultGroup F_Complex st x = y & ord y divides n
@@ -1519,8 +1510,7 @@ definition let n be non empty Nat, L be left_unital (non empty doubleLoopStr);
   A1: for i being Nat st i <> 0 & i <> n holds p.i = 0.L
       proof let i be Nat such that A2: i <> 0 & i <> n;
          set q = 0_.(L)+*(0,-(1_(L)));
-             q+*(n,1_(L)).i = q.i by A2,FUNCT_7:34 .= (0_.(L)).i by A2,FUNCT_7:
-34
+       q+*(n,1_(L)).i = q.i by A2,FUNCT_7:34 .= (0_.(L)).i by A2,FUNCT_7:34
            .= 0.L by POLYNOM3:28;
         hence thesis;
       end;
@@ -1544,7 +1534,7 @@ proof
 .= <%-1_ F_Complex, 1_ F_Complex %> by POLYNOM5:def 4;
 end;
 
-theorem Th42: ::Unit0:
+theorem Th42:
 for L being left_unital (non empty doubleLoopStr) for n being non empty Nat
   holds unital_poly(L,n).0 = -1_(L) & unital_poly(L,n).n = 1_(L)
 proof let L be left_unital (non empty doubleLoopStr),n be non empty Nat;
@@ -1560,7 +1550,7 @@ A1: unital_poly(L,n) = p+*(n,1_(L)) by Def4;
   hence thesis by A1,A2,A3,FUNCT_7:33;
 end;
 
-theorem Th43: ::Unit1:
+theorem Th43:
 for L being left_unital (non empty doubleLoopStr)
 for n being non empty Nat, i being Nat st i <> 0 & i <> n
   holds unital_poly(L,n).i = 0.L
@@ -1572,7 +1562,7 @@ proof let L be left_unital (non empty doubleLoopStr),n be non empty Nat;
   hence thesis by Def4;
 end;
 
-theorem Th44: :: Unit2:
+theorem Th44:
 for L being non degenerated left_unital (non empty doubleLoopStr),
     n being non empty Nat
  holds len unital_poly(L,n) = n+1
@@ -1612,7 +1602,7 @@ registration
  end;
 end;
 
-theorem Th45: ::Unit3:
+theorem Th45:
 for n being non empty Nat for x being Element of F_Complex
   holds eval(unital_poly(F_Complex,n), x) = (power F_Complex).(x,n) - 1
 proof let n be non empty Nat, x be Element of F_Complex;
@@ -1769,7 +1759,7 @@ A48: -z2 = -1_(F_Complex) by COMPLFLD:4;
   hence thesis by A1,COMPLEX1:def 7,COMPLFLD:10,XCMPLX_0:def 8;
 end;
 
-theorem Th46: ::Unit3a:
+theorem Th46:
 for n being non empty Nat holds Roots unital_poly(F_Complex, n) = n-roots_of_1
 proof let n be non empty Nat;
      now let x be set;  set p = unital_poly(F_Complex,n);
@@ -1797,7 +1787,7 @@ def 2;
  hence Roots unital_poly(F_Complex,n) = n-roots_of_1 by TARSKI:2;
 end;
 
-theorem Th47: ::Unit4H:
+theorem Th47:
 for n being Nat, z being Element of F_Complex
  st z is Real ex x being Real st x = z & (power F_Complex).(z,n) = x |^ n
 proof let n be Nat;
@@ -1846,7 +1836,7 @@ A9: for n being Nat st P[n] holds P[n+1]
 end;
 end;
 
-theorem Th48: ::Unit4:
+theorem Th48:
 for n being non empty Nat for x being Real ex y being Element of F_Complex
  st y = x & eval(unital_poly(F_Complex,n),y) = (x |^ n) - 1
 proof let n be non empty Nat, x be Real;
@@ -1859,7 +1849,7 @@ A2: x2 = y & (power F_Complex).(y,n) = x2 |^ n by A1,Th47;
   hence thesis by A1;
 end;
 
-theorem Th49: ::Unit5a:
+theorem Th49:
 for n being non empty Nat
  holds BRoots unital_poly(F_Complex, n) = (n-roots_of_1, 1)-bag
 proof let n being non empty Nat;   set p = unital_poly(F_Complex, n);
@@ -1872,7 +1862,7 @@ A3: degree BRoots p = len p -' 1 by UPROOTS:60 .= n+1 -'1 by Th44
      by A1,A2,A3,UPROOTS:14;
 end;
 
-theorem Th50: ::Unit5:
+theorem Th50:
 for n being non empty Nat
  holds unital_poly(F_Complex, n) = poly_with_roots((n-roots_of_1, 1)-bag)
 proof let n be non empty Nat;  set p = unital_poly(F_Complex, n);
@@ -1888,7 +1878,7 @@ definition let i be Integer,n be Nat;
   coherence;
 end;
 
-theorem Th51: ::Unit6:
+theorem Th51:
 for n being non empty Nat, i being Element of F_Complex
  st i is Integer holds eval(unital_poly(F_Complex, n), i) is Integer
 proof let n be non empty Nat;
@@ -1939,7 +1929,7 @@ A4: d-roots_of_1 = {y where y is Element of cMGFC : ord y divides d} by Th38;
  uniqueness;
 end;
 
-theorem Th52: ::Cyclo01:
+theorem Th52:
 cyclotomic_poly(1) = <%-1_ F_Complex, 1_ F_Complex %>
 proof consider s being non empty finite Subset of cFC such that
 A1: s = { y where y is Element of cMGFC : ord y = 1 } and
@@ -1966,8 +1956,8 @@ then s = 1-roots_of_1 by TARSKI:2;
     = <%-1_ F_Complex, 1_ F_Complex %> by A2,Th41,Th50;
 end;
 
-theorem Th53: ::Cyclo5:
-for n being non empty Nat,
+theorem Th53:
+  for n being non empty Nat,
     f being FinSequence of (the carrier of Polynom-Ring F_Complex)
  st len f = n &
     for i being non empty Nat st i in dom f
@@ -2043,8 +2033,7 @@ A9: R[1] proof   reconsider t = MG(1) as finite Subset of cFC by A8;
 that
           A19: x = y and
           A20: ord y = 1 by A14;
-                  ord y divides n by A20,NAT_1:53; then y in nr1 by A5
-;
+                  ord y divides n by A20,NAT_1:53; then y in nr1 by A5;
           hence x in MG(1) by A19,A20;
         end;
      hence F.1 = poly_with_roots(b) by A15,TARSKI:2;
@@ -2091,8 +2080,7 @@ A21: for i being Nat st 1 <= i & i < len f holds R[i] implies R[i+1] proof
              A37: y in nr1 and
              A38: ord y <= i+1;
                     ord y divides n by A37,Th37;
-                  then ord y < i+1 by A35,A38,REAL_1:def 5; then ord
-y
+                  then ord y < i+1 by A35,A38,REAL_1:def 5; then ord y
 <= i by NAT_1:38;
               hence x in sb by A28,A36,A37;
              end;
@@ -2192,7 +2180,7 @@ A71: f = f|Seg len f by FINSEQ_3:55;   A72: len f in Seg len f by A1,FINSEQ_1:5
    .= Product(f) by A1,A7,A68,A69,A70,A71,A72;
 end;
 
-theorem Th54:  ::Cyclo7aa:
+theorem Th54:
 for n being non empty Nat
  ex f being FinSequence of (the carrier of Polynom-Ring F_Complex),
     p being Polynomial of F_Complex
@@ -2298,7 +2286,7 @@ A26: Product(h) = Product(fm) * p1 by FVSUM_1:100
       by A14,A26,POLYNOM3:def 12;
 end;
 
-theorem Th55: ::Cyclo1:
+theorem Th55:
 for d being non empty Nat, i being Nat
   holds ((cyclotomic_poly d).0 = 1 or (cyclotomic_poly d).0 = -1) &
         (cyclotomic_poly d).i is integer
@@ -2659,7 +2647,7 @@ COMPLFLD:4,10
  hence thesis;
 end;
 
-theorem Th56:  :: WEDDWITT ::Cyclo2:  :: WEDDWITT
+theorem Th56:  :: WEDDWITT
 for d being non empty Nat, z being Element of F_Complex
  st z is Integer holds eval(cyclotomic_poly(d),z) is Integer
 proof let d be non empty Nat,z be Element of F_Complex such that
@@ -2680,7 +2668,7 @@ A3: for i being Nat st i in dom F holds
   hence thesis by A2,Th16;
 end;
 
-theorem Th57: ::Cyclo6:
+theorem Th57:
 for n, ni being non empty Nat,
     f being FinSequence of (the carrier of Polynom-Ring F_Complex),
     s being finite Subset of F_Complex
@@ -2816,7 +2804,7 @@ n
                 f.(i+1) = <%1_(F_Complex)%> by A3,A28,A38;
             then F.(i+1) = (poly_with_roots b) by A30,A33,A37,UPROOTS:33
                    .= poly_with_roots(B) by A39,TARSKI:2;
-            hence thesis; :: by sBne;
+            hence thesis;
         end;
         suppose A46: (i+1) divides n & not (i+1) divides ni & (i+1) <> n;
          consider scb being non empty finite Subset of cFC such that
@@ -2893,7 +2881,7 @@ A74: F.len f = poly_with_roots((S,1)-bag) by A4,A6,A67;
  hence thesis by A4,A8,A71,A72,A73,A74;
 end;
 
-theorem Th58: ::Cyclo7:
+theorem Th58:
 for n, ni being non empty Nat st ni < n & ni divides n
 ex f being FinSequence of (the carrier of Polynom-Ring F_Complex),
     p being Polynomial of F_Complex
@@ -3046,7 +3034,7 @@ then A34: b = bibn+bp by A29,UPROOTS:12;
  hence thesis by A8,A10,Th57;
 end;
 
-theorem Th59: ::Cyclo7a:
+theorem Th59:
 for i being Integer, c being Element of F_Complex,
     f being FinSequence of (the carrier of Polynom-Ring F_Complex),
     p being Polynomial of F_Complex

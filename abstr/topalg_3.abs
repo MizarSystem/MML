@@ -1,0 +1,288 @@
+:: On the Isomorphism of Fundamental Groups
+::  by Artur Korni{\l}owicz
+:: 
+:: Received July 30, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, EUCLID, RELAT_1, SUBSET_1, TOPALG_3, TOPALG_1, WELLORD1,
+      ALGSTR_1, BORSUK_1, FUNCT_1, WAYBEL20, EQREL_1, BORSUK_2, ORDINAL2,
+      ARYTM_1, GROUP_6, VECTSP_1, T_0TOPSP, TOPS_2, ARYTM_3, FUNCOP_1,
+      REALSET1, TOPMETR, GRAPH_1, BORSUK_6, SGRAPH1, PCOMPS_1, FUNCT_4, BOOLE,
+      SEQM_3, SETFAM_1, TARSKI, TOPREAL1, TOPREAL2, TAXONOM2, TEX_2, RELAT_2,
+      CONNSP_1, RLVECT_3, CAT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, EQREL_1, FUNCT_1,
+      RELSET_1, FUNCT_2, BINOP_1, XCMPLX_0, XREAL_0, SEQM_3, FUNCOP_1,
+      CQC_LANG, FUNCT_4, STRUCT_0, PRE_TOPC, VECTSP_1, GROUP_6, GRCAT_1,
+      BORSUK_1, TOPS_2, COMPTS_1, CONNSP_1, TOPREAL1, TEX_2, TOPREAL2, EUCLID,
+      PCOMPS_1, BORSUK_2, BORSUK_3, TAXONOM2, YELLOW_8, BORSUK_6, TOPALG_1,
+      TOPALG_2;
+ constructors GRCAT_1, TOPALG_1, TOPREAL1, REAL_1, TOPS_2, BORSUK_3, CONNSP_1,
+      TOPALG_2, SEQM_3, COMPTS_1, YELLOW_8, TOPREAL2, TAXONOM2, REALSET2,
+      SEQ_4, TEX_2, TDLAT_3, CANTOR_1, CQC_LANG;
+ clusters STRUCT_0, EUCLID, RELSET_1, XREAL_0, BORSUK_1, PRE_TOPC, SUBSET_1,
+      XBOOLE_0, FUNCT_1, TOPALG_1, BORSUK_2, INT_1, BORSUK_5, PCOMPS_1, TOPS_1,
+      TOPREAL2, TEX_1, BORSUK_3, WAYBEL12, YELLOW12, CQC_LANG;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin
+
+theorem :: TOPALG_3:1
+  for A, B, a, b being set, f being Function of A,B st a in A & b in B holds
+  f +* (a .--> b) is Function of A,B;
+
+theorem :: TOPALG_3:2
+  for f being Function, X, x being set st f|X is one-to-one & x in rng (f|X)
+  holds (f*(f|X)").x = x;
+
+theorem :: TOPALG_3:3
+  for x, y, X, Y, Z being set, f being Function of [:X,Y:],Z, g being Function
+    st Z <> {} & x in X & y in Y holds (g*f).(x,y) = g.(f.(x,y));
+
+theorem :: TOPALG_3:4
+  for X, a, b being set, f being Function of X,{a,b} holds X = f"{a} \/ f"{b};
+
+theorem :: TOPALG_3:5
+  for S, T being non empty 1-sorted,
+      s being Point of S, t being Point of T holds
+   (S --> t).s = t;
+
+:: Topological preliminaries
+
+theorem :: TOPALG_3:6
+  for T being non empty TopStruct, t being Point of T, A being Subset of T
+   st A = {t} holds Sspace(t) = T | A;
+
+theorem :: TOPALG_3:7
+  for T being TopSpace, A, B being Subset of T,
+      C, D being Subset of the TopStruct of T st A = C & B = D holds
+  A,B are_separated iff C,D are_separated;
+
+theorem :: TOPALG_3:8
+  for T being non empty TopSpace holds T is connected iff
+  not ex f being map of T, 1TopSp{0,1} st f is continuous onto;
+
+registration
+  cluster empty -> connected TopStruct;
+end;
+
+theorem :: TOPALG_3:9
+  for T being TopSpace st the TopStruct of T is connected holds T is connected;
+
+registration
+  let T be connected TopSpace;
+  cluster the TopStruct of T -> connected;
+end;
+
+theorem :: TOPALG_3:10
+  for S, T be non empty TopSpace st
+   S,T are_homeomorphic & S is arcwise_connected holds T is arcwise_connected;
+
+registration
+  cluster trivial -> arcwise_connected (non empty TopSpace);
+end;
+
+theorem :: TOPALG_3:11
+  for T being SubSpace of TOP-REAL 2 st
+   the carrier of T is Simple_closed_curve holds T is arcwise_connected;
+
+theorem :: TOPALG_3:12
+  for T being TopSpace
+   ex F being Subset-Family of T st F = {the carrier of T} &
+    F is_a_cover_of T & F is open;
+
+registration
+  let T be TopSpace;
+  cluster non empty mutually-disjoint open closed Subset-Family of T;
+end;
+
+theorem :: TOPALG_3:13
+  for T being TopSpace, D being mutually-disjoint open Subset-Family of T,
+      A being Subset of T, X being set st
+   A is connected & X in D & X meets A & D is_a_cover_of A
+  holds A c= X;
+
+begin :: On the product of topologies
+
+theorem :: TOPALG_3:14
+  for S, T being TopSpace holds
+  the TopStruct of [:S,T:] = [:the TopStruct of S,the TopStruct of T:];
+
+theorem :: TOPALG_3:15
+  for S, T being TopSpace,
+      A being Subset of S, B being Subset of T holds
+  Cl [:A,B:] = [:Cl A,Cl B:];
+
+theorem :: TOPALG_3:16
+  for S, T being TopSpace,
+      A being closed Subset of S, B being closed Subset of T holds
+  [:A,B:] is closed;
+
+registration
+  let A, B be connected TopSpace;
+  cluster [:A,B:] ->  connected;
+end;
+
+theorem :: TOPALG_3:17
+  for S, T being TopSpace, A being Subset of S, B being Subset of T
+  st A is connected & B is connected holds
+  [:A,B:] is connected;
+
+theorem :: TOPALG_3:18
+  for S, T be TopSpace, Y being non empty TopSpace, A being Subset of S,
+      f being map of [:S,T:],Y, g being map of [:S|A,T:],Y st
+    g = f | [:A,the carrier of T:] & f is continuous holds g is continuous;
+
+theorem :: TOPALG_3:19
+  for S, T be TopSpace, Y being non empty TopSpace, A being Subset of T,
+      f being map of [:S,T:],Y, g being map of [:S,T|A:],Y st
+    g = f | [:the carrier of S,A:] & f is continuous holds g is continuous;
+
+theorem :: TOPALG_3:20
+  for S, T, T1, T2, Y being non empty TopSpace,
+      f being map of [:Y,T1:],S,
+      g being map of [:Y,T2:],S,
+      F1, F2 being closed Subset of T st
+   T1 is SubSpace of T & T2 is SubSpace of T & F1 = [#]T1 & F2 = [#]T2 &
+   ([#]T1) \/ ([#]T2) = [#]T &
+    f is continuous & g is continuous &
+   (for p being set st p in ([#][:Y,T1:]) /\ ([#][:Y,T2:]) holds f.p = g.p)
+  ex h being map of [:Y,T:],S st h = f+*g & h is continuous;
+
+theorem :: TOPALG_3:21
+  for S, T, T1, T2, Y being non empty TopSpace,
+      f being map of [:T1,Y:],S,
+      g being map of [:T2,Y:],S,
+      F1, F2 being closed Subset of T st
+   T1 is SubSpace of T & T2 is SubSpace of T & F1 = [#]T1 & F2 = [#]T2 &
+   ([#]T1) \/ ([#]T2) = [#]T &
+    f is continuous & g is continuous &
+   (for p being set st p in ([#][:T1,Y:]) /\ ([#][:T2,Y:]) holds f.p = g.p)
+  ex h being map of [:T,Y:],S st h = f+*g & h is continuous;
+
+begin :: On the fundamental groups
+
+registration
+  let T be non empty TopSpace, t be Point of T;
+  cluster -> continuous Loop of t;
+end;
+
+theorem :: TOPALG_3:22
+  for T being non empty TopSpace, t being Point of T,
+      x being Point of I[01], P being constant Loop of t holds
+  P.x = t;
+
+theorem :: TOPALG_3:23
+  for T being non empty TopSpace, t being Point of T, P being Loop of t holds
+  P.0 = t & P.1 = t;
+
+theorem :: TOPALG_3:24
+  for S, T being non empty TopSpace,
+      f being continuous map of S,T,
+      a, b being Point of S st a,b are_connected holds
+   f.a,f.b are_connected;
+
+theorem :: TOPALG_3:25
+  for S, T being non empty TopSpace,
+      f being continuous map of S,T,
+      a, b being Point of S,
+      P being Path of a,b st a,b are_connected
+   holds f*P is Path of f.a,f.b;
+
+theorem :: TOPALG_3:26
+  for S being non empty arcwise_connected TopSpace,
+      T being non empty TopSpace,
+      f being continuous map of S,T,
+      a, b being Point of S,
+      P being Path of a,b
+   holds f*P is Path of f.a,f.b;
+
+theorem :: TOPALG_3:27
+  for S, T being non empty TopSpace,
+      f being continuous map of S,T,
+      a being Point of S,
+      P being Loop of a
+   holds f*P is Loop of f.a;
+
+theorem :: TOPALG_3:28
+  for S, T being non empty TopSpace,
+      f being continuous map of S,T,
+      a, b being Point of S,
+      P, Q being Path of a,b,
+      P1, Q1 being Path of f.a,f.b st P,Q are_homotopic & P1 = f*P & Q1 = f*Q
+  holds P1,Q1 are_homotopic;
+
+theorem :: TOPALG_3:29
+  for S, T being non empty TopSpace,
+      f being continuous map of S,T,
+      a, b being Point of S,
+      P, Q being Path of a,b,
+      P1, Q1 being Path of f.a,f.b,
+      F being Homotopy of P,Q st P,Q are_homotopic & P1 = f*P & Q1 = f*Q
+  holds f*F is Homotopy of P1,Q1;
+
+theorem :: TOPALG_3:30
+  for S, T being non empty TopSpace,
+      f being continuous map of S,T,
+      a, b, c being Point of S,
+      P being Path of a,b,
+      Q being Path of b,c,
+      P1 being Path of f.a,f.b,
+      Q1 being Path of f.b,f.c
+  st a,b are_connected & b,c are_connected & P1 = f*P & Q1 = f*Q
+  holds P1+Q1 = f*(P+Q);
+
+theorem :: TOPALG_3:31
+  for S being non empty TopSpace, s being Point of S
+  for x, y being Element of pi_1(S,s)
+  for P, Q being Loop of s st x = Class(EqRel(S,s),P) & y = Class(EqRel(S,s),Q)
+    holds x*y = Class(EqRel(S,s),P+Q);
+
+definition
+  let S, T be non empty TopSpace,
+      s be Point of S,
+      f be map of S,T such that
+ f is continuous;
+  func FundGrIso(f,s) -> map of pi_1(S,s),pi_1(T,f.s) means
+:: TOPALG_3:def 1
+  for x being Element of pi_1(S,s)
+   ex ls being Loop of s, lt being Loop of f.s st
+     x = Class(EqRel(S,s),ls) & lt = f*ls & it.x = Class(EqRel(T,f.s),lt);
+end;
+
+theorem :: TOPALG_3:32
+  for S, T being non empty TopSpace, s being Point of S,
+      f being continuous map of S,T,
+      x being Element of pi_1(S,s),
+      ls being Loop of s, lt being Loop of f.s
+  st x = Class(EqRel(S,s),ls) & lt = f*ls
+  holds FundGrIso(f,s).x = Class(EqRel(T,f.s),lt);
+
+definition
+  let S, T be non empty TopSpace,
+      s be Point of S,
+      f be continuous map of S,T;
+  redefine func FundGrIso(f,s) -> Homomorphism of pi_1(S,s),pi_1(T,f.s);
+end;
+
+theorem :: TOPALG_3:33
+  for S, T being non empty TopSpace, s being Point of S,
+      f being continuous map of S,T st f is_homeomorphism
+  holds FundGrIso(f,s) is_isomorphism;
+
+theorem :: TOPALG_3:34
+  for S, T being non empty TopSpace, s being Point of S, t being Point of T,
+      f being continuous map of S,T,
+      P being Path of t,f.s,
+      h being Homomorphism of pi_1(S,s),pi_1(T,t)
+  st f is_homeomorphism & f.s,t are_connected &
+     h = pi_1-iso(P) * FundGrIso(f,s)
+  holds h is_isomorphism;
+
+theorem :: TOPALG_3:35
+  for S being non empty TopSpace,
+      T being non empty arcwise_connected TopSpace,
+      s being Point of S, t being Point of T st
+  S,T are_homeomorphic holds pi_1(S,s),pi_1(T,t) are_isomorphic;

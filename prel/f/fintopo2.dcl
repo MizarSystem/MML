@@ -26,6 +26,6 @@ FRAENKEL
 MARGREL1
 FINTOPO2
 #
-«V52 ;;;G5 ;
-«W37 ;V52 ;;;G5 ;
+«V53 ;;;G5 ;
+«W37 ;V53 ;;;G5 ;
 !

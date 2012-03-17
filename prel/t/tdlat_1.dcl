@@ -13,7 +13,7 @@ PRE_TOPC
 LATTICES
 TDLAT_1
 #
-fW5 ;;G3 W11 ;V13 ;;;K85 A1 ;
-fW5 ;;G3 W11 ;V13 ;;;K89 A1 ;
-fW5 ;;G3 W11 ;V13 ;;;K93 A1 ;
+fW5 ;;G3 W11 ;V13 ;;;K86 A1 ;
+fW5 ;;G3 W11 ;V13 ;;;K90 A1 ;
+fW5 ;;G3 W11 ;V13 ;;;K94 A1 ;
 !

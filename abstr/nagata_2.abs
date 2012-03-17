@@ -1,0 +1,200 @@
+:: The {N}agata-Smirnov Theorem. {P}art {II}
+::  by Karol P\c{a}k
+:: 
+:: Received July 22, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary SQUARE_1, TARSKI, BOOLE, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_3,
+      SETFAM_1, RELAT_2, GROUP_1, NAT_1, NAGATA_2, ORDINAL2, PRE_TOPC,
+      METRIC_1, ARYTM_1, PCOMPS_1, PCOMPS_2, ARYTM, ABSVALUE, NAGATA_1,
+      TOPMETR, TMAP_1, PSCOMP_1, SEQ_2, SGRAPH1, FINSET_1, PROB_1, URYSOHN1,
+      SUPINF_2, RLVECT_1, SERIES_1, SEQ_1, SEQM_3, ARYTM_3, PREPOWER, FINSEQ_1,
+      TDGROUP, SEQFUNC, CARD_1, FUNCT_2, FINSOP_1, BINOP_1, SETWISEO, COMPTS_1,
+      RLVECT_3, COH_SP, PARTFUN1, WELLORD1, NATTRA_1, FUNCT_7;
+ notation SQUARE_1, TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, SETWISEO,
+      BORSUK_1, RELAT_1, RELAT_2, ORDINAL1, XCMPLX_0, XREAL_0, FUNCT_1, REAL_1,
+      FUNCT_2, FUNCT_3, DOMAIN_1, BINOP_1, PRE_TOPC, NAT_1, NUMBERS, FINSET_1,
+      COMPLEX1, STRUCT_0, FINSEQ_1, PCOMPS_1, PCOMPS_2, TOPS_2, METRIC_1,
+      PROB_1, URYSOHN1, SEQFUNC, PREPOWER, TOPMETR, PSCOMP_1, TMAP_1, RELSET_1,
+      SEQ_1, NAGATA_1, SEQ_2, SEQM_3, SEQ_4, SERIES_1, CARD_1, FINSOP_1,
+      PARTFUN1, COMPTS_1, CANTOR_1, FRAENKEL, WELLORD1, FUNCT_7;
+ constructors NAGATA_1, SQUARE_1, REAL_1, PREPOWER, TOPS_2, COMPTS_1, SETWISEO,
+      URYSOHN3, TMAP_1, PSCOMP_1, PCOMPS_2, CARD_4, DOMAIN_1, SEQM_3, SERIES_1,
+      FINSOP_1, CANTOR_1, WELLORD1, FUNCT_7, BINARITH, COMPLEX1, FUNCT_3;
+ clusters XREAL_0, MEMBERED, NAT_1, STRUCT_0, RELSET_1, SUBSET_1, BORSUK_1,
+      METRIC_1, FINSET_1, TOPS_1, SEQ_1, ORDINAL2, FINSEQ_1, TOPREAL6,
+      FRAENKEL, PSCOMP_1, NEWTON, COMPLEX1, DTCONSTR;
+ requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
+
+
+begin
+
+ reserve i, j, k, m, n for Nat,
+   r, s, t for Real,
+   rn for real number,
+   x, y, z, xy, X for set,
+   T, T1, T2 for non empty TopSpace,
+   p, q for Point of T,
+   A, B, C for Subset of T,
+   A' for non empty Subset of T,
+   pq for Element of [:the carrier of T,the carrier of T:],
+   pq' for Point of [:T,T:],
+   pmet,pmet1 for Function of [:the carrier of T,the carrier of T:],REAL,
+   pmet',pmet1' for RealMap of [:T,T:],
+   f,f1 for RealMap of T,
+   F_S2 for Functional_Sequence of [:the carrier of T,the carrier of T:],REAL,
+   seq for Real_Sequence;
+
+theorem :: NAGATA_2:1
+  for i st i>0 ex n,m st i=(2|^n)*(2*m+1);
+
+definition
+  func PairFunc -> Function of [:NAT,NAT:],NAT means
+:: NAGATA_2:def 1
+  for n,m holds it.[n,m] = (2|^n)*(2*m+1)-1;
+end;
+
+theorem :: NAGATA_2:2
+  PairFunc is bijective;
+
+definition
+  let X be set,f be Function of [:X,X:],REAL,x be Element of X;
+  func dist(f,x) -> Function of X,REAL means
+:: NAGATA_2:def 2
+  for y be Element of X holds it.y = f.(x,y);
+end;
+
+theorem :: NAGATA_2:3
+for D be Subset of [:T1,T2:] st D is open
+  for x1 be Point of T1, x2 be Point of T2
+    for X1 be Subset of T1,X2 be Subset of T2 holds
+  (X1=pr1(the carrier of T1,the carrier of T2).:(D/\[:the carrier of T1,{x2}:])
+     implies X1 is open) &
+  (X2=pr2(the carrier of T1,the carrier of T2).:(D/\[:{x1},the carrier of T2:])
+     implies X2 is open);
+
+theorem :: NAGATA_2:4
+  for pmet st for pmet' st pmet=pmet' holds pmet' is continuous
+    for x be Point of T holds dist(pmet,x) is continuous;
+
+definition
+  let X be non empty set,f be Function of [:X,X:],REAL,A be Subset of X;
+  func inf(f,A) -> Function of X,REAL means
+:: NAGATA_2:def 3
+  for x be Element of X holds it.x = inf((dist(f,x)).:A);
+end;
+
+theorem :: NAGATA_2:5
+  for X be non empty set,f be Function of [:X,X:],REAL st
+    f is_a_pseudometric_of X
+    for A be non empty Subset of X,x be Element of X
+      holds inf(f,A).x>=0;
+
+theorem :: NAGATA_2:6
+  for X be non empty set,f be Function of [:X,X:],REAL st
+    f is_a_pseudometric_of X
+    for A be Subset of X,x be Element of X
+       holds x in A implies inf(f,A).x=0;
+
+theorem :: NAGATA_2:7
+  for pmet st pmet is_a_pseudometric_of the carrier of T
+    for x,y be Point of T,A be non empty Subset of T holds
+      abs(inf(pmet,A).x-inf(pmet,A).y)<=pmet.(x,y);
+
+theorem :: NAGATA_2:8
+  for pmet st pmet is_a_pseudometric_of the carrier of T &
+    for p holds dist(pmet,p) is continuous
+     for A be non empty Subset of T holds inf(pmet,A) is continuous;
+
+theorem :: NAGATA_2:9
+  for f be Function of [:X,X:],REAL st f is_metric_of X holds
+    f is_a_pseudometric_of X;
+
+theorem :: NAGATA_2:10
+  for pmet st pmet is_metric_of the carrier of T &
+    (for A be non empty Subset of T holds
+       Cl A={p where p is Point of T:inf(pmet,A).p=0})
+       holds T is metrizable;
+
+theorem :: NAGATA_2:11
+  for F_S2 st (for n ex pmet st F_S2.n=pmet &
+      pmet is_a_pseudometric_of the carrier of T)
+      & for pq holds F_S2#pq is summable
+    for pmet st for pq holds pmet.pq=Sum(F_S2#pq)
+      holds pmet is_a_pseudometric_of the carrier of T;
+
+theorem :: NAGATA_2:12
+  for n,seq st for m st m<=n holds seq.m<=r
+    for m st m<=n holds Partial_Sums(seq).m <= r * (m+1);
+
+theorem :: NAGATA_2:13
+  for k holds abs(Partial_Sums(seq).k)<=Partial_Sums(abs(seq)).k;
+
+theorem :: NAGATA_2:14
+  for F_S1 being Functional_Sequence of the carrier of T,REAL
+   st (for n ex f st F_S1.n=f & f is continuous & for p holds f.p>=0)
+    & (ex seq st seq is summable & for n,p holds (F_S1#p).n<=seq.n)
+    for f st for p holds f.p=Sum(F_S1#p) holds f is continuous;
+
+theorem :: NAGATA_2:15
+  for s, F_S2 st for n ex pmet st F_S2.n=pmet &
+       pmet is_a_pseudometric_of the carrier of T &
+       (for pq holds pmet.pq<=s) &
+       for pmet' st pmet=pmet' holds pmet' is continuous
+    for pmet st for pq holds pmet.pq=Sum((1/2)GeoSeq(#)(F_S2#pq))
+      holds pmet is_a_pseudometric_of the carrier of T &
+        for pmet' st pmet=pmet' holds pmet' is continuous;
+
+theorem :: NAGATA_2:16
+  for pmet st pmet is_a_pseudometric_of the carrier of T
+    & for pmet' st pmet=pmet' holds pmet' is continuous
+    for A be non empty Subset of T,p
+       holds p in Cl A implies inf(pmet,A).p=0;
+
+theorem :: NAGATA_2:17
+  for T st T is_T1
+    for s, F_S2 st (for n ex pmet st F_S2.n=pmet &
+       pmet is_a_pseudometric_of the carrier of T &
+       (for pq holds pmet.pq<=s) &
+       for pmet' st pmet=pmet' holds pmet' is continuous)
+       & for p,A' st not p in A' & A' is closed
+           ex n st for pmet st F_S2.n=pmet holds inf(pmet,A').p>0 holds
+      (ex pmet st pmet is_metric_of the carrier of T &
+        for pq holds pmet.pq=Sum((1/2)GeoSeq(#)(F_S2#pq)))
+      & T is metrizable;
+
+theorem :: NAGATA_2:18
+  for D being non empty set, p,q be FinSequence of D,B be BinOp of D st
+    p is one-to-one & q is one-to-one & rng q c= rng p
+    & B is commutative associative & (B has_a_unity or len q>=1 & len p>len q)
+  holds
+    ex r be FinSequence of D st r is one-to-one
+      & rng r=rng p \rng q & B "**" p =B.(B "**" q,B "**" r);
+
+:: NAGATA SMIRNOV THEOREM
+
+theorem :: NAGATA_2:19
+  for T holds (T is_T3 & T is_T1 &
+    ex Bn being FamilySequence of T st Bn is Basis_sigma_locally_finite)
+    iff T is metrizable;
+
+theorem :: NAGATA_2:20
+  T is metrizable implies
+     for FX be Subset-Family of T
+        st FX is_a_cover_of T & FX is open
+     ex Un be FamilySequence of T
+       st Union Un is open & Union Un is_a_cover_of T &
+         Union Un is_finer_than FX & Un is sigma_discrete;
+
+theorem :: NAGATA_2:21
+  for T st T is metrizable
+    ex Un be FamilySequence of T st Un is Basis_sigma_discrete;
+
+:: BING's THEOREM
+
+theorem :: NAGATA_2:22
+  for T holds (T is_T3 & T is_T1 &
+    ex Bn being FamilySequence of T st Bn is Basis_sigma_discrete)
+     iff T is metrizable;

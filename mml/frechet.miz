@@ -11,14 +11,15 @@ environ
       PCOMPS_1, CARD_4, FUNCT_4, FUNCOP_1, SEQ_2, ORDINAL2, ORDINAL1, FRECHET,
       RLVECT_3, ARYTM;
  notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, REAL_1, NAT_1,
+      COMPLEX1,
       SETFAM_1, STRUCT_0, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, ORDINAL1,
-      CARD_4, FUNCT_4, ABSVALUE, RCOMP_1, PRE_TOPC, TOPS_2, METRIC_1, PCOMPS_1,
+      CARD_4, FUNCT_4, RCOMP_1, PRE_TOPC, TOPS_2, METRIC_1, PCOMPS_1,
       TOPMETR, NORMSP_1, CANTOR_1, YELLOW_8;
  constructors REAL_1, NAT_1, RAT_1, NORMSP_1, YELLOW_8, CARD_4, TOPS_2,
-      TOPMETR, CANTOR_1, FUNCT_4, RCOMP_1, MEMBERED;
+      TOPMETR, CANTOR_1, FUNCT_4, RCOMP_1, MEMBERED, COMPLEX1;
  clusters SUBSET_1, XREAL_0, PRE_TOPC, STRUCT_0, COMPLSP1, NORMSP_1, METRIC_1,
       PCOMPS_1, TOPMETR, FUNCOP_1, RELSET_1, XBOOLE_0, NAT_1, MEMBERED,
-      ZFMISC_1, FUNCT_1, FUNCT_2, PARTFUN1, NUMBERS, ORDINAL2;
+      ZFMISC_1, FUNCT_1, FUNCT_2, PARTFUN1, NUMBERS, ORDINAL2, COMPLEX1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, TOPS_2, XBOOLE_0;
  theorems REAL_1, REAL_2, TARSKI, ZFMISC_1, SUBSET_1, SETFAM_1, PRE_TOPC,
@@ -477,8 +478,7 @@ A4:  ]. x1 - 1/4 , x1 + 1/4 .[ /\ B <> {};
 A6:  n1 in dom S and
 A7:  y = S.n1 by A5,FUNCT_1:def 5;
   reconsider n1 as Nat by A6,NORMSP_1:17;
-  consider r being Real such that
-A8:  r=abs( x1 - y );
+  reconsider r=abs (x1 - y) as Real;
        x1 <> y
   proof
     assume x1 = y;
@@ -488,11 +488,10 @@ A8:  r=abs( x1 - y );
   end;
   then A9: x1 + (-y) <> y + (-y) by XCMPLX_1:2;
   then A10: abs(x1-y) > 0 by ABSVALUE:6;
-  A11:   r>0 by A8,A9,ABSVALUE:6;
+  A11:   r>0 by A9,ABSVALUE:6;
        abs(y-x1) < 1/4 by A5,RCOMP_1:8;
   then abs(-(x1-y)) < 1/4;
-  then A12: r<=1/4 by A8,ABSVALUE:17;
-
+  then A12: r<=1/4 by ABSVALUE:17;
      A13: Ball(x,r) misses rng S
   proof
     assume Ball(x,r) meets rng S;
@@ -506,10 +505,9 @@ A16:    z = S.n2 by A14,FUNCT_1:def 5;
     per cases by REAL_1:def 5;
     suppose n1=n2;
     then A17: y in ].x1-r,x1+r.[ by A7,A11,A14,A16,Th7;
-         r = abs( 0 + -(y - x1) ) by A8
+         r = abs( 0 + -(y - x1) )
                  .= abs( y - x1 ) by ABSVALUE:17;
     hence contradiction by A17,RCOMP_1:8;
-
     end;
     suppose n1>n2;
     then A18:   n2 + 1 <= n1 by NAT_1:38;
@@ -582,7 +580,7 @@ A33:  y=a1 & x1 - 1/4 < a1 & a1 < x1 + 1/4;
     as Subset of TopSpaceMetr(RealSpace) by TOPMETR:16;
      C misses B`` by A13;
   then C c= B` by TOPS_1:20;
-  hence ex r being real number st r>0 & Ball(x,r) c= B` by A8,A10;
+  hence ex r being real number st r>0 & Ball(x,r) c= B` by A10;
  end;
  end;
  then (rng S)` is open by TOPMETR:22,def 7;
