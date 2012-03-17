@@ -165,32 +165,16 @@ end;
 registration
    let n be Nat;
    cluster goto (n+1) -> No-StopCode;
-   correctness by SCMPDS_5:25;
 
    cluster goto -(n+1) -> No-StopCode;
-   correctness
-   proof
-         -(n+1) <> 0 by XCMPLX_1:135;
-       hence thesis by SCMPDS_5:25;
-   end;
 end;
 
 
 registration
    let n be Nat;
    cluster Goto (n+1) -> No-StopCode;
-   correctness
-   proof
-         Goto (n+1) =Load goto (n+1) by Def1;
-       hence thesis;
-   end;
 
    cluster Goto -(n+1) -> No-StopCode;
-   correctness
-   proof
-         Goto -(n+1) =Load goto -(n+1) by Def1;
-       hence thesis;
-   end;
 end;
 
 
@@ -394,36 +378,6 @@ registration
    let I,J be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if=0(a,k1,I,J) -> shiftable parahalting;
-   correctness
-   proof
-    set IF=if=0(a,k1,I,J),
-        IsIF=Initialized stop IF;
-    set i = (a,k1)<>0_goto (card I + 2),
-        G =Goto (card J+1);
-    reconsider IJ=I ';' G ';' J as shiftable Program-block by Lm3;
-      IF = i ';' I ';' G ';' J by Def4
-     .=i ';' (I ';' G) ';' J by SCMPDS_4:50
-     .=i ';' IJ by SCMPDS_4:50
-     .=Load i ';' IJ by SCMPDS_4:def 4;
-    hence IF is shiftable;
-      now let s be State of SCMPDS;
-      assume IsIF c= s;
-then A1:    s = s +* IsIF by AMI_5:10;
-A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
-A3:    J is_closed_on s & J is_halting_on s by Th34,Th35;
-       per cases;
-       suppose s.DataLoc(s.a,k1)= 0;
-        then IF is_halting_on s by A2,Th52;
-        hence s is halting by A1,Def3;
-       end;
-       suppose s.DataLoc(s.a,k1) <> 0;
-        then IF is_halting_on s by A3,Th53;
-        hence s is halting by A1,Def3;
-   end;
-   end;
-   then IsIF is halting by AMI_1:def 26;
-   hence IF is parahalting by SCMPDS_4:def 10;
-  end;
 end;
 
 
@@ -431,12 +385,6 @@ registration
    let I,J be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if=0(a,k1,I,J) -> No-StopCode;
-   coherence
-   proof
-       if=0(a,k1,I,J) =
-     (a,k1)<>0_goto (card I +2) ';' I ';' Goto (card J+1) ';' J by Def4;
-     hence thesis;
-   end;
 end;
 
 
@@ -494,31 +442,6 @@ registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if=0(a,k1,I) -> shiftable parahalting;
-   correctness
-   proof
-    set IF=if=0(a,k1,I),
-        IsIF=Initialized stop IF;
-    set i = (a,k1)<>0_goto (card I +1);
-      IF = i ';' I by Def7
-     .=Load i ';' I by SCMPDS_4:def 4;
-    hence IF is shiftable;
-      now let s be State of SCMPDS;
-      assume IsIF c= s;
-then A1:    s = s +* IsIF by AMI_5:10;
-A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
-       per cases;
-       suppose s.DataLoc(s.a,k1)= 0;
-        then IF is_halting_on s by A2,Th62;
-        hence s is halting by A1,Def3;
-       end;
-       suppose s.DataLoc(s.a,k1) <> 0;
-        then IF is_halting_on s by Th63;
-        hence s is halting by A1,Def3;
-   end;
-   end;
-   then IsIF is halting by AMI_1:def 26;
-   hence IF is parahalting by SCMPDS_4:def 10;
-  end;
 end;
 
 
@@ -526,11 +449,6 @@ registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if=0(a,k1,I) -> No-StopCode;
-   coherence
-   proof
-       if=0(a,k1,I) = (a,k1)<>0_goto (card I +1) ';' I by Def7;
-     hence thesis;
-   end;
 end;
 
 
@@ -588,32 +506,6 @@ registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if<>0(a,k1,I) -> shiftable parahalting;
-   correctness
-   proof
-    set IF=if<>0(a,k1,I),
-        IsIF=Initialized stop IF;
-    set i = (a,k1)<>0_goto 2,
-        j = goto (card I + 1);
-      IF = i ';' j ';' I by Def8
-    .=Load i ';' Load j ';' I by SCMPDS_4:def 6;
-    hence IF is shiftable;
-      now let s be State of SCMPDS;
-      assume IsIF c= s;
-then A1:    s = s +* IsIF by AMI_5:10;
-A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
-       per cases;
-       suppose s.DataLoc(s.a,k1)<>0;
-        then IF is_halting_on s by A2,Th72;
-        hence s is halting by A1,Def3;
-       end;
-       suppose s.DataLoc(s.a,k1) = 0;
-        then IF is_halting_on s by Th73;
-        hence s is halting by A1,Def3;
-   end;
-   end;
-   then IsIF is halting by AMI_1:def 26;
-   hence IF is parahalting by SCMPDS_4:def 10;
-  end;
 end;
 
 
@@ -621,11 +513,6 @@ registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if<>0(a,k1,I) -> No-StopCode;
-   coherence
-   proof
-       if<>0(a,k1,I) = (a,k1)<>0_goto 2 ';' goto (card I+1) ';' I by Def8;
-     hence thesis;
-   end;
 end;
 
 
@@ -686,36 +573,6 @@ registration
    let I,J be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if>0(a,k1,I,J) -> shiftable parahalting;
-   correctness
-   proof
-    set IF=if>0(a,k1,I,J),
-        IsIF=Initialized stop IF;
-    set i = (a,k1)<=0_goto (card I + 2),
-        G =Goto (card J+1);
-    reconsider IJ=I ';' G ';' J as shiftable Program-block by Lm3;
-      IF = i ';' I ';' G ';' J by Def5
-     .=i ';' (I ';' G) ';' J by SCMPDS_4:50
-     .=i ';' IJ by SCMPDS_4:50
-     .=Load i ';' IJ by SCMPDS_4:def 4;
-    hence IF is shiftable;
-      now let s be State of SCMPDS;
-      assume IsIF c= s;
-then A1:    s = s +* IsIF by AMI_5:10;
-A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
-A3:    J is_closed_on s & J is_halting_on s by Th34,Th35;
-       per cases;
-       suppose s.DataLoc(s.a,k1) > 0;
-        then IF is_halting_on s by A2,Th82;
-        hence s is halting by A1,Def3;
-       end;
-       suppose s.DataLoc(s.a,k1) <= 0;
-        then IF is_halting_on s by A3,Th83;
-        hence s is halting by A1,Def3;
-   end;
-   end;
-   then IsIF is halting by AMI_1:def 26;
-   hence IF is parahalting by SCMPDS_4:def 10;
-  end;
 end;
 
 
@@ -723,12 +580,6 @@ registration
    let I,J be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if>0(a,k1,I,J) -> No-StopCode;
-   coherence
-   proof
-       if>0(a,k1,I,J) =
-     (a,k1)<=0_goto (card I +2) ';' I ';' Goto (card J+1) ';' J by Def5;
-     hence thesis;
-   end;
 end;
 
 
@@ -786,31 +637,6 @@ registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if>0(a,k1,I) -> shiftable parahalting;
-   correctness
-   proof
-    set IF=if>0(a,k1,I),
-        IsIF=Initialized stop IF;
-    set i = (a,k1)<=0_goto (card I +1);
-      IF = i ';' I by Def9
-     .=Load i ';' I by SCMPDS_4:def 4;
-    hence IF is shiftable;
-      now let s be State of SCMPDS;
-      assume IsIF c= s;
-then A1:    s = s +* IsIF by AMI_5:10;
-A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
-       per cases;
-       suppose s.DataLoc(s.a,k1) > 0;
-        then IF is_halting_on s by A2,Th92;
-        hence s is halting by A1,Def3;
-       end;
-       suppose s.DataLoc(s.a,k1) <= 0;
-        then IF is_halting_on s by Th93;
-        hence s is halting by A1,Def3;
-   end;
-   end;
-   then IsIF is halting by AMI_1:def 26;
-   hence IF is parahalting by SCMPDS_4:def 10;
-  end;
 end;
 
 
@@ -818,11 +644,6 @@ registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if>0(a,k1,I) -> No-StopCode;
-   coherence
-   proof
-       if>0(a,k1,I) = (a,k1)<=0_goto (card I +1) ';' I by Def9;
-     hence thesis;
-   end;
 end;
 
 
@@ -880,32 +701,6 @@ registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if<=0(a,k1,I) -> shiftable parahalting;
-   correctness
-   proof
-    set IF=if<=0(a,k1,I),
-        IsIF=Initialized stop IF;
-    set i = (a,k1)<=0_goto 2,
-        j = goto (card I + 1);
-      IF = i ';' j ';' I by Def10
-    .=Load i ';' Load j ';' I by SCMPDS_4:def 6;
-    hence IF is shiftable;
-      now let s be State of SCMPDS;
-      assume IsIF c= s;
-then A1:    s = s +* IsIF by AMI_5:10;
-A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
-       per cases;
-       suppose s.DataLoc(s.a,k1) <= 0;
-        then IF is_halting_on s by A2,Th102;
-        hence s is halting by A1,Def3;
-       end;
-       suppose s.DataLoc(s.a,k1) > 0;
-        then IF is_halting_on s by Th103;
-        hence s is halting by A1,Def3;
-   end;
-   end;
-   then IsIF is halting by AMI_1:def 26;
-   hence IF is parahalting by SCMPDS_4:def 10;
-  end;
 end;
 
 
@@ -913,11 +708,6 @@ registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if<=0(a,k1,I) -> No-StopCode;
-   coherence
-   proof
-       if<=0(a,k1,I) = (a,k1)<=0_goto 2 ';' goto (card I+1) ';' I by Def10;
-     hence thesis;
-   end;
 end;
 
 
@@ -978,36 +768,6 @@ registration
    let I,J be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if<0(a,k1,I,J) -> shiftable parahalting;
-   correctness
-   proof
-    set IF=if<0(a,k1,I,J),
-        IsIF=Initialized stop IF;
-    set i = (a,k1)>=0_goto (card I + 2),
-        G =Goto (card J+1);
-    reconsider IJ=I ';' G ';' J as shiftable Program-block by Lm3;
-      IF = i ';' I ';' G ';' J by Def6
-     .=i ';' (I ';' G) ';' J by SCMPDS_4:50
-     .=i ';' IJ by SCMPDS_4:50
-     .=Load i ';' IJ by SCMPDS_4:def 4;
-    hence IF is shiftable;
-      now let s be State of SCMPDS;
-      assume IsIF c= s;
-then A1:    s = s +* IsIF by AMI_5:10;
-A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
-A3:    J is_closed_on s & J is_halting_on s by Th34,Th35;
-       per cases;
-       suppose s.DataLoc(s.a,k1) < 0;
-        then IF is_halting_on s by A2,Th112;
-        hence s is halting by A1,Def3;
-       end;
-       suppose s.DataLoc(s.a,k1) >= 0;
-        then IF is_halting_on s by A3,Th113;
-        hence s is halting by A1,Def3;
-   end;
-   end;
-   then IsIF is halting by AMI_1:def 26;
-   hence IF is parahalting by SCMPDS_4:def 10;
-  end;
 end;
 
 
@@ -1015,12 +775,6 @@ registration
    let I,J be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if<0(a,k1,I,J) -> No-StopCode;
-   coherence
-   proof
-       if<0(a,k1,I,J) =
-     (a,k1)>=0_goto (card I +2) ';' I ';' Goto (card J+1) ';' J by Def6;
-     hence thesis;
-   end;
 end;
 
 
@@ -1078,31 +832,6 @@ registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if<0(a,k1,I) -> shiftable parahalting;
-   correctness
-   proof
-    set IF=if<0(a,k1,I),
-        IsIF=Initialized stop IF;
-    set i = (a,k1)>=0_goto (card I +1);
-      IF = i ';' I by Def11
-     .=Load i ';' I by SCMPDS_4:def 4;
-    hence IF is shiftable;
-      now let s be State of SCMPDS;
-      assume IsIF c= s;
-then A1:    s = s +* IsIF by AMI_5:10;
-A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
-       per cases;
-       suppose s.DataLoc(s.a,k1) < 0;
-        then IF is_halting_on s by A2,Th122;
-        hence s is halting by A1,Def3;
-       end;
-       suppose s.DataLoc(s.a,k1) >= 0;
-        then IF is_halting_on s by Th123;
-        hence s is halting by A1,Def3;
-   end;
-   end;
-   then IsIF is halting by AMI_1:def 26;
-   hence IF is parahalting by SCMPDS_4:def 10;
-  end;
 end;
 
 
@@ -1110,11 +839,6 @@ registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if<0(a,k1,I) -> No-StopCode;
-   coherence
-   proof
-       if<0(a,k1,I) = (a,k1)>=0_goto (card I +1) ';' I by Def11;
-     hence thesis;
-   end;
 end;
 
 
@@ -1172,32 +896,6 @@ registration
    let I be shiftable parahalting Program-block,
    a be Int_position,k1 be Integer;
    cluster if>=0(a,k1,I) -> shiftable parahalting;
-   correctness
-   proof
-    set IF=if>=0(a,k1,I),
-        IsIF=Initialized stop IF;
-    set i = (a,k1)>=0_goto 2,
-        j = goto (card I + 1);
-      IF = i ';' j ';' I by Def12
-    .=Load i ';' Load j ';' I by SCMPDS_4:def 6;
-    hence IF is shiftable;
-      now let s be State of SCMPDS;
-      assume IsIF c= s;
-then A1:    s = s +* IsIF by AMI_5:10;
-A2:    I is_closed_on s & I is_halting_on s by Th34,Th35;
-       per cases;
-       suppose s.DataLoc(s.a,k1) >= 0;
-        then IF is_halting_on s by A2,Th132;
-        hence s is halting by A1,Def3;
-       end;
-       suppose s.DataLoc(s.a,k1) < 0;
-        then IF is_halting_on s by Th133;
-        hence s is halting by A1,Def3;
-   end;
-   end;
-   then IsIF is halting by AMI_1:def 26;
-   hence IF is parahalting by SCMPDS_4:def 10;
-  end;
 end;
 
 
@@ -1205,11 +903,6 @@ registration
    let I be No-StopCode Program-block,
    a be Int_position,k1 be Integer;
    cluster if>=0(a,k1,I) -> No-StopCode;
-   coherence
-   proof
-       if>=0(a,k1,I) = (a,k1)>=0_goto 2 ';' goto (card I+1) ';' I by Def12;
-     hence thesis;
-   end;
 end;
 
 

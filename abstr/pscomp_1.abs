@@ -39,33 +39,19 @@ definition let X be set;
 
 registration
  cluster REAL -> with_zero;
- coherence by Def1;
  cluster NAT -> with_zero;
- coherence by Def1;
 end;
 
 
 registration
  cluster non empty without_zero set;
- existence proof set s = {1};
-  take s;
-  thus s is non empty; not 0 in s by TARSKI:def 1;
-  hence s is without_zero by Def1;
- end;
  cluster non empty with_zero set;
- existence by Def1;
 end;
 
 
 registration
  cluster non empty without_zero Subset of REAL;
- existence proof set s = {1 qua Real};
-  take s;
-  thus s is non empty; not 0 in s by TARSKI:def 1;
-  hence s is without_zero by Def1;
- end;
  cluster non empty with_zero Subset of REAL;
- existence by Def1;
 end;
 
 
@@ -76,7 +62,6 @@ theorem :: PSCOMP_1:1
 registration let F be set;
  cluster non empty with_non-empty_elements c=-linear
           -> centered Subset-Family of F;
-  coherence by Th1;
 end;
 
 
@@ -88,12 +73,6 @@ end;
 registration let X, Y be non empty set, f be Function of X, Y;
    :: see WAYBEL_2
  cluster f.:X -> non empty;
-coherence proof
-    consider x being Element of X;
-A1: dom f = X by FUNCT_2:def 1;
-    then f.x in rng f by FUNCT_1:def 5;
-    hence thesis by A1,FUNCT_1:def 12;
-  end;
 end;
 
 
@@ -179,13 +158,6 @@ end;
 
 registration
  cluster non empty closed bounded Subset of REAL;
- existence proof
-   reconsider 0r = 0 as Real;
-     [.0,0.]={0} & [.0,0.] is closed & {0r} is bounded by RCOMP_1:14,23,SEQ_4:
-15
-;
-  hence thesis;
- end;
 end;
 
 
@@ -214,10 +186,6 @@ r in X iff -r in -X;
 
 registration let X be non empty Subset of REAL;
  cluster -X -> non empty;
- coherence proof
-     ex x being Real st x in X by SUBSET_1:10;
-  hence thesis by Th14;
- end;
 end;
 
 theorem :: PSCOMP_1:15
@@ -249,9 +217,6 @@ r in X iff q3+r in q3+X;
 
 registration let X be non empty Subset of REAL, s be Real;
  cluster s+X -> non empty;
- coherence proof ex x being Real st x in X by SUBSET_1:10;
-  hence thesis by Th20;
- end;
 end;
 
 
@@ -290,33 +255,11 @@ for X being without_zero Subset of REAL holds r in X iff 1/r in Inv X;
 
 registration let X be non empty without_zero Subset of REAL;
  cluster Inv X -> non empty without_zero;
- coherence proof consider x being Real such that
- A1: x in X by SUBSET_1:10;
- A2: not 0 in X by Def1;
-  thus Inv X is non empty by A1,Th28;
-     now assume
- A3: 0 in Inv X;
-      Inv X = {1/r3 : r3 in X} by Def9;
-    then ex r3 st 0 = 1/r3 & r3 in X by A3;
-    hence contradiction by A2,XCMPLX_1:62;
-   end;
-  hence thesis by Def1;
- end;
 end;
 
 
 registration let X be without_zero Subset of REAL;
  cluster Inv X -> without_zero;
- coherence proof
- A1: not 0 in X by Def1;
-     now assume
- A2: 0 in Inv X;
-      Inv X = {1/r3 : r3 in X} by Def9;
-    then ex r3 st 0 = 1/r3 & r3 in X by A2;
-    hence contradiction by A1,XCMPLX_1:62;
-   end;
-  hence thesis by Def1;
- end;
 end;
 
 
@@ -340,19 +283,6 @@ end;
 
 registration let X be Subset of REAL;
  cluster Cl X -> closed;
- coherence proof
-   defpred P[Element of bool REAL] means X c= $1 & $1 is closed;
-   deffunc F(Element of bool REAL) = $1;
-   reconsider Z = { F(A) where A is Element of bool REAL : P[A] }
-   as Subset of bool REAL from COMPLSP1:sch 3;
-   reconsider Z as Subset-Family of REAL by SETFAM_1:def 7;
-A1: Z is closed proof let Y be Subset of REAL; assume Y in Z;
-     then ex A being Element of bool REAL st Y = A & X c= A & A is closed;
-    hence Y is closed;
-   end;
-     Cl X = meet Z by Def10;
-  hence thesis by A1,Th31;
- end;
 end;
 
 
@@ -464,16 +394,6 @@ end;
 
 registration let T be non empty 1-sorted;
  cluster bounded RealMap of T;
- existence proof set c = (the carrier of T);
-  reconsider f = c --> (0 qua Real) as RealMap of T;
-  take f;
-A1: dom f = c by FUNCT_2:def 1;
-    rng f = {0 qua Real} by FUNCOP_1:14;
-  then f.:c = {0 qua Real} by A1,RELAT_1:146;
-then A2: f.:c is bounded by SEQ_4:15;
-  hence f.:c is bounded_above by SEQ_4:def 3;
-  thus f.:c is bounded_below by A2,SEQ_4:def 3;
- end;
 end;
 
 
@@ -482,34 +402,12 @@ scheme :: PSCOMP_1:sch 1
   ex f being RealMap of X() st
     for x being Element of X() holds P[x, f.x]
 provided
- for x being set st x in the carrier of X() ex r3 st P[x, r3]
-proof
-  defpred Q[set,set] means P[$1,$2];
-A2: for x being set st x in the carrier of X()
-     ex y being set st y in REAL & Q[x,y]
-   proof let x be set;
-    assume x in the carrier of X();
-    then ex r3 st P[x, r3] by A1;
-    hence thesis;
-   end;
-  consider f being Function of the carrier of X(),REAL such that
-A3: for x being set st x in the carrier of X() holds Q[x,f.x]
-   from FUNCT_2:sch 1(A2);
-  reconsider f as RealMap of X();
-  take f;
-  thus thesis by A3;
- end;
+ for x being set st x in the carrier of X() ex r3 st P[x, r3];
 
 scheme :: PSCOMP_1:sch 2
  LambdaRF{X() -> non empty TopStruct, F(set) -> Real}:
 ex f being RealMap of X() st
- for x being Element of X() holds f.x = F(x)
-proof
-  defpred P[set,set] means $2 = F($1);
-A1: for x being set st x in the carrier of X() ex r3 st P[x,r3];
-  thus ex f be RealMap of X() st for x be Element of X() holds
-   P[x,f.x] from NonUniqExRF(A1);
- end;
+ for x being Element of X() holds f.x = F(x);
 
 definition let T be 1-sorted, f be RealMap of T, P be set;
  redefine func f"P -> Subset of T;
@@ -570,57 +468,11 @@ end;
 
 registration let T be non empty TopSpace;
  cluster continuous RealMap of T;
- existence proof set c = (the carrier of T);
-  reconsider f = c --> (0 qua Real) as RealMap of T;
-  take f;
-A1: dom f = c by FUNCT_2:def 1;
-A2: rng f = {0 qua Real} by FUNCOP_1:14;
-  let Y be Subset of REAL; assume Y is closed;
-  per cases;
-  suppose 0 in Y;
-  then A3: rng f c= Y by A2,ZFMISC_1:37;
-        f"Y = f"(rng f /\ Y) by RELAT_1:168
-         .= f"rng f by A3,XBOOLE_1:28
-         .= c by A1,RELAT_1:169
-         .= [#]T by PRE_TOPC:12;
-   hence f"Y is closed;
-  end;
-  suppose not 0 in Y;
-then A4:    rng f misses Y by A2,ZFMISC_1:56;
-        f"Y = f"(rng f /\ Y) by RELAT_1:168
-         .= f"{} by A4,XBOOLE_0:def 7
-         .= {}T by RELAT_1:171;
-   hence f"Y is closed by TOPS_1:22;
- end;
- end;
 end;
 
 
 registration let T be non empty TopSpace, S be non empty SubSpace of T;
  cluster continuous RealMap of S;
- existence proof set c = (the carrier of S);
-  reconsider f = c --> (0 qua Real) as RealMap of S;
-  take f;
-A1: dom f = c by FUNCT_2:def 1;
-A2: rng f = {0 qua Real} by FUNCOP_1:14;
-  let Y be Subset of REAL; assume Y is closed;
-  per cases;
-  suppose 0 in Y;
-  then A3: rng f c= Y by A2,ZFMISC_1:37;
-        f"Y = f"(rng f /\ Y) by RELAT_1:168
-         .= f"rng f by A3,XBOOLE_1:28
-         .= c by A1,RELAT_1:169
-         .= [#]S by PRE_TOPC:12;
-   hence f"Y is closed;
-  end;
-  suppose not 0 in Y;
-then A4:    rng f misses Y by A2,ZFMISC_1:56;
-        f"Y = f"(rng f /\ Y) by RELAT_1:168
-         .= f"{} by A4,XBOOLE_0:def 7
-         .= {}S by RELAT_1:171;
-   hence f"Y is closed by TOPS_1:22;
- end;
- end;
 end;
 
 
@@ -663,33 +515,17 @@ end;
 
 registration let T be non empty TopSpace;
  cluster compact non empty Subset of T;
- existence proof
-  consider x being Point of T;
-  take {x};
-  thus thesis by BORSUK_1:41;
- end;
 end;
 
 
 registration let T be non empty TopSpace, f be continuous RealMap of T,
                X be Subset of T;
  cluster f||X -> continuous;
- coherence proof
-    now let Y be Subset of REAL; assume
-     Y is open;
-  then A1: f"Y is open by Th54;
-  A2: the carrier of (T|X) = X by JORDAN1:1;
-       (f||X)"Y = (f|X)"Y by Def26 .= X/\(f"Y) by FUNCT_1:139;
-   hence (f||X)"Y is open by A1,A2,TSP_1:def 1;
-  end;
-  hence thesis by Th54;
- end;
 end;
 
 
 registration let T be non empty TopSpace, P be compact non empty Subset of T;
  cluster T|P -> compact;
- coherence by COMPTS_1:12;
 end;
 
 
@@ -719,200 +555,16 @@ end;
 
 registration
  cluster compact -> pseudocompact (non empty TopSpace);
- coherence proof let T be non empty TopSpace;
-  assume that
-A1: T is compact;
-  let f be RealMap of T such that
-A2: f is continuous;
-  thus f is bounded_above
-  proof
-  assume
-A3: for s be real number ex r be real number
-       st r in f.:(the carrier of T) & r > s;
-    consider p being Element of T;
-    defpred P[Real] means $1 >= f.p;
-    deffunc F(Real) = right_closed_halfline($1);
-    set R = {F(r3) : P[r3]};
-A4: R is Subset of bool REAL from COMPLSP1:sch 3;
-A5: right_closed_halfline(f.p) in R;
-    then reconsider R as non empty Subset-Family of REAL by A4,SETFAM_1:def 7;
-    reconsider F = ("f).:R as Subset-Family of T;
-A6: ("f).right_closed_halfline(f.p) in F by A5,FUNCT_2:43;
-      now assume {} in F; then consider rchx being set such that
-    A7: rchx in bool REAL and
-    A8: rchx in R and
-    A9: {} = ("f).rchx by FUNCT_2:115;
-        consider r3 being Real such that
-    A10: rchx = right_closed_halfline(r3) & r3 >= f.p by A8;
-    A11: {} = f"rchx by A7,A9,Def2;
-        consider r1 being real number such that
-    A12: r1 in f.:(the carrier of T) and
-    A13: r1 > r3 by A3;
-        consider c being set such that
-    A14: c in the carrier of T & c in the carrier of T and
-    A15: r1 = f.c by A12,FUNCT_2:115;
-A16:  r1 is Real by XREAL_0:def 1;
-          rchx = {g where g is Real : g >= r3} by A10,LIMFUNC1:def 2;
-        then r1 in rchx by A13,A16;
-     hence contradiction by A11,A14,A15,FUNCT_2:46;
-    end;
-then A17: F is with_non-empty_elements by AMI_1:def 1;
-      F is c=-linear proof let X,Y be set;
-     assume X in F;
-        then consider A being set such that
-    A18: A in bool REAL and
-    A19: A in R and
-    A20: X = ("f).A by FUNCT_2:115;
-        consider r1 such that
-    A21: A = right_closed_halfline(r1) and r1 >= f.p by A19;
-     assume Y in F;
-        then consider B being set such that
-    A22: B in bool REAL and
-    A23: B in R and
-    A24: Y = ("f).B by FUNCT_2:115;
-        consider r2 such that
-    A25: B = right_closed_halfline(r2) and r2 >= f.p by A23;
-          r1 >= r2 or r2 >= r1;
-    then A26: A c= B or B c= A by A21,A25,LIMFUNC1:9;
-          X = f"A & Y = f"B by A18,A20,A22,A24,Def2;
-     then X c= Y or Y c= X by A26,RELAT_1:178;
-     hence thesis by XBOOLE_0:def 9;
-    end;
-then A27: F is centered by A6,A17,Th1;
-      R is closed proof let X be Subset of REAL;
-     assume X in R;
-        then ex r3 st X = right_closed_halfline(r3) & r3 >= f.p;
-     hence X is closed by FCONT_3:5;
-    end;
-    then F is closed by A2,Th59;
-    then meet F <> {} by A1,A27,COMPTS_1:13;
-    then consider x being set such that
-A28:  x in meet F by XBOOLE_0:def 1;
-    reconsider x as Element of T by A28;
-A29: f.x in meet R by A28,Th2;
-    consider eR being Element of R;
-A30: f.x in eR by A29,SETFAM_1:def 1;
-      eR in R; then consider er being Real such that
-A31: eR = right_closed_halfline(er) & er >= f.p;
-      right_closed_halfline(er) = {r3:r3>=er} by LIMFUNC1:def 2;
-    then consider r1 being Real such that
-A32: f.x = r1 & r1 >= er by A30,A31;
-A33: f.x >= f.p by A31,A32,AXIOMS:22;
-    consider fx' being real number such that
-A34:  fx' > f.x by REAL_1:76;
-    reconsider fx' as Real by XREAL_0:def 1;
-      fx' >= f.p by A33,A34,AXIOMS:22;
-    then right_closed_halfline(fx') in R;
-then A35:  f.x in right_closed_halfline(fx') by A29,SETFAM_1:def 1;
-      right_closed_halfline(fx') = {r3:r3>=fx'} by LIMFUNC1:def 2;
-    then ex r3 st f.x = r3 & r3 >= fx' by A35;
-  hence contradiction by A34;
-  end;
-  assume
-A36: for s be real number ex r3 be real number st
-      r3 in f.:(the carrier of T) & r3 < s;
-    consider p being Element of T;
-    defpred P[Real] means $1 <= f.p;
-    deffunc F(Real) = left_closed_halfline($1);
-    set R = {F(r3): P[r3]};
-A37: R is Subset of bool REAL from COMPLSP1:sch 3;
-A38: left_closed_halfline(f.p) in R;
-    then reconsider R as non empty Subset-Family of REAL by A37,SETFAM_1:def 7;
-    reconsider F = ("f).:R as Subset-Family of T;
-    A39: ("f).left_closed_halfline(f.p) in F by A38,FUNCT_2:43;
-      now assume {} in F; then consider rchx being set such that
-    A40: rchx in bool REAL and
-    A41: rchx in R and
-    A42: {} = ("f).rchx by FUNCT_2:115;
-        consider r3 being Real such that
-    A43: rchx = left_closed_halfline(r3) & r3 <= f.p by A41;
-    A44: {} = f"rchx by A40,A42,Def2;
-        consider r1 being real number such that
-    A45: r1 in f.:(the carrier of T) and
-    A46: r1 < r3 by A36;
-        consider c being set such that
-    A47: c in the carrier of T & c in the carrier of T and
-    A48: r1 = f.c by A45,FUNCT_2:115;
-A49:  r1 is Real by XREAL_0:def 1;
-          rchx = {g where g is Real : g <= r3} by A43,LIMFUNC1:def 1;
-        then r1 in rchx by A46,A49;
-     hence contradiction by A44,A47,A48,FUNCT_2:46;
-    end;
-then A50: F is with_non-empty_elements by AMI_1:def 1;
-      F is c=-linear proof let X,Y be set;
-     assume X in F;
-        then consider A being set such that
-    A51: A in bool REAL and
-    A52: A in R and
-    A53: X = ("f).A by FUNCT_2:115;
-        consider r1 such that
-    A54: A = left_closed_halfline(r1) and r1 <= f.p by A52;
-     assume Y in F;
-        then consider B being set such that
-    A55: B in bool REAL and
-    A56: B in R and
-    A57: Y = ("f).B by FUNCT_2:115;
-        consider r2 such that
-    A58: B = left_closed_halfline(r2) and r2 <= f.p by A56;
-          r1 <= r2 or r2 <= r1;
-    then A59: A c= B or B c= A by A54,A58,LIMFUNC1:14;
-          X = f"A & Y = f"B by A51,A53,A55,A57,Def2;
-     then X c= Y or Y c= X by A59,RELAT_1:178;
-     hence thesis by XBOOLE_0:def 9;
-    end;
-then A60: F is centered by A39,A50,Th1;
-      R is closed proof let X be Subset of REAL;
-     assume X in R;
-        then ex r3 st X = left_closed_halfline(r3) & r3 <= f.p;
-     hence X is closed by FCONT_3:6;
-    end;
-    then F is closed by A2,Th59;
-    then meet F <> {} by A1,A60,COMPTS_1:13;
-    then consider x being set such that
-A61:  x in meet F by XBOOLE_0:def 1;
-    reconsider x as Element of T by A61;
-A62: f.x in meet R by A61,Th2;
-    consider eR being Element of R;
-A63: f.x in eR by A62,SETFAM_1:def 1;
-      eR in R; then consider er being Real such that
-A64: eR = left_closed_halfline(er) & er <= f.p;
-      left_closed_halfline(er) = {r3 : r3 <= er} by LIMFUNC1:def 1;
-    then consider r1 being Real such that
-A65: f.x = r1 & r1 <= er by A63,A64;
-A66: f.x <= f.p by A64,A65,AXIOMS:22;
-    consider fx' being real number such that
-A67:  fx' < f.x by REAL_1:77;
-    reconsider fx' as Real by XREAL_0:def 1;
-      fx' <= f.p by A66,A67,AXIOMS:22;
-    then left_closed_halfline(fx') in R;
-then A68:  f.x in left_closed_halfline(fx') by A62,SETFAM_1:def 1;
-      left_closed_halfline(fx') = {r3 : r3 <= fx'} by LIMFUNC1:def 1;
-    then ex r3 st f.x = r3 & r3 <= fx' by A68;
-  hence contradiction by A67;
- end;
 end;
 
 
 registration
  cluster compact non empty TopSpace;
- existence proof
-  take 1TopSp {{}};
-  thus thesis by PCOMPS_1:9;
- end;
 end;
 
 
 registration let T be pseudocompact non empty TopSpace;
  cluster continuous -> bounded with_max with_min RealMap of T;
- coherence proof let f be RealMap of T; assume
-A1: f is continuous;
-  hence f is bounded by Def27;
-  A2: for f being RealMap of T st f is continuous holds f is bounded by Def27;
-  then A3:for f being RealMap of T st f is continuous holds f is with_max by
-Th61;
-  thus f is with_max by A1,A2,Th61;
-  thus f is with_min by A1,A3,Th60;
- end;
 end;
 
 
@@ -930,7 +582,6 @@ begin :: Bounding boxes of compact sets in TOP-REAL 2
 
 registration let n be Nat; let p1, p2 be Point of TOP-REAL n;
  cluster LSeg(p1,p2) -> compact;
- coherence by SPPOL_1:28;
 end;
 
 
@@ -967,70 +618,7 @@ for r3, q3 st P = {|[ r1, r2 ]| : r3 < r2 & r2 < q3} holds P is open;
 
 registration
  cluster proj1 -> continuous;
- coherence proof
-   now let Y be Subset of REAL; assume
- A1: Y is open;
-  set p1Y = (proj1"Y);
-     now let x be set;
-    hereby assume
-   A2: x in p1Y;
-       then reconsider p = x as Point of TOP-REAL 2;
-       set p1 = proj1.p;
-         p1 in Y by A2,FUNCT_2:46; then consider g being real number such that
-   A3: 0<g and
-   A4: ].p1-g,p1+g.[ c= Y by A1,RCOMP_1:40;
-       reconsider g as Real by XREAL_0:def 1;
-   A5: p1 < p1+g by A3,REAL_1:69;
-   then A6: p1-g < p1 by REAL_1:84;
-         ].p1-g,p1+g.[ = {r3 : p1-g<r3 & r3<p1+g} by RCOMP_1:def 2;
-   then A7: p1 in ].p1-g,p1+g.[ by A5,A6;
-     reconsider Q = proj1"].p1-g,p1+g.[
-                      as Subset of TOP-REAL 2;
-     take Q;
-       Q = {|[ q3,p3 ]|: p1-g < q3 & q3 < p1+g} by Th65;
-     hence Q is open by Th66;
-     thus Q c= p1Y by A4,RELAT_1:178;
-     thus x in Q by A7,FUNCT_2:46;
-    end;
-    assume ex Q being Subset of TOP-REAL 2 st Q is open & Q c= p1Y & x in Q;
-    hence x in p1Y;
-   end;
-  hence p1Y is open by TOPS_1:57;
-  end;
-  hence thesis by Th54;
- end;
  cluster proj2 -> continuous;
- coherence proof now let Y be Subset of REAL; assume
- A8: Y is open;
-  set p1Y = (proj2"Y);
-     now let x be set;
-    hereby assume
-   A9: x in p1Y;
-       then reconsider p = x as Point of TOP-REAL 2;
-       set p1 = proj2.p;
-         p1 in Y by A9,FUNCT_2:46; then consider g being real number such that
-   A10: 0<g and
-   A11: ].p1-g,p1+g.[ c= Y by A8,RCOMP_1:40;
-       reconsider g as Real by XREAL_0:def 1;
-   A12: p1 < p1+g by A10,REAL_1:69;
-   then A13: p1-g < p1 by REAL_1:84;
-         ].p1-g,p1+g.[ = {r3 : p1-g<r3 & r3<p1+g} by RCOMP_1:def 2;
-   then A14: p1 in ].p1-g,p1+g.[ by A12,A13;
-     reconsider Q = proj2"].p1-g,p1+g.[
-                      as Subset of TOP-REAL 2;
-     take Q;
-       Q = {|[ q3,p3 ]|: p1-g < p3 & p3 < p1+g} by Th67;
-     hence Q is open by Th68;
-     thus Q c= p1Y by A11,RELAT_1:178;
-     thus x in Q by A14,FUNCT_2:46;
-    end;
-    assume ex Q being Subset of TOP-REAL 2 st Q is open & Q c= p1Y & x in Q;
-    hence x in p1Y;
-   end;
-  hence p1Y is open by TOPS_1:57;
-  end;
-  hence thesis by Th54;
- end;
 end;
 
 
@@ -1134,93 +722,9 @@ end;
 
 registration let X be non empty compact Subset of TOP-REAL 2;
  cluster W-most X -> non empty compact;
- coherence proof
-A1: W-most X = LSeg(SW-corner X, NW-corner X)/\X by Def38;
-    SW-corner X = |[W-bound X, S-bound X]| &
-  NW-corner X = |[W-bound X, N-bound X]| by Def34,Def35;
-then A2: (SW-corner X)`1 = W-bound X & (NW-corner X)`1 = W-bound X &
-   (SW-corner X)`2 = S-bound X & (NW-corner X)`2 = N-bound X
-          by EUCLID:56;
-   set p1X = (proj1||X), c = the carrier of (TOP-REAL 2)|X;
-A3: inf p1X = W-bound X by Def30;
-A4: c = X by JORDAN1:1;
-A5: inf p1X = inf (p1X.:c) by Def20;
-     p1X.:c is with_min by Def15;
-   then inf (p1X.:c) in p1X.:c by Def4;
-   then consider p being set such that
-A6: p in c & p in c & inf (p1X.:c) = p1X.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A4,A6;
-A7: p1X.p = p`1 by A4,A6,Th69;
-     S-bound X <= p`2 & p`2 <= N-bound X by A4,A6,Th71;
-   then p in LSeg(SW-corner X, NW-corner X) by A2,A3,A5,A6,A7,GOBOARD7:8;
-  hence thesis by A1,A4,A6,Th64,XBOOLE_0:def 3;
- end;
  cluster N-most X -> non empty compact;
- coherence proof
-A8:N-most X = LSeg(NW-corner X, NE-corner X)/\X by Def39;
-    NW-corner X = |[W-bound X, N-bound X]| &
-  NE-corner X = |[E-bound X, N-bound X]| by Def35,Def36;
-then A9: (NW-corner X)`1 = W-bound X & (NE-corner X)`1 = E-bound X &
-   (NW-corner X)`2 = N-bound X & (NE-corner X)`2 = N-bound X
-          by EUCLID:56;
-   set p2X = (proj2||X), c = the carrier of (TOP-REAL 2)|X;
-A10: sup p2X = N-bound X by Def31;
-A11: c = X by JORDAN1:1;
-A12: sup p2X = sup (p2X.:c) by Def21;
-     p2X.:c is with_max by Def14;
-   then sup (p2X.:c) in p2X.:c by Def3;
-   then consider p being set such that
-A13: p in c & p in c & sup (p2X.:c) = p2X.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A11,A13;
-A14: p2X.p = p`2 by A11,A13,Th70;
-     W-bound X <= p`1 & p`1 <= E-bound X by A11,A13,Th71;
-   then p in LSeg(NW-corner X, NE-corner X) by A9,A10,A12,A13,A14,GOBOARD7:9;
-  hence thesis by A8,A11,A13,Th64,XBOOLE_0:def 3;
- end;
  cluster E-most X -> non empty compact;
- coherence proof
-A15:E-most X = LSeg(SE-corner X, NE-corner X)/\X by Def40;
-    SE-corner X = |[E-bound X, S-bound X]| &
-  NE-corner X = |[E-bound X, N-bound X]| by Def36,Def37;
-then A16: (SE-corner X)`1 = E-bound X & (NE-corner X)`1 = E-bound X &
-   (SE-corner X)`2 = S-bound X & (NE-corner X)`2 = N-bound X
-          by EUCLID:56;
-   set p1X = (proj1||X), c = the carrier of (TOP-REAL 2)|X;
-A17: sup p1X = E-bound X by Def32;
-A18: c = X by JORDAN1:1;
-A19: sup p1X = sup (p1X.:c) by Def21;
-     p1X.:c is with_max by Def14;
-   then sup (p1X.:c) in p1X.:c by Def3;
-   then consider p being set such that
-A20: p in c & p in c & sup (p1X.:c) = p1X.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A18,A20;
-A21: p1X.p = p`1 by A18,A20,Th69;
-     S-bound X <= p`2 & p`2 <= N-bound X by A18,A20,Th71;
-   then p in LSeg(SE-corner X, NE-corner X) by A16,A17,A19,A20,A21,GOBOARD7:8;
-  hence thesis by A15,A18,A20,Th64,XBOOLE_0:def 3;
- end;
  cluster S-most X -> non empty compact;
- coherence proof
-A22:S-most X = LSeg(SW-corner X, SE-corner X)/\X by Def41;
-    SW-corner X = |[W-bound X, S-bound X]| &
-  SE-corner X = |[E-bound X, S-bound X]| by Def34,Def37;
-then A23: (SW-corner X)`1 = W-bound X & (SE-corner X)`1 = E-bound X &
-   (SW-corner X)`2 = S-bound X & (SE-corner X)`2 = S-bound X
-          by EUCLID:56;
-   set p2X = (proj2||X), c = the carrier of (TOP-REAL 2)|X;
-A24: inf p2X = S-bound X by Def33;
-A25: c = X by JORDAN1:1;
-A26: inf p2X = inf (p2X.:c) by Def20;
-     p2X.:c is with_min by Def15;
-   then inf (p2X.:c) in p2X.:c by Def4;
-   then consider p being set such that
-A27: p in c & p in c & inf (p2X.:c) = p2X.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A25,A27;
-A28: p2X.p = p`2 by A25,A27,Th70;
-     W-bound X <= p`1 & p`1 <= E-bound X by A25,A27,Th71;
-   then p in LSeg(SW-corner X, SE-corner X) by A23,A24,A26,A27,A28,GOBOARD7:9;
-  hence thesis by A22,A25,A27,Th64,XBOOLE_0:def 3;
- end;
 end;
 
 

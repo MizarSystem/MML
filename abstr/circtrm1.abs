@@ -59,15 +59,6 @@ registration
  let V be non-empty ManySortedSet of the carrier of S;
  let X be non empty Subset of S-Terms V;
  cluster X-CircuitStr -> unsplit;
- coherence
-  proof
-      X-CircuitStr = ManySortedSign(#
-        Subtrees X, [:the OperSymbols of S,{the carrier of S}:]-Subtrees X,
-        [:the OperSymbols of S,{the carrier of S}:]-ImmediateSubtrees X,
-        id ([:the OperSymbols of S,{the carrier of S}:]-Subtrees X)
-       #) by Def1;
-   hence the ResultSort of X-CircuitStr = id the OperSymbols of X-CircuitStr;
-  end;
 end;
 
 
@@ -90,7 +81,6 @@ registration
  let V be non-empty ManySortedSet of the carrier of S;
  let X be SetWithCompoundTerm of S,V;
  cluster X-CircuitStr -> non void;
-  coherence by Th3;
 end;
 
 
@@ -111,13 +101,6 @@ registration
  let S,V;
  let X be SetWithCompoundTerm of S,V, g be Gate of X-CircuitStr;
  cluster the_arity_of g -> DTree-yielding;
- coherence
-  proof set C = [:the OperSymbols of S,{the carrier of S}:];
-      X-CircuitStr = ManySortedSign(# Subtrees X, C-Subtrees X,
-        C-ImmediateSubtrees X, id(C-Subtrees X)#) by Def1;
-    then the_arity_of g is FinSequence of Subtrees X;
-   hence thesis;
-  end;
 end;
 
 
@@ -126,7 +109,6 @@ registration
  let V be non-empty ManySortedSet of the carrier of S;
  let X be non empty Subset of S-Terms V;
  cluster -> finite Function-like Relation-like Vertex of X-CircuitStr;
-  coherence by Th4;
 end;
 
 
@@ -135,7 +117,6 @@ registration
  let V be non-empty ManySortedSet of the carrier of S;
  let X be non empty Subset of S-Terms V;
  cluster -> DecoratedTree-like Vertex of X-CircuitStr;
-  coherence by Th4;
 end;
 
 
@@ -144,7 +125,6 @@ registration
  let V be non-empty ManySortedSet of the carrier of S;
  let X be SetWithCompoundTerm of S,V;
  cluster -> finite Function-like Relation-like Gate of X-CircuitStr;
-  coherence by Th4;
 end;
 
 
@@ -153,7 +133,6 @@ registration
  let V be non-empty ManySortedSet of the carrier of S;
  let X be SetWithCompoundTerm of S,V;
  cluster -> DecoratedTree-like Gate of X-CircuitStr;
-  coherence by Th4;
 end;
 
 
@@ -170,7 +149,6 @@ theorem :: CIRCTRM1:7
 registration
  let X,Y be constituted-DTrees set;
  cluster X \/ Y -> constituted-DTrees;
- coherence by TREES_3:9;
 end;
 
 
@@ -224,12 +202,6 @@ registration
  let v be Vertex of X-CircuitStr;
  let A be non-empty MSAlgebra over S;
     cluster the_sort_of (v, A) -> non empty;
- coherence
-  proof
-    reconsider u = v as Term of S,V by Th4;
-  the_sort_of (v, A) = (the Sorts of A).the_sort_of u by Def2;
-   hence thesis;
-  end;
 end;
 
 
@@ -256,43 +228,7 @@ scheme :: CIRCTRM1:sch 1
   for i being Element of I(), a being Element of A().i holds P[i,a,f.i.a]
  provided
   for i being Element of I(), a being Element of A().i
-     ex b being Element of B().i st P[i,a,b]
-proof
-    defpred R[set,set] means ex g being Function of A().$1, B().$1 st $2 = g &
-      for a being set st a in A().$1 holds P[$1,a,g.a];
-A2:  for i being set st i in I() ex y being set st R[i,y]
-     proof let i be set; assume i in I();
-      then reconsider i as Element of I();
-      defpred R[set,set] means P[i,$1,$2];
-A3:     for a being set st a in A().i ex b being set st b in B().i & R[a,b]
-        proof let a be set; assume a in A().i;
-          then ex b being Element of B().i st P[i,a,b] by A1;
-         hence thesis;
-        end;
-      consider g being Function such that
-A4:     dom g = A().i & rng g c= B().i and
-A5:     for a being set st a in A().i holds R[a,g.a]
-           from COMPTS_1:sch 1(A3);
-      take g;
-         g is Function of A().i, B().i by A4,FUNCT_2:4;
-      hence thesis by A5;
-     end;
-   consider f being Function such that
-A6:  dom f = I() and
-A7:  for i being set st i in I() holds R[i,f.i] from ZFREFLE1:sch 1(A2);
-   reconsider f as ManySortedSet of I() by A6,PBOOLE:def 3;
-      f is ManySortedFunction of A(),B()
-     proof let i be set; assume i in I();
-       then ex g being Function of A().i, B().i st f.i = g &
-        for a being set st a in A().i holds P[i,a,g.a] by A7;
-      hence thesis;
-     end;
-   then reconsider f as ManySortedFunction of A(),B();
-   take f; let i being Element of I(), a being Element of A().i;
-      ex g being Function of A().i, B().i st f.i = g &
-     for a being set st a in A().i holds P[i,a,g.a] by A7;
-   hence P[i,a,f.i.a];
-  end;
+     ex b being Element of B().i st P[i,a,b];
 
 definition
  let S be non empty non void ManySortedSign;
@@ -313,13 +249,6 @@ registration
  let X be non empty Subset of S-Terms V;
  let A be non-empty MSAlgebra over S;
  cluster X-CircuitSorts A -> non-empty;
- coherence
-  proof
-   let i be set; assume i in the carrier of X-CircuitStr;
-   then reconsider i as Vertex of X-CircuitStr;
-      (X-CircuitSorts A).i = the_sort_of (i, A) by Def4;
-   hence thesis;
-  end;
 end;
 
 
@@ -385,7 +314,6 @@ registration
  let X be SetWithCompoundTerm of S,V;
  let A be locally-finite non-empty MSAlgebra over S;
  cluster X-Circuit A -> locally-finite;
- coherence by Th18;
 end;
 
 
@@ -450,12 +378,6 @@ registration
  let V be non-empty ManySortedSet of the carrier of S;
  let p be FinSequence of S-Terms V;
  cluster x-tree p -> finite;
- coherence
-  proof
-   reconsider q = doms p as FinTree-yielding FinSequence;
-      dom (x-tree p) = tree q by TREES_4:10;
-   hence thesis by AMI_1:21;
-  end;
 end;
 
 
@@ -481,17 +403,14 @@ begin :: <section4>Circuit similarity</section4>
 registration
  let X be set;
  cluster id X -> one-to-one;
- coherence by FUNCT_1:52;
 end;
 
 
 registration
  let f be one-to-one Function;
  cluster f" -> one-to-one;
- coherence by FUNCT_1:62;
  let g be one-to-one Function;
  cluster g*f -> one-to-one;
- coherence by FUNCT_1:46;
 end;
 
 

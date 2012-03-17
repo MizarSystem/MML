@@ -45,51 +45,6 @@ end;
 
 registration
  cluster non empty strict TopSpace-like TopStruct;
-  existence
-   proof
-   now
-  take X={{}};
-  set T={{},X};
-    T c= bool X
-   proof
-    let x be set;
-    assume x in T;
-    then x= {} or x = X by TARSKI:def 2;
-    then x c= X by XBOOLE_1:2;
-    hence thesis;
-   end;
-  then reconsider T as Subset-Family of X by SETFAM_1:def 7;
-  take T;
-  set Y=TopStruct(#X,T#);
-  thus the carrier of Y in the topology of Y by TARSKI:def 2;
-  thus for a being Subset-Family of Y st
-   a c= the topology of Y holds union a in the topology of Y
-       proof
-        let a be Subset-Family of Y; assume
-           a c= the topology of Y;
-         then a={} or a={{}} or a={X} or a={{},X} by ZFMISC_1:42;
-          then union a={} or union a=X or union a = {} \/ X by ZFMISC_1:2,31,93
-;
-          hence thesis by TARSKI:def 2;
-        end;
-  let a,b be Subset of Y such that
-      A1:a in the topology of Y and A2:b in the topology of Y;
-        (a={} or a=X) & (b={} or b=X) by A1,A2,TARSKI:def 2;
-    hence a /\ b in the topology of Y by TARSKI:def 2;
- end;
-     then consider X being non empty set, T being Subset-Family of X such that
-A3:    the carrier of TopStruct(#X,T#) in the topology of TopStruct(#X,T#) &
-      (for a being Subset-Family of TopStruct(#X,T#)
-       st a c= the topology of TopStruct(#X,T#)
-        holds union a in the topology of TopStruct(#X,T#)) &
-      (for a,b being Subset of TopStruct(#X,T#) st
-       a in the topology of TopStruct(#X,T#) &
-       b in the topology of TopStruct(#X,T#)
-        holds a /\ b in the topology of TopStruct(#X,T#));
-    take TopStruct(#X,T#);
-    thus TopStruct(#X,T#) is non empty by STRUCT_0:def 1;
-     thus thesis by A3,Def1;
-   end;
 end;
 
 
@@ -122,7 +77,6 @@ end;
 
 registration let T be 1-sorted;
  cluster {}T -> empty;
- coherence by Def2;
 end;
 
 
@@ -133,7 +87,6 @@ theorem :: PRE_TOPC:12
 
 registration let T be non empty 1-sorted;
  cluster [#]T -> non empty;
- coherence by Def3;
 end;
 
 
@@ -240,119 +193,21 @@ end;
 
 registration let T be TopStruct;
  cluster strict SubSpace of T;
-  existence
-   proof
-       the TopStruct of T is SubSpace of T by Lm2;
-    hence thesis;
-   end;
 end;
 
 
 registration let T be non empty TopStruct;
  cluster strict non empty SubSpace of T;
-  existence
-   proof
-A1:   the TopStruct of T is SubSpace of T by Lm2;
-       the TopStruct of T is non empty by STRUCT_0:def 1;
-    hence thesis by A1;
-   end;
 end;
 
 
 scheme :: PRE_TOPC:sch 1
  SubFamExS {A() -> TopStruct, P[Subset of A()]}:
    ex F being Subset-Family of A() st
-   for B being Subset of A() holds B in F iff P[B]
-proof
-   defpred Q[Subset of A()] means P[$1];
-   consider F being Subset-Family of A() such that
-A1: for B being Subset of A() holds B in F iff Q[B]
- from SETFAM_1:sch 1;
-   reconsider F as Subset-Family of A();
-   take F;
-   thus thesis by A1;
-end;
+   for B being Subset of A() holds B in F iff P[B];
 
 registration let T be TopSpace;
  cluster -> TopSpace-like SubSpace of T;
- coherence
-  proof let S be SubSpace of T;
-      S is TopSpace-like
-     proof
-      set P = the carrier of S;
-A1:    P = [#] S by Def3;
-      then A2: P c= [#] T by Def9;
-A3:   [#]T = the carrier of T by Def3;
-      then A4:[#]T in the topology of T by Def1;
-        [#]T /\ P = P by A2,A3,Th15;
-     hence the carrier of S in the topology of S by A1,A4,Def9;
-     thus for a being Subset-Family of S st
-          a c= the topology of S
-         holds union a in the topology of S
-      proof
-       let a be Subset-Family of S such that
-        A5:a c= the topology of S;
-        defpred Q[set] means
-         $1 /\ the carrier of S in a & $1 in the topology of T;
-        consider b being Subset-Family of T such that
-        A6:for Z being Subset of T holds Z in b iff Q[Z]
-         from SubFamExS;
-          b c= the topology of T
-        proof
-          let y be set;
-          assume y in b;
-          hence thesis by A6;
-        end;
-        then A7:union b in the topology of T by Def1;
-          union a = union b /\ P
-        proof
-          A8:union a c= union b /\ P
-          proof
-           let x be set;
-            assume A9:x in union a;
-            then consider Z1 being set such that A10:x in Z1 & Z1 in a
-               by TARSKI:def 4;
-            consider Z3 being Subset of T such that
-            A11:Z3 in the topology of T & Z1 = Z3 /\ P by A1,A5,A10,Def9;
-            A12:Z3 in b by A6,A10,A11;
-              x in Z3 by A10,A11,XBOOLE_0:def 3;
-            then x in union b by A12,TARSKI:def 4;
-           hence x in union b /\ P by A9,XBOOLE_0:def 3;
-          end;
-            union b /\ P c= union a
-          proof
-           let x be set;
-            assume x in union b /\ P;
-            then A13:x in union b & x in P by XBOOLE_0:def 3;
-            then consider Z being set such that
-            A14:x in Z & Z in b by TARSKI:def 4;
-            A15:Z /\ P in a by A6,A14;
-              x in Z /\ P by A13,A14,XBOOLE_0:def 3;
-           hence x in union a by A15,TARSKI:def 4;
-          end;
-          hence union a = union b /\ P by A8,XBOOLE_0:def 10;
-         end;
-         hence union a in the topology of S by A1,A7,Def9;
-     end;
-     thus for V,Q being Subset of S st
-      V in the topology of S & Q in the topology of S holds
-      V /\ Q in the topology of S
-      proof
-       let V,Q be Subset of S; assume
-        A16:V in the topology of S & Q in the topology of S;
-        then consider P1 being Subset of T such that
-        A17:P1 in the topology of T & V = P1 /\ P by A1,Def9;
-        consider Q1 being Subset of T such that
-        A18:Q1 in the topology of T & Q = Q1 /\ P by A1,A16,Def9;
-        A19:P1 /\ Q1 in the topology of T by A17,A18,Def1;
-          V /\ Q = P1 /\ ((Q1 /\ P) /\ P) by A17,A18,XBOOLE_1:16
-             .= P1 /\ (Q1 /\ (P /\ P)) by XBOOLE_1:16
-             .= (P1 /\ Q1) /\ P by XBOOLE_1:16;
-       hence V /\ Q in the topology of S by A1,A19,Def9;
-      end;
-     end;
-   hence thesis;
-  end;
 end;
 
 
@@ -366,27 +221,17 @@ end;
 registration let T be non empty TopStruct,
                P be non empty Subset of T;
  cluster T|P -> non empty;
-coherence
-  proof
-      [#](T|P) = P by Def10;
-    hence the carrier of T|P is non empty by Def3;
-  end;
 end;
 
 
 registration let T be TopSpace;
  cluster TopSpace-like strict SubSpace of T;
-  existence
-   proof consider X being strict SubSpace of T;
-    take X; thus thesis;
-   end;
 end;
 
 
 registration
  let T be TopSpace, P be Subset of T;
  cluster T|P -> TopSpace-like;
- coherence;
 end;
 
 
@@ -420,29 +265,7 @@ end;
 scheme :: PRE_TOPC:sch 2
  TopAbstr{A() -> TopStruct,P[set]}:
   ex P being Subset of A() st
-  for x being set st x in the carrier of A() holds x in P iff P[x]
-proof
-   defpred Q[set] means ex y being Point of A() st $1=y & P[y];
-   consider Z being set such that
-A1:for x being set holds x in Z iff x in the carrier of A() & Q[x]
-    from XBOOLE_0:sch 1;
-     for x being set holds x in Z implies x in the carrier of A() by A1;
-   then reconsider Z as Subset of A() by TARSKI:def 3;
-   take Z;
-     for x being set st x in the carrier of A() holds x in Z iff P[x]
-   proof
-    let x be set such that
-A2: x in the carrier of A();
-    thus x in Z implies P[x]
-    proof
-     assume x in Z;
-      then ex y being Point of A() st x=y & P[y] by A1;
-     hence P[x];
-    end;
-    thus P[x] implies x in Z by A1,A2;
-   end;
- hence thesis;
-end;
+  for x being set st x in the carrier of A() holds x in P iff P[x];
 
 canceled 11;
 
@@ -461,27 +284,16 @@ theorem :: PRE_TOPC:42
 
 registration let T be TopSpace;
  cluster [#]T -> closed;
-coherence by Th42;
 end;
 
 
 registration let T be TopSpace;
  cluster closed Subset of T;
-existence
-  proof
-    take [#]T;
-    thus thesis;
-  end;
 end;
 
 
 registration let T be non empty TopSpace;
  cluster non empty closed Subset of T;
-existence
-  proof
-    take [#]T;
-    thus thesis;
-  end;
 end;
 
 

@@ -31,14 +31,6 @@ end;
 
 registration
  cluster non empty NORMSTR;
- existence
-  proof
-    consider A being non empty set, Z being Element of A,
-             a being BinOp of A, M being Function of [:REAL,A:],A,
-             n being Function of A,REAL;
-   take NORMSTR(#A,Z,a,M,n#);
-   thus the carrier of NORMSTR(#A,Z,a,M,n#) is non empty;
-  end;
 end;
 
 
@@ -66,93 +58,6 @@ registration
  cluster RealNormSpace-like RealLinearSpace-like Abelian
     add-associative right_zeroed right_complementable strict
       (non empty NORMSTR);
-  existence
-   proof
-    take X;
-    thus X is RealNormSpace-like by Def2,Lm6;
-A1: now
-      let x,y be VECTOR of X;
-      let x',y' be VECTOR of (0).V;
-      assume A2: x = x' & y = y';
-      hence x + y= (the add of X).[x',y'] by RLVECT_1:def 3 .=
-      x' + y' by RLVECT_1:def 3;
-      let a;
-      thus a * x = (the Mult of X).[a,x'] by A2,RLVECT_1:def 4 .=
-      a * x' by RLVECT_1:def 4;
-     end;
-A3:  0.X = the Zero of X by RLVECT_1:def 2 .=
-     0.(0).V by RLVECT_1:def 2;
-    thus X is RealLinearSpace-like
-    proof
-     thus for a for v,w being VECTOR of X holds a * (v + w) = a * v + a * w
-     proof
-      let a;
-      let v,w be VECTOR of X;
-      reconsider v'= v, w' = w as VECTOR of (0).V;
-A4:   a * v' = a * v by A1;
-A5:  a * w' = a * w by A1;
-    v + w = v'+ w' by A1;
-      hence a * (v + w) = a *( v' + w') by A1 .=
-      a * v' + a * w' by RLVECT_1:def 9 .= a * v + a * w by A1,A4,A5;
-     end;
-     thus for a,b for v being VECTOR of X holds (a + b) * v = a * v + b * v
-     proof
-      let a,b;
-      let v be VECTOR of X;
-      reconsider v'= v as VECTOR of (0).V;
-A6:   a * v' = a * v by A1;
-A7:  b * v' = b * v by A1;
-      thus (a + b) * v = (a + b) * v' by A1 .=
-      a * v' + b * v' by RLVECT_1:def 9 .= a * v + b * v by A1,A6,A7;
-     end;
-     thus for a,b for v being VECTOR of X holds (a * b) * v = a * (b * v)
-     proof
-      let a,b;
-      let v be VECTOR of X;
-      reconsider v'= v as VECTOR of (0).V;
-A8:   b * v' = b * v by A1;
-      thus (a * b) * v = (a * b) * v' by A1
-                .= a * (b * v') by RLVECT_1:def 9
-                .= a * (b * v) by A1,A8;
-     end;
-     let v be VECTOR of X;
-     reconsider v'= v as VECTOR of (0).V;
-     thus 1 * v = 1 * v' by A1 .= v by RLVECT_1:def 9;
-    end;
-    thus for v,w being VECTOR of X holds v + w = w + v
-    proof
-     let v,w be VECTOR of X;
-     reconsider v'= v , w'= w as VECTOR of (0).V;
-     thus v + w = w'+ v' by A1 .= w + v by A1;
-    end;
-     thus for u,v,w being VECTOR of X holds (u + v) + w = u + (v + w)
-     proof
-      let u,v,w be VECTOR of X;
-      reconsider u'= u, v'= v, w'= w as VECTOR of (0).V;
-      A9: u + v = u'+ v' by A1;
-      A10: v + w = v' + w' by A1;
-      thus (u + v) + w = (u' + v') + w' by A1,A9 .=
-      u' + (v' + w') by RLVECT_1:def 6 .= u + (v + w) by A1,A10;
-     end;
-     thus for v being VECTOR of X holds v + 0.X = v
-     proof
-      let v be VECTOR of X;
-      reconsider v'= v as VECTOR of (0).V;
-      thus v + 0.X = v'+ 0.(0).V by A1,A3 .=v by RLVECT_1:10;
-     end;
-     thus for v being VECTOR of X
-       ex w being VECTOR of X st v + w = 0.X
-       proof
-        let v be VECTOR of X;
-        reconsider v'= v as VECTOR of (0).V;
-        consider w' be VECTOR of (0).V such that
-        A11: v' + w' = 0.(0).V by RLVECT_1:def 8;
-        reconsider w = w' as VECTOR of X;
-        take w;
-        thus v + w = 0.X by A1,A3,A11;
-       end;
-    thus thesis;
-   end;
 end;
 
 
@@ -210,7 +115,6 @@ end;
 
 registration let RNS be 1-sorted;
  cluster -> Function-like Relation-like sequence of RNS;
- coherence by Def3;
 end;
 
 
@@ -289,70 +193,12 @@ end;
 
 scheme :: NORMSP_1:sch 1
  ExRNSSeq{RNS()->RealNormSpace, F(Nat) -> ( Point of RNS() ) } :
-       ex S be sequence of RNS() st for n holds S.n = F(n)
-proof
-       defpred P[set,set] means ex n st n =$1 & $2 = F(n);
-    A1: for d st d in NAT ex s st P[d,s]
-       proof
-            let d; assume d in NAT;
-            then consider n such that
-        A2: n = d;
-            reconsider z = F(n) as set;
-            take z;
-            thus thesis by A2;
-       end;
-    A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
-       consider f such that
-    A4: dom f = NAT and
-    A5: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A3,A1);
-         for d st d in NAT holds f.d is Point of RNS()
-       proof
-            let d; assume d in NAT;
-            then ex n st n = d & f.d = F(n) by A5;
-            hence thesis;
-       end;
-       then reconsider f as sequence of RNS() by A4,Th17;
-       take S = f;
-         now let n;
-         P[n,S.n] by A5;
-       hence S.n = F(n);
-       end;
-   hence for n holds S.n = F(n);
-end;
+       ex S be sequence of RNS() st for n holds S.n = F(n);
 
 scheme :: NORMSP_1:sch 2
  ExRLSSeq{RNS()->RealLinearSpace,
                 F(Nat) -> Element of RNS() } :
-       ex S be sequence of RNS() st for n holds S.n = F(n)
-proof
-       defpred P[set,set] means ex n st ( n =$1 & $2 = F(n));
-    A1: for d st d in NAT ex s st P[d,s]
-       proof
-            let d; assume d in NAT;
-            then consider n such that
-        A2: n = d;
-            reconsider z = F(n) as set;
-            take z;
-            thus thesis by A2;
-       end;
-    A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
-       consider f such that
-    A4: dom f = NAT and
-    A5: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A3,A1);
-         for d st d in NAT holds f.d is Element of RNS()
-       proof
-            let d; assume d in NAT;
-            then ex n st n = d & f.d = F(n) by A5;
-            hence thesis;
-       end;
-       then reconsider f as sequence of RNS() by A4,Th17;
-       take S = f;
-         now let n;
-         P[n,S.n] by A5;
-       hence S.n = F(n);
-       end;
-   hence for n holds S.n = F(n);
-end;
+       ex S be sequence of RNS() st for n holds S.n = F(n);
 
 definition let RNS be RealLinearSpace;
            let S1, S2 be sequence of RNS;

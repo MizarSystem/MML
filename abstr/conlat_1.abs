@@ -37,30 +37,12 @@ end;
 
 registration
  cluster strict non empty 2-sorted;
-existence
- proof
- consider O, A being non empty set;
-   2-sorted(#O,A#) is non empty by Def1;
- hence thesis;
- end;
  cluster strict non quasi-empty 2-sorted;
-existence
- proof
- consider O, A being non empty set;
-   2-sorted(#O,A#) is non quasi-empty by Def2;
- hence thesis;
- end;
 end;
 
 
 registration
  cluster strict empty quasi-empty 2-sorted;
-existence
- proof
- consider O, A being empty set;
-   2-sorted(#O,A#) is empty quasi-empty by Def1,Def2;
- hence thesis;
-end;
 end;
 
 
@@ -73,21 +55,7 @@ end;
 
 registration
  cluster strict non empty ContextStr;
-existence
- proof
- consider O,A being non empty set;
- consider I being Relation of O,A;
-   ContextStr(#O,A,I#) is non empty by Def1;
- hence thesis;
- end;
  cluster strict non quasi-empty ContextStr;
-existence
- proof
- consider O,A being non empty set;
- consider I being Relation of O,A;
-   ContextStr(#O,A,I#) is non quasi-empty by Def2;
- hence thesis;
- end;
 end;
 
 
@@ -107,28 +75,14 @@ end;
 registration
 let C be non quasi-empty 2-sorted;
  cluster the Attributes of C -> non empty;
-coherence by Def2;
  cluster the Objects of C -> non empty;
-coherence by Def2;
 end;
 
 
 registration
 let C be non quasi-empty 2-sorted;
  cluster non empty Subset of the Objects of C;
-existence
- proof
- take (the Objects of C);
-   the Objects of C c= the Objects of C;
- hence thesis;
- end;
  cluster non empty Subset of the Attributes of C;
-existence
- proof
- take (the Attributes of C);
-   the Attributes of C c= the Attributes of C;
- hence thesis;
- end;
 end;
 
 
@@ -331,70 +285,19 @@ end;
 registration
 let C be non quasi-empty 2-sorted;
  cluster strict non empty ConceptStr over C;
-existence
- proof
- consider O being non empty Subset of the Objects of C;
- consider A being non empty Subset of the Attributes of C;
-   ConceptStr(#O,A#) is non empty by Def11;
- hence thesis;
- end;
  cluster strict quasi-empty ConceptStr over C;
-existence
- proof
- reconsider O = {} as Subset of the Objects of C by XBOOLE_1:2;
- reconsider A = {} as Subset of the Attributes of C by XBOOLE_1:2;
-   ConceptStr(#O,A#) is quasi-empty by Def12;
- hence thesis;
- end;
 end;
 
 
 registration
 let C be empty 2-sorted;
  cluster -> empty ConceptStr over C;
-coherence
- proof
-    let CP be ConceptStr over C;
- A1: the Extent of CP is empty
-    proof
-    assume A2: the Extent of CP is non empty;
-    consider x being Element of the Extent of CP;
-      x in the Extent of CP by A2;
-    hence contradiction by Def1;
-    end;
-   the Intent of CP is empty
-    proof
-    assume A3: the Intent of CP is non empty;
-    consider x being Element of the Intent of CP;
-      x in the Intent of CP by A3;
-    hence contradiction by Def1;
-    end;
- hence thesis by A1,Def11;
- end;
 end;
 
 
 registration
 let C be quasi-empty 2-sorted;
  cluster -> quasi-empty ConceptStr over C;
-coherence
- proof
- let CP be ConceptStr over C;
-   the Extent of CP is empty or the Intent of CP is empty
-   proof
-   assume A1: the Extent of CP is non empty;
-   consider x being Element of the Extent of CP;
-   A2: x in the Extent of CP by A1;
-   thus the Intent of CP is empty
-     proof
-     assume A3: the Intent of CP is non empty;
-     consider x being Element of the Intent of CP;
-       x in the Intent of CP by A3;
-     hence contradiction by A2,Def2;
-     end;
-   end;
- hence thesis by Def12;
- end;
 end;
 
 definition
@@ -410,57 +313,6 @@ end;
 registration
 let C be FormalContext;
  cluster concept-like non empty ConceptStr over C;
-existence
- proof
- consider o being Object of C;
- set O = (AttributeDerivation(C)).((ObjectDerivation(C)).({o}));
- set A = (ObjectDerivation(C)).({o});
-   {o} c= the Objects of C
-   proof
-   let x be set;
-   assume x in {o};
-   then x = o by TARSKI:def 1;
-   hence thesis;
-   end;
- then reconsider t = {o} as Subset of the Objects of C;
-   O c= the Objects of C
-   proof
-     let x be set; assume x in O;
-     then x in {o' where o' is Object of C :
-               for a being Attribute of C st a in ((ObjectDerivation(C)).t)
-               holds o' is-connected-with a} by Def7;
-     then consider x' being Object of C such that A1: x' = x &
-          for a being Attribute of C st a in ((ObjectDerivation(C)).t)
-          holds x' is-connected-with a;
-     thus thesis by A1;
-   end;
- then reconsider O as Subset of the Objects of C;
-   A c= the Attributes of C
-   proof
-     let x be set;
-     assume x in A;
-     then x in {a where a is Attribute of C :
-          for o being Object of C st o in t holds o is-connected-with a}
-          by Def6;
-     then consider x' being Attribute of C such that A2: x' = x &
-          for o being Object of C st o in t holds o is-connected-with x';
-     thus thesis by A2;
-   end;
- then reconsider A as Subset of the Attributes of C;
- set M' = ConceptStr(#O,A#);
-   M' is non empty
-   proof
-   A3: o in {o} by TARSKI:def 1;
-     t c= (AttributeDerivation(C)).((ObjectDerivation(C)).t) by Th5;
-   hence thesis by A3,Def11;
-   end;
- then reconsider M' as non empty ConceptStr over C;
-       (ObjectDerivation(C)).(the Extent of M')
-   = (ObjectDerivation(C)).t by Th7
-  .= the Intent of M';
- then M' is concept-like by Def13;
- hence thesis;
- end;
 end;
 
 
@@ -473,15 +325,6 @@ end;
 registration
 let C be FormalContext;
  cluster strict FormalConcept of C;
-existence
- proof
- consider CP being FormalConcept of C;
- A1: the Intent of CP is non empty or the Extent of CP is non empty by Def11;
-   (ObjectDerivation(C)).(the Extent of CP) = the Intent of CP &
- (AttributeDerivation(C)).(the Intent of CP) = the Extent of CP by Def13;
- then the ConceptStr of CP is FormalConcept of C by A1,Def11,Def13;
- hence thesis;
- end;
 end;
 
 
@@ -542,27 +385,7 @@ end;
 registration
 let C be FormalContext;
  cluster strict universal FormalConcept of C;
-existence
- proof
- reconsider e = {} as Subset of the Attributes of C by XBOOLE_1:2;
- reconsider CP = ConceptStr(#(AttributeDerivation(C)).(e),
-                 (ObjectDerivation(C)).((AttributeDerivation(C)).(e))#)
-    as FormalConcept of C by Th22;
-   (AttributeDerivation(C)).({}) = the Objects of C by Th19;
- then CP is universal by Def14;
- hence thesis;
- end;
  cluster strict co-universal FormalConcept of C;
-existence
- proof
- reconsider e = {} as Subset of the Objects of C by XBOOLE_1:2;
- reconsider CP = ConceptStr(#
-            (AttributeDerivation(C)).((ObjectDerivation(C)).(e)),
-            (ObjectDerivation(C)).(e)#) as FormalConcept of C by Th20;
-   (ObjectDerivation(C)).({}) = the Attributes of C by Th18;
- then CP is co-universal by Def15;
- hence thesis;
- end;
 end;
 
 
@@ -690,7 +513,6 @@ end;
 registration
   let C be FormalContext;
   cluster B-carrier(C) -> non empty;
-  coherence;
 end;
 
 
@@ -794,7 +616,6 @@ for C being FormalContext holds ConceptLattice(C) is Lattice;
 registration
   let C be FormalContext;
   cluster ConceptLattice(C) -> strict non empty Lattice-like;
-  coherence by Th46;
 end;
 
 
@@ -825,6 +646,5 @@ for C being FormalContext holds ConceptLattice(C) is complete Lattice;
 registration
 let C be FormalContext;
 cluster ConceptLattice(C) -> complete;
-coherence by Th48;
 end;
 

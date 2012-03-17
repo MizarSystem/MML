@@ -46,37 +46,16 @@ end;
 
 registration let C be set;
  cluster -> real-yielding PartFunc of C, REAL;
- coherence
-  proof let f be PartFunc of C, REAL;
-   thus rng f c= REAL;
-  end;
 end;
 
 
 registration
  cluster real-yielding Function;
- existence
-  proof consider A being set;
-   consider f being Function of A, REAL;
-   take f;
-   thus rng f c= REAL;
-  end;
 end;
 
 
 registration let f be real-yielding Function, x be set;
  cluster f.x -> real;
-  coherence
- proof per cases;
-  suppose x in dom f;
-    then A1:   f.x in rng f by FUNCT_1:12;
-       rng f c= REAL by Def1;
-   hence f.x in REAL by A1;
-  end;
-  suppose not x in dom f;
-   hence thesis by CARD_1:51,FUNCT_1:def 4;
- end;
- end;
 end;
 
 
@@ -121,32 +100,7 @@ theorem :: SEQ_1:10
 
 scheme :: SEQ_1:sch 1
  ExRealSeq{F(set)->real number}:
- ex seq st for n holds seq.n=F(n)
-proof
-   defpred P[set,set] means ex n st n=$1 & $2=F(n);
- A1: now let x;
-     assume x in NAT;
-     then consider n such that
-  A2: n=x;
-     reconsider r2=F(n) as set;
-     take y=r2;
-     thus P[x,y] by A2;
-    end;
- A3: for x,y,z st x in NAT & P[x,y] & P[x,z] holds y=z;
-   consider f such that
-A4: dom f=NAT and
-A5: for x st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A3,A1);
-      now let x;
-     assume x in NAT;
-      then ex n st n=x & f.x=F(n) by A5;
-     hence f.x is real;
-    end;
-   then reconsider f as Real_Sequence by A4,Th3;
-   take seq=f;
-   let n;
-      ex k st k=n & seq.n=F(k) by A5;
-   hence seq.n=F(n);
-  end;
+ ex seq st for n holds seq.n=F(n);
 
 ::
 ::  BASIC OPERATIONS ON SEQUENCES
@@ -157,96 +111,20 @@ scheme :: SEQ_1:sch 2
  ex f being PartFunc of D(),C() st
   (for d be Element of D() holds
       d in dom f iff (ex c be Element of C() st P[d,c])) &
-  (for d be Element of D() st d in dom f holds P[d,f.d])
-proof
-  consider x being Element of C();
-   defpred X[Element of D(),Element of C()] means
-    ((ex c be Element of C() st P[$1,c]) implies P[$1,$2]) &
-    ((for c be Element of C() holds not P[$1,c]) implies $2=x);
-A1: for d be Element of D() ex z be Element of C() st X[d,z]
-:::    ((ex c be Element of C() st P[d,c]) implies P[d,z]) &
-:::    ((for c be Element of C() holds not P[d,c]) implies z=x)
-   proof let d be Element of D();
-      (for c be Element of C() holds not P[d,c]) implies
-     ex z st ((ex c be Element of C() st P[d,c]) implies P[d,z]) &
-          ((for c be Element of C() holds not P[d,c]) implies z=x);
-    hence thesis;
-   end;
-  consider g being Function of D(),C() such that
-A2: for d be Element of D() holds X[d,g.d]
-:::     ((ex c be Element of C() st P[d,c]) implies P[d,g.d]) &
-:::     ((for c be Element of C() holds not P[d,c]) implies g.d=x)
-       from FUNCT_2:sch 3(A1);
-A3: dom g = D() & rng g c= C() by FUNCT_2:def 1;
-   defpred X[set] means ex c be Element of C() st P[$1,c];
-  consider X be set such that
-A4: for x holds x in X iff x in D() & X[x]
-:::& ex c be Element of C() st P[x,c]
-       from XBOOLE_0:sch 1;
-     for x holds x in X implies x in D() by A4;
-  then reconsider X as Subset of D() by TARSKI:def 3;
-   reconsider f=g|X as PartFunc of D(),C();
-   take f;
-   thus for d be Element of D() holds
-      d in dom f iff (ex c be Element of C() st P[d,c])
-    proof let d be Element of D();
-       dom f c= X by RELAT_1:87;
-hence d in dom f implies ex c be Element of C() st P[d,c] by A4;
-     assume ex c be Element of C() st P[d,c];
-     then d in X & d in D() by A4;
-     then d in dom g /\ X by A3,XBOOLE_0:def 3;
-     hence thesis by RELAT_1:90;
-    end;
-   let d be Element of D();
-   assume A5: d in dom f;
-     dom f c= X by RELAT_1:87;
-   then ex c be Element of C() st P[d,c] by A4,A5;
-   then P[d,g.d] by A2;
-   hence thesis by A5,FUNCT_1:70;
- end;
+  (for d be Element of D() st d in dom f holds P[d,f.d]);
 
 scheme :: SEQ_1:sch 3
  LambdaPFD'{D,C()->non empty set, F(set)->Element of C(), P[set]}:
   ex f being PartFunc of D(),C() st
    (for d be Element of D() holds d in dom f iff P[d]) &
-   (for d be Element of D() st d in dom f holds f.d = F(d))
-proof   defpred X[Element of D(),set] means P[$1] & $2 = F($1);
-   consider f being PartFunc of D(),C() such that
-A1:  for d be Element of D() holds
-      d in dom f iff ex c be Element of C() st X[d,c] :::P[c,d] & c = F(d)
-      and
-A2:  for d be Element of D() st d in dom f holds X[d,f.d] :::P[d] & f.d = F(d)
-      from PartFuncExD';
-   take f;
-   thus for d be Element of D() holds d in dom f iff P[d]
-    proof let d be Element of D();
-     thus d in dom f implies P[d]
-      proof assume d in dom f;
-       then ex c be Element of C() st P[d] & c = F(d) by A1;
-       hence thesis;
-      end;
-     assume P[d];
-     then ex c be Element of C() st P[d] & c = F(d);
-     hence thesis by A1;
-    end;
-   thus thesis by A2;
-  end;
+   (for d be Element of D() st d in dom f holds f.d = F(d));
 
 scheme :: SEQ_1:sch 4
  UnPartFuncD'{C,D,X() -> set, F(set)->set}:
   for f,g being PartFunc of C(),D() st
    (dom f=X() & for c be Element of C() st c in dom f holds f.c = F(c)) &
    (dom g=X() & for c be Element of C() st c in dom g holds g.c = F(c))
-  holds f = g
-proof let f,g be PartFunc of C(),D(); assume that
-A1: (dom f=X() & for c be Element of C() st c in dom f holds f.c = F(c)) and
-A2: dom g=X() & for c be Element of C() st c in dom g holds g.c = F(c);
-   now let c be Element of C(); assume A3: c in dom f;
-  hence f.c = F(c) by A1
-            .= g.c by A1,A2,A3;
- end;
- hence thesis by A1,A2,PARTFUN1:34;
-end;
+  holds f = g;
 
 definition let C be :::non empty
   set; let f1,f2 be PartFunc of C,REAL;
@@ -276,17 +154,7 @@ theorem :: SEQ_1:12
 registration
   let seq1,seq2;
   cluster seq1+seq2 -> total;
-  coherence
-   proof
-       dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
-    hence dom(seq1 + seq2) = NAT /\ NAT by Def3 .= NAT;
-   end;
   cluster seq1(#)seq2 -> total;
-  coherence
-   proof
-       dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
-    hence dom(seq1 (#) seq2) = NAT /\ NAT by Def5 .= NAT;
-   end;
 end;
 
 definition let C be set; let f be PartFunc of C,REAL;
@@ -300,10 +168,6 @@ end;
 registration
  let r,seq;
  cluster r(#)seq -> total;
- coherence
-  proof
-   thus dom(r(#)seq) = dom seq by Def6 .= NAT by FUNCT_2:def 1;
-  end;
 end;
 
 
@@ -320,10 +184,6 @@ end;
 registration
  let seq;
  cluster - seq -> total;
- coherence
-  proof
-   thus dom -seq = dom seq by Def7 .= NAT by FUNCT_2:def 1;
-  end;
 end;
 
 
@@ -333,11 +193,6 @@ theorem :: SEQ_1:14
 registration
  let seq1,seq2;
  cluster seq1-seq2 -> total;
- coherence
-  proof
-      dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
-   hence dom(seq1 - seq2) = NAT /\ NAT by Def4 .= NAT;
-  end;
 end;
 
 
@@ -370,10 +225,6 @@ end;
 
 registration let seq;
   cluster abs seq -> total;
- coherence
-  proof
-   thus dom abs seq = dom seq by Def10 .= NAT by FUNCT_2:def 1;
-  end;
 end;
 
 

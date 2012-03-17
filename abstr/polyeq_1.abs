@@ -8,11 +8,11 @@
 environ
 
  vocabulary ARYTM, ARYTM_1, ARYTM_3, RELAT_1, SQUARE_1, FUNCT_3, PREPOWER,
-      POWER, POLYEQ_1, GROUP_1;
+      POWER, POLYEQ_1, GROUP_1, XCMPLX_0;
  notation ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, NAT_1, SQUARE_1, NEWTON,
       PREPOWER, POWER, QUIN_1;
  constructors REAL_1, NAT_1, SQUARE_1, PREPOWER, POWER, QUIN_1, MEMBERED;
- clusters XREAL_0, SQUARE_1, NEWTON, QUIN_1, MEMBERED;
+ clusters XREAL_0, SQUARE_1, NEWTON, QUIN_1, MEMBERED, XCMPLX_0;
  requirements NUMERALS, SUBSET, REAL, ARITHM;
 
 
@@ -21,63 +21,56 @@ begin :: Polynomial of Degree 1 and 2
 reserve a, a', a1, a2, a3, b, b', c, c', d, d', h,
         p, q, x, x1, x2, x3, u, v, y, z for real number;
 
-definition let a, b, x be real number;
-  func Poly1(a ,b ,x) equals
+definition let a, b, x be complex number;
+  func Poly1 (a,b,x) equals
 :: POLYEQ_1:def 1
-
   a*x+b;
 end;
 
+registration let a, b, x be complex number;
+  cluster Poly1(a,b,x) -> complex;
+end;
 
 registration let a, b, x be real number;
-  cluster Poly1(a ,b ,x) -> real;
-  coherence
-    proof
-        Poly1(a ,b ,x) = a*x+b by Def1;
-      hence thesis;
-    end;
+  cluster Poly1(a,b,x) -> real;
 end;
-
 
 definition let a, b, x be Real;
- redefine func Poly1(a ,b ,x) -> Real;
+  redefine func Poly1(a,b,x) -> Real;
 end;
 
-
 theorem :: POLYEQ_1:1
-    a <> 0 & Poly1(a,b,x) = 0 implies x = -(b/a);
+  for a, b, x being complex number holds
+  a <> 0 & Poly1(a,b,x) = 0 implies x = -(b/a);
 
 theorem :: POLYEQ_1:2
-    Poly1(0,0,x) = 0;
+  for x being complex number holds Poly1(0,0,x) = 0;
 
 theorem :: POLYEQ_1:3
-    b <> 0 implies not ex x st Poly1(0,b,x) = 0;
+  for b being complex number holds
+  b <> 0 implies not ex x being complex number st Poly1(0,b,x) = 0;
 
-definition let a,b,c,x be real number;
+definition let a,b,c,x be complex number;
   func Poly2(a,b,c,x) equals
 :: POLYEQ_1:def 2
-
   a*x^2+b*x+c;
 end;
 
-
 registration let a,b,c,x be real number;
   cluster Poly2(a,b,c,x) -> real;
-  coherence
-    proof
-        Poly2(a,b,c,x) = a*x^2+b*x+c by Def2;
-      hence thesis;
-    end;
 end;
 
+registration let a,b,c,x be complex number;
+  cluster Poly2(a,b,c,x) -> complex;
+end;
 
 definition let a,b,c,x be Real;
   redefine func Poly2(a,b,c,x) -> Real;
 end;
 
-
 theorem :: POLYEQ_1:4
- (for x holds Poly2(a,b,c,x) = Poly2(a',b',c',x)) implies
+  for a, b, c, a', b', c' being complex number holds
+ (for x being real number holds Poly2(a,b,c,x) = Poly2(a',b',c',x)) implies
       a = a'& b = b'& c = c';
 
 theorem :: POLYEQ_1:5
@@ -86,6 +79,7 @@ theorem :: POLYEQ_1:5
       x = (-b+sqrt delta(a,b,c))/(2*a) or x = (-b-sqrt delta(a,b,c))/(2*a));
 
 theorem :: POLYEQ_1:6
+  for a, b, c, x being complex number holds
     a <> 0 & delta(a,b,c) = 0 &
     Poly2(a,b,c,x) = 0 implies x = -(b/(2*a));
 
@@ -94,40 +88,36 @@ theorem :: POLYEQ_1:7
     not ex x st Poly2(a,b,c,x) = 0;
 
 theorem :: POLYEQ_1:8
-    b <> 0 & (for x holds Poly2(0,b,c,x) = 0) implies x = -(c/b);
+  for b, c being complex number holds
+    b <> 0 & (for x being real number holds Poly2(0,b,c,x) = 0) implies
+      x = -(c/b);
 
 theorem :: POLYEQ_1:9
-    Poly2(0,0,0,x) = 0;
+  for x being complex number holds
+  Poly2(0,0,0,x) = 0;
 
 theorem :: POLYEQ_1:10
-    c <> 0 implies not ex x st Poly2(0,0,c,x) = 0;
+  for c being complex number holds
+  c <> 0 implies not ex x being complex number st Poly2(0,0,c,x) = 0;
 
-definition let a,x,x1,x2 be real number;
+definition let a,x,x1,x2 be complex number;
   func Quard(a,x1,x2,x) equals
 :: POLYEQ_1:def 3
-
   a*((x-x1)*(x-x2));
 end;
 
-
 registration let a,x,x1,x2 be real number;
   cluster Quard(a,x1,x2,x) -> real;
-  coherence
-    proof
-        Quard(a,x1,x2,x) = a*((x-x1)*(x-x2)) by Def3;
-      hence thesis;
-    end;
 end;
-
 
 definition let a,x,x1,x2 be Real;
   redefine func Quard(a,x1,x2,x) -> Real;
 end;
 
-
 theorem :: POLYEQ_1:11
+  for a, b, c being complex number holds
     a <> 0 &
-    (for x holds Poly2(a,b,c,x) = Quard(a,x1,x2,x)) implies
+    (for x being real number holds Poly2(a,b,c,x) = Quard(a,x1,x2,x)) implies
       b/a = -(x1+x2) & c/a = x1*x2;
 
 begin :: Polynomial of Degree 3
@@ -138,49 +128,31 @@ definition let a,b,c,d,x be real number;
   a*(x |^ 3)+ b*x^2 +c*x +d;
 end;
 
-
 registration let a,b,c,d,x be real number;
   cluster Poly3(a,b,c,d,x) -> real;
-  coherence
-    proof
-        Poly3(a,b,c,d,x) = a*(x |^ 3)+ b*x^2 +c*x +d by Def4;
-      hence thesis;
-    end;
 end;
-
 
 definition let a,b,c,d,x be Real;
   redefine func Poly3(a,b,c,d,x) -> Real;
 end;
 
-
 theorem :: POLYEQ_1:12
-  (for x holds Poly3(a,b,c,d,x) = Poly3(a',b',c',d',x))
-   implies
+  (for x holds Poly3(a,b,c,d,x) = Poly3(a',b',c',d',x)) implies
       a = a' & b = b' & c = c' & d = d';
 
 definition let a,x,x1,x2,x3 be real number;
   func Tri(a,x1,x2,x3,x) equals
 :: POLYEQ_1:def 5
-
   a*((x-x1)*(x-x2)*(x-x3));
 end;
 
-
 registration let a,x,x1,x2,x3 be real number;
   cluster Tri(a,x1,x2,x3,x) -> real;
-  coherence
-    proof
-        Tri(a,x1,x2,x3,x) = a*((x-x1)*(x-x2)*(x-x3)) by Def5;
-      hence thesis;
-    end;
 end;
-
 
 definition let a,x,x1,x2,x3 be Real;
   redefine func Tri(a,x1,x2,x3,x) -> Real;
 end;
-
 
 theorem :: POLYEQ_1:13
     a <> 0 &
@@ -227,7 +199,7 @@ theorem :: POLYEQ_1:19
         3-root(-q/2-sqrt(q^2/4+(p/3) |^ 3)));
 
 theorem :: POLYEQ_1:20
-    b <> 0 & delta(b,c,d) > 0 &
+  b <> 0 & delta(b,c,d) > 0 &
     Poly3(0,b,c,d,x) = 0 implies
       x = (-c+sqrt delta(b,c,d))/(2*b) or x = (-c-sqrt delta(b,c,d))/(2*b);
 

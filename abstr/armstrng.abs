@@ -35,26 +35,6 @@ for X being set, S being finite Subset-Family of X
 
 registration
   cluster reflexive antisymmetric transitive non empty Relation;
-  existence proof set R = {[{},{}]};
-   reconsider R as Relation by RELAT_1:4;
-  A1: field R = {{},{}} by RELAT_1:32 .= {{}} by ENUMSET1:69;
-   take R;
-   thus R is reflexive proof
-    let x be set; assume x in field R; then x = {} by A1,TARSKI:def 1;
-     hence [x,x] in R by TARSKI:def 1;
-   end;
-   thus R is antisymmetric proof let x, y be set; assume
-       x in field R & y in field R & [x,y] in R & [y,x] in R;
-     then x = {} & y = {} by A1,TARSKI:def 1;
-     hence thesis;
-   end;
-   thus R is transitive proof let x, y, z be set; assume
-       x in field R & y in field R & z in field R & [x,y] in R & [y,z] in R;
-     then x = {} & z = {} by A1,TARSKI:def 1;
-    hence [x,z] in R by TARSKI:def 1;
-   end;
-   thus R is non empty;
-  end;
 end;
 
 
@@ -67,24 +47,7 @@ scheme :: ARMSTRNG:sch 1
  SubsetS_Eq { X() -> set, P[set] }:
  for X1,X2 being Subset of X() st
    (for y being set holds y in X1 iff P[y]) &
-   (for y being set holds y in X2 iff P[y]) holds X1 = X2
-proof
- let X1,X2 being Subset of X() such that
-A1:for y being set holds y in X1 iff P[y] and
-A2:for y being set holds y in X2 iff P[y];
-    for x being set holds x in X1 iff x in X2
-  proof
-    let x be set;
-    hereby assume x in X1;
-      then P[x] by A1;
-      hence x in X2 by A2;
-    end;
-    assume x in X2;
-    then P[x] by A2;
-    hence thesis by A1;
-  end;
-  hence thesis by TARSKI:2;
-end;
+   (for y being set holds y in X2 iff P[y]) holds X1 = X2;
 
 definition
  let X be set, R be Relation;
@@ -119,77 +82,7 @@ scheme :: ARMSTRNG:sch 2
   for x being set st x in X() holds P[x]
 provided
  for x being set st x is_/\-irreducible_in X() holds P[x] and
- for x, y being set st x in X() & y in X() & P[x] & P[y] holds P[x /\ y]
-proof
- deffunc U(set) = {x where x is Element of X(): $1 c= x};
- given x being set such that
-A3: x in X() and
-A4: not P[x];
- defpred R[Nat] means ex s being Element of X() st Card U(s) = $1 & not P[s];
-         U(x) c= X() proof let x1 be set; assume x1 in U(x);
-           then ex xx being Element of X() st x1 = xx & x c= xx;
-        hence x1 in X();
-       end; then reconsider Ux = U(x) as finite set by FINSET_1:13;
-A5: ex k being Nat st R[k]
-    proof
-     take k = card Ux;
-     reconsider x as Element of X() by A3;
-     take x; thus Card U(x) = k; thus not P[x] by A4;
-   end; consider k being Nat such that
-A6: R[k] and
-A7: for n being Nat st R[n] holds k <= n from NAT_1:sch 5(A5);
-   consider s being Element of X() such that
-A8: Card U(s) = k and
-A9: not P[s] by A6;
-   per cases;
-   suppose s is_/\-irreducible_in X();
-    hence contradiction by A1,A9;
-   end;
-   suppose s is_/\-reducible_in X();
-    then consider z, y being set such that
-   A10: z in X() & y in X() and
-   A11: s = z /\ y and
-   A12: s <> z & s <> y by Def2;
-   A13: s c= z & s c= y by A11,XBOOLE_1:17;
-         U(s) c= X() proof let x be set; assume x in U(s);
-           then ex xx being Element of X() st x = xx & s c= xx;
-        hence x in X();
-       end; then reconsider Us = U(s) as finite set by FINSET_1:13;
-         U(y) c= X() proof let x be set; assume x in U(y);
-           then ex xx being Element of X() st x = xx & y c= xx;
-        hence x in X();
-       end; then reconsider Uy = U(y) as finite set by FINSET_1:13;
-         U(z) c= X() proof let x be set; assume x in U(z);
-           then ex xx being Element of X() st x = xx & z c= xx;
-        hence x in X();
-       end; then reconsider Uz = U(z) as finite set by FINSET_1:13;
-       reconsider y, z as Element of X() by A10;
-   A14: now assume s in Uz; then ex x being Element of X() st s = x & z c= x;
-        hence contradiction by A12,A13,XBOOLE_0:def 10;
-       end;
-         now assume s in Uy; then ex x being Element of X() st s = x & y c= x
-;
-        hence contradiction by A12,A13,XBOOLE_0:def 10;
-       end;
-   then A15: Uz <> Us & Uy <> Us by A14;
-   A16: Uz c= Us proof let x be set; assume x in Uz;
-           then consider xx being Element of X() such that
-       A17: x = xx and
-       A18: z c= xx;
-             s c= xx by A13,A18,XBOOLE_1:1;
-         hence x in Us by A17;
-        end;
-         Uy c= Us proof let x be set; assume x in Uy;
-           then consider xx being Element of X() such that
-       A19: x = xx and
-       A20: y c= xx; s c= xx by A13,A20,XBOOLE_1:1;
-         hence x in Us by A19;
-        end; then Uz c< Us & Uy c< Us by A15,A16,XBOOLE_0:def 8;
-       then card Us > card Uz & card Us > card Uy by TREES_1:24;
-       then P[z] & P[y] by A7,A8;
-    hence contradiction by A2,A9,A11;
-end;
-end;
+ for x, y being set st x in X() & y in X() & P[x] & P[y] holds P[x /\ y];
 
 theorem :: ARMSTRNG:3
 for X being non empty finite set, x being Element of X
@@ -214,16 +107,6 @@ notation
 registration
   let X be set;
   cluster (B1) (B2) Subset-Family of X;
-  existence proof set B = {X}; {X} c= bool X by ZFMISC_1:80;
-    then reconsider B as Subset-Family of X by SETFAM_1:def 7;
-   take B;
-     X in B by TARSKI:def 1;
-   hence B is (B1) by Def4;
-   thus B is (B2) proof let a, b be set; assume a in B & b in B;
-     then a = X & b = X by TARSKI:def 1;
-    hence a/\b in B by TARSKI:def 1;
-   end;
-  end;
 end;
 
 
@@ -235,27 +118,12 @@ for S being finite Subset-Family of X st S c= B & x = Intersect S holds x in S;
 registration
   let X, D be non empty set, n be Nat;
   cluster -> FinSequence-yielding Function of X, n-tuples_on D;
-  coherence proof let f be Function of X, n-tuples_on D;
-   let x be set; assume x in dom f;
-     then reconsider fx = f.x as Element of n-tuples_on D by FUNCT_2:7; fx =
-f
-.x;
-   hence f.x is FinSequence;
-  end;
 end;
 
 
 registration
  let f be FinSequence-yielding Function, x be set;
  cluster f.x -> FinSequence-like;
- coherence proof
- per cases;
-  suppose x in dom f; hence thesis by MATRLIN:def 1;
-  end;
-  suppose not x in dom f;
-   hence thesis by FUNCT_1:def 4;
- end;
- end;
 end;
 
 
@@ -311,10 +179,6 @@ end;
 registration
   let X be set;
   cluster non empty finite Dependency-set of X;
-  existence proof {} c= X by XBOOLE_1:2;
-   then reconsider R = {[{},{}]} as Relation of bool X by RELSET_1:8;
-   take R; thus R is non empty; thus R is finite;
-  end;
 end;
 
 
@@ -334,9 +198,6 @@ end;
 registration
   let X be set;
   cluster Dependencies X -> non empty;
-  coherence proof Dependencies X = [: bool X, bool X :] by Def7; hence thesis
-;
-  end;
 
   end;
 
@@ -439,56 +300,9 @@ for X being set holds field Dependencies-Order X = [: bool X, bool X :];
 registration
   let X be set;
   cluster Dependencies-Order X -> non empty;
-  coherence proof dom Dependencies-Order X = [:bool X, bool X:] by Th17;
-   hence thesis by RELAT_1:60;
-  end;
 
   cluster Dependencies-Order X
       -> total reflexive antisymmetric transitive;
-  coherence proof set dox = Dependencies-Order X; set dx = Dependencies X;
-A1: dox = { [E, F] where E, F is Element of dx : E <= F } by Def11;
-    dx c= dom dox
-    proof let x be set; assume x in dx;
-      then reconsider x' = x as Element of dx; x' <= x';
-      then [x,x] in dox by A1;
-     hence thesis by RELAT_1:def 4;
-    end;
-    then
-A2: dom dox = dx by XBOOLE_0:def 10;
-   then
-A3: field dox = dx \/ rng dox by RELAT_1:def 6
-       .= dx by XBOOLE_1:12;
-   thus dox is total by A2,PARTFUN1:def 4;
-   dox is_reflexive_in dx
-    proof let x be set; assume x in dx;
-      then reconsider x' = x as Element of dx; x' <= x';
-     hence [x,x] in dox by A1;
-    end;
-  hence dox is reflexive by A3,RELAT_2:def 9;
-   dox is_antisymmetric_in dx proof let x, y be set; assume that
-        x in dx & y in dx and
-  A4: [x,y] in dox & [y,x] in dox;
-      consider x', y' being Element of dx such that
-  A5: [x,y]=[x',y'] & x' <= y' by A1,A4;
-      consider y'', x'' being Element of dx such that
-  A6: [y,x]=[y'',x''] & y'' <= x'' by A1,A4;
-        x = x' & x = x'' & y = y' & y = y'' by A5,A6,ZFMISC_1:33;
-   hence x = y by A5,A6,Th13;
-  end;
-  hence dox is antisymmetric by A3,RELAT_2:def 12;
-   dox is_transitive_in dx proof let x, y, z be set; assume that
-       x in dx & y in dx & z in dx and
-  A7: [x,y] in dox & [y,z] in dox;
-      consider x', y' being Element of dx such that
-  A8: [x,y]=[x',y'] & x' <= y' by A1,A7;
-      consider y'', z' being Element of dx such that
-  A9: [y,z]=[y'',z'] & y'' <= z' by A1,A7;
-  A10: x = x' & y = y' & y = y'' & z = z' by A8,A9,ZFMISC_1:33;
-      then x' <= z' by A8,A9,Th14;
-   hence [x,z] in dox by A1,A10;
-  end;
-   hence dox is transitive by A3,RELAT_2:def 16;
-  end;
 end;
 
 notation
@@ -536,7 +350,6 @@ for X being set holds Dependencies X is (F1) (F2) (F3) (F4);
 registration
   let X be set;
   cluster (F1) (F2) (F3) (F4) non empty Dependency-set of X;
-  existence proof take Dependencies X; thus thesis by Th21; end;
 end;
 
 
@@ -552,10 +365,6 @@ end;
 registration
   let X be set;
   cluster full_family Dependency-set of X;
-  existence proof
-   consider D being (F1) (F2) (F3) (F4) non empty Dependency-set of X;
-   take D; thus thesis by Def15;
-  end;
 end;
 
 
@@ -571,16 +380,8 @@ for X being finite set, F being Dependency-set of X holds F is finite;
 registration
   let X be finite set;
   cluster finite Full-family of X;
-  existence proof
-   consider D being (F1) (F2) (F3) (F4) non empty Dependency-set of X;
-   reconsider D as Full-family of X by Def15;
-   take D; bool X is finite by FINSET_1:24;
-           then [:bool X, bool X:] is finite by FINSET_1:19;
-   hence thesis by FINSET_1:13;
-  end;
 
   cluster -> finite Dependency-set of X;
-  coherence by Th22;
 end;
 
 
@@ -588,9 +389,7 @@ end;
 registration
   let X be set;
   cluster full_family -> (F1) (F2) (F3) (F4) Dependency-set of X;
-  coherence by Def15;
   cluster (F1) (F2) (F3) (F4) -> full_family Dependency-set of X;
-  correctness by Def15;
 end;
 
 
@@ -606,36 +405,13 @@ end;
 registration
  let X be set;
  cluster (F1) (F3) -> (DC3) Dependency-set of X;
- coherence proof let F be Dependency-set of X; assume
- A1: F is (F1) (F3);
-  let A, B being Subset of X such that
- A2: B c= A;
- A3: [A, A] in F by A1,Def12;
-     [A, A] >= [A, B] by A2,Th15;
-  hence [A, B] in F by A1,A3,Def13;
- end;
  cluster (DC3) (F2) -> (F1) (F3) Dependency-set of X;
- coherence proof let F be Dependency-set of X; assume
- A4: F is (DC3) (F2);
-  thus F is (F1) proof let A be Subset of X; thus [A, A] in F by A4,Def16
-; end;
-  let A, B, A', B' be Subset of X; assume
- A5: [A, B] in F; assume
-     [A, B] >= [A', B']; then A c= A' & B' c= B by Th15;
-   then [A', A] in F & [B, B'] in F by A4,Def16;
-   then [A', B] in F & [B, B'] in F by A4,A5,Th20;
-  hence [A', B'] in F by A4,Th20;
- end;
 end;
 
 
 registration
  let X be set;
  cluster (DC3) (F2) (F4) non empty Dependency-set of X;
- existence proof
-  consider D being (F1) (F3) (F2) (F4) non empty Dependency-set of X;
-  take D; thus thesis;
- end;
 end;
 
 
@@ -650,7 +426,6 @@ for X being set, F being Dependency-set of X st F is (F1) (F3) holds F is (DC3)
 registration
   let X be set;
   cluster (F1) -> non empty Dependency-set of X;
-  coherence by Def12;
 end;
 
 
@@ -729,12 +504,6 @@ for X being finite set, M, F being Dependency-set of X
 registration
   let X be non empty finite set, F be Full-family of X;
   cluster Maximal_wrt F -> non empty;
-  coherence proof set M = Maximal_wrt F; M is (M1) by Th30;
-    then ex A',B' being Subset of X st [A', B']>=[[#]X, [#]X]&[A', B'] in M
-by Def19
-;
-   hence thesis;
-  end;
 end;
 
 
@@ -761,38 +530,6 @@ notation
 registration
   let X be set, F be finite Dependency-set of X;
   cluster saturated-subsets F -> finite;
-  coherence proof
-  set ss = {B where B is Subset of X: ex A being Subset of X st A ^|^ B, F };
-A1: saturated-subsets F = ss by Def22;
-  defpred P[set,set] means
-  ex a,b being set st $1 = [a,b] & $2 = [a,b]`2;
-A2: for x,y1,y2 being set st x in F & P[x,y1] & P[x,y2] holds y1 = y2;
-A3: for x being set st x in F ex y being set st P[x,y] proof
-     let x be set; assume x in F;
-        then consider a, b being Subset of X such that
-    A4: x = [a,b] by Th10;
-        reconsider a, b as set;
-     take b; take a, b; thus x = [a,b] & b = [a,b]`2 by A4,MCART_1:def 2;
-    end;
-  consider f being Function such that
-A5: dom f = F and
-A6: for x being set st x in F holds P[x,f.x] from FUNCT_1:sch 2(A2,A3);
-A7: rng f is finite by A5,FINSET_1:26;
-     ss c= rng f proof let x be set; assume x in ss;
-      then consider B being Subset of X such that
-   A8: x = B and
-   A9: ex A being Subset of X st A ^|^ B, F;
-       consider A being Subset of X such that
-   A10: A ^|^ B, F by A9;
-   A11: Maximal_wrt F c= F by Th27;
-   A12: [A, B] in Maximal_wrt F by A10,Def18;
-       then consider a,b being set such that
-   A13: [A,B] = [a,b] & f.[A,B] = [a,b]`2 by A6,A11;
-         f.[A,B] = B by A13,MCART_1:def 2;
-     hence x in rng f by A5,A8,A11,A12,FUNCT_1:12;
-   end;
-   hence saturated-subsets F is finite by A1,A7,FINSET_1:13;
- end;
 end;
 
 

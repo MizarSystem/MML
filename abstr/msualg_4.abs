@@ -35,18 +35,6 @@ end;
 registration
  let I be set;
 cluster Relation-yielding ManySortedSet of I;
- existence
-  proof
-   consider R be Relation;
-   deffunc F(set) = R;
-   consider f be Function such that
-   A1: dom f = I & for x be set st x in I holds f.x = F(x)
-          from FUNCT_1:sch 3;
-   reconsider f as ManySortedSet of I by A1,PBOOLE:def 3;
-   take f;
-     for x be set st x in dom f holds f.x is Relation by A1;
-   hence thesis by Def1;
-  end;
 end;
 
 
@@ -68,13 +56,6 @@ registration
  let I be set,
      A,B be ManySortedSet of I;
  cluster -> Relation-yielding ManySortedRelation of A,B;
- coherence
-  proof let R be ManySortedRelation of A,B;
-   let x be set;
-   assume x in dom R;
-    then x in I by PBOOLE:def 3;
-   hence thesis by Def2;
-  end;
 end;
 
 
@@ -128,50 +109,6 @@ registration
  let S be non void non empty ManySortedSign,
      U1 be MSAlgebra over S;
  cluster MSEquivalence-like ManySortedRelation of U1;
- existence
-  proof
-   deffunc F(Element of S)
-          = id ((the Sorts of U1).$1);
-   consider f be Function such that A1: dom f = the carrier of S &
-    for d be Element of S holds
-    f.d = F(d) from MSUALG_2:sch 1;
-    reconsider f as ManySortedSet of the carrier of S
-       by A1,PBOOLE:def 3;
-      for x be set st x in dom f holds f.x is Relation
-     proof
-      let x be set;
-      assume x in dom f;
-      then f.x = id ((the Sorts of U1).x) by A1;
-      hence thesis;
-     end;
-    then reconsider f as ManySortedRelation of the carrier of S
-        by Def1;
-      for i be set st i in the carrier of S holds f.i is
-     Relation of (the Sorts of U1).i,(the Sorts of U1).i
-     proof
-      let i be set;
-      assume i in the carrier of S;
-      then f.i = id ((the Sorts of U1).i) by A1;
-      hence thesis;
-     end;
-    then reconsider f as
-    ManySortedRelation of the Sorts of U1,the Sorts of U1
-         by Def2;
-    reconsider f as ManySortedRelation of U1;
-      for i be set, R be Relation of (the Sorts of U1).i st
-     i in the carrier of S & f.i = R holds
-      R is Equivalence_Relation of (the Sorts of U1).i
-      proof
-       let i be set,
-           R be Relation of (the Sorts of U1).i;
-       assume i in the carrier of S & f.i = R;
-       then R = id ((the Sorts of U1).i) by A1;
-       hence thesis;
-      end;
-     then A2: f is MSEquivalence_Relation-like by Def3;
-     take f;
-   thus thesis by A2,Def5;
-  end;
 end;
 
 
@@ -196,92 +133,6 @@ registration
  let S be non void non empty ManySortedSign,
      U1 be non-empty MSAlgebra over S;
   cluster MSCongruence-like (MSEquivalence-like ManySortedRelation of U1);
-  existence
-  proof
-   deffunc F(Element of S)
-           = id ((the Sorts of U1).$1);
-   consider f be Function such that A1: dom f = the carrier of S &
-    for d be Element of S holds
-    f.d = F(d) from MSUALG_2:sch 1;
-   reconsider f as ManySortedSet of the carrier of S
-       by A1,PBOOLE:def 3;
-     for x be set st x in dom f holds f.x is Relation
-    proof
-     let x be set;
-     assume x in dom f;
-     then f.x = id ((the Sorts of U1).x) by A1;
-     hence thesis;
-    end;
-   then reconsider f as ManySortedRelation of the carrier of S
-       by Def1;
-     for i be set st i in the carrier of S holds f.i is
-    Relation of (the Sorts of U1).i,(the Sorts of U1).i
-    proof
-     let i be set;
-     assume i in the carrier of S;
-     then f.i = id ((the Sorts of U1).i) by A1;
-     hence thesis;
-    end;
-   then reconsider f as
-   ManySortedRelation of the Sorts of U1,the Sorts of U1
-        by Def2;
-   reconsider f as ManySortedRelation of U1;
-     for i be set, R be Relation of (the Sorts of U1).i st
-    i in the carrier of S & f.i = R holds
-     R is Equivalence_Relation of (the Sorts of U1).i
-     proof
-      let i be set,
-          R be Relation of (the Sorts of U1).i;
-      assume i in the carrier of S & f.i = R;
-      then R = id ((the Sorts of U1).i) by A1;
-      hence thesis;
-     end;
-    then f is MSEquivalence_Relation-like by Def3;
-   then reconsider f as MSEquivalence-like ManySortedRelation of U1
-          by Def5;
-   take f;
-     for o be OperSymbol of S, x,y be Element of Args(o,U1) st
-    (for n be Nat st n in dom x holds
-      [x.n,y.n] in f.((the_arity_of o)/.n))
-    holds [Den(o,U1).x,Den(o,U1).y] in f.(the_result_sort_of o)
-    proof
-     let o be OperSymbol of S,
-         x,y be Element of Args(o,U1);
-     assume A2: for n be Nat st n in dom x holds
-            [x.n,y.n] in f.((the_arity_of o)/.n);
-     A3: dom x = dom (the_arity_of o) &
-       dom y = dom (the_arity_of o) by MSUALG_3:6;
-       for a be set st a in dom (the_arity_of o) holds x.a = y.a
-      proof
-       let a be set;
-       assume A4: a in dom (the_arity_of o);
-       then reconsider n = a as Nat;
-       A5: ((the_arity_of o)/.n) = (the_arity_of o).n
-             by A4,FINSEQ_4:def 4;
-       set ao = the_arity_of o;
-         ao.n in rng ao by A4,FUNCT_1:def 5;
-       then A6: f.(ao.n) = id ((the Sorts of U1).(ao.n)) by A1;
-         [x.n,y.n] in f.(ao.n) by A2,A3,A4,A5; hence thesis by A6,RELAT_1:def
-10;
-      end;
-     then A7: Den(o,U1).x = Den(o,U1).y by A3,FUNCT_1:9;
-     set r = the_result_sort_of o;
-     A8: f.r = id ((the Sorts of U1).r) by A1;
-     A9: the OperSymbols of S <> {} by MSUALG_1:def 5;
-     A10: dom (the ResultSort of S) = the OperSymbols of S &
-     rng (the ResultSort of S) c= the carrier of S
-            by FUNCT_2:def 1;
-     then A11: dom ((the Sorts of U1)*(the ResultSort of S))
-       = dom (the ResultSort of S) by PBOOLE:def 3;
-       Result(o,U1) = ((the Sorts of U1) * the ResultSort of S).o
-        by MSUALG_1:def 10
-        .= (the Sorts of U1).((the ResultSort of S).o)
-               by A9,A10,A11,FUNCT_1:22
-        .= (the Sorts of U1).r by MSUALG_1:def 7; hence thesis by A7,A8,RELAT_1
-:def 10;
-    end;
-   hence thesis by Def6;
-  end;
 end;
 
 
@@ -420,11 +271,6 @@ end;
 registration let S; let U1 be non-empty MSAlgebra over S;
  let R be MSCongruence of U1;
  cluster QuotMSAlg (U1,R) -> strict non-empty;
- coherence
-  proof
-     QuotMSAlg (U1,R) = MSAlgebra(# Class R, QuotCharact R #) by Def16;
-   hence thesis by MSUALG_1:def 8;
-  end;
 end;
 
 

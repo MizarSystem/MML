@@ -38,134 +38,70 @@ end;
 registration
  let a be read-write Int-Location, b be Int-Location;
  cluster a := b -> good;
- coherence proof
-     a := b does_not_destroy intloc 0 by SCMFSA7B:12;
-  hence Macro (a := b) is good by SCMFSA8C:99;
- end;
  cluster AddTo(a, b) -> good;
- coherence proof
-     AddTo(a, b) does_not_destroy intloc 0 by SCMFSA7B:13;
-  hence Macro AddTo(a, b) is good by SCMFSA8C:99;
- end;
  cluster SubFrom(a, b) -> good;
- coherence proof
-     SubFrom(a, b) does_not_destroy intloc 0 by SCMFSA7B:14;
-  hence Macro SubFrom(a, b) is good by SCMFSA8C:99;
- end;
  cluster MultBy(a, b) -> good;
- coherence proof
-      MultBy(a, b) does_not_destroy intloc 0 by SCMFSA7B:15;
-  hence Macro MultBy(a, b) is good by SCMFSA8C:99;
- end;
 end;
 
 
 registration
  cluster good parahalting Instruction of SCM+FSA;
- existence proof
-  consider a, b being read-write Int-Location;
-    a:=b is good parahalting;
-  hence thesis;
- end;
 end;
 
 
 registration
  let a, b be read-write Int-Location;
  cluster Divide(a, b) -> good;
- coherence proof
-     Divide(a, b) does_not_destroy intloc 0 by SCMFSA7B:16;
-  hence Macro Divide(a, b) is good by SCMFSA8C:99;
- end;
 end;
 
 
 registration
  let l be Instruction-Location of SCM+FSA;
  cluster goto l -> good;
- coherence proof
-     goto l does_not_destroy intloc 0 by SCMFSA7B:17;
-  hence Macro goto l is good by SCMFSA8C:99;
- end;
 end;
 
 
 registration
  let a be Int-Location, l be Instruction-Location of SCM+FSA;
  cluster a =0_goto l -> good;
- coherence proof
-     a =0_goto l does_not_destroy intloc 0 by SCMFSA7B:18;
-  hence Macro (a =0_goto l) is good by SCMFSA8C:99;
- end;
  cluster a >0_goto l -> good;
- coherence proof
-     a >0_goto l does_not_destroy intloc 0 by SCMFSA7B:19;
-  hence Macro (a >0_goto l) is good by SCMFSA8C:99;
- end;
 end;
 
 
 registration
  let a be Int-Location, f be FinSeq-Location, b be read-write Int-Location;
  cluster b := (f,a) -> good;
- coherence proof
-     b := (f, a) does_not_destroy intloc 0 by SCMFSA7B:20;
-  hence Macro (b := (f, a)) is good by SCMFSA8C:99;
- end;
 end;
 
 
 registration
  let f be FinSeq-Location, b be read-write Int-Location;
  cluster b :=len f -> good;
- coherence proof
-     b :=len f does_not_destroy intloc 0 by SCMFSA7B:22;
-  hence Macro (b :=len f) is good by SCMFSA8C:99;
- end;
 end;
 
 
 registration
  let f be FinSeq-Location, a be Int-Location;
  cluster f :=<0,...,0> a -> good;
- coherence proof
-      f :=<0,...,0> a does_not_destroy intloc 0 by SCMFSA7B:23;
-  hence Macro (f :=<0,...,0> a) is good by SCMFSA8C:99;
- end;
  let b be Int-Location;
  cluster (f,a) := b -> good;
- coherence proof
-     (f, a) := b does_not_destroy intloc 0 by SCMFSA7B:21;
-  hence Macro ((f, a) := b) is good by SCMFSA8C:99;
- end;
 end;
 
 
 registration
  cluster good Instruction of SCM+FSA;
- existence proof
-  take h = halt SCM+FSA;
-     h does_not_destroy intloc 0 by SCMFSA7B:11;
-   then Macro h is good by SCMFSA8C:99;
-  hence thesis by Def1;
- end;
 end;
 
 
 registration
  let i be good Instruction of SCM+FSA;
  cluster Macro i -> good;
- coherence by Def1;
 end;
 
 
 registration
  let i, j be good Instruction of SCM+FSA;
  cluster i ';' j -> good;
- coherence proof
-    i ';' j = Macro i ';' Macro j by SCMFSA6A:def 7;
-  hence thesis;
- end;
 end;
 
 
@@ -173,38 +109,19 @@ registration
  let i be good Instruction of SCM+FSA,
      I be good Macro-Instruction;
  cluster i ';' I -> good;
- coherence proof
-    i ';' I = Macro i ';' I by SCMFSA6A:def 5;
-  hence thesis;
- end;
  cluster I ';' i -> good;
- coherence proof
-    I ';' i = I ';' Macro i by SCMFSA6A:def 6;
-  hence thesis;
- end;
 end;
 
 
 registration
  let a, b be read-write Int-Location;
  cluster swap(a, b) -> good;
- coherence proof
-    swap(a, b) = FirstNotUsed Macro (a := b) := a ';' (a := b) ';'
-                 (b := FirstNotUsed Macro (a := b)) by SCMFSA6C:def 4;
-  hence thesis;
- end;
 end;
 
 
 registration
  let I be good Macro-Instruction, a be read-write Int-Location;
  cluster Times(a, I) -> good;
- coherence proof
-  reconsider J = if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0))
-       as good Macro-Instruction;
-    if>0(a, loop J, SCM+FSA-Stop) is good;
-  hence thesis by SCMFSA8C:def 5;
- end;
 end;
 
 
@@ -352,7 +269,6 @@ end;
 registration
  let L be finite Subset of Int-Locations, n be Nat;
  cluster (RWNotIn-seq L).n -> non empty;
- coherence by Def2;
 end;
 
 
@@ -382,15 +298,6 @@ notation
 registration
  let n be Nat, L be finite Subset of Int-Locations;
  cluster n-thRWNotIn L -> read-write;
- coherence proof
-  set FNI = n-thRWNotIn L;
-  set sn = (RWNotIn-seq L).n;
-A1: FNI = intloc min sn by Def3;
-     min sn in sn by CQC_SIM1:def 8;
-   then min sn <> 0 by Th18;
-   then FNI <> intloc 0 by A1,SCMFSA_2:16;
-  hence thesis by SF_MASTR:def 5;
- end;
 end;
 
 
@@ -415,10 +322,6 @@ notation
 registration
  let n be Nat, p be programmed FinPartState of SCM+FSA;
  cluster n-thNotUsed p -> read-write;
- coherence proof
-    n-thNotUsed p = n-thRWNotIn UsedIntLoc p by Def4;
-  hence thesis;
- end;
 end;
 
 

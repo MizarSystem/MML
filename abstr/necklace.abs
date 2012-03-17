@@ -57,28 +57,12 @@ theorem :: NECKLACE:5
 
 registration
  cluster natural -> cardinal set;
- coherence
-  proof
-   let X be set;
-   assume X is natural;
-   then X in omega by ORDINAL2:def 21;
-   hence X is cardinal by CARD_1:65;
-  end;
 end;
 
 
 registration
  let X be set;
  cluster delta X -> one-to-one;
- coherence
-  proof
-   let x1,x2 be set;
-   set f = delta X;
-   assume that A1:x1 in dom f and A2: x2 in dom f and A3: f.x1 = f.x2;
-A4:  f.x1 = [x1,x1] by A1,FUNCT_3:def 7;
-    f.x2 = [x2,x2] by A2,FUNCT_3:def 7;
-  hence thesis by A3,A4,ZFMISC_1:33;
-  end;
 end;
 
 
@@ -87,41 +71,11 @@ theorem :: NECKLACE:6
 
 registration let R be trivial Relation;
   cluster dom R -> trivial;
-  coherence
-  proof
-  per cases by REALSET1:def 12;
-  suppose R is empty;
-  hence thesis by RELAT_1:60;
-  end;
-  suppose ex x being set st R = {x};
-  then consider x being set such that
-A1:  R = {x};
-    x in R by A1,TARSKI:def 1;
-  then consider y,z being set such that
-A2:  x=[y,z] by RELAT_1:def 1;
-    dom R = {y} by A1,A2,RELAT_1:23;
-  hence thesis;
-  end;
-  end;
 end;
 
 
 registration
   cluster trivial -> one-to-one Function;
-  coherence
-  proof
-  let f be Function such that
-A1:  f is trivial;
-  let x1,x2 be set;
-  assume that
-A2:  x1 in dom f & x2 in dom f and
-    f.x1 = f.x2;
-  reconsider f as trivial Function by A1;
-  consider x being set such that
-A3: dom f = {x} by A2,REALSET1:def 12;
-    x1 = x & x2 = x by A2,A3,TARSKI:def 1;
-  hence thesis;
-  end;
 end;
 
 
@@ -147,43 +101,7 @@ scheme :: NECKLACE:sch 1
  Convers{X()-> non empty set, R() -> Relation, F,G(set)-> set, P[set]}:
  R()~ ={[F(x),G(x)] where x is Element of X(): P[x]}
  provided
-  R() = {[G(x),F(x)] where x is Element of X(): P[x]}
-proof
- set S = {[F(x),G(x)] where x is Element of X(): P[x]};
-   S is Relation-like
- proof
-  let x being set;
-  assume x in S;
-  then ex y being Element of X() st x = [F(y),G(y)] & P[y];
-  hence thesis;
- end;
- then reconsider S' = S as Relation;
-    for x,y being set holds [x,y] in S' iff [y,x] in R()
-  proof
-A2:   for x,y being set holds [x,y] in S' implies [y,x] in R()
-   proof
-    let x,y being set;
-    assume [x,y] in S';
-    then consider z being Element of X() such that
-A3:   [x,y] = [F(z),G(z)] and
-A4:   P[z];
-     x = F(z) & y = G(z) by A3,ZFMISC_1:33;
-    hence thesis by A1,A4;
-   end;
-     for x,y being set holds [y,x] in R() implies [x,y] in S'
-   proof
-    let x,y being set;
-    assume [y,x] in R();
-    then consider z being Element of X() such that
-A5:   [y,x] = [G(z),F(z)] and
-A6:   P[z] by A1;
-     y = G(z) & x = F(z) by A5,ZFMISC_1:33;
-    hence thesis by A6;
-   end;
-   hence thesis by A2;
-  end;
- hence S = R()~ by RELAT_1:def 7;
-end;
+  R() = {[G(x),F(x)] where x is Element of X(): P[x]};
 
 theorem :: NECKLACE:12
      for i,j,n be natural number holds
@@ -281,67 +199,16 @@ end;
 
 registration let R be RelStr;
  cluster SymRelStr R -> symmetric;
- coherence
-  proof
-   let x,y be set;
-   assume that x in the carrier of SymRelStr R &
-                   y in the carrier of SymRelStr R and
-               A1: [x,y] in the InternalRel of SymRelStr R;
-A2:  [x,y] in (the InternalRel of R) \/ (the InternalRel of R)~ by A1,Def8;
-  per cases by A2,XBOOLE_0:def 2;
-  suppose [x,y] in the InternalRel of R;
-   then [y,x] in (the InternalRel of R)~ by RELAT_1:def 7;
-   then [y,x] in (the InternalRel of R) \/ (the InternalRel of R)~
-                      by XBOOLE_0:def 2;
-  hence thesis by Def8;
-  end;
-  suppose [x,y] in (the InternalRel of R)~;
-   then [y,x] in the InternalRel of R by RELAT_1:def 7;
-   then [y,x] in (the InternalRel of R) \/ (the InternalRel of R)~
-                      by XBOOLE_0:def 2;
-  hence thesis by Def8;
-  thus thesis;
-  end;
-  end;
 end;
 
 
 registration
  cluster non empty symmetric RelStr;
- existence
-  proof
-   set R = {[0,0]};
-     R c= [:{0},{0}:] by ZFMISC_1:35;
-   then reconsider R = {[0,0]} as Relation of {0} by RELSET_1:def 1;
-   take S = RelStr (#{0},R#);
-   thus S is non empty;
-   thus the InternalRel of S is_symmetric_in the carrier of S
-    proof
-     let x,y be set;
-     assume that x in the carrier of S &
-                     y in the carrier of S and
-                 A1: [x,y] in the InternalRel of S;
-       x = 0 & y = 0 by A1,ZFMISC_1:34;
-     then [y,x] in [:{0},{0}:] by ZFMISC_1:34;
-     hence [y,x] in the InternalRel of S by ZFMISC_1:35;
-    end;
-  end;
 end;
 
 
 registration let R be symmetric RelStr;
  cluster the InternalRel of R -> symmetric;
- coherence
- proof
-  let x,y be set;
-  assume that A1: x in field the InternalRel of R &
-                  y in field the InternalRel of R and
-              A2: [x,y] in the InternalRel of R;
-A3:  the InternalRel of R is_symmetric_in the carrier of R by Def4;
-    field the InternalRel of R c= (the carrier of R) \/ the carrier of R
-        by RELSET_1:19;
-  hence thesis by A1,A2,A3,RELAT_2:def 3;
- end;
 end;
 
 definition let R be RelStr;
@@ -355,11 +222,6 @@ end;
 
 registration let R be non empty RelStr;
  cluster ComplRelStr R -> non empty;
- coherence
-  proof
-     the carrier of ComplRelStr R = the carrier of R by Def9;
-   hence the carrier of ComplRelStr R is non empty;
-  end;
 end;
 
 
@@ -379,11 +241,6 @@ end;
 
 registration let n be natural number;
  cluster Necklace n -> symmetric;
- coherence
- proof
-    Necklace n = SymRelStr(n-SuccRelStr) by Def10;
-  hence thesis;
- end;
 end;
 
 
@@ -397,29 +254,6 @@ theorem :: NECKLACE:20
 
 registration let n be natural number;
   cluster Necklace n -> irreflexive;
-  coherence
-  proof
-  set A = Necklace n;
-  let x be set;
-  assume x in the carrier of A;
-  assume A1:[x,x] in the InternalRel of A;
-A2:  the InternalRel of Necklace n
-    = {[i,i+1] where i is Nat:i+1 < n} \/ {[i+1,i] where i is Nat:i+1 < n}
-      by Th19;
-  per cases by A1,A2,XBOOLE_0:def 2;
-   suppose [x,x] in {[i,i+1] where i is Nat:i+1 < n};
-   then consider i being Nat such that
-A3:   [x,x] = [i,i+1] & i+1 < n;
-     x = i & x = i+1 by A3,ZFMISC_1:33;
-   hence contradiction by REAL_1:69;
-   end;
-   suppose [x,x] in {[i+1,i] where i is Nat:i+1 < n};
-   then consider i being Nat such that
-A4:   [x,x] = [i+1,i] & i+1 < n;
-     x = i+1 & x = i by A4,ZFMISC_1:33;
-   hence contradiction by REAL_1:69;
-  end;
-  end;
 end;
 
 
@@ -428,17 +262,11 @@ theorem :: NECKLACE:21
 
 registration let n be non empty natural number;
   cluster Necklace n -> non empty;
-   coherence
-   proof
-      the carrier of Necklace n = n by Th21;
-    hence thesis by STRUCT_0:def 1;
-   end;
 end;
 
 
 registration let n be natural number;
   cluster the carrier of Necklace n -> finite;
-  coherence by Th21;
 end;
 
 

@@ -98,14 +98,6 @@ theorem :: SCMFSA6A:14
 
 registration let I be Macro-Instruction;
  cluster Directed I -> initial;
- coherence
-  proof let m,n such that
-A1: insloc n in dom Directed I and
-A2: m < n;
-      insloc n in dom I by A1,Th14;
-    then insloc m in dom I by A2,SCMFSA_4:def 4;
-   hence insloc m in dom Directed I by Th14;
-  end;
 end;
 
 
@@ -118,11 +110,6 @@ end;
 
 registration let i;
  cluster Macro i -> non empty;
- coherence
-  proof
-      Macro i = (insloc 0,insloc 1) --> (i,halt SCM+FSA) by Def2;
-   hence Macro i is non empty;
-  end;
 end;
 
 
@@ -132,15 +119,6 @@ theorem :: SCMFSA6A:15
 
 registration let I be initial FinPartState of SCM+FSA;
  cluster ProgramPart I -> initial;
- coherence
-  proof let m,n such that
-A1: insloc n in dom ProgramPart I and
-A2: m < n;
-      ProgramPart I c= I by AMI_5:63;
-    then dom ProgramPart I c= dom I by RELAT_1:25;
-    then insloc m in dom I by A1,A2,SCMFSA_4:def 4;
-   hence insloc m in dom ProgramPart I by AMI_5:73;
-  end;
 end;
 
 
@@ -236,134 +214,7 @@ scheme :: SCMFSA6A:sch 1
                  I() -> Instruction-Location of SCM+FSA }:
  ex S being State of SCM+FSA st IC S = I() &
   for i being Nat holds
-    S.insloc i = F(i) & S.intloc i = G(i) & S.fsloc i = H(i)
-proof
- defpred P[set,set] means ex m st
-   $1 = IC SCM+FSA & $2 = I() or
-   $1 = insloc m & $2 = F(m) or
-   $1 = intloc m & $2 = G(m) or
-   $1 = fsloc m & $2 = H(m);
-A1: for e being set st e in the carrier of SCM+FSA
-     ex u being set st P[e,u]
-   proof let e be set;
-    assume e in the carrier of SCM+FSA;
-     then e in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} or
-     e in the Instruction-Locations of SCM+FSA by SCMFSA_2:8,XBOOLE_0:def 2;
-     then A2:    e in Int-Locations \/ FinSeq-Locations or e in {IC SCM+FSA} or
-      e in the Instruction-Locations of SCM+FSA by XBOOLE_0:def 2;
-       now per cases by A2,XBOOLE_0:def 2;
-      case e in {IC SCM+FSA};
-       hence e = IC SCM+FSA by TARSKI:def 1;
-      end;
-      case e in Int-Locations;
-        then e is Int-Location by SCMFSA_2:11;
-       hence ex m st e = intloc m by SCMFSA_2:19;
-      end;
-      case e in FinSeq-Locations;
-       then e is FinSeq-Location by SCMFSA_2:12;
-       hence ex m st e = fsloc m by SCMFSA_2:20;
-      end;
-      case e in the Instruction-Locations of SCM+FSA;
-       hence ex m st e = insloc m by SCMFSA_2:21;
-     end;
-     end;
-     then consider m such that
-A3:    e = IC SCM+FSA or e = insloc m or e = intloc m or e = fsloc m;
-    per cases by A3;
-    suppose
-A4:   e = IC SCM+FSA;
-     take u = I(); thus P[e,u] by A4;
-    end;
-    suppose
-A5:   e = insloc m;
-     take u = F(m); thus P[e,u] by A5;
-    end;
-    suppose
-A6:   e = intloc m;
-     take u = G(m); thus P[e,u] by A6;
-    end;
-    suppose
-A7:   e = fsloc m;
-     take u = H(m); thus P[e,u] by A7;
-   end;
-   end;
-  consider f being Function such that
-A8: dom f = the carrier of SCM+FSA and
-A9: for e being set st e in the carrier of SCM+FSA holds P[e,f.e]
-                         from ZFREFLE1:sch 1(A1);
-A10: dom the Object-Kind of SCM+FSA = the carrier of SCM+FSA by FUNCT_2:def 1;
-    now let x be set;
-   assume
-A11: x in dom the Object-Kind of SCM+FSA;
-    then x in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} or
-    x in the Instruction-Locations of SCM+FSA by A10,SCMFSA_2:8,XBOOLE_0:def 2;
-    then A12:   x in Int-Locations \/ FinSeq-Locations or x in {IC SCM+FSA} or
-     x in the Instruction-Locations of SCM+FSA by XBOOLE_0:def 2;
-   consider m such that
-A13: x = IC SCM+FSA & f.x = I() or
-    x = insloc m & f.x = F(m) or
-    x = intloc m & f.x = G(m) or
-    x = fsloc m & f.x = H(m) by A9,A10,A11;
-   per cases by A12,XBOOLE_0:def 2;
-    suppose x in Int-Locations;
-     then A14: x is Int-Location by SCMFSA_2:11;
-    then (the Object-Kind of SCM+FSA).x = ObjectKind intloc m by A13,AMI_1:def
-6,SCMFSA_2:81,83,84
-        .= INT by SCMFSA_2:26;
-   hence f.x in (the Object-Kind of SCM+FSA).x by A13,A14,INT_1:12,SCMFSA_2:81,
-83,84;
-    end;
-    suppose x in FinSeq-Locations;
-     then A15: x is FinSeq-Location by SCMFSA_2:12;
-    then (the Object-Kind of SCM+FSA).x = ObjectKind fsloc m by A13,AMI_1:def 6
-,SCMFSA_2:82,83,85
-       .= INT* by SCMFSA_2:27;
-   hence f.x in (the Object-Kind of SCM+FSA).x by A13,A15,FINSEQ_1:def 11,
-SCMFSA_2:82,83,85;
-    end;
-    suppose x in {IC SCM+FSA};
-     then A16:    x = IC SCM+FSA by TARSKI:def 1;
-    then (the Object-Kind of SCM+FSA).x = ObjectKind IC SCM+FSA by AMI_1:def 6
-       .= the Instruction-Locations of SCM+FSA by AMI_1:def 11;
-   hence f.x in (the Object-Kind of SCM+FSA).x by A13,A16,AMI_1:48,SCMFSA_2:81,
-82;
-    end;
-    suppose A17: x in the Instruction-Locations of SCM+FSA;
-    then (the Object-Kind of SCM+FSA).x = ObjectKind insloc m by A13,AMI_1:48,
-def 6,SCMFSA_2:84,85
-        .= the Instructions of SCM+FSA by AMI_1:def 14;
-   hence f.x in (the Object-Kind of SCM+FSA).x by A13,A17,AMI_1:48,SCMFSA_2:84,
-85;
-  end;
-  end;
-  then reconsider f as State of SCM+FSA by A8,A10,CARD_3:18;
- take f;
-  consider m such that
-A18: IC SCM+FSA = IC SCM+FSA & f.IC SCM+FSA = I() or
-    IC SCM+FSA = insloc m & f.IC SCM+FSA = F(m) or
-    IC SCM+FSA = intloc m & f.IC SCM+FSA = G(m) or
-    IC SCM+FSA = fsloc m & f.IC SCM+FSA = H(m) by A9;
- thus IC f = I() by A18,AMI_1:48,def 15,SCMFSA_2:81,82;
- let i be Nat;
-  consider m such that
-A19: insloc i = IC SCM+FSA & f.insloc i = I() or
-    insloc i = insloc m & f.insloc i = F(m) or
-    insloc i = intloc m & f.insloc i = G(m) or
-    insloc i = fsloc m & f.insloc i = H(m) by A9;
- thus f.insloc i = F(i) by A19,AMI_1:48,SCMFSA_2:18,84,85;
-  consider m such that
-A20: intloc i = IC SCM+FSA & f.intloc i = I() or
-    intloc i = insloc m & f.intloc i = F(m) or
-    intloc i = intloc m & f.intloc i = G(m) or
-    intloc i = fsloc m & f.intloc i = H(m) by A9;
- thus f.intloc i = G(i) by A20,SCMFSA_2:16,81,83,84;
-  consider m such that
-A21: fsloc i = IC SCM+FSA & f.fsloc i = I() or
-    fsloc i = insloc m & f.fsloc i = F(m) or
-    fsloc i = intloc m & f.fsloc i = G(m) or
-    fsloc i = fsloc m & f.fsloc i = H(m) by A9;
- thus f.fsloc i = H(i) by A21,SCMFSA_2:17,82,83,85;
-end;
+    S.insloc i = F(i) & S.intloc i = G(i) & S.fsloc i = H(i);
 
 theorem :: SCMFSA6A:34  ::T12
   for s being State of SCM+FSA holds

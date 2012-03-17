@@ -28,13 +28,6 @@ end;
 
 registration
  cluster empty-yielding Function;
- existence
-  proof
-   reconsider f = {} as Function;
-   take f;
-   let i;
-   thus thesis by RELAT_1:60;
-  end;
 end;
 
 
@@ -64,23 +57,7 @@ scheme :: PBOOLE:sch 1
  ex f being ManySortedSet of A() st
   for e st e in A() holds f.e in F(e)
  provided
- for e st e in A() holds F(e) <> {}
-proof
-     defpred P[set,set] means $2 in F($1);
-A2:  now let e;
-     consider fe being Element of F(e);
-     assume e in A();
-then A3:     F(e) <> {} by A1;
-      reconsider fe as set;
-     take fe;
-     thus P[e,fe] by A3;
-    end;
-    consider f being Function such that
-A4:  dom f = A() and
-A5:  for e st e in A() holds P[e,f.e] from ZFREFLE1:sch 1(A2);
-    reconsider f as ManySortedSet of A() by A4,Def3;
-   take f; thus thesis by A5;
-  end;
+ for e st e in A() holds F(e) <> {};
 
 definition let I,X,Y;
  pred X in Y means
@@ -103,20 +80,7 @@ scheme :: PBOOLE:sch 2
  PSeparation { I()-> set, A() -> ManySortedSet of I(), P[set,set] } :
   ex X being ManySortedSet of I() st
    for i being set st i in I()
-    for e holds e in X.i iff e in A().i & P[i,e]
-proof
-    defpred R[set,set] means for e holds e in $2 iff e in A().$1 & P[ $1,e];
-A1: now let i such that i in I();
-    defpred Q[set] means P[i,$1];
-    ex u st for e holds e in u iff e in A().i & Q[e] from XBOOLE_0:sch 1;
-    hence ex u st R[i,u];
-   end;
-   consider f being Function such that
-A2: dom f = I() and
-A3: for i st i in I() holds R[i,f.i] from ZFREFLE1:sch 1(A1);
-     f is ManySortedSet of I() by A2,Def3;
-  hence thesis by A3;
- end;
+    for e holds e in X.i iff e in A().i & P[i,e];
 
 theorem :: PBOOLE:3
  (for i st i in I holds X.i = Y.i) implies X = Y;
@@ -612,42 +576,13 @@ end;
 
 registration let I be set;
  cluster empty-yielding ManySortedSet of I;
- existence
-  proof take [0]I; let i; assume
-    i in I;
-   hence [0]I.i is empty by Th5;
-  end;
  cluster non-empty ManySortedSet of I;
- existence
-  proof consider e;
-      dom(I --> {e}) = I by FUNCOP_1:19;
-    then reconsider M = I --> {e} as ManySortedSet of I by Def3;
-   take M;
-   let i; assume i in I;
-   hence thesis by FUNCOP_1:13;
-  end;
 end;
 
 
 registration let I be non empty set;
  cluster non-empty -> non empty-yielding ManySortedSet of I;
-  coherence
-   proof let M be ManySortedSet of I;
-    assume
-A1:   M is non-empty;
-     consider i being Element of I;
-    take i; thus i in I;
-    thus M.i is non empty by A1,Def16;
-   end;
  cluster empty-yielding -> non non-empty ManySortedSet of I;
-  coherence
-   proof let M be ManySortedSet of I;
-    assume
-A2:   M is empty-yielding;
-     consider i being Element of I;
-    take i; thus i in I;
-    thus M.i is empty by A2,Def15;
-   end;
 end;
 
 

@@ -30,75 +30,17 @@ scheme :: ASYMPT_0:sch 1
                   F(set) -> Element of X()} :
  {F(i) where i is Nat: m() <= i & i <= n()} is finite non empty Subset of X()
 provided
- m() <= n()
-proof deffunc _F(set) = F($1); defpred _P[Nat] means not contradiction;
-   set S = {_F(i) where i is Nat: m()<=i & i<=n() & _P[i]};
-   set S1 = {_F(i) where i is Nat: m()<=i & i<=n()};
-    now let x be set;
-     hereby assume x in S; then
-        ex i being Nat st x = _F(i) & m()<=i & i<=n() & _P[i];
-      hence x in S1;
-     end;
-     assume x in S1; then
-        ex i being Nat st x = _F(i) & m()<=i & i<=n();
-     hence x in S;
-    end; then
-A2: S = S1 by TARSKI:2;
-A3: F(m()) in S by A1;
-A4: S is finite from GRAPH_2:sch 1;
-    S c= X() proof let x; assume x in S; then consider n1 being Nat such that
-   A5: x = F(n1) and n1 >= m() & n1 <= n();
-    thus x in X() by A5;
-   end;
- hence thesis by A2,A3,A4;
-end;
+ m() <= n();
 
 scheme :: ASYMPT_0:sch 2
  FinImInit1{N() -> Nat, X() -> non empty set, F(set) -> Element of X()} :
- {F(n) where n is Nat: n <= N()} is finite non empty Subset of X()
-proof
- set S = {F(n) where n is Nat: n <= N()};
-     deffunc _F(Nat) = F($1);
- set T = {_F(n) where n is Nat: 0<=n & n<=N()};
-A1: 0 <= N() by NAT_1:18;
-A2: T is finite non empty Subset of X() from FinSegRng1(A1);
-     now let x be set;
-    hereby assume x in S; then consider n being Nat such that
-    A3: x = F(n) & n <= N();
-          n >= 0 by NAT_1:18;
-     hence x in T by A3;
-    end;
-    assume x in T; then consider n being Nat such that
-    A4: x = F(n) & 0 <= n & n <= N();
-    thus x in S by A4;
-   end;
- hence thesis by A2,TARSKI:2;
-end;
+ {F(n) where n is Nat: n <= N()} is finite non empty Subset of X();
 
 scheme :: ASYMPT_0:sch 3
  FinImInit2{N() -> Nat, X() -> non empty set, F(set) -> Element of X()} :
  {F(n) where n is Nat: n < N()} is finite non empty Subset of X()
 provided
- N() > 0
-proof set S = {F(n) where n is Nat: n < N()};
-   consider m being Nat such that
-A2: N() = m+1 by A1,NAT_1:22;
-    deffunc _F(set) = F($1);
-    set T = {_F(n) where n is Nat: n <= m};
-A3: T is finite non empty Subset of X() from FinImInit1;
-     now let x be set;
-    hereby assume x in S; then consider n being Nat such that
-    A4: x = F(n) & n < N();
-          n <= m by A2,A4,NAT_1:38;
-     hence x in T by A4;
-    end;
-    assume x in T; then consider n being Nat such that
-    A5: x = F(n) & n <= m;
-       n < m+1 by A5,NAT_1:38;
-    hence x in S by A2,A5;
-   end;
- hence thesis by A3,TARSKI:2;
-end;
+ N() > 0;
 
 definition let c be real number;
  canceled 2;
@@ -111,20 +53,11 @@ end;
 
 registration
  cluster positive Real;
-  existence proof take 1; 1 > 0; hence thesis; end;
  cluster negative Real;
-  existence proof
-   take -1;
-   thus thesis by XREAL_0:def 4;
-  end;
  cluster logbase Real;
-  existence proof take 2; thus thesis by Def3; end;
  cluster non negative Real;
-  existence by XREAL_0:def 4;
  cluster non positive Real;
-  existence by XREAL_0:def 3;
  cluster non logbase Real;
-  existence proof take 1; thus thesis by Def3; end;
 end;
 
 
@@ -150,89 +83,20 @@ end;
 registration
  cluster eventually-nonnegative eventually-nonzero positive eventually-positive
          eventually-nondecreasing Real_Sequence;
-  existence proof
-     deffunc _F(set) = 1;
-     consider f being Function of NAT, REAL such that
-  A1: for x being Nat holds f.x = _F(x) from FUNCT_2:sch 4;
-   take f;
-   thus f is eventually-nonnegative proof
-    take 0; let n; assume n >= 0; f.n = 1 by A1; hence f.n >= 0;
-   end;
-   thus f is eventually-nonzero proof
-    take 0; let n; thus thesis by A1;
-   end;
-   thus f is positive proof
-    let n; f.n = 1 by A1; hence f.n > 0;
-   end;
-   thus f is eventually-positive proof
-    take 0; let n; assume n >= 0; f.n = 1 by A1; hence f.n > 0;
-   end;
-   thus f is eventually-nondecreasing proof
-    take 0; let n; assume n >= 0;
-        f.n = 1 & f.(n+1) = 1 by A1;
-     hence f.n <= f.(n+1);
-   end;
-  end;
 end;
 
 
 registration
  cluster positive -> eventually-positive Real_Sequence;
-  coherence proof
-   let f be Real_Sequence; assume
-  A1: f is positive;
-   take 0; let n; assume n >= 0; thus f.n > 0 by A1,Def5;
-  end;
  cluster eventually-positive ->
                        eventually-nonnegative eventually-nonzero Real_Sequence;
-  coherence proof
-   let f be Real_Sequence; assume
-     f is eventually-positive;
-     then consider N such that
-  A2: for n st n >= N holds f.n > 0 by Def6;
-    thus f is eventually-nonnegative proof
-     take N; let n; assume n >= N; hence f.n >= 0 by A2;
-    end;
-    thus f is eventually-nonzero proof
-     take N; let n; assume n >= N; hence f.n <> 0 by A2;
-    end;
-  end;
  cluster eventually-nonnegative eventually-nonzero ->
                                              eventually-positive Real_Sequence;
-  coherence proof
-   let f be Real_Sequence; assume
-  A3: f is eventually-nonnegative & f is eventually-nonzero;
-     then consider N such that
-  A4: for n st n >= N holds f.n >= 0 by Def4;
-     consider M such that
-  A5: for n st n >= M holds f.n <> 0 by A3,Def7;
-   take a = max( N, M ); let n; assume
-  A6: n >= a;
-       a >= N & a >= M by SQUARE_1:46;
-  then A7: n >= N & n >= M by A6,AXIOMS:22;
-      then f.n <> 0 by A5;
-   hence thesis by A4,A7;
-  end;
 end;
 
 
 registration let f,g be eventually-nonnegative Real_Sequence;
  cluster f+g -> eventually-nonnegative;
-  coherence proof
-     consider N such that
-  A1: for n st n >= N holds f.n >= 0 by Def4;
-     consider M such that
-  A2: for n st n >= M holds g.n >= 0 by Def4;
-   set a = max(N, M);
-   take a; let n; assume
-  A3: n >= a; a >= N by SQUARE_1:46;
-      then n >= N by A3,AXIOMS:22;
-  then A4: f.n >= 0 by A1;
-        a >= M by SQUARE_1:46; then n >= M by A3,AXIOMS:22;
-   then g.n >= 0 by A2;
-      then 0 + 0 <= f.n + g.n by A4,REAL_1:55;
-   hence (f + g).n >= 0 by SEQ_1:11;
-  end;
 end;
 
 
@@ -247,40 +111,17 @@ notation let f be Real_Sequence, c be real number;
 
 registration let f be eventually-nonnegative Real_Sequence, c be positive Real;
  cluster c(#)f -> eventually-nonnegative;
-  coherence proof
-     consider N such that
-  A1: for n st n >= N holds f.n >= 0 by Def4;
-   take N; let n; assume n >= N;
-  then f.n >= 0 by A1;
-     then c*f.n >= c*0 by AXIOMS:25;
-   hence thesis by SEQ_1:13;
-  end;
 end;
 
 
 registration let f be eventually-nonnegative Real_Sequence,
                c be non negative Real;
  cluster c+f -> eventually-nonnegative;
-  coherence proof
-   consider N such that
-  A1: for n st n >= N holds f.n >= 0 by Def4;
-   take N; let n; assume n >= N;
-  then f.n >= 0 by A1;
-  then c + f.n >= 0 + 0 by REAL_1:55;
-   hence (c+f).n >= 0 by Def9;
-  end;
 end;
 
 
 registration let f be eventually-nonnegative Real_Sequence, c be positive Real;
  cluster c+f -> eventually-positive;
-  coherence proof
-     consider N such that
-  A1: for n st n >= N holds f.n >= 0 by Def4;
-   take N; let n; assume n >= N;
-  then f.n >= 0 by A1; then c + f.n > 0 + 0 by REAL_1:67;
-   hence (c+f).n > 0 by Def9;
-  end;
 end;
 
 
@@ -294,27 +135,11 @@ end;
 
 registration let f be Real_Sequence, g be eventually-nonnegative Real_Sequence;
  cluster max(f, g) -> eventually-nonnegative;
-  coherence proof
-     consider N such that
-  A1: for n st n >= N holds g.n >= 0 by Def4;
-   take N; let n; assume n >= N;
-  then A2: g.n >= 0 by A1;
-       max( f.n, g.n ) >= g.n by SQUARE_1:46;
-   hence max(f, g).n >= 0 by A2,Def10;
-  end;
 end;
 
 
 registration let f be Real_Sequence, g be eventually-positive Real_Sequence;
  cluster max(f, g) -> eventually-positive;
-  coherence proof
-     consider N such that
-  A1: for n st n >= N holds g.n > 0 by Def6;
-   take N; let n; assume n >= N;
-  then g.n > 0 by A1;
-     then max( f.n, g.n ) > 0 by SQUARE_1:46;
-   hence max(f, g).n > 0 by Def10;
-  end;
 end;
 
 

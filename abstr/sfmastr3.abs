@@ -57,10 +57,6 @@ definition let A be finite non empty real-membered set;
 registration
   let X be finite non empty natural-membered set;
   cluster min X -> integer;
-  coherence
-    proof min X in X by Def1;
-      hence min X is integer by MEMBERED:def 4;
-    end;
 end;
 
 
@@ -157,10 +153,6 @@ registration
  let a be read-write Int-Location, b be Int-Location,
      I, J be good Macro-Instruction;
  cluster if>0(a, b, I, J) -> good;
- coherence proof
-     if>0(a, b, I, J) = SubFrom(a,b) ';' if>0(a,I,J) by SCMFSA8B:def 5;
-  hence thesis;
- end;
 end;
 
 
@@ -282,17 +274,6 @@ registration
  let a be read-write Int-Location, b, c be Int-Location,
      I be good Macro-Instruction;
  cluster for-up(a, b, c, I) -> good;
- coherence proof
-    set aux = 1-stRWNotIn ({a, b, c} \/ UsedIntLoc I);
-    for-up(a, b, c, I) =
-    aux := c ';'
-    SubFrom(aux, b) ';'
-    AddTo(aux, intloc 0) ';'
-    (a := b) ';'
-    while>0( aux, I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)
-           ) by Def8;
-  hence thesis;
- end;
 end;
 
 
@@ -341,19 +322,6 @@ registration
  let start, finish be Int-Location, min_pos be read-write Int-Location,
      f be FinSeq-Location;
  cluster FinSeqMin(f, start, finish, min_pos) -> good;
- coherence proof
-  set a = start, b = finish, c = min_pos;
-  set aux1 = 1-stRWNotIn {a, b, c};
-  set aux2 = 2-ndRWNotIn {a, b, c};
-  set cv = 3-rdRWNotIn {a, b, c};
-  set i0 = c := a;
-  set i10 = aux1 := (f, cv);
-  set i11 = aux2 := (f, c);
-  set I12 = if>0(aux2, aux1, Macro (c := cv), SCM+FSA-Stop);
-  set I1B = i10 ';' i11 ';' I12;
-    FinSeqMin(f, a, b, c) = i0 ';' for-up ( cv, a, b, I1B) by Def9;
-  hence thesis;
- end;
 end;
 
 
@@ -396,13 +364,6 @@ end;
 registration
  let f be FinSeq-Location, a, b be Int-Location;
   cluster swap(f, a, b) -> good parahalting;
- coherence proof
-  set aux1 = 1-stRWNotIn {a, b};
-  set aux2 = 2-ndRWNotIn {a, b};
-    swap(f, a, b) = aux1 := (f,a) ';' (aux2 := (f,b)) ';'
-                  ((f,a) := aux2) ';' ((f,b) := aux1) by Def10;
-  hence thesis;
- end;
 end;
 
 

@@ -46,19 +46,7 @@ scheme :: GRCAT_1:sch 1
   st (for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y])
    & (for x,y st [x,y] in dom f holds f.[x,y] = F(x,y))
 provided
- for x,y st x in X() & y in Y() & P[x,y] holds F(x,y) in Z()
-proof
-  defpred R[set,set] means $1 in X() & $2 in Y() & P[$1,$2];
-  deffunc G(set,set) = F($1,$2);
-A2: for x,y st R[x,y] holds G(x,y) in Z() by A1;
-  consider f being PartFunc of [:X(),Y():],Z() such that
-  A3: (for x,y holds [x,y] in dom f iff x in X() & y in Y() & R[x,y]) and
-  A4: (for x,y st [x,y] in dom f holds f.[x,y] = G(x,y)) from PARTFUN1:sch 5
-(A2);
-  take f;
-  thus for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y] by A3;
-  thus for x,y st [x,y] in dom f holds f.[x,y] = F(x,y) by A4;
-end;
+ for x,y st x in X() & y in Y() & P[x,y] holds F(x,y) in Z();
 
 scheme :: GRCAT_1:sch 2
  PartLambda2D{X,Y()->non empty set,Z()->set,F(set,set)->set,
@@ -69,20 +57,7 @@ scheme :: GRCAT_1:sch 2
  dom f holds f.[x,y] = F(x,y))
 provided
  for x being Element of X(), y being Element of Y() st P[x,y] holds
-     F(x,y) in Z()
-proof
-  defpred R[set,set] means P[$1,$2];
-  deffunc G(set,set) = F($1,$2);
-A2: for x,y st x in X() & y in Y() & R[x,y] holds G(x,y) in Z() by A1;
-  consider f being PartFunc of [:X(),Y():],Z() such that
-A3: for x,y holds [x,y] in dom f iff x in X() & y in Y() & R[x,y] and
-A4: for x,y st [x,y] in dom f holds f.[x,y] = G(x,y) from PartLambda2(A2);
-  take f;
-  thus for x being Element of X(), y being Element of Y() holds
-       [x,y] in dom f iff P[x,y] by A3;
-  thus for x being Element of X(), y being Element of Y() st [x,y] in dom f
-       holds f.[x,y] = F(x,y) by A4;
-end;
+     F(x,y) in Z();
 
 ::  0c. Auxiliary theorems: Trivial Group
 
@@ -98,7 +73,6 @@ theorem :: GRCAT_1:7
 
 registration
  cluster L_Trivial -> midpoint_operator;
- coherence by Th7,ALGSTR_1:def 4;
 end;
 
 
@@ -124,12 +98,6 @@ end;
 
 registration let C,O;
  cluster Morphs(O) -> non empty;
- coherence
-   proof
-    union{Hom(a,b) where a is Object of C,b is Object of C : a in O & b in O}
-  = Morphs O by Def5;
-    hence thesis by CAT_2:28;
-   end;
 end;
 
 
@@ -162,11 +130,6 @@ end;
 
 registration let C,O;
  cluster cat(O) -> strict;
- coherence
-  proof
-      CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#) = cat O by Def10;
-    hence thesis;
-  end;
 end;
 
 
@@ -263,11 +226,6 @@ end;
 
 registration let G,H;
  cluster ZERO(G,H) -> strict;
-  coherence
-  proof
-      ZERO(G,H) = GroupMorphismStr(# G,H,ZeroMap(G,H)#) by Def17;
-    hence thesis;
-  end;
 end;
 
 definition let IT be GroupMorphismStr;
@@ -279,15 +237,6 @@ end;
 
 registration
  cluster strict GroupMorphism-like GroupMorphismStr;
- existence
-  proof
-    consider G,H;
-    set z = ZERO(G,H);
-      dom(z) = G & cod(z) = H & fun(z) = ZeroMap(G,H) by Lm1;
-    then fun(z) is additive by Th16;
-    then z is GroupMorphism-like by Def18;
-   hence thesis;
-  end;
 end;
 
 
@@ -301,13 +250,6 @@ theorem :: GRCAT_1:18
 
 registration let G,H;
  cluster ZERO(G,H) -> GroupMorphism-like;
- coherence
-  proof
-    set z = ZERO(G,H);
-      dom(z) = G & cod(z) = H & fun(z) = ZeroMap(G,H) by Lm1;
-    then fun(z) is additive by Th16;
-    hence thesis by Def18;
-  end;
 end;
 
 
@@ -320,12 +262,6 @@ end;
 
 registration let G,H;
  cluster strict Morphism of G,H;
-  existence
-   proof
-       dom(ZERO(G,H)) = G & cod(ZERO(G,H)) = H by Lm1;
-     then ZERO(G,H) is Morphism of G,H by Def19;
-    hence thesis;
-   end;
 end;
 
 
@@ -350,11 +286,6 @@ end;
 
 registration let G;
  cluster ID G -> strict;
-  coherence
-   proof
-       ID G = GroupMorphismStr(# G,G,id G#) by Def20;
-     hence thesis;
-   end;
 end;
 
 
@@ -460,13 +391,6 @@ end;
 
 registration
  cluster Group_DOMAIN-like non empty set;
- existence
-  proof
-    set D = {L_Trivial};
-A1: for x be set st x in D holds x is strict AddGroup by TARSKI:def 1;
-    take D;
-    thus thesis by A1,Def22;
-  end;
 end;
 
 
@@ -484,11 +408,6 @@ end;
 
 registration let V;
  cluster strict Element of V;
-  existence
-   proof consider v being Element of V;
-       v is strict AddGroup by Def22;
-    hence thesis;
-   end;
 end;
 
 
@@ -503,14 +422,6 @@ end;
 
 registration
  cluster GroupMorphism_DOMAIN-like non empty set;
-   existence
-    proof
-      consider G;
-      take {ID G};
-        for x being set st x in {ID G} holds x is strict GroupMorphism
- by TARSKI:def 1;
-      hence thesis by Def23;
-    end;
 end;
 
 
@@ -526,11 +437,6 @@ end;
 
 registration let M be GroupMorphism_DOMAIN;
  cluster strict Element of M;
-  existence
-   proof consider m being Element of M;
-       m is strict GroupMorphism by Def23;
-    hence thesis;
-   end;
 end;
 
 
@@ -569,19 +475,11 @@ end;
 
 registration let G be 1-sorted, H be non empty 1-sorted;
  cluster Maps(G,H) -> non empty;
- coherence
-  proof Maps(G,H) = Funcs(the carrier of G, the carrier of H) by Def26;
-   hence thesis;
-  end;
 end;
 
 
 registration let G be 1-sorted, H be non empty 1-sorted;
  cluster non empty MapsSet of G,H;
- existence
-  proof Maps(G,H) is non empty;
-   hence thesis;
-  end;
 end;
 
 
@@ -605,11 +503,6 @@ end;
 
 registration let G,H; let M be GroupMorphism_DOMAIN of G,H;
  cluster strict Element of M;
-  existence
-   proof consider m being Element of M;
-       m is strict Morphism of G,H by Def24;
-    hence thesis;
-   end;
 end;
 
 
@@ -646,7 +539,6 @@ theorem :: GRCAT_1:42
 
 registration let UN;
  cluster GroupObjects(UN) -> non empty;
- coherence by Th42;
 end;
 
 
@@ -655,12 +547,6 @@ theorem :: GRCAT_1:43
 
 registration let UN;
   cluster GroupObjects(UN) -> Group_DOMAIN-like;
-   coherence
-    proof
-        for x being set st x in GroupObjects(UN) holds x is strict AddGroup
- by Th43;
-      hence thesis by Def22;
-    end;
 end;
 
 
@@ -742,13 +628,6 @@ end;
 
 registration let UN;
  cluster GroupCat(UN) -> strict;
- coherence
- proof
-    GroupCat UN = CatStr(# GroupObjects(UN),Morphs(GroupObjects(UN)),
-   dom(GroupObjects(UN)),cod(GroupObjects(UN)),
-   comp(GroupObjects(UN)),ID(GroupObjects(UN))#) by Def36;
-  hence thesis;
- end;
 end;
 
 
@@ -790,22 +669,6 @@ theorem :: GRCAT_1:48
 
 registration let UN;
  cluster GroupCat(UN) -> Category-like;
- coherence
-  proof
-         ( for f,g being Morphism of GroupCat(UN)
-          holds [g,f] in dom(the Comp of GroupCat(UN)) iff dom g = cod f )
-     & ( for f,g being Morphism of GroupCat(UN) st dom g = cod f
-          holds dom(g*f) = dom f & cod (g*f) = cod g )
-     & ( for f,g,h being Morphism of GroupCat(UN)
-          st dom h = cod g & dom g = cod f holds h*(g*f) = (h*g)*f )
-     & ( for b being Object of GroupCat(UN)
-          holds dom id b = b & cod id b = b &
-           (for f being Morphism of GroupCat(UN)
-             st cod f = b holds (id b)*f = f) &
-           (for g being Morphism of GroupCat(UN)
-             st dom g = b holds g*(id b) = g) ) by Lm2,Lm3,Lm4,Th46;
-   hence thesis by CAT_1:29;
-  end;
 end;
 
 
@@ -822,7 +685,6 @@ theorem :: GRCAT_1:51
 
 registration let UN;
  cluster AbGroupObjects(UN) -> non empty;
- coherence by Th51;
 end;
 
 
@@ -835,11 +697,6 @@ end;
 
 registration let UN;
  cluster AbGroupCat(UN) -> strict;
- coherence
- proof
-    AbGroupCat(UN) = cat(AbGroupObjects(UN)) by Def38;
-  hence thesis;
- end;
 end;
 
 
@@ -858,24 +715,6 @@ end;
 
 registration let UN;
  cluster MidOpGroupObjects(UN) -> non empty;
- coherence
-  proof
-    set D2 = the Objects of AbGroupCat(UN);
-    set D1 = {G where G is Element of D2
-               : ex H being midpoint_operator AbGroup st G = H};
-    set T = L_Trivial;
-      D2 = AbGroupObjects(UN) by Th52;
-    then T in D2 by Th51;
-    then T in D1;
-    then reconsider D1 as non empty set;
-      now
-      let x be set;
-      assume x in D1;
-      then ex G being Element of D2 st
- x = G & ex H being midpoint_operator AbGroup st G = H;
-      hence x in D2;end;
-    hence thesis by Def39;
-  end;
 end;
 
 
@@ -888,11 +727,6 @@ end;
 
 registration let UN;
  cluster MidOpGroupCat(UN) -> strict;
- coherence
- proof
-     MidOpGroupCat(UN) = cat(MidOpGroupObjects(UN)) by Def40;
-   hence thesis;
- end;
 end;
 
 

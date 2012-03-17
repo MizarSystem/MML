@@ -26,11 +26,6 @@ end;
 
 registration
  cluster Relation-like empty set;
-existence
- proof take {};
-  thus x in {} implies ex y,z st x = [y,z];
-  thus thesis;
- end;
 end;
 
 
@@ -58,49 +53,7 @@ theorem :: RELAT_1:6
 scheme :: RELAT_1:sch 1
  Rel_Existence{A,B() -> set, P[set,set]}:
   ex R being Relation st
-   for x,y holds [x,y] in R iff x in A() & y in B() & P[x,y]
-proof
-     ex R being Relation st
-    for p being set holds
-     p in R iff p in [:A(),B():] & ex x,y st p=[x,y] & P[x,y]
-     proof
-      defpred Q[set] means ex x,y st $1=[x,y] & P[x,y];
-      consider B being set such that
-A1:    for p being set holds p in B iff p in [:A(),B():] & Q[p]
-         from XBOOLE_0:sch 1;
-         for p being set st p in B holds ex x,y st p = [x,y]
-         proof let p be set;
-           assume p in B;
-           then ex x,y st p=[x,y] & P[x,y] by A1;
-           hence thesis;
-         end;
-       then reconsider B as Relation by Def1;
-       take B;
-       let p be set;
-       thus p in B iff p in [:A(),B():] &
-               ex x,y st p=[x,y] & P[x,y] by A1;
-     end;
-   then consider R being Relation such that
-A2: for p being set holds
-     p in R iff p in [:A(),B():] & ex x,y st p=[x,y] & P[x,y];
-   take R;
-   let x,y;
-   thus [x,y] in R implies x in A() & y in B() & P[x,y]
-        proof
-         assume A3: [x,y] in R;
-         then consider xx,yy being set such that
-             A4: [x,y]=[xx,yy] & P[xx,yy] by A2;
-         A5: x=xx & y=yy by A4,ZFMISC_1:33;
-           [x,y] in [:A(),B():] by A2,A3;
-         hence thesis by A4,A5,ZFMISC_1:106;
-        end;
-   thus x in A() & y in B() & P[x,y] implies [x,y] in R
-        proof
-         assume A6: x in A() & y in B() & P[x,y];
-          then [x,y] in [:A(),B():] by ZFMISC_1:106;
-         hence thesis by A2,A6;
-        end;
-  end;
+   for x,y holds [x,y] in R iff x in A() & y in B() & P[x,y];
 
 definition let P,R;
  redefine pred P = R means
@@ -111,35 +64,10 @@ end;
 
 registration let P,R;
  cluster P /\ R -> Relation-like;
- coherence
-  proof
-      now let x;
-        x in P & x in R implies ex y,z st x = [y,z] by Def1;
-      hence x in P /\ R implies ex y,z st x = [y,z] by XBOOLE_0:def 3;
-    end;
-    hence P /\ R is Relation-like by Def1;
-  end;
 
  cluster P \/ R -> Relation-like;
- coherence
- proof
-      now let x;
-      A1: x in P implies ex y,z st x = [y,z] by Def1;
-            x in R implies ex y,z st x = [y,z] by Def1;
-      hence x in P \/ R implies ex y,z st x = [y,z] by A1,XBOOLE_0:def 2;
-    end;
-   hence P \/ R is Relation-like by Def1;
- end;
 
  cluster P \ R -> Relation-like;
- coherence
- proof
-      now let x;
-        x in P implies ex y,z st x = [y,z] by Def1;
-      hence x in P \ R implies ex y,z st x = [y,z] by XBOOLE_0:def 4;
-    end;
-  hence P \ R is Relation-like by Def1;
- end;
 end;
 
 
@@ -339,47 +267,23 @@ theorem :: RELAT_1:55
 
 registration
  cluster empty -> Relation-like set;
- coherence
-   proof let X be set;
-   assume X is empty;
-   hence for p being set st p in X ex x,y st [x,y] = p;
-  end;
 end;
 
 
 registration
  cluster {} -> Relation-like;
-coherence;
 end;
 
 
 registration
   cluster non empty Relation;
-  existence
-  proof
-    reconsider X = {[0,0]} as Relation by Th4;
-    X is non empty;
-    hence thesis;
-  end;
 end;
 
 
 registration
  let f be non empty Relation;
  cluster dom f -> non empty;
- coherence
-  proof consider x being Element of f;
-   consider x1,x2 being set such that
-A1:  x = [x1,x2] by Def1;
-   thus thesis by A1,Def4;
-  end;
  cluster rng f -> non empty;
- coherence
-  proof consider x being Element of f;
-   consider x1,x2 being set such that
-A2:  x = [x1,x2] by Def1;
-   thus thesis by A2,Def5;
-  end;
 end;
 
 
@@ -398,14 +302,10 @@ theorem :: RELAT_1:62
 
 registration let X be empty set;
  cluster dom X -> empty;
- coherence by Th60;
  cluster rng X -> empty;
- coherence by Th60;
  let R;
  cluster X*R -> empty;
- coherence by Th62;
  cluster R*X -> empty;
- coherence by Th62;
 end;
 
 
@@ -423,7 +323,6 @@ theorem :: RELAT_1:66
 
 registration let X be empty set;
  cluster X~ -> empty;
- coherence by Th66;
 end;
 
 

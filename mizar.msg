@@ -407,6 +407,10 @@ Mode symbol or attribute symbol expected
 Right functor bracket expected
 # 311
 Paired functor brackets must be of the same kind
+# 312
+Scheme reference is not allowed in a simple justification
+# 313
+"sch" expected
 # 320
 Selector or structure symbol expected
 # 321

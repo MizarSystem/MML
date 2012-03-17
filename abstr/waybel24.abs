@@ -33,20 +33,6 @@ theorem :: WAYBEL24:1
 registration let S be non empty RelStr,
                T be non empty reflexive RelStr;
   cluster constant -> monotone map of S, T;
-  coherence
-  proof
-    let f be map of S, T;
-    assume A1: f is constant;
-      for x,y being Element of S st x <= y holds f.x <= f.y
-    proof
-      let x,y be Element of S;
-      assume x <= y;
-        x in the carrier of S & y in the carrier of S;
-      then x in dom f & y in dom f by FUNCT_2:def 1;
-      hence thesis by A1,SEQM_3:def 5;
-    end;
-    hence f is monotone by WAYBEL_1:def 2;
-  end;
 end;
 
 
@@ -54,21 +40,6 @@ registration let S be non empty RelStr,
                T be reflexive non empty RelStr,
                a be Element of T;
   cluster S --> a -> monotone;
-  coherence
-  proof
-    set f = S --> a;
-      for x, y being Element of S st x <= y holds f.x <= f.y
-    proof
-      let x, y be Element of S;
-      assume x <= y;
-        f.x = ((the carrier of S) --> a). x by BORSUK_1:def 3
-         .= a by FUNCOP_1:13
-         .= ((the carrier of S) --> a). y by FUNCOP_1:13
-         .= f.y by BORSUK_1:def 3;
-      hence thesis;
-    end;
-    hence thesis by WAYBEL_1:def 2;
-  end;
 end;
 
 
@@ -87,56 +58,14 @@ scheme :: WAYBEL24:sch 1
         A(set) -> Element of C(), f() -> Function, P[set]}:
   f().:{A(x) where x is Element of B(): P[x]} =
    {f().A(x) where x is Element of B(): P[x]}
-  provided  the carrier of C() c= dom f()
-proof   set f = f();
-   thus f.:{A(x) where x is Element of B(): P[x]} c=
-      {f.A(x) where x is Element of B(): P[x]}
-     proof let y be set; assume
-         y in f.:{A(x) where x is Element of B(): P[x]};
-      then consider z being set such that
-A2:     z in dom f & z in {A(x) where x is Element of B(): P[x]}
-       & y = f.z by FUNCT_1:def 12;
-         ex x being Element of B() st z = A(x) & P[x] by A2;
-      hence thesis by A2;
-     end;
-   let y be set;
-   assume y in {f.A(x) where x is Element of B(): P[x]};
-   then consider x being Element of B() such that
-A3:   y = f.A(x) & P[x];
-     A(x) in the carrier of C();
-   then A(x) in dom f &
-    A(x) in {A(z) where z is Element of B(): P[z]} by A1,A3;
-   hence thesis by A3,FUNCT_1:def 12;
-  end;
+  provided  the carrier of C() c= dom f();
 
 scheme :: WAYBEL24:sch 2
  Fraenkel6A{ B() -> LATTICE, F(set) -> set, P[set], Q[set] } :
   { F(v1) where v1 is Element of B() : P[v1] }
   = { F(v2) where v2 is Element of B() : Q[v2] }
  provided
- for v being Element of B() holds P[v] iff Q[v]
-proof
-  thus { F(v1) where v1 is Element of B() : P[v1] } c=
-    { F(v2) where v2 is Element of B() : Q[v2] }
-  proof
-    let a be set;
-    assume a in { F(v1) where v1 is Element of B() : P[v1] };
-    then consider V1 being Element of B() such that
-A2:    a = F(V1) & P[V1];
-      Q[V1] by A1,A2;
-    hence thesis by A2;
-  end;
-  thus { F(v2) where v2 is Element of B() : Q[v2] } c=
-    { F(v1) where v1 is Element of B() : P[v1] }
-  proof
-    let a be set;
-    assume a in { F(v1) where v1 is Element of B() : Q[v1] };
-    then consider V1 being Element of B() such that
-A3:    a = F(V1) & Q[V1];
-      P[V1] by A1,A3;
-    hence thesis by A3;
-  end;
-end;
+ for v being Element of B() holds P[v] iff Q[v];
 
 theorem :: WAYBEL24:4
  for S, T being complete LATTICE,
@@ -196,17 +125,6 @@ theorem :: WAYBEL24:9
 registration
  let S be non empty RelStr, T be non empty reflexive RelStr;
  cluster antitone map of S, T;
- existence
-  proof consider c being Element of T;
-   take f = S --> c;
-   let x, y be Element of S;
-     assume
-       [x, y] in the InternalRel of S;
-A1:  f = (the carrier of S) --> c by BORSUK_1:def 3;
-   let a, b be Element of T; assume a = f.x & b = f.y;
-   then a = c & b = c by A1,FUNCOP_1:13;
-   hence b <= a;
-  end;
 end;
 
 
@@ -228,7 +146,6 @@ registration let R, S, T be non empty reflexive RelStr;
   let f be monotone map of [:R, S:], T;
   let a be Element of R;
   cluster Proj (f, a) -> monotone;
-  coherence by Th10;
 end;
 
 
@@ -236,7 +153,6 @@ registration let R, S, T be non empty reflexive RelStr;
   let f be monotone map of [:R, S:], T;
   let b be Element of S;
   cluster Proj (f, b) -> monotone;
-  coherence by Th10;
 end;
 
 
@@ -244,7 +160,6 @@ registration let R, S, T be non empty reflexive RelStr;
   let f be antitone map of [:R, S:], T;
   let a be Element of R;
   cluster Proj (f, a) -> antitone;
-  coherence by Th11;
 end;
 
 
@@ -252,7 +167,6 @@ registration let R, S, T be non empty reflexive RelStr;
   let f be antitone map of [:R, S:], T;
   let b be Element of S;
   cluster Proj (f, b) -> antitone;
-  coherence by Th11;
 end;
 
 
@@ -331,25 +245,12 @@ end;
 registration let S be non empty TopSpace,
                T be non empty TopSpace-like TopRelStr;
   cluster ContMaps (S, T) -> non empty;
-  coherence
-  proof
-    consider f being continuous map of S, T;
-      f in the carrier of ContMaps(S,T) by Def3;
-    hence thesis by STRUCT_0:def 1;
-  end;
 end;
 
 
 registration let S be non empty TopSpace,
                T be non empty TopSpace-like TopRelStr;
   cluster ContMaps (S, T) -> constituted-Functions;
-  coherence
-  proof
-    let a be Element of ContMaps (S, T);
-    consider a' being map of S, T such that
-A1:    a' = a & a' is continuous by Def3;
-    thus thesis by A1;
-  end;
 end;
 
 
@@ -369,50 +270,24 @@ theorem :: WAYBEL24:21
 registration let S be non empty TopSpace,
                T be non empty reflexive TopSpace-like TopRelStr;
   cluster ContMaps (S, T) -> reflexive;
-  coherence
-  proof
-    reconsider CS = ContMaps (S, T) as full SubRelStr of
-      T |^ the carrier of S by Def3;
-      CS is reflexive;
-    hence thesis;
-  end;
 end;
 
 
 registration let S be non empty TopSpace,
                T be non empty transitive TopSpace-like TopRelStr;
   cluster ContMaps (S, T) -> transitive;
-  coherence
-  proof
-    reconsider CS = ContMaps (S, T) as full SubRelStr of
-      T |^ the carrier of S by Def3;
-      CS is transitive;
-    hence thesis;
-  end;
 end;
 
 
 registration let S be non empty TopSpace,
                T be non empty antisymmetric TopSpace-like TopRelStr;
   cluster ContMaps (S, T) -> antisymmetric;
-  coherence
-  proof
-    reconsider CS = ContMaps (S, T) as full SubRelStr of
-      T |^ the carrier of S by Def3;
-      CS is antisymmetric;
-    hence thesis;
-  end;
 end;
 
 
 registration let S be non empty 1-sorted,
                T be non empty TopSpace-like TopRelStr;
   cluster T |^ the carrier of S -> constituted-Functions;
-  coherence
-  proof
-    let a be Element of (T |^ the carrier of S);
-    thus thesis by Th19;
-  end;
 end;
 
 
@@ -439,13 +314,11 @@ theorem :: WAYBEL24:24
 
 registration let S be non empty 1-sorted, T be LATTICE;
   cluster -> Function-like Relation-like Element of (T |^ the carrier of S);
-  coherence by Th19;
 end;
 
 
 registration let S, T be TopLattice;
   cluster -> Function-like Relation-like Element of ContMaps (S, T);
-  coherence;
 end;
 
 
@@ -488,28 +361,7 @@ scheme :: WAYBEL24:sch 3
   { F(v1) where v1 is Element of B() : P[v1] }
   = { G(v2) where v2 is Element of B() : P[v2] }
  provided
- for v being Element of B() st P[v] holds F(v) = G(v)
-proof
-  set X = { F(v1) where v1 is Element of B() : P[v1] },
-      Y = { G(v2) where v2 is Element of B() : P[v2] };
-A2: X c= Y
-   proof let x be set;
-    assume x in X;
-     then consider v1 being Element of B() such that
-A3:   x = F(v1) & P[v1];
-       x = G(v1) by A1,A3;
-    hence x in Y by A3;
-   end;
-    Y c= X
-   proof let x be set;
-    assume x in Y;
-     then consider v1 being Element of B() such that
-A4:   x = G(v1) & P[v1];
-       x = F(v1) by A1,A4;
-    hence x in X by A4;
-   end;
- hence thesis by A2,XBOOLE_0:def 10;
-end;
+ for v being Element of B() st P[v] holds F(v) = G(v);
 
 scheme :: WAYBEL24:sch 4
  FraenkelF'RSS{ B() -> non empty RelStr, F(set) -> set, G(set) -> set,
@@ -517,55 +369,14 @@ scheme :: WAYBEL24:sch 4
   { F(v1) where v1 is Element of B() : P[v1] }
   = { G(v2) where v2 is Element of B() : P[v2] }
  provided
- for v being Element of B() st P[v] holds F(v) = G(v)
-proof
-  set X = { F(v1) where v1 is Element of B() : P[v1] },
-      Y = { G(v2) where v2 is Element of B() : P[v2] };
-A2: X c= Y
-   proof let x be set;
-    assume x in X;
-     then consider v1 being Element of B() such that
-A3:   x = F(v1) & P[v1];
-       x = G(v1) by A1,A3;
-    hence x in Y by A3;
-   end;
-    Y c= X
-   proof let x be set;
-    assume x in Y;
-     then consider v1 being Element of B() such that
-A4:   x = G(v1) & P[v1];
-       x = F(v1) by A1,A4;
-    hence x in X by A4;
-   end;
- hence thesis by A2,XBOOLE_0:def 10;
-end;
+ for v being Element of B() st P[v] holds F(v) = G(v);
 
 scheme :: WAYBEL24:sch 5
  FuncFraenkelS{ B, C() -> non empty TopRelStr,
         A(set) -> Element of C(), f() -> Function, P[set]}:
   f().:{A(x) where x is Element of B(): P[x]} =
    {f().A(x) where x is Element of B(): P[x]}
-  provided  the carrier of C() c= dom f()
-proof   set f = f();
-   thus f.:{A(x) where x is Element of B(): P[x]} c=
-      {f.A(x) where x is Element of B(): P[x]}
-     proof let y be set; assume
-         y in f.:{A(x) where x is Element of B(): P[x]};
-      then consider z being set such that
-A2:     z in dom f & z in {A(x) where x is Element of B(): P[x]}
-       & y = f.z by FUNCT_1:def 12;
-         ex x being Element of B() st z = A(x) & P[x] by A2;
-      hence thesis by A2;
-     end;
-   let y be set;
-   assume y in {f.A(x) where x is Element of B(): P[x]};
-   then consider x being Element of B() such that
-A3:   y = f.A(x) & P[x];
-     A(x) in the carrier of C();
-   then A(x) in dom f &
-    A(x) in {A(z) where z is Element of B(): P[z]} by A1,A3;
-   hence thesis by A3,FUNCT_1:def 12;
-  end;
+  provided  the carrier of C() c= dom f();
 
 theorem :: WAYBEL24:29
  for S, T being complete Scott TopLattice,
@@ -608,41 +419,6 @@ registration let S be non empty reflexive RelStr,
                T be complete LATTICE,
                a be Element of T;
   cluster S --> a -> directed-sups-preserving;
-  coherence
-  proof
-    set f = S --> a;
-      for X being Subset of S st X is non empty directed holds
-      f preserves_sup_of X
-    proof
-      let X be Subset of S;
-      assume X is non empty directed;
-      then reconsider X' = X as non empty directed Subset of S;
-        f preserves_sup_of X
-      proof
-        assume ex_sup_of X,S;
-        thus ex_sup_of f.:X, T by YELLOW_0:17;
-A1:     f .: X c= rng f by RELAT_1:144;
-A2:     f = (the carrier of S) --> a by BORSUK_1:def 3;
-then A3:     f .: X c= {a} by A1,FUNCOP_1:14;
-          {a} c= f .: X
-        proof
-          let b be set; assume b in {a};
-then A4:       b = a by TARSKI:def 1;
-          consider n being Element of X';
-A5:       dom f = the carrier of S by A2,FUNCOP_1:19;
-            a = ((the carrier of S) --> a).n by FUNCOP_1:13
-           .= f.n by BORSUK_1:def 3;
-          hence thesis by A4,A5,FUNCT_1:def 12;
-        end;
-        hence sup (f.:X) = sup {a} by A3,XBOOLE_0:def 10
-                      .= a by YELLOW_0:39
-                     .= ((the carrier of S) --> a). sup X by FUNCOP_1:13
-                     .= f.sup X by BORSUK_1:def 3;
-      end;
-      hence thesis;
-    end;
-    hence f is directed-sups-preserving by WAYBEL_0:def 37;
-  end;
 end;
 
 
@@ -652,12 +428,6 @@ theorem :: WAYBEL24:35  :: Lemma 2.4, p. 115
 
 registration let S, T be complete Scott TopLattice;
   cluster ContMaps (S, T) -> complete;
-  coherence
-  proof
-      ContMaps (S, T) is sups-inheriting non empty full
-      SubRelStr of (T |^ the carrier of S) by Def3,Th35;
-    hence thesis by YELLOW_2:33;
-  end;
 end;
 
 

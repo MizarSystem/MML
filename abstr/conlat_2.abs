@@ -32,48 +32,6 @@ end;
 
 registration let C be FormalContext;
   cluster ConceptLattice C -> bounded;
-  coherence
-  proof
-A1:   (@Concept-with-all-Attributes(C))@
-   = @Concept-with-all-Attributes(C) by CONLAT_1:def 24
-  .= Concept-with-all-Attributes(C) by Def1;
-A2: for a being Element of ConceptLattice(C) holds
-    @Concept-with-all-Attributes(C) [= a
-    proof
-    let a be Element of ConceptLattice(C);
-      (@Concept-with-all-Attributes(C))@ is-SubConcept-of a@ by A1,CONLAT_1:34;
-    hence thesis by CONLAT_1:47;
-    end;
-  for a being Element of ConceptLattice(C)
-holds @Concept-with-all-Attributes(C) "/\" a = @Concept-with-all-Attributes(C)
- & a "/\" @Concept-with-all-Attributes(C) = @Concept-with-all-Attributes(C)
-   proof
-   let a be Element of ConceptLattice(C);
-     @Concept-with-all-Attributes(C) [= a by A2;
-   hence thesis by LATTICES:21;
-   end;
-then A3: ConceptLattice C is lower-bounded by LATTICES:def 13;
-A4:  (@Concept-with-all-Objects(C))@
-  = @Concept-with-all-Objects(C) by CONLAT_1:def 24
- .= Concept-with-all-Objects(C) by Def1;
-A5: for a being Element of ConceptLattice(C) holds
-    a [= @Concept-with-all-Objects(C)
-    proof
-    let a be Element of ConceptLattice(C);
-      a@ is-SubConcept-of (@Concept-with-all-Objects(C))@ by A4,CONLAT_1:34;
-    hence thesis by CONLAT_1:47;
-    end;
-  for a being Element of ConceptLattice(C)
-holds @Concept-with-all-Objects(C) "\/" a = @Concept-with-all-Objects(C) &
-   a "\/" @Concept-with-all-Objects(C) = @Concept-with-all-Objects(C)
-   proof
-   let a be Element of ConceptLattice(C);
-     a [= @Concept-with-all-Objects(C) by A5;
-   hence thesis by LATTICES:def 3;
-   end;
-then ConceptLattice C is upper-bounded by LATTICES:def 14;
-    hence thesis by A3,LATTICES:def 15;
-  end;
 end;
 
 
@@ -252,75 +210,6 @@ begin :: Dual Concept Lattices
 registration
 let L be complete Lattice;
 cluster L.: -> complete;
-coherence
-proof
-A1: L.: = LattStr(#the carrier of L,the L_meet of L,
-                  the L_join of L#) by LATTICE2:def 2;
-A2: (LattPOSet L)~ = RelStr(#the carrier of (LattPOSet L),
-         (the InternalRel of (LattPOSet L))~#) by LATTICE3:def 5;
-A3: (LattPOSet L.:)~ = RelStr(#the carrier of (LattPOSet L.:),
-         (the InternalRel of (LattPOSet L.:))~#) by LATTICE3:def 5;
-A4: LattPOSet L = RelStr(#the carrier of L, LattRel L#) by LATTICE3:def 2;
-A5: LattPOSet (L.:.:) = RelStr(#the carrier of (L.:.:), LattRel (L.:.:)#)
-     by LATTICE3:def 2;
-      LattRel (L.:) = (LattRel L)~ by LATTICE3:20;
-then A6:LattRel (L.:.:) = ((LattRel L)~)~ by LATTICE3:20;
-  let X be Subset of L.:;
-  reconsider X' = X as Subset of L by A1;
-  set a' = "\/"(X',L);
-  A7: X' is_less_than a' &
-      for r being Element of L
-      st X' is_less_than r holds a' [= r by LATTICE3:def 21;
-  reconsider a = a' as Element of L.: by A1;
-A8:a is_less_than X
-    proof
-    let q' be Element of L.:; assume A9: q' in X;
-    reconsider q = q' as Element of L by A1;
-      q [= a' by A7,A9,LATTICE3:def 17;
-    then q% <= (a')% by LATTICE3:7;
-    then [q%,(a')%] in the InternalRel of LattPOSet L by ORDERS_1:def 9;
-    then [(a')%,q%] in (the InternalRel of LattPOSet L)~ by RELAT_1:def 7;
-    then A10: [(a')%,q%] in the InternalRel of LattPOSet (L.:)
-      by A2,LATTICE3:20;
-    A11: (a')% = a' by LATTICE3:def 3 .= a% by LATTICE3:def 3;
-      (q')% = q' by LATTICE3:def 3 .= q% by LATTICE3:def 3;
-    then a% <= (q')% by A10,A11,ORDERS_1:def 9;
-    hence thesis by LATTICE3:7;
-    end;
-    for b being Element of L.:
-  st b is_less_than X holds b [= a
-    proof
-    let b be Element of L.:;
-    assume A12: b is_less_than X;
-    reconsider b' = b as Element of L by A1;
-      X' is_less_than b'
-      proof
-      let q be Element of L; assume A13: q in X';
-      reconsider q' = q as Element of L.: by A1;
-        b [= q' by A12,A13,LATTICE3:def 16;
-      then b% <= (q')% by LATTICE3:7;
-      then [b%,(q')%] in the InternalRel of LattPOSet L.: by ORDERS_1:def 9;
-      then [(q')%,b%] in (the InternalRel of LattPOSet L.:)~ by RELAT_1:def 7;
-      then A14: [(q')%,b%] in the InternalRel of LattPOSet (L.:.:)
-        by A3,LATTICE3:20;
-      A15: (b')% = b' by LATTICE3:def 3 .= b% by LATTICE3:def 3;
-        (q')% = q' by LATTICE3:def 3 .= q% by LATTICE3:def 3;
-      then q% <= (b')% by A4,A5,A6,A14,A15,ORDERS_1:def 9;
-      hence thesis by LATTICE3:7;
-      end;
-    then a' [= b' by LATTICE3:def 21;
-    then (a')% <= (b')% by LATTICE3:7;
-    then [(a')%,(b')%] in the InternalRel of LattPOSet L by ORDERS_1:def 9;
-    then [(b')%,(a')%] in (the InternalRel of LattPOSet L)~ by RELAT_1:def 7;
-    then A16: [(b')%,(a')%] in the InternalRel of LattPOSet (L.:)
-      by A2,LATTICE3:20;
-    A17: (a')% = a' by LATTICE3:def 3 .= a% by LATTICE3:def 3;
-      (b')% = b' by LATTICE3:def 3 .= b% by LATTICE3:def 3;
-    then b% <= a% by A16,A17,ORDERS_1:def 9;
-    hence thesis by LATTICE3:7;
-    end;
-  hence thesis by A8;
-end;
 end;
 
 

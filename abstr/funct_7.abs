@@ -59,19 +59,11 @@ theorem :: FUNCT_7:6
 
 registration let x,y be set;
  cluster x .--> y -> non empty;
- coherence
-  proof dom(x .--> y) = {x} by CQC_LANG:5;
-   hence thesis by RELAT_1:60;
-  end;
 end;
 
 
 registration let x,y,a,b be set;
  cluster (x,y) --> (a,b) -> non empty;
- coherence
-  proof dom((x,y) --> (a,b)) = {x,y} by FUNCT_4:65;
-   hence thesis by RELAT_1:60;
-  end;
 end;
 
 
@@ -145,112 +137,35 @@ theorem :: FUNCT_7:24
 
 registration
  cluster Function-yielding non empty non-empty FinSequence;
- existence
-  proof take p = <*<*0 qua set*>*>;
-A1:  dom p = {1} & p.1 = <*0*> by FINSEQ_1:4,55,57;
-   thus p is Function-yielding
-     proof let x be set; assume x in dom p;
-      hence thesis by A1,TARSKI:def 1;
-     end;
-   thus p is non empty;
-   let x be set; assume x in dom p;
-   hence thesis by A1,TARSKI:def 1;
-  end;
 end;
 
 
 registration
  cluster {} -> Function-yielding;
- coherence
-  proof let x be set; assume x in dom {};
-   hence thesis;
-  end;
  let f be Function;
  cluster <*f*> -> Function-yielding;
- coherence
-  proof let x be set; assume x in dom <*f*>;
-    then x in {1} by FINSEQ_1:4,55;
-    then x = 1 by TARSKI:def 1;
-   hence thesis by FINSEQ_1:57;
-  end;
  let g be Function;
  cluster <*f,g*> -> Function-yielding;
- coherence
-  proof let x be set; assume x in dom <*f,g*>;
-    then x in {1,2} by FINSEQ_1:4,FINSEQ_3:29;
-    then x = 1 or x = 2 by TARSKI:def 2;
-   hence thesis by FINSEQ_1:61;
-  end;
  let h be Function;
  cluster <*f,g,h*> -> Function-yielding;
- coherence
-  proof let x be set; assume x in dom <*f,g,h*>;
-    then x in {1,2,3} by FINSEQ_3:1,30;
-    then x = 1 or x = 2 or x = 3 by ENUMSET1:13;
-   hence thesis by FINSEQ_1:62;
-  end;
 end;
 
 
 registration let n be Nat, f be Function;
  cluster n|->f -> Function-yielding;
- coherence
-  proof let x be set; assume
-A1:  x in dom (n|->f);
-   then reconsider i = x as Nat;
-      i in Seg n by A1,FINSEQ_2:68;
-   hence thesis by FINSEQ_2:70;
-  end;
 end;
 
 
 registration
  let p be FinSequence, q be non empty FinSequence;
  cluster p^q -> non empty;
- coherence
-  proof
-   consider x being Element of q;
-   consider y,z being set such that
-A1:  x = [y,z] by RELAT_1:def 1;
-A2:  y in dom q by A1,RELAT_1:def 4;
-   then reconsider y as Nat;
-      len p+y in dom (p^q) by A2,FINSEQ_1:41;
-    then [len p+y,(p^q).(len p+y)] in p^q by FUNCT_1:def 4;
-   hence thesis;
-  end;
  cluster q^p -> non empty;
- coherence
-  proof
-   consider x being Element of q;
-   consider y,z being set such that
-A3:  x = [y,z] by RELAT_1:def 1;
-A4:  y in dom q by A3,RELAT_1:def 4;
-   then reconsider y as Nat;
-      y in dom (q^p) by A4,FINSEQ_3:24;
-    then [y,(q^p).y] in q^p by FUNCT_1:def 4;
-   hence thesis;
-  end;
 end;
 
 
 registration
  let p,q be Function-yielding FinSequence;
  cluster p^q -> Function-yielding;
- coherence
-  proof let x be set; assume
-A1:  x in dom (p^q);
-   then reconsider i = x as Nat;
-   per cases; suppose i in dom p;
-     then p.i is Function & p.i = (p^q).i by FINSEQ_1:def 7,PRALG_1:def 15;
-    hence thesis;
-   end;
-   suppose not i in dom p;
-    then consider j being Nat such that
-A2:   j in dom q & i = len p+j by A1,FINSEQ_1:38;
-       q.j = (p^q).i by A2,FINSEQ_1:def 7;
-    hence thesis by A2,PRALG_1:def 15;
-  end;
-  end;
 end;
 
 
@@ -265,224 +180,28 @@ scheme :: FUNCT_7:sch 1
  ex f being Function of [:X(),Y():], Z()
   st for x being Element of X(), y being Element of Y() holds f.[x,y]=F(x,y)
 provided
- for x being Element of X(), y being Element of Y() holds F(x,y) in Z()
-proof
-  deffunc G(Element of [:X(),Y():]) = F($1`1,$1`2);
-A2: for p being Element of [:X(),Y():] holds G(p) in Z() by A1;
-  consider f being Function of [:X(),Y():], Z() such that
-A3: for p being Element of [:X(),Y():] holds f.p = G(p)
-  from SUPINF_2:sch 1(A2);
- take f;
- let x be Element of X(), y be Element of Y();
- [x,y]`1 = x & [x,y]`2 = y by MCART_1:7;
- hence f.[x,y]=F(x,y) by A3;
-end;
+ for x being Element of X(), y being Element of Y() holds F(x,y) in Z();
 
 scheme :: FUNCT_7:sch 2
  FinMono{ A() -> set, D() -> non empty set, F,G(set) -> set }:
   { F(d) where d is Element of D() : G(d) in A() } is finite
 provided
   A() is finite and
-  for d1,d2 being Element of D() st G(d1) = G(d2) holds d1 = d2
-proof
-  deffunc F'(set) = F($1);
-  deffunc G'(set) = G($1);
- per cases;
- suppose
-A3:  A() = {};
-      now consider a being
-       Element of { F(d) where d is Element of D() : G(d) in A() };
-     assume { F(d) where d is Element of D() : G(d) in A() } <> {};
-      then a in { F(d) where d is Element of D() : G(d) in A() };
-      then ex d being Element of D() st a = F(d) & G(d) in A();
-     hence contradiction by A3;
-    end;
-  hence thesis;
- end;
- suppose A() <> {};
-  then reconsider D = A() as non empty set;
- defpred R[set] means ex d being Element of D() st $1 = G'(d);
- set B = { d where d is Element of D() : G'(d) in D},
-     C = { a where a is Element of D: R[a]};
-   C is Subset of D from DOMAIN_1:sch 7;
-then A4: C is finite by A1,FINSET_1:13;
-   C,B are_equipotent
-  proof
-   take Z = { [G(d),d] where d is Element of D(): not contradiction };
-   hereby let x be set;
-    assume x in C;
-     then consider a being Element of D such that
-A5:     a = x & ex d being Element of D() st a = G(d);
-     consider d being Element of D() such that
-A6:     a = G(d) by A5;
-     reconsider d as set;
-    take d;
-    thus d in B & [x,d] in Z by A5,A6;
-   end;
-   hereby let y be set;
-    assume y in B;
-     then consider d being Element of D() such that
-A7:   d = y & G(d) in D;
-     reconsider x = G(d) as set;
-    take x;
-    thus x in C & [x,y] in Z by A7;
-   end;
-   let x,y,z,u be set;
-   assume [x,y] in Z;
-    then consider d1 being Element of D() such that
-A8:  [x,y] = [G(d1),d1];
-   assume [z,u] in Z;
-    then consider d2 being Element of D() such that
-A9:  [z,u] = [G(d2),d2];
-A10: x = G(d1) & y = d1 by A8,ZFMISC_1:33;
-      z = G(d2) & u = d2 by A9,ZFMISC_1:33;
-   hence thesis by A2,A10;
-  end;
- then A11: B is finite by A4,CARD_1:68;
-A12: { F'(d) where d is Element of D(): d in B} is finite
-   from FRAENKEL:sch 21(A11);
-  { F(d) where d is Element of D() : G(d) in A() } =
-    { F'(d) where d is Element of D(): d in B}
-  proof
-   thus { F(d) where d is Element of D() : G(d) in A() } c=
-    { F'(d) where d is Element of D(): d in B}
-   proof
-     let x be set;
-     assume x in { F(d) where d is Element of D() : G(d) in A() }; then
-     consider d' being Element of D() such that
-A13:  x = F(d') & G(d') in A();
-     x = F'(d') & d' in B by A13; then
-     x in { F'(d) where d is Element of D(): d in B};
-     hence thesis;
-   end;
-   let x be set;
-   assume x in { F'(d) where d is Element of D(): d in B}; then
-   consider d1 being Element of D() such that
-A14: x = F'(d1) & d1 in B;
-   d1 in { d2 where d2 is Element of D() : G'(d2) in D} by A14; then
-   consider d3 being Element of D() such that
-A15:d3 = d1 & G'(d3) in D;
-   G(d1) in A() by A15; then
-   x in { F(d) where d is Element of D() : G(d) in A() } by A14;
-   hence thesis;
-  end;
- hence thesis by A12;
-end;
-end;
+  for d1,d2 being Element of D() st G(d1) = G(d2) holds d1 = d2;
 
 scheme :: FUNCT_7:sch 3
  CardMono{ A() -> set, D() -> non empty set, G(set) -> set }:
  A(),{ d where d is Element of D() : G(d) in A() } are_equipotent
 provided
   for x being set st x in A() ex d being Element of D() st x = G(d) and
-  for d1,d2 being Element of D() st G(d1) = G(d2) holds d1 = d2
-proof
- per cases;
- suppose
-A3:  A() = {};
-      now consider a being
-       Element of { d where d is Element of D() : G(d) in A() };
-     assume { d where d is Element of D() : G(d) in A() } <> {};
-      then a in { d where d is Element of D() : G(d) in A() };
-      then ex d being Element of D() st a = d & G(d) in A();
-     hence contradiction by A3;
-    end;
-  hence thesis by A3,CARD_1:46;
- end;
- suppose A() <> {};
-  then reconsider A = A() as non empty set;
- set D = { d where d is Element of D() : G(d) in A };
-   A,D are_equipotent
-  proof
-   take Z = { [G(d),d] where d is Element of D(): not contradiction };
-   hereby let x be set;
-    assume
-A4:     x in A;
-     then consider d being Element of D() such that
-A5:     x = G(d) by A1;
-     reconsider d as set;
-    take d;
-    thus d in D by A4,A5;
-    thus [x,d] in Z by A5;
-   end;
-   hereby let y be set;
-    assume y in D;
-     then consider d being Element of D() such that
-A6:   d = y & G(d) in A;
-     reconsider x = G(d) as set;
-    take x;
-    thus x in A & [x,y] in Z by A6;
-   end;
-   let x,y,z,u be set;
-   assume [x,y] in Z;
-    then consider d1 being Element of D() such that
-A7:  [x,y] = [G(d1),d1];
-   assume [z,u] in Z;
-    then consider d2 being Element of D() such that
-A8:  [z,u] = [G(d2),d2];
-A9: x = G(d1) & y = d1 by A7,ZFMISC_1:33;
-      z = G(d2) & u = d2 by A8,ZFMISC_1:33;
-   hence thesis by A2,A9;
-  end;
- hence thesis;
-end;
-end;
+  for d1,d2 being Element of D() st G(d1) = G(d2) holds d1 = d2;
 
 scheme :: FUNCT_7:sch 4
  CardMono'{ A() -> set, D() -> non empty set, G(set) -> set }:
  A(),{ G(d) where d is Element of D() : d in A() } are_equipotent
 provided
   A() c= D() and
-  for d1,d2 being Element of D() st G(d1) = G(d2) holds d1 = d2
-proof
- per cases;
- suppose
-A3:  A() = {};
-      now consider a being
-       Element of { G(d) where d is Element of D() : d in A() };
-     assume { G(d) where d is Element of D() : d in A() } <> {};
-      then a in { G(d) where d is Element of D() : d in A() };
-      then ex d being Element of D() st a = G(d) & d in A();
-     hence contradiction by A3;
-    end;
-  hence thesis by A3,CARD_1:46;
- end;
- suppose A() <> {};
-  then reconsider A = A() as non empty set;
- set D = { G(d) where d is Element of D() : d in A };
-   A,D are_equipotent
-  proof
-   take Z = { [d,G(d)] where d is Element of D(): not contradiction };
-   hereby let x be set;
-    assume
-A4:     x in A;
-     then reconsider d = x as Element of D() by A1;
-    take y = G(d);
-    thus y in D by A4;
-    thus [x,y] in Z;
-   end;
-   hereby let y be set;
-    assume y in D;
-     then consider d being Element of D() such that
-A5:   G(d) = y & d in A;
-     reconsider d as set;
-    take d;
-    thus d in A & [d,y] in Z by A5;
-   end;
-   let x,y,z,u be set;
-   assume [x,y] in Z;
-    then consider d1 being Element of D() such that
-A6:  [x,y] = [d1,G(d1)];
-   assume [z,u] in Z;
-    then consider d2 being Element of D() such that
-A7:  [z,u] = [d2,G(d2)];
-A8: x = d1 & y = G(d1) by A6,ZFMISC_1:33;
-      z = d2 & u = G(d2) by A7,ZFMISC_1:33;
-   hence thesis by A2,A8;
-  end;
- hence thesis;
-end;
-end;
+  for d1,d2 being Element of D() st G(d1) = G(d2) holds d1 = d2;
 
 scheme :: FUNCT_7:sch 5
  FuncSeqInd {P[set]}:
@@ -490,24 +209,7 @@ scheme :: FUNCT_7:sch 5
   provided
    P[ {} ] and
    for p being Function-yielding FinSequence st P[p]
-     for f being Function holds P[p^<*f*>]
-proof
-     defpred R[FinSequence] means $1 is Function-yielding implies P[ $1];
-A3:  R[{}] by A1;
-A4:  for p being FinSequence, x being set st R[p] holds R[p^<*x*>]
-     proof let p be FinSequence, x be set such that
-A5:     p is Function-yielding implies P[p] and
-A6:     p^<*x*> is Function-yielding;
-A7:     <*x*>.1 = x & dom <*x*> = {1} by FINSEQ_1:4,55,57;
-then A8:     p is Function-yielding & <*x*> is Function-yielding & 1 in dom <*x
-*>
-        by A6,Th25,TARSKI:def 1;
-       then P[p] & x is Function by A5,A7,PRALG_1:def 15;
-      hence P[p^<*x*>] by A2,A8;
-     end;
-      for p being FinSequence holds R[p] from FINSEQ_1:sch 3(A3,A4);
-   hence thesis;
-  end;
+     for f being Function holds P[p^<*f*>];
 
 begin :: Some auxiliary concepts
 
@@ -582,11 +284,6 @@ theorem :: FUNCT_7:37
 
 registration let f be FinSequence, i be Nat, x be set;
  cluster f+*(i,x) -> FinSequence-like;
- coherence
- proof
-     dom(f+*(i,x)) = dom f by Th32 .= Seg len f by FINSEQ_1:def 3;
-  hence f+*(i,x) is FinSequence-like by FINSEQ_1:def 2;
- end;
 end;
 
 
@@ -732,61 +429,21 @@ theorem :: FUNCT_7:62
 
 registration
  cluster FuncSeq-like -> Function-yielding FinSequence;
- coherence
-  proof let q be FinSequence;
-   given p being FinSequence such that
-      len p = len q+1 and
-A1:  for i being Nat st i in dom q holds q.i in Funcs(p.i, p.(i+1));
-   let i be set; assume
-A2:  i in dom q;
-    then reconsider i as Nat;
-      q.i in Funcs(p.i, p.(i+1)) by A1,A2;
-    then ex f being Function st q.i = f & dom f = p.i & rng f c= p.(i+1)
-     by FUNCT_2:def 2;
-   hence thesis;
-  end;
 end;
 
 
 registration
  cluster empty -> FuncSeq-like FinSequence;
- coherence
-  proof let p be FinSequence; assume
-    A1: p is empty;
-then A2:  len p = 0 & dom p = {} by FINSEQ_1:25,RELAT_1:60;
-   take q = <*{}*>;
-   thus len q = len p+1 by A2,FINSEQ_1:57;
-   thus thesis by A1,RELAT_1:60;
-  end;
 end;
 
 
 registration let f be Function;
  cluster <*f*> -> FuncSeq-like;
- coherence
-  proof set p = <*f*>; take q = <*dom f, rng f*>;
-   thus len q = 1+1 by FINSEQ_1:61 .= len p+1 by FINSEQ_1:57;
-   let i be Nat; assume i in dom p;
-    then i in {1} by FINSEQ_1:4,55;
-    then i = 1 by TARSKI:def 1;
-    then p.i = f & q.i = dom f & q.(i+1) = rng f by FINSEQ_1:57,61;
-   hence p.i in Funcs(q.i, q.(i+1)) by FUNCT_2:def 2;
-  end;
 end;
 
 
 registration
  cluster FuncSeq-like non empty non-empty FinSequence;
- existence
-  proof consider f being non empty Function;
-   take p = <*f*>;
-   thus p is FuncSeq-like;
-   thus p is non empty;
-   let x be set; assume x in dom p;
-    then x in {1} by FINSEQ_1:4,55;
-    then x = 1 by TARSKI:def 1;
-   hence thesis by FINSEQ_1:57;
-  end;
 end;
 
 
@@ -845,22 +502,6 @@ end;
 registration
  let q be non-empty non empty FinSequence;
  cluster -> FuncSeq-like non-empty FuncSequence of q;
- coherence
-  proof let p be FuncSequence of q;
-   thus p is FuncSeq-like
-     proof take q; thus thesis by Def10; end;
-   let x be set; assume
-A1:  x in dom p; then reconsider i = x as Nat;
-      len q = len p+1 by Def10;
-    then i in dom q & i+1 in dom q by A1,Th24;
-   then reconsider X = q.i, Y = q.(i+1) as non empty set by UNIALG_1:def 6;
-      p.i in Funcs(X,Y) by A1,Def10;
-   then consider f such that
-A2:  p.x = f & dom f = X & rng f c= Y by FUNCT_2:def 2;
-   consider a being Element of X;
-      [a,f.a] in p.x by A2,FUNCT_1:def 4;
-   hence thesis;
-  end;
 end;
 
 

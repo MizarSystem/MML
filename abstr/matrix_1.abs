@@ -41,13 +41,6 @@ begin
 
  registration
   cluster tabular FinSequence;
-    existence
-     proof
-       take M={},0;
-       let x;
-       assume x in rng M;
-       hence thesis;
-     end;
  end;
 
 
@@ -86,7 +79,6 @@ theorem :: MATRIX_1:8
  registration
   let D be set;
   cluster tabular FinSequence of D*;
-   existence proof take <*>(D*),0; thus thesis; end;
  end;
 
 
@@ -99,16 +91,6 @@ theorem :: MATRIX_1:8
  registration
   let D be non empty set;
   cluster non empty-yielding Matrix of D;
-   existence
-    proof consider d be Element of D;
-A1:    rng <*<*d*>*>= {<*d*>} & <*d*> in D* by FINSEQ_1:55,def 11;
-      then rng <*<*d*>*> c= D* by ZFMISC_1:37;
-      then reconsider p = <*<*d*>*> as FinSequence of D* by FINSEQ_1:def 4;
-      reconsider p as tabular FinSequence of D* by Th1;
-      reconsider s = <*d*> as FinSequence;
-      take p,s; thus s in rng p by A1,TARSKI:def 1;
-      thus len s <> 0 by FINSEQ_1:56;
-    end;
  end;
 
 
@@ -207,110 +189,7 @@ len M1 =len M2 & width M1= width M2 &
  MatrixLambda { D() -> non empty set, n() -> Nat, m() -> Nat,
                    f(set,set) -> Element of D()} :
   ex M being Matrix of n(),m(),D() st
-   for i,j st [i,j] in Indices M holds M*(i,j) = f(i,j)
-proof
-   defpred P[set,set] means
-    ex p being FinSequence st
-    $2=p & len p = m() & for i st i in Seg m() holds p.i = f($1,i);
-   A1: for k,y1,y2 st k in Seg n() & P[k,y1] & P[k,y2] holds y1=y2
-   proof
-    let k,y1,y2;
-    assume k in Seg n();
-    given p1 being FinSequence such that A2:y1 =p1 and A3:len p1 =m() and
-     A4:for i st i in Seg m() holds p1.i =f(k,i);
-    given p2 being FinSequence such that A5:y2 =p2 and A6:len p2 =m() and
-     A7:for i st i in Seg m() holds p2.i =f(k,i);
-      now let j; assume A8:j in Seg m();
-    then p1.j=f(k,j) by A4;
-    hence p1.j=p2.j by A7,A8;
-    end;
-    hence y1=y2 by A2,A3,A5,A6,FINSEQ_2:10;
-   end;
-  A9:for k st k in Seg n() ex y st P[k,y]
-   proof
-    let k;
-    assume k in Seg n();
-    deffunc F(Nat) = f(k,$1);
-    consider p being FinSequence such that
-     A10: len p =m() & for i st i in Seg m() holds p.i = F(i)
-      from FINSEQ_1:sch 2;
-    reconsider y =p as set;
-    take y,p;
-    thus thesis by A10;
-   end;
-   consider M being FinSequence such that
-    A11:dom M = Seg n() and
-    A12:for k st k in Seg n() holds P[k,M.k] from FINSEQ_1:sch 1(A1,A9);
-    A13:len M = n() by A11,FINSEQ_1:def 3;
-     rng M c=D()*
-    proof
-     let x;
-     assume x in rng M;
-     then consider i such that
-A14:      i in dom M & M.i=x by FINSEQ_2:11;
-      consider p being FinSequence such that
-A15:    M.i=p & len p = m() & for j st j in Seg m() holds p.j = f(i,j)
-         by A11,A12,A14;
-        rng p c= D()
-       proof
-          let z;
-          assume z in rng p;
-          then consider k such that
-          A16:k in dom p and A17:p.k =z by FINSEQ_2:11;
-            k in Seg len p by A16,FINSEQ_1:def 3;
-          then z = f(i,k) by A15,A17;
-          hence thesis;
-         end;
-      then p is FinSequence of D() by FINSEQ_1:def 4;
-      hence x in D()* by A14,A15,FINSEQ_1:def 11;
-     end;
-    then reconsider M as FinSequence of D()* by FINSEQ_1:def 4;
-       ex n st for x st x in rng M ex p being FinSequence of D() st
-        x=p & len p = n
-     proof take m();
-      let x;
-      assume x in rng M;
-      then consider i such that A18:i in dom M and A19:M.i =x by FINSEQ_2:11;
-      consider p being FinSequence such that
-      A20: x=p & len p = m() & for j st j in Seg m() holds p.j = f(i,j)
-                                                            by A11,A12,A18,A19;
-        rng p c= D()
-       proof
-          let z;
-          assume z in rng p;
-          then consider k such that
-          A21:k in dom p and A22:p.k =z by FINSEQ_2:11;
-            k in Seg len p by A21,FINSEQ_1:def 3;
-          then z = f(i,k) by A20,A22;
-          hence thesis;
-       end;
-      then reconsider p as FinSequence of D() by FINSEQ_1:def 4;
-      take p;
-      thus thesis by A20;
-     end;
-    then reconsider M as Matrix of D() by Th9;
-     for p being FinSequence of D() st p in rng M holds len p= m()
-    proof
-      let p be FinSequence of D();
-      assume p in rng M;
-      then consider i such that A23:i in dom M and A24:M.i =p by FINSEQ_2:11;
-        P[i,p] by A11,A12,A23,A24;
-      hence thesis;
-    end;
-    then reconsider M as Matrix of n(),m(),D() by A13,Def3;
-    take M;
-    let i,j;
-    assume A25:[i,j] in Indices M;
-    then A26: ex p being FinSequence of D() st p=M.i & M*(i,j)=p.j by Def6;
-A27:      Indices M = [:dom M, Seg width M:] by Def5;
-then A28:      i in Seg n() & j in Seg width M by A11,A25,ZFMISC_1:106;
- then A29:      ex q being FinSequence st
- M.i=q & len q = m() & for j st j in Seg m() holds q.j = f(i,j) by A12;
-       n() <> 0 & n() >= 0 by A11,A25,A27,FINSEQ_1:4,NAT_1:18,ZFMISC_1:106;
-      then n() > 0 by REAL_1:def 5;
-      then j in Seg m() by A13,A28,Th20;
-      hence thesis by A26,A29;
-   end;
+   for i,j st [i,j] in Indices M holds M*(i,j) = f(i,j);
 
 
  scheme :: MATRIX_1:sch 2
@@ -323,138 +202,7 @@ then A28:      i in Seg n() & j in Seg width M by A11,A25,ZFMISC_1:106;
      for x1,x2 being Element of D() st P[i,j,x1] & P[i,j,x2]
       holds x1 = x2 and
   for i,j st [i,j] in [:Seg n(), Seg m():]
-     ex x being Element of D() st P[i,j,x]
-proof
-      defpred Q[set,set,set] means
-      P[$1,$2,$3] & $3 in D();
-      A2:for x ,y st x in Seg n() & y in Seg m() ex z st z in D()
-        & Q[x,y,z]
-      proof
-       let x,y;
-       assume A3:x in Seg n() & y in Seg m();
-       then reconsider x'=x as Nat;
-       reconsider y'=y as Nat by A3;
-         [x',y'] in [:Seg n(),Seg m():] by A3,ZFMISC_1:106;
-       then consider z' being Element of D() such that
-        A4: P[x',y',z'] by A1;
-       reconsider z'' = z' as set;
-       take z'';
-       thus thesis by A4;
-      end;
-     consider f being Function of [:Seg n(),Seg m():],D()
-     such that
-    A5:for x,y st x in Seg n() & y in Seg m() holds Q[x,y,f.[x,y]]
-          from FUNCT_2:sch 5(A2);
-    defpred R[set,set] means
-      ex p being FinSequence st
-      $2=p & len p = m() & for i st i in Seg m() holds p.i = f.[$1,i];
-    A6: for k,y1,y2 st k in Seg n() & R[k,y1] & R[k,y2] holds y1=y2
-       proof
-        let k,y1,y2;
-        assume k in Seg n();
-        given p1 being FinSequence such that A7:y1 =p1 and A8:len p1 =m() and
-        A9:for i st i in Seg m() holds p1.i =f.[k,i];
-        given p2 being FinSequence such that A10:y2 =p2 and A11:len p2 =m() and
-        A12:for i st i in Seg m() holds p2.i =f.[k,i];
-          now let j; assume A13:j in Seg m();
-           then p1.j=f.[k,j] by A9;
-           hence p1.j=p2.j by A12,A13;
-         end;
-         hence y1=y2 by A7,A8,A10,A11,FINSEQ_2:10;
-        end;
-     A14:for k st k in Seg n() ex y st R[k,y]
-        proof
-         let k;
-         assume k in Seg n();
-         deffunc F(Nat) = f.[k,$1];
-         consider p being FinSequence such that
-         A15: len p =m() & for i st i in Seg m() holds p.i = F(i)
-              from FINSEQ_1:sch 2;
-         reconsider y =p as set;
-         take y,p;
-         thus thesis by A15;
-        end;
-     consider M being FinSequence such that
-     A16:dom M = Seg n() and
-     A17:for k st k in Seg n() holds R[k,M.k] from FINSEQ_1:sch 1(A6,A14);
-     A18:len M = n() by A16,FINSEQ_1:def 3;
-       rng M c=D()*
-       proof
-         let x;
-         assume x in rng M;
-         then consider i such that
-         A19:i in Seg n() & M.i=x by A16,FINSEQ_2:11;
-         consider p being FinSequence such that
-         A20:M.i=p & len p = m() & for j st j in Seg m() holds p.j = f.[i,j]
-            by A17,A19;
-           rng p c= D()
-           proof
-             let z;
-             assume z in rng p;
-             then consider k such that
-             A21:k in dom p and A22:p.k =z by FINSEQ_2:11;
-A23:          k in Seg len p by A21,FINSEQ_1:def 3;
-             then A24:z = f.[i,k] by A20,A22;
-               [i,k] in [:Seg n(),Seg m():] by A19,A20,A23,ZFMISC_1:106;
-             hence thesis by A24,FUNCT_2:7;
-           end;
-         then p is FinSequence of D() by FINSEQ_1:def 4;
-         hence x in D()* by A19,A20,FINSEQ_1:def 11;
-        end;
-      then reconsider M as FinSequence of (D())* by FINSEQ_1:def 4;
-         ex n st for x st x in rng M ex p being FinSequence of D() st
-         x=p & len p = n
-        proof take m();
-          let x;
-          assume x in rng M;
-          then consider i such that A25:i in dom M and A26:M.i =x by FINSEQ_2:
-11;
-          consider p being FinSequence such that
-          A27:x=p & len p = m() & for j st j in Seg m() holds p.j =f.[i,j]
-                                                      by A16,A17,A25,A26;
-            rng p c= D()
-           proof
-             let z;
-             assume z in rng p;
-             then consider k such that
-             A28:k in dom p and A29:p.k =z by FINSEQ_2:11;
-A30:          k in Seg len p by A28,FINSEQ_1:def 3;
-             then A31:z = f.[i,k] by A27,A29;
-               [i,k] in [:Seg n(),Seg m():] by A16,A25,A27,A30,ZFMISC_1:106;
-             hence thesis by A31,FUNCT_2:7;
-           end;
-         then reconsider p as FinSequence of D() by FINSEQ_1:def 4;
-         take p;
-         thus thesis by A27;
-        end;
-       then reconsider M as Matrix of D() by Th9;
-         for p being FinSequence of D() st p in rng M holds len p= m()
-         proof
-           let p be FinSequence of D();
-           assume p in rng M;
-           then consider i such that A32:i in dom M and A33:M.i =p by FINSEQ_2:
-11;
-             R[i,p] by A16,A17,A32,A33;
-           hence thesis;
-         end;
-         then reconsider M as Matrix of n(),m(),D() by A18,Def3;
-         take M;
-         let i,j;
-         assume A34:[i,j] in Indices M;
-         then A35: ex p being FinSequence of D() st p=M.i & M*
-(i,j)=p.j by Def6
-;
-A36:         Indices M = [:dom M, Seg width M:] by Def5;
- then A37:      i in Seg n() & j in Seg width M by A16,A34,ZFMISC_1:106;
- then A38:          ex q being FinSequence st
- M.i=q & len q = m() & for j st j in Seg m() holds
-                   q.j = f.[i,j] by A17;
-       n() <> 0 & n() >= 0 by A16,A34,A36,FINSEQ_1:4,NAT_1:18,ZFMISC_1:106;
-         then n() > 0 by REAL_1:def 5;
- then A39:      j in Seg m() by A18,A37,Th20;
-         then f.[i,j]=M*(i,j) by A35,A38;
-         hence thesis by A5,A37,A39;
-       end;
+     ex x being Element of D() st P[i,j,x];
 
 canceled;
 
@@ -551,11 +299,6 @@ theorem :: MATRIX_1:29
 
  registration let K,n;
   cluster n-Matrices_over K -> non empty;
-    coherence
-    proof
-       n-Matrices_over K= n-tuples_on (n-tuples_on the carrier of K) by Def10;
-     hence thesis;
-    end;
    end;
 
 

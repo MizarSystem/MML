@@ -190,28 +190,6 @@ end;
 
 registration
  cluster non empty Tree-like set;
-  existence
-   proof
-    take D = { <*>(NAT) };
-    thus D is non empty;
-    thus D c= NAT*
-      proof let x; assume x in D;
-        then x = <*>(NAT) by TARSKI:def 1;
-       hence thesis by FINSEQ_1:def 11;
-      end;
-    thus for p st p in D holds ProperPrefixes p c= D
-      proof let p; assume p in D;
-        then p = <*>(NAT) & <*>(NAT) = {} & ProperPrefixes {} = {} & {} c= D
-         by Th39,TARSKI:def 1,XBOOLE_1:2;
-       hence thesis;
-      end;
-    let p,k,n; assume
-       p^<*k*> in D;
-     then p^<*k*> = {} by TARSKI:def 1;
-     then len {} = len p + len <*k*> by FINSEQ_1:35 .= 1 + len p by FINSEQ_1:56
-;
-    hence thesis by FINSEQ_1:25;
-   end;
 end;
 
 
@@ -256,7 +234,6 @@ theorem :: TREES_1:50
 
 registration
  cluster finite Tree;
-  existence by Th48;
 end;
 
 
@@ -317,55 +294,6 @@ theorem :: TREES_1:60
 
 registration let T be finite Tree; let p be Element of T;
  cluster T|p -> finite;
-  coherence
-   proof
-     consider t being Function such that
-A1:   rng t = T and
-A2:  dom t in omega by FINSET_1:def 1;
-     defpred P[set,set] means
-      ex q st t.$1 = q & ((ex r st $2 = r & q = p^r) or
-      (for r holds q <> p^r) & $2 = <*> NAT);
-A3:  for x,y,z st x in dom t & P[x,y] & P[x,z] holds y = z by FINSEQ_1:46;
-A4:  for x st x in dom t ex y st P[x,y]
-      proof let x; assume x in dom t;
-        then t.x in T by A1,FUNCT_1:def 5;
-        then reconsider q = t.x as FinSequence of NAT by Th44;
-          (ex r st q = p^r) implies thesis;
-       hence thesis;
-      end;
-     consider f being Function such that
-A5:   dom f = dom t & for x st x in dom t holds P[x,f.x] from FUNCT_1:sch 2
-(A3,A4);
-       T|p is finite
-      proof take f;
-       thus rng f c= T|p
-        proof let x; assume x in rng f;
-          then consider y such that
-A6:        y in dom f & x = f.y by FUNCT_1:def 5;
-          consider q such that
-A7:        t.y = q & ((ex r st x = r & q = p^r) or
-             (for r holds q <> p^r) & x = <*> NAT) by A5,A6;
-A8:       p^(<*> NAT) = p by FINSEQ_1:47;
-         assume
-A9:       not x in T|p;
-            q in T & p in T by A1,A5,A6,A7,FUNCT_1:def 5;
-         hence contradiction by A7,A8,A9,Def9;
-        end;
-       thus T|p c= rng f
-        proof let x; assume
-A10:      x in T|p;
-          then reconsider q = x as FinSequence of NAT by Th44;
-            p^q in T by A10,Def9;
-          then consider y such that
-A11:       y in dom t & p^q = t.y by A1,FUNCT_1:def 5;
-            P[y,f.y] by A5,A11;
-          then x = f.y by A11,FINSEQ_1:46;
-         hence x in rng f by A5,A11,FUNCT_1:def 5;
-        end;
-       thus thesis by A2,A5;
-      end;
-    hence thesis;
-   end;
 end;
 
 
@@ -411,64 +339,6 @@ theorem :: TREES_1:66
 registration let T be finite Tree, t be Element of T;
  let T1 be finite Tree;
  cluster T with-replacement (t,T1) -> finite;
-  coherence
-   proof
-       { s where s is Element of T : not t is_a_proper_prefix_of s } c= T
-      proof let x; assume
-          x in
- { s where s is Element of T : not t is_a_proper_prefix_of s };
-        then ex s being Element of T st
-     x = s & not t is_a_proper_prefix_of s;
-       hence thesis;
-      end;
-then A1:   { s where s is Element of T : not t is_a_proper_prefix_of s } is
-finite
-      by FINSET_1:13;
-       T1,{ t^s where s is Element of T1 : s = s } are_equipotent
-      proof
-       defpred P[set,set] means ex q st $1 = q & $2 = t^q;
-A2:     x in T1 & P[x,y] & P[x,z] implies y = z;
-A3:     x in T1 implies ex y st P[x,y]
-         proof assume x in T1;
-          then reconsider q = x as FinSequence of NAT by Th44;
-             x = q & t^q = t^q;
-          hence thesis;
-         end;
-       consider f such that
-A4:      dom f = T1 & for x st x in T1 holds P[x,f.x] from FUNCT_1:sch 2
-(A2,A3);
-       take f;
-       thus f is one-to-one
-         proof let x,y; assume
-A5:        x in dom f & y in dom f & f.x = f.y;
-          then A6: ex q st x = q & f.x = t^q by A4;
-             ex r st y = r & f.y = t^r by A4,A5;
-          hence thesis by A5,A6,FINSEQ_1:46;
-         end;
-       thus dom f = T1 by A4;
-       thus rng f c= { t^s where s is Element of T1 : s = s }
-         proof let x; assume x in rng f;
-          then consider y such that
-A7:        y in dom f & x = f.y by FUNCT_1:def 5;
-          consider q such that
-A8:        y = q & f.y = t^q by A4,A7;
-          reconsider q as Element of T1 by A4,A7,A8;
-             x = t^q by A7,A8;
-          hence thesis;
-         end;
-       let x; assume x in { t^s where s is Element of T1 : s = s };
-       then consider s being Element of T1 such that
-A9:      x = t^s & s = s;
-          P[s,x] & P[s,f.s] by A4,A9;
-       hence x in rng f by A4,FUNCT_1:def 5;
-      end;
-     then { t^s where s is Element of T1 : s = s } is finite by CARD_1:68;
-     then t in T & { v where v is Element of T : not t is_a_proper_prefix_of v
-} \/
-      { t^s where s is Element of T1 : s = s } is finite
-       by A1,FINSET_1:14;
-    hence thesis by Th64;
-   end;
 end;
 
 
@@ -479,12 +349,6 @@ theorem :: TREES_1:67
 
 registration let p be FinSequence;
  cluster ProperPrefixes p -> finite;
- coherence
-  proof
-     ProperPrefixes p,dom p are_equipotent by Th67;
-   then ProperPrefixes p,Seg len p are_equipotent by FINSEQ_1:def 3;
-   hence thesis by CARD_1:68;
-  end;
 end;
 
 
@@ -506,13 +370,6 @@ end;
 
 registration
  cluster AntiChain_of_Prefixes-like set;
-  existence
-   proof
-    take {};
-    thus for x st x in {} holds x is FinSequence;
-    let p1,p2;
-    thus thesis;
-   end;
 end;
 
 
@@ -553,11 +410,6 @@ theorem :: TREES_1:75
 
 registration let T be finite Tree;
  cluster -> finite AntiChain_of_Prefixes of T;
- coherence
-  proof let X be AntiChain_of_Prefixes of T;
-      X c= T by Def14;
-   hence thesis by FINSET_1:13;
-  end;
 end;
 
 
@@ -602,23 +454,4 @@ scheme :: TREES_1:sch 1
  Tree_Ind { P[Tree] }:
  for fT holds P[fT]
   provided
- for fT st for n st <*n*> in fT holds P[fT|<*n*>] holds P[fT]
-proof
-    defpred X[set] means for fT holds height fT = $1 implies P[fT];
-A2:  for n st for k st k < n holds X[k] holds X[n]
-     proof let n such that
-A3:    for k st k < n for fT st height fT = k holds P[fT];
-      let fT such that
-A4:    height fT = n;
-         now let k; assume <*k*> in fT;
-        then reconsider k' = <*k*> as Element of fT;
-           k' <> {} by Th4;
-         then height(fT|k') < height fT by Th85;
-        hence P[fT|<*k*>] by A3,A4;
-       end;
-      hence thesis by A1;
-     end;
-A5:  X[n] from NAT_1:sch 4(A2);
-   let fT; height fT = height fT;
-   hence thesis by A5;
-  end;
+ for fT st for n st <*n*> in fT holds P[fT|<*n*>] holds P[fT];

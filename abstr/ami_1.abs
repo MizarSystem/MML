@@ -47,53 +47,19 @@ end;
 
 registration
  cluster non empty with_non-empty_elements set;
- existence
-  proof
-   take {{{}}};
-   thus {{{}}} is non empty;
-   assume {} in {{{}}};
-   hence contradiction by TARSKI:def 1;
-  end;
 end;
 
 
 registration
  let A be non empty set;
   cluster { A } -> with_non-empty_elements;
-  coherence
-   proof
-      { A } is with_non-empty_elements
-    proof
-    assume {} in { A };
-    hence contradiction by TARSKI:def 1;
-    end;
-    hence thesis;
-   end;
  let B be non empty set;
   cluster { A, B } -> with_non-empty_elements;
-  coherence
-   proof
-      { A, B } is with_non-empty_elements
-    proof
-    assume {} in { A,B };
-    hence contradiction by TARSKI:def 2;
-    end;
-    hence thesis;
-   end;
 end;
 
 
 registration let A,B be with_non-empty_elements set;
  cluster A \/ B -> with_non-empty_elements;
- coherence
-  proof
-     A \/ B is with_non-empty_elements
-    proof
-       not {} in A & not {} in B by Def1;
-     hence not {} in A \/ B by XBOOLE_0:def 2;
-    end;
-   hence thesis;
-  end;
 end;
 
 
@@ -142,33 +108,21 @@ end;
 
 registration let N be set;
  cluster Trivial-AMI N -> non empty non void;
- coherence
- proof
-   thus the carrier of Trivial-AMI N is non empty by Def2;
-   thus the Instruction-Locations of Trivial-AMI N is non empty by Def2;
- end;
 end;
 
 
 registration let N be set;
  cluster non empty non void AMI-Struct over N;
- existence
- proof
-   take Trivial-AMI N;
-   thus thesis;
- end;
 end;
 
 
 registration let N be set; let S be non empty AMI-Struct over N;
  cluster the carrier of S -> non empty;
-coherence;
 end;
 
 
 registration let N be set; let S be non void AMI-Struct over N;
  cluster the Instruction-Locations of S -> non empty;
- coherence by Def3;
 end;
 
 
@@ -207,27 +161,12 @@ end;
 
 registration let f be Function;
  cluster product f -> functional;
- coherence
-  proof
-    set d = product f;
-     let x be set; assume x in d;
-       then ex g being Function
-      st x = g & dom g= dom f & for x being set st x in dom f holds g.x in f.x
-         by CARD_3:def 5;
-      hence x is Function;
-  end;
 end;
 
 
 registration let A be set; let B be with_non-empty_elements set;
  let f be Function of A,B;
  cluster product f -> non empty;
- coherence
-  proof
-      rng f c= B by RELSET_1:12;
-    then not {} in rng f by Def1;
-    hence thesis by CARD_3:37;
-  end;
 end;
 
 
@@ -268,17 +207,11 @@ theorem :: AMI_1:6
 
 registration let N;
  cluster Trivial-AMI N -> halting;
-coherence by Th6;
 end;
 
 
 registration let N;
  cluster halting (non void AMI-Struct over N);
-existence
-  proof
-    take Trivial-AMI N;
-    thus thesis;
-  end;
 end;
 
 
@@ -290,7 +223,6 @@ end;
 
 registration let N; let S be halting (non void AMI-Struct over N);
  cluster halt S -> halting;
-coherence by Lm1;
 end;
 
 
@@ -344,51 +276,33 @@ theorem :: AMI_1:11
 
 registration let E be set;
   cluster Trivial-AMI E -> data-oriented;
-  coherence by Th8;
 end;
 
 
 registration let E be set;
   cluster Trivial-AMI E -> IC-Ins-separated definite;
-  coherence by Th7,Th11;
 end;
 
 
 registration let N be with_non-empty_elements set;
   cluster Trivial-AMI N -> steady-programmed;
-  coherence by Th10;
 end;
 
 
 registration let E be set;
  cluster data-oriented strict AMI-Struct over E;
- existence
-  proof
-    take Trivial-AMI E;
-    thus thesis;
-  end;
 end;
 
 
 registration let M be set;
  cluster IC-Ins-separated data-oriented definite strict
               (non empty non void AMI-Struct over M);
- existence
-  proof
-    take Trivial-AMI M;
-    thus thesis;
-  end;
 end;
 
 
 registration let N;
  cluster IC-Ins-separated data-oriented halting steady-programmed definite
          strict (non empty non void AMI-Struct over N);
- existence
-  proof
-    take Trivial-AMI N;
-    thus thesis;
-  end;
 end;
 
 
@@ -453,43 +367,6 @@ end;
 
 registration let f be Function;
  cluster sproduct f -> functional non empty;
- coherence
- proof
-   defpred _P[set] means ex g st $1 = g & dom g c= dom f &
-     for x st x in dom g holds g.x in f.x;
-   consider A being set such that
-A1:x in A iff x in  PFuncs(dom f, union rng f) & _P[x] from XBOOLE_0:sch 1;
-     {} is PartFunc of dom f, union rng f by PARTFUN1:56;
-then A2:{} in PFuncs(dom f, union rng f) by PARTFUN1:119;
-     dom {} c= dom f & for x st x in dom {} holds {} .x in f.x by XBOOLE_1:2;
-   then reconsider A as non empty set by A1,A2;
-     now let x be set;
-    assume x in A;
-     then ex g st x = g & dom g c= dom f &
-         for x st x in dom g holds g.x in f.x by A1;
-    hence x is Function;
-   end;
-   then reconsider A as functional non empty set by FRAENKEL:def 1;
-     now let x;
-    thus x in A implies ex g st x = g & dom g c= dom f &
-         for x st x in dom g holds g.x in f.x by A1;
-    given g such that
-A3:     x = g & dom g c= dom f &
-     for x st x in dom g holds g.x in f.x;
-       rng g c= union rng f
-      proof let y be set;
-       assume y in rng g;
-        then consider z being set such that
-A4:       z in dom g & y = g.z by FUNCT_1:def 5;
-A5:      g.z in f.z by A3,A4;
-          f.z in rng f by A3,A4,FUNCT_1:def 5;
-       hence y in union rng f by A4,A5,TARSKI:def 4;
-      end;
-     then x in PFuncs(dom f, union rng f) by A3,PARTFUN1:def 5;
-    hence x in A by A1,A3;
-   end;
-  hence thesis by Def16;
- end;
 end;
 
 
@@ -709,7 +586,6 @@ theorem :: AMI_1:57
 registration let N;
   let S be non empty non void AMI-Struct over N, o be Object of S;
   cluster ObjectKind o -> non empty;
-coherence by Def1;
 end;
 
 
@@ -794,34 +670,22 @@ theorem :: AMI_1:61
 
 registration let E;
   cluster Trivial-AMI E -> realistic;
-  coherence by Th60;
 end;
 
 
 registration let N;
   cluster Trivial-AMI N -> programmable;
-  coherence by Th61;
 end;
 
 
 registration let E;
  cluster data-oriented realistic strict AMI-Struct over E;
- existence
-  proof
-   take Trivial-AMI E;
-   thus thesis;
-  end;
 end;
 
 
 registration let M be set;
  cluster data-oriented realistic strict IC-Ins-separated
  definite (non empty non void AMI-Struct over M);
- existence
-  proof
-   take Trivial-AMI M;
-   thus thesis;
-  end;
 end;
 
 
@@ -829,11 +693,6 @@ registration let N;
  cluster data-oriented halting steady-programmed realistic programmable
          strict (IC-Ins-separated definite
          (non empty non void AMI-Struct over N));
- existence
-  proof
-   take Trivial-AMI N;
-   thus thesis;
-  end;
 end;
 
 
@@ -849,7 +708,6 @@ registration let N;
  let S be programmable
   (IC-Ins-separated definite (non empty non void AMI-Struct over N));
  cluster non empty autonomic FinPartState of S;
- existence by Def27;
 end;
 
 
@@ -900,14 +758,6 @@ registration let N;
  let S be realistic halting IC-Ins-separated definite
   (non empty non void AMI-Struct over N);
  cluster autonomic halting FinPartState of S;
- existence
-  proof
-    consider loc being Instruction-Location of S;
-    reconsider l = loc as Element of ObjectKind IC S by Def11;
-    reconsider h = halt S as Element of ObjectKind loc by Def14;
-      (IC S,loc) --> (l, h) is autonomic halting by Th65,Th67;
-   hence thesis;
-  end;
 end;
 
 

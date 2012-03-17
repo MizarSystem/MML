@@ -75,109 +75,7 @@ scheme :: FRECHET2:sch 1
   ex S1 being subsequence of S() st for n being Nat holds P[S1.n]
 provided
   for n being Nat ex m being Nat,x being Point of T() st
-    n <= m & x = S().m & P[x]
-proof
-A2:
-  for n being Nat ex m being Nat st
-    n <= m & P[S().m]
-  proof
-    let n be Nat;
-    consider m being Nat such that
-A3:   ex x being Point of T() st n <= m & x = S().m & P[x] by A1;
-    take m;
-    consider x being Point of T() such that
-A4:   n <= m & x = S().m & P[S().m] by A3;
-    thus n <= m by A4;
-    thus P[S().m] by A4;
-  end;
-  then consider n0 being Nat such that
-      0 <= n0 and
-A5: P[S().n0];
-  defpred R[Nat,set,set] means
-    $3 in NAT &
-      (for m,k being Nat st m=$2 & k=$3 holds m<k & P[S().k]);
-A6: for n being Nat for x being set ex y being set st R[n,x,y]
-  proof
-    let n be Nat, x be set;
-    per cases;
-    suppose x in NAT;
-    then reconsider mx=x as Nat;
-    consider my being Nat such that
-A7:    mx + 1 <= my & P[S().my] by A2;
-    take my;
-    thus my in NAT;
-    thus for m,k being Nat st m=x & k=my holds m<k & P[S().k] by A7,NAT_1:38;
-    end;
-    suppose
-A8:    not x in NAT;
-    set y=0;
-    take 0;
-    thus y in NAT;
-    let m,k be Nat;
-    assume m=x & k=y;
-    hence m<k & P[S().k] by A8;
-  end;
-  end;
-  consider g being Function such that
-A9: dom g = NAT and
-A10: g.0 = n0 and
-A11: for n being Nat holds R[n,g.n,g.(n+1)]
-        from LATTICE5:sch 1(A6);
-A12:
-  rng g c= NAT
-  proof
-    let y be set;
-    assume y in rng g;
-    then consider x being set such that
-A13:   x in dom g and
-A14:   g.x = y by FUNCT_1:def 5;
-    reconsider n=x as Nat by A9,A13;
-    defpred P[Nat] means g.$1 in NAT;
-A15: P[0] by A10;
-A16: for k being Nat holds P[k] implies P[k+1] by A11;
-      for k being Nat holds P[k] from NAT_1:sch 1(A15,A16);
-    then g.n in NAT;
-    hence y in NAT by A14;
-  end;
-  then rng g c= REAL by XBOOLE_1:1;
-  then reconsider g as Function of NAT,REAL by A9,FUNCT_2:4;
-  reconsider g as Real_Sequence;
-    for n being Nat holds g.n<g.(n+1)
-  proof
-    let n be Nat;
-      g.(n+1) in rng g by A9,FUNCT_1:def 5;
-    then reconsider k=g.(n+1) as Nat by A12;
-      g.n in rng g by A9,FUNCT_1:def 5;
-    then reconsider m=g.n as Nat by A12;
-      m < k by A11;
-    hence g.n<g.(n+1);
-  end;
-  then reconsider g as increasing Seq_of_Nat by A12,SEQM_3:def 8,def 11;
-  reconsider S1 = S() * g as sequence of T();
-A17: dom S1 = NAT by NORMSP_1:17;
-  reconsider S1 as subsequence of S();
-  take S1;
-  thus for n being Nat holds P[S1.n]
-  proof
-    let n be Nat;
-    per cases;
-    suppose n = 0;
-    hence P[S1.n] by A5,A10,A17,FUNCT_1:22;
-    end;
-    suppose n <> 0;
-    then n > 0 by NAT_1:19;
-    then n >= 0 + 1 by NAT_1:38;
-    then reconsider n'=n-1 as Nat by INT_1:18;
-A18:for m,k being Nat st m=g.(n') & k=g.((n')+1) holds P[S().k] by A11;
-    reconsider k=g.((n')+1) as Nat;
-A19:  P[S().k] by A18;
-      n + (-1)=n' by XCMPLX_0:def 8;
-    then n=n'-(-1) by XCMPLX_1:26;
-    then n=n'+1 by XCMPLX_1:151;
-    hence P[S1.n] by A17,A19,FUNCT_1:22;
-  end;
-  end;
-end;
+    n <= m & x = S().m & P[x];
 
 scheme :: FRECHET2:sch 2
  SubSeqChoice1
@@ -186,19 +84,7 @@ scheme :: FRECHET2:sch 2
     for n being Nat holds P[S1.n]
 provided
  for n being Nat ex m being Nat,x being Point of T() st
-    n <= m & x = S().m & P[x]
-proof
-  reconsider T'=T() as non empty 1-sorted;
-  reconsider S'=S() as sequence of T';
-   defpred R[set] means P[$1];
-A2: for n being Nat ex m being Nat,x being Point of T' st
-    n <= m & x = S'.m & R[x] by A1;
-  consider S1 being subsequence of S' such that
-A3: for n being Nat holds R[S1.n] from SubSeqChoice(A2);
-  reconsider S1 as subsequence of S();
-  take S1;
-  thus for n being Nat holds P[S1.n] by A3;
-end;
+    n <= m & x = S().m & P[x];
 
 theorem :: FRECHET2:6
 for T being non empty 1-sorted, S being sequence of T,
@@ -428,46 +314,7 @@ scheme :: FRECHET2:sch 3
   ex n being Nat st for m being Nat st n<=m holds P[(S()*p()).m]
 provided
   ex n being Nat st for m being Nat, x being Point of T()
-    st n<=m & x=S().m holds P[x]
-proof
-  consider n being Nat such that
-A2:  for m being Nat, x being Point of T() st n<=m & x=S().m holds P[x] by A1;
-    n + 1 is finite by CARD_1:69;
-  then A3: succ n is finite by CARD_1:52;
-  n in succ n & dom (p()") = NAT by FUNCT_2:def 1,ORDINAL1:10;
-  then (p()").n in (p()").:(succ n) by FUNCT_1:def 12;
-  then reconsider X=(p()").:(succ n) as finite non empty Subset of NAT
-      by A3,FINSET_1:17;
-  max X in X by PRE_CIRC:def 1; then
-A4:max X in NAT; then
-  reconsider mm = max X as natural number by ORDINAL2:def 21;
-  mm + 1 is natural; then
-  reconsider mX = (max X) + 1 as Nat by ORDINAL2:def 21;
-  take mX;
-  let m be Nat;
-  assume
-A5: mX<=m;
-    m in NAT;
-then A6: m in dom p() by FUNCT_2:67;
-    n<=p().m
-  proof
-    assume p().m<n;
-    then p().m in {p1 where p1 is Nat : p1 < n};
-    then p().m in n by AXIOMS:30;
-    then p().m in succ n by ORDINAL1:13;
-    then m in p()"(succ n) by A6,FUNCT_1:def 13;
-    then m in (p()").:(succ n) by FUNCT_1:155;
-    then A7: m <=max X by Lm13;
-    max X is Nat by A4; then
-    max X < mX by NAT_1:38; then
-    m < mX by A7,AXIOMS:22;
-    hence contradiction by A5;
-  end;
-  then A8:  P[S().(p().m)] by A2;
-  m in NAT;
-  then m in dom p() by FUNCT_2:def 1;
-  hence P[(S()*p()).m] by A8,FUNCT_1:23;
-end;
+    st n<=m & x=S().m holds P[x];
 
 scheme :: FRECHET2:sch 4
  PermSeq2
@@ -476,18 +323,7 @@ scheme :: FRECHET2:sch 4
   ex n being Nat st for m being Nat st n<=m holds P[(S()*p()).m]
 provided
   ex n being Nat st for m being Nat, x being Point of T()
-    st n<=m & x=S().m holds P[x]
-proof
-  reconsider T1=T() as non empty 1-sorted;
-  reconsider S1=S() as sequence of T1;
-  defpred R[set] means P[$1];
-A2:
-  ex n being Nat st for m being Nat, x being Point of T1
-    st n<=m & x=S1.m holds R[x] by A1;
-    ex n being Nat st for m being Nat st n<=m holds R[(S1*p()).m]
-      from PermSeq(A2);
-  hence ex n being Nat st for m being Nat st n<=m holds P[(S()*p()).m];
-end;
+    st n<=m & x=S().m holds P[x];
 
 theorem :: FRECHET2:40
 for T being non empty TopStruct, S being sequence of T,

@@ -45,59 +45,12 @@ scheme :: FUNCT_3:sch 1
 provided
  for x,y,z1,z2 st x in A() & y in
  B() & P[x,y,z1] & P[x,y,z2] holds z1 = z2 and
- for x,y st x in A() & y in B() ex z st P[x,y,z]
-proof
-    set D = [:A(), B():];
-    defpred R[set,set] means for x,y st $1=[x,y] holds P[x,y,$2];
-A3:    for p,y1,y2 st p in D & R[p,y1] & R[p,y2] holds y1 = y2
-        proof let p,y1,y2;
-         assume p in D;
-          then consider x1,x2 such that
-A4:         x1 in A() & x2 in B() and
-A5:         p = [x1,x2] by ZFMISC_1:def 2;
-         assume (for x,y st p=[x,y] holds P[x,y,y1]) &
-          (for x,y st p=[x,y] holds P[x,y,y2]);
-         then P[x1,x2,y1] & P[x1,x2,y2] by A5;
-         hence thesis by A1,A4;
-        end;
-A6:    for p st p in D ex z st R[p,z]
-        proof let p;
-          assume p in D;
-          then consider x1,y1 such that
-A7:         x1 in A() & y1 in B() and
-A8:         p = [x1,y1] by ZFMISC_1:def 2;
-          consider z such that
-A9:         P[x1,y1,z] by A2,A7;
-          take z;
-          let x,y;
-          assume p=[x,y];
-          then x=x1 & y=y1 by A8,ZFMISC_1:33;
-          hence thesis by A9;
-        end;
-    consider f being Function such that
-A10:   dom f = D and
-A11:   for p st p in D holds R[p,f.p] from FUNCT_1:sch 2(A3,A6);
-    take f;
-    thus dom f = [:A(),B():] by A10;
-    let x,y;
-    assume x in A() & y in B();
-    then [x,y] in [:A(),B():] by ZFMISC_1:def 2;
-    hence thesis by A11;
- end;
+ for x,y st x in A() & y in B() ex z st P[x,y,z];
 
 scheme :: FUNCT_3:sch 2
  Lambda_3{A()->set,B()->set,F(set,set)->set}:
  ex f being Function st dom f = [:A(),B():] &
-   for x,y st x in A() & y in B() holds f.[x,y] = F(x,y)
-proof
-  defpred P[set,set,set] means $3 = F($1,$2);
-A1: for x,y,z1,z2 st x in A() & y in B() & P[x,y,z1] & P[x,y,z2] holds z1=z2;
-A2: for x,y st x in A() & y in B() ex z st P[x,y,z];
-  ex f being Function st dom f = [:A(),B():] &
-   for x,y st x in A() & y in B() holds P[x,y,f.[x,y]]
-  from FuncEx_3(A1,A2);
-  hence thesis;
- end;
+   for x,y st x in A() & y in B() holds f.[x,y] = F(x,y);
 
 theorem :: FUNCT_3:6
    for f,g being Function st dom f = [:X,Y:] & dom g = [:X,Y:] &

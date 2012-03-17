@@ -1,0 +1,3245 @@
+:: Complex Linear Space and Complex Normed Space
+::  by Noboru Endou
+:: 
+:: Received January 26, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
+      ORDINAL2, ARYTM, CLVECT_1, ARYTM_3, SQUARE_1, ABSVALUE, COMPLEX1, SEQ_1,
+      CFUNCT_1, RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
+      XREAL_0, DOMAIN_1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1,
+      NAT_1, ABSVALUE, STRUCT_0, PRE_TOPC, RLVECT_1, SQUARE_1, PARTFUN1, SEQ_1,
+      SEQ_2, COMPLEX1, CFUNCT_1, NORMSP_1;
+ constructors DOMAIN_1, BINOP_1, REAL_1, NAT_1, MEMBERED, ABSVALUE, SQUARE_1,
+      ARYTM_0, PARTFUN1, COMPLEX1, NORMSP_1, SEQ_2;
+ clusters RELSET_1, STRUCT_0, XREAL_0, SUBSET_1, NAT_1, MEMBERED, ORDINAL2,
+      RLVECT_1, COMPLEX1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions STRUCT_0, RLVECT_1, XCMPLX_0, TARSKI, XBOOLE_0, ZFMISC_1, REAL_1;
+ theorems STRUCT_0, TARSKI, RLVECT_1, BINOP_1, COMPLEX1, XCMPLX_0, SQUARE_1,
+      XCMPLX_1, FINSEQ_1, NAT_1, FUNCT_1, XBOOLE_0, FUNCT_2, RELAT_1, XBOOLE_1,
+      ZFMISC_1, RELSET_1, REAL_1, ABSVALUE, NORMSP_1, SEQ_2, AXIOMS, XREAL_0;
+ schemes BINOP_1, FUNCT_2, NAT_1, XBOOLE_0, FUNCT_1, SEQ_1;
+
+begin :: Complex Linear Space
+
+definition
+ struct (LoopStr) CLSStruct
+   (# carrier -> set,
+      Zero -> Element of the carrier,
+      add -> BinOp of the carrier,
+      Mult -> Function of [:COMPLEX, the carrier:], the carrier #);
+end;
+
+registration
+ cluster non empty CLSStruct;
+existence
+proof
+   consider ZS being non empty set, O being Element of ZS,
+      F being BinOp of ZS, G being Function of [:COMPLEX,ZS:],ZS;
+   take CLSStruct(#ZS,O,F,G#);
+   thus the carrier of CLSStruct(#ZS,O,F,G#) is non empty;
+   end;
+end;
+
+definition let V be CLSStruct;
+ mode VECTOR of V is Element of V;
+end;
+
+definition let V be non empty CLSStruct, v be VECTOR of V, z be Complex;
+ func z * v -> Element of V equals
+  :def1: (the Mult of V).[z,v];
+coherence;
+end;
+
+registration
+  let ZS be non empty set, O be Element of ZS,
+   F be BinOp of ZS, G be Function of [:COMPLEX,ZS:],ZS;
+ cluster CLSStruct (# ZS,O,F,G #) -> non empty;
+ coherence by STRUCT_0:def 1;
+end;
+
+Lm1:
+   now take ZS = {0};
+   reconsider O = 0 as Element of ZS by TARSKI:def 1;
+   take O;
+   deffunc A((Element of ZS), Element of ZS) = O;
+   consider F being BinOp of ZS such that
+A1:for x,y being Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 2;
+   deffunc M((Element of COMPLEX), Element of ZS) = O;
+   consider G being Function of [:COMPLEX,ZS:],ZS such that
+A2:for a being Element of COMPLEX for x being Element of ZS holds
+     G.[a,x qua set] = M(a,x) from FUNCT_2:sch 8;
+   take F,G;
+   set W = CLSStruct (# ZS,O,F,G #);
+   thus for x,y being VECTOR of W holds x + y = y + x
+   proof
+     let x,y be VECTOR of W;
+     x + y = F.[x,y] & y + x = F.[y,x] by RLVECT_1:def 3; then
+A3:  x + y = F.(x,y) & y + x = F.(y,x) by BINOP_1:def 1;
+     reconsider X = x, Y = y as Element of ZS;
+     x + y = A(X,Y) & y + x = A(Y,X) by A1,A3;
+     hence thesis;
+   end;
+
+   thus for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
+   proof
+     let x,y,z be VECTOR of W;
+     (x + y) + z=F.[x + y,z] & x + (y + z)=F.[x,y + z] by RLVECT_1:def 3; then
+A4:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z) by BINOP_1:def 1;
+     reconsider X = x, Y = y, Z = z as Element of ZS;
+     (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1,A4;
+     hence thesis;
+   end;
+
+   thus for x being VECTOR of W holds x + 0.W = x
+   proof
+     let x be VECTOR of W;
+     reconsider X = x as Element of ZS;
+     x + 0.W = F.[x,0.W] by RLVECT_1:def 3
+            .= F.(x,0.W) by BINOP_1:def 1
+            .= A(X,O) by A1;
+     hence thesis by TARSKI:def 1;
+   end;
+
+   thus for x being VECTOR of W ex y being VECTOR of W st x + y = 0.W
+   proof
+     let x be VECTOR of W;
+     reconsider y = O as VECTOR of W;
+     take y;
+     thus x + y = F.[x,y] by RLVECT_1:def 3
+               .= F.(x,y) by BINOP_1:def 1
+               .= the Zero of W by A1
+               .= 0.W by RLVECT_1:def 2;
+   end;
+
+   thus for z being Complex for x,y being VECTOR of W holds
+     z * (x + y) = z * x + z * y
+   proof
+     let z be Complex; let x,y be VECTOR of W;
+     reconsider X = x, Y = y as Element of ZS;
+A5:  z * (x + y) = G.[z,x + y] by def1;
+     z * x + z * y = F.[z * x,z * y] by RLVECT_1:def 3
+                  .= F.(z * x,z * y) by BINOP_1:def 1
+                  .= A(M(z,X),M(z,Y)) by A1;
+     hence thesis by A2,A5;
+   end;
+
+   thus for z1,z2 being Complex for x being VECTOR of W holds
+     (z1 + z2) * x = z1 * x + z2 * x
+   proof
+     let z1,z2 be Complex;
+     let x be VECTOR of W;
+     set c = z1 + z2;
+     reconsider X = x as Element of ZS;
+A6:  c * x = G.[c,x] by def1
+          .= M(c,X) by A2;
+     z1 * x + z2 * x = F.[z1 * x,z2 * x] by RLVECT_1:def 3
+                   .= F.(z1 * x,z2 * x) by BINOP_1:def 1
+                   .= A(M(z1,X),M(z2,X)) by A1;
+     hence thesis by A6;
+   end;
+
+   thus for z1,z2 being Complex for x being VECTOR of W holds
+     (z1 * z2) * x = z1 * (z2 * x)
+   proof
+     let z1,z2 be Complex;
+     let x be VECTOR of W;
+     set c = z1 * z2;
+     reconsider X = x as Element of ZS;
+A7:  c * x = G.[c,x] by def1
+          .= M(c,X) by A2;
+     z1 * (z2 * x) = G.[z1,z2 * x] by def1
+                  .= M(z1,M(z2,X)) by A2;
+     hence thesis by A7;
+   end;
+
+   thus for x being VECTOR of W holds 1r * x = x
+   proof
+     let x be VECTOR of W;
+     reconsider X = x as Element of ZS;
+     reconsider A' = 1 as Element of REAL;
+     1r * x = G.[1r,x] by def1 .= M(A',X) by A2;
+     hence thesis by TARSKI:def 1;
+   end;
+end;
+
+definition let IT be non empty CLSStruct;
+  attr IT is ComplexLinearSpace-like means :def2:
+  (for z being Complex, v,w being VECTOR of IT holds
+    z * (v + w) = z * v + z * w) &
+  (for z1,z2 being Complex, v being VECTOR of IT holds
+    (z1 + z2) * v = z1 * v + z2 * v) &
+  (for z1,z2 being Complex, v being VECTOR of IT holds
+    (z1 * z2) * v = z1 * (z2 * v)) &
+  (for v being VECTOR of IT holds 1r * v = v);
+end;
+
+registration
+cluster non empty strict Abelian add-associative right_zeroed
+    right_complementable ComplexLinearSpace-like (non empty CLSStruct);
+existence
+proof
+   consider ZS being non empty set, O being Element of ZS,
+   F being BinOp of ZS, G being Function of [:COMPLEX,ZS:],ZS such that
+A1:(for v,w being VECTOR of CLSStruct (# ZS,O,F,G #) holds v + w = w + v) &
+   (for u,v,w being VECTOR of CLSStruct (# ZS,O,F,G #) holds
+      (u + v) + w = u + (v + w)) &
+   (for v being VECTOR of CLSStruct (# ZS,O,F,G #) holds
+      v + 0.CLSStruct (# ZS,O,F,G #) = v) &
+   (for v being VECTOR of CLSStruct (# ZS,O,F,G #)
+      ex w being VECTOR of CLSStruct (# ZS,O,F,G #) st
+        v + w = 0.CLSStruct (# ZS,O,F,G #)) &
+   (for z being Complex, v,w being VECTOR of CLSStruct (# ZS,O,F,G #) holds
+     z * (v + w) = z * v + z * w) &
+   (for z1,z2 being Complex, v being VECTOR of CLSStruct (# ZS,O,F,G #) holds
+     (z1 + z2) * v = z1 * v + z2 * v) &
+   (for z1,z2 being Complex, v being VECTOR of CLSStruct (# ZS,O,F,G #) holds
+     (z1 * z2) * v = z1 * (z2 * v)) &
+   (for v being VECTOR of CLSStruct (# ZS,O,F,G #) holds 1r * v = v) by Lm1;
+   take CLSStruct (# ZS,O,F,G #);
+   thus CLSStruct (# ZS,O,F,G #) is non empty;
+   thus thesis by A1,RLVECT_1:def 5,def 6,def 7,def 8,def2;
+   end;
+end;
+
+definition
+  mode ComplexLinearSpace is Abelian add-associative right_zeroed
+    right_complementable ComplexLinearSpace-like (non empty CLSStruct);
+end;
+
+theorem
+for V being non empty CLSStruct holds
+  (for v,w being VECTOR of V holds v + w = w + v) &
+  (for u,v,w being VECTOR of V holds (u + v) + w = u + (v + w)) &
+  (for v being VECTOR of V holds v + 0.V = v) &
+  (for v being VECTOR of V ex w being VECTOR of V st v + w = 0.V) &
+  (for z being Complex, v,w being VECTOR of V holds
+    z * (v + w) = z * v + z * w) &
+  (for z1,z2 being Complex, v being VECTOR of V holds
+    (z1 + z2) * v = z1 * v + z2 * v) &
+  (for z1,z2 being Complex, v being VECTOR of V holds
+    (z1 * z2) * v = z1 * (z2 * v)) &
+  (for v being VECTOR of V holds 1r * v = v)
+    implies V is ComplexLinearSpace by RLVECT_1:def 5,def 6,def 7,def 8,def2;
+
+::
+::  Axioms of complex linear space.
+::
+
+reserve V,X,Y for ComplexLinearSpace;
+reserve u,u1,u2,v,v1,v2 for VECTOR of V;
+reserve z,z1,z2 for Complex;
+
+theorem th2:
+z = 0c or v = 0.V implies z * v = 0.V
+proof
+   assume
+A1:z = 0c or v = 0.V;
+   now per cases by A1;
+     suppose
+A2:  z = 0c;
+     v + 0c * v = 1r * v + 0c * v by def2
+               .= (1r + 0c) * v by def2
+               .= 1r * v by COMPLEX1:22
+               .= v by def2
+               .= v + 0.V by RLVECT_1:10;
+     hence z * v = 0.V by A2,RLVECT_1:21;
+     end;
+     suppose
+A3:  v = 0.V;
+     z * 0.V + z * 0.V = z * (0.V + 0.V) by def2
+                      .= z * 0.V by RLVECT_1:10
+                      .= z * 0.V + 0.V by RLVECT_1:10;
+     hence z * v = 0.V by A3,RLVECT_1:21;
+    end;
+   end;
+   hence thesis;
+end;
+
+theorem th3:
+z * v = 0.V implies z = 0c or v = 0.V
+proof
+   assume that A1: z * v = 0.V and A2: z <> 0c;
+   thus v = 1r * v by def2
+         .= (z" * z) * v by A2,COMPLEX1:65
+         .= z" * 0.V by A1,def2
+         .= 0.V by th2;
+  end;
+
+theorem th4:
+- v = (- 1r) * v
+proof
+   v + (- 1r) * v = 1r * v + (- 1r) * v by def2
+                        .= (1r + (- 1r)) * v by def2
+                        .= 0c * v by XCMPLX_0:def 6
+                        .= 0.V by th2;
+   hence (- v) = (- v) + (v + (- 1r) * v) by RLVECT_1:10
+             .= ((- v) + v) + (- 1r) * v by RLVECT_1:def 6
+             .= 0.V + (- 1r) * v by RLVECT_1:16
+             .= (- 1r) * v by RLVECT_1:10;
+end;
+
+theorem th5:
+v = - v implies v = 0.V
+proof
+   assume v = - v; then
+A1:0.V = v - (- v) by RLVECT_1:28
+      .= v + (- (- v)) by RLVECT_1:def 11
+      .= v + v by RLVECT_1:30
+      .= 1r * v + v by def2
+      .= 1r * v + 1r * v by def2
+      .= (1r + 1r) * v by def2;
+A2:Re(1r + 1r) = Re(1r) + Re(1r) by COMPLEX1:19
+              .= 1 + Re(1r) by COMPLEX1:15
+              .= 2 by COMPLEX1:15;
+   Im(1r + 1r) = Im(1r) + Im(1r) by COMPLEX1:19
+              .= 0 + Im(1r) by COMPLEX1:15
+              .= 0 by COMPLEX1:15; then
+   (Re(1r + 1r))^2 + (Im(1r + 1r))^2 > 0 by A2,SQUARE_1:60,74; then
+   1r + 1r <> 0c by COMPLEX1:13;
+   hence thesis by A1,th3;
+end;
+
+theorem
+v + v = 0.V implies v = 0.V
+proof
+   assume v + v = 0.V; then
+   v = - v by RLVECT_1:def 10;
+   hence thesis by th5;
+end;
+
+theorem th7:
+z * (- v) = (- z) * v
+proof
+   thus z * (- v) = z * ((- 1r) * v) by th4
+                 .= (z *(- 1r)) * v by def2
+                 .= (- (z * 1r)) * v by XCMPLX_1:175
+                 .= (- z) * v by COMPLEX1:29;
+end;
+
+theorem th8:
+z * (- v) = - (z * v)
+proof
+   thus z * (- v) = (- z) * v by th7
+                 .= (- (1r * z)) * v by COMPLEX1:29
+                 .= ((- 1r) * z) * v by XCMPLX_1:175
+                 .= (- 1r) * (z * v) by def2
+                 .= - (z * v) by th4;
+end;
+
+theorem
+(- z) * (- v) = z * v
+proof
+   thus (- z) * (- v) = (- (- z)) * v by th7
+                     .= z * v;
+end;
+
+theorem th10:
+z * (v - u) = z * v - z * u
+proof
+   thus z * (v - u) = z * (v + (- u)) by RLVECT_1:def 11
+                   .= z * v + z * (- u) by def2
+                   .= z * v + (- (z * u)) by th8
+                   .= z * v - z * u by RLVECT_1:def 11;
+end;
+
+theorem th11:
+(z1 - z2) * v = z1 * v - z2 * v
+proof
+   thus (z1 - z2) * v = (z1 + (- z2)) * v by XCMPLX_0:def 8
+                   .= z1 * v + (- z2) * v by def2
+                   .= z1 * v + z2 * (- v) by th7
+                   .= z1 * v + (- (z2 * v)) by th8
+                   .= z1 * v - z2 * v by RLVECT_1:def 11;
+end;
+
+theorem
+z <> 0 & z * v = z * u implies v = u
+proof
+   assume that
+A1:z <> 0 and
+A2:z * v = z * u;
+   0.V = z * v - z * u by A2,RLVECT_1:28
+      .= z * (v - u) by th10; then
+   v - u = 0.V by A1,th3;
+   hence thesis by RLVECT_1:35;
+end;
+
+theorem
+v <> 0.V & z1 * v = z2 * v implies z1 = z2
+proof
+   assume that
+A1:v <> 0.V and
+A2:z1 * v = z2 * v;
+   0.V = z1 * v - z2 * v by A2,RLVECT_1:28
+      .= (z1 - z2) * v by th11; then
+   z1 - z2 = 0 by A1,th3; then
+   (- z2) + z1 = 0 by XCMPLX_0:def 8; then
+   z1 = - (- z2) by XCMPLX_0:def 6;
+   hence thesis;
+end;
+
+Lm5:
+for V being non empty LoopStr holds Sum(<*>(the carrier of V)) = 0.V
+proof
+   let V be non empty LoopStr;
+   set S = <*>(the carrier of V);
+   ex f being Function of NAT, the carrier of V st
+    Sum(S) = f.(len S) & f.0 = 0.V &
+   for j being Nat, v being Element of V st j < len S & v = S.(j + 1) holds
+   f.(j + 1) = f.j + v by RLVECT_1:def 12;
+   hence thesis by FINSEQ_1:25;
+end;
+
+Lm6:
+for V being non empty LoopStr, F being FinSequence of the carrier of V holds
+  len F = 0 implies Sum(F) = 0.V
+proof
+ let V be non empty LoopStr;
+ let F be FinSequence of the carrier of V;
+  assume len F = 0;
+   then F = <*>(the carrier of V) by FINSEQ_1:32;
+  hence thesis by Lm5;
+ end;
+
+theorem
+for F,G being FinSequence of the carrier of V st len F = len G &
+  (for k being Nat,v being VECTOR of V st
+   k in dom F & v = G.k holds F.k = z * v)
+holds Sum(F) = z * Sum(G)
+proof
+   let F,G be FinSequence of the carrier of V;
+   defpred P[set] means
+    for H,I being FinSequence of the carrier of V st
+     len H = len I & len H = $1 &
+     (for k being Nat, v being VECTOR of V st
+       k in Seg len H & v = I.k holds H.k = z * v) holds
+    Sum(H) = z * Sum(I);
+A1:P[0]
+   proof
+     now
+       let H,I be FinSequence of the carrier of V;
+       assume that
+A2:    len H = len I & len H = 0 and
+       for k being Nat,v being VECTOR of V st
+        k in Seg len H & v = I.k holds H.k = z * v;
+       Sum(H) = 0.V & Sum(I) = 0.V by A2,Lm6;
+       hence Sum(H) = z * Sum(I) by th2;
+     end;
+     hence thesis;
+   end;
+A3:for n being Nat st P[n] holds P[n+1]
+   proof
+     now
+       let n be Nat;
+       assume
+A4:    for H,I being FinSequence of the carrier of V st
+        len H = len I & len H = n &
+       for k being Nat, v being VECTOR of V st
+        k in Seg len H & v = I.k holds H.k = z * v holds Sum(H) = z * Sum(I);
+       let H,I be FinSequence of the carrier of V;
+       assume that
+A5:    len H = len I and
+A6:    len H = n + 1 and
+A7:    for k being Nat, v being VECTOR of V st k in Seg len H & v = I.k holds
+        H.k = z * v;
+       reconsider p = H | (Seg n),q = I | (Seg n)
+           as FinSequence of the carrier of V by FINSEQ_1:23;
+A8:    n <= n + 1 by NAT_1:37; then
+A9:    len p = n & len q = n by A5,A6,FINSEQ_1:21;
+A10:     now
+         let k be Nat;
+         let v be VECTOR of V;
+         assume that
+A11:     k in Seg len p and
+A12:     v = q.k;
+         len p <= len H by A6,A8,FINSEQ_1:21; then
+A13:     Seg len p c= Seg len H by FINSEQ_1:7;
+         dom q = Seg n by A5,A6,A8,FINSEQ_1:21; then
+         I.k = q.k by A9,A11,FUNCT_1:70; then
+A14:     H.k = z * v by A7,A11,A12,A13;
+         dom p = Seg n by A6,A8,FINSEQ_1:21;
+         hence p.k = z * v by A9,A11,A14,FUNCT_1:70;
+       end;
+A15:   n + 1 in Seg(n + 1) by FINSEQ_1:6; then
+       reconsider v1 = H.(n + 1),v2 = I.(n + 1) as VECTOR of V
+            by A5,A6,RLVECT_1:54;
+A16:   v1 = z * v2 by A6,A7,A15;
+A17:   dom q = Seg len q by FINSEQ_1:def 3;
+       dom p = Seg len p by FINSEQ_1:def 3;
+       hence Sum(H) = Sum(p) + v1 by A6,A9,RLVECT_1:55
+                .= z * Sum(q) + z * v2 by A4,A9,A10,A16
+                .= z * (Sum(q) + v2) by def2
+                .= z * Sum(I) by A5,A6,A9,A17,RLVECT_1:55;
+     end;
+     hence thesis;
+   end;
+A18:dom F = Seg len F by FINSEQ_1:def 3;
+   for n being Nat holds P[n] from NAT_1:sch 1(A1,A3);
+   hence thesis by A18;
+end;
+
+theorem
+z * Sum(<*>(the carrier of V)) = 0.V
+proof
+   thus z * Sum(<*>(the carrier of V)) = z * 0.V by Lm5 .= 0.V by th2;
+end;
+
+theorem
+z * Sum<* v,u *> = z * v + z * u
+proof
+   thus z * Sum<* v,u *> = z * (v + u) by RLVECT_1:62
+                        .= z * v + z * u by def2;
+end;
+
+theorem
+ z * Sum<* u,v1,v2 *> = z * u + z * v1 + z * v2
+proof
+   thus z * Sum<* u,v1,v2 *> = z * (u + v1 + v2) by RLVECT_1:63
+                        .= z * (u + v1) + z * v2 by def2
+                        .= z * u + z * v1 + z * v2 by def2;
+end;
+
+Lem00:
+1r + 1r = [* 2,0 *]
+proof
+   1r + 1r = [* Re(1r) + Re(1r), Im(1r) + Im(1r) *] by COMPLEX1:def 9
+          .= [* 1+1,0+0 *] by COMPLEX1:15;
+   hence thesis;
+end;
+
+theorem th18:
+ Sum<* v,v *> = [* 2, 0*] * v
+proof
+   thus Sum<* v,v *> = v + v by RLVECT_1:62
+                  .= 1r * v + v by def2
+                  .= 1r * v + 1r * v by def2
+                  .= (1r + 1r) * v by def2
+                  .= [* 2,0 *] * v by Lem00;
+end;
+
+theorem
+  Sum<* - v,- v *> = [* -2,0 *] * v
+proof
+   set 2r = [* 2,0 *];
+   -1r = [* -1,-0 *] by COMPLEX1:def 11,15 .= [* -1,0 *]; then
+A1:Re(-1r) = -1 & Im(-1r) = 0 & Re(2r) = 2 & Im(2r) = 0 by COMPLEX1:7;
+   thus Sum<* - v,- v *> = - (v + v) by RLVECT_1:78
+         .= - Sum<* v,v *> by RLVECT_1:62
+         .= - ([* 2,0 *] * v) by th18
+         .= (- 1r) * ([* 2,0 *] * v) by th4
+         .= ((- 1r) * [* 2,0 *]) * v by def2
+         .= [* Re(-1r)*Re(2r)-Im(-1r)*Im(2r),
+               Re(-1r)*Im(2r)+Re(2r)*Im(-1r) *] * v by COMPLEX1:def 10
+         .= [* -1*2 - 0*0, -1*0 + 2*0 *] * v by A1
+         .= [* -2,0 *] * v;
+end;
+
+theorem
+  Sum<* v,v,v *> = [* 3,0 *] * v
+proof
+   set 2r = [* 2,0 *];
+A1:Re(2r) = 2 & Im(2r) = 0 by COMPLEX1:7;
+   thus Sum<* v,v,v *> = Sum<* v,v *> + v by RLVECT_1:84
+                    .= [* 2,0 *] * v + v by th18
+                    .= [* 2,0 *] * v + 1r * v by def2
+                    .= ([* 2,0 *] + 1r) * v by def2
+                    .= [* Re(2r)+Re(1r),Im(2r)+Im(1r) *] * v by COMPLEX1:def 9
+                    .= [* 2+1,0+0 *] *v by A1,COMPLEX1:15
+                    .= [* 3,0 *] * v;
+end;
+
+begin :: Subspace and Cosets of Subspaces in Complex Linear Space
+
+reserve V1,V2,V3 for Subset of V;
+
+definition let V, V1;
+  attr V1 is lineary-closed means :def3:
+ (for v,u being VECTOR of V st v in V1 & u in V1 holds v + u in V1) &
+ (for z being Complex, v being VECTOR of V st v in V1 holds z * v in V1);
+end;
+
+theorem th21:
+ V1 <> {} & V1 is lineary-closed implies 0.V in V1
+proof
+   assume that
+A1:V1 <> {} and
+A2:V1 is lineary-closed;
+   consider x being Element of V1;
+   reconsider x as Element of V by A1,TARSKI:def 3;
+   0c * x in V1 by A1,A2,def3;
+   hence thesis by th2;
+end;
+
+theorem th22:
+ V1 is lineary-closed implies
+  (for v being VECTOR of V st v in V1 holds - v in V1)
+proof
+   assume
+A1:V1 is lineary-closed;
+   let v be VECTOR of V;
+   assume v in V1; then
+   (- 1r) * v in V1 by A1,def3;
+   hence thesis by th4;
+end;
+
+theorem
+  V1 is lineary-closed implies
+  (for v,u being VECTOR of V st v in V1 & u in V1 holds v - u in V1)
+proof
+   assume
+A1:V1 is lineary-closed;
+   let v,u be VECTOR of V;
+   assume that
+A2:v in V1 and
+A3:u in V1;
+   v - u = v + (- u) & - u in V1 by A1,A3,th22,RLVECT_1:def 11;
+   hence thesis by A1,A2,def3;
+end;
+
+theorem th24:
+{0.V} is lineary-closed
+proof
+   thus for v,u being VECTOR of V st v in {0.V} & u in {0.V} holds
+     v + u in {0.V}
+   proof
+     let v,u be VECTOR of V;
+     assume v in {0.V} & u in {0.V}; then
+     v = 0.V & u = 0.V by TARSKI:def 1; then
+     v + u = 0.V & 0.V in {0.V} by RLVECT_1:10,TARSKI:def 1;
+     hence thesis;
+   end;
+   let z be Complex;
+   let v be VECTOR of V;
+   assume
+A1:v in {0.V}; then
+   v = 0.V by TARSKI:def 1;
+   hence thesis by A1,th2;
+end;
+
+theorem
+  the carrier of V = V1 implies V1 is lineary-closed
+proof
+   assume
+A1:the carrier of V = V1;
+   hence for v,u being VECTOR of V st v in V1 & u in V1 holds v + u in V1;
+   let z be Complex, v be VECTOR of V;
+   assume v in V1;
+   thus z * v in V1 by A1;
+end;
+
+theorem
+V1 is lineary-closed & V2 is lineary-closed &
+ V3 = {v + u : v in V1 & u in V2} implies
+  V3 is lineary-closed
+proof
+   assume that
+A1:V1 is lineary-closed & V2 is lineary-closed and
+A2:V3 = {v + u where v,u is VECTOR of V: v in V1 & u in V2};
+   thus for v,u being VECTOR of V st v in V3 & u in V3 holds v + u in V3
+   proof let v,u be VECTOR of V;
+     assume that
+A3:  v in V3 and
+A4:  u in V3;
+     consider v1,v2 be VECTOR of V such that
+A5:  v = v1 + v2 and
+A6:  v1 in V1 & v2 in V2 by A2,A3;
+     consider u1,u2 be VECTOR of V such that
+A7:  u = u1 + u2 and
+A8:  u1 in V1 & u2 in V2 by A2,A4;
+A9:  v1 + u1 in V1 & v2 + u2 in V2 by A1,A6,A8,def3;
+     v + u = ((v1 + v2) + u1) + u2 by A5,A7,RLVECT_1:def 6
+          .= ((v1 + u1) + v2) + u2 by RLVECT_1:def 6
+          .= (v1 + u1) + (v2 + u2) by RLVECT_1:def 6;
+     hence thesis by A2,A9;
+   end;
+   let z be Complex, v be VECTOR of V;
+   assume v in V3; then
+   consider v1,v2 be VECTOR of V such that
+A10: v = v1 + v2 and
+A11: v1 in V1 & v2 in V2 by A2;
+A12: z * v1 in V1 & z * v2 in V2 by A1,A11,def3;
+   z * v = z * v1 + z * v2 by A10,def2;
+   hence z * v in V3 by A2,A12;
+end;
+
+theorem
+V1 is lineary-closed & V2 is lineary-closed implies
+ V1 /\ V2 is lineary-closed
+proof
+   assume
+A1:V1 is lineary-closed & V2 is lineary-closed;
+   thus for v,u being VECTOR of V st v in V1 /\ V2 & u in V1 /\ V2 holds
+     v + u in V1 /\ V2
+   proof let v,u be VECTOR of V;
+     assume v in V1 /\ V2 & u in V1 /\ V2; then
+     v in V1 & v in V2 & u in V1 & u in V2 by XBOOLE_0:def 3; then
+     v + u in V1 & v + u in V2 by A1,def3;
+     hence thesis by XBOOLE_0:def 3;
+   end;
+   let z be Complex, v be VECTOR of V;
+   assume v in V1 /\ V2; then
+   v in V1 & v in V2 by XBOOLE_0:def 3; then
+   z * v in V1 & z * v in V2 by A1,def3;
+   hence thesis by XBOOLE_0:def 3;
+end;
+
+definition let V;
+  mode Subspace of V -> ComplexLinearSpace means :Def2:
+    the carrier of it c= the carrier of V &
+    the Zero of it = the Zero of V &
+    the add of it = (the add of V) | [:the carrier of it,the carrier of it:] &
+    the Mult of it = (the Mult of V) | [:COMPLEX, the carrier of it:];
+existence
+proof
+   the carrier of V c= the carrier of V &
+   the Zero of V = the Zero of V &
+   the add of V = (the add of V) | [:the carrier of V,the carrier of V:] &
+   the Mult of V = (the Mult of V) | [:COMPLEX, the carrier of V:]
+     by FUNCT_2:40;
+   hence thesis;
+end;
+end;
+
+::  Axioms of the subspaces of real linear spaces.
+
+ reserve W,W1,W2 for Subspace of V;
+ reserve x for set;
+ reserve w,w1,w2 for VECTOR of W;
+
+theorem
+x in W1 & W1 is Subspace of W2 implies x in W2
+proof
+   assume x in W1 & W1 is Subspace of W2; then
+   x in the carrier of W1 & the carrier of W1 c= the carrier of W2
+     by Def2,RLVECT_1:def 1;
+   hence thesis by RLVECT_1:def 1;
+end;
+
+theorem th29:
+x in W implies x in V
+proof
+   assume x in W; then
+   x in the carrier of W & the carrier of W c= the carrier of V
+     by Def2,RLVECT_1:def 1;
+   hence thesis by RLVECT_1:def 1;
+end;
+
+theorem th30:
+w is VECTOR of V
+proof
+   w in W by RLVECT_1:3; then
+   w in V by th29;
+   hence thesis by RLVECT_1:def 1;
+end;
+
+theorem th31:
+0.W = 0.V
+proof
+   thus 0.W = the Zero of W by RLVECT_1:def 2
+           .= the Zero of V by Def2
+           .= 0.V by RLVECT_1:def 2;
+end;
+
+theorem
+0.W1 = 0.W2
+proof
+   thus 0.W1 = 0.V by th31
+            .= 0.W2 by th31;
+end;
+
+theorem th32:
+w1 = v & w2 = u implies w1 + w2 = v + u
+proof
+   assume
+A1:v = w1 & u = w2;
+   reconsider ww1 = w1, ww2 = w2 as VECTOR of V by th30;
+A2:v + u = (the add of V).[ww1,ww2] by A1,RLVECT_1:def 3;
+   w1 + w2 = (the add of W).[w1,w2] by RLVECT_1:def 3
+          .= ((the add of V) | [:the carrier of W, the carrier of W:]).[w1,w2]
+             by Def2;
+   hence thesis by A2,FUNCT_1:72;
+end;
+
+theorem th33:
+w = v implies z * w = z * v
+proof
+   assume
+A1:w = v;
+   reconsider ww1 = w as VECTOR of V by th30;
+A2:z * v = (the Mult of V).[z,ww1] by A1,def1;
+   z * w = (the Mult of W).[z,w] by def1
+        .= ((the Mult of V) | [:COMPLEX, the carrier of W:]).[z,w] by Def2;
+   hence thesis by A2,FUNCT_1:72;
+end;
+
+theorem th34:
+w = v implies - v = - w
+proof
+   assume
+A1:w = v;
+   - v = (- 1r) * v & - w = (- 1r) * w by th4;
+   hence thesis by A1,th33;
+end;
+
+theorem th35:
+w1 = v & w2 = u implies w1 - w2 = v - u
+proof
+   assume that
+A1:w1 = v and
+A2:w2 = u;
+A3:- w2 = - u by A2,th34;
+   w1 - w2 = w1 + (- w2) & v - u = v + (- u) by RLVECT_1:def 11;
+   hence thesis by A1,A3,th32;
+end;
+
+Lm1:
+the carrier of W = V1 implies V1 is lineary-closed
+proof
+   assume
+A1:the carrier of W = V1;
+   set VW = the carrier of W;
+   reconsider WW = W as ComplexLinearSpace;
+   thus for v,u st v in V1 & u in V1 holds v + u in V1
+   proof
+     let v,u;
+     assume v in V1 & u in V1; then
+     reconsider vv = v, uu = u as VECTOR of WW by A1;
+     reconsider vw = vv + uu as Element of VW;
+     vw in V1 by A1;
+     hence v + u in V1 by th32;
+   end;
+   let z,v;
+   assume v in V1; then
+   reconsider vv = v as VECTOR of WW by A1;
+   reconsider vw = z * vv as Element of VW;
+   vw in V1 by A1;
+   hence z * v in V1 by th33;
+end;
+
+theorem th36:
+0.V in W
+proof
+   0.W in W & 0.V = 0.W by th31,RLVECT_1:3;
+   hence thesis;
+end;
+
+theorem
+0.W1 in W2
+proof
+   0.W1 = 0.V by th31;
+   hence thesis by th36;
+end;
+
+theorem
+0.W in V
+proof
+   0.W in W by RLVECT_1:3;
+   hence thesis by th29;
+end;
+
+theorem th39:
+u in W & v in W implies u + v in W
+proof
+   assume u in W & v in W; then
+A1:u in the carrier of W & v in the carrier of W by RLVECT_1:def 1;
+   reconsider VW = the carrier of W as Subset of V by Def2;
+   VW is lineary-closed by Lm1; then
+   u + v in the carrier of W by A1,def3;
+   hence thesis by RLVECT_1:def 1;
+end;
+
+theorem th40:
+v in W implies z * v in W
+proof
+   assume v in W; then
+A1:v in the carrier of W by RLVECT_1:def 1;
+   reconsider VW = the carrier of W as Subset of V by Def2;
+   VW is lineary-closed by Lm1; then
+   z * v in the carrier of W by A1,def3;
+   hence thesis by RLVECT_1:def 1;
+end;
+
+theorem th41:
+v in W implies - v in W
+proof
+   assume v in W; then
+   (- 1r) * v in W by th40;
+   hence thesis by th4;
+end;
+
+theorem th42:
+u in W & v in W implies u - v in W
+proof
+   assume that
+A1:u in W and
+A2:v in W;
+   - v in W by A2,th41; then
+   u + (- v) in W by A1,th39;
+   hence thesis by RLVECT_1:def 11;
+end;
+
+reserve D for non empty set;
+reserve d1 for Element of D;
+reserve A for BinOp of D;
+reserve M for Function of [:COMPLEX,D:],D;
+
+theorem th44:
+V1 = D &
+d1 = 0.V &
+A = (the add of V) | [:V1,V1:] &
+M = (the Mult of V) | [:COMPLEX,V1:] implies
+    CLSStruct (# D,d1,A,M #) is Subspace of V
+proof
+   assume that
+A1:V1 = D and
+A2:d1 = 0.V and
+A3:A = (the add of V) | [:V1,V1:] and
+A4:M = (the Mult of V) | [:COMPLEX,V1:];
+   set W = CLSStruct (# D,d1,A,M #);
+A5:the Zero of W = the Zero of V by A2,RLVECT_1:def 2;
+A6:for x,y being VECTOR of W holds x + y = (the add of V).[x,y]
+   proof
+     let x,y be VECTOR of W;
+     x + y = ((the add of V) | [:the carrier of W, the carrier of W:]).[x,y]
+       by A1,A3,RLVECT_1:def 3;
+     hence thesis by FUNCT_1:72;
+   end;
+A7:for z for x being VECTOR of W holds z * x = (the Mult of V).[z,x]
+   proof
+     let z;
+     let x be VECTOR of W;
+     z * x = ((the Mult of V) | [:COMPLEX, the carrier of W:]).[z,x]
+        by A1,A4,def1;
+     hence thesis by FUNCT_1:72;
+   end;
+A8:d1 = 0.W by RLVECT_1:def 2;
+   W is Abelian add-associative right_zeroed right_complementable
+        ComplexLinearSpace-like
+   proof
+     set AV = the add of V; set MV = the Mult of V;
+     thus for x,y being VECTOR of W holds x + y = y + x
+     proof
+       let x,y be VECTOR of W;
+       reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
+       thus x + y = AV.[x1,y1] by A6
+                 .= y1 + x1 by RLVECT_1:def 3
+                 .= AV.[y1,x1] by RLVECT_1:def 3
+                 .= y + x by A6;
+     end;
+     thus for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
+     proof
+       let x,y,z be VECTOR of W;
+       reconsider x1 = x, y1 = y, z1 = z as VECTOR of V by A1,TARSKI:def 3;
+       thus (x + y) + z = AV.[x + y,z1] by A6
+                       .= AV.[AV.[x1,y1],z1] by A6
+                       .= AV.[x1 + y1,z1] by RLVECT_1:def 3
+                       .= (x1 + y1) + z1 by RLVECT_1:def 3
+                       .= x1 + (y1 + z1) by RLVECT_1:def 6
+                       .= AV.[x1,y1 + z1] by RLVECT_1:def 3
+                       .= AV.[x1,AV.[y1,z1]] by RLVECT_1:def 3
+                       .= AV.[x1,y + z] by A6
+                       .= x + (y + z) by A6;
+     end;
+     thus for x being VECTOR of W holds x + 0.W = x
+     proof
+       let x be VECTOR of W;
+       reconsider y = x, z = 0.W as VECTOR of V by A1,TARSKI:def 3;
+       thus x + 0.W = AV.[y,z] by A6
+                   .= y + 0.V by A2,A8,RLVECT_1:def 3
+                   .= x by RLVECT_1:10;
+     end;
+     thus for x being VECTOR of W
+            ex y being VECTOR of W st x + y = 0.W
+     proof
+       let x be VECTOR of W;
+       reconsider x1 = x as VECTOR of V by A1,TARSKI:def 3;
+       consider v such that A9: x1 + v = 0.V by RLVECT_1:def 8;
+       v = - x1 by A9,RLVECT_1:def 10
+        .= (- 1r) * x1 by th4
+        .= MV.[- 1r,x1] by def1
+        .= (- 1r) * x by A7; then
+       reconsider y = v as VECTOR of W;
+       take y;
+       thus x + y = AV.[x1,v] by A6
+                 .= 0.W by A2,A8,A9,RLVECT_1:def 3;
+     end;
+     thus for z for x,y being VECTOR of W holds
+            z * (x + y) = z * x + z * y
+     proof
+       let z; let x,y be VECTOR of W;
+       reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
+       thus z * (x + y) = MV.[z,x + y] by A7
+                       .= MV.[z,AV.[x1,y1]] by A6
+                       .= MV.[z,x1 + y1] by RLVECT_1:def 3
+                       .= z * (x1 + y1) by def1
+                       .= z * x1 + z * y1 by def2
+                       .= AV.[z * x1,z * y1] by RLVECT_1:def 3
+                       .= AV.[MV.[z,x1],z * y1] by def1
+                       .= AV.[MV.[z,x1],MV.[z,y1]] by def1
+                       .= AV.[MV.[z,x1],z * y] by A7
+                       .= AV.[z * x, z * y] by A7
+                       .= z * x + z * y by A6;
+     end;
+     thus for z1,z2 for x being VECTOR of W holds
+            (z1 + z2) * x = z1 * x + z2 * x
+     proof
+       let z1,z2; let x be VECTOR of W;
+       reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
+       thus (z1 + z2) * x = MV.[z1 + z2,y] by A7
+                       .= (z1 + z2) * y by def1
+                       .= z1 * y + z2 * y by def2
+                       .= AV.[z1 * y,z2 * y] by RLVECT_1:def 3
+                       .= AV.[MV.[z1,y],z2 * y] by def1
+                       .= AV.[MV.[z1,y],MV.[z2,y]] by def1
+                       .= AV.[MV.[z1,y],z2 * x] by A7
+                       .= AV.[z1 * x,z2 * x] by A7
+                       .= z1 * x + z2 * x by A6;
+     end;
+     thus for z1,z2 for x being VECTOR of W holds
+            (z1 * z2) * x = z1 * (z2 * x)
+     proof
+       let z1,z2; let x be VECTOR of W;
+       reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
+       thus (z1 * z2) * x = MV.[(z1 * z2),y] by A7
+                       .= (z1 * z2) * y by def1
+                       .= z1 * (z2 * y) by def2
+                       .= MV.[z1,z2 * y] by def1
+                       .= MV.[z1,MV.[z2,y]] by def1
+                       .= MV.[z1,z2 * x] by A7
+                       .= z1 * (z2 * x) by A7;
+     end;
+     let x be VECTOR of W;
+     reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
+     thus 1r * x = MV.[1r,y] by A7
+                .= 1r * y by def1
+                .= x by def2;
+   end;
+   hence thesis by A1,A3,A4,A5,Def2;
+end;
+
+theorem th45:
+V is Subspace of V
+proof
+   thus the carrier of V c= the carrier of V &
+        the Zero of V = the Zero of V;
+   thus thesis by FUNCT_2:40;
+end;
+
+theorem th46:
+for V,X being strict ComplexLinearSpace holds
+ V is Subspace of X & X is Subspace of V implies V = X
+proof
+   let V,X be strict ComplexLinearSpace;
+   assume
+A1:V is Subspace of X & X is Subspace of V;
+   set VV = the carrier of V; set VX = the carrier of X;
+   set AV = the add of V; set AX = the add of X;
+   set MV = the Mult of V; set MX = the Mult of X;
+   VV c= VX & VX c= VV by A1,Def2; then
+A2:VV = VX by XBOOLE_0:def 10;
+A3:the Zero of V = the Zero of X by A1,Def2;
+   AV = AX | [:VV,VV:] & AX = AV | [:VX,VX:] by A1,Def2; then
+A4:AV = AX by A2,RELAT_1:101;
+   MV = MX | [:COMPLEX,VV:] & MX = MV | [:COMPLEX,VX:] by A1,Def2;
+   hence thesis by A2,A3,A4,RELAT_1:101;
+end;
+
+theorem th47:
+V is Subspace of X & X is Subspace of Y implies V is Subspace of Y
+proof
+   assume
+A1:V is Subspace of X & X is Subspace of Y;
+   thus the carrier of V c= the carrier of Y
+   proof
+     the carrier of V c= the carrier of X &
+     the carrier of X c= the carrier of Y by A1,Def2;
+     hence thesis by XBOOLE_1:1;
+   end;
+   thus the Zero of V = the Zero of Y
+   proof
+     the Zero of V = the Zero of X & the Zero of X = the Zero of Y by A1,Def2;
+     hence thesis;
+   end;
+   thus the add of V = (the add of Y) | [:the carrier of V, the carrier of V:]
+   proof
+     set AV = the add of V; set VV = the carrier of V;
+     set AX = the add of X; set VX = the carrier of X;
+     set AY = the add of Y;
+     AV = AX | [:VV,VV:] & AX = AY | [:VX,VX:] & VV c= VX by A1,Def2; then
+     AV =(AY | [:VX,VX:]) | [:VV,VV:] & [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
+     hence thesis by FUNCT_1:82;
+   end;
+   set MV = the Mult of V; set VV = the carrier of V;
+   set MX = the Mult of X; set VX = the carrier of X;
+   set MY = the Mult of Y;
+   MV = MX | [:COMPLEX,VV:] &
+   MX = MY | [:COMPLEX,VX:] & VV c= VX by A1,Def2; then
+   MV = (MY | [:COMPLEX,VX:]) | [:COMPLEX,VV:] &
+        [:COMPLEX,VV:] c= [:COMPLEX,VX:] by ZFMISC_1:118;
+   hence thesis by FUNCT_1:82;
+end;
+
+theorem th48:
+the carrier of W1 c= the carrier of W2 implies W1 is Subspace of W2
+proof
+   assume A1: the carrier of W1 c= the carrier of W2;
+   set VW1 = the carrier of W1; set VW2 = the carrier of W2;
+   set AV = the add of V; set MV = the Mult of V;
+   the Zero of W1 = the Zero of V & the Zero of W2 = the Zero of V by Def2;
+   hence the carrier of W1 c= the carrier of W2 &
+         the Zero of W1 = the Zero of W2 by A1;
+   thus the add of W1 =
+        (the add of W2) | [:the carrier of W1,the carrier of W1:]
+   proof
+     the add of W1 = AV | [:VW1,VW1:] & the add of W2 = AV | [:VW2,VW2:] &
+     [:VW1,VW1:] c= [:VW2,VW2:] by A1,Def2,ZFMISC_1:119;
+     hence thesis by FUNCT_1:82;
+   end;
+   the Mult of W1 = MV | [:COMPLEX,VW1:] &
+     the Mult of W2 = MV | [:COMPLEX,VW2:] &
+       [:COMPLEX,VW1:] c= [:COMPLEX,VW2:] by A1,Def2,ZFMISC_1:118;
+   hence thesis by FUNCT_1:82;
+end;
+
+theorem
+(for v st v in W1 holds v in W2) implies W1 is Subspace of W2
+proof
+   assume
+A1:for v st v in W1 holds v in W2;
+   the carrier of W1 c= the carrier of W2
+   proof
+     let x be set;
+     assume
+A2:  x in the carrier of W1;
+     the carrier of W1 c= the carrier of V by Def2; then
+     reconsider v = x as VECTOR of V by A2;
+     v in W1 by A2,RLVECT_1:def 1; then
+     v in W2 by A1;
+     hence thesis by RLVECT_1:def 1;
+   end;
+   hence thesis by th48;
+end;
+
+registration let V;
+cluster strict Subspace of V;
+existence
+proof
+   the carrier of V is Subset of V iff
+   the carrier of V c= the carrier of V; then
+   reconsider V1 = the carrier of V as Subset of V;
+   the Zero of V = 0.V &
+    the add of V = (the add of V) | [:V1,V1:] &
+     the Mult of V = (the Mult of V) | [:COMPLEX,V1:]
+      by FUNCT_2:40,RLVECT_1:def 2; then
+   CLSStruct(#the carrier of V,the Zero of V,the add of V,the Mult of V #)
+      is Subspace of V by th44;
+   hence thesis;
+end;
+end;
+
+theorem th50:
+for W1,W2 being strict Subspace of V holds
+ the carrier of W1 = the carrier of W2 implies W1 = W2
+proof
+   let W1,W2 be strict Subspace of V;
+   assume the carrier of W1 = the carrier of W2; then
+   W1 is Subspace of W2 & W2 is Subspace of W1 by th48;
+   hence thesis by th46;
+end;
+
+theorem th51:
+for W1,W2 being strict Subspace of V holds
+ (for v holds v in W1 iff v in W2) implies W1 = W2
+proof
+   let W1,W2 be strict Subspace of V;
+   assume
+A1:for v holds v in W1 iff v in W2;
+   x in the carrier of W1 iff x in the carrier of W2
+   proof
+     thus x in the carrier of W1 implies x in the carrier of W2
+     proof
+       assume
+A2:    x in the carrier of W1;
+       the carrier of W1 c= the carrier of V by Def2; then
+       reconsider v = x as VECTOR of V by A2;
+       v in W1 by A2,RLVECT_1:def 1; then
+       v in W2 by A1;
+       hence thesis by RLVECT_1:def 1;
+     end;
+     assume
+A3:  x in the carrier of W2;
+     the carrier of W2 c= the carrier of V by Def2; then
+     reconsider v = x as VECTOR of V by A3;
+     v in W2 by A3,RLVECT_1:def 1; then
+     v in W1 by A1;
+     hence thesis by RLVECT_1:def 1;
+   end; then
+   the carrier of W1 = the carrier of W2 by TARSKI:2;
+   hence thesis by th50;
+end;
+
+theorem
+for V being strict ComplexLinearSpace, W being strict Subspace of V holds
+ the carrier of W = the carrier of V implies W = V
+proof
+   let V be strict ComplexLinearSpace, W be strict Subspace of V;
+   assume
+A1:the carrier of W = the carrier of V;
+   V is Subspace of V by th45;
+   hence thesis by A1,th50;
+end;
+
+theorem
+for V being strict ComplexLinearSpace, W being strict Subspace of V holds
+ (for v being VECTOR of V holds v in W iff v in V) implies W = V
+proof
+   let V be strict ComplexLinearSpace, W be strict Subspace of V;
+   assume
+A1:for v being VECTOR of V holds v in W iff v in V;
+   V is Subspace of V by th45;
+   hence thesis by A1,th51;
+end;
+
+theorem
+the carrier of W = V1 implies V1 is lineary-closed by Lm1;
+
+theorem th55:
+V1 <> {} & V1 is lineary-closed implies
+ (ex W being strict Subspace of V st V1 = the carrier of W)
+proof
+   assume that
+A1:V1 <> {} and
+A2:V1 is lineary-closed;
+   reconsider D = V1 as non empty set by A1;
+   reconsider d1 = 0.V as Element of D by A2,th21;
+   set A = (the add of V) | [:V1,V1:];
+   set M = (the Mult of V) | [:COMPLEX,V1:];
+   set VV = the carrier of V;
+   dom(the add of V) = [:VV,VV:] by FUNCT_2:def 1; then
+   dom A = [:VV,VV:] /\ [:V1,V1:] & [:V1,V1:] c= [:VV,VV:]
+        by RELAT_1:90,ZFMISC_1:119; then
+A3:dom A = [:D,D:] by XBOOLE_1:28;
+   dom(the Mult of V) = [:COMPLEX,VV:] by FUNCT_2:def 1; then
+   dom M = [:COMPLEX,VV:] /\ [:COMPLEX,V1:] & [:COMPLEX,V1:] c= [:COMPLEX,VV:]
+       by RELAT_1:90,ZFMISC_1:118; then
+A4:dom M = [:COMPLEX,D:] by XBOOLE_1:28;
+A5:D = rng A
+   proof
+     now
+       let y be set;
+       thus y in D implies ex x being set st x in dom A & y = A.x
+       proof
+         assume
+A6:      y in D; then
+         reconsider v1 = y, v0 = d1 as Element of VV;
+A7:      [d1,y] in [:D,D:] & [d1,y] in [:VV,VV:] by A6,ZFMISC_1:106; then
+         A.[d1,y] = (the add of V).[d1,y] by FUNCT_1:72
+                 .= v0 + v1 by RLVECT_1:def 3
+                 .= y by RLVECT_1:10;
+         hence thesis by A3,A7;
+       end;
+       given x being set such that
+A8:    x in dom A and
+A9:    y = A.x;
+       consider x1,x2 being set such that
+A10:   x1 in D & x2 in D and
+A11:   x = [x1,x2] by A3,A8,ZFMISC_1:def 2;
+A12:   [x1,x2] in [:VV,VV:] & [x1,x2] in [:V1,V1:] by A10,ZFMISC_1:106;
+       reconsider v1 = x1, v2 = x2 as Element of VV by A10;
+
+       y = (the add of V).[x1,x2] by A9,A11,A12,FUNCT_1:72
+        .= v1 + v2 by RLVECT_1:def 3;
+       hence y in D by A2,A10,def3;
+     end;
+     hence thesis by FUNCT_1:def 5;
+   end;
+
+A13:D = rng M
+   proof
+     now let y be set;
+       thus y in D implies ex x being set st x in dom M & y = M.x
+       proof
+         assume
+A14:     y in D; then
+         reconsider v1 = y as Element of VV;
+A15:     [1r,y] in [:COMPLEX,D:] & [1r,y] in [:COMPLEX,VV:]
+           by A14,ZFMISC_1:106; then
+         M.[1r,y] = (the Mult of V).[1r,y] by FUNCT_1:72
+                 .= 1r * v1 by def1
+                 .= y by def2;
+         hence thesis by A4,A15;
+       end;
+       given x being set such that
+A16:   x in dom M and
+A17:   y = M.x;
+       consider x1,x2 being set such that
+A18:   x1 in COMPLEX and
+A19:   x2 in D and
+A20:   x = [x1,x2] by A4,A16,ZFMISC_1:def 2;
+A21:   [x1,x2] in [:COMPLEX,VV:] & [x1,x2] in [:COMPLEX,V1:]
+            by A18,A19,ZFMISC_1:106;
+       reconsider v2 = x2 as Element of VV by A19;
+       reconsider xx1 = x1 as Complex by A18;
+       y = (the Mult of V).[x1,x2] by A17,A20,A21,FUNCT_1:72
+        .= xx1 * v2 by def1;
+       hence y in D by A2,A19,def3;
+     end;
+     hence thesis by FUNCT_1:def 5;
+   end;
+   reconsider A as Function of [:D,D:],D by A3,A5,FUNCT_2:def 1,RELSET_1:11;
+   reconsider M as Function of [:COMPLEX,D:],D
+      by A4,A13,FUNCT_2:def 1,RELSET_1:11;
+   set W = CLSStruct (# D,d1,A,M #);
+   W is Subspace of V & the carrier of W = D by th44;
+   hence thesis;
+end;
+
+:: Definition of zero subspace and improper subspace of complex linear space.
+
+definition let V;
+func (0).V -> strict Subspace of V means :RLSUB_1Def3:
+the carrier of it = {0.V};
+correctness
+proof
+   {0.V} is lineary-closed & {0.V} <> {} by th24;
+   hence thesis by th50,th55;
+end;
+end;
+
+definition let V;
+func (Omega).V -> strict Subspace of V equals :RLSUB_1Def4:
+the CLSStruct of V;
+coherence
+proof
+   set W = the CLSStruct of V;
+   W is Abelian add-associative right_zeroed right_complementable
+        ComplexLinearSpace-like
+   proof
+A1:  0.W = the Zero of W by RLVECT_1:def 2 .= 0.V by RLVECT_1:def 2;
+A2:  now let z; let v,w be VECTOR of W, v',w' be VECTOR of V such that
+A3:    v=v' & w=w';
+       thus v+w = (the add of W).[v,w] by RLVECT_1:def 3
+               .= v'+w' by A3,RLVECT_1:def 3;
+       thus z*v = (the Mult of W).[z,v] by def1
+               .= z*v' by A3,def1;
+     end;
+     thus for v,w being VECTOR of W holds v + w = w + v
+     proof let v,w be VECTOR of W;
+       reconsider v'=v,w'=w as VECTOR of V;
+       thus v + w = w' + v' by A2 .= w + v by A2;
+     end;
+     thus for u,v,w being VECTOR of W holds (u + v) + w = u + (v + w)
+     proof let u,v,w be VECTOR of W;
+       reconsider u'=u,v'=v,w'=w as VECTOR of V;
+A4:    v + w = v' + w' & u + v = u' + v' by A2;
+       hence (u + v) + w = (u' + v') + w' by A2
+                        .= u' + (v' + w') by RLVECT_1:def 6
+                        .= u + (v + w) by A2,A4;
+     end;
+     thus for v being VECTOR of W holds v + 0.W = v
+     proof let v be VECTOR of W;
+       reconsider v'=v as VECTOR of V;
+       thus v + 0.W = v' + 0.V by A1,A2 .= v by RLVECT_1:10;
+     end;
+     thus for v being VECTOR of W ex w being VECTOR of W st v + w = 0.W
+     proof let v be VECTOR of W;
+       reconsider v'=v as VECTOR of V;
+       consider w' being VECTOR of V such that
+A5:    v' + w' = 0.V by RLVECT_1:def 8;
+       reconsider w=w' as VECTOR of W;
+       take w;
+       thus v + w = 0.W by A1,A2,A5;
+     end;
+     thus for z for v,w being VECTOR of W holds z * (v + w) = z * v + z * w
+     proof let z; let v,w be VECTOR of W;
+       reconsider v'=v,w'=w as VECTOR of V;
+A6:    v + w = v' + w' & z * v = z * v' & z * w = z * w' by A2;
+       hence z * (v + w) = z * (v' + w') by A2
+                        .= z * v' + z * w' by def2
+                        .= z * v + z * w by A2,A6;
+     end;
+     thus for z1,z2 for v being VECTOR of W holds (z1+z2) * v = z1* v + z2* v
+     proof let z1,z2; let v be VECTOR of W;
+     reconsider v'=v as VECTOR of V;
+A7:    z1 * v = z1 * v' & z2 * v = z2 * v' by A2;
+       thus (z1 + z2) * v = (z1 + z2) * v' by A2
+                       .= z1 * v' + z2 * v' by def2
+                       .= z1 * v + z2 * v by A2,A7;
+     end;
+     thus for z1,z2 for v being VECTOR of W holds (z1 * z2) * v = z1 * (z2 * v)
+     proof let z1,z2; let v be VECTOR of W;
+       reconsider v'=v as VECTOR of V;
+A8:    z2 * v = z2 * v' by A2;
+       thus (z1 * z2) * v = (z1 * z2) * v' by A2
+                       .= z1 * (z2 * v') by def2
+                       .= z1 * (z2 * v) by A2,A8;
+     end;
+     thus for v being VECTOR of W holds 1r * v = v
+     proof let v be VECTOR of W;
+       reconsider v'=v as VECTOR of V;
+       thus 1r * v = 1r * v' by A2 .= v by def2;
+     end;
+   end; then
+   reconsider W as ComplexLinearSpace;
+   W is Subspace of V
+   proof
+     thus the carrier of W c= the carrier of V &
+          the Zero of W = the Zero of V;
+     thus thesis by FUNCT_2:40;
+   end;
+   hence thesis;
+end;
+end;
+
+:: Definitional theorems of zero subspace and improper subspace.
+
+theorem th60:
+(0).W = (0).V
+proof
+   the carrier of (0).W = {0.W} &
+    the carrier of (0).V = {0.V} by RLSUB_1Def3; then
+   the carrier of (0).W = the carrier of (0).V &
+    (0).W is Subspace of V by th31,th47;
+   hence thesis by th50;
+end;
+
+theorem th61:
+(0).W1 = (0).W2
+proof
+   (0).W1 = (0).V & (0).W2 = (0).V by th60;
+   hence thesis;
+end;
+
+theorem
+(0).W is Subspace of V by th47;
+
+theorem
+(0).V is Subspace of W
+proof
+   the carrier of (0).V = {0.V} by RLSUB_1Def3
+                       .= {0.W} by th31
+                       .= {the Zero of W} by RLVECT_1:def 2;
+   hence thesis by th48;
+end;
+
+theorem
+(0).W1 is Subspace of W2
+proof
+   (0).W1 = (0).W2 & (0).W2 is Subspace of W2 by th61;
+   hence thesis;
+end;
+
+theorem
+for V being strict ComplexLinearSpace holds V is Subspace of (Omega).V
+proof
+   let V be strict ComplexLinearSpace;
+   V is Subspace of V by th45;
+   hence thesis by RLSUB_1Def4;
+end;
+
+:: Introduction of the cosets of subspace.
+
+definition let V; let v,W;
+func v + W -> Subset of V equals :Def5:
+ {v + u : u in W};
+coherence
+proof
+   defpred P[set] means
+   ex u st $1 = v + u & u in W;
+   consider X being set such that
+A1:for x being set holds x in X iff x in the carrier of V &
+   P[x] from XBOOLE_0:sch 1;
+   X c= the carrier of V
+   proof
+     let x be set;
+     assume x in X;
+     hence x in the carrier of V by A1;
+   end; then
+   reconsider X as Subset of V;
+   set Y = {v + u : u in W};
+   X = Y
+   proof
+     thus X c= Y
+     proof let x be set;
+       assume x in X; then
+       ex u st x = v + u & u in W by A1;
+       hence thesis;
+     end;
+     thus Y c= X
+     proof let x be set;
+       assume x in Y; then
+       ex u st x = v + u & u in W;
+       hence thesis by A1;
+     end;
+   end;
+   hence thesis;
+end;
+end;
+
+Lm2: 0.V + W = the carrier of W
+proof
+   set A = {0.V + u : u in W};
+A1:0.V + W = A by Def5;
+A2:A c= the carrier of W
+   proof let x be set;
+     assume x in A; then
+     consider u such that A3: x = 0.V + u and A4: u in W;
+     x = u by A3,RLVECT_1:10;
+     hence thesis by A4,RLVECT_1:def 1;
+   end;
+   the carrier of W c= A
+   proof let x be set;
+     assume x in the carrier of W; then
+A5:  x in W by RLVECT_1:def 1; then
+     x in V by th29; then
+     reconsider y = x as Element of V by RLVECT_1:def 1;
+     0.V + y = x by RLVECT_1:10;
+     hence thesis by A5;
+   end;
+   hence thesis by A1,A2,XBOOLE_0:def 10;
+end;
+
+definition let V; let W;
+mode Coset of W -> Subset of V means :Def6:
+ ex v st it = v + W;
+existence
+proof
+   reconsider VW = the carrier of W as Subset of V by Def2;
+   take VW;
+   take 0.V;
+   thus thesis by Lm2;
+   end;
+end;
+
+reserve B,C for Coset of W;
+
+:: Definitional theorems of the cosets.
+
+theorem th70:
+0.V in v + W iff v in W
+proof
+   set A = {v + u : u in W};
+   thus 0.V in v + W implies v in W
+   proof
+     assume 0.V in v + W; then
+     0.V in A by Def5; then
+     consider u such that
+A1:  0.V = v + u and
+A2:  u in W;
+     v = - u by A1,RLVECT_1:def 10;
+     hence thesis by A2,th41;
+   end;
+   assume v in W; then
+A3:- v in W by th41;
+   0.V = v - v by RLVECT_1:28
+      .= v + (- v) by RLVECT_1:def 11; then
+   0.V in A by A3;
+   hence thesis by Def5;
+end;
+
+theorem th71:
+v in v + W
+proof
+   v + 0.V = v & 0.V in W by th36,RLVECT_1:10; then
+   v in {v + u : u in W};
+   hence thesis by Def5;
+end;
+
+theorem
+0.V + W = the carrier of W by Lm2;
+
+theorem th73:
+v + (0).V = {v}
+proof
+   set A = {v + u : u in (0).V};
+   thus v + (0).V c= {v}
+   proof let x be set;
+     assume x in v + (0).V; then
+     x in A by Def5; then
+     consider u such that
+A1:  x = v + u and
+A2:  u in (0).V;
+     the carrier of (0).V = {0.V} & u in the carrier of (0).V
+         by A2,RLSUB_1Def3,RLVECT_1:def 1; then
+     u = 0.V by TARSKI:def 1; then
+     x = v by A1,RLVECT_1:10;
+     hence thesis by TARSKI:def 1;
+   end;
+   let x be set;
+   assume x in {v}; then
+A3:x = v by TARSKI:def 1;
+   0.V in (0).V & v = v + 0.V by th36,RLVECT_1:10; then
+   x in A by A3;
+   hence thesis by Def5;
+end;
+
+Lm3:
+v in W iff v + W = the carrier of W
+proof
+   set A = {v + u : u in W};
+   thus v in W implies v + W = the carrier of W
+   proof
+     assume
+A1:  v in W;
+     thus v + W c= the carrier of W
+     proof let x be set;
+       assume x in v + W; then
+       x in A by Def5; then
+       consider u such that
+A2:    x = v + u and
+A3:    u in W;
+       v + u in W by A1,A3,th39;
+       hence thesis by A2,RLVECT_1:def 1;
+     end;
+     let x be set;
+     assume x in the carrier of W; then
+     reconsider y = x, z = v as Element of W by A1,RLVECT_1:def 1;
+     reconsider y1 = y, z1 = z as VECTOR of V by th30;
+A4:  y - z in W by RLVECT_1:def 1;
+A5:  z + (y - z) = (y + z) - z by RLVECT_1:42
+                .= y + (z - z) by RLVECT_1:42
+                .= y + 0.W by RLVECT_1:28
+                .= x by RLVECT_1:10;
+A6:  y - z = y1 - z1 by th35;
+A7:  y1 - z1 in W by A4,th35;
+     z1 + (y1 - z1) = x by A5,A6,th32; then
+     x in A by A7;
+     hence thesis by Def5;
+   end;
+   assume
+A8:v + W = the carrier of W;
+   assume
+A9:not v in W;
+   0.V in W & v + 0.V = v by th36,RLVECT_1:10; then
+   v in {v + u : u in W}; then
+   v in the carrier of W by A8,Def5;
+   hence thesis by A9,RLVECT_1:def 1;
+end;
+
+theorem th74:
+v + (Omega).V = the carrier of V
+proof
+A1:the carrier of (Omega).V = the carrier of the CLSStruct of V by RLSUB_1Def4
+                           .= the carrier of V; then
+   v in (Omega).V by RLVECT_1:def 1;
+   hence thesis by A1,Lm3;
+end;
+
+theorem th75:
+0.V in v + W iff v + W = the carrier of W
+proof
+   (0.V in v + W iff v in W) &
+   (v in W iff v + W = the carrier of W) by Lm3,th70;
+   hence thesis;
+end;
+
+theorem
+v in W iff v + W = the carrier of W by Lm3;
+
+theorem th77:
+v in W implies (z * v) + W = the carrier of W
+proof
+   set A = {z * v + u : u in W};
+   assume
+A1:v in W;
+   thus (z * v) + W c= the carrier of W
+   proof let x be set;
+     assume x in (z * v) + W; then
+     x in A by Def5; then
+     consider u such that
+A2:  x = z * v + u and
+A3:  u in W;
+     z * v in W by A1,th40; then
+     z * v + u in W by A3,th39;
+     hence thesis by A2,RLVECT_1:def 1;
+   end;
+   let x be set;
+   assume
+A4:x in the carrier of W;
+   the carrier of W c= the carrier of V & v in V by Def2,RLVECT_1:3; then
+   reconsider y = x as Element of V by A4;
+   z * v in W & x in W by A1,A4,th40,RLVECT_1:def 1; then
+A5:y - z * v in W by th42;
+   z * v + (y - z * v) = (y + z * v) - z * v by RLVECT_1:42
+                      .= y + (z * v - z * v) by RLVECT_1:42
+                      .= y + 0.V by RLVECT_1:28
+                      .= x by RLVECT_1:10; then
+   x in A by A5;
+   hence thesis by Def5;
+end;
+
+theorem th78:
+z <> 0c & (z * v) + W = the carrier of W implies v in W
+proof
+   assume that
+A1:z <> 0c and
+A2:(z * v) + W = the carrier of W;
+   assume not v in W; then
+   not 1r * v in W by def2; then
+   not (z" * z) * v in W by A1,COMPLEX1:65; then
+   not z" * (z * v) in W by def2; then
+A3:not z * v in W by th40;
+   0.V in W & z * v + 0.V = z * v by th36,RLVECT_1:10; then
+   z * v in {z * v + u : u in W}; then
+   z * v in the carrier of W by A2,Def5;
+   hence contradiction by A3,RLVECT_1:def 1;
+end;
+
+Lem0:
+(-1r) <> 0c
+proof
+   Re(-1r)=-Re(1r) & Im(-1r) = -Im(1r) by COMPLEX1:34;
+   hence thesis by COMPLEX1:15;
+end;
+
+theorem th79:
+v in W iff - v + W = the carrier of W
+proof
+   (v in W iff ((- 1r) * v) + W = the carrier of W) & (- 1r) * v = - v
+      by th77,th78,th4,Lem0;
+   hence thesis;
+end;
+
+theorem th80:
+u in W iff v + W = (v + u) + W
+proof
+   set A = {v + v1 : v1 in W};
+   set B = {(v + u) + v2 : v2 in W};
+   thus u in W implies v + W = (v + u) + W
+   proof assume
+A1:  u in W;
+     thus v + W c= (v + u) + W
+     proof let x be set;
+       assume x in v + W; then
+       x in A by Def5; then
+       consider v1 such that
+A2:    x = v + v1 and
+A3:    v1 in W;
+A4:    v1 - u in W by A1,A3,th42;
+       (v + u) + (v1 - u) = v + (u + (v1 - u)) by RLVECT_1:def 6
+                         .= v + ((v1 + u) - u) by RLVECT_1:42
+                         .= v + (v1 + (u - u)) by RLVECT_1:42
+                         .= v + (v1 + 0.V) by RLVECT_1:28
+                         .= x by A2,RLVECT_1:10; then
+       x in B by A4;
+       hence thesis by Def5;
+     end;
+     let x be set;
+     assume x in (v + u) + W; then
+     x in B by Def5; then
+     consider v2 such that
+A5:  x = (v + u) + v2 and
+A6:  v2 in W;
+A7:  u + v2 in W by A1,A6,th39;
+     x = v + (u + v2) by A5,RLVECT_1:def 6; then
+     x in A by A7;
+     hence thesis by Def5;
+   end;
+   assume
+A8:v + W = (v + u) + W;
+   0.V in W & v + 0.V = v by th36,RLVECT_1:10; then
+   v in A; then
+   v in (v + u) + W by A8,Def5; then
+   v in B by Def5; then
+   consider u1 such that
+A9:v = (v + u) + u1 and
+A10:u1 in W;
+   v = v + 0.V & v = v + (u + u1) by A9,RLVECT_1:10,def 6; then
+A11:u + u1 = 0.V by RLVECT_1:21;
+   u = - u1 by A11,RLVECT_1:def 10;
+   hence thesis by A10,th41;
+end;
+
+theorem
+u in W iff v + W = (v - u) + W
+proof
+A1:(-u in W iff v+W = (v+(-u))+W) & v + (-u) = v - u by th80,RLVECT_1:def 11;
+   - u in W implies u in W
+   proof
+     assume - u in W; then
+     - (- u) in W by th41;
+     hence thesis by RLVECT_1:30;
+   end;
+   hence thesis by A1,th41;
+end;
+
+theorem th82:
+v in u + W iff u + W = v + W
+proof
+   set A = {u + v1 : v1 in W}; set B = {v + v2 : v2 in W};
+   thus v in u + W implies u + W = v + W
+   proof
+     assume v in u + W; then
+     v in A by Def5; then
+     consider z being VECTOR of V such that
+A1:  v = u + z and
+A2:  z in W;
+     thus u + W c= v + W
+     proof let x be set;
+       assume x in u + W; then
+       x in A by Def5; then
+       consider v1 such that
+A3:    x = u + v1 and
+A4:    v1 in W;
+A5:    v1 - z in W by A2,A4,th42;
+       v - z = u + (z - z) by A1,RLVECT_1:42
+            .= u + 0.V by RLVECT_1:28
+            .= u by RLVECT_1:10; then
+       x = (v + (- z)) + v1 by A3,RLVECT_1:def 11
+        .= v + (v1 + (- z)) by RLVECT_1:def 6
+        .= v + (v1 - z) by RLVECT_1:def 11; then
+       x in B by A5;
+       hence thesis by Def5;
+     end;
+     let x be set;
+     assume x in v + W; then
+     x in B by Def5; then
+     consider v2 such that
+A6:  x = v + v2 and
+A7:  v2 in W;
+A8:  z + v2 in W by A2,A7,th39;
+     x = u + (z + v2) by A1,A6,RLVECT_1:def 6; then
+     x in A by A8;
+     hence thesis by Def5;
+   end;
+   thus thesis by th71;
+end;
+
+theorem th83:
+v + W = (- v) + W iff v in W
+proof
+   thus v + W = (- v) + W implies v in W
+   proof
+     assume v + W = (- v) + W; then
+     v in (- v) + W by th71; then
+     v in {- v + u : u in W} by Def5; then
+     consider u such that
+A1:  v = - v + u and
+A2:  u in W;
+     0.V = v - (- v + u) by A1,RLVECT_1:28
+        .= (v - (- v)) - u by RLVECT_1:41
+        .= (v + (- (- v))) - u by RLVECT_1:def 11
+        .= (v + v) - u by RLVECT_1:30
+        .= (1r * v + v) - u by def2
+        .= (1r * v + 1r * v) - u by def2
+        .= ((1r + 1r) * v) - u by def2
+        .= [* 2,0 *] * v - u by Lem00; then
+     [* 2,0 *]" * ([* 2,0 *] * v) = [* 2,0 *]" * u by RLVECT_1:35; then
+     ([* 2,0 *]" * [* 2,0 *]) * v = [* 2,0 *]" * u & 0c <> [* 2,0 *]
+         by def2,COMPLEX1:7,12; then
+     1r * v = [* 2,0 *]" * u by COMPLEX1:65; then
+     v = [* 2,0 *]" * u by def2;
+     hence thesis by A2,th40;
+   end;
+   assume v in W; then
+   v + W = the carrier of W & (- v) + W = the carrier of W by Lm3,th79;
+   hence thesis;
+end;
+
+theorem th84:
+u in v1 + W & u in v2 + W implies v1 + W = v2 + W
+proof
+   assume that
+A1:u in v1 + W and
+A2:u in v2 + W;
+   set A = {v1 + u1 : u1 in W};
+   set B = {v2 + u2 : u2 in W};
+   u in A by A1,Def5; then
+   consider x1 being VECTOR of V such that
+A3:u = v1 + x1 and
+A4:x1 in W;
+   u in B by A2,Def5; then
+   consider x2 being VECTOR of V such that
+A5:u = v2 + x2 and
+A6:x2 in W;
+   thus v1 + W c= v2 + W
+   proof let x be set;
+     assume x in v1 + W; then
+     x in A by Def5; then
+     consider u1 such that
+A7:  x = v1 + u1 and
+A8:  u1 in W;
+     u - x1 = v1 + (x1 - x1) by A3,RLVECT_1:42
+           .= v1 + 0.V by RLVECT_1:28
+           .= v1 by RLVECT_1:10; then
+A9:  x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:42
+      .= v2 + ((x2 - x1) + u1) by RLVECT_1:def 6;
+     x2 - x1 in W by A4,A6,th42; then
+     (x2 - x1) + u1 in W by A8,th39; then
+     x in B by A9;
+     hence thesis by Def5;
+   end;
+   let x be set;
+   assume x in v2 + W; then
+   x in B by Def5; then
+   consider u1 such that
+A10: x = v2 + u1 and
+A11: u1 in W;
+   u - x2 = v2 + (x2 - x2) by A5,RLVECT_1:42
+         .= v2 + 0.V by RLVECT_1:28
+         .= v2 by RLVECT_1:10; then
+A12: x = (v1 + (x1 - x2)) + u1 by A3,A10,RLVECT_1:42
+      .= v1 + ((x1 - x2) + u1) by RLVECT_1:def 6;
+   x1 - x2 in W by A4,A6,th42; then
+   (x1 - x2) + u1 in W by A11,th39; then
+   x in A by A12;
+   hence thesis by Def5;
+end;
+
+theorem
+u in v + W & u in (- v) + W implies v in W
+proof
+   assume u in v + W & u in (- v) + W; then
+   v + W = (- v) + W by th84;
+   hence thesis by th83;
+end;
+
+theorem th86:
+z <> 1r & z * v in v + W implies v in W
+proof
+   assume that
+A1:z <> 1r and
+A2:z * v in v + W;
+A3:now assume z - 1r = 0; then
+     (- 1r) + z = 0 by XCMPLX_0:def 8; then
+     z = - (- 1r) by XCMPLX_0:def 6;
+     hence contradiction by A1;
+   end;
+   z * v in {v + u : u in W} by A2,Def5; then
+   consider u such that
+A4: z * v = v + u and
+A5: u in W;
+   u = u + 0.V by RLVECT_1:10
+    .= u + (v - v) by RLVECT_1:28
+    .= z * v - v by A4,RLVECT_1:42
+    .= z * v - 1r * v by def2
+    .= (z - 1r) * v by th11; then
+   (z - 1r)" * u = ((z - 1r)" * (z - 1r)) * v & z - 1r <> 0 by A3,def2; then
+   1r * v = (z - 1r)" * u by COMPLEX1:65; then
+   v = (z - 1r)" * u by def2;
+   hence thesis by A5,th40;
+end;
+
+theorem th87:
+v in W implies z * v in v + W
+proof
+   assume
+A1:v in W;
+A2:z * v = (z - (1r - 1r)) * v by XCMPLX_1:17
+        .= ((z - 1r) + 1r) * v by XCMPLX_1:37
+        .= (z - 1r) * v + 1r * v by def2
+        .= v + (z - 1r) * v by def2;
+   (z - 1r) * v in W by A1,th40; then
+   z * v in {v + u : u in W} by A2;
+   hence thesis by Def5;
+end;
+
+theorem
+- v in v + W iff v in W
+proof
+A1:(v in W implies (- 1r) * v in v + W) & (- 1r) * v = - v by th87,th4;
+A2:Re(-1r) = -(Re(1r)) & Im(-1r) = -(Im(1r)) by COMPLEX1:34;
+   (-1r <> 1r & (- 1r) * v in v + W implies v in W) by th86;
+   hence thesis by A1,A2,COMPLEX1:15;
+end;
+
+theorem th89:
+u + v in v + W iff u in W
+proof
+   set A = {v + v1 : v1 in W};
+   thus u + v in v + W implies u in W
+   proof assume u + v in v + W; then
+     u + v in A by Def5; then
+     consider v1 such that
+A1:  u + v = v + v1 and
+A2:  v1 in W;
+     thus thesis by A1,A2,RLVECT_1:21;
+   end;
+   assume u in W; then
+   u + v in A;
+   hence thesis by Def5;
+end;
+
+theorem
+v - u in v + W iff u in W
+proof
+A1:v - u = (- u) + v by RLVECT_1:def 11;
+A2:u in W implies - u in W by th41;
+   - u in W implies - (- u) in W by th41;
+   hence thesis by A1,A2,th89,RLVECT_1:30;
+end;
+
+theorem th91:
+u in v + W iff (ex v1 st v1 in W & u = v + v1)
+proof
+   set A = {v + v2 : v2 in W};
+   thus u in v + W implies (ex v1 st v1 in W & u = v + v1)
+   proof assume u in v + W; then
+     u in A by Def5; then
+     ex v1 st u = v + v1 & v1 in W;
+     hence thesis;
+   end;
+   given v1 such that A1: v1 in W & u = v + v1;
+   u in A by A1;
+   hence thesis by Def5;
+end;
+
+theorem
+u in v + W iff (ex v1 st v1 in W & u = v - v1)
+proof
+   set A = {v + v2 : v2 in W};
+   thus u in v + W implies (ex v1 st v1 in W & u = v - v1)
+   proof assume u in v + W; then
+     u in A by Def5; then
+     consider v1 such that
+A1:  u = v + v1 and
+A2:  v1 in W;
+     take x = - v1;
+     thus x in W by A2,th41;
+     u = v + (- (- v1)) by A1,RLVECT_1:30
+      .= v - (- v1) by RLVECT_1:def 11;
+     hence thesis;
+   end;
+   given v1 such that
+A3: v1 in W & u = v - v1;
+   u = v + (- v1) & - v1 in W by A3,th41,RLVECT_1:def 11; then
+   u in A;
+   hence thesis by Def5;
+end;
+
+theorem th93:
+ (ex v st v1 in v + W & v2 in v + W) iff v1 - v2 in W
+  proof
+   thus (ex v st v1 in v + W & v2 in v + W) implies v1 - v2 in W
+    proof given v such that A1: v1 in v + W and A2: v2 in v + W;
+      consider u1 such that A3: u1 in W and A4: v1 = v + u1 by A1,th91;
+      consider u2 such that A5: u2 in W and A6: v2 = v + u2 by A2,th91;
+         v1 - v2 = (u1 + v) + (- (v + u2)) by A4,A6,RLVECT_1:def 11
+              .= (u1 + v) + ((- v) - u2) by RLVECT_1:44
+              .= ((u1 + v) + (- v)) - u2 by RLVECT_1:42
+              .= (u1 + (v + (- v))) - u2 by RLVECT_1:def 6
+              .= (u1 + 0.V) - u2 by RLVECT_1:16
+              .= u1 - u2 by RLVECT_1:10;
+     hence thesis by A3,A5,th42;
+    end;
+    assume v1 - v2 in W;
+    then A7: - (v1 - v2) in W by th41;
+   take v1;
+   thus v1 in v1 + W by th71;
+        v1 + (- (v1 - v2)) = v1 + ((- v1) + v2) by RLVECT_1:47
+                        .= (v1 + (- v1)) + v2 by RLVECT_1:def 6
+                        .= 0.V + v2 by RLVECT_1:16
+                        .= v2 by RLVECT_1:10;
+   hence thesis by A7,th91;
+  end;
+
+theorem th94:
+ v + W = u + W implies
+  (ex v1 st v1 in W & v + v1 = u)
+   proof
+     assume A1: v + W = u + W;
+    take v1 = u - v;
+         v in u + W by A1,th71;
+       then v in {u + u2 : u2 in W} by Def5;
+      then consider u1 such that A2: v = u + u1 and A3: u1 in W;
+         0.V = (u + u1) - v by A2,RLVECT_1:28
+               .= u + (u1 - v) by RLVECT_1:42
+               .= u + ((- v) + u1) by RLVECT_1:def 11
+               .= (u + (- v)) + u1 by RLVECT_1:def 6
+               .= u1 + (u - v) by RLVECT_1:def 11;
+        then v1 = - u1 by RLVECT_1:def 10;
+    hence v1 in W by A3,th41;
+    thus v + v1 = (u + v) - v by RLVECT_1:42
+               .= u + (v - v) by RLVECT_1:42
+               .= u + 0.V by RLVECT_1:28
+               .= u by RLVECT_1:10;
+   end;
+
+theorem th95:
+ v + W = u + W implies
+  (ex v1 st v1 in W & v - v1 = u)
+   proof
+     assume A1: v + W = u + W;
+    take v1 = v - u;
+         u in v + W by A1,th71;
+       then u in {v + u2 : u2 in W} by Def5;
+      then consider u1 such that A2: u = v + u1 and A3: u1 in W;
+         0.V = (v + u1) - u by A2,RLVECT_1:28
+               .= v + (u1 - u) by RLVECT_1:42
+               .= v + ((- u) + u1) by RLVECT_1:def 11
+               .= (v + (- u)) + u1 by RLVECT_1:def 6
+               .= u1 + (v - u) by RLVECT_1:def 11;
+        then v1 = - u1 by RLVECT_1:def 10;
+    hence v1 in W by A3,th41;
+    thus v - v1 = (v - v) + u by RLVECT_1:43
+               .= 0.V + u by RLVECT_1:28
+               .= u by RLVECT_1:10;
+   end;
+
+theorem th96:
+ for W1,W2 being strict Subspace of V holds
+ v + W1 = v + W2 iff W1 = W2
+  proof let W1,W2 be strict Subspace of V;
+   thus v + W1 = v + W2 implies W1 = W2
+    proof assume A1: v + W1 = v + W2;
+        the carrier of W1 = the carrier of W2
+       proof A2: the carrier of W1 c= the carrier of V by Def2;
+             A3: the carrier of W2 c= the carrier of V by Def2;
+        thus the carrier of W1 c= the carrier of W2
+         proof let x be set;
+           assume A4: x in the carrier of W1;
+            then reconsider y = x as Element of V by A2;
+
+            set z = v + y;
+               x in W1 by A4,RLVECT_1:def 1;
+             then z in {v + u : u in W1};
+             then z in v + W2 by A1,Def5;
+             then z in {v + u : u in W2} by Def5;
+            then consider u such that A5: z = v + u and A6: u in W2;
+               y = u by A5,RLVECT_1:21;
+          hence thesis by A6,RLVECT_1:def 1;
+         end;
+        let x be set;
+         assume A7: x in the carrier of W2;
+          then reconsider y = x as Element of V by A3;
+
+           set z = v + y;
+              x in W2 by A7,RLVECT_1:def 1;
+            then z in {v + u : u in W2};
+            then z in v + W1 by A1,Def5;
+            then z in {v + u : u in W1} by Def5;
+          then consider u such that A8: z = v + u and A9: u in W1;
+              y = u by A8,RLVECT_1:21;
+        hence thesis by A9,RLVECT_1:def 1;
+       end;
+     hence thesis by th50;
+    end;
+   thus thesis;
+  end;
+
+theorem th97:
+ for W1,W2 being strict Subspace of V holds
+ v + W1 = u + W2 implies W1 = W2
+  proof let W1,W2 be strict Subspace of V;
+   assume A1: v + W1 = u + W2;
+     set V1 = the carrier of W1; set V2 = the carrier of W2;
+    assume A2: W1 <> W2;
+      then V1 <> V2 by th50;
+      then A3: not V1 c= V2 or not V2 c= V1 by XBOOLE_0:def 10;
+
+      A4: now assume A5: V1 \ V2 <> {};
+        consider x being Element of V1 \ V2;
+            x in V1 & not x in V2 by A5,XBOOLE_0:def 4;
+          then A6: x in W1 & not x in W2 by RLVECT_1:def 1;
+          then x in V by th29;
+        then reconsider x as Element of V by RLVECT_1:def 1;
+
+         set z = v + x;
+            z in {v + u2 : u2 in W1} by A6;
+          then z in u + W2 by A1,Def5;
+          then z in {u + u2 : u2 in W2} by Def5;
+        then consider u1 such that A7: z = u + u1 and A8: u1 in W2;
+            x = 0.V + x by RLVECT_1:10
+           .= v - v + x by RLVECT_1:28
+           .= (- v + v) + x by RLVECT_1:def 11
+           .= - v + (u + u1) by A7,RLVECT_1:def 6;
+          then A9: (v + (- v + (u + u1))) + W1 = v + W1 by A6,th80;
+            v + (- v + (u + u1)) = (v + (- v)) + (u + u1) by RLVECT_1:def 6
+                              .= (v - v) + (u + u1) by RLVECT_1:def 11
+                              .= 0.V + (u + u1) by RLVECT_1:28
+                              .= u + u1 by RLVECT_1:10;
+          then (u + u1) + W2 = (u + u1) + W1 by A1,A8,A9,th80;
+       hence thesis by A2,th96;
+      end;
+        now assume A10: V2 \ V1 <> {};
+        consider x being Element of V2 \ V1;
+            x in V2 & not x in V1 by A10,XBOOLE_0:def 4;
+          then A11: x in W2 & not x in W1 by RLVECT_1:def 1;
+          then x in V by th29;
+        then reconsider x as Element of V by RLVECT_1:def 1;
+
+         set z = u + x;
+            z in {u + u2 : u2 in W2} by A11;
+          then z in v + W1 by A1,Def5;
+          then z in {v + u2 : u2 in W1} by Def5;
+        then consider u1 such that A12: z = v + u1 and A13: u1 in W1;
+            x = 0.V + x by RLVECT_1:10
+           .= u - u + x by RLVECT_1:28
+           .= (- u + u) + x by RLVECT_1:def 11
+           .= - u + (v + u1) by A12,RLVECT_1:def 6;
+          then A14: (u + (- u + (v + u1))) + W2 = u + W2 by A11,th80;
+            u + (- u + (v + u1)) = (u + (- u)) + (v + u1) by RLVECT_1:def 6
+                              .= (u - u) + (v + u1) by RLVECT_1:def 11
+                              .= 0.V + (v + u1) by RLVECT_1:28
+                              .= v + u1 by RLVECT_1:10;
+          then (v + u1) + W1 = (v + u1) + W2 by A1,A13,A14,th80;
+       hence thesis by A2,th96;
+      end;
+   hence thesis by A3,A4,XBOOLE_1:37;
+  end;
+
+:: Theorems concerning cosets of subspace
+:: regarded as subsets of the carrier.
+
+theorem
+   C is lineary-closed iff C = the carrier of W
+  proof
+   thus C is lineary-closed implies C = the carrier of W
+    proof assume A1: C is lineary-closed;
+      consider v such that A2: C = v + W by Def6;
+         C <> {} by A2,th71;
+       then 0.V in v + W by A1,A2,th21;
+     hence thesis by A2,th75;
+    end;
+   thus thesis by Lm1;
+  end;
+
+theorem
+   for W1,W2 being strict Subspace of V,
+  C1 being Coset of W1, C2 being Coset of W2 holds
+ C1 = C2 implies W1 = W2
+  proof
+   let W1,W2 be strict Subspace of V,
+    C1 be Coset of W1, C2 be Coset of W2;
+ A1:    ex v1 st C1 = v1 + W1 by Def6;
+       ex v2 st C2 = v2 + W2 by Def6;
+   hence thesis by A1,th97;
+  end;
+
+theorem
+   {v} is Coset of (0).V
+  proof v + (0).V = {v} by th73;
+   hence thesis by Def6;
+  end;
+
+theorem
+   V1 is Coset of (0).V implies (ex v st V1 = {v})
+  proof assume V1 is Coset of (0).V;
+    then consider v such that A1: V1 = v + (0).V by Def6;
+   take v;
+   thus thesis by A1,th73;
+  end;
+
+theorem
+   the carrier of W is Coset of W
+  proof the carrier of W = 0.V + W by Lm2;
+   hence thesis by Def6;
+  end;
+
+theorem
+   the carrier of V is Coset of (Omega).V
+  proof
+      the carrier of V is Subset of V iff
+      the carrier of V c= the carrier of V;
+    then reconsider A = the carrier of V as Subset of V;
+    consider v;
+       A = v + (Omega).V by th74;
+   hence thesis by Def6;
+  end;
+
+theorem
+   V1 is Coset of (Omega).V implies V1 = the carrier of V
+  proof assume V1 is Coset of (Omega).V;
+    then ex v st V1 = v + (Omega).V by Def6;
+   hence thesis by th74;
+  end;
+
+theorem
+   0.V in C iff C = the carrier of W
+  proof
+       ex v st C = v + W by Def6;
+   hence thesis by th75;
+  end;
+
+theorem Th94:
+ u in C iff C = u + W
+  proof
+   thus u in C implies C = u + W
+    proof assume A1: u in C;
+         ex v st C = v + W by Def6;
+     hence thesis by A1,th82;
+    end;
+   thus thesis by th71;
+  end;
+
+theorem
+   u in C & v in C implies (ex v1 st v1 in W & u + v1 = v)
+  proof assume u in C & v in C;
+    then C = u + W & C = v + W by Th94;
+   hence thesis by th94;
+  end;
+
+theorem
+   u in C & v in C implies (ex v1 st v1 in W & u - v1 = v)
+  proof assume u in C & v in C;
+    then C = u + W & C = v + W by Th94;
+   hence thesis by th95;
+  end;
+
+theorem
+   (ex C st v1 in C & v2 in C) iff v1 - v2 in W
+  proof
+   thus (ex C st v1 in C & v2 in C) implies v1 - v2 in W
+    proof given C such that A1: v1 in C & v2 in C;
+         ex v st C = v + W by Def6;
+     hence thesis by A1,th93;
+    end;
+    assume v1 - v2 in W;
+     then consider v such that A2: v1 in v + W & v2 in v + W by th93;
+     reconsider C = v + W as Coset of W by Def6;
+   take C;
+   thus thesis by A2;
+  end;
+
+theorem
+   u in B & u in C implies B = C
+  proof assume A1: u in B & u in C;
+ A2:    ex v1 st B = v1 + W by Def6;
+       ex v2 st C = v2 + W by Def6;
+   hence thesis by A1,A2,th84;
+  end;
+
+begin :: Complex Normed Space
+
+definition
+ struct(CLSStruct) CNORMSTR (# carrier -> set,
+            Zero -> Element of the carrier,
+             add -> BinOp of the carrier,
+            Mult -> Function of [:COMPLEX, the carrier:], the carrier,
+            norm -> Function of the carrier, REAL #);
+end;
+
+registration
+ cluster non empty CNORMSTR;
+ existence
+  proof
+    consider A being non empty set, Z being Element of A,
+             a being BinOp of A, M being Function of [:COMPLEX,A:],A,
+             n being Function of A,REAL;
+   take CNORMSTR(#A,Z,a,M,n#);
+   thus the carrier of CNORMSTR(#A,Z,a,M,n#) is non empty;
+  end;
+end;
+
+ reserve X for non empty CNORMSTR;
+ reserve x for Point of X;
+
+deffunc 0'(CNORMSTR) = 0.$1;
+
+definition let X, x;
+ func ||.x.|| -> Real equals
+:Def1:   ( the norm of X ).x;
+coherence;
+end;
+     consider V being ComplexLinearSpace;
+Lm1:   the carrier of (0).V = {0.V} by RLSUB_1Def3;
+  deffunc F(set) = 0;
+     consider nil_to_nil being Function
+     of the carrier of (0).V , REAL such that
+Lm2: for u being VECTOR of (0).V holds nil_to_nil.u = F(u)
+       from FUNCT_2:sch 4;
+
+Lm3:
+nil_to_nil.(0.V) = 0
+proof
+  0.V is VECTOR of (0).V by Lm1,TARSKI:def 1;
+hence thesis by Lm2;
+end;
+
+Lm4:
+for u being VECTOR of (0).V , z holds
+nil_to_nil.(z * u) = |.z.| * nil_to_nil.u
+proof
+let u be VECTOR of (0).V;
+let z;
+  nil_to_nil.u = 0 by Lm1,Lm3,TARSKI:def 1;
+hence thesis by Lm1,Lm3,TARSKI:def 1;
+end;
+
+Lm5:
+for u , v being VECTOR of (0).V holds
+nil_to_nil.(u + v) <= nil_to_nil.u + nil_to_nil.v
+proof
+let u, v be VECTOR of (0).V;
+     u = 0.V & v = 0.V by Lm1,TARSKI:def 1;
+hence thesis by Lm1,Lm3,TARSKI:def 1;
+end;
+reconsider X =
+ CNORMSTR (# the carrier of (0).V, the Zero of (0).V, the add of (0).V,
+           the Mult of (0).V, nil_to_nil #)
+            as non empty CNORMSTR by STRUCT_0:def 1;
+
+Lm6:
+now
+let x, y be Point of X;
+let z;
+A1:   ||.x.|| = nil_to_nil.x &
+||.y.|| = nil_to_nil.y &
+||.z * x.|| = nil_to_nil.(z * x) &
+||.x + y.|| = nil_to_nil.(x + y) by Def1;
+
+reconsider u = x, w = y as VECTOR of (0).V;
+
+thus ||.x.|| = 0 iff x = 0'(X)
+proof
+  0'(X) = the Zero of X by RLVECT_1:def 2
+     .= 0.(0).V by RLVECT_1:def 2
+     .= 0.V by th31;
+hence thesis by Def1,Lm1,Lm3,TARSKI:def 1;
+end;
+
+   z * x = (the Mult of X).[z,u] by def1
+         .= z * u by def1;
+hence ||.z * x.|| = |.z.| * ||.x.|| by A1,Lm4;
+   x + y = (the add of X).[x,y] by RLVECT_1:def 3
+      .= u + w by RLVECT_1:def 3;
+hence ||.x + y.|| <= ||.x.|| + ||.y.|| by A1,Lm5;
+end;
+
+definition let IT be non empty CNORMSTR;
+ attr IT is ComplexNormSpace-like means
+:Def2:   for x , y being Point of IT , z holds
+          ( ||.x.|| = 0 iff x = 0.IT ) &
+          ||.z * x.|| = |.z.| * ||.x.|| &
+          ||.x + y.|| <= ||.x.|| + ||.y.||;
+end;
+
+registration
+ cluster ComplexNormSpace-like ComplexLinearSpace-like Abelian
+    add-associative right_zeroed right_complementable strict
+      (non empty CNORMSTR);
+  existence
+   proof
+    take X;
+    thus X is ComplexNormSpace-like by Def2,Lm6;
+A1: now
+      let x,y be VECTOR of X;
+      let x',y' be VECTOR of (0).V;
+      assume A2: x = x' & y = y';
+      hence x + y= (the add of X).[x',y'] by RLVECT_1:def 3 .=
+      x' + y' by RLVECT_1:def 3;
+      let z;
+      thus z * x = (the Mult of X).[z,x'] by A2,def1 .=
+      z * x' by def1;
+     end;
+A3:  0.X = the Zero of X by RLVECT_1:def 2 .=
+     0.(0).V by RLVECT_1:def 2;
+    thus X is ComplexLinearSpace-like
+    proof
+     thus for z for v,w being VECTOR of X holds z * (v + w) = z * v + z * w
+     proof
+      let z;
+      let v,w be VECTOR of X;
+      reconsider v'= v, w' = w as VECTOR of (0).V;
+A4:   z * v' = z * v by A1;
+A5:  z * w' = z * w by A1;
+    v + w = v'+ w' by A1;
+      hence z * (v + w) = z *( v' + w') by A1 .=
+      z * v' + z * w' by def2 .= z * v + z * w by A1,A4,A5;
+     end;
+     thus for z1,z2 for v being VECTOR of X holds (z1+z2) * v = z1 * v + z2 * v
+     proof
+      let z1,z2;
+      let v be VECTOR of X;
+      reconsider v'= v as VECTOR of (0).V;
+A6:   z1 * v' = z1 * v by A1;
+A7:  z2 * v' = z2 * v by A1;
+      thus (z1 + z2) * v = (z1 + z2) * v' by A1 .=
+      z1 * v' + z2 * v' by def2 .= z1 * v + z2 * v by A1,A6,A7;
+     end;
+     thus for z1,z2 for v being VECTOR of X holds (z1 * z2) * v = z1 * (z2 * v)
+     proof
+      let z1,z2;
+      let v be VECTOR of X;
+      reconsider v'= v as VECTOR of (0).V;
+A8:   z2 * v' = z2 * v by A1;
+      thus (z1 * z2) * v = (z1 * z2) * v' by A1
+                .= z1 * (z2 * v') by def2
+                .= z1 * (z2 * v) by A1,A8;
+     end;
+     let v be VECTOR of X;
+     reconsider v'= v as VECTOR of (0).V;
+     thus 1r * v = 1r * v' by A1 .= v by def2;
+    end;
+    thus for v,w being VECTOR of X holds v + w = w + v
+    proof
+     let v,w be VECTOR of X;
+     reconsider v'= v , w'= w as VECTOR of (0).V;
+     thus v + w = w'+ v' by A1 .= w + v by A1;
+    end;
+     thus for u,v,w being VECTOR of X holds (u + v) + w = u + (v + w)
+     proof
+      let u,v,w be VECTOR of X;
+      reconsider u'= u, v'= v, w'= w as VECTOR of (0).V;
+      A9: u + v = u'+ v' by A1;
+      A10: v + w = v' + w' by A1;
+      thus (u + v) + w = (u' + v') + w' by A1,A9 .=
+      u' + (v' + w') by RLVECT_1:def 6 .= u + (v + w) by A1,A10;
+     end;
+     thus for v being VECTOR of X holds v + 0.X = v
+     proof
+      let v be VECTOR of X;
+      reconsider v'= v as VECTOR of (0).V;
+      thus v + 0.X = v'+ 0.(0).V by A1,A3 .=v by RLVECT_1:10;
+     end;
+     thus for v being VECTOR of X
+       ex w being VECTOR of X st v + w = 0.X
+       proof
+        let v be VECTOR of X;
+        reconsider v'= v as VECTOR of (0).V;
+        consider w' be VECTOR of (0).V such that
+        A11: v' + w' = 0.(0).V by RLVECT_1:def 8;
+        reconsider w = w' as VECTOR of X;
+        take w;
+        thus v + w = 0.X by A1,A3,A11;
+       end;
+    thus thesis;
+   end;
+end;
+
+definition
+ mode ComplexNormSpace is ComplexNormSpace-like ComplexLinearSpace-like
+      Abelian add-associative right_zeroed right_complementable
+          (non empty CNORMSTR);
+end;
+
+ reserve CNS for ComplexNormSpace;
+ reserve x, y, w, g, g1, g2 for Point of CNS;
+
+theorem
+ ||.0.CNS.|| = 0 by Def2;
+
+theorem th108:
+ ||.-x.|| = ||.x.||
+proof
+A1:   ||.-x.|| = ||.(-1r) * x.|| by th4
+           .= |.-1r.| * ||.x.|| by Def2;
+       |.-1r.| = |.1r.| by COMPLEX1:138 .= 1 by COMPLEX1:134;
+     hence thesis by A1;
+end;
+
+theorem th109:
+ ||.x - y.|| <= ||.x.|| + ||.y.||
+proof
+       x - y = x + (-y) by RLVECT_1:def 11;
+     then ||.x - y.|| <= ||.x.|| + ||.(-y).|| by Def2;
+     hence thesis by th108;
+end;
+
+theorem th110:
+ 0 <= ||.x.||
+proof
+       ||.x - x.|| = ||.0'(CNS).|| by RLVECT_1:28
+              .= 0 by Def2;
+   then 0 <= ||.x.|| + ||.x.|| by th109;
+     then 0 <= (||.x.|| + ||.x.||)/2 by SQUARE_1:27;
+     hence thesis by XCMPLX_1:65;
+end;
+
+theorem
+ ||.z1 * x + z2 * y.|| <= |.z1.| * ||.x.|| + |.z2.| * ||.y.||
+proof
+       ||.z1 * x + z2 * y.|| <= ||.z1 * x.|| + ||.z2 * y.|| by Def2;
+     then ||.z1 * x + z2 * y.|| <= |.z1.| * ||.x.|| + ||.z2 * y.|| by Def2;
+     hence thesis by Def2;
+end;
+
+theorem th112:
+ ||.x - y.|| = 0 iff x = y
+proof
+     ||.x - y.|| = 0 iff x - y = 0'(CNS) by Def2;
+     hence thesis by RLVECT_1:28,35;
+end;
+
+theorem th113:
+ ||.x - y.|| = ||.y - x.||
+proof
+       x - y = (-y) + x by RLVECT_1:def 11
+          .= - (y - x) by RLVECT_1:47;
+    hence thesis by th108;
+end;
+
+theorem th114:
+ ||.x.|| - ||.y.|| <= ||.x - y.||
+proof
+       (x - y) + y = x - (y - y) by RLVECT_1:43
+                .= x - 0'(CNS) by RLVECT_1:28
+                .= x by RLVECT_1:26;
+     then ||.x.|| <= ||.x - y.|| + ||.y.|| by Def2;
+     hence thesis by REAL_1:86;
+end;
+
+theorem th115:
+ abs(||.x.|| - ||.y.||) <= ||.x - y.||
+proof
+A1:   ||.x.|| - ||.y.|| <= ||.x - y.|| by th114;
+       (y - x) + x = y - (x - x) by RLVECT_1:43
+                .= y - 0'(CNS) by RLVECT_1:28
+                .= y by RLVECT_1:26;
+     then ||.y.|| <= ||.y - x.|| + ||.x.|| by Def2;
+     then ||.y.|| - ||.x.|| <= ||.y - x.|| by REAL_1:86;
+     then ||.y.|| - ||.x.|| <= ||.x - y.|| by th113;
+     then -(||.x.|| - ||.y.||) <= ||.x - y.|| by XCMPLX_1:143;
+     then - ||.x - y.|| <= -(-(||.x.|| - ||.y.||)) by REAL_1:50;
+     hence thesis by A1,ABSVALUE:12;
+end;
+
+theorem th116:
+ ||.x - w.|| <= ||.x - y.|| + ||.y - w.||
+proof
+       x - w = x + (-w) by RLVECT_1:def 11
+          .= x + (0'(CNS) + (-w)) by RLVECT_1:10
+          .= x + (((-y) + y) + (-w)) by RLVECT_1:16
+          .= x + ((-y) + (y + (-w))) by RLVECT_1:def 6
+          .= (x + (-y)) + (y + (-w)) by RLVECT_1:def 6
+          .= (x - y) + (y + (-w)) by RLVECT_1:def 11
+          .= (x - y) + (y - w) by RLVECT_1:def 11;
+     hence thesis by Def2;
+end;
+
+theorem
+ x <> y implies ||.x - y.|| <> 0 by th112;
+
+reserve S, S1, S2 for sequence of CNS;
+reserve k, n, m, m1, m2 for Nat;
+reserve r for Real;
+reserve f for Function;
+reserve d, s, t for set;
+
+theorem
+ ex S st rng S = {0.CNS} by NORMSP_1:19;
+
+scheme ExCNSSeq{CNS()->ComplexNormSpace, F(Nat) -> ( Point of CNS() ) } :
+ ex S be sequence of CNS() st for n holds S.n = F(n)
+       proof
+       defpred P[set,set] means ex n st n =$1 & $2 = F(n);
+    A1: for d st d in NAT ex s st P[d,s]
+       proof
+            let d; assume d in NAT;
+            then consider n such that
+        A2: n = d;
+            reconsider z = F(n) as set;
+            take z;
+            thus thesis by A2;
+       end;
+    A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
+       consider f such that
+    A4: dom f = NAT and
+    A5: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A3,A1);
+         for d st d in NAT holds f.d is Point of CNS()
+       proof
+            let d; assume d in NAT;
+            then ex n st n = d & f.d = F(n) by A5;
+            hence thesis;
+       end;
+       then reconsider f as sequence of CNS() by A4,NORMSP_1:17;
+       take S = f;
+         now let n;
+         P[n,S.n] by A5;
+       hence S.n = F(n);
+       end;
+   hence for n holds S.n = F(n);
+end;
+
+scheme ExCLSSeq{CNS()->ComplexLinearSpace, F(Nat) -> Element of CNS() }:
+ ex S be sequence of CNS() st for n holds S.n = F(n)
+       proof
+       defpred P[set,set] means ex n st ( n =$1 & $2 = F(n));
+    A1: for d st d in NAT ex s st P[d,s]
+       proof
+            let d; assume d in NAT;
+            then consider n such that
+        A2: n = d;
+            reconsider z = F(n) as set;
+            take z;
+            thus thesis by A2;
+       end;
+    A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
+       consider f such that
+    A4: dom f = NAT and
+    A5: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A3,A1);
+         for d st d in NAT holds f.d is Element of CNS()
+       proof
+            let d; assume d in NAT;
+            then ex n st n = d & f.d = F(n) by A5;
+            hence thesis;
+       end;
+       then reconsider f as sequence of CNS() by A4,NORMSP_1:17;
+       take S = f;
+         now let n;
+         P[n,S.n] by A5;
+       hence S.n = F(n);
+       end;
+   hence for n holds S.n = F(n);
+end;
+
+definition
+let CNS be ComplexLinearSpace;
+let S1, S2 be sequence of CNS;
+ func S1 + S2 -> sequence of CNS means
+:Def5:     for n holds it.n = S1.n + S2.n;
+existence proof
+  deffunc F(Nat) = S1.$1 + S2.$1;
+  thus ex S being sequence of CNS st for n holds S.n = F(n) from ExCLSSeq;
+end;
+uniqueness
+          proof
+               let S, T be sequence of CNS;
+               assume that
+          A1:  ( for n holds S.n = S1.n + S2.n ) and
+          A2:  ( for n holds T.n = S1.n + S2.n );
+                 for n holds S.n = T.n
+               proof
+                    let n;
+                   S.n = S1.n + S2.n by A1;
+                    hence thesis by A2;
+               end;
+              hence thesis by FUNCT_2:113;
+          end;
+end;
+
+definition
+let CNS be ComplexLinearSpace;
+let S1, S2 be sequence of CNS;
+ func S1 - S2 -> sequence of CNS means
+:Def6:    for n holds it.n = S1.n - S2.n;
+existence proof
+  deffunc F(Nat) = S1.$1 - S2.$1;
+  thus ex S being sequence of CNS st for n holds S.n = F(n) from ExCLSSeq;
+end;
+uniqueness
+          proof
+               let S , T be sequence of CNS;
+               assume that
+          A1:  ( for n holds S.n = S1.n - S2.n ) and
+          A2:  ( for n holds T.n = S1.n - S2.n );
+                 for n holds S.n = T.n
+               proof
+                    let n;
+                   S.n = S1.n - S2.n by A1;
+                    hence thesis by A2;
+               end;
+              hence thesis by FUNCT_2:113;
+          end;
+end;
+
+definition
+let CNS be ComplexLinearSpace;
+let S be sequence of CNS;
+let x be Element of CNS;
+ func S - x -> sequence of CNS means
+:Def7:     for n holds it.n = S.n - x;
+existence proof
+  deffunc F(Nat) = S.$1 - x;
+  thus ex S being sequence of CNS st for n holds S.n = F(n) from ExCLSSeq;
+end;
+uniqueness
+          proof
+               let S1 , S2 be sequence of CNS;
+               assume that
+          A1:  ( for n holds S1.n = S.n - x ) and
+          A2:  ( for n holds S2.n = S.n - x );
+                 for n holds S1.n = S2.n
+               proof
+                    let n;
+                   S1.n = S.n - x by A1;
+                    hence thesis by A2;
+               end;
+              hence thesis by FUNCT_2:113;
+          end;
+end;
+
+definition
+let CNS be ComplexLinearSpace;
+let S be sequence of CNS;
+let z;
+ func z * S -> sequence of CNS means
+:Def8:     for n holds it.n = z * S.n;
+existence proof
+  deffunc F(Nat) = z * S.$1;
+  thus ex S being sequence of CNS st for n holds S.n = F(n) from ExCLSSeq;
+end;
+uniqueness
+          proof
+               let S1 , S2 be sequence of CNS;
+               assume that
+          A1:  ( for n holds S1.n = z * S.n ) and
+          A2:  ( for n holds S2.n = z * S.n );
+                 for n holds S1.n = S2.n
+               proof
+                    let n;
+                   S1.n = z * S.n by A1;
+                    hence thesis by A2;
+               end;
+              hence thesis by FUNCT_2:113;
+          end;
+end;
+
+definition
+let CNS;
+let S;
+ attr S is convergent means :def2:
+   ex g st 
+     for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r;
+end;
+
+theorem th119:
+ S1 is convergent & S2 is convergent implies S1 + S2 is convergent
+proof
+     assume that
+ A1:  S1 is convergent and
+ A2:  S2 is convergent;
+      consider g1 such that
+ A3:  for r st 0 < r ex m st for n st m <= n holds
+      ||.(S1.n) - g1.|| < r by A1,def2;
+      consider g2 such that
+ A4:  for r st 0 < r ex m st for n st m <= n holds
+      ||.(S2.n) - g2.|| < r by A2,def2;
+      take g = g1 + g2;
+      let r; assume 0 < r;
+ then A5:  0< r/2 by SEQ_2:3;
+      then consider m1 such that
+ A6:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A3;
+      consider m2 such that
+ A7:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A4,A5;
+      take k = m1 + m2;
+      let n such that
+  A8:  k <= n;
+        m1 <= m1 + m2 by NAT_1:37;
+      then m1 <= n by A8,AXIOMS:22;
+  then A9:  ||.(S1.n) - g1.|| < r/2 by A6;
+        m2 <= k by NAT_1:37;
+      then m2 <= n by A8,AXIOMS:22;
+      then ||.(S2.n) - g2.|| < r/2 by A7;
+      then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
+      by A9,REAL_1:67;
+  then A10:  ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r by XCMPLX_1:66;
+  A11:  ||.(S1 + S2).n - g.|| = ||.(S1.n) + (S2.n) - (g1+g2).|| by Def5
+      .= ||.(S1.n) + ((S2.n) - (g1+g2)).|| by RLVECT_1:42
+      .= ||.(S1.n) + (-(g1+g2) + (S2.n)).|| by RLVECT_1:def 11
+      .= ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by RLVECT_1:def 6
+      .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:45
+      .= ||.(S1.n) + ((-g1)+(-g2)) + (S2.n).|| by RLVECT_1:def 6
+      .= ||.((S1.n) + (-g1)) + (-g2) + (S2.n).|| by RLVECT_1:def 6
+      .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 11
+      .= ||.(S1.n)- g1 + ((S2.n) + -g2).|| by RLVECT_1:def 6
+      .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 11;
+        ||.(S1.n) - g1 + ((S2.n) - g2).|| <=
+      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Def2;
+      hence ||.(S1 + S2).n - g.|| < r by A10,A11,AXIOMS:22;
+  end;
+
+theorem th120:
+ S1 is convergent & S2 is convergent implies S1 - S2 is convergent
+proof
+     assume that
+ A1:  S1 is convergent and
+ A2:  S2 is convergent;
+      consider g1 such that
+ A3:  for r st 0 < r ex m st for n st m <= n holds
+      ||.(S1.n) - g1.|| < r by A1,def2;
+      consider g2 such that
+ A4:  for r st 0 < r ex m st for n st m <= n holds
+      ||.(S2.n) - g2.|| < r by A2,def2;
+      take g = g1 - g2;
+      let r; assume 0 < r;
+ then A5:  0< r/2 by SEQ_2:3;
+      then consider m1 such that
+ A6:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A3;
+      consider m2 such that
+ A7:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A4,A5;
+      take k = m1 + m2;
+      let n such that
+  A8:  k <= n;
+        m1 <= m1 + m2 by NAT_1:37;
+      then m1 <= n by A8,AXIOMS:22;
+  then A9:  ||.(S1.n) - g1.|| < r/2 by A6;
+        m2 <= k by NAT_1:37;
+      then m2 <= n by A8,AXIOMS:22;
+      then ||.(S2.n) - g2.|| < r/2 by A7;
+      then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
+      by A9,REAL_1:67;
+  then A10:  ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r by XCMPLX_1:66;
+  A11:  ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).|| by Def6
+      .= ||.(((S1.n) - (S2.n)) - g1) + g2.|| by RLVECT_1:43
+      .= ||. ((S1.n) - (g1 + (S2.n))) + g2.|| by RLVECT_1:41
+      .= ||. (((S1.n) - g1 ) - (S2.n)) + g2.|| by RLVECT_1:41
+      .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:43;
+        ||.((S1.n) - g1) - ((S2.n) - g2).|| <=
+      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by th109;
+      hence ||.(S1 - S2).n - g.|| < r by A10,A11,AXIOMS:22;
+  end;
+
+theorem th121:
+ S is convergent implies S - x is convergent
+proof
+     assume S is convergent;
+           then consider g such that
+     A1:    for r st 0 < r ex m st for n
+           st m <= n holds ||.(S.n) - g.|| < r by def2;
+           take h = g - x;
+           let r; assume 0 < r;
+           then consider m1 such that
+     A2:    for n st m1 <= n holds ||.(S.n) - g.|| < r by A1;
+           take k = m1;
+           let n; assume k <= n;
+     then A3:    ||.(S.n) - g.|| < r by A2;
+             ||.(S.n) - g.|| = ||.((S.n) - 0'(CNS)) - g.|| by RLVECT_1:26
+                        .= ||.((S.n) - (x - x)) - g.|| by RLVECT_1:28
+                        .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:43
+                        .= ||.((S.n) - x) + (x - g).|| by RLVECT_1:42
+                        .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 11
+                        .= ||.((S.n) - x) + -h.|| by RLVECT_1:47
+                        .= ||.((S.n) - x) - h.|| by RLVECT_1:def 11;
+           hence ||.(S - x).n - h.|| < r by A3,Def7;
+end;
+
+theorem th122:
+ S is convergent implies z * S is convergent
+proof
+     assume S is convergent;
+           then consider g such that
+     A1:    for r st 0 < r ex m st for n
+           st m <= n holds ||.(S.n) - g.|| < r by def2;
+           take h = z * g;
+     A2:    now assume
+     A3:   z = 0;
+           let r; assume
+          0 < r;
+           then consider m1 such that
+     A4:   for n st m1 <= n holds ||.(S.n) - g.|| < r by A1;
+           take k = m1;
+           let n; assume k <= n;
+     then A5:   ||.(S.n) - g.|| < r by A4;
+          ||.z * (S.n) - z * g.|| = ||.0c * (S.n) - 0'(CNS).||
+           by A3,th2
+                        .= ||.0'(CNS) - 0'(CNS).|| by th2
+                        .= ||.0'(CNS).|| by RLVECT_1:26
+                        .= 0 by Def2;
+           then ||.z * (S.n) - h.|| < r by A5,th110;
+           hence ||.(z * S).n - h.|| < r by Def8;
+           end;
+             now assume
+A6:        z <> 0c;
+     then A7:   0 < |.z.| by COMPLEX1:133;
+           let r such that
+     A8:   0 < r;
+     A9:   0 <> |.z.| by A6,COMPLEX1:133;
+             0/|.z.| =0;
+           then 0 < r/|.z.| by A7,A8,REAL_1:73;
+           then consider m1 such that
+     A10:   for n st m1 <= n holds ||.(S.n) - g.|| < r/|.z.| by A1;
+           take k = m1;
+           let n; assume k <= n;
+     then A11:   ||.(S.n) - g.|| < r/|.z.| by A10;
+     A12:   ||.(z * (S.n)) - (z * g).|| = ||.z * ((S.n) - g).|| by th10
+                                    .= |.z.| * ||.(S.n) - g.|| by Def2;
+             |.z.| * (r/|.z.|) = |.z.| * (|.z.|" * r) by XCMPLX_0:def 9
+                            .= |.z.| *|.z.|" * r by XCMPLX_1:4
+                            .= 1 * r by A9,XCMPLX_0:def 7
+                            .= r;
+           then ||.(z *(S.n)) - h.|| < r by A7,A11,A12,REAL_1:70;
+           hence ||.(z * S).n - h.|| < r by Def8;
+           end;
+     hence thesis by A2;
+end;
+
+definition
+let CNS;
+let S;
+ func ||.S.|| -> Real_Sequence means
+:Def10:   for n holds it.n =||.(S.n).||;
+existence
+         proof
+           deffunc F(Nat) = ||.(S.$1).||;
+              consider s being Real_Sequence such that A1:
+              for n holds s.n = F(n) from SEQ_1:sch 1;
+              take s;
+              thus thesis by A1;
+         end;
+uniqueness
+          proof
+               let s,t be Real_Sequence;
+                    assume
+               A2:  ( for n holds s.n = ||.(S.n).|| ) &
+                    ( for n holds t.n = ||.(S.n).|| );
+                      now let n;
+                       s.n = ||.(S.n).|| by A2; hence
+                       s.n = t.n by A2;
+                    end;
+                    hence thesis by FUNCT_2:113;
+         end;
+end;
+
+theorem th123:
+ S is convergent implies ||.S.|| is convergent
+proof
+     assume S is convergent;
+           then consider g such that
+     A1:    for r st 0 < r ex m st for n
+           st m <= n holds ||.(S.n) - g.|| < r by def2;
+             now let r be real number;
+A2:        r is Real by XREAL_0:def 1;
+           assume 0 < r;
+           then consider m1 such that
+     A3:    for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,A2;
+           take k = m1;
+           now let n; assume
+           k <= n;
+     then A4:    ||.(S.n) - g.|| < r by A3;
+             abs(||.(S.n).|| - ||.g.||) <= ||.(S.n) - g.|| by th115;
+           then abs(||.(S.n).|| - ||.g.||) < r by A4,AXIOMS:22;
+           hence abs(||.S.||.n - ||.g.||) < r by Def10;
+           end;
+           hence for n st k <= n holds abs(||.S.||.n - ||.g.||) < r;
+           end;
+     hence thesis by SEQ_2:def 6;
+end;
+
+definition
+let CNS;
+let S;
+assume A1:S is convergent;
+ func lim S -> Point of CNS means :Def11:
+  for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - it.|| < r;
+existence by A1,def2;
+uniqueness
+          proof
+                 for x , y st
+( for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - x.|| < r ) &
+( for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - y.|| < r )
+holds x = y
+          proof
+               given x , y such that
+A2: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - x.|| < r and
+A3: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - y.|| < r and
+A4: x <> y;
+A5: ||.x - y.|| <> 0 by A4,th112;
+    A6: 0 <= ||.x - y.|| by th110;
+   then A7: 0 / 4 < ||.x - y.||/4 by A5,REAL_1:73;
+   then consider m1 such that
+A8: for n st m1 <= n holds ||.(S.n) - x.|| < ||.x - y.||/4 by A2;
+   consider m2 such that
+A9: for n st m2 <= n holds ||.(S.n) - y.|| < ||.x - y.||/4 by A3,A7;
+A10: now assume
+   m1 <= m2;
+then A11: ||.(S.m2) - x.|| < ||.x - y.||/4 by A8;
+      ||.(S.m2) - y.|| < ||.x - y.||/4 by A9;
+    then ||.(S.m2) - x.|| + ||.(S.m2) - y.|| < ||.x - y.||/4 + ||.x - y.||/4
+    by A11,REAL_1:67;
+then A12: ||.(S.m2) - x.|| + ||.(S.m2) - y.|| <= ||.x - y.||/2 by XCMPLX_1:72;
+      ||.x - y.|| <= ||.x - (S.m2).|| + ||.(S.m2) - y.|| by th116;
+    then ||.x - y.|| <= ||.(S.m2) - x.|| + ||.(S.m2) - y.|| by th113;
+    then not ||.x - y.||/2 < ||.x - y.|| by A12,AXIOMS:22;
+    hence contradiction by A5,A6,SEQ_2:4;
+    end;
+     now assume m2 <= m1;
+then A13: ||.(S.m1) - y.|| < ||.x - y.||/4 by A9;
+      ||.(S.m1) - x.|| < ||.x - y.||/4 by A8;
+    then ||.(S.m1) - x.|| + ||.(S.m1) - y.|| < ||.x - y.||/4 + ||.x - y.||/4
+    by A13,REAL_1:67;
+then A14: ||.(S.m1) - x.|| + ||.(S.m1) - y.|| <= ||.x - y.||/2 by XCMPLX_1:72;
+      ||.x - y.|| <= ||.x - (S.m1).|| + ||.(S.m1) - y.|| by th116;
+    then ||.x - y.|| <= ||.(S.m1) - x.|| + ||.(S.m1) - y.|| by th113;
+    then not ||.x - y.||/2 < ||.x - y.|| by A14,AXIOMS:22;
+    hence contradiction by A5,A6,SEQ_2:4;
+    end;
+    hence contradiction by A10;
+    end;
+hence thesis;
+end;
+end;
+
+theorem
+ S is convergent & lim S = g implies
+  ( ||.S - g.|| is convergent & lim ||.S - g.|| = 0 )
+proof
+     assume that
+     A1:    S is convergent and
+     A2:    lim S = g;
+             S - g is convergent by A1,th121;
+     then A3:    ||.S - g.|| is convergent by th123;
+           now let r be real number;
+A4:        r is Real by XREAL_0:def 1;
+         assume 0 < r;
+           then consider m1 such that
+     A5:    for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,A2,A4,Def11;
+           take k = m1;
+           let n; assume
+           k <= n;
+     then ||.(S.n) - g.|| < r by A5;
+     then A6:    ||.((S.n) - g ) - 0'(CNS).|| < r by RLVECT_1:26;
+             abs(||.(S.n) - g.|| - ||.0'(CNS).||) <= ||.((S.n) - g ) - 0'(CNS)
+.||
+           by th115;
+           then abs(||.(S.n) - g.|| - ||.0'(CNS).||) < r by A6,AXIOMS:22;
+           then abs((||.(S.n) - g.|| - 0)) < r by Def2;
+           then abs((||.(S - g).n.|| - 0)) < r by Def7;
+           hence abs((||.S - g.||.n - 0)) < r by Def10;
+           end;
+    hence thesis by A3,SEQ_2:def 7;
+end;
+
+theorem
+ S1 is convergent & S2 is convergent implies lim(S1+S2) = (lim S1) + (lim S2)
+proof
+     assume that
+ A1:  S1 is convergent and
+ A2:  S2 is convergent;
+ A3:   S1 + S2 is convergent by A1,A2,th119;
+      set g1 = lim S1;
+      set g2 = lim S2;
+      set g = g1 + g2;
+        now let r; assume 0 < r;
+ then A4:  0< r/2 by SEQ_2:3;
+      then consider m1 such that
+ A5:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def11;
+      consider m2 such that
+ A6:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def11;
+      take k = m1 + m2;
+      let n such that
+  A7:  k <= n;
+        m1 <= m1 + m2 by NAT_1:37;
+      then m1 <= n by A7,AXIOMS:22;
+  then A8:  ||.(S1.n) - g1.|| < r/2 by A5;
+        m2 <= k by NAT_1:37;
+      then m2 <= n by A7,AXIOMS:22;
+      then ||.(S2.n) - g2.|| < r/2 by A6;
+      then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
+      by A8,REAL_1:67;
+  then A9:  ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r by XCMPLX_1:66;
+  A10:  ||.(S1 + S2).n - g.|| = ||.(S1.n) + (S2.n) - (g1+g2).|| by Def5
+      .= ||.(S1.n) + ((S2.n) - (g1+g2)).|| by RLVECT_1:42
+      .= ||.(S1.n) + (-(g1+g2) + (S2.n)).|| by RLVECT_1:def 11
+      .= ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by RLVECT_1:def 6
+      .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:45
+      .= ||.(S1.n) + ((-g1)+(-g2)) + (S2.n).|| by RLVECT_1:def 6
+      .= ||.((S1.n) + (-g1)) + (-g2) + (S2.n).|| by RLVECT_1:def 6
+      .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 11
+      .= ||.(S1.n)- g1 + ((S2.n) + -g2).|| by RLVECT_1:def 6
+      .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 11;
+        ||.(S1.n) - g1 + ((S2.n) - g2).|| <=
+      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Def2;
+      hence ||.(S1 + S2).n - g.|| < r by A9,A10,AXIOMS:22;
+      end;
+      hence thesis by A3,Def11;
+end;
+
+theorem
+ S1 is convergent & S2 is convergent implies lim (S1-S2) = (lim S1) - (lim S2)
+proof
+     assume that
+ A1:  S1 is convergent and
+ A2:  S2 is convergent;
+ A3:   S1 - S2 is convergent by A1,A2,th120;
+      set g1 = lim S1;
+      set g2 = lim S2;
+      set g = g1 - g2;
+        now let r; assume 0 < r;
+ then A4:  0< r/2 by SEQ_2:3;
+      then consider m1 such that
+ A5:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def11;
+      consider m2 such that
+ A6:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def11;
+      take k = m1 + m2;
+      let n such that
+  A7:  k <= n;
+        m1 <= m1 + m2 by NAT_1:37;
+      then m1 <= n by A7,AXIOMS:22;
+  then A8:  ||.(S1.n) - g1.|| < r/2 by A5;
+        m2 <= k by NAT_1:37;
+      then m2 <= n by A7,AXIOMS:22;
+      then ||.(S2.n) - g2.|| < r/2 by A6;
+      then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
+      by A8,REAL_1:67;
+  then A9:  ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r by XCMPLX_1:66;
+  A10:  ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).|| by Def6
+      .= ||.(((S1.n) - (S2.n)) - g1) + g2.|| by RLVECT_1:43
+      .= ||. ((S1.n) - (g1 + (S2.n))) + g2.|| by RLVECT_1:41
+      .= ||. (((S1.n) - g1 ) - (S2.n)) + g2.|| by RLVECT_1:41
+      .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:43;
+        ||.((S1.n) - g1) - ((S2.n) - g2).|| <=
+      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by th109;
+      hence ||.(S1 - S2).n - g.|| < r by A9,A10,AXIOMS:22;
+      end;
+      hence thesis by A3,Def11;
+end;
+
+theorem
+ S is convergent implies lim (S - x) = (lim S) - x
+proof
+     assume
+ A1:   S is convergent;
+ then A2:   S - x is convergent by th121;
+      set g = lim S;
+      set h = g - x;
+        now let r; assume 0 < r;
+      then consider m1 such that
+ A3:   for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def11;
+      take k = m1;
+      let n; assume k <= n;
+ then A4:   ||.(S.n) - g.|| < r by A3;
+        ||.(S.n) - g.|| = ||.((S.n) - 0'(CNS)) - g.|| by RLVECT_1:26
+                   .= ||.((S.n) - (x - x)) - g.|| by RLVECT_1:28
+                   .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:43
+                   .= ||.((S.n) - x) + (x - g).|| by RLVECT_1:42
+                   .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 11
+                   .= ||.((S.n) - x) + -h.|| by RLVECT_1:47
+                   .= ||.((S.n) - x) - h.|| by RLVECT_1:def 11;
+      hence ||.(S - x).n - h.|| < r by A4,Def7;
+      end;
+      hence thesis by A2,Def11;
+end;
+
+theorem
+ S is convergent implies lim (z * S) = z * (lim S)
+proof
+     assume
+ A1:   S is convergent;
+ then A2:   z * S is convergent by th122;
+      set g = lim S;
+      set h = z * g;
+     A3:    now assume
+     A4:   z = 0;
+           let r; assume 0 < r;
+           then consider m1 such that
+     A5:   for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def11;
+           take k = m1;
+           let n; assume k <= n;
+     then A6:   ||.(S.n) - g.|| < r by A5;
+          ||.z * (S.n) - z * g.|| = ||.0c * (S.n) - 0'(CNS).|| by A4,th2
+                        .= ||.0'(CNS) - 0'(CNS).|| by th2
+                        .= ||.0'(CNS).|| by RLVECT_1:26
+                        .= 0 by Def2;
+           then ||.z * (S.n) - h.|| < r by A6,th110;
+           hence ||.(z * S).n - h.|| < r by Def8;
+           end;
+             now assume
+A7:        z <> 0c;
+     then A8:   0 < |.z.| by COMPLEX1:133;
+           let r such that
+      A9:   0 < r;
+     A10:   0 <> |.z.| by A7,COMPLEX1:133;
+             0/|.z.| =0;
+           then 0 < r/|.z.| by A8,A9,REAL_1:73;
+           then consider m1 such that
+     A11:   for n st m1 <= n holds ||.(S.n) - g.|| < r/|.z.| by A1,Def11;
+           take k = m1;
+           let n; assume k <= n;
+     then A12:   ||.(S.n) - g.|| < r/|.z.| by A11;
+     A13:   ||.(z * (S.n)) - (z * g).|| = ||.z * ((S.n) - g).|| by th10
+                                    .= |.z.| * ||.(S.n) - g.|| by Def2;
+             |.z.| * (r/|.z.|) = |.z.| * (|.z.|" * r) by XCMPLX_0:def 9
+                            .= |.z.| *|.z.|" * r by XCMPLX_1:4
+                            .= 1 * r by A10,XCMPLX_0:def 7
+                            .= r;
+           then ||.(z *(S.n)) - h.|| < r by A8,A12,A13,REAL_1:70;
+           hence ||.(z * S).n - h.|| < r by Def8;
+           end;
+     hence thesis by A2,A3,Def11;
+end;

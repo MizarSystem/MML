@@ -313,44 +313,13 @@ holds f is continuous;
 
 scheme :: JGRAPH_2:sch 1
  TopSubset { P[set] } :
-  { p where p is Point of TOP-REAL 2 : P[p] } is Subset of TOP-REAL 2
-proof
-      { p where p is Point of TOP-REAL 2 : P[p] } c= the carrier of TOP-REAL 2
-    proof
-      let x be set;
-      assume x in { p where p is Point of TOP-REAL 2 : P[p] };
-      then consider p being Point of TOP-REAL 2 such that
-A1:    p = x & P[p];
-      thus x in the carrier of TOP-REAL 2 by A1;
-    end;
-    hence thesis;
-  end;
+  { p where p is Point of TOP-REAL 2 : P[p] } is Subset of TOP-REAL 2;
 
 scheme :: JGRAPH_2:sch 2
  TopCompl { P[set], K() -> Subset of TOP-REAL 2 } :
     K()` = { p where p is Point of TOP-REAL 2 : not P[p] }
     provided
-    K() = { p where p is Point of TOP-REAL 2 : P[p] }
-proof
-   thus K()` c= { p where p is Point of TOP-REAL 2: not P[p] }
-   proof let x be set;assume A2:x in K()`;
-    then x in K()`;
-    then x in (the carrier of TOP-REAL 2) \ K() by SUBSET_1:def 5;
-    then A3:x in (the carrier of TOP-REAL 2) & not x in K() by XBOOLE_0:def 4;
-    reconsider qx=x as Point of TOP-REAL 2 by A2;
-      not P[qx] by A1,A3;
-    hence x in {p7 where p7 is Point of TOP-REAL 2: not P[p7]};
-   end;
-    let x be set;assume
-      x in {p7 where p7 is Point of TOP-REAL 2: not P[p7]};
-    then consider p7 being Point of TOP-REAL 2 such that
-    A4: p7=x & not P[p7];
-      not ex q7 being Point of TOP-REAL 2 st x=q7 & P[q7] by A4;
-    then not x in K() by A1;
-    then x in (the carrier of TOP-REAL 2) \ K() by A4,XBOOLE_0:def 4;
-    then x in K()` by SUBSET_1:def 5;
-    hence x in K()`;
-end;
+    K() = { p where p is Point of TOP-REAL 2 : P[p] };
 
 scheme :: JGRAPH_2:sch 3
  ClosedSubset { F,G(Point of TOP-REAL 2) -> real number } :
@@ -360,54 +329,7 @@ scheme :: JGRAPH_2:sch 3
    for p,q being Point of TOP-REAL 2 holds
         F(p-q) = F(p) - F(q) & G(p-q) = G(p) - G(q) and
    for p,q being Point of TOP-REAL 2 holds
-       (|. (p-q).|)^2 = (F(p-q))^2+(G(p-q))^2
-proof
-  defpred P[Point of TOP-REAL 2] means F($1) <= G($1);
-  reconsider K2 = {p7 where p7 is Point of TOP-REAL 2: P[p7] }
-    as Subset of TOP-REAL 2 from TopSubset;
-  A3: K2 = {p7 where p7 is Point of TOP-REAL 2: P[p7] };
-  A4: K2`={p7 where p7 is Point of TOP-REAL 2:not P[p7]} from TopCompl(A3);
-    for p being Point of Euclid 2 st p in K2`
-  ex r being real number st r>0 & Ball(p,r) c= K2`
-  proof let p be Point of Euclid 2;
-   assume A5: p in K2`;
-    then reconsider p0=p as Point of TOP-REAL 2;
-    set r0=(F(p0) -G(p0))/4;
-    consider p7 being Point of TOP-REAL 2 such that
-    A6: p0=p7 & F(p7)>G(p7) by A4,A5;
-    A7:F(p0)- G(p0)>0 by A6,SQUARE_1:11;
-    then A8:r0>0 by REAL_2:127;
-    A9: (F(p0) -G(p0))/2 >0 by A7,REAL_2:127;
-      Ball(p,r0) c= K2`
-    proof let x be set;assume A10: x in Ball(p,r0);
-      then reconsider px=x as Point of TOP-REAL 2 by TOPREAL3:13;
-        Ball(p,r0)={q where q is Element of Euclid 2:
-        dist(p,q) < r0} by METRIC_1:18;
-      then consider q being Element of Euclid 2 such that
-       A11: q=x & dist(p,q) < r0 by A10;
-       A12:dist(p,q)= |. (p0-px).| by A11,JGRAPH_1:45;
-       A13:(|. (p0-px).|)^2 =(F(p0-px))^2+(G(p0-px))^2 by A2;
-       A14:(G(p0-px))^2 >= 0 by SQUARE_1:72;
-         (F(p0-px))^2 >= 0 by SQUARE_1:72;
-       then A15:(G(p0-px))^2+0 <= (G(p0-px))^2 + (F(p0-px))^2 by REAL_1:55;
-       A16: 0+(F(p0-px))^2 <= (G(p0-px))^2 + (F(p0-px))^2 by A14,REAL_1:55;
-         0 <= dist(p,q) by METRIC_1:5;
-       then A17:(|.(p0-px).|)^2 <= r0^2 by A11,A12,SQUARE_1:77;
-       then A18: (G(p0-px))^2 <= r0^2 by A13,A15,AXIOMS:22;
-       A19: (F(p0-px))^2 <= r0^2 by A13,A16,A17,AXIOMS:22;
-       A20:G(p0-px)=G(p0) - G(px) & F(p0-px)=F(p0) - F(px) by A1;
-       then A21: -r0 <=G(p0) - G(px) & G(p0) - G(px)<=r0 by A8,A18,Th5;
-         -r0 <=F(p0) - F(px) & F(p0) - F(px)<=r0 by A8,A19,A20,Th5;
-        then F(p0) - F(px) - (G(p0) - G(px))<=r0--r0 by A21,REAL_1:92;
-      then F(px)-G(px)>0 by A9,Lm2;
-      then F(px)>G(px) by REAL_2:106;
-     hence x in K2` by A4;
-    end;
-   hence ex r being real number st r>0 & Ball(p,r) c= K2` by A8;
-  end;
-  then K2` is open by Lm1,TOPMETR:22;
-  hence thesis by TOPS_1:29;
-end;
+       (|. (p-q).|)^2 = (F(p-q))^2+(G(p-q))^2;
 
 theorem :: JGRAPH_2:48
 for B0 being Subset of TOP-REAL 2,K0 being Subset of
@@ -471,12 +393,6 @@ end;
 
 registration let a,b,c,d be real number;
  cluster AffineMap(a,b,c,d) -> continuous;
- coherence
-  proof
-      for t being Point of TOP-REAL 2 holds
-      AffineMap(a,b,c,d).t=|[a*(t`1)+b,c*(t`2)+d]| by Def2;
-   hence thesis by Th53;
-  end;
 end;
 
 

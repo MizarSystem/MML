@@ -36,14 +36,6 @@ begin
 
 registration let h;
  cluster -h -> convergent_to_0;
- coherence
-  proof
-   A1: h is_not_0 & h is convergent & lim h = 0 by FDIFF_1:def 1;
-   then A2: -h is_not_0 by SEQ_1:53;
-   A3: -h is convergent by A1,SEQ_2:23;
-     lim (-h) = 0 by A1,REAL_1:26,SEQ_2:24;
-   hence thesis by A2,A3,FDIFF_1:def 1;
-  end;
 end;
 
 
@@ -88,105 +80,7 @@ ex q being increasing Seq_of_Nat st
 (for n holds P[(s()*q).n]) &
 for n st (for r st r = s().n holds P[r]) ex m st n = q.m
 provided
- for n ex m st n <= m & P[s().m]
-proof
-  consider m1 be Nat such that
-  A2: 0 <= m1 & P[s().m1] by A1;
-  defpred R[Nat] means P[s().$1];
-  A3: ex m st R[m] by A2;
-  consider M be Nat such that
-  A4: R[M] & for n st R[n] holds M <= n from NAT_1:sch 5(A3);
-  A5: now let n; consider m such that
-       A6: n + 1 <= m & P[s().m] by A1;
-       take m;
-       thus n < m & P[s().m] by A6,NAT_1:38;
-      end;
-  defpred P[Nat,set,set] means for n,m st $2 = n & $3 = m holds
-   n < m & P[s().m] & for k st n < k & P[s().k] holds m <= k;
-  A7: for n for x be Element of NAT ex y be Element of NAT st P[n,x,y]
-       proof let n; let x be Element of NAT;
-        defpred R[Nat] means x < $1 & P[s().$1];
-        A8: ex m st R[m] by A5;
-        consider l be Nat such that
-        A9: R[l] & for k st R[k] holds l <= k from NAT_1:sch 5(A8);
-        take l;
-        thus thesis by A9;
-       end;
-  reconsider M' = M as Element of NAT;
-  consider F be Function of NAT,NAT such that
-  A10: F.0 = M' &
-      for n be Element of NAT holds P[n,F.n,F.(n+1)] from RECDEF_1:sch 2(A7);
-  A11: dom F = NAT & rng F c= NAT by FUNCT_2:def 1;
-   rng F c= REAL by XBOOLE_1:1;
-  then reconsider F as Real_Sequence by A11,FUNCT_2:def 1,RELSET_1:11;
-  A12: now let n;
-         F.n in rng F by A11,FUNCT_1:def 5;hence F.n is Nat by A11;
-      end;
-    now let n;
-      F.n is Nat & F.(n+1) is Nat by A12;
-   hence F.n < F.(n+1) by A10;
-  end;
-  then reconsider F as increasing Seq_of_Nat by A11,SEQM_3:def 8,def 11;
-  take F;
-  set q = s()*F;
-  defpred S[Nat] means P[q.$1];
-  A13: S[0] by A4,A10,SEQM_3:31;
-  A14: for k st S[k] holds S[k+1]
-      proof let k;
-       assume P[q.k]; P[k,F.k,F.(k+1)] by A10; then P[s().(F.(k+1))];
-       hence P[q.(k+1)] by SEQM_3:31;
-      end;
-  thus for n holds S[n] from NAT_1:sch 1(A13,A14);
-  A15: for n st P[s().n] ex m st F.m = n
-       proof
-        defpred R[Nat] means P[s().$1] & for m holds F.m <> $1;
-        assume A16: ex n st R[n];
-        consider M1 be Nat such that
-        A17: R[M1] & for n st R[n] holds M1 <= n from NAT_1:sch 5(A16);
-        defpred H[Nat] means $1 < M1 & P[s().$1] & ex m st F.m = $1;
-        A18: ex n st H[n]
-             proof
-              take M;
-              A19: M <= M1 by A4,A17;
-                  M <> M1 by A10,A17;
-              hence M < M1 by A19,REAL_1:def 5;
-              thus P[s().M] by A4;
-              take 0;
-              thus thesis by A10;
-             end;
-        A20: for n st H[n] holds n <= M1;
-        consider X be Nat such that
-        A21: H[X] & for n st H[n] holds n <= X from NAT_1:sch 6(A20,A18);
-        A22: for k st X < k & k < M1 holds not P[s().k]
-             proof given k such that
-              A23: X < k & k < M1 & P[s().k];
-                 now per cases;
-               suppose ex m st F.m = k;
-                hence contradiction by A21,A23;
-               end;
-               suppose for m holds F.m <> k;
-                hence contradiction by A17,A23;
-               end;
-               end;
-              hence contradiction;
-             end;
-        consider m such that
-        A24: F.m = X by A21;
-        A25: X < F.(m+1) & P[s().(F.(m+1))] &
-            for k st X < k & P[s().k] holds F.(m+1) <= k by A10,A24;
-        A26: F.(m+1) <= M1 by A10,A17,A21,A24;
-           now
-          assume F.(m+1) <> M1; then F.(m+1) < M1 by A26,REAL_1:def 5;
-          hence contradiction by A22,A25;
-         end;
-        hence contradiction by A17;
-      end;
-  let n; assume for r st r = s().n holds P[r];
-  then P[s().n]; then consider m such that
-  A27: F.m = n by A15;
-  take m;
-  thus thesis by A27;
- end;
+ for n ex m st n <= m & P[s().m];
 
 theorem :: FDIFF_2:10
   f.x0 <> r & f is_differentiable_in x0 implies

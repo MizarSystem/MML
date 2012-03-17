@@ -34,40 +34,7 @@ scheme :: CLOSURE1:sch 1
              B() -> ManySortedSet of I(),
              P[set] } :
  (for X being ManySortedSet of I() holds X in A() iff X in B() & P[X])
-  implies A() c= B()
-proof
-    assume
-A1:   for X being ManySortedSet of I() holds X in A() iff X in B() & P[X];
-    consider K being ManySortedSet of I() such that
-A2:   K in A() by PBOOLE:146;
-    let i such that
-A3:   i in I();
-    let x such that
-A4:   x in A().i;
-   dom (K +* (i .--> x)) = I() by A3,PZFMISC1:1;
-    then reconsider X = K +* (i .--> x) as ManySortedSet of I() by PBOOLE:def 3
-;
-A5: dom (i .--> x) = {i} by CQC_LANG:5;
-      i in {i} by TARSKI:def 1;
-then A6: X.i = (i .--> x).i by A5,FUNCT_4:14
-       .= x by CQC_LANG:6;
-      X in A()
-    proof
-      let s be set such that
-A7:     s in I();
-      per cases;
-      suppose s = i;
-        hence X.s in A().s by A4,A6;
-      end;
-      suppose s <> i;
-        then not s in dom (i .--> x) by A5,TARSKI:def 1;
-        then X.s = K.s by FUNCT_4:12;
-        hence X.s in A().s by A2,A7,PBOOLE:def 4;
-    end;
-    end;
-    then X in B() by A1;
-    hence x in B().i by A3,A6,PBOOLE:def 4;
-  end;
+  implies A() c= B();
 
 theorem :: CLOSURE1:1
 for X being non empty set
@@ -117,14 +84,6 @@ for A, B being non-empty ManySortedSet of I
 
 registration let I, M;
  cluster empty-yielding locally-finite Element of bool M;
-existence
-  proof
-      [0]I c= M by MBOOLEAN:5;
-    then [0]I in bool M by MBOOLEAN:1;
-    then reconsider a = [0]I as Element of bool M by MSSUBFAM:11;
-    take a;
-    thus thesis;
-  end;
 end;
 
 
@@ -185,37 +144,6 @@ theorem :: CLOSURE1:11
 
 registration let I, M;
  cluster reflexive monotonic idempotent topological MSSetOp of M;
-existence
-  proof
-    reconsider F = id (bool M) as MSSetOp of M;
-    take F;
-    thus F is reflexive
-    proof
-      let X be Element of bool M;
-      thus thesis by Th8;
-    end;
-    thus F is monotonic
-    proof
-      let X, Y be Element of bool M;
-      assume X c= Y;
-      hence thesis by Th9;
-    end;
-    thus F is idempotent
-    proof
-      let X be Element of bool M;
-      thus thesis by Th8;
-    end;
-    thus F is topological
-    proof
-      let X, Y be Element of bool M;
-        X in bool M & Y in bool M by MSSUBFAM:12;
-      then X c= M & Y c= M by MBOOLEAN:1;
-      then X \/ Y c= M by PBOOLE:18;
-      then X \/ Y in bool M by MBOOLEAN:1;
-      then X \/ Y is Element of bool M by MSSUBFAM:11;
-      hence thesis by Th10;
-    end;
-  end;
 end;
 
 
@@ -246,16 +174,6 @@ theorem :: CLOSURE1:18
 
 registration let I, M;
  cluster topological -> monotonic MSSetOp of M;
-coherence
-  proof
-    let P be MSSetOp of M such that
-A1:   P is topological;
-    let X, Y be Element of bool M such that
-A2:   X c= Y;
-      P..X \/ P..Y = P..(X \/ Y) by A1,Def5
-               .= P..Y by A2,PBOOLE:24;
-    hence P..X c= P..Y by PBOOLE:28;
-  end;
 end;
 
 
@@ -349,27 +267,12 @@ registration let S, MS;
  cluster MSFull MS -> strict additive absolutely-additive
                       multiplicative absolutely-multiplicative
                       properly-upper-bound properly-lower-bound;
-coherence
-  proof
-A1: MSFull MS = MSClosureStr (#the Sorts of MS, bool the Sorts of MS#)
- by Def12;
-    hence MSFull MS is strict;
-    thus the Family of MSFull MS is additive absolutely-additive
-     multiplicative absolutely-multiplicative properly-upper-bound
-      properly-lower-bound by A1;
-  end;
 end;
 
 
 registration let S;
            let MS be non-empty many-sorted over S;
  cluster MSFull MS -> non-empty;
-coherence
-  proof
-      MSFull MS = MSClosureStr (#the Sorts of MS, bool the Sorts of MS#)
- by Def12;
-    hence MSFull MS is non-empty by MSUALG_1:def 8;
-  end;
 end;
 
 
@@ -377,54 +280,42 @@ registration let S;
  cluster strict non-empty additive absolutely-additive
          multiplicative absolutely-multiplicative
          properly-upper-bound properly-lower-bound MSClosureStr over S;
-existence
-  proof
-    consider a being non-empty many-sorted over S;
-    take MSFull a;
-    thus thesis;
-  end;
 end;
 
 
 registration let S;
            let CS be additive MSClosureStr over S;
  cluster the Family of CS -> additive;
-coherence by Def6;
 end;
 
 
 registration let S;
            let CS be absolutely-additive MSClosureStr over S;
  cluster the Family of CS -> absolutely-additive;
-coherence by Def7;
 end;
 
 
 registration let S;
            let CS be multiplicative MSClosureStr over S;
  cluster the Family of CS -> multiplicative;
-coherence by Def8;
 end;
 
 
 registration let S;
            let CS be absolutely-multiplicative MSClosureStr over S;
  cluster the Family of CS -> absolutely-multiplicative;
-coherence by Def9;
 end;
 
 
 registration let S;
            let CS be properly-upper-bound MSClosureStr over S;
  cluster the Family of CS -> properly-upper-bound;
-coherence by Def10;
 end;
 
 
 registration let S;
            let CS be properly-lower-bound MSClosureStr over S;
  cluster the Family of CS -> properly-lower-bound;
-coherence by Def11;
 end;
 
 
@@ -432,108 +323,62 @@ registration let S;
            let M be non-empty ManySortedSet of the carrier of S;
            let F be MSSubsetFamily of M;
  cluster MSClosureStr (#M, F#) -> non-empty;
-coherence
-  proof
-    thus the Sorts of MSClosureStr (#M, F#) is non-empty;
-  end;
 end;
 
 
 registration let S, MS;
            let F be additive MSSubsetFamily of the Sorts of MS;
  cluster MSClosureStr (#the Sorts of MS, F#) -> additive;
-coherence by Def6;
 end;
 
 
 registration let S, MS;
            let F be absolutely-additive MSSubsetFamily of the Sorts of MS;
  cluster MSClosureStr (#the Sorts of MS, F#) -> absolutely-additive;
-coherence by Def7;
 end;
 
 
 registration let S, MS;
            let F be multiplicative MSSubsetFamily of the Sorts of MS;
  cluster MSClosureStr (#the Sorts of MS, F#) -> multiplicative;
-coherence by Def8;
 end;
 
 
 registration let S, MS;
          let F be absolutely-multiplicative MSSubsetFamily of the Sorts of MS;
  cluster MSClosureStr (#the Sorts of MS, F#) -> absolutely-multiplicative;
-coherence by Def9;
 end;
 
 
 registration let S, MS;
            let F be properly-upper-bound MSSubsetFamily of the Sorts of MS;
  cluster MSClosureStr (#the Sorts of MS, F#) -> properly-upper-bound;
-coherence by Def10;
 end;
 
 
 registration let S, MS;
            let F be properly-lower-bound MSSubsetFamily of the Sorts of MS;
  cluster MSClosureStr (#the Sorts of MS, F#) -> properly-lower-bound;
-coherence by Def11;
 end;
 
 
 registration let S;
  cluster absolutely-additive -> additive MSClosureStr over S;
-coherence
-  proof
-    let CS be MSClosureStr over S;
-    assume CS is absolutely-additive;
-then A1: the Family of CS is absolutely-additive by Def7;
-      for a being absolutely-additive MSSubsetFamily of M
-      holds a is additive;
-    hence the Family of CS is additive by A1;
-  end;
 end;
 
 
 registration let S;
  cluster absolutely-multiplicative -> multiplicative MSClosureStr over S;
-coherence
-  proof
-    let CS be MSClosureStr over S;
-    assume CS is absolutely-multiplicative;
-then A1: the Family of CS is absolutely-multiplicative by Def9;
-      for a being absolutely-multiplicative MSSubsetFamily of M
-      holds a is multiplicative;
-    hence the Family of CS is multiplicative by A1;
-  end;
 end;
 
 
 registration let S;
  cluster absolutely-multiplicative -> properly-upper-bound MSClosureStr over S;
-coherence
-  proof
-    let CS be MSClosureStr over S;
-    assume CS is absolutely-multiplicative;
-then A1: the Family of CS is absolutely-multiplicative by Def9;
-      for a being absolutely-multiplicative MSSubsetFamily of M
-      holds a is properly-upper-bound;
-    hence the Family of CS is properly-upper-bound by A1;
-  end;
 end;
 
 
 registration let S;
  cluster absolutely-additive -> properly-lower-bound MSClosureStr over S;
-coherence
-  proof
-    let CS be MSClosureStr over S;
-    assume CS is absolutely-additive;
-then A1: the Family of CS is absolutely-additive by Def7;
-      for a being absolutely-additive MSSubsetFamily of M
-      holds a is properly-lower-bound;
-    hence the Family of CS is properly-lower-bound by A1;
-  end;
 end;
 
 
@@ -560,19 +405,6 @@ registration let I;
            let M be empty-yielding ManySortedSet of I;
            let F be ManySortedFunction of M, M;
  cluster MSFixPoints F -> empty-yielding;
-coherence
-  proof
-    let i such that
-A1:   i in I;
-    assume (MSFixPoints F).i is non empty;
-    then consider x being set such that
-A2:   x in (MSFixPoints F).i by XBOOLE_0:def 1;
-    consider f being Function such that
-A3:   f = F.i & x in dom f & f.x = x by A1,A2,Def13;
-      M.i = {} by A1,PBOOLE:def 15;
-    then f is Function of {}, {} by A1,A3,MSUALG_1:def 2;
-    hence contradiction by A3,PARTFUN1:54;
-  end;
 end;
 
 
@@ -686,12 +518,6 @@ registration let S;
            let A be ManySortedSet of the carrier of S;
            let C be MSClosureOperator of A;
  cluster ClOp->ClSys C -> strict;
-coherence
-  proof
-    consider D being MSSubsetFamily of A such that
-A1:   D = MSFixPoints C & ClOp->ClSys C = MSClosureStr (#A, D#) by Def14;
-    thus thesis by A1;
-  end;
 end;
 
 
@@ -699,12 +525,6 @@ registration let S;
            let A be non-empty ManySortedSet of the carrier of S;
            let C be MSClosureOperator of A;
  cluster ClOp->ClSys C -> non-empty;
-coherence
-  proof
-    consider D being MSSubsetFamily of A such that
-A1:   D = MSFixPoints C & ClOp->ClSys C = MSClosureStr (#A, D#) by Def14;
-    thus thesis by A1;
-  end;
 end;
 
 

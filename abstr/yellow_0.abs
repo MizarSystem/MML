@@ -21,17 +21,7 @@ begin :: Reexamination of poset concepts
 scheme :: YELLOW_0:sch 1
  RelStrEx {X() -> non empty set, P[set,set]}:
  ex L being non empty strict RelStr st the carrier of L = X() &
-  for a,b being Element of L holds a <= b iff P[a,b]
-proof   defpred p[set,set] means P[$1,$2];
-    consider R being Relation of X() such that
-A1:for a,b being Element of X() holds [a,b] in R iff p[a,b] from RELSET_1:sch 2
-;
-   take L = RelStr(#X(),R#);
-   thus the carrier of L = X();
-   let a,b be Element of L;
-      a <= b iff [a,b] in R by ORDERS_1:def 9;
-   hence thesis by A1;
-  end;
+  for a,b being Element of L holds a <= b iff P[a,b];
 
 definition let A be non empty RelStr;
  redefine attr A is reflexive means
@@ -52,26 +42,8 @@ end;
 
 registration
  cluster complete -> with_suprema with_infima (non empty RelStr);
- coherence by LATTICE3:12;
  cluster trivial -> complete transitive antisymmetric
          (non empty reflexive RelStr);
- coherence
-  proof let L be non empty reflexive RelStr; assume
-A1:  for x,y being Element of L holds x = y;
-   consider x being Element of L;
-   thus L is complete
-    proof let X be set; take x;
-     thus for y be Element of L st y in X holds y <= x by A1;
-     let y be Element of L;
-        y = x by A1;
-     hence thesis by ORDERS_1:24;
-    end;
-   thus L is transitive
-     proof let x,y,z be Element of L;
-      thus thesis by A1;
-     end;
-   let x be Element of L; thus thesis by A1;
-  end;
 end;
 
 
@@ -79,22 +51,11 @@ registration
  let x be set;
  let R be Relation of {x};
  cluster RelStr(#{x},R#) -> trivial;
- coherence
-  proof let z1,z2 be Element of RelStr(#{x},R#);
-      z1 = x & z2 = x by TARSKI:def 1;
-   hence thesis;
-  end;
 end;
 
 
 registration
  cluster strict trivial non empty reflexive RelStr;
- existence
-  proof consider x being set;
-   consider O being Order of {x};
-   take RelStr(#{x}, O#);
-   thus thesis;
-  end;
 end;
 
 
@@ -166,7 +127,6 @@ theorem :: YELLOW_0:12
 registration
  let L be non empty RelStr;
  cluster [#]L -> non empty;
- coherence by PRE_TOPC:12;
 end;
 
 
@@ -198,50 +158,13 @@ theorem :: YELLOW_0:13
 
 registration
  cluster complete -> bounded (non empty RelStr);
- coherence
-  proof let L be non empty RelStr; assume
-A1:  for X being set ex a being Element of L st
-     X is_<=_than a &
-     for b being Element of L st X is_<=_than b holds a <= b;
-   then consider a0 being Element of L such that
-      {} is_<=_than a0 and
-A2:  for b being Element of L st {} is_<=_than b holds a0 <= b;
-   consider a1 being Element of L such that
-A3:  the carrier of L is_<=_than a1 and
-      for b being Element of L st
-     the carrier of L is_<=_than b holds a1 <= b by A1;
-   reconsider a0, a1 as Element of L;
-   hereby take a0;
-    thus a0 is_<=_than the carrier of L
-     proof let b be Element of L; assume
-         b in the carrier of L;
-      reconsider b as Element of L;
-         {} is_<=_than b by Th6;
-      hence thesis by A2;
-     end;
-   end;
-   take a1; thus thesis by A3;
-  end;
  cluster bounded -> lower-bounded upper-bounded RelStr;
- coherence
-  proof let L be RelStr; assume L is lower-bounded upper-bounded;
-   hence L is lower-bounded upper-bounded;
-  end;
  cluster lower-bounded upper-bounded -> bounded RelStr;
- coherence
-  proof let L be RelStr; assume L is lower-bounded upper-bounded;
-   hence L is lower-bounded upper-bounded;
-  end;
 end;
 
 
 registration
  cluster complete (non empty Poset);
-  :: with_infima with_suprema (lower, upper) bounded
- existence
-  proof consider L being complete (non empty Poset);
-   take L; thus thesis;
-  end;
 end;
 
 
@@ -528,36 +451,12 @@ end;
 registration
  let L be RelStr;
  cluster strict full SubRelStr of L;
- existence
-  proof set S = RelStr(#the carrier of L, the InternalRel of L#);
-      S is SubRelStr of L
-     proof thus the carrier of S c= the carrier of L;
-      thus thesis;
-     end;
-   then reconsider S as SubRelStr of L;
-   take S; thus S is strict;
-   thus the InternalRel of S = (the InternalRel of L)|_2 the carrier of S
-     by Th56;
-  end;
 end;
 
 
 registration
  let L be non empty RelStr;
  cluster non empty full strict SubRelStr of L;
- existence
-  proof set S = RelStr(#the carrier of L, the InternalRel of L#);
-      S is SubRelStr of L
-     proof thus the carrier of S c= the carrier of L;
-      thus thesis;
-     end;
-   then reconsider S as SubRelStr of L;
-   take S;
-   thus the carrier of S is non empty;
-   thus the InternalRel of S = (the InternalRel of L)|_2 the carrier of S
-     by Th56;
-   thus thesis;
-  end;
 end;
 
 
@@ -609,60 +508,18 @@ theorem :: YELLOW_0:63
 registration
  let L be reflexive RelStr;
  cluster -> reflexive (full SubRelStr of L);
- coherence
-  proof let S be full SubRelStr of L;
-A1:  the carrier of S c= the carrier of L &
-    the InternalRel of S = (the InternalRel of L)|_2 the carrier of S
-     by Def13,Def14;
-   let x be set; assume
-A2:   x in the carrier of S;
-then A3:  x in the carrier of L & [x,x] in [:the carrier of S, the carrier of S
-:]
-     by A1,ZFMISC_1:106;
-      the InternalRel of L is_reflexive_in the carrier of L
-     by ORDERS_1:def 4;
-    then [x,x] in the InternalRel of L by A1,A2,RELAT_2:def 1;
-   hence [x,x] in the InternalRel of S by A1,A3,WELLORD1:16;
-  end;
 end;
 
 
 registration
  let L be transitive RelStr;
  cluster -> transitive (full SubRelStr of L);
- coherence
-  proof let S be full SubRelStr of L;
-   let x,y,z be Element of S;
-   assume
-A1:  x <= y & y <= z;
-    then [x,y] in the InternalRel of S & [y,z] in the InternalRel of S
-     by ORDERS_1:def 9;
-then A2:  x in the carrier of S & y in the carrier of S & z in the carrier of S
-     by ZFMISC_1:106;
-      the carrier of S c= the carrier of L by Def13;
-   then reconsider a = x, b = y, c = z as Element of L by A2;
-      a <= b & b <= c by A1,Th60;
-    then a <= c by ORDERS_1:26;
-   hence thesis by A2,Th61;
-  end;
 end;
 
 
 registration
  let L be antisymmetric RelStr;
  cluster -> antisymmetric (full SubRelStr of L);
- coherence
-  proof let S be full SubRelStr of L;
-   let x,y be Element of S;
-   assume
-A1:  x <= y & y <= x;
-    then [x,y] in the InternalRel of S by ORDERS_1:def 9;
-then A2:  x in the carrier of S & y in the carrier of S by ZFMISC_1:106;
-    the carrier of S c= the carrier of L by Def13;
-   then reconsider a = x, b = y as Element of L by A2;
-      a <= b & b <= a by A1,Th60;
-   hence thesis by ORDERS_1:25;
-  end;
 end;
 
 
@@ -701,44 +558,13 @@ end;
 registration
  let L be non empty RelStr;
  cluster infs-inheriting -> meet-inheriting SubRelStr of L;
- coherence
-  proof let S be SubRelStr of L; assume
-A1:  for X being Subset of S st ex_inf_of X,L holds "/\"(X,L) in
- the carrier of S;
-   let x,y be Element of L; assume
-      x in the carrier of S & y in the carrier of S;
-    then {x,y} c= the carrier of S by ZFMISC_1:38;
-    then {x,y} is Subset of S;
-   hence thesis by A1;
-  end;
  cluster sups-inheriting -> join-inheriting SubRelStr of L;
- coherence
-  proof let S be SubRelStr of L; assume
-A2:  for X being Subset of S st ex_sup_of X,L holds "\/"(X,L) in
- the carrier of S;
-   let x,y be Element of L; assume
-      x in the carrier of S & y in the carrier of S;
-    then {x,y} c= the carrier of S by ZFMISC_1:38;
-    then {x,y} is Subset of S;
-   hence thesis by A2;
-  end;
 end;
 
 
 registration
  let L be non empty RelStr;
  cluster infs-inheriting sups-inheriting non empty full strict SubRelStr of L;
- existence
-  proof the carrier of L c= the carrier of L &
-    (the InternalRel of L)|_2 the carrier of L = the InternalRel of L
-     by Th56;
-   then reconsider S = RelStr(#the carrier of L, the InternalRel of L#)
-    as non empty full strict SubRelStr of L by Th57;
-   take S;
-   thus S is infs-inheriting proof let X be Subset of S; thus thesis; end;
-   thus S is sups-inheriting proof let X be Subset of S; thus thesis; end;
-   thus thesis;
-  end;
 end;
 
 
@@ -771,32 +597,12 @@ theorem :: YELLOW_0:67
 registration
  let L be with_infima antisymmetric transitive RelStr;
  cluster -> with_infima (non empty meet-inheriting full SubRelStr of L);
- coherence
-  proof let S be non empty meet-inheriting full SubRelStr of L;
-      now let x,y be Element of S;
-     reconsider a = x, b = y as Element of L by Th59;
-A1:   ex_inf_of {a,b}, L by Th21;
-      then "/\"({a,b},L) in the carrier of S by Def16;
-     hence ex_inf_of {x,y}, S by A1,Th64;
-    end;
-   hence thesis by Th21;
-  end;
 end;
 
 
 registration
  let L be with_suprema antisymmetric transitive RelStr;
  cluster -> with_suprema (non empty join-inheriting full SubRelStr of L);
- coherence
-  proof let S be non empty join-inheriting full SubRelStr of L;
-      now let x,y be Element of S;
-     reconsider a = x, b = y as Element of L by Th59;
-A1:  ex_sup_of {a,b}, L by Th20;
-     then "\/"({a,b},L) in the carrier of S by Def17;
-     hence ex_sup_of {x,y}, S by A1,Th65;
-    end;
-   hence thesis by Th20;
-  end;
 end;
 
 

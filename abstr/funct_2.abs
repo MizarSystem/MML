@@ -32,41 +32,11 @@ end;
 
 registration let X,Y;
  cluster quasi_total Function-like Relation of X,Y;
-  existence
-   proof
-    per cases;
-    suppose
-A1:    Y = {} & X <> {};
-     reconsider R = {} as Relation of X,Y by RELSET_1:25;
-    take R;
-    thus thesis by A1,Def1;
-    end;
-    suppose
-A2:    Y <> {} or X = {};
-     then consider f being Function such that
-A3:    X = dom f & rng f c= Y by FUNCT_1:18;
-     reconsider R = f as Relation of X,Y by A3,RELSET_1:10;
-    take R;
-    thus thesis by A2,A3,Def1;
-   end;
-   end;
 end;
 
 
 registration let X,Y;
  cluster total -> quasi_total PartFunc of X,Y;
- coherence
-  proof let f be PartFunc of X,Y;
-   assume
-A1:   dom f = X;
-   per cases;
-   case Y = {} implies X = {};
-   thus X = dom f by A1;
-   end;
-   case Y = {} & X <> {};
-   hence f = {} by PARTFUN1:64;
-  end;
-  end;
 end;
 
 
@@ -105,92 +75,13 @@ scheme :: FUNCT_2:sch 1
  FuncEx1{X, Y() -> set, P[set,set]}:
  ex f being Function of X(),Y() st for x st x in X() holds P[x,f.x]
 provided
- for x st x in X() ex y st y in Y() & P[x,y]
-proof
-  per cases;
-  suppose
-A2: Y() = {};
-A3: now let x;
-      assume x in X();
-      then ex y st y in Y() & P[x,y] by A1;
-      hence contradiction by A2;
-     end;
-     consider f being Function of X(),Y();
-     take f;
-     thus for x st x in X() holds P[x,f.x] by A3;
-  end;
-  suppose
-A4: X() = {};
-     consider f being Function of X(),Y();
-     take f;
-   thus for x st x in X() holds P[x,f.x] by A4;
-  end;
-  suppose X() <> {} & Y() <> {};
-   then reconsider X = X(), Y = Y() as non empty set;
-   set M = { { ff where ff is Element of Y : P[tt,ff] }
-                     where tt is Element of X : not contradiction };
-   consider x0 being Element of X;
-     { ff where ff is Element of Y : P[x0,ff] } in M;
-   then reconsider M as non empty set;
-     now let x;
-     assume x in M; then consider t being Element of X such that
-A5:   x = { ff where ff is Element of Y : P[t,ff] };
-      consider ff being set such that
-A6:    ff in Y and
-A7:    P[t,ff] by A1;
-        ff in x by A5,A6,A7;
-     hence x <> {};
-    end;
-   then consider C being Function such that dom C = M and
-A8: for x holds x in M implies C.x in x by WELLORD2:28;
-   deffunc F(set) = C.{ ff where ff is Element of Y : P[$1,ff] };
-   consider f being Function such that
-A9: dom f = X and
-A10: for x st x in X holds f.x = F(x) from FUNCT_1:sch 3;
-     rng f c= Y
-    proof let x be set;
-     assume x in rng f;
-      then consider y being set such that
-A11:    y in X and
-A12:    x = f.y by A9,FUNCT_1:def 5;
-      set y0 = { ff where ff is Element of Y : P[y,ff] };
-A13:    x = C.y0 by A10,A11,A12;
-        y0 in M by A11;
-      then x in y0 by A8,A13;
-      then ex ff being Element of Y st x = ff & P[y,ff];
-     hence x in Y;
-    end;
-   then reconsider f as Function of X(),Y() by A9,Def1,RELSET_1:11;
-  take f;
-  let x;
-   set x0 = { ff where ff is Element of Y : P[x,ff] };
-  assume
-A14: x in X();
-   then A15: x0 in M;
-     f.x = C.x0 by A10,A14;
-   then f.x in x0 by A8,A15;
-   then ex ff being Element of Y st ff = f.x & P[x,ff];
-  hence P[x,f.x];
- end;
- end;
+ for x st x in X() ex y st y in Y() & P[x,y];
 
 scheme :: FUNCT_2:sch 2
  Lambda1{X, Y() -> set, F(set)->set}:
  ex f being Function of X(),Y() st for x st x in X() holds f.x = F(x)
 provided
- for x st x in X() holds F(x) in Y()
-proof
-   defpred P[set,set] means $2 = F($1);
-A2: for x st x in X() ex y st y in Y() & P[x,y]
-     proof let x;
-      assume
-A3:     x in X();
-      take F(x);
-      thus thesis by A1,A3;
-     end;
-   thus ex f being Function of X(),Y() st for x st x in X() holds P[x,f.x]
-     from FuncEx1(A2);
-  end;
+ for x st x in X() holds F(x) in Y();
 
 ::::::::::::::::::::::::::::::::::::::::::::
 :: set of functions from a set into a set ::
@@ -213,13 +104,11 @@ theorem :: FUNCT_2:12
 
 registration let X be set, Y be non empty set;
   cluster Funcs(X,Y) -> non empty;
-  coherence by Th11;
 end;
 
 
 registration let X be set;
   cluster Funcs(X,X) -> non empty;
-  coherence by Th12;
 end;
 
 
@@ -503,18 +392,12 @@ end;
 
 registration let X, Y be set;
   cluster bijective -> one-to-one onto Function of X,Y;
-  coherence by Def4;
   cluster one-to-one onto -> bijective Function of X,Y;
-  coherence by Def4;
 end;
 
 
 registration let X;
  cluster bijective Function of X,X;
-  existence
-   proof take id X;
-    thus id X is one-to-one & rng id X = X by FUNCT_1:52,RELAT_1:71;
-   end;
 end;
 
 
@@ -540,31 +423,6 @@ end;
 
 registration let X;
  cluster reflexive total -> bijective Function of X,X;
- coherence
-  proof let f be Function of X,X;
-   assume
-A1:  f is reflexive total;
-    then
-A2:  f is_reflexive_in field f by RELAT_2:def 9;
-A3:  field f = dom f \/ rng f by RELAT_1:def 6;
-   thus f is one-to-one
-    proof let x1,x2 such that
-A4:   x1 in dom f and
-A5:   x2 in dom f and
-A6:   f.x1 = f.x2;
-       x1 in field f & x2 in field f by A3,A4,A5,XBOOLE_0:def 2;
-      then [x1,x1] in f & [x2,x2] in f by A2,RELAT_2:def 1;
-      then x1 = f.x1 & x2 = f.x2 by A4,A5,FUNCT_1:def 4;
-     hence x1 = x2 by A6;
-    end;
-   thus rng f c= X by RELSET_1:12;
-   let x;
-   assume x in X;
-    then x in dom f by A1,PARTFUN1:def 4;
-    then x in field f by A3,XBOOLE_0:def 2;
-    then [x,x] in f by A2,RELAT_2:def 1;
-   hence x in rng f by RELAT_1:def 5;
-  end;
 end;
 
 
@@ -595,12 +453,6 @@ theorem :: FUNCT_2:92
 
 registration let X,D;
  cluster quasi_total -> total PartFunc of X,D;
- coherence
-  proof let f be PartFunc of X,D;
-   assume f is quasi_total;
-    then dom f = X by Def1;
-   hence thesis by PARTFUN1:def 4;
-  end;
 end;
 
 
@@ -623,35 +475,12 @@ scheme :: FUNCT_2:sch 3
  FuncExD{C, D() -> non empty set, P[set,set]}:
  ex f being Function of C(),D() st for x being Element of C() holds P[x,f.x]
 provided
- for x being Element of C() ex y being Element of D() st P[x,y]
-proof
-   defpred R[set,set] means $1 in C() & $2 in D() & P[$1,$2];
-A2: for x being set st x in C()
-     ex y being set st y in D() & R[x,y]
-   proof let x be set;
-    assume
-A3:    x in C();
-    then ex y being Element of D() st P[x,y] by A1;
-    hence thesis by A3;
-   end;
-  consider f being Function of C(),D() such that
-A4: for x being set st x in C()
-      holds R[x,f.x] from FuncEx1(A2);
-  take f;
-  let x be Element of C();
-  thus thesis by A4;
- end;
+ for x being Element of C() ex y being Element of D() st P[x,y];
 
 scheme :: FUNCT_2:sch 4
  LambdaD{C, D() -> non empty set, F(Element of C()) -> Element of D()}:
  ex f being Function of C(),D() st
-  for x being Element of C() holds f.x = F(x)
-proof
-  defpred P[Element of C(),set] means $2 = F($1);
-A1: for x being Element of C() ex y being Element of D() st P[x,y];
-  thus ex f being Function of C(),D() st
-         for x being Element of C() holds P[x,f.x] from FuncExD(A1);
- end;
+  for x being Element of C() holds f.x = F(x);
 
 canceled 20;
 
@@ -686,52 +515,14 @@ scheme :: FUNCT_2:sch 5
  ex f being Function of [:X(),Y():],Z() st
    for x,y st x in X() & y in Y() holds P[x,y,f.[x,y]]
 provided
- for x,y st x in X() & y in Y() ex z st z in Z() & P[x,y,z]
-proof
-   defpred R[set,set] means
-   for x1,y1 st $1 = [x1,y1] holds P[x1,y1,$2];
-A2: for x st x in [:X(),Y():] ex z st z in Z() & R[x,z]
-     proof let x;
-      assume x in [:X(),Y():];
-      then consider x1,y1 such that
-A3:     x1 in X() & y1 in Y() and
-A4:     x = [x1,y1] by ZFMISC_1:def 2;
-      consider z such that
-A5:     z in Z() and
-A6:     P[x1,y1,z] by A1,A3;
-      take z;
-      thus z in Z() by A5;
-      let x2,y2;
-      assume x = [x2,y2];
-      then x1 = x2 & y1 = y2 by A4,ZFMISC_1:33;
-      hence thesis by A6;
-     end;
-   consider f being Function of [:X(),Y():],Z() such that
-A7:  for x st x in [:X(),Y():] holds R[x,f.x] from FuncEx1(A2);
-   take f;
-   let x,y;
-   assume x in X() & y in Y();
-   then [x,y] in [:X(),Y():] by ZFMISC_1:def 2;
-   hence thesis by A7;
- end;
+ for x,y st x in X() & y in Y() ex z st z in Z() & P[x,y,z];
 
 scheme :: FUNCT_2:sch 6
  Lambda2{X, Y, Z() -> set, F(set,set)->set}:
  ex f being Function of [:X(),Y():],Z()
   st for x,y st x in X() & y in Y() holds f.[x,y] = F(x,y)
 provided
- for x,y st x in X() & y in Y() holds F(x,y) in Z()
-proof
-    defpred P[set,set,set] means $3 = F($1,$2);
-A2: for x,y st x in X() & y in Y() ex z st z in Z() & P[x,y,z]
-     proof let x,y such that
-A3:     x in X() & y in Y();
-      take F(x,y);
-      thus thesis by A1,A3;
-     end;
-   thus ex f being Function of [:X(),Y():],Z() st
-   for x,y st x in X() & y in Y() holds P[x,y,f.[x,y]] from FuncEx2(A2);
-  end;
+ for x,y st x in X() & y in Y() holds F(x,y) in Z();
 
 theorem :: FUNCT_2:120
      for f1,f2 being Function of [:C,D:],E st for c,d holds f1.[c,d] = f2.[c,d]
@@ -743,51 +534,14 @@ scheme :: FUNCT_2:sch 7
    for x being Element of X() for y being Element of Y() holds P[x,y,f.[x,y]]
 provided
  for x being Element of X() for y being Element of Y()
-      ex z being Element of Z() st P[x,y,z]
-proof
-  defpred R[set,set] means
-    for x being (Element of X()),y being Element of Y()
-       st $1 = [x,y] holds P[x,y,$2];
-A2: for p being Element of [:X(),Y():]
-      ex z being Element of Z() st R[p,z]
-     proof let p be Element of [:X(),Y():];
-      consider x1 ,y1 such that
-A3:     x1 in X() and
-A4:     y1 in Y() and
-A5:     p = [x1,y1] by ZFMISC_1:def 2;
-      reconsider x1 as Element of X() by A3;
-      reconsider y1 as Element of Y() by A4;
-      consider z being Element of Z() such that
-A6:       P[x1,y1,z] by A1;
-      take z;
-      let x be Element of X(),y be Element of Y();
-      assume p = [x,y];
-      then x1 = x & y1 = y by A5,ZFMISC_1:33;
-      hence P[x,y,z] by A6;
-     end;
-  consider f being Function of [:X(),Y():],Z() such that
-A7:   for p being Element of [:X(),Y():] holds R[p,f.p] from FuncExD(A2);
-  take f;
-  let x be Element of X(); let y be Element of Y();
-  reconsider xy = [x,y] as Element of [:X(),Y():] by ZFMISC_1:def 2;
-    P[x,y,f.xy] by A7;
-  hence thesis;
- end;
+      ex z being Element of Z() st P[x,y,z];
 
 scheme :: FUNCT_2:sch 8
  Lambda2D{X, Y, Z() -> non empty set,
                 F(Element of X(),Element of Y()) -> Element of Z()}:
  ex f being Function of [:X(),Y():],Z()
   st for x being Element of X() for y being Element of Y() holds f.[x,y]=F(x,y)
-
-proof
-   defpred P[Element of X(),Element of Y(),set] means $3 = F($1,$2);
-A1: for x being Element of X() for y being Element of Y()
-      ex z being Element of Z() st P[x,y,z];
-   thus ex f being Function of [:X(),Y():],Z()
-  st for x being Element of X() for y being Element of Y() holds
-    P[x,y,f.[x,y]] from FuncEx2D(A1);
-  end;
+;
 
 begin :: PARTFUN1
 
@@ -801,38 +555,7 @@ scheme :: FUNCT_2:sch 9
    (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
  provided
  for x st x in A() holds
-     (C[x] implies F(x) in B()) & (not C[x] implies G(x) in B())
-proof
-  deffunc F'(set) = F($1);
-  deffunc G'(set) = G($1);
-  defpred P[set] means C[$1];
-  consider f being Function such that
-A2:  dom f = A() and
-A3:  for x st x in A() holds
-      (P[x] implies f.x = F'(x)) &
-      (not P[x] implies f.x = G'(x)) from PARTFUN1:sch 1;
-A4: now assume
-A5:   B() = {};
-    assume
-A6:  A() <> {};
-    consider x being Element of A();
-      (C[x] implies F(x) in B()) & (not C[x] implies G(x) in B()) by A1,A6;
-    hence contradiction by A5;
-   end;
-    rng f c= B()
-   proof let y;
-    assume y in rng f;
-    then consider x such that
-A7:  x in dom f and
-A8:  y = f.x by FUNCT_1:def 5;
-    (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x)) by A2,A3,A7;
-    then (C[x] implies f.x in B()) & (not C[x] implies f.x in B()) by A1,A2,A7
-;
-    hence y in B() by A8;
-   end;
-   then f is Function of A(),B() by A2,A4,Def1,RELSET_1:11;
-  hence thesis by A3;
- end;
+     (C[x] implies F(x) in B()) & (not C[x] implies G(x) in B());
 
 canceled 8;
 
@@ -962,7 +685,6 @@ theorem :: FUNCT_2:168
 
 registration let A,B be non empty set;
  cluster -> non empty Function of A,B;
-  coherence by Def1,RELAT_1:60;
 end;
 
 

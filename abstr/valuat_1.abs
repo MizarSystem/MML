@@ -32,11 +32,6 @@ begin
 
  registration let A;
   cluster Valuations_in A -> non empty functional;
-  coherence
-  proof
-     Valuations_in A = Funcs(bound_QC-variables, A) by Def1;
-   hence thesis;
-  end;
  end;
 
 
@@ -61,39 +56,16 @@ end;
 
 registration
  cluster boolean-valued Function;
- existence
-  proof take {};
-   thus rng {} c= BOOLEAN by RELAT_1:60,XBOOLE_1:2;
-  end;
 end;
 
 
 registration let f be boolean-valued Function, x be set;
  cluster f.x -> boolean;
- coherence
-  proof
-   per cases;
-   suppose not x in dom f;
-    then f.x = 0 by FUNCT_1:def 4;
-   hence f.x in BOOLEAN by MARGREL1:def 12,TARSKI:def 2;
-   end;
-   suppose x in dom f;
-    then A1:   f.x in rng f by FUNCT_1:def 5;
-      rng f c= BOOLEAN by Def2;
-   hence f.x in BOOLEAN by A1;
-  end;
-  end;
 end;
 
 
 registration let A be set;
  cluster -> boolean-valued Element of Funcs(A,BOOLEAN);
- coherence
-  proof let F be Element of Funcs(A,BOOLEAN);
-      ex f being Function st F = f & dom f = A & rng f c= BOOLEAN
-       by FUNCT_2:def 2;
-   hence rng F c= BOOLEAN;
-  end;
 end;
 
 
@@ -115,33 +87,8 @@ end;
 registration
  let p be boolean-valued Function;
  cluster 'not' p -> boolean-valued;
-  coherence
-   proof let x be set;
-    assume x in rng 'not' p;
-     then consider y being set such that
-A1:   y in dom 'not' p and
-A2:   x = ('not' p).y by FUNCT_1:def 5;
-A3:   y in dom p by A1,Def3;
-     then A4:   x = 'not'(p.y) by A2,Def3;
-A5:   rng p c= BOOLEAN by Def2;
-       p.y in rng p by A3,FUNCT_1:def 5;
-     then p.y = FALSE or p.y = TRUE by A5,MARGREL1:37,TARSKI:def 2;
-     then x = FALSE or x = TRUE by A4,MARGREL1:def 16;
-    hence x in BOOLEAN;
-   end;
  let q be boolean-valued Function;
   cluster p '&' q -> boolean-valued;
-  coherence
-   proof let x be set;
-    assume x in rng(p '&' q);
-     then consider y being set such that
-A6:   y in dom(p '&' q) and
-A7:   x = (p '&' q).y by FUNCT_1:def 5;
-A8:   x = (p.y) '&' (q.y) by A6,A7,Def4;
-       p.y = TRUE & q.y = TRUE or not(p.y = TRUE & q.y = TRUE);
-     then x = FALSE or x = TRUE by A8,MARGREL1:def 17;
-    hence x in BOOLEAN;
-   end;
 end;
 
 
@@ -360,33 +307,7 @@ scheme :: VALUAT_1:sch 1
                      V1, V2() -> Element of Valuations_in A()}:
  ex v being Element of Valuations_in A() st
   (for x being bound_QC-variable st x <> Y() holds v.x = V1().x) &
-                                                 v.Y() = V2().Z()
-proof
-   defpred C[set] means for x1 st x1 = $1 holds x1 <> Y();
-   deffunc F(set) = V1().$1;
-   deffunc G(set) = V2().Z();
-  A1:   for x being set st x in bound_QC-variables holds
-           (C[x] implies F(x) in A()) &
-           (not C[x] implies G(x) in A())
- by FUNCT_2:7;
-     consider f being Function of bound_QC-variables, A() such that
-  A2:   for x being set st x in bound_QC-variables holds
-           (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
-              from FUNCT_2:sch 9(A1);
-      dom f = bound_QC-variables & rng f c= A() by FUNCT_2:def 1,RELSET_1:12;
-    then f is Element of Funcs(bound_QC-variables,A()) by FUNCT_2:def 2;
-    then reconsider f as Element of Valuations_in A() by Def1;
-    take f;
-     now let x be bound_QC-variable;
-          now assume A3: x <> Y();
-            (for x1 st x1 = x holds x1 <> Y()) implies f.x = V1().x by A2;
-           hence f.x = V1().x by A3;
-         end;
-         hence x <> Y() implies f.x = V1().x;
-         thus x = Y() implies f.Y() = V2().Z() by A2;
-      end;
-      hence thesis;
- end;
+                                                 v.Y() = V2().Z();
 
 canceled;
 

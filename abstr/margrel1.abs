@@ -35,10 +35,6 @@ end;
 
 registration
   cluster relation-like set;
- existence proof take {};
-  thus (for x being set st x in {} holds x is FinSequence) &
-          for a,b being FinSequence st a in {} & b in {} holds len a = len b;
- end;
 end;
 
 
@@ -63,35 +59,7 @@ theorem :: MARGREL1:8
  rel_exist{A() -> set, P[FinSequence]}:
     ex r st for a holds a in r iff a in A() & P[a]
   provided
-  for a,b st P[a] & P[b] holds len a = len b
-proof
-    defpred _P[set] means ex a st P[a] & $1 = a;
-    consider X such that
-  A2: x in X iff x in A() & _P[x] from XBOOLE_0:sch 1;
-   A3: for x being set st x in X holds x is FinSequence
-        proof let x be set;
-            assume x in X;
-             then ex a st P[a] & x = a by A2;
-            hence x is FinSequence;
-        end;
-          for a,b st a in X & b in X holds len a = len b
-        proof let a,b;
-          assume that A4: a in X and A5: b in X;
- A6:               ex c being FinSequence st P[c] & a = c by A2,A4;
-                  ex d being FinSequence st P[d] & b = d by A2,A5;
-          hence thesis by A1,A6;
-        end;
-     then reconsider r = X as relation by A3,Def1;
-       for a holds a in r iff a in A() & P[a]
-     proof let a;
-           now assume A7: a in r;
-                then ex c being FinSequence st P[c] & a = c by A2;
-                hence a in A() & P[a] by A2,A7;
-            end;
-          hence thesis by A2;
-     end;
-     hence thesis;
-  end;
+  for a,b st P[a] & P[b] holds len a = len b;
 
 definition
  let p,r;
@@ -103,11 +71,6 @@ end;
 
 registration
  cluster {} -> relation-like;
- coherence
-  proof
-   thus (for x being set st x in {} holds x is FinSequence) &
-          for a,b being FinSequence st a in {} & b in {} holds len a = len b;
-  end;
 end;
 
 
@@ -164,33 +127,6 @@ end;
 
 registration let D;
    cluster relations_on D -> non empty;
- coherence
-  proof
-  defpred P[set] means  ex Y being set st Y = $1 & Y c= D* &
-           for a,b being FinSequence of D st a in Y & b in Y holds
-            len a = len b;
-  consider XX being set such that
-A1:  for x holds x in XX iff x in bool(D*) & P[x] from XBOOLE_0:sch 1;
-A2:      {} c= D* by XBOOLE_1:2;
-      for a,b being FinSequence of D st a in {} & b in {} holds len a = len b;
-     then reconsider A = XX as non empty set by A1,A2;
-         for X being set holds X in A iff X c= D* &
-        for a,b being FinSequence of D st a in X & b in X holds len a = len b
-          proof let X be set;
-            thus X in A implies X c= D* & for a,b being FinSequence of D st
-              a in X & b in X holds len a = len b
-            proof
-              assume X in A;
-              then ex Y being set st
-              Y = X & Y c= D* & for a,b being FinSequence of D st
-                  a in Y & b in Y holds len a=len b by A1;
-              hence thesis;
-            end;
-            thus X c= D* & (for a,b being FinSequence of D st
-               a in X & b in X holds len a = len b) implies X in A by A1;
-          end;
-          hence thesis by Def8;
-   end;
 end;
 
 
@@ -227,39 +163,7 @@ scheme :: MARGREL1:sch 2
   ex r being Element of relations_on D() st
    for a being FinSequence of D() holds a in r iff P[a]
   provided
-     for a,b being FinSequence of D() st P[a] & P[b] holds len a = len b
-proof
-    defpred _P[set] means ex a being FinSequence of D() st P[a] & $1 =  a;
-    consider X being set such that
-  A2: x in X iff x in D()* & _P[x] from XBOOLE_0:sch 1;
-   A3:  X c= D()*
-        proof
-            for x holds x in X implies x in D()* by A2;
-          hence thesis by TARSKI:def 3;
-        end;
-          for a,b being FinSequence of D() st a in X & b in X holds
-                                                           len a = len b
-        proof let a,b be FinSequence of D();
-          assume that A4: a in X and A5: b in X;
- A6:               ex c being FinSequence of D() st P[c] & a = c by A2,A4;
-                  ex d being FinSequence of D() st P[d] & b = d by A2,A5;
-          hence thesis by A1,A6;
-        end;
-     then reconsider r = X as Element of relations_on D() by A3,Def8;
-       for a being FinSequence of D() holds a in r iff P[a]
-     proof let a be FinSequence of D();
-        A7: now assume a in r;
-                   then ex c being FinSequence of D() st P[c] & a = c by A2;
-                hence P[a];
-            end;
-              now assume A8: P[a];
-                  a in D()* by FINSEQ_1:def 11;
-               hence a in r by A2,A8;
-            end;
-          hence thesis by A7;
-     end;
-     hence thesis;
-  end;
+     for a,b being FinSequence of D() st P[a] & P[b] holds len a = len b;
 
 definition let D;
   func empty_rel(D) -> Element of relations_on D means
@@ -285,44 +189,7 @@ definition
 scheme :: MARGREL1:sch 3
  rel_D_exist2{D() -> non empty set, k() -> Nat, P[FinSequence of D()]}:
   ex r being Element of relations_on D() st
-    for a being FinSequence of D() st len a = k() holds a in r iff P[a]
-proof
-    defpred _P[set] means
-     ex a being FinSequence of D() st len a = k() & P[a] & $1 = a;
-    consider X being set such that
-  A1: x in X iff x in D()* & _P[x] from XBOOLE_0:sch 1;
-   A2:  X c= D()*
-        proof
-            for x holds x in X implies x in D()* by A1;
-          hence thesis by TARSKI:def 3;
-        end;
-          for a,b being FinSequence of D() st a in X & b in X holds
-                                                           len a = len b
-        proof let a,b be FinSequence of D();
-          assume that A3: a in X and A4: b in X;
- A5:                ex c being FinSequence of D() st
- len c = k() & P[c] & a = c by A1,A3;
-                   ex d being FinSequence of D() st
- len d = k() & P[d] & b = d by A1,A4;
-          hence len a = len b by A5;
-        end;
-     then reconsider r = X as Element of relations_on D() by A2,Def8;
-       for a being FinSequence of D() st len a = k() holds a in r iff P[a]
-     proof let a be FinSequence of D() such that
-        A6: len a = k();
-        A7: now assume a in r;
-                 then ex c being FinSequence of D() st
- len c = k() & P[c] & a = c by A1;
-                hence P[a];
-            end;
-              now assume A8: P[a];
-                  a in D()* by FINSEQ_1:def 11;
-               hence a in r by A1,A6,A8;
-            end;
-          hence thesis by A7;
-     end;
-    hence thesis;
-  end;
+    for a being FinSequence of D() st len a = k() holds a in r iff P[a];
 
  definition
   func BOOLEAN -> set equals
@@ -333,7 +200,6 @@ proof
 
  registration
   cluster BOOLEAN -> non empty;
- coherence by Def12;
  end;
 
 
@@ -368,13 +234,7 @@ end;
 
 registration
  cluster boolean set;
- existence
-  proof
-   take FALSE;
-   thus thesis by Def15;
-  end;
  cluster -> boolean Element of BOOLEAN;
- coherence by Def15;
 end;
 
 
@@ -401,18 +261,8 @@ theorem :: MARGREL1:39
 
   registration let v be boolean set;
   cluster 'not' v -> boolean;
-  coherence
-   proof v in BOOLEAN by Def15;
-    then v = FALSE or v = TRUE by Def12,Def13,Def14,TARSKI:def 2;
-    hence thesis by Def16;
-   end;
   let w be boolean set;
   cluster v '&' w -> boolean;
-  correctness
-   proof
-      v = TRUE & w = TRUE or not(v = TRUE & w = TRUE);
-    hence thesis by Def17;
-   end;
  end;
 
 
@@ -472,10 +322,6 @@ theorem :: MARGREL1:52
  registration
   let X;
   cluster ALL X -> boolean;
-   correctness
-    proof FALSE in X or not FALSE in X;
-     hence thesis by Def18;
-    end;
  end;
 
 

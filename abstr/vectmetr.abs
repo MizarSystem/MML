@@ -68,86 +68,11 @@ begin  :: Convex and Internal Metric Spaces
 
   registration
    cluster convex -> internal (non empty MetrSpace);
-   coherence
-   proof
-    let V be non empty MetrSpace;
-    assume A1: V is convex;
-    let x,y be Element of V;
-    let p,q be Real such that
-     A2: p > 0 and
-     A3: q > 0;
-    consider f be FinSequence of the carrier of V such that
-     A4: f/.1 = x and
-     A5: f/.len f = y and
-     A6: for i be Nat st 1 <= i & i <= len f - 1 holds
-      dist(f/.i,f/.(i+1)) < p and
-     A7: for F be FinSequence of REAL st len F = len f - 1 &
-      for i be Nat st 1 <= i & i <= len F holds F/.i = dist(f/.i,f/.(i+1))
-       holds dist(x,y) = Sum F by A1,A2,Th1;
-    take f;
-    thus f/.1 = x & f/.len f = y &
-     for i be Nat st 1 <= i & i <= len f - 1 holds dist(f/.i,f/.(i+1)) < p
-                                                                 by A4,A5,A6;
-    let F be FinSequence of REAL such that
-     A8: len F = len f - 1 and
-     A9: for i be Nat st 1 <= i & i <= len F holds
-      F/.i = dist(f/.i,f/.(i+1));
-       dist(x,y) = Sum F by A7,A8,A9;
-     then dist(x,y) - Sum F = 0 by XCMPLX_1:14;
-     hence abs(dist(x,y) - Sum F) < q by A3,ABSVALUE:7;
-   end;
   end;
 
 
   registration
    cluster convex (non empty MetrSpace);
-   existence
-   proof
-    reconsider ZS = {0} as non empty set;
-    deffunc T((Element of ZS), Element of ZS) = 0;
-    consider F be Function of [:ZS,ZS:],REAL such that
-     A1: for x,y be Element of ZS holds F.[x,y] = T(x,y) from FUNCT_2:sch 8;
-   reconsider V = MetrStruct (# ZS,F #) as non empty MetrStruct
-                                                          by STRUCT_0:def 1;
-   A2: now let a,b be Element of V;
-    assume dist(a,b) = 0;
-      a = 0 & b = 0 by TARSKI:def 1;
-    hence a = b;
-   end;
-   A3: now let a be Element of V;
-    thus dist(a,a) = F.(a,a) by METRIC_1:def 1
-                .= F.[a,a] by BINOP_1:def 1
-                .= 0 by A1;
-   end;
-   A4: now let a,b be Element of V;
-    thus dist(a,b) = F.(a,b) by METRIC_1:def 1
-                .= F.[a,b] by BINOP_1:def 1
-                .= 0 by A1
-                .= F.[b,a] by A1
-                .= F.(b,a) by BINOP_1:def 1
-                .= dist(b,a) by METRIC_1:def 1;
-   end;
-     now let a,b,c be Element of V;
-      a = 0 & b = 0 & c = 0 by TARSKI:def 1;
-    then dist(a,c) = 0 & dist(a,b) = 0 & dist(b,c) = 0 by A3;
-    hence dist(a,c) <= dist(a,b) + dist(b,c);
-   end;
-   then reconsider V as discerning Reflexive symmetric
-    triangle (non empty MetrStruct) by A2,A3,A4,METRIC_1:1,2,3,4;
-   take V;
-   let x,y be Element of V;
-   let r be Real such that
-      0 <= r and
-      r <= 1;
-   take z = x;
-   A5: dist(x,z) = F.(x,z) by METRIC_1:def 1
-                .= F.[x,z] by BINOP_1:def 1
-                .= 0 by A1;
-     dist(z,y) = F.(z,y) by METRIC_1:def 1
-            .= F.[z,y] by BINOP_1:def 1
-            .= 0 by A1;
-   hence dist(x,z) = r * dist(x,y) & dist(z,y) = (1 - r) * dist(x,y) by A5;
-   end;
   end;
 
 
@@ -192,22 +117,12 @@ begin  :: Isometric Functions
   registration
    let V be discerning Reflexive (non empty MetrStruct);
    cluster isometric -> one-to-one map of V,V;
-   coherence by Th2;
   end;
 
 
   registration
    let V be non empty MetrStruct;
    cluster isometric map of V,V;
-   existence
-   proof
-    reconsider f = id (the carrier of V) as map of V,V;
-    take f;
-    thus rng f = the carrier of V by RELAT_1:71;
-    let x,y be Element of V;
-    thus dist(x,y) = dist(f.x,y) by FUNCT_1:35
-                  .= dist(f.x,f.y) by FUNCT_1:35;
-   end;
   end;
 
 
@@ -228,11 +143,6 @@ begin  :: Isometric Functions
   registration
    let V be non empty MetrStruct;
    cluster ISOM V -> non empty;
-   coherence
-   proof
-      id(V) is isometric by Th5;
-    hence ISOM V is non empty by Def4;
-   end;
   end;
 
 
@@ -249,17 +159,6 @@ end;
 
   registration
    cluster non empty strict RLSMetrStruct;
-   existence
-   proof
-    consider X be non empty set,
-             F be Function of [:X,X:],REAL,
-             O be Element of X,
-             B be BinOp of X,
-             G be Function of [:REAL,X:],X;
-    take RLSMetrStruct (# X,F,O,B,G #);
-    thus the carrier of RLSMetrStruct (# X,F,O,B,G #) is non empty;
-    thus RLSMetrStruct (# X,F,O,B,G #) is strict;
-   end;
   end;
 
 
@@ -270,7 +169,6 @@ end;
    let B be BinOp of X;
    let G be Function of [:REAL,X:],X;
    cluster RLSMetrStruct (# X,F,O,B,G #) -> non empty;
-   coherence by STRUCT_0:def 1;
   end;
 
 
@@ -307,165 +205,6 @@ end;
            right_complementable RealLinearSpace-like
            Reflexive discerning symmetric triangle
            homogeneous translatible (non empty RLSMetrStruct);
-   existence
-   proof
-    reconsider ZS = {0} as non empty set;
-    reconsider O = 0 as Element of ZS by TARSKI:def 1;
-    deffunc T((Element of ZS), Element of ZS) = 0;
-    consider FF be Function of [:ZS,ZS:],REAL such that
-     A1: for x,y be Element of ZS holds FF.[x,y] = T(x,y) from FUNCT_2:sch 8;
-    deffunc A((Element of ZS), Element of ZS) = O;
-    consider F be BinOp of ZS such that
-     A2: for x,y be Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 2;
-    deffunc M((Element of REAL), Element of ZS) = O;
-    consider G be Function of [:REAL,ZS:],ZS such that
-     A3: for a be Element of REAL for x be Element of ZS holds
-            G.[a,x qua set] = M(a,x) from FUNCT_2:sch 8;
-    set W = RLSMetrStruct (# ZS,FF,O,F,G #);
-    A4: for x,y be VECTOR of W holds x + y = y + x
-    proof
-     let x,y be VECTOR of W;
-       x + y = F.[x,y] & y + x = F.[y,x] by RLVECT_1:def 3;
-     then A5: x + y = F.(x,y) & y + x = F.(y,x) by BINOP_1:def 1;
-     reconsider X = x, Y = y as Element of ZS;
-       x + y = A(X,Y) & y + x = A(Y,X) by A2,A5;
-     hence thesis;
-    end;
-    A6: for x,y,z be VECTOR of W holds (x + y) + z = x + (y + z)
-    proof
-     let x,y,z be VECTOR of W;
-       (x + y) + z = F.[x + y,z] & x + (y + z) = F.[x,y + z] by RLVECT_1:def 3;
-     then A7: (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z)
-                                                                by BINOP_1:def
-1;
-     reconsider X = x, Y = y, Z = z as Element of ZS;
-       (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A2,A7;
-     hence thesis;
-    end;
-    A8: for x be VECTOR of W holds x + 0.W = x
-    proof
-     let x be VECTOR of W;
-     reconsider X = x as Element of ZS;
-       x + 0.W = F.[x,0.W] by RLVECT_1:def 3
-            .= F.(x,0.W) by BINOP_1:def 1
-            .= A(X,O) by A2;
-     hence thesis by TARSKI:def 1;
-    end;
-    A9: for x be VECTOR of W ex y be VECTOR of W st x + y = 0.W
-    proof
-     let x be VECTOR of W;
-     reconsider y = O as VECTOR of W;
-     take y;
-     thus x + y = F.[x,y] by RLVECT_1:def 3
-               .= F.(x,y) by BINOP_1:def 1
-               .= the Zero of W by A2
-               .= 0.W by RLVECT_1:def 2;
-    end;
-    A10: for a be Element of REAL for x,y be VECTOR of W holds
-          a * (x + y) = a * x + a * y
-    proof
-     let a be Element of REAL;
-     let x,y be VECTOR of W;
-     reconsider X = x, Y = y as Element of ZS;
-     A11: a * (x + y) = G.[a,x + y] by RLVECT_1:def 4;
-       a * x + a * y = F.[a * x,a * y] by RLVECT_1:def 3
-                  .= F.(a * x,a * y) by BINOP_1:def 1
-                  .= A(M(a,X),M(a,Y)) by A2;
-     hence thesis by A3,A11;
-    end;
-    A12: for a,b be Element of REAL
-         for x be VECTOR of W holds (a + b) * x = a * x + b * x
-    proof
-     let a,b be Element of REAL;
-     let x be VECTOR of W;
-     set c = a + b;
-     reconsider X = x as Element of ZS;
-     A13: c * x = G.[c,x] by RLVECT_1:def 4
-             .= M(c,X) by A3;
-       a * x + b * x = F.[a * x,b * x] by RLVECT_1:def 3
-                  .= F.(a * x,b * x) by BINOP_1:def 1
-                  .= A(M(a,X),M(b,X)) by A2;
-     hence thesis by A13;
-    end;
-    A14: for a,b be Element of REAL
-         for x be VECTOR of W holds (a * b) * x = a * (b * x)
-    proof
-     let a,b be Element of REAL;
-     let x be VECTOR of W;
-     set c = a * b;
-     reconsider X = x as Element of ZS;
-     A15: c * x = G.[c,x] by RLVECT_1:def 4
-             .= M(c,X) by A3;
-       a * (b * x) = G.[a,b * x] by RLVECT_1:def 4
-                .= M(a,M(b,X)) by A3;
-     hence thesis by A15;
-    end;
-    A16: for x be VECTOR of W holds 1 * x = x
-    proof
-     let x be VECTOR of W;
-     reconsider X = x as Element of ZS;
-     reconsider A' = 1 as Element of REAL;
-       1 * x = G.[1,x] by RLVECT_1:def 4
-          .= M(A',X) by A3;
-     hence thesis by TARSKI:def 1;
-    end;
-    A17: for a,b,c be Point of W holds
-          dist (a,a) = 0 &
-          (dist(a,b) = 0 implies a=b) &
-          dist(a,b) = dist(b,a) &
-          dist(a,c)<=dist(a,b)+dist(b,c)
-    proof
-     let a,b,c be Point of W;
-     A18: a = 0 & b = 0 & c = 0 by TARSKI:def 1;
-     thus A19: dist(a,a) = 0
-     proof
-      thus dist(a,a) = FF.(a,a) by METRIC_1:def 1
-                    .= FF.[a,a] by BINOP_1:def 1
-                    .= 0 by A1;
-     end;
-     thus dist(a,b) = 0 implies a = b by A18;
-     thus dist(a,b) = dist(b,a) by A18;
-     thus dist(a,c)<=dist(a,b)+dist(b,c) by A18,A19;
-    end;
-    A20: for r be Element of REAL
-         for v,w be VECTOR of W holds
-          dist(r*v,r*w) = abs(r) * dist(v,w)
-    proof
-     let r be Element of REAL;
-     let v,w be VECTOR of W;
-     reconsider v1 = v, w1 = w as Element of ZS;
-     thus dist(r*v,r*w) = FF.(r*v,r*w) by METRIC_1:def 1
-                       .= FF.[r*v,r*w] by BINOP_1:def 1
-                       .= abs(r) * 0 by A1
-                       .= abs(r) * FF.[v1,w1] by A1
-                       .= abs(r) * FF.(v1,w1) by BINOP_1:def 1
-                       .= abs(r) * dist(v,w) by METRIC_1:def 1;
-    end;
-    A21: for u,w,v be VECTOR of W holds
-       dist(v,w) = dist(v + u,w + u)
-    proof
-     let u,w,v be VECTOR of W;
-     thus dist(v + u,w + u) = FF.(v + u,w + u) by METRIC_1:def 1
-                   .= FF.[v + u,w + u] by BINOP_1:def 1
-                   .= 0 by A1
-                   .= FF.[v,w] by A1
-                   .= FF.(v,w) by BINOP_1:def 1
-                   .= dist(v,w) by METRIC_1:def 1;
-    end;
-    take W;
-    thus W is strict;
-    thus W is Abelian by A4,RLVECT_1:def 5;
-    thus W is add-associative by A6,RLVECT_1:def 6;
-    thus W is right_zeroed by A8,RLVECT_1:def 7;
-    thus W is right_complementable by A9,RLVECT_1:def 8;
-    thus W is RealLinearSpace-like by A10,A12,A14,A16,RLVECT_1:def 9;
-    thus W is Reflexive by A17,METRIC_1:1;
-    thus W is discerning by A17,METRIC_1:2;
-    thus W is symmetric by A17,METRIC_1:3;
-    thus W is triangle by A17,METRIC_1:4;
-    thus W is homogeneous by A20,Def5;
-    thus W is translatible by A21,Def6;
-   end;
   end;
 
 
@@ -529,98 +268,12 @@ begin  :: Groups of Isometric Functions
   registration
    let n be Nat;
    cluster IsomGroup n -> non empty;
-   coherence
-   proof
-      the carrier of IsomGroup n = ISOM RLMSpace n by Def9;
-    hence IsomGroup n is non empty by STRUCT_0:def 1;
-   end;
   end;
 
 
   registration
    let n be Nat;
    cluster IsomGroup n -> associative Group-like;
-   coherence
-   proof
-      now let x,y,z be Element of IsomGroup n;
-       x in the carrier of IsomGroup n;
-     then A1: x in ISOM RLMSpace n by Def9;
-     then consider x1 be map of RLMSpace n,RLMSpace n such that
-      A2: x1 = x and
-      A3: x1 is isometric by Def4;
-       y in the carrier of IsomGroup n;
-     then A4: y in ISOM RLMSpace n by Def9;
-     then consider y1 be map of RLMSpace n,RLMSpace n such that
-      A5: y1 = y and
-      A6: y1 is isometric by Def4;
-       z in the carrier of IsomGroup n;
-     then A7: z in ISOM RLMSpace n by Def9;
-     then consider z1 be map of RLMSpace n,RLMSpace n such that
-      A8: z1 = z and
-      A9: z1 is isometric by Def4;
-       x1*y1 is isometric by A3,A6,Th4;
-     then A10: x1*y1 in ISOM RLMSpace n by Def4;
-       y1*z1 is isometric by A6,A9,Th4;
-     then A11: y1*z1 in ISOM RLMSpace n by Def4;
-     thus (x*y)*z = (the mult of IsomGroup n).(x*y,z) by VECTSP_1:def 10
-        .= (the mult of IsomGroup n).((the mult of IsomGroup n).(x,y),z)
-                                                          by VECTSP_1:def 10
-        .= (the mult of IsomGroup n).(x1*y1,z) by A1,A2,A4,A5,Def9
-        .= (x1*y1)*z1 by A7,A8,A10,Def9
-        .= x1*(y1*z1) by RELAT_1:55
-        .= (the mult of IsomGroup n).(x,y1*z1) by A1,A2,A11,Def9
-        .= (the mult of IsomGroup n).(x,(the mult of IsomGroup n).(y,z))
-                                                            by A4,A5,A7,A8,Def9
-        .= (the mult of IsomGroup n).(x,y*z) by VECTSP_1:def 10
-        .= x*(y*z) by VECTSP_1:def 10;
-    end;
-    hence IsomGroup n is associative by VECTSP_1:def 16;
-      ex e be Element of IsomGroup n st
-     for h be Element of IsomGroup n holds
-      h * e = h & e * h = h &
-      ex g be Element of IsomGroup n st h * g = e & g * h = e
-    proof
-       id(RLMSpace n) is isometric by Th5;
-     then A12: id(RLMSpace n) in ISOM RLMSpace n by Def4;
-     then reconsider e = id(RLMSpace n) as
-                                 Element of IsomGroup n by Def9;
-     take e;
-     let h be Element of IsomGroup n;
-       h in the carrier of IsomGroup n;
-     then A13: h in ISOM RLMSpace n by Def9;
-     then consider h1 be map of RLMSpace n,RLMSpace n such that
-      A14: h1 = h and
-      A15: h1 is isometric by Def4;
-     thus h * e = (the mult of IsomGroup n).(h,e) by VECTSP_1:def 10
-        .= h1*id(RLMSpace n) by A12,A13,A14,Def9
-        .= h1*id(the carrier of RLMSpace n) by GRCAT_1:def 11
-        .= h by A14,FUNCT_2:74;
-     thus e * h = (the mult of IsomGroup n).(e,h) by VECTSP_1:def 10
-        .= id(RLMSpace n)*h1 by A12,A13,A14,Def9
-        .= id(the carrier of RLMSpace n)*h1 by GRCAT_1:def 11
-        .= h by A14,FUNCT_2:74;
-       h1" is isometric by A15,Th3;
-     then A16: h1" in ISOM RLMSpace n by Def4;
-     then reconsider g = h1" as Element of IsomGroup n by Def9;
-     take g;
-     A17: dom h1 = the carrier of RLMSpace n by FUNCT_2:def 1
-        .= [#](RLMSpace n) by PRE_TOPC:12;
-     A18: rng h1 = the carrier of RLMSpace n by A15,Def3
-        .= [#](RLMSpace n) by PRE_TOPC:12;
-     A19: h1 is one-to-one by A15,Th2;
-     thus h * g = (the mult of IsomGroup n).(h,g) by VECTSP_1:def 10
-        .= h1*h1" by A13,A14,A16,Def9
-        .= id rng h1 by A18,A19,TOPS_2:65
-        .= id(the carrier of RLMSpace n) by A17,A18,FUNCT_2:def 1
-        .= e by GRCAT_1:def 11;
-     thus g * h = (the mult of IsomGroup n).(g,h) by VECTSP_1:def 10
-        .= h1"*h1 by A13,A14,A16,Def9
-        .= id dom h1 by A18,A19,TOPS_2:65
-        .= id(the carrier of RLMSpace n) by FUNCT_2:def 1
-        .= e by GRCAT_1:def 11;
-    end;
-    hence IsomGroup n is Group-like by GROUP_1:def 3;
-   end;
   end;
 
 
@@ -649,97 +302,5 @@ begin  :: Groups of Isometric Functions
    let n be Nat;
    let G be Subgroup of IsomGroup n;
    cluster SubIsomGroupRel G -> total symmetric transitive;
-   coherence
-   proof
-    set X = the carrier of RLMSpace n;
-    set S = SubIsomGroupRel G;
-      now let x be set;
-     assume x in X;
-     then reconsider x1 = x as Element of RLMSpace n;
-       1.(IsomGroup n) = id (RLMSpace n) by Th10;
-     then id(RLMSpace n) in G by GROUP_2:55;
-     then A1: id(RLMSpace n) in the carrier of G by RLVECT_1:def 1;
-       id(RLMSpace n).x1 = id(the carrier of RLMSpace n).x1 by GRCAT_1:def 11
-        .= x1 by FUNCT_1:35;
-     hence [x,x] in S by A1,Def10;
-    end;
-    then S is_reflexive_in X by RELAT_2:def 1;
-    then
-A2:   dom S = X & field S = X by ORDERS_1:98;
-    hence S is total by PARTFUN1:def 4;
-      now let x,y be set;
-     assume that
-      A3: x in X and
-      A4: y in X and
-      A5: [x,y] in S;
-     reconsider x1 = x, y1 = y as Element of RLMSpace n
-                                                    by A3,A4;
-     consider f be Function such that
-      A6: f in the carrier of G and
-      A7: f.x1 = y1 by A5,Def10;
-     A8: the carrier of G c= the carrier of IsomGroup n by GROUP_2:def 5;
-     then f in the carrier of IsomGroup n by A6;
-     then f in ISOM RLMSpace n by Def9;
-     then consider f2 be map of RLMSpace n,RLMSpace n such that
-      A9: f2 = f and
-      A10: f2 is isometric by Def4;
-     reconsider f1 = f as Element of G by A6;
-       f1 in the carrier of IsomGroup n by A8,TARSKI:def 3;
-     then reconsider f3 = f1 as Element of IsomGroup n;
-     A11: rng f2 = the carrier of RLMSpace n by A10,Def3
-        .= [#](RLMSpace n) by PRE_TOPC:12;
-     A12: f2 is one-to-one by A10,Th2;
-     A13: f1" = f3" by GROUP_2:57
-        .= f2" by A9,Th11
-        .= f" by A9,A11,A12,TOPS_2:def 4;
-       x1 in the carrier of RLMSpace n;
-     then x1 in dom f by A9,FUNCT_2:def 1;
-     then f".y1 = x1 by A7,A9,A12,FUNCT_1:56;
-     hence [y,x] in S by A13,Def10;
-    end;
-    then S is_symmetric_in X by RELAT_2:def 3;
-    hence S is symmetric by A2,RELAT_2:def 11;
-      now let x,y,z be set;
-     assume that
-      A14: x in X and
-      A15: y in X and
-      A16: z in X and
-      A17: [x,y] in S and
-      A18: [y,z] in S;
-     reconsider x1 = x, y1 = y, z1 = z as Element of RLMSpace n
-                                                 by A14,A15,A16;
-     consider f be Function such that
-      A19: f in the carrier of G and
-      A20: f.x1 = y1 by A17,Def10;
-     consider g be Function such that
-      A21: g in the carrier of G and
-      A22: g.y1 = z1 by A18,Def10;
-     A23: the carrier of G c= the carrier of IsomGroup n by GROUP_2:def 5;
-     then f in the carrier of IsomGroup n by A19;
-     then A24: f in ISOM RLMSpace n by Def9;
-     then consider f1 be map of RLMSpace n,RLMSpace n such that
-      A25: f1 = f and
-        f1 is isometric by Def4;
-     reconsider f2 = f as Element of G by A19;
-       f2 in the carrier of IsomGroup n by A23,TARSKI:def 3;
-     then reconsider f3 = f2 as Element of IsomGroup n;
-       g in the carrier of IsomGroup n by A21,A23;
-     then A26: g in ISOM RLMSpace n by Def9;
-     reconsider g2 = g as Element of G by A21;
-       g2 in the carrier of IsomGroup n by A23,TARSKI:def 3;
-     then reconsider g3 = g2 as Element of IsomGroup n;
-     A27: g3*f3 = (the mult of IsomGroup n).(g,f) by VECTSP_1:def 10
-        .= g*f by A24,A26,Def9;
-     f2 in G & g2 in G by RLVECT_1:def 1;
-     then g3*f3 in G by GROUP_2:59;
-     then A28: g*f in the carrier of G by A27,RLVECT_1:def 1;
-       x1 in the carrier of RLMSpace n;
-     then x1 in dom f by A25,FUNCT_2:def 1;
-     then (g*f).x1 = z1 by A20,A22,FUNCT_1:23;
-     hence [x,z] in S by A28,Def10;
-    end;
-    then S is_transitive_in X by RELAT_2:def 8;
-    hence S is transitive by A2,RELAT_2:def 16;
-   end;
   end;
 

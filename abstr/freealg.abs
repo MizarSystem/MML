@@ -39,20 +39,6 @@ end;
 
 registration
 cluster non empty missing_with_Nat set;
- existence
-  proof
-   take X = {-1};
-   thus X is non empty;
-      now assume X meets NAT;
-     then consider x such that
-     A1: x in X /\ NAT by XBOOLE_0:4;
-     A2: x in X & x in NAT by A1,XBOOLE_0:def 3;
-     reconsider x as Nat by A1,XBOOLE_0:def 3;
-       x = -1 & 0 <= x by A2,NAT_1:18,TARSKI:def 1;
-     hence contradiction;
-    end;
-   hence thesis by Def1;
-  end;
 end;
 
 definition let IT be FinSequence;
@@ -66,21 +52,7 @@ antonym IT is without_zero for IT is with_zero ; end;
 
 registration
 cluster non empty with_zero FinSequence of NAT;
- existence
-  proof
-   reconsider f = <*0*> as FinSequence of NAT;
-   take f;
-   thus f is non empty by Lm1;
-   thus 0 in rng f by Lm1;
-  end;
 cluster non empty without_zero FinSequence of NAT;
- existence
-  proof
-   reconsider f = <*1*> as FinSequence of NAT;
-   take f;
-   thus f is non empty by Lm1;
-   thus not 0 in rng f by Lm1;
-  end;
 end;
 
 
@@ -129,112 +101,12 @@ end;
 
 registration
 cluster free strict Universal_Algebra;
-existence
- proof
-  consider x be set;
-  reconsider A = {x} as non empty set;
-  consider a be Element of A;
-  reconsider w = {<*>A} --> a as Element of PFuncs(A*,A) by UNIALG_1:3;
-  reconsider ww = <*w*> as PFuncFinSequence of A;
-  set U0 = UAStr (# A, ww#);
-  A1: the charact of(U0) is quasi_total & the charact of(U0) is homogeneous &
-     the charact of(U0) is non-empty by UNIALG_1:4;
-  A2: len the charact of(U0) = 1 by FINSEQ_1:56;
-  then the charact of U0 <> {} by FINSEQ_1:25;
-  then reconsider U0 as Universal_Algebra by A1,UNIALG_1:def 7,def 8,def 9;
-A3:  dom the charact of(U0) = {1} & 1 in {1}
-   by A2,FINSEQ_1:4,def 3,TARSKI:def 1;
-  then reconsider o0 = (the charact of U0).1 as operation of U0 by UNIALG_2:6;
-     o0 = w by FINSEQ_1:57;
-  then A4: dom o0 = {<*>A} by FUNCOP_1:19;
-     now let x be FinSequence of A; assume x in dom o0;
-    then x = <*>A by A4,TARSKI:def 1;
-    hence len x = 0 by FINSEQ_1:32;
-   end;
-  then A5: arity o0 = 0 by UNIALG_1:def 10;
-  take U0;
-    GenUnivAlg( {}(the carrier of U0) ) = U0
-   proof
-    set P = {}(the carrier of U0);
-    reconsider B = the carrier of GenUnivAlg(P)
-     as non empty Subset of U0 by UNIALG_2:def 8;
-    A6: B = the carrier of U0 by ZFMISC_1:39;
-    A7: dom the charact of(U0) = dom Opers(U0,B) by UNIALG_2:def 7;
-      for n st n in dom the charact of(U0)
-     holds (the charact of(U0)).n =(Opers(U0,B)).n
-     proof let n; assume
-      A8: n in dom the charact of(U0);
-      then reconsider o =(the charact of(U0)).n as operation of U0 by UNIALG_2:
-6;
-        (Opers(U0,B)).n = o/.B by A7,A8,UNIALG_2:def 7;
-      hence (Opers(U0,B)).n = (the charact of(U0)).n by A6,UNIALG_2:7;
-     end;
-    then the charact of(U0) = Opers(U0,B) by A7,FINSEQ_1:17
-         .= the charact of GenUnivAlg(P) by UNIALG_2:def 8;
-    hence thesis by A6;
-   end;
-  then reconsider G = {}(the carrier of U0) as GeneratorSet of U0 by Def5;
-     now
-    take G;
-       now
-      let U1 be Universal_Algebra;assume
-      A9: U0,U1 are_similar;
-       then len the charact of(U1) = 1 by A2,UNIALG_2:3;
-      then A10: dom the charact of(U1) = {1} & 1 in {1}
-       by FINSEQ_1:4,def 3,TARSKI:def 1;
-      then reconsider o1 = (the charact of U1).1 as operation of U1 by UNIALG_2
-:6;
-      A11: signature U0 = signature U1 by A9,UNIALG_2:def 2;
-        len (signature U0) = len the charact of(U0) &
-      len (signature U1) = len the charact of(U1) &
-      dom (signature U0) = Seg len (signature U0) &
-      dom (signature U1) = Seg len (signature U1)
-        by FINSEQ_1:def 3,UNIALG_1:def 11;
-      then (signature U0).1 = arity o0 & (signature U1).1 = arity o1
-             by A2,A10,A11,FINSEQ_1:4,UNIALG_1:def 11;
-      then A12: arity o0 = arity o1 by A9,UNIALG_2:def 2;
-      consider aa be set such that
-      A13: aa in dom o1 by XBOOLE_0:def 1;
-        o1.aa in rng o1 & rng o1 c= the carrier of U1
-                                     by A13,FUNCT_1:def 5,RELSET_1:12;
-      then reconsider u1 = o1.aa as Element of U1;
-      let f be Function of G,the carrier of U1;
-      deffunc F(set) = u1;
-      consider h be Function of U0,U1 such that
-A14: for x being Element of U0 holds h.x = F(x) from FUNCT_2:sch 4
-;
-      take h;
-         now
-        let n; assume n in dom the charact of(U0);
-        then A15: n = 1 by A3,TARSKI:def 1;
-        let 0o be operation of U0,1o be operation of U1;assume
-A16:        0o=(the charact of U0).n & 1o=(the charact of U1).n;
-        let y  be FinSequence of U0;assume A17: y in dom 0o;
-         then y = <*>the carrier of U0 by A4,A15,A16,TARSKI:def 1;
-        then A18: h*y = <*>the carrier of U1 by ALG_1:3;
-           dom 1o = 0-tuples_on the carrier of U1 by A5,A12,A15,A16,UNIALG_2:2
-           .= {<*>the carrier of U1} by FINSEQ_2:112;
-        then A19: 1o.(h*y) = u1 by A13,A15,A16,A18,TARSKI:def 1;
-          0o.y in rng 0o & rng 0o c= the carrier of U0
-         by A17,FUNCT_1:def 5,RELSET_1:12;
-        hence h.(0o.y) = 1o.(h*y) by A14,A19;
-       end;
-      hence h is_homomorphism U0,U1 by A9,ALG_1:def 1;
-        dom f = {} by PARTFUN1:54;
-      then f = {} by RELAT_1:64;
-      hence h|G = f by RELAT_1:110;
-     end;
-    hence G is free by Def6;
-   end;
-  hence thesis by Def7;
- end;
 end;
 
 
 registration
  let U0 be free Universal_Algebra;
 cluster free GeneratorSet of U0;
- existence by Def7;
 end;
 
 
@@ -270,11 +142,6 @@ registration
  let f be non empty FinSequence of NAT,
      X be set;
 cluster DTConUA(f,X) -> non empty;
- coherence
-  proof
-      DTConUA(f,X) = DTConstrStr (# (dom f) \/ X, REL(f,X) #) by Def9;
-   hence the carrier of DTConUA(f,X) is non empty;
-  end;
 end;
 
 
@@ -290,11 +157,6 @@ registration
  let f be non empty FinSequence of NAT,
      X be set;
 cluster DTConUA(f,X) -> with_nonterminals;
- coherence
-  proof
-     NonTerminals DTConUA(f,X) = dom f by Th2;
-   hence thesis by DTCONSTR:def 7;
-  end;
 end;
 
 
@@ -303,55 +165,6 @@ registration
      X be set;
 cluster DTConUA(f,X) ->
   with_nonterminals with_useful_nonterminals;
- coherence
-  proof
-   set A = DTConUA(f,X),
-       D = (dom f) \/ X;
-A1:   A = DTConstrStr (# (dom f) \/ X, REL(f,X) #) by Def9;
-     A is with_useful_nonterminals
-    proof
-     let s be Symbol of A; assume
-     A2: s in NonTerminals A;
-     set e = <*>(TS A);
-       0 in rng f by Def2;
-     then consider x such that
-     A3: x in dom f & f.x = 0 by FUNCT_1:def 5;
-     A4: NonTerminals A = dom f &
-     the carrier of A = (Terminals A) \/ (NonTerminals A)
-       by Th2,LANG1:1;
-     then reconsider s0 = x as Symbol of A by A3;
-        roots e = <*> D by DTCONSTR:3;
-     then reconsider re = (roots e) as Element of D*;
-       len re = 0 by DTCONSTR:3,FINSEQ_1:32;
-     then [s0,roots e] in the Rules of A by A1,A3,Def8;
-     then s0 ==> roots e by LANG1:def 1;
-     then A5: s0-tree(e) in (TS A) by DTCONSTR:def 4;
-       NonTerminals A = dom f by Th2;
-     then f.s in rng f & rng f c= NAT by A2,FINSEQ_1:def 4,FUNCT_1:def 5;
-     then reconsider fs = f.s as Nat;
-     set p = fs |-> (s0-tree e);
-     A6: len p = fs by FINSEQ_2:69;
-       dom(roots p) = dom p by DTCONSTR:def 1
-     .= Seg len p by FINSEQ_1:def 3;
-     then A7: len(roots p) = fs by A6,FINSEQ_1:def 3;
-     reconsider sd = s as Element of D by A2,A4,XBOOLE_0:def 2;
-       rng p c= TS A
-      proof
-       let y; assume y in rng p;
-       then consider n such that
-       A8: n in dom p & p.n = y by FINSEQ_2:11;
-         dom p = Seg len p by FINSEQ_1:def 3;
-       hence thesis by A5,A6,A8,FINSEQ_2:70;
-      end;
-     then reconsider p as FinSequence of TS A by FINSEQ_1:def 4;
-     take p;
-     reconsider p as FinSequence of FinTrees the carrier of A;
-     reconsider rp =roots p as Element of D* by A1,FINSEQ_1:def 11;
-       [sd,rp] in REL(f,X) by A2,A4,A7,Def8;
-     hence thesis by A1,LANG1:def 1;
-    end;
-   hence thesis;
-  end;
 end;
 
 
@@ -360,44 +173,6 @@ registration
      D be missing_with_Nat non empty set;
 cluster DTConUA(f,D) ->
  with_terminals with_nonterminals with_useful_nonterminals;
- coherence
-  proof
-   set A = DTConUA(f,D);
-A1:   A = DTConstrStr (#(dom f) \/ D, REL(f,D) #) by Def9;
-   A2: Terminals A = D & NonTerminals A = dom f by Th2,Th3;
-     A is with_useful_nonterminals
-    proof
-     let s be Symbol of A; assume
-     A3: s in NonTerminals A;
-     consider d be Element of D;
-     reconsider sd = d as Symbol of A by A1,XBOOLE_0:def 2;
-     A4: root-tree sd in TS(A) by A2,DTCONSTR:def 4;
-       f.s in rng f & rng f c= NAT by A2,A3,FINSEQ_1:def 4,FUNCT_1:def 5;
-     then reconsider fs = f.s as Nat;
-     set p = fs |-> (root-tree sd);
-     A5: len p = fs by FINSEQ_2:69;
-       dom(roots p) = dom p by DTCONSTR:def 1
-     .= Seg len p by FINSEQ_1:def 3;
-     then A6: len(roots p) = fs by A5,FINSEQ_1:def 3;
-       rng p c= TS A
-      proof
-       let y; assume y in rng p;
-       then consider n such that
-       A7: n in dom p & p.n = y by FINSEQ_2:11;
-         n in Seg len p by A7,FINSEQ_1:def 3;
-       hence thesis by A4,A5,A7,FINSEQ_2:70;
-      end;
-     then reconsider p as FinSequence of (TS A) by FINSEQ_1:def 4;
-     take p;
-     reconsider p as FinSequence of FinTrees the carrier of A;
-     reconsider rp =(roots p) as Element of ((dom f) \/ D)*
-        by A1,FINSEQ_1:def 11;
-     reconsider sdd = s as Element of ((dom f) \/ D) by A1;
-       [sdd,rp] in REL(f,D) by A2,A3,A6,Def8;
-     hence thesis by A1,LANG1:def 1;
-    end;
-   hence thesis by A2,DTCONSTR:def 6;
-  end;
 end;
 
 
@@ -507,11 +282,6 @@ registration
  let f be non empty FinSequence of NAT,
      D be non empty missing_with_Nat set;
  cluster FreeUnivAlgNSG(f,D) -> free;
- coherence
-  proof
-     FreeGenSetNSG(f,D) is free by Th6;
-   hence thesis by Def7;
-  end;
 end;
 
 
@@ -611,11 +381,6 @@ registration
  let f be with_zero non empty FinSequence of NAT,
      D be missing_with_Nat set;
 cluster FreeUnivAlgZAO(f,D) -> free;
- coherence
-  proof
-     FreeGenSetZAO(f,D) is free by Th10;
-   hence thesis by Def7;
-  end;
 end;
 
 
@@ -628,12 +393,5 @@ end;
 
 registration
 cluster strict free with_const_op Universal_Algebra;
- existence
-  proof
-   consider f be with_zero non empty FinSequence of NAT;
-   consider D be missing_with_Nat set;
-   take FreeUnivAlgZAO(f,D);
-   thus thesis by Th8;
-  end;
 end;
 

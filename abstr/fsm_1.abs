@@ -68,20 +68,16 @@ theorem :: FSM_1:10
 
 registration let W be non empty set;
  cluster -> non empty a_partition of W;
- coherence by Th9;
 end;
 
 
 registration let Z be finite set;
  cluster -> finite a_partition of Z;
- coherence by Th10;
 end;
 
 
 registration let X be non empty finite set;
  cluster non empty finite a_partition of X;
- existence proof consider p being a_partition of X;
-   take p; thus p is non empty & p is finite; end;
 end;
 
 
@@ -123,31 +119,16 @@ end;
 
 registration let X be set;
   cluster non empty finite FSM over X;
-  existence
-  proof
-    consider A being non empty finite set,
-             T being Function of [: A, X :], A,
-             I being Element of A;
-    take S = FSM (# A, T, I #);
-    thus S is non empty by STRUCT_0:def 1;
-    thus S is finite by GROUP_1:def 13;
-  end;
 end;
 
 
 registration :: WAYBEL11
   cluster finite non empty 1-sorted;
-  existence
-  proof
-   take 1-sorted(#{{}}#);
-   thus thesis by GROUP_1:def 13,STRUCT_0:def 1;
-  end;
 end;
 
 
 registration let S be finite 1-sorted; :: YELLOW13
  cluster the carrier of S -> finite;
- coherence by GROUP_1:def 13;
 end;
 
 
@@ -257,7 +238,6 @@ registration let IAlph be set,
                T be Function of [: X, IAlph :], X,
                I be Element of X;
   cluster FSM (# X, T, I #) -> finite non empty;
-  coherence by GROUP_1:def 13,STRUCT_0:def 1;
 end;
 
 
@@ -267,7 +247,6 @@ registration let IAlph be set, OAlph be non empty set,
                O be Function of [: X, IAlph :], OAlph,
                I be Element of X;
   cluster Mealy-FSM (# X, T, O, I #) -> finite non empty;
-  coherence by GROUP_1:def 13,STRUCT_0:def 1;
 end;
 
 
@@ -277,32 +256,13 @@ registration let IAlph be set, OAlph be non empty set,
                O be Function of X, OAlph,
                I be Element of X;
   cluster Moore-FSM (# X, T, O, I #) -> finite non empty;
-  coherence by GROUP_1:def 13,STRUCT_0:def 1;
 end;
 
 
 registration let IAlph be set, OAlph be non empty set;
   cluster finite non empty Mealy-FSM over IAlph, OAlph;
-  existence
-  proof
-    consider X be finite non empty set,
-             T be Function of [: X, IAlph :], X,
-             O be Function of [: X, IAlph :], OAlph,
-             I be Element of X;
-    take Mealy-FSM (# X, T, O, I #);
-    thus thesis;
-  end;
 
   cluster finite non empty Moore-FSM over IAlph, OAlph;
-  existence
-  proof
-    consider X be finite non empty set,
-             T be Function of [: X, IAlph :], X,
-             O be Function of X, OAlph,
-             I be Element of X;
-    take Moore-FSM (# X, T, O, I #);
-    thus thesis;
-  end;
 end;
 
 
@@ -582,12 +542,6 @@ end;
 
 registration let IAlph, OAlph, tfsm;
  cluster the_reduction_of tfsm -> non empty finite;
- coherence
- proof
-     the carrier of the_reduction_of tfsm = final_states_partition tfsm
-     by Def18;
-   hence thesis by GROUP_1:def 13,STRUCT_0:def 1;
- end;
 end;
 
 
@@ -655,10 +609,6 @@ theorem :: FSM_1:63
 
 registration let IAlph, OAlph;
  cluster reduced finite (non empty Mealy-FSM over IAlph,OAlph);
- existence
- proof consider M being finite non empty Mealy-FSM over IAlph, OAlph;
-  take the_reduction_of M; thus thesis by Th63;
- end;
 end;
 
 
@@ -691,21 +641,6 @@ end;
 
 registration let IAlph, OAlph;
  cluster connected (finite non empty Mealy-FSM over IAlph,OAlph);
- existence proof
-  reconsider S = {1} as finite non empty set;
-  reconsider IS = 1 as Element of S by TARSKI:def 1;
-  set dF = [:S, IAlph:]; set Tr = dF --> 1;
-    dom Tr = dF & rng Tr c= S by FUNCOP_1:19;
-  then reconsider T = Tr as Function of dF, S by FUNCT_2:def 1,RELSET_1:11;
-  consider out being Element of OAlph;
-  reconsider OF = dF --> out as Function of [:S, IAlph:], OAlph;
-  reconsider M = Mealy-FSM(#S, T, OF, IS#) as
-    finite non empty Mealy-FSM over IAlph, OAlph;
-  take M; let q be State of M;
-A1: q = 1 by TARSKI:def 1;
-     the InitS of M, <*>IAlph-leads_to the InitS of M by Th17;
-   hence q is accessible by A1,Def21;
- end;
 end;
 
 
@@ -717,9 +652,6 @@ the_reduction_of Ctfsm is connected;
 
 registration let IAlph, OAlph;
  cluster connected reduced finite (non empty Mealy-FSM over IAlph,OAlph);
- existence proof consider cm being connected
-   finite (non empty Mealy-FSM over IAlph, OAlph);
-  take the_reduction_of cm; thus thesis by Th63,Th66;end;
 end;
 
 
@@ -733,16 +665,6 @@ end;
 
 registration let IAlph, OAlph, tfsm;
  cluster accessibleStates tfsm -> finite non empty;
- coherence proof set m = tfsm;
-  set AS = { q where q is State of m : q is accessible };
-    AS c= the carrier of m proof let x be set; assume x in AS;
-    then consider q being State of m such that
-A1:  x = q & q is accessible; thus x in the carrier of m by A1; end;
-then A2: AS is finite by FINSET_1:13;
-     the InitS of m,<*>IAlph-leads_to the InitS of m by Th17;
-   then the InitS of m is accessible by Def21; then the InitS of m in AS;
-  hence thesis by A2,Def23;
- end;
 end;
 
 
@@ -788,12 +710,6 @@ end;
 registration let IAlph be set, OAlph be non empty set;
            let tfsm1, tfsm2 be non empty finite Mealy-FSM over IAlph, OAlph;
  cluster tfsm1-Mealy_union tfsm2 -> non empty finite;
- coherence
- proof
-     the carrier of tfsm1-Mealy_union tfsm2 =
-      (the carrier of tfsm1) \/ (the carrier of tfsm2) by Def24;
-   hence thesis by GROUP_1:def 13,STRUCT_0:def 1;
- end;
 end;
 
 

@@ -35,35 +35,11 @@ theorem :: SPRECT_1:1
 
 registration
  cluster non constant -> non trivial Function;
- coherence
-  proof let f be Function;
-   assume f is non constant;
-    then consider n1,n2 being set such that
-A1:  n1 in dom f & n2 in dom f and
-A2:  f.n1 <> f.n2 by SEQM_3:def 5;
-      [n1,f.n1] in f & [n2,f.n2] in f by A1,FUNCT_1:8;
-    then reconsider f as non empty Function;
-      f is non trivial
-     proof
-      reconsider x = [n1,f.n1], y = [n2,f.n2] as Element of f by A1,FUNCT_1:8;
-      take x,y;
-      thus x <> y by A2,ZFMISC_1:33;
-     end;
-   hence thesis;
-  end;
 end;
 
 
 registration
  cluster trivial -> constant Function;
- coherence
-  proof let f be Function such that
-A1: f is trivial;
-   assume f is not constant;
-    then reconsider f as non constant Function;
-      f is not trivial;
-   hence contradiction by A1;
-  end;
 end;
 
 
@@ -72,41 +48,11 @@ theorem :: SPRECT_1:2
 
 registration let f be constant Function;
  cluster rng f -> trivial;
- coherence
-  proof
-    per cases;
-    suppose f is empty;
-     then reconsider g = f as empty Function;
-      rng g is empty;
-   hence rng f is trivial;
-    end;
-    suppose f <> {};
-    then dom f <> {} by RELAT_1:64;
-    then consider x being set such that
-A1:   x in dom f by XBOOLE_0:def 1;
-      for y being set holds
-      y in {f.x} iff ex z being set st z in dom f & y = f.z
-    proof let y be set;
-      hereby assume
-A2:      y in {f.x};
-       take x;
-       thus x in dom f & y = f.x by A1,A2,TARSKI:def 1;
-      end;
-     given z being set such that
-A3:   z in dom f and
-A4:   y = f.z;
-        y = f.x by A1,A3,A4,SEQM_3:def 5;
-     hence y in {f.x} by TARSKI:def 1;
-    end;
-   hence rng f is trivial by FUNCT_1:def 5;
-  end;
-  end;
 end;
 
 
 registration
  cluster non empty constant FinSequence;
- existence proof take <* 0 *>; thus thesis; end;
 end;
 
 
@@ -164,58 +110,11 @@ theorem :: SPRECT_1:10
 
 registration let n be Nat; let f be non trivial FinSequence of TOP-REAL n;
  cluster L~f -> non empty;
- coherence
-  proof
-      len f <> 0 & len f <> 1 by SPPOL_1:2;
-   hence L~f is non empty by TOPREAL1:28;
-  end;
 end;
 
 
 registration let f be FinSequence of TOP-REAL 2;
  cluster L~f -> compact;
- coherence
-  proof
-    defpred X[Nat] means for f being FinSequence of TOP-REAL 2 st len f = $1
-       holds L~f is compact;
-A1: X[0]
-   proof let f be FinSequence of TOP-REAL 2;
-     assume len f = 0;
-      then L~f ={}TOP-REAL 2 by TOPREAL1:28;
-     hence L~f is compact by COMPTS_1:9;
-    end;
-A2: for m being Nat st X[m] holds X[m+1]
-    proof let m be Nat;
-     assume
-A3:    for f being FinSequence of TOP-REAL 2 st len f = m
-       holds L~f is compact;
-     let f be FinSequence of TOP-REAL 2;
-     assume
-A4:   len f = m+1;
-      then consider q being FinSequence of TOP-REAL 2,
-                   x being Point of TOP-REAL 2 such that
-A5:     f=q^<*x*> by FINSEQ_2:22;
-        len f = len q + len<*x*> by A5,FINSEQ_1:35
-           .= len q + 1 by FINSEQ_1:56;
-      then len q = m by A4,XCMPLX_1:2;
-      then A6:     L~q is compact by A3;
-     per cases;
-     suppose q is empty;
-      then L~f = L~<*x*> by A5,FINSEQ_1:47
-              .= {}TOP-REAL 2 by SPPOL_2:12;
-     hence L~f is compact by COMPTS_1:9;
-     end;
-     suppose q is non empty;
-      then L~f = L~q \/ LSeg(q/.len q,<*x*>/.1) \/ L~<*x*> by A5,SPPOL_2:23
-              .= L~q \/ LSeg(q/.len q,<*x*>/.1) \/ {} by SPPOL_2:12
-              .= L~q \/ LSeg(q/.len q,<*x*>/.1);
-     hence L~f is compact by A6,COMPTS_1:19;
-    end;
-    end;
-A7:  for m being Nat holds X[m] from NAT_1:sch 1(A1,A2);
-      len f = len f;
-   hence L~f is compact by A7;
-  end;
 end;
 
 
@@ -229,36 +128,11 @@ theorem :: SPRECT_1:12
 
 registration
  cluster R^2-unit_square -> special_polygonal non horizontal non vertical;
- coherence
-  proof set Sq = R^2-unit_square;
-   thus Sq is special_polygonal by SPPOL_2:61;
-     Sq = ( LSeg(|[0,0]|,|[0,1]|) \/ LSeg(|[0,1]|,|[1,1]|) ) \/
-        ( LSeg(|[1,1]|,|[1,0]|) \/ LSeg(|[1,0]|,|[0,0]|) ) by SPPOL_2:58,60;
-   then A1:  LSeg(|[0,0]|,|[0,1]|) \/ LSeg(|[0,1]|,|[1,1]|) c= Sq by XBOOLE_1:7
-;
-      LSeg(|[0,0]|,|[0,1]|) c= LSeg(|[0,0]|,|[0,1]|) \/ LSeg(|[0,1]|,|[1,1]|)
-            by XBOOLE_1:7;
-    then A2:  LSeg(|[0,0]|,|[0,1]|) c= Sq by A1,XBOOLE_1:1;
-      |[0,0]|`2 = 0 & |[0,1]|`2 = 1 by EUCLID:56;
-    then LSeg(|[0,0]|,|[0,1]|) is not horizontal by SPPOL_1:36;
-   hence Sq is not horizontal by A2,Th11;
-      LSeg(|[0,1]|,|[1,1]|) c= LSeg(|[0,0]|,|[0,1]|) \/ LSeg(|[0,1]|,|[1,1]|)
-            by XBOOLE_1:7;
-    then A3:  LSeg(|[0,1]|,|[1,1]|) c= Sq by A1,XBOOLE_1:1;
-      |[0,1]|`1 = 0 & |[1,1]|`1 = 1 by EUCLID:56;
-    then LSeg(|[0,1]|,|[1,1]|) is not vertical by SPPOL_1:37;
-   hence Sq is not vertical by A3,Th12;
-  end;
 end;
 
 
 registration
  cluster non vertical non horizontal non empty compact Subset of TOP-REAL 2;
- existence
-  proof
-   take R^2-unit_square;
-   thus thesis by SPPOL_2:63;
-  end;
 end;
 
 
@@ -390,433 +264,17 @@ theorem :: SPRECT_1:43
 
 registration let D be non vertical non empty compact Subset of TOP-REAL 2;
  cluster SpStSeq D -> non constant;
-  coherence
-   proof
-A1:    SpStSeq D = <*NW-corner D,NE-corner D,SE-corner D*>^
-      <*SW-corner D,NW-corner D*> by Def1;
-    assume SpStSeq D is constant;
-     then A2:    <*NW-corner D,NE-corner D,SE-corner D*> is constant by A1,Th3;
-        |[W-bound D, N-bound D]| = NW-corner D by PSCOMP_1:def 35
-        .= NE-corner D by A2,Th5
-        .= |[E-bound D, N-bound D]| by PSCOMP_1:def 36;
-     then W-bound D = E-bound D by SPPOL_2:1;
-    hence contradiction by Th17;
-   end;
 end;
 
 
 registration let D be non horizontal non empty compact Subset of TOP-REAL 2;
  cluster SpStSeq D -> non constant;
-  coherence
-   proof
-A1:    SpStSeq D = <*NW-corner D,NE-corner D,SE-corner D*>^
-      <*SW-corner D,NW-corner D*> by Def1;
-    assume SpStSeq D is constant;
-     then A2:    <*SW-corner D,NW-corner D*> is constant by A1,Th3;
-        |[W-bound D, N-bound D]| = NW-corner D by PSCOMP_1:def 35
-        .= SW-corner D by A2,Th4
-        .= |[W-bound D, S-bound D]| by PSCOMP_1:def 34;
-     then N-bound D = S-bound D by SPPOL_2:1;
-    hence contradiction by Th18;
-   end;
 end;
 
 
 registration let D be non vertical non horizontal non empty compact
                     Subset of TOP-REAL 2;
  cluster SpStSeq D -> special unfolded circular s.c.c. standard;
-  coherence
-   proof
-   set f1 = <*NW-corner D,NE-corner D,SE-corner D*>,
-       f2 = <*SW-corner D,NW-corner D*>;
-A1:len f1 = 3 & len f2 = 2 by FINSEQ_1:61,62;
-    then A2: len(f1^f2) = 3+2 by FINSEQ_1:35;
-    set f = SpStSeq D;
-A3: f = f1^f2 by Def1;
-A4: NW-corner D = |[W-bound D,N-bound D]| by PSCOMP_1:def 35;
-A5: NE-corner D = |[E-bound D,N-bound D]| by PSCOMP_1:def 36;
-A6: SE-corner D = |[E-bound D,S-bound D]| by PSCOMP_1:def 37;
-A7: SW-corner D = |[W-bound D,S-bound D]| by PSCOMP_1:def 34;
-      1 in dom f1 by A1,FINSEQ_3:27;
-then A8: f/.1 = f1/.1 by A3,GROUP_5:95 .= NW-corner D by FINSEQ_4:27;
-      2 in dom f1 by A1,FINSEQ_3:27;
-then A9: f/.2 = f1/.2 by A3,GROUP_5:95 .= NE-corner D by FINSEQ_4:27;
-      3 in dom f1 by A1,FINSEQ_3:27;
-then A10: f/.3 = f1/.3 by A3,GROUP_5:95 .= SE-corner D by FINSEQ_4:27;
-      1 in dom f2 by A1,FINSEQ_3:27;
-then A11: f/.(3+1) = f2/.1 by A1,A3,GROUP_5:96 .= SW-corner D by FINSEQ_4:26;
-      2 in dom f2 by A1,FINSEQ_3:27;
-then A12: f/.(3+2) = f2/.2 by A1,A3,GROUP_5:96 .= NW-corner D by FINSEQ_4:26;
-       1+1 = 2;
-then A13: LSeg(f,1) = LSeg(NW-corner D,NE-corner D) by A2,A3,A8,A9,TOPREAL1:def
-5;
-       2+1 = 3;
-then A14: LSeg(f,2) = LSeg(NE-corner D,SE-corner D) by A2,A3,A9,A10,TOPREAL1:
-def 5;
-A15: LSeg(f,3) = LSeg(SE-corner D,SW-corner D) by A2,A3,A10,A11,TOPREAL1:def 5;
-       4+1 = 5;
-then A16: LSeg(f,4) = LSeg(SW-corner D,NW-corner D) by A2,A3,A11,A12,TOPREAL1:
-def 5;
- thus f is special
-    proof let i;
-    assume 1 <= i;
-     then 1+1 <= i+1 by AXIOMS:24;
-     then A17:   1 < i+1 & 0 < i+1 by AXIOMS:22;
-    assume i+1 <= len f;
-      then A18:    i+1 = 1+1 or i+1 = 2+1 or i+1 = 3+1 or i+1 = 4+1
-          by A2,A3,A17,CQC_THE1:6;
-     per cases by A18,XCMPLX_1:2;
-      suppose
-A19:      i = 1;
-          (f/.1)`2 = N-bound D by A4,A8,EUCLID:56
-                .= (f/.(1+1))`2 by A5,A9,EUCLID:56;
-       hence thesis by A19;
-      end;
-      suppose
-A20:     i = 2;
-         (f/.2)`1 = E-bound D by A5,A9,EUCLID:56
-               .= (f/.(2+1))`1 by A6,A10,EUCLID:56;
-       hence thesis by A20;
-      end;
-      suppose
-A21:     i = 3;
-         (f/.3)`2 = S-bound D by A6,A10,EUCLID:56
-               .= (f/.(3+1))`2 by A7,A11,EUCLID:56;
-       hence thesis by A21;
-      end;
-      suppose
-A22:     i = 4;
-         (f/.4)`1 = W-bound D by A7,A11,EUCLID:56
-               .= (f/.(4+1))`1 by A4,A12,EUCLID:56;
-       hence thesis by A22;
-    end;
-    end;
- thus f is unfolded
-    proof let i;
-     assume 1 <= i;
-      then 1+2 <= i+2 by AXIOMS:24;
-      then A23:   2 < i+2 & 1 < i+2 & 0 < i+2 by AXIOMS:22;
-     assume i + 2 <= len f;
-      then A24:   i+2 = 1+2 or i+2 = 2+2 or i+2 = 3+2 by A2,A3,A23,CQC_THE1:6;
-      per cases by A24,XCMPLX_1:2;
-     suppose i = 1;
-      hence LSeg(f,i) /\ LSeg(f,i+1) = {f/.(i+1)} by A9,A13,A14,Th30;
-     end;
-     suppose i = 2;
-      hence LSeg(f,i) /\ LSeg(f,i+1) = {f/.(i+1)} by A10,A14,A15,Th31;
-     end;
-     suppose i = 3;
-      hence LSeg(f,i) /\ LSeg(f,i+1) = {f/.(i+1)} by A11,A15,A16,Th32;
-    end;
-    end;
-      thus f is circular by A2,A3,A8,A12,FINSEQ_6:def 1;
- thus f is s.c.c.
-    proof let i,j;
-     assume that
-A25:  i+1 < j and
-A26:  (i > 1 & j < len f or j+1 < len f);
-A27:   i+1 >= 1 by NAT_1:29;
-     then A28:   i+1 >= 0 by AXIOMS:22;
-     A29:   j+1 = 0+1 or j+1 = 1+1 or j+1 = 2+1 or j+1 = 3+1 or j+1 = 4+1
-                                                      by A2,A3,A26,CQC_THE1:6;
-A30:   i+1+1 = i+(1+1) by XCMPLX_1:1;
-     then A31:  i+2 <= j by A25,NAT_1:38;
-A32:   (i+2 = 2+2 implies i=2) &
-     (i+2 = 1+2 implies i=1) &
-     (i+2 = 0+2 implies i=0) by XCMPLX_1:2;
-A33: i+2 <> 0+1 by A30,XCMPLX_1:2;
-A34:   now per cases by A25,A27,A28,A29,XCMPLX_1:2;
-       case j = 2;
-        hence i = 0 by A25,A30,A32,CQC_THE1:3;
-       end;
-       case j = 3;
-        hence i = 0 or i = 1 by A25,A30,A32,CQC_THE1:4;
-       end;
-       case j = 4;
-        hence i = 0 or i = 2 by A2,A26,A31,A32,A33,Def1,CQC_THE1:5;
-      end;
-      end;
-     per cases by A34;
-     suppose i = 0;
-      then LSeg(f,i) = {} by TOPREAL1:def 5;
-     hence LSeg(f,i) /\ LSeg(f,j) = {};
-     end;
-     suppose i = 1 & j = 3;
-     then LSeg(f,i) misses LSeg(f,j) by A13,A15,Th36;
-     hence LSeg(f,i) /\ LSeg(f,j) = {} by XBOOLE_0:def 7;
-     end;
-     suppose i = 2 & j = 4;
-     then LSeg(f,i) misses LSeg(f,j) by A14,A16,Th35;
-     hence LSeg(f,i) /\ LSeg(f,j) = {} by XBOOLE_0:def 7;
-    end;
-    end;
-    set Xf1 = <*W-bound D,E-bound D,E-bound D*>,
-        Xf2 = <*W-bound D,W-bound D*>;
-    reconsider Xf = Xf1^Xf2 as FinSequence of REAL;
-A35:len Xf1 = 3 & len Xf2 = 2 by FINSEQ_1:61,62;
-    then A36: len Xf = 3+2 by FINSEQ_1:35;
-      1 in dom Xf1 by A35,FINSEQ_3:27;
-then A37: Xf.1 = Xf1.1 by FINSEQ_1:def 7 .= W-bound D by FINSEQ_1:62;
-      2 in dom Xf1 by A35,FINSEQ_3:27;
-then A38: Xf.2 = Xf1.2 by FINSEQ_1:def 7 .= E-bound D by FINSEQ_1:62;
-      3 in dom Xf1 by A35,FINSEQ_3:27;
-then A39: Xf.3 = Xf1.3 by FINSEQ_1:def 7 .= E-bound D by FINSEQ_1:62;
-      1 in dom Xf2 by A35,FINSEQ_3:27;
-then A40: Xf.(3+1) = Xf2.1 by A35,FINSEQ_1:def 7 .= W-bound D by FINSEQ_1:61;
-      2 in dom Xf2 by A35,FINSEQ_3:27;
-then A41: Xf.(3+2) = Xf2.2 by A35,FINSEQ_1:def 7 .= W-bound D by FINSEQ_1:61;
-       now let n be Nat;
-      assume n in dom Xf;
-       then A42:    n <> 0 & n <= 5 by A36,FINSEQ_3:27;
-      per cases by A42,CQC_THE1:6;
-      suppose n = 1;
-      hence Xf.n = (f/.n)`1 by A8,A37,PSCOMP_1:74;
-      end;
-      suppose n = 2;
-      hence Xf.n = (f/.n)`1 by A9,A38,PSCOMP_1:76;
-      end;
-      suppose n = 3;
-      hence Xf.n = (f/.n)`1 by A10,A39,PSCOMP_1:78;
-      end;
-      suppose n = 4;
-      hence Xf.n = (f/.n)`1 by A11,A40,PSCOMP_1:72;
-      end;
-      suppose n = 5;
-      hence Xf.n = (f/.n)`1 by A12,A41,PSCOMP_1:74;
-     end;
-     end;
-     then A43:   Xf = X_axis f by A2,A3,A36,GOBOARD1:def 3;
-A44:    W-bound D < E-bound D by Th33;
-A45:    rng Xf1 = { W-bound D,E-bound D,E-bound D } by FINSEQ_2:148
-             .= { E-bound D,E-bound D,W-bound D } by ENUMSET1:102
-             .= { W-bound D,E-bound D } by ENUMSET1:70;
-        rng Xf2 = { W-bound D,W-bound D } by FINSEQ_2:147
-             .= { W-bound D } by ENUMSET1:69;
-then A46:   rng Xf = { W-bound D,E-bound D } \/ { W-bound D } by A45,FINSEQ_1:
-44
-            .= { W-bound D,W-bound D,E-bound D } by ENUMSET1:42
-            .= { W-bound D,E-bound D } by ENUMSET1:70;
-      then A47:   rng <*W-bound D,E-bound D*> = rng Xf by FINSEQ_2:147;
-A48:   len <*W-bound D,E-bound D*> = 2 by FINSEQ_1:61
-               .= card rng Xf by A44,A46,CARD_2:76;
-       <*W-bound D,E-bound D*> is increasing
-       proof let n,m be Nat;
-           len <*W-bound D,E-bound D*> = 2 by FINSEQ_1:61;
-then A49:       dom <*W-bound D,E-bound D*> = { 1,2 } by FINSEQ_1:4,def 3;
-        assume n in dom <*W-bound D,E-bound D*> &
-               m in dom <*W-bound D,E-bound D*>;
-         then A50:       (n = 1 or n = 2) & (m = 1 or m = 2) by A49,TARSKI:def
-2;
-        assume n < m;
-         then <*W-bound D,E-bound D*>.n = W-bound D &
-              <*W-bound D,E-bound D*>.m = E-bound D by A50,FINSEQ_1:61;
-        hence <*W-bound D,E-bound D*>.n < <*W-bound D,E-bound D*>.m by Th33;
-       end;
-     then A51: <*W-bound D,E-bound D*> = Incr X_axis f by A43,A47,A48,GOBOARD2:
-def 2;
-    set Yf1 = <*N-bound D,N-bound D,S-bound D*>,
-        Yf2 = <*S-bound D,N-bound D*>;
-A52:  S-bound D < N-bound D by Th34;
-    reconsider Yf = Yf1^Yf2 as FinSequence of REAL;
-A53:len Yf1 = 3 & len Yf2 = 2 by FINSEQ_1:61,62;
-    then A54: len Yf = 3+2 by FINSEQ_1:35;
-      1 in dom Yf1 by A53,FINSEQ_3:27;
-then A55: Yf.1 = Yf1.1 by FINSEQ_1:def 7 .= N-bound D by FINSEQ_1:62;
-      2 in dom Yf1 by A53,FINSEQ_3:27;
-then A56: Yf.2 = Yf1.2 by FINSEQ_1:def 7 .= N-bound D by FINSEQ_1:62;
-      3 in dom Yf1 by A53,FINSEQ_3:27;
-then A57: Yf.3 = Yf1.3 by FINSEQ_1:def 7 .= S-bound D by FINSEQ_1:62;
-      1 in dom Yf2 by A53,FINSEQ_3:27;
-then A58: Yf.(3+1) = Yf2.1 by A53,FINSEQ_1:def 7 .= S-bound D by FINSEQ_1:61;
-      2 in dom Yf2 by A53,FINSEQ_3:27;
-then A59: Yf.(3+2) = Yf2.2 by A53,FINSEQ_1:def 7 .= N-bound D by FINSEQ_1:61;
-       now let n be Nat;
-      assume n in dom Yf;
-       then A60:    n <> 0 & n <= 5 by A54,FINSEQ_3:27;
-      per cases by A60,CQC_THE1:6;
-      suppose n = 1;
-      hence Yf.n = (f/.n)`2 by A8,A55,PSCOMP_1:75;
-      end;
-      suppose n = 2;
-      hence Yf.n = (f/.n)`2 by A9,A56,PSCOMP_1:77;
-      end;
-      suppose n = 3;
-      hence Yf.n = (f/.n)`2 by A10,A57,PSCOMP_1:79;
-      end;
-      suppose n = 4;
-      hence Yf.n = (f/.n)`2 by A11,A58,PSCOMP_1:73;
-      end;
-      suppose n = 5;
-      hence Yf.n = (f/.n)`2 by A12,A59,PSCOMP_1:75;
-     end;
-     end;
-     then A61:   Yf = Y_axis f by A2,A3,A54,GOBOARD1:def 4;
-A62:    rng Yf1 = { N-bound D,N-bound D,S-bound D } by FINSEQ_2:148
-           .= { S-bound D,N-bound D } by ENUMSET1:70;
-        rng Yf2 = { S-bound D,N-bound D } by FINSEQ_2:147;
-then A63:   rng Yf = { S-bound D,N-bound D } \/ { S-bound D,N-bound D }
-                      by A62,FINSEQ_1:44
-            .= { S-bound D,N-bound D };
-      then A64:   rng <*S-bound D,N-bound D*> = rng Yf by FINSEQ_2:147;
-A65:   len <*S-bound D,N-bound D*> = 2 by FINSEQ_1:61
-              .= card rng Yf by A52,A63,CARD_2:76;
-       <*S-bound D,N-bound D*> is increasing
-       proof let n,m be Nat;
-           len <*S-bound D,N-bound D*> = 2 by FINSEQ_1:61;
-then A66:       dom <*S-bound D,N-bound D*> = { 1,2 } by FINSEQ_1:4,def 3;
-        assume n in dom <*S-bound D,N-bound D*> &
-               m in dom <*S-bound D,N-bound D*>;
-         then A67:       (n = 1 or n = 2) & (m = 1 or m = 2) by A66,TARSKI:def
-2;
-        assume n < m;
-         then <*S-bound D,N-bound D*>.n = S-bound D &
-              <*S-bound D,N-bound D*>.m = N-bound D
-            by A67,FINSEQ_1:61;
-        hence <*S-bound D,N-bound D*>.n < <*S-bound D,N-bound D*>.m by Th34;
-       end;
-     then A68:   <*S-bound D,N-bound D*> = Incr Y_axis f by A61,A64,A65,
-GOBOARD2:def 2;
-     set S = (|[W-bound D,S-bound D]|,|[W-bound D,N-bound D]|)
-           ][(|[E-bound D,S-bound D]|,|[E-bound D,N-bound D]|);
-A69:  len S = 2 by MATRIX_2:3 .= len Incr X_axis f by A51,FINSEQ_1:61;
-A70:  width S = 2 by MATRIX_2:3 .= len Incr Y_axis f by A68,FINSEQ_1:61;
-       for n,m being Nat st [n,m] in Indices S
-            holds S*(n,m) = |[(Incr X_axis f).n,(Incr Y_axis f).m]|
-      proof let n,m be Nat;
-       assume [n,m] in Indices S;
-        then [n,m] in [:{ 1,2 },{ 1,2 }:] by FINSEQ_1:4,MATRIX_2:3;
-        then A71:     [n,m] in {[1,1],[1,2],[2,1],[2,2]} by MCART_1:25;
-A72:    <*S-bound D,N-bound D*>.1 = S-bound D &
-       <*S-bound D,N-bound D*>.2 = N-bound D by FINSEQ_1:61;
-       per cases by A71,ENUMSET1:18;
-       suppose [n,m] = [1,1];
-        then A73:       n = 1 & m = 1 by ZFMISC_1:33;
-       hence S*(n,m) = |[W-bound D,S-bound D]| by MATRIX_2:6
-          .= |[(Incr X_axis f).n,(Incr Y_axis f).m]|
-          by A51,A68,A72,A73,FINSEQ_1:61;
-       end;
-       suppose [n,m] = [1,2];
-        then A74:       n = 1 & m = 2 by ZFMISC_1:33;
-       hence S*(n,m) = |[W-bound D,N-bound D]| by MATRIX_2:6
-          .= |[(Incr X_axis f).n,(Incr Y_axis f).m]|
-          by A51,A68,A72,A74,FINSEQ_1:61;
-       end;
-       suppose [n,m] = [2,1];
-        then A75:       n = 2 & m = 1 by ZFMISC_1:33;
-       hence S*(n,m) = |[E-bound D,S-bound D]| by MATRIX_2:6
-            .= |[(Incr X_axis f).n,(Incr Y_axis f).m]|
-            by A51,A68,A72,A75,FINSEQ_1:61;
-       end;
-       suppose [n,m] = [2,2];
-        then A76:       n = 2 & m = 2 by ZFMISC_1:33;
-       hence S*(n,m) = |[E-bound D,N-bound D]| by MATRIX_2:6
-            .= |[(Incr X_axis f).n,(Incr Y_axis f).m]|
-            by A51,A68,A72,A76,FINSEQ_1:61;
-      end;
-      end;
-      then A77:   S = GoB(Incr X_axis f, Incr Y_axis f) by A69,A70,GOBOARD2:def
-1
-        .= GoB f by GOBOARD2:def 3;
-A78: f/.1 = |[W-bound D,N-bound D]| by A8,PSCOMP_1:def 35
-           .= (GoB f)*(1,2) by A77,MATRIX_2:6;
-A79: f/.2 = |[E-bound D,N-bound D]| by A9,PSCOMP_1:def 36
-           .= (GoB f)*(2,2) by A77,MATRIX_2:6;
-A80: f/.3 = |[E-bound D,S-bound D]| by A10,PSCOMP_1:def 37
-           .= (GoB f)*(2,1) by A77,MATRIX_2:6;
-A81: f/.4 = |[W-bound D,S-bound D]| by A11,PSCOMP_1:def 34
-           .= (GoB f)*(1,1) by A77,MATRIX_2:6;
-  thus SpStSeq D is standard
-   proof
-   thus for k st k in dom f
-    ex i,j st [i,j] in Indices GoB f & f/.k = (GoB f)*(i,j)
-   proof let k;
-    assume
-A82:   k in dom f;
-     then A83:    k >= 1 & k <= 5 by A2,A3,FINSEQ_3:27;
-A84:    k <> 0 by A82,FINSEQ_3:27;
-    per cases by A83,A84,CQC_THE1:6;
-    suppose
-A85:    k = 1;
-     take 1,2;
-     thus [1,2] in Indices GoB f by A77,MATRIX_2:4;
-     thus f/.k = (GoB f)*(1,2) by A78,A85;
-    end;
-    suppose
-A86:    k = 2;
-     take 2,2;
-     thus [2,2] in Indices GoB f by A77,MATRIX_2:4;
-     thus f/.k = (GoB f)*(2,2) by A79,A86;
-    end;
-    suppose
-A87:    k = 3;
-     take 2,1;
-     thus [2,1] in Indices GoB f by A77,MATRIX_2:4;
-     thus f/.k = (GoB f)*(2,1) by A80,A87;
-    end;
-    suppose
-A88:    k = 4;
-     take 1,1;
-     thus [1,1] in Indices GoB f by A77,MATRIX_2:4;
-     thus f/.k = (GoB f)*(1,1) by A81,A88;
-    end;
-    suppose
-A89:    k = 5;
-     take 1,2;
-     thus [1,2] in Indices GoB f by A77,MATRIX_2:4;
-     thus f/.k = (GoB f)*(1,2) by A8,A12,A78,A89;
-   end;
-   end;
-
-   let n be Nat such that
-A90: n in dom f and
-A91: n+1 in dom f;
-   let m,k,i,j be Nat such that
-A92: [m,k] in Indices GoB f and
-A93: [i,j] in Indices GoB f and
-A94: f/.n = (GoB f)*(m,k) and
-A95: f/.(n+1) = (GoB f)*(i,j);
-   A96:  n <> 0 by A90,FINSEQ_3:27;
-      n+1 <= 4+1 by A2,A3,A91,FINSEQ_3:27;
-    then A97: n <= 4 by REAL_1:53;
-   per cases by A96,A97,CQC_THE1:5;
-   suppose
-A98:  n = 1;
-      [1,2] in Indices GoB f by A77,MATRIX_2:4;
-then A99:  m = 1 & k = 2 by A78,A92,A94,A98,GOBOARD1:21;
-      [2,2] in Indices GoB f by A77,MATRIX_2:4;
-then A100:  i = 1+1 & j = 2 by A79,A93,A95,A98,GOBOARD1:21;
-    then abs(m-i) = 1 by A99,GOBOARD1:1;
-   hence abs(m-i)+abs(k-j) = 1 by A99,A100,GOBOARD1:2;
-   end;
-   suppose
-A101:  n = 2;
-      [2,2] in Indices GoB f by A77,MATRIX_2:4;
-then A102:  m = 2 & k = 1+1 by A79,A92,A94,A101,GOBOARD1:21;
-      [2,1] in Indices GoB f by A77,MATRIX_2:4;
-then A103:  i = 2 & j = 1 by A80,A93,A95,A101,GOBOARD1:21;
-    then abs(k-j) = 1 by A102,GOBOARD1:1;
-   hence abs(m-i)+abs(k-j) = 1 by A102,A103,GOBOARD1:2;
-   end;
-   suppose
-A104:  n = 3;
-      [2,1] in Indices GoB f by A77,MATRIX_2:4;
-then A105:  m = 1+1 & k = 1 by A80,A92,A94,A104,GOBOARD1:21;
-      [1,1] in Indices GoB f by A77,MATRIX_2:4;
-then A106:  i = 1 & j = 1 by A81,A93,A95,A104,GOBOARD1:21;
-    then abs(m-i) = 1 by A105,GOBOARD1:1;
-   hence abs(m-i)+abs(k-j) = 1 by A105,A106,GOBOARD1:2;
-   end;
-   suppose
-A107:  n = 4;
-      [1,1] in Indices GoB f by A77,MATRIX_2:4;
-then A108:  m = 1 & k = 1 by A81,A92,A94,A107,GOBOARD1:21;
-      [1,2] in Indices GoB f by A77,MATRIX_2:4;
-then A109:  i = 1 & j = 1+1 by A8,A12,A78,A93,A95,A107,GOBOARD1:21;
-    then abs(k-j) = 1 by A108,GOBOARD1:1;
-   hence abs(m-i)+abs(k-j) = 1 by A108,A109,GOBOARD1:2;
-   end;
-   end;
-   end;
 end;
 
 
@@ -842,20 +300,6 @@ theorem :: SPRECT_1:47
 
 registration
  cluster non empty bounded_above bounded_below Subset of REAL;
-  existence
-  proof
-    reconsider A = {0} as Subset of REAL;
-   take A;
-   thus A is non empty;
-   thus A is bounded_above
-    proof take 0; let t be real number;
-     assume t in A;
-     hence thesis by TARSKI:def 1;
-    end;
-   take 0; let t be real number;
-   assume t in A;
-   hence thesis by TARSKI:def 1;
-  end;
 end;
 
 
@@ -893,40 +337,22 @@ theorem :: SPRECT_1:57
 
 registration let p,q;
  cluster LSeg(p,q) -> compact;
- coherence;
 end;
 
 
 registration
  cluster {}REAL -> bounded;
- coherence
-  proof
-   thus {}REAL is bounded_below proof take 0; thus thesis; end;
-   take 0; thus thesis;
-  end;
 end;
 
 
 registration let r1,r2;
  cluster [.r1,r2.] -> bounded;
- coherence
-  proof
-   thus [.r1,r2.] is bounded_below
-    proof
-     take r1;
-     thus thesis by TOPREAL5:1;
-    end;
-   take r2;
-   thus thesis by TOPREAL5:1;
-  end;
 end;
 
 
 registration
  cluster bounded -> bounded_below bounded_above Subset of REAL;
- coherence by SEQ_4:def 3;
  cluster bounded_below bounded_above -> bounded Subset of REAL;
- coherence by SEQ_4:def 3;
 end;
 
 
@@ -1037,13 +463,11 @@ end;
 
 registration let D;
  cluster SpStSeq D -> rectangular;
-  coherence by Def2;
 end;
 
 
 registration
  cluster rectangular FinSequence of TOP-REAL 2;
- existence proof consider D; take SpStSeq D, D; thus thesis; end;
 end;
 
 
@@ -1054,11 +478,6 @@ theorem :: SPRECT_1:90
 
 registration
  cluster rectangular -> non constant FinSequence of TOP-REAL 2;
- coherence
-  proof let f be FinSequence of TOP-REAL 2;
-   assume ex D st f = SpStSeq D;
-   hence f is not constant;
-  end;
 end;
 
 
@@ -1066,11 +485,6 @@ registration
  cluster rectangular ->
      standard special unfolded circular s.c.c.
        (non empty FinSequence of TOP-REAL 2);
- coherence
-  proof let f be non empty FinSequence of TOP-REAL 2;
-   assume ex D st f = SpStSeq D;
-   hence thesis;
-  end;
 end;
 
 
@@ -1095,14 +509,6 @@ theorem :: SPRECT_1:95
 
 registration let f be rectangular FinSequence of TOP-REAL 2;
  cluster L~f -> Jordan;
- coherence
-  proof
-    consider D such that
-A1:   f = SpStSeq D by Def2;
-A2:  L~f = [.W-bound D,E-bound D,S-bound D,N-bound D.] by A1,Th44;
-      W-bound D < E-bound D & S-bound D < N-bound D by Th33,Th34;
-   hence L~f is Jordan by A2,Th95;
-  end;
 end;
 
 
@@ -1122,23 +528,7 @@ theorem :: SPRECT_1:96
 
 registration let f be non constant standard special_circular_sequence;
  cluster LeftComp f -> non empty;
- coherence
-  proof
-      len f > 4 by GOBOARD7:36;
-    then 1+1 <= len f by AXIOMS:22;
-then A1:  Int left_cell(f,1) <> {} by GOBOARD9:18;
-      Int left_cell(f,1) c= LeftComp f by GOBOARD9:def 1;
-   hence thesis by A1,XBOOLE_1:3;
-  end;
  cluster RightComp f -> non empty;
- coherence
-  proof
-      len f > 4 by GOBOARD7:36;
-    then 1+1 <= len f by AXIOMS:22;
-then A2:  Int right_cell(f,1) <> {} by GOBOARD9:19;
-      Int right_cell(f,1) c= RightComp f by GOBOARD9:def 2;
-   hence thesis by A2,XBOOLE_1:3;
-  end;
 end;
 
 

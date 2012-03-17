@@ -30,7 +30,6 @@ begin :: Preliminaries
 
 registration let A be set;
   cluster RelStr (# A, id A #) -> discrete;
-  coherence by ORDERS_3:def 1;
 end;
 
 
@@ -46,11 +45,6 @@ end;
 
 registration let A be non trivial set;
   cluster RelStr (# A, Total A #) -> non diagonal;
-  coherence
-  proof
-    not Total A c= id A by Th1;
-    hence thesis by Def1;
-  end;
 end;
 
 
@@ -60,9 +54,7 @@ theorem :: ROUGHS_1:2
 
 registration
   cluster non discrete -> non trivial (reflexive RelStr);
-  coherence by Lm1;
   cluster reflexive trivial -> discrete RelStr;
-  coherence by Lm1;
 end;
 
 
@@ -73,20 +65,12 @@ theorem :: ROUGHS_1:3
 
 registration
   cluster discrete -> diagonal RelStr;
-  coherence by Lm2;
   cluster non diagonal -> non discrete RelStr;
-  coherence by Lm2;
 end;
 
 
 registration
   cluster non diagonal non empty RelStr;
-  existence
-  proof
-    consider A being non trivial set;
-    take RelStr (# A, Total A #);
-    thus thesis;
-  end;
 end;
 
 
@@ -106,83 +90,15 @@ theorem :: ROUGHS_1:6
 
 registration
   cluster empty -> disjoint_valued Function;
-  coherence
-  proof
-    let X be Function;
-    assume
-A1: X is empty;
-    X is disjoint_valued
-    proof
-      let x, y be set;
-      assume x <> y;
-      X.x = {} by FUNCT_1:def 4, A1, RELAT_1:60;
-      hence thesis by XBOOLE_1:65;
-    end;
-    hence thesis;
-  end;
 end;
 
 
 registration let A be set;
   cluster disjoint_valued FinSequence of A;
-  existence
-  proof
-    per cases;
-    suppose A is empty;
-    reconsider X = {} as empty FinSequence of A by FINSEQ_1:29;
-    X is disjoint_valued;
-    hence thesis;
-    end;
-    suppose
-A1: A is non empty;
-    consider a being Element of A;
-    reconsider X = 1 |-> a as FinSequence of A by A1, FINSEQ_2:77;
-    X is disjoint_valued
-    proof
-      let x, y be set;
-      assume
-A2:   x <> y;
-      per cases;
-      suppose x in dom X & y in dom X; then
-      x in Seg 1 & y in Seg 1 by FINSEQ_2:68; then
-      x = 1 & y = 1 by TARSKI:def 1, FINSEQ_1:4;
-      hence thesis by A2;
-      end;
-      suppose not x in dom X or not y in dom X; then
-      X.x = {} or X.y = {} by FUNCT_1:def 4;
-      hence thesis by XBOOLE_1:65;
-    end;
-    end;
-    hence thesis;
-  end;
-  end;
 end;
 
 registration let A be non empty set;
   cluster non empty disjoint_valued FinSequence of A;
-  existence
-  proof
-    consider a being Element of A;
-    reconsider X = 1 |-> a as FinSequence of A by FINSEQ_2:77;
-A1: X is non empty by Lm3, RELAT_1:60, FINSEQ_1:4;
-    X is disjoint_valued
-    proof
-      let x, y be set;
-      assume
-A2:   x <> y;
-      per cases;
-      suppose x in dom X & y in dom X; then
-      x in Seg 1 & y in Seg 1 by FINSEQ_2:68; then
-      x = 1 & y = 1 by TARSKI:def 1, FINSEQ_1:4;
-      hence thesis by A2;
-      end;
-      suppose not x in dom X or not y in dom X; then
-      X.x = {} or X.y = {} by FUNCT_1:def 4;
-      hence thesis by XBOOLE_1:65;
-    end;
-    end;
-    hence thesis by A1;
-  end;
 end;
 
 
@@ -201,7 +117,6 @@ end;
 
 registration let A be finite set; let R be Relation of A;
   cluster RelStr (# A, R #) -> finite;
-  coherence by GROUP_1:def 13;
 end;
 
 
@@ -224,46 +139,17 @@ end;
 
 registration
   cluster with_equivalence -> with_tolerance RelStr;
-  coherence
-  proof
-    let L be RelStr;
-    assume L is with_equivalence; then
-    the InternalRel of L is Equivalence_Relation of the carrier of L by Def2;
-    hence thesis by Def3;
-  end;
 end;
 
 
 registration let A be set;
   cluster RelStr (# A, id A #) -> with_equivalence;
-  coherence by Def2;
 end;
 
 
 registration
   cluster discrete finite with_equivalence non empty RelStr;
-  existence
-  proof
-    set E = RelStr (# {{}}, id {{}} #);
-    E is discrete;
-    hence thesis;
-  end;
   cluster non diagonal finite with_equivalence non empty RelStr;
-  existence
-  proof
-    set C = {0,1};
-    set R = Total C;
-    set E = RelStr (# C, R #);
-    reconsider E as non empty RelStr;
-A1: E is with_equivalence by Def2;
-    E is non diagonal
-    proof
-      C is non trivial by CHAIN_1:4; then
-      not the InternalRel of E c= id the carrier of E by Th1;
-      hence thesis by Def1;
-    end;
-    hence thesis by A1;
-  end;
 end;
 
 
@@ -275,13 +161,11 @@ end;
 
 registration let A be Tolerance_Space;
   cluster the InternalRel of A -> total reflexive symmetric;
-  coherence by Def3;
 end;
 
 
 registration let A be Approximation_Space;
   cluster the InternalRel of A -> transitive;
-  coherence by Def2;
 end;
 
 
@@ -414,34 +298,12 @@ theorem :: ROUGHS_1:36
 
 registration let A be Approximation_Space;
   cluster exact Subset of A;
-  existence
-  proof
-    take {}A;
-    LAp {}A = {} by Th18;
-    hence thesis by Th15;
-  end;
 end;
 
 
 registration let A be Approximation_Space; let X be Subset of A;
   cluster LAp X -> exact;
-  coherence
-  proof
-    set Y = LAp X;
-    UAp Y = LAp Y by Th34; then
-    UAp Y \ LAp Y = {} by XBOOLE_1:37; then
-    BndAp Y = {} by Def6;
-    hence thesis by Def7;
-  end;
   cluster UAp X -> exact;
-  coherence
-  proof
-    set Y = UAp X;
-    UAp Y = LAp Y by Th36; then
-    UAp Y \ LAp Y = {} by XBOOLE_1:37; then
-    BndAp Y = {} by Def6;
-    hence thesis by Def7;
-  end;
 end;
 
 
@@ -453,18 +315,6 @@ theorem :: ROUGHS_1:37
 
 registration let A be non diagonal Approximation_Space;
   cluster rough Subset of A;
-  existence
-  proof
-    consider x, y being Element of A such that
-A1: x <> y & [x,y] in the InternalRel of A by Th4;
-    set X = {x};
-A2: x in X by TARSKI:def 1;
-    X c= UAp X by Th13; then
-    y in UAp X by A1, A2, Th37; then
-    UAp X <> X by TARSKI:def 1, A1; then
-    X is not exact by Th16;
-    hence thesis;
-  end;
 end;
 
 
@@ -479,11 +329,6 @@ begin :: Membership Function
 
 registration let A be finite Tolerance_Space, x be Element of A;
   cluster card Class (the InternalRel of A, x) -> non empty;
-  coherence
-  proof
-    x in Class (the InternalRel of A, x) by EQREL_1:28;
-    hence thesis by CARD_2:59;
-  end;
 end;
 
 
@@ -527,7 +372,6 @@ theorem :: ROUGHS_1:43
 
 registration let A be discrete Approximation_Space;
   cluster -> exact Subset of A;
-  coherence by Th43;
 end;
 
 

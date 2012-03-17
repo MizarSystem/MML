@@ -58,7 +58,6 @@ end;
 
 registration
  cluster SCM+FSA -> non empty non void;
- coherence by Def1,AMI_1:def 3,STRUCT_0:def 1;
 end;
 
 
@@ -227,11 +226,6 @@ begin :: The Instruction Structure
 
 registration let I be Instruction of SCM+FSA;
  cluster InsCode I -> natural;
- coherence
-  proof
-     InsCode I in Segm 13 by Def1;
-   hence thesis by ORDINAL2:def 21;
-  end;
 end;
 
 
@@ -471,128 +465,6 @@ theorem :: SCMFSA_2:80
 registration
  cluster SCM+FSA ->
    realistic IC-Ins-separated data-oriented definite steady-programmed;
- coherence
-  proof
-   thus SCM+FSA is realistic
-    proof
-     thus the Instructions of SCM+FSA
-          <> the Instruction-Locations of SCM+FSA by Def1,SCMFSA_1:13;
-    end;
-   thus SCM+FSA is IC-Ins-separated
-    proof
-        ObjectKind IC SCM+FSA
-        = the Instruction-Locations of SCM+FSA by Def1,Th7,AMI_1:def 6,SCMFSA_1
-:9;
-     hence thesis by AMI_1:def 11;
-    end;
-   thus SCM+FSA is data-oriented
-    proof
-     set A = SCM+FSA;
-     let x be set;
-     assume A1: x in (the Object-Kind of A)"{ the Instructions of A };
-     then reconsider x as Integer by Def1,INT_1:12;
-       SCM+FSA-OK.x in { SCM+FSA-Instr } by A1,Def1,FUNCT_2:46;
-     then SCM+FSA-OK.x = SCM+FSA-Instr by TARSKI:def 1;
-     hence thesis by Def1,SCMFSA_1:16;
-    end;
-   thus SCM+FSA is definite
-    proof let l be Instruction-Location of SCM+FSA;
-      reconsider L = l as Element of SCM+FSA-Instr-Loc by Def1;
-     thus ObjectKind l = SCM+FSA-OK.L by Def1,AMI_1:def 6
-      .= the Instructions of SCM+FSA by Def1,SCMFSA_1:11;
-    end;
-   let s be State of SCM+FSA, i be Instruction of SCM+FSA,
-      l be Instruction-Location of SCM+FSA;
-     A2:    i in SCM-Instr \/ { [L,<*dB,fA,dA*>] : L in {9,10} }
-           or i in { [K,<*dC,fB*>] : K in {11,12} } by Def1,SCMFSA_1:def 4,
-XBOOLE_0:def 2;
-   reconsider I = i as Element of SCM+FSA-Instr by Def1;
-   reconsider S = s as Element of product SCM+FSA-OK by Def1;
-   reconsider l' = l as Element of SCM+FSA-Instr-Loc by Def1;
-A3: Exec(i,s) = SCM+FSA-Exec.I.S by Def1,AMI_1:def 7
-    .= SCM+FSA-Exec-Res(I,S) by SCMFSA_1:def 18;
-     per cases by A2,XBOOLE_0:def 2;
-     suppose i in SCM-Instr;
-      then reconsider I = i as Instruction of SCM by AMI_3:def 1;
-      reconsider S = s|NAT +* (SCM-Instr-Loc --> I) as State of SCM by Def1,
-AMI_3:def 1,SCMFSA_1:18;
-A4:   dom(s|SCM+FSA-Instr-Loc)=dom s /\ SCM+FSA-Instr-Loc by RELAT_1:90;
-       dom s = dom SCM+FSA-OK by Def1,CARD_3:18 .=
- {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc \/ SCM+FSA-Instr-Loc
-                        by FUNCT_2:def 1,SCMFSA_1:8;
-     then l in dom s by Def1,XBOOLE_0:def 2;
-then A5:   l in dom(s|SCM+FSA-Instr-Loc) by A4,Def1,XBOOLE_0:def 3;
-     thus Exec(i,s).l = (s +* Exec(I,S) +* s|SCM+FSA-Instr-Loc).l
-                       by Th75
-          .= (s|SCM+FSA-Instr-Loc).l by A5,FUNCT_4:14
-          .= s.l by A5,FUNCT_1:70;
-     end;
-     suppose i in { [J,<*dB,fA,dA*>] : J in {9,10} };
-      then consider J,dB,dA,fA such that
-A6:    i = [J,<*dB,fA,dA*>] and
-A7:    J in {9,10};
-        now per cases by A7,TARSKI:def 2;
-       suppose J = 9;
-        then I`1 = 9 by A6,MCART_1:7;
-        then InsCode I = 9 by SCMFSA_1:def 5;
-       then consider i being Integer, k such that
-          k = abs(S.(I int_addr2)) and
-          i = (S.(I coll_addr1))/.k and
-A8:     SCM+FSA-Exec-Res(I,S) =
-            SCM+FSA-Chg(SCM+FSA-Chg(S,I int_addr1,i),Next IC S)
-             by SCMFSA_1:def 17;
-       thus SCM+FSA-Exec-Res(I,S).l'
-           = SCM+FSA-Chg(S,I int_addr1,i).l' by A8,SCMFSA_1:23
-          .= S.l' by SCMFSA_1:28;
-       end;
-       suppose J = 10;
-        then I`1 = 10 by A6,MCART_1:7;
-        then InsCode I = 10 by SCMFSA_1:def 5;
-       then consider f being FinSequence of INT,k such that
-          k = abs(S.(I int_addr2)) and
-          f = S.(I coll_addr1)+*(k,S.(I int_addr1)) and
-A9:     SCM+FSA-Exec-Res(I,S) =
-          SCM+FSA-Chg(SCM+FSA-Chg(S,I coll_addr1,f),Next IC S)
-           by SCMFSA_1:def 17;
-       thus SCM+FSA-Exec-Res(I,S).l'
-           = SCM+FSA-Chg(S,I coll_addr1,f).l' by A9,SCMFSA_1:23
-          .= S.l' by SCMFSA_1:32;
-      end;
-      end;
-     hence Exec(i,s).l = s.l by A3;
-     end;
-     suppose i in { [K,<*dC,fB*>] : K in {11,12} };
-      then consider J,dC,fB such that
-A10:    i = [J,<*dC,fB*>] and
-A11:    J in{11,12};
-        now per cases by A11,TARSKI:def 2;
-       suppose J = 11;
-        then I`1 = 11 by A10,MCART_1:7;
-        then InsCode I = 11 by SCMFSA_1:def 5;
-       hence SCM+FSA-Exec-Res(I,S).l'
-           = SCM+FSA-Chg(SCM+FSA-Chg(S,I int_addr3,len(S.(I coll_addr2))),
-                         Next IC S).l' by SCMFSA_1:def 17
-          .= SCM+FSA-Chg(S,I int_addr3,len(S.(I coll_addr2))).l'
-                                  by SCMFSA_1:23
-          .= S.l' by SCMFSA_1:28;
-       end;
-       suppose J = 12;
-        then I`1 = 12 by A10,MCART_1:7;
-        then InsCode I = 12 by SCMFSA_1:def 5;
-        then consider f being FinSequence of INT,k such that
-           k = abs(S.(I int_addr3)) and
-           f = k |-> 0 and
-A12:      SCM+FSA-Exec-Res(I,S) =
-           SCM+FSA-Chg(SCM+FSA-Chg(S,I coll_addr2,f),Next IC S)
-                 by SCMFSA_1:def 17;
-       thus SCM+FSA-Exec-Res(I,S).l'
-           = SCM+FSA-Chg(S,I coll_addr2,f).l' by A12,SCMFSA_1:23
-          .= S.l' by SCMFSA_1:32;
-      end;
-      end;
-     hence Exec(i,s).l = s.l by A3;
-  end;
-  end;
 end;
 
 
@@ -790,56 +662,6 @@ theorem :: SCMFSA_2:120
 
 registration
  cluster SCM+FSA -> halting;
- coherence
- proof
-    reconsider I = [0,{}] as Instruction of SCM+FSA by Def1,SCMFSA_1:4;
-    take I;
-    thus I is halting by Th103,AMI_3:71;
-    let W be Instruction of SCM+FSA such that
-A1:   W is halting;
-    assume
-A2:   I <> W;
-    per cases by Th120;
-    suppose W = [0,{}];
-    hence thesis by A2;
-    end;
-    suppose ex a,b st W = a:=b;
-    hence thesis by A1,Th105;
-    end;
-    suppose ex a,b st W = AddTo(a,b);
-    hence thesis by A1,Th106;
-    end;
-    suppose ex a,b st W = SubFrom(a,b);
-    hence thesis by A1,Th107;
-    end;
-    suppose ex a,b st W = MultBy(a,b);
-    hence thesis by A1,Th108;
-    end;
-    suppose ex a,b st W = Divide(a,b);
-    hence thesis by A1,Th109;
-    end;
-    suppose ex la st W = goto la;
-    hence thesis by A1,Th110;
-    end;
-    suppose ex lb,da st W = da=0_goto lb;
-    hence thesis by A1,Th111;
-    end;
-    suppose ex lb,da st W = da>0_goto lb;
-    hence thesis by A1,Th112;
-    end;
-    suppose ex b,a,fa st W = a:=(fa,b);
-    hence thesis by A1,Th113;
-    end;
-    suppose ex a,b,fa st W = (fa,a):=b;
-    hence thesis by A1,Th114;
-    end;
-    suppose ex a,f st W = a:=len f;
-    hence thesis by A1,Th115;
-    end;
-    suppose ex a,f st W = f:=<0,...,0>a;
-    hence thesis by A1,Th116;
-  end;
-  end;
 end;
 
 

@@ -31,29 +31,12 @@ scheme :: MSUALG_1:sch 1
  MSSEx { I() -> set, P[set,set] }:
  ex f being ManySortedSet of I() st
   for i st i in I() holds P[i,f.i]
-  provided  for i st i in I() ex j st P[i,j]
-proof
-   defpred Q[set,set] means P[$1,$2];
-   A2: for i st i in I() ex j st Q[i,j] by A1;
-   consider f being Function such that
-A3: dom f = I() and
-A4: for i st i in I() holds Q[i,f.i] from ZFREFLE1:sch 1(A2);
-   reconsider f as ManySortedSet of I() by A3,PBOOLE:def 3;
-  take f; thus thesis by A4;
- end;
+  provided  for i st i in I() ex j st P[i,j];
 
 scheme :: MSUALG_1:sch 2
  MSSLambda { I() -> set, F(set) -> set }:
  ex f being ManySortedSet of I() st
-  for i st i in I() holds f.i = F(i)
-proof
-   deffunc G(set)=F($1);
-   consider f being Function such that
-A1:  dom f = I() and
-A2:  for i st i in I() holds f.i = G(i) from FUNCT_1:sch 3;
-   reconsider f as ManySortedSet of I() by A1,PBOOLE:def 3;
-  take f; thus thesis by A2;
- end;
+  for i st i in I() holds f.i = F(i);
 
 definition let I be set; let M be ManySortedSet of I;
  mode Component of M is Element of rng M;
@@ -88,13 +71,6 @@ end;
 registration let I;
  let A be ManySortedSet of I, B be ManySortedSet of I;
  cluster ->Function-yielding ManySortedFunction of A,B;
-  coherence
-   proof let f be ManySortedFunction of A,B;
-    let i;
-     assume i in dom f;
-      then i in I by PBOOLE:def 3;
-     hence f.i is Function by Def2;
-   end;
 end;
 
 
@@ -107,20 +83,6 @@ end;
 
 registration let I be set; let M be non-empty ManySortedSet of I;
  cluster M# -> non-empty;
- coherence
-  proof
-      M# is non-empty
-    proof let i;
-     assume
-      i in I*;
-      then reconsider f = i as Element of I*;
-        not {} in rng M by Th1;
-      then not {} in rng(M*f) by FUNCT_1:25;
-      then product(M*f) <> {} by CARD_3:37;
-     hence M#.i is non empty by Def3;
-    end;
-   hence thesis;
-  end;
 end;
 
 
@@ -182,23 +144,7 @@ end;
 
 registration
  cluster void strict non empty ManySortedSign;
- existence
-  proof
-      {} in {{}}* by FINSEQ_1:66;
-    then reconsider f = {}-->{} as Function of {},{{}}* by FUNCOP_1:58;
-    reconsider g = {}-->{} as Function of {},{{}};
-   take ManySortedSign(#{{}},{},f,g#);
-   thus thesis by Def5,STRUCT_0:def 1;
-  end;
  cluster non void strict non empty ManySortedSign;
-  existence
-  proof
-      {} in {{}}* by FINSEQ_1:66;
-    then reconsider f = {{}}-->{} as Function of {{}},{{}}* by FUNCOP_1:58;
-    reconsider g = {{}}-->{} as Function of {{}},{{}};
-   take ManySortedSign(#{{}},{{}},f,g#);
-   thus thesis by Def5,STRUCT_0:def 1;
-  end;
 end;
 
 
@@ -245,57 +191,22 @@ end;
 
 registration let S;
  cluster strict non-empty MSAlgebra over S;
- existence
-  proof
-     dom((the carrier of S) --> {0}) = the carrier of S by FUNCOP_1:19;
-   then reconsider s = (the carrier of S) --> {0}
-            as ManySortedSet of the carrier of S by PBOOLE:def 3;
-   consider o being ManySortedFunction of
-       s# * the Arity of S, s * the ResultSort of S;
-   take MSAlgebra(#s,o#);
-   thus MSAlgebra(#s,o#) is strict;
-   let i be set;
-   assume i in the carrier of S;
-   hence thesis by FUNCOP_1:13;
-  end;
 end;
 
 
 registration let S be 1-sorted;
   cluster strict non-empty many-sorted over S;
-  existence
-  proof
-     dom ((the carrier of S) --> {0}) = the carrier of S by FUNCOP_1:19;
-   then reconsider s = (the carrier of S) --> {0}
-            as ManySortedSet of the carrier of S by PBOOLE:def 3;
-   take many-sorted(#s#);
-   thus many-sorted (#s#) is strict;
-   let i be set;
-   assume i in the carrier of S;
-   hence thesis by FUNCOP_1:13;
-  end;
 end;
 
 
 registration let S be 1-sorted; let A be non-empty many-sorted over S;
  cluster the Sorts of A -> non-empty;
-  coherence by Def8;
 end;
 
 
 registration let S; let A be non-empty MSAlgebra over S;
  cluster -> non empty Component of the Sorts of A;
-  coherence
-   proof let C be Component of the Sorts of A;
-       ex i st i in the carrier of S & C = (the Sorts of A).i by Th2;
-    hence thesis by PBOOLE:def 16;
-   end;
  cluster -> non empty Component of (the Sorts of A)#;
-  coherence
-   proof let C be Component of (the Sorts of A)#;
-       ex i st i in (the carrier of S)* & C = (the Sorts of A)#.i by Th2;
-    hence thesis by PBOOLE:def 16;
-   end;
 end;
 
 
@@ -359,14 +270,6 @@ theorem :: MSUALG_1:10
 
 registration
  cluster segmental trivial non void strict non empty ManySortedSign;
- existence
-  proof consider A being Universal_Algebra;
-    reconsider f = (*-->0)*(signature A) as Function of dom signature A, {0}*
-             by Th7;
-      ManySortedSign(#{0},dom signature(A),f,dom signature(A)-->0#)
-     is segmental trivial non void strict non empty by Lm2;
-   hence thesis;
-  end;
 end;
 
 
@@ -383,10 +286,6 @@ end;
 
 registration let A be Universal_Algebra;
  cluster MSSign A -> non empty;
- coherence
-  proof
-   thus the carrier of MSSign A is non empty by Def13;
-  end;
 end;
 
 
@@ -415,11 +314,6 @@ end;
 
 registration let A be Universal_Algebra;
  cluster MSAlg A -> non-empty;
- coherence
-  proof
-      MSAlg A = MSAlgebra(#MSSorts A,MSCharact A#) by Def16;
-   hence the Sorts of MSAlg A is non-empty;
-  end;
 end;
 
 
@@ -436,11 +330,6 @@ end;
 registration let MS be trivial non empty ManySortedSign;
  let A be non-empty MSAlgebra over MS;
  cluster the_sort_of A -> non empty;
- coherence
-  proof
-      ex c being Component of the Sorts of A st the_sort_of A = c by Def17;
-   hence thesis;
-  end;
 end;
 
 

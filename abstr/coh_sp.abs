@@ -35,31 +35,6 @@ end;
 
 registration
   cluster subset-closed binary_complete non empty set;
- existence
-  proof
-   take X={{}};
-   thus for a,b st a in X & b c= a holds b in X
-     proof let a,b; assume
-      A1: a in X & b c= a;
-      then a = {} by TARSKI:def 1;
-      hence b in X by A1,XBOOLE_1:3;
-     end;
-    thus for A st A c= X &
-         (for a,b st a in A & b in A holds a \/ b in X) holds union A in X
-     proof let A such that
-      A2: A c= X & for a,b st a in A & b in A holds a \/ b in X;
-         now per cases by A2,ZFMISC_1:39;
-       suppose A = {};
-        hence union A in X by TARSKI:def 1,ZFMISC_1:2;
-       end;
-       suppose A = {{}}; then union A = {} by ZFMISC_1:31;
-        hence union A in X by TARSKI:def 1;
-       end;
-       end;
-      hence thesis;
-     end;
-    thus thesis;
-   end;
 end;
 
 
@@ -144,27 +119,11 @@ end;
 
 registration let X;
   cluster CSp(X) -> non empty;
-coherence
- proof
-  set F = { x where x is Element of bool bool X: x is Coherence_Space };
-  reconsider b = bool X as Element of bool bool X by ZFMISC_1:def 1;
-    b is Coherence_Space by Th2;
-  then b in F;
-  hence thesis by Def5;
- end;
 end;
 
 
 registration let X be set;
   cluster -> subset-closed binary_complete non empty Element of CSp(X);
-  coherence
-  proof let C be Element of CSp(X);
-     C in CSp(X);
-   then C in { x where x is Element of bool bool X : x is Coherence_Space }
-      by Def5; then consider x be Element of bool bool X such that
-   A1: C = x & x is Coherence_Space;
-   thus thesis by A1;
-  end;
 end;
 
 
@@ -185,26 +144,6 @@ end;
 
 registration let X;
   cluster FuncsC(X) -> non empty functional;
- coherence
-  proof set F = { Funcs(union T,union TT) where T is Element of CSp(X),
-             TT is Element of CSp(X): not contradiction };
-A1:  FuncsC X = union F by Def7;
-   reconsider A = bool X as Element of bool bool X by ZFMISC_1:def 1;
-     A is Coherence_Space by Th2;
-   then A in { x where x is Element of bool bool X: x is Coherence_Space};
-   then reconsider A as Element of CSp(X) by Def5;
-     id union A in Funcs(union A,union A) & Funcs(union A,union A) in F
-     by FUNCT_2:12;
-   then reconsider UF = union F as non empty set by TARSKI:def 4;
-      now let f be set;
-     assume f in UF;
-     then consider C being set such that
-     A2: f in C and
-     A3: C in F by TARSKI:def 4;
-       ex A,B be Element of CSp(X) st C = Funcs(union A,union B) by A3;
-     hence f is Function by A2,FUNCT_2:121;
-    end; hence thesis by A1,FRAENKEL:def 1;
-  end;
 end;
 
 
@@ -228,31 +167,6 @@ end;
 
 registration let X;
   cluster MapsC(X) -> non empty;
-  coherence
-   proof
-   set FV = { [[T,TT],f] where T is Element of CSp(X), TT is Element of CSp(X),
-                         f is Element of FuncsC(X) :
-       (union TT = {} implies union T = {}
-) & f is Function of union T,union TT &
-        for x,y st {x,y} in T holds {f.x,f.y} in TT};
-     now
-    reconsider A = bool X as Element of bool bool X by ZFMISC_1:def 1;
-      A is Coherence_Space by Th2;
-    then A in { xx where xx is Element of bool bool X: xx is Coherence_Space};
-    then reconsider A as Element of CSp(X) by Def5;
-    set f = id union A;
-    take m = [[A,A],f];
-    A1: union A = {} implies union A = {};
-    then reconsider f as Element of FuncsC(X) by Th17;
-       now let x,y; assume A2: {x,y} in A;
-      then x in union A & y in union A by Th16;
-      then f.x = x & f.y = y by FUNCT_1:35;
-      hence {f.x,f.y} in A by A2;
-     end;
-    hence m in FV by A1;
-   end;
-  hence thesis by Def8;
- end;
 end;
 
 
@@ -271,15 +185,6 @@ for f being Function of union C1,union C2 st (union C2={} implies union C1={}
 
 registration let X be set, l be Element of MapsC(X);
   cluster l`2 -> Function-like Relation-like;
-  coherence
-  proof
-   consider g be Element of FuncsC(X),
-            C1,C2 be Element of CSp(X) such that
-   A1: l = [[C1,C2],g] and (union C2 = {} implies union C1 = {}) and
-     g is Function of union C1,union C2 &
-   for x,y st {x,y} in C1 holds {g.x,g.y} in C2 by Th18;
-   thus thesis by A1,MCART_1:def 2;
-  end;
 end;
 
 
@@ -373,12 +278,6 @@ end;
 
 registration let X be set;
 cluster Toler(X) -> non empty;
-coherence
-proof
-  consider T being Tolerance of X;
-    T in Toler X by Def19;
-  hence thesis;
-end;
 end;
 
 
@@ -391,14 +290,6 @@ end;
 
 registration let X be set;
 cluster Toler_on_subsets(X) -> non empty;
- coherence
-  proof
-   set F = {Toler(Y) where Y is Element of bool X: not contradiction};
-A1:union F = Toler_on_subsets(X) by Def20;
-     {} c= X by XBOOLE_1:2;
-   then {} in Toler({}) & Toler({}) in F by Def19,TOLER_1:39;
-   hence thesis by A1,TARSKI:def 4;
-  end;
 end;
 
 
@@ -437,18 +328,6 @@ end;
 
 registration let X;
 cluster TOL(X) -> non empty;
- coherence
-  proof
-   set FV = { [t,Y] where t is Element of Toler_on_subsets(X),
-       Y is Element of bool X : t is Tolerance of Y};
-     now
-    reconsider e = {} as Element of Toler_on_subsets(X) by Th30;
-    reconsider o = {} as Element of bool X by XBOOLE_1:2;
-    take m = [e,o];
-    thus m in FV by TOLER_1:39;
-   end;
-   hence thesis by Def21;
-  end;
 end;
 
 
@@ -485,24 +364,6 @@ end;
 
 registration let X;
 cluster FuncsT(X) -> non empty functional;
- coherence
-  proof set F = { Funcs(T`2,TT`2) where T is Element of TOL(X),
-             TT is Element of TOL(X): not contradiction };
-A1: FuncsT X = union F by Def22;
-   consider A be Element of bool X;
-   reconsider T = [Total A,A] as Element of TOL(X) by Th37;
-     T`2 = A by MCART_1:def 2;
-   then id A in Funcs(T`2,T`2) & Funcs(T`2,T`2) in F by FUNCT_2:12;
-   then reconsider UF = union F as non empty set by TARSKI:def 4;
-      now let f be set;
-     assume f in UF;
-     then consider C being set such that
-     A2:  f in C and
-     A3:  C in F by TARSKI:def 4;
-       ex A,B be Element of TOL(X) st C = Funcs(A`2,B`2) by A3;
-     hence f is Function by A2,FUNCT_2:121;
-    end; hence thesis by A1,FRAENKEL:def 1;
-  end;
 end;
 
 
@@ -524,28 +385,6 @@ end;
 
 registration let X;
 cluster MapsT(X) -> non empty;
-  coherence
-   proof
-   set FV = { [[T,TT],f] where T is Element of TOL(X), TT is Element of TOL(X),
-                         f is Element of FuncsT(X) :
-        (TT`2 = {} implies T`2 = {}) & f is Function of T`2,TT`2 &
-        for x,y st [x,y] in T`1 holds [f.x,f.y] in TT`1};
-     now consider A  be Element of bool X;
-    set a = [Total A,A],
-        f = id a`2;
-    take m = [[a,a],f];
-    reconsider a as Element of TOL(X) by Th37;
-    A1: a`2 = {} implies a`2 = {};
-    then reconsider f as Element of FuncsT(X) by Th40;
-       now let x,y; assume A2: [x,y] in a`1;
-      then x in a`2 & y in a`2 by ZFMISC_1:106;
-      then f.x = x & f.y = y by FUNCT_1:35;
-      hence [f.x,f.y] in a`1 by A2;
-     end;
-    hence m in FV by A1;
-   end;
-   hence thesis by Def23;
-  end;
 end;
 
 
@@ -563,15 +402,6 @@ for f being Function of T1`2,T2`2 st (T2`2={} implies T1`2={}) &
 
 registration let X be set,m be Element of MapsT(X);
   cluster m`2 -> Function-like Relation-like;
- coherence
-  proof
-   consider f be Element of FuncsT(X),
-            T1,T2 be Element of TOL(X) such that
-   A1: m = [[T1,T2],f] and (T2`2 = {} implies T1`2 = {}) and
-      f is Function of T1`2,T2`2 &
-    for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1 by Th41;
-   thus thesis by A1,MCART_1:def 2;
-  end;
 end;
 
 

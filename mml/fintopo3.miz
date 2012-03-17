@@ -1,0 +1,1058 @@
+:: Some Set Series in Finite Topological Spaces. {F}undamental Concepts 
+:: for Image Processing
+::  by Masami Tanaka and Yatsuka Nakamura
+:: 
+:: Received January 26, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, FUNCT_1, RELAT_1, SUBSET_1, PRE_TOPC, FIN_TOPO, FINTOPO3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ARYTM_0, NUMBERS,
+      NAT_1, RELSET_1, RELAT_1, FUNCT_1, FUNCT_2, FIN_TOPO, PRE_TOPC, BINOP_1,
+      STRUCT_0;
+ constructors NAT_1, FINSEQ_4, FIN_TOPO, PRE_TOPC, PARTFUN1, BINOP_1, BHSP_2,
+      BHSP_3, ARYTM_0, ORDINAL2, NUMBERS;
+ clusters SUBSET_1, INT_1, RELSET_1, STRUCT_0, XREAL_0, FINSEQ_1, XBOOLE_0,
+      FIN_TOPO, ARYTM_3, RLVECT_1, SEQ_1, ORDINAL2, NUMBERS, NAT_1;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI, STRUCT_0, XBOOLE_0;
+ theorems TARSKI, SUBSET_1, FUNCT_1, FUNCT_2, XBOOLE_0, XBOOLE_1, FIN_TOPO,
+      FINTOPO2;
+ schemes RECDEF_1, NAT_1, COMPLSP1;
+
+begin
+
+ reserve T for non empty FT_Space_Str,
+         A,B for Subset of T,
+         x,x2,y,y2,z for Element of T;
+
+:: The following is definition of "deflation of a set A"
+:: (A^f is an inflation of A).
+definition let T;
+           let A be Subset of T;
+  func A^d -> Subset of T equals :FT3000:
+  {x where x is Element of T :
+    for y being Element of T st y in A` holds not x in U_FT y};
+  coherence
+    proof
+      defpred P[Element of T] means
+        for y st y in A` holds not $1 in U_FT y;
+      deffunc F(Element of T) = $1;
+      {F(x):P[x]} is Subset of T from COMPLSP1:sch 3;
+      hence thesis;
+    end;
+end;
+
+theorem Th18:
+  T is filled implies A c= A^f
+ proof assume A0: T is filled;
+   let x be set;
+    assume A1:x in A;
+    then reconsider y=x as Element of T;
+    y in U_FT y by A0,FIN_TOPO:def 3;
+  hence thesis by A1,FIN_TOPO:16;
+ end;
+
+theorem FT3100:
+  x in A^d iff for y st y in A` holds not x in U_FT y
+proof
+  thus x in A^d implies for y st y in A` holds not x in U_FT y
+    proof
+      assume x in A^d;
+      then x in {y:for z st z in A` holds not y in U_FT z} by FT3000;
+      then ex y st y = x & for z st z in A` holds not y in U_FT z;
+      hence thesis;
+    end;
+  assume for z st z in A` holds not x in U_FT z;
+  then x in {y:for z st z in A` holds not y in U_FT z};
+  hence x in A^d by FT3000;
+end;
+
+theorem FT3105:
+  T is filled implies A^d c= A
+ proof
+  assume A0: T is filled;
+    thus A^d c= A
+    proof
+    let x be set;
+    assume
+A1: x in A^d;then
+    reconsider z=x as Element of T;
+    now assume not x in A;then
+B1:   x in A` by A1,SUBSET_1:50;
+      x in U_FT z by A0,FIN_TOPO:def 3;
+     hence contradiction by B1,A1,FT3100;
+    end;
+    hence x in A;
+   end;
+ end;
+
+theorem FT3110:
+  A^d = ((A`)^f)`
+ proof
+   for x being set holds x in A^d iff x in ((A`)^f)`
+    proof
+      let x be set;
+      thus x in A^d implies x in ((A`)^f)`
+        proof
+          assume A1:x in A^d;then
+          A3: for y st y in A` holds not x in U_FT y by FT3100;
+          A2: (A`)^f={x2:ex y st y in A` & x2 in U_FT y} by FIN_TOPO:def 13;
+          not(ex x2 st x2=x & (ex y st y in A` & x2 in U_FT y)) by A3;then
+          not x in (A`)^f by A2;
+         hence thesis by A1,SUBSET_1:50;
+        end;
+      assume A3:x in ((A`)^f)`;then
+       A4: not x in (A`)^f by SUBSET_1:54;
+       ((A`)^f)={x2:ex y st y in A` & x2 in U_FT y} by FIN_TOPO:def 13;then
+       for y st y in A` holds not x in U_FT y by A4;
+      hence x in A^d by FT3100,A3;
+    end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem FT3111b:
+  A c= B implies A^f c= B^f
+ proof
+  assume A0: A c= B;
+   thus A^f c= B^f
+   proof let z be set;assume
+     z in A^f;then
+     ex y st y in A & z in U_FT y by FIN_TOPO:16;
+    hence z in B^f by FIN_TOPO:16,A0;
+   end;
+ end;
+
+theorem FT3111:
+  A c= B implies A^d c= B^d
+ proof
+  assume A0: A c= B;
+   thus A^d c= B^d
+   proof let z be set;assume
+     A1: z in A^d;
+     B` c= A` by A0,SUBSET_1:31;then
+     for y st y in B` holds not z in U_FT y by A1,FT3100;
+    hence z in B^d by FT3100,A1;
+   end;
+ end;
+
+theorem
+  (A /\ B)^b c= (A^b) /\ (B^b)
+  proof
+    let x be set;
+    assume
+A1: x in (A /\ B)^b;
+    then reconsider px=x as Point of T;
+    U_FT px meets (A /\ B) by A1,FIN_TOPO:13;
+    then U_FT px meets A & U_FT px meets B by XBOOLE_1:74;
+    then x in A^b & x in B^b by FIN_TOPO:13;
+    hence x in (A^b) /\ (B^b) by XBOOLE_0:def 3;
+  end;
+
+theorem FT10:
+  (A \/ B)^b = (A^b) \/ (B^b)
+  proof
+A1: (A \/ B)^b c= (A^b) \/ (B^b)
+    proof
+      let x be set;
+      assume
+A2:   x in (A \/ B)^b;
+      then reconsider px=x as Point of T;
+      U_FT px meets (A \/ B) by A2,FIN_TOPO:13;
+      then U_FT px meets A or U_FT px meets B by XBOOLE_1:70;
+      then x in A^b or x in B^b by FIN_TOPO:13;
+      hence x in (A^b) \/ (B^b) by XBOOLE_0:def 2;
+    end;
+    (A^b) \/ (B^b) c= (A \/ B)^b
+    proof
+      let x be set;
+      assume a4: x in (A^b) \/ (B^b);then
+A4:   x in A^b or x in B^b by XBOOLE_0:def 2;
+      reconsider px=x as Point of T by a4;
+      U_FT px meets A or U_FT px meets B by A4,FIN_TOPO:13;
+      then U_FT px meets (A \/ B) by XBOOLE_1:70;
+      hence x in (A \/ B)^b by FIN_TOPO:13;
+    end;
+    hence (A \/ B)^b = (A^b) \/ (B^b) by A1,XBOOLE_0:def 10;
+  end;
+
+theorem
+  (A^i) \/ (B^i) c= (A \/ B)^i
+  proof
+    let x be set;
+    assume x in (A^i) \/ (B^i);then
+A1: x in A^i or x in B^i by XBOOLE_0:def 2;
+    then reconsider px=x as Point of T;
+    (U_FT px c= A or U_FT px c= B) & A c= A \/ B
+    & B c= A \/ B by XBOOLE_1:7,A1,FIN_TOPO:12;then
+    U_FT px c= A \/ B by XBOOLE_1:1;
+    hence x in (A \/ B)^i by FIN_TOPO:12;
+  end;
+
+theorem FT30:
+  (A^i) /\ (B^i) = (A /\ B)^i
+  proof
+    A1: (A^i) /\ (B^i) c= (A /\ B)^i
+    proof
+      let x be set;
+      assume x in (A^i) /\ (B^i);then
+A1:   x in (A^i) & x in (B^i) by XBOOLE_0:def 3;
+      then reconsider px=x as Point of T;
+      U_FT px c= A & U_FT px c= B by A1,FIN_TOPO:12;
+      then U_FT px c= (A /\ B) by XBOOLE_1:19;
+      hence x in (A /\ B)^i by FIN_TOPO:12;
+    end;
+    (A /\ B)^i c= (A^i) /\ (B^i)
+    proof
+      let x be set;
+      assume
+A2:   x in (A /\ B)^i;
+      then reconsider px=x as Point of T;
+A3:   U_FT px c= (A /\ B) by A2,FIN_TOPO:12;then
+A4:   U_FT px c= A by XBOOLE_1:18;
+      U_FT px c= B by A3,XBOOLE_1:18;
+      then x in A^i & x in B^i by A4,FIN_TOPO:12;
+      hence x in ((A^i) /\ (B^i)) by XBOOLE_0:def 3;
+    end;
+    hence thesis by A1,XBOOLE_0:def 10;
+  end;
+
+theorem FT40:
+  (A^f) \/ (B^f) = (A \/ B)^f
+  proof
+   A c= A \/ B by XBOOLE_1:7;then
+   A2: A^f c= (A \/ B)^f by FT3111b;
+   B c= A \/ B by XBOOLE_1:7;then
+   B^f c= (A \/ B)^f by FT3111b;
+  hence (A^f) \/ (B^f) c= (A \/ B)^f by A2,XBOOLE_1:8;
+  thus (A \/ B)^f c= (A^f) \/ (B^f)
+  proof let z be set;assume
+    z in (A \/ B)^f;then
+    consider y such that
+    B2: y in A \/ B & z in U_FT y by FIN_TOPO:16;
+    per cases by B2,XBOOLE_0:def 2;
+    suppose y in A;then
+      z in (A^f) by B2,FIN_TOPO:16;
+     hence z in (A^f) \/ (B^f) by XBOOLE_0:def 2;
+    end;
+    suppose y in B;then
+     z in (B^f) by B2,FIN_TOPO:16;
+     hence z in (A^f) \/ (B^f) by XBOOLE_0:def 2;
+    end;
+  end;
+end;
+
+theorem FT50:
+  (A^d) /\ (B^d) = (A /\ B)^d
+  proof
+   A1: B^d = ((B`)^f)` by FT3110;
+   thus (A^d) /\ (B^d) = (((A`)^f)`) /\ (B^d) by FT3110
+                  .= (((A`)^f) \/ ((B`)^f))` by A1,SUBSET_1:29
+                  .= ((A` \/ B`)^f)` by FT40
+                  .= (((A /\ B)`)^f)` by SUBSET_1:30
+                  .= (A /\ B)^d by FT3110;
+  end;
+
+definition let T be non empty FT_Space_Str;
+           let A be Subset of T;
+   func Fcl(A) -> Function of NAT,bool(the carrier of T) means :FT100:
+   (for n being Nat,B being Subset of T st
+   B=it.n holds it.(n+1)=B^b) & it.0=A;
+   existence
+     proof
+     defpred P[set,set,set] means for B being Subset of T st
+        B=$2 holds $3=B^b;
+A1:    for n being Nat for x being Element of bool(the carrier of T)
+       ex y being Element of bool(the carrier of T) st P[n,x,y]
+       proof
+         let n be Nat,x be Element of bool(the carrier of T);
+         reconsider C=x as Subset of T;
+         P[n,x,C^b];
+         hence thesis;
+       end;
+       ex f being Function of NAT,bool(the carrier of T) st
+            f.0 = A &
+                 for n being Element of NAT holds P[n,f.n,f.(n+1)]
+                 from RECDEF_1:sch 2(A1);
+       hence thesis;
+     end;
+   uniqueness
+     proof let f1,f2 be Function of NAT,bool(the carrier of T) such that
+A3:    (for n being Nat,B being Subset of T st
+         B=f1.n holds f1.(n+1)=B^b) & f1.0=A and
+A4:    (for n being Nat,B being Subset of T st
+         B=f2.n holds f2.(n+1)=B^b) & f2.0=A;
+       defpred P[Nat] means f1.$1=f2.$1;
+A5:    dom f1=NAT by FUNCT_2:def 1;then
+A7:    dom f1=dom f2 by FUNCT_2:def 1;
+A8:    for n being Nat holds f1.n=f2.n
+       proof
+A9:      P[0] by A3,A4;
+A10:     for n being Nat st P[n] holds P[n+1]
+         proof let n be Nat;
+           assume
+A11:       P[n];
+           reconsider B1=f1.n as Subset of T;
+           B1^b=f1.(n+1) by A3;
+           hence thesis by A11,A4;
+         end;
+         for n being Nat holds P[n] from NAT_1:sch 1(A9,A10);
+         hence thesis;
+       end;
+      for x being set st x in dom f1 holds f1.x=f2.x by A5,A8;
+      hence f1=f2 by A7,FUNCT_1:9;
+     end;
+  end;
+
+definition let T be non empty FT_Space_Str;
+           let A be Subset of T, n be Nat;
+  func Fcl(A,n) -> Subset of T equals :AA:
+    (Fcl(A)).n;
+  coherence;
+end;
+
+definition let T be non empty FT_Space_Str;
+           let A be Subset of T;
+  func Fint(A) -> Function of NAT,bool(the carrier of T) means :FT1100:
+  (for n being Nat,B being Subset of T st B=it.n holds it.(n+1)=B^i) &
+  it.0=A;
+  existence
+  proof
+     defpred P[set,set,set] means
+        for B being Subset of T st B=$2 holds $3=B^i;
+A1:   for n being Nat for x being Element of bool(the carrier of T)
+      ex y being Element of bool(the carrier of T) st P[n,x,y]
+      proof let n be Nat,x be Element of bool(the carrier of T);
+        reconsider C=x as Subset of T;
+        for B being Subset of T st B=x holds C^i=B^i;
+        hence thesis;
+      end;
+      ex f being Function of NAT,bool(the carrier of T) st f.0 = A &
+      for n being Element of NAT holds
+      P[n,f.n,f.(n+1)] from RECDEF_1:sch 2(A1);
+      hence thesis;
+    end;
+  uniqueness
+    proof let f1,f2 be Function of NAT,bool(the carrier of T) such that
+A3:   (for n being Nat,B being Subset of T st
+      B=f1.n holds f1.(n+1)=B^i) & f1.0=A and
+A4:    (for n being Nat,B being Subset of T st
+       B=f2.n holds f2.(n+1)=B^i) & f2.0=A;
+       defpred P[Nat] means f1.$1=f2.$1;
+A5:    dom f1=NAT by FUNCT_2:def 1;then
+A7:    dom f1=dom f2 by FUNCT_2:def 1;
+A8:    for n being Nat holds P[n]
+       proof
+A9:      P[0] by A3,A4;
+A10:     for n being Nat st P[n] holds P[n+1]
+         proof let n be Nat;
+           assume
+A11:       P[n];
+           reconsider B1=f1.n as Subset of T;
+           B1^i=f1.(n+1) by A3;
+           hence P[n+1] by A11,A4;
+         end;
+         for n being Nat holds P[n] from NAT_1:sch 1(A9,A10);
+         hence thesis;
+       end;
+       for x being set st x in dom f1 holds f1.x=f2.x by A5,A8;
+       hence f1=f2 by A7,FUNCT_1:9;
+     end;
+ end;
+
+definition let T be non empty FT_Space_Str;
+           let A be Subset of T, n be Nat;
+  func Fint(A,n) -> Subset of T equals :BB:
+    (Fint(A)).n;
+  coherence;
+end;
+
+theorem FT500:
+  for n being Nat holds Fcl(A,n+1) = (Fcl(A,n))^b
+ proof
+   let n be Nat;
+A2: (Fcl(A)).(n+1)=((Fcl(A)).n)^b by FT100;
+   (Fcl(A)).(n+1)=Fcl(A,n+1) by AA;
+   hence thesis by A2,AA;
+ end;
+
+theorem
+  Fcl(A,0) = A
+ proof
+   (for n being Nat,B being Subset of T st
+   B=(Fcl(A)).n holds (Fcl(A)).(n+1)=B^b) & (Fcl(A)).0=A by FT100;
+   hence thesis by AA;
+ end;
+
+theorem FT200:
+  Fcl(A,1) = A^b
+ proof
+   (for n being Nat,B being Subset of T st
+    B=(Fcl(A)).n holds (Fcl(A)).(n+1)=B^b) & (Fcl(A)).0=A by FT100;then
+   (Fcl(A)).(0+1)=A^b;
+   hence thesis by AA;
+ end;
+
+theorem
+  Fcl(A,2) = A^b^b
+ proof
+   for B being Subset of T st
+   B=(Fcl(A)).1 holds (Fcl(A)).(1+1)=B^b by FT100;then
+A2: (Fcl(A)).2=((Fcl(A)).1)^b;
+    (Fcl(A)).2=Fcl(A,2) by AA;then
+    Fcl(A,2)=(Fcl(A,1))^b by A2,AA .=(A^b)^b by FT200;
+   hence thesis;
+ end;
+
+theorem FT600:
+  for n being Nat holds Fcl(A \/ B,n) = Fcl(A,n) \/ Fcl(B,n)
+ proof
+A1: for n being Nat holds
+    (Fcl(A \/ B)).n = (Fcl(A)).n \/ (Fcl(B)).n
+    proof
+     defpred P[Nat] means (Fcl(A \/ B)).$1= (Fcl(A)).$1 \/ (Fcl(B)).$1;
+A2:   P[0]
+      proof
+        (Fcl(A \/ B)).0 = A \/ B by FT100 
+                       .= (Fcl(A)).0 \/ B by FT100
+                       .= (Fcl(A)).0 \/ (Fcl(B)).0 by FT100;
+        hence thesis;
+      end;
+A3:   for k being Nat st P[k] holds P[k+1]
+      proof let k be Nat;
+        assume A4: P[k];
+        (Fcl(A \/ B)).(k+1) = Fcl(A \/ B,k+1) by AA
+                           .= Fcl(A \/ B,k)^b by FT500
+                           .= ((Fcl(A \/ B)).k)^b by AA
+                           .= (Fcl(A,k) \/ (Fcl(B)).k)^b by AA,A4
+                           .= (Fcl(A,k) \/ Fcl(B,k))^b by AA
+                           .= Fcl(A,k)^b \/ Fcl(B,k)^b by FT10
+                           .= Fcl(A,k+1) \/ Fcl(B,k)^b by FT500
+                           .= Fcl(A,k+1) \/ Fcl(B,k+1) by FT500
+                           .= (Fcl(A)).(k+1) \/ Fcl(B,k+1) by AA
+                           .= (Fcl(A)).(k+1) \/ (Fcl(B)).(k+1) by AA;
+        hence thesis;
+      end;
+      for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+      hence thesis;
+    end; 
+    let n be Nat;
+    (Fcl(A \/ B)).n= (Fcl(A)).n \/ (Fcl(B)).n by A1;then
+    Fcl(A \/ B,n) = (Fcl(A)).n \/ (Fcl(B)).n by AA
+                 .= Fcl(A,n) \/ (Fcl(B)).n by AA         
+                 .= Fcl(A,n) \/ Fcl(B,n) by AA;
+    hence thesis;
+ end;
+
+theorem FT1500:
+  for n being Nat holds Fint(A,n+1) = (Fint(A,n))^i
+ proof
+  let n be Nat;
+A2:  (Fint(A)).(n+1)=((Fint(A)).n)^i by FT1100;
+    (Fint(A)).(n+1)=Fint(A,n+1) by BB;
+   hence thesis by A2,BB;
+ end;
+
+theorem
+  Fint(A,0) = A
+ proof
+   thus Fint(A,0) = (Fint(A)).0 by BB
+                 .= A by FT1100;
+ end;
+
+theorem FT1200:
+  Fint(A,1) = A^i
+ proof
+A1: (for n being Nat,B being Subset of T st
+   B=(Fint(A)).n holds (Fint(A)).(n+1)=B^i) & ((Fint(A)).0=A) by FT1100;
+   for B being Subset of T st
+   B=(Fint(A)).0 holds (Fint(A)).(0+1)=B^i by FT1100;then
+   (Fint(A)).1=A^i by A1;
+   hence thesis by BB;
+ end;
+
+theorem
+  Fint(A,2) = A^i^i
+ proof
+   thus Fint(A,2)=Fint(A,1+1) .=(Fint(A,1))^i by FT1500 .=A^i^i by FT1200;
+ end;
+
+theorem FT1600:
+  for n being Nat holds Fint(A /\ B,n) = Fint(A,n) /\ Fint(B,n)
+ proof
+  defpred P[Nat] means (Fint(A /\ B)).$1= (Fint(A)).$1 /\ (Fint(B)).$1;
+A1: for n being Nat holds P[n]
+   proof
+A2:  P[0]
+     proof
+       (Fint(A /\ B)).0 = A /\ B by FT1100
+                       .= (Fint(A)).0 /\ B by FT1100
+                       .= (Fint(A)).0 /\ (Fint(B)).0 by FT1100;
+       hence thesis;
+     end;
+A3:  for k being Nat st P[k] holds P[k+1]
+     proof let k be Nat;
+       assume
+A4:    P[k];
+       (Fint(A /\ B)).(k+1) = Fint(A /\ B,k+1) by BB
+                           .= Fint(A /\ B,k)^i by FT1500
+                           .= ((Fint(A /\ B)).k)^i by BB
+                           .= (Fint(A,k) /\ (Fint(B)).k)^i by BB,A4
+                           .= (Fint(A,k) /\ Fint(B,k))^i by BB
+                           .= ((Fint(A,k))^i) /\ (Fint(B,k)^i) by FT30
+                           .= Fint(A,k+1) /\ ((Fint(B,k))^i) by FT1500
+                           .= Fint(A,k+1) /\ Fint(B,k+1) by FT1500
+                           .= (Fint(A)).(k+1) /\ Fint(B,k+1) by BB
+                           .= (Fint(A)).(k+1) /\ (Fint(B)).(k+1) by BB;
+       hence thesis;
+     end;
+     for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+     hence thesis;
+   end; 
+   let n be Nat;
+   (Fint(A /\ B)).n= (Fint(A)).n /\ (Fint(B)).n by A1;then
+   Fint(A /\ B,n) = (Fint(A)).n /\ (Fint(B)).n by BB
+                 .= Fint(A,n) /\ (Fint(B)).n by BB        
+                 .= Fint(A,n) /\ Fint(B,n) by BB;
+   hence thesis;
+ end;
+
+theorem
+  T is filled implies for n being Nat holds A c= Fcl(A,n)
+ proof assume
+ A0: T is filled;
+ defpred P[Nat] means A c= (Fcl(A)).$1;
+A1: for n being Nat holds P[n]
+    proof
+A2:   P[0] by FT100;
+A3:   for k being Nat st P[k] holds P[k+1]
+      proof
+        let k be Nat;
+        assume P[k];then
+        A c= Fcl(A,k) by AA;then
+        A^b c= Fcl(A,k)^b by FIN_TOPO:19;then
+        A^b c= Fcl(A,k+1) by FT500;then
+A4:     A^b c= (Fcl(A)).(k+1) by AA;
+        A c= A^b by A0,FIN_TOPO:18;
+        hence thesis by A4,XBOOLE_1:1;
+      end; 
+      for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+      hence thesis;
+    end;
+    let n be Nat;
+    A c= (Fcl(A)).n by A1;
+    hence thesis by AA;
+ end;
+
+theorem
+  T is filled implies for n being Nat holds Fint(A,n) c= A
+ proof assume
+ A0: T is filled;
+ defpred P[Nat] means (Fint(A)).$1 c= A;
+A1: for n being Nat holds P[n]
+    proof
+A2:   P[0] by FT1100;
+A3:   for k being Nat st P[k] holds P[k+1]
+      proof
+        let k be Nat;
+        assume P[k];then
+        Fint(A,k) c= A by BB;then
+        Fint(A,k)^i c= A^i by FINTOPO2:1; then
+        Fint(A,k+1) c= A^i by FT1500;then
+A4:     (Fint(A)).(k+1) c= A^i by BB;
+        A^i c= A by A0,FIN_TOPO:28;
+        hence thesis by A4,XBOOLE_1:1;
+      end; 
+      for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+      hence thesis;
+    end; 
+    let n be Nat;
+    (Fint(A)).n c= A by A1;
+    hence thesis by BB;
+ end;
+
+theorem
+  T is filled implies for n being Nat holds Fcl(A,n) c= Fcl(A,n+1)
+ proof assume
+ A0: T is filled;
+    let n be Nat;
+A2: ((Fcl(A)).n)^b = (Fcl(A,n))^b by AA
+                   .= Fcl(A,n+1) by FT500;
+    (Fcl(A)).n = Fcl(A,n) by AA;
+    hence thesis by A0,FIN_TOPO:18,A2;
+ end; 
+
+theorem
+  T is filled implies for n being Nat holds Fint(A,n+1) c= Fint(A,n)
+ proof assume
+ A0: T is filled;
+   let n be Nat;
+A2: ((Fint(A)).n)^i = (Fint(A,n))^i by BB
+                    .= Fint(A,n+1) by FT1500;
+    (Fint(A)).n = Fint(A,n) by BB;
+    hence thesis by A0,FIN_TOPO:28,A2;
+  end;
+
+theorem FT2070:
+  for n being Nat holds Fint(A`,n)` = Fcl(A,n)
+ proof
+ defpred P[Nat] means Fint(A`,$1)` = Fcl(A,$1);
+A1: P[0]
+    proof
+      Fint(A`,0)` = ((Fint(A`)).0)` by BB
+                 .= A`` by FT1100
+                 .= (Fcl(A)).0 by FT100
+                 .= Fcl(A,0) by AA;
+      hence thesis;
+    end;
+A2: for k being Nat st P[k] holds P[k+1]
+   proof
+     let k be Nat;
+     assume
+A3:  P[k];
+     Fcl(A,k+1) = Fcl(A,k)^b by FT500
+               .= ((Fint(A`,k)``)^i)` by A3,FIN_TOPO:22
+               .= Fint(A`,k+1)` by FT1500;
+     hence thesis;
+   end;
+   for n being Nat holds P[n] from NAT_1:sch 1(A1,A2);
+   hence thesis;
+ end;
+
+theorem FT2080:
+  for n being Nat holds Fcl(A`,n)` = Fint(A,n)
+ proof
+   let n be Nat;
+   Fint(A,n) = Fint(A``,n)`` .= Fcl(A`,n)` by FT2070;
+   hence thesis;
+ end;
+
+theorem
+  for n being Nat holds Fcl(A,n) \/ Fcl(B,n) = Fint((A \/ B)`,n)`
+ proof
+   let n be Nat;
+   Fcl(A,n) \/ Fcl(B,n) = Fcl(A \/ B,n) by FT600
+                       .= Fint((A \/ B)`,n)` by FT2070;
+   hence thesis;
+ end;
+
+theorem
+  for n being Nat holds Fint(A,n) /\ Fint(B,n) = Fcl((A /\ B)`,n)`
+ proof
+  let n be Nat;
+  Fint(A,n) /\ Fint(B,n) = Fint(A /\ B,n) by FT1600
+                        .= Fcl((A /\ B)`,n)` by FT2080;
+  hence thesis;
+ end;
+
+:: Function of Inflation Series
+definition let T be non empty FT_Space_Str;
+           let A be Subset of T;
+  func Finf(A) -> Function of NAT,bool(the carrier of T) means :FT2500:
+  (for n being Nat,B being Subset of T st B=it.n holds it.(n+1)=B^f) &
+  it.0=A;
+  existence
+    proof
+    defpred P[set,set,set] means
+      (for B being Subset of T st B=$2 holds $3=B^f);
+A1:   for n being Nat for x being Element of bool(the carrier of T)
+      ex y being Element of bool(the carrier of T) st P[n,x,y]
+      proof let n be Nat,x be Element of bool(the carrier of T);
+        reconsider C=x as Subset of T;
+        for B being Subset of T st B=x holds C^f=B^f;
+        hence thesis;
+      end;
+      ex f being Function of NAT,bool(the carrier of T) st f.0 = A &
+      for n being Element of NAT holds
+      P[n,f.n,f.(n+1)] from RECDEF_1:sch 2(A1);
+      hence thesis;
+    end;
+   uniqueness
+    proof let f1,f2 be Function of NAT,bool(the carrier of T) such that
+A3:   (for n being Nat,B being Subset of T st
+      B=f1.n holds f1.(n+1)=B^f) & f1.0=A and
+A4:    (for n being Nat,B being Subset of T st
+       B=f2.n holds f2.(n+1)=B^f) & f2.0=A;
+       defpred P[Nat] means f1.$1=f2.$1;
+A5:    dom f1=NAT by FUNCT_2:def 1; then
+A7:    dom f1=dom f2 by FUNCT_2:def 1;
+A8:    for n being Nat holds P[n]
+       proof let n be Nat;
+A9:      P[0] by A3,A4;
+A10:     for k being Nat st P[k] holds P[k+1]
+         proof let k be Nat;
+           assume
+A11:       P[k];
+           reconsider B1=f1.k as Subset of T;
+           B1^f=f1.(k+1) by A3;
+           hence P[k+1] by A11,A4;
+         end;
+         for m being Nat holds P[m] from NAT_1:sch 1(A9,A10);
+         hence thesis;
+       end;
+       for x being set st x in dom f1 holds f1.x=f2.x by A5,A8;
+       hence f1=f2 by A7,FUNCT_1:9;
+     end;
+ end;
+
+definition let T be non empty FT_Space_Str;
+           let A be Subset of T, n be Nat;
+  func Finf(A,n) -> Subset of T equals :CC:
+   (Finf(A)).n;
+  coherence;
+end;
+
+:: Function of Deflation Series
+definition let T be non empty FT_Space_Str;
+           let A be Subset of T;
+   func Fdfl(A) -> Function of NAT,bool(the carrier of T) means :FT3500:
+   (for n being Nat,B being Subset of T st B=it.n holds it.(n+1)=B^d) &
+   it.0=A;
+   existence
+     proof
+     defpred P[set,set,set] means
+        for B being Subset of T st B=$2 holds $3=B^d;
+A1:    for n being Nat for x being Element of bool(the carrier of T)
+       ex y being Element of bool(the carrier of T) st P[n,x,y]
+       proof
+         let n be Nat,x be Element of bool(the carrier of T);
+         reconsider C=x as Subset of T;
+         for B being Subset of T st B=x holds C^d=B^d;
+         hence thesis;
+       end;
+       ex f being Function of NAT,bool(the carrier of T) st
+        f.0 = A & for n being Element of NAT holds
+        P[n,f.n,f.(n+1)] from RECDEF_1:sch 2(A1);
+       hence thesis;
+     end;
+   uniqueness
+     proof let f1,f2 be Function of NAT,bool(the carrier of T) such that
+A3:    (for n being Nat,B being Subset of T st
+         B=f1.n holds f1.(n+1)=B^d) & f1.0=A and
+A4:    (for n being Nat,B being Subset of T st
+         B=f2.n holds f2.(n+1)=B^d) & f2.0=A;
+       defpred P[Nat] means f1.$1=f2.$1;
+A5:    dom f1=NAT by FUNCT_2:def 1;then
+A7:    dom f1=dom f2 by FUNCT_2:def 1;
+A8:    for n being Nat holds P[n]
+       proof
+A9:      P[0] by A3,A4;
+A10:     for n being Nat st P[n] holds P[n+1]
+         proof let n be Nat;
+           assume
+A11:       P[n];
+           reconsider B1=f1.n as Subset of T;
+           B1^d=f1.(n+1) by A3;
+           hence P[n+1] by A11,A4;
+         end;
+         for n being Nat holds P[n] from NAT_1:sch 1(A9,A10);
+         hence thesis;
+       end;
+       for x being set st x in dom f1 holds f1.x=f2.x by A5,A8;
+       hence f1=f2 by A7,FUNCT_1:9;
+     end;
+  end;
+
+definition let T be non empty FT_Space_Str;
+           let A be Subset of T, n be Nat;
+  func Fdfl(A,n) -> Subset of T equals :DD:
+   (Fdfl(A)).n;
+  coherence;
+end;
+
+theorem FT4000:
+  for n being Nat holds Finf(A,n+1) = (Finf(A,n))^f
+  proof
+    let n be Nat;
+A2: (Finf(A)).(n+1)=((Finf(A)).n)^f by FT2500;
+    (Finf(A)).(n+1)=Finf(A,n+1) by CC;
+    hence thesis by A2,CC;
+  end;
+
+theorem FT8940:
+  Finf(A,0) = A
+proof
+   (Finf(A)).0 = A by FT2500;
+   hence thesis by CC;
+end;
+
+theorem FT8950:
+  Finf(A,1) = A^f
+ proof
+A1: (for n being Nat,B being Subset of T st
+   B=(Finf(A)).n holds (Finf(A)).(n+1)=B^f) & (Finf(A)).0=A by FT2500;
+   for B being Subset of T st
+   B=(Finf(A)).0 holds (Finf(A)).(0+1)=B^f by FT2500;then
+   (Finf(A)).1=A^f by A1;
+   hence thesis by CC;
+ end;
+
+theorem
+  Finf(A,2) = A^f^f
+ proof
+   Finf(A,2)=Finf(A,1+1) .=(Finf(A,1))^f by FT4000 .=A^f^f by FT8950;
+   hence thesis;
+ end;
+
+theorem
+  for n being Nat holds Finf(A \/ B,n) = Finf(A,n) \/ Finf(B,n)
+ proof
+    defpred P[Nat] means (Finf(A \/ B)).$1 = (Finf(A)).$1 \/ (Finf(B)).$1;
+A1: for n being Nat holds P[n]
+    proof
+A2:   P[0]
+      proof
+        (Finf(A \/ B)).0 = A \/ B by FT2500
+                       .= (Finf(A)).0 \/ B by FT2500
+                       .= (Finf(A)).0 \/ (Finf(B)).0 by FT2500;
+        hence thesis;
+      end;
+A3:   for k being Nat st P[k] holds P[k+1]
+      proof let k be Nat;
+        assume A4: P[k];
+        (Finf(A \/ B)).(k+1) = Finf(A \/ B,k+1) by CC
+                           .= Finf(A \/ B,k)^f by FT4000
+                           .= ((Finf(A \/ B)).k)^f by CC
+                           .= (Finf(A,k) \/ (Finf(B)).k)^f by CC,A4
+                           .= (Finf(A,k) \/ Finf(B,k))^f by CC 
+                           .= Finf(A,k)^f \/ Finf(B,k)^f by FT40
+                           .= Finf(A,k+1) \/ Finf(B,k)^f by FT4000
+                           .= Finf(A,k+1) \/ Finf(B,k+1) by FT4000
+                           .= (Finf(A)).(k+1) \/ Finf(B,k+1) by CC
+                           .= (Finf(A)).(k+1) \/ (Finf(B)).(k+1) by CC;
+        hence thesis;
+      end;
+      for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+      hence thesis;
+    end; 
+    let n be Nat;
+    (Finf(A \/ B)).n= (Finf(A)).n \/ (Finf(B)).n by A1;then
+    Finf(A \/ B,n) = (Finf(A)).n \/ (Finf(B)).n by CC
+                 .= Finf(A,n) \/ (Finf(B)).n by CC
+                 .= Finf(A,n) \/ Finf(B,n) by CC;
+    hence thesis;
+ end;
+
+theorem
+  T is filled implies for n being Nat holds A c= Finf(A,n)
+ proof
+ assume A0:T is filled;
+  defpred P[Nat] means A c= (Finf(A)).$1;
+A1: for n being Nat holds P[n]
+    proof
+A2:   P[0] by FT2500;
+A3:   for k being Nat st P[k] holds P[k+1]
+      proof
+        let k be Nat;
+        assume P[k];then
+        A c= Finf(A,k) by CC;then
+        A^f c= Finf(A,k)^f by FT3111b;then
+        A^f c= Finf(A,k+1) by FT4000;then
+A4:     A^f c= (Finf(A)).(k+1) by CC;
+        A c= A^f by Th18,A0;
+        hence thesis by A4,XBOOLE_1:1;
+      end;
+      for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+      hence thesis;
+    end;
+    let n be Nat;
+    A c= (Finf(A)).n by A1;
+    hence thesis by CC;
+ end;
+
+theorem
+  T is filled implies for n being Nat holds Finf(A,n) c= Finf(A,n+1)
+ proof
+ assume a1: T is filled;
+    let n be Nat;
+A2: ((Finf(A)).n)^f = (Finf(A,n))^f by CC
+                   .= Finf(A,n+1) by FT4000;
+    (Finf(A)).n = Finf(A,n) by CC;
+    hence thesis by a1,A2,Th18;
+ end;
+
+theorem FT4500:
+  for n being Nat holds Fdfl(A,n+1) = (Fdfl(A,n))^d
+ proof
+  let n be Nat;
+A2:  (Fdfl(A)).(n+1)=((Fdfl(A)).n)^d by FT3500;
+    (Fdfl(A)).(n+1)=Fdfl(A,n+1) by DD;
+   hence thesis by A2,DD;
+ end;
+
+theorem
+  Fdfl(A,0) = A
+ proof
+   (Fdfl(A)).0=A by FT3500;
+   hence thesis by DD;
+ end;
+
+theorem FT4501:
+  Fdfl(A,1) = A^d
+ proof
+A1: (for n being Nat,B being Subset of T st
+   B=(Fdfl(A)).n holds (Fdfl(A)).(n+1)=B^d) & ((Fdfl(A)).0=A) by FT3500;then
+   for B being Subset of T st
+   B=(Fdfl(A)).0 holds (Fdfl(A)).(0+1)=B^d;then
+   (Fdfl(A)).1=A^d by A1;
+   hence thesis by DD;
+ end;
+
+theorem
+  Fdfl(A,2) = A^d^d
+ proof
+   Fdfl(A,2)=Fdfl(A,1+1) .=(Fdfl(A,1))^d by FT4500;
+   hence thesis by FT4501;
+ end;
+
+theorem FT4600:
+  for n being Nat holds Fdfl(A /\ B,n) = Fdfl(A,n) /\ Fdfl(B,n)
+ proof
+ defpred P[Nat] means (Fdfl(A /\ B)).$1= (Fdfl(A)).$1 /\ (Fdfl(B)).$1;
+A1: for n being Nat holds P[n]
+   proof
+A2:  P[0]
+     proof
+       (Fdfl(A /\ B)).0 = A /\ B by FT3500
+                       .= (Fdfl(A)).0 /\ B by FT3500
+                       .= (Fdfl(A)).0 /\ (Fdfl(B)).0 by FT3500;
+       hence thesis;
+     end;
+A3:  for k being Nat st P[k] holds P[k+1]
+     proof let k be Nat;
+       assume
+A4:    P[k]; 
+       (Fdfl(A /\ B)).(k+1) = Fdfl(A /\ B,k+1) by DD
+                           .= Fdfl(A /\ B,k)^d by FT4500
+                           .= ((Fdfl(A /\ B)).k)^d by DD
+                           .= (Fdfl(A,k) /\ (Fdfl(B)).k)^d by DD,A4
+                           .= (Fdfl(A,k) /\ Fdfl(B,k))^d by DD
+                           .= ((Fdfl(A,k))^d) /\ ((Fdfl(B,k))^d) by FT50
+                           .= Fdfl(A,k+1) /\ ((Fdfl(B,k))^d) by FT4500
+                           .= Fdfl(A,k+1) /\ Fdfl(B,k+1) by FT4500
+                           .= (Fdfl(A)).(k+1) /\ Fdfl(B,k+1) by DD
+                           .= (Fdfl(A)).(k+1) /\ (Fdfl(B)).(k+1) by DD;
+       hence thesis;
+     end;
+     for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+     hence thesis;
+   end; 
+   let n be Nat;
+   (Fdfl(A /\ B)).n = (Fdfl(A)).n /\ (Fdfl(B)).n by A1;then
+   Fdfl(A /\ B,n) = (Fdfl(A)).n /\ (Fdfl(B)).n by DD
+                 .= Fdfl(A,n) /\ (Fdfl(B)).n by DD
+                 .= Fdfl(A,n) /\ Fdfl(B,n) by DD;
+   hence thesis;
+ end;
+
+theorem
+  T is filled implies for n being Nat holds Fdfl(A,n) c= A
+ proof
+ assume A0: T is filled;
+ defpred P[Nat] means (Fdfl(A)).$1 c= A;
+A1: for n being Nat holds P[n]
+    proof
+A2:   P[0] by FT3500; 
+A3:   for k being Nat st P[k] holds P[k+1]
+      proof
+        let k be Nat;
+        assume P[k];then
+        Fdfl(A,k) c= A by DD;then
+        Fdfl(A,k)^d c= A^d by FT3111; then
+        Fdfl(A,k+1) c= A^d by FT4500;then
+A4:     (Fdfl(A)).(k+1) c= A^d by DD;
+        A^d c= A by FT3105,A0;
+        hence thesis by A4,XBOOLE_1:1;
+      end; 
+      for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+      hence thesis;
+    end;
+    let n be Nat;
+    (Fdfl(A)).n c= A by A1;
+    hence thesis by DD;
+ end;
+
+theorem
+  T is filled implies for n being Nat holds Fdfl(A,n+1) c= Fdfl(A,n)
+ proof
+ assume A0: T is filled;
+   let n be Nat;
+A2: ((Fdfl(A)).n)^d = (Fdfl(A,n))^d by DD
+                   .= Fdfl(A,n+1) by FT4500;
+    (Fdfl(A)).n = Fdfl(A,n) by DD;
+    hence thesis by FT3105,A0,A2;
+  end;
+
+theorem FT4650:
+  for n being Nat holds Fdfl(A,n) = Finf(A`,n)`
+ proof
+    defpred P[Nat] means (Fdfl(A)).$1= ((Finf(A`)).$1)`;
+A1: for n being Nat holds P[n]
+    proof
+A2:   P[0]
+      proof
+        ((Finf(A`)).0)` = A`` by FT2500
+                       .= A;
+        hence thesis by FT3500;
+      end;
+A3:   for k being Nat st P[k] holds P[k+1]
+      proof let k be Nat;
+        assume A4: P[k];
+A33:    (Fdfl(A)).(k+1) = Fdfl(A,k+1) by DD
+                       .= Fdfl(A,k)^d by FT4500;
+        reconsider FB=Fdfl(A,k) as Subset of T;
+        (Fdfl(A)).(k+1) = ((FB`)^f)` by FT3110,A33
+                       .= ((((Fdfl(A)).k)`)^f)` by DD
+                       .= ((Finf(A`)).(k+1))` by A4,FT2500;
+        hence thesis;
+      end;
+      for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+      hence thesis;
+    end;
+    let n be Nat;
+    (Fdfl(A)).n = ((Finf(A`)).n)` by A1;then
+    Fdfl(A,n) = ((Finf(A`)).n)` by DD
+             .= (Finf(A`,n))` by CC;
+    hence thesis;
+ end;
+
+theorem
+  for n being Nat holds Fdfl(A,n) /\ Fdfl(B,n) = Finf((A /\ B)`,n)`
+ proof
+  let n be Nat;
+  Fdfl(A,n) /\ Fdfl(B,n) = Fdfl(A /\ B,n) by FT4600
+                        .= Finf((A /\ B)`,n)` by FT4650;
+  hence thesis;
+ end;
+
+definition :: n-th neighbourhood of x
+  let T be non empty FT_Space_Str, n be Nat, x be Element of T;
+  func U_FT(x,n) -> Subset of T equals :FT7990:
+    Finf((U_FT x),n);
+  coherence;
+end;
+
+theorem
+  U_FT(x,0) = U_FT x
+proof
+  thus U_FT(x,0)= Finf((U_FT x),0) by FT7990
+               .= U_FT x by FT8940;
+end;
+
+theorem
+  for n being Nat holds U_FT(x,n+1) = (U_FT(x,n))^f
+ proof
+  let n be Nat;
+  U_FT(x,n+1) = Finf((U_FT x),n+1) by FT7990
+             .= (Finf((U_FT x),n))^f by FT4000;
+  hence thesis by FT7990;
+ end;
+
+definition let S, T be non empty FT_Space_Str;
+  pred S, T are_mutually_symmetric means
+    the carrier of S = the carrier of T &
+    for x, y being set st x in the carrier of S & y in the carrier of T
+      holds y in (the Nbd of S).x iff x in (the Nbd of T).y;
+  symmetry;
+end;

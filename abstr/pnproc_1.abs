@@ -36,13 +36,6 @@ theorem :: PNPROC_1:3
 
 registration
   cluster -> finite FinSubsequence;
-  coherence
-   proof let q be FinSubsequence;
-     consider n being Nat such that
-A1:  dom q c= Seg n by FINSEQ_1:def 12;
-       dom q is finite by A1,FINSET_1:13;
-     hence thesis by AMI_1:21;
-   end;
 end;
 
 
@@ -109,26 +102,7 @@ definition
 scheme :: PNPROC_1:sch 1
  MarkingLambda { P() -> set, F(set) -> Nat }:
  ex m being marking of P() st
-  for p st p in P() holds m multitude_of p = F(p)
-proof
-   deffunc F1(set) = F($1);
-   consider m being Function such that
-A1: dom m = P() and
-A2: for p st p in P() holds m.p = F1(p) from FUNCT_1:sch 3;
-      m is marking of P()
-     proof
-      thus dom m = P() by A1;
-      thus rng m c= NAT
-       proof
-        let y; assume y in rng m;
-        then consider x such that
-A3:      x in dom m & y = m.x by FUNCT_1:def 5;
-           y = F(x) by A1,A2,A3;
-        hence y in NAT;
-       end;
-     end;
-   hence thesis by A2;
-  end;
+  for p st p in P() holds m multitude_of p = F(p);
 
 definition let P,m1,m2;
   redefine pred m1 = m2 means
@@ -373,7 +347,6 @@ reserve R, R1, R2, R3, P1, P2 for process of N;
 
 registration
   cluster FinSequence-like -> FinSubsequence-like Function;
-  coherence by FINSEQ_1:68;
 end;
 
 
@@ -389,17 +362,6 @@ registration
  let P, N;
  let R1, R2 be non empty process of N;
  cluster R1 before R2 -> non empty;
- coherence
-   proof
-A1:  R1 before R2 = {C1^C2: C1 in R1 & C2 in R2} by Def13;
-     consider fs1 being set such that
-A2:  fs1 in R1 by XBOOLE_0:def 1;
-     consider fs2 being set such that
-A3:  fs2 in R2 by XBOOLE_0:def 1;
-     reconsider fs1,fs2 as firing-sequence of N by A2,A3;
-       fs1^fs2 in R1 before R2 by A1,A2,A3;
-     hence thesis;
-   end;
 end;
 
 
@@ -576,23 +538,6 @@ registration
  let P, N;
  let R1, R2 be non empty process of N;
  cluster R1 concur R2 -> non empty;
- coherence
-   proof
-A1:  R1 concur R2 = {C: ex q1,q2 being FinSubsequence st C = q1 \/ q2 &
-                        q1 misses q2 & Seq q1 in R1 & Seq q2 in R2} by Def14;
-     consider fs1 being set such that
-A2:  fs1 in R1 by XBOOLE_0:def 1;
-     consider fs2 being set such that
-A3:  fs2 in R2 by XBOOLE_0:def 1;
-     reconsider fs1, fs2 as firing-sequence of N by A2,A3;
-     reconsider C = fs1^fs2 as firing-sequence of N;
-A4:  C = fs1 \/ (len fs1 Shift fs2) by Th64;
-A5:  fs1 misses (len fs1 Shift fs2) by Th65;
-     A6: fs1 = Seq fs1 by GRAPH_2:24;
-   Seq (len fs1 Shift fs2) in R2 by A3,Th61;
-     then C in R1 concur R2 by A1,A2,A4,A5,A6;
-     hence thesis;
-   end;
 end;
 
 

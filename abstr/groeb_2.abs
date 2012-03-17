@@ -167,15 +167,6 @@ let L be add-associative right_zeroed right_complementable
          (non trivial LoopStr),
     a be non-zero Element of L;
 cluster -a -> non-zero;
-coherence
- proof
- A1: a <> 0.L by RLVECT_1:def 13;
-  now assume -a = 0.L;
-   then --a = 0.L by RLVECT_1:25;
-   hence contradiction by A1,RLVECT_1:30;
-   end;
- hence thesis by RLVECT_1:def 13;
- end;
 end;
 
 
@@ -186,83 +177,6 @@ let X be set,
     m be Monomial of X,L,
     a be Element of L;
 cluster a * m -> monomial-like;
-coherence
- proof
- set p = a * m;
-  now per cases by POLYNOM7:6;
- case A1: Support m = {};
-    now assume A2: Support p <> {};
-     consider b being Element of Support p;
-      b in Support p by A2;
-     then reconsider b as Element of Bags X;
-      p.b = a * m.b by POLYNOM7:def 10
-        .= a * 0.L by A1,POLYNOM1:def 9
-        .= 0.L by BINOM:2;
-     hence contradiction by A2,POLYNOM1:def 9;
-     end;
-   hence thesis by POLYNOM7:6;
- end;
- case ex b being bag of X st Support m = {b};
-   then consider b being bag of X such that
-   A3: Support m = {b};
-   reconsider b as Element of Bags X by POLYNOM1:def 14;
-    now per cases;
-   case A4: a = 0.L;
-      now assume A5: Support p <> {};
-       consider b being Element of Support p;
-        b in Support p by A5;
-       then reconsider b as Element of Bags X;
-        p.b = a * m.b by POLYNOM7:def 10
-          .= 0.L by A4,BINOM:1;
-       hence contradiction by A5,POLYNOM1:def 9;
-       end;
-     hence Support p = {};
-   end;
-   case a <> 0.L;
-     A6: now let b' be Element of Bags X;
-         assume b' <> b;
-         then not(b' in Support m) by A3,TARSKI:def 1;
-         then A7: m.b' = 0.L by POLYNOM1:def 9;
-          p.b' = a * m.b' by POLYNOM7:def 10;
-         hence p.b' = 0.L by A7,BINOM:2;
-         end;
-      now per cases;
-     case A8: a * m.b = 0.L;
-        now assume A9: Support p <> {};
-         consider b' being Element of Support p;
-          b' in Support p by A9;
-         then reconsider b' as Element of Bags X;
-         A10: p.b' <> 0.L by A9,POLYNOM1:def 9;
-         then b' = b by A6;
-         hence contradiction by A8,A10,POLYNOM7:def 10;
-         end;
-       hence Support p = {};
-     end;
-     case A11: a * m.b <> 0.L;
-        A12: now let u be set;
-            assume u in {b};
-            then A13: u = b by TARSKI:def 1;
-             p.b <> 0.L by A11,POLYNOM7:def 10;
-            hence u in Support p by A13,POLYNOM1:def 9;
-            end;
-         now let u be set;
-          assume A14: u in Support p;
-          then reconsider u' = u as Element of Bags X;
-           p.u' <> 0.L by A14,POLYNOM1:def 9;
-          then u' = b by A6;
-          hence u in {b} by TARSKI:def 1;
-          end;
-        hence Support p = {b} by A12,TARSKI:2;
-        end;
-        end;
-     hence thesis by POLYNOM7:6;
-     end;
-     end;
-   hence thesis by POLYNOM7:6;
-   end;
-   end;
- hence thesis;
- end;
 end;
 
 
@@ -273,22 +187,6 @@ let n be Ordinal,
     p be non-zero Polynomial of n,L,
     a be non-zero Element of L;
 cluster a * p -> non-zero;
-coherence
- proof
- set ap = a * p;
-  p <> 0_(n,L) by POLYNOM7:def 2;
- then A1: Support p <> {} by POLYNOM7:1;
- consider b being Element of Support p;
-  b in Support p by A1;
- then reconsider b as Element of Bags n;
- A2: p.b <> 0.L by A1,POLYNOM1:def 9;
-  a <> 0.L by RLVECT_1:def 13;
- then a * p.b <> 0.L by A2,VECTSP_2:def 5;
- then ap.b <> 0.L by POLYNOM7:def 10;
- then b in Support ap by POLYNOM1:def 9;
- then ap <> 0_(n,L) by POLYNOM7:1;
- hence thesis by POLYNOM7:def 2;
- end;
 end;
 
 
@@ -487,57 +385,6 @@ let n be Ordinal,
          Field-like (non trivial doubleLoopStr),
     P be finite Subset of Polynom-Ring(n,L);
 cluster S-Poly(P,T) -> finite;
-coherence
- proof
- defpred P[set,set] means
-    ex p1,p2 being Polynomial of n,L
-    st p1 = $1`1 & $1`2 = p2 &
-       p1 in P & p2 in P & $2 = S-Poly(p1,p2,T);
- A1: for x,y1,y2 being set st x in [:P,P:] & P[x,y1] & P[x,y2]
-     holds y1 = y2;
- A2: for x being set st x in [:P,P:] ex y being set st P[x,y]
-       proof
-       let x be set;
-       assume x in [:P,P:];
-       then consider p1,p2 being set such that
-       A3: p1 in P & p2 in P & [p1,p2] = x by ZFMISC_1:def 2;
-       reconsider p1,p2 as Polynomial of n,L by A3,POLYNOM1:def 27;
-       take S-Poly(p1,p2,T);
-       take p1,p2;
-       thus x`1 = p1 by A3,MCART_1:def 1;
-       thus x`2 = p2 by A3,MCART_1:def 2;
-       thus thesis by A3;
-       end;
- consider f being Function such that
- A4: dom f = [:P,P:] & for x being set st x in [:P,P:] holds P[x,f.x]
-     from FUNCT_1:sch 2(A1,A2);
- A5: now let v be set;
-     assume v in rng f;
-     then consider u being set such that
-     A6: u in dom f & v = f.u by FUNCT_1:def 5;
-     consider p1,p2 being Polynomial of n,L such that
-     A7: p1 = u`1 & u`2 = p2 &
-          p1 in P & p2 in P & f.u = S-Poly(p1,p2,T) by A4,A6;
-      f.u in {S-Poly(p,q,T) where p,q is Polynomial of n,L :
-                                            p in P & q in P} by A7;
-     hence v in S-Poly(P,T) by A6,Def5;
-     end;
-  now let v be set;
-   assume v in S-Poly(P,T);
-   then v in {S-Poly(p1,p2,T) where p1,p2 is Polynomial of n,L :
-                                          p1 in P & p2 in P} by Def5;
-   then consider p1,p2 being Polynomial of n,L such that
-   A8: v = S-Poly(p1,p2,T) & p1 in P & p2 in P;
-   A9: [p1,p2] in dom f by A4,A8,ZFMISC_1:def 2;
-   then consider p1',p2' being Polynomial of n,L such that
-   A10: [p1,p2]`1 = p1' & [p1,p2]`2 = p2' & p1' in P & p2' in P &
-        f.[p1,p2] = S-Poly(p1',p2',T) by A4;
-    p1 = p1' & p2 = p2' by A10,MCART_1:def 1,def 2;
-   hence v in rng f by A8,A9,A10,FUNCT_1:def 5;
-   end;
- then rng f = S-Poly(P,T) by A5,TARSKI:2;
- hence thesis by A4,FINSET_1:26;
- end;
 end;
 
 

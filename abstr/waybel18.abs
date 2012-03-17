@@ -51,47 +51,16 @@ end;
 
 registration
  cluster TopSpace-yielding -> 1-sorted-yielding Function;
- coherence
-  proof let F be Function such that
-A1:  F is TopSpace-yielding;
-   let x be set;
-   assume x in dom F;
-   then F.x in rng F by FUNCT_1:def 5;
-   hence F.x is 1-sorted by A1,Def1;
-  end;
 end;
 
 
 registration let I be set;
  cluster TopSpace-yielding ManySortedSet of I;
- existence
-  proof consider T being TopSpace;
-   take I --> T;
-   let v be set;
-A1:  rng(I --> T) c= {T} by FUNCOP_1:19;
-   assume v in rng(I --> T);
-   hence thesis by A1,TARSKI:def 1;
-  end;
 end;
 
 
 registration let I be set;
  cluster TopSpace-yielding non-Empty ManySortedSet of I;
- existence
-  proof consider R being non empty TopSpace;
-   take J = I --> R;
-A1:   dom J = I & rng J c= {R} by FUNCOP_1:19;
-   thus J is TopSpace-yielding
-    proof let x be set; assume
-         x in rng J;
-     hence x is TopStruct by A1,TARSKI:def 1;
-    end;
-   thus J is non-Empty
-    proof let S be 1-sorted; assume
-        S in rng J;
-     hence thesis by A1,TARSKI:def 1;
-    end;
-  end;
 end;
 
 
@@ -128,23 +97,6 @@ end;
 registration let I be set;
            let J be TopSpace-yielding non-Empty ManySortedSet of I;
  cluster product J -> non empty;
- coherence
-  proof
-A1:  the carrier of product J = product Carrier J by Def3;
-      now assume {} in rng Carrier J;
-     then consider i being set such that
-A2:    i in dom Carrier J & {} = (Carrier J).i by FUNCT_1:def 5;
-A3:    dom Carrier J = I & dom J = I by PBOOLE:def 3;
-     then consider R being 1-sorted such that
-A4:    R = J.i & {} = the carrier of R by A2,PRALG_1:def 13;
-        R in rng J by A2,A3,A4,FUNCT_1:def 5;
-     then reconsider R as non empty 1-sorted by WAYBEL_3:def 7;
-        the carrier of R = {} by A4;
-     hence contradiction;
-    end;
-    then the carrier of product J <> {} by A1,CARD_3:37;
-   hence thesis by STRUCT_0:def 1;
-  end;
 end;
 
 
@@ -158,14 +110,6 @@ end;
 registration let I be set;
            let J be TopSpace-yielding non-Empty ManySortedSet of I;
  cluster -> Function-like Relation-like Element of product J;
- coherence
-  proof let x be Element of product J;
-      the carrier of product J = product Carrier J by Def3;
-    then ex g being Function st x = g & dom g = dom Carrier J &
-     for x being set st x in dom Carrier J holds g.x in (Carrier J).x
-      by CARD_3:def 5;
-   hence thesis;
-  end;
 end;
 
 
@@ -237,17 +181,6 @@ registration let X be non empty 1-sorted,
                Y be non empty TopStruct,
                f be map of X,Y;
  cluster Image f -> non empty;
- coherence
- proof
-A1:dom f = the carrier of X by FUNCT_2:def 1;
-   consider x being Element of dom f;
-     f.x in rng f by A1,FUNCT_1:def 5;
-   then reconsider A = rng f as non empty Subset of Y;
-A2:Image f = Y|A by Def6;
-     the carrier of Image f = [#]Image f by PRE_TOPC:12
-     .= A by A2,PRE_TOPC:def 10;
-   hence the carrier of Image f is non empty;
- end;
 end;
 
 
@@ -271,11 +204,6 @@ for X, Y being non empty TopSpace, f being map of X,Y st
 
 registration let X be 1-sorted,Y be non empty TopStruct; let f be map of X,Y;
  cluster corestr f -> onto;
- coherence
-  proof
-      the carrier of Image f = rng f by Th10 .= rng corestr f by Def7;
-   hence thesis by FUNCT_2:def 3;
- end;
 end;
 
 
@@ -302,250 +230,40 @@ end;
 
 registration
  cluster Sierpinski_Space -> non empty TopSpace-like;
- coherence
-  proof
-   set IT = Sierpinski_Space;
-   thus IT is non empty
-    proof
-     thus the carrier of IT is non empty by Def9;
-    end;
-      {0,1} in {{}, {1}, {0,1} } by ENUMSET1:14;
-    then the carrier of IT in {{}, {1}, {0,1} } by Def9;
-   hence the carrier of IT in the topology of IT by Def9;
-   thus for a being Subset-Family of IT
-          st a c= the topology of IT holds union a in the topology of IT
-    proof
-     let a be Subset-Family of IT; assume
-         a c= the topology of IT;
-    then A1: a c= {{}, {1}, {0,1} } by Def9;
-      per cases by A1,Th1;
-       suppose a = {};
-        then union a in {{}, {1}, {0,1} } by ENUMSET1:14,ZFMISC_1:2;
-        hence union a in the topology of IT by Def9;
-       end;
-       suppose a = {{}}; then union a = {} by ZFMISC_1:31;
-        then union a in {{}, {1}, {0,1} } by ENUMSET1:14;
-        hence union a in the topology of IT by Def9;
-       end;
-       suppose a = {{1}}; then union a = {1} by ZFMISC_1:31;
-        then union a in {{}, {1}, {0,1} } by ENUMSET1:14;
-        hence union a in the topology of IT by Def9;
-       end;
-       suppose a = {{0,1}}; then union a = {0,1} by ZFMISC_1:31;
-        then union a in {{}, {1}, {0,1} } by ENUMSET1:14;
-        hence union a in the topology of IT by Def9;
-       end;
-       suppose a = {{},{1}}; then union a = {} \/ {1} by ZFMISC_1:93;
- then union a in {{}, {1}, {0,1} } by ENUMSET1:14;
-        hence union a in the topology of IT by Def9;
-       end;
-       suppose a = {{1},{0,1}}; then union a = {1} \/ {0,1} by ZFMISC_1:93
-        .= {0,1} by ZFMISC_1:14; then union a in {{}
-, {1}, {0,1}} by ENUMSET1:14;
-        hence union a in the topology of IT by Def9;
-       end;
-       suppose a = {{},{0,1}}; then union a = {} \/ {0,1} by ZFMISC_1:93;
- then union a in {{}, {1}, {0,1} } by ENUMSET1:14;
-        hence union a in the topology of IT by Def9;
-       end;
-       suppose a = {{},{1},{0,1}}; then a = {{}
-} \/ {{1},{0,1}} by ENUMSET1:42;
-        then union a = union {{}} \/ union {{1},{0,1}} by ZFMISC_1:96
-        .= {} \/ union {{1},{0,1}} by ZFMISC_1:31
-        .= {1} \/ {0,1} by ZFMISC_1:93 .= {0,1} by ZFMISC_1:14;
-        then union a in {{}, {1}, {0,1} } by ENUMSET1:14;
-       hence union a in the topology of IT by Def9;
-    end;
-    end;
-   let a,b be Subset of IT; assume
-        a in the topology of IT &
-      b in the topology of IT;
-   then A2: a in {{}, {1}, {0,1} } & b in {{}, {1}, {0,1} } by Def9;
-    per cases by A2,ENUMSET1:13;
-     suppose a = {} & b = {};
-      then a /\ b in {{}, {1}, {0,1} } by ENUMSET1:14; hence thesis by Def9;
-     end;
-     suppose a = {} & b = {1};
-      then a /\ b in {{}, {1}, {0,1} } by ENUMSET1:14;
-      hence thesis by Def9;
-     end;
-     suppose a = {} & b = {0,1};
-      then a /\ b in {{}, {1}, {0,1} } by ENUMSET1:14;
-      hence thesis by Def9;
-     end;
-     suppose a = {1} & b = {};
-      then a /\ b in {{}, {1}, {0,1} } by ENUMSET1:14;
-      hence thesis by Def9;
-     end;
-     suppose a = {1} & b = {1};
-      then a /\ b in {{}, {1}, {0,1} } by ENUMSET1:14; hence thesis by Def9;
-     end;
-     suppose a = {1} & b = {0,1}; then a /\ b = {1} by ZFMISC_1:19;
-      then a /\ b in {{}, {1}, {0,1} } by ENUMSET1:14; hence thesis by Def9;
-     end;
-     suppose a = {0,1} & b = {};
-      then a /\ b in {{}, {1}, {0,1} } by ENUMSET1:14;
-      hence thesis by Def9;
-     end;
-     suppose a = {0,1} & b = {1}; then a /\ b = {1} by ZFMISC_1:19;
-      then a /\ b in {{}, {1}, {0,1} } by ENUMSET1:14; hence thesis by Def9;
-     end;
-     suppose a = {0,1} & b = {0,1};
-      then a /\ b in {{}, {1}, {0,1} } by ENUMSET1:14; hence thesis by Def9;
-  end;
-  end;
 end;
 
 registration
  cluster Sierpinski_Space -> discerning;
- coherence by Lm2;
 end;
 
 
 registration       ::p.122 lemma 3.3.
  cluster Sierpinski_Space -> injective;
- coherence
-proof
- set S = Sierpinski_Space;
- let X be non empty TopSpace; let f be map of X, S; assume
-A1:  f is continuous;
- let Y be non empty TopSpace; assume
-A2:  X is SubSpace of Y;
-then A3:  the carrier of X c= the carrier of Y by BORSUK_1:35;
-       {1} c= {0,1} by ZFMISC_1:12;
- then {1} is Subset of S by Def9;
- then reconsider u = {1} as Subset of S;
-       u in {{}, {1}, {0,1} } by ENUMSET1:14;
-     then u in the topology of S by Def9;
-     then u is open by PRE_TOPC:def 5;
-     then f"u is open by A1,TOPS_2:55;
-     then f"u in the topology of X by PRE_TOPC:def 5;
- then consider V being Subset of Y such that
-A4:  V in the topology of Y and
-A5:  f"u = V /\ [#](X) by A2,PRE_TOPC:def 9;
- reconsider V as Subset of Y;
-A6:  V is open by A4,PRE_TOPC:def 5;
-A7:  f"u = V /\ (the carrier of X) by A5,PRE_TOPC:12;
- set g = chi(V,the carrier of Y);
-A8:  dom g = the carrier of Y by FUNCT_3:def 3;
-       the carrier of S = {0,1} by Def9;
- then reconsider g as map of Y,S ;
- take g;
-   for P being Subset of S st P is open holds g"P is open
-  proof
-   let P be Subset of S; assume
-       P is open;
-     then P in the topology of S by PRE_TOPC:def 5;
- then A9: P in {{}, {1}, {0,1} } by Def9;
-   per cases by A9,ENUMSET1:13;
-    suppose P = {}; then g"P = {} by RELAT_1:171; then g"P in the topology
-of Y
-     by PRE_TOPC:5; hence g"P is open by PRE_TOPC:def 5;
-    end;
-    suppose A10: P = {1};
-  A11: g"P c= V
-       proof let x be set; assume
-     A12: x in g"P;
-         then x in dom g & g.x in {1} by A10,FUNCT_1:def 13;
-         then g.x = 1 by TARSKI:def 1;
-        hence x in V by A12,FUNCT_3:def 3;
-       end;
-        V c= g"P
-       proof let x be set; assume
-     A13: x in V; then g.x = 1 by FUNCT_3:def 3;
-         then x in dom g & g.x in {1} by A8,A13,TARSKI:def 1;
-         hence x in g"P by A10,FUNCT_1:def 13;
-       end;
-     hence g"P is open by A6,A11,XBOOLE_0:def 10;
-    end;
-    suppose P = {0,1};
-      then g"P = the carrier of Y by FUNCT_2:48;
-      then g"P in the topology of Y by PRE_TOPC:def 1;
-    hence g"P is open by PRE_TOPC:def 5;
-  end;
-  end;
- hence g is continuous by TOPS_2:55;
-A14:   dom g /\ (the carrier of X) = (the carrier of Y) /\ (the carrier of X)
-         by FUNCT_3:def 3 .= the carrier of X by A3,XBOOLE_1:28
-      .= dom f by FUNCT_2:def 1;
-       for x being set st x in dom f holds f.x = g.x
-      proof
-       let x be set; assume
-  A15:    x in dom f;
-  then A16:    x in the carrier of X by FUNCT_2:def 1;
-        per cases;
-         suppose A17: x in V;
-       then A18:  g.x = 1 by FUNCT_3:def 3;
-             x in f"u by A7,A16,A17,XBOOLE_0:def 3;
-           then x in dom f & f.x in {1} by FUNCT_1:def 13;
-          hence f.x = g.x by A18,TARSKI:def 1;
-         end;
-         suppose A19: not x in V;
-          f.x in rng f by A15,FUNCT_1:def 5;
-           then f.x in the carrier of S;
-           then f.x in {0,1} by Def9;
-       then A20: f.x = 0 or f.x = 1 by TARSKI:def 2;
-             not x in f"{1} by A5,A19,XBOOLE_0:def 3;
-           then not x in dom f or not f.x in {1} by FUNCT_1:def 13;
-          hence f.x = g.x by A3,A15,A16,A19,A20,FUNCT_3:def 3,TARSKI:def 1;
-      end;
-      end;
- hence g|(the carrier of X) = f by A14,FUNCT_1:68;
-end;
 end;
 
 
 registration let I be set; let S be non empty 1-sorted;
  cluster I --> S -> non-Empty;
- coherence
-  proof let s be 1-sorted; assume
- A1:  s in rng (I --> S);
-       rng (I --> S) c= {S} by FUNCOP_1:19;
-   hence s is non empty by A1,TARSKI:def 1;
-  end;
 end;
 
 
 registration let I be set; let T be TopStruct;
  cluster I --> T -> TopSpace-yielding;
- coherence
-  proof let x be set; assume
- A1:  x in rng (I --> T);
-       rng (I --> T) c= {T} by FUNCOP_1:19;
-   hence x is TopStruct by A1,TARSKI:def 1;
-  end;
 end;
 
 
 registration let I be set; let L be reflexive RelStr;
  cluster I --> L -> reflexive-yielding;
- coherence
-  proof let S be RelStr; assume
- A1:  S in rng (I --> L);
-       rng (I --> L) c= {L} by FUNCOP_1:19;
-   hence S is reflexive by A1,TARSKI:def 1;
-  end;
 end;
 
 
 registration let I be non empty set; let L be non empty antisymmetric RelStr;
  cluster product (I --> L) -> antisymmetric;
- coherence
-  proof
-       for i being Element of I holds (I --> L).i is antisymmetric
-       by FUNCOP_1:13;
-   hence product (I --> L) is antisymmetric by WAYBEL_3:30;
-  end;
 end;
 
 
 registration let I be non empty set; let L be non empty transitive RelStr;
  cluster product (I --> L) -> transitive;
- coherence
-  proof
-       for i being Element of I holds (I --> L).i is transitive by FUNCOP_1:13;
-   hence product (I --> L) is transitive by WAYBEL_3:29;
-  end;
 end;
 
 
@@ -561,24 +279,11 @@ theorem :: WAYBEL18:14
 
 registration let I be non empty set; let L be complete LATTICE;
  cluster product (I --> L) -> with_suprema complete;
- coherence
-  proof reconsider IB = I --> L as
-          RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I;
-       for i being Element of I holds IB.i is complete LATTICE
-      by FUNCOP_1:13;
-   hence product (I --> L) is with_suprema complete by WAYBEL_3:31;
-  end;
 end;
 
 
 registration let I be non empty set; let X be algebraic lower-bounded LATTICE;
  cluster product (I --> X) -> algebraic;
- coherence
-  proof set IB = I --> X;
-       for i being Element of I holds IB.i is algebraic lower-bounded LATTICE
-        by FUNCOP_1:13;
-   hence product (I --> X) is algebraic by WAYBEL13:25;
-  end;
 end;
 
 

@@ -39,62 +39,7 @@ scheme :: MSSUBFAM:sch 1
     for x be set st x in A().i holds P[f.x,x,i]
 provided
   for i be set st i in I() holds
-   for x be set st x in A().i ex y be set st y in B().i & P[y,x,i]
-proof
- defpred Q[set,set] means
-   ex f1 be Function of A().$1, B().$1 st f1 = $2 &
-    for x be set st x in A().$1 holds P[f1.x,x,$1];
-A2: now
-      let i be set such that
-A3:     i in I();
-      per cases;
-      suppose
-          B().i is non empty;
-      then reconsider bb = B().i as non empty set;
-      defpred Z[set,set] means P[ $2,$1,i];
-A4:   for e be set st e in A().i ex u be set st u in bb & Z[e,u] by A1,A3;
-      consider ff be Function of A().i, bb such that
-A5:     for e be set st e in A().i holds Z[e,ff.e] from FUNCT_2:sch 1(A4);
-      reconsider fff = ff as Function of A().i, B().i;
-      reconsider j = fff as set;
-      take j;
-      thus Q[i,j] by A5;
-      end;
-      suppose
-A6:     B().i is empty;
-A7:   now
-        let x be set;
-          for y be set holds not (y in B().i & P[y,x,i]) by A6;
-        hence not x in A().i by A1,A3;
-      end;
-      then A().i = {} by XBOOLE_0:def 1;
-      then reconsider fff = {} as Function of A().i, B().i
-       by FUNCT_2:55,RELAT_1:60;
-      reconsider j = fff as set;
-      take j;
-      thus Q[i,j]
-      proof
-       take fff;
-       thus fff = j;
-       thus for e be set st e in A().i holds P[fff.e,e,i] by A7;
-      end;
-    end;
-    end;
-    consider F be ManySortedSet of I() such that
-A8:   for i be set st i in I() holds Q[i,F.i] from MSUALG_1:sch 1(A2);
-      F is ManySortedFunction of A(), B()
-    proof
-      let i be set; assume
-       i in I();
-      then consider f be Function of A().i, B().i such that
-A9:     f = F.i and
-          for x be set st x in A().i holds P[f.x,x,i] by A8;
-      thus F.i is Function of A().i, B().i by A9;
-    end;
-    then reconsider F as ManySortedFunction of A(), B();
-    take F;
-    thus thesis by A8;
-  end;
+   for x be set st x in A().i ex y be set st y in B().i & P[y,x,i];
 
 theorem :: MSSUBFAM:1     :: SETFAM_1:3
   sf <> {} implies Intersect sf c= union sf;
@@ -157,40 +102,16 @@ begin :: Finite Many Sorted Sets
 
 registration let I;
  cluster empty-yielding -> locally-finite ManySortedSet of I;
-coherence
-  proof
-    let A be ManySortedSet of I such that
-A1:   A is empty-yielding;
-    let i;
-    assume i in I;
-    then reconsider B = A.i as empty set by A1,PBOOLE:def 15;
-      B is finite;
-    hence A.i is finite;
-  end;
 end;
 
 
 registration let I;
  cluster [0]I -> empty-yielding locally-finite;
-coherence
-  proof
-A1:[0]I is empty-yielding by PBOOLE:141;
-     for B be empty-yielding ManySortedSet of I holds B is locally-finite;
-   hence thesis by A1;
-  end;
 end;
 
 
 registration let I, A;
  cluster empty-yielding locally-finite ManySortedSubset of A;
-existence
-  proof
-   set x = [0]I;
-     x c= A by PBOOLE:49;
-   then reconsider x as ManySortedSubset of A by MSUALG_2:def 1;
-   take x;
-   thus thesis;
-  end;
 end;
 
 
@@ -200,98 +121,42 @@ A c= B & B is locally-finite implies A is locally-finite;
 registration let I;
            let A be locally-finite ManySortedSet of I;
  cluster -> locally-finite ManySortedSubset of A;
-coherence
-  proof
-   let x be ManySortedSubset of A;
-   reconsider x' = x as ManySortedSet of I;
-     x' c= A by MSUALG_2:def 1;
-   hence x is locally-finite by Th18;
-  end;
 end;
 
 
 registration let I;
            let A, B be locally-finite ManySortedSet of I;
  cluster A \/ B -> locally-finite;
-coherence
-  proof
-   let i; assume
-A1:  i in I;
-   then A.i is finite & B.i is finite by PRE_CIRC:def 3;
-   then A.i \/ B.i is finite by FINSET_1:14;
-   hence (A \/ B).i is finite by A1,PBOOLE:def 7;
-  end;
 end;
 
 
 registration let I, A;
            let B be locally-finite ManySortedSet of I;
  cluster A /\ B -> locally-finite;
-coherence
-  proof
-    let i; assume
-A1:  i in I;
-    then B.i is finite by PRE_CIRC:def 3;
-    then A.i /\ B.i is finite by FINSET_1:15;
-    hence (A /\ B).i is finite by A1,PBOOLE:def 8;
-  end;
 end;
 
 
 registration let I, B;
            let A be locally-finite ManySortedSet of I;
  cluster A /\ B -> locally-finite;
-coherence
-  proof
-    let i; assume
-A1:  i in I;
-    then A.i is finite by PRE_CIRC:def 3;
-    then A.i /\ B.i is finite by FINSET_1:15;
-    hence (A /\ B).i is finite by A1,PBOOLE:def 8;
-  end;
 end;
 
 
 registration let I, B;
            let A be locally-finite ManySortedSet of I;
  cluster A \ B -> locally-finite;
-coherence
-  proof
-    let i; assume
-A1:  i in I;
-    then A.i is finite by PRE_CIRC:def 3;
-    then A.i \ B.i is finite by FINSET_1:16;
-    hence (A \ B).i is finite by A1,PBOOLE:def 9;
-  end;
 end;
 
 
 registration let I, F;
            let A be locally-finite ManySortedSet of I;
  cluster F.:.:A -> locally-finite;
-coherence
-  proof
-    let i such that
-A1:   i in I;
-    reconsider f = F.i as Function;
-      A.i is finite by A1,PRE_CIRC:def 3;
-    then f.:(A.i) is finite by FINSET_1:17;
-    hence (F.:.:A).i is finite by A1,MSUALG_3:def 6;
-  end;
 end;
 
 
 registration let I;
            let A, B be locally-finite ManySortedSet of I;
  cluster [|A,B|] -> locally-finite;
-coherence
-  proof
-   let i; assume
-A1: i in I;
-   then A.i is finite & B.i is finite by PRE_CIRC:def 3;
-   then [:A.i,B.i:] is finite by FINSET_1:19;
-   hence [|A,B|].i is finite by A1,PRALG_2:def 9;
-  end;
 end;
 
 
@@ -307,7 +172,6 @@ A is locally-finite iff bool A is locally-finite;
 registration let I;
            let M be locally-finite ManySortedSet of I;
  cluster bool M -> locally-finite;
-coherence by Th21;
 end;
 
 
@@ -332,28 +196,12 @@ theorem :: MSSUBFAM:25     :: FINSET_1:27
 registration let I;
            let A, B be locally-finite ManySortedSet of I;
  cluster MSFuncs(A,B) -> locally-finite;
-coherence
-  proof
-    let i; assume
-A1:   i in I;
-then A2: MSFuncs(A,B).i = Funcs(A.i, B.i) by AUTALG_1:def 5;
-      A.i is finite & B.i is finite by A1,PRE_CIRC:def 3;
-    hence MSFuncs(A,B).i is finite by A2,FRAENKEL:16;
-  end;
 end;
 
 
 registration let I;
            let A, B be locally-finite ManySortedSet of I;
  cluster A \+\ B -> locally-finite;
-coherence
-  proof
-    let i; assume
-A1:   i in I;
-then A2: (A \+\ B).i = A.i \+\ B.i by PBOOLE:4;
-      A.i is finite & B.i is finite by A1,PRE_CIRC:def 3;
-    hence (A \+\ B).i is finite by A2,RLVECT_2:107;
-  end;
 end;
 
 
@@ -394,11 +242,6 @@ end;
 
 registration let I, M;
  cluster non-empty MSSubsetFamily of M;
-existence
-  proof
-      bool M is ManySortedSubset of bool M by MSUALG_2:def 1;
-    hence thesis;
-  end;
 end;
 
 
@@ -409,12 +252,6 @@ end;
 
 registration let I, M;
  cluster empty-yielding locally-finite MSSubsetFamily of M;
-existence
-  proof
-      [0]I c= bool M by PBOOLE:49;
-    then [0]I is ManySortedSubset of bool M by MSUALG_2:def 1;
-    hence thesis;
-  end;
 end;
 
 
@@ -424,11 +261,6 @@ theorem :: MSSUBFAM:31
 registration let I;
            let M be locally-finite ManySortedSet of I;
  cluster non-empty locally-finite MSSubsetFamily of M;
-existence
-  proof
-      bool M is MSSubsetFamily of M;
-    hence thesis;
-  end;
 end;
 
 
@@ -561,11 +393,6 @@ registration let I, M;
  cluster non-empty additive absolutely-additive
           multiplicative absolutely-multiplicative
            properly-upper-bound properly-lower-bound MSSubsetFamily of M;
-existence
-  proof
-    take bool M;
-    thus thesis by Lm1;
-  end;
 end;
 
 
@@ -578,101 +405,33 @@ end;
 
 registration let I, M;
  cluster absolutely-additive -> additive MSSubsetFamily of M;
-coherence
-  proof
-    let SF be MSSubsetFamily of M such that
-A1:   SF is absolutely-additive;
-    let A, B; assume
-A2:   A in SF & B in SF;
-    then A is ManySortedSubset of M & B is ManySortedSubset of M by Th33;
-    then A c= M & B c= M by MSUALG_2:def 1;
-then A3: {A,B} is MSSubsetFamily of M by Th39;
-      {A} c= SF & {B} c= SF by A2,PZFMISC1:36;
-    then {A} \/ {B} c= SF by PBOOLE:18;
-    then {A,B} c= SF by PZFMISC1:11;
-    then union {A,B} in SF by A1,A3,Def4;
-    hence A \/ B in SF by PZFMISC1:35;
-  end;
 end;
 
 
 registration let I, M;
  cluster absolutely-multiplicative -> multiplicative MSSubsetFamily of M;
-coherence
-  proof
-    let SF be MSSubsetFamily of M such that
-A1:   SF is absolutely-multiplicative;
-    let A, B; assume
-A2:   A in SF & B in SF;
-then A3: A is ManySortedSubset of M & B is ManySortedSubset of M by Th33;
-    then A c= M & B c= M by MSUALG_2:def 1;
-    then reconsider ab = {A,B} as MSSubsetFamily of M by Th39;
-      {A} c= SF & {B} c= SF by A2,PZFMISC1:36;
-    then {A} \/ {B} c= SF by PBOOLE:18;
-    then {A,B} c= SF by PZFMISC1:11;
-    then meet ab in SF by A1,Def6;
-    hence A /\ B in SF by A3,Th51;
-  end;
 end;
 
 
 registration let I, M;
  cluster absolutely-multiplicative ->
                  properly-upper-bound MSSubsetFamily of M;
-coherence
-  proof
-    let SF be MSSubsetFamily of M such that
-A1:   SF is absolutely-multiplicative;
-      [0]I c= bool M by PBOOLE:49;
-    then reconsider a = [0]I as MSSubsetFamily of M by MSUALG_2:def 1;
-A2: meet a = M by Th41;
-      [0]I c= SF by PBOOLE:49;
-    hence M in SF by A1,A2,Def6;
-  end;
 end;
 
 
 registration let I, M;
  cluster properly-upper-bound -> non-empty MSSubsetFamily of M;
-coherence
-  proof
-    let SF be MSSubsetFamily of M;
-    assume SF is properly-upper-bound;
-then A1: M in SF by Def7;
-    let i;
-    assume i in I;
-    hence thesis by A1,PBOOLE:def 4;
-  end;
 end;
 
 
 registration let I, M;
  cluster absolutely-additive ->
                  properly-lower-bound MSSubsetFamily of M;
-coherence
-  proof
-    let SF be MSSubsetFamily of M such that
-A1:   SF is absolutely-additive;
-      [0]I c= bool M by PBOOLE:49;
-    then reconsider a = [0]I as MSSubsetFamily of M by MSUALG_2:def 1;
-A2: union a = [0]I by MBOOLEAN:22;
-      [0]I c= SF by PBOOLE:49;
-    hence [0]I in SF by A1,A2,Def4;
-  end;
 end;
 
 
 registration let I, M;
  cluster properly-lower-bound -> non-empty MSSubsetFamily of M;
-coherence
-  proof
-    let SF be MSSubsetFamily of M;
-    assume SF is properly-lower-bound;
-then A1: [0]I in SF by Def8;
-    let i;
-    assume i in I;
-    hence thesis by A1,PBOOLE:def 4;
-  end;
 end;
 
 

@@ -77,123 +77,7 @@ begin :: Trees and Binary Trees
    ex D be binary DecoratedTree of A() st dom D = {0,1}* & D.{} = a() &
     for x be Node of D holds P[D.x,D.(x ^ <* 0 *>),D.(x ^ <*1*>)]
    provided
-     for a be Element of A() ex b,c be Element of A() st P[a,b,c]
-proof
-    defpred Q[set,set] means
-     ex b,c be Element of A() st P[$1,b,c] & $2 = [b,c];
-    A2: for e be set st e in A() ex u be set st u in [:A(),A():] & Q[e,u]
-    proof
-     let e be set;
-     assume e in A();
-     then consider b,c be Element of A() such that
-      A3: P[e,b,c] by A1;
-     take u = [b,c];
-     thus u in [:A(),A():];
-     thus Q[e,u] by A3;
-    end;
-    consider f be Function such that
-     A4: dom f = A() and
-     A5: rng f c= [:A(),A():] and
-     A6: for e be set st e in A() holds Q[e,f.e] from COMPTS_1:sch 1(A2);
-    deffunc _F(set) = IFEQ($1`2,0,(f.($1`1))`1,(f.($1`1))`2);
-    A7: for x be set st x in [:A(),NAT:] holds _F(x) in A() proof
-     let x be set;
-     assume x in [:A(),NAT:];
-     then x`1 in A() by MCART_1:10;
-     then f.(x`1) in rng f by A4,FUNCT_1:def 5;
-     then A8: (f.(x`1))`1 in A() & (f.(x`1))`2 in A() by A5,MCART_1:10;
-       now per cases;
-      suppose x`2 = 0;
-       hence IFEQ(x`2,0,(f.(x`1))`1,(f.(x`1))`2) in A() by A8,CQC_LANG:def 1;
-      end;
-      suppose x`2 <> 0;
-       hence IFEQ(x`2,0,(f.(x`1))`1,(f.(x`1))`2) in A() by A8,CQC_LANG:def 1;
-     end;
-     end;
-     hence IFEQ(x`2,0,(f.(x`1))`1,(f.(x`1))`2) in A();
-    end;
-    consider F be Function of [:A(),NAT:],A() such that
-     A9: for x be set st x in [:A(),NAT:] holds F.x = _F(x) from FUNCT_2:sch 2
-(A7);
-    A10: for e be set st e in A() holds P[e,F.[e,0],F.[e,1]]
-    proof
-     let e be set;
-     assume A11: e in A();
-     then consider b,c be Element of A() such that
-      A12: P[e,b,c] and
-      A13: f.e = [b,c] by A6;
-     A14: [e,0]`2 = 0 by MCART_1:7;
-       [e,0] in [:A(),NAT:] by A11,ZFMISC_1:106;
-     then A15: F.[e,0] = IFEQ([e,0]`2,0,(f.([e,0]`1))`1,(f.([e,0]`1))`2) by A9
-        .= (f.([e,0]`1))`1 by A14,CQC_LANG:def 1
-        .= (f.e)`1 by MCART_1:7
-        .= b by A13,MCART_1:7;
-     A16: [e,1]`2 = 1 & 1 <> 0 by MCART_1:7;
-       [e,1] in [:A(),NAT:] by A11,ZFMISC_1:106;
-     then F.[e,1] = IFEQ([e,1]`2,0,(f.([e,1]`1))`1,(f.([e,1]`1))`2) by A9
-        .= (f.([e,1]`1))`2 by A16,CQC_LANG:def 1
-        .= (f.e)`2 by MCART_1:7
-        .= c by A13,MCART_1:7;
-     hence P[e,F.[e,0],F.[e,1]] by A12,A15;
-    end;
-    deffunc _F(set) = 2;
-    consider D be DecoratedTree of A() such that
-     A17: D.{} = a() and
-     A18: for d be Element of dom D holds
-      succ d = { d^<*k*> where k is Nat : k < _F(D.d) } &
-      for n be Nat, x be set st x = D.d & n < _F(x)
-        holds D.(d^<*n*>) = F.[x,n] from TREES_2:sch 9;
-      now let t be Element of dom D;
-     assume not t in Leaves dom D;
-       { t^<*k*> where k is Nat : k < 2 } = { t^<* 0 *>, t^<* 1 *> }
-     proof
-      thus { t^<*k*> where k is Nat : k < 2 } c= { t^<* 0 *>, t^<* 1 *> }
-      proof
-       let v be set;
-       assume v in { t^<*k*> where k is Nat : k < 2 };
-       then consider k be Nat such that
-        A19: v = t^<*k*> and
-        A20: k < 2;
-         k = 0 or k = 1 by A20,ALGSEQ_1:4;
-       hence v in { t^<* 0 *>, t^<* 1 *> } by A19,TARSKI:def 2;
-      end;
-      let v be set;
-      assume v in { t^<* 0 *>, t^<* 1 *> };
-      then v = t^<* 0 *> or v = t^<* 1 *> by TARSKI:def 2;
-      hence v in { t^<*k*> where k is Nat : k < 2 };
-     end;
-     hence succ t = { t^<* 0 *>, t^<* 1 *> } by A18;
-    end;
-    then dom D is binary by BINTREE1:def 2;
-    then reconsider D as binary DecoratedTree of A() by BINTREE1:def 3;
-    take D;
-      now let t be Element of dom D;
-       { t^<*k*> where k is Nat : k < 2 } = { t^<* 0 *>, t^<* 1 *> }
-     proof
-      thus { t^<*k*> where k is Nat : k < 2 } c= { t^<* 0 *>, t^<* 1 *> }
-      proof
-       let v be set;
-       assume v in { t^<*k*> where k is Nat : k < 2 };
-       then consider k be Nat such that
-        A21: v = t^<*k*> and
-        A22: k < 2;
-         k = 0 or k = 1 by A22,ALGSEQ_1:4;
-       hence v in { t^<* 0 *>, t^<* 1 *> } by A21,TARSKI:def 2;
-      end;
-      let v be set;
-      assume v in { t^<* 0 *>, t^<* 1 *> };
-      then v = t^<* 0 *> or v = t^<* 1 *> by TARSKI:def 2;
-      hence v in { t^<*k*> where k is Nat : k < 2 };
-     end;
-     hence succ t = { t^<* 0 *>, t^<* 1 *> } by A18;
-    end;
-    hence dom D = {0,1}* by Th8;
-    thus D.{} = a() by A17;
-    let x be Node of D;
-      P[D.x,F.[D.x,0],F.[D.x,1]] by A10;
-    then P[D.x,D.(x ^ <* 0 *>),F.[D.x,1]] by A18;
-    hence P[D.x,D.(x ^ <* 0 *>),D.(x ^ <* 1 *>)] by A18;
-   end;
+     for a be Element of A() ex b,c be Element of A() st P[a,b,c];
 
   scheme :: BINTREE2:sch 2
  DecoratedBinTreeEx1 {A() -> non empty set, a() -> Element of A(),
@@ -202,93 +86,7 @@ proof
     for x be Node of D holds P[D.x,D.(x ^ <* 0 *>)] & Q[D.x,D.(x ^ <*1*>)]
    provided
      for a be Element of A() ex b be Element of A() st P[a,b] and
-     for a be Element of A() ex b be Element of A() st Q[a,b]
-proof
-    defpred _P[set,set] means
-    ( $1`2 = 0 implies P[$1`1,$2] ) & ( $1`2 = 1 implies Q[$1`1,$2] );
-    A3: for e be set st e in [:A(),NAT:] ex u be set st u in A() & _P[e,u]
-    proof
-     let e be set;
-     assume e in [:A(),NAT:];
-     then reconsider e1 = e`1 as Element of A() by MCART_1:10;
-     consider u1 be Element of A() such that
-      A4: P[e1,u1] by A1;
-     consider u2 be Element of A() such that
-      A5: Q[e1,u2] by A2;
-     take u = IFEQ(e`2,0,u1,u2);
-     thus u in A();
-     thus e`2 = 0 implies P[e`1,u] by A4,CQC_LANG:def 1;
-     thus e`2 = 1 implies Q[e`1,u] by A5,CQC_LANG:def 1;
-    end;
-    consider F be Function such that
-     A6: dom F = [:A(),NAT:] and
-     A7: rng F c= A() and
-     A8: for e be set st e in [:A(),NAT:] holds _P[e,F.e]
-                                                 from COMPTS_1:sch 1(A3);
-    reconsider F as Function of [:A(),NAT:],A() by A6,A7,FUNCT_2:4;
-    deffunc _F(set) = 2;
-    consider D be DecoratedTree of A() such that
-     A9: D.{} = a() and
-     A10: for d be Element of dom D holds
-      succ d = { d^<*k*> where k is Nat : k < _F(D.d) } &
-      for n be Nat, x be set st x = D.d & n < _F(x) holds D.(d^<*n*>) = F.[x,n]
-                                                       from TREES_2:sch 9;
-      now let t be Element of dom D;
-     assume not t in Leaves dom D;
-       { t^<*k*> where k is Nat : k < 2 } = { t^<* 0 *>, t^<* 1 *> }
-     proof
-      thus { t^<*k*> where k is Nat : k < 2 } c= { t^<* 0 *>, t^<* 1 *> }
-      proof
-       let v be set;
-       assume v in { t^<*k*> where k is Nat : k < 2 };
-       then consider k be Nat such that
-        A11: v = t^<*k*> and
-        A12: k < 2;
-         k = 0 or k = 1 by A12,ALGSEQ_1:4;
-       hence v in { t^<* 0 *>, t^<* 1 *> } by A11,TARSKI:def 2;
-      end;
-      let v be set;
-      assume v in { t^<* 0 *>, t^<* 1 *> };
-      then v = t^<* 0 *> or v = t^<* 1 *> by TARSKI:def 2;
-      hence v in { t^<*k*> where k is Nat : k < 2 };
-     end;
-     hence succ t = { t^<* 0 *>, t^<* 1 *> } by A10;
-    end;
-    then dom D is binary by BINTREE1:def 2;
-    then reconsider D as binary DecoratedTree of A() by BINTREE1:def 3;
-    take D;
-      now let t be Element of dom D;
-       { t^<*k*> where k is Nat : k < 2 } = { t^<* 0 *>, t^<* 1 *> }
-     proof
-      thus { t^<*k*> where k is Nat : k < 2 } c= { t^<* 0 *>, t^<* 1 *> }
-      proof
-       let v be set;
-       assume v in { t^<*k*> where k is Nat : k < 2 };
-       then consider k be Nat such that
-        A13: v = t^<*k*> and
-        A14: k < 2;
-         k = 0 or k = 1 by A14,ALGSEQ_1:4;
-       hence v in { t^<* 0 *>, t^<* 1 *> } by A13,TARSKI:def 2;
-      end;
-      let v be set;
-      assume v in { t^<* 0 *>, t^<* 1 *> };
-      then v = t^<* 0 *> or v = t^<* 1 *> by TARSKI:def 2;
-      hence v in { t^<*k*> where k is Nat : k < 2 };
-     end;
-     hence succ t = { t^<* 0 *>, t^<* 1 *> } by A10;
-    end;
-    hence dom D = {0,1}* by Th8;
-    thus D.{} = a() by A9;
-    let x be Node of D;
-      [D.x,0]`2 = 0 by MCART_1:7;
-    then P[[D.x,0]`1,F.[D.x,0]] by A8;
-    then P[D.x,F.[D.x,0]] by MCART_1:7;
-    hence P[D.x,D.(x ^ <* 0 *>)] by A10;
-      [D.x,1]`2 = 1 by MCART_1:7;
-    then Q[[D.x,1]`1,F.[D.x,1]] by A8;
-    then Q[D.x,F.[D.x,1]] by MCART_1:7;
-    hence Q[D.x,D.(x ^ <* 1 *>)] by A10;
-   end;
+     for a be Element of A() ex b be Element of A() st Q[a,b];
 
   definition
    let T be binary Tree;
@@ -305,35 +103,6 @@ proof
    let T be binary Tree;
    let n be non empty Nat;
    cluster NumberOnLevel(n,T) -> one-to-one;
-   coherence
-   proof
-      now let x1,x2 be set;
-     assume that
-      A1: x1 in dom NumberOnLevel(n,T) and
-      A2: x2 in dom NumberOnLevel(n,T) and
-      A3: NumberOnLevel(n,T).x1 = NumberOnLevel(n,T).x2;
-     A4: x1 in T-level n by A1,FUNCT_2:def 1;
-     then x1 in { w where w is Element of T : len w = n } by TREES_2:def 6;
-     then consider t1 be Element of T such that
-      A5: t1 = x1 and
-      A6: len t1 = n;
-       len Rev t1 = n by A6,FINSEQ_5:def 3;
-     then reconsider F1 = Rev t1 as Tuple of n,BOOLEAN by FINSEQ_2:110;
-     A7: x2 in T-level n by A2,FUNCT_2:def 1;
-     then x2 in { w where w is Element of T : len w = n } by TREES_2:def 6;
-     then consider t2 be Element of T such that
-      A8: t2 = x2 and
-      A9: len t2 = n;
-       len Rev t2 = n by A9,FINSEQ_5:def 3;
-     then reconsider F2 = Rev t2 as Tuple of n,BOOLEAN by FINSEQ_2:110;
-       (Absval F1) + 1 = NumberOnLevel(n,T).x1 by A4,A5,Def1
-        .= (Absval F2) + 1 by A3,A7,A8,Def1;
-     then Absval F1 = Absval F2 by XCMPLX_1:2;
-     then F1 = F2 by BINARI_3:2;
-     hence x1 = x2 by A5,A8,BINARI_3:3;
-    end;
-    hence NumberOnLevel(n,T) is one-to-one by FUNCT_1:def 8;
-   end;
   end;
 
 
@@ -365,30 +134,16 @@ begin :: Full Trees
    let T be binary Tree;
    let n be Nat;
    cluster T-level n -> finite;
-   coherence by QC_LANG4:19;
   end;
 
 
   registration
    cluster full -> binary Tree;
-   coherence
-   proof
-    let T be Tree;
-    assume T is full;
-    then T = {0,1}* by Def2;
-    hence T is binary by Th3;
-   end;
   end;
 
 
   registration
    cluster full Tree;
-   existence
-   proof
-    reconsider T = {0,1}* as Tree by Th9;
-    take T;
-    thus T is full by Def2;
-   end;
   end;
 
 
@@ -410,11 +165,6 @@ begin :: Full Trees
    let T be full Tree;
    let n be non empty Nat;
    cluster FinSeqLevel(n,T) -> one-to-one;
-   coherence
-   proof
-      NumberOnLevel(n,T)" is one-to-one by FUNCT_1:62;
-    hence FinSeqLevel(n,T) is one-to-one by Def3;
-   end;
   end;
 
 

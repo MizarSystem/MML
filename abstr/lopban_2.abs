@@ -1,0 +1,403 @@
+:: The {B}anach Algebra of Bounded Linear Operators
+::  by Yasunari Shidama
+:: 
+:: Received January 26, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, FUNCT_2,
+      VECTSP_1, ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, BINOP_1, GRCAT_1,
+      UNIALG_1, LATTICES, FUNCSDOM, SEQ_1, SEQ_2, REALSET1, PREPOWER, SERIES_1,
+      BHSP_3, RSSPACE, RSSPACE3, ALGSTR_2, LOPBAN_1, LOPBAN_2, SUPINF_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, SUBSET_1, MCART_1, RELSET_1,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1,
+      FUNCOP_1, BINOP_1, STRUCT_0, XCMPLX_0, XREAL_0, RAT_1, INT_1, ORDINAL1,
+      ORDINAL2, NUMBERS, MEMBERED, REAL_1, NAT_1, PSCOMP_1, ALG_1, RLVECT_1,
+      VECTSP_1, REALSET1, VECTSP_2, FRAENKEL, ABSVALUE, RLSUB_1, NORMSP_1,
+      BHSP_1, BHSP_2, BHSP_3, RSSPACE, RSSPACE3, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
+      SERIES_1, PREPOWER, FUNCSDOM, LOPBAN_1;
+ constructors MCART_1, FUNCT_3, BINOP_1, ARYTM_0, REAL_1, XREAL_0, NAT_1,
+      SQUARE_1, FUNCT_2, FUNCT_4, FUNCT_5, FUNCT_7, ABIAN, REALSET1, XCMPLX_0,
+      SUBSET_1, MEMBERED, DOMAIN_1, SEQ_1, SEQ_2, SERIES_1, SEQ_4, PSCOMP_1,
+      FUNCOP_1, PREPOWER, POWER, RLVECT_1, VECTSP_1, FRAENKEL, FUNCSDOM,
+      PARTFUN1, RLSUB_1, NORMSP_1, BHSP_2, BHSP_3, RSSPACE, RSSPACE3, LOPBAN_1,
+      SEQM_3, XBOOLE_0, VECTSP_2, GRCAT_1;
+ clusters SUBSET_1, RELSET_1, FINSEQ_1, STRUCT_0, ARYTM_3, RELAT_1, REAL_1,
+      NUMBERS, ORDINAL2, XBOOLE_0, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1,
+      RLVECT_1, VECTSP_1, NORMSP_1, XREAL_0, MEMBERED, FUNCSDOM, INT_1, SEQ_1,
+      RSSPACE3, BHSP_1, LOPBAN_1, ZFMISC_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Banach Algebra of Bounded Linear Operators
+
+definition
+  let X be non empty set;
+  let f,g be Element of Funcs(X,X);
+ redefine func g*f -> Element of Funcs(X,X);
+   end;
+
+theorem :: LOPBAN_2:1
+for X,Y,Z be RealLinearSpace
+ for f be LinearOperator of X,Y
+ for g be LinearOperator of Y,Z
+      holds g*f is LinearOperator of X,Z;
+
+theorem :: LOPBAN_2:2
+for X,Y,Z be RealNormSpace
+ for f be bounded LinearOperator of X,Y
+ for g be bounded LinearOperator of Y,Z
+      holds g*f is bounded LinearOperator of X,Z
+      & for x be VECTOR of X holds ||.((g*f).x).||
+              <=(BoundedLinearOperatorsNorm(Y,Z).g)
+               *(BoundedLinearOperatorsNorm(X,Y).f )*||.x.||
+      &  (BoundedLinearOperatorsNorm(X,Z).(g*f))
+               <=(BoundedLinearOperatorsNorm(Y,Z).g)
+                  *(BoundedLinearOperatorsNorm(X,Y).f);
+
+definition
+  let X be RealNormSpace;
+  let f,g be bounded LinearOperator of X,X;
+  redefine func g*f -> bounded LinearOperator of X,X;
+end;
+
+definition
+  let X be RealNormSpace;
+  let f,g be Element of BoundedLinearOperators(X,X);
+  func f + g -> Element of BoundedLinearOperators(X,X) equals
+:: LOPBAN_2:def 1
+  Add_ ( BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X) )
+     .(f,g);
+end;
+
+definition
+  let X be RealNormSpace;
+  let f,g be Element of BoundedLinearOperators(X,X);
+  func g*f -> Element of BoundedLinearOperators(X,X) equals
+:: LOPBAN_2:def 2
+  modetrans(g,X,X)*modetrans(f,X,X);
+end;
+
+definition
+  let X be RealNormSpace;
+  let f be Element of BoundedLinearOperators(X,X);
+  let a be Real;
+  func a*f  -> Element of BoundedLinearOperators(X,X) equals
+:: LOPBAN_2:def 3
+  Mult_(BoundedLinearOperators(X,X),
+                R_VectorSpace_of_LinearOperators(X,X)).(a,f);
+end;
+
+definition let X be RealNormSpace;
+  func FuncMult(X) -> BinOp of BoundedLinearOperators(X,X) means
+:: LOPBAN_2:def 4
+  for f,g being Element of BoundedLinearOperators(X,X) holds
+  it.(f,g) = f*g;
+end;
+
+theorem :: LOPBAN_2:3
+  for X be RealNormSpace holds
+    id (the carrier of X) is bounded LinearOperator of X,X;
+
+definition let X be RealNormSpace;
+   func FuncUnit(X) -> Element of BoundedLinearOperators(X,X) equals
+:: LOPBAN_2:def 5
+    id (the carrier of X);
+  end;
+
+theorem :: LOPBAN_2:4
+   for X be RealNormSpace
+   for f,g,h be bounded LinearOperator of X,X holds
+   h = f*g iff for x be VECTOR of X holds h.x = f.(g.x);
+
+theorem :: LOPBAN_2:5
+  for X be RealNormSpace
+  for f,g,h be bounded LinearOperator of X,X
+  holds f*(g*h) =(f*g)*h;
+
+theorem :: LOPBAN_2:6
+  for X be RealNormSpace
+  for f be bounded LinearOperator of X,X holds
+  f*(id the carrier of X) = f  & (id the carrier of X )*f=f;
+
+theorem :: LOPBAN_2:7
+ for X be RealNormSpace
+ for f,g,h be Element of BoundedLinearOperators(X,X)
+ holds f*(g*h) =(f*g)*h;
+
+theorem :: LOPBAN_2:8
+  for X be RealNormSpace
+  for f be Element of BoundedLinearOperators(X,X) holds
+  f*FuncUnit(X)= f & FuncUnit(X)*f=f;
+
+theorem :: LOPBAN_2:9
+  for X be RealNormSpace
+  for f,g,h be Element of BoundedLinearOperators(X,X) holds
+  f *(g+h)=f*g + f*h;
+
+theorem :: LOPBAN_2:10
+  for X be RealNormSpace
+  for f,g,h be Element of BoundedLinearOperators(X,X) holds
+  (g+h)*f = g*f + h*f;
+
+theorem :: LOPBAN_2:11
+ for X be RealNormSpace
+ for f,g be Element of BoundedLinearOperators(X,X)
+ for a,b be Real holds
+ (a*b)*(f*g)=(a*f)*(b*g);
+
+theorem :: LOPBAN_2:12
+ for X be RealNormSpace
+ for f,g be Element of BoundedLinearOperators(X,X)
+ for a be Real holds
+ a*(f*g) =(a*f)*g;
+
+definition
+ let X be RealNormSpace;
+  func Ring_of_BoundedLinearOperators(X) -> doubleLoopStr equals
+:: LOPBAN_2:def 6
+     doubleLoopStr
+     (# BoundedLinearOperators(X,X),
+           Add_(BoundedLinearOperators(X,X),
+                    R_VectorSpace_of_LinearOperators(X,X)),
+          FuncMult(X),
+          FuncUnit(X),
+          Zero_(BoundedLinearOperators(X,X),
+                   R_VectorSpace_of_LinearOperators(X,X))
+    #);
+end;
+
+registration
+ let X be RealNormSpace;
+ cluster Ring_of_BoundedLinearOperators(X) -> non empty strict;
+end;
+
+theorem :: LOPBAN_2:13
+   for X be RealNormSpace
+     for x,y,z being Element of Ring_of_BoundedLinearOperators(X) holds
+         x+y = y+x &
+         (x+y)+z = x+(y+z) &
+         x+(0.Ring_of_BoundedLinearOperators(X)) = x &
+         (ex t being Element of
+            Ring_of_BoundedLinearOperators(X) st  x+t=
+          0.Ring_of_BoundedLinearOperators(X)) &
+         (x*y)*z = x*(y*z) &
+         x*(1_ Ring_of_BoundedLinearOperators(X)) = x &
+         (1_ Ring_of_BoundedLinearOperators(X))*x = x &
+         x*(y+z) = x*y + x*z &
+         (y+z)*x = y*x + z*x;
+
+theorem :: LOPBAN_2:14
+   for X be RealNormSpace holds Ring_of_BoundedLinearOperators(X) is Ring;
+
+registration
+   let X be RealNormSpace;
+   cluster Ring_of_BoundedLinearOperators(X) ->
+     Abelian add-associative right_zeroed right_complementable
+     associative left_unital right_unital distributive;
+end;
+
+definition
+ let X be RealNormSpace;
+  func R_Algebra_of_BoundedLinearOperators(X) -> AlgebraStr equals
+:: LOPBAN_2:def 7
+   AlgebraStr
+    (# BoundedLinearOperators(X,X),
+        FuncMult(X),
+        Add_(BoundedLinearOperators(X,X),
+                     R_VectorSpace_of_LinearOperators(X,X)),
+        Mult_(BoundedLinearOperators(X,X),
+                 R_VectorSpace_of_LinearOperators(X,X)),
+      FuncUnit(X),
+      Zero_(BoundedLinearOperators(X,X),
+               R_VectorSpace_of_LinearOperators(X,X))
+    #);
+end;
+
+registration
+ let X be RealNormSpace;
+ cluster R_Algebra_of_BoundedLinearOperators(X) -> non empty strict;
+end;
+
+theorem :: LOPBAN_2:15
+   for X be RealNormSpace
+     for x,y,z being Element of
+       R_Algebra_of_BoundedLinearOperators(X)
+        for a,b be Real holds
+         x+y = y+x &
+         (x+y)+z = x+(y+z) &
+         x+(0.R_Algebra_of_BoundedLinearOperators(X)) = x &
+         (ex t being Element of
+            R_Algebra_of_BoundedLinearOperators(X) st  x+t=
+          0.R_Algebra_of_BoundedLinearOperators(X)) &
+         (x*y)*z = x*(y*z) &
+         x*(1_ R_Algebra_of_BoundedLinearOperators(X)) = x &
+         (1_ R_Algebra_of_BoundedLinearOperators(X))*x = x &
+         x*(y+z) = x*y + x*z &
+         (y+z)*x = y*x + z*x &
+        a*(x*y) = (a*x)*y &
+         a*(x+y) = a*x + a*y &
+         (a+b)*x = a*x + b*x &
+         (a*b)*x = a*(b*x)    &
+         (a*b)*(x*y)=(a*x)*(b*y);
+
+definition
+  mode BLAlgebra is Abelian add-associative right_zeroed right_complementable
+     associative Algebra-like (non empty AlgebraStr);
+end;
+
+theorem :: LOPBAN_2:16
+ for X be RealNormSpace holds
+    R_Algebra_of_BoundedLinearOperators(X) is BLAlgebra;
+
+registration
+  cluster l1_Space -> complete;
+end;
+
+registration
+  cluster l1_Space -> non trivial;
+end;
+
+registration
+  cluster non trivial RealBanachSpace;
+end;
+
+theorem :: LOPBAN_2:17
+   for X be non trivial RealNormSpace
+   ex w be VECTOR of X st ||. w .|| = 1;
+
+ theorem :: LOPBAN_2:18
+   for X be non trivial RealNormSpace holds
+       BoundedLinearOperatorsNorm(X,X).(id the carrier of X) = 1;
+
+definition
+  struct(AlgebraStr,NORMSTR) Normed_AlgebraStr
+               (# carrier -> set,
+                 mult,add -> (BinOp of the carrier),
+                 Mult -> (Function of [:REAL,the carrier:],the carrier),
+                 unity,Zero -> Element of the carrier,
+                 norm -> Function of the carrier, REAL#);
+end;
+
+registration
+ cluster non empty Normed_AlgebraStr;
+end;
+
+definition
+ let X be RealNormSpace;
+ func R_Normed_Algebra_of_BoundedLinearOperators(X) -> Normed_AlgebraStr equals
+:: LOPBAN_2:def 8
+
+   Normed_AlgebraStr
+    (# BoundedLinearOperators(X,X),
+        FuncMult(X),
+        Add_(BoundedLinearOperators(X,X),
+                     R_VectorSpace_of_LinearOperators(X,X)),
+        Mult_(BoundedLinearOperators(X,X),
+                 R_VectorSpace_of_LinearOperators(X,X)),
+        FuncUnit(X),
+        Zero_(BoundedLinearOperators(X,X),
+               R_VectorSpace_of_LinearOperators(X,X)),
+       BoundedLinearOperatorsNorm(X,X)
+          #);
+end;
+
+registration
+ let X be RealNormSpace;
+ cluster R_Normed_Algebra_of_BoundedLinearOperators(X) -> non empty strict;
+end;
+
+theorem :: LOPBAN_2:19
+   for X be RealNormSpace
+     for x,y,z being Element of
+       R_Normed_Algebra_of_BoundedLinearOperators(X)
+        for a,b be Real holds
+         x+y = y+x &
+         (x+y)+z = x+(y+z) &
+         x+(0.R_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
+         (ex t being Element of
+            R_Normed_Algebra_of_BoundedLinearOperators(X) st  x+t=
+          0.R_Normed_Algebra_of_BoundedLinearOperators(X)) &
+         (x*y)*z = x*(y*z) &
+         x*(1_ R_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
+         (1_ R_Normed_Algebra_of_BoundedLinearOperators(X))*x = x &
+         x*(y+z) = x*y + x*z &
+         (y+z)*x = y*x + z*x &
+         a*(x*y) = (a*x)*y &
+         (a*b)*(x*y)=(a*x)*(b*y) &
+         a*(x+y) = a*x + a*y &
+         (a+b)*x = a*x + b*x &
+         (a*b)*x = a*(b*x) &
+         1*x =x;
+
+ theorem :: LOPBAN_2:20
+   for X be RealNormSpace
+     holds R_Normed_Algebra_of_BoundedLinearOperators(X)
+     is RealNormSpace-like Abelian add-associative
+  right_zeroed right_complementable
+     associative Algebra-like RealLinearSpace-like;
+
+registration
+  cluster RealNormSpace-like Abelian add-associative
+     right_zeroed right_complementable
+     associative Algebra-like RealLinearSpace-like
+     strict (non empty Normed_AlgebraStr);
+end;
+
+definition
+  mode Normed_Algebra is RealNormSpace-like Abelian add-associative
+      right_zeroed right_complementable
+      associative Algebra-like RealLinearSpace-like
+      (non empty Normed_AlgebraStr);
+end;
+
+registration
+  let X be RealNormSpace;
+  cluster R_Normed_Algebra_of_BoundedLinearOperators(X)
+  -> RealNormSpace-like Abelian add-associative
+     right_zeroed right_complementable
+     associative Algebra-like RealLinearSpace-like;
+end;
+
+definition let X be non empty Normed_AlgebraStr;
+  attr X is Banach_Algebra-like_1 means
+:: LOPBAN_2:def 9
+   for x,y being Element of X holds ||. x*y .|| <= ||.x.|| * ||.y.||;
+  attr X is Banach_Algebra-like_2 means
+:: LOPBAN_2:def 10
+   ||. 1_ X .|| = 1;
+  attr X is Banach_Algebra-like_3 means
+:: LOPBAN_2:def 11
+   for a being Real for x,y being Element of X
+   holds a*(x*y)=x*(a*y);
+end;
+
+definition let X be Normed_Algebra;
+  attr X is Banach_Algebra-like means
+:: LOPBAN_2:def 12
+   X is Banach_Algebra-like_1 Banach_Algebra-like_2 Banach_Algebra-like_3
+        left_unital left-distributive complete;
+end;
+
+registration
+  cluster Banach_Algebra-like ->
+     Banach_Algebra-like_1 Banach_Algebra-like_2 Banach_Algebra-like_3
+     left-distributive left_unital complete Normed_Algebra;
+  cluster Banach_Algebra-like_1 Banach_Algebra-like_2 Banach_Algebra-like_3
+    left-distributive left_unital complete ->
+    Banach_Algebra-like Normed_Algebra;
+end;
+
+registration
+ let X be non trivial RealBanachSpace;
+ cluster R_Normed_Algebra_of_BoundedLinearOperators(X) -> Banach_Algebra-like;
+end;
+
+registration
+  cluster Banach_Algebra-like Normed_Algebra;
+end;
+
+definition
+  mode Banach_Algebra is Banach_Algebra-like Normed_Algebra;
+end;

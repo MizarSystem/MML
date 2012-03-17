@@ -88,13 +88,6 @@ for X being set, F being Subset-Family of X st F = {X}
 
 registration let X be set, F be empty Subset-Family of X;
  cluster COMPLEMENT F -> empty;
- coherence
-  proof
-   assume COMPLEMENT F is not empty;
-    then ex x being Subset of X st
-     x in COMPLEMENT F by SUBSET_1:10;
-   hence contradiction by SETFAM_1:def 8;
-  end;
 end;
 
 
@@ -197,7 +190,6 @@ end;
 
 registration let T be TopStruct;
  cluster irreducible -> non empty Subset of T;
- coherence by Def4;
 end;
 
 
@@ -221,11 +213,6 @@ theorem :: YELLOW_8:26
 
 registration let T be non empty TopSpace;
  cluster irreducible Subset of T;
- existence
-  proof consider p being Point of T;
-      Cl{p} is irreducible by Th26;
-   hence thesis;
-  end;
 end;
 
 
@@ -259,7 +246,6 @@ theorem :: YELLOW_8:30
 
 registration let T be Hausdorff (non empty TopSpace);
  cluster irreducible -> trivial Subset of T;
- coherence by Th30;
 end;
 
 
@@ -268,17 +254,11 @@ theorem :: YELLOW_8:31
 
 registration
  cluster Hausdorff -> sober (non empty TopSpace);
- coherence by Th31;
 end;
 
 
 registration
  cluster sober (non empty TopSpace);
- existence
-  proof consider T being Hausdorff (non empty TopSpace);
-   take T;
-   thus thesis;
-  end;
 end;
 
 
@@ -291,7 +271,6 @@ theorem :: YELLOW_8:33
 
 registration
  cluster sober -> T_0 (non empty TopSpace);
- coherence by Th33;
 end;
 
 
@@ -305,82 +284,11 @@ end;
 
 registration let X be non empty set;
  cluster CofinTop X -> non empty;
- coherence
-  proof
-   thus the carrier of CofinTop X is non empty by Def7;
-  end;
 end;
 
 
 registration let X be set;
  cluster CofinTop X -> TopSpace-like;
- coherence
-  proof set IT = CofinTop X;
-A1: the carrier of IT = X by Def7;
-A2: COMPLEMENT the topology of IT = {X} \/ Fin X by Def7;
-   reconsider XX = {X} as Subset of bool X by ZFMISC_1:80;
-   reconsider XX as Subset-Family of X by SETFAM_1:def 7;
-   reconsider F = Fin X as Subset of bool X by FINSUB_1:26;
-   reconsider F as Subset-Family of X by SETFAM_1:def 7;
-A3: the topology of IT
-       = COMPLEMENT COMPLEMENT the topology of IT
-      .= COMPLEMENT XX \/ COMPLEMENT F by A1,A2,Th11
-      .= {{}} \/ COMPLEMENT F by Th12;
-   A4: {} in {{}} by TARSKI:def 1;
-      {}.X in F;
-    then ({}X)`` in F;
-    then ({}X)` in COMPLEMENT F by SETFAM_1:def 8;
-    then [#]X in COMPLEMENT F by SUBSET_1:22;
-    then [#]X in the topology of IT by A3,XBOOLE_0:def 2;
-   hence the carrier of IT in the topology of IT by A1,SUBSET_1:def 4;
-   thus for a being Subset-Family of IT
-      st a c= the topology of IT
-       holds union a in the topology of IT
-   proof let a be Subset-Family of IT such that
-A5:   a c= the topology of IT;
-    set b = a /\ COMPLEMENT F;
-      b c= a by XBOOLE_1:17;
-    then reconsider b as Subset of bool X by A1,XBOOLE_1:1;
-    reconsider b as Subset-Family of X by SETFAM_1:def 7;
-      a /\ {{}} c= {{}} by XBOOLE_1:17;
-    then a /\ {{}} = {{}} or a /\ {{}} = {} by ZFMISC_1:39;
-then A6:   union(a /\ {{}}) = {} by ZFMISC_1:2,31;
-A7:  union a = union(a /\ the topology of IT) by A5,XBOOLE_1:28
-       .= union(a /\ {{}} \/ a /\ COMPLEMENT F) by A3,XBOOLE_1:23
-       .= union(a /\ {{}}) \/ union(a /\ COMPLEMENT F) by ZFMISC_1:96
-       .= union b by A6;
-    per cases;
-    suppose b = {};
-    hence union a in the topology of IT by A3,A4,A7,XBOOLE_0:def 2,ZFMISC_1:2;
-    end;
-    suppose b <> {};
-then A8:   meet COMPLEMENT b = [#]X \ union b by SETFAM_1:47
-      .= X \ union b by SUBSET_1:def 4
-      .= (union b)` by SUBSET_1:def 5;
-       b c= COMPLEMENT F by XBOOLE_1:17;
-     then COMPLEMENT b c= Fin X by Th9;
-     then (union b)` in Fin X by A8,Th2;
-     then union b in COMPLEMENT F by SETFAM_1:def 8;
-    hence union a in the topology of IT by A3,A7,XBOOLE_0:def 2;
-   end;
-   end;
-   let a,b be Subset of IT such that
-A9:  a in the topology of IT & b in the topology of IT;
-    reconsider a'=a, b'=b as Subset of X by Def7;
-   per cases;
-   suppose a = {} or b = {};
-   hence a /\ b in the topology of IT by A3,A4,XBOOLE_0:def 2;
-   end;
-   suppose a <> {} & b <> {};
-    then not(a in {{}} or b in {{}}) by TARSKI:def 1;
-    then a' in COMPLEMENT F & b' in COMPLEMENT F by A3,A9,XBOOLE_0:def 2;
-    then a'` in Fin X & b'` in Fin X by SETFAM_1:def 8;
-    then a'` \/ b'` in Fin X by FINSUB_1:10;
-    then (a' /\ b')` in Fin X by SUBSET_1:30;
-    then a /\ b in COMPLEMENT F by SETFAM_1:def 8;
-   hence a /\ b in the topology of IT by A3,XBOOLE_0:def 2;
-  end;
-  end;
 end;
 
 
@@ -394,53 +302,16 @@ theorem :: YELLOW_8:35
 
 registration let X be non empty set;
  cluster CofinTop X -> being_T1;
- coherence
-  proof
-      for p being Point of CofinTop X holds {p} is closed by Th34;
-   hence CofinTop X is_T1 by URYSOHN1:27;
-  end;
 end;
 
 
 registration let X be infinite set;
  cluster CofinTop X -> non sober;
- coherence
-  proof set T = CofinTop X;
-A1:  the carrier of CofinTop X = X by Def7;
-    then reconsider S = [#]X as Subset of T;
-      S is irreducible
-     proof
-A2:     S = X & X = [#]T by A1,PRE_TOPC:12,SUBSET_1:def 4;
-      hence S is non empty closed;
-      let S1,S2 be Subset of T such that
-A3:     S1 is closed & S2 is closed and
-A4:     S = S1 \/ S2;
-      assume S1 <> S & S2 <> S;
-       then reconsider S1'=S1, S2'=S2 as finite set by A2,A3,Th34;
-         S = S1' \/ S2' by A4;
-      hence contradiction by SUBSET_1:def 4;
-     end;
-    then reconsider S as irreducible Subset of T;
-   take S;
-   let p be Point of T;
-      now assume p is_dense_point_of S;
-      then S c= Cl{p} by Def5;
-      then X c= Cl{p} by SUBSET_1:def 4;
-      then Cl{p} is infinite by FINSET_1:13;
-     hence contradiction by Th35;
-    end;
-   hence thesis;
-  end;
 end;
 
 
 registration
  cluster being_T1 non sober (non empty TopSpace);
- existence
-  proof consider X being infinite set;
-   take CofinTop X;
-   thus thesis;
-  end;
 end;
 
 

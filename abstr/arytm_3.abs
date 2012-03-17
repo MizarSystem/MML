@@ -20,38 +20,23 @@ reserve A,B,C for Ordinal;
 registration
  let A be Ordinal;
  cluster -> ordinal Element of A;
- coherence
-   proof
-    let x be Element of A;
-      A is empty or A is non empty;
-    hence thesis by ORDINAL1:23,SUBSET_1:def 2;
-   end;
 end;
 
 
 registration
  cluster empty -> natural Ordinal;
- coherence by ORDINAL2:19,def 21;
  cluster one -> natural non empty;
- coherence by Lm1,ORDINAL2:def 21;
  cluster -> natural Element of omega;
- coherence by ORDINAL2:def 21;
 end;
 
 
 registration
  cluster non empty natural Ordinal;
- existence proof take one; thus thesis; end;
 end;
 
 
 registration let a be natural Ordinal;
  cluster succ a -> natural;
- coherence
-  proof
-      a in omega by ORDINAL2:def 21;
-   hence succ a in omega by ORDINAL1:41,ORDINAL2:19;
-  end;
 end;
 
 
@@ -61,45 +46,11 @@ scheme :: ARYTM_3:sch 1
 provided
    P[{}]
 and
-   for a being natural Ordinal st P[a] holds P[succ a]
-proof
-     defpred _P[Ordinal] means $1 is natural implies P[$1];
-A3:  _P[{}] by A1;
-A4:  now let A; assume
-A5:   _P[A];
-      now assume succ A is natural;
-       then succ A in omega & A in succ A by ORDINAL1:10,ORDINAL2:def 21;
-       then A is Element of omega by ORDINAL1:19;
-       hence P[succ A] by A2,A5;
-      end; hence _P[succ A];
-    end;
-A6:  now let A;
-A7:   {} c= A by XBOOLE_1:2;
-     assume A <> {};
-     then {} c< A by A7,XBOOLE_0:def 8;
-then A8:   {} in A by ORDINAL1:21;
-     assume A is_limit_ordinal;
-      then omega c= A & not A in A by A8,ORDINAL2:def 5;
-      then not A in omega;
-     hence (for B st B in A holds _P[B]) implies _P[A] by ORDINAL2:def 21;
-    end;
-      for A holds _P[A] from ORDINAL2:sch 1(A3,A4,A6);
-   hence thesis;
-  end;
+   for a being natural Ordinal st P[a] holds P[succ a];
 
 registration
  let a, b be natural Ordinal;
  cluster a +^ b -> natural;
- coherence
-  proof defpred _P[natural Ordinal] means a+^$1 is natural;
-A1:  _P[{}] by ORDINAL2:44;
-A2:  now let b be natural Ordinal; assume _P[b]; then
-     reconsider c = a+^b as natural Ordinal; a+^succ b = succ c by ORDINAL2:45;
-     hence _P[succ b];
-    end;
-      for b being natural Ordinal holds _P[b] from Omega_Ind(A1,A2);
-   hence thesis;
-  end;
 end;
 
 
@@ -109,22 +60,7 @@ theorem :: ARYTM_3:1
 registration
  let a, b be natural Ordinal;
  cluster a -^ b -> natural;
- coherence
-  proof not b c= a or b c= a;
-    then a -^ b = {} or a = b+^(a-^b) by ORDINAL3:def 6;
-   hence a-^b in omega by Th1,ORDINAL2:def 5;
-  end;
  cluster a *^ b -> natural;
- coherence
-  proof defpred _P[natural Ordinal] means $1*^b is natural;
-A1:  _P[{}] by ORDINAL2:52;
-A2:  now let a be natural Ordinal; assume _P[a]; then
-     reconsider c = a*^b as natural Ordinal; (succ a)*^b = c+^b by ORDINAL2:53;
-     hence _P[succ a];
-    end;
-      for a being natural Ordinal holds _P[a] from Omega_Ind(A1,A2);
-   hence thesis;
-  end;
 end;
 
 
@@ -178,23 +114,7 @@ reserve l,m,n for natural Ordinal;
 
 registration let m,n;
  cluster m div^ n -> natural;
- coherence
-  proof A1: n in one or one c= n by ORDINAL1:26;
-      n = {} implies m div^ n = {} & {}*^one = {}
- by ORDINAL2:52,ORDINAL3:def 7;
-    then (m div^ n)*^one c= (m div^ n)*^n by A1,ORDINAL3:17,23,XBOOLE_1:2;
-    then m div^ n c= (m div^ n)*^n & (m div^ n)*^n c= m
-     by ORDINAL2:56,ORDINAL3:77;
-    then m div^ n c= m & m in omega by ORDINAL2:def 21,XBOOLE_1:1;
-   hence m div^ n in omega by ORDINAL1:22;
-  end;
  cluster m mod^ n -> natural;
- coherence
-  proof
-      (m div^ n)*^n+^(m mod^ n) = m by ORDINAL3:78;
-    then m mod^ n c= m & m in omega by ORDINAL2:def 21,ORDINAL3:27;
-   hence m mod^ n in omega by ORDINAL1:22;
-  end;
 end;
 
 
@@ -328,13 +248,11 @@ reserve x,y,z for Element of RAT+;
 
 registration
  cluster RAT+ -> non empty;
- coherence by Th34,ORDINAL2:19;
 end;
 
 
 registration
  cluster non empty ordinal Element of RAT+;
- existence by Lm1,Th34;
 end;
 
 
@@ -350,15 +268,6 @@ theorem :: ARYTM_3:37
 
 registration
  cluster -> natural (ordinal Element of RAT+);
- coherence
-  proof let x be ordinal Element of RAT+;
-   assume not x in omega;
-   then consider i,j such that
-A1:  x = [i,j] & i,j are_relative_prime & j <> {} & j <> one by Th35;
-A2:  x = {{i},{i,j}} by A1,TARSKI:def 5;
-    then {} in x by ORDINAL3:10;
-   hence thesis by A2,TARSKI:def 2;
-  end;
 end;
 
 
@@ -459,7 +368,6 @@ theorem :: ARYTM_3:53
 
 registration
  cluster empty Element of RAT+;
- existence by Th34,ORDINAL2:19;
 end;
 
 
@@ -658,27 +566,5 @@ provided
  n0() = {} and
  n2() in omega and
  P[n0()] and
- not P[n2()]
-proof
-      defpred _P[Ordinal] means not P[$1] & $1 in omega;
-      n2() is Ordinal by A3,ORDINAL1:23;
-then A6:  ex A st _P[A] by A3,A5;
-   consider A such that
-A7:  _P[A] and
-A8:  for B st _P[B] holds A c= B from ORDINAL1:sch 1(A6);
-A9:  {} in A by A2,A4,A7,ORDINAL3:10;
-      now assume A is_limit_ordinal;
-      then omega c= A by A9,ORDINAL2:def 5;
-      then A in A by A7;
-     hence contradiction;
-    end;
-   then consider B being Ordinal such that
-A10:  A = succ B by ORDINAL1:42;
-      B in A by A10,ORDINAL1:13;
-then A11:  B in omega & not A c= B by A7,ORDINAL1:7,19;
-   then reconsider s = B as ordinal Element of RAT+ by Th34;
-   take s; thus s in omega & P[s] by A8,A11;
-      A = B+^one by A10,ORDINAL2:48;
-   hence thesis by A1,A7,Th64;
-  end;
+ not P[n2()];
 

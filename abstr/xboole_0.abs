@@ -17,17 +17,7 @@ begin
 
 scheme :: XBOOLE_0:sch 1
  Separation { A()-> set, P[set] } :
-   ex X being set st for x being set holds x in X iff x in A() & P[x]
-proof
-   defpred Q[set,set] means $1 = $2 & P[$2];
-A1: for x,y,z st Q[x,y] & Q[x,z] holds y = z;
-   consider X such that
-A2: for x holds x in X iff ex y st y in A() & Q[y,x] from TARSKI:sch 1(A1);
-  take X;
-  let x;
-     x in X iff ex y st y in A() & y = x & P[x] by A2;
-  hence thesis;
- end;
+   ex X being set st for x being set holds x in X iff x in A() & P[x];
 
 definition
   func {} -> set means
@@ -97,40 +87,14 @@ theorem :: XBOOLE_0:2 :: BOOLE'25:
 
 registration
  cluster {} -> empty;
-  coherence by Def5;
  cluster empty set;
-  existence
-   proof {} is empty by Def5; hence thesis; end;
  cluster non empty set;
-  existence
-   proof consider x;
-      x in {x} by TARSKI:def 1;
-    then {x} <> {} by Def1;
-    then {x} is non empty by Def5;
-    hence thesis;
-   end;
 end;
 
 
 registration let D be non empty set, X be set;
   cluster D \/ X -> non empty;
-  coherence
-  proof
-    consider x being set such that
-A1: x in D by Def1;
-      x in D \/ X by A1,Def2;
-    then D \/ X <> {} by Def1;
-    hence thesis by Def5;
-  end;
   cluster X \/ D -> non empty;
-  coherence
-  proof
-    consider x being set such that
-A2: x in D by Def1;
-      x in X \/ D by A2,Def2;
-    then X \/ D <> {} by Def1;
-    hence thesis by Def5;
-  end;
 end;
 
 
@@ -148,24 +112,11 @@ scheme :: XBOOLE_0:sch 2
  Extensionality { X,Y() -> set, P[set] } :
   X() = Y() provided
   for x holds x in X() iff P[x] and
-  for x holds x in Y() iff P[x]
-proof
-A3:  x in X() implies x in Y()
-     proof assume x in X(); then P[x] by A1; hence x in Y() by A2; end;
-      x in Y() implies x in X()
-     proof assume x in Y(); then P[x] by A2; hence x in X() by A1; end;
-   hence thesis by A3,TARSKI:2;
-  end;
+  for x holds x in Y() iff P[x];
 
 scheme :: XBOOLE_0:sch 3
  SetEq { P[set] } :
   for X1,X2 being set st
    (for x being set holds x in X1 iff P[x]) &
-   (for x being set holds x in X2 iff P[x]) holds X1 = X2
-proof defpred p[set] means P[$1];
-  let X1,X2 be set such that
-  A1: for x being set holds x in X1 iff p[x] and
-  A2: for x being set holds x in X2 iff p[x];
-  thus thesis from Extensionality(A1,A2);
-end;
+   (for x being set holds x in X2 iff P[x]) holds X1 = X2;
 

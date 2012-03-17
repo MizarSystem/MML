@@ -30,7 +30,6 @@ definition
 end;
 registration
  cluster finite Coherence_Space;
- existence by COH_SP:3;
  end;
 
 
@@ -59,31 +58,14 @@ theorem :: COHSP_1:3
 
 registration
  cluster {{}} -> subset-closed binary_complete;
- coherence by COH_SP:3;
  let X be set;
  cluster bool X -> subset-closed binary_complete;
- coherence by COH_SP:2;
  cluster FlatCoh X -> non empty subset-closed binary_complete;
- coherence
-  proof
-      FlatCoh X = CohSp id X by Def2;
-   hence thesis;
-  end;
 end;
 
 
 registration let C be non empty subset-closed set;
  cluster Sub_of_Fin C -> non empty subset-closed;
- coherence
-  proof consider c being Element of C;
-      {} c= c by XBOOLE_1:2;
-    then {} in C by CLASSES1:def 1;
-   hence Sub_of_Fin C is non empty by Def3;
-   let a,b be set; assume a in Sub_of_Fin C;
-then A1:  a in C & a is finite by Def3;
-   assume b c= a; then b is finite & b in C by A1,CLASSES1:def 1,FINSET_1:13;
-   hence thesis by Def3;
-  end;
 end;
 
 
@@ -99,39 +81,10 @@ scheme :: COHSP_1:sch 1
  and
    P[a()]
  and
-   a() is finite
-proof
-    defpred p[set] means $1 c= a() & P[$1];
-    consider X being set such that
-A4:  for x being set holds x in X iff x in A() & p[x] from XBOOLE_0:sch 1;
-   reconsider a = a() as finite set by A3;
-      bool a is finite & X c= bool a
-     proof thus bool a is finite by FINSET_1:24;
-      let x be set; assume x in X; then x c= a by A4;
-      hence thesis;
-     end;
-   then reconsider X as finite set by FINSET_1:13;
-  defpred P[set,set] means $1 c= $2;
-A5:  X <> {} by A1,A2,A4;
-A6: for x,y being set st P[x,y] & P[y,x] holds x = y by XBOOLE_0:def 10;
-A7: for x,y,z being set st P[x,y] & P[y,z] holds P[x,z] by XBOOLE_1:1;
-   consider x being set such that
-A8:  x in X & for y being set st y in X & y <> x holds not P[y,x]
-     from CARD_3:sch 2(A5,A6,A7);
-   take x; thus x in A() & P[x] by A4,A8;
-   let b be set; assume
-A9:  b in
- A() & P[b] & b c= x; x c= a by A4,A8; then b c= a by A9,XBOOLE_1:1;
-    then b in X by A4,A9;
-   hence b = x by A8,A9;
-  end;
+   a() is finite;
 
 registration let C be Coherence_Space;
  cluster finite Element of C;
-  existence
-   proof reconsider E = {} as Element of C by COH_SP:1;
-    take E; thus thesis;
-   end;
 end;
 
 
@@ -148,21 +101,7 @@ end;
 
 registration
  cluster c=directed -> non empty set;
-  coherence
-   proof let X be set; consider Y being finite Subset of X; assume
-       for Y being finite Subset of X
-      ex a being set st union Y c= a & a in X;
-     then ex a being set st union Y c= a & a in X;
-    hence thesis;
-   end;
  cluster c=filtered -> non empty set;
-  coherence
-   proof let X be set; consider Y being finite Subset of X; assume
-       for Y being finite Subset of X
-      ex a being set st (for y being set st y in Y holds a c= y) & a in X;
-     then ex a being set st (for y being set st y in Y holds a c= y) & a in X;
-    hence thesis;
-   end;
 end;
 
 
@@ -195,20 +134,11 @@ theorem :: COHSP_1:11
 
 registration
  cluster c=directed c=filtered finite set;
-  existence
-   proof consider x being set; take {x}; thus thesis by Th9;
-   end;
 end;
 
 
 registration let C be non empty set;
  cluster c=directed c=filtered finite Subset of C;
-  existence
-   proof consider x being Element of C;
-       {x} is Subset of C & {x} is c=directed c=filtered finite by Th9,ZFMISC_1
-:37;
-    hence thesis;
-   end;
 end;
 
 
@@ -217,17 +147,11 @@ theorem :: COHSP_1:12
 
 registration let X be set;
  cluster Fin X -> c=directed c=filtered;
- coherence by Th12;
 end;
 
 registration
  let C be subset-closed non empty set;
  cluster preBoolean non empty Subset of C;
- existence
-  proof consider a being Element of C;
-   reconsider b = Fin a as Subset of C by Lm3;
-   take b; thus thesis;
-  end;
 end;
 
 
@@ -259,13 +183,6 @@ end;
 
 registration
  cluster subset-closed -> multiplicative set;
- coherence
-  proof let C be set such that
-A1:  C is subset-closed;
-   let x,y be set;
-      x /\ y c= x by XBOOLE_1:17;
-   hence thesis by A1,CLASSES1:def 1;
-  end;
 end;
 
 
@@ -277,19 +194,11 @@ theorem :: COHSP_1:15
 
 registration
  cluster -> d.union-closed Coherence_Space;
-  coherence
-   proof let C be Coherence_Space;
-    let A be Subset of C;
-    thus thesis by Th15;
-   end;
 end;
 
 
 registration
  cluster multiplicative d.union-closed Coherence_Space;
-  existence
-   proof consider C being Coherence_Space; take C; thus thesis;
-   end;
 end;
 
 
@@ -356,34 +265,7 @@ end;
 
 registration
  cluster d.union-distributive -> c=-monotone Function;
-  coherence
-   proof let f be Function; assume
-A1:   for A being Subset of dom f st A is c=directed & union A in dom f holds
-      f.union A = union (f.:A);
-    let a, b be set; assume
-A2:   a in dom f & b in dom f & a c= b;
-    then reconsider A = {a,b} as Subset of dom f by ZFMISC_1:38;
-A3:   union A = a \/ b by ZFMISC_1:93 .= b by A2,XBOOLE_1:12;
-       A is c=directed
-      proof let Y be finite Subset of A;
-       take b;
-          union Y c= union A by ZFMISC_1:95;
-        then union Y c= a \/ b by ZFMISC_1:93;
-       hence thesis by A2,TARSKI:def 2,XBOOLE_1:12;
-      end;
-then A4:   union (f.:A) = f.b by A1,A2,A3;
-       a in A by TARSKI:def 2;
-     then f.a in f.:A by FUNCT_1:def 12;
-    hence thesis by A4,ZFMISC_1:92;
-   end;
  cluster union-distributive -> d.union-distributive Function;
-  coherence
-   proof let f be Function; assume
-A5:   for A being Subset of dom f st union A in dom f holds
-      f.union A = union (f.:A);
-    let A be Subset of dom f;
-    thus thesis by A5;
-   end;
 end;
 
 
@@ -397,39 +279,11 @@ theorem :: COHSP_1:19
 
 registration let C1,C2 be Coherence_Space;
  cluster union-distributive cap-distributive Function of C1, C2;
- existence
-  proof reconsider a = {} as Element of C2 by COH_SP:1;
-   take f = C1 --> a;
-A1:  dom f = C1 by FUNCOP_1:19;
-   thus f is union-distributive
-    proof let A be Subset of dom f; assume union A in dom f;
-then A2:    f.union A = {} by A1,FUNCOP_1:13;
-        f.:A c= {{}}
-       proof let x be set; assume x in f.:A;
-         then ex y being set st y in dom f & y in A & x = f.y by FUNCT_1:def 12
-;
-         then x = {} by A1,FUNCOP_1:13;
-        hence thesis by TARSKI:def 1;
-       end;
-      then union (f.:A) c= union {{}} & union {{}} = {} by ZFMISC_1:31,95;
-     hence f.union A = union (f.:A) by A2,XBOOLE_1:3;
-    end;
-   let a,b be set; assume dom f includes_lattice_of a, b;
-    then a in dom f & b in dom f & a /\ b in dom f by Th17;
-    then f.a = {} & f.b = {} & f.(a/\b) = {} by A1,FUNCOP_1:13;
-   hence f.(a/\b) = f.a /\ f.b;
-  end;
 end;
 
 
 registration let C be Coherence_Space;
  cluster union-distributive cap-distributive ManySortedSet of C;
-  existence
-   proof consider f being union-distributive cap-distributive Function of C, C;
-       dom f = C by FUNCT_2:67;
-     then reconsider f as ManySortedSet of C by PBOOLE:def 3;
-    take f; thus thesis;
-   end;
 end;
 
 
@@ -463,77 +317,43 @@ end;
 
 registration
  cluster U-continuous -> d.union-distributive Function;
-  coherence by Def14;
  cluster U-stable -> cap-distributive U-continuous Function;
-  coherence by Def15;
  cluster U-linear -> union-distributive U-stable Function;
-  coherence by Def16;
 end;
 
 
 registration let X be d.union-closed set;
  cluster d.union-distributive -> U-continuous ManySortedSet of X;
- coherence
-  proof let f be ManySortedSet of X; dom f = X by PBOOLE:def 3;
-   hence thesis by Def14;
-  end;
 end;
 
 
 registration let X be multiplicative set;
  cluster U-continuous cap-distributive -> U-stable ManySortedSet of X;
- coherence
-  proof let f be ManySortedSet of X; dom f = X by PBOOLE:def 3;
-   hence thesis by Def15;
-  end;
 end;
 
 
 registration
  cluster U-stable union-distributive -> U-linear Function;
- coherence by Def16;
 end;
 
 
 
 registration
  cluster U-linear Function;
-  existence
-   proof consider C being Coherence_Space;
-    consider f being union-distributive cap-distributive ManySortedSet of C;
-    take f; thus thesis;
-   end;
  let C be Coherence_Space;
  cluster U-linear ManySortedSet of C;
-  existence
-   proof
-    consider f being union-distributive cap-distributive ManySortedSet of C;
-    take f; thus thesis;
-   end;
  let B be Coherence_Space;
  cluster U-linear Function of B,C;
-  existence
-   proof
-     consider f being union-distributive cap-distributive Function of B,C;
-    take f;
-       dom f = B by FUNCT_2:def 1;
-     then reconsider f as
-      union-distributive cap-distributive ManySortedSet of B by PBOOLE:def 3;
-       f is U-linear;
-    hence thesis;
-   end;
 end;
 
 
 registration let f be U-continuous Function;
  cluster dom f -> d.union-closed;
- coherence by Def14;
 end;
 
 
 registration let f be U-stable Function;
  cluster dom f -> multiplicative;
- coherence by Def15;
 end;
 
 
@@ -586,13 +406,6 @@ end;
 
 registration let f be Function;
  cluster graph f -> Relation-like;
- coherence
-  proof let x be set; assume x in graph f;
-    then ex y being finite set, z being set st x = [y,z] & y in dom f & z in f
-.y
-     by Def17;
-   hence thesis;
-  end;
 end;
 
 
@@ -666,12 +479,6 @@ end;
 
 registration let f be Function;
  cluster Trace f -> Relation-like;
-  coherence
-   proof let x be set; assume x in Trace f;
-     then ex a, y being set st x = [a,y] & a in dom f & y in f.a &
-      for b being set st b in dom f & b c= a & y in f.b holds a = b by Def18;
-    hence thesis;
-   end;
 end;
 
 
@@ -766,28 +573,6 @@ end;
 
 registration let C1, C2 be Coherence_Space;
  cluster StabCoh(C1,C2) -> non empty subset-closed binary_complete;
- coherence
-  proof consider f being U-stable Function of C1,C2;
-   set C = StabCoh(C1,C2);
-      Trace f in C by Def19;
-   hence C is non empty;
-   thus C is subset-closed
-    proof let a,b be set; assume a in C;
-     then consider f being U-stable Function of C1,C2 such that
-A1:    a = Trace f by Def19;
-     assume b c= a;
-      then ex g being U-stable Function of C1, C2 st Trace g = b by A1,Th45;
-     hence thesis by Def19;
-    end;
-   let A be set; assume
-A2:  for a,b being set st a in A & b in A holds a \/ b in C;
-      now let x,y be set; assume x in A & y in A;
-      then x \/ y in C by A2;
-     hence ex f being U-stable Function of C1,C2 st x \/ y = Trace f by Def19;
-    end;
-    then ex f being U-stable Function of C1,C2 st union A = Trace f by Th46;
-   hence union A in C by Def19;
-  end;
 end;
 
 
@@ -845,11 +630,6 @@ end;
 
 registration let f be Function;
  cluster LinTrace f -> Relation-like;
-  coherence
-   proof let x be set; assume x in LinTrace f;
-     then ex y,z being set st x = [y,z] & [{y},z] in Trace f by Def20;
-    hence thesis;
-   end;
 end;
 
 
@@ -925,32 +705,6 @@ theorem :: COHSP_1:63
 
 registration let C1, C2 be Coherence_Space;
  cluster LinCoh(C1,C2) -> non empty subset-closed binary_complete;
- coherence
-  proof consider f being U-linear Function of C1,C2;
-   set C = LinCoh(C1,C2);
-      LinTrace f in C by Def21;
-   hence C is non empty;
-   thus C is subset-closed
-    proof let a,b be set; assume a in C;
-     then consider f being U-linear Function of C1,C2 such that
-A1:    a = LinTrace f by Def21;
-     assume b c= a;
-      then ex g being U-linear Function of C1, C2 st LinTrace g = b by A1,Th62
-;
-     hence thesis by Def21;
-    end;
-   let A be set; assume
-A2:  for a,b being set st a in A & b in A holds a \/ b in C;
-      now let x,y be set; assume x in A & y in A;
-      then x \/ y in C by A2;
-     hence ex f being U-linear Function of C1,C2 st x \/
- y = LinTrace f by Def21
-;
-    end;
-    then ex f being U-linear Function of C1,C2 st union A = LinTrace f by Th63
-;
-   hence union A in C by Def21;
-  end;
 end;
 
 
@@ -987,78 +741,6 @@ theorem :: COHSP_1:66
 registration
  let C be Coherence_Space;
  cluster 'not' C -> non empty subset-closed binary_complete;
-  coherence
-   proof
-A1:   'not' C = {a where a is Subset of union C:
-           for b being Element of C ex x being set st a /\ b c= {x}} by Def22;
-    reconsider a = {} as Subset of union C by XBOOLE_1:2;
-       now let b be Element of C; consider x being set; take x;
-      thus a /\ b c= {x} by XBOOLE_1:2;
-     end;
-     then a in 'not' C by A1;
-    hence 'not' C is non empty;
-    hereby let a, b be set; assume a in 'not' C;
-     then consider aa being Subset of union C such that
-A2:    a = aa & for b being Element of C ex x being set st aa /\
- b c= {x} by A1;
-     assume
-A3:    b c= a;
-     then reconsider bb = b as Subset of union C by A2,XBOOLE_1:1;
-        now let c be Element of C;
-       consider x being set such that
-A4:      aa /\ c c= {x} by A2;
-       take x;
-          b /\ c c= a /\ c by A3,XBOOLE_1:26;
-       hence bb /\ c c= {x} by A2,A4,XBOOLE_1:1;
-      end;
-     hence b in 'not' C by A1;
-    end;
-    let A be set such that
-A5:   for a,b being set st a in A & b in A holds a \/ b in 'not' C;
-       A c= bool union C
-      proof let x be set; assume x in A;
-        then x \/ x in 'not' C by A5;
-        then ex a being Subset of union C st x = a &
-         for b being Element of C ex x being set st a /\ b c= {x} by A1;
-       hence thesis;
-      end;
-     then union A c= union bool union C by ZFMISC_1:95;
-    then reconsider a = union A as Subset of union C by ZFMISC_1:99;
-       now let c be Element of C;
-      consider x being set;
-      per cases;
-       suppose
-A6:       a /\ c = {};
-        take x;
-        thus a /\ c c= {x} by A6,XBOOLE_1:2;
-       end;
-       suppose
-           a /\ c <> {}; then reconsider X = a /\ c as non empty set;
-        consider x being Element of X; reconsider y = x as set;
-        take y;
-        thus a /\ c c= {y}
-         proof let z be set; assume z in a /\ c;
-then A7:        z in a & z in c by XBOOLE_0:def 3;
-          then consider v being set such that
-A8:         z in v & v in A by TARSKI:def 4;
-A9:        x in a & x in c by XBOOLE_0:def 3;
-          then consider w being set such that
-A10:         x in w & w in A by TARSKI:def 4;
-             w \/ v in 'not' C by A5,A8,A10;
-          then consider aa being Subset of union C such that
-A11:         w \/ v = aa &
-           for b being Element of C ex x being set st aa /\ b c= {x} by A1;
-          consider t being set such that
-A12:         aa /\ c c= {t} by A11;
-             z in aa & x in aa by A8,A10,A11,XBOOLE_0:def 2;
-           then z in aa /\ c & x in aa /\ c by A7,A9,XBOOLE_0:def 3;
-then z in {t} & x in {t} by A12;
-          hence thesis by TARSKI:def 1;
-         end;
-     end;
-     end;
-    hence union A in 'not' C by A1;
-   end;
 end;
 
 
@@ -1180,221 +862,7 @@ theorem :: COHSP_1:89
 registration
  let C1, C2 be Coherence_Space;
  cluster C1 "/\" C2 -> non empty subset-closed binary_complete;
-  coherence
-   proof
-A1:   C1 "/\" C2 =
-     {a U+ b where a is Element of C1, b is Element of C2: not contradiction}
-      by Def24;
-    consider a' being Element of C1, b' being Element of C2;
-       a' U+ b' in C1 "/\" C2 by A1;
-    hence C1 "/\" C2 is non empty;
-    hereby let a, b be set; assume a in C1 "/\" C2;
-     then consider aa being Element of C1, bb being Element of C2 such that
-A2:    a = aa U+ bb by A1;
-     assume b c= a;
-     then consider x1,y1 being set such that
-A3:    b = x1 U+ y1 & x1 c= aa & y1 c= bb by A2,Th80;
-        x1 in C1 & y1 in C2 by A3,CLASSES1:def 1;
-     hence b in C1 "/\" C2 by A1,A3;
-    end;
-    let A be set such that
-A4:   for a,b being set st a in A & b in A holds a \/ b in C1 "/\" C2;
-    set A1 = {a where a is Element of C1:
-              ex b being Element of C2 st a U+ b in A};
-    set A2 = {b where b is Element of C2:
-              ex a being Element of C1 st a U+ b in A};
-       now let x,y be set; assume x in A1;
-      then consider ax being Element of C1 such that
-A5:    x = ax & ex b being Element of C2 st ax U+ b in A;
-      consider bx being Element of C2 such that
-A6:    ax U+ bx in A by A5;
-      assume y in A1;
-      then consider ay being Element of C1 such that
-A7:    y = ay & ex b being Element of C2 st ay U+ b in A;
-      consider b_y being Element of C2 such that
-A8:    ay U+ b_y in A by A7;
-         (ax U+ bx) \/ (ay U+ b_y) in C1 "/\" C2 by A4,A6,A8;
-       then (ax \/ ay) U+ (bx \/ b_y) in C1 "/\" C2 by Th82;
-      hence x \/ y in C1 by A5,A7,Th85;
-     end;
-then A9:   union A1 in C1 by Def1;
-       now let x,y be set; assume x in A2;
-      then consider ax being Element of C2 such that
-A10:    x = ax & ex b being Element of C1 st b U+ ax in A;
-      consider bx being Element of C1 such that
-A11:    bx U+ ax in A by A10;
-      assume y in A2;
-      then consider ay being Element of C2 such that
-A12:    y = ay & ex b being Element of C1 st b U+ ay in A;
-      consider b_y being Element of C1 such that
-A13:    b_y U+ ay in A by A12;
-         (bx U+ ax) \/ (b_y U+ ay) in C1 "/\" C2 by A4,A11,A13;
-       then (bx \/ b_y) U+ (ax \/ ay) in C1 "/\" C2 by Th82;
-      hence x \/ y in C2 by A10,A12,Th85;
-     end;
-then A14:   union A2 in C2 by Def1;
-       (union A1) U+ union A2 = union A
-      proof
-       hereby let x be set; assume A15: x in (union A1) U+ union A2;
-then A16:      x = [x`1,x`2] &
-         (x`2 = 1 & x`1 in union A1 or x`2 = 2 & x`1 in union A2) by Th76;
-        per cases by A15,Th76;
-         suppose
-A17:        x`2 = 1 & x`1 in union A1;
-          then consider a being set such that
-A18:        x`1 in a & a in A1 by TARSKI:def 4;
-          consider ax being Element of C1 such that
-A19:        a = ax & ex b being Element of C2 st ax U+ b in A by A18;
-          consider bx being Element of C2 such that
-A20:        ax U+ bx in A by A19;
-             x in ax U+ bx by A16,A17,A18,A19,Th77;
-          hence x in union A by A20,TARSKI:def 4;
-         end;
-         suppose
-A21:        x`2 = 2 & x`1 in union A2;
-          then consider a being set such that
-A22:        x`1 in a & a in A2 by TARSKI:def 4;
-          consider bx being Element of C2 such that
-A23:        a = bx & ex a being Element of C1 st a U+ bx in A by A22;
-          consider ax being Element of C1 such that
-A24:        ax U+ bx in A by A23;
-             x in ax U+ bx by A16,A21,A22,A23,Th78;
-          hence x in union A by A24,TARSKI:def 4;
-       end;
-       end;
-       let x be set; assume x in union A;
-       then consider a being set such that
-A25:     x in a & a in A by TARSKI:def 4;
-          a \/ a in C1 "/\" C2 by A4,A25;
-       then consider aa being Element of C1, bb being Element of C2 such that
-A26:     a = aa U+ bb by A1;
-          aa in A1 & bb in A2 by A25,A26;
-        then aa c= union A1 & bb c= union A2 by ZFMISC_1:92;
-        then aa U+ bb c= (union A1) U+ union A2 by Th79;
-       hence x in (union A1) U+ union A2 by A25,A26;
-      end;
-    hence union A in C1 "/\" C2 by A9,A14,Th85;
-   end;
  cluster C1 "\/" C2 -> non empty subset-closed binary_complete;
-  coherence
-   proof
-    consider a' being Element of C1;
-       a' U+ {} in C1 "\/" C2 by Th87;
-    hence C1 "\/" C2 is non empty;
-    hereby let a, b be set; assume a in C1 "\/" C2;
-     then consider aa being Element of C1, bb being Element of C2 such that
-A27:    a = aa U+ bb & (aa = {} or bb = {}) by Th88;
-     assume b c= a;
-     then consider x1,y1 being set such that
-A28:    b = x1 U+ y1 & x1 c= aa & y1 c= bb by A27,Th80;
-        x1 in C1 & y1 in C2 & (x1 = {} or y1 = {}) by A27,A28,CLASSES1:def 1,
-XBOOLE_1:3;
-     hence b in C1 "\/" C2 by A28,Th87;
-    end;
-    let A be set; assume that
-A29:   for a,b being set st a in A & b in A holds a \/ b in C1 "\/" C2;
-    set A1 = {a where a is Element of C1:
-              ex b being Element of C2 st a U+ b in A};
-    set A2 = {b where b is Element of C2:
-              ex a being Element of C1 st a U+ b in A};
-       now let x,y be set; assume x in A1;
-      then consider ax being Element of C1 such that
-A30:    x = ax & ex b being Element of C2 st ax U+ b in A;
-      consider bx being Element of C2 such that
-A31:    ax U+ bx in A by A30;
-      assume y in A1;
-      then consider ay being Element of C1 such that
-A32:    y = ay & ex b being Element of C2 st ay U+ b in A;
-      consider b_y being Element of C2 such that
-A33:    ay U+ b_y in A by A32;
-         (ax U+ bx) \/ (ay U+ b_y) in C1 "\/" C2 by A29,A31,A33;
-       then (ax \/ ay) U+ (bx \/ b_y) in C1 "\/" C2 by Th82;
-       then x \/ y in C1 or x \/ y = {} by A30,A32,Th87;
-      hence x \/ y in C1 by COH_SP:1;
-     end;
-then A34:   union A1 in C1 by Def1;
-       now let x,y be set; assume x in A2;
-      then consider ax being Element of C2 such that
-A35:    x = ax & ex b being Element of C1 st b U+ ax in A;
-      consider bx being Element of C1 such that
-A36:    bx U+ ax in A by A35;
-      assume y in A2;
-      then consider ay being Element of C2 such that
-A37:    y = ay & ex b being Element of C1 st b U+ ay in A;
-      consider b_y being Element of C1 such that
-A38:    b_y U+ ay in A by A37;
-         (bx U+ ax) \/ (b_y U+ ay) in C1 "\/" C2 by A29,A36,A38;
-       then (bx \/ b_y) U+ (ax \/ ay) in C1 "\/" C2 by Th82;
-       then x \/ y in C2 or x \/ y = {} by A35,A37,Th87;
-      hence x \/ y in C2 by COH_SP:1;
-     end;
-then A39:   union A2 in C2 by Def1;
-A40:   now assume union A1 <> {};
-      then reconsider AA = union A1 as non empty set;
-      consider aa being Element of AA;
-      consider x being set such that
-A41:    aa in x & x in A1 by TARSKI:def 4;
-      consider ax being Element of C1 such that
-A42:    x = ax & ex b being Element of C2 st ax U+ b in A by A41;
-      consider bx being Element of C2 such that
-A43:    ax U+ bx in A by A42;
-      assume union A2 <> {};
-      then reconsider AA = union A2 as non empty set;
-      consider bb being Element of AA;
-      consider y being set such that
-A44:    bb in y & y in A2 by TARSKI:def 4;
-      consider b_y being Element of C2 such that
-A45:    y = b_y & ex a being Element of C1 st a U+ b_y in A by A44;
-      consider ay being Element of C1 such that
-A46:    ay U+ b_y in A by A45;
-         (ax U+ bx) \/ (ay U+ b_y) in C1 "\/" C2 by A29,A43,A46;
-       then (ax \/ ay) U+ (bx \/ b_y) in C1 "\/" C2 by Th82;
-       then x \/ ay = {} & aa in x \/ ay or
-       bx \/ y = {} & bb in bx \/ y by A41,A42,A44,A45,Th87,XBOOLE_0:def 2;
-      hence contradiction;
-     end;
-       (union A1) U+ union A2 = union A
-      proof
-       hereby let x be set; assume A47: x in (union A1) U+ union A2;
-then A48:      x = [x`1,x`2] &
-         (x`2 = 1 & x`1 in union A1 or x`2 = 2 & x`1 in union A2) by Th76;
-        per cases by A47,Th76;
-         suppose
-A49:        x`2 = 1 & x`1 in union A1;
-          then consider a being set such that
-A50:        x`1 in a & a in A1 by TARSKI:def 4;
-          consider ax being Element of C1 such that
-A51:        a = ax & ex b being Element of C2 st ax U+ b in A by A50;
-          consider bx being Element of C2 such that
-A52:        ax U+ bx in A by A51;
-             x in ax U+ bx by A48,A49,A50,A51,Th77;
-          hence x in union A by A52,TARSKI:def 4;
-         end;
-         suppose
-A53:        x`2 = 2 & x`1 in union A2;
-          then consider a being set such that
-A54:        x`1 in a & a in A2 by TARSKI:def 4;
-          consider bx being Element of C2 such that
-A55:        a = bx & ex a being Element of C1 st a U+ bx in A by A54;
-          consider ax being Element of C1 such that
-A56:        ax U+ bx in A by A55;
-             x in ax U+ bx by A48,A53,A54,A55,Th78;
-          hence x in union A by A56,TARSKI:def 4;
-       end;
-       end;
-       let x be set; assume x in union A;
-       then consider a being set such that
-A57:     x in a & a in A by TARSKI:def 4;
-          a \/ a in C1 "\/" C2 by A29,A57;
-       then consider aa being Element of C1, bb being Element of C2 such that
-A58:     a = aa U+ bb & (aa = {} or bb = {}) by Th88;
-          aa in A1 & bb in A2 by A57,A58;
-        then aa c= union A1 & bb c= union A2 by ZFMISC_1:92;
-        then aa U+ bb c= (union A1) U+ union A2 by Th79;
-       hence x in (union A1) U+ union A2 by A57,A58;
-      end;
-    hence union A in C1 "\/" C2 by A34,A39,A40,Th87;
-   end;
 end;
 
 
@@ -1445,11 +913,6 @@ theorem :: COHSP_1:97
 
 registration let C1,C2 be Coherence_Space;
  cluster C1 [*] C2 -> non empty;
- coherence
-  proof consider a1 being Element of C1, a2 being Element of C2;
-      [:a1,a2:] in C1[*]C2 by Th97;
-   hence C1[*]C2 is non empty;
-  end;
 end;
 
 
@@ -1459,56 +922,6 @@ theorem :: COHSP_1:98
 
 registration let C1,C2 be Coherence_Space;
  cluster C1 [*] C2 -> subset-closed binary_complete;
- coherence
-  proof
-   thus C1[*]C2 is subset-closed
-    proof let a,b be set; assume a in C1[*]C2;
-     then consider a1 being Element of C1, a2 being Element of C2 such that
-A1:    a c= [:a1,a2:] by Th97;
-     assume b c= a; then b c= [:a1,a2:] by A1,XBOOLE_1:1;
-     hence thesis by Th97;
-    end;
-   let A be set; assume
-A2:  for a,b being set st a in A & b in A holds a \/ b in C1 [*] C2;
-   set A1 = {proj1 a where a is Element of C1[*]C2: a in A};
-   set A2 = {proj2 a where a is Element of C1[*]C2: a in A};
-      now let a1,b1 be set; assume a1 in A1;
-     then consider a being Element of C1[*]C2 such that
-A3:   a1 = proj1 a & a in A;
-     assume b1 in A1;
-     then consider b being Element of C1[*]C2 such that
-A4:   b1 = proj1 b & b in A;
-        a \/ b in C1[*]C2 by A2,A3,A4;
-      then proj1 (a \/ b) in C1 by Th98;
-     hence a1 \/ b1 in C1 by A3,A4,FUNCT_5:6;
-    end;
-then A5:  union A1 in C1 by Def1;
-      now let a1,b1 be set; assume a1 in A2;
-     then consider a being Element of C1[*]C2 such that
-A6:   a1 = proj2 a & a in A;
-     assume b1 in A2;
-     then consider b being Element of C1[*]C2 such that
-A7:   b1 = proj2 b & b in A;
-        a \/ b in C1[*]C2 by A2,A6,A7;
-      then proj2 (a \/ b) in C2 by Th98;
-     hence a1 \/ b1 in C2 by A6,A7,FUNCT_5:6;
-    end;
-then A8:  union A2 in C2 by Def1;
-      union A c= [:union A1, union A2:]
-     proof let x be set; assume x in union A;
-      then consider a being set such that
-A9:     x in a & a in A by TARSKI:def 4;
-         a \/ a in C1[*]C2 by A2,A9;
-       then a c= [:proj1 a, proj2 a:] & proj1 a in A1 & proj2 a in
- A2 by A9,Th98;
-then A10:     x in [:proj1 a, proj2 a:] & proj1 a c= union A1 & proj2 a c=
-union A2
-        by A9,ZFMISC_1:92;
-       then [:proj1 a, proj2 a:] c= [:union A1, union A2:] by ZFMISC_1:119;
-      hence thesis by A10;
-     end;
-   hence thesis by A5,A8,Th97;
-  end;
 end;
 
 

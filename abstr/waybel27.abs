@@ -51,81 +51,23 @@ end;
 
 registration
 cluster empty -> uncurrying currying commuting Function;
-coherence
- proof
-  let F be Function;
-  assume A1: F is empty;
-  hence for x being set st x in dom F holds x is Function-yielding Function
-by RELAT_1:60;
-  thus for f being Function st f in dom F holds F.f = uncurry f by A1,RELAT_1:
-60;
-  thus for x being set st x in dom F holds x is Function & proj1 x is Relation
-    by A1,RELAT_1:60;
-  thus for f being Function st f in dom F holds F.f = curry f by A1,RELAT_1:60
-;
-  thus for x being set st x in
- dom F holds x is Function-yielding Function by A1,RELAT_1:60;
-  thus thesis by A1,RELAT_1:60;
- end;
 end;
 
 
 registration
  cluster uncurrying currying commuting Function;
- existence
-  proof reconsider F={} as Function;
-   take F; thus thesis;
-  end;
 end;
 
 
 registration
  let F be uncurrying Function, X be set;
  cluster F|X -> uncurrying;
- coherence
-  proof
-A1: for x being set st x in dom (F|X) holds x is Function-yielding Function
-    proof
-     let x be set;
-     assume x in dom (F|X);
-     then x in dom F by RELAT_1:86;
-     hence x is Function-yielding Function by Def1;
-    end;
-     for f being Function st f in dom (F|X) holds (F|X).f = uncurry f
-    proof
-     let f be Function;
-     assume A2: f in dom (F|X);
-     then A3: f in dom F by RELAT_1:86;
-     thus (F|X).f = F.f by A2,FUNCT_1:70
-                 .= uncurry f by A3,Def1;
-    end;
-   hence thesis by A1,Def1;
-  end;
 end;
 
 
 registration
  let F be currying Function, X be set;
  cluster F|X -> currying;
- coherence
-  proof
-A1: for x being set st x in dom (F|X) holds x is Function & proj1 x is Relation
-    proof
-     let x be set;
-     assume x in dom (F|X);
-     then x in dom F by RELAT_1:86;
-     hence x is Function & proj1 x is Relation by Def2;
-    end;
-     for f being Function st f in dom (F|X) holds (F|X).f = curry f
-    proof
-     let f be Function;
-     assume A2: f in dom (F|X);
-     then A3: f in dom F by RELAT_1:86;
-     thus (F|X).f = F.f by A2,FUNCT_1:70
-                  .= curry f by A3,Def2;
-    end;
-   hence thesis by A1,Def2;
-  end;
 end;
 
 
@@ -143,19 +85,7 @@ theorem :: WAYBEL27:2
 registration
  let X,Y,Z be set;
  cluster uncurrying ManySortedSet of Funcs(X, Funcs(Y, Z));
- existence
-  proof
-      ex F being ManySortedSet of Funcs(X, Funcs(Y, Z))
-     st F is uncurrying & rng F c= Funcs([:X,Y:], Z) by Th1;
-   hence thesis;
-  end;
  cluster currying ManySortedSet of Funcs([:X, Y:], Z);
- existence
-  proof
-     ex F being ManySortedSet of Funcs([:X, Y:], Z) st F is currying &
-   ((Y = {} implies X = {}) implies rng F c= Funcs(X, Funcs(Y, Z))) by Th2;
-   hence thesis;
-  end;
 end;
 
 
@@ -203,23 +133,12 @@ registration
  let X be set;
  let Y be non empty functional set;
  cluster -> Function-yielding Function of X, Y;
- coherence
-  proof let f be Function of X, Y;
-   let x be set; assume x in dom f;
-    then f.x in rng f & rng f c= Y by FUNCT_1:def 5,RELSET_1:12;
-    then f.x is Element of Y;
-   hence thesis;
-  end;
 end;
 
 
 registration
  let T be constituted-Functions 1-sorted;
  cluster the carrier of T -> functional;
- coherence
-  proof let x be set; assume x in the carrier of T;
-   hence thesis by MONOID_0:def 1;
-  end;
 end;
 
 
@@ -227,39 +146,18 @@ registration
  let X be set;
  let L be non empty RelStr;
  cluster L|^X -> constituted-Functions;
- coherence
-  proof let a be Element of L|^X;
-      the carrier of L|^X = Funcs(X, the carrier of L) by YELLOW_1:28;
-   hence thesis by FUNCT_2:121;
-  end;
 end;
 
 
 registration
  cluster constituted-Functions complete strict LATTICE;
- existence
-  proof consider L be complete LATTICE;
-   take L|^{}; thus thesis;
-  end;
  cluster constituted-Functions non empty 1-sorted;
- existence
-  proof consider L be complete LATTICE;
-   take L|^{}; thus thesis;
-  end;
 end;
 
 
 registration
  let T be constituted-Functions non empty RelStr;
  cluster -> constituted-Functions (non empty SubRelStr of T);
- coherence
-  proof let S be non empty SubRelStr of T;
-   let a be Element of S;
-      a in the carrier of S & the carrier of S c= the carrier of T
-     by YELLOW_0:def 13;
-    then a is Element of T;
-   hence thesis;
-  end;
 end;
 
 
@@ -358,13 +256,6 @@ registration
  let S be non empty RelStr;
  let T be non empty reflexive antisymmetric RelStr;
  cluster UPS(S, T) -> non empty reflexive antisymmetric constituted-Functions;
- coherence
-  proof consider f being directed-sups-preserving map of S, T;
-      f in the carrier of UPS(S, T) by Def4;
-    then UPS(S, T) is full non empty SubRelStr of T |^ the carrier of S
-     by Def4,STRUCT_0:def 1;
-   hence thesis;
-  end;
 end;
 
 
@@ -372,11 +263,6 @@ registration
  let S be non empty RelStr;
  let T be non empty Poset;
  cluster UPS(S,T) -> transitive;
- coherence
-  proof
-      UPS(S,T) is full SubRelStr of T |^ the carrier of S by Def4;
-   hence thesis;
-  end;
 end;
 
 
@@ -412,18 +298,6 @@ UPS(S,T) = UPS(S',T');
 registration
  let S, T be complete LATTICE;
  cluster UPS(S, T) -> complete;
- coherence
-  proof
-   consider S' being Scott TopAugmentation of S;
-   consider T' being Scott TopAugmentation of T;
-   reconsider S',T' as complete Scott TopLattice;
-     the RelStr of S = the RelStr of S' & the RelStr of T = the RelStr of T'
-                                              by YELLOW_9:def 4;
-   then UPS(S,T) = UPS(S',T') by Th25
-           .= SCMaps(S',T') by Th24
-           .= ContMaps(S',T') by WAYBEL24:38;
-   hence thesis;
-  end;
 end;
 
 

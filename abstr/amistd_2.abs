@@ -35,28 +35,13 @@ registration
    let f be Function,
        g be non empty Function;
  cluster f +* g -> non empty;
-coherence
-  proof
-      dom (f+*g) = dom f \/ dom g by FUNCT_4:def 1;
-    hence thesis by Lm1;
-  end;
  cluster g +* f -> non empty;
-coherence
-  proof
-      dom (g+*f) = dom g \/ dom f by FUNCT_4:def 1;
-    hence thesis by Lm1;
-  end;
 end;
 
 
 registration
    let f, g be finite Function;
  cluster f +* g -> finite;
-coherence
-  proof
-      dom (f+*g) = dom f \/ dom g by FUNCT_4:def 1;
-    hence thesis by AMI_1:21;
-  end;
 end;
 
 
@@ -72,7 +57,6 @@ registration
    let f be Function,
        A be set;
  cluster f \ A -> Function-like Relation-like;
-coherence by GRFUNC_1:38;
 end;
 
 
@@ -115,36 +99,16 @@ end;
 registration
   let f be Function;
  cluster product f -> product-like;
-coherence by Def2;
 end;
 
 
 registration
  cluster product-like -> functional with_common_domain set;
-coherence
-  proof
-    let S be set;
-    given f being Function such that
-A1:   S = product f;
-    thus S is functional by A1;
-    let h, g be Function such that
-A2:   h in S and
-A3:   g in S;
-    thus dom h = dom f by A1,A2,CARD_3:18
-      .= dom g by A1,A3,CARD_3:18;
-  end;
 end;
 
 
 registration
  cluster product-like non empty set;
-existence
-  proof
-    consider B being with_non-empty_elements set,
-             f being Function of 0,B;
-    take product f;
-    thus thesis;
-  end;
 end;
 
 
@@ -164,101 +128,18 @@ theorem :: AMISTD_2:10
 registration
   let D be set;
  cluster -> functional FinSequenceSet of D;
-coherence
-  proof
-    let f be FinSequenceSet of D;
-    let x be set;
-    thus x in f implies x is Function by FINSEQ_2:def 3;
-  end;
 end;
 
 
 registration
   let i be Nat, D be set;
  cluster i-tuples_on D -> with_common_domain;
-coherence
-  proof
-    set S = i-tuples_on D;
-    let f, g be Function such that
-A1:   f in S & g in S;
-      S = { s where s is Element of D*: len s = i } by FINSEQ_2:def 4;
-    then (ex s being Element of D* st f = s & len s = i) &
-    (ex s being Element of D* st g = s & len s = i) by A1;
-    hence dom f = dom g by FINSEQ_3:31;
-  end;
 end;
 
 
 registration
   let i be Nat, D be set;
  cluster i-tuples_on D -> product-like;
-coherence
-  proof
-    set S = i-tuples_on D;
-    per cases;
-    suppose D = {} & i = 0;
-    then S = { <*>D } by FINSEQ_2:112
-     .= {{}};
-    hence thesis by CARD_3:19;
-    end;
-    suppose D = {} & i <> 0;
-then A1: S = {} by CATALG_1:7;
-    take f = 0 .--> {};
-      rng f = {{}} by CQC_LANG:5;
-    then {} in rng f by TARSKI:def 1;
-    hence thesis by A1,CARD_3:37;
-    end;
-    suppose D <> {};
-    then reconsider D as non empty set;
-    set S = i-tuples_on D;
-    take PA S;
-      S = product PA S
-    proof
-      thus S c= product PA S by Th9;
-      let x be set;
-      assume x in product PA S;
-      then consider g being Function such that
-A2:     x = g and
-A3:     dom g = dom PA S and
-A4:     for z being set st z in dom PA S holds g.z in (PA S).z by CARD_3:def 5;
-A5:   S = { s where s is Element of D*: len s = i } by FINSEQ_2:def 4;
-      consider s being Element of S;
-        s in S;
-      then consider t being Element of D* such that
-A6:     s = t and
-A7:     len t = i by A5;
-A8:   dom g = DOM S by A3,Th7
-           .= dom s by PRALG_2:def 2;
-        dom s = Seg len t by A6,FINSEQ_1:def 3;
-then A9:   g is FinSequence by A8,FINSEQ_1:def 2;
-        rng g c= D
-      proof
-        let y be set;
-        assume y in rng g;
-        then consider a being set such that
-A10:       a in dom g and
-A11:       g.a = y by FUNCT_1:def 5;
-          g.a in (PA S).a by A3,A4,A10;
-        then g.a in pi(S,a) by A3,A10,Def1;
-        then consider f being Function such that
-A12:       f in S and
-A13:       g.a = f.a by CARD_3:def 6;
-        consider w being Element of D* such that
-A14:       f = w and
-            len w = i by A5,A12;
-A15:     rng w c= D by FINSEQ_1:def 4;
-          dom g = dom w by A8,A12,A14,PRALG_2:def 1;
-        then w.a in rng w by A10,FUNCT_1:def 5;
-        hence y in D by A11,A13,A14,A15;
-      end;
-      then reconsider g as FinSequence of D by A9,FINSEQ_1:def 4;
-A16:   g in D* by FINSEQ_1:def 11;
-        len g = i by A6,A7,A8,FINSEQ_3:31;
-      hence thesis by A2,A5,A16;
-    end;
-    hence thesis;
-  end;
-  end;
 end;
 
 begin  :: Properties of AMI-Struct
@@ -286,11 +167,6 @@ registration
    let N be with_non-empty_elements set;
    let S be halting (non void AMI-Struct over N);
  cluster halting Instruction of S;
-existence
-  proof
-    take halt S;
-    thus thesis;
-  end;
 end;
 
 
@@ -366,16 +242,6 @@ registration
    let S be AMI-Struct over N;
    let T be InsType of S;
  cluster AddressParts T -> functional;
-coherence
-  proof
-A1: AddressParts T = { AddressPart I where I is Instruction of S:
-       InsCode I = T } by Def5;
-    let f be set;
-    assume f in AddressParts T;
-    then ex I being Instruction of S st f = AddressPart I & InsCode I = T by A1
-;
-    hence f is Function;
-  end;
 end;
 
 
@@ -424,21 +290,6 @@ registration
    let N be with_non-empty_elements set;
  cluster standard -> with-non-trivial-Instruction-Locations
         (IC-Ins-separated definite (non empty non void AMI-Struct over N));
-coherence
-  proof
-    let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
-    given f being Function of NAT, the Instruction-Locations of S such that
-A1:   f is bijective and
-        for m, n being Nat holds m <= n iff f.m <= f.n;
-A2: NAT,the Instruction-Locations of S are_equipotent by A1,KNASTER:13;
-    thus the Instruction-Locations of S is non trivial
-    proof
-      assume not thesis;
-      then reconsider a = the Instruction-Locations of S as trivial set;
-        a is finite;
-      hence thesis by A2,CARD_1:68;
-    end;
-  end;
 end;
 
 
@@ -446,11 +297,6 @@ registration
    let N be with_non-empty_elements set;
  cluster standard (IC-Ins-separated definite
          (non empty non void AMI-Struct over N));
-existence
-  proof
-    take STC N;
-    thus thesis;
-  end;
 end;
 
 
@@ -458,7 +304,6 @@ registration
    let N be with_non-empty_elements set,
        S be with-non-trivial-Instruction-Locations AMI-Struct over N;
  cluster the Instruction-Locations of S -> non trivial;
-coherence by Def10;
 end;
 
 
@@ -473,22 +318,6 @@ registration
    let N be with_non-empty_elements set,
        I be Instruction of STC N;
  cluster JUMP I -> empty;
-coherence
-  proof
-    per cases by AMISTD_1:22;
-    suppose InsCode I = 0;
-then I is halting by AMISTD_1:20;
-    then for f being Instruction-Location of STC N holds NIC(I,f)={f}
-      by AMISTD_1:15;
-    hence thesis by AMISTD_1:14;
-    end;
-    suppose
-    InsCode I = 1;
-    then for f being Instruction-Location of STC N holds NIC(I,f)={NextLoc f}
-      by AMISTD_1:39;
-    hence thesis by Th18;
-  end;
-  end;
 end;
 
 
@@ -503,23 +332,6 @@ end;
 
 registration let N be set;
  cluster regular -> homogeneous AMI-Struct over N;
-coherence
-  proof
-    let S be AMI-Struct over N such that
-A1:   for T being InsType of S holds AddressParts T is product-like;
-    let I, J be Instruction of S such that
-A2:   InsCode I = InsCode J;
-      AddressParts InsCode I is product-like by A1;
-    then consider f being Function such that
-A3:   AddressParts InsCode I = product f by Def2;
-      AddressParts InsCode I =
-     { AddressPart A where A is Instruction of S: InsCode A = InsCode I }
-       by Def5;
-then A4: AddressPart I in AddressParts InsCode I &
-      AddressPart J in AddressParts InsCode I by A2;
-    hence dom AddressPart I = dom f by A3,CARD_3:18
-       .= dom AddressPart J by A3,A4,CARD_3:18;
-  end;
 end;
 
 
@@ -529,28 +341,6 @@ theorem :: AMISTD_2:19
 registration
    let N be with_non-empty_elements set;
  cluster STC N -> with_explicit_jumps without_implicit_jumps regular;
-coherence
-  proof
-    thus STC N is with_explicit_jumps
-    proof
-      let I be Instruction of STC N;
-      let f be set;
-      thus thesis;
-    end;
-    thus STC N is without_implicit_jumps
-    proof
-      let I be Instruction of STC N;
-      let f be set;
-        the Instructions of STC N = {[0,0],[1,0]} by AMISTD_1:def 11;
-then A1:   I = [0,0] or I = [1,0] by TARSKI:def 2;
-        AddressPart I = I`2 by Def3
-       .= 0 by A1,MCART_1:def 2;
-      hence thesis by FINSEQ_1:26;
-    end;
-    let T be InsType of STC N;
-    take {};
-    thus thesis by Th19,CARD_3:19;
-  end;
 end;
 
 
@@ -559,11 +349,6 @@ registration
  cluster standard regular halting realistic steady-programmed programmable
          with_explicit_jumps without_implicit_jumps
          (IC-Ins-separated definite (non empty non void AMI-Struct over N));
-existence
-  proof
-    take STC N;
-    thus thesis;
-  end;
 end;
 
 
@@ -572,7 +357,6 @@ registration
    let S be regular AMI-Struct over N;
    let T be InsType of S;
  cluster AddressParts T -> product-like;
-coherence by Def11;
 end;
 
 
@@ -581,16 +365,6 @@ registration
    let S be homogeneous AMI-Struct over N;
    let T be InsType of S;
  cluster AddressParts T -> with_common_domain;
-coherence
-  proof
-A1: AddressParts T = { AddressPart I where I is Instruction of S:
-       InsCode I = T } by Def5;
-    let f, g be Function;
-    assume f in AddressParts T & g in AddressParts T;
-    then (ex I being Instruction of S st f = AddressPart I & InsCode I = T) &
-    ex J being Instruction of S st g = AddressPart J & InsCode J = T by A1;
-    hence dom f = dom g by Def4;
-  end;
 end;
 
 
@@ -606,7 +380,6 @@ registration
    let S be with_explicit_jumps (IC-Ins-separated
        definite (non empty non void AMI-Struct over N));
  cluster -> with_explicit_jumps Instruction of S;
-coherence by Def8;
 end;
 
 
@@ -615,7 +388,6 @@ registration
    let S be without_implicit_jumps
  (IC-Ins-separated definite (non empty non void AMI-Struct over N));
  cluster -> without_implicit_jumps Instruction of S;
-coherence by Def9;
 end;
 
 
@@ -632,7 +404,6 @@ registration
            (IC-Ins-separated definite (non empty non void AMI-Struct over N)),
       I be halting Instruction of S;
  cluster JUMP I -> empty;
-coherence by Th21;
 end;
 
 
@@ -641,25 +412,6 @@ registration
        S be with-non-trivial-Instruction-Locations IC-Ins-separated definite
             (non empty non void AMI-Struct over N);
  cluster non trivial programmed FinPartState of S;
-existence
-  proof
-    consider l1, l2 being Element of the Instruction-Locations of S such that
-A1:   l1 <> l2 by YELLOW_8:def 1;
-    consider I being Instruction of S;
-    take f = (l1,l2) --> (I,I);
-    thus f is non trivial
-    proof
-         f = { [l1,I], [l2,I] } by A1,FUNCT_4:71;
-       then reconsider x = [l1,I], y = [l2,I] as Element of f by TARSKI:def 2;
-       take x, y;
-       thus x <> y by A1,ZFMISC_1:33;
-    end;
-    let a be set;
-    assume a in dom f;
-    then a in {l1,l2} by FUNCT_4:65;
-    then a = l1 or a = l2 by TARSKI:def 2;
-    hence thesis;
-  end;
 end;
 
 
@@ -668,24 +420,6 @@ registration
      S be standard halting (IC-Ins-separated definite
           (non empty non void AMI-Struct over N));
  cluster trivial -> unique-halt (non empty programmed FinPartState of S);
-coherence
-  proof
-    let F be non empty programmed FinPartState of S;
-    assume
-A1:    F is trivial;
-    let f be Instruction-Location of S such that
-        F.f = halt S and
-A2:   f in dom F;
-    consider x being set such that
-A3:   F = {x} by A1,REALSET1:def 12;
-      x in F by A3,TARSKI:def 1;
-    then consider a, b being set such that
-A4:   [a,b] = x by RELAT_1:def 1;
-A5: LastLoc F in dom F by AMISTD_1:51;
-A6: dom F = {a} by A3,A4,RELAT_1:23;
-    hence f = a by A2,TARSKI:def 1
-           .= LastLoc F by A5,A6,TARSKI:def 1;
-  end;
 end;
 
 
@@ -722,7 +456,6 @@ registration
             realistic (IC-Ins-separated definite
             (non empty non void AMI-Struct over N));
  cluster halting -> ins-loc-free Instruction of S;
-coherence by Th23;
 end;
 
 
@@ -739,7 +472,6 @@ registration
             (IC-Ins-separated definite
             (non empty non void AMI-Struct over N));
  cluster sequential -> ins-loc-free Instruction of S;
-coherence by Th24;
 end;
 
 
@@ -757,11 +489,6 @@ registration
        S be standard halting
           (IC-Ins-separated definite (non empty non void AMI-Struct over N));
  cluster Stop S -> lower non empty programmed trivial;
-coherence
-  proof
-      Stop S = il.(S,0) .--> halt S by Def13;
-    hence thesis by AMISTD_1:48;
-  end;
 end;
 
 
@@ -770,11 +497,6 @@ registration
        S be standard realistic halting
            (IC-Ins-separated definite (non empty non void AMI-Struct over N));
  cluster Stop S -> closed;
-coherence
-  proof
-      Stop S = il.(S,0) .--> halt S by Def13;
-    hence thesis by AMISTD_1:46;
-  end;
 end;
 
 
@@ -783,11 +505,6 @@ registration
        S be standard halting steady-programmed
           (IC-Ins-separated definite (non empty non void AMI-Struct over N));
  cluster Stop S -> autonomic;
-coherence
-  proof
-      Stop S = il.(S,0) .--> halt S by Def13;
-    hence thesis by AMISTD_1:12;
-  end;
 end;
 
 
@@ -811,18 +528,6 @@ registration
        S be standard halting (IC-Ins-separated definite
             (non empty non void AMI-Struct over N));
  cluster Stop S -> halt-ending unique-halt;
-coherence
-  proof
-    thus (Stop S).(LastLoc Stop S)
-       = (Stop S).il.(S,0) by Th27
-      .= (il.(S,0) .--> halt S).il.(S,0) by Def13
-      .= halt S by CQC_LANG:6;
-    let l be Instruction-Location of S such that (Stop S).l = halt S;
-    assume l in dom Stop S;
-    then l in {il.(S,0)} by Lm5;
-    then l = il.(S,0) by TARSKI:def 1;
-    hence l = LastLoc Stop S by Th27;
-  end;
 end;
 
 
@@ -881,7 +586,6 @@ registration
        I be halting Instruction of S,
        k be natural number;
  cluster IncAddr(I,k) -> halting;
-coherence by Th29;
 end;
 
 
@@ -957,11 +661,6 @@ registration
        F be programmed FinPartState of S,
        k be natural number;
  cluster IncAddr(F,k) -> programmed;
-coherence
-  proof
-      dom IncAddr(F,k) = dom F by Def15;
-    hence dom IncAddr(F,k) c= the Instruction-Locations of S by AMI_3:def 13;
-  end;
 end;
 
 
@@ -972,14 +671,6 @@ registration
        F be empty programmed FinPartState of S,
        k be natural number;
  cluster IncAddr(F,k) -> empty;
-coherence
-  proof
-    assume not thesis;
-    then reconsider f = IncAddr(F,k) as non empty Function;
-A1: dom f <> {};
-      dom IncAddr(F,k) = dom F by Def15;
-    hence thesis by A1;
-  end;
 end;
 
 
@@ -990,11 +681,6 @@ registration
        F be non empty programmed FinPartState of S,
        k be natural number;
  cluster IncAddr(F,k) -> non empty;
-coherence
-  proof
-      dom IncAddr(F,k) = dom F by Def15;
-    hence thesis by Lm1;
-  end;
 end;
 
 
@@ -1005,11 +691,6 @@ registration
        F be lower programmed FinPartState of S,
        k be natural number;
  cluster IncAddr(F,k) -> lower;
-coherence
-  proof
-      dom IncAddr(F,k) = dom F by Def15;
-    hence thesis by Th13;
-  end;
 end;
 
 
@@ -1045,15 +726,6 @@ registration
        F be FinPartState of S,
        k be natural number;
  cluster Shift(F,k) -> programmed;
-coherence
-  proof
-A1: dom Shift(F,k) = { il.(S,m+k) where m is Nat: il.(S,m) in dom F }
-      by Def16;
-    let x be set;
-    assume x in dom Shift(F,k);
-    then ex m being Nat st x = il.(S,m+k) & il.(S,m) in dom F by A1;
-    hence x in the Instruction-Locations of S;
-  end;
 end;
 
 
@@ -1064,18 +736,6 @@ registration
        F be empty FinPartState of S,
        k be natural number;
  cluster Shift(F,k) -> empty;
-coherence
-  proof
-A1: dom Shift(F,k) = { il.(S,m+k) where m is Nat: il.(S,m) in dom F }
-      by Def16;
-    assume Shift(F,k) is non empty;
-    then reconsider f = Shift(F,k) as non empty Function;
-      dom f is non empty;
-    then consider a being set such that
-A2:   a in dom Shift(F,k) by XBOOLE_0:def 1;
-      ex m being Nat st a = il.(S,m+k) & il.(S,m) in dom F by A1,A2;
-    hence thesis;
-  end;
 end;
 
 
@@ -1086,20 +746,6 @@ registration
        F be non empty programmed FinPartState of S,
        k be natural number;
  cluster Shift(F,k) -> non empty;
-coherence
-  proof
-A1: dom Shift(F,k) = { il.(S,m+k) where m is Nat: il.(S,m) in dom F }
-      by Def16;
-    consider a being set such that
-A2:   a in dom F by XBOOLE_0:def 1;
-      dom F c= the Instruction-Locations of S by AMI_3:def 13;
-    then reconsider a as Instruction-Location of S by A2;
-    consider m being natural number such that
-A3:   a = il.(S,m) by AMISTD_1:26;
-    reconsider m as Element of NAT by ORDINAL2:def 21;
-      il.(S,m+k) in dom Shift(F,k) by A1,A2,A3;
-    hence thesis by Lm1;
-  end;
 end;
 
 
@@ -1185,7 +831,6 @@ registration
        S be regular standard without_implicit_jumps
           (IC-Ins-separated definite (non empty non void AMI-Struct over N));
  cluster sequential -> IC-good Instruction of S;
-coherence by Th44;
 end;
 
 
@@ -1200,7 +845,6 @@ registration
        S be regular standard without_implicit_jumps realistic
            (IC-Ins-separated definite (non empty non void AMI-Struct over N));
  cluster halting -> IC-good Instruction of S;
-coherence by Th45;
 end;
 
 
@@ -1213,118 +857,12 @@ registration
    let N be with_non-empty_elements set,
        S be non void AMI-Struct over N;
  cluster halting -> Exec-preserving Instruction of S;
-coherence by Th46;
 end;
 
 
 registration
    let N be with_non-empty_elements set;
  cluster STC N -> IC-good Exec-preserving;
-coherence
-  proof
-    thus STC N is IC-good
-    proof
-      let I be Instruction of STC N,
-          k be natural number,
-          s1, s2 be State of STC N such that
-A1:     s2 = s1 +* (IC STC N .--> (IC s1 + k));
-        {IC STC N} = dom (IC STC N .--> (IC s1 + k)) by CQC_LANG:5;
-then A2:   IC STC N in dom (IC STC N .--> (IC s1 + k)) by TARSKI:def 1;
-A3:   IC Exec(IncAddr(I,k), s2) = Exec(IncAddr(I,k), s2).IC STC N
-         by AMI_1:def 15;
-A4:   IC s2 = s2.IC STC N by AMI_1:def 15
-           .= (IC STC N .--> (IC s1 + k)).IC STC N by A1,A2,FUNCT_4:14
-           .= IC s1 + k by CQC_LANG:6;
-      per cases by AMISTD_1:22;
-      suppose
-A5:     InsCode I = 1;
-then A6:   InsCode IncAddr(I,k) = 1 by Def14;
-    Exec(I,s1).IC STC N = NextLoc IC s1 by A5,AMISTD_1:38
-        .= il.(STC N,locnum IC s1 + 1) by AMISTD_1:34;
-then A7:   locnum IC Exec(I,s1) = locnum il.(STC N,locnum IC s1 + 1)
-        by AMI_1:def 15
-        .= locnum IC s1 + 1 by AMISTD_1:def 13;
-      thus IC Exec(I,s1) + k = il.(STC N, locnum IC Exec(I,s1) + k)
-           by AMISTD_1:def 14
-        .= locnum IC Exec(I,s1) + k by AMISTD_1:37
-        .= locnum IC s1 + k + 1 by A7,XCMPLX_1:1
-        .= locnum (IC s1 + k) + 1 by AMISTD_1:33
-        .= il.(STC N, locnum IC s2 + 1) by A4,AMISTD_1:37
-        .= NextLoc IC s2 by AMISTD_1:34
-        .= IC Exec(IncAddr(I,k), s2) by A3,A6,AMISTD_1:38;
-      end;
-      suppose InsCode I = 0;
-then A8:   I is halting by AMISTD_1:20;
-      then I is ins-loc-free by Th23;
-then A9:   IncAddr(I,k) is halting by A8,Th29;
-      thus IC Exec(I,s1) + k = IC s1 + k by A8,AMI_1:def 8
-        .= IC Exec(IncAddr(I,k), s2) by A4,A9,AMI_1:def 8;
-    end;
-    end;
-    let I be Instruction of STC N;
-    per cases by AMISTD_1:22;
-    suppose InsCode I = 1;
-then A10: I`1 = 1 by AMI_5:def 1;
-      the Instructions of STC N = {[0,0],[1,0]} by AMISTD_1:def 11;
-then A11: I = [0,0] or I = [1,0] by TARSKI:def 2;
-    let s1, s2 be State of STC N such that
-A12:   s1, s2 equal_outside the Instruction-Locations of STC N;
-    consider f being Function of product the Object-Kind of STC N,
-                                 product the Object-Kind of STC N such that
-A13:   for s being Element of product the Object-Kind of STC N
-       holds f.s = s+*({NAT}-->succ(s.NAT)) and
-A14:   the Execution of STC N
-       = ({[1,0]} --> f) +* ({[0,0]} --> id product the Object-Kind of STC N)
-       by AMISTD_1:def 11;
-      [0,0] <> [1,0] by ZFMISC_1:33;
-    then not I in {[0,0]} by A10,A11,MCART_1:7,TARSKI:def 1;
-then not I in dom ({[0,0]} --> id product the Object-Kind of STC N)
-      by FUNCOP_1:19;
-then A15: (the Execution of STC N).I = ({[1,0]} --> f).I by A14,FUNCT_4:12;
-A16: I in {[1,0]} by A10,A11,MCART_1:7,TARSKI:def 1;
-A17: Exec(I,s1) = (the Execution of STC N).I.s1 by AMI_1:def 7
-      .= f.s1 by A15,A16,FUNCOP_1:13
-      .= s1+*({NAT}-->succ(s1.NAT)) by A13;
-A18: Exec(I,s2) = (the Execution of STC N).I.s2 by AMI_1:def 7
-      .= f.s2 by A15,A16,FUNCOP_1:13
-      .= s2+*({NAT}-->succ(s2.NAT)) by A13;
-      dom Exec(I,s1) = dom the Object-Kind of STC N by CARD_3:18;
-then A19: dom Exec(I,s1) = dom Exec(I,s2) by CARD_3:18;
-A20: dom Exec(I,s1) \ the Instruction-Locations of STC N c= dom Exec(I,s1)
-      by XBOOLE_1:36;
-      for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of STC
-N
-      holds Exec(I,s1).x = Exec(I,s2).x
-    proof
-      let x be set;
-      assume
-A21:     x in dom Exec(I,s1) \ the Instruction-Locations of STC N;
-      then not x in the Instruction-Locations of STC N by XBOOLE_0:def 4;
-then A22:   not x in NAT by AMISTD_1:def 11;
-A23:   IC STC N = the Instruction-Counter of STC N by AMI_1:def 5;
-then A24:   s1.NAT = s1.IC STC N by AMISTD_1:def 11
-            .= IC s1 by AMI_1:def 15
-            .= IC s2 by A12,SCMFSA6A:29
-            .= s2.IC STC N by AMI_1:def 15
-            .= s2.NAT by A23,AMISTD_1:def 11;
-        x in dom Exec(I,s1) by A21,XBOOLE_0:def 4;
-      then x in the carrier of STC N by AMI_3:36;
-      then x in NAT \/ {NAT} by AMISTD_1:def 11;
-then A25:   x in {NAT} by A22,XBOOLE_0:def 2;
-then A26:   x in dom ({NAT}-->succ(s2.NAT)) by FUNCOP_1:19;
-        x in dom ({NAT}-->succ(s1.NAT)) by A25,FUNCOP_1:19;
-      hence Exec(I,s1).x = ({NAT}-->succ(s1.NAT)).x by A17,FUNCT_4:14
-         .= Exec(I,s2).x by A18,A24,A26,FUNCT_4:14;
-    end;
-    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of STC N) =
-      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of STC N)
-      by A19,A20,SCMFSA6A:9;
-    end;
-    suppose InsCode I = 0;
-    then I is halting by AMISTD_1:20;
-    hence thesis by Th46;
-  end;
-  end;
 end;
 
 
@@ -1335,11 +873,6 @@ registration
          IC-good Exec-preserving
          (regular standard (IC-Ins-separated definite
          (non empty non void AMI-Struct over N)));
-existence
-  proof
-    take STC N;
-    thus thesis;
-  end;
 end;
 
 
@@ -1348,7 +881,6 @@ registration
        S be IC-good (regular standard
           (IC-Ins-separated definite (non empty non void AMI-Struct over N)));
  cluster -> IC-good Instruction of S;
-coherence by Def18;
 end;
 
 
@@ -1356,7 +888,6 @@ registration
    let N be with_non-empty_elements set,
        S be Exec-preserving (non void AMI-Struct over N);
  cluster -> Exec-preserving Instruction of S;
-coherence by Def20;
 end;
 
 
@@ -1388,20 +919,6 @@ registration
          (non empty non void AMI-Struct over N));
    let F be non empty trivial programmed FinPartState of S;
  cluster CutLastLoc F -> empty;
-coherence
-  proof
-A1: CutLastLoc F = F \ ( LastLoc F .--> F.LastLoc F ) by Def21;
-      LastLoc F in dom F by AMISTD_1:51;
-then A2: [LastLoc F,F.LastLoc F] in F by FUNCT_1:def 4;
-    assume not thesis;
-    then consider a being set such that
-A3:   a in CutLastLoc F by XBOOLE_0:def 1;
-      a in F by A1,A3,XBOOLE_0:def 4;
-then A4: a = [LastLoc F,F.LastLoc F] by A2,YELLOW_8:def 1;
-      not a in LastLoc F .--> F.LastLoc F by A1,A3,XBOOLE_0:def 4;
-    then not a in {[LastLoc F,F.LastLoc F]} by AMI_1:19;
-    hence thesis by A4,TARSKI:def 1;
-  end;
 end;
 
 
@@ -1411,11 +928,6 @@ registration
          (non empty non void AMI-Struct over N));
    let F be non empty programmed FinPartState of S;
  cluster CutLastLoc F -> programmed;
-coherence
-  proof
-      CutLastLoc F = F \ ( LastLoc F .--> F.LastLoc F ) by Def21;
-    hence thesis by Th12;
-  end;
 end;
 
 
@@ -1425,50 +937,6 @@ registration
          (non empty non void AMI-Struct over N));
    let F be lower non empty programmed FinPartState of S;
  cluster CutLastLoc F -> lower;
-coherence
-  proof
-    set G = CutLastLoc F;
-    per cases;
-    suppose G is empty;
-    then reconsider H = G as empty FinPartState of S;
-      H is lower;
-    hence thesis;
-    end;
-    suppose G is non empty;
-    then reconsider G as non empty FinPartState of S;
-      G is lower
-    proof
-      let l be Instruction-Location of S such that
-A1:     l in dom G;
-      let m be Instruction-Location of S such that
-A2:     m <= l;
-      consider M being finite non empty natural-membered set such that
-A3:     M = { locnum w where w is Element of the Instruction-Locations of S
-                           : w in dom F } and
-A4:     LastLoc F = il.(S, max M) by AMISTD_1:def 21;
-      reconsider R = {[LastLoc F, F.LastLoc F]} as Relation by RELAT_1:4;
-        R = LastLoc F .--> (F.LastLoc F) by AMI_1:19;
-then A5:   dom R = {LastLoc F} by CQC_LANG:5;
-then A6:   dom F \ dom R = dom G by Th47;
-then A7:   l in dom F by A1,XBOOLE_0:def 4;
-then A8:   m in dom F by A2,AMISTD_1:def 20;
-        locnum l in M by A3,A7;
-then A9:   locnum l <= max M by PRE_CIRC:def 1;
-        now
-        assume m = LastLoc F;
-        then LastLoc F <= il.(S,locnum l) by A2,AMISTD_1:def 13;
-        then max M <= locnum l by A4,AMISTD_1:28;
-        then il.(S,locnum l) = il.(S,max M) by A9,AXIOMS:21;
-        then LastLoc F in dom G by A1,A4,AMISTD_1:def 13;
-        then not LastLoc F in {LastLoc F} by A5,A6,XBOOLE_0:def 4;
-        hence contradiction by TARSKI:def 1;
-      end;
-      then not m in {LastLoc F} by TARSKI:def 1;
-      hence m in dom G by A5,A6,A8,XBOOLE_0:def 4;
-    end;
-    hence thesis;
-  end;
-  end;
 end;
 
 
@@ -1508,12 +976,6 @@ registration
             (non empty non void AMI-Struct over N)),
        F, G be non empty programmed FinPartState of S;
  cluster F ';' G -> non empty programmed;
-coherence
-  proof
-      F ';' G = CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1)
-      by Def22;
-    hence thesis;
-  end;
 end;
 
 
@@ -1531,67 +993,6 @@ registration
          (non empty non void AMI-Struct over N));
    let F, G be lower non empty programmed FinPartState of S;
  cluster F ';' G -> lower;
-coherence
-  proof
-    set P = F ';' G;
-A1: P = CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1) by Def22;
-    let n be Instruction-Location of S such that
-A2:   n in dom P;
-    let f be Instruction-Location of S such that
-A3:   f <= n;
-    set k = card F -' 1;
-A4: dom P = dom CutLastLoc F \/ dom Shift(IncAddr(G,k),k) by A1,FUNCT_4:def 1;
-    per cases by A2,A4,XBOOLE_0:def 2;
-    suppose n in dom CutLastLoc F;
-    then f in dom CutLastLoc F by A3,AMISTD_1:def 20;
-    hence f in dom P by A4,XBOOLE_0:def 2;
-    end;
-    suppose n in dom Shift(IncAddr(G,k),k);
-    then n in { il.(S,w+k) where w is Nat:
-          il.(S,w) in dom IncAddr(G,k) } by Def16;
-    then consider m being Nat such that
-A5:   n = il.(S,m+k) and
-A6:   il.(S,m) in dom IncAddr(G,k);
-A7: locnum f <= locnum n by A3,AMISTD_1:29;
-A8: il.(S,m) in dom G by A6,Def15;
-      now per cases;
-      case
-A9:     locnum f < k;
-      then locnum f < card F - 1 by Th4;
-      then 1+locnum f < 1 + (card F - 1) by REAL_1:53;
-      then 1+locnum f < 1 + card F - 1 by XCMPLX_1:29;
-      then 1+locnum f < card F + (1 - 1) by XCMPLX_1:29;
-then A10:   il.(S,1+locnum f) in dom F by AMISTD_1:50;
-        locnum f <= 1+locnum f by NAT_1:29;
-      then il.(S,locnum f) <= il.(S,1+locnum f) by AMISTD_1:28;
-      then il.(S,locnum f) in dom F by A10,AMISTD_1:def 20;
-then A11:   f in dom F by AMISTD_1:def 13;
-        now
-        assume f = LastLoc F;
-        then f = il.(S,k) by AMISTD_1:55;
-        hence contradiction by A9,AMISTD_1:def 13;
-      end;
-      then not f in {LastLoc F} by TARSKI:def 1;
-      then f in (dom F) \ {LastLoc F} by A11,XBOOLE_0:def 4;
-      hence f in dom CutLastLoc F by Th47;
-      end;
-      case locnum f >= k;
-      then consider l1 being Nat such that
-A12:     locnum f = k + l1 by NAT_1:28;
-A13:   dom Shift(IncAddr(G,k),k) =
-        { il.(S,w+k) where w is Nat: il.(S,w) in dom IncAddr(G,k) } by Def16;
-A14:   f = il.(S,l1+k) by A12,AMISTD_1:def 13;
-        locnum f <= k+m by A5,A7,AMISTD_1:def 13;
-      then l1 <= m by A12,REAL_1:53;
-      then il.(S,l1) <= il.(S,m) by AMISTD_1:28;
-      then il.(S,l1) in dom G by A8,AMISTD_1:def 20;
-      then il.(S,l1) in dom IncAddr(G,k) by Def15;
-      hence f in dom Shift(IncAddr(G,k),k) by A13,A14;
-    end;
-    end;
-    hence f in dom P by A4,XBOOLE_0:def 2;
-  end;
-  end;
 end;
 
 
@@ -1628,39 +1029,6 @@ registration
    let F be lower non empty programmed FinPartState of S;
    let G be halt-ending (lower non empty programmed FinPartState of S);
  cluster F ';' G -> halt-ending;
-coherence
-  proof
-    set P = F ';' G,
-        k = card F -' 1;
-A1: P = CutLastLoc F +* Shift(IncAddr(G,k),k) by Def22;
-A2: dom Shift(IncAddr(G,k),k) = { il.(S,m+k) where m is Nat:
-      il.(S,m) in dom IncAddr(G,k) } by Def16;
-A3: il.(S, card G -' 1) = LastLoc G by AMISTD_1:55;
-then A4: il.(S, card G -' 1) in dom G by AMISTD_1:51;
-then A5: il.(S, card G -' 1) in dom IncAddr(G,k) by Def15;
-then A6: il.(S, k + (card G -' 1)) in dom Shift(IncAddr(G,k),k) by A2;
-A7: pi(G,il.(S,card G -' 1)) = G.il.(S,card G -' 1) by A4,AMI_5:def 5
-       .= halt S by A3,AMISTD_1:def 22;
-      card F <> 0 by CARD_2:59;
-then A8: 1 <= card F by RLVECT_1:99;
-      card G <> 0 by CARD_2:59;
-    then card G >= 1 by RLVECT_1:99;
-then A9: card G - 1 >= 0 by SQUARE_1:12;
-    then k + (card G - 1) >= k+0 by AXIOMS:24;
-then A10: k + card G - 1 >= k+0 by XCMPLX_1:29;
-      k+0 >= 0 by NAT_1:18;
-then A11: k + card G -' 1 = k + card G - 1 by A10,BINARITH:def 3
-     .= k + (card G - 1) by XCMPLX_1:29
-     .= k + (card G -' 1) by A9,BINARITH:def 3;
-    thus P.(LastLoc P) = P.il.(S,card P -' 1) by AMISTD_1:55
-      .= P.il.(S, card F + card G -' 1 -' 1) by Th52
-      .= P.il.(S, k + card G -' 1) by A8,JORDAN4:3
-      .= Shift(IncAddr(G,k),k).il.(S, k + (card G -' 1))
-         by A1,A6,A11,FUNCT_4:14
-      .= IncAddr(G,k).il.(S,card G -' 1) by A5,Def16
-      .= IncAddr(pi(G,il.(S,card G -' 1)),k) by A4,Def15
-      .= halt S by A7,Th30;
-  end;
 end;
 
 
@@ -1672,57 +1040,6 @@ registration
    let F, G be halt-ending unique-halt
                (lower non empty programmed FinPartState of S);
  cluster F ';' G -> unique-halt;
-coherence
-  proof
-    set P = F ';' G,
-        k = card F -' 1;
-A1: P = CutLastLoc F +* Shift(IncAddr(G,k),k) by Def22;
-then A2: dom P = dom CutLastLoc F \/ dom Shift(IncAddr(G,k),k) by FUNCT_4:def 1
-;
-A3: dom Shift(IncAddr(G,k),k) = { il.(S,m+k) where m is Nat:
-      il.(S,m) in dom IncAddr(G,k) } by Def16;
-      card F <> 0 by CARD_2:59;
-then A4: 1 <= card F by RLVECT_1:99;
-      card G <> 0 by CARD_2:59;
-    then card G >= 1 by RLVECT_1:99;
-then A5: card G - 1 >= 0 by SQUARE_1:12;
-    then k + (card G - 1) >= k+0 by AXIOMS:24;
-then A6: k + card G - 1 >= k+0 by XCMPLX_1:29;
-      k+0 >= 0 by NAT_1:18;
-then A7: k + card G -' 1 = k + card G - 1 by A6,BINARITH:def 3
-     .= k + (card G - 1) by XCMPLX_1:29
-     .= k + (card G -' 1) by A5,BINARITH:def 3;
-    let f be Instruction-Location of S such that
-A8:   P.f = halt S and
-A9:   f in dom P;
-    per cases by A2,A9,XBOOLE_0:def 2;
-    suppose
-A10:   f in dom CutLastLoc F;
-then A11: (CutLastLoc F).f <> halt S by Th51;
-      dom CutLastLoc F misses dom Shift(IncAddr(G,k),k) by Th50;
-    then CutLastLoc F c= P by A1,FUNCT_4:33;
-    hence f = LastLoc P by A8,A10,A11,GRFUNC_1:8;
-    end;
-    suppose
-A12:   f in dom Shift(IncAddr(G,k),k);
-    then consider m being Nat such that
-A13:   f = il.(S,m+k) and
-A14:   il.(S,m) in dom IncAddr(G,k) by A3;
-A15: il.(S,m) in dom G by A14,Def15;
-then A16: pi(G,il.(S,m)) = G.il.(S,m) by AMI_5:def 5;
-      IncAddr(pi(G,il.(S,m)),k)
-      = IncAddr(G,k).il.(S,m) by A15,Def15
-     .= Shift(IncAddr(G,k),k).il.(S,m+k) by A14,Def16
-     .= halt S by A1,A8,A12,A13,FUNCT_4:14;
-    then G.il.(S,m) = halt S by A16,Th35;
-    then il.(S,m) = LastLoc G by A15,AMISTD_1:def 23
-            .= il.(S,card G -' 1) by AMISTD_1:55;
-    then m = card G -' 1 by AMISTD_1:25;
-    then m+k = card F + card G -' 1 -' 1 by A4,A7,JORDAN4:3
-       .= card P -' 1 by Th52;
-    hence f = LastLoc P by A13,AMISTD_1:55;
-  end;
-  end;
 end;
 
 
@@ -1743,148 +1060,6 @@ registration
        (non empty non void AMI-Struct over N))),
        F, G be closed lower non empty programmed FinPartState of S;
  cluster F ';' G -> closed;
-coherence
-  proof
-    set P = F ';' G,
-        k = card F -' 1;
-    let f be Instruction-Location of S such that
-A1:   f in dom P;
-A2: dom P = dom CutLastLoc F \/ dom Shift(IncAddr(G,k),k) by Lm9;
-A3: P = CutLastLoc F +* Shift(IncAddr(G,k),k) by Def22;
-      dom CutLastLoc F misses dom Shift(IncAddr(G,k),k) by Th50;
-then A4: dom CutLastLoc F /\ dom Shift(IncAddr(G,k),k) = {} by XBOOLE_0:def 7;
-A5: CutLastLoc F c= F by Lm8;
-then A6: dom CutLastLoc F c= dom F by GRFUNC_1:8;
-A7: dom Shift(IncAddr(G,k),k) =
-     {il.(S,m+k) where m is Nat: il.(S,m) in dom IncAddr(G,k)} by Def16;
-A8: NIC(pi(P,f),f) = { IC Following s where s is State of S:
-      IC s = f & s.f = pi(P,f) } by AMISTD_1:def 5;
-    let x be set;
-    assume x in NIC(pi(P,f),f);
-    then consider s2 being State of S such that
-A9:   x = IC Following s2 and
-A10:   IC s2 = f and
-A11:   s2.f = pi(P,f) by A8;
-A12: pi(P,f) = P.f by A1,AMI_5:def 5;
-A13: x = (Following s2).IC S by A9,AMI_1:def 15
-     .= Exec(CurInstr s2,s2).IC S by AMI_1:def 18
-     .= Exec(s2.IC s2,s2).IC S by AMI_1:def 17
-     .= IC Exec(pi(P,f),s2) by A10,A11,AMI_1:def 15;
-    per cases by A1,A2,XBOOLE_0:def 2;
-    suppose
-A14:   f in dom CutLastLoc F;
-then A15: NIC(pi(F,f),f) c= dom F by A6,AMISTD_1:def 17;
-A16: NIC(pi(F,f),f) = { IC Following s where s is State of S:
-      IC s = f & s.f = pi(F,f) } by AMISTD_1:def 5;
-      not f in dom Shift(IncAddr(G,k),k) by A4,A14,XBOOLE_0:def 3;
-    then s2.f = (CutLastLoc F).f by A3,A11,A12,FUNCT_4:12
-        .= F.f by A5,A14,GRFUNC_1:8
-        .= pi(F,f) by A6,A14,AMI_5:def 5;
-    then IC Following s2 in NIC(pi(F,f),f) by A10,A16;
-then A17: x in dom F by A9,A15;
-      dom F c= dom P by Th53;
-    hence x in dom P by A17;
-    end;
-    suppose
-A18:   f in dom Shift(IncAddr(G,k),k);
-    then consider m being Nat such that
-A19:   f = il.(S,m+k) and
-A20:   il.(S,m) in dom IncAddr(G,k) by A7;
-A21: il.(S,m) in dom G by A20,Def15;
-then A22: NIC(pi(G,il.(S,m)),il.(S,m)) c= dom G by AMISTD_1:def 17;
-A23: ObjectKind IC S = the Instruction-Locations of S by AMI_1:def 11;
-    then reconsider v = IC S .--> il.(S,m) as FinPartState of S by AMI_1:59;
-    set s1 = s2 +* v;
-A24: pi(P,f) = Shift(IncAddr(G,k),k).f by A3,A12,A18,FUNCT_4:14
-          .= IncAddr(G,k).il.(S,m) by A19,A20,Def16;
-A25: (IC S .--> il.(S,m)).IC S = il.(S,m) by CQC_LANG:6;
-A26: IC S in {IC S} by TARSKI:def 1;
-A27: dom (IC S .--> il.(S,m)) = {IC S} by CQC_LANG:5;
-A28: IC s1 = s1.IC S by AMI_1:def 15
-         .= il.(S,m) by A25,A26,A27,FUNCT_4:14;
-A29: dom s2 = the carrier of S by AMI_3:36;
-    reconsider w = IC S .--> (IC s1 + k) as FinPartState of S by A23,AMI_1:59;
-      s1 +* w is State of S;
-then A30: dom (s1 +* (IC S .--> (IC s1 + k))) = the carrier of S by AMI_3:36;
-      for a being set st a in dom s2 holds
-     s2.a = (s1 +* (IC S .--> (IC s1 + k))).a
-    proof
-      let a be set such that a in dom s2;
-A31:   dom (IC S .--> (IC s1 + k)) = {IC S} by CQC_LANG:5;
-      per cases;
-      suppose
-A32:     a = IC S;
-      hence s2.a = il.(S,m+k) by A10,A19,AMI_1:def 15
-        .= il.(S,locnum IC s1 + k) by A28,AMISTD_1:def 13
-        .= IC s1 + k by AMISTD_1:def 14
-        .= (IC S .--> (IC s1 + k)).a by A32,CQC_LANG:6
-        .= (s1 +* (IC S .--> (IC s1 + k))).a by A26,A31,A32,FUNCT_4:14;
-      end;
-      suppose
-A33:     a <> IC S;
-then A34:   not a in dom (IC S .--> (IC s1 + k)) by A31,TARSKI:def 1;
-        not a in dom (IC S .--> il.(S,m)) by A27,A33,TARSKI:def 1;
-      then s1.a = s2.a by FUNCT_4:12;
-      hence s2.a = (s1 +* (IC S .--> (IC s1 + k))).a by A34,FUNCT_4:12;
-    end;
-    end;
-then A35: s2 = s1 +* (IC S .--> (IC s1 + k)) by A29,A30,FUNCT_1:9;
-    set s3 = s1 +* (il.(S,m) .--> pi(G,il.(S,m)));
-A36: dom (il.(S,m) .--> pi(G,il.(S,m))) = {il.(S,m)} by CQC_LANG:5;
-then A37: il.(S,m) in dom (il.(S,m) .--> pi(G,il.(S,m))) by TARSKI:def 1;
-       IC S <> il.(S,m) by AMI_1:48;
-then A38: not IC S in dom (il.(S,m) .--> pi(G,il.(S,m))) by A36,TARSKI:def 1;
-A39: IC s3 = s3.IC S by AMI_1:def 15
-         .= s1.IC S by A38,FUNCT_4:12
-         .= il.(S,m) by A25,A26,A27,FUNCT_4:14;
-A40: s3.il.(S,m) = (il.(S,m) .--> pi(G,il.(S,m))).il.(S,m) by A37,FUNCT_4:14
-       .= pi(G,il.(S,m)) by CQC_LANG:6;
-      s1, s3 equal_outside the Instruction-Locations of S
-    proof
-A41:   dom s1 = the carrier of S & dom s3 = the carrier of S by AMI_3:36;
-then A42:   dom s1 \ the Instruction-Locations of S c= dom s3 by XBOOLE_1:36;
-        for x being set st x in dom s1 \ the Instruction-Locations of S holds
-        s1.x = s3.x
-      proof
-        let x be set;
-        assume A43: x in dom s1 \ the Instruction-Locations of S;
-          now
-          assume x in dom (il.(S,m) .--> pi(G,il.(S,m)));
-          then x = il.(S,m) by A36,TARSKI:def 1;
-          hence contradiction by A43,XBOOLE_0:def 4;
-        end;
-        hence s1.x = s3.x by FUNCT_4:12;
-      end;
-      hence s1|(dom s1 \ the Instruction-Locations of S) =
-         s3|(dom s3 \ the Instruction-Locations of S) by A41,A42,SCMFSA6A:9;
-    end;
-then A44: Exec(pi(G,il.(S,m)),s1), Exec(pi(G,il.(S,m)),s3)
-         equal_outside the Instruction-Locations of S by Def19;
-    reconsider k,m as Element of NAT;
-A45: x = IC Exec(IncAddr(pi(G,il.(S,m)),k),s2) by A13,A21,A24,Def15
-     .= IC Exec(pi(G,il.(S,m)), s1) + k by A35,Def17
-     .= IC Exec(pi(G,il.(S,m)), s3) + k by A44,SCMFSA6A:29
-     .= il.(S,locnum IC Exec(pi(G,il.(S,m)), s3) + k) by AMISTD_1:def 14;
-A46: NIC(pi(G,il.(S,m)),il.(S,m)) =
-      { IC Following t where t is State of S:
-        IC t = il.(S,m) & t.il.(S,m) = pi(G,il.(S,m)) } by AMISTD_1:def 5;
-      IC Following s3 = IC Exec(CurInstr s3,s3) by AMI_1:def 18
-       .= IC Exec(s3.IC s3,s3) by AMI_1:def 17
-       .= il.(S,locnum IC Exec(pi(G,il.(S,m)), s3))
-          by A39,A40,AMISTD_1:def 13;
-    then il.(S,locnum IC Exec(pi(G,il.(S,m)), s3)) in NIC(pi(G,il.(S,m)),il.(S
-,m))
-      by A39,A40,A46;
-    then il.(S,locnum IC Exec(pi(G,il.(S,m)), s3)) in dom G by A22;
-    then
-A47:   il.(S,locnum IC Exec(pi(G,il.(S,m)), s3)) in dom IncAddr(G,k)
-       by Def15;
-    reconsider nn = locnum IC Exec(pi(G,il.(S,m)), s3) as Element of NAT;
-A48: x = il.(S,nn + k) by A45;
-    x in dom Shift(IncAddr(G,k),k) by A7,A47,A48;
-    hence x in dom P by A2,XBOOLE_0:def 2;
-  end;
-  end;
 end;
 
 

@@ -48,84 +48,26 @@ reserve m,k,j,j1,i,i1,i2,n for Nat,
 
 registration
  cluster with_non-empty_element set;
- existence
-  proof consider X being with_non-empty_element set;
-   take X; thus thesis;
-  end;
 end;
 
 
 registration let D be non empty with_non-empty_element set;
  cluster non empty non-empty FinSequence of D*;
- existence
-  proof
-    consider X being non empty set such that
-A1:   X in D by TRIANG_1:def 1;
-A2:  rng<*<*X*>*> = {<*X*>} by FINSEQ_1:56;
-      <*X*> in D* by A1,FUNCT_7:20;
-    then rng<*<*X*>*> c= D* by A2,ZFMISC_1:37;
-    then reconsider F = <*<*X*>*> as FinSequence of D* by FINSEQ_1:def 4;
-   take F;
-   thus F is non empty;
-   assume {} in rng F;
-   hence thesis by A2,TARSKI:def 1;
-  end;
 end;
 
 
 registration let D be non empty with_non-empty_elements set;
  cluster non empty non-empty FinSequence of D*;
- existence
-  proof consider X being Element of D;
-A1:  rng<*<*X*>*> = {<*X*>} by FINSEQ_1:56;
-      <*X*> in D* by FUNCT_7:20;
-    then rng<*<*X*>*> c= D* by A1,ZFMISC_1:37;
-    then reconsider F = <*<*X*>*> as FinSequence of D* by FINSEQ_1:def 4;
-   take F;
-   thus F is non empty;
-   assume {} in rng F;
-   hence thesis by A1,TARSKI:def 1;
-  end;
 end;
 
 
 registration let F be non-empty Function-yielding Function;
  cluster rngs F -> non-empty;
- coherence
-  proof
-      now let n be set;
-     assume n in dom rngs F;
-      then A1:    n in dom F by EXTENS_1:4;
-      then A2:    (rngs F).n = rng(F.n) by FUNCT_6:31;
-        F.n is non empty by A1,UNIALG_1:def 6;
-     hence (rngs F).n is non empty by A2,RELAT_1:64;
-    end;
-  hence thesis by UNIALG_1:def 6;
- end;
 end;
 
 
 registration
  cluster increasing -> one-to-one FinSequence of REAL;
- coherence
-  proof let f be FinSequence of REAL such that
-A1: f is increasing;
-   let x1,x2 be set;
-   assume
-A2: x1 in dom f & x2 in dom f;
-    then reconsider n1=x1, n2=x2 as Nat;
-   assume
-A3: f.x1 = f.x2;
-   assume
-A4: not thesis;
-   per cases by A4,AXIOMS:21;
-   suppose n1 < n2;
-   hence contradiction by A1,A2,A3,GOBOARD1:def 1;
-   end;
-   suppose n1 > n2;
-   hence contradiction by A1,A2,A3,GOBOARD1:def 1;
-  end;
-  end;
 end;
 
 
@@ -171,28 +113,6 @@ theorem :: JORDAN1H:10
 registration
  cluster RealOrd
     -> total reflexive antisymmetric transitive being_linear-order;
- coherence
-  proof
-A1:  REAL c= dom RealOrd
-     proof let x be set such that
-A2:   x in REAL;
-      reconsider x as Element of REAL by A2;
-     [x,x] in RealOrd by Def1;
-     hence thesis by RELAT_1:def 4;
-    end;
-    dom RealOrd = REAL by A1,XBOOLE_0:def 10;
-   hence RealOrd is total by PARTFUN1:def 4;
-    RealOrd is_reflexive_in REAL by Lm1;
-   hence RealOrd is reflexive by Th10,RELAT_2:def 9;
-    RealOrd is_antisymmetric_in REAL by Lm2;
-   hence RealOrd is antisymmetric by Th10,RELAT_2:def 12;
-    RealOrd is_transitive_in REAL by Lm3;
-   hence RealOrd is transitive by Th10,RELAT_2:def 16;
-   thus RealOrd is_reflexive_in field RealOrd by Lm1,Th10;
-   thus RealOrd is_transitive_in field RealOrd by Lm3,Th10;
-   thus RealOrd is_antisymmetric_in field RealOrd by Lm2,Th10;
-   thus RealOrd is_connected_in field RealOrd by Lm4,Th10;
-  end;
 end;
 
 
@@ -210,7 +130,6 @@ theorem :: JORDAN1H:13
 
 registration let A be finite Subset of REAL;
  cluster SgmX(RealOrd,A) -> increasing;
- coherence by Th12;
 end;
 
 
@@ -240,15 +159,6 @@ end;
 registration let D be non empty with_non-empty_elements set;
  let M be non empty non-empty FinSequence of D*;
  cluster Values M -> non empty;
- coherence
-  proof
-      dom rngs M = dom M by EXTENS_1:4;
-    then reconsider X = rng rngs M as non empty with_non-empty_elements set
-                by RELAT_1:65;
-      Values M = Union rngs M by GOBRD13:def 1
-            .= union X by PROB_1:def 3;
-   hence thesis;
-  end;
 end;
 
 
@@ -332,28 +242,6 @@ theorem :: JORDAN1H:33
 
 registration
  cluster -> non empty non-empty Go-board;
- coherence
-  proof let G be Go-board;
-A1:  len G <> 0 by GOBOARD1:def 5;
-   thus G is non empty by CARD_1:47,GOBOARD1:def 5;
-   assume G is not non-empty;
-    then consider n being set such that
-A2:  n in dom G and
-A3:  G.n is empty by UNIALG_1:def 6;
-      len G > 0 by A1,NAT_1:19;
-    then consider s0 being FinSequence such that
-A4:  s0 in rng G and
-A5:  len s0 = width G by MATRIX_1:def 4;
-    consider n0 being Nat such that
-A6:  for x being set st x in rng G
-      ex s being FinSequence st s=x & len s = n0 by MATRIX_1:def 1;
-      G.n in rng G by A2,FUNCT_1:12;
-    then consider s1 being FinSequence such that
-A7:  s1 = G.n and
-A8:  len s1 = n0 by A6;
-      ex s being FinSequence st s=s0 & len s = n0 by A4,A6;
-   hence contradiction by A3,A5,A7,A8,CARD_1:47,GOBOARD1:def 5;
-  end;
 end;
 
 
@@ -381,14 +269,6 @@ theorem :: JORDAN1H:37
 
 registration let G be Go-board;
  cluster Values G -> non empty;
- coherence
-  proof
-      dom G is non empty;
-    then reconsider f = rngs G as non empty non-empty Function
-                 by EXTENS_1:4,RELAT_1:60;
-      Union f is non empty;
-   hence thesis by GOBRD13:def 1;
-  end;
 end;
 
 

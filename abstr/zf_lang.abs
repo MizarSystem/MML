@@ -38,11 +38,6 @@ begin
 
  registration
   cluster VAR -> non empty;
-  coherence
-  proof
- 5 in { k : 5 <= k };
-   hence thesis by Def1;
-  end;
  end;
 
 
@@ -141,13 +136,6 @@ theorem :: ZF_LANG:12
 
  registration
   cluster ZF-formula-like FinSequence of NAT;
-   existence
-    proof
-     consider x being Element of WFF;
-     reconsider x as FinSequence of NAT by Def8;
-     take x;
-     thus x is Element of WFF;
-    end;
  end;
 
 
@@ -165,55 +153,19 @@ theorem :: ZF_LANG:14
 
  registration let x,y;
   cluster x '=' y -> ZF-formula-like;
-   coherence
-    proof
-         x '=' y is ZF-formula-like
-       proof thus x '=' y is Element of WFF by Def8; end;
-     hence thesis;
-    end;
   cluster x 'in' y -> ZF-formula-like;
-   coherence
-    proof
-         x 'in' y is ZF-formula-like
-       proof thus x 'in' y is Element of WFF by Def8; end;
-     hence thesis;
-    end;
  end;
 
 
  registration let H;
   cluster 'not' H -> ZF-formula-like;
-   coherence
-    proof
-         'not' H is ZF-formula-like
-       proof H is Element of WFF by Def9;
-        hence 'not' H is Element of WFF by Def8;
-       end;
-     hence thesis;
-    end;
   let G;
   cluster H '&' G -> ZF-formula-like;
-   coherence
-    proof
-         H '&' G is ZF-formula-like
-       proof H is Element of WFF & G is Element of WFF by Def9;
-        hence H '&' G is Element of WFF by Def8;
-       end;
-     hence thesis;
-    end;
  end;
 
 
  registration let x,H;
   cluster All(x,H) -> ZF-formula-like;
-   coherence
-    proof
-         All(x,H) is ZF-formula-like
-       proof H is Element of WFF by Def9;
-        hence All(x,H) is Element of WFF by Def8;
-       end;
-     hence thesis;
-    end;
  end;
 
 
@@ -772,73 +724,10 @@ scheme :: ZF_LANG:sch 1
  for H st H is negative & P[the_argument_of H] holds P[H] and
  for H st H is conjunctive &
     P[the_left_argument_of H] & P[the_right_argument_of H] holds P[H] and
- for H st H is universal & P[the_scope_of H] holds P[H]
-proof
-     defpred Q[Nat] means for H st len H = $1 holds P[H];
-A5:  for n st for k st k < n holds Q[k] holds Q[n]
-     proof let n such that
-A6:     for k st k < n for H st len H = k holds P[H];
-      let H such that
-A7:     len H = n;
-A8:     H is atomic or H is negative or H is conjunctive or H is universal
-        by Th26;
-A9:    now assume
-A10:       H is negative;
-         then H = 'not' the_argument_of H by Def30;
-         then the_argument_of H is_immediate_constituent_of H by Th71;
-         then len the_argument_of H < len H by Th81;
-         then P[the_argument_of H] by A6,A7;
-        hence P[H] by A2,A10;
-       end;
-A11:    now assume
-A12:       H is conjunctive;
-         then H = (the_left_argument_of H) '&' the_right_argument_of H by Th58
-;
-         then the_left_argument_of H is_immediate_constituent_of H &
-          the_right_argument_of H is_immediate_constituent_of H
-           by Th72;
-         then len the_left_argument_of H < len H &
-          len the_right_argument_of H < len H by Th81;
-         then P[the_left_argument_of H] & P[the_right_argument_of H] by A6,A7;
-        hence P[H] by A3,A12;
-       end;
-      now assume
-A13:       H is universal;
-         then H = All(bound_in H,the_scope_of H) by Th62;
-         then the_scope_of H is_immediate_constituent_of H by Th73;
-         then len the_scope_of H < len H by Th81;
-         then P[the_scope_of H] by A6,A7;
-        hence P[H] by A4,A13;
-       end;
-      hence thesis by A1,A8,A9,A11;
-     end;
-   let H;
-A14:  len H = len H;
-      for n holds Q[n] from NAT_1:sch 4(A5);
-   hence thesis by A14;
-  end;
+ for H st H is universal & P[the_scope_of H] holds P[H];
 
 scheme :: ZF_LANG:sch 2
  ZF_CompInd { P[ZF-formula] } :
   for H holds P[H]
     provided
- for H st for F st F is_proper_subformula_of H holds P[F] holds P[H]
-proof
-     defpred Q[Nat] means for H st len H = $1 holds P[H];
-A2:  for n st for k st k < n holds Q[k] holds Q[n]
-     proof let n such that
-A3:     for k st k < n for H st len H = k holds P[H];
-      let H such that
-A4:     len H = n;
-         now let F; assume
-           F is_proper_subformula_of H;
-         then len F < len H by Th83;
-        hence P[F] by A3,A4;
-       end;
-      hence P[H] by A1;
-     end;
-A5:  for n holds Q[n] from NAT_1:sch 4 (A2);
-   let H;
-      len H = len H;
-   hence thesis by A5;
-  end;
+ for H st for F st F is_proper_subformula_of H holds P[F] holds P[H];

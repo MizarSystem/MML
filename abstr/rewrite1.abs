@@ -55,51 +55,7 @@ scheme :: REWRITE1:sch 1
   and
   for i being Nat st i in dom q() & i+1 in dom q() holds P[q().i, q().(i+1)]
   and
-  len p() > 0 & len q() > 0 & p().len p() = q().1
-proof   let i be Nat; assume
-A4:  i in dom (p()$^q()) & i+1 in dom (p()$^q());
-then A5: i >= 0+1 by Lm1;
-A6: i+1 >= 1 by NAT_1:29;
-      0+1 <= len q() by A3,NAT_1:38;
-then A7: 1 in Seg len q() & Seg len q() = dom q() by FINSEQ_1:3,def 3;
-   let x,y be set; assume
-A8:  x = (p()$^q()).i & y = (p()$^q()).(i+1);
-A9:  p() <> {} & q() <> {} by A3,FINSEQ_1:25;
-   then consider r being FinSequence, a being set such that
-A10:  p() = r^<*a*> by FINSEQ_1:63;
-A11:  p()$^q() = r^q() by A9,A10,Th2;
-A12:  len p() = len r + len <*a*> by A10,FINSEQ_1:35 .= len r + 1 by FINSEQ_1:
-57;
-   per cases;
-    suppose
-A13:   i < len p();
-     then i in dom p() & i+1 in dom p() by A5,Lm3,Lm4;
-then A14:   P[p().i, p().(i+1)] by A1;
-A15:   i <= len r by A12,A13,NAT_1:38;
-     then i in Seg len r by A5,FINSEQ_1:3;
-     then i in dom r by FINSEQ_1:def 3;
-then A16:   x = r.i & r.i = p().i by A8,A10,A11,FINSEQ_1:def 7;
-A17:   now assume i+1 <= len r;
-       then i+1 in Seg len r by A6,FINSEQ_1:3;
-       then i+1 in dom r by FINSEQ_1:def 3;
-      hence y = r.(i+1) & r.(i+1) = p().(i+1) by A8,A10,A11,FINSEQ_1:def 7;
-     end;
-       i = len r or i < len r by A15,REAL_1:def 5;
-    hence thesis by A3,A7,A8,A11,A12,A14,A16,A17,FINSEQ_1:def 7,NAT_1:38;
-    end;
-    suppose i >= len p();
-    then consider k being Nat such that
-A18:   i = len p()+k by NAT_1:28;
-A19:   len (p()$^q()) = len r + len q() & i = len r+(1+k) &
-     i < len (p()$^q()) & len r+(1+k)+1 = len r+(k+1+1)
-      by A4,A11,A12,A18,Lm2,FINSEQ_1:35,XCMPLX_1:1;
-   then k+1 < len q() & k+1 >= 1 by NAT_1:29,REAL_1:55;
-then A20:   k+1 in dom q() & k+1+1 in dom q() & k+1<>0 by Lm3,Lm4;
-     then x = q().(k+1) & y = q().(k+1+1) & k+1 > 0
-      by A8,A11,A19,FINSEQ_1:def 7,NAT_1:19;
-    hence thesis by A2,A20;
-  end;
-  end;
+  len p() > 0 & len q() > 0 & p().len p() = q().1;
 
 definition
  let R be Relation;
@@ -114,10 +70,6 @@ end;
 registration
  let R be Relation;
  cluster -> non empty RedSequence of R;
- coherence
-  proof let p be RedSequence of R; len p > 0 by Def2;
-   hence thesis by FINSEQ_1:25;
-  end;
 end;
 
 
@@ -411,114 +363,22 @@ scheme :: REWRITE1:sch 2
    R() is co-well_founded
   and
    for a being set st for b being set st [a,b] in R() & a <> b holds P[b]
-      holds P[a]
-proof   given a being set such that
-A3:  a in field R() & not P[a];
-   reconsider X = field R() as non empty set by A3;
-   reconsider a as Element of X by A3;
-   set Y = {x where x is Element of X: not P[x]};
-A4:  a in Y by A3;
-      Y c= field R()
-     proof let y be set; assume y in Y;
-       then ex x being Element of X st y = x & not P[x];
-      hence thesis;
-     end;
-   then consider a being set such that
-A5:  a in Y and
-A6:  for b being set st b in Y & a <> b holds not [a,b] in R() by A1,A4,Def16;
-   consider x being Element of X such that
-A7:  a = x & not P[x] by A5;
-      now let b be set; assume
-A8:    [a,b] in R() & a <> b & not P[b];
-      then not b in Y & b in X by A6,RELAT_1:30;
-     hence contradiction by A8;
-    end;
-   hence thesis by A2,A7;
-  end;
+      holds P[a];
 
 registration
  cluster strongly-normalizing -> irreflexive co-well_founded Relation;
- coherence
-  proof let R be Relation such that
-A1:  for f being ManySortedSet of NAT ex i being Nat st not [f.i,f.(i+1)] in R;
-   thus R is irreflexive
-     proof given x being set such that
-A2:    x in field R & [x,x] in R;
-         dom (NAT --> x) = NAT by FUNCOP_1:19;
-      then reconsider f = NAT --> x as ManySortedSet of NAT by PBOOLE:def 3;
-      consider i being Nat such that
-A3:    not [f.i, f.(i+1)] in R by A1;
-         f.i = x & f.(i+1) = x by FUNCOP_1:13;
-      hence contradiction by A2,A3;
-     end;
-   let Y be set; assume that
-A4:  Y c= field R & Y <> {} and
-A5:  for a being set st a in Y
-     ex b being set st b in Y & a <> b & [a,b] in R;
-   reconsider Y as non empty set by A4;
-   consider y being Element of Y;
-   defpred P[set,set] means [$1,$2] in R;
-   defpred Q[set] means not contradiction;
-A6: y in Y & Q[y];
- now let x be set; assume x in Y;
-      then ex b being set st b in Y & x <> b & [x,b] in R by A5;
-     hence ex y being set st y in Y & [x,y] in R;
-    end; then
-A7: for x be set st x in Y & Q[x] ex y be set st y in Y & P[x,y] & Q[y];
-   consider f being Function such that
-A8:  dom f = NAT & rng f c= Y & f.0 = y and
-A9:  for k being Nat holds P[f.k,f.(k+1)] & Q[f.k] from TREES_2:sch 5(A6,A7);
-      f is ManySortedSet of NAT by A8,PBOOLE:def 3;
-   hence thesis by A1,A9;
-  end;
  cluster co-well_founded irreflexive -> strongly-normalizing Relation;
- coherence
-  proof let R be Relation such that
-A10:  for Y being set st Y c= field R & Y <> {}
-     ex a being set st a in Y &
-      for b being set st b in Y & a <> b holds not [a,b] in R;
-   assume
-A11: for x being set st x in field R holds not [x,x] in R;
-   let f be ManySortedSet of NAT; assume
-A12:  for i being Nat holds [f.i, f.(i+1)] in R;
-A13:  dom f = NAT by PBOOLE:def 3;
-A14:  rng f c= field R
-     proof let y be set; assume y in rng f;
-      then consider x being set such that
-A15:     x in dom f & y = f.x by FUNCT_1:def 5;
-      reconsider x as Nat by A15,PBOOLE:def 3;
-         [y, f.(x+1)] in R by A12,A15;
-      hence thesis by RELAT_1:30;
-     end;
-      f.0 in rng f by A13,FUNCT_1:def 5;
-   then consider a being set such that
-A16:  a in rng f & for b being set st b in rng f & a <> b holds not [a,b] in R
-     by A10,A14;
-   consider x being set such that
-A17:  x in dom f & a = f.x by A16,FUNCT_1:def 5;
-   reconsider x as Nat by A17,PBOOLE:def 3;
-A18:  [a,f.(x+1)] in R & not [a,a] in R by A11,A12,A14,A16,A17;
-    then a <> f.(x+1) & f.(x+1) in rng f by A13,FUNCT_1:def 5;
-   hence contradiction by A16,A18;
-  end;
 end;
 
 
 registration
  cluster empty -> weakly-normalizing strongly-normalizing Relation;
-  coherence
-   proof let R be Relation; assume
-A1:   R is empty;
-    thus R is weakly-normalizing
-     proof let x be set; thus thesis by A1,TOLER_1:1; end;
-    thus R is strongly-normalizing
-     proof let f be ManySortedSet of NAT; take 0; thus thesis by A1; end;
-   end;
 end;
 
 
 registration
- cluster empty Relation; existence proof take {}; thus thesis; end;
+ cluster empty Relation;
+
 end;
 
 
@@ -528,36 +388,6 @@ theorem :: REWRITE1:48
 
 registration
  cluster strongly-normalizing -> weakly-normalizing Relation;
- coherence
-  proof let R be Relation such that
-A1:  R is strongly-normalizing;
-   let a be set; assume
-A2:  a in field R;
-   then reconsider X = field R as non empty set;
-   set Y = {x where x is Element of X: R reduces a,x};
-A3:  Y c= field R
-     proof let y be set; assume y in Y;
-       then ex x being Element of X st y = x & R reduces a,x;
-      hence thesis;
-     end;
-      R reduces a,a & a in X by A2,Th13;
-then A4:  a in Y & R is strongly-normalizing Relation by A1;
-   then consider x being set such that
-A5:  x in Y &
-    for b being set st b in Y & x <> b holds not [x,b] in R by A3,Def16;
-   take x;
-    A6: ex y being Element of X st x = y & R reduces a,y by A5;
-   hereby given b being set such that
-A7:   [x,b] in R;
-       x in field R & R is_irreflexive_in field R & R reduces x,b
-      by A3,A4,A5,A7,Th16,RELAT_2:def 10;
-     then not [x,x] in R & R reduces a,b & b in X
-      by A6,A7,Th17,RELAT_1:30,RELAT_2:def 2;
-     then x <> b & b in Y by A7;
-    hence contradiction by A5,A7;
-   end;
-   thus thesis by A6;
-  end;
 end;
 
 
@@ -642,139 +472,23 @@ theorem :: REWRITE1:53
 
 registration
  cluster with_Church-Rosser_property -> confluent Relation;
- coherence
-  proof let R be Relation; assume
-A1:  for a,b being set st a,b are_convertible_wrt R
-     holds a,b are_convergent_wrt R;
-   let a,b be set; assume a,b are_divergent_wrt R;
-    then a,b are_convertible_wrt R by Th38;
-   hence a,b are_convergent_wrt R by A1;
-  end;
  cluster confluent -> locally-confluent with_Church-Rosser_property Relation;
- coherence
-  proof let R be Relation; assume
-A2:  for a,b being set st a,b are_divergent_wrt R
-     holds a,b are_convergent_wrt R;
-   hereby let a,b,c be set; assume
-       [a,b] in R & [a,c] in R;
-     then R reduces a,b & R reduces a,c by Th16;
-     then b,c are_divergent_wrt R by Def8;
-    hence b,c are_convergent_wrt R by A2;
-   end;
-   let a,b be set; given p being RedSequence of R \/ R~ such that
-A3:  p.1 = a & p.len p = b;
-A4:  len p in dom p by FINSEQ_5:6;
-    defpred P[Nat] means $1 in dom p implies a,p.$1 are_convergent_wrt R;
-A5:  P[0] by Lm1;
-  now let i be Nat; assume that
-A6:   i in dom p implies a,p.i are_convergent_wrt R and
-A7:   i+1 in dom p;
-     per cases;
-     suppose A8: i in dom p;
-then a,p.i are_convergent_wrt R & [p.i, p.(i+1)] in R \/
- R~ by A6,A7,Def2;
-      then [p.i, p.(i+1)] in R or [p.i, p.(i+1)] in R~ by XBOOLE_0:def 2;
-      then [p.i, p.(i+1)] in R or [p.(i+1), p.i] in R by RELAT_1:def 7;
-then A9:   R reduces p.i, p.(i+1) or R reduces p.(i+1), p.i by Th16;
-     consider c being set such that
-A10:   R reduces a,c & R reduces p.i,c by A6,A8,Def7;
-        c,p.(i+1) are_divergent_wrt R or R reduces p.(i+1),c
-       by A9,A10,Def8,Th17;
-      then c,p.(i+1) are_convergent_wrt R or a,p.(i+1) are_convergent_wrt R
-       by A2,A10,Def7;
-     hence a, p.(i+1) are_convergent_wrt R by A10,Th43;
-     end;
-     suppose not i in dom p;
-      then i < 0+1 or i > len p & i+1 <= len p by A7,Lm1,Lm3;
-      then i <= 0 & i >= 0 by NAT_1:18,38;
-      then i = 0;
-     hence a, p.(i+1) are_convergent_wrt R by A3,Th39;
-    end;
-    end;
-then A11: for k being Nat st P[k] holds P[k+1];
-      for i being Nat holds P[i] from NAT_1:sch 1(A5,A11);
-   hence thesis by A3,A4;
-  end;
  cluster subcommutative -> confluent Relation;
- coherence
-  proof let R be Relation; assume
-      R is subcommutative;
-    then for a,b,c being set st R reduces a,b & [a,c] in R
-     holds b,c are_convergent_wrt R by Th50;
-   hence thesis by Th52;
-  end;
  cluster with_Church-Rosser_property -> with_NF_property Relation;
- coherence
-  proof let R be Relation; assume
-A12:  R is with_Church-Rosser_property;
-   let b,a be set; assume
-A13:  b is_a_normal_form_wrt R;
-   assume b,a are_convertible_wrt R;
-    then b,a are_convergent_wrt R by A12,Def23;
-   then consider c being set such that
-A14:  R reduces b,c & R reduces a,c by Def7;
-   thus thesis by A13,A14,Th34;
-  end;
  cluster with_NF_property -> with_UN_property Relation;
- coherence
-  proof let R be Relation such that
-A15:  for a,b being set st a is_a_normal_form_wrt R & a,b are_convertible_wrt R
-     holds R reduces b,a;
-   let a,b be set such that
-A16:  a is_a_normal_form_wrt R & b is_a_normal_form_wrt R and
-A17:  a,b are_convertible_wrt R;
-      R reduces b,a by A15,A16,A17;
-   hence a = b by A16,Th34;
-  end;
  cluster with_UN_property weakly-normalizing -> with_Church-Rosser_property
    Relation;
- coherence
-  proof let R be Relation such that
-A18:  for a,b being set st a is_a_normal_form_wrt R & b is_a_normal_form_wrt R
-&
-     a,b are_convertible_wrt R holds a = b and
-A19:  for a being set st a in field R holds a has_a_normal_form_wrt R;
-   let a,b be set; assume
-A20:  R \/ R~ reduces a,b;
-A21:  field (R \/ R~) = (field R) \/ field (R~) by RELAT_1:33
-      .= (field R) \/ field R by RELAT_1:38
-      .= field R;
-   per cases; suppose a = b; hence thesis by Th39;
-   end;
-   suppose
-    a <> b;
-    then a in field R & b in field R by A20,A21,Th19;
-then A22:  a has_a_normal_form_wrt R & b has_a_normal_form_wrt R by A19;
-   then consider a' being set such that
-A23:  a' is_a_normal_form_of a,R by Def11;
-   consider b' being set such that
-A24:  b' is_a_normal_form_of b,R by A22,Def11;
-A25:  a' is_a_normal_form_wrt R & b' is_a_normal_form_wrt R by A23,A24,Def6;
-A26:  R reduces a,a' & R reduces b,b' by A23,A24,Def6;
-    then a',a are_convertible_wrt R & a,b are_convertible_wrt R
-     by A20,Def4,Th26;
-    then b,b' are_convertible_wrt R & a',b are_convertible_wrt R
-     by A26,Th26,Th31;
-    then a',b' are_convertible_wrt R by Th31;
-    then a' = b' by A18,A25;
-   hence thesis by A26,Def7;
-  end;
-  end;
 end;
 
 
 registration
  cluster empty -> subcommutative Relation;
-  coherence
-   proof let R be Relation; assume
-A1:   R is empty;
-    let x be set; thus thesis by A1;
-   end;
 end;
 
 
 registration
- cluster empty Relation; existence proof take {}; thus thesis; end;
+ cluster empty Relation;
+
 end;
 
 
@@ -794,69 +508,6 @@ theorem :: REWRITE1:56
 
 registration
  cluster strongly-normalizing locally-confluent -> confluent Relation;
-  coherence
-   proof let R be Relation; assume
-       R is strongly-normalizing;
-then A1:  R is strongly-normalizing Relation;
-then A2:   R is co-well_founded;
-    assume
-A3:   for a,b,c being set st [a,b] in R & [a,c] in R
-      holds b,c are_convergent_wrt R;
-    given a0,b0 being set such that
-A4:   a0,b0 are_divergent_wrt R & not a0,b0 are_convergent_wrt R;
-    consider c0 being set such that
-A5:   R reduces c0,a0 & R reduces c0,b0 by A4,Def8;
-       a0 <> c0 or b0 <> c0 by A4,Th39;
-then A6:   c0 in field R by A5,Th19;
-    defpred P[set] means
-     for b,c being set st R reduces $1,b & R reduces $1,c
-      holds b,c are_convergent_wrt R;
-A7:   for a being set st for b being set st [a,b] in R & a <> b holds P[b]
-      holds P[a]
-      proof let a be set; assume
-A8:      for b being set st [a,b] in R & a <> b holds P[b];
-       let b,c be set; assume
-A9:      R reduces a,b & R reduces a,c;
-       then consider p being RedSequence of R such that
-A10:      a = p.1 & b = p.len p by Def3;
-       consider q being RedSequence of R such that
-A11:      a = q.1 & c = q.len q by A9,Def3;
-          len p > 0 & len q > 0 by Def2;
-then A12:      len p >= 0+1 & len q >= 0+1 by NAT_1:38;
-       per cases;
-       suppose len p = 1; hence b,c are_convergent_wrt R by A9,A10,Th37;
-       end;
-       suppose len q = 1; hence b,c are_convergent_wrt R by A9,A11,Th37;
-       end;
-       suppose len p <> 1 & len q <> 1;
-         then len p > 1 & len q > 1 by A12,REAL_1:def 5;
-then A13:       1 <= 2 & 1+1 <= len p & 1+1 <= len q by NAT_1:38;
-then A14:       1 in dom p & 1+1 in dom p & 1 in dom q & 1+1 in
- dom q by A12,Lm3;
-then A15:       [a,p.2] in R & [a,q.2] in R by A10,A11,Def2;
-         then a in field R & R is_irreflexive_in field R
-          by A1,RELAT_1:30,RELAT_2:def 10;
-         then A16: a <> p.2 & a <> q.2 by A15,RELAT_2:def 2;
-           p.2,q.2 are_convergent_wrt R by A3,A15;
-        then consider d being set such that
-A17:       R reduces p.2,d & R reduces q.2,d by Def7;
-           len p in dom p by FINSEQ_5:6;
-         then R reduces p.2,b by A10,A13,A14,Th18;
-         then b,d are_convergent_wrt R by A8,A15,A16,A17;
-        then consider e being set such that
-A18:       R reduces b,e & R reduces d,e by Def7;
-           len q in dom q by FINSEQ_5:6;
-         then R reduces q.2,e & R reduces q.2,c by A11,A13,A14,A17,A18,Th17,
-Th18
-;
-         then e,c are_convergent_wrt R by A8,A15,A16;
-        hence b,c are_convergent_wrt R by A18,Th43;
-      end;
-      end;
-       for a being set st a in field R holds P[a]
-      from coNoetherianInduction(A2,A7);
-    hence thesis by A4,A5,A6;
-   end;
 end;
 
 
@@ -869,72 +520,18 @@ end;
 
 registration
  cluster complete -> confluent strongly-normalizing Relation;
- coherence
-  proof let R be Relation; assume
-      R is confluent strongly-normalizing;
-   hence thesis;
-  end;
  cluster confluent strongly-normalizing -> complete Relation;
- coherence
-  proof let R be Relation; assume
-      R is confluent strongly-normalizing;
-   hence R is confluent strongly-normalizing;
-  end;
 end;
 
 
 registration
- cluster empty Relation; existence proof take {}; thus thesis; end;
+ cluster empty Relation;
+
 end;
 
 
 registration
  cluster complete (non empty Relation);
- existence
-  proof reconsider R = {[0,1]} as non empty Relation by RELAT_1:4;
-   take R;
-A1:  field R = {0,1} by RELAT_1:32;
-   thus R is confluent
-    proof let a,b be set; given c being set such that
-A2:    R reduces c,a & R reduces c,b;
-     per cases; suppose a = b; hence thesis by Th39;
-     end;
-     suppose a <> b;
-      then a <> c or b <> c;
-      then c in field R by A2,Th19;
-      then a in {0,1} & b in {0,1} & [0,1] in R by A1,A2,Th20,TARSKI:def 1;
-      then (a = 0 or a = 1) & (b = 0 or b = 1) & R reduces 0,1 & R reduces 1,1
-       by Th13,Th16,TARSKI:def 2;
-     hence a,b are_convergent_wrt R by Def7;
-    end;
-    end;
-A3:  R is irreflexive
-     proof let x be set; assume x in field R & [x,x] in R;
-       then [x,x] = [0,1] by TARSKI:def 1;
-       then x = 0 & x = 1 by ZFMISC_1:33;
-      hence contradiction;
-     end;
-      R is co-well_founded
-     proof let Y be set; assume
-A4:     Y c= field R & Y <> {}; then reconsider Y' = Y as non empty set;
-      consider y being Element of Y';
-      per cases; suppose
-A5:      1 in Y;
-       take 1; thus 1 in Y by A5;
-       let b be set; assume b in Y & 1 <> b;
-          [0,1] <> [1,b] by ZFMISC_1:33;
-       hence not [1,b] in R by TARSKI:def 1;
-      end;
-      suppose
-A6:      not 1 in Y & y in Y;
-       take 0; thus 0 in Y by A1,A4,A6,TARSKI:def 2;
-       let b be set; assume b in Y;
-       hence thesis by A1,A4,A6,TARSKI:def 2;
-     end;
-     end;
-    then R is irreflexive co-well_founded Relation by A3;
-   hence R is strongly-normalizing;
-  end;
 end;
 
 

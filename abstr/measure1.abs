@@ -56,34 +56,7 @@ scheme :: MEASURE1:sch 1
  DomsetFamEx {A() -> set,P[set]}:
    ex F being non empty Subset-Family of A() st
    for B being set holds B in F iff (B c= A() & P[B])
-   provided  ex B being set st B c= A() & P[B]
-proof
-   defpred X[set] means ex Z being set st $1 = Z & P[Z];
-   consider X being set such that
-A2:for x being set holds x in X iff x in bool A() & X[x] from XBOOLE_0:sch 1;
-   consider B being set such that A3: B c= A() & P[B] by A1;
-     X c= bool A()
-   proof
-     let x be set; assume x in X;
-     hence thesis by A2;
-   end;
-   then reconsider X as non empty Subset-Family of A() by A2,A3,SETFAM_1:def 7;
-   take X;
-     for B being set holds B in X iff (B c= A() & P[B])
-   proof
-      let B be set;
-      thus B in X implies B c= A() & P[B]
-      proof
-         assume
-      A4:B in X;
-         then ex Z being set st B = Z & P[Z] by A2;
-         hence thesis by A4;
-      end;
-      assume B c= A() & P[B];
-      hence B in X by A2;
-   end;
-  hence thesis;
-end;
+   provided  ex B being set st B c= A() & P[B];
 
 definition let X be set;
    let S be non empty Subset-Family of X;
@@ -99,12 +72,6 @@ end;
 registration let X be set;
    let S be non empty Subset-Family of X;
    cluster X\S -> non empty;
-   coherence
-   proof
-     consider x being set such that A1: x in S by XBOOLE_0:def 1;
-       X\x in X\S by A1,Def2;
-     hence thesis;
-   end;
 end;
 
 
@@ -138,23 +105,7 @@ theorem :: MEASURE1:16
 
 registration let X be set;
   cluster cup-closed compl-closed -> cap-closed Subset-Family of X;
-  coherence by Th16;
   cluster cap-closed compl-closed -> cup-closed Subset-Family of X;
-  coherence
-  proof
-    let S be Subset-Family of X;
-    assume A1: S is cap-closed compl-closed;
-    let A,B be set;
-    assume
-    A2:A in S & B in S;
-    then X \ A in S & X \ B in S by A1,Def3;
-    then A3:(X \ A) /\ (X \ B) in S by A1,FINSUB_1:def 2;
-      A \/ B c= X by A2,XBOOLE_1:8;
-    then A \/ B = X /\ (A \/ B) by XBOOLE_1:28
-         .= X \ (X \ (A \/ B)) by XBOOLE_1:48
-         .= X \ ((X \ A) /\ (X \ B)) by XBOOLE_1:53;
-    hence thesis by A1,A3,Def3;
-  end;
 end;
 
 
@@ -234,12 +185,6 @@ theorem :: MEASURE1:26
 
 registration let X be set;
    cluster non empty compl-closed cap-closed Subset-Family of X;
-  existence
-   proof
-     consider S being non empty compl-closed cap-closed Subset-Family of X;
-    take S;
-    thus thesis;
-   end;
 end;
 
 
@@ -335,15 +280,6 @@ theorem :: MEASURE1:35
 
 registration let X be set;
    cluster non empty countable Subset-Family of X;
-existence
-proof
-A1:{} is Subset of X by XBOOLE_1:2;
-   reconsider S = {{}} as Subset-Family of X by Th9;
-   take S;
-   thus S is non empty;
-   thus S is empty or ex F being Function of NAT,bool X st S = rng F
-      by A1,Th34;
-end;
 end;
 
 
@@ -389,46 +325,6 @@ end;
 
 registration let X be set;
    cluster non empty compl-closed sigma_Field_Subset-like Subset-Family of X;
-existence
-proof
-   reconsider S = {{},X} as non empty Subset-Family of X by PROB_1:14;
-   take S;
-   thus S is non empty;
-   thus for A being set holds A in S implies X\A in S
-   proof
-      let A be set;
-      assume
-A1:   A in S;
-A2:   A = {} implies X\A in S by TARSKI:def 2;
-        A = X implies X\A in S
-      proof
-         assume A = X;
-         then X\A = {} by XBOOLE_1:37;
-         hence thesis by TARSKI:def 2;
-      end;
-      hence thesis by A1,A2,TARSKI:def 2;
-   end;
-   let M be N_Sub_set_fam of X;
-   assume
-A3:M c= S;
-A4:X in M implies union M in S
-   proof
-      assume X in M;
-      then X c= union M by ZFMISC_1:92;
-      then X = union M by XBOOLE_0:def 10;
-      hence thesis by TARSKI:def 2;
-   end;
-     not X in M implies union M in S
-   proof
-      assume not X in M;
-      then for A being set st
-      A in M holds A c= {} by A3,TARSKI:def 2;
-      then union M c= {} by ZFMISC_1:94;
-      then union M = {} by XBOOLE_1:3;
-      hence thesis by TARSKI:def 2;
-   end;
-   hence thesis by A4;
-end;
 end;
 
 
@@ -444,7 +340,6 @@ theorem :: MEASURE1:45
 
 registration let X be set;
  cluster -> non empty sigma_Field_Subset of X;
- coherence;
 end;
 
 
@@ -469,29 +364,6 @@ registration
    let X be set;
    let S be sigma_Field_Subset of X;
    cluster disjoint_valued Function of NAT, S;
-existence
-proof
-   consider F being Function of NAT,{{}} such that
-A1:for n being Nat holds F.n = {} by Th35;
-     {} in S by Th45; then {{}} c= S by ZFMISC_1:37;
-   then reconsider F as Function of NAT,S by FUNCT_2:9;
-   take F;
-A2:for n being set holds F.n = {}
-   proof
-     let n be set;
-     per cases;
-     suppose n in dom F; then n in NAT by FUNCT_2:def 1; hence thesis by A1;
-     end;
-     suppose not n in dom F; hence thesis by FUNCT_1:def 4;
-   end;
-   end;
-   thus for x,y being set st x <> y holds F.x misses F.y
-   proof
-     let x,y be set;
-       F.x = {} & F.y = {} by A2;
-     hence thesis by XBOOLE_1:65;
-   end;
-end;
 end;
 
 
@@ -570,7 +442,6 @@ end;
 registration let X be set;
    cluster sigma_Field_Subset-like compl-closed -> cup-closed
      (non empty Subset-Family of X);
-   coherence by Lm1;
 end;
 
 

@@ -79,17 +79,11 @@ theorem :: PARTFUN2:17
 
 registration
  cluster {} -> one-to-one;
- coherence;
 end;
 
 
 registration let X,Y;
  cluster one-to-one PartFunc of X,Y;
- existence
-  proof
-      {} is PartFunc of X,Y by PARTFUN1:56;
-   hence thesis;
-  end;
 end;
 
 
@@ -182,90 +176,20 @@ scheme :: PARTFUN2:sch 1
  ex f being PartFunc of D(),C() st
   (for d be Element of D() holds
       d in dom f iff (ex c be Element of C() st P[d,c])) &
-  (for d be Element of D() st d in dom f holds P[d,f/.d])
-proof
-  consider x being Element of C();
-  defpred Q[set,set] means
-   ((ex c be Element of C() st P[$1,c]) implies P[$1,$2]) &
-   ((for c be Element of C() holds not P[$1,c]) implies $2=x);
-A1: for d be Element of D() ex z be Element of C() st Q[d,z]
-   proof let d be Element of D();
-       (for c be Element of C() holds not P[d,c]) implies
-      ex z be Element of C()
-         st ((ex c be Element of C() st P[d,c]) implies P[d,z]) &
-          ((for c be Element of C() holds not P[d,c]) implies z=x);
-    hence thesis;
-   end;
-  consider g being Function of D(),C() such that
-A2: for d be Element of D() holds Q[d,g.d] from FUNCT_2:sch 3(A1);
-A3: dom g = D() & rng g c= C() by FUNCT_2:def 1,RELSET_1:12;
-  defpred R[set] means ex c be Element of C() st P[$1,c];
-  consider X be set such that
-A4: for x holds x in X iff x in D() & R[x] from XBOOLE_0:sch 1;
-     for x holds x in X implies x in D() by A4;
-  then reconsider X as Subset of D() by TARSKI:def 3;
-   reconsider f=g|X as PartFunc of D(),C();
-   take f;
-   thus for d be Element of D() holds
-      d in dom f iff (ex c be Element of C() st P[d,c])
-    proof let d be Element of D();
-       dom f c= X by RELAT_1:87;
-hence d in dom f implies ex c be Element of C() st P[d,c] by A4;
-     assume ex c be Element of C() st P[d,c];
-     then d in X & d in D() by A4;
-     then d in dom g /\ X by A3,XBOOLE_0:def 3;
-     hence thesis by RELAT_1:90;
-    end;
-   let d be Element of D();
-   assume A5: d in dom f;
-     dom f c= X by RELAT_1:87;
-   then ex c be Element of C() st P[d,c] by A4,A5;
-   then P[d,g.d] by A2;
-   then P[d,(f qua Function).d] by A5,FUNCT_1:70;
-   hence thesis by A5,FINSEQ_4:def 4;
- end;
+  (for d be Element of D() st d in dom f holds P[d,f/.d]);
 
 scheme :: PARTFUN2:sch 2
  LambdaPFD{D,C()->non empty set, F(set)->Element of C(), P[set]}:
   ex f being PartFunc of D(),C() st
    (for d be Element of D() holds d in dom f iff P[d]) &
-   (for d be Element of D() st d in dom f holds f/.d = F(d))
-proof
-   defpred Q[set,set] means P[$1] & $2 = F($1);
-   consider f being PartFunc of D(),C() such that
-A1:  for d be Element of D() holds
-      d in dom f iff ex c be Element of C() st Q[d,c] and
-A2:  for d be Element of D() st d in dom f holds Q[d,f/.d] from PartFuncExD;
-   take f;
-   thus for d be Element of D() holds d in dom f iff P[d]
-    proof let d be Element of D();
-     thus d in dom f implies P[d]
-      proof assume d in dom f;
-       then ex c be Element of C() st P[d] & c = F(d) by A1;
-       hence thesis;
-      end;
-     assume P[d];
-     then ex c be Element of C() st P[d] & c = F(d);
-     hence thesis by A1;
-    end;
-   thus thesis by A2;
-  end;
+   (for d be Element of D() st d in dom f holds f/.d = F(d));
 
 scheme :: PARTFUN2:sch 3
  UnPartFuncD{C,D()->non empty set, X()->set, F(set)->Element of D()}:
   for f,g being PartFunc of C(),D() st
    (dom f=X() & for c be Element of C() st c in dom f holds f/.c = F(c)) &
    (dom g=X() & for c be Element of C() st c in dom g holds g/.c = F(c))
-  holds f = g
-proof let f,g be PartFunc of C(),D(); assume that
-A1: (dom f=X() & for c be Element of C() st c in dom f holds f/.c = F(c)) and
-A2: dom g=X() & for c be Element of C() st c in dom g holds g/.c = F(c);
-   now let c be Element of C(); assume A3: c in dom f;
-  hence f/.c = F(c) by A1
-            .= g/.c by A1,A2,A3;
- end;
- hence thesis by A1,A2,Th3;
-end;
+  holds f = g;
 
 definition let C,D; let SC,d;
 redefine func SC --> d -> PartFunc of C,D;

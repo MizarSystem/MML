@@ -124,10 +124,6 @@ registration
  let L be lower-bounded (non empty reflexive antisymmetric RelStr);
  let x be Element of L;
  cluster waybelow x -> non empty;
- coherence
-  proof Bottom L << x by Th4;
-   hence thesis by Th7;
-  end;
 end;
 
 
@@ -135,21 +131,7 @@ registration
  let L be non empty reflexive transitive RelStr;
  let x be Element of L;
  cluster waybelow x -> lower;
- coherence
-  proof let z,y be Element of L; assume z in waybelow x;
-    then z << x by Th7;
-    then y <= z implies y << x by Th2;
-   hence y <= z implies y in waybelow x by Th7;
-  end;
  cluster wayabove x -> upper;
- coherence
-  proof
-   hereby let z,y be Element of L; assume z in wayabove x;
-     then z >> x by Th8;
-     then y >= z implies y >> x by Th2;
-    hence y >= z implies y in wayabove x by Th8;
-   end;
-  end;
 end;
 
 
@@ -157,14 +139,6 @@ registration
  let L be sup-Semilattice;
  let x be Element of L;
  cluster waybelow x -> directed;
- coherence
-  proof let v,y be Element of L; assume v in waybelow x & y in waybelow x;
-then A1:  v << x & y << x by Th7;
-then A2:  ex_sup_of {v,y},L by Th3;
-   take z = v"\/"y; z << x by A1,Th3;
-   hence z in waybelow x by Th7;
-   thus v <= z & y <= z by A2,YELLOW_0:18;
-  end;
 end;
 
 
@@ -172,14 +146,6 @@ registration
  let L be /\-complete (non empty Poset);
  let x be Element of L;
  cluster waybelow x -> directed;
- coherence
-  proof let v,y be Element of L; assume v in waybelow x & y in waybelow x;
-then A1:  v << x & y << x by Th7;
-then A2:  ex_sup_of {v,y},L by Th3;
-   take z = v"\/"y; z << x by A1,Th3;
-   hence z in waybelow x by Th7;
-   thus v <= z & y <= z by A2,YELLOW_0:18;
-  end;
 end;
 
 
@@ -189,41 +155,16 @@ end;
 registration
  let L be connected (non empty RelStr);
  cluster -> directed filtered Subset of L;
- coherence
-  proof let X be Subset of L;
-   thus X is directed
-    proof let x,y be Element of L;
-        x <= y & y <= y or x >= x & x >= y by WAYBEL_0:def 29;
-     hence thesis;
-    end;
-   let x,y be Element of L;
-      x >= y & y <= y or x >= x & x <= y by WAYBEL_0:def 29;
-   hence thesis;
-  end;
 end;
 
 
 registration
  cluster up-complete lower-bounded -> complete (non empty Chain);
- coherence
-  proof let L be non empty Chain such that
-A1:  L is up-complete lower-bounded;
-      now let X be Subset of L;
-        X = {} or X <> {};
-     hence ex_sup_of X,L by A1,WAYBEL_0:75,YELLOW_0:42;
-    end;
-   hence thesis by YELLOW_0:53;
-  end;
 end;
 
 
 registration
  cluster complete (non empty Chain);
- existence
-  proof consider x being set, O being Order of {x};
-      RelStr(#{x},O#) is trivial non empty RelStr;
-   hence thesis;
-  end;
 end;
 
 
@@ -253,15 +194,7 @@ begin :: The Way-Below Relation in Other Terms
 scheme :: WAYBEL_3:sch 1
  SSubsetEx {S() -> non empty RelStr, P[set]}:
  ex X being Subset of S() st
-  for x being Element of S() holds x in X iff P[x]
-proof
-    defpred p[set] means P[$1];
-    consider X being Subset of S() such that
-A1:  for x being Element of S() holds x in X iff p[x]
-     from SETWISEO:sch 1;
-   take X;
-   thus thesis by A1;
-  end;
+  for x being Element of S() holds x in X iff P[x];
 
 theorem :: WAYBEL_3:18
  for L being complete LATTICE, x,y being Element of L st x << y
@@ -310,11 +243,6 @@ end;
 registration
  cluster trivial -> satisfying_axiom_of_approximation
    (non empty reflexive RelStr);
- coherence
-  proof let L be non empty reflexive RelStr; assume
-      for x,y being Element of L holds x = y;
-   hence for x being Element of L holds x = sup waybelow x;
-  end;
 end;
 
 
@@ -331,25 +259,13 @@ end;
 registration
  cluster continuous -> up-complete satisfying_axiom_of_approximation
   (non empty reflexive RelStr);
- coherence by Def6;
  cluster up-complete satisfying_axiom_of_approximation -> continuous
   (lower-bounded sup-Semilattice);
- coherence
-  proof let L be lower-bounded sup-Semilattice; assume
-A1:  L is up-complete satisfying_axiom_of_approximation;
-   thus for x be Element of L holds waybelow x is non empty directed;
-   thus thesis by A1;
-  end;
 end;
 
 
 registration
  cluster continuous complete strict LATTICE;
- existence
-  proof consider x being set, R be Order of {x};
-      RelStr(#{x},R#) is trivial non empty RelStr;
-   hence thesis;
-  end;
 end;
 
 
@@ -357,7 +273,6 @@ registration
  let L be continuous (non empty reflexive RelStr);
  let x be Element of L;
  cluster waybelow x -> non empty directed;
- coherence by Def6;
 end;
 
 
@@ -376,48 +291,6 @@ theorem :: WAYBEL_3:25
 
 registration
  cluster complete -> satisfying_axiom_of_approximation (non empty Chain);
- coherence
-  proof let L be non empty Chain; assume
-      L is complete;
-   then reconsider S = L as complete (non empty Chain);
-      S is satisfying_axiom_of_approximation
-     proof let x be Element of S;
-A1:     ex_sup_of waybelow x,S by YELLOW_0:17;
-A2:     x is_>=_than waybelow x by Th9;
-         now let y be Element of S; assume
-A3:       y is_>=_than waybelow x & not x <= y;
-         then x >= y & x <> y by WAYBEL_0:def 29;
-         then x > y by ORDERS_1:def 10;
-         then x >> y by Th13;
-         then y in waybelow x by Th7;
-         then for z being Element of S st z is_>=_than waybelow x holds z >= y
-          by LATTICE3:def 9;
-then A4:       sup waybelow x = y by A1,A3,YELLOW_0:def 9;
-           x << x
-          proof let D be non empty directed Subset of S; assume
-A5:          x <= sup D; assume
-A6:          for d being Element of S st d in D holds not x <= d;
-A7:          D c= waybelow x
-             proof let a be set; assume
-A8:            a in D;
-              then reconsider a as Element of S;
-                 not x <= a by A6,A8;
-               then a <= x & a <> x by WAYBEL_0:def 29;
-               then a < x by ORDERS_1:def 10;
-               then a << x by Th13;
-              hence thesis by Th7;
-             end;
-              ex_sup_of D,S by YELLOW_0:17;
-            then sup D <= sup waybelow x by A1,A7,YELLOW_0:34;
-           hence contradiction by A3,A4,A5,ORDERS_1:26;
-          end;
-         then x in waybelow x by Th7;
-        hence contradiction by A3,LATTICE3:def 9;
-       end;
-      hence thesis by A1,A2,YELLOW_0:def 9;
-     end;
-   hence thesis;
-  end;
 end;
 
 
@@ -444,20 +317,6 @@ end;
 registration
  let I be set;
  cluster RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I;
- existence
-  proof consider R being reflexive non empty RelStr;
-   set J = I --> R;
-A1:  dom J = I & rng J c= {R} by FUNCOP_1:19;
-   then reconsider J as ManySortedSet of I by PBOOLE:def 3;
-   take J;
-   thus J is RelStr-yielding;
-   thus J is non-Empty
-    proof let S be 1-sorted; assume S in rng J;
-     hence thesis by A1,TARSKI:def 1;
-    end;
-   let S be RelStr; assume S in rng J;
-   hence thesis by A1,TARSKI:def 1;
-  end;
 end;
 
 
@@ -465,23 +324,6 @@ registration
  let I be set;
  let J be RelStr-yielding non-Empty ManySortedSet of I;
  cluster product J -> non empty;
- coherence
-  proof
-A1:  the carrier of product J = product Carrier J by YELLOW_1:def 4;
-      now assume {} in rng Carrier J;
-     then consider i being set such that
-A2:    i in dom Carrier J & {} = (Carrier J).i by FUNCT_1:def 5;
-A3:    dom Carrier J = I & dom J = I by PBOOLE:def 3;
-     then consider R being 1-sorted such that
-A4:    R = J.i & {} = the carrier of R by A2,PRALG_1:def 13;
-        R in rng J by A2,A3,A4,FUNCT_1:def 5;
-     then reconsider R as non empty RelStr by Def7,YELLOW_1:def 3;
-        the carrier of R = {} by A4;
-     hence contradiction;
-    end;
-    then the carrier of product J <> {} by A1,CARD_3:37;
-   hence thesis by STRUCT_0:def 1;
-  end;
 end;
 
 
@@ -497,14 +339,6 @@ registration
  let I be set;
  let J be RelStr-yielding non-Empty ManySortedSet of I;
  cluster -> Function-like Relation-like (Element of product J);
- coherence
-  proof let x be Element of product J;
-      the carrier of product J = product Carrier J by YELLOW_1:def 4;
-    then ex g being Function st x = g & dom g = dom Carrier J &
-     for x being set st x in dom Carrier J holds g.x in (Carrier J).x
-      by CARD_3:def 5;
-   hence thesis;
-  end;
 end;
 
 
@@ -549,16 +383,6 @@ registration
  let I be non empty set;
  let J be RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I;
  cluster product J -> reflexive;
- coherence
-  proof thus product J is reflexive
-  proof let x be Element of product J;
-      now let i be Element of I;
-      J.i is reflexive;
-     hence x.i <= x.i by YELLOW_0:def 1;
-    end;
-   hence thesis by Th28;
-  end;
-  end;
  end;
 
 definition
@@ -647,21 +471,6 @@ end;
 registration
  cluster compact being_T2 -> being_T3 being_T4 locally-compact
    (non empty TopSpace);
- coherence
-  proof let T be non empty TopSpace; assume
-A1:  T is compact being_T2;
-   hence
-A2:  T is_T3 & T is_T4 by COMPTS_1:21,22;
-A3:  [#]T is compact & [#]T = the carrier of T by A1,COMPTS_1:10,PRE_TOPC:12;
-   let x be Point of T, X be Subset of T;
-   assume x in X & X is open;
-   then consider Y being open Subset of T such that
-A4:  x in Y & Cl Y c= X by A2,URYSOHN1:29;
-   take Z = Cl Y;
-      Y c= Z by PRE_TOPC:48;
-    then Y c= Int Z & Z is closed by TOPS_1:56;
-   hence x in Int Z & Z c= X & Z is compact by A3,A4,COMPTS_1:18;
-  end;
 end;
 
 
@@ -670,10 +479,6 @@ theorem :: WAYBEL_3:38
 
 registration
  cluster compact being_T2 (non empty TopSpace);
- existence
-  proof take 1TopSp {0};
-   thus thesis by Th38,PCOMPS_1:9;
-  end;
 end;
 
 

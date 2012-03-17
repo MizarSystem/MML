@@ -25,17 +25,7 @@ reserve x, X, Y for set;
 
 scheme :: YELLOW_2:sch 1
  RelStrSubset{L() -> non empty RelStr, P[set]}:
-  {x where x is Element of L(): P[x]} is Subset of L()
-proof
-    {x where x is Element of L(): P[x]} c= the carrier of L()
-  proof
-    let x be set;
-    assume x in {l where l is Element of L(): P[l]};
-    then ex l being Element of L() st x = l & P[l];
-    hence thesis;
-  end;
-  hence thesis;
-end;
+  {x where x is Element of L(): P[x]} is Subset of L();
 
 theorem :: YELLOW_2:1
     for L being non empty RelStr
@@ -100,57 +90,19 @@ begin :: Maps
 
 scheme :: YELLOW_2:sch 2
  LambdaMD{X, Y() -> non empty RelStr, F(set) -> Element of Y()}:
-  ex f being map of X(), Y() st for x being Element of X() holds f.x = F(x)
-proof  deffunc f(set) = F($1);
-  consider f being Function of the carrier of X(),the carrier of Y() such that
-A1:  for s being Element of X() holds f.s = f(s)
-   from FUNCT_2:sch 4;
-  reconsider f as map of X(),Y();
-  take f;
-  thus thesis by A1;
- end;
+  ex f being map of X(), Y() st for x being Element of X() holds f.x = F(x);
 
 scheme :: YELLOW_2:sch 3
  KappaMD{X, Y() -> non empty RelStr, F(set) -> set}:
   ex f being map of X(), Y() st for x being Element of X() holds f.x = F(x)
 provided
-  for x being Element of X() holds F(x) is Element of Y()
-proof
-  reconsider X = the carrier of X(),Y = the carrier of Y() as non empty set;
-  deffunc f(set) = F($1);
-A2: now let x be Element of X;
-     F(x) is Element of Y() by A1;
-     hence f(x) in Y;
-    end;
-  consider f being Function of X, Y such that
-A3: for x being Element of X holds f.x = f(x) from SUPINF_2:sch 1(A2);
-  reconsider f as map of X(),Y();
-  take f;
-  thus thesis by A3;
- end;
+  for x being Element of X() holds F(x) is Element of Y();
 
 scheme :: YELLOW_2:sch 4
  NonUniqExMD{X, Y() -> non empty RelStr, P[set,set]}:
   ex f being map of X(), Y() st for x being Element of X() holds P[x, f.x]
 provided
-  for x being Element of X() ex y being Element of Y() st P[x, y]
-proof
-  defpred p[set,set] means P[$1,$2];
-A2: for x being set st x in the carrier of X()
-     ex y being set st y in the carrier of Y() & p[x,y]
-   proof let x be set;
-    assume x in the carrier of X();
-    then reconsider x as Element of X();
-      ex y being Element of Y() st p[x,y] by A1;
-    hence thesis;
-   end;
-  consider f being Function of the carrier of X(),the carrier of Y() such that
-A3:  for x being set st x in the carrier of X() holds p[x,f.x]
-   from FUNCT_2:sch 1(A2);
-  reconsider f as map of X(),Y();
-  take f;
-  thus thesis by A3;
- end;
+  for x being Element of X() ex y being Element of Y() st P[x, y];
 
 definition
   let S, T be 1-sorted;
@@ -213,10 +165,6 @@ registration
   let L be non empty RelStr;
   let X be non empty Subset of L;
   cluster subrelstr X -> non empty;
-  coherence
- proof the carrier of subrelstr X = X by YELLOW_0:def 15;
-  hence thesis by STRUCT_0:def 1;
- end;
 end;
 
 
@@ -224,12 +172,6 @@ registration
   let L, M be non empty RelStr;
   let f be map of L, M;
   cluster Image f -> non empty;
-  coherence
- proof
-    dom f = the carrier of L by FUNCT_2:def 1;
-  then rng f is non empty & rng f = the carrier of Image f by Th11,RELAT_1:65;
-  hence Image f is non empty by STRUCT_0:def 1;
- end;
 end;
 
 
@@ -345,7 +287,6 @@ theorem :: YELLOW_2:30   ::Proposition 2.2 (i)  (variant 3)
 
 registration
   cluster up-complete /\-complete upper-bounded -> complete (non empty Poset);
-  correctness by Lm1;
 end;
 
 
@@ -424,12 +365,6 @@ theorem :: YELLOW_2:42
 registration
   let L be non empty reflexive transitive RelStr;
   cluster Ids L -> non empty;
-  correctness
-  proof
-    consider x being Element of L;
-      downarrow x in {Y where Y is Ideal of L: not contradiction};
-    hence Ids L is non empty by WAYBEL_0:def 23;
-  end;
 end;
 
 
@@ -453,27 +388,6 @@ theorem :: YELLOW_2:45
 registration
   let L be with_infima Poset;
   cluster InclPoset(Ids L) -> with_infima;
-  correctness
-  proof
-      for x, y be set st (x in Ids L & y in Ids L) holds x /\ y in Ids L
-    proof
-      let x, y be set;
-      assume
-    A1: x in Ids L & y in Ids L;
-      then x in
- {X where X is Ideal of L: not contradiction} by WAYBEL_0:def 23;
-      then consider I being Ideal of L such that
-    A2: I = x;
-        y in {X where X is Ideal of L: not contradiction} by A1,WAYBEL_0:def 23
-;
-      then consider J being Ideal of L such that
-    A3: J = y;
-        I /\ J is Ideal of L by Th42;
-      then I /\ J in {X where X is Ideal of L: not contradiction};
-      hence x /\ y in Ids L by A2,A3,WAYBEL_0:def 23;
-    end;
-    hence InclPoset(Ids L) is with_infima by YELLOW_1:12;
-  end;
 end;
 
 
@@ -489,25 +403,6 @@ theorem :: YELLOW_2:46
 registration
   let L be with_suprema Poset;
   cluster InclPoset(Ids L) -> with_suprema;
-  correctness
-  proof
-    set P = InclPoset(Ids L);
-      for x, y being Element of P
-      ex z being Element of P st x <= z & y <= z &
-        for z' being Element of P st x <= z' & y <= z' holds z <= z'
-    proof
-      let x, y be Element of P;
-      consider Z being Subset of L such that
-          Z = {z where z is Element of L: z in x or z in y or
-        ex a, b being Element of L st a in x & b in y & z = a "\/" b} and
-    A1: ex_sup_of {x, y},InclPoset(Ids L) and
-          x "\/" y = downarrow Z by Th46;
-
-      take x "\/" y;
-      thus thesis by A1,YELLOW_0:18;
-    end;
-    hence thesis by LATTICE3:def 10;
-  end;
 end;
 
 
@@ -536,7 +431,6 @@ theorem :: YELLOW_2:50
 registration
   let L be lower-bounded sup-Semilattice;
   cluster InclPoset(Ids L) -> complete;
-  correctness by Th50;
 end;
 
 
@@ -568,7 +462,6 @@ theorem :: YELLOW_2:53
 registration
   let L be up-complete (non empty Poset);
   cluster SupMap L -> monotone;
-  correctness by Th53;
 end;
 
 
@@ -587,7 +480,6 @@ theorem :: YELLOW_2:54
 registration
   let L be non empty Poset;
   cluster IdsMap L -> monotone;
-  correctness by Th54;
 end;
 
 

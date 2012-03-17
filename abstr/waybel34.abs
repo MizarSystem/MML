@@ -35,12 +35,6 @@ begin
 registration
  let S,T be complete LATTICE;
  cluster Galois Connection of S,T;
- existence
-  proof consider g being infs-preserving map of S,T;
-      g has_a_lower_adjoint by WAYBEL_1:17;
-    then ex d being map of T,S st [g,d] is Galois by WAYBEL_1:def 11;
-   hence thesis;
-  end;
 end;
 
 
@@ -74,16 +68,14 @@ end;
 registration
  let S,T be complete LATTICE;
  let g be infs-preserving map of S,T;
- cluster LowerAdj g -> lower_adjoint;  :: sups-preserving
- coherence by Lm1;
+ cluster LowerAdj g -> lower_adjoint;
 end;
 
 
 registration
  let S,T be complete LATTICE;
  let d be sups-preserving map of T,S;
- cluster UpperAdj d -> upper_adjoint;  :: infs-preserving
- coherence by Lm2;
+ cluster UpperAdj d -> upper_adjoint;
 end;
 
 
@@ -113,13 +105,6 @@ registration
  let S,T be complete LATTICE;
  let g be infs-preserving map of S,T;
  cluster g opp -> lower_adjoint;
- coherence
-  proof
-A1:  g opp = g & (LowerAdj g) opp = LowerAdj g by Def3;
-      [g, LowerAdj g] is Galois by Def1;
-    then [(LowerAdj g) opp, g opp] is Galois by A1,YELLOW_7:44;
-   hence thesis by WAYBEL_1:def 12;
-  end;
 end;
 
 
@@ -127,13 +112,6 @@ registration
  let S,T be complete LATTICE;
  let d be sups-preserving map of S,T;
  cluster d opp -> upper_adjoint;
- coherence
-  proof
-A1:  d opp = d & (UpperAdj d) opp = UpperAdj d by Def3;
-      [UpperAdj d, d] is Galois by Def2;
-    then [d opp, (UpperAdj d) opp] is Galois by A1,YELLOW_7:44;
-   hence thesis by WAYBEL_1:def 11;
-  end;
 end;
 
 
@@ -216,21 +194,7 @@ end;
 registration
  let W be with_non-empty_element set;
  cluster W-INF_category -> with_complete_lattices;
- coherence
-  proof thus W-INF_category is lattice-wise;
-   let a be object of W-INF_category;
-A1: ex x being non empty set st x in W by TRIANG_1:def 1;
-      a = latt a by YELLOW21:def 6;
-   hence thesis by A1,Def4;
-  end;
  cluster W-SUP_category -> with_complete_lattices;
- coherence
-  proof thus W-SUP_category is lattice-wise;
-   let a be object of W-SUP_category;
-A2: ex x being non empty set st x in W by TRIANG_1:def 1;
-      a = latt a by YELLOW21:def 6;
-   hence thesis by A2,Def5;
-  end;
 end;
 
 
@@ -287,103 +251,7 @@ end;
 registration
  let W be with_non-empty_element set;
  cluster W LowerAdj -> bijective;
- coherence
-  proof set A = W-INF_category, B = W-SUP_category;
-   set F = W LowerAdj;
-A1: ex x being non empty set st x in W by TRIANG_1:def 1;
-   deffunc O(object of A) = latt $1;
-   deffunc F(object of A,object of A,Morphism of $1,$2) = LowerAdj @$3;
-A2: for a being object of A holds F.a = O(a) by Def6;
-A3: for a,b being object of A st <^a,b^> <> {}
-     for f being Morphism of a,b holds F.f = F(a,b,f) by Def6;
-A4: now let a,b be object of A; assume O(a) = O(b);
-      then a = latt b by YELLOW21:def 6;
-     hence a = b by YELLOW21:def 6;
-    end;
-A5: now let a,b be object of A such that
-A6:   <^a,b^> <> {};
-     let f,g be Morphism of a,b;
-A7:   @f = f & @g = g by A6,YELLOW21:def 7;
-     then
-A8:   latt a is complete & latt b is complete &
-      @f is infs-preserving & @g is infs-preserving
-       by A1,A6,Def4;
-     assume F(a,b,f) = F(a,b,g);
-     hence f = UpperAdj LowerAdj @g by A7,A8,Th10 .= g by A7,A8,Th10;
-    end;
-A9: now let a,b be object of B such that
-A10:   <^a,b^> <> {};
-     let f be Morphism of a,b;
-A11:   a = latt a & b = latt b by YELLOW21:def 6;
-     then latt a is strict complete & the carrier of latt a in W &
-      latt b is strict complete & the carrier of latt b in W by A1,Def5;
-     then reconsider c = latt b, d = latt a as object of A by Def4;
-     take c,d;
-A12:   latt c = c & latt d = d by YELLOW21:def 6;
-A13:   f = @f by A10,YELLOW21:def 7;
-      then
-A14:   @f is sups-preserving by A1,A10,Def5;
-      then
-A15:   UpperAdj @f is monotone infs-preserving by A12,Lm2;
-      then
-A16:   UpperAdj @f in <^c,d^> by A1,A12,Def4;
-     then reconsider g = UpperAdj @f as Morphism of c,d;
-     take g;
-     thus b = O(c) & a = O(d) & <^c,d^> <> {} by A1,A11,A15,Def4;
-        g = @g by A16,YELLOW21:def 7;
-     hence f = F(c,d,g) by A12,A13,A14,Th11;
-    end;
-   thus thesis from YELLOW18:sch 12(A2,A3,A4,A5,A9);
-  end;
  cluster W UpperAdj -> bijective;
- coherence
-  proof set A = W-SUP_category, B = W-INF_category;
-   set F = W UpperAdj;
-A17: ex x being non empty set st x in W by TRIANG_1:def 1;
-   deffunc O(object of A) = latt $1;
-   deffunc F(object of A, object of A, Morphism of $1,$2) = UpperAdj @$3;
-A18: for a being object of A holds F.a = O(a) by Def7;
-A19: for a,b being object of A st <^a,b^> <> {}
-     for f being Morphism of a,b holds F.f = F(a,b,f) by Def7;
-A20: now let a,b be object of A; assume O(a) = O(b);
-      then a = latt b by YELLOW21:def 6;
-     hence a = b by YELLOW21:def 6;
-    end;
-A21: now let a,b be object of A such that
-A22:   <^a,b^> <> {};
-     let f,g be Morphism of a,b;
-A23:   @f = f & @g = g by A22,YELLOW21:def 7;
-      then
-A24:   latt a is complete & latt b is complete &
-      @f is sups-preserving & @g is sups-preserving
-       by A17,A22,Def5;
-     assume F(a,b,f) = F(a,b,g);
-     hence f = LowerAdj UpperAdj @g by A23,A24,Th11 .= g by A23,A24,Th11;
-    end;
-A25: now let a,b be object of B such that
-A26:   <^a,b^> <> {};
-     let f be Morphism of a,b;
-A27:   a = latt a & b = latt b by YELLOW21:def 6;
-     then latt a is strict complete & the carrier of latt a in W &
-      latt b is strict complete & the carrier of latt b in W by A17,Def4;
-     then reconsider c = latt b, d = latt a as object of A by Def5;
-     take c,d;
-A28:   latt c = c & latt d = d by YELLOW21:def 6;
-A29:   f = @f by A26,YELLOW21:def 7;
-      then
-A30:   @f is infs-preserving by A17,A26,Def4;
-      then
-A31:   LowerAdj @f is monotone sups-preserving by A28,Lm1;
-      then
-A32:   LowerAdj @f in <^c,d^> by A17,A28,Def5;
-     then reconsider g = LowerAdj @f as Morphism of c,d;
-     take g;
-     thus b = O(c) & a = O(d) & <^c,d^> <> {} by A17,A27,A31,Def5;
-        g = @g by A32,YELLOW21:def 7;
-     hence f = F(c,d,g) by A28,A29,A30,Th10;
-    end;
-   thus thesis from YELLOW18:sch 12(A18,A19,A20,A21,A25);
-  end;
 end;
 
 
@@ -472,7 +340,6 @@ registration
  let X,Y be complete LATTICE;
  let f be sups-preserving map of X,Y;
  cluster Image f -> complete;
- coherence by YELLOW_2:36;
 end;
 
 
@@ -505,7 +372,6 @@ registration
  let X be complete LATTICE;
  let f be projection map of X,X;
  cluster Image f -> complete;
- coherence by WAYBEL_1:57;
 end;
 
 
@@ -639,12 +505,6 @@ registration :: WAYBEL24
  let S be non empty RelStr;
  let T be upper-bounded non empty reflexive antisymmetric RelStr;
  cluster S --> Top T -> directed-sups-preserving infs-preserving;
- coherence
-  proof
-   thus S --> Top T is directed-sups-preserving
-     proof let X be Subset of S; thus thesis by Th44; end;
-   thus thesis by Th46;
-  end;
 end;
 
 
@@ -652,11 +512,6 @@ registration
  let S be non empty RelStr;
  let T be lower-bounded non empty reflexive antisymmetric RelStr;
  cluster S --> Bottom T -> filtered-infs-preserving sups-preserving;
- coherence
-  proof thus S --> Bottom T is filtered-infs-preserving
-     proof let X be Subset of S; thus thesis by Th44; end;
-   thus thesis by Th45;
-  end;
 end;
 
 
@@ -664,7 +519,6 @@ registration
  let S be non empty RelStr;
  let T be upper-bounded non empty reflexive antisymmetric RelStr;
  cluster directed-sups-preserving infs-preserving map of S, T;
- existence proof take S --> Top T; thus thesis; end;
 end;
 
 
@@ -672,7 +526,6 @@ registration
  let S be non empty RelStr;
  let T be lower-bounded non empty reflexive antisymmetric RelStr;
  cluster filtered-infs-preserving sups-preserving map of S, T;
- existence proof take S --> Bottom T; thus thesis; end;
 end;
 
 
@@ -725,7 +578,6 @@ registration
   :: COS ZLE!!! To jest wniosek z rejestracji warunkowej YELLOW21:condreg 9,
   :: a jest potrzebna rejstracja aby zadzialalo nizej
  cluster W-CL_category -> with_complete_lattices;
- coherence;
 end;
 
 
@@ -858,11 +710,6 @@ end;
 registration
  let S,T be non empty RelStr;
  cluster sups-preserving -> bottom-preserving map of S,T;
- coherence
-  proof let f be map of S,T;
-   assume f is sups-preserving;
-   hence f preserves_sup_of {}S by WAYBEL_0:def 33;
-  end;
 end;
 
 
@@ -870,61 +717,24 @@ registration
  let L be lower-bounded antisymmetric non empty RelStr;
  cluster finite-sups-inheriting ->
     bottom-inheriting join-inheriting SubRelStr of L;
- coherence
-  proof let S be SubRelStr of L;
-   assume
-A1:  S is finite-sups-inheriting;
-    then (ex_sup_of {}, L implies "\/"
-({}S, L) in the carrier of S) & ex_sup_of {}, L
-     by Def18,YELLOW_0:42;
-   hence Bottom L in the carrier of S by YELLOW_0:def 11;
-   let x,y be Element of L; assume
-      x in the carrier of S & y in the carrier of S;
-    then {x,y} c= the carrier of S by ZFMISC_1:38;
-   then reconsider X = {x,y} as finite Subset of S;
-      ex_sup_of X,L implies "\/"(X,L) in the carrier of S by A1,Def18;
-   hence thesis;
-  end;
 end;
 
 
 registration
  let L be non empty RelStr;
  cluster sups-inheriting -> finite-sups-inheriting SubRelStr of L;
- coherence
-  proof let S be SubRelStr of L such that
-A1:  S is sups-inheriting;
-   let X be finite Subset of S; thus thesis by A1,YELLOW_0:def 19;
-  end;
 end;
 
 
 registration
  let S,T be lower-bounded non empty Poset;
  cluster sups-preserving map of S,T;
- existence
-  proof consider f being sups-preserving map of S,T;
-   take f; thus thesis;
-  end;
 end;
 
 
 registration
  let L be lower-bounded antisymmetric non empty RelStr;
  cluster bottom-inheriting -> non empty lower-bounded (full SubRelStr of L);
- coherence
-  proof let S be full SubRelStr of L;
-   assume
-A1:  Bottom L in the carrier of S;
-   hence
-A2:  S is non empty by STRUCT_0:def 1;
-   reconsider x = Bottom L as Element of S by A1;
-   take x; let y be Element of S; assume
-A3:  y in the carrier of S;
-   reconsider a = y as Element of L by A2,YELLOW_0:59;
-      Bottom L <= a by YELLOW_0:44;
-   hence x <= y by A3,YELLOW_0:61;
-  end;
 end;
 
 
@@ -932,10 +742,6 @@ registration
  let L be lower-bounded antisymmetric non empty RelStr;
  cluster non empty sups-inheriting finite-sups-inheriting bottom-inheriting
   full SubRelStr of L;
- existence
-  proof consider S being non empty sups-inheriting full SubRelStr of L;
-   take S; thus thesis;
-  end;
 end;
 
 
@@ -948,51 +754,6 @@ registration
  let L be with_suprema lower-bounded non empty Poset;
  cluster bottom-inheriting join-inheriting -> finite-sups-inheriting
      (full SubRelStr of L);
- coherence
-  proof let S be full SubRelStr of L;
-   assume S is bottom-inheriting join-inheriting;
-   then reconsider S' = S as join-inheriting bottom-inheriting full SubRelStr
-of L;
-   let X be finite Subset of S;
-   reconsider X' = X as Subset of S';
-A1:  X is finite;
-   defpred P[set] means
-     for Y being finite Subset of S' st Y = $1
-      holds ex_sup_of Y,L & "\/"(Y, L) = sup Y;
-      Bottom L = "\/"({}, L) & Bottom S' = "\/"({}, S') & ex_sup_of {},L
-     by YELLOW_0:42,def 11;
-     then
-A2:  P[{}] by Th64;
-A3:  for x,B being set st x in X & B c= X & P[B] holds P[B \/ {x}]
-     proof let x,B be set such that
-         x in X & B c= X and
-A4:    for Y being finite Subset of S' st Y = B
-        holds ex_sup_of Y,L & "\/"(Y, L) = sup Y;
-      let Y be finite Subset of S' such that
-A5:    Y = B \/ {x};
-A6:    B c= Y & {x} c= Y by A5,XBOOLE_1:7;
-       then B c= the carrier of S by XBOOLE_1:1;
-      then reconsider Z = B as finite Subset of S'
-       by A6,FINSET_1:13;
-A7:    ex_sup_of Z,L & "\/"(Z, L) = sup Z by A4;
-        x in Y by A6,ZFMISC_1:37;
-      then reconsider x as Element of S';
-      reconsider a = x as Element of L by YELLOW_0:59;
-A8:    ex_sup_of {a}, L by YELLOW_0:38;
-      hence ex_sup_of Y,L by A5,A7,YELLOW_2:3;
-         Z = {} or Z <> {} & S' is with_suprema;
-      then
-A9:    ex_sup_of {x}, S' & ex_sup_of Z, S' by YELLOW_0:42,54;
-      thus "\/"(Y, L) = "\/"(Z, L) "\/" sup {a} by A5,A7,A8,YELLOW_2:3
-        .= "\/"(Z, L) "\/" a by YELLOW_0:39
-        .= (sup Z) "\/" x by A7,YELLOW_0:71
-        .= (sup Z) "\/" sup {x} by YELLOW_0:39
-        .= sup Y by A5,A9,YELLOW_2:3;
-     end;
-      P[X] from FINSET_1:sch 2(A1,A2,A3);
-    then "\/"(X, L) = sup X' & sup X' in the carrier of S';
-   hence thesis;
-  end;
 end;
 
 
@@ -1009,14 +770,8 @@ theorem :: WAYBEL34:66
 registration
  let S,T be non empty RelStr;
  cluster sups-preserving -> finite-sups-preserving map of S,T;
- coherence
-  proof let f be map of S,T; assume
-      for X being Subset of S holds f preserves_sup_of X;
-   hence for X being finite Subset of S holds f preserves_sup_of X;
-  end;
  cluster finite-sups-preserving ->
   join-preserving bottom-preserving map of S,T;
- coherence by Th65;
 end;
 
 
@@ -1024,26 +779,12 @@ registration
  let S be non empty RelStr;
  let T be lower-bounded non empty reflexive antisymmetric RelStr;
  cluster sups-preserving finite-sups-preserving map of S,T;
- existence
-  proof consider f being sups-preserving map of S,T;
-   take f; thus thesis;
-  end;
 end;
 
 
 registration :: WAYBEL13:15
  let L be lower-bounded non empty Poset;
  cluster CompactSublatt L -> lower-bounded;
- coherence
-  proof Bottom L is compact by WAYBEL_3:15;
-    then Bottom L in the carrier of CompactSublatt L by WAYBEL_8:def 1;
-   then reconsider c = Bottom L as Element of CompactSublatt L;
-   take c; let b be Element of CompactSublatt L such that
-  b in the carrier of CompactSublatt L;
-   reconsider x = b as Element of L by YELLOW_0:59;
-      Bottom L <= x by YELLOW_0:44;
-   hence c <= b by YELLOW_0:61;
-  end;
 end;
 
 
@@ -1072,15 +813,6 @@ theorem :: WAYBEL34:69
 registration
  let L be complete LATTICE;
  cluster CompactSublatt L -> finite-sups-inheriting;
- coherence
-  proof
-      CompactSublatt L is bottom-inheriting
-     proof thus Bottom L in the carrier of CompactSublatt L by WAYBEL_8:3;
-     end;
-    then CompactSublatt L is bottom-inheriting join-inheriting non empty
-      full SubRelStr of L;
-   hence thesis;
-  end;
 end;
 
 

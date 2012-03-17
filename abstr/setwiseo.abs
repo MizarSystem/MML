@@ -58,15 +58,7 @@ theorem :: SETWISEO:13
 scheme :: SETWISEO:sch 1
  SubsetEx { A() -> non empty set, P[set] } :
   ex B being Subset of A() st
-   for x being Element of A() holds x in B iff P[x]
-proof  defpred X[set] means P[$1];
-   consider B being set such that
-A1: for x being set holds x in B iff x in A() & X[x] from XBOOLE_0:sch 1;
-    for x being set holds x in B implies x in A() by A1;
-  then reconsider B as Subset of A() by TARSKI:def 3;
-  take B; let x be Element of A();
-  thus x in B iff P[x] by A1;
- end;
+   for x being Element of A() holds x in B iff P[x];
 
 :: Theorems related to Fin ...
 
@@ -95,10 +87,6 @@ theorem :: SETWISEO:19
 
 registration let X be set;
  cluster empty Element of Fin X;
- existence
-  proof {} is Element of Fin X by FINSUB_1:18;
-   hence thesis;
-  end;
 end;
 
 
@@ -113,25 +101,7 @@ scheme :: SETWISEO:sch 2
  FinSubFuncEx{ A()->non empty set
 , B()->(Element of Fin A()), P[set,set] } :
  ex f being Function of A(), Fin A() st
-  for b,a being Element of A() holds a in f.b iff a in B() & P[a,b]
-proof
-     defpred X[set,Element of Fin A()] means
-       for a being Element of A() holds a in $2 iff a in B() & P[a,$1];
-A1:  now let x be Element of A();
-      defpred X[set] means $1 in B() & P[$1,x];
-      consider y being Subset of A() such that
-A2:    for a being Element of A() holds a in y iff X[a] from SubsetEx;
-     reconsider B = B() as Subset of A() by FINSUB_1:def 5;
-       for x being Element of A() holds x in y implies x in B by A2;
-  then y c= B() by SUBSET_1:7;
-     then y is finite by FINSET_1:13;
-     then reconsider y as Element of Fin A() by FINSUB_1:def 5;
-     take y' = y;
-     thus X[x,y'] by A2;
-    end;
-   thus ex f being Function of A(), Fin A() st
-         for x being Element of A() holds X[x,f.x] from FUNCT_2:sch 3(A1);
-  end;
+  for b,a being Element of A() holds a in f.b iff a in B() & P[a,b];
 
 :: theorems related to BinOp of ...
 
@@ -160,12 +130,6 @@ for X being non empty set, F being BinOp of X st F has_a_unity
 
 registration let X be non empty set;
  cluster non empty Element of Fin X;
- existence
-  proof consider x being Element of X;
-      {x} is Subset of X by SUBSET_1:63;
-    then {x} is Element of Fin X by FINSUB_1:def 5;
-   hence thesis;
-  end;
 end;
 
 
@@ -194,26 +158,7 @@ scheme :: SETWISEO:sch 3
  provided
   P[{}.X()] and
   for B' being (Element of Fin X()), b being Element of X()
-      holds P[B'] & not b in B' implies P[B' \/ {b}]
-proof  let B be Element of Fin X();
-    defpred X[set] means ex B' being Element of Fin X() st B' = $1 & P[B'];
-A3: B is finite;
-A4: X[{}] by A1;
-A5: for x,A being set st x in B & A c= B & X[A] holds X[A \/ {x}]
-    proof let x,A be set such that
-A6:  x in B and
-A7:  A c= B and
-A8:  ex B' being Element of Fin X() st B' = A & P[B'];
-      reconsider A' = A as Element of Fin X() by A7,Th16;
-      reconsider x' = x as Element of X() by A6,Th14;
-     take A' \/ {x'};
-     thus A' \/ {x'} = A \/ {x};
-        not x' in A or A \/ {x'} = A by ZFMISC_1:46;
-     hence P[A' \/ {x'}] by A2,A8;
-    end;
-   X[B] from FINSET_1:sch 2(A3,A4,A5);
-  hence thesis;
- end;
+      holds P[B'] & not b in B' implies P[B' \/ {b}];
 
 scheme :: SETWISEO:sch 4
  FinSubInd2{ X() -> non empty set, P[Element of Fin X()] } :
@@ -221,38 +166,7 @@ scheme :: SETWISEO:sch 4
  provided
   for x being Element of X() holds P[{x}] and
   for B1,B2 being Element of Fin X() st B1 <> {} & B2 <> {}
-      holds P[B1] & P[B2] implies P[B1 \/ B2]
-proof  let B be Element of Fin X();
-
-A3: B is finite;
-   defpred X[set] means
-     $1 <> {} implies ex B' being Element of Fin X() st B' = $1 & P[B'];
-A4: X[{}];
-A5: for x,A being set st x in B & A c= B & X[A] holds X[A \/ {x}]
-    proof let x,A be set such that
-A6:  x in B and
-A7:  A c= B and
-A8:  A <> {} implies ex B' being Element of Fin X() st B' = A & P[B'] and
-       A \/ {x} <> {};
-      reconsider A' = A as Element of Fin X() by A7,Th16;
-      reconsider x' = x as Element of X() by A6,Th14;
-     take A' \/ {x'};
-     thus A' \/ {x'} =A \/ {x};
-A9:    P[{x'}] by A1;
-        now per cases;
-       suppose A = {};
-        hence P[A' \/ {x'}] by A1;
-       end;
-       suppose
-       A <> {};
-        hence P[A' \/ {x'}] by A2,A8,A9;
-      end;
-      end;
-     hence P[A' \/ {x'}];
-    end;
-     X[B] from FINSET_1:sch 2(A3,A4,A5);
-  hence thesis;
- end;
+      holds P[B1] & P[B2] implies P[B1 \/ B2];
 
 scheme :: SETWISEO:sch 5
  FinSubInd3{ X() -> non empty set, P[set] } :
@@ -260,14 +174,7 @@ scheme :: SETWISEO:sch 5
  provided
   P[{}.X()] and
   for B' being (Element of Fin X()), b being Element of X()
-      holds P[B'] implies P[B' \/ {b}]
-proof
- defpred X[set] means P[$1];
-A3:  X[{}.X()] by A1;
-A4:  for B' being (Element of Fin X()), b being Element of X()
-      holds X[B'] & not b in B' implies X[B' \/ {b}] by A2;
- thus for B being Element of Fin X() holds X[B] from FinSubInd1(A3,A4);
-end;
+      holds P[B'] implies P[B' \/ {b}];
 
 definition let X, Y be non empty set;
  let F be BinOp of Y;

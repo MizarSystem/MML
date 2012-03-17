@@ -35,27 +35,7 @@ scheme :: JORDAN_A:sch 1
  AndScheme{A()-> non empty set, P,Q[set]}:
   { a where a is Element of A(): P[a] & Q[a] }
    = { a1 where a1 is Element of A(): P[a1] }
-   /\ { a2 where a2 is Element of A(): Q[a2] }
-proof
- set A = { a where a is Element of A(): P[a] & Q[a] },
-     A1 = { a1 where a1 is Element of A(): P[a1] },
-     A2 = { a2 where a2 is Element of A(): Q[a2] };
- thus A c= A1 /\ A2
-  proof let x;
-   assume x in A;
-    then consider a being Element of A() such that
-A1:  x = a and
-A2: P[a] & Q[a];
-    a in A1 & a in A2 by A2;
-   hence thesis by A1,XBOOLE_0:def 3;
-  end;
- let x;
- assume x in A1 /\ A2;
-  then x in A1 & x in A2 by XBOOLE_0:def 3;
-  then (ex a being Element of A() st x = a & P[a])
-   & ex a being Element of A() st x = a & Q[a];
- hence thesis;
-end;
+   /\ { a2 where a2 is Element of A(): Q[a2] };
 
 reserve C,C1,C2 for Simple_closed_curve,
         X,Y for non empty set,
@@ -70,12 +50,6 @@ theorem :: JORDAN_A:1
 
 registration let T be non empty TopSpace;
  cluster compact non empty Subset of T;
- existence
-  proof consider p being Point of T;
-   take {p};
-   thus {p} is compact;
-   thus thesis;
-  end;
 end;
 
 
@@ -133,79 +107,6 @@ end;
 
 registration let n;
  cluster Eucl_dist n -> continuous;
- coherence
-  proof set f = Eucl_dist n;
-   let p being Point of [:TOP-REAL n, TOP-REAL n:],
-             N being Neighbourhood of f.p;
-     consider r such that
-A1:   0<r and
-A2:   N = ].f.p-r,f.p+r.[ by RCOMP_1:def 7;
-     p in the carrier of [:TOP-REAL n, TOP-REAL n:];
-     then p in [:the carrier of TOP-REAL n, the carrier of TOP-REAL n:]
-          by BORSUK_1:def 5;
-     then consider p1,p2 being set such that
-A3:   p1 in the carrier of TOP-REAL n & p2 in the carrier of TOP-REAL n and
-A4:   p = [p1,p2] by ZFMISC_1:103;
-     reconsider p1,p2 as Point of TOP-REAL n by A3;
-A5:  the carrier of TOP-REAL n = the carrier of Euclid n by TOPREAL3:13;
-     then reconsider p1'=p1, p2'=p2 as Element of Euclid n;
-A6:  r/2 > 0 by A1,SEQ_2:3;
-A7:  TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
-     then
-A8:  Ball(p1',r/2) is a_neighborhood of p1 by A6,HAUSDORF:6;
-     Ball(p2',r/2) is a_neighborhood of p2 by A6,A7,HAUSDORF:6;
-     then reconsider V = [:Ball(p1',r/2),Ball(p2',r/2):]
-        as a_neighborhood of p by A4,A8,BORSUK_1:48;
-    take V;
-    let s be set;
-    assume
-A9:   s in f.:V;
-     then reconsider s as Real;
-     consider q being Point of [:TOP-REAL n, TOP-REAL n:] such that
-A10:   q in V and
-A11:   f.q = s by A9,FUNCT_2:116;
-     q in the carrier of [:TOP-REAL n, TOP-REAL n:];
-     then q in [:the carrier of TOP-REAL n, the carrier of TOP-REAL n:]
-          by BORSUK_1:def 5;
-     then consider q1,q2 being set such that
-A12:   q1 in the carrier of TOP-REAL n & q2 in the carrier of TOP-REAL n and
-A13:   q = [q1,q2] by ZFMISC_1:103;
-     reconsider q1,q2 as Point of TOP-REAL n by A12;
-     reconsider q1'=q1, q2'=q2 as Element of Euclid n by A5;
-     reconsider q1''=q1', q2''=q2', p1''=p1', p2''=p2' as Element of REAL n
-               by EUCLID:25;
-     q1' in Ball(p1',r/2) & q2' in Ball(p2',r/2) by A10,A13,ZFMISC_1:106;
-     then dist(q1',p1') < r/2 & dist(q2',p2') < r/2 by METRIC_1:12;
-     then
-A14:   |.q1''-p1''.| < r/2 & |.q2''-p2''.| < r/2 by SPPOL_1:20;
-     q1''-p1'' = q1 - p1 & q2''-p2'' = q2 - p2 by EUCLID:def 13;
-     then |.q1-p1.| < r/2 & |.q2-p2.| < r/2 by A14,JGRAPH_1:def 5;
-     then |.q1-p1.|+|.q2-p2.| < r/2+r/2 by REAL_1:67;
-     then
-A15:   |.q1-p1.|+|.q2-p2.| < r by XCMPLX_1:66;
-A16:   for p,q being Point of TOP-REAL n holds f. [p,q] =|.p - q.|
-      proof let p,q be Point of TOP-REAL n;
-       thus f. [p,q] = f.(p,q) by BINOP_1:def 1.=|.p - q.| by Def1;
-      end;
-A17:  f.p = |.p1-p2.| by A4,A16;
-A18:  s = |.q1-q2.| by A11,A13,A16;
-A19:  q1-q2-(p1-p2) = q1-q2-p1+p2 by EUCLID:51
-           .= q1-(q2+p1)+p2 by EUCLID:50
-           .= q1-p1-q2+p2 by EUCLID:50
-           .= (q1-p1)-(q2-p2) by EUCLID:51;
-A20:  |.(q1-p1)-(q2-p2).| <= |.q1-p1.| + |.q2-p2.| by TOPRNS_1:31;
-A21:  s - f.p <= |.(q1-q2)-(p1-p2).| by A17,A18,TOPRNS_1:33;
-     f.p - s <= |.(p1-p2)-(q1-q2).| by A17,A18,TOPRNS_1:33;
-     then f.p - s <= |.(q1-q2)-(p1-p2).| by TOPRNS_1:28;
-     then f.p - s <= |.q1-p1.| + |.q2-p2.| by A19,A20,AXIOMS:22;
-     then f.p - s < r by A15,AXIOMS:22;
-     then
-A22:  f.p-r < s by REAL_2:165;
-     s - f.p <= |.q1-p1.| + |.q2-p2.| by A19,A20,A21,AXIOMS:22;
-     then s - f.p < r by A15,AXIOMS:22;
-     then s < f.p+r by REAL_1:84;
-    hence thesis by A2,A22,JORDAN6:45;
-  end;
 end;
 
 
@@ -293,12 +194,6 @@ end;
 
 registration let C;
  cluster -> non trivial Segmentation of C;
- coherence
-  proof let S be Segmentation of C;
-    len S >= 8 by Def3;
-    then len S >= 2 by AXIOMS:22;
-   hence thesis by SPPOL_1:2;
-  end;
 end;
 
 
@@ -322,27 +217,6 @@ theorem :: JORDAN_A:23
 
 registration let C; let S be Segmentation of C, i;
  cluster Segm(S,i) -> non empty compact;
- coherence
-  proof
-   per cases;
-   suppose
-A1:   1<=i & i<len S;
-    then
-A2:   Segm(S,i) = Segment(S/.i,S/.(i+1),C) by Def4;
-    LE S/.i,S/.(i+1),C by A1,Def3;
-   hence thesis by A2,Th21,JORDAN7:6;
-   end;
-   suppose not(1<=i & i<len S);
-    then
-A3:   Segm(S,i) = Segment(S/.len S,S/.1,C) by Def4;
-    8 <= len S by Def3;
-    then 1 <= len S by AXIOMS:22;
-    then
-A4:  S/.len S in C by Th22;
-    S/.1 = W-min C by Def3;
-   hence thesis by A3,A4,Th20,JORDAN16:23;
-  end;
-  end;
 end;
 
 

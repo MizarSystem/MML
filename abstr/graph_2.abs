@@ -26,23 +26,7 @@ reserve p, q for FinSequence,
 
 scheme :: GRAPH_2:sch 1
  FinSegRng{m, n() -> Nat, F(set)->set, P[Nat]}:
-  {F(i): m()<=i & i<=n() & P[i]} is finite
-proof
-  set F = {F(i): m()<=i & i<=n() & P[i]};
-  deffunc G(Nat) = F($1-1);
-  consider f being FinSequence such that
-A1: len f = n()+1 and
-A2: for k st k in Seg (n()+1) holds f.k = G(k) from FINSEQ_1:sch 2;
-    F c= rng f proof let x be set;assume x in F; then consider j such that
-A3: x=F(j) & m()<=j & j<=n() and P[j];
-     1<=j+1 & j+1<=n()+1 by A3,AXIOMS:24,NAT_1:29;
-then A4: j+1 in Seg (n()+1) by FINSEQ_1:3;
-then A5: j+1 in dom f by A1,FINSEQ_1:def 3;
-     f.(j+1) = F(j+1-1) by A2,A4 .= F(j) by XCMPLX_1:26;
-  hence x in rng f by A3,A5,FUNCT_1:def 5;
-  end;
-  hence thesis by FINSET_1:13;
-end;
+  {F(i): m()<=i & i<=n() & P[i]} is finite;
 
 theorem :: GRAPH_2:1
 m+1<=k & k<=n iff ex i being Nat st m<=i & i<n & k=i+1;
@@ -156,7 +140,6 @@ end;
 
 registration
  cluster TwoValued Alternating FinSequence;
- existence by Lm3,Lm5;
 end;
 
 
@@ -220,7 +203,6 @@ reserve G for Graph;
 
 registration let G;
  cluster the Vertices of G -> non empty;
- coherence by GRAPH_1:def 1;
 end;
 
 
@@ -238,7 +220,6 @@ reserve vs, vs1, vs2 for FinSequence of the Vertices of G,
 
 registration let G;
  cluster empty Chain of G;
- existence proof {} is Chain of G by GRAPH_1:14; hence thesis; end;
 end;
 
 
@@ -347,15 +328,6 @@ end;
 
 registration let G;
    cluster simple Chain of G;
-existence proof consider q being empty Chain of G;
-     take q; consider x being Element of the Vertices of G;
-     reconsider p =<*x*> as FinSequence of the Vertices of G;
-     take p;
-  thus p is_vertex_seq_of q by Lm7;
-   let n,m; assume 1<=n & n<m & m<=len p & p.n = p.m;
-       then 1<m & m<=1 by AXIOMS:22,FINSEQ_1:56;
-   hence n =1 & m = len p;
- end;
 end;
 
 
@@ -399,7 +371,6 @@ vs is_vertex_seq_of c implies
 
 registration let G;
  cluster empty -> one-to-one Chain of G;
- correctness;
 end;
 
 
@@ -408,16 +379,6 @@ p is Path of G implies p|Seg(n) is Path of G;
 
 registration let G;
  cluster simple Path of G;
-existence proof consider q being empty Chain of G;
-     reconsider q as one-to-one Chain of G;
-     take q; consider x being Element of the Vertices of G;
-     reconsider p = <*x*> as FinSequence of the Vertices of G;
-     take p;
-   thus p is_vertex_seq_of q by Lm7;
-   let n,m; assume 1<=n & n<m & m<=len p & p.n = p.m;
-       then 1<m & m<=1 by AXIOMS:22,FINSEQ_1:56;
-   hence n =1 & m = len p;
- end;
 end;
 
 
@@ -429,15 +390,6 @@ sc is Path of G iff len sc = 0 or len sc = 1 or sc.1<>sc.2;
 
 registration let G;
  cluster empty -> oriented Chain of G;
- correctness proof let p be Chain of G; assume A1: p is empty;
-      for n st 1<=n & n < len p holds
-       (the Source of G).(p.(n+1)) = (the Target of G).(p.n) proof
-    let n; assume 1<=n & n<=len p;
-     then 1<=len p by AXIOMS:22; then 1<=0 by A1,FINSEQ_1:25;
-    hence thesis;
-   end;
-   hence thesis by GRAPH_1:def 12;
-  end;
 end;
 
 

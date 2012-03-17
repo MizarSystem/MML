@@ -31,22 +31,7 @@ begin :: Preliminaries
 scheme :: BORSUK_2:sch 1
  FrCard { A() -> non empty set, X() -> set,
        F(set) -> set, P[set] }:
- Card { F(w) where w is Element of A(): w in X() & P[w] } <=` Card X()
-proof
-     deffunc G(set) = F($1);
-     consider f be Function such that
-A1:  dom f = X() & for x be set st x in X() holds f.x = G(x) from FUNCT_1:sch 3
-;
-      { F(w) where w is Element of A(): w in X() & P[w]} c= rng f
-     proof let x be set;
-     assume x in { F(w) where w is Element of A(): w in X() & P[w]};
-      then consider w being Element of A() such that
-A2:     x = F(w) & w in X() & P[w];
-         f.w = x by A1,A2;
-      hence thesis by A1,A2,FUNCT_1:def 5;
-     end;
-   hence thesis by A1,CARD_1:28;
-  end;
+ Card { F(w) where w is Element of A(): w in X() & P[w] } <=` Card X();
 
 theorem :: BORSUK_2:1
    for f being map of T1,S, g being map of T2,S st
@@ -60,43 +45,17 @@ theorem :: BORSUK_2:1
 registration
   let S, T be non empty TopSpace;
   cluster continuous map of S, T;
-  existence
-  proof
-   consider a be Point of T;
-     S --> a is continuous by BORSUK_1:36;
-   hence thesis;
-  end;
 end;
 
 
 registration let T be non empty TopStruct;
   cluster id T -> open continuous;
-  coherence
-  proof
-   thus id T is open
-   proof
-    let A be Subset of T;
-    assume A1: A is open;
-      (id the carrier of T).:A = A by BORSUK_1:3;
-    hence thesis by A1,GRCAT_1:def 11;
-   end;
-   let V be Subset of T such that
-A2:    V is closed;
-     (id T)"V = (id the carrier of T)"V by GRCAT_1:def 11
-           .= V by BORSUK_1:4;
-   hence (id T)"V is closed by A2;
-  end;
 end;
 
 
 registration
   let T be non empty TopStruct;
   cluster continuous one-to-one map of T, T;
-  existence
-  proof
-   take id T;
-   thus thesis;
-  end;
 end;
 
 
@@ -124,17 +83,6 @@ theorem :: BORSUK_2:4
 
 registration let T be non empty TopSpace; let a be Point of T;
  cluster continuous Path of a, a;
- existence
- proof
-  set IT = I[01] --> a;
-A1:  IT = (the carrier of I[01]) --> a by BORSUK_1:def 3;
-  reconsider IT as map of I[01], T;
-A2:  IT.0 = a & IT.1 = a by A1,BORSUK_1:def 17,def 18,FUNCOP_1:13;
-    IT is continuous by BORSUK_1:36;
-  then reconsider IT as Path of a, a by A2,Def1;
-    IT is continuous by BORSUK_1:36;
-  hence thesis;
- end;
 end;
 
 
@@ -148,27 +96,6 @@ end;
 
 registration
  cluster arcwise_connected non empty TopSpace;
- existence
- proof
-  set T = I[01] | { 0[01] };
-A1: the carrier of T = { 0[01] } by JORDAN1:1;
-     0[01] in the carrier of I[01] & 0[01] in { 0[01] }
-    by TARSKI:def 1;
-  then reconsider nl = 0[01] as Point of T by JORDAN1:1;
-    for a, b being Point of T ex f being map of I[01], T st
-          f is continuous & f.0 = a & f.1 = b
-  proof
-   let a, b be Point of T;
-A2: a = nl & b = nl by A1,TARSKI:def 1;
-   reconsider f = I[01] --> nl as map of I[01], T;
-A3: f is continuous by BORSUK_1:36;
-     f = (the carrier of I[01]) --> nl by BORSUK_1:def 3;
-   then f.0 = a & f.1 = b by A2,BORSUK_1:def 17,def 18,FUNCOP_1:13;
-   hence thesis by A3;
-  end;
-  then T is arcwise_connected by Def2;
-  hence thesis;
- end;
 end;
 
 
@@ -183,7 +110,6 @@ end;
 registration let T be arcwise_connected TopStruct;
   let a, b be Point of T;
   cluster -> continuous Path of a, b;
- coherence by Def3;
 end;
 
 
@@ -196,7 +122,6 @@ theorem :: BORSUK_2:5
 
 registration
   cluster arcwise_connected -> connected (non empty TopSpace);
-  coherence by Th5;
 end;
 
 
@@ -220,27 +145,6 @@ end;
 registration let T be non empty TopSpace;
  let a be Point of T;
  cluster constant Path of a, a;
-  existence
-  proof
-  set IT = I[01] --> a;
-A1:  IT = (the carrier of I[01]) --> a by BORSUK_1:def 3;
-  reconsider IT as map of I[01], T;
-A2:  IT.0 = a & IT.1 = a by A1,BORSUK_1:def 17,def 18,FUNCOP_1:13;
-    IT is continuous by BORSUK_1:36;
-  then reconsider IT as Path of a, a by A2,Def1;
-    for n1,n2 being set st n1 in dom IT & n2 in dom IT holds IT.n1=IT.n2
-  proof
-   let n1,n2 be set;
-   assume n1 in dom IT & n2 in dom IT;
-then A3: n1 in the carrier of I[01] & n2 in the carrier of I[01] by FUNCT_2:def
-1;
-   then IT.n1 = a by A1,FUNCOP_1:13
-        .= IT.n2 by A1,A3,FUNCOP_1:13;
-   hence thesis;
-  end;
-  then IT is constant by SEQM_3:def 5;
-  hence thesis;
- end;
 end;
 
 
@@ -258,7 +162,6 @@ registration let T be non empty TopSpace,
                a be Point of T,
                P be constant Path of a, a;
  cluster P + P -> constant;
- coherence by Th7;
 end;
 
 
@@ -282,7 +185,6 @@ registration let T be non empty TopSpace,
                a be Point of T,
                P be constant Path of a, a;
  cluster - P -> constant;
- coherence by Th8;
 end;
 
 
@@ -322,74 +224,11 @@ theorem :: BORSUK_2:12
 
 registration
   cluster empty -> T_0 TopStruct;
-  coherence by T_0TOPSP:def 7;
 end;
 
 
 registration let T1, T2 be discerning (non empty TopSpace);
   cluster [:T1, T2:] -> discerning;
-  coherence
-  proof
-  set T = [:T1,T2:];
-    now let p,q be Point of T; assume A1: p <> q;
-     p in the carrier of T & q in the carrier of T;
-then A2: p in [:the carrier of T1, the carrier of T2:] &
-    q in [:the carrier of T1, the carrier of T2:] by BORSUK_1:def 5;
-   then consider x,y be set such that
-A3: x in the carrier of T1 & y in
- the carrier of T2 & p = [x,y] by ZFMISC_1:def 2;
-   consider z,v be set such that
-A4: z in the carrier of T1 & v in the carrier of T2 & q = [z,v]
-      by A2,ZFMISC_1:def 2;
-  reconsider x, z as Point of T1 by A3,A4;
-  reconsider y, v as Point of T2 by A3,A4;
-  per cases;
-  suppose x <> z;
-   then consider V1 being Subset of T1 such that
-A5:   V1 is open &
-     ((x in V1 & not z in V1) or (z in V1 & not x in V1)) by T_0TOPSP:def 7;
-A6: [#]T2 is open by TOPS_1:53;
-A7: y in [#]T2 & v in [#]T2 by A3,A4,PRE_TOPC:12;
-   set X = [:V1, [#]T2:];
-A8:  X is open by A5,A6,BORSUK_1:46;
-       now per cases by A5;
-      suppose x in V1 & not z in V1;
-      hence (p in X & not q in X) or (q in X & not p in
- X) by A3,A4,A7,ZFMISC_1:106;
-      end;
-      suppose z in V1 & not x in V1;
-      hence (p in X & not q in X) or (q in X & not p in
- X) by A3,A4,A7,ZFMISC_1:106;
-     end;
-     end;
-   hence ex X being Subset of T st X is open &
-     ((p in X & not q in X) or (q in X & not p in X)) by A8;
-  end;
-  suppose x = z;
-   then consider V1 being Subset of T2 such that
-A9:   V1 is open &
-     ((y in V1 & not v in V1) or (v in V1 & not y in V1))
-       by A1,A3,A4,T_0TOPSP:def 7;
-A10: [#]T1 is open by TOPS_1:53;
-A11: x in [#]T1 & z in [#]T1 by A3,A4,PRE_TOPC:12;
-   set X = [:[#]T1, V1:];
-A12:  X is open by A9,A10,BORSUK_1:46;
-       now per cases by A9;
-      suppose y in V1 & not v in V1;
-hence (p in X & not q in X) or (q in X & not p in X)
-        by A3,A4,A11,ZFMISC_1:106;
-      end;
-      suppose v in V1 & not y in V1;
-hence (p in X & not q in X) or (q in X & not p in X)
-        by A3,A4,A11,ZFMISC_1:106;
-     end;
-     end;
-   hence ex X being Subset of T st X is open &
-     ((p in X & not q in X) or (q in X & not p in X)) by A12;
-  end;
-  end;
-  hence thesis by T_0TOPSP:def 7;
-end;
 end;
 
 
@@ -401,28 +240,20 @@ theorem :: BORSUK_2:14
 
 registration let T1, T2 be being_T1 (non empty TopSpace);
  cluster [:T1, T2:] -> being_T1;
- coherence by Th14;
 end;
 
 registration let T1, T2 be being_T2 (non empty TopSpace);
  cluster [:T1, T2:] -> being_T2;
- coherence by Lm5;
 end;
 
 
 registration
  cluster I[01] -> compact being_T2;
- coherence
- proof
-    I[01] = TopSpaceMetr (Closed-Interval-MSpace(0,1)) by TOPMETR:27,def 8;
-  hence thesis by HEINE:11,PCOMPS_1:38,TOPMETR:27;
- end;
 end;
 
 
 registration let n be Nat;
  cluster TOP-REAL n -> being_T2;
- coherence by SPPOL_1:26;
 end;
 
 

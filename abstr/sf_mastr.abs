@@ -36,30 +36,12 @@ theorem :: SF_MASTR:2
 registration
  let A be finite set, B be set;
  cluster -> finite Function of A, B;
- coherence proof
-  let f be Function of A, B;
-    dom f c= A by RELSET_1:12; then dom f is finite by FINSET_1:13;
-  hence thesis by AMI_1:21;
- end;
 end;
 
 
 registration
  let A be finite set, B be set, f be Function of A, Fin B;
  cluster Union f -> finite;
- coherence proof
-    now
-   thus dom f is finite by AMI_1:21;
-   let x be set; assume
-  A1: x in dom f;
-     then reconsider A as non empty set by FUNCT_2:def 1;
-     reconsider x' = x as Element of A by A1,FUNCT_2:def 1;
-     reconsider f' = f as Function of A, Fin B;
-       f'.x' is finite;
-   hence f.x is finite;
-  end;
-  hence Union f is finite by CARD_4:63;
- end;
 end;
 
 
@@ -67,13 +49,11 @@ end;
 
 registration
  cluster Int-Locations -> non empty;
- coherence by SCMFSA_2:9;
 end;
 
 
 registration
  cluster FinSeq-Locations -> non empty;
- coherence by SCMFSA_2:10;
 end;
 
 
@@ -180,19 +160,6 @@ end;
 registration
  let p be programmed FinPartState of SCM+FSA;
  cluster UsedIntLoc p -> finite;
- coherence proof
-  consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
-    such that
-A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
-       UsedIntLoc p = Union (UIL * p) by Def2;
-   reconsider dp = dom p as finite set by AMI_1:21;
-     rng p c= the Instructions of SCM+FSA by SCMFSA_4:1;
- then reconsider p' = p as Function of dp, the Instructions of SCM+FSA by
-FUNCT_2:4;
-   reconsider Up = UIL * p' as Function of dp, Fin Int-Locations;
-     Union Up is finite;
-  hence thesis by A1;
- end;
 end;
 
 
@@ -284,19 +251,6 @@ end;
 registration
  let p be programmed FinPartState of SCM+FSA;
  cluster UsedInt*Loc p -> finite;
- coherence proof
-  consider UIL being Function of the Instructions of SCM+FSA,
-                                 Fin FinSeq-Locations such that
-A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
-       UsedInt*Loc p = Union (UIL * p) by Def4;
-   reconsider dp = dom p as finite set by AMI_1:21;
-     rng p c= the Instructions of SCM+FSA by SCMFSA_4:1;
- then reconsider p' = p as Function of dp, the Instructions of SCM+FSA by
-FUNCT_2:4;
-   reconsider Up = UIL * p' as Function of dp, Fin FinSeq-Locations;
-     Union Up is finite;
-  hence thesis by A1;
- end;
 end;
 
 
@@ -354,14 +308,11 @@ notation let IT be Int-Location;
 
 registration
  cluster intloc 0 -> read-only;
- coherence by Def5;
 end;
 
 
 registration
  cluster read-write Int-Location;
- existence proof take intloc 1; intloc 0 <> intloc 1 by SCMFSA_2:16;
-  hence thesis by Def5; end;
 end;
 
 
@@ -396,14 +347,6 @@ end;
 registration
  let p be programmed FinPartState of SCM+FSA;
  cluster FirstNotUsed p -> read-write;
- coherence proof
-  consider sil being finite Subset of Int-Locations such that
-A1: sil = UsedIntLoc p \/ {intloc 0} & FirstNotUsed p = FirstNotIn sil by Def7;
-    now assume FirstNotIn sil = intloc 0; then not intloc 0 in sil by Th52;
-   hence contradiction by A1,SETWISEO:6;
-  end;
- hence thesis by A1,Def5;
- end;
 end;
 
 

@@ -39,29 +39,12 @@ theorem :: BAGORDER:2
 registration
   let f be natural-yielding Function, X be set;
   cluster f|X -> natural-yielding;
-  coherence proof
-  A1: rng f c= NAT by SEQM_3:def 8;
-       rng(f|X) c= rng f by RELAT_1:99;
-     then rng(f|X) c= NAT by A1,XBOOLE_1:1;
-   hence thesis by SEQM_3:def 8;
-  end;
 end;
 
 
 registration
   let f be finite-support Function, X be set;
   cluster f|X -> finite-support;
-  coherence proof
-       support (f|X) c= support f proof let x be set; assume
-     A1: x in support (f|X);
-     then A2: (f|X).x <> 0 by POLYNOM1:def 7;
-           support (f|X) c= dom (f|X) by POLYNOM1:41;
-         then f.x <> 0 by A1,A2,FUNCT_1:70;
-      hence x in support f by POLYNOM1:def 7;
-     end;
-     then support (f|X) is finite by FINSET_1:13;
-    hence thesis by POLYNOM1:def 8;
-  end;
 end;
 
 
@@ -88,30 +71,12 @@ end;
 registration
   let n,i,j be Nat, b be natural-yielding ManySortedSet of n;
   cluster (i,j)-cut b -> natural-yielding;
-coherence proof
-      now let y be set such that
-    A1: y in rng (i,j)-cut b;
-        consider x being set such that
-    A2: x in dom ((i,j)-cut b) and
-    A3: ((i,j)-cut b).x = y by A1,FUNCT_1:def 5;
-    A4: x in j-'i by A2,PBOOLE:def 3;
-          j-'i = {k where k is Nat : k < j-'i} by AXIOMS:30;
-        then consider k being Nat such that
-    A5: k = x & k < j-'i by A4;
-        reconsider x as Nat by A5;
-          y = b.(i+x) by A3,A4,Def1;
-        hence y in NAT;
-    end;
-    then rng (i,j)-cut b c= NAT by TARSKI:def 3;
-    hence (i,j)-cut b is natural-yielding by SEQM_3:def 8;
-end;
 end;
 
 
 registration
   let n,i,j be Nat, b be finite-support ManySortedSet of n;
   cluster (i,j)-cut b -> finite-support;
-coherence;
 end;
 
 
@@ -132,26 +97,6 @@ end;
 registration
   let x be non empty set, n be non empty Nat;
   cluster Fin (x,n) -> non empty;
-coherence proof
-    consider y being Element of x;
-      0 < n by NAT_1:19;
-    then A1: 0+1 < n+1 by REAL_1:67;
-    A2: now per cases by ORDINAL1:26;
-        suppose 1 c= n;
-            hence Card {y} <=`n by CARD_1:79;
-        end;
-        suppose A3: n in 1;
-              1 = {k where k is Nat : k < 1} by AXIOMS:30;
-            then consider k being Nat such that
-        A4: k = n & k < 1 by A3;
-            thus Card {y} <=`n by A1,A4,NAT_1:38;
-    end;
-    end;
-      Fin (x,n) = {k where k is Element of bool x:
-                 k is finite & k is non empty & Card k <=` n} by Def2;
-    then {y} in Fin (x,n) by A2;
-    hence thesis;
-end;
 end;
 
 
@@ -275,14 +220,12 @@ for n being Ordinal holds LexOrder n is admissible;
 registration
   let n be Ordinal;
   cluster admissible TermOrder of n;
-  existence proof LexOrder n is admissible by Th23; hence thesis; end;
 end;
 
 
 registration
   let n be Ordinal;
   cluster LexOrder n -> admissible;
-  coherence by Th23;
 end;
 
 
@@ -306,7 +249,6 @@ for n being Ordinal holds InvLexOrder n is admissible;
 registration
   let n be Ordinal;
   cluster InvLexOrder n -> admissible;
-  coherence by Th25;
 end;
 
 
@@ -348,7 +290,6 @@ for n being Ordinal holds GrLexOrder n is admissible;
 registration
   let n be Ordinal;
   cluster GrLexOrder n -> admissible;
-  coherence by Th28;
 end;
 
 
@@ -361,7 +302,6 @@ for n being Ordinal holds GrInvLexOrder n is admissible;
 registration
   let n be Ordinal;
   cluster GrInvLexOrder n -> admissible;
-  coherence by Th30;
 end;
 
 
@@ -480,10 +420,6 @@ end;
 registration
   let R be connected (non empty Poset);
   cluster FinPoset R -> non empty;
-correctness proof
-      FinPoset R = RelStr(# Fin the carrier of R, FinOrd R #) by Def18;
-    hence FinPoset R is non empty;
-end;
 end;
 
 
@@ -501,86 +437,6 @@ for R being connected (non empty Poset),a,b being Element of FinPoset R
 registration
   let R be connected (non empty Poset);
   cluster FinPoset R -> connected;
-correctness proof
-    set IR = the InternalRel of R, CR = the carrier of R;
-    set FIR = FinOrd R, FCR = Fin CR;
-A1: FinPoset R = RelStr(#FCR, FIR#) by Def18;
-      now let x,y be Element of FinPoset R;
-        reconsider x'=x,y'=y as Element of Fin CR by A1;
-        defpred _P[Nat] means (for x,y being Element of Fin CR
-               st Card x = $1 holds ([x,y] in FIR or [y,x] in FIR));
-              now let a,b be Element of Fin CR such that
-            A2: Card a = 0;
-             a = {} by A2,CARD_2:59;
-                hence [a,b] in FIR or [a,b] in FIR by A1,Th40;
-            end;
-        then A4: _P[0];
-              now let n be Nat such that
-            A5: for x,y being Element of Fin CR
-                 st Card x = n
-                 holds ([x,y] in FIR or [y,x] in FIR);
-                let a,b be Element of Fin CR such that
-            A6: Card a = n+1;
-                per cases;
-                suppose a = {};
-                    hence [a,b] in FIR or [b,a] in FIR by A1,Th40;
-                end;
-                suppose A7: a <> {};
-                     now per cases;
-                       suppose b = {};
-                           hence [a,b] in FIR or [b,a] in FIR by A1,Th40;
-                       end;
-                       suppose A8: b <>{};
-                             now per cases;
-                               suppose A9: PosetMax a <> PosetMax b;
-                                 now per cases by WAYBEL_0:def 29;
-                                   suppose PosetMax a <= PosetMax b;
-                                       then [PosetMax a, PosetMax b] in IR
-                                        by ORDERS_1:def 9;
-              hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A9,Th40;
-                                   end;
-                                   suppose PosetMax b <= PosetMax a;
-                                       then [PosetMax b, PosetMax a] in IR
-                                        by ORDERS_1:def 9;
-                    hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A9,Th40;
-                               end;
-                               end;
-                               hence [a,b] in FIR or [b,a] in FIR;
-                               end;
-                               suppose A10: PosetMax a = PosetMax b;
-                               set ax = a\{PosetMax a}, bx = b\{PosetMax b};
-                               A11: Card ax = n by A6,Lm1;
-                                   reconsider ax,bx as Element of Fin CR
-                                    by Th38;
-                                     now per cases by A5,A11;
-                                   suppose [ax,bx] in FIR;
-                      hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A10,Th40;
-
-                                   end;
-                                   suppose [bx,ax] in FIR;
-               hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A10,Th40;
-                                  end;
-                                  end;
-                                  hence [a,b] in FIR or [b,a] in FIR;
-                           end;
-                           end;
-                           hence [a,b] in FIR or [b,a] in FIR;
-                  end;
-                  end;
-                  hence [a,b] in FIR or [b,a] in FIR;
-            end;
-            end;
-        then A12: for n being Nat st _P[n] holds _P[n+1];
-        A13: for n being Nat holds _P[n] from NAT_1:sch 1(A4,A12);
-              x' in Fin CR;
-            then consider n being Nat such that
-        A14: x,n are_equipotent by CARD_1:74;
-              Card x' = n by A14,CARD_1:def 5;
-            then [x',y'] in FIR or [y',x'] in FIR by A13;
-            hence x <= y or y <= x by A1,ORDERS_1:def 9;
-    end;
-    hence FinPoset R is connected by WAYBEL_0:def 29;
-end;
 end;
 
 

@@ -78,16 +78,6 @@ begin  :: Preliminaries
    let D be non empty set;
    let n be Nat;
    cluster -> FinSequence-yielding FinSequence of n-tuples_on D;
-   coherence
-   proof
-    let p be FinSequence of n-tuples_on D;
-    let x be set;
-    assume A1: x in dom p;
-    then x in Seg len p by FINSEQ_1:def 3;
-    then reconsider i=x as Nat;
-      p.i is Element of n-tuples_on D by A1,FINSEQ_2:13;
-    hence thesis;
-   end;
   end;
 
 
@@ -108,35 +98,7 @@ begin  :: Preliminaries
     for k be Nat st k in Seg A() holds
      len (p/.k) = T(k) &
      for n be Nat st n in dom (p/.k) holds
-      (p/.k).n = F(k,n)
-proof
-    defpred P[Nat,Element of D()*] means len $2 = T($1) &
-     for n be Nat st n in dom $2 holds $2.n = F($1,n);
-    A1: for k be Nat st k in Seg A() ex d be Element of D()* st P[k,d]
-    proof
-     let k be Nat;
-     assume k in Seg A();
-     deffunc G(Nat) = F(k,$1);
-     consider d be FinSequence of D() such that
-      A2: len d = T(k) and
-      A3: for n be Nat st n in Seg T(k) holds d.n = G(n) from FINSEQ_2:sch 1;
-     reconsider d as Element of D()* by FINSEQ_1:def 11;
-     take d;
-     thus len d = T(k) by A2;
-     let n be Nat;
-     assume n in dom d;
-     then n in Seg T(k) by A2,FINSEQ_1:def 3;
-     hence d.n = F(k,n) by A3;
-    end;
-    consider p be FinSequence of D()* such that
-     A4: dom p = Seg A() and
-     A5: for k be Nat st k in Seg A() holds P[k,p/.k] from POLYNOM2:sch 1(A1);
-    take p;
-    thus len p = A() by A4,FINSEQ_1:def 3;
-    let k be Nat;
-    assume k in Seg A();
-    hence thesis by A5;
-   end;
+      (p/.k).n = F(k,n);
 
 begin  :: The Lexicographic Order of Finite Sequences
 
@@ -197,25 +159,6 @@ notation
   registration
    let n be Nat;
    cluster TuplesOrder n -> being_linear-order;
-   coherence
-   proof
-    A1: field TuplesOrder n = n-tuples_on NAT by ORDERS_2:2;
-      now let x,y be set;
-     assume that
-      A2: x in n-tuples_on NAT and
-      A3: y in n-tuples_on NAT and
-        x <> y and
-      A4: not [x,y] in TuplesOrder n;
-     reconsider p=x, q=y as Element of n-tuples_on NAT by A2,A3;
-       not p <= q by A4,Def3;
-     then p > q by Th7;
-     then q <= p by Def2;
-     hence [y,x] in TuplesOrder n by Def3;
-    end;
-    then TuplesOrder n is_connected_in n-tuples_on NAT by RELAT_2:def 6;
-    then TuplesOrder n is connected by A1,RELAT_2:def 14;
-    hence thesis by ORDERS_2:def 3;
-   end;
   end;
 
 
@@ -236,22 +179,6 @@ begin  :: Decomposition of Natural Numbers
    let i be non empty Nat;
    let n be Nat;
    cluster Decomp(n,i) -> non empty one-to-one FinSequence-yielding;
-   coherence
-   proof
-    consider A be finite Subset of i-tuples_on NAT such that
-     A1: Decomp(n,i) = SgmX (TuplesOrder i,A) and
-     A2: for p be Element of i-tuples_on NAT holds p in A iff Sum
- p = n by Def4;
-      i >= 1 by RLVECT_1:99;
-    then reconsider p1 = ((i-'1)|->0)^<*n*> as Element of i-tuples_on NAT
-                                                                  by AMI_5:4;
-    reconsider p2 = (i-'1)|->0 as FinSequence of NAT;
-      Sum p1 = Sum p2 + n by RVSUM_1:104
-        .= 0+n by RVSUM_1:111;
-    then reconsider A as non empty finite Subset of i-tuples_on NAT by A2;
-      SgmX (TuplesOrder i,A) is non empty finite;
-    hence thesis by A1;
-   end;
   end;
 
 
@@ -361,54 +288,12 @@ begin  :: Polynomials
  PolynomialLambdaF{R()->non empty LoopStr, A()->Nat,
                            F(Nat)->Element of R()}:
    ex p be Polynomial of R() st
-    len p <= A() & for n be Nat st n < A() holds p.n=F(n)
-proof
-   defpred P[Nat,Element of R()] means
-    $1<A() & $2=F($1) or $1>=A() & $2=0.R();
-   A1: for x be Element of NAT ex y be Element of R() st P[x,y]
-   proof
-    let x be Element of NAT;
-      x<A() implies x<A() & F(x) = F(x);
-    hence thesis;
-   end;
-   ex f be Function of NAT,the carrier of R() st
-    for x be Element of NAT holds P[x,f.x] from FUNCT_2:sch 3(A1);
-   then consider f be Function of NAT,the carrier of R() such that
-    A2: for x be Element of NAT holds
-     x<A() & f.x=F(x) or x>=A() & f.x=0.R();
-   reconsider f as sequence of R() by NORMSP_1:def 3;
-     ex n be Nat st for i be Nat st i >= n holds f.i = 0.R()
-   proof
-    take A();
-    thus thesis by A2;
-   end;
-   then reconsider f as AlgSequence of R() by ALGSEQ_1:def 2;
-   A3:len f <= A()
-   proof
-      for i be Nat st i>=A() holds f.i=0.R() by A2;
-    then A() is_at_least_length_of f by ALGSEQ_1:def 3;
-    hence thesis by ALGSEQ_1:def 4;
-   end;
-   take f;
-   thus thesis by A2,A3;
-  end;
+    len p <= A() & for n be Nat st n < A() holds p.n=F(n);
 
   scheme :: POLYNOM3:sch 3
  ExDLoopStrSeq{ R() -> non empty LoopStr,
                         F(set) -> Element of R() } :
-   ex S be sequence of R() st for n be Nat holds S.n = F(n)
-proof
-    set Y = the carrier of R();
-    deffunc G(set) = F($1);
-    A1: for x be set st x in NAT holds G(x) in Y;
-    ex f be Function of NAT,Y st for x be set st x in NAT holds f.x = G(x)
-     from FUNCT_2:sch 2(A1);
-    then consider f be Function of NAT,Y such that
-A2: for x be set st x in NAT holds f.x = F(x);
-    reconsider f as sequence of R() by NORMSP_1:def 3;
-    take f;
-    thus thesis by A2;
-   end;
+   ex S be sequence of R() st for n be Nat holds S.n = F(n);
 
   definition
    let L be non empty LoopStr;
@@ -423,20 +308,6 @@ A2: for x be set st x in NAT holds f.x = F(x);
    let L be right_zeroed (non empty LoopStr);
    let p,q be Polynomial of L;
    cluster p+q -> finite-Support;
-   coherence
-   proof
-    take s=len p + len q;
-    let i be Nat;
-     assume A1: i >= s;
-       len p + len q >= len p by NAT_1:29;
-     then i >= len p by A1,AXIOMS:22;
-     then A2: p.i = 0.L by ALGSEQ_1:22;
-       len p + len q >= len q by NAT_1:29;
-     then A3: i >= len q by A1,AXIOMS:22;
-     thus (p+q).i = p.i + q.i by Def6
-        .= 0.L + 0.L by A2,A3,ALGSEQ_1:22
-        .= 0.L by RLVECT_1:def 7;
-   end;
   end;
 
 
@@ -479,15 +350,6 @@ A2: for x be set st x in NAT holds f.x = F(x);
     (non empty LoopStr);
    let p be Polynomial of L;
    cluster -p -> finite-Support;
-   coherence
-   proof
-    take s=len p;
-    let i be Nat;
-     assume A1: i >= s;
-     thus (-p).i = -p.i by Def7
-        .= - 0.L by A1,ALGSEQ_1:22
-        .= 0.L by RLVECT_1:25;
-   end;
   end;
 
 
@@ -505,11 +367,6 @@ A2: for x be set st x in NAT holds f.x = F(x);
     (non empty LoopStr);
    let p,q be Polynomial of L;
    cluster p-q -> finite-Support;
-   coherence
-   proof
-      p-q = p+-q by Def8;
-    hence thesis;
-   end;
   end;
 
 
@@ -530,14 +387,6 @@ A2: for x be set st x in NAT holds f.x = F(x);
   registration
    let L be non empty ZeroStr;
    cluster 0_.(L) -> finite-Support;
-   coherence
-   proof
-    take 0;
-    let i be Nat;
-     assume i >= 0;
-     thus (0_.(L)).i = (NAT --> 0.L).i by Def9
-        .= 0.L by FUNCOP_1:13;
-   end;
   end;
 
 
@@ -568,16 +417,6 @@ A2: for x be set st x in NAT holds f.x = F(x);
   registration
    let L be non empty multLoopStr_0;
    cluster 1_.(L) -> finite-Support;
-   coherence
-   proof
-    take 1;
-    let i be Nat;
-     assume i >= 1;
-     then A1: i <> 0;
-     thus (1_.(L)).i = (0_.(L)+*(0,1_(L))).i by Def10
-        .= (0_.(L)).i by A1,FUNCT_7:34
-        .= 0.L by Th28;
-   end;
   end;
 
 
@@ -603,44 +442,6 @@ A2: for x be set st x in NAT holds f.x = F(x);
     (non empty doubleLoopStr);
    let p,q be Polynomial of L;
    cluster p*'q -> finite-Support;
-   coherence
-   proof
-    take s = len p + len q;
-    let i be Nat;
-     consider r be FinSequence of the carrier of L such that
-      A1: len r = i+1 and
-      A2: (p*'q).i = Sum r and
-      A3: for k be Nat st k in dom r holds r.k = p.(k-'1) * q.(i+1-'k)
-                                                                   by Def11;
-     assume i >= s;
-     then len p <= i - len q by REAL_1:84;
-     then -len p >= -(i - len q) by REAL_1:50;
-     then A4: -len p >= len q - i by XCMPLX_1:143;
-       now let k be Nat;
-      assume A5: k in dom r;
-      then A6: r.k = p.(k-'1) * q.(i+1-'k) by A3;
-      A7: 1 <= k & k <= i+1 by A1,A5,FINSEQ_3:27;
-      then A8: i+1-k >= 0 by SQUARE_1:12;
-      A9: k-1 >= 0 by A7,SQUARE_1:12;
-      per cases;
-       suppose k-'1 < len p;
-        then k-1 < len p by A9,BINARITH:def 3;
-        then -(k-1) > -len p by REAL_1:50;
-        then 1-k > -len p by XCMPLX_1:143;
-        then 1-k > len q - i by A4,AXIOMS:22;
-        then i+(1-k) > len q by REAL_1:84;
-        then i+1-k > len q by XCMPLX_1:29;
-        then i+1-'k >= len q by A8,BINARITH:def 3;
-        then q.(i+1-'k) = 0.L by ALGSEQ_1:22;
-        hence r.k = 0.L by A6,VECTSP_1:36;
-       end;
-       suppose k-'1 >= len p;
-        then p.(k-'1) = 0.L by ALGSEQ_1:22;
-        hence r.k = 0.L by A6,VECTSP_1:39;
-     end;
-     end;
-     hence thesis by A2,Th1;
-   end;
   end;
 
 
@@ -704,13 +505,6 @@ begin  :: The Ring of Polynomials
    let L be Abelian add-associative right_zeroed right_complementable
                                       distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> Abelian;
-   coherence
-   proof
-    let p,q be Element of Polynom-Ring L;
-    reconsider p1=p, q1=q as sequence of L by Def12;
-    thus p + q = p1 + q1 by Def12
-       .= q + p by Def12;
-   end;
   end;
 
 
@@ -718,39 +512,10 @@ begin  :: The Ring of Polynomials
    let L be add-associative right_zeroed right_complementable
                                       distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> add-associative;
-   coherence
-   proof
-    let p,q,r be Element of Polynom-Ring L;
-    reconsider p1=p, q1=q, r1=r as sequence of L by Def12;
-    A1: q + r = q1 + r1 by Def12;
-      p + q = p1 + q1 by Def12;
-    hence (p + q) + r = (p1 + q1) + r1 by Def12
-       .= p1 + (q1 + r1) by Th26
-       .= p + (q + r) by A1,Def12;
-   end;
 
    cluster Polynom-Ring L -> right_zeroed;
-   coherence
-   proof
-    let p be Element of Polynom-Ring L;
-    reconsider p1=p as sequence of L by Def12;
-      0.(Polynom-Ring L) = 0_.(L) by Def12;
-    hence p + 0.(Polynom-Ring L) = p1 + 0_.(L) by Def12
-       .= p by Th29;
-   end;
 
    cluster Polynom-Ring L -> right_complementable;
-   coherence
-   proof
-    let p be Element of Polynom-Ring L;
-    reconsider p1=p as Polynomial of L by Def12;
-    reconsider q = -p1 as Element of Polynom-Ring L by Def12;
-    take q;
-    thus p + q = p1 + -p1 by Def12
-       .= p1 - p1 by Def8
-       .= 0_.(L) by Th30
-       .= 0.(Polynom-Ring L) by Def12;
-   end;
   end;
 
 
@@ -758,13 +523,6 @@ begin  :: The Ring of Polynomials
    let L be Abelian add-associative right_zeroed right_complementable
                           commutative distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> commutative;
-   coherence
-   proof
-    let p,q be Element of Polynom-Ring L;
-    reconsider p1=p, q1=q as sequence of L by Def12;
-    thus p * q = p1 *' q1 by Def12
-       .= q * p by Def12;
-   end;
   end;
 
 
@@ -772,16 +530,6 @@ begin  :: The Ring of Polynomials
    let L be Abelian add-associative right_zeroed right_complementable unital
                           associative distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> associative;
-   coherence
-   proof
-    let p,q,r be Element of Polynom-Ring L;
-    reconsider p1=p, q1=q, r1=r as sequence of L by Def12;
-    A1: q * r = q1 *' r1 by Def12;
-      p * q = p1 *' q1 by Def12;
-    hence (p * q) * r = (p1 *' q1) *' r1 by Def12
-       .= p1 *' (q1 *' r1) by Th34
-       .= p * (q * r) by A1,Def12;
-   end;
   end;
 
 
@@ -789,14 +537,6 @@ begin  :: The Ring of Polynomials
    let L be add-associative right_zeroed right_complementable right_unital
                                       distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> right_unital;
-   coherence
-   proof
-    let p be Element of Polynom-Ring L;
-    reconsider p1=p as sequence of L by Def12;
-      1_(Polynom-Ring L) = 1_.(L) by Def12;
-    hence p * 1_(Polynom-Ring L) = p1 *' 1_.(L) by Def12
-       .= p by Th36;
-   end;
   end;
 
 
@@ -804,20 +544,5 @@ begin  :: The Ring of Polynomials
    let L be Abelian add-associative right_zeroed right_complementable
                                       distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> distributive;
-   coherence
-   proof
-    let p,q,r be Element of Polynom-Ring L;
-    reconsider p1=p, q1=q, r1=r as sequence of L by Def12;
-    A1: p*q = p1*'q1 & p*r = p1*'r1 by Def12;
-      q+r = q1+r1 by Def12;
-    hence p*(q+r) = p1*'(q1+r1) by Def12
-       .= p1*'q1+p1*'r1 by Th32
-       .= p*q+p*r by A1,Def12;
-    A2: q*p = q1*'p1 & r*p = r1*'p1 by Def12;
-      q+r = q1+r1 by Def12;
-    hence (q+r)*p = (q1+r1)*'p1 by Def12
-       .= q1*'p1+r1*'p1 by Th33
-       .= q*p+r*p by A2,Def12;
-   end;
   end;
 

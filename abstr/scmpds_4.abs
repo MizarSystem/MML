@@ -42,11 +42,6 @@ end;
 
 registration let i;
  cluster Load i -> non empty;
- coherence
-  proof
-      Load i = (inspos 0) .--> i by Def1;
-   hence Load i is non empty;
-  end;
 end;
 
 
@@ -56,15 +51,6 @@ theorem :: SCMPDS_4:1   ::SCMFSA6A=SCMPDS_4,Th15
 
 registration let I be initial FinPartState of SCMPDS;
  cluster ProgramPart I -> initial;
- coherence
-  proof let m,n such that
-A1: inspos n in dom ProgramPart I and
-A2: m < n;
-      ProgramPart I c= I by AMI_5:63;
-    then dom ProgramPart I c= dom I by RELAT_1:25;
-    then inspos m in dom I by A1,A2,SCMPDS_3:def 5;
-   hence inspos m in dom ProgramPart I by AMI_5:73;
-  end;
 end;
 
 
@@ -144,102 +130,7 @@ scheme :: SCMPDS_4:sch 1
                  I() -> Instruction-Location of SCMPDS }:
  ex S being State of SCMPDS st IC S = I() &
   for i being Nat holds
-    S.inspos i = F(i) & S.DataLoc(i,0) = G(i)
-proof
- defpred P[set,set] means ex m st
-   $1 = IC SCMPDS & $2 = I() or
-   $1 = inspos m & $2 = F(m) or
-   $1 = DataLoc(m,0) & $2 = G(m);
-  set S1={IC SCMPDS },
-      S2=SCM-Data-Loc,
-      S3=the Instruction-Locations of SCMPDS;
-A1: for e being set st e in the carrier of SCMPDS
-     ex u being set st P[e,u]
-   proof let e be set;
-    assume e in the carrier of SCMPDS;
-    then A2: e in S1 \/ S2 or e in S3 by SCMPDS_3:5,XBOOLE_0:def 2;
-       now per cases by A2,XBOOLE_0:def 2;
-      case e in S1;
-       hence e = IC SCMPDS by TARSKI:def 1;
-      end;
-      case e in S2;
-        then e is Int_position by SCMPDS_2:9;
-        hence ex m st e = DataLoc(m,0) by Th18;
-      end;
-      case e in S3;
-       hence ex m st e = inspos m by SCMPDS_3:32;
-     end;
-     end;
-     then consider m such that
-A3:  e = IC SCMPDS or e = inspos m or e = DataLoc(m,0);
-    per cases by A3;
-    suppose
-A4:   e = IC SCMPDS;
-     take u = I(); thus P[e,u] by A4;
-    end;
-    suppose
-A5:   e = inspos m;
-     take u = F(m); thus P[e,u] by A5;
-    end;
-    suppose
-A6:   e = DataLoc(m,0);
-     take u = G(m); thus P[e,u] by A6;
-   end;
-   end;
-  consider f being Function such that
-A7: dom f = the carrier of SCMPDS and
-A8: for e being set st e in the carrier of SCMPDS holds P[e,f.e]
-                         from ZFREFLE1:sch 1(A1);
-A9: dom the Object-Kind of SCMPDS = the carrier of SCMPDS by FUNCT_2:def 1;
-    now let x be set;
-   assume
-A10: x in dom the Object-Kind of SCMPDS;
-     then A11: x in S1 \/ S2 or x in S3 by A9,SCMPDS_3:5,XBOOLE_0:def 2;
-   consider m such that
-A12: x = IC SCMPDS & f.x = I() or
-    x = inspos m & f.x = F(m) or
-    x = DataLoc(m,0) & f.x = G(m) by A8,A9,A10;
-   per cases by A11,XBOOLE_0:def 2;
-    suppose x in S2;
-     then A13: x is Int_position by SCMPDS_2:9;
-    then (the Object-Kind of SCMPDS).x = ObjectKind DataLoc(m,0) by A12,AMI_1:
-def 6,SCMPDS_2:52,53
-        .= INT by SCMPDS_2:13;
-   hence f.x in (the Object-Kind of SCMPDS).x by A12,A13,INT_1:12,SCMPDS_2:52,
-53;
-    end;
-    suppose x in S1;
-then A14:    x = IC SCMPDS by TARSKI:def 1;
-    then (the Object-Kind of SCMPDS).x = ObjectKind IC SCMPDS by AMI_1:def 6
-       .= the Instruction-Locations of SCMPDS by AMI_1:def 11;
-   hence f.x in (the Object-Kind of SCMPDS).x by A12,A14,AMI_1:48,SCMPDS_2:52;
-    end;
-    suppose A15: x in the Instruction-Locations of SCMPDS;
-    then (the Object-Kind of SCMPDS).x = ObjectKind inspos m by A12,AMI_1:48,
-def 6,SCMPDS_2:53
-        .= the Instructions of SCMPDS by AMI_1:def 14;
-   hence f.x in (the Object-Kind of SCMPDS).x by A12,A15,AMI_1:48,SCMPDS_2:53;
-  end;
-  end;
-  then reconsider f as State of SCMPDS by A7,A9,CARD_3:18;
- take f;
-  consider m such that
-A16: IC SCMPDS = IC SCMPDS & f.IC SCMPDS = I() or
-    IC SCMPDS = inspos m & f.IC SCMPDS = F(m) or
-    IC SCMPDS = DataLoc(m,0) & f.IC SCMPDS = G(m) by A8;
- thus IC f = I() by A16,AMI_1:48,def 15,SCMPDS_2:52;
- let i be Nat;
-  consider m such that
-A17: inspos i = IC SCMPDS & f.inspos i = I() or
-    inspos i = inspos m & f.inspos i = F(m) or
-    inspos i = DataLoc(m,0) & f.inspos i = G(m) by A8;
-  thus f.inspos i = F(i) by A17,AMI_1:48,SCMPDS_2:53,SCMPDS_3:31;
-  consider m such that
-A18: DataLoc(i,0) = IC SCMPDS & f.DataLoc(i,0) = I() or
-    DataLoc(i,0) = inspos m & f.DataLoc(i,0) = F(m) or
-    DataLoc(i,0) = DataLoc(m,0) & f.DataLoc(i,0) = G(m) by A8;
- thus f.DataLoc(i,0) = G(i) by A18,Th17,SCMPDS_2:52,53;
-end;
+    S.inspos i = F(i) & S.DataLoc(i,0) = G(i);
 
 theorem :: SCMPDS_4:19    :: Th34
   for s being State of SCMPDS holds
@@ -478,7 +369,6 @@ end;
 
 registration
  cluster parahalting Program-block;
- existence by Lm1;
 end;
 
 
@@ -488,12 +378,6 @@ theorem :: SCMPDS_4:63     ::TN63
 
 registration let I be parahalting Program-block;
  cluster Initialized stop(I) -> halting;
-  coherence
-  proof
-  let s be State of SCMPDS;
-   assume Initialized stop I c= s;
-   hence s is halting by Th63;
-  end;
 end;
 
 
@@ -539,66 +423,6 @@ theorem :: SCMPDS_4:71
 
 registration
  cluster parahalting -> paraclosed Program-block;
- coherence proof
-  let I be Program-block; assume
-A1: I is parahalting;
-  let s be State of SCMPDS, n be Nat;
- assume
-A2: Initialized stop(I) c= s;
-   defpred X[Nat] means not IC (Computation s).$1 in dom stop(I);
- assume not IC (Computation s).n in dom stop(I);
-then A3: ex n st X[n];
-  consider n such that
-A4: X[n] and
-A5: for m st X[m] holds n <= m from NAT_1:sch 5(A3);
-A6: not Next IC (Computation s).n in dom stop(I) by A4,Th71;
-   set s2 = (Computation s).n,
-       Ig = ((IC s2,Next IC s2) --> (goto 1, goto -1)),
-       s0 = s +* Ig,
-       s1 = s2 +* Ig,
-       t1= s +* (IC s2,goto 1),
-       t2= t1 +* (Next IC s2,goto -1),
-       t3= s2 +* (IC s2,goto 1),
-       t4= t3 +* (Next IC s2,goto -1),
-       IL=the Instruction-Locations of SCMPDS;
-   set IAt = stop(I) +* Start-At inspos 0;
-     dom stop(I) misses dom Start-At inspos 0 by Th54;
-then A7: stop I c= IAt by FUNCT_4:33;
-A8: Initialized stop(I) = IAt by Def2;
-then A9: IAt is halting by A1,Def10;
-     (IAt) | IL = stop I by Th58;
-then A10:  dom stop (I) = dom(IAt) /\ IL
-        by RELAT_1:90;
-then A11: not IC s2 in dom IAt by A4,XBOOLE_0:def 3;
-A12: not Next IC s2 in dom IAt by A6,A10,XBOOLE_0:def 3;
-      IAt c= t1 by A2,A8,A11,SCMFSA6A:1;
-    then IAt c= t2 by A12,SCMFSA6A:1;
-then A13: IAt c= s0 by Th69;
-then A14: s0 is halting by A9,AMI_1:def 26;
-A15: s,t1 equal_outside IL by SCMFSA6A:3;
-    t1,t2 equal_outside IL by SCMFSA6A:3;
-  then s,t2 equal_outside IL by A15,FUNCT_7:29;
-  then s,s0 equal_outside IL by Th69;
-then A16: s0,s equal_outside IL by FUNCT_7:28;
-A17: stop I c= s0 by A7,A13,XBOOLE_1:1;
-A18: stop I c= s by A2,A7,A8,XBOOLE_1:1;
-   for m st m < n holds IC((Computation s).m) in dom stop I by A5;
-then A19: (Computation s0).n,s2 equal_outside IL by A16,A17,A18,Th67;
-A20: s2,t3 equal_outside IL by SCMFSA6A:3;
-     t3,t4 equal_outside IL by SCMFSA6A:3;
-   then s2,t4 equal_outside IL by A20,FUNCT_7:29;
-   then s2,s1 equal_outside IL by Th69;
-then A21: (Computation s0).n, s1 equal_outside IL by A19,FUNCT_7:29;
-        s| IL = s2 | IL by SCMFSA6B:17;
-      then t1 | IL = t3 | IL by SCMFSA6A:5;
-      then t2 | IL = t4 | IL by SCMFSA6A:5;
-      then s0 | IL = t4 | IL by Th69;
-  then s0 | IL = s1 | IL by Th69;
-    then (Computation s0).n | IL = s1 | IL by SCMFSA6B:17;
-then A22: (Computation s0).n = s1 by A21,SCMFSA6A:2;
-    s1 is not halting by Th66;
- hence contradiction by A14,A22,SCM_1:27;
- end;
 end;
 
 
@@ -649,7 +473,6 @@ end;
 
 registration
  cluster parahalting shiftable Program-block;
- existence by Lm1,Lm2;
 end;
 
 
@@ -662,146 +485,50 @@ end;
 
 registration
  cluster shiftable Instruction of SCMPDS;
- existence
-  proof
-   take i=DataLoc(0,0):=1;
-   InsCode i=2 by SCMPDS_2:23;
-    hence thesis by Def13;
-  end;
 end;
 
 
 registration
  let a,k1;
  cluster a := k1 -> shiftable;
- coherence
- proof
-       InsCode (a:=k1)=2 by SCMPDS_2:23;
-     hence thesis by Def13;
- end;
 end;
 
 
 registration
  let a,k1,k2;
  cluster (a,k1) := k2 -> shiftable;
- coherence
- proof
-       InsCode ((a,k1) := k2)=7 by SCMPDS_2:28;
-     hence thesis by Def13;
- end;
 end;
 
 
 registration
  let a,k1,k2;
  cluster AddTo(a,k1,k2) -> shiftable;
- coherence
- proof
-       InsCode AddTo(a,k1,k2)=8 by SCMPDS_2:29;
-     hence thesis by Def13;
- end;
 end;
 
 
 registration
  let a,b,k1,k2;
  cluster AddTo(a,k1,b,k2) -> shiftable;
- coherence
- proof
-       InsCode AddTo(a,k1,b,k2)=9 by SCMPDS_2:30;
-     hence thesis by Def13;
- end;
 
 cluster SubFrom(a,k1,b,k2) -> shiftable;
- coherence
- proof
-       InsCode SubFrom(a,k1,b,k2)=10 by SCMPDS_2:31;
-     hence thesis by Def13;
- end;
 
 cluster MultBy(a,k1,b,k2) -> shiftable;
- coherence
- proof
-       InsCode MultBy(a,k1,b,k2)=11 by SCMPDS_2:32;
-     hence thesis by Def13;
- end;
 
 cluster Divide(a,k1,b,k2) -> shiftable;
- coherence
- proof
-       InsCode Divide(a,k1,b,k2)=12 by SCMPDS_2:33;
-     hence thesis by Def13;
- end;
 
 cluster (a,k1) := (b,k2) -> shiftable;
- coherence
- proof
-       InsCode (a,k1) := (b,k2)=13 by SCMPDS_2:34;
-     hence thesis by Def13;
- end;
 end;
 
 
 registration
  let I,J be shiftable Program-block;
  cluster I ';' J -> shiftable;
- coherence
- proof
-     set IJ=I ';' J;
-A1: I ';' J = I +* Shift(J,card I) by Def3;
-     now let n,i such that
-A2:    inspos n in dom IJ and
-A3:    i=IJ.(inspos n);
-       set D = {inspos(l+card I): inspos l in dom J };
-         dom Shift(J,card I) = D by SCMPDS_3:def 7;
-then A4:    dom IJ = dom I \/ D by A1,FUNCT_4:def 1;
-      per cases by A2,A4,XBOOLE_0:def 2;
-       suppose A5:inspos n in dom I;
-           then I.inspos n=i by A3,Th37;
-         hence InsCode i <> 1 & InsCode i <> 3 & i valid_at n by A5,Def12;
-       end;
-       suppose inspos n in D;
-        then consider l such that
-A6:      inspos n = inspos(l+card I) and
-A7:      inspos l in dom J;
-A8:      J.inspos l=IJ.(inspos l+card I) by A7,Th38
-         .=i by A3,A6,SCMPDS_3:def 3;
-         hence InsCode i <> 1 & InsCode i <> 3 by A7,Def12;
-           l <= l+card I by NAT_1:29;
-then A9:      l <= n by A6,SCMPDS_3:31;
-           i valid_at l by A7,A8,Def12;
-         hence i valid_at n by A9,Th77;
-   end;
-   end;
-   hence thesis by Def12;
- end;
 end;
 
 
 registration
  let i be shiftable Instruction of SCMPDS;
  cluster Load i -> shiftable;
- coherence
- proof
-    set p=Load i;
-     now let n,j such that
-A1:    inspos n in dom p and
-A2:    j=p.inspos n;
-A3:    p=inspos 0 .--> i by Def1;
-       then dom p = { inspos 0 } by CQC_LANG:5;
-       then inspos n = inspos 0 by A1,TARSKI:def 1;
-       then A4: j=i by A2,A3,CQC_LANG:6;
-then A5:    InsCode j=2 or InsCode j > 6 by Def13;
-       thus InsCode j <> 1 by A4,Def13;
-       thus InsCode j <> 3 by A4,Def13;
-A6:    InsCode j <> 0 by A4,Def13;
-A7:    InsCode j <> 4 by A4,Def13;
-     InsCode j <> 5 by A4,Def13;
-       hence j valid_at n by A5,A6,A7,Def11;
-     end;
-     hence thesis by Def12;
-  end;
 end;
 
 
@@ -809,11 +536,6 @@ registration
   let i be shiftable Instruction of SCMPDS,
       J be shiftable Program-block;
  cluster i ';' J -> shiftable;
- coherence
- proof
-       i ';' J=Load i ';' J by Def4;
-     hence thesis;
- end;
 end;
 
 
@@ -821,39 +543,23 @@ registration
  let I be shiftable Program-block,
      j be shiftable Instruction of SCMPDS;
  cluster I ';' j -> shiftable;
- coherence
- proof
-       I ';' j=I ';' Load j by Def5;
-     hence thesis;
- end;
 end;
 
 
 registration
  let i,j be shiftable Instruction of SCMPDS;
  cluster i ';' j -> shiftable;
- coherence
- proof
-       i ';' j=Load i ';' Load j by Def6;
-     hence thesis;
- end;
 end;
 
 
 registration
  cluster SCMPDS-Stop -> parahalting shiftable;
- coherence by Def1,Lm1,Lm2,SCMPDS_3:def 6;
 end;
 
 
 registration
  let I be shiftable Program-block;
  cluster stop I -> shiftable;
- coherence
- proof
-      stop I= I ';' SCMPDS-Stop by Def7;
-    hence thesis;
- end;
 end;
 
 
@@ -864,24 +570,6 @@ theorem :: SCMPDS_4:78
 registration
  let n be Nat;
  cluster Load goto n -> shiftable;
- coherence
- proof
-   set k1=n;
-   set J= Load goto k1;
-     now let n,i such that
-A1:    inspos n in dom J and
-A2:    i=J.inspos n;
-A3:    J=inspos 0 .--> goto k1 by Def1;
-       then dom J = { inspos 0 } by CQC_LANG:5;
-then inspos n = inspos 0 by A1,TARSKI:def 1;
-then A4:    goto k1 =i by A2,A3,CQC_LANG:6;
-       hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:21;
-A5:    n+k1 >=0 by NAT_1:18;
-     InsCode i <> 4 & InsCode i <> 5 & InsCode i <> 6 by A4,SCMPDS_2:21;
-       hence i valid_at n by A4,A5,Def11;
-    end;
-   hence thesis by Def12;
-  end;
 end;
 
 
@@ -892,25 +580,6 @@ theorem :: SCMPDS_4:79
 registration
   let k1 be Integer,a be Int_position,n be Nat;
   cluster Load (a,k1)<>0_goto n -> shiftable;
-  coherence
-  proof
-   set k2=n;
-   set ii= (a,k1)<>0_goto k2,
-       J= Load ii;
-     now let n,i such that
-A1:    inspos n in dom J and
-A2:    i=J.inspos n;
-A3:    J=inspos 0 .--> ii by Def1;
-       then dom J = { inspos 0 } by CQC_LANG:5;
-then inspos n = inspos 0 by A1,TARSKI:def 1;
-then A4:    ii =i by A2,A3,CQC_LANG:6;
-       hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:25;
-A5:    n+k2 >=0 by NAT_1:18;
-     InsCode i <> 0 & InsCode i <> 5 & InsCode i <> 6 by A4,SCMPDS_2:25;
-       hence i valid_at n by A4,A5,Def11;
-    end;
-   hence thesis by Def12;
-   end;
 end;
 
 
@@ -921,25 +590,6 @@ theorem :: SCMPDS_4:80
 registration
   let k1 be Integer,a be Int_position,n be Nat;
   cluster Load (a,k1)<=0_goto n -> shiftable;
-  coherence
-  proof
-   set k2=n;
-   set ii= (a,k1)<=0_goto k2,
-       J= Load ii;
-     now let n,i such that
-A1:    inspos n in dom J and
-A2:    i=J.inspos n;
-A3:    J=inspos 0 .--> ii by Def1;
-       then dom J = { inspos 0 } by CQC_LANG:5;
-then inspos n = inspos 0 by A1,TARSKI:def 1;
-then A4:    ii =i by A2,A3,CQC_LANG:6;
-       hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:26;
-A5:    n+k2 >=0 by NAT_1:18;
-     InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 6 by A4,SCMPDS_2:26;
-       hence i valid_at n by A4,A5,Def11;
-    end;
-   hence thesis by Def12;
-   end;
 end;
 
 
@@ -950,25 +600,6 @@ theorem :: SCMPDS_4:81
 registration
   let k1 be Integer,a be Int_position,n be Nat;
   cluster Load (a,k1)>=0_goto n -> shiftable;
-  coherence
-  proof
-   set k2=n;
-   set ii= (a,k1)>=0_goto k2,
-       J= Load ii;
-     now let n,i such that
-A1:    inspos n in dom J and
-A2:    i=J.inspos n;
-A3:    J=inspos 0 .--> ii by Def1;
-       then dom J = { inspos 0 } by CQC_LANG:5;
-then inspos n = inspos 0 by A1,TARSKI:def 1;
-then A4:    ii =i by A2,A3,CQC_LANG:6;
-       hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:27;
-A5:    n+k2 >=0 by NAT_1:18;
-     InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 5 by A4,SCMPDS_2:27;
-       hence i valid_at n by A4,A5,Def11;
-    end;
-   hence thesis by Def12;
-   end;
 end;
 
 

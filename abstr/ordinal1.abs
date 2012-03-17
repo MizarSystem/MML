@@ -49,11 +49,6 @@ theorem :: ORDINAL1:7
 
  registration let X;
   cluster succ X -> non empty;
-  coherence
-  proof
-       succ X = X \/ { X } & X in { X } by Def1,TARSKI:def 1;
-     hence thesis by XBOOLE_0:def 2;
-  end;
  end;
 
 
@@ -101,9 +96,7 @@ theorem :: ORDINAL1:14
 
 registration
   cluster ordinal -> epsilon-transitive epsilon-connected set;
-  coherence by Def4;
   cluster epsilon-transitive epsilon-connected -> ordinal set;
-  coherence by Def4;
 end;
 
 
@@ -114,7 +107,6 @@ notation
 
  registration
   cluster ordinal number;
-  existence proof take {}; thus thesis by Def4,Lm1; end;
  end;
 
 
@@ -165,19 +157,16 @@ theorem :: ORDINAL1:27
 
  registration
   cluster empty Ordinal;
-   existence by Th27;
  end;
 
 
  registration
   cluster empty -> ordinal number;
-   coherence by Def4,Lm1;
  end;
 
 
 registration
   cluster {} -> ordinal;
-  coherence;
 end;
 
 
@@ -191,19 +180,12 @@ theorem :: ORDINAL1:30
 
 registration
  cluster non empty Ordinal;
- existence
-  proof
-   reconsider A = succ {} as Ordinal by Th29;
-   take A; thus thesis;
-  end;
 end;
 
 
  registration let A;
   cluster succ A -> non empty ordinal;
-   coherence by Th29;
   cluster union A -> ordinal;
-   coherence by Th30;
  end;
 
 
@@ -226,70 +208,12 @@ theorem :: ORDINAL1:34
 scheme :: ORDINAL1:sch 1
  Ordinal_Min { P[Ordinal] } :
   ex A st P[A] & for B st P[B] holds A c= B provided
- ex A st P[A]
-proof
-   consider A such that
-A2:  P[A] by A1;
-   defpred R[set] means ex B st $1 = B & P[B];
-   consider X such that
-A3:  x in X iff x in succ A & R[x] from XBOOLE_0:sch 1;
-      A in succ A by Th10;
-then A4:  X <> {} by A2,A3;
-      for a holds
-   a in X implies a in succ A by A3;
-    then X c= succ A by TARSKI:def 3;
-   then consider C such that
-A5:  C in X & for B st B in X holds C c= B by A4,Th32;
-   take C;
-      ex B st C = B & P[B] by A3,A5;
-   hence P[C];
-   let B; assume
-A6:  P[B];
-   assume
-A7:  not C c= B;
-    then B c= C & B <> C;
-    then B c< C by XBOOLE_0:def 8;
-    then A8:  B in C by Th21;
-      C in succ A by A3,A5;
-    then C c= succ A by Def2;
-    then B in X by A3,A6,A8;
-   hence contradiction by A5,A7;
-  end;
+ ex A st P[A];
 
 scheme :: ORDINAL1:sch 2
  Transfinite_Ind { P[Ordinal] } :
   for A holds P[A] provided
- for A st for C st C in A holds P[C] holds P[A]
-proof  let A;
-  set Y = succ A;
-  defpred R[set] means ex B st $1 = B & P[B];
-  consider Z such that
-A2: x in Z iff x in Y & R[x] from XBOOLE_0:sch 1;
-A3: Y \ Z c= Y by XBOOLE_1:36;
-     now assume Y \ Z <> {};
-    then consider C such that
-A4:   C in Y \ Z & for B st B in Y \ Z holds C c= B by A3,Th32;
-A5:   C in Y & not C in Z by A4,XBOOLE_0:def 4;
-       now let B such that
-A6:    B in C;
-A7:    C c= Y by A5,Def2;
-         now assume not B in Z;
-        then B in Y \ Z by A6,A7,XBOOLE_0:def 4;
-then A8:     C c= B by A4;
-           C <> B by A6;
-         then C c< B by A8,XBOOLE_0:def 8;
-        hence contradiction by A6,Th21;
-       end;
-       then ex B' being Ordinal st B = B' & P[B'] by A2;
-      hence P[B];
-     end;
-     then P[C] by A1;
-    hence contradiction by A2,A5;
-   end;
- then not A in Y or A in Z by XBOOLE_0:def 4;
-  then ex B st A = B & P[B] by A2,Th10;
-  hence thesis;
- end;
+ for A st for C st C in A holds P[C] holds P[A];
 
 ::
 :: 7. Properties of sets of ordinals
@@ -348,13 +272,6 @@ theorem :: ORDINAL1:42
 
  registration
   cluster T-Sequence-like Function;
-   existence
-    proof
-     reconsider E = {} as empty Function;
-     take E;
-       dom E = E;
-     hence thesis by Def7;
-    end;
  end;
 
 
@@ -382,7 +299,6 @@ theorem :: ORDINAL1:46
 
  registration let L;
   cluster dom L -> ordinal;
-   coherence by Def7;
  end;
 
 
@@ -417,153 +333,11 @@ theorem :: ORDINAL1:49
                     L1, L2() -> T-Sequence } :
   L1() = L2() provided
  dom L1() = A() & for B,L st B in A() & L = L1()|B holds L1().B = H(L) and
- dom L2() = A() & for B,L st B in A() & L = L2()|B holds L2().B = H(L)
-proof
-   assume
-      L1() <> L2();
-   then consider a such that
-A3:  a in A() & L1().a <> L2().a by A1,A2,FUNCT_1:9;
-   defpred P[set] means L1().$1 <> L2().$1;
-   consider X such that
-A4:  x in X iff x in A() & P[x] from XBOOLE_0:sch 1;
-A5:  X <> {} by A3,A4;
-      for b holds
-   b in X implies b in A() by A4;
-    then X c= A() by TARSKI:def 3;
-   then consider B such that
-A6:  B in X & for C st C in X holds B c= C by A5,Th32;
-A7: B in A() & L1().B <> L2().B by A4,A6;
-then A8:  B c= A() by Def2;
-A9:  now let C; assume
-A10:   C in B;
-      then not B c= C by Th7;
-   then not C in X by A6;
-      hence L1().C = L2().C by A4,A8,A10;
-    end;
-A11:  dom(L1()|B) = B & dom(L2()|B) = B by A1,A2,A8,RELAT_1:91;
-      now let a; assume
-A12:   a in B;
-     then reconsider a' = a as Ordinal by Th23;
-A13:   L1().a' = L2().a' by A9,A12;
-        L1()|B.a = L1().a & L2()|B.a = L2().a by A11,A12,FUNCT_1:70;
-     hence L1()|B.a = L2()|B.a by A13;
-    end;
-then A14:  L1()|B = L2()|B by A11,FUNCT_1:9;
-      L1().B = H(L1()|B) & L2().B = H(L2()|B) by A1,A2,A7;
-   hence contradiction by A4,A6,A14;
-  end;
+ dom L2() = A() & for B,L st B in A() & L = L2()|B holds L2().B = H(L);
 
  scheme :: ORDINAL1:sch 4
  TS_Exist { A()->Ordinal,H(T-Sequence)->set } :
-   ex L st dom L = A() & for B,L1 st B in A() & L1 = L|B holds L.B = H(L1)
-proof
-     defpred S[Ordinal] means
-        ex L st dom L = $1 & for B st B in $1 holds L.B = H(L|B);
-A1:  for B st for C st C in B holds S[C] holds S[B]
-     proof let B such that
-A2:    for C st C in B
-        ex L st dom L = C & for D st D in C holds L.D = H(L|D);
-      defpred P[set,set] means
-        $1 is Ordinal & $2 is T-Sequence &
-             for A,L st A = $1 & L = $2 holds dom L = A &
-              for B st B in A holds L.B = H(L|B);
-A3:    for a,b,c st P[a,b] & P[a,c] holds b = c
-        proof let a,b,c; assume
-A4:       ( a is Ordinal & b is T-Sequence & for A,L st A = a & L = b holds
-           dom L = A & for B st B in A holds L.B = H(L|B) ) &
-          ( a is Ordinal & c is T-Sequence & for A,L st A = a & L = c holds
-           dom L = A & for B st B in A holds L.B = H(L|B) );
-         then reconsider a as Ordinal;
-         reconsider b as T-Sequence by A4;
-         reconsider c as T-Sequence by A4;
-         deffunc HH(Ordinal) = H($1);
-A5:       dom b = a & for B,L st B in a & L=b|B holds b.B = HH(L) by A4;
-A6:       dom c = a & for B,L st B in a & L=c|B holds c.B = HH(L) by A4;
-            b = c from TS_Uniq(A5,A6);
-         hence thesis;
-        end;
-      consider G such that
-A7:    [a,b] in G iff a in B & P[a,b] from FUNCT_1:sch 1(A3);
-A8:    dom G = B
-        proof
-         thus a in dom G implies a in B
-           proof assume a in dom G;
-             then ex b st [a,b] in G by RELAT_1:def 4;
-            hence a in B by A7;
-           end;
-         let a; assume
-A9:       a in B;
-         then reconsider a' = a as Ordinal by Th23;
-         consider L such that
-A10:       dom L = a' & for D st D in a' holds L.D = H(L|D) by A2,A9;
-            for A holds for K be T-Sequence holds A = a' & K = L
- implies dom K = A & for B holds B in A implies K.B = H(K|B) by A10;
-          then [a',L] in G by A7,A9;
-         hence a in dom G by RELAT_1:def 4;
-        end;
-        defpred R[Ordinal,Ordinal] means
-          ex L st L = G.$1 & $2 = H(L);
-A11:    for a,b,c st a in B & R[a,b] & R[a,c] holds b = c;
-A12:    for a st a in B ex b st R[a,b]
-        proof let a; assume a in B;
-         then consider c such that
-A13:       [a,c] in G by A8,RELAT_1:def 4;
-         reconsider L = c as T-Sequence by A7,A13;
-         take b = H(L), L;
-         thus L = G.a by A13,FUNCT_1:8;
-         thus b = H(L);
-        end;
-      consider F such that
-A14:    dom F = B & for a st a in B holds R[a,F.a]
-        from FUNCT_1:sch 2(A11,A12);
-      reconsider L = F as T-Sequence by A14,Def7;
-      take L;
-      thus dom L = B by A14;
-      let D; assume
-A15:     D in B;
-      then consider K being T-Sequence such that
-A16:     K = G.D & F.D = H(K) by A14;
-         D c= dom L by A14,A15,Def2;
-then A17:     dom(L|D) = D by RELAT_1:91;
-A18:       [D,K] in G by A8,A15,A16,FUNCT_1:8;
-then A19:     dom K = D & for B st B in D holds K.B = H(K|B) by A7;
-A20:     now let C; assume
-A21:      C in D;
-then A22:      C in B by A15,Th19;
-           now let A,L such that
-A23:        A = C & L = K|C;
-A24:        C c= D by A21,Def2;
-          hence
-A25:        dom L = A by A19,A23,RELAT_1:91;
-          let B; assume
-A26:        B in A;
-           then B in D & B c= A by A23,A24,Def2;
-           then K.B = H(K|B) & K|B = L|B by A7,A18,A23,FUNCT_1:82;
-          hence L.B = H(L|B) by A23,A25,A26,FUNCT_1:70;
-         end;
-         then [C,K|C] in G by A7,A22;
-        hence G.C = K|C by FUNCT_1:8;
-       end;
-         now let a; assume
-A27:      a in D;
-        then reconsider A = a as Ordinal by Th23;
-A28:      G.A = K|A by A20,A27;
-A29:      A in B by A15,A27,Th19;
-A30:      L|D.A = L.A by A27,FUNCT_1:72;
-           ex J being T-Sequence st J = G.A & F.A = H(J) by A14,A29;
-        hence L|D.a = K.a by A7,A18,A27,A28,A30;
-       end;
-      hence L.D = H(L|D) by A16,A17,A19,FUNCT_1:9;
-     end;
-      for A holds S[A] from Transfinite_Ind(A1);
-   then consider L such that
-A31:  dom L = A() & for B st B in A() holds L.B = H(L|B);
-   take L;
-   thus dom L = A() by A31;
-   let B,L1; assume
-      B in A() & L1 = L|B;
-   hence thesis by A31;
-  end;
+   ex L st dom L = A() & for B,L1 st B in A() & L1 = L|B holds L.B = H(L1);
 
  scheme :: ORDINAL1:sch 5
  Func_TS { L() -> T-Sequence, F(Ordinal)->set, H(T-Sequence)->set } :
@@ -571,32 +345,7 @@ A31:  dom L = A() & for B st B in A() holds L.B = H(L|B);
      provided
   for A,a holds a = F(A) iff
      ex L st a = H(L) & dom L = A & for B st B in A holds L.B = H(L|B) and
-  for A st A in dom L() holds L().A = F(A)
-proof
-   consider L such that
-    F(dom L()) = H(L) and
-A3:  dom L = dom L() and
-A4:  for B st B in dom L() holds L.B = H(L|B) by A1;
-      now let b; assume
-A5:    b in dom L;
-     then reconsider B = b as Ordinal by Th23;
-        now take K = L|B;
-       thus H(L|B) = H(K);
-A6:      B c= dom L by A5,Def2;
-       hence
-        dom K = B by RELAT_1:91;
-       let C; assume
-A7:      C in B;
-      then C in dom L() & C c= B by A3,A6,Def2;
-        then K.C = L.C & L|C = K|C by A7,FUNCT_1:72,82;
-       hence K.C = H(K|C) by A3,A4,A6,A7;
-      end;
-      then F(B) = H(L|B) by A1 .= L.B by A3,A4,A5;
-     hence L().b = L.b by A2,A3,A5;
-    end;
-    then L() = L by A3,FUNCT_1:9;
-   hence thesis by A4;
-  end;
+  for A st A in dom L() holds L().A = F(A);
 
 theorem :: ORDINAL1:50
    A c< B or A = B or B c< A;

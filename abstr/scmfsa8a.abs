@@ -116,28 +116,12 @@ registration
  let P be programmed FinPartState of SCM+FSA;
  let l be Instruction-Location of SCM+FSA;
  cluster Directed(P,l) -> halt-free;
- correctness
-  proof
-   A1: halt SCM+FSA <> goto l by SCMFSA_2:47,124;
-     Directed(P,l) =
-       ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto l)) * P
-       by Def1;
-   then rng Directed(P,l) c= rng ((id the Instructions of SCM+FSA) +*
-       (halt SCM+FSA .--> goto l)) by RELAT_1:45;
-   then not halt SCM+FSA in rng Directed(P,l) by A1,FUNCT_7:14;
-   hence thesis by SCMFSA7B:def 6;
-  end;
 end;
 
 
 registration
  let P be programmed FinPartState of SCM+FSA;
  cluster Directed P -> halt-free;
- correctness
-  proof
-     Directed P = Directed(P,insloc card P) by Th18;
-   hence thesis;
-  end;
 end;
 
 
@@ -190,52 +174,24 @@ registration
  let I be good programmed FinPartState of SCM+FSA;
  let l be Instruction-Location of SCM+FSA;
  cluster Directed(I,l) -> good;
- correctness
-  proof
-     I does_not_destroy intloc 0 by SCMFSA7B:def 5;
-   then Directed(I,l) does_not_destroy intloc 0 by Th27;
-   hence thesis by SCMFSA7B:def 5;
-  end;
 end;
 
 
 registration
  let I be good Macro-Instruction;
  cluster Directed I -> good;
- correctness
-  proof
-     Directed I = Directed(I,insloc card I) by Th18;
-   hence thesis;
-  end;
 end;
 
 
 registration
  let I be Macro-Instruction, l be Instruction-Location of SCM+FSA;
  cluster Directed(I,l) -> initial;
- correctness
-  proof
-     now let m,n be Nat;
-      assume A1: insloc n in dom Directed(I,l);
-      assume A2: m < n;
-        insloc n in dom I by A1,Th19;
-      then insloc m in dom I by A2,SCMFSA_4:def 4;
-      hence insloc m in dom Directed(I,l) by Th19;
-     end;
-   hence thesis by SCMFSA_4:def 4;
-  end;
 end;
 
 
 registration
  let I,J be good Macro-Instruction;
  cluster I ';' J -> good;
- coherence
-  proof
-A1: I ';' J = Directed I +* ProgramPart Relocated(J,card I) by SCMFSA6A:def 4;
-     ProgramPart Relocated(J,card I) is good by Th24;
-   hence I ';' J is good by A1,Th26;
-  end;
 end;
 
 definition
@@ -271,27 +227,6 @@ end;
 
 registration
  cluster pseudo-paraclosed Macro-Instruction;
- existence
-  proof
-   set I = Load (<*>(the Instructions of SCM+FSA));
-A1: now let s be State of SCM+FSA;
-   A2: card I = len <*>(the Instructions of SCM+FSA) by SCMFSA_7:25
-      .= 0 by FINSEQ_1:25;
-  A3: IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
-  A4: IC ((Computation (s +* (I +* Start-At insloc 0))).0)
-       = IC (s +* (I +* Start-At insloc 0)) by AMI_1:def 19
-      .= (s +* (I +* Start-At insloc 0)).IC SCM+FSA by AMI_1:def 15
-      .= (I +* Start-At insloc 0).IC SCM+FSA by A3,FUNCT_4:14
-      .= insloc card I by A2,SF_MASTR:66
-      .= insloc card ProgramPart I by AMI_5:72;
-        for n being Nat st n < 0 holds
-         IC ((Computation (s +* (I +* Start-At insloc 0))).n) in dom I
-         by NAT_1:18;
-      hence I is_pseudo-closed_on s by A4,Def3;
-     end;
-   take I;
-   thus thesis by A1,Def4;
-  end;
 end;
 
 

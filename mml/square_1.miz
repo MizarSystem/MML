@@ -7,17 +7,23 @@
 
 environ
 
- vocabulary ARYTM, ARYTM_3, RELAT_1, ARYTM_1, ABSVALUE, SQUARE_1;
+ vocabulary ARYTM, ARYTM_3, RELAT_1, ARYTM_1, ABSVALUE, SQUARE_1, XCMPLX_0,
+     COMPLEX1;
  notation TARSKI, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, ABSVALUE;
  constructors REAL_1, ABSVALUE, XCMPLX_0, XREAL_0, XBOOLE_0;
- clusters XREAL_0, REAL_1, NUMBERS, ARYTM_3, ZFMISC_1, XBOOLE_0;
+ clusters XREAL_0, REAL_1, NUMBERS, ARYTM_3, ZFMISC_1, XBOOLE_0, XCMPLX_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, REAL_1, XREAL_0;
  theorems AXIOMS, REAL_1, ABSVALUE, XREAL_0, XCMPLX_0, XCMPLX_1;
 
 begin
 
-reserve a,b,c,x,y,z for real number;
+registration
+  cluster -> complex Element of COMPLEX;
+  coherence by XCMPLX_0:def 2;
+end;
+
+ reserve a,b,c,x,y,z for real number;
 
 canceled;
 
@@ -60,17 +66,17 @@ theorem
  hence 0 <= x*y; end;
 
 theorem Th21:
-0 < x & 0 < y implies 0 < x*y
+  0 < x & 0 < y implies 0 < x*y
  proof assume 0 < x & 0 < y; then x*0 < x*y by REAL_1:70;
  hence 0 < x*y; end;
 
 theorem Th22:
-x < 0 & y < 0 implies 0 < x*y
+  x < 0 & y < 0 implies 0 < x*y
  proof assume x < 0 & y < 0; then x*0 < x*y by REAL_1:71;
   hence 0 < x*y; end;
 
 theorem Th23:
-0 <= x & y <= 0 implies x*y <= 0
+  0 <= x & y <= 0 implies x*y <= 0
  proof assume
 A1: 0 <= x & y <= 0;
   then 0 <= -y by REAL_1:26,50;
@@ -80,7 +86,7 @@ A1: 0 <= x & y <= 0;
  end;
 
 theorem Th24:
-0 < x & y < 0 implies x*y < 0
+  0 < x & y < 0 implies x*y < 0
  proof assume
 A1:  0 < x & y < 0;
   then 0 < -y by REAL_1:66;
@@ -90,10 +96,10 @@ A1:  0 < x & y < 0;
  end;
 
 theorem
-   0 <= x*y implies 0 <= x & 0 <= y or x <= 0 & y <= 0 by Th24;
+  0 <= x*y implies 0 <= x & 0 <= y or x <= 0 & y <= 0 by Th24;
 
 theorem
-   0 < x*y implies 0 < x & 0 < y or x < 0 & y < 0
+  0 < x*y implies 0 < x & 0 < y or x < 0 & y < 0
  proof assume
 A1: 0 < x*y;
    then x <> 0;
@@ -102,7 +108,7 @@ A1: 0 < x*y;
  end;
 
 theorem Th27:
-0 <= a & 0 <= b implies 0 <= a/b
+  0 <= a & 0 <= b implies 0 <= a/b
  proof assume that
 A1: 0 <= a and
 A2: 0 <= b;
@@ -123,7 +129,7 @@ A2: 0 <= b;
 canceled;
 
 theorem Th29:
-0 < x implies y - x < y
+  0 < x implies y - x < y
  proof assume 0 < x;
   then -x < 0 by REAL_1:26,50;
   then y + -x < y + 0 by REAL_1:53;
@@ -131,8 +137,7 @@ theorem Th29:
  end;
 
 scheme RealContinuity { P[set], Q[set] } :
- ex z st
-  for x,y st P[x] & Q[y] holds x <= z & z <= y
+ ex z st for x,y st P[x] & Q[y] holds x <= z & z <= y
 provided
 A1: for x,y st P[x] & Q[y] holds x <= y
 proof
@@ -180,7 +185,6 @@ definition let x,y;
  idempotence;
 end;
 
-
 definition let x,y be Element of REAL;
  redefine func min(x,y) -> Element of REAL;
  coherence by XREAL_0:def 1;
@@ -188,13 +192,12 @@ definition let x,y be Element of REAL;
  coherence by XREAL_0:def 1;
 end;
 
-
 canceled 4;
 
 theorem Th34:
    min(x,y) = (x + y - abs(x - y)) / 2
  proof
-    now per cases;
+    per cases;
    suppose
 A1:   x <= y; then 0 <= y - x by Th12;
 then A2:   0 <= -(x-y) by XCMPLX_1:143;
@@ -215,12 +218,10 @@ then A4:   0 <= x - y by Th12;
                  .= ((x+y)- (x - y))/2 by XCMPLX_1:37
                  .= ((x+y)-abs(x-y))/2 by A4,ABSVALUE:def 1;
   end;
-  end;
-  hence thesis;
  end;
 
 theorem Th35:
-   min(x,y) <= x
+  min(x,y) <= x
  proof x <= y or not x <= y;
   hence min(x,y) <= x by Def1;
  end;
@@ -228,12 +229,12 @@ theorem Th35:
 canceled 2;
 
 theorem Th38:
-   min(x,y) = x or min(x,y) = y
+  min(x,y) = x or min(x,y) = y
  proof assume min(x,y) <> x; then not x <= y by Def1;
   hence min(x,y) = y by Def1; end;
 
 theorem Th39:
- x <= y & x <= z iff x <= min(y,z)
+  x <= y & x <= z iff x <= min(y,z)
  proof
   thus x <= y & x <= z implies x <= min(y,z) by Th38;
      min(y,z) <= y & min(y,z) <= z by Th35;
@@ -241,7 +242,7 @@ theorem Th39:
  end;
 
 theorem
-     min(x,min(y,z)) = min(min(x,y),z)
+  min(x,min(y,z)) = min(min(x,y),z)
  proof
   per cases by AXIOMS:22;
    suppose x <= y & x <= z;
@@ -262,9 +263,9 @@ Th38;
 canceled 4;
 
 theorem Th45:
-   max(x,y) = (x + y + abs(x-y)) / 2
+  max(x,y) = (x + y + abs(x-y)) / 2
 proof
-    now per cases;
+  per cases;
    suppose
 A1:   y <= x;
 then A2:   0 <= x - y by Th12;
@@ -287,12 +288,10 @@ then A4:   0 <= -(x-y) by XCMPLX_1:143;
                 .= ((x+y)+abs(-(x-y)))/2 by A4,ABSVALUE:def 1
                 .= ((x+y)+abs(x-y))/2 by ABSVALUE:17;
   end;
-  end;
- hence thesis;
 end;
 
 theorem Th46:
-   x <= max(x,y)
+  x <= max(x,y)
  proof y <= x or not y <= x;
   hence x <= max(x,y) by Def2;
  end;
@@ -300,20 +299,20 @@ theorem Th46:
 canceled 2;
 
 theorem Th49:
-   max(x,y) = x or max(x,y) = y
+  max(x,y) = x or max(x,y) = y
  proof assume max(x,y) <> x; then not y <= x by Def2;
   hence max(x,y) = y by Def2; end;
 
 theorem
-   y <= x & z <= x iff max(y,z) <= x
+  y <= x & z <= x iff max(y,z) <= x
  proof
   thus y <= x & z <= x implies max(y,z) <= x by Th49;
-     y <= max(y,z) & z <= max(y,z) by Th46;
+  y <= max(y,z) & z <= max(y,z) by Th46;
   hence max(y,z) <= x implies y <= x & z <= x by AXIOMS:22;
  end;
 
 theorem
-     max(x,max(y,z)) = max(max(x,y),z)
+  max(x,max(y,z)) = max(max(x,y),z)
  proof
   per cases by AXIOMS:22;
   suppose x <= y & x <= z;
@@ -334,7 +333,7 @@ Th49;
 canceled;
 
 theorem
-     min(x,y) + max(x,y) = x + y
+  min(x,y) + max(x,y) = x + y
  proof
    thus min(x,y) + max(x,y) = (x + y - abs(x-y)) / 2 + max(x,y) by Th34
       .= (x + y - abs(x-y)) / 2 + (x + y + abs(x-y)) / 2 by Th45
@@ -344,7 +343,7 @@ theorem
  end;
 
 theorem Th54:
-   max(x,min(x,y)) = x
+  max(x,min(x,y)) = x
  proof
   per cases;
     suppose x <= y;
@@ -357,7 +356,7 @@ A1:   y <= x;
  end;
 
 theorem Th55:
-   min(x,max(x,y)) = x
+  min(x,max(x,y)) = x
  proof
   per cases;
     suppose
@@ -370,7 +369,7 @@ A1:   x <= y;
  end;
 
 theorem
-     min(x,max(y,z)) = max(min(x,y),min(x,z))
+  min(x,max(y,z)) = max(min(x,y),min(x,z))
  proof
    per cases by AXIOMS:22;
    suppose
@@ -398,7 +397,7 @@ then A5:   z <= min(x,y) by Th39;
  end;
 
 theorem
-     max(x,min(y,z)) = min(max(x,y),max(x,z))
+  max(x,min(y,z)) = min(max(x,y),max(x,z))
  proof
   per cases by AXIOMS:22;
   suppose
@@ -424,12 +423,19 @@ A3:   z <= y & z <= x;
  end;
  end;
 
-definition let x;
+definition let x be complex number;
   func x^2 equals
 :Def3: x * x;
   correctness;
 end;
 
+registration let x be complex number;
+  cluster x^2 -> complex;
+ correctness
+  proof x^2 = x * x by Def3;
+  hence thesis;
+ end;
+end;
 
 registration let x;
   cluster x^2 -> real;
@@ -439,12 +445,15 @@ registration let x;
  end;
 end;
 
+definition let x be Element of COMPLEX;
+  redefine func x^2 -> Element of COMPLEX;
+  correctness by XCMPLX_0:def 2;
+end;
 
 definition let x be Element of REAL;
   redefine func x^2 -> Element of REAL;
   correctness by XREAL_0:def 1;
 end;
-
 
 Lm1: 1*1 = 1;
 
@@ -459,8 +468,9 @@ theorem
 Th60: 0^2 = 0 by Def3,Lm2;
 
 theorem Th61:
-a^2 = (-a)^2
+  for a being complex number holds a^2 = (-a)^2
  proof
+  let a be complex number;
   thus a^2 = --a*a by Def3
          .= -(-a)*a by XCMPLX_1:175
          .= (-a)*(-a) by XCMPLX_1:175
@@ -468,15 +478,17 @@ a^2 = (-a)^2
  end;
 
 theorem
-    (abs(a))^2 = a^2
+  (abs a)^2 = a^2
  proof 0 <= a or not 0 <= a;
   then abs(a) = a or abs(a) = -a by ABSVALUE:def 1;
   hence thesis by Th61;
  end;
 
 theorem Th63:
-(a + b)^2 = a^2 + 2*a*b + b^2
+  for a, b being complex number holds
+  (a + b)^2 = a^2 + 2*a*b + b^2
  proof
+  let a, b be complex number;
   thus (a + b)^2 = (a + b)*(a + b) by Def3
             .= a*(a + b) + b*(a + b) by XCMPLX_1:8
             .= a*a + a*b + b*(a + b) by XCMPLX_1:8
@@ -490,8 +502,10 @@ theorem Th63:
  end;
 
 theorem Th64:
-(a - b)^2 = a^2 - 2*a*b + b^2
+  for a, b being complex number holds
+  (a - b)^2 = a^2 - 2*a*b + b^2
  proof
+  let a, b be complex number;
   thus (a - b)^2 = (a + -b)^2 by XCMPLX_0:def 8
          .= a^2 + 2*a*(-b) + (-b)^2 by Th63
          .= a^2 + -2*a*b + (-b)^2 by XCMPLX_1:175
@@ -500,34 +514,41 @@ theorem Th64:
  end;
 
 theorem Th65:
-(a + 1)^2 = a^2 + 2*a + 1
+  for a being complex number holds
+  (a + 1)^2 = a^2 + 2*a + 1
  proof
+  let a be complex number;
   thus (a + 1)^2 = a^2 + 2*a*1 + 1^2 by Th63
           .= a^2 + 2*a + 1 by Def3,Lm1;
  end;
 
 theorem
+  for a being complex number holds
   (a - 1)^2 = a^2 - 2*a + 1
  proof
+  let a be complex number;
   thus (a - 1)^2 = a^2 - 2*a*1 + 1^2 by Th64
           .= a^2 - 2*a + 1 by Def3,Lm1;
  end;
 
 theorem Th67:
-   (a - b)*(a + b) = a^2 - b^2 & (a + b)*(a - b) = a^2 - b^2
+  for a, b being complex number holds
+  (a - b)*(a + b) = a^2 - b^2
  proof
+   let a, b be complex number;
    thus (a - b)*(a + b) = (a - b)*a + (a - b)*b by XCMPLX_1:8
                        .= a*a - b*a + (a - b)*b by XCMPLX_1:40
                        .= a*a - a*b + (a*b - b*b) by XCMPLX_1:40
                        .= a*a - b*b by XCMPLX_1:39
                        .= a^2 - b*b by Def3
                        .= a^2 - b^2 by Def3;
-   hence thesis;
  end;
 
 theorem Th68:
-   (a*b)^2 = a^2*b^2
+  for a, b being complex number holds
+  (a*b)^2 = a^2*b^2
  proof
+   let a, b be complex number;
    thus (a*b)^2 = a*b*(a*b) by Def3
               .= a*(a*b*b) by XCMPLX_1:4
               .= a*(a*(b*b)) by XCMPLX_1:4
@@ -537,8 +558,10 @@ theorem Th68:
  end;
 
 theorem Th69:
+  for a, b being complex number holds
   (a/b)^2 = a^2/b^2
  proof
+  let a, b be complex number;
   thus (a/b)^2 = (a/b)*(a/b) by Def3
              .= (a*a)/(b*b) by XCMPLX_1:77
              .= a^2/(b*b) by Def3
@@ -546,8 +569,11 @@ theorem Th69:
  end;
 
 theorem Th70:
-   a^2-b^2 <> 0 implies 1/(a+b) = (a-b)/(a^2-b^2)
- proof assume a^2-b^2 <> 0;
+  for a, b being complex number holds
+  a^2 - b^2 <> 0 implies 1/(a+b) = (a-b)/(a^2-b^2)
+ proof
+  let a, b be complex number;
+  assume a^2-b^2 <> 0;
   then (a+b)*(a-b) <> 0 by Th67;
   then (a+b) <> 0 & (a-b) <> 0;
   hence 1/(a+b) = (1*(a-b))/((a+b)*(a-b)) by XCMPLX_1:92
@@ -555,8 +581,11 @@ theorem Th70:
  end;
 
 theorem Th71:
-   a^2-b^2 <> 0 implies 1/(a-b) = (a+b)/(a^2-b^2)
- proof assume a^2-b^2 <> 0;
+  for a, b being complex number holds
+  a^2-b^2 <> 0 implies 1/(a-b) = (a+b)/(a^2-b^2)
+ proof
+  let a, b be complex number;
+  assume a^2-b^2 <> 0;
   then (a+b)*(a-b) <> 0 by Th67;
   then (a+b) <> 0 & (a-b) <> 0;
   hence 1/(a-b) = (1*(a+b))/((a-b)*(a+b)) by XCMPLX_1:92
@@ -564,31 +593,31 @@ theorem Th71:
  end;
 
 theorem Th72:
-0 <= a^2
+  0 <= a^2
  proof 0 <= a*a by REAL_1:93; hence thesis by Def3; end;
 
 theorem Th73:
- a^2 = 0 implies a = 0
- proof assume a^2 = 0;
-then A1: a*a = 0 by Def3;
-  assume a <> 0;
-   then a < 0 or 0 < a;
-  hence contradiction by A1,Th21,Th22;
+  for a being complex number st a^2 = 0 holds a = 0
+ proof
+  let a be complex number;
+  assume a^2 = 0;then
+  a*a = 0 by Def3;
+  hence thesis by XCMPLX_1:6;
  end;
 
 theorem
-     0 <> a implies 0 < a^2
+  0 <> a implies 0 < a^2
  proof assume 0 <> a; hence 0 <= a^2 & a^2 <> 0 by Th72,Th73; end;
 
 theorem Th75:
-0 < a & a < 1 implies a^2 < a
+  0 < a & a < 1 implies a^2 < a
  proof assume 0 < a & a < 1;
    then a*a < a*1 by REAL_1:70;
   hence a^2 < a by Def3;
  end;
 
 theorem
-     1 < a implies a < a^2
+  1 < a implies a < a^2
  proof assume
 A1:    1 < a;
    then 0 < a by AXIOMS:22;
@@ -597,10 +626,10 @@ A1:    1 < a;
  end;
 
 Lm3:
-0 < a implies ex x st 0 < x & x^2 < a
+  0 < a implies ex x st 0 < x & x^2 < a
  proof assume
 A1: 0 < a;
-     now per cases;
+     per cases;
     suppose
 A2:   1 <= a;
      reconsider x = 2" as real number;
@@ -616,12 +645,10 @@ A3:   a < 1;
      thus 0 < x by A1;
      thus x^2 < a by A1,A3,Th75;
    end;
-   end;
-  hence thesis;
  end;
 
 theorem Th77:
- 0 <= x & x <= y implies x^2 <= y^2
+  0 <= x & x <= y implies x^2 <= y^2
  proof assume
  0 <= x & x <= y;
    then x*x <= x*y & x*y <= y*y by AXIOMS:25;
@@ -631,9 +658,8 @@ theorem Th77:
  end;
 
 theorem Th78:
- 0 <= x & x < y implies x^2 < y^2
- proof assume
- 0 <= x & x < y;
+  0 <= x & x < y implies x^2 < y^2
+ proof assume 0 <= x & x < y;
    then x*x <= x*y & x*y < y*y by AXIOMS:25,REAL_1:70;
    then x*x < y*y by AXIOMS:22;
    then x^2 < y*y by Def3;
@@ -641,11 +667,11 @@ theorem Th78:
  end;
 
 Lm4:
-0 <= x & 0 <= y & x^2 = y^2 implies x = y
+  0 <= x & 0 <= y & x^2 = y^2 implies x = y
 proof assume
 A1: 0 <= x & 0 <= y;
   assume x^2 = y ^2;
-   then x <= y & y <= x by A1,Th78;
+  then x <= y & y <= x by A1,Th78;
   hence x = y by AXIOMS:21;
 end;
 
@@ -668,22 +694,18 @@ A3: (a + 1)^2 = a^2 + 2*a + 1 by Th65
 A5: now let x,y such that
 A6:  X[x] and
 A7:  Y[y];
-       now per cases;
+       per cases;
       suppose x <= 0; hence x <= y by A7;
       end;
-      suppose
-       not x <= 0;
+      suppose not x <= 0;
        then x^2 <= y^2 by A6,A7,AXIOMS:22;
       hence x <= y by A7,Th78;
      end;
-     end;
-    hence x <= y;
    end;
    consider z such that
 A8:  for x,y st X[x] & Y[y] holds x <= z & z <= y from RealContinuity(A5);
    take z;
-   thus
-  0 <= z by A1,A2,A3,A4,A8;
+   thus 0 <= z by A1,A2,A3,A4,A8;
    assume
 A9:  z^2 <> a;
       now per cases by A9,AXIOMS:21;
@@ -732,7 +754,6 @@ A27:   a < z^2 & not z <= 0;
       set b = z^2 - a;
 A28:   0 < 2*z by A27,Th21;
 A29:   2*z <> 0 by A27,Th21;
-
 A30:   0 < b by A27,Th11;
       set eps = min(b/(2*z),z);
 A31:   0/(2*z) = 0;
@@ -762,20 +783,18 @@ then A37:   0 <= z - eps by Th12;
  uniqueness by Lm4;
 end;
 
-
 definition let a be Element of REAL;
- redefine func sqrt a -> Element of REAL;
-coherence by XREAL_0:def 1;
+  redefine func sqrt a -> Element of REAL;
+  coherence by XREAL_0:def 1;
 end;
-
 
 canceled 3;
 
 theorem
-     sqrt 0 = 0 by Def4,Th60;
+  sqrt 0 = 0 by Def4,Th60;
 
 theorem Th83:
-   sqrt 1 = 1 by Def4,Th59;
+  sqrt 1 = 1 by Def4,Th59;
 
 Lm5:  0 <= a implies sqrt a^2 = a
  proof 0 <= a^2 by Th72; hence thesis by Def4; end;
@@ -791,30 +810,30 @@ then A4: 0 <= sqrt x & 0 <= sqrt y by A1,Def4;
  end;
 
 theorem
-     1 < sqrt 2 by Lm6,Th83;
+  1 < sqrt 2 by Lm6,Th83;
 Lm7: 2^2 = 2*2 by Def3;
 
 theorem Th85:
   sqrt 4 = 2 by Def4,Lm7;
 
 theorem
-     sqrt 2 < 2 by Lm6,Th85;
+  sqrt 2 < 2 by Lm6,Th85;
 
 canceled 2;
 
 theorem 0 <= a implies sqrt a^2 = a by Lm5;
 
 theorem Th90:
-   a <= 0 implies sqrt a^2 = -a
+  a <= 0 implies sqrt a^2 = -a
  proof assume a <= 0;
   then 0 <= -a & a^2 = (-a)^2 by Th61,REAL_1:26,50;
   hence sqrt a^2 = -a by Lm5;
  end;
 
 theorem
-     sqrt a^2 = abs(a)
+  sqrt a^2 = abs(a)
  proof
-     now per cases;
+   per cases;
     suppose 0 <= a; then sqrt a^2 = a & abs(a) = a by Lm5,ABSVALUE:def 1;
      hence thesis;
     end;
@@ -822,24 +841,22 @@ theorem
       then abs(a) = -a & a <= 0 by ABSVALUE:def 1;
      hence thesis by Th90;
    end;
-   end;
-  hence thesis;
  end;
 
 theorem
-     0 <= a & sqrt a = 0 implies a = 0 by Def4,Th60;
+  0 <= a & sqrt a = 0 implies a = 0 by Def4,Th60;
 
 theorem
-     0 < a implies 0 < sqrt a
+  0 < a implies 0 < sqrt a
  proof assume 0 < a;
   then sqrt a <> 0 & 0 <= sqrt a by Def4,Th60;
   hence thesis;
  end;
 
 theorem
-     0 <= x & x <= y implies sqrt x <= sqrt y
+  0 <= x & x <= y implies sqrt x <= sqrt y
   proof
-      now per cases;
+     per cases;
      suppose x = y; hence thesis;
      end;
      suppose
@@ -849,15 +866,13 @@ A2:     0 <= x;
       assume x <= y; then x < y by A1,REAL_1:def 5;
       hence sqrt x <= sqrt y by A2,Lm6;
     end;
-    end;
-   hence thesis;
   end;
 
 theorem
-     0 <= x & x < y implies sqrt x < sqrt y by Lm6;
+  0 <= x & x < y implies sqrt x < sqrt y by Lm6;
 
 theorem Th96:
-   0 <= x & 0 <= y & sqrt x = sqrt y implies x = y
+  0 <= x & 0 <= y & sqrt x = sqrt y implies x = y
  proof assume that
 A1: 0 <= x & 0 <= y and
 A2: sqrt x = sqrt y;
@@ -866,7 +881,7 @@ A2: sqrt x = sqrt y;
  end;
 
 theorem Th97:
-   0 <= a & 0 <= b implies sqrt (a*b) = sqrt a * sqrt b
+  0 <= a & 0 <= b implies sqrt (a*b) = sqrt a * sqrt b
  proof assume
 A1:  0 <= a & 0 <= b;
 then A2: 0 <= a*b by Th19;
@@ -880,7 +895,7 @@ then A4: 0 <= sqrt(a*b) & 0 <= sqrt a*sqrt b by A2,Def4,Th19;
  end;
 
 theorem
-     0 <= a*b implies sqrt (a*b) = sqrt abs(a)*sqrt abs(b)
+  0 <= a*b implies sqrt (a*b) = sqrt abs(a)*sqrt abs(b)
  proof assume 0 <= a*b;
    then abs(a*b) = a*b by ABSVALUE:def 1;
    then abs(a)*abs(b) = a*b & 0 <= abs(a) & 0 <= abs(b) by ABSVALUE:5,10;
@@ -888,7 +903,7 @@ theorem
  end;
 
 theorem Th99:
-   0 <= a & 0 <= b implies sqrt (a/b) = sqrt a/sqrt b
+  0 <= a & 0 <= b implies sqrt (a/b) = sqrt a/sqrt b
  proof assume
 A1: 0 <= a & 0 <= b;
 then A2: 0 <= sqrt a & 0 <= sqrt b by Def4;
@@ -899,7 +914,7 @@ then A2: 0 <= sqrt a & 0 <= sqrt b by Def4;
  end;
 
 theorem
-     0 < a/b implies sqrt (a/b) = sqrt abs(a) / sqrt abs(b)
+  0 < a/b implies sqrt (a/b) = sqrt abs(a) / sqrt abs(b)
  proof assume 0 < a/b;
   then (a/b) = abs(a/b) & 0 <= abs(b) by ABSVALUE:5,def 1;
   then (a/b) = abs(a)/abs(b) & 0 <= abs(a) & 0 <= abs(b)
@@ -908,11 +923,11 @@ theorem
  end;
 
 theorem
-     0 < a implies sqrt (1/a) = 1/sqrt a by Th83,Th99;
+  0 < a implies sqrt (1/a) = 1/sqrt a by Th83,Th99;
 
 theorem
-     0 < a implies sqrt a/a = 1/sqrt a
- proof assume A1: 0 < a;
+  0 < a implies sqrt a/a = 1/sqrt a
+proof assume A1: 0 < a;
    then sqrt a <> 0 by Def4,Th60;
   hence sqrt a/a = (sqrt a*sqrt a)/(a*sqrt a) by XCMPLX_1:92
             .= (sqrt a)^2/(a*sqrt a) by Def3
@@ -921,7 +936,7 @@ theorem
  end;
 
 theorem
-     0 < a implies a /sqrt a = sqrt a
+  0 < a implies a /sqrt a = sqrt a
  proof assume A1: 0 < a;
    then sqrt a <> 0 by Def4,Th60;
    hence a /sqrt a = (a*sqrt a) /(sqrt a*sqrt a) by XCMPLX_1:92
@@ -932,7 +947,7 @@ theorem
  end;
 
 theorem
-     0 <= a & 0 <= b implies (sqrt a - sqrt b)*(sqrt a + sqrt b) = a - b
+  0 <= a & 0 <= b implies (sqrt a - sqrt b)*(sqrt a + sqrt b) = a - b
  proof assume
 A1: 0 <= a & 0 <= b;
   thus (sqrt a - sqrt b)*(sqrt a + sqrt b) = (sqrt a)^2 - (sqrt b)^2 by Th67
@@ -941,16 +956,15 @@ A1: 0 <= a & 0 <= b;
  end;
 
 Lm8:
-  0 <= a & 0 <= b & a <>b implies (sqrt a)^2-(sqrt b)^2 <> 0
- proof assume 0 <= a & 0 <= b & a <>b;
+  0 <= a & 0 <= b & a <> b implies (sqrt a)^2-(sqrt b)^2 <> 0
+ proof assume 0 <= a & 0 <= b & a <> b;
   then sqrt a <> sqrt b & 0 <= sqrt a & 0 <= sqrt b by Def4,Th96;
   then (sqrt a)^2 <>(sqrt b)^2 by Lm4;
   hence (sqrt a)^2-(sqrt b)^2 <> 0 by XCMPLX_1:15;
  end;
 
 theorem
-     0 <= a & 0 <= b & a <>b implies 1/(sqrt a+sqrt b) = (sqrt a - sqrt b)/(a-b
-)
+  0 <= a & 0 <= b & a <>b implies 1/(sqrt a+sqrt b) = (sqrt a - sqrt b)/(a-b)
  proof assume that
 A1:   0 <= a and
 A2: 0 <= b and
@@ -962,7 +976,7 @@ A3: a <>b;
  end;
 
 theorem
-     0 <= b & b < a implies 1/(sqrt a+sqrt b) = (sqrt a - sqrt b)/(a-b)
+  0 <= b & b < a implies 1/(sqrt a+sqrt b) = (sqrt a - sqrt b)/(a-b)
  proof assume A1: 0 <= b & b < a;
 then A2: 0 < a;
     0 <= a & b <> a by A1,AXIOMS:22;
@@ -973,22 +987,29 @@ then A2: 0 < a;
  end;
 
 theorem
-     0 <= a & 0 <= b & a <> b implies 1/(sqrt a-sqrt b) = (sqrt a + sqrt b)/(a-
-b
-)
+  0 <= a & 0 <= b implies
+  1/(sqrt a-sqrt b) = (sqrt a + sqrt b)/(a-b)
  proof assume
-A1:   0 <= a & 0 <= b & a <>b;
-  then (sqrt a)^2-(sqrt b)^2 <> 0 by Lm8;
+A1:   0 <= a & 0 <= b;
+  per cases;
+  suppose a <> b;
+  then (sqrt a)^2-(sqrt b)^2 <> 0 by A1,Lm8;
   hence 1/(sqrt a-sqrt b) = (sqrt a + sqrt b)/((sqrt a)^2-(sqrt b)^2) by Th71
                  .= (sqrt a + sqrt b)/(a-(sqrt b)^2) by A1,Def4
                  .= (sqrt a + sqrt b)/(a-b) by A1,Def4;
+  end;
+  suppose a = b; then
+  a - b = 0 & sqrt a - sqrt b = 0 by XCMPLX_1:14; then
+  1/(sqrt a-sqrt b) = 0 & (sqrt a + sqrt b)/(a-b) = 0 by XCMPLX_1:49;
+  hence thesis;
+  end;
  end;
 
 theorem
-     0 <= b & b < a implies 1/(sqrt a-sqrt b) = (sqrt a + sqrt b)/(a-b)
+  0 <= b & b < a implies 1/(sqrt a-sqrt b) = (sqrt a + sqrt b)/(a-b)
  proof assume A1: 0 <= b & b < a;
 then A2: 0 < a;
-    0 <= a & b <> a by A1,AXIOMS:22;
+  0 <= a & b <> a by A1,AXIOMS:22;
   then (sqrt a)^2-(sqrt b)^2 <> 0 by A1,Lm8;
   hence 1/(sqrt a-sqrt b) = (sqrt a + sqrt b)/((sqrt a)^2-(sqrt b)^2) by Th71
                  .= (sqrt a + sqrt b)/(a-(sqrt b)^2) by A2,Def4

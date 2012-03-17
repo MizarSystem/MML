@@ -30,36 +30,11 @@ end;
 
 registration let A be set; let f be Function;
  cluster A --> f -> Function-yielding;
-  coherence
-   proof set g = A --> f;
-A1:   dom (A --> f) = A by FUNCOP_1:19;
-       g is Function-yielding
-      proof let a be set; assume a in dom g; hence g.a is Function by A1,
-FUNCOP_1:13;
-      end;
-    hence thesis;
-   end;
 end;
 
 registration
  let f,g be non-empty Function;
  cluster f+*g -> non-empty;
-  coherence
-   proof set h = f+*g;
-A1:   dom (f+*g) = dom f \/ dom g by FUNCT_4:def 1;
-       h is non-empty
-      proof assume {} in rng h;
-       then consider x being set such that
-A2:      x in dom (f+*g) & {} = h.x by FUNCT_1:def 5;
-          (x in dom f or x in dom g) & (not x in dom g or x in dom g)
-         by A1,A2,XBOOLE_0:def 2;
-        then {} = f.x & x in dom f or {} = g.x & x in dom g
-         by A1,A2,FUNCT_4:def 1;
-        then {} in rng f or {} in rng g by FUNCT_1:def 5;
-       hence thesis by RELAT_1:def 9;
-      end;
-    hence thesis;
-   end;
 end;
 
 
@@ -145,8 +120,6 @@ theorem :: CIRCCOMB:10
 
 registration
  cluster one-to-one Function;
-  existence proof reconsider f = {} as Function;
-  take f; thus thesis; end;
 end;
 
 
@@ -172,9 +145,7 @@ registration
  let S1 be non void non empty ManySortedSign;
  let S2 be non empty ManySortedSign;
  cluster S1 +* S2 -> non void;
-  coherence by Th13;
  cluster S2 +* S1 -> non void;
-  coherence by Th13;
 end;
 
 
@@ -443,11 +414,6 @@ registration
  let p be FinSequence;
  let x be set;
  cluster 1GateCircStr(p,f,x) -> non empty;
- coherence
-  proof
-      the carrier of 1GateCircStr(p,f,x) = rng p \/ {x} by Def5;
-   hence the carrier of 1GateCircStr(p,f,x) is non empty;
-  end;
 end;
 
 
@@ -483,11 +449,6 @@ registration
  let f be set;
  let p be FinSequence;
  cluster 1GateCircStr(p,f) -> non empty;
- coherence
-  proof
-      the carrier of 1GateCircStr(p,f) = rng p \/ {[p,f]} by Def6;
-   hence the carrier of 1GateCircStr(p,f) is non empty;
-  end;
 end;
 
 
@@ -562,16 +523,7 @@ scheme :: CIRCCOMB:sch 1
   f(set,set) -> set}:
  ex f being ManySortedSet of A() st
   for a being set, b being Element of B() st a in A() & b = g().a
-   holds f.a = f(a,b)
-proof
-    deffunc F(set) = f($1,g().$1);
-    consider f being Function such that
-A1:  dom f = A() and
-A2:  for a being set st a in A() holds f.a = F(a) from FUNCT_1:sch 3;
-   reconsider f as ManySortedSet of A() by A1,PBOOLE:def 3;
-   take f;
-   thus thesis by A2;
-  end;
+   holds f.a = f(a,b);
 
 scheme :: CIRCCOMB:sch 2
  Lemma {S() -> non empty ManySortedSign, F(set,set) -> set}:
@@ -583,78 +535,10 @@ scheme :: CIRCCOMB:sch 2
  provided
   for g being set, p being Element of (the carrier of S())* st
       g in the OperSymbols of S() & p = (the Arity of S()).g
-     holds F(g,p) is Function of (len p)-tuples_on BOOLEAN, BOOLEAN
-proof   set S = S(), SORTS = (the carrier of S) --> BOOLEAN;
-    deffunc G(set,set) = F($1,$2);
-   consider CHARACT being ManySortedSet of the OperSymbols of S such that
-A2:  for o being set, p being Element of (the carrier of S)* st
-      o in the OperSymbols of S & p = (the Arity of S).o holds
-      CHARACT.o = G(o,p) from _MSSLambdaWeak;
-A3:   dom CHARACT = the OperSymbols of S &
-     dom the Arity of S = the OperSymbols of S &
-     dom the ResultSort of S = the OperSymbols of S by FUNCT_2:def 1,PBOOLE:def
-3;
-       CHARACT is Function-yielding
-      proof let x be set; assume
-A4:      x in dom CHARACT;
-       then reconsider o = x as Gate of S by PBOOLE:def 3;
-       reconsider p = (the Arity of S).o as Element of (the carrier of S)*
-         by A3,A4,FUNCT_2:7;
-          CHARACT.x = F(o,p) by A2,A3,A4;
-       hence thesis by A1,A3,A4;
-      end;
-    then reconsider CHARACT as ManySortedFunction of the OperSymbols of S;
-       now let i be set; assume
-A5:     i in the OperSymbols of S;
-      then reconsider o = i as Gate of S;
-      reconsider p = (the Arity of S).o as Element of (the carrier of S)*
-        by A5,FUNCT_2:7;
-      reconsider v = (the ResultSort of S).o as Vertex of S
-       by A5,FUNCT_2:7;
-         SORTS.v = BOOLEAN by FUNCOP_1:13;
-       then CHARACT.i = F(o,p) & (SORTS#*the Arity of S).i = SORTS#.p &
-       SORTS#.p = (len p)-tuples_on BOOLEAN &
-       (SORTS*the ResultSort of S).i = BOOLEAN
-        by A2,A3,A5,Th6,FUNCT_1:23;
-      hence CHARACT.i is Function of
-         (SORTS#*the Arity of S).i, (SORTS*the ResultSort of S).i by A1,A5;
-     end;
-    then reconsider CHARACT as ManySortedFunction of
-       SORTS#*the Arity of S, SORTS*the ResultSort of S by MSUALG_1:def 2;
-    take MSAlgebra(#SORTS, CHARACT#); thus thesis by A2;
-   end;
+     holds F(g,p) is Function of (len p)-tuples_on BOOLEAN, BOOLEAN;
 
 registration
  cluster gate`2isBoolean -> gate`2=den (non empty ManySortedSign);
-  coherence
-   proof let S be non empty ManySortedSign; assume
-A1:   for g being set st g in the OperSymbols of S
-      for p being FinSequence st p = (the Arity of S).g
-      ex f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN st
-       g = [g`1,f];
-     deffunc F(set,set) = $1`2;
-A2:   now let g be set, p be Element of (the carrier of S)*; assume
-         g in the OperSymbols of S & p = (the Arity of S).g;
-      then consider f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN such
-that
-A3:     g = [g`1,f] by A1;
-       thus F(g,p) is Function of (len p)-tuples_on BOOLEAN, BOOLEAN by A3,
-MCART_1:7;
-     end;
-    consider A being strict MSAlgebra over S such that
-A4:   the Sorts of A = (the carrier of S) --> BOOLEAN &
-     for g being set, p being Element of (the carrier of S)* st
-       g in the OperSymbols of S & p = (the Arity of S).g
-      holds (the Charact of A).g = F(g,p) from Lemma(A2);
-    take A; let g be set; assume
-A5:   g in the OperSymbols of S;
-    then reconsider p = (the Arity of S).g as Element of (the carrier of S)*
-      by FUNCT_2:7;
-    consider f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN such that
-A6:   g = [g`1,f] by A1,A5;
-       f = g`2 by A6,MCART_1:7;
-    hence thesis by A4,A5,A6;
-   end;
 end;
 
 
@@ -669,20 +553,6 @@ theorem :: CIRCCOMB:53
 
 registration
  cluster unsplit -> Circuit-like (non empty ManySortedSign);
-  coherence
-   proof let S be non empty ManySortedSign such that
-A1:   the ResultSort of S = id the OperSymbols of S;
-    let S' be non void non empty ManySortedSign such that
-A2:   S' = S;
-    let o1,o2 be Gate of S';
-       the_result_sort_of o1 = (the ResultSort of S).o1 &
-     o1 in the OperSymbols of S & o2 in the OperSymbols of S &
-     the_result_sort_of o2 = (the ResultSort of S).o2
-      by A2,Lm2,MSUALG_1:def 7;
-     then the_result_sort_of o1 = o1 & the_result_sort_of o2 = o2
-       by A1,FUNCT_1:34;
-    hence thesis;
-   end;
 end;
 
 
@@ -693,17 +563,11 @@ theorem :: CIRCCOMB:54
 registration
  let f be set, p be FinSequence;
  cluster 1GateCircStr(p,f) -> unsplit gate`1=arity;
-  coherence by Th54;
 end;
 
 
 registration
  cluster unsplit gate`1=arity non void strict non empty ManySortedSign;
-  existence
-   proof consider f being set, p being FinSequence;
-    take 1GateCircStr(p,f);
-    thus thesis;
-   end;
 end;
 
 
@@ -722,7 +586,6 @@ theorem :: CIRCCOMB:57
 registration
  let S1,S2 be unsplit non empty ManySortedSign;
  cluster S1+*S2 -> unsplit;
-  coherence by Th57;
 end;
 
 
@@ -733,7 +596,6 @@ theorem :: CIRCCOMB:58
 registration
  let S1,S2 be gate`1=arity non empty ManySortedSign;
  cluster S1+*S2 -> gate`1=arity;
-  coherence by Th58;
 end;
 
 
@@ -787,9 +649,7 @@ registration
  let f be Function of n-tuples_on X, X;
  let p be FinSeqLen of n;
  cluster 1GateCircuit(p,f) -> gate`2=den;
-  coherence by Th60;
  cluster 1GateCircStr(p,f) -> gate`2=den;
-  coherence by Th60;
 end;
 
 
@@ -803,25 +663,17 @@ registration
  let f be Function of n-tuples_on BOOLEAN, BOOLEAN;
  let p be FinSeqLen of n;
  cluster 1GateCircStr(p,f) -> gate`2isBoolean;
-  coherence by Th61;
 end;
 
 
 registration
  cluster gate`2isBoolean non empty ManySortedSign;
- existence
-  proof consider n being Nat;
-   consider f being Function of n-tuples_on BOOLEAN, BOOLEAN;
-   consider p being FinSeqLen of n;
-   take 1GateCircStr(p,f); thus thesis;
-  end;
 end;
 
 
 registration
  let S1,S2 be gate`2isBoolean non empty ManySortedSign;
  cluster S1+*S2 -> gate`2isBoolean;
-  coherence by Th59;
 end;
 
 
@@ -836,10 +688,6 @@ registration let n be Nat; let X be non empty finite set;
  let f be Function of n-tuples_on X, X;
  let p be FinSeqLen of n;
  cluster 1GateCircuit(p,f) -> locally-finite;
-  coherence
-   proof set S = 1GateCircStr(p,f);
-    let i be set; assume i in the carrier of S; hence thesis by Th62;
-   end;
 end;
 
 
@@ -880,13 +728,6 @@ theorem :: CIRCCOMB:65
 registration
  let S be non empty ManySortedSign;
  cluster Boolean -> non-empty locally-finite MSAlgebra over S;
-  coherence
-   proof let A be MSAlgebra over S; assume
-A1:   A is Boolean;
-     then the Sorts of A = (the carrier of S) --> BOOLEAN by Th65;
-    hence A is non-empty by MSUALG_1:def 8;
-    let v be set; assume v in the carrier of S; hence thesis by A1,Def15;
-   end;
 end;
 
 
@@ -907,21 +748,6 @@ theorem :: CIRCCOMB:68
 
 registration let S be non empty ManySortedSign;
  cluster Boolean (strict MSAlgebra over S);
-  existence
-   proof
-     deffunc F(set,Element of (the carrier of S)*) =
-      ((len $2)-tuples_on BOOLEAN) --> FALSE;
-A1:   for g being set, p being Element of (the carrier of S)* st
-       g in the OperSymbols of S & p = (the Arity of S).g
-      holds F(g,p) is Function of (len p)-tuples_on BOOLEAN, BOOLEAN;
-    consider A being strict MSAlgebra over S such that
-A2:   the Sorts of A = (the carrier of S) --> BOOLEAN &
-     for g being set, p being Element of (the carrier of S)* st
-       g in the OperSymbols of S & p = (the Arity of S).g
-      holds (the Charact of A).g = F(g,p) from Lemma(A1);
-    take A; let v be Vertex of S;
-    thus thesis by A2,FUNCOP_1:13;
-   end;
 end;
 
 
@@ -944,48 +770,12 @@ theorem :: CIRCCOMB:71
 registration
  cluster unsplit gate`1=arity gate`2=den gate`2isBoolean non void
          strict (non empty ManySortedSign);
-  existence
-   proof consider f being Function of 1-tuples_on BOOLEAN, BOOLEAN;
-    consider p being FinSeqLen of 1;
-    take 1GateCircStr(p,f);
-    thus thesis;
-   end;
 end;
 
 
 registration
  let S be gate`2isBoolean non empty ManySortedSign;
  cluster Boolean gate`2=den (strict MSAlgebra over S);
-  existence
-   proof
-     deffunc F(set,set) = $1`2;
-A1:   now let g be set, p be Element of (the carrier of S)*; assume
-         g in the OperSymbols of S & p = (the Arity of S).g;
-      then consider f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN such
-that
-A2:     g = [g`1, f] by Def9;
-       thus F(g,p) is Function of (len p)-tuples_on BOOLEAN, BOOLEAN by A2,
-MCART_1:7;
-     end;
-    consider A being strict MSAlgebra over S such that
-A3:   the Sorts of A = (the carrier of S) --> BOOLEAN &
-     for g being set, p being Element of (the carrier of S)* st
-       g in the OperSymbols of S & p = (the Arity of S).g
-      holds (the Charact of A).g = F(g,p) from Lemma(A1);
-    take A;
-    thus A is Boolean
-      proof let v be Vertex of S;
-       thus thesis by A3,FUNCOP_1:13;
-      end;
-    let g be set; assume
-A4:   g in the OperSymbols of S;
-    then reconsider p = (the Arity of S).g as Element of (the carrier of S)*
-      by FUNCT_2:7;
-    consider f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN such that
-A5:   g = [g`1, f] by A4,Def9;
-       g`2 = f by A5,MCART_1:7;
-    hence thesis by A3,A4,A5;
-   end;
 end;
 
 
@@ -994,10 +784,6 @@ registration
  let A1 be Boolean gate`2=den Circuit of S1;
  let A2 be Boolean gate`2=den Circuit of S2;
  cluster A1+*A2 -> Boolean gate`2=den;
-  coherence
-   proof the Sorts of A1 tolerates the Sorts of A2 by Th67;
-   hence thesis by Th70,Th71;
-   end;
 end;
 
 
@@ -1005,7 +791,6 @@ registration let n be Nat; let X be finite non empty set;
  let f be Function of n-tuples_on X, X;
  let p be FinSeqLen of n;
  cluster gate`2=den strict non-empty Circuit of 1GateCircStr(p,f);
-  existence proof take 1GateCircuit(p,f); thus thesis; end;
 end;
 
 
@@ -1013,7 +798,6 @@ registration let n be Nat; let X be finite non empty set;
  let f be Function of n-tuples_on X, X;
  let p be FinSeqLen of n;
  cluster 1GateCircuit(p,f) -> gate`2=den;
-  coherence;
 end;
 
 

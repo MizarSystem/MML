@@ -32,36 +32,13 @@ scheme :: QUANTAL1:sch 1
  {A()->non empty set, B()->non empty set, F(set)->set,
   G(set)->Element of B(), P[set]}:
   {F(a) where a is Element of B(): a in {G(b) where b is Element of A(): P[b]}}
-    = {F(G(a)) where a is Element of A(): P[a]}
-proof
-   thus {F(a) where a is Element of B(): a in {G(b) where b is Element of A():
-      P[b]}} c= {F(G(a)) where a is Element of A(): P[a]}
-     proof let x be set; assume x in {F(a) where a is Element of B():
-       a in {G(b) where b is Element of A(): P[b]}};
-      then consider a being Element of B() such that
-A1:     x = F(a) & a in {G(b) where b is Element of A(): P[b]};
-      consider b being Element of A() such that
-A2:     a = G(b) & P[b] by A1;
-      thus thesis by A1,A2;
-     end;
-   let x be set; assume x in {F(G(a)) where a is Element of A(): P[a]};
-   then consider a being Element of A() such that
-A3:  x = F(G(a)) & P[a];
-      G(a) in {G(b) where b is Element of A(): P[b]} by A3;
-   hence thesis by A3;
-  end;
+    = {F(G(a)) where a is Element of A(): P[a]};
 
 scheme :: QUANTAL1:sch 2
  EmptyFraenkel {A() -> non empty set, f(set) -> set, P[set]}:
  {f(a) where a is Element of A(): P[a]} = {}
   provided
- not ex a being Element of A() st P[a]
-proof  assume not thesis;
-  then reconsider X = {f(a) where a is Element of A(): P[a]} as non empty set;
-  consider x being Element of X; x in X;
-   then ex a being Element of A() st x = f(a) & P[a];
-  hence contradiction by A1;
- end;
+ not ex a being Element of A() st P[a];
 
 theorem :: QUANTAL1:1
  for L1,L2 being non empty LattStr st the LattStr of L1 = the LattStr of L2
@@ -103,11 +80,6 @@ end;
 
 registration
  cluster non empty QuantaleStr;
- existence
-  proof consider A being non empty set, b1,b2,b3 being BinOp of A;
-    take QuantaleStr(#A,b1,b2,b3#);
-    thus the carrier of QuantaleStr(#A,b1,b2,b3#) is non empty;
-  end;
 end;
 
 
@@ -121,12 +93,6 @@ end;
 
 registration
  cluster non empty QuasiNetStr;
- existence
-  proof consider A being non empty set, b1,b2,b3 being (BinOp of A),
-                 e being Element of A;
-    take QuasiNetStr(#A,b1,b2,b3,e#);
-    thus the carrier of QuasiNetStr(#A,b1,b2,b3,e#) is non empty;
-  end;
 end;
 
 
@@ -152,23 +118,12 @@ end;
 
 registration
  cluster with_zero -> with_left-zero with_right-zero (non empty HGrStr);
-  coherence by Def4;
  cluster with_left-zero with_right-zero -> with_zero (non empty HGrStr);
-  coherence by Def4;
 end;
 
 
 registration
  cluster with_zero (non empty HGrStr);
-  existence
-   proof consider x being set, f being BinOp of {x};
-    take G = HGrStr(#{x},f#); reconsider x as Element of G
-     by TARSKI:def 1;
-    thus G is with_left-zero
-     proof take x; thus thesis by TARSKI:def 1;
-     end;
-    take x; thus thesis by TARSKI:def 1;
-   end;
 end;
 
 
@@ -207,7 +162,6 @@ theorem :: QUANTAL1:4
 
 registration let A be non empty set, b1,b2,b3 be BinOp of A;
  cluster QuantaleStr(#A,b1,b2,b3#) -> non empty;
- coherence by STRUCT_0:def 1;
 end;
 
 
@@ -215,12 +169,6 @@ registration
  cluster associative commutative unital with_zero
   left-distributive right-distributive complete Lattice-like
      (non empty QuantaleStr);
-  existence
-   proof set B = BooleLatt {};
-    consider b being BinOp of B;
-    take QuantaleStr (#carr(B), join(B), met(B), b#);
-    thus thesis by Th4;
-   end;
 end;
 
 
@@ -233,78 +181,7 @@ scheme :: QUANTAL1:sch 3
                  where a is Element of Q(): a in X()}, Q()) =
   "\/"({f(a,b) where a is Element of Q(),
                    b is Element of Q(): a in X() & b in
- Y()}, Q())
-proof   set Q = Q(), X = X(), Y = Y();
-   set Z = {{f(a,b) where b is Element of Q: b in Y}
-                    where a is Element of Q: a in X};
-   set W = {"\/"V where V is Subset of Q: V in Z};
-   set S = {f(a,b) where a is Element of Q,
-                         b is Element of Q: a in X & b in Y};
-    A1: Z c= bool carr(Q)
-     proof let x; assume x in Z;
-      then consider a being Element of Q such that
-A2:    x = {f(a,b) where b is Element of Q: b in Y} & a in X;
-         x c= carr(Q)
-        proof let y; assume y in x;
-          then ex b being Element of Q st y = f(a,b) & b in Y
-by A2;
-         hence thesis;
-        end;
-      hence thesis;
-     end;
-A3:  W = {"\/"({f(a,b) where b is Element of Q: b in Y}, Q)
-           where a is Element of Q: a in X}
-     proof
-      thus W c= {"\/"
-({f(a,b) where b is Element of Q: b in Y}, Q)
-            where a is Element of Q: a in X}
-        proof let x; assume x in W;
-         then consider V being Subset of Q such that
-A4:       x = "\/"V & V in Z;
-            ex a being Element of Q st
-           V = {f(a,b) where b is Element of Q: b in Y}
-               & a in X by A4;
-         hence thesis by A4;
-        end;
-      let x; assume
-         x in {"\/"({f(a,b) where b is Element of Q: b in Y}, Q)
-           where a is Element of Q: a in X};
-      then consider a being Element of Q such that
-A5:    x = "\/"({f(a,b) where b is Element of Q: b in Y}, Q)
-         & a in X;
-         {f(a,b) where b is Element of Q: b in Y} c= carr(Q)
-        proof let y;
-          assume y in {f(a,b) where b is Element of Q: b in Y};
-          then ex b being Element of Q st y = f(a,b) & b in Y;
-         hence thesis;
-        end;
-       then {f(a,b) where b is Element of Q: b in Y} is
-          Subset of Q &
-       {f(a,c) where c is Element of Q: c in Y} in Z by A5;
-      hence thesis by A5;
-     end;
-      S = union Z
-     proof
-      thus S c= union Z
-        proof let x; assume x in S;
-         then consider a, b being Element of Q such that
-A6:       x = f(a,b) & a in X & b in Y;
-            x in {f(a,c) where c is Element of Q: c in Y} &
-          {f(a,d) where d is Element of Q: d in Y} in Z by A6;
-         hence thesis by TARSKI:def 4;
-        end;
-      let x; assume x in union Z;
-      then consider V being set such that
-A7:    x in V & V in Z by TARSKI:def 4;
-      consider a being Element of Q such that
-A8:    V = {f(a,b) where b is Element of Q: b in Y} & a in X
-        by A7;
-         ex b being Element of Q st x = f(a,b) & b in Y by A7,A8
-;
-      hence thesis by A8;
-     end;
-   hence thesis by A1,A3,LATTICE3:49;
-  end;
+ Y()}, Q());
 
 reserve
  Q for left-distributive right-distributive complete Lattice-like
@@ -322,35 +199,17 @@ theorem :: QUANTAL1:6
 registration let A be non empty set, b1,b2,b3 be (BinOp of A),
   e be Element of A;
  cluster QuasiNetStr(#A,b1,b2,b3,e#) -> non empty;
- coherence by STRUCT_0:def 1;
 end;
 
 
 registration
  cluster complete Lattice-like (non empty QuasiNetStr);
-  existence
-   proof set B = BooleLatt {};
-    consider e being Element of B, b being BinOp of B;
-    take QuasiNetStr (#carr(B), join(B), met(B), b, e#);
-    thus thesis by Th4;
-   end;
 end;
 
 
 registration
  cluster left-distributive right-distributive -> times-continuous
   times-additive (complete Lattice-like (non empty QuasiNetStr));
- coherence
-  proof let Q be complete Lattice-like (non empty QuasiNetStr);
-   assume Q is left-distributive right-distributive;
-   hence (for X, Y being Subset of Q st X is directed & Y is directed holds
-    "\/"(X,Q) [*] "\/"(Y,Q) = "\/"({a[*]b where
-      a is Element of Q,
-      b is Element of Q: a in X & b in Y}, Q)) &
-    for a,b,c being Element of Q holds
-     (a"\/"b)[*]c = (a[*]c)"\/"(b[*]c) & c[*](a"\/"b) = (c[*]a)"\/"(c[*]b)
-      by Th5,Th6;
-  end;
 end;
 
 
@@ -358,23 +217,6 @@ registration
  cluster associative commutative well-unital with_zero with_left-zero
   left-distributive right-distributive complete Lattice-like
    (non empty QuasiNetStr);
-  existence
-   proof set B = BooleLatt {};
-    consider e being Element of B, b being BinOp of B;
-    take Q = QuasiNetStr (#carr(B), join(B), met(B), b, e#);
-A1:   now let x, y be Element of Q;
-         carr(B) = {{}} by LATTICE3:def 1,ZFMISC_1:1;
-       then x = {} & y = {} by TARSKI:def 1;
-      hence x = y;
-     end;
-       Q is with_zero well-unital
-      proof thus Q is with_zero by Th4;
-       thus the unity of Q is_a_left_unity_wrt times(Q)
-         proof let b be Element of Q; thus thesis by A1; end;
-       let b be Element of Q; thus thesis by A1;
-      end;
-    hence thesis by Def4,Th4;
-   end;
 end;
 
 
@@ -435,23 +277,6 @@ end;
 registration
  let L be Lattice;
  cluster inflationary deflationary monotone UnOp of L;
- existence
-  proof reconsider f = id the carrier of L as UnOp of L;
-   take f;
-   thus f is inflationary
-     proof let p be Element of L;
-         f.p = p & p [= p by FUNCT_1:34;
-      hence thesis;
-     end;
-   thus f is deflationary
-     proof let p be Element of L;
-         f.p = p & p [= p by FUNCT_1:34;
-      hence thesis;
-     end;
-   let p,q be Element of L;
-      f.p = p & f.q = q by FUNCT_1:34;
-   hence thesis;
-  end;
 end;
 
 
@@ -550,13 +375,6 @@ end;
 
 registration
  cluster non empty Girard-QuantaleStr;
- existence
-  proof
-   consider A being non empty set, b1,b2,b3 being (BinOp of A),
-            e1,e2 being Element of A;
-   take Girard-QuantaleStr(#A,b1,b2,b3,e1,e2#);
-   thus the carrier of Girard-QuantaleStr(#A,b1,b2,b3,e1,e2#) is non empty;
-  end;
 end;
 
 
@@ -577,7 +395,6 @@ theorem :: QUANTAL1:21
 registration let A be non empty set, b1,b2,b3 be (BinOp of A),
                e1,e2 be Element of A;
  cluster Girard-QuantaleStr(#A,b1,b2,b3,e1,e2#) -> non empty;
- coherence by STRUCT_0:def 1;
 end;
 
 
@@ -585,15 +402,6 @@ registration
   cluster associative commutative well-unital
    left-distributive right-distributive complete Lattice-like
    cyclic dualized strict (non empty Girard-QuantaleStr);
-   existence
-    proof set B = BooleLatt {};
-     consider b being BinOp of B; consider e being Element of B;
-     take Q = Girard-QuantaleStr (#carr(B), join(B), met(B), b, e, e#);
-        carr(B) = {{}} by LATTICE3:def 1,ZFMISC_1:1;
-      then Q is unital & e = {} & the_unity_wrt b = {} by Th4,TARSKI:def 1;
-      then e is_a_unity_wrt b by MONOID_0:4;
-     hence thesis by Th4,Th21,MONOID_0:def 21;
-    end;
 end;
 
 

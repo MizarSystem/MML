@@ -36,12 +36,6 @@ end;
 
 registration
  cluster strict Graph-like MultiGraphStruct;
-existence
-  proof
-      MultiGraphStruct(# DomEx, {}, _empty, _empty #) is Graph-like
-     by Def1;
-   hence thesis;
-  end;
 end;
 
 
@@ -117,65 +111,8 @@ end;
 
 registration
   cluster finite MultiGraphStruct;
-existence
-  proof
-    take G = MultiGraphStruct(# DomEx, {}, _empty, _empty #);
-    thus the Vertices of G is finite;
-    thus the Edges of G is finite;
-  end;
 
   cluster finite non-multi oriented simple connected Graph;
-existence
-  proof
-    set V = {1};
-    reconsider _empty = {} as Function of {}, V by FUNCT_2:55,RELAT_1:60;
-    reconsider G = MultiGraphStruct(# V, {}, _empty, _empty #)
-       as Graph by Def1;
-    take G;
-    thus G is finite by Def8;
-      for x,y st x in the Edges of G & y in the Edges of G &
-     (((the Source of G).x = (the Source of G).y &
-     (the Target of G).x = (the Target of G).y) or
-     ((the Source of G).x = (the Target of G).y &
-     (the Source of G).y = (the Target of G).x))
-     holds x = y;
-    hence G is non-multi by Def5;
-      for x,y st x in the Edges of G & y in the Edges of G &
-     (the Source of G).x = (the Source of G).y &
-     (the Target of G).x = (the Target of G).y
-     holds x = y;
-    hence G is oriented by Def4;
-      not ex x st x in the Edges of G &
-     (the Source of G).x = (the Target of G).x;
-    hence G is simple by Def6;
-
-      not ex G1, G2 being Graph st
-      (the Vertices of G1) misses (the Vertices of G2) &
-      G is_sum_of G1, G2
-    proof
-      given G1, G2 being Graph such that A1:
-       (the Vertices of G1) misses (the Vertices of G2) &
-      G is_sum_of G1, G2;
-A2:    (the Vertices of G1) /\ (the Vertices of G2) = {} by A1,XBOOLE_0:def 7;
-        (the Source of G1) tolerates (the Source of G2) &
-      (the Target of G1) tolerates (the Target of G2) &
-      G = G1 \/ G2 by A1,Def3;
-     then A3:  (the Vertices of G1) \/ (the Vertices of G2)
-       = V by Def2;
-      consider x being Element of the Vertices of G1;
-      A4: the Vertices of G1 is non empty set by Def1;
-then A5:   x in the Vertices of G1;
-        x in V by A3,A4,XBOOLE_0:def 2;
-     then A6: 1 in the Vertices of G1 by A5,TARSKI:def 1;
-      consider y being Element of the Vertices of G2;
-      A7: the Vertices of G2 is non empty set by Def1;
-then A8:   y in the Vertices of G2;
-        y in V by A3,A7,XBOOLE_0:def 2;
-      then 1 in the Vertices of G2 by A8,TARSKI:def 1;
-     hence contradiction by A2,A6,XBOOLE_0:def 3;
-    end;
-  hence G is connected by Def7;
-  end;
 end;
 
 
@@ -224,15 +161,6 @@ end;
 
 registration let G be Graph;
   cluster oriented Chain of G;
-existence
-  proof
-    reconsider p = {} as Chain of G by Lm3;
-    take p;
-    let n; assume 1 <= n & n <= len p;
-     then 1 <= len p by AXIOMS:22;
-     then 1 <= 0 by FINSEQ_1:25;
-    hence thesis;
-  end;
 end;
 
 definition let G be Graph;
@@ -245,16 +173,6 @@ end;
 
 registration let G be Graph;
   cluster one-to-one Chain of G;
-existence
-  proof
-     reconsider p = {} as Chain of G by Lm3;
-     take p;
-     let n,m; assume 1 <= n & n < m & m <= len p;
-       then 1 < m & m <= len p by AXIOMS:22;
-       then 1 < len p by AXIOMS:22;
-       then 1 < 0 by FINSEQ_1:25;
-      hence thesis;
-  end;
 end;
 
 
@@ -265,12 +183,6 @@ end;
 
 registration let G be Graph;
   cluster one-to-one oriented Chain of G;
-existence
-   proof
-     reconsider p = {} as oriented Chain of G by Lm4;
-     take p;
-     thus thesis;
-   end;
 end;
 
 
@@ -297,31 +209,6 @@ end;
 
 registration let G be Graph;
    cluster cyclic Path of G;
-existence
-   proof
-     reconsider p = {} as Path of G by Lm3;
-     take p;
-     consider x being Element of the Vertices of G;
-       the Vertices of G is non empty set by Def1;
-then A1:   x in the Vertices of G;
-     take <*x*>;
-     thus len <*x*> = 0 + 1 by FINSEQ_1:56 .= len p + 1 by FINSEQ_1:25;
-     thus for n st 1 <= n & n <= len <*x*> holds <*x*>.n in the Vertices of G
-       proof let n; assume 1 <= n & n <= len <*x*>;
-         then 1 <= n & n <= 1 by FINSEQ_1:56;
-          then n = 1 by AXIOMS:21;
-        hence <*x*>.n in the Vertices of G by A1,FINSEQ_1:57;
-       end;
-      thus for n st 1 <= n & n <= len p
-         ex x', y' being Element of the Vertices of G st
-           x' = <*x*>.n & y' = <*x*>.(n+1) & p.n joins x', y'
-      proof let n; assume 1 <= n & n <= len p;
-        then 1 <= len p by AXIOMS:22;
-        then 1 <= 0 by FINSEQ_1:25;
-       hence thesis;
-      end;
-     thus <*x*>.1 = <*x*>.(len <*x*>) by FINSEQ_1:56;
-   end;
 end;
 
 
@@ -331,12 +218,6 @@ end;
 
 registration let G be Graph;
    cluster cyclic OrientedPath of G;
-  existence
-    proof
-      reconsider p = {} as OrientedPath of G by Lm4;
-      take p;
-      thus p is cyclic by Lm5;
-    end;
 end;
 
 
@@ -361,20 +242,6 @@ end;
 
 registration let G be Graph;
  cluster strict Subgraph of G;
-existence
-  proof the Vertices of G is non empty set by Def1;
-    then reconsider S =
-     MultiGraphStruct(# the Vertices of G, the Edges of G,
-                        the Source of G, the Target of G #) as Graph
-      by Def1;
-     for v st v in the Edges of S holds
-     (the Source of S).v = (the Source of G).v &
-     (the Target of S).v = (the Target of G).v &
-     (the Source of G).v in the Vertices of S &
-          (the Target of G).v in the Vertices of S by Lm6;
-    then S is Subgraph of G by Def17;
-   hence thesis;
-  end;
 end;
 
 
@@ -431,24 +298,7 @@ scheme :: GRAPH_1:sch 1
  GraphSeparation{G() -> Graph, P[set]}:
   ex X being set st
     for x being set holds
-      x in X iff x is strict Subgraph of G() & P[x]
-proof
-  defpred _P[set] means P[$1];
-  consider X being set such that A1:
-    for x being set holds
-      x in X iff x in bool G() & _P[x] from XBOOLE_0:sch 1;
- take X;
- let x be set;
- thus x in X implies x is strict Subgraph of G() & P[x]
-   proof assume A2: x in X;
-     then x in bool G() by A1;
-    hence x is strict Subgraph of G() by Def24;
-    thus P[x] by A1,A2;
-   end;
- assume A3: x is strict Subgraph of G() & P[x];
-  then x in bool G() by Def24;
- hence thesis by A1,A3;
-end;
+      x in X iff x is strict Subgraph of G() & P[x];
 
                ::::::::::::::::::::::::::
                :: Properties of graphs ::

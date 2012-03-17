@@ -35,25 +35,7 @@ scheme :: MATRIX_2:sch 1
   ex p being FinSequence of D() st dom p = Seg A() &
                      for k st k in Seg A() holds P[k,p.k]
  provided
- for k st k in Seg A() ex x being Element of D() st P[k,x]
-proof
- defpred _P[set,set] means P[$1,$2];
- A2: for y be set st y in Seg A() ex x st x in D() & _P[y,x]
-  proof
-   let y;
-   assume A3:y in Seg A();
-   then reconsider k=y as Nat;
-   consider x being Element of D() such that A4:P[k,x] by A1,A3;
-   take x;
-   thus thesis by A4;
-  end;
- consider f being Function such that A5:dom f = Seg A() and A6:rng f c= D() and
-   A7:for y be set st y in Seg A() holds _P[y,f.y] from COMPTS_1:sch 1(A2);
- reconsider f as FinSequence by A5,FINSEQ_1:def 2;
- reconsider p=f as FinSequence of D() by A6,FINSEQ_1:def 4;
- take p;
- thus thesis by A5,A7;
-end;
+ for k st k in Seg A() ex x being Element of D() st P[k,x];
 
 definition let n,m; let a be set;
  func (n,m) --> a -> tabular FinSequence equals
@@ -228,18 +210,6 @@ end;
 
 registration
  cluster permutational non empty set;
-  existence
-   proof
-   consider n;consider p being Permutation of Seg n;
-   take P={p};
-   thus P is permutational
-    proof
-     take n;let x;
-     assume x in P;
-     hence thesis by TARSKI:def 1;
-    end;
-  thus thesis;
-   end;
 end;
 
 
@@ -267,32 +237,6 @@ end;
 
 registration let n;
 cluster Permutations(n) -> permutational non empty;
-coherence
- proof
- defpred P[set] means $1 is Permutation of Seg n;
- consider P being set such that A1:for x holds x in P iff x in
- Funcs(Seg n,Seg n) & P[x] from XBOOLE_0:sch 1;
-  A2:id Seg n= idseq n & idseq n is Permutation of Seg n by FINSEQ_2:65,def 1;
-    idseq n is Function of Seg n,Seg n by FINSEQ_2:65;
-  then idseq n in Funcs(Seg n,Seg n) by FUNCT_2:12;
-  then reconsider P as non empty set by A1,A2;
-    P is permutational non empty set
-   proof now take n;let x;
-    assume x in P;
-    hence x is Permutation of Seg n by A1;
-    end;
-    hence thesis by Def9;
-   end;
-  then reconsider P as permutational non empty set;
-    x in P iff x is Permutation of Seg n
-   proof
-    thus x in P implies x is Permutation of Seg n by A1;
-    assume A3:x is Permutation of Seg n;
-    then x in Funcs(Seg n,Seg n) by FUNCT_2:12;
-    hence thesis by A1,A3;
- end;
- hence thesis by Def11;
-end;
 end;
 
 
@@ -326,11 +270,6 @@ end;
 
 registration let n;
  cluster Group_of_Perm(n) -> non empty;
- coherence
-  proof
-      the carrier of Group_of_Perm(n) = Permutations(n) by Def13;
-   hence the carrier of Group_of_Perm(n) is non empty;
-  end;
 end;
 
 
@@ -351,88 +290,6 @@ p" is Element of Group_of_Perm(n);
   end;
 registration let n;
   cluster Group_of_Perm(n) -> associative Group-like;
- coherence
- proof
-    A1:for p,q,r being Element of Group_of_Perm(n)
-       holds (p * q) * r = p * (q * r)
-       proof
-        let p,q,r be Element of Group_of_Perm(n);
-        reconsider p'=p,q'=q,r'=r as Element of Permutations(n) by Def13;
-         A2:q'*p' is Permutation of Seg n & r'*q' is Permutation of Seg n
-           proof
-             reconsider p',q',r' as Permutation of Seg n by Def11;
-             A3: q'*p' is Permutation of Seg n;
-                r'*q' is Permutation of Seg n;
-            hence thesis by A3;
-           end;
-        then A4:q' * p' is Element of Permutations(n) by Def11;
-        A5:r' * q' is Element of Permutations(n) by A2,Def11;
-          (p * q) * r = (the mult of Group_of_Perm(n)).((p*q),r)
-                                                     by VECTSP_1:def 10
-                     .=(the mult of Group_of_Perm(n)).
-                    (((the mult of Group_of_Perm(n)).(p',q')),r') by VECTSP_1:
-def 10
-                    .=(the mult of Group_of_Perm(n)).((q'*p'),r') by Def13
-                    .=r'*(q' *p' ) by A4,Def13
-                    .=(r' *q') * p' by RELAT_1:55
-                    .=(the mult of Group_of_Perm(n)).(p',(r'*q'))
-                                                   by A5,Def13
-                    .=(the mult of Group_of_Perm(n)).
-                       (p,(the mult of Group_of_Perm(n)).(q,r)) by Def13
-                    .=(the mult of Group_of_Perm(n)).(p,(q*r))
-                                                 by VECTSP_1:def 10
-                    .=p *(q* r) by VECTSP_1:def 10;
-        hence thesis;
-       end;
-       ex e being Element of Group_of_Perm(n) st
-        for p being Element of Group_of_Perm(n) holds
-         p * e = p & e * p = p &
-           ex g being Element of Group_of_Perm(n) st
-        p * g = e & g * p = e
-         proof
-            idseq n = id Seg n by FINSEQ_2:def 1;
-          then reconsider e'=idseq n as Element of Permutations(n) by Def11;
-          reconsider e=idseq n as Element of Group_of_Perm(n)
-          by Th23;
-       A6:  for p being Element of Group_of_Perm(n) holds
-                p * e =p & e* p=p
-             proof
-              let p be Element of Group_of_Perm(n);
-              reconsider p'=p as Element of Permutations(n) by Def13;
-             A7:p * e =(the mult of Group_of_Perm(n)).(p',e') by VECTSP_1:def
-10
-                    .=e' * p' by Def13
-                    .=p by Th24;
-                 e * p =(the mult of Group_of_Perm(n)).(e',p') by VECTSP_1:def
-10
-                    .=p' * e' by Def13
-                    .=p by Th24;
-            hence thesis by A7;
-          end;
-         take e;
-        for p being Element of Group_of_Perm(n)
-                holds ex g being Element of Group_of_Perm(n) st
-                       p * g= e & g * p=e
-              proof
-               let p be Element of Group_of_Perm(n);
-               reconsider q=p as Element of Permutations(n) by Def13;
-               reconsider r=q as Permutation of Seg n by Def11;
-               reconsider f=r" as Element of Permutations(n) by Def11;
-               reconsider g=f as Element of Group_of_Perm(n)
-               by Th26;
-              A8: p * g=(the mult of Group_of_Perm(n)).(q,f) by VECTSP_1:def 10
-                     .=f*q by Def13
-                     .=e by Th25;
-              A9: g * p=(the mult of Group_of_Perm(n)).(f,q) by VECTSP_1:def 10
-                     .=q*f by Def13
-                     .=e by Th25;
-               take g;
-              thus thesis by A8,A9;
-             end;
-         hence thesis by A6;
-         end;
-  hence thesis by A1,GROUP_1:5;
- end;
  end;
 
 

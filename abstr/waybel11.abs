@@ -36,26 +36,7 @@ scheme :: WAYBEL11:sch 1
   = { F(i,v) where i is Element of I(), v is Element of D(): P[v]}
 provided
  for i being Element of I(), u being Element of D()
-    holds F(u) = F(i,u)
-proof
- set A = { F(u) where u is Element of D(): P[u]},
-     B = { F(i,v) where i is Element of I(), v is Element of D(): P[v]};
- thus A c= B
-  proof let e be set;
-    consider i being Element of I();
-   assume e in A;
-    then consider u being Element of D() such that
-A2:   e = F(u) & P[u];
-      e = F(i,u) by A1,A2;
-   hence e in B by A2;
-  end;
- let e be set;
- assume e in B;
-  then consider i being Element of I(), u being Element of D() such that
-A3: e = F(i,u) & P[u];
-    e = F(u) by A1,A3;
- hence e in A by A3;
-end;
+    holds F(u) = F(i,u);
 
 theorem :: WAYBEL11:1
  for L being complete LATTICE,
@@ -73,11 +54,6 @@ theorem :: WAYBEL11:3
 
 registration let T be reflexive non empty RelStr;
  cluster non empty directed finite Subset of T;
- existence
-  proof consider x being Element of T;
-   take {x};
-   thus thesis by WAYBEL_0:5;
-  end;
 end;
 
 
@@ -89,77 +65,26 @@ theorem :: WAYBEL11:4  :: uogolnione WAYBEL_3:16
 registration
  cluster trivial reflexive transitive non empty antisymmetric
   with_suprema with_infima finite strict RelStr;
- existence
-  proof
-      0 in {0} by TARSKI:def 1;
-    then reconsider r = {[0,0]} as Relation of {0} by RELSET_1:8;
-   reconsider T = RelStr(#{0},r#) as non empty RelStr;
-   take T;
-   thus T is trivial;
-   thus T is reflexive
-    proof let x be Element of T;
-        x = 0 by TARSKI:def 1;
-      then [x,x] in {[0,0]} by TARSKI:def 1;
-     hence x <= x by ORDERS_1:def 9;
-    end;
-    then reconsider T' = T as trivial non empty reflexive RelStr;
-      T' is transitive;
-   hence T is transitive;
-   thus T is non empty;
-      T' is antisymmetric;
-   hence T is antisymmetric;
-      T' is with_suprema;
-   hence T is with_suprema;
-      T' is with_infima;
-   hence T is with_infima;
-   thus T is finite by GROUP_1:def 13;
-   thus thesis;
-  end;
 end;
 
 
 registration
  cluster finite non empty strict 1-sorted;
- existence
-  proof
-   take S = 1-sorted(#{{}}#);
-   thus the carrier of S is finite non empty;
-   thus thesis;
-  end;
 end;
 
 
 registration let T be finite 1-sorted;
  cluster -> finite Subset of T;
- coherence
-  proof let S be Subset of T;
-    reconsider C = the carrier of T as finite set by GROUP_1:def 13;
-      S is Subset of C;
-   hence S is finite;
-  end;
 end;
 
 
 registration let R be RelStr;
  cluster {}R -> lower upper;
- coherence
-  proof
-   thus for x,y being Element of R st x in {}R & y <= x holds y in {}R;
-   thus for x,y being Element of R st x in {}R & x <= y holds y in {}R;
-  end;
 end;
 
 
 registration let R be trivial non empty RelStr;
  cluster -> upper Subset of R;
- coherence
-  proof let S be Subset of R;
-    consider x being Element of R such that
-A1:   the carrier of R = {x} by TEX_1:def 1;
-      S = {} or S = the carrier of R by A1,ZFMISC_1:39;
-    then S = {}R or S = [#]R by PRE_TOPC:12;
-   hence S is upper;
-  end;
 end;
 
 
@@ -198,45 +123,18 @@ notation let T be non empty reflexive RelStr, S be Subset of T;
 registration
  let T be non empty reflexive RelStr;
   cluster {}T -> property(S) directly_closed;
- coherence
-  proof
-      for D being non empty directed Subset of T st sup D in {}T
-     ex y being Element of T st y in D &
-      for x being Element of T st x in D & x >= y holds x in {}T;
-   hence {}T is property(S) by Def3;
-   thus for D being non empty directed Subset of T st D c= {}T holds sup D in
- {}
-T
-             by XBOOLE_1:3;
-  end;
 end;
 
 
 registration
  let T be non empty reflexive RelStr;
   cluster property(S) directly_closed Subset of T;
- existence proof take {}T; thus thesis; end;
 end;
 
 
 registration
  let T be non empty reflexive RelStr, S be property(S) Subset of T;
  cluster S` -> directly_closed;
- coherence
-  proof
-   let D be non empty directed Subset of T such that
-A1:  D c= S`;
-   assume not sup D in S`;
-    then sup D in S by YELLOW_6:10;
-    then consider y being Element of T such that
-A2:  y in D and
-A3:  for x being Element of T st x in D & x >= y holds x in S by Def3;
-      y <= y;
-    then y in S by A2,A3;
-    then D /\ S <> {} by A2,XBOOLE_0:def 3;
-    then D meets S by XBOOLE_0:def 7;
-   hence contradiction by A1,PRE_TOPC:21;
-  end;
 end;
 
 
@@ -252,12 +150,6 @@ registration
  let T be reflexive transitive antisymmetric non empty with_suprema
    finite RelStr;
  cluster -> inaccessible Subset of T;
- coherence
-  proof let S be Subset of T, D be non empty directed Subset of T such that
-A1: sup D in S;
-      sup D in D by Th4;
-   hence D meets S by A1,XBOOLE_0:3;
-  end;
 end;
 
 
@@ -272,67 +164,28 @@ end;
 
 registration
  cluster trivial complete strict non empty Scott TopLattice;
- existence
-  proof consider T being
-      trivial reflexive non empty discrete strict finite TopRelStr;
-   take T;
-   thus T is trivial complete strict non empty;
-   let S be Subset of T;
-   thus S is open iff S is upper by TDLAT_3:17;
-  end;
 end;
 
 
 registration let T be non empty reflexive RelStr;
  cluster [#]T -> directly_closed inaccessible;
- coherence
-  proof
-   thus [#]T is directly_closed
-    proof let D be non empty directed Subset of T such that D c= [#]T;
-     thus sup D in [#]T by PRE_TOPC:13;
-    end;
-   let D be non empty directed Subset of T such that sup D in [#]T;
-    consider p being Element of T such that
-A1:   p in D by SUBSET_1:10;
-      p in [#]T by PRE_TOPC:13;
-   hence D meets [#]T by A1,XBOOLE_0:3;
-  end;
 end;
 
 
 registration let T be non empty reflexive RelStr;
  cluster directly_closed lower inaccessible upper Subset of T;
- existence
-  proof take [#]T;
-   thus [#]T is directly_closed lower inaccessible upper;
-  end;
 end;
 
 
 registration
  let T be non empty reflexive RelStr, S be inaccessible Subset of T;
  cluster S` -> directly_closed;
- coherence
-  proof let D be non empty directed Subset of T;
-   assume D c= S`;
-    then D misses S by PRE_TOPC:21;
-    then not sup D in S by Def1;
-   hence sup D in S` by YELLOW_6:10;
-  end;
 end;
 
 
 registration
  let T be non empty reflexive RelStr, S be directly_closed Subset of T;
  cluster S` -> inaccessible;
- coherence
-  proof let D be non empty directed Subset of T;
-   assume sup D in S`;
-    then not sup D in S by YELLOW_6:10;
-    then not D c= S by Def2;
-    then not D c= S``;
-    hence D meets S` by PRE_TOPC:21;
-  end;
 end;
 
 
@@ -383,21 +236,6 @@ theorem :: WAYBEL11:15  :: p. 100, Remark 1.4 (v)
 registration let T be complete TopLattice;
                   :: p. 100, Remark 1.4 (vi)
  cluster lower -> property(S) Subset of T;
- coherence
-  proof let S be Subset of T;
-   assume
-A1: S is lower;
-   let D be non empty directed Subset of T such that
-A2:  sup D in S;
-   consider y being Element of T such that
-A3:  y in D by SUBSET_1:10;
-   take y;
-   thus y in D by A3;
-   let x be Element of T such that
-A4: x in D and x >= y;
-      x <= sup D by A4,YELLOW_2:24;
-   hence x in S by A1,A2,WAYBEL_0:def 19;
-  end;
 end;
 
 theorem :: WAYBEL11:16  :: p. 100, Remark 1.4 (vii)
@@ -484,44 +322,18 @@ theorem :: WAYBEL11:20
 registration let R be non empty RelStr;
  let S be non empty set, f be Function of S, the carrier of R;
  cluster Net-Str(S,f) -> monotone;
- coherence
-  proof set N = Net-Str(S,f);
-      netmap(N,R) is monotone
-     proof let x,y be Element of N;
-A1:   netmap(N,R).x = (the mapping of N).x by WAYBEL_0:def 7
-        .= N.x by WAYBEL_0:def 8;
-A2:   netmap(N,R).y = (the mapping of N).y by WAYBEL_0:def 7
-        .= N.y by WAYBEL_0:def 8;
-      assume x <= y;
-      hence netmap(N,R).x <= netmap(N,R).y by A1,A2,Def10;
-     end;
-   hence thesis by WAYBEL_0:def 9;
-  end;
 end;
 
 
 registration let R be transitive non empty RelStr;
  let S be non empty set, f be Function of S, the carrier of R;
  cluster Net-Str(S,f) -> transitive;
- coherence
-  proof set N = Net-Str(S,f);
-   let x,y,z be Element of N;
-   assume x <= y & y <= z;
-    then N.x <= N.y & N.y <= N.z by Def10;
-    then N.x <= N.z by YELLOW_0:def 2;
-   hence x <= z by Def10;
-  end;
 end;
 
 
 registration let R be reflexive non empty RelStr;
  let S be non empty set, f be Function of S, the carrier of R;
  cluster Net-Str(S,f) -> reflexive;
- coherence
-  proof let x be Element of Net-Str(S,f);
-      Net-Str(S,f).x <= Net-Str(S,f).x;
-   hence thesis by Def10;
-  end;
 end;
 
 
@@ -533,18 +345,6 @@ theorem :: WAYBEL11:21
 
 registration let R be LATTICE;
  cluster monotone reflexive strict net of R;
- existence
-  proof
-    reconsider f = id the carrier of R
-       as Function of the carrier of R, the carrier of R;
-      rng f = the carrier of R by RELAT_1:71
-         .= [#]R by PRE_TOPC:12;
-    then reconsider N = Net-Str(the carrier of R,f) as strict reflexive net of
-R
-                                    by Th20;
-   take N;
-   thus thesis;
-  end;
 end;
 
 
@@ -574,11 +374,6 @@ end;
 
 registration let S be non empty 1-sorted, e be Element of S;
  cluster Net-Str e -> non empty;
- coherence
-  proof set N = Net-Str e;
-      the carrier of N = {e} by Def11;
-   hence the carrier of N is non empty;
-  end;
 end;
 
 
@@ -592,33 +387,6 @@ theorem :: WAYBEL11:26
 
 registration let S be non empty 1-sorted, e be Element of S;
  cluster Net-Str e -> reflexive transitive directed antisymmetric;
- coherence
-  proof set N = Net-Str e;
-A1:  the carrier of N = {e} by Def11;
-      e in {e} by TARSKI:def 1;
-    then reconsider e as Element of N by A1;
-      the InternalRel of N = {[e,e]} by Def11;
-    then A2:  [e,e] in the InternalRel of N by TARSKI:def 1;
-   thus N is reflexive
-    proof let x be Element of N;
-        x = e by Th25;
-     hence x <= x by A2,ORDERS_1:def 9;
-    end;
-   thus N is transitive
-    proof let x,y,z be Element of N such that x <= y & y <= z;
-        x = e & z = e by Th25;
-     hence thesis by A2,ORDERS_1:def 9;
-    end;
-   thus N is directed
-    proof let x,y be Element of N;
-     take e;
-        x = e & y = e by Th25;
-     hence thesis by A2,ORDERS_1:def 9;
-    end;
-   let x,y be Element of N such that x <= y & y <= x;
-      x = e & y = e by Th25;
-   hence thesis;
-  end;
 end;
 
 
@@ -667,89 +435,12 @@ theorem :: WAYBEL11:34
 registration let R be complete LATTICE;
   :: 1.6. Proposition (i)
  cluster Scott-Convergence R -> (CONSTANTS);
- coherence
-  proof
-    let N be constant net of R;
-     assume
-A1:    N in NetUniv R;
-      then consider M being strict net of R such that
-A2:     M = N and the carrier of M in the_universe_of the carrier of R
-          by YELLOW_6:def 14;
-         the_value_of M is_S-limit_of M by A2,Th24;
-     hence [N,the_value_of N] in Scott-Convergence R by A1,A2,Def8;
-  end;
 end;
 
 
 registration let R be complete LATTICE;
   :: 1.6. Proposition (i)
  cluster Scott-Convergence R -> (SUBNETS);
- coherence
-  proof set S = Scott-Convergence R;
-   let N be net of R, Y be subnet of N;
-A1: S c= [:NetUniv R,the carrier of R:] by YELLOW_6:def 21;
-   assume
-A2:  Y in NetUniv R;
-   then consider Y' being strict net of R such that
-A3:  Y' = Y and the carrier of Y' in the_universe_of the carrier of R
-       by YELLOW_6:def 14;
-   let p be Element of R;
-    reconsider p' = p as Element of R;
-   assume
-A4: [N,p] in S;
-   then A5: N in NetUniv R by A1,ZFMISC_1:106;
-   then consider N' being strict net of R such that
-A6:  N' = N and the carrier of N' in the_universe_of the carrier of R
-       by YELLOW_6:def 14;
-    deffunc F(Element of N)
-     = "/\"({N.i where i is Element of N: i >= $1},R);
-    defpred P[set] means not contradiction;
-    reconsider X1 = {F(j) where j is Element of N: P[j]}
-     as Subset of R from COMPLSP1:sch 3;
-    deffunc G(Element of Y)
-     = "/\"({Y.i where i is Element of Y: i >= $1},R);
-    reconsider X2 = {G(j) where j is Element of Y: P[j]}
-             as Subset of R from COMPLSP1:sch 3;
-      p is_S-limit_of N' by A4,A5,A6,Def8;
-    then p <= lim_inf N by A6,Def7;
-    then A7:   p' <= "\/"(X1,R) by Def6;
-    consider f being map of Y, N such that
-A8:  the mapping of Y = (the mapping of N)*f and
-A9:  for m being Element of N ex n being Element of Y st
-      for p being Element of Y st n <= p holds m <= f.p by YELLOW_6:def 12;
-      X1 is_finer_than X2
-     proof let a be Element of R;
-      assume a in X1;
-       then consider j being Element of N such that
-A10:    a = "/\"({N.i where i is Element of N: i >= j},R);
-       reconsider j as Element of N;
-       consider n being Element of Y such that
-A11:     for p being Element of Y st n <= p holds j <= f.p by A9;
-       set X3 = {Y.i where i is Element of Y: i >= n},
-           X4 = {N.i where i is Element of N: i >= j};
-      take b = "/\"(X3,R);
-      thus b in X2;
-         X3 c= X4
-        proof let u be set;
-         assume u in X3;
-          then consider m being Element of Y such that
-A12:        u = Y.m and
-A13:        m >= n;
-          reconsider m as Element of Y;
-A14:        f.m >= j by A11,A13;
-            u = ((the mapping of N)*f).m by A8,A12,WAYBEL_0:def 8
-           .= (the mapping of N).(f.m) by FUNCT_2:21
-           .= N.(f.m) by WAYBEL_0:def 8;
-         hence u in X4 by A14;
-        end;
-      hence a <= b by A10,WAYBEL_7:3;
-     end;
-    then "\/"(X1,R) <= "\/"(X2,R) by Th2;
-    then p' <= "\/"(X2,R) by A7,YELLOW_0:def 2;
-    then p <= lim_inf Y by Def6;
-    then p is_S-limit_of Y' by A3,Def7;
-   hence [Y,p] in S by A2,A3,Def8;
-  end;
 end;
 
 
@@ -777,161 +468,6 @@ theorem :: WAYBEL11:37
 registration let R be continuous complete LATTICE;
   :: 1.6. Proposition (ii)
  cluster Scott-Convergence R -> topological;
- coherence
-  proof set C = Scott-Convergence R;
-   thus C is (CONSTANTS) (SUBNETS);
-   thus C is (DIVERGENCE)
-    proof let X be net of R, p be Element of R such that
-A1:  X in NetUniv R and
-A2:  not [X,p] in C;
-A3:   for x being Element of R holds waybelow x is non empty directed;
-     reconsider p' = p as Element of R;
-     consider N being strict net of R such that
-A4:   N = X and the carrier of N in the_universe_of the carrier of R
-               by A1,YELLOW_6:def 14;
-       not p is_S-limit_of N by A1,A2,A4,Def8;
-     then not p <= lim_inf X by A4,Def7;
-     then consider u being Element of R such that
-A5:   u << p' and
-A6:   not u <= lim_inf X by A3,WAYBEL_3:24;
-      set A = { a where a is Element of R : not a >= u};
-        X is_often_in A
-       proof let i be Element of X;
-         set B = { X.j where j is Element of X: j >= i};
-         set C = {"/\"({X.k where k is Element of X:
-                    k >= j},R) where j is Element of X:
-                   not contradiction};
-A7:       lim_inf X = "\/"(C,R) by Def6;
-           "/\"(B,R) in C;
-         then "/\"(B,R) <= lim_inf X by A7,YELLOW_2:24;
-         then not u <= "/\"(B,R) by A6,YELLOW_0:def 2;
-         then not u is_<=_than B by YELLOW_0:33;
-         then consider b being Element of R such that
-A8:       b in B and
-A9:       not u <= b by LATTICE3:def 8;
-         consider j being Element of X such that
-A10:       b = X.j and
-A11:       j >= i by A8;
-        take j;
-        thus i <= j by A11;
-        thus X.j in A by A9,A10;
-       end;
-      then reconsider Y = X"A as subnet of X by YELLOW_6:31;
-     take Y;
-      reconsider UN = the_universe_of the carrier of R as universal set;
-A12:   ex N being strict net of R st X = N &
-          the carrier of N in UN by A1,YELLOW_6:def 14;
-        X"A is SubRelStr of X by YELLOW_6:def 8;
-      then the carrier of X"A c= the carrier of X by YELLOW_0:def 13;
-      then the carrier of Y in UN by A12,CLASSES1:def 1;
-     hence Y in NetUniv R by YELLOW_6:def 14;
-     let Z be subnet of Y;
-     assume
-A13:   [Z,p] in C;
-        C c= [:NetUniv R,the carrier of R:] by YELLOW_6:def 21;
-      then A14:    Z in NetUniv R by A13,ZFMISC_1:106;
-      then consider ZZ being strict net of R such that
-A15:    ZZ = Z and the carrier of ZZ in UN by YELLOW_6:def 14;
-    deffunc F(Element of Z)
-     = "/\"({Z.i where i is Element of Z: i >= $1},R);
-    defpred P[set] means not contradiction;
-      set D = {F(j) where j is Element of Z: P[j]};
-        D is Subset of R from COMPLSP1:sch 3;
-      then reconsider D as Subset of R;
-      reconsider D as non empty directed Subset of R by Th30;
-A16:   lim_inf Z = sup D by Def6;
-        p is_S-limit_of ZZ by A13,A14,A15,Def8;
-      then p <= lim_inf Z by A15,Def7;
-      then consider d being Element of R such that
-A17:     d in D and
-A18:    u <= d by A5,A16,WAYBEL_3:def 1;
-      consider j being Element of Z such that
-A19:   d = "/\"({Z.k where k is Element of Z: k >= j},R) by A17;
-      reconsider j' = j as Element of Z;
-      consider i being Element of Z such that
-A20:   i >= j' & i >= j' by YELLOW_6:def 5;
-      consider f being map of Z, Y such that
-A21:   the mapping of Z = (the mapping of Y)*f and
-         for m being Element of Y ex n being Element of Z st
-        for p being Element of Z st n <= p holds m <= f.p by YELLOW_6:def 12;
-        Z.i in {Z.k where k is Element of Z: k >= j} by A20;
-      then A22:    d <= Z.i by A19,YELLOW_2:24;
-        Y.(f.i) = (the mapping of Y).(f.i) by WAYBEL_0:def 8
-        .= ((the mapping of Y)*f).i by FUNCT_2:21
-        .= Z.i by A21,WAYBEL_0:def 8;
-      then Z.i in A by Th35;
-      then ex a being Element of R st a = Z.i & not a >= u;
-     hence contradiction by A18,A22,YELLOW_0:def 2;
-    end;
-   thus C is (ITERATED_LIMITS)
-    proof let X be net of R, p be Element of R such that
-A23:  [X,p] in C;
-     let J be net_set of the carrier of X, R such that
-A24:   for i being Element of X holds [J.i,X.i] in C;
-A25:    C c= [:NetUniv R,the carrier of R:] by YELLOW_6:def 21;
-      then A26:  X in NetUniv R by A23,ZFMISC_1:106;
-        for i being Element of X holds J.i in NetUniv R
-       proof let i be Element of X;
-           [J.i,X.i] in C by A24;
-        hence J.i in NetUniv R by A25,ZFMISC_1:106;
-       end;
-then A27:   Iterated J in NetUniv R by A26,YELLOW_6:34;
-      reconsider p' = p as Element of R;
-      set q = lim_inf Iterated J;
-        q is_>=_than waybelow p'
-       proof let u be Element of R;
-        assume u in waybelow p';
-         then A28:          u << p' by WAYBEL_3:7;
-         set T = TopRelStr(#the carrier of R,the InternalRel of R, sigma R#);
-A29:       the RelStr of T = the RelStr of R;
-        the carrier of R = the carrier of ConvergenceSpace C
-               by YELLOW_6:def 27;
-then A30:        the TopStruct of T = the TopStruct of ConvergenceSpace C by
-Def12;
-         then reconsider T as TopLattice by A29,Lm3,Lm9;
-         reconsider T as complete TopLattice by A29,Lm22;
-         reconsider T as continuous complete TopLattice by A29,Lm23;
-           the topology of T = sigma T by A29,Lm21;
-         then reconsider T as continuous complete Scott TopLattice
-                             by Th37;
-         :: we now move all to T setting
-         reconsider XX = X as net of T;
-         reconsider JJ = J as net_set of the carrier of XX,T by A29,Lm18;
-         reconsider uu = u, qq = q, pp = p' as Element of T
-           ;
-         set N = Iterated JJ;
-         set CC = Convergence T;
-           CC = Convergence ConvergenceSpace C by A30,Lm8;
-then A31:       C c= CC by YELLOW_6:49;
-A32:      uu << pp by A28,A29,Lm15;
-           N = Iterated J by A29,Lm17;
-then A33:     qq = lim_inf N by A29,Lm16;
-           for i being Element of XX holds [JJ.i,XX.i] in CC
-          proof let i be Element of XX;
-            reconsider ii = i as Element of X;
-A34:          X.ii = (the mapping of X).ii by WAYBEL_0:def 8
-              .= (the mapping of XX).i
-              .= XX.i by WAYBEL_0:def 8;
-              [J.ii,X.ii] in C by A24;
-           hence [JJ.i,XX.i] in CC by A31,A34;
-          end;
-         then [N,pp] in CC by A23,A31,YELLOW_6:def 26;
-then A35:      pp in Lim N by YELLOW_6:def 22;
-A36:      wayabove uu is open by Th36;
-           pp in wayabove uu by A32,WAYBEL_3:8;
-         then wayabove uu is a_neighborhood of pp by A36,CONNSP_2:5;
-         then A37:       N is_eventually_in wayabove uu by A35,YELLOW_6:def 18;
-           wayabove uu c= uparrow uu by WAYBEL_3:11;
-         then N is_eventually_in uparrow uu by A37,WAYBEL_0:8;
-         then uu <= qq by A33,Th18;
-        hence u <= q by A29,Lm1;
-       end;
-      then sup waybelow p' <= q by YELLOW_0:32;
-      then p <= q by WAYBEL_3:def 5;
-      then p is_S-limit_of Iterated J by Def7;
-     hence [Iterated J,p] in C by A27,Def8;
-    end;
-  end;
 end;
 
 
