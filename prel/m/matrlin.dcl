@@ -27,7 +27,6 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRLIN"/>
 </Signature>
@@ -39,7 +38,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="60"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -76,7 +75,7 @@
 <Adjective nr="55">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="61">
+<Adjective nr="60">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -90,7 +89,7 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="58"/>
+<Adjective nr="57"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -99,8 +98,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="58"/>
-<Adjective nr="60"/>
+<Adjective nr="57"/>
+<Adjective nr="59"/>
 </Cluster>
 </CCluster>
 </Registrations>

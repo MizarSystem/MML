@@ -43,7 +43,7 @@ definition
   holds o1 = o2 from BINOP_2:sch 2;
  end;
 
- func lcmlat-> BinOp of NAT means
+ func lcmlat -> BinOp of NAT means
  :Def4: it.(m,n)=m lcm n;
  existence proof
    deffunc O(Nat,Nat)= $1 lcm $2;
@@ -80,8 +80,8 @@ Lm1:
        holds a"\/"b = b"\/"a
  proof
   let a,b be Element of LattStr (# NAT, lcmlat, hcflat #);
-  thus a"\/"b = @a lcm @b by Th48
-           .= b"\/"a by Th48;
+  thus a"\/"b = @a lcm @b by Def4
+           .= b"\/"a by Def4;
  end;
 
 Lm2:
@@ -114,11 +114,11 @@ Lm4:
   let a,b,c be Element of LattStr (# NAT, lcmlat, hcflat #);
   set l=b"\/"c;
   set k=a"\/"b;
-  A1:(@b lcm @c)=l & @l=l by Th48;
-  A2:@a lcm @b=k & @k=k by Th48;
-  thus a"\/"(b"\/"c) = @a lcm (@b lcm @c) by A1,Th48
+  A1:(@b lcm @c)=l & @l=l by Def4;
+  A2:@a lcm @b=k & @k=k by Def4;
+  thus a"\/"(b"\/"c) = @a lcm (@b lcm @c) by A1,Def4
                 .= @k lcm @c by A2,NEWTON:56
-                .= (a"\/"b)"\/"c by Th48;
+                .= (a"\/"b)"\/"c by Def4;
  end;
 
 Lm5:
@@ -207,10 +207,12 @@ end;
 
  reserve p,q,r for Element of Nat_Lattice;
 
-canceled 3;
+canceled 4;
 
-theorem
-  Nat_Lattice is 0_Lattice by Th56,LATTICES:def 13;
+registration
+  cluster Nat_Lattice -> lower-bounded;
+  coherence by Th56,LATTICES:def 13;
+end;
 
 theorem Th61:
   lcmlat.(p,q)=lcmlat.(q,p)
@@ -230,10 +232,8 @@ theorem Th63:
   lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(p,q),r)
 proof
  set s=q"\/"r;
- thus lcmlat.(p,lcmlat.(q,r))=lcmlat.(p,s)
-                       .=p"\/"s
+ thus lcmlat.(p,lcmlat.(q,r))=p"\/"s
                        .=(p"\/"q)"\/"r by Lm4
-                       .=lcmlat.((p"\/"q),r)
                        .=lcmlat.(lcmlat.(p,q),r);
 end;
 
@@ -249,8 +249,7 @@ thus lcmlat.(p,lcmlat.(q,r)) =lcmlat.(lcmlat.(p,q),r) by Th63
 thus A1:lcmlat.(p,lcmlat.(q,r)) = lcmlat.(p,lcmlat.(r,q)) by Th61
                        .=lcmlat.(lcmlat.(p,r),q) by Th63;
 thus lcmlat.(p,lcmlat.(q,r)) = lcmlat.(p,s) by LATTICES:def 1
-                       .=lcmlat.(s,p) by Th61
-                       .=lcmlat.(lcmlat.(r,q),p);
+                       .=lcmlat.(lcmlat.(r,q),p) by Th61;
 thus lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(r,p),q) by A1,Th61;
 end;
 
@@ -258,10 +257,8 @@ theorem Th65:
   hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(p,q),r)
 proof
  set s=q"/\"r;
- thus hcflat.(p,hcflat.(q,r))=hcflat.(p,s)
-                       .=p"/\"s
+ thus hcflat.(p,hcflat.(q,r))=p"/\"s
                        .=(p"/\"q)"/\"r by Lm3
-                       .=hcflat.((p"/\"q),r)
                        .=hcflat.(hcflat.(p,q),r);
 end;
 
@@ -277,8 +274,7 @@ thus hcflat.(p,hcflat.(q,r)) =hcflat.(hcflat.(p,q),r) by Th65
 thus A1:hcflat.(p,hcflat.(q,r)) = hcflat.(p,hcflat.(r,q)) by Th62
                        .=hcflat.(hcflat.(p,r),q) by Th65;
 thus hcflat.(p,hcflat.(q,r)) = hcflat.(p,s) by LATTICES:def 2
-                       .=hcflat.(s,p) by Th62
-                       .=hcflat.(hcflat.(r,q),p);
+                       .=hcflat.(hcflat.(r,q),p) by Th62;
 thus hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(r,p),q) by A1,Th62;
 end;
 
@@ -287,8 +283,7 @@ theorem
   hcflat.(q,lcmlat.(p,q))=q & hcflat.(lcmlat.(q,p),q)=q
  proof
  set s=q"\/"p;
- thus A1:hcflat.(q,lcmlat.(q,p))=hcflat.(q,s)
-                              .=q"/\"s
+ thus A1:hcflat.(q,lcmlat.(q,p))=q"/\"s
                               .=q by Lm6;
  thus A2:hcflat.(lcmlat.(p,q),q)=hcflat.(p"\/"q,q)
                               .=q"/\"(q"\/"p) by LATTICES:def 2
@@ -305,8 +300,7 @@ theorem
  thus A1:lcmlat.(q,hcflat.(q,p))=lcmlat.(q,q"/\"p)
                               .=(p"/\"q)"\/"q by LATTICES:def 1
                               .=q by Lm5;
- thus A2:lcmlat.(hcflat.(p,q),q)=lcmlat.(r,q)
-                              .=r"\/"q
+ thus A2:lcmlat.(hcflat.(p,q),q)=r"\/"q
                               .=q by Lm5;
  thus lcmlat.(q,hcflat.(p,q))=q by A1,Th62;
  thus lcmlat.(hcflat.(q,p),q)=q by A2,Th62;
@@ -447,13 +441,24 @@ definition
   end;
 end;
 
- reserve p,q,r for Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+definition
+  func NatPlus_Lattice -> strict LattStr equals
+   LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+  coherence;
+end;
 
-definition let m be Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+registration
+  cluster NatPlus_Lattice -> non empty;
+  coherence;
+end;
+
+definition let m be Element of NatPlus_Lattice;
   func @m -> NatPlus equals
     m;
   coherence;
 end;
+
+ reserve p,q,r for Element of NatPlus_Lattice;
 
 theorem
 Th69: p"\/"q =@p lcm @q by Def13;
@@ -462,19 +467,18 @@ theorem
 Th70: p"/\"q = @p hcf @q by Def12;
 
 Lm7:
- for a,b being Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #)
-       holds a"\/"b = b"\/"a
+ for a,b being Element of NatPlus_Lattice holds a"\/"b = b"\/"a
 proof
-  let a,b be Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+  let a,b be Element of NatPlus_Lattice;
   thus a"\/"b = @a lcm @b by Th69
            .= b"\/"a by Th69;
 end;
 
 Lm8:
- for a,b,c being Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #)
+ for a,b,c being Element of NatPlus_Lattice
       holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
  proof
-  let a,b,c be Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+  let a,b,c be Element of NatPlus_Lattice;
   set l=b"\/"c;
   set k=a"\/"b;
   A1:(@b lcm @c)=l & @l=l by Th69;
@@ -485,71 +489,52 @@ Lm8:
  end;
 
 Lm9:
- for a,b being Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #)
-      holds (a"/\"b)"\/"b = b
+ for a,b being Element of NatPlus_Lattice holds (a"/\"b)"\/"b = b
  proof
- let a,b be Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+ let a,b be Element of NatPlus_Lattice;
   set k=a"/\"b;
-      @a hcf @b=k & @k=k by Th70;
+  @a hcf @b=k & @k=k by Th70;
  hence (a"/\"b)"\/"b = (@a hcf @b) lcm @b by Th69
                .= b by NEWTON:66;
 end;
 
 Lm10:
- for a,b being Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #)
-      holds a"/\"b = b"/\"a
+ for a,b being Element of NatPlus_Lattice holds a"/\"b = b"/\"a
  proof
-  let a,b be Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+  let a,b be Element of NatPlus_Lattice;
   thus a"/\"b = @a hcf @b by Th70
            .= b"/\"a by Th70;
  end;
 
 Lm11:
- for a,b,c being Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #)
+ for a,b,c being Element of NatPlus_Lattice
       holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
  proof
-  let a,b,c be Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+  let a,b,c be Element of NatPlus_Lattice;
   set l=b"/\"c;
   set k=a"/\"b;
-  A1:(@b hcf @c)=l & @l=l by Th70;
-  A2:@a hcf @b=k & @k=k by Th70;
-  thus a"/\"(b"/\"c) = @a hcf (@b hcf @c) by A1,Th70
+A2:@a hcf @b=k & @k=k by Th70;
+A1:(@b hcf @c)=l & @l=l by Th70;
+  hence a"/\"(b"/\"c) = @a hcf (@b hcf @c) by Th70
                 .= @k hcf @c by A2,NEWTON:61
                 .= (a"/\"b)"/\"c by Th70;
  end;
 
 Lm12:
- for a,b being Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #)
-      holds a"/\"(a"\/"b) = a
+ for a,b being Element of NatPlus_Lattice holds a"/\"(a"\/"b) = a
  proof
-  let a,b be Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+  let a,b be Element of NatPlus_Lattice;
   set l=a"\/"b;
   @a lcm @b=l & @l=l by Th69;
   hence a"/\"(a"\/"b) = @a hcf (@a lcm @b) by Th70
                 .= a by NEWTON:67;
  end;
 
-definition
-  func NatPlus_Lattice -> Lattice equals
-   LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
-  coherence
-  proof
-     LattStr (# NATPLUS, lcmlatplus, hcflatplus #) is Lattice-like
-     proof
-      thus (for p,q holds p"\/"q = q"\/"p) &
-      (for p,q,r holds p"\/"(q"\/"r) = (p"\/"q)"\/"r) &
-      (for p,q holds (p"/\"q)"\/"q = q) &
-      (for p,q holds p"/\"q = q"/\"p) &
-      (for p,q,r holds p"/\"(q"/\"r) = (p"/\"q)"/\"r) &
-      (for p,q holds p"/\"(p"\/"q) = p) by Lm7,Lm8,Lm9,Lm10,Lm11,Lm12;
-     end;
-   hence thesis;
-  end;
-end;
-
 registration
-  cluster NatPlus_Lattice -> strict;
-  coherence;
+  cluster NatPlus_Lattice -> join-commutative join-associative
+    meet-commutative meet-associative join-absorbing meet-absorbing;
+  coherence by Lm7,Lm8,Lm9,Lm10,Lm11,Lm12,
+    LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
 end;
 
 Lm13: now let L be Lattice;
@@ -584,7 +569,7 @@ A1:  for a,b be Element of S,
          a',b' be Element of L st a = a' & b = b'
       holds a"\/"b = a'"\/"b' & a"/\"b = a'"/\"b';
 A2:  now let a,b be Element of S;
-       reconsider a' = a, b' = b as Element of L;
+      reconsider a' = a, b' = b as Element of L;
       thus a"\/"b = b'"\/"a' by A1
         .= b"\/"a;
      end;
@@ -665,8 +650,8 @@ A4:  dom lcmlat = [:NAT,NAT:] by FUNCT_2:def 1;
   proof
    A8: dom hcflatplus = dom hcflat /\ [:NATPLUS,NATPLUS:]
     proof
-     A9: dom hcflatplus = [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
-     A10: dom hcflat = [:NAT,NAT:] by FUNCT_2:def 1;
+A9:  dom hcflatplus = [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
+A10: dom hcflat = [:NAT,NAT:] by FUNCT_2:def 1;
      [:NATPLUS,NATPLUS:] c= [:NAT,NAT:] by ZFMISC_1:119;
      hence thesis by A9,A10,XBOOLE_1:28;
     end;

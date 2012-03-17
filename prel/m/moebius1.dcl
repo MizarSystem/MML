@@ -300,17 +300,14 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
+<Adjective nr="19"/>
 <Adjective nr="53" value="false"/>
 </Cluster>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="1">
 <Cluster/>
-<Func kind="K" nr="90"/>
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="13"/>
-<Adjective nr="14"/>
-<Adjective nr="15"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="37"/>

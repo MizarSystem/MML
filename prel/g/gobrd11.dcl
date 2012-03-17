@@ -65,7 +65,7 @@
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="226">
+<Func kind="K" nr="227">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

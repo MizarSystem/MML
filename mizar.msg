@@ -366,7 +366,7 @@ Only one "per cases" is allowed in a reasoning
 # 231
 "per cases" missing
 # 232
-"case" expected
+"case" or "suppose" expected
 # 240
 Definition blocks must not be nested
 # 241
@@ -387,6 +387,8 @@ Redefined mode cannot be expandable
 It's meaningless to redefine cluster
 # 274
 "means" not allowed in a definition of an expandable mode
+# 278
+Identifier expected
 # 300
 Identifier expected
 # 301

@@ -75,7 +75,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="230"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="24" value="false"/>
@@ -111,7 +111,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="242">
+<Func kind="K" nr="243">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -162,7 +162,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="232">
+<Func kind="K" nr="233">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

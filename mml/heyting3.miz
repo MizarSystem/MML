@@ -9,9 +9,10 @@ environ
  vocabularies ORDERS_1, FUNCT_1, MATRIX_2, FINSET_1, SQUARE_1, FINSEQ_1, BOOLE,
       FUNCT_5, MCART_1, LATTICES, LATTICE3, RELAT_2, FINSUB_1, PARTFUN1,
       HEYTING1, TARSKI, RELAT_1, SUBSTLAT, NORMFORM, BINOP_1, CAT_1, YELLOW_0,
-      WELLORD1, HEYTING2, BHSP_3, HEYTING3, REALSET1;
+      WELLORD1, HEYTING2, BHSP_3, HEYTING3, REALSET1, ORDINAL2, ARYTM, INT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1,
-      FUNCT_1, ORDERS_2, NAT_1, FINSEQ_1, BINOP_1, FINSET_1, FINSUB_1,
+      ORDINAL1, FUNCT_1, ORDERS_2, NAT_1, INT_1,
+      FINSEQ_1, BINOP_1, FINSET_1, FINSUB_1,
       PARTFUN1, LATTICES, DOMAIN_1, REALSET1, STRUCT_0, SUBSTLAT, MCART_1,
       FUNCT_5, WELLORD1, YELLOW_0, ABIAN, PRE_CIRC, LATTICE3, HEYTING2,
       XXREAL_0;
@@ -19,7 +20,8 @@ environ
       TOLER_1, PRE_CIRC, ABIAN, LATTICE3, YELLOW_0, HEYTING2;
  registrations RELSET_1, LATTICES, FINSET_1, SUBSET_1, FINSUB_1, SUBSTLAT,
       PARTFUN1, STRUCT_0, LATTICE3, ABIAN, NAT_1, YELLOW_1, YELLOW_3, FINSEQ_1,
-      YELLOW_0, XREAL_0, MEMBERED, PRE_CIRC, ORDINAL1, REALSET1, XXREAL_0;
+      YELLOW_0, XREAL_0, MEMBERED, PRE_CIRC, ORDINAL1, REALSET1, XXREAL_0,
+      INT_1;
  requirements SUBSET, BOOLE, NUMERALS, REAL, ARITHM;
  definitions TARSKI, LATTICE3, FUNCT_1, XBOOLE_0, BINOP_1, REALSET1, WELLORD1;
  theorems HEYTING2, ZFMISC_1, PARTFUN1, YELLOW_0, LATTICE3, TARSKI, CQC_THE1,
@@ -30,6 +32,23 @@ environ
  schemes LMOD_7, XBOOLE_0;
 
 begin :: Preliminaries
+
+registration
+  cluster odd natural number;
+  existence
+  proof
+    take 1;
+    1 = 2*0+1;
+    hence thesis by ABIAN:1;
+  end;
+  cluster even natural number;
+  existence
+  proof
+    take 0;
+    0 = 2*0;
+    hence thesis by ABIAN:def 1;
+  end;
+end;
 
 scheme SSubsetUniq { R() -> RelStr, P[set] } :
   for A1, A2 being Subset of R() st
@@ -57,7 +76,7 @@ Lm1:
   proof
     let A, x be set;
     set X = [:A, {x}:];
-        X is Function-like
+    X is Function-like
     proof
       let y,y1,y2 be set;
       assume [y,y1] in X & [y,y2] in X;
@@ -78,10 +97,10 @@ then Lm3: 0 is even & 2 is even by ABIAN:def 2;
 then Lm4: 1 is odd by Lm2,ABIAN:9;
 
 theorem Th1:
-  for n being odd Nat holds 1 <= n
+  for n being odd natural number holds 1 <= n
   proof
-    let n be odd Nat;
-        0 < n by Lm3,NAT_1:19;
+    let n be odd natural number;
+    0 < n by Lm3,NAT_1:19;
     then 0 + 1 <= n by NAT_1:38;
     hence thesis;
   end;
@@ -112,7 +131,7 @@ A3: n <= m by A1,PRE_CIRC:def 1;
   end;
 
 theorem
-      for X being finite Subset of NAT holds
+  for X being finite Subset of NAT holds
     ex k being odd Nat st not k in X
   proof
     let X be finite Subset of NAT;
@@ -120,17 +139,17 @@ theorem
     suppose A1: X is non empty;
     assume A2: for k being odd Nat holds k in X;
     consider n being Nat such that
-A3:   X c= Seg n \/ {0} by A1,Th3;
+A3: X c= Seg n \/ {0} by A1,Th3;
 A4: not 2*n+1 in X
     proof
       assume A5: 2*n+1 in X;
-          not 2*n+1 in {0} by TARSKI:def 1;
+      not 2*n+1 in {0} by TARSKI:def 1;
       then 2*n+1 in Seg n by A3,A5,XBOOLE_0:def 2;
 then A6:   2*n+1 <= n by FINSEQ_1:3;
-          1*n <= 2*n by NAT_1:20;
+      1*n <= 2*n by NAT_1:20;
       hence thesis by A6,NAT_1:38;
     end;
-        2*n+1 is odd by ABIAN:9;
+    2*n+1 is odd by ABIAN:9;
     hence contradiction by A2,A4;
     end;
     suppose X is empty;
@@ -158,7 +177,7 @@ A3: x1 = x`1 by A2,MCART_1:7;
     reconsider n = x`1 as Nat by A2,MCART_1:7;
 A4: Seg m c= Seg m \/ {0} & {0} c= Seg m \/ {0} by XBOOLE_1:7;
 A5:  max pX <= m by NAT_1:29;
-        n in pX by A1,A2,A3,FUNCT_5:def 1;
+    n in pX by A1,A2,A3,FUNCT_5:def 1;
     then n <= max pX by PRE_CIRC:def 1;
 then A6: n <= m by A5,XXREAL_0:2;
     per cases by CQC_THE1:2;
@@ -182,11 +201,11 @@ theorem Th6:
     assume A1: for k being non empty Nat holds [2*k+1,m] in X;
     consider n being non empty Nat such that
 A2:   X c= [:Seg n \/ {0},{m}:] by Th5;
-        not [2*n+1,m] in X
+    not [2*n+1,m] in X
     proof
       assume [2*n+1,m] in X;
 then A3:   2*n+1 in Seg n \/ {0} by A2,ZFMISC_1:106;
-          not 2*n+1 in {0} by TARSKI:def 1;
+      not 2*n+1 in {0} by TARSKI:def 1;
       then 2*n+1 in Seg n by A3,XBOOLE_0:def 2;
 then A4:   2*n+1 <= n by FINSEQ_1:3;
           1*n <= 2*n by NAT_1:20;
@@ -196,7 +215,7 @@ then A4:   2*n+1 <= n by FINSEQ_1:3;
   end;
 
 theorem
-      for m being Nat,
+  for m being Nat,
       X being finite Subset of [:NAT,{m}:]
    ex k being Nat st
   for l being Nat st l >= k holds not [l,m] in X
@@ -213,7 +232,7 @@ A1:   X' c= [:Seg n \/ {0},{m}:] by Th5;
     assume A2: l >= k;
     assume [l,m] in X;
 then A3: l in Seg n \/ {0} by A1,ZFMISC_1:106;
-        now per cases by A3,XBOOLE_0:def 2;
+    now per cases by A3,XBOOLE_0:def 2;
       suppose l in Seg n;
       then l <= n by FINSEQ_1:3;
       hence contradiction by A2,NAT_1:38;
@@ -233,12 +252,12 @@ then A3: l in Seg n \/ {0} by A1,ZFMISC_1:106;
   end;
 
 theorem
-      for L being upper-bounded Lattice holds Top L = Top LattPOSet L
+  for L being upper-bounded Lattice holds Top L = Top LattPOSet L
   proof
     let L be upper-bounded Lattice;
     set x = %Top LattPOSet L;
-        now let a be Element of L;
-          a% <= Top LattPOSet L by YELLOW_0:45;
+    now let a be Element of L;
+      a% <= Top LattPOSet L by YELLOW_0:45;
       then a% <= x%;
       then a [= x by LATTICE3:7;
       hence x"\/"a = x & a"\/"x = x by LATTICES:def 3;
@@ -247,12 +266,12 @@ theorem
   end;
 
 theorem
-      for L being lower-bounded Lattice holds Bottom L = Bottom LattPOSet L
+  for L being lower-bounded Lattice holds Bottom L = Bottom LattPOSet L
   proof
     let L be lower-bounded Lattice;
     set x = %Bottom LattPOSet L;
-        now let a be Element of L;
-          a% >= Bottom LattPOSet L by YELLOW_0:44;
+    now let a be Element of L;
+      a% >= Bottom LattPOSet L by YELLOW_0:44;
       then a% >= x%;
       then x [= a by LATTICE3:7;
       hence x"/\"a = x & a"/\"x = x by LATTICES:21;
@@ -265,7 +284,7 @@ begin :: Poset of Substitutions
 canceled;
 
 theorem
-      for V being set, C being finite set,
+  for V being set, C being finite set,
       A, B being Element of Fin PFuncs (V, C) st A = {} & B <> {} holds
     B =>> A = {}
 proof
@@ -276,7 +295,7 @@ proof
   then consider k being set such that
 A2: k in B =>> A by XBOOLE_0:def 1;
   consider f being PartFunc of B, A such that
-A3:  k = union {f.i \ i where i is Element of PFuncs (V, C) : i in B}
+A3: k = union {f.i \ i where i is Element of PFuncs (V, C) : i in B}
        & dom f = B by A2,HEYTING2:20;
   thus thesis by A1,A3,PARTFUN1:62;
 end;
@@ -311,14 +330,14 @@ A4: B c= PFuncs (V,C) by FINSUB_1:def 5;
 end;
 
 theorem Th13:
- for V, V', C, C' being set,
-     A being Element of Fin PFuncs (V, C),
-     B being Element of Fin PFuncs (V', C') st V c= V' & C c= C' & A = B
+  for V, V', C, C' being set,
+      A being Element of Fin PFuncs (V, C),
+      B being Element of Fin PFuncs (V', C') st V c= V' & C c= C' & A = B
     holds mi A = mi B
 proof
   let V, V', C, C' be set,
-     A be Element of Fin PFuncs (V, C),
-     B be Element of Fin PFuncs (V', C');
+      A be Element of Fin PFuncs (V, C),
+      B be Element of Fin PFuncs (V', C');
   assume A1: V c= V' & C c= C' & A = B;
   hereby let x be set;
     assume A2: x in mi A;
@@ -356,7 +375,7 @@ A7:  mi B c= B by SUBSTLAT:8;
 end;
 
 theorem
-     for V, V', C, C' being set st V c= V' & C c= C' holds
+  for V, V', C, C' being set st V c= V' & C c= C' holds
   the L_join of SubstLatt (V, C) =
    (the L_join of SubstLatt (V', C'))||the carrier of SubstLatt (V, C)
   proof
@@ -369,19 +388,19 @@ then A4:  SubstitutionSet (V, C) c= SubstitutionSet (V', C') by Th12;
 A5: the carrier of K c= the carrier of L by A1,A2,A3,Th12;
     reconsider B1 = the L_join of K as BinOp of the carrier of K;
     set B2 = (the L_join of L)||the carrier of K;
-        dom (the L_join of L) = [:the carrier of L, the carrier of L:]
+    dom (the L_join of L) = [:the carrier of L, the carrier of L:]
       by FUNCT_2:def 1;
     then [:the carrier of K, the carrier of K:] c= dom (the L_join of L)
       by A5,ZFMISC_1:119;
 then A6: dom B2 = [:the carrier of K, the carrier of K:] by RELAT_1:91;
-        rng B2 c= the carrier of K
+    rng B2 c= the carrier of K
     proof
       let x be set;
       assume x in rng B2;
       then consider y being set such that
-A7:     y in dom B2 & x = B2.y by FUNCT_1:def 5;
+A7:   y in dom B2 & x = B2.y by FUNCT_1:def 5;
       consider y1, y2 being set such that
-A8:     y1 in the carrier of K & y2 in the carrier of K & y = [y1, y2]
+A8:   y1 in the carrier of K & y2 in the carrier of K & y = [y1, y2]
           by A6,A7,ZFMISC_1:def 2;
       y1 in SubstitutionSet (V, C) & y2 in SubstitutionSet (V, C)
         by A8,SUBSTLAT:def 4;
@@ -389,7 +408,7 @@ A8:     y1 in the carrier of K & y2 in the carrier of K & y = [y1, y2]
         by A4;
       reconsider y11 = y1, y22 = y2 as Element of SubstitutionSet (V, C)
         by A8,SUBSTLAT:def 4;
-          B2.y = (the L_join of L). [y1, y2] by A6,A7,A8,FUNCT_1:72
+      B2.y = (the L_join of L). [y1, y2] by A6,A7,A8,FUNCT_1:72
           .= (the L_join of L). (y1, y2)
           .= mi (y1' \/ y2') by SUBSTLAT:def 4
           .= mi (y11 \/ y22) by A3,Th13;
@@ -461,7 +480,7 @@ A1:  a'% = a & b'% = b;
   end;
 
 theorem
-     for V, V', C, C' being set st V c= V' & C c= C' holds
+  for V, V', C, C' being set st V c= V' & C c= C' holds
   SubstPoset (V, C) is full SubRelStr of SubstPoset (V', C')
   proof
     let V, V', C, C' be set;
@@ -535,7 +554,7 @@ A2: X c= [:NAT,{k}:]
       hence thesis by A1;
     end;
     then reconsider X' = X as Function by GRFUNC_1:6;
-        dom X' c= NAT & rng X' c= {k} by A2,SYSREL:15;
+    dom X' c= NAT & rng X' c= {k} by A2,SYSREL:15;
     then reconsider X as Element of PFuncs (NAT, {k}) by PARTFUN1:def 5;
     take X;
     let x be set;
@@ -546,8 +565,8 @@ A2: X c= [:NAT,{k}:]
     per cases by A3;
     suppose ex m being odd Nat st m <= 2*n & [m,k] = x;
     then consider m being odd Nat such that
-A4:    m <= 2*n & [m,k] = x;
-        x in [:NAT,{k}:] by A4,ZFMISC_1:129;
+A4: m <= 2*n & [m,k] = x;
+    x in [:NAT,{k}:] by A4,ZFMISC_1:129;
     hence thesis by A1,A3;
     end;
     suppose A5: [2*n,k] = x;
@@ -574,20 +593,20 @@ registration let n, k be Nat;
   cluster PFArt (n, k) -> finite;
   coherence
   proof
-        PFArt (n, k) c= [:Seg (2*n) \/ {0}, {k}:]
+    PFArt (n, k) c= [:Seg (2*n) \/ {0}, {k}:]
     proof
       let t be set; assume A1: t in PFArt (n, k);
       per cases by A1,Def2;
       suppose ex m1 being odd Nat st m1 <= 2*n & [m1,k] = t;
       then consider m1 being odd Nat such that
-A2:     m1 <= 2*n & [m1,k] = t;
+A2:   m1 <= 2*n & [m1,k] = t;
       1 <= m1 by Th1;
       then m1 in Seg (2*n) by A2,FINSEQ_1:3;
       then m1 in Seg (2*n) \/ {0} by XBOOLE_0:def 2;
       hence thesis by A2,ZFMISC_1:129;
       end;
       suppose A3: [2*n,k] = t;
-          now per cases;
+      now per cases;
       suppose n is non empty;
 then A4:    1 <= n by NAT_1:39;
       n <= 2*n by REAL_2:146;
@@ -625,14 +644,14 @@ A2: X c= [:NAT,{k}:]
       hence thesis by A1;
     end;
     then reconsider X' = X as Function by GRFUNC_1:6;
-        dom X' c= NAT & rng X' c= {k} by A2,SYSREL:15;
+    dom X' c= NAT & rng X' c= {k} by A2,SYSREL:15;
     then reconsider X as Element of PFuncs (NAT, {k}) by PARTFUN1:def 5;
     take X;
     let x be set;
     thus x in X implies ex m being odd Nat st m <= 2*n + 1 & [m,k] = x by A1;
     given m being odd Nat such that
 A3:    m <= 2*n + 1 & [m,k] = x;
-        x in [:NAT,{k}:] by A3,ZFMISC_1:129;
+    x in [:NAT,{k}:] by A3,ZFMISC_1:129;
     hence thesis by A1,A3;
   end;
   uniqueness
@@ -655,12 +674,12 @@ registration let n,k be Nat;
   coherence
   proof
     set x = PFCrt (n,k);
-        x c= [:Seg (2*n+1), {k}:]
+    x c= [:Seg (2*n+1), {k}:]
     proof
       let t be set; assume t in x;
       then consider m being odd Nat such that
-A1:     m <= 2*n + 1 & [m,k] = t by Def3;
-          1 <= m by Th1;
+A1:   m <= 2*n + 1 & [m,k] = t by Def3;
+      1 <= m by Th1;
       then m in Seg (2*n+1) by A1,FINSEQ_1:3;
       hence thesis by A1,ZFMISC_1:129;
     end;
@@ -672,7 +691,7 @@ theorem Th17:
   for n, k being Nat holds [2*n+1,k] in PFCrt (n,k)
   proof
     let n, k be Nat;
-        2*n+1 is odd by ABIAN:9;
+    2*n+1 is odd by ABIAN:9;
     hence thesis by Def3;
   end;
 
@@ -686,7 +705,7 @@ A1:   x in PFCrt (n,k) /\ {[2*n+3,k]} by XBOOLE_0:def 1;
 A2: x in PFCrt (n,k) & x in {[2*n+3,k]} by A1,XBOOLE_0:def 3;
     then consider m being odd Nat such that
 A3:   m <= 2*n + 1 & [m,k] = x by Def3;
-        x = [2*n+3,k] by A2,TARSKI:def 1;
+    x = [2*n+3,k] by A2,TARSKI:def 1;
     then m = 2*n+3 by A3,ZFMISC_1:33;
     hence thesis by A3,XREAL_1:8;
   end;
@@ -694,7 +713,7 @@ A3:   m <= 2*n + 1 & [m,k] = x by Def3;
 Lm6:for n being Nat holds 2*n + 1 <= 2*(n+1) + 1
 proof
   let n be Nat;
-      2*(n+1) + 1 = 2*n + 1 + 2;
+  2*(n+1) + 1 = 2*n + 1 + 2;
   hence thesis by NAT_1:29;
 end;
 
@@ -707,7 +726,7 @@ A1: 2*(n+1)+1 = 2*n+3;
     proof
       let x be set; assume x in PFCrt (n+1,k);
       then consider m being odd Nat such that
-A2:     m <= 2*(n+1) + 1 & [m,k] = x by Def3;
+A2:   m <= 2*(n+1) + 1 & [m,k] = x by Def3;
       per cases by A2,NAT_1:27;
       suppose m <= 2*(n+1);
       then m <= 2*n + 1 or m = 2*n + 1 + 1 by NAT_1:26;
@@ -725,7 +744,7 @@ A2:     m <= 2*(n+1) + 1 & [m,k] = x by Def3;
       suppose x in PFCrt (n,k);
       then consider m being odd Nat such that
 A4:     m <= 2*n + 1 & [m,k] = x by Def3;
-          2*n+1 <= 2*(n+1)+1 by Lm6;
+      2*n+1 <= 2*(n+1)+1 by Lm6;
       then m <= 2*(n+1) + 1 by A4,XXREAL_0:2;
       hence thesis by A4,Def3;
       end;
@@ -740,7 +759,7 @@ Lm7:
   proof
     let n, n' be Nat;
     set k = [2*n+3,n'];
-        PFCrt (n+1,n') = PFCrt (n,n') \/ {[2*n+3,n']} by Th19;
+    PFCrt (n+1,n') = PFCrt (n,n') \/ {[2*n+3,n']} by Th19;
     then {k} c= PFCrt (n+1,n') by XBOOLE_1:7;
 then A1: k in PFCrt (n+1,n') by ZFMISC_1:37;
         PFCrt (n,n') misses {[2*n+3,n']} by Th18;
@@ -757,8 +776,8 @@ theorem Th20:
       let x be set;
       assume x in PFCrt (n,k);
       then consider m being odd Nat such that
-A1:     m <= 2*n + 1 & [m,k] = x by Def3;
-          2*n + 1 <= 2*(n+1) + 1 by Lm6;
+A1:   m <= 2*n + 1 & [m,k] = x by Def3;
+      2*n + 1 <= 2*(n+1) + 1 by Lm6;
       then m <= 2*(n+1) + 1 by A1,XXREAL_0:2;
       hence thesis by A1,Def3;
     end;
@@ -769,7 +788,7 @@ registration let n, k be Nat;
   cluster PFArt (n, k) -> non empty;
   coherence
   proof
-        [2*n, k] in PFArt (n, k) by Def2;
+    [2*n, k] in PFArt (n, k) by Def2;
     hence thesis;
   end;
 end;
@@ -784,8 +803,8 @@ A1: x in PFArt (n, m) by Def2;
     proof
       assume x in PFCrt (k,m);
       then consider m' being odd Nat such that
-A2:     m' <= 2*k + 1 & [m',m] = x by Def3;
-          m' = 2*n by A2,ZFMISC_1:33;
+A2:   m' <= 2*k + 1 & [m',m] = x by Def3;
+      m' = 2*n by A2,ZFMISC_1:33;
       hence thesis by ABIAN:def 2;
     end;
     hence thesis by A1;
@@ -794,7 +813,7 @@ A2:     m' <= 2*k + 1 & [m',m] = x by Def3;
 Lm8: for n, k being Nat holds PFCrt (n,k) c= PFCrt (n+1,k)
   proof
     let n, k be Nat;
-        PFCrt (n,k) c< PFCrt (n+1,k) by Th20;
+    PFCrt (n,k) c< PFCrt (n+1,k) by Th20;
     hence thesis by XBOOLE_0:def 8;
   end;
 
@@ -808,8 +827,8 @@ then A1: 2*n + 1 <= 2*k + 1 by XREAL_1:8;
     let x be set;
     assume x in PFCrt (n, m);
     then consider m' being odd Nat such that
-A2:   m' <= 2*n + 1 & [m',m] = x by Def3;
-        m' <= 2*k + 1 by A1,A2,XXREAL_0:2;
+A2: m' <= 2*n + 1 & [m',m] = x by Def3;
+    m' <= 2*k + 1 by A1,A2,XXREAL_0:2;
     hence thesis by A2,Def3;
   end;
 
@@ -823,8 +842,8 @@ then A1: 2*n + 1 <= 2*k by NAT_1:38;
     let x be set;
     assume x in PFCrt (n,m);
     then consider p being odd Nat such that
-A2:   p <= 2*n + 1 & [p,m] = x by Def3;
-        p <= 2*k by A1,A2,XXREAL_0:2;
+A2: p <= 2*n + 1 & [p,m] = x by Def3;
+    p <= 2*k by A1,A2,XXREAL_0:2;
     hence thesis by A2,Def2;
   end;
 
@@ -838,8 +857,8 @@ proof
     per cases by A1,Def2;
     suppose ex m being odd Nat st m <= 2*1 & [m,n] = x;
     then consider m being odd Nat such that
-A2:   m <= 2*1 & [m,n] = x;
-        x = [1,n] by A2,Lm3,CQC_THE1:3;
+A2: m <= 2*1 & [m,n] = x;
+    x = [1,n] by A2,Lm3,CQC_THE1:3;
     hence thesis by TARSKI:def 2;
     end;
     suppose [2*1,n] = x;
@@ -850,7 +869,7 @@ A2:   m <= 2*1 & [m,n] = x;
   assume A3: x in { [1,n], [2,n] };
   per cases by A3,TARSKI:def 2;
   suppose A4: x = [1,n];
-      1 <= 2 * 1;
+  1 <= 2 * 1;
   hence thesis by A4,Def2,Lm4;
   end;
   suppose x = [2,n];
@@ -888,9 +907,9 @@ then A6:   2*m <= 2*n+1 by A5,XXREAL_0:2;
         per cases by A4,A7,Def2;
         suppose ex m1 being odd Nat st m1 <= 2*m & [m1,k] = t;
         then consider m1 being odd Nat such that
-A8:       m1 <= 2*m & [m1,k] = t;
+A8:     m1 <= 2*m & [m1,k] = t;
 A9:     1 <= m1 by Th1;
-            m1 <= 2*n+1 by A6,A8,XXREAL_0:2;
+        m1 <= 2*n+1 by A6,A8,XXREAL_0:2;
         then m1 in Seg (2*n+1) by A9,FINSEQ_1:3;
         hence thesis by A8,ZFMISC_1:129;
         end;
@@ -905,21 +924,21 @@ A11:      1 <= m by NAT_1:39;
       hence thesis;
       end;
       suppose A12: x = PFCrt (n,k);
-          x c= [:Seg (2*n+1), {k}:]
+      x c= [:Seg (2*n+1), {k}:]
       proof
         let t be set; assume t in x;
         then consider m being odd Nat such that
-A13:       m <= 2*n + 1 & [m,k] = t by A12,Def3;
-            1 <= m by Th1;
+A13:    m <= 2*n + 1 & [m,k] = t by A12,Def3;
+        1 <= m by Th1;
         then m in Seg (2*n+1) by A13,FINSEQ_1:3;
         hence thesis by A13,ZFMISC_1:129;
       end;
       hence thesis;
     end;
     end;
-        bool [:Seg (2*n+1), {k}:] is finite by FINSET_1:24;
+    bool [:Seg (2*n+1), {k}:] is finite by FINSET_1:24;
 then A14: X is finite by A2,FINSET_1:13;
-        X c= PFuncs (NAT, {k})
+    X c= PFuncs (NAT, {k})
     proof
       let x be set; assume x in X;
       hence thesis by A1;
@@ -952,7 +971,7 @@ A16:   (for x being set holds x in X1 iff P[x]) &
 end;
 
 theorem
-      for n, k being Nat,
+  for n, k being Nat,
       x being set st x in PFBrt (n+1,k) holds
    ex y being set st y in PFBrt (n,k) & y c= x
 proof
@@ -972,7 +991,7 @@ A2: m <= n+1 & x = PFArt (m,k);
     end;
     suppose A4: m = n+1;
     take y = PFCrt (n,k);
-        n < n+1 by NAT_1:38;
+    n < n+1 by NAT_1:38;
     hence y in PFBrt (n,k) & y c= x by A2,A4,Def4,Lm9;
   end;
   end;
@@ -985,7 +1004,7 @@ end;
 end;
 
 theorem
-      for n, k being Nat holds
+  for n, k being Nat holds
    not PFCrt (n,k) in PFBrt (n+1,k)
   proof
     let n, k be Nat;
@@ -1024,10 +1043,10 @@ theorem Th26:
     assume n <> k;
 then A2: 2*n <> 2*k;
 A3: [2*n,m] in PFArt (n,m) by Def2;
-        [2*n,m] <> [2*k,m] by A2,ZFMISC_1:33;
+    [2*n,m] <> [2*k,m] by A2,ZFMISC_1:33;
     then consider m' being odd Nat such that
-A4:    m' <= 2*k & [m',m] = [2*n,m] by A1,A3,Def2;
-        m'= 2*n by A4,ZFMISC_1:33;
+A4: m' <= 2*k & [m',m] = [2*n,m] by A1,A3,Def2;
+    m'= 2*n by A4,ZFMISC_1:33;
     hence thesis by ABIAN:def 2;
   end;
 
@@ -1047,7 +1066,7 @@ A3: [2*n+1,m] in PFCrt (n,m) by Th17;
       per cases by A4,Def2;
       suppose ex m' being odd Nat st m' <= 2*k & [m',m] = [2*n+1,m];
       then consider m' being odd Nat such that
-A5:     m' <= 2*k & [m',m] = [2*n+1,m];
+A5:   m' <= 2*k & [m',m] = [2*n+1,m];
 A6:   2*n+1 <= 2*k by A5,ZFMISC_1:33;
       2*k <= 2*n by A2,NAT_1:20;
       hence thesis by A6,NAT_1:38;
@@ -1149,7 +1168,7 @@ A4:   (for x being set holds x in A1 iff P[x]) &
 end;
 
 theorem
-     for k being Nat holds PFBrt (1,k) = { PFArt (1,k), PFCrt (1,k) }
+  for k being Nat holds PFBrt (1,k) = { PFArt (1,k), PFCrt (1,k) }
   proof
     let k be Nat;
     thus PFBrt (1,k) c= { PFArt (1,k), PFCrt (1,k) }
@@ -1158,8 +1177,8 @@ theorem
       per cases by A1,Def4;
       suppose ex m being non empty Nat st m <= 1 & x = PFArt (m,k);
       then consider m being non empty Nat such that
-A2:     m <= 1 & x = PFArt (m,k);
-          m >= 1 by NAT_1:39;
+A2:   m <= 1 & x = PFArt (m,k);
+      m >= 1 by NAT_1:39;
       then m = 1 by A2,XXREAL_0:1;
       hence thesis by A2,TARSKI:def 2;
       end;
@@ -1182,7 +1201,7 @@ theorem Th30:
   for k being Nat holds PFBrt (1,k) <> {{}}
   proof
     let k be Nat;
-        PFArt (1,k) in PFBrt (1,k) by Def4;
+    PFArt (1,k) in PFBrt (1,k) by Def4;
     hence thesis by TARSKI:def 1;
   end;
 
@@ -1190,7 +1209,7 @@ registration let k be Nat;
   cluster PFBrt (1,k) -> non empty;
   coherence
   proof
-        PFArt (1,k) in PFBrt (1,k) by Def4;
+    PFArt (1,k) in PFBrt (1,k) by Def4;
     hence thesis;
   end;
 end;
@@ -1199,7 +1218,7 @@ theorem Th31:
   for n, k being Nat holds { PFArt (n,k) } is Element of SubstPoset (NAT, {k})
   proof
     let n, k be Nat;
-        SubstitutionSet (NAT, {k}) = the carrier of SubstLatt (NAT, {k})
+    SubstitutionSet (NAT, {k}) = the carrier of SubstLatt (NAT, {k})
          by SUBSTLAT:def 4
       .= the carrier of SubstPoset (NAT, {k});
     hence thesis by HEYTING2:6;
@@ -1221,7 +1240,7 @@ A1: SubstitutionSet (V, {k}) = the carrier of SubstLatt (V, {k})
 then A2: a c= PFuncs (V, {k}) & a is finite by FINSUB_1:def 5;
     assume A3: X in a;
 then A4: X in PFuncs (V, {k}) by A2;
-        PFuncs (V, {k}) c= bool [:V, {k}:] by HEYTING2:4;
+    PFuncs (V, {k}) c= bool [:V, {k}:] by HEYTING2:4;
     hence thesis by A1,A3,A4,HEYTING2:2;
   end;
 
@@ -1241,7 +1260,7 @@ theorem Th33:
 A4: now let k be non empty Nat;
       reconsider Pk = PFBrt (k,m) as Element of SubstPoset (NAT, {m})
         by Th28;
-          Pk in PFDrt m by Def5;
+      Pk in PFDrt m by Def5;
       then a <= Pk by A1,LATTICE3:def 8;
       then consider y being set such that
 A5:     y in Pk & y c= X by A2,Th15;
@@ -1250,16 +1269,16 @@ A6:   ( ex m' being non empty Nat st m' <= k & y = PFArt (m',m) ) or
 A7:   not ex m' being Nat st m' <= k & y = PFArt (m',m)
       proof
         given m' being Nat such that
-A8:       m' <= k & y = PFArt (m',m);
-            [2*m',m] in PFArt (m',m) by Def2;
+A8:     m' <= k & y = PFArt (m',m);
+        [2*m',m] in PFArt (m',m) by Def2;
         then 2*m' is odd by A3,A5,A8;
         hence thesis by ABIAN:def 2;
       end;
-          [2*k+1,m] in PFCrt (k,m) by Th17;
+      [2*k+1,m] in PFCrt (k,m) by Th17;
       hence [2*k+1,m] in X by A5,A6,A7;
     end;
     consider l being non empty Nat such that
-A9:   not [2*l+1,m] in X' by Th6;
+A9: not [2*l+1,m] in X' by Th6;
     thus thesis by A4,A9;
   end;
 
@@ -1283,7 +1302,7 @@ registration let k be Nat;
   cluster non empty Element of SubstPoset (NAT, {k});
   existence
   proof
-        SubstitutionSet (NAT, {k})
+    SubstitutionSet (NAT, {k})
       = the carrier of SubstPoset (NAT, {k}) by Lm5;
     then reconsider E = {{}} as Element of SubstPoset (NAT, {k})
       by SUBSTLAT:2;
@@ -1298,7 +1317,7 @@ Lm11:
    proof
      let a be non empty set; assume A1: a <> {{}} & {} in a;
      assume A2: for b being set st b in a holds b = {};
-         a = {{}}
+     a = {{}}
      proof
        thus a c= {{}}
        proof
@@ -1318,7 +1337,7 @@ theorem Th35:
   proof
     let n be Nat;
     let a be Element of SubstPoset (NAT, {n});
-        SubstitutionSet (NAT, {n})
+    SubstitutionSet (NAT, {n})
       = the carrier of SubstPoset (NAT, {n}) by Lm5;
 then A1:  a in SubstitutionSet (NAT, {n});
     assume A2: {} in a;
@@ -1326,10 +1345,10 @@ then A1:  a in SubstitutionSet (NAT, {n});
     then consider k being set such that
 A3:    k in a & k <> {} by A2,Lm11;
 A4:  a c= PFuncs (NAT, {n}) by A1,FINSUB_1:def 5;
-        {} is PartFunc of NAT, {n} by PARTFUN1:56;
+    {} is PartFunc of NAT, {n} by PARTFUN1:56;
     then reconsider E = {}, K = k as Element of PFuncs (NAT, {n})
       by A3,A4,PARTFUN1:119;
-        E in a & K in a & E c= K by A2,A3,XBOOLE_1:2;
+    E in a & K in a & E c= K by A2,A3,XBOOLE_1:2;
     hence thesis by A1,A3,SUBSTLAT:5;
   end;
 
@@ -1342,8 +1361,8 @@ theorem Th36:
     let a be non empty Element of SubstPoset (NAT, {k});
     assume A1: a <> {{}};
     consider f being set such that
-A2:   f in a by XBOOLE_0:def 1;
-        SubstitutionSet (NAT, {k})
+A2: f in a by XBOOLE_0:def 1;
+    SubstitutionSet (NAT, {k})
       = the carrier of SubstPoset (NAT, {k}) by Lm5;
     then reconsider f as finite Function by A2,HEYTING2:2;
     take f;
@@ -1365,8 +1384,8 @@ theorem Th37:
 A1: a <> {{}} and
 A2: a = a';
     consider f being finite Function such that
-A3:   f in a & f <> {} by A1,Th36;
-        dom f <> {} by A3,RELAT_1:64;
+A3: f in a & f <> {} by A1,Th36;
+    dom f <> {} by A3,RELAT_1:64;
     then consider k1 being set such that
 A4:   k1 in dom f by XBOOLE_0:def 1;
     thus thesis by A2,A3,A4,HEYTING2:10,12,def 1;
@@ -1390,11 +1409,11 @@ theorem Th38:
     let l be Nat;
     assume A3: l > max B + 1;
     assume A4: [l,k] in X;
-        SubstitutionSet (NAT, {k}) = the carrier of SubstPoset (NAT, {k})
+    SubstitutionSet (NAT, {k}) = the carrier of SubstPoset (NAT, {k})
         by Lm5;
     then reconsider X' = X as finite Function by A2,HEYTING2:2;
-A5:  max B + 1 >= max B by NAT_1:29;
-        l in dom X' by A4,RELAT_1:def 4;
+A5: max B + 1 >= max B by NAT_1:29;
+    l in dom X' by A4,RELAT_1:def 4;
     then l in Involved a' by A1,A2,HEYTING2:def 1;
     then max B >= l by A1,PRE_CIRC:def 1;
     hence thesis by A3,A5,XXREAL_0:2;
@@ -1414,7 +1433,7 @@ A1: a is_<=_than {} by YELLOW_0:6;
     proof
       let b be Element of SubstPoset (NAT, {k});
       assume b is_<=_than {};
-          now let x be set; assume x in b;
+      now let x be set; assume x in b;
         take y = {};
         thus y in a & y c= x by TARSKI:def 1,XBOOLE_1:2;
       end;
@@ -1433,12 +1452,12 @@ theorem Th40:
     then reconsider a = {} as Element of SubstPoset (NAT, {k})
       by SUBSTLAT:1;
 A1: a is_>=_than {} by YELLOW_0:6;
-        for b being Element of SubstPoset (NAT, {k}) st
+    for b being Element of SubstPoset (NAT, {k}) st
       b is_>=_than {} holds a <= b
     proof
       let b be Element of SubstPoset (NAT, {k});
       assume b is_>=_than {};
-          for x be set st x in a ex y being set st y in b & y c= x;
+      for x be set st x in a ex y being set st y in b & y c= x;
       hence thesis by Th15;
     end;
     then a = "\/"({},SubstPoset (NAT, {k})) by A1,YELLOW_0:30;
@@ -1477,8 +1496,8 @@ theorem Th43:
 A3: PFBrt (1,m) in PFDrt m by Def5;
     reconsider P1 = PFBrt (1,m) as Element of SubstPoset (NAT, {m})
       by Th28;
-A4:  Top SubstPoset (NAT, {m}) = {{}} by Th39;
-        P1 >= a by A1,A3,LATTICE3:def 8;
+A4: Top SubstPoset (NAT, {m}) = {{}} by Th39;
+    P1 >= a by A1,A3,LATTICE3:def 8;
     then P1 = {{}} by A2,A4,WAYBEL15:5;
     hence thesis by Th30;
   end;
@@ -1487,17 +1506,17 @@ Lm12:
   for m being Nat holds SubstPoset (NAT, {m}) is not complete
   proof
     let m be Nat;
-A1:  SubstitutionSet (NAT, {m}) = the carrier of SubstPoset (NAT, {m}) by Lm5;
+A1: SubstitutionSet (NAT, {m}) = the carrier of SubstPoset (NAT, {m}) by Lm5;
     assume SubstPoset (NAT, {m}) is complete;
     then consider a being Element of SubstPoset (NAT, {m}) such that
-A2:   PFDrt m is_>=_than a &
+A2: PFDrt m is_>=_than a &
       for b being Element of SubstPoset (NAT, {m}) st
-        PFDrt m is_>=_than b holds a >= b
+    PFDrt m is_>=_than b holds a >= b
        by LATTICE5:def 2;
     reconsider EM = {} as Element of SubstPoset (NAT, {m})
       by A1,SUBSTLAT:1;
 A3: a <> {{}} by A2,Th43;
-        a in SubstitutionSet (NAT, {m}) by A1;
+    a in SubstitutionSet (NAT, {m}) by A1;
     then reconsider a' = a as Element of Fin PFuncs (NAT, {m});
     set Mi = Involved a';
     reconsider Cos = { PFArt (1,m) } as Element of SubstPoset (NAT, {m})
@@ -1510,7 +1529,7 @@ A4: PFDrt m is_>=_than Cos
 A5:     u = PFBrt (n1,m) by Def5;
           now let d be set; assume d in Cos;
 then A6:     d = PFArt (1,m) by TARSKI:def 1;
-            1 <= n1 by NAT_1:39;
+        1 <= n1 by NAT_1:39;
         then d in PFBrt (n1,m) by A6,Def4;
         hence ex e be set st e in u & e c= d by A5;
       end;
@@ -1527,13 +1546,13 @@ then A6:     d = PFArt (1,m) by TARSKI:def 1;
     reconsider Sum = { PFArt (mX,m) } as Element of SubstPoset (NAT, {m})
       by Th31;
     set b = a "\/" Sum;
-        Sum is_<=_than PFDrt m
+    Sum is_<=_than PFDrt m
     proof
       let t be Element of SubstPoset (NAT, {m});
       assume t in PFDrt m;
       then consider n being non empty Nat such that
-A7:     t = PFBrt (n,m) by Def5;
-          for x being set st x in Sum ex y being set st y in t & y c= x
+A7:   t = PFBrt (n,m) by Def5;
+      for x being set st x in Sum ex y being set st y in t & y c= x
       proof
         let x be set; assume A8: x in Sum;
 then A9:     x = PFArt (mX,m) by TARSKI:def 1;
@@ -1563,15 +1582,15 @@ A16:     g in a & g c= PFArt (mX,m) by A15,Th15;
       per cases;
       suppose g is non empty;
       then consider n being Nat such that
-A17:     [n,m] in g & n is even by A2,A16,Th33;
-          now per cases by A16,A17,Def2;
+A17:  [n,m] in g & n is even by A2,A16,Th33;
+      now per cases by A16,A17,Def2;
         suppose ex m' being odd Nat st m' <= 2*mX & [m',m] = [n,m];
         then consider m' being odd Nat such that
-  A18:     m' <= 2*mX & [m',m] = [n,m];
+A18:    m' <= 2*mX & [m',m] = [n,m];
         thus thesis by A17,A18,ZFMISC_1:33;
         end;
         suppose A19: [2*mX,m] = [n,m];
-            2*mX > mX by REAL_2:144;
+        2*mX > mX by REAL_2:144;
         hence thesis by A16,A17,A19,Th38;
       end;
       end;
@@ -1588,7 +1607,7 @@ A21:   PFBrt (1,m) <> {{}} by Th30;
     end;
     end;
 then A22: a < b by A13,ORDERS_2:def 10;
-        a >= b by A2,A12;
+    a >= b by A2,A12;
     hence contradiction by A22,ORDERS_2:30;
   end;
 
@@ -1603,8 +1622,8 @@ registration let m be Nat;
   proof
     assume SubstLatt (NAT, {m}) is complete;
     then reconsider K = SubstLatt (NAT, {m}) as complete Lattice;
-A1:  LattPOSet K is complete;
-        SubstPoset (NAT, {m}) is non complete;
+A1: LattPOSet K is complete;
+    SubstPoset (NAT, {m}) is non complete;
     hence thesis by A1;
   end;
 end;

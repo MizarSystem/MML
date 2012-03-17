@@ -14,7 +14,7 @@ environ
       GROUP_1, VECTSP_1, XXREAL_0;
  constructors BINOP_1, XXREAL_0, FINSEQOP, VECTSP_1;
  registrations FINSEQ_1, VECTSP_1, STRUCT_0, FINSEQ_2, RELSET_1, GROUP_1,
-      ARYTM_3, RELAT_1, XREAL_0;
+      ARYTM_3, RELAT_1, XREAL_0, NUMBERS;
  requirements NUMERALS, SUBSET, BOOLE;
 
 
@@ -34,7 +34,7 @@ definition let f be FinSequence;
   attr f is tabular means
 :: MATRIX_1:def 1
    ex n being Nat st for x st x in rng f
-   ex s st s=x & len s = n;
+   ex s being FinSequence st s=x & len s = n;
 end;
 
 registration
@@ -138,7 +138,7 @@ definition let M be tabular FinSequence;
   func width M -> Nat means
 :: MATRIX_1:def 4
    ex s st s in rng M & len s = it if len M > 0 otherwise it = 0;
- end;
+end;
 
 theorem :: MATRIX_1:20
   len M > 0 implies for n holds
@@ -147,18 +147,18 @@ theorem :: MATRIX_1:20
 definition let M be tabular FinSequence;
   func Indices M -> set equals
 :: MATRIX_1:def 5
-   [:dom M,Seg width M:];
+    [:dom M,Seg width M:];
 end;
 
 definition let D be set; let M be Matrix of D; let i,j;
   assume [i,j] in Indices M;
   func M*(i,j) -> Element of D means
 :: MATRIX_1:def 6
-    ex p being FinSequence of D st p= M.i & it =p.j;
+    ex p being FinSequence of D st p = M.i & it = p.j;
 end;
 
 theorem :: MATRIX_1:21
-  len M1 =len M2 & width M1= width M2 &
+  len M1 = len M2 & width M1 = width M2 &
    (for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j)) implies
      M1 = M2;
 
@@ -169,8 +169,7 @@ theorem :: MATRIX_1:21
    for i,j st [i,j] in Indices M holds M*(i,j) = f(i,j);
 
  scheme :: MATRIX_1:sch 2
- MatrixEx { D() -> non empty set, n() -> Nat, m() -> Nat,
-                   P[set,set,set] } :
+ MatrixEx { D() -> non empty set, n, m() -> Nat, P[set,set,set] } :
   ex M being Matrix of n(),m(),D() st
    for i,j st [i,j] in Indices M holds P[i,j,M*(i,j)]
   provided
@@ -184,23 +183,23 @@ canceled;
 
 theorem :: MATRIX_1:23
   for M being Matrix of 0,m,D holds
-    len M=0 & width M = 0 & Indices M = {};
+    len M = 0 & width M = 0 & Indices M = {};
 
 theorem :: MATRIX_1:24
   n > 0 implies for M being Matrix of n,m,D holds
-    len M=n & width M = m & Indices M = [:Seg n, Seg m:];
+    len M = n & width M = m & Indices M = [:Seg n, Seg m:];
 
 theorem :: MATRIX_1:25
-  for M being Matrix of n,D holds len M=n & width M =n &
+  for M being Matrix of n,D holds len M = n & width M = n &
     Indices M = [:Seg n, Seg n:];
 
 theorem :: MATRIX_1:26
   for M being Matrix of n,m,D holds
-    len M = n & Indices M=[:Seg n,Seg width M:];
+    len M = n & Indices M = [:Seg n,Seg width M:];
 
 theorem :: MATRIX_1:27
   for M1,M2 being Matrix of n,m,D holds
-    Indices M1=Indices M2;
+    Indices M1 = Indices M2;
 
 theorem :: MATRIX_1:28
   for M1,M2 being Matrix of n,m,D st
@@ -217,6 +216,10 @@ definition let D; let M be Matrix of D;
     len it = width M &
    (for i,j holds [i,j] in Indices it iff [j,i] in Indices M) &
    for i,j st [j,i] in Indices M holds it*(i,j) = M*(j,i);
+end;
+
+definition let n,D; let M be Matrix of n,D;
+  redefine func M@ -> Matrix of n,D;
 end;
 
 definition let D,M,i;
@@ -272,13 +275,13 @@ theorem :: MATRIX_1:30
 theorem :: MATRIX_1:31
   x is Element of n-Matrices_over K iff x is Matrix of n,K;
 
-definition let K, n; let M be Matrix of n, K;
+definition let K; let M be Matrix of K;
   attr M is diagonal means
 :: MATRIX_1:def 15
     for i,j st [i,j] in Indices M & M*(i,j) <> 0.K holds i=j;
 end;
 
-registration let K, n;
+registration let n, K;
   cluster diagonal Matrix of n,K;
 end;
 
@@ -308,3 +311,5 @@ definition let F,n;
    the Zero of it = 0.(F,n);
 end;
 
+theorem :: MATRIX_1:36
+  for M1, M2 being Matrix of 0, n, K holds M1 = M2;

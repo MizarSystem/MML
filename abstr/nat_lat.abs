@@ -29,7 +29,7 @@ definition
 :: NAT_LAT:def 3
   it.(m,n)=m hcf n;
 
- func lcmlat-> BinOp of NAT means
+ func lcmlat -> BinOp of NAT means
 :: NAT_LAT:def 4
   it.(m,n)=m lcm n;
 end;
@@ -87,10 +87,11 @@ end;
 
  reserve p,q,r for Element of Nat_Lattice;
 
-canceled 3;
+canceled 4;
 
-theorem :: NAT_LAT:60
-  Nat_Lattice is 0_Lattice;
+registration
+  cluster Nat_Lattice -> lower-bounded;
+end;
 
 theorem :: NAT_LAT:61
   lcmlat.(p,q)=lcmlat.(q,p);
@@ -186,13 +187,23 @@ definition
     it.(m,n)=m lcm n;
 end;
 
- reserve p,q,r for Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
-
-definition let m be Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
-  func @m -> NatPlus equals
+definition
+  func NatPlus_Lattice -> strict LattStr equals
 :: NAT_LAT:def 14
+   LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+end;
+
+registration
+  cluster NatPlus_Lattice -> non empty;
+end;
+
+definition let m be Element of NatPlus_Lattice;
+  func @m -> NatPlus equals
+:: NAT_LAT:def 15
     m;
 end;
+
+ reserve p,q,r for Element of NatPlus_Lattice;
 
 theorem :: NAT_LAT:69
  p"\/"q =@p lcm @q;
@@ -200,14 +211,9 @@ theorem :: NAT_LAT:69
 theorem :: NAT_LAT:70
  p"/\"q = @p hcf @q;
 
-definition
-  func NatPlus_Lattice -> Lattice equals
-:: NAT_LAT:def 15
-   LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
-end;
-
 registration
-  cluster NatPlus_Lattice -> strict;
+  cluster NatPlus_Lattice -> join-commutative join-associative
+    meet-commutative meet-associative join-absorbing meet-absorbing;
 end;
 
 definition let L be Lattice;
