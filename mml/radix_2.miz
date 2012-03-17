@@ -8,18 +8,19 @@ environ
 
  vocabularies ARYTM_1, NAT_1, INT_1, ARYTM_3, FINSEQ_1, RADIX_1, POWER,
       MIDSP_3, RELAT_1, FUNCT_1, RLVECT_1, RADIX_2, FINSEQ_4, GROUP_1;
- notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1, INT_1, NAT_1,
-      FUNCT_1, POWER, FINSEQ_1, FINSEQ_4, BINARITH, EULER_2, RVSUM_1, TREES_4,
-      WSIERP_1, RADIX_1, XXREAL_0;
+ notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1, INT_1, NAT_1, FUNCT_1,
+      POWER, FINSEQ_1, FINSEQ_4, BINARITH, EULER_2, RVSUM_1, TREES_4, WSIERP_1,
+      RADIX_1, XXREAL_0;
  constructors POWER, BINARITH, FINSEQ_4, EULER_2, RADIX_1, SEQ_1, RAT_1, NAT_1,
- XXREAL_0;
- registrations INT_1, RELSET_1, XREAL_0, WSIERP_1, MEMBERED, ORDINAL2;
+      XXREAL_0, FINSOP_1;
+ registrations INT_1, RELSET_1, XREAL_0, WSIERP_1, MEMBERED, ORDINAL2,
+      XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI;
- theorems REAL_1, NAT_1, NAT_2, INT_1, FINSEQ_1, GR_CY_1, BINARITH, PREPOWER,
-      POWER, JORDAN3, JORDAN4, RVSUM_1, FINSEQ_2, FINSEQ_4, TARSKI, FUNCT_1,
-      PEPIN, SPRECT_3, RADIX_1, EULER_2, INT_3, NEWTON, INT_2, SCMFSA9A,
-      SPPOL_1, AMI_5, XCMPLX_1, XREAL_1;
+ theorems REAL_1, NAT_1, NAT_2, INT_1, FINSEQ_1, BINARITH, PREPOWER, POWER,
+      JORDAN3, JORDAN4, RVSUM_1, FINSEQ_2, FINSEQ_4, TARSKI, FUNCT_1, PEPIN,
+      SPRECT_3, RADIX_1, EULER_2, INT_3, NEWTON, INT_2, SPPOL_1, XCMPLX_1,
+      XREAL_1, XXREAL_0, FINSOP_1;
  schemes NAT_1, FINSEQ_2, INT_2, RECDEF_1;
 
 begin :: Some Useful Theorems
@@ -108,7 +109,7 @@ proof
   assume i in Seg n;
   then 1 <= i & i <= n by FINSEQ_1:3;
   then 1+1 <= i+1 & i+1 <= n+1 by XREAL_1:8;
-  then 1 <= i+1 & i+1 <= n+1 by XREAL_1:2;
+  then 1 <= i+1 & i+1 <= n+1 by XXREAL_0:2;
   hence i+1 in Seg (n+1) by FINSEQ_1:3;
 end;
 
@@ -365,7 +366,7 @@ proof
            (x '+' y).i = (xn '+' yn).i
         proof
           A38: i >= 1 & i <= n+1 by A37,FINSEQ_1:3;
-             now per cases by A38,XREAL_1:1;
+             now per cases by A38,XXREAL_0:1;
             suppose A39:i > 1;
               then i -'1 > 1 -'1 by SPRECT_3:10;
               then i -'1 > 0;
@@ -738,13 +739,13 @@ uniqueness
           suppose
             A15: 1 <= kk;
             A16:kk <= kk + 1 by NAT_1:29;
-            then A17:1 <= kk & kk <= n - 1 by A13,A15,XREAL_1:2;
+            then A17:1 <= kk & kk <= n - 1 by A13,A15,XXREAL_0:2;
             then A18:ex I1,I2 be Integer st I1 = s1.kk & I2 = s1.(kk+1) &
               I2 = (Radix(k)*I1+Table1(q,c,f,n -'kk)) mod f by A6;
             consider i1,i2 be Integer such that
               A19: i1 = s2.kk & i2 = s2.(kk+1) &
               i2 = (Radix(k)*i1+Table1(q,c,f,n -'kk)) mod f by A7,A17;
-      thus s1.(kk+1) = s2.(kk+1) by A12,A13,A15,A16,A18,A19,XREAL_1:2;
+      thus s1.(kk+1) = s2.(kk+1) by A12,A13,A15,A16,A18,A19,XXREAL_0:2;
     end;
     end;
     A20:for kk be Nat holds P[kk] from NAT_1:sch 1 (A10,A11);
@@ -774,7 +775,7 @@ uniqueness
     proof
       let kk be Nat;
       assume A27:1 <= kk & kk <= len s1;
-         now per cases by A27,XREAL_1:1;
+         now per cases by A27,XXREAL_0:1;
         suppose A28:kk < len s1;
            n - 1 >= 1 - 1 by A1,XREAL_1:11;
         then reconsider U1 = len s1 - 1 as Nat by A8,INT_1:16;
@@ -929,7 +930,7 @@ proof
                                + (q*DigA(c,(n -' i)+1) mod f)) mod f
                                                         by A18,A40
             .= (Radix(k)*Mul_mod(q,c,f,k).i
-                    + (q*DigA(c,((n+1) -' i)) mod f)) mod f by A35,JORDAN4:3
+                    + (q*DigA(c,((n+1) -' i)) mod f)) mod f by A35,BINARITH:56
             .= Mul_mod(q,c,f,k).(i+1) by A38;
             hence Mul_mod(q,cn,f,k).(i+1)=Mul_mod(q,c,f,k).(i+1);
         end;
@@ -1038,7 +1039,7 @@ FINSEQ_1:37
     A63: ic >= Radix(k)*icn2 by A43,INT_1:19;
     A64: Radix(k) > 0 by Th6;
        ic < (Radix(k) |^ (n+1)) by A7,RADIX_1:def 12;
-    then icn2 * Radix(k) < (Radix(k) |^ (n+1)) by A63,XREAL_1:2;
+    then icn2 * Radix(k) < (Radix(k) |^ (n+1)) by A63,XXREAL_0:2;
     then icn2 * Radix(k) < (Radix(k) |^ n)* Radix(k) by NEWTON:11;
     then icn < (Radix(k) |^ n) by A42,XREAL_1:66;
     then A65: icn is_represented_by n,k by RADIX_1:def 12;
@@ -1051,7 +1052,7 @@ FINSEQ_1:37
         assume A67: 1 <= i & i <= len cn;
         then A68: i in Seg n by A10,FINSEQ_1:3;
         A69: i <= i+1 by XREAL_1:31;
-        then 1 <= (i+1) & (i+1) <= (n+1) by A10,A67,XREAL_1:2,XREAL_1:8;
+        then 1 <= (i+1) & (i+1) <= (n+1) by A10,A67,XXREAL_0:2,XREAL_1:8;
         then A70: (i+1) in Seg (n+1) by FINSEQ_1:3;
            c2.1 = DigitDC2(ic,1,k) by A23,Def5
            .= (ic mod (Radix(k) |^ 1)) div (Radix(k) |^ (1 -' 1))
@@ -1060,7 +1061,7 @@ FINSEQ_1:37
            .= ic mod (Radix(k) |^ 1) by NAT_2:6
            .= ic mod Radix(k) by NEWTON:10;
         then A71: c2.1 < Radix(k) by A64,NAT_1:46;
-        A72:1 <= i+1 & 0 < Radix(k) by A67,A69,Th6,XREAL_1:2;
+        A72:1 <= i+1 & 0 < Radix(k) by A67,A69,Th6,XXREAL_0:2;
         A73:Radix(k) <> 0 & i <> 0 by A67,Th6;
         reconsider a = c2.1 as Integer;
         reconsider b = icn2 as Integer;
@@ -1072,7 +1073,7 @@ FINSEQ_1:37
             .= [\c2.1/Radix(k)/] + icn2 by INT_1:51
             .= a div Radix(k) + icn2 by INT_1:def 7
             .= (c2.1) div Radix(k) + icn2 by NEWTON:101
-            .= 0 + icn2 by A71,JORDAN4:5;
+            .= 0 + icn2 by A71,NAT_1:80;
            cn.i
          = c2.(i+1) by A17,A20,A68
         .= DigitDC2(ic,(i+1),k) by A70,Def5
@@ -1198,7 +1199,7 @@ uniqueness
           suppose
             A15: 1 <= kk;
             A16: kk <= kk + 1 by NAT_1:29;
-            then A17: 1 <= kk & kk <= n - 1 by A13,A15,XREAL_1:2;
+            then A17: 1 <= kk & kk <= n - 1 by A13,A15,XXREAL_0:2;
             then consider i1,i2 be Nat such that
               A18: i1 = s1.kk & i2 = s1.(kk+1) &
               i2 = (((i1 |^ Radix(k)) mod f)*Table2(m,e,f,n-'kk)) mod f by A6;
@@ -1206,7 +1207,7 @@ uniqueness
               A19: i1 = s2.kk & i2 = s2.(kk+1) &
               i2 = (((i1 |^ Radix(k)) mod f)*Table2(m,e,f,n-'kk)) mod f
                                                                   by A7,A17;
-      thus s1.(kk+1) = s2.(kk+1) by A12,A13,A15,A16,A18,A19,XREAL_1:2;
+      thus s1.(kk+1) = s2.(kk+1) by A12,A13,A15,A16,A18,A19,XXREAL_0:2;
     end;
     end;
     A20:for kk be Nat holds P[kk] from NAT_1:sch 1 (A10,A11);
@@ -1238,7 +1239,7 @@ uniqueness
     proof
       let kk be Nat;
       assume A27:1 <= kk & kk <= len s1;
-         now per cases by A27,XREAL_1:1;
+         now per cases by A27,XXREAL_0:1;
         suppose A28:kk < len s1;
            n - 1 >= 1 - 1 by A1,XREAL_1:11;
         then reconsider U1 = len s1 - 1 as Nat by A8,INT_1:16;
@@ -1359,8 +1360,8 @@ proof
             then i+1-1 <= n-1 by XREAL_1:11;
             then A38: (n+1)-'i >= (n+1)-'nn by JORDAN3:4;
                (n+1)-'nn >= (n+1)-nn by BINARITH:def 3;
-            then A39: (n+1)-'i >= (n+1)-(n-1) by A38,XREAL_1:2;
-            1 <= (n+1)-'i by A39,XREAL_1:2;
+            then A39: (n+1)-'i >= (n+1)-(n-1) by A38,XXREAL_0:2;
+            1 <= (n+1)-'i by A39,XXREAL_0:2;
             then ((n+1)-'i) in Seg (n+1) by A37,FINSEQ_1:3;
             then A40: ((n+1) -' i) in dom e by A26,FINSEQ_2:109;
                Pow_mod(m,en,f,k).(i+1)
@@ -1371,7 +1372,7 @@ proof
             .= ((((Pow_mod(m,e,f,k).i) |^ Radix(k)) mod f)
                    * ((m |^ (e.(n-'i+1))) mod f)) mod f by A13,A35
             .= ((((Pow_mod(m,e,f,k).i) |^ Radix(k)) mod f)
-                   * ((m |^ (e.((n+1) -'i))) mod f)) mod f by A30,JORDAN4:3
+                   * ((m |^ (e.((n+1) -'i))) mod f)) mod f by A30,BINARITH:56
             .= ((((Pow_mod(m,e,f,k).i) |^ Radix(k)) mod f)
                 * ((m |^ (e/.((n+1) -'i))) mod f)) mod f by A40,FINSEQ_4:def 4
             .= ((((Pow_mod(m,e,f,k).i) |^ Radix(k)) mod f)
@@ -1482,7 +1483,7 @@ proof
     then A65: ie >= ien * Radix(k) by INT_1:19;
     A66: Radix(k) > 0 by Th6;
        ie < (Radix(k) |^ (n+1)) by A10,RADIX_1:def 12;
-    then ien * Radix(k) < (Radix(k) |^ (n+1)) by A65,XREAL_1:2;
+    then ien * Radix(k) < (Radix(k) |^ (n+1)) by A65,XXREAL_0:2;
     then ien * Radix(k) < (Radix(k) |^ n)* Radix(k) by NEWTON:11;
     then ien < (Radix(k) |^ n) by XREAL_1:66;
     then A67: ien is_represented_by n,k by RADIX_1:def 12;
@@ -1495,7 +1496,7 @@ proof
         assume A70: 1 <= i & i <= len en;
         then A71: i in Seg n by A12,FINSEQ_1:3;
         A72:i <= i+1 by XREAL_1:31;
-        then 1 <= (i+1) & (i+1) <= (n+1) by A12,A70,XREAL_1:2,XREAL_1:8;
+        then 1 <= (i+1) & (i+1) <= (n+1) by A12,A70,XXREAL_0:2,XREAL_1:8;
         then A73: (i+1) in Seg (n+1) by FINSEQ_1:3;
            e.1 = DigitDC2(ie,1,k) by A11,A14,Def5
            .= (ie mod (Radix(k) |^ 1)) div (Radix(k) |^ (1 -' 1))
@@ -1506,7 +1507,7 @@ proof
         then A74: e.1 < Radix(k) by A66,NAT_1:46;
            dom e = Seg (len e) by FINSEQ_1:def 3;
         then A75:dom e = Seg (n+1) by FINSEQ_2:109;
-        A76:1 <= i+1 & 0 < Radix(k) by A70,A72,Th6,XREAL_1:2;
+        A76:1 <= i+1 & 0 < Radix(k) by A70,A72,Th6,XXREAL_0:2;
         A77:Radix(k) <> 0 & i <> 0 by A70,Th6;
         reconsider a = e.1 as Integer;
         reconsider b = ien as Integer;
@@ -1518,7 +1519,7 @@ proof
             .= [\e.1/Radix(k)/] + ien by INT_1:51
             .= a div Radix(k) + ien by INT_1:def 7
             .= (e.1) div Radix(k) + ien by NEWTON:101
-            .= 0 + ien by A74,JORDAN4:5;
+            .= 0 + ien by A74,NAT_1:80;
            en.i
          = e.(i+1) by A13,A71
         .= DigitDC2(ie,(i+1),k) by A11,A73,Def5

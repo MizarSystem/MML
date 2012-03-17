@@ -9,19 +9,18 @@ environ
  vocabularies METRIC_1, FINSET_1, BOOLE, FUNCT_1, PRE_TOPC, FUNCOP_1, RELAT_1,
       ARYTM_3, PCOMPS_1, COMPTS_1, SETFAM_1, POWER, SUBSET_1, ARYTM_1, SEQ_1,
       SEQ_2, ORDINAL2, ALI2, HAHNBAN;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, FINSET_1,
-      SETFAM_1, METRIC_1, RELAT_1, FUNCT_2, STRUCT_0, PRE_TOPC, POWER,
-      FUNCOP_1, COMPTS_1, PCOMPS_1, TOPS_2, SEQ_1, SEQ_2, XXREAL_0, REAL_1,
-      NAT_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, FINSET_1, SETFAM_1,
+      METRIC_1, RELAT_1, FUNCT_2, STRUCT_0, PRE_TOPC, POWER, FUNCOP_1,
+      COMPTS_1, PCOMPS_1, TOPS_2, SEQ_1, SEQ_2, XXREAL_0, REAL_1, NAT_1;
  constructors FINSET_1, POWER, FUNCOP_1, COMPTS_1, PCOMPS_1, TOPS_2, SEQ_2,
-      SEQM_3, REAL_1, NAT_1, SETFAM_1, XXREAL_0;
+      REAL_1, NAT_1, SETFAM_1, XXREAL_0;
  registrations STRUCT_0, PCOMPS_1, XREAL_0, METRIC_1, MEMBERED, ORDINAL2,
-      SEQM_3, SUBSET_1;
+      SEQM_3, SUBSET_1, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions COMPTS_1, TARSKI, TOPS_2, ORDINAL1, XBOOLE_0;
+ definitions COMPTS_1, TARSKI, TOPS_2, ORDINAL1, XBOOLE_0, SUBSET_1;
  theorems METRIC_1, SUBSET_1, REAL_1, PCOMPS_1, REAL_2, COMPTS_1, POWER, SEQ_2,
       SEQ_4, SERIES_1, SETFAM_1, SEQ_1, PRE_TOPC, TOPS_1, FUNCOP_1, FUNCT_2,
-      RELSET_1, XBOOLE_1, FINSET_1, XREAL_1;
+      RELSET_1, XBOOLE_1, FINSET_1, XREAL_1, XXREAL_0, XBOOLE_0;
  schemes SUBSET_1, SEQ_1, DOMAIN_1, NAT_1;
 
 begin
@@ -118,7 +117,7 @@ A6: {x where x is Point of M:P[x]}is Subset of M from DOMAIN_1:sch 7;
 A20:    y = x and
 A21:    dist(x,f.x) <= a*L to_power m by A13;
            a*L to_power m <= a*L to_power n by A16,A19;
-       then dist(x,f.x) <= a*L to_power n by A21,XREAL_1:2;
+       then dist(x,f.x) <= a*L to_power n by A21,XXREAL_0:2;
       hence y in B by A12,A20;
     end;
    end;
@@ -131,7 +130,7 @@ A21:    dist(x,f.x) <= a*L to_power m by A13;
 A23:    y = x and
 A24:    dist(x,f.x) <= a*L to_power n by A12;
            a*L to_power n <= a*L to_power m by A16,A22;
-       then dist(x,f.x) <= a*L to_power m by A24,XREAL_1:2;
+       then dist(x,f.x) <= a*L to_power m by A24,XXREAL_0:2;
       hence y in C by A13,A23;
     end;
    end;
@@ -164,7 +163,7 @@ A24:    dist(x,f.x) <= a*L to_power n by A12;
                      .=a*(L to_power k*L to_power 1) by POWER:30
                      .= a*L to_power (k+1) by A1,POWER:32;
        dist(f.y,f.(f.y)) <= L*dist(y,f.y) by A2;
-   then dist(f.y,f.(f.y)) <= a*L to_power (k+1) by A32,A33,XREAL_1:2;
+   then dist(f.y,f.(f.y)) <= a*L to_power (k+1) by A32,A33,XXREAL_0:2;
    then f.y in { x where x is Point of M : dist(x,f.x) <= a*L to_power (k+1)};
    hence { x where x is Point of M : dist(x,f.x) <= a*L to_power (k+1)}<>{};
    end;
@@ -181,13 +180,12 @@ A24:    dist(x,f.x) <= a*L to_power n by A12;
    A35: TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
      by PCOMPS_1:def 6;
    then reconsider V = B` as Subset of M;
-
-       for x being Point of M st x in V ex r being Real st r>0 & Ball(x,r) c= V
+   for x being Point of M st x in V ex r being Real st r>0 & Ball(x,r) c= V
    proof
    let x be Point of M such that A36:x in V;
    take r = (dist(x,f.x)-a*L to_power n)/2;
    A37: dist(x,f.x)-2*r = a*L to_power n;
-       not x in B by A36,SUBSET_1:54;
+   not x in B by A36,XBOOLE_0:def 4;
    then dist(x,f.x)>a*L to_power n by A34;
    then dist(x,f.x)-a*L to_power n>0 by XREAL_1:52;
    hence r>0 by SEQ_2:3;
@@ -199,18 +197,19 @@ A24:    dist(x,f.x) <= a*L to_power n by A12;
    then A40:  (dist(x,y) + dist(y,f.y)) + dist(f.y,f.x) >=
                        dist(x,f.y) + dist(f.y,f.x) by XREAL_1:8;
        dist(x,f.y) + dist(f.y,f.x) >= dist(x,f.x) by METRIC_1:4;
-   then A41: dist(y,f.y)+dist(x,y)+dist(f.y,f.x)>=dist(x,f.x) by A40,XREAL_1:2;
+   then A41: dist(y,f.y)+dist(x,y)+dist(f.y,f.x)>=dist(x,f.x) by A40,XXREAL_0:2
+;
    A42: dist(f.y,f.x)<=L*dist(y,x) by A2;
        dist(y,x)>=0 by METRIC_1:5;
    then L*dist(y,x)<=dist(y,x) by A1,REAL_2:147;
-   then dist(f.y,f.x)<=dist(y,x) by A42,XREAL_1:2;
+   then dist(f.y,f.x)<=dist(y,x) by A42,XXREAL_0:2;
    then A43: dist(f.y,f.x)+dist(y,x) <= dist(y,x)+dist(y,x) by XREAL_1:8;
        2*dist(x,y)<2*r by A39,XREAL_1:70;
    then A44: dist(y,f.y) + 2*dist(x,y)< dist(y,f.y) + 2*r by XREAL_1:8;
     dist(y,f.y) + (dist(y,x) + dist(f.y,f.x)) <=
                       dist(y,f.y) + 2*dist(y,x) by A43,XREAL_1:9;
-   then dist(y,f.y)+2*dist(x,y)>=dist(x,f.x) by A41,XREAL_1:2;
-   then dist(y,f.y)+2*r>dist(x,f.x) by A44,XREAL_1:2;
+   then dist(y,f.y)+2*dist(x,y)>=dist(x,f.x) by A41,XXREAL_0:2;
+   then dist(y,f.y)+2*r>dist(x,f.x) by A44,XXREAL_0:2;
    then not ex x being Point of M st y = x & dist(x,f.x)<= a*L to_power n by
 A37,XREAL_1:21;
    then not y in B by A34;

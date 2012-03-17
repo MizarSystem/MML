@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
@@ -23,7 +24,7 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="7"/>
-<Adjective nr="21">
+<Adjective nr="19">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 </Adjective>
@@ -35,12 +36,12 @@
 </Typ>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="21">
+<Adjective nr="19">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="29"/>
-<Adjective nr="33"/>
+<Adjective nr="27"/>
+<Adjective nr="31"/>
 </Cluster>
 </CCluster>
 </Registrations>

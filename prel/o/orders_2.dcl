@@ -11,6 +11,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="PARTFUN1"/>
@@ -146,7 +147,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="56">
+<Func kind="K" nr="73">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -173,14 +174,14 @@
 </Typ>
 <Typ kind="M" nr="8">
 <Cluster/>
-<Func kind="K" nr="68">
+<Func kind="K" nr="83">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="72">
+<Func kind="K" nr="87">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

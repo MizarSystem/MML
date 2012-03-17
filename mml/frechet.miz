@@ -9,23 +9,23 @@ environ
  vocabularies ARYTM_3, ARYTM_1, NORMSP_1, RELAT_1, FUNCT_1, PRE_TOPC, CANTOR_1,
       BOOLE, SUBSET_1, SETFAM_1, TARSKI, METRIC_1, RCOMP_1, ABSVALUE, TOPMETR,
       PCOMPS_1, CARD_4, FUNCT_4, FUNCOP_1, SEQ_2, ORDINAL2, ORDINAL1, FRECHET,
-      RLVECT_3, ARYTM;
+      RLVECT_3, ARYTM, PARTFUN1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, REAL_1, NAT_1,
-      COMPLEX1, SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, STRUCT_0,
-      ORDINAL1, CARD_4, FUNCT_4, RCOMP_1, PRE_TOPC, TOPS_2, METRIC_1, PCOMPS_1,
-      TOPMETR, NORMSP_1, YELLOW_8, XXREAL_0;
+      COMPLEX1, SETFAM_1, RELAT_1, FUNCT_1, PARTFUN1, RELSET_1, FUNCT_2,
+      FUNCOP_1, STRUCT_0, ORDINAL1, CARD_4, FUNCT_4, RCOMP_1, PRE_TOPC, TOPS_2,
+      METRIC_1, PCOMPS_1, TOPMETR, NORMSP_1, YELLOW_8, XXREAL_0;
  constructors REAL_1, NAT_1, YELLOW_8, CARD_4, TOPS_2, TOPMETR, FUNCT_4,
       RCOMP_1, MEMBERED, SETFAM_1, XXREAL_0;
  registrations SUBSET_1, XREAL_0, PRE_TOPC, STRUCT_0, COMPLSP1, METRIC_1,
       PCOMPS_1, TOPMETR, FUNCOP_1, RELSET_1, XBOOLE_0, NAT_1, MEMBERED,
-      PARTFUN1, ORDINAL2;
+      PARTFUN1, ORDINAL2, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, TOPS_2, XBOOLE_0;
+ definitions TARSKI, TOPS_2, XBOOLE_0, SUBSET_1, PRE_TOPC;
  theorems REAL_1, REAL_2, TARSKI, ZFMISC_1, SUBSET_1, SETFAM_1, PRE_TOPC,
       FUNCT_1, FUNCT_2, FUNCT_4, FUNCOP_1, NORMSP_1, NAT_1, ORDINAL1, RELAT_1,
       CARD_1, CARD_5, WAYBEL12, YELLOW_8, TOPS_1, TOPS_2, TOPMETR, RCOMP_1,
       METRIC_1, PCOMPS_1, GOBOARD6, RELSET_1, XREAL_0, XBOOLE_0, XBOOLE_1,
-      SEQ_4, XCMPLX_1, COMPLEX1, XREAL_1;
+      SEQ_4, XCMPLX_1, COMPLEX1, XREAL_1, XXREAL_0;
  schemes DOMAIN_1, ZFREFLE1, NAT_1, CARD_4, WELLORD2;
 
 begin
@@ -61,29 +61,12 @@ end;
 :: Preliminaries
 ::
 
-theorem Th1:
+theorem
 for T being non empty 1-sorted,S being sequence of T holds
   rng S is Subset of T
 proof
   let T be non empty 1-sorted,S be sequence of T;
-       rng S c= the carrier of T
-  proof
-    let y be set;
-    assume y in rng S;
-    then consider x being set such that
-A1:    x in dom S & S.x = y by FUNCT_1:def 5;
-         x in NAT by A1,NORMSP_1:17;
-    then S.x is Element of T by NORMSP_1:17;
-    hence y in the carrier of T by A1;
-  end;
-  hence rng S is Subset of T;
-end;
-
-definition
- let T be non empty 1-sorted;
- let S be sequence of T;
- redefine func rng S -> Subset of T;
- coherence by Th1;
+  thus rng S is Subset of T;
 end;
 
 theorem Th2:
@@ -103,12 +86,11 @@ for T being non empty TopSpace, x being Point of T, B being Basis of x
 holds B <> {}
 proof
     let T be non empty TopSpace, x be Point of T, B be Basis of x;
-A1: x in the carrier of T;
          the carrier of T in the topology of T by PRE_TOPC:def 1;
-then A2:       [#]T in the topology of T & x in [#]T by A1,PRE_TOPC:12;
+then A1:       [#]T in the topology of T & x in [#]T;
     set U1=[#]T;
     reconsider T as non empty TopStruct;
-         x in U1 & U1 is open by A2,PRE_TOPC:def 5;
+         x in U1 & U1 is open by A1,PRE_TOPC:def 5;
     then ex U2 be Subset of T st U2 in B & U2 c= U1 by YELLOW_8:22;
     hence B <> {};
   end;
@@ -147,9 +129,7 @@ A1:    A is open & B is closed;
     then [#](T)\B is open by PRE_TOPC:def 6;
     then A /\ ([#](T)\B) is open by A1,TOPS_1:38;
     then A2:    A /\ [#](T) \ A /\ B is open by XBOOLE_1:50;
-         A c= the carrier of T;
-    then A c= [#](T) by PRE_TOPC:12;
-    then A /\ [#](T) = A by XBOOLE_1:28;
+    A /\ [#](T) = A by XBOOLE_1:28;
     hence A\B is open by A2,XBOOLE_1:47;
 end;
 
@@ -173,7 +153,7 @@ A4: the carrier of T in the topology of T
    proof
           [#]T \ {}T is open by A1,PRE_TOPC:def 6;
      then [#]T in the topology of T by PRE_TOPC:def 5;
-     hence thesis by PRE_TOPC:12;
+     hence thesis;
    end;
 
 A5: for G being Subset-Family of T
@@ -208,12 +188,12 @@ A9: for A being Subset of T holds
         assume A in COMPLEMENT(G);
         then A` in G' by SETFAM_1:def 8;
         then [#]T \ A` is closed by A9;
-        then [#]T \([#]T \ A) is closed by PRE_TOPC:17;
+        then [#]T \([#]T \ A) is closed;
         hence A is closed by PRE_TOPC:22;
     end;
     then meet CG is closed by A3;
     then (union G')` is closed by A8,TOPS_2:11;
-    then [#]T \ union G is closed by PRE_TOPC:17;
+    then [#]T \ union G is closed;
     then union G is open by Lm3;
     hence thesis by PRE_TOPC:def 5;
    end;
@@ -476,7 +456,7 @@ A4:  ]. x1 - 1/4 , x1 + 1/4 .[ /\ B <> {};
   consider n1 being set such that
 A6:  n1 in dom S and
 A7:  y = S.n1 by A5,FUNCT_1:def 5;
-  reconsider n1 as Nat by A6,NORMSP_1:17;
+  reconsider n1 as Nat by A6;
   reconsider r=abs (x1 - y) as Real;
        x1 <> y
   proof
@@ -500,7 +480,7 @@ A13:   z in Ball(x,r) & z in rng S by XBOOLE_0:3;
 A14:    n2 in dom S and
 A15:    z = S.n2 by A13,FUNCT_1:def 5;
     reconsider z as Real by A13,METRIC_1:def 14;
-    reconsider n2 as Nat by A14,NORMSP_1:17;
+    reconsider n2 as Nat by A14;
     per cases by REAL_1:def 5;
     suppose n1=n2;
     then A16: y in ].x1-r,x1+r.[ by A7,A10,A13,A15,Th7;
@@ -521,8 +501,8 @@ A18:      S.n2=a2 & n2-1/4<a2 & a2<n2+1/4;
     then consider a1 being Real such that
 A20:      S.n1=a1 & n1 - 1/4 < a1 & a1 < n1 + 1/4;
          n1 < y + 1/4 by A7,A20,XREAL_1:21;
-    then n2 +1 < y + 1/4 by A17,XREAL_1:2;
-    then z + (-1/4 + 1) < y + 1/4 by A19,XREAL_1:2;
+    then n2 +1 < y + 1/4 by A17,XXREAL_0:2;
+    then z + (-1/4 + 1) < y + 1/4 by A19,XXREAL_0:2;
     then A21: z < y + 1/4 - (-1/4 + 1) by XREAL_1:22;
          Ball(x,r) c= Ball(x,1/4) by A11,PCOMPS_1:1;
     then z in Ball(x,1/4) by A13;
@@ -536,7 +516,7 @@ A22:   a1=z & x1-1/4<a1 & a1<x1 +1/4;
     then consider a1 being Real such that
 A24:    y=a1 & x1 - 1/4 < a1 & a1 < x1 + 1/4;
          y -1/4 < x1 + 1/4 - 1/4 by A24,XREAL_1:11;
-    then z + 1/4 > y - 1/4 by A23,XREAL_1:2;
+    then z + 1/4 > y - 1/4 by A23,XXREAL_0:2;
     then z + 1/4 + -1/4 > y - 1/4 + -1/4 by XREAL_1:8;
     hence contradiction by A21;
 
@@ -548,14 +528,14 @@ then A25:   n1 + 1 <= n2 by NAT_1:38;
     then consider a2 being Real such that
 A26:      S.n2=a2 & n2-1/4<a2 & a2<n2+1/4;
      z + 1/4 > n2 + -1/4 + 1/4 by A15,A26,XREAL_1:8;
-    then A27:   z + 1/4 > n1 + 1 by A25,XREAL_1:2;
+    then A27:   z + 1/4 > n1 + 1 by A25,XXREAL_0:2;
          S.n1 in ]. n1 - 1/4 , n1 + 1/4 .[ by A1;
     then S.n1 in {a where a is Real : n1-1/4<a & a<n1+1/4} by RCOMP_1:def 2;
     then consider a1 being Real such that
 A28:    S.n1=a1 & n1-1/4<a1 & a1<n1+1/4;
          n1 + 1/4 - 1/4 > y - 1/4 by A7,A28,XREAL_1:11;
     then n1 + 1 > y - 1/4 + 1 by XREAL_1:8;
-    then y + -1/4 + 1 < z + 1/4 by A27,XREAL_1:2;
+    then y + -1/4 + 1 < z + 1/4 by A27,XXREAL_0:2;
     then A29: y + (-1/4 + 1) - (-1/4 + 1) < z + 1/4 - (-1/4 + 1) by XREAL_1:11;
          Ball(x,r) c= Ball(x,1/4) by A11,PCOMPS_1:1;
     then z in Ball(x,1/4) by A13;
@@ -569,7 +549,7 @@ A30:   a1=z & x1-1/4<a1 & a1<x1 +1/4;
     then consider a1 being Real such that
 A32:  y=a1 & x1 - 1/4 < a1 & a1 < x1 + 1/4;
      x1 + -1/4 + 1/4 < y + 1/4 by A32,XREAL_1:8;
-    then z - 1/4 < y + 1/4 by A31,XREAL_1:2;
+    then z - 1/4 < y + 1/4 by A31,XXREAL_0:2;
     then z - 1/4 + 1/4< y + 1/4 + 1/4 by XREAL_1:8;
     then z - 1/2 < y + 1/2 - 1/2 by XREAL_1:11;
     hence contradiction by A29;
@@ -583,7 +563,7 @@ A32:  y=a1 & x1 - 1/4 < a1 & a1 < x1 + 1/4;
  end;
  end;
  then (rng S)` is open by TOPMETR:22,def 7;
- then [#](R^1)\(rng S) is open by PRE_TOPC:17;
+ then [#](R^1)\(rng S) is open;
  hence rng S is closed by PRE_TOPC:def 6;
 end;
 
@@ -801,7 +781,7 @@ A2:  dom(id A) = A by FUNCT_1:34;
 A3:   x in dom(id A) and
 A4:   x in B and
 A5:   (id A).x = y by FUNCT_1:def 12;
-    thus y in B by A2,A3,A4,A5,FUNCT_1:34;
+    thus y in B by A3,A4,A5,FUNCT_1:34;
   end;
 
   let y be set;
@@ -854,7 +834,7 @@ A6:     not x1 in dom (B --> x);
     then A7:     f.x1 = (id A).x1 by A3,FUNCT_4:def 1;
 A8:  not x1 in B by A6,FUNCOP_1:19;
          x1 in dom (id A) by A3,A6,XBOOLE_0:def 2;
-    then A9:    x1 in A by FUNCT_1:34;
+    then A9:    x1 in A;
     then x1 in A \ B by A8,XBOOLE_0:def 4;
     then x1 in (A \ B) \/ {x} by XBOOLE_0:def 2;
     hence thesis by A2,A7,A9,FUNCT_1:35;
@@ -947,10 +927,10 @@ A1:  not x in A;
 A3:    not y in dom (B --> x);
     then A4:   f.y = (id A).y by FUNCT_4:12;
     A5: y in dom (B --> x) or y in dom (id A) by A2,FUNCT_4:13;
-    then y in A by A3,FUNCT_1:34;
+    then y in A by A3;
     then (id A).y = y by FUNCT_1:35;
     then y = x by A2,A4,TARSKI:def 1;
-    hence y in B by A1,A3,A5,FUNCT_1:34;
+    hence y in B by A1,A3,A5;
   end;
   end;
   let y be set;
@@ -1248,7 +1228,7 @@ A17:       H = meet (f.:succ n) & H is open;
       assume G in (f.:succ n);
       then consider k be set such that
 A19:     k in dom f & k in succ n & G = f.k by FUNCT_1:def 12;
-           k in NAT by A19,FUNCT_2:def 1;
+           k in NAT by A19;
       then A20: f.k in B by FUNCT_2:7;
       then reconsider G1=G as Subset of T by A19;
       reconsider G1 as Subset of T;
@@ -1303,7 +1283,7 @@ A29:          x in U1;
 A30:            U2 in B & U2 c= U1 by A28,A29,YELLOW_8:22;
         consider n be set such that
 A31:            n in dom f & U2 = f.n by A4,A30,FUNCT_1:def 5;
-        reconsider n as Nat by A31,FUNCT_2:def 1;
+        reconsider n as Nat by A31;
              for m being Nat st n <= m holds S.m in U1
           proof
             let m be Nat;
@@ -1483,13 +1463,13 @@ A3: for A being Subset of T holds A is closed iff f"A is closed
        then consider B being Subset of X such that
 A4:         X \ B = [#]T \ A & ex fA being Subset of R^1 st
        fA = f"B & fA is closed;
-            [#]T \ B = [#]T \ A by A4,PRE_TOPC:12;
+            [#]T \ B = [#]T \ A by A4;
        then B = [#]T \ ([#]T \ A) by PRE_TOPC:22;
        hence f"A is closed by A4,PRE_TOPC:22;
      end;
      assume f"A is closed;
      then X \ A in O;
-     then [#]T \ A in O by PRE_TOPC:12;
+     then [#]T \ A in O;
      then [#]T \ A is open by PRE_TOPC:def 5;
      hence A is closed by PRE_TOPC:def 6;
    end;
@@ -1509,8 +1489,8 @@ A5:
 A6: the carrier of Y = (REAL \ NAT) \/ {REAL} &
     ex f being Function of R^1, Y st f = (id REAL)+*(NAT --> REAL) &
     for A being Subset of Y holds A is closed iff f"A is closed;
-       the carrier of X = [#]Y by A5,A6,PRE_TOPC:12;
-  then A7:  [#]X = [#]Y by PRE_TOPC:12;
+       the carrier of X = [#]Y by A5,A6;
+  then A7:  [#]X = [#]Y;
   consider f being Function of R^1, X such that
 A8:     f = (id REAL)+*(NAT --> REAL) and
 A9:     for A being Subset of X holds A is closed iff f"A is closed by A5;
@@ -1599,7 +1579,7 @@ A5:  O=(f"(A`))`;
   then f"(A`) is closed by A2;
   then A6: (f"(A`))` is open by TOPS_1:29;
        not REAL in [#](REAL?) \ A by A4,XBOOLE_0:def 4;
-  then A7:  not REAL in A` by PRE_TOPC:17;
+  then A7:  not REAL in A`;
 A8:
   A` = A` \ {REAL}
   proof
@@ -1629,8 +1609,8 @@ A13:   x in A`;
        not REAL in REAL;
   then A15: ((id REAL)+*(NAT --> REAL))"(A` \ {REAL}) = A` \ NAT by A14,Th20;
        NAT c= the carrier of R^1 by TOPMETR:24;
-  then A16:  NAT c= [#](R^1) by PRE_TOPC:12;
-       O = [#](R^1) \ f"(A`) by A5,PRE_TOPC:17
+  then A16:  NAT c= [#](R^1);
+       O = [#](R^1) \ f"(A`) by A5
         .= ([#](R^1) \ A`) \/ (NAT /\ [#](R^1)) by A1,A8,A15,XBOOLE_1:52;
   then A17:  O = ([#](R^1) \ A`) \/ NAT by A16,XBOOLE_1:28;
   then A18: NAT c= O by XBOOLE_1:7;
@@ -1642,11 +1622,11 @@ A20:   x in NAT;
     then not x in A` by A12,XBOOLE_0:def 4;
     hence x in REAL \ A` by A20,XBOOLE_0:def 4;
   end;
-       O = NAT \/ (REAL \ A`) by A17,PRE_TOPC:12,TOPMETR:24;
+       O = NAT \/ (REAL \ A`) by A17,TOPMETR:24;
   then A21:  O = REAL \ A` by A19,XBOOLE_1:12;
        A = A``
-    .= [#](REAL?) \ A` by PRE_TOPC:17
-    .= (the carrier of REAL?) \ A` by PRE_TOPC:12;
+    .= [#](REAL?) \ A`
+    .= (the carrier of REAL?) \ A`;
   then A22:  A = ((REAL \ NAT) \/ {REAL}) \ A` by Def7;
        A = (REAL \ A`) \ NAT \/ {REAL}
   proof
@@ -1688,8 +1668,8 @@ A27:
  B is closed by A23,A26,Lm3;
       f"(A`)=B
  proof
-   A28: A` = [#](REAL?) \ A by PRE_TOPC:17
-     .= (the carrier of REAL?) \ A by PRE_TOPC:12
+   A28: A` = [#](REAL?) \ A
+     .= (the carrier of REAL?) \ A
      .= ((REAL \ NAT) \/ {REAL}) \ ((O\NAT) \/ {REAL}) by A25,Def7
      .= ((REAL \ NAT) \((O\NAT) \/ {REAL})) \/ ({REAL} \ ({REAL} \/
  (O\NAT))) by XBOOLE_1:42
@@ -1702,11 +1682,11 @@ A27:
    then ((id REAL)+*(NAT --> REAL))"((REAL \ O) \ {REAL})= REAL \ O \ NAT
                                                                by Lm4;
    then A29: f"((REAL \ O) \ {REAL}) = REAL \ (O \/ NAT) by A1,XBOOLE_1:41;
-        B = REAL \ O by A26,PRE_TOPC:12,TOPMETR:24;
+        B = REAL \ O by A26,TOPMETR:24;
    hence thesis by A24,A28,A29,XBOOLE_1:12;
  end;
  then A` is closed by A2,A27;
- then [#](REAL?) \ A is closed by PRE_TOPC:17;
+ then [#](REAL?) \ A is closed;
  hence A is open by Lm3;
       REAL in {REAL} by TARSKI:def 1;
  hence REAL in A by A25,XBOOLE_0:def 2;
@@ -1789,9 +1769,9 @@ A4:
     assume
 A5:   NAT /\ A = {} & not REAL in B;
          REAL in the carrier of REAL? by Th30;
-    then REAL in [#](REAL?) by PRE_TOPC:12;
+    then REAL in [#](REAL?);
     then REAL in [#](REAL?) \ B by A5,XBOOLE_0:def 4;
-    then A6:   REAL in B` by PRE_TOPC:17;
+    then A6:   REAL in B`;
          B` c= the carrier of REAL?;
     then A7:   B` c= (REAL \ NAT) \/ {REAL} by Def7;
 A8: B` \ {REAL} c= REAL
@@ -1812,8 +1792,8 @@ A10:not REAL in REAL;
     then B` = (B`\{REAL}) \/ {REAL} by XBOOLE_1:45;
     then A11: ((id REAL)+*(NAT --> REAL))"(B`)
              = (B`\{REAL}) \/ NAT by A8,A10,Th19
-            .= (([#](REAL?) \ B)\{REAL}) \/ NAT by PRE_TOPC:17
-            .= (((the carrier of REAL?) \ B)\{REAL}) \/ NAT by PRE_TOPC:12
+            .= (([#](REAL?) \ B)\{REAL}) \/ NAT
+            .= (((the carrier of REAL?) \ B)\{REAL}) \/ NAT
             .= ((((REAL\NAT)\/{REAL})\A)\{REAL}) \/ NAT by A1,Def7;
          REAL \ A = ((((REAL\NAT)\/{REAL})\A)\{REAL}) \/ NAT
     proof
@@ -1860,8 +1840,8 @@ A15:     x in NAT;
     end;
     end;
     then [#](R^1) \ A = ((((REAL\NAT)\/ {REAL})\A)\{REAL}) \/
- NAT by PRE_TOPC:12,TOPMETR:24;
-    hence f"(B`) = A` by A2,A11,PRE_TOPC:17;
+ NAT by TOPMETR:24;
+    hence f"(B`) = A` by A2,A11;
   end;
 
   thus NAT /\ A = {} & A is open implies not REAL in B & B is open
@@ -1897,8 +1877,8 @@ A2:B is open
     reconsider N=NAT as Subset of R^1 by TOPMETR:24;
     reconsider N as Subset of R^1;
     A3: N is closed by Th10;
-         N` = [#](R^1) \ N by PRE_TOPC:17
-      .= B by PRE_TOPC:12,TOPMETR:24;
+         N` = [#](R^1) \ N
+      .= B by TOPMETR:24;
     hence B is open by A3,TOPS_1:29;
   end;
       B misses NAT by XBOOLE_1:79;
@@ -1928,8 +1908,8 @@ A8:   not x in {REAL}
     hence x in REAL \ NAT by XBOOLE_0:def 2;
   end;
   then C = (the carrier of REAL?) \ A by A1,Def7
-        .= [#](REAL?) \ A by PRE_TOPC:12
-        .= A` by PRE_TOPC:17;
+        .= [#](REAL?) \ A
+        .= A`;
   hence A is closed by A5,TOPS_1:29;
 end;
 
@@ -1955,7 +1935,7 @@ A5:    n in NAT;
     then A6: h.n in rng h by FUNCT_1:def 5;
     then reconsider Bn=h.n as Subset of REAL? by A3;
     reconsider Bn as Subset of REAL?;
-         Bn is open & y in Bn by A3,A6,YELLOW_8:21;
+         Bn is open & y in Bn by A6,YELLOW_8:21;
     then consider An being Subset of R^1 such that
 A7:   An is open and
 A8:   NAT c= An and
@@ -1978,7 +1958,7 @@ A13:   Ball(m',r) c= An /\ Kn by A11,TOPMETR:22;
 A14: r < 1
     proof
       assume r>=1;
-      then 1/2 < r by XREAL_1:2;
+      then 1/2 < r by XXREAL_0:2;
       then -r < -(1/2) by XREAL_1:26;
       then A15: -r + m < -(1/2) + m by XREAL_1:8;
            -(1/2) < r by A12;
@@ -2023,7 +2003,7 @@ A21:  not x in NAT
       then A22:     m >= x + 1 by NAT_1:38;
            m < x + r by A17,XREAL_1:21;
       then m - x < r by XREAL_1:21;
-      then m - x < 1 by A14,XREAL_1:2;
+      then m - x < 1 by A14,XXREAL_0:2;
       hence contradiction by A22,XREAL_1:21;
     end;
     end;
@@ -2054,7 +2034,7 @@ A29:   S.n in h.n /\ ]. m - 1/4 , m + 1/4 .[ by A26;
   reconsider O=rng S as Subset of R^1;
        O is closed by A27,Th9;
   then [#](R^1)\O is open by PRE_TOPC:def 6;
-  then A30:  O` is open by PRE_TOPC:17;
+  then A30:  O` is open;
 A31:
   NAT c= O`
   proof
@@ -2062,10 +2042,10 @@ A31:
     assume
 A32:   x in NAT;
     then x in the carrier of R^1 by TOPMETR:24;
-    then A33:   x in [#](R^1) by PRE_TOPC:12;
+    then A33:   x in [#](R^1);
          not x in rng S by A25,A32,XBOOLE_0:def 4;
     then x in [#](R^1) \ O by A33,XBOOLE_0:def 4;
-    hence x in O` by PRE_TOPC:17;
+    hence x in O`;
   end;
   set A = (O` \ NAT) \/ {REAL};
        A c= (REAL \ NAT) \/ {REAL}
@@ -2092,7 +2072,7 @@ A36:   xn=S.n;
     A37: ex m being Nat st m=n & S.n in h.n /\ ]. m - 1/4 , m + 1/4 .[ by A26;
     A38:  S.n in rng S by A24,FUNCT_1:def 5;
     then not xn in [#](R^1) \ O by A36,XBOOLE_0:def 4;
-    then A39: not xn in O` by PRE_TOPC:17;
+    then A39: not xn in O`;
          not xn = REAL
     proof
       assume xn = REAL;
@@ -2106,7 +2086,7 @@ A36:   xn=S.n;
   consider n1 being set such that
 A40: n1 in dom h and
 A41: V = h.n1 by A3,A34,FUNCT_1:def 5;
-  reconsider n=n1 as Nat by A40,FUNCT_2:def 1;
+  reconsider n=n1 as Nat by A40;
   consider x being set such that
 A42:  x in h.n & not (x in A) by A35;
   thus contradiction by A34,A41,A42;
@@ -2306,7 +2286,7 @@ A43:     for n being set st n in NAT holds P[n,S'.n]
         then consider z' being set such that
 A45:       z' in dom S' and
 A46:       z = S'.z' by FUNCT_1:def 5;
-             S'.z' in h.z' /\ A' by A42,A43,A45;
+             S'.z' in h.z' /\ A' by A43,A45;
         hence z in A' by A46,XBOOLE_0:def 3;
       end;
            S' is_convergent_to k
@@ -2331,7 +2311,7 @@ A51:      n > 0 by A48,Lm2;
           then A52:        n < m + 1 by NAT_1:38;
                n > 0 by A51;
           then 1/(m+1) < 1/n by A52,REAL_2:151;
-          then 1/(m+1) < r by A50,XREAL_1:2;
+          then 1/(m+1) < r by A50,XXREAL_0:2;
           then Ball(k',1/(m+1)) c= Ball(k',r) by PCOMPS_1:1;
           then A53:      Ball(k',1/(m+1)) c= U2 by A49,XBOOLE_1:1;
           consider m' being Nat such that
@@ -2472,7 +2452,37 @@ begin
 :: Auxiliary theorems
 ::
 
-canceled 2;
+canceled;
+
+::Moved from CIRCCMB2:5, AK, 20.02.2006
+theorem
+ for f,g being Function st f tolerates g
+  holds rng (f+*g) = (rng f)\/(rng g)
+  proof let f,g be Function such that
+A1: f tolerates g;
+   thus rng (f+*g) c= (rng f)\/(rng g) by FUNCT_4:18;
+A2: rng(f+*g) = f.:(dom f\dom g)\/rng g by Th12;
+   let x be set; assume
+A3: x in (rng f)\/(rng g);
+A4: rng g c= rng(f+*g) by FUNCT_4:19;
+   per cases;
+   suppose x in rng g; hence thesis by A4;
+   end;
+   suppose
+A5: not x in rng g;
+    then x in rng f by A3,XBOOLE_0:def 2;
+    then consider a being set such that
+A6: a in dom f & x = f.a by FUNCT_1:def 5;
+       now assume
+A7:   a in dom g;
+         x = (f+*g).a by A1,A6,FUNCT_4:16 .= g.a by A7,FUNCT_4:14;
+     hence contradiction by A5,A7,FUNCT_1:def 5;
+    end;
+    then a in dom f\dom g by A6,XBOOLE_0:def 4;
+    then x in f.:(dom f\dom g) by A6,FUNCT_1:def 12;
+   hence thesis by A2,XBOOLE_0:def 2;
+  end;
+  end;
 
 theorem
        for r being Real st r>0 ex n being Nat st (1/n < r & n>0) by Lm2;

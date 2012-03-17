@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FINSET_1"/>
@@ -60,8 +61,8 @@
 </Func>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="61"/>
-<Adjective nr="71">
+<Adjective nr="59"/>
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -103,8 +104,8 @@
 </Func>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="61"/>
-<Adjective nr="71">
+<Adjective nr="59"/>
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -146,7 +147,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="203">
+<Func kind="K" nr="220">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -181,7 +182,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="208">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

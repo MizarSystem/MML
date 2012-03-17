@@ -9,6 +9,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FINSUB_1"/>
@@ -27,7 +28,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="78">
+<Func kind="K" nr="95">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -41,7 +42,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="82">
+<Func kind="K" nr="99">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

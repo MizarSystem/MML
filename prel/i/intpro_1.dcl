@@ -11,6 +11,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -37,7 +38,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="101"/>
+<Func kind="K" nr="118"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="27"/>
@@ -51,7 +52,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="101"/>
+<Func kind="K" nr="118"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="26"/>
@@ -69,11 +70,11 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="101"/>
+<Func kind="K" nr="118"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="107">
+<Func kind="K" nr="124">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -82,7 +83,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="108"/>
+<Func kind="K" nr="125"/>
 <Cluster>
 <Adjective nr="34"/>
 </Cluster>
@@ -92,11 +93,11 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="101"/>
+<Func kind="K" nr="118"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="111">
+<Func kind="K" nr="128">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -105,7 +106,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="129"/>
 <Cluster>
 <Adjective nr="35"/>
 </Cluster>
@@ -115,11 +116,11 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="101"/>
+<Func kind="K" nr="118"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="113">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -128,7 +129,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="114"/>
+<Func kind="K" nr="131"/>
 <Cluster>
 <Adjective nr="36"/>
 </Cluster>
@@ -164,7 +165,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="85">
+<Func kind="K" nr="105">
 <Func kind="K" nr="56"/>
 </Func>
 </Func>
@@ -178,7 +179,7 @@
 <Cluster/>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="101"/>
+<Func kind="K" nr="118"/>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>

@@ -9,25 +9,27 @@ environ
  vocabularies BOOLE, TARSKI, FUNCT_1, RELAT_1, SUBSET_1, ARYTM_1, ARYTM,
       RCOMP_1, ARYTM_3, ORDINAL2, SEQM_3, ABSVALUE, SQUARE_1, FUNCT_3, MCART_1,
       PRE_TOPC, SETFAM_1, COMPTS_1, SEQ_1, SEQ_2, RELAT_2, PSCOMP_1, LIMFUNC1,
-      CONNSP_1, METRIC_1, SEQ_4, TOPMETR, INTEGRA1, FRECHET2;
+      CONNSP_1, METRIC_1, SEQ_4, TOPMETR, INTEGRA1, FRECHET2, JORDAN2C,
+      LATTICES, EUCLID, FUNCT_5;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
       COMPLEX1, RELSET_1, FUNCT_2, INTEGRA1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XREAL_0, REAL_1, NAT_1, BINARITH, SQUARE_1, SEQ_1, SEQ_2, SEQ_4, RCOMP_1,
-      STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1, PSCOMP_1, SEQM_3, TOPMETR,
-      LIMFUNC1, CONNSP_1, XXREAL_0;
+      XXREAL_0, XREAL_0, REAL_1, NAT_1, BINARITH, SQUARE_1, SEQ_1, SEQ_2,
+      SEQ_4, RCOMP_1, STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1, PSCOMP_1, SEQM_3,
+      METRIC_1, TBSP_1, TOPMETR, LIMFUNC1, CONNSP_1, JORDAN2C, EUCLID;
  constructors BINARITH, REAL_1, SEQM_3, COMPTS_1, DTCONSTR, INTEGRA1, RFUNCT_2,
       PSCOMP_1, TOPMETR, TSP_1, PROB_1, LIMFUNC1, CONNSP_1, COMPLEX1, SETFAM_1,
-      XXREAL_0;
- registrations XREAL_0, INT_1, STRUCT_0, PRE_TOPC, RELSET_1, SUBSET_1,
-      INTEGRA1, SEQM_3, PSCOMP_1, BORSUK_1, BORSUK_3, TOPREAL6, MEMBERED;
- requirements NUMERALS, REAL, SUBSET, BOOLE;
- definitions TARSKI, RCOMP_1, SEQ_4, XBOOLE_0;
- theorems AMI_5, JORDAN3, REAL_1, REAL_2, ZFMISC_1, TARSKI, SUBSET_1, MCART_1,
+      XXREAL_0, SQUARE_1, JORDAN2C, TBSP_1;
+ registrations XREAL_0, INT_1, STRUCT_0, PRE_TOPC, RELSET_1, SUBSET_1, TBSP_1,
+      INTEGRA1, SEQM_3, PSCOMP_1, BORSUK_1, BORSUK_3, TOPREAL6, MEMBERED,
+      XXREAL_0, EUCLID, COMPTS_1, TOPREAL1, JORDAN2C;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, RCOMP_1, SEQ_4, XBOOLE_0, SUBSET_1;
+ theorems JORDAN3, REAL_1, REAL_2, ZFMISC_1, TARSKI, SUBSET_1, MCART_1,
       FUNCT_2, FUNCT_1, RFUNCT_2, RCOMP_1, SEQ_4, SEQM_3, ABSVALUE, PSCOMP_1,
       GOBOARD7, BORSUK_1, TOPMETR, JORDAN6, UNIFORM1, JORDAN1, SQUARE_1,
       RELAT_1, SEQ_2, TOPREAL6, TSP_1, SEQ_1, INTEGRA1, CONNSP_1, XREAL_0,
       LIMFUNC1, PROB_1, FCONT_3, TSEP_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1,
-      COMPLEX1, BINARITH;
+      COMPLEX1, BINARITH, JORDAN2C, PRE_TOPC, TOPREAL3, METRIC_6, XXREAL_0;
  schemes FUNCT_2, PSCOMP_1;
 
 begin :: Preliminaries
@@ -40,29 +42,7 @@ A1: a0 in A() by XBOOLE_0:def 1;
  hence thesis;
 end;
 
-canceled 2;
-
-theorem Th3:
- for A,B being set, f being Function st A c= dom f & f.:A c= B
-  holds A c= f"B
-proof let A,B be set, f being Function;
- assume A c= dom f;
-  then A1: A c= f"(f.:A) by FUNCT_1:146;
- assume f.:A c= B;
-  then f"(f.:A) c= f"B by RELAT_1:178;
- hence A c= f"B by A1,XBOOLE_1:1;
-end;
-
-theorem Th4:
- for f being Function, A,B being set st A misses B
-  holds f"A misses f"B
-proof let f be Function, A,B be set;
- assume A misses B;
-  then A /\ B = {} by XBOOLE_0:def 7;
-  then {} = f"(A /\ B) by RELAT_1:171
-     .= f"A /\ f"B by FUNCT_1:137;
- hence f"A misses f"B by XBOOLE_0:def 7;
-end;
+canceled 4;
 
 theorem Th5:
  for S,X being set, f being Function of S,X, A being Subset of X
@@ -70,15 +50,15 @@ theorem Th5:
   holds (f"A)` = f"(A`)
 proof let S,X be set, f be Function of S,X, A be Subset of X such that
 A1: X = {} implies S = {};
-      A misses A` by SUBSET_1:26;
+      A misses A` by XBOOLE_1:79;
 then A /\ A` = {} by XBOOLE_0:def 7;
   then f"A /\ f"(A`) = f"({}X) by FUNCT_1:137 .= {} by RELAT_1:171;
   then A2: f"A misses f"(A`) by XBOOLE_0:def 7;
       f"A \/ f"(A`) = f"(A \/ A`) by RELAT_1:175 .= f"[#]X by SUBSET_1:25
-      .= f"X by SUBSET_1:def 4 .= S by A1,FUNCT_2:48
-      .= [#]S by SUBSET_1:def 4;
-  then (f"A)` /\ (f"(A`))` = ([#]S)` by SUBSET_1:29
-          .= {}S by SUBSET_1:21;
+      .= f"X .= S by A1,FUNCT_2:48
+      .= [#]S;
+  then (f"A)` /\ (f"(A`))` = ([#]S)` by XBOOLE_1:53
+          .= {}S by XBOOLE_1:37;
   then (f"A)` misses (f"(A`))` by XBOOLE_0:def 7;
  hence (f"A)` = f"(A`) by A2,SUBSET_1:46;
 end;
@@ -93,13 +73,13 @@ theorem
          r,s,r0,s0,t for real number;
 
 theorem
-     m <= n implies n-'(n-'m) = m
+  m <= n implies n-'(n-'m) = m
 proof assume
 A1: m <= n;
       n -' m <= n by JORDAN3:13;
   then n-'(n-'m) + (n-'m) = n by BINARITH:53
      .= m + (n-'m) by A1,BINARITH:53;
- hence thesis by XCMPLX_1:2;
+ hence thesis;
 end;
 
 canceled;
@@ -114,11 +94,11 @@ A2: s in [.a,b.];
        a <= r & a <= s by A1,A2,RCOMP_1:48;
    then a+a <= r+s by XREAL_1:9;
    then (a+a)/2 <= (r+s)/2 by REAL_1:73;
-then A3: a <= (r + s)/2 by XCMPLX_1:65;
+then A3: a <= (r + s)/2;
        r <= b & s <= b by A1,A2,RCOMP_1:48;
    then r+s <= b+b by XREAL_1:9;
    then (r+s)/2 <= (b+b)/2 by REAL_1:73;
-   then (r + s)/2 <= b by XCMPLX_1:65;
+   then (r + s)/2 <= b;
   hence thesis by A3;
  end;
 
@@ -132,15 +112,15 @@ theorem Th11:
  abs(abs(r0-s0)-abs(r-s)) <= abs(r0-r) + abs(s0-s)
 proof
 A1: abs(abs(r0-s0) - abs(r-s)) <= abs(r0-s0 - (r-s)) by COMPLEX1:150;
-      r0-s0 - (r-s) = r0-s0 - r + s by XCMPLX_1:37
-      .= r0-r - s0 + s by XCMPLX_1:21
-      .= r0-r - (s0-s) by XCMPLX_1:37;
+      r0-s0 - (r-s) = r0-s0 - r + s
+      .= r0-r - s0 + s
+      .= r0-r - (s0-s);
   then abs(r0-s0 - (r-s)) <= abs(r0-r) + abs(s0-s) by COMPLEX1:143;
- hence abs(abs(r0-s0)-abs(r-s)) <= abs(r0-r) + abs(s0-s) by A1,XREAL_1:2;
+ hence abs(abs(r0-s0)-abs(r-s)) <= abs(r0-r) + abs(s0-s) by A1,XXREAL_0:2;
 end;
 
-theorem
-     t in ].r,s.[ implies abs(t) < max(abs(r),abs(s))
+theorem Th12:
+  t in ].r,s.[ implies abs(t) < max(abs(r),abs(s))
 proof assume
 A1: t in ].r,s.[;
   reconsider r,t,s as Real by XREAL_0:def 1;
@@ -149,80 +129,18 @@ A1: t in ].r,s.[;
  suppose
 A3: t >= 0;
   then A4: t = abs(t) by ABSVALUE:def 1;
-      s > 0 by A1,A3,RCOMP_1:47;
+  s > 0 by A1,A3,RCOMP_1:47;
   then abs(t) < abs(s) by A2,A4,ABSVALUE:def 1;
  hence thesis by SQUARE_1:50;
  end;
  suppose
 A5: t < 0;
   then A6: -t = abs(t) by ABSVALUE:def 1;
-      r < 0 by A2,A5;
+  r < 0 by A2,A5;
   then -r =abs(r) by ABSVALUE:def 1;
   then abs(t) < abs(r) by A2,A6,XREAL_1:26;
  hence thesis by SQUARE_1:50;
 end;
-end;
-
-definition let A,B,C be non empty set;
- let f be Function of A, [:B,C:];
- redefine func pr1 f -> Function of A,B means
-:Def1:  for x being Element of A holds it.x = (f.x)`1;
- coherence
-  proof
-A1:  dom pr1 f = dom f by MCART_1:def 12;
-    then A2:  dom pr1 f = A by FUNCT_2:def 1;
-        rng pr1 f c= B
-     proof let x be set;
-      assume x in rng pr1 f;
-       then consider y being set such that
-A3:     y in dom pr1 f and
-A4:     x = (pr1 f).y by FUNCT_1:def 5;
-A5:     x = (f.y)`1 by A1,A3,A4,MCART_1:def 12;
-           f.y in [:B,C:] by A1,A3,FUNCT_2:7;
-      hence x in B by A5,MCART_1:10;
-     end;
-   hence pr1 f is Function of A,B by A2,FUNCT_2:4;
-  end;
- compatibility
-  proof let IT be Function of A,B;
-A6:  dom pr1 f = dom f by MCART_1:def 12;
-    then A7:  dom pr1 f = A by FUNCT_2:def 1;
-   hence IT = pr1 f implies for x being Element of A holds IT.x = (f.x)`1
-    by A6,MCART_1:def 12;
-   assume for x being Element of A holds IT.x = (f.x)`1;
-    then A8:   for x being set st x in dom f holds IT.x = (f.x)`1;
-        dom IT = dom f by A6,A7,FUNCT_2:def 1;
-   hence IT = pr1 f by A8,MCART_1:def 12;
-  end;
- func pr2 f -> Function of A,C means
-:Def2: for x being Element of A holds it.x = (f.x)`2;
- coherence
-  proof
-A9:  dom pr2 f = dom f by MCART_1:def 13;
-    then A10:  dom pr2 f = A by FUNCT_2:def 1;
-        rng pr2 f c= C
-     proof let x be set;
-      assume x in rng pr2 f;
-       then consider y being set such that
-A11:     y in dom pr2 f and
-A12:     x = (pr2 f).y by FUNCT_1:def 5;
-A13:     x = (f.y)`2 by A9,A11,A12,MCART_1:def 13;
-           f.y in [:B,C:] by A9,A11,FUNCT_2:7;
-      hence x in C by A13,MCART_1:10;
-     end;
-   hence pr2 f is Function of A,C by A10,FUNCT_2:4;
-  end;
- compatibility
-  proof let IT be Function of A,C;
-A14:  dom pr2 f = dom f by MCART_1:def 13;
-    then A15:  dom pr2 f = A by FUNCT_2:def 1;
-   hence IT = pr2 f implies for x being Element of A holds IT.x = (f.x)`2
-     by A14,MCART_1:def 13;
-   assume for x being Element of A holds IT.x = (f.x)`2;
-    then A16:   for x being set st x in dom f holds IT.x = (f.x)`2;
-        dom IT = dom f by A14,A15,FUNCT_2:def 1;
-   hence IT = pr2 f by A16,MCART_1:def 13;
-  end;
 end;
 
 scheme DoubleChoice{ A,B,C() -> non empty set, P[set,set,set]}:
@@ -250,7 +168,8 @@ A3:    P[e,ai,bi] by A1;
 A4: for e being Element of A() holds P1[e,f.e] from FUNCT_2:sch 3(A2);
  take pr1 f, pr2 f;
  let i be Element of A();
-      (f.i)`1 = (pr1 f).i & (f.i)`2 = (pr2 f).i by Def1,Def2;
+      (f.i)`1 = (pr1 f).i & (f.i)`2 = (pr2 f).i
+     by FUNCT_2:def 6, def 7;
  hence P[i,(pr1 f).i,(pr2 f).i] by A4;
 end;
 
@@ -336,7 +255,7 @@ A8: lim s3 in B by RCOMP_1:def 3;
 
 definition let A be Subset of REAL;
  attr A is connected means
-:Def3: for r,s being real number st r in A & s in A holds [.r,s.] c= A;
+:Def1: for r,s being real number st r in A & s in A holds [.r,s.] c= A;
 end;
 
 theorem
@@ -369,14 +288,14 @@ A9: not t in f.:A by SUBSET_1:7;
       P = P1 /\ A, Q = Q1 /\ A,
       X = left_open_halfline t \/ right_open_halfline t;
   reconsider Y = {t} as Subset of REAL;
-       Y` = REAL \ {t} by SUBSET_1:def 5
+       Y` = REAL \ {t}
           .= REAL \ [.t,t.] by RCOMP_1:14
           .= X by LIMFUNC1:25;
    then A10: (f"Y)` = f"X by Th5
         .= P1 \/ Q1 by RELAT_1:175;
 A11: A c= f"(f.:A) by FUNCT_2:50;
        {t} misses f.:A by A9,ZFMISC_1:56;
-   then f"{t} misses f"(f.:A) by Th4;
+   then f"{t} misses f"(f.:A) by FUNCT_1:141;
    then f"{t} misses A by A11,XBOOLE_1:63;
    then A c= P1 \/ Q1 by A10,SUBSET_1:43;
    then A12: A = A /\ (P1 \/ Q1) by XBOOLE_1:28
@@ -384,12 +303,12 @@ A11: A c= f"(f.:A) by FUNCT_2:50;
 A13: left_open_halfline t = {r1 where r1 is Real: r1 < t} by PROB_1:def 15;
 A14: right_open_halfline t = {r1 where r1 is Real: t < r1} by LIMFUNC1:def 3;
        r <= t & r <> t by A2,A8,A9,RCOMP_1:48;
-   then r < t by XREAL_1:1;
+   then r < t by XXREAL_0:1;
    then r in left_open_halfline t by A13;
    then p in P1 by A4,FUNCT_2:46;
    then A15: P <> {}T by A3,XBOOLE_0:def 3;
        t <= s & s <> t by A5,A8,A9,RCOMP_1:48;
-   then t < s by XREAL_1:1;
+   then t < s by XXREAL_0:1;
    then s in right_open_halfline t by A14;
    then q in Q1 by A7,FUNCT_2:46;
    then A16: Q <> {}T by A6,XBOOLE_0:def 3;
@@ -402,7 +321,7 @@ A20: Q c= Q1 by XBOOLE_1:17;
        left_open_halfline t /\ right_open_halfline t = ].t,t.[ by LIMFUNC1:18
         .= {} by RCOMP_1:12;
    then left_open_halfline t misses right_open_halfline t by XBOOLE_0:def 7;
-   then P1 misses Q1 by Th4;
+   then P1 misses Q1 by FUNCT_1:141;
    then P1 /\ Q1 = {} by XBOOLE_0:def 7;
    then P1 /\ Q1 misses P \/ Q by XBOOLE_1:65;
    then P,Q are_separated by A17,A18,A19,A20,TSEP_1:49;
@@ -411,7 +330,7 @@ end;
 
 definition let A,B be Subset of REAL;
  func dist(A,B) -> real number means
-:Def4: ex X being Subset of REAL st
+:Def2: ex X being Subset of REAL st
     X = {abs(r - s) where r is Element of REAL, s is Element of REAL :
             r in A & s in B}
           & it = lower_bound X;
@@ -482,7 +401,7 @@ proof let A,B be Subset of REAL;
       hence thesis;
      end;
     then reconsider Y0 = Y as Subset of REAL;
-A1: dist(A,B) = lower_bound Y0 by Def4;
+A1: dist(A,B) = lower_bound Y0 by Def2;
 A2: Y0 is bounded_below
   proof take 0;
    let r0;
@@ -513,7 +432,7 @@ A2: D c= B;
       hence thesis;
      end;
     then reconsider X as Subset of REAL;
-A3: dist(A,B) = lower_bound X by Def4;
+A3: dist(A,B) = lower_bound X by Def2;
 A4: X is bounded_below
   proof take 0;
    let r0;
@@ -537,7 +456,7 @@ A7: abs(r0 - s0) in Y by A5,A6;
       hence thesis;
      end;
     then reconsider Y as non empty Subset of REAL by A7;
-A8: dist(C,D) = lower_bound Y by Def4;
+A8: dist(C,D) = lower_bound Y by Def2;
        Y c= X
    proof let x be set;
     assume x in Y;
@@ -554,7 +473,7 @@ theorem Th18:
 proof let A, B be non empty compact Subset of REAL;
   reconsider At = A, Bt = B as non empty compact Subset of R^1
           by TOPMETR:24,TOPREAL6:81;
-A1:   the carrier of R^1|At = At & the carrier of R^1|Bt = Bt by JORDAN1:1;
+A1:   the carrier of R^1|At = At & the carrier of R^1|Bt = Bt by PRE_TOPC:29;
   reconsider AB = [:R^1|At, R^1|Bt:] as compact (non empty TopSpace);
   defpred P[set,set] means ex r,s being Real st $1 = [r,s] & $2 = abs(r-s);
 A2: now let x be set;
@@ -618,14 +537,14 @@ A17:        f.y = abs(r1-s1) by A5;
               s1 in YT by A14,A16,ZFMISC_1:106;
           then s1 in ].s-g/2,s+g/2.[ by XBOOLE_0:def 3;
           then A19:       abs(s1-s) < g/2 by RCOMP_1:8;
-              g = g/2 + g/2 by XCMPLX_1:66;
+              g = g/2 + g/2;
           then A20:       abs(r1-r) + abs(s1-s) < g by A18,A19,XREAL_1:10;
               abs(abs(r1-s1)-abs(r-s)) <= abs(r1-r) + abs(s1-s) by Th11;
-          then abs(abs(r1-s1)-abs(r-s)) < g by A20,XREAL_1:2;
+          then abs(abs(r1-s1)-abs(r-s)) < g by A20,XXREAL_0:2;
          hence e in N by A9,A11,A15,A17,RCOMP_1:8;
         end;
        then f.:[:YS,YT:] c= Y by A7,XBOOLE_1:1;
-      hence [:YS,YT:] c= f"Y by A13,Th3;
+      hence [:YS,YT:] c= f"Y by A13,FUNCT_1:163;
      end;
     hence f"Y is open by Th13;
    end;
@@ -679,7 +598,7 @@ A34:   f.y = abs(r1-s1) by A5;
 A35: x = [r,s] and
 A36: f.x = abs(r-s) by A5;
       r1 = r & s1 = s by A25,A35,ZFMISC_1:33;
- hence dist(A,B) = abs(r1 - s1) by A22,A26,A36,Def4;
+ hence dist(A,B) = abs(r1 - s1) by A22,A26,A36,Def2;
 end;
 
 theorem Th19:
@@ -702,7 +621,7 @@ A3: abs(r0 - s0) in X by A1,A2;
       hence thesis;
      end;
     then reconsider X as non empty Subset of REAL by A3;
-A4: dist(A,B) = lower_bound X by Def4;
+A4: dist(A,B) = lower_bound X by Def2;
       for t being real number st t in X holds t >= 0
    proof let t be real number;
     assume t in X;
@@ -768,7 +687,7 @@ A11:   x <= y;
     hence [.x,y.] meets A by A7,XBOOLE_0:3;
          y in [.x,y.] by A11;
     hence [.x,y.] meets B by A9,XBOOLE_0:3;
-    thus [.x,y.] c= S.i by A6,A8,A10,Def3;
+    thus [.x,y.] c= S.i by A6,A8,A10,Def1;
    end;
    suppose
 A12:  y <= x;
@@ -778,7 +697,7 @@ A12:  y <= x;
     hence [.y,x.] meets A by A7,XBOOLE_0:3;
          y in [.y,x.] by A12;
     hence [.y,x.] meets B by A9,XBOOLE_0:3;
-    thus [.y,x.] c= S.i by A6,A8,A10,Def3;
+    thus [.y,x.] c= S.i by A6,A8,A10,Def1;
   end;
   end;
   consider T be Function of NAT, bool REAL such that
@@ -855,7 +774,7 @@ A31:  fb = gb*Nseq1 by A28,SEQM_3:def 10;
   then A33: fa is convergent by A23,SEQ_4:29;
    then A34: fa+fb is convergent by A29,SEQ_2:19;
    then A35: ff is convergent by SEQ_2:21;
-A36: r = (1/2)*(lim fa + lim fb) by XCMPLX_1:100
+A36: r = (1/2)*(lim fa + lim fb)
      .= (1/2)*lim(fa+fb) by A29,A33,SEQ_2:20
      .= lim ff by A34,SEQ_2:22;
         T.0 meets A & T.0 meets B by A13;
@@ -868,7 +787,7 @@ A37: for i being Nat st k0 <= i holds abs(ff.i - r) < d0/2
 A38: now assume
 A39: r in A \/ B;
        ff.k0 = (1/2)*((fa+fb).k0) by SEQ_1:13
-     .= ((fa+fb).k0)/2 by XCMPLX_1:100
+     .= ((fa+fb).k0)/2
      .= (fa.k0+fb.k0)/2 by SEQ_1:11;
    then A40: abs((fa.k0+fb.k0)/2 - r) < d0/2 by A37;
    set i = Nseq.(Nseq1.k0),
@@ -881,7 +800,7 @@ A42: SA.i = T.i /\ A & SB.i = T.i /\ B by A14,A15;
    then A43:  d0 <= di by A41,Th17;
    then d0/2 <= di/2 by REAL_1:73;
    then di/2 + d0/2 <= di/2 + di/2 by XREAL_1:8;
-   then A44:  di/2 + d0/2 <= di by XCMPLX_1:66;
+   then A44:  di/2 + d0/2 <= di;
 A45: fa.k0 = ga.(Nseq1.k0) by SEQM_3:31
         .= sa.i by A25,SEQM_3:31;
 A46: fb.k0 = gb.(Nseq1.k0) by A31,SEQM_3:31
@@ -890,12 +809,12 @@ A46: fb.k0 = gb.(Nseq1.k0) by A31,SEQM_3:31
    then consider a,b being Real such that
          a <= b and
 A47:  T.i = [.a,b.] by INTEGRA1:def 1;
-       2*(d0/2) = d0 by XCMPLX_1:88;
+       2*(d0/2) = d0;
    then A48: 2*abs((sa.i+sb.i)/2 - r) < d0 by A40,A45,A46,XREAL_1:70;
 A49: 2*abs((sa.i+sb.i)/2 - r) = abs(2)*abs((sa.i+sb.i)/2 - r) by ABSVALUE:def 1
         .= abs(2*((sa.i+sb.i)/2 - r)) by COMPLEX1:151
-        .= abs(2*((sa.i+sb.i)/2) - 2*r) by XCMPLX_1:40
-        .= abs(sa.i+sb.i-2*r) by XCMPLX_1:88;
+        .= abs(2*((sa.i+sb.i)/2) - 2*r)
+        .= abs(sa.i+sb.i-2*r);
 A50: sa.i in SA.i & sb.i in SB.i by A19;
 A51: SA.i c= T.i & SB.i c= T.i by A42,XBOOLE_1:17;
 A52: di <= abs(sb.i-sa.i) by A50,Th16;
@@ -903,8 +822,8 @@ A53: now per cases;
     suppose sa.i <= sb.i;
      then sb.i - sa.i >= 0 by XREAL_1:50;
     then di <= sb.i-sa.i by A52,ABSVALUE:def 1;
-    then d0 <= sb.i-sa.i by A43,XREAL_1:2;
-   then abs(sa.i+sb.i-2*r) <= sb.i-sa.i by A48,A49,XREAL_1:2;
+    then d0 <= sb.i-sa.i by A43,XXREAL_0:2;
+   then abs(sa.i+sb.i-2*r) <= sb.i-sa.i by A48,A49,XXREAL_0:2;
    then A54: r in [.sa.i,sb.i.] by RCOMP_1:9;
          [.sa.i,sb.i.] c= T.i by A47,A50,A51,RCOMP_1:16;
     hence r in T.i by A54;
@@ -913,8 +832,8 @@ A53: now per cases;
      then A55:   sa.i - sb.i >= 0 by XREAL_1:50;
         abs(sb.i-sa.i) = abs(sa.i-sb.i) by UNIFORM1:13;
     then di <= sa.i-sb.i by A52,A55,ABSVALUE:def 1;
-    then d0 <= sa.i-sb.i by A43,XREAL_1:2;
-   then abs(sb.i+sa.i-2*r) <= sa.i-sb.i by A48,A49,XREAL_1:2;
+    then d0 <= sa.i-sb.i by A43,XXREAL_0:2;
+   then abs(sb.i+sa.i-2*r) <= sa.i-sb.i by A48,A49,XXREAL_0:2;
    then A56: r in [.sb.i,sa.i.] by RCOMP_1:9;
          [.sb.i,sa.i.] c= T.i by A47,A50,A51,RCOMP_1:16;
     hence r in T.i by A56;
@@ -923,13 +842,8 @@ A53: now per cases;
   per cases by A39,XBOOLE_0:def 2;
   suppose
 A57: r in B;
-       fa.k0 - (fa.k0+fb.k0)/2 = (fa.k0 + fa.k0)/2 - (fa.k0+fb.k0)/2 by
-XCMPLX_1:65
-          .= (fa.k0 + fa.k0 - (fa.k0+fb.k0))/2 by XCMPLX_1:121
-          .= (fa.k0 + fa.k0 - fa.k0 - fb.k0)/2 by XCMPLX_1:36
-          .= (fa.k0 - fb.k0)/2 by XCMPLX_1:26;
-   then fa.k0 - r = (fa.k0-fb.k0)/2 + (fa.k0+fb.k0)/2 - r by XCMPLX_1:27
-       .= (fa.k0-fb.k0)/2 + ((fa.k0+fb.k0)/2 - r) by XCMPLX_1:29;
+   fa.k0 - r = (fa.k0-fb.k0)/2 + (fa.k0+fb.k0)/2 - r
+       .= (fa.k0-fb.k0)/2 + ((fa.k0+fb.k0)/2 - r);
    then A58:  abs(fa.k0 - r) <= abs((fa.k0-fb.k0)/2) + abs((fa.k0+fb.k0)/2 - r)
                by COMPLEX1:142;
 A59:  abs((fa.k0-fb.k0)/2) = abs((fa.k0-fb.k0))/abs(2) by COMPLEX1:153
@@ -937,24 +851,20 @@ A59:  abs((fa.k0-fb.k0)/2) = abs((fa.k0-fb.k0))/abs(2) by COMPLEX1:153
        abs((fa.k0-fb.k0)/2) + abs((fa.k0+fb.k0)/2 - r) <
      abs((fa.k0-fb.k0)/2) + d0/2
         by A40,XREAL_1:8;
-   then A60:  abs(fa.k0 - r) < abs((fa.k0-fb.k0))/2 + d0/2 by A58,A59,XREAL_1:2
+   then A60:  abs(fa.k0 - r) < abs((fa.k0-fb.k0))/2 + d0/2 by A58,A59,
+XXREAL_0:2
 ;
 A61: fa.k0 in SA.i by A19,A45;
        SB.i = T.i /\ B by A15;
    then A62: r in SB.i by A53,A57,XBOOLE_0:def 3;
        abs(fa.k0 - r) < di/2 + d0/2 by A19,A45,A46,A60;
-   then abs(fa.k0 - r) < di by A44,XREAL_1:2;
+   then abs(fa.k0 - r) < di by A44,XXREAL_0:2;
   hence contradiction by A61,A62,Th16;
   end;
   suppose
 A63: r in A;
-       fb.k0 - (fb.k0+fa.k0)/2 = (fb.k0 + fb.k0)/2 - (fb.k0+fa.k0)/2 by
-XCMPLX_1:65
-          .= (fb.k0 + fb.k0 - (fb.k0+fa.k0))/2 by XCMPLX_1:121
-          .= (fb.k0 + fb.k0 - fb.k0 - fa.k0)/2 by XCMPLX_1:36
-          .= (fb.k0 - fa.k0)/2 by XCMPLX_1:26;
-   then fb.k0 - r = (fb.k0-fa.k0)/2 + (fb.k0+fa.k0)/2 - r by XCMPLX_1:27
-       .= (fb.k0-fa.k0)/2 + ((fb.k0+fa.k0)/2 - r) by XCMPLX_1:29;
+   fb.k0 - r = (fb.k0-fa.k0)/2 + (fb.k0+fa.k0)/2 - r
+       .= (fb.k0-fa.k0)/2 + ((fb.k0+fa.k0)/2 - r);
    then A64:  abs(fb.k0 - r) <= abs((fb.k0-fa.k0)/2) + abs((fb.k0+fa.k0)/2 - r)
     by COMPLEX1:142;
 A65:  abs((fb.k0-fa.k0)/2) = abs((fb.k0-fa.k0))/abs(2) by COMPLEX1:153
@@ -962,14 +872,15 @@ A65:  abs((fb.k0-fa.k0)/2) = abs((fb.k0-fa.k0))/abs(2) by COMPLEX1:153
        abs((fb.k0-fa.k0)/2) + abs((fb.k0+fa.k0)/2 - r) <
      abs((fb.k0-fa.k0)/2) + d0/2
         by A40,XREAL_1:8;
-   then A66:  abs(fb.k0 - r) < abs((fb.k0-fa.k0))/2 + d0/2 by A64,A65,XREAL_1:2
+   then A66:  abs(fb.k0 - r) < abs((fb.k0-fa.k0))/2 + d0/2 by A64,A65,
+XXREAL_0:2
 ;
 A67: fb.k0 in SB.i by A19,A46;
        SA.i = T.i /\ A by A14;
    then A68: r in SA.i by A53,A63,XBOOLE_0:def 3;
        abs(fb.k0-fa.k0) = abs(fa.k0-fb.k0) by UNIFORM1:13
        .= di by A19,A45,A46;
-   then abs(fb.k0 - r) < di by A44,A66,XREAL_1:2;
+   then abs(fb.k0 - r) < di by A44,A66,XXREAL_0:2;
   hence contradiction by A67,A68,Th16;
  end;
  end;
@@ -980,16 +891,16 @@ A67: fb.k0 in SB.i by A19,A46;
 A69: i <= Nseq.i by SEQM_3:33;
         i <= Nseq1.i by SEQM_3:33;
    then Nseq.i <= Nseq.(Nseq1.i) by Lm1;
-   then A70: i <= Nseq.(Nseq1.i) by A69,XREAL_1:2;
+   then A70: i <= Nseq.(Nseq1.i) by A69,XXREAL_0:2;
   set k = max(k0,i);
-A71: k0 <= k by SQUARE_1:46;
+A71: k0 <= k by XXREAL_0:25;
  take j = Nseq.(Nseq1.k);
-      i <= k by SQUARE_1:46;
+      i <= k by XXREAL_0:25;
   then Nseq1.i <= Nseq1.k by Lm1;
   then Nseq.(Nseq1.i) <= j by Lm1;
- hence i <= j by A70,XREAL_1:2;
+ hence i <= j by A70,XXREAL_0:2;
        ff.k = (1/2)*((fa+fb).k) by SEQ_1:13
-     .= ((fa+fb).k)/2 by XCMPLX_1:100
+     .= ((fa+fb).k)/2
      .= (fa.k+fb.k)/2 by SEQ_1:11;
    then A72: abs((fa.k+fb.k)/2 - r) < d0/2 by A37,A71;
    set di = dist(SA.j,SB.j);
@@ -1003,16 +914,16 @@ A76: fa.k = ga.(Nseq1.k) by SEQM_3:31
         .= sa.j by A25,SEQM_3:31;
 A77: fb.k = gb.(Nseq1.k) by A31,SEQM_3:31
         .= sb.j by SEQM_3:31;
-       T.j is closed-interval by A13;
+    T.j is closed-interval by A13;
    then consider a,b be Real such that
-         a <= b and
+    a <= b and
 A78:  T.j = [.a,b.] by INTEGRA1:def 1;
-       2*(d0/2) = d0 by XCMPLX_1:88;
+       2*(d0/2) = d0;
    then A79: 2*abs((sa.j+sb.j)/2 - r) < d0 by A72,A76,A77,XREAL_1:70;
 A80: 2*abs((sa.j+sb.j)/2 - r) = abs(2)*abs((sa.j+sb.j)/2 - r) by ABSVALUE:def 1
         .= abs(2*((sa.j+sb.j)/2 - r)) by COMPLEX1:151
-        .= abs(2*((sa.j+sb.j)/2) - 2*r) by XCMPLX_1:40
-        .= abs(sa.j+sb.j-2*r) by XCMPLX_1:88;
+        .= abs(2*((sa.j+sb.j)/2) - 2*r)
+        .= abs(sa.j+sb.j-2*r);
 A81: sa.j in SA.j & sb.j in SB.j by A19;
 A82: SA.j c= T.j & SB.j c= T.j by A74,XBOOLE_1:17;
 A83: di <= abs(sb.j-sa.j) by A81,Th16;
@@ -1021,25 +932,77 @@ A84:
     suppose sa.j <= sb.j;
      then sb.j - sa.j >= 0 by XREAL_1:50;
     then di <= sb.j-sa.j by A83,ABSVALUE:def 1;
-    then d0 <= sb.j-sa.j by A75,XREAL_1:2;
-
-   then abs(sa.j+sb.j-2*r) <= sb.j-sa.j by A79,A80,XREAL_1:2;
+    then d0 <= sb.j-sa.j by A75,XXREAL_0:2;
+   then abs(sa.j+sb.j-2*r) <= sb.j-sa.j by A79,A80,XXREAL_0:2;
    then A85: r in [.sa.j,sb.j.] by RCOMP_1:9;
-         [.sa.j,sb.j.] c= T.j by A78,A81,A82,RCOMP_1:16;
+    [.sa.j,sb.j.] c= T.j by A78,A81,A82,RCOMP_1:16;
     hence r in T.j by A85;
     end;
     suppose sb.j <= sa.j;
      then A86:   sa.j - sb.j >= 0 by XREAL_1:50;
-        abs(sb.j-sa.j) = abs(sa.j-sb.j) by UNIFORM1:13;
+    abs(sb.j-sa.j) = abs(sa.j-sb.j) by UNIFORM1:13;
     then di <= sa.j-sb.j by A83,A86,ABSVALUE:def 1;
-    then d0 <= sa.j-sb.j by A75,XREAL_1:2;
-   then abs(sb.j+sa.j-2*r) <= sa.j-sb.j by A79,A80,XREAL_1:2;
+    then d0 <= sa.j-sb.j by A75,XXREAL_0:2;
+   then abs(sb.j+sa.j-2*r) <= sa.j-sb.j by A79,A80,XXREAL_0:2;
    then A87: r in [.sb.j,sa.j.] by RCOMP_1:9;
-         [.sb.j,sa.j.] c= T.j by A78,A81,A82,RCOMP_1:16;
+   [.sb.j,sa.j.] c= T.j by A78,A81,A82,RCOMP_1:16;
   hence r in T.j by A87;
  end;
  end;
       T.j c= S.j by A13;
  hence r in S.j by A84;
+end;
+
+:: Moved from JORDAN1A, AK, 23.02.2006
+
+theorem Th22:
+ for S being closed Subset of TOP-REAL 2 st S is Bounded
+  holds proj2.:S is closed
+proof let S be closed Subset of TOP-REAL 2;
+ assume S is Bounded;
+  then Cl(proj2.:S) = proj2.:Cl S by TOPREAL6:93
+               .= proj2.:S by PRE_TOPC:52;
+ hence proj2.:S is closed;
+end;
+
+theorem Th23:
+ for S being Subset of TOP-REAL 2 st S is Bounded
+  holds proj2.:S is bounded
+proof let S be Subset of TOP-REAL 2;
+ assume S is Bounded;
+  then reconsider C = S as bounded Subset of Euclid 2 by JORDAN2C:def 2;
+  consider r being Real, x being Point of Euclid 2 such that
+A1: 0 < r and
+A2: C c= Ball(x,r) by METRIC_6:def 10;
+  reconsider p = x as Point of TOP-REAL 2 by TOPREAL3:13;
+  reconsider P = Ball(x,r) as Subset of TOP-REAL 2 by TOPREAL3:13;
+  set t = max(abs(p`2-r),abs(p`2+r));
+  now assume
+    abs(p`2-r) <= 0 & abs(p`2+r) <= 0;
+    then abs(p`2-r) = 0 & abs(p`2+r) = 0 by COMPLEX1:132;
+    then abs(r-p`2) = 0 & abs(p`2+r) = 0 by UNIFORM1:13;
+    then r-p`2 = 0 & p`2+r = 0 by ABSVALUE:7;
+    then A3: r-p`2+p`2+r = 0;
+    r+r > 0+0 by A1,XREAL_1:10;
+   hence contradiction by A3;
+  end;
+  then A4: t > 0 by SQUARE_1:50;
+A5: proj2.:P = ].p`2-r,p`2+r.[ by TOPREAL6:52;
+      for s st s in proj2.:S holds abs(s) < t
+  proof let s;
+        proj2.:S c= proj2.:P by A2,RELAT_1:156;
+   hence thesis by A5,Th12;
+  end;
+ hence proj2.:S is bounded by A4,SEQ_4:14;
+end;
+
+theorem
+  for S being compact Subset of TOP-REAL 2
+  holds proj2.:S is compact
+proof
+ let S being compact Subset of TOP-REAL 2;
+A1: proj2.:S is closed by Th22;
+      proj2.:S is bounded by Th23;
+ hence proj2.:S is compact by A1,RCOMP_1:29;
 end;
 

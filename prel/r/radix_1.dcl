@@ -14,6 +14,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
@@ -30,8 +31,8 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="FINSEQ_3"/>
+<ArticleID name="RVSUM_1"/>
 <ArticleID name="WSIERP_1"/>
 <ArticleID name="RADIX_1"/>
 </Signature>
@@ -42,7 +43,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="266">
+<Func kind="K" nr="283">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

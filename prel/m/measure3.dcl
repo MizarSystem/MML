@@ -23,7 +23,9 @@
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="CARD_4"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="SUPINF_2"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="SETFAM_1"/>
@@ -40,10 +42,10 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="34">
+<Adjective nr="39">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="37">
+<Adjective nr="42">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -53,28 +55,28 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="17">
+<Typ kind="M" nr="19">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="195">
+<Func kind="K" nr="231">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="34">
+<Adjective nr="39">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="37">
+<Adjective nr="42">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="46">
+<Adjective nr="47"/>
+<Adjective nr="48"/>
+<Adjective nr="52">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

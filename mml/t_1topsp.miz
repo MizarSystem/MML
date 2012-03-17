@@ -8,16 +8,17 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, PRE_TOPC, EQREL_1, BORSUK_1, TARSKI, BOOLE,
       SUBSET_1, SETFAM_1, PROB_1, URYSOHN1, ORDINAL2, T_1TOPSP;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
+ RELSET_1, PARTFUN1, FUNCT_2,
       SETFAM_1, STRUCT_0, PRE_TOPC, EQREL_1, TOPS_2, URYSOHN1, BORSUK_1;
- constructors URYSOHN1, TOPS_2, SETFAM_1, EQREL_1, BORSUK_1;
+ constructors URYSOHN1, TOPS_2, SETFAM_1, BORSUK_1;
  registrations PRE_TOPC, BORSUK_1, STRUCT_0, FUNCT_1, RELSET_1, SUBSET_1,
-      XBOOLE_0, EQREL_1, PARTFUN1;
+      XBOOLE_0, EQREL_1, PARTFUN1, FUNCT_2;
  requirements BOOLE, SUBSET;
- definitions TARSKI, EQREL_1, PRE_TOPC, XBOOLE_0;
  theorems ZFMISC_1, PRE_TOPC, TARSKI, SETFAM_1, EQREL_1, URYSOHN1, BORSUK_1,
       FUNCT_2, FUNCT_1, TOPS_2, RELSET_1, RELAT_1, XBOOLE_0, XBOOLE_1;
  schemes FUNCT_1;
+ definitions TARSKI, EQREL_1, PRE_TOPC, XBOOLE_0;
 
 begin
 
@@ -93,7 +94,7 @@ theorem Th4:
        let S be a_partition of X;
        assume
 A1:     A in S;
-           {A} c= S
+       {A} c= S
        proof
         let y be set;
         assume y in {A};
@@ -676,8 +677,7 @@ definition
  correctness;
 end;
 
-registration
- let T;
+registration let T;
  cluster T_1-reflex T -> strict non empty;
  coherence;
 end;
@@ -769,8 +769,17 @@ registration let T;
  coherence by Th12;
 end;
 
-definition
- let T be non empty TopSpace;
+registration
+  cluster being_T1 non empty TopSpace;
+  existence
+  proof
+    consider T being non empty TopSpace;
+    take T_1-reflex T;
+    thus thesis;
+  end;
+end;
+
+definition let T be non empty TopSpace;
   func T_1-reflect T -> continuous Function of T,T_1-reflex T equals
    Proj Intersection Closed_Partitions T;
   correctness;
@@ -788,13 +797,13 @@ theorem Th13:
      let T,T1 be non empty TopSpace;
      let f be continuous Function of T,T1;
 A1: dom f = the carrier of T & rng f c= the carrier of T1
-      by FUNCT_2:def 1,RELSET_1:12;
+      by FUNCT_2:def 1;
      assume
 A2: T1 is being_T1;
      thus {f"{z} where z is Element of T1 : z in rng f}
       is a_partition of the carrier of T
        proof
-            {f"{z} where z is Element of T1 : z in rng f} c=
+        {f"{z} where z is Element of T1 : z in rng f} c=
         bool the carrier of T
          proof
           let y;
@@ -817,7 +826,7 @@ A5:          y in the carrier of T;
             consider z being set such that
 A6:          z = f.y;
 A7:       z in rng f by A1,A5,A6,FUNCT_1:def 5;
-            then reconsider z as Element of T1 by A1;
+            then reconsider z as Element of T1;
 A8:          f"{z} in fz by A7;
                 f.y in {f.y} by TARSKI:def 1;
             then y in f"{z} by A1,A5,A6,FUNCT_1:def 13;
@@ -876,7 +885,7 @@ theorem Th14:
       let T,T1 be non empty TopSpace;
       let f be continuous Function of T,T1;
 A1: dom f = the carrier of T & rng f c= the carrier of T1
-      by FUNCT_2:def 1,RELSET_1:12;
+      by FUNCT_2:def 1;
       assume
 A2:  T1 is being_T1;
       let w be set;
@@ -929,7 +938,7 @@ A1:  T1 is being_T1;
 A2:    w = EqClass(x,Intersection (Closed_Partitions T)) by Th10;
       reconsider x as Element of T;
 A3: dom f = the carrier of T & rng f c= the carrier of T1
-      by FUNCT_2:def 1,RELSET_1:12;
+      by FUNCT_2:def 1;
       reconsider fx = f.x as Element of T1;
       take fx;
       thus thesis by A1,A2,A3,Th14,FUNCT_1:def 5;
@@ -951,9 +960,9 @@ A1:   T1 is being_T1;
         as a_partition of the carrier of T by Th13;
        set g = T_1-reflect T;
 A2:  dom f = the carrier of T & rng f c= the carrier of T1
-       by FUNCT_2:def 1,RELSET_1:12;
+       by FUNCT_2:def 1;
 A3:  dom g = the carrier of T & rng g c= the carrier of T_1-reflex T
-       by FUNCT_2:def 1,RELSET_1:12;
+       by FUNCT_2:def 1;
        defpred X[set,set] means for z being Element of T1 holds
        (z in rng f & $1 c= f"{z}) implies $2 = f"{z};
 A4:    for y,w,v st y in the carrier of T_1-reflex T & X[y,w] & X[y,v]
@@ -1091,13 +1100,13 @@ A34:    f = h*g
            let x be set;
            assume
 A35:         x in dom f;
-           then g.x in rng g by A2,A3,FUNCT_1:def 5;
-           then g.x in the carrier of T_1-reflex T by A3;
+           then g.x in rng g by A3,FUNCT_1:def 5;
+           then g.x in the carrier of T_1-reflex T;
            then g.x in the carrier of space (Intersection Closed_Partitions T);
            then g.x in Intersection (Closed_Partitions T) by BORSUK_1:def 10;
            then consider y being Element of T such that
 A36:         g.x = EqClass(y,Intersection (Closed_Partitions T)) by Th10;
-           reconsider x as Element of T by A35,FUNCT_2:def 1;
+           reconsider x as Element of T by A35;
            g = proj (Intersection Closed_Partitions T) by BORSUK_1:def 11
 ;
            then A37:       x in g.x by BORSUK_1:def 1;
@@ -1156,7 +1165,16 @@ definition
  let f be continuous Function of T,S;
   func T_1-reflex f -> continuous Function of T_1-reflex T, T_1-reflex S means
      (T_1-reflect S) * f = it * (T_1-reflect T);
-existence by Th16;
+existence
+ proof
+   reconsider g = (T_1-reflect S) * f as continuous Function of T,T_1-reflex S
+      by TOPS_2:58;
+   ex h being continuous Function of T_1-reflex T, T_1-reflex S st
+     g = h*T_1-reflect T by Th16;
+  hence
+   ex h being continuous Function of T_1-reflex T, T_1-reflex S
+    st (T_1-reflect S) * f = h * (T_1-reflect T);
+ end;
 uniqueness
  proof
   let g1,g2 be continuous Function of T_1-reflex T, T_1-reflex S;
@@ -1168,7 +1186,7 @@ A3: dom g1 = the carrier of (T_1-reflex T) &
       now
    let x be set;
    assume x in dom g1;
-   then A4: x in the carrier of T_1-reflex T by FUNCT_2:def 1;
+   then A4: x in the carrier of T_1-reflex T;
 A5: the carrier of T_1-reflex T = the carrier of
                     space (Intersection Closed_Partitions T)
     .= (Intersection Closed_Partitions T) by BORSUK_1:def 10;
@@ -1176,7 +1194,7 @@ A5: the carrier of T_1-reflex T = the carrier of
 A6: x = EqClass(y,(Intersection (Closed_Partitions T))) by A4,Th10;
  A7: dom (T_1-reflect T) = the carrier of T &
    rng (T_1-reflect T) c= the carrier of T_1-reflex T
-        by FUNCT_2:def 1,RELSET_1:12;
+        by FUNCT_2:def 1;
    reconsider y as Element of T;
        T_1-reflect T = Proj (Intersection Closed_Partitions T)
                       .= proj (Intersection Closed_Partitions T)

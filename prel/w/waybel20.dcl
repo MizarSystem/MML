@@ -18,7 +18,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="BINOP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="FUNCT_3"/>
@@ -29,6 +28,7 @@
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="CAT_1"/>
+<ArticleID name="BINOP_1"/>
 <ArticleID name="CAT_2"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="RELAT_2"/>
@@ -61,7 +61,7 @@
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="32" value="false"/>
+<Adjective nr="29" value="false"/>
 <Adjective nr="96"/>
 </Cluster>
 </Typ>
@@ -95,19 +95,19 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="140"/>
-<Adjective nr="175">
+<Adjective nr="138"/>
+<Adjective nr="173">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="205">
+<Adjective nr="203">
 <LocusVar nr="1"/>
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="213">
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="215">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="217">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

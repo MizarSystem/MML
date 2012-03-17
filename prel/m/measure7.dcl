@@ -23,7 +23,9 @@
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="CARD_4"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="SUPINF_2"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="SETFAM_1"/>
@@ -34,7 +36,6 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="MEASURE5"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="MEASURE7"/>
 </Signature>
 <FCluster>
@@ -42,11 +43,11 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="205"/>
+<Func kind="K" nr="241"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="248">
+<Func kind="K" nr="264">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

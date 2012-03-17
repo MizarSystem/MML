@@ -10,6 +10,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -22,7 +23,6 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="RELAT_2"/>
@@ -150,7 +150,7 @@
 </For>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="296">
+<Func kind="K" nr="294">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -203,7 +203,7 @@
 </For>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="191">
+<Func kind="K" nr="188">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

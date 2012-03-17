@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FINSUB_1"/>
@@ -37,8 +38,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="37">
+<Adjective nr="28"/>
+<Adjective nr="35">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -59,10 +60,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="37">
+<Adjective nr="35">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="40">
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -75,10 +76,10 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="37">
+<Adjective nr="35">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="40">
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -97,11 +98,11 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="5"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
 </Cluster>
 </RCluster>
 <CCluster>
@@ -112,10 +113,10 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="37">
+<Adjective nr="35">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="40">
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -129,11 +130,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="37">
+<Adjective nr="28"/>
+<Adjective nr="35">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="40">
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

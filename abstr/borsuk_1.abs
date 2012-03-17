@@ -8,16 +8,17 @@ environ
 
  vocabularies BOOLE, FUNCT_1, RELAT_1, FUNCOP_1, FUNCT_3, MCART_1, SETFAM_1,
       TARSKI, SUBSET_1, EQREL_1, PRE_TOPC, ORDINAL2, CONNSP_2, TOPS_1,
-      COMPTS_1, FINSET_1, PCOMPS_1, METRIC_1, RCOMP_1, BORSUK_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, RELAT_1, FUNCT_1,
-      MCART_1, DOMAIN_1, RCOMP_1, SETFAM_1, PARTFUN1, EQREL_1, FUNCT_2,
-      STRUCT_0, METRIC_1, PCOMPS_1, PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1,
-      CONNSP_2, FUNCT_3, FUNCOP_1, XXREAL_0;
+      COMPTS_1, FINSET_1, PCOMPS_1, METRIC_1, RCOMP_1, BORSUK_1, ARYTM;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, XXREAL_0, XREAL_0,
+      REAL_1, FINSET_1, RELAT_1, FUNCT_1, MCART_1, DOMAIN_1, RCOMP_1, SETFAM_1,
+      EQREL_1, FUNCT_2, STRUCT_0, METRIC_1, PCOMPS_1, PRE_TOPC, TOPS_1, TOPS_2,
+      COMPTS_1, CONNSP_2, FUNCT_3, FUNCOP_1, RELSET_1, PARTFUN1;
  constructors FINSET_1, DOMAIN_1, RCOMP_1, PCOMPS_1, EQREL_1, TOPS_1, TOPS_2,
       COMPTS_1, CONNSP_2, FUNCT_3, XCMPLX_0, MEMBERED, FUNCOP_1, SETFAM_1,
       XXREAL_0;
  registrations SUBSET_1, PCOMPS_1, EQREL_1, FINSET_1, PRE_TOPC, STRUCT_0,
-      METRIC_1, FUNCOP_1, RELSET_1, MEMBERED, PARTFUN1, FUNCT_2, XREAL_0;
+      METRIC_1, FUNCOP_1, RELSET_1, MEMBERED, PARTFUN1, FUNCT_2, RELAT_1,
+      TOPS_1, XREAL_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
 
 
@@ -188,39 +189,42 @@ theorem :: BORSUK_1:35
  for X being TopStruct,
      Y being SubSpace of X holds the carrier of Y c= the carrier of X;
 
+definition
+ let X be 1-sorted,Y be non empty 1-sorted, y be Element of Y;
+ func X --> y -> Function of X,Y equals
+:: BORSUK_1:def 2
+  (the carrier of X) --> y;
+end;
+
+theorem :: BORSUK_1:36
+ for X being TopSpace, Y being non empty TopSpace
+ for y being Point of Y holds X --> y is continuous;
+
+registration
+  let X be TopSpace, Y be non empty TopSpace;
+  let y be Point of Y;
+  cluster X --> y -> continuous;
+end;
+
 definition let X, Y be non empty TopSpace, F be Function of X, Y;
  redefine attr F is continuous means
-:: BORSUK_1:def 2
+:: BORSUK_1:def 3
        for W being Point of X, G being a_neighborhood of F.W
     ex H being a_neighborhood of W st F.:H c= G;
 end;
 
-definition
- let X be 1-sorted,Y be non empty 1-sorted, y be Element of Y;
- func X --> y -> Function of X,Y equals
-:: BORSUK_1:def 3
-  (the carrier of X) --> y;
-end;
-
 reserve X, Y for non empty TopSpace;
 
-theorem :: BORSUK_1:36
- for y being Point of Y holds X --> y is continuous;
-
 registration
-  let X, Y; let y be Point of Y;
-  cluster X --> y -> continuous;
-end;
-
-registration
-  let S, T be non empty TopSpace;
+  let S be TopSpace;
+  let T be non empty TopSpace;
   cluster continuous Function of S, T;
 end;
 
-definition let X,Y,Z be non empty TopSpace,
+registration let X,Y,Z be non empty TopSpace,
                F be continuous Function of X,Y,
                G be continuous Function of Y,Z;
- redefine func G*F -> continuous Function of X,Z;
+ cluster G*F -> continuous Function of X,Z;
 end;
 
 theorem :: BORSUK_1:37
@@ -402,10 +406,15 @@ theorem :: BORSUK_1:59
    (X1 = pr1(the carrier of X, the carrier of Y).:D implies X1 is open) &
    (Y1 = pr2(the carrier of X, the carrier of Y).:D implies Y1 is open);
 
-definition let X, Y be set, f be Function of bool X, bool Y;
-           let R be Subset-Family of X;
-  redefine func f.:R -> Subset-Family of Y;
-end;
+::definition let X, Y be set, f be Function of bool X, bool Y;
+::           let R be Subset-Family of X;
+::  redefine func f.:R -> Subset-Family of Y;
+::  coherence
+::  proof
+::        f.:R c= bool Y;
+::    hence thesis;
+::  end;
+::end;
 
 theorem :: BORSUK_1:60
  for H being Subset-Family of [:X,Y:] st H is open holds
@@ -693,9 +702,13 @@ end;
 theorem :: BORSUK_1:84
      for XX being non empty TopSpace, X being closed non empty SubSpace of XX,
      D being DECOMPOSITION of X st X is_a_retract_of XX
-   holds space(D) is_a_retract_of space(TrivExt D);
+   holds space D is_a_retract_of space TrivExt D;
 
 theorem :: BORSUK_1:85
      for XX being non empty TopSpace, X being closed non empty SubSpace of XX,
      D being DECOMPOSITION of X st X is_an_SDR_of XX
   holds space(D) is_an_SDR_of space(TrivExt D);
+
+theorem :: BORSUK_1:86
+  for r being real number holds
+    0 <= r & r <= 1 iff r in the carrier of I[01];

@@ -11,7 +11,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="RELSET_1"/>
@@ -23,7 +23,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="SQUARE_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="RFINSEQ"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="RFUNCT_3"/>
@@ -46,7 +46,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="180">
+<Func kind="K" nr="185">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>

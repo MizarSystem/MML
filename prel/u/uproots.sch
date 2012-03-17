@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -44,7 +45,7 @@
 </Pred>
 <Pred kind="R" nr="12">
 <Var nr="1"/>
-<Func kind="K" nr="91">
+<Func kind="K" nr="108">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -81,7 +82,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="12">
-<Func kind="K" nr="91">
+<Func kind="K" nr="108">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
@@ -96,13 +97,13 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="129">
+<Func kind="K" nr="146">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="20">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="129">
+<Func kind="K" nr="146">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

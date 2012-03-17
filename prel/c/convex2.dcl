@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
@@ -31,12 +32,12 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="37" value="false"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -47,14 +48,14 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="21">
+<Adjective nr="19">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="29"/>
-<Adjective nr="49">
+<Adjective nr="27"/>
+<Adjective nr="47">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -63,12 +64,12 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="37" value="false"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -90,14 +91,14 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="21">
+<Adjective nr="19">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="29"/>
-<Adjective nr="49">
+<Adjective nr="27"/>
+<Adjective nr="47">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

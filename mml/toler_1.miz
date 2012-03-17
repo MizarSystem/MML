@@ -13,7 +13,7 @@ environ
  constructors WELLORD1, EQREL_1, ORDINAL1;
  registrations RELAT_1, RELSET_1, SUBSET_1, PARTFUN1, EQREL_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, RELAT_1, RELAT_2;
+ definitions TARSKI, RELAT_1, RELAT_2, WELLORD1;
  theorems TARSKI, RELAT_1, RELSET_1, RELAT_2, ZFMISC_1, WELLORD1, ENUMSET1,
       ORDERS_1, EQREL_1, ORDINAL1, XBOOLE_0, XBOOLE_1, PARTFUN1;
  schemes XBOOLE_0;
@@ -119,8 +119,7 @@ definition let R be Relation, Y be set;
   redefine func R |_2 Y -> Relation of Y,Y;
   coherence
   proof
-    R |_2 Y = R /\ [:Y,Y:] by WELLORD1:def 6;
-    then R |_2 Y c= [:Y,Y:] by XBOOLE_1:17;
+    R |_2 Y c= [:Y,Y:] by XBOOLE_1:17;
     hence R|_2 Y is Relation of Y,Y by RELSET_1:def 1;
   end;
 end;
@@ -237,12 +236,12 @@ proof let R be Relation of X,Y; assume R is symmetric;
 then A1:  R is_symmetric_in field R by RELAT_2:def 11;
   now let x,y; assume A2: x in field(R|_2 Z) & y in field(R|_2 Z)
     & [x,y] in R|_2 Z;
-    then A3: x in (field R) & x in Z by WELLORD1:19;
-    A4: y in (field R) & y in Z by A2,WELLORD1:19;
-    [x,y] in R & [x,y] in [:Z,Z:] by A2,WELLORD1:16;
+    then A3: x in field R & x in Z by WELLORD1:19;
+    A4: y in field R & y in Z by A2,WELLORD1:19;
+    [x,y] in R & [x,y] in [:Z,Z:] by A2,XBOOLE_0:def 3;
     then A5: [y,x] in R by A1,A3,A4,RELAT_2:def 3;
     [y,x] in [:Z,Z:] by A2,ZFMISC_1:107;
-    hence [y,x] in R|_2 Z by A5,WELLORD1:16;
+    hence [y,x] in R|_2 Z by A5,XBOOLE_0:def 3;
   end;
   then R|_2 Z is_symmetric_in field(R|_2 Z) by RELAT_2:def 3;
   hence R|_2 Z is symmetric by RELAT_2:def 11;
@@ -252,11 +251,10 @@ definition let X,T;let Y be Subset of X;
   redefine func T |_2 Y -> Tolerance of Y;
   coherence
     proof
-A1:   T |_2 Y = T /\ [:Y,Y:] by WELLORD1:def 6;
-      now let x; assume A2: x in Y;
-        then A3: [x,x] in [:Y,Y:] by ZFMISC_1:106;
-        [x,x] in T by A2,Th27;
-        then [x,x] in T |_2 Y by A1,A3,XBOOLE_0:def 3;
+      now let x; assume A1: x in Y;
+        then A2: [x,x] in [:Y,Y:] by ZFMISC_1:106;
+        [x,x] in T by A1,Th27;
+        then [x,x] in T |_2 Y by A2,XBOOLE_0:def 3;
         hence x in dom (T |_2 Y) by RELAT_1:def 4;
       end;
       then Y c= dom(T |_2 Y) by TARSKI:def 3;
@@ -732,7 +730,7 @@ end;
 
 :: Tolerance neighbourhood
 
-notation let X; let T be Tolerance of X; let x;
+notation let X, Y; let T be Relation of X, Y; let x;
   synonym neighbourhood (x, T) for Class (T,x);
 end;
 
@@ -961,7 +959,7 @@ A1:     field T = X by ORDERS_1:97;
   then A2: T is_transitive_in X by A1,RELAT_2:def 16;
   let x;
   assume A3: x in X;
-  set N = neighbourhood(x,T);
+  set N = Class(T,x);
        for y,z st y in N & z in N holds [y,z] in T
     proof let y,z such that A4: y in N & z in N;
       A5: [x,z] in T by A4,Th54;

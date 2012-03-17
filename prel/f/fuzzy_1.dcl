@@ -12,6 +12,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
@@ -33,7 +34,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
-<Adjective nr="29"/>
+<Adjective nr="27"/>
 </Cluster>
 </CCluster>
 </Registrations>

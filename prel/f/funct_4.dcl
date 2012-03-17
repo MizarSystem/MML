@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCT_4"/>
@@ -27,7 +28,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="57">
+<Func kind="K" nr="74">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

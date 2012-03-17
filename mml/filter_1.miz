@@ -9,21 +9,21 @@ environ
 
  vocabularies LATTICES, FILTER_0, RELAT_1, EQREL_1, BINOP_1, BOOLE, FUNCT_1,
       LATTICE2, ZF_LANG, SUBSET_1, FUNCT_4, WELLORD1, FUNCT_3, PARTFUN1,
-      FILTER_1;
+      FILTER_1, T_1TOPSP;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, BINOP_1, EQREL_1, DOMAIN_1, WELLORD1, FUNCT_3, FUNCT_4,
       STRUCT_0, LATTICES, FILTER_0, LATTICE2;
  constructors BINOP_1, DOMAIN_1, WELLORD1, FUNCT_3, FUNCT_4, FILTER_0,
       LATTICE2, EQREL_1, REALSET1;
  registrations LATTICES, FILTER_0, LATTICE2, RELSET_1, STRUCT_0, SUBSET_1,
-      XBOOLE_0, PARTFUN1, FUNCT_2;
+      XBOOLE_0, PARTFUN1, FUNCT_2, EQREL_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, FUNCT_1, WELLORD1, BINOP_1, FILTER_0, LATTICE2, LATTICES,
-      STRUCT_0, XBOOLE_0;
  theorems FUNCT_1, FUNCT_2, FUNCT_3, FUNCT_4, WELLORD1, DOMAIN_1, BINOP_1,
       EQREL_1, RELAT_1, ZFMISC_1, LATTICES, FILTER_0, LATTICE2, RELSET_1,
       WELLORD2, XBOOLE_0, XBOOLE_1;
  schemes FUNCT_1, FUNCT_2, BINOP_1;
+ definitions TARSKI, FUNCT_1, WELLORD1, BINOP_1, FILTER_0, LATTICE2, LATTICES,
+      XBOOLE_0, EQREL_1;
 
 begin
 
@@ -80,64 +80,49 @@ theorem
    coherence by Th1;
  end;
 
- definition let D,R;
+definition let D,R;
   mode UnOp of D,R -> UnOp of D means :Def1:
    for x,y being Element of D st [x,y] in R
       holds [it.x,it.y] in R;
    existence
     proof
-      reconsider f = id D as UnOp of D;
+     reconsider f = id D as UnOp of D;
      take f; let x,y be Element of D;
-         f.x = x & f.y = y by FUNCT_1:35;
+     f.x = x & f.y = y by FUNCT_1:35;
      hence thesis;
-    end;
+   end;
 
   mode BinOp of D,R -> BinOp of D means :Def2:
    for x1,y1, x2,y2 being Element of D
    st [x1,y1] in R & [x2,y2] in R holds
     [it.(x1,x2),it.(y1,y2)] in R;
    existence
-    proof
+   proof
      deffunc F(Element of D,Element of D) = $1;
      consider f being BinOp of D such that
 A1:    for x,y being Element of D holds f.(x,y) = F(x,y)
          from BINOP_1:sch 4;
      take f; let x1,y1, x2,y2 be Element of D;
-         f.(x1,x2) = x1 & f.(y1,y2) = y1 by A1;
+     f.(x1,x2) = x1 & f.(y1,y2) = y1 by A1;
      hence thesis;
     end;
- end;
+end;
 
  reserve F,G for BinOp of D,RD;
 
- definition let D; let R be Equivalence_Relation of D;
+definition let D; let R be Equivalence_Relation of D;
   mode UnOp of R is UnOp of D,R;
   mode BinOp of R is BinOp of D,R;
-  end;
-registration let D; let R be Equivalence_Relation of D;
-  cluster Class R -> non empty;
-   coherence
-    proof consider d being Element of D;
-         Class(R,d) in Class R by EQREL_1:def 5;
-     hence thesis;
-    end;
- end;
-
- definition let D; let R be Equivalence_Relation of D;
-  let d be Element of D;
-  redefine func Class(R,d) -> Element of Class R;
-   coherence by EQREL_1:def 5;
- end;
+end;
 
  definition let D; let R be Equivalence_Relation of D; let u be UnOp of D;
   assume
 A1: u is UnOp of D,R;
   func u /\/ R -> UnOp of Class R means
       for x,y st x in Class R & y in x holds it.x = Class(R,u.y);
-
    existence
     proof
-       deffunc F(Element of D) = Class(R,$1);
+       deffunc F(Element of D) = EqClass(R,$1);
        consider f being Function of D, Class R such that
 A2:    for x being Element of D holds f.x = F(x) from FUNCT_2:sch 4;
          now let X; assume X in Class R;
@@ -168,8 +153,8 @@ then A8:    uR.x = (f*u).(g.x) & (f*u).(g.x) = f.(u.(g.x)) by A7,FUNCT_1:22;
          g.x' in x by A4;
       then [g.x',y'] in R by A7,A9,EQREL_1:30;
       then [u.(g.x'),u.y'] in R by A1,Def1;
-      then u.(g.x') in Class(R,u.y') & f.(u.(g.x')) = Class(R,u.(g.x')) &
-       f.(u.y') = Class(R,u.y') by A2,EQREL_1:27;
+      then u.(g.x') in EqClass(R,u.y') & f.(u.(g.x')) = EqClass(R,u.(g.x')) &
+       f.(u.y') = EqClass(R,u.y') by A2,EQREL_1:27;
      hence uR.x = Class(R,u.y) by A8,EQREL_1:31;
     end;
    uniqueness
@@ -196,7 +181,7 @@ A1: b is BinOp of D,R;
     it.(x,y) = Class(R,b.(x1,y1));
    existence
     proof
-     deffunc F(Element of D) = Class(R,$1);
+     deffunc F(Element of D) = EqClass(R,$1);
      consider f being Function of D, Class R such that
 A2:    for x being Element of D holds f.x = F(x) from FUNCT_2:sch 4;
          now let X; assume X in Class R;
@@ -229,10 +214,10 @@ A7:    x in Class R & y in Class R & x1 in x & y1 in y;
          g.x' in x & g.y' in y by A4;
       then [g.x',x1'] in R & [g.y',y1'] in R by A7,A8,A9,EQREL_1:30;
       then [b.(g.x',g.y'),b.(x1',y1')] in R by A1,Def2;
-      then b.(g.x',g.y') in Class(R,b.(x1',y1')) & bR.(x',y') = f.(b.(g.x',g.
-y')) &
-       f.(b.(g.x',g.y')) = Class(R,b.(g.x',g.y')) &
-        f.(b.(x1',y1')) = Class(R,b.(x1',y1')) by A2,A6,EQREL_1:27;
+      then b.(g.x',g.y') in EqClass(R,b.(x1',y1')) &
+      bR.(x',y') = f.(b.(g.x',g.y')) &
+       f.(b.(g.x',g.y')) = EqClass(R,b.(g.x',g.y')) &
+        f.(b.(x1',y1')) = EqClass(R,b.(x1',y1')) by A2,A6,EQREL_1:27;
      hence bR.(x,y) = Class(R,b.(x1,y1)) by EQREL_1:31;
     end;
    uniqueness
@@ -257,7 +242,7 @@ A13:     y1 in D & y = Class(R,y1) by EQREL_1:def 5;
 
 theorem
  Th3: (F /\/ RD).(Class(RD,a), Class(RD,b)) = Class(RD, F.(a,b))
-  proof a in Class(RD,a) & b in Class(RD,b) by EQREL_1:28;
+  proof a in EqClass(RD,a) & b in EqClass(RD,b) by EQREL_1:28;
    hence thesis by Def4;
   end;
 
@@ -265,10 +250,13 @@ scheme
 SchAux1 { D()->non empty set, R()->Equivalence_Relation of D(), P[set] }:
  for x being Element of Class R() holds P[x]
   provided
-A1: for x being Element of D() holds P[Class(R(),x)]
+A1: for x being Element of D() holds P[EqClass(R(),x)]
   proof
    let x be Element of Class R();
-       ex y st y in D() & x = Class(R(),y) by EQREL_1:def 5;
+   consider y such that
+A2:y in D() & x = Class(R(),y) by EQREL_1:def 5;
+   reconsider y as Element of D() by A2;
+   x = EqClass(R(),y) by A2;
    hence thesis by A1;
   end;
 
@@ -276,12 +264,16 @@ scheme
 SchAux2 { D()->non empty set, R()->Equivalence_Relation of D(), P[set,set] }:
  for x,y being Element of Class R() holds P[x,y]
   provided
-A1: for x,y being Element of D() holds P[Class(R(),x),Class(R(),y)]
+A1: for x,y being Element of D() holds P[EqClass(R(),x),EqClass(R(),y)]
   proof
    let x1,x2 be Element of Class R();
- A2:   ex y1 st y1 in D() & x1 = Class(R(),y1) by EQREL_1:def 5;
-       ex y2 st y2 in D() & x2 = Class(R(),y2) by EQREL_1:def 5;
-   hence thesis by A1,A2;
+   consider y1 such that
+A2:y1 in D() & x1 = Class(R(),y1) by EQREL_1:def 5;
+   consider y2 such that
+A3:y2 in D() & x2 = Class(R(),y2) by EQREL_1:def 5;
+   reconsider y1, y2 as Element of D() by A2,A3;
+   x1 = EqClass(R(),y1) & x2 = EqClass(R(),y2) by A2,A3;
+   hence thesis by A1;
   end;
 
 scheme SchAux3 { D()->non empty set, R()->Equivalence_Relation of D(),
@@ -289,12 +281,18 @@ scheme SchAux3 { D()->non empty set, R()->Equivalence_Relation of D(),
  for x,y,z being Element of Class R() holds P[x,y,z]
   provided
 A1: for x,y,z being Element of D() holds
-     P[Class(R(),x),Class(R(),y),Class(R(),z)]
+     P[EqClass(R(),x),EqClass(R(),y),EqClass(R(),z)]
 proof let x1,x2,x3 be Element of Class R();
- A2:   ex y1 st y1 in D() & x1 = Class(R(),y1) by EQREL_1:def 5;
- A3:   ex y2 st y2 in D() & x2 = Class(R(),y2) by EQREL_1:def 5;
-       ex y3 be set st y3 in D() & x3 = Class(R(),y3) by EQREL_1:def 5;
-   hence thesis by A1,A2,A3;
+   consider y1 such that
+A2:y1 in D() & x1 = Class(R(),y1) by EQREL_1:def 5;
+   consider y2 such that
+A3:y2 in D() & x2 = Class(R(),y2) by EQREL_1:def 5;
+   consider y3 being set such that
+A4:y3 in D() & x3 = Class(R(),y3) by EQREL_1:def 5;
+   reconsider y1, y2, y3 as Element of D() by A2,A3,A4;
+   x1 = EqClass(R(),y1) & x2 = EqClass(R(),y2) &
+     x3 = EqClass(R(),y3) by A2,A3,A4;
+   hence thesis by A1;
   end;
 
 theorem
@@ -304,12 +302,12 @@ A1:  for a,b holds F.(a,b) = F.(b,a);
    defpred P[Element of Class RD, Element of Class RD] means
       (F/\/RD).($1,$2) = (F/\/RD).($2,$1);
 A2:  now let x1,x2 be Element of D;
-     thus P[Class(RD,x1),Class(RD,x2)]
+     thus P[EqClass(RD,x1),EqClass(RD,x2)]
      proof
-     thus (F/\/RD).(Class(RD,x1),Class(RD,x2))
+     thus (F/\/RD).(EqClass(RD,x1),EqClass(RD,x2))
         = Class(RD, F.(x1,x2)) by Th3
        .= Class(RD, F.(x2,x1)) by A1
-       .= (F/\/RD).(Class(RD,x2),Class(RD,x1)) by Th3;
+       .= (F/\/RD).(EqClass(RD,x2),EqClass(RD,x1)) by Th3;
     end;
     end;
     thus for c1,c2 being Element of Class RD holds P[c1,c2]
@@ -324,15 +322,16 @@ A1:  for d,a,b holds F.(d,F.(a,b)) = F.(F.(d,a),b);
       means
       (F/\/RD).($1,(F/\/RD).($2,$3)) = (F/\/RD).((F/\/RD).($1,$2),$3);
 A2:  now let x1,x2,x3 be Element of D;
-    thus P[Class(RD,x1),Class(RD,x2),Class(RD,x3)]
+    thus P[EqClass(RD,x1),EqClass(RD,x2),EqClass(RD,x3)]
     proof
-     thus (F/\/RD).(Class(RD,x1),(F/\/RD).(Class(RD,x2),Class(RD,x3)))
+     thus (F/\/RD).(EqClass(RD,x1),
+           (F/\/RD).(EqClass(RD,x2),EqClass(RD,x3)))
         = (F/\/RD).(Class(RD,x1),Class(RD, F.(x2,x3))) by Th3
        .= Class(RD, F.(x1,F.(x2,x3))) by Th3
        .= Class(RD, F.(F.(x1,x2),x3)) by A1
        .= (F/\/RD).(Class(RD,F.(x1,x2)),Class(RD, x3)) by Th3
-       .= (F/\/RD).((F/\/RD).(Class(RD,x1),Class(RD,x2)),Class(RD,x3))
-           by Th3;
+       .= (F/\/RD).((F/\/RD).(EqClass(RD,x1),EqClass(RD,x2)),
+            EqClass(RD,x3)) by Th3;
      end;
     end;
    thus for c1,c2,c3 being Element of Class RD holds P[c1,c2,c3]
@@ -340,16 +339,17 @@ A2:  now let x1,x2,x3 be Element of D;
   end;
 
 theorem
- Th6: d is_a_left_unity_wrt F implies Class(RD,d) is_a_left_unity_wrt F/\/RD
+ Th6: d is_a_left_unity_wrt F implies
+   EqClass(RD,d) is_a_left_unity_wrt F/\/RD
   proof assume
 A1:  F.(d,a) = a;
    defpred P[Element of Class RD] means
-     (F/\/RD).(Class(RD,d),$1) = $1;
+     (F/\/RD).(EqClass(RD,d),$1) = $1;
 A2:  now let a;
-     thus P[Class(RD,a)]
+     thus P[EqClass(RD,a)]
      proof
-       thus (F/\/RD).(Class(RD,d),Class(RD,a))
-          = Class(RD, F.(d,a)) by Th3 .= Class(RD, a) by A1;
+       thus (F/\/RD).(EqClass(RD,d),EqClass(RD,a))
+          = Class(RD, F.(d,a)) by Th3 .= EqClass(RD, a) by A1;
      end;
     end;
    thus for c being Element of Class RD holds P[c]
@@ -358,16 +358,16 @@ A2:  now let a;
 
 theorem
  Th7: d is_a_right_unity_wrt F implies
-   Class(RD,d) is_a_right_unity_wrt F/\/RD
+   EqClass(RD,d) is_a_right_unity_wrt F/\/RD
   proof assume
 A1:  F.(a,d) = a;
    defpred P[Element of Class RD] means
-     (F/\/RD).($1,Class(RD,d)) = $1;
+     (F/\/RD).($1,EqClass(RD,d)) = $1;
 A2:  now let a;
-     thus P[Class(RD,a)]
+     thus P[EqClass(RD,a)]
      proof
-       thus (F/\/RD).(Class(RD,a),Class(RD,d))
-          = Class(RD, F.(a,d)) by Th3 .= Class(RD, a) by A1;
+       thus (F/\/RD).(EqClass(RD,a),EqClass(RD,d))
+          = EqClass(RD, F.(a,d)) by Th3 .= EqClass(RD, a) by A1;
      end;
     end;
    thus for c being Element of Class RD holds P[c]
@@ -375,23 +375,23 @@ A2:  now let a;
   end;
 
 theorem
-    d is_a_unity_wrt F implies Class(RD,d) is_a_unity_wrt F/\/RD
+    d is_a_unity_wrt F implies EqClass(RD,d) is_a_unity_wrt F/\/RD
   proof assume
        d is_a_left_unity_wrt F & d is_a_right_unity_wrt F;
-   hence Class(RD,d) is_a_left_unity_wrt F/\/RD &
-         Class(RD,d) is_a_right_unity_wrt F/\/RD by Th6,Th7;
+   hence EqClass(RD,d) is_a_left_unity_wrt F/\/RD &
+         EqClass(RD,d) is_a_right_unity_wrt F/\/RD by Th6,Th7;
   end;
 
 theorem Th9:
  F is_left_distributive_wrt G implies F/\/RD is_left_distributive_wrt G/\/RD
   proof assume
 A1:  for d,a,b holds F.(d,G.(a,b)) = G.(F.(d,a),F.(d,b));
-   deffunc Cl(Element of D) = Class(RD,$1);
+   deffunc Cl(Element of D) = EqClass(RD,$1);
    defpred P[Element of Class RD, Element of Class RD, Element of Class RD]
       means (F/\/RD).($1,(G/\/RD).($2,$3)) =
        (G/\/RD).((F/\/RD).($1,$2),(F/\/RD).($1,$3));
 A2:  now let x1,x2,x3 be Element of D;
-      thus P[Class(RD,x1),Class(RD,x2),Class(RD,x3)]
+      thus P[EqClass(RD,x1),EqClass(RD,x2),EqClass(RD,x3)]
       proof
        thus (F/\/RD).(Cl(x1),(G/\/RD).(Cl(x2),Cl(x3)))
         = (F/\/RD).(Cl(x1),Cl(G.(x2,x3))) by Th3
@@ -412,12 +412,12 @@ theorem Th10:
    F/\/RD is_right_distributive_wrt G/\/RD
   proof assume
 A1:  for a,b,d holds F.(G.(a,b),d) = G.(F.(a,d),F.(b,d));
-   deffunc Cl(Element of D) = Class(RD,$1);
+   deffunc Cl(Element of D) = EqClass(RD,$1);
    defpred P[Element of Class RD, Element of Class RD, Element of Class RD]
     means (F/\/RD).((G/\/RD).($1,$2),$3) =
       (G/\/RD).((F/\/RD).($1,$3),(F/\/RD).($2,$3));
 A2:  now let x2,x3,x1 be Element of D;
-      thus P[Class(RD,x2),Class(RD,x3),Class(RD,x1)]
+      thus P[EqClass(RD,x2),EqClass(RD,x3),EqClass(RD,x1)]
       proof
        thus (F/\/RD).((G/\/RD).(Cl(x2),Cl(x3)),Cl(x1))
         = (F/\/RD).(Cl(G.(x2,x3)),Cl(x1)) by Th3
@@ -445,11 +445,11 @@ theorem
  Th12: F absorbs G implies F/\/RD absorbs G/\/RD
   proof assume
 A1:  for x,y being Element of D holds F.(x,G.(x,y)) = x;
-   deffunc Cl(Element of D) = Class(RD,$1);
+   deffunc Cl(Element of D) = EqClass(RD,$1);
    defpred P[Element of Class RD,Element of Class RD] means
      (F/\/RD).($1,(G/\/RD).($1,$2)) = $1;
 A2:  now let x1,x2 be Element of D;
-      thus P[Class(RD  ,x1),Class(RD,x2)]
+      thus P[EqClass(RD,x1),EqClass(RD,x2)]
        proof
         thus (F/\/RD).(Cl(x1),(G/\/RD).(Cl(x1),Cl(x2)))
          = (F/\/RD).(Cl(x1),Cl(G.(x1,x2))) by Th3
@@ -608,11 +608,8 @@ A3:   for R being Equivalence_Relation of the carrier of L st
 
  definition let L be Lattice, F be Filter of L,
     a be Element of L;
-  assume
-A1:
-   L is I_Lattice;
-  func a /\/ F -> Element of L /\/ F means:
-Def6:
+  assume A1:L is I_Lattice;
+  func a /\/ F -> Element of L /\/ F means :Def6:
     for R being Equivalence_Relation of the carrier of L st
       R = equivalence_wrt F holds it = Class(R, a);
    existence
@@ -622,7 +619,7 @@ Def6:
      set R = equivalence_wrt FI;
      reconsider j = join(I), m = meet(I) as BinOp of R by Th13,Th14;
          I /\/ FI = LattStr (#Class R, j/\/R, m/\/R#) by Def5;
-     then reconsider c = Class(equivalence_wrt FI,i)
+     then reconsider c = EqClass(equivalence_wrt FI,i)
         as Element of L/\/F;
      take c; thus thesis;
     end;
@@ -2222,7 +2219,7 @@ A10: h.b is Element of latt F
       then consider y such that
 A11:    y in dom f & x = f.y by FUNCT_1:def 5;
       reconsider y as Element of B by A2,A7,A11,FUNCT_3:70;
-          g.y = Class(E,y) by A2;
+          g.y = EqClass(E,y) by A2;
       then reconsider z1 = g.y as Element of B/\/F by A9;
       reconsider z2 = h.y as Element of latt F by A10;
           x = [z1,z2] by A11,FUNCT_3:def 8;

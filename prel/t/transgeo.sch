@@ -8,6 +8,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 </Signature>
@@ -51,7 +52,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="52">
+<Func kind="K" nr="67">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -75,7 +76,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="52">
+<Func kind="K" nr="67">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>

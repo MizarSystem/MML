@@ -16,6 +16,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
@@ -467,10 +468,10 @@
 <Func kind="F" nr="1"/>
 </Pred>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="97">
+<Func kind="K" nr="114">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="97">
+<Func kind="K" nr="114">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
@@ -501,10 +502,10 @@
 <Not>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="101">
-<Func kind="K" nr="101">
+<Func kind="K" nr="118">
+<Func kind="K" nr="118">
 <Var nr="1"/>
-<Func kind="K" nr="103">
+<Func kind="K" nr="120">
 <Var nr="3"/>
 </Func>
 </Func>
@@ -517,10 +518,10 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="101">
-<Func kind="K" nr="101">
+<Func kind="K" nr="118">
+<Func kind="K" nr="118">
 <Var nr="1"/>
-<Func kind="K" nr="103">
+<Func kind="K" nr="120">
 <Var nr="4"/>
 </Func>
 </Func>
@@ -544,7 +545,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="98">
+<Func kind="K" nr="115">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

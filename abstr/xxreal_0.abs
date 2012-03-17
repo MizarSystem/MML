@@ -6,10 +6,12 @@
 
 environ
 
- vocabularies SUPINF_1, ARYTM, BOOLE, ARYTM_2, ARYTM_3, ORDINAL1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ARYTM_2, NUMBERS;
+ vocabularies SUPINF_1, ARYTM, BOOLE, ARYTM_2, ARYTM_3, ORDINAL1, ASYMPT_0,
+      ZF_LANG, ORDINAL2, XREAL_0, SQUARE_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ORDINAL2, ARYTM_2,
+      NUMBERS;
  constructors NUMBERS, ARYTM_2, RELSET_1, FUNCT_2;
- registrations NUMBERS, XBOOLE_0;
+ registrations NUMBERS, XBOOLE_0, ARYTM_3;
  requirements BOOLE, SUBSET, NUMERALS;
 
 
@@ -25,6 +27,7 @@ end;
 
 registration
  cluster ext-real number;
+ cluster -> ext-real Element of ExtREAL;
 end;
 
 definition
@@ -59,48 +62,211 @@ definition let x,y be ext-real number;
   connectedness;
   end;
 
-notation let x,y be ext-real number;
- synonym y >= x for x <= y;
- antonym y < x for x <= y;
- antonym x > y for x <= y;
+reserve a,b,c,d for ext-real number;
+
+notation let a,b;
+ synonym b >= a for a <= b;
+ antonym b < a for a <= b;
+ antonym a > b for a <= b;
 end;
 
-reserve a,b,c for ext-real number;
-
 theorem :: XXREAL_0:1
- -infty < +infty;
-
-canceled 3;
-
-theorem :: XXREAL_0:5
  a <= b & b <= a implies a = b;
 
-theorem :: XXREAL_0:6
- a <= +infty;
-
-theorem :: XXREAL_0:7
- a >= -infty;
-
-theorem :: XXREAL_0:8
- +infty <= a implies a = +infty;
-
-theorem :: XXREAL_0:9
- -infty >= a implies a = -infty;
-
-theorem :: XXREAL_0:10
+theorem :: XXREAL_0:2
  a <= b & b <= c implies a <= c;
 
-theorem :: XXREAL_0:11
- a in REAL implies -infty < a;
+theorem :: XXREAL_0:3
+ a <= +infty;
 
-theorem :: XXREAL_0:12
+theorem :: XXREAL_0:4
+ +infty <= a implies a = +infty;
+
+theorem :: XXREAL_0:5
+ a >= -infty;
+
+theorem :: XXREAL_0:6
+ -infty >= a implies a = -infty;
+
+theorem :: XXREAL_0:7
+ -infty < +infty;
+
+theorem :: XXREAL_0:8
+ not +infty in REAL;
+
+theorem :: XXREAL_0:9
  a in REAL implies +infty > a;
 
-theorem :: XXREAL_0:13
+theorem :: XXREAL_0:10
  a in REAL & b >= a implies b in REAL or b = +infty;
 
-theorem :: XXREAL_0:14
+theorem :: XXREAL_0:11
+ not -infty in REAL;
+
+theorem :: XXREAL_0:12
+ a in REAL implies -infty < a;
+
+theorem :: XXREAL_0:13
  a in REAL & b <= a implies b in REAL or b = -infty;
+
+theorem :: XXREAL_0:14
+ a in REAL or a = +infty or a = -infty;
+
+begin :: positive & negative
+
+registration
+ cluster natural -> ext-real number;
+end;
+
+definition let a be ext-real number;
+  attr a is positive means
+:: XXREAL_0:def 6
+    a > 0;
+  attr a is negative means
+:: XXREAL_0:def 7
+    a < 0;
+end;
+
+notation let a be ext-real number;
+  synonym a is zero for a is empty;
+end;
+
+registration
+ cluster positive -> non negative non zero (ext-real number);
+ cluster non negative non zero -> positive (ext-real number);
+ cluster negative -> non positive non zero (ext-real number);
+ cluster non positive non zero -> negative (ext-real number);
+ cluster zero -> non negative non positive (ext-real number);
+ cluster non negative non positive -> zero (ext-real number);
+end;
+
+registration
+ cluster +infty -> positive;
+ cluster -infty -> negative;
+end;
+
+registration
+ cluster positive (ext-real number);
+ cluster negative (ext-real number);
+ cluster zero (ext-real number);
+end;
+
+begin :: min & max
+
+definition let a,b;
+ func min(a,b) equals
+:: XXREAL_0:def 8
+
+ a if a <= b otherwise b;
+ commutativity;
+ idempotence;
+ func max(a,b) equals
+:: XXREAL_0:def 9
+
+ a if b <= a otherwise b;
+ commutativity;
+ idempotence;
+end;
+
+theorem :: XXREAL_0:15
+ min(a,b) = a or min(a,b) = b;
+
+theorem :: XXREAL_0:16
+ max(a,b) = a or max(a,b) = b;
+
+registration let a,b;
+ cluster min(a,b) -> ext-real;
+ cluster max(a,b) -> ext-real;
+end;
+
+theorem :: XXREAL_0:17
+ min(a,b) <= a;
+
+theorem :: XXREAL_0:18
+ a <= b & c <= d implies min(a,c) <= min(b,d);
+
+theorem :: XXREAL_0:19
+ a < b & c < d implies min(a,c) < min(b,d);
+
+theorem :: XXREAL_0:20
+ a <= b & a <= c implies a <= min(b,c);
+
+theorem :: XXREAL_0:21
+ a < b & a < c implies a < min(b,c);
+
+theorem :: XXREAL_0:22
+ a <= min(b,c) implies a <= b;
+
+theorem :: XXREAL_0:23
+ a < min(b,c) implies a < b;
+
+theorem :: XXREAL_0:24
+ c <= a & c <= b &
+  (for d st d <= a & d <= b holds d <= c)
+  implies c = min(a,b);
+
+theorem :: XXREAL_0:25
+ a <= max(a,b);
+
+theorem :: XXREAL_0:26
+ a <= b & c <= d implies max(a,c) <= max(b,d);
+
+theorem :: XXREAL_0:27
+ a < b & c < d implies max(a,c) < max(b,d);
+
+theorem :: XXREAL_0:28
+ b <= a & c <= a implies max(b,c) <= a;
+
+theorem :: XXREAL_0:29
+ b < a & c < a implies max(b,c) < a;
+
+theorem :: XXREAL_0:30
+ max(b,c) <= a implies b <= a;
+
+theorem :: XXREAL_0:31
+ max(b,c) < a implies b < a;
+
+theorem :: XXREAL_0:32
+ a <= c & b <= c &
+  (for d st a <= d & b <= d holds c <= d)
+  implies c = max(a,b);
+
+theorem :: XXREAL_0:33
+ min(min(a,b),c) = min(a,min(b,c));
+
+theorem :: XXREAL_0:34
+ max(max(a,b),c) = max(a,max(b,c));
+
+theorem :: XXREAL_0:35
+ min(max(a,b),b) = b;
+
+theorem :: XXREAL_0:36
+ max(min(a,b),b) = b;
+
+theorem :: XXREAL_0:37
+ a <= c implies max(a,min(b,c)) = min(max(a,b),c);
+
+theorem :: XXREAL_0:38
+ min(a,max(b,c)) = max(min(a,b),min(a,c));
+
+theorem :: XXREAL_0:39
+ max(a,min(b,c)) = min(max(a,b),max(a,c));
+
+theorem :: XXREAL_0:40
+ max(max(min(a,b),min(b,c)),min(c,a)) = min(min(max(a,b),max(b,c)),max(c,a));
+
+theorem :: XXREAL_0:41
+ max(a,+infty) = +infty;
+
+theorem :: XXREAL_0:42
+ min(a,+infty) = a;
+
+theorem :: XXREAL_0:43
+ max(a,-infty) = a;
+
+theorem :: XXREAL_0:44
+ min(a,-infty) = -infty;
+
 
 
 

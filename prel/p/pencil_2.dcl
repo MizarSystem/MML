@@ -12,6 +12,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
@@ -24,7 +25,6 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="ORDERS_1"/>

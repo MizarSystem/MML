@@ -13,12 +13,21 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="RVSUM_1"/>
+<ArticleID name="EUCLID"/>
+<ArticleID name="TOPREAL2"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -27,21 +36,88 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
-<ArticleID name="XXREAL_0"/>
+<ArticleID name="COMPTS_1"/>
+<ArticleID name="JORDAN6"/>
 </Signature>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="3">
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="49"/>
+</Cluster>
+<Func kind="K" nr="40">
+<Func kind="U" nr="1">
+<Func kind="K" nr="179">
+<Num nr="2"/>
+</Func>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="261">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="28">
+<Func kind="K" nr="179">
+<Num nr="2"/>
+</Func>
+</Adjective>
+<Adjective nr="78">
+<Func kind="K" nr="179">
+<Num nr="2"/>
+</Func>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="3">
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="49"/>
+</Cluster>
+<Func kind="K" nr="40">
+<Func kind="U" nr="1">
+<Func kind="K" nr="179">
+<Num nr="2"/>
+</Func>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="260">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="28">
+<Func kind="K" nr="179">
+<Num nr="2"/>
+</Func>
+</Adjective>
+<Adjective nr="78">
+<Func kind="K" nr="179">
+<Num nr="2"/>
+</Func>
+</Adjective>
+</Cluster>
+</FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="164"/>
+<Func kind="K" nr="249"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="44"/>
-<Adjective nr="65"/>
+<Adjective nr="42"/>
+<Adjective nr="50"/>
 </Cluster>
 </CCluster>
 </Registrations>

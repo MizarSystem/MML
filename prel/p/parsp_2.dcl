@@ -8,6 +8,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -32,9 +33,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="28" value="false"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
 <Adjective nr="61"/>
-<Adjective nr="62"/>
-<Adjective nr="63"/>
 </Cluster>
 </RCluster>
 </Registrations>

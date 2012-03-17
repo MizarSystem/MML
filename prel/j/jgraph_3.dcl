@@ -11,6 +11,8 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -24,23 +26,37 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="JGRAPH_3"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="165"/>
+<Func kind="K" nr="194"/>
 <Cluster>
+<Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="6"/>
-<Adjective nr="18">
+<Adjective nr="19">
 <Func kind="U" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="179">
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="179">
+<Num nr="2"/>
+</Func>
+</Func>
+</Adjective>
+<Adjective nr="49">
+<Func kind="U" nr="1">
+<Func kind="K" nr="179">
+<Num nr="2"/>
+</Func>
+</Func>
+<Func kind="U" nr="1">
+<Func kind="K" nr="179">
 <Num nr="2"/>
 </Func>
 </Func>

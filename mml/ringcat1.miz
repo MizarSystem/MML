@@ -6,18 +6,19 @@
 
 environ
 
- vocabularies CLASSES2, VECTSP_1, INCSP_1, FUNCT_1, CAT_1, FUNCSDOM,
-      GRCAT_1, RELAT_1, MIDSP_1, ARYTM_3, ENS_1, FUNCT_2, RLVECT_1, MOD_2,
-      TARSKI, PARTFUN1, RINGCAT1, GROUP_1;
+ vocabularies CLASSES2, VECTSP_1, INCSP_1, FUNCT_1, CAT_1, FUNCSDOM, GRCAT_1,
+      RELAT_1, MIDSP_1, ARYTM_3, ENS_1, FUNCT_2, RLVECT_1, MOD_2, TARSKI,
+      PARTFUN1, RINGCAT1, GROUP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, MCART_1,
-      PARTFUN1, FUNCT_2, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1,
+      RELSET_1, PARTFUN1, FUNCT_2, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1,
       GRCAT_1, FUNCSDOM, CAT_1, CLASSES2, MOD_2;
  constructors ALGSTR_1, MOD_2, GRCAT_1, PARTFUN1;
  registrations VECTSP_2, MOD_2, RELSET_1, STRUCT_0, GRCAT_1, SUBSET_1,
-      XBOOLE_0;
+      XBOOLE_0, FUNCT_2;
+ definitions GRCAT_1;
  requirements SUBSET, BOOLE;
  theorems CAT_1, FUNCT_2, GRCAT_1, MCART_1, MOD_2, PARTFUN1, TARSKI, RELAT_1,
-      RELSET_1, ZFMISC_1, XBOOLE_0;
+      RELSET_1, ZFMISC_1, XBOOLE_0, FUNCT_1;
  schemes FUNCT_2, GRCAT_1, TARSKI;
 
 begin
@@ -99,14 +100,14 @@ proof
   set f = id G;
   A1: now
     let x,y be Scalar of G;
-        f.(x+y) = x+y & f.x = x & f.y = y by GRCAT_1:11;
+        f.(x+y) = x+y & f.x = x & f.y = y by FUNCT_1:35;
     hence f.(x+y) = f.x+f.y;end;
   A2: now
     let x,y be Scalar of G;
         f.(x*y) = x*y
-       & f.x = x & f.y = y by GRCAT_1:11;
+       & f.x = x & f.y = y by FUNCT_1:35;
     hence f.(x*y) = f.x*f.y;end;
-     f.(1.G) = 1.G by GRCAT_1:11;
+     f.(1.G) = 1.G by FUNCT_1:35;
   hence thesis by A1,A2,Def2;
 end;
 
@@ -694,7 +695,7 @@ definition let G,H;
      A2: f is linear by A1,Lm7;
         f is Element of Funcs(the carrier of G, the carrier of H) by FUNCT_2:11
 ;
-     then reconsider f0 = f as Element of Maps(G,H) by GRCAT_1:def 26;
+     then reconsider f0 = f as Element of Maps(G,H);
         RingMorphismStr(# G,H,f0#) in D by A2;
      then reconsider D as non empty set;
      A3: x in D implies x is Morphism of G,H
@@ -715,7 +716,7 @@ A5:      x is Morphism of G,H implies x in D
         reconsider f = the Fun of x as Function of G,H by A6;
            f is Element of Funcs(the carrier of G, the carrier of H)
  by FUNCT_2:11;
-        then reconsider g = f as Element of Maps(G,H) by GRCAT_1:def 26;
+        then reconsider g = f as Element of Maps(G,H);
            x = RingMorphismStr(# G,H,g #) by A6;
         hence thesis by A7;
       end;
@@ -1155,35 +1156,34 @@ definition let V;
     A6:for g,f being Element of X holds [g,f] in dom c2 iff P[g,f] and
     A7:for g,f being Element of X
          st [g,f] in dom c2 holds c2.[g,f] = g*f;
-    A8: dom c1 c= [:X,X:] & dom c2 c= [:X,X:] by RELSET_1:12;
-    A9: dom c1 = dom c2
+    A8: dom c1 = dom c2
      proof
           now let x; assume
-         A10: x in dom c1;
+         A9: x in dom c1;
          then consider g,f being Element of X such that
-         A11: x = [g,f] by A8,GRCAT_1:2;
-            P[g,f] by A4,A10,A11;
-         hence x in dom c2 by A6,A11;end;
-       then A12: dom c1 c= dom c2 by TARSKI:def 3;
+         A10: x = [g,f] by GRCAT_1:2;
+            P[g,f] by A4,A9,A10;
+         hence x in dom c2 by A6,A10;end;
+       then A11: dom c1 c= dom c2 by TARSKI:def 3;
           now let x; assume
-         A13: x in dom c2;
+         A12: x in dom c2;
          then consider g,f being Element of X such that
-         A14: x = [g,f] by A8,GRCAT_1:2;
-            P[g,f] by A6,A13,A14;
-         hence x in dom c1 by A4,A14;end;
+         A13: x = [g,f] by GRCAT_1:2;
+            P[g,f] by A6,A12,A13;
+         hence x in dom c1 by A4,A13;end;
        then dom c2 c= dom c1 by TARSKI:def 3;
-       hence thesis by A12,XBOOLE_0:def 10;
+       hence thesis by A11,XBOOLE_0:def 10;
      end;
     set V0 = dom c1;
    for x,y st [x,y] in V0 holds c1.[x,y]=c2.[x,y]
      proof
        let x,y;assume
-       A15: [x,y] in V0;
-       then reconsider x,y as Element of X by A8,ZFMISC_1:106;
-          c1.[x,y] = x*y by A5,A15;
-       hence thesis by A7,A9,A15;
+       A14: [x,y] in V0;
+       then reconsider x,y as Element of X by ZFMISC_1:106;
+          c1.[x,y] = x*y by A5,A14;
+       hence thesis by A7,A8,A14;
      end;
-    hence thesis by A9,PARTFUN1:35;
+    hence thesis by A8,PARTFUN1:35;
   end;
 end;
 

@@ -12,6 +12,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -45,7 +46,6 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="REALSET2"/>
 <ArticleID name="FUNCT_5"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL_2"/>
 <ArticleID name="COMPTS_1"/>
@@ -75,7 +75,7 @@
 <Adjective nr="115"/>
 <Adjective nr="116"/>
 <Adjective nr="117"/>
-<Adjective nr="176"/>
+<Adjective nr="174"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -105,9 +105,9 @@
 <Adjective nr="93"/>
 <Adjective nr="94"/>
 <Adjective nr="116"/>
-<Adjective nr="158" value="false"/>
-<Adjective nr="175"/>
-<Adjective nr="176"/>
+<Adjective nr="156" value="false"/>
+<Adjective nr="173"/>
+<Adjective nr="174"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -123,7 +123,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="360">
+<Func kind="K" nr="358">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -136,16 +136,16 @@
 <Adjective nr="93"/>
 <Adjective nr="94"/>
 <Adjective nr="116"/>
-<Adjective nr="158" value="false"/>
-<Adjective nr="175"/>
-<Adjective nr="176"/>
+<Adjective nr="156" value="false"/>
+<Adjective nr="173"/>
+<Adjective nr="174"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="176"/>
+<Adjective nr="174"/>
 </Cluster>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -164,7 +164,7 @@
 <Adjective nr="41"/>
 <Adjective nr="115"/>
 <Adjective nr="116"/>
-<Adjective nr="156"/>
+<Adjective nr="154"/>
 </Cluster>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -177,7 +177,7 @@
 <Adjective nr="41"/>
 <Adjective nr="115"/>
 <Adjective nr="116"/>
-<Adjective nr="176"/>
+<Adjective nr="174"/>
 </Cluster>
 </CCluster>
 <CCluster>

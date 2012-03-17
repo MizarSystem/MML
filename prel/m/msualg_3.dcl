@@ -16,6 +16,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="REALSET1"/>
@@ -48,8 +49,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="83"/>
-<Adjective nr="105"/>
+<Adjective nr="81"/>
+<Adjective nr="103"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -57,12 +58,12 @@
 <Typ kind="G" nr="14">
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="96" value="false"/>
+<Adjective nr="94" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="99">
+<Adjective nr="97">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -75,14 +76,14 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="193">
+<Func kind="K" nr="210">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="104"/>
+<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 </Registrations>

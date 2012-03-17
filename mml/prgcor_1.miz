@@ -9,14 +9,14 @@ environ
  vocabularies RELAT_1, FUNCT_1, FINSEQ_1, ARYTM_1, ARYTM_3, INT_1, NAT_1,
       PARTFUN1, GROUP_1, PRGCOR_1, FUNCOP_1;
  notations TARSKI, XCMPLX_0, XXREAL_0, RELAT_1, FUNCT_1, FINSEQ_1, INT_1,
-      BINARITH, RELSET_1, FUNCOP_1, PARTFUN1, NAT_1, EULER_2;
- constructors REAL_1, BINARITH, NAT_1, EULER_2, XXREAL_0;
- registrations RELSET_1, XREAL_0, ARYTM_3, INT_1, ORDINAL1, FUNCOP_1;
+      BINARITH, RELSET_1, FUNCOP_1, PARTFUN1, NAT_1, WSIERP_1;
+ constructors REAL_1, BINARITH, NAT_1, XXREAL_0, WSIERP_1;
+ registrations RELSET_1, XREAL_0, ARYTM_3, INT_1, ORDINAL1, FUNCOP_1, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI;
  theorems FINSEQ_1, REAL_1, NAT_1, FUNCT_1, XCMPLX_1, PRE_FF, INT_1, NEWTON,
-      BINARITH, JORDAN4, GR_CY_1, CARD_4, HEINE, JORDAN3, SCMFSA9A, JORDAN1D,
-      FINSEQ_3, FUNCOP_1, TARSKI, XREAL_1;
+      BINARITH, JORDAN4, CARD_4, HEINE, JORDAN3, JORDAN1D, FINSEQ_3, FUNCOP_1,
+      TARSKI, XREAL_1, ORDINAL2, XXREAL_0;
  schemes NAT_1, FINSEQ_1;
 
 begin
@@ -117,7 +117,7 @@ theorem Th1: for n,m,k being Nat holds (n+k)-'(m+k)=n-'m
 proof let n,m,k be Nat;
   A1: n+k-(m+k)=n-m;
   per cases;
-  suppose  n-m>=0;
+  suppose n-m>=0;
     then n-'m=n-m by BINARITH:def 3;
    hence (n+k)-'(m+k)=n-'m by A1,BINARITH:def 3;
   end;
@@ -209,7 +209,7 @@ proof let m,n be Nat;
 A4: n+1-'1=n by A3,BINARITH:def 3;
       m>=0+1 by A1,NAT_1:38;
   then m*n>=1*n by XREAL_1:66;
-  then A5: m*(2|^(n+1-'1))> n by A2,A4,XREAL_1:2;
+  then A5: m*(2|^(n+1-'1))> n by A2,A4,XXREAL_0:2;
   defpred P[Nat] means
       m*(2|^($1))> n;
   A6: ex k being Nat st P[k] by A5;
@@ -372,8 +372,7 @@ A5: rng ssm c= {1} by FUNCOP_1:19;
    A11: len ssn=n+1 & for k2 being Nat st k2 in (Seg (n2+1)) holds
         ssn.k2=n2 mod (m2*(2|^(k2-'1)));
        rng ssn c= INT
-   proof let y be set;assume
-         y in rng ssn;
+   proof let y be set;assume y in rng ssn;
      then consider x being set such that
      A12: x in dom ssn & y=ssn.x by FUNCT_1:def 5;
      A13: dom ssn=Seg len ssn by FINSEQ_1:def 3;
@@ -391,8 +390,7 @@ A5: rng ssm c= {1} by FUNCOP_1:19;
    for k2 being Nat st k2 in (Seg (n2+1)) holds
         ppn.k2= n2 div (m2*(2|^(k2-'1)));
        rng ppn c= INT
-   proof let y be set;assume
-         y in rng ppn;
+   proof let y be set;assume y in rng ppn;
      then consider x being set such that
      A15: x in dom ppn & y=ppn.x by FUNCT_1:def 5;
      A16: dom ppn=Seg len ppn by FINSEQ_1:def 3;
@@ -401,10 +399,11 @@ A5: rng ssm c= {1} by FUNCOP_1:19;
     hence y in INT by A15,INT_1:def 2;
    end;
    then reconsider ppn as FinSequence of INT by FINSEQ_1:def 4;
+AA:m2*(2 |^ 0) = m2*1 by NEWTON:9 .= m2;
    A17: ppn.1=n2 div (m2*(2|^(1-'1))) by A7,A14
-           .=n2 div (m2*(2|^(0))) by BINARITH:51
-           .=n2 div m2*1 by NEWTON:9.=n2 div m2;
-   A18: ssm.1=m*(2|^(1-'1)) by A7,A8 .=m*(2|^(0)) by BINARITH:51
+           .=n2 div (m2*(2|^0)) by BINARITH:51
+           .=n2 div m2 by AA;
+   A18: ssm.1=m*(2|^(1-'1)) by A7,A8 .=m*(2|^0) by BINARITH:51
             .=m*1 by NEWTON:9
             .=m;
     consider ii0 being Nat such that
@@ -422,7 +421,7 @@ A5: rng ssm c= {1} by FUNCOP_1:19;
       then A23: m*(2|^n2) <= n2 by A19;
           1+0<=m2 by A1,NAT_1:38;
       then 1*(2|^n2)<=m2*(2|^n2) by XREAL_1:66;
-      then A24: (2|^n2)<=n2 by A23,XREAL_1:2;
+      then A24: (2|^n2)<=n2 by A23,XXREAL_0:2;
           n2+1<= 2|^n2 by HEINE:7;
      hence contradiction by A24,NAT_1:38;
     end;
@@ -442,7 +441,7 @@ A5: rng ssm c= {1} by FUNCOP_1:19;
             ssm.(k+1)=ssm.(k)*2 & not(ssm.(k+1)>n)
      proof let k be Nat;
       assume A30: 1<=k & k<i0;
-        then A31: k<=n2 by A22,XREAL_1:2;
+        then A31: k<=n2 by A22,XXREAL_0:2;
         A32: k-1>=0 by A30,XREAL_1:50;
         A33: 1<k+1 by A30,NAT_1:38;
         A34: k+1-'1=k by BINARITH:39;
@@ -477,11 +476,11 @@ A5: rng ssm c= {1} by FUNCOP_1:19;
      then A44: ssn.(i0+1)=n2 mod (m2*(2|^(ii0+1-'1))) by A11;
      reconsider k5=m2*(2|^(ii0+1-'1)) as Nat;
      A45: k5>n2 by A19,BINARITH:39;
-         n2 div (m2*(2|^(ii0+1-'1)))=0 by A19,A40,JORDAN4:5;
+         n2 div (m2*(2|^(ii0+1-'1)))=0 by A19,A40,NAT_1:80;
      then A46:  ppn.(i0+1)=0 & ssn.(i0+1)=n by A14,A41,A44,A45,NAT_1:76;
          for j being Integer st 1<=j & j<=i0 holds
         (ssn.(i0+1- (j- 1))>=ssm.(i0+1- j) implies
-             ssn.(i0+1- j)=ssn.(i0+1- (j- 1))-ssm.(i0+1- j)
+             ssn.(i0+1- j)=ssn.(i0+1- (j- 1))-ssm.(i0+1-j)
              &
              ppn.(i0+1- j)=ppn.(i0+1- (j- 1))*2+1
         )&
@@ -507,22 +506,22 @@ A5: rng ssm c= {1} by FUNCOP_1:19;
           A52: jj-' 1=j-1 by A50,BINARITH:def 3;
           A53: j+1<=i0+1 by A47,XREAL_1:9;
               j<j+1 by XREAL_1:31;
-          then A54: j<i0+1 by A53,XREAL_1:2;
+          then A54: j<i0+1 by A53,XXREAL_0:2;
               ii0<ii0+1 by NAT_1:38;
-          then j<i0+1 by A47,XREAL_1:2;
+          then j<i0+1 by A47,XXREAL_0:2;
           then A55: i0+1-j>0 by XREAL_1:52;
           then A56: ii0+1-' jj=i0+1-j by BINARITH:def 3;
           A57: ii0+1-' jj=i0-j+1 by A55,BINARITH:def 3;
           A58: ii0+1-' jj=i0+1-j by A55,BINARITH:def 3;
               jj-' 1<=j by BINARITH:52;
-          then jj-' 1<i0+1 by A54,XREAL_1:2;
+          then jj-' 1<i0+1 by A54,XXREAL_0:2;
           then A59: ii0+1-(jj -' 1)>=0 by XREAL_1:50;
           then A60: ii0+1-' (jj-' 1)=i0+1-j+1 by A52,BINARITH:def 3;
           then A61: ii0+1-' (jj-' 1)-' 1=ii0+1-' jj
                                 by A56,BINARITH:39;
           A62: ii0+1-' (jj-' 1)=i0+1-(j-1) by A52,A59,BINARITH:def 3;
               ii0<ii0+1 by NAT_1:38;
-          then j<i0+1 by A47,XREAL_1:2;
+          then j<i0+1 by A47,XXREAL_0:2;
           then i0+1-j>=0 by XREAL_1:50;
           then A63: ii0+1-' jj=i0+1-j by BINARITH:def 3;
               i0+1<=n2+j by A22,A47,XREAL_1:9;
@@ -539,15 +538,15 @@ A5: rng ssm c= {1} by FUNCOP_1:19;
           then A68: ii0+1-' jj -' 1=i0-j by A56,BINARITH:def 3;
           A69: ii0+1-' jj<=i0+1 by BINARITH:52;
               i0+1<=n2+1 by A22,XREAL_1:9;
-          then n2+1>=(ii0+1-' jj) by A69,XREAL_1:2;
+          then n2+1>=(ii0+1-' jj) by A69,XXREAL_0:2;
           then A70: ii0+1-' (jj) in Seg (n2+1) by A67,FINSEQ_1:3;
           then A71: ssn.(ii0+1-' jj)=n2 mod (m2*(2|^(ii0+1-' jj-' 1))) by A11;
           A72: jj-' 1=j-1 by A50,BINARITH:def 3;
           A73: j+1<=i0+1 by A47,XREAL_1:9;
               jj<jj+1 by NAT_1:38;
-          then A74: j<i0+1 by A73,XREAL_1:2;
+          then A74: j<i0+1 by A73,XXREAL_0:2;
               jj-' 1<=jj by BINARITH:52;
-          then jj-' 1<i0+1 by A74,XREAL_1:2;
+          then jj-' 1<i0+1 by A74,XXREAL_0:2;
           then ii0+1-(jj -' 1)>=0 by XREAL_1:50;
           then ii0+1-' (jj-' 1)=ii0+1-' jj+1 by A56,A72,BINARITH:def 3;
           then A75: ssn.(ii0+1-' (jj-' 1))
@@ -584,20 +583,20 @@ BINARITH:def 3;
           A82: jj-' 1=j-1 by A50,BINARITH:def 3;
           A83: j+1<=i0+1 by A47,XREAL_1:9;
               jj<jj+1 by NAT_1:38;
-          then A84: j<i0+1 by A83,XREAL_1:2;
+          then A84: j<i0+1 by A83,XXREAL_0:2;
               ii0<ii0+1 by NAT_1:38;
-          then j<i0+1 by A47,XREAL_1:2;
+          then j<i0+1 by A47,XXREAL_0:2;
           then A85: i0+1-j>0 by XREAL_1:52;
           then A86: ii0+1-' jj=i0+1-j by BINARITH:def 3;
           A87: ii0+1-' jj=i0-j+1 by A85,BINARITH:def 3;
               jj-' 1<=jj by BINARITH:52;
-          then jj-' 1<i0+1 by A84,XREAL_1:2;
+          then jj-' 1<i0+1 by A84,XXREAL_0:2;
           then A88: i0+1-(jj -' 1)>=0 by XREAL_1:50;
           then A89: ii0+1-' (jj-' 1)=i0+1-j+1 by A82,BINARITH:def 3;
           then A90: ii0+1-' (jj-' 1)-' 1=ii0+1-' jj
                                      by A86,BINARITH:39;
               ii0<ii0+1 by NAT_1:38;
-          then j<i0+1 by A47,XREAL_1:2;
+          then j<i0+1 by A47,XXREAL_0:2;
           then i0+1-j>=0 by XREAL_1:50;
           then A91: ii0+1-' jj=i0+1-j by BINARITH:def 3;
               i0+1<=n2+j by A22,A47,XREAL_1:9;
@@ -614,7 +613,7 @@ BINARITH:def 3;
           then A96: ii0+1-' jj -' 1=i0-j by A86,BINARITH:def 3;
           A97: ii0+1-' jj<=ii0+1 by BINARITH:52;
               i0+1<=n2+1 by A22,XREAL_1:9;
-          then n2+1>=(ii0+1-' jj) by A97,XREAL_1:2;
+          then n2+1>=(ii0+1-' jj) by A97,XXREAL_0:2;
           then A98: ii0+1-' (jj) in Seg (n2+1) by A95,FINSEQ_1:3;
           then ssn.(ii0+1-' jj)=n2 mod (m2*(2|^(ii0+1-' jj-' 1))) by A11;
           then A99: ssn.(ii0+1-' jj)
@@ -622,9 +621,9 @@ BINARITH:def 3;
           A100: jj-' 1=j-1 by A50,BINARITH:def 3;
           A101: j+1<=i0+1 by A47,XREAL_1:9;
               jj<jj+1 by NAT_1:38;
-          then A102: j<i0+1 by A101,XREAL_1:2;
+          then A102: j<i0+1 by A101,XXREAL_0:2;
               jj-' 1<=j by BINARITH:52;
-          then jj-' 1<i0+1 by A102,XREAL_1:2;
+          then jj-' 1<i0+1 by A102,XXREAL_0:2;
           then i0+1-(jj -' 1)>=0 by XREAL_1:50;
           then A103: ii0+1-' (jj-' 1)=i0+1-j+1 by A100,BINARITH:def 3
                         .=ii0+1-' jj+1 by A85,BINARITH:def 3;
@@ -824,7 +823,7 @@ proof
          then A120: kh-' 1+1=k;
             A121: k-1<=i1+1-1 by A118,XREAL_1:11;
              ii1<ii1+1 by NAT_1:38;
-         then A122: kh-' 1<i1+1 by A119,A121,XREAL_1:2;
+         then A122: kh-' 1<i1+1 by A119,A121,XXREAL_0:2;
          defpred P[Nat] means $1<i1+1 implies sm1.($1+1)=sm2.($1+1);
          A123: P[0] by A110,A111,A112;
          A124: for e being Nat st P[e] holds P[e+1]
@@ -834,18 +833,18 @@ proof
            suppose e+1<i1+1;
              then e+1+1<=ii1+1 by NAT_1:38;
              then A126: e+1+1-1<=i1+1-1 by XREAL_1:11;
-             then A127: e+1 <i2 by A116,XREAL_1:2;
+             then A127: e+1 <i2 by A116,XXREAL_0:2;
              A128: 0+1<=e+1 by XREAL_1:9;
                A129: e<e+1 by NAT_1:38;
                 now per cases;
              case e+1<i1;
               hence sm1.(e+1+1)=(sm1.(e+1))*2 by A113,A128;
              end;
-             case e+1>=i1; then e+1=i1 by A126,XREAL_1:1;
+             case e+1>=i1; then e+1=i1 by A126,XXREAL_0:1;
               hence sm1.(e+1+1)=(sm1.(e+1))*2 by A113;
              end;
              end;
-            hence P[e+1] by A114,A125,A127,A128,A129,XREAL_1:2;
+            hence P[e+1] by A114,A125,A127,A128,A129,XXREAL_0:2;
            end;
            suppose e+1>=i1+1;
             hence P[e+1];
@@ -870,7 +869,7 @@ proof
          then A136: kh-'1+1=k;
             A137: k-1<=i2+1-1 by A134,XREAL_1:11;
              ii2<ii2+1 by NAT_1:38;
-         then A138: kh-'1<i2+1 by A135,A137,XREAL_1:2;
+         then A138: kh-'1<i2+1 by A135,A137,XXREAL_0:2;
          defpred P[Nat] means $1<i2+1 implies sm2.($1+1)=sm1.($1+1);
          A139: P[0] by A110,A111,A112;
          A140: for e being Nat st P[e] holds P[e+1]
@@ -880,18 +879,18 @@ proof
            suppose e+1<i2+1;
              then e+1+1<=ii2+1 by NAT_1:38;
              then A142: e+1+1-1<=i2+1-1 by XREAL_1:11;
-             then A143: e+1 <i1 by A132,XREAL_1:2;
+             then A143: e+1 <i1 by A132,XXREAL_0:2;
              A144: 0+1<=e+1 by XREAL_1:9;
               A145: e<e+1 by NAT_1:38;
                  now per cases;
              case e+1<i2;
               hence sm2.(e+1+1)=(sm2.(e+1))*2 by A114,A144;
              end;
-             case e+1>=i2; then e+1=i2 by A142,XREAL_1:1;
+             case e+1>=i2; then e+1=i2 by A142,XXREAL_0:1;
               hence sm2.(e+1+1)=(sm2.(e+1))*2 by A114;
              end;
              end;
-            hence P[e+1] by A113,A141,A143,A144,A145,XREAL_1:2;
+            hence P[e+1] by A113,A141,A143,A144,A145,XXREAL_0:2;
            end;
            suppose e+1>=i2+1;
             hence P[e+1];
@@ -905,7 +904,7 @@ proof
        then A146: sm2.(i2+1)=sm1.(i2+1) by A133;
         thus contradiction by A113,A114,A132,A146;
      end;
-     then A147: i1=i2 by A115,XREAL_1:1;
+     then A147: i1=i2 by A115,XXREAL_0:1;
      A148: ii1<ii1+1 by NAT_1:38;
      defpred P2[Nat] means 1<=$1 & $1<=i1+1 implies sm1.$1=sm2.$1;
      A149: P2[0];
@@ -926,11 +925,12 @@ proof
                case kk<i2;
                 hence sm2.(kk+1)=(sm2.(kk))*2 by A114,A155;
                end;
-               case kk>=i2; then kk=i2 by A154,XREAL_1:1;
+               case kk>=i2; then kk=i2 by A154,XXREAL_0:1;
                 hence sm2.(kk+1)=(sm2.(kk))*2 by A114;
                end;
                end;
-              hence sm1.(kk+1)=sm2.(kk+1) by A113,A148,A151,A155,A156,XREAL_1:2
+              hence sm1.(kk+1)=sm2.(kk+1) by A113,A148,A151,A155,A156,
+XXREAL_0:2
 ;
              end;
              case 0>=kk;
@@ -969,9 +969,9 @@ proof
              suppose 0<kk;
                then A164: 0+1<=kk by NAT_1:38;
                then A165: kk-1>=0 by XREAL_1:50;
-               A166: kk<i1+1 by A147,A148,A163,XREAL_1:2;
+               A166: kk<i1+1 by A147,A148,A163,XXREAL_0:2;
                    kk-' 1<=kk by BINARITH:52;
-               then kk-' 1<i1+1 by A166,XREAL_1:2;
+               then kk-' 1<i1+1 by A166,XXREAL_0:2;
                then i1+1-(kk -' 1)>=0 by XREAL_1:50;
                then A167: ii1+1-' (kk-' 1)=i1+1-(kk-' 1) by BINARITH:def 3
                         .=i1+1-(kk-1) by A165,BINARITH:def 3;
@@ -1000,7 +1000,7 @@ proof
                   pn2.(ii1+1-'kk)=pn2.(ii1+1-'(kk-'1))*2
                ) by A114,A147,A164,A167,A168,A169;
                     ii1<ii1+1 by NAT_1:38;
-                then kk<i1+1 by A147,A169,XREAL_1:2;
+                then kk<i1+1 by A147,A169,XXREAL_0:2;
                 then A172: i1+1-kk>0 by XREAL_1:52;
                 then ii1+1-'kk=i1+1-kk by BINARITH:def 3;
                 then A173: ii1+1-'kk>=0+1 by A172,NAT_1:38;
@@ -1023,7 +1023,7 @@ proof
                then A176: kk=0;
                    ii1+1+1-'(kk+1)=ii1+1-'kk by Th1 .=ii1+1 by A176,JORDAN3:2;
               hence sn1.(ii1+1+1-'(kk+1))=sn2.(ii1+1+1-'(kk+1)) by A113,A114
-,A115,A131,XREAL_1:1;
+,A115,A131,XXREAL_0:1;
        end;
        end;
       hence P3[kk+1];
@@ -1046,8 +1046,8 @@ proof
                then A184: kk-1>=0 by XREAL_1:50;
                then A185: kk-1=kk-'1 by BINARITH:def 3;
                    kk-'1<kk-'1+1 by NAT_1:38;
-               then kk-'1<i2 by A182,A185,XREAL_1:2;
-               then kk-'1<i2+1 by A147,A148,XREAL_1:2;
+               then kk-'1<i2 by A182,A185,XXREAL_0:2;
+               then kk-'1<i2+1 by A147,A148,XXREAL_0:2;
                then i1+1-(kk -' 1)>=0 by A147,XREAL_1:50;
                then A186: ii1+1-' (kk-' 1)=i1+1-(kk-' 1) by BINARITH:def 3
                         .=i1+1-(kk-1) by A184,BINARITH:def 3;
@@ -1077,7 +1077,7 @@ proof
                   pn2.(ii1+1-'kk)=pn2.(ii1+1-'(kk-'1))*2
                ) by A114,A147,A183,A186,A187,A188;
                     ii1<ii1+1 by NAT_1:38;
-                then A191: kk<i1+1 by A147,A188,XREAL_1:2;
+                then A191: kk<i1+1 by A147,A188,XXREAL_0:2;
                 then A192: i1+1-kk>0 by XREAL_1:52;
                 then ii1+1-'kk=i1+1-kk by BINARITH:def 3;
                 then A193: ii1+1-'kk>=0+1 by A192,NAT_1:38;
@@ -1102,7 +1102,7 @@ proof
                    ii1+1+1-'(kk+1)=ii1+1-'kk by Th1 .=i1+1 by A196,JORDAN3:2
 ;
               hence pn1.(ii1+1+1-'(kk+1))=pn2.(ii1+1+1-'(kk+1)) by A113,A114
-,A115,A131,XREAL_1:1;
+,A115,A131,XXREAL_0:1;
        end;
        end;
       hence P4[kk+1];
@@ -1114,7 +1114,7 @@ proof
        assume A199: 1<=jj & jj<=i1+1; then 0<=jj;
         then reconsider j2=jj as Nat by INT_1:16;
             ii1+1<ii1+1+1 by NAT_1:38;
-        then jj<ii1+1+1 by A199,XREAL_1:2;
+        then jj<ii1+1+1 by A199,XXREAL_0:2;
         then ii1+1+1-j2>=0 by XREAL_1:50;
         then ii1+1+1-' j2=ii1+1+1-jj by BINARITH:def 3;
        hence pn1.(i1+1+1- jj)=pn2.(i1+1+1- jj) by A197,A199;
@@ -1270,7 +1270,7 @@ proof let n,m be Integer;
              j-1>=0 by A6,XREAL_1:50;
          then i+1+0<=i+1+(j-1) by XREAL_1:9;
          then i+1-(j-1)<=i+1+(j-1)-(j-1) by XREAL_1:11;
-         then A11: i+1-(j-1)<=n2+1 by A10,XREAL_1:2;
+         then A11: i+1-(j-1)<=n2+1 by A10,XXREAL_0:2;
              0<i-j+1 by A6,A8,XREAL_1:50;
          then reconsider ij=i-j+1 as Nat by INT_1:16;
             A12: 0+1<=ij by A7,A8,NAT_1:38;
@@ -1278,7 +1278,7 @@ proof let n,m be Integer;
              j>=0 by A6;
          then i+1+0<=i+1+j by XREAL_1:9;
          then i+1-j<=i+1+j-j by XREAL_1:11;
-         then i+1-j<=n2+1 by A13,XREAL_1:2;
+         then i+1-j<=n2+1 by A13,XXREAL_0:2;
         hence thesis by A2,A3,A6,A9,A11,A12,Th7;
        end;
           i>=0 by A2,A3;
@@ -1294,7 +1294,7 @@ proof let n,m be Integer;
          assume A18: 1<=k & k<i;
           then 0<=k;
           then reconsider k2=k as Nat by INT_1:16;
-          A19: k2<n2+1 by A16,A18,XREAL_1:2;
+          A19: k2<n2+1 by A16,A18,XXREAL_0:2;
           then A20: k in Seg (n2+1) by A18,FINSEQ_1:3;
           A21: k2+1<=n2+1 by A19,NAT_1:38;
               1<=k2+1 by NAT_1:37;
@@ -1466,7 +1466,7 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
       then A25: m*(2|^n2) <= n2 by A21;
           1+0<=m2 by A1,NAT_1:38;
       then 1*(2|^n2)<=m2*(2|^n2) by XREAL_1:66;
-      then A26: (2|^n2)<=n2 by A25,XREAL_1:2;
+      then A26: (2|^n2)<=n2 by A25,XXREAL_0:2;
           n2+1<= 2|^n2 by HEINE:7;
      hence contradiction by A26,NAT_1:38;
     end;
@@ -1485,7 +1485,7 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
             ssm.(k+1)=ssm.(k)*2 & not(ssm.(k+1)>n)
      proof let k be Nat;
       assume A33: 1<=k & k<i0;
-        then A34: k<=n2 by A24,XREAL_1:2;
+        then A34: k<=n2 by A24,XXREAL_0:2;
         A35: k-1>=0 by A33,XREAL_1:50;
         A36: 1<k+1 by A33,NAT_1:38;
         A37: k+1-'1=k by BINARITH:39;
@@ -1520,7 +1520,7 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
      then A47: ssn.(i0+1)=n2 mod (m2*(2|^(ii0+1-'1))) by A13;
      reconsider k5=m2*(2|^(ii0+1-'1)) as Nat;
      A48: k5>n2 by A21,BINARITH:39;
-         n2 div (m2*(2|^(ii0+1-'1)))=0 by A21,A43,JORDAN4:5;
+         n2 div (m2*(2|^(ii0+1-'1)))=0 by A21,A43,NAT_1:80;
      then A49:  ppn.(i0+1)=0 & ssn.(i0+1)=n by A16,A44,A47,A48,NAT_1:76;
          for j being Integer st 1<=j & j<=i0 holds
         (ssn.(i0+1- (j- 1))>=ssm.(i0+1- j) implies
@@ -1545,22 +1545,22 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
           A55: jj-' 1=j-1 by A53,BINARITH:def 3;
           A56: j+1<=i0+1 by A50,XREAL_1:9;
               j<j+1 by XREAL_1:31;
-          then A57: j<i0+1 by A56,XREAL_1:2;
+          then A57: j<i0+1 by A56,XXREAL_0:2;
               ii0<ii0+1 by NAT_1:38;
-          then j<i0+1 by A50,XREAL_1:2;
+          then j<i0+1 by A50,XXREAL_0:2;
           then A58: i0+1-j>0 by XREAL_1:52;
           then A59: ii0+1-' jj=i0+1-j by BINARITH:def 3;
           A60: ii0+1-' jj=i0-j+1 by A58,BINARITH:def 3;
           A61: ii0+1-' jj=i0+1-j by A58,BINARITH:def 3;
               jj-' 1<=j by BINARITH:52;
-          then jj-' 1<i0+1 by A57,XREAL_1:2;
+          then jj-' 1<i0+1 by A57,XXREAL_0:2;
           then A62: ii0+1-(jj -' 1)>=0 by XREAL_1:50;
           then A63: ii0+1-' (jj-' 1)=i0+1-j+1 by A55,BINARITH:def 3;
           then A64: ii0+1-' (jj-' 1)-' 1=ii0+1-' jj
                                 by A59,BINARITH:39;
           A65: ii0+1-' (jj-' 1)=i0+1-(j-1) by A55,A62,BINARITH:def 3;
               ii0<ii0+1 by NAT_1:38;
-          then j<i0+1 by A50,XREAL_1:2;
+          then j<i0+1 by A50,XXREAL_0:2;
           then i0+1-j>=0 by XREAL_1:50;
           then A66: ii0+1-' jj=i0+1-j by BINARITH:def 3;
               i0+1<=n2+j by A24,A50,XREAL_1:9;
@@ -1573,15 +1573,15 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
           then A70: ii0+1-' jj -' 1=i0-j by A59,BINARITH:def 3;
           A71: ii0+1-' jj<=i0+1 by BINARITH:52;
               i0+1<=n2+1 by A24,XREAL_1:9;
-          then n2+1>=(ii0+1-' jj) by A71,XREAL_1:2;
+          then n2+1>=(ii0+1-' jj) by A71,XXREAL_0:2;
           then A72: ii0+1-' (jj) in Seg (n2+1) by A69,FINSEQ_1:3;
           then A73: ssn.(ii0+1-' jj)=n2 mod (m2*(2|^(ii0+1-' jj-' 1))) by A13;
           A74: jj-' 1=j-1 by A53,BINARITH:def 3;
           A75: j+1<=i0+1 by A50,XREAL_1:9;
               jj<jj+1 by NAT_1:38;
-          then A76: j<i0+1 by A75,XREAL_1:2;
+          then A76: j<i0+1 by A75,XXREAL_0:2;
               jj-' 1<=jj by BINARITH:52;
-          then jj-' 1<i0+1 by A76,XREAL_1:2;
+          then jj-' 1<i0+1 by A76,XXREAL_0:2;
           then ii0+1-(jj -' 1)>=0 by XREAL_1:50;
           then ii0+1-' (jj-' 1)=i0+1-j+1 by A74,BINARITH:def 3
                         .=ii0+1-' jj+1 by A58,BINARITH:def 3;
@@ -1616,20 +1616,20 @@ BINARITH:def 3;
           A84: jj-' 1=j-1 by A53,BINARITH:def 3;
           A85: j+1<=i0+1 by A50,XREAL_1:9;
               jj<jj+1 by NAT_1:38;
-          then A86: j<i0+1 by A85,XREAL_1:2;
+          then A86: j<i0+1 by A85,XXREAL_0:2;
               ii0<ii0+1 by NAT_1:38;
-          then j<i0+1 by A50,XREAL_1:2;
+          then j<i0+1 by A50,XXREAL_0:2;
           then A87: i0+1-j>0 by XREAL_1:52;
           then A88: ii0+1-' jj=i0+1-j by BINARITH:def 3;
           A89: ii0+1-' jj=i0-j+1 by A87,BINARITH:def 3;
               jj-' 1<=jj by BINARITH:52;
-          then jj-' 1<i0+1 by A86,XREAL_1:2;
+          then jj-' 1<i0+1 by A86,XXREAL_0:2;
           then A90: i0+1-(jj -' 1)>=0 by XREAL_1:50;
           then A91: ii0+1-' (jj-' 1)=i0+1-j+1 by A84,BINARITH:def 3;
           then A92: ii0+1-' (jj-' 1)-' 1 =ii0+1-' jj
                                      by A88,BINARITH:39;
               ii0<ii0+1 by NAT_1:38;
-          then j<i0+1 by A50,XREAL_1:2;
+          then j<i0+1 by A50,XXREAL_0:2;
           then i0+1-j>=0 by XREAL_1:50;
           then A93: ii0+1-' jj=i0+1-j by BINARITH:def 3;
               i0+1<=n2+j by A24,A50,XREAL_1:9;
@@ -1642,7 +1642,7 @@ BINARITH:def 3;
           then A97: ii0+1-' jj -' 1=i0-j by A88,BINARITH:def 3;
           A98: ii0+1-' jj<=ii0+1 by BINARITH:52;
               i0+1<=n2+1 by A24,XREAL_1:9;
-          then n2+1>=(ii0+1-' jj) by A98,XREAL_1:2;
+          then n2+1>=(ii0+1-' jj) by A98,XXREAL_0:2;
           then A99: ii0+1-' (jj) in Seg (n2+1) by A96,FINSEQ_1:3;
           then ssn.(ii0+1-' jj)=n2 mod (m2*(2|^(ii0+1-' jj-' 1))) by A13;
           then A100: ssn.(ii0+1-' jj)
@@ -1650,9 +1650,9 @@ BINARITH:def 3;
           A101: jj-' 1=j-1 by A53,BINARITH:def 3;
           A102: j+1<=i0+1 by A50,XREAL_1:9;
               jj<jj+1 by NAT_1:38;
-          then A103: j<i0+1 by A102,XREAL_1:2;
+          then A103: j<i0+1 by A102,XXREAL_0:2;
               jj-' 1<=j by BINARITH:52;
-          then jj-' 1<i0+1 by A103,XREAL_1:2;
+          then jj-' 1<i0+1 by A103,XXREAL_0:2;
           then i0+1-(jj -' 1)>=0 by XREAL_1:50;
           then A104: ii0+1-' (jj-' 1)=ii0+1-' jj+1 by A88,A101,BINARITH:def 3;
           A105: ii0+1-' (jj-' 1)=i0+1-(j-1) by A84,A90,BINARITH:def 3;

@@ -6,14 +6,16 @@
 
 environ
 
- vocabularies SUPINF_1, ARYTM_1, ARYTM_3, RLVECT_1, BOOLE, ORDINAL2, SEQ_2,
-      FUNCT_1, RELAT_1, LATTICES, CARD_4, FUNCT_4, FUNCOP_1, SUPINF_2, FUNCT_3;
+ vocabularies SUPINF_1, ARYTM_1, RLVECT_1, BOOLE, ORDINAL2, SEQ_2, FUNCT_1,
+      RELAT_1, LATTICES, CARD_4, FUNCT_4, FUNCOP_1, SUPINF_2, FUNCT_3,
+      PARTFUN1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, REAL_1, SUPINF_1,
-      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_3, FUNCOP_1, FUNCT_4, NAT_1, CARD_4;
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, FUNCOP_1,
+      FUNCT_4, NAT_1, CARD_4;
  constructors REAL_1, SUPINF_1, NAT_1, CARD_4, FUNCOP_1, FUNCT_4, MEMBERED,
-      FUNCT_3, XXREAL_0;
+      FUNCT_3;
  registrations SUPINF_1, RELSET_1, FUNCOP_1, FUNCT_1, ARYTM_3, FINSET_1,
-      MEMBERED, ORDINAL2, NUMBERS, XREAL_0;
+      MEMBERED, ORDINAL2, NUMBERS, XREAL_0, XXREAL_0, FUNCT_2, RELAT_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -475,9 +477,10 @@ D = rng it;
 end;
 
 definition
-   let N be Function of NAT,ExtREAL;
-   let n be Nat;
-redefine func N.n -> R_eal;
+  let X be set;
+  let f be PartFunc of X,ExtREAL;
+  let x be set;
+redefine func f.x -> R_eal;
 end;
 
 theorem :: SUPINF_2:53
@@ -557,11 +560,11 @@ definition let F be Function of NAT,ExtREAL;
  for N being Num of rng F st N = F holds it = Ser(rng F,N);
 end;
 
-definition let X be set;
-   let F be Function of X,ExtREAL;
-   attr F is nonnegative means
+definition
+  let R be Relation;
+  attr R is nonnegative means
 :: SUPINF_2:def 22
-     rng F is nonnegative;
+  rng R is nonnegative;
 end;
 
 definition
@@ -572,8 +575,8 @@ definition
 end;
 
 theorem :: SUPINF_2:58
-   for X being non empty set,
-       F being Function of X,ExtREAL holds
+   for X being set,
+       F being PartFunc of X,ExtREAL holds
    F is nonnegative iff for n being Element of X holds 0. <= F.n;
 
 theorem :: SUPINF_2:59
@@ -615,7 +618,7 @@ end;
 
 theorem :: SUPINF_2:65
    for F being Function of NAT,ExtREAL st F is nonnegative holds
-   ((ex n being Nat st F.n = +infty) implies F is not summable);
+   (ex n being Nat st F.n = +infty) implies F is not summable;
 
 theorem :: SUPINF_2:66
   for F1,F2 being Function of NAT,ExtREAL st
@@ -637,3 +640,17 @@ theorem :: SUPINF_2:69
    (ex n being Nat st (for k being Nat st n <= k holds F.k = 0.) &
    (for k being Nat st k <= n holds F.k <> +infty))
    holds F is summable;
+
+:: Added by AK, 2006.02.06
+
+theorem :: SUPINF_2:70
+   for X being set,
+       F being PartFunc of X,ExtREAL holds
+   F is nonnegative iff for n being set holds 0. <= F.n;
+
+theorem :: SUPINF_2:71
+   for X being set,
+       F being PartFunc of X,ExtREAL st
+   for n being set st n in dom F holds 0. <= F.n
+   holds F is nonnegative;
+

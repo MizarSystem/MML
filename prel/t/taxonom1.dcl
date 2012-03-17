@@ -12,6 +12,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
@@ -28,9 +29,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="24"/>
-<Adjective nr="26" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="46"/>
+<Adjective nr="25"/>
+<Adjective nr="44"/>
+<Adjective nr="46" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -38,15 +39,15 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="23" value="false"/>
+<Adjective nr="34"/>
 <Adjective nr="36"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="45">
+<Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -57,15 +58,15 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="102">
+<Func kind="K" nr="119">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="24"/>
-<Adjective nr="26" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="46"/>
+<Adjective nr="25"/>
+<Adjective nr="44"/>
+<Adjective nr="46" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -10,21 +10,22 @@ environ
       YELLOW_2, LATTICE3, YELLOW_6, ORDERS_1, PRE_TOPC, RELAT_2, QUANTAL1,
       SUBSET_1, SEQM_3, SETFAM_1, WAYBEL11, CLASSES1, CAT_1, PROB_1, YELLOW_9,
       BOOLE, WAYBEL28;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1,
-      FUNCT_1, FUNCT_2, STRUCT_0,
-      CLASSES1, SEQM_3, GRCAT_1, PRE_TOPC, ORDERS_2,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, STRUCT_0, CLASSES1, GRCAT_1, PRE_TOPC, ORDERS_2,
       LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_2, WAYBEL_3, YELLOW_6, YELLOW_9,
       WAYBEL_9, WAYBEL11, WAYBEL17;
- constructors SEQM_3, GRCAT_1, CLASSES1, YELLOW_2, WAYBEL_3, YELLOW_9,
-      WAYBEL17, MEMBERED;
+ constructors GRCAT_1, CLASSES1, YELLOW_2, WAYBEL_3, YELLOW_9, WAYBEL17,
+      MEMBERED;
  registrations STRUCT_0, SUBSET_1, RELSET_1, LATTICE3, WAYBEL_0, WAYBEL_3,
-      YELLOW_6, YELLOW_9, WAYBEL11, WAYBEL17, CLASSES2, MEMBERED, PARTFUN1;
+      YELLOW_6, YELLOW_9, WAYBEL11, WAYBEL17, CLASSES2, MEMBERED, PARTFUN1,
+      FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0, RELAT_1, YELLOW_6, WAYBEL11;
- theorems ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, SEQM_3, GRCAT_1, PRE_TOPC,
-      TOPS_1, ORDERS_2, CLASSES1, WAYBEL_0, YELLOW_0, LATTICE3, YELLOW_2,
-      YELLOW_4, YELLOW_6, WAYBEL_8, YELLOW_9, WAYBEL_9, WAYBEL11, YELLOW12,
-      WAYBEL17, WAYBEL21, XBOOLE_1;
+ definitions TARSKI, XBOOLE_0, RELAT_1, YELLOW_6, WAYBEL11, SUBSET_1,
+      PRE_TOPC;
+ theorems ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, GRCAT_1, PRE_TOPC, TOPS_1,
+      ORDERS_2, CLASSES1, WAYBEL_0, YELLOW_0, LATTICE3, YELLOW_2, YELLOW_4,
+      YELLOW_6, WAYBEL_8, YELLOW_9, WAYBEL_9, WAYBEL11, YELLOW12, WAYBEL17,
+      WAYBEL21, XBOOLE_1, SUBSET_1;
  schemes RELSET_1, WELLORD2;
 
 begin
@@ -138,12 +139,8 @@ proof
   let N be directed non empty RelStr, x,y be Element of N;
 A1:
   [#]N is directed by WAYBEL_0:def 6;
-       x in the carrier of N;
-  then A2:  x in [#]N by PRE_TOPC:12;
-       y in the carrier of N;
-  then y in [#]N by PRE_TOPC:12;
-  then ex z being Element of N st z in [#]N & x <= z & y <= z
-        by A1,A2,WAYBEL_0:def 1;
+  ex z being Element of N st z in [#]N & x <= z & y <= z
+        by A1,WAYBEL_0:def 1;
   hence thesis;
 end;
 
@@ -249,10 +246,8 @@ proof
       f be Function of the carrier of N,the carrier of L;
   set N2 = NetStr(#the carrier of N,the InternalRel of N,f#);
 A1: the RelStr of N = the RelStr of N2;
-A2: [#]N = the carrier of N by PRE_TOPC:12
-    .= [#]N2 by PRE_TOPC:12;
        [#]N is directed by WAYBEL_0:def 6;
-  then [#]N2 is directed by A1,A2,WAYBEL_0:3;
+  then [#]N2 is directed by A1,WAYBEL_0:3;
   hence NetStr (#the carrier of N,the InternalRel of N,f#) is net of L
      by A1,WAYBEL_0:def 6,WAYBEL_8:13;
 end;
@@ -505,9 +500,7 @@ A21:    v'>= v;
       reconsider j1=j as Element of N;
       reconsider v=g.j as Element of M;
 A22:  [#]M is directed by WAYBEL_0:def 6;
-           v in the carrier of M;
-      then v in [#]M by PRE_TOPC:12;
-      then consider v' being Element of M such that
+      consider v' being Element of M such that
 A23:     v' in [#]M & v <= v' & v <=v' by A22,WAYBEL_0:def 1;
            j <= f.(g.j) by A19,A23;
       hence j <= p.j by A17,FUNCT_1:23;
@@ -1158,16 +1151,14 @@ A3:
   the RelStr of L = the RelStr of T by YELLOW_9:def 4;
   then reconsider A'=A as Subset of T;
   reconsider A' as Subset of T;
-
-      [#]L = the carrier of T by A3,PRE_TOPC:12
-    .= [#]T by PRE_TOPC:12;
+  [#]L = the carrier of T by A3
+    .= [#]T;
 then A4:
-  A` = [#]T \ A' by PRE_TOPC:17
-    .= A'` by PRE_TOPC:17;
+  A` = [#]T \ A'
+    .= A'`;
   thus A` in xi L implies A is closed_under_directed_sups
   proof
-    assume
-         A` in xi L;
+    assume A` in xi L;
     then A'` in sigma L by A2,A4,Th30;
     then A'` in the topology of T by YELLOW_9:51;
     then A'` is open by PRE_TOPC:def 5;
@@ -1175,12 +1166,9 @@ then A4:
     then A' is directly_closed by WAYBEL11:7;
     hence A is closed_under_directed_sups by A3,YELLOW12:20;
   end;
-  assume
-       A is closed_under_directed_sups;
-then A5:
-  A' is directly_closed by A3,YELLOW12:20;
-
-       A' is lower by A1,A3,WAYBEL_0:25;
+  assume A is closed_under_directed_sups;
+then A5: A' is directly_closed by A3,YELLOW12:20;
+  A' is lower by A1,A3,WAYBEL_0:25;
   then A' is closed by A5,WAYBEL11:7;
   then A'` is open by TOPS_1:29;
   then A'` in the topology of T by PRE_TOPC:def 5;

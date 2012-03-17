@@ -11,11 +11,11 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -32,7 +32,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="18">
+<Pred kind="V" nr="21">
 <Fraenkel>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -46,7 +46,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="76">
+<Func kind="K" nr="80">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
@@ -72,7 +72,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="18">
+<Pred kind="V" nr="21">
 <Fraenkel>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -90,7 +90,7 @@
 </Pred>
 <Pred kind="R" nr="12">
 <Var nr="1"/>
-<Func kind="K" nr="75">
+<Func kind="K" nr="79">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>

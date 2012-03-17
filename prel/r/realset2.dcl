@@ -9,6 +9,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="ORDINAL1"/>
@@ -35,8 +36,8 @@
 <Adjective nr="30"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
-<Adjective nr="62"/>
-<Adjective nr="63"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -45,7 +46,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="64"/>
+<Adjective nr="62"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -54,8 +55,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="51"/>
-<Adjective nr="64" value="false"/>
+<Adjective nr="49"/>
+<Adjective nr="62" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -64,8 +65,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="51"/>
-<Adjective nr="65"/>
+<Adjective nr="49"/>
+<Adjective nr="63"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -7,6 +7,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="FUNCT_2"/>
@@ -34,10 +35,10 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="44"/>
+<Adjective nr="42"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
 <Adjective nr="53"/>
-<Adjective nr="54"/>
-<Adjective nr="55"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -51,13 +52,13 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="58">
+<Adjective nr="56">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="59">
+<Adjective nr="57">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="63">
+<Adjective nr="61">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -16,6 +16,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
@@ -29,10 +30,10 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30">
+<Adjective nr="28">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="33">
+<Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -52,7 +53,7 @@
 <Adjective nr="5"/>
 <Adjective nr="18"/>
 <Adjective nr="21"/>
-<Adjective nr="34"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 </Registrations>

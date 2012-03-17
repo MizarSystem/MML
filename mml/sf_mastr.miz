@@ -11,22 +11,23 @@ environ
       CARD_1, FUNCOP_1, SQUARE_1, AMI_2, ARYTM_1, NAT_1, ABSVALUE, FINSEQ_2,
       SF_MASTR, CARD_3, FINSEQ_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
-      FINSET_1, FINSUB_1, NAT_1, INT_1, STRUCT_0, SETWISEO, CQC_LANG,
-      CQC_SIM1, CARD_1, CARD_3, FINSEQ_1, FINSEQ_2, FINSEQ_4, RELAT_1, FUNCT_1,
-      FUNCT_2, FUNCT_4, FUNCT_7, AMI_1, AMI_3, AMI_5, SCMFSA_2, SCMFSA_4,
-      SCMFSA_5, SCMFSA6A, INT_2, XXREAL_0;
+      FINSET_1, FINSUB_1, NAT_1, INT_1, STRUCT_0, SETWISEO, CQC_LANG, CQC_SIM1,
+      CARD_1, CARD_3, FINSEQ_1, FINSEQ_2, FINSEQ_4, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2,
+      FUNCT_4, FUNCT_7, AMI_1, AMI_3, AMI_5, SCMFSA_2, SCMFSA_4, SCMFSA_5,
+      SCMFSA6A, INT_2, XXREAL_0;
  constructors FUNCT_7, SETWISEO, NAT_1, CQC_SIM1, AMI_5, SCMFSA_5, SCMFSA6A,
-      FINSEQ_4, MEMBERED, INT_2, CAT_3, XXREAL_0;
+      FINSEQ_4, MEMBERED, INT_2, XXREAL_0, PARTFUN1;
  registrations FINSET_1, FINSUB_1, RELSET_1, FUNCT_1, AMI_1, SCMFSA_2,
       SCMFSA_4, INT_1, CQC_LANG, AMI_3, FRAENKEL, MEMBERED, ORDINAL2, SETFAM_1,
-      STRUCT_0, XREAL_0;
+      STRUCT_0, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0;
  theorems TARSKI, ENUMSET1, ZFMISC_1, FINSEQ_1, FINSUB_1, SETWISEO, NAT_1,
       FINSET_1, RELAT_1, GRFUNC_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_7,
       CQC_LANG, CQC_SIM1, CQC_THE1, CARD_3, CARD_4, AMI_1, AMI_3, AMI_5,
       SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, RELSET_1, XBOOLE_0, XBOOLE_1;
  schemes NAT_1, DOMAIN_1, FUNCT_2;
+ definitions TARSKI, XBOOLE_0;
 
 begin :: Preliminaries
 
@@ -109,8 +110,7 @@ registration
  let A be finite set, B be set;
  cluster -> finite Function of A, B;
  coherence proof
-  let f be Function of A, B;
-      dom f c= A by RELSET_1:12; then dom f is finite by FINSET_1:13;
+  let f be Function of A, B; dom f is finite;
   hence thesis by FINSET_1:29;
  end;
 end;
@@ -120,11 +120,11 @@ registration
  cluster Union f -> finite;
  coherence proof
       now
-   thus dom f is finite by FINSET_1:29;
+   thus dom f is finite;
    let x be set; assume
   A1: x in dom f;
-     then reconsider A as non empty set by FUNCT_2:def 1;
-     reconsider x' = x as Element of A by A1,FUNCT_2:def 1;
+     then reconsider A as non empty set;
+     reconsider x' = x as Element of A by A1;
      reconsider f' = f as Function of A, Fin B;
          f'.x' is finite;
    hence f.x is finite;
@@ -582,12 +582,11 @@ A2: for i being Element of the Instructions of SCM+FSA holds P[i,UIL.i]
    reconsider Up = UIL * p' as
                    Function of dp, Fin Int-Locations;
 A3: IT = union rng Up by CARD_3:def 4;
-A4: rng Up c= Fin Int-Locations by RELSET_1:12;
        Fin Int-Locations c= bool Int-Locations by FINSUB_1:26;
-   then rng Up c= bool Int-Locations by A4,XBOOLE_1:1;
-   then A5: union rng Up c= union bool Int-Locations by ZFMISC_1:95;
+   then rng Up c= bool Int-Locations by XBOOLE_1:1;
+   then A4: union rng Up c= union bool Int-Locations by ZFMISC_1:95;
    take IT;
-   thus IT is Subset of Int-Locations by A3,A5,ZFMISC_1:99;
+   thus IT is Subset of Int-Locations by A3,A4,ZFMISC_1:99;
    take UIL;
    hereby
      let i be Instruction of SCM+FSA;
@@ -599,20 +598,20 @@ A4: rng Up c= Fin Int-Locations by RELSET_1:12;
  uniqueness proof let IT1, IT2 be Subset of Int-Locations;
    given UIL1 being Function of the Instructions of SCM+FSA, Fin Int-Locations
    such that
-A6: (for i being Instruction of SCM+FSA holds UIL1.i = UsedIntLoc i) &
+A5: (for i being Instruction of SCM+FSA holds UIL1.i = UsedIntLoc i) &
    IT1 = Union (UIL1 * p);
    given UIL2 being Function of the Instructions of SCM+FSA, Fin Int-Locations
    such that
-A7: (for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i) &
+A6: (for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i) &
    IT2 = Union (UIL2 * p);
         for c be Element of the Instructions of SCM+FSA holds UIL1.c = UIL2.c
     proof
       let c be Element of the Instructions of SCM+FSA;
       reconsider d = c as Instruction of SCM+FSA;
-      thus UIL1.c = UsedIntLoc d by A6
-        .= UIL2.c by A7;
+      thus UIL1.c = UsedIntLoc d by A5
+        .= UIL2.c by A6;
     end;
-  hence IT1 = IT2 by A6,A7,FUNCT_2:113;
+  hence IT1 = IT2 by A5,A6,FUNCT_2:113;
  end;
 end;
 
@@ -1168,12 +1167,11 @@ A2: for i being Element of the Instructions of SCM+FSA holds P[i,UIL.i]
    reconsider Up = UIL * p' as
                    Function of dp, Fin FinSeq-Locations;
 A3: IT = union rng Up by CARD_3:def 4;
-A4: rng Up c= Fin FinSeq-Locations by RELSET_1:12;
        Fin FinSeq-Locations c= bool FinSeq-Locations by FINSUB_1:26;
-   then rng Up c= bool FinSeq-Locations by A4,XBOOLE_1:1;
-   then A5: union rng Up c= union bool FinSeq-Locations by ZFMISC_1:95;
+   then rng Up c= bool FinSeq-Locations by XBOOLE_1:1;
+   then A4: union rng Up c= union bool FinSeq-Locations by ZFMISC_1:95;
    take IT;
-   thus IT is Subset of FinSeq-Locations by A3,A5,ZFMISC_1:99;
+   thus IT is Subset of FinSeq-Locations by A3,A4,ZFMISC_1:99;
    take UIL;
    hereby
      let i be Instruction of SCM+FSA;
@@ -1185,20 +1183,20 @@ A4: rng Up c= Fin FinSeq-Locations by RELSET_1:12;
  uniqueness proof let IT1, IT2 be Subset of FinSeq-Locations;
  given UIL1 being Function of the Instructions of SCM+FSA, Fin FinSeq-Locations
    such that
-A6: (for i being Instruction of SCM+FSA holds UIL1.i = UsedInt*Loc i) &
+A5: (for i being Instruction of SCM+FSA holds UIL1.i = UsedInt*Loc i) &
    IT1 = Union (UIL1 * p);
  given UIL2 being Function of the Instructions of SCM+FSA, Fin FinSeq-Locations
    such that
-A7: (for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i) &
+A6: (for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i) &
    IT2 = Union (UIL2 * p);
         for c be Element of the Instructions of SCM+FSA holds UIL1.c = UIL2.c
     proof
       let c be Element of the Instructions of SCM+FSA;
       reconsider d = c as Instruction of SCM+FSA;
-      thus UIL1.c = UsedInt*Loc d by A6
-        .= UIL2.c by A7;
+      thus UIL1.c = UsedInt*Loc d by A5
+        .= UIL2.c by A6;
     end;
-  hence IT1 = IT2 by A6,A7,FUNCT_2:113;
+  hence IT1 = IT2 by A5,A6,FUNCT_2:113;
  end;
 end;
 

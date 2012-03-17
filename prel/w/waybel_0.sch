@@ -8,6 +8,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
@@ -43,13 +44,13 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
-<Func kind="K" nr="68">
+<Func kind="K" nr="85">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="68">
+<Func kind="K" nr="85">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -81,7 +82,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="68">
+<Func kind="K" nr="85">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -122,7 +123,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="68">
+<Func kind="K" nr="85">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -146,13 +147,13 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
-<Func kind="K" nr="68">
+<Func kind="K" nr="85">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="68">
+<Func kind="K" nr="85">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

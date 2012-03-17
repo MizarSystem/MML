@@ -228,4 +228,15 @@
 <Adjective nr="18"/>
 </Cluster>
 </CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster/>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="K" nr="53"/>
+</Typ>
+<Cluster>
+<Adjective nr="18"/>
+</Cluster>
+</CCluster>
 </Registrations>

@@ -8,6 +8,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
@@ -46,7 +47,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="173">
 <Var nr="1"/>
 </Func>
 <Num nr="1"/>
@@ -64,8 +65,8 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
-<Func kind="K" nr="52"/>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="72"/>
+<Func kind="K" nr="76"/>
 </Typ>
 <Not>
 <And>
@@ -79,7 +80,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="173">
 <Var nr="2"/>
 </Func>
 <Var nr="1"/>
@@ -103,10 +104,10 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="173">
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="65">
+<Func kind="K" nr="85">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -147,7 +148,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="158">
+<Func kind="K" nr="175">
 <Var nr="1"/>
 </Func>
 <Num nr="0"/>
@@ -163,8 +164,8 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="52"/>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="72"/>
+<Func kind="K" nr="76"/>
 </Typ>
 <Not>
 <And>
@@ -178,7 +179,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="158">
+<Func kind="K" nr="175">
 <Var nr="2"/>
 </Func>
 <Var nr="1"/>
@@ -202,10 +203,10 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="158">
+<Func kind="K" nr="175">
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="65">
+<Func kind="K" nr="85">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

@@ -12,16 +12,16 @@ environ
       RCOMP_1, PRE_TOPC, BOOLE, FCONT_1, SUBSET_1, SIN_COS, FINSEQ_4, GROUP_1,
       XCMPLX_0, FUNCOP_1, FRECHET2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
-      XREAL_0, REAL_1, FUNCT_1, FCONT_1, FUNCT_2, SEQ_1, SEQ_2, FDIFF_1,
-      RELAT_1, FUNCOP_1, SERIES_1, NAT_1, FINSEQ_4, NEWTON, COMPLEX1, SQUARE_1,
-      PARTFUN1, SEQM_3, RCOMP_1, BINARITH, RFUNCT_1, RFUNCT_2, COMSEQ_1,
-      COMSEQ_2, COMSEQ_3, PREPOWER, XXREAL_0;
+      XXREAL_0, XREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1, FCONT_1, FUNCT_2,
+      SEQ_1, SEQ_2, FDIFF_1, FUNCOP_1, SERIES_1, NAT_1, FINSEQ_4, NEWTON,
+      COMPLEX1, SQUARE_1, PARTFUN1, SEQM_3, RCOMP_1, BINARITH, RFUNCT_1,
+      RFUNCT_2, COMSEQ_1, COMSEQ_2, COMSEQ_3, PREPOWER;
  constructors COMSEQ_3, REAL_1, SEQ_2, RCOMP_1, FINSEQ_4, FCONT_1, RFUNCT_1,
       FDIFF_1, SQUARE_1, COMSEQ_1, COMSEQ_2, PREPOWER, SERIES_1, PARTFUN1,
       BINARITH, RFUNCT_2, ARYTM_0, ARYTM_3, FUNCT_4, NAT_1, XXREAL_0;
  registrations COMSEQ_2, COMSEQ_3, XREAL_0, RELSET_1, FDIFF_1, RCOMP_1, SEQ_1,
       COMSEQ_1, SEQM_3, NEWTON, COMPLEX1, MEMBERED, ORDINAL2, SQUARE_1,
-      XCMPLX_0, NAT_1;
+      XCMPLX_0, NAT_1, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -79,19 +79,19 @@ end;
 definition let n be Nat;
   func n !c -> Element of COMPLEX equals
 :: SIN_COS:def 6
-  Prod_complex_n.n;
+    Prod_complex_n.n;
 end;
 
 definition let n be Nat;
   redefine func n! -> Real equals
 :: SIN_COS:def 7
-  Prod_real_n.n;
+    Prod_real_n.n;
 end;
 
-definition let z be Element of COMPLEX;
- func z ExpSeq -> Complex_Sequence means
+definition let z be complex number;
+  func z ExpSeq -> Complex_Sequence means
 :: SIN_COS:def 8
-   for n holds it.n = z #N n /(n!c);
+    for n holds it.n = z #N n / (n!c);
 end;
 
 definition let a be real number;
@@ -101,24 +101,23 @@ definition let a be real number;
 end;
 
 theorem :: SIN_COS:1
- 0!c = 1 &
- n!c <> 0 &
- (n+1)!c = n!c * (n+1);
+  0!c = 1 &
+  n!c <> 0 &
+  (n+1)!c = n!c * (n+1);
 
 theorem :: SIN_COS:2
   n! <> 0 & (n+1)! = n! * (n+1);
 
 theorem :: SIN_COS:3
-(for k st 0 < k holds ((k-'1)!c ) * k = k!c) &
- for m,k st k <= m holds ((m-'k)!c) * (m+1-k) = (m+1-'k)!c;
+  (for k st 0 < k holds ((k-'1)!c ) * k = k!c) &
+    for m,k st k <= m holds ((m-'k)!c) * (m+1-k) = (m+1-'k)!c;
 
-definition
-let n be Nat;
-func Coef(n) -> Complex_Sequence means
+definition let n be Nat;
+  func Coef(n) -> Complex_Sequence means
 :: SIN_COS:def 10
-  for k be Nat holds
-     (k <= n implies it.k = n!c /( (k!c ) * ((n-'k)!c )))
-    &(k > n implies it.k=0);
+   for k be Nat holds
+     (k <= n implies it.k = n!c /( (k!c ) * ((n-'k)!c ))) &
+     (k > n implies it.k=0);
 end;
 
 definition let n be Nat;
@@ -136,12 +135,12 @@ func Sift seq -> Complex_Sequence means
 end;
 
 definition let n;
-let z,w be Element of COMPLEX;
-func Expan(n,z,w) -> Complex_Sequence means
+  let z,w be Element of COMPLEX;
+  func Expan(n,z,w) -> Complex_Sequence means
 :: SIN_COS:def 13
   for k be Nat holds
    ( k <= n implies
-       it.k=((Coef(n)).k) * (z #N k) * (w #N (n-'k)) ) &
+       it.k=((Coef(n)).k) * (z |^ k) * (w |^ (n-'k)) ) &
    (n < k implies it.k=0);
 end;
 
@@ -151,7 +150,7 @@ func Expan_e(n,z,w) -> Complex_Sequence means
 :: SIN_COS:def 14
   for k be Nat holds
    ( k <= n implies
-       it.k=((Coef_e(n)).k) * (z #N k) * (w #N (n-'k)) ) &
+       it.k=((Coef_e(n)).k) * (z |^ k) * (w |^ (n-'k)) ) &
    (n < k implies it.k=0);
 end;
 
@@ -201,13 +200,13 @@ theorem :: SIN_COS:6
 Partial_Sums(seq).k=Partial_Sums(Sift(seq)).k+seq.k;
 
 theorem :: SIN_COS:7
-(z+w) #N n = Partial_Sums(Expan(n,z,w)).n;
+(z+w) |^ n = Partial_Sums(Expan(n,z,w)).n;
 
 theorem :: SIN_COS:8
   Expan_e(n,z,w)=(1r/(n!c )) (#) Expan(n,z,w);
 
 theorem :: SIN_COS:9
-((z+w) #N n) / (n!c) = Partial_Sums(Expan_e(n,z,w)).n;
+((z+w) |^ n) / (n!c) = Partial_Sums(Expan_e(n,z,w)).n;
 
 theorem :: SIN_COS:10
 0c ExpSeq is absolutely_summable & Sum(0c ExpSeq)=1r;
@@ -267,75 +266,77 @@ theorem :: SIN_COS:23
 for seq st for k holds seq.k=Partial_Sums((Conj(k,z,w))).k
   holds seq is convergent & lim seq = 0;
 
-begin ::Definition of Exponential Function on Complex
+begin :: Definition of Exponential Function on Complex
 
 definition
-func exp -> PartFunc of COMPLEX, COMPLEX means
+  func exp -> PartFunc of COMPLEX, COMPLEX means
 :: SIN_COS:def 18
- dom it= COMPLEX & for z being Element of COMPLEX holds it.z=Sum(z ExpSeq);
- end;
+  dom it = COMPLEX & for z being Element of COMPLEX holds it.z=Sum(z ExpSeq);
+end;
 
-definition let z;
-func exp z -> Element of COMPLEX equals
+definition let z be complex number;
+  func exp z -> complex number equals
 :: SIN_COS:def 19
- exp.z;
+    exp.z;
+end;
+
+definition let z be complex number;
+  redefine func exp z -> Element of COMPLEX;
 end;
 
 theorem :: SIN_COS:24
-    for z1, z2 holds exp(z1+z2)=exp(z1) *exp(z2);
+  for z1, z2 holds exp(z1+z2)=exp(z1) *exp(z2);
 
-begin ::Definition of Sinus, Cosine, and Exponential Function on REAL
+begin :: Definition of Sinus, Cosine, and Exponential Function on REAL
 
 definition
-func sin -> PartFunc of REAL, REAL means
+  func sin -> PartFunc of REAL, REAL means
 :: SIN_COS:def 20
- dom it = REAL & for d being Element of REAL holds it.d=Im(Sum([*0,d*]
-ExpSeq));
+    dom it = REAL & for d being Element of REAL holds
+      it.d = Im(Sum([*0,d*] ExpSeq));
   end;
 
 definition let th be real number;
-func sin th equals
+  func sin th equals
 :: SIN_COS:def 21
- sin.th;
+    sin.th;
 end;
 
-registration
-let th be real number;
- cluster sin th -> real;
+registration let th be real number;
+  cluster sin th -> real;
 end;
 
 definition let th be Real;
- redefine func sin th -> Real;
+  redefine func sin th -> Real;
 end;
 
 theorem :: SIN_COS:25
-    sin is Function of REAL,REAL;
+  sin is Function of REAL,REAL;
 
-reserve d for Real;
+ reserve d for Real;
 
 definition
-func cos -> PartFunc of REAL, REAL means
+  func cos -> PartFunc of REAL, REAL means
 :: SIN_COS:def 22
- dom it= REAL & for d holds it.d=Re(Sum([*0,d*] ExpSeq));
+    dom it = REAL & for d holds it.d = Re(Sum([*0,d*] ExpSeq));
  end;
 
 definition let th be real number;
-func cos th equals
+  func cos th equals
 :: SIN_COS:def 23
- cos.th;
+  cos.th;
 end;
 
-registration
-let th be real number;
- cluster cos th -> real;
+registration let th be real number;
+  cluster cos th -> real;
 end;
 
 definition let th be Real;
- redefine func cos th -> Real;
+  redefine func cos th -> Real;
 end;
 
 theorem :: SIN_COS:26
-    cos is Function of REAL,REAL;
+  cos is Function of REAL,REAL;
 
 theorem :: SIN_COS:27
 dom(sin)=REAL & dom(cos)=REAL;
@@ -344,7 +345,7 @@ theorem :: SIN_COS:28
     exp([*0,th*])=cos(th)+(sin th)*<i>;
 
 theorem :: SIN_COS:29
-    (exp([*0,th*]))*'=exp(-[*0,th*]);
+  (exp([*0,th*]))*'=exp(-[*0,th*]);
 
 theorem :: SIN_COS:30
   |.exp([*0,th*]).| = 1 &
@@ -353,40 +354,37 @@ theorem :: SIN_COS:30
 reserve th,th1,th2 for real number;
 
 theorem :: SIN_COS:31
-(cos.th)^2+(sin.th)^2=1
-   &
-(cos.th)*(cos.th)+(sin.th)*(sin.th)=1;
+  (cos.th)^2+(sin.th)^2=1 &
+  (cos.th)*(cos.th)+(sin.th)*(sin.th)=1;
 
 theorem :: SIN_COS:32
-  (cos(th))^2+(sin(th))^2=1
-   &
-(cos(th))*(cos(th))+(sin(th))*(sin(th))=1;
+  (cos(th))^2+(sin(th))^2=1 &
+  (cos(th))*(cos(th))+(sin(th))*(sin(th))=1;
 
 theorem :: SIN_COS:33
- cos.0=1 & sin.0=0
- &
- cos.(-th)=cos.(th) & sin.(-th)=-sin.(th);
+ cos.0=1 & sin.0=0 &
+ cos.(-th)=cos.th & sin.(-th)=-sin.th;
 
 theorem :: SIN_COS:34
-     cos(0)=1 & sin(0)=0 &
- cos(-th)=cos(th) & sin(-th)=-sin(th);
+  cos(0)=1 & sin(0)=0 &
+    cos(-th)=cos(th) & sin(-th)=-sin(th);
 
 definition let th be real number;
-func th P_sin -> Real_Sequence means
+  func th P_sin -> Real_Sequence means
 :: SIN_COS:def 24
-for n holds it.n= (-1)|^ n * (th)|^ (2*n+1)/((2*n+1)!);
+  for n holds it.n= (-1)|^ n * (th)|^ (2*n+1)/((2*n+1)!);
 func th P_cos -> Real_Sequence means
 :: SIN_COS:def 25
  for n holds it.n = (-1)|^ n * (th)|^ (2*n)/((2*n)!);
 end;
 
 theorem :: SIN_COS:35
-for z, k holds z#N (2*k) = (z#N k)#N 2&
-       z#N (2*k)= (z#N 2)#N k;
+for z, k holds z|^ (2*k) = (z|^ k)|^ 2&
+       z|^ (2*k)= (z|^ 2)|^ k;
 
 theorem :: SIN_COS:36
-  for th being Real holds [*0, th*] #N (2*k)=[*(-1)|^ k* (th |^ (2*k)),0*]
-     & [*0, th*] #N (2*k+1)=[*0,(-1)|^ k* (th |^ (2*k+1))*];
+  for th being Real holds [*0, th*] |^ (2*k)=[*(-1)|^ k* (th |^ (2*k)),0*]
+     & [*0, th*] |^ (2*k+1)=[*0,(-1)|^ k* (th |^ (2*k+1))*];
 
 theorem :: SIN_COS:37
 for n holds n!c=[*n!,0*];
@@ -418,10 +416,10 @@ theorem :: SIN_COS:43
 for th,n,k st 0<=th & th <=1 & n<=k holds th |^ k <= th |^ n;
 
 theorem :: SIN_COS:44
-for th being Real holds [*th,0*]#N n=[* th |^ n,0 *];
+for th being Real holds [*th,0*]|^ n=[* th |^ n,0 *];
 
 theorem :: SIN_COS:45
- for th being Real holds [*th,0*] #N n /(n!c )=[*(th|^ n) /(n!),0*];
+ for th being Real holds [*th,0*] |^ n /(n!c )=[*(th|^ n) /(n!),0*];
 
 theorem :: SIN_COS:46
 for p being Real holds Im(Sum([*p,0*] ExpSeq))=0;
@@ -433,69 +431,68 @@ theorem :: SIN_COS:48
 for th being Real holds th ExpSeq=Re([*th,0*] ExpSeq);
 
 theorem :: SIN_COS:49
-for th being Real holds (th ExpSeq) is summable &
-       Sum(th ExpSeq)=Re(Sum([*th,0*] ExpSeq));
+  for th being Real holds (th ExpSeq) is summable &
+    Sum(th ExpSeq)=Re(Sum([*th,0*] ExpSeq));
 
 theorem :: SIN_COS:50
   for p,q being real number holds
-  Sum((p+q) ExpSeq)= (Sum(p ExpSeq))*(Sum(q ExpSeq));
+  Sum((p+q) ExpSeq) = (Sum(p ExpSeq))*(Sum(q ExpSeq));
 
 definition
-func exp -> PartFunc of REAL, REAL means
+  func exp_R -> PartFunc of REAL, REAL means
 :: SIN_COS:def 26
- dom it= REAL & for d being real number holds it.d=Sum(d ExpSeq);
+    dom it = REAL & for d being real number holds it.d=Sum(d ExpSeq);
  end;
 
 definition let th be real number;
-func exp th equals
+  func exp_R th equals
 :: SIN_COS:def 27
- exp.th;
+    exp_R.th;
 end;
 
-registration
-let th be real number;
- cluster exp th -> real;
+registration let th be real number;
+  cluster exp_R th -> real;
 end;
 
 definition let th be Real;
- redefine func exp th -> Real;
+  redefine func exp_R th -> Real;
 end;
 
 theorem :: SIN_COS:51
-dom(exp)=REAL;
+dom(exp_R)=REAL;
 
 canceled;
 
 theorem :: SIN_COS:53
-for th being Real holds exp.th = Re(Sum([*th,0*] ExpSeq));
+for th being Real holds exp_R.th = Re(Sum([*th,0*] ExpSeq));
 
 theorem :: SIN_COS:54
-for th being Real holds exp([*th,0*])=[*exp(th ),0*];
+for th being Real holds exp([*th,0*])=[*exp_R th,0*];
 
 theorem :: SIN_COS:55
-  for p,q being real number holds exp(p+q) = exp(p) * exp(q);
+  for p,q being real number holds exp_R(p+q) = exp_R(p) * exp_R(q);
 
 theorem :: SIN_COS:56
-exp(0) =1;
+  exp_R(0) =1;
 
 theorem :: SIN_COS:57
-for th st th >0 holds exp.th >=1;
+for th st th > 0 holds exp_R.th >=1;
 
 theorem :: SIN_COS:58
-th <0 implies 0<exp.th & exp.th <=1;
+th < 0 implies 0<exp_R.th & exp_R.th <=1;
 
 theorem :: SIN_COS:59
-exp.th>0;
+exp_R.th>0;
 
 theorem :: SIN_COS:60
-exp(th)>0;
+exp_R(th)>0;
 
-begin ::Differential of sin, cos, and Exponential Function
+begin :: Differential of sin, cos, and Exponential Function
 
 definition let z be Element of COMPLEX;
-func z P_dt -> Complex_Sequence means
+  func z P_dt -> Complex_Sequence means
 :: SIN_COS:def 28
- for n holds it.n = (z#N(n+1))/((n+2)!c);
+    for n holds it.n = (z|^(n+1))/((n+2)!c);
 func z P_t -> Complex_Sequence means
 :: SIN_COS:def 29
      for n holds it.n = (z#N(n))/((n+2)!c);
@@ -524,8 +521,8 @@ for p,q being Real holds sin.(p+q)-sin.p=
       q*cos.p+q*Re((Sum([*0,q*] P_dt))* [*cos.p,sin.p*]);
 
 theorem :: SIN_COS:67
-for p,q being Real holds exp.(p+q)-exp.p=
-      q* (exp.p)+q*exp.p*Re((Sum([*q,0*] P_dt)));
+for p,q being Real holds exp_R.(p+q)-exp_R.p=
+      q * (exp_R.p)+q*exp_R.p*Re((Sum([*q,0*] P_dt)));
 
 theorem :: SIN_COS:68
   cos is_differentiable_in p & diff(cos,p)=-sin.p;
@@ -534,11 +531,11 @@ theorem :: SIN_COS:69
   sin is_differentiable_in p & diff(sin,p)=cos.p;
 
 theorem :: SIN_COS:70
-  exp is_differentiable_in p & diff(exp,p)=exp.p;
+  exp_R is_differentiable_in p & diff(exp_R,p)=exp_R.p;
 
 theorem :: SIN_COS:71
-  exp is_differentiable_on REAL &
- (for th st th in REAL holds diff(exp,th)=exp.(th));
+  exp_R is_differentiable_on REAL &
+ (for th st th in REAL holds diff(exp_R,th)=exp_R.th);
 
 theorem :: SIN_COS:72
  cos is_differentiable_on REAL &

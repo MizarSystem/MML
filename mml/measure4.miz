@@ -6,22 +6,22 @@
 
 environ
 
- vocabularies SUPINF_1, MEASURE1, RLVECT_1, ARYTM_3, ARYTM_1, SETFAM_1,
-      FUNCT_1, BOOLE, TARSKI, RELAT_1, SUPINF_2, PROB_1, MEASURE3, MEASURE4;
+ vocabularies SUPINF_1, MEASURE1, RLVECT_1, ARYTM_1, SETFAM_1, FUNCT_1, BOOLE,
+      TARSKI, RELAT_1, SUPINF_2, PROB_1, MEASURE3, MEASURE4;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0,
-      RELAT_1, FUNCT_1, FUNCT_2, REAL_1, NAT_1, SETFAM_1,
-      PROB_1, SUPINF_1, SUPINF_2,
-      MEASURE1, MEASURE3;
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, REAL_1, NAT_1, SETFAM_1, PROB_1, SUPINF_1,
+      SUPINF_2, MEASURE1, MEASURE3;
  constructors ENUMSET1, NAT_1, REAL_1, SUPINF_2, PROB_2, MEASURE3, SUPINF_1,
- XXREAL_0;
- registrations SUBSET_1, FUNCT_1, SUPINF_1, MEASURE1, RELSET_1, NAT_1,
-      XBOOLE_0, NUMBERS, ORDINAL2, XREAL_0;
+ PARTFUN1;
+ registrations SUBSET_1, FUNCT_1, MEASURE1, RELSET_1, NAT_1, XBOOLE_0, NUMBERS,
+      ORDINAL2, FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, MEASURE3, XBOOLE_0;
  theorems TARSKI, ENUMSET1, FUNCT_1, FUNCT_2, ZFMISC_1, NAT_1, SUPINF_1,
       SUPINF_2, MEASURE1, MEASURE2, MEASURE3, RELSET_1, XBOOLE_0, XBOOLE_1,
       XXREAL_0, PROB_1;
  schemes NAT_1, FUNCT_2, XBOOLE_0;
+ definitions TARSKI, MEASURE3, XBOOLE_0;
 
 begin :: Some theorems about R_eal numbers
 
@@ -173,7 +173,7 @@ A1:for n being Element of NAT holds G.n = A /\ F.n;
    A2:r in E & E in rng G by TARSKI:def 4;
       consider s being set such that
    A3:s in dom G & E = G.s by A2,FUNCT_1:def 5;
-      reconsider s as Element of NAT by A3,FUNCT_2:def 1;
+      reconsider s as Element of NAT by A3;
          r in A /\ F.s by A1,A2,A3;
    then A4:r in A & r in F.s by XBOOLE_0:def 3;
          F.s in rng F by FUNCT_2:6;
@@ -187,7 +187,7 @@ then A5:r in A & r in union rng F by XBOOLE_0:def 3;
 A6:r in E & E in rng F by TARSKI:def 4;
    consider s being set such that
 A7:s in dom F & E = F.s by A6,FUNCT_1:def 5;
-   reconsider s as Element of NAT by A7,FUNCT_2:def 1;
+   reconsider s as Element of NAT by A7;
       A /\ E = G.s by A1,A7;
 then A8:r in G.s by A5,A6,XBOOLE_0:def 3;
       G.s in rng G by FUNCT_2:6;
@@ -232,7 +232,7 @@ A6:union rng H c= union rng F
    A7:r in E & E in rng H by TARSKI:def 4;
       consider s being set such that
    A8:s in dom H & E = H.s by A7,FUNCT_1:def 5;
-      reconsider s as Element of NAT by A8,FUNCT_2:def 1;
+      reconsider s as Element of NAT by A8;
 A9:    E c= F.s by A3,A8;
          F.s in rng F by FUNCT_2:6;
       hence thesis by A7,A9,TARSKI:def 4;
@@ -245,7 +245,7 @@ A9:    E c= F.s by A3,A8;
    A10:r in E & E in rng F by TARSKI:def 4;
       consider s being set such that
    A11:s in dom F & E = F.s by A10,FUNCT_1:def 5;
-      reconsider s as Element of NAT by A11,FUNCT_2:def 1;
+      reconsider s as Element of NAT by A11;
          ex s1 being Element of NAT st r in H.s1
       proof
         defpred P[Nat] means r in F.$1;
@@ -303,21 +303,11 @@ A2:    for M being N_Sub_set_fam of X st M c= bool X holds union M in bool X;
    hence thesis;
 end;
 
-definition let X be set;
-   let F be Function of NAT,bool X;
-   redefine func rng F -> Subset-Family of X;
-coherence by RELSET_1:12;
-end;
-
-definition let Y be set; let X,Z be non empty set;
-   let F be Function of Y,X;
-   let M be Function of X,Z;
-  redefine func M*F -> Function of Y,Z;
-coherence
-proof
-  thus M*F is Function of Y,Z;
-end;
-end;
+::definition let X be set;
+::   let F be Function of NAT,bool X;
+::   redefine func rng F -> Subset-Family of X;
+::coherence by RELSET_1:12;
+::end;
 
 theorem Th7:
    for a,b being R_eal holds
@@ -1000,8 +990,7 @@ proof
    A in sigma_Field(C) implies D.A = C.A)
    proof
      deffunc F(set) = C.$1;
-   A1:for S being set st S in sigma_Field(C) holds (F(S) in ExtREAL)
-        by FUNCT_2:7;
+   A1:for S being set st S in sigma_Field(C) holds (F(S) in ExtREAL);
       consider D being Function of sigma_Field(C),ExtREAL such that
    A2:for S being set st S in sigma_Field(C) holds D.S = F(S) from
 FUNCT_2:sch 2(A1);
@@ -1077,8 +1066,7 @@ proof
       let F be Sep_Sequence of sigma_Field(C);
       consider A being Subset of X such that
    A1:A = union rng F;
-         M.A in ExtREAL by A1,FUNCT_2:7;
-      then consider a,b being R_eal such that
+      consider a,b being R_eal such that
    A2:a = M.A & b = C.A;
       reconsider F' = F as Function of NAT,bool X by FUNCT_2:9;
 A3:   C*F' is Function of NAT,ExtREAL;

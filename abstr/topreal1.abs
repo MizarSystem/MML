@@ -10,7 +10,7 @@ environ
  vocabularies EUCLID, METRIC_1, PCOMPS_1, BOOLE, FINSEQ_1, RELAT_1, FUNCT_1,
       PRE_TOPC, BORSUK_1, TOPS_2, RCOMP_1, SUBSET_1, MCART_1, ARYTM_1, ARYTM_3,
       CONNSP_2, TOPS_1, TOPMETR, COMPLEX1, ABSVALUE, ORDINAL2, COMPTS_1,
-      TARSKI, SETFAM_1, TOPREAL1, FINSEQ_4, ARYTM;
+      TARSKI, SETFAM_1, TOPREAL1, FINSEQ_4, ARYTM, JORDAN1A;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, ORDINAL2, NUMBERS,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, TOPS_1,
       TOPS_2, CONNSP_2, COMPTS_1, RCOMP_1, FINSEQ_1, FINSEQ_4, STRUCT_0,
@@ -18,7 +18,8 @@ environ
  constructors REAL_1, NAT_1, TOPS_1, TOPS_2, COMPTS_1, RCOMP_1, EUCLID,
       TOPMETR, FINSEQ_4, INT_1, MEMBERED, COMPLEX1, SETFAM_1, XXREAL_0;
  registrations SUBSET_1, PRE_TOPC, RELSET_1, STRUCT_0, EUCLID, BORSUK_1,
-      XREAL_0, METRIC_1, INT_1, TOPMETR, XBOOLE_0, NAT_1, MEMBERED, PCOMPS_1;
+      XREAL_0, METRIC_1, INT_1, TOPMETR, XBOOLE_0, NAT_1, MEMBERED, PCOMPS_1,
+      XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -276,3 +277,85 @@ theorem :: TOPREAL1:35
 theorem :: TOPREAL1:36
   P is_S-P_arc implies
     ex f being Function of I[01], (TOP-REAL 2)|P st f is_homeomorphism;
+
+:: Moved from JORDAN1A, AK, 23.02.2006
+
+scheme :: TOPREAL1:sch 2
+ TRSubsetEx { n() -> Nat, P[set] } :
+ ex A being Subset of TOP-REAL n() st
+  for p being Point of TOP-REAL n() holds p in A iff P[p];
+
+scheme :: TOPREAL1:sch 3
+ TRSubsetUniq { n() -> Nat, P[set] } :
+ for A, B being Subset of TOP-REAL n() st
+  (for p being Point of TOP-REAL n() holds p in A iff P[p]) &
+  (for p being Point of TOP-REAL n() holds p in B iff P[p])
+ holds A = B;
+
+definition let p be Point of TOP-REAL 2;
+ func north_halfline p -> Subset of TOP-REAL 2 means
+:: TOPREAL1:def 12
+  for x being Point of TOP-REAL 2 holds
+   x in it iff x`1 = p`1 & x`2 >= p`2;
+
+ func east_halfline p -> Subset of TOP-REAL 2 means
+:: TOPREAL1:def 13
+  for x being Point of TOP-REAL 2 holds
+   x in it iff x`1 >= p`1 & x`2 = p`2;
+
+ func south_halfline p -> Subset of TOP-REAL 2 means
+:: TOPREAL1:def 14
+  for x being Point of TOP-REAL 2 holds
+   x in it iff x`1 = p`1 & x`2 <= p`2;
+
+ func west_halfline p -> Subset of TOP-REAL 2 means
+:: TOPREAL1:def 15
+  for x being Point of TOP-REAL 2 holds
+   x in it iff x`1 <= p`1 & x`2 = p`2;
+end;
+
+theorem :: TOPREAL1:37
+ north_halfline p =
+   {q where q is Point of TOP-REAL 2: q`1 = p`1 & q`2 >= p`2};
+
+theorem :: TOPREAL1:38
+ north_halfline p =
+   { |[ p`1,r ]| where r is Element of REAL: r >= p`2 };
+
+theorem :: TOPREAL1:39
+ east_halfline p =
+   {q where q is Point of TOP-REAL 2: q`1 >= p`1 & q`2 = p`2};
+
+theorem :: TOPREAL1:40
+ east_halfline p =
+   { |[ r,p`2 ]| where r is Element of REAL: r >= p`1 };
+
+theorem :: TOPREAL1:41
+ south_halfline p =
+   {q where q is Point of TOP-REAL 2: q`1 = p`1 & q`2 <= p`2};
+
+theorem :: TOPREAL1:42
+ south_halfline p =
+   { |[ p`1,r ]| where r is Element of REAL: r <= p`2 };
+
+theorem :: TOPREAL1:43
+ west_halfline p =
+   {q where q is Point of TOP-REAL 2: q`1 <= p`1 & q`2 = p`2};
+
+theorem :: TOPREAL1:44
+ west_halfline p =
+   { |[ r,p`2 ]| where r is Element of REAL: r <= p`1 };
+
+registration let p be Point of TOP-REAL 2;
+ cluster north_halfline p -> non empty;
+ cluster east_halfline p -> non empty;
+ cluster south_halfline p -> non empty;
+ cluster west_halfline p -> non empty;
+end;
+
+:: Moved from JORDAN1C, AK, 23.02.2006
+
+theorem :: TOPREAL1:45
+  p in west_halfline p & p in east_halfline p &
+  p in north_halfline p & p in south_halfline p;
+

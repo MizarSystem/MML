@@ -129,7 +129,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -146,7 +146,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -226,12 +226,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -249,12 +249,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -353,17 +353,17 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -382,17 +382,17 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -1140,7 +1140,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="19"/>
-<Adjective nr="24"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -1159,8 +1159,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="19"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -1179,9 +1179,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -1201,9 +1201,9 @@
 <Adjective nr="1"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
 </Cluster>
 </CCluster>
 <CCluster>

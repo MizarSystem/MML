@@ -10,6 +10,7 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -88,7 +89,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="174">
+<Func kind="K" nr="190">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>

@@ -7,21 +7,21 @@
 environ
 
  vocabularies PRE_TOPC, SETFAM_1, SUBSET_1, BOOLE, TARSKI, FINSET_1, FUNCT_1,
-      RELAT_1, FINSEQ_1, ORDINAL2, TOPS_2, SEQ_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XXREAL_0, RELAT_1,
- FUNCT_1,
+      RELAT_1, FINSEQ_1, ORDINAL2, TOPS_2, SEQ_1, RELAT_2, CONNSP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XXREAL_0, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1,
       FUNCT_2, FUNCT_3, NAT_1, FINSEQ_1, FINSET_1, SETFAM_1, STRUCT_0,
-      PRE_TOPC;
+      PRE_TOPC, CONNSP_1;
  constructors FUNCT_3, NAT_1, FINSEQ_1, PRE_TOPC, XREAL_0, MEMBERED, SETFAM_1,
- XXREAL_0;
+      XXREAL_0, PARTFUN1, CONNSP_1;
  registrations PRE_TOPC, STRUCT_0, RELSET_1, ARYTM_3, MEMBERED, SUBSET_1,
-  XREAL_0;
+   FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, PRE_TOPC;
  theorems TARSKI, FINSET_1, SETFAM_1, FUNCT_1, FUNCT_2, FUNCT_3, NAT_1,
       FINSEQ_1, ZFMISC_1, PRE_TOPC, TOPS_1, RELAT_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, SUBSET_1, XREAL_1;
+      XBOOLE_1, SUBSET_1, XREAL_1, CONNSP_1;
  schemes FUNCT_1, NAT_1, SUBSET_1;
+ definitions TARSKI, PRE_TOPC;
 
 begin
 
@@ -909,7 +909,7 @@ theorem
 theorem Th51:
   for T being 1-sorted, S being non empty 1-sorted,
       f being Function of T, S holds
-  dom f = [#]T & rng f c= [#]S by FUNCT_2:def 1,RELSET_1:12;
+  dom f = [#]T & rng f c= [#]S by FUNCT_2:def 1;
 
 theorem Th52:
   for T being 1-sorted, S being non empty 1-sorted,
@@ -918,10 +918,9 @@ theorem Th52:
  proof
   let T be 1-sorted, S be non empty 1-sorted,
       f be Function of T, S;
-  A1: f"(rng f) = dom f by RELAT_1:169
+  f"(rng f) = dom f by RELAT_1:169
            .= [#]T by Th51;
-      rng f c= [#]S by Th51;
-  then [#]T c= f"([#]S) & f"([#]S) c= dom f by A1,RELAT_1:167,178;
+  then [#]T c= f"([#]S) & f"([#]S) c= dom f by RELAT_1:167,178;
   then [#]T c= f"([#]S) & f"([#]S) c= [#]T;
   hence thesis by XBOOLE_0:def 10;
  end;
@@ -963,20 +962,20 @@ theorem Th55:
     let P1; assume P1 is open;
     then P1` is closed by TOPS_1:30;
     then A2: f"(P1`) is closed by A1,PRE_TOPC:def 12;
-        f"(P1`) = f"([#]S \ P1) by PRE_TOPC:17
+        f"(P1`) = f"([#]S \ P1) by SUBSET_1:def 5
            .= f"([#]S) \ f"P1 by FUNCT_1:138
            .= [#]T \ f"P1 by Th52
-           .= (f"P1)` by PRE_TOPC:17;
+           .= (f"P1)` by SUBSET_1:def 5;
     hence f"P1 is open by A2,TOPS_1:30;
    end;
    assume A3: for P1 st P1 is open holds f"P1 is open;
    let P1; assume P1 is closed;
    then P1` is open by TOPS_1:29;
    then A4: f"(P1`) is open by A3;
-   f"(P1`) = f"([#]S \ P1) by PRE_TOPC:17
+   f"(P1`) = f"([#]S \ P1) by SUBSET_1:def 5
           .= f"([#]S) \ f"P1 by FUNCT_1:138
           .= [#]T \ f"P1 by Th52
-          .= (f"P1)` by PRE_TOPC:17;
+          .= (f"P1)` by SUBSET_1:def 5;
    hence thesis by A4,TOPS_1:29;
  end;
 
@@ -1213,7 +1212,7 @@ end;
 
 canceled;
 
-theorem
+theorem Th70:
   f is_homeomorphism implies f" is_homeomorphism
   proof
    assume A1: f is_homeomorphism;
@@ -1352,3 +1351,78 @@ A1:     f is_homeomorphism;
     end;
     hence f" is continuous by Th56;
    end;
+
+theorem Th75: :: TOPREAL5:5, AK, 21.02.2006
+for X,Y being non empty TopSpace
+for f being Function of X,Y,
+   A being Subset of X st f is continuous  & A is connected
+   holds f.:A is connected
+ proof
+   let X,Y be non empty TopSpace;
+   let f be Function of X,Y,
+    A be Subset of X;
+    assume A0: f is continuous;
+  assume A1:A is connected;
+  assume not f.:A is connected;
+   then consider P,Q being Subset of Y such that
+     A2: f.:A = P \/ Q &
+     P,Q are_separated & P <> {}(Y) & Q <> {}(Y) by CONNSP_1:16;
+     A3: Cl P misses Q & P misses Cl Q by A2,CONNSP_1:def 1;
+     consider y being Element of P;
+         y in f.:A by A2,XBOOLE_0:def 2;
+     then consider x such that A4: x in dom f & x in A & y=f.x by
+FUNCT_1:def 12;
+     A5:x in f"P by A2,A4,FUNCT_1:def 13;
+     consider z being Element of Q;
+         z in P \/ Q by A2,XBOOLE_0:def 2;
+     then consider x1 being set such that
+     A6: x1 in dom f & x1 in A & z=f.x1 by A2,FUNCT_1:def 12;
+     A7:x1 in f"Q by A2,A6,FUNCT_1:def 13;
+     A8:f"(f.:A)=f"P \/ f"Q by A2,RELAT_1:175;
+         the carrier of X=dom f by FUNCT_2:def 1;
+     then A9: A c=f"P \/ f"Q by A8,FUNCT_1:146;
+     reconsider P1=f"P,Q1=f"Q as Subset of X;
+     A10:Cl P1 c=f"(Cl P) by A0,Th56;
+     A11:Cl Q1 c=f"(Cl Q) by A0,Th56;
+     A12:Cl P1 /\ f"Q c=f"(Cl P) /\ f"(Q) by A10,XBOOLE_1:26;
+     A13:f"(Cl P) /\ f"Q = f"(Cl P /\ Q) by FUNCT_1:137;
+     A14:f"(Cl P /\ Q)=f"({}Y) by A3,XBOOLE_0:def 7;
+     A15:f"(P) /\ Cl Q1 c=f"(P) /\ f"(Cl Q) by A11,XBOOLE_1:26;
+     A16:f"(P) /\ f"(Cl Q) = f"(P /\ Cl Q) by FUNCT_1:137;
+     A17:f"(P /\ Cl Q)=f"({}Y) by A3,XBOOLE_0:def 7;
+     A18:f"({}Y) = {} by RELAT_1:171;
+     then Cl P1 /\ Q1 = {}X by A12,A13,A14,XBOOLE_1:3;
+     then A19:Cl P1 misses Q1 by XBOOLE_0:def 7;
+         P1 /\ Cl Q1 = {} by A15,A16,A17,A18,XBOOLE_1:3;
+     then P1 misses Cl Q1 by XBOOLE_0:def 7;
+     then A20:P1,Q1 are_separated by A19,CONNSP_1:def 1;
+     set P2=P1/\A,Q2=Q1/\A;
+     A21:A=(P1 \/ Q1)/\A by A9,XBOOLE_1:28 .=P2 \/ Q2 by XBOOLE_1:23;
+     A22:P2 c=P1 by XBOOLE_1:17;
+         Q2 c=Q1 by XBOOLE_1:17;
+     then A23:P2,Q2 are_separated by A20,A22,CONNSP_1:8;
+     A24:P2<>{} by A4,A5,XBOOLE_0:def 3;
+         Q2<>{} by A6,A7,XBOOLE_0:def 3;
+     then ex P3,Q3 being Subset of X st A = P3 \/ Q3 &
+     P3,Q3 are_separated & P3 <> {}(X) & Q3 <> {}(X) by A21,A23,A24;
+   hence contradiction by A1,CONNSP_1:16;
+ end;
+
+theorem :: JORDAN18:2, AK, 21.02.2006
+     for S,T being non empty TopSpace,
+      f being Function of S,T,
+      A being Subset of T st f is_homeomorphism & A is connected
+   holds f"A is connected
+  proof
+    let S,T be non empty TopSpace,
+        f be Function of S,T,
+        A be Subset of T such that
+A1:   f is_homeomorphism and
+A2:   A is connected;
+       f" is_homeomorphism by A1,Th70;
+    then f" is continuous & rng (f") = [#]S by Def5;
+    then A3: f".:A is connected by A2,Th75;
+       rng f = [#]T & f is one-to-one by A1,Def5;
+    hence f"A is connected by A3,Th68;
+  end;
+

@@ -11,6 +11,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -52,7 +53,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="42">
+<Adjective nr="44">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -64,7 +65,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="13">
-<Func kind="K" nr="123">
+<Func kind="K" nr="142">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -86,7 +87,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="112">
+<Func kind="K" nr="129">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>

@@ -12,6 +12,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
@@ -24,7 +25,6 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
@@ -48,7 +48,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="120">
+<Func kind="K" nr="137">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -67,11 +67,11 @@
 <Cluster/>
 <Func kind="K" nr="14">
 <Func kind="K" nr="55"/>
-<Func kind="K" nr="112">
+<Func kind="K" nr="129">
 <Func kind="K" nr="55"/>
 </Func>
 </Func>
-<Func kind="K" nr="245"/>
+<Func kind="K" nr="242"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>

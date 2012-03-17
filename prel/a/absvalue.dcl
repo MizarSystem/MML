@@ -24,13 +24,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="67">
+<Func kind="K" nr="69">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="22"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 </Registrations>

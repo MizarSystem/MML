@@ -11,15 +11,14 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSUB_1, RELAT_1, FUNCT_1,
       REAL_1, FUNCT_2, FUNCOP_1, ORDINAL1, CARD_3, NUMBERS, XCMPLX_0, XREAL_0,
       NAT_1, COMPLEX1, SEQ_1, SEQ_2, SETFAM_1, XXREAL_0;
- constructors ABSVALUE, SEQ_2, SETFAM_1, FINSUB_1, FUNCOP_1, XCMPLX_0,
-      MEMBERED, XBOOLE_0, COMPLEX1, CARD_3, XXREAL_0;
+ constructors SEQ_2, SETFAM_1, FINSUB_1, FUNCOP_1, COMPLEX1, CARD_3, XXREAL_0;
  registrations FUNCT_1, XREAL_0, RELSET_1, SUBSET_1, FUNCOP_1, MEMBERED,
       ORDINAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions FINSUB_1, TARSKI;
- theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, ABSVALUE, SEQ_2,
-      SETFAM_1, SUBSET_1, RELAT_1, RELSET_1, FINSUB_1, FUNCOP_1, XBOOLE_0,
-      XBOOLE_1, XCMPLX_1, XREAL_1, CARD_3;
+ definitions FINSUB_1, TARSKI, SUBSET_1;
+ theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, ABSVALUE, SEQ_2, SETFAM_1,
+      SUBSET_1, RELAT_1, RELSET_1, FINSUB_1, FUNCOP_1, XBOOLE_0, XBOOLE_1,
+      XREAL_1, CARD_3, XXREAL_0;
  schemes FUNCT_2, PARTFUN1;
 
 begin
@@ -131,7 +130,7 @@ proof
   A3:  A1` in F by A1,Def1;
        B1` in F by A2,Def1;
   then A1` /\ B1` in F by A3,FINSUB_1:def 2;
-  then (A1 \/ B1)` in F by SUBSET_1:29;
+  then (A1 \/ B1)` in F by XBOOLE_1:53;
   then (A1 \/ B1)`` in F by Def1;
   hence thesis;
 end;
@@ -142,7 +141,7 @@ theorem Th10:
      consider A being Subset of X such that
    A1:  A in F by Th6;
 A2:     A` in F by A1,Def1;
-           A misses A` by SUBSET_1:26;
+           A misses A` by XBOOLE_1:79;
         then A /\ A` = {} by XBOOLE_0:def 7;
         hence thesis by A1,A2,FINSUB_1:def 2;
      end;
@@ -154,7 +153,7 @@ theorem Th11:
    A1:  A in F by Th6;
 A2:     A` in F by A1,Def1;
            A \/ A` = [#] X by SUBSET_1:25
-              .= X by SUBSET_1:def 4;
+              .= X;
         hence thesis by A1,A2,Th9;
      end;
 
@@ -196,11 +195,8 @@ A4:    (A = {} or B = {}) implies A /\ B = {};
     end;
        now let A be Subset of X; assume
 A5:    A in EX;
-          A = {} implies A = {} X;
-       then A = {} implies A` = [#] X by SUBSET_1:22;
-       then A6: A = {} implies A` = X by SUBSET_1:def 4;
-          A = X implies A = [#] X by SUBSET_1:def 4;
-       then A = X implies A` = {} X by SUBSET_1:21;
+       A6: A = {} implies A` = X;
+       A = X implies A` = {} X by XBOOLE_1:37;
        hence A` in EX by A5,A6,TARSKI:def 2;
     end;
     hence thesis by A2,Def1,FINSUB_1:def 2;
@@ -266,7 +262,7 @@ end;
  reserve ASeq,BSeq for SetSequence of Omega;
  reserve A1 for SetSequence of X;
 
-Lm2:
+Lm1:
   dom A1 = NAT & for n holds A1.n in bool X by FUNCT_2:def 1;
 
 canceled;
@@ -318,7 +314,7 @@ A2: A in bool X & B in bool X;
 
 definition let X,A1,n;
   redefine func A1.n -> Subset of X;
-  coherence by Lm2;
+  coherence by Lm1;
 end;
 
 theorem Th23:
@@ -431,14 +427,12 @@ Th29: x in Intersection A1 iff for n holds x in A1.n
   proof
   A1: for n holds X \ (Complement A1).n = A1.n
      proof let n;
-          X \ (Complement A1).n = ((Complement A1).n)` by SUBSET_1:def 5
+          X \ (Complement A1).n = ((Complement A1).n)`
                            .= ((A1.n)`)` by Def4
                            .= A1.n;
        hence thesis;
      end;
- A2: x in (Union Complement A1)` iff x in X \ Union Complement A1
-                                                           by SUBSET_1:def 5;
- A3: x in X & not x in Union Complement A1 iff
+ A2: x in X & not x in Union Complement A1 iff
           x in X & for n holds not x in (Complement A1).n by Th25;
      (for n holds (x in X & not x in (Complement A1).n)) iff
                                                for n holds x in A1.n
@@ -446,17 +440,17 @@ Th29: x in Intersection A1 iff for n holds x in A1.n
         (for n holds (x in X & not x in (Complement A1).n)) implies
                                            for n holds x in A1.n
        proof assume
-      A4: (for n holds (x in X & not x in (Complement A1).n)); let n;
-             x in X & not x in (Complement A1).n by A4;
+      A3: (for n holds (x in X & not x in (Complement A1).n)); let n;
+             x in X & not x in (Complement A1).n by A3;
           then x in X \ (Complement A1).n by XBOOLE_0:def 4;
           hence thesis by A1;
        end;
-       assume A5: for n holds x in A1.n; let n;
-          x in A1.n by A5;
+       assume A4: for n holds x in A1.n; let n;
+          x in A1.n by A4;
        then x in X \ (Complement A1).n by A1;
        hence thesis by XBOOLE_0:def 4;
      end;
-  hence thesis by A2,A3,XBOOLE_0:def 4;
+  hence thesis by A2,XBOOLE_0:def 4;
 end;
 
 theorem Th30:
@@ -529,13 +523,13 @@ proof assume
     reconsider Y' = Y as non empty Subset-Family of X by A1;
        Y is cap-closed
     proof let A,B be set; assume
-    A7: A in Y & B in Y;
+    A2: A in Y & B in Y;
         then reconsider A' = A, B' = B as Subset of X by A1;
         consider A1 such that
-    A8: (A1.0 = A' & for n st n <> 0 holds A1.n = B') by Th22;
-    A9: Intersection A1 = A /\ B by A8,Th30;
-           for n holds A1.n in Y by A7,A8;
-        hence thesis by A1,A9,Def8;
+    A3: (A1.0 = A' & for n st n <> 0 holds A1.n = B') by Th22;
+    A4: Intersection A1 = A /\ B by A3,Th30;
+           for n holds A1.n in Y by A2,A3;
+        hence thesis by A1,A4,Def8;
     end;
     hence thesis by A1;
 end;
@@ -989,9 +983,9 @@ Th67: P.(([#] Sigma) \ A) + P.A = 1
   proof
  A1: (([#] Sigma) \ A) misses A by XBOOLE_1:79;
     (([#] Sigma) \ A) \/ A = (Omega \ A) \/ A
-                        .= A` \/ A by SUBSET_1:def 5
+                        .= A` \/ A
                         .= [#] Omega by SUBSET_1:25
-                        .= Omega by SUBSET_1:def 4;
+                        .= Omega;
    then P.(([#] Sigma) \ A) + P.A = P.Omega by A1,Def13
                           .= 1 by Def13;
    hence thesis;
@@ -1079,7 +1073,7 @@ Th76: bool Omega is SigmaField of Omega
    hence thesis by Def8,Def1;
   end;
 
-Lm3: for X being Subset-Family of Omega ex Y being SigmaField of Omega
+Lm2: for X being Subset-Family of Omega ex Y being SigmaField of Omega
     st X c= Y & for Z st (X c= Z & Z is SigmaField of Omega) holds Y c= Z
    proof let X be Subset-Family of Omega;
     set V = { S : X c= S & S is SigmaField of Omega};
@@ -1091,51 +1085,51 @@ Lm3: for X being Subset-Family of Omega ex Y being SigmaField of Omega
            X1 is SigmaField of Omega by Th76;
         hence thesis;
        end;
-A3:   now let Z; assume Z in V;
+A2:   now let Z; assume Z in V;
        then ex S st Z = S & X c= S & S is SigmaField of Omega;
        hence {} in Z by Th10;
       end;
-  A4: for BSeq st (for n holds BSeq.n in Y) holds Intersection BSeq in Y
-      proof let BSeq such that A5: for n holds BSeq.n in Y;
-          now let Z; assume A6: Z in V;
-       then A7: ex S st Z = S & X c= S & S is SigmaField of Omega;
-           now let n;  BSeq.n in Y by A5;
-         hence BSeq.n in Z by A6,SETFAM_1:def 1;
+  A3: for BSeq st (for n holds BSeq.n in Y) holds Intersection BSeq in Y
+      proof let BSeq such that A4: for n holds BSeq.n in Y;
+          now let Z; assume A5: Z in V;
+       then A6: ex S st Z = S & X c= S & S is SigmaField of Omega;
+           now let n;  BSeq.n in Y by A4;
+         hence BSeq.n in Z by A5,SETFAM_1:def 1;
         end;
-        hence Intersection BSeq in Z by A7,Def8;
+        hence Intersection BSeq in Z by A6,Def8;
        end;
        hence thesis by A1,SETFAM_1:def 1;
       end;
       for E st E in Y holds E` in Y
-      proof let E such that A8: E in Y;
-          now let Z; assume A9: Z in V;
-       then A10: E in Z by A8,SETFAM_1:def 1;
-          ex S st Z = S & X c= S & S is SigmaField of Omega by A9;
-       hence E` in Z by A10,Def1;
+      proof let E such that A7: E in Y;
+          now let Z; assume A8: Z in V;
+       then A9: E in Z by A7,SETFAM_1:def 1;
+          ex S st Z = S & X c= S & S is SigmaField of Omega by A8;
+       hence E` in Z by A9,Def1;
        end;
        hence thesis by A1,SETFAM_1:def 1;
       end;
     then reconsider Y as SigmaField of Omega
-                      by A1,SETFAM_1:4,def 1,A3,A4,Def8,Def1;
+                      by A1,SETFAM_1:4,def 1,A2,A3,Def8,Def1;
     take Y;
-A11:       now let Z; assume Z in V;
+A10:       now let Z; assume Z in V;
        then ex S st Z = S & X c= S & S is SigmaField of Omega;
        hence X c= Z;
        end;
        for Z st (X c= Z & Z is SigmaField of Omega) holds Y c= Z
-    proof let Z; assume A12: X c= Z & Z is SigmaField of Omega;
+    proof let Z; assume A11: X c= Z & Z is SigmaField of Omega;
      then reconsider Z as Subset-Family of Omega;
-        Z in V by A12;
+        Z in V by A11;
      hence thesis by SETFAM_1:4;
     end;
-    hence thesis by A1,A11,SETFAM_1:6;
+    hence thesis by A1,A10,SETFAM_1:6;
    end;
 
 definition let Omega; let X be Subset-Family of Omega;
   func sigma(X) -> SigmaField of Omega means
      X c= it &
   for Z st (X c= Z & Z is SigmaField of Omega) holds it c= Z;
-  existence by Lm3;
+  existence by Lm2;
   uniqueness
   proof let R1,R2 be SigmaField of Omega such that
    A1: X c= R1 & for Z st X c= Z & Z is SigmaField of Omega holds R1 c= Z and

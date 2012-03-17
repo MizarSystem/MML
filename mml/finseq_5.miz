@@ -8,15 +8,15 @@ environ
 
  vocabularies ARYTM_1, FINSEQ_1, FUNCT_1, RELAT_1, FINSEQ_4, REALSET1, RFINSEQ,
       BOOLE, RLSUB_2, FINSEQ_5;
- notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NAT_1, RELAT_1,
-      FUNCT_1, FINSEQ_1, FINSEQ_4, REALSET1, RFINSEQ, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NAT_1, RELAT_1, FUNCT_1,
+      FINSEQ_1, FINSEQ_4, REALSET1, RFINSEQ, XXREAL_0;
  constructors REAL_1, NAT_1, REALSET1, RFINSEQ, FINSEQ_4, INT_1, XXREAL_0;
- registrations FUNCT_1, FINSEQ_1, RELSET_1, INT_1, NAT_1, ORDINAL2, XREAL_0;
+ registrations FUNCT_1, FINSEQ_1, RELSET_1, INT_1, ORDINAL2, XREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, XBOOLE_0, FINSEQ_1;
  theorems TARSKI, ZFMISC_1, REAL_1, NAT_1, PARTFUN2, FUNCT_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_3, FINSEQ_4, RFINSEQ, REALSET1, RELAT_1, INT_1,
-      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1;
+      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0;
  schemes FINSEQ_1;
 
 begin
@@ -51,7 +51,7 @@ then A3:  j <= n + 1 by XREAL_1:8;
    end;
    then j < n + 1 by A3,REAL_1:def 5;
    then j <= n by NAT_1:38;
-   hence thesis by A2,FINSEQ_1:3;
+   hence thesis by A2;
  end;
 
 theorem Th3:
@@ -296,7 +296,7 @@ A1: i in dom f;
 
 canceled;
 
-theorem Th18:
+theorem
  for D being set, f being FinSequence of D holds
    len(f|i) <= len f
  proof let D be set, f be FinSequence of D;
@@ -352,10 +352,9 @@ theorem
 A1: i+1 = len f;
   then f is non empty by FINSEQ_1:25;
 then A2: i+1 in dom f by A1,Th6;
-A3: f|i = f|Seg i by FINSEQ_1:def 15;
      dom f = Seg(i+1) by A1,FINSEQ_1:def 3;
   hence f = f|Seg(i+1) by RELAT_1:97
-         .= (f|i)^<*f.(i+1)*> by A2,A3,Th11
+         .= (f|i)^<*f.(i+1)*> by A2,Th11
          .= (f|i)^<*f/.len f*> by A1,A2,FINSEQ_4:def 4;
  end;
 
@@ -394,14 +393,14 @@ then A3:  len((f^g)|i) = i by FINSEQ_1:80;
     assume
 A4:  j in Seg i;
     then j <= i by FINSEQ_1:3;
-    then 1 <= j & j <= len f by A1,A4,XREAL_1:2,FINSEQ_1:3;
-  then j in Seg len f by FINSEQ_1:3;
+    then 1 <= j & j <= len f by A1,A4,XXREAL_0:2,FINSEQ_1:3;
+  then j in Seg len f;
 then A5:  j in dom f by FINSEQ_1:def 3;
-    thus ((f^g)|i).j = ((f^g)|(Seg i)).j by FINSEQ_1:def 15
+    thus ((f^g)|i).j = ((f^g)|(Seg i)).j
                     .= (f^g).j by A4,FUNCT_1:72
                     .= f.j by A5,FINSEQ_1:def 7
                     .= (f|(Seg i)).j by A4,FUNCT_1:72
-                    .= (f|i).j by FINSEQ_1:def 15;
+                    .= (f|i).j;
    end;
    hence (f^g)|i = f|i by A2,A3,FINSEQ_2:10;
  end;
@@ -411,8 +410,7 @@ theorem
    (f^g)|(len f) = f
  proof
   let D be set, f, g be FinSequence of D;
-     f|len f = f|(Seg len f) by FINSEQ_1:def 15;
-  hence f = f|len f by FINSEQ_2:23 .= (f^g)|(len f) by Th25;
+  thus f = f|len f by FINSEQ_2:23 .= (f^g)|(len f) by Th25;
  end;
 
 theorem
@@ -426,7 +424,7 @@ A2:  n = p..f - 1 and
 A3:  f-|p = f | Seg n by FINSEQ_4:def 6;
    n+1 in dom f & f.(n+1) = p by A1,A2,FINSEQ_4:29,30;
   hence (f-|p)^<*p*> = f|Seg(n+1) by A3,Th11
-                    .= f|(p..f) by A2,FINSEQ_1:def 15;
+                    .= f|(p..f) by A2;
  end;
 
 theorem
@@ -457,7 +455,7 @@ A1: i in dom(f/^n);
 A2:  n <= len f;
 A3:  1 <= i by A1,FINSEQ_3:27;
        i <= i+n by NAT_1:29;
-then A4:  1 <= i+n by A3,XREAL_1:2;
+then A4:  1 <= i+n by A3,XXREAL_0:2;
        i <= len(f/^n) by A1,FINSEQ_3:27;
     then i <= len f - n by A2,RFINSEQ:def 2;
     then n+i <= len f by XREAL_1:21;
@@ -532,7 +530,7 @@ A2: i in dom f;
   set g = <*f/.i*>^(f/^i);
 A3: i <= len f by A2,FINSEQ_3:27;
        j <= i by A1,NAT_1:29;
-then A4: j <= len f by A3,XREAL_1:2;
+then A4: j <= len f by A3,XXREAL_0:2;
 A5: len g = len(f/^i) + 1 by Th8;
 then A6: len g = len f - i + 1 by A3,RFINSEQ:def 2
          .= len f - j by A1
@@ -643,9 +641,9 @@ A10:  f/.(j+n) = (f/^n)/.j by A6,Th30
 A11: i = j+n;
 A12: i <= len(f|n) by A4,FINSEQ_3:27;
       len(f|n) <= n by Th19;
-then A13: i <= n by A12,XREAL_1:2;
+then A13: i <= n by A12,XXREAL_0:2;
       n <= i by A11,NAT_1:29;
-   then i = n by A13,XREAL_1:1;
+   then i = n by A13,XXREAL_0:1;
  then j = n-n by A11
      .= 0;
    hence contradiction by A6,FINSEQ_3:27;
@@ -751,12 +749,12 @@ then A2: p..(f|i) in dom(f|i) by FINSEQ_4:30;
   then A5: p..f <= p..(f|i) by A2,A3,Th42;
 A6: 1 <= p..f by A1,A4,FINSEQ_4:31;
      p..(f|i) <= len(f|i) by A1,FINSEQ_4:31;
-  then p..f <= len(f|i) by A5,XREAL_1:2;
+  then p..f <= len(f|i) by A5,XXREAL_0:2;
 then A7:  p..f in dom(f|i) by A6,FINSEQ_3:27;
   then (f|i)/.(p..f) = f/.(p..f) by FINSEQ_4:85
                   .= p by A1,A4,Th41;
   then p..(f|i) <= p..f by A7,Th42;
-  hence thesis by A5,XREAL_1:1;
+  hence thesis by A5,XXREAL_0:1;
  end;
 
 theorem
@@ -799,7 +797,7 @@ theorem
  proof assume
 A1:  p in rng f;
   then 1 <= p..f by FINSEQ_4:31;
-  then 1 in Seg(p..f) by FINSEQ_1:3;
+  then 1 in Seg(p..f);
   hence (f-:p)/.1 = f/.1 by A1,Th46;
  end;
 
@@ -809,7 +807,7 @@ theorem
   assume
 A1:  p in rng f;
   then 1 <= p..f & p..f <= p..f by FINSEQ_4:31;
-then A2:  p..f in Seg(p..f) by FINSEQ_1:3;
+then A2:  p..f in Seg(p..f);
 A3:  p..f in dom f by A1,FINSEQ_4:30;
   thus (f-:p)/.(p..f) = f/.(p..f) by A1,A2,Th46
                    .= f.(p..f) by A3,FINSEQ_4:def 4
@@ -827,7 +825,7 @@ A3:  x..f<=p..f;
   set g = f-:p, i = x..f;
 A4:  i in dom f by A1,FINSEQ_4:30;
      1 <= i by A1,FINSEQ_4:31;
-then A5:  i in Seg (p..f) by A3,FINSEQ_1:3;
+then A5:  i in Seg (p..f) by A3;
      Seg len g = dom g by FINSEQ_1:def 3;
 then A6:  i in dom g by A2,A5,Th45;
   then g.i in rng g by FUNCT_1:def 5;
@@ -885,7 +883,7 @@ A1:  p in rng f;
 A2:  i+1 = p..f and
 A3:  f:-p = f/^i by Th52;
      i <= p..f & p..f <= len f by A1,A2,FINSEQ_4:31,NAT_1:29;
-  then i <= len f by XREAL_1:2;
+  then i <= len f by XXREAL_0:2;
   hence len(f:-p) = len f - i by A3,RFINSEQ:def 2
                  .= len f - (p..f - 1) by A2
                  .= len f - p..f + 1;
@@ -901,7 +899,7 @@ A2:  j+1 in dom(f:-p);
   then j <= len f - p..f by XREAL_1:8;
 then A3: j+p..f <= len f by XREAL_1:21;
      1 <= p..f & p..f <= j+p..f by A1,FINSEQ_4:31,NAT_1:29;
-  then 1 <= j+p..f by XREAL_1:2;
+  then 1 <= j+p..f by XXREAL_0:2;
   hence j+p..f in dom f by A3,FINSEQ_3:27;
  end;
 
@@ -920,7 +918,7 @@ A2:  j+1 in dom(f:-p);
 A3:  k+1 = p..f and
 A4:  f:-p = f/^k by A1,Th52;
      k <= p..f & p..f <= len f by A1,A3,FINSEQ_4:31,NAT_1:29;
-then A5:  k <= len f by XREAL_1:2;
+then A5:  k <= len f by XXREAL_0:2;
 A6:  j+p..f in dom f by A1,A2,Th54;
   thus (f:-p)/.i = (f:-p).i by A2,FINSEQ_4:def 4
                 .= f.(i+k) by A2,A4,A5,RFINSEQ:def 2
@@ -1150,7 +1148,7 @@ A7:  i in dom(Rev(f^g)) by A3,A4,FINSEQ_1:def 3;
    suppose
 A8:  i = 1;
        Seg len g = dom g by FINSEQ_1:def 3;
-then A9:  1 in dom g by A6,FINSEQ_1:4,TARSKI:def 1;
+then A9:  1 in dom g by A6;
     thus (Rev(f^g)).i = (f^g).(n-1+1) by A1,A7,A8,Def3
                     .= x by FINSEQ_1:59
                     .= g.1 by FINSEQ_1:57
@@ -1160,7 +1158,7 @@ then A9:  1 in dom g by A6,FINSEQ_1:4,TARSKI:def 1;
 A10:  i > 1;
     then reconsider j = i-1 as Nat by NAT_1:60;
     reconsider k = n - i + 1 as Nat by A5,Th1;
-     0 < i by A10,XREAL_1:2;
+     0 < i by A10,XXREAL_0:2;
     then consider l being Nat such that
 A11:   i = l + 1 by NAT_1:22;
        l <> 0 by A10,A11;
@@ -1350,8 +1348,8 @@ theorem
 A1: n+1 <= i and
 A2: i <= len f;
       n <= n+1 by NAT_1:29;
-   then n <= i by A1,XREAL_1:2;
-then A3: n <= len f by A2,XREAL_1:2;
+   then n <= i by A1,XXREAL_0:2;
+then A3: n <= len f by A2,XXREAL_0:2;
  then len(f|n) = n by FINSEQ_1:80;
 then A4: len((f|n)^<*p*>) = n+1 by FINSEQ_2:19;
   reconsider j = i - (n+1) as Nat by A1,INT_1:18;
@@ -1422,13 +1420,10 @@ theorem  for f,i1,i2 st i1<=i2 holds
   (f|i1)|i2=f|i1 & (f|i2)|i1=f|i1
 proof let f,i1,i2;assume A1:i1<=i2;
     len (f|i1)<=i1 by Th19;
- then len (f|i1)<=i2 by A1,XREAL_1:2;
+ then len (f|i1)<=i2 by A1,XXREAL_0:2;
  hence (f|i1)|i2=f|i1 by FINSEQ_1:79;
-  A2:f|i2=f|(Seg i2) by FINSEQ_1:def 15;
-  A3:f|i1=f|(Seg i1) by FINSEQ_1:def 15;
-  A4:(f|i2)|i1=(f|i2)|Seg i1 by FINSEQ_1:def 15;
      Seg i1 c= Seg i2 by A1,FINSEQ_1:7;
- hence thesis by A2,A3,A4,FUNCT_1:82;
+ hence thesis by FUNCT_1:82;
 end;
 
 theorem  (<*>D)|i=<*>D

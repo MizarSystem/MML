@@ -13,9 +13,10 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="SQUARE_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="LIMFUNC1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
@@ -31,23 +32,23 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="214"/>
+<Func kind="K" nr="227"/>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="6"/>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="97">
+<Func kind="K" nr="109">
 <Num nr="0"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 </Registrations>

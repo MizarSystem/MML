@@ -10,18 +10,20 @@ environ
       RELAT_1, NATTRA_1, TDLAT_3, TOPS_3, TOPS_1, FUNCT_1, ORDINAL2, TEX_1,
       BORSUK_1, TEX_2, PCOMPS_1;
  notations TARSKI, XBOOLE_0, REALSET1, SUBSET_1, SETFAM_1, DOMAIN_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, REALSET2, PRE_TOPC, TOPS_1, TOPS_2,
-      BORSUK_1, TSEP_1, TDLAT_3, TOPS_3, PCOMPS_1, TEX_1;
+      FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, STRUCT_0, REALSET2, PRE_TOPC, TOPS_1, TOPS_2,
+      BORSUK_1, TSEP_1, TDLAT_3, TOPS_3, COMPTS_1, PCOMPS_1, TEX_1;
  constructors DOMAIN_1, TOPS_1, TOPS_2, TMAP_1, BORSUK_1, TOPS_3, TEX_1,
-      TDLAT_3, MEMBERED, REALSET2, SETFAM_1;
+      TDLAT_3, MEMBERED, REALSET2, SETFAM_1, COMPTS_1, CONNSP_1;
  registrations PRE_TOPC, TDLAT_3, TEX_1, REALSET1, STRUCT_0, RELSET_1,
-      PCOMPS_1, BORSUK_1, MEMBERED, FUNCT_2, PARTFUN1, TOPS_1, SUBSET_1;
+      PCOMPS_1, BORSUK_1, MEMBERED, FUNCT_2, PARTFUN1, TOPS_1,
+      SUBSET_1, COMPTS_1;
  requirements BOOLE, SUBSET;
- definitions PRE_TOPC, XBOOLE_0, REALSET2;
  theorems TARSKI, SUBSET_1, ZFMISC_1, FUNCT_2, PRE_TOPC, TOPS_1, TOPS_2,
-      PCOMPS_1, BORSUK_1, TSEP_1, TDLAT_3, REALSET1, TOPS_3, TEX_1, RELAT_1,
+      BORSUK_1, TSEP_1, TDLAT_3, REALSET1, TOPS_3, TEX_1, RELAT_1,
       STRUCT_0, RELSET_1, XBOOLE_0, XBOOLE_1, REALSET2;
  schemes WELLORD2, FUNCT_2;
+ definitions PRE_TOPC, XBOOLE_0, REALSET2, COMPTS_1, SUBSET_1;
 
 begin
 :: 1. Proper Subsets of 1-sorted Structures.
@@ -99,8 +101,7 @@ registration let S be set;
  existence
   proof
    take [#]S;
-        [#]S = S by SUBSET_1:def 4;
-   hence [#]S = union bool S by ZFMISC_1:99;
+   thus [#]S = union bool S by ZFMISC_1:99;
   end;
 end;
 
@@ -177,7 +178,7 @@ theorem
  proof let S be non empty set, y be Element of S;
   assume A1: {y} is proper;
   assume
-A2: S is trivial;
+ S is trivial;
    then reconsider S as trivial non empty set;
    {y} is non empty trivial Subset of S;
   hence thesis by A1;
@@ -215,7 +216,7 @@ registration let S be non trivial non empty set;
   end;
 end;
 
-theorem Th8:
+theorem
  for Y being non empty 1-sorted, y being Element of Y holds
   {y} is proper implies Y is non trivial
  proof let Y be non empty 1-sorted, y be Element of Y;
@@ -300,6 +301,18 @@ registration let Y be non trivial non empty 1-sorted;
     reconsider X as Subset of Y;
     take X;
     thus thesis;
+  end;
+end;
+
+registration
+  let X be non empty set;
+  let A be proper Subset of X;
+  cluster A` -> non empty;
+  coherence
+  proof
+    assume A` is empty; then
+    A`` = ({}X)` .= [#]X .= X;
+    hence thesis by Th5;
   end;
 end;
 
@@ -733,7 +746,7 @@ registration let Y be non empty TopStruct, y be Point of Y;
  coherence by Lm2;
 end;
 
-theorem Th20:
+theorem
  for Y being non empty TopStruct, y being Point of Y holds
   Sspace(y) is proper iff {y} is proper
  proof let Y be non empty TopStruct, y be Point of Y;
@@ -757,11 +770,11 @@ theorem
   Sspace(y) is proper implies Y is non trivial
  proof let Y be non empty TopStruct, y be Point of Y;
   assume
-Z:  Sspace(y) is proper;
+A1:  Sspace(y) is proper;
   assume Y is trivial;
    then reconsider Y as trivial non empty TopStruct;
    Sspace y is non empty SubSpace of Y;
-  hence thesis by Z;
+  hence thesis by A1;
  end;
 
 registration let Y be non trivial non empty TopStruct;
@@ -1367,7 +1380,7 @@ theorem Th36:
            now assume A4: D = {x};
        hereby
         take G = [#]X;
-        thus G is open & {x} /\ G = D by A4,PRE_TOPC:15;
+        thus G is open & {x} /\ G = D by A4,XBOOLE_1:28;
        end;
       end;
     hence ex G being Subset of X st G is open & {x} /\ G = D
@@ -1657,7 +1670,7 @@ theorem Th47:
                 suppose A12: x = a;
                        now
                    take G = [#]X \ Cl A;
-                     A13: G = (Cl A)` by PRE_TOPC:17;
+                     A13: G = (Cl A)`;
                    hence G is open;
                            a in G by A4;
                      then A14: {a} c= G by ZFMISC_1:37;
@@ -2292,7 +2305,7 @@ XBOOLE_0:def 4,XBOOLE_1:17;
                 suppose A15: x = a;
                        now
                    take G = [#]X \ Cl A;
-                     A16: G = (Cl A)` by PRE_TOPC:17;
+                     A16: G = (Cl A)`;
                    hence G is open;
                            a in G by A3;
                      then A17: {a} c= G by ZFMISC_1:37;
@@ -2444,7 +2457,7 @@ theorem Th65:
             end;
             hence thesis by TARSKI:def 3;
            end;
-                            A10: D = (Cl A)` by PRE_TOPC:17;
+                            A10: D = (Cl A)`;
                            then D is open;
                            then D is closed by TDLAT_3:23;
                           then A11: D = Cl D by PRE_TOPC:52;
@@ -2462,7 +2475,7 @@ theorem Th65:
            for x being Point of X ex a being Point of X st
                                a in M & M /\ Cl {x} = {a}
        proof let x be Point of X;
-A15:          [#]X = Cl A \/ D & [#]X = the carrier of X by PRE_TOPC:24;
+A15:          [#]X = Cl A \/ D & [#]X = the carrier of X by XBOOLE_1:45;
               now per cases by A15,XBOOLE_0:def 2;
           suppose A16: x in Cl A;
                  now
@@ -2671,16 +2684,14 @@ theorem
   assume A1: for Y being non empty TopSpace, f being Function of X,Y holds
                  f is continuous;
   set Y = 1TopSp(the carrier of X);
-A2:     Y = TopStruct(#the carrier of X, bool the carrier of X#)
- by PCOMPS_1:def 1;
-   then reconsider f = id the carrier of X as Function of X,Y;
-     A3: f is continuous by A1;
+   reconsider f = id the carrier of X as Function of X,Y;
+     A2: f is continuous by A1;
          for A being Subset of X holds A is closed
      proof let A be Subset of X;
-       reconsider B = A as Subset of Y by A2;
-    A4: B is closed by TDLAT_3:18;
+       reconsider B = A as Subset of Y;
+    A3: B is closed by TDLAT_3:18;
              f"B = A by BORSUK_1:4;
-      hence A is closed by A3,A4,PRE_TOPC:def 12;
+      hence A is closed by A2,A3,PRE_TOPC:def 12;
      end;
   hence X is discrete by TDLAT_3:18;
  end;
@@ -2951,7 +2962,7 @@ theorem Th78:
      reconsider g as continuous Function of Z0,X0;
      consider h being continuous Function of X,Z0 such that
             A4: h is_a_retraction by Th74;
-   reconsider r = g * h as continuous Function of X,X0;
+   reconsider r = g * h as continuous Function of X,X0 by TOPS_2:58;
   take r;
            for x being Point of X st x in the carrier of X0 holds r.x = x
         proof let x be Point of X;

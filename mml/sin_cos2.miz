@@ -10,14 +10,16 @@ environ
       FDIFF_1, FUNCT_1, PARTFUN1, RELAT_1, ORDINAL2, VECTSP_1, SEQ_1, SEQ_2,
       SEQM_3, BOOLE, PRE_TOPC, FCONT_1, SIN_COS2, FINSEQ_4, GROUP_1, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, RELAT_1, FCONT_1, FDIFF_1, NAT_1, FINSEQ_4, FUNCOP_1, SQUARE_1,
-      PREPOWER, PARTFUN1, SEQ_2, SEQM_3, RCOMP_1, RFUNCT_1, RFUNCT_2, SIN_COS,
+      REAL_1, RELAT_1, RELSET_1,
+      FCONT_1, FDIFF_1, NAT_1, FINSEQ_4, FUNCOP_1, SQUARE_1,
+      PREPOWER, PARTFUN1,
+      SEQ_2, SEQM_3, RCOMP_1, RFUNCT_1, RFUNCT_2, SIN_COS,
       SEQ_1, BINOP_2, XXREAL_0;
  constructors NAT_1, COMSEQ_3, REAL_1, SEQ_2, RCOMP_1, FINSEQ_4, FCONT_1,
       RFUNCT_1, FDIFF_1, SQUARE_1, PREPOWER, PARTFUN1, RFUNCT_2, SIN_COS,
       BINOP_2, FUNCOP_1, XXREAL_0;
  registrations XREAL_0, RELSET_1, FDIFF_1, RCOMP_1, SEQ_1, MEMBERED, SQUARE_1,
-      SIN_COS;
+      SIN_COS, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SQUARE_1;
  theorems REAL_1, REAL_2, SEQ_1, SEQM_3, SEQ_4, SQUARE_1, FINSEQ_4, RCOMP_1,
@@ -60,7 +62,7 @@ theorem Th1:
   p>=0 & r>=0 implies p+r>=2*sqrt(p*r)
  proof
  assume A1:p>=0 & r>=0;
- A2:(sqrt p - sqrt r)^2>=0 by SQUARE_1:72;
+ A2:(sqrt p - sqrt r)^2>=0 by XREAL_1:65;
       (sqrt p - sqrt r)^2
   =(sqrt p)^2 - 2*sqrt p*sqrt r + (sqrt r)^2
  .=p-2*sqrt p*sqrt r + (sqrt r)^2 by A1,SQUARE_1:def 4
@@ -283,11 +285,11 @@ begin ::Hyperbolic sine, hyperbolic cosine and hyperbolic tangent.
 
 definition
   func sinh -> PartFunc of REAL, REAL means :Def1:
-  dom it= REAL & for d being real number holds it.d=(exp.(d) - exp.(-d))/2;
+  dom it= REAL & for d being real number holds it.d=(exp_R.d - exp_R.(-d))/2;
   existence
   proof
     defpred X[set] means $1 in REAL;
-    deffunc U(Real) = (exp.($1) - exp.(-$1))/2;
+    deffunc U(Real) = (exp_R.($1) - exp_R.(-$1))/2;
    consider f being PartFunc of REAL, REAL such that
    A1: for d be Element of REAL holds d in dom f iff X[d] and
    A2: for d be Element of REAL st d in dom f holds f/.d = U(d) from
@@ -295,34 +297,33 @@ PARTFUN2:sch 2;
    take f;
    thus dom(f)=REAL
     proof
-A3:  dom(f) c=REAL by RELSET_1:12;
      for x be set st x in REAL holds x in dom f by A1;
      then REAL c=dom(f) by TARSKI:def 3;
-     hence dom(f)=REAL by A3,XBOOLE_0:def 10;
+     hence dom(f)=REAL by XBOOLE_0:def 10;
     end;
      let d be real number;
-A4:   d is Real by XREAL_0:def 1;
-      then A5: d in dom f by A1;
-      then f/.d = (exp.(d) - exp.(-d))/2 by A2,A4;
-      hence f.d = (exp.(d) - exp.(-d))/2 by A5,FINSEQ_4:def 4;
+   d is Real by XREAL_0:def 1;
+      then A3: d in dom f by A1;
+      then f/.d = (exp_R.d - exp_R.(-d))/2 by A2;
+      hence f.d = (exp_R.d - exp_R.(-d))/2 by A3,FINSEQ_4:def 4;
     end;
  uniqueness
   proof
    let f1,f2 be PartFunc of REAL, REAL;
    assume
-   A6: dom f1= REAL & for d being real number holds
-   f1.d=(exp.(d) - exp.(-d))/2;
+   A4: dom f1= REAL & for d being real number holds
+   f1.d=(exp_R.d - exp_R.(-d))/2;
    assume
-   A7: dom f2= REAL & for d being real number holds
-   f2.d=(exp.(d) - exp.(-d))/2;
+   A5: dom f2= REAL & for d being real number holds
+   f2.d=(exp_R.d - exp_R.(-d))/2;
       for d being Element of REAL st d in REAL holds f1.d = f2.d
     proof
      let d be Element of REAL such that
         d in REAL;
-     thus f1.d=(exp.(d) - exp.(-d))/2 by A6
-             .=f2.d by A7;
+     thus f1.d=(exp_R.d - exp_R.(-d))/2 by A4
+             .=f2.d by A5;
     end;
-   hence f1=f2 by A6,A7,PARTFUN1:34;
+   hence f1=f2 by A4,A5,PARTFUN1:34;
   end;
  end;
 
@@ -332,8 +333,7 @@ definition let d be number;
   coherence;
 end;
 
-registration
-  let d be number;
+registration let d be number;
   cluster sinh(d) -> real;
   coherence;
 end;
@@ -345,11 +345,11 @@ end;
 
 definition
   func cosh -> PartFunc of REAL, REAL means :Def3:
-  dom it = REAL & for d being real number holds it.d=(exp.(d) + exp.(-d))/2;
+  dom it = REAL & for d being real number holds it.d=(exp_R.d + exp_R.(-d))/2;
   existence
   proof
     defpred X[set] means $1 in REAL;
-    deffunc U(Real) = (exp.($1) + exp.(-$1))/2;
+    deffunc U(Real) = (exp_R.$1 + exp_R.(-$1))/2;
    consider f being PartFunc of REAL, REAL such that
    A1:   for d be Element of REAL holds d in dom f iff X[d] and
    A2:   for d be Element of REAL st d in dom f holds f/.d = U(d)
@@ -357,34 +357,33 @@ definition
    take f;
    thus dom(f)=REAL
     proof
-A3:  dom(f) c=REAL by RELSET_1:12;
      for x be set st x in REAL holds x in dom f by A1;
      then REAL c=dom(f) by TARSKI:def 3;
-     hence dom(f)=REAL by A3,XBOOLE_0:def 10;
+     hence dom(f)=REAL by XBOOLE_0:def 10;
     end;
     let d be real number;
-A4:  d is Real by XREAL_0:def 1;
-      then A5: d in dom f by A1;
-      then f/.d = (exp.(d) + exp.(-d))/2 by A2,A4;
-     hence f.d = (exp.(d) + exp.(-d))/2 by A5,FINSEQ_4:def 4;
+  d is Real by XREAL_0:def 1;
+      then A3: d in dom f by A1;
+      then f/.d = (exp_R.d + exp_R.(-d))/2 by A2;
+     hence f.d = (exp_R.d + exp_R.(-d))/2 by A3,FINSEQ_4:def 4;
   end;
  uniqueness
   proof
    let f1,f2 be PartFunc of REAL, REAL;
    assume
-   A6: dom f1= REAL & for d being real number holds
-   f1.d=(exp.(d) + exp.(-d))/2;
+   A4: dom f1= REAL & for d being real number holds
+   f1.d=(exp_R.d + exp_R.(-d))/2;
    assume
-   A7: dom f2= REAL & for d being real number holds
-   f2.d=(exp.(d) + exp.(-d))/2;
+   A5: dom f2= REAL & for d being real number holds
+   f2.d=(exp_R.d + exp_R.(-d))/2;
     for d being Element of REAL st d in REAL holds f1.d = f2.d
     proof
      let d be Element of REAL such that
      d in REAL;
-     thus f1.d=(exp.(d) + exp.(-d))/2 by A6
-             .=f2.d by A7;
+     thus f1.d=(exp_R.d + exp_R.(-d))/2 by A4
+             .=f2.d by A5;
     end;
-   hence f1=f2 by A6,A7,PARTFUN1:34;
+   hence f1=f2 by A4,A5,PARTFUN1:34;
   end;
  end;
 
@@ -407,11 +406,12 @@ end;
 definition
   func tanh -> PartFunc of REAL, REAL means :Def5:
   dom it= REAL &
-  for d being real number holds it.d=(exp.(d) - exp.(-d))/(exp.(d) + exp.(-d));
+  for d being real number holds
+    it.d=(exp_R.d - exp_R.(-d))/(exp_R.d + exp_R.(-d));
   existence
    proof
     defpred X[set] means $1 in REAL;
-    deffunc U(Real) = (exp.($1) - exp.(-$1))/(exp.($1) + exp.(-$1));
+    deffunc U(Real) = (exp_R.$1 - exp_R.(-$1))/(exp_R.$1 + exp_R.(-$1));
     consider f being PartFunc of REAL, REAL such that
     A1: for d be Element of REAL holds d in dom f iff X[d] and
     A2: for d be Element of REAL st d in dom f holds f/.d = U(d)
@@ -419,35 +419,34 @@ definition
     take f;
     thus dom(f)=REAL
      proof
-A3:  dom(f) c=REAL by RELSET_1:12;
       for x be set st x in REAL holds x in dom f by A1;
       then REAL c=dom(f) by TARSKI:def 3;
-      hence dom(f)=REAL by A3,XBOOLE_0:def 10;
+      hence dom(f)=REAL by XBOOLE_0:def 10;
      end;
      let d be real number;
-A4:  d is Real by XREAL_0:def 1;
-       then A5: d in dom f by A1;
-       then f/.d = (exp.(d) - exp.(-d))/(exp.(d) + exp.(-d)) by A2,A4;
-        hence f.d = (exp.(d) - exp.(-d))/(exp.(d) + exp.(-d))
-        by A5,FINSEQ_4:def 4;
+  d is Real by XREAL_0:def 1;
+       then A3: d in dom f by A1;
+       then f/.d = (exp_R.d - exp_R.(-d))/(exp_R.d + exp_R.(-d)) by A2;
+        hence f.d = (exp_R.d - exp_R.(-d))/(exp_R.d + exp_R.(-d))
+        by A3,FINSEQ_4:def 4;
    end;
   uniqueness
    proof
     let f1,f2 be PartFunc of REAL, REAL;
     assume
-    A6: dom f1= REAL & for d being real number holds
-        f1.d=(exp.(d) - exp.(-d))/(exp.(d) + exp.(-d));
+    A4: dom f1= REAL & for d being real number holds
+        f1.d=(exp_R.(d) - exp_R.(-d))/(exp_R.d + exp_R.(-d));
     assume
-    A7: dom f2= REAL & for d being real number holds
-        f2.d=(exp.(d) - exp.(-d))/(exp.(d) + exp.(-d));
+    A5: dom f2= REAL & for d being real number holds
+        f2.d=(exp_R.(d) - exp_R.(-d))/(exp_R.(d) + exp_R.(-d));
        for d being Element of REAL st d in REAL holds f1.d = f2.d
      proof
       let d be Element of REAL such that
       d in REAL;
-      thus f1.d=(exp.(d) - exp.(-d))/(exp.(d) + exp.(-d)) by A6
-              .=f2.d by A7;
+      thus f1.d=(exp_R.(d) - exp_R.(-d))/(exp_R.(d) + exp_R.(-d)) by A4
+              .=f2.d by A5;
      end;
-    hence f1=f2 by A6,A7,PARTFUN1:34;
+    hence f1=f2 by A4,A5,PARTFUN1:34;
    end;
  end;
 
@@ -468,49 +467,49 @@ definition let d be number;
 end;
 
 theorem Th12:
-  exp.(p+q) = exp.(p) * exp.(q)
+  exp_R.(p+q) = exp_R.(p) * exp_R.(q)
  proof
-    exp.(p+q) = exp(p+q) by SIN_COS:def 27
-          .= exp(p) * exp(q) by SIN_COS:55
-          .= exp.(p) * exp(q) by SIN_COS:def 27
-          .= exp.(p) * exp.(q) by SIN_COS:def 27;
+    exp_R.(p+q) = exp_R(p+q) by SIN_COS:def 27
+          .= exp_R(p) * exp_R(q) by SIN_COS:55
+          .= exp_R.(p) * exp_R(q) by SIN_COS:def 27
+          .= exp_R.(p) * exp_R.(q) by SIN_COS:def 27;
  hence thesis;
  end;
 
 theorem Th13:
-  exp.0 = 1 by SIN_COS:56,def 27;
+  exp_R.0 = 1 by SIN_COS:56,def 27;
 
 theorem Th14:
   (cosh.p)^2-(sinh.p)^2=1 &
   (cosh.p)*(cosh.p)-(sinh.p)*(sinh.p)=1
  proof
   A1: (cosh.p)*(cosh.p)
-    = ((exp.(p) + exp.(-p))/2)*(cosh.p) by Def3
-   .= ((exp.(p) + exp.(-p))/2)*((exp.(p) + exp.(-p))/2) by Def3
-   .= ((exp.(p) + exp.(-p))*(exp.(p) + exp.(-p)))/(2*2) by XCMPLX_1:77
-   .= ((exp.(p))*(exp.(p))+(exp.(p))*(exp.(-p))
-      +(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/(2*2)
-   .= ((exp.(p+p))+(exp.(p))*(exp.(-p))
-      +(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/4 by Th12
-   .= ((exp.(p+p))+(exp.(p+-p))
-      +(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/4 by Th12
-   .= ((exp.(p+p))+(exp.(p+-p))
-      +(exp.(-p))*(exp.(p))+(exp.(-p+-p)))/4 by Th12
-   .= ((exp.(p+p)) + 1 + 1 + (exp.(-p+-p)))/4 by Th12,Th13
-   .= ((exp.(p+p)) + 2 + (exp.(-p+-p)))/4;
+    = ((exp_R.(p) + exp_R.(-p))/2)*(cosh.p) by Def3
+   .= ((exp_R.(p) + exp_R.(-p))/2)*((exp_R.(p) + exp_R.(-p))/2) by Def3
+   .= ((exp_R.(p) + exp_R.(-p))*(exp_R.(p) + exp_R.(-p)))/(2*2) by XCMPLX_1:77
+   .= ((exp_R.(p))*(exp_R.(p))+(exp_R.(p))*(exp_R.(-p))
+      +(exp_R.(-p))*(exp_R.(p))+(exp_R.(-p))*(exp_R.(-p)))/(2*2)
+   .= ((exp_R.(p+p))+(exp_R.(p))*(exp_R.(-p))
+      +(exp_R.(-p))*(exp_R.(p))+(exp_R.(-p))*(exp_R.(-p)))/4 by Th12
+   .= ((exp_R.(p+p))+(exp_R.(p+-p))
+      +(exp_R.(-p))*(exp_R.(p))+(exp_R.(-p))*(exp_R.(-p)))/4 by Th12
+   .= ((exp_R.(p+p))+(exp_R.(p+-p))
+      +(exp_R.(-p))*(exp_R.(p))+(exp_R.(-p+-p)))/4 by Th12
+   .= ((exp_R.(p+p)) + 1 + 1 + (exp_R.(-p+-p)))/4 by Th12,Th13
+   .= ((exp_R.(p+p)) + 2 + (exp_R.(-p+-p)))/4;
       (sinh.p)*(sinh.p)
-    = ((exp.(p) - exp.(-p))/2)*(sinh.p) by Def1
-   .= ((exp.(p) - exp.(-p))/2)*((exp.(p) - exp.(-p))/2) by Def1
-   .= ((exp.(p) - exp.(-p))*(exp.(p) - exp.(-p)))/(2*2) by XCMPLX_1:77
-   .= ((exp.(p))*(exp.(p))-(exp.(p))*(exp.(-p))
-      -(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/(2*2)
-   .= ((exp.(p+p))-(exp.(p))*(exp.(-p))
-      -(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/4 by Th12
-   .= ((exp.(p+p))-(exp.(p+-p))
-      -(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/4 by Th12
-   .= ((exp.(p+p))-(exp.(p+-p))
-      -(exp.(-p))*(exp.(p))+(exp.(-p+-p)))/4 by Th12
-   .= ((exp.(p+p)) - 1 - 1 + (exp.(-p+-p)))/4 by Th12,Th13;
+    = ((exp_R.(p) - exp_R.(-p))/2)*(sinh.p) by Def1
+   .= ((exp_R.(p) - exp_R.(-p))/2)*((exp_R.(p) - exp_R.(-p))/2) by Def1
+   .= ((exp_R.(p) - exp_R.(-p))*(exp_R.(p) - exp_R.(-p)))/(2*2) by XCMPLX_1:77
+   .= ((exp_R.(p))*(exp_R.(p))-(exp_R.(p))*(exp_R.(-p))
+      -(exp_R.(-p))*(exp_R.(p))+(exp_R.(-p))*(exp_R.(-p)))/(2*2)
+   .= ((exp_R.(p+p))-(exp_R.(p))*(exp_R.(-p))
+      -(exp_R.(-p))*(exp_R.(p))+(exp_R.(-p))*(exp_R.(-p)))/4 by Th12
+   .= ((exp_R.(p+p))-(exp_R.(p+-p))
+      -(exp_R.(-p))*(exp_R.(p))+(exp_R.(-p))*(exp_R.(-p)))/4 by Th12
+   .= ((exp_R.(p+p))-(exp_R.(p+-p))
+      -(exp_R.(-p))*(exp_R.(p))+(exp_R.(-p+-p)))/4 by Th12
+   .= ((exp_R.(p+p)) - 1 - 1 + (exp_R.(-p+-p)))/4 by Th12,Th13;
   then A2: (cosh.p)*(cosh.p)-(sinh.p)*(sinh.p)
   =1 by A1;
      (cosh.p)^2-(sinh.p)^2
@@ -523,19 +522,19 @@ Lm3:
 cosh.(p+r)=(cosh.p)*(cosh.r) + (sinh.p)*(sinh.r)
 proof
      (cosh.p)*(cosh.r) + (sinh.p)*(sinh.r)
- =((exp.(p) + exp.(-p))/2)*(cosh.r)
+ =((exp_R.(p) + exp_R.(-p))/2)*(cosh.r)
   +(sinh.p)*(sinh.r) by Def3
-.=((exp.(p) + exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
+.=((exp_R.(p) + exp_R.(-p))/2)*((exp_R.(r) + exp_R.(-r))/2)
   +(sinh.p)*(sinh.r) by Def3
-.=((exp.(p) + exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
-  +((exp.(p) - exp.(-p))/2)*(sinh.r) by Def1
-.=((exp.(p) + exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
-  +((exp.(p) - exp.(-p))/2)*((exp.(r) - exp.(-r))/2) by Def1
-.=( 2*((exp.(p))*(exp.(r))) + 2*((exp.(-p))*(exp.(-r))) )/4
-.=( 2*(exp.(p+r)) + 2*((exp.(-p))*(exp.(-r))) )/4 by Th12
-.=( 2*(exp.(p+r)) + 2*(exp.(-p+-r)) )/4 by Th12
-.=(exp.(p+r)+exp.(-p+-r))/2
-.=(exp.(p+r)+exp.(-(p+r)))/2
+.=((exp_R.(p) + exp_R.(-p))/2)*((exp_R.(r) + exp_R.(-r))/2)
+  +((exp_R.(p) - exp_R.(-p))/2)*(sinh.r) by Def1
+.=((exp_R.(p) + exp_R.(-p))/2)*((exp_R.(r) + exp_R.(-r))/2)
+  +((exp_R.(p) - exp_R.(-p))/2)*((exp_R.(r) - exp_R.(-r))/2) by Def1
+.=( 2*((exp_R.(p))*(exp_R.(r))) + 2*((exp_R.(-p))*(exp_R.(-r))) )/4
+.=( 2*(exp_R.(p+r)) + 2*((exp_R.(-p))*(exp_R.(-r))) )/4 by Th12
+.=( 2*(exp_R.(p+r)) + 2*(exp_R.(-p+-r)) )/4 by Th12
+.=(exp_R.(p+r)+exp_R.(-p+-r))/2
+.=(exp_R.(p+r)+exp_R.(-(p+r)))/2
 .=cosh.(p+r) by Def3;
 hence thesis;
 end;
@@ -544,19 +543,19 @@ Lm4:
 sinh.(p+r)=(sinh.p)*(cosh.r) + (cosh.p)*(sinh.r)
 proof
     (sinh.p)*(cosh.r) + (cosh.p)*(sinh.r)
- =((exp.(p) - exp.(-p))/2)*(cosh.r) + (cosh.p)*(sinh.r) by Def1
-.=((exp.(p) - exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
+ =((exp_R.(p) - exp_R.(-p))/2)*(cosh.r) + (cosh.p)*(sinh.r) by Def1
+.=((exp_R.(p) - exp_R.(-p))/2)*((exp_R.(r) + exp_R.(-r))/2)
    + (cosh.p)*(sinh.r) by Def3
-.=((exp.(p) - exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
-   + ((exp.(p) + exp.(-p))/2)*(sinh.r) by Def3
-.=((exp.(p) - exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
-   + ((exp.(p) + exp.(-p))/2)*((exp.(r) - exp.(-r))/2) by Def1
-.=( 2*( (exp.(p))*(exp.(r)) )+2*( -((exp.(-p))*(exp.(-r))) ) )/4
-.=( 2*(exp.(p+r))+2*( -(exp.(-p))*(exp.(-r)) ) )/4 by Th12
-.=( 2*(exp.(p+r))+2*( -(exp.(-p+-r)) ) )/4 by Th12
-.=(exp.(p+r)+-exp.(-p+-r))/2
-.=(exp.(p+r)+-exp.(-(p+r)))/2
-.=(exp.(p+r)-exp.(-(p+r)))/2
+.=((exp_R.(p) - exp_R.(-p))/2)*((exp_R.(r) + exp_R.(-r))/2)
+   + ((exp_R.(p) + exp_R.(-p))/2)*(sinh.r) by Def3
+.=((exp_R.(p) - exp_R.(-p))/2)*((exp_R.(r) + exp_R.(-r))/2)
+   + ((exp_R.(p) + exp_R.(-p))/2)*((exp_R.(r) - exp_R.(-r))/2) by Def1
+.=( 2*( (exp_R.(p))*(exp_R.(r)) )+2*( -((exp_R.(-p))*(exp_R.(-r))) ) )/4
+.=( 2*(exp_R.(p+r))+2*( -(exp_R.(-p))*(exp_R.(-r)) ) )/4 by Th12
+.=( 2*(exp_R.(p+r))+2*( -(exp_R.(-p+-r)) ) )/4 by Th12
+.=(exp_R.(p+r)+-exp_R.(-p+-r))/2
+.=(exp_R.(p+r)+-exp_R.(-(p+r)))/2
+.=(exp_R.(p+r)-exp_R.(-(p+r)))/2
 .=sinh.(p+r) by Def1;
 hence thesis;
 end;
@@ -566,17 +565,17 @@ theorem Th15:
 proof
  A1: cosh.0 = 1
   proof
-     cosh.0 = (exp.0+exp.(-0))/2 by Def3
-        .= (1+exp.0)/2 by SIN_COS:56,def 27
+     cosh.0 = (exp_R.0+exp_R.(-0))/2 by Def3
+        .= (1+exp_R.0)/2 by SIN_COS:56,def 27
         .= (1+1)/2 by SIN_COS:56,def 27
         .= 1;
   hence thesis;
   end;
     cosh.p > 0
   proof
-     exp.p > 0 & exp.(-p) > 0 by SIN_COS:59;
-  then exp.p + exp.(-p) > 0+0 by XREAL_1:10;
-  then (exp.p+exp.(-p))/2 > 0 by REAL_2:127;
+     exp_R.p > 0 & exp_R.(-p) > 0 by SIN_COS:59;
+  then exp_R.p + exp_R.(-p) > 0+0 by XREAL_1:10;
+  then (exp_R.p+exp_R.(-p))/2 > 0 by REAL_2:127;
   hence thesis by Def3;
   end;
   hence thesis by A1;
@@ -585,8 +584,8 @@ end;
 theorem Th16:
   sinh.0 = 0
 proof
-   sinh.0 = (exp.0-exp.(-0))/2 by Def1
-      .= (1-exp.0)/2 by SIN_COS:56,def 27
+   sinh.0 = (exp_R.0-exp_R.(-0))/2 by Def1
+      .= (1-exp_R.0)/2 by SIN_COS:56,def 27
       .= (1-1)/2 by SIN_COS:56,def 27
       .= 0;
 hence thesis;
@@ -596,9 +595,9 @@ theorem Th17:
   tanh.p = (sinh.p)/(cosh.p)
 proof
      (sinh.p)/(cosh.p)
- =((exp.(p) - exp.(-p))/2)/(cosh.p) by Def1
-.=((exp.(p) - exp.(-p))/2)/((exp.(p) + exp.(-p))/2) by Def3
-.=(exp.(p) - exp.(-p))/(exp.(p) + exp.(-p)) by XCMPLX_1:55
+ =((exp_R.(p) - exp_R.(-p))/2)/(cosh.p) by Def1
+.=((exp_R.(p) - exp_R.(-p))/2)/((exp_R.(p) + exp_R.(-p))/2) by Def3
+.=(exp_R.(p) - exp_R.(-p))/(exp_R.(p) + exp_R.(-p)) by XCMPLX_1:55
 .=tanh.p by Def5;
 hence thesis;
 end;
@@ -655,27 +654,27 @@ proof
 A1: (sinh.p)^2 = 1/2*(cosh.(2*p) - 1)
  proof
   (sinh.p)^2 = (sinh.p)*(sinh.p)
- .=( (exp.(p) - exp.(-p))/2 )*(sinh.p) by Def1
- .=( (exp.(p) - exp.(-p))/2 )*( (exp.(p) - exp.(-p))/2 ) by Def1
- .=( (exp.(p))*(exp.(p))-(exp.(p))*(exp.(-p))
-   -(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)) )/4
- .=( (exp.(p+p))-(exp.(p))*(exp.(-p))
-   -(exp.(p))*(exp.(-p))+(exp.(-p))*(exp.(-p)) )/4 by Th12
- .=( (exp.(p+p))-(exp.(p))*(exp.(-p))
-   -(exp.(p))*(exp.(-p))+(exp.(-p+ -p)) )/4 by Th12
- .=( (exp.(p+p))-(exp.(p+ -p))
-   -(exp.(p))*(exp.(-p))+(exp.(-p+ -p)) )/4 by Th12
- .=( ((exp.(p+p))+ -(exp.(p+ -p))
-    -(exp.(p+ -p)) )+(exp.(-p+ -p)) )/4 by Th12
- .=( ( (exp.(p+p)) + (-(exp.(p+-p)) + -(exp.(p+-p)) ) )
-   +exp.(-p+-p) )/4
- .=( ( (exp.(p+p)) + (-(exp.(0)) + -(exp.(0)) ) )
-   +exp.(-p+-p) )/4
- .=( exp.(2*p) + 2*(-(exp.(0))) +exp.(-p+-p) )/4
- .=( exp.(2*p) + 2*(-1) +exp.(-(2*p)) )/4 by SIN_COS:56,def 27
- .=( exp.(2*p) +exp.(-(2*p))+ 2*(-1) )/4
- .=( exp.(2*p) +exp.(-(2*p)) )/(2*2) + ((-1)*2)/(2*2) by XCMPLX_1:63
- .=1/2*( ( exp.(2*p) +exp.(-(2*p)) )/2 ) + ((-1)*2)/(2*2) by XCMPLX_1:104
+ .=( (exp_R.(p) - exp_R.(-p))/2 )*(sinh.p) by Def1
+ .=( (exp_R.(p) - exp_R.(-p))/2 )*( (exp_R.(p) - exp_R.(-p))/2 ) by Def1
+ .=( (exp_R.(p))*(exp_R.(p))-(exp_R.(p))*(exp_R.(-p))
+   -(exp_R.(-p))*(exp_R.(p))+(exp_R.(-p))*(exp_R.(-p)) )/4
+ .=( (exp_R.(p+p))-(exp_R.(p))*(exp_R.(-p))
+   -(exp_R.(p))*(exp_R.(-p))+(exp_R.(-p))*(exp_R.(-p)) )/4 by Th12
+ .=( (exp_R.(p+p))-(exp_R.(p))*(exp_R.(-p))
+   -(exp_R.(p))*(exp_R.(-p))+(exp_R.(-p+ -p)) )/4 by Th12
+ .=( (exp_R.(p+p))-(exp_R.(p+ -p))
+   -(exp_R.(p))*(exp_R.(-p))+(exp_R.(-p+ -p)) )/4 by Th12
+ .=( ((exp_R.(p+p))+ -(exp_R.(p+ -p))
+    -(exp_R.(p+ -p)) )+(exp_R.(-p+ -p)) )/4 by Th12
+ .=( ( (exp_R.(p+p)) + (-(exp_R.(p+-p)) + -(exp_R.(p+-p)) ) )
+   +exp_R.(-p+-p) )/4
+ .=( ( (exp_R.(p+p)) + (-(exp_R.(0)) + -(exp_R.(0)) ) )
+   +exp_R.(-p+-p) )/4
+ .=( exp_R.(2*p) + 2*(-(exp_R.(0))) +exp_R.(-p+-p) )/4
+ .=( exp_R.(2*p) + 2*(-1) +exp_R.(-(2*p)) )/4 by SIN_COS:56,def 27
+ .=( exp_R.(2*p) +exp_R.(-(2*p))+ 2*(-1) )/4
+ .=( exp_R.(2*p) +exp_R.(-(2*p)) )/(2*2) + ((-1)*2)/(2*2) by XCMPLX_1:63
+ .=1/2*( ( exp_R.(2*p) +exp_R.(-(2*p)) )/2 ) + ((-1)*2)/(2*2) by XCMPLX_1:104
  .=1/2*(cosh.(2*p))+ 1/2*((2*(-1))/2) by Def3
  .=1/2*( cosh.(2*p) - 1 );
  hence thesis;
@@ -684,27 +683,27 @@ A1: (sinh.p)^2 = 1/2*(cosh.(2*p) - 1)
  proof
      (cosh.p)^2
    =(cosh.p)*(cosh.p)
-  .=( (exp.(p) + exp.(-p))/2 )*(cosh.p) by Def3
-  .=( (exp.(p) + exp.(-p))/2 )*( (exp.(p) + exp.(-p))/2 ) by Def3
-  .=( (exp.(p))*(exp.(p))+(exp.(p))*(exp.(-p))
-    +(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)) )/4
-  .=( (exp.(p+p))+(exp.(p))*(exp.(-p))
-    +(exp.(p))*(exp.(-p))+(exp.(-p))*(exp.(-p)) )/4 by Th12
-  .=( (exp.(p+p))+(exp.(p))*(exp.(-p))
-    +(exp.(p))*(exp.(-p))+(exp.(-p+ -p)) )/4 by Th12
-  .=( (exp.(p+p))+(exp.(p+ -p))
-    +(exp.(p))*(exp.(-p))+(exp.(-p+ -p)) )/4 by Th12
-  .=( (exp.(p+p))+(exp.(p+ -p))
-    +(exp.(p+ -p))+(exp.(-p+ -p)) )/4 by Th12
-  .=( ( (exp.(p+p)) + (exp.(p+-p) + exp.(p+-p) ) )
-    +exp.(-p+-p) )/4
-  .=( ( (exp.(p+p)) + (exp.(0) + exp.(0) ) )
-    +exp.(-p+-p) )/4
-  .=( exp.(2*p) + 2*(exp.(0)) +exp.(-p+-p) )/4
-  .=( exp.(2*p) + 2*1 +exp.(-(2*p)) )/4 by SIN_COS:56,def 27
-  .=( exp.(2*p) +exp.(-(2*p))+ 2*1 )/4
-  .=( exp.(2*p) +exp.(-(2*p)) )/(2*2) + (1*2)/(2*2) by XCMPLX_1:63
-  .=1/2*( ( exp.(2*p) +exp.(-(2*p)) )/2 ) + (1*2)/(2*2) by XCMPLX_1:104
+  .=( (exp_R.(p) + exp_R.(-p))/2 )*(cosh.p) by Def3
+  .=( (exp_R.(p) + exp_R.(-p))/2 )*( (exp_R.(p) + exp_R.(-p))/2 ) by Def3
+  .=( (exp_R.(p))*(exp_R.(p))+(exp_R.(p))*(exp_R.(-p))
+    +(exp_R.(-p))*(exp_R.(p))+(exp_R.(-p))*(exp_R.(-p)) )/4
+  .=( (exp_R.(p+p))+(exp_R.(p))*(exp_R.(-p))
+    +(exp_R.(p))*(exp_R.(-p))+(exp_R.(-p))*(exp_R.(-p)) )/4 by Th12
+  .=( (exp_R.(p+p))+(exp_R.(p))*(exp_R.(-p))
+    +(exp_R.(p))*(exp_R.(-p))+(exp_R.(-p+ -p)) )/4 by Th12
+  .=( (exp_R.(p+p))+(exp_R.(p+ -p))
+    +(exp_R.(p))*(exp_R.(-p))+(exp_R.(-p+ -p)) )/4 by Th12
+  .=( (exp_R.(p+p))+(exp_R.(p+ -p))
+    +(exp_R.(p+ -p))+(exp_R.(-p+ -p)) )/4 by Th12
+  .=( ( (exp_R.(p+p)) + (exp_R.(p+-p) + exp_R.(p+-p) ) )
+    +exp_R.(-p+-p) )/4
+  .=( ( (exp_R.(p+p)) + (exp_R.(0) + exp_R.(0) ) )
+    +exp_R.(-p+-p) )/4
+  .=( exp_R.(2*p) + 2*(exp_R.(0)) +exp_R.(-p+-p) )/4
+  .=( exp_R.(2*p) + 2*1 +exp_R.(-(2*p)) )/4 by SIN_COS:56,def 27
+  .=( exp_R.(2*p) +exp_R.(-(2*p))+ 2*1 )/4
+  .=( exp_R.(2*p) +exp_R.(-(2*p)) )/(2*2) + (1*2)/(2*2) by XCMPLX_1:63
+  .=1/2*( ( exp_R.(2*p) +exp_R.(-(2*p)) )/2 ) + (1*2)/(2*2) by XCMPLX_1:104
   .=1/2*(cosh.(2*p))+ 1/2*((2*1/2)) by Def3
   .=1/2*( cosh.(2*p)+ 1 );
  hence thesis;
@@ -719,18 +718,19 @@ proof
 A1: sinh.(2*p) = 2*(sinh.p)*(cosh.p)
  proof
       2*(sinh.p)*(cosh.p)
-  =2*( (exp.(p) - exp.(-p))/2 )*(cosh.p) by Def1
- .=2*( (exp.(p) - exp.(-p))/2 )*( (exp.(p) + exp.(-p))/2 ) by Def3
- .=2*(( (exp.(p) - exp.(-p))/2 )*( (exp.(p) + exp.(-p))/2 ))
- .=2*(( (exp.(p) + exp.(-p))*(exp.(p) - exp.(-p)) )/(2*2)) by XCMPLX_1:77
- .=( ( (exp.p)^2 - (exp.(-p))^2 )/4 )*2
- .=2/4*((exp.p)^2 - (exp.(-p))^2)
- .=2/4*((exp.p)*(exp.p) - (exp.(-p))^2)
- .=2/4*((exp.p)*(exp.p) - (exp.(-p))*(exp.(-p)))
- .=2/4*( exp.(p+p)- (exp.(-p))*(exp.(-p)) ) by Th12
- .=2/4*(exp.(2*p)- exp.(-p+ -p)) by Th12
- .=1/2*( exp.(2*p)- exp.(-(2*p)) )
- .=( ( exp.(2*p)- exp.(-(2*p)) )/2 )*1
+  =2*( (exp_R.(p) - exp_R.(-p))/2 )*(cosh.p) by Def1
+ .=2*( (exp_R.(p) - exp_R.(-p))/2 )*( (exp_R.(p) + exp_R.(-p))/2 ) by Def3
+ .=2*(( (exp_R.(p) - exp_R.(-p))/2 )*( (exp_R.(p) + exp_R.(-p))/2 ))
+ .=2*(( (exp_R.(p) + exp_R.(-p))*(exp_R.(p) - exp_R.(-p)) )/(2*2))
+        by XCMPLX_1:77
+ .=( ( (exp_R.p)^2 - (exp_R.(-p))^2 )/4 )*2
+ .=2/4*((exp_R.p)^2 - (exp_R.(-p))^2)
+ .=2/4*((exp_R.p)*(exp_R.p) - (exp_R.(-p))^2)
+ .=2/4*((exp_R.p)*(exp_R.p) - (exp_R.(-p))*(exp_R.(-p)))
+ .=2/4*( exp_R.(p+p)- (exp_R.(-p))*(exp_R.(-p)) ) by Th12
+ .=2/4*(exp_R.(2*p)- exp_R.(-p+ -p)) by Th12
+ .=1/2*( exp_R.(2*p)- exp_R.(-(2*p)) )
+ .=( ( exp_R.(2*p)- exp_R.(-(2*p)) )/2 )*1
  .=sinh.(2*p) by Def1;
  hence thesis;
  end;
@@ -755,15 +755,15 @@ tanh.(-p) = -tanh.p
 proof
  A1: cosh.(-p) = cosh.p
  proof
-    cosh.(-p) = (exp.(-p) + exp.(-(-p)))/2 by Def3
+    cosh.(-p) = (exp_R.(-p) + exp_R.(-(-p)))/2 by Def3
           .= cosh.p by Def3;
  hence thesis;
  end;
  A2: sinh.(-p) = -sinh.p
  proof
-    sinh.(-p) = (exp.(-p) - exp.(-(-p)))/2 by Def1
-          .= (-(exp.(p) - exp.(-p)))/2 by XCMPLX_1:143
-          .= -(exp.(p) - exp.(-p))/2
+    sinh.(-p) = (exp_R.(-p) - exp_R.(-(-p)))/2 by Def1
+          .= (-(exp_R.(p) - exp_R.(-p)))/2 by XCMPLX_1:143
+          .= -(exp_R.(p) - exp_R.(-p))/2
           .= -sinh.p by Def1;
  hence thesis;
  end;
@@ -1096,27 +1096,27 @@ proof
   (cosh.(n*p))*(cosh.p)+(sinh.(n*p))*(sinh.p)=cosh.((n+1)*p)
    proof
       (cosh.(n*p))*(cosh.p)+(sinh.(n*p))*(sinh.p)
-    =((exp.(n*p) + exp.(-n*p))/2)*(cosh.p)
+    =((exp_R.(n*p) + exp_R.(-n*p))/2)*(cosh.p)
     +(sinh.(n*p))*(sinh.p) by Def3
-   .=((exp.(n*p) + exp.(-n*p))/2)*((exp.p + exp.-p)/2)
+   .=((exp_R.(n*p) + exp_R.(-n*p))/2)*((exp_R.p + exp_R.-p)/2)
     +(sinh.(n*p))*(sinh.p) by Def3
-   .=((exp.(n*p) + exp.(-n*p))/2)*((exp.p + exp.-p)/2)
-    +((exp.(n*p) - exp.(-n*p))/2)*(sinh.p) by Def1
-   .=((exp.(n*p))/2 + (exp.(-n*p))/2)*((exp.p)/2 + (exp.-p)/2)
-    +((exp.(n*p))/2 - (exp.(-n*p))/2)*((exp.p - exp.-p)/2) by Def1
-   .=2*( ((exp.(n*p))/2 )*((exp.p)/2) )
-    +2*(((exp.(-n*p))/2)*((exp.-p)/2))
-   .=2*( ( (exp.(n*p))*(exp.p) )/(2*2) )
-    +2*(((exp.(-n*p))/2)*((exp.-p)/2)) by XCMPLX_1:77
-   .=2*( ( (exp.(n*p))*(exp.p) )/(2*2) )
-    +2*( ( (exp.(-n*p))*(exp.-p) )/(2*2) ) by XCMPLX_1:77
-   .=2*( exp.(p*n+p*1)/(2*2) )
-    +2*( ( (exp.(-n*p))*(exp.-p) )/(2*2) ) by Th12
-   .=2*( exp.(p*(n+1))/(2*2) )
-    +2*( exp.(-n*p+-p)/(2*2) ) by Th12
-   .=exp.(p*(n+1))/(4/2)+2*( exp.((-p)*(n+1))/4 ) by XCMPLX_1:82
-   .=exp.(p*(n+1))/2+exp.(-(p*(n+1)))/2 by XCMPLX_1:82
-   .=(exp.(p*(n+1))+exp.(-(p*(n+1))))/2
+   .=((exp_R.(n*p) + exp_R.(-n*p))/2)*((exp_R.p + exp_R.-p)/2)
+    +((exp_R.(n*p) - exp_R.(-n*p))/2)*(sinh.p) by Def1
+   .=((exp_R.(n*p))/2 + (exp_R.(-n*p))/2)*((exp_R.p)/2 + (exp_R.-p)/2)
+    +((exp_R.(n*p))/2 - (exp_R.(-n*p))/2)*((exp_R.p - exp_R.-p)/2) by Def1
+   .=2*( ((exp_R.(n*p))/2 )*((exp_R.p)/2) )
+    +2*(((exp_R.(-n*p))/2)*((exp_R.-p)/2))
+   .=2*( ( (exp_R.(n*p))*(exp_R.p) )/(2*2) )
+    +2*(((exp_R.(-n*p))/2)*((exp_R.-p)/2)) by XCMPLX_1:77
+   .=2*( ( (exp_R.(n*p))*(exp_R.p) )/(2*2) )
+    +2*( ( (exp_R.(-n*p))*(exp_R.-p) )/(2*2) ) by XCMPLX_1:77
+   .=2*( exp_R.(p*n+p*1)/(2*2) )
+    +2*( ( (exp_R.(-n*p))*(exp_R.-p) )/(2*2) ) by Th12
+   .=2*( exp_R.(p*(n+1))/(2*2) )
+    +2*( exp_R.(-n*p+-p)/(2*2) ) by Th12
+   .=exp_R.(p*(n+1))/(4/2)+2*( exp_R.((-p)*(n+1))/4 ) by XCMPLX_1:82
+   .=exp_R.(p*(n+1))/2+exp_R.(-(p*(n+1)))/2 by XCMPLX_1:82
+   .=(exp_R.(p*(n+1))+exp_R.(-(p*(n+1))))/2
    .=cosh.(p*(n+1)) by Def3;
    hence thesis;
    end;
@@ -1124,32 +1124,32 @@ proof
   (cosh.(n*p))*(sinh.p)+(sinh.(n*p))*(cosh.p)=sinh.((n+1)*p)
    proof
       (cosh.(n*p))*(sinh.p)+(sinh.(n*p))*(cosh.p)
-   =((exp.(n*p) + exp.(-n*p))/2)*(sinh.p)
+   =((exp_R.(n*p) + exp_R.(-n*p))/2)*(sinh.p)
    +(sinh.(n*p))*(cosh.p) by Def3
-  .=((exp.(n*p) + exp.(-n*p))/2)*((exp.p - exp.-p)/2)
+  .=((exp_R.(n*p) + exp_R.(-n*p))/2)*((exp_R.p - exp_R.-p)/2)
    +(sinh.(n*p))*(cosh.p) by Def1
-  .=((exp.(n*p) + exp.(-n*p))/2)*((exp.p - exp.-p)/2)
-   +((exp.(n*p) - exp.(-n*p))/2)*(cosh.p) by Def1
-  .=((exp.(n*p))/2)*((exp.p)/2) - ((exp.(n*p))/2)*((exp.-p)/2)
-   +((exp.(-n*p))/2)*((exp.p)/2) - ((exp.(-n*p))/2)*((exp.-p)/2)
-   +((exp.(n*p) - exp.(-n*p))/2)*((exp.p + exp.-p)/2) by Def3
-  .=2*(((exp.(n*p))/2)*((exp.p)/2))
-   +2*(-(((exp.(-n*p))/2)*((exp.-p)/2)))
-  .=2*(( (exp.(n*p))*(exp.p) )/4 )
-   +2*( -( ((exp.(-n*p))*(exp.-p))/(2*2) )) by XCMPLX_1:77
-  .=2*( exp.(n*p+p)/4 )
-   +2*( -( ((exp.(-n*p))*(exp.-p))/4 )) by Th12
-  .=2*( exp.(n*p+p)/4 )
-   +2*( -( (exp.(-n*p+-p))/4 ) ) by Th12
-  .=2*( exp.(p*(n+1))/4 )
-   +-(2*( (exp.(-n*p+-p))/4 ) )
-  .=2*( exp.(p*(n+1))/4 )
-   +-( exp.(-(p*(n+1)))/(4/2) ) by XCMPLX_1:82
-  .=exp.(p*(n+1))/(4/2)
-   +-( exp.(-(p*(n+1)))/(4/2) ) by XCMPLX_1:82
-  .=exp.(p*(n+1))/(4/2)
-   -( exp.(-(p*(n+1)))/(4/2) )
-  .=( exp.(p*(n+1))- exp.(-(p*(n+1))) )/2 by XCMPLX_1:121
+  .=((exp_R.(n*p) + exp_R.(-n*p))/2)*((exp_R.p - exp_R.-p)/2)
+   +((exp_R.(n*p) - exp_R.(-n*p))/2)*(cosh.p) by Def1
+  .=((exp_R.(n*p))/2)*((exp_R.p)/2) - ((exp_R.(n*p))/2)*((exp_R.-p)/2)
+   +((exp_R.(-n*p))/2)*((exp_R.p)/2) - ((exp_R.(-n*p))/2)*((exp_R.-p)/2)
+   +((exp_R.(n*p) - exp_R.(-n*p))/2)*((exp_R.p + exp_R.-p)/2) by Def3
+  .=2*(((exp_R.(n*p))/2)*((exp_R.p)/2))
+   +2*(-(((exp_R.(-n*p))/2)*((exp_R.-p)/2)))
+  .=2*(( (exp_R.(n*p))*(exp_R.p) )/4 )
+   +2*( -( ((exp_R.(-n*p))*(exp_R.-p))/(2*2) )) by XCMPLX_1:77
+  .=2*( exp_R.(n*p+p)/4 )
+   +2*( -( ((exp_R.(-n*p))*(exp_R.-p))/4 )) by Th12
+  .=2*( exp_R.(n*p+p)/4 )
+   +2*( -( (exp_R.(-n*p+-p))/4 ) ) by Th12
+  .=2*( exp_R.(p*(n+1))/4 )
+   +-(2*( (exp_R.(-n*p+-p))/4 ) )
+  .=2*( exp_R.(p*(n+1))/4 )
+   +-( exp_R.(-(p*(n+1)))/(4/2) ) by XCMPLX_1:82
+  .=exp_R.(p*(n+1))/(4/2)
+   +-( exp_R.(-(p*(n+1)))/(4/2) ) by XCMPLX_1:82
+  .=exp_R.(p*(n+1))/(4/2)
+   -( exp_R.(-(p*(n+1)))/(4/2) )
+  .=( exp_R.(p*(n+1))- exp_R.(-(p*(n+1))) )/2 by XCMPLX_1:121
   .=sinh.(p*(n+1)) by Def1;
    hence thesis;
    end;
@@ -1202,7 +1202,7 @@ dom sinh=REAL & dom cosh=REAL & dom tanh=REAL by Def1,Def3,Def5;
  end;
 
  Lm12:
- dom(compreal)=REAL & rng(compreal)c=REAL by FUNCT_2:def 1,RELSET_1:12;
+ dom(compreal)=REAL & rng(compreal)c=REAL by FUNCT_2:def 1;
 
   Lm13:
  for f being PartFunc of REAL,REAL st f = compreal holds
@@ -1221,229 +1221,228 @@ PARTFUN2:sch 2;
      proof
         dom f1 = REAL
       proof
-        A5:  dom f1 c=REAL by RELSET_1:12;
            for x be set st x in REAL holds x in dom f1 by A2;
         then REAL c=dom f1 by TARSKI:def 3;
-       hence dom f1=REAL by A5,XBOOLE_0:def 10;
+       hence dom f1=REAL by XBOOLE_0:def 10;
       end;
-    then A6:f1 is total by PARTFUN1:def 4;
-    A7: for p be Element of REAL holds
+    then A5:f1 is total by PARTFUN1:def 4;
+    A6: for p be Element of REAL holds
           f1.p = - p
          proof
          let p be Element of REAL;
-         A8:  p in dom f1 by A2;
+         A7:  p in dom f1 by A2;
          then f1/.p = -p by A3;
-         hence f1.p = -p by A8,FINSEQ_4:def 4;
+         hence f1.p = -p by A7,FINSEQ_4:def 4;
          end;
        for p be Real holds f1.p=(-1)*p
      proof
       let p be Real;
-        f1.p = -p by A7;
+        f1.p = -p by A6;
       hence f1.p = (-1)*p;
       end;
-    hence f1 is LINEAR by A6,FDIFF_1:def 4;
+    hence f1 is LINEAR by A5,FDIFF_1:def 4;
     end;
     reconsider f2 = REAL --> 0 as PartFunc of REAL,REAL by FUNCOP_1:57;
-       A9: dom f2 = REAL by FUNCOP_1:19;
-       A10:for p be Element of REAL holds f2.p= 0 by FUNCOP_1:13;
-   A11:f2 is REST
+       A8: dom f2 = REAL by FUNCOP_1:19;
+       A9:for p be Element of REAL holds f2.p= 0 by FUNCOP_1:13;
+   A10:f2 is REST
     proof
-  A12:f2 is total by PARTFUN1:def 4,A9;
+  A11:f2 is total by PARTFUN1:def 4,A8;
      f2 is REST-like PartFunc of REAL,REAL
    proof
       for hy1 be convergent_to_0 Real_Sequence holds
           (hy1")(#)(f2*hy1) is convergent & lim ((hy1")(#)(f2*hy1)) = 0
     proof
     let hy1 be convergent_to_0 Real_Sequence;
-    A13: for n holds ((hy1")(#)(f2*hy1)).n=0
+    A12: for n holds ((hy1")(#)(f2*hy1)).n=0
       proof
       let n;
-      A14: ((hy1")(#)(f2*hy1)).n
+      A13: ((hy1")(#)(f2*hy1)).n
          = (hy1".n)*((f2*hy1).n) by SEQ_1:12
         .= (hy1.n)"*((f2*hy1).n) by SEQ_1:def 8;
-          rng hy1 c= dom f2 by A9;
+          rng hy1 c= dom f2 by A8;
       then ((hy1")(#)(f2*hy1)).n
-         =(hy1.n)"*(f2.(hy1.n)) by A14,RFUNCT_2:21
-        .=(hy1.n)"*(0) by A10
+         =(hy1.n)"*(f2.(hy1.n)) by A13,RFUNCT_2:21
+        .=(hy1.n)"*(0) by A9
         .= 0;
       hence thesis;
       end;
-   then A15:(hy1")(#)(f2*hy1) is constant by SEQM_3:def 6;
+   then A14:(hy1")(#)(f2*hy1) is constant by SEQM_3:def 6;
     for n holds lim ((hy1")(#)(f2*hy1)) = 0
     proof
     let n;
          lim ((hy1")(#)(f2*hy1))
-     =((hy1")(#)(f2*hy1)).n by A15,SEQ_4:41
-    .=0 by A13;
+     =((hy1")(#)(f2*hy1)).n by A14,SEQ_4:41
+    .=0 by A12;
     hence lim ((hy1")(#)(f2*hy1)) = 0;
     end;
-   hence thesis by A15,SEQ_4:39;
+   hence thesis by A14,SEQ_4:39;
    end;
-   hence thesis by A12,FDIFF_1:def 3;
+   hence thesis by A11,FDIFF_1:def 3;
    end;
    hence thesis;
    end;
-  A16: ex N being Neighbourhood of p st N c= dom compreal &
+  A15: ex N being Neighbourhood of p st N c= dom compreal &
    for r be Real st r in N holds compreal.r - compreal.p = f1.(r-p) + f2.(r-p)
      proof
-       A17: for r st r in ].p-1,p+1 .[ holds compreal.r - compreal.p =
+       A16: for r st r in ].p-1,p+1 .[ holds compreal.r - compreal.p =
           f1.(r-p) + f2.(r-p)
       proof
        let r;
-         A18: for p be real number holds f1.p = - p
+         A17: for p be real number holds f1.p = - p
           proof
           let p be real number;
-A19:       p is Real by XREAL_0:def 1;
-          then A20:  p in dom f1 by A2;
-          then f1/.p = -p by A3,A19;
-          hence f1.p = -p by A20,FINSEQ_4:def 4;
+       p is Real by XREAL_0:def 1;
+          then A18:  p in dom f1 by A2;
+          then f1/.p = -p by A3;
+          hence f1.p = -p by A18,FINSEQ_4:def 4;
           end;
-         A21: for d be real number holds f2.d = 0
+         A19: for d be real number holds f2.d = 0
           proof
           let d be real number;
           d is Real by XREAL_0:def 1;
-          then d in dom f2 by A9;
-          hence f2.d = 0 by A10,A9;
+          then d in dom f2 by A8;
+          hence f2.d = 0 by A9;
           end;
          compreal.r-compreal.p
         =(-1)*r - compreal.p by Lm11
        .=(-1)*r -(-1)*p + 0 by Lm11
-       .=-(r-p) + f2.(r-p) by A21
-       .=f1.(r-p) + f2.(r-p) by A18;
+       .=-(r-p) + f2.(r-p) by A19
+       .=f1.(r-p) + f2.(r-p) by A17;
        hence thesis;
        end;
      take ].p-1,p+1 .[;
-     thus thesis by A17,Lm12,RCOMP_1:def 7;
+     thus thesis by A16,Lm12,RCOMP_1:def 7;
     end;
-   then A22:f is_differentiable_in p by A1,A4,A11,FDIFF_1:def 5;
-   A23: for p be Element of REAL holds f1.p = - p
+   then A20:f is_differentiable_in p by A1,A4,A10,FDIFF_1:def 5;
+   A21: for p be Element of REAL holds f1.p = - p
            proof
             let p be Element of REAL;
-            A24:  p in dom f1 by A2;
+            A22:  p in dom f1 by A2;
             then f1/.p = -p by A3;
-            hence f1.p = -p by A24,FINSEQ_4:def 4;
+            hence f1.p = -p by A22,FINSEQ_4:def 4;
           end;
-      diff(f,p) = f1.1 by A1,A4,A11,A16,A22,FDIFF_1:def 6
-             .=-1 by A23;
-   hence thesis by A1,A4,A11,A16,FDIFF_1:def 5;
+      diff(f,p) = f1.1 by A1,A4,A10,A15,A20,FDIFF_1:def 6
+             .=-1 by A21;
+   hence thesis by A1,A4,A10,A15,FDIFF_1:def 5;
 end;
 
 Lm14:
  for f being PartFunc of REAL,REAL st f = compreal holds
- exp*f is_differentiable_in p &
- diff(exp*f,p) = (-1)*exp.(f.p)
+ exp_R*f is_differentiable_in p &
+ diff(exp_R*f,p) = (-1)*exp_R.(f.p)
  proof
   let f be PartFunc of REAL,REAL such that
 A1: f = compreal;
 A2: p is Real by XREAL_0:def 1;
- A3: exp is_differentiable_in f.p by SIN_COS:70;
+ A3: exp_R is_differentiable_in f.p by SIN_COS:70;
  A4: f is_differentiable_in p by A1,Lm13;
-   then diff(exp*f,p)
-  =diff(exp,f.p)*diff(f,p) by A2,A3,FDIFF_2:13
- .=diff(exp,f.p)*(-1) by A1,Lm13
- .=exp.(f.p)*(-1) by SIN_COS:70;
+   then diff(exp_R*f,p)
+  =diff(exp_R,f.p)*diff(f,p) by A2,A3,FDIFF_2:13
+ .=diff(exp_R,f.p)*(-1) by A1,Lm13
+ .=exp_R.(f.p)*(-1) by SIN_COS:70;
  hence thesis by A2,A3,A4,FDIFF_2:13;
  end;
 
  Lm15:
-for f being PartFunc of REAL,REAL st f = compreal holds exp.((-1)*p)= (exp*f).p
+for f being PartFunc of REAL,REAL st f = compreal holds
+  exp_R.((-1)*p)= (exp_R*f).p
  proof
   let f be PartFunc of REAL,REAL;
    assume A1:f = compreal;
 A2: p is Real by XREAL_0:def 1;
- exp.((-1)*p) =exp.(f.p) by A1,Lm11
- .=(exp*f).p by A1,A2,FUNCT_2:70;
+ exp_R.((-1)*p) =exp_R.(f.p) by A1,Lm11
+ .=(exp_R*f).p by A1,A2,FUNCT_2:70;
  hence thesis;
  end;
 
  Lm16:
  for f being PartFunc of REAL,REAL st f = compreal holds
- (exp-(exp*f)) is_differentiable_in p &
- (exp+(exp*f)) is_differentiable_in p &
- diff(exp-(exp*f),p)=exp.p+exp.(-p) &
- diff(exp+(exp*f),p)=exp.p-exp.(-p)
+ (exp_R-(exp_R*f)) is_differentiable_in p &
+ (exp_R+(exp_R*f)) is_differentiable_in p &
+ diff(exp_R-(exp_R*f),p)=exp_R.p+exp_R.(-p) &
+ diff(exp_R+(exp_R*f),p)=exp_R.p-exp_R.(-p)
  proof
 A1: p is Real by XREAL_0:def 1;
   let f be PartFunc of REAL,REAL;
   assume
 A2:  f = compreal;
-  then A3:
-  exp is_differentiable_in p & exp*f is_differentiable_in p
+  then A3: exp_R is_differentiable_in p & exp_R*f is_differentiable_in p
     by Lm14,SIN_COS:70;
   then A4:
-    diff(exp-(exp*f),p)
-   =diff(exp,p)-diff((exp*f),p) by A1,FDIFF_1:22
-  .=exp.p-diff((exp*f),p) by SIN_COS:70
-  .=exp.p- (-1)*exp.(f.p) by A2,Lm14
-  .=exp.p- (-1)*exp.((-1)*p) by A2,Lm11
-  .=exp.p- (-1)*exp.(-p)
-  .=exp.p+exp.(-p);
-     diff(exp+(exp*f),p)
-   =diff(exp,p)+diff((exp*f),p) by A1,A3,FDIFF_1:21
-  .=exp.p+diff((exp*f),p) by SIN_COS:70
-  .=exp.p+ (-1)*exp.(f.p) by A2,Lm14
-  .=exp.p+ (-1)*exp.((-1)*p) by A2,Lm11
-  .=exp.p+ (-1)*exp.(-p)
-  .=exp.p-exp.(-p);
+    diff(exp_R-(exp_R*f),p)
+   =diff(exp_R,p)-diff((exp_R*f),p) by A1,FDIFF_1:22
+  .=exp_R.p-diff((exp_R*f),p) by SIN_COS:70
+  .=exp_R.p- (-1)*exp_R.(f.p) by A2,Lm14
+  .=exp_R.p- (-1)*exp_R.((-1)*p) by A2,Lm11
+  .=exp_R.p- (-1)*exp_R.(-p)
+  .=exp_R.p+exp_R.(-p);
+     diff(exp_R+(exp_R*f),p)
+   =diff(exp_R,p)+diff((exp_R*f),p) by A1,A3,FDIFF_1:21
+  .=exp_R.p+diff((exp_R*f),p) by SIN_COS:70
+  .=exp_R.p+ (-1)*exp_R.(f.p) by A2,Lm14
+  .=exp_R.p+ (-1)*exp_R.((-1)*p) by A2,Lm11
+  .=exp_R.p+ (-1)*exp_R.(-p)
+  .=exp_R.p-exp_R.(-p);
   hence thesis by A1,A3,A4,FDIFF_1:21,22;
  end;
 
- Lm17:
+Lm17:
  for f being PartFunc of REAL,REAL st f = compreal holds
- (1/2)(#)(exp-exp*f) is_differentiable_in p &
- diff(((1/2)(#)(exp-exp*f)),p) = (1/2)*diff((exp-(exp*f)),p)
+ (1/2)(#)(exp_R-exp_R*f) is_differentiable_in p &
+ diff(((1/2)(#)(exp_R-exp_R*f)),p) = (1/2)*diff((exp_R-(exp_R*f)),p)
  proof
 A1: p is Real by XREAL_0:def 1;
   let f be PartFunc of REAL,REAL;
   assume f = compreal;
-  then (exp-exp*f) is_differentiable_in p by Lm16;
+  then (exp_R-exp_R*f) is_differentiable_in p by Lm16;
   hence thesis by A1,FDIFF_1:23;
  end;
 
 Lm18:
  for ff being PartFunc of REAL,REAL st ff = compreal holds
-  sinh.p=((1/2)(#)(exp-exp*ff)).p
+  sinh.p=((1/2)(#)(exp_R-exp_R*ff)).p
  proof
 A1: p is Real by XREAL_0:def 1;
   let ff be PartFunc of REAL,REAL such that
 A2:  ff = compreal;
- A3: dom (exp - exp*ff) = dom exp /\ dom (exp*ff) &
-  for p be Real st p in dom (exp - exp*ff) holds
-  exp.(p) - (exp*ff).p = (exp - exp*ff).p by SEQ_1:def 4;
- A4:dom (exp - exp*ff) = REAL
+ A3: dom (exp_R - exp_R*ff) = dom exp_R /\ dom (exp_R*ff) &
+  for p be Real st p in dom (exp_R - exp_R*ff) holds
+  exp_R.p - (exp_R*ff).p = (exp_R - exp_R*ff).p by SEQ_1:def 4;
+ A4:dom (exp_R - exp_R*ff) = REAL
   proof
-        dom (exp*ff) = REAL by A2,Lm12,RELAT_1:46,SIN_COS:51;
+     dom (exp_R*ff) = REAL by A2,Lm12,RELAT_1:46,SIN_COS:51;
      hence thesis by A3,SIN_COS:51;
   end;
- then A5:dom((1/2)(#)(exp-exp*ff))=REAL by SEQ_1:def 6;
-   sinh.p = (exp.(p) - exp.(-p))/2 by Def1
- .=(1/2)*(exp.(p) - exp.(-p))
- .=(1/2)*(exp.(p) - exp.((-1)*p))
- .=(1/2)*(exp.(p) - (exp*ff).p) by A2,Lm15
- .=(1/2)*((exp - exp*ff).p) by A1,A4,SEQ_1:def 4
- .=((1/2)(#)(exp-exp*ff)).p by A1,A5,SEQ_1:def 6;
+ then A5:dom((1/2)(#)(exp_R-exp_R*ff))=REAL by SEQ_1:def 6;
+   sinh.p = (exp_R.p - exp_R.(-p))/2 by Def1
+ .=(1/2)*(exp_R.p - exp_R.(-p))
+ .=(1/2)*(exp_R.p - exp_R.((-1)*p))
+ .=(1/2)*(exp_R.p - (exp_R*ff).p) by A2,Lm15
+ .=(1/2)*((exp_R - exp_R*ff).p) by A1,A4,SEQ_1:def 4
+ .=((1/2)(#)(exp_R-exp_R*ff)).p by A1,A5,SEQ_1:def 6;
  hence thesis;
  end;
 
  Lm19:
  for ff being PartFunc of REAL,REAL st ff = compreal holds
- sinh = (1/2)(#)(exp-exp*ff)
+ sinh = (1/2)(#)(exp_R-exp_R*ff)
  proof
    let ff be PartFunc of REAL,REAL such that
 A1:   ff = compreal;
-   A2: dom (exp - exp*ff) = dom exp /\ dom (exp*ff) &
-    for p be Real st p in dom (exp - exp*ff) holds
-    exp.(p) - (exp*ff).p = (exp - exp*ff).p by SEQ_1:def 4;
-     dom (exp - exp*ff) = REAL
+   A2: dom (exp_R - exp_R*ff) = dom exp_R /\ dom (exp_R*ff) &
+    for p be Real st p in dom (exp_R - exp_R*ff) holds
+    exp_R.p - (exp_R*ff).p = (exp_R - exp_R*ff).p by SEQ_1:def 4;
+     dom (exp_R - exp_R*ff) = REAL
     proof
-    dom (exp*ff) = REAL by A1,Lm12,RELAT_1:46,SIN_COS:51;
+    dom (exp_R*ff) = REAL by A1,Lm12,RELAT_1:46,SIN_COS:51;
     hence thesis by A2,SIN_COS:51;
     end;
-   then A3:REAL=dom(sinh) & REAL=dom((1/2)(#)(exp-exp*ff)) by Def1,SEQ_1:def 6;
+   then A3:REAL=dom(sinh) &
+     REAL=dom((1/2)(#)(exp_R-exp_R*ff)) by Def1,SEQ_1:def 6;
      for p being Element of REAL st p in REAL holds
-     sinh.p=((1/2)(#)(exp-exp*ff)).p by A1,Lm18;
-      hence
-     sinh=(1/2)(#)(exp-exp*ff) by A3,PARTFUN1:34;
+     sinh.p=((1/2)(#)(exp_R-exp_R*ff)).p by A1,Lm18;
+      hence sinh=(1/2)(#)(exp_R-exp_R*ff) by A3,PARTFUN1:34;
  thus thesis;
  end;
 
@@ -1451,85 +1450,81 @@ A1:   ff = compreal;
  sinh is_differentiable_in p & diff(sinh,p)=cosh.p
  proof
    reconsider ff = compreal as PartFunc of REAL,REAL;
-A1:sinh = (1/2)(#)(exp-exp*ff) by Lm19;
-      diff(sinh,p)
-  =diff( ((1/2)(#)(exp-exp*ff)),p ) by Lm19
- .=(1/2)*diff((exp-(exp*ff)),p) by Lm17
- .=(1/2)*( exp.p+exp.(-p) ) by Lm16
- .=( exp.p+exp.(-p) )/2
+A1:sinh = (1/2)(#)(exp_R-exp_R*ff) by Lm19;
+   diff(sinh,p) =diff( ((1/2)(#)(exp_R-exp_R*ff)),p ) by Lm19
+ .=(1/2)*diff((exp_R-(exp_R*ff)),p) by Lm17
+ .=(1/2)*( exp_R.p+exp_R.(-p) ) by Lm16
+ .=( exp_R.p+exp_R.(-p) )/2
  .=cosh.p by Def3;
  hence thesis by A1,Lm17;
  end;
 
  Lm20:
  for ff being PartFunc of REAL,REAL st ff = compreal holds
-  (1/2)(#)(exp+exp*ff) is_differentiable_in p &
-  diff(((1/2)(#)(exp+exp*ff)),p) = (1/2)*diff((exp+(exp*ff)),p)
+  (1/2)(#)(exp_R+exp_R*ff) is_differentiable_in p &
+  diff(((1/2)(#)(exp_R+exp_R*ff)),p) = (1/2)*diff((exp_R+(exp_R*ff)),p)
   proof
 A1: p is Real by XREAL_0:def 1;
-   let ff be PartFunc of REAL,REAL; assume
-      ff = compreal;
-  then (exp+exp*ff) is_differentiable_in p by Lm16;
+   let ff be PartFunc of REAL,REAL; assume ff = compreal;
+  then (exp_R+exp_R*ff) is_differentiable_in p by Lm16;
   hence thesis by A1,FDIFF_1:23;
   end;
 
   Lm21:
    for ff being PartFunc of REAL,REAL st ff = compreal holds
-   cosh.p=((1/2)(#)(exp+exp*ff)).p
+   cosh.p=((1/2)(#)(exp_R+exp_R*ff)).p
   proof
 A1: p is Real by XREAL_0:def 1;
    let ff be PartFunc of REAL,REAL such that
 A2:   ff = compreal;
-A3: dom (exp + exp*ff) = dom exp /\ dom (exp*ff) &
-   for p be Real st p in dom (exp + exp*ff) holds
-   exp.(p) + (exp*ff).p = (exp + exp*ff).p by SEQ_1:def 3;
-   A4:dom (exp + exp*ff) = REAL
+A3: dom (exp_R + exp_R*ff) = dom exp_R /\ dom (exp_R*ff) &
+   for p be Real st p in dom (exp_R + exp_R*ff) holds
+   exp_R.p + (exp_R*ff).p = (exp_R + exp_R*ff).p by SEQ_1:def 3;
+   A4:dom (exp_R + exp_R*ff) = REAL
    proof
-      dom (exp*ff) = REAL by A2,Lm12,RELAT_1:46,SIN_COS:51;
+      dom (exp_R*ff) = REAL by A2,Lm12,RELAT_1:46,SIN_COS:51;
    hence thesis by A3,SIN_COS:51;
    end;
-  then A5:dom((1/2)(#)(exp+exp*ff))=REAL by SEQ_1:def 6;
-       cosh.p
-   =(exp.(p) + exp.(-p))/2 by Def3
-  .=(1/2)*(exp.(p) + exp.(-p))
-  .=(1/2)*(exp.(p) + exp.((-1)*p))
-  .=(1/2)*(exp.(p) + (exp*ff).p) by A2,Lm15
-  .=(1/2)*((exp + exp*ff).p) by A1,A4,SEQ_1:def 3
-  .=((1/2)(#)(exp+exp*ff)).p by A1,A5,SEQ_1:def 6;
+  then A5:dom((1/2)(#)(exp_R+exp_R*ff))=REAL by SEQ_1:def 6;
+   cosh.p =(exp_R.p + exp_R.(-p))/2 by Def3
+  .=(1/2)*(exp_R.p + exp_R.(-p))
+  .=(1/2)*(exp_R.p + exp_R.((-1)*p))
+  .=(1/2)*(exp_R.p + (exp_R*ff).p) by A2,Lm15
+  .=(1/2)*((exp_R + exp_R*ff).p) by A1,A4,SEQ_1:def 3
+  .=((1/2)(#)(exp_R+exp_R*ff)).p by A1,A5,SEQ_1:def 6;
   hence thesis;
   end;
 
   Lm22:
   for ff being PartFunc of REAL,REAL st ff = compreal holds
-  cosh = (1/2)(#)(exp+exp*ff)
+  cosh = (1/2)(#)(exp_R+exp_R*ff)
   proof
    let ff be PartFunc of REAL,REAL such that
    A1: ff = compreal;
-   A2: dom (exp + exp*ff) = dom exp /\ dom (exp*ff) &
-     for p be Real st p in dom (exp + exp*ff) holds
-    exp.(p) + (exp*ff).p = (exp + exp*ff).p by SEQ_1:def 3;
-      dom (exp + exp*ff) = REAL
+   A2: dom (exp_R + exp_R*ff) = dom exp_R /\ dom (exp_R*ff) &
+     for p be Real st p in dom (exp_R + exp_R*ff) holds
+    exp_R.p + (exp_R*ff).p = (exp_R + exp_R*ff).p by SEQ_1:def 3;
+      dom (exp_R + exp_R*ff) = REAL
      proof
-        dom (exp*ff) = REAL by A1,Lm12,RELAT_1:46,SIN_COS:51;
+     dom (exp_R*ff) = REAL by A1,Lm12,RELAT_1:46,SIN_COS:51;
      hence thesis by A2,SIN_COS:51;
      end;
-   then A3:REAL=dom(cosh) & REAL=dom((1/2)(#)(exp+exp*ff)) by Def3,SEQ_1:def 6;
+   then A3:REAL=dom(cosh) & REAL=dom((1/2)(#)(exp_R+exp_R*ff))
+     by Def3,SEQ_1:def 6;
       for p being Element of REAL st p in REAL holds
-      cosh.p=((1/2)(#)(exp+exp*ff)).p by A1,Lm21;
-    hence
-      cosh=(1/2)(#)(exp+exp*ff) by A3,PARTFUN1:34;
+      cosh.p=((1/2)(#)(exp_R+exp_R*ff)).p by A1,Lm21;
+    hence cosh=(1/2)(#)(exp_R+exp_R*ff) by A3,PARTFUN1:34;
     end;
 
 theorem Th32:
   cosh is_differentiable_in p & diff(cosh,p)=sinh.p
   proof
    reconsider ff = compreal as PartFunc of REAL,REAL;
-A1: cosh = (1/2)(#)(exp+exp*ff) by Lm22;
-       diff(cosh,p)
-   =diff( ((1/2)(#)(exp+exp*ff)),p ) by Lm22
-  .=(1/2)*diff((exp+(exp*ff)),p) by Lm20
-  .=(1/2)*( exp.p-exp.(-p) ) by Lm16
-  .=( exp.p-exp.(-p) )/2
+A1: cosh = (1/2)(#)(exp_R+exp_R*ff) by Lm22;
+   diff(cosh,p) =diff( ((1/2)(#)(exp_R+exp_R*ff)),p ) by Lm22
+  .=(1/2)*diff((exp_R+(exp_R*ff)),p) by Lm20
+  .=(1/2)*( exp_R.p-exp_R.(-p) ) by Lm16
+  .=( exp_R.p-exp_R.(-p) )/2
   .=sinh.p by Def1;
   hence thesis by A1,Lm20;
   end;
@@ -1553,8 +1548,7 @@ A1: p is Real by XREAL_0:def 1;
    hence thesis by A1,A2,A3,A4,FDIFF_2:14;
   end;
 
-  Lm24:
-  tanh=sinh/cosh
+Lm24: tanh=sinh/cosh
   proof
   A1: dom (sinh/cosh) = dom sinh /\ (dom cosh \ cosh"{0}) &
        for p be Real st p in dom (sinh/cosh) holds
@@ -1576,8 +1570,7 @@ A1: p is Real by XREAL_0:def 1;
    .=tanh.p by Th17;
    hence thesis;
    end;
-  hence
-     tanh=sinh/cosh by A1,A2,Th30,PARTFUN1:34;
+  hence tanh=sinh/cosh by A1,A2,Th30,PARTFUN1:34;
  end;
 
 theorem
@@ -1598,7 +1591,7 @@ theorem Th35:
   cosh is_differentiable_on REAL &
   diff(cosh,p)=sinh.p
   proof
-     REAL is open Subset of REAL &
+   REAL is open Subset of REAL &
   REAL c=dom cosh &
   for r be Real st r in REAL holds cosh is_differentiable_in r
   by Def3,Th32,FCONT_3:4,SUBSET_1:def 4;
@@ -1616,12 +1609,12 @@ theorem Th36:
   end;
 
  Lm25:
- exp.p + exp.-p >= 2
+ exp_R.p + exp_R.-p >= 2
  proof
- A1:exp.p >= 0 by SIN_COS:59;
- A2: exp.-p>= 0 by SIN_COS:59;
-      2*sqrt((exp.p) * (exp.-p))
-  =2*sqrt(exp.(p+-p)) by Th12
+ A1:exp_R.p >= 0 by SIN_COS:59;
+ A2: exp_R.-p>= 0 by SIN_COS:59;
+      2*sqrt((exp_R.p) * (exp_R.-p))
+  =2*sqrt(exp_R.(p+-p)) by Th12
  .=2*1 by SIN_COS:56,def 27,SQUARE_1:83;
  hence thesis by A1,A2,Th1;
  end;
@@ -1629,8 +1622,8 @@ theorem Th36:
 theorem
   cosh.p >= 1
  proof
- (exp.p + exp.-p)>=2 by Lm25;
- then (exp.p + exp.-p)/2 >= 2/2 by REAL_1:73;
+ (exp_R.p + exp_R.-p)>=2 by Lm25;
+ then (exp_R.p + exp_R.-p)/2 >= 2/2 by REAL_1:73;
  hence thesis by Def3;
  end;
 
@@ -1670,33 +1663,33 @@ theorem
   thus tanh.p<1
   proof
   assume tanh.p>=1;
-  then A1: (exp.p - exp.(-p))/(exp.p + exp.(-p))>=1 by Def5;
-     (exp.p + exp.-p) >= 2 by Lm25;
-  then A2:(exp.p - exp.(-p))/(exp.p + exp.(-p))*(exp.p + exp.(-p))
-                    >=1*(exp.p + exp.(-p)) by A1,XREAL_1:66;
-     exp.p > 0 & exp.(-p) > 0 by SIN_COS:59;
-  then exp.p + exp.(-p) > 0+0 by XREAL_1:10;
-  then (exp.p - exp.(-p))/(exp.p + exp.(-p))*(exp.p + exp.(-p))
-       =exp.p - exp.(-p) by XCMPLX_1:88;
-  then (exp.p - exp.(-p))-exp.p
-        >= (exp.p + exp.(-p))-exp.p by A2,XREAL_1:11;
-  then A3: -exp.(-p)+exp.(-p) >= exp.(-p)+exp.(-p) by XREAL_1:8;
-     exp.(-p) > 0 & exp.(-p) > 0 by SIN_COS:59;
-  then exp.(-p) + exp.(-p) > 0+0 by XREAL_1:10;
+  then A1: (exp_R.p - exp_R.(-p))/(exp_R.p + exp_R.(-p))>=1 by Def5;
+     (exp_R.p + exp_R.-p) >= 2 by Lm25;
+  then A2:(exp_R.p - exp_R.(-p))/(exp_R.p + exp_R.(-p))*(exp_R.p + exp_R.(-p))
+                    >=1*(exp_R.p + exp_R.(-p)) by A1,XREAL_1:66;
+     exp_R.p > 0 & exp_R.(-p) > 0 by SIN_COS:59;
+  then exp_R.p + exp_R.(-p) > 0+0 by XREAL_1:10;
+  then (exp_R.p - exp_R.(-p))/(exp_R.p + exp_R.(-p))*(exp_R.p + exp_R.(-p))
+       =exp_R.p - exp_R.(-p) by XCMPLX_1:88;
+  then (exp_R.p - exp_R.(-p))-exp_R.p
+        >= (exp_R.p + exp_R.(-p))-exp_R.p by A2,XREAL_1:11;
+  then A3: -exp_R.(-p)+exp_R.(-p) >= exp_R.(-p)+exp_R.(-p) by XREAL_1:8;
+     exp_R.(-p) > 0 & exp_R.(-p) > 0 by SIN_COS:59;
+  then exp_R.(-p) + exp_R.(-p) > 0+0 by XREAL_1:10;
   hence contradiction by A3;
   end;
   assume tanh.p<=-1;
-  then A4: (exp.p - exp.(-p))/(exp.p + exp.(-p))<=-1 by Def5;
-     (exp.p + exp.-p) >= 2 by Lm25;
-  then A5:(exp.p - exp.(-p))/(exp.p + exp.(-p))*(exp.p + exp.(-p))
-                    <=(-1)*(exp.p + exp.(-p)) by A4,XREAL_1:66;
-     exp.p > 0 & exp.(-p) > 0 by SIN_COS:59;
-  then exp.p + exp.(-p) > 0+0 by XREAL_1:10;
-  then exp.p - exp.(-p)<=-(exp.p + exp.(-p)) by A5,XCMPLX_1:88;
-  then exp.p - exp.(-p)+exp.(-p)
-           <=-exp.p + -exp.(-p)+exp.(-p) by XREAL_1:8;
-  then A6: exp.p+exp.p<=-exp.p+exp.p by XREAL_1:8;
-     exp.p > 0 & exp.p > 0 by SIN_COS:59;
-  then exp.p + exp.p > 0+0 by XREAL_1:10;
+  then A4: (exp_R.p - exp_R.(-p))/(exp_R.p + exp_R.(-p))<=-1 by Def5;
+     (exp_R.p + exp_R.-p) >= 2 by Lm25;
+  then A5:(exp_R.p - exp_R.(-p))/(exp_R.p + exp_R.(-p))*(exp_R.p + exp_R.(-p))
+                    <=(-1)*(exp_R.p + exp_R.(-p)) by A4,XREAL_1:66;
+     exp_R.p > 0 & exp_R.(-p) > 0 by SIN_COS:59;
+  then exp_R.p + exp_R.(-p) > 0+0 by XREAL_1:10;
+  then exp_R.p - exp_R.(-p)<=-(exp_R.p + exp_R.(-p)) by A5,XCMPLX_1:88;
+  then exp_R.p - exp_R.(-p)+exp_R.(-p)
+           <=-exp_R.p + -exp_R.(-p)+exp_R.(-p) by XREAL_1:8;
+  then A6: exp_R.p+exp_R.p<=-exp_R.p+exp_R.p by XREAL_1:8;
+     exp_R.p > 0 & exp_R.p > 0 by SIN_COS:59;
+  then exp_R.p + exp_R.p > 0+0 by XREAL_1:10;
   hence contradiction by A6;
   end;

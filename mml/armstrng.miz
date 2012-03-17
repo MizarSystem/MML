@@ -12,24 +12,25 @@ environ
       MARGREL1, MATRLIN, BINARITH, BINARI_3, ZF_LANG, MIDSP_3, POWER, EUCLID,
       FINSEQ_4, CONLAT_1, FINSUB_1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, FINSUB_1, RELAT_1,
-      RELAT_2, RELSET_1, SETFAM_1, PARTFUN1, NUMBERS, XREAL_0, NAT_1, FUNCT_4,
-      FUNCT_1, ORDERS_2, MCART_1, EQREL_1, CARD_3, PBOOLE, STRUCT_0, WAYBEL_4,
-      CARD_1, FINSEQ_1, PRE_CIRC, MARGREL1, FUNCT_2, FINSEQ_2, MATRLIN,
-      BINARITH, BINARI_3, FINSEQ_4, SERIES_1, EUCLID, XXREAL_0;
+      RELAT_2, RELSET_1, SETFAM_1, PARTFUN1, NUMBERS, NAT_1, FUNCT_4, FUNCT_1,
+      ORDERS_2, MCART_1, EQREL_1, CARD_3, PBOOLE, STRUCT_0, WAYBEL_4, CARD_1,
+      FINSEQ_1, PRE_CIRC, MARGREL1, FUNCT_2, FINSEQ_2, MATRLIN, BINARITH,
+      BINARI_3, FINSEQ_4, SERIES_1, EUCLID, XXREAL_0;
  constructors WAYBEL_4, PRE_CIRC, MATRLIN, BINARITH, BINARI_3, MIDSP_3,
       SERIES_1, EUCLID, FINSEQOP, CARD_3, SETFAM_1, FINSUB_1, XXREAL_0;
  registrations FINSET_1, SUBSET_1, ALTCAT_1, PBOOLE, FINSEQ_1, FINSEQ_2,
-      GOBRD13, FUNCT_1, ORDERS_2, CANTOR_1, RELSET_1, EQREL_1, MARGREL1,
-      XBOOLE_0, MATRLIN, PRALG_1, FRAENKEL, XREAL_0, NUMBERS, ORDINAL2,
-      FUNCOP_1, NAT_1;
+      GOBRD13, FUNCT_1, ORDERS_2, RELSET_1, EQREL_1, MARGREL1, XBOOLE_0,
+      MATRLIN, PRALG_1, FRAENKEL, XREAL_0, NUMBERS, ORDINAL2, FUNCOP_1, NAT_1,
+      XXREAL_0;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
- definitions TARSKI, RELAT_2, YELLOW_0, MATRLIN, WAYBEL_4, FINSUB_1;
+ definitions TARSKI, RELAT_2, YELLOW_0, MATRLIN, WAYBEL_4, FINSUB_1,
+      FINSEQ_2, SUBSET_1;
  theorems TARSKI, RELSET_1, ZFMISC_1, EQREL_1, MCART_1, RELAT_1, RELAT_2,
       XBOOLE_0, XBOOLE_1, ORDERS_2, STRUCT_0, ENUMSET1, BAGORDER, WAYBEL_4,
       POLYNOM1, FINSET_1, SUBSET_1, SETFAM_1, MSSUBFAM, TREES_1, FUNCT_1,
       FINSEQ_4, FINSEQ_1, FINSEQ_2, FUNCOP_1, MARGREL1, CARD_3, BINARI_3,
       NAT_1, EUCLID, PBOOLE, FUNCT_2, MATRLIN, BINARITH, POWER, REAL_1,
-      FUNCT_4, FINSUB_1, PARTFUN1, NUMBERS, XREAL_1, ORDERS_1;
+      FUNCT_4, FINSUB_1, PARTFUN1, NUMBERS, XREAL_1, ORDERS_1, XXREAL_0;
  schemes FINSET_1, NAT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, XBOOLE_0, FUNCT_1;
 
 begin
@@ -461,22 +462,19 @@ definition
   consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
 A2: for j being Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
-A3: n-tuples_on BOOLEAN =
-      { s where s is Element of BOOLEAN*: len s = n } by FINSEQ_2:def 4;
-      z in BOOLEAN* by FINSEQ_1:def 11; then z in n-tuples_on BOOLEAN by A1,A3
-;
+      z in BOOLEAN* by FINSEQ_1:def 11; then z in n-tuples_on BOOLEAN by A1;
    then reconsider z as Element of n-tuples_on BOOLEAN;
    take z; thus thesis by A2;
  end;
  uniqueness proof let it1, it2 be Element of n-tuples_on BOOLEAN such that
-A4: for i being set st i in Seg n holds it1.i = (p/.i) '&' (q/.i) and
-A5: for i being set st i in Seg n holds it2.i = (p/.i) '&' (q/.i);
+A3: for i being set st i in Seg n holds it1.i = (p/.i) '&' (q/.i) and
+A4: for i being set st i in Seg n holds it2.i = (p/.i) '&' (q/.i);
      now
-  A6: dom it1 = Seg n by Lm1;
+  A5: dom it1 = Seg n by Lm1;
    hence dom it1 = dom it2 by Lm1;
    let x be set; assume
-  A7: x in dom it1;
-   hence it1.x = (p/.x) '&' (q/.x) by A4,A6 .=it2.x by A5,A6,A7;
+  A6: x in dom it1;
+   hence it1.x = (p/.x) '&' (q/.x) by A3,A5 .=it2.x by A4,A5,A6;
   end;
   hence it1 = it2 by FUNCT_1:9;
  end;
@@ -495,10 +493,10 @@ set B = n-BinarySequence 0;
   A2: x in dom (B '&' p);
   A3: dom B = Seg n by Lm1;
   A4: B = 0*n by BINARI_3:26 .= n |-> 0 by EUCLID:def 4;
-   then B.x = 0 by A1,A2,FINSEQ_2:70;
+   then B.x = 0 by A1,A2,FUNCOP_1:13;
    then B/.x = FALSE by A1,A2,A3,FINSEQ_4:def 4,MARGREL1:def 13;
   hence (B '&' p).x = FALSE '&' (p/.x) by A1,A2,Def5
-   .= FALSE by MARGREL1:49 .= B.x by A1,A2,A4,FINSEQ_2:70,MARGREL1:def 13;
+   .= FALSE by MARGREL1:49 .= B.x by A1,A2,A4,FUNCOP_1:13,MARGREL1:def 13;
   end;
  hence (n-BinarySequence 0) '&' p = (n-BinarySequence 0) by FUNCT_1:9;
 end;
@@ -516,7 +514,7 @@ set B = n-BinarySequence 0; set nB = 'not' B;
   A3: x in dom (nB '&' p);
   A4: B = 0*n by BINARI_3:26 .= n |-> 0 by EUCLID:def 4;
   A5: dom B = Seg n by Lm1;
-      B.x = 0 by A1,A3,A4,FINSEQ_2:70;
+      B.x = 0 by A1,A3,A4,FUNCOP_1:13;
   then A6: B/.x = FALSE by A1,A3,A5,FINSEQ_4:def 4,MARGREL1:def 13;
          nB/.x = 'not' (B/.x) by A1,A3,BINARITH:def 4
               .= TRUE by A6,MARGREL1:def 16;
@@ -547,7 +545,7 @@ A3: now let n be Nat such that
     per cases by A5,REAL_1:def 5;
     suppose A6: n = 0;
     then A7: i = 0 by A5;
-           0*n = n |-> 0 by EUCLID:def 4; then dom 0*n =Seg n by FINSEQ_2:68;
+           0*n = n |-> 0 by EUCLID:def 4; then dom 0*n =Seg n by FUNCOP_1:19;
     then A8: len 0*n = n by FINSEQ_1:def 3;  dom <*TRUE*> =Seg 1 by FINSEQ_1:55
 ;
     then A9: 1 in dom <*TRUE*> by FINSEQ_1:3;
@@ -556,7 +554,7 @@ A3: now let n be Nat such that
         .= <*TRUE*>.1 by A6,A7,A8,A9,FINSEQ_1:def 7 .= TRUE by FINSEQ_1:57;
     end;
     suppose A10: n > 0 & n = i;
-           0*n = n |-> 0 by EUCLID:def 4; then dom 0*n = Seg n by FINSEQ_2:68;
+           0*n = n |-> 0 by EUCLID:def 4; then dom 0*n = Seg n by FUNCOP_1:19;
     then A11: len 0*n = n by FINSEQ_1:def 3;  dom <*TRUE*> = Seg 1 by
 FINSEQ_1:55;
     then A12: 1 in dom <*TRUE*> by FINSEQ_1:3;
@@ -589,8 +587,8 @@ A19: now let n be Nat such that
     A24: 0+1 <= i+1 by XREAL_1:8;
     per cases by A23,REAL_1:def 5;
     suppose A25: n = 0;
-    A26: dom B(n+1) = Seg (n+1) by Lm1;  1 <= j by A22,A24,XREAL_1:2;
-        then j = 1 by A22,A25,XREAL_1:1;
+    A26: dom B(n+1) = Seg (n+1) by Lm1;  1 <= j by A22,A24,XXREAL_0:2;
+        then j = 1 by A22,A25,XXREAL_0:1;
         then not j+1 in dom B(n+1) by A25,A26,FINSEQ_1:3;
      hence B(n+1).(j+1) = FALSE by FUNCT_1:def 4,MARGREL1:def 13;
     end;
@@ -647,7 +645,7 @@ A42: now let n be Nat such that
    suppose A47: n > 0 & i < n;
       then reconsider n' = n as non empty Nat;
    A48: dom B(n) = Seg n by Lm1;  j <= i & i <= n by A44,A45,NAT_1:38;
-       then j <= n by XREAL_1:2;
+       then j <= n by XXREAL_0:2;
    then A49: j in dom B(n) by A45,A48,FINSEQ_1:3;
          2 to_power i < 2 to_power n by A47,POWER:44;
     hence B(n+1).j = (B(n')^<*FALSE*>).j by BINARI_3:28
@@ -657,10 +655,10 @@ A42: now let n be Nat such that
        then j <= n by A45,NAT_1:38;
    then A51: j in Seg n by A45,FINSEQ_1:3;
    A52: 0*n = n |-> 0 by EUCLID:def 4;
-   then A53: j in dom 0*n by A51,FINSEQ_2:68;
+   then A53: j in dom 0*n by A51,FUNCOP_1:19;
     thus B(n+1).j = (0*n^<*TRUE*>).j by A50,BINARI_3:29,MARGREL1:def 14
       .= (0*n).j by A53,FINSEQ_1:def 7
-      .= FALSE by A51,A52,FINSEQ_2:70,MARGREL1:def 13;
+      .= FALSE by A51,A52,FUNCOP_1:13,MARGREL1:def 13;
      end;
      end; hence P[n+1];
    end;
@@ -1565,7 +1563,7 @@ for X being finite set, F being Dependency-set of X, K being Subset of X
       = Maximal_wrt F
 proof let X be finite set, F be Dependency-set of X, K be Subset of X; assume
 A1: F = { [A, B] where A, B is Subset of X : K c= A or B c= A };
-A2: [#] X = X by SUBSET_1:def 4;
+A2: [#] X = X;
    set M = {[K, X]}\/{[A, A] where A is Subset of X : not K c= A};
 A3: [K,X] in {[K,X]} by TARSKI:def 1;  {[K,X]} c= M by XBOOLE_1:7;
 then A4: [K,X] in M by A3;
@@ -1600,8 +1598,8 @@ A7: now let A, B be Subset of X; assume A8: [A,B] in M;
 A11: M is (M1) proof let A be Subset of X;
     per cases;
     suppose A12: K c= A;
-     take A' = K, B' = [#]X; thus [A', B'] >= [A, A] by A2,A12,Th15;
-     thus [A', B'] in M by A4,SUBSET_1:def 4;
+     take A' = K, B' = [#]X; thus [A', B'] >= [A, A] by A12,Th15;
+     thus [A', B'] in M by A4;
     end;
     suppose A13: not K c= A;
      take A' = A, B' = A; thus [A', B'] >= [A, A];
@@ -1678,8 +1676,8 @@ A27: M = Maximal_wrt FF by A11,A14,A21,Th31;
    A31: [K,X] in {[K,X]} by TARSKI:def 1;
    A32: {[a, a] where a is Subset of X : not K c= a} c= M by XBOOLE_1:7;
     per cases;
-    suppose K c= A; then [K,[#] X] >= [A,B] by A2,Th15;
-     hence x in FF by A2,A28,A30,A31;
+    suppose K c= A; then [K,[#] X] >= [A,B] by Th15;
+     hence x in FF by A28,A30,A31;
     end;
     suppose A33: not K c= A;
     then A34: [A,A] in {[a, a] where a is Subset of X : not K c= a};
@@ -1789,38 +1787,37 @@ for X being finite non empty set, F being Full-family of X
  holds saturated-subsets F is (B1) (B2)
 proof let X be finite non empty set, F be Full-family of X;
  set ss = saturated-subsets F;
-A1: [#] X = X by SUBSET_1:def 4;
-A2: Maximal_wrt F is (M1) by Th30;
+A1: Maximal_wrt F is (M1) by Th30;
    then consider A', B' being Subset of X such that
-A3: [A',B'] >= [[#]X,[#]X] and
-A4: [A',B'] in Maximal_wrt F by Def19;
-A5: A' ^|^ B', F by A4,Def18;  [#]X c= B' by A3,Th15;
-   then [#]X = B' by A1,XBOOLE_0:def 10; then X in ss by A1,A5;
+A2: [A',B'] >= [[#]X,[#]X] and
+A3: [A',B'] in Maximal_wrt F by Def19;
+A4: A' ^|^ B', F by A3,Def18;  [#]X c= B' by A2,Th15;
+   then [#]X = B' by XBOOLE_0:def 10; then X in ss by A4;
  hence ss is (B1) by Def4;
  thus ss is (B2) proof let a, b be set such that
- A6: a in ss and
- A7: b in ss;
-     reconsider a' = a, b' = b as Subset of X by A6,A7;
+ A5: a in ss and
+ A6: b in ss;
+     reconsider a' = a, b' = b as Subset of X by A5,A6;
      consider B1, A1 being Subset of X such that
- A8: a = B1 and
- A9: A1 ^|^ B1, F by A6,Th33;
- A10: [A1,B1] in Maximal_wrt F by A9,Def18;
+ A7: a = B1 and
+ A8: A1 ^|^ B1, F by A5,Th33;
+ A9: [A1,B1] in Maximal_wrt F by A8,Def18;
      consider B2, A2 being Subset of X such that
- A11: b = B2 and
- A12: A2 ^|^ B2, F by A7,Th33;
- A13: [A2,B2] in Maximal_wrt F by A12,Def18;
+ A10: b = B2 and
+ A11: A2 ^|^ B2, F by A6,Th33;
+ A12: [A2,B2] in Maximal_wrt F by A11,Def18;
      consider A', B' being Subset of X such that
- A14: [A',B'] >= [a'/\b',a'/\b'] and
- A15: [A',B'] in Maximal_wrt F by A2,Def19;
- A16: A' ^|^ B', F by A15,Def18;
- A17: A' c= a/\b & a/\b c= B' by A14,Th15;  a/\b c= a by XBOOLE_1:17;
- then A18: A' c= B1 by A8,A17,XBOOLE_1:1;
-A19: Maximal_wrt F is (M3) by Th30;
- then A20: B' c= B1 by A10,A15,A18,Def21;  a/\b c= b by XBOOLE_1:17;
-     then A' c= B2 by A11,A17,XBOOLE_1:1; then B' c= B2 by A13,A15,A19,Def21;
-     then B' c= a/\b by A8,A11,A20,XBOOLE_1:19; then B' = a/\b by A17,
+ A13: [A',B'] >= [a'/\b',a'/\b'] and
+ A14: [A',B'] in Maximal_wrt F by A1,Def19;
+ A15: A' ^|^ B', F by A14,Def18;
+ A16: A' c= a/\b & a/\b c= B' by A13,Th15;  a/\b c= a by XBOOLE_1:17;
+ then A17: A' c= B1 by A7,A16,XBOOLE_1:1;
+A18: Maximal_wrt F is (M3) by Th30;
+ then A19: B' c= B1 by A9,A14,A17,Def21;  a/\b c= b by XBOOLE_1:17;
+     then A' c= B2 by A10,A16,XBOOLE_1:1; then B' c= B2 by A12,A14,A18,Def21;
+     then B' c= a/\b by A7,A10,A19,XBOOLE_1:19; then B' = a/\b by A16,
 XBOOLE_0:def 10;
-  hence a /\ b in ss by A16;
+  hence a /\ b in ss by A15;
  end;
 end;
 
@@ -2051,7 +2048,7 @@ for X being finite non empty set, F being Dependency-set of X
   holds enclosure_of F is (B1) (B2)
 proof let X be finite non empty set, F be Dependency-set of X;
    set B = enclosure_of F;
-A1: X = [#]X by SUBSET_1:def 4;
+A1: X = [#]X;
       for x, y being Subset of X st [x, y] in F & x c= X holds y c= X;
    then X in B by A1;
  hence B is (B1) by Def4;
@@ -2283,7 +2280,7 @@ A1: F = { [A, B] where A, B is Subset of X : K c= A or B c= A };
    set BB = {X}\/{B where B is Subset of X : not K c= B};
    set M = {[K, X]}\/{[A, A] where A is Subset of X : not K c= A};
 A2: M = Maximal_wrt F by A1,Th32;
-A3: [#]X = X by SUBSET_1:def 4; set ss = saturated-subsets F;
+A3: [#]X = X; set ss = saturated-subsets F;
       now let x be set;
     hereby assume
     A4: x in BB;
@@ -2571,7 +2568,7 @@ A14: now let x be Element of X;
    A20: y in BOOLEAN* by FINSEQ_1:def 11;
           len y = n by A18,FINSEQ_1:def 3;
        then y in { s where s is Element of BOOLEAN*: len s = n } by A20;
-       then reconsider y as Tuple of n, BOOLEAN by FINSEQ_2:def 4;
+       then reconsider y as Tuple of n, BOOLEAN;
        take y;
        thus R[x,y] by A19;
    end; consider M being Function of X, n-tuples_on BOOLEAN such that
@@ -2746,7 +2743,7 @@ A63
              A74: bs0 = 0*n by BINARI_3:26 .= n |-> 0 by EUCLID:def 4;
                      dom bs0 = Seg n by Lm1;
              then A75:  bs0/.nj = bs0.nj by A73,FINSEQ_4:def 4
-                            .= 0 by A73,A74,FINSEQ_2:70;
+                            .= 0 by A73,A74,FUNCOP_1:13;
              A76:  L.j = (bs0/.nj) '&' (Ma/.nj) by A73,Def5
                      .= 0 by A75,MARGREL1:49,def 13;
               per cases;
@@ -2779,7 +2776,7 @@ A63
     A84: bs0 = 0*n by BINARI_3:26 .= n |-> 0 by EUCLID:def 4;
             dom bs0 = Seg n by Lm1;
     then A85:  bs0/.i = bs0.i by A13,A57,FINSEQ_4:def 4
-                  .= 0 by A13,A57,A84,FINSEQ_2:70;
+                  .= 0 by A13,A57,A84,FUNCOP_1:13;
     A86:  (bs0 '&' (Mbx)).i = (bs0/.i) '&' (Mbx/.i) by A13,A57,Def5
                           .= bs0/.i by A83,MARGREL1:50,def 14;
     A87:  (bsi '&' (Mbx)).i = (bsi/.i) '&' (Mbx/.i) by A13,A57,Def5
@@ -2897,9 +2894,9 @@ A7: [a1, X] in Maximal_wrt F by A3;
    consider a2 being Subset of X such that
 A8: k2 = a2 and
 A9: [a2, X] in Maximal_wrt F by A4;
-A10: Maximal_wrt F is (M2) by A1,Th30;
-A11: [#]X = X by SUBSET_1:def 4;  [a1,[#]X] >= [a2,[#]X] by A5,A6,A8,Th15;
- hence k1 = k2 by A6,A7,A8,A9,A10,A11,Def20;
+A10: Maximal_wrt F is (M2) by A1,Th30;  [a1,[#]X] >= [a2,[#]X] by A5,A6,A8,Th15
+;
+ hence k1 = k2 by A6,A7,A8,A9,A10,Def20;
 end;
 
 theorem  :: WWA6a:
@@ -2921,7 +2918,7 @@ X
       F = X deps_encl_by BB;
    then reconsider F as Full-family of X by Th35;
  take F;
-A3: [#]X = X by SUBSET_1:def 4;
+A3: [#]X = X;
 A4: now let x be set; assume
   A5: x in C; then reconsider x' = x as Subset of X;
        now let c be set; assume
@@ -2932,8 +2929,8 @@ A4: now let x be set; assume
     end;
   then [x',X] in F by A3; then consider a, b being Subset of X such that
   A7: [a,b] in Maximal_wrt F and
-  A8: [a, b] >= [x',[#]X] by A3,Th28;
-  A9: a c= x' by A8,Th15;  X c= b by A3,A8,Th15;
+  A8: [a, b] >= [x',[#]X] by Th28;
+  A9: a c= x' by A8,Th15;  X c= b by A8,Th15;
   then A10: b = X by XBOOLE_0:def 10;
    assume A11: not [x,X] in Maximal_wrt F;
          now let K be Subset of X; assume
@@ -2968,8 +2965,8 @@ A18;
      A23: K c= A;  [K,X] in Maximal_wrt F by A4,A22;
      then A24: K ^|^ X, F by Def18;
      A25: A ^|^ X, F by A16,Def18;
-     A26: [K, [#]X] in F by A3,A24,Th29;  [K, [#]X] >= [A, [#]X] by A23,Th15;
-      hence contradiction by A3,A15,A21,A22,A25,A26,Th29;
+     A26: [K, [#]X] in F by A24,Th29;  [K, [#]X] >= [A, [#]X] by A23,Th15;
+      hence contradiction by A15,A21,A22,A25,A26,Th29;
      end;
  then A in BB; then X in BB by A17; then consider b being Subset of X such
 that
@@ -2999,7 +2996,7 @@ X
          st x = b & for K being Subset of X st K in C holds not K c= b by A3;
      hence x in bool X;
    end; then reconsider BB = B as Subset-Family of X;
-A4: [#]X = X by SUBSET_1:def 4;
+A4: [#]X = X;
 A5: now let x be set; assume
   A6: x in C; then reconsider x' = x as Subset of X;
        now let c be set; assume
@@ -3011,8 +3008,8 @@ A5: now let x be set; assume
   then [x',X] in F by A4; then consider a, b being Subset of X such
 that
   A8: [a,b] in Maximal_wrt F and
-  A9: [a, b] >= [x',[#]X] by A4,Th28;
-  A10: a c= x' by A9,Th15;  X c= b by A4,A9,Th15;
+  A9: [a, b] >= [x',[#]X] by Th28;
+  A10: a c= x' by A9,Th15;  X c= b by A9,Th15;
   then A11: b = X by XBOOLE_0:def 10;
    assume A12: not [x,X] in Maximal_wrt F;
          now let K be Subset of X; assume
@@ -3047,8 +3044,8 @@ that
      A24: K c= A;  [K,X] in Maximal_wrt F by A5,A23;
      then A25: K ^|^ X, F by Def18;
      A26: A ^|^ X, F by A17,Def18;
-     A27: [K, [#]X] in F by A4,A25,Th29;  [K, [#]X] >= [A, [#]X] by A24,Th15;
-      hence contradiction by A4,A16,A22,A23,A26,A27,Th29;
+     A27: [K, [#]X] in F by A25,Th29;  [K, [#]X] >= [A, [#]X] by A24,Th15;
+      hence contradiction by A16,A22,A23,A26,A27,Th29;
      end;
  then A in BB by A3; then X in BB by A18;
      then consider b being Subset of X such that
@@ -3106,7 +3103,7 @@ A4: (X --> 0) +* ({}X --> {}X) in R by A3;
  thus the Attributes of DB = X;
  set ds = Dependency-str DB; set dox = Dependencies-Order X;
  set ck = { A where A is Subset of X : [A, X] in Maximal_wrt ds };
-A12: [#]X = X by SUBSET_1:def 4;
+A12: [#]X = X;
 :: And here WWA writes that the rest is "easy to show".  Good luck.
 :: Interesting in showing C = ck we show C c= ck and then in order to show
 :: that ck c= C we use the fact that C c= ck.  I do not understand why so.
@@ -3193,9 +3190,9 @@ that
        end; then AA >|> XA, DB by Def8; then [A,X] in ds;
        then consider a, b being Subset of X such that
    A47: [a,b] in Maximal_wrt ds and
-   A48: [a, b] >= [A,[#]X] by A12,Th28;
+   A48: [a, b] >= [A,[#]X] by Th28;
        A49: [a, b] in (dox Maximal_in ds) by A47;
-   A50: a c= A & X c= b by A12,A48,Th15;
+   A50: a c= A & X c= b by A48,Th15;
    then A51: b = X by XBOOLE_0:def 10;
           [a,b] in ds by A49;
        then consider aa, XX being Subset of the Attributes of DB such that
@@ -3228,7 +3225,7 @@ FUNCT_4:22;
             hence dom (r0|a) = dom r1 /\ a by A62,RELAT_1:90;
             let x be set; assume x in dom (r0|a);
            then A63: x in a by A61,XBOOLE_0:def 3;
-                  a misses a` by SUBSET_1:26;
+             a misses a` by XBOOLE_1:79;
                then a /\ a` = {} by XBOOLE_0:def 7;
            then A64: not x in a` by A63,XBOOLE_0:def 3;
              thus (r0|a).x = (X --> 0).x by A63,FUNCT_1:72
@@ -3265,9 +3262,9 @@ FUNCT_4:22;
            A77: [B, X] in (dox Maximal_in ds) by A76;
            assume
        A78: K <> A;
-       A79: A ^|^ [#]X, ds by A12,A70,Def18;  [AA,XA] <= [B,XA] by A74,A75,Th15
+       A79: A ^|^ [#]X, ds by A70,Def18;  [AA,XA] <= [B,XA] by A74,A75,Th15
 ;
-        hence contradiction by A12,A75,A77,A78,A79,Th29;
+        hence contradiction by A75,A77,A78,A79,Th29;
        end;
        consider K being set such that
    A80: K in C by A1,XBOOLE_0:def 1;
@@ -3486,44 +3483,43 @@ A1: F c= G by Def25;
 then A5: B = BB by TARSKI:2;
        B c= bool A by XBOOLE_1:36;
     then reconsider B as Subset-Family of A;
-A6: A = [#]A by SUBSET_1:def 4;
        for x, y be Subset of A st [x, y] in F & x c= A holds y c= A;
-    then not [#]A in charact_set F by A6,Th57;
-   then A in B by A6,XBOOLE_0:def 4;
-then A7: B is (B1) by Def4;
-A8: BB = enclosure_of F;
-then A9: B is (B2) by A5,Th38;
+    then not [#]A in charact_set F by Th57;
+   then A in B by XBOOLE_0:def 4;
+then A6: B is (B1) by Def4;
+A7: BB = enclosure_of F;
+then A8: B is (B2) by A5,Th38;
    set FF = {[a, b] where a, b is Subset of A :
                     for c being set st c in B & a c= c holds b c= c};
-A10: FF = A deps_encl_by B;
+A9: FF = A deps_encl_by B;
    then reconsider FF as Dependency-set of A;
-A11: FF is full_family by A10,Th35;  F c= FF by A5,A8,A10,Th39;
-then A12: G c= FF by A11,Def25;
-A13: FF c= G by A1,A5,A8,A10,Th39; then A14: G = FF by A12,XBOOLE_0:def 10;
+A10: FF is full_family by A9,Th35;  F c= FF by A5,A7,A9,Th39;
+then A11: G c= FF by A10,Def25;
+A12: FF c= G by A1,A5,A7,A9,Th39; then A13: G = FF by A11,XBOOLE_0:def 10;
  hereby let X, Y be Subset of A;
   hereby assume
-  A15: [X, Y] in G;
+  A14: [X, Y] in G;
    let a be Subset of A such that
-  A16: X c= a & not Y c= a;  [X,Y] in FF by A12,A15;
+  A15: X c= a & not Y c= a;  [X,Y] in FF by A11,A14;
       then consider a', b' being Subset of A such that
-  A17: [a',b'] = [X,Y] and
-  A18: for c being set st c in B & a' c= c holds b' c= c;
-  A19: a' = X & b' = Y by A17,ZFMISC_1:33;
+  A16: [a',b'] = [X,Y] and
+  A17: for c being set st c in B & a' c= c holds b' c= c;
+  A18: a' = X & b' = Y by A16,ZFMISC_1:33;
    assume not a in charact_set F; then a in B by XBOOLE_0:def 4;
-   hence contradiction by A16,A18,A19;
+   hence contradiction by A15,A17,A18;
   end;
   assume
- A20: for a being Subset of A st X c= a & not Y c= a holds a in charact_set F;
+ A19: for a being Subset of A st X c= a & not Y c= a holds a in charact_set F;
        now let c be set such that
-    A21: c in B and
-    A22: X c= c and
-    A23: not Y c= c; reconsider c as Subset of A by A21;
-           not c in charact_set F by A21,XBOOLE_0:def 4;
-     hence contradiction by A20,A22,A23;
+    A20: c in B and
+    A21: X c= c and
+    A22: not Y c= c; reconsider c as Subset of A by A20;
+           not c in charact_set F by A20,XBOOLE_0:def 4;
+     hence contradiction by A19,A21,A22;
     end; then [X,Y] in FF;
-   hence [X, Y] in G by A13;
+   hence [X, Y] in G by A12;
  end;
- thus thesis by A7,A9,A10,A14,Th37;
+ thus thesis by A6,A8,A9,A13,Th37;
 end;
 
 theorem  :: WWACorA: :: Bill: Is this the right translation
@@ -3614,29 +3610,28 @@ proof let X be finite non empty set,
     then dcF = X deps_encl_by B by Th40;
 then A1: dcF = {[a, b] where a,b is Subset of X :
            for c being set st c in B & a c= c holds b c= c};
-A2: X = [#]X by SUBSET_1:def 4;
  hereby assume K in ck; then consider A being Subset of X such that
- A3: K = A and
- A4: [A, X] in Maximal_wrt dcF;
- A5: A ^|^ X, dcF by A4,Def18; then [A, [#]X] in dcF by A2,Th29;
+ A2: K = A and
+ A3: [A, X] in Maximal_wrt dcF;
+ A4: A ^|^ X, dcF by A3,Def18; then [A, [#]X] in dcF by Th29;
      then consider a, b being Subset of X such that
- A6: [A,X] = [a,b] and
- A7: for c being set st c in B & a c= c holds b c= c by A1,A2;
- A8: A = a & X = b by A6,ZFMISC_1:33;
+ A5: [A,X] = [a,b] and
+ A6: for c being set st c in B & a c= c holds b c= c by A1;
+ A7: A = a & X = b by A5,ZFMISC_1:33;
   thus K is_p_i_w_ncv_of F proof
      hereby let z be Subset of X such that
-     A9: K c= z and
-     A10: z <> X and
-     A11: not z in charact_set F;
-       for x, y being Subset of X st [x,y]in F & x c=z holds y c=z by A11;
-         then z in B; then X c= z by A3,A7,A8,A9;
-      hence contradiction by A10,XBOOLE_0:def 10;
+     A8: K c= z and
+     A9: z <> X and
+     A10: not z in charact_set F;
+       for x, y being Subset of X st [x,y]in F & x c=z holds y c=z by A10;
+         then z in B; then X c= z by A2,A6,A7,A8;
+      hence contradiction by A9,XBOOLE_0:def 10;
      end;
      let k be set; assume
-    A12: k c< K; then k c= A by A3,XBOOLE_0:def 8;
+    A11: k c< K; then k c= A by A2,XBOOLE_0:def 8;
         then reconsider k as Subset of X by XBOOLE_1:1;
      assume
-    A13: not thesis;
+    A12: not thesis;
         set S = {P where P is Subset of X : [k, P] in dcF };
            S c= bool X proof let x be set; assume x in S;
           then ex P being Subset of X st x = P & [k, P] in dcF;
@@ -3644,40 +3639,40 @@ A2: X = [#]X by SUBSET_1:def 4;
         end; then reconsider S as Subset-Family of X;
            [k, k] in dcF by Def12
 ; then k in S; then consider m being set such that
-    A14: m in S and
-    A15: for B being set st B in S holds m c= B implies B =m by FINSET_1:18;
+    A13: m in S and
+    A14: for B being set st B in S holds m c= B implies B =m by FINSET_1:18;
         consider P being Subset of X such that
-    A16: m = P and
-    A17: [k, P] in dcF by A14;  [k, k] in dcF by Def12;
-    then A18: [k\/k, k\/P] in dcF by A17,Def14;
-    A19: k c= k\/P by XBOOLE_1:7;
-    A20: [k, [#]X] in dcF proof
+    A15: m = P and
+    A16: [k, P] in dcF by A13;  [k, k] in dcF by Def12;
+    then A17: [k\/k, k\/P] in dcF by A16,Def14;
+    A18: k c= k\/P by XBOOLE_1:7;
+    A19: [k, [#]X] in dcF proof
          per cases;
           suppose k\/P = X;
-           hence thesis by A18,SUBSET_1:def 4;
+           hence thesis by A17;
           end;
-          suppose k\/P <> X; then k\/P in charact_set F by A13,A19;
+          suppose k\/P <> X; then k\/P in charact_set F by A12,A18;
              then k\/P in charact_set dcF by Th61;
              then consider x, y being Subset of X such that
-          A21: [x, y] in dcF and
-          A22: x c= k\/P and
-          A23: not y c= k\/P by Th57;  [k\/P, k\/P] in dcF by Def12;
-              then [x\/(k\/P), y\/(k\/P)] in dcF by A21,Def14;
-              then [k\/P, y\/(k\/P)] in dcF by A22,XBOOLE_1:12;
-              then [k, y\/(k\/P)] in dcF by A18,Th20;
-          then A24: y\/(k\/P) in S;  P c= k\/P by XBOOLE_1:7;
+          A20: [x, y] in dcF and
+          A21: x c= k\/P and
+          A22: not y c= k\/P by Th57;  [k\/P, k\/P] in dcF by Def12;
+              then [x\/(k\/P), y\/(k\/P)] in dcF by A20,Def14;
+              then [k\/P, y\/(k\/P)] in dcF by A21,XBOOLE_1:12;
+              then [k, y\/(k\/P)] in dcF by A17,Th20;
+          then A23: y\/(k\/P) in S;  P c= k\/P by XBOOLE_1:7;
               then P c= y\/(k\/P) by XBOOLE_1:10;
-          then A25: P = (y\/(k\/P)) by A15,A16,A24;  not y c= P by A23,
+          then A24: P = (y\/(k\/P)) by A14,A15,A23;  not y c= P by A22,
 XBOOLE_1:10;
-           hence thesis by A25,XBOOLE_1:7;
+           hence thesis by A24,XBOOLE_1:7;
         end;
-        end;  k c= K by A12,XBOOLE_0:def 8;
+        end;  k c= K by A11,XBOOLE_0:def 8;
         then [K,[#]X] <= [k,[#]X] by Th15;
-     hence contradiction by A2,A3,A5,A12,A20,Th29;
+     hence contradiction by A2,A4,A11,A19,Th29;
     end;
  end;
  assume
-A26: K is_p_i_w_ncv_of F;
+A25: K is_p_i_w_ncv_of F;
    set S = {P where P is Subset of X : [K, P] in dcF };
       S c= bool X proof let x be set; assume x in S;
       then ex P being Subset of X st x = P & [K, P] in dcF;
@@ -3685,48 +3680,48 @@ A26: K is_p_i_w_ncv_of F;
    end;
    then reconsider S as Subset-Family of X;
       [K, K] in dcF by Def12; then K in S; then consider m being set such that
-A27: m in S and
-A28: for B being set st B in S holds m c= B implies B = m by FINSET_1:18;
+A26: m in S and
+A27: for B being set st B in S holds m c= B implies B = m by FINSET_1:18;
    consider P being Subset of X such that
-A29: m = P and
-A30: [K, P] in dcF by A27;  [K, K] in dcF by Def12;
-then A31: [K\/K, K\/P] in dcF by A30,Def14;
-A32: K c= K\/P by XBOOLE_1:7;
-A33: [K, [#]X] in dcF proof
+A28: m = P and
+A29: [K, P] in dcF by A26;  [K, K] in dcF by Def12;
+then A30: [K\/K, K\/P] in dcF by A29,Def14;
+A31: K c= K\/P by XBOOLE_1:7;
+A32: [K, [#]X] in dcF proof
     per cases;
     suppose K\/P = X;
-     hence thesis by A31,SUBSET_1:def 4;
+     hence thesis by A30;
     end;
-    suppose K\/P <> X; then K\/P in charact_set F by A26,A32,Def33;
+    suppose K\/P <> X; then K\/P in charact_set F by A25,A31,Def33;
         then K\/P in charact_set dcF by Th61;
         then consider x, y being Subset of X such that
-    A34: [x, y] in dcF and
-    A35: x c= K\/P and
-    A36: not y c= K\/P by Th57;  [K\/P, K\/P] in dcF by Def12;
-        then [x\/(K\/P), y\/(K\/P)] in dcF by A34,Def14;
-        then [K\/P, y\/(K\/P)] in dcF by A35,XBOOLE_1:12;
-        then [K, y\/(K\/P)] in dcF by A31,Th20;
-    then A37: y\/(K\/P) in S;
+    A33: [x, y] in dcF and
+    A34: x c= K\/P and
+    A35: not y c= K\/P by Th57;  [K\/P, K\/P] in dcF by Def12;
+        then [x\/(K\/P), y\/(K\/P)] in dcF by A33,Def14;
+        then [K\/P, y\/(K\/P)] in dcF by A34,XBOOLE_1:12;
+        then [K, y\/(K\/P)] in dcF by A30,Th20;
+    then A36: y\/(K\/P) in S;
            P c= K\/P by XBOOLE_1:7; then P c= y\/(K\/P) by XBOOLE_1:10;
-    then A38: P = (y\/(K\/P)) by A28,A29,A37;  not y c= P by A36,XBOOLE_1:10;
-     hence thesis by A38,XBOOLE_1:7;
+    then A37: P = (y\/(K\/P)) by A27,A28,A36;  not y c= P by A35,XBOOLE_1:10;
+     hence thesis by A37,XBOOLE_1:7;
    end;
    end;
       now let x', y' be Subset of X such that
-   A39: [x', y'] in dcF and
-   A40: (K <> x' or X <> y') and
-   A41: [K, [#]X] <= [x',y'];
-   A42: x' c= K & X c= y' by A2,A41,Th15;
-   then A43: X = y' by XBOOLE_0:def 10;
-        x' c< K by A40,A42,XBOOLE_0:def 8,def 10; then consider a being Subset
+   A38: [x', y'] in dcF and
+   A39: (K <> x' or X <> y') and
+   A40: [K, [#]X] <= [x',y'];
+   A41: x' c= K & X c= y' by A40,Th15;
+   then A42: X = y' by XBOOLE_0:def 10;
+        x' c< K by A39,A41,XBOOLE_0:def 8,def 10; then consider a being Subset
 of X such that
-   A44: x' c= a and
-   A45: a <> X and
-   A46: not a in charact_set F by A26,Def33;
-   A47: not a in charact_set dcF by A46,Th61;
-          not y' c= a by A43,A45,XBOOLE_0:def 10;
-    hence contradiction by A39,A44,A47;
-   end; then K ^|^ X, dcF by A2,A33,Th29;
+   A43: x' c= a and
+   A44: a <> X and
+   A45: not a in charact_set F by A25,Def33;
+   A46: not a in charact_set dcF by A45,Th61;
+          not y' c= a by A42,A44,XBOOLE_0:def 10;
+    hence contradiction by A38,A43,A46;
+   end; then K ^|^ X, dcF by A32,Th29;
    then [K,X] in Maximal_wrt dcF by Def18;
  hence K in candidate-keys Dependency-closure F;
 end;

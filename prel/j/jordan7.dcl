@@ -17,6 +17,8 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
@@ -34,7 +36,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="79"/>
+<Adjective nr="80"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>

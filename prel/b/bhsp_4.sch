@@ -14,6 +14,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -21,19 +22,12 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
-<ArticleID name="BHSP_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="43"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -69,7 +63,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="125">
+<Func kind="K" nr="142">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Num nr="0"/>
@@ -93,7 +87,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="125">
+<Func kind="K" nr="142">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -101,7 +95,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="125">
+<Func kind="K" nr="142">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Func kind="K" nr="65">

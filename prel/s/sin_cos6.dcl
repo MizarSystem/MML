@@ -11,16 +11,17 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XREAL_0"/>
+<ArticleID name="COMPLEX1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="COMPLEX1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="SIN_COS"/>
@@ -31,29 +32,29 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="182"/>
+<Func kind="K" nr="200"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 <Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24" value="false"/>
-<Adjective nr="35"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
+<Adjective nr="35" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="184">
-<Func kind="K" nr="186">
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="202">
+<Func kind="K" nr="204">
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -67,18 +68,18 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="184">
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="202">
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="189">
-<Func kind="K" nr="191">
+<Func kind="K" nr="207">
+<Func kind="K" nr="209">
 <Num nr="3"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -91,11 +92,11 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="184">
-<Func kind="K" nr="186">
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="202">
+<Func kind="K" nr="204">
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -111,11 +112,11 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="184">
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="202">
 <Num nr="0"/>
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -129,13 +130,13 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="184">
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="202">
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 <Cluster>
@@ -147,15 +148,15 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="184">
-<Func kind="K" nr="183"/>
-<Func kind="K" nr="189">
-<Func kind="K" nr="191">
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="202">
+<Func kind="K" nr="201"/>
+<Func kind="K" nr="207">
+<Func kind="K" nr="209">
 <Num nr="3"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -168,18 +169,18 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="184">
-<Func kind="K" nr="189">
-<Func kind="K" nr="191">
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="202">
+<Func kind="K" nr="207">
+<Func kind="K" nr="209">
 <Num nr="3"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
-<Func kind="K" nr="189">
+<Func kind="K" nr="207">
 <Num nr="2"/>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -192,16 +193,16 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="185">
-<Func kind="K" nr="186">
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="203">
+<Func kind="K" nr="204">
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -215,18 +216,18 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="185">
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="203">
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="189">
-<Func kind="K" nr="191">
+<Func kind="K" nr="207">
+<Func kind="K" nr="209">
 <Num nr="3"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -239,11 +240,11 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="185">
-<Func kind="K" nr="186">
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="203">
+<Func kind="K" nr="204">
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -259,11 +260,11 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="185">
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="203">
 <Num nr="0"/>
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -277,13 +278,13 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="185">
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="203">
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 <Cluster>
@@ -295,15 +296,15 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="185">
-<Func kind="K" nr="183"/>
-<Func kind="K" nr="189">
-<Func kind="K" nr="191">
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="203">
+<Func kind="K" nr="201"/>
+<Func kind="K" nr="207">
+<Func kind="K" nr="209">
 <Num nr="3"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -316,18 +317,18 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="169"/>
-<Func kind="K" nr="185">
-<Func kind="K" nr="189">
-<Func kind="K" nr="191">
+<Func kind="K" nr="187"/>
+<Func kind="K" nr="203">
+<Func kind="K" nr="207">
+<Func kind="K" nr="209">
 <Num nr="3"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
-<Func kind="K" nr="189">
+<Func kind="K" nr="207">
 <Num nr="2"/>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -340,10 +341,10 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="184">
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="202">
 <Num nr="0"/>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 <Cluster>
@@ -355,12 +356,12 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="184">
-<Func kind="K" nr="183"/>
-<Func kind="K" nr="189">
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="202">
+<Func kind="K" nr="201"/>
+<Func kind="K" nr="207">
 <Num nr="2"/>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -373,11 +374,11 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="184">
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="202">
 <Num nr="0"/>
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -391,13 +392,13 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="184">
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="202">
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 <Cluster>
@@ -409,15 +410,15 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="184">
-<Func kind="K" nr="183"/>
-<Func kind="K" nr="189">
-<Func kind="K" nr="191">
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="202">
+<Func kind="K" nr="201"/>
+<Func kind="K" nr="207">
+<Func kind="K" nr="209">
 <Num nr="3"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -430,18 +431,18 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="184">
-<Func kind="K" nr="189">
-<Func kind="K" nr="191">
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="202">
+<Func kind="K" nr="207">
+<Func kind="K" nr="209">
 <Num nr="3"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
-<Func kind="K" nr="189">
+<Func kind="K" nr="207">
 <Num nr="2"/>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -454,10 +455,10 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="185">
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="203">
 <Num nr="0"/>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 <Cluster>
@@ -469,12 +470,12 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="185">
-<Func kind="K" nr="183"/>
-<Func kind="K" nr="189">
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="203">
+<Func kind="K" nr="201"/>
+<Func kind="K" nr="207">
 <Num nr="2"/>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -487,11 +488,11 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="185">
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="203">
 <Num nr="0"/>
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -505,13 +506,13 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="185">
-<Func kind="K" nr="191">
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="203">
+<Func kind="K" nr="209">
+<Func kind="K" nr="201"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 <Cluster>
@@ -523,15 +524,15 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="185">
-<Func kind="K" nr="183"/>
-<Func kind="K" nr="189">
-<Func kind="K" nr="191">
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="203">
+<Func kind="K" nr="201"/>
+<Func kind="K" nr="207">
+<Func kind="K" nr="209">
 <Num nr="3"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -544,18 +545,18 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="16">
-<Func kind="K" nr="172"/>
-<Func kind="K" nr="185">
-<Func kind="K" nr="189">
-<Func kind="K" nr="191">
+<Func kind="K" nr="190"/>
+<Func kind="K" nr="203">
+<Func kind="K" nr="207">
+<Func kind="K" nr="209">
 <Num nr="3"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
-<Func kind="K" nr="189">
+<Func kind="K" nr="207">
 <Num nr="2"/>
-<Func kind="K" nr="183"/>
+<Func kind="K" nr="201"/>
 </Func>
 </Func>
 </Func>
@@ -567,7 +568,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="194"/>
+<Func kind="K" nr="214"/>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
@@ -576,7 +577,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="197"/>
+<Func kind="K" nr="217"/>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>

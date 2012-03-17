@@ -7,18 +7,19 @@
 environ
 
  vocabularies VECTSP_1, FINSEQ_1, RLVECT_1, RELAT_1, BOOLE, FINSEQ_2, FUNCOP_1,
-      TREES_1, FUNCT_1, QC_LANG1, INCSP_1, GROUP_1, ARYTM_1, BINOP_1, MATRIX_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1,
-      FUNCT_1, FUNCT_2, FINSEQ_1, FUNCOP_1, FINSEQ_2, STRUCT_0, BINOP_1,
-      FINSEQOP, RLVECT_1, GROUP_1, VECTSP_1, XXREAL_0;
- constructors BINOP_1, FINSEQOP, VECTSP_1, XCMPLX_0, MEMBERED, XXREAL_0;
+      TREES_1, FUNCT_1, QC_LANG1, INCSP_1, GROUP_1, ARYTM_1, BINOP_1, MATRIX_1,
+      ROUGHS_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, FUNCT_1, FUNCT_2,
+      FINSEQ_1, FUNCOP_1, FINSEQ_2, STRUCT_0, BINOP_1, FINSEQOP, RLVECT_1,
+      GROUP_1, VECTSP_1, XXREAL_0;
+ constructors BINOP_1, FINSEQOP, VECTSP_1, XXREAL_0;
  registrations FINSEQ_1, VECTSP_1, STRUCT_0, FINSEQ_2, RELSET_1, GROUP_1,
-      ARYTM_3, RELAT_1, MEMBERED, XREAL_0;
+      ARYTM_3, RELAT_1, XREAL_0;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, RLVECT_1, BINOP_1;
+ definitions TARSKI, RLVECT_1, BINOP_1, FINSEQ_2;
  theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, TARSKI, FUNCOP_1, FUNCT_1, FUNCT_2,
-      ZFMISC_1, NAT_1, BINOP_1, REAL_1, RLVECT_1, RELAT_1;
- schemes FINSEQ_1, FUNCT_2, BINOP_1, FINSEQ_2;
+      ZFMISC_1, NAT_1, BINOP_1, REAL_1, RLVECT_1, RELAT_1, XXREAL_0;
+ schemes FINSEQ_1, BINOP_1, FINSEQ_2;
 
 begin
 
@@ -65,8 +66,7 @@ theorem Th2:
   take n;
    let z;
    assume A1:z in rng s;
-   s=Seg m --> (n |-> x) by FINSEQ_2:def 2;
-   then A2: rng s c= {n |-> x} by FUNCOP_1:19;
+   A2: rng s c= {n |-> x} by FUNCOP_1:19;
    take t=n|->x;
    thus z=t & len t =n by A1,A2,FINSEQ_2:69,TARSKI:def 1;
  end;
@@ -226,8 +226,7 @@ definition let D,m,n;
        take n;
        let x;
        assume A1:x in rng M;
-          M=Seg m --> (n |-> a) by FINSEQ_2:def 2;
-       then A2: rng M c= {n |->a} by FUNCOP_1:19;
+       A2: rng M c= {n |->a} by FUNCOP_1:19;
        reconsider p=n |-> a as FinSequence of D;
        take p;
        thus x=p & len p =n by A1,A2,FINSEQ_2:69,TARSKI:def 1;
@@ -239,8 +238,7 @@ definition let D,m,n;
       thus len M = m by FINSEQ_2:69;
       let p;
        assume A3:p in rng M;
-       M=Seg m --> (n |-> a) by FINSEQ_2:def 2;
-       then rng M c= {n |-> a} by FUNCOP_1:19;
+       rng M c= {n |-> a} by FUNCOP_1:19;
        then p = n |-> a by A3,TARSKI:def 1;
        hence len p =n by FINSEQ_2:69;
      end;
@@ -269,8 +267,7 @@ theorem Th10:
        thus len M = m by FINSEQ_2:69;
        let p;
         assume A1:p in rng M;
-        M=Seg m --> (n |-> a) by FINSEQ_2:def 2;
-        then rng M c= {n |-> a} by FUNCOP_1:19;
+        rng M c= {n |-> a} by FUNCOP_1:19;
         then p = n |-> a by A1,TARSKI:def 1;
         hence len p =n by FINSEQ_2:69;
        end;
@@ -1054,7 +1051,7 @@ definition let D; let M be Matrix of D; let i;
     len Line(M,i) = width M & Line(M,i) is Element of D*
       by Def8,FINSEQ_1:def 11;
     then Line(M,i) in { p where p is Element of D*: len p = width M };
-    hence Line(M,i) is Element of (width M)-tuples_on D by FINSEQ_2:def 4;
+    hence Line(M,i) is Element of (width M)-tuples_on D;
   end;
 
   func Col(M,i) -> Element of (len M)-tuples_on D;
@@ -1063,7 +1060,7 @@ definition let D; let M be Matrix of D; let i;
     len Col(M,i) = len M & Col(M,i) is Element of D*
       by Def9,FINSEQ_1:def 11;
     then Col(M,i) in { p where p is Element of D*: len p = len M };
-    hence Col(M,i) is Element of (len M)-tuples_on D by FINSEQ_2:def 4;
+    hence Col(M,i) is Element of (len M)-tuples_on D;
   end;
  end;
 
@@ -1197,8 +1194,8 @@ theorem Th30:
      assume A1:[i,j] in Indices (0.(K,n));
      then [i,j] in [:Seg n,Seg n:] by Th25;
      then A2:i in Seg n & j in Seg n by ZFMISC_1:106;
-     A3:(0.(K,n)).i= n |-> 0.K by A2,FINSEQ_2:70;
-        (n |-> 0.K).j= 0.K by A2,FINSEQ_2:70;
+     A3:(0.(K,n)).i= n |-> 0.K by A2,FUNCOP_1:13;
+        (n |-> 0.K).j= 0.K by A2,FUNCOP_1:13;
      hence (0.(K,n))*(i,j)=0.K by A1,A3,Def6;
     end;
 
@@ -1255,13 +1252,24 @@ A4: len x = n & for p be FinSequence of K st
     hence thesis by A4,FINSEQ_2:110;
   end;
 
-definition let K,n;
-  mode Diagonal of n,K -> Matrix of n,K means
-    for i,j st [i,j] in Indices it & it*(i,j) <> 0.K holds i=j;
+definition let K, n; let M be Matrix of n, K;
+  attr M is diagonal means
+    for i,j st [i,j] in Indices M & M*(i,j) <> 0.K holds i=j;
+end;
+
+registration let K, n;
+  cluster diagonal Matrix of n,K;
   existence
   proof
-    take 1.(K,n); thus thesis by Def12;
+    take M=1.(K,n);
+    let i,j; assume [i,j] in Indices M & M*(i,j) <> 0.K; then
+    i=j by Def12;
+    hence thesis;
   end;
+end;
+
+definition let K, n;
+  mode Diagonal of n,K is diagonal Matrix of n,K;
 end;
 
  reserve A,A',B,B',C for Matrix of n,F;

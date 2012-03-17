@@ -8,15 +8,14 @@ environ
 
  vocabularies RELSET_2, TARSKI, RELAT_1, CANTOR_1, SETFAM_1, BOOLE, FUNCT_1,
       PUA2MSS1, EQREL_1, FUNCT_5, SUBSET_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1,
-      PARTFUN1, FUNCT_1, FUNCT_2, PUA2MSS1, EQREL_1, FUNCT_5;
- constructors PUA2MSS1, FUNCT_5, SETFAM_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, EQREL_1, FUNCT_5;
+ constructors FUNCT_5, SETFAM_1, EQREL_1, FUNCT_2;
  registrations SUBSET_1, RELSET_1, PARTFUN1, SYSREL, RELAT_1;
  requirements SUBSET, BOOLE;
- definitions XBOOLE_0, TARSKI;
+ definitions XBOOLE_0, TARSKI, EQREL_1, SUBSET_1;
  theorems RELAT_1, TARSKI, SETFAM_1, ZFMISC_1, XBOOLE_1, SUBSET_1, RELSET_1,
-      XBOOLE_0, FUNCT_1, FUNCT_2, MSSUBFAM, PUA2MSS1, EQREL_1, FUNCT_5, SYSREL,
-      ORDERS_1;
+      XBOOLE_0, FUNCT_1, FUNCT_2, MSSUBFAM, EQREL_1, FUNCT_5, SYSREL, ORDERS_1;
  schemes FUNCT_1, DOMAIN_1;
 
 begin :: Preliminaries
@@ -29,8 +28,7 @@ begin :: Preliminaries
  reserve x,y,X,Y,A,B,C,M for set;
  reserve P,Q,R,R1,R2 for Relation;
 
-notation
-  let X be set;
+notation let X be set;
   synonym {_{X}_} for SmallestPartition X;
 end;
 
@@ -42,24 +40,23 @@ proof
     assume A1: y in {_{X}_};
     per cases;
       suppose A2: X is empty;
-A3:     SmallestPartition X = Class id X by PUA2MSS1:def 2;
         consider x being set such that
-A4:     x in X & y = Class(id X,x) by EQREL_1:def 5,A3,A1;
-        thus thesis by A4,A2;
+A3:     x in X & y = Class(id X,x) by EQREL_1:def 5,A1;
+        thus thesis by A3,A2;
       end;
       suppose X is non empty;
         then reconsider X' = X as non empty set;
-    y in {{x} where x is Element of X': not contradiction} by PUA2MSS1:13,A1;
+    y in {{x} where x is Element of X': not contradiction} by EQREL_1:46,A1;
         then consider x being Element of X' such that
-A5:     y = {x};
-        thus thesis by A5;
+A4:     y = {x};
+        thus thesis by A4;
       end;
     end;
     given x such that
-A6: y = {x} & x in X;
-    reconsider X' = X as non empty set by A6;
-    y in {{z} where z is Element of X': not contradiction} by A6;
-    hence thesis by PUA2MSS1:13;
+A5: y = {x} & x in X;
+    reconsider X' = X as non empty set by A5;
+    y in {{z} where z is Element of X': not contradiction} by A5;
+    hence thesis by EQREL_1:46;
   end;
 
 theorem Th2:
@@ -189,15 +186,6 @@ A5: {y} = {x1} & x1 in Y by Th1,A3;
   thus thesis by A5,ZFMISC_1:6;
 end;
 
-definition
-  let M be set, X,Y be Subset-Family of M;
-  redefine func X /\ Y -> Subset-Family of M;
-  coherence
-  proof
-    thus X/\Y is Subset-Family of M;
-  end;
-end;
-
 theorem
   for B1, B2 being Subset-Family of M holds
     Intersect(B1) /\ Intersect(B2) c= Intersect(B1 /\ B2)
@@ -227,11 +215,7 @@ begin :: The first order cutting of binary relation of two sets A,B
       :: under a subset of the set A
 
 definition
-  let X,Y be set; let R be Relation of X,Y;
-  let x be Element of X;
-  func R.:x -> Subset of Y equals    :: R(x) - original counterpart
-  R.:{x};
-  correctness;
+  canceled;
 end;
 
 theorem Th9:
@@ -410,10 +394,10 @@ A1:  a = {x} & x in X;
 theorem :: R(X) - original counterpart. The First Order Cutting.
   for A being non empty set, B being set,
       X being Subset of A, R being Relation of A,B
-  holds R.:X = union {R.:x where x is Element of A: x in X}
+  holds R.:X = union {Class(R,x) where x is Element of A: x in X}
 proof
  let A be non empty set, B be set, X be Subset of A, R be Relation of A,B;
- thus R.:X c= union {R.:x where x is Element of A: x in X}
+ thus R.:X c= union {Class(R,x) where x is Element of A: x in X}
  proof
    let y be set;
    assume y in R.:X;
@@ -426,20 +410,21 @@ A2: x1 in S & S in {{x} where x is Element of A: x in X} by TARSKI:def 4;
 A3: S = {x} & x in X by A2;
 A4: y in R.:{x} by A1,A2,A3,RELAT_1:def 13;
    set Y = R.:{x};
-   Y = R.:x;
-   then Y in {R.:xs where xs is Element of A: xs in X} by A3;
+   Y = Class(R,x);
+   then Y in {Class(R,xs) where xs is Element of A: xs in X} by A3;
    hence thesis by A4,TARSKI:def 4;
  end;
  let a be set;
- assume a in union {R.:x where x is Element of A: x in X};
+ assume a in union {Class(R,x) where x is Element of A: x in X};
  then consider Y being set such that
-A5: a in Y & Y in {R.:x where x is Element of A: x in X} by TARSKI:def 4;
+A5: a in Y & Y in {Class(R,x) where x is Element of A: x in X}
+   by TARSKI:def 4;
  consider x being Element of A such that
-A6: Y = R.:x & x in X by A5;
+A6: Y = Class(R,x) & x in X by A5;
  Y c= R.:X
  proof
   let b be set; assume b in Y;
-  then b in R.:{x} by A6;
+  then b in Class(R,x) by A6;
   then consider x1 being set such that
 A7: [x1,b] in R & x1 in {x} by RELAT_1:def 13;
   x1 = x by A7,TARSKI:def 1;
@@ -459,19 +444,6 @@ proof
   defpred P[set] means $1 in X;
   set Y = { F(x) where x is Element of A: P[x]};
   thus Y is Subset-Family of B from DOMAIN_1:sch 8;
-end;
-
-definition
-  let A,B be set;
-  let R be Subset of [:A,bool B:];
-  let X be set;
-  redefine func R.:X -> Subset-Family of B;
-  coherence
-  proof
-   reconsider R as Relation of A,bool B by RELSET_1:def 1;
-   R.:X c= bool B;
-   hence thesis;
-  end;
 end;
 
 definition let A be set, R be Relation;
@@ -1323,7 +1295,7 @@ proof
     then consider a being set such that
     A1: [a,y] in R` & a in {x} by RELAT_1:def 13;
     a = x by A1,TARSKI:def 1;
-    then [x,y] in [:A,B:] \ R by A1,SUBSET_1:def 5;
+    then [x,y] in [:A,B:] \ R by A1;
     then [x,y] in [:A,B:] & not [x,y] in R by XBOOLE_0:def 4;
     hence thesis by ZFMISC_1:106;
   end;
@@ -1333,7 +1305,7 @@ proof
 A3: x in {x} by TARSKI:def 1;
     [x,y] in [:A,B:] by A2,ZFMISC_1:106;
     then [x,y] in [:A,B:] \ R by XBOOLE_0:def 4,A2;
-    then [x,y] in R` by SUBSET_1:def 5;
+    then [x,y] in R`;
     hence thesis by A3;
   end;
   hence thesis by RELAT_1:def 13;
@@ -1467,24 +1439,24 @@ proof
   proof
     let a be set;
     assume a in (R.:^X)`;
-    then a in B\ R.:^X by SUBSET_1:def 5;
+    then a in B\ R.:^X;
     then A1: a in B & not a in R.:^X by XBOOLE_0:def 4;
     then consider x being set such that
 A2: x in X & not a in R.:{x} by Th25;
 A3: not [x,a] in R by A2,Th9;
     [x,a] in [:A,B:] by ZFMISC_1:106,A1,A2;
     then [x,a] in [:A,B:] \ R by A3,XBOOLE_0:def 4;
-    then [x,a] in R` by SUBSET_1:def 5;
+    then [x,a] in R`;
     hence thesis by RELAT_1:def 13,A2;
   end;
   let a be set;
   assume a in R`.:X;
   then consider x being set such that
 A4: [x,a] in R` & x in X by RELAT_1:def 13;
-  [x,a] in [:A,B:] \ R by A4,SUBSET_1:def 5;
+  [x,a] in [:A,B:] \ R by A4;
   then A5: [x,a] in [:A,B:] & not [x,a] in R by XBOOLE_0:def 4;
   assume not thesis;
-  then not a in B \ R.:^X by SUBSET_1:def 5;
+  then not a in B \ R.:^X;
   then A6: not a in B or a in R.:^X by XBOOLE_0:def 4;
   a in R.:^X implies for x being set st x in X holds [x,a] in R
   proof
@@ -1520,7 +1492,7 @@ proof
   proof
     let a be set;
     assume A1:a in (R.:X)`;
-    then A2: a in B \ R.:X by SUBSET_1:def 5;
+    then A2: a in B \ R.:X;
     reconsider B as non empty set by A1;
     reconsider a as Element of B by A1;
     assume not thesis;
@@ -1542,11 +1514,11 @@ A5: a in (R`).:^X implies for x being set st x in X holds not [x,a] in R
     then consider b being set such that
 A8: [b,a] in R` & b in {x} by RELAT_1:def 13;
 A9: [x,a] in R` & [x,a] in R by A8,TARSKI:def 1,A7;
-    R` misses R by SUBSET_1:26;
+    R` misses R by XBOOLE_1:79;
     hence contradiction by A9,XBOOLE_0:3;
   end;
   assume not thesis;
-  then A10: not (a in B\R.:X) by SUBSET_1:def 5;
+  then A10: not (a in B\R.:X);
   per cases by A10,XBOOLE_0:def 4;
   suppose not a in B;
     hence contradiction by A4;
@@ -1720,10 +1692,9 @@ end;
 theorem Th60: :: (24.3)
   (R`)~ = (R~)`
 proof
-  R` = [:A,B:] \ R by SUBSET_1:def 5; then
   (R`)~ = ([:A,B:])~ \ R~ by RELAT_1:41
        .= [:B,A:] \ R~ by SYSREL:18
-       .= (R~)` by SUBSET_1:def 5;
+       .= (R~)`;
   hence thesis;
 end;
 

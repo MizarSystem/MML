@@ -41,7 +41,7 @@
 <Adjective nr="19" value="false"/>
 <Adjective nr="20"/>
 <Adjective nr="23"/>
-<Adjective nr="31" value="false"/>
+<Adjective nr="29" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -50,7 +50,7 @@
 <Cluster>
 <Adjective nr="19" value="false"/>
 <Adjective nr="20"/>
-<Adjective nr="31" value="false"/>
+<Adjective nr="29" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -138,7 +138,7 @@
 <Adjective nr="11"/>
 <Adjective nr="19" value="false"/>
 <Adjective nr="20"/>
-<Adjective nr="31" value="false"/>
+<Adjective nr="29" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

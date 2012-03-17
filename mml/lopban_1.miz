@@ -10,21 +10,21 @@ environ
       ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, BINOP_1, GRCAT_1, UNIALG_1,
       LATTICES, FUNCOP_1, FUNCSDOM, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SEQM_3,
       BHSP_3, RSSPACE, RSSPACE3, PARTFUN1, LOPBAN_1, FRAENKEL, MONOID_0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, STRUCT_0, XREAL_0,
-      ORDINAL1, NUMBERS, REAL_1, NAT_1, MONOID_0, PSCOMP_1, ALG_1, RLVECT_1,
-      FRAENKEL, COMPLEX1, RLSUB_1, NORMSP_1, RSSPACE, RSSPACE3, SEQ_1, SEQ_2,
-      SEQM_3, SEQ_4, FUNCSDOM, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, XXREAL_0,
+      STRUCT_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, MONOID_0, PSCOMP_1,
+      RLVECT_1, FRAENKEL, COMPLEX1, RLSUB_1, NORMSP_1, RSSPACE, RSSPACE3,
+      SEQ_1, SEQ_2, SEQM_3, SEQ_4, FUNCSDOM;
  constructors FUNCT_3, REAL_1, NAT_1, DOMAIN_1, PSCOMP_1, FUNCSDOM, PREPOWER,
-      RLSUB_1, RSSPACE3, MONOID_0, SEQM_3, XXREAL_0;
+      RLSUB_1, RSSPACE3, MONOID_0, SEQM_3, XXREAL_0, RELAT_2;
  registrations SUBSET_1, RELSET_1, STRUCT_0, ORDINAL2, RLVECT_1, NORMSP_1,
-      XREAL_0, MEMBERED, RSSPACE3, SEQM_3, MONOID_0;
+      XREAL_0, MEMBERED, RSSPACE3, SEQM_3, MONOID_0, XXREAL_0, FUNCT_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions RLVECT_1, SEQ_4, FRAENKEL, BINOP_1;
  theorems XBOOLE_0, REAL_2, TARSKI, ABSVALUE, RLVECT_1, BINOP_1, FUNCOP_1,
       FUNCSDOM, XREAL_0, XCMPLX_0, SEQ_1, SEQ_2, SEQM_3, FUNCT_1, NAT_1,
       FUNCT_2, RLSUB_1, NORMSP_1, SEQ_4, FUNCT_3, RSSPACE, RSSPACE3, MONOID_0,
-      XREAL_1, COMPLEX1;
+      XREAL_1, COMPLEX1, XXREAL_0;
  schemes BINOP_1, SEQ_1, FUNCT_2, XBOOLE_0;
 
 begin :: Real Vector Space of Operators
@@ -40,9 +40,10 @@ proof
 A1:a in REAL by XREAL_0:def 1;
      dom f = X by FUNCT_2:def 1;
    then dom f --> a is Function of X,REAL by A1,FUNCOP_1:57;
-then A2:<:dom f --> a, f:> is Function of X,[:REAL, Y:] by FUNCT_3:78;
-     F[;](a,f) = F * <:dom f --> a, f:> by FUNCOP_1:def 5;
-   then F[;](a,f) is Function of X, Y by A2,FUNCT_2:19;
+then reconsider g = <:dom f --> a, f:> as Function of X,[:REAL, Y:]
+            by FUNCT_3:78;
+     F[;](a,f) = F * g by FUNCOP_1:def 5;
+   then F[;](a,f) is Function of X, Y;
    hence thesis by FUNCT_2:11;
 end;
 end;
@@ -902,7 +903,7 @@ A4:    r is Real by XREAL_0:def 1;
           then A6: ||.(seq.n) - g.|| < r by A5;
                    abs(||.(seq.n).|| - ||.g.||) <= ||.(seq.n) - g.||
  by NORMSP_1:13;
-               then abs(||.(seq.n).|| - ||.g.||) < r by A6,XREAL_1:2;
+               then abs(||.(seq.n).|| - ||.g.||) < r by A6,XXREAL_0:2;
                hence abs(||.seq.||.n - ||.g.||) < r by NORMSP_1:def 10;
                end;
           hence for n be Nat st k <= n holds abs(||.seq.||.n - ||.g.||) < r;
@@ -1055,7 +1056,7 @@ A5:         0 + 0 <= K1+K2 by A3,A4,XREAL_1:9;
          ||. v1.x .|| <= K2*||. x .|| by A4;
         then ||. u1.x .|| + ||. v1.x .|| <= K1*||. x .|| +K2*||. x .||
       by A8,XREAL_1:9;
-       hence ||. f.x .|| <= K3*||. x .|| by A6,A7,XREAL_1:2;
+       hence ||. f.x .|| <= K3*||. x .|| by A6,A7,XXREAL_0:2;
         end;
      hence thesis by A5;
      end;
@@ -1297,7 +1298,7 @@ theorem Th32:
           A5:   r=||.g.t.|| & ||.t.|| <= 1;
           A6:   ||.g.t.|| <= K*||. t .|| by A2;
             K*||. t .|| <= K *1 by A1,A5,XREAL_1:66;
-        hence r <=K by A5,A6,XREAL_1:2;
+        hence r <=K by A5,A6,XXREAL_0:2;
       end;
    take K;
    thus thesis by A3;
@@ -1730,7 +1731,7 @@ now let t be VECTOR of X such that
  A17:   ||.f1.t.||<= ||.f.||*||.t.|| by Th38;
      0 <= ||.f.|| by Th39;
    then ||.f.||*||.t.|| <= ||.f.||*1 by A14,XREAL_1:66;
- then A18: ||.f1.t.||  <= ||.f.|| by A17,XREAL_1:2;
+ then A18: ||.f1.t.||  <= ||.f.|| by A17,XXREAL_0:2;
    0<= abs(a) by COMPLEX1:132;
     hence ||.h1.t.|| <= abs(a)*||.f.|| by A15,A16,A18,XREAL_1:66;
 end;
@@ -1762,7 +1763,7 @@ case A24: a <> 0;
  A29:   ||.h1.t.||<= ||.a*f.||*||.t.|| by Th38;
      0 <= ||.a*f.|| by Th39;
    then ||.a*f.||*||.t.|| <= ||.a*f.||*1 by A26,XREAL_1:66;
-   then A30: ||.h1.t.|| <= ||.a*f.|| by A29,XREAL_1:2;
+   then A30: ||.h1.t.|| <= ||.a*f.|| by A29,XXREAL_0:2;
  A31: 0<= abs(a") by COMPLEX1:132;
      abs(a") =abs(1*a") .=abs( 1/a) by XCMPLX_0:def 9
                  .=1/abs(a) by ABSVALUE:15
@@ -1807,7 +1808,7 @@ implies sup PreNorms(f1) <= abs(a)"*||.a*f.|| by SEQ_4:62;
                            .=||.a*f.|| by A39,Th40;
 end;
 end;
-hence thesis by A23,XREAL_1:1;
+hence thesis by A23,XXREAL_0:1;
 end;
     ||.f+g.|| <= ||.f.|| +  ||.g.||
 proof
@@ -1827,8 +1828,8 @@ now let t be VECTOR of X such that
  then ||.g.||*||.t.|| <= ||.g.||*1 by A41,XREAL_1:66;
     then ||.f.||*||.t.|| + ||.g.||*||.t.|| <= ||.f.||*1 + ||.g.||*1
  by A46,XREAL_1:9;
-   then ||.f1.t.||+||.g1.t.|| <= ||.f.|| + ||.g.|| by A45,XREAL_1:2;
-    hence ||.h1.t.|| <= ||.f.|| + ||.g.|| by A42,A43,XREAL_1:2;
+   then ||.f1.t.||+||.g1.t.|| <= ||.f.|| + ||.g.|| by A45,XXREAL_0:2;
+    hence ||.h1.t.|| <= ||.f.|| + ||.g.|| by A42,A43,XXREAL_0:2;
 end;
 A47:
      now let r be Real such that
@@ -1990,7 +1991,7 @@ proof
             by NORMSP_1:13;
            ||.seq.m - lim seq.||  <e by A4,A6;
       hence abs( ||.seq.||.m - ||.lim seq.||  ) <e1
-      by A7,XREAL_1:2;
+      by A7,XXREAL_0:2;
    end;
    take k;
    thus for m be Nat st m >= k holds
@@ -2029,7 +2030,7 @@ A6: now
       A10:   ||.vseq.m.||= ||.vseq.||.m by NORMSP_1:def 10;
            ||.(vseq.m) - (vseq.k).|| <e by A5,A7;
       hence abs( ||.vseq.||.m - ||.vseq.||.k  ) <e1
-      by A8,A9,A10,XREAL_1:2;
+      by A8,A9,A10,XXREAL_0:2;
    end;
    take k;
    thus for m be Nat st m >= k holds
@@ -2114,7 +2115,7 @@ then A26:                 ||.(vseq.n) - (vseq.m).|| * ||.x.||
                          .= e*(||.x.||"* ||.x.||)
                          .= e*1 by A21,XCMPLX_0:def 7
                          .=e;
-                     hence ||.xseq.n-xseq.m.|| < e by A25,A26,XREAL_1:2;
+                     hence ||.xseq.n-xseq.m.|| < e by A25,A26,XXREAL_0:2;
                    end;
                  end;
                  end;
@@ -2277,7 +2278,7 @@ A45:
                          0 <= ||.x.|| by NORMSP_1:8;
                       then ||.vseq.n - vseq.m.|| * ||.x.|| <= e* ||.x.||
                   by A58,XREAL_1:66;
-                      hence thesis by A57,XREAL_1:2;
+                      hence thesis by A57,XXREAL_0:2;
                     end;
                     ||.xseq.n-tseq.x.|| <= e * ||.x.||
                   proof
@@ -2349,7 +2350,7 @@ A65:
        then A71:  ||.h1.t.||= ||.f1.t-g1.t.|| by Th46;
        A72:  ||.f1.t-g1.t.|| <=e* ||.t.|| by A67,A68;
          e*||.t.|| <= e*1 by A66,A70,XREAL_1:66;
-       hence ||.h1.t.|| <=e by A71,A72,XREAL_1:2;
+       hence ||.h1.t.|| <=e by A71,A72,XXREAL_0:2;
       end;
      A73:
        now let r be Real such that
@@ -2383,7 +2384,7 @@ end;
             now let n be Nat such that
         A81: n >= m;
               ||.(vseq.n) - tv.|| <= e/2 by A80,A81;
-            hence ||.(vseq.n) - tv.|| < e by A79,XREAL_1:2;
+            hence ||.(vseq.n) - tv.|| < e by A79,XXREAL_0:2;
           end;
     hence thesis;
    end;

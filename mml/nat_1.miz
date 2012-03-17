@@ -11,10 +11,11 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
       XREAL_0, REAL_1, XXREAL_0;
  constructors REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0, XXREAL_0;
- registrations REAL_1, NUMBERS, ORDINAL2, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0;
+ registrations REAL_1, NUMBERS, ORDINAL2, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0,
+      XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions REAL_1;
- theorems AXIOMS, REAL_1, TARSKI, ORDINAL2, XCMPLX_1, XREAL_1;
+ theorems AXIOMS, REAL_1, TARSKI, ORDINAL2, XCMPLX_1, XREAL_1, XXREAL_0;
  schemes REAL_1;
 
 begin
@@ -24,8 +25,8 @@ definition
 end;
 
  reserve x for Real,
-         p,g,q,k,l,m,n for Nat,
-         h,i,j for natural number,
+         p,q,k,l,m,n for Nat,
+         h,i,j,g for natural number,
          X for Subset of REAL;
 
 :: The results of axioms of natural numbers
@@ -34,14 +35,14 @@ canceled;
 
 theorem                       :: axiom of induction
  Th2: for X st 0 in X & for x st x in X holds x + 1 in X
-  for k holds k in X
+  for n holds n in X
    proof let A be Subset of REAL such that
 A1:  0 in A;
      assume x in A implies x + 1 in A;
      then for x being real number st x in A holds x + 1 in A;
 then A2:  NAT c= A by A1,AXIOMS:29;
-    let k;
-    thus k in A by A2,TARSKI:def 3;
+    let n;
+    thus n in A by A2,TARSKI:def 3;
    end;
 
 :: Addition and multiplication
@@ -283,7 +284,7 @@ A5:     now assume
 A6:       j = 0;
 then A7:       i <= 0 by A4,XREAL_1:8;
             0 <= i by Th18;
-        hence thesis by A6,A7,XREAL_1:1;
+        hence thesis by A6,A7,XXREAL_0:1;
        end;
         now given k such that
 A8:       j = k + 1;
@@ -301,7 +302,7 @@ theorem
   proof assume
 A1:  i <= j & j <= i + 1;
      then j <= i or j = i + 1 by Th26;
-     hence thesis by A1,XREAL_1:1;
+     hence thesis by A1,XXREAL_0:1;
   end;
 
 theorem
@@ -423,7 +424,7 @@ theorem
 A1:  i <= j;
        0 <= h by Th18;
     then i + 0 <= i + h & i + h <= j + h & i + 0 = i by A1,XREAL_1:9;
-   hence i <= j + h by XREAL_1:2;
+   hence i <= j + h by XXREAL_0:2;
   end;
 
 theorem
@@ -867,7 +868,7 @@ A10:        now assume l lcm m = 0;
               0 <= l lcm m by Th18;
           hence thesis by A9,A10,Th54;
          end;
-       then l lcm m = m by A8,XREAL_1:1;
+       then l lcm m = m by A8,XXREAL_0:1;
        hence l divides m by Def4;
       end;
      hence thesis by A2;
@@ -942,7 +943,7 @@ A23:      k <= m by Th38;
           defpred Q[Nat] means k <= $1 implies Q($1) = 0;
 A24: Q[0]
      proof assume A25: k <= 0;  0 <= k by Th18;
-       hence thesis by A13,A25,XREAL_1:1;
+       hence thesis by A13,A25,XXREAL_0:1;
      end;
 A26: for m st Q[m] holds Q[m+1]
      proof let m such that
@@ -1059,7 +1060,7 @@ theorem
   assume A1: n mod 2 <> 0;
   2 = 1 + 1 & n mod 2 < 2 by Th46;
   then n mod 2 <= 1 & n mod 2 >= 1 by A1,Th38,Th39;
-  hence n mod 2 = 1 by XREAL_1:1;
+  hence n mod 2 = 1 by XXREAL_0:1;
  end;
 
 theorem
@@ -1233,10 +1234,10 @@ theorem Th1:
    proof
     assume m mod n = t;
     then consider q such that A2: m = n * q + t & t < n by A1,Def2;
-        ex g st n*k + m = n*g + t & t < n
+        ex p st n*k + m = n*p + t & t < n
       proof
-        reconsider g = k+q as Nat by ORDINAL2:def 21;
-        take g;
+        reconsider p = k+q as Nat by ORDINAL2:def 21;
+        take p;
        thus thesis by A2;
       end;
     hence thesis by Def2;
@@ -1284,7 +1285,7 @@ A2: k is Nat by ORDINAL2:def 21;
   hence thesis by A2,Def2;
  end;
 
-theorem Th5:
+theorem
  for n being natural number holds n mod n = 0
  proof
    let n be natural number;
@@ -1302,7 +1303,7 @@ theorem Th5:
  end;
  end;
 
-theorem Th6:
+theorem
  for n being natural number holds 0 = 0 mod n
   proof
     let n be natural number;
@@ -1310,3 +1311,33 @@ theorem Th6:
     hence thesis by Th4,Def2;
   end;
 
+:: from JORDAN4
+
+theorem
+ i<>0 & h=j*i implies j<=h
+proof assume i<>0;
+  then consider k such that
+W: i = k+1 by Th22;
+ assume h=j*i;
+  then h=j*k+j*1 by W;
+ hence j<=h by Th29;
+end;
+
+theorem
+ i<j implies i div j=0
+proof assume A1: i<j;
+ per cases by Def1;
+  suppose ex j1 being Nat st i=j*(i div j)+j1 & j1<j;
+   then consider j1 being Nat such that
+W1: i=j*(i div j)+j1 and
+    j1<j;
+   assume i div j<>0;
+     then consider k such that
+W3:   i div j = k+1 by Th22;
+    i = j + (j*k+j1) by W1,W3;
+   hence contradiction by A1,Th29;
+  end;
+  suppose (i div j)=0 & j=0;
+   hence i div j=0;
+  end;
+end;

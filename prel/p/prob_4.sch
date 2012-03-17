@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -25,6 +26,7 @@
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="CARD_4"/>
+<ArticleID name="SUPINF_2"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE2"/>
@@ -41,10 +43,10 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="34">
+<Adjective nr="39">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="37">
+<Adjective nr="42">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -64,7 +66,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="13">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -77,7 +79,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="198">
+<Func kind="K" nr="234">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

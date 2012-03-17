@@ -11,7 +11,9 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -45,10 +47,10 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="21"/>
-<Adjective nr="24"/>
-<Adjective nr="94"/>
+<Adjective nr="22"/>
+<Adjective nr="25"/>
 <Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 </RCluster>
 </Registrations>

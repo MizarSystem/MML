@@ -11,6 +11,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -19,10 +20,10 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="KURATO_2"/>
 </Signature>
 <Scheme>
@@ -62,7 +63,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="117">
+<Func kind="K" nr="136">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -119,7 +120,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="139">
+<Func kind="K" nr="156">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -151,7 +152,7 @@
 <Var nr="2"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="139">
+<Func kind="K" nr="156">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>

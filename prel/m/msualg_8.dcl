@@ -9,6 +9,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
@@ -51,7 +52,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="301">
+<Func kind="K" nr="320">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -75,7 +76,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="301">
+<Func kind="K" nr="320">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -99,19 +100,19 @@
 <Typ kind="G" nr="15">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="121" value="false"/>
+<Adjective nr="119" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="17">
 <Cluster>
-<Adjective nr="124">
+<Adjective nr="122">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="305">
+<Func kind="K" nr="324">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -129,8 +130,8 @@
 <Adjective nr="42"/>
 <Adjective nr="43"/>
 <Adjective nr="69"/>
-<Adjective nr="131">
-<Func kind="K" nr="304">
+<Adjective nr="129">
+<Func kind="K" nr="323">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -140,8 +141,8 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="132">
-<Func kind="K" nr="304">
+<Adjective nr="130">
+<Func kind="K" nr="323">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

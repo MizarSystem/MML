@@ -10,18 +10,17 @@ environ
       PARTFUN1, FUNCT_4, ZF_REFLE, QC_LANG1, PBOOLE, MSUALG_1, MSAFREE2,
       LATTICES, FINSET_1, SQUARE_1, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1,
       MARGREL1;
- notations TARSKI, XBOOLE_0, NUMBERS, NAT_1, MCART_1,
-      FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_2, FUNCT_4,
-      LIMFUNC1, PBOOLE, STRUCT_0, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2,
-      CIRCCOMB, FACIRC_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, NUMBERS, XXREAL_0, NAT_1, MCART_1, FINSET_1,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_2, FUNCT_4, LIMFUNC1, PBOOLE,
+      STRUCT_0, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1;
  constructors LIMFUNC1, CIRCUIT1, CIRCUIT2, FACIRC_1, XXREAL_0;
  registrations RELAT_1, RELSET_1, FUNCT_1, STRUCT_0, PRE_CIRC, CIRCCOMB,
-      FACIRC_1, ORDINAL2, FRAENKEL, CARD_3, XREAL_0;
+      FACIRC_1, ORDINAL2, FRAENKEL, CARD_3, XXREAL_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, CIRCUIT2, XBOOLE_0;
- theorems TARSKI, FUNCT_1, RELAT_1, ZFMISC_1, NAT_1, SQUARE_1, MCART_1,
-      PBOOLE, MSAFREE2, CIRCCOMB, FACIRC_1, FUNCT_4, FRECHET,
-      CIRCUIT1, CIRCUIT2, XBOOLE_0, XBOOLE_1;
+ definitions TARSKI, CIRCUIT2, XBOOLE_0, MSAFREE2;
+ theorems TARSKI, FUNCT_1, RELAT_1, ZFMISC_1, NAT_1, SQUARE_1, MCART_1, PBOOLE,
+      MSAFREE2, CIRCCOMB, FACIRC_1, FUNCT_4, FRECHET, CIRCUIT1, CIRCUIT2,
+      XBOOLE_0, XBOOLE_1, XXREAL_0;
  schemes NAT_1, RECDEF_1, PBOOLE;
 
 begin :: One gate circuits
@@ -469,32 +468,7 @@ begin :: Input of Many Cell Circuit
 
 theorem Th5:
  for f,g being Function st f tolerates g
-  holds rng (f+*g) = (rng f)\/(rng g)
-  proof let f,g be Function such that
-A1: f tolerates g;
-   thus rng (f+*g) c= (rng f)\/(rng g) by FUNCT_4:18;
-A2: rng(f+*g) = f.:(dom f\dom g)\/rng g by FRECHET:12;
-   let x be set; assume
-A3: x in (rng f)\/(rng g);
-A4: rng g c= rng(f+*g) by FUNCT_4:19;
-   per cases;
-   suppose x in rng g; hence thesis by A4;
-   end;
-   suppose
-A5: not x in rng g;
-    then x in rng f by A3,XBOOLE_0:def 2;
-    then consider a being set such that
-A6: a in dom f & x = f.a by FUNCT_1:def 5;
-       now assume
-A7:   a in dom g;
-         x = (f+*g).a by A1,A6,FUNCT_4:16 .= g.a by A7,FUNCT_4:14;
-     hence contradiction by A5,A7,FUNCT_1:def 5;
-    end;
-    then a in dom f\dom g by A6,XBOOLE_0:def 4;
-    then x in f.:(dom f\dom g) by A6,FUNCT_1:def 12;
-   hence thesis by A2,XBOOLE_0:def 2;
-  end;
-  end;
+  holds rng (f+*g) = (rng f)\/(rng g) by FRECHET:39;
 
 theorem Th6:
  for S1,S2 being non empty ManySortedSign st S1 tolerates S2
@@ -507,7 +481,7 @@ theorem Th6:
 then A1:    the ResultSort of S1 tolerates the ResultSort of S2 by
 CIRCCOMB:def 1;
 A2:    InputVertices (S1+*S2) = (the carrier of (S1+*S2)) \
-            rng the ResultSort of (S1+*S2) by MSAFREE2:def 2
+            rng the ResultSort of (S1+*S2)
        .= (the carrier of S1+*S2) \
             rng ((the ResultSort of S1) +* (the ResultSort of S2))
            by CIRCCOMB:def 2
@@ -526,15 +500,13 @@ A3:    ((the carrier of S1) \
         = ((the carrier of S1) \ (rng the ResultSort of S1)) \
           (rng the ResultSort of S2) by XBOOLE_1:41
        .=(InputVertices S1) \ (rng the ResultSort of S2)
-         by MSAFREE2:def 2
-       .=(InputVertices S1) \ (InnerVertices S2) by MSAFREE2:def 3;
+       .=(InputVertices S1) \ (InnerVertices S2);
           ((the carrier of S2) \
          ((rng the ResultSort of S1)\/(rng the ResultSort of S2)))
         = ((the carrier of S2) \ (rng the ResultSort of S2)) \
           (rng the ResultSort of S1) by XBOOLE_1:41
        .=(InputVertices S2) \ (rng the ResultSort of S1)
-         by MSAFREE2:def 2
-       .=(InputVertices S2) \ (InnerVertices S1) by MSAFREE2:def 3;
+       .=(InputVertices S2) \ (InnerVertices S1);
         hence thesis by A2,A3;
       end;
 
@@ -1746,7 +1718,7 @@ A10:  v in InputVertices S2 & not v in InnerVertices S1 implies
          the carrier of S2 = InnerVertices S2 \/ InputVertices S2 &
       (InputVertices S1)\InnerVertices S2 = InputVertices S1 &
       (not v in InnerVertices S1 or v in InnerVertices S1) &
-      S1 tolerates S2 by A1,A2,CIRCCOMB:def 3,MSAFREE2:3,XBOOLE_1:83;
+      S1 tolerates S2 by A1,A2,CIRCCOMB:def 3,XBOOLE_1:45,XBOOLE_1:83;
       then v in InnerVertices S2 or v in InputVertices S2 &
       (v in InnerVertices S1 or not v in InnerVertices S1) &
       InputVertices S =
@@ -1794,7 +1766,7 @@ A10: the carrier of S = (the carrier of S1) \/ the carrier of S2
        now let x be set; assume x in the carrier of S;
      then reconsider v = x as Vertex of S;
          the carrier of S = (InputVertices S) \/ InnerVertices S
-       by MSAFREE2:3;
+       by XBOOLE_1:45;
       then v in InputVertices S or v in InnerVertices S by XBOOLE_0:def 2;
       then v in InputVertices S & v in the carrier of S1 or
       v in InputVertices S & v in the carrier of S2 or
@@ -1838,7 +1810,7 @@ A7:  dom s1 = the carrier of S1 & dom Following s1 = the carrier of S1
          then reconsider v = x as Vertex of S1;
          reconsider v' = v as Vertex of S by A5,XBOOLE_0:def 2;
              the carrier of S1 = (InputVertices S1) \/ InnerVertices S1
-           by MSAFREE2:3;
+           by XBOOLE_1:45;
           then v in InputVertices S1 or v' in InnerVertices S1 by
 XBOOLE_0:def 2;
           then s1.v = (Following s1).v or s.v' = (Following s1).v
@@ -1856,7 +1828,7 @@ A9: dom s2 = the carrier of S2 & dom Following s2 = the carrier of S2
      then reconsider v = x as Vertex of S2;
      reconsider v' = v as Vertex of S by A5,XBOOLE_0:def 2;
          the carrier of S2 = (InputVertices S2) \/ InnerVertices S2
-       by MSAFREE2:3;
+       by XBOOLE_1:45;
       then v in InputVertices S2 or v' in InnerVertices S2 by XBOOLE_0:def 2;
       then s2.v = (Following s2).v or s.v' = (Following s2).v
        by A1,A2,A3,A4,A8,CIRCCOMB:38,CIRCUIT2:def 5;
@@ -2051,7 +2023,7 @@ A6: Following(s, n)|the carrier of S1 = Following(s0, n) by A1,A2,A3,Th14;
      by A2,CIRCCOMB:9,23,26;
 then A7: Following(s, n)|the carrier of S2 = Following(s3, n) by A1,A2,A4,Th14;
        Following(s0, n1) is stable & Following(s3, n2) is stable &
-    n1 <= n & n2 <= n by A5,SQUARE_1:46;
+    n1 <= n & n2 <= n by A5,XXREAL_0:25;
 then A8: Following(s0, n) is stable & Following(s3, n) is stable by Th4;
    thus Following(s, max(n1,n2))
       = Following(s0, n)+*Following(s3, n) by A1,A2,A3,A4,Th22

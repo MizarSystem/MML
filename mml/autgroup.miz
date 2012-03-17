@@ -9,13 +9,14 @@ environ
  vocabularies REALSET1, GROUP_2, GROUP_6, GROUP_1, GROUP_3, RELAT_1, FRAENKEL,
       FUNCT_1, FUNCT_2, BINOP_1, VECTSP_1, GROUP_5, WELLORD1, AUTGROUP;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REALSET1, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, STRUCT_0, BINOP_1, FRAENKEL, RLVECT_1, GROUP_1,
-      GROUP_2, GROUP_3, GROUP_5, GROUP_6;
+      RELSET_1, PARTFUN1, FUNCT_2, STRUCT_0, BINOP_1, FRAENKEL, RLVECT_1,
+      GROUP_1, GROUP_2, GROUP_3, GROUP_5, GROUP_6;
  constructors REALSET1, FUNCSDOM, GROUP_5, GROUP_6, PARTFUN1, RELAT_2;
  registrations FUNCT_1, FRAENKEL, GROUP_1, GROUP_2, GROUP_3, GROUP_6, STRUCT_0,
       GR_CY_2, RELSET_1, PARTFUN1, FUNCT_2, XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions FRAENKEL, FUNCT_1, GROUP_1, GROUP_6, TARSKI, BINOP_1, REALSET1;
+ definitions FRAENKEL, FUNCT_1, GROUP_1, GROUP_6, TARSKI, BINOP_1, REALSET1,
+      RLVECT_1, GROUP_2, GROUP_3;
  theorems BINOP_1, FUNCT_1, FUNCT_2, FRAENKEL, GROUP_1, GROUP_2, GROUP_3,
       GROUP_5, GROUP_6, REALSET1, RLVECT_1, RELAT_1, ZFMISC_1, TARSKI,
       XBOOLE_0;
@@ -40,20 +41,20 @@ Lm1: (for a,b st b is Element of H holds b |^ a in H)
         let q;
         assume q in H * a;
         then consider b such that
-A2:       q = b * a and
-A3:       b in H by GROUP_2:126;
+A2:     q = b * a and
+A3:     b in H by GROUP_2:126;
         set A = carr H;
-           b is Element of H by A3,RLVECT_1:def 1;
+        b is Element of H by A3,RLVECT_1:def 1;
         then b |^ a in H by A1;
-        then b |^ a in A by GROUP_2:88;
-        then a" * b * a in A by GROUP_3:20;
+        then b |^ a in A by RLVECT_1:def 1;
+        then a" * b * a in A;
         then a * (a" * b * a) in a * A by GROUP_2:33;
         then a * (a" * (b * a)) in a * A by GROUP_1:def 4;
         then (a * a") * (b * a) in a * A by GROUP_1:def 4;
         then a * a" * b * a in a * A by GROUP_1:def 4;
         then 1.G * b * a in a * A by GROUP_1:def 6;
         then q in a * A by A2,GROUP_1:def 5;
-        hence q in a * H by GROUP_2:def 13;
+        hence q in a * H;
       end;
     end;
     hence thesis by GROUP_3:142;
@@ -69,7 +70,7 @@ Lm2: H is normal implies (for a,b st b is Element of H
     consider q such that
 A3:   q = b;
     q in H by A2,A3,RLVECT_1:def 1;
-then A4: b in A & b in H by A3,GROUP_2:88;
+then A4: b in A & b in H by A3,RLVECT_1:def 1;
        H * a = a * H by A1,GROUP_3:140;
     then a" * H * a = a" * (a * H) by GROUP_2:128;
     then a" * H * a = a" * a * H by GROUP_2:127;
@@ -79,9 +80,9 @@ then A4: b in A & b in H by A3,GROUP_2:88;
 then A5: A |^ a = A by GROUP_3:def 6;
        a" * b in a" * A by A4,GROUP_2:33;
     then a" * b * a in a" * A * a by GROUP_2:34;
-    then b |^ a in a" * A * a by GROUP_3:20;
+    then b |^ a in a" * A * a;
     then b |^ a in A by A5,GROUP_3:59;
-    hence thesis by GROUP_2:88;
+    hence thesis by RLVECT_1:def 1;
   end;
 
 theorem
@@ -424,7 +425,7 @@ A2:   a" = 1.G by GROUP_1:16;
       thus I.x = x by FUNCT_1:35
               .= x * a by GROUP_1:def 5
               .= a" * x * a by A2,GROUP_1:def 5
-              .= x |^ a by GROUP_3:def 2;
+              .= x |^ a;
     end;
 then A3:  I in X by A1;
        X is functional
@@ -515,7 +516,7 @@ A1: f is Element of Funcs (the carrier of G, the carrier of G) by FUNCT_2:12;
       consider a such that
 A2:     for x holds f.x = x |^ a by A1,Def4;
       thus f.(x * y) = (x * y) |^ a by A2
-                    .= a" * (x * y) * a by GROUP_3:def 2
+                    .= a" * (x * y) * a
                     .= a" * x * y * a by GROUP_1:def 4
                     .= (a" * x) * (y * a) by GROUP_1:def 4
                     .= (a" * x) * 1.G * (y * a) by GROUP_1:def 5
@@ -524,8 +525,8 @@ A2:     for x holds f.x = x |^ a by A1,Def4;
                     .= (a" * x * a) * a" * y * a by GROUP_1:def 4
                     .= (a" * x * a) * (a" * y) * a by GROUP_1:def 4
                     .= (a" * x * a) * (a" * y * a) by GROUP_1:def 4
-                    .= (a" * x * a)* (y |^ a) by GROUP_3:def 2
-                    .= (x |^ a) * (y |^ a) by GROUP_3:def 2
+                    .= (a" * x * a)* (y |^ a)
+                    .= (x |^ a) * (y |^ a)
                     .= f.x * (y |^ a) by A2
                     .= f.x * f.y by A2;
     end;
@@ -536,14 +537,12 @@ A3: f is one-to-one
 A4:     for x holds f.x = x |^ a by A1,Def4;
       let q,q1;
       assume that A5: q in dom f and A6: q1 in dom f and A7: f.q = f.q1;
-         ex f1 being Function st f = f1 & dom f1 = the carrier of G &
-        rng f1 c= the carrier of G by A1,FUNCT_2:def 2;
-      then consider x, y such that
+      consider x, y such that
 A8:     x = q & y = q1 by A5,A6;
          f.x = y |^ a by A4,A7,A8;
       then x |^ a = y |^ a by A4;
-      then a" * x * a = y |^ a by GROUP_3:def 2;
-      then a * (a" * x * a) = a * (a" * y * a) by GROUP_3:def 2;
+      then a" * x * a = y |^ a;
+      then a * (a" * x * a) = a * (a" * y * a);
       then a * (a" * (x * a)) = a * (a" * y * a) by GROUP_1:def 4;
       then (a * a") * (x * a) = a * (a" * y * a) by GROUP_1:def 4;
       then (a * a") * (x * a) = a * (a" * (y * a)) by GROUP_1:def 4;
@@ -581,7 +580,7 @@ A10:       y = q;
          .= (a" * a * (y * a")) * a by GROUP_1:def 4
          .= a" * (a * (y * a")) * a by GROUP_1:def 4
          .= a" * q1 * a by GROUP_1:def 4
-         .= q1 |^ a by GROUP_3:def 2
+         .= q1 |^ a
          .= f.q1 by A9;
         hence thesis by A10;
       end;
@@ -631,7 +630,7 @@ A2:   a" = 1.G by GROUP_1:16;
       thus I.x = x by FUNCT_1:35
               .= x * a by GROUP_1:def 5
               .= a" * x * a by A2,GROUP_1:def 5
-              .= x |^ a by GROUP_3:def 2;
+              .= x |^ a;
     end;
     hence thesis by A1,Def4;
   end;
@@ -681,10 +680,10 @@ A8:      x = f1.y1 by GROUP_6:68;
            .= (b * b" * (y1 * b)) * b" by GROUP_1:def 4
            .= b * (b" * (y1 * b)) * b" by GROUP_1:def 4
            .= b * (b" * y1 * b) * b" by GROUP_1:def 4
-           .= b * (y1 |^ b) * b" by GROUP_3:def 2
+           .= b * (y1 |^ b) * b"
            .= b * x * b" by A5,A8
            .= a" * x * a by GROUP_1:19;
-      hence f".x = x |^ a by A1,GROUP_3:def 2;
+      hence f".x = x |^ a by A1;
     end;
     hence thesis by A4,Def4;
   end;
@@ -710,16 +709,16 @@ A4:      for x2 being Element of G holds g.x2 = x2 |^ c
       let x;
          (f * g).x = f.(g.x) by FUNCT_2:21
         .= f.(x |^ c) by A4
-        .= f.(c" * x * c) by GROUP_3:20
+        .= f.(c" * x * c)
         .= (c" * x * c) |^ b by A3
-        .= b" * (c" * x * c * b) by GROUP_3:20
+        .= b" * (c" * x * c * b) by GROUP_1:def 4
         .= b" * (c" * (x * c) * b) by GROUP_1:def 4
         .= b" * (c" * (x * c * b)) by GROUP_1:def 4
         .= (b" * c") * (x * c * b) by GROUP_1:def 4
         .= (b" * c") * (x * (c * b)) by GROUP_1:def 4
         .= (b" * c") * x * (c * b) by GROUP_1:def 4
         .= a" * x * (c * b) by GROUP_1:25
-        .= x |^ a by GROUP_3:20;
+        .= x |^ a;
       hence (f * g).x = x |^ a;
     end;
     hence thesis by A2,Def4;
@@ -850,13 +849,13 @@ A20:     A = f1";
         .= f1".((g1 * f1).y) by FUNCT_2:70
         .= f1".(g1.(f1.y)) by FUNCT_2:70
         .= f1".(f1.y |^ a) by A16
-        .= A.(a" * f1.y * a) by A20,GROUP_3:20
+        .= A.(a" * f1.y * a) by A20
         .= A.(a" * f1.y) * A.a by GROUP_6:def 7
         .= A.a" * A.(f1.y) * A.a by GROUP_6:def 7
         .= A.a" * (A * f1).y * A.a by FUNCT_2:70
         .= A.a" * y * A.a by A21,FUNCT_1:35
         .= (A.a)" * y * A.a by GROUP_6:41
-        .= y |^ A.a by GROUP_3:20;
+        .= y |^ A.a;
       end;
       hence f1" * g1 * f1 is Element of InnAut G by A19,Def4;
     end;
@@ -875,9 +874,9 @@ then A22: f1" * g * f1 in InnAut G by A15;
     consider q such that
 A24:   q = f" * k * f;
        E * f1 = f" * k * f by A13,A23,Th9;
-    then q in carr IG by A22,A24,GROUP_2:def 9;
-    then f" * k * f in IG by A24,GROUP_2:88;
-    hence k |^ f in IG by GROUP_3:20;
+    then q in carr IG by A22,A24;
+    then f" * k * f in IG by A24,RLVECT_1:def 1;
+    hence k |^ f in IG;
   end;
   then reconsider IG as normal strict Subgroup of AutGroup G by Lm1;
   take IG;
@@ -1153,7 +1152,7 @@ A11:    for b holds b |^ x" = b
        for b holds x * b = b * x
        proof
          let b;
-            b |^ x" = x"" * b * x" by GROUP_3:20
+            b |^ x" = x"" * b * x"
            .= x * b * x" by GROUP_1:19;
          then x * b * x" * x = b * x by A11;
          then x * b * (x" * x) = b * x by GROUP_1:def 4;
@@ -1176,7 +1175,7 @@ A13:    for b holds b = (Conjugate x").b
          then x * b * x" = b * 1.G by GROUP_1:def 6;
          then b = x * b * x" by GROUP_1:def 5;
          then b = x"" * b * x" by GROUP_1:19;
-         then b = b |^ x" by GROUP_3:20;
+         then b = b |^ x";
          hence thesis by Def6;
        end;
        consider g be Function of the carrier of G, the carrier of G such that

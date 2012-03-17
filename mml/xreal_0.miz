@@ -8,7 +8,7 @@ environ
 
  vocabularies XREAL_0, ARYTM_2, BOOLE, ARYTM_1, ARYTM_3, ORDINAL2, ARYTM,
       RELAT_1, ASYMPT_0, ZF_LANG, XCMPLX_0, COMPLEX1, FUNCOP_1, OPPCAT_1,
-      ORDINAL1, SUPINF_1;
+      ORDINAL1, SUPINF_1, SQUARE_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_4, ORDINAL1, ORDINAL2,
       ARYTM_2, ARYTM_1, NUMBERS, ARYTM_0, XCMPLX_0, XXREAL_0;
  constructors ARYTM_1, ARYTM_0, ORDINAL2, XCMPLX_0, FUNCT_4, XBOOLE_0, TARSKI,
@@ -76,14 +76,6 @@ existence
    assume n in REAL;
    hence n in ExtREAL by XBOOLE_0:def 2;
   end;
-end;
-
-definition let x be real number;
-canceled;
-  attr x is positive means :Def3:
-     x > 0;
-  attr x is negative means :Def4:
-     x < 0;
 end;
 
 Lm1: for x being real number, x1,x2 being Element of REAL st x = [*x1,x2*]
@@ -191,9 +183,7 @@ Def2:
   (not(r in REAL+ & s in REAL+) & not (r in [:{0},REAL+:] & s in [:{0},REAL+:])
     implies s in REAL+ & r in [:{0},REAL+:])
 proof
-  r in REAL & s in REAL by Def1;
-  then r <> -infty & s <> +infty;
- hence thesis by XXREAL_0:def 5;
+ thus thesis by XXREAL_0:def 5;
 end;
 
 Def2':
@@ -742,45 +732,6 @@ A2: s >= 0;
  end;
 
 registration
- cluster positive -> non negative non zero (real number);
- coherence
-  proof let r be real number;
-   assume r > 0;
-   hence r >= 0 & r <> 0;
-  end;
- cluster non negative non zero -> positive (real number);
- coherence
-  proof let r be real number;
-   assume r >= 0 & r <> 0;
-   hence r > 0 by Lm4;
-  end;
- cluster negative -> non positive non zero (real number);
- coherence
-  proof let r be real number;
-   assume r < 0;
-   hence r <= 0 & r <> 0;
-  end;
- cluster non positive non zero -> negative (real number);
- coherence
-  proof let r be real number;
-   assume r <= 0 & r <> 0;
-   hence r < 0 by Lm4;
-  end;
- cluster zero -> non negative non positive (real number);
- coherence
-  proof let r be real number;
-   assume r = 0;
-   hence r >= 0 & 0 >= r;
-  end;
- cluster non negative non positive -> zero (real number);
- coherence
-  proof let r be real number;
-   assume r >= 0 & 0 >= r;
-   hence r = 0 by Lm4;
-  end;
-end;
-
-registration
  cluster positive (real number);
  existence
   proof take r = 1;
@@ -802,10 +753,10 @@ registration let r,s be non negative (real number);
  cluster r + s -> non negative;
  coherence
   proof
-A1:  r >= 0 & s >= 0 by Def4;
+A1:  r >= 0 & s >= 0 by XXREAL_0:def 7;
    per cases by A1,Lm4;
    suppose r = 0;
-   hence r + s >= 0 by Def4;
+   hence r + s >= 0 by XXREAL_0:def 7;
    end;
    suppose r > 0;
    hence r+s >= 0 by A1,Lm16;
@@ -817,10 +768,10 @@ registration let r,s be non positive (real number);
  cluster r + s -> non positive;
  coherence
   proof
-A1:  r <= 0 & s <= 0 by Def3;
+A1:  r <= 0 & s <= 0 by XXREAL_0:def 6;
    per cases by A1,Lm4;
    suppose r = 0;
-   hence r + s <= 0 by Def3;
+   hence r + s <= 0 by XXREAL_0:def 6;
    end;
    suppose r < 0;
    hence r + s <= 0 by A1,Lm17;
@@ -833,7 +784,7 @@ registration let r be positive (real number);
  cluster r + s -> positive;
  coherence
   proof
-      r > 0 & s >= 0 by Def3,Def4;
+      r > 0 & s >= 0 by XXREAL_0:def 6,XXREAL_0:def 7;
     hence r+s > 0 by Lm16;
   end;
  cluster s + r -> positive;
@@ -845,7 +796,7 @@ registration let r be negative (real number);
  cluster r + s -> negative;
  coherence
   proof
-      r < 0 & s <= 0 by Def3,Def4;
+      r < 0 & s <= 0 by XXREAL_0:def 6,XXREAL_0:def 7;
    hence r+s < 0 by Lm17;
   end;
  cluster s + r -> negative;
@@ -856,7 +807,7 @@ registration let r be non positive (real number);
  cluster -r -> non negative;
  coherence
   proof
-A1:  --r <= 0 by Def3;
+A1:  --r <= 0 by XXREAL_0:def 6;
    assume -r < 0;
     then -r+--r < 0 by A1,Lm17;
    hence contradiction;
@@ -867,7 +818,7 @@ registration let r be non negative (real number);
  cluster -r -> non positive;
  coherence
   proof
-A1:  --r >= 0 by Def4;
+A1:  --r >= 0 by XXREAL_0:def 7;
    assume -r > 0;
    then -r+--r > 0 by A1,Lm16;
    hence contradiction;
@@ -905,7 +856,7 @@ registration
  cluster r*s -> non positive;
  coherence
   proof
-      r <= 0 & s >= 0 by Def3,Def4;
+      r <= 0 & s >= 0 by XXREAL_0:def 6,XXREAL_0:def 7;
    hence r*s <= 0 by Lm25;
   end;
  cluster s*r -> non positive;
@@ -917,7 +868,7 @@ registration
  cluster r*s -> non negative;
  coherence
   proof
-A1:  r <= 0 & s <= 0 by Def3;
+A1:  r <= 0 & s <= 0 by XXREAL_0:def 6;
    per cases by A1,Lm4;
    suppose r = 0 or s = 0;
    hence r * s >= 0;
@@ -940,7 +891,7 @@ registration let r,s be non negative (real number);
  cluster r*s -> non negative;
  coherence
   proof
-A1:  r >= 0 & s >= 0 by Def4;
+A1:  r >= 0 & s >= 0 by XXREAL_0:def 7;
    per cases by A1,Lm4;
    suppose r = 0 or s = 0;
    hence r * s >= 0;
@@ -964,7 +915,7 @@ registration let r be non positive (real number);
  cluster r" -> non positive;
  coherence
   proof
-A1: r"" <= 0 by Def3;
+A1: r"" <= 0 by XXREAL_0:def 6;
    assume that
 A2:  r" > 0;
    per cases by A1,Lm4;
@@ -983,7 +934,7 @@ registration let r be non negative (real number);
  cluster r" -> non negative;
  coherence
   proof
-A1: r"" >= 0 by Def4;
+A1: r"" >= 0 by XXREAL_0:def 7;
    assume that
 A2:  r" < 0;
    per cases by A1,Lm4;
@@ -1018,3 +969,19 @@ registration
  coherence;
 end;
 
+begin :: min & max
+
+registration let r,s;
+ cluster min(r,s) -> real;
+ coherence
+  proof
+    min(r,s) = r or min(r,s) = s by XXREAL_0:15;
+   hence thesis;
+  end;
+ cluster max(r,s) -> real;
+ coherence
+  proof
+    max(r,s) = r or max(r,s) = s by XXREAL_0:16;
+   hence thesis;
+  end;
+end;

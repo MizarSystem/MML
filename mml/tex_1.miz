@@ -9,15 +9,16 @@ environ
  vocabularies PRE_TOPC, TMAP_1, SUBSET_1, BOOLE, TOPS_1, TOPS_3, REALSET1,
       SETFAM_1, TDLAT_3, NATTRA_1, TARSKI, TEX_1, PCOMPS_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, STRUCT_0, REALSET2,
-      PRE_TOPC, TOPS_1, TMAP_1, TDLAT_3, TOPS_3, PCOMPS_1;
- constructors REALSET2, TOPS_1, TMAP_1, TDLAT_3, TOPS_3, DOMAIN_1, PCOMPS_1,
-      MEMBERED, SETFAM_1;
- registrations TDLAT_3, STRUCT_0, COMPLSP1, TMAP_1, SUBSET_1, TOPS_1, PCOMPS_1,
-      XBOOLE_0;
+      PRE_TOPC, TOPS_1, TMAP_1, TDLAT_3, TOPS_3, COMPTS_1, PCOMPS_1;
+ constructors REALSET2, TOPS_1, TMAP_1, TDLAT_3, TOPS_3, DOMAIN_1,
+      MEMBERED, SETFAM_1, COMPTS_1, PCOMPS_1;
+ registrations TDLAT_3, STRUCT_0, COMPLSP1, TMAP_1, SUBSET_1, TOPS_1,
+      XBOOLE_0, COMPTS_1;
  requirements BOOLE, SUBSET;
- definitions PRE_TOPC, TDLAT_3, STRUCT_0;
  theorems TARSKI, SUBSET_1, ZFMISC_1, ENUMSET1, REALSET2, PRE_TOPC, TOPS_1,
-      PCOMPS_1, TMAP_1, TDLAT_3, TOPS_3, STRUCT_0, XBOOLE_0, XBOOLE_1, TSEP_1;
+      PCOMPS_1, TMAP_1, TDLAT_3, TOPS_3, STRUCT_0, XBOOLE_0, XBOOLE_1, TSEP_1,
+      COMPTS_1;
+ definitions PRE_TOPC, TDLAT_3, COMPTS_1, SUBSET_1;
 
 begin
 :: 1. Properties of Subsets of a Topological Space with Modified Topology.
@@ -97,7 +98,7 @@ A5:      C c= Cl C by PRE_TOPC:48;
      assume C is not dense;
       then Cl C <> [#](X modified_with_respect_to D) by TOPS_1:def 3;
       then B <> {}(X modified_with_respect_to D) by TOPS_3:2;
-     hence contradiction by A7,PRE_TOPC:15;
+     hence contradiction by A7,XBOOLE_1:28;
     end;
    thus C is open by A1,TMAP_1:105;
  end;
@@ -248,9 +249,9 @@ theorem
   holds Y is almost_discrete implies Y is TopSpace-like
  proof let Y be trivial non empty TopStruct;
    consider d being Element of Y such that
-       A1: the carrier of Y = {d} by Def1;
+A1: the carrier of Y = {d} by Def1;
    reconsider D = {d} as Subset of Y;
-    A2: bool D = {{},D} by ZFMISC_1:30;
+A2: bool D = {{},D} by ZFMISC_1:30;
   assume the topology of Y is non empty;
    then consider A being Subset of Y such that
        A3: A in the topology of Y by SUBSET_1:10;
@@ -556,7 +557,7 @@ registration let D be set;
    set Y = TopStruct (#D,bool D#);
     reconsider Y' = Y as discrete TopStruct by TDLAT_3:def 1;
         Y' is discrete strict TopSpace;
-   hence thesis by PCOMPS_1:def 1;
+   hence thesis;
   end;
 end;
 
@@ -564,9 +565,7 @@ theorem Th18:
  for X being discrete non empty TopSpace holds
    the TopStruct of X = 1TopSp (the carrier of X)
  proof let X be discrete non empty TopSpace;
-         1TopSp(the carrier of X) =
-       TopStruct (#the carrier of X,bool the carrier of X#) by PCOMPS_1:def 1;
-  hence thesis by TDLAT_3:def 1;
+  thus thesis by TDLAT_3:def 1;
  end;
 
 theorem
@@ -575,9 +574,7 @@ theorem
      X is discrete
  proof let X be non empty TopSpace;
   assume A1: the TopStruct of X = the TopStruct of 1TopSp(the carrier of X);
-          1TopSp(the carrier of X) =
-     TopStruct (#the carrier of X,bool the carrier of X#) by PCOMPS_1:def 1;
-  hence X is discrete by A1,TDLAT_3:def 1;
+  thus X is discrete by A1,TDLAT_3:def 1;
  end;
 
 theorem
@@ -619,20 +616,19 @@ theorem Th23:
  for D being non empty set holds
   ADTS(D) = 1TopSp(D) iff ex d0 being Element of D st D = {d0}
  proof let D be non empty set;
-   A1: 1TopSp(D) = TopStruct (#D,bool D#) by PCOMPS_1:def 1;
   thus ADTS(D) = 1TopSp(D) implies ex d0 being Element of D st D = {d0}
    proof
     assume ADTS(D) = 1TopSp(D);
-     then A2: bool D = {{},D} by A1;
+     then A1: bool D = {{},D};
      consider d0 being Element of D;
     take d0;
           {d0} c= D by ZFMISC_1:37;
-    hence thesis by A2,TARSKI:def 2;
+    hence thesis by A1,TARSKI:def 2;
    end;
-  given d0 being Element of D such that A3: D = {d0};
-         bool D = {{},D} by A3,ZFMISC_1:30
+  given d0 being Element of D such that A2: D = {d0};
+         bool D = {{},D} by A2,ZFMISC_1:30
            .= cobool D;
-  hence thesis by PCOMPS_1:def 1;
+  hence thesis;
  end;
 
 registration
@@ -641,11 +637,10 @@ registration
   proof
    set D = {0,1}; set Y = 1TopSp(D);
    take Y;
-     A1: Y = TopStruct (#D,bool D#) by PCOMPS_1:def 1;
         now assume Y is anti-discrete;
-      then the TopStruct of Y = the TopStruct of ADTS(D) by A1,Th9;
-      then consider d0 being Element of D such that A2: D = {d0} by Th23;
-           d0 = 0 & d0 = 1 by A2,ZFMISC_1:8;
+      then the TopStruct of Y = the TopStruct of ADTS(D) by Th9;
+      then consider d0 being Element of D such that A1: D = {d0} by Th23;
+           d0 = 0 & d0 = 1 by A1,ZFMISC_1:8;
      hence contradiction;
     end;
    hence thesis;
@@ -657,8 +652,8 @@ registration
    take Y;
         now assume Y is discrete;
       then the TopStruct of Y = the TopStruct of 1TopSp(D) by Th18;
-      then consider d0 being Element of D such that A3: D = {d0} by Th23;
-           d0 = 0 & d0 = 1 by A3,ZFMISC_1:8;
+      then consider d0 being Element of D such that A2: D = {d0} by Th23;
+           d0 = 0 & d0 = 1 by A2,ZFMISC_1:8;
      hence contradiction;
     end;
    hence thesis;
@@ -785,7 +780,7 @@ theorem Th24:
    proof assume A1: {d0} c= A;
           d0 in {d0} by TARSKI:def 1;
      then not ex Q being Subset of D
-       st Q = Z & d0 in Q & Q <> D by A1,SUBSET_1:54;
+       st Q = Z & d0 in Q & Q <> D by A1,XBOOLE_0:def 4;
      then not Z in G;
       then Z in the topology of STS(D,d0) by XBOOLE_0:def 4;
      then Z is open by PRE_TOPC:def 5;
@@ -860,14 +855,13 @@ theorem Th26:
   set Z =  A`;
   set T = (bool D) \
     {P where P is Subset of D : d0 in P & P <> D};
-     A1: [#]STS(D,d0) = D;
     reconsider P = {d0} as Subset of STS(D,d0)
       by ZFMISC_1:37;
   thus A c= D \ {d0} implies A is open
    proof
     assume A c= D \ {d0};
      then [#]STS(D,d0) \ (D \ {d0}) c= [#]STS(D,d0) \ A by XBOOLE_1:34;
-     then [#]STS(D,d0) \ (D \ P) c= Z by PRE_TOPC:17;
+     then [#]STS(D,d0) \ (D \ P) c= Z;
      then P c= Z by PRE_TOPC:22;
      then Z is closed by Th24;
     hence thesis by TOPS_1:30;
@@ -875,12 +869,12 @@ theorem Th26:
   thus A <> D & A is open implies A c= D \ {d0}
    proof
     assume A <> D;
-     then A2: Z <> {}STS(D,d0) by TOPS_3:2;
+     then A1: Z <> {}STS(D,d0) by TOPS_3:2;
     assume A is open;
      then Z is closed by TOPS_1:30;
-     then {d0} c= Z by A2,Th24;
+     then {d0} c= Z by A1,Th24;
      then Z` c=  P` by SUBSET_1:31;
-    hence thesis by A1,PRE_TOPC:17;
+    hence thesis;
    end;
  end;
 
@@ -895,13 +889,12 @@ theorem
   set Z =  A`;
   set T = (bool D) \
    {P where P is Subset of D : d0 in P & P <> D};
-    A2: [#]STS(D,d0) = D;
    reconsider P = {d0} as Subset of STS(D,d0) by ZFMISC_1:37;
   thus A = D \ {d0} implies A is open & A is dense
    proof
-    assume A3: A = D \ {d0};
+    assume A2: A = D \ {d0};
     hence A is open by Th26;
-         [#]STS(D,d0) \ ([#]STS(D,d0) \ P) = Z by A3,PRE_TOPC:17;
+         [#]STS(D,d0) \ ([#]STS(D,d0) \ P) = Z by A2;
      then P = Z by PRE_TOPC:22;
      then Z is closed & Z is boundary by A1,Th25;
     hence thesis by TOPS_3:18;
@@ -909,14 +902,14 @@ theorem
   thus A <> D & A is open & A is dense implies A = D \ {d0}
    proof
     assume A <> D;
-     then A4: Z <> {}STS(D,d0) by TOPS_3:2;
+     then A3: Z <> {}STS(D,d0) by TOPS_3:2;
     assume A is open;
-     then A5: Z is closed by TOPS_1:30;
+     then A4: Z is closed by TOPS_1:30;
     assume A is dense;
      then Z is boundary by TOPS_3:18;
-     then Z = {d0} by A1,A4,A5,Th25;
+     then Z = {d0} by A1,A3,A4,Th25;
      then A =  P`;
-    hence thesis by A2,PRE_TOPC:17;
+    hence thesis;
    end;
  end;
 
@@ -1258,31 +1251,30 @@ theorem
 theorem
      STS(D,d0) = 1TopSp(D) iff D = {d0}
  proof
-     A1: 1TopSp(D) = TopStruct (#D,bool D#) by PCOMPS_1:def 1;
    set G = {P where P is Subset of D : d0 in P & P <> D};
    set T = (bool D) \ G;
   thus STS(D,d0) = 1TopSp(D) implies D = {d0}
    proof
-    assume A2: STS(D,d0) = 1TopSp(D);
-A3:   G c= bool D
+    assume A1: STS(D,d0) = 1TopSp(D);
+A2:   G c= bool D
         proof
               now let x be set;
            assume x in G;
             then consider Q being Subset of D such that
-                   A4: x = Q and d0 in Q & Q <> D;
-           thus x in bool D by A4;
+                   A3: x = Q and d0 in Q & Q <> D;
+           thus x in bool D by A3;
           end;
          hence thesis by TARSKI:def 3;
         end;
-    assume A5: D <> {d0};
+    assume A4: D <> {d0};
      reconsider P = {d0} as Subset of D by ZFMISC_1:37;
            d0 in P by TARSKI:def 1;
-      then P in G by A5;
-    hence contradiction by A1,A2,A3,XBOOLE_1:38;
+      then P in G by A4;
+    hence contradiction by A1,A2,XBOOLE_1:38;
    end;
   assume D = {d0};
      then G = {} by Lm2;
-  hence thesis by PCOMPS_1:def 1;
+  hence thesis;
  end;
 
 theorem
@@ -1290,23 +1282,22 @@ theorem
    for A being Subset of STS(D,d0) st A = {d0} holds
      1TopSp(D) = STS(D,d0) modified_with_respect_to A
  proof let D be non empty set, d0 be Element of D;
-      A1: 1TopSp(D) = TopStruct(#D,bool D#) by PCOMPS_1:def 1;
    set G = {P where P is Subset of D : d0 in P & P <> D};
    set T = (bool D) \ G;
           T \/ G = (bool D) \/ G by XBOOLE_1:39;
-     then A2: bool D c= T \/ G by XBOOLE_1:7;
+     then A1: bool D c= T \/ G by XBOOLE_1:7;
    let A be Subset of STS(D,d0);
-  assume A3: A = {d0};
-   A4: G c= A-extension_of_the_topology_of STS(D,d0)
+  assume A2: A = {d0};
+   A3: G c= A-extension_of_the_topology_of STS(D,d0)
         proof
-          A5: A-extension_of_the_topology_of STS(D,d0) =
+          A4: A-extension_of_the_topology_of STS(D,d0) =
                 {H \/ (F /\ A) where H is Subset of STS(D,d0),
                   F is Subset of STS(D,d0) : H in T & F in T}
                     by TMAP_1:def 7;
               now let W be set;
            assume W in G;
             then consider P being Subset of D such that
-                  A6: W = P and A7: d0 in P and P <> D;
+                  A5: W = P and A6: d0 in P and P <> D;
             reconsider F=D as Subset of D by Lm1;
            set H = P \ {d0};
                    H c= P by XBOOLE_1:36;
@@ -1314,27 +1305,27 @@ theorem
                     not ex K being Subset of D
                   st K = F & d0 in K & K <> D;
                 then not F in G;
-             then A8: F in T by XBOOLE_0:def 4;
+             then A7: F in T by XBOOLE_0:def 4;
                      d0 in {d0} by TARSKI:def 1;
                 then not ex K being Subset of D
                 st K = H & d0 in K & K <> D by XBOOLE_0:def 4;
                 then not H in G;
-             then A9: H in T by XBOOLE_0:def 4;
-                   A c= P & A c= D by A3,A7,ZFMISC_1:37;
-             then W = H \/ A & A = F /\ A by A3,A6,XBOOLE_1:28,45;
-           hence W in A-extension_of_the_topology_of STS(D,d0) by A5,A8,A9
+             then A8: H in T by XBOOLE_0:def 4;
+                   A c= P & A c= D by A2,A6,ZFMISC_1:37;
+             then W = H \/ A & A = F /\ A by A2,A5,XBOOLE_1:28,45;
+           hence W in A-extension_of_the_topology_of STS(D,d0) by A4,A7,A8
 ;
           end;
          hence thesis by TARSKI:def 3;
         end;
        T c= A-extension_of_the_topology_of STS(D,d0) by TMAP_1:99;
-   then T \/ G c= A-extension_of_the_topology_of STS(D,d0) by A4,XBOOLE_1:8;
-   then A10: bool D c= A-extension_of_the_topology_of STS(D,d0) by A2,
+   then T \/ G c= A-extension_of_the_topology_of STS(D,d0) by A3,XBOOLE_1:8;
+   then A9: bool D c= A-extension_of_the_topology_of STS(D,d0) by A1,
 XBOOLE_1:1;
         the topology of STS(D,d0) modified_with_respect_to A
           = A-extension_of_the_topology_of STS(D,d0) by TMAP_1:104
-         .= the topology of 1TopSp(D) by A1,A10,XBOOLE_0:def 10;
-  hence thesis by A1,TMAP_1:104;
+         .= the topology of 1TopSp(D) by A9,XBOOLE_0:def 10;
+  hence thesis by TMAP_1:104;
  end;
 
 begin
@@ -1596,16 +1587,16 @@ registration
             hence H = C by A12;
            end;
            case A14: P = {} & Q = A1;
-                  A1 misses  A1` by SUBSET_1:26;
+                  A1 misses  A1` by XBOOLE_1:79;
             hence H = {} by A12,A14,XBOOLE_0:def 7;
            end;
            case A15: P = A1 & Q = A1;
-                  A1 misses  A1` by SUBSET_1:26;
+                  A1 misses  A1` by XBOOLE_1:79;
               then A1 /\  A1` = {}Y1 by XBOOLE_0:def 7;
             hence H = A1 by A12,A15;
            end;
            case A16: P = C & Q = A1;
-                  A1 misses  A1` by SUBSET_1:26;
+                  A1 misses  A1` by XBOOLE_1:79;
               then A1 /\  A1` = {}Y1 by XBOOLE_0:def 7;
             hence H = C by A12,A16;
            end;

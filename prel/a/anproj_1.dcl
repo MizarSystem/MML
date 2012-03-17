@@ -16,6 +16,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="COLLSP"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="FINSET_1"/>
@@ -42,7 +43,7 @@
 <Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="77" value="false"/>
+<Adjective nr="75" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -55,11 +56,11 @@
 <Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="77" value="false"/>
+<Adjective nr="75" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="154">
+<Func kind="K" nr="171">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -76,11 +77,11 @@
 <Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="77" value="false"/>
+<Adjective nr="75" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="157">
+<Func kind="K" nr="174">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -97,11 +98,11 @@
 <Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="77" value="false"/>
+<Adjective nr="75" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="159">
+<Func kind="K" nr="176">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

@@ -9,14 +9,14 @@ environ
  vocabularies ORDINAL2, ARYTM, FINSEQ_1, ARYTM_3, ARYTM_1, RELAT_1, FUNCT_1,
       BOOLE, FINSEQ_2, GROUP_1, QC_LANG1, RLVECT_1, NEWTON, FINSEQ_4, CARD_3,
       NAT_1, INT_1, ABSVALUE, FILTER_0, NAT_LAT, FINSET_1, CARD_1, TARSKI,
-      SQUARE_1;
+      SQUARE_1, XCMPLX_0, SEQ_1, COMPLEX1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
-      XREAL_0, CARD_1, REAL_1, FUNCT_1, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
-      INT_1, INT_2, NAT_1, RVSUM_1, SQUARE_1, XXREAL_0;
+      XREAL_0, CARD_1, REAL_1, RELAT_1, FUNCT_1, SEQ_1, FINSET_1, FINSEQ_1,
+      FINSEQ_2, FINSEQ_4, INT_1, INT_2, NAT_1, RVSUM_1, SQUARE_1, XXREAL_0;
  constructors FINSEQOP, NAT_1, RVSUM_1, FINSEQ_4, SEQ_1, BINOP_2, INT_2,
-      WELLORD2, SQUARE_1, XXREAL_0;
+      WELLORD2, SQUARE_1, XXREAL_0, SETWOP_2, FINSOP_1, PARTFUN1;
  registrations RELSET_1, FINSEQ_2, INT_1, XREAL_0, NAT_1, MEMBERED, ORDINAL2,
-      FINSEQ_1, FINSET_1;
+      FINSEQ_1, FINSET_1, RVSUM_1, XXREAL_0, FUNCT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -52,30 +52,40 @@ definition let i be natural number; let x be real number;
   redefine func i |-> x -> FinSequence of REAL;
 end;
 
-definition let x be real number; let n be natural number;
-  func x|^n equals
+registration let x be complex number, n be natural number;
+  cluster n |-> x -> complex-yielding;
+end;
+
+definition let x be complex number, n be natural number;
+  func x |^ n equals
 :: NEWTON:def 1
-Product(n |-> x);
+    Product (n |-> x);
 end;
 
-registration let x be real number; let n be natural number;
-  cluster x|^n -> real;
+registration let x be real number, n be natural number;
+  cluster x |^ n -> real;
 end;
 
-definition let x be Real; let n be natural number;
-  redefine func x|^n -> Real;
+definition let x be Real, n be natural number;
+  redefine func x |^ n -> Real;
 end;
 
 canceled;
 
+reserve z for complex number;
+
 theorem :: NEWTON:9
- x|^0 = 1;
+ z|^0 = 1;
+
+registration let z be complex number, n be natural number;
+ cluster z|^n -> complex;
+end;
 
 theorem :: NEWTON:10
- x|^1 = x;
+ z|^1 = z;
 
 theorem :: NEWTON:11
- x|^(s+1) = x|^s*x;
+ z|^(s+1) = z|^s*z;
 
 registration let x, n be natural number;
   cluster x|^n -> natural;
@@ -105,13 +115,12 @@ definition let n be natural number;
 end;
 
 definition let n be natural number;
-  func n! equals
+  func n! -> Real equals
 :: NEWTON:def 2
-Product idseq n;
+    Product idseq n;
 end;
 
-registration
-  let n be natural number;
+registration let n be natural number;
   cluster n! -> real;
 end;
 

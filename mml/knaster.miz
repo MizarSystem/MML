@@ -10,20 +10,21 @@ environ
       TARSKI, SGRAPH1, CARD_1, LATTICES, BINOP_1, ORDINAL1, ORDINAL2, LATTICE3,
       FILTER_0, FILTER_1, WELLORD1, RELAT_2, ORDERS_1, BHSP_3, SEQM_3, KNASTER;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, RELAT_1, RELAT_2,
-      RELSET_1, ORDERS_1, STRUCT_0, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1,
-      SETFAM_1, FUNCT_4, WELLORD1, ORDINAL1, ORDINAL2, CARD_1, COHSP_1,
-      LATTICES, LATTICE3, QUANTAL1, ORDERS_2, FUNCT_7, ABIAN, XXREAL_0;
+      ORDERS_1, STRUCT_0, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1,
+      FUNCOP_1, SETFAM_1, FUNCT_4, WELLORD1, ORDINAL1, ORDINAL2, CARD_1,
+      COHSP_1, LATTICES, LATTICE3, QUANTAL1, ORDERS_2, ABIAN;
  constructors NAT_1, BINOP_1, DOMAIN_1, WELLORD2, COHSP_1, BOOLEALG, QUANTAL1,
-      PROB_1, FUNCT_7, WELLORD1, SETFAM_1, ABIAN, XXREAL_0;
+      WELLORD1, SETFAM_1, ABIAN, XXREAL_0;
  registrations SUBSET_1, STRUCT_0, FUNCT_1, LATTICES, CARD_1, LATTICE3,
-      RELSET_1, ORDINAL1, QUANTAL1, XREAL_0;
+      RELSET_1, ORDINAL1, QUANTAL1;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions TARSKI, FUNCT_1, COHSP_1, LATTICE3, QUANTAL1, XBOOLE_0, ABIAN;
+ definitions TARSKI, FUNCT_1, COHSP_1, LATTICE3, QUANTAL1, XBOOLE_0, ABIAN,
+      WELLORD1;
  theorems TARSKI, SETFAM_1, ZFMISC_1, RELAT_1, FUNCT_1, FUNCOP_1, FUNCT_2,
       FUNCT_4, CARD_1, COHSP_1, LATTICES, LATTICE3, QUANTAL1, FILTER_0,
       FILTER_1, BOOLEALG, WELLORD1, RELSET_1, ORDERS_2, RELAT_2, ORDINAL1,
-      CARD_3, CARD_4, PROB_1, XBOOLE_0, XBOOLE_1, FUNCT_7, PARTFUN1, ORDERS_1,
-      ABIAN;
+      CARD_3, CARD_4, XBOOLE_0, XBOOLE_1, FUNCT_7, PARTFUN1, ORDERS_1, ABIAN,
+      XXREAL_0;
  schemes NAT_1, FUNCT_1, FUNCT_2, DOMAIN_1, ORDINAL2;
 
 begin :: Preliminaries
@@ -124,7 +125,7 @@ theorem Th4:
 proof
  assume x is_a_fixpoint_of iter(f,n);
 then A1: x in dom iter(f, n) & x = iter(f, n).x by ABIAN:def 3;
-A2: dom f = X & rng f c= X & dom iter(f, n) = X by FUNCT_2:67,RELSET_1:12;
+A2: dom f = X & rng f c= X & dom iter(f, n) = X by FUNCT_2:67;
    then f.x in rng f by A1,FUNCT_1:def 5;
  hence f.x in dom iter(f, n) by A2;
  thus f.x = (f*iter(f, n)).x by A1,FUNCT_1:23
@@ -601,7 +602,7 @@ defpred P[Nat] means iter(f, $1).x = (f, $1)+.x;
     .= (f, 0)+.x by Th16; then A3: P[0];
 A4: now let n be Nat; assume
      A5: P[n];
-              rng f c= the carrier of L by RELSET_1:12;
+              rng f c= the carrier of L;
 then A6:  dom iter(f, n) = dom f by A1,FUNCT_7:76;
         iter(f, n+1).x = (f*iter(f, n)).x by FUNCT_7:73
          .= f.(f, n)+.x by A1,A5,A6,FUNCT_1:23
@@ -624,7 +625,7 @@ defpred P[Nat] means iter(f, $1).x = (f, $1)-.x;
     .= (f, 0)-.x by Th17; then A3: P[0];
 A4: now let n be Nat; assume
      A5: P[n];
-              rng f c= the carrier of L by RELSET_1:12;
+              rng f c= the carrier of L;
 then A6:   dom iter(f, n) = dom f by A1,FUNCT_7:76;
         iter(f, n+1).x = (f*iter(f, n)).x by FUNCT_7:73
          .= f.(f, n)-.x by A1,A5,A6,FUNCT_1:23
@@ -741,7 +742,7 @@ existence proof
   set LL = LattRel L;
   set cL = the carrier of L;
   set LR = LL|_2 P;
-        LR c= [:P, P:] by WELLORD1:15;
+  LR c= [:P, P:] by XBOOLE_1:17;
   then reconsider LR as Relation of P by RELSET_1:def 1;
     field LL = cL by FILTER_1:33;
    then A1: LL is_reflexive_in cL & LL is_antisymmetric_in cL &
@@ -752,8 +753,7 @@ A2: field LR = P proof
        assume A3: x in P;
      then A4: [x,x] in [:P, P:] by ZFMISC_1:106;
      A5: [x,x] in LL by A1,A3,RELAT_2:def 1;
-             LR = LL /\ [:P, P:] by WELLORD1:def 6;
-        then [x, x] in LR by A4,A5,XBOOLE_0:def 3;
+        [x, x] in LR by A4,A5,XBOOLE_0:def 3;
        hence x in field LR by RELAT_1:30;
      end;
       LR is reflexive by WELLORD1:22;
@@ -778,18 +778,18 @@ A9: RS is with_suprema proof
      take z;
            [xL,zL] in [:P,P:] & [yL,zL] in [:P,P:] &
       [xL,zL] in LL & [yL,zL] in LL by A10,FILTER_1:32,ZFMISC_1:106;
-      then [xL,zL] in LR & [yL,zL] in LR by WELLORD1:16;
+      then [xL,zL] in LR & [yL,zL] in LR by XBOOLE_0:def 3;
      hence x <= z & y <= z by ORDERS_2:def 9;
      let z' be Element of RS; assume
     A11: x <= z' & y <= z';
           z' in P; then reconsider z'L = z' as Element of L;
              [x,z'] in LR & [y,z'] in LR by A11,ORDERS_2:def 9;
-        then [x,z'] in LL & [y,z'] in LL by WELLORD1:16;
+        then [x,z'] in LL & [y,z'] in LL by XBOOLE_0:def 3;
         then xL [= z'L & yL [= z'L by FILTER_1:32;
         then zL [= z'L by A10;
         then [zL,z'L] in [:P, P:] & [zL,z'L] in LL
                    by A10,FILTER_1:32,ZFMISC_1:106;
-        then [zL,z'L] in LR by WELLORD1:16;
+        then [zL,z'L] in LR by XBOOLE_0:def 3;
      hence z <= z' by ORDERS_2:def 9;
     end;
 A12: RS is with_infima proof
@@ -804,18 +804,18 @@ A12: RS is with_infima proof
      take z;
            [zL,xL] in [:P,P:] & [zL,yL] in [:P,P:] &
       [zL,xL] in LL & [zL,yL] in LL by A13,FILTER_1:32,ZFMISC_1:106;
-      then [zL,xL] in LR & [zL,yL] in LR by WELLORD1:16;
+      then [zL,xL] in LR & [zL,yL] in LR by XBOOLE_0:def 3;
      hence z <= x & z <= y by ORDERS_2:def 9;
      let z' be Element of RS; assume
     A14: z' <= x & z' <= y;
           z' in P; then reconsider z'L = z' as Element of L;
              [z',x] in LR & [z',y] in LR by A14,ORDERS_2:def 9;
-        then [z',x] in LL & [z',y] in LL by WELLORD1:16;
+        then [z',x] in LL & [z',y] in LL by XBOOLE_0:def 3;
         then z'L [= xL & z'L [= yL by FILTER_1:32;
         then z'L [= zL by A13;
         then [z'L,zL] in [:P, P:] & [z'L,zL] in LL
                    by A13,FILTER_1:32,ZFMISC_1:106;
-        then [z'L,zL] in LR by WELLORD1:16;
+        then [z'L,zL] in LR by XBOOLE_0:def 3;
      hence z' <= z by ORDERS_2:def 9;
     end;
 A15: RS is Poset by A6,A7,A8,ORDERS_2:def 4,def 5,def 6;
@@ -831,13 +831,13 @@ A17: RS = LattPOSet IT by A9,A12,A15,LATTICE3:def 15;
  thus x = x' & y = y';
  hereby assume x [= y;
     then [x, y] in LR by A17,FILTER_1:32;
-    then [x, y] in LattRel L by WELLORD1:16;
+    then [x, y] in LattRel L by XBOOLE_0:def 3;
   hence x' [= y' by FILTER_1:32;
  end;
 A18: [x, y] in [:P, P:] by A17,ZFMISC_1:106;
  assume x' [= y';
    then [x, y] in LattRel L by FILTER_1:32;
-   then [x, y] in LattRel IT by A17,A18,WELLORD1:16;
+   then [x, y] in LattRel IT by A17,A18,XBOOLE_0:def 3;
  hence x [= y by FILTER_1:32;
 end;
 uniqueness proof

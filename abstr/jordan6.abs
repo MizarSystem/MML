@@ -10,18 +10,18 @@ environ
       ARYTM_3, ARYTM_1, RELAT_1, BOOLE, SUBSET_1, ORDINAL2, FUNCT_1, MCART_1,
       FINSEQ_1, TOPREAL1, RELAT_2, TOPS_2, COMPTS_1, JORDAN5C, JORDAN3,
       TREAL_1, SEQ_1, PSCOMP_1, TOPREAL2, SEQ_2, METRIC_1, SEQ_4, ABSVALUE,
-      SQUARE_1, FUNCT_5, JORDAN6;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, NAT_1, RCOMP_1, SETWOP_2, RELAT_1, FUNCT_1, FUNCT_2,
-      STRUCT_0, TOPREAL1, TOPREAL2, CONNSP_1, JORDAN2B, SQUARE_1, TSEP_1,
-      TOPMETR, PRE_TOPC, TOPS_2, COMPTS_1, BORSUK_1, EUCLID, METRIC_1,
-      PCOMPS_1, SEQ_4, JORDAN5C, TREAL_1, PSCOMP_1, XXREAL_0;
+      SQUARE_1, FUNCT_5, JORDAN6, JORDAN1K;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
+      XREAL_0, COMPLEX1, REAL_1, NAT_1, RCOMP_1, SETWOP_2, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, STRUCT_0, TOPREAL1, TOPREAL2, CONNSP_1,
+      JORDAN2B, SQUARE_1, TSEP_1, TOPMETR, PRE_TOPC, TOPS_2, COMPTS_1,
+      BORSUK_1, EUCLID, METRIC_1, PCOMPS_1, SEQ_4, JORDAN5C, TREAL_1, PSCOMP_1;
  constructors RCOMP_1, TOPREAL2, CONNSP_1, JORDAN2B, TSEP_1, TOPS_2, REAL_1,
-      TOPREAL1, SQUARE_1, SETWOP_2, JORDAN5C, TREAL_1, PSCOMP_1, TSP_1,
-      COMPTS_1, YELLOW_8, COMPLEX1, XXREAL_0;
- registrations STRUCT_0, FUNCT_1, EUCLID, PRE_TOPC, TOPMETR, METRIC_1,
-      PSCOMP_1, BORSUK_2, TSEP_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED,
-      TOPREAL2, BORSUK_1, TOPREAL1;
+      TOPREAL1, SQUARE_1, SETWOP_2, JORDAN5C, TREAL_1, PSCOMP_1, COMPTS_1,
+      COMPLEX1, XXREAL_0;
+ registrations STRUCT_0, FUNCT_1, PRE_TOPC, TOPMETR, METRIC_1, PSCOMP_1,
+      BORSUK_2, TSEP_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, TOPREAL2,
+      BORSUK_1, TOPREAL1, COMPTS_1, XXREAL_0, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -325,7 +325,7 @@ P is_an_arc_of p1,p2 ex p3 being Point of TOP-REAL n st
 p3 in P & p3<>p1 & p3<>p2;
 
 theorem :: JORDAN6:56
-     for P being Subset of TOP-REAL n,
+  for P being Subset of TOP-REAL n,
 p1,p2 being Point of TOP-REAL n st P is_an_arc_of p1,p2
 holds P\{p1,p2}<>{};
 
@@ -487,3 +487,70 @@ theorem :: JORDAN6:73
  q1,q2,q3 being Point of TOP-REAL 2
  st P is_simple_closed_curve & LE q1,q2,P & LE q2,q3,P
  holds LE q1,q3,P;
+
+theorem :: JORDAN6:74
+  for P being Subset of TOP-REAL 2,
+      p1,p2,q being Point of TOP-REAL 2
+   st P is_an_arc_of p1,p2 & q <> p2
+   holds not p2 in L_Segment(P,p1,p2,q);
+
+theorem :: JORDAN6:75
+  for P being Subset of TOP-REAL 2,
+      p1,p2,q being Point of TOP-REAL 2
+   st P is_an_arc_of p1,p2 & q <> p1
+   holds not p1 in R_Segment(P,p1,p2,q);
+
+registration
+ let S be non empty being_simple_closed_curve Subset of TOP-REAL 2;
+ cluster Lower_Arc S -> non empty compact;
+ cluster Upper_Arc S -> non empty compact;
+end;
+
+theorem :: JORDAN6:76
+  for S being being_simple_closed_curve non empty Subset of TOP-REAL 2
+  holds Lower_Arc S c= S & Upper_Arc S c= S;
+
+reserve C for Simple_closed_curve;
+
+definition let C be Simple_closed_curve;
+  func Lower_Middle_Point C -> Point of TOP-REAL 2 equals
+:: JORDAN6:def 11
+  First_Point(Lower_Arc C,W-min C,E-max C,
+                  Vertical_Line((W-bound C+E-bound C)/2));
+  func Upper_Middle_Point C -> Point of TOP-REAL 2 equals
+:: JORDAN6:def 12
+  First_Point(Upper_Arc C,W-min C,E-max C,
+                  Vertical_Line((W-bound C+E-bound C)/2));
+end;
+
+theorem :: JORDAN6:77
+  Lower_Arc C meets Vertical_Line((W-bound C+E-bound C)/2);
+
+theorem :: JORDAN6:78
+  Upper_Arc C meets Vertical_Line((W-bound C+E-bound C)/2);
+
+theorem :: JORDAN6:79
+  (Lower_Middle_Point C)`1 = (W-bound C+E-bound C)/2;
+
+theorem :: JORDAN6:80
+  (Upper_Middle_Point C)`1 = (W-bound C+E-bound C)/2;
+
+theorem :: JORDAN6:81
+  Lower_Middle_Point C in Lower_Arc C;
+
+theorem :: JORDAN6:82
+  Upper_Middle_Point C in Upper_Arc C;
+
+theorem :: JORDAN6:83
+  Upper_Middle_Point C in C;
+
+  theorem :: JORDAN6:84 :: JORDAN1B:26: AK, 20.02.2006
+   for C be Simple_closed_curve
+   for r be real number st W-bound C <= r & r <= E-bound C holds
+    LSeg(|[r,S-bound C]|,|[r,N-bound C]|) meets Upper_Arc C;
+
+  theorem :: JORDAN6:85 :: JORDAN1B:27: AK, 20.02.2006
+   for C be Simple_closed_curve
+   for r be real number st W-bound C <= r & r <= E-bound C holds
+    LSeg(|[r,S-bound C]|,|[r,N-bound C]|) meets Lower_Arc C;
+

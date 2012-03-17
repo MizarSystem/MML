@@ -6,15 +6,14 @@
 
 environ
 
- vocabularies CAT_1, MCART_1, FUNCT_1, RELAT_1, PARTFUN1, CAT_2, FUNCOP_1,
-      FUNCT_3, COMMACAT;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, BINOP_1,
-      FUNCT_4, PBOOLE, CAT_1, CAT_2, MCART_1, DOMAIN_1;
- constructors CAT_2, DOMAIN_1, PBOOLE, MCART_1, BINOP_1;
+ vocabularies CAT_1, MCART_1, FUNCT_1, RELAT_1, PARTFUN1, CAT_2, FUNCT_3,
+      COMMACAT;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, FUNCT_4, CAT_1, CAT_2, MCART_1, DOMAIN_1;
+ constructors CAT_2, DOMAIN_1;
  registrations CAT_1, CAT_2, RELSET_1, SUBSET_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, CAT_1;
  theorems TARSKI, ZFMISC_1, MCART_1, FUNCT_1, FUNCT_2, CAT_1, CAT_2, GRFUNC_1,
       RELSET_1;
  schemes FUNCT_2, ZFREFLE1;
@@ -283,8 +282,7 @@ A7:    P[o,I.o] from FUNCT_2:sch 3(A5);
 A8:    dom the Comp of FG = { [k1,k2]: k1`11 = k2`12} by Def8;
 A9:    for f being Morphism of FG holds dom f = f`11 & cod f = f`12
        proof let f be Morphism of FG;
-        dom f = D'.f & cod f = C'.f by CAT_1:def 2,def 3;
-        hence thesis by A2,A3;
+        thus thesis by A2,A3;
        end;
 A10:    for f,g being Morphism of FG for k1,k2 st f = k1 & g = k2 &
         dom g = cod f holds g*f = [[k1`11,k2`12],[k2`21*k1`21,k2`22*k1`22]]
@@ -355,7 +353,7 @@ A20:      dom h = cod g & dom g = cod f;
         reconsider i = id b as Element of commaMorphs(F,G);
             I.b' = [[b',b'],[id b'`11, id b'`12]] by A7;
 then A21:      (I.b')`11 = b' & (I.b')`12 = b' & (I.b')`21 = id b'`11 &
-         (I.b')`22 = id b'`12 & i = I.b by Lm1,CAT_1:def 5;
+         (I.b')`22 = id b'`12 & i = I.b by Lm1;
         hence dom id b = b & cod id b = b by A9;
         thus for f being Morphism of FG st cod f = b holds (id b)*f = f
           proof let f be Morphism of FG;
@@ -415,28 +413,25 @@ then A29:    the Cod of E1 = the Cod of E2 by A26,A27,FUNCT_2:113;
 end;
 
 theorem
- Th4: the Objects of 1Cat(x,y) = {x} & the Morphisms of 1Cat(x,y) = {y}
+  the Objects of 1Cat(x,y) = {x} & the Morphisms of 1Cat(x,y) = {y}
   proof
    thus obj(1Cat(x,y)) c= {x}
-     proof let z; assume z in obj(1Cat(x,y)); then z = x by CAT_1:34;
+     proof let z; assume z in obj(1Cat(x,y)); then z = x by TARSKI:def 1;
       hence thesis by TARSKI:def 1;
      end;
-       x is Object of 1Cat(x,y) by CAT_1:32;
-   hence {x} c= obj(1Cat(x,y)) by ZFMISC_1:37;
+   thus {x} c= obj(1Cat(x,y));
    thus morph(1Cat(x,y)) c= {y}
-     proof let z; assume z in morph(1Cat(x,y)); then z = y by CAT_1:35;
+     proof let z; assume z in morph(1Cat(x,y)); then z = y by TARSKI:def 1;
       hence thesis by TARSKI:def 1;
      end;
-       y is Morphism of 1Cat(x,y) by CAT_1:33;
-   hence {y} c= morph(1Cat(x,y)) by ZFMISC_1:37;
+   thus {y} c= morph(1Cat(x,y));
   end;
 
 theorem
  Th5: for a,b being Object of 1Cat(x,y) holds Hom(a,b) = {y}
   proof let a,b be Object of 1Cat(x,y);
-       morph(1Cat(x,y)) = {y} by Th4;
-   hence Hom(a,b) c= {y};
-       y is Morphism of 1Cat(x,y) by CAT_1:33;
+   thus Hom(a,b) c= {y};
+       y is Morphism of 1Cat(x,y) by TARSKI:def 1;
     then y in Hom(a,b) by CAT_1:36;
    hence thesis by ZFMISC_1:37;
   end;
@@ -446,10 +441,10 @@ definition let C, c;
     1Cat(c, id c);
    coherence
     proof
-A1:   obj(1Cat(c, id c)) = {c} by Th4;
+A1:   obj(1Cat(c, id c)) = {c};
 A2:   now let a,b be Object of 1Cat(c, id c);
         a = c & b = c & id c in Hom(c,c) & Hom(a,a) = {id c}
-         by Th5,CAT_1:34,55;
+         by Th5,TARSKI:def 1,CAT_1:55;
         hence for c1,c2 st a = c1 & b = c2 holds Hom(a,b) c= Hom(c1,c2)
          by ZFMISC_1:37;
       end;
@@ -458,24 +453,23 @@ A2:   now let a,b be Object of 1Cat(c, id c);
      set d = id c .-->c;
      set i = c .-->m;
      set s = (m,m).--> m;
-A3:    1Cat(c,m) = CatStr(#O, M, d, d, s, i#) by CAT_1:def 9;
-A4:   dom s = {[m,m]} & s.[m,m] = m by CAT_1:7,8;
-A5:    dom m = c & cod m = c by CAT_1:44;
+A3:   dom s = {[m,m]} & s.[m,m] = m by CAT_1:7,8;
+A4:    dom m = c & cod m = c by CAT_1:44;
       then [m,m] in dom the Comp of C by CAT_1:40;
-then A6:    dom the Comp of 1Cat(c,m) c= dom the Comp of C by A3,A4,ZFMISC_1:37
+then A5:    dom the Comp of 1Cat(c,m) c= dom the Comp of C by A3,ZFMISC_1:37
 ;
-         now let x; assume A7: x in dom the Comp of 1Cat(c,m);
-then A8:      x = [m,m] by A3,A4,TARSKI:def 1;
-       thus (the Comp of 1Cat(c,m)).x = m by A3,A4,A7,TARSKI:def 1
-               .= m*(m qua Morphism of C) by A5,CAT_1:46
-               .= (the Comp of C).x by A5,A8,CAT_1:41;
+         now let x; assume A6: x in dom the Comp of 1Cat(c,m);
+then A7:      x = [m,m] by A3,TARSKI:def 1;
+       thus (the Comp of 1Cat(c,m)).x = m by A3,A6,TARSKI:def 1
+               .= m*(m qua Morphism of C) by A4,CAT_1:46
+               .= (the Comp of C).x by A4,A7,CAT_1:41;
       end;
-then A9:    the Comp of 1Cat(c, id c) <= the Comp of C by A6,GRFUNC_1:8;
+then A8:    the Comp of 1Cat(c, id c) <= the Comp of C by A5,GRFUNC_1:8;
      now let a be Object of 1Cat(c, id c);
-       id a = id c & a = c by CAT_1:34,35;
+       id a = id c & a = c by TARSKI:def 1;
        hence for c1 st a = c1 holds id a = id c1;
       end;
-      hence thesis by A1,A2,A9,CAT_2:def 4;
+      hence thesis by A1,A2,A8,CAT_2:def 4;
     end;
 end;
 

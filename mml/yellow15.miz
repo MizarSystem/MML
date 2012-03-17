@@ -12,24 +12,23 @@ environ
       ORDINAL2, WAYBEL_0, WAYBEL_3, WAYBEL_8, COMPTS_1, TSP_1, PRE_TOPC,
       YELLOW15, RLVECT_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, SETFAM_1, STRUCT_0,
-      FINSET_1, MARGREL1, VALUAT_1, GROUP_1, RELAT_1, FUNCT_1, FUNCT_2,
-      REALSET1, FINSEQ_1, FINSEQ_2, FINSEQ_4, EQREL_1, CQC_LANG, CARD_1,
-      CARD_3, PRE_TOPC, TSP_1, TOPS_2, CANTOR_1, ORDERS_2, YELLOW_0, WAYBEL_0,
-      WAYBEL_3, WAYBEL_8, WAYBEL23, XXREAL_0;
+      FINSET_1, MARGREL1, VALUAT_1, GROUP_1, RELAT_1, FUNCT_1, RELSET_1,
+      FUNCT_2, REALSET1, FINSEQ_1, FINSEQ_2, FINSEQ_4, EQREL_1, CQC_LANG,
+      CARD_1, CARD_3, PRE_TOPC, TSP_1, TOPS_2, CANTOR_1, ORDERS_2, YELLOW_0,
+      WAYBEL_0, WAYBEL_3, WAYBEL_8, WAYBEL23;
  constructors GROUP_1, FINSEQ_4, TSP_1, TOPS_2, CANTOR_1, WAYBEL_8, WAYBEL23,
       DOMAIN_1, REALSET1, VALUAT_1, SETFAM_1, XXREAL_0;
  registrations STRUCT_0, RELSET_1, FUNCT_1, FINSET_1, MARGREL1, FINSEQ_1,
       FINSEQ_2, CARD_5, TSP_1, TOPS_1, CANTOR_1, LATTICE3, WAYBEL_0, WAYBEL_3,
-      WAYBEL11, WAYBEL23, SUBSET_1, ARYTM_3, VALUAT_1, REALSET1, SCMRING1,
-      XREAL_0;
+      WAYBEL11, WAYBEL23, SUBSET_1, ARYTM_3, VALUAT_1, REALSET1, SCMRING1;
  requirements NUMERALS, REAL, SUBSET, BOOLE;
- definitions TARSKI, FUNCT_1, VALUAT_1, XBOOLE_0;
+ definitions TARSKI, FUNCT_1, VALUAT_1, XBOOLE_0, FINSEQ_2, PRE_TOPC;
  theorems TARSKI, STRUCT_0, SETFAM_1, ZFMISC_1, FINSET_1, MARGREL1, RELAT_1,
       FUNCT_1, FUNCT_2, FUNCT_6, MSSUBFAM, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       FINSEQ_4, EQREL_1, CATALG_1, CQC_LANG, CARD_1, CARD_4, T_0TOPSP, GROUP_1,
       PRE_TOPC, TOPS_2, CANTOR_1, MSSCYC_1, YELLOW_0, YELLOW_8, YELLOW_9,
       WAYBEL_0, WAYBEL_3, WAYBEL_8, WAYBEL23, RELSET_1, XBOOLE_0, XBOOLE_1,
-      SUBSET_1;
+      SUBSET_1, XXREAL_0, FUNCOP_1;
  schemes FUNCT_2, PRE_CIRC, FINSEQ_1, FRAENKEL;
 
 begin  :: Preliminaries
@@ -59,13 +58,6 @@ proof
     thus thesis by A3,A4,FINSEQ_1:def 3;
    end;
 
-  definition
-   let X be set;
-   let p be FinSequence of bool X;
-   redefine func rng p -> Subset-Family of X;
-   coherence by FINSEQ_1:def 4;
-  end;
-
   registration
    cluster BOOLEAN -> finite;
    coherence by MARGREL1:def 12;
@@ -85,8 +77,8 @@ canceled;
       then A1: product (i |-> D) = i-tuples_on D by FUNCT_6:9;
           now let x be set;
        assume x in dom (i |-> D);
-       then x in Seg i by FINSEQ_2:68;
-       hence (i |-> D).x is finite by FINSEQ_2:70;
+       then x in Seg i by FUNCOP_1:19;
+       hence (i |-> D).x is finite by FUNCOP_1:13;
       end;
       hence i-tuples_on D is finite by A1,MSSCYC_1:1;
      end;
@@ -483,7 +475,7 @@ registration
  cluster -> boolean-valued FinSequence of BOOLEAN;
  coherence
   proof let f be FinSequence of BOOLEAN;
-   thus rng f c= BOOLEAN by FINSEQ_1:def 4;
+   thus rng f c= BOOLEAN;
   end;
 end;
 
@@ -1128,24 +1120,23 @@ XBOOLE_0:def 10;
       thus p1.i in rng p implies (q*p"*p1).i in BOOLEAN
       proof
        assume A18: p1.i in rng p;
-       A19: rng q c= BOOLEAN by FINSEQ_1:def 4;
            rng (q*p"*p1) = rng (q*(p"*p1)) by RELAT_1:55;
        then rng (q*p"*p1) c= rng q by RELAT_1:45;
-       then A20: rng (q*p"*p1) c= BOOLEAN by A19,XBOOLE_1:1;
+       then A19: rng (q*p"*p1) c= BOOLEAN by XBOOLE_1:1;
            dom (q*p") c= rng p by A15,RELAT_1:44;
        then dom (q*p") c= rng p1 by A2,A5,A8,XBOOLE_1:1;
-       then A21: rng (q*p") = rng (q*p"*p1) by RELAT_1:47;
+       then A20: rng (q*p") = rng (q*p"*p1) by RELAT_1:47;
            rng (p") = dom q by A13,A15,FINSEQ_3:31;
        then p1.i in dom (q*p") by A15,A18,RELAT_1:46;
        then (q*p").(p1.i) in rng (q*p") by FUNCT_1:def 5;
-       then (q*p"*p1).i in rng (q*p"*p1) by A17,A21,FUNCT_1:23;
-       hence (q*p"*p1).i in BOOLEAN by A20;
+       then (q*p"*p1).i in rng (q*p"*p1) by A17,A20,FUNCT_1:23;
+       hence (q*p"*p1).i in BOOLEAN by A19;
       end;
       thus thesis;
      end;
      consider q1 be FinSequence of BOOLEAN such that
-      A22: len q1 = len p1 and
-      A23: for i be Nat st i in Seg len p1 holds
+      A21: len q1 = len p1 and
+      A22: for i be Nat st i in Seg len p1 holds
        (C[i] implies q1.i = F(i)) &
        (not C[i] implies q1.i = T(i)) from SeqLambda1C(A16);
          rng MergeSequence(p,q) c= rng MergeSequence(p1,q1)
@@ -1153,26 +1144,26 @@ XBOOLE_0:def 10;
       let z be set;
       assume z in rng MergeSequence(p,q);
       then consider i be Nat such that
-       A24: i in dom MergeSequence(p,q) and
-       A25: MergeSequence(p,q).i = z by FINSEQ_2:11;
-          i in Seg len MergeSequence(p,q) by A24,FINSEQ_1:def 3;
+       A23: i in dom MergeSequence(p,q) and
+       A24: MergeSequence(p,q).i = z by FINSEQ_2:11;
+          i in Seg len MergeSequence(p,q) by A23,FINSEQ_1:def 3;
       then i in Seg len p by Def1;
-      then A26: i in dom p by FINSEQ_1:def 3;
-      then A27: i in dom (p1"*p) by A2,A5,A8,A14,RELAT_1:46;
+      then A25: i in dom p by FINSEQ_1:def 3;
+      then A26: i in dom (p1"*p) by A2,A5,A8,A14,RELAT_1:46;
       then (p1"*p).i in rng (p1"*p) by FUNCT_1:def 5;
-      then A28: (p1"*p).i in rng (p1") by FUNCT_1:25;
-      then A29: (p1"*p).i in dom p1 by A11,FUNCT_1:55;
+      then A27: (p1"*p).i in rng (p1") by FUNCT_1:25;
+      then A28: (p1"*p).i in dom p1 by A11,FUNCT_1:55;
       then reconsider j = (p1"*p).i as Nat;
-      A30: j in dom MergeSequence(p1,q1) by A29,Th5;
-      A31: j in Seg len p1 by A29,FINSEQ_1:def 3;
-      A32: j in dom p1 by A11,A28,FUNCT_1:55;
-          p1.j = (p1*(p1"*p)).i by A27,FUNCT_1:23
+      A29: j in dom MergeSequence(p1,q1) by A28,Th5;
+      A30: j in Seg len p1 by A28,FINSEQ_1:def 3;
+      A31: j in dom p1 by A11,A27,FUNCT_1:55;
+          p1.j = (p1*(p1"*p)).i by A26,FUNCT_1:23
          .= (p1*p1"*p).i by RELAT_1:55
          .= ((id rng p1)*p).i by A11,FUNCT_1:61
          .= p.i by A2,A5,A8,RELAT_1:79;
-      then p1.j in rng p by A26,FUNCT_1:def 5;
-      then A33: q1.j = (q*p"*p1).((p1"*p).i) by A23,A31
-         .= (q*p"*p1*(p1"*p)).i by A27,FUNCT_1:23
+      then p1.j in rng p by A25,FUNCT_1:def 5;
+      then A32: q1.j = (q*p"*p1).((p1"*p).i) by A22,A30
+         .= (q*p"*p1*(p1"*p)).i by A26,FUNCT_1:23
          .= (q*p"*(p1*(p1"*p))).i by RELAT_1:55
          .= (q*p"*(p1*p1"*p)).i by RELAT_1:55
          .= (q*p"*((id rng p1)*p)).i by A11,FUNCT_1:61
@@ -1182,30 +1173,30 @@ XBOOLE_0:def 10;
          .= (q*(id dom q)).i by A13,FINSEQ_3:31
          .= q.i by RELAT_1:78;
           now per cases;
-       suppose A34: q.i = TRUE;
-        hence z = p.i by A25,Th6
+       suppose A33: q.i = TRUE;
+        hence z = p.i by A24,Th6
            .= ((id rng p1)*p).i by A2,A5,A8,RELAT_1:79
            .= (p1*p1"*p).i by A11,FUNCT_1:61
            .= (p1*(p1"*p)).i by RELAT_1:55
-           .= p1.j by A27,FUNCT_1:23
-           .= MergeSequence(p1,q1).j by A33,A34,Th6;
+           .= p1.j by A26,FUNCT_1:23
+           .= MergeSequence(p1,q1).j by A32,A33,Th6;
        end;
        suppose not q.i = TRUE;
-        then A35: q.i = FALSE by MARGREL1:39;
-        hence z = X\p.i by A25,A26,Th7
+        then A34: q.i = FALSE by MARGREL1:39;
+        hence z = X\p.i by A24,A25,Th7
            .= X\((id rng p1)*p).i by A2,A5,A8,RELAT_1:79
            .= X\(p1*p1"*p).i by A11,FUNCT_1:61
            .= X\(p1*(p1"*p)).i by RELAT_1:55
-           .= X\p1.j by A27,FUNCT_1:23
-           .= MergeSequence(p1,q1).j by A32,A33,A35,Th7;
+           .= X\p1.j by A26,FUNCT_1:23
+           .= MergeSequence(p1,q1).j by A31,A32,A34,Th7;
       end;
       end;
-      hence z in rng MergeSequence(p1,q1) by A30,FUNCT_1:def 5;
+      hence z in rng MergeSequence(p1,q1) by A29,FUNCT_1:def 5;
      end;
      then Intersect (rng MergeSequence(p1,q1)) c=
       Intersect (rng MergeSequence(p,q)) by SETFAM_1:59;
      then {} = Intersect (rng MergeSequence(p1,q1)) by A12,XBOOLE_1:3;
-     hence contradiction by A3,A9,A22;
+     hence contradiction by A3,A9,A21;
     end;
     hence Y is in_general_position by Def3;
    end;
@@ -1246,14 +1237,12 @@ begin  :: About basis of Topological Spaces
     let L be non empty RelStr;
         now let X be Subset of [#]L;
      assume ex_inf_of X,L;
-         "/\"(X,L) in the carrier of L;
-     hence "/\"(X,L) in [#]L by PRE_TOPC:12;
+     thus "/\"(X,L) in [#]L;
     end;
     hence [#]L is infs-closed by WAYBEL23:19;
         now let X be Subset of [#]L;
      assume ex_sup_of X,L;
-         "\/"(X,L) in the carrier of L;
-     hence "\/"(X,L) in [#]L by PRE_TOPC:12;
+     thus "\/"(X,L) in [#]L;
     end;
     hence [#]L is sups-closed by WAYBEL23:20;
    end;
@@ -1263,11 +1252,9 @@ begin  :: About basis of Topological Spaces
     [#]L is with_bottom with_top
    proof
     let L be non empty RelStr;
-        Bottom L in the carrier of L;
-    then Bottom L in [#]L by PRE_TOPC:12;
+    Bottom L in [#]L;
     hence [#]L is with_bottom by WAYBEL23:def 8;
-        Top L in the carrier of L;
-    then Top L in [#]L by PRE_TOPC:12;
+    Top L in [#]L;
     hence [#]L is with_top by WAYBEL23:def 9;
    end;
 
@@ -1283,9 +1270,7 @@ begin  :: About basis of Topological Spaces
    proof
     let L be continuous sup-Semilattice;
         now let x be Element of L;
-         waybelow x c= the carrier of L;
-     then waybelow x c= [#]L by PRE_TOPC:12;
-     then waybelow x /\ [#]L = waybelow x by XBOOLE_1:28;
+     waybelow x /\ [#]L = waybelow x by XBOOLE_1:28;
      hence x = sup (waybelow x /\ [#]L) by WAYBEL_3:def 5;
     end;
     hence [#]L is CLbasis of L by WAYBEL23:def 7;
@@ -1325,44 +1310,43 @@ begin  :: About basis of Topological Spaces
      ex u be Element of finsups B1 st P[p, u]
     proof
      let p be Element of B1*;
-     A3: rng p c= B1 by FINSEQ_1:def 4;
-     then A4: rng p c= the carrier of L by XBOOLE_1:1;
+     A3: rng p c= the carrier of L by XBOOLE_1:1;
          now per cases;
       suppose rng p is empty;
        hence ex_sup_of rng p,L by YELLOW_0:42;
       end;
       suppose rng p is non empty;
-       hence ex_sup_of rng p,L by A4,YELLOW_0:54;
+       hence ex_sup_of rng p,L by A3,YELLOW_0:54;
      end;
      end;
      then "\/"(rng p,L) in { "\/"(Y,L) where Y is finite Subset of B1 :
-      ex_sup_of Y,L} by A3;
+      ex_sup_of Y,L};
      then reconsider u = "\/"(rng p,L) as Element of finsups B1
                                                          by WAYBEL_0:def 27;
      take u;
      thus thesis;
     end;
     consider f be Function of B1*,finsups B1 such that
-     A5: for p be Element of B1* holds P[p, f.p] from FUNCT_2:sch 3(A2);
+     A4: for p be Element of B1* holds P[p, f.p] from FUNCT_2:sch 3(A2);
         B c= finsups B
     proof
      let z be set;
-     assume A6: z in B;
+     assume A5: z in B;
      then reconsider z1 = z as Element of L;
-     A7: ex_sup_of {z1},L by YELLOW_0:38;
-     A8: {z1} c= B
+     A6: ex_sup_of {z1},L by YELLOW_0:38;
+     A7: {z1} c= B
      proof
       let v be set;
       assume v in {z1};
-      hence v in B by A6,TARSKI:def 1;
+      hence v in B by A5,TARSKI:def 1;
      end;
          z = sup {z1} by YELLOW_0:39;
      then z1 in { "\/"(Y,L) where Y is finite Subset of B : ex_sup_of Y,L }
-                                                                    by A7,A8;
+                                                                    by A6,A7;
      hence z in finsups B by WAYBEL_0:def 27;
     end;
-    then A9: Card B c= Card finsups B by CARD_1:27;
-    A10: dom f = B1* by FUNCT_2:def 1;
+    then A8: Card B c= Card finsups B by CARD_1:27;
+    A9: dom f = B1* by FUNCT_2:def 1;
         finsups B c= rng f
     proof
      let z be set;
@@ -1370,18 +1354,18 @@ begin  :: About basis of Topological Spaces
      then z in { "\/"(Y,L) where Y is finite Subset of B : ex_sup_of Y,L }
                                                          by WAYBEL_0:def 27;
      then consider Y be finite Subset of B such that
-      A11: z = "\/"(Y,L) and
+      A10: z = "\/"(Y,L) and
           ex_sup_of Y,L;
      consider p be FinSequence such that
-      A12: rng p = Y by FINSEQ_1:73;
-     reconsider p as FinSequence of B1 by A12,FINSEQ_1:def 4;
+      A11: rng p = Y by FINSEQ_1:73;
+     reconsider p as FinSequence of B1 by A11,FINSEQ_1:def 4;
      reconsider p1 = p as Element of B1* by FINSEQ_1:def 11;
-         f.p1 = "\/"(rng p1,L) by A5;
-     hence z in rng f by A10,A11,A12,FUNCT_1:def 5;
+         f.p1 = "\/"(rng p1,L) by A4;
+     hence z in rng f by A9,A10,A11,FUNCT_1:def 5;
     end;
-    then Card finsups B1 c= Card (B1*) by A10,CARD_1:28;
+    then Card finsups B1 c= Card (B1*) by A9,CARD_1:28;
     then Card finsups B1 c= Card B1 by A1,CARD_4:87;
-    hence Card B = Card finsups B by A9,XBOOLE_0:def 10;
+    hence Card B = Card finsups B by A8,XBOOLE_0:def 10;
    end;
 
   theorem
@@ -1403,7 +1387,7 @@ begin  :: About basis of Topological Spaces
     consider f be Function of the carrier of T, the topology of T such that
      A2: for e be Element of T holds P[e, f.e] from FUNCT_2:sch 3(A1);
     A3: dom f = the carrier of T &
-        rng f c= the topology of T by FUNCT_2:def 1,RELSET_1:12;
+        rng f c= the topology of T by FUNCT_2:def 1;
         f is one-to-one
     proof
      let x1,x2 be set;
@@ -1411,13 +1395,11 @@ begin  :: About basis of Topological Spaces
       A4: x1 in dom f and
       A5: x2 in dom f and
       A6: f.x1 = f.x2;
-     reconsider y1 = x1, y2 = x2 as Element of T
-                                                          by A4,A5,
-FUNCT_2:def 1;
-         (Cl {y1})` = [#]T \ Cl {y1} by PRE_TOPC:17
+     reconsider y1 = x1, y2 = x2 as Element of T by A4,A5;
+         (Cl {y1})` = [#]T \ Cl {y1} by SUBSET_1:def 5
          .= f.x2 by A2,A6
          .= [#]T \ Cl {y2} by A2
-         .= (Cl {y2})` by PRE_TOPC:17;
+         .= (Cl {y2})` by SUBSET_1:def 5;
      then Cl {y2} c= Cl {y1} & Cl {y1} c= Cl {y2} by SUBSET_1:31;
      then Cl {y1} = Cl {y2} by XBOOLE_0:def 10;
      hence x1 = x2 by YELLOW_8:32;

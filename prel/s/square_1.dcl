@@ -45,18 +45,7 @@
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="22"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<CCluster>
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="53"/>
-</Typ>
-<Cluster>
-<Adjective nr="18"/>
-</Cluster>
-</CCluster>
 </Registrations>

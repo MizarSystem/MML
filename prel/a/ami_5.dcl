@@ -32,8 +32,8 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="AMI_3"/>
-<ArticleID name="XCMPLX_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="AMI_5"/>
 </Signature>
@@ -70,36 +70,36 @@
 <Func kind="K" nr="13">
 <Func kind="K" nr="75"/>
 </Func>
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="254"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="66">
+<Adjective nr="64">
 <Func kind="K" nr="13">
 <Func kind="K" nr="75"/>
 </Func>
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="254"/>
 </Adjective>
-<Adjective nr="70" value="false">
+<Adjective nr="68" value="false">
 <Func kind="K" nr="13">
 <Func kind="K" nr="75"/>
 </Func>
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="254"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="154"/>
+<Func kind="K" nr="151"/>
 <Cluster>
 <Adjective nr="13" value="false"/>
 <Adjective nr="21" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="70"/>
+<Adjective nr="71"/>
 <Adjective nr="72"/>
 <Adjective nr="73"/>
-<Adjective nr="74"/>
-<Adjective nr="75"/>
-<Adjective nr="76"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -108,7 +108,7 @@
 <Func kind="K" nr="13">
 <Func kind="K" nr="75"/>
 </Func>
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="254"/>
 </Func>
 <Cluster>
 <Adjective nr="13" value="false"/>
@@ -123,23 +123,23 @@
 <Func kind="K" nr="13">
 <Func kind="K" nr="75"/>
 </Func>
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="254"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="284">
+<Func kind="K" nr="283">
 <Func kind="K" nr="13">
 <Func kind="K" nr="75"/>
 </Func>
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="254"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="17"/>
 <Adjective nr="29"/>
-<Adjective nr="32"/>
-<Adjective nr="71"/>
-<Adjective nr="77"/>
+<Adjective nr="30"/>
+<Adjective nr="74"/>
+<Adjective nr="75"/>
 </Cluster>
 </FCluster>
 </Registrations>

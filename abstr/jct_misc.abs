@@ -9,18 +9,20 @@ environ
  vocabularies BOOLE, TARSKI, FUNCT_1, RELAT_1, SUBSET_1, ARYTM_1, ARYTM,
       RCOMP_1, ARYTM_3, ORDINAL2, SEQM_3, ABSVALUE, SQUARE_1, FUNCT_3, MCART_1,
       PRE_TOPC, SETFAM_1, COMPTS_1, SEQ_1, SEQ_2, RELAT_2, PSCOMP_1, LIMFUNC1,
-      CONNSP_1, METRIC_1, SEQ_4, TOPMETR, INTEGRA1, FRECHET2;
+      CONNSP_1, METRIC_1, SEQ_4, TOPMETR, INTEGRA1, FRECHET2, JORDAN2C,
+      LATTICES, EUCLID, FUNCT_5;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
       COMPLEX1, RELSET_1, FUNCT_2, INTEGRA1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XREAL_0, REAL_1, NAT_1, BINARITH, SQUARE_1, SEQ_1, SEQ_2, SEQ_4, RCOMP_1,
-      STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1, PSCOMP_1, SEQM_3, TOPMETR,
-      LIMFUNC1, CONNSP_1, XXREAL_0;
+      XXREAL_0, XREAL_0, REAL_1, NAT_1, BINARITH, SQUARE_1, SEQ_1, SEQ_2,
+      SEQ_4, RCOMP_1, STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1, PSCOMP_1, SEQM_3,
+      METRIC_1, TBSP_1, TOPMETR, LIMFUNC1, CONNSP_1, JORDAN2C, EUCLID;
  constructors BINARITH, REAL_1, SEQM_3, COMPTS_1, DTCONSTR, INTEGRA1, RFUNCT_2,
       PSCOMP_1, TOPMETR, TSP_1, PROB_1, LIMFUNC1, CONNSP_1, COMPLEX1, SETFAM_1,
-      XXREAL_0;
- registrations XREAL_0, INT_1, STRUCT_0, PRE_TOPC, RELSET_1, SUBSET_1,
-      INTEGRA1, SEQM_3, PSCOMP_1, BORSUK_1, BORSUK_3, TOPREAL6, MEMBERED;
- requirements NUMERALS, REAL, SUBSET, BOOLE;
+      XXREAL_0, SQUARE_1, JORDAN2C, TBSP_1;
+ registrations XREAL_0, INT_1, STRUCT_0, PRE_TOPC, RELSET_1, SUBSET_1, TBSP_1,
+      INTEGRA1, SEQM_3, PSCOMP_1, BORSUK_1, BORSUK_3, TOPREAL6, MEMBERED,
+      XXREAL_0, EUCLID, COMPTS_1, TOPREAL1, JORDAN2C;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Preliminaries
@@ -29,15 +31,7 @@ scheme :: JCT_MISC:sch 1
  NonEmpty{ A()-> non empty set, F(set)-> set}:
  { F(a) where a is Element of A(): not contradiction } is non empty;
 
-canceled 2;
-
-theorem :: JCT_MISC:3
- for A,B being set, f being Function st A c= dom f & f.:A c= B
-  holds A c= f"B;
-
-theorem :: JCT_MISC:4
- for f being Function, A,B being set st A misses B
-  holds f"A misses f"B;
+canceled 4;
 
 theorem :: JCT_MISC:5
  for S,X being set, f being Function of S,X, A being Subset of X
@@ -54,7 +48,7 @@ theorem :: JCT_MISC:6
          r,s,r0,s0,t for real number;
 
 theorem :: JCT_MISC:7
-     m <= n implies n-'(n-'m) = m;
+  m <= n implies n-'(n-'m) = m;
 
 canceled;
 
@@ -68,17 +62,7 @@ theorem :: JCT_MISC:11
  abs(abs(r0-s0)-abs(r-s)) <= abs(r0-r) + abs(s0-s);
 
 theorem :: JCT_MISC:12
-     t in ].r,s.[ implies abs(t) < max(abs(r),abs(s));
-
-definition let A,B,C be non empty set;
- let f be Function of A, [:B,C:];
- redefine func pr1 f -> Function of A,B means
-:: JCT_MISC:def 1
-  for x being Element of A holds it.x = (f.x)`1;
- func pr2 f -> Function of A,C means
-:: JCT_MISC:def 2
- for x being Element of A holds it.x = (f.x)`2;
-end;
+  t in ].r,s.[ implies abs(t) < max(abs(r),abs(s));
 
 scheme :: JCT_MISC:sch 2
  DoubleChoice{ A,B,C() -> non empty set, P[set,set,set]}:
@@ -104,7 +88,7 @@ theorem :: JCT_MISC:14
 
 definition let A be Subset of REAL;
  attr A is connected means
-:: JCT_MISC:def 3
+:: JCT_MISC:def 1
  for r,s being real number st r in A & s in A holds [.r,s.] c= A;
 end;
 
@@ -116,7 +100,7 @@ theorem :: JCT_MISC:15
 
 definition let A,B be Subset of REAL;
  func dist(A,B) -> real number means
-:: JCT_MISC:def 4
+:: JCT_MISC:def 2
  ex X being Subset of REAL st
     X = {abs(r - s) where r is Element of REAL, s is Element of REAL :
             r in A & s in B}
@@ -154,4 +138,18 @@ theorem :: JCT_MISC:21
        S.i meets A & S.i meets B
  ex r being real number st r in [.e,f.] & not r in A \/ B &
   for i being Nat ex k being Nat st i <= k & r in S.k;
+
+:: Moved from JORDAN1A, AK, 23.02.2006
+
+theorem :: JCT_MISC:22
+ for S being closed Subset of TOP-REAL 2 st S is Bounded
+  holds proj2.:S is closed;
+
+theorem :: JCT_MISC:23
+ for S being Subset of TOP-REAL 2 st S is Bounded
+  holds proj2.:S is bounded;
+
+theorem :: JCT_MISC:24
+  for S being compact Subset of TOP-REAL 2
+  holds proj2.:S is compact;
 

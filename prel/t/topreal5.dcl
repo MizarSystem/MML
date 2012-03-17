@@ -11,58 +11,50 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="PRE_TOPC"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="METRIC_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="FUNCT_2"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="PRE_TOPC"/>
 <ArticleID name="RVSUM_1"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="JORDAN2C"/>
-<ArticleID name="CONNSP_1"/>
+<ArticleID name="TOPREAL2"/>
 <ArticleID name="COMPTS_1"/>
+<ArticleID name="SPPOL_1"/>
 </Signature>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="3">
+<CCluster>
+<ArgTypes/>
 <Cluster>
-<Adjective nr="57">
-<Func kind="K" nr="156">
-<Num nr="2"/>
-</Func>
-</Adjective>
+<Adjective nr="49"/>
 </Cluster>
+<Typ kind="M" nr="3">
+<Cluster/>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="179">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
-</ArgTypes>
-<Func kind="K" nr="166">
-<Num nr="2"/>
-<LocusVar nr="1"/>
-</Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="34">
-<Func kind="K" nr="156">
+<Adjective nr="49"/>
+<Adjective nr="55">
+<Func kind="K" nr="179">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="51">
-<Func kind="K" nr="156">
-<Num nr="2"/>
-</Func>
-</Adjective>
+<Adjective nr="56" value="false"/>
+<Adjective nr="57" value="false"/>
 </Cluster>
-</FCluster>
+</CCluster>
 </Registrations>

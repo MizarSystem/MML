@@ -9,6 +9,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 </Signature>
 <Scheme>
@@ -88,13 +89,13 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="52">
+<Func kind="K" nr="67">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="52">
+<Func kind="K" nr="67">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Var nr="2"/>

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-HEADER_STR="Installation of Mizar System Version 7.6.01 (Linux/FPC) (MML 4.53.937)"
+HEADER_STR="Installation of Mizar System Version 7.6.02 (Linux/FPC) (MML 4.59.938)"
 LDIR=`pwd`
 INSTALL_BIN='/usr/local/bin'
 INSTALL_DOC='/usr/local/doc/mizar'
@@ -45,10 +45,6 @@ start_install()
      rm -r -f $INSTALL_MIZ/prel/* || exit_install "Unable to clear directory $INSTALL_MIZ/prel"
      rm -f $INSTALL_MIZ/abstr/* || exit_install "Unable to clear directory $INSTALL_MIZ/abstr"
      rm -f $INSTALL_MIZ/mml/* || exit_install "Unable to clear directory $INSTALL_MIZ/mml"
-     rm -f $INSTALL_MIZ/mizar.dct || exit_install "Unable to remove old share files"
-     rm -f $INSTALL_MIZ/mizar.dic || exit_install "Unable to remove old share files"
-     rm -f $INSTALL_MIZ/mizar.msg || exit_install "Unable to remove old share files"
-     rm -f $INSTALL_MIZ/mml.vct || exit_install "Unable to remove old share files"
    fi
    
    dialog \
@@ -131,10 +127,6 @@ start_old_install()
      rm -r -f $INSTALL_MIZ/prel/* || exit_install "Unable to clear directory $INSTALL_MIZ/prel" 
      rm -f $INSTALL_MIZ/abstr/* || exit_install "Unable to clear directory $INSTALL_MIZ/abstr"
      rm -f $INSTALL_MIZ/mml/* || exit_install "Unable to clear directory $INSTALL_MIZ/mml"
-     rm -f $INSTALL_MIZ/mizar.dct || exit_install "Unable to remove old share files"
-     rm -f $INSTALL_MIZ/mizar.dic || exit_install "Unable to remove old share files"
-     rm -f $INSTALL_MIZ/mizar.msg || exit_install "Unable to remove old share files"
-     rm -f $INSTALL_MIZ/mml.vct || exit_install "Unable to remove old share files"     
    fi
 
    echo "It may take some time..."

@@ -7,18 +7,19 @@
 environ
 
  vocabularies MEASURE1, FUNCT_1, SUPINF_2, BOOLE, SETFAM_1, TARSKI, RELAT_1,
-      ARYTM_3, RLVECT_1, PROB_1, ORDINAL2, MEASURE2;
+      RLVECT_1, PROB_1, ORDINAL2, MEASURE2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0, RELAT_1,
-      FUNCT_1, FUNCT_2, NAT_1, SETFAM_1, PROB_1, SUPINF_1, SUPINF_2, MEASURE1;
+      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, NAT_1, SETFAM_1, PROB_1, SUPINF_1,
+      SUPINF_2, MEASURE1;
  constructors NAT_1, SUPINF_2, MEASURE1, PROB_2, MEMBERED, SETFAM_1, SUPINF_1,
- XXREAL_0;
- registrations SUBSET_1, SUPINF_1, MEASURE1, RELSET_1, ARYTM_3, MEMBERED,
-      ORDINAL2, NUMBERS, XREAL_0;
+      PARTFUN1, RELAT_2;
+ registrations SUBSET_1, MEASURE1, RELSET_1, ARYTM_3, MEMBERED, ORDINAL2,
+      NUMBERS, FUNCT_2, RELAT_1;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, SUPINF_2, XXREAL_0;
  theorems TARSKI, FUNCT_1, FUNCT_2, ZFMISC_1, NAT_1, SETFAM_1, SUPINF_1,
       SUPINF_2, MEASURE1, ENUMSET1, REAL_1, RELSET_1, PROB_2, XBOOLE_0,
-      XBOOLE_1, PROB_1;
+      XBOOLE_1, PROB_1, XXREAL_0;
  schemes NAT_1, RECDEF_1;
 
 begin
@@ -453,18 +454,18 @@ A7:for n being Element of NAT holds (M*H).n <= (M*F).n
      A c= B by A4;
      hence thesis by A8,MEASURE1:62;
    end;
-A10:M*H is nonnegative by Th1;
+A9:M*H is nonnegative by Th1;
    for n,m being set st n <> m holds H.n misses H.m
    proof
      let n,m be set;
      assume
-A11: n <> m;
+A10: n <> m;
      per cases;
      suppose n in dom H & m in dom H;
-       then reconsider n'=n,m'=m as Nat by FUNCT_2:def 1;
-   A12:n' < m' implies H.n misses H.m by A2,A3,Th11;
+       then reconsider n'=n,m'=m as Nat;
+   A11:n' < m' implies H.n misses H.m by A2,A3,Th11;
        m' < n' implies H.m misses H.n by A2,A3,Th11;
-       hence H.n misses H.m by A11,A12,REAL_1:def 5;
+       hence H.n misses H.m by A10,A11,REAL_1:def 5;
      end;
      suppose not (n in dom H & m in dom H);
      then H.n = {} or H.m = {} by FUNCT_1:def 4;
@@ -472,7 +473,7 @@ A11: n <> m;
    end;
    end;
    then H is Sep_Sequence of S by PROB_2:def 3;
-   then A13:SUM(M*H) = M.(union rng H) by MEASURE1:def 11;
+   then A12:SUM(M*H) = M.(union rng H) by MEASURE1:def 11;
    union rng H = union rng F
    proof
      thus union rng H c= union rng F
@@ -480,56 +481,56 @@ A11: n <> m;
        let r be set;
        assume r in union rng H;
        then consider E being set such that
-   A14:r in E & E in rng H by TARSKI:def 4;
+   A13:r in E & E in rng H by TARSKI:def 4;
        consider s being set such that
-   A15:s in dom H & E = H.s by A14,FUNCT_1:def 5;
-       reconsider s as Element of NAT by A15,FUNCT_2:def 1;
-A16:   E c= F.s by A4,A15;
+   A14:s in dom H & E = H.s by A13,FUNCT_1:def 5;
+       reconsider s as Element of NAT by A14;
+A15:   E c= F.s by A4,A14;
        F.s in rng F by FUNCT_2:6;
-       hence thesis by A14,A16,TARSKI:def 4;
+       hence thesis by A13,A15,TARSKI:def 4;
      end;
      let r be set;
      assume r in union rng F;
      then consider E being set such that
- A17:r in E & E in rng F by TARSKI:def 4;
+ A16:r in E & E in rng F by TARSKI:def 4;
      consider s being set such that
- A18:s in dom F & E = F.s by A17,FUNCT_1:def 5;
-     reconsider s as Element of NAT by A18,FUNCT_2:def 1;
+ A17:s in dom F & E = F.s by A16,FUNCT_1:def 5;
+     reconsider s as Element of NAT by A17;
      ex s1 being Element of NAT st r in H.s1
      proof
        defpred P[Nat] means r in F.$1;
-       r in F.s by A17,A18;
-       then A19:ex k being Nat st P[k];
+       r in F.s by A16,A17;
+       then A18:ex k being Nat st P[k];
        ex k being Nat st P[k] &
-       for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A19);
+       for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A18);
        then consider k being Nat such that
-   A20:r in F.k & for n being Nat st r in F.n holds k <= n;
-   A21:k=0 implies ex s1 being Element of NAT st r in H.s1 by A3,A20;
+   A19:r in F.k & for n being Nat st r in F.n holds k <= n;
+   A20:k=0 implies ex s1 being Element of NAT st r in H.s1 by A3,A19;
        (ex l being Nat st k = l + 1) implies
        ex s1 being Element of NAT st r in H.s1
        proof
          given l being Nat such that
-     A22:k = l + 1;
-     A23:not r in G.l
+     A21:k = l + 1;
+     A22:not r in G.l
          proof
            assume r in G.l;
            then consider i being Nat such that
-       A24:i <= l & r in F.i by A2,Th6;
-           k <= i by A20,A24;
-           hence thesis by A22,A24,NAT_1:38;
+       A23:i <= l & r in F.i by A2,Th6;
+           k <= i by A19,A23;
+           hence thesis by A21,A23,NAT_1:38;
          end;
-A25:     H.(l+1) = F.(l+1) \ G.l by A3;
+A24:     H.(l+1) = F.(l+1) \ G.l by A3;
          take k;
-         thus thesis by A20,A22,A23,A25,XBOOLE_0:def 4;
+         thus thesis by A19,A21,A22,A24,XBOOLE_0:def 4;
        end;
-       hence thesis by A21,NAT_1:22;
+       hence thesis by A20,NAT_1:22;
      end;
      then consider s1 being Element of NAT such that
-A26: r in H.s1;
+A25: r in H.s1;
      H.s1 in rng H by FUNCT_2:6;
-     hence thesis by A26,TARSKI:def 4;
+     hence thesis by A25,TARSKI:def 4;
    end;
-   hence thesis by A1,A7,A10,A13,SUPINF_2:62;
+   hence thesis by A1,A7,A9,A12,SUPINF_2:62;
 end;
 
 theorem Th14:
@@ -677,7 +678,7 @@ A4:rng F = {A} &
    F.0 = A & for n being Nat st 0 < n holds F.n = A by A2,A3,ENUMSET1:69;
    then rng F c= S by A1,ZFMISC_1:37;
    then reconsider F as Function of NAT,S by FUNCT_2:8;
-A5:{A} is N_Sub_set_fam of X by A4,ZFMISC_1:37,SUPINF_2:def 14;
+A5:{A} is N_Sub_set_fam of X by A4,SUPINF_2:def 14;
    {A} c= S by A1,ZFMISC_1:37;
    then reconsider T = {A} as N_Measure_fam of S by A5,Def1;
    take T,F;
@@ -724,7 +725,7 @@ A3:rng F = {A} &
    F.0 = A & for n being Nat st 0 < n holds F.n = A by A2,ENUMSET1:69;
    then rng F c= S by A1,ZFMISC_1:37;
    then reconsider F as Function of NAT,S by FUNCT_2:8;
-A4:{A} is N_Sub_set_fam of X by A3,ZFMISC_1:37,SUPINF_2:def 14;
+A4:{A} is N_Sub_set_fam of X by A3,SUPINF_2:def 14;
    {A} c= S by A1,ZFMISC_1:37;
    then reconsider T = {A} as N_Measure_fam of S by A4,Def1;
    take T,F;
@@ -871,7 +872,7 @@ A1:F.0 = N.0 & for n being Element of NAT holds
    A2:x in Y & Y in rng F by TARSKI:def 4;
       consider n being set such that
    A3:n in dom F & Y = F.n by A2,FUNCT_1:def 5;
-      reconsider n as Nat by A3,FUNCT_2:def 1;
+      reconsider n as Nat by A3;
    A4:n=0 implies ex Z being set st x in Z & Z in rng N
       proof
         assume
@@ -899,43 +900,43 @@ A5:     n=0;
    let x be set;
    assume x in union rng N;
    then consider Y being set such that
-A9:x in Y & Y in rng N by TARSKI:def 4;
+A8:x in Y & Y in rng N by TARSKI:def 4;
    consider n being set such that
-A10:n in dom N & Y = N.n by A9,FUNCT_1:def 5;
-   reconsider n as Nat by A10,FUNCT_2:def 1;
+A9:n in dom N & Y = N.n by A8,FUNCT_1:def 5;
+   reconsider n as Nat by A9;
    ex Z being set st x in Z & Z in rng F
    proof
      ex s being Element of NAT st x in F.s
      proof
        defpred P[Nat] means x in N.$1;
-       x in N.n by A9,A10;
-       then A11:ex k being Nat st P[k];
+       x in N.n by A8,A9;
+       then A10:ex k being Nat st P[k];
        ex k being Nat st P[k] &
-       for r being Nat st P[r] holds k <= r from NAT_1:sch 5(A11);
+       for r being Nat st P[r] holds k <= r from NAT_1:sch 5(A10);
        then consider k being Nat such that
-   A12:x in N.k & for r being Nat st x in N.r holds k <= r;
-   A13:k=0 implies (ex s being Element of NAT st x in F.s) by A1,A12;
+   A11:x in N.k & for r being Nat st x in N.r holds k <= r;
+   A12:k=0 implies (ex s being Element of NAT st x in F.s) by A1,A11;
        (ex l being Nat st k = l + 1) implies
        ex s being Element of NAT st x in F.s
        proof
          given l being Nat such that
-     A14:k = l + 1;
-     A15:not x in N.l
+     A13:k = l + 1;
+     A14:not x in N.l
          proof
            assume x in N.l;
-           then l + 1 <= l by A12,A14;
+           then l + 1 <= l by A11,A13;
            hence thesis by NAT_1:38;
          end;
-A16:     F.(l+1) = N.(l+1) \ N.l by A1;
+A15:     F.(l+1) = N.(l+1) \ N.l by A1;
          take k;
-         thus thesis by A12,A14,A15,A16,XBOOLE_0:def 4;
+         thus thesis by A11,A13,A14,A15,XBOOLE_0:def 4;
        end;
-       hence thesis by A13,NAT_1:22;
+       hence thesis by A12,NAT_1:22;
      end;
      then consider s being Element of NAT such that
- A17:x in F.s;
+ A16:x in F.s;
      F.s in rng F by FUNCT_2:6;
-     hence thesis by A17;
+     hence thesis by A16;
    end;
    hence thesis by TARSKI:def 4;
 end;
@@ -959,7 +960,7 @@ A1:F.0 = N.0 & for n being Element of NAT holds
 A2:   n <> m;
       per cases;
       suppose n in dom F & m in dom F;
-      then reconsider n'=n,m'=m as Nat by FUNCT_2:def 1;
+      then reconsider n'=n,m'=m as Nat;
    A3:n' < m' implies F.n misses F.m by A1,Th23;
       m' < n' implies F.m misses F.n by A1,Th23;
       hence F.n misses F.m by A2,A3,REAL_1:def 5;
@@ -1047,6 +1048,6 @@ A7:     P[0]
   end;
   M.(union rng F) = M.(union rng G) by A1,A2,Th24
                  .= SUM(M*G) by A3,MEASURE1:def 11
-                 .= sup(rng (M*F)) by A4,SUPINF_2:def 23;
+                 .= sup(rng (M*F)) by A4;
   hence thesis;
 end;

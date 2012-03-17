@@ -9,21 +9,22 @@ environ
  vocabularies PRE_TOPC, EUCLID, ARYTM, RCOMP_1, BOOLE, CONNSP_1, SUBSET_1,
       RELAT_2, RELAT_1, FUNCT_1, ORDINAL2, TOPMETR, ARYTM_1, BORSUK_1, ARYTM_3,
       FUNCT_5, FINSEQ_1, MCART_1, TOPREAL2, TOPREAL1, TOPS_2, COMPTS_1,
-      PSCOMP_1, REALSET1;
+      PSCOMP_1, REALSET1, SPPOL_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, RELAT_1, FUNCT_1, STRUCT_0, PRE_TOPC, TOPS_2, COMPTS_1, RCOMP_1,
-      FINSEQ_1, EUCLID, TOPMETR, TOPREAL1, TOPREAL2, TMAP_1, CONNSP_1,
-      BORSUK_1, PSCOMP_1, JORDAN2B, XXREAL_0;
+      REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, STRUCT_0, PRE_TOPC, TOPS_2,
+      COMPTS_1, RCOMP_1, FINSEQ_1, EUCLID, TOPMETR, TOPREAL1, TOPREAL2, TMAP_1,
+      CONNSP_1, SPPOL_1, PSCOMP_1, BORSUK_1, JORDAN2B, XXREAL_0;
  constructors REAL_1, TOPS_2, RCOMP_1, TOPMETR, TOPREAL1, TOPREAL2, TMAP_1,
-      CONNSP_1, PSCOMP_1, COMPTS_1, JORDAN2B, XXREAL_0;
+      CONNSP_1, PSCOMP_1, COMPTS_1, JORDAN2B, XXREAL_0, SETFAM_1, SPPOL_1;
  registrations FUNCT_1, PRE_TOPC, TOPMETR, STRUCT_0, EUCLID, BORSUK_1,
-      PSCOMP_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED;
+      PSCOMP_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, FUNCT_2, TOPREAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI;
  theorems BORSUK_1, EUCLID, FUNCT_1, FUNCT_2, PRE_TOPC, RCOMP_1, REAL_1,
       TARSKI, TOPMETR, TOPS_2, TOPREAL1, RELAT_1, TOPREAL2, TOPREAL3, METRIC_1,
       CONNSP_1, TREAL_1, XREAL_0, PSCOMP_1, TMAP_1, FINSEQ_1, SPPOL_2,
-      JORDAN2B, RELSET_1, XBOOLE_0, XBOOLE_1, TSEP_1, XCMPLX_0, XREAL_1;
+      JORDAN2B, RELSET_1, XBOOLE_0, XBOOLE_1, TSEP_1, XCMPLX_0, XREAL_1,
+      SPPOL_1, XXREAL_0;
 
 begin ::1.   INTERMEDIATE VALUE THEOREMS AND BOLZANO THEOREM
 
@@ -33,11 +34,11 @@ reserve r,s,r1,r2,r3,rc for Element of REAL;
 reserve p,q,q1,q2 for Point of TOP-REAL 2;
 reserve X,Y,Z for non empty TopSpace;
 
- Lm1: for a,b,c being real number holds c in [.a,b.] iff a<=c & c <=b
+Lm1: for a,b,c being real number holds c in [.a,b.] iff a<=c & c <=b
         by RCOMP_1:48;
 
 Lm2:for f being continuous Function of X,Y, g being continuous Function of Y,Z
-  holds g*f is continuous Function of X,Z;
+  holds g*f is continuous Function of X,Z by TOPS_2:58;
 
 canceled 3;
 
@@ -61,53 +62,7 @@ end;
 
 theorem Th5:for f being continuous Function of X,Y,
    A being Subset of X st A is connected holds f.:A is connected
- proof let f be continuous Function of X,Y,
-    A be Subset of X;
-  assume A1:A is connected;
-  assume not f.:A is connected;
-   then consider P,Q being Subset of Y such that
-     A2: f.:A = P \/ Q &
-     P,Q are_separated & P <> {}(Y) & Q <> {}(Y) by CONNSP_1:16;
-     A3: Cl P misses Q & P misses Cl Q by A2,CONNSP_1:def 1;
-     consider y being Element of P;
-         y in f.:A by A2,XBOOLE_0:def 2;
-     then consider x such that A4: x in dom f & x in A & y=f.x by
-FUNCT_1:def 12;
-     A5:x in f"P by A2,A4,FUNCT_1:def 13;
-     consider z being Element of Q;
-         z in P \/ Q by A2,XBOOLE_0:def 2;
-     then consider x1 such that
-     A6: x1 in dom f & x1 in A & z=f.x1 by A2,FUNCT_1:def 12;
-     A7:x1 in f"Q by A2,A6,FUNCT_1:def 13;
-     A8:f"(f.:A)=f"P \/ f"Q by A2,RELAT_1:175;
-         the carrier of X=dom f by FUNCT_2:def 1;
-     then A9: A c=f"P \/ f"Q by A8,FUNCT_1:146;
-     reconsider P1=f"P,Q1=f"Q as Subset of X;
-     A10:Cl P1 c=f"(Cl P) by TOPS_2:56;
-     A11:Cl Q1 c=f"(Cl Q) by TOPS_2:56;
-     A12:Cl P1 /\ f"Q c=f"(Cl P) /\ f"(Q) by A10,XBOOLE_1:26;
-     A13:f"(Cl P) /\ f"Q = f"(Cl P /\ Q) by FUNCT_1:137;
-     A14:f"(Cl P /\ Q)=f"({}Y) by A3,XBOOLE_0:def 7;
-     A15:f"(P) /\ Cl Q1 c=f"(P) /\ f"(Cl Q) by A11,XBOOLE_1:26;
-     A16:f"(P) /\ f"(Cl Q) = f"(P /\ Cl Q) by FUNCT_1:137;
-     A17:f"(P /\ Cl Q)=f"({}Y) by A3,XBOOLE_0:def 7;
-     A18:f"({}Y) = {} by RELAT_1:171;
-     then Cl P1 /\ Q1 = {}X by A12,A13,A14,XBOOLE_1:3;
-     then A19:Cl P1 misses Q1 by XBOOLE_0:def 7;
-         P1 /\ Cl Q1 = {} by A15,A16,A17,A18,XBOOLE_1:3;
-     then P1 misses Cl Q1 by XBOOLE_0:def 7;
-     then A20:P1,Q1 are_separated by A19,CONNSP_1:def 1;
-     set P2=P1/\A,Q2=Q1/\A;
-     A21:A=(P1 \/ Q1)/\A by A9,XBOOLE_1:28 .=P2 \/ Q2 by XBOOLE_1:23;
-     A22:P2 c=P1 by XBOOLE_1:17;
-         Q2 c=Q1 by XBOOLE_1:17;
-     then A23:P2,Q2 are_separated by A20,A22,CONNSP_1:8;
-     A24:P2<>{} by A4,A5,XBOOLE_0:def 3;
-         Q2<>{} by A6,A7,XBOOLE_0:def 3;
-     then ex P3,Q3 being Subset of X st A = P3 \/ Q3 &
-     P3,Q3 are_separated & P3 <> {}(X) & Q3 <> {}(X) by A21,A23,A24;
-   hence contradiction by A1,CONNSP_1:16;
- end;
+   by TOPS_2:75;
 
 theorem Th6:
  for ra,rb st ra<=rb holds
@@ -376,7 +331,7 @@ for P being non empty Subset of TOP-REAL 2,
   let P be non empty Subset of TOP-REAL 2,
       f be Function of I[01], (TOP-REAL 2)|P;
    assume A1:f is continuous;
-        [#]((TOP-REAL 2)|P)=P by PRE_TOPC:def 10;
+    [#]((TOP-REAL 2)|P)=P by PRE_TOPC:def 10;
     then A2:the carrier of ((TOP-REAL 2)|P)=P by PRE_TOPC:12;
     set h=(proj1|P)*f;
     reconsider rj=proj1 as Function of (TOP-REAL 2),R^1 by TOPMETR:24;
@@ -477,29 +432,28 @@ A8:  f2 is_homeomorphism & f2.0 = p1 & f2.1 = p2 by A3,TOPREAL1:def 2;
     hence contradiction by A3,EUCLID:57;
     end;
     then consider r1 such that
-    A19:0<r1 & r1<1 & g1.r1=(p1`1+p2`1)/2
-                           by A9,A13,A16,Th15;
+    A19:0<r1 & r1<1 & g1.r1=(p1`1+p2`1)/2 by A9,A13,A16,Th15;
     A20:[.0,1.] = {r3 : 0<=r3 & r3<=1 } by RCOMP_1:def 1;
     then A21:r1 in the carrier of I[01] by A19,BORSUK_1:83;
     then r1 in dom f1 by FUNCT_2:def 1;
     then f1.r1 in rng f1 by FUNCT_1:def 5;
     then A22:f1.r1 in the carrier of ((TOP-REAL 2)|P1);
-        [#]((TOP-REAL 2)|P1) = P1 by PRE_TOPC:def 10;
+    [#]((TOP-REAL 2)|P1) = P1 by PRE_TOPC:def 10;
     then A23:f1.r1 in P1 by A22,PRE_TOPC:12;
     then A24:f1.r1 in P by A3,XBOOLE_0:def 2;
     reconsider p3=f1.r1 as Point of (TOP-REAL 2) by A23;
     consider r2 such that A25:0<r2 & r2<1 & g2.r2=(p1`1+p2`1)/2
                                  by A10,A14,A17,A18,Th15;
     A26:r2 in the carrier of I[01] by A20,A25,BORSUK_1:83;
-        dom f2=the carrier of I[01] by FUNCT_2:def 1;
+    dom f2=the carrier of I[01] by FUNCT_2:def 1;
     then f2.r2 in rng f2 by A26,FUNCT_1:def 5;
     then A27:f2.r2 in the carrier of ((TOP-REAL 2)|P2);
-       [#]((TOP-REAL 2)|P2) = P2 by PRE_TOPC:def 10;
+    [#]((TOP-REAL 2)|P2) = P2 by PRE_TOPC:def 10;
     then A28:f2.r2 in P2 by A27,PRE_TOPC:12;
     then A29:f2.r2 in P by A3,XBOOLE_0:def 2;
     reconsider p4=f2.r2 as Point of (TOP-REAL 2) by A28;
     A30:p3`1= (p1`1+p2`1)/2 by A9,A19,A21 .=p4`1 by A10,A25,A26;
-        p3`2=r0 by A2,A24 .=p4`2 by A2,A29;
+    p3`2=r0 by A2,A24 .=p4`2 by A2,A29;
     then f1.r1=f2.r2 by A30,TOPREAL3:11;
 then A31: f1.r1 in P1/\P2 by A23,A28,XBOOLE_0:def 3;
         now per cases by A3,A31,TARSKI:def 2;
@@ -673,9 +627,9 @@ for C being compact non empty Subset of TOP-REAL 2
             for p st p in C holds p`2=S-bound C
         proof let p;assume p in C;
            then A3:S-bound C <= p`2 & p`2 <= N-bound C by PSCOMP_1:71;
-           then S-bound C <= N-bound C by XREAL_1:2;
-           then S-bound C = N-bound C by A2,XREAL_1:1;
-         hence p`2=S-bound C by A3,XREAL_1:1;
+           then S-bound C <= N-bound C by XXREAL_0:2;
+           then S-bound C = N-bound C by A2,XXREAL_0:1;
+         hence p`2=S-bound C by A3,XXREAL_0:1;
         end;
        hence contradiction by A1,Th20;
       end;
@@ -691,9 +645,9 @@ for C being compact non empty Subset of TOP-REAL 2
             for p st p in C holds p`1=W-bound C
         proof let p;assume p in C;
            then A3:W-bound C <= p`1 & p`1 <= E-bound C by PSCOMP_1:71;
-           then W-bound C <= E-bound C by XREAL_1:2;
-           then W-bound C = E-bound C by A2,XREAL_1:1;
-         hence p`1=W-bound C by A3,XREAL_1:1;
+           then W-bound C <= E-bound C by XXREAL_0:2;
+           then W-bound C = E-bound C by A2,XXREAL_0:1;
+         hence p`1=W-bound C by A3,XXREAL_0:1;
         end;
        hence contradiction by A1,Th21;
       end;
@@ -727,4 +681,20 @@ theorem
    end;
   hence W-min(P)<>E-max(P);
  end;
+
+:: Moved from JORDAN1B, AK, 23.02.2006
+  registration
+   cluster -> non vertical non horizontal Simple_closed_curve;
+   coherence
+   proof
+   let S be Simple_closed_curve;
+   consider p1 be set such that
+    A1: p1 in S by XBOOLE_0:def 1;
+   reconsider p1 as Point of TOP-REAL 2 by A1;
+   ex p2 be Point of TOP-REAL 2 st p2 in S & p2`1 <> p1`1 by Th21;
+   hence S is non vertical by A1,SPPOL_1:def 3;
+   ex p2 be Point of TOP-REAL 2 st p2 in S & p2`2 <> p1`2 by Th20;
+   hence S is non horizontal by A1,SPPOL_1:def 2;
+   end;
+  end;
 

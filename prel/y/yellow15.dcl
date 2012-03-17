@@ -12,6 +12,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -41,7 +42,6 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="WAYBEL23"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
@@ -52,7 +52,7 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="349"/>
+<Func kind="K" nr="346"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="21"/>
@@ -74,7 +74,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="372">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -90,15 +90,21 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="119">
+<Func kind="K" nr="136">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="110">
+<Adjective nr="108">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="111">
+<Adjective nr="109">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="130">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="131">
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="132">
@@ -107,16 +113,10 @@
 <Adjective nr="133">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="134">
-<LocusVar nr="1"/>
-</Adjective>
 <Adjective nr="135">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="137">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="138">
+<Adjective nr="136">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -146,7 +146,7 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -170,10 +170,10 @@
 <Cluster/>
 <Typ kind="M" nr="8">
 <Cluster/>
-<Func kind="K" nr="349"/>
+<Func kind="K" nr="346"/>
 </Typ>
 <Cluster>
-<Adjective nr="153"/>
+<Adjective nr="151"/>
 </Cluster>
 </CCluster>
 </Registrations>

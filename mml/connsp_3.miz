@@ -8,15 +8,15 @@ environ
 
  vocabularies PRE_TOPC, RELAT_1, CONNSP_1, SETFAM_1, RELAT_2, TARSKI, BOOLE,
       SUBSET_1, CONNSP_3;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1,
- ZFMISC_1, STRUCT_0, PRE_TOPC, CONNSP_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ZFMISC_1, STRUCT_0, PRE_TOPC,
+      CONNSP_1;
  constructors CONNSP_1, MEMBERED, SETFAM_1;
  registrations PRE_TOPC, STRUCT_0, SUBSET_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0;
  theorems TARSKI, ZFMISC_1, SETFAM_1, PRE_TOPC, SUBSET_1, CONNSP_1, JORDAN1,
-      XBOOLE_0, XBOOLE_1;
+      XBOOLE_0, XBOOLE_1, ORDERS_1;
  schemes SUBSET_1;
+ definitions TARSKI, XBOOLE_0;
 
 begin :: The component of a subset in a topological space
 
@@ -261,7 +261,7 @@ theorem Th9:
       for V being Subset of GX st V is connected & V<>{}
    holds skl V is_a_component_of GX by Th8;
 
-theorem Th10:
+theorem
  for A, V be Subset of GX st
   A is_a_component_of GX & V is connected & V c= A & V<>{}
    holds A = skl V
@@ -440,7 +440,7 @@ proof
     {}(GX) = union F by Lm1;
 end;
 
-theorem
+theorem Th20:
       for A being Subset of GX st A=(the carrier of GX) holds
       A is a_union_of_components of GX
 proof let A be Subset of GX;assume A1: A=(the carrier of GX);
@@ -772,7 +772,7 @@ definition let GX be TopStruct, B be Subset of GX,
   func Up(p) -> Point of GX equals
        p;
    coherence
-   proof B=the carrier of (GX|B) by JORDAN1:1;
+   proof B=the carrier of (GX|B) by PRE_TOPC:29;
        then p in B by A1;
      hence p is Point of GX;
    end;
@@ -798,7 +798,7 @@ definition let GX be TopStruct, B be Subset of GX;
    V;
    coherence
    proof
-           B=the carrier of (GX|B) by JORDAN1:1;
+           B=the carrier of (GX|B) by PRE_TOPC:29;
      hence thesis by XBOOLE_1:1;
    end;
 end;
@@ -840,7 +840,7 @@ theorem
 proof let B be Subset of GX, p be Point of GX;assume
   A1: p in B;
   then reconsider B' = B as non empty Subset of GX;
-  reconsider q=p as Point of GX|B' by A1,JORDAN1:1;
+  reconsider q=p as Point of GX|B' by A1,PRE_TOPC:29;
   q in skl q by CONNSP_1:40;
  hence thesis by A1,Def7;
 end;
@@ -924,3 +924,52 @@ proof let B be Subset of GX, p be Point of GX;
       skl(p,B)=skl Down(p,B) by A1,Th27;
  hence thesis by A2,CONNSP_1:24;
 end;
+
+:: Moved from JORDAN1B, AK, 22.02.2006
+
+  registration
+   let T be non empty TopSpace;
+   cluster non empty a_union_of_components of T;
+   existence
+   proof
+    [#]T = the carrier of T by PRE_TOPC:12;
+    then reconsider A = [#]T as a_union_of_components of T by Th20;
+    A is non empty;
+    hence thesis;
+   end;
+  end;
+
+  theorem
+      for T being non empty TopSpace
+   for A being non empty a_union_of_components of T st A is connected holds
+    A is_a_component_of T
+ proof
+  let T be non empty TopSpace;
+  let A be non empty a_union_of_components of T;
+  consider F being Subset-Family of T such that
+A1:  (for B being Subset of T st B in F holds B is_a_component_of T) &
+    A = union F by Def2;
+  consider X being set such that
+A2: X <> {} & X in F by A1,ORDERS_1:91;
+  reconsider X as Subset of T by A2;
+  assume A3: A is connected;
+     F={X}
+   proof
+    thus F c= {X}
+     proof
+      let x be set; assume A4: x in F;
+      then reconsider Y=x as Subset of T;
+A5:   Y is_a_component_of T & X is_a_component_of T by A1,A2,A4;
+A6:   X c= A by A1,A2,ZFMISC_1:92;
+         Y c= A by A1,A4,ZFMISC_1:92;
+      then Y = A by A3,A5,CONNSP_1:def 5
+       .= X by A3,A5,A6,CONNSP_1:def 5;
+      hence x in {X} by TARSKI:def 1;
+     end;
+    let x be set; assume x in {X};
+    hence x in F by A2,TARSKI:def 1;
+   end;
+  then A = X by A1,ZFMISC_1:31;
+  hence A is_a_component_of T by A1,A2;
+ end;
+

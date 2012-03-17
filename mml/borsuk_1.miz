@@ -8,24 +8,24 @@ environ
 
  vocabularies BOOLE, FUNCT_1, RELAT_1, FUNCOP_1, FUNCT_3, MCART_1, SETFAM_1,
       TARSKI, SUBSET_1, EQREL_1, PRE_TOPC, ORDINAL2, CONNSP_2, TOPS_1,
-      COMPTS_1, FINSET_1, PCOMPS_1, METRIC_1, RCOMP_1, BORSUK_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, RELAT_1, FUNCT_1,
-      MCART_1, DOMAIN_1, RCOMP_1, SETFAM_1,
-      PARTFUN1, EQREL_1, FUNCT_2, STRUCT_0, METRIC_1, PCOMPS_1,
-      PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1, CONNSP_2,
-      FUNCT_3, FUNCOP_1, XXREAL_0;
+      COMPTS_1, FINSET_1, PCOMPS_1, METRIC_1, RCOMP_1, BORSUK_1, ARYTM;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, XXREAL_0, XREAL_0,
+      REAL_1, FINSET_1, RELAT_1, FUNCT_1, MCART_1, DOMAIN_1, RCOMP_1, SETFAM_1,
+      EQREL_1, FUNCT_2, STRUCT_0, METRIC_1, PCOMPS_1, PRE_TOPC, TOPS_1, TOPS_2,
+      COMPTS_1, CONNSP_2, FUNCT_3, FUNCOP_1, RELSET_1, PARTFUN1;
  constructors FINSET_1, DOMAIN_1, RCOMP_1, PCOMPS_1, EQREL_1, TOPS_1, TOPS_2,
       COMPTS_1, CONNSP_2, FUNCT_3, XCMPLX_0, MEMBERED, FUNCOP_1, SETFAM_1,
       XXREAL_0;
  registrations SUBSET_1, PCOMPS_1, EQREL_1, FINSET_1, PRE_TOPC, STRUCT_0,
-      METRIC_1, FUNCOP_1, RELSET_1, MEMBERED, PARTFUN1, FUNCT_2, XREAL_0;
+      METRIC_1, FUNCOP_1, RELSET_1, MEMBERED, PARTFUN1, FUNCT_2, RELAT_1,
+      TOPS_1, XREAL_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions TARSKI, PRE_TOPC, TOPS_2, CONNSP_2, COMPTS_1, EQREL_1, STRUCT_0,
-      XBOOLE_0;
+      XBOOLE_0, SUBSET_1;
  theorems TARSKI, ZFMISC_1, DOMAIN_1, PRE_TOPC, FUNCT_1, FUNCT_2, TOPS_1,
       EQREL_1, SETWISEO, FUNCT_3, SUBSET_1, TOPS_2, CONNSP_2, FUNCOP_1,
       COMPTS_1, FINSET_1, SETFAM_1, PCOMPS_1, METRIC_1, RCOMP_1, MCART_1,
-      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
+      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_0, XXREAL_0;
  schemes ZFREFLE1, DOMAIN_1, FUNCT_2;
 
 begin
@@ -52,7 +52,7 @@ then A1:  F.:X c= F.:F"X1 by RELAT_1:156;
    hence F.:X c= X1 by A1,XBOOLE_1:1;
   end;
 
-theorem Th6:
+theorem
  (X --> u).:X1 c= {u}
  proof
        (X --> u).:X1 c= rng(X --> u) & rng(X --> u) c= {u}
@@ -263,7 +263,7 @@ A2: B = union A;
 A3: e in B`;
    then consider u such that
 A4:  e in u & u in D by A1,TARSKI:def 4;
-       not e in B by A3,SUBSET_1:54;
+   not e in B by A3,XBOOLE_0:def 4;
    then not u in A by A2,A4,TARSKI:def 4;
    then u in A` by A4,SUBSET_1:50;
   hence e in union A` by A4,TARSKI:def 4;
@@ -426,7 +426,7 @@ A4:  e in v & v in A by A1,TARSKI:def 4;
 A5: v in D by A4;
        not u misses v by A2,A4,XBOOLE_0:3;
    then u = v by A3,A5,EQREL_1:def 6;
-  hence contradiction by A2,A4,SUBSET_1:54;
+  hence contradiction by A2,A4,XBOOLE_0:def 4;
  end;
 
 theorem ::Class(id X) is non-empty
@@ -585,6 +585,38 @@ theorem Th35:
    hence the carrier of Y c= the carrier of X by PRE_TOPC:def 9;
   end;
 
+definition
+ let X be 1-sorted,Y be non empty 1-sorted, y be Element of Y;
+ func X --> y -> Function of X,Y equals
+  (the carrier of X) --> y;
+ coherence;
+end;
+
+theorem Th36:
+ for X being TopSpace, Y being non empty TopSpace
+ for y being Point of Y holds X --> y is continuous
+  proof let X be TopSpace, Y be non empty TopSpace;
+   let y be Point of Y;
+    set F = X --> y, H = [#] X;
+   let P1 being Subset of Y such that P1 is closed;
+   per cases;
+   suppose y in P1;
+    then F"P1 = the carrier of X by FUNCOP_1:20 .= H;
+   hence F"P1 is closed;
+   end;
+   suppose not y in P1;
+    then F"P1 = {} by FUNCOP_1:22 .= {}X;
+   hence F"P1 is closed;
+   end;
+  end;
+
+registration
+  let X be TopSpace, Y be non empty TopSpace;
+  let y be Point of Y;
+  cluster X --> y -> continuous;
+coherence by Th36;
+end;
+
 definition let X, Y be non empty TopSpace, F be Function of X, Y;
  redefine attr F is continuous means
        for W being Point of X, G being a_neighborhood of F.W
@@ -598,8 +630,7 @@ definition let X, Y be non empty TopSpace, F be Function of X, Y;
       let W be Point of X, G be a_neighborhood of F.W;
            F.W in Int G by CONNSP_2:def 1;
 then A2:    W in F"Int G by FUNCT_2:46;
-           Int G is open by TOPS_1:51;
-       then F"Int G is open by A1,TOPS_2:55;
+       F"Int G is open by A1,TOPS_2:55;
        then W in Int(F"Int G) by A2,TOPS_1:55;
        then reconsider H = F"Int G as a_neighborhood of W by CONNSP_2:def 1;
       take H;
@@ -624,7 +655,7 @@ A6:       F.W in P1 by A5,FUNCT_2:46;
          then consider H being a_neighborhood of W such that
 A7:        F.:H c= P1 by A3;
          take Int H;
-         thus Int H is open by TOPS_1:51;
+         thus Int H is open;
 A8:        F"(F.:H) c= F"P1 by A7,RELAT_1:178;
               dom F = the carrier of X by FUNCT_2:def 1;
           then H c= F"(F.:H) by FUNCT_1:146;
@@ -642,39 +673,11 @@ then A9:        H c= F"P1 by A8,XBOOLE_1:1;
   end;
 end;
 
-definition
- let X be 1-sorted,Y be non empty 1-sorted, y be Element of Y;
- func X --> y -> Function of X,Y equals
-  (the carrier of X) --> y;
- coherence;
-end;
-
 reserve X, Y for non empty TopSpace;
 
-theorem Th36:
- for y being Point of Y holds X --> y is continuous
-  proof
-   let y be Point of Y;
-    set F = X --> y, H = [#] X;
-   let W be Point of X, G be a_neighborhood of F.W;
-    W in H;
-    then W in Int H by TOPS_1:43;
-    then reconsider H as a_neighborhood of W by CONNSP_2:def 1;
-   take H;
-        F.W in Int G & Int G c= G by CONNSP_2:def 1,TOPS_1:44;
-    then y = F.W & F.W in G by FUNCOP_1:13;
-    then F.:H c= {y} & {y} c= G by Th6,ZFMISC_1:37;
-   hence F.:H c= G by XBOOLE_1:1;
-  end;
-
 registration
-  let X, Y; let y be Point of Y;
-  cluster X --> y -> continuous;
-coherence by Th36;
-end;
-
-registration
-  let S, T be non empty TopSpace;
+  let S be TopSpace;
+  let T be non empty TopSpace;
   cluster continuous Function of S, T;
   existence
   proof
@@ -684,10 +687,10 @@ registration
   end;
 end;
 
-definition let X,Y,Z be non empty TopSpace,
+registration let X,Y,Z be non empty TopSpace,
                F be continuous Function of X,Y,
                G be continuous Function of Y,Z;
- redefine func G*F -> continuous Function of X,Z;
+ cluster G*F -> continuous Function of X,Z;
  coherence by TOPS_2:58;
 end;
 
@@ -695,8 +698,7 @@ theorem Th37:
  for A being continuous Function of X,Y, G being Subset of Y
     holds A"Int G c= Int(A"G)
   proof let A be continuous Function of X,Y, G be Subset of Y;
-       Int G is open by TOPS_1:51;
-then A1:  A"Int G is open by TOPS_2:55;
+A1:  A"Int G is open by TOPS_2:55;
    let e;
    assume
 A2:  e in A"Int G;
@@ -723,8 +725,8 @@ definition let X,Y be non empty TopSpace, W be Point of Y,
  correctness by Th38;
 end;
 
-theorem
-Th39: for X being non empty TopSpace,
+theorem Th39:
+ for X being non empty TopSpace,
           A,B being Subset of X,
           U being a_neighborhood of B st A c= B holds
           U is a_neighborhood of A
@@ -1147,8 +1149,7 @@ A5:     a = [:X1,Y1:] & X1 is open & Y1 is open by A3,A4;
       then [:X1,Y1:] c= [:Int V, Int W:] by ZFMISC_1:119;
      hence e in [:Int V, Int W:] by A4,A5;
     end;
-        Int V is open & Int W is open by TOPS_1:51;
-then A6:  [:Int V, Int W:] is open by Th46;
+A6:  [:Int V, Int W:] is open by Th46;
         Int V c= V & Int W c= W by TOPS_1:44;
     then [:Int V, Int W:] c= [:V,W:] by ZFMISC_1:119;
    hence [:Int V, Int W:] c= Int [:V,W:] by A6,TOPS_1:56;
@@ -1296,8 +1297,7 @@ theorem Th55:
  for X, Y being TopSpace, A being Subset of [:X,Y:] holds
   Int A = union Base-Appr A
  proof let X, Y be TopSpace, A be Subset of [:X,Y:];
-       Int A is open by TOPS_1:51;
-then A1: Int A = union Base-Appr Int A by Th54;
+A1: Int A = union Base-Appr Int A by Th54;
        Int A c= A by TOPS_1:44;
    then Base-Appr Int A c= Base-Appr A by Th52;
   hence Int A c= union Base-Appr A by A1,ZFMISC_1:95;
@@ -1418,7 +1418,7 @@ FUNCT_2:def 1
          then A9:        X1 = p.:c by A7,FUNCT_3:8;
              c = {} or c <> {};
          then X1 = X2 or X1 = {} by A8,A9,Th12,RELAT_1:149;
-        hence X1 is open by A1,A8,TOPS_1:52;
+        hence X1 is open by A1,A8;
        end;
           X1 = union(P.:K) by A2,A4,Th16;
      hence X1 is open by A5,TOPS_2:26;
@@ -1445,21 +1445,21 @@ A14:    c = [:X2,Y2:] & X2 is open & Y2 is open by A3,A12;
       then A15:     Y1 = p.:c by A13,FUNCT_3:8;
           c = {} or c <> {};
       then Y1 = Y2 or Y1 = {} by A14,A15,Th12,RELAT_1:149;
-     hence Y1 is open by A1,A14,TOPS_1:52;
+     hence Y1 is open by A1,A14;
     end;
        Y1 = union(P.:K) by A2,A10,Th16;
   hence Y1 is open by A11,TOPS_2:26;
  end;
 
-definition let X, Y be set, f be Function of bool X, bool Y;
-           let R be Subset-Family of X;
-  redefine func f.:R -> Subset-Family of Y;
-  coherence
-  proof
-        f.:R c= bool Y;
-    hence thesis;
-  end;
-end;
+::definition let X, Y be set, f be Function of bool X, bool Y;
+::           let R be Subset-Family of X;
+::  redefine func f.:R -> Subset-Family of Y;
+::  coherence
+::  proof
+::        f.:R c= bool Y;
+::    hence thesis;
+::  end;
+::end;
 
 theorem Th60:
  for H being Subset-Family of [:X,Y:] st H is open holds
@@ -1768,7 +1768,7 @@ FUNCT_3:def 6;
      thus [:V,W:] c= G by A27,Th56;
     end;
     suppose A = {} X;
-     then A c= Int {} X by XBOOLE_1:2;
+     then A c= Int {} X;
      then reconsider V = {} X as a_neighborhood of A by CONNSP_2:def 2;
      consider W being a_neighborhood of t;
      take V,W;
@@ -1817,7 +1817,7 @@ Lm1:
  proof let A be Subset of X such that A in TrivDecomp X;
   let V be a_neighborhood of A;
   take Int V;
-  thus Int V is open by TOPS_1:51;
+  thus Int V is open;
   thus A c= Int V by CONNSP_2:def 2;
   thus Int V c= V by TOPS_1:44;
   let B be Subset of X such that
@@ -1952,8 +1952,7 @@ A1:  the carrier of space D = D by Def10;
         F is continuous
      proof let W be Point of X, G be a_neighborhood of F.W;
        reconsider H = union Int G as Subset of X by A1,Th25;
-           Int G is open by TOPS_1:51;
-       then Int G in the topology of space D by PRE_TOPC:def 5;
+       Int G in the topology of space D by PRE_TOPC:def 5;
        then union Int G in the topology of X by A1,Th69;
 then A2:     H is open by PRE_TOPC:def 5;
            F.W in Int G by CONNSP_2:def 1;
@@ -1995,7 +1994,7 @@ theorem Th72:
  for D being non empty a_partition of the carrier of X
   holds rng Proj D = the carrier of space D
  proof let D be non empty a_partition of the carrier of X;
-  thus rng Proj D c= the carrier of space D by RELSET_1:12;
+  thus rng Proj D c= the carrier of space D;
   let e;
   assume e in the carrier of space D;
    then ex p being Point of X st (Proj D).p = e by Th71;
@@ -2340,12 +2339,12 @@ A1:    P in the topology of S;
      reconsider Q = P as Subset of T;
     take Q;
     thus Q in the topology of T by A1;
-    thus P = Q /\ [#]S by PRE_TOPC:15;
+    thus P = Q /\ [#]S by XBOOLE_1:28;
    end;
    given Q being Subset of T such that
 A2: Q in the topology of T and
 A3: P = Q /\ [#]S;
-    thus P in the topology of S by A2,A3,PRE_TOPC:15;
+    thus P in the topology of S by A2,A3,XBOOLE_1:28;
   end;
 
 registration let X be TopSpace;
@@ -2387,7 +2386,6 @@ definition
   proof let A be Subset of XX such that
 A1:  A in TrivExt D;
    let V be a_neighborhood of A;
-A2:  Int V is open by TOPS_1:51;
 A3:  Int V c= V by TOPS_1:44;
 A4:  A c= Int V by CONNSP_2:def 2;
         now per cases by A1,Th74;
@@ -2395,7 +2393,7 @@ A4:  A c= Int V by CONNSP_2:def 2;
 A5:    A in D;
       reconsider C = A as Subset of X by A5;
       reconsider E = Int V /\ [#]X as Subset of X by XBOOLE_1:17;
-A6:    E is open by A2,TOPS_2:32;
+A6:    E is open by TOPS_2:32;
           C c= E by A4,XBOOLE_1:19;
       then C c= Int E by A6,TOPS_1:55;
       then E is a_neighborhood of C by CONNSP_2:def 2;
@@ -2408,7 +2406,7 @@ A9:    for B being Subset of X st B in D & B meets W
 A10:    G is open and
 A11:    W = G /\ [#] X by A7,TOPS_2:32;
       take H = G /\ Int V;
-      thus H is open by A2,A10,TOPS_1:38;
+      thus H is open by A10,TOPS_1:38;
 A12:     W c= G by A11,XBOOLE_1:17;
        then C c= G by A8,XBOOLE_1:1;
       hence A c= H by A4,XBOOLE_1:19;
@@ -2446,7 +2444,7 @@ A18:      A = {x};
       take W = Int V \ C;
        C is closed by Def14;
        then C` is open by TOPS_1:29;
-       then (Int V) /\ C` is open by A2,TOPS_1:38;
+       then (Int V) /\ C` is open by TOPS_1:38;
       hence W is open by SUBSET_1:32;
            x in A by A18,TARSKI:def 1;
        then x in W by A4,A17,XBOOLE_0:def 4;
@@ -2771,7 +2769,7 @@ end;
 theorem
      for XX being non empty TopSpace, X being closed non empty SubSpace of XX,
      D being DECOMPOSITION of X st X is_a_retract_of XX
-   holds space(D) is_a_retract_of space(TrivExt D)
+   holds space D is_a_retract_of space TrivExt D
  proof
   let XX be non empty TopSpace, X be closed non empty SubSpace of XX,
       D be DECOMPOSITION of X;
@@ -2784,11 +2782,9 @@ A2:    Proj TrivExt D.xx=Proj TrivExt D.xx' and
 A3:    (Proj D*R).xx<>(Proj D*R).xx';
 A4:    xx in the carrier of X & xx' in the carrier of X by A2,A3,Th78;
        then R.xx=xx & R.xx'=xx' by A1,Def19;
-then A5:    Proj D.xx = (Proj D*R).xx & Proj D.xx'= (Proj D*R).xx' by
-FUNCT_2:21;
-           Proj TrivExt D.xx=Proj D.xx & Proj TrivExt D.xx'=Proj D.xx' by A4,
-Th76
-;
+       then
+A5:    Proj D.xx = (Proj D*R).xx & Proj D.xx'= (Proj D*R).xx' by FUNCT_2:21;
+       Proj TrivExt D.xx=Proj D.xx & Proj TrivExt D.xx'=Proj D.xx' by A4,Th76;
       hence contradiction by A2,A3,A5;
      end;
      then consider F being
@@ -2799,9 +2795,12 @@ Th76
          F is continuous
       proof let W be Point of space TrivExt D;
        let G be a_neighborhood of F.W;
+        reconsider FF = Proj D*R as continuous Function of XX, space D
+                by TOPS_2:58;
+X: FF"G is a_neighborhood of (Proj D*R)"{F.W};
             Proj TrivExt D"{W} c= (Proj D*R)"{F.W} by A6,Th20;
         then reconsider GG=(Proj D*R)"G
-         as a_neighborhood of Proj TrivExt D"{W} by Th39;
+         as a_neighborhood of Proj TrivExt D"{W} by Th39,X;
         reconsider V'=Proj TrivExt D.:GG as a_neighborhood of W by Th81;
        take V=V';
             F.:V=(Proj D*R).:GG by A6,RELAT_1:159;
@@ -2869,13 +2868,15 @@ then A7:       CH1.xx=x & CH1.xx'=x' by A1,A4,A5;
        Element of [:the carrier of space TrivExt D, the carrier of I[01]:] by
 Def5;
     let G be a_neighborhood of THETA.WT;
+     reconsider FF = Proj TrivExt D*CH1
+       as continuous Function of [:XX,I[01]:], space TrivExt D by TOPS_2:58;
      consider W being Point of space TrivExt D, T being Point of I[01]
       such that A9: WT=[W,T] by Th50;
          II"{xt'} = [:Proj TrivExt D"{W},{T}:] by A9,Th24;
-     then [:Proj TrivExt D"{W},{T}:] c= (Proj TrivExt D*CH1)"{THETA.WT}
+     then [:Proj TrivExt D"{W},{T}:] c= FF"{THETA.WT}
       by A8,Th20;
-     then reconsider GG=(Proj TrivExt D*CH1)"G as
-     a_neighborhood of [:Proj TrivExt D"{W},{T}:] by Th39;
+     then reconsider GG=FF"G as
+       a_neighborhood of [:Proj TrivExt D"{W},{T}:] by Th39;
          W in the carrier of space TrivExt D;
 then A10:   W in TrivExt D by Def10;
          (Proj TrivExt D)"{W} = W by A10,Th30;
@@ -2918,3 +2919,16 @@ A16: W in the carrier of space(D);
         (THETA'*II). [W',T] = W by A8,A14,FUNCT_2:21;
   hence THETA''. [W,T] =W;
  end;
+
+theorem 
+  for r being real number holds
+    0 <= r & r <= 1 iff r in the carrier of I[01]
+  proof
+    let r be real number;
+A1: r is Real by XREAL_0:def 1;
+A2: [.0,1.] = { r1 where r1 is Real : 0 <= r1 & r1 <= 1 } by RCOMP_1:def 1;
+    hence 0 <= r & r <= 1 implies r in the carrier of I[01] by A1,Th83;
+    assume r in the carrier of I[01];
+    then ex r2 being Real st r2 = r & 0 <= r2 & r2 <= 1 by A2,Th83;
+    hence thesis;
+  end;

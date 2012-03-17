@@ -1,20 +1,20 @@
 :: Several Differentiable Formulas of Special Functions -- Part {II}
 ::  by Yan Zhang , Bo Li and Xiquan Liang
-:: 
+::
 :: Received November 23, 2005
 :: Copyright (c) 2005 Association of Mizar Users
 
 environ
 
- vocabularies PRE_TOPC, BOOLE, FUNCT_1, ARYTM_1, ARYTM_3, RELAT_1, ORDINAL2,
-      PARTFUN1, SEQ_1, SIN_COS, FDIFF_1, PREPOWER, POWER, GROUP_1, SQUARE_1,
-      TAYLOR_1, FINSEQ_1, ABSVALUE, LIMFUNC1;
+ vocabularies PRE_TOPC, BOOLE, FUNCT_1, ARYTM_1, ARYTM_3, RELAT_1, PARTFUN1,
+      SEQ_1, SIN_COS, FDIFF_1, PREPOWER, POWER, GROUP_1, SQUARE_1, TAYLOR_1,
+      FINSEQ_1, ABSVALUE, LIMFUNC1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, PARTFUN1, LIMFUNC1, RCOMP_1,
       NUMBERS, REAL_1, NAT_1, SEQ_1, FDIFF_1, PREPOWER, POWER, TAYLOR_1,
       SIN_COS, RFUNCT_1, SQUARE_1, XXREAL_0;
  constructors REAL_1, NAT_1, PARTFUN1, PARTFUN2, LIMFUNC1, RCOMP_1, TAYLOR_1,
-      SERIES_1, PREPOWER, FDIFF_2, SIN_COS, RFUNCT_1, XXREAL_0;
- registrations RELSET_1, XREAL_0, MEMBERED, RCOMP_1, INT_1, SEQ_1;
+      SERIES_1, PREPOWER, FDIFF_2, SIN_COS, RFUNCT_1, XXREAL_0, SQUARE_1;
+ registrations RELSET_1, XREAL_0, MEMBERED, RCOMP_1, INT_1, SEQ_1, XXREAL_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
 
 
@@ -28,11 +28,11 @@ begin
 
 :: a #R x=exp.(x*ln a)
 theorem :: FDIFF_6:1
-  a>0 implies exp.(x*log(number_e,a))=a #R x;
+  a>0 implies exp_R.(x*log(number_e,a))=a #R x;
 
 :: 15 a #R (-x)=exp.(-x*ln a)
 theorem :: FDIFF_6:2
-  a>0 implies exp.(-x*log(number_e,a))=a #R (-x);
+  a>0 implies exp_R.(-x*log(number_e,a))=a #R (-x);
 
 :: 1 f.x=a^2-x^2
 theorem :: FDIFF_6:3
@@ -89,189 +89,194 @@ theorem :: FDIFF_6:10
 
 :: 10 f.x=a #R x=exp.(x*ln a)
 theorem :: FDIFF_6:11
-  Z c= dom (exp*f) & (for x st x in Z holds f.x=x*log(number_e,a)) &
+  Z c= dom (exp_R*f) & (for x st x in Z holds f.x=x*log(number_e,a)) &
   a>0 implies
-  exp*f is_differentiable_on Z &
-  for x st x in Z holds ((exp*f)`|Z).x =a #R x*log(number_e,a);
+  exp_R*f is_differentiable_on Z &
+  for x st x in Z holds ((exp_R*f)`|Z).x =a #R x*log(number_e,a);
 
 :: 11 f.x=(a #R x)*(x-1/ln a)/ln a
 theorem :: FDIFF_6:12
-  Z c= dom ((1/log(number_e,a))(#)((exp*f1)(#)f2)) &
+  Z c= dom ((1/log(number_e,a))(#)((exp_R*f1)(#)f2)) &
   (for x st x in Z holds f1.x=x*log(number_e,a) & f2.x=x-1/log(number_e,a)) &
   a>0 & a<>1 implies
-  (1/log(number_e,a))(#)((exp*f1)(#)f2) is_differentiable_on Z &
+  (1/log(number_e,a))(#)((exp_R*f1)(#)f2) is_differentiable_on Z &
   for x st x in Z holds
-  (((1/log(number_e,a))(#)((exp*f1)(#)f2))`|Z).x =x * a #R x;
+  (((1/log(number_e,a))(#)((exp_R*f1)(#)f2))`|Z).x =x * a #R x;
 
 :: 12 f.x=a #R x*exp(x)/(1+ln a)
 theorem :: FDIFF_6:13
-  Z c= dom ((1/(1+log(number_e,a)))(#)((exp*f)(#)exp)) &
+  Z c= dom ((1/(1+log(number_e,a)))(#)((exp_R*f)(#)exp_R)) &
   (for x st x in Z holds f.x=x*log(number_e,a)) & a>0 & a<>1/number_e
   implies
-  (1/(1+log(number_e,a)))(#)((exp*f)(#)exp) is_differentiable_on Z &
+  (1/(1+log(number_e,a)))(#)((exp_R*f)(#)exp_R) is_differentiable_on Z &
   for x st x in Z holds
-  (((1/(1+log(number_e,a)))(#)((exp*f)(#)exp))`|Z).x =a #R x*exp.x;
+  (((1/(1+log(number_e,a)))(#)((exp_R*f)(#)exp_R))`|Z).x =a #R x*exp_R.x;
 
-:: 13 f.x=exp(-x)
+:: 13 f.x=exp_R(-x)
 theorem :: FDIFF_6:14
-  Z c= dom (exp*f) & (for x st x in Z holds f.x=-x)
-  implies exp*f is_differentiable_on Z &
-  for x st x in Z holds ((exp*f)`|Z).x = -exp(-x);
+  Z c= dom (exp_R*f) & (for x st x in Z holds f.x=-x)
+  implies exp_R*f is_differentiable_on Z &
+  for x st x in Z holds ((exp_R*f)`|Z).x = -exp_R(-x);
 
-:: 14 f.x=-(x+1)*exp(-x)
+:: 14 f.x=-(x+1)*exp_R(-x)
 theorem :: FDIFF_6:15
-  Z c= dom (f1(#)(exp*f2)) & (for x st x in Z holds f1.x=-x-1 & f2.x=-x)
-  implies f1(#)(exp*f2) is_differentiable_on Z &
-  for x st x in Z holds ((f1(#)(exp*f2))`|Z).x = x/exp(x);
+  Z c= dom (f1(#)(exp_R*f2)) & (for x st x in Z holds f1.x=-x-1 & f2.x=-x)
+  implies f1(#)(exp_R*f2) is_differentiable_on Z &
+  for x st x in Z holds ((f1(#)(exp_R*f2))`|Z).x = x/exp_R(x);
 
-:: 16 f.x=a #R (-x)=exp.(-x*ln a)
+:: 16 f.x=a #R (-x)=exp_R.(-x*ln a)
 theorem :: FDIFF_6:16
-  Z c= dom -(exp*f) & (for x st x in Z holds f.x=-x*log(number_e,a))
+  Z c= dom -(exp_R*f) & (for x st x in Z holds f.x=-x*log(number_e,a))
   & a>0 implies
-  -(exp*f) is_differentiable_on Z &
-  for x st x in Z holds ((-(exp*f))`|Z).x =a #R (-x)*log(number_e,a);
+  -(exp_R*f) is_differentiable_on Z &
+  for x st x in Z holds ((-(exp_R*f))`|Z).x =a #R (-x)*log(number_e,a);
 
 :: 17 f.x=-(a #R -x)*(x+1/ln a)/ln a
 theorem :: FDIFF_6:17
-  Z c= dom ((1/log(number_e,a))(#)((-(exp*f1))(#)f2)) &
+  Z c= dom ((1/log(number_e,a))(#)((-(exp_R*f1))(#)f2)) &
   (for x st x in Z holds f1.x=-x*log(number_e,a) & f2.x=x+1/log(number_e,a)) &
   a>0 & a<>1 implies
-  (1/log(number_e,a))(#)((-(exp*f1))(#)f2) is_differentiable_on Z &
+  (1/log(number_e,a))(#)((-(exp_R*f1))(#)f2) is_differentiable_on Z &
   for x st x in Z holds
-  (((1/log(number_e,a))(#)((-(exp*f1))(#)f2))`|Z).x =x /a #R x;
+  (((1/log(number_e,a))(#)((-(exp_R*f1))(#)f2))`|Z).x =x /a #R x;
 
-:: 18 f.x=(1/(ln a-1))*a #R x/exp(x)
+:: 18 f.x=(1/(ln a-1))*a #R x/exp_R(x)
 theorem :: FDIFF_6:18
-  Z c= dom ((1/(log(number_e,a)-1))(#)((exp*f)/exp)) &
+  Z c= dom ((1/(log(number_e,a)-1))(#)((exp_R*f)/exp_R)) &
   (for x st x in Z holds f.x=x*log(number_e,a)) & a>0 & a<>number_e
   implies
-  (1/(log(number_e,a)-1))(#)((exp*f)/exp) is_differentiable_on Z &
+  (1/(log(number_e,a)-1))(#)((exp_R*f)/exp_R) is_differentiable_on Z &
   for x st x in Z holds
-  (((1/(log(number_e,a)-1))(#)((exp*f)/exp))`|Z).x =a #R x/exp.x;
+  (((1/(log(number_e,a)-1))(#)((exp_R*f)/exp_R))`|Z).x =a #R x/exp_R.x;
 
-:: 19 f.x=(1/(1-ln a))*exp(x)/a #R x
+:: 19 f.x=(1/(1-ln a))*exp_R(x)/a #R x
 theorem :: FDIFF_6:19
-  Z c= dom ((1/(1-log(number_e,a)))(#)(exp/(exp*f))) &
+  Z c= dom ((1/(1-log(number_e,a)))(#)(exp_R/(exp_R*f))) &
   (for x st x in Z holds f.x=x*log(number_e,a)) & a>0 & a<>number_e
   implies
-  (1/(1-log(number_e,a)))(#)(exp/(exp*f)) is_differentiable_on Z &
+  (1/(1-log(number_e,a)))(#)(exp_R/(exp_R*f)) is_differentiable_on Z &
   for x st x in Z holds
-  (((1/(1-log(number_e,a)))(#)(exp/(exp*f)))`|Z).x =exp.x/a #R x;
+  (((1/(1-log(number_e,a)))(#)(exp_R/(exp_R*f)))`|Z).x =exp_R.x/a #R x;
 
-:: 20 f.x=ln(exp.x+1)
+:: 20 f.x=ln(exp_R.x+1)
 theorem :: FDIFF_6:20
-  Z c= dom ((log_ number_e)*(exp+f)) & (for x st x in Z holds f.x=1 )
-  implies (log_ number_e)*(exp+f) is_differentiable_on Z &
-  for x st x in Z holds (((log_ number_e)*(exp+f))`|Z).x = exp.x/(exp.x+1);
+  Z c= dom ((log_ number_e)*(exp_R+f)) & (for x st x in Z holds f.x=1 )
+  implies (log_ number_e)*(exp_R+f) is_differentiable_on Z &
+  for x st x in Z holds
+   (((log_ number_e)*(exp_R+f))`|Z).x = exp_R.x/(exp_R.x+1);
 
-:: 21 f.x=ln(exp.x-1)
+:: 21 f.x=ln(exp_R.x-1)
 theorem :: FDIFF_6:21
-  Z c= dom ((log_ number_e)*(exp-f)) & (for x st x in Z holds f.x=1
-  & (exp-f).x>0) implies (log_ number_e)*(exp-f) is_differentiable_on Z &
-  for x st x in Z holds (((log_ number_e)*(exp-f))`|Z).x = exp.x/(exp.x-1);
+  Z c= dom ((log_ number_e)*(exp_R-f)) & (for x st x in Z holds f.x=1
+  & (exp_R-f).x>0) implies (log_ number_e)*(exp_R-f) is_differentiable_on Z &
+  for x st x in Z holds
+   (((log_ number_e)*(exp_R-f))`|Z).x = exp_R.x/(exp_R.x-1);
 
-:: 22 f.x=-ln(1-exp.x)
+:: 22 f.x=-ln(1-exp_R.x)
 theorem :: FDIFF_6:22
-  Z c= dom -((log_ number_e)*(f-exp)) & (for x st x in Z holds f.x=1
-  & (f-exp).x>0) implies -((log_ number_e)*(f-exp)) is_differentiable_on Z &
-  for x st x in Z holds (((-(log_ number_e)*(f-exp)))`|Z).x = exp.x/(1-exp.x);
+  Z c= dom -((log_ number_e)*(f-exp_R)) & (for x st x in Z holds f.x=1
+  & (f-exp_R).x>0) implies
+      -((log_ number_e)*(f-exp_R)) is_differentiable_on Z &
+  for x st x in Z holds (((-(log_ number_e)*(f-exp_R)))`|Z).x =
+      exp_R.x/(1-exp_R.x);
 
-:: 23 f.x=exp(2*x)+1
+:: 23 f.x=exp_R(2*x)+1
 theorem :: FDIFF_6:23
-  Z c= dom ((( #Z 2)*exp)+f) & (for x st x in Z holds f.x=1)
-  implies (( #Z 2)*exp)+f is_differentiable_on Z & for x st x in Z holds
-  (((( #Z 2)*exp)+f)`|Z).x =2*exp(2*x);
+  Z c= dom ((( #Z 2)*exp_R)+f) & (for x st x in Z holds f.x=1)
+  implies (( #Z 2)*exp_R)+f is_differentiable_on Z & for x st x in Z holds
+  (((( #Z 2)*exp_R)+f)`|Z).x =2*exp_R(2*x);
 
-:: 24 f.x=(1/2)*ln(exp(2*x)+1)
+:: 24 f.x=(1/2)*ln(exp_R(2*x)+1)
 theorem :: FDIFF_6:24
-  Z c= dom ((1/2)(#)((log_ number_e)*f)) & f=(( #Z 2)*exp)+f1 &
+  Z c= dom ((1/2)(#)((log_ number_e)*f)) & f=(( #Z 2)*exp_R)+f1 &
   (for x st x in Z holds f1.x=1) implies (1/2)(#)((log_ number_e)*f)
   is_differentiable_on Z & for x st x in Z holds
-  (((1/2)(#)((log_ number_e)*f))`|Z).x =exp(x)/(exp(x)+exp(-x));
+  (((1/2)(#)((log_ number_e)*f))`|Z).x =exp_R(x)/(exp_R(x)+exp_R(-x));
 
-:: 25 f.x=exp(2*x)-1
+:: 25 f.x=exp_R(2*x)-1
 theorem :: FDIFF_6:25
-  Z c= dom ((( #Z 2)*exp)-f) & (for x st x in Z holds f.x=1)
-  implies (( #Z 2)*exp)-f is_differentiable_on Z & for x st x in Z holds
-  (((( #Z 2)*exp)-f)`|Z).x =2*exp(2*x);
+  Z c= dom ((( #Z 2)*exp_R)-f) & (for x st x in Z holds f.x=1)
+  implies (( #Z 2)*exp_R)-f is_differentiable_on Z & for x st x in Z holds
+  (((( #Z 2)*exp_R)-f)`|Z).x =2*exp_R(2*x);
 
-:: 26 f.x=(1/2)*ln(exp(2*x)-1)
+:: 26 f.x=(1/2)*ln(exp_R(2*x)-1)
 theorem :: FDIFF_6:26
-  Z c= dom ((1/2)(#)((log_ number_e)*f)) & f=(( #Z 2)*exp)-f1 &
+  Z c= dom ((1/2)(#)((log_ number_e)*f)) & f=(( #Z 2)*exp_R)-f1 &
   (for x st x in Z holds f1.x=1 & f.x>0) implies (1/2)(#)((log_ number_e)*f)
   is_differentiable_on Z & for x st x in Z holds
-  (((1/2)(#)((log_ number_e)*f))`|Z).x =exp(x)/(exp(x)-exp(-x));
+  (((1/2)(#)((log_ number_e)*f))`|Z).x =exp_R(x)/(exp_R(x)-exp_R(-x));
 
-:: 27 f.x=(exp.x-1)^2
+:: 27 f.x=(exp_R.x-1)^2
 theorem :: FDIFF_6:27
-  Z c= dom (( #Z 2)*(exp-f)) & (for x st x in Z holds f.x=1)
-  implies ( #Z 2)*(exp-f) is_differentiable_on Z & for x st x in Z holds
-  ((( #Z 2)*(exp-f))`|Z).x =2*exp.x*(exp.x-1);
+  Z c= dom (( #Z 2)*(exp_R-f)) & (for x st x in Z holds f.x=1)
+  implies ( #Z 2)*(exp_R-f) is_differentiable_on Z & for x st x in Z holds
+  ((( #Z 2)*(exp_R-f))`|Z).x =2*exp_R.x*(exp_R.x-1);
 
-:: 28 f.x=ln((exp.x-1)^2/exp.x)
+:: 28 f.x=ln((exp_R.x-1)^2/exp_R.x)
 theorem :: FDIFF_6:28
-  Z c= dom f & f=(log_ number_e)*((( #Z 2)*(exp-f1))/exp) &
-  (for x st x in Z holds f1.x=1 & (exp-f1).x>0) implies
+  Z c= dom f & f=(log_ number_e)*((( #Z 2)*(exp_R-f1))/exp_R) &
+  (for x st x in Z holds f1.x=1 & (exp_R-f1).x>0) implies
     f is_differentiable_on Z &
-      for x st x in Z holds (f`|Z).x =(exp.x+1)/(exp.x-1);
+      for x st x in Z holds (f`|Z).x =(exp_R.x+1)/(exp_R.x-1);
 
-:: 29 f.x=(exp.x+1)^2
+:: 29 f.x=(exp_R.x+1)^2
 theorem :: FDIFF_6:29
-  Z c= dom (( #Z 2)*(exp+f)) & (for x st x in Z holds f.x=1)
-  implies ( #Z 2)*(exp+f) is_differentiable_on Z & for x st x in Z holds
-  ((( #Z 2)*(exp+f))`|Z).x =2*exp.x*(exp.x+1);
+  Z c= dom (( #Z 2)*(exp_R+f)) & (for x st x in Z holds f.x=1)
+  implies ( #Z 2)*(exp_R+f) is_differentiable_on Z & for x st x in Z holds
+  ((( #Z 2)*(exp_R+f))`|Z).x =2*exp_R.x*(exp_R.x+1);
 
-:: 30 f.x=ln((exp.x+1)^2/exp.x)
+:: 30 f.x=ln((exp_R.x+1)^2/exp_R.x)
 theorem :: FDIFF_6:30
-  Z c= dom f & f=(log_ number_e)*((( #Z 2)*(exp+f1))/exp) &
+  Z c= dom f & f=(log_ number_e)*((( #Z 2)*(exp_R+f1))/exp_R) &
   (for x st x in Z holds f1.x=1) implies f is_differentiable_on Z
-  & for x st x in Z holds (f`|Z).x =(exp.x-1)/(exp.x+1);
+  & for x st x in Z holds (f`|Z).x =(exp_R.x-1)/(exp_R.x+1);
 
-:: 31 f.x=(1-exp.x)^2
+:: 31 f.x=(1-exp_R.x)^2
 theorem :: FDIFF_6:31
-  Z c= dom (( #Z 2)*(f-exp)) & (for x st x in Z holds f.x=1)
-  implies ( #Z 2)*(f-exp) is_differentiable_on Z & for x st x in Z holds
-  ((( #Z 2)*(f-exp))`|Z).x =-2*exp.x*(1-exp.x);
+  Z c= dom (( #Z 2)*(f-exp_R)) & (for x st x in Z holds f.x=1)
+  implies ( #Z 2)*(f-exp_R) is_differentiable_on Z & for x st x in Z holds
+  ((( #Z 2)*(f-exp_R))`|Z).x =-2*exp_R.x*(1-exp_R.x);
 
-:: 32 f.x=ln(exp.x/(1-exp.x)^2)
+:: 32 f.x=ln(exp_R.x/(1-exp_R.x)^2)
 theorem :: FDIFF_6:32
-  Z c= dom f & f=(log_ number_e)*(exp/(( #Z 2)*(f1-exp))) &
-  (for x st x in Z holds f1.x=1 & (f1-exp).x>0) implies
+  Z c= dom f & f=(log_ number_e)*(exp_R/(( #Z 2)*(f1-exp_R))) &
+  (for x st x in Z holds f1.x=1 & (f1-exp_R).x>0) implies
   f is_differentiable_on Z &
-  for x st x in Z holds (f`|Z).x =(1+exp.x)/(1-exp.x);
+  for x st x in Z holds (f`|Z).x =(1+exp_R.x)/(1-exp_R.x);
 
-:: 33 f.x=ln(exp.x/(1+exp.x)^2)
+:: 33 f.x=ln(exp_R.x/(1+exp_R.x)^2)
 theorem :: FDIFF_6:33
-  Z c= dom f & f=(log_ number_e)*(exp/(( #Z 2)*(f1+exp))) &
+  Z c= dom f & f=(log_ number_e)*(exp_R/(( #Z 2)*(f1+exp_R))) &
   (for x st x in Z holds f1.x=1) implies f is_differentiable_on Z
-  & for x st x in Z holds (f`|Z).x =(1-exp.x)/(1+exp.x);
+  & for x st x in Z holds (f`|Z).x =(1-exp_R.x)/(1+exp_R.x);
 
-:: 34 f.x=ln(exp(x)+exp(-x))
+:: 34 f.x=ln(exp_R(x)+exp_R(-x))
 theorem :: FDIFF_6:34
-  Z c= dom ((log_ number_e)*f) & f=exp+(exp*f1) & (for x st x in Z holds
+  Z c= dom ((log_ number_e)*f) & f=exp_R+(exp_R*f1) & (for x st x in Z holds
   f1.x=-x) implies (log_ number_e)*f is_differentiable_on Z & for x st x in Z
-  holds (((log_ number_e)*f)`|Z).x =(exp(x)-exp(-x))/(exp(x)+exp(-x));
+  holds (((log_ number_e)*f)`|Z).x =(exp_R(x)-exp_R(-x))/(exp_R(x)+exp_R(-x));
 
-:: 35 f.x=ln(exp(x)-exp(-x))
+:: 35 f.x=ln(exp_R(x)-exp_R(-x))
 theorem :: FDIFF_6:35
-  Z c= dom ((log_ number_e)*f) & f=exp-(exp*f1) & (for x st x in Z holds
+  Z c= dom ((log_ number_e)*f) & f=exp_R-(exp_R*f1) & (for x st x in Z holds
   f1.x=-x & f.x>0) implies (log_ number_e)*f is_differentiable_on Z & for x
-  st x in Z holds (((log_ number_e)*f)`|Z).x=(exp(x)+exp(-x))/(exp(x)-exp(-x));
+  st x in Z holds (((log_ number_e)*f)`|Z).x=(exp_R(x)+exp_R(-x))/
+     (exp_R(x)-exp_R(-x));
 
-:: 36 f.x=(2/3)*((1+exp.x) #R (3/2))
+:: 36 f.x=(2/3)*((1+exp_R.x) #R (3/2))
 theorem :: FDIFF_6:36
-  Z c= dom ((2/3)(#)(( #R (3/2))*(f+exp))) & (for x st x in Z holds f.x=1)
-  implies (2/3)(#)(( #R (3/2))*(f+exp)) is_differentiable_on Z &
+  Z c= dom ((2/3)(#)(( #R (3/2))*(f+exp_R))) & (for x st x in Z holds f.x=1)
+  implies (2/3)(#)(( #R (3/2))*(f+exp_R)) is_differentiable_on Z &
   for x st x in Z
-  holds (((2/3)(#)(( #R (3/2))*(f+exp)))`|Z).x =exp.x*(1+exp.x) #R (1/2);
+  holds (((2/3)(#)(( #R (3/2))*(f+exp_R)))`|Z).x =exp_R.x*(1+exp_R.x) #R (1/2);
 
 :: 37 f.x=(2/(3*lna))*((1+a |^x) #R (3/2))
 theorem :: FDIFF_6:37
-  Z c= dom ((2/(3*log(number_e,a)))(#)(( #R (3/2))*(f+(exp*f1)))) &
+  Z c= dom ((2/(3*log(number_e,a)))(#)(( #R (3/2))*(f+(exp_R*f1)))) &
   (for x st x in Z holds f.x=1 & f1.x=x*log(number_e,a)) & a>0 & a<>1
-  implies (2/(3*log(number_e,a)))(#)(( #R (3/2))*(f+(exp*f1)))
+  implies (2/(3*log(number_e,a)))(#)(( #R (3/2))*(f+(exp_R*f1)))
   is_differentiable_on Z & for x st x in Z holds
-  (((2/(3*log(number_e,a)))(#)(( #R (3/2))*(f+(exp*f1))))`|Z).x
+  (((2/(3*log(number_e,a)))(#)(( #R (3/2))*(f+(exp_R*f1))))`|Z).x
   =a #R x * (1+a #R x) #R (1/2);
 
 :: 38 f.x=(-1/2)*cos(2*x)

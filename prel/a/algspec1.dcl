@@ -9,6 +9,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
@@ -31,7 +32,6 @@
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="MSUALG_1"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
@@ -48,7 +48,7 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="105"/>
+<Adjective nr="103"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -57,10 +57,10 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="79"/>
-<Adjective nr="80" value="false"/>
-<Adjective nr="105"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="77"/>
+<Adjective nr="78" value="false"/>
+<Adjective nr="103"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -78,13 +78,13 @@
 <Adjective nr="4"/>
 <Adjective nr="8">
 <LocusVar nr="2"/>
-<Func kind="K" nr="166">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 </Cluster>
 <LocusVar nr="2"/>
-<Func kind="K" nr="166">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -107,16 +107,16 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="79"/>
-<Adjective nr="80" value="false"/>
+<Adjective nr="77"/>
+<Adjective nr="78" value="false"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="105"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="103"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -126,16 +126,16 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="105"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="103"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="80" value="false"/>
-<Adjective nr="105"/>
+<Adjective nr="78" value="false"/>
+<Adjective nr="103"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -145,9 +145,9 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="80" value="false"/>
-<Adjective nr="105"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="78" value="false"/>
+<Adjective nr="103"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -12,12 +12,13 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="INT_1"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -54,8 +55,8 @@
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="23"/>
-<Adjective nr="25" value="false"/>
-<Adjective nr="26"/>
+<Adjective nr="24"/>
+<Adjective nr="26" value="false"/>
 <Adjective nr="27"/>
 </Cluster>
 </FCluster>
@@ -76,8 +77,8 @@
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="23"/>
-<Adjective nr="25" value="false"/>
-<Adjective nr="26"/>
+<Adjective nr="24"/>
+<Adjective nr="26" value="false"/>
 <Adjective nr="27"/>
 </Cluster>
 </CCluster>

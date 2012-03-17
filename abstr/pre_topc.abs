@@ -8,9 +8,9 @@ environ
 
  vocabularies SETFAM_1, TARSKI, BOOLE, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL2,
       PRE_TOPC;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_2,
-      STRUCT_0;
- constructors STRUCT_0, FUNCT_2, MEMBERED, SETFAM_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1,
+      FUNCT_2, STRUCT_0;
+ constructors STRUCT_0, FUNCT_2, MEMBERED, SETFAM_1, PARTFUN1;
  registrations STRUCT_0, RELSET_1, SUBSET_1, MEMBERED;
  requirements BOOLE, SUBSET;
 
@@ -50,6 +50,11 @@ end;
 
 definition let S be 1-sorted;
   mode Point of S is Element of S;
+end;
+
+registration
+ let T be TopSpace;
+ cluster the topology of T -> non empty;
 end;
 
 reserve GX for TopSpace;
@@ -187,32 +192,35 @@ registration let T be TopSpace, P be Subset of T;
   cluster T|P -> TopSpace-like;
 end;
 
-:: Moved to STRUCT_0 on 2005.09.22
-:: definition let S, T be 1-sorted;
-::   mode map of S, T is Function of the carrier of S, the carrier of T;
-:: end;
+theorem :: PRE_TOPC:28
+for S being TopSpace,
+  P1,P2 being Subset of S,
+  P1' being Subset of S|P2 st P1=P1' & P1 c= P2
+  holds S|P1=(S|P2)|P1';
 
-definition let S, T be 1-sorted,
-               f be Function of the carrier of S, the carrier of T,
-               P be set;
-  redefine func f.:P -> Subset of T;
-end;
+theorem :: PRE_TOPC:29  :: JORDAN1:1, AK, 20.02.2006
+for GX being TopStruct,
+    A being Subset of GX holds the carrier of (GX|A) = A;
 
-definition let S, T be 1-sorted,
-               f be Function of the carrier of S, the carrier of T,
-               P be set;
-  redefine func f"P -> Subset of S;
-end;
+theorem :: PRE_TOPC:30 :: JGRAPH_3:12, AK, 20.02.2006
+  for X being TopStruct,Y being non empty TopStruct,
+      f being Function of X,Y,
+      P being Subset of X holds f|P is Function of X|P,Y;
 
 definition let S, T be TopStruct, f be Function of S,T;
  canceled;
-
   attr f is continuous means
 :: PRE_TOPC:def 12
     for P1 being Subset of T st P1 is closed holds f" P1 is closed;
 end;
 
-canceled 11;
+theorem :: PRE_TOPC:31
+ for T1, T2, S1, S2 being TopStruct
+   st the TopStruct of T1 = the TopStruct of T2 &
+      the TopStruct of S1 = the TopStruct of S2
+  holds S1 is SubSpace of T1 implies S2 is SubSpace of T2;
+
+canceled 7;
 
 theorem :: PRE_TOPC:39
   for X' being SubSpace of T, A being Subset of X'

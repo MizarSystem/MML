@@ -8,6 +8,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
@@ -34,7 +35,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="69"/>
+<Adjective nr="67"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -44,11 +45,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="29" value="false"/>
+<Adjective nr="67"/>
+<Adjective nr="68"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
 <Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="73"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -58,11 +59,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="29" value="false"/>
+<Adjective nr="67"/>
+<Adjective nr="68"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
-<Adjective nr="71"/>
 <Adjective nr="72"/>
-<Adjective nr="74"/>
 </Cluster>
 </RCluster>
 </Registrations>

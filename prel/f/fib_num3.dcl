@@ -13,34 +13,34 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="FIB_NUM"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="FIB_NUM3"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="65"/>
+<Func kind="K" nr="69"/>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="70"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21" value="false"/>
-<Adjective nr="24"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes/>
-<Func kind="K" nr="66"/>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
-<Adjective nr="20" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="24"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -50,7 +50,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="77">
+<Func kind="K" nr="79">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -62,8 +62,8 @@
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="21" value="false"/>
-<Adjective nr="22"/>
+<Adjective nr="21"/>
+<Adjective nr="22" value="false"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 </Cluster>

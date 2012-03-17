@@ -15,6 +15,21 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XXREAL_0"/>
 </Signature>
+<RCluster>
+<ArgTypes/>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="K" nr="52"/>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22" value="false"/>
+</Cluster>
+</RCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster/>
@@ -24,8 +39,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="21"/>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -9,6 +9,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
@@ -29,8 +30,8 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -38,7 +39,7 @@
 <For>
 <Typ kind="M" nr="8">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="33"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -47,7 +48,7 @@
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="134">
+<Func kind="K" nr="151">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -62,7 +63,7 @@
 <For>
 <Typ kind="M" nr="8">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="33"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -91,7 +92,7 @@
 <For>
 <Typ kind="M" nr="8">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="33"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -108,8 +109,8 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -122,14 +123,14 @@
 <And>
 <Pred kind="R" nr="3">
 <Var nr="1"/>
-<Func kind="K" nr="123">
+<Func kind="K" nr="140">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
 <For>
 <Typ kind="M" nr="8">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="33"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

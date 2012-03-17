@@ -10,6 +10,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -22,7 +23,6 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="RELAT_2"/>
@@ -81,8 +81,8 @@
 <Adjective nr="140"/>
 <Adjective nr="141"/>
 <Adjective nr="142"/>
+<Adjective nr="179"/>
 <Adjective nr="181"/>
-<Adjective nr="183"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -101,7 +101,7 @@
 <Adjective nr="10" value="false"/>
 <Adjective nr="84"/>
 <Adjective nr="114"/>
-<Adjective nr="183"/>
+<Adjective nr="181"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -137,7 +137,7 @@
 <Adjective nr="140"/>
 <Adjective nr="141"/>
 <Adjective nr="142"/>
-<Adjective nr="184"/>
+<Adjective nr="182"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -187,7 +187,7 @@
 <Adjective nr="140"/>
 <Adjective nr="141"/>
 <Adjective nr="142"/>
-<Adjective nr="184"/>
+<Adjective nr="182"/>
 </Cluster>
 </RCluster>
 <CCluster>
@@ -196,7 +196,7 @@
 <Adjective nr="10" value="false"/>
 <Adjective nr="18"/>
 <Adjective nr="84"/>
-<Adjective nr="181"/>
+<Adjective nr="179"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -206,7 +206,7 @@
 <Adjective nr="18"/>
 <Adjective nr="84"/>
 <Adjective nr="97" value="false"/>
-<Adjective nr="183"/>
+<Adjective nr="181"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -217,7 +217,7 @@
 <Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="84"/>
-<Adjective nr="183"/>
+<Adjective nr="181"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -289,7 +289,7 @@
 <Adjective nr="140"/>
 <Adjective nr="141"/>
 <Adjective nr="142"/>
-<Adjective nr="184"/>
+<Adjective nr="182"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -324,7 +324,7 @@
 <Adjective nr="140"/>
 <Adjective nr="141"/>
 <Adjective nr="142"/>
-<Adjective nr="184"/>
+<Adjective nr="182"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>

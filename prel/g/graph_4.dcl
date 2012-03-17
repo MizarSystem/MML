@@ -12,13 +12,13 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="GRAPH_2"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="GRAPH_4"/>
 </Signature>
 <RCluster>
@@ -43,11 +43,6 @@
 <Adjective nr="33">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -70,7 +65,7 @@
 <Adjective nr="33">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="44">
+<Adjective nr="39">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

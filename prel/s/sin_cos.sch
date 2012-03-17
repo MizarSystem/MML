@@ -11,14 +11,15 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
-<ArticleID name="COMSEQ_1"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="COMSEQ_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -38,7 +39,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="18">
+<Adjective nr="19">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="53"/>
 </Adjective>
@@ -62,7 +63,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="107">
+<Func kind="K" nr="128">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -84,7 +85,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="107">
+<Func kind="K" nr="128">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -104,7 +105,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -119,7 +120,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="18">
+<Adjective nr="19">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 </Adjective>
@@ -143,7 +144,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="86">
+<Func kind="K" nr="103">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 <Var nr="2"/>
@@ -167,7 +168,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="86">
+<Func kind="K" nr="103">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 <Var nr="2"/>

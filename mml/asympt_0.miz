@@ -14,15 +14,16 @@ environ
       NEWTON, POWER, PRE_CIRC, FINSET_1, SQUARE_1, LIMFUNC1, SFMASTR3,
       XXREAL_0;
  constructors REAL_1, FRAENKEL, SEQ_2, POWER, PRE_CIRC, LIMFUNC1, CARD_4,
-      NAT_1, XXREAL_0;
+      NAT_1, XXREAL_0, SQUARE_1;
  registrations XREAL_0, FRAENKEL, FINSET_1, INT_1, SEQ_1, MEMBERED, ORDINAL2,
-      RELSET_1;
+      RELSET_1, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FRAENKEL;
  theorems TARSKI, FUNCT_2, FRAENKEL, INT_1, NAT_1, PRE_CIRC, REAL_1, SEQ_1,
       SQUARE_1, SEQ_2, ABSVALUE, LIMFUNC1, SFMASTR3, POWER, PRE_FF, NEWTON,
-      XREAL_0, XBOOLE_0, XCMPLX_0, XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1;
+      XREAL_0, XBOOLE_0, XCMPLX_0, XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1,
+      XXREAL_0;
  schemes FUNCT_2, FINSEQ_1, INT_2, NAT_1;
+ definitions TARSKI, FRAENKEL;
 
 begin :: Preliminaries
 
@@ -112,14 +113,14 @@ registration
  cluster negative Real;
   existence proof
    take -1;
-   thus thesis by XREAL_0:def 4;
+   thus thesis by XXREAL_0:def 7;
   end;
  cluster logbase Real;
   existence proof take 2; thus thesis by Def3; end;
  cluster non negative Real;
-  existence by XREAL_0:def 4;
+  existence by XXREAL_0:def 7;
  cluster non positive Real;
-  existence by XREAL_0:def 3;
+  existence by XXREAL_0:def 6;
  cluster non logbase Real;
   existence proof take 1; thus thesis by Def3; end;
 end;
@@ -164,6 +165,28 @@ registration
   end;
 end;
 
+definition let c,d;
+ redefine
+  func min(c,d) -> Real;
+  coherence by XREAL_0:def 1;
+  func max(c,d) -> Real;
+  coherence by XREAL_0:def 1;
+end;
+
+definition let N,M;
+ redefine
+  func min(N,M) -> Nat;
+  coherence
+   proof min(N,M) = N or min(N,M) = M by XXREAL_0:15;
+    hence thesis;
+   end;
+  func max(N,M) -> Nat;
+  coherence
+   proof max(N,M) = N or max(N,M) = M by XXREAL_0:16;
+    hence thesis;
+   end;
+end;
+
 registration
  cluster positive -> eventually-positive Real_Sequence;
   coherence proof
@@ -196,8 +219,8 @@ registration
   A5: for n st n >= M holds f.n <> 0 by A3,Def7;
    take a = max( N, M ); let n; assume
   A6: n >= a;
-         a >= N & a >= M by SQUARE_1:46;
-  then A7: n >= N & n >= M by A6,XREAL_1:2;
+         a >= N & a >= M by XXREAL_0:25;
+  then A7: n >= N & n >= M by A6,XXREAL_0:2;
       then f.n <> 0 by A5;
    hence thesis by A4,A7;
   end;
@@ -214,10 +237,10 @@ definition let f,g be eventually-nonnegative Real_Sequence;
    f+g is eventually-nonnegative
    proof
    take a; let n; assume
-  A3: n >= a;   a >= N by SQUARE_1:46;
-      then n >= N by A3,XREAL_1:2;
+  A3: n >= a;   a >= N by XXREAL_0:25;
+      then n >= N by A3,XXREAL_0:2;
   then A4: f.n >= 0 by A1;
-          a >= M by SQUARE_1:46; then n >= M by A3,XREAL_1:2;
+          a >= M by XXREAL_0:25; then n >= M by A3,XXREAL_0:2;
    then g.n >= 0 by A2;
       then 0 + 0 <= f.n + g.n by A4,XREAL_1:9;
    hence (f + g).n >= 0 by SEQ_1:11;
@@ -313,7 +336,7 @@ registration let f be Real_Sequence, g be eventually-nonnegative Real_Sequence;
   A1: for n st n >= N holds g.n >= 0 by Def4;
    take N; let n; assume n >= N;
   then A2: g.n >= 0 by A1;
-         max( f.n, g.n ) >= g.n by SQUARE_1:46;
+         max( f.n, g.n ) >= g.n by XXREAL_0:25;
    hence max(f, g).n >= 0 by A2,Def10;
   end;
 end;
@@ -325,7 +348,7 @@ registration let f be Real_Sequence, g be eventually-positive Real_Sequence;
   A1: for n st n >= N holds g.n > 0 by Def6;
    take N; let n; assume n >= N;
   then g.n > 0 by A1;
-     then max( f.n, g.n ) > 0 by SQUARE_1:46;
+     then max( f.n, g.n ) > 0 by XXREAL_0:25;
    hence max(f, g).n > 0 by Def10;
   end;
 end;
@@ -356,9 +379,9 @@ A3: P[n];
 A4: for m st m >= n & P[m] holds P[m+1] proof
     let m; assume
    A5: m >= n & f.n <= f.m;
-    then m >= N by A2,XREAL_1:2;
+    then m >= N by A2,XXREAL_0:2;
     then f.m <= f.(m+1) by A1;
-    hence f.n <= f.(m+1) by A5,XREAL_1:2;
+    hence f.n <= f.(m+1) by A5,XXREAL_0:2;
    end;
        for m st m >= n holds P[m] from INT_2:sch 1(A3,A4);
   hence thesis;
@@ -400,7 +423,7 @@ A14: N1<=n & N2<=n & N3<=n & N4<=n & n1<=n & n2<=n by A13,NAT_1:37;
    let m such that
 A15: n<=m;
    set asm = abs(s.m);
-A16:  N1<=m & N2<=m & N3<=m & N4<=m & n1<=m & n2<=m by A14,A15,XREAL_1:2;
+A16:  N1<=m & N2<=m & N3<=m & N4<=m & n1<=m & n2<=m by A14,A15,XXREAL_0:2;
 then A17: abs(s.m-ls)<p*((als*als)/2) by A11;
 A18: als/2<asm by A7,A16;
       f.m<>0 & g.m<>0 by A3,A4,A16;
@@ -433,7 +456,7 @@ then A25: (p*(als/2))/asm < (p*(als/2))/(als/2) by A18,A23,XREAL_1:78;
      .=p*((als/2)*(als/2 )")
      .=p*1 by A24,XCMPLX_0:def 7
      .=p;
-   hence abs((g/"f).m-ls")<p by A20,A21,A22,A25,XREAL_1:2;
+   hence abs((g/"f).m-ls")<p by A20,A21,A22,A25,XXREAL_0:2;
  end;
  hence g/"f is convergent by SEQ_2:def 6;
  hence lim(g/"f) = (lim(f/"g))" by A9,SEQ_2:def 7;
@@ -451,7 +474,7 @@ A4: 0<-(lim f) by A2,XREAL_1:60;
    then consider N1 such that
 A5: for m st N1<=m holds abs(f.m-(lim f))<-(lim f) by A1,SEQ_2:def 7;
    set n1 = max( N, N1 );
-A6: n1 >= N & n1 >= N1 by SQUARE_1:46;
+A6: n1 >= N & n1 >= N1 by XXREAL_0:25;
    then abs(f.n1-(lim f))<=-(lim f) &
       abs(f.n1-(lim f))<>-(lim f) by A5;
    then f.n1-(lim f)<=-(lim f) by ABSVALUE:12;
@@ -503,9 +526,9 @@ A3: now
     consider N such that
   A5: for n st n>=N holds w<(f/"g).n by A1,LIMFUNC1:def 4;
     set a = max(N, N1);
-  A6: a >= N & a >= N1 by SQUARE_1:46;
+  A6: a >= N & a >= N1 by XXREAL_0:25;
     take a; let n; assume n >= a;
-  then A7: n >= N & n >= N1 by A6,XREAL_1:2;
+  then A7: n >= N & n >= N1 by A6,XXREAL_0:2;
   then A8: 1/p < (f/"g).n by A5;
   A9: g.n <> 0 by A2,A7;
           (1/p)*p < p*(f/"g).n by A4,A8,XREAL_1:70;
@@ -660,7 +683,7 @@ proof
       A11: n < N;
                f.n > 0 by Def5;
            then t.n <= b*f.n & b*f.n <= c*f.n by A7,A10,A11,XREAL_1:66;
-       hence thesis by XREAL_1:2;
+       hence thesis by XXREAL_0:2;
       end;
       suppose n >= N;
        hence thesis by A1,A4;
@@ -682,7 +705,7 @@ proof
       A13: n >= N;
                f.n > 0 by Def5;
            then t.n <= c*f.n & c*f.n <= b*f.n by A1,A4,A12,A13,XREAL_1:66;
-       hence thesis by XREAL_1:2;
+       hence thesis by XXREAL_0:2;
      end;
      end;
    end;
@@ -720,8 +743,8 @@ A6:  for n st n >= M holds t.n <= c2*f.n & t.n >= 0 by A3,A4;
  set tset = { T(n) : N <= n & n <= max(M,N) };
      deffunc F(Nat) = f.$1;
  set fset = { F(n) : N <= n & n <= max(M,N) };
-A7: M <= max(M,N) by SQUARE_1:46;
-A8: N <= max(M,N) by SQUARE_1:46;
+A7: M <= max(M,N) by XXREAL_0:25;
+A8: N <= max(M,N) by XXREAL_0:25;
         tset is finite non empty Subset of REAL from FinSegRng1(A8);
     then reconsider tset as finite non empty Subset of REAL;
         fset is finite non empty Subset of REAL from FinSegRng1(A8);
@@ -735,24 +758,24 @@ A11:  F <> 0 by A2,A9;
  set c1 = T / F;
    reconsider c = max(c1,c2) as Element of REAL by XREAL_0:def 1;
   take c;
-A12:  c >= c1 & c >= c2 by SQUARE_1:46;
- thus c > 0 by A5,SQUARE_1:46;
+A12:  c >= c1 & c >= c2 by XXREAL_0:25;
+ thus c > 0 by A5,XXREAL_0:25;
  let n; assume
 A13: n >= N;
 then A14: f.n > 0 by A2;
 A15: f.n <> 0 by A2,A13;
  per cases;
- suppose N >= M; then n >= M by A13,XREAL_1:2;
+ suppose N >= M; then n >= M by A13,XXREAL_0:2;
  then A16: t.n <= c2*f.n by A6;
         c2*f.n <= c*f.n by A12,A14,XREAL_1:66;
-  hence t.n <= c*f.n by A16,XREAL_1:2;
+  hence t.n <= c*f.n by A16,XXREAL_0:2;
  end;
  suppose
  A17: N <= M;
   thus t.n <= c*f.n proof
    per cases;
    suppose n <= M;
-   then A18: n <= max(M,N) by A7,XREAL_1:2;
+   then A18: n <= max(M,N) by A7,XXREAL_0:2;
        then t.n in tset by A13;
    then A19: t.n <= T by PRE_CIRC:def 1;
    A20:  t.M >= 0 by A6;
@@ -767,18 +790,18 @@ A15: f.n <> 0 by A2,A13;
         now assume t.n/f.n > c1;
       then t.n/f.n*f.n > c1*f.n by A14,XREAL_1:70;
       then t.n > c1*f.n by A15,XCMPLX_1:88;
-      then T > c1*f.n by A19,XREAL_1:2;
+      then T > c1*f.n by A19,XXREAL_0:2;
      hence contradiction by A11,A23,XCMPLX_1:88;
     end; then t.n/f.n*f.n <= c1*f.n by A14,XREAL_1:66;
    then A24: t.n <= c1*f.n by A15,XCMPLX_1:88;
           c1*f.n <= c*f.n by A12,A14,XREAL_1:66;
-    hence thesis by A24,XREAL_1:2;
+    hence thesis by A24,XXREAL_0:2;
    end;
    suppose
         n >= M;
    then A25: t.n <= c2*f.n by A6;
           c2*f.n <= c*f.n by A12,A14,XREAL_1:66;
-    hence thesis by A25,XREAL_1:2;
+    hence thesis by A25,XXREAL_0:2;
   end;
   end;
 end;
@@ -803,11 +826,11 @@ proof
    then A7: t.n <= c*(f+g).n by A4;
    A8: (f+g).n = f.n + g.n by SEQ_1:11;
    A9: max(f,g).n = max( f.n, g.n ) by Def10;
-   A10: f.n <= max( f.n, g.n ) & g.n <= max( f.n, g.n ) by SQUARE_1:46;
+   A10: f.n <= max( f.n, g.n ) & g.n <= max( f.n, g.n ) by XXREAL_0:25;
           1*max(f,g).n + 1*max(f,g).n = (1+1)*max(f,g).n;
       then (f+g).n <= 2*max(f,g).n by A8,A9,A10,XREAL_1:9;
       then c*(f+g).n <= c*(2*max(f,g).n) by A3,XREAL_1:66;
-    hence t.n <= (2*c)*max(f,g).n by A7,XREAL_1:2;
+    hence t.n <= (2*c)*max(f,g).n by A7,XXREAL_0:2;
     thus t.n >= 0 by A4,A6;
    end;
    hence x in Big_Oh( max( f, g ) ) by A1,A5;
@@ -825,18 +848,18 @@ proof
      consider M2 being Nat such that
   A16: for n st n >= M2 holds g.n >= 0 by Def4;
    set N = max(N1, max(M1, M2));
-         max(M1,M2) <= N & M1 <= max(M1,M2) & M2 <= max(M1,M2) by SQUARE_1:46;
-  then A17: N1 <= N & M1 <= N & M2 <= N by XREAL_1:2,SQUARE_1:46;
+         max(M1,M2) <= N & M1 <= max(M1,M2) & M2 <= max(M1,M2) by XXREAL_0:25;
+  then A17: N1 <= N & M1 <= N & M2 <= N by XXREAL_0:2,XXREAL_0:25;
        now let n; assume n >= N;
-   then A18: n >= N1 & n >= M1 & n >= M2 by A17,XREAL_1:2;
+   then A18: n >= N1 & n >= M1 & n >= M2 by A17,XXREAL_0:2;
    then A19: t.n <= c*max(f,g).n by A14;
    A20: max(f,g).n = max(f.n,g.n) by Def10;
    A21: (f+g).n = f.n + g.n by SEQ_1:11;
           f.n >= 0 & g.n >= 0 by A15,A16,A18;
    then A22: f.n + g.n >= f.n + 0 & f.n + g.n >= 0 + g.n by XREAL_1:9;
-          max(f.n,g.n) = f.n or max(f.n,g.n) = g.n by SQUARE_1:49;
+          max(f.n,g.n) = f.n or max(f.n,g.n) = g.n by XXREAL_0:16;
       then c*max(f,g).n <= c*(f+g).n by A13,A20,A21,A22,XREAL_1:66;
-    hence t.n <= c*(f+g).n by A19,XREAL_1:2;
+    hence t.n <= c*(f+g).n by A19,XXREAL_0:2;
     thus t.n >= 0 by A14,A18;
    end;
    hence x in Big_Oh( f + g ) by A11,A13;
@@ -879,23 +902,23 @@ A9: for n st n >= Nt holds t.n <= ct*g.n & t.n >= 0 by A6;
 A10: for n st n >= Ng holds g.n >= 0 by Def4;
        now take c = max(cs*ct,max(cs,ct));
        A11: cs <= max(cs,ct) & ct <= max(cs,ct) & c >=
- max(cs,ct) by SQUARE_1:46;
-   then A12: c >= cs & c >= ct & c >= cs*ct by XREAL_1:2,SQUARE_1:46;
+ max(cs,ct) by XXREAL_0:25;
+   then A12: c >= cs & c >= ct & c >= cs*ct by XXREAL_0:2,XXREAL_0:25;
     thus c > 0 by A7,A11;
     take N = max(max(Ns, Nt), Ng);
     let n; assume
    A13: n >= N;
           N >= max(Ns,Nt) & max(Ns,Nt) >= Ns & max(Ns,Nt) >=
- Nt by SQUARE_1:46;
-      then N >= Ns & N >= Nt & N >= Ng by XREAL_1:2,SQUARE_1:46;
-   then A14: n >= Ns & n >= Nt & n >= Ng by A13,XREAL_1:2;
+ Nt by XXREAL_0:25;
+      then N >= Ns & N >= Nt & N >= Ng by XXREAL_0:2,XXREAL_0:25;
+   then A14: n >= Ns & n >= Nt & n >= Ng by A13,XXREAL_0:2;
       then t.n <= ct*g.n by A9;
       then A15: cs*t.n <= cs*(ct*g.n) by A7,XREAL_1:66;
           g.n >= 0 by A10,A14;
       then cs*ct*g.n <= c*g.n by A12,XREAL_1:66;
-   then A16: cs*t.n <= c*g.n by A15,XREAL_1:2;
+   then A16: cs*t.n <= c*g.n by A15,XXREAL_0:2;
           s.n <= cs*f.n by A8,A14;
-    hence s.n <= c*g.n by A5,A16,XREAL_1:2;
+    hence s.n <= c*g.n by A5,A16,XXREAL_0:2;
     thus s.n >= 0 by A8,A14;
    end;
   hence x in Big_Oh(g) by A3;
@@ -992,7 +1015,7 @@ proof
           f.n+0 <= f.n+c by XREAL_1:9;
       then f.n <= (c+f).n by Def9;
       then c1*f.n <= c1*(c+f).n by A4,XREAL_1:66;
-   hence t.n <= c1*(c+f).n & t.n >= 0 by A6,XREAL_1:2;
+   hence t.n <= c1*(c+f).n & t.n >= 0 by A6,XXREAL_0:2;
   end;
   hence x in Big_Oh(c+f) by A2,A4;
 end;
@@ -1016,10 +1039,10 @@ A6: for n st n >= N2 holds g.n > 0 by Def6;
  set a = max( b, N2 );
      now let n; assume
  A7:  n >= a;
- A8: a >= b & a >= N2 by SQUARE_1:46;
- A9: b >= N & b >= N1 by SQUARE_1:46;
-      n >= b by A7,A8,XREAL_1:2;
- then A10:  n >= N & n >= N1 & n >= N2 by A7,A8,A9,XREAL_1:2;
+ A8: a >= b & a >= N2 by XXREAL_0:25;
+ A9: b >= N & b >= N1 by XXREAL_0:25;
+      n >= b by A7,A8,XXREAL_0:2;
+ then A10:  n >= N & n >= N1 & n >= N2 by A7,A8,A9,XXREAL_0:2;
       then abs((f/"g).n-l) < delta by A3;
       then (f/"g).n - l <= delta by ABSVALUE:12;
       then (f/"g).n <= 1*l + 1*l by XREAL_1:22;
@@ -1066,11 +1089,11 @@ A6: for n st n>=N2 holds g.n > 0 by Def6;
  set b = max( N, N1 ), a = max( b, N2 );
 A7: now let n; assume
  A8:  n >= a;
- A9: a >= b & a >= N2 by SQUARE_1:46;
- then A10:  n >= N2 by A8,XREAL_1:2;
- A11: b >= N & b >= N1 by SQUARE_1:46;
-      n >= b by A8,A9,XREAL_1:2;
- then A12:  n >= N & n >= N1 by A11,XREAL_1:2;
+ A9: a >= b & a >= N2 by XXREAL_0:25;
+ then A10:  n >= N2 by A8,XXREAL_0:2;
+ A11: b >= N & b >= N1 by XXREAL_0:25;
+      n >= b by A8,A9,XXREAL_0:2;
+ then A12:  n >= N & n >= N1 by A11,XXREAL_0:2;
       then abs((f/"g).n-0) < 1 by A4;
       then (f/"g).n <= 1 by ABSVALUE:12;
       then (f(#)(g")).n <= 1 by SEQ_1:def 9;
@@ -1093,12 +1116,12 @@ A7: now let n; assume
    A17: c > 0 and
    A18: for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A16;
     set a = max(N, N2);
-   A19: a >= N & a >= N2 by SQUARE_1:46;
+   A19: a >= N & a >= N2 by XXREAL_0:25;
     reconsider q = NAT --> 1/c as Real_Sequence by FUNCOP_1:57;
    A20: for n holds q.n = 1/c by FUNCOP_1:13;
         now take a; let n; assume
          n >= a;
-    then A21: n >= N & n >= N2 by A19,XREAL_1:2;
+    then A21: n >= N & n >= N2 by A19,XXREAL_0:2;
     then A22: g.n <= c*f.n & g.n >= 0 by A15,A18;
     A23: g.n > 0 by A6,A21;
     then A24: (g.n)" > 0 by XREAL_1:124;
@@ -1219,9 +1242,9 @@ A7: d" > 0 by A5,XREAL_1:124;
    consider N1 such that
 A8: for n st n >= N1 holds g.n >= 0 by Def4;
   set a = max(N, N1);
-A9: a >= N & a >= N1 by SQUARE_1:46;
+A9: a >= N & a >= N1 by XXREAL_0:25;
       now take a; let n; assume n >= a;
-   then A10: n >= N & n >= N1 by A9,XREAL_1:2;
+   then A10: n >= N & n >= N1 by A9,XXREAL_0:2;
       then t.n >= d*g.n & t.n >= 0 by A6;
       then d"*t.n >= d"*(d*g.n) by A7,XREAL_1:66;
       then d"*t.n >= (d"*d)*g.n;
@@ -1243,9 +1266,9 @@ A15: c" > 0 by A13,XREAL_1:124;
    consider N1 such that
 A16: for n st n >= N1 holds f.n >= 0 by Def4;
   set a = max(N, N1);
-A17: a >= N & a >= N1 by SQUARE_1:46;
+A17: a >= N & a >= N1 by XXREAL_0:25;
       now take a; let n; assume n >= a;
-   then A18: n >= N & n >= N1 by A17,XREAL_1:2;
+   then A18: n >= N & n >= N1 by A17,XXREAL_0:2;
       then t.n <= c*f.n & t.n >= 0 by A14;
       then c"*t.n <= c"*(c*f.n) by A15,XREAL_1:66;
       then c"*t.n <= (c"*c)*f.n;
@@ -1399,7 +1422,7 @@ proof
       then A13: d*f.n <= t.n by A1,A4;
              f.n > 0 by Def5;
          then b*f.n <= d*f.n by A10,XREAL_1:66;
-       hence thesis by A13,XREAL_1:2;
+       hence thesis by A13,XXREAL_0:2;
      end;
      end;
     end;
@@ -1414,7 +1437,7 @@ proof
       then A15: b*f.n <= t.n by A7;
              f.n > 0 by Def5;
          then d*f.n <= b*f.n by A14,XREAL_1:66;
-       hence thesis by A15,XREAL_1:2;
+       hence thesis by A15,XXREAL_0:2;
       end;
       suppose n >= N;
        hence thesis by A1,A4;
@@ -1451,15 +1474,15 @@ A2: for n st n >= N2 holds g.n >= 0 by Def4;
   A6: for n st n >= N holds d*(f+g).n <= t.n & t.n >= 0 by A4;
    set a = max(N, max(N1, N2));
   A7: a >= N & a >= max(N1, N2) &
-       max(N1, N2) >= N1 & max(N1, N2) >= N2 by SQUARE_1:46;
-  then A8: a >= N1 & a >= N2 by XREAL_1:2;
+       max(N1, N2) >= N1 & max(N1, N2) >= N2 by XXREAL_0:25;
+  then A8: a >= N1 & a >= N2 by XXREAL_0:2;
        now let n; assume n >= a;
-   then A9: n >= N & n >= N1 & n >= N2 by A7,A8,XREAL_1:2;
+   then A9: n >= N & n >= N1 & n >= N2 by A7,A8,XXREAL_0:2;
    A10: max(f,g).n = max( f.n, g.n ) by Def10;
    A11: f.n >= 0 by A1,A9;
    A12: g.n >= 0 by A2,A9;
    A13: max(f,g).n <= (f+g).n proof
-       per cases by A10,SQUARE_1:49;
+       per cases by A10,XXREAL_0:16;
        suppose max(f,g).n = f.n;
           then max(f,g).n + 0 <= f.n + g.n by A12,XREAL_1:9;
         hence thesis by SEQ_1:11;
@@ -1471,7 +1494,7 @@ A2: for n st n >= N2 holds g.n >= 0 by Def4;
       end;
    A14: d*(f+g).n <= t.n by A6,A9;
           d*max(f,g).n <= d*(f+g).n by A5,A13,XREAL_1:66;
-    hence d*max(f,g).n <= t.n by A14,XREAL_1:2;
+    hence d*max(f,g).n <= t.n by A14,XXREAL_0:2;
     thus t.n >= 0 by A6,A9;
    end;
    hence x in Big_Omega(max(f,g)) by A3,A5;
@@ -1486,11 +1509,11 @@ A2: for n st n >= N2 holds g.n >= 0 by Def4;
   A18: for n st n >= N holds d*max(f,g).n <= t.n & t.n >= 0 by A16;
   A19: d*2" > d*0 by A17,XREAL_1:70;
    set a = max(N, max(N1, N2));
-         max(N1,N2) <= a & N1 <= max(N1,N2) & N2 <= max(N1,N2) by SQUARE_1:46;
-  then A20: N <= a & N1 <= a & N2 <= a by XREAL_1:2,SQUARE_1:46;
+         max(N1,N2) <= a & N1 <= max(N1,N2) & N2 <= max(N1,N2) by XXREAL_0:25;
+  then A20: N <= a & N1 <= a & N2 <= a by XXREAL_0:2,XXREAL_0:25;
        now let n; assume n >= a;
-   then A21: n >= N & n >= N1 & n >= N2 by A20,XREAL_1:2;
-          f.n <= max(f.n,g.n) & g.n <= max(f.n,g.n) by SQUARE_1:46;
+   then A21: n >= N & n >= N1 & n >= N2 by A20,XXREAL_0:2;
+          f.n <= max(f.n,g.n) & g.n <= max(f.n,g.n) by XXREAL_0:25;
       then f.n + g.n <= 1*max(f.n,g.n) + 1*max(f.n,g.n) by XREAL_1:9;
       then 2"*(f.n + g.n) <= 2"*(2*max(f.n,g.n)) by XREAL_1:66;
       then 2"*(f.n + g.n) <= (2"*2)*max(f.n,g.n);
@@ -1498,7 +1521,7 @@ A2: for n st n >= N2 holds g.n >= 0 by Def4;
       then d*(2"*(f+g).n) <= d*max(f.n,g.n) by A17,XREAL_1:66;
       then A22: d*(2"*(f+g).n) <= d*max(f,g).n by Def10;
           d*max(f,g).n <= t.n by A18,A21;
-    hence (d*2")*(f+g).n <= t.n by A22,XREAL_1:2;
+    hence (d*2")*(f+g).n <= t.n by A22,XXREAL_0:2;
     thus t.n >= 0 by A18,A21;
    end;
    hence x in Big_Omega(f+g) by A15,A19;
@@ -1558,9 +1581,9 @@ proof
   A8: d > 0 and
   A9: for n st n >= N1 holds s.n >= d*f.n & s.n >= 0 by A5;
    set a = max(N, N1);
-  A10: a >= N & a >= N1 by SQUARE_1:46;
+  A10: a >= N & a >= N1 by XXREAL_0:25;
        now take a; let n; assume n >= a;
-       then n >= N & n >= N1 by A10,XREAL_1:2;
+       then n >= N & n >= N1 by A10,XXREAL_0:2;
      hence d*f.n <= t.n & t.n <= c*f.n by A2,A4,A7,A9;
    end;
   hence x in BT by A2,A6,A8;
@@ -1577,9 +1600,9 @@ proof
      consider N1 such that
   A16: for n st n >= N1 holds f.n >= 0 by Def4;
    set a = max( N, N1 );
-  A17: a >= N & a >= N1 by SQUARE_1:46;
+  A17: a >= N & a >= N1 by XXREAL_0:25;
          now take a; let n; assume n >= a;
-     then A18: n >= N & n >= N1 by A17,XREAL_1:2;
+     then A18: n >= N & n >= N1 by A17,XXREAL_0:2;
       hence t.n <= c*f.n by A15;
             f.n >= 0 by A16,A18;
      then d*f.n >= d*0 by A14,XREAL_1:66;
@@ -1587,7 +1610,7 @@ proof
      end;
   then A19: x in Big_Oh(f) by A11,A13;
          now take a; let n; assume n >= a;
-     then A20: n >= N & n >= N1 by A17,XREAL_1:2;
+     then A20: n >= N & n >= N1 by A17,XXREAL_0:2;
       hence d*f.n <= t.n by A15;
             f.n >= 0 by A16,A20;
      then d*f.n >= d*0 by A14,XREAL_1:66;
@@ -1693,9 +1716,9 @@ A1: Big_Theta(f) = { s where s is Element of Funcs(NAT, REAL) :
     thus ex c,d st c > 0 & d > 0 &
           for n holds d*f.n <= t.n & t.n <= c*f.n proof
      set C = max( b, c );
-    A15: C >= b & C >= c by SQUARE_1:46;
+    A15: C >= b & C >= c by XXREAL_0:25;
      set D = min( a, d );
-    A16: D <= a & D <= d by SQUARE_1:35;
+    A16: D <= a & D <= d by XXREAL_0:17;
     A17: now let n;  :: do we need this?
      A18: f.n > 0 & t.n > 0 by Def5;
         then 0 < (f.n)" by XREAL_1:124;
@@ -1711,8 +1734,8 @@ A1: Big_Theta(f) = { s where s is Element of Funcs(NAT, REAL) :
      end;
       reconsider C,D as Element of REAL by XREAL_0:def 1;
      take C,D;
-     thus C > 0 by A4,SQUARE_1:46;
-     thus D > 0 by A5,A19,SQUARE_1:38;
+     thus C > 0 by A4,XXREAL_0:25;
+     thus D > 0 by A5,A19,XXREAL_0:15;
      let n;
     A21: f.n > 0 by Def5;
       per cases;
@@ -1720,18 +1743,18 @@ A1: Big_Theta(f) = { s where s is Element of Funcs(NAT, REAL) :
       A22: n < N;
       then A23: a*f.n <= t.n by A12;
            D*f.n <= a*f.n by A16,A21,XREAL_1:66;
-       hence D*f.n <= t.n by A23,XREAL_1:2;
+       hence D*f.n <= t.n by A23,XXREAL_0:2;
       A24: t.n <= b*f.n by A9,A22;
            b*f.n <= C*f.n by A15,A21,XREAL_1:66;
-       hence t.n <= C*f.n by A24,XREAL_1:2;
+       hence t.n <= C*f.n by A24,XXREAL_0:2;
       end;
       suppose
              n >= N;
       then A25: d*f.n <= t.n & t.n <= c*f.n by A2,A6;
            D*f.n <= d*f.n by A16,A21,XREAL_1:66;
-       hence D*f.n <= t.n by A25,XREAL_1:2;
+       hence D*f.n <= t.n by A25,XXREAL_0:2;
            c*f.n <= C*f.n by A15,A21,XREAL_1:66;
-       hence t.n <= C*f.n by A25,XREAL_1:2;
+       hence t.n <= C*f.n by A25,XXREAL_0:2;
     end;
     end;
 
@@ -1772,15 +1795,15 @@ A4: for n st n >= N2 holds g.n >= 0 by Def4;
    A9: for n st n >= N holds d*(f+g).n <= t.n & t.n <= c*(f+g).n by A6;
    A10: 2*c > 2*0 by A7,XREAL_1:70;
     set a = max(N,max(N1, N2));
-   A11: a >= N & a >= max(N1, N2) by SQUARE_1:46;
-          max(N1, N2) >= N1 & max(N1, N2) >= N2 by SQUARE_1:46;
-   then A12: a >= N1 & a >= N2 by A11,XREAL_1:2;
+   A11: a >= N & a >= max(N1, N2) by XXREAL_0:25;
+          max(N1, N2) >= N1 & max(N1, N2) >= N2 by XXREAL_0:25;
+   then A12: a >= N1 & a >= N2 by A11,XXREAL_0:2;
         now let n; assume n >= a;
-    then A13: n >= N & n >= N1 & n >= N2 by A11,A12,XREAL_1:2;
+    then A13: n >= N & n >= N1 & n >= N2 by A11,A12,XXREAL_0:2;
     then A14: t.n <= c*(f+g).n by A9;
     A15: (f+g).n = f.n + g.n by SEQ_1:11;
     A16: max(f,g).n = max( f.n, g.n ) by Def10;
-    A17: f.n <= max( f.n, g.n ) & g.n <= max( f.n, g.n ) by SQUARE_1:46;
+    A17: f.n <= max( f.n, g.n ) & g.n <= max( f.n, g.n ) by XXREAL_0:25;
            1*max(f,g).n + 1*max(f,g).n = (1+1)*max(f,g).n;
        then (f+g).n <= 2*max(f,g).n by A15,A16,A17,XREAL_1:9;
        then A18: c*(f+g).n <= c*(2*max(f,g).n) by A7,XREAL_1:66;
@@ -1788,7 +1811,7 @@ A4: for n st n >= N2 holds g.n >= 0 by Def4;
     A20: g.n >= 0 by A4,A13;
     A21: d*(f+g).n <= t.n by A9,A13;
            max(f,g).n <= (f+g).n proof
-         per cases by A16,SQUARE_1:49;
+         per cases by A16,XXREAL_0:16;
          suppose max(f,g).n = f.n;
             then max(f,g).n + 0 <= f.n + g.n by A20,XREAL_1:9;
           hence thesis by SEQ_1:11;
@@ -1800,7 +1823,7 @@ A4: for n st n >= N2 holds g.n >= 0 by Def4;
        end;
        then d*max(f,g).n <= d*(f+g).n by A8,XREAL_1:66;
      hence d*max(f,g).n <= t.n & t.n <= (2*c)*max(f,g).n by A14,A18,A21,
-XREAL_1:2;
+XXREAL_0:2;
     end;
    hence x in Big_Theta(max(f,g)) by A2,A5,A8,A10;
   end;
@@ -1820,18 +1843,18 @@ XREAL_1:2;
    A29: d*2" > d*0 by A25,XREAL_1:70;
     set a = max(N, max(N1, N2));
           max(N1,N2) <= a & N1 <= max(N1,N2) & N2 <=
- max(N1,N2) by SQUARE_1:46;
-   then A30: N <= a & N1 <= a & N2 <= a by XREAL_1:2,SQUARE_1:46;
+ max(N1,N2) by XXREAL_0:25;
+   then A30: N <= a & N1 <= a & N2 <= a by XXREAL_0:2,XXREAL_0:25;
         now let n; assume n >= a;
-    then A31: n >= N & n >= N1 & n >= N2 by A30,XREAL_1:2;
+    then A31: n >= N & n >= N1 & n >= N2 by A30,XXREAL_0:2;
     then A32: t.n <= c*max(f,g).n by A26;
     A33: max(f,g).n = max(f.n,g.n) by Def10;
     A34: (f+g).n = f.n + g.n by SEQ_1:11;
            f.n >= 0 & g.n >= 0 by A27,A28,A31;
        then f.n + g.n >= f.n + 0 & f.n + g.n >= 0 + g.n by XREAL_1:9;
-       then max(f,g).n <= (f+g).n by A33,A34,SQUARE_1:49;
+       then max(f,g).n <= (f+g).n by A33,A34,XXREAL_0:16;
     then A35: c*max(f,g).n <= c*(f+g).n by A24,XREAL_1:66;
-           f.n <= max(f.n,g.n) & g.n <= max(f.n,g.n) by SQUARE_1:46;
+           f.n <= max(f.n,g.n) & g.n <= max(f.n,g.n) by XXREAL_0:25;
        then f.n + g.n <= 1*max(f.n,g.n) + 1*max(f.n,g.n) by XREAL_1:9;
        then 2"*(f.n + g.n) <= 2"*(2*max(f.n,g.n)) by XREAL_1:66;
        then 2"*(f.n + g.n) <= (2"*2)*max(f.n,g.n);
@@ -1839,7 +1862,7 @@ XREAL_1:2;
        then d*(2"*(f+g).n) <= d*max(f.n,g.n) by A25,XREAL_1:66;
        then A36: d*(2"*(f+g).n) <= d*max(f,g).n by Def10;
            d*max(f,g).n <= t.n by A26,A31;
-     hence (d*2")*(f+g).n <= t.n & t.n <= c*(f+g).n by A32,A35,A36,XREAL_1:2
+     hence (d*2")*(f+g).n <= t.n & t.n <= c*(f+g).n by A32,A35,A36,XXREAL_0:2
 ;
     end;
     hence x in Big_Theta(f+g) by A1,A22,A24,A29;
@@ -2012,11 +2035,11 @@ proof
      consider N1 such that
   A6: for n st n >= N1 holds f.n >= 0 by Def4;
    set a = max( N, N1 );
-  A7: a >= N & a >= N1 by SQUARE_1:46;
+  A7: a >= N & a >= N1 by XXREAL_0:25;
          now take a; let n; assume that
      A8: n >= a and
      A9: n in X;
-     A10: n >= N & n >= N1 by A7,A8,XREAL_1:2;
+     A10: n >= N & n >= N1 by A7,A8,XXREAL_0:2;
       hence t.n <= c*f.n by A5,A9;
             f.n >= 0 by A6,A10;
      then d*f.n >= d*0 by A4,XREAL_1:66;
@@ -2026,7 +2049,7 @@ proof
          now take a; let n; assume that
      A12: n >= a and
      A13: n in X;
-     A14: n >= N & n >= N1 by A7,A12,XREAL_1:2;
+     A14: n >= N & n >= N1 by A7,A12,XXREAL_0:2;
       hence d*f.n <= t.n by A5,A13;
             f.n >= 0 by A6,A14;
      then d*f.n >= d*0 by A4,XREAL_1:66;
@@ -2052,11 +2075,11 @@ proof
   A22: d > 0 and
   A23: for n st n >= N1 & n in X holds s.n >= d*f.n & s.n >= 0 by A19;
    set a = max(N, N1);
-  A24: a >= N & a >= N1 by SQUARE_1:46;
+  A24: a >= N & a >= N1 by XXREAL_0:25;
        now take a; let n; assume that
    A25: n >= a and
    A26: n in X;
-           n >= N & n >= N1 by A24,A25,XREAL_1:2;
+           n >= N & n >= N1 by A24,A25,XXREAL_0:2;
      hence d*f.n <= t.n & t.n <= c*f.n by A16,A18,A21,A23,A26;
    end;
   hence x in Big_Theta(f,X) by A16,A20,A22;
@@ -2112,16 +2135,16 @@ A7: for n st n >= N2 holds t.n <= c*f.n & t.n >= 0 by A5;
    consider N3 such that
 A8: for n st n >= N3 holds f.n <= f.(n+1) by A3,Def8;
  set N = max(N2, N3);
-A9: N >= N2 & N >= N3 by SQUARE_1:46;
+A9: N >= N2 & N >= N3 by XXREAL_0:25;
      now let a be Nat; assume
  A10: a >= 2;
  A11:  f taken_every a is Element of Funcs(NAT, REAL) by FUNCT_2:11;
   set i = [/log(b,a)\];
- A12: b > 1 by A1,XREAL_1:2;
+ A12: b > 1 by A1,XXREAL_0:2;
  A13: b > 0 by A1;
  A14: b <> 0 by A1;
  A15: b <> 1 by A1;
-         a > 1 by A10,XREAL_1:2;
+         a > 1 by A10,XXREAL_0:2;
     then log(b,a) > log(b,1) by A12,POWER:65;
  then A16: log(b,a) > 0 by A13,A15,POWER:59;
  A17: [/log(b,a)\] >= log(b,a) by INT_1:def 5;
@@ -2132,7 +2155,7 @@ A9: N >= N2 & N >= N3 by SQUARE_1:46;
   reconsider i1 = b|^i as Nat by NEWTON:99;
       now let n; assume
   A19: n >= N;
-  then A20: n >= N2 & n >= N3 by A9,XREAL_1:2;
+  then A20: n >= N2 & n >= N3 by A9,XXREAL_0:2;
   A21: a <= b|^i proof
             a > 0 by A10;
      then A22: a = b to_power log(b,a) by A13,A15,POWER:def 3;
@@ -2140,9 +2163,9 @@ A9: N >= N2 & N >= N3 by SQUARE_1:46;
       hence thesis by A14,A22,POWER:48;
      end;
   A23: a*n <= i1*n by A21,XREAL_1:66;
-         a >= 1 by A10,XREAL_1:2;
+         a >= 1 by A10,XXREAL_0:2;
  then A24: a*n >= 1*n by XREAL_1:66;
-     then a*n >= N3 by A20,XREAL_1:2;
+     then a*n >= N3 by A20,XXREAL_0:2;
      then f.(a*n) <= f.(i1*n) by A8,A23,Th1;
      then (f taken_every a).n <= f.(i1*n) by Def18;
   then A25: (f taken_every a).n <= (f taken_every i1).n by Def18;
@@ -2173,13 +2196,13 @@ A9: N >= N2 & N >= N3 by SQUARE_1:46;
               then b|^k*n = (b to_power 0)*n by A14,POWER:48
                     .= 1*n by POWER:29
                     .= n;
-            hence thesis by A9,A19,XREAL_1:2;
+            hence thesis by A9,A19,XXREAL_0:2;
            end;
            suppose k > 0;
               then b to_power k > 1 by A12,POWER:40;
               then b|^k > 1 by A14,POWER:48;
               then b|^k*n >= 1*n by XREAL_1:66;
-            hence thesis by A20,XREAL_1:2;
+            hence thesis by A20,XXREAL_0:2;
           end;
           end;
           then (f taken_every b).m <= c*f.m by A4,A7;
@@ -2190,12 +2213,12 @@ A9: N >= N2 & N >= N3 by SQUARE_1:46;
           then c*f.m <= (c to_power 1)*(c to_power k)*f.n by POWER:30;
           then c*f.m <= (c to_power (k+1))*f.n by A6,POWER:32;
           then c*f.m <= c|^(k+1)*f.n by A6,POWER:48;
-       hence thesis by A29,A30,XREAL_1:2;
+       hence thesis by A29,A30,XXREAL_0:2;
      end;
          for k holds P[k] from NAT_1:sch 1( A26, A27 );
      then f.(b|^i*n) <= c|^i*f.n;
      then (f taken_every i1).n <= c|^i*f.n by Def18;
-   hence (f taken_every a).n <= c|^i*f.n by A25,XREAL_1:2;
+   hence (f taken_every a).n <= c|^i*f.n by A25,XXREAL_0:2;
  A31: t.n <= c*f.n & t.n >= 0 by A7,A20;
  A32: now assume f.n < 0;
         then c*f.n < c*0 by A6,XREAL_1:70;
@@ -2249,22 +2272,22 @@ A15: for n st n >= N5 holds t.n >= 0 by Def4;
    set N0 = max(max(N1,N2),max(N3,N4));
        max(N1,N2) >= N1 & max(N1,N2) >= N2 & max(N3,N4) >= N3 & max(N3,N4) >=
 N4
-     & N0 >= max(N1,N2) & N0 >= max(N3,N4) by SQUARE_1:46;
-then A16: N0 >= N1 & N0 >= N2 & N0 >= N3 & N0 >= N4 by XREAL_1:2;
+     & N0 >= max(N1,N2) & N0 >= max(N3,N4) by XXREAL_0:25;
+then A16: N0 >= N1 & N0 >= N2 & N0 >= N3 & N0 >= N4 by XXREAL_0:2;
    set N = max(N5, max(1, b*N0));
 A17: N >= N5 & N >= max(1, b*N0) &
-     max(1, b*N0) >= 1 & max(1, b*N0) >= b*N0 by SQUARE_1:46;
-then A18: N >= 1 & N >= b*N0 by XREAL_1:2;
-A19:b >= 1 & b > 1 & b > 0 & b <> 0 & b <> 1 by A2,XREAL_1:2;
+     max(1, b*N0) >= 1 & max(1, b*N0) >= b*N0 by XXREAL_0:25;
+then A18: N >= 1 & N >= b*N0 by XXREAL_0:2;
+A19:b >= 1 & b > 1 & b > 0 & b <> 0 & b <> 1 by A2,XXREAL_0:2;
    then b*N0 >= 1*N0 by XREAL_1:66;
-then A20: N >= N0 by A18,XREAL_1:2;
+then A20: N >= N0 by A18,XXREAL_0:2;
 A21: a*c > c*0 by A9,A13,XREAL_1:70;
 A22: t is Element of Funcs(NAT, REAL) by FUNCT_2:11;
      now let n; assume
- A23: n >= N; then n >= N0 by A20,XREAL_1:2;
- then A24: n >= N1 & n >= N2 & n >= N3 & n >= N4 by A16,XREAL_1:2;
+ A23: n >= N; then n >= N0 by A20,XXREAL_0:2;
+ then A24: n >= N1 & n >= N2 & n >= N3 & n >= N4 by A16,XXREAL_0:2;
      set n1 = b to_power [\log(b,n)/];
-    n >= 1 by A18,A23,XREAL_1:2;
+    n >= 1 by A18,A23,XXREAL_0:2;
      then log(b,n) >= log(b,1) by A19,PRE_FF:12;
  then A25: log(b,n) >= 0 by A19,POWER:59;
  A26: [\log(b,n)/] >= 0 proof
@@ -2297,7 +2320,7 @@ hence contradiction by A25,A27,XREAL_1:8;
      then reconsider n3 = [\log(b,n)/] + 1 as Nat by INT_1:16;
          n2 = b|^n3 by A19,A30,POWER:48;
  then A33: n2 in X;
- A34: n2 >= N4 by A24,A31,XREAL_1:2;
+ A34: n2 >= N4 by A24,A31,XXREAL_0:2;
  A35: t.n <= t.n2 by A6,A24,A31,Th1;
  A36: t.n2 <= a*f.n2 by A11,A14,A33,A34;
  A37: f.(b*n1) = s.n1 by A7,Def18;
@@ -2305,19 +2328,19 @@ hence contradiction by A25,A27,XREAL_1:8;
      then N*b" >= (b"*b)*N0;
  then A38: N*b" >= 1*N0 by A19,XCMPLX_0:def 7;
          n*b" >= N*b" by A23,XREAL_1:66;
-     then n*b" >= N0 by A38,XREAL_1:2;
+     then n*b" >= N0 by A38,XXREAL_0:2;
      then n/b >= N0 by XCMPLX_0:def 9;
- then A39: n1 >= N0 by A32,XREAL_1:2;
-     then n1 >= N3 by A16,XREAL_1:2;
+ then A39: n1 >= N0 by A32,XXREAL_0:2;
+     then n1 >= N3 by A16,XXREAL_0:2;
      then f.(b*n1) <= c*f.n1 by A10,A37;
      then A40: a*f.(b*n1) <= a*(c*f.n1) by A13,XREAL_1:66;
-         n1 >= N1 by A16,A39,XREAL_1:2;
+         n1 >= N1 by A16,A39,XXREAL_0:2;
      then f.n1 <= f.n by A5,A29,Th1;
  then A41: a*c*f.n1 <= a*c*f.n by A21,XREAL_1:66;
-         t.n <= a*f.n2 by A35,A36,XREAL_1:2;
-     then t.n <= a*c*f.n1 by A40,XREAL_1:2;
-  hence t.n <= a*c*f.n by A41,XREAL_1:2;
-         n >= N5 by A17,A23,XREAL_1:2;
+         t.n <= a*f.n2 by A35,A36,XXREAL_0:2;
+     then t.n <= a*c*f.n1 by A40,XXREAL_0:2;
+  hence t.n <= a*c*f.n by A41,XXREAL_0:2;
+         n >= N5 by A17,A23,XXREAL_0:2;
   hence t.n >= 0 by A15;
  end;
  hence t in Big_Oh(f) by A21,A22;
@@ -2364,23 +2387,23 @@ A15: for n st n >= N5 holds t.n >= 0 by Def4;
    set N0 = max(max(N1,N2),max(N3,N4));
        max(N1,N2) >= N1 & max(N1,N2) >= N2 & max(N3,N4) >= N3 & max(N3,N4) >=
 N4
-     & N0 >= max(N1,N2) & N0 >= max(N3,N4) by SQUARE_1:46;
-then A16: N0 >= N1 & N0 >= N2 & N0 >= N3 & N0 >= N4 by XREAL_1:2;
+     & N0 >= max(N1,N2) & N0 >= max(N3,N4) by XXREAL_0:25;
+then A16: N0 >= N1 & N0 >= N2 & N0 >= N3 & N0 >= N4 by XXREAL_0:2;
    set N = max(N5, max(1, b*N0));
 A17: N >= N5 & N >= max(1, b*N0) &
-     max(1, b*N0) >= 1 & max(1, b*N0) >= b*N0 by SQUARE_1:46;
-then A18: N >= 1 & N >= b*N0 by XREAL_1:2;
-A19:b >= 1 & b > 1 & b > 0 & b <> 0 & b <> 1 by A2,XREAL_1:2;
+     max(1, b*N0) >= 1 & max(1, b*N0) >= b*N0 by XXREAL_0:25;
+then A18: N >= 1 & N >= b*N0 by XXREAL_0:2;
+A19:b >= 1 & b > 1 & b > 0 & b <> 0 & b <> 1 by A2,XXREAL_0:2;
    then b*N0 >= 1*N0 by XREAL_1:66;
-then A20: N >= N0 by A18,XREAL_1:2;
+then A20: N >= N0 by A18,XXREAL_0:2;
 A21: c" > 0 by A9,XREAL_1:124;
 then A22:  a*c" > c"*0 by A13,XREAL_1:70;
 A23: t is Element of Funcs(NAT, REAL) by FUNCT_2:11;
      now let n; assume
- A24: n >= N; then n >= N0 by A20,XREAL_1:2;
- then A25: n >= N1 & n >= N2 & n >= N3 & n >= N4 by A16,XREAL_1:2;
+ A24: n >= N; then n >= N0 by A20,XXREAL_0:2;
+ then A25: n >= N1 & n >= N2 & n >= N3 & n >= N4 by A16,XXREAL_0:2;
      set n1 = b to_power [\log(b,n)/];
-    n >= 1 by A18,A24,XREAL_1:2;
+    n >= 1 by A18,A24,XXREAL_0:2;
  then A26: log(b,n) >= log(b,1) by A19,PRE_FF:12;
      [\log(b,n)/] >= 0 proof
         assume [\log(b,n)/] < 0;
@@ -2412,15 +2435,15 @@ A23: t is Element of Funcs(NAT, REAL) by FUNCT_2:11;
      then N*b" >= (b"*b)*N0;
  then A34: N*b" >= 1*N0 by A19,XCMPLX_0:def 7;
          n*b" >= N*b" by A24,XREAL_1:66;
-     then n*b" >= N0 by A34,XREAL_1:2;
+     then n*b" >= N0 by A34,XXREAL_0:2;
      then n/b >= N0 by XCMPLX_0:def 9;
- then A35: n1 >= N0 by A33,XREAL_1:2;
-     then n1 >= N2 by A16,XREAL_1:2;
+ then A35: n1 >= N0 by A33,XXREAL_0:2;
+     then n1 >= N2 by A16,XXREAL_0:2;
  then A36: t.n1 <= t.n by A6,A29,A30,Th1;
  A37: n1 in X by A28;
-         n1 >= N4 by A16,A35,XREAL_1:2;
+         n1 >= N4 by A16,A35,XXREAL_0:2;
  then A38: a*f.n1 <= t.n1 by A11,A14,A37;
-         n1 >= N3 by A16,A35,XREAL_1:2;
+         n1 >= N3 by A16,A35,XXREAL_0:2;
      then s.n1 <= c*f.n1 by A10;
      then c"*s.n1 <= c"*(c*f.n1) by A21,XREAL_1:66;
      then c"*s.n1 <= (c"*c)*f.n1;
@@ -2429,10 +2452,10 @@ A23: t is Element of Funcs(NAT, REAL) by FUNCT_2:11;
      then A39: a*(c"*f.(b*n1)) <= a*f.n1 by A13,XREAL_1:66;
          f.n <= f.n2 by A5,A25,A32,Th1;
  then A40: a*c"*f.n <= a*c"*f.n2 by A22,XREAL_1:66;
-         a*f.n1 <= t.n by A36,A38,XREAL_1:2;
-     then a*c"*f.n2 <= t.n by A39,XREAL_1:2;
-  hence a*c"*f.n <= t.n by A40,XREAL_1:2;
-         n >= N5 by A17,A24,XREAL_1:2;
+         a*f.n1 <= t.n by A36,A38,XXREAL_0:2;
+     then a*c"*f.n2 <= t.n by A39,XXREAL_0:2;
+  hence a*c"*f.n <= t.n by A40,XXREAL_0:2;
+         n >= N5 by A17,A24,XXREAL_0:2;
   hence t.n >= 0 by A15;
  end;
  hence t in Big_Omega(f) by A22,A23;
@@ -2591,21 +2614,21 @@ proof
   A11: d > 0 and
   A12: for n st n >= N2 holds s.n <= d*g.n & s.n >= 0 by A8;
      set e = max(c,d);
-  A13: e >= c & e >= d by SQUARE_1:46;
-  A14: e > 0 by A9,SQUARE_1:46;
+  A13: e >= c & e >= d by XXREAL_0:25;
+  A14: e > 0 by A9,XXREAL_0:25;
      set N = max(N1,N2);
-  A15: N >= N1 & N >= N2 by SQUARE_1:46;
+  A15: N >= N1 & N >= N2 by XXREAL_0:25;
        now let n; assume n >= N;
-   then A16: n >= N1 & n >= N2 by A15,XREAL_1:2;
+   then A16: n >= N1 & n >= N2 by A15,XXREAL_0:2;
       then r.n <= c*f.n & r.n >= 0 & s.n <= d*g.n & s.n >= 0 by A10,A12;
       then f.n*c >= 0*c & g.n*d >= 0*d;
       then f.n >= 0 & g.n >= 0 by A9,A11,XREAL_1:70;
       then r.n <= c*f.n & s.n <= d*g.n & c*f.n <= e*f.n & d*g.n <= e*g.n
          by A10,A12,A13,A16,XREAL_1:66;
-      then r.n <= e*f.n & s.n <= e*g.n by XREAL_1:2;
+      then r.n <= e*f.n & s.n <= e*g.n by XXREAL_0:2;
       then r.n + s.n <= e*f.n + s.n & e*f.n + s.n <=
  e*f.n + e*g.n by XREAL_1:8;
-      then r.n + s.n <= e*(f.n + g.n) by XREAL_1:2;
+      then r.n + s.n <= e*(f.n + g.n) by XXREAL_0:2;
       then r.n + s.n <= e*(f+g).n by SEQ_1:11;
      hence t.n <= e*(f+g).n by A4,A5,A7;
           f'.n >= 0 & g'.n >= 0 by A5,A7,A10,A12,A16;
@@ -2627,8 +2650,8 @@ proof
  A22:for n st n >= N2 holds g.n >= 0 by Def4;
     set N = max(N3,max(N1,N2));
         N >= N3 & N >= max(N1,N2) & max(N1,N2) >= N1 & max(N1,N2) >= N2
-         by SQUARE_1:46;
- then A23: N >= N3 & N >= N1 & N >= N2 by XREAL_1:2;
+         by XXREAL_0:25;
+ then A23: N >= N3 & N >= N1 & N >= N2 by XXREAL_0:2;
     defpred P[Nat,Real] means
      (t.$1 <= c*f.$1 implies $2 = t.$1) & (c*f.$1 < t.$1 implies $2 = c*f.$1);
  A24:for x being Element of NAT ex y being Element of REAL st P[x,y] proof
@@ -2654,7 +2677,7 @@ proof
  A27:for x being Element of NAT holds Q[x,g'.x] from FUNCT_2:sch 3(A26);
  A28: f' is Element of Funcs(NAT,REAL) & g' is Element of Funcs(NAT,REAL)
      by FUNCT_2:11;
-        now let n; assume n >= N; then n >= N3 & n >= N1 by A23,XREAL_1:2;
+        now let n; assume n >= N; then n >= N3 & n >= N1 by A23,XXREAL_0:2;
     then A29: t.n >= 0 & f.n >= 0 by A20,A21;
     then A30: 0*f.n <= c*f.n by A19,XREAL_1:66;
      per cases;
@@ -2666,7 +2689,7 @@ proof
     end;
     end;
  then A31:f' in Big_Oh(f) by A19,A28;
-        now let n; assume n >= N; then n >= N3 & n >= N2 by A23,XREAL_1:2;
+        now let n; assume n >= N; then n >= N3 & n >= N2 by A23,XXREAL_0:2;
     then A32: t.n >= 0 & g.n >= 0 & t.n <= c*(f+g).n by A20,A22;
     then A33: 0*g.n <= c*g.n by A19,XREAL_1:66;
      per cases;
@@ -2729,27 +2752,27 @@ proof
   A11: d > 0 and
   A12: for n st n >= N2 holds s.n <= d*g.n & s.n >= 0 by A8;
      set e = max(c,d);
-  A13: e >= c & e >= d by SQUARE_1:46;
-  A14: e > 0 by A9,SQUARE_1:46;
+  A13: e >= c & e >= d by XXREAL_0:25;
+  A14: e > 0 by A9,XXREAL_0:25;
      set N = max(N1,N2);
-  A15: N >= N1 & N >= N2 by SQUARE_1:46;
+  A15: N >= N1 & N >= N2 by XXREAL_0:25;
        now let n; assume n >= N;
-   then A16: n >= N1 & n >= N2 by A15,XREAL_1:2;
+   then A16: n >= N1 & n >= N2 by A15,XXREAL_0:2;
       then r.n <= c*f.n & r.n >= 0 & s.n <= d*g.n & s.n >= 0 by A10,A12;
       then f.n*c >= 0*c & g.n*d >= 0*d;
       then f.n >= 0 & g.n >= 0 by A9,A11,XREAL_1:70;
       then r.n <= c*f.n & s.n <= d*g.n & c*f.n <= e*f.n & d*g.n <= e*g.n
          by A10,A12,A13,A16,XREAL_1:66;
-   then A17: r.n <= e*f.n & s.n <= e*g.n by XREAL_1:2;
-          f.n <= max(f.n, g.n) & g.n <= max(f.n, g.n) by SQUARE_1:46;
+   then A17: r.n <= e*f.n & s.n <= e*g.n by XXREAL_0:2;
+          f.n <= max(f.n, g.n) & g.n <= max(f.n, g.n) by XXREAL_0:25;
       then e*f.n <= e*max(f.n, g.n) & e*g.n <= e*max(f.n, g.n) by A14,
 XREAL_1:66
 ;
-      then r.n <= e*max(f.n, g.n) & s.n <= e*max(f.n, g.n) by A17,XREAL_1:2;
+      then r.n <= e*max(f.n, g.n) & s.n <= e*max(f.n, g.n) by A17,XXREAL_0:2;
       then max(r.n, s.n) <= e*max(f.n, g.n) by SQUARE_1:50;
       then max(r.n, s.n) <= e*max(f,g).n by Def10;
      hence t.n <= e*max(f,g).n by A4,A5,A7;
-          max(f'.n, g'.n) >= f'.n & f'.n >= 0 by A5,A10,A16,SQUARE_1:46;
+          max(f'.n, g'.n) >= f'.n & f'.n >= 0 by A5,A10,A16,XXREAL_0:25;
      hence t.n >= 0 by A4;
    end;
    hence x in Big_Oh(max(f,g)) by A1,A14;
@@ -2768,8 +2791,8 @@ XREAL_1:66
  A23:for n st n >= N2 holds g.n >= 0 by Def4;
     set N = max(N3,max(N1,N2));
  A24:N >= N3 & N >= max(N1,N2) & max(N1,N2) >= N1 & max(N1,N2) >= N2
-         by SQUARE_1:46;
- then A25: N >= N3 & N >= N1 & N >= N2 by XREAL_1:2;
+         by XXREAL_0:25;
+ then A25: N >= N3 & N >= N1 & N >= N2 by XXREAL_0:2;
     defpred P[Nat,Real] means
       (f.$1 >= g.$1 or $1 < N implies $2 = t.$1) &
       (f.$1 < g.$1 & $1 >= N implies $2 = 0);
@@ -2808,13 +2831,13 @@ XREAL_1:66
       by FUNCT_2:11;
         now let n; assume
     A33: n >= N;
-       then n >= N3 & n >= N1 by A25,XREAL_1:2;
+       then n >= N3 & n >= N1 by A25,XXREAL_0:2;
     then A34: t.n >= 0 & f.n >= 0 & t.n <= c*max(f,g).n by A21,A22;
     then A35: 0*f.n <= c*f.n by A20,XREAL_1:66;
      per cases;
      suppose
      A36: f.n >= g.n;
-        then max(f.n,g.n) = f.n by SQUARE_1:def 2;
+        then max(f.n,g.n) = f.n by XXREAL_0:def 9;
         then max(f,g).n = f.n by Def10;
       hence f'.n <= c*f.n & f'.n >= 0 by A28,A34,A36;
      end;
@@ -2825,7 +2848,7 @@ XREAL_1:66
  then A37:f' in Big_Oh(f) by A20,A32;
         now let n; assume
     A38: n >= N;
-       then n >= N3 & n >= N2 by A25,XREAL_1:2;
+       then n >= N3 & n >= N2 by A25,XXREAL_0:2;
     then A39: t.n >= 0 & g.n >= 0 & t.n <= c*max(f,g).n by A21,A23;
     then A40: 0*g.n <= c*g.n by A20,XREAL_1:66;
      per cases;
@@ -2834,7 +2857,7 @@ XREAL_1:66
      end;
      suppose
      A41: f.n < g.n;
-        then max(f.n,g.n) = g.n by SQUARE_1:def 2;
+        then max(f.n,g.n) = g.n by XXREAL_0:def 9;
         then max(f,g).n = g.n by Def10;
       hence g'.n <= c*g.n & g'.n >= 0 by A31,A39,A41;
     end;
@@ -2848,16 +2871,16 @@ XREAL_1:66
      end;
      suppose
      A43: n >= N;
-     then A44: n >= N3 by A24,XREAL_1:2;
+     then A44: n >= N3 by A24,XXREAL_0:2;
       thus t.n = max(f'.n, g'.n) proof
        per cases;
        suppose f.n >= g.n;
          then f'.n = t.n & g'.n = 0 & t.n >= 0 by A21,A28,A31,A43,A44;
-        hence t.n = max(f'.n, g'.n) by SQUARE_1:def 2;
+        hence t.n = max(f'.n, g'.n) by XXREAL_0:def 9;
        end;
        suppose f.n < g.n;
          then f'.n = 0 & g'.n = t.n & t.n >= 0 by A21,A28,A31,A43,A44;
-        hence t.n = max(f'.n, g'.n) by SQUARE_1:def 2;
+        hence t.n = max(f'.n, g'.n) by XXREAL_0:def 9;
       end;
       end;
     end;

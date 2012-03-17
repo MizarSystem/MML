@@ -12,6 +12,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -49,7 +50,7 @@
 </Func>
 <Cluster>
 <Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 </Registrations>

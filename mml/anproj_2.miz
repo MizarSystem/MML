@@ -14,9 +14,9 @@ environ
  constructors DOMAIN_1, REAL_1, FUNCSDOM, ANPROJ_1, MEMBERED;
  registrations SUBSET_1, COLLSP, ANPROJ_1, STRUCT_0, RELSET_1, MEMBERED;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions COLLSP, ANPROJ_1, BINOP_1;
- theorems RLVECT_1, BINOP_1, FUNCT_2, FUNCSDOM, COLLSP, ANPROJ_1, ENUMSET1,
-      XCMPLX_0, XCMPLX_1;
+ definitions COLLSP, ANPROJ_1, BINOP_1, FUNCSDOM;
+ theorems RLVECT_1, FUNCT_2, FUNCSDOM, COLLSP, ANPROJ_1, ENUMSET1, XCMPLX_0,
+      XCMPLX_1, FUNCOP_1;
  schemes FUNCT_2;
 
 begin
@@ -988,24 +988,23 @@ Th11: (x1 in A & x2 in A & x3 in A & x1<>x2 & x1<>x3 & x2<>x3) &
       (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0);
    A5: f.x1=1 & f.x2=0 & f.x3=0 & g.x1=0 & g.x2=1 & g.x3=0 &
        h.x1=0 & h.x2=0 & h.x3=1 by A1,A2,A3,A4;
-
     let a,b,c;
     assume A6: RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]) = RealFuncZero(A);
-     then A7: 0 = (RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h])).x1 by FUNCSDOM:13
+     then A7: 0 = (RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h])).x1 by FUNCOP_1:13
       .= (RA.(RM.[a,f],RM.[b,g])).x1 + (RM.[c,h]).x1 by FUNCSDOM:10
       .= ((RM.[a,f]).x1) + ((RM.[b,g]).x1) + (RM.[c,h]).x1 by FUNCSDOM:10
       .= ((RM.[a,f]).x1) + ((RM.[b,g]).x1) + c*(h.x1) by FUNCSDOM:15
       .= ((RM.[a,f]).x1) + b*(g.x1) + c*(h.x1) by FUNCSDOM:15
       .= a*1 + b*0 + c*0 by A5,FUNCSDOM:15
       .= a;
-     A8: 0 = (RA.(RA.(RM.[a,f],RM.[b,g]), RM.[c,h])).x2 by A6,FUNCSDOM:13
+     A8: 0 = (RA.(RA.(RM.[a,f],RM.[b,g]), RM.[c,h])).x2 by A6,FUNCOP_1:13
       .= (RA.(RM.[a,f],RM.[b,g])).x2 + (RM.[c,h]).x2 by FUNCSDOM:10
       .= ((RM.[a,f]).x2) + ((RM.[b,g]).x2) + (RM.[c,h]).x2 by FUNCSDOM:10
       .= ((RM.[a,f]).x2) + ((RM.[b,g]).x2) + c*(h.x2) by FUNCSDOM:15
       .= ((RM.[a,f]).x2) + b*(g.x2) + c*(h.x2) by FUNCSDOM:15
       .= a*0 + b*1 + c*0 by A5,FUNCSDOM:15
       .= b;
-         0 = (RA.(RA.(RM.[a,f],RM.[b,g]), RM.[c,h])).x3 by A6,FUNCSDOM:13
+         0 = (RA.(RA.(RM.[a,f],RM.[b,g]), RM.[c,h])).x3 by A6,FUNCOP_1:13
       .= (RA.(RM.[a,f],RM.[b,g])).x3 + (RM.[c,h]).x3 by FUNCSDOM:10
       .= ((RM.[a,f]).x3) + ((RM.[b,g]).x3) + (RM.[c,h]).x3 by FUNCSDOM:10
       .= ((RM.[a,f]).x3) + ((RM.[b,g]).x3) + c*(h.x3) by FUNCSDOM:15
@@ -1175,46 +1174,42 @@ Lm30: ex A,x1,x2,x3 st A={x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3
      (RealFuncAdd(A)).((RealFuncAdd(A)).
    ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
    (RealFuncExtMult(A)).[c,h]))) by A1,Th15;
-     A3: V=RLSStruct(#Funcs(A,REAL),
-         (RealFuncZero(A)),RealFuncAdd(A),RealFuncExtMult(A)#) by
-FUNCSDOM:def 7;
-    then reconsider u=f, v=g, w = h as Element of V;
-    A4: for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0
-     proof let r,s,t be Real such that A5: r*u + s*v + t*w = 0.V;
-        A6: r*u = (RealFuncExtMult(A)).[r,f] &
+    reconsider u=f, v=g, w = h as Element of V;
+    A3: for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0
+     proof let r,s,t be Real such that A4: r*u + s*v + t*w = 0.V;
+        A5: r*u = (RealFuncExtMult(A)).[r,f] &
         s*v = (RealFuncExtMult(A)).[s,g] &
-        t*w = (RealFuncExtMult(A)).[t,h] by A3,RLVECT_1:def 4;
-        reconsider u' = r*u,v' = s*v,w' = t*w as Element of Funcs(A,REAL) by A3
-;
+        t*w = (RealFuncExtMult(A)).[t,h] by RLVECT_1:def 4;
+        reconsider u' = r*u,v' = s*v,w' = t*w as Element of Funcs(A,REAL);
         reconsider u''=u',v''=v' as Element of V;
-     0.V = (the add of V).[u'' + v'',w'] by A5,RLVECT_1:def 3
-       .= (RealFuncAdd(A)).[(RealFuncAdd(A)).[u',v'],w'] by A3,RLVECT_1:def 3
+     0.V = (the add of V).[u'' + v'',w'] by A4,RLVECT_1:def 3
+       .= (RealFuncAdd(A)).[(RealFuncAdd(A)).[u',v'],w'] by RLVECT_1:def 3
        .= (RealFuncAdd(A)).[(RealFuncAdd(A)).(u',v'),w']
        .= (RealFuncAdd(A)).((RealFuncAdd(A)).
    ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
-   (RealFuncExtMult(A)).[t,h]) by A6;
+   (RealFuncExtMult(A)).[t,h]) by A5;
          then (RealFuncAdd(A)).((RealFuncAdd(A)).
    ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
-   (RealFuncExtMult(A)).[t,h]) = RealFuncZero(A) by A3,RLVECT_1:def 2;
+   (RealFuncExtMult(A)).[t,h]) = RealFuncZero(A) by RLVECT_1:def 2;
         hence r=0 & s=0 & t=0 by A2; end;
-   A7: for y being Element of V ex a,b,c st y = a*u + b*v + c*w
+   A6: for y being Element of V ex a,b,c st y = a*u + b*v + c*w
         proof let y be Element of V;
-         reconsider h'=y as Element of Funcs(A,REAL) by A3;
+         reconsider h'=y as Element of Funcs(A,REAL);
          consider a,b,c such that
-    A8: h' = (RealFuncAdd(A)).((RealFuncAdd(A)).
+    A7: h' = (RealFuncAdd(A)).((RealFuncAdd(A)).
             ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
             (RealFuncExtMult(A)).[c,h]) by A2;
         a*u = (RealFuncExtMult(A)).[a,f] &
          b*v = (RealFuncExtMult(A)).[b,g] &
-         c*w = (RealFuncExtMult(A)).[c,h] by A3,RLVECT_1:def 4;
-        then h' = (the add of V).((the add of V).[a*u,b*v],c*w) by A3,A8
+         c*w = (RealFuncExtMult(A)).[c,h] by RLVECT_1:def 4;
+        then h' = (the add of V).((the add of V).[a*u,b*v],c*w) by A7
           .= (the add of V).[(the add of V).[a*u,b*v],c*w]
           .= (the add of V).[a*u + b*v,c*w] by RLVECT_1:def 3
           .= a*u + b*v + c*w by RLVECT_1:def 3; hence thesis; end;
-       u is_Prop_Vect by A4,Th1; then u <> 0.V by RLVECT_1:def 13;
+       u is_Prop_Vect by A3,Th1; then u <> 0.V by RLVECT_1:def 13;
     then reconsider V as non trivial RealLinearSpace by ANPROJ_1:def 8;
     take V; reconsider u,v,w as Element of V; take u,v,w;
-   thus thesis by A4,A7; end;
+   thus thesis by A3,A6; end;
 
 theorem
 Th17: ex f,g,h,f1 st
@@ -1296,7 +1291,7 @@ Th18: (x1 in A & x2 in A & x3 in A & x4 in A &
     assume A7: RA.(RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]),RM.[d,f1]) =
      RealFuncZero(A);
  then A8: 0 = (RA.(RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]),RM.[d,f1])).x1 by
-FUNCSDOM:13
+FUNCOP_1:13
   .= (RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h])).x1 + (RM.[d,f1]).x1 by FUNCSDOM:10
   .= (RA.(RM.[a,f],RM.[b,g])).x1 + (RM.[c,h]).x1 +
          (RM.[d,f1]).x1 by FUNCSDOM:10
@@ -1309,7 +1304,7 @@ FUNCSDOM:13
   .= a*1 + b*0 + c*0 + d*0 by A6,FUNCSDOM:15
   .= a;
  A9: 0 = (RA.(RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]),RM.[d,f1])).x2 by A7,
-FUNCSDOM:13
+FUNCOP_1:13
   .= (RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h])).x2 + (RM.[d,f1]).x2 by FUNCSDOM:10
   .= (RA.(RM.[a,f],RM.[b,g])).x2 + (RM.[c,h]).x2 + (RM.[d,f1]).x2
       by FUNCSDOM:10
@@ -1322,7 +1317,7 @@ FUNCSDOM:13
   .= a*0 + b*1 + c*0 + d*0 by A6,FUNCSDOM:15
   .= b;
  A10: 0 = (RA.(RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]),RM.[d,f1])).x3 by A7,
-FUNCSDOM:13
+FUNCOP_1:13
   .= (RA.(RA.(RM.[a,f], RM.[b,g]),RM.[c,h])).x3 +
          (RM.[d,f1]).x3 by FUNCSDOM:10
   .= (RA.(RM.[a,f],RM.[b,g])).x3 + (RM.[c,h]).x3 + (RM.[d,f1]).x3
@@ -1335,7 +1330,7 @@ FUNCSDOM:13
   .= a*0 + b*0 + c*1 + d*0 by A6,FUNCSDOM:15
   .= c;
      0 = (RA.(RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]),RM.[d,f1])).x4
-      by A7,FUNCSDOM:13
+      by A7,FUNCOP_1:13
  .= (RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h])).x4 + (RM.[d,f1]).x4 by FUNCSDOM:10
  .= (RA.(RM.[a,f], RM.[b,g])).x4 + (RM.[c,h]).x4 + (RM.[d,f1]).x4
      by FUNCSDOM:10
@@ -1566,62 +1561,59 @@ Th23: ex V being non trivial RealLinearSpace st
      (ex a,b,c,d st h' = (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
        ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
        (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) )) by A1,Th22;
-    A3: V=RLSStruct(#Funcs(A,REAL),
-         (RealFuncZero(A)),RealFuncAdd(A),RealFuncExtMult(A)#) by
-FUNCSDOM:def 7;
-    then reconsider u = f, v = g, w = h, u1 = f1 as Element of V;
-  A4: for a,b,c,d st a*u + b*v + c*w + d*u1 = 0.V holds
+    reconsider u = f, v = g, w = h, u1 = f1 as Element of V;
+  A3: for a,b,c,d st a*u + b*v + c*w + d*u1 = 0.V holds
                                    a = 0 & b = 0 & c = 0 & d = 0
-     proof let r,s,t,r1 be Real such that A5: r*u + s*v + t*w + r1*u1 = 0.V;
+     proof let r,s,t,r1 be Real such that A4: r*u + s*v + t*w + r1*u1 = 0.V;
       reconsider u' = r*u,v' = s*v,w' = t*w,u1' = r1*u1
- as Element of Funcs(A,REAL) by A3; reconsider
+ as Element of Funcs(A,REAL); reconsider
       u''= u',v''=v',w''=w' as Element of V;
-   0.V = (the add of V).[u'' + v'' + w'',u1'] by A5,RLVECT_1:def 3
+   0.V = (the add of V).[u'' + v'' + w'',u1'] by A4,RLVECT_1:def 3
  .= (the add of V).[(the add of V).[u'' + v'',w'],u1'] by RLVECT_1:def 3
- .= (RealFuncAdd(A)).[(RealFuncAdd(A)).[(RealFuncAdd(A)).[u',v'],w'],u1'] by A3
-,RLVECT_1:def 3
+ .= (RealFuncAdd(A)).[(RealFuncAdd(A)).[(RealFuncAdd(A)).[u',v'],w'],u1'] by
+RLVECT_1:def 3
  .= (RealFuncAdd(A)).[(RealFuncAdd(A)).[(RealFuncAdd(A)).(u',v'),w'],u1']
  .= (RealFuncAdd(A)).[(RealFuncAdd(A)).((RealFuncAdd(A)).(u',v'),w'),u1']
  .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).(u',v'),w'),u1')
  .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
-                             ((RealFuncExtMult(A)).[r,f],v'),w'),u1') by A3,
+                             ((RealFuncExtMult(A)).[r,f],v'),w'),u1') by
 RLVECT_1:def 4
  .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
-   ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),w'),u1') by A3,
+   ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),w'),u1') by
 RLVECT_1:def 4
  .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
    ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
-                   (RealFuncExtMult(A)).[t,h]),u1') by A3,RLVECT_1:def 4
+                   (RealFuncExtMult(A)).[t,h]),u1') by RLVECT_1:def 4
  .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
    ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
-      (RealFuncExtMult(A)).[t,h]),(RealFuncExtMult(A)).[r1,f1]) by A3,
+      (RealFuncExtMult(A)).[t,h]),(RealFuncExtMult(A)).[r1,f1]) by
 RLVECT_1:def 4;
   then (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
    ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
     (RealFuncExtMult(A)).[t,h]),(RealFuncExtMult(A)).[r1,f1]) =
-                 RealFuncZero(A) by A3,RLVECT_1:def 2;
+                 RealFuncZero(A) by RLVECT_1:def 2;
   hence r = 0 & s = 0 & t = 0 & r1 = 0 by A2; end;
-   A6: for y being Element of V ex a,b,c,d st y = a*u + b*v + c*w + d*u1
+   A5: for y being Element of V ex a,b,c,d st y = a*u + b*v + c*w + d*u1
     proof let y be Element of V;
  reconsider
-     h'=y as Element of Funcs(A,REAL) by A3; consider a,b,c,d such that
-     A7: h' = (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+     h'=y as Element of Funcs(A,REAL); consider a,b,c,d such that
+     A6: h' = (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
        ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
        (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) by A2;
          a*u = (RealFuncExtMult(A)).[a,f] & b*v = (RealFuncExtMult(A)).[b,g] &
          c*w = (RealFuncExtMult(A)).[c,h] & d*u1 = (RealFuncExtMult(A)).[d,f1]
-                        by A3,RLVECT_1:def 4; then h' =
+                        by RLVECT_1:def 4; then h' =
 (the add of V).((the add of V).((the add of V).[a*u,b*v],c*w),d*u1)
-        by A3,A7
+        by A6
  .= (the add of V).((the add of V).[(the add of V).[a*u,b*v],c*w],d*u1)
  .= (the add of V).[(the add of V).[(the add of V).[a*u,b*v],c*w],d*u1]
  .= (the add of V).[(the add of V).[a*u + b*v,c*w],d*u1] by RLVECT_1:def 3
  .= (the add of V).[a*u + b*v + c*w,d*u1] by RLVECT_1:def 3
  .= a*u + b*v + c*w + d*u1 by RLVECT_1:def 3; hence thesis; end;
-       u is_Prop_Vect by A4,Th2; then u <> 0.V by RLVECT_1:def 13;
+       u is_Prop_Vect by A3,Th2; then u <> 0.V by RLVECT_1:def 13;
     then reconsider V as non trivial RealLinearSpace by ANPROJ_1:def 8;
     take V; reconsider u,v,w,u1 as Element of V; take u,v,w,u1;
-   thus thesis by A4,A6; end;
+   thus thesis by A3,A5; end;
 
 definition let IT be RealLinearSpace;
  attr IT is up-3-dimensional means

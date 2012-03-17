@@ -14,8 +14,8 @@
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="RELAT_2"/>
@@ -42,9 +42,9 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="202">
+<Func kind="K" nr="203">
 <Func kind="K" nr="56"/>
-<Func kind="K" nr="114">
+<Func kind="K" nr="113">
 <Func kind="K" nr="56"/>
 <LocusVar nr="1"/>
 </Func>
@@ -83,7 +83,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="202">
+<Func kind="K" nr="203">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -102,7 +102,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="202">
+<Func kind="K" nr="203">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -113,25 +113,6 @@
 <Adjective nr="44"/>
 <Adjective nr="66"/>
 <Adjective nr="67"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="56"/>
-</Typ>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="56"/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="203">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -164,7 +145,26 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="203">
+<Func kind="K" nr="205">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="25"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="K" nr="56"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="204">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -180,7 +180,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="205">
+<Func kind="K" nr="206">
 <Num nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -196,9 +196,9 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="202">
+<Func kind="K" nr="203">
 <Func kind="K" nr="56"/>
-<Func kind="K" nr="114">
+<Func kind="K" nr="113">
 <Func kind="K" nr="56"/>
 <LocusVar nr="1"/>
 </Func>
@@ -220,9 +220,9 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="150">
+<Func kind="K" nr="149">
 <Func kind="K" nr="56"/>
-<Func kind="K" nr="114">
+<Func kind="K" nr="113">
 <Func kind="K" nr="56"/>
 <LocusVar nr="1"/>
 </Func>

@@ -12,13 +12,14 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="RELSET_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="SIN_COS2"/>
 </Signature>
 <FCluster>
@@ -27,13 +28,13 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="116">
+<Func kind="K" nr="135">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="22"/>
-<Adjective nr="32"/>
+<Adjective nr="19"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -42,13 +43,13 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="119">
+<Func kind="K" nr="138">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="22"/>
-<Adjective nr="32"/>
+<Adjective nr="19"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -57,23 +58,23 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="122">
+<Func kind="K" nr="141">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="22"/>
-<Adjective nr="32"/>
+<Adjective nr="19"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="115"/>
+<Func kind="K" nr="134"/>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="30"/>
-<Adjective nr="31">
+<Adjective nr="28"/>
+<Adjective nr="32">
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="52"/>
 </Adjective>
@@ -81,12 +82,12 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="118"/>
+<Func kind="K" nr="137"/>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="30"/>
-<Adjective nr="31">
+<Adjective nr="28"/>
+<Adjective nr="32">
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="52"/>
 </Adjective>
@@ -94,12 +95,12 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="121"/>
+<Func kind="K" nr="140"/>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="30"/>
-<Adjective nr="31">
+<Adjective nr="28"/>
+<Adjective nr="32">
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="52"/>
 </Adjective>

@@ -9,6 +9,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
@@ -55,9 +56,9 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="70">
+<Func kind="K" nr="87">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="83">
+<Func kind="K" nr="100">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -74,7 +75,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="70">
+<Func kind="K" nr="87">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -127,9 +128,9 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="69">
+<Func kind="K" nr="86">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="83">
+<Func kind="K" nr="100">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -146,7 +147,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="69">
+<Func kind="K" nr="86">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>

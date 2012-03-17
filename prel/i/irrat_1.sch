@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
@@ -31,7 +32,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="21">
+<Adjective nr="19">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 </Adjective>
@@ -47,7 +48,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="79">
+<Func kind="K" nr="96">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 <Var nr="1"/>
@@ -65,7 +66,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="21">
+<Adjective nr="19">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 </Adjective>
@@ -77,7 +78,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="21">
+<Adjective nr="19">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 </Adjective>
@@ -94,7 +95,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="79">
+<Func kind="K" nr="96">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 <Var nr="1"/>
@@ -112,7 +113,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="79">
+<Func kind="K" nr="96">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 <Var nr="2"/>

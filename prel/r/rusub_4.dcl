@@ -11,6 +11,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -22,7 +23,6 @@
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 <ArticleID name="RUSUB_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="RUSUB_4"/>
 </Signature>
 <RCluster>
@@ -39,7 +39,7 @@
 <Adjective nr="35"/>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="49"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -69,7 +69,7 @@
 <Adjective nr="35"/>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="49"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -83,7 +83,7 @@
 <Adjective nr="34"/>
 <Adjective nr="35"/>
 <Adjective nr="43"/>
-<Adjective nr="49"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -100,7 +100,7 @@
 <Adjective nr="35"/>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="49"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -121,7 +121,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="50">
+<Adjective nr="45">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -145,12 +145,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="21"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="50">
+<Adjective nr="45">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -166,7 +161,7 @@
 <Adjective nr="34"/>
 <Adjective nr="35"/>
 <Adjective nr="43"/>
-<Adjective nr="49"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -176,7 +171,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="49"/>
+<Adjective nr="44"/>
 </Cluster>
 </CCluster>
 </Registrations>

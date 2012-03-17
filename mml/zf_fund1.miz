@@ -9,20 +9,21 @@ environ
  vocabularies CLASSES2, ZF_REFLE, ORDINAL1, ORDINAL2, FUNCT_1, ZF_LANG, SEQ_1,
       RELAT_1, MCART_1, CARD_1, FINSET_1, ZF_MODEL, FUNCT_2, BOOLE, ORDINAL4,
       TARSKI, FUNCOP_1, ZF_FUND1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, ORDINAL1,
-      ORDINAL2, ORDINAL4, CARD_1, FINSET_1, RELAT_1, CLASSES2, ZF_REFLE,
-      ZF_LANG, ZF_MODEL, FUNCT_1, FUNCT_2, MCART_1, FUNCOP_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, ORDINAL1, ORDINAL2,
+      ORDINAL4, CARD_1, FINSET_1, RELAT_1, CLASSES2, ZF_REFLE, ZF_LANG,
+      ZF_MODEL, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, MCART_1, FUNCOP_1, XXREAL_0;
  constructors WELLORD2, ORDINAL4, CLASSES1, ZF_MODEL, MCART_1, NAT_1, FUNCOP_1,
       PARTFUN1, XREAL_0, XXREAL_0;
  registrations ORDINAL1, CARD_1, ZF_LANG, FUNCT_1, FINSET_1, RELSET_1,
-      CLASSES2, ORDINAL2, XREAL_0;
+      CLASSES2, ORDINAL2, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0;
  theorems TARSKI, ORDINAL1, ORDINAL2, ORDINAL3, ORDINAL4, CARD_1, CLASSES2,
       ZFMISC_1, ZF_LANG, ZF_LANG1, ZF_MODEL, ENUMSET1, FUNCT_1, FUNCT_2,
       FUNCT_5, RELAT_1, MCART_1, FINSET_1, GRFUNC_1, NAT_1, FUNCOP_1, WELLORD2,
       CLASSES1, RELSET_1, FINSEQ_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
  schemes FUNCT_1, FUNCT_2, ORDINAL1, FINSET_1, ZF_LANG1, BINOP_2, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0;
 
 begin
 
@@ -200,7 +201,7 @@ Lm1:
                    .=x.(x".p') by FINSEQ_1:78
                    .=p by Def3;
       end;
-      hence p in VAR iff ex q st q in dom decode & p=decode.q by A1,FUNCT_2:7;
+      hence p in VAR iff ex q st q in dom decode & p=decode.q by FUNCT_2:7;
      end;
      hence thesis by FUNCT_1:def 5;
     end;
@@ -208,7 +209,7 @@ Lm1:
     proof
         now let p,q; assume
          A4:p in dom decode & q in dom decode & decode.p=decode.q;
-       then reconsider p'=p, q'=q as Element of omega by FUNCT_2:def 1;
+       then reconsider p'=p, q'=q as Element of omega;
          x.card p' = decode.q by A4,Def2
                 .= x.card q' by Def2;
       then A5: 5+card p' = x.card q' by ZF_LANG:def 2
@@ -268,14 +269,13 @@ definition let H,E;
          now
        given f such that
            A2: p=(f*decode)|code Free(H) & f in St(H,E);
-       A3:dom (f*decode)=omega & rng (f*decode) c= E
-             by FUNCT_2:def 1,RELSET_1:12;
-       then A4:dom((f*decode)|code Free(H))=omega /\ code Free(H)
+       dom (f*decode)=omega & rng (f*decode) c= E
+             by FUNCT_2:def 1;
+       then A3:dom((f*decode)|code Free(H))=omega /\ code Free(H)
                                                             by RELAT_1:90;
-    A5:dom((f*decode)|code Free(H))=code Free(H) by A4,XBOOLE_1:28;
-          rng((f*decode)|code Free(H)) c= rng (f*decode) by RELAT_1:99;
-       then rng((f*decode)|code Free(H)) c= E by A3,XBOOLE_1:1;
-       then p in Funcs(code Free(H),E) by A2,A5,FUNCT_2:def 2;
+    A4:dom((f*decode)|code Free(H))=code Free(H) by A3,XBOOLE_1:28;
+       rng((f*decode)|code Free(H)) c= E;
+       then p in Funcs(code Free(H),E) by A2,A4,FUNCT_2:def 2;
        hence p in B by A1,A2;
       end;
       hence thesis by A1;
@@ -285,17 +285,17 @@ definition let H,E;
   uniqueness
    proof
     let B,C such that
-       A6:p in B iff ex f st p=(f*decode)|code Free(H) & f in St(H,E)
-   and A7:p in C iff ex f st p=(f*decode)|code Free(H) & f in St(H,E);
+       A5:p in B iff ex f st p=(f*decode)|code Free(H) & f in St(H,E)
+   and A6:p in C iff ex f st p=(f*decode)|code Free(H) & f in St(H,E);
     thus B c= C
     proof
      let p;assume p in B;
-     then ex f st p=(f*decode)|code Free(H) & f in St(H,E) by A6;
-     hence p in C by A7;
+     then ex f st p=(f*decode)|code Free(H) & f in St(H,E) by A5;
+     hence p in C by A6;
     end;
      let p;assume p in C;
-     then ex f st p=(f*decode)|code Free(H) & f in St(H,E) by A7;
-     hence p in B by A6;
+     then ex f st p=(f*decode)|code Free(H) & f in St(H,E) by A6;
+     hence p in B by A5;
    end;
 end;
 
@@ -341,11 +341,10 @@ Lm3:
  dom((f*decode)|fs)=fs & rng((f*decode)|fs) c= E
  & (f*decode)|fs in Funcs(fs,E) & dom(f*decode)=omega
   proof
-   A1:dom(f*decode)=omega & rng(f*decode) c= E by FUNCT_2:def 1,RELSET_1:12;
-   hence A2:dom((f*decode)|fs)=fs by RELAT_1:91;
-      rng((f*decode)|fs) c= rng(f*decode) by RELAT_1:99;
-   hence rng((f*decode)|fs) c= E by A1,XBOOLE_1:1;
-   hence (f*decode)|fs in Funcs(fs,E) by A2,FUNCT_2:def 2;
+   dom(f*decode)=omega & rng(f*decode) c= E by FUNCT_2:def 1;
+   hence A1:dom((f*decode)|fs)=fs by RELAT_1:91;
+   thus rng((f*decode)|fs) c= E;
+   hence (f*decode)|fs in Funcs(fs,E) by A1,FUNCT_2:def 2;
    thus thesis by FUNCT_2:def 1;
   end;
 
@@ -483,7 +482,7 @@ Lm12:
     let q such that q in omega;
        now assume q in dom g;
      then g.q in rng g by FUNCT_1:def 5;
-     hence g.q in E by A1;
+     hence g.q in E;
     end;
     hence (C[q] implies F(q) in E) & (not C[q] implies G(q) in E);
    end;
@@ -1777,7 +1776,7 @@ theorem Th20:
       then reconsider gg=((f*decode)|fs) \/ e as Function by GRFUNC_1:31;
          dom gg=fs \/ (fs'\fs) & rng gg=rng((f*decode)|fs) \/ rng e
                                         by A11,A13,GRFUNC_1:33;
-      then dom gg=fs \/ fs' & rng gg c= E by A11,A13,XBOOLE_1:8,39;
+      then dom gg=fs \/ fs' & rng gg c= E by A11,XBOOLE_1:8,39;
       then gg in Funcs(fs \/ fs',E) by FUNCT_2:def 2;
       then consider ff being Function of VAR,E such that
          A14:gg=(ff*decode)|(fs \/ fs') by Lm12;

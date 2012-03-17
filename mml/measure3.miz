@@ -6,23 +6,22 @@
 
 environ
 
- vocabularies SUPINF_1, FUNCT_1, SUPINF_2, ARYTM_3, ORDINAL2, RELAT_1,
-      MEASURE1, MEASURE2, SETFAM_1, BOOLE, TARSKI, ARYTM_1, RLVECT_1, PROB_1,
-      MEASURE3;
+ vocabularies SUPINF_1, FUNCT_1, SUPINF_2, ORDINAL2, RELAT_1, MEASURE1,
+      MEASURE2, SETFAM_1, BOOLE, TARSKI, ARYTM_1, RLVECT_1, PROB_1, MEASURE3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0, RELAT_1,
-      FUNCT_1, FUNCT_2, REAL_1, NAT_1, SETFAM_1,
-      PROB_1, SUPINF_1, SUPINF_2, MEASURE1,
-      MEASURE2;
+      FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, REAL_1, NAT_1, SETFAM_1, PROB_1, SUPINF_1, SUPINF_2,
+      MEASURE1, MEASURE2;
  constructors NAT_1, REAL_1, SUPINF_2, MEASURE2, PROB_2, MEMBERED, SUPINF_1,
-      MEASURE1, XXREAL_0;
+      MEASURE1, PARTFUN1, RELAT_2;
  registrations SUBSET_1, SUPINF_1, MEASURE1, RELSET_1, ARYTM_3, MEMBERED,
-      ORDINAL2, NUMBERS, XREAL_0;
+      ORDINAL2, NUMBERS, FUNCT_2, RELAT_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0;
  theorems TARSKI, FUNCT_1, FUNCT_2, ZFMISC_1, NAT_1, SETFAM_1, SUPINF_1,
       SUPINF_2, MEASURE1, MEASURE2, RELSET_1, PROB_2, XBOOLE_0, XBOOLE_1,
-      XXREAL_0, NUMBERS, PROB_1, FINSUB_1;
+      XXREAL_0, PROB_1, FINSUB_1;
  schemes NAT_1, FUNCT_2, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0;
 
 begin
 ::
@@ -767,122 +766,122 @@ proof
    set T = rng F;
    union T is Subset of X & {} is Subset of X by XBOOLE_1:2;
    then consider H being Function of NAT,bool X such that
-A2:rng H = {union T,{}} & H.0 = union T &
+A1:rng H = {union T,{}} & H.0 = union T &
    (for n being Nat st 0 < n holds H.n = {}) by MEASURE1:40;
    rng H c= S
    proof
      let a be set;
      assume a in rng H;
-     then a = union T or a = {} by A2,TARSKI:def 2;
+     then a = union T or a = {} by A1,TARSKI:def 2;
      hence thesis by PROB_1:10;
    end;
    then reconsider H as Function of NAT,S by FUNCT_2:8;
    M is nonnegative by MEASURE1:def 5;
-   then A3:M*F is nonnegative & M*H is nonnegative by MEASURE1:54;
+   then A2:M*F is nonnegative & M*H is nonnegative by MEASURE1:54;
    consider G being Function of NAT,S such that
-A4:G.0 = F.0 &
+A3:G.0 = F.0 &
    for n being Element of NAT holds G.(n+1) = F.(n+1) \/ G.n by MEASURE2:5;
-A5:for n being Nat holds G.n /\ F.(n+1) = {}
+A4:for n being Nat holds G.n /\ F.(n+1) = {}
    proof
      let n be Nat;
-  A6:for n being Nat holds
+  A5:for n being Nat holds
      for k being Nat st n < k holds G.n /\ F.k = {}
      proof
        defpred P[Nat] means
        for k being Nat st $1 < k holds G.$1 /\ F.k = {};
-   A7: P[0]
+   A6: P[0]
        proof
          let k be Nat; assume 0 < k;
          then F.0 misses F.k by PROB_2:def 3;
-         hence thesis by A4,XBOOLE_0:def 7;
+         hence thesis by A3,XBOOLE_0:def 7;
        end;
-    A8:for n being Nat st P[n] holds P[n+1]
+    A7:for n being Nat st P[n] holds P[n+1]
        proof
          let n be Nat;
          assume
-      A9:for k being Nat st n < k holds G.n /\ F.k = {};
+      A8:for k being Nat st n < k holds G.n /\ F.k = {};
          let k be Nat;
          assume
-     A10:n+1 < k;
-     A11:G.(n+1) /\ F.k = (F.(n+1) \/ G.n) /\ F.k by A4
+     A9:n+1 < k;
+     A10:G.(n+1) /\ F.k = (F.(n+1) \/ G.n) /\ F.k by A3
                        .= (F.(n+1) /\ F.k) \/ (G.n /\ F.k) by XBOOLE_1:23;
-    A12: n < k by A10,NAT_1:38;
-         F.(n+1) misses F.k by A10,PROB_2:def 3;
+    A11: n < k by A9,NAT_1:38;
+         F.(n+1) misses F.k by A9,PROB_2:def 3;
          then F.(n+1) /\ F.k = {} by XBOOLE_0:def 7;
-         hence thesis by A9,A11,A12;
+         hence thesis by A8,A10,A11;
        end;
-       thus for n being Nat holds P[n] from NAT_1:sch 1(A7,A8);
+       thus for n being Nat holds P[n] from NAT_1:sch 1(A6,A7);
      end;
      n < n + 1 by NAT_1:38;
-     hence thesis by A6;
+     hence thesis by A5;
    end;
-A13:Ser(M*F).0 = (M*F).0 by SUPINF_2:63;
+A12:Ser(M*F).0 = (M*F).0 by SUPINF_2:63;
    defpred P[Nat] means Ser(M*F).$1 = M.(G.$1);
-A14:dom F = NAT & dom (M*F) = NAT by FUNCT_2:def 1;
-   then A15: P[0] by A4,A13,FUNCT_1:22;
-A16:for n being Nat holds Ser(M*F).n = M.(G.n)
+A13:dom F = NAT & dom (M*F) = NAT by FUNCT_2:def 1;
+   then A14: P[0] by A3,A12,FUNCT_1:22;
+A15:for n being Nat holds Ser(M*F).n = M.(G.n)
    proof
- A17:for k being Nat st P[k] holds P[k+1]
+ A16:for k being Nat st P[k] holds P[k+1]
      proof
        let k be Nat;
        assume Ser(M*F).k = M.(G.k);
-       then A18:Ser(M*F).(k+1) = M.(G.k) + (M*F).(k+1) by SUPINF_2:63;
-       G.k /\ F.(k+1) = {} by A5;then
-A19:   G.k misses F.(k+1) by XBOOLE_0:def 7;
-       Ser(M*F).(k+1) = M.(G.k) + M.(F.(k+1)) by A14,A18,FUNCT_1:22
-                     .= M.(F.(k+1) \/ G.k) by A19,MEASURE1:def 5
-                     .= M.(G.(k+1)) by A4;
+       then A17:Ser(M*F).(k+1) = M.(G.k) + (M*F).(k+1) by SUPINF_2:63;
+       G.k /\ F.(k+1) = {} by A4;then
+A18:   G.k misses F.(k+1) by XBOOLE_0:def 7;
+       Ser(M*F).(k+1) = M.(G.k) + M.(F.(k+1)) by A13,A17,FUNCT_1:22
+                     .= M.(F.(k+1) \/ G.k) by A18,MEASURE1:def 5
+                     .= M.(G.(k+1)) by A3;
        hence thesis;
      end;
-     thus for n being Nat holds P[n] from NAT_1:sch 1(A15,A17);
+     thus for n being Nat holds P[n] from NAT_1:sch 1(A14,A16);
    end;
-A20:for n being Nat holds G.n c= union T
+A19:for n being Nat holds G.n c= union T
    proof
      defpred P[Nat] means G.$1 c= union T;
-     G.0 in rng F by A4,FUNCT_2:6;
-     then A21: P[0] by ZFMISC_1:92;
- A22:for n being Nat st P[n] holds P[n+1]
+     G.0 in rng F by A3,FUNCT_2:6;
+     then A20: P[0] by ZFMISC_1:92;
+ A21:for n being Nat st P[n] holds P[n+1]
      proof
        let n be Nat;
        assume
-   A23:G.n c= union T;
-   A24:G.(n+1) = F.(n+1) \/ G.n by A4;
+   A22:G.n c= union T;
+   A23:G.(n+1) = F.(n+1) \/ G.n by A3;
        F.(n+1) in T by FUNCT_2:6;
        then F.(n+1) c= union T by ZFMISC_1:92;
-       hence thesis by A23,A24,XBOOLE_1:8;
+       hence thesis by A22,A23,XBOOLE_1:8;
      end;
-     thus for n being Nat holds P[n] from NAT_1:sch 1(A21,A22);
+     thus for n being Nat holds P[n] from NAT_1:sch 1(A20,A21);
    end;
    defpred P[Nat] means Ser(M*H).$1 = M.(union T);
-A25: P[0]
+A24: P[0]
    proof
- A26:Ser(M*H).0 = (M*H).0 by SUPINF_2:63;
+ A25:Ser(M*H).0 = (M*H).0 by SUPINF_2:63;
      dom (M*H) = NAT by FUNCT_2:def 1;
-     hence thesis by A2,A26,FUNCT_1:22;
+     hence thesis by A1,A25,FUNCT_1:22;
    end;
-A27:for n being Nat holds Ser(M*H).n = M.(union T)
+A26:for n being Nat holds Ser(M*H).n = M.(union T)
    proof
- A28:for n being Nat st P[n] holds P[n+1]
+ A27:for n being Nat st P[n] holds P[n+1]
      proof
        let n be Nat;
        assume Ser(M*H).n = M.(union T);
-       then A29:Ser(M*H).(n+1) = M.(union T) + (M*H).(n+1) by SUPINF_2:63;
+       then A28:Ser(M*H).(n+1) = M.(union T) + (M*H).(n+1) by SUPINF_2:63;
        0 <= n by NAT_1:18; then 0 < n + 1 by NAT_1:38;
-       then A30:H.(n+1) = {} by A2;
+       then A29:H.(n+1) = {} by A1;
        dom (M*H) = NAT by FUNCT_2:def 1;
-       then (M*H).(n+1) = M.({}) by A30,FUNCT_1:22;
+       then (M*H).(n+1) = M.({}) by A29,FUNCT_1:22;
        then (M*H).(n+1) = 0. by MEASURE1:def 5;
-       hence thesis by A29,SUPINF_2:18;
+       hence thesis by A28,SUPINF_2:18;
      end;
-     thus for n being Nat holds P[n] from NAT_1:sch 1(A25,A28);
+     thus for n being Nat holds P[n] from NAT_1:sch 1(A24,A27);
    end;
-A31:for n being Nat holds Ser(M*F).n <= Ser(M*H).n
+A30:for n being Nat holds Ser(M*F).n <= Ser(M*H).n
    proof
      let n be Nat;
- A32:Ser(M*F).n = M.(G.n) by A16;
-     G.n c= union T by A20;
-     then Ser(M*F).n <= M.(union T) by A32,MEASURE1:25;
-     hence thesis by A27;
+ A31:Ser(M*F).n = M.(G.n) by A15;
+     G.n c= union T by A19;
+     then Ser(M*F).n <= M.(union T) by A31,MEASURE1:25;
+     hence thesis by A26;
    end;
    for r being Nat st 1 <= r holds (M*H).r = 0.
    proof
@@ -890,14 +889,14 @@ A31:for n being Nat holds Ser(M*F).n <= Ser(M*H).n
      assume 1 <= r;
      then 0 + 1 <= r;
      then 0 < r by NAT_1:38;
-     then A33:H.r = {} by A2;
+     then A32:H.r = {} by A1;
      dom (M*H) = NAT by FUNCT_2:def 1;
-     then (M*H).r = M.({}) by A33,FUNCT_1:22;
+     then (M*H).r = M.({}) by A32,FUNCT_1:22;
      hence thesis by MEASURE1:def 5;
    end;
-   then SUM(M*H) = Ser(M*H).1 by A3,SUPINF_2:67;
-   then SUM(M*H) = M.(union T) by A27;
-   hence thesis by A31,Th3;
+   then SUM(M*H) = Ser(M*H).1 by A2,SUPINF_2:67;
+   then SUM(M*H) = M.(union T) by A26;
+   hence thesis by A30,Th3;
 end;
 
 canceled;
@@ -1028,9 +1027,9 @@ end;
 uniqueness
 proof
    let D1,D2 be non empty Subset-Family of X such that
-A14:for A being set holds (A in D1 iff
+A13:for A being set holds (A in D1 iff
    (ex B being set st (B in S & ex C being thin of M st A = B \/ C))) and
-A15:for A being set holds (A in D2 iff
+A14:for A being set holds (A in D2 iff
    (ex B being set st (B in S & ex C being thin of M st A = B \/ C)));
    for A being set holds A in D1 iff A in D2
    proof
@@ -1039,13 +1038,13 @@ A15:for A being set holds (A in D2 iff
       proof
         assume A in D1;
         then ex B being set st (B in S & ex C being thin of M st A = B \/ C)
-        by A14;
-        hence thesis by A15;
+        by A13;
+        hence thesis by A14;
       end;
       assume A in D2;
       then ex B being set st (B in S & ex C being thin of M st A = B \/ C) by
-A15;
-      hence thesis by A14;
+A14;
+      hence thesis by A13;
    end;
    hence thesis by TARSKI:2;
 end;
@@ -1515,7 +1514,7 @@ A1: for x being set st x in COM(S,M)
      then consider B being set such that
   A2:B in S & ex C being thin of M st x = B \/ C by Def4;
      take M.B;
-     thus thesis by A2,Th22,FUNCT_2:7;
+     thus thesis by A2,Th22;
    end;
    consider comM being Function of COM(S,M),ExtREAL such that
 A3:for x being set st x in COM(S,M) holds P[x,comM.x] from FUNCT_2:sch 1(A1);
@@ -1696,7 +1695,7 @@ A40:     dom F = NAT by FUNCT_2:def 1 .= dom G by FUNCT_2:def 1;
            let n be set;
            per cases;
            suppose n in dom F;
-           then n in NAT by FUNCT_2:def 1;
+           then n in NAT;
            hence thesis by A14;
            end;
            suppose A41:not n in dom F;
@@ -1807,11 +1806,11 @@ then A9:            A /\ B2 c= B2 & A /\ C2 c= D2 by A6,XBOOLE_1:1;
                   reconsider O1 = O as Element of S by A8;
                   reconsider B2,D2 as Element of S by A3,A6;
                   M.(B2 \/ D2) <= 0. + 0. by A5,A6,MEASURE1:64;
-                  then A14:M.O1 <= 0. by SUPINF_2:18;
+                  then A13:M.O1 <= 0. by SUPINF_2:18;
                   M is nonnegative by MEASURE1:def 11;
-then A15:                  0. <= M.O1 by MEASURE1:def 4;
+then A14:                  0. <= M.O1 by MEASURE1:def 4;
                   take O;
-                  thus thesis by A9,A14,A15,SUPINF_1:22,XBOOLE_1:13;
+                  thus thesis by A9,A13,A14,SUPINF_1:22,XBOOLE_1:13;
                end;
                C1 c= X by A8,A10,XBOOLE_1:1;
                hence thesis by A12,Def3;

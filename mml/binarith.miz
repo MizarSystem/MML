@@ -9,18 +9,18 @@ environ
  vocabularies MONOID_0, FUNCT_1, RELAT_1, MIDSP_3, FINSEQ_1, MARGREL1, ZF_LANG,
       ORDINAL2, ARYTM_1, CQC_LANG, POWER, SETWISEO, BOOLE, FINSEQ_2, BINARITH,
       FINSEQ_4, ARYTM;
- notations XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, NAT_1, MARGREL1, FUNCT_1, FUNCT_2, BINOP_1, BINOP_2, SETWISEO,
-      SETWOP_2, SERIES_1, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_4, XXREAL_0;
+ notations XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0, REAL_1,
+      NAT_1, MARGREL1, FUNCT_1, FUNCT_2, BINOP_1, BINOP_2, SETWISEO, SETWOP_2,
+      SERIES_1, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_4, XXREAL_0;
  constructors NAT_1, MARGREL1, BINOP_1, INT_1, SETWISEO, SERIES_1, CQC_LANG,
       FINSOP_1, FINSEQ_4, MEMBERED, BINOP_2, XXREAL_0;
  registrations INT_1, RELSET_1, MARGREL1, NAT_1, MEMBERED, ORDINAL2, FINSEQ_2,
-      BINOP_2, XREAL_0;
+      BINOP_2, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FINSEQ_1, TARSKI, MARGREL1;
  theorems NAT_1, INT_1, MARGREL1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCT_1,
-      TARSKI, CQC_LANG, POWER, CARD_1, FINSOP_1, XBOOLE_0, XCMPLX_1, BINOP_2,
-      REAL_2, XREAL_1;
+      TARSKI, CQC_LANG, POWER, CARD_1, FINSOP_1, XBOOLE_0, BINOP_2, REAL_2,
+      XREAL_1, XXREAL_0;
  schemes FINSEQ_1, FINSEQ_2, RECDEF_1, NAT_1;
 
 begin
@@ -123,30 +123,30 @@ canceled;
     thus x 'or' FALSE = 'not' ('not' x '&' 'not' FALSE)
                         .= 'not' (TRUE '&' 'not' x) by MARGREL1:41
                         .= 'not' 'not' x by MARGREL1:50
-                        .= x by MARGREL1:40;
+                        .= x;
   end;
 
 canceled;
 
-  theorem Th9:
+  theorem
   'not' (x '&' y) = 'not' x 'or' 'not' y
     proof
-      thus 'not' (x '&' y) = 'not' ('not' 'not' x '&' y) by MARGREL1:40
-                     .= 'not' ('not' 'not' x '&' 'not' 'not' y) by MARGREL1:40
+      thus 'not' (x '&' y) = 'not' ('not' 'not' x '&' y)
+                     .= 'not' ('not' 'not' x '&' 'not' 'not' y)
                      .= 'not' x 'or' 'not' y;
   end;
 
-  theorem Th10:
-  'not' (x 'or' y) = 'not' x '&' 'not' y by MARGREL1:40;
+  theorem
+  'not' (x 'or' y) = 'not' x '&' 'not' y;
 
 canceled;
 
   theorem
      x '&' y = 'not' ('not' x 'or' 'not' y)
   proof
-    thus x '&' y = 'not' 'not' x '&' y by MARGREL1:40
-                .= 'not' 'not' x '&' 'not' 'not' y by MARGREL1:40
-                .= 'not' ('not' x 'or' 'not' y) by Th10;
+    thus x '&' y = 'not' 'not' x '&' y
+                .= 'not' 'not' x '&' 'not' 'not' y
+                .= 'not' ('not' x 'or' 'not' y);
   end;
 
   theorem
@@ -195,7 +195,7 @@ x) by MARGREL1:def 16
   x 'xor' 'not' x = TRUE
   proof
     thus x 'xor' 'not' x = ('not' x '&' 'not' x) 'or' (x '&' 'not' 'not' x)
-                      .= ('not' x '&' 'not' x) 'or' (x '&' x) by MARGREL1:40
+                      .= ('not' x '&' 'not' x) 'or' (x '&' x)
                       .= 'not' x 'or' (x '&' x) by Th16
                       .= 'not' x 'or' x by Th16
                       .= 'not' ('not' 'not' x '&' 'not' x)
@@ -219,10 +219,9 @@ x) by MARGREL1:def 16
   proof
     thus (x 'or' y) 'or' z = 'not' ('not' x '&' 'not' y) 'or' z
       .= 'not' ('not' 'not' ('not' x '&' 'not' y) '&' 'not' z)
-      .= 'not' ('not' x '&' 'not' y '&' 'not' z) by MARGREL1:40
+      .= 'not' ('not' x '&' 'not' y '&' 'not' z)
       .= 'not' ('not' x '&' ('not' y '&' 'not' z)) by MARGREL1:52
       .= 'not' ('not' x '&' 'not' 'not' ('not' y '&' 'not' z))
-       by MARGREL1:40
       .= x 'or' 'not' ('not' y '&' 'not' z)
       .= x 'or' (y 'or' z);
   end;
@@ -351,32 +350,21 @@ canceled 5;
   theorem Th34:
   (x 'xor' y) 'xor' z = x 'xor' (y 'xor' z)
   proof
-    A1: (x 'xor' y) 'xor' z
-            = ('not' x '&' y) 'or' (x '&' 'not' y) 'xor' z
-           .= ('not' (('not' x '&' y) 'or' (x '&' 'not' y)) '&' z)
-                'or' ((('not' x '&' y) 'or' (x '&' 'not' y)) '&' 'not' z)
-           .= ('not' ('not' x '&' y) '&' 'not' (x '&' 'not' y) '&' z)
-                'or' ((('not' x '&' y) 'or' (x '&' 'not' y)) '&' 'not'
-z ) by Th10;
-    A2: 'not' ('not' x '&' y) = 'not' 'not' x 'or' 'not' y by Th9
-                   .= x 'or' 'not' y by MARGREL1:40;
-           'not' (x '&' 'not' y) = 'not' x 'or' 'not' 'not' y by Th9
-                   .= 'not' x 'or' y by MARGREL1:40;
-    then A3: 'not' ('not' x '&' y) '&' 'not' (x '&' 'not' y) '&' z
+    A1: 'not' ('not' x '&' y) '&' 'not' (x '&' 'not' y) '&' z
                   = (x 'or' 'not' y) '&' (z '&' ('not'
-x 'or' y)) by A2,MARGREL1:52
+x 'or' y)) by MARGREL1:52
                  .= (x 'or' 'not' y) '&' ((z '&' 'not' x) 'or' (z '&' y))
                  by Th22
                  .= ((x 'or' 'not' y) '&' (z '&' 'not' x))
                         'or' ((x 'or' 'not' y) '&' (z '&' y)) by Th22;
-    A4: (x 'or' 'not' y) '&' (z '&' 'not' x)
+    A2: (x 'or' 'not' y) '&' (z '&' 'not' x)
              = (z '&' 'not' x '&' x) 'or' (z '&' 'not' x '&' 'not' y) by Th22
             .= (z '&' ('not' x '&' x)) 'or' (z '&' 'not' x '&' 'not'
 y) by MARGREL1:52
             .= (z '&' FALSE) 'or' (z '&' 'not' x '&' 'not' y) by MARGREL1:46
             .= FALSE 'or' (z '&' 'not' x '&' 'not' y) by MARGREL1:49
             .= (z '&' 'not' x '&' 'not' y) by Th7;
-A5:        (x 'or' 'not' y) '&' (z '&' y)
+A3:        (x 'or' 'not' y) '&' (z '&' y)
              = (z '&' y '&' x) 'or' (z '&' y '&' 'not' y) by Th22
             .= (z '&' y '&' x) 'or' (z '&' (y '&' 'not' y)) by MARGREL1:52
             .= (z '&' y '&' x) 'or' (z '&' FALSE) by MARGREL1:46
@@ -389,10 +377,10 @@ y)) by Th22
 y)) by MARGREL1:52
             .= ('not' z '&' 'not' x '&' y) 'or' ('not' z '&' x '&' 'not'
 y) by MARGREL1:52;
-    then A6: (x 'xor' y) 'xor' z
+    then A4: (x 'xor' y) 'xor' z
            = (z '&' y '&' x) 'or' (('not' z '&' 'not' x '&' y) 'or' ('not'
 z '&' x '&' 'not' y))
-               'or' (z '&' 'not' x '&' 'not' y) by A1,A3,A4,A5,Th20
+               'or' (z '&' 'not' x '&' 'not' y) by A1,A2,A3,Th20
           .= (z '&' y '&' x) 'or' ('not' z '&' x '&' 'not' y)
                'or' ('not' z '&' 'not' x '&' y) 'or' (z '&' 'not' x '&' 'not'
 y) by Th20
@@ -409,33 +397,31 @@ y) by MARGREL1:52
                'or' ('not' x '&' y '&' 'not' z) 'or' ('not' x '&' 'not'
 y '&' z) by MARGREL1:52;
 
-    A7: x 'xor' (y 'xor' z)
+    A5: x 'xor' (y 'xor' z)
             = x 'xor' (('not' y '&' z) 'or' (y '&' 'not' z))
            .= ('not' x '&' (('not' y '&' z) 'or' (y '&' 'not' z)))
                 'or' (x '&' 'not' (('not' y '&' z) 'or' (y '&' 'not' z)))
            .= ('not' x '&' (('not' y '&' z) 'or' (y '&' 'not' z)))
                 'or' (x '&' ('not' ('not' y '&' z) '&' 'not' (y '&' 'not'
-z))) by Th10
+z)))
            .= ('not' x '&' (('not' y '&' z) 'or' (y '&' 'not' z)))
                 'or' (x '&' 'not' ('not' y '&' z) '&' 'not' (y '&' 'not'
 z)) by MARGREL1:52;
-    A8: 'not' x '&' (('not' y '&' z) 'or' (y '&' 'not' z))
+    A6: 'not' x '&' (('not' y '&' z) 'or' (y '&' 'not' z))
              = ('not' x '&' ('not' y '&' z)) 'or' ('not' x '&' (y '&' 'not'
 z)) by Th22
             .= ('not' x '&' 'not' y '&' z) 'or' ('not' x '&' (y '&' 'not'
 z)) by MARGREL1:52
             .= ('not' x '&' 'not' y '&' z) 'or' ('not' x '&' y '&' 'not'
 z) by MARGREL1:52;
-    A9: 'not' ('not' y '&' z) = 'not' 'not' y 'or' 'not' z by Th9
-                   .= y 'or' 'not' z by MARGREL1:40;
-           'not' (y '&' 'not' z) = 'not' y 'or' 'not' 'not' z by Th9
-                   .= 'not' y 'or' z by MARGREL1:40;
-    then A10: x '&' 'not' ('not' y '&' z) '&' 'not' (y '&' 'not' z)
+    A7: 'not' ('not' y '&' z) = 'not' 'not' y 'or' 'not' z
+                   .= y 'or' 'not' z;
+    A8: x '&' 'not' ('not' y '&' z) '&' 'not' (y '&' 'not' z)
                   = ('not' y 'or' z) '&' ((x '&' y) 'or' (x '&' 'not'
-z)) by A9,Th22
+z)) by A7,Th22
                  .= (('not' y 'or' z) '&' (x '&' y))
                       'or' (('not' y 'or' z) '&' (x '&' 'not' z)) by Th22;
-     A11: ('not' y 'or' z) '&' (x '&' y)
+     A9: ('not' y 'or' z) '&' (x '&' y)
               = ((x '&' y) '&' 'not' y) 'or' ((x '&' y) '&' z) by Th22
              .= (x '&' (y '&' 'not' y)) 'or' ((x '&' y) '&' z) by MARGREL1:52
              .= (x '&' FALSE) 'or' ((x '&' y) '&' z) by MARGREL1:46
@@ -452,11 +438,11 @@ z '&' z)) by MARGREL1:52
      then x 'xor' (y 'xor' z)
                  = (x '&' y '&' z) 'or' (x '&' 'not' z '&' 'not' y)
                    'or' ('not' x '&' y '&' 'not' z) 'or' ('not' x '&' 'not'
-y '&' z) by A7,A8,A10,A11,Th20
+y '&' z) by A5,A6,A8,A9,Th20
                 .=(x '&' y '&' z) 'or' (x '&' 'not' y '&' 'not' z)
                    'or' ('not' x '&' y '&' 'not' z) 'or' ('not' x '&' 'not'
 y '&' z) by MARGREL1:52;
-    hence thesis by A6;
+    hence thesis by A4;
   end;
 
   theorem
@@ -469,8 +455,7 @@ x '&' y))
 x '&' y)) by MARGREL1:52
              .= ('not' x '&' y) 'or' (x '&' 'not' ('not' x '&' y)) by Th16
              .= ('not' x '&' y) 'or' (x '&' ('not' 'not' x 'or' 'not' y))
-             by Th9
-             .= ('not' x '&' y) 'or' (x '&' (x 'or' 'not' y)) by MARGREL1:40
+             .= ('not' x '&' y) 'or' (x '&' (x 'or' 'not' y))
              .= x 'or' ('not' x '&' y) by Th25
              .= x 'or' y by Th26;
   end;
@@ -496,7 +481,7 @@ x '&' y)) by MARGREL1:52
   proof
     thus x 'or' ('not' x 'xor' y)
               = x 'or' (('not' 'not' x '&' y) 'or' ('not' x '&' 'not' y))
-             .= x 'or' (('not' x '&' 'not' y) 'or' (x '&' y)) by MARGREL1:40
+             .= x 'or' (('not' x '&' 'not' y) 'or' (x '&' y))
              .= (x 'or' ('not' x '&' 'not' y)) 'or' (x '&' y) by Th20
              .= (x 'or' 'not' y) 'or' (x '&' y) by Th26
              .= (x 'or' (x 'or' 'not' y)) '&' ((x 'or' 'not' y) 'or' y) by Th23
@@ -520,7 +505,7 @@ x '&' y)) by MARGREL1:52
            = ('not' (x '&' y) '&' (x '&' z))
                'or' ((x '&' y) '&' 'not' (x '&' z))
           .= ((x '&' z) '&' ('not' x 'or' 'not' y))
-               'or' ((x '&' y) '&' 'not' (x '&' z)) by Th9
+               'or' ((x '&' y) '&' 'not' (x '&' z))
           .= ((x '&' z '&' 'not' x) 'or' (x '&' z '&' 'not' y))
                'or' ((x '&' y) '&' 'not' (x '&' z)) by Th22
           .= (((x '&' 'not' x) '&' z) 'or' (x '&' z '&' 'not' y))
@@ -532,7 +517,7 @@ x '&' y)) by MARGREL1:52
           .= (x '&' z '&' 'not' y)
                'or' ((x '&' y) '&' 'not' (x '&' z)) by Th7
           .= (x '&' z '&' 'not' y)
-               'or' ((x '&' y) '&' ('not' x 'or' 'not' z)) by Th9
+               'or' ((x '&' y) '&' ('not' x 'or' 'not' z))
           .= (x '&' z '&' 'not' y)
                'or' ((x '&' y '&' 'not' x) 'or' (x '&' y '&''not' z)) by Th22
           .= (x '&' z '&' 'not' y)
@@ -558,8 +543,7 @@ z)) by MARGREL1:52
   for i,j being natural number holds i + j -' j = i
   proof
      let i, j be natural number;
-        j + 0 = j & j <= i + j by NAT_1:29;
-     then i + j - j >= 0 by XREAL_1:21;
+     i + j - j >= 0;
     hence i + j -' j = i by Def3;
   end;
 
@@ -630,8 +614,7 @@ then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
         end;
         then reconsider z as Tuple of n, BOOLEAN by A3,FINSEQ_2:110;
         take z;
-           n>0 by NAT_1:19;
-        then 0+1 <= n by NAT_1:38;
+        0+1 <= n by NAT_1:38;
         then A7: 1 in Seg n;
         then 1 in dom z by A3,FINSEQ_1:def 3;
         hence z/.1 = z.1 by FINSEQ_4:def 4
@@ -676,11 +659,11 @@ then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
                      hence z1/.(k+1) = z2/.(k+1) by A14,A16;
                    end;
                    suppose k <> 0;
-                     then k > 0 by NAT_1:19;
+                     then k > 0;
                      then A24: k >= 0+1 by NAT_1:38;
                      A25:k+1 <= n by A23,FINSEQ_1:3;
                         k < k+1 by XREAL_1:31;
-                     then A26: k < n by A25,XREAL_1:2;
+                     then A26: k < n by A25,XXREAL_0:2;
                      hence z1/.(k+1)
                        = (x/.k) '&' (y/.k) 'or' (x/.k) '&' (z1/.k) 'or'
                           (y/.k) '&' (z1/.k) by A15,A24
@@ -853,7 +836,7 @@ end;
       assume A1: z1=<*TRUE*>;
         consider k being Nat such that
           A2: Binary( z1 ) = <* k *> by FINSEQ_2:117;
-       A3: z1/.1 <> FALSE by A1,FINSEQ_4:25,MARGREL1:38;
+       A3: z1/.1 <> FALSE by A1,FINSEQ_4:25;
           1 in Seg 1;
       then A4: (Binary(z1))/.1 = IFEQ(z1/.1,FALSE,0,2 to_power(1-'1)) by Def6
                       .= 2 to_power(1-'1) by A3,CQC_LANG:def 1;
@@ -905,12 +888,12 @@ A5:                      1 - 1 = 0;
        A4: i+1 > i by XREAL_1:31;
          assume i+1 in Seg n;
           then i+1 >= 1 & i+1 <= n by FINSEQ_1:3;
-       then A5: 1 <= i & i < n by A4,XREAL_1:2,NAT_1:39;
+       then A5: 1 <= i & i < n by A4,XXREAL_0:2,NAT_1:39;
        then A6: i in Seg n;
        then A7: (z1^<*d1*>)/.i = z1/.i by Th2;
        A8: (z2^<*d2*>)/.i = z2/.i by A6,Th2;
              n <= n+1 by NAT_1:29;
-          then 1 <= i & i < n+1 by A5,XREAL_1:2;
+          then 1 <= i & i < n+1 by A5,XXREAL_0:2;
           hence carry(z1^<*d1*>,z2^<*d2*>)/.(i+1)
                    = ((z1/.i) '&' (z2/.i)) 'or'
                       (z1/.i) '&' (carry(z1,z2)/.i) 'or'
@@ -1132,7 +1115,7 @@ Def5;
                        .= t '&' t by FINSEQ_4:25
                        .= t by Th16;
                   hence IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1))
-                       = 2 to_power 1 by CQC_LANG:def 1,MARGREL1:38
+                       = 2 to_power 1 by CQC_LANG:def 1
                       .= 2 by POWER:30;
                end;
 
@@ -1239,7 +1222,7 @@ CQC_LANG:def 1;
                      = f 'xor' add_ovfl(t1,t2) by A22,A24,Th15
                     .= t by A29,Th33,MARGREL1:39;
                   then C2=2 to_power n & C1=0 by A20,A31,CQC_LANG:def 1
-,MARGREL1:38;
+;
                   hence C2 + C1 = C5 + C3 + C4 by A22,A25,A30,CQC_LANG:def 1;
               end;
               end;
@@ -1262,7 +1245,7 @@ CQC_LANG:def 1;
                      d1 'xor' d2 'xor' add_ovfl(t1,t2)
                      = t by A22,A32,A34,Th33,MARGREL1:39;
                   then C2=2 to_power n & C1=0 by A20,A36,CQC_LANG:def 1
-,MARGREL1:38;
+;
                   hence C2 + C1 = C5 + C3 + C4 by A22,A33,A35,CQC_LANG:def 1;
                 end;
                 suppose A37:add_ovfl(t1,t2)<>f;
@@ -1284,7 +1267,7 @@ A39:                   d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
                     .= t 'xor' t by A37,MARGREL1:39
                     .= f by Th15;
                   then C2=0 & C1=2 to_power(n+1) by A20,A39,CQC_LANG:def 1
-,MARGREL1:38;
+;
                   hence C2 + C1 = 2 to_power n * 2 to_power 1 by POWER:32
                                .= 2 * 2 to_power n by POWER:30
                                .= C5 + C3 + C4 by A23,A33,A38;
@@ -1315,7 +1298,7 @@ A39:                   d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
                      d1 'xor' d2 'xor' add_ovfl(t1,t2)
                      = t by A40,A42,A44,Th33,MARGREL1:39;
                   then C2=2 to_power n & C1=0 by A20,A46,CQC_LANG:def 1
-,MARGREL1:38;
+;
                   hence C2 + C1 = C5 + C3 + C4 by A40,A43,A45,CQC_LANG:def 1;
                 end;
                 suppose A47:add_ovfl(t1,t2)<>f;
@@ -1338,7 +1321,7 @@ A49:                   d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
                     .= t 'xor' t by A47,MARGREL1:39
                     .= f by Th15;
                   then C2=0 & C1=2 to_power (n+1) by A20,A49,CQC_LANG:def 1
-,MARGREL1:38;
+;
                   hence C2 + C1 = 2 to_power n * 2 to_power 1 by POWER:32
                                .= 2 * 2 to_power n by POWER:30
                                .= C5 + C3 + C4 by A41,A43,A48;
@@ -1369,7 +1352,7 @@ A54:                   d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
                     .= f 'xor' add_ovfl(t1,t2) by Th15
                     .= f by A52,Th15;
                   then C2=0 & C1=2 to_power (n+1)
- by A20,A54,CQC_LANG:def 1,MARGREL1:38;
+ by A20,A54,CQC_LANG:def 1;
                   hence C2 + C1 = 2 to_power n * 2 to_power 1 by POWER:32
                                .= 2 * 2 to_power n by POWER:30
                                .= C5 + C3 + C4 by A41,A51,A53;
@@ -1399,7 +1382,7 @@ A56:                   d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
                     .= f 'xor' add_ovfl(t1,t2) by Th15
                     .= t by A55,Th33,MARGREL1:39;
                   then C2=2 to_power n & C1=2 to_power (n+1)
- by A20,A56,CQC_LANG:def 1,MARGREL1:38;
+ by A20,A56,CQC_LANG:def 1;
                   hence C2 + C1 = 2 to_power n + 2 to_power n * 2 to_power 1
  by POWER:32
                                .= 2 to_power n + 2 * 2 to_power n by POWER:30
@@ -1463,7 +1446,7 @@ A2: a -' c = a - c by Def3;
     hence thesis;
  end;
 
-theorem
+theorem Th50:
    b <= a implies a -' b = a - b
  proof
     assume a >= b;
@@ -1482,13 +1465,12 @@ theorem
   proof per cases;
    suppose
 A1: a-b >= 0;
-       b >= 0 by NAT_1:18;
-    then a-b <= a-0 by REAL_2:106;
+    a-b <= a-0 by REAL_2:106;
    hence thesis by A1,Def3;
    end;
    suppose a-b < 0;
     then a-'b = 0 by Def3;
-   hence thesis by NAT_1:18;
+   hence thesis;
   end;
   end;
 
@@ -1504,4 +1486,28 @@ theorem
   end;
 
 
+:: from JORDAN4:1, AK, 21.06,2006
+
+reserve n,i,j,k for Nat;
+
+theorem
+  n-'i=0 implies n<=i
+proof
+  assume A1:n-'i=0;
+  assume i<n; then i+1<=n by NAT_1:38; then i+1-i<=n-i by XREAL_1:11;
+  hence contradiction by A1,Def3;
+end;
+
+theorem
+  i<=j implies j+k-'i=j+k-i
+proof assume i<=j; then i<=j+k by NAT_1:37;
+ hence thesis by Th50;
+end;
+
+theorem
+  i<=j implies j+k-'i=j-'i+k
+proof assume A1:i<=j; then i<=j+k by NAT_1:37;
+ hence j+k-'i=j+k-i by Th50 .=j-i+k
+    .=j-'i+k by A1,Th50;
+end;
 

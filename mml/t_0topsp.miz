@@ -8,13 +8,14 @@ environ
 
  vocabularies RELAT_1, FUNCT_1, PRE_TOPC, TOPS_2, EQREL_1, RELAT_2, BORSUK_1,
       SUBSET_1, TARSKI, BOOLE, METRIC_1, RFINSEQ, ORDINAL2, T_0TOPSP;
- notations TARSKI, XBOOLE_0, SUBSET_1, RFINSEQ, RELAT_2, RELSET_1, RELAT_1,
-      FUNCT_1, FUNCT_2, STRUCT_0, PRE_TOPC, TOPS_2, BORSUK_1, EQREL_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RFINSEQ, RELAT_2, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, STRUCT_0, PRE_TOPC, TOPS_2, BORSUK_1,
+      EQREL_1;
  constructors RFINSEQ, TOPS_2, BORSUK_1, SETFAM_1;
  registrations BORSUK_1, RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, PARTFUN1,
-      XBOOLE_0;
+      XBOOLE_0, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions TOPS_2, RELAT_2;
+ definitions TOPS_2, RELAT_2, SUBSET_1, PRE_TOPC;
  theorems RFINSEQ, FUNCT_1, FUNCT_2, EQREL_1, RELAT_1, TOPS_2, PRE_TOPC,
       BORSUK_1, TARSKI, ZFMISC_1, RELSET_1, XBOOLE_0, RELAT_2, PARTFUN1,
       ORDERS_1;
@@ -189,7 +190,6 @@ A8: for p,q being Point of T holds
       A is open holds x in A iff y in A by A7;
       hence thesis by A8;
     end;
-
     hence R1=R2 by Th1;
   end;
 end;
@@ -201,7 +201,6 @@ end;
 definition
   let T be non empty TopStruct;
   func Indiscernible(T) -> non empty a_partition of the carrier of T equals
-
    Class Indiscernibility(T);
   coherence
   proof
@@ -235,8 +234,7 @@ end;
 
 definition
   let T be non empty TopSpace;
-  func T_0-canonical_map T -> continuous Function
- of T,T_0-reflex T equals
+  func T_0-canonical_map T -> continuous Function of T,T_0-reflex T equals
    Proj Indiscernible T;
   coherence;
 end;
@@ -256,12 +254,9 @@ for T being non empty TopSpace holds
 proof
   let T be non empty TopSpace;
   set F=T_0-canonical_map(T);
-
-      dom F = [#] T by TOPS_2:51;
-  hence dom F = the carrier of T by PRE_TOPC:12;
-
-      rng F c= [#] T_0-reflex(T) by TOPS_2:51;
-  hence rng F c= the carrier of T_0-reflex(T) by PRE_TOPC:12;
+      dom F = [#] T by FUNCT_2:def 1;
+  hence dom F = the carrier of T;
+  thus rng F c= the carrier of T_0-reflex(T);
 end;
 
 theorem Th5:
@@ -285,7 +280,6 @@ A1: V is Subset of Indiscernible(T) by Th5;
     then V in the topology of space Indiscernible(T);
     hence union V in the topology of T by A1,BORSUK_1:69;
   end;
-
   assume union V in the topology of T;
   then V in the topology of space Indiscernible(T) by A1,BORSUK_1:69;
   then V in the topology of T_0-reflex(T);
@@ -548,7 +542,7 @@ A4:
  then reconsider f as Function of T,S by FUNCT_2:def 1,RELSET_1:11;
   take f;
 
-  thus A5: dom f = [#] T & rng f = [#] S by A4,PRE_TOPC:12;
+  thus A5: dom f = [#] T & rng f = [#] S by A4;
   thus f is one-to-one by A3;
 
 A6:  dom h = [#] SR & rng h = [#] TR & h is one-to-one &
@@ -589,8 +583,7 @@ A12:
     hence f"A is open by A11,A12,Th2;
   end;
   hence f is continuous by TOPS_2:55;
-
-      for A being Subset of T st A is open
+  for A being Subset of T st A is open
   holds (f" qua Function of S,T)"A is open
   proof
     let A be Subset of T;
@@ -602,21 +595,17 @@ A16: for x1,x2 being Element of T
       let x1,x2 be Element of T;
       assume that A17: x1 in A and
                   A18: g.x1=g.x2;
-
     A19:  h" is one-to-one by A6,TOPS_2:63;
-
-          h".(F.x1) = g.x2 by A18,FUNCT_2:21;
+      h".(F.x1) = g.x2 by A18,FUNCT_2:21;
       then h".(F.x1) = h".(F.x2) by FUNCT_2:21;
       then F.x1 = F.x2 by A19,FUNCT_2:25;
       hence x2 in A by A15,A17,Th10;
     end;
-
     set B = g.:A;
-
 A20:
     G"B is open
     proof
-          F is open by Th12;
+      F is open by Th12;
       then F.:A is open by A15,Def2;
 then A21:   h"(F.:A) is open by A6,TOPS_2:55;
           B = (h").:(F.:A) by RELAT_1:159;
@@ -630,7 +619,7 @@ then A21:   h"(F.:A) is open by A6,TOPS_2:55;
     then g = (id the carrier of SR)*(G*f) by FUNCT_2:def 1;
     then g*f" = G*f*f" by FUNCT_2:23;
     then g*f" = G*(f*f") by RELAT_1:55;
-    then g*f" = G*(id the carrier of S) by A3,A4,A5,TOPS_2:65;
+    then g*f" = G*(id the carrier of S) by A3,A5,TOPS_2:65;
     then G = g*f" by FUNCT_2:23;
     then G"B = (f")"(g"B) by RELAT_1:181;
     hence (f" qua Function of S,T)"A is open by A16,A20,Th2;

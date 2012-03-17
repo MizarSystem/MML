@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="COMSEQ_1"/>
 </Signature>
@@ -40,7 +41,7 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="85">
+<Func kind="K" nr="102">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

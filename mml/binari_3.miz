@@ -9,17 +9,17 @@ environ
  vocabularies MIDSP_3, MARGREL1, BINARITH, POWER, FINSEQ_1, CQC_LANG, FINSEQ_5,
       EUCLID, FINSEQ_2, ZF_LANG, FUNCT_1, ARYTM_1, RELAT_1, BINARI_2, NAT_1,
       ARYTM_3, MATRIX_2, BINARI_3, FINSEQ_4, REALSET1;
- notations XBOOLE_0, SUBSET_1, XREAL_0, REAL_1, NAT_1, POWER, ABIAN, SERIES_1,
-      MARGREL1, FUNCT_1, CQC_LANG, FINSEQ_1, FINSEQ_4, FINSEQ_5, FINSEQOP,
-      REALSET1, BINARITH, BINARI_2, EUCLID, XXREAL_0;
+ notations XBOOLE_0, SUBSET_1, REAL_1, NAT_1, POWER, ABIAN, SERIES_1, MARGREL1,
+      FUNCT_1, CQC_LANG, FINSEQ_1, FINSEQ_4, FINSEQ_5, FINSEQOP, REALSET1,
+      BINARITH, BINARI_2, EUCLID, XXREAL_0;
  constructors REAL_1, ABIAN, SERIES_1, FINSEQ_5, FINSEQOP, BINARITH, BINARI_2,
       EUCLID, FINSEQ_4, REALSET1, MEMBERED, NAT_1, XXREAL_0;
- registrations RELSET_1, NAT_2, MARGREL1, REALSET1, NAT_1, MEMBERED, XREAL_0;
+ registrations RELSET_1, NAT_2, MARGREL1, REALSET1, NAT_1, MEMBERED;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions MARGREL1;
+ definitions FINSEQ_2, EUCLID;
  theorems TARSKI, REAL_1, NAT_1, NAT_2, MARGREL1, POWER, CQC_LANG, FINSEQ_1,
-      FINSEQ_2, FINSEQ_4, FINSEQ_5, FINSEQ_6, BINARITH, AMI_5, BINARI_2,
-      EUCLID, JORDAN2B, JORDAN4, GR_CY_1, XCMPLX_1, XREAL_1;
+      FINSEQ_2, FINSEQ_4, FINSEQ_5, FINSEQ_6, BINARITH, BINARI_2, EUCLID,
+      JORDAN2B, JORDAN4, XREAL_1, XXREAL_0, FUNCOP_1;
  schemes NAT_1, NAT_2, FINSEQ_2, BINARITH;
 
 begin :: Binary Arithmetics
@@ -151,9 +151,9 @@ CQC_LANG:def 1,MARGREL1:38;
     0*(n + 1) = 0*n ^ <* 0 *>
    proof
     let n be Nat;
-    thus 0*(n+1) = (n+1) |-> (0 qua Real) by EUCLID:def 4
+    thus 0*(n+1) = (n+1) |-> (0 qua Real)
        .= (n |-> (0 qua Real)) ^ <* 0 *> by FINSEQ_2:74
-       .= 0*n ^ <* 0 *> by EUCLID:def 4;
+       .= 0*n ^ <* 0 *>;
    end;
 
   theorem Th5:
@@ -162,7 +162,7 @@ CQC_LANG:def 1,MARGREL1:38;
    proof
     let n be Nat;
        n |-> 0 is FinSequence of BOOLEAN by FINSEQ_2:77,MARGREL1:def 13;
-    then 0*n is FinSequence of BOOLEAN by EUCLID:def 4;
+    then 0*n is FinSequence of BOOLEAN;
     hence 0*n in BOOLEAN* by FINSEQ_1:def 11;
    end;
 
@@ -182,13 +182,13 @@ CQC_LANG:def 1,MARGREL1:38;
       A4: i <= len 'not' y;
      A5: len 'not' y = n & len y = n by FINSEQ_2:109;
      then A6: i in Seg n by A3,A4,FINSEQ_1:3;
-     A7: y.i = (n |-> (0 qua Real)).i by A1,EUCLID:def 4
-        .= FALSE by A6,FINSEQ_2:70,MARGREL1:36;
+     A7: y.i = (n |-> (0 qua Real)).i by A1
+        .= FALSE by A6,FUNCOP_1:13,MARGREL1:36;
      thus ('not' y).i = ('not' y)/.i by A3,A4,FINSEQ_4:24
         .= 'not' (y/.i) by A6,BINARITH:def 4
         .= 'not' FALSE by A3,A4,A5,A7,FINSEQ_4:24
         .= 1 by MARGREL1:36,41
-        .= (n |-> 1).i by A6,FINSEQ_2:70;
+        .= (n |-> 1).i by A6,FUNCOP_1:13;
     end;
     hence thesis by A2,FINSEQ_1:18;
    end;
@@ -201,7 +201,7 @@ CQC_LANG:def 1,MARGREL1:38;
     A1: P[1] proof
      let F be Tuple of 1,BOOLEAN;
      assume F = 0*1;
-     then F = 1 |-> (0 qua Real) by EUCLID:def 4
+     then F = 1 |-> (0 qua Real)
            .= <*FALSE*> by FINSEQ_2:73,MARGREL1:36;
      hence Absval F = 0 by BINARITH:41;
     end;
@@ -211,7 +211,7 @@ CQC_LANG:def 1,MARGREL1:38;
      let F be Tuple of n+1,BOOLEAN;
         0*n in BOOLEAN* by Th5;
      then A4: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
-        len (0*n) = n by JORDAN2B:8;
+        len (0*n) = n by FINSEQ_2:109;
      then reconsider F1 = 0*n as Tuple of n,BOOLEAN by A4,FINSEQ_2:110;
      assume F = 0*(n+1);
      hence Absval F = Absval(F1 ^ <*FALSE*>) by Th4,MARGREL1:36
@@ -245,14 +245,14 @@ CQC_LANG:def 1,MARGREL1:38;
        now let k be Nat;
      assume A2: k in dom 0*n;
      then k in Seg len 0*n by FINSEQ_1:def 3;
-     then A3: k in Seg n by EUCLID:2;
+     then A3: k in Seg n by FINSEQ_2:109;
      then n - k + 1 in Seg n by FINSEQ_5:2;
-     then A4: len 0*n - k + 1 in Seg n by EUCLID:2;
+     then A4: len 0*n - k + 1 in Seg n by FINSEQ_2:109;
      thus (Rev 0*n).k = (0*n).(len 0*n - k + 1) by A2,FINSEQ_5:61
-        .= (n |-> (0 qua Real)).(len 0*n - k + 1) by EUCLID:def 4
-        .= 0 by A4,FINSEQ_2:70
-        .= (n |-> (0 qua Real)).k by A3,FINSEQ_2:70
-        .= (0*n).k by EUCLID:def 4;
+        .= (n |-> (0 qua Real)).(len 0*n - k + 1)
+        .= 0 by A4,FUNCOP_1:13
+        .= (n |-> (0 qua Real)).k by A3,FUNCOP_1:13
+        .= (0*n).k;
     end;
     hence thesis by A1,FINSEQ_1:17;
    end;
@@ -276,8 +276,8 @@ CQC_LANG:def 1,MARGREL1:38;
      then A5: len 'not' y - k + 1 in Seg n by FINSEQ_2:109;
      thus (Rev 'not' y).k = ('not' y).(len 'not' y - k + 1) by A3,FINSEQ_5:61
         .= (n |-> 1).(len 'not' y - k + 1) by A1,Th6
-        .= 1 by A5,FINSEQ_2:70
-        .= (n |-> 1).k by A4,FINSEQ_2:70
+        .= 1 by A5,FUNCOP_1:13
+        .= (n |-> 1).k by A4,FUNCOP_1:13
         .= ('not' y).k by A1,Th6;
     end;
     hence thesis by A2,FINSEQ_1:17;
@@ -595,8 +595,8 @@ CQC_LANG:def 1,MARGREL1:38;
         now let i be Nat;
       assume A8: i in Seg n;
       then A9: 1 <= i & i <= n by FINSEQ_1:3;
-      A10: y.i = (n |-> (0 qua Real)).i by A1,EUCLID:def 4
-              .= FALSE by A8,FINSEQ_2:70,MARGREL1:36;
+      A10: y.i = (n |-> (0 qua Real)).i by A1
+              .= FALSE by A8,FUNCOP_1:13,MARGREL1:36;
          now per cases;
        suppose A11: i = 1;
         A12: n >= 1 by NAT_1:39;
@@ -659,8 +659,8 @@ CQC_LANG:def 1,MARGREL1:38;
     assume A1: y = 0*n;
     A2: n in Seg n by FINSEQ_1:5;
     A3: n >= 1 by NAT_1:39;
-    A4: y.n = (n |-> (0 qua Real)).n by A1,EUCLID:def 4
-       .= 0 by A2,FINSEQ_2:70;
+    A4: y.n = (n |-> (0 qua Real)).n by A1
+       .= 0 by A2,FUNCOP_1:13;
     A5: len y = n by FINSEQ_2:109;
     A6: ('not' y)/.n = 'not' (y/.n) by A2,BINARITH:def 4
        .= 'not' FALSE by A3,A4,A5,FINSEQ_4:24,MARGREL1:36
@@ -691,8 +691,8 @@ y,Bin1 n))/.i by A7,A9,FINSEQ_4:24
        then A13: 1 < n by NAT_1:38;
        then A14: 1 in Seg n by FINSEQ_1:3;
        then A15: (Bin1 n)/.1 = TRUE by BINARI_2:7;
-       A16: y.1 = (n |-> (0 qua Real)).1 by A1,EUCLID:def 4
-               .= FALSE by A14,FINSEQ_2:70,MARGREL1:36;
+       A16: y.1 = (n |-> (0 qua Real)).1 by A1
+               .= FALSE by A14,FUNCOP_1:13,MARGREL1:36;
           ('not' y)/.1 = 'not' (y/.1) by A14,BINARITH:def 4
           .= 'not' FALSE by A5,A13,A16,FINSEQ_4:24
           .= TRUE by MARGREL1:41;
@@ -715,8 +715,8 @@ y,Bin1 n))/.1) = TRUE by BINARITH:19;
        A21: 1 <= i by NAT_1:39;
        A22: i < n by A20,NAT_1:38;
        then A23: i in Seg n by A21,FINSEQ_1:3;
-       A24: y.i = (n |-> (0 qua Real)).i by A1,EUCLID:def 4
-               .= FALSE by A23,FINSEQ_2:70,MARGREL1:36;
+       A24: y.i = (n |-> (0 qua Real)).i by A1
+               .= FALSE by A23,FUNCOP_1:13,MARGREL1:36;
        A25: ('not' y)/.i = 'not' (y/.i) by A23,BINARITH:def 4
           .= 'not' FALSE by A5,A21,A22,A24,FINSEQ_4:24
           .= TRUE by MARGREL1:41;
@@ -789,8 +789,8 @@ y,Bin1 n)/.i)) by A21,A22,BINARITH:def 5
           len y = 1 by A10,FINSEQ_2:109;
        then 1 in dom y by A3,FINSEQ_1:def 3;
        then A13: (y/.1) = y.1 by FINSEQ_4:def 4
-          .= (1 |-> (0 qua Real)).1 by A1,A10,EUCLID:def 4
-          .= 0 by A3,FINSEQ_2:70;
+          .= (1 |-> (0 qua Real)).1 by A1,A10
+          .= 0 by A3,FUNCOP_1:13;
           now let i be Nat;
         assume i in Seg n;
         then A14: i = 1 by A10,FINSEQ_1:4,TARSKI:def 1;
@@ -806,8 +806,8 @@ y,Bin1 n)/.i)) by A21,A22,BINARITH:def 5
          len y = n by FINSEQ_2:109;
       then n in dom y by A2,FINSEQ_1:def 3;
       then A17: (y/.n) = y.n by FINSEQ_4:def 4
-         .= (n |-> (0 qua Real)).n by A1,EUCLID:def 4
-         .= 0 by A2,FINSEQ_2:70;
+         .= (n |-> (0 qua Real)).n by A1
+         .= 0 by A2,FUNCOP_1:13;
       A18: x/.n = 'not' (y/.n) by A2,A15,BINARITH:def 4
          .= TRUE by A17,MARGREL1:36,41;
          (carry(x,Bin1 n))/.n = ('not' Bin1 n)/.n by A1,A15,Th23
@@ -828,8 +828,8 @@ y,Bin1 n)/.i)) by A21,A22,BINARITH:def 5
          len y = 1 by A20,FINSEQ_2:109;
       then 1 in dom y by A3,FINSEQ_1:def 3;
       then A22: (y/.1) = y.1 by FINSEQ_4:def 4
-         .= (1 |-> (0 qua Real)).1 by A1,A20,EUCLID:def 4
-         .= 0 by A3,FINSEQ_2:70;
+         .= (1 |-> (0 qua Real)).1 by A1,A20
+         .= 0 by A3,FUNCOP_1:13;
          d = ('not' y)/.1 by A15,A21,FINSEQ_4:25
        .= 'not' (y/.1) by A3,A20,BINARITH:def 4
        .= TRUE by A22,MARGREL1:36,41;
@@ -907,7 +907,7 @@ begin :: Binary Sequences
     let n be Nat;
        0*n in BOOLEAN* by Th5;
     then A1: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
-       len (0*n) = n by JORDAN2B:8;
+       len (0*n) = n by FINSEQ_2:109;
     then reconsider F = 0*n as Tuple of n,BOOLEAN by A1,FINSEQ_2:110;
        now let i be Nat;
      assume A2: i in Seg n;
@@ -918,8 +918,8 @@ begin :: Binary Sequences
         .= IFEQ(0 mod 2,0,FALSE,TRUE) by NAT_2:4
         .= IFEQ(0,0,FALSE,TRUE) by NAT_1:78
         .= 0 by CQC_LANG:def 1,MARGREL1:36
-        .= (n |-> (0 qua Real)).i by A2,FINSEQ_2:70
-        .= F.i by EUCLID:def 4;
+        .= (n |-> (0 qua Real)).i by A2,FUNCOP_1:13
+        .= F.i;
     end;
     hence thesis by FINSEQ_2:139;
    end;
@@ -930,9 +930,9 @@ begin :: Binary Sequences
    proof
     let n,k be Nat;
     assume A1: k < 2 to_power n;
-       n+1-'1 = n+1-1 by JORDAN4:2
+       n+1-'1 = n+1-1 by BINARITH:55
        .= n;
-    then A2: (k div 2 to_power (n+1-'1)) mod 2 = 0 mod 2 by A1,JORDAN4:5
+    then A2: (k div 2 to_power (n+1-'1)) mod 2 = 0 mod 2 by A1,NAT_1:80
        .= 0 by NAT_1:78;
     A3: n + 1 in Seg (n+1) by FINSEQ_1:6;
     then n + 1 in Seg len ((n+1)-BinarySequence k) by FINSEQ_2:109;
@@ -982,7 +982,7 @@ Lm1:for n be non empty Nat holds
     let n be non empty Nat;
        0*n in BOOLEAN* by Th5;
     then A1: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
-       len (0*n) = n by JORDAN2B:8;
+       len (0*n) = n by FINSEQ_2:109;
     then reconsider 0n = 0*n as Tuple of n,BOOLEAN by A1,FINSEQ_2:110;
        now let i be Nat;
      assume A2: i in Seg (n+1);
@@ -1020,8 +1020,8 @@ POWER:32;
           .= IFEQ(((2 to_power n) div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE)
                                                                   by A2,Def1
           .= 0 by A10,CQC_LANG:def 1,MARGREL1:36
-          .= (n |-> (0 qua Real)).i by A3,FINSEQ_2:70
-          .= 0n.i by EUCLID:def 4
+          .= (n |-> (0 qua Real)).i by A3,FUNCOP_1:13
+          .= 0n.i
           .= (0n^<*TRUE*>).i by A4,FINSEQ_1:def 7;
       end;
       suppose A11: i = n + 1;
@@ -1031,7 +1031,7 @@ POWER:32;
        then A12: n + 1 in dom ((n+1)-BinarySequence 2 to_power n)
                                                           by FINSEQ_1:def 3;
        A13: 2 to_power n > 0 by POWER:39;
-          i-'1 = n+1-1 by A11,JORDAN4:2
+          i-'1 = n+1-1 by A11,BINARITH:55
           .= n;
        then A14: ((2 to_power n) div 2 to_power (i-'1)) mod 2 =
              1 mod 2 by A13,NAT_2:5
@@ -1062,7 +1062,7 @@ Lm2:
        k < 2 to_power n * 2 to_power 1 by A2,POWER:32;
     then k < 2 * 2 to_power n by POWER:30;
     then A3: k < 2 to_power n + 2 to_power n;
-       n+1-'1 = n+1-1 by JORDAN4:2
+       n+1-'1 = n+1-1 by BINARITH:55
        .= n;
     then A4:(k div 2 to_power (n+1-'1)) mod 2 = 1 mod 2 by A1,A3,NAT_2:22
       .= 1 by NAT_1:76;
@@ -1161,7 +1161,7 @@ Lm4:
       assume A5: k < 2 to_power 1;
       let y be Tuple of 1,BOOLEAN;
       assume y = 0*1;
-      then A6: y = 1 |-> (0 qua Real) by EUCLID:def 4
+      then A6: y = 1 |-> (0 qua Real)
             .= <*FALSE*> by FINSEQ_2:73,MARGREL1:36;
       assume A7: 1-BinarySequence k = 'not' y;
       A8: 1 <= len (1-BinarySequence k) by FINSEQ_2:109;
@@ -1175,7 +1175,7 @@ Lm4:
        assume k <> 1;
        then k = 0 by A10,NAT_1:71;
        then k < 2 to_power (1-'1) by POWER:39;
-       then k div 2 to_power (1-'1) = 0 by JORDAN4:5;
+       then k div 2 to_power (1-'1) = 0 by NAT_1:80;
        then (k div 2 to_power (1-'1)) mod 2 = 0 by NAT_1:78;
        hence contradiction by A11,CQC_LANG:def 1,MARGREL1:36;
       end;
@@ -1196,8 +1196,8 @@ Lm4:
       A19: m + 1 in Seg (m + 1) by FINSEQ_1:6;
          0 <= m by NAT_1:18;
       then A20: 0 + 1 <= m + 1 by XREAL_1:8;
-      A21: y.(m + 1) = ((m + 1) |-> (0 qua Real)).(m + 1) by A15,EUCLID:def 4
-         .= FALSE by A19,FINSEQ_2:70,MARGREL1:36;
+      A21: y.(m + 1) = ((m + 1) |-> (0 qua Real)).(m + 1) by A15
+         .= FALSE by A19,FUNCOP_1:13,MARGREL1:36;
          ((m+1)-BinarySequence k).(m+1) = ('not' y)/.(m+1)
         by A16,A18,A20,FINSEQ_4:24
          .= 'not' (y/.(m+1)) by A19,BINARITH:def 4
@@ -1213,7 +1213,7 @@ Lm4:
       then A24: k -' 2 to_power m < 2 to_power m by A22,BINARITH:50;
          0*m in BOOLEAN* by Th5;
       then A25: 0*m is FinSequence of BOOLEAN by FINSEQ_1:def 11;
-         len (0*m) = m by JORDAN2B:8;
+         len (0*m) = m by FINSEQ_2:109;
       then reconsider y1 = 0*m as Tuple of m,BOOLEAN by A25,FINSEQ_2:110;
          y = y1 ^ <* 0 *> by A15,Th4;
       then (m-BinarySequence (k -' 2 to_power m))^<*TRUE*> = 'not' y1^<*'not'
@@ -1238,8 +1238,8 @@ FALSE*>
      A29: len x = n by FINSEQ_2:109;
      A30: len 'not' x = n by FINSEQ_2:109;
      A31: 1 <= i & i <= n by A27,FINSEQ_1:3;
-     A32: (x).i = (n |-> 0).i by A2,EUCLID:def 4
-            .= FALSE by A27,FINSEQ_2:70,MARGREL1:36;
+     A32: (x).i = (n |-> 0).i by A2
+            .= FALSE by A27,FUNCOP_1:13,MARGREL1:36;
         2 to_power (i-'1) > 0 by POWER:39;
      then A33: 2 to_power (i-'1) >= 0 + 1 by NAT_1:38;
      A34: 1 <= i & i <= n by A27,FINSEQ_1:3;
@@ -1280,10 +1280,10 @@ theorem Th29:
    suppose A1: i = 0; reconsider i1 = i+1 as non empty Nat;
     2 to_power i1 = 2 by A1,POWER:30;
    then A2: 1 = (2 to_power i1) - 1;
-   A3: 0*i1 = 1 |-> 0 by A1,EUCLID:def 4
+   A3: 0*i1 = 1 |-> 0 by A1
            .= <*FALSE*> by FINSEQ_2:73,MARGREL1:def 13;
        then reconsider x = 0*i1 as Tuple of i1, BOOLEAN by A1;
-   A4: 0*i = 0 |-> 0 by A1,EUCLID:def 4 .= 0 by FINSEQ_2:72;
+   A4: 0*i = 0 |-> 0 by A1 .= 0 by FINSEQ_2:72;
           i1-BinarySequence 1 = 'not' x by A2,Lm4;
     hence Bi = <*TRUE*> by A1,A3,Th15,POWER:29
            .= 0*i^<*1*> by A4,FINSEQ_1:47,MARGREL1:def 14;
@@ -1322,7 +1322,7 @@ theorem Th29:
     then A2: k < 2 to_power n - 1 by XREAL_1:22;
        0*n in BOOLEAN* by Th5;
     then A3: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
-       len (0*n) = n by JORDAN2B:8;
+       len (0*n) = n by FINSEQ_2:109;
     then reconsider y = 0*n as Tuple of n,BOOLEAN by A3,FINSEQ_2:110;
        k < 2 to_power n by A1,NAT_1:38;
     then n-BinarySequence k <> 'not' y by A2,Th32;
@@ -1348,9 +1348,9 @@ theorem Th29:
         .= 2 to_power 1 - 1 by POWER:30;
         0*1 in BOOLEAN* by Th5;
      then A5: 0*1 is FinSequence of BOOLEAN by FINSEQ_1:def 11;
-        len (0*1) = 1 by JORDAN2B:8;
+        len (0*1) = 1 by FINSEQ_2:109;
      then reconsider x = 0*1 as Tuple of 1,BOOLEAN by A5,FINSEQ_2:110;
-     A6: 0*1 = 1 |-> (0 qua Real) by EUCLID:def 4
+     A6: 0*1 = 1 |-> (0 qua Real)
         .= <*FALSE*> by FINSEQ_2:73,MARGREL1:36;
      thus 1-BinarySequence (k+1) = 'not' x by A2,A4,Th32
         .= 1-BinarySequence k + Bin1 1 by A3,A6,Th11,Th15,Th18,Th26;
@@ -1389,7 +1389,8 @@ theorem Th29:
                                                                      by Th33;
        thus (n+1)-BinarySequence (k+1) =
             (n-BinarySequence (k + 1 -' 2 to_power n))^<*TRUE*> by A9,A14,Th31
-         .= (n-BinarySequence (k-'2 to_power n + 1))^<*TRUE*> by A15,JORDAN4:3
+         .= (n-BinarySequence (k-'2 to_power n + 1))^<*TRUE*> by A15,
+BINARITH:56
          .= (n-BinarySequence (k -' 2 to_power n) + Bin1 n)^<*TRUE*> by A8,A16
          .= (n-BinarySequence (k -' 2 to_power n) + Bin1 n)^<*TRUE 'xor'
             add_ovfl(n-BinarySequence (k -' 2 to_power n),Bin1 n)*>
@@ -1407,7 +1408,7 @@ theorem Th29:
        then A19: k < 2 to_power n by NAT_1:38;
           0*n in BOOLEAN* by Th5;
        then A20: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
-          len (0*n) = n by JORDAN2B:8;
+          len (0*n) = n by FINSEQ_2:109;
        then reconsider z = 0*n as Tuple of n,BOOLEAN by A20,FINSEQ_2:110;
        A21: k = 2 to_power n - 1 by A18;
        then n-BinarySequence k = 'not' z by A19,Th32;
@@ -1516,7 +1517,7 @@ theorem Th29:
      then A5: k < 2 to_power n by NAT_1:38;
         0*n in BOOLEAN* by Th5;
      then A6: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
-        len (0*n) = n by JORDAN2B:8;
+        len (0*n) = n by FINSEQ_2:109;
      then reconsider 0n = 0*n as Tuple of n,BOOLEAN by A6,FINSEQ_2:110;
         k + 1 - 1 < 2 to_power n - 1 by A4,XREAL_1:11;
      then n-BinarySequence k <> 'not' 0n by A5,Th32;

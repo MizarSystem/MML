@@ -9,25 +9,25 @@ environ
  vocabularies ARYTM_1, FINSEQ_1, RELAT_1, FUNCT_1, RFINSEQ, RLVECT_1, FINSEQ_2,
       BINOP_1, VECTSP_1, LATTICES, REALSET1, ALGSTR_2, NORMSP_1, POLYNOM3,
       ARYTM_3, ALGSEQ_1, POLYNOM1, FUNCOP_1, SQUARE_1, FINSEQ_4, FUNCT_4,
-      GROUP_1, POLYNOM2, VECTSP_2, ENDALG, GRCAT_1, COHSP_1,
-      QUOFIELD, POLYNOM4, ALGSTR_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0,
-      NAT_1, SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1,
-      POLYNOM1, STRUCT_0, FINSEQ_2,
-      FINSEQ_4, FINSOP_1, RFINSEQ, BINARITH, PRE_TOPC, NORMSP_1, RLVECT_1,
-      REALSET2, GROUP_1, VECTSP_1, VECTSP_2, FVSUM_1, ALGSTR_1, GRCAT_1,
-      ENDALG, QUOFIELD, ALGSEQ_1, POLYNOM3, GROUP_6, XXREAL_0;
- constructors REAL_1, SQUARE_1, FINSOP_1, SETWOP_2, RFINSEQ, TOPREAL1,
-      BINARITH, QUOFIELD, ALGSEQ_1, GRCAT_1, ENDALG, POLYNOM1, POLYNOM3,
-      FINSEQOP, ALGSTR_1, NORMSP_1, GROUP_6, XXREAL_0;
+      GROUP_1, POLYNOM2, VECTSP_2, ENDALG, GRCAT_1, COHSP_1, QUOFIELD,
+      POLYNOM4, ALGSTR_1;
+ notations TARSKI, XBOOLE_0, NUMBERS, XCMPLX_0, NAT_1, SQUARE_1, RELAT_1,
+      FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, POLYNOM1, STRUCT_0, FINSEQ_2,
+      FINSEQ_4, FINSOP_1, RFINSEQ, BINARITH, NORMSP_1, RLVECT_1, GROUP_1,
+      VECTSP_1, VECTSP_2, FVSUM_1, ALGSTR_1, GRCAT_1, ENDALG, QUOFIELD,
+      ALGSEQ_1, POLYNOM3, GROUP_6, XXREAL_0;
+ constructors REAL_1, SQUARE_1, FINSOP_1, SETWOP_2, RFINSEQ, BINARITH,
+      QUOFIELD, ALGSEQ_1, GRCAT_1, ENDALG, POLYNOM1, POLYNOM3, FINSEQOP,
+      ALGSTR_1, NORMSP_1, GROUP_6, XXREAL_0;
  registrations STRUCT_0, RELSET_1, ALGSTR_1, FINSEQ_1, FINSEQ_2, VECTSP_1,
-      POLYNOM1, POLYNOM3, INT_1, XREAL_0, ORDINAL2;
+      POLYNOM1, POLYNOM3, INT_1, XREAL_0, ORDINAL2, XXREAL_0;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
- definitions ALGSEQ_1, QUOFIELD, ENDALG, GRCAT_1, GROUP_6;
+ definitions ALGSEQ_1, QUOFIELD, ENDALG, GRCAT_1, GROUP_6, POLYNOM3,
+      FINSEQ_2;
  theorems REAL_1, NAT_1, SQUARE_1, FUNCT_2, FUNCT_7, FUNCOP_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ, BINARITH, RLVECT_1,
-      VECTSP_1, VECTSP_2, FVSUM_1, NORMSP_1, ALGSEQ_1, AMI_5, GROUP_1,
-      POLYNOM2, POLYNOM3, INT_1, NAT_2, MATRIX_3, XCMPLX_1, ALGSTR_1, XREAL_1;
+      VECTSP_1, VECTSP_2, FVSUM_1, NORMSP_1, ALGSEQ_1, GROUP_1, POLYNOM2,
+      POLYNOM3, INT_1, NAT_2, MATRIX_3, ALGSTR_1, XREAL_1, XXREAL_0;
  schemes NAT_1, FINSEQ_2, POLYNOM3, FUNCT_2;
 
 begin  :: Preliminaries
@@ -131,11 +131,11 @@ canceled;
          now let k be Nat;
       assume k in dom r;
       hence r.k = (0_.(L)).(k-'1) * p.(i+1-'k) by A2
-         .= 0.L * p.(i+1-'k) by POLYNOM3:28
+         .= 0.L * p.(i+1-'k) by FUNCOP_1:13
          .= 0.L by VECTSP_1:39;
      end;
      hence ((0_.(L))*'p).i = 0.L by A1,POLYNOM3:1
-        .= (0_.(L)).i by POLYNOM3:28;
+        .= (0_.(L)).i by FUNCOP_1:13;
     end;
     hence thesis by FUNCT_2:113;
    end;
@@ -145,7 +145,7 @@ canceled;
     len 0_.(L) = 0
    proof
     let L be non empty ZeroStr;
-        for i be Nat st i >= 0 holds (0_.(L)).i = 0.L by POLYNOM3:28;
+        for i be Nat st i >= 0 holds (0_.(L)).i = 0.L by FUNCOP_1:13;
     then A1: 0 is_at_least_length_of 0_.(L) by ALGSEQ_1:def 3;
         for i be Nat st i is_at_least_length_of 0_.(L) holds 0 <= i;
     hence thesis by A1,ALGSEQ_1:def 4;
@@ -188,7 +188,7 @@ canceled;
      hence p.x = 0.L by A1,ALGSEQ_1:def 3;
     end;
     then p = NAT --> 0.L by A2,FUNCOP_1:17;
-    hence thesis by POLYNOM3:def 9;
+    hence thesis;
    end;
 
   theorem Th9:
@@ -221,7 +221,7 @@ canceled;
     assume A1: len p <> len q;
     per cases by A1,REAL_1:def 5;
      suppose A2: len p < len q;
-      then A3: max(len p,len q) = len q by SQUARE_1:def 2;
+      then A3: max(len p,len q) = len q by XXREAL_0:def 9;
       A4: len q >= 0+1 by A2,NAT_1:38;
           len q >= len p+1 by A2,NAT_1:38;
       then len q-1 >= len p by XREAL_1:21;
@@ -240,10 +240,10 @@ canceled;
        then (p+q).(len q-'1) = 0.L by ALGSEQ_1:22;
        hence contradiction by A6,A7,ALGSEQ_1:25;
       end;
-      hence thesis by A3,A8,XREAL_1:1;
+      hence thesis by A3,A8,XXREAL_0:1;
      end;
      suppose A9: len p > len q;
-      then A10: max(len p,len q) = len p by SQUARE_1:def 2;
+      then A10: max(len p,len q) = len p by XXREAL_0:def 9;
       A11: len p >= 0+1 by A9,NAT_1:38;
           len p >= len q+1 by A9,NAT_1:38;
       then len p-1 >= len q by XREAL_1:21;
@@ -262,7 +262,7 @@ canceled;
        then (p+q).(len p-'1) = 0.L by ALGSEQ_1:22;
        hence contradiction by A13,A14,ALGSEQ_1:25;
       end;
-      hence thesis by A10,A15,XREAL_1:1;
+      hence thesis by A10,A15,XXREAL_0:1;
    end;
    end;
 
@@ -312,9 +312,8 @@ canceled;
     assume that
      A1: n >= len p and
      A2: n >= len q;
-    A3: p-q = p+-q by POLYNOM3:def 8;
         len q = len (-q) by Th11;
-    hence thesis by A1,A2,A3,Th9;
+    hence thesis by A1,A2,Th9;
    end;
 
   theorem
@@ -330,12 +329,12 @@ canceled;
 A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
   A2: now assume  len p <= 0;
         then len p = 0; then p = 0_. L by Th8;
-       then p.(len p -'1) = 0.L by POLYNOM3:28;
+       then p.(len p -'1) = 0.L by FUNCOP_1:13;
        hence contradiction by A1,VECTSP_1:39;
       end;
   A3: now assume  len q <= 0;
         then len q = 0; then q = 0_. L by Th8;
-       then q.(len q -'1) = 0.L by POLYNOM3:28;
+       then q.(len q -'1) = 0.L by FUNCOP_1:13;
        hence contradiction by A1,VECTSP_1:36;
       end;
       then len p + len q > 0+0 by XREAL_1:10;
@@ -364,7 +363,7 @@ A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
        suppose k-'1 < len p;
         then k-1 < len p by BINARITH:def 3;
         then -(k-1) > -len p by XREAL_1:26;
-        then 1-k > len q - (i+1) by A9,XREAL_1:2;
+        then 1-k > len q - (i+1) by A9,XXREAL_0:2;
         then i+1+(1-k) > len q by XREAL_1:21;
         then i+1-k+1 > len q;
         then i+1-'k+1 > len q by A12,BINARITH:def 3;
@@ -444,13 +443,13 @@ BINARITH:def 3
       then A38: 1 <= i & i <= len (r/^len p) by FINSEQ_1:3;
       then A39: 0+1 <= i & i <= len r-len p by A25,RFINSEQ:def 2;
           i+len p >= i by NAT_1:29;
-      then A40: i+len p >= 1 by A38,XREAL_1:2;
+      then A40: i+len p >= 1 by A38,XXREAL_0:2;
           i+len p <= len r by A39,XREAL_1:21;
       then i+len p in Seg len r by A40,FINSEQ_1:3;
       then A41: i+len p in dom r by FINSEQ_1:def 3;
       A42: i-1 >= 0 by A39,XREAL_1:21;
           i+len p >= i by NAT_1:29;
-      then i+len p >= 0+1 by A38,XREAL_1:2;
+      then i+len p >= 0+1 by A38,XXREAL_0:2;
       then i+len p-1 >= 0 by XREAL_1:21;
       then i+len p-'1 = len p+(i-1) by BINARITH:def 3;
       then A43: i+len p-'1 >= len p+0 by A42,XREAL_1:8;
@@ -489,7 +488,7 @@ begin  :: Leading Monomials
     let n be Nat;
     assume n <> len p-'1;
     hence P.n = (0_.(L)).n by FUNCT_7:34
-       .= 0.L by POLYNOM3:28;
+       .= 0.L by FUNCOP_1:13;
    end;
    uniqueness
    proof
@@ -526,7 +525,7 @@ begin  :: Leading Monomials
         now let n be Nat;
      assume n <> len p-'1;
      hence P.n = (0_.(L)).n by FUNCT_7:34
-        .= 0.L by POLYNOM3:28;
+        .= 0.L by FUNCOP_1:13;
     end;
     hence thesis by A1,Def1;
    end;
@@ -549,7 +548,7 @@ begin  :: Leading Monomials
       then len p-1 >= 0+1-1 by XREAL_1:11;
       then i <> len p-'1 by A2,BINARITH:def 3;
       hence (Leading-Monomial(p)).i = (0_.(L)).i by A1,FUNCT_7:34
-         .= 0.L by POLYNOM3:28;
+         .= 0.L by FUNCOP_1:13;
      end;
      suppose A3: len p = 0;
       then A4: len p-'1 = 0 by Lm1;
@@ -558,12 +557,12 @@ begin  :: Leading Monomials
           now per cases;
        suppose i > 0;
         hence (Leading-Monomial(p)).i = (0_.(L)).i by A1,A4,FUNCT_7:34
-           .= 0.L by POLYNOM3:28;
+           .= 0.L by FUNCOP_1:13;
        end;
        suppose i = 0;
         hence (Leading-Monomial(p)).i = p.0 by A1,A4,A5,FUNCT_7:33
            .= (0_.(L)).0 by A3,Th8
-           .= 0.L by POLYNOM3:28;
+           .= 0.L by FUNCOP_1:13;
       end;
       end;
       hence thesis;
@@ -580,7 +579,7 @@ begin  :: Leading Monomials
     let p be Polynomial of L;
     assume len p = 0;
     then A1: (0_.(L)).(len p-'1) = p.(len p-'1) by Th8;
-        for n be Nat st n <> len p-'1 holds (0_.(L)).n = 0.L by POLYNOM3:28;
+        for n be Nat st n <> len p-'1 holds (0_.(L)).n = 0.L by FUNCOP_1:13;
     hence thesis by A1,Def1;
    end;
 
@@ -629,7 +628,7 @@ begin  :: Leading Monomials
        then i+1-1 > len p-1 by XREAL_1:11;
        then i <> len p-'1 by A3,BINARITH:def 3;
        hence r.i = (0_.(L)).i by A1,FUNCT_7:34
-          .= 0.L by POLYNOM3:28;
+          .= 0.L by FUNCOP_1:13;
       end;
           len p-'1 in NAT;
       then A5: len p-'1 in dom 0_.(L) by NORMSP_1:17;
@@ -676,7 +675,7 @@ begin  :: Leading Monomials
     A6: len Leading-Monomial(p) = len p by Th18;
     then A7: len (q+Leading-Monomial(p)) = max(len q,len Leading-Monomial(p))
                                                                    by A5,Th10
-       .= len p by A5,A6,SQUARE_1:def 2;
+       .= len p by A5,A6,XXREAL_0:def 9;
         now let k be Nat;
      assume k < len p;
      then k+1 <= len p by NAT_1:38;
@@ -837,7 +836,7 @@ begin  :: Evaluation of Polynomials
      A9: for n be Nat st n in dom F3 holds
                          F3.n = (p+q).(n-'1) * (power L).(x,n-'1) by Def2;
     reconsider k = max(len p,len q) as Nat by FINSEQ_2:1;
-    A10: k >= len p & k >= len q by SQUARE_1:46;
+    A10: k >= len p & k >= len q by XXREAL_0:25;
     then k >= len (p+q) by Th9;
     then A11: k - len p >= 0 & k - len q >= 0 & k - len (p+q) >= 0
       by A10,XREAL_1:50;
@@ -874,7 +873,7 @@ begin  :: Evaluation of Polynomials
      then A18: 0+1 <= n & n <= k by FINSEQ_1:3;
      per cases by REAL_1:def 5;
       suppose A19: len p > len q;
-       then A20: k = len p by SQUARE_1:def 2;
+       then A20: k = len p by XXREAL_0:def 9;
        then A21: len(p+q) = len p by A19,Th10;
        A22: n in dom F1 by A2,A17,A20,FINSEQ_1:def 3;
        A23: n in dom F3 by A8,A17,A20,A21,FINSEQ_1:def 3;
@@ -915,7 +914,7 @@ begin  :: Evaluation of Polynomials
              n <= len G2 by A17,A25,FINSEQ_1:3;
          then A38: G2/.n = ((k-'(len F2))|->0.L).(n-len F2)
                                                     by A5,A27,A32,FINSEQ_1:37
-            .= 0.L by A37,FINSEQ_2:70;
+            .= 0.L by A37,FUNCOP_1:13;
          thus G3.n = F3.n by A23,FINSEQ_1:def 7
             .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A23
             .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
@@ -930,7 +929,7 @@ begin  :: Evaluation of Polynomials
        hence G3.n = (G1 + G2).n;
       end;
       suppose A39: len p < len q;
-       then A40: k = len q by SQUARE_1:def 2;
+       then A40: k = len q by XXREAL_0:def 9;
        then A41: len(p+q) = len q by A39,Th10;
        A42: n in dom F2 by A5,A17,A40,FINSEQ_1:def 3;
        A43: n in dom F3 by A8,A17,A40,A41,FINSEQ_1:def 3;
@@ -971,7 +970,7 @@ begin  :: Evaluation of Polynomials
              n <= len G1 by A17,A45,FINSEQ_1:3;
          then A58: G1/.n = ((k-'(len F1))|->0.L).(n-len F1)
                                                     by A2,A47,A52,FINSEQ_1:37
-            .= 0.L by A57,FINSEQ_2:70;
+            .= 0.L by A57,FUNCOP_1:13;
          thus G3.n = F3.n by A43,FINSEQ_1:def 7
             .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A43
             .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
@@ -1028,7 +1027,7 @@ begin  :: Evaluation of Polynomials
             .= (q.(n-'1))*(power L).(x,n-'1) by A6,A60;
              n <= len G3 by A17,A62,FINSEQ_1:3;
          hence G3.n = ((k-'(len F3))|->0.L).(n-len F3) by A8,A71,FINSEQ_1:37
-            .= 0.L by A76,FINSEQ_2:70
+            .= 0.L by A76,FUNCOP_1:13
             .= 0.L * (power L).(x,n-'1) by Lm3
             .= (p+q).(n-'1) * (power L).(x,n-'1) by A75,ALGSEQ_1:22
             .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
@@ -1092,7 +1091,7 @@ unital
      distributive (non empty doubleLoopStr);
     let p,q be Polynomial of L;
     let x be Element of L;
-    thus eval(p-q,x) = eval(p+-q,x) by POLYNOM3:def 8
+    thus eval(p-q,x) = eval(p+-q,x)
        .= eval(p,x) + eval(-q,x) by Th22
        .= eval(p,x) +- eval(q,x) by Th23
        .= eval(p,x) - eval(q,x) by RLVECT_1:def 11;
@@ -1146,7 +1145,7 @@ unital
           LMp = 0_.(L) by A11,Th15;
       hence eval(Leading-Monomial(p),x) = 0.L by Th20
          .= 0.L*(power L).(x,len p-'1) by VECTSP_1:39
-         .= p.(len p-'1)*(power L).(x,len p-'1) by A12,POLYNOM3:28;
+         .= p.(len p-'1)*(power L).(x,len p-'1) by A12,FUNCOP_1:13;
    end;
    end;
 

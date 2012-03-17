@@ -11,6 +11,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -18,6 +19,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
@@ -41,7 +43,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="162">
+<Func kind="K" nr="185">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -52,15 +54,15 @@
 <Adjective nr="5"/>
 <Adjective nr="6"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="18"/>
-<Adjective nr="21"/>
-<Adjective nr="79" value="false"/>
-<Adjective nr="80"/>
+<Adjective nr="19"/>
+<Adjective nr="22"/>
+<Adjective nr="80" value="false"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
 <Adjective nr="83"/>
-<Adjective nr="86"/>
+<Adjective nr="84"/>
 <Adjective nr="87"/>
+<Adjective nr="88"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -70,18 +72,18 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="236">
+<Func kind="K" nr="263">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -89,8 +91,8 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="18"/>
-<Adjective nr="21"/>
+<Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

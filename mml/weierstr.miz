@@ -10,20 +10,20 @@ environ
       FINSET_1, TOPMETR, RELAT_1, TARSKI, FUNCT_1, SUBSET_1, ORDINAL2,
       COMPTS_1, EUCLID, LATTICES, PCOMPS_1, SEQ_2, SEQ_1, SEQ_4, WEIERSTR,
       ARYTM, FRECHET2;
- notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, ORDINAL1,
-      NUMBERS, XREAL_0, REAL_1, COMPLEX1, NAT_1, TOPMETR, METRIC_1, COMPTS_1,
-      SEQ_1, SEQ_2, SEQM_3, SEQ_4, FINSEQ_1, FINSET_1, STRUCT_0, PRE_TOPC,
-      TOPS_2, RCOMP_1, EUCLID, PCOMPS_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, ORDINAL1, NUMBERS, XREAL_0, REAL_1, COMPLEX1, NAT_1, TOPMETR,
+      METRIC_1, COMPTS_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, FINSEQ_1, FINSET_1,
+      STRUCT_0, PRE_TOPC, TOPS_2, RCOMP_1, EUCLID, PCOMPS_1, XXREAL_0;
  constructors REAL_1, NAT_1, TOPMETR, COMPTS_1, SEQ_2, SEQM_3, SEQ_4, TOPS_2,
       RCOMP_1, EUCLID, COMPLEX1, SETFAM_1, XXREAL_0;
  registrations STRUCT_0, TOPMETR, PRE_TOPC, PCOMPS_1, EUCLID, XREAL_0,
       METRIC_1, RELSET_1, ARYTM_3, FINSET_1, MEMBERED, ORDINAL2, SUBSET_1;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
- definitions STRUCT_0, TARSKI;
+ definitions STRUCT_0, TARSKI, SUBSET_1, PRE_TOPC;
  theorems TARSKI, FUNCT_1, FUNCT_2, NAT_1, FINSEQ_1, ZFMISC_1, REAL_1, SEQ_2,
       SEQ_4, ABSVALUE, COMPTS_1, PRE_TOPC, RELAT_1, TOPS_2, RCOMP_1, TOPMETR,
       PCOMPS_1, METRIC_1, METRIC_6, XBOOLE_0, XBOOLE_1, XREAL_0, SUBSET_1,
-      XREAL_1, COMPLEX1, XCMPLX_1;
+      XREAL_1, COMPLEX1, XXREAL_0;
  schemes NAT_1, SUBSET_1, FUNCT_2;
 
 begin
@@ -502,16 +502,15 @@ then A1:P c= union B by COMPTS_1:def 1;
      assume x in P;
      then consider Y being set such that
   A2:x in Y & Y in B by A1,TARSKI:def 4;
-        ex Z being set st (x in Z & Z in f"(f.:(B)))
+     ex Z being set st (x in Z & Z in f"(f.:B))
      proof
-        A3: B c= bool [#](T) by TOPS_2:1;
         reconsider Y as Subset of T by A2;
         set Z = f"(f.:Y);
-           dom f = [#](T) by TOPS_2:51;
-        then A4: Y c= f"(f.:Y) by A2,A3,FUNCT_1:146;
-        A5: f.:(Y) in f.:B & f"(f.:Y) = f"(f.:Y) by A2,Def2;
+        dom f = [#]T by FUNCT_2:def 1;
+        then A3: Y c= f"(f.:Y) by FUNCT_1:146;
+        A4: f.:Y in f.:B & f"(f.:Y) = f"(f.:Y) by A2,Def2;
         take Z;
-        thus thesis by A2,A4,A5,Def1;
+        thus thesis by A2,A3,A4,Def1;
      end;
      hence thesis by TARSKI:def 4;
    end;
@@ -558,12 +557,11 @@ proof
   x in union P;
    then consider A being set such that
 A1:x in A & A in P by TARSKI:def 4;
-      P c= bool [#](T) by TOPS_2:1;
-then A2:A c= [#](T) by A1;
+A2:A c= [#](T) by A1;
    reconsider A as Subset of T by A1;
    reconsider A1 = f.:A as Subset of S;
    reconsider A2 = f"A1 as Subset of T;
-      A c= dom f by A2,TOPS_2:51;
+      A c= dom f by A2,FUNCT_2:def 1;
    then A3: A c= A2 by FUNCT_1:146;
       A1 in f.:P by A1,Def2;
    then A2 in f"(f.:P) by Def1;
@@ -591,14 +589,7 @@ proof
          let x be Subset of [#](S);
          reconsider x as set;
          set y = f"x;
-            for z being set holds z in f"x implies z in [#](T)
-         proof
-            let z be set;
-            assume z in f"x;
-            then z in dom f & f.z in x by FUNCT_1:def 13;
-            hence thesis by TOPS_2:51;
-         end;
-         then reconsider y as Subset of [#](T) by TARSKI:def 3;
+         reconsider y as Subset of [#](T);
          take y;
          thus thesis;
       end;
@@ -606,7 +597,7 @@ proof
    A3:for x being Subset of [#](S)
     holds EF[x,F.x qua Subset of [#](T)] from FUNCT_2:sch 3
 (A2);
-         Q c= bool [#](S) & dom F = bool [#](S) by FUNCT_2:def 1,TOPS_2:1;
+         Q c= bool [#](S) & dom F = bool [#](S) by FUNCT_2:def 1;
       then reconsider q = F*s as FinSequence by A1,FINSEQ_1:20;
       A4: F.:Q = f"Q
       proof
@@ -619,20 +610,18 @@ proof
               x in F.:Q;
                   then consider y being set such that
                A5:y in dom F & y in Q & x = F.y by FUNCT_1:def 12;
-               A6:dom F = bool [#](S) by FUNCT_2:def 1;
                   reconsider y as Subset of S by A5;
-                     F.y = f"y by A3,A5,A6;
+                     F.y = f"y by A3;
                   hence thesis by A5,Def1;
             end;
             assume
-         A7:x in f"Q;
+         A6:x in f"Q;
             then reconsider x as Subset of T;
             consider y being Subset of S such that
-         A8:y in Q & x = f"y by A7,Def1;
-            A9: Q c= bool [#](S) by TOPS_2:1;
-        then A10:x = F.y by A3,A8;
+         A7:y in Q & x = f"y by A6,Def1;
+        A8:x = F.y by A3,A7;
                dom F = bool [#](S) by FUNCT_2:def 1;
-            hence thesis by A8,A9,A10,FUNCT_1:def 12;
+            hence thesis by A7,A8,FUNCT_1:def 12;
          end;
          hence thesis by TARSKI:2;
       end;
@@ -665,29 +654,17 @@ proof
          let x be Subset of [#](T);
          reconsider x as set;
          set y = f.:x;
-            f.:x c= [#](S)
-         proof
-            let z be set;
-            assume z in f.:x;
-            then consider w being set such that
-         A3:w in dom f & w in x & z = f.w by FUNCT_1:def 12;
-               [#](T) = the carrier of T & [#](S) = the carrier of S
-            by PRE_TOPC:12;
-            then reconsider f as Function of [#](T),[#](S);
-               f.w in [#](S) by A3,FUNCT_2:7;
-            hence thesis by A3;
-         end;
-         then reconsider y as Subset of [#](S);
+         reconsider y as Subset of [#](S);
          take y;
          thus thesis;
       end;
       consider F being Function of bool [#](T),bool [#](S) such that
-   A4:for x being Subset of [#](T)
+   A3:for x being Subset of [#](T)
     holds EF[x,F.x qua Subset of [#](S)] from FUNCT_2:sch 3
 (A2);
-         P c= bool [#](T) & dom F = bool [#](T) by FUNCT_2:def 1,TOPS_2:1;
+         P c= bool [#](T) & dom F = bool [#](T) by FUNCT_2:def 1;
       then reconsider q = F*s as FinSequence by A1,FINSEQ_1:20;
-      A5: F.:P = f.:P
+      A4: F.:P = f.:P
       proof
             for x being set holds x in F.:P iff x in f.:P
          proof
@@ -697,23 +674,21 @@ proof
                assume
               x in F.:P;
                then consider y being set such that
-            A6:y in dom F & y in P & x = F.y by FUNCT_1:def 12;
-            A7:dom F = bool [#](T) by FUNCT_2:def 1;
-               reconsider y as Subset of T by A6;
-                  F.y = f.:y by A4,A6,A7;
-               hence thesis by A6,Def2;
+            A5:y in dom F & y in P & x = F.y by FUNCT_1:def 12;
+               reconsider y as Subset of T by A5;
+                  F.y = f.:y by A3;
+               hence thesis by A5,Def2;
             end;
             thus x in f.:P implies x in F.:P
             proof
                assume
-           A8:x in f.:P;
+           A6:x in f.:P;
                then reconsider x as Subset of S;
                consider y being Subset of T such that
-           A9:y in P & x = f.:y by A8,Def2;
-               A10: P c= bool [#](T) by TOPS_2:1;
-           then A11:x = F.y by A4,A9;
+           A7:y in P & x = f.:y by A6,Def2;
+           A8:x = F.y by A3,A7;
                   dom F = bool [#](T) by FUNCT_2:def 1;
-               hence thesis by A9,A10,A11,FUNCT_1:def 12;
+               hence thesis by A7,A8,FUNCT_1:def 12;
             end;
          end;
          hence thesis by TARSKI:2;
@@ -721,7 +696,7 @@ proof
          ex q being FinSequence st rng q = f.:P
       proof
          take q;
-         thus thesis by A1,A5,RELAT_1:160;
+         thus thesis by A1,A4,RELAT_1:160;
       end;
       hence thesis by FINSEQ_1:73;
 end;
@@ -765,7 +740,7 @@ A4:    D = B;
          then reconsider x as Subset of T;
          consider y being Subset of S such that
      A7:y in F & x = f"y by A1,A6,Def1;
-         reconsider y as Subset of [#](S) by PRE_TOPC:12;
+         reconsider y as Subset of [#](S);
          take y;
          thus thesis by A7;
       end;
@@ -871,9 +846,8 @@ proof
    let P be Subset of T;
    assume
 A1:P is compact & f is continuous;
-      P is Subset of [#]T by PRE_TOPC:12;
-then P c= [#]T;
-then A2:P c= dom f by TOPS_2:51;
+P c= [#]T;
+then A2:P c= dom f by FUNCT_2:def 1;
       for F0 being Subset-Family of S st
      (F0 is_a_cover_of f.:P & F0 is open)
    ex G being Subset-Family of S st
@@ -1714,10 +1688,10 @@ A1:P <> {} & P is compact;
    A10: dist(x2,p2) <= dist(x1,p2) by A1,A2,A3,A7,Th25;
       dist(x1,p1) <= dist(x2,p1) by A1,A2,A3,A5,Th25;
       then dist(x1,p1) <= dist(x2,p2) + dist(p1,p2)
-      by A9,XREAL_1:2;
+      by A9,XXREAL_0:2;
    then A11:dist(x1,p1) - dist(x2,p2) <= dist(p1,p2) by XREAL_1:22;
          dist(x2,p2) <= dist(x1,p1) + dist(p1,p2)
-      by A9,A10,XREAL_1:2;
+      by A9,A10,XXREAL_0:2;
       then dist(x2,p2) - dist(x1,p1) <= dist(p1,p2) by XREAL_1:22;
       then -dist(p1,p2) <= -(dist(x2,p2) - dist(x1,p1)) by XREAL_1:26;
       then -dist(p1,p2) <= dist(x1,p1) - dist(x2,p2);
@@ -2118,7 +2092,7 @@ A8:y in [#]((dist_max(P)).:Q) by A2,A3,A4,FUNCT_1:def 12;
    A9:[#]((dist_max(P)).:Q) is bounded_above by A7,SEQ_4:def 3;
       thus thesis by A8,A9,SEQ_4:def 4;
    end;
-   then A10: dist(x1,x2) <= upper_bound((dist_max(P)).:Q) by A5,A6,XREAL_1:2;
+   then A10: dist(x1,x2) <= upper_bound((dist_max(P)).:Q) by A5,A6,XXREAL_0:2;
    A11: dom (dist_min(P)) = the carrier of TopSpaceMetr(M) by FUNCT_2:def 1;
       x2 in the carrier of M;
    then x2 in the carrier of TopSpaceMetr(M) by TOPMETR:16;
@@ -2137,7 +2111,7 @@ A16:z in [#]((dist_min(P)).:Q) by A2,A11,A12,FUNCT_1:def 12;
    A17:[#]((dist_min(P)).:Q) is bounded_below by A15,SEQ_4:def 3;
       thus thesis by A16,A17,SEQ_4:def 5;
    end;
-   then lower_bound((dist_min(P)).:Q) <= dist(x1,x2) by A13,A14,XREAL_1:2;
+   then lower_bound((dist_min(P)).:Q) <= dist(x1,x2) by A13,A14,XXREAL_0:2;
    hence thesis by A10;
 end;
 

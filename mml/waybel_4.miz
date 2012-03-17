@@ -7,22 +7,21 @@
 environ
 
  vocabularies RELAT_2, ORDERS_1, RELAT_1, WAYBEL_3, LATTICES, LATTICE3,
-      WAYBEL_0, BOOLE, YELLOW_1, SETFAM_1, BHSP_3, YELLOW_0, QUANTAL1,
-      FUNCT_1, FILTER_2, SEQM_3, PARTFUN1, CAT_1, GROUP_1, FUNCOP_1,
-      FUNCT_2, CARD_3, RLVECT_2, WELLORD1, YELLOW_2, FILTER_0, WELLORD2,
-      ORDINAL2, WAYBEL_2, SUBSET_1, ORDERS_2, WAYBEL_4;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1,
-      RELAT_1, RELAT_2, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      STRUCT_0, ORDERS_2, PRE_TOPC, LATTICE3, WELLORD1, YELLOW_0,
-      PRE_CIRC, CARD_3, PRALG_1, YELLOW_1, ALG_1,
+      WAYBEL_0, BOOLE, YELLOW_1, SETFAM_1, BHSP_3, YELLOW_0, QUANTAL1, FUNCT_1,
+      FILTER_2, SEQM_3, PARTFUN1, CAT_1, GROUP_1, FUNCOP_1, FUNCT_2, CARD_3,
+      RLVECT_2, WELLORD1, YELLOW_2, FILTER_0, WELLORD2, ORDINAL2, WAYBEL_2,
+      SUBSET_1, ORDERS_2, WAYBEL_4;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELAT_2,
+      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, STRUCT_0, ORDERS_2, PRE_TOPC,
+      LATTICE3, WELLORD1, YELLOW_0, PRE_CIRC, CARD_3, PRALG_1, YELLOW_1, ALG_1,
       YELLOW_2, YELLOW_4, WAYBEL_0, WAYBEL_1, WAYBEL_2, WAYBEL_3;
  constructors ORDERS_3, PRE_CIRC, TOLER_1, WAYBEL_1, WAYBEL_2, WAYBEL_3,
       YELLOW_4, REALSET2, PRALG_1, SETFAM_1;
  registrations LATTICE3, RELSET_1, STRUCT_0, WAYBEL_0, WAYBEL_2, WAYBEL_3,
-      YELLOW_1, YELLOW_2, SUBSET_1, PARTFUN1, XBOOLE_0;
+      YELLOW_1, YELLOW_2, SUBSET_1, PARTFUN1, XBOOLE_0, FUNCT_2;
  requirements SUBSET, BOOLE;
  definitions LATTICE3, XBOOLE_0, TARSKI, YELLOW_0, WAYBEL_0, RELAT_1, YELLOW_2,
-      ORDERS_3;
+      ORDERS_3, WELLORD1;
  theorems FUNCOP_1, FUNCT_1, FUNCT_2, LATTICE3, ORDERS_2, ORDERS_3, PARTFUN1,
       PRE_TOPC, RELAT_1, RELAT_2, RELSET_1, SETFAM_1, STRUCT_0, TARSKI,
       WAYBEL_0, WAYBEL_3, WAYBEL_2, WELLORD1, WELLORD2, YELLOW_0, YELLOW_1,
@@ -1120,13 +1119,13 @@ A10:     a = f.i' & b = g.i' & a <= b by A4,YELLOW_2:def 1;
     let a,b be set;
     thus [a,b] in the InternalRel of MonSet L implies
    [a,b] in (the InternalRel of (InclPoset Ids L)|^(the carrier of L))|_2
-      the carrier of MonSet L by A3,WELLORD1:16;
+      the carrier of MonSet L by A3,XBOOLE_0:def 3;
    assume [a,b] in (the InternalRel of (InclPoset Ids L)|^
      (the carrier of L) )|_2 the carrier of MonSet L;
 then A11: [a,b] in (the InternalRel of (InclPoset Ids L)|^
      (the carrier of L) ) &
    [a,b] in [:the carrier of MonSet L, the carrier of MonSet L:]
-     by WELLORD1:16;
+     by XBOOLE_0:def 3;
 then A12: a in the carrier of (InclPoset Ids L)|^(the carrier of L) &
       b in the carrier of (InclPoset Ids L)|^(the carrier of L)
        by ZFMISC_1:106;
@@ -2031,19 +2030,6 @@ then A2:downarrow x in X;
  end;
 end;
 
-scheme LambdaC'{ A() -> non empty set, C[set], F,G(set) -> set } :
- ex f being Function st dom f = A() &
-  for x be Element of A() holds
-   (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
-proof
-  consider f being Function such that A1: dom f = A() &
-   for x be set st x in A() holds
-   (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
-            from PARTFUN1:sch 1;
- take f;
- thus thesis by A1;
-end;
-
 definition let L be Semilattice, I be Ideal of L;
   func DownMap I -> Function of L, InclPoset Ids L means :Def17:
   for x be Element of L holds
@@ -2062,7 +2048,7 @@ definition let L be Semilattice, I be Ideal of L;
 A1: dom f = the carrier of L &
   for x be Element of L holds
     ( C[x] implies f.x = F(x) ) &
-    ( not C[x] implies f.x = G(x) ) from LambdaC';
+    ( not C[x] implies f.x = G(x) ) from PARTFUN1:sch 6;
 A2: for a be set st a in the carrier of L ex y be set st y in
      the carrier of InclPoset Ids L & P[a,y]
      proof let a; assume a in the carrier of L;

@@ -14,19 +14,18 @@ environ
       COMPLEX1, FINSEQ_1, FINSEQ_2, QUIN_1, PRE_TOPC, TOPRNS_1, RVSUM_1,
       EUCLID, SQUARE_1, XXREAL_0;
  constructors REAL_1, FINSEQOP, TOPRNS_1, SEQ_1, QUIN_1, SQUARE_1, COMPLEX1,
-      BINOP_2, XXREAL_0;
+      BINOP_2, XXREAL_0, SETWOP_2, PARTFUN1;
  registrations FINSEQ_2, XREAL_0, NAT_1, RELSET_1, SEQ_1, QUIN_1, SQUARE_1,
       MEMBERED;
  requirements REAL, SUBSET, NUMERALS, ARITHM;
- definitions SQUARE_1;
+ definitions SQUARE_1, FINSEQ_2;
  theorems EUCLID, RVSUM_1, REAL_1, REAL_2, FINSEQ_2, XREAL_0, FINSEQ_1,
       FINSEQ_3, SQUARE_1, JGRAPH_1, QUIN_1, ABSVALUE, TOPRNS_1, JORDAN2C,
-      COMPLEX1, XREAL_1;
+      COMPLEX1, XREAL_1, XXREAL_0, FUNCOP_1, FINSEQOP, XCMPLX_1;
 
 begin :: Preliminaries
 
  reserve i, n, j for Nat,
-
          x, y, a for real number,
          v for Element of n-tuples_on REAL,
          p, p1, p2, p3, q, q1, q2 for Point of TOP-REAL n;
@@ -39,7 +38,7 @@ A1: i in Seg n;
 A2: 0*n = n |-> (0 qua set) by EUCLID:def 4;
 then A3: len 0*n = n by FINSEQ_2:69;
     set v1 = v.i, v0 = (0*n).i;
-A4: v0=0 by A1,A2,FINSEQ_2:70;
+A4: v0=0 by A1,A2,FUNCOP_1:13;
     reconsider z = 0*n as Element of n-tuples_on REAL by A3,FINSEQ_2:110;
        mlt(v, z).i = v1 * v0 by RVSUM_1:87
         .= 0 by A4;
@@ -62,7 +61,7 @@ A4: dom 0*n = Seg n by A2,FINSEQ_1:def 3;
     let j;
     assume A5: j in dom 0*n;
     hence mlt(v,0*n).j = 0 by A4,Th1
-      .= (n |-> 0).j by A4,A5,FINSEQ_2:70
+      .= (n |-> 0).j by A4,A5,FUNCOP_1:13
       .= (0*n).j by EUCLID:def 4;
     end;
   hence thesis by A3,FINSEQ_1:17;
@@ -261,7 +260,7 @@ theorem Th15:
 proof let x be FinSequence of REAL;
  thus |(x,x)|=0 implies x=0*(len x)
   proof assume |(x,x)|=0; then |.x.|^2=0 by Th12;
-    then A1: |.x.|=0 by SQUARE_1:73;
+    then A1: |.x.|=0 by XCMPLX_1:6;
     reconsider y=x as Element of REAL len x by JORDAN2C:52;
        y=0*(len x) by A1,EUCLID:11;
    hence thesis;
@@ -535,7 +534,7 @@ A10:    len (t * x)=len x by Th8;
         hence thesis;
       end;
       set w=abs( |(x,y)| ), u=|(x,y)|;
-A11:   0 <= w^2 by SQUARE_1:72;
+A11:   0 <= w^2 by XREAL_1:65;
 A12:   abs(|(x,y)|) >= 0 by COMPLEX1:132;
 A13:  |(y,y)| >= 0 by Th11;
          delta(|(x,x)|,(2 * (|(x,y)|)),|(y,y)|) <= 0 by A8,A9,QUIN_1:10;
@@ -567,12 +566,12 @@ theorem :: Triangle
     A5: (|.x+y.|)^2 = (|.x.|)^2 + 2*|(y, x)| + (|.y.|)^2 by A1,Th33;
     A6: |(x,y)| <= abs(|(x,y)|) by ABSVALUE:11;
         abs(|(x,y)|) <= |.x.|*|.y.| by A1,Th37;
-     then |(x,y)| <= |.x.|*|.y.| by A6,XREAL_1:2;
+     then |(x,y)| <= |.x.|*|.y.| by A6,XXREAL_0:2;
      then 2*|(x,y)| <= 2*(|.x.|*|.y.|) by XREAL_1:66;
      then (|.x.|)^2+ 2*|(x,y)|<=(|.x.|)^2 + 2*(|.x.|*|.y.|) by XREAL_1:9;
     then (|.x+y.|)^2 <= (|.x.|)^2 + 2*|.x.|*|.y.|+(|.y.|)^2 by A5,XREAL_1:9;
     then A7: (|.x+y.|)^2 <= (|.x.| + |.y.|)^2;
-       0<= (|.x+y.|)^2 by SQUARE_1:72;
+       0<= (|.x+y.|)^2 by XREAL_1:65;
     then sqrt((|.x+y.|)^2) <= sqrt((|.x.| + |.y.|)^2) by A7,SQUARE_1:94;
     then |.x+y.| <= sqrt((|.x.| + |.y.|)^2) by A2,SQUARE_1:89;
     hence thesis by A4,SQUARE_1:89;
@@ -792,7 +791,7 @@ theorem Th62:
     proof
       assume |(p,p)| = 0;
       then |.p.|^2 = 0 by Th58;
-      hence |.p.| = 0 by SQUARE_1:73;
+      hence |.p.| = 0 by XCMPLX_1:6;
     end;
     hence thesis by Th58,SQUARE_1:60;
   end;
@@ -945,7 +944,7 @@ A8:    for t be real number holds
          hence thesis;
        end;
        set w=abs( |(x,y)| ),u=|(x,y)|;
-  A9:  0 <= w^2 by SQUARE_1:72;
+  A9:  0 <= w^2 by XREAL_1:65;
   A10:  abs(|(x,y)|) >= 0 by COMPLEX1:132;
   A11: |(y,y)| >= 0 by Th57;
           delta(|(x,x)|,(2 * (|(x,y)|)),|(y,y)|) <= 0 by A7,A8,QUIN_1:10;
@@ -975,12 +974,12 @@ then A3: 0+0 <= |.p.| + |.q.| by A2,XREAL_1:9;
     A4: (|.p+q.|)^2 = (|.p.|)^2 + 2*|(q, p)| + (|.q.|)^2 by Th67;
     A5: |(p,q)| <= abs(|(p,q)|) by ABSVALUE:11;
         abs(|(p,q)|) <= |.p.|*|.q.| by Th73;
-     then |(p,q)| <= |.p.|*|.q.| by A5,XREAL_1:2;
+     then |(p,q)| <= |.p.|*|.q.| by A5,XXREAL_0:2;
      then 2*|(p,q)| <= 2*(|.p.|*|.q.|) by XREAL_1:66;
      then (|.p.|)^2+ 2*|(p,q)|<=(|.p.|)^2 + 2*(|.p.|*|.q.|) by XREAL_1:9;
     then (|.p+q.|)^2 <= (|.p.|)^2 + 2*|.p.|*|.q.|+(|.q.|)^2 by A4,XREAL_1:9;
     then A6: (|.p+q.|)^2 <= (|.p.| + |.q.|)^2;
-       0<= (|.p+q.|)^2 by SQUARE_1:72;
+       0<= (|.p+q.|)^2 by XREAL_1:65;
     then sqrt((|.p+q.|)^2) <= sqrt((|.p.| + |.q.|)^2) by A6,SQUARE_1:94;
     then |.p+q.| <= sqrt((|.p.| + |.q.|)^2) by A1,SQUARE_1:89;
    hence thesis by A3,SQUARE_1:89;

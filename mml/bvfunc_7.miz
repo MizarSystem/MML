@@ -36,7 +36,7 @@ A2:((a 'imp' b) '&' ('not' a 'imp' b)).x
 a).x 'or' (b).x) by BVFUNC_1:def 11
   .=('not' (a).x 'or' (b).x) '&' ('not' 'not'
 (a).x 'or' (b).x) by VALUAT_1:def 5
-  .=('not' (a).x 'or' (b).x) '&' ((a).x 'or' (b).x) by MARGREL1:40;
+  .=('not' (a).x 'or' (b).x) '&' ((a).x 'or' (b).x);
        now per cases by MARGREL1:39;
      case (a).x=TRUE;
      then ((a 'imp' b) '&' ('not' a 'imp' b)).x
@@ -309,7 +309,7 @@ proof
   .='not'( (a).x '&' ('not' b).x) 'or' (c).x by VALUAT_1:def 6
   .=('not' (a).x 'or' 'not' ('not' b).x) 'or' (c).x by BINARITH:9
   .=('not' (a).x 'or' 'not' 'not' (b).x) 'or' (c).x by VALUAT_1:def 5
-  .=('not' (a).x 'or' (b).x) 'or' (c).x by MARGREL1:40
+  .=('not' (a).x 'or' (b).x) 'or' (c).x
   .='not' (a).x 'or' ((b).x 'or' (c).x) by BINARITH:20
   .='not' (a).x 'or' (b 'or' c).x by BVFUNC_1:def 7
   .=(a 'imp' (b 'or' c)).x by BVFUNC_1:def 11;
@@ -611,16 +611,16 @@ proof
 then A1:'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
     A2: (b).z=TRUE or (b).z=FALSE by MARGREL1:39;
        now per cases by A1,A2,BINARITH:7;
-     case A3:'not' (a).z=TRUE;
+     case A3:'not' a.z=TRUE;
         ((c 'imp' a) 'imp' (c 'imp' b)).z
     ='not' (c 'imp' a).z 'or' (c 'imp' b).z by BVFUNC_1:def 11
-   .='not'( 'not' (c).z 'or' (a).z) 'or' (c 'imp' b).z by BVFUNC_1:def 11
-   .=('not' 'not' (c).z '&' TRUE) 'or' (c 'imp' b).z by A3,BINARITH:10
-   .=(TRUE '&' (c).z) 'or' (c 'imp' b).z by MARGREL1:40
+   .='not'( 'not' c.z 'or' a.z) 'or' (c 'imp' b).z by BVFUNC_1:def 11
+   .=('not' 'not' c.z '&' TRUE) 'or' (c 'imp' b).z by A3,BINARITH:10
+   .=(TRUE '&' c.z) 'or' (c 'imp' b).z
    .=(c).z 'or' (c 'imp' b).z by MARGREL1:50
-   .=(c).z 'or' ('not' (c).z 'or' (b).z) by BVFUNC_1:def 11
-   .=((c).z 'or' 'not' (c).z) 'or' (b).z by BINARITH:20
-   .=TRUE 'or' (b).z by BINARITH:18
+   .=(c).z 'or' ('not' c.z 'or' b.z) by BVFUNC_1:def 11
+   .=((c).z 'or' 'not' c.z) 'or' b.z by BINARITH:20
+   .=TRUE 'or' b.z by BINARITH:18
    .=TRUE by BINARITH:19;
      hence thesis;
      end;
@@ -1112,10 +1112,8 @@ A8:((a 'imp' c) 'eqv' (b 'imp' c)).z
    by BINARITH:10
   .=(((a).z '&' 'not' (c).z) 'or' ('not' (b).z 'or' (c).z)) '&'
     (('not' 'not' (b).z '&' 'not' (c).z) 'or' ('not' (a).z 'or' (c).z))
-   by MARGREL1:40
   .=(((a).z '&' 'not' (c).z) 'or' ('not' (b).z 'or' (c).z)) '&'
-    (((b).z '&' 'not' (c).z) 'or' ('not' (a).z 'or' (c).z))
-   by MARGREL1:40;
+    (((b).z '&' 'not' (c).z) 'or' ('not' (a).z 'or' (c).z));
       now per cases by A3,A4,BINARITH:7;
    case A9:'not' (a).z=TRUE;
      then A10:(a).z=FALSE by MARGREL1:41;
@@ -1207,10 +1205,8 @@ A8:((c 'imp' a) 'eqv' (c 'imp' b)).z
    by BINARITH:10
   .=(((c).z '&' 'not' (a).z) 'or' ('not' (c).z 'or' (b).z)) '&'
     (('not' 'not' (c).z '&' 'not' (b).z) 'or' ('not' (c).z 'or' (a).z))
-   by MARGREL1:40
   .=(((c).z '&' 'not' (a).z) 'or' ('not' (c).z 'or' (b).z)) '&'
-    (((c).z '&' 'not' (b).z) 'or' ('not' (c).z 'or' (a).z))
-   by MARGREL1:40;
+    (((c).z '&' 'not' (b).z) 'or' ('not' (c).z 'or' (a).z));
       now per cases by A3,A4,BINARITH:7;
    case A9:'not' (a).z=TRUE;
      then A10:(a).z=FALSE by MARGREL1:41;
@@ -1697,7 +1693,6 @@ a 'or' b)).z
    by BINARITH:10
   .=(((a).z '&' 'not' (b).z) 'or' (b).z) '&' ('not' b 'or' ('not'
 a 'or' b)).z
-   by MARGREL1:40
   .=(((a).z '&' 'not' (b).z) 'or' (b).z) '&'
   (('not' b).z 'or' ('not' a 'or' b).z)
    by BVFUNC_1:def 7
@@ -1757,7 +1752,6 @@ b 'or' a)).z by VALUAT_1:def 5
    by BINARITH:10
   .=(((b).z '&' 'not' (a).z) 'or' (a).z) '&' ('not' a 'or' ('not'
 b 'or' a)).z
-   by MARGREL1:40
   .=(((b).z '&' 'not' (a).z) 'or' (a).z) '&'
   (('not' a).z 'or' ('not' b 'or' a).z)
    by BVFUNC_1:def 7

@@ -10,21 +10,23 @@ environ
       COMPLSP1, COMPLEX1, EUCLID_2, ARYTM_3, XCMPLX_0, ARYTM, RLVECT_1,
       MATRIX_1, TREES_1, BOOLE, QC_LANG1, INCSP_1, MATRIXC1, SETWISEO,
       FINSEQ_4, MATRIX_5, COMPLFLD, VECTSP_1;
- notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, RELAT_1, FUNCT_1,
-      FUNCT_2, ZFMISC_1, NAT_1, PARTFUN1, BINOP_1, FUNCOP_1, FINSEQ_1,
-      FINSEQOP, COMPLSP1, COMPLEX1, RVSUM_1, FINSEQ_2, BINOP_2, EUCLID_2,
-      ORDINAL1, MATRIX_5, MATRIX_1, MATRIX_3, MATRIX_4, RLVECT_1, COMPLSP2,
-      SETWOP_2, COMPLFLD, BINARITH, FINSEQ_4, STRUCT_0, GROUP_1, XXREAL_0;
- constructors NAT_1, SETWISEO, MEMBERED, PARTFUN1, FINSOP_1, EUCLID_2,
-      MATRIX_5, MATRIX_4, MATRIX_3, COMPLSP2, BINARITH, FINSEQ_4, XXREAL_0;
+ notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0,
+      XXREAL_0, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2,
+      ZFMISC_1, NAT_1, PARTFUN1, BINOP_1, FUNCOP_1, FINSEQ_1, FINSEQOP,
+      COMPLSP1, COMPLEX1, RVSUM_1, FINSEQ_2, BINOP_2, EUCLID_2, ORDINAL1,
+      MATRIX_5, MATRIX_1, MATRIX_3, MATRIX_4, RLVECT_1, COMPLSP2, SETWOP_2,
+      COMPLFLD, BINARITH, FINSEQ_4, STRUCT_0, GROUP_1;
+ constructors NAT_1, SETWISEO, PARTFUN1, FINSOP_1, EUCLID_2, MATRIX_5,
+      MATRIX_4, MATRIX_3, COMPLSP2, BINARITH, FINSEQ_4, XXREAL_0, FUNCT_2;
  registrations RELSET_1, FINSEQ_2, NAT_1, FUNCT_1, FUNCT_2, BINOP_2, COMPLEX1,
-      XREAL_0, XCMPLX_0, NUMBERS, RELAT_1, ORDINAL2, COMPLFLD;
+      XREAL_0, XCMPLX_0, NUMBERS, RELAT_1, ORDINAL2, COMPLFLD, XXREAL_0;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  theorems FINSEQ_1, FUNCT_1, NAT_1, MATRIX_1, FINSEQ_2, COMPLEX1, BINOP_2,
       FINSEQ_3, XCMPLX_0, ZFMISC_1, COMPLSP1, MATRIX_2, FINSEQOP, COMPLSP2,
       FUNCOP_1, FUNCT_2, FINSOP_1, SETWOP_2, REAL_1, BINARITH, FINSEQ_5,
-      FINSEQ_4, JORDAN3, XREAL_1, MATRIX_3, COMPLFLD, MATRIX_4, MATRIX_5,
-      EUCLID_2, RVSUM_1, NUMBERS, XBOOLE_1;
+      FINSEQ_4, XREAL_1, MATRIX_3, COMPLFLD, MATRIX_4, MATRIX_5, EUCLID_2,
+      RVSUM_1, NUMBERS, XBOOLE_1;
+ definitions MATRIX_1;
  schemes MATRIX_1, FINSEQ_2, FINSEQ_1, FUNCT_2, NAT_1;
 
 begin
@@ -55,8 +57,6 @@ A3:now per cases;
       end;
      end;
      dom M = dom M1 by A2,FINSEQ_3:31;
-     then Indices M1=[:dom M,Seg width M:] &
-       Indices M =[:dom M,Seg width M:] by A3,MATRIX_1:def 5;
   hence thesis by A1,A3,MATRIX_1:def 3;
  end;
  uniqueness
@@ -68,11 +68,9 @@ A6: len M2=len M & width M2 =width M &
             for i,j st [i,j] in Indices M holds M2*(i,j)=(M*(i,j))*';
     now let i,j;
       assume A7:[i,j] in Indices M1;
-      dom M1 = dom M by A5,FINSEQ_3:31;
-      then A8: Indices M1=[:dom M,Seg width M:] &
-      Indices M = [:dom M,Seg width M:]by A5,MATRIX_1:def 5;
+A8:   dom M1 = dom M by A5,FINSEQ_3:31;
       hence M1*(i,j)=(M*(i,j))*' by A5,A7
-                   .=M2*(i,j) by A6,A7,A8;
+                   .=M2*(i,j) by A5,A6,A7,A8;
     end;
   hence M1=M2 by A5,A6,MATRIX_1:21;
  end;
@@ -82,22 +80,16 @@ theorem Th1:
   for M being Matrix of COMPLEX holds
     [i,j] in Indices M iff 1<= i & i<=len M & 1<=j & j<=width M
 proof let M be Matrix of COMPLEX;
-A1: [i,j] in Indices M implies 1<= i & i<=len M & 1<=j & j<=width M
+  thus [i,j] in Indices M implies 1<= i & i<=len M & 1<=j & j<=width M
   proof
     assume [i,j] in Indices M;then
-    [i,j] in [:dom M,Seg width M:] by MATRIX_1:def 5;then
     [i,j] in [:Seg len M,Seg width M:] by FINSEQ_1:def 3;then
     i in Seg len M & j in Seg width M by ZFMISC_1:106;
     hence thesis by FINSEQ_1:3;
   end;
-  1<= i & i<=len M & 1<=j & j<=width M implies [i,j] in Indices M
-  proof
-    assume 1<= i & i<=len M & 1<=j & j<=width M;then
-    i in dom M & j in Seg width M by FINSEQ_1:3,FINSEQ_3:27;then
-    [i,j] in [:dom M,Seg width M:] by ZFMISC_1:106;
-    hence thesis by MATRIX_1:def 5;
-  end;
-  hence thesis by A1;
+  assume 1<= i & i<=len M & 1<=j & j<=width M;then
+  i in dom M & j in Seg width M by FINSEQ_1:3,FINSEQ_3:27;
+  hence thesis by ZFMISC_1:106;
 end;
 
 theorem Th2:
@@ -515,10 +507,8 @@ definition let F1,F2 be FinSequence of COMPLEX;
    assume
 A1: F = multcomplex.:(F1,F2);
 A2: dom multcomplex = [:COMPLEX,COMPLEX:] by FUNCT_2:def 1;
-A3: rng F1 c= COMPLEX by FINSEQ_1:def 4;
-A4: rng F2 c= COMPLEX by FINSEQ_1:def 4;
-    then A5:  [:rng F2, rng F1:] c= dom multcomplex by A2,A3,ZFMISC_1:119;
-       [:rng F1, rng F2:] c= dom multcomplex by A2,A3,A4,ZFMISC_1:119;
+A5:  [:rng F2, rng F1:] c= dom multcomplex by A2,ZFMISC_1:119;
+       [:rng F1, rng F2:] c= dom multcomplex by A2,ZFMISC_1:119;
     then A6:  dom(multcomplex.:(F1,F2)) = dom F1 /\ dom F2 by FUNCOP_1:84
           .= dom(multcomplex.:(F2,F1)) by A5,FUNCOP_1:84;
      for z being set st z in dom(multcomplex.:(F2,F1))
@@ -581,11 +571,9 @@ theorem Th16:
 proof
   thus a*mlt(R1,R2)
       = (multcomplex[;](a,id COMPLEX))*(mlt(R1,R2)) by Lm1
-     .= (multcomplex[;](a,id COMPLEX))*(multcomplex.:(R1,R2))
      .= multcomplex.:((multcomplex[;](a,id COMPLEX))*R1,R2)
         by FINSEQOP:27
-     .= multcomplex.:(a*R1,R2) by Lm1
-     .= mlt(a*R1,R2);
+     .= mlt(a*R1,R2) by Lm1;
 end;
 
 definition let M be Matrix of COMPLEX;
@@ -610,8 +598,7 @@ proof let F1,F2 be FinSequence of COMPLEX,i be Nat;
   assume
 A1: i in dom mlt(F1,F2);
   set r1 = F1.i, r2 = F2.i;
-  mlt(F1,F2) = multcomplex.:(F1,F2) & i in dom mlt(F1,F2) by A1;
-  then mlt(F1,F2).i = multcomplex.(r1,r2) by FUNCOP_1:28;
+  mlt(F1,F2).i = multcomplex.(r1,r2) by FUNCOP_1:28,A1;
   hence thesis by BINOP_2:def 5;
 end;
 
@@ -775,8 +762,7 @@ theorem Th24:
 proof let F be FinSequence of COMPLEX;
    assume len F >= 1;then
 A1:len (F*') >= 1 by COMPLSP2:def 1;
-   Sum(F*') = addcomplex $$ (F*')
-           .=(addcomplex $$ F)*' by Th23,A1
+   Sum(F*') =(addcomplex $$ F)*' by Th23,A1
            .=(Sum F)*';
    hence thesis;
 end;
@@ -873,10 +859,8 @@ theorem Th29:
    Sum(a*F) = a*(Sum F)
  proof let F be FinSequence of COMPLEX,a be Element of COMPLEX;
    set rM = multcomplex[;](a,id COMPLEX);
-   thus Sum (a*F) = addcomplex $$(a*F)
-    .= addcomplex $$(rM*F) by Lm1
+   thus Sum (a*F) = addcomplex $$(rM*F) by Lm1
     .= rM.(addcomplex $$F) by COMPLSP1:15,COMPLSP1:7,SETWOP_2:41
-    .= rM.(Sum F)
     .= a*(Sum F) by Lm2;
  end;
 
@@ -885,8 +869,7 @@ definition let x be FinSequence of REAL;
     x;
   coherence
   proof
-    rng x c= REAL by FINSEQ_1:def 4;
-    then rng x c= COMPLEX by XBOOLE_1:1,NUMBERS:11;
+    rng x c= COMPLEX by XBOOLE_1:1,NUMBERS:11;
     hence thesis by FINSEQ_1:def 4;
   end;
 end;
@@ -982,12 +965,9 @@ proof let F1,F2 be FinSequence of COMPLEX;
   assume A1: len F1=len F2;
    reconsider x2=F1 as Element of (len F1)-tuples_on COMPLEX by FINSEQ_2:110;
    reconsider y2=F2 as Element of (len F2)-tuples_on COMPLEX by FINSEQ_2:110;
-   Sum(F1 - F2) = addcomplex $$(F1 - F2)
-    .= addcomplex $$(diffcomplex.:(F1,F2)) by COMPLSP1:def 8
+   Sum(F1 - F2) = addcomplex $$(diffcomplex.:(F1,F2)) by COMPLSP1:def 8
     .= diffcomplex.(addcomplex$$x2,addcomplex$$y2)
        by SETWOP_2:48,A1,COMPLSP1:def 3,COMPLSP1:7,COMPLSP1:8
-    .= diffcomplex.(Sum F1,addcomplex$$F2)
-    .= diffcomplex.(Sum F1,Sum F2)
     .= Sum F1 - Sum F2 by BINOP_2:def 4;
   hence thesis;
  end;
@@ -1151,11 +1131,9 @@ proof let F1,F2 be FinSequence of COMPLEX;
   assume A1: len F1=len F2;
    reconsider x2=F1 as Element of (len F1)-tuples_on COMPLEX by FINSEQ_2:110;
    reconsider y2=F2 as Element of (len F2)-tuples_on COMPLEX by FINSEQ_2:110;
-   Sum(F1 + F2) = addcomplex $$(F1 + F2)
-    .= addcomplex $$(addcomplex.:(F1,F2)) by COMPLSP1:def 7
+   Sum(F1 + F2)
+     = addcomplex $$(addcomplex.:(F1,F2)) by COMPLSP1:def 7
     .= addcomplex.(addcomplex$$x2,addcomplex$$y2) by SETWOP_2:46,A1
-    .= addcomplex.(Sum F1,addcomplex$$F2)
-    .= addcomplex.(Sum F1,Sum F2)
     .= Sum F1 + Sum F2 by BINOP_2:def 3;
   hence thesis;
  end;
@@ -1185,8 +1163,7 @@ theorem Th41:
 proof
   let x,y be FinSequence of REAL;
   assume A1: len x=len y;
-  FR2FC mlt(x,y)= mlt(x,y)
-  .=multreal.:(x,y) by RVSUM_1:def 9
+  FR2FC mlt(x,y)=multreal.:(x,y) by RVSUM_1:def 9
   .=multcomplex.:(FR2FC x,FR2FC y) by Th40,A1
   .=mlt(FR2FC x,FR2FC y);
   hence thesis;
@@ -1217,44 +1194,36 @@ proof let x,y be FinSequence of COMPLEX;
    set Imy=FR2FC Im y;
    set Imx=FR2FC Im x;
    A11: len ((<i>)*(Imy))=len Imy by COMPLSP2:3
-       .= len Im y .= len y by COMPLSP2:48;
+       .= len y by COMPLSP2:48;
    A12: len ((<i>)*(Imx))=len Imx by COMPLSP2:3
-       .= len Im x .= len x by COMPLSP2:48
+       .= len x by COMPLSP2:48
        .= len Re x by COMPLSP2:48
        .= len Rex;
    A13: len ((<i>)*(Imx))=len Imx by COMPLSP2:3
-      .= len Im x
       .= len y by A1,COMPLSP2:48 .= len (y*') by COMPLSP2:def 1;
-   A14: len Imx=len Im x
-      .= len y by A1,COMPLSP2:48 .= len (y*') by COMPLSP2:def 1;
-   A15: len Rey = len Re y .= len y by COMPLSP2:48;
-   A16: len Rex = len Re x .= len x by COMPLSP2:48;
-   A17: len Imy = len Im y .= len y by COMPLSP2:48;
-   A18: len Imx = len Im x .= len x by COMPLSP2:48;
+   A14: len Imx = len y by A1,COMPLSP2:48 .= len (y*') by COMPLSP2:def 1;
+   A15: len Rey = len y by COMPLSP2:48;
+   A16: len Rex = len x by COMPLSP2:48;
+   A17: len Imy = len y by COMPLSP2:48;
+   A18: len Imx = len x by COMPLSP2:48;
    A19: len (-(mlt(Imx,Imy)))=len (mlt(Imx,Imy)) by COMPLSP2:5;
    A20: len (mlt(Imx,Imy)) = len Imx by Th18,A18,A17,A1
-       .= len Im x
        .= len x by COMPLSP2:48;
    A21: len (mlt(Imx,Rey)) = len Imx by Th18,A18,A15,A1
-       .= len Im x
        .= len x by COMPLSP2:48;
    A22: len mlt(Rex,Rey)
         = len Rex by Th18,A16,A15,A1
-       .= len Re x
        .= len x by COMPLSP2:48;
    A23: len mlt(Rex,Imy)
         = len Rex by Th18,A16,A17,A1
-       .= len Re x
        .= len x by COMPLSP2:48;
    A24: len (<i>*(mlt(Rex,Imy)))
        = len mlt(Rex,Imy) by COMPLSP2:3
       .= len Rex by Th18,A16,A17,A1
-      .= len Re x
       .= len x by COMPLSP2:48;
    A25: len (<i>*mlt(Imx,Rey))
        = len (mlt(Imx,Rey)) by COMPLSP2:3
       .= len Imx by Th18,A18,A15,A1
-      .= len Im x
       .= len x by COMPLSP2:48;
    A26: len ((mlt(Rex,Rey) - ((<i>*(mlt(Rex,Imy))))))
        = len (<i>*mlt(Imx,Rey)) by A25,COMPLSP2:7,A22,A24;
@@ -1271,8 +1240,8 @@ proof let x,y be FinSequence of COMPLEX;
    A31: len (mlt(Rex,Rey)-mlt(Rex,<i>*Imy))=len (mlt(Rex,Rey))
        by COMPLSP2:7,A22,A29,A16;
    A32: len (x*') = len x by COMPLSP2:def 1;
-   A33: Rex = Re x .= 1/2*(x+x*') by COMPLSP2:def 2;
-   A34: Imx = Im x .= (-1/2*<i>)*(x-x*') by COMPLSP2:def 3;
+   A33: Rex = 1/2*(x+x*') by COMPLSP2:def 2;
+   A34: Imx = (-1/2*<i>)*(x-x*') by COMPLSP2:def 3;
    A35: <i>*Imx = <i>*(-1/2*<i>)*(x-x*') by COMPLSP2:53,A34
       .= (1/2)*(x-x*');
    A36: len (x+x*') = len x by A32,COMPLSP2:6;
@@ -1299,8 +1268,8 @@ proof let x,y be FinSequence of COMPLEX;
      .= (1/2+1/2)*x by COMPLSP2:63
      .= x by A39;
    A42: len (y*') = len y by COMPLSP2:def 1;
-   A43: Rey = Re y .= 1/2*(y+y*') by COMPLSP2:def 2;
-   A44: Imy = Im y .= (-1/2*<i>)*(y-y*') by COMPLSP2:def 3;
+   A43: Rey = 1/2*(y+y*') by COMPLSP2:def 2;
+   A44: Imy = (-1/2*<i>)*(y-y*') by COMPLSP2:def 3;
    A45: <i>*Imy = <i>*(-1/2*<i>)*(y-y*') by COMPLSP2:53,A44
       .= (1/2)*(y-y*');
    A46: len (y+y*') = len y by A42,COMPLSP2:6;
@@ -1379,15 +1348,8 @@ proof let x,y be FinSequence of COMPLEX;
 end;
 
 theorem
-  for A,B being Matrix of COMPLEX st
-  len A=len B & width A=width B holds Indices A=Indices B
-proof let A,B be Matrix of COMPLEX;
-  assume A1: len A=len B & width A=width B;
-A2: Indices A = [:dom A,Seg width A:] by MATRIX_1:def 5;
-A3: Indices B = [:dom B,Seg width B:] by MATRIX_1:def 5;
-  dom A = Seg len A by FINSEQ_1:def 3;
-  hence Indices A = Indices B by A1,A2,A3,FINSEQ_1:def 3;
-end;
+  for C being set, A,B being Matrix of C st
+  len A=len B & width A=width B holds Indices A=Indices B by MATRIX_4:55;
 
 theorem
   for i,j being Nat,M1,M2 being Matrix of COMPLEX
@@ -1411,7 +1373,7 @@ proof let i,j be Nat,M1,M2 be Matrix of COMPLEX;
   A11: j in Seg len M1 & i in Seg width M1 by FINSEQ_1:3,A6,A5,A1;
   A12: [j,i] in [:Seg len M1,Seg width M1:] by ZFMISC_1:106,A11;
   A13: [j,i] in [:dom M1,Seg width M1:] by FINSEQ_1:def 3,A12;
-  A14: [j,i] in Indices M1 by MATRIX_1:def 5,A13;
+  A14: [j,i] in Indices M1 by A13;
   i in Seg width (M1+M2) by FINSEQ_1:3,A6,A5,A2;
   hence (Line(M1+M2,j)).i
     = (M1+M2)*(j,i) by MATRIX_1:def 8
@@ -1502,10 +1464,8 @@ proof let F1,F2,F3 be FinSequence of COMPLEX;
   reconsider f1=F1 as Element of (len F1)-tuples_on COMPLEX by FINSEQ_2:110;
   reconsider f2=F2 as Element of (len F2)-tuples_on COMPLEX by FINSEQ_2:110;
   reconsider f3=F3 as Element of (len F3)-tuples_on COMPLEX by FINSEQ_2:110;
-  thus mlt(F1,mlt(F2,F3)) = multcomplex.:(F1,mlt(F2,F3))
-       .= multcomplex.:(F1,multcomplex.:(F2,F3))
-       .= multcomplex.:(multcomplex.:(f1,f2),f3) by FINSEQOP:29,A1
-       .= multcomplex.:(mlt(F1,F2),F3)
+  thus mlt(F1,mlt(F2,F3))
+        = multcomplex.:(multcomplex.:(f1,f2),f3) by FINSEQOP:29,A1
        .= mlt(mlt(F1,F2),F3);
 end;
 
@@ -1513,10 +1473,9 @@ theorem
   for F being FinSequence of COMPLEX holds
    Sum -F = -(Sum F)
 proof let F be FinSequence of COMPLEX;
-  thus Sum -F = addcomplex $$(-F)
-   .= addcomplex $$(compcomplex*F) by COMPLSP1:def 9
+  thus Sum -F
+    = addcomplex $$(compcomplex*F) by COMPLSP1:def 9
    .= compcomplex.(addcomplex $$ F) by COMPLSP1:7,COMPLSP1:8,SETWOP_2:42
-   .= compcomplex.(Sum F)
    .= -(Sum F) by BINOP_2:def 1;
 end;
 
@@ -1528,10 +1487,8 @@ theorem Th51:
   for F1,F2 being FinSequence of COMPLEX holds
     Sum(F1^F2) = Sum F1 + Sum F2
  proof let F1,F2 be FinSequence of COMPLEX;
-  thus Sum(F1^F2) = addcomplex $$ (F1^F2)
-   .= addcomplex.(addcomplex $$ F1,addcomplex $$ F2) by FINSOP_1:6
-   .= addcomplex.(Sum F1,addcomplex $$ F2)
-   .= addcomplex.(Sum F1,Sum F2)
+  thus Sum(F1^F2)
+    = addcomplex.(addcomplex $$ F1,addcomplex $$ F2) by FINSOP_1:6
    .= Sum F1 + Sum F2 by BINOP_2:def 3;
  end;
 
@@ -1917,8 +1874,7 @@ theorem Th56:
     SumAll M = SumAll (M@)
 proof let M be Matrix of COMPLEX;
   assume A1: len M > 0;
-  SumAll M = Sum LineSum M
-  .= Sum ColSum M by Th54,A1
+  SumAll M = Sum ColSum M by Th54,A1
   .= Sum LineSum(M@) by Th55
   .= SumAll(M@);
   hence thesis;
@@ -1947,9 +1903,7 @@ A4:now per cases;
         hence width M1=len y by MATRIX_1:24,A1;
       end;
      end;
-  dom M = dom M1 by A3,FINSEQ_3:31,A1;then
-  Indices M1=[:dom M,Seg width M:] &
-    Indices M =[:dom M,Seg width M:] by A4,MATRIX_1:def 5,A1;
+  dom M = dom M1 by A3,FINSEQ_3:31,A1;
   hence thesis by A2,MATRIX_1:def 3,A1,A4;
  end;
   uniqueness
@@ -1964,7 +1918,7 @@ A7: len M2=len x & width M2=len y & for i,j st [i,j] in Indices M holds
       assume A8:[i,j] in Indices M1;
       dom M1 = dom M by A6,FINSEQ_3:31,A1;
     then A9: Indices M1=[:dom M,Seg width M:] &
-             Indices M= [:dom M,Seg width M:] by A6,MATRIX_1:def 5,A1;
+             Indices M= [:dom M,Seg width M:] by A6,A1;
       hence M1*(i,j)=(x.i)*(M*(i,j))*((y.j)*') by A6,A8
                   .=M2*(i,j) by A7,A8,A9;
     end;
@@ -1979,10 +1933,9 @@ theorem Th57:
 proof let x,y be FinSequence of COMPLEX,M be Matrix of COMPLEX;
   assume A1: len x=len M & len y =width M & len x > 0& len y > 0;
 A2: len (x*') = len x by COMPLSP2:def 1;
-A3: len (M@")= len ((M@)*')
-      .= len (M@) by Def1
+A3: len (M@") = len (M@) by Def1
       .= len y by A1,MATRIX_1:def 7;
-A4: width (M@")= width ((M@)*') .= width (M@) by Def1
+A4: width (M@") = width (M@) by Def1
       .= len x by MATRIX_2:12,A1;
 A5: len ((QuadraticForm(x,M,y))@) = width (QuadraticForm(x,M,y))
       by MATRIX_1:def 7 .= len y by Def13,A1;
@@ -1991,7 +1944,7 @@ A6: len ((QuadraticForm(x,M,y))@) = width (QuadraticForm(x,M,y))
 A7: len ((QuadraticForm(y,M@",x))*')=len (QuadraticForm(y,M@",x))
       by Def1 .= len y by Def13,A3,A4;
 A8: width (QuadraticForm(x,M,y))=len y by Def13,A1;
-A9: len (M@")=len ((M@)*') .= len (M@) by Def1;
+A9: len (M@")=len (M@) by Def1;
 A10: len (M@")=width M by A9,MATRIX_1:def 7;
 A11: len QuadraticForm(y,M@",x) = len y by Def13,A3,A4;
 A12: width ((QuadraticForm(x,M,y))@)
@@ -2032,7 +1985,6 @@ A15: width (QuadraticForm(y,M@",x))= len x by Def13,A3,A4;
       .= ((y.i)*')*(((M@")*(i,j)*'))*((x*')*'.j) by COMPLEX1:121
       .= ((y.i)*')*(((M@")*')*(i,j))*((x*')*'.j) by Def1,A24
       .= ((y.i)*')*(((M@")*')*(i,j))*(x.j) by COMPLSP2:22
-      .= ((y.i)*')*((((M@)*')*')*(i,j))*(x.j)
       .= ((y.i)*')*((M@)*(i,j))*(x.j) by Th2
       .= ((y.i)*')*(M*(j,i))*(x.j) by MATRIX_1:def 7,A19
       .= (x.j)*(M*(j,i))*((y.i)*')
@@ -2162,7 +2114,7 @@ theorem Th62:
 proof let x,y be FinSequence of COMPLEX,M be Matrix of COMPLEX;
  assume A1: len x=width M & len y = len M & len x>0 & len y>0;
   A2: len (M@)=len x by MATRIX_1:def 7,A1;
-  A3: len (M@")=len ((M@)*') .=len (M@) by Def1
+  A3: len (M@")=len (M@) by Def1
        .=len x by MATRIX_1:def 7,A1;
   A4: 0+1<=len y by A1,NAT_1:38;
   A5: width (M@) = len y by A1,MATRIX_2:12;
@@ -2231,7 +2183,6 @@ proof let x,y be FinSequence of COMPLEX,M be Matrix of COMPLEX;
            ((x.i)*(mlt(Line((M@"),i),y))*').j
             =(x.i)*(((mlt(Line((M@"),i),y))*').j) by COMPLSP2:16
            .=(x.i)*((mlt((Line((M@"),i))*',y*')).j) by Th28,A23
-           .=(x.i)*((mlt((Line(((M@)*'),i))*',y*')).j)
            .=(x.i)*((mlt(Line(M@,i),y*')).j) by Th45,A2,A3,A19
            .=(x.i)*(((Line(M@,i)).j)*((y*').j)) by Th19,A34
            .=(x.i)*(((Line(M@,i)).j)*((y.j)*')) by COMPLSP2:def 1,A30,A26
@@ -2268,7 +2219,7 @@ proof let x,y be FinSequence of COMPLEX,
    A8: len (y*')= len M by A1,COMPLSP2:def 1;
    A9: len (x*')= width M by A1,COMPLSP2:def 1;
    A10: len QuadraticForm(y*',M,x*') = len M by A8,A9,Def13;
-   A11: (M@)@"=((M@)@)*' .=M*' by MATRIX_2:15,A1;
+   A11: (M@)@"=M*' by MATRIX_2:15,A1;
    thus |(M*x,y)| = (|(y,M*x)|)*' by Th59,A1,A3
             .= (|(y*',(M*x)*')|) by Th60,A3,A1
             .= |(y*',((M*')*(x*')) )| by Th47,A1,A2
@@ -2277,7 +2228,6 @@ proof let x,y be FinSequence of COMPLEX,
             .= SumAll QuadraticForm(y*',M,x*') by MATRIX_2:15,A1
             .= SumAll((QuadraticForm(y*',M,x*'))@) by Th56,A1,A10
             .= SumAll((QuadraticForm(x*',(M@"),y*'))*') by Th57,A1,A4,A5
-            .= SumAll((QuadraticForm(x*',(M@)*',y*'))*')
             .= SumAll(((QuadraticForm(x,(M@),y))*')*') by Th58,A1,A6,A7
             .= SumAll QuadraticForm(x,M@,y) by Th2;
 end;
@@ -2299,7 +2249,7 @@ theorem
 proof let x,y be FinSequence of COMPLEX, M be Matrix of COMPLEX;
   assume A1: len x=len M & len y =width M & width M>0 & len M>0 &
              len x > 0;
-A2: len ((M@")*x)=len (M@") by Def7 .=len ((M@)*')
+A2: len ((M@")*x)=len (M@") by Def7
                   .=len (M@) by Def1
                   .=width M by MATRIX_1:def 7;
   len (M*y) =len x by A1,Def7;

@@ -16,6 +16,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
@@ -64,20 +65,20 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="10">
-<Func kind="K" nr="401">
+<Func kind="K" nr="421">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="421">
+<Func kind="K" nr="441">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
 <Adjective nr="29" value="false"/>
+<Adjective nr="65"/>
+<Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
-<Adjective nr="69"/>
-<Adjective nr="70"/>
-<Adjective nr="83"/>
+<Adjective nr="81"/>
 </Cluster>
 </FCluster>
 </Registrations>

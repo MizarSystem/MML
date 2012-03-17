@@ -7,10 +7,10 @@
 environ
 
  vocabularies RELAT_1, BOOLE, FUNCT_1, PARTFUN1, FUNCT_2, SGRAPH1, RELAT_2,
-      CAT_4;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
-      FUNCT_1, PARTFUN1;
- constructors TARSKI, PARTFUN1, RELAT_2, XBOOLE_0;
+      CAT_4, FUNCT_3, MCART_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
+      RELSET_1, PARTFUN1, MCART_1;
+ constructors TARSKI, PARTFUN1, RELAT_2, XBOOLE_0, MCART_1;
  registrations FUNCT_1, RELAT_1, RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1,
       PARTFUN1;
  requirements SUBSET, BOOLE;
@@ -127,9 +127,10 @@ theorem :: FUNCT_2:18
     holds f1 = f2;
 
 theorem :: FUNCT_2:19
-  for f being Function of X,Y for g being Function of Y,Z
+  for f being quasi_total Relation of X,Y
+  for g being quasi_total Relation of Y,Z
      st Y = {} implies Z = {} or X = {}
-    holds g*f is Function of X,Z;
+    holds f*g is quasi_total;
 
 theorem :: FUNCT_2:20
   for f being Function of X,Y for g being Function of Y,Z
@@ -233,10 +234,6 @@ theorem :: FUNCT_2:43
 theorem :: FUNCT_2:44
   for f being Function of X,Y holds f.:P c= Y;
 
-definition let X,Y; let f be Function of X,Y; let P;
-  redefine func f.:P -> Subset of Y;
-end;
-
 theorem :: FUNCT_2:45
   for f being Function of X,Y st Y = {} implies X = {} holds f.:X = rng f;
 
@@ -246,10 +243,6 @@ theorem :: FUNCT_2:46
 
 theorem :: FUNCT_2:47
   for f being PartFunc of X,Y holds f"Q c= X;
-
-definition let X,Y; let f be PartFunc of X,Y; let Q;
-  redefine func f"Q -> Subset of X;
-end;
 
 theorem :: FUNCT_2:48
   for f being Function of X,Y st Y = {} implies X = {} holds f"Y = X;
@@ -318,9 +311,9 @@ theorem :: FUNCT_2:66
 :: Function from X into X ::
 ::::::::::::::::::::::::::::
 
-definition let X;
-  let f,g be Function of X,X;
-  redefine func g*f -> Function of X,X;
+registration let X;
+  let f,g be quasi_total PartFunc of X,X;
+  cluster g*f -> quasi_total PartFunc of X,X;
 end;
 
 theorem :: FUNCT_2:67
@@ -335,7 +328,7 @@ theorem :: FUNCT_2:70
 canceled 2;
 
 theorem :: FUNCT_2:73
-  for f,g being Function of X,X st rng f = X & rng g = X holds rng(g*f) = X;
+  for f,g being Relation of X,X st rng f = X & rng g = X holds rng(g*f) = X;
 
 canceled;
 
@@ -364,7 +357,7 @@ theorem :: FUNCT_2:82
 :: Permutation of a set ::
 ::::::::::::::::::::::::::
 
-definition let X, Y be set; let f be Function of X, Y;
+definition let X, Y be set; let f be Relation of X, Y;
   attr f is onto means
 :: FUNCT_2:def 3
   rng f = Y;
@@ -399,8 +392,19 @@ theorem :: FUNCT_2:85
   for f being Function of X,X st f is one-to-one holds
     for x1,x2 st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2;
 
-definition let X; let f,g be Permutation of X;
-  redefine func g*f -> Permutation of X;
+registration let X;
+ let f,g be onto PartFunc of X,X;
+ cluster f*g -> onto PartFunc of X,X;
+end;
+
+registration
+ let f,g be one-to-one Function;
+ cluster g*f -> one-to-one Function;
+end;
+
+registration let X;
+ let f,g be bijective Function of X,X;
+ cluster g*f -> bijective Function of X,X;
 end;
 
 registration let X;
@@ -435,9 +439,9 @@ registration let X,D;
  cluster quasi_total -> total PartFunc of X,D;
 end;
 
-definition let X,D,Z;
+registration let X,D,Z;
   let f be Function of X,D; let g be Function of D,Z;
-  redefine func g*f -> Function of X,Z;
+  cluster g*f -> quasi_total PartFunc of X,Z;
 end;
 
 definition let C be non empty set, D be set; let f be Function of C,D;
@@ -677,3 +681,12 @@ scheme :: FUNCT_2:sch 10
 provided
   for x being Element of X() ex y being Element of Y() st P[x, y];
 
+definition let A,B,C be non empty set;
+ let f be Function of A, [:B,C:];
+ redefine func pr1 f -> Function of A,B means
+:: FUNCT_2:def 6
+  for x being Element of A holds it.x = (f.x)`1;
+ func pr2 f -> Function of A,C means
+:: FUNCT_2:def 7
+  for x being Element of A holds it.x = (f.x)`2;
+end;

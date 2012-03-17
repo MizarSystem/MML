@@ -9,6 +9,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
@@ -20,7 +21,6 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="CLASSES2"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
@@ -42,10 +42,10 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="68"/>
+<Adjective nr="66"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
 <Adjective nr="77"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="14">
@@ -63,10 +63,10 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="82">
+<Adjective nr="80">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="83">
+<Adjective nr="81">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -80,10 +80,10 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="68"/>
+<Adjective nr="66"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
 <Adjective nr="77"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="16">
@@ -96,10 +96,10 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="86">
+<Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="87">
+<Adjective nr="85">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -119,14 +119,14 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="68"/>
+<Adjective nr="66"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
 <Adjective nr="77"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="275">
+<Func kind="K" nr="274">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -149,14 +149,14 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="68"/>
+<Adjective nr="66"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
 <Adjective nr="77"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="285">
+<Func kind="K" nr="284">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

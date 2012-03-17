@@ -10,14 +10,14 @@ environ
       T_0TOPSP, BOOLE, COMPTS_1, FUNCT_3, PARTFUN1, PBOOLE, TARSKI, BORSUK_1,
       TOPS_1, CONNSP_2, SETFAM_1, FINSET_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, FUNCT_1,
-      PBOOLE, FUNCT_2, STRUCT_0, PRE_TOPC, TOPS_2, TOPS_1, COMPTS_1, BORSUK_1,
-      T_0TOPSP, FINSET_1, FUNCT_3, CONNSP_2, GRCAT_1;
+      PBOOLE, RELSET_1, PARTFUN1, FUNCT_2, STRUCT_0, PRE_TOPC, TOPS_2, TOPS_1,
+      COMPTS_1, BORSUK_1, T_0TOPSP, FINSET_1, FUNCT_3, CONNSP_2, GRCAT_1;
  constructors TOPS_2, T_0TOPSP, TOPS_1, COMPTS_1, WAYBEL_3, GRCAT_1, BORSUK_1,
       MEMBERED;
  registrations STRUCT_0, PRE_TOPC, BORSUK_1, BORSUK_2, TOPS_1, WAYBEL_3,
-      WAYBEL12, PSCOMP_1, RELSET_1, SUBSET_1, XBOOLE_0;
+      WAYBEL12, PSCOMP_1, RELSET_1, SUBSET_1, XBOOLE_0, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions TARSKI, TOPS_2, COMPTS_1, T_0TOPSP, FUNCT_1, XBOOLE_0;
+ definitions TARSKI, TOPS_2, COMPTS_1, T_0TOPSP, FUNCT_1, XBOOLE_0, GRCAT_1;
  theorems BORSUK_1, FUNCOP_1, TOPS_2, FUNCT_2, FUNCT_1, PRE_TOPC, TARSKI,
       JORDAN1, TOPS_1, TOPMETR, ZFMISC_1, CONNSP_2, STRUCT_0, FUNCT_3,
       COMPTS_1, FINSET_1, T_0TOPSP, GRCAT_1, YELLOW12, TSEP_1, TOPGRP_1,
@@ -55,9 +55,9 @@ proof
       x be Point of X;
   set Z = {x};
   set f = Y --> x;
-A1:f = (the carrier of Y) --> x by BORSUK_1:def 3;
+A1:f = (the carrier of Y) --> x by BORSUK_1:def 2;
 A2:  x in Z by TARSKI:def 1;
-      the carrier of (X|Z) = Z by JORDAN1:1;
+      the carrier of (X|Z) = Z by PRE_TOPC:29;
   then reconsider g = f as Function of Y, X|Z by A1,A2, FUNCOP_1:57;
       g is continuous by TOPMETR:9;
   hence thesis;
@@ -117,7 +117,7 @@ registration let T be TopStruct,
   cluster T | P -> empty;
   coherence
 proof
-      the carrier of (T | P) = P by JORDAN1:1;
+      the carrier of (T | P) = P by PRE_TOPC:29;
   hence thesis by STRUCT_0:def 1;
 end;
 end;
@@ -237,10 +237,9 @@ A3: f is one-to-one by A1,Th6;
     reconsider KA = <:idZ, idY:> as continuous Function of Y, [:Y, (X|Z):]
       by YELLOW12:41;
 A4: rng KA c= [:rng idZ, rng idY:] by FUNCT_3:71;
-        rng idY c= the carrier of (X|Z) by RELSET_1:12;
-then A5: rng idY c= Z by JORDAN1:1;
-        rng idZ c= the carrier of Y by RELSET_1:12;
-    then [:rng idZ, rng idY:] c= [:the carrier of Y, Z:]
+        rng idY c= the carrier of (X|Z);
+then A5: rng idY c= Z by PRE_TOPC:29;
+    [:rng idZ, rng idY:] c= [:the carrier of Y, Z:]
       by A5,ZFMISC_1:119;
 then A6: rng KA c= [:the carrier of Y, Z:] by A4,XBOOLE_1:1;
         [:the carrier of Y, Z:] c= rng KA
@@ -250,20 +249,20 @@ then A6: rng KA c= [:the carrier of Y, Z:] by A4,XBOOLE_1:1;
       then consider y1, y2 being set such that
 A7:     y1 in the carrier of Y & y2 in {x} & y = [y1,y2] by ZFMISC_1:def 2;
 A8:   y = [y1, x] by A7,TARSKI:def 1;
-A9:   idY.y1 = ((the carrier of Y) --> x).y1 by BORSUK_1:def 3
+A9:   idY.y1 = ((the carrier of Y) --> x).y1 by BORSUK_1:def 2
             .= x by A7,FUNCOP_1:13;
 A10:   y1 in dom KA by A7,FUNCT_2:def 1;
       then KA. y1 = [idZ.y1, idY.y1] by FUNCT_3:def 8
-            .= [y1, x] by A7,A9,GRCAT_1:11;
+            .= [y1, x] by A7,A9,FUNCT_1:35;
       hence thesis by A8,A10,FUNCT_1:def 5;
     end;
 then A11: rng KA = [:the carrier of Y, Z:] by A6,XBOOLE_0:def 10
           .= dom f by A1,FUNCT_3:def 5;
 A12: dom idY = the carrier of Y by FUNCT_2:def 1
            .= dom idZ by FUNCT_2:def 1;
-        rng idZ c= the carrier of Y by RELSET_1:12;
+        rng idZ c= the carrier of Y;
     then f*KA = idZ by A1,A5,A12,FUNCT_3:72
-        .= id the carrier of Y by GRCAT_1:def 11
+        .= id the carrier of Y
         .= id rng f by A2,PRE_TOPC:12;
     then KA = (f qua Function)" by A3,A11,FUNCT_1:64;
     hence thesis by A2,A3,TOPS_2:def 4;
@@ -289,10 +288,9 @@ A3: f is one-to-one by A1,Th7;
     reconsider KA = <:idZ, idY:> as continuous Function of Y, [:(X|Z), Y:]
       by YELLOW12:41;
 A4: rng KA c= [:rng idZ, rng idY:] by FUNCT_3:71;
-        rng idZ c= the carrier of (X|Z) by RELSET_1:12;
-then A5: rng idZ c= Z by JORDAN1:1;
-        rng idY c= the carrier of Y by RELSET_1:12;
-    then [:rng idZ, rng idY:] c= [:{x},the carrier of Y:]
+        rng idZ c= the carrier of (X|Z);
+then A5: rng idZ c= Z by PRE_TOPC:29;
+    [:rng idZ, rng idY:] c= [:{x},the carrier of Y:]
       by A5,ZFMISC_1:119;
 then A6: rng KA c= [:{x}, the carrier of Y:] by A4,XBOOLE_1:1;
         [:{x}, the carrier of Y:] c= rng KA
@@ -302,20 +300,20 @@ then A6: rng KA c= [:{x}, the carrier of Y:] by A4,XBOOLE_1:1;
       then consider y1, y2 being set such that
 A7:     y1 in {x} & y2 in the carrier of Y & y = [y1,y2] by ZFMISC_1:def 2;
 A8:   y = [x, y2] by A7,TARSKI:def 1;
-A9:   idZ.y2 = ((the carrier of Y) --> x).y2 by BORSUK_1:def 3
+A9:   idZ.y2 = ((the carrier of Y) --> x).y2 by BORSUK_1:def 2
             .= x by A7,FUNCOP_1:13;
 A10:   y2 in dom KA by A7,FUNCT_2:def 1;
       then KA. y2 = [idZ.y2, idY.y2] by FUNCT_3:def 8
-            .= [x, y2] by A7,A9,GRCAT_1:11;
+            .= [x, y2] by A7,A9,FUNCT_1:35;
       hence thesis by A8,A10,FUNCT_1:def 5;
     end;
 then A11: rng KA = [:Z, the carrier of Y:] by A6,XBOOLE_0:def 10
           .= dom f by A1,FUNCT_3:def 6;
 A12: dom idZ = the carrier of Y by FUNCT_2:def 1
            .= dom idY by FUNCT_2:def 1;
-        rng idY c= the carrier of Y by RELSET_1:12;
+        rng idY c= the carrier of Y;
     then f*KA = idY by A1,A5,A12,FUNCT_3:72
-        .= id the carrier of Y by GRCAT_1:def 11
+        .= id the carrier of Y
         .= id rng f by A2,PRE_TOPC:12;
     then KA = (f qua Function)" by A3,A11,FUNCT_1:64;
     hence thesis by A2,A3,TOPS_2:def 4;
@@ -333,7 +331,7 @@ theorem
       f be Function of [:Y, X | {x}:], Y;
       set Z = {x};
       assume A1: f = pr1(the carrier of Y, Z);
-A2:   the carrier of (X|Z) = Z by JORDAN1:1;
+A2:   the carrier of (X|Z) = Z by PRE_TOPC:29;
     thus dom f = the carrier of [:Y, (X|Z):] by FUNCT_2:def 1
                .= [#][:Y, (X|Z):] by PRE_TOPC:12;
     thus rng f = the carrier of Y by A1,FUNCT_3:60
@@ -360,7 +358,7 @@ theorem Th11:
       f be Function of [:X | {x}, Y:], Y;
       set Z = {x};
       assume A1: f = pr2(Z, the carrier of Y);
-A2:   the carrier of (X|Z) = Z by JORDAN1:1;
+A2:   the carrier of (X|Z) = Z by PRE_TOPC:29;
     thus dom f = the carrier of [:(X|Z), Y:] by FUNCT_2:def 1
                .= [#][:(X|Z), Y:] by PRE_TOPC:12;
     thus rng f = the carrier of Y by A1,FUNCT_3:62
@@ -534,7 +532,7 @@ proof
   set Z = {x};
       the carrier of [:(X|Z), Y:] = [:the carrier of (X|Z), the carrier of Y:]
     by BORSUK_1:def 5
-          .= [:Z, the carrier of Y:] by JORDAN1:1;
+          .= [:Z, the carrier of Y:] by PRE_TOPC:29;
   then reconsider f= pr2(Z, the carrier of Y) as Function of [:X|Z, Y:], Y;
   take f;
   thus thesis by Th11;
@@ -718,7 +716,7 @@ A24:    Q' = union A &
        by A1,A2,A3,A4,ZFMISC_1:119;
      reconsider A as Subset-Family of T;
      reconsider AA = A | oS as Subset-Family of T|oS;
-         the carrier of (T|oS) = oS by JORDAN1:1
+         the carrier of (T|oS) = oS by PRE_TOPC:29
         .= the carrier of S by PRE_TOPC:12;
      then reconsider AA as Subset-Family of S;
      reconsider AA as Subset-Family of S;
@@ -778,9 +776,9 @@ proof
   reconsider A = [:Y, X | V:] as SubSpace of [:Y, X:] by Th17;
 A2:the carrier of A = [:the carrier of Y, the carrier of (X|V):]
                          by BORSUK_1:def 5
-                  .= [:the carrier of Y, V:] by JORDAN1:1
+                  .= [:the carrier of Y, V:] by PRE_TOPC:29
                   .= Z by A1,PRE_TOPC:12
-                  .= the carrier of ([:Y, X:]|Z) by JORDAN1:1;
+                  .= the carrier of ([:Y, X:]|Z) by PRE_TOPC:29;
 then A3:A is SubSpace of [:Y, X:] | Z by TOPMETR:4;
       [:Y, X:] | Z is SubSpace of A by A2,TOPMETR:4;
   hence thesis by A3,TSEP_1:6;
@@ -1328,7 +1326,7 @@ A24:    Q' = union A &
        by A1,A2,A3,A4,ZFMISC_1:119;
      reconsider A as Subset-Family of T;
      reconsider AA = A | oS as Subset-Family of T|oS;
-         the carrier of (T|oS) = oS by JORDAN1:1
+         the carrier of (T|oS) = oS by PRE_TOPC:29
         .= the carrier of S by PRE_TOPC:12;
      then reconsider AA as Subset-Family of S;
      reconsider AA as Subset-Family of S;
@@ -1404,9 +1402,9 @@ proof
   reconsider A = [:Y | W, X | V:] as SubSpace of [:Y, X:] by Th25;
 A2:the carrier of A = [:the carrier of (Y|W), the carrier of (X|V):]
                          by BORSUK_1:def 5
-                  .= [:the carrier of (Y|W), V:] by JORDAN1:1
-                  .= Z by A1,JORDAN1:1
-                  .= the carrier of ([:Y, X:]|Z) by JORDAN1:1;
+                  .= [:the carrier of (Y|W), V:] by PRE_TOPC:29
+                  .= Z by A1,PRE_TOPC:29
+                  .= the carrier of ([:Y, X:]|Z) by PRE_TOPC:29;
 then A3:A is SubSpace of [:Y, X:] | Z by TOPMETR:4;
       [:Y, X:] | Z is SubSpace of A by A2,TOPMETR:4;
   hence thesis by A3,TSEP_1:6;

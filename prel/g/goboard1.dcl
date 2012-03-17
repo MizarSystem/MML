@@ -11,9 +11,11 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELSET_1"/>
-<ArticleID name="FUNCT_2"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
@@ -41,9 +43,9 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="32"/>
-<Adjective nr="35"/>
-<Adjective nr="79"/>
+<Adjective nr="31"/>
+<Adjective nr="34"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -62,8 +64,8 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="32"/>
-<Adjective nr="35"/>
+<Adjective nr="31"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -76,17 +78,17 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="7"/>
-<Adjective nr="32"/>
-<Adjective nr="35"/>
+<Adjective nr="31"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
 <Typ kind="M" nr="9">
 <Cluster/>
-<Func kind="K" nr="110">
+<Func kind="K" nr="132">
 <Func kind="U" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="179">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -96,13 +98,13 @@
 <Adjective nr="2"/>
 <Adjective nr="4" value="false"/>
 <Adjective nr="5"/>
-<Adjective nr="32"/>
-<Adjective nr="35"/>
+<Adjective nr="31"/>
+<Adjective nr="34"/>
 <Adjective nr="78"/>
-<Adjective nr="81"/>
 <Adjective nr="82"/>
 <Adjective nr="83"/>
 <Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -10,22 +10,23 @@ environ
       RELAT_2, FINSET_1, SETFAM_1, CARD_1, FUNCT_3, FUNCT_1, ORDERS_1,
       FINSEQ_4, SUBSET_1, ARYTM_1, TARSKI, PROB_1, PBOOLE, FUNCT_2, QC_LANG1,
       ORDINAL2, FINSEQ_2, PRALG_1, CQC_LANG, TRIANG_1, FUNCOP_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
-      RELAT_1, RELAT_2, SETFAM_1, ORDERS_1, STRUCT_0, NAT_1, FUNCT_1, FUNCT_2,
-      FUNCT_3, FRAENKEL, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSUB_1,
-      WELLORD1, TOLER_1, GOBOARD1, CARD_1, PBOOLE, ORDERS_2, FINSEQOP,
-      CQC_LANG, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1,
+      RELAT_2, SETFAM_1, ORDERS_1, STRUCT_0, NAT_1, FUNCT_1, FUNCT_2, FUNCT_3,
+      FRAENKEL, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSUB_1, WELLORD1,
+      TOLER_1, GOBOARD1, CARD_1, PBOOLE, ORDERS_2, FINSEQOP, CQC_LANG,
+      XXREAL_0;
  constructors NAT_1, FUNCT_3, FINSUB_1, WELLORD2, TOLER_1, GOBOARD1, AMI_1,
       MSUALG_1, ORDERS_2, FRAENKEL, FINSEQ_4, FINSEQOP, XXREAL_0;
  registrations RELAT_1, FINSET_1, RELSET_1, ORDERS_2, STRUCT_0, XREAL_0,
-      FINSUB_1, FINSEQ_1, NAT_1, NUMBERS, ORDINAL2, SETFAM_1;
+      FINSUB_1, FINSEQ_1, NAT_1, NUMBERS, ORDINAL2, SETFAM_1, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions RELAT_2, TARSKI, SETFAM_1, FUNCT_1, GOBOARD1;
+ definitions RELAT_2, TARSKI, SETFAM_1, FUNCT_1, GOBOARD1, WELLORD1,
+      ORDERS_2, FINSEQ_2;
  theorems RELAT_1, ORDERS_2, RELAT_2, ZFMISC_1, TARSKI, SUBSET_1, ORDERS_1,
       WELLORD1, FINSUB_1, NAT_1, FUNCT_2, PBOOLE, FUNCT_1, CARD_1, FINSEQ_1,
       FINSET_1, REAL_1, WELLORD2, CARD_2, FINSEQ_4, FINSEQ_2, CQC_LANG,
-      GOBOARD1, RELSET_1, SETFAM_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, FUNCOP_1,
-      XREAL_1;
+      GOBOARD1, RELSET_1, SETFAM_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, XREAL_1,
+      XXREAL_0;
  schemes FUNCT_2, FINSEQ_1, FINSEQ_2, PBOOLE, NAT_1, ZFREFLE1, MSSUBFAM,
       XBOOLE_0;
 
@@ -70,7 +71,7 @@ end;
 theorem
     {}|_2 A = {}
  proof
-  thus {}|_2 A = {} /\ [:A,A:] by WELLORD1:def 6
+  thus {}|_2 A = {} /\ [:A,A:]
   .= {};
  end;
 
@@ -257,8 +258,7 @@ let P be non empty Poset,
 cluster InitSegm(A,x) -> finite;
 coherence
  proof
-      InitSegm(A,x) c= A by ORDERS_2:61;
-  hence thesis by FINSET_1:13;
+  thus thesis;
  end;
 end;
 
@@ -432,7 +432,7 @@ A22:
     A31: n = f.(gn) & m = f.(gm)by A18,A30,FUNCT_1:57;
         then gn < gm by A22,A29;
     then A32:  gn <> gm & gn <= gm by ORDERS_2:def 10;
-    A33: R |_2 A c= R by WELLORD1:15;
+    A33: R |_2 A c= R by XBOOLE_1:17;
           A34: [gn,gm] in R|_2 A by A32,ORDERS_2:def 9;
         gn = g/.n & gm = g/.m by A29,FINSEQ_4:def 4;
     hence thesis by A29,A31,A33,A34;
@@ -587,7 +587,7 @@ FUNCT_1:def 5;
                  reconsider y as Nat by A61;
              A63: 1 <= y & y <= n by A60,A62,FINSEQ_1:3;
                      n <= n + 1 by NAT_1:29;
-                 then 1 <= y & y <= n+1 by A63,XREAL_1:2;
+                 then 1 <= y & y <= n+1 by A63,XXREAL_0:2;
                  then y in Seg (n+1) by FINSEQ_1:3;
                  then y in dom q by A59,FINSEQ_1:def 3;
              then A64: q.y in rng q by FUNCT_1:def 5;
@@ -1220,11 +1220,10 @@ increasing
    hence a.n c= b.n;
   end;
   then A3: a c= b by PBOOLE:def 5;
-      now let n be set; assume n in NAT;
+  now let n be set; assume n in NAT;
    then reconsider n1 = n as Nat;
-       a.n1 = {f where f is Element of Funcs(Seg n1,Seg(n1+1)) : @ f is
-increasing
-}
+   a.n1 = {f where f is Element of Funcs(Seg n1,Seg(n1+1)) : @ f is
+increasing}
    &
    b.n1 = {f where f is Element of Funcs(Seg n1,Seg(n1+1)) : @ f is increasing}
                                                                    by A2;
@@ -1235,22 +1234,21 @@ increasing
  end;
 end;
 
-registration
-let n;
-cluster NatEmbSeq.n -> non empty;
+registration let n;
+  cluster NatEmbSeq.n -> non empty;
 coherence
  proof
-      n <= n + 1 by NAT_1:29;
+    n <= n + 1 by NAT_1:29;
   then A1: Seg n c= Seg(n+1) by FINSEQ_1:7;
       dom id Seg n = Seg n & rng id Seg n = Seg n by RELAT_1:71;
-then A2: dom (idseq n) = Seg n & rng (idseq n) = Seg n by FINSEQ_2:def 1;
+then A2: dom (idseq n) = Seg n & rng (idseq n) = Seg n;
   then reconsider n1 = (idseq n) as Element of Funcs(Seg n,Seg(n+1))
                             by A1,FUNCT_2:def 2;
       @ n1 is increasing
    proof
     let l,m; assume
 A3:  l in dom @ n1 & m in dom @ n1 & l < m;
-    (@ n1).l = l & (@ n1).m = m by A2,A3,FINSEQ_2:56;
+    (@ n1).l = l & (@ n1).m = m by A2,A3,FUNCT_1:35;
     hence thesis by A3;
    end;
   then n1 in {f where f is Element of Funcs(Seg n,Seg(n+1)) : @ f is

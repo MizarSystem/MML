@@ -10,24 +10,25 @@ environ
       TARSKI, RELAT_1, RELAT_2, SUBSET_1, ORDERS_1, PARTFUN1, EQREL_1, CARD_1,
       FINSET_1, TOLER_1, NATTRA_1, REALSET1, FUNCT_3, PROB_2, FINSEQ_1, PROB_1,
       RLVECT_1, FINSEQ_2, FUNCOP_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XXREAL_0,
       REAL_1, NAT_1, SQUARE_1, FINSET_1, FUNCOP_1, RELAT_1, RELAT_2, FUNCT_1,
       FINSEQ_1, RVSUM_1, FINSEQ_2, RELSET_1, PARTFUN1, CARD_3, PROB_2, FUNCT_2,
       FUNCT_3, REALSET1, STRUCT_0, REALSET2, PRE_TOPC, GROUP_1, ORDERS_2,
-      EQREL_1, RCOMP_1, TOLER_1, ORDERS_3, XXREAL_0;
+      EQREL_1, RCOMP_1, TOLER_1, ORDERS_3;
  constructors PRE_TOPC, MEMBERED, SQUARE_1, RCOMP_1, NAT_1, REAL_1, FSM_1,
       REALSET2, ORDERS_3, PROB_2, RVSUM_1, BINOP_2, FUNCT_6, XXREAL_0;
  registrations RELSET_1, STRUCT_0, SUBSET_1, MEMBERED, PARTFUN1, XREAL_0,
       FINSET_1, ARYTM_3, FSM_1, ORDERS_2, EQREL_1, FINSEQ_1, FUNCOP_1,
-      REALSET1;
+      REALSET1, XXREAL_0;
  requirements BOOLE, SUBSET, ARITHM, NUMERALS, REAL;
- definitions TARSKI, XBOOLE_0, PROB_2;
+ definitions TARSKI, XBOOLE_0, PROB_2, FINSEQ_2, SUBSET_1, PRE_TOPC, CARD_3,
+      FINSEQ_1;
  theorems EQREL_1, XBOOLE_0, XBOOLE_1, PRE_TOPC, SUBSET_1, XCMPLX_1, TRIANG_1,
       CARD_2, CARD_1, KURATO_2, REAL_1, TOLER_1, REAL_2, NAT_1, SQUARE_1,
       GROUP_1, TARSKI, ZFMISC_1, RELAT_1, RELAT_2, ORDERS_3, CHAIN_1, FUNCT_2,
       FUNCT_3, RVSUM_1, CARD_3, FUNCT_6, FINSEQ_1, FINSEQ_3, PROB_2, FUNCT_1,
       GRFUNC_1, FINSEQ_6, FINSEQ_2, REALSET2, ORDERS_2, RELSET_1, SYSREL,
-      FUNCOP_1, REALSET1, ORDERS_1, RCOMP_1;
+      FUNCOP_1, REALSET1, ORDERS_1, RCOMP_1, XXREAL_0;
  schemes FUNCT_2, BINOP_2, FINSEQ_2;
 
 begin :: Preliminaries
@@ -191,9 +192,9 @@ theorem Th5:
         p, q be FinSequence of D;
      union rng(p^q) = union (rng p \/ rng q) by FINSEQ_1:44
                   .= union rng p \/ union rng q by ZFMISC_1:96
-                  .= Union p \/ union rng q by CARD_3:def 4
-                  .= Union p \/ Union q by CARD_3:def 4;
-    hence thesis by CARD_3:def 4;
+                  .= Union p \/ union rng q
+                  .= Union p \/ Union q;
+    hence thesis;
   end;
 
 theorem Th6:
@@ -255,8 +256,7 @@ Lm3: :: move to FINSEQ_2
   proof
     let a be set,
         k be Nat;
-     dom (k |-> a) = dom (Seg k --> a) by FINSEQ_2:def 2;
-    hence thesis by FUNCOP_1:19;
+    thus thesis by FUNCOP_1:19;
   end;
 
 registration let A be non empty set;
@@ -273,7 +273,7 @@ A1: X is non empty by Lm3,FINSEQ_1:4,RELAT_1:60;
 A2:   x <> y;
       per cases;
       suppose x in dom X & y in dom X;
-      then x in Seg 1 & y in Seg 1 by FINSEQ_2:68;
+      then x in Seg 1 & y in Seg 1 by FUNCOP_1:19;
       then x = 1 & y = 1 by FINSEQ_1:4,TARSKI:def 1;
       hence thesis by A2;
       end;
@@ -316,7 +316,7 @@ definition let A be set;
 A1:   x in Y & Y in rng X by TARSKI:def 4;
       thus thesis by A1;
     end;
-    hence thesis by CARD_3:def 4;
+    hence thesis;
   end;
 end;
 
@@ -636,11 +636,11 @@ A2: y = x & Class (the InternalRel of A, y) meets {}A;
 theorem Th20:
   LAp [#]A = [#]A
   proof
-    thus LAp [#]A c= [#]A by PRE_TOPC:14;
+    thus LAp [#]A c= [#]A;
     let x be set;
     assume
 A1: x in [#]A;
-     Class (the InternalRel of A, x) c= [#]A by PRE_TOPC:14;
+     Class (the InternalRel of A, x) c= [#]A;
     hence thesis by A1;
   end;
 
@@ -649,8 +649,7 @@ theorem
   proof
      LAp [#]A c= UAp [#]A by Th14;
 then A1: [#]A c= UAp [#]A by Th20;
-     UAp [#]A c= [#]A by PRE_TOPC:14;
-    hence thesis by A1,XBOOLE_0:def 10;
+    thus thesis by A1,XBOOLE_0:def 10;
   end;
 
 theorem
@@ -768,15 +767,15 @@ theorem Th28:
       then consider x being set such that
 A1:   x in LAp X` & x in UAp X by XBOOLE_0:3;
 A2:   Class (the InternalRel of A, x) meets X by A1,Th10;
-       Class (the InternalRel of A, x) c= X` by A1,Th8;
+      Class (the InternalRel of A, x) c= X` by A1,Th8;
       then X meets X` by A2,XBOOLE_1:63;
-      hence thesis by SUBSET_1:26;
+      hence thesis by XBOOLE_1:79;
     end;
     hence LAp X` c= (UAp X)` by SUBSET_1:43;
     let x be set;
     assume
 A3: x in (UAp X)`;
-    then not x in UAp X by SUBSET_1:54;
+    then not x in UAp X by XBOOLE_0:def 4;
     then Class (the InternalRel of A, x) misses X by A3;
     then Class (the InternalRel of A, x) c= X` by SUBSET_1:43;
     hence thesis by A3;
@@ -877,7 +876,7 @@ theorem
 A1:   x in UAp X & not x in LAp X by XBOOLE_0:def 4;
       then x in (LAp X)` by SUBSET_1:50;then
 A2:   x in UAp X` by Th29;
-      not x in (UAp X)` by A1,SUBSET_1:54;
+      not x in (UAp X)` by A1,XBOOLE_0:def 4;
       then not x in LAp X` by Th28;
       then x in UAp X` \ LAp X` by A2,XBOOLE_0:def 4;
       hence thesis;
@@ -890,7 +889,7 @@ A3:   x in BndAp X`;
       then x in UAp X` \ LAp X`;then
 A4:   x in UAp X` & not x in LAp X` by XBOOLE_0:def 4;
       then x in (LAp X)` by Th29;then
-A5:   not x in LAp X by SUBSET_1:54;
+A5:   not x in LAp X by XBOOLE_0:def 4;
       not x in (UAp X)` by A4,Th28;
       then x in (UAp X)`` by A3,SUBSET_1:50;
       then x in UAp X \ LAp X by A5,XBOOLE_0:def 4;
@@ -1181,7 +1180,7 @@ A1:   MemberFunc (X, A).x = 0;
       hence x in (UAp X)` by KURATO_2:1;
     end;
     assume x in (UAp X)`;
- then not x in UAp X by SUBSET_1:54;
+ then not x in UAp X by XBOOLE_0:def 4;
     then X misses Class (the InternalRel of A, x);
 then A2: card (X /\ Class (the InternalRel of A, x)) = 0
       by CARD_1:78,XBOOLE_0:def 7;
@@ -1205,7 +1204,7 @@ A2: 0 <= MemberFunc (X, A).x & MemberFunc (X, A).x <= 1 by Th38;
     assume x in BndAp X;
     then x in UAp X \ LAp X;
 then A3: x in UAp X & not x in LAp X by XBOOLE_0:def 4;
-    then not x in (UAp X)` & not x in LAp X by SUBSET_1:54;
+    then not x in (UAp X)` & not x in LAp X by XBOOLE_0:def 4;
 then A4: 0 <> MemberFunc (X, A).x by Th41;
      MemberFunc (X, A).x <> 1 by A3,Th40;
     hence thesis by A2,A4,REAL_1:def 5;
@@ -1297,13 +1296,13 @@ theorem
    MemberFunc (X`,A).x = 1 - (MemberFunc (X,A).x)
   proof
      [#]A /\ Class (the InternalRel of A, x) =
-      Class (the InternalRel of A, x) by PRE_TOPC:15;
+      Class (the InternalRel of A, x) by XBOOLE_1:28;
 then A1: X /\ Class (the InternalRel of A, x) c=
       [#]A /\ Class (the InternalRel of A, x) by XBOOLE_1:17;
      MemberFunc (X`,A).x = card (X` /\ Class (the InternalRel of A, x)) /
              (card Class (the InternalRel of A, x)) by Def9
       .= card (([#]A \ X) /\ Class (the InternalRel of A, x)) /
-             (card Class (the InternalRel of A, x)) by PRE_TOPC:17
+             (card Class (the InternalRel of A, x))
       .= (card (([#]A /\ Class (the InternalRel of A, x)) \
           (X /\ Class (the InternalRel of A, x)))) /
              (card Class (the InternalRel of A, x)) by XBOOLE_1:50
@@ -1317,7 +1316,7 @@ then A1: X /\ Class (the InternalRel of A, x) c=
       .= card (Class (the InternalRel of A, x))/
              (card Class (the InternalRel of A, x)) -
          (card (X /\ Class (the InternalRel of A, x)) /
-             (card Class (the InternalRel of A, x))) by PRE_TOPC:15
+             (card Class (the InternalRel of A, x))) by XBOOLE_1:28
       .= 1 - card (X /\ Class (the InternalRel of A, x)) /
              (card Class (the InternalRel of A, x)) by XCMPLX_1:60
       .= 1 - (MemberFunc (X,A).x) by Def9;
@@ -1492,9 +1491,8 @@ theorem Th54:
   MemberFunc ({}A, A).x = 0
   proof
      UAp {}A = {} by Th19;
-then A1: (UAp {}A)` = [#] A by PRE_TOPC:27;
-     x in the carrier of A;
-    then x in (UAp {}A)` by A1,PRE_TOPC:12;
+then A1: (UAp {}A)` = [#] A;
+    x in (UAp {}A)` by A1;
     hence thesis by Th41;
   end;
 
@@ -1534,7 +1532,7 @@ A7:     Union (p^<*y*>) = Union p \/ Union <*y*> by Th5
           assume Union p meets y;
           then consider x being set such that
 A8:       x in Union p & x in y by XBOOLE_0:3;
-           x in union rng p by A8,CARD_3:def 4;
+           x in union rng p by A8;
           then consider X being set such that
 A9:      x in X & X in rng p by TARSKI:def 4;
           consider m being set such that
@@ -1589,7 +1587,7 @@ theorem
       assume
 A1:   y in UAp X;
       then reconsider y' = y as Element of A;
-       not y in (UAp X)` by A1,SUBSET_1:54;
+       not y in (UAp X)` by A1,XBOOLE_0:def 4;
       then MemberFunc (X, A).y' <> 0 by Th41;
       then MemberFunc (X, A).y' > 0 by Th38;
       hence thesis;
@@ -1633,13 +1631,16 @@ begin :: Rough Inclusion
 definition let A be Tolerance_Space, X, Y be Subset of A;
   pred X _c= Y means :Def11:
     LAp X c= LAp Y;
+  reflexivity;
   pred X c=^ Y means :Def12:
     UAp X c= UAp Y;
+  reflexivity;
 end;
 
 definition let A be Tolerance_Space, X, Y be Subset of A;
   pred X _c=^ Y means :Def13:
     X _c= Y & X c=^ Y;
+  reflexivity;
 end;
 
 theorem Th59:

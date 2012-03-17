@@ -20,14 +20,14 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="62"/>
+<Func kind="K" nr="64"/>
 </Func>
 </Typ>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="62"/>
+<Func kind="K" nr="64"/>
 </Func>
 </Typ>
 <Not>

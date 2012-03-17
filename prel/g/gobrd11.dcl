@@ -11,8 +11,10 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -39,20 +41,20 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="79"/>
 <Adjective nr="80"/>
-<Adjective nr="84">
+<Adjective nr="81"/>
+<Adjective nr="85">
 <Func kind="U" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="179">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="85"/>
 <Adjective nr="86"/>
+<Adjective nr="87"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="179">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -60,11 +62,11 @@
 </ArgTypes>
 <Func kind="K" nr="46">
 <Func kind="U" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="179">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="215">
+<Func kind="K" nr="238">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

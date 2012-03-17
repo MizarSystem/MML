@@ -7,6 +7,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
@@ -31,43 +32,43 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="190"/>
+<Func kind="K" nr="207"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="190"/>
+<Func kind="K" nr="207"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="17">
 <Cluster/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="87"/>
 <LocusVar nr="2"/>
 <Num nr="6"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="193">
+<Func kind="K" nr="210">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -85,26 +86,26 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="17">
 <Cluster/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="87"/>
 <LocusVar nr="2"/>
 <Num nr="6"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="194">
+<Func kind="K" nr="211">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -123,7 +124,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="190"/>
+<Func kind="K" nr="207"/>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>

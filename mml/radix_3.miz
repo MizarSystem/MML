@@ -11,12 +11,12 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XXREAL_0, INT_1, NAT_1,
       FUNCT_1, POWER, FINSEQ_1, FINSEQ_4, BINARITH, TREES_4, WSIERP_1, RADIX_1;
  constructors POWER, BINARITH, FINSEQ_4, RADIX_1, MEMBERED, NAT_1, XXREAL_0;
- registrations INT_1, RELSET_1, FINSET_1, XREAL_0, MEMBERED;
+ registrations INT_1, RELSET_1, FINSET_1, XREAL_0, MEMBERED, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI;
- theorems AMI_5, REAL_1, REAL_2, RADIX_1, POWER, NAT_1, NAT_2, INT_1, BINARITH,
+ definitions TARSKI, RADIX_1;
+ theorems REAL_1, REAL_2, RADIX_1, POWER, NAT_1, NAT_2, INT_1, BINARITH,
       SPRECT_3, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, JORDAN3, PRE_FF, NEWTON,
-      RVSUM_1, PREPOWER, JORDAN12, FINSEQ_3, RADIX_2, XCMPLX_1, XREAL_1;
+      RVSUM_1, PREPOWER, JORDAN12, FINSEQ_3, RADIX_2, XREAL_1, XXREAL_0;
  schemes NAT_1, FINSEQ_2, INT_2;
 
 begin :: Definition for Radix-2^k SD_Sub number
@@ -29,11 +29,11 @@ Lm1:
 proof
   assume
 A1:   1 <= k;
-       Radix(k) = 2 to_power k by RADIX_1:def 1
+       Radix(k) = 2 to_power k
              .= 2 to_power ( k -' 1 + 1 ) by A1,BINARITH:53
              .= (2 to_power 1) * (2 to_power (k -' 1)) by POWER:32
              .= 2 * (2 to_power (k -' 1)) by POWER:30
-             .= 2 * Radix(k -' 1) by RADIX_1:def 1
+             .= 2 * Radix(k -' 1)
              .= Radix(k -' 1) + Radix(k -' 1);
   hence thesis;
 end;
@@ -59,7 +59,7 @@ Lm4:
   for k be Nat st 1 <= k holds 2 <= Radix(k)
 proof
   defpred P[Nat] means 2<= Radix($1);
-         Radix(1) = 2 to_power 1 by RADIX_1:def 1
+         Radix(1) = 2 to_power 1
               .= 2 by POWER:30;
 then A1:     P[1];
 A2: for kk be Nat st
@@ -68,11 +68,11 @@ A2: for kk be Nat st
         let kk be Nat;
         assume
 A3:       1 <= kk & 2 <= Radix(kk);
-A4:     Radix(kk + 1) = 2 to_power (kk + 1) by RADIX_1:def 1
+A4:     Radix(kk + 1) = 2 to_power (kk + 1)
                  .= 2 to_power (1) * 2 to_power (kk) by POWER:32
                  .= 2 * 2 to_power (kk) by POWER:30
-                 .= 2 * Radix(kk) by RADIX_1:def 1;
-           Radix(kk) > 1 by A3,XREAL_1:2;
+                 .= 2 * Radix(kk);
+           Radix(kk) > 1 by A3,XXREAL_0:2;
         hence thesis by A4,REAL_2:144;
         end;
          1 <= k implies P[k] from INT_2:sch 1(A1,A2);
@@ -92,29 +92,24 @@ then A3:   i in Seg (n+1) by A2,FINSEQ_1:3;
        Radix(k) |^ i divides Radix(k) |^ n by A2,RADIX_1:7;
     then consider t be Nat such that
 A4:   Radix(k) |^ n = (Radix(k) |^ i)*t by NAT_1:def 3;
-       Radix(k) <> 0 by RADIX_1:9;
+      Radix(k) <> 0 by POWER:39;
 then t <> 0 by A4,PREPOWER:12;
 then A5:   (m mod (Radix(k) |^ n)) mod (Radix(k) |^ i)
          = m mod (Radix(k) |^ i) by A4,RADIX_1:4;
        DigA(DecSD((m mod (Radix(k) |^ n)),n,k),i)
        = DigitDC((m mod (Radix(k) |^ n)),i,k) by A1,RADIX_1:def 9
-      .= (m mod (Radix(k) |^ i)) div (Radix(k) |^ (i -'1)) by A5,RADIX_1:def 8
-      .= DigitDC(m,i,k) by RADIX_1:def 8
+      .= (m mod (Radix(k) |^ i)) div (Radix(k) |^ (i -'1)) by A5
+      .= DigitDC(m,i,k)
       .= DigA(DecSD(m,n+1,k),i) by A3,RADIX_1:def 9;
   hence thesis;
 end;
 
 definition let k;
   func k-SD_Sub_S equals
-
     {e where e is Element of INT:
          e >= -Radix(k -' 1) & e <= Radix(k -' 1) - 1 };
   correctness;
-end;
-
-definition let k;
   func k-SD_Sub equals
-
     {e where e is Element of INT:
          e >= -Radix(k -' 1) - 1 & e <= Radix(k -' 1) };
   correctness;
@@ -145,10 +140,10 @@ A2:   e = g and
 A3:   g >= -Radix(k-'1) and
 A4:   g <= Radix(k-'1) - 1 by A1;
        Radix(k-'1) + 0 >= Radix(k-'1) + -1 by XREAL_1:9;
-    then A5:   Radix(k-'1) >= g by A4,XREAL_1:2;
+    then A5:   Radix(k-'1) >= g by A4,XXREAL_0:2;
        Radix(k-'1) + 1 >= Radix(k-'1) + 0 by XREAL_1:9;
     then -Radix(k-'1) >= -(Radix(k-'1) + 1) by XREAL_1:26;
-    then g >= -Radix(k-'1) - 1 by A3,XREAL_1:2;
+    then g >= -Radix(k-'1) - 1 by A3,XXREAL_0:2;
     hence thesis by A2,A5;
 end;
 
@@ -162,17 +157,16 @@ A1:   e in k-SD_Sub_S;
 A2:   e = g and
 A3:   g >= -Radix(k-'1) and
 A4:   g <= Radix(k-'1) - 1 by A1;
-A5:   2 to_power k = Radix(k) by RADIX_1:def 1;
        k-'1 <= k by JORDAN3:7;
     then 2 to_power (k-'1) <= 2 to_power k by PRE_FF:10;
-    then A6:   Radix(k-'1) <= Radix(k) by A5,RADIX_1:def 1;
+    then A5:   Radix(k-'1) <= Radix(k);
     then -Radix(k-'1) >= -Radix(k) by XREAL_1:26;
     then -Radix(k-'1) >= -Radix(k + 1 -' 1) by BINARITH:39;
-    then A7:  g >= -Radix(k + 1 -' 1) by A3,XREAL_1:2;
-       Radix(k-'1) - 1 <= Radix(k) - 1 by A6,XREAL_1:11;
+    then A6:  g >= -Radix(k + 1 -' 1) by A3,XXREAL_0:2;
+       Radix(k-'1) - 1 <= Radix(k) - 1 by A5,XREAL_1:11;
     then Radix(k-'1) - 1 <= Radix(k + 1 -' 1) - 1 by BINARITH:39;
-    then g <= Radix(k + 1 -' 1) - 1 by A4,XREAL_1:2;
-  hence thesis by A2,A7;
+    then g <= Radix(k + 1 -' 1) - 1 by A4,XXREAL_0:2;
+  hence thesis by A2,A6;
 end;
 
 theorem
@@ -183,29 +177,27 @@ A1:   2 <= k;
   let e be set;
   assume
 A2:   e in k-SD_Sub;
-A3: k-SD = {w where w is Element of INT:
-      w <= Radix(k) - 1 & w >= -Radix(k) + 1 } by RADIX_1:def 2;
     consider g being Element of INT such that
-A4:   e = g and
-A5:   g >= -Radix(k-'1) - 1 and
-A6:   g <= Radix(k-'1) by A2;
-A7:   1 <= k by A1,XREAL_1:2;
+A3:   e = g and
+A4:   g >= -Radix(k-'1) - 1 and
+A5:   g <= Radix(k-'1) by A2;
+A6:   1 <= k by A1,XXREAL_0:2;
     then Radix(k) + 0 = Radix(k-'1) + Radix(k-'1) by Lm1;
-    then A8:   Radix(k) - Radix(k-'1) = Radix(k-'1) - 0;
+    then A7:   Radix(k) - Radix(k-'1) = Radix(k-'1) - 0;
        1 + 1 <= k by A1;
     then 1 <= k -' 1 by SPRECT_3:8;
-    then A9:   Radix(k -' 1) >= 2 by Lm4;
-    then Radix(k-'1) >= 1 by XREAL_1:2;
+    then A8:   Radix(k -' 1) >= 2 by Lm4;
+    then Radix(k-'1) >= 1 by XXREAL_0:2;
     then -Radix(k-'1) <= -1 by XREAL_1:26;
     then Radix(k) + -Radix(k-'1) <= Radix(k) + -1 by XREAL_1:9;
     then Radix(k) - Radix(k-'1) <= Radix(k) + -1;
-    then A10:   g <= Radix(k) - 1 by A6,A8,XREAL_1:2;
-       Radix(k -' 1) + Radix(k -' 1) >= Radix(k -' 1) + 2 by A9,XREAL_1:8;
-    then Radix(k) + 0 >= (Radix(k -' 1) + 1) + 1 by A7,Lm1;
+    then A9:   g <= Radix(k) - 1 by A5,A7,XXREAL_0:2;
+       Radix(k -' 1) + Radix(k -' 1) >= Radix(k -' 1) + 2 by A8,XREAL_1:8;
+    then Radix(k) + 0 >= (Radix(k -' 1) + 1) + 1 by A6,Lm1;
     then Radix(k) - 1 >= (Radix(k -' 1) + 1) - 0 by XREAL_1:23;
     then -(Radix(k -' 1) + 1) >= -(Radix(k) - 1) by XREAL_1:26;
-    then g >= -Radix(k) + 1 by A5,XREAL_1:2;
-    hence thesis by A3,A4,A10;
+    then g >= -Radix(k) + 1 by A4,XXREAL_0:2;
+    hence thesis by A3,A9;
 end;
 
 theorem Th6:
@@ -213,7 +205,7 @@ theorem Th6:
 proof
        0 > 0 - 1;
     then 0 -' 1 = 0 by BINARITH:def 3;
-    then Radix(0-'1) = 2 to_power(0) by RADIX_1:def 1
+    then Radix(0-'1) = 2 to_power(0)
              .= 1 by POWER:29;
 then A1:   0-SD_Sub_S
       = {w where w is Element of INT:w >= -1 & w <= 1 - 1}
@@ -359,7 +351,7 @@ proof
   assume
 A1:   2 <= k & i1 in k-SD;
 then A2:   -Radix(k) + 1 <= i1 & i1 <= Radix(k) - 1 by RADIX_1:15;
-A3:   1 <= k by A1,XREAL_1:2;
+A3:   1 <= k by A1,XXREAL_0:2;
            now per cases;
         case
 A4:        i1 < -Radix(k -' 1);
@@ -390,7 +382,7 @@ A9:        Radix(k-'1) <= i1;
           A12: 0 - 1 <= Radix(k-'1) - 1 by XREAL_1:11;
              i1 <= Radix(k) + -1 by A2;
           then i1 - Radix(k) <= -1 by XREAL_1:22;
-          hence thesis by A3,A10,A11,A12,Lm3,XREAL_1:2;
+          hence thesis by A3,A10,A11,A12,Lm3,XXREAL_0:2;
         end;
         end;
      hence thesis;
@@ -403,17 +395,17 @@ proof
   let x be Integer, k be Nat;
   assume
 A1:   k >= 2;
-      then k > 1 by XREAL_1:2;
+      then k > 1 by XXREAL_0:2;
       then k - 1 > 1 - 1 by REAL_1:92;
       then k -' 1 > 0 by BINARITH:def 3;
       then 2 to_power (k -' 1) > 1 by POWER:40;
-      then A2:     Radix(k-'1) > 1 by RADIX_1:def 1;
+      then A2:     Radix(k-'1) > 1;
       then A3:     Radix(k-'1) - 1 >= 1 by INT_1:79;
          SDSub_Add_Carry(x,k) <= 1 by A1,Th13;
-      then A4:     SDSub_Add_Carry(x,k) <= Radix(k-'1) - 1 by A3,XREAL_1:2;
+      then A4:     SDSub_Add_Carry(x,k) <= Radix(k-'1) - 1 by A3,XXREAL_0:2;
 A5:     -1 <= SDSub_Add_Carry(x,k) by A1,Th13;
          -Radix(k-'1) <= -1 by A2,XREAL_1:26;
-      then A6:    SDSub_Add_Carry(x,k) >= -Radix(k-'1) by A5,XREAL_1:2;
+      then A6:    SDSub_Add_Carry(x,k) >= -Radix(k-'1) by A5,XXREAL_0:2;
 A7:  SDSub_Add_Carry(x,k) is Element of INT by INT_1:def 2;
       thus thesis by A4,A6,A7;
 end;
@@ -441,7 +433,7 @@ theorem Th17:
 proof
   assume k >= 2;
     set x = 0;
-A1:   Radix(k -' 1) <> x by RADIX_1:9;
+A1:   Radix(k -' 1) <> x by POWER:39;
      A2: Radix(k-'1) >= x;
     -Radix(k-'1) <= 0 - 0;
   hence thesis by A1,A2,Def3;
@@ -506,7 +498,7 @@ A4:   i in Seg n;
         proof
           A5: DigA(a,i) is Element of k-SD by A4,RADIX_1:19;
 A6:      1 <= i & i <= n by A4,FINSEQ_1:3;
-             now per cases by A6,XREAL_1:1;
+             now per cases by A6,XXREAL_0:1;
             suppose i = 1;
               then i-'1 = 0 by NAT_2:10;
               then DigA(a,i-'1) = 0 by RADIX_1:def 3;
@@ -607,7 +599,7 @@ A3:   -Radix(k-'1) - 1 <= i2 & i2 <= Radix(k-'1) by A1,Th2;
     set z = i1+i2;
       A4: z <= Radix(k) - 1 + Radix(k-'1) by A2,A3,XREAL_1:9;
       A5: -Radix(k) + 1 + ( -Radix(k-'1) - 1 ) <= z by A2,A3,XREAL_1:9;
-A6:   1 <= k by A1,XREAL_1:2;
+A6:   1 <= k by A1,XXREAL_0:2;
 A7:  SDSub_Add_Data(z,k) >= -Radix(k-'1)
         & SDSub_Add_Data(z,k) <= Radix(k-'1) - 1
     proof

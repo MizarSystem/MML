@@ -6,14 +6,15 @@
 
 environ
 
- vocabularies SUPINF_1, ARYTM, BOOLE, ARYTM_2, ARYTM_3, ORDINAL1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ARYTM_2,
-  NUMBERS;
+ vocabularies SUPINF_1, ARYTM, BOOLE, ARYTM_2, ARYTM_3, ORDINAL1,
+  ASYMPT_0, ZF_LANG, ORDINAL2, XREAL_0, SQUARE_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ORDINAL2,
+  ARYTM_2, NUMBERS;
  constructors NUMBERS, ARYTM_2, RELSET_1,FUNCT_2;
- definitions TARSKI, NUMBERS;
- registrations NUMBERS, XBOOLE_0;
+ definitions TARSKI, NUMBERS, XBOOLE_0;
+ registrations NUMBERS, XBOOLE_0, ARYTM_3;
  theorems XBOOLE_0, TARSKI, ORDINAL1, NUMBERS, ARYTM_0,ZFMISC_1, ARYTM_1,
-  ENUMSET1;
+  ENUMSET1, ORDINAL2;
  requirements BOOLE,SUBSET,NUMERALS;
 
 begin
@@ -32,6 +33,8 @@ registration
    take 0;
    thus 0 in ExtREAL by XBOOLE_0:def 2;
  end;
+ cluster -> ext-real Element of ExtREAL;
+ coherence by Def1;
 end;
 
 definition
@@ -171,13 +174,13 @@ A23:     z = 0 by A20,TARSKI:def 1;
    end;
   end;
 
-notation let x,y be ext-real number;
- synonym y >= x for x <= y;
- antonym y < x for x <= y;
- antonym x > y for x <= y;
-end;
+reserve a,b,c,d for ext-real number;
 
-reserve a,b,c for ext-real number;
+notation let a,b;
+ synonym b >= a for a <= b;
+ antonym b < a for a <= b;
+ antonym a > b for a <= b;
+end;
 
 Lm1: +infty <> [0,0]
   proof assume +infty = [0,0];
@@ -213,7 +216,7 @@ Lm7: not -infty in [:{0},REAL+:]
   hence contradiction by ORDINAL1:7,ARYTM_0:1;
  end;
 
-theorem Tx1:
+Tx1:
  -infty < +infty
 proof
   now assume -infty = +infty;
@@ -222,8 +225,6 @@ proof
   end;
  hence thesis by Lm5,Lm7,Def5;
 end;
-
-canceled 3;
 
 theorem Anty:
  a <= b & b <= a implies a = b
@@ -283,25 +284,19 @@ S5: not(a in REAL+ & b in [:{0},REAL+:]);
  end;
 end;
 
-theorem Tw3:
- a <= +infty by Def5,Lm4,Lm6;
-
-theorem Tw4:
- a >= -infty by Def5,Lm5,Lm7;
-
-theorem Tw1:
- +infty <= a implies a = +infty
-proof a <= +infty by Def5,Lm4,Lm6;
- hence thesis by Anty;
-end;
-
-theorem Tw2:
+Tw2:
  -infty >= a implies a = -infty
 proof a >= -infty by Def5,Lm5,Lm7;
  hence thesis by Anty;
 end;
 
-theorem
+Tw1:
+ +infty <= a implies a = +infty
+proof a <= +infty by Def5,Lm4,Lm6;
+ hence thesis by Anty;
+end;
+
+theorem Th2:
  a <= b & b <= c implies a <= c
 proof assume that
 A1: a <= b and
@@ -337,11 +332,10 @@ A14:  b in REAL+ & c in [:{0},REAL+:];
  suppose that
 A15: a in [:{0},REAL+:] and
 A16: c in REAL+;
-S2: c <> -infty & a <> +infty by A15,A16,Lm5,Lm6;
      not(a in REAL+ & c in REAL+) &
      not(a in [:{0},REAL+:] & c in [:{0},REAL+:])
     by A15,A16,ARYTM_0:5,XBOOLE_0:3;
- hence thesis by A16,Def5,S2;
+ hence thesis by Def5,A15,A16;
  end;
  suppose that
 A17: a in [:{0},REAL+:] and
@@ -373,25 +367,32 @@ B:  b = -infty implies a = -infty by A1,Tw2;
  end;
 end;
 
-Lem:
-  not -infty in REAL
-  proof assume
-A:   -infty in REAL;
-B:  {0,REAL} in {{0,REAL},{0}} by TARSKI:def 2;
-    REAL in {0,REAL} by TARSKI:def 2;
-   hence contradiction by A,B,ORDINAL1:3;
-  end;
+theorem Tw3:
+ a <= +infty by Def5,Lm4,Lm6;
 
 theorem
- a in REAL implies -infty < a
-proof
-A: -infty <= a by Tw4;
- assume a in REAL;
-  then a <> -infty by Lem;
- hence thesis by A,Anty;
-end;
+ +infty <= a implies a = +infty by Tw1;
+
+theorem Tw4:
+ a >= -infty by Def5,Lm5,Lm7;
 
 theorem
+ -infty >= a implies a = -infty by Tw2;
+
+theorem
+ -infty < +infty by Tx1;
+
+theorem
+ not +infty in REAL;
+
+Lm:
+ a in REAL or a = +infty or a = -infty
+ proof a in ExtREAL by Def1;
+   then a in REAL or a in { +infty, -infty } by XBOOLE_0:def 2;
+  hence thesis by TARSKI:def 2;
+ end;
+
+theorem Th12:
  a in REAL implies +infty > a
 proof
 A: +infty >= a by Tw3;
@@ -400,38 +401,467 @@ A: +infty >= a by Tw3;
  hence thesis by A,Anty;
 end;
 
-Lm:
- not a in REAL implies a = -infty or a = +infty
-proof assume
-Z: not a in REAL;
-  a in REAL \/ {-infty,+infty} by Def1;
-  then a in {-infty,+infty} by Z,XBOOLE_0:def 2;
- hence thesis by TARSKI:def 2;
-end;
-
 theorem
  a in REAL & b >= a implies b in REAL or b = +infty
  proof assume that
 Z1: a in REAL and
 Z2: b >= a;
-  assume not b in REAL;
-   then
-A:  b = -infty or b = +infty by Lm;
+  assume
+A: not b in REAL;
     b = -infty implies a = -infty by Z2,Tw2;
-  hence b = +infty by A,Z1,Lem;
+  hence b = +infty by A,Lm,Z1;
  end;
+
+theorem Lem:
+ not -infty in REAL
+  proof assume
+A:   -infty in REAL;
+B:  {0,REAL} in {{0,REAL},{0}} by TARSKI:def 2;
+    REAL in {0,REAL} by TARSKI:def 2;
+   hence contradiction by A,B,ORDINAL1:3;
+  end;
+
+theorem Th11:
+ a in REAL implies -infty < a
+proof
+  -infty <= a by Tw4;
+ hence thesis by Anty, Lem;
+end;
 
 theorem
  a in REAL & b <= a implies b in REAL or b = -infty
  proof assume that
 Z1: a in REAL and
 Z2: b <= a;
-  assume not b in REAL;
-   then
-A:  b = -infty or b = +infty by Lm;
+  assume
+A: not b in REAL;
     b = +infty implies a = +infty by Z2,Tw1;
-  hence b = -infty by A,Z1;
+  hence b = -infty by A,Lm,Z1;
  end;
+
+theorem
+ a in REAL or a = +infty or a = -infty by Lm;
+
+begin :: positive & negative
+
+registration
+ cluster natural -> ext-real number;
+ coherence
+  proof
+   let a be number;
+   assume a is natural;
+    then a in NAT by ORDINAL2:def 21;
+   hence a in ExtREAL by XBOOLE_0:def 2;
+  end;
+end;
+
+definition let a be ext-real number;
+  attr a is positive means
+    a > 0;
+  attr a is negative means
+    a < 0;
+end;
+
+notation let a be ext-real number;
+  synonym a is zero for a is empty;
+end;
+
+registration
+ cluster positive -> non negative non zero (ext-real number);
+ coherence
+  proof let r be ext-real number;
+   assume r > 0;
+   hence r >= 0 & r <> {};
+  end;
+ cluster non negative non zero -> positive (ext-real number);
+ coherence
+  proof let r be ext-real number;
+   assume r >= 0 & r <> {};
+   hence r > 0 by Anty;
+  end;
+ cluster negative -> non positive non zero (ext-real number);
+ coherence
+  proof let r be ext-real number;
+   assume r < 0;
+   hence r <= 0 & r <> {};
+  end;
+ cluster non positive non zero -> negative (ext-real number);
+ coherence
+  proof let r be ext-real number;
+   assume r <= 0 & r <> {};
+   hence r < 0 by Anty;
+  end;
+ cluster zero -> non negative non positive (ext-real number);
+ coherence
+  proof let r be ext-real number;
+   assume r = {};
+   hence r >= 0 & 0 >= r;
+  end;
+ cluster non negative non positive -> zero (ext-real number);
+ coherence
+  proof let r be ext-real number;
+   assume r >= 0 & 0 >= r;
+   hence r = {} by Anty;
+  end;
+end;
+
+registration
+ cluster +infty -> positive;
+ coherence
+  proof
+   thus 0 < +infty by Th12;
+  end;
+ cluster -infty -> negative;
+ coherence
+  proof
+   thus 0 > -infty by Th11;
+  end;
+end;
+
+registration
+ cluster positive (ext-real number);
+ existence
+  proof take +infty;
+   thus thesis;
+  end;
+ cluster negative (ext-real number);
+ existence
+  proof take -infty;
+   thus thesis;
+  end;
+ cluster zero (ext-real number);
+ existence
+  proof take 0;
+   thus thesis;
+  end;
+end;
+
+begin :: min & max
+
+definition let a,b;
+ func min(a,b) equals
+:Def9:
+ a if a <= b otherwise b;
+ correctness;
+ commutativity by Anty;
+ idempotence;
+ func max(a,b) equals
+:Def10:
+ a if b <= a otherwise b;
+ correctness;
+ commutativity by Anty;
+ idempotence;
+end;
+
+theorem Th15:
+ min(a,b) = a or min(a,b) = b
+  proof per cases;
+   suppose a <= b;
+    hence thesis by Def9;
+   end;
+   suppose b < a;
+    hence thesis by Def9;
+   end;
+  end;
+
+theorem Th16:
+ max(a,b) = a or max(a,b) = b
+  proof per cases;
+   suppose a <= b;
+    hence thesis by Def10;
+   end;
+   suppose b < a;
+    hence thesis by Def10;
+   end;
+  end;
+
+registration let a,b;
+ cluster min(a,b) -> ext-real;
+ coherence by Th15;
+ cluster max(a,b) -> ext-real;
+ coherence by Th16;
+end;
+
+theorem Th17:
+ min(a,b) <= a
+ proof a <= b or not a <= b;
+  hence min(a,b) <= a by Def9;
+ end;
+
+theorem Th18:
+ a <= b & c <= d implies min(a,c) <= min(b,d)
+proof
+A: min(a,c) <= a & min(a,c) <= c by Th17;
+ assume a <= b & c <= d;
+  then min(a,c) <= b & min(a,c) <= d by A,Th2;
+ hence thesis by Th15;
+end;
+
+theorem
+ a < b & c < d implies min(a,c) < min(b,d)
+proof
+A: min(a,c) <= a & min(a,c) <= c by Th17;
+ assume a < b & c < d;
+  then min(a,c) < b & min(a,c) < d by A,Th2;
+ hence thesis by Th15;
+end;
+
+theorem
+ a <= b & a <= c implies a <= min(b,c) by Th15;
+
+theorem
+ a < b & a < c implies a < min(b,c) by Th15;
+
+theorem
+ a <= min(b,c) implies a <= b
+ proof min(b,c) <= b by Th17;
+  hence thesis by Th2;
+ end;
+
+theorem
+ a < min(b,c) implies a < b
+ proof min(b,c) <= b by Th17;
+  hence thesis by Th2;
+ end;
+
+theorem
+ c <= a & c <= b &
+  (for d st d <= a & d <= b holds d <= c)
+  implies c = min(a,b)
+ proof assume that
+Z1: c <= a & c <= b and
+Z2: for d st d <= a & d <= b holds d <= c;
+A: c <= min(a,b) by Z1,Th15;
+   min(a,b) <= a & min(a,b) <= b by Th17;
+   then min(a,b) <= c by Z2;
+  hence c = min(a,b) by A,Anty;
+ end;
+
+theorem Th25:
+ a <= max(a,b)
+ proof a <= b or not a <= b;
+  hence a <= max(a,b) by Def10;
+ end;
+
+theorem Th28:
+ a <= b & c <= d implies max(a,c) <= max(b,d)
+proof
+A: b <= max(b,d) & d <= max(b,d) by Th25;
+ assume a <= b & c <= d;
+  then a <= max(b,d) & c <= max(b,d) by A,Th2;
+ hence thesis by Th16;
+end;
+
+theorem
+ a < b & c < d implies max(a,c) < max(b,d)
+proof
+A: b <= max(b,d) & d <= max(b,d) by Th25;
+ assume a < b & c < d;
+  then a < max(b,d) & c < max(b,d) by A,Th2;
+ hence thesis by Th16;
+end;
+
+theorem
+ b <= a & c <= a implies max(b,c) <= a by Th16;
+
+theorem
+ b < a & c < a implies max(b,c) < a by Th16;
+
+theorem
+ max(b,c) <= a implies b <= a
+ proof b <= max(b,c) by Th25;
+  hence thesis by Th2;
+ end;
+
+theorem
+ max(b,c) < a implies b < a
+ proof b <= max(b,c) by Th25;
+  hence thesis by Th2;
+ end;
+
+theorem
+ a <= c & b <= c &
+  (for d st a <= d & b <= d holds c <= d)
+  implies c = max(a,b)
+ proof assume that
+Z1: a <= c & b <= c and
+Z2: for d st a <= d & b <= d holds c <= d;
+A: max(a,b) <= c by Z1,Th16;
+   a <= max(a,b) & b <= max(a,b) by Th25;
+   then c <= max(a,b) by Z2;
+  hence c = max(a,b) by A,Anty;
+ end;
+
+theorem
+ min(min(a,b),c) = min(a,min(b,c))
+ proof
+  per cases by Th2;
+   suppose a <= b & a <= c;
+    then min(a,b) = a & min(a,c) = a
+     & (min(b,c) = b or min(b,c) = c) by Def9,Th15;
+    hence thesis;
+   end;
+   suppose b <= a & b <= c;
+     then min(a,b) = b & min(b,c) = b by Def9;
+    hence thesis;
+   end;
+   suppose c <= b & c <= a;
+    then min(b,c) = c & min(a,c) = c
+     & (min(a,b) = a or min(a,b) = b) by Def9,Th15;
+    hence thesis;
+  end;
+ end;
+
+theorem
+ max(max(a,b),c) = max(a,max(b,c))
+ proof
+  per cases by Th2;
+  suppose a <= b & a <= c;
+    then max(a,b) = b & max(a,c) = c
+     & (max(b,c) = b or max(b,c) = c) by Def10, Th16;
+   hence thesis;
+  end;
+  suppose b <= a & b <= c;
+   then max(a,b) = a & max(b,c) = c by Def10;
+   hence thesis;
+  end;
+  suppose c <= b & c <= a;
+    then max(b,c) = b & max(a,c) = a
+     & (max(a,b) = b or max(a,b) = a) by Def10, Th16;
+    hence thesis;
+  end;
+ end;
+
+theorem
+ min(max(a,b),b) = b
+ proof
+   b <= max(a,b) by Th25;
+  hence thesis by Def9;
+ end;
+
+theorem
+ max(min(a,b),b) = b
+ proof
+   min(a,b) <= b by Th17;
+  hence thesis by Def10;
+ end;
+
+theorem Th37:
+ a <= c implies max(a,min(b,c)) = min(max(a,b),c)
+ proof assume
+Z: a <= c;
+  per cases;
+  suppose
+S: a <= b;
+    then a <= min(b,c) by Z,Th15;
+   hence max(a,min(b,c)) = min(b,c) by Def10
+      .= min(max(a,b),c) by S,Def10;
+  end;
+  suppose
+S: b <= a;
+   then
+   b <= c by Z,Th2;
+   hence max(a,min(b,c)) = max(a,b) by Def9
+     .= a by S,Def10
+     .= min(a,c) by Z,Def9
+     .= min(max(a,b),c) by S,Def10;
+  end;
+ end;
+
+theorem
+ min(a,max(b,c)) = max(min(a,b),min(a,c))
+ proof
+  per cases;
+  suppose
+S:  b <= c;
+    then
+A:  min(a,b) <= min(a,c) by Th18;
+   thus min(a,max(b,c)) = min(a,c) by S,Def10
+      .= max(min(a,b),min(a,c)) by A,Def10;
+  end;
+  suppose
+S:  c <= b;
+    then
+A:  min(a,c) <= min(a,b) by Th18;
+   thus min(a,max(b,c)) = min(a,b) by S,Def10
+      .= max(min(a,b),min(a,c)) by A,Def10;
+  end;
+ end;
+
+theorem
+ max(a,min(b,c)) = min(max(a,b),max(a,c))
+ proof
+  per cases;
+  suppose
+S:  b <= c;
+    then
+A:  max(a,b) <= max(a,c) by Th28;
+   thus max(a,min(b,c)) = max(a,b) by S,Def9
+      .= min(max(a,b),max(a,c)) by A,Def9;
+  end;
+  suppose
+S:  c <= b;
+    then
+A:  max(a,c) <= max(a,b) by Th28;
+   thus max(a,min(b,c)) = max(a,c) by S,Def9
+      .= min(max(a,b),max(a,c)) by A,Def9;
+  end;
+ end;
+
+theorem
+ max(max(min(a,b),min(b,c)),min(c,a)) = min(min(max(a,b),max(b,c)),max(c,a))
+ proof
+  per cases;
+  suppose
+S: a <= c;
+    then
+A:   min(a,b) <= min(b,c) by Th18;
+B:  max(a,b) <= max(b,c) by S,Th28;
+   thus max(max(min(a,b),min(b,c)),min(c,a))
+     = max(min(b,c),min(c,a)) by A,Def10
+    .= max(min(b,c),a) by S,Def9
+    .= min(max(a,b),c) by S,Th37
+    .= min(max(a,b),max(c,a)) by S,Def10
+    .= min(min(max(a,b),max(b,c)),max(c,a)) by B,Def9;
+  end;
+  suppose
+S: c <= a;
+    then
+A:   min(a,b) >= min(b,c) by Th18;
+B:  max(a,b) >= max(b,c) by S,Th28;
+   thus max(max(min(a,b),min(b,c)),min(c,a))
+     = max(min(a,b),min(c,a)) by A,Def10
+    .= max(min(a,b),c) by S,Def9
+    .= min(max(c,b),a) by S,Th37
+    .= min(max(c,b),max(c,a)) by S,Def10
+    .= min(min(max(a,b),max(b,c)),max(c,a)) by B,Def9;
+  end;
+ end;
+
+theorem
+ max(a,+infty) = +infty
+  proof a <= +infty by Tw3;
+   hence thesis by Def10;
+  end;
+
+theorem
+ min(a,+infty) = a
+  proof a <= +infty by Tw3;
+   hence thesis by Def9;
+  end;
+
+theorem
+ max(a,-infty) = a
+  proof a >= -infty by Tw4;
+   hence thesis by Def10;
+  end;
+
+theorem
+ min(a,-infty) = -infty
+  proof a >= -infty by Tw4;
+   hence thesis by Def9;
+  end;
+
 
 
 

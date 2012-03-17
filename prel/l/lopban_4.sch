@@ -12,7 +12,9 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
@@ -29,22 +31,21 @@
 <ArticleID name="FUNCSDOM"/>
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="LOPBAN_2"/>
-<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="37"/>
+<Adjective nr="35" value="false"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
-<Adjective nr="44"/>
-<Adjective nr="50"/>
-<Adjective nr="71"/>
-<Adjective nr="80"/>
+<Adjective nr="42"/>
+<Adjective nr="45"/>
+<Adjective nr="51"/>
+<Adjective nr="72"/>
+<Adjective nr="81"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -65,7 +66,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="21">
+<Adjective nr="22">
 <Func kind="K" nr="56"/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
@@ -87,13 +88,13 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="22">
+<Pred kind="R" nr="12">
 <Var nr="3"/>
 <Var nr="1"/>
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="129">
+<Func kind="K" nr="150">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -109,19 +110,19 @@
 <Not>
 <And>
 <Not>
-<Pred kind="R" nr="22">
+<Pred kind="R" nr="12">
 <Var nr="3"/>
 <Var nr="1"/>
 </Pred>
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="129">
+<Func kind="K" nr="150">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="119">
+<Func kind="K" nr="140">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

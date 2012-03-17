@@ -9,17 +9,18 @@ environ
  vocabularies GROUP_1, ARYTM_3, ORDINAL2, ARYTM, POLYNOM1, FILTER_0, FUNCT_1,
       FINSEQ_1, ALGSEQ_1, CARD_3, FINSET_1, ARYTM_1, BOOLE, SEQM_3, PBOOLE,
       NAT_1, RELAT_1, NAT_LAT, FUNCOP_1, CARD_1, SEQ_1, REALSET1, SQUARE_1,
-      FINSEQ_2, UPROOTS, VECTSP_1, FUNCT_2, SETWISEO, SGRAPH1, NAT_3;
+      FINSEQ_2, UPROOTS, FUNCT_2, SETWISEO, SGRAPH1, NAT_3, COMPLEX1, XCMPLX_0,
+      COMPLSP1;
  notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, REALSET1, ORDINAL1, ORDINAL2,
-      CARD_1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, NAT_1, INT_2, NEWTON,
-      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, SEQ_1, SEQM_3, NAT_LAT, PBOOLE,
-      POLYNOM1, POLYNOM2, RVSUM_1, WSIERP_1, BINARITH, TREES_4, UPROOTS,
-      BINOP_2, PRE_CIRC, SETWOP_2, XXREAL_0;
- constructors POLYNOM2, WSIERP_1, FINSOP_1, EULER_2, NAT_LAT, REAL_1, BINARITH,
-      FINSEQOP, UPROOTS, PRE_CIRC, FACIRC_1, SETWISEO, BINOP_1, XXREAL_0;
- registrations XREAL_0, NAT_1, INT_1, POLYNOM1, RELSET_1, CARD_5, MEMBERED,
-      PRE_CIRC, SEQ_1, RELAT_1, TEX_2, FINSET_1, CIRCCMB3, XCMPLX_0, FUNCT_1,
-      NEWTON, BINOP_2;
+      CARD_1, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, NAT_1, INT_2, NEWTON,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, SEQ_1, SEQM_3, PBOOLE, POLYNOM1,
+      POLYNOM2, RVSUM_1, WSIERP_1, BINARITH, TREES_4, UPROOTS, BINOP_2,
+      PRE_CIRC, SETWOP_2;
+ constructors POLYNOM2, WSIERP_1, FINSOP_1, REAL_1, BINARITH, FINSEQOP,
+      UPROOTS, PRE_CIRC, FACIRC_1, SETWISEO, BINOP_1, XXREAL_0;
+ registrations XREAL_0, NAT_1, INT_1, POLYNOM1, RELSET_1, MEMBERED, PRE_CIRC,
+      RELAT_1, TEX_2, FINSET_1, CIRCCMB3, XCMPLX_0, FUNCT_1, NEWTON, BINOP_2,
+      RVSUM_1, XXREAL_0;
  requirements NUMERALS, SUBSET, ARITHM, REAL, BOOLE;
 
 
@@ -229,15 +230,23 @@ registration
   cluster max(b1,b2) -> finite-support;
 end;
 
-definition
-  let A be set, b be bag of A;
-  func Product b -> natural number means
-:: NAT_3:def 5
-  ex f being FinSequence of NAT st it = Product f & f = b*canFS(support b);
+registration
+  cluster natural-yielding -> complex-yielding Relation;
 end;
 
-definition
-  let A be set, b be bag of A;
+registration let A be set;
+  cluster finite-support complex-yielding ManySortedSet of A;
+end;
+
+definition let A be set,
+               b be finite-support complex-yielding ManySortedSet of A;
+  func Product b -> complex number means
+:: NAT_3:def 5
+  ex f being FinSequence of COMPLEX st
+    it = Product f & f = b*canFS(support b);
+end;
+
+definition let A be set, b be bag of A;
   redefine func Product b -> Nat;
 end;
 
@@ -267,7 +276,7 @@ registration
 end;
 
 theorem :: NAT_3:20
-for A being set holds Product EmptyBag A = 1;
+  for A being set holds Product EmptyBag A = 1;
 
 begin :: Multiplicity of a divisor
 

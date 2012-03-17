@@ -8,14 +8,15 @@ environ
 
  vocabularies SETFAM_1, TARSKI, BOOLE, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL2,
       PRE_TOPC;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_2,
-      STRUCT_0;
- constructors STRUCT_0, FUNCT_2, MEMBERED, SETFAM_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1,
+   RELSET_1, FUNCT_2, STRUCT_0;
+ constructors STRUCT_0, FUNCT_2, MEMBERED, SETFAM_1, PARTFUN1;
  registrations STRUCT_0, RELSET_1, SUBSET_1, MEMBERED;
  requirements BOOLE, SUBSET;
- definitions TARSKI, STRUCT_0;
- theorems TARSKI, SUBSET_1, ZFMISC_1, SETFAM_1, STRUCT_0, XBOOLE_0, XBOOLE_1;
+ theorems TARSKI, SUBSET_1, ZFMISC_1, SETFAM_1, STRUCT_0, XBOOLE_0, XBOOLE_1,
+   FUNCT_2;
  schemes SUBSET_1;
+ definitions TARSKI, STRUCT_0;
 
 begin
 
@@ -93,6 +94,12 @@ end;
 
 definition let S be 1-sorted;
   mode Point of S is Element of S;
+end;
+
+registration
+ let T be TopSpace;
+ cluster the topology of T -> non empty;
+ coherence by Def1;
 end;
 
 reserve GX for TopSpace;
@@ -445,39 +452,94 @@ registration let T be TopSpace, P be Subset of T;
   coherence;
 end;
 
-:: Moved to STRUCT_0 on 2005.09.22
-:: definition let S, T be 1-sorted;
-::   mode map of S, T is Function of the carrier of S, the carrier of T;
-:: end;
-
-definition let S, T be 1-sorted,
-               f be Function of the carrier of S, the carrier of T,
-               P be set;
-  redefine func f.:P -> Subset of T;
-   coherence
-    proof
-     thus f.:P is Subset of T;
+theorem for S being TopSpace,
+  P1,P2 being Subset of S,
+  P1' being Subset of S|P2 st P1=P1' & P1 c= P2
+  holds S|P1=(S|P2)|P1'
+proof let S be TopSpace,
+  P1,P2 be Subset of S,
+  P1' be Subset of S|P2;
+ assume A1:P1=P1' & P1 c= P2;
+  A2:[#](S|P2)=P2 by Def10;
+  A3:[#]((S|P2)|P1')=P1 by A1,Def10;
+  A4:[#]((S|P2)|P1') c= [#](S) by A3;
+      for R being Subset of (S|P2)|P1' holds
+     R in the topology of (S|P2)|P1' iff
+     ex Q being Subset of S st
+     Q in the topology of S & R=Q/\[#]((S|P2)|P1')
+    proof let R be Subset of (S|P2)|P1';
+      A5:now assume R in the topology of (S|P2)|P1';
+        then consider Q0 being Subset of S|P2 such that
+        A6: Q0 in the topology of S|P2 & R=Q0/\[#]((S|P2)|P1')
+           by Def9;
+        consider Q1 being Subset of S such that
+        A7: Q1 in the topology of S & Q0=Q1/\[#](S|P2) by A6,Def9;
+            R=Q1/\(P2/\P1) by A2,A3,A6,A7,XBOOLE_1:16
+        .=Q1/\[#]((S|P2)|P1') by A1,A3,XBOOLE_1:28;
+       hence ex Q being Subset of S st
+              Q in the topology of S & R=Q/\[#]((S|P2)|P1') by A7;
+      end;
+          now given Q being Subset of S such that
+        A8:Q in the topology of S & R=Q/\[#]((S|P2)|P1');
+        reconsider R'=Q/\[#](S|P2) as Subset of S|P2
+            by XBOOLE_1:17;
+        A9:R' in the topology of (S|P2) by A8,Def9;
+           R'/\[#]((S|P2)|P1')=Q/\(P2/\P1) by A2,A3,XBOOLE_1:16
+          .=R by A1,A3,A8,XBOOLE_1:28;
+       hence R in the topology of (S|P2)|P1' by A9,Def9;
+      end;
+     hence R in the topology of (S|P2)|P1' iff
+           ex Q being Subset of S st
+           Q in the topology of S & R=Q/\[#]((S|P2)|P1') by A5;
     end;
+  then (S|P2)|P1' is SubSpace of S by A4,Def9;
+ hence S|P1=(S|P2)|P1' by A3,Def10;
 end;
 
-definition let S, T be 1-sorted,
-               f be Function of the carrier of S, the carrier of T,
-               P be set;
-  redefine func f"P -> Subset of S;
-   coherence
-    proof
-     thus f"P is Subset of S;
-    end;
+theorem Th29: :: JORDAN1:1, AK, 20.02.2006
+for GX being TopStruct,
+    A being Subset of GX holds the carrier of (GX|A) = A
+  proof
+   let GX be TopStruct, A be Subset of GX;
+   A=[#](GX|A) by Def10;
+   hence thesis;
+  end;
+
+theorem :: JGRAPH_3:12, AK, 20.02.2006
+  for X being TopStruct,Y being non empty TopStruct,
+      f being Function of X,Y,
+      P being Subset of X holds f|P is Function of X|P,Y
+proof let X be TopStruct,Y be non empty TopStruct,f be Function of X,Y,
+  P be Subset of X;
+  P = the carrier of (X|P) by Th29;
+  hence thesis by FUNCT_2:38;
 end;
 
 definition let S, T be TopStruct, f be Function of S,T;
  canceled;
-
   attr f is continuous means
     for P1 being Subset of T st P1 is closed holds f" P1 is closed;
 end;
 
-canceled 11;
+theorem 
+ for T1, T2, S1, S2 being TopStruct
+   st the TopStruct of T1 = the TopStruct of T2 &
+      the TopStruct of S1 = the TopStruct of S2
+  holds S1 is SubSpace of T1 implies S2 is SubSpace of T2
+  proof let T1, T2, S1, S2 be TopStruct such that
+A1: the TopStruct of T1 = the TopStruct of T2 and
+A2: the TopStruct of S1 = the TopStruct of S2;
+   assume that
+A3: [#]S1 c= [#]T1 and
+A4: for P being Subset of S1
+     holds P in the topology of S1 iff
+      ex Q being Subset of T1 st Q in the topology of T1 &
+         P = Q /\ [#]S1;
+   thus [#]S2 c= [#]T2 by A1,A2,A3;
+   thus thesis by A1,A2,A4;
+  end;
+
+canceled 7;
 
 theorem Th39:
   for X' being SubSpace of T, A being Subset of X'

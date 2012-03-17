@@ -6,13 +6,15 @@
 
 environ
 
- vocabularies VECTSP_1, FINSEQ_1, RELAT_1, FUNCT_1, SQUARE_1, O_RING_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NAT_1, FUNCT_1, FINSEQ_1,
+ vocabularies VECTSP_1, FINSEQ_1, RELAT_1, FUNCT_1, SQUARE_1, O_RING_1,
+      FINSEQ_4;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NAT_1, FUNCT_1, FINSEQ_1, FINSEQ_4,
       STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, XXREAL_0;
- constructors NAT_1, VECTSP_1, XXREAL_0;
- registrations VECTSP_1, STRUCT_0, RELSET_1, NAT_1, XREAL_0;
+ constructors NAT_1, VECTSP_1, XXREAL_0, FINSEQ_4;
+ registrations VECTSP_1, STRUCT_0, RELSET_1, NAT_1;
  requirements NUMERALS, REAL, SUBSET, ARITHM;
- theorems REAL_1, NAT_1, FINSEQ_1, FUNCT_1, FINSEQ_3, XREAL_1;
+ theorems REAL_1, NAT_1, FINSEQ_1, FUNCT_1, FINSEQ_3, XREAL_1, FINSEQ_4,
+      XXREAL_0;
  schemes NAT_1;
 
 begin
@@ -25,7 +27,7 @@ Lm1:
       assume n<1;
       then n<0+1;
       then 0<=n & n<=0 by NAT_1:18,38;
-      hence thesis by XREAL_1:1;
+      hence thesis by XXREAL_0:1;
     end;
 
 Lm2:
@@ -44,128 +46,120 @@ reserve R for non empty doubleLoopStr;
 reserve x,y for Scalar of R;
 reserve f,g,h for FinSequence of the carrier of R;
 
-definition let D be non empty set,
-               f be FinSequence of D,
-               k be Nat;
- assume
-A1: 0<>k & k<=len f;
-  func f.:k -> Element of D equals
-:Def1: f.k;
- coherence
-  proof
-      0<k by A1,NAT_1:19;
-   then 0+1<=k by NAT_1:38;
-   then k in dom f by A1,FINSEQ_3:27;
-   then A2:f.k in rng f by FUNCT_1:def 5;
-      rng f c= D by FINSEQ_1:def 4;
-   hence thesis by A2;
-  end;
-end;
-
 Lm3:
   h=f^g iff ( dom h = Seg(len f + len g) &
-     (for k st k in dom f holds h.:k=f.:k) &
-     (for k st k in dom g holds h.:(len f + k)=g.:k))
+     (for k st k in dom f holds h/.k=f/.k) &
+     (for k st k in dom g holds h/.(len f + k)=g/.k))
      proof
+A1:     len f >= 0 by NAT_1:18;
       thus h=f^g implies
         (dom h = Seg(len f + len g) &
-        (for k st k in dom f holds h.:k=f.:k) &
-        (for k st k in dom g holds h.:(len f + k)=g.:k))
+        (for k st k in dom f holds h/.k=f/.k) &
+        (for k st k in dom g holds h/.(len f + k)=g/.k))
         proof
-          assume A1: h=f^g;
+          assume A2: h=f^g;
           hence dom h = Seg(len f + len g) by FINSEQ_1:def 7;
-          then A2:len h=len f+len g by FINSEQ_1:def 3;
-          thus for k st k in dom f holds h.:k=f.:k
+          then A3:len h=len f+len g by FINSEQ_1:def 3;
+          thus for k st k in dom f holds h/.k=f/.k
             proof
-              let k such that A3:k in dom f;
-              A4:len f<=len f+len g by NAT_1:29;
-              A5:0<>k & k<=len f by A3,FINSEQ_3:27;
-              then 0<>k & k<=len h by A2,A4,XREAL_1:2;
-              then h.:k=h.k by Def1
-                     .=f.k by A1,A3,FINSEQ_1:def 7
-                     .=f.:k by A5,Def1;
+              let k such that A4:k in dom f;
+              A5:len f<=len f+len g by NAT_1:29;
+              1<=k & k<=len f by A4,FINSEQ_3:27;
+              then 1<=k & k<=len h by A3,A5,XXREAL_0:2;
+              then k in dom h by FINSEQ_3:27;
+              then h/.k=h.k by FINSEQ_4:def 4
+                     .=f.k by A2,A4,FINSEQ_1:def 7
+                     .=f/.k by A4,FINSEQ_4:def 4;
               hence thesis;
             end;
-          thus for k st k in dom g holds h.:(len f + k)=g.:k
+          thus for k st k in dom g holds h/.(len f + k)=g/.k
             proof
               let k; assume A6:k in dom g;
-              then A7:0<>k & k<=len g by FINSEQ_3:27;
-              then 0<>len f+k & len f+k<=len f+len g by NAT_1:23,XREAL_1:9;
-              then h.:(len f + k)=h.(len f+k) by A2,Def1
-                          .=g.k by A1,A6,FINSEQ_1:def 7
-                          .=g.:k by A7,Def1;
+              then A7:1<=k & k<=len g by FINSEQ_3:27;
+              then
+A8:             0+1<=len f+k  by XREAL_1:9,A1;
+              len f+k<=len f+len g by XREAL_1:9,A7;
+              then len f + k in dom h by A3,FINSEQ_3:27,A8;
+              then h/.(len f + k)=h.(len f+k) by FINSEQ_4:def 4
+                          .=g.k by A2,A6,FINSEQ_1:def 7
+                          .=g/.k by FINSEQ_4:def 4,A6;
               hence thesis;
             end;
         end;
       thus (dom h = Seg(len f + len g) &
-      (for k st k in dom f holds h.:k=f.:k) &
-      (for k st k in dom g holds h.:(len f + k)=g.:k)) implies
+      (for k st k in dom f holds h/.k=f/.k) &
+      (for k st k in dom g holds h/.(len f + k)=g/.k)) implies
         h=f^g
         proof
           assume that
-            A8:dom h = Seg(len f + len g) and
-            A9:for k st k in dom f holds h.:k=f.:k and
-            A10:for k st k in dom g holds h.:(len f + k)=g.:k;
-          A11:len h=len f+len g by A8,FINSEQ_1:def 3;
-          A12:for k st k in dom f holds h.k=f.k
+            A9:dom h = Seg(len f + len g) and
+            A10:for k st k in dom f holds h/.k=f/.k and
+            A11:for k st k in dom g holds h/.(len f + k)=g/.k;
+          A12:len h=len f+len g by A9,FINSEQ_1:def 3;
+          A13:for k st k in dom f holds h.k=f.k
             proof
-              let k such that A13:k in dom f;
-              A14:len f<=len f+len g by NAT_1:29;
-              A15:0<>k & k<=len f by A13,FINSEQ_3:27;
-              then 0<>k & k<=len h by A11,A14,XREAL_1:2;
-              then h.k=h.:k by Def1
-                     .=f.:k by A9,A13
-                     .=f.k by A15,Def1;
+              let k such that A14:k in dom f;
+              A15:len f<=len f+len g by NAT_1:29;
+              1<=k & k<=len f by A14,FINSEQ_3:27;
+              then 1<=k & k<=len h by A12,A15,XXREAL_0:2;
+              then k in dom h by FINSEQ_3:27;
+              then h.k=h/.k by FINSEQ_4:def 4
+                     .=f/.k by A10,A14
+                     .=f.k by FINSEQ_4:def 4,A14;
               hence thesis;
             end;
              for k st k in dom g holds h.(len f + k)=g.k
             proof
               let k; assume A16:k in dom g;
-              then A17:0<>k & k<=len g by FINSEQ_3:27;
-              then 0<>len f+k & len f+k<=len f+len g by NAT_1:23,XREAL_1:9;
-              then h.(len f + k)=h.:(len f+k) by A11,Def1
-                          .=g.:k by A10,A16
-                          .=g.k by A17,Def1;
+              then 1<=k & k<=len g by FINSEQ_3:27;
+              then 0+1<=len f+k & len f+k<=len f+len g by XREAL_1:9,A1;
+              then len f + k in dom h by A12,FINSEQ_3:27;
+              then h.(len f + k)=h/.(len f+k) by FINSEQ_4:def 4
+                          .=g/.k by A11,A16
+                          .=g.k by FINSEQ_4:def 4,A16;
               hence thesis;
             end;
-          hence h=f^g by A8,A12,FINSEQ_1:def 7;
+          hence h=f^g by A9,A13,FINSEQ_1:def 7;
         end;
      end;
 
 Lm4:
-  f=<*x*> iff len f =1 & f.:1=x
+  f=<*x*> iff len f =1 & f/.1=x
     proof
-      thus f=<*x*> implies len f=1 & f.:1=x
+      thus f=<*x*> implies len f=1 & f/.1=x
         proof
           assume A1:f=<*x*>;
           hence len f=1 by FINSEQ_1:57;
-          then f.:1=f.1 by Def1
+          then 1 in dom f by FINSEQ_3:27;
+          then f/.1=f.1 by FINSEQ_4:def 4
                   .=x by A1,FINSEQ_1:57;
           hence thesis;
         end;
-      thus len f=1 & f.:1=x implies f=<*x*>
+      thus len f=1 & f/.1=x implies f=<*x*>
         proof
           assume that
             A2:len f=1 and
-            A3:f.:1=x;
-               f.1=x by A2,A3,Def1;
-            hence thesis by A2,FINSEQ_1:57;
+            A3:f/.1=x;
+           1 in dom f by A2,FINSEQ_3:27;
+           then f.1=x by A3,FINSEQ_4:def 4;
+         hence thesis by A2,FINSEQ_1:57;
         end;
     end;
 
 Lm5:
-  (f^<*x*>).:(len f + 1)=x
+  (f^<*x*>)/.(len f + 1)=x
     proof
          len f+1=len f+len<*x*> by FINSEQ_1:56
             .=len(f^<*x*>) by FINSEQ_1:35;
-      then 0<>len f+1 & len f+1<=len(f^<*x*>) by NAT_1:21;
-      then (f^<*x*>).:(len f+1)=(f^<*x*>).(len f+1) by Def1
+      then 1<=len f+1 & len f+1<=len(f^<*x*>) by NAT_1:29;
+      then len f+1 in dom(f^<*x*>) by FINSEQ_3:27;
+      then (f^<*x*>)/.(len f+1)=(f^<*x*>).(len f+1) by FINSEQ_4:def 4
                              .=x by FINSEQ_1:59;
       hence thesis;
     end;
 
 Lm6:
-  i<>0 & i<=len f implies (f^g).:i=f.:i
+  i<>0 & i<=len f implies (f^g)/.i=f/.i
     proof
       assume A1: i<>0 & i<=len f;
       then 0<>i & 0<=i by NAT_1:18;
@@ -176,6 +170,7 @@ Lm6:
     end;
 
 definition let R be non empty doubleLoopStr, x be Scalar of R;
+  canceled;
   func x^2 -> Scalar of R equals
      x*x;
     coherence;
@@ -192,8 +187,8 @@ end;
 
 definition let R,f;
   attr f is being_a_Sum_of_squares means:Def4:
-  len f<>0 & f.:1 is_a_square &
-  (for n st n<>0 & n<len f ex y st y is_a_square & f.:(n+1)=f.:n+y);
+  len f<>0 & f/.1 is_a_square &
+  (for n st n<>0 & n<len f ex y st y is_a_square & f/.(n+1)=f/.n+y);
   end;
 
 notation let R,f;
@@ -203,7 +198,7 @@ end;
 definition let R be non empty doubleLoopStr, x be Scalar of R;
   attr x is being_a_sum_of_squares means:Def5:
   ex f being FinSequence of the carrier of R st
-    f is_a_Sum_of_squares & x=f.:len f;
+    f is_a_Sum_of_squares & x=f/.len f;
   end;
 
 notation let R be non empty doubleLoopStr, x be Scalar of R;
@@ -215,9 +210,9 @@ Lm7:
     proof
       assume A1:x is_a_square;
       A2: len<*x*>=1 by Lm4;
-      A3:<*x*>.:1 is_a_square by A1,Lm4;
+      A3:<*x*>/.1 is_a_square by A1,Lm4;
          for n st n<>0 & n<len <*x*>
-        ex y st y is_a_square & <*x*>.:(n+1)=<*x*>.:n+y
+        ex y st y is_a_square & <*x*>/.(n+1)=<*x*>/.n+y
         proof
           let n; assume n<>0 & n<len <*x*>;
           then n<>0 & n<1 by Lm4;
@@ -231,15 +226,15 @@ Lm8:
     proof
       assume x is_a_square;
       then A1:<*x*> is_a_Sum_of_squares by Lm7;
-         len<*x*>=1 & <*x*>.:1=x by Lm4;
+         len<*x*>=1 & <*x*>/.1=x by Lm4;
       hence thesis by A1,Def5;
     end;
 
 definition let R,f;
   attr f is being_a_Product_of_squares means:Def6:
-    len f<>0 & f.:1 is_a_square &
+    len f<>0 & f/.1 is_a_square &
       (for n st n<>0 & n<len f ex y
-        st y is_a_square & f.:(n+1)=f.:n*y);
+        st y is_a_square & f/.(n+1)=f/.n*y);
   end;
 
 notation let R,f;
@@ -248,7 +243,7 @@ end;
 
 definition let R,x;
   attr x is being_a_product_of_squares means:Def7:
-  ex f st f is_a_Product_of_squares & x=f.:len f;
+  ex f st f is_a_Product_of_squares & x=f/.len f;
   end;
 
 notation let R,x;
@@ -260,9 +255,9 @@ Lm9:
     proof
       assume A1:x is_a_square;
       A2: len<*x*>=1 by Lm4;
-      A3:<*x*>.:1 is_a_square by A1,Lm4;
+      A3:<*x*>/.1 is_a_square by A1,Lm4;
          for n st n<>0 & n<len <*x*>
-        ex y st y is_a_square & <*x*>.:(n+1)=<*x*>.:n*y
+        ex y st y is_a_square & <*x*>/.(n+1)=<*x*>/.n*y
         proof
           let n; assume n<>0 & n<len <*x*>;
           then n<>0 & n<1 by Lm4;
@@ -276,15 +271,15 @@ Lm10:
     proof
       assume x is_a_square;
       then A1:<*x*> is_a_Product_of_squares by Lm9;
-         len<*x*>=1 & <*x*>.:1=x by Lm4;
+         len<*x*>=1 & <*x*>/.1=x by Lm4;
       hence thesis by A1,Def7;
     end;
 
 definition let R,f;
   attr f is being_a_Sum_of_products_of_squares means:Def8:
-    len f<>0 & (f.:1 is_a_product_of_squares) &
+    len f<>0 & (f/.1 is_a_product_of_squares) &
     (for n st n<>0 & n<len f ex y
-         st y is_a_product_of_squares & f.:(n+1)=f.:n+y);
+         st y is_a_product_of_squares & f/.(n+1)=f/.n+y);
   end;
 
 notation let R,f;
@@ -293,7 +288,7 @@ notation let R,f;
 
 definition let R,x;
   attr x is being_a_sum_of_products_of_squares means:Def9:
-  ex f st f is_a_Sum_of_products_of_squares & x=f.:len f;
+  ex f st f is_a_Sum_of_products_of_squares & x=f/.len f;
   end;
 
 notation let R,x;
@@ -306,9 +301,9 @@ Lm11:
       assume x is_a_square;
       then A1:x is_a_product_of_squares by Lm10;
       A2: len<*x*>=1 by Lm4;
-      A3:<*x*>.:1 is_a_product_of_squares by A1,Lm4;
+      A3:<*x*>/.1 is_a_product_of_squares by A1,Lm4;
          for n st n<>0 & n<len <*x*>
-        ex y st y is_a_product_of_squares & <*x*>.:(n+1)=<*x*>.:n+y
+        ex y st y is_a_product_of_squares & <*x*>/.(n+1)=<*x*>/.n+y
         proof
           let n; assume n<>0 & n<len <*x*>;
           then n<>0 & n<1 by Lm4;
@@ -322,7 +317,7 @@ Lm12:
     proof
       assume x is_a_square;
       then A1:<*x*> is_a_Sum_of_products_of_squares by Lm11;
-         len<*x*>=1 & <*x*>.:1=x by Lm4;
+         len<*x*>=1 & <*x*>/.1=x by Lm4;
       hence thesis by A1,Def9;
     end;
 
@@ -331,10 +326,10 @@ Lm13:
     proof
       assume A1:x is_a_product_of_squares;
       A2: len<*x*>=1 by Lm4;
-      A3:<*x*>.:1 is_a_product_of_squares
+      A3:<*x*>/.1 is_a_product_of_squares
         by A1,Lm4;
          for n st n<>0 & n<len <*x*>
-        ex y st y is_a_product_of_squares & <*x*>.:(n+1)=<*x*>.:n+y
+        ex y st y is_a_product_of_squares & <*x*>/.(n+1)=<*x*>/.n+y
         proof
           let n; assume n<>0 & n<len <*x*>;
           then n<>0 & n<1 by Lm4;
@@ -348,7 +343,7 @@ Lm14:
     proof
       assume x is_a_product_of_squares;
       then A1:<*x*> is_a_Sum_of_products_of_squares by Lm13;
-         len<*x*>=1 & <*x*>.:1=x by Lm4;
+         len<*x*>=1 & <*x*>/.1=x by Lm4;
       hence thesis by A1,Def9;
     end;
 
@@ -356,15 +351,15 @@ Lm15:
   f is_a_Sum_of_squares implies f is_a_Sum_of_products_of_squares
     proof
       assume A1:f is_a_Sum_of_squares;
-      then len f<>0 & f.:1 is_a_square by Def4;
-      then A2:len f<>0 & f.:1 is_a_product_of_squares by Lm10;
+      then len f<>0 & f/.1 is_a_square by Def4;
+      then A2:len f<>0 & f/.1 is_a_product_of_squares by Lm10;
          for n st n<>0 & n<len f ex y
-        st y is_a_product_of_squares & f.:(n+1)=f.:n+y
+        st y is_a_product_of_squares & f/.(n+1)=f/.n+y
         proof
           let n; assume n<>0 & n<len f;
-          then consider y such that A3:y is_a_square & f.:(n+1)=f.:n+y
+          then consider y such that A3:y is_a_square & f/.(n+1)=f/.n+y
             by A1,Def4;
-             y is_a_product_of_squares & f.:(n+1)=f.:n+y by A3,Lm10;
+             y is_a_product_of_squares & f/.(n+1)=f/.n+y by A3,Lm10;
           hence thesis;
         end;
       hence thesis by A2,Def8;
@@ -374,7 +369,7 @@ Lm16:
   x is_a_sum_of_squares implies x is_a_sum_of_products_of_squares
     proof
       assume x is_a_sum_of_squares;
-      then consider f such that A1:f is_a_Sum_of_squares & x=f.:len f
+      then consider f such that A1:f is_a_Sum_of_squares & x=f/.len f
         by Def5;
          f is_a_Sum_of_products_of_squares by A1,Lm15;
       hence thesis by A1,Def9;
@@ -383,8 +378,8 @@ Lm16:
 definition let R,f;
   attr f is being_an_Amalgam_of_squares means:Def10:
   len f<>0 &
-  (for n st n<>0 & n<=len f holds f.:n is_a_product_of_squares or
-    ex i,j st f.:n=f.:i*f.:j & i<>0 & i<n & j<>0 & j<n);
+  (for n st n<>0 & n<=len f holds f/.n is_a_product_of_squares or
+    ex i,j st f/.n=f/.i*f/.j & i<>0 & i<n & j<>0 & j<n);
   end;
 
 notation let R,f;
@@ -393,7 +388,7 @@ end;
 
 definition let R,x;
   attr x is being_an_amalgam_of_squares means:Def11:
-  ex f st f is_an_Amalgam_of_squares & x=f.:len f;
+  ex f st f is_an_Amalgam_of_squares & x=f/.len f;
   end;
 
 notation let R,x;
@@ -406,9 +401,9 @@ Lm17:
       assume x is_a_square;
       then A1:x is_a_product_of_squares by Lm10;
       A2: len<*x*>=1 by Lm4;
-      A3:<*x*>.:1 is_a_product_of_squares by A1,Lm4;
-         for n st n<>0 & n<=len <*x*> holds <*x*>.:n is_a_product_of_squares or
-        ex i,j st <*x*>.:n=<*x*>.:i*<*x*>.:j & i<>0 & i<n & j<>0 & j<n
+      A3:<*x*>/.1 is_a_product_of_squares by A1,Lm4;
+         for n st n<>0 & n<=len <*x*> holds <*x*>/.n is_a_product_of_squares or
+        ex i,j st <*x*>/.n=<*x*>/.i*<*x*>/.j & i<>0 & i<n & j<>0 & j<n
         proof
           let n; assume n<>0 & n<=len <*x*>;
           then n<>0 & n<=1 by Lm4;
@@ -422,7 +417,7 @@ Lm18:
     proof
       assume x is_a_square;
       then A1:<*x*> is_an_Amalgam_of_squares by Lm17;
-         len<*x*>=1 & <*x*>.:1=x by Lm4;
+         len<*x*>=1 & <*x*>/.1=x by Lm4;
       hence thesis by A1,Def11;
     end;
 
@@ -431,9 +426,9 @@ Lm19:
     proof
       assume A1:x is_a_product_of_squares;
       A2: len<*x*>=1 by Lm4;
-      A3:<*x*>.:1 is_a_product_of_squares by A1,Lm4;
-         for n st n<>0 & n<=len <*x*> holds <*x*>.:n is_a_product_of_squares or
-        ex i,j st <*x*>.:n=<*x*>.:i*<*x*>.:j & i<>0 & i<n & j<>0 & j<n
+      A3:<*x*>/.1 is_a_product_of_squares by A1,Lm4;
+         for n st n<>0 & n<=len <*x*> holds <*x*>/.n is_a_product_of_squares or
+        ex i,j st <*x*>/.n=<*x*>/.i*<*x*>/.j & i<>0 & i<n & j<>0 & j<n
         proof
           let n; assume n<>0 & n<=len <*x*>;
           then n<>0 & n<=1 by Lm4;
@@ -447,16 +442,16 @@ Lm20:
     proof
       assume x is_a_product_of_squares;
       then A1:<*x*> is_an_Amalgam_of_squares by Lm19;
-         len<*x*>=1 & <*x*>.:1=x by Lm4;
+         len<*x*>=1 & <*x*>/.1=x by Lm4;
       hence thesis by A1,Def11;
     end;
 
 definition let R,f;
   attr f is being_a_Sum_of_amalgams_of_squares means
   :Def12:
-  len f<>0 & (f.:1 is_an_amalgam_of_squares) &
+  len f<>0 & (f/.1 is_an_amalgam_of_squares) &
   (for n st n<>0 & n<len f ex y
-    st y is_an_amalgam_of_squares & f.:(n+1)=f.:n+y);
+    st y is_an_amalgam_of_squares & f/.(n+1)=f/.n+y);
   end;
 
 notation let R,f;
@@ -466,7 +461,7 @@ notation let R,f;
 definition let R,x;
   attr x is being_a_sum_of_amalgams_of_squares means
   :Def13:
-  ex f st f is_a_Sum_of_amalgams_of_squares & x=f.:len f;
+  ex f st f is_a_Sum_of_amalgams_of_squares & x=f/.len f;
   end;
 
 notation let R,x;
@@ -479,9 +474,9 @@ Lm21:
       assume x is_a_square;
       then A1:x is_an_amalgam_of_squares by Lm18;
       A2: len<*x*>=1 by Lm4;
-      A3:<*x*>.:1 is_an_amalgam_of_squares by A1,Lm4;
+      A3:<*x*>/.1 is_an_amalgam_of_squares by A1,Lm4;
          for n st n<>0 & n<len <*x*>
-        ex y st y is_an_amalgam_of_squares & <*x*>.:(n+1)=<*x*>.:n+y
+        ex y st y is_an_amalgam_of_squares & <*x*>/.(n+1)=<*x*>/.n+y
         proof
           let n; assume n<>0 & n<len <*x*>;
           then n<>0 & n<1 by Lm4;
@@ -495,7 +490,7 @@ Lm22:
     proof
       assume x is_a_square;
       then A1:<*x*> is_a_Sum_of_amalgams_of_squares by Lm21;
-         len<*x*>=1 & <*x*>.:1=x by Lm4;
+         len<*x*>=1 & <*x*>/.1=x by Lm4;
       hence thesis by A1,Def13;
     end;
 
@@ -505,16 +500,16 @@ Lm23:
     proof
       assume A1:f is_a_Sum_of_squares;
       then A2:len f<>0 by Def4;
-         f.:1 is_a_square by A1,Def4;
-      then A3:f.:1 is_an_amalgam_of_squares by Lm18;
+         f/.1 is_a_square by A1,Def4;
+      then A3:f/.1 is_an_amalgam_of_squares by Lm18;
          for n st n<>0 & n<len f ex y
-        st y is_an_amalgam_of_squares & f.:(n+1)=f.:n+y
+        st y is_an_amalgam_of_squares & f/.(n+1)=f/.n+y
         proof
           let n; assume n<>0 & n<len f;
           then consider y such that
-            A4:y is_a_square & f.:(n+1)=f.:n+y
+            A4:y is_a_square & f/.(n+1)=f/.n+y
               by A1,Def4;
-             y is_an_amalgam_of_squares & f.:(n+1)=f.:n+y by A4,Lm18;
+             y is_an_amalgam_of_squares & f/.(n+1)=f/.n+y by A4,Lm18;
           hence thesis;
         end;
       hence thesis by A2,A3,Def12;
@@ -526,9 +521,9 @@ Lm24:
     proof
       assume x is_a_sum_of_squares;
       then consider f such that
-        A1:f is_a_Sum_of_squares & x=f.:len f
+        A1:f is_a_Sum_of_squares & x=f/.len f
           by Def5;
-         f is_a_Sum_of_amalgams_of_squares & x=f.:len f by A1,Lm23;
+         f is_a_Sum_of_amalgams_of_squares & x=f/.len f by A1,Lm23;
       hence thesis by Def13;
     end;
 
@@ -538,9 +533,9 @@ Lm25:
       assume x is_a_product_of_squares;
       then A1:x is_an_amalgam_of_squares by Lm20;
       A2: len<*x*>=1 by Lm4;
-      A3:<*x*>.:1 is_an_amalgam_of_squares by A1,Lm4;
+      A3:<*x*>/.1 is_an_amalgam_of_squares by A1,Lm4;
          for n st n<>0 & n<len <*x*>
-        ex y st y is_an_amalgam_of_squares & <*x*>.:(n+1)=<*x*>.:n+y
+        ex y st y is_an_amalgam_of_squares & <*x*>/.(n+1)=<*x*>/.n+y
         proof
           let n; assume n<>0 & n<len <*x*>;
           then n<>0 & n<1 by Lm4;
@@ -554,7 +549,7 @@ Lm26:
     proof
       assume x is_a_product_of_squares;
       then A1:<*x*> is_a_Sum_of_amalgams_of_squares by Lm25;
-         len<*x*>=1 & <*x*>.:1=x by Lm4;
+         len<*x*>=1 & <*x*>/.1=x by Lm4;
       hence thesis by A1,Def13;
     end;
 
@@ -564,16 +559,16 @@ Lm27:
     proof
       assume A1:f is_a_Sum_of_products_of_squares;
       then A2:len f<>0 by Def8;
-         f.:1 is_a_product_of_squares by A1,Def8;
-      then A3:f.:1 is_an_amalgam_of_squares by Lm20;
+         f/.1 is_a_product_of_squares by A1,Def8;
+      then A3:f/.1 is_an_amalgam_of_squares by Lm20;
          for n st n<>0 & n<len f ex y
-        st y is_an_amalgam_of_squares & f.:(n+1)=f.:n+y
+        st y is_an_amalgam_of_squares & f/.(n+1)=f/.n+y
         proof
           let n; assume n<>0 & n<len f;
           then consider y such that
-            A4:y is_a_product_of_squares & f.:(n+1)=f.:n+y
+            A4:y is_a_product_of_squares & f/.(n+1)=f/.n+y
               by A1,Def8;
-             y is_an_amalgam_of_squares & f.:(n+1)=f.:n+y by A4,Lm20;
+             y is_an_amalgam_of_squares & f/.(n+1)=f/.n+y by A4,Lm20;
           hence thesis;
         end;
       hence thesis by A2,A3,Def12;
@@ -585,9 +580,9 @@ Lm28:
     proof
       assume x is_a_sum_of_products_of_squares;
       then consider f such that
-        A1:f is_a_Sum_of_products_of_squares & x=f.:len f
+        A1:f is_a_Sum_of_products_of_squares & x=f/.len f
           by Def9;
-         f is_a_Sum_of_amalgams_of_squares & x=f.:len f by A1,Lm27;
+         f is_a_Sum_of_amalgams_of_squares & x=f/.len f by A1,Lm27;
       hence thesis by Def13;
     end;
 
@@ -597,9 +592,9 @@ Lm29:
     proof
       assume A1:x is_an_amalgam_of_squares;
       A2: len<*x*>=1 by Lm4;
-      A3:<*x*>.:1 is_an_amalgam_of_squares by A1,Lm4;
+      A3:<*x*>/.1 is_an_amalgam_of_squares by A1,Lm4;
          for n st n<>0 & n<len <*x*>
-        ex y st y is_an_amalgam_of_squares & <*x*>.:(n+1)=<*x*>.:n+y
+        ex y st y is_an_amalgam_of_squares & <*x*>/.(n+1)=<*x*>/.n+y
         proof
           let n; assume n<>0 & n<len <*x*>;
           then n<>0 & n<1 by Lm4;
@@ -613,15 +608,15 @@ Lm30:
     proof
       assume x is_an_amalgam_of_squares;
       then A1:<*x*> is_a_Sum_of_amalgams_of_squares by Lm29;
-         len<*x*>=1 & <*x*>.:1=x by Lm4;
+         len<*x*>=1 & <*x*>/.1=x by Lm4;
       hence thesis by A1,Def13;
     end;
 
 definition let R,f;
   attr f is being_a_generation_from_squares means:Def14:
   len f<>0 &
-  (for n st n<>0 & n<=len f holds f.:n is_an_amalgam_of_squares or
-    ex i,j st (f.:n=f.:i*f.:j or f.:n=f.:i+f.:j) & i<>0 & i<n & j<>0 & j<n);
+  (for n st n<>0 & n<=len f holds f/.n is_an_amalgam_of_squares or
+    ex i,j st (f/.n=f/.i*f/.j or f/.n=f/.i+f/.j) & i<>0 & i<n & j<>0 & j<n);
   end;
 
 notation let R,f;
@@ -630,7 +625,7 @@ notation let R,f;
 
 definition let R,x;
   attr x is generated_from_squares means:Def15:
-  ex f st f is_a_generation_from_squares & x=f.:len f;
+  ex f st f is_a_generation_from_squares & x=f/.len f;
   end;
 
 notation let R,x;
@@ -643,10 +638,10 @@ Lm31:
       assume x is_a_square;
       then A1:x is_an_amalgam_of_squares by Lm18;
       A2: len<*x*>=1 by Lm4;
-      A3:<*x*>.:1 is_an_amalgam_of_squares by A1,Lm4;
-         for n st n<>0 & n<=len <*x*> holds <*x*>.:n is_an_amalgam_of_squares
+      A3:<*x*>/.1 is_an_amalgam_of_squares by A1,Lm4;
+         for n st n<>0 & n<=len <*x*> holds <*x*>/.n is_an_amalgam_of_squares
 or
-        ex i,j st (<*x*>.:n=<*x*>.:i*<*x*>.:j or <*x*>.:n=<*x*>.:i+<*x*>.:j) &
+        ex i,j st (<*x*>/.n=<*x*>/.i*<*x*>/.j or <*x*>/.n=<*x*>/.i+<*x*>/.j) &
           i<>0 & i<n & j<>0 & j<n
         proof
           let n; assume n<>0 & n<=len <*x*>;
@@ -661,7 +656,7 @@ Lm32:
     proof
       assume x is_a_square;
       then A1:<*x*> is_a_generation_from_squares by Lm31;
-         len<*x*>=1 & <*x*>.:1=x by Lm4;
+         len<*x*>=1 & <*x*>/.1=x by Lm4;
       hence thesis by A1,Def15;
     end;
 
@@ -677,22 +672,22 @@ Lm33:f is_a_generation_from_squares & x is_an_amalgam_of_squares
       A3:len g=len f+len<*x*> by FINSEQ_1:35
             .=len f+1 by Lm4;
          for n st n<>0 & n<=len g holds
-        g.:n is_an_amalgam_of_squares or
-          ex i,j st (g.:n=g.:i*g.:j or g.:n=g.:i+g.:
+        g/.n is_an_amalgam_of_squares or
+          ex i,j st (g/.n=g/.i*g/.j or g/.n=g/.i+g/.
 j) & i<>0 & i<n & j<>0 & j<n
         proof
           let n such that A4:n<>0 & n<=len g;
           A5:now assume n<len g;
             then A6:n<=len f by A3,NAT_1:38;
-            then A7:g.:n=f.:n by A4,Lm6;
-            A8: f.:n is_an_amalgam_of_squares implies thesis by A4,A6,Lm6;
+            then A7:g/.n=f/.n by A4,Lm6;
+            A8: f/.n is_an_amalgam_of_squares implies thesis by A4,A6,Lm6;
                now given k,m such that
-                A9:(f.:n=f.:k*f.:m or f.:n=f.:k+f.:m) & k<>0 & k<n & m<>0 &
+                A9:(f/.n=f/.k*f/.m or f/.n=f/.k+f/.m) & k<>0 & k<n & m<>0 &
                   m<n;
-                 k<=len f by A6,A9,XREAL_1:2;
-              then A10:f.:k=g.:k by A9,Lm6;
-                 m<=len f by A6,A9,XREAL_1:2;
-              then f.:m=g.:m by A9,Lm6;
+                 k<=len f by A6,A9,XXREAL_0:2;
+              then A10:f/.k=g/.k by A9,Lm6;
+                 m<=len f by A6,A9,XXREAL_0:2;
+              then f/.m=g/.m by A9,Lm6;
               hence thesis by A7,A9,A10;
             end;
             hence thesis by A1,A4,A6,A8,Def14;
@@ -705,43 +700,43 @@ j) & i<>0 & i<n & j<>0 & j<n
 
 Lm34:
   f is_a_generation_from_squares & i<>0 & i<=len f & j<>0 & j<=len f
-    implies f^<*f.:i+f.:j*> is_a_generation_from_squares
+    implies f^<*f/.i+f/.j*> is_a_generation_from_squares
     proof
       assume A1:f is_a_generation_from_squares &
         i<>0 & i<=len f & j<>0 & j<=len f;
       then len f<>0 by Def14;
-      then len f+len<*f.:i+f.:j*><>0 by NAT_1:23;
-      then A2:len (f^<*f.:i+f.:j*>)<>0 by FINSEQ_1:35;
-      set g=f^<*f.:i+f.:j*>;
-      A3:len g=len f+len<*f.:i+f.:j*> by FINSEQ_1:35
+      then len f+len<*f/.i+f/.j*><>0 by NAT_1:23;
+      then A2:len (f^<*f/.i+f/.j*>)<>0 by FINSEQ_1:35;
+      set g=f^<*f/.i+f/.j*>;
+      A3:len g=len f+len<*f/.i+f/.j*> by FINSEQ_1:35
             .=len f+1 by Lm4;
          for n st n<>0 & n<=len g holds
-        g.:n is_an_amalgam_of_squares or
-          ex i,j st (g.:n=g.:i*g.:j or g.:n=g.:i+g.:
+        g/.n is_an_amalgam_of_squares or
+          ex i,j st (g/.n=g/.i*g/.j or g/.n=g/.i+g/.
 j) & i<>0 & i<n & j<>0 & j<n
         proof
           let n such that A4:n<>0 & n<=len g;
           A5:now assume n<len g;
             then A6:n<=len f by A3,NAT_1:38;
-            then A7:g.:n=f.:n by A4,Lm6;
-            A8: f.:n is_an_amalgam_of_squares implies thesis by A4,A6,Lm6;
+            then A7:g/.n=f/.n by A4,Lm6;
+            A8: f/.n is_an_amalgam_of_squares implies thesis by A4,A6,Lm6;
                now given k,m such that
-                A9:(f.:n=f.:k*f.:m or f.:n=f.:k+f.:m) & k<>0 & k<n & m<>0 &
+                A9:(f/.n=f/.k*f/.m or f/.n=f/.k+f/.m) & k<>0 & k<n & m<>0 &
                   m<n;
-                 k<=len f by A6,A9,XREAL_1:2;
-              then A10:f.:k=g.:k by A9,Lm6;
-                 m<=len f by A6,A9,XREAL_1:2;
-              then f.:m=g.:m by A9,Lm6;
+                 k<=len f by A6,A9,XXREAL_0:2;
+              then A10:f/.k=g/.k by A9,Lm6;
+                 m<=len f by A6,A9,XXREAL_0:2;
+              then f/.m=g/.m by A9,Lm6;
               hence thesis by A7,A9,A10;
             end;
             hence thesis by A1,A4,A6,A8,Def14;
           end;
              now assume A11: n=len g;
 
-            then g.:n=f.:i+f.:j by A3,Lm5
-                     .=g.:i+f.:j by A1,Lm6
-                     .=g.:i+g.:j by A1,Lm6;
-            then g.:n=g.:i+g.:j & i<n & j<n by A1,A3,A11,NAT_1:38;
+            then g/.n=f/.i+f/.j by A3,Lm5
+                     .=g/.i+f/.j by A1,Lm6
+                     .=g/.i+g/.j by A1,Lm6;
+            then g/.n=g/.i+g/.j & i<n & j<n by A1,A3,A11,NAT_1:38;
             hence thesis by A1;
           end;
           hence thesis by A4,A5,REAL_1:def 5;
@@ -761,29 +756,29 @@ Lm35:
       A3:len g=len f+len<*x*> by FINSEQ_1:35
             .=len f+1 by Lm4;
          for n st n<>0 & n<=len g holds
-        g.:n is_an_amalgam_of_squares or
-          ex i,j st (g.:n=g.:i*g.:j or g.:n=g.:i+g.:
+        g/.n is_an_amalgam_of_squares or
+          ex i,j st (g/.n=g/.i*g/.j or g/.n=g/.i+g/.
 j) & i<>0 & i<n & j<>0 & j<n
         proof
           let n such that A4:n<>0 & n<=len g;
           A5:now assume n<len g;
             then A6:n<=len f by A3,NAT_1:38;
-            then A7:g.:n=f.:n by A4,Lm6;
-            A8: f.:n is_an_amalgam_of_squares implies thesis by A4,A6,Lm6;
+            then A7:g/.n=f/.n by A4,Lm6;
+            A8: f/.n is_an_amalgam_of_squares implies thesis by A4,A6,Lm6;
                now given k,m such that
-                A9:(f.:n=f.:k*f.:m or f.:n=f.:k+f.:m) & k<>0 & k<n & m<>0 &
+                A9:(f/.n=f/.k*f/.m or f/.n=f/.k+f/.m) & k<>0 & k<n & m<>0 &
                   m<n;
-                 k<=len f by A6,A9,XREAL_1:2;
-              then A10:f.:k=g.:k by A9,Lm6;
-                 m<=len f by A6,A9,XREAL_1:2;
-              then f.:m=g.:m by A9,Lm6;
+                 k<=len f by A6,A9,XXREAL_0:2;
+              then A10:f/.k=g/.k by A9,Lm6;
+                 m<=len f by A6,A9,XXREAL_0:2;
+              then f/.m=g/.m by A9,Lm6;
               hence thesis by A7,A9,A10;
             end;
             hence thesis
               by A1,A4,A6,A8,Def14;
           end;
              now assume n=len g;
-            then g.:n=x by A3,Lm5;
+            then g/.n=x by A3,Lm5;
             hence thesis by A1,Lm18;
           end;
           hence thesis by A4,A5,REAL_1:def 5;
@@ -793,7 +788,7 @@ j) & i<>0 & i<n & j<>0 & j<n
 
 Lm36:
   f is_a_generation_from_squares & x is_a_square
-  implies (f^<*x*>)^<*f.:len f+x*> is_a_generation_from_squares
+  implies (f^<*x*>)^<*f/.len f+x*> is_a_generation_from_squares
     proof
       assume A1:f is_a_generation_from_squares & x is_a_square;
       then A2:f^<*x*> is_a_generation_from_squares by Lm35;
@@ -804,8 +799,8 @@ A5:      len f<=len f+1 by NAT_1:29;
 A6:
       len f+1<>0 & len f+1=len(f^<*x*>) by A3,FINSEQ_1:35,NAT_1:21;
 
-      A7:(f^<*x*>).:len f=f.:len f by A4,Lm6;
-         (f^<*x*>).:(len f+1)=x by Lm5;
+      A7:(f^<*x*>)/.len f=f/.len f by A4,Lm6;
+         (f^<*x*>)/.(len f+1)=x by Lm5;
       hence thesis by A2,A4,A5,A6,A7,Lm34;
     end;
 
@@ -817,40 +812,40 @@ Lm37:
           A1:x is_generated_from_squares and
           A2:y is_a_square;
         consider f such that
-          A3:f is_a_generation_from_squares & x=f.:len f
+          A3:f is_a_generation_from_squares & x=f/.len f
             by A1,Def15;
-        take g=(f^<*y*>)^<*f.:len f+y*>;
-           len g=len(f^<*y*>)+len<*f.:len f+y*> by FINSEQ_1:35
+        take g=(f^<*y*>)^<*f/.len f+y*>;
+           len g=len(f^<*y*>)+len<*f/.len f+y*> by FINSEQ_1:35
               .=len(f^<*y*>)+1 by Lm4;
         hence thesis by A2,A3,Lm5,Lm36;
       end;
 
 Lm38:
   f is_a_Sum_of_squares & 0<>i & i<=len f
-    implies f.:i is_generated_from_squares
+    implies f/.i is_generated_from_squares
   proof
     assume that
       A1:f is_a_Sum_of_squares and
       A2:0<>i and
       A3:i<=len f;
-      defpred P[Nat] means 0<>$1 & $1<=len f implies f.:$1
+      defpred P[Nat] means 0<>$1 & $1<=len f implies f/.$1
                            is_generated_from_squares;
     A4: P[0];
     A5: for i st P[i] holds P[i+1]
       proof
         let i such that
-          A6:0<>i & i<=len f implies f.:i is_generated_from_squares;
+          A6:0<>i & i<=len f implies f/.i is_generated_from_squares;
         assume that
              0<>(i+1) and
           A7:(i+1)<=len f;
         A8:i<len f by A7,NAT_1:38;
         A9:now assume i=0;
-          then f.:(i+1) is_a_square by A1,Def4;
+          then f/.(i+1) is_a_square by A1,Def4;
           hence thesis by Lm32;
         end;
            now assume A10:i<>0;
           then ex y st
-          y is_a_square & f.:(i+1)=f.:i+y by A1,A8,Def4;
+          y is_a_square & f/.(i+1)=f/.i+y by A1,A8,Def4;
           hence thesis by A6,A7,A10,Lm37,NAT_1:38;
         end;
         hence thesis by A9;
@@ -865,14 +860,14 @@ Lm39:
     proof
       assume x is_a_sum_of_squares;
       then consider f such that
-        A1:f is_a_Sum_of_squares & x=f.:len f
+        A1:f is_a_Sum_of_squares & x=f/.len f
           by Def5;
          0<>len f & len f<=len f by A1,Def4;
       hence thesis by A1,Lm38;
     end;
 
 Lm40:f is_a_generation_from_squares & x is_an_amalgam_of_squares
-  implies (f^<*x*>)^<*f.:len f+x*> is_a_generation_from_squares
+  implies (f^<*x*>)^<*f/.len f+x*> is_a_generation_from_squares
     proof
       assume A1:f is_a_generation_from_squares &
         x is_an_amalgam_of_squares;
@@ -884,8 +879,8 @@ A5:      len f<=len f+1 by NAT_1:29;
 A6:
       len f+1<>0 & len f+1=len(f^<*x*>) by A3,FINSEQ_1:35,NAT_1:21;
 
-      A7:(f^<*x*>).:len f=f.:len f by A4,Lm6;
-         (f^<*x*>).:(len f+1)=x by Lm5;
+      A7:(f^<*x*>)/.len f=f/.len f by A4,Lm6;
+         (f^<*x*>)/.(len f+1)=x by Lm5;
       hence thesis by A2,A4,A5,A6,A7,Lm34;
     end;
 
@@ -897,10 +892,10 @@ Lm41:
           A1:x is_generated_from_squares and
           A2:y is_an_amalgam_of_squares;
         consider f such that
-          A3:f is_a_generation_from_squares & x=f.:len f
+          A3:f is_a_generation_from_squares & x=f/.len f
             by A1,Def15;
-        take g=(f^<*y*>)^<*f.:len f+y*>;
-           len g=len(f^<*y*>)+len<*f.:len f+y*> by FINSEQ_1:35
+        take g=(f^<*y*>)^<*f/.len f+y*>;
+           len g=len(f^<*y*>)+len<*f/.len f+y*> by FINSEQ_1:35
               .=len(f^<*y*>)+1 by Lm4;
         hence thesis by A2,A3,Lm5,Lm40;
       end;
@@ -913,9 +908,9 @@ Lm42:
     thus thesis
       proof
         let n such that A2:n<>0 & n<=len f;
-        A3:( ex i,j st f.:n=f.:i*f.:j & i<>0 & i<n & j<>0 & j<n) implies
+        A3:( ex i,j st f/.n=f/.i*f/.j & i<>0 & i<n & j<>0 & j<n) implies
  thesis;
-            f.:n is_a_product_of_squares implies thesis by Lm20;
+            f/.n is_a_product_of_squares implies thesis by Lm20;
         hence thesis by A1,A2,A3,Def10;
       end;
   end;
@@ -925,49 +920,49 @@ Lm43:
   proof
     assume x is_an_amalgam_of_squares;
     then consider f such that
-      A1:f is_an_Amalgam_of_squares & x=f.:len f by Def11;
-       f is_a_generation_from_squares & x=f.:len f by A1,Lm42;
+      A1:f is_an_Amalgam_of_squares & x=f/.len f by Def11;
+       f is_a_generation_from_squares & x=f/.len f by A1,Lm42;
     hence thesis by Def15;
   end;
 
 Lm44:f is_a_generation_from_squares & i<>0 & i<=len f & j<>0 & j<=len f
-  implies f^<*f.:i*f.:j*> is_a_generation_from_squares
+  implies f^<*f/.i*f/.j*> is_a_generation_from_squares
     proof
       assume A1:f is_a_generation_from_squares &
         i<>0 & i<=len f & j<>0 & j<=len f;
       then len f<>0 by Def14;
-      then len f+len<*f.:i*f.:j*><>0 by NAT_1:23;
-      then A2:len (f^<*f.:i*f.:j*>)<>0 by FINSEQ_1:35;
-      set g=f^<*f.:i*f.:j*>;
-      A3:len g=len f+len<*f.:i*f.:j*> by FINSEQ_1:35
+      then len f+len<*f/.i*f/.j*><>0 by NAT_1:23;
+      then A2:len (f^<*f/.i*f/.j*>)<>0 by FINSEQ_1:35;
+      set g=f^<*f/.i*f/.j*>;
+      A3:len g=len f+len<*f/.i*f/.j*> by FINSEQ_1:35
             .=len f+1 by Lm4;
          for n st n<>0 & n<=len g holds
-        g.:n is_an_amalgam_of_squares or
-          ex i,j st (g.:n=g.:i*g.:j or g.:n=g.:i+g.:
+        g/.n is_an_amalgam_of_squares or
+          ex i,j st (g/.n=g/.i*g/.j or g/.n=g/.i+g/.
 j) & i<>0 & i<n & j<>0 & j<n
         proof
           let n such that A4:n<>0 & n<=len g;
           A5:now assume n<len g;
             then A6:n<=len f by A3,NAT_1:38;
-            then A7:g.:n=f.:n by A4,Lm6;
-            A8: f.:n is_an_amalgam_of_squares implies thesis by A4,A6,Lm6;
+            then A7:g/.n=f/.n by A4,Lm6;
+            A8: f/.n is_an_amalgam_of_squares implies thesis by A4,A6,Lm6;
                now given k,m such that
-                A9:(f.:n=f.:k*f.:m or f.:n=f.:k+f.:m) & k<>0 & k<n & m<>0 &
+                A9:(f/.n=f/.k*f/.m or f/.n=f/.k+f/.m) & k<>0 & k<n & m<>0 &
                   m<n;
-                 k<=len f by A6,A9,XREAL_1:2;
-              then A10:f.:k=g.:k by A9,Lm6;
-                 m<=len f by A6,A9,XREAL_1:2;
-              then f.:m=g.:m by A9,Lm6;
+                 k<=len f by A6,A9,XXREAL_0:2;
+              then A10:f/.k=g/.k by A9,Lm6;
+                 m<=len f by A6,A9,XXREAL_0:2;
+              then f/.m=g/.m by A9,Lm6;
               hence thesis by A7,A9,A10;
             end;
             hence thesis by A1,A4,A6,A8,Def14;
           end;
              now assume A11: n=len g;
 
-            then g.:n=f.:i*f.:j by A3,Lm5
-                     .=g.:i*f.:j by A1,Lm6
-                     .=g.:i*g.:j by A1,Lm6;
-            then g.:n=g.:i*g.:j & i<n & j<n by A1,A3,A11,NAT_1:38;
+            then g/.n=f/.i*f/.j by A3,Lm5
+                     .=g/.i*f/.j by A1,Lm6
+                     .=g/.i*g/.j by A1,Lm6;
+            then g/.n=g/.i*g/.j & i<n & j<n by A1,A3,A11,NAT_1:38;
             hence thesis by A1;
           end;
           hence thesis by A4,A5,REAL_1:def 5;
@@ -977,7 +972,7 @@ j) & i<>0 & i<n & j<>0 & j<n
 
 Lm45:
   f is_a_generation_from_squares & x is_a_square
-  implies (f^<*x*>)^<*f.:len f*x*> is_a_generation_from_squares
+  implies (f^<*x*>)^<*f/.len f*x*> is_a_generation_from_squares
     proof
       assume A1:f is_a_generation_from_squares & x is_a_square;
       then A2:f^<*x*> is_a_generation_from_squares by Lm35;
@@ -988,8 +983,8 @@ A5:      len f<=len f+1 by NAT_1:29;
 A6:
       len f+1<>0 & len f+1=len(f^<*x*>) by A3,FINSEQ_1:35,NAT_1:21;
 
-      A7:(f^<*x*>).:len f=f.:len f by A4,Lm6;
-         (f^<*x*>).:(len f+1)=x by Lm5;
+      A7:(f^<*x*>)/.len f=f/.len f by A4,Lm6;
+         (f^<*x*>)/.(len f+1)=x by Lm5;
       hence thesis by A2,A4,A5,A6,A7,Lm44;
     end;
 
@@ -1001,39 +996,39 @@ Lm46:
           A1:x is_generated_from_squares and
           A2:y is_a_square;
         consider f such that
-          A3:f is_a_generation_from_squares & x=f.:len f
+          A3:f is_a_generation_from_squares & x=f/.len f
             by A1,Def15;
-        take g=(f^<*y*>)^<*f.:len f*y*>;
-           len g=len(f^<*y*>)+len<*f.:len f*y*> by FINSEQ_1:35
+        take g=(f^<*y*>)^<*f/.len f*y*>;
+           len g=len(f^<*y*>)+len<*f/.len f*y*> by FINSEQ_1:35
               .=len(f^<*y*>)+1 by Lm4;
         hence thesis by A2,A3,Lm5,Lm45;
       end;
 
 Lm47:
   f is_a_Product_of_squares & 0<>i & i<=len f
-    implies f.:i is_generated_from_squares
+    implies f/.i is_generated_from_squares
   proof
     assume that
       A1:f is_a_Product_of_squares and
       A2:0<>i and
       A3:i<=len f;
     defpred P[Nat] means
-            0<>$1 & $1<=len f implies f.:$1 is_generated_from_squares;
+            0<>$1 & $1<=len f implies f/.$1 is_generated_from_squares;
     A4: P[0];
     A5:for i st P[i] holds P[i+1]
       proof
         let i such that
-          A6:0<>i & i<=len f implies f.:i is_generated_from_squares;
+          A6:0<>i & i<=len f implies f/.i is_generated_from_squares;
         assume that
              0<>(i+1) and
           A7:(i+1)<=len f;
         A8:i<len f by A7,NAT_1:38;
         A9:now assume i=0;
-          then f.:(i+1) is_a_square by A1,Def6;
+          then f/.(i+1) is_a_square by A1,Def6;
           hence thesis by Lm32;
         end;
            now assume A10:i<>0;
-          then ex y st y is_a_square & f.:(i+1)=f.:i*y
+          then ex y st y is_a_square & f/.(i+1)=f/.i*y
               by A1,A8,Def6;
           hence thesis by A6,A7,A10,Lm46,NAT_1:38;
         end;
@@ -1049,7 +1044,7 @@ Lm48:
     proof
       assume x is_a_product_of_squares;
       then consider f such that
-        A1:f is_a_Product_of_squares & x=f.:len f
+        A1:f is_a_Product_of_squares & x=f/.len f
           by Def7;
          0<>len f & len f<=len f by A1,Def6;
       hence thesis by A1,Lm47;
@@ -1067,28 +1062,28 @@ Lm49:f is_a_generation_from_squares & x is_a_product_of_squares
       A3:len g=len f+len<*x*> by FINSEQ_1:35
             .=len f+1 by Lm4;
          for n st n<>0 & n<=len g holds
-        g.:n is_an_amalgam_of_squares or
-          ex i,j st (g.:n=g.:i*g.:j or g.:n=g.:i+g.:
+        g/.n is_an_amalgam_of_squares or
+          ex i,j st (g/.n=g/.i*g/.j or g/.n=g/.i+g/.
 j) & i<>0 & i<n & j<>0 & j<n
         proof
           let n such that A4:n<>0 & n<=len g;
           A5:now assume n<len g;
             then A6:n<=len f by A3,NAT_1:38;
-            then A7:g.:n=f.:n by A4,Lm6;
-            A8: f.:n is_an_amalgam_of_squares implies thesis by A4,A6,Lm6;
+            then A7:g/.n=f/.n by A4,Lm6;
+            A8: f/.n is_an_amalgam_of_squares implies thesis by A4,A6,Lm6;
                now given k,m such that
-                A9:(f.:n=f.:k*f.:m or f.:n=f.:k+f.:m) & k<>0 & k<n & m<>0 &
+                A9:(f/.n=f/.k*f/.m or f/.n=f/.k+f/.m) & k<>0 & k<n & m<>0 &
                   m<n;
-                 k<=len f by A6,A9,XREAL_1:2;
-              then A10:f.:k=g.:k by A9,Lm6;
-                 m<=len f by A6,A9,XREAL_1:2;
-              then f.:m=g.:m by A9,Lm6;
+                 k<=len f by A6,A9,XXREAL_0:2;
+              then A10:f/.k=g/.k by A9,Lm6;
+                 m<=len f by A6,A9,XXREAL_0:2;
+              then f/.m=g/.m by A9,Lm6;
               hence thesis by A7,A9,A10;
             end;
             hence thesis by A1,A4,A6,A8,Def14;
           end;
              now assume n=len g;
-            then g.:n=x by A3,Lm5;
+            then g/.n=x by A3,Lm5;
             hence thesis by A1,Lm20;
           end;
           hence thesis by A4,A5,REAL_1:def 5;
@@ -1097,7 +1092,7 @@ j) & i<>0 & i<n & j<>0 & j<n
     end;
 
 Lm50:f is_a_generation_from_squares & x is_a_product_of_squares
-  implies (f^<*x*>)^<*f.:len f+x*> is_a_generation_from_squares
+  implies (f^<*x*>)^<*f/.len f+x*> is_a_generation_from_squares
     proof
       assume A1:f is_a_generation_from_squares &
         x is_a_product_of_squares;
@@ -1107,8 +1102,8 @@ Lm50:f is_a_generation_from_squares & x is_a_product_of_squares
 A5:      len f<=len f+1 by NAT_1:29;
 
 A6: len f+1<>0 & len f+1=len(f^<*x*>) by A3,FINSEQ_1:35,NAT_1:21;
-    A7:(f^<*x*>).:len f=f.:len f by A4,Lm6;
-         (f^<*x*>).:(len f+1)=x by Lm5;
+    A7:(f^<*x*>)/.len f=f/.len f by A4,Lm6;
+         (f^<*x*>)/.(len f+1)=x by Lm5;
       hence thesis by A2,A4,A5,A6,A7,Lm34;
     end;
 
@@ -1120,41 +1115,41 @@ Lm51:
           A1:x is_generated_from_squares and
           A2:y is_a_product_of_squares;
         consider f such that
-          A3:f is_a_generation_from_squares & x=f.:len f
+          A3:f is_a_generation_from_squares & x=f/.len f
             by A1,Def15;
-        take g=(f^<*y*>)^<*f.:len f+y*>;
-           len g=len(f^<*y*>)+len<*f.:len f+y*> by FINSEQ_1:35
+        take g=(f^<*y*>)^<*f/.len f+y*>;
+           len g=len(f^<*y*>)+len<*f/.len f+y*> by FINSEQ_1:35
               .=len(f^<*y*>)+1 by Lm4;
         hence thesis by A2,A3,Lm5,Lm50;
       end;
 
 Lm52:
   f is_a_Sum_of_products_of_squares & 0<>i & i<=len f
-    implies f.:i is_generated_from_squares
+    implies f/.i is_generated_from_squares
   proof
     assume that
       A1:f is_a_Sum_of_products_of_squares and
       A2:0<>i and
       A3:i<=len f;
     defpred P[Nat] means
-              0<>$1 & $1<=len f implies f.:$1 is_generated_from_squares;
+              0<>$1 & $1<=len f implies f/.$1 is_generated_from_squares;
     A4: P[0];
     A5:for i st P[i] holds P[i+1]
       proof
         let i such that
-          A6:0<>i & i<=len f implies f.:i is_generated_from_squares;
+          A6:0<>i & i<=len f implies f/.i is_generated_from_squares;
         assume that
              0<>(i+1) and
           A7:(i+1)<=len f;
         A8:i<len f by A7,NAT_1:38;
 
         A9:now assume i=0;
-          then f.:(i+1) is_a_product_of_squares
+          then f/.(i+1) is_a_product_of_squares
             by A1,Def8;
           hence thesis by Lm48;
         end;
            now assume A10:i<>0;
-          then ex y st y is_a_product_of_squares & f.:(i+1)=f.:i+y
+          then ex y st y is_a_product_of_squares & f/.(i+1)=f/.i+y
               by A1,A8,Def8;
           hence thesis by A6,A7,A10,Lm51,NAT_1:38;
         end;
@@ -1170,7 +1165,7 @@ Lm53:
     proof
       assume x is_a_sum_of_products_of_squares;
       then consider f such that
-        A1:f is_a_Sum_of_products_of_squares & x=f.:len f
+        A1:f is_a_Sum_of_products_of_squares & x=f/.len f
           by Def9;
          0<>len f & len f<=len f by A1,Def8;
       hence thesis by A1,Lm52;
@@ -1211,26 +1206,26 @@ theorem
 
 Lm54:
   f is_a_Sum_of_amalgams_of_squares implies
-  for i holds i<>0 & i<=len f implies f.:i is_generated_from_squares
+  for i holds i<>0 & i<=len f implies f/.i is_generated_from_squares
     proof
       assume A1:f is_a_Sum_of_amalgams_of_squares;
       defpred P[Nat] means
-              $1<>0 & $1<=len f implies f.:$1 is_generated_from_squares;
+              $1<>0 & $1<=len f implies f/.$1 is_generated_from_squares;
       A2: P[0];
       A3:for i st P[i] holds P[i+1]
         proof
           let i such that
-            A4:i<>0 & i<=len f implies f.:i is_generated_from_squares;
+            A4:i<>0 & i<=len f implies f/.i is_generated_from_squares;
           assume A5:(i+1)<>0 & (i+1)<=len f;
           A6:now assume i=0;
-            then f.:(i+1) is_an_amalgam_of_squares
+            then f/.(i+1) is_an_amalgam_of_squares
               by A1,Def12;
             hence thesis by Lm43;
           end;
              now assume A7: i<>0;
             then i<>0 & i<len f by A5,NAT_1:38;
             then ex y st
-y is_an_amalgam_of_squares & f.:(i+1)=f.:i+y
+y is_an_amalgam_of_squares & f/.(i+1)=f/.i+y
                 by A1,Def12;
             hence thesis by A4,A5,A7,Lm41,NAT_1:38;
           end;
@@ -1244,7 +1239,7 @@ theorem
     proof
       assume x is_a_sum_of_amalgams_of_squares;
       then consider f such that
-        A1:f is_a_Sum_of_amalgams_of_squares & x=f.:len f
+        A1:f is_a_Sum_of_amalgams_of_squares & x=f/.len f
           by Def13;
          len f<>0 & len f<=len f by A1,Def12;
       hence thesis by A1,Lm54;

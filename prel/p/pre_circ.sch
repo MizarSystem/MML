@@ -14,6 +14,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -161,7 +162,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="104">
 <Func kind="K" nr="56"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -176,7 +177,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="104">
 <Func kind="K" nr="56"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -187,7 +188,7 @@
 </Func>
 <Func kind="F" nr="3">
 <Var nr="2"/>
-<Func kind="K" nr="89">
+<Func kind="K" nr="104">
 <Func kind="K" nr="56"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -227,7 +228,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="104">
 <Func kind="K" nr="56"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -242,7 +243,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="104">
 <Func kind="K" nr="56"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -253,7 +254,7 @@
 </Func>
 <Func kind="F" nr="3">
 <Var nr="3"/>
-<Func kind="K" nr="89">
+<Func kind="K" nr="104">
 <Func kind="K" nr="56"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -263,7 +264,7 @@
 </Pred>
 </For>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="104">
 <Func kind="K" nr="56"/>
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
@@ -278,7 +279,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="104">
 <Func kind="K" nr="56"/>
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
@@ -289,7 +290,7 @@
 </Func>
 <Func kind="F" nr="3">
 <Var nr="3"/>
-<Func kind="K" nr="89">
+<Func kind="K" nr="104">
 <Func kind="K" nr="56"/>
 <Func kind="F" nr="1"/>
 <Var nr="2"/>

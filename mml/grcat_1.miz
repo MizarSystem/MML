@@ -8,22 +8,23 @@ environ
 
  vocabularies CLASSES2, PARTFUN1, RELAT_1, FUNCT_1, MIDSP_1, BOOLE, VECTSP_2,
       FUNCT_2, VECTSP_1, MIDSP_2, RLVECT_1, ARYTM_1, CAT_1, TARSKI, CAT_2,
-      ORDINAL4, FUNCOP_1, MOD_1, ENS_1, GRCAT_1, ALGSTR_1, REALSET1;
+      ORDINAL4, FUNCOP_1, MOD_1, ENS_1, GRCAT_1, ALGSTR_1, REALSET1,
+      SUBSET_1, SGRAPH1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MOD_1, RELAT_1, FUNCT_1,
-      MCART_1, BINOP_1, REALSET1,
-      PARTFUN1, CLASSES2, FUNCT_2, STRUCT_0,
-      CAT_1, RLVECT_1, VECTSP_1, VECTSP_2,
-      FUNCOP_1, CAT_2, ALGSTR_1, MIDSP_1, MIDSP_2;
- constructors BINOP_1, VECTSP_2, CLASSES2, CAT_2, MIDSP_2, ALGSTR_1, CLASSES1,
-      PARTFUN1, RELAT_2, FUNCOP_1, REALSET1;
+      MCART_1, REALSET1, PARTFUN1, CLASSES2, FUNCT_2, BINOP_1, STRUCT_0, CAT_1,
+      PRE_TOPC, TOPS_2,
+      RLVECT_1, VECTSP_1, VECTSP_2, FUNCOP_1, CAT_2, ALGSTR_1, MIDSP_1,
+      MIDSP_2;
+ constructors VECTSP_2, CLASSES2, CAT_2, MIDSP_2, ALGSTR_1, CLASSES1, PARTFUN1,
+      RELAT_2, FUNCOP_1, REALSET1, TOPS_2;
  registrations RELSET_1, GROUP_1, STRUCT_0, SUBSET_1, CLASSES2, ALGSTR_1,
       MIDSP_2, FUNCT_2, PARTFUN1, XBOOLE_0, FUNCOP_1;
- definitions BINOP_1;
  requirements SUBSET, BOOLE;
- theorems BINOP_1, CAT_1, CAT_2, CLASSES2, FUNCOP_1, FUNCT_1, FUNCT_2, MIDSP_2,
-      MCART_1, PARTFUN1, VECTSP_1, TARSKI, ZFMISC_1, RLVECT_1, RELAT_1,
-      RELSET_1, ORDINAL1, XBOOLE_0, ALGSTR_1;
+ theorems CAT_1, CAT_2, CLASSES2, FUNCOP_1, FUNCT_1, FUNCT_2, MIDSP_2, MCART_1,
+      PARTFUN1, VECTSP_1, TARSKI, ZFMISC_1, RLVECT_1, RELAT_1, RELSET_1,
+      ORDINAL1, XBOOLE_0, ALGSTR_1, TOPS_2;
  schemes FUNCT_2, PARTFUN1, TARSKI, XBOOLE_0;
+ definitions BINOP_1, PRE_TOPC;
 
 begin ::  0a. Auxiliary theorems: sets and universums
 
@@ -230,6 +231,11 @@ theorem
 definition let G be 1-sorted;
  func id G -> Function of G,G equals
    id the carrier of G;
+  coherence;
+end;
+
+registration let G be 1-sorted;
+  cluster id G -> one-to-one;
   coherence;
 end;
 
@@ -1730,3 +1736,30 @@ theorem
                : ex H being midpoint_operator AbGroup st G = H};
     hence thesis;
  end;
+
+theorem :: YELLOW16:8, AK, 20.02.2006
+ for S, T being non empty 1-sorted, f being Function of T,S,
+     g being Function of S,T holds
+   f*g = id S implies rng f = the carrier of S
+  proof let S,T be non empty 1-sorted;
+   let f be Function of T,S, g be Function of S,T such that
+A1:  f*g = id S;
+   thus rng f = the carrier of S by A1,FUNCT_2:29;
+  end;
+
+theorem :: WAYBEL29:1
+ for S, T being non empty 1-sorted
+ for f being Function of S, T st f is one-to-one onto
+  holds f*f" = id T & f"*f = id S & f" is one-to-one onto
+  proof let S, T be non empty 1-sorted;
+   let f be Function of S, T;
+A1:  dom f = the carrier of S by FUNCT_2:def 1;
+   assume f is one-to-one onto;
+    then f is one-to-one & rng f = the carrier of T & [#]T = the carrier of T
+     by FUNCT_2:def 3;
+    then f*f" = id the carrier of T & f"*f = id the carrier of S &
+    rng (f") = [#]S & f" is one-to-one & [#]S = the carrier of S
+     by A1,TOPS_2:62,63,65;
+   hence thesis by FUNCT_2:def 3;
+  end;
+

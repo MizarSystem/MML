@@ -15,7 +15,7 @@ environ
  registrations SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_2, RELSET_1, FUNCOP_1,
       ARYTM_3, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions BINOP_1;
+ definitions BINOP_1, FUNCOP_1, FINSEQ_2;
  theorems ZFMISC_1, FUNCT_1, FUNCT_2, FUNCOP_1, FINSEQ_1, BINOP_1, SETWISEO,
       FINSEQ_2, FUNCT_3, RELAT_1, XBOOLE_0;
  schemes NAT_1, FINSEQ_2;
@@ -53,22 +53,21 @@ canceled;
 theorem Th4:
    for F,f being Function holds F.:({},f) = {} & F.:(f,{}) = {}
  proof let F,f be Function;
-     F.:({},f) = F*<:{},f:> & F.:(f,{}) = F*<:f,{}:> by FUNCOP_1:def 3;
-  then F.:({},f) = F*{} & F.:(f,{}) = F*{} by Th1;
+  F.:({},f) = F*{} & F.:(f,{}) = F*{} by Th1;
   hence thesis;
  end;
 
 theorem
       for F being Function holds F[:]({},x) = {}
  proof let F be Function;
-     F[:]({},x) = F.:({}, dom {} --> x) by FUNCOP_1:34;
+     F[:]({},x) = F.:({}, dom {} --> x);
   hence thesis by Th4;
  end;
 
 theorem
       for F being Function holds F[;](x,{}) = {}
  proof let F be Function;
-     F[;](x,{}) = F.:(dom {} --> x, {}) by FUNCOP_1:41;
+     F[;](x,{}) = F.:(dom {} --> x, {});
   hence thesis by Th4;
  end;
 
@@ -109,7 +108,7 @@ theorem Th8:
  proof let F be Function, X be set, x1,x2 be set such that
 A1:  [x1,x2] in dom F;
   set f = X-->x1, g = X-->x2;
-  thus F.:(f,g) = F*<:f,g:> by FUNCOP_1:def 3
+  thus F.:(f,g) = F*<:f,g:>
          .= F*(X-->[x1,x2]) by Th7
          .= X -->(F.[x1,x2]) by A1,FUNCOP_1:23;
  end;
@@ -416,8 +415,8 @@ theorem
      d in D;
   then d in dom h by FUNCT_2:def 1;
   then h*((Seg i)-->d) = (Seg i) --> (h.d) by FUNCOP_1:23;
-  hence h*(i|->d) = (Seg i) --> (h.d) by FINSEQ_2:def 2
-                 .= i|->(h.d) by FINSEQ_2:def 2;
+  hence h*(i|->d) = (Seg i) --> (h.d)
+                 .= i|->(h.d);
  end;
 
 theorem Th18:
@@ -425,27 +424,27 @@ theorem Th18:
  proof
      [d,d'] in [:D,D':] by ZFMISC_1:def 2;
   then [d,d'] in dom F & i|->d = (Seg i)-->d & i|->d' = (Seg i)-->d'
-    by FINSEQ_2:def 2,FUNCT_2:def 1;
+    by FUNCT_2:def 1;
   hence F.:(i|->d,i|->d') = (Seg i) --> (F.[d,d']) by Th8
                         .= (Seg i) --> (F.(d,d'))
-                        .= i |-> (F.(d,d')) by FINSEQ_2:def 2;
+                        .= i |-> (F.(d,d'));
  end;
 
 theorem
       F[;](d,i|->d') = i |-> (F.(d,d'))
  proof
-  thus F[;](d,i|->d') = F.:(dom(i|->d')-->d,i|->d') by FUNCOP_1:41
-                   .= F.:(Seg i -->d,i|->d') by FINSEQ_2:68
-                   .= F.:(i |->d,i|->d') by FINSEQ_2:def 2
+  thus F[;](d,i|->d') = F.:(dom(i|->d')-->d,i|->d')
+                   .= F.:(Seg i -->d,i|->d') by FUNCOP_1:19
+                   .= F.:(i |->d,i|->d')
                    .= i |-> (F.(d,d')) by Th18;
  end;
 
 theorem
       F[:](i|->d,d') = i |-> (F.(d,d'))
  proof
-  thus F[:](i|->d,d') = F.:(i|->d,dom(i|->d)-->d') by FUNCOP_1:34
-                   .= F.:(i|->d,Seg i-->d') by FINSEQ_2:68
-                   .= F.:(i |->d,i|->d') by FINSEQ_2:def 2
+  thus F[:](i|->d,d') = F.:(i|->d,dom(i|->d)-->d')
+                   .= F.:(i|->d,Seg i-->d') by FUNCOP_1:19
+                   .= F.:(i |->d,i|->d')
                    .= i |-> (F.(d,d')) by Th18;
  end;
 
@@ -453,16 +452,16 @@ theorem
       F.:(i|->d,T') = F[;](d,T')
  proof
 A1:  dom T' = Seg len T' by FINSEQ_1:def 3 .= Seg i by FINSEQ_2:109;
-  thus F.:(i|->d,T') = F.:((Seg i)-->d,T') by FINSEQ_2:def 2
-                   .= F[;](d,T') by A1,FUNCOP_1:41;
+  thus F.:(i|->d,T') = F.:((Seg i)-->d,T')
+                   .= F[;](d,T') by A1;
  end;
 
 theorem
       F.:(T,i|->d) = F[:](T,d)
  proof
 A1:  dom T = Seg len T by FINSEQ_1:def 3 .= Seg i by FINSEQ_2:109;
-  thus F.:(T,i|->d) = F.:(T,(Seg i)-->d) by FINSEQ_2:def 2
-                  .= F[:](T,d) by A1,FUNCOP_1:34;
+  thus F.:(T,i|->d) = F.:(T,(Seg i)-->d)
+                  .= F[:](T,d) by A1;
  end;
 
 theorem
@@ -731,10 +730,10 @@ A2: dom f = C by FUNCT_2:def 1;
 A3:  dom h = D by FUNCT_2:def 1;
 A4: dom(h*f) = C by FUNCT_2:def 1;
   reconsider g = C --> d as Function of C,D by FUNCOP_1:58;
-  thus h*(F[;](d,f)) = h*(F.:(g,f)) by A2,FUNCOP_1:41
+  thus h*(F[;](d,f)) = h*(F.:(g,f)) by A2
                   .= H.:(h*g,h*f) by A1,Th38
                   .= H.:(C-->(h.d),h*f) by A3,FUNCOP_1:23
-                  .= H[;](h.d,h*f) by A4,FUNCOP_1:41;
+                  .= H[;](h.d,h*f) by A4;
  end;
 
 theorem Th40:
@@ -746,10 +745,10 @@ A2: dom f = C by FUNCT_2:def 1;
 A3:  dom h = D by FUNCT_2:def 1;
 A4: dom(h*f) = C by FUNCT_2:def 1;
   reconsider g = C --> d as Function of C,D by FUNCOP_1:58;
-  thus h*(F[:](f,d)) = h*(F.:(f,g)) by A2,FUNCOP_1:34
+  thus h*(F[:](f,d)) = h*(F.:(f,g)) by A2
                   .= H.:(h*f,h*g) by A1,Th38
                   .= H.:(h*f,C-->h.d) by A3,FUNCOP_1:23
-                  .= H[:](h*f,h.d) by A4,FUNCOP_1:34;
+                  .= H[:](h*f,h.d) by A4;
  end;
 
 theorem
@@ -964,7 +963,7 @@ A1: F has_a_unity;
      hence thesis;
     end;
     suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
-        T is Function of C,D & i|->e = Seg i --> e by Lm5,FINSEQ_2:def 2;
+        T is Function of C,D & i|->e = Seg i --> e by Lm5;
      hence thesis by A1,Th44;
  end;
  end;
@@ -1305,7 +1304,7 @@ A1:   F has_a_unity & F is associative & F has_an_inverseOp;
      hence thesis;
     end;
     suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
-        T is Function of C,D & i|->e = C-->e by Lm5,FINSEQ_2:def 2;
+        T is Function of C,D & i|->e = C-->e by Lm5;
      hence thesis by A1,Th75;
  end;
  end;
@@ -1325,7 +1324,7 @@ A1:   F is associative & F has_an_inverseOp &
     end;
     suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
         T1 is Function of C,D & T2 is Function of C,D &
-      i|->the_unity_wrt F = C-->the_unity_wrt F by Lm5,FINSEQ_2:def 2;
+      i|->the_unity_wrt F = C-->the_unity_wrt F by Lm5;
      hence thesis by A1,Th76;
  end;
  end;
@@ -1360,7 +1359,7 @@ A1:   F is associative & F has_a_unity & e = the_unity_wrt F &
     end;
     suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
         T is Function of C,D & i|->the_unity_wrt F = C-->the_unity_wrt F
-      by Lm5,FINSEQ_2:def 2;
+      by Lm5;
      hence thesis by A1,Th79;
  end;
  end;

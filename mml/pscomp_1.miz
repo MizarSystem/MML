@@ -13,15 +13,14 @@ environ
       MCART_1, PSCOMP_1, ARYTM, MEMBERED;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, SETFAM_1, FINSET_1, STRUCT_0, FINSOP_1, REAL_1, NAT_1, INT_1,
-      MEMBERED, RELAT_1, FUNCT_1, FUNCT_2, SEQ_1, SEQ_2, SEQ_4, RCOMP_1,
-      LIMFUNC1, PRE_TOPC, TOPS_2, COMPTS_1, PCOMPS_1, EUCLID, TOPREAL1,
-      MEASURE6, XXREAL_0;
+      MEMBERED, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, SEQ_1, SEQ_2, SEQ_4,
+      RCOMP_1, LIMFUNC1, PRE_TOPC, TOPS_2, COMPTS_1, PCOMPS_1, EUCLID,
+      TOPREAL1, MEASURE6, XXREAL_0;
  constructors REAL_1, TOPS_2, INT_1, FINSOP_1, SEQ_2, SEQ_4, RCOMP_1, COMPTS_1,
-      LIMFUNC1, TOPREAL1, SEQM_3, TSP_1, PCOMPS_1, COMPLEX1, MEASURE6,
-      SETFAM_1, XXREAL_0;
+      LIMFUNC1, TOPREAL1, TSP_1, PCOMPS_1, COMPLEX1, MEASURE6, SETFAM_1;
  registrations SUBSET_1, STRUCT_0, PRE_TOPC, RCOMP_1, SEQM_3, EUCLID, PCOMPS_1,
       FUNCT_1, XREAL_0, RELSET_1, SEQ_1, SETFAM_1, INT_1, SEQ_2, MEMBERED,
-      RELAT_1, FUNCT_2, ORDINAL2, SPPOL_2;
+      RELAT_1, FUNCT_2, ORDINAL2, SPPOL_2, COMPTS_1, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SEQ_2, SEQ_4, TOPS_2, COMPTS_1, RCOMP_1, ORDINAL1,
       XBOOLE_0;
@@ -29,8 +28,8 @@ environ
       REAL_2, FCONT_3, RCOMP_1, FUNCOP_1, ABSVALUE, NAT_1, INT_1, EUCLID,
       RFUNCT_2, SEQ_1, SEQ_2, BORSUK_1, TOPS_1, TSP_1, COMPTS_1, LIMFUNC1,
       SETFAM_1, ZFMISC_1, PCOMPS_1, TOPREAL1, JORDAN1, GOBOARD7, SPPOL_1,
-      RELSET_1, XREAL_0, ORDINAL1, XBOOLE_0, XBOOLE_1, PARTFUN1, XCMPLX_0,
-      XCMPLX_1, MEASURE6, XREAL_1, COMPLEX1;
+      RELSET_1, XREAL_0, ORDINAL1, XBOOLE_0, XBOOLE_1, PARTFUN1, XCMPLX_1,
+      MEASURE6, XREAL_1, COMPLEX1, XXREAL_0;
  schemes FINSET_1, FUNCT_2, DOMAIN_1, WELLORD2, BINOP_2;
 
 begin :: Preliminaries
@@ -165,11 +164,6 @@ registration let F be set;
  cluster non empty with_non-empty_elements c=-linear
           -> centered Subset-Family of F;
   coherence by Th1;
-end;
-
-definition let A, B be set, f be Function of A, B;
- redefine func rng f -> Subset of B;
- coherence by RELSET_1:12;
 end;
 
 registration let X, Y be non empty set, f be Function of X, Y;
@@ -315,7 +309,7 @@ A2: for r st r in rng seq holds r<=t;
       seq.n in rng seq by FUNCT_2:6;
   then A3: seq.n <= t by A2;
       t < t+1 by XREAL_1:31;
-  hence seq.n < t+1 by A3,XREAL_1:2;
+  hence seq.n < t+1 by A3,XXREAL_0:2;
  end;
   take s-1;
   let n be Nat;
@@ -323,24 +317,23 @@ A2: for r st r in rng seq holds r<=t;
   then A4: seq.n >= s by A1;
       s < s+1 by XREAL_1:31;
    then s-1 < s by XREAL_1:21;
-  hence s-1 < seq.n by A4,XREAL_1:2;
+  hence s-1 < seq.n by A4,XXREAL_0:2;
  end;
  given t such that
 A5: for n being Nat holds seq.n<t;
  given s such that
 A6: for n being Nat holds seq.n>s;
-A7: dom seq = NAT by FUNCT_2:def 1;
  thus rng seq is bounded_below proof
   take s;
   let r; assume r in rng seq;
    then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
-  hence s<=r by A6,A7;
+  hence s<=r by A6;
  end;
  take t;
  let r; assume
     r in rng seq;
    then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
-  hence r<=t by A5,A7;
+  hence r<=t by A5;
 end;
 
 notation let X be real-membered set;
@@ -529,7 +522,7 @@ A4: -s1 is convergent by A3,SEQ_2:23;
           x in rng -s1; then consider n being set such that
    A5: n in dom -s1 and
    A6: x = (-s1).n by FUNCT_1:def 5;
-       reconsider n as Nat by A5,FUNCT_2:def 1;
+       reconsider n as Nat by A5;
    A7: x = -(s1.n) by A6,SEQ_1:14;
           s1.n in rng s1 by FUNCT_2:6;
        then x in --X by A2,A7;
@@ -733,7 +726,7 @@ then A4: s1-s0 is convergent by A3,SEQ_2:25;
    A5: x in rng (s1-s0); then consider n being set such that
    A6: n in dom (s1-s0) and
    A7: x = (s1-s0).n by FUNCT_1:def 5;
-       reconsider n as Nat by A6,FUNCT_2:def 1;
+       reconsider n as Nat by A6;
        reconsider x' = x as Real by A5;
    A8: x = (s1+-s0).n by A7,SEQ_1:15
         .= s1.n + (-s0).n by SEQ_1:11
@@ -852,7 +845,7 @@ A7: now assume
     A9: rng (s1") c= X proof let y be set; assume y in rng (s1");
             then consider x being set such that
         A10: x in dom (s1") & y = (s1").x by FUNCT_1:def 5;
-            reconsider x as Nat by A10,FUNCT_2:def 1;
+            reconsider x as Nat by A10;
         A11: (s1").x = (s1.x)" by SEQ_1:def 8;
                s1.x in rng s1 by FUNCT_2:6;
             then 1/(s1.x) in Inv Inv X by A3;
@@ -868,7 +861,7 @@ then A12: s1" is convergent by A4,A6,SEQ_2:35;
           x in rng (s1"); then consider n being set such that
    A13: n in dom (s1") and
    A14: x = (s1").n by FUNCT_1:def 5;
-       reconsider n as Nat by A13,FUNCT_2:def 1;
+       reconsider n as Nat by A13;
    A15: x = (s1.n)" by A14,SEQ_1:def 8;
           s1.n in rng s1 by FUNCT_2:6;
        then 1/(s1.n) in Inv Inv X by A3;
@@ -1109,7 +1102,7 @@ A6: for x being set st x in NAT holds P[x,seq.x] from WELLORD2:sch 1(A2);
     then consider x being set such that
  A7: x in dom seq & seq.x = y by FUNCT_1:def 5;
      consider n being Nat such that
- A8: x = n & seq.x = choose(X/\].r3-1/(n+1),r3+1/(n+1).[) by A4,A6,A7;
+ A8: x = n & seq.x = choose(X/\].r3-1/(n+1),r3+1/(n+1).[) by A6,A7;
         set n1 = n+1;
         set oi = ].r3-1/n1,r3+1/n1.[;
          1/n1 > 0 by REAL_2:127;
@@ -1153,9 +1146,9 @@ A10: now let p be real number; assume
      then A21: 1/(n+1) < 1/n by A14,REAL_2:151;
              1/(1/p) >= 1/cp by A12,A13,REAL_2:152;
           then 1/n <= p by XCMPLX_1:56;
-         then 1/(n+1) < p by A21,XREAL_1:2;
-         then 1/m1 < p by A20,XREAL_1:2;
-    hence abs(seq.m-r3)<p by A18,A19,XREAL_1:2;
+         then 1/(n+1) < p by A21,XXREAL_0:2;
+         then 1/m1 < p by A20,XXREAL_0:2;
+    hence abs(seq.m-r3)<p by A18,A19,XXREAL_0:2;
    end;
  hence seq is convergent by SEQ_2:def 6;
  hence lim seq = r3 by A10,SEQ_2:def 7;
@@ -1191,7 +1184,7 @@ A5:  for r being real number st r in f.:X holds p<=r;
      then f.y in f.:X by PARTFUN1:51;
      then A6:    p <= f.y by A5;
         f.y < f.y + 1 by XREAL_1:31;
-     then p < f.y + 1 by A6,XREAL_1:2;
+     then p < f.y + 1 by A6,XXREAL_0:2;
     hence p-1 < f.y by XREAL_1:21;
    end;
  attr f is bounded_above means
@@ -1222,7 +1215,7 @@ A11:  for r being real number st r in f.:X holds p>=r;
      then p >= f.y by A11;
      then A12:    p+1 >= f.y+1 by XREAL_1:8;
         f.y < f.y + 1 by XREAL_1:31;
-    hence p+1 > f.y by A12,XREAL_1:2;
+    hence p+1 > f.y by A12,XXREAL_0:2;
    end;
 end;
 
@@ -1511,16 +1504,8 @@ A3: for x being set st x in the carrier of X() holds P[x,f.x]
   thus thesis by A3;
  end;
 
-definition let T be 1-sorted, f be RealMap of T, P be set;
- redefine func f"P -> Subset of T;
- coherence proof
-   thus f"P is Subset of T;
- end;
-end;
-
 definition let T be 1-sorted, f be RealMap of T;
  canceled;
-
  func inf f -> Real equals
 :Def20: inf (f.:the carrier of T);
  coherence;
@@ -1808,7 +1793,7 @@ A5: X0\{0} c= X0 by XBOOLE_1:36;
                    y in rng (seq");
               then consider n being set such that
             A17: n in dom (seq") & y = (seq").n by FUNCT_1:def 5;
-                reconsider n as Nat by A17,FUNCT_2:def 1;
+                reconsider n as Nat by A17;
                    seq.n in rng seq by FUNCT_2:6;
                 then seq.n in X' by A9,XBOOLE_0:def 3;
 then A18:            1/(1/seq.n) in X' by XCMPLX_1:56;
@@ -1850,16 +1835,6 @@ then A25:     x in the carrier of T & (Inv f).x in X0 by FUNCT_2:46;
  hence (Inv f)"X0 is closed by A21,A22,A23,TARSKI:2;
 end;
 
-definition let X, Y be set, f be Function of bool X, bool Y;
-           let R be Subset-Family of X;
-  redefine func f.:R -> Subset-Family of Y;
-  coherence
-  proof
-       f.:R c= bool Y;
-    hence thesis;
-  end;
-end;
-
 theorem
    for R being Subset-Family of REAL
  st f is continuous & R is open holds ("f).:R is open
@@ -1899,7 +1874,7 @@ definition let T be non empty TopStruct, X be Subset of T,
  func f||X -> RealMap of T|X equals
  f|X;
  coherence proof
-      the carrier of (T|X) = X by JORDAN1:1;
+      the carrier of (T|X) = X by PRE_TOPC:29;
   hence thesis by FUNCT_2:38;
  end;
 end;
@@ -1920,7 +1895,7 @@ registration let T be non empty TopSpace, f be continuous RealMap of T,
      now let Y be Subset of REAL; assume
       Y is open;
   then A1: f"Y is open by Th54;
-  A2: the carrier of (T|X) = X by JORDAN1:1;
+  A2: the carrier of (T|X) = X by PRE_TOPC:29;
         (f||X)"Y = (f|X)"Y .= X/\(f"Y) by FUNCT_1:139;
    hence (f||X)"Y is open by A1,A2,TSP_1:def 1;
   end;
@@ -1986,9 +1961,8 @@ proof let T be non empty TopSpace;
 A6: now assume 0 in rng bf; then consider x being set such that
     A7: x in dom bf and
     A8: bf.x = 0 by FUNCT_1:def 5;
-            dom bf = cT & dom f = cT by FUNCT_2:def 1;
-    then A9: f.x in fcT by A7,FUNCT_2:43;
-        reconsider x as Element of cT by A7,FUNCT_2:def 1;
+    A9: f.x in fcT by A7,FUNCT_2:43;
+        reconsider x as Element of cT by A7;
            bf'.x = b+(-f').x by Def17
              .= b+-(f.x) by Def16
              .= b-f.x;
@@ -2140,11 +2114,11 @@ A31: eR = right_closed_halfline(er) & er >= f.p;
        right_closed_halfline(er) = {r3:r3>=er} by LIMFUNC1:def 2;
     then consider r1 being Real such that
 A32: f.x = r1 & r1 >= er by A30,A31;
-A33: f.x >= f.p by A31,A32,XREAL_1:2;
+A33: f.x >= f.p by A31,A32,XXREAL_0:2;
     consider fx' being real number such that
 A34:  fx' > f.x by XREAL_1:3;
     reconsider fx' as Real by XREAL_0:def 1;
-       fx' >= f.p by A33,A34,XREAL_1:2;
+       fx' >= f.p by A33,A34,XXREAL_0:2;
     then right_closed_halfline(fx') in R;
 then A35:  f.x in right_closed_halfline(fx') by A29,SETFAM_1:def 1;
        right_closed_halfline(fx') = {r3:r3>=fx'} by LIMFUNC1:def 2;
@@ -2221,11 +2195,11 @@ A64: eR = left_closed_halfline(er) & er <= f.p;
        left_closed_halfline(er) = {r3 : r3 <= er} by LIMFUNC1:def 1;
     then consider r1 being Real such that
 A65: f.x = r1 & r1 <= er by A63,A64;
-A66: f.x <= f.p by A64,A65,XREAL_1:2;
+A66: f.x <= f.p by A64,A65,XXREAL_0:2;
     consider fx' being real number such that
 A67:  fx' < f.x by XREAL_1:4;
     reconsider fx' as Real by XREAL_0:def 1;
-       fx' <= f.p by A66,A67,XREAL_1:2;
+       fx' <= f.p by A66,A67,XXREAL_0:2;
     then left_closed_halfline(fx') in R;
 then A68:  f.x in left_closed_halfline(fx') by A62,SETFAM_1:def 1;
        left_closed_halfline(fx') = {r3 : r3 <= fx'} by LIMFUNC1:def 1;
@@ -2265,10 +2239,10 @@ proof let T be non empty TopSpace,
           f be continuous RealMap of T; assume
 A1: X c= Y;
     then reconsider Y1 = Y as non empty compact Subset of T by XBOOLE_1:3;
-A2: (f||Y).:the carrier of (T|Y) = (f||Y).:Y by JORDAN1:1
+A2: (f||Y).:the carrier of (T|Y) = (f||Y).:Y by PRE_TOPC:29
     .= (f|Y).:Y
     .= f.:Y by RFUNCT_2:5;
-A3: (f||X).:the carrier of (T|X) = (f||X).:X by JORDAN1:1
+A3: (f||X).:the carrier of (T|X) = (f||X).:X by PRE_TOPC:29
     .= (f|X).:X
     .= f.:X by RFUNCT_2:5;
 A4: (f||Y1).:the carrier of (T|Y1) is bounded_below by Def11;
@@ -2285,10 +2259,10 @@ proof let T be non empty TopSpace, X be non empty Subset of T,
           f be continuous RealMap of T; assume
 A1: X c= Y;
     then reconsider Y1 = Y as non empty compact Subset of T by XBOOLE_1:3;
-A2: (f||Y).:the carrier of (T|Y) = (f||Y).:Y by JORDAN1:1
+A2: (f||Y).:the carrier of (T|Y) = (f||Y).:Y by PRE_TOPC:29
     .= (f|Y).:Y
     .= f.:Y by RFUNCT_2:5;
-A3: (f||X).:the carrier of (T|X) = (f||X).:X by JORDAN1:1
+A3: (f||X).:the carrier of (T|X) = (f||X).:X by PRE_TOPC:29
     .= (f|X).:X
     .= f.:X by RFUNCT_2:5;
 A4: (f||Y1).:the carrier of (T|Y1) is bounded_above by Def12;
@@ -2551,7 +2525,7 @@ p in X implies inf (proj1||X) <= p`1 & p`1 <= sup (proj1||X) &
                  inf (proj2||X) <= p`2 & p`2 <= sup (proj2||X)
 proof assume
 A1: p in X;
-   then reconsider p' = p as Point of (TOP-REAL 2)|X by JORDAN1:1;
+   then reconsider p' = p as Point of (TOP-REAL 2)|X by PRE_TOPC:29;
 A2: ((proj1||X)).p' = p`1 by A1,Th69;
  hence inf (proj1||X) <= p`1 by Th47;
  thus p`1 <= sup (proj1||X) by A2,Th50;
@@ -2670,7 +2644,7 @@ A1: (SW-corner X)`1 = W-bound X & (NW-corner X)`1 = W-bound X &
    (SW-corner X)`2 = S-bound X & (NW-corner X)`2 = N-bound X
           by EUCLID:56;
    set p1X = (proj1||X), c = the carrier of (TOP-REAL 2)|X;
-A2: c = X by JORDAN1:1;
+A2: c = X by PRE_TOPC:29;
 A3: inf p1X = inf (p1X.:c) by Def20;
       p1X.:c is with_min by Def15;
    then inf (p1X.:c) in p1X.:c by Def4;
@@ -2688,7 +2662,7 @@ A6: (NW-corner X)`1 = W-bound X & (NE-corner X)`1 = E-bound X &
    (NW-corner X)`2 = N-bound X & (NE-corner X)`2 = N-bound X
           by EUCLID:56;
    set p2X = (proj2||X), c = the carrier of (TOP-REAL 2)|X;
-A7: c = X by JORDAN1:1;
+A7: c = X by PRE_TOPC:29;
 A8: sup p2X = sup (p2X.:c) by Def21;
       p2X.:c is with_max by Def14;
    then sup (p2X.:c) in p2X.:c by Def3;
@@ -2706,7 +2680,7 @@ A11: (SE-corner X)`1 = E-bound X & (NE-corner X)`1 = E-bound X &
    (SE-corner X)`2 = S-bound X & (NE-corner X)`2 = N-bound X
           by EUCLID:56;
    set p1X = (proj1||X), c = the carrier of (TOP-REAL 2)|X;
-A12: c = X by JORDAN1:1;
+A12: c = X by PRE_TOPC:29;
 A13: sup p1X = sup (p1X.:c) by Def21;
       p1X.:c is with_max by Def14;
    then sup (p1X.:c) in p1X.:c by Def3;
@@ -2724,7 +2698,7 @@ A16: (SW-corner X)`1 = W-bound X & (SE-corner X)`1 = E-bound X &
    (SW-corner X)`2 = S-bound X & (SE-corner X)`2 = S-bound X
           by EUCLID:56;
    set p2X = (proj2||X), c = the carrier of (TOP-REAL 2)|X;
-A17: c = X by JORDAN1:1;
+A17: c = X by PRE_TOPC:29;
 A18: inf p2X = inf (p2X.:c) by Def20;
       p2X.:c is with_min by Def15;
    then inf (p2X.:c) in p2X.:c by Def4;
@@ -2802,10 +2776,10 @@ then A6: (SW-corner X)`2 <= (W-min X)`2 by A1,A2,Th62;
 A7: (W-min X)`2 <= (W-max X)`2 by A2,A3,Th53;
 A8: (W-max X)`2 <= (NW-corner X)`2 by A3,A4,A5,Th63;
   thus (SW-corner X)`2 <= (W-min X)`2 by A1,A2,A5,Th62;
-  thus (SW-corner X)`2 <= (W-max X)`2 by A6,A7,XREAL_1:2;
-  hence (SW-corner X)`2 <= (NW-corner X)`2 by A8,XREAL_1:2;
+  thus (SW-corner X)`2 <= (W-max X)`2 by A6,A7,XXREAL_0:2;
+  hence (SW-corner X)`2 <= (NW-corner X)`2 by A8,XXREAL_0:2;
   thus (W-min X)`2 <= (W-max X)`2 by A2,A3,Th53;
-  thus (W-min X)`2 <= (NW-corner X)`2 by A7,A8,XREAL_1:2;
+  thus (W-min X)`2 <= (NW-corner X)`2 by A7,A8,XXREAL_0:2;
   thus (W-max X)`2 <= (NW-corner X)`2 by A3,A4,A5,Th63;
 end;
 
@@ -2855,7 +2829,7 @@ theorem Th91:
 W-min X in W-most X & W-max X in W-most X
 proof
    set p2W = (proj2||W-most X), c = the carrier of (TOP-REAL 2)|W-most X;
-A1: c = W-most X by JORDAN1:1;
+A1: c = W-most X by PRE_TOPC:29;
       p2W.:c is with_min by Def15;
    then inf (p2W.:c) in p2W.:c by Def4;
    then consider p being set such that
@@ -2900,7 +2874,7 @@ proof
        by A5,TOPREAL1:12;
      then p in W-most X by A2,XBOOLE_0:def 3;
      then (W-min X)`2 <= p`2 by Th88;
-  then A6: p`2 = (W-min X)`2 by A4,XREAL_1:1;
+  then A6: p`2 = (W-min X)`2 by A4,XXREAL_0:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = W-min X by A3,A6,EUCLID:57;
   end;
@@ -2927,7 +2901,7 @@ proof
        by A13,TOPREAL1:12;
      then p in W-most X by A10,XBOOLE_0:def 3;
      then p`2 <= (W-max X)`2 by Th88;
-  then A14: p`2 = (W-max X)`2 by A12,XREAL_1:1;
+  then A14: p`2 = (W-max X)`2 by A12,XXREAL_0:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = W-max X by A11,A14,EUCLID:57;
   end;
@@ -2987,10 +2961,10 @@ then A6: (NW-corner X)`1 <= (N-min X)`1 by A1,A2,Th62;
 A7: (N-min X)`1 <= (N-max X)`1 by A2,A3,Th53;
 A8: (N-max X)`1 <= (NE-corner X)`1 by A3,A4,A5,Th63;
   thus (NW-corner X)`1 <= (N-min X)`1 by A1,A2,A5,Th62;
-  thus (NW-corner X)`1 <= (N-max X)`1 by A6,A7,XREAL_1:2;
-  hence (NW-corner X)`1 <= (NE-corner X)`1 by A8,XREAL_1:2;
+  thus (NW-corner X)`1 <= (N-max X)`1 by A6,A7,XXREAL_0:2;
+  hence (NW-corner X)`1 <= (NE-corner X)`1 by A8,XXREAL_0:2;
   thus (N-min X)`1 <= (N-max X)`1 by A2,A3,Th53;
-  thus (N-min X)`1 <= (NE-corner X)`1 by A7,A8,XREAL_1:2;
+  thus (N-min X)`1 <= (NE-corner X)`1 by A7,A8,XXREAL_0:2;
   thus (N-max X)`1 <= (NE-corner X)`1 by A3,A4,A5,Th63;
 end;
 
@@ -3040,7 +3014,7 @@ theorem Th101:
 N-min X in N-most X & N-max X in N-most X
 proof
    set p2W = (proj1||N-most X), c = the carrier of (TOP-REAL 2)|N-most X;
-A1: c = N-most X by JORDAN1:1;
+A1: c = N-most X by PRE_TOPC:29;
       p2W.:c is with_min by Def15;
    then inf (p2W.:c) in p2W.:c by Def4;
    then consider p being set such that
@@ -3085,7 +3059,7 @@ proof
        by A5,TOPREAL1:12;
      then p in N-most X by A2,XBOOLE_0:def 3;
      then (N-min X)`1 <= p`1 by Th98;
-  then A6: p`1 = (N-min X)`1 by A4,XREAL_1:1;
+  then A6: p`1 = (N-min X)`1 by A4,XXREAL_0:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = N-min X by A3,A6,EUCLID:57;
   end;
@@ -3112,7 +3086,7 @@ proof
        by A13,TOPREAL1:12;
      then p in N-most X by A10,XBOOLE_0:def 3;
      then p`1 <= (N-max X)`1 by Th98;
-  then A14: p`1 = (N-max X)`1 by A12,XREAL_1:1;
+  then A14: p`1 = (N-max X)`1 by A12,XXREAL_0:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = N-max X by A11,A14,EUCLID:57;
   end;
@@ -3172,10 +3146,10 @@ then A6: (SE-corner X)`2 <= (E-min X)`2 by A1,A2,Th62;
 A7: (E-min X)`2 <= (E-max X)`2 by A2,A3,Th53;
 A8: (E-max X)`2 <= (NE-corner X)`2 by A3,A4,A5,Th63;
   thus (SE-corner X)`2 <= (E-min X)`2 by A1,A2,A5,Th62;
-  thus (SE-corner X)`2 <= (E-max X)`2 by A6,A7,XREAL_1:2;
-  hence (SE-corner X)`2 <= (NE-corner X)`2 by A8,XREAL_1:2;
+  thus (SE-corner X)`2 <= (E-max X)`2 by A6,A7,XXREAL_0:2;
+  hence (SE-corner X)`2 <= (NE-corner X)`2 by A8,XXREAL_0:2;
   thus (E-min X)`2 <= (E-max X)`2 by A2,A3,Th53;
-  thus (E-min X)`2 <= (NE-corner X)`2 by A7,A8,XREAL_1:2;
+  thus (E-min X)`2 <= (NE-corner X)`2 by A7,A8,XXREAL_0:2;
   thus (E-max X)`2 <= (NE-corner X)`2 by A3,A4,A5,Th63;
 end;
 
@@ -3225,7 +3199,7 @@ theorem Th111:
 E-min X in E-most X & E-max X in E-most X
 proof
    set p2W = (proj2||E-most X), c = the carrier of (TOP-REAL 2)|E-most X;
-A1: c = E-most X by JORDAN1:1;
+A1: c = E-most X by PRE_TOPC:29;
       p2W.:c is with_min by Def15;
    then inf (p2W.:c) in p2W.:c by Def4;
    then consider p being set such that
@@ -3270,7 +3244,7 @@ proof
        by A5,TOPREAL1:12;
      then p in E-most X by A2,XBOOLE_0:def 3;
      then (E-min X)`2 <= p`2 by Th108;
-  then A6: p`2 = (E-min X)`2 by A4,XREAL_1:1;
+  then A6: p`2 = (E-min X)`2 by A4,XXREAL_0:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = E-min X by A3,A6,EUCLID:57;
   end;
@@ -3297,7 +3271,7 @@ proof
        by A13,TOPREAL1:12;
      then p in E-most X by A10,XBOOLE_0:def 3;
      then p`2 <= (E-max X)`2 by Th108;
-  then A14: p`2 = (E-max X)`2 by A12,XREAL_1:1;
+  then A14: p`2 = (E-max X)`2 by A12,XXREAL_0:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = E-max X by A11,A14,EUCLID:57;
   end;
@@ -3357,10 +3331,10 @@ then A6: (SW-corner X)`1 <= (S-min X)`1 by A1,A2,Th62;
 A7: (S-min X)`1 <= (S-max X)`1 by A2,A3,Th53;
 A8: (S-max X)`1 <= (SE-corner X)`1 by A3,A4,A5,Th63;
   thus (SW-corner X)`1 <= (S-min X)`1 by A1,A2,A5,Th62;
-  thus (SW-corner X)`1 <= (S-max X)`1 by A6,A7,XREAL_1:2;
-  hence (SW-corner X)`1 <= (SE-corner X)`1 by A8,XREAL_1:2;
+  thus (SW-corner X)`1 <= (S-max X)`1 by A6,A7,XXREAL_0:2;
+  hence (SW-corner X)`1 <= (SE-corner X)`1 by A8,XXREAL_0:2;
   thus (S-min X)`1 <= (S-max X)`1 by A2,A3,Th53;
-  thus (S-min X)`1 <= (SE-corner X)`1 by A7,A8,XREAL_1:2;
+  thus (S-min X)`1 <= (SE-corner X)`1 by A7,A8,XXREAL_0:2;
   thus (S-max X)`1 <= (SE-corner X)`1 by A3,A4,A5,Th63;
 end;
 
@@ -3410,7 +3384,7 @@ theorem Th121:
 S-min X in S-most X & S-max X in S-most X
 proof
    set p2W = (proj1||S-most X), c = the carrier of (TOP-REAL 2)|S-most X;
-A1: c = S-most X by JORDAN1:1;
+A1: c = S-most X by PRE_TOPC:29;
       p2W.:c is with_min by Def15;
    then inf (p2W.:c) in p2W.:c by Def4;
    then consider p being set such that
@@ -3455,7 +3429,7 @@ proof
        by A5,TOPREAL1:12;
      then p in S-most X by A2,XBOOLE_0:def 3;
      then (S-min X)`1 <= p`1 by Th118;
-  then A6: p`1 = (S-min X)`1 by A4,XREAL_1:1;
+  then A6: p`1 = (S-min X)`1 by A4,XXREAL_0:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = S-min X by A3,A6,EUCLID:57;
   end;
@@ -3482,7 +3456,7 @@ proof
        by A13,TOPREAL1:12;
      then p in S-most X by A10,XBOOLE_0:def 3;
      then p`1 <= (S-max X)`1 by Th118;
-  then A14: p`1 = (S-max X)`1 by A12,XREAL_1:1;
+  then A14: p`1 = (S-max X)`1 by A12,XXREAL_0:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = S-max X by A11,A14,EUCLID:57;
   end;
@@ -3552,3 +3526,66 @@ A2: (S-min P)`2 = S-bound P & (W-min P)`1 = W-bound P &
    S-min P = |[(S-min P)`1, (S-min P)`2]| by EUCLID:57;
  hence S-min P = SW-corner P by A1,A2;
 end;
+
+theorem
+  for r, s being real number holds proj2. |[r,s]| = s & proj1. |[r,s]| = r
+proof
+  let r, s be real number;
+ thus proj2. |[r,s]| = |[r,s]|`2 by Def29 .= s by EUCLID:56;
+ thus proj1. |[r,s]| = |[r,s]|`1 by Def28 .= r by EUCLID:56;
+end;
+
+:: Moved from JORDAN1E, AK, 23.02.2006
+
+  theorem
+   for X be non empty Subset of TOP-REAL 2
+   for Y be compact Subset of TOP-REAL 2 st X c= Y holds
+    N-bound X <= N-bound Y
+   proof
+    let X be non empty Subset of TOP-REAL 2;
+    let Y be compact Subset of TOP-REAL 2;
+    assume X c= Y;
+    then sup (proj2||X) <= sup (proj2||Y) by Th63;
+    then sup (proj2||X) <= N-bound Y;
+    hence N-bound X <= N-bound Y;
+   end;
+
+  theorem
+   for X be non empty Subset of TOP-REAL 2
+   for Y be compact Subset of TOP-REAL 2 st X c= Y holds
+    E-bound X <= E-bound Y
+   proof
+    let X be non empty Subset of TOP-REAL 2;
+    let Y be compact Subset of TOP-REAL 2;
+    assume X c= Y;
+    then sup (proj1||X) <= sup (proj1||Y) by Th63;
+    then sup (proj1||X) <= E-bound Y;
+    hence E-bound X <= E-bound Y;
+   end;
+
+  theorem
+   for X be non empty Subset of TOP-REAL 2
+   for Y be compact Subset of TOP-REAL 2 st X c= Y holds
+    S-bound X >= S-bound Y
+   proof
+    let X be non empty Subset of TOP-REAL 2;
+    let Y be compact Subset of TOP-REAL 2;
+    assume X c= Y;
+    then inf (proj2||X) >= inf (proj2||Y) by Th62;
+    then inf (proj2||X) >= S-bound Y;
+    hence S-bound X >= S-bound Y;
+   end;
+
+  theorem
+   for X be non empty Subset of TOP-REAL 2
+   for Y be compact Subset of TOP-REAL 2 st X c= Y holds
+    W-bound X >= W-bound Y
+   proof
+    let X be non empty Subset of TOP-REAL 2;
+    let Y be compact Subset of TOP-REAL 2;
+    assume X c= Y;
+    then inf (proj1||X) >= inf (proj1||Y) by Th62;
+    then inf (proj1||X) >= W-bound Y;
+    hence W-bound X >= W-bound Y;
+   end;
+

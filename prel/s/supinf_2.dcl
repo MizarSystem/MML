@@ -23,6 +23,7 @@
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="CARD_4"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="SUPINF_2"/>
 </Signature>
@@ -36,7 +37,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -49,8 +50,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="37"/>
+<Adjective nr="27"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -72,7 +73,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="157">
+<Func kind="K" nr="174">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -91,7 +92,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="158">
+<Func kind="K" nr="175">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -116,11 +117,11 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="30">
+<Adjective nr="28">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="35">
+<Adjective nr="33">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -132,15 +133,15 @@
 </Typ>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="30">
+<Adjective nr="28">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="33">
+<Adjective nr="31">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -164,15 +165,15 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="30">
+<Adjective nr="28">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="33">
+<Adjective nr="31">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="32">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -184,11 +185,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="30">
+<Adjective nr="28">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="35">
+<Adjective nr="33">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

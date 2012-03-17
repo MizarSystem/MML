@@ -12,6 +12,7 @@
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
@@ -123,7 +124,7 @@
 <For>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="84">
+<Adjective nr="82">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -139,11 +140,11 @@
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="218">
+<Func kind="K" nr="235">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="94"/>
+<Func kind="K" nr="111"/>
 </Func>
 </Pred>
 <For>
@@ -156,7 +157,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="174">
+<Func kind="K" nr="191">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -212,7 +213,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="174">
+<Func kind="K" nr="191">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -245,22 +246,22 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="18">
-<Func kind="K" nr="175">
-<Func kind="K" nr="109">
+<Func kind="K" nr="192">
+<Func kind="K" nr="126">
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="94"/>
+<Func kind="K" nr="111"/>
 </Func>
-<Func kind="K" nr="94"/>
+<Func kind="K" nr="111"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="175">
-<Func kind="K" nr="109">
+<Func kind="K" nr="192">
+<Func kind="K" nr="126">
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="94"/>
+<Func kind="K" nr="111"/>
 </Func>
-<Func kind="K" nr="94"/>
+<Func kind="K" nr="111"/>
 </Typ>
 </Is>
 </Not>

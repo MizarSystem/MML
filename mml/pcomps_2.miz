@@ -16,14 +16,14 @@ environ
  constructors TOPS_2, NAT_1, COMPTS_1, PCOMPS_1, REAL_1, PREPOWER, WELLORD1,
       WELLORD2, RELAT_2, FINSEQ_4, MEMBERED, SETFAM_1, XXREAL_0;
  registrations SUBSET_1, PRE_TOPC, FINSET_1, RELSET_1, STRUCT_0, XREAL_0,
-      FINSEQ_1, METRIC_1, NEWTON, MEMBERED, ORDINAL2;
+      FINSEQ_1, METRIC_1, NEWTON, MEMBERED, ORDINAL2, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, WELLORD1, RELAT_2, SETFAM_1, XBOOLE_0;
  theorems PCOMPS_1, COMPTS_1, SETFAM_1, TOPS_1, TOPS_2, PRE_TOPC, SUBSET_1,
       TARSKI, WELLORD2, AXIOMS, ZFMISC_1, NAT_1, REAL_1, REAL_2, PREPOWER,
       WELLORD1, RELAT_1, RELAT_2, SEQ_4, FUNCT_1, FINSET_1, METRIC_1, FINSEQ_1,
       CARD_1, FINSEQ_2, FINSEQ_4, TBSP_1, NEWTON, XREAL_0, XBOOLE_0, XBOOLE_1,
-      XCMPLX_1, XREAL_1;
+      XCMPLX_1, XREAL_1, XXREAL_0;
  schemes NAT_1, FUNCT_2, SUBSET_1, RECDEF_1, TREES_2, FRAENKEL, XBOOLE_0;
 
 begin :: 1. Selected properties of real numbers
@@ -33,53 +33,11 @@ begin :: 1. Selected properties of real numbers
 
 canceled 2;
 
-  theorem
-  Th3: r>0 & u > 0 implies ex k be Nat st u/(2 |^ k) <= r
-    proof
-      assume that A1:r>0 and A2: u>0;
-      consider t be real number such that
-        A3: r * t = 1 by A1,AXIOMS:20;
-        reconsider t as Real by XREAL_0:def 1;
-      A4: t > 0 by A1,A3,XREAL_1:133;
-      A5: r = 1/t by A3,XCMPLX_1:74
-        .= (u * 1) / (u * t) by A2,XCMPLX_1:92
-        .= u/(u * t);
-      consider n such that A6: (u * t) < n by SEQ_4:10;
-      A7: 0 < u * t by A2,A4,REAL_2:122;
-      then A8: u/(u * t) > u/n by A2,A6,REAL_2:200;
-      defpred P[Nat] means $1 <= 2 |^ $1;
-      A9: P[0];
-      A10: for k be Nat st P[k] holds P[k + 1]
-        proof
-          let k be Nat;
-          assume A11: k <= 2 |^ k;
-          A12: 2 |^ (k + 1) = (2 |^ k) * (2 |^ 1) by NEWTON:13
-                          .= (2 |^ k) * 2 by NEWTON:10
-                          .= 2 |^ k + 2 |^ k;
-              2 |^ k >= 1 by PREPOWER:19;
-          then A13: 2 |^ k + 2 |^ k >= 2 |^ k + 1 by XREAL_1:9;
-              (2 |^ k) + 1 >= k + 1 by A11,XREAL_1:9;
-          hence thesis by A12,A13,XREAL_1:2;
-        end;
-          for k be Nat holds P[k] from NAT_1:sch 1(A9,A10);
-      then A14: n <= (2 |^ n);
-          0 < n by A6,A7;
-      then A15: u/n >= u/(2 |^ n) by A2,A14,REAL_2:201;
-      take n;
-      thus thesis by A5,A8,A15,XREAL_1:2;
-    end;
+theorem
+   r>0 & u > 0 implies ex k be Nat st u/(2 |^ k) <= r by PREPOWER:106;
 
-theorem Th4:
-    k>=n & r >= 1 implies r |^ k >= r |^ n
-    proof
-      assume that A1:k>=n and A2: r >= 1;
-      consider m be Nat such that A3: k = n + m by A1,NAT_1:28;
-      A4: r |^ k = r |^ n * r |^ m by A3,NEWTON:13;
-           r |^ n >= 1 by A2,PREPOWER:19;
-      then A5: r |^ n >= 0;
-          r |^ m >= 1 by A2,PREPOWER:19;
-      hence thesis by A4,A5,REAL_2:146;
-    end;
+theorem
+    k>=n & r >= 1 implies r |^ k >= r |^ n by PREPOWER:107;
 
 begin :: 2. Certain functions defined on families of sets
 
@@ -98,7 +56,7 @@ A4:      A c= field (R |_2 A)
           assume A5: x in A;
           then A6: [x,x] in [:A,A:] by ZFMISC_1:106;
               [x,x] in R by A2,A5,RELAT_2:def 1;
-          then [x,x] in R |_2 A by A6,WELLORD1:16;
+          then [x,x] in R |_2 A by A6,XBOOLE_0:def 3;
           hence x in field (R |_2 A) by RELAT_1:30;
         end;
       A7: R |_2 A is_reflexive_in A
@@ -107,9 +65,9 @@ A4:      A c= field (R |_2 A)
           assume A8: x in A;
           then A9: [x,x] in R by A2,RELAT_2:def 1;
               [x,x] in [:A,A:] by A8,ZFMISC_1:106;
-          hence [x,x] in R |_2 A by A9,WELLORD1:16;
+          hence [x,x] in R |_2 A by A9,XBOOLE_0:def 3;
         end;
-      A10:R |_2 A c= R by WELLORD1:15;
+      A10:R |_2 A c= R by XBOOLE_1:17;
       A11: R |_2 A is_transitive_in A
         proof
           let x,y,z be set;
@@ -118,7 +76,7 @@ A4:      A c= field (R |_2 A)
               R is_transitive_in A by A1,WELLORD1:def 5;
           then A17:[x,z] in R by A10,A12,A13,A14,A15,A16,RELAT_2:def 8;
               [x,z] in [:A,A:] by A12,A14,ZFMISC_1:106;
-          hence [x,z] in R |_2 A by A17,WELLORD1:16;
+          hence [x,z] in R |_2 A by A17,XBOOLE_0:def 3;
         end;
       A18: R |_2 A is_antisymmetric_in A
         proof
@@ -136,11 +94,11 @@ A25:      R is_connected_in A by A1,WELLORD1:def 5;
               now per cases by A24,A25,RELAT_2:def 6;
             case A26:[x,y] in R;
                 [x,y] in [:A,A:] by A24,ZFMISC_1:106;
-            hence [x,y] in R |_2 A by A26,WELLORD1:16;
+            hence [x,y] in R |_2 A by A26,XBOOLE_0:def 3;
             end;
             case A27:[y,x] in R;
                 [y,x] in [:A,A:] by A24,ZFMISC_1:106;
-            hence [y,x] in R |_2 A by A27,WELLORD1:16;
+            hence [y,x] in R |_2 A by A27,XBOOLE_0:def 3;
           end;
           end;
           hence [x,y] in R |_2 A or [y,x] in R |_2 A;
@@ -890,14 +848,14 @@ theorem  :: Stone Theorem - general case
                   consider r be Real such that
                    A35: r>0 and A36: Ball(x',r) c= X by A32,A34,PCOMPS_1:def 5;
                   defpred P2[Nat] means 3/(2 |^ $1) <= r;
-                  A37: ex k be Nat st P2[k] by A35,Th3;
+                  A37: ex k be Nat st P2[k] by A35,PREPOWER:106;
                   consider k such that A38: P2[k] and
                      for l st P2[l] holds k <= l from NAT_1:sch 5(A37);
                   A39: 2 |^ k > 0 by PREPOWER:13;
                        2 |^ (k+1) = 2 |^ k * 2 by NEWTON:11;
                   then 2 |^ (k+1) >= 2 |^ k by REAL_2:146;
                   then 3/2 |^ (k+1) <= 3/2 |^ k by A39,REAL_2:201;
-                  then A40: 3/2 |^ (k+1) <= r by A38,XREAL_1:2;
+                  then A40: 3/2 |^ (k+1) <= r by A38,XXREAL_0:2;
                   assume A41: not x in union GX;
 
                   A42: for V be set,n st V in f.n holds not x in V
@@ -932,7 +890,6 @@ theorem  :: Stone Theorem - general case
                           not x' in PartUnion(X,Mn)
                         proof
                           assume x' in PartUnion(X,Mn);
-                          then x' in union (Mn-Seg(X));
                           then consider M be set such that A48: x' in M and
                               A49: M in Mn-Seg(X) by TARSKI:def 4;
                           reconsider FX as set;
@@ -1135,7 +1092,7 @@ by A31;
                 consider r be Real such that
                A81: r>0 and A82: Ball(x',r) c= X by A76,A80,PCOMPS_1:def 5;
  consider m be Nat such that
-                A83: 1/(2 |^ m) <= r by A81,Th3;
+                A83: 1/(2 |^ m) <= r by A81,PREPOWER:106;
                     2 |^ (m+1+k+1) > 0 by PREPOWER:13;
                 then A84: 1/(2 |^ (m+1+k+1)) > 0 by REAL_2:127;
                 consider W be Subset of PM such that
@@ -1179,9 +1136,8 @@ by A31;
                         consider y being set such that
                         A103: y in V & y in W by A101,XBOOLE_0:3;
                             now per cases by NAT_1:19;
-                          suppose A104: t=0;
-                              m+1+k+1 >= 1 by NAT_1:29;
-                          hence contradiction by A102,A104;
+                          suppose t=0;
+                          hence contradiction by A102,NAT_1:29;
                           end;
                           suppose t>0;
                           then consider l be Nat such that
@@ -1216,7 +1172,7 @@ by A31;
                             where q is Nat: q <= l} by A108;
                           reconsider y as Element of PM
                               by A103;
- A111:2 |^ t >= 2 |^ (m+1+k+1) by A102,Th4;
+ A111:2 |^ t >= 2 |^ (m+1+k+1) by A102,PREPOWER:107;
   A112:2 |^ (m+1+k+1) > 0 by PREPOWER:13;
 then A113: 1/(2 |^ (m+1+k+1)) >= 1/(2 |^ t) by A111,REAL_2:201;
      2 |^ (1+k+1) <> 0 by PREPOWER:12;
@@ -1240,13 +1196,13 @@ REAL_1:73;
         hence contradiction by A110,A118,TARSKI:def 4;
       end;
           dist(c,y) < 1/(2 |^ t) by A105,A107,A109,METRIC_1:12;
-      then dist(c,y) < 1/(2 |^ (m+1+k+1)) by A113,XREAL_1:2;
+      then dist(c,y) < 1/(2 |^ (m+1+k+1)) by A113,XXREAL_0:2;
       then A119: dist(c,y) + dist(y,x') <
         1/(2 |^ (m+1+k+1)) + dist(y,x') by XREAL_1:8;
       A120: dist(c,x') >= 1/(2 |^ m)
         proof
           assume not dist(c,x') >= 1/(2 |^ m);
-          then dist(x',c) < r by A83,XREAL_1:2;
+          then dist(x',c) < r by A83,XXREAL_0:2;
           then c in Ball(x',r) by METRIC_1:12;
           then A121: c in union (f.k) by A79,A82,TARSKI:def 4;
           A122: k <> l
@@ -1256,17 +1212,17 @@ REAL_1:73;
             hence contradiction by A110,A121,TARSKI:def 4;
           end;A123:l >= k+(m+1) by A102,A105,XREAL_1:8;   k+(m+1)>=k
 by NAT_1:29;
-          then k <= l by A123,XREAL_1:2;
+          then k <= l by A123,XXREAL_0:2;
           then k < l by A122,REAL_1:def 5;
           hence contradiction by A116,A121;
         end;
           dist(c,y) + dist(y,x') >= dist(c,x') by METRIC_1:4;
       then dist(c,y) + dist(y,x') >= 1/(2 |^ m)
-          by A120,XREAL_1:2;
+          by A120,XXREAL_0:2;
       then 1/(2 |^ (m+1+k+1)) + dist(y,x') > 1/(2 |^ m)
-          by A119,XREAL_1:2;
+          by A119,XXREAL_0:2;
       then dist(y,x') >= 1/(2 |^ m) - 1/(2 |^ (m+1+k+1)) by XREAL_1:21;
-      then dist(y,x') >= 1/(2 |^ (m+1+k+1)) by A115,XREAL_1:2;
+      then dist(y,x') >= 1/(2 |^ (m+1+k+1)) by A115,XXREAL_0:2;
       hence contradiction by A85,A103,METRIC_1:12;
     end;
     end;
@@ -1350,11 +1306,11 @@ by NAT_1:29;
           by A85,A138,METRIC_1:12;
         A161: dist(c2,w2) < 1/2 by A150,A152,METRIC_1:12;
             dist(c1,c2) <= dist(c1,w1) + (dist(w1,x') +
-            (dist(x',w2) + dist(w2,c2))) by A156,A157,XREAL_1:2;
+            (dist(x',w2) + dist(w2,c2))) by A156,A157,XXREAL_0:2;
         then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
           dist(w2,c2))) <= dist(c1,w1) by XREAL_1:22;
         then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
-          dist(w2,c2))) < 1/2 by A158,XREAL_1:2;
+          dist(w2,c2))) < 1/2 by A158,XXREAL_0:2;
         then dist(c1,c2) < 1/2 + (dist(w1,x') +
           (dist(x',w2) + dist(w2,c2))) by XREAL_1:21;
         then dist(c1,c2) < dist(w1,x') + (1/2 +
@@ -1363,7 +1319,7 @@ by NAT_1:29;
           dist(w2,c2))) < dist(w1,x') by XREAL_1:21;
         then dist(c1,c2) - (1/2 + (dist(x',w2) +
           dist(w2,c2))) < 1/(2 |^ (m+1+k+1))
-            by A159,XREAL_1:2;
+            by A159,XXREAL_0:2;
         then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) + (1/2 +
           (dist(x',w2) + dist(w2,c2))) by XREAL_1:21;
         then dist(c1,c2) < dist(x',w2) + (dist(w2,c2)
@@ -1373,7 +1329,7 @@ by NAT_1:29;
               by XREAL_1:21;
         then dist(c1,c2) - (dist(w2,c2) +
           (1/(2 |^ (m+1+k+1)) + 1/2)) < 1/(2 |^ (m+1+k+1))
-              by A160,XREAL_1:2;
+              by A160,XXREAL_0:2;
         then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) + (dist(w2,c2) +
           (1/(2 |^ (m+1+k+1)) + 1/2))
               by XREAL_1:21;
@@ -1384,7 +1340,7 @@ by NAT_1:29;
               by XREAL_1:21;
         then dist(c1,c2) - (1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (m+1+k+1)) + 1/2)) < 1/2
-              by A161,XREAL_1:2;
+              by A161,XXREAL_0:2;
         then A162: dist(c1,c2) < 1/2 + (1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (m+1+k+1)) + 1/2))
               by XREAL_1:21;
@@ -1396,7 +1352,7 @@ by NAT_1:29;
                A164: m+k+1 >= 1 by NAT_1:29;
             A165: 2/(2 |^ (m+1+k+1)) =(1*2)/(2 |^ (m+1+k)*2) by NEWTON:11
             .= 1/(2 |^ (m+1+k)) by XCMPLX_1:92;
-                 2 |^ (m+1+k) >= 2 |^ 1 by A164,Th4;
+                 2 |^ (m+1+k) >= 2 |^ 1 by A164,PREPOWER:107;
             then 2 |^ (m+1+k) >= 2 by NEWTON:10;
             then A166: 1/(2 |^ (m+1+k)) <= 1/2
               by REAL_2:201;
@@ -1406,7 +1362,7 @@ by NAT_1:29;
             then (1/2 + 1/(2 |^ (m+1+k+1)))
               + (1/(2 |^ (m+1+k+1)) + 1/2) <= 2/2 + 1/2
                 by A166,XREAL_1:22;
-        then A167: dist(c1,c2) < 3/2 by A162,XREAL_1:2;
+        then A167: dist(c1,c2) < 3/2 by A162,XXREAL_0:2;
         then A168: c2 in Ball(c1,3/2) by METRIC_1:12;
         A169: c1 in Ball(c2,3/2) by A167,METRIC_1:12;
         A170: Mn is_connected_in FX by A8,WELLORD1:def 5;
@@ -1414,14 +1370,12 @@ by NAT_1:29;
             now per cases by A142,A149,A170,A171,RELAT_2:def 6;
           suppose [M1,M2] in Mn;
           then M1 in Mn-Seg(M2) by A171,WELLORD1:def 1;
-          then c2 in union(Mn-Seg(M2)) by A147,A168,TARSKI:def 4;
-          then c2 in PartUnion(M2,Mn);
+          then c2 in PartUnion(M2,Mn) by A147,A168,TARSKI:def 4;
           hence contradiction by A153,XBOOLE_0:def 4;
           end;
           suppose [M2,M1] in Mn;
           then M2 in Mn-Seg(M1) by A171,WELLORD1:def 1;
-          then c1 in union(Mn-Seg(M1)) by A154,A169,TARSKI:def 4;
-          then c1 in PartUnion(M1,Mn);
+          then c1 in PartUnion(M1,Mn) by A154,A169,TARSKI:def 4;
           hence contradiction by A146,XBOOLE_0:def 4;
         end;
         end;
@@ -1506,11 +1460,11 @@ by NAT_1:29;
         A193: dist(c2,w2) < 1/(2 |^ (l+1))
           by A182,A184,METRIC_1:12;
             dist(c1,c2) <= dist(c1,w1) + (dist(w1,x') +
-            (dist(x',w2) + dist(w2,c2))) by A188,A189,XREAL_1:2;
+            (dist(x',w2) + dist(w2,c2))) by A188,A189,XXREAL_0:2;
         then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
           dist(w2,c2))) <= dist(c1,w1) by XREAL_1:22;
         then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
-          dist(w2,c2))) < 1/(2 |^ (l+1)) by A190,XREAL_1:2;
+          dist(w2,c2))) < 1/(2 |^ (l+1)) by A190,XXREAL_0:2;
         then dist(c1,c2) < 1/(2 |^ (l+1)) + (dist(w1,x') +
           (dist(x',w2) + dist(w2,c2))) by XREAL_1:21;
         then dist(c1,c2) < dist(w1,x') + (1/(2 |^ (l+1)) +
@@ -1519,7 +1473,7 @@ by NAT_1:29;
           dist(w2,c2))) < dist(w1,x') by XREAL_1:21;
         then dist(c1,c2) - (1/(2 |^ (l+1)) + (dist(x',w2) +
           dist(w2,c2))) < 1/(2 |^ (m+1+k+1))
-            by A191,XREAL_1:2;
+            by A191,XXREAL_0:2;
         then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (l+1)) + (dist(x',w2) + dist(w2,c2)))
             by XREAL_1:21;
@@ -1530,7 +1484,7 @@ by NAT_1:29;
             dist(x',w2) by XREAL_1:21;
         then dist(c1,c2) - (dist(w2,c2) +
           (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1)))) <
-            1/(2 |^ (m+1+k+1)) by A192,XREAL_1:2;
+            1/(2 |^ (m+1+k+1)) by A192,XXREAL_0:2;
         then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) + (dist(w2,c2) +
           (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))))
               by XREAL_1:21;
@@ -1541,7 +1495,7 @@ by NAT_1:29;
           dist(w2,c2) by XREAL_1:21;
         then dist(c1,c2) - (1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1)))) <
-            1/(2 |^ (l+1)) by A193,XREAL_1:2;
+            1/(2 |^ (l+1)) by A193,XXREAL_0:2;
         then A194: dist(c1,c2) < 1/(2 |^ (l+1)) +
           (1/(2 |^ (m+1+k+1)) + (1/(2 |^ (m+1+k+1)) +
             1/(2 |^ (l+1)))) by XREAL_1:21;
@@ -1567,7 +1521,7 @@ by NAT_1:29;
              .= (1*2)/(2 |^ ((l+1)+i)*2) by NEWTON:11
              .= 1/(2 |^ ((l+1)+i)) by XCMPLX_1:92;
                 (l+1)+i >= l+1 by NAT_1:29;
-            then 2 |^ ((l+1)+i) >= 2 |^ (l+1) by Th4;
+            then 2 |^ ((l+1)+i) >= 2 |^ (l+1) by PREPOWER:107;
             then A201:1/(2 |^ ((l+1)+i)) <= 1/(2 |^ (l+1))
               by A199,REAL_2:201;
                 (1/(2 |^ (l+1)) + 1/(2 |^ (m+1+k+1)))
@@ -1582,7 +1536,7 @@ by NAT_1:29;
               + (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))) <=
               (2+1)/(2 |^ (l+1)) by XCMPLX_1:63;
         then A202: dist(c1,c2) < 3/(2 |^ (l+1))
-          by A194,XREAL_1:2;
+          by A194,XXREAL_0:2;
         then A203: c2 in Ball(c1,3/(2 |^ (l+1))) by METRIC_1:12;
         A204: c1 in Ball(c2,3/(2 |^ (l+1))) by A202,METRIC_1:12;
         A205: Mn is_connected_in FX by A8,WELLORD1:def 5;
@@ -1590,14 +1544,12 @@ by NAT_1:29;
             now per cases by A174,A181,A205,A206,RELAT_2:def 6;
           suppose [M1,M2] in Mn;
           then M1 in Mn-Seg(M2) by A206,WELLORD1:def 1;
-          then c2 in union(Mn-Seg(M2)) by A179,A203,TARSKI:def 4;
-          then c2 in PartUnion(M2,Mn);
+          then c2 in PartUnion(M2,Mn) by A179,A203,TARSKI:def 4;
           hence contradiction by A185,XBOOLE_0:def 4;
           end;
           suppose [M2,M1] in Mn;
           then M2 in Mn-Seg(M1) by A206,WELLORD1:def 1;
-          then c1 in union(Mn-Seg(M1)) by A186,A204,TARSKI:def 4;
-          then c1 in PartUnion(M1,Mn);
+          then c1 in PartUnion(M1,Mn) by A186,A204,TARSKI:def 4;
           hence contradiction by A178,XBOOLE_0:def 4;
         end;
         end;

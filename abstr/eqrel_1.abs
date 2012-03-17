@@ -7,12 +7,12 @@
 environ
 
  vocabularies RELAT_1, SETFAM_1, ARYTM_1, BOOLE, RELAT_2, LATTICES, FINSEQ_1,
-      FUNCT_1, TARSKI, EQREL_1, PARTFUN1, TOLER_1, AMI_1;
+      FUNCT_1, TARSKI, EQREL_1, PARTFUN1, TOLER_1, AMI_1, T_1TOPSP, PUA2MSS1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XXREAL_0, RELAT_1,
       RELAT_2, RELSET_1, SETFAM_1, FINSEQ_1, FUNCT_1, NAT_1, PARTFUN1;
- constructors RELAT_2, SETFAM_1, FINSEQ_1, REAL_1, NAT_1, XREAL_0, MEMBERED,
-      PARTFUN1, ORDERS_1, XBOOLE_0, XXREAL_0;
- registrations RELSET_1, FINSEQ_1, SUBSET_1, XREAL_0, ARYTM_3, PARTFUN1;
+ constructors RELAT_2, SETFAM_1, FINSEQ_1, NAT_1, XREAL_0, PARTFUN1, XXREAL_0;
+ registrations RELSET_1, FINSEQ_1, SUBSET_1, XREAL_0, ARYTM_3, PARTFUN1,
+      XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -144,18 +144,25 @@ scheme :: EQREL_1:sch 1
 
 :: Classes of abstraction
 
-definition let X be set,
-               R be Tolerance of X,
+definition let R be Relation,
                x be set;
-  func Class(R,x) -> Subset of X equals
+  func Class(R,x) equals
 :: EQREL_1:def 4
     R.:{x};
 end;
 
-canceled;
+definition let X, Y be set,
+               R be Relation of X, Y,
+               x be set;
+  redefine func Class(R,x) -> Subset of Y;
+end;
+
+theorem :: EQREL_1:26
+  for R being Relation holds
+    y in Class (R,x) iff [x,y] in R;
 
 theorem :: EQREL_1:27
-  for R being Tolerance of X holds
+  for R being total symmetric Relation of X holds
     y in Class (R,x) iff [y,x] in R;
 
 theorem :: EQREL_1:28
@@ -258,3 +265,21 @@ end;
 registration let I be non empty set, R be Equivalence_Relation of I;
   cluster Class R -> with_non-empty_elements;
 end;
+
+definition let I be non empty set, R be Equivalence_Relation of I;
+  let x be Element of I;
+  func EqClass(R,x) -> Element of Class R equals
+:: EQREL_1:def 7
+    Class(R,x);
+end;
+
+definition let X be set;
+  func SmallestPartition X -> a_partition of X equals
+:: EQREL_1:def 8
+    Class id X;
+end;
+
+theorem :: EQREL_1:46
+ for X being non empty set holds
+   SmallestPartition X = {{x} where x is Element of X: not contradiction};
+
