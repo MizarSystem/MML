@@ -862,7 +862,7 @@ A1:LocNums F = {locnum l where l is Instruction-Location of S : l in F}
 A2: F is non empty;
    LocNums F,F are_equipotent
   proof
-  defpred P[Nat,set] means $2 = il.(S,$1);
+    defpred P[set,set] means ex n being Nat st n = $1 & $2 = il.(S,n);
 A3: for x being set st x in LocNums F ex y being set st y in F & P[x,y]
   proof
     let x be set;
@@ -870,6 +870,8 @@ A3: for x being set st x in LocNums F ex y being set st y in F & P[x,y]
     then consider l being Instruction-Location of S such that
 A4:    x = locnum l & l in F by A1;
     take l;
+    thus l in F by A4;
+    take locnum l;
     thus thesis by A4,AMISTD_1:def 13;
   end;
   consider f being Function of LocNums F,F such that
@@ -883,12 +885,8 @@ A6:   x in dom f and
 A7:   y in dom f and
 A8:   f.x = f.y;
 A9: dom f = LocNums F by A2,FUNCT_2:def 1;
-    then A10: ex l1 being Instruction-Location of S st x = locnum l1 & l1 in F
-by A1,A6;
-A11: ex l2 being Instruction-Location of S st y = locnum l2 & l2 in F
-     by A1,A7,A9;
      P[x,f.x] & P[y,f.y] by A5,A6,A7,A9;
-    hence thesis by A8,A10,A11,AMISTD_1:25;
+    hence thesis by A8,AMISTD_1:25;
   end;
   thus
 A12: dom f = LocNums F by A2,FUNCT_2:def 1;
@@ -1116,13 +1114,15 @@ A8:    k2 in F(d);
   consider T being DecoratedTree of D such that
 A9:T.{} = FirstLoc(M) and
 A10:for t being Element of dom T holds
-    succ t = { t^<*k*> where k is Nat: k in F(T.t)} &
-     for n being Nat, x being set st x = T.t & n in F(x) holds
-      T.(t^<*n*>) = f.[x,n] from TREES_2:sch 8(A6);
+    succ t = { t^<*k*> where k is Nat:
+    k in F(T.t qua Instruction-Location of S)} &
+     for n being Nat st n in F(T.t qua Instruction-Location of S) holds
+      T.(t^<*n*>) = f.[T.t,n] from TREES_2:sch 8(A6);
   take T;
   thus T.{} = FirstLoc(M) by A9;
   let t be Element of dom T;
-  thus succ t = { t^<*k*> where k is Nat: k in F(T.t)} by A10;
+  thus succ t = { t^<*k*> where k is Nat:
+  k in F(T.t qua Instruction-Location of S)} by A10;
   let m be Nat;
   assume
 A11: m in Card NIC(pi(M,T.t),T.t);

@@ -560,7 +560,7 @@ end;
 Lm03:
 ex Un being FamilySequence of T st Un is sigma_discrete
 proof
-  deffunc C(Nat)={the carrier of T};
+  deffunc C(set)={the carrier of T};
   A1:for k being set st k in NAT holds C(k) in bool bool the carrier of T
   proof
    let k be set;
@@ -705,7 +705,7 @@ proof let A be uncountable set;
      consider a being set such that
        A3:a in A by XBOOLE_0:def 1;
      reconsider a as Element of A by A3;set aAAa=[:{a},A:]\/[:A,{a}:];
-     defpred F1[Nat,Element of F] means 
+     defpred F1[set,set] means 
        ($2 in f.$1 & f.$1 is non empty )or($2=aAAa & f.$1 is empty);
      A4:for k being set st k in NAT ex f being set st f in F & F1[k,f]
         proof
@@ -767,7 +767,7 @@ A9:    cAAc in f.k by A2,PROB_1:25;
      end;
      A8:Card A <=` Card F
      proof
-       deffunc D(Element of A)=[:{$1},A:]\/[:A,{$1}:];
+       deffunc D(set)=[:{$1},A:]\/[:A,{$1}:];
        consider d being Function such that
          A9:dom d = A & for x being set st 
               x in A holds d.x = D(x) from FUNCT_1:sch 3;
@@ -982,11 +982,11 @@ assume A0:T is metrizable;
   then A4:[#]T=[#]TPM by A1,A2,A3,PCOMPS_2:8;  
   deffunc BALL(Nat)={Ball(x, 1/(2 |^ $1)) where x is Element of PM: 
                      x is Element of PM};
-  A5:for k being set st k in NAT holds BALL(k) in bool bool the carrier of T
+  defpred E[Nat,set] means $2 = BALL($1);
+A5:for k being Element of NAT ex y being Element of bool bool the carrier of T
+   st E[k,y]
      proof
-       let k be set;
-       assume k in NAT;
-       then reconsider k as Nat;
+       let k be Element of NAT;
        set Ak=BALL(k);
        Ak c= bool the carrier of T
        proof let B be set;
@@ -999,7 +999,7 @@ assume A0:T is metrizable;
        hence thesis;
      end;
   consider FB being Function of NAT,bool bool (the carrier of T) such that
-    A6:for k being set st k in NAT holds FB.k= BALL(k) from FUNCT_2:sch 2(A5);  
+    A6:for k being Element of NAT holds E[k,FB.k] from FUNCT_2:sch 3(A5);  
   Lm:for n st n>=0 ex PP being Subset-Family of T st 
     PP is_finer_than FB.n & PP is_a_cover_of T & 
     PP is open & PP is locally_finite 
@@ -1051,9 +1051,10 @@ assume A0:T is metrizable;
     & PP is_finer_than (FB.n) & PP is locally_finite by A0,A8,PCOMPS_2:12;
     hence thesis;
   end;
-  defpred P[Nat,Subset-Family of T] means
-      $2 is open & $2 is_a_cover_of T & 
-      $2 is_finer_than (FB.$1) & $2 is locally_finite;  
+  defpred P[set,set] means
+  ex W being Subset-Family of T st W = $2 &
+      W is open & W is_a_cover_of T & 
+      W is_finer_than FB.$1 & W is locally_finite;  
   A7:for k being set st k in NAT 
   ex y st y in bool bool the carrier of T & P[k,y]
   proof
@@ -1068,7 +1069,12 @@ assume A0:T is metrizable;
   end;
   consider UC being FamilySequence of T such that
     A8:for x st x in NAT holds P[x,UC.x] from FUNCT_2:sch 1(A7);
-  for n holds UC.n is locally_finite by A8;
+  for n holds UC.n is locally_finite
+  proof
+    let n;
+    P[n,UC.n] by A8;
+    hence thesis;
+  end;
   then A9:UC is sigma_locally_finite by Def3;
   A10:Union UC c= the topology of T
     proof
@@ -1077,7 +1083,7 @@ assume A0:T is metrizable;
       then consider k being Nat such that
         A11:u in UC.k by PROB_1:25;
       reconsider u'=u as Subset of T by A11;
-      UC.k is open by A8;
+      P[k,UC.k] by A8;
       then u' is open by A11,TOPS_2:def 1;
       hence thesis by PRE_TOPC:def 5;
     end;
@@ -1092,8 +1098,7 @@ assume A0:T is metrizable;
          A14:r1>0 & Ball(p,r1) c=A by A13,A12,PCOMPS_1:def 5;
        consider n such that
          A15:1/(2|^ n)<=r1 by A14,PCOMPS_2:3;
-       A16:UC.(n+1) is_finer_than FB.(n+1) & UC.(n+1) is_a_cover_of T 
-         & UC.(n+1) is open by A8;
+       A16:P[n+1,UC.(n+1)] by A8;
        then union (UC.(n+1)) = [#]T by PRE_TOPC:def 8;
        then union (UC.(n+1)) = the carrier of T by PRE_TOPC:12;
        then consider B being set such that
@@ -1202,9 +1207,10 @@ proof
        hence thesis by A4,XBOOLE_1:63;
      end;
   deffunc W_U(Nat)=Wn.$1\union{Cl (Un.k) where k is Nat: k in Seg $1\/{0}};
-  A9:for k being set st k in NAT holds W_U(k) in bool the carrier of T
-     proof let k be set;assume k in NAT;
-       then reconsider k as Nat;
+  defpred E1[Nat,set] means $2=W_U($1);
+  A9:for k being Element of NAT ex y being Element of bool the carrier of T st
+  E1[k,y]
+     proof let k be Element of NAT;
        now let w be set;assume w in W_U(k);
          then w in Wn.k by XBOOLE_0:def 4;
          hence w in the carrier of T;
@@ -1212,8 +1218,8 @@ proof
        then W_U(k) c= the carrier of T by TARSKI:def 3;
        hence thesis;
      end;
-  consider FW_U being Function of NAT, bool (the carrier of T) such that 
-  A10:for k being set st k in NAT holds FW_U.k= W_U(k) from FUNCT_2:sch 2(A9);  
+  consider FW_U being Function of NAT, bool the carrier of T such that 
+  A10:for k being Element of NAT holds E1[k,FW_U.k] from FUNCT_2:sch 3(A9);  
   A11:for n holds FW_U.n is open
     proof
       let n;
@@ -1246,9 +1252,10 @@ proof
       hence thesis by A10;
     end;
   deffunc U_W(Nat)=Un.$1\union{Cl (Wn.k) where k is Nat: k in Seg $1\/{0}};
-  A12:for k being set st k in NAT holds U_W(k) in bool the carrier of T
-     proof let k be set;assume k in NAT;
-       then reconsider k as Nat;
+  defpred E2[Nat,set] means $2 = U_W($1);
+  A12:for k being Element of NAT ex y being Element of bool the carrier of T st
+  E2[k,y]
+     proof let k be Element of NAT;
        now let w be set;assume w in U_W(k);
          then w in Un.k by XBOOLE_0:def 4;
          hence w in the carrier of T;
@@ -1256,8 +1263,8 @@ proof
        then U_W(k) c= the carrier of T by TARSKI:def 3;
        hence thesis;
      end;
-  consider FU_W being Function of NAT, bool (the carrier of T) such that 
-  A13:for k being set st k in NAT holds FU_W.k= U_W(k) from FUNCT_2:sch 2(A12);  
+  consider FU_W being Function of NAT, bool the carrier of T such that 
+  A13:for k being Element of NAT holds E2[k,FU_W.k] from FUNCT_2:sch 3(A12);  
   A14:for n holds FU_W.n is open
      proof
        let n;
@@ -1443,7 +1450,7 @@ proof
     A c= Union W & Union W c= U & (for n holds Cl (W.n) c= U & W.n is open) 
   proof
     let A,U; assume A4:A is closed & U is open & A c=U;
-    deffunc B(Nat)=union{O where O is Subset of T: O in Bn.$1 & Cl O c=U};
+    deffunc B(set)=union{O where O is Subset of T: O in Bn.$1 & Cl O c=U};
     A5:for k being set st k in NAT holds B(k) in bool the carrier of T
     proof
       let k be set;assume k in NAT;
@@ -1560,10 +1567,12 @@ deffunc fg(Element of the carrier of T)=F.$1+G.$1;
     for t being Element of T holds it.t=F.t+G.t;
 existence
 proof
-  A1:for t being set st t in the carrier of T holds fg(t) in REAL;
+  defpred P[Element of the carrier of T,set] means $2 = fg($1);
+  A1:for t being Element of the carrier of T ex y being Element of REAL st
+  P[t,y];
   consider FG being RealMap of T such that 
-  A2:for x st x in the carrier of T holds FG.x =fg(x) 
-  from FUNCT_2:sch 2(A1);
+  A2:for x being Element of the carrier of T holds P[x,FG.x] 
+  from FUNCT_2:sch 3(A1);
   take FG;thus thesis by A2;
 end;
 uniqueness
@@ -1735,13 +1744,13 @@ theorem Th23:
     ADD has_a_unity & ADD is commutative associative
 proof
   let ADD be BinOp of Funcs(the carrier of T,REAL) such that
-A0: (for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2);
+A0: for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2;
   set F=Funcs(the carrier of T,REAL);
   thus ADD has_a_unity
     proof
       ex map' be Element of F st map' is_a_unity_wrt ADD
       proof
-        deffunc F0(Element of T)=0;
+        deffunc F0(set)=0;
         A1:for x st x in the carrier of T holds F0(x) in REAL;
         consider map0 being RealMap of T such that
           A2:for x st x in the carrier of T holds map0.x=F0(x) 
@@ -1859,16 +1868,18 @@ func Fun Toler Sub -> map of T,T1 means :Def8:
 existence
 proof
   deffunc IT(Point of T)=Fun.$1.$1;
-  A0:for x st x in the carrier of T holds IT(x) in the carrier of T1
+  defpred P[Point of T,set] means $2 = IT($1);
+A0:for x being Element of the carrier of T
+ex y being Element of the carrier of T1 st P[x,y]
   proof
-    let x such that A1:x in the carrier of T;
-    reconsider x'=x as Point of T by A1;
-    reconsider Funx=Fun.x' as map of T,T1 by FUNCT_2:121;
-    Funx.x' in the carrier of T1;
+    let x be Element of the carrier of T;
+    reconsider Funx=Fun.x as map of T,T1 by FUNCT_2:121;
+    Funx.x in the carrier of T1;
     hence thesis;
   end;
   consider F be map of T,T1 such that
-    A1:for x st x in the carrier of T holds F.x=IT(x) from FUNCT_2:sch 2(A0); 
+    A1:for x being Element of the carrier of T holds P[x,F.x]
+    from FUNCT_2:sch 3(A0); 
   take F;thus thesis by A1; 
 end;
 uniqueness
@@ -2003,11 +2014,21 @@ definition let X,r;let f be Function of X,REAL;
     for x st x in X holds it.x = min(r,f.x);
 existence
  proof
-   A1:for x st x in X
-      holds M(x) in REAL by XREAL_0:def 1;
+   defpred P[set,set] means ex a being Element of X st a = $1 & $2 = M(a);
+   A1:for x st x in X ex y being set st y in REAL & P[x,y]
+   proof
+     let x be set; assume x in X;
+     then reconsider x as Element of X;
+     min(r,f.x) is Element of REAL by XREAL_0:def 1;
+     hence thesis;
+   end;
    consider Min being Function of X,REAL such that 
-     A2:for x st x in X holds Min.x =M(x) from FUNCT_2:sch 2(A1);take Min;
-   thus thesis by A2;
+     A2:for x being set st x in X holds P[x,Min.x] from FUNCT_2:sch 1(A1);
+     take Min;
+   let x;
+   assume x in X;
+   then P[x,Min.x] by A2;
+   hence thesis;
  end;
 uniqueness
  proof
@@ -2016,7 +2037,8 @@ uniqueness
 A1:for x st x in X holds M1.x=min(r,f.x) and
 A2:for x st x in X holds M2.x=min(r,f.x);
    now let x such that A3:x in X;
-     M1.x=M(x) & M2.x=M(x) by A1,A2,A3;
+     reconsider y = x as Element of X by A3;
+     M1.x=M(y) & M2.x=M(y) by A1,A2,A3;
      hence M1.x=M2.x;
    end;
    hence M1=M2 by FUNCT_2:18;

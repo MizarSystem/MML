@@ -7,20 +7,20 @@
 environ
 
  vocabulary RELAT_1, FUNCT_1, MCART_1, ARYTM_1, FUNCT_3, RECDEF_2, BOOLE,
-      FUNCT_4;
+      FUNCT_4, FUNCT_7;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, MCART_2, DOMAIN_1,
       NUMBERS, XCMPLX_0, XREAL_0, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2,
-      DTCONSTR, FUNCT_4, BINARITH, JCT_MISC;
+      DTCONSTR, FUNCT_4, BINARITH, JCT_MISC, FUNCT_7;
  constructors SUBSET_1, FUNCT_2, NAT_1, DOMAIN_1, DTCONSTR, XREAL_0, BINARITH,
-      JCT_MISC, INT_1, FUNCT_4, MCART_2;
+      JCT_MISC, INT_1, FUNCT_4, MCART_2, FUNCT_7;
  clusters XBOOLE_0, RELSET_1, ZFMISC_1, SUBSET_1, ORDINAL2, ARYTM_3, XCMPLX_0,
       XREAL_0, NAT_1, INT_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0;
  theorems MCART_1, XCMPLX_1, BINARITH, REAL_1, AMI_5, XCMPLX_0, NAT_1,
       GOBOARD9, CQC_THE1, JCT_MISC, FUNCT_1, FUNCT_2, RELSET_1, INT_1, AXIOMS,
-      FUNCT_4, XBOOLE_0, XBOOLE_1, DOMAIN_1, MCART_2;
- schemes NAT_1, RECDEF_1, FUNCT_1, PARTFUN1, XBOOLE_0;
+      FUNCT_4, XBOOLE_0, XBOOLE_1, DOMAIN_1, MCART_2, FUNCT_7;
+ schemes NAT_1, RECDEF_1, FUNCT_1, PARTFUN1, XBOOLE_0, WAYBEL_4, MSUALG_2;
 
 begin
 
@@ -552,12 +552,12 @@ A1: h.0 = [ B(), r03, r13 ] and
 A2: for n being Nat holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
   defpred C[set] means $1 = 0;
   deffunc X(set) = [ A(), B(), r03 ];
-  deffunc Y(Nat) = h.($1-'1);
+  deffunc Y(Element of NAT) = h.($1-'1);
   consider g being Function such that
      dom g = NAT and
-A3: for x being set st x in NAT holds
+A3: for x being Element of NAT holds
      (C[x] implies g.x = X(x)) & (not C[x] implies g.x = Y(x))
-      from PARTFUN1:sch 1;
+      from WAYBEL_4:sch 1;
 A4: g.0 = [ A(), B(), r03 ] by A3;
 A5: g.1 = Y(1) by A3
        .= [ B(), r03, r13 ] by A1,GOBOARD9:1;
@@ -572,7 +572,7 @@ A9:   0 <= n+1 by NAT_1:18;
         .= h.(n+1) by A8,A9,BINARITH:def 3
         .= G(n+1,g.(n+1)) by A2,A7;
     end;
-  deffunc M(Nat) = (g.$1)`1_3;
+  deffunc M(set) = (g.$1)`1_3;
   consider f being Function such that
 A10:  dom f = NAT and
 A11: for x being set st x in NAT holds f.x = M(x) from FUNCT_1:sch 3;
@@ -751,18 +751,23 @@ A1: h.0 = [ C(), r04, r14, r24 ] and
 A2: for n being Nat holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
   defpred C1[set] means $1 = 0;
   defpred C2[set] means $1 = 1;
-  defpred C3[Nat] means $1 > 1;
+  defpred C3[set] means In($1,NAT) > 1;
   deffunc X1(set) = [ A(), B(), C(), r04 ];
   deffunc X2(set) = [ B(), C(), r04, r14 ];
-  deffunc X3(Nat) = h.($1-'2);
+  deffunc X3(set) = h.(In($1,NAT)-'2);
 A3: for c being set st c in NAT holds (C1[c] implies not C2[c]) &
-     (C1[c] implies not C3[c]) & (C2[c] implies not C3[c]);
+     (C1[c] implies not C3[c]) & (C2[c] implies not C3[c])
+    proof
+      let c be set;
+      assume c in NAT; then
+      In(c,NAT) = c by FUNCT_7:def 1;
+      hence thesis;
+    end;
 A4: for c being set st c in NAT holds C1[c] or C2[c] or C3[c]
   proof
     let c be set;
-    assume c in NAT;
-    then reconsider c as Nat;
-     c > 1 or c <= 1;
+    assume c in NAT; then
+    In(c,NAT) = c by FUNCT_7:def 1;
     hence thesis by CQC_THE1:2;
   end;
   consider g being Function such that
@@ -772,28 +777,29 @@ A5: for x being set st x in NAT holds
      (C2[x] implies g.x = X2(x)) &
      (C3[x] implies g.x = X3(x)) from ExFunc3Cond(A3,A4);
 A6: g.0 = [ A(), B(), C(), r04 ] by A5;
-A7: g.1 = [ B(), C(), r04, r14 ]
-       by A5;
+A7: g.1 = [ B(), C(), r04, r14 ] by A5;
+ab: In(2,NAT) = 2 by FUNCT_7:def 1; then
 A8: g.2 = X3(2) by A5
-       .= [ C(), r04, r14, r24 ] by A1,GOBOARD9:1;
+       .= [ C(), r04, r14, r24 ] by A1,ab,GOBOARD9:1;
 A9: for n being Nat holds g.(n+3) = G(n+2,g.(n+2))
     proof
       let n be Nat;
-A10:   0 <= n by NAT_1:18;
+ac:   In(n+2,NAT) = n+2 & In(n+3,NAT) = n+3 by FUNCT_7:def 1;
+A10:  0 <= n by NAT_1:18;
       then 0+1 < n+2 by REAL_1:67;
-      then A11:   g.(n+2) = X3(n+2) by A5
-        .= h.n by BINARITH:39;
+      then A11:   g.(n+2) = X3(n+2) by ac,A5
+        .= h.n by ac,BINARITH:39;
 A12:   n+3-2 = n+(3-2);
 A13:   0 <= n+1 by NAT_1:18;
        0+1 < n+3 by A10,REAL_1:67;
-      hence g.(n+3) = X3(n+3) by A5
-         .= h.(n+1) by A12,A13,BINARITH:def 3
+      hence g.(n+3) = X3(n+3) by A5,ac
+         .= h.(n+1) by A12,A13,BINARITH:def 3,ac
          .= G(n+2,g.(n+2)) by A2,A11;
     end;
-  deffunc M(Nat) = (g.$1)`1_4;
+  deffunc M(Element of NAT) = (g.$1)`1_4;
   consider f being Function such that
 A14:  dom f = NAT and
-A15: for x being set st x in NAT holds f.x = M(x) from FUNCT_1:sch 3;
+A15: for x being Element of NAT holds f.x = M(x) from MSUALG_2:sch 1;
   take f;
   thus dom f = NAT by A14;
   thus
@@ -1015,22 +1021,27 @@ A1: h.0 = [ D(), r05, r15, r25, r35 ]
 A2: for n being Nat holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
   defpred C1[set] means $1 = 0;
   defpred C2[set] means $1 = 1;
-  defpred C3[Nat] means $1 = 2;
-  defpred C4[Nat] means $1 > 2;
+  defpred C3[set] means $1 = 2;
+  defpred C4[set] means In($1,NAT) > 2;
   deffunc X1(set) = [ A(), B(), C(), D(), r05 ];
   deffunc X2(set) = [ B(), C(), D(), r05, r15 ];
   deffunc X3(set) = [ C(), D(), r05, r15, r25 ];
-  deffunc X4(Nat) = h.($1-'3);
+  deffunc X4(set) = h.(In($1,NAT)-'3);
 A3: for c being set st c in NAT holds
     (C1[c] implies not C2[c]) & (C1[c] implies not C3[c]) &
     (C1[c] implies not C4[c]) & (C2[c] implies not C3[c]) &
-    (C2[c] implies not C4[c]) & (C3[c] implies not C4[c]);
+    (C2[c] implies not C4[c]) & (C3[c] implies not C4[c])
+    proof
+      let c be set;
+      assume c in NAT; then
+      In (c,NAT) = c by FUNCT_7:def 1;
+      hence thesis;
+    end;
 A4: for c being set st c in NAT holds C1[c] or C2[c] or C3[c] or C4[c]
   proof
     let c be set;
-    assume c in NAT;
-    then reconsider c as Nat;
-     c > 2 or c <= 2;
+    assume c in NAT; then
+    In (c,NAT) = c by FUNCT_7:def 1;
     hence thesis by CQC_THE1:3;
   end;
   consider g being Function such that
@@ -1043,26 +1054,29 @@ A5: for x being set st x in NAT holds
 A6: g.0 = [ A(), B(), C(), D(), r05 ] by A5;
 A7: g.1 = [ B(), C(), D(), r05, r15 ] by A5;
 A8: g.2 = [ C(), D(), r05, r15, r25 ] by A5;
+xx: In (3,NAT) = 3 by FUNCT_7:def 1; then
 A9: g.3 = X4(3) by A5
-       .= [ D(), r05, r15, r25, r35 ] by A1,GOBOARD9:1;
+       .= [ D(), r05, r15, r25, r35 ] by A1,xx,GOBOARD9:1;
 A10: for n being Nat holds g.(n+4) = G(n+3,g.(n+3))
     proof
       let n be Nat;
-A11:   0 <= n by NAT_1:18;
+l1:   In (n+3,NAT) = n+3 & In (n+4,NAT) = n+4 &
+      In (n,NAT) = n & In (n+1,NAT) = n+1 by FUNCT_7:def 1;
+A11:  0 <= n by NAT_1:18;
       then 0+2 < n+3 by REAL_1:67;
-      then A12:   g.(n+3) = X4(n+3) by A5
-        .= h.n by BINARITH:39;
+      then A12:   g.(n+3) = X4(n+3) by A5,l1
+        .= h.n by BINARITH:39,l1;
 A13:   n+4-3 = n+(4-3);
 A14:   0 <= n+1 by NAT_1:18;
        0+2 < n+4 by A11,REAL_1:67;
-      hence g.(n+4) = X4(n+4) by A5
-         .= h.(n+1) by A13,A14,BINARITH:def 3
+      hence g.(n+4) = X4(n+4) by A5,l1
+         .= h.(n+1) by A13,A14,BINARITH:def 3,l1
          .= G(n+3,g.(n+3)) by A2,A12;
     end;
-  deffunc M(Nat) = (g.$1)`1_5;
+  deffunc M(Element of NAT) = (g.$1)`1_5;
   consider f being Function such that
 A15:  dom f = NAT and
-A16: for x being set st x in NAT holds f.x = M(x) from FUNCT_1:sch 3;
+A16: for x being Element of NAT holds f.x = M(x) from MSUALG_2:sch 1;
   take f;
   thus dom f = NAT by A15;
   thus

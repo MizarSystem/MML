@@ -1,0 +1,182 @@
+:: Continuous Mappings between Finite and One-Dimensional Finite Topological 
+:: Spaces
+::  by Hiroshi Imura , Masami Tanaka and Yatsuka Nakamura
+:: 
+:: Received July 13, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, BOOLE, FUNCT_1, RELAT_1, ARYTM_1, RELAT_2, FIN_TOPO,
+      CONNSP_1, SQUARE_1, FINTOPO3, FINTOPO4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, NAT_1, STRUCT_0, RELSET_1, RELAT_1, FUNCT_1, FUNCT_2, CQC_LANG,
+      DOMAIN_1, GROUP_1, FINSEQ_1, FINSEQ_4, FIN_TOPO, FINTOPO3, SQUARE_1,
+      BINARITH, ENUMSET1, LIMFUNC1, RFUNCT_3;
+ constructors NAT_1, CQC_LANG, DOMAIN_1, GROUP_1, FINSEQ_4, MEMBERED, XBOOLE_0,
+      FIN_TOPO, FINTOPO3, SQUARE_1, BINARITH, ENUMSET1, LIMFUNC1, RFUNCT_3;
+ clusters SUBSET_1, INT_1, RELSET_1, STRUCT_0, CQC_LANG, FINSEQ_1, NAT_1,
+      XREAL_0, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2, FIN_TOPO;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+definition
+  let FT be non empty FT_Space_Str,A,B be Subset of FT;
+  pred A,B are_separated means
+:: FINTOPO4:def 1
+ A^b misses B & A misses (B^b);
+end;
+
+theorem :: FINTOPO4:1
+  for FT being filled (non empty FT_Space_Str),
+      A being Subset of FT, n,m being Nat st
+    n<=m holds Finf(A,n) c= Finf(A,m);
+
+theorem :: FINTOPO4:2
+  for FT being filled (non empty FT_Space_Str),
+      A being Subset of FT, n,m being Nat st
+    n<=m holds Fcl(A,n) c= Fcl(A,m);
+
+theorem :: FINTOPO4:3
+  for FT being filled (non empty FT_Space_Str),
+      A being Subset of FT, n,m being Nat st
+    n<=m holds Fdfl(A,m) c= Fdfl(A,n);
+
+theorem :: FINTOPO4:4
+  for FT being filled (non empty FT_Space_Str), A being Subset of FT,
+      n,m being Nat st
+    n<=m holds Fint(A,m) c= Fint(A,n);
+
+theorem :: FINTOPO4:5
+  for FT being non empty FT_Space_Str,A,B being Subset of FT st
+    A,B are_separated holds B,A are_separated;
+
+theorem :: FINTOPO4:6
+  for FT being filled (non empty FT_Space_Str),
+      A,B being Subset of FT st
+    A,B are_separated holds A misses B;
+
+theorem :: FINTOPO4:7
+  for FT being non empty FT_Space_Str,
+      A,B being Subset of FT st
+    FT is symmetric holds
+    A,B are_separated iff A^f misses B & A misses (B^f);
+
+theorem :: FINTOPO4:8
+  for FT being filled (non empty FT_Space_Str),
+      A,B being Subset of FT st
+    FT is symmetric & A^b misses B holds A misses (B^b);
+
+theorem :: FINTOPO4:9
+  for FT being filled (non empty FT_Space_Str),
+      A,B being Subset of FT st
+    FT is symmetric & A misses (B^b) holds A^b misses B;
+
+theorem :: FINTOPO4:10
+  for FT being filled (non empty FT_Space_Str),
+      A,B being Subset of FT st
+    FT is symmetric holds
+    A,B are_separated iff A^b misses B;
+
+theorem :: FINTOPO4:11
+  for FT being filled (non empty FT_Space_Str),
+      A,B being Subset of FT st
+    FT is symmetric holds
+    A,B are_separated iff A misses (B^b);
+
+theorem :: FINTOPO4:12
+  for FT being filled (non empty FT_Space_Str),
+      IT being Subset of FT st
+    FT is symmetric holds IT is connected iff
+   (for A, B being Subset of FT st
+      IT = A \/ B & A,B are_separated holds
+      A = IT or B = IT);
+
+theorem :: FINTOPO4:13
+  for FT being filled (non empty FT_Space_Str),
+      B being Subset of FT st FT is symmetric holds
+    B is connected iff
+    not (ex C being Subset of FT st
+    C<>{} & B\C <>{} & C c= B & (C^b) misses (B\C));
+
+definition
+  let FT1,FT2 be non empty FT_Space_Str,
+  f be Function of (the carrier of FT1),(the carrier of FT2),n be Nat;
+  pred f is_continuous n means
+:: FINTOPO4:def 2
+ for x being Element of FT1,y being Element of FT2 st
+   x in the carrier of FT1 & y=f.x holds
+  f.:( U_FT(x,0)) c= U_FT(y,n);
+end;
+
+theorem :: FINTOPO4:14
+  for FT1 being non empty FT_Space_Str,
+      FT2 being filled (non empty FT_Space_Str), n being Nat,
+      f being Function of (the carrier of FT1),(the carrier of FT2) st
+    f is_continuous 0 holds f is_continuous n;
+
+theorem :: FINTOPO4:15
+  for FT1 being non empty FT_Space_Str,
+      FT2 being filled (non empty FT_Space_Str), n0,n being Nat,
+      f being Function of (the carrier of FT1),(the carrier of FT2) st
+    f is_continuous n0 & n0<=n holds f is_continuous n;
+
+theorem :: FINTOPO4:16
+  for FT1,FT2 being non empty FT_Space_Str,
+      A being Subset of FT1,B being Subset of FT2,
+      f being Function of (the carrier of FT1),(the carrier of FT2) st
+    f is_continuous 0 & B=f.:A holds
+    f.:(A^b) c= B^b;
+
+theorem :: FINTOPO4:17
+  for FT1,FT2 being non empty FT_Space_Str,A being Subset of FT1,
+      B being Subset of FT2,
+      f being Function of (the carrier of FT1),(the carrier of FT2) st
+    A is connected & f is_continuous 0 & B=f.:A holds B is connected;
+
+::1 dimensional linear FT_Str
+definition let n be Nat;
+  func Nbdl1 n -> Function of Seg n,bool (Seg n) means
+:: FINTOPO4:def 3
+ dom it =Seg n & for i being Nat st
+   i in Seg n holds it.i={i,max(i-'1,1),min(i+1,n)};
+end;
+
+definition let n be Nat;
+ assume  n>0;
+ func FTSL1 n -> non empty FT_Space_Str equals
+:: FINTOPO4:def 4
+  FT_Space_Str(# Seg n,Nbdl1 n #);
+end;
+
+theorem :: FINTOPO4:18
+  for n being Nat st n>0 holds (FTSL1 n) is filled;
+
+theorem :: FINTOPO4:19
+  for n being Nat st n>0 holds (FTSL1 n) is symmetric;
+
+::1 dimensional cyclic FT_Str
+definition let n be Nat;
+  func Nbdc1 n -> Function of Seg n,bool (Seg n) means
+:: FINTOPO4:def 5
+ dom it =Seg n & for i being Nat st i in Seg n holds
+   (1<i & i<n implies it.i={i,i-'1,i+1})&
+   (i=1 & i<n implies it.i={i,n,i+1}) &
+   (1<i & i=n implies it.i={i,i-'1,1}) &
+   (i=1 & i=n implies it.i={i});
+end;
+
+definition let n be Nat;
+  assume  n>0;
+  func FTSC1 n -> non empty FT_Space_Str equals
+:: FINTOPO4:def 6
+ FT_Space_Str(# Seg n,Nbdc1 n #);
+end;
+
+theorem :: FINTOPO4:20
+  for n being Nat st n>0 holds (FTSC1 n) is filled;
+
+theorem :: FINTOPO4:21
+  for n being Nat st n>0 holds (FTSC1 n) is symmetric;

@@ -514,11 +514,12 @@ L4:   for d be Real st d > 0 holds
        ex h be Real st 
         abs(h) < d & h <> 0 &  h*z+x0 in N & 
         not ( ||. h"*(f/.(h*z+x0) -  f/.x0) - dv .|| < r ) by L2;
-     defpred P[Nat,Real] means 
-      abs($2) < (1/($1+1)) &
-      $2 <> 0 & 
-      $2*z+x0 in N &
-      not (  ||. $2"*(f/.($2*z+x0) -  f/.x0) - dv .|| < r );
+     defpred P[Nat,real number] means
+     ex rr being Real st rr = $2 &
+      abs(rr) < (1/($1+1)) &
+      rr <> 0 & 
+      rr*z+x0 in N &
+      not (  ||. rr"*(f/.(rr*z+x0) -  f/.x0) - dv .|| < r );
 L5:  for n be Nat ex h be real number st P[n,h] 
      proof
        let n be Nat;
@@ -577,13 +578,19 @@ A15: n + 1 <= m + 1 by AXIOMS:24;
      0  <=  n by NAT_1:18; then
      0+0 < 1+ n by REAL_1:67; then 
 A16: 1/(m+1) <= 1/(n+1) by A15,SEQ_4:1;
-     abs(h.m) < (1/(m+1)) by L6; then
-     abs(h.m-0) <  1/(n+1) by A16,AXIOMS:22;
+     P[m,h.m] by L6;
+     then abs(h.m-0) <  1/(n+1) by A16,AXIOMS:22;
      hence abs(h.m-0) <p by A14,AXIOMS:22;
    end; then 
 L8:h is convergent by SEQ_2:def 6; then 
 L9:lim h = 0 by L7,SEQ_2:def 7;
-   h is_not_0 by L6 ,SEQ_1:7; then
+   for n holds h.n <> 0
+   proof
+     let n;
+     P[n,h.n] by L6;
+     hence thesis;
+   end;
+   then h is_not_0 by SEQ_1:7; then
    reconsider h as  convergent_to_0 Real_Sequence by L8,L9,FDIFF_1:def 1;
 C3:rng (h*z+c) c= N  
    proof
@@ -591,10 +598,11 @@ C3:rng (h*z+c) c= N
        assume x in rng (h*z+c); then
        consider n be Nat such that 
 D1:     x=(h*z+c).n by NFCONT_1:6;
+ee:    P[n,h.n] by L6;
        x=(h*z).n+c.n by D1,NORMSP_1:def 5
        .=(h.n)*z+c.n by NDIFF_1:def 3
        .=(h.n)*z+x0 by C0;
-       hence x in N by L6;  
+       hence x in N by ee;  
      end;
      hence thesis by TARSKI:def 3;
    end; then
@@ -605,6 +613,7 @@ L11:h"(#)(f*(h*z+c) - f*c) is convergent
 L12:for m be Nat st n <=m holds 
      ||. (h"(#)(f*(h*z+c) - f*c)).m- dv.|| < r by L11,L3,NORMSP_1:def 11;
 L13:||. (h"(#)(f*(h*z+c) - f*c)).n- dv.|| < r by L12;
+ee:    P[n,h.n] by L6;
    ||. (h"(#)(f*(h*z+c) - f*c)).n- dv.|| 
      = ||.(h".n)*((f*(h*z+c) - f*c).n)- dv.|| by NDIFF_1:def 2
     .= ||.(h.n)"*((f*(h*z+c) - f*c).n)- dv.|| by SEQ_1:def 8
@@ -619,7 +628,7 @@ L13:||. (h"(#)(f*(h*z+c) - f*c)).n- dv.|| < r by L12;
       ( for e be Real st e > 0 holds
         ex d be Real st d > 0 
           & for h be Real st ( abs(h) < d  & h <> 0 & h*z+x0 in N) holds
-              ||. h"*(f/.(h*z+x0) -  f/.x0) - dv .|| < e ) by L6,L13;
+              ||. h"*(f/.(h*z+x0) -  f/.x0) - dv .|| < e ) by ee,L13;
  end;
    now assume   
 AS1:( for e be Real st e > 0 holds

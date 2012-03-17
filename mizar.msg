@@ -735,6 +735,8 @@ Inaccessible requirements directive
 MML identifier should be written in capitals
 # 892
 MML identifier should be at most eight characters long
+# 900
+Too complex skeleton
 # 911
 Too long term without parentheses
 # 912

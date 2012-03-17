@@ -1643,7 +1643,7 @@ scheme DTreeStructEx
        S() -> Function of [:D(),NAT:],D()}:
  ex T being DecoratedTree of D() st T.{} = d() &
   for t being Element of dom T holds succ t = { t^<*k*>: k in F(T.t)} &
-   for n,x st x = T.t & n in F(x) holds T.(t^<*n*>) = S().[x,n]
+   for n st n in F(T.t) holds T.(t^<*n*>) = S().[T.t,n]
   provided
 A1: for d being Element of D(), k1,k2 st k1 <= k2 & k2 in F(d) holds k1 in F(d)
 
@@ -1717,8 +1717,7 @@ A13:       p^<*m*> = t^<*l*> & l in F(T.t) by A11,A12,TREES_1:def 5;
           (p^<*m*>).(len p + 1) = m & (t^<*l*>).(len t + 1) = l
            by FINSEQ_1:35,57,59;
           then p = t & n in F(T.t) by A1,A12,A13,FINSEQ_1:46;
-          then p^<*n*> in { s^<*i*> where s is Element of dom T: i in F(T.s) }
-;
+          then p^<*n*> in { s^<*i*> where s is Element of dom T: i in F(T.s) };
          hence thesis by A12,XBOOLE_0:def 2;
         end;
       then reconsider M as Tree;
@@ -2069,12 +2068,12 @@ then A87: succ t2 = { t2^<*i*>: i in F(T2.t2)} by A82;
        then x in dom T by A73;
       hence thesis by A89,Th14;
      end;
-   let n,x; assume
-A90:  x = T.t & n in F(x);
+   let n; assume
+A90:  n in F(T.t);
     then t^<*n*> in succ t2 & succ t2 c= dom T2 by A85,A87;
     then t^<*n*> in dom T2 & T2 in E by A44,A82,FUNCT_1:def 5;
     then T2.(t^<*n*>) = T.(t^<*n*>) by A73;
-   hence T.(t^<*n*>) = S().[x,n] by A82,A85,A86,A90;
+   hence T.(t^<*n*>) = S().[T.t,n] by A82,A85,A86,A90;
   end;
 
 scheme DTreeStructFinEx
@@ -2082,7 +2081,7 @@ scheme DTreeStructFinEx
        S() -> Function of [:D(),NAT:],D()}:
  ex T being DecoratedTree of D() st T.{} = d() &
   for t being Element of dom T holds succ t = { t^<*k*>: k < F(T.t)} &
-   for n,x st x = T.t & n < F(x) holds T.(t^<*n*>) = S().[x,n]
+   for n st n < F(T.t) holds T.(t^<*n*>) = S().[T.t,n]
 proof deffunc FF(Nat) = { i: i < $1};
     deffunc U(set) = FF(F($1));
 A1: for d being Element of D(), k1,k2 st k1 <= k2 & k2 in U(d) holds
@@ -2096,7 +2095,7 @@ A2:    k1 <= k2 & k2 in { i: i < F(d)};
    consider T being DecoratedTree of D() such that
 A3:  T.{} = d() &
     for t being Element of dom T holds succ t = { t^<*k*>: k in U(T.t)} &
-     for n,x st x = T.t & n in U(x) holds T.(t^<*n*>) = S().[x,n]
+     for n st n in U(T.t) holds T.(t^<*n*>) = S().[T.t,n]
       from DTreeStructEx(A1);
    take T; thus T.{} = d() by A3;
    let t be Element of dom T;
@@ -2115,10 +2114,9 @@ A6:    x = t^<*l*> & l < F(T.t);
           l in FF(F(T.t)) by A6;
       hence thesis by A4,A6;
      end;
-   let n,x; assume
-A7:  x = T.t & n < F(x);
-    then n in FF(F(x));
-   hence T.(t^<*n*>) = S().[x,n] by A3,A7;
+   let n; assume n < F(T.t);
+    then n in FF(F(T.t));
+   hence T.(t^<*n*>) = S().[T.t,n] by A3;
   end;
 
 begin :: Addenda

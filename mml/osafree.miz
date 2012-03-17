@@ -11,15 +11,16 @@ environ
       FINSEQ_1, QC_LANG1, LANG1, DTCONSTR, TREES_4, TREES_2, TREES_3, FUNCT_6,
       MCART_1, UNIALG_2, GROUP_6, MSUALG_3, MSAFREE, MSUALG_4, NATTRA_1,
       FINSEQ_4, OSALG_1, SEQM_3, YELLOW18, COH_SP, EQREL_1, RELAT_2, FUNCT_5,
-      CARD_LAR, CARD_5, OSALG_2, OSALG_4, OSAFREE, PARTFUN1;
+      CARD_LAR, CARD_5, OSALG_2, OSALG_4, OSAFREE, PARTFUN1, FUNCT_7,
+      SIN_COS;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, RELAT_1,
       RELSET_1, STRUCT_0, FUNCT_1, MCART_1, PARTFUN1, FUNCT_2, FINSEQ_1,
       FINSEQ_2, RELAT_2, TREES_2, PROB_1, CARD_3, EQREL_1, FINSEQ_4, LANG1,
       TREES_3, FUNCT_6, TREES_4, FUNCT_5, DTCONSTR, ORDERS_2, ORDERS_3, PBOOLE,
       PRALG_1, MSUALG_1, MSUALG_2, MSUALG_3, MSUALG_4, OSALG_1, OSALG_2,
-      OSALG_3, OSALG_4, MSAFREE, YELLOW18;
+      OSALG_3, OSALG_4, MSAFREE, YELLOW18, FUNCT_7;
  constructors NAT_1, MSUALG_3, FINSOP_1, FINSEQ_4, FINSEQOP, ORDERS_3, OSALG_2,
-      OSALG_3, OSALG_4, MSAFREE3, MEMBERED, YELLOW18;
+      OSALG_3, OSALG_4, MSAFREE3, MEMBERED, YELLOW18, FUNCT_7;
  clusters SUBSET_1, PBOOLE, TREES_3, TREES_4, DTCONSTR, PRALG_1, MSUALG_1,
       RELSET_1, STRUCT_0, XBOOLE_0, MSUALG_4, MSUALG_9, OSALG_1, OSALG_4,
       MSAFREE, NAT_1, MEMBERED, PARTFUN1, NUMBERS, ORDINAL2;
@@ -31,7 +32,8 @@ environ
       FINSEQ_1, TREES_4, FINSEQ_4, TREES_1, TREES_2, ALG_1, DOMAIN_1, PROB_1,
       RELSET_1, XBOOLE_0, XBOOLE_1, OSALG_1, OSALG_2, OSALG_3, OSALG_4,
       MSAFREE, MSUALG_6, MSAFREE2, CARD_5, FINSEQ_2, FINSEQ_3, MSUALG_9,
-      MSUALG_4, EQREL_1, FUNCT_5, ORDERS_2, RELAT_2, PARTFUN1, ORDERS_1;
+      MSUALG_4, EQREL_1, FUNCT_5, ORDERS_2, RELAT_2, PARTFUN1, ORDERS_1,
+      FUNCT_7;
  schemes ZFREFLE1, FUNCT_1, RELSET_1, MSUALG_2, DTCONSTR, WELLORD2, XBOOLE_0,
       FUNCT_2, MSUALG_1;
 
@@ -740,8 +742,7 @@ for s be Element of S holds it.s = ParsedTerms(X,s);
          s3 <= s1 & x in X.s3 & a = root-tree [x,s3];
          then consider s3 being Element of S, x be set such that
          A6: s3 <= s1 & x in X.s3 & a = root-tree [x,s3];
-         reconsider s2_1 = s2 , s3_1 = s3 as Element of S
-     ;
+         reconsider s2_1 = s2 , s3_1 = s3 as Element of S;
              s3_1 <= s2_1 by A2,A6,ORDERS_2:26;
          hence thesis by A6;
          end;
@@ -1962,7 +1963,7 @@ proof consider S1 being discrete op-discrete OrderSortedSign;
 end;
 end;
 
-:: just casting funcs necessary for the usage of schemes,
+:: just casting funcs necessary for the usage of schemes
 
 definition
   let S be locally_directed regular (monotone OrderSortedSign),
@@ -2347,8 +2348,7 @@ existence
  set G = DTConOSA(X),
      D = bool [:TS(DTConOSA(X)), the carrier of S:];
  deffunc TermVal(Symbol of G) = @ $1;
- deffunc NTermVal(Symbol of G,FinSequence of TS(G),
-   FinSequence of D) = @($1,$3);
+ deffunc NTermVal(Symbol of G,set,FinSequence of D) = @($1,$3);
  thus ex f being Function of TS(G), D st
   (for t being Symbol of G st t in Terminals G
          holds f.(root-tree t) = TermVal(t)) &
@@ -2361,8 +2361,7 @@ proof
  set G = DTConOSA(X),
      D = bool [:TS(DTConOSA(X)), the carrier of S:];
   deffunc TermVal(Symbol of G) = @ $1;
-  deffunc NTermVal(Symbol of G,FinSequence of TS(G),
-    FinSequence of D) = @($1,$3);
+  deffunc NTermVal(Symbol of G,set,FinSequence of D) = @($1,$3);
   let f1,f2 be Function of TS(DTConOSA(X)),
                bool [:TS(DTConOSA(X)), the carrier of S:] such that
   A1: (for t being Symbol of DTConOSA(X) st t in Terminals DTConOSA(X)
@@ -4776,10 +4775,9 @@ proof
  A1: PTA = MSAlgebra (# ParsedTerms(X), PTOper(X) #) by Def11;
  reconsider SAO=SA,S1O=S1 as OrderSortedSet of S by OSALG_1:17;
  deffunc TermVal(Symbol of D) = pi(F,the Sorts of U1,$1);
- deffunc NTermVal(Symbol of D,FinSequence of TS(D),
-   FinSequence of D) = pi(@(X,$1),U1,$3);
- consider G being Function of TS(D), Union (the Sorts of U1)
- such that
+ deffunc NTermVal(Symbol of D,set,FinSequence) = pi(@(X,$1),U1,
+   $3);
+ consider G being Function of TS(D), Union (the Sorts of U1) such that
  A2: for t being Symbol of D st t in Terminals D
          holds G.(root-tree t) = TermVal(t) and
  A3: for nt be Symbol of D, ts be FinSequence of TS(D) st nt ==> roots ts
@@ -4788,8 +4786,7 @@ proof
  deffunc F(set) = G | ((the Sorts of PTA).$1);
  consider h be Function such that
  A4: dom h = the carrier of S &
- for s be set st s in the carrier of S holds h.s = F(s)
-          from FUNCT_1:sch 3;
+ for s be set st s in the carrier of S holds h.s = F(s) from FUNCT_1:sch 3;
  reconsider h as ManySortedSet of the carrier of S by A4,PBOOLE:def 3;
      for s be set st s in dom h holds h.s is Function
   proof
@@ -4889,7 +4886,7 @@ proof
       A39: h.s = G | (SA.s) by A4;
       A40: dom G = TS D by FUNCT_2:def 1
                .= union rng SA by A1,Th8;
-          dom SA = the carrier of S by PBOOLE:def 3;
+      dom SA = the carrier of S by PBOOLE:def 3;
       then SA.s in rng SA by FUNCT_1:def 5;
       then SA.s c= dom G by A40,ZFMISC_1:92;
       then dom (h.s) = SA.s by A39,RELAT_1:91;
@@ -4903,7 +4900,7 @@ proof
       by FUNCT_2:def 1,RELSET_1:12;
     then ppi in rng Den(o,U1) by A41,A42,FUNCT_1:def 5;
     then A44: ppi in Result(o,U1) by A43;
-        dom S1 = the carrier of S & rng RS c= the carrier of S &
+    dom S1 = the carrier of S & rng RS c= the carrier of S &
     dom SA = the carrier of S by PBOOLE:def 3,RELSET_1:12;
     then A45: dom (S1 *RS) = dom RS & dom RS = O & dom (SA * RS) = dom RS
                                          by FUNCT_2:def 1,RELAT_1:46;
@@ -4914,7 +4911,7 @@ proof
     A48: (PTDenOp(o,X)).ts = nt-tree ts by A19,A24,A25,Def9;
     A49: dom (PTDenOp (o,X)) = ((ParsedTerms X)# * AR).o &
     rng (PTDenOp (o,X)) c= ((ParsedTerms X) * RS).o
-    by FUNCT_2:def 1,RELSET_1:12;
+      by FUNCT_2:def 1,RELSET_1:12;
     then ts in dom (PTDenOp(o,X)) by A19,A24,A25,Th7;
     then nt-tree ts in rng (PTDenOp(o,X)) by A48,FUNCT_1:def 5;
     then nt-tree ts in (SA * RS).o by A1,A49;
@@ -5034,7 +5031,7 @@ then A69: @(X,OSSym(o,X)) = o by ZFMISC_1:33;
      hence thesis by A79,A80,A81,A89,FUNCT_1:72;
     end;
    then A90: G*p = h#x by A76,A77,FUNCT_1:9;
-       dom SA = the carrier of S by PBOOLE:def 3;
+   dom SA = the carrier of S by PBOOLE:def 3;
    then SA.rs in rng SA by FUNCT_1:def 5;
    then SA.rs c= dom G by A75,ZFMISC_1:92;
    then dom (h.rs) = SA.rs by A74,RELAT_1:91;
@@ -5056,7 +5053,7 @@ then A69: @(X,OSSym(o,X)) = o by ZFMISC_1:33;
    hence (h.s1).a1 = G.a1 by A93,FUNCT_1:72
    .= (h.s2).a1 by A92,A94,A95,FUNCT_1:72;
  end;
-     for x st x in the carrier of S holds (h || PV).x = F.x
+  for x st x in the carrier of S holds (h || PV).x = F.x
   proof
    let x;
    assume x in the carrier of S;
@@ -5400,33 +5397,56 @@ existence
  set G = DTConOSA(X);
  set D = TS G;
  deffunc TermVal(Symbol of G) = pi $1;
- deffunc NTermVal(Symbol of G,FinSequence of TS(G),
-   FinSequence of D) = pi(@(X,$1),$3);
- thus ex f being Function of TS(G), D st
+ deffunc NTermVal(Symbol of G,set,FinSequence of D) =
+   In(pi(@(X,$1),$3),D);
+ ex f being Function of TS(G), D st
   (for t being Symbol of G st t in Terminals G
          holds f.(root-tree t) = TermVal(t)) &
   (for nt being Symbol of G,
        ts being FinSequence of TS(G) st nt ==> roots ts
-     holds f.(nt-tree ts) = NTermVal(nt, roots ts, f*ts)) from DTCONSTR:sch 9;
+     holds f.(nt-tree ts) = NTermVal(nt, roots ts, f*ts qua FinSequence of D))
+       from DTCONSTR:sch 9;
+ consider f being Function of TS(G), D such that
+A1:(for t being Symbol of G st t in Terminals G
+         holds f.(root-tree t) = TermVal(t)) &
+  (for nt being Symbol of G,
+       ts being FinSequence of TS(G) st nt ==> roots ts
+     holds f.(nt-tree ts) = NTermVal(nt, roots ts,
+       f*ts qua FinSequence of D))
+       from DTCONSTR:sch 9;
+   take f;
+   thus for t being Symbol of G st t in Terminals G
+        holds f.(root-tree t) = TermVal(t) by A1;
+   let nt be Symbol of G,
+       ts be FinSequence of TS(G);
+   assume A0: nt ==> roots ts;
+   reconsider fts = f * ts as FinSequence of D;
+A2:In(pi(@(X,nt),fts),D) = pi(@(X,nt),fts) by FUNCT_7:def 1;
+   f.(nt-tree ts) = NTermVal(nt, roots ts, fts) by A0,A1
+                 .= In(pi(@(X,nt),fts),D); then
+   f.(nt-tree ts) = pi(@(X,nt),fts) by A2;
+   hence thesis;
   end;
 uniqueness
 proof
  set G = DTConOSA(X);
  set D = TS G;
  deffunc TermVal(Symbol of G) = pi $1;
- deffunc NTermVal(Symbol of G,FinSequence of TS(G),
-   FinSequence of D) = pi(@(X,$1),$3);
+ deffunc NTermVal(Symbol of G,set,FinSequence of D) =
+   pi(@(X,$1),$3 qua FinSequence of D);
   let M1,M2 be Function of TS(DTConOSA(X)), TS(DTConOSA(X)) such that
   A1: (for t being Symbol of DTConOSA(X) st t in Terminals DTConOSA(X)
          holds M1.(root-tree t) = TermVal(t) ) &
   (for nt being Symbol of DTConOSA(X),
        ts being FinSequence of TS(DTConOSA(X)) st nt ==> roots ts
-         holds M1.(nt-tree ts) = NTermVal(nt, roots ts, M1 * ts) ) and
+         holds M1.(nt-tree ts) = NTermVal(nt, roots
+           ts, M1 * ts qua FinSequence of D) ) and
   A2: (for t being Symbol of DTConOSA(X) st t in Terminals DTConOSA(X)
          holds M2.(root-tree t) = TermVal(t) ) &
   (for nt being Symbol of DTConOSA(X),
        ts being FinSequence of TS(DTConOSA(X)) st nt ==> roots ts
-         holds M2.(nt-tree ts) = NTermVal(nt, roots ts, M2 * ts) );
+         holds M2.(nt-tree ts) = NTermVal(nt, roots ts,
+           M2 * ts qua FinSequence of D) );
   thus M1 = M2 from DTCONSTR:sch 10(A1,A2);
 end;
 end;
@@ -5586,9 +5606,7 @@ Th10;
       end;
       hence LeastSorts ((PTMin X)*ts) <= the_arity_of o2 by A9,A21,A22,
 ZFMISC_1:33;
-          LBound(o2,LSMs1) has_least_rank_for o2,LSMs1 by A22,A23,A24,OSALG_1:
-14
-;
+      LBound(o2,LSMs1) has_least_rank_for o2,LSMs1 by A22,A23,A24,OSALG_1:14;
       then LBound(o2,LSMs1) has_least_args_for o2,LSMs1
       & LBound(o2,LSMs1) has_least_sort_for o2,LSMs1 by OSALG_1:def 12;
       then o2 ~= Lo2 & LSMs1 <= the_arity_of Lo2
@@ -5901,11 +5919,9 @@ proof
       F = PTClasses X, M = PTMin X;
  let R be monotone (MSEquivalence-like OrderSortedRelation of PTA);
  A1: R is os-compatible by OSALG_4:def 3;
-
  defpred P3[set] means
  ex t1 being Element of TS D st t1 = $1
   & [t1,M.t1] in R.(LeastSort t1);
-
  A2: for s being Symbol of D st s in Terminals D
         holds P3[root-tree s]
  proof

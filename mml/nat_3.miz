@@ -29,7 +29,8 @@ environ
       FUNCOP_1, CARD_1, WSIERP_1, XBOOLE_0, RADIX_1, AMI_5, BINARITH, BAGORDER,
       SEQ_1, FINSEQ_2, SEQM_3, FINSEQ_3, FINSEQ_4, JORDAN1A, REAL_2, RELAT_1,
       UPROOTS, PRE_CIRC, CIRCCMB3, FINSOP_1, FUNCT_2;
- schemes NAT_1, PRE_CIRC, GRAPH_2, FINSEQ_1, FINSEQ_2, MSUALG_1, FUNCT_1;
+ schemes NAT_1, PRE_CIRC, GRAPH_2, FINSEQ_1, FINSEQ_2, MSUALG_1, FUNCT_1,
+      ZFREFLE1;
 
 begin :: Preliminaries
 
@@ -1032,10 +1033,19 @@ definition
   for i being set holds it.i = b.i |^ n;
   existence proof
     deffunc F(Element of X) = b.$1 |^ n;
+    defpred P[set,set] means ex a being Element of X st a = $1 & $2 = F(a);
   A1: dom b = X by PBOOLE:def 3;
+a1: for e being set st e in X ex u being set st P[e,u]
+  proof
+    let e be set;
+    assume e in X;
+    then reconsider f = e as Element of X;
+    take F(f), f;
+    thus thesis;
+  end;
     consider f being Function such that
   A2: dom f = X and
-  A3: for x being set st x in X holds f.x = F(x) from FUNCT_1:sch 3;
+  A3: for x being set st x in X holds P[x,f.x] from ZFREFLE1:sch 1(a1);
      reconsider n1 = n as Nat by ORDINAL2:def 21;
   A4: n1 >= 1 by UPROOTS:1;
      reconsider f as ManySortedSet of X by A2,PBOOLE:def 3;
@@ -1046,14 +1056,16 @@ definition
          then b.x = 0 by POLYNOM1:def 7;
        then A6: b.x |^ n = 0 by A4,NEWTON:16;
            support f c= X by A2,POLYNOM1:41;
-          then f.x = 0 by A3,A5,A6;
+          then P[x,f.x] by A3,A5;
+          then f.x = 0 by A6;
         hence contradiction by A5,POLYNOM1:def 7;
        end;
        assume x in support b;
        then A7: b.x <> 0 by POLYNOM1:def 7;
           now per cases;
           suppose x in X;
-          hence f.x = b.x |^ n1 by A3;
+          then P[x,f.x] by A3;
+          hence f.x = b.x |^ n1;
           end;
           suppose
         A8:  not x in X;
@@ -1069,7 +1081,8 @@ definition
      let i be set;
      per cases;
      suppose i in X;
-     hence f.i = b.i |^ n by A3;
+     then P[i,f.i] by A3;
+     hence f.i = b.i |^ n;
      end;
      suppose
   A9:   not i in X;
@@ -1437,10 +1450,20 @@ definition
   func prime_exponents n -> ManySortedSet of SetPrimes means :Def8:
   for p being Prime holds it.p = p |-count n;
 existence proof deffunc F(natural number) = $1 |-count n;
+defpred P[set,set] means ex w being natural number st w = $1 & $2 = F(w);
+a1: for i being set st i in SetPrimes ex j being set st P[i,j]
+  proof
+    let i be set;
+    assume i in SetPrimes;
+    then reconsider i as Prime by NAT_LAT:def 17;
+    take F(i), i;
+    thus thesis;
+  end;
   consider f being ManySortedSet of SetPrimes such that
-A1: for i being set st i in SetPrimes holds f.i = F(i) from MSUALG_1:sch 2;
+A1: for i being set st i in SetPrimes holds P[i,f.i] from MSUALG_1:sch 1(a1);
   take f; let i be Prime;  i in SetPrimes by NAT_LAT:def 17;
-  hence thesis by A1;
+  then P[i,f.i] by A1;
+  hence thesis;
 end;
 uniqueness proof let f, g be ManySortedSet of SetPrimes such that
 A2:  for i being Prime holds f.i = i |-count n and

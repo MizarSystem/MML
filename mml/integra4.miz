@@ -841,15 +841,16 @@ vol(A)>0 implies ex T being DivSequence of A st delta(T) is convergent
 & lim delta(T)=0
 proof
    assume A1:vol(A)>0;
-   defpred P[Nat, Element of divs A] means $2 divide_into_equal $1+1;
+   defpred P[set,set] means ex n being Nat, e being Element of divs A st
+   n = $1 & e = $2 & e divide_into_equal n+1;
 A2:for n ex D being Element of divs A st P[n,D]
    proof
     let n;
-        n+1>0 by NAT_1:19;
+    n+1>0 by NAT_1:19;
     then consider D being Element of divs A such that
 A3: len D = n+1 & for i st i in dom D holds D.i=inf A+vol(A)/(n+1)*i
     by A1,Lm3;
-        D divide_into_equal n+1 by A3,Def1;
+    D divide_into_equal n+1 by A3,Def1;
     hence thesis;
    end;
    consider T being Function of NAT,divs A such that
@@ -862,9 +863,10 @@ A5:for i holds (delta(T)).i >= 0
    end;
 A6:for i holds (delta(T)).i = vol(A)/(i+1)
    proof
-    let i;   (delta(T)).i = delta(T.i) by INTEGRA2:def 3;
-then A7: (delta(T)).i = max rng upper_volume(chi(A,A),(T.i)) by INTEGRA1:def 19
-;
+    let i;
+    (delta(T)).i = delta(T.i) by INTEGRA2:def 3;
+    then A7: (delta(T)).i = max rng upper_volume(chi(A,A),(T.i))
+    by INTEGRA1:def 19;
         rng upper_volume(chi(A,A),(T.i))={vol(A)/(i+1)}
     proof
          for x1 being set st x1 in rng upper_volume(chi(A,A),(T.i))
@@ -876,6 +878,8 @@ A8:   k in dom upper_volume(chi(A,A),(T.i))&
        (upper_volume(chi(A,A),(T.i))).k=x1
       by PARTFUN1:26;
       reconsider D = T.i as Element of divs A;
+ww: ex n being Nat, e being Element of divs A st n = i & e = D &
+   e divide_into_equal n+1 by A4;
           k in Seg len upper_volume(chi(A,A),(T.i)) by A8,FINSEQ_1:def 3;
 then A9:   k in Seg len D by INTEGRA1:def 7;
       then x1=vol(divset(D,k)) by A8,INTEGRA1:22;
@@ -885,13 +889,10 @@ then A10:   x1=sup divset(D,k) - inf divset(D,k) by INTEGRA1:def 6;
 A11:    1 <= k by A8,FINSEQ_3:27;
            now per cases by A11,REAL_1:def 5;
         suppose A12:k=1;
-then A13:     1 in dom D by A9,FINSEQ_1:def 3;
-then A14:     inf divset(D,k)=inf A & sup divset(D,k)=D.1 by A12,INTEGRA1:def 5
-;
-            D divide_into_equal i+1 by A4;
-        then len D = i+1 & for j st j in dom D holds D.j=inf A + vol(A)/(len D
-)*j
-        by Def1;
+then A13:   1 in dom D by A9,FINSEQ_1:def 3;
+then A14:   inf divset(D,k)=inf A & sup divset(D,k)=D.1 by A12,INTEGRA1:def 5;
+        len D = i+1 & for j st j in dom D holds
+        D.j=inf A + vol(A)/(len D)*j  by ww,Def1;
         then sup divset(D,k)=inf A+vol(A)/(i+1)*1 by A13,A14;
         then sup divset(D,k)-inf divset(D,k)=inf A+vol(A)/(i+1)-inf A
         by A12,A13,INTEGRA1:def 5
@@ -903,14 +904,12 @@ A16:    k in dom D by A9,FINSEQ_1:def 3;
 then A17:    inf divset(D,k)=D.(k-1) & sup divset(D,k)=D.k by A15,INTEGRA1:def
 5;
 A18:    k-1 in dom D & k-1 in NAT by A15,A16,INTEGRA1:9;
-A19:   D divide_into_equal i+1 by A4;
-           then
 AA:    D.(k-1)=inf A + vol(A)/(len D)*(k-1) & D.k = inf A + vol(A)/(
 len D)* k
-        by A16,A18,Def1;
+        by A16,A18,ww,Def1;
         sup divset(D,k)-inf divset(D,k)
          =vol(A)/(len D)*k - (vol(A)/(len D)*k-vol(A)/(len D)*1) by A17,AA;
-        hence sup divset(D,k)-inf divset(D,k)=vol(A)/(i+1) by A19,Def1;
+        hence sup divset(D,k)-inf divset(D,k)=vol(A)/(i+1) by ww,Def1;
        end;
        end;
        hence thesis;
@@ -934,13 +933,14 @@ then A24:  (upper_volume(chi(A,A),D)).1 in rng upper_volume(chi(A,A),D)
 A25:  (upper_volume(chi(A,A),D)).1 = vol(divset(D,1)) by A23,INTEGRA1:22;
 A26:  vol(divset(D,1))=sup divset(D,1) - inf divset(D,1) by INTEGRA1:def 6;
 A27:  sup divset(D,1)=D.1 & inf divset(D,1)=inf A by A22,INTEGRA1:def 5;
-A28:  D divide_into_equal i+1 by A4;
+ww: ex n being Nat, e being Element of divs A st n = i & e = D &
+   e divide_into_equal n+1 by A4;
       then sup divset(D,1)=inf A+vol(A)/(len D)*1 by A22,A27,Def1;
-      then vol(divset(D,1))=inf A+vol(A)/(len D)-inf A by A22,A26,INTEGRA1:def
-5
+      then vol(divset(D,1))=inf A+vol(A)/(len D)-inf A
+        by A22,A26,INTEGRA1:def 5
       .=vol(A)/(len D)-(inf A-inf A)
       .=vol(A)/(len D) by XCMPLX_1:17;
-      hence thesis by A21,A24,A25,A28,Def1;
+      hence thesis by A21,A24,A25,ww,Def1;
      end;
      then {vol(A)/(i+1)} c= rng upper_volume(chi(A,A),(T.i)) by TARSKI:def 3;
      hence thesis by A20,XBOOLE_0:def 10;

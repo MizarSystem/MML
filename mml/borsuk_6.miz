@@ -36,9 +36,36 @@ environ
       SQUARE_1, YELLOW12, JORDAN6, JGRAPH_2, JGRAPH_3, JGRAPH_1, JGRAPH_6,
       JORDAN5B, YELLOW_2, MEMBERED, SUBSET_1, STRUCT_0, JORDAN16, TOPREAL6,
       EUCLID, FINSEQ_1, CATALG_1, JORDAN1K, MSAFREE3, JORDAN20;
- schemes FUNCT_2, PARTFUN1, RECDEF_2, JGRAPH_2, DOMAIN_1, XBOOLE_0, JGRAPH_4;
+ schemes FUNCT_2, PARTFUN1, RECDEF_2, JGRAPH_2, DOMAIN_1, XBOOLE_0, JGRAPH_4,
+      WAYBEL_4;
 
 begin :: Preliminaries
+
+scheme ExFunc3CondD { C() -> non empty set, P,Q,R[set], F,G,H(set) -> set }:
+  ex f being Function st dom f = C() &
+   for c being Element of C() holds (P[c] implies f.c = F(c)) &
+    (Q[c] implies f.c = G(c)) & (R[c] implies f.c = H(c))
+provided
+A1:for c being Element of C() holds (P[c] implies not Q[c]) &
+    (P[c] implies not R[c]) & (Q[c] implies not R[c]) and
+A2: for c being Element of C() holds P[c] or Q[c] or R[c]
+ proof
+a1:for c being set st c in C() holds (P[c] implies not Q[c]) &
+    (P[c] implies not R[c]) & (Q[c] implies not R[c]) by A1;
+a2: for c being set st c in C() holds P[c] or Q[c] or R[c] by A2;
+   ex f being Function st dom f = C() &
+   for c being set st c in C() holds (P[c] implies f.c = F(c)) &
+    (Q[c] implies f.c = G(c)) & (R[c] implies f.c = H(c)) from
+      RECDEF_2:sch 1(a1,a2); then
+   consider f being Function such that
+B1:dom f = C() and
+B2:for c being set st c in C() holds (P[c] implies f.c = F(c)) &
+    (Q[c] implies f.c = G(c)) & (R[c] implies f.c = H(c));
+   take f;
+   thus dom f = C() by B1;
+   let c be Element of C();
+   thus thesis by B2;
+ end;
 
 registration let n be Nat;
   cluster -> Function-like Relation-like Element of TOP-REAL n;
@@ -1842,9 +1869,9 @@ definition
     deffunc G(set) = 1;
     consider f being Function such that
 A1: dom f = the carrier of I[01] &
-    for x being set st x in the carrier of I[01] holds
+    for x being Element of the carrier of I[01] holds
     (P[x] implies f.x = F(x)) &
-    (not P[x] implies f.x = G(x)) from PARTFUN1:sch 1;
+    (not P[x] implies f.x = G(x)) from WAYBEL_4:sch 1;
     for x being set st x in the carrier of I[01] holds
       f.x in the carrier of I[01]
     proof
@@ -1998,9 +2025,9 @@ definition
     deffunc F(set) = 0;
     consider f being Function such that
 A1: dom f = the carrier of I[01] &
-    for x being set st x in the carrier of I[01] holds
+    for x being Element of the carrier of I[01] holds
     (P[x] implies f.x = F(x)) &
-    (not P[x] implies f.x = G(x)) from PARTFUN1:sch 1;
+    (not P[x] implies f.x = G(x)) from WAYBEL_4:sch 1;
     for x being set st x in the carrier of I[01] holds
       f.x in the carrier of I[01]
     proof
@@ -2158,13 +2185,12 @@ definition
     deffunc F(real number) = 1/2 * $1;
     deffunc G(real number) = $1 - 1/4;
     deffunc H(real number) = 2 * $1 - 1;
-B1: for c being set st c in the carrier of I[01] holds
+B1: for c being Element of the carrier of I[01] holds
       (P[c] implies not Q[c]) &
       (P[c] implies not R[c]) &
       (Q[c] implies not R[c])
     proof
-      let c be set;
-      assume c in the carrier of I[01]; then
+      let c be Element of the carrier of I[01];
       reconsider c' = c as Point of I[01];
       thus P[c] implies not Q[c];
       hereby assume P[c]; then
@@ -2174,14 +2200,14 @@ B1: for c being set st c in the carrier of I[01] holds
       assume Q[c];
       hence thesis;
     end;
-B2: for c being set st c in the carrier of I[01] holds
+B2: for c being Element of the carrier of I[01] holds
       P[c] or Q[c] or R[c];
     consider f being Function such that
 A1: dom f = the carrier of I[01] &
-    for c being set st c in the carrier of I[01] holds
+    for c being Element of the carrier of I[01] holds
       (P[c] implies f.c = F(c)) &
       (Q[c] implies f.c = G(c)) &
-      (R[c] implies f.c = H(c)) from RECDEF_2:sch 1 (B1,B2);
+      (R[c] implies f.c = H(c)) from ExFunc3CondD(B1,B2);
     for x being set st x in the carrier of I[01] holds
       f.x in the carrier of I[01]
     proof

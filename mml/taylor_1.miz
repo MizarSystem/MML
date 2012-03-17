@@ -20,7 +20,7 @@ environ
       RFUNCT_2, RCOMP_1, MEMBERED, SEQ_2, COMPLEX1, GROUP_1, SERIES_1,
       PREPOWER, COMSEQ_3, FDIFF_1, FINSEQ_4, SIN_COS, SEQFUNC, INT_2;
  clusters RELSET_1, XREAL_0, MEMBERED, NEWTON, NAT_1, RAT_1, RCOMP_1, INT_1,
-      SEQ_1, SIN_COS, PREPOWER;
+      SEQ_1, SIN_COS, PREPOWER, PARTFUN1, ORDINAL2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  theorems AXIOMS, XBOOLE_1, ABSVALUE, REAL_1, REAL_2, RLVECT_1, TARSKI,
       XBOOLE_0, PARTFUN1, PARTFUN2, SUBSET_1, XCMPLX_1, RELAT_1, CARD_4,
@@ -117,7 +117,7 @@ A4: n = 0 & m = 0;
 theorem Th2:
   #Z n is_differentiable_in x & diff(( #Zn),x) = n * x #Z (n-1)
 proof
-defpred P[Nat] means for x be real number holds
+defpred P[natural number] means for x be real number holds
      #Z $1 is_differentiable_in x &
      diff( ( #Z $1),x) = $1 * x #Z ($1 -1);
 A1:P[0]
@@ -956,29 +956,47 @@ func diff(f,Z) -> Functional_Sequence of REAL,REAL means :Def4:
    it.0 = f|Z & for i be natural number holds it.(i+1) = (it.i) `| Z;
 existence
 proof
-      deffunc G(Nat,PartFunc of REAL,REAL)= ( $2 )`|Z;
-      consider g be Function
-      such that
-      A1:   dom g = NAT & g.0 = f|Z
-      & for n being Element of  NAT holds g.(n+1) = G(n,g.n)
-      from RECDEF_1:sch 3;
-      defpred P[Nat]  means g.$1 is PartFunc of REAL,REAL;
+      deffunc G(set,PartFunc of REAL,REAL)= ( $2 )`|Z;
+      defpred R[set,set,set] means
+      ex h being PartFunc of REAL, REAL st $2 = h & $3 = h `| Z;
+X1:   for n being Nat for x being Element of PFuncs(REAL,REAL)
+      ex y being Element of PFuncs(REAL,REAL) st R[n,x,y]
+      proof
+        let n be Nat;
+        let x be Element of PFuncs (REAL,REAL);
+        reconsider x' = x as PartFunc of REAL, REAL by PARTFUN1:120;
+        reconsider y = x' `| Z as Element of PFuncs (REAL,REAL) 
+          by PARTFUN1:119;
+        ex h being PartFunc of REAL, REAL st x = h & y = h `| Z;
+        hence thesis;
+      end;
+      reconsider fZ = f|Z as Element of PFuncs(REAL,REAL) by PARTFUN1:119; 
+      consider g be Function of NAT, PFuncs (REAL,REAL) such that
+      A1: g.0 = fZ
+      & for n being Element of NAT holds R[n,g.n,g.(n+1)]
+      from RECDEF_1:sch 2(X1);
+      defpred P[Nat] means g.$1 is PartFunc of REAL,REAL;
+a1:    dom g = NAT by FUNCT_2:def 1;
        A2: P[0] by A1;
        A3:  for k be Nat st P[k] holds P[k+1]
        proof
        let k be Nat such that
-         A4: P[k];
-         reconsider gk=g.k as PartFunc of REAL,REAL by A4;
-          g.(k+1)=( gk )`|Z by A1;
+         P[k];
+         R[k,g.k,g.(k+1)] by A1; then
+         consider h being PartFunc of REAL, REAL such that 
+X2:      g.k = h & g.(k+1) = h `| Z;
+         reconsider gk=g.k as PartFunc of REAL,REAL by X2;
+         g.(k+1)=( gk )`|Z by X2;
          hence thesis;
        end;
-          for n be Nat  holds P[n]  from NAT_1:sch 1(A2,A3);
-       then reconsider g as Functional_Sequence of REAL,REAL by A1,SEQFUNC:1;
-        take g;
-        thus g.0 = f|Z by A1;
-        let i be natural number;
-         i is Nat by ORDINAL2:def 21;
-       hence  thesis by A1;
+       for n be Nat holds P[n] from NAT_1:sch 1(A2,A3);
+       then reconsider g as Functional_Sequence of REAL,REAL by a1,SEQFUNC:1;
+       take g;
+       thus g.0 = f|Z by A1;
+       let i be natural number;
+       i is Nat by ORDINAL2:def 21; then
+       R[i,g.i,g.(i+1)] by A1;
+       hence thesis;
 end;
 uniqueness
 proof
@@ -1053,7 +1071,7 @@ hence thesis by A1;
 end;
 uniqueness
 proof
-deffunc F(Nat)=(diff(f,Z).$1).a * (b-a) |^ $1 /($1!);
+deffunc F(natural number)=(diff(f,Z).$1).a * (b-a) |^ $1 /($1!);
 let s1,s2 be Real_Sequence such that
  A2:   for n be natural number holds s1.n=F(n)
         and

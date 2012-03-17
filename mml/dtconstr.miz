@@ -2082,19 +2082,22 @@ definition
          holds f.(root-tree t) = T(t)) &
   (for nt being Symbol of PeanoNat,
        ts being FinSequence of TS(PeanoNat) st nt ==> roots ts
-         holds f.(nt-tree ts) = N(nt, roots ts,  f * ts)) from DTConstrIndDef;
+       holds f.(nt-tree ts) = N(nt, roots ts,  f * ts qua FinSequence of NAT))
+         from DTConstrIndDef;
   end;
   uniqueness proof let it1, it2 be Function of TS(PeanoNat), NAT such that
 A1:  (for t being Symbol of PeanoNat st t in Terminals PeanoNat
          holds it1.(root-tree t) = T(t)) &
   (for nt being Symbol of PeanoNat,
        ts being FinSequence of TS(PeanoNat) st nt ==> roots ts
-         holds it1.(nt-tree ts) = N(nt,roots ts,it1 * ts)) and
+         holds it1.(nt-tree ts) =
+         N(nt,roots ts,it1 * ts qua FinSequence of NAT)) and
 A2:  (for t being Symbol of PeanoNat st t in Terminals PeanoNat
          holds it2.(root-tree t) = T(t)) &
   (for nt being Symbol of PeanoNat,
        ts being FinSequence of TS(PeanoNat) st nt ==> roots ts
-         holds it2.(nt-tree ts) = N(nt,roots ts,it2 * ts));
+         holds it2.(nt-tree ts) =
+         N(nt,roots ts,it2 * ts qua FinSequence of NAT));
    thus it1 = it2 from DTConstrUniqDef (A1,A2);
   end;
 end;
@@ -2119,16 +2122,18 @@ definition
   for n being Nat holds it.(n+1) = PNsucc it.n;
  existence proof
    ex f being Function of NAT, TS(PeanoNat) st f.0 = root-tree O &
-  for n being Nat holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 4;
+  for n being Nat holds f.(n+1) = F(n,f.n qua Element of TS(PeanoNat))
+  from RECDEF_1:sch 4;
   hence thesis;
  end;
  uniqueness proof let it1, it2 be Function of NAT, TS(PeanoNat);
  assume
 A1:   not thesis;
 then A2:   it1.0 = root-tree O &
-  for n being Nat holds it1.(n+1) = F(n,it1.n);
+  for n being Nat holds it1.(n+1) = F(n,it1.n qua Element of TS(PeanoNat));
 A3:   it2.0 = root-tree O &
-  for n being Nat holds it2.(n+1) = F(n,it2.n) by A1;
+  for n being Nat holds it2.(n+1) = F(n,it2.n qua Element of TS(PeanoNat))
+  by A1;
      it1 = it2 from RECDEF_1:sch 12 (A2, A3);
   hence thesis by A1;
  end;
@@ -2346,8 +2351,7 @@ end;
   consider s2s being Function of the carrier of G, (the carrier of G)*
          such that
 A14: for s being set st s in the carrier of G holds s2s.s = F(s)
-                                                        from FUNCT_2:sch 2
-( A13 );
+    from FUNCT_2:sch 2(A13);
   deffunc T(Symbol of G) = s2s.$1;
   deffunc N(Symbol of G,set,FinSequence of (the carrier of G)*) =
    s2s.$1^FlattenSeq($3);
