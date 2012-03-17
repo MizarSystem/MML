@@ -20,7 +20,8 @@ environ
       BINARITH, RFUNCT_2, COMPLEX1, MEMBERED, ARYTM_0, ARYTM_3, FUNCT_4,
       BINOP_2, NAT_1;
  clusters INT_1, COMSEQ_2, COMSEQ_3, XREAL_0, RELSET_1, FDIFF_1, RCOMP_1,
-      SEQ_1, COMSEQ_1, SEQM_3, NEWTON, COMPLEX1, MEMBERED, ORDINAL2, NUMBERS;
+      SEQ_1, COMSEQ_1, SEQM_3, NEWTON, COMPLEX1, MEMBERED, ORDINAL2, NUMBERS,
+      SQUARE_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions COMSEQ_3;
  theorems AXIOMS, NAT_1, REAL_1, ABSVALUE, REAL_2, INT_1, SEQ_1, SEQ_2,
@@ -34,7 +35,8 @@ environ
 
 begin
 
- reserve p,q,th,th1,th2,th3,r for Real,
+ reserve q,th,th1,th2,th3,r for Real,
+         p for real number,
          w,z,z1,z2 for Element of COMPLEX,
          k,l,m,n,n1,n2 for Nat,
          seq,seq1,seq2,cq1 for Complex_Sequence,
@@ -2209,8 +2211,12 @@ proof
 end;
 
  Lm8:
-|.Sum([*0,th*] ExpSeq ).| = 1 & abs(sin.th) <= 1 & abs(cos.th) <= 1
+for th1 being real number st th = th1 holds 
+|.Sum([*0,th*] ExpSeq ).| = 1 &
+abs(sin.th1) <= 1 & abs(cos.th1) <= 1
 proof
+  let th1 be real number such that
+a1: th = th1;
   A1:    Sum([*0,th*] ExpSeq ) * Sum((-[*0,th*]) ExpSeq )
          =Sum(([*0,th*]+(-[*0,th*])) ExpSeq ) by Lm4
         .=1r by Th10;
@@ -2221,49 +2227,54 @@ proof
   thus
   A3: |.Sum([*0,th*] ExpSeq ).|=1
  proof
-   A4: |.Sum([*0,th*] ExpSeq ).| =1/|.Sum([*0,th*] ExpSeq ).| by A2,XCMPLX_1:74
-;
+ A4: |.Sum([*0,th*] ExpSeq ).| =1/|.Sum([*0,th*] ExpSeq ).| by A2,XCMPLX_1:74;
    A5: |.Sum([*0,th*] ExpSeq ).| <> 0 by A2;
          |.Sum([*0,th*] ExpSeq ).| <> -1 by COMPLEX1:132;
      hence |.Sum([*0,th*] ExpSeq ).|=1 by A4,A5,XCMPLX_1:200;
   end;
-     A6:abs(sin.th)=abs(Im(Sum([*0,th*] ExpSeq ))) by Def20;
-            abs(cos.th)=abs(Re(Sum([*0,th*] ExpSeq ))) by Def22;
-        hence thesis by A3,A6,COMSEQ_3:13;
+  A6:abs(sin.th)=abs(Im(Sum([*0,th*] ExpSeq ))) by Def20;
+  abs(cos.th)=abs(Re(Sum([*0,th*] ExpSeq ))) by Def22;
+  hence thesis by a1,A3,A6,COMSEQ_3:13;
 end;
 
 theorem
-    |.exp([*0,th*]).| = 1 & abs(sin th) <= 1 & abs(cos th) <= 1
+  |.exp([*0,th*]).| = 1 &
+  for th being real number holds abs(sin th) <= 1 & abs(cos th) <= 1
 proof
   thus |.exp([*0,th*]).| =|.Sum([*0,th*] ExpSeq ).| by Lm5
                   .=1 by Lm8;
-        abs(sin.th) <= 1 by Lm8;
+  let th be real number;
+a1: th is Real by XREAL_0:def 1;
+  then abs(sin.th) <= 1 by Lm8;
   hence abs(sin(th)) <= 1 by Def21;
-      abs(cos.th) <= 1 by Lm8;
+  abs(cos.th) <= 1 by a1,Lm8;
   hence abs(cos(th)) <= 1 by Def23;
 end;
 
+reserve th,th1,th2 for real number;
+
 theorem Th31:
-(cos.(th))^2+(sin.(th))^2=1
+(cos.th)^2+(sin.th)^2=1
    &
-(cos.(th))*(cos.(th))+(sin.(th))*(sin.(th))=1
+(cos.th)*(cos.th)+(sin.th)*(sin.th)=1
 proof
-  A1:    Sum([*0,th*] ExpSeq ) * Sum((-[*0,th*]) ExpSeq )
-         =Sum(([*0,th*]+(-[*0,th*])) ExpSeq ) by Lm4
+  reconsider th1=th as Real by XREAL_0:def 1;
+  A1:    Sum([*0,th1*] ExpSeq ) * Sum((-[*0,th1*]) ExpSeq )
+         =Sum(([*0,th1*]+(-[*0,th1*])) ExpSeq ) by Lm4
         .=1r by Th10;
  thus A2: (cos.(th))^2+(sin.(th))^2
-         =(Re(Sum([*0,th*] ExpSeq )))^2+(sin.(th))^2 by Def22
-        .=(Re(Sum([*0,th*] ExpSeq )))^2+(Im(Sum([*0,th*] ExpSeq )))^2 by Def20
-        .=|.Sum([*0,th*] ExpSeq )*Sum([*0,th*] ExpSeq ).| by COMPLEX1:154
-        .=|.Sum([*0,th*] ExpSeq ) * Sum([*0,th*] ExpSeq)*'.| by COMPLEX1:155
-        .=1 by A1,Lm7,COMPLEX1:134;
+       =(Re(Sum([*0,th1*] ExpSeq )))^2+(sin.(th))^2 by Def22
+      .=(Re(Sum([*0,th1*] ExpSeq )))^2+(Im(Sum([*0,th1*] ExpSeq )))^2 by Def20
+      .=|.Sum([*0,th1*] ExpSeq )*Sum([*0,th1*] ExpSeq ).| by COMPLEX1:154
+      .=|.Sum([*0,th1*] ExpSeq ) * Sum([*0,th1*] ExpSeq)*'.| by COMPLEX1:155
+      .=1 by A1,Lm7,COMPLEX1:134;
   thus (cos.(th))*(cos.(th))+(sin.(th))*(sin.(th))
      =(cos.(th))^2 +(sin.(th))*(sin.(th)) by SQUARE_1:def 3
     .=1 by A2,SQUARE_1:def 3;
   end;
 
 theorem
-    (cos(th))^2+(sin(th))^2=1
+  (cos(th))^2+(sin(th))^2=1
    &
 (cos(th))*(cos(th))+(sin(th))*(sin(th))=1
 proof
@@ -2281,22 +2292,23 @@ end;
 Lm9: 0c = [*0,0*] by ARYTM_0:def 7;
 
 theorem Th33:
- cos.(0)=1 & sin.(0)=0
+ cos.0=1 & sin.0=0
  &
  cos.(-th)=cos.(th) & sin.(-th)=-sin.(th)
  proof
    thus cos.(0) = 1 by Def22,Lm9,Th10,COMPLEX1:15;
    thus
        sin.(0) = 0 by Def20,Lm9,Th10,COMPLEX1:15;
-    thus cos.(-th)=Re( Sum(([*-0,-th*]) ExpSeq) ) by Def22
-               .= Re( Sum((-[*0,th*]) ExpSeq) ) by Lm3
-               .= Re(Sum([*0,th*] ExpSeq)*') by Lm7
+    reconsider th1=th as Real by XREAL_0:def 1;
+    thus cos.(-th)=Re( Sum(([*-0,-th1*]) ExpSeq) ) by Def22
+               .= Re( Sum((-[*0,th1*]) ExpSeq) ) by Lm3
+               .= Re(Sum([*0,th1*] ExpSeq)*') by Lm7
                .= Re([*cos.(th),sin.(th)*]*') by Lm6
                .= Re([*cos.(th),-sin.(th)*]) by Lm3
                .= cos.(th) by COMPLEX1:7;
-    thus sin.(-th)=Im( Sum(([*-0,-th*]) ExpSeq) ) by Def20
-               .= Im( Sum((-[*0,th*]) ExpSeq) ) by Lm3
-               .= Im(Sum([*0,th*] ExpSeq)*') by Lm7
+    thus sin.(-th)=Im( Sum(([*-0,-th1*]) ExpSeq) ) by Def20
+               .= Im( Sum((-[*0,th1*]) ExpSeq) ) by Lm3
+               .= Im(Sum([*0,th1*] ExpSeq)*') by Lm7
                .= Im([*cos.(th),sin.(th)*]*') by Lm6
                .= Im([*cos.(th),-sin.(th)*]) by Lm3
                .= -sin.(th) by COMPLEX1:7;
@@ -2349,10 +2361,10 @@ func th P_cos -> Real_Sequence means :Def25:
    end;
 end;
 
-Lm10: for p,q,r st r<>0 holds
+Lm10: for p,q,r being Real st r<>0 holds
        [*p,q*]/[*r,0*]=[*p/r,q/r*]& [*p,q*]/[*0,r*]=[*q/r,-p/r*]
  proof
-   let p,q,r;
+   let p,q,r be Real;
    assume
    A1: r<>0;
    A2: Re[*p,q*]=p & Im[*p,q*]=q & Re[*r,0*]=r & Im[*r,0*]=0 &
@@ -2375,9 +2387,10 @@ Lm10: for p,q,r st r<>0 holds
        .=[* q/ r,- p/r *] by XCMPLX_1:188;
     hence thesis by A3;
  end;
-Lm11: [*p,q*]*[*r,0*]=[*p*r,q*r*]&
+Lm11: for p,q,r being Real holds [*p,q*]*[*r,0*]=[*p*r,q*r*]&
       [*p,q*]*[*0,r*]=[*-q*r,p*r*]
  proof
+let p,q,r be Real;
  A1: Re[*p,q*]=p & Im[*p,q*]=q& Re[*r,0*]=r & Im[*r,0*]=0 &
      Re[*0,r*]=0 & Im[*0,r*]=r by COMPLEX1:7;
   then A2: [*p,q*]*[*r,0*]= [*p*r-q*0, p*0+ r*q*] by COMPLEX1:def 10
@@ -2444,10 +2457,10 @@ A1:     z#N (2*0)=1r by COMSEQ_3:11;
 Lm12: 1r = [*1,0*] by ARYTM_0:def 7,COMPLEX1:def 7;
 
 theorem Th36:
-  for k, th holds [*0, th*] #N (2*k)=[*(-1)|^ k* (th |^ (2*k)),0*]
+  for th being Real holds [*0, th*] #N (2*k)=[*(-1)|^ k* (th |^ (2*k)),0*]
      & [*0, th*] #N (2*k+1)=[*0,(-1)|^ k* (th |^ (2*k+1))*]
 proof
-  let k, th;
+  let th be Real;
   A1: [*0, th*] #N (2*0)=[*0, th*] GeoSeq.0 by COMSEQ_3:def 2
                        .=[*1,0*] by Lm12,COMSEQ_3:def 1;
   A2: [*(-1)|^ 0* (th |^ (2*0)),0*]=[*(-1)|^ 0* th GeoSeq.0,0*] by PREPOWER:def
@@ -2548,11 +2561,11 @@ proof
  thus for k holds X[k] from NAT_1:sch 1(A1,A2);
 end;
 
-theorem Th38:for th, n holds
+theorem Th38:for th being Real holds
      Partial_Sums(th P_sin).n = Partial_Sums(Im ([*0, th*] ExpSeq)).(2*n+1) &
      Partial_Sums(th P_cos).n = Partial_Sums(Re ([*0, th*] ExpSeq)).(2*n)
 proof
-let th;
+let th be Real;
       now
   A1:Partial_Sums(th P_sin).0= (th P_sin).0 by SERIES_1:def 1
                          .= (-1)|^ 0 * (th)|^ (2*0+1)/((2*0+1)!) by Def24;
@@ -2723,13 +2736,13 @@ A16: Partial_Sums(Re ([*0, th*] ExpSeq)).(2*(k+1))
  hence thesis;
 end;
 
-theorem Th39: for th holds
+theorem Th39: for th being Real holds
      Partial_Sums(th P_sin) is convergent & Sum(th P_sin)=Im(Sum
 ([*0,th*] ExpSeq))
      &Partial_Sums(th P_cos) is convergent & Sum(th P_cos)=Re(Sum
 ([*0,th*] ExpSeq))
 proof
-  let th;
+  let th be Real;
       Re ([*0,th*] ExpSeq) is summable & Im ([*0,th*] ExpSeq) is summable
      & Sum(([*0,th*] ExpSeq))=[*Sum(Re ([*0,th*] ExpSeq)),Sum
 (Im ([*0,th*] ExpSeq))*]
@@ -2794,9 +2807,9 @@ A7: now let p be real number;
 hence thesis by A2,A6,A7,SEQ_2:def 6,SERIES_1:def 3;
 end;
 
-theorem Th40: for th holds cos.th=Sum(th P_cos) & sin.th=Sum(th P_sin)
+theorem Th40: cos.th=Sum(th P_cos) & sin.th=Sum(th P_sin)
 proof
-   let th;
+   reconsider th as Real by XREAL_0:def 1;
    A1: sin.th = Im(Sum([*0,th*] ExpSeq)) by Def20;
        cos.th=Re(Sum([*0,th*] ExpSeq)) by Def22;
    hence thesis by A1,Th39;
@@ -2879,10 +2892,12 @@ Lm14: for th,th1,th2,th3 be real number holds th |^ 0=1
  end;
 
 Lm15:
+for th,th1,th2,th3 being Real holds
     [*th,th1*]+[*th2,th3*]=[*th+th2,th1+th3*]
     &(5/6)^2=25/36
-    &(th>0 & th1>0 implies th+th1>0)
+    &(for th,th1 being real number holds th>0 & th1>0 implies th+th1>0)
  proof
+   let th,th1,th2,th3 be Real;
      thus [*th,th1*]+[*th2,th3*]=[*th+th2,th1+th3*]
      proof
            Re[*th,th1*]=th&Im[*th,th1*]=th1&Re[*th2,th3*]=th2
@@ -2891,8 +2906,9 @@ Lm15:
      end;
      thus (5/6)^2=(5/6)*(5/6) by SQUARE_1:def 3
           .=25/36;
+          let th,th1 be real number;
         th>0 implies th1+th>th1 by REAL_1:69;
-   hence (th>0 & th1>0 implies th+th1>0) by AXIOMS:22;
+   hence thesis by AXIOMS:22;
  end;
 
 theorem Th42: for n,k,m st n < k holds m!>0 & n!<=k!
@@ -2980,9 +2996,9 @@ proof
    hence thesis by A1,A2,A7,SEQM_3:14;
 end;
 
-theorem Th44: for th,n holds [*th,0*]#N n=[* th |^ n,0 *]
+theorem Th44: for th being Real holds [*th,0*]#N n=[* th |^ n,0 *]
 proof
-  let th, n;
+  let th be Real;
       defpred X[Nat] means [*th,0*]#N $1 =[* th |^ $1,0 *];
      [*th,0*]#N 0=[* 1,0 *] by Lm12,COMSEQ_3:11
                  .=[* th |^ 0,0 *] by Lm14;
@@ -3004,9 +3020,9 @@ proof
 end;
 
 theorem Th45:
- for th, n holds [*th,0*] #N n /(n!c )=[*(th|^ n) /(n!),0*]
+ for th being Real holds [*th,0*] #N n /(n!c )=[*(th|^ n) /(n!),0*]
 proof
-  let th, n;
+  let th be Real;
   A1: [*th,0*] #N n /(n!c )=[* th |^ n,0 *]/(n!c ) by Th44
      .=[* th |^ n,0 *]/[*n!,0*] by Th37;
      n!<>0 by NEWTON:23;
@@ -3014,8 +3030,9 @@ proof
    hence thesis;
 end;
 
-theorem Th46: Im(Sum([*p,0*] ExpSeq))=0
+theorem Th46: for p being Real holds Im(Sum([*p,0*] ExpSeq))=0
 proof
+let p be Real;
 A1: for n holds (Partial_Sums(Im([*p,0*] ExpSeq))).n=0
  proof
    let n;
@@ -3248,9 +3265,9 @@ def 1
  hence thesis by A1,AXIOMS:22;
 end;
 
-theorem Th48:for th holds th ExpSeq=Re([*th,0*] ExpSeq)
+theorem Th48:for th being Real holds th ExpSeq=Re([*th,0*] ExpSeq)
 proof
- let th;
+ let th be Real;
       for n holds (th ExpSeq).n=Re([*th,0*] ExpSeq).n
   proof
   let n;
@@ -3264,10 +3281,10 @@ proof
   hence thesis by FUNCT_2:113;
 end;
 
-theorem Th49: for th holds (th ExpSeq) is summable &
+theorem Th49: for th being Real holds (th ExpSeq) is summable &
        Sum(th ExpSeq)=Re(Sum([*th,0*] ExpSeq))
 proof
-   let th;
+   let th be Real;
    A1: Re([*th,0*] ExpSeq) is summable &
    Sum([*th,0*] ExpSeq)=[*Sum(Re ([*th,0*] ExpSeq)),Sum(Im ([*th,0*] ExpSeq))*]
  by COMSEQ_3:54;
@@ -3315,9 +3332,9 @@ proof
   hence thesis by A1,A2,A3,A4;
 end;
 
- Lm17: for th holds Sum([*th,0*] ExpSeq)=[*Sum(th ExpSeq),0*]
+ Lm17: for th being Real holds Sum([*th,0*] ExpSeq)=[*Sum(th ExpSeq),0*]
 proof
- let th;
+ let th be Real;
  A1: for n holds Im(Partial_Sums([*th,0*] ExpSeq)).n=0
  proof
    defpred X[Nat] means Im(Partial_Sums([*th,0*] ExpSeq)).$1=0;
@@ -3358,10 +3375,12 @@ proof
   hence thesis;
 end;
 
-theorem Th50: for p,q holds
+theorem Th50:
+  for p,q being real number holds
   Sum((p+q) ExpSeq)= (Sum(p ExpSeq))*(Sum(q ExpSeq))
 proof
-  let p,q;
+  let p,q be real number;
+  reconsider p,q as Real by XREAL_0:def 1;
       Sum((p+q) ExpSeq)=Re(Sum([*p+q,0+0*] ExpSeq)) by Th49
             .=Re(Sum(([*p,0*]+[*q,0*]) ExpSeq)) by Lm15
              .=Re((Sum([*p,0*] ExpSeq)) *(Sum([*q,0*] ExpSeq))) by Lm4
@@ -3463,24 +3482,25 @@ theorem Th51: dom(exp)=REAL by Def26;
 
 canceled;
 
-theorem Th53: for th holds exp.th = Re(Sum([*th,0*] ExpSeq))
+theorem Th53: for th being Real holds exp.th = Re(Sum([*th,0*] ExpSeq))
 proof
- let th;
+ let th be Real;
      exp.th = Sum(th ExpSeq) by Def26;
  hence thesis by Th49;
 end;
 
-theorem   exp([*th,0*])=[*exp(th ),0*]
+theorem for th being Real holds exp([*th,0*])=[*exp(th ),0*]
 proof
+  let th be Real;
   thus exp([*th,0*])=Sum([*th,0*] ExpSeq) by Lm5
             .=[*Sum(th ExpSeq),0*] by Lm17
             .=[*exp.(th ),0*] by Def26
             .=[*exp(th ),0*] by Def27;
 end;
 
-Lm18:for p,q holds exp.(p+q) = exp.p * exp.q
+Lm18:for p,q being real number holds exp.(p+q) = exp.p * exp.q
 proof
-let p,q;
+let p,q be real number;
     exp.(p+q) = Sum((p+q) ExpSeq) by Def26
            .= (Sum(p ExpSeq))*(Sum(q ExpSeq)) by Th50
            .=exp.p *(Sum(q ExpSeq)) by Def26
@@ -3489,8 +3509,9 @@ let p,q;
   end;
 
 theorem
-    exp(p+q) = exp(p) * exp(q)
+  for p,q being real number holds exp(p+q) = exp(p) * exp(q)
 proof
+  let p,q be real number;
  thus exp(p+q) = exp.(p+q) by Def27
        .=exp.p * exp.q by Lm18
        .=exp.p *exp(q) by Def27
@@ -3536,29 +3557,29 @@ ExpSeq).n
         for n holds X[n] from NAT_1:sch 1(A3,A4);
     hence thesis;
  end;
-     (th ExpSeq) is summable by Th49;
+ th is Real by XREAL_0:def 1;
+ then th ExpSeq is summable by Th49;
  then Partial_Sums(th ExpSeq) is convergent&
  lim(Partial_Sums(th ExpSeq))=Sum(th ExpSeq) by SERIES_1:def 2,def 3;
  then Sum(th ExpSeq)>=1 by A2,Th41;
  hence thesis by Def26;
 end;
 
-theorem Th58: for th st th <0 holds 0<exp.th & exp.th <=1
+theorem Th58: th <0 implies 0<exp.th & exp.th <=1
 proof
-  let th; assume th <0;
-  then -th >0 by REAL_1:26,50;
+  assume th <0;
+  then -th >-0 by REAL_1:50;
   then A1: exp.(-th)>=1 by Th57;
   then A2: exp.(-th)> 0 by AXIOMS:22;
-      exp.(-th)*exp.th=exp.(-th+th) by Lm18
+  exp.(-th)*exp.th=exp.(-th+th) by Lm18
                 .=1 by Lm19;
   then A3:exp.th=1/(exp.(-th)) by XCMPLX_1:74;
   hence 0<exp.th by A2,REAL_2:127;
   thus exp.th <=1 by A1,A3,REAL_2:164;
 end;
 
-theorem Th59: for th holds exp.th>0
+theorem Th59: exp.th>0
 proof
-  let th;
       now per cases;
    suppose th=0;
    hence exp.th>0 by Lm19;
@@ -3579,10 +3600,9 @@ proof
   hence thesis;
 end;
 
-theorem   for th holds exp(th)>0
+theorem exp(th)>0
 proof
-  let th;
-      exp(th)=exp.(th) by Def27;
+  exp(th)=exp.(th) by Def27;
   hence thesis by Th59;
 end;
 
@@ -3620,20 +3640,22 @@ func z P_t -> Complex_Sequence means
    end;
 end;
 
-Lm20: for z,p holds Re([*0,p*]*z)=-p*Im z & Im([*0,p*]*z)=p*Re z
+Lm20: for p being Real holds Re([*0,p*]*z)=-p*Im z & Im([*0,p*]*z)=p*Re z
              &Re([*p,0*]*z)=p*Re z & Im([*p,0*]*z)=p*Im z
 proof
-  let z,p;
+  let p being Real;
   A1: ([*0,p*]*z)=([*0,p*]*[*Re z,Im z*]) by COMPLEX1:8
             .=([*-p* Im z,p*Re z*]) by Lm11;
       ([*p,0*]*z)=([*p,0*]*[*Re z,Im z*]) by COMPLEX1:8
           .=([*p* Re z,p*Im z*]) by Lm11;
   hence thesis by A1,COMPLEX1:7;
 end;
-Lm21: for z,p st p>0 holds Re(z/[*0,p*])=Im z /p & Im(z/[*0,p*])=-Re z /p
+
+Lm21:
+for p being Real st p>0 holds Re(z/[*0,p*])=Im z /p & Im(z/[*0,p*])=-Re z /p
       &|.z/[*p,0*].|=|.z.|/p
  proof
-  let z,p such that
+  let p be Real such that
   A1: p>0;
   A2: Re[*0,p*]=0 & Im[*0,p*]=p&Re[*p,0*]=p&Im[*p,0*]=0 by COMPLEX1:7;
   then A3: z/[*0,p*]
@@ -3784,9 +3806,7 @@ proof
     |.Partial_Sums(z P_dt).|.k <= Partial_Sums(|.z P_dt.|).k
     proof
      let k;
-         |.Partial_Sums(z P_dt).k.|=|.Partial_Sums(z P_dt).|.k by COMSEQ_1:def
-14
-;
+     |.Partial_Sums(z P_dt).k.|=|.Partial_Sums(z P_dt).|.k by COMSEQ_1:def 14;
      hence thesis by COMSEQ_3:30;
      end;
        z P_dt is absolutely_summable by Th61;
@@ -3833,6 +3853,7 @@ A8:  for z,n holds
    let p; assume
    A13: p>0;
    then A14: p+1>0 by Lm15;
+   reconsider p as Real by XREAL_0:def 1;
    consider q such that
    A15: q=p/(p+1);
        p+1>p by REAL_1:69;
@@ -3893,10 +3914,10 @@ proof let z,z1;
   hence thesis;
 end;
 
-theorem Th65: for p,q holds cos.(p+q)-cos.p=
+theorem Th65: for p,q being Real holds cos.(p+q)-cos.p=
       -q*sin.p -q*Im((Sum([*0,q*] P_dt))* [*cos.p,sin.p*])
 proof
-  let p,q;
+  let p,q be Real;
       cos.(p+q)-cos.p=cos.(p+q)-Re(Sum([*0,p*] ExpSeq)) by Def22
     .=Re(Sum([*0,p+q*] ExpSeq))-Re(Sum([*0,p*] ExpSeq)) by Def22
     .=Re(Sum([*0+0,p+q*] ExpSeq)-Sum([*0,p*] ExpSeq)) by COMPLEX1:48
@@ -3919,10 +3940,10 @@ proof
    hence thesis;
 end;
 
-theorem Th66: for p,q holds sin.(p+q)-sin.p=
+theorem Th66: for p,q being Real holds sin.(p+q)-sin.p=
       q*cos.p+q*Re((Sum([*0,q*] P_dt))* [*cos.p,sin.p*])
 proof
-  let p,q;
+  let p,q be Real;
       sin.(p+q)-sin.p=sin.(p+q)-Im(Sum([*0,p*] ExpSeq)) by Def20
     .=Im(Sum([*0,p+q*] ExpSeq))-Im(Sum([*0,p*] ExpSeq)) by Def20
     .=Im(Sum([*0+0,p+q*] ExpSeq)-Sum([*0,p*] ExpSeq)) by COMPLEX1:48
@@ -3945,10 +3966,10 @@ proof
    hence thesis;
 end;
 
-theorem Th67: for p,q holds exp.(p+q)-exp.p=
+theorem Th67: for p,q being Real holds exp.(p+q)-exp.p=
       q* (exp.p)+q*exp.p*Re((Sum([*q,0*] P_dt)))
 proof
-  let p,q;
+  let p,q be Real;
       exp.(p+q)-exp.p=exp.(p+q)-Re(Sum([*p,0*] ExpSeq)) by Th53
     .=Re(Sum([*p+q,0*] ExpSeq))-Re(Sum([*p,0*] ExpSeq)) by Th53
     .=Re(Sum([*p+q,0+0*] ExpSeq)-Sum([*p,0*] ExpSeq)) by COMPLEX1:48
@@ -3970,9 +3991,9 @@ Th53
 end;
 
 theorem Th68:
- for p holds cos is_differentiable_in p & diff(cos,p)=-sin.p
+  cos is_differentiable_in p & diff(cos,p)=-sin.p
 proof
-   let p;
+  reconsider p as Real by XREAL_0:def 1;
    defpred X[set] means $1 in REAL;
    deffunc U(Element of REAL) =
       - $1* Im((Sum([*0,$1*] P_dt))* [*cos.p,sin.p*]);
@@ -4068,7 +4089,7 @@ A21:     abs(hy1.m-0)<r by A17,A19;
              hence thesis by A14,COMSEQ_2:def 5;
            end;
            then A22: -cq1 is convergent by COMSEQ_2:21;
-           A23: lim(-cq1)=0c by A13,COMSEQ_2:22,REAL_1:26;
+           A23: lim(-cq1)=-0c by A13,COMSEQ_2:22;
            A24: for n holds Im(-cq1).n= rseq.n
            proof
               A25: for n holds
@@ -4171,9 +4192,9 @@ A35: for r st r in ].p-1,p+1 .[ holds cos.r - cos.p = PL.(r-p) + PR.(r-p)
 end;
 
 theorem Th69:
- for p holds sin is_differentiable_in p & diff(sin,p)=cos.p
+  sin is_differentiable_in p & diff(sin,p)=cos.p
 proof
-   let p;
+  reconsider p as Real by XREAL_0:def 1;
    defpred X[set] means $1 in REAL;
    deffunc U(Element of REAL) =
       $1 *Re((Sum([*0,$1*] P_dt))* [*cos.p,sin.p*]);
@@ -4352,9 +4373,8 @@ A31: for r st r in ].p-1,p+1 .[ holds sin.r - sin.p = PL.(r-p) + PR.(r-p)
 end;
 
 theorem Th70:
-  for p holds exp is_differentiable_in p & diff(exp,p)=exp.p
+  exp is_differentiable_in p & diff(exp,p)=exp.p
 proof
-   let p;
    defpred X[set] means $1 in REAL;
    deffunc U(Element of REAL) = $1 *exp.p*Re((Sum([*$1,0*] P_dt)));
    consider C_r being PartFunc of REAL, REAL such that
@@ -4529,7 +4549,8 @@ A30: d is Real by XREAL_0:def 1;
    A35: for r st r in ].p-1,p+1 .[ holds exp.r - exp.p = PL.(r-p) + PR.(r-p)
      proof
      let r;
-          r=p+(r-p);
+     reconsider p as Real by XREAL_0:def 1;
+     r=p+(r-p);
    then exp.r - exp.p =(r-p)* (exp.p)+(r-p)*exp.p*Re((Sum([*(r-p),0*] P_dt)))
       by Th67
        .=(r-p)* (exp.p)+C_r.(r-p) by A6
@@ -4565,22 +4586,23 @@ proof
 end;
 
 theorem Th73:
-sin is_differentiable_on REAL &
-(for th holds diff(sin,th)=cos.(th))
+sin is_differentiable_on REAL & diff(sin,th)=cos.th
 proof
-      REAL is open Subset of REAL&
-    REAL c=dom sin & for r st r in REAL holds sin is_differentiable_in r
- by Def20,Th69,FCONT_3:4,SUBSET_1:def 4;
+  REAL is open Subset of REAL&
+  REAL c=dom sin & for r st r in REAL holds sin is_differentiable_in r
+    by Def20,Th69,FCONT_3:4,SUBSET_1:def 4;
   hence thesis by Th69,FDIFF_1:16;
 end;
 
 theorem Th74:
-for th st th in [.0,1 .] holds 0<cos.(th) & cos.(th)>=1/2
+th in [.0,1 .] implies 0<cos.(th) & cos.(th)>=1/2
 proof
-   let th; assume th in [.0,1 .];
+   assume th in [.0,1 .];
    then A1: 0<=th & th<=1 by TOPREAL5:1;
    A2: (Partial_Sums(th P_cos))*bq is_subsequence_of Partial_Sums(th P_cos)
  by SEQM_3:def 10;
+ th is Real by XREAL_0:def 1;
+ then
    A3: Partial_Sums(th P_cos) is convergent & cos.th=Sum
 (th P_cos) by Th39,Th40;
    then A4: (Partial_Sums(th P_cos))*bq is convergent by A2,SEQ_4:29;
@@ -4687,8 +4709,9 @@ proof
        then consider rr such that
        A2:rr in [.0,1 .] /\ cos"{0} by XBOOLE_0:def 1;
        A3:rr in [.0,1 .] & rr in cos"{0} by A2,XBOOLE_0:def 3;
-       then A4:cos.(rr) <>0 by Th74;
-            cos.(rr) in {0} by A3,FUNCT_1:def 13;
+       then rr is Real;
+       then A4:cos.(rr) <>0 by A3,Th74;
+       cos.(rr) in {0} by A3,FUNCT_1:def 13;
         hence contradiction by A4,TARSKI:def 1;
       end;
       then [.0,1 .] misses cos"{0} by XBOOLE_0:def 7;
@@ -4725,16 +4748,16 @@ proof
   proof
   let th such that
   A5: th in ].0,1 .[;
+aa: th is Real by XREAL_0:def 1;
   A6: cos is_differentiable_in th by Th68;
   A7: sin is_differentiable_in th by Th69;
   A8: cos.th<>0 by A3,A5;
   then A9: diff(sin/cos,th)=(diff(sin,th)*cos.th-diff(cos,th)*sin.th)/(cos.th)
 ^2
- by A6,A7,FDIFF_2:14
+ by aa,A6,A7,FDIFF_2:14
             .=(cos.th*cos.th-diff(cos,th)*sin.th)/(cos.th)^2 by Th69
             .=(cos.th*cos.th-(-sin.th)*sin.th)/(cos.th)^2 by Th68
             .=(cos.th*cos.th+(sin.th)*sin.th)/(cos.th)^2
-
             .=((cos.th)^2+(sin.th)*sin.th)/(cos.th)^2 by SQUARE_1:def 3
             .=((cos.th)^2+(sin.th)^2)/(cos.th)^2 by SQUARE_1:def 3
             .=1/(cos.th)^2 by Th31;
@@ -4797,10 +4820,10 @@ Lm22;
    hence sin/cos is_continuous_on [. 0, 1 .] by Th75,FCONT_1:def 2;
   end;
 
-theorem Th77: for th1,th2 st th1 in ].0,1 .[ & th2 in ].0,1 .[ &
-(sin/cos).th1=(sin/cos).th2 holds th1=th2
+theorem Th77: th1 in ].0,1 .[ & th2 in ].0,1 .[ &
+(sin/cos).th1=(sin/cos).th2 implies th1=th2
 proof
-  let th1,th2; assume
+  assume
   A1: th1 in ].0,1 .[ & th2 in ].0,1 .[ & (sin/cos).(th1)=(sin/cos).(th2);
   then A2: 0<th1 & th1<1 & 0<th2 & th2<1 by JORDAN6:45;
   assume A3: th1<>th2;
@@ -4957,6 +4980,7 @@ theorem Th79:
 sin.(th1+th2)=(sin.(th1)) *(cos.(th2))+(cos.(th1)) * (sin.(th2)) &
 cos.(th1+th2)=(cos.(th1)) *(cos.(th2))-(sin.(th1)) * (sin.(th2))
  proof
+   reconsider th1,th2 as Real by XREAL_0:def 1;
   A1:    Sum([*0,th1*] ExpSeq ) * Sum([*0,th2*] ExpSeq )
          =Sum(([*0,th1*]+[*0,th2*]) ExpSeq ) by Lm4
          .=Sum([*0+0, th1+th2*] ExpSeq ) by Lm3
@@ -5068,7 +5092,7 @@ proof
  end;
 
 theorem
-     sin(th+2 * PI) = sin(th) &
+ sin(th+2 * PI) = sin(th) &
  cos(th+2 * PI) = cos(th) &
  sin(PI/2-th) = cos(th) &
  cos(PI/2-th) = sin(th) &
@@ -5103,9 +5127,9 @@ proof
             .= -cos(th) by Def23;
 end;
 
-Lm25: for th st th in [.0,1 .] holds sin.th>=0
+Lm25: th in [.0,1 .] implies sin.th>=0
 proof
-  let th; assume A1: th in [.0,1 .];
+  assume A1: th in [.0,1 .];
   then A2: 0<=th & th<=1 by TOPREAL5:1;
       sin.th>= sin.0
   proof
@@ -5115,10 +5139,11 @@ proof
     end;
     suppose A3: 0<th;
      A4: sin is_differentiable_on ].0,th.[ by Th73,FDIFF_1:34;
-          sin is_continuous_on REAL by Th73,FDIFF_1:33;
+a1: th is Real by XREAL_0:def 1;
+     sin is_continuous_on REAL by Th73,FDIFF_1:33;
      then sin is_continuous_on [.0,th.] by FCONT_1:17;
      then consider r be Real such that
-     A5: r in ].0,th.[ & diff(sin,r)=(sin.th-sin.0)/(th-0) by A3,A4,ROLLE:3;
+     A5: r in ].0,th.[ & diff(sin,r)=(sin.th-sin.0)/(th-0) by a1,A3,A4,ROLLE:3;
      A6: diff(sin,r)=cos.r by Th73;
           0<r & r < th by A5,JORDAN6:45;
      then 0<r & r <1 by A2,AXIOMS:22;
@@ -5135,23 +5160,23 @@ proof
 end;
 
 theorem Th85:
-for th st th in ].0,PI/2.[ holds cos.th > 0
+th in ].0,PI/2.[ implies cos.th > 0
 proof
- given th1 such that
- A1:th1 in ].0,PI/2.[ & cos.th1 <= 0;
- reconsider th1 as Real;
-     cos is_continuous_on REAL by Th72,FDIFF_1:33;
- then A2:cos is_continuous_on [.0,th1 .] by FCONT_1:17;
- A3:0 < th1 by A1,JORDAN6:45;
-    cos.th1 <= cos.0 by A1,Th33,AXIOMS:22;
-  then A4:[.cos.0,cos.th1 .] \/ [.cos.th1,cos.0 .] = [.cos.th1,cos.0 .]
+  assume that
+ A1:th in ].0,PI/2.[ & cos.th <= 0;
+ cos is_continuous_on REAL by Th72,FDIFF_1:33;
+ then A2:cos is_continuous_on [.0,th .] by FCONT_1:17;
+ A3:0 < th by A1,JORDAN6:45;
+a1: th is Real by XREAL_0:def 1;
+    cos.th <= cos.0 by A1,Th33,AXIOMS:22;
+  then A4:[.cos.0,cos.th .] \/ [.cos.th,cos.0 .] = [.cos.th,cos.0 .]
    by RCOMP_1:18;
-     0 in [.cos.th1,cos.0 .] by A1,Th33,TOPREAL5:1;
- then ex th2 be Real st th2 in [.0,th1 .] & cos.th2 = 0 by A2,A3,A4,FCONT_2:16
-;
+     0 in [.cos.th,cos.0 .] by A1,Th33,TOPREAL5:1;
+ then ex th2 be Real st th2 in [.0,th .] & cos.th2 = 0
+ by a1,A2,A3,A4,FCONT_2:16;
  then consider th2 be Real such that
- A5:th2 in [.0,th1 .] & 0 < th1 & cos.th2 = 0 by A3;
- A6: 0 <= th2 & th2 <= th1 & th1 < PI/2 by A1,A5,JORDAN6:45,TOPREAL5:1;
+ A5:th2 in [.0,th .] & 0 < th & cos.th2 = 0 by A3;
+ A6: 0 <= th2 & th2 <= th & th < PI/2 by A1,A5,JORDAN6:45,TOPREAL5:1;
  then 0<th2 & th2<PI/2 by A5,Th33,AXIOMS:21,22;
   then A7: 0/2<th2/2 & th2/2 < PI/2/2 by REAL_1:73;
       PI in ].0, 4.[ by Def30;
@@ -5172,14 +5197,12 @@ proof
   A10: th2/2 in ].0,1 .[ by A8,JORDAN6:45;
   A11: ].0,1 .[ c= [.0,1 .] by RCOMP_1:15;
   then A12: cos.(th2/2) > 0 by A10,Th74;
-  A13: sin.(th2/2) >= 0 by A10,A11,Lm25;
+  A13: sin.(th2/2) >= -0 by A10,A11,Lm25;
        (2*th2) in ].0,4.[ & (sin/cos).((2*th2)/4) = 1
    proof
     4*0 < 4*(th2/2) & 4*(th2/2) < 4*1 by A8,Lm1;
    hence (2*th2) in ].0,4.[ by JORDAN6:45;
-      (sin.(th2/2)) * (cos.(th2/2))"=1 by A9,A12,A13,REAL_1:26,50,XCMPLX_0:def
-7
-;
+    (sin.(th2/2)) * (cos.(th2/2))"=1 by A9,A12,A13,REAL_1:50,XCMPLX_0:def 7;
    hence (sin/cos).((2*th2)/4) =1 by A10,Th75,RFUNCT_1:def 4;
    end;
    then A14: 2*th2 =PI by Def30;
@@ -5189,10 +5212,8 @@ proof
    end;
 
 theorem
-    for th st th in ].0,PI/2.[ holds cos(th) > 0
+  th in ].0,PI/2.[ implies cos(th) > 0
 proof
-  let th such that
-  A1: th in ].0,PI/2.[;
-      cos(th)=cos.th by Def23;
-  hence thesis by A1,Th85;
+  cos(th)=cos.th by Def23;
+  hence thesis by Th85;
 end;

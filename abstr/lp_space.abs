@@ -1,0 +1,224 @@
+:: The Banach Space $l^p$
+::  by Yasumasa Suzuki
+:: 
+:: Received September 25, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
+      RELAT_1, ABSVALUE, ORDINAL2, RLSUB_1, SEQ_1, SEQ_2, SERIES_1, SUPINF_2,
+      PROB_1, BHSP_3, RSSPACE, RSSPACE3, POWER, LP_SPACE, LOPBAN_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, SUBSET_1, MCART_1, RELSET_1,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1,
+      FUNCOP_1, BINOP_1, STRUCT_0, XCMPLX_0, XREAL_0, RAT_1, INT_1, ORDINAL1,
+      ORDINAL2, NUMBERS, MEMBERED, REAL_1, NAT_1, RLVECT_1, VECTSP_1, FRAENKEL,
+      COMPLEX1, ABSVALUE, RLSUB_1, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
+      FUNCSDOM, POWER, RSSPACE, RSSPACE3, LOPBAN_1;
+ constructors MCART_1, FUNCT_3, BINOP_1, ARYTM_0, REAL_1, XREAL_0, NAT_1,
+      ABSVALUE, SQUARE_1, FUNCT_2, XCMPLX_0, SUBSET_1, MEMBERED, DOMAIN_1,
+      SEQ_1, SEQ_2, SEQM_3, SERIES_1, SEQ_4, SUPINF_2, METRIC_1, FUNCOP_1,
+      FUNCSDOM, PROB_1, PREPOWER, POWER, RLVECT_1, VECTSP_1, FRAENKEL,
+      PARTFUN1, RLSUB_1, NORMSP_1, BHSP_2, BHSP_3, RSSPACE, RSSPACE3, LOPBAN_1;
+ clusters SUBSET_1, RELSET_1, FINSEQ_1, STRUCT_0, ARYTM_3, RELAT_1, REAL_1,
+      NUMBERS, ORDINAL2, XBOOLE_0, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1,
+      FUNCSDOM, RLVECT_1, NORMSP_1, XREAL_0, MEMBERED, VECTSP_1, FRAENKEL,
+      INT_1, SEQ_1, RSSPACE3, BHSP_1, LOPBAN_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: The Real Norm Space of l^p Real Sequences
+
+definition
+  let x be Real_Sequence;
+  let p be Real;
+  func x rto_power p -> Real_Sequence means
+:: LP_SPACE:def 1
+  for n be Nat holds it.n = abs(x.n) to_power p;
+     end;
+
+definition
+  let p be Real;
+  assume p >= 1;
+  func the_set_of_RealSequences_l^p
+  -> non empty Subset of the carrier of Linear_Space_of_RealSequences means
+:: LP_SPACE:def 2
+
+     for x being set holds x in it iff
+     (x in the_set_of_RealSequences & seq_id(x) rto_power p is summable);
+end;
+
+ reserve x1,x2,y1,y2,p,q,a,b,c for Real;
+
+theorem :: LP_SPACE:1
+  a >= 0 & a < b & c > 0 implies a to_power c < b to_power c;
+
+theorem :: LP_SPACE:2
+ for p be Real st 1 <= p
+ for a,b be Real_Sequence
+ for n be Nat holds
+  (Partial_Sums((a + b) rto_power p).n) to_power (1/p) <=
+  (Partial_Sums(a rto_power p).n) to_power (1/p) +
+  (Partial_Sums(b rto_power p).n) to_power (1/p);
+
+theorem :: LP_SPACE:3
+for a,b be Real_Sequence
+for p be Real st 1 <= p &
+  (a rto_power p) is summable &
+  (b rto_power p) is summable
+ holds ((a+b) rto_power p) is summable &
+ (Sum((a + b) rto_power p)) to_power (1/p) <=
+ (Sum(a rto_power p)) to_power (1/p) +
+ (Sum(b rto_power p)) to_power (1/p);
+
+theorem :: LP_SPACE:4
+for p be Real st 1 <= p holds
+the_set_of_RealSequences_l^p is lineary-closed;
+
+theorem :: LP_SPACE:5
+for p be Real st 1 <= p holds
+RLSStruct (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences) #)
+is Subspace of Linear_Space_of_RealSequences;
+
+theorem :: LP_SPACE:6
+for p be Real st 1 <= p holds
+  RLSStruct (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences)
+        #)
+      is Abelian add-associative right_zeroed right_complementable
+        RealLinearSpace-like;
+
+theorem :: LP_SPACE:7
+   for p be Real st 1 <= p holds
+   RLSStruct (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences) #)
+   is RealLinearSpace;
+
+definition
+  let p be Real;
+  func l_norm^p -> Function of the_set_of_RealSequences_l^p, REAL means
+:: LP_SPACE:def 3
+     for x be set st x in the_set_of_RealSequences_l^p  holds
+    it.x = ( Sum(seq_id(x) rto_power p) ) to_power (1/p);
+end;
+
+theorem :: LP_SPACE:8
+for p be Real st 1 <= p holds
+   NORMSTR (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+         l_norm^p #) is RealLinearSpace;
+
+theorem :: LP_SPACE:9
+for p be Real st p >= 1 holds
+NORMSTR (# the_set_of_RealSequences_l^p,
+     Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+      Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p  #) is Subspace of Linear_Space_of_RealSequences;
+
+begin :: The Banach Space of l^p Real Sequences
+
+theorem :: LP_SPACE:10
+for p be Real st 1 <=p holds
+  for lp be non empty NORMSTR st lp
+     =  NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #) holds
+  the carrier of lp = the_set_of_RealSequences_l^p &
+ ( for x be set holds x is VECTOR of lp
+    iff x is Real_Sequence & seq_id(x) rto_power p is summable ) &
+ 0.lp = Zeroseq &
+ ( for x be VECTOR of lp holds x =seq_id(x) ) &
+ ( for x,y be VECTOR of lp holds x+y =seq_id(x)+seq_id(y) ) &
+( for r be Real for x be VECTOR of lp holds r*x = r(#)seq_id(x) ) &
+( for x be VECTOR of lp holds
+   -x = -seq_id(x) & seq_id(-x) = -seq_id(x) ) &
+( for x,y be VECTOR of lp holds x-y =seq_id(x)-seq_id(y) ) &
+( for x be VECTOR of lp holds
+seq_id(x) rto_power p is summable ) &
+( for x be VECTOR of
+lp holds ||.x.|| = ( Sum(seq_id(x) rto_power p) ) to_power (1/p) );
+
+theorem :: LP_SPACE:11
+for p be Real st p>=1 holds
+for rseq be Real_Sequence
+   st (for n be Nat holds rseq.n=0) holds
+    (rseq rto_power p is summable
+ &  ( Sum(rseq rto_power p) ) to_power (1/p)=0 );
+
+theorem :: LP_SPACE:12
+  for p be Real st 1 <=p
+  for rseq be Real_Sequence st
+  (rseq rto_power p is summable
+   & ( Sum(rseq rto_power p) ) to_power (1/p)=0 ) holds
+  for n be Nat holds rseq.n = 0;
+
+theorem :: LP_SPACE:13
+ for p be Real st 1 <= p
+ for lp be non empty NORMSTR st lp
+     = NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #) holds
+for x, y being Point of lp, a be Real holds
+  ( ||.x.|| = 0 iff x = 0.lp ) &
+  0 <= ||.x.|| &
+  ||.x+y.|| <= ||.x.|| + ||.y.|| &
+  ||.(a*x).|| = abs(a) * ||.x.||;
+
+theorem :: LP_SPACE:14
+for p be Real st p >= 1
+  for lp be non empty NORMSTR
+     st lp = NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #) holds
+ lp is RealNormSpace-like;
+
+theorem :: LP_SPACE:15
+ for p be Real st p >= 1
+ for lp be non empty NORMSTR st lp
+      = NORMSTR (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+      l_norm^p #) holds
+ lp is RealNormSpace;
+
+ reserve NRM for non empty RealNormSpace,
+         seq for sequence of NRM;
+
+theorem :: LP_SPACE:16
+ for p be Real st 1 <=p
+ for lp be RealNormSpace
+    st lp = NORMSTR (# the_set_of_RealSequences_l^p,
+      Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+      Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+      Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+      l_norm^p #) holds
+ for vseq be sequence of lp st vseq is Cauchy_sequence_by_Norm
+ holds vseq is convergent;
+
+definition
+  let p be Real such that 1 <= p;
+  func l_Space^p -> RealBanachSpace equals
+:: LP_SPACE:def 4
+   NORMSTR (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+         l_norm^p #);
+end;

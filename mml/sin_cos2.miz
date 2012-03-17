@@ -17,7 +17,7 @@ environ
       RFUNCT_1, FDIFF_1, GOBOARD1, SQUARE_1, PREPOWER, PARTFUN1, RFUNCT_2,
       SIN_COS, MEMBERED, BINOP_2;
  clusters XREAL_0, RELSET_1, FDIFF_1, RCOMP_1, SEQ_1, MEMBERED, NUMBERS,
-      ORDINAL2;
+      ORDINAL2, SQUARE_1, SIN_COS;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems AXIOMS, REAL_1, REAL_2, SEQ_1, SEQM_3, SEQ_4, SQUARE_1, FINSEQ_4,
       RCOMP_1, FUNCT_1, FDIFF_1, FDIFF_2, FCONT_3, TARSKI, FUNCT_2, RFUNCT_1,
@@ -27,7 +27,7 @@ environ
 
 begin :: Monotone increasing and monotone decreasing of sine and cosine.
 
-reserve p,q,r,th for Real;
+reserve p,q,r,th for real number;
 reserve n for Nat;
 
 Lm1:
@@ -1407,13 +1407,14 @@ end;
  proof
   let f be PartFunc of REAL,REAL such that
 A1: f = compreal;
+a1: p is Real by XREAL_0:def 1;
  A2: exp is_differentiable_in f.p by SIN_COS:70;
  A3: f is_differentiable_in p by A1,Lm14;
    then diff(exp*f,p)
-  =diff(exp,f.p)*diff(f,p) by A2,FDIFF_2:13
+  =diff(exp,f.p)*diff(f,p) by a1,A2,FDIFF_2:13
  .=diff(exp,f.p)*(-1) by A1,Lm14
  .=exp.(f.p)*(-1) by SIN_COS:70;
- hence thesis by A2,A3,FDIFF_2:13;
+ hence thesis by a1,A2,A3,FDIFF_2:13;
  end;
 
  Lm16:
@@ -1421,9 +1422,9 @@ for f being PartFunc of REAL,REAL st f = compreal holds exp.((-1)*p)= (exp*f).p
  proof
   let f be PartFunc of REAL,REAL;
    assume A1:f = compreal;
- then exp.((-1)*p)
- =exp.(f.p) by Lm12
- .=(exp*f).p by A1,FUNCT_2:70;
+a1: p is Real by XREAL_0:def 1;
+ exp.((-1)*p) =exp.(f.p) by A1,Lm12
+ .=(exp*f).p by a1,A1,FUNCT_2:70;
  hence thesis;
  end;
 
@@ -1434,6 +1435,7 @@ for f being PartFunc of REAL,REAL st f = compreal holds exp.((-1)*p)= (exp*f).p
  diff(exp-(exp*f),p)=exp.p+exp.(-p) &
  diff(exp+(exp*f),p)=exp.p-exp.(-p)
  proof
+a1: p is Real by XREAL_0:def 1;
   let f be PartFunc of REAL,REAL;
   assume
 A1:  f = compreal;
@@ -1442,7 +1444,7 @@ A1:  f = compreal;
     by Lm15,SIN_COS:70;
   then A3:
     diff(exp-(exp*f),p)
-   =diff(exp,p)-diff((exp*f),p) by FDIFF_1:22
+   =diff(exp,p)-diff((exp*f),p) by a1,FDIFF_1:22
   .=exp.p-diff((exp*f),p) by SIN_COS:70
   .=exp.p- (-1)*exp.(f.p) by A1,Lm15
   .=exp.p- (-1)*exp.((-1)*p) by A1,Lm12
@@ -1450,13 +1452,13 @@ A1:  f = compreal;
   .=exp.p+exp.(-p);
 
      diff(exp+(exp*f),p)
-   =diff(exp,p)+diff((exp*f),p) by A2,FDIFF_1:21
+   =diff(exp,p)+diff((exp*f),p) by a1,A2,FDIFF_1:21
   .=exp.p+diff((exp*f),p) by SIN_COS:70
   .=exp.p+ (-1)*exp.(f.p) by A1,Lm15
   .=exp.p+ (-1)*exp.((-1)*p) by A1,Lm12
   .=exp.p+ (-1)*exp.(-p)
   .=exp.p-exp.(-p);
-  hence thesis by A2,A3,FDIFF_1:21,22;
+  hence thesis by a1,A2,A3,FDIFF_1:21,22;
  end;
 
  Lm18:
@@ -1464,20 +1466,21 @@ A1:  f = compreal;
  (1/2)(#)(exp-exp*f) is_differentiable_in p &
  diff(((1/2)(#)(exp-exp*f)),p) = (1/2)*diff((exp-(exp*f)),p)
  proof
+a1: p is Real by XREAL_0:def 1;
   let f be PartFunc of REAL,REAL;
   assume
     f = compreal;
 then (exp-exp*f) is_differentiable_in p by Lm17;
- hence thesis by FDIFF_1:23;
+ hence thesis by a1,FDIFF_1:23;
  end;
 
  Lm19:
  for ff being PartFunc of REAL,REAL st ff = compreal holds
   sinh.p=((1/2)(#)(exp-exp*ff)).p
  proof
+a1: p is Real by XREAL_0:def 1;
   let ff be PartFunc of REAL,REAL such that
 A1:  ff = compreal;
- reconsider p as Real;
  A2: dom (exp - exp*ff) = dom exp /\ dom (exp*ff) &
   for p be Real st p in dom (exp - exp*ff) holds
   exp.(p) - (exp*ff).p = (exp - exp*ff).p by SEQ_1:def 4;
@@ -1492,8 +1495,8 @@ A1:  ff = compreal;
  .=(1/2)*(exp.(p) - exp.(-p))
  .=(1/2)*(exp.(p) - exp.((-1)*p))
  .=(1/2)*(exp.(p) - (exp*ff).p) by A1,Lm16
- .=(1/2)*((exp - exp*ff).p) by A3,SEQ_1:def 4
- .=((1/2)(#)(exp-exp*ff)).p by A4,SEQ_1:def 6;
+ .=(1/2)*((exp - exp*ff).p) by a1,A3,SEQ_1:def 4
+ .=((1/2)(#)(exp-exp*ff)).p by a1,A4,SEQ_1:def 6;
  hence thesis;
  end;
 
@@ -1538,19 +1541,20 @@ A1:sinh = (1/2)(#)(exp-exp*ff) by Lm20;
   (1/2)(#)(exp+exp*ff) is_differentiable_in p &
   diff(((1/2)(#)(exp+exp*ff)),p) = (1/2)*diff((exp+(exp*ff)),p)
   proof
+a1: p is Real by XREAL_0:def 1;
    let ff be PartFunc of REAL,REAL; assume
       ff = compreal;
   then (exp+exp*ff) is_differentiable_in p by Lm17;
-  hence thesis by FDIFF_1:23;
+  hence thesis by a1,FDIFF_1:23;
   end;
 
   Lm22:
    for ff being PartFunc of REAL,REAL st ff = compreal holds
    cosh.p=((1/2)(#)(exp+exp*ff)).p
   proof
+a1: p is Real by XREAL_0:def 1;
    let ff be PartFunc of REAL,REAL such that
 A1:   ff = compreal;
-   reconsider p as Real;
 A2: dom (exp + exp*ff) = dom exp /\ dom (exp*ff) &
    for p be Real st p in dom (exp + exp*ff) holds
    exp.(p) + (exp*ff).p = (exp + exp*ff).p by SEQ_1:def 3;
@@ -1565,8 +1569,8 @@ A2: dom (exp + exp*ff) = dom exp /\ dom (exp*ff) &
   .=(1/2)*(exp.(p) + exp.(-p))
   .=(1/2)*(exp.(p) + exp.((-1)*p))
   .=(1/2)*(exp.(p) + (exp*ff).p) by A1,Lm16
-  .=(1/2)*((exp + exp*ff).p) by A3,SEQ_1:def 3
-  .=((1/2)(#)(exp+exp*ff)).p by A4,SEQ_1:def 6;
+  .=(1/2)*((exp + exp*ff).p) by a1,A3,SEQ_1:def 3
+  .=((1/2)(#)(exp+exp*ff)).p by a1,A4,SEQ_1:def 6;
   hence thesis;
   end;
 
@@ -1609,18 +1613,19 @@ A1: cosh = (1/2)(#)(exp+exp*ff) by Lm23;
   sinh/cosh is_differentiable_in p &
   diff(sinh/cosh,p) = 1/(cosh.p)^2
   proof
+a1: p is Real by XREAL_0:def 1;
   A1:cosh.p<>0 by Th15;
   A2:sinh is_differentiable_in p by Th31;
   A3:cosh is_differentiable_in p by Th32;
     then diff(sinh/cosh,p)
    =(diff(sinh,p) * cosh.p - diff(cosh,p)*sinh.p)/(cosh.p)^2
-        by A1,A2,FDIFF_2:14
+        by a1,A1,A2,FDIFF_2:14
   .=((cosh.p)*(cosh.p) - diff(cosh,p) * sinh.p)/(cosh.p)^2 by Th31
   .=( (cosh.p)*(cosh.p) - (sinh.p)*(sinh.p) )/(cosh.p)^2 by Th32
   .=( (cosh.p)^2 - (sinh.p)*(sinh.p) )/(cosh.p)^2 by SQUARE_1:def 3
   .=( (cosh.p)^2 - (sinh.p)^2 )/(cosh.p)^2 by SQUARE_1:def 3
   .=1/(cosh.p)^2 by Th14;
-   hence thesis by A1,A2,A3,FDIFF_2:14;
+   hence thesis by a1,A1,A2,A3,FDIFF_2:14;
   end;
 
   Lm25:
@@ -1632,24 +1637,22 @@ A1: cosh = (1/2)(#)(exp+exp*ff) by Lm23;
      not(0 in rng(cosh))
     proof
     assume 0 in rng(cosh);
-    then consider p be Real such that
-    A2:p in dom(cosh) & 0=cosh.p by PARTFUN1:26;
-    thus contradiction by A2,Th15;
+    then ex p be Real st p in dom(cosh) & 0=cosh.p by PARTFUN1:26;
+    hence contradiction by Th15;
     end;
  then A3: cosh"{0}={} by FUNCT_1:142;
     for p being Element of REAL st p in REAL holds
      tanh.p=(sinh/cosh).p
    proof
    let p;
-       (sinh/cosh).p
-    =sinh.p*(cosh.p)" by A1,A3,Th30
+   p is Real by XREAL_0:def 1;
+   then (sinh/cosh).p =sinh.p*(cosh.p)" by A1,A3,Th30
    .=(sinh.p)/(cosh.p) by XCMPLX_0:def 9
    .=tanh.p by Th17;
    hence thesis;
    end;
   hence
      tanh=sinh/cosh by A1,A3,Th30,PARTFUN1:34;
- thus thesis;
  end;
 
  theorem

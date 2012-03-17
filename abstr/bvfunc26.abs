@@ -1,0 +1,291 @@
+:: Propositional Calculus for Boolean Valued Functions, {VIII}
+::  by Shunichi Kobayashi
+:: 
+:: Received September 25, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary MARGREL1, ZF_LANG, BINARITH, FUNCT_2, VALUAT_1, RELAT_1, FUNCT_1,
+      BOOLE, BVFUNC_1, BINARI_5;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, MARGREL1, VALUAT_1,
+      RELAT_1, FUNCT_1, FUNCT_2, SETFAM_1, FRAENKEL, BINARITH, EQREL_1, SEQM_3,
+      BVFUNC_1, BINARI_5;
+ constructors BINARITH, T_1TOPSP, PARTIT1, SEQM_3, PUA2MSS1, VALUAT_1, XREAL_0,
+      MEMBERED, BVFUNC_1, BINARI_5;
+ clusters SUBSET_1, MARGREL1, PARTIT1, XREAL_0, ARYTM_3, VALUAT_1, BINARITH,
+      FRAENKEL, BVFUNC_1, BINARI_5;
+ requirements NUMERALS, REAL, SUBSET, BOOLE;
+
+
+begin
+
+ reserve Y for non empty set,
+         a,b,c for Element of Funcs(Y,BOOLEAN);
+
+definition
+  let p,q be boolean-valued Function;
+  func p 'nand' q -> Function means
+:: BVFUNC26:def 1
+ dom it = dom p /\ dom q &
+  for x being set st x in dom it holds it.x = (p.x) 'nand' (q.x);
+ commutativity;
+  func p 'nor' q -> Function means
+:: BVFUNC26:def 2
+ dom it = dom p /\ dom q &
+  for x being set st x in dom it holds it.x = (p.x) 'nor' (q.x);
+ commutativity;
+end;
+
+registration
+  let p,q be boolean-valued Function;
+  cluster p 'nand' q -> boolean-valued;
+  cluster p 'nor' q -> boolean-valued;
+end;
+
+definition let A be non empty set;
+           let p,q be Element of Funcs(A,BOOLEAN);
+ redefine func p 'nand' q -> Element of Funcs(A,BOOLEAN) means
+:: BVFUNC26:def 3
+ for x being Element of A holds it.x = (p.x) 'nand' (q.x);
+  func p 'nor' q -> Element of Funcs(A,BOOLEAN) means
+:: BVFUNC26:def 4
+  for x being Element of A holds it.x = (p.x) 'nor' (q.x);
+end;
+
+definition let Y;let a,b be Element of BVF(Y);
+ redefine func a 'nand' b ->Element of BVF(Y);
+ func a 'nor' b ->Element of BVF(Y);
+end;
+
+theorem :: BVFUNC26:1
+  a 'nand' b = 'not' (a '&' b);
+
+theorem :: BVFUNC26:2
+  a 'nor' b = 'not' (a 'or' b);
+
+theorem :: BVFUNC26:3
+  I_el(Y) 'nand' a = 'not' a;
+
+theorem :: BVFUNC26:4
+ O_el(Y) 'nand' a = I_el(Y);
+
+theorem :: BVFUNC26:5
+ O_el(Y) 'nand' O_el(Y) = I_el(Y) &
+ O_el(Y) 'nand' I_el(Y) = I_el(Y) &
+ I_el(Y) 'nand' I_el(Y) = O_el(Y);
+
+theorem :: BVFUNC26:6
+ a 'nand' a = 'not' a &
+'not' (a 'nand' a) = a;
+
+theorem :: BVFUNC26:7
+ 'not' (a 'nand' b) = a '&' b;
+
+theorem :: BVFUNC26:8
+ a 'nand' 'not' a = I_el(Y) &
+ 'not' (a 'nand' 'not' a) = O_el(Y);
+
+theorem :: BVFUNC26:9
+ a 'nand' (b '&' c) = 'not' (a '&' b '&' c);
+
+theorem :: BVFUNC26:10
+ a 'nand' (b '&' c) = (a '&' b) 'nand' c;
+
+theorem :: BVFUNC26:11
+ a 'nand' (b 'or' c) = 'not' (a '&' b) '&' 'not' (a '&' c);
+
+theorem :: BVFUNC26:12
+ a 'nand' (b 'xor' c) = (a '&' b) 'eqv' (a '&' c);
+
+theorem :: BVFUNC26:13
+ a 'nand' (b 'nand' c) = 'not' a 'or' (b '&' c) &
+ a 'nand' (b 'nand' c) = a 'imp' (b '&' c);
+
+theorem :: BVFUNC26:14
+ a 'nand' (b 'nor' c) = 'not' a 'or' b 'or' c &
+ a 'nand' (b 'nor' c) = a 'imp' (b 'or' c);
+
+theorem :: BVFUNC26:15
+ a 'nand' (b 'eqv' c) = a 'imp' (b 'xor' c);
+
+theorem :: BVFUNC26:16
+a 'nand' (a '&' b) = a 'nand' b;
+
+theorem :: BVFUNC26:17
+ a 'nand' (a 'or' b) = 'not' a '&' 'not' (a '&' b);
+
+theorem :: BVFUNC26:18
+ a 'nand' (a 'eqv' b) = a 'imp' (a 'xor' b);
+
+theorem :: BVFUNC26:19
+ a 'nand' (a 'nand' b) = 'not' a 'or' b &
+ a 'nand' (a 'nand' b) = a 'imp' b;
+
+theorem :: BVFUNC26:20
+ a 'nand' (a 'nor' b) = I_el(Y);
+
+theorem :: BVFUNC26:21
+ a 'nand' (a 'eqv' b) = 'not' a 'or' 'not' b;
+
+theorem :: BVFUNC26:22
+ a '&' b = (a 'nand' b) 'nand' (a 'nand' b);
+
+theorem :: BVFUNC26:23
+ (a 'nand' b) 'nand' (a 'nand' c) = a '&' (b 'or' c);
+
+theorem :: BVFUNC26:24
+ a 'nand' (b 'imp' c) = ('not' a 'or' b) '&' 'not' (a '&' c);
+
+theorem :: BVFUNC26:25
+ a 'nand' (a 'imp' b) = 'not' (a '&' b);
+
+theorem :: BVFUNC26:26
+ I_el(Y) 'nor' a = O_el(Y);
+
+theorem :: BVFUNC26:27
+ O_el(Y) 'nor' a = 'not' a;
+
+theorem :: BVFUNC26:28
+ O_el(Y) 'nor' O_el(Y) = I_el(Y) &
+ O_el(Y) 'nor' I_el(Y) = O_el(Y) &
+ I_el(Y) 'nor' I_el(Y) = O_el(Y);
+
+theorem :: BVFUNC26:29
+ a 'nor' a = 'not' a &
+'not' (a 'nor' a) = a;
+
+theorem :: BVFUNC26:30
+ 'not' (a 'nor' b) = a 'or' b;
+
+theorem :: BVFUNC26:31
+ a 'nor' 'not' a = O_el(Y) &
+'not' (a 'nor' 'not' a) = I_el(Y);
+
+theorem :: BVFUNC26:32
+ 'not' a '&' (a 'xor' b) = 'not' a '&' b;
+
+theorem :: BVFUNC26:33
+ a 'nor' (b '&' c) = 'not' (a 'or' b) 'or' 'not' (a 'or' c);
+
+theorem :: BVFUNC26:34
+ a 'nor' (b 'or' c) = 'not' (a 'or' b 'or' c);
+
+theorem :: BVFUNC26:35
+ a 'nor' (b 'eqv' c) = ('not' a) '&' (b 'xor' c);
+
+theorem :: BVFUNC26:36
+ a 'nor' (b 'imp' c) = 'not' a '&' b '&' 'not' c;
+
+theorem :: BVFUNC26:37
+ a 'nor' (b 'nand' c) = 'not' a '&' b '&' c;
+
+theorem :: BVFUNC26:38
+ a 'nor' (b 'nor' c) = 'not' a '&' (b 'or' c);
+
+theorem :: BVFUNC26:39
+ a 'nor' (a '&' b) = 'not' (a '&' (a 'or' b));
+
+theorem :: BVFUNC26:40
+ a 'nor' (a 'or' b) = 'not' (a 'or' b);
+
+theorem :: BVFUNC26:41
+ a 'nor' (a 'eqv' b) = 'not' a '&' b;
+
+theorem :: BVFUNC26:42
+ a 'nor' (a 'imp' b) = O_el(Y);
+
+theorem :: BVFUNC26:43
+ a 'nor' (a 'nand' b) = O_el(Y);
+
+theorem :: BVFUNC26:44
+ a 'nor' (a 'nor' b) = 'not' a '&' b;
+
+theorem :: BVFUNC26:45
+ O_el(Y) 'eqv' O_el(Y) = I_el(Y);
+
+theorem :: BVFUNC26:46
+ O_el(Y) 'eqv' I_el(Y) = O_el(Y);
+
+theorem :: BVFUNC26:47
+ I_el(Y) 'eqv' I_el(Y) = I_el(Y);
+
+theorem :: BVFUNC26:48
+ a 'eqv' a = I_el(Y) &
+'not' (a 'eqv' a) = O_el(Y);
+
+theorem :: BVFUNC26:49
+ a 'eqv' (a 'or' b) = a 'or' 'not' b;
+
+theorem :: BVFUNC26:50
+ a '&' (b 'nand' c) = (a '&' 'not' b) 'or' (a '&' 'not' c);
+
+theorem :: BVFUNC26:51
+ a 'or' (b 'nand' c) = a 'or' 'not' b 'or' 'not' c;
+
+theorem :: BVFUNC26:52
+ a 'xor' (b 'nand' c) = ('not' a '&' 'not' (b '&' c)) 'or' (a '&' b '&' c);
+
+theorem :: BVFUNC26:53
+ a 'eqv' (b 'nand' c) = (a '&' 'not' (b '&' c)) 'or' ('not' a '&' b '&' c);
+
+theorem :: BVFUNC26:54
+ a 'imp' (b 'nand' c) = 'not' (a '&' b '&' c);
+
+theorem :: BVFUNC26:55
+ a 'nor' (b 'nand' c) = 'not' (a 'or' 'not' b 'or' 'not' c);
+
+theorem :: BVFUNC26:56
+ a '&' (a 'nand' b) = a '&' 'not' b;
+
+theorem :: BVFUNC26:57
+ a 'or' (a 'nand' b) = I_el(Y);
+
+theorem :: BVFUNC26:58
+ a 'xor' (a 'nand' b) = 'not' a 'or' b;
+
+theorem :: BVFUNC26:59
+ a 'eqv' (a 'nand' b) = a '&' 'not' b;
+
+theorem :: BVFUNC26:60
+ a 'imp' (a 'nand' b) = 'not' (a '&' b);
+
+theorem :: BVFUNC26:61
+ a 'nor' (a 'nand' b) = O_el(Y);
+
+theorem :: BVFUNC26:62
+ a '&' (b 'nor' c) = a '&' 'not' b '&' 'not' c;
+
+theorem :: BVFUNC26:63
+ a 'or' (b 'nor' c) = (a 'or' 'not' b) '&' (a 'or' 'not' c);
+
+theorem :: BVFUNC26:64
+ a 'xor' (b 'nor' c) = (a 'or' 'not' (b 'or' c)) '&' ('not' a 'or' b 'or' c);
+
+theorem :: BVFUNC26:65
+ a 'eqv' (b 'nor' c) = (a 'or' b 'or' c) '&' ('not' a 'or' 'not' (b 'or' c));
+
+theorem :: BVFUNC26:66
+ a 'imp' (b 'nor' c) = 'not' (a '&' (b 'or' c));
+
+theorem :: BVFUNC26:67
+ a 'nand' (b 'nor' c) = 'not' a 'or' b 'or' c;
+
+theorem :: BVFUNC26:68
+ a '&' (a 'nor' b) = O_el(Y);
+
+theorem :: BVFUNC26:69
+ a 'or' (a 'nor' b) = a 'or' 'not' b;
+
+theorem :: BVFUNC26:70
+ a 'xor' (a 'nor' b) = a 'or' 'not' b;
+
+theorem :: BVFUNC26:71
+ a 'eqv' (a 'nor' b) = 'not' a '&' b;
+
+theorem :: BVFUNC26:72
+ a 'imp' (a 'nor' b) = 'not' (a 'or' a '&' b);
+
+theorem :: BVFUNC26:73
+ a 'nand' (a 'nor' b) = I_el(Y);
+

@@ -22,7 +22,7 @@ environ
       REALSET2;
  clusters XREAL_0, STRUCT_0, RELSET_1, PARTFUN2, BINARITH, GROUP_1, GCD_1,
       COMPLFLD, POLYNOM2, MONOID_0, NAT_1, MEMBERED, NUMBERS, ORDINAL2,
-      COMPLEX1, XCMPLX_0;
+      COMPLEX1, XCMPLX_0, SIN_COS;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions RFUNCT_2;
  theorems AXIOMS, XREAL_0, REAL_1, REAL_2, NAT_1, SQUARE_1, PREPOWER, POWER,
@@ -33,6 +33,8 @@ environ
  schemes NAT_1;
 
 begin
+
+reserve x for real number;
 
 COMPLEX1'131:
   for z being complex number st |.z.| = 0 holds z = 0
@@ -269,11 +271,9 @@ GROUP_1:def 7
    end;
 
   theorem Th17:
-   for x be real number
    for n be Nat st x >= 0 & n <> 0 holds
     (n-root x) to_power n = x
    proof
-    let x be real number;
     let n be Nat;
     assume that
      A1: x >= 0 and
@@ -352,9 +352,8 @@ A4: a < x & x < c by A1,JORDAN6:45;
    end;
 
   theorem Th23:
-   for x be Real st x in ].0,PI.[ holds sin.x > 0
+   x in ].0,PI.[ implies sin.x > 0
    proof
-    let x be Real;
     assume A1: x in ].0,PI.[;
     per cases by A1,Th22;
      suppose x in ].0,PI/2.[;
@@ -379,9 +378,8 @@ A4: a < x & x < c by A1,JORDAN6:45;
    end;
 
   theorem Th24:
-   for x be real number st x in [.0,PI.] holds sin.x >= 0
+   x in [.0,PI.] implies sin.x >= 0
    proof
-    let x be real number;
     assume x in [.0,PI.];
     then 0 <= x & x <= PI by TOPREAL5:1;
     then x = 0 or x = PI or (0 < x & x < PI) by REAL_1:def 5;
@@ -390,9 +388,8 @@ A4: a < x & x < c by A1,JORDAN6:45;
    end;
 
   theorem Th25:
-   for x be Real st x in ].PI,2*PI.[ holds sin.x < 0
+   x in ].PI,2*PI.[ implies sin.x < 0
    proof
-    let x be Real;
     assume x in ].PI,2*PI.[;
     then PI < x & x < 2*PI by JORDAN6:45;
     then PI-PI < x-PI & x-PI < 2*PI-PI by REAL_1:54;
@@ -406,17 +403,14 @@ A4: a < x & x < c by A1,JORDAN6:45;
    end;
 
   theorem Th26:
-   for x be real number st x in [.PI,2*PI.] holds sin.x <= 0
+   x in [.PI,2*PI.] implies sin.x <= 0
    proof
-    let x be real number;
     assume x in [.PI,2*PI.];
     then PI <= x & x <= 2*PI by TOPREAL5:1;
     then x = PI or x = 2*PI or (PI < x & x < 2*PI) by REAL_1:def 5;
     then x = PI or x = 2*PI or x in ].PI,2*PI.[ by JORDAN6:45;
     hence sin.x <= 0 by Th25,SIN_COS:81;
    end;
-
-reserve x for Real;
 
   theorem Th27:
    x in ].-PI/2,PI/2.[ implies cos.x > 0
@@ -430,9 +424,8 @@ reserve x for Real;
    end;
 
   theorem Th28:
-   for x be real number st x in [.-PI/2,PI/2.] holds cos.x >= 0
+   x in [.-PI/2,PI/2.] implies cos.x >= 0
    proof
-    let x be real number;
     assume x in [.-PI/2,PI/2.];
     then -PI/2 <= x & x <= PI/2 by TOPREAL5:1;
     then x = -PI/2 or x = PI/2 or (-PI/2 < x & x < PI/2) by REAL_1:def 5;
@@ -452,9 +445,8 @@ reserve x for Real;
    end;
 
   theorem Th30:
-   for x be real number st x in [.PI/2,3/2*PI.] holds cos.x <= 0
+   x in [.PI/2,3/2*PI.] implies cos.x <= 0
    proof
-    let x be real number;
     assume x in [.PI/2,3/2*PI.];
     then PI/2 <= x & x <= 3/2*PI by TOPREAL5:1;
     then x = PI/2 or x = 3/2*PI or (PI/2 < x & x < 3/2*PI) by REAL_1:def 5;
@@ -479,9 +471,8 @@ reserve x for Real;
    end;
 
   theorem Th32:
-   for x be real number st x in [.3/2*PI,2*PI.] holds cos.x >= 0
+   x in [.3/2*PI,2*PI.] implies cos.x >= 0
    proof
-    let x be real number;
     assume x in [.3/2*PI,2*PI.];
     then 3/2*PI <= x & x <= 2*PI by TOPREAL5:1;
     then x = 3/2*PI or x = 2*PI or (3/2*PI < x & x < 2*PI)
@@ -491,10 +482,8 @@ reserve x for Real;
    end;
 
   theorem Th33:
-   for x be real number st 0 <= x & x < 2*PI & sin x = 0 holds
-    x = 0 or x = PI
+   0 <= x & x < 2*PI & sin x = 0 implies x = 0 or x = PI
    proof
-    let x be real number;
     assume that
      A1: 0 <= x and
      A2: x < 2*PI and
@@ -506,10 +495,8 @@ reserve x for Real;
    end;
 
   theorem Th34:
-   for x be real number st 0 <= x & x < 2*PI & cos x = 0 holds
-    x = PI/2 or x = 3/2*PI
+   0 <= x & x < 2*PI & cos x = 0 implies x = PI/2 or x = 3/2*PI
    proof
-    let x be real number;
     assume that
      A1: 0 <= x and
      A2: x < 2*PI and
@@ -600,7 +587,7 @@ reserve x for Real;
    end;
 
   theorem
-       sin is_increasing_on [.-PI/2,PI/2.]
+   sin is_increasing_on [.-PI/2,PI/2.]
    proof
     let r1,r2 be Real;
     assume that
@@ -665,7 +652,7 @@ reserve x for Real;
    end;
 
   theorem
-       sin is_decreasing_on [.PI/2,3/2*PI.]
+   sin is_decreasing_on [.PI/2,3/2*PI.]
    proof
     let r1,r2 be Real;
     assume that
@@ -881,14 +868,14 @@ reserve x for Real;
   theorem Th45:
     sin.x in [.-1,1 .] & cos.x in [.-1,1 .]
    proof
-        abs(sin x) <= 1 & abs(cos x) <= 1 by SIN_COS:30;
+     abs(sin x) <= 1 & abs(cos x) <= 1 by SIN_COS:30;
     then abs(sin.x) <= 1 & abs(cos.x) <= 1 by SIN_COS:def 21,def 23;
     then -1 <= sin.x & sin.x <= 1 & -1 <= cos.x & cos.x <= 1 by ABSVALUE:12;
     hence thesis by TOPREAL5:1;
    end;
 
   theorem
-       rng sin = [.-1,1 .]
+    rng sin = [.-1,1 .]
    proof
         now let y be set;
      thus y in [.-1,1 .] implies ex x be set st x in dom sin & y = sin.x
@@ -920,7 +907,7 @@ reserve x for Real;
    end;
 
   theorem
-       rng cos = [.-1,1 .]
+    rng cos = [.-1,1 .]
    proof
         now let y be set;
      thus y in [.-1,1 .] implies ex x be set st x in dom cos & y = cos.x
@@ -951,7 +938,7 @@ reserve x for Real;
    end;
 
   theorem
-       rng (sin|[.-PI/2,PI/2.]) = [.-1,1 .]
+    rng (sin|[.-PI/2,PI/2.]) = [.-1,1 .]
    proof
     set sin1 = sin|[.-PI/2,PI/2.];
         now let y be set;
@@ -990,7 +977,7 @@ reserve x for Real;
    end;
 
   theorem
-       rng (sin|[.PI/2,3/2*PI.]) = [.-1,1 .]
+    rng (sin|[.PI/2,3/2*PI.]) = [.-1,1 .]
    proof
     set sin1 = sin|[.PI/2,3/2*PI.];
         now let y be set;
@@ -1000,8 +987,7 @@ reserve x for Real;
       then reconsider y1=y as Real;
           sin is_continuous_on [.PI/2,3/2*PI.] by Th43;
       then A2: sin1 is_continuous_on [.PI/2,3/2*PI.] by FCONT_1:16;
-          PI/2 in [.PI/2,3/2*PI.] & 3/2*PI in [.PI/2,3/2*PI.] by Th21,TOPREAL5:
-1;
+      PI/2 in [.PI/2,3/2*PI.] & 3/2*PI in [.PI/2,3/2*PI.] by Th21,TOPREAL5:1;
       then sin1.(PI/2) = sin.(PI/2) & sin1.(3/2*PI) = sin.(3/2*PI)
                                                                by FUNCT_1:72;
       then y1 in [.sin1.(PI/2),sin1.(3/2*PI).] \/
@@ -1730,9 +1716,10 @@ A2: z <> 0;
    end;
 
 theorem Th71:
-  for n be Nat holds
+  for x be Real, n be Nat holds
     (power F_Complex).([**cos x,sin x**],n) = [**cos (n*x),sin (n*x)**]
    proof
+     let x be Real;
      defpred P[Nat] means
      (power F_Complex).([**cos x,sin x**],$1) = [**cos ($1*x),sin ($1*x)**];
       (power F_Complex).([**cos x,sin x**],0) = 1.F_Complex by GROUP_1:def 7
@@ -1793,10 +1780,11 @@ theorem Th71:
    end;
 
   theorem Th73:
-   for n,k be Nat st n <> 0 holds
+   for x be Real, n,k be Nat st n <> 0 holds
     (power F_Complex).([**cos((x+2*PI*k)/n),sin((x+2*PI*k)/n)**],n) =
      [**cos x,sin x**]
    proof
+    let x be Real;
     let n,k be Nat;
     assume A1: n <> 0;
     thus (power F_Complex).([**cos((x+2*PI*k)/n),sin((x+2*PI*k)/n)**],n) =

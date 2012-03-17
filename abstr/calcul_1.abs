@@ -1,0 +1,410 @@
+:: A Sequent Calculus for First-Order Logic
+::  by Patrick Braselmann and Peter Koepke
+:: 
+:: Received September 25, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, CQC_THE1, CQC_LANG, QC_LANG1, FINSEQ_1, ZF_LANG, ZF_MODEL,
+      BOOLE, FUNCT_1, FUNCT_4, CALCUL_1, FINSET_1, VALUAT_1, FUNCOP_1, CAT_1,
+      MCART_1, QMAX_1, ORDINAL2, FINSEQ_2, CARD_1, TARSKI, SUBSTUT1, SUBLEMMA;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ARYTM_2, FINSEQ_1,
+      FUNCT_1, QC_LANG1, QC_LANG2, QC_LANG3, PARTFUN1, NUMBERS, ORDINAL2,
+      FINSEQ_2, CARD_1, CARD_2, XCMPLX_0, XREAL_0, REAL_1, NAT_1, CQC_LANG,
+      RELAT_1, FINSET_1, FUNCT_4, VALUAT_1, CQC_THE1, FUNCOP_1, FINSUB_1,
+      RELSET_1, FUNCT_2, FRAENKEL, MARGREL1, CQC_SIM1, DOMAIN_1, MCART_1,
+      SUBSTUT1, SUBSTUT2, SUBLEMMA;
+ constructors TARSKI, QC_LANG3, DOMAIN_1, CQC_THE1, ARYTM_0, CQC_THE3, CARD_2,
+      RECDEF_1, CQC_SIM1, FINSEQ_1, PARTFUN1, MARGREL1, ARYTM_2, CQC_LANG,
+      NAT_1, MCART_1, FUNCT_1, SUBSTUT1, SUBSTUT2, SUBLEMMA, FUNCT_4, FUNCT_2,
+      FINSEQ_2, CARD_1, REAL_1, QC_LANG2, MEMBERED, XREAL_0, XCMPLX_0,
+      XBOOLE_0, NUMBERS, ORDINAL3, WELLORD2;
+ clusters NAT_1, FINSEQ_1, ARYTM_3, RELSET_1, CQC_LANG, SUBLEMMA, XREAL_0,
+      ZFMISC_1, REAL_1, XCMPLX_0, XBOOLE_0, FUNCOP_1, SUBSET_1, QC_LANG1,
+      MARGREL1, FUNCT_1, SUBSTUT1, PARTFUN1, FINSET_1, RELAT_1, NUMBERS,
+      ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve a,b,c,d for set,
+         i,j,k,l,m,n for Nat,
+         p,q,r for Element of CQC-WFF,
+         x,y,y0 for bound_QC-variable,
+         X for Subset of CQC-WFF,
+         A for non empty set,
+         J for interpretation of A,
+         v,w for Element of Valuations_in A,
+         Sub for CQC_Substitution,
+         S for Element of CQC-Sub-WFF,
+         xSQ for second_Q_comp of [S,x],
+         f,f1,f2,g,h,h1 for FinSequence of CQC-WFF;
+
+registration let g be FinSequence, N be set;
+  cluster g|N -> FinSubsequence-like;
+end;
+
+definition let D be non empty set, f be FinSequence of D;
+  func Ant(f) -> FinSequence of D means
+:: CALCUL_1:def 1
+   for i st len f = i+1 holds it = f|(Seg i) if len f > 0
+         otherwise it = {};
+end;
+
+definition let D be non empty set, f be FinSequence of D;
+  assume  len f > 0;
+  func Suc(f) -> Element of D equals
+:: CALCUL_1:def 2
+    f.(len f);
+end;
+
+definition let D be non empty set, p be Element of D,
+               f be FinSequence of D;
+  pred p is_tail_of f means
+:: CALCUL_1:def 3
+   ex i st i in dom f & f.i = p;
+end;
+
+definition let f,g;
+  pred f is_Subsequence_of g means
+:: CALCUL_1:def 4
+   ex N being Subset of NAT st f c= Seq (g|N);
+end;
+
+theorem :: CALCUL_1:1
+  f is_Subsequence_of g implies rng f c= rng g &
+    ex N being Subset of NAT st rng f c= rng (g|N);
+
+theorem :: CALCUL_1:2
+  len f > 0 implies len Ant(f)+1 = len f & len Ant(f) < len f;
+
+theorem :: CALCUL_1:3
+  len f > 0 implies f = Ant(f)^<*Suc(f)*> & rng f = rng Ant(f) \/ {Suc(f)};
+
+theorem :: CALCUL_1:4
+  len f > 1 implies len Ant(f) > 0;
+
+theorem :: CALCUL_1:5
+  Suc(f^<*p*>) = p & Ant(f^<*p*>) = f;
+
+ reserve fin,fin1 for FinSequence;
+
+theorem :: CALCUL_1:6
+  len fin <= len (fin^fin1) & len fin1 <= len (fin^fin1) &
+    (fin <> {} implies 1 <= len fin & len fin1 < len (fin1^fin));
+
+theorem :: CALCUL_1:7
+  Seq ((f^g)|dom f) = (f^g)|dom f;
+
+theorem :: CALCUL_1:8
+  f is_Subsequence_of f^g;
+
+theorem :: CALCUL_1:9
+  1 < len (fin^<*b*>^<*c*>);
+
+theorem :: CALCUL_1:10
+  1 <= len (fin^<*b*>) & len (fin^<*b*>) in dom (fin^<*b*>);
+
+theorem :: CALCUL_1:11
+  0 < m implies len (Sgm (Seg n \/ {n+m})) = n+1;
+
+theorem :: CALCUL_1:12
+  0 < m implies dom (Sgm (Seg n \/ {n+m})) = Seg (n+1);
+
+theorem :: CALCUL_1:13
+  0 < len f implies f is_Subsequence_of Ant(f)^g^<*Suc(f)*>;
+
+theorem :: CALCUL_1:14
+  1 in dom <*c,d*> & 2 in dom <*c,d*> &
+        (f^<*c,d*>).(len f + 1) = c & (f^<*c,d*>).(len f + 2) = d;
+
+begin :: A Sequent calculus
+
+definition let f;
+  func still_not-bound_in f -> Element of bool bound_QC-variables means
+:: CALCUL_1:def 5
+   a in it iff ex i,p st i in dom f & p = f.i &
+             a in still_not-bound_in p;
+end;
+
+definition
+  func set_of_CQC-WFF-seq means
+:: CALCUL_1:def 6
+   a in it iff a is FinSequence of CQC-WFF;
+end;
+
+ reserve PR,PR1,PR2,PR3 for
+                    FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
+
+definition let PR; let n be Nat;
+  pred PR,n is_a_correct_step means
+:: CALCUL_1:def 7
+   ex f st Suc(f) is_tail_of Ant(f) & (PR.n)`1 = f if (PR.n)`2 = 0,
+  ex f st (PR.n)`1 = f^<*VERUM*>                         if (PR.n)`2 = 1,
+  ex i,f,g st 1 <= i & i < n & Ant(f) is_Subsequence_of Ant(g) &
+      Suc(f) = Suc(g) & (PR.i)`1 = f & (PR.n)`1 = g      if (PR.n)`2 = 2,
+  ex i,j,f,g st 1 <= i & i < n & 1 <= j & j < i & len f > 1 & len g > 1 &
+   Ant(Ant(f)) = Ant(Ant(g)) & 'not' Suc(Ant(f)) = Suc(Ant(g)) &
+   Suc(f) = Suc(g) & f = (PR.j)`1 &
+          g = (PR.i)`1 & Ant(Ant(f))^<*Suc(f)*> = (PR.n)`1 if (PR.n)`2 = 3,
+  ex i,j,f,g,p st 1 <= i & i < n & 1 <= j & j < i & len f > 1 &
+      Ant(f) = Ant(g) & Suc(Ant(f)) = 'not' p & 'not' Suc(f) = Suc(g) &
+      f = (PR.j)`1 & g = (PR.i)`1 & Ant(Ant(f))^<*p*> = (PR.n)`1
+                                                  if (PR.n)`2 = 4,
+  ex i,j,f,g st 1 <= i & i < n & 1 <= j & j < i & Ant(f) = Ant(g) &
+       f = (PR.j)`1 & g = (PR.i)`1 &
+         Ant(f)^<*(Suc(f)) '&' (Suc(g))*> = (PR.n)`1 if (PR.n)`2 = 5,
+  ex i,f,p,q st 1 <= i & i < n & p '&' q = Suc(f) & f = (PR.i)`1 &
+                                Ant(f)^<*p*> = (PR.n)`1 if (PR.n)`2 = 6,
+  ex i,f,p,q st 1 <= i & i < n & p '&' q = Suc(f) & f = (PR.i)`1 &
+                                Ant(f)^<*q*>= (PR.n)`1 if (PR.n)`2 = 7,
+  ex i,f,p,x,y st 1 <= i & i < n & Suc(f) = All(x,p) &
+            f = (PR.i)`1 & Ant(f)^<*p.(x,y)*> = (PR.n)`1 if (PR.n)`2 = 8,
+  ex i,f,p,x,y st 1 <= i & i < n & Suc(f) = p.(x,y) &
+   not y in still_not-bound_in (Ant(f)) & not y in still_not-bound_in All(x,p)
+    & f = (PR.i)`1 & Ant(f)^<*All(x,p)*> = (PR.n)`1 if (PR.n)`2 = 9;
+end;
+
+definition let PR;
+  attr PR is a_proof means
+:: CALCUL_1:def 8
+   PR <> {} & for n st 1 <= n & n <= len PR holds PR,n is_a_correct_step;
+end;
+
+definition let f;
+  pred |- f means
+:: CALCUL_1:def 9
+   ex PR st PR is a_proof & f = (PR.(len PR))`1;
+end;
+
+definition let p,X;
+  pred p is_formal_provable_from X means
+:: CALCUL_1:def 10
+   ex f st rng Ant(f) c= X & Suc(f) = p & |- f;
+end;
+
+definition let X; let A; let J; let v;
+  pred J,v |= X means
+:: CALCUL_1:def 11
+    p in X implies J,v |= p;
+end;
+
+definition let X,p;
+  pred X |= p means
+:: CALCUL_1:def 12
+    J,v |= X implies J,v |= p;
+end;
+
+definition let p;
+  pred |= p means
+:: CALCUL_1:def 13
+    {}(CQC-WFF) |= p;
+end;
+
+definition let f, A, J, v;
+  pred J,v |= f means
+:: CALCUL_1:def 14
+    J,v |= rng(f);
+end;
+
+definition let f, p;
+  pred f |= p means
+:: CALCUL_1:def 15
+    J,v |= f implies J,v |= p;
+end;
+
+theorem :: CALCUL_1:15
+  Suc(f) is_tail_of Ant(f) implies Ant(f) |= Suc(f);
+
+theorem :: CALCUL_1:16
+  Ant(f) is_Subsequence_of Ant(g) & Suc(f) = Suc(g) &
+      Ant(f) |= Suc(f) implies Ant(g) |= Suc(g);
+
+theorem :: CALCUL_1:17
+  len f > 0 implies (J,v |= Ant(f) & J,v |= Suc(f) iff J,v |= f);
+
+theorem :: CALCUL_1:18
+  len f > 1 & len g > 1 & Ant(Ant(f)) = Ant(Ant(g)) &
+    'not' Suc(Ant(f)) = Suc(Ant(g)) & Suc(f) = Suc(g) & Ant(f) |= Suc(f) &
+        Ant(g) |= Suc(g) implies Ant(Ant(f)) |= Suc(f);
+
+theorem :: CALCUL_1:19
+  len f > 1 & Ant(f) = Ant(g) & 'not' p = Suc(Ant(f)) &
+    'not' Suc(f) = Suc(g) & Ant(f) |= Suc(f) & Ant(g) |= Suc(g) implies
+        Ant(Ant(f)) |= p;
+
+theorem :: CALCUL_1:20
+  Ant(f) = Ant(g) & Ant(f) |= Suc(f) &
+     Ant(g) |= Suc(g) implies Ant(f) |= (Suc(f)) '&' (Suc(g));
+
+theorem :: CALCUL_1:21
+  Suc(f) = p '&' q & Ant(f) |= p '&' q implies Ant(f) |= p;
+
+theorem :: CALCUL_1:22
+  Suc(f) = p '&' q & Ant(f) |= p '&' q implies Ant(f) |= q;
+
+theorem :: CALCUL_1:23
+  J,v |= [p,Sub] iff J,v |= p;
+
+ reserve a for Element of A;
+
+theorem :: CALCUL_1:24
+  J,v |= p.(x,y) iff ex a st v.y = a & J,v.(x|a) |= p;
+
+theorem :: CALCUL_1:25
+  Suc(f) = All(x,p) & Ant(f) |= Suc(f) implies
+                                      for y holds Ant(f) |= p.(x,y);
+
+theorem :: CALCUL_1:26
+  for X being set st X c= bound_QC-variables holds
+     not x in X implies v.(x|a)|X = v|X;
+
+theorem :: CALCUL_1:27
+  for v,w holds v|still_not-bound_in f = w|still_not-bound_in f
+                                           implies (J,v |= f iff J,w |= f);
+
+theorem :: CALCUL_1:28
+  not y in still_not-bound_in All(x,p) implies
+     v.(y|a).(x|a)|still_not-bound_in p = v.(x|a)|still_not-bound_in p;
+
+theorem :: CALCUL_1:29
+  Suc(f) = p.(x,y) & Ant(f) |= Suc(f) &
+    not y in still_not-bound_in Ant(f) & not y in still_not-bound_in All(x,p)
+       implies Ant(f) |= All(x,p);
+
+theorem :: CALCUL_1:30
+  Ant(f^<*VERUM*>) |= Suc(f^<*VERUM*>);
+
+theorem :: CALCUL_1:31
+  1 <= n & n <= len PR implies
+  (PR.n)`2 = 0 or (PR.n)`2 = 1 or (PR.n)`2 = 2 or (PR.n)`2 = 3 or
+  (PR.n)`2 = 4 or (PR.n)`2 = 5 or (PR.n)`2 = 6 or (PR.n)`2 = 7 or
+  (PR.n)`2 = 8 or (PR.n)`2 = 9;
+
+:: Theorem on the Correctness (Ebb et al, Chapter IV, Theorem 6.2)
+
+theorem :: CALCUL_1:32
+  p is_formal_provable_from X implies X |= p;
+
+begin :: Derived Rules
+
+theorem :: CALCUL_1:33
+  Suc(f) is_tail_of Ant(f) implies |- f;
+
+theorem :: CALCUL_1:34
+  1 <= n & n <= len PR implies
+         (PR,n is_a_correct_step iff PR^PR1,n is_a_correct_step);
+
+theorem :: CALCUL_1:35
+  1 <= n & n <= len PR1 & PR1,n is_a_correct_step implies
+    (PR^PR1),(n+len PR) is_a_correct_step;
+
+theorem :: CALCUL_1:36
+  Ant(f) is_Subsequence_of Ant(g) & Suc(f) = Suc(g) & |- f implies |- g;
+
+theorem :: CALCUL_1:37
+  1 < len f & 1 < len g & Ant(Ant(f)) = Ant(Ant(g)) &
+    'not' Suc(Ant(f)) = Suc(Ant(g)) & Suc(f) = Suc(g) & |- f & |- g implies
+       |- Ant(Ant(f))^<*Suc(f)*>;
+
+theorem :: CALCUL_1:38
+  len f > 1 & Ant(f) = Ant(g) & Suc(Ant(f)) = 'not' p &
+    'not' Suc(f) = Suc(g) & |- f & |- g implies |- Ant(Ant(f))^<*p*>;
+
+theorem :: CALCUL_1:39
+  Ant(f) = Ant(g) & |- f & |- g implies
+    |- Ant(f)^<*(Suc(f)) '&' (Suc(g))*>;
+
+theorem :: CALCUL_1:40
+  p '&' q = Suc(f) & |- f implies |- Ant(f)^<*p*>;
+
+theorem :: CALCUL_1:41
+  p '&' q = Suc(f) & |- f implies |- Ant(f)^<*q*>;
+
+theorem :: CALCUL_1:42
+  Suc(f) = All(x,p) & |- f implies |- Ant(f)^<*p.(x,y)*>;
+
+theorem :: CALCUL_1:43
+  Suc(f) = p.(x,y) & not y in still_not-bound_in Ant(f) &
+    not y in still_not-bound_in All(x,p) & |- f implies
+       |- Ant(f)^<*All(x,p)*>;
+
+theorem :: CALCUL_1:44
+  |- f & |- Ant(f)^<*'not' Suc(f)*> implies |- Ant(f)^<*p*>;
+
+theorem :: CALCUL_1:45
+  1 <= len f & |- f & |- f^<*p*> implies |- Ant(f)^<*p*>;
+
+theorem :: CALCUL_1:46
+  |- f^<*p*>^<*q*> implies |- f^<*'not' q*>^<*'not' p*>;
+
+theorem :: CALCUL_1:47
+  |- f^<*'not' p*>^<*'not' q*> implies |- f^<*q*>^<*p*>;
+
+theorem :: CALCUL_1:48
+  |- f^<*'not' p*>^<*q*> implies |- f^<*'not' q*>^<*p*>;
+
+theorem :: CALCUL_1:49
+  |- f^<*p*>^<*'not' q*> implies |- f^<*q*>^<*'not' p*>;
+
+theorem :: CALCUL_1:50
+  |- f^<*p*>^<*r*> & |- f^<*q*>^<*r*> implies |- f^<*p 'or' q*>^<*r*>;
+
+theorem :: CALCUL_1:51
+  |- f^<*p*> implies |- f^<*p 'or' q*>;
+
+theorem :: CALCUL_1:52
+  |- f^<*q*> implies |- f^<*p 'or' q*>;
+
+theorem :: CALCUL_1:53
+  |- f^<*p*>^<*r*> & |- f^<*q*>^<*r*> implies |- f^<*p 'or' q*>^<*r*>;
+
+theorem :: CALCUL_1:54
+  |- f^<*p*> implies |- f^<*'not' 'not' p*>;
+
+theorem :: CALCUL_1:55
+  |- f^<*'not' 'not' p*> implies |- f^<*p*>;
+
+theorem :: CALCUL_1:56
+  |- f^<*p => q*> & |- f^<*p*> implies |- f^<*q*>;
+
+theorem :: CALCUL_1:57
+  ('not' p).(x,y) = 'not' (p.(x,y));
+
+theorem :: CALCUL_1:58
+  (ex y st |- f^<*p.(x,y)*>) implies |- f^<*Ex(x,p)*>;
+
+theorem :: CALCUL_1:59
+  still_not-bound_in (f^g) = still_not-bound_in f \/ still_not-bound_in g;
+
+theorem :: CALCUL_1:60
+  still_not-bound_in <*p*> = still_not-bound_in p;
+
+theorem :: CALCUL_1:61
+  |- f^<*p.(x,y)*>^<*q*> &
+         not y in still_not-bound_in (f^<*Ex(x,p)*>^<*q*>) implies
+           |- f^<*Ex(x,p)*>^<*q*>;
+
+theorem :: CALCUL_1:62
+  still_not-bound_in f =
+    union {still_not-bound_in p : ex i st i in dom f & p = f.i};
+
+theorem :: CALCUL_1:63
+  still_not-bound_in f is finite;
+
+theorem :: CALCUL_1:64
+  Card bound_QC-variables = alef 0 & not bound_QC-variables is finite;
+
+theorem :: CALCUL_1:65
+  ex x st not x in still_not-bound_in f;
+
+theorem :: CALCUL_1:66
+  |- f^<*All(x,p)*> implies |- f^<*All(x,'not' 'not' p)*>;
+
+theorem :: CALCUL_1:67
+  |- f^<*All(x,'not' 'not' p)*> implies |- f^<*All(x,p)*>;
+
+theorem :: CALCUL_1:68
+  |- f^<*All(x,p)*> iff |- f^<*'not' Ex(x,'not' p)*>;

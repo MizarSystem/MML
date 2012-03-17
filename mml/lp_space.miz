@@ -1,0 +1,2056 @@
+:: The Banach Space $l^p$
+::  by Yasumasa Suzuki
+:: 
+:: Received September 25, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
+      RELAT_1, ABSVALUE, ORDINAL2, RLSUB_1, SEQ_1, SEQ_2, SERIES_1, SUPINF_2,
+      PROB_1, BHSP_3, RSSPACE, RSSPACE3, POWER, LP_SPACE, LOPBAN_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, SUBSET_1, MCART_1, RELSET_1,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1,
+      FUNCOP_1, BINOP_1, STRUCT_0, XCMPLX_0, XREAL_0, RAT_1, INT_1, ORDINAL1,
+      ORDINAL2, NUMBERS, MEMBERED, REAL_1, NAT_1, RLVECT_1, VECTSP_1, FRAENKEL,
+      COMPLEX1, ABSVALUE, RLSUB_1, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
+      FUNCSDOM, POWER, RSSPACE, RSSPACE3, LOPBAN_1;
+ constructors MCART_1, FUNCT_3, BINOP_1, ARYTM_0, REAL_1, XREAL_0, NAT_1,
+      ABSVALUE, SQUARE_1, FUNCT_2, XCMPLX_0, SUBSET_1, MEMBERED, DOMAIN_1,
+      SEQ_1, SEQ_2, SEQM_3, SERIES_1, SEQ_4, SUPINF_2, METRIC_1, FUNCOP_1,
+      FUNCSDOM, PROB_1, PREPOWER, POWER, RLVECT_1, VECTSP_1, FRAENKEL,
+      PARTFUN1, RLSUB_1, NORMSP_1, BHSP_2, BHSP_3, RSSPACE, RSSPACE3, LOPBAN_1;
+ clusters SUBSET_1, RELSET_1, FINSEQ_1, STRUCT_0, ARYTM_3, RELAT_1, REAL_1,
+      NUMBERS, ORDINAL2, XBOOLE_0, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1,
+      FUNCSDOM, RLVECT_1, NORMSP_1, XREAL_0, MEMBERED, VECTSP_1, FRAENKEL,
+      INT_1, SEQ_1, RSSPACE3, BHSP_1, LOPBAN_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI, XREAL_0, REAL_1, POWER;
+ theorems XBOOLE_0, RELAT_1, AXIOMS, TARSKI, ABSVALUE, ZFMISC_1, REAL_1, SEQ_1,
+      SEQM_3, SERIES_1, COMSEQ_3, FUNCT_1, NAT_1, SEQ_2, FUNCT_2, RLVECT_1,
+      RLSUB_1, NORMSP_1, XREAL_0, RSSPACE2, XCMPLX_1, SEQ_4, REAL_2, POWER,
+      RSSPACE, RSSPACE3, LOPBAN_1, HOLDER_1;
+ schemes NAT_1, SEQ_1, FUNCT_2, XBOOLE_0;
+
+begin :: The Real Norm Space of l^p Real Sequences
+
+definition
+  let x be Real_Sequence;
+  let p be Real;
+  func x rto_power p -> Real_Sequence means :def_1:
+  for n be Nat holds it.n = abs(x.n) to_power p;
+     existence
+     proof
+    deffunc F(set)=( abs(x.$1) ) to_power p;
+a1:     ex q1 be  Real_Sequence st
+        for n be Nat holds q1.n=F(n) from SEQ_1:sch 1;
+        consider q1 be Real_Sequence such that
+qq1:    for n be Nat holds
+        q1.n= abs(x.n) to_power p by a1;
+        take IT=q1;
+        thus thesis by qq1;
+     end;
+     uniqueness
+     proof
+      let a1,a2 be Real_Sequence;
+      assume that
+aa1:   for n be Nat holds a1.n = abs(x.n) to_power p and
+aa2:   for n be Nat holds a2.n = abs(x.n) to_power p;
+        for s be set st s in NAT holds a1.s = a2.s
+       proof
+        let s be set such that
+B:      s in NAT;
+        a1.s = abs(x.s) to_power p by aa1,B
+              .= a2.s by aa2,B;      
+        hence thesis;
+       end;
+       hence thesis by SEQ_1:8;
+     end;
+     end;
+
+definition
+  let p be Real;
+  assume AS0:p >= 1;
+  func the_set_of_RealSequences_l^p
+  -> non empty Subset of the carrier of Linear_Space_of_RealSequences means
+     :def_2:
+     for x being set holds x in it iff
+     (x in the_set_of_RealSequences & seq_id(x) rto_power p is summable);
+   existence
+   proof
+   defpred P[set] means seq_id($1) rto_power p is summable;
+   consider IT being set such that
+A1:for x being set holds x in IT
+    iff x in the_set_of_RealSequences & P[x] from XBOOLE_0:sch 1;
+A2:IT is non empty
+   proof
+      seq_id(Zeroseq) rto_power p is summable
+      proof
+        1 > 0; then
+S2:    p > 0 by AS0;
+         reconsider rseq=seq_id(Zeroseq) rto_power p as Real_Sequence;
+         now let n be Nat;
+         thus rseq.n =abs((seq_id(Zeroseq)).n) to_power p by def_1
+                    .=abs(0) to_power p by RSSPACE:def 6
+                    .=0 to_power p by ABSVALUE:7
+                    .=0 by POWER:def 2,S2;
+       end;
+       then rseq is absolutely_summable by COMSEQ_3:3;
+       hence thesis by SERIES_1:40;
+     end;
+     hence thesis by A1;
+  end;
+IT is Subset of the_set_of_RealSequences
+   proof
+     for x be set st x in IT holds x in the_set_of_RealSequences by A1;
+     hence thesis by TARSKI:def 3;
+   end;
+   hence thesis by A1,A2,RSSPACE:def 7;
+  end;
+uniqueness
+     proof
+   let X1,X2 be non empty Subset of the carrier
+   of Linear_Space_of_RealSequences;
+   assume that
+A3: for x being set holds x in X1 iff
+     (x in the_set_of_RealSequences &  seq_id(x) rto_power p is summable)
+   and
+A4: for x being set holds x in X2 iff
+     (x in the_set_of_RealSequences &  seq_id(x) rto_power p is summable);
+A5: X1 c= X2
+    proof
+      let x be set;
+      assume x in X1; then
+      x in the_set_of_RealSequences &
+      (x in the_set_of_RealSequences & seq_id(x) rto_power p is summable)
+      by A3;
+      hence x in X2 by A4;
+   end;
+   X2 c= X1
+   proof
+       let x be set;
+        assume x in X2; then
+        x in the_set_of_RealSequences & (x in the_set_of_RealSequences
+        & seq_id(x) rto_power p is summable) by A4;
+      hence x in X1 by A3;
+    end;
+  hence thesis by A5,XBOOLE_0:def 10;
+  end;
+end;
+
+ reserve x1,x2,y1,y2,p,q,a,b,c for Real;
+
+REM04:
+x1 >= 0 & y1 > 0 implies x1 to_power y1 >= 0
+proof
+assume that
+q1:x1 >= 0 and 
+q2:y1 > 0;
+   x1>0 or x1=0 by q1;
+hence x1 to_power y1 >= 0 by q2,POWER:def 2,POWER:39;
+end;
+
+REM06:
+y1>0 & x1>=0 & x2>=0 implies
+  (x1*x2) to_power y1 = (x1 to_power y1) * (x2 to_power y1)
+proof
+assume 
+A00: y1>0 & x1>=0 & x2>=0; then
+A01: (x1>0 & x2>0) or (x1>0 & x2=0) or
+       (x1=0 & x2>0) or (x1=0 & x2=0);
+per cases by A00;
+   suppose x1>0 & x2>0;
+    hence (x1*x2) to_power y1=(x1 to_power y1) * (x2 to_power y1) by POWER:35;
+  end;
+    suppose Q:x1>0 & x2=0; then
+q1:   x1 * x2=0;
+q2:   x2 to_power y1 = 0 by Q,A00,POWER:def 2;
+      hence (x1*x2) to_power y1=(x1 to_power y1) * (x2 to_power y1) by Q;
+    end;
+    suppose Q:x1=0 & x2>0; then
+q1:   x1 * x2=0;
+q2:   x1 to_power y1 = 0 by Q,A00,POWER:def 2;
+      hence (x1*x2) to_power y1=(x1 to_power y1) * (x2 to_power y1) by Q;
+    end;
+    suppose Q: x1=0 & x2=0; then
+q1:   x1 * x2=0;
+q2:   x2 to_power y1 = 0 by Q,A00,POWER:def 2;
+      hence (x1*x2) to_power y1=(x1 to_power y1) * (x2 to_power y1) by Q;
+    end;
+end;
+
+theorem REM03:
+  a >= 0 & a < b & c > 0 implies a to_power c < b to_power c
+proof
+P:  a > 0 & a < b & c > 0 implies a to_power c < b to_power c by POWER:42;
+P1:  a = 0 & c > 0 implies a to_power c = 0 by POWER:def 2;
+  hence thesis by POWER:42,POWER:39;
+end;
+
+sub1:
+ for p be Real st 1 = p 
+ for a,b be Real_Sequence
+ for n be Nat holds
+  (Partial_Sums((a + b) rto_power p).n) to_power (1/p) <=
+  (Partial_Sums(a rto_power p).n) to_power (1/p) +
+  (Partial_Sums(b rto_power p).n) to_power (1/p)
+   proof
+      let p be Real such that
+A01:p=1;
+      let a,b be Real_Sequence;
+      let n be Nat;
+A03: now let n be Nat;
+      thus ((a + b) rto_power p).n = abs((a + b).n) to_power p by def_1
+      .=abs((a + b).n) by A01,POWER:30;thus
+    (a rto_power p).n = abs(a .n) to_power p by def_1
+      .=abs(a .n) by A01,POWER:30;thus
+    (b rto_power p).n = abs(b .n) to_power p by def_1
+      .=abs(b .n) by A01,POWER:30;
+      end; then
+A04: (a + b) rto_power p = abs(a + b) by SEQ_1:16;
+A05: a rto_power p = abs(a) by SEQ_1:16,A03;
+A06: b rto_power p = abs(b) by SEQ_1:16,A03;
+A07: (Partial_Sums((a + b) rto_power p).n) to_power (1/p)
+      =(Partial_Sums(abs(a + b)).n) by A01,POWER:30,A04;
+A08: (Partial_Sums(a rto_power p).n) to_power (1/p)
+      =(Partial_Sums(abs(a)).n) by A01,POWER:30,A05;
+A09: (Partial_Sums(b rto_power p).n) to_power (1/p)
+      =(Partial_Sums(abs(b)).n) by A01,POWER:30,A06;
+A10:for n be Nat holds abs((a + b).n) <= abs(b .n) + abs(a .n)
+   proof
+    let n be Nat;
+    abs((a + b).n)=abs(a.n + b.n) by SEQ_1:11;
+    hence thesis by ABSVALUE:13;
+    end;
+   deffunc F(Nat) =abs(a .($1)) + abs(b .($1));
+   consider c be Real_Sequence such that
+A11:for n be Nat holds c.n= F(n) from SEQ_1:sch 1;
+A12:now let n be Nat;
+q00:abs((a + b).n) <= abs(b .n) + abs(a .n) by A10;
+q01:abs((a + b).n)=abs(a+b).n by SEQ_1:16;
+   thus abs(a+b).n <= c.n by q00,q01,A11;
+ end;
+A13:now let n be Nat;
+q2: abs(b.n)=abs (b).n by SEQ_1:16;
+q3: abs(a.n)=abs (a).n by SEQ_1:16;
+    thus c.n=abs (a).n + abs (b).n by q2,q3,A11
+        .=(abs a + abs b).n by SEQ_1:11;
+     end;
+ A14: c = abs a + abs b
+       proof
+       for n be set st n in NAT holds
+       c.n = (abs (a) + abs (b)).n by A13;
+   hence c = (abs (a) + abs (b)) by SEQ_1:8;
+  end; 
+W1: Partial_Sums(abs(a+b)).n<=Partial_Sums(c).n by SERIES_1:17,A12; then
+W2: Partial_Sums(abs(a+b)).n <=
+      Partial_Sums(abs (a) + abs (b)).n by A14;
+      Partial_Sums(abs (a) + abs (b)) =
+      Partial_Sums(abs a) + Partial_Sums(abs(b)) by SERIES_1:8;
+       hence (Partial_Sums((a + b) rto_power p).n) to_power (1/p)
+       <=(Partial_Sums(a rto_power p).n) to_power (1/p)
+       + (Partial_Sums(b rto_power p).n) to_power (1/p)
+         by A07,A08,A09,W2,SEQ_1:11;
+   end;
+
+theorem LM10:
+ for p be Real st 1 <= p
+ for a,b be Real_Sequence
+ for n be Nat holds
+  (Partial_Sums((a + b) rto_power p).n) to_power (1/p) <=
+  (Partial_Sums(a rto_power p).n) to_power (1/p) +
+  (Partial_Sums(b rto_power p).n) to_power (1/p)
+   proof
+   let p be Real such that
+   A01: 1<=p;
+   let a,b be Real_Sequence;
+   set ap = a rto_power p;
+   set bp = b rto_power p;
+   set ab= ((a + b) rto_power p);
+   let n be Nat;
+L: p > 1 or p=1 by A01,REAL_1:def 5;
+   now per cases by A01,REAL_1:def 5;
+   case 
+   L1:p > 1;
+a0:now let n be Nat;
+a1:  (a rto_power p).n =abs(a .n) to_power p by def_1;
+a2:  (b rto_power p).n =abs(b .n) to_power p by def_1;
+a3:  ((a + b) rto_power p).n =abs((a + b).n) to_power p by def_1
+      .=abs(a.n+b.n) to_power p by SEQ_1:11;
+        thus ap.n = abs(a .n) to_power p by a1;
+        thus bp.n = abs(b .n) to_power p by def_1;
+        thus ab.n = abs(a.n+b.n) to_power p by a3;
+    end;  
+    hence (Partial_Sums((a + b) rto_power p).n) to_power (1/p) <=
+        (Partial_Sums(a rto_power p).n) to_power (1/p) +
+        (Partial_Sums(b rto_power p).n) to_power (1/p) by L1,HOLDER_1:7;
+    end;
+    case p=1;
+    hence (Partial_Sums((a + b) rto_power p).n) to_power (1/p) <=
+     (Partial_Sums(a rto_power p).n) to_power (1/p) +
+     (Partial_Sums(b rto_power p).n) to_power (1/p) by sub1;
+    end;
+   end;
+ hence thesis;
+ end;
+
+sub2:
+for a,b be Real_Sequence
+for p be Real st 1 = p &
+  ((a rto_power p) is summable) &
+  ((b rto_power p) is summable) holds
+  ((a+b) rto_power p) is summable &
+ (Sum((a + b) rto_power p)) to_power (1/p) <=
+ (Sum(a rto_power p)) to_power (1/p) + (Sum(b rto_power p)) to_power (1/p)
+proof
+ let a,b be Real_Sequence;
+ let p be Real such that
+A01:p=1 and
+A00:a rto_power p is summable and
+A02:b rto_power p is summable;
+A03: now let n be Nat;thus
+       ((a + b) rto_power p).n = abs((a + b).n) to_power p by def_1
+      .=abs((a + b).n) by A01,POWER:30;thus
+      (a rto_power p).n = abs(a .n) to_power p by def_1
+      .=abs(a .n) by A01,POWER:30;
+      thus (b rto_power p).n = abs(b .n) to_power p by def_1
+      .=abs(b .n) by A01,POWER:30;
+      end; then
+A04: (a + b) rto_power p = abs(a + b) by SEQ_1:16;
+A05: a rto_power p = abs(a) by SEQ_1:16,A03;
+A06: b rto_power p = abs(b) by SEQ_1:16,A03;
+A07:(Sum((a + b) rto_power p)) to_power (1/p)
+      =Sum(abs(a + b)) by A01,POWER:30,A04;
+A08:(Sum((a) rto_power p)) to_power (1/p)
+      =Sum(abs(a)) by A01,POWER:30,A05;
+A09:(Sum((b) rto_power p)) to_power (1/p)
+      =Sum(abs(b)) by A01,POWER:30,A06;
+A11:abs(a) is summable by A00,A05;
+A12:abs(b) is summable by A02,A06;
+A13:a is absolutely_summable by A11,SERIES_1:def 5;
+A14:b is absolutely_summable by A12,SERIES_1:def 5;
+A15:a = seq_id (a) & b = seq_id (b) by RSSPACE:3;
+A16:seq_id (a) is absolutely_summable &
+      seq_id (b) is absolutely_summable by A13,A14,A15;
+      reconsider a1=a as VECTOR of l1_Space by A16,RSSPACE3:8;
+      reconsider b1=b as VECTOR of l1_Space by A16,RSSPACE3:8;
+A17: ||.a1+b1.|| <= ||.a1.|| + ||.b1.|| by RSSPACE3:9;
+A18: ||.a1+b1.|| = (the norm of l1_Space).(a1+b1) by NORMSP_1:def 1
+       .=Sum(abs(seq_id(a1+b1))) by RSSPACE3:def 2,RSSPACE3:def 3
+       .=Sum(abs(seq_id(seq_id(a1)+seq_id(b1)))) by RSSPACE3:8
+       .=Sum(abs(seq_id(a1)+seq_id(b1))) by RSSPACE:3;
+A19: ||.a1.|| = (the norm of l1_Space).(a1) by NORMSP_1:def 1
+       .=Sum(abs(seq_id(a1))) by RSSPACE3:def 2,RSSPACE3:def 3;
+A20: ||.b1.|| = (the norm of l1_Space).(b1) by NORMSP_1:def 1
+       .=Sum(abs(seq_id(b1))) by RSSPACE3:def 2,RSSPACE3:def 3;
+A21: Sum(abs(seq_id(a1)+seq_id(b1))) <=
+       Sum(abs(seq_id(a1)))+ Sum(abs(seq_id(b1))) by A17,A19,A20,A18;
+A25: seq_id(a1)=a by RSSPACE:3;
+A26: seq_id(b1)=b by RSSPACE:3;
+A28: Sum(abs(a+b)) <= Sum(abs(a)) + Sum(abs(b)) by A21,A25,A26;
+A34:(abs(a) + abs(b) is summable) &
+       Sum(abs(a) + abs(b))=Sum(abs(a))+Sum(abs(b))       
+     by SERIES_1:10,A11,A12;
+    deffunc F(Nat) =abs(a .($1)) + abs(b .($1));
+    consider c be Real_Sequence such that
+q4:for n be Nat holds c.n= F(n) from SEQ_1:sch 1;
+q0:now let n be Nat;
+q1:abs(a+b).n=abs((a+b).n) by SEQ_1:16;
+    hence abs(a+b).n>= 0 by ABSVALUE:5;
+q2: abs((a+b).n) =abs((a.n)+(b.n)) by SEQ_1:11; then
+q3:abs(a+b).n <= abs(a.n)+abs(b.n) by q1,ABSVALUE:13; thus
+q5: c.n=abs(a.n)+abs(b.n) by q4;
+q6: abs(a.n)+abs(b.n) = abs(a).n+abs(b.n) by SEQ_1:16
+     .=abs(a).n+abs(b).n by SEQ_1:16;thus
+     c.n =abs(a).n+abs(b).n by q4,q6;
+     thus abs(a+b).n <= c.n by q3,q4;
+end;
+c = abs(a) + abs(b) by q0,SEQ_1:11;
+ hence (a + b) rto_power p is summable by A04,A34,q0,SERIES_1:24;
+thus (Sum((a + b) rto_power p)) to_power (1/p)
+       <=(Sum((a) rto_power p)) to_power (1/p) +
+          (Sum((b) rto_power p)) to_power (1/p) by A28,A07,A08,A09;
+end;
+
+theorem LM11:
+for a,b be Real_Sequence
+for p be Real st 1 <= p &
+  (a rto_power p) is summable &
+  (b rto_power p) is summable
+ holds ((a+b) rto_power p) is summable &
+ (Sum((a + b) rto_power p)) to_power (1/p) <=
+ (Sum(a rto_power p)) to_power (1/p) +
+ (Sum(b rto_power p)) to_power (1/p)
+ proof  
+     let a,b be Real_Sequence;
+     let p be Real such that 
+A01: 1<=p and
+W1:((a rto_power p) is summable) and 
+W2:((b rto_power p) is summable);
+    set ap = a rto_power p;
+    set bp = b rto_power p;
+    set ab= ((a + b) rto_power p);
+a0:now let n be Nat;
+      a1:  (a rto_power p).n =abs(a .n) to_power p by def_1;
+      a2:  (b rto_power p).n =abs(b .n) to_power p by def_1;
+      a3:  ((a + b) rto_power p).n =abs((a + b).n) to_power p by def_1
+            .=abs(a.n+b.n) to_power p by SEQ_1:11;
+            thus ap.n= abs(a .n) to_power p by a1;
+            thus bp.n= abs(b .n) to_power p by a2;
+            thus ab.n= abs(a.n+b.n) to_power p by a3;
+          end;      
+L:  p > 1 or p=1 by A01,REAL_1:def 5;
+   now per cases by A01,REAL_1:def 5;
+      case 
+      L1:p > 1;
+        thus Sum(ab) to_power (1/p) <= Sum ap to_power (1/p)
+         + Sum(bp) to_power (1/p)
+         & ab is summable by a0,L1,W1,W2,HOLDER_1:13;
+         end;
+       case
+       L2:p=1;
+        thus Sum(ab) to_power (1/p) <= Sum(ap) to_power (1/p)
+                 + Sum(bp) to_power (1/p)
+         & ab is summable by sub2,L2,W1,W2;
+       end;
+      end;
+    hence thesis;
+ end;
+
+theorem LM14:
+for p be Real st 1 <= p holds
+the_set_of_RealSequences_l^p is lineary-closed
+proof
+ let p be Real such that
+ AS0: p >=1;
+ set W = the_set_of_RealSequences_l^p;
+  P1:for v,u be VECTOR of Linear_Space_of_RealSequences st
+      v in the_set_of_RealSequences_l^p &
+      u in the_set_of_RealSequences_l^p
+        holds v + u in the_set_of_RealSequences_l^p
+ proof
+     let v,u be VECTOR of Linear_Space_of_RealSequences such that
+AS1: v in W & u in W;
+AS4:  seq_id(v +u) rto_power p is summable
+    proof
+    AS41: seq_id(v) rto_power p is summable by def_2,AS1,AS0;
+    AS42: seq_id(u) rto_power p is summable by def_2,AS1,AS0;
+    1 > 0; then
+QS00: p > 0 by AS0;
+    then QS1: p <> 0;
+QS01:  1/p > 0 by QS00,REAL_2:127;
+    set p1=1/p;
+    set vp=seq_id(v) rto_power p;
+    set up=seq_id(u) rto_power p;
+QS2:  p * (1/p) = (p*1)/p by XCMPLX_1:75
+              .= 1 by QS1, XCMPLX_1:60;
+Q2:  vp is summable by AS41;
+Q3:  up is summable by AS42;
+W0: now
+        let n be Nat;
+     thus Q6S: vp.n=abs((seq_id(v)).n) to_power p by def_1; thus
+           Q7S: up.n=abs((seq_id(u)).n) to_power p by def_1; thus
+           Q8S: 0 <= abs((seq_id(v)).n) by ABSVALUE:5; thus
+           Q9S: 0 < abs((seq_id(v)).n) or 0=abs((seq_id(v)).n) by Q8S;
+           thus 0 <= vp.n by Q6S,Q9S,POWER:39,QS00,POWER:def 2; thus
+           Q11S: 0 <= abs((seq_id(u)).n) by ABSVALUE:5; thus
+           Q12S: 0 < abs((seq_id(u)).n) or 0=abs((seq_id(u)).n)
+         by Q11S; thus 0 <= up.n by Q7S,Q12S,QS00,POWER:39, POWER:def 2;
+    end;
+P8d1: Partial_Sums(up) is non-decreasing by SERIES_1:19,W0;
+P8d2: Partial_Sums(up) is bounded_above by SERIES_1:20,W0,Q3;
+        consider r1 be real number such that
+         P8d5:for n be set st n in dom Partial_Sums(up)
+        holds Partial_Sums(up).n<r1 by P8d2,SEQ_2:def 1;
+        reconsider r1 as Real by XREAL_0:def 1;
+        P8d6: dom Partial_Sums(up)=NAT by SEQ_1:4;
+       W2:now
+          let n be set such that e1:n in dom Partial_Sums(up);
+          e2:Partial_Sums(up).n<r1 by P8d5,e1;
+          reconsider n1=n as Nat by P8d6,e1;
+          e2d:Partial_Sums(up).n1<r1 by e2;
+   e3: Partial_Sums(up).0<=Partial_Sums(up).n1 by P8d1,SEQM_3:21;
+   0<=up.0 by W0;
+   then 0<=Partial_Sums(up).0 by SERIES_1:def 1;
+hence (Partial_Sums(up).n) to_power p1 < r1 to_power p1
+ by e3,e2d,REM03,QS01;
+end;
+deffunc F1(set)=(Partial_Sums(up).$1) to_power p1;
+P8d7:ex q1 be Real st for n be set st n in dom Partial_Sums(up)
+     holds (Partial_Sums(up).n) to_power p1 <q1 by W2;
+P9d1: Partial_Sums(vp) is non-decreasing by SERIES_1:19,W0;
+P9d2: Partial_Sums(vp) is bounded_above by SERIES_1:20,W0,Q2;
+      consider r be real number such that
+P9d5:for n be set st n in dom Partial_Sums(vp)
+     holds Partial_Sums(vp).n<r by P9d2,SEQ_2:def 1;
+     reconsider r as Real by XREAL_0:def 1;  
+P9d6: dom Partial_Sums(vp)=NAT by SEQ_1:4;
+W1:now 
+let n be set such that e1:n in dom Partial_Sums(vp);
+e2:Partial_Sums(vp).n<r by P9d5,e1;
+reconsider n1=n as Nat by P9d6,e1;
+e2d:Partial_Sums(vp).n1<r by e2;
+   e3: Partial_Sums(vp).0<=Partial_Sums(vp).n1 by P9d1,SEQM_3:21;
+   0<=vp.0 by W0;
+   then 0<=Partial_Sums(vp).0 by SERIES_1:def 1;
+hence (Partial_Sums(vp).n) to_power p1 < r to_power p1
+ by e3,e2d,REM03,QS01;
+end;
+P9d7:ex q be Real st for n be set st n in dom Partial_Sums(vp)
+     holds (Partial_Sums(vp).n) to_power p1 <q by W1;
+consider q be Real such that 
+P1d1: for n be set st n in dom Partial_Sums(vp)
+     holds (Partial_Sums(vp).n) to_power p1 <q by P9d7;
+consider q1 be Real such that 
+P1d2: for n be set st n in dom Partial_Sums(up)
+     holds (Partial_Sums(up).n) to_power p1 <q1 by P8d7;
+set g = q + q1;
+v in the_set_of_RealSequences by AS0,AS1,def_2;then
+reconsider vq=v as Real_Sequence by RSSPACE:def 1;
+u in the_set_of_RealSequences by AS0,AS1,def_2;then
+reconsider uq=u as Real_Sequence by RSSPACE:def 1;
+Qd1:  vp = vq rto_power p by RSSPACE:3;
+Qd2:  up = uq rto_power p by RSSPACE:3;
+Qd3:  for n be Nat holds
+ (Partial_Sums((vq + uq) rto_power p).n) to_power (1/p) <=
+ (Partial_Sums(up).n) to_power (1/p) +
+ (Partial_Sums(vp).n) to_power (1/p) by AS0,LM10,Qd1,Qd2;
+Qd11: now
+let n be Nat;
+    NAT=dom Partial_Sums(up) by SEQ_1:4; then
+a2:(Partial_Sums(up).n) to_power p1 <q1 by P1d2;
+   NAT=dom Partial_Sums(vp) by SEQ_1:4; then
+   (Partial_Sums(vp).n) to_power (1/p) < q by P1d1; then
+ a4:(Partial_Sums(up).n) to_power (1/p) +
+    (Partial_Sums(vp).n) to_power (1/p) < g by a2,REAL_1:67;
+ (Partial_Sums((vq + uq) rto_power p).n) to_power (1/p) <=
+ (Partial_Sums(up).n) to_power (1/p) +
+ (Partial_Sums(vp).n) to_power (1/p) by Qd3; then
+Qd4:  (Partial_Sums((vq + uq) rto_power p).n) to_power (1/p)
+       < g by AXIOMS:22,a4;
+Qd5:now
+assume
+(Partial_Sums((vq + uq) rto_power p).n) > 0;
+hence (Partial_Sums((vq + uq) rto_power p).n) to_power (1/p) to_power p =
+(Partial_Sums((vq + uq) rto_power p).n) to_power ((1/p)*p) by POWER:38
+ .= (Partial_Sums((vq + uq) rto_power p).n) by QS2,POWER:30;
+end;
+Qd6:now
+assume  
+a1:(Partial_Sums((vq + uq) rto_power p).n) = 0; 
+hence (Partial_Sums((vq + uq) rto_power p).n) to_power (1/p) to_power p =
+0 to_power p by POWER:def 2,QS01
+   .= (Partial_Sums((vq + uq) rto_power p).n) by a1,POWER:def 2,QS00;
+end;
+thus Qd7: now
+     let n be Nat;
+a1:((vq + uq) rto_power p).n =abs((vq + uq).n) to_power p by def_1;
+thus
+a3:0 < abs((vq + uq).n) or 0=abs((vq + uq).n) by ABSVALUE:5;
+thus 0 <= ((vq + uq) rto_power p).n by POWER:def 2,a3,a1,POWER:39,QS00;
+end;
+then
+Qd8:Partial_Sums((vq + uq) rto_power p) is non-decreasing by SERIES_1:19;
+Qd9:now 
+   a1: Partial_Sums((vq + uq) rto_power p).0
+       <=Partial_Sums((vq + uq) rto_power p).n by Qd8,SEQM_3:21;
+   0<=((vq + uq) rto_power p).0 by Qd7;
+  hence 0<=Partial_Sums((vq + uq) rto_power p).0 by SERIES_1:def 1;
+   hence 0<=Partial_Sums((vq + uq) rto_power p).n by a1;
+end; then
+Qdd1:(Partial_Sums((vq + uq) rto_power p).n) to_power (1/p) 
+         >=0 by REM04,QS01;  
+hence (Partial_Sums((vq + uq) rto_power p).n) < g to_power p
+             by REM03,QS00,Qd4,Qd5,Qd6,Qd9;
+end;
+
+for n be Nat holds (Partial_Sums((vq + uq) rto_power p) is bounded_above &
+ 0 <= ((vq + uq) rto_power p).n ) by SEQ_2:def 3,Qd11; then
+QQ0:((vq + uq) rto_power p) is summable by SERIES_1:20;
+zz1:seq_id(v)=vq by RSSPACE:3;
+zz2:seq_id(u)=uq by RSSPACE:3; then
+AS43: ((seq_id(v)+seq_id(u)) rto_power p) is summable by QQ0,zz1;
+seq_id(v)+seq_id(u) =seq_id(seq_id(v)+seq_id(u)) by RSSPACE:3
+                   .=seq_id(v+u) by RSSPACE:4,RSSPACE:def 7;
+hence ((seq_id(v+u)) rto_power p) is summable by AS43;
+end;
+cd:v + u =seq_id(v)+seq_id(u) by RSSPACE:4,RSSPACE:def 7
+                   .=seq_id(seq_id(v)+seq_id(u)) by RSSPACE:3
+                   .=seq_id(v+u) by RSSPACE:4,RSSPACE:def 7;
+   reconsider w = v + u as Real_Sequence by cd;
+   reconsider w as set;
+   w in the_set_of_RealSequences by RSSPACE:def 1;
+hence v +u in W by AS4,AS0,def_2;
+end;
+    for a be Real for v be VECTOR of Linear_Space_of_RealSequences
+    st v in W holds a * v in W
+proof
+let a be Real;
+let v be VECTOR of Linear_Space_of_RealSequences such that
+    AS1: v in W;
+ seq_id(a*v) rto_power p is summable
+proof
+  set vp = seq_id(v) rto_power p;
+PS2:vp is summable by AS1,def_2,AS0;
+  1 > 0 & p >= 1 by AS0; then
+QS00: p > 0;
+  set p1=1/p;
+Q4:  1 <= p by AS0;
+S5:  0 <  p by Q4,AXIOMS:22;
+PS3:now
+let n be Nat;
+QA1:vp.n=abs((seq_id(v)).n) to_power p by def_1;thus
+QA2:  0 <= abs((seq_id(v)).n) by ABSVALUE:5; thus
+QA3:  0 < abs((seq_id(v)).n) or 0=abs((seq_id(v)).n) by QA2;
+   thus 0 <= vp.n by QA1,QA3, POWER:39,S5,POWER:def 2;
+end;
+PS6: Partial_Sums(vp) is bounded_above by SERIES_1:20,PS3,PS2;
+PS7t: ex r be real number st for n be set st n in dom Partial_Sums(vp)
+     holds Partial_Sums(vp).n<r by PS6,SEQ_2:def 1;
+ set q1 = seq_id(a*v) rto_power p;
+ reconsider a1=a as real number;
+      v in the_set_of_RealSequences by AS0,AS1,def_2;then
+ reconsider vq=v as Real_Sequence by RSSPACE:def 1;
+ reconsider v1=v as VECTOR of 
+      RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #)
+     by AS0,AS1,def_2;
+PS8t:  seq_id(a*v)= seq_id(a(#)seq_id(v)) by RSSPACE:def 7, RSSPACE:5
+                .=(a(#)seq_id(v)) by RSSPACE:3;
+PS9:  for n be Nat holds
+    Partial_Sums(seq_id(a*v) rto_power p).n
+    = (abs(a) to_power p)* Partial_Sums(seq_id(v) rto_power p).n
+proof
+qw1:now
+let n be Nat;
+b1: abs(a)>=0 by ABSVALUE:5;
+b2: abs((seq_id(v)).n) >= 0 by ABSVALUE:5;           
+a1:     (seq_id(a*v) rto_power p).n 
+       = ((a(#)seq_id(v)) rto_power p).n by PS8t;
+a2:    (a(#)seq_id(v)).n = a * (seq_id(v)).n by SEQ_1:13;
+        ((a(#)seq_id(v)) rto_power p).n 
+       =  abs((a(#)seq_id(v)).n) to_power p by def_1
+      .=((abs(a)* abs((seq_id(v)).n))) to_power p by ABSVALUE:10,a2
+      .=(abs(a) to_power p)
+                  * ((abs((seq_id(v)).n)) to_power p) by REM06,b1,b2,QS00;
+hence (seq_id(a*v) rto_power p).n
+       = (abs(a) to_power p)
+            * ((seq_id(v)) rto_power p).n by def_1,a1
+      .= ((abs(a) to_power p)
+           (#) ((seq_id(v)) rto_power p)).n by SEQ_1:13;
+end;
+qw2:(seq_id(a*v) rto_power p)= ((abs(a) to_power p)
+                             (#) ((seq_id(v)) rto_power p)) 
+proof
+for n be set st n in  NAT holds
+(seq_id(a*v) rto_power p).n= ((abs(a) to_power p)
+                   (#) ((seq_id(v)) rto_power p)).n by qw1;
+hence
+(seq_id(a*v) rto_power p)= ((abs(a) to_power p)
+                             (#) ((seq_id(v)) rto_power p)) by SEQ_1:8;
+end;
+qw3:Partial_Sums(((abs(a) to_power p)
+                             (#) ((seq_id(v)) rto_power p))) 
+   = ((abs(a) to_power p) (#)Partial_Sums( ((seq_id(v)) rto_power p)))
+                       by SERIES_1:12;
+qw4:Partial_Sums(seq_id(a*v) rto_power p) = ((abs(a) to_power p)
+                 (#)Partial_Sums( ((seq_id(v)) rto_power p))) by qw3,qw2;
+let n be Nat;
+thus Partial_Sums(seq_id(a*v) rto_power p).n
+               =(abs(a) to_power p)
+                * Partial_Sums ((seq_id(v)) rto_power p).n by SEQ_1:13,qw4;
+end;
+consider r be real number such that
+PSD1:for n be set st n in dom Partial_Sums(seq_id(v) rto_power p)
+     holds Partial_Sums(vp).n<r by PS7t;
+e0:  0 <=abs(a) by ABSVALUE:5; then
+a0d: (0<(abs(a) to_power p)) or 0=(abs(a) to_power p) by S5,REM04;
+PSD2: now
+     let n be set such that
+a1:  n in dom Partial_Sums(seq_id(v) rto_power p);
+a2:  dom Partial_Sums(seq_id(v) rto_power p)= NAT by SEQ_1:3;
+hence n in dom Partial_Sums(seq_id(a*v) rto_power p) by a1,SEQ_1:3;
+a4:  Partial_Sums(seq_id(v) rto_power p).n<r by a1,PSD1;
+thus ( ((abs(a) to_power p) *
+              Partial_Sums(seq_id(v) rto_power p).n 
+                 < (abs(a) to_power p) * r )) or ( ((abs(a) to_power p) *
+              Partial_Sums(seq_id(v) rto_power p).n )
+                = (abs(a) to_power p) * r ) by a4, a0d, REAL_1:70;
+ end;
+PSD3: for n be set st 
+     n in dom Partial_Sums(seq_id(a*v) rto_power p)
+     holds Partial_Sums(seq_id(a*v) rto_power p).n
+       <(abs(a) to_power p) * r or
+     Partial_Sums(seq_id(a*v) rto_power p).n = (abs(a) to_power p) * r
+proof
+ let n be set such that
+a0:n in dom Partial_Sums(seq_id(a*v) rto_power p);
+a1: n in NAT by a0,SEQ_1:3;
+then n in dom Partial_Sums(seq_id(v) rto_power p) by SEQ_1:3;
+then
+a2:(abs(a) to_power p)
+        * Partial_Sums(seq_id(v) rto_power p).n
+            < (abs(a) to_power p) * r or
+     ( ((abs(a) to_power p) *
+              Partial_Sums(seq_id(v) rto_power p).n )
+                = (abs(a) to_power p) * r ) by PSD2;
+reconsider n1=n as Nat by a1;
+Partial_Sums(seq_id(a*v) rto_power p).n1
+       <(abs(a) to_power p) * r or
+     Partial_Sums(seq_id(a*v) rto_power p).n1
+      =(abs(a) to_power p) * r by PS9,a2;
+hence Partial_Sums(seq_id(a*v) rto_power p).n
+       <(abs(a) to_power p) * r or
+     Partial_Sums(seq_id(a*v) rto_power p).n
+      =(abs(a) to_power p) * r;
+end;
+PSD4:  ex r1 be real number st for n be set st n in 
+    dom Partial_Sums(seq_id(a*v) rto_power p) holds
+     Partial_Sums(seq_id(a*v) rto_power p).n<r1
+proof
+take r1 = (abs(a) to_power p) * r + 1;
+reconsider r1 as real number;
+a1:for n be set st
+     n in dom Partial_Sums(seq_id(a*v) rto_power p)
+     holds Partial_Sums(seq_id(a*v) rto_power p).n<r1
+     proof
+        let n be set such that
+a0:n in dom Partial_Sums(seq_id(a*v) rto_power p);
+a1: n in NAT by a0,SEQ_1:3;
+reconsider n1=n as Nat by a1;
+a2:(abs(a) to_power p) * r <(abs(a) to_power p) * r +1 by REAL_1:69;
+a3:Partial_Sums(seq_id(a*v) rto_power p).n1
+       <(abs(a) to_power p) * r implies
+   Partial_Sums(seq_id(a*v) rto_power p).n1
+       <(abs(a) to_power p) * r +1 by a2,AXIOMS:22;
+a4: Partial_Sums(seq_id(a*v) rto_power p).n1
+      =(abs(a) to_power p) * r implies
+   Partial_Sums(seq_id(a*v) rto_power p).n1
+       <(abs(a) to_power p) * r +1 by REAL_1:69;
+ hence thesis by a3,PSD3,a0;
+     end;
+thus thesis by a1;
+end;
+PSD6:for n be Nat holds (seq_id(a*v) rto_power p).n >= 0
+ proof
+   let n be Nat;
+a1:     (seq_id(a*v) rto_power p).n
+       = ((a(#)seq_id(v)) rto_power p).n by PS8t;
+a2:    (a(#)seq_id(v)).n = a * (seq_id(v)).n by SEQ_1:13;
+     set b = (a(#)seq_id(v));
+a3:    (b rto_power p).n = abs(a * (seq_id(v)).n) to_power p by a2,def_1;
+a4: 1 <= p by AS0;
+    1 > 0 & p >= 1 by a4; then
+a5: p > 0;
+a6: abs(a * (seq_id(v)).n) >= 0 by ABSVALUE:5;
+hence (seq_id(a*v) rto_power p).n >= 0 by a1,a3,REM04,a5;
+end;
+      Partial_Sums(seq_id(a*v) rto_power p) is bounded_above
+    by PSD4,SEQ_2:def 1;
+hence (seq_id(a*v) rto_power p) is summable by PSD6,SERIES_1:20;
+ end;
+hence a*v in W by AS0,RSSPACE:def 7,def_2;
+end;
+hence thesis by P1,RLSUB_1:def 1;
+end;
+
+theorem LM15:
+for p be Real st 1 <= p holds
+RLSStruct (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences) #)
+is Subspace of Linear_Space_of_RealSequences 
+proof
+  let p be Real such that
+AS1: 1 <= p;
+  the_set_of_RealSequences_l^p is lineary-closed by AS1,LM14;
+  hence thesis by RSSPACE:13;
+end;
+
+theorem LM17:
+for p be Real st 1 <= p holds
+  RLSStruct (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences)
+        #)
+      is Abelian add-associative right_zeroed right_complementable
+        RealLinearSpace-like by LM15;
+
+theorem LM18:
+   for p be Real st 1 <= p holds
+   RLSStruct (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences) #)
+   is RealLinearSpace by LM17;
+
+LM19:
+ for p be Real holds
+  ex NORM be Function of the_set_of_RealSequences_l^p,REAL st
+   for x be set st x in the_set_of_RealSequences_l^p holds
+    NORM.x =( Sum(seq_id(x) rto_power p) ) to_power (1/p)
+proof
+  let p be Real;
+  deffunc F(set) =( Sum(seq_id($1) rto_power p) ) to_power (1/p);
+A1:for z be set st z in the_set_of_RealSequences_l^p holds F(z) in REAL;
+   ex f being Function of the_set_of_RealSequences_l^p,REAL st
+     for x being set st x in the_set_of_RealSequences_l^p holds
+       f.x = F(x) from FUNCT_2:sch 2(A1);
+   hence thesis;
+end;
+
+definition
+  let p be Real;
+  func l_norm^p -> Function of the_set_of_RealSequences_l^p, REAL means
+    :def_3: for x be set st x in the_set_of_RealSequences_l^p  holds
+    it.x = ( Sum(seq_id(x) rto_power p) ) to_power (1/p);
+existence by LM19;
+uniqueness
+proof
+   let NORM1,NORM2 be Function of the_set_of_RealSequences_l^p , REAL such that
+A1:(for x be set st x in the_set_of_RealSequences_l^p holds
+     NORM1.x = ( Sum(seq_id(x) rto_power p) ) to_power (1/p) ) and
+A2:(for x be set st x in the_set_of_RealSequences_l^p holds
+     NORM2.x = ( Sum(seq_id(x) rto_power p) ) to_power (1/p));
+A3:dom NORM1 = the_set_of_RealSequences_l^p &
+     dom NORM2 = the_set_of_RealSequences_l^p by FUNCT_2:def 1;
+   for z be set st z in the_set_of_RealSequences_l^p holds NORM1.z = NORM2.z
+   proof
+     let z be set such that
+A4:  z in the_set_of_RealSequences_l^p;
+     NORM1.z = ( Sum(seq_id(z) rto_power p) ) to_power (1/p) by A1,A4;
+     hence thesis by A2,A4;
+  end;
+  hence thesis by A3,FUNCT_1:9;
+end;
+end;
+
+theorem LM20:
+for p be Real st 1 <= p holds
+   NORMSTR (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+         l_norm^p #) is RealLinearSpace
+proof
+let p be Real such that
+  AS1: 1 <= p;
+   RLSStruct (# the_set_of_RealSequences_l^p,
+          Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+          Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+          Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences) #)
+     is RealLinearSpace by LM18,AS1;
+   hence thesis by RSSPACE3:4;
+end;
+
+theorem LM21:
+for p be Real st p >= 1 holds
+NORMSTR (# the_set_of_RealSequences_l^p,
+     Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+      Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p  #) is Subspace of Linear_Space_of_RealSequences
+proof
+  let p be Real such that
+   AS1: 1 <= p;
+   set l_Space_p = NORMSTR (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+         l_norm^p  #);
+ q5:l_Space_p is RealLinearSpace by AS1,LM20;
+set w1=
+RLSStruct (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences)
+        #);
+set V =Linear_Space_of_RealSequences;
+w1 is Subspace of V by LM15,AS1;
+then the carrier of w1 c= the carrier of V &
+    the Zero of w1 = the Zero of V &
+    the add of w1 = (the add of V) | [:the carrier of w1,the carrier of w1:] &
+    the Mult of w1 = (the Mult of V) | [:REAL, the carrier of w1:] 
+  by RLSUB_1:def 2;
+ hence l_Space_p is Subspace of V by RLSUB_1:def 2, q5;
+end;
+
+begin :: The Banach Space of l^p Real Sequences
+
+theorem LM22:
+for p be Real st 1 <=p holds
+  for lp be non empty NORMSTR st lp
+     =  NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #) holds
+  the carrier of lp = the_set_of_RealSequences_l^p &
+ ( for x be set holds x is VECTOR of lp
+    iff x is Real_Sequence & seq_id(x) rto_power p is summable ) &
+ 0.lp = Zeroseq &
+ ( for x be VECTOR of lp holds x =seq_id(x) ) &
+ ( for x,y be VECTOR of lp holds x+y =seq_id(x)+seq_id(y) ) &
+( for r be Real for x be VECTOR of lp holds r*x = r(#)seq_id(x) ) &
+( for x be VECTOR of lp holds
+   -x = -seq_id(x) & seq_id(-x) = -seq_id(x) ) &
+( for x,y be VECTOR of lp holds x-y =seq_id(x)-seq_id(y) ) &
+( for x be VECTOR of lp holds
+seq_id(x) rto_power p is summable ) &
+( for x be VECTOR of
+lp holds ||.x.|| = ( Sum(seq_id(x) rto_power p) ) to_power (1/p) )
+proof
+ let p be Real such that
+  q1: 1<= p;
+ let lp be non empty NORMSTR such that
+  q2:   lp = NORMSTR (# the_set_of_RealSequences_l^p,
+           Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+           Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+           Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+         l_norm^p  #);
+A1:for x be set holds x is Element of lp
+     iff x is Real_Sequence & seq_id(x) rto_power p is summable
+   proof
+     let x be set;  
+   a2:   x is Element of the carrier of lp iff x is Element of
+          the_set_of_RealSequences_l^p by q2;
+   a4:  x in the_set_of_RealSequences_l^p iff seq_id(x) rto_power p
+          is summable & x in the_set_of_RealSequences by def_2,q1;
+     hence thesis by a2,RSSPACE:def 1;
+     end;
+ A2: for x be set holds x is VECTOR of lp implies x =seq_id(x)
+   proof
+     let x be set;
+a1:     x is VECTOR of lp iff x is Element of
+                       the_set_of_RealSequences_l^p by q2;
+a2:     x in the_set_of_RealSequences_l^p iff seq_id(x) rto_power p
+          is summable & x in the_set_of_RealSequences by def_2,q1;
+ a3:  x in the_set_of_RealSequences iff x is Real_Sequence by RSSPACE:def 1;
+ hence thesis by q2,a2,RSSPACE:3;
+ end;
+A3:0.lp = Zeroseq
+   proof
+a2:     the_set_of_RealSequences_l^p is lineary-closed by LM14,q1;
+         thus 0.lp = Zero_(the_set_of_RealSequences_l^p
+                                       ,Linear_Space_of_RealSequences)
+                 by RLVECT_1:def 2,q2
+              .= 0.Linear_Space_of_RealSequences 
+                        by RSSPACE:def 10,a2
+              .= Zeroseq by RLVECT_1:def 2,RSSPACE:def 7;
+  end; 
+A5:for x,y be VECTOR of lp holds x+y =seq_id(x)+seq_id(y)
+   proof
+     let x,y be VECTOR of lp;     
+e1:   lp is Subspace of Linear_Space_of_RealSequences by LM21,q1,q2;
+        reconsider x1=x as 
+           VECTOR of Linear_Space_of_RealSequences by RLSUB_1:18,e1;
+        reconsider y1=y as 
+           VECTOR of Linear_Space_of_RealSequences by RLSUB_1:18,e1;
+     set L1=Linear_Space_of_RealSequences;
+     set W = the_set_of_RealSequences_l^p;
+z1:     x in W by q2;
+z2:    y in W by q2;
+qw:        W is lineary-closed by LM14,q1;
+          dom (the add of L1)
+            = [:the carrier of L1,the carrier of L1:] by FUNCT_2:def 1; then
+          dom ((the add of Linear_Space_of_RealSequences) | [:W,W:])
+            =[:W,W:] by RELAT_1:91; then 
+e3:    [x,y] in dom ((the add of Linear_Space_of_RealSequences)|[:W,W:])
+          by q2;
+         x+y=(the add of lp).[x,y] by RLVECT_1:def 3
+            .= ((the add of Linear_Space_of_RealSequences)|[:W,W:]).[x,y]
+              by RSSPACE:def 8, qw,q2
+             .=(the add of Linear_Space_of_RealSequences).[x,y]
+            by e3,FUNCT_1:70
+             .=x1+y1 by RLVECT_1:def 3;
+          hence thesis by RSSPACE:4,RSSPACE:def 7;
+          end;           
+A6:for r be Real for x be VECTOR of lp holds r*x =r(#)seq_id(x)
+   proof
+     let r be Real;
+     let x be VECTOR of lp;
+ e1:   lp is Subspace of Linear_Space_of_RealSequences by LM21,q1,q2;
+         reconsider x1=x as 
+           VECTOR of Linear_Space_of_RealSequences by RLSUB_1:18,e1;
+     set L1=Linear_Space_of_RealSequences;
+     set W = the_set_of_RealSequences_l^p;
+A7: [:REAL,W:] c= [:REAL,the carrier of L1:] by ZFMISC_1:119;
+     dom (the Mult of L1) = [:REAL,the carrier of L1:] by FUNCT_2:def 1; then
+     dom ((the Mult of Linear_Space_of_RealSequences) | [:REAL,W:])
+       =[:REAL,W:] by A7,RELAT_1:91; then
+A8:  [r,x] in dom ((the Mult of Linear_Space_of_RealSequences)|[:REAL,W:])
+     by q2;
+qw:        W is lineary-closed by LM14,q1;       
+    r*x =(the Mult of lp).[r,x] by RLVECT_1:def 4
+        .=((the Mult of Linear_Space_of_RealSequences)|[:REAL,W:]).[r,x]
+        by RSSPACE:def 9,qw,q2
+        .=(the Mult of Linear_Space_of_RealSequences).[r,x]
+        by A8,FUNCT_1:70
+        .=r*x1 by RLVECT_1:def 4;
+     hence thesis by RSSPACE:5,def 7;
+   end;
+A8:for x be VECTOR of lp holds (-x =-seq_id(x) & seq_id(-x)=-seq_id(x))
+   proof
+     let x be VECTOR of lp;
+     lp is Subspace of Linear_Space_of_RealSequences by LM21,q1,q2;
+     then -x = (-1)*x by RLVECT_1:29
+         .= (-1) (#) seq_id(x) by A6
+        .= -seq_id(x) by SEQ_1:25;
+     hence thesis by A2;
+   end;
+   A9:for x,y be VECTOR of lp holds x-y =seq_id(x)-seq_id(y)
+      proof
+     let x,y be VECTOR of lp;
+     thus x-y = x+(-y) by RLVECT_1:def 11
+                .= seq_id(x)+seq_id(-y) by A5
+                .= seq_id(x)+(-seq_id(y)) by A8
+                .= seq_id(x)-seq_id(y) by SEQ_1:15;
+      end;
+   for x be VECTOR of lp holds ||.x.|| =
+           ( Sum(seq_id(x) rto_power p) ) to_power (1/p)
+   proof
+     let x be VECTOR of lp;
+     thus ||.x.|| = (the norm of lp).x by NORMSP_1:def 1
+       .= ( Sum(seq_id(x) rto_power p) ) to_power (1/p) by def_3,q2;
+   end;
+   hence thesis by A1,A2,A3,A5,A6,A8,A9,q2;
+end;
+
+theorem LM23:
+for p be Real st p>=1 holds
+for rseq be Real_Sequence
+   st (for n be Nat holds rseq.n=0) holds
+    (rseq rto_power p is summable
+ &  ( Sum(rseq rto_power p) ) to_power (1/p)=0 )
+proof
+     let p be Real such that
+A00:      p>=1;
+e02: p>0 by A00,AXIOMS:22;
+z2:  1/p > 0 by e02,REAL_2:127;
+     let rseq be Real_Sequence such that
+A01: for n be Nat holds rseq.n=0;
+A02: for n be Nat holds (rseq rto_power p).n=0
+   proof      
+       let n be Nat;
+       rseq.n=0 by A01;then
+       abs((rseq).n) =0 by ABSVALUE:7;then
+q01: abs((rseq).n) to_power p =0 by POWER:def 2,e02;
+       hence thesis by def_1;
+     end;
+A04:  for m be Nat holds Partial_Sums (rseq rto_power p).m = 0
+     proof
+       let m be Nat;
+       defpred P[Nat] means (rseq rto_power p).$1 
+       = (Partial_Sums(rseq rto_power p)).$1;
+A05:    P[0] by SERIES_1:def 1;
+A06:    for k be Nat st P[k] holds P[k+1]
+       proof
+         let k be Nat such that
+A07:      (rseq rto_power p).k
+             = (Partial_Sums (rseq rto_power p)).k;
+         thus (rseq rto_power p).(k+1) = 0 + (rseq rto_power p).(k+1)
+          .= (rseq rto_power p).k + (rseq rto_power p).(k+1) by A02
+          .= (Partial_Sums ((rseq rto_power p))).(k+1) by A07,SERIES_1:def 1;
+       end;
+       for n be Nat holds P[n] from NAT_1:sch 1(A05,A06);
+       hence (Partial_Sums ((rseq rto_power p))).m 
+                = (rseq rto_power p).m .= 0 by A02;
+     end;
+A08:  Sum(rseq rto_power p) =0 & (rseq rto_power p) is summable
+     proof
+A09:    for e be real number st 0<e
+        ex n be Nat st for m be Nat st n<=m holds
+         abs((Partial_Sums (rseq rto_power p)).m-0)<e
+       proof
+         let e be real number such that
+A10:   0<e;
+         take 0;
+         let m be Nat such that 0<=m;
+         abs((Partial_Sums (rseq rto_power p)).m-0)
+            = abs(0-0) by A04
+           .= 0 by ABSVALUE:def 1;
+         hence abs((Partial_Sums (rseq rto_power p)).m-0)<e by A10;
+       end; then
+A11:    Partial_Sums (rseq rto_power p) is convergent 
+        by SEQ_2:def 6; then
+A12:   (rseq rto_power p) is summable by SERIES_1:def 2;
+       lim (Partial_Sums (rseq rto_power p)) =0 by A09,A11,SEQ_2:def 7;
+       hence thesis by A12,SERIES_1:def 3;
+     end;
+     hence thesis by z2,POWER:def 2;
+end;
+
+theorem LM24:
+  for p be Real st 1 <=p
+  for rseq be Real_Sequence st
+  (rseq rto_power p is summable
+   & ( Sum(rseq rto_power p) ) to_power (1/p)=0 ) holds
+  for n be Nat holds rseq.n = 0
+proof
+   let p be Real such that
+A00: 1 <=p;
+A02: p>0 by A00,AXIOMS:22; then
+z0:  p <> 0;
+z2:  1/p > 0 by A02,REAL_2:127;
+   let rseq being Real_Sequence such that
+A03:rseq rto_power p is summable and
+A04: Sum(rseq rto_power p) to_power (1/p)=0;
+A05:  for i be Nat holds ((rseq) rto_power p).i >= 0
+        proof
+         let i be Nat;
+j1:      ( (rseq) rto_power p).i
+           =abs((rseq).i) to_power p by def_1;
+j2:       abs((rseq).i) >=0 by ABSVALUE:5;
+          hence ((rseq) rto_power p).i >= 0 by j1,A02,REM04;
+        end;
+ A06:(Sum(rseq rto_power p) ) >= 0 by A05,A03,SERIES_1:21;
+A07: ( (Sum(rseq rto_power p) ) to_power (1/p)) to_power p
+      =(Sum(rseq rto_power p) ) to_power((1/p)*p)
+    by A02,z2,A06,HOLDER_1:2
+     .=(Sum(rseq rto_power p) ) to_power(1) by XCMPLX_1:107,z0
+     .=(Sum(rseq rto_power p) ) by POWER:30;
+A08: 0 to_power p =0 by POWER:def 2,A02; then
+A09: (Sum(rseq rto_power p) ) = 0 by A07,A04;
+A10: for n be Nat holds (rseq rto_power p).n =0
+     by A03,A05,A09,RSSPACE:21;
+     now
+       let n be Nat;
+       (rseq rto_power p).n =abs(rseq.n) to_power p by def_1; then
+ A13: abs(rseq.n) to_power p =0 by A10;
+ A11: abs(rseq.n) >= 0 by ABSVALUE:5;
+ A14: (abs(rseq.n) to_power p) to_power (1/p)
+        =abs(rseq.n) to_power (p*(1/p)) by A11,HOLDER_1:2,A02,z2
+        .=abs(rseq.n) to_power (1) by XCMPLX_1:107,z0
+        .=abs(rseq.n) by POWER:30;
+        0 to_power (1/p) =0 by POWER:def 2,z2;      
+        hence rseq.n =0 by ABSVALUE:7,A13,A14;
+       end;
+   hence thesis;
+end;
+
+REM20:
+for p be Real st 1 <=p
+  for lp be non empty NORMSTR st lp
+     =  NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #) holds
+for x being Point of lp, a be Real holds
+(seq_id(a *(x)) rto_power p )=
+((abs(a) to_power p)(#)(seq_id(x) rto_power p))
+proof
+ let p be Real such that
+  q1: 1<= p;  
+  QS00: p > 0 by q1,AXIOMS:22;
+ let lp be non empty NORMSTR such that
+A0:  lp = NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #);
+   let x be Point of lp;
+   let a be Real;
+now let n1 be set such that q8:n1 in NAT;
+reconsider n =n1 as Nat by q8;
+ q4:abs(a) >=0 & abs((seq_id(x)).n) >=0 by ABSVALUE:5; 
+ q5:(seq_id(a *(x)) rto_power p ).n
+  =abs(((seq_id(a*x)).n)) to_power p by def_1
+  .=abs(((seq_id(a(#)seq_id(x))).n)) to_power p by LM22,A0,q1
+.=abs(((a(#)seq_id(x)).n)) to_power p by RSSPACE:3
+.=abs(a*(seq_id(x)).n ) to_power p by SEQ_1:13
+.=(abs(a) * abs((seq_id(x)).n)) to_power p by ABSVALUE:10
+.=abs(a) to_power p * abs((seq_id(x)).n) to_power p by REM06,q4,QS00
+.=abs(a) to_power p*(seq_id(x) rto_power p).n by def_1
+.=((abs(a) to_power p)(#)(seq_id(x) rto_power p)).n by SEQ_1:13;
+reconsider n as set; 
+thus (seq_id(a *(x)) rto_power p ).n1=
+((abs(a) to_power p)(#)(seq_id(x) rto_power p)).n1 by q5;
+end;
+hence (seq_id(a *(x)) rto_power p )=
+((abs(a) to_power p)(#)(seq_id(x) rto_power p)) by SEQ_1:8;
+end;
+
+REM21:
+for p be Real st 1 <=p
+  for lp be non empty NORMSTR st lp
+     = NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #) holds
+for x being Point of lp, a be Real holds
+ ( Sum(seq_id(a*x) rto_power p) ) 
+ =(abs(a) to_power p) * Sum(seq_id(x) rto_power p)
+ proof
+  let p be Real such that
+   q1: 1<= p;
+ let lp be non empty NORMSTR such that
+A0:  lp = NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #);
+    let x be Point of lp;
+    let a be Real;
+q3: (seq_id(x) rto_power p) is summable by LM22,q1,A0;  
+thus ( Sum(seq_id(a*x) rto_power p) )
+ = ( Sum((abs(a) to_power p)(#)(seq_id(x) rto_power p)) ) by A0,REM20,q1
+ .=(abs(a) to_power p) * Sum(seq_id(x) rto_power p) by SERIES_1:13,q3;
+ end;
+ 
+REM22:
+for p be Real st 1 <=p
+ for lp be non empty NORMSTR st lp
+     = NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #) holds
+for x being Point of lp, a be Real holds
+ ( Sum(seq_id(a*x) rto_power p) ) to_power (1/p)
+ =(abs(a) )*(Sum(seq_id(x) rto_power p) to_power (1/p))
+proof
+   let p be Real such that
+    q1: 1<= p;
+  let lp be non empty NORMSTR such that
+ A0:  lp = NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #);
+    a1:  1 <= p by q1;
+  h1:  0 < p by a1,AXIOMS:22; then
+  h2:p <>0;
+  h3:(1/p)>0 by h1,REAL_2:127; 
+  let x be Point of lp;
+   let a be Real;
+ q3: (seq_id(x) rto_power p) is summable by LM22,q1,A0;
+q4: now let n be Nat;
+ e1: (seq_id(x) rto_power p).n =abs((seq_id(x)).n) to_power p by def_1; 
+ e2:abs((seq_id(x)).n)>=0 by ABSVALUE:5;
+hence (seq_id(x) rto_power p).n >= 0 by e1,h1,REM04;
+ end;
+ e3: abs(a) >= 0 by ABSVALUE:5;
+ e4:0<=Sum(seq_id(x) rto_power p) by q3,q4,SERIES_1:21;
+e5: (abs(a) to_power p) >= 0 by REM04,e3,h1;
+thus ( Sum(seq_id(a*x) rto_power p) ) to_power (1/p)
+  =((abs(a) to_power p) * Sum(seq_id(x) rto_power p) )
+                                    to_power (1/p) by REM21,A0,q1
+ .= ((abs(a) to_power p) to_power (1/p)) *
+      ( Sum(seq_id(x) rto_power p) to_power (1/p)) by REM06,e4,e5,h3
+ .= (abs(a) to_power (p*(1/p))) *
+       ( Sum(seq_id(x) rto_power p) to_power (1/p))
+      by HOLDER_1:2,h1,h3,e3
+.= (abs(a) to_power 1) *
+    ( Sum(seq_id(x) rto_power p) to_power (1/p)) by XCMPLX_1:107,h2
+.= abs(a)* ( Sum(seq_id(x) rto_power p) to_power (1/p)) by POWER:30;
+ end;
+
+theorem LM25:
+ for p be Real st 1 <= p
+ for lp be non empty NORMSTR st lp
+     = NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #) holds
+for x, y being Point of lp, a be Real holds
+  ( ||.x.|| = 0 iff x = 0.lp ) &
+  0 <= ||.x.|| &
+  ||.x+y.|| <= ||.x.|| + ||.y.|| &
+  ||.(a*x).|| = abs(a) * ||.x.||
+proof
+  let p be Real such that
+  q1: 1<= p;
+  let lp be non empty NORMSTR such that
+  q2: lp = NORMSTR (# the_set_of_RealSequences_l^p,
+           Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+           Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+           Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+         l_norm^p  #);
+ a1:  1 <= p by q1;
+ h1:  0 < p by a1,AXIOMS:22;
+   let x, y be Point of lp;
+   let a be Real;
+   1 > 0 & p >= 1 by q1; then
+    p > 0; then
+   q3:  1/p > 0 by REAL_2:127;
+A1:now assume
+a2: ||.x.|| = 0;
+a3: ||.x.|| = (the norm of lp). x by NORMSP_1:def 1
+            .= ( Sum(seq_id(x) rto_power p) ) to_power (1/p) by def_3,q2;
+a4:  seq_id(x) rto_power p is summable by LM22,q1,q2;
+a5: for n be Nat holds 0 = (seq_id(x)).n by a2,a3,a4,LM24,q1;
+     x in the_set_of_RealSequences by def_2,q1,q2;
+     hence x = Zeroseq by RSSPACE:def 6,a5
+     .=0.lp by LM22,q1,q2;
+   end;
+A2:now assume
+e1:x=0.lp;
+    x=Zeroseq by e1,LM22,q1,q2; then
+e2: for n be Nat holds (seq_id(x)).n=0 by RSSPACE:def 6;    
+thus ||.x.|| = (the norm of lp). x by NORMSP_1:def 1
+            .=  ( Sum(seq_id(x) rto_power p) ) to_power (1/p) by def_3,q2
+            .= 0 by LM23,e2,q1;
+   end;
+D1:for n be Nat holds 0 <= (seq_id(x) rto_power p).n
+proof
+ let n be Nat;
+ set xp=seq_id(x) rto_power p;
+ e2:   xp.n=abs((seq_id(x)).n) to_power p by def_1;
+ e3:  0 <= abs((seq_id(x)).n) by ABSVALUE:5; 
+ e4:  0 < abs((seq_id(x)).n) or 0=abs((seq_id(x)).n) by e3; thus
+   0 <= xp.n by e2,e4,POWER:39,h1,POWER:def 2;
+   end;
+   seq_id(x) rto_power p is summable by q2,def_2,q1;then
+ D2: 0<= ( Sum(seq_id(x) rto_power p) ) by SERIES_1:21,D1;
+ D3:( Sum(seq_id(x) rto_power p) ) to_power (1/p) >=0 by q3,REM04,D2;
+     ( Sum(seq_id(x) rto_power p) ) to_power (1/p) = (the norm of lp). x
+     by def_3,q2
+       .= ||.x.|| by NORMSP_1:def 1; then
+A3:     ||.x.|| >=0 by D3;
+A4:now
+ A11:||.x.|| = (the norm of lp). x by NORMSP_1:def 1
+            .= ( Sum(seq_id(x) rto_power p) ) to_power (1/p) by def_3,q2;
+ A12:||.y.|| = (the norm of lp). y by NORMSP_1:def 1
+           .= ( Sum(seq_id(y) rto_power p) ) to_power (1/p) by def_3,q2;
+A1:((seq_id(x))+(seq_id(y)))
+=seq_id((seq_id(x))+(seq_id(y))) by RSSPACE:3
+.=seq_id(x+y) by LM22,q1,q2;
+A13: Sum((((seq_id(x))+(seq_id(y))) rto_power p)) to_power (1/p)
+      = (the norm of lp).(x+y) by def_3,q2,A1
+     .= ||.x + y.|| by NORMSP_1:def 1;
+A14:(seq_id(x) rto_power p) is summable by LM22,q1,q2;
+(seq_id(y) rto_power p) is summable by LM22,q1,q2;
+hence ||.x + y.|| <= ||.x.|| + ||.y.|| by A11,A12,A13,A14,q1,LM11;
+end;
+ Q1:||.x.|| = (the norm of lp). x by NORMSP_1:def 1
+            .= ( Sum(seq_id(x) rto_power p) ) to_power (1/p) by def_3,q2;
+ ||.(a*x).|| = (the norm of lp). (a*x) by NORMSP_1:def 1
+ .= ( Sum(seq_id(a*x) rto_power p) ) to_power (1/p) by def_3,q2
+ .=(abs(a))* ||.x.|| by Q1,REM22,q1,q2;
+ hence thesis by A1,A2, A3, A4;
+end;
+
+theorem Th9d:
+for p be Real st p >= 1
+  for lp be non empty NORMSTR
+     st lp = NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #) holds
+ lp is RealNormSpace-like
+ proof
+ let p be Real such that 
+A1: p >=1;
+ let lp be non empty NORMSTR such that
+A11: lp = NORMSTR (# the_set_of_RealSequences_l^p,
+       Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+       Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+     l_norm^p #);
+     for x, y being Point of lp, a be Real holds
+    ( ||.x.|| = 0 iff x = 0.lp ) &
+    0 <= ||.x.|| &
+    ||.x+y.|| <= ||.x.|| + ||.y.|| &
+    ||.(a*x).|| = abs(a) * ||.x.|| by LM25,A1,A11;
+ hence thesis by NORMSP_1:def 2; 
+ end;
+ 
+theorem TH10d:
+ for p be Real st p >= 1
+ for lp be non empty NORMSTR st lp
+      = NORMSTR (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+      l_norm^p #) holds
+ lp is RealNormSpace by Th9d,LM21;
+
+ reserve NRM for non empty RealNormSpace,
+         seq for sequence of NRM;
+
+Lm6:
+for c be Real, seq be Real_Sequence st seq is convergent
+for rseq be Real_Sequence st
+ ( for i be Nat holds rseq .i = abs(seq.i-c) ) holds
+ ( rseq is convergent & lim rseq = abs(lim seq-c) ) by RSSPACE3:1;
+
+Lm7:
+for p be Real st 0 < p
+for c be Real, seq be Real_Sequence st seq is convergent
+for rseq be Real_Sequence st
+ ( for i be Nat holds rseq .i = (abs(seq.i -c)) to_power p ) 
+ holds
+ ( rseq is convergent & lim rseq = (abs(lim seq-c)) to_power p )
+proof
+  let p be Real such that   
+Q01:0 <p;
+  let c be Real;
+  let seq be Real_Sequence such that
+Q02:seq is convergent;
+  let rseq be Real_Sequence such that
+Q03: ( for i be Nat holds rseq .i = (abs(seq.i -c)) to_power p ); 
+ deffunc F(set) = abs(seq.$1-c);
+   consider b be Real_Sequence such that
+Q04:for n be Nat holds b.n=F(n) from SEQ_1:sch 1;
+Q05:b is convergent by Q04,Lm6,Q02;
+Q06:lim b = abs(lim seq - c) by Q04,Lm6,Q02;
+Q07:for n be Nat holds 0 <=b.n 
+  proof
+  let n be Nat;
+  b.n=abs(seq.n-c) by Q04;
+  hence thesis by ABSVALUE:5;
+  end;
+  for n be Nat holds rseq.n=(b.n) to_power p
+  proof
+    let n be Nat;
+    rseq.n=(abs(seq.n -c)) to_power p by Q03
+         .=(b.n) to_power p by Q04;
+    hence thesis;
+  end;
+  hence thesis by Q06,Q05,Q07,Q01,HOLDER_1:10;
+end;
+
+Lm7d:
+for p be Real st 0 < p
+for c be Real, seq, seq1 be Real_Sequence st (seq is convergent
+& seq1 is convergent)
+for rseq be Real_Sequence st
+ ( for i be Nat holds rseq .i = (abs(seq.i -c)) to_power p +seq1.i ) 
+ holds
+ ( rseq is convergent & lim rseq = (abs(lim seq-c)) to_power p + lim seq1 )
+proof
+  let p be Real such that   
+Q01:0 < p;
+  let c be Real;
+  let seq,seq1 be Real_Sequence such that
+Q02:seq is convergent and
+Q00:seq1 is convergent;  
+  let rseq be Real_Sequence such that
+Q03:  for i be Nat holds rseq .i =( (abs(seq.i -c)) to_power p ) + seq1.i;
+ deffunc F(set) = abs(seq.$1-c) to_power p;
+   consider b be Real_Sequence such that
+Q04:for n be Nat holds b.n=F(n) from  SEQ_1:sch 1;
+Q05:b is convergent by Q04,Lm7,Q02,Q01;
+Q06:lim b = (abs(lim seq-c)) to_power p by Q04,Lm7,Q02,Q01;
+now let n be Nat;thus
+  rseq .n = ( (abs(seq.n -c)) to_power p ) + seq1.n by Q03
+           .=b.n + seq1.n by Q04;
+  end; then
+ Q07:rseq = b + seq1 by SEQ_1:11;
+ Q08: lim rseq
+     =(abs(lim seq-c)) to_power p + lim seq1 by Q06,Q00,Q05,SEQ_2:20,Q07;
+     thus rseq is convergent by Q07,Q05,Q00,SEQ_2:19;
+     thus lim rseq = (abs(lim seq-c)) to_power p + lim seq1 by Q08;
+end;
+
+Lm8:
+ for e be Real, seq be Real_Sequence st ( seq is convergent &
+  ex k be Nat st (for i be Nat st k <= i holds seq.i <=e )) holds
+   lim seq <=e by RSSPACE2:6;
+
+Lm9:
+for a,b be Real_Sequence holds a=a+b-b
+proof
+ let a,b be Real_Sequence;
+ now let n be Nat;
+ q: a+b-b = a+b+-b by SEQ_1:15
+   .=a+(b+(-b)) by SEQ_1:20;
+   (a+(b+(-b))).n=a.n+(b+(-b)).n by SEQ_1:11
+   .=a.n+(b.n+(-b).n) by SEQ_1:11
+   .=a.n+(b.n+(-b.n)) by SEQ_1:14
+   .=a.n;
+   hence (a+b-b).n=a.n by q;
+ end;
+hence thesis by FUNCT_2:113;
+end;
+
+Lmd1:
+for p be Real st p >= 1
+for a,b be Real_Sequence st (a rto_power p is summable &
+    b rto_power p is summable) holds (a + b) rto_power p is summable
+proof
+      let p be Real such that 
+q00:p >= 1;
+      let a,b be Real_Sequence such that 
+q01: a rto_power p is summable and
+q02: b rto_power p is summable;
+      reconsider a1=a, b1=b as set;
+q03:a1 in the_set_of_RealSequences by RSSPACE:def 1;
+q04:b1 in the_set_of_RealSequences by RSSPACE:def 1;
+q05:seq_id(a1) = a by RSSPACE:def 2,q03;
+q06:seq_id(b1) = b by RSSPACE:def 2,q04;
+q07:seq_id(a1) rto_power p is summable by q01,q05;
+q08:seq_id(b1) rto_power p is summable by q02,q06;
+q09:a1 in the_set_of_RealSequences_l^p by def_2,q07,q03,q00;
+q10:b1 in the_set_of_RealSequences_l^p by def_2,q08,q04,q00;
+     reconsider a1 as VECTOR of Linear_Space_of_RealSequences by q09;
+     reconsider b1 as VECTOR of Linear_Space_of_RealSequences by q10;
+     the_set_of_RealSequences_l^p is lineary-closed by LM14,q00;
+     then a1+b1 in the_set_of_RealSequences_l^p by q09,q10,RLSUB_1:def 1;
+     then 
+q13:seq_id(a1+b1) rto_power p is summable by def_2,q00;
+     seq_id(a1+b1)=seq_id(seq_id(a1)+seq_id(b1)) by RSSPACE:4,RSSPACE:def 7
+     .=a+b by q05,q06,RSSPACE:3;
+     hence (a+b) rto_power p is summable by q13;
+end;
+
+theorem LM26:
+ for p be Real st 1 <=p
+ for lp be RealNormSpace 
+    st lp = NORMSTR (# the_set_of_RealSequences_l^p,
+      Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+      Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+      Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+      l_norm^p #) holds
+ for vseq be sequence of lp st vseq is Cauchy_sequence_by_Norm
+ holds vseq is convergent
+proof
+  let p be Real such that
+  q1: 1<= p;
+ Q6:  p >0 by q1,AXIOMS:22;
+ then z0: p <> 0;
+  z2:  1/p > 0 by Q6,REAL_2:127;
+  z3:  p * (1/p) = (p*1)/p by XCMPLX_1:75
+                .= 1 by Q6, XCMPLX_1:60;
+   let lp be RealNormSpace such that
+     q2:  lp = NORMSTR (# the_set_of_RealSequences_l^p,
+           Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+           Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+           Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+         l_norm^p #);
+ let vseq be sequence of lp such that
+ A1:vseq is Cauchy_sequence_by_Norm;
+   defpred P[set,set] means
+        ex i be Nat st $1=i &
+     ex rseqi be Real_Sequence st
+      (for n be Nat holds rseqi.n=(seq_id(vseq.n)).i) &
+     rseqi is convergent & $2 = lim rseqi;
+A2:for x be set st x in NAT ex y be set st y in REAL & P[x,y]
+   proof
+     let x be set such that
+A3: x in NAT;
+     reconsider i=x as Nat by A3;
+     deffunc F(Nat) = (seq_id(vseq.$1)).i;
+     consider rseqi be Real_Sequence such that
+A4:  for n be Nat holds rseqi.n= F(n) from SEQ_1:sch 1;
+A5:  rseqi is convergent
+      proof
+      now
+         let e1 be real number such that
+A6:     e1 > 0;
+         reconsider e=e1 as Real by XREAL_0:def 1;
+    thus ex k be Nat st
+          for m be Nat st k <= m holds abs(rseqi.m -rseqi.k) < e1
+          proof
+           consider k be Nat such that
+A8:       for n, m be Nat st ( n >= k & m >= k ) holds
+           ||.(vseq.n) - (vseq.m).|| < e by A1,A6,RSSPACE3:10;
+ for m being Nat st k <= m holds abs(rseqi.m-rseqi.k) < e
+           proof  
+            let m be Nat such that
+A9:        k<=m;
+a9:        0 <= ||.(vseq.m) - (vseq.k).|| by NORMSP_1:8;
+a9d:       ||.(vseq.m) - (vseq.k).||
+            = (the norm of lp).((vseq.m)-(vseq.k)) by NORMSP_1:def 1
+           .= ( Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) ) 
+             to_power (1/p) by def_3,q2; then
+             ( Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) ) to_power
+                                               (1/p) < e by A8,A9; then
+A11:        (( Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) ) to_power
+                                (1/p)) to_power p < e to_power p
+                              by REM03,Q6,a9,a9d;
+ e3: (seq_id((vseq.m)-(vseq.k)) rto_power p) is summable by LM22,q1,q2;
+ 
+e4:now
+ let i be Nat;
+   j1:  (seq_id((vseq.m)-(vseq.k)) rto_power p).i 
+             =abs((seq_id((vseq.m)-(vseq.k))).i) to_power p
+           by def_1;
+   j2:abs((seq_id((vseq.m)-(vseq.k))).i) >=0 by ABSVALUE:5;
+ hence (seq_id((vseq.m)-(vseq.k)) rto_power p).i >= 0 by j1,Q6,REM04;
+end;
+e5:0<=Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) by e3,e4,SERIES_1:21;        
+e6:    (( Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) ) to_power
+                                (1/p)) to_power p
+         =( Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) )
+           to_power ((1/p)*p) by HOLDER_1:2,e5,Q6,z2
+        .= ( Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) ) by POWER:30,z3;
+az1:(e to_power p) to_power (1/p)
+        = e to_power ((1/p) * p) by POWER:38,A6
+        .= e to_power(1) by XCMPLX_1:107,z0
+        .=e by POWER:30;
+ee0: Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) < e to_power p by e6,A11;
+ ee1:(seq_id((vseq.m)-(vseq.k)) rto_power p).i <=
+      Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) by e4,e3,RSSPACE2:4;
+ e8: abs((seq_id((vseq.m)-(vseq.k))).i) >=0 by ABSVALUE:5;
+ww1: now
+       let a,b,c be Real such that q:a =0 & b>0 & c>0;
+       a to_power b =0 by POWER:def 2,q;
+       hence (a to_power b) to_power c =0 by POWER:def 2,q;
+       end;
+ ww2: now 
+       let a,b,c be Real such that q:a =0 & b>0 & c>0;
+       b*c >0 by REAL_2:122,q;
+       hence a to_power (b *c) =0 by POWER:def 2,q;
+       end;  
+  ww3: now 
+       let a,b,c be Real such that q:a =0 & b>0 & c>0;
+       thus (a to_power b) to_power c
+         = 0 by ww1,q
+        .= a to_power (b *c) by ww2,q;
+       end;  
+  ww4:for a,b,c be Real st a >0 & b>0 & c>0
+       holds (a to_power b) to_power c =
+       a to_power (b*c) by POWER:38;
+  ww5:for a,b,c be Real st (a >0 or a=0) & b>0 & c>0
+       holds (a to_power b) to_power c =
+       a to_power (b*c) by ww4,ww3;
+ ww6: for a,b,c be Real st a>=0 & b>0 & c>0 holds
+      (a to_power b) to_power c = a to_power (b*c)
+      proof
+       let a,b,c be Real such that
+       q:a>=0 & b>0 & c>0;
+       ((a >0) or (a=0)) & b>0 & c>0 by q;
+      hence (a to_power b) to_power c = a to_power (b*c) by ww5;
+       end;
+ r1: (seq_id((vseq.m)-(vseq.k)) rto_power p).i
+     =abs((seq_id((vseq.m)-(vseq.k))).i) to_power p by def_1;
+ r2:((seq_id((vseq.m)-(vseq.k)) rto_power p).i) to_power (1/p)
+    =abs((seq_id((vseq.m)-(vseq.k))).i) to_power (1) by z3,Q6,z2,e8,ww6,r1
+    .=abs((seq_id((vseq.m)-(vseq.k))).i) by POWER:30;       
+qw1:  (seq_id((vseq.m)-(vseq.k)) rto_power p).i >= 0 by e4;    
+    (seq_id((vseq.m)-(vseq.k)) rto_power p).i <e to_power p
+      by ee0,ee1,AXIOMS:22;
+  then ((seq_id((vseq.m)-(vseq.k)) rto_power p).i) to_power (1/p)
+  < (e to_power p) to_power (1/p) by REM03,qw1,z2; then
+kw1:   abs((seq_id((vseq.m)-(vseq.k))).i) <e by az1,r2;
+ qw2:  rseqi.m=(seq_id(vseq.m)).i & rseqi.k=(seq_id(vseq.k)).i by A4;
+   reconsider vsem = (vseq.m), vsek = (vseq.k) as VECTOR of lp;
+(vsem)-(vsek) =(seq_id(vsem)) - (seq_id(vsek)) by LM22,q1,q2; then
+  abs((seq_id((vseq.m)-(vseq.k))).i)
+   =abs((seq_id(vseq.m)-seq_id(vseq.k)).i) by RSSPACE:3
+  .=abs((seq_id(vseq.m)+-seq_id(vseq.k)).i) by SEQ_1:15
+  .=abs((seq_id(vseq.m)).i+(-(seq_id(vseq.k))).i) by SEQ_1:11
+  .=abs((seq_id(vseq.m)).i +-(seq_id(vseq.k)).i) by SEQ_1:14
+  .=abs(rseqi.m -rseqi.k) by qw2;
+ hence abs(rseqi.m -rseqi.k) < e by kw1;
+end;        
+hence thesis;
+end;  
+end;
+hence rseqi is convergent by SEQ_4:58;
+end;
+   take y = lim rseqi;
+   thus thesis by A4,A5;
+ end;
+   consider f be Function of NAT,REAL such that
+A16:for x be set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A2);
+   reconsider tseq=f as Real_Sequence;
+A17:now
+      let i be Nat;
+      reconsider x=i as set;
+      ex i0 be Nat st x=i0 &
+       ex rseqi be Real_Sequence st
+        ( for n be Nat holds rseqi.n=(seq_id(vseq.n)).i0 ) &
+       rseqi is convergent &
+       f.x=lim rseqi by A16;
+       hence ex rseqi be Real_Sequence st
+        ( for n be Nat holds rseqi.n=(seq_id(vseq.n)).i ) &
+        rseqi is convergent &
+        tseq.i=lim rseqi;
+      end;
+A18:for e be Real st e >0
+   ex k be Nat st for n be Nat st n >= k holds
+    ((seq_id(tseq)-seq_id(vseq.n)) rto_power p ) is summable &
+      Sum((seq_id(tseq)-seq_id(vseq.n)) rto_power p) < e
+   proof
+       let e2 be Real such that
+A00: e2 >0;
+       set e=e2/2;
+A19: e >0 by A00,SEQ_2:3;
+A21: e2 >e by A00,SEQ_2:4;
+       set e1=e to_power (1/p);
+A20: e1>0 by A19,POWER:39;
+       consider k be Nat such that
+A22: for n, m be Nat st ( n >= k & m >= k ) holds
+         ||.(vseq.n) - (vseq.m).|| < e1 by A1,A20,RSSPACE3:10;
+A23: for m,n be Nat st ( n >= k & m >= k ) holds
+        ((seq_id((vseq.m)-(vseq.n)) rto_power p) is summable &
+           Sum( (seq_id((vseq.m)-(vseq.n)) rto_power p) ) < e &
+    for i be Nat holds 0 <=  ((seq_id((vseq.m)-(vseq.n))) rto_power p).i)
+        proof
+        let m,n be Nat such that
+e0:  n >= k & m >= k;
+e1:  (seq_id((vseq.m)-(vseq.n)) rto_power p) is summable by LM22,q1,q2;
+e1d:       for i be Nat holds (seq_id((vseq.m)-(vseq.n)) rto_power p).i >= 0
+       proof
+         let i be Nat;
+j1:      (seq_id((vseq.m)-(vseq.n)) rto_power p).i 
+         =abs((seq_id((vseq.m)-(vseq.n))).i) to_power p by def_1;
+j2:      abs((seq_id((vseq.m)-(vseq.n))).i) >=0 by ABSVALUE:5;
+        hence
+        (seq_id((vseq.m)-(vseq.n)) rto_power p).i >= 0 by j1,Q6,REM04;
+       end;
+       ||.(vseq.m) - (vseq.n).|| < e1 by e0,A22; then
+     (the norm of lp).((vseq.m)-(vseq.n))<e1 by NORMSP_1:def 1;
+     then
+e3:  (( Sum(seq_id((vseq.m)-(vseq.n)) rto_power p) )       
+                                       to_power (1/p)) < e1 by def_3,q2;
+ e4: (seq_id((vseq.m)-(vseq.n)) rto_power p) is summable by LM22,q1,q2;
+ e5:0<=Sum(seq_id((vseq.m)-(vseq.n)) rto_power p) by e1d,e4,SERIES_1:21;
+ e6:    (( Sum(seq_id((vseq.m)-(vseq.n)) rto_power p) ) to_power 
+                                 (1/p)) to_power p
+          =( Sum(seq_id((vseq.m)-(vseq.n)) rto_power p) )
+            to_power ((1/p)*p) by HOLDER_1:2,e5,Q6,z2
+        .= ( Sum(seq_id((vseq.m)-(vseq.n)) rto_power p) ) by POWER:30,z3;
+ e7:e1 to_power p = e to_power ((1/p) * p) by POWER:38,A19
+     .= e to_power(1) by XCMPLX_1:107,z0
+     .= e by POWER:30;
+  (( Sum(seq_id((vseq.m)-(vseq.n)) rto_power p) ) to_power
+                                 (1/p)) >=0 by e5,z2,REM04;
+ then ( Sum(seq_id((vseq.m)-(vseq.n)) rto_power p) ) < e by e7,e6,e3,Q6,REM03;
+hence thesis by e1,e1d;
+ end;
+A27:  for n be Nat for i be Nat holds
+      for rseq be Real_Sequence st
+       ( for m be Nat holds
+         rseq.m = Partial_Sums ((seq_id((vseq.m)-(vseq.n))) rto_power p).i )
+      holds
+       ( rseq is convergent & lim rseq =
+              Partial_Sums ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i )
+     proof
+       let n be Nat;
+A28:   for m,k be Nat holds
+         seq_id((vseq.m) - (vseq.k)) = seq_id(vseq.m)-seq_id(vseq.k)         
+         proof
+             let m,k be Nat;
+             seq_id((vseq.m) - (vseq.k))
+              = seq_id(seq_id((vseq.m))-seq_id((vseq.k))) by LM22,q1,q2;
+             hence thesis by RSSPACE:3;
+          end;
+         defpred P[Nat] means
+         for rseq be Real_Sequence st for m be Nat holds
+         rseq.m= Partial_Sums 
+                 ((seq_id((vseq.m)-(vseq.n))) rto_power p).$1 holds
+         rseq is convergent &
+         lim rseq = Partial_Sums
+                  ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).$1;
+A29:  P[0]
+       proof
+         now
+           let rseq be Real_Sequence such that
+A30:     for m be Nat holds
+           rseq.m= Partial_Sums 
+                 ((seq_id((vseq.m)-(vseq.n))) rto_power p).0;
+           thus
+           rseq is convergent &
+           lim rseq = Partial_Sums
+                  ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).0
+           proof
+            consider rseq0 be Real_Sequence such that
+A31:       ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).0 ) &
+            rseq0 is convergent &
+            tseq.0=lim rseq0 by A17;
+A32:       for m being Nat holds rseq.m =
+            abs(rseq0.m -(seq_id(vseq.n)).0) to_power p       
+            proof
+               let m be Nat;
+              rseq.m =Partial_Sums
+                 ((seq_id((vseq.m)-(vseq.n))) rto_power p).0 by A30
+              .= ((seq_id((vseq.m)-(vseq.n))) rto_power p).0
+                                                        by SERIES_1:def 1
+              .= ((seq_id(vseq.m)-seq_id(vseq.n)) rto_power p).0 by A28
+              .=((seq_id(vseq.m)+-seq_id(vseq.n)) rto_power p).0 by SEQ_1:15
+              .=abs((seq_id(vseq.m)+-seq_id(vseq.n)).0) to_power p by def_1
+              .=abs((seq_id(vseq.m)).0+(-seq_id(vseq.n)).0) to_power p
+                                                        by SEQ_1:11
+              .=abs((seq_id(vseq.m)).0+-(seq_id(vseq.n)).0) to_power p
+                                                        by SEQ_1:14
+              .=abs((seq_id(vseq.m)).0-(seq_id(vseq.n)).0) to_power p;
+              hence thesis by A31;
+           end;
+A33:rseq is convergent by A32,A31,Lm7,Q6;
+lim rseq = abs(lim(rseq0) -(seq_id(vseq.n)).0) to_power p
+                                                by A31,Lm7,Q6,A32
+           .= abs(tseq.0+-(seq_id(vseq.n)).0) to_power p by A31
+           .=abs(tseq.0+(-(seq_id(vseq.n))).0) to_power p by SEQ_1:14
+           .=abs((tseq+(-seq_id((vseq.n)))).0) to_power p by SEQ_1:11
+           .=abs((tseq-(seq_id((vseq.n)))).0) to_power p by SEQ_1:15
+           .=abs((seq_id(tseq)-(seq_id((vseq.n)))).0) to_power p by RSSPACE:3
+           .=(abs(seq_id(tseq)-(seq_id(vseq.n))).0) to_power p by SEQ_1:16
+          .=(abs(seq_id(tseq)+-(seq_id(vseq.n))).0) to_power p by SEQ_1:15
+          .=abs((seq_id(tseq)+-(seq_id(vseq.n))).0) to_power p by SEQ_1:16
+          .=((seq_id(tseq)+-(seq_id(vseq.n))) rto_power p).0 by def_1
+          .= Partial_Sums
+             ((seq_id(tseq)+-(seq_id(vseq.n))) rto_power p).0
+                        by SERIES_1:def 1
+          .=Partial_Sums
+             ((seq_id(tseq)-(seq_id(vseq.n))) rto_power p).0 by SEQ_1:15;
+           hence thesis by A33;
+          end;
+         end;
+         hence thesis;
+        end;  
+A34:  for i be Nat st P[i] holds P[i+1]
+          proof
+           now
+                let i be Nat such that
+       A34:    for rseq be Real_Sequence st
+                 ( for m be Nat holds rseq.m= Partial_Sums
+                 ((seq_id((vseq.m)-(vseq.n))) rto_power p).i ) holds
+                 ( rseq is convergent & lim rseq =Partial_Sums
+                  ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i);
+                thus for rseq be Real_Sequence st
+                 ( for m be Nat holds rseq.m = Partial_Sums
+                 ((seq_id((vseq.m)-(vseq.n))) rto_power p).(i+1) ) holds
+                 ( rseq is convergent & lim rseq =Partial_Sums
+                  ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).(i+1))
+                proof
+                  let rseq be Real_Sequence such that
+       A35:     ( for m be Nat holds rseq.m = Partial_Sums
+                 ((seq_id((vseq.m)-(vseq.n))) rto_power p).(i+1) );
+                 deffunc F(Nat) = Partial_Sums 
+                 ((seq_id((vseq.$1)-(vseq.n))) rto_power p).i;
+                  consider rseqb be Real_Sequence such that
+       A36:       for m be Nat holds
+                    rseqb.m = F(m) from SEQ_1:sch 1;
+       A37:     rseqb is convergent &
+                  lim rseqb = Partial_Sums
+                  ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i by A34,A36;
+                  consider rseq0 be Real_Sequence such that
+       A38:       ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).(i+1) ) &
+                  rseq0 is convergent & tseq.(i+1)=lim rseq0 by A17;
+     A39:       now
+                    let m be Nat;
+                    thus rseq.m = Partial_Sums
+                   ((seq_id((vseq.m)-(vseq.n))) rto_power p).(i+1) by A35
+                      .=((seq_id((vseq.m)-(vseq.n))) rto_power p).(i+1)
+                        +Partial_Sums((seq_id((vseq.m)-(vseq.n)))
+                                   rto_power p).i by SERIES_1:def 1
+                      .=((seq_id(vseq.m)-seq_id(vseq.n)) rto_power p).(i+1)
+                        +Partial_Sums((seq_id((vseq.m)-(vseq.n)))
+                                   rto_power p).i by A28
+                     .=((seq_id(vseq.m)-seq_id(vseq.n)) rto_power p).(i+1)
+                      + rseqb.m by A36
+                     .= abs((seq_id(vseq.m)-seq_id(vseq.n)).(i+1))
+                          to_power p + rseqb.m by def_1
+                      .= abs((seq_id(vseq.m)+-seq_id(vseq.n)).(i+1))
+                          to_power p + rseqb.m by SEQ_1:15
+                      .= abs((seq_id(vseq.m)).(i+1)+(-seq_id(vseq.n)).(i+1))
+                          to_power p + rseqb.m by SEQ_1:11
+                      .= abs((seq_id(vseq.m)).(i+1)+-(seq_id(vseq.n)).(i+1))
+                          to_power p + rseqb.m by SEQ_1:14
+                       .= abs((seq_id(vseq.m)).(i+1)-(seq_id(vseq.n)).(i+1))
+                          to_power p + rseqb.m
+                       .= abs(rseq0.m-(seq_id(vseq.n)).(i+1))
+                          to_power p + rseqb.m by A38;
+                  end;  
+                  lim rseq = abs(lim rseq0-(seq_id(vseq.n)).(i+1))
+                  to_power p + lim rseqb by A39,A38,A37,Lm7d,Q6
+                  .= abs(tseq.(i+1)+-(seq_id(vseq.n)).(i+1))
+                  to_power p + lim rseqb by A38
+                  .= abs(tseq.(i+1)+(-seq_id(vseq.n)).(i+1))
+                  to_power p + lim rseqb by SEQ_1:14
+                  .= abs((tseq+(-seq_id(vseq.n))).(i+1))
+                  to_power p + lim rseqb by SEQ_1:11
+                  .= (abs(tseq+(-seq_id(vseq.n))).(i+1))
+                  to_power p + lim rseqb by SEQ_1:16
+                  .= (abs(tseq-(seq_id(vseq.n))).(i+1))
+                  to_power p + lim rseqb by SEQ_1:15
+                  .= (abs((tseq-(seq_id(vseq.n))).(i+1))
+                  to_power p) + lim rseqb by SEQ_1:16
+                  .= ((tseq-(seq_id(vseq.n)))
+                  rto_power p).(i+1) + Partial_Sums
+                  ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i by A37,def_1
+                  .= ((seq_id(tseq)-(seq_id(vseq.n)))
+                  rto_power p).(i+1) + Partial_Sums
+                  ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i by RSSPACE:3
+                  .=Partial_Sums
+                  ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).(i+1)
+                 by SERIES_1:def 1;
+                  hence thesis by A37,A38,A39,Lm7d,Q6;
+                end;
+              end;
+              hence thesis;
+            end;
+      for i be Nat holds P[i] from NAT_1:sch 1(A29,A34);
+       hence thesis;
+     end;
+  for n be Nat st n >= k holds
+       ((seq_id(tseq)-seq_id(vseq.n)) rto_power p ) is summable &
+        Sum ((seq_id(tseq)-seq_id(vseq.n)) rto_power p ) < e2
+  proof
+    let n be Nat such that
+A40:     n >= k;
+A41:     for i be Nat st 0 <= i holds
+           Partial_Sums ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i <=e
+          proof
+            let i be Nat such that 0 <=i;
+            deffunc F(Nat)=
+               Partial_Sums ((seq_id((vseq.$1)-(vseq.n))) rto_power p).i;
+               consider rseq be Real_Sequence such that
+A42:     for m be Nat holds rseq.m = F(m) from SEQ_1:sch 1;
+A43:     rseq is convergent by A27,A42;
+A44:     lim rseq =
+                Partial_Sums ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i
+          by A27,A42;
+         for m be Nat st m >= k holds rseq.m <= e
+         proof
+            let m be Nat;
+            assume m >= k; then
+A45:      ((seq_id((vseq.m)-(vseq.n)) rto_power p) is summable &
+            Sum( (seq_id((vseq.m)-(vseq.n)) rto_power p) ) < e &
+            for i be Nat holds
+               0 <= ((seq_id((vseq.m)-(vseq.n))) rto_power p).i )
+                by A23,A40; then
+A46:        Partial_Sums ((seq_id((vseq.m)-(vseq.n))) rto_power p).i 
+               <=Sum( (seq_id((vseq.m)-(vseq.n)) rto_power p) )
+                    by RSSPACE2:4;
+             rseq.m = Partial_Sums ((seq_id((vseq.m)-(vseq.n))) rto_power p).i 
+                                    by A42;
+            hence thesis by A45,A46,AXIOMS:22;
+          end;
+          then lim rseq <=e by A43,Lm8;
+           hence Partial_Sums
+           ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i <=e by A44;
+          end;
+A47:   for i be Nat holds 
+          0 <= ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i
+       proof
+         let i be Nat;
+j1:      ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i
+         =(abs((seq_id(tseq)-seq_id(vseq.n)).i)) to_power p by def_1;
+j2:      abs((seq_id(tseq)-seq_id(vseq.n)).i) >=0 by ABSVALUE:5; 
+        abs((seq_id(tseq)-seq_id(vseq.n)).i) to_power p >= 0 by j2,Q6,REM04;
+        hence ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i >= 0 by j1;
+       end;
+A48:   Partial_Sums
+           ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) is bounded_above
+       proof
+         now
+          take e2=e+1;
+q1:       e2>e by REAL_1:69;
+           let i be Nat;
+           0 <= i by NAT_1:18; then
+           Partial_Sums 
+           ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i <=e by A41;
+           hence Partial_Sums
+           ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i <e2
+           by q1,AXIOMS:22;
+         end;
+         hence thesis by SEQ_2:def 3;
+       end;
+A49:    Sum ((seq_id(tseq)-seq_id(vseq.n)) rto_power p)
+         = lim Partial_Sums((seq_id(tseq)-seq_id(vseq.n)) rto_power p)
+         by SERIES_1:def 3;
+         ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) is summable
+       by A47,A48,SERIES_1:20; then
+         Partial_Sums((seq_id(tseq)-seq_id(vseq.n)) rto_power p)
+         is convergent by SERIES_1:def 2; then
+         lim Partial_Sums
+         ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) <= e by A41,Lm8;
+         then Sum((seq_id(tseq)-seq_id(vseq.n)) rto_power p) <= e by A49;
+         hence thesis by A47,A48,SERIES_1:20,A21,AXIOMS:22;
+       end;
+   hence thesis;
+  end;
+Ad: (seq_id(tseq)) rto_power p is summable
+   proof
+      consider m be Nat such that
+A51:  for n be Nat st n >= m holds
+         ((seq_id(tseq)-seq_id(vseq.n)) rto_power p ) is summable &
+         Sum((seq_id(tseq)-seq_id(vseq.n)) rto_power p) < 1 by A18;
+A52: ((seq_id(tseq)-seq_id(vseq.m)) 
+         rto_power p ) is summable by A51;
+A53:  seq_id( (vseq.m) ) rto_power p is summable by def_2,q1,q2;
+       set a=(seq_id(tseq) -seq_id(vseq.m));
+       set b=(seq_id(vseq.m));
+       set d=(seq_id(tseq));
+A54:  a +b =seq_id(tseq)+-seq_id(vseq.m)+seq_id(vseq.m) by SEQ_1:15
+          .=(seq_id(tseq)+seq_id(vseq.m))+(-seq_id(vseq.m)) by SEQ_1:20
+          .=seq_id(tseq)+seq_id(vseq.m)-seq_id(vseq.m) by SEQ_1:15
+          .=d by Lm9;
+       (a + b) rto_power p is summable by A52,A53,Lmd1,q1;
+    hence seq_id(tseq) rto_power p is summable by A54;
+end;
+ reconsider tv=tseq as Point of lp by Ad,q1,LM22,q2;
+ for e be Real st
+     e > 0 ex m be Nat st for n be Nat st
+      n >= m holds ||.(vseq.n) - tv.|| < e
+    proof
+      let e be Real such that
+A59:  e > 0;
+      set e1=e to_power p;
+A59d: e1>0 by POWER:39,A59;
+      consider m be Nat such that
+ A60: for n be Nat st n >= m holds ((seq_id(tseq)-seq_id(vseq.n))
+       rto_power p ) is summable &
+         Sum((seq_id(tseq)-seq_id(vseq.n)) rto_power p) < e1 by A18,A59d;
+     now
+     let n be Nat such that
+AS:  n >= m;
+A61: for i be Nat holds ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i >= 0
+    proof
+      let i be Nat;
+j1:   ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i
+       =abs((seq_id(tseq)-seq_id(vseq.n)).i) to_power p by def_1;
+j2:   abs((seq_id(tseq)-seq_id(vseq.n)).i) >=0 by ABSVALUE:5;
+      abs((seq_id(tseq)-seq_id(vseq.n)).i) to_power p >= 0 by j2,Q6,REM04;
+      hence ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i >= 0 by j1;
+  end;
+   ((seq_id(tseq)-seq_id(vseq.n)) rto_power p ) is summable by A60,AS;
+   then
+A62:  Sum((seq_id(tseq)-seq_id(vseq.n)) rto_power p) >=0
+               by A61,SERIES_1:21;
+         Sum((seq_id(tseq)-seq_id(vseq.n)) rto_power p) < e1 by AS,A60; then
+A63:   (Sum((seq_id(tseq)-seq_id(vseq.n)) rto_power p)) to_power (1/p )
+                             <e1 to_power (1/p ) by A62,REM03,z2;
+        e1 to_power(1/p) = e to_power (p * (1/p)) by A59,POWER:38
+         .= e to_power 1 by XCMPLX_1:107,z0
+         .= e by POWER:30;
+      then
+A64:  (Sum((seq_id(tv)-seq_id(vseq.n)) rto_power p)) to_power (1/p) <e by A63;
+       (Sum((seq_id(tv)-seq_id(vseq.n)) rto_power p)) to_power (1/p )
+       =(Sum(seq_id(seq_id(tv)-seq_id(vseq.n)) rto_power p)) to_power (1/p )
+       by RSSPACE:3
+      .=(Sum(seq_id((tv)-(vseq.n)) rto_power p)) to_power (1/p )
+       by LM22,q1,q2
+      .=(the norm of lp).((tv)-(vseq.n)) by def_3,q2
+      .= ||.(tv)-(vseq.n).|| by NORMSP_1:def 1
+      .= ||.(tv)+(-(vseq.n)).|| by RLVECT_1:def 11
+      .=||.-(vseq.n-tv).|| by RLVECT_1:47
+      .=||.vseq.n-tv.|| by NORMSP_1:6;
+        hence ||.vseq.n-tv.|| <e by A64;
+      end;
+      hence thesis;
+    end;
+ hence thesis by NORMSP_1:def 9;
+ end;
+ 
+definition
+  let p be Real such that AS1:1 <= p;
+  func l_Space^p -> RealBanachSpace equals
+   NORMSTR (# the_set_of_RealSequences_l^p,
+        Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+         l_norm^p #);
+  coherence  
+  proof
+  set lp= NORMSTR (# the_set_of_RealSequences_l^p,
+          Zero_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+          Add_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+          Mult_(the_set_of_RealSequences_l^p,Linear_Space_of_RealSequences),
+         l_norm^p #);
+   reconsider lp as RealNormSpace by AS1,TH10d;
+   for vseq be sequence of lp st vseq is Cauchy_sequence_by_Norm
+     holds vseq is convergent by AS1,LM26; then
+   P2: lp is complete by LOPBAN_1:def 16;
+   thus thesis by P2;
+  end;
+end;

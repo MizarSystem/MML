@@ -29,7 +29,8 @@ environ
  clusters XREAL_0, STRUCT_0, RELSET_1, SEQ_1, BINARITH, VECTSP_2, GROUP_1,
       FINSEQ_2, COMPLFLD, POLYNOM1, POLYNOM3, MONOID_0, NAT_1, INT_1, COMPLEX1,
       POLYNOM5, FINSEQ_1, FINSET_1, CARD_1, FSM_1, MEMBERED, ORDINAL2, ARYTM_3,
-      ORDINAL1, WSIERP_1, RFINSEQ, PRALG_1, BINOP_2, XCMPLX_0, PREPOWER;
+      ORDINAL1, WSIERP_1, RFINSEQ, PRALG_1, BINOP_2, XCMPLX_0, PREPOWER,
+      SIN_COS;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, GROUP_1, VECTSP_1, XBOOLE_0;
  theorems GROUP_1, CARD_1, FINSEQ_1, ZFMISC_1, NAT_1, FUNCT_1, FUNCT_2,
@@ -430,19 +431,21 @@ COMPTRIG:16
 end;
 
 theorem Th11:
-for n being non empty Nat for i being Nat holds
+for n, i being Nat holds
   cos((2*PI*i)/n) = cos((2*PI*(i mod n))/n) &
   sin((2*PI*i)/n) = sin((2*PI*(i mod n))/n)
-proof let n be non empty Nat, i be Nat;
-    set j = (i div n);
-        n > 0 by NAT_1:19;
+proof let n, i be Nat;
+    set j = i div n;
+    per cases;
+    suppose X1:n <> 0; then
+    n > 0 by NAT_1:19;
     then i = n*j + (i mod n) by NAT_1:47;
 then A1:  (2*PI*i)/n = (2*PI*(n*j) + 2*PI*(i mod n))/n
               .= (2*PI*(n*j))/(n*1) + (2*PI*(i mod n))/n by XCMPLX_1:63
               .= (2*PI)/n*(n*j)/1 + (2*PI*(i mod n))/n by XCMPLX_1:84
               .= (2*PI)*(1/n)*(n*j) + (2*PI*(i mod n))/n by XCMPLX_1:100
               .= (2*PI)*((1/n)*(j*n)) + (2*PI*(i mod n))/n
-              .= (2*PI)*(j*1) + (2*PI*(i mod n))/n by XCMPLX_1:91
+              .= (2*PI)*(j*1) + (2*PI*(i mod n))/n by X1,XCMPLX_1:91
               .= 2*PI*j + (2*PI*(i mod n))/n;
 then A2:  cos((2*PI*i)/n)
     = (cos(2*PI*j + 0)) * (cos((2*PI*(i mod n))/n)) -
@@ -468,14 +471,21 @@ then A2:  cos((2*PI*i)/n)
     .= (sin.0) * (cos((2*PI*(i mod n))/n)) +
        (cos.0) * (sin((2*PI*(i mod n))/n)) by SIN_COS2:11
     .= sin((2*PI*(i mod n))/n) by SIN_COS:33;
-  hence thesis by A2;
+      hence thesis by A2;
+    end;
+    suppose n = 0; then
+      (2*PI*i)/n = 0 & (2*PI*(i mod n))/n = 0 by XCMPLX_1:49; then
+      cos((2*PI*i)/n) = cos((2*PI*(i mod n))/n) &
+      sin((2*PI*i)/n) = sin((2*PI*(i mod n))/n);
+      hence thesis;
+    end;
 end;
 
 theorem Th12:
-for n being non empty Nat for i being Nat holds
+for n, i being Nat holds
    [** cos((2*PI*i)/n), sin((2*PI*i)/n)**] =
    [** cos((2*PI*(i mod n))/n), sin((2*PI*(i mod n))/n) **]
-proof let n be non empty Nat, i be Nat;
+proof let n, i be Nat;
       [** cos((2*PI*i)/n), sin((2*PI*i)/n)**]
     = [** cos((2*PI*(i mod n))/n), sin((2*PI*i)/n)**] by Th11
    .= [** cos((2*PI*(i mod n))/n), sin((2*PI*(i mod n))/n) **] by Th11;
@@ -483,10 +493,10 @@ proof let n be non empty Nat, i be Nat;
 end;
 
 theorem Th13:
-for n being non empty Nat, i, j being Nat holds
+for n, i, j being Nat holds
 [** cos((2*PI*i)/n),sin((2*PI*i)/n) **]*[** cos((2*PI*j)/n),sin((2*PI*j)/n) **]
  = [** cos((2*PI*((i+j) mod n))/n), sin((2*PI*((i+j)mod n))/n)**]
-proof let n be non empty Nat; let i,j be Nat;
+proof let n, i, j be Nat;
 A1:  (2*PI*i)/n + (2*PI*j)/n = (2*PI*i + 2*PI*j)/n by XCMPLX_1:63
     .= (2*PI*(i+j))/n;
 then A2:  cos((2*PI*i)/n) * cos((2*PI*j)/n) - sin((2*PI*i)/n) * sin((2*PI*j)/n)
@@ -595,9 +605,9 @@ A15: for k being Nat holds P[k] from NAT_1:sch 1(A2,A4);
 end;
 
 theorem Th17:
-for a being Real st 0 <= a & a < 2*PI & cos(a) = 1 holds a = 0
+for a being real number st 0 <= a & a < 2*PI & cos(a) = 1 holds a = 0
 proof
- let a be Real such that
+ let a be real number such that
 A1: 0 <= a & a < 2*PI and
 A2: cos(a) = 1;
    1*1+(sin a)*(sin a) = 1 by A2,SIN_COS:32;
@@ -903,7 +913,6 @@ A1: |.z.| = 1 by COMPLFLD:10,97,def 1;
         consider r being real number such that
      A15: r = (2*PI) * (-[\ ((n*Arg x)/(2*PI)) /]) + (n*Arg x) &
         0 <= r & r < (2*PI) by COMPLEX2:2,COMPTRIG:21;
-     A16: r in REAL by XREAL_0:def 1;
         set a = ((2*PI) * [\ ((n*Arg x)/(2*PI)) /]);
         n > 0 by NAT_1:19; then 0 <= n*Arg x by a5,REAL_2:121;
      then A17: 0 <= (n*Arg x)/(2*PI) by COMPTRIG:21,REAL_2:125;
@@ -915,10 +924,10 @@ A1: |.z.| = 1 by COMPLFLD:10,97,def 1;
         then reconsider m = [\ ((n*Arg x)/(2*PI)) /] as Nat by INT_1:16;
      A19: n*Arg x = 2*PI*m + r by A15;
      A20: cos(n*Arg x)  = cos.(2*PI*m + r) by A15,SIN_COS:def 23 .= cos.(r) by
-A16,SIN_COS2:11
+SIN_COS2:11
        .= cos(r) by SIN_COS:def 23;
             sin(n*Arg x)  = sin.(2*PI*m + r) by A15,SIN_COS:def 21 .= sin.(r)
-by A16,SIN_COS2:10
+by SIN_COS2:10
        .= sin(r) by SIN_COS:def 21;
      then r = 0 or r = PI by A14,A15,COMPTRIG:33; then (n*Arg x)/(n
 *1) = (2*PI*m)/n by A6,A13,A19,A20,COMPTRIG:8,SIN_COS:82;

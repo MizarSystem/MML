@@ -1,0 +1,200 @@
+:: Equivalences of Inconsistency and {H}enkin Models
+::  by Patrick Braselmann and Peter Koepke
+:: 
+:: Received September 25, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary CQC_LANG, QC_LANG1, FINSEQ_1, RELAT_1, QMAX_1, ZF_LANG, ZF_MODEL,
+      BOOLE, FUNCT_1, VALUAT_1, FINSET_1, FUNCT_2, ARYTM_1, HENMODEL, ORDINAL2,
+      ORDINAL1, TARSKI, CARD_1, INT_1, WELLORD1, WELLORD2, MARGREL1, ARYTM_3,
+      CQC_THE1, MCART_1, CALCUL_1, CALCUL_2, SUBLEMMA;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CALCUL_1, XREAL_0, ARYTM_2,
+      RELAT_1, FUNCT_1, ORDINAL1, XCMPLX_0, REAL_1, NAT_1, FINSEQ_1, QC_LANG1,
+      QC_LANG2, QC_LANG3, PARTFUN1, CQC_LANG, CQC_THE1, VALUAT_1, FINSET_1,
+      CQC_THE3, FUNCT_4, FUNCOP_1, FINSUB_1, RELSET_1, FUNCT_2, FRAENKEL,
+      CARD_1, MARGREL1, CQC_SIM1, DOMAIN_1, MCART_1, NUMBERS, ORDINAL2,
+      SETFAM_1, FINSEQ_3, CALCUL_2, INT_1, WELLORD1, WELLORD2, SUBSTUT1,
+      SUBSTUT2, SUBLEMMA;
+ constructors QC_LANG3, DOMAIN_1, CQC_THE1, ARYTM_0, RELAT_1, REAL_1, CQC_THE3,
+      RECDEF_1, CQC_SIM1, FINSEQ_1, PARTFUN1, FUNCT_2, MARGREL1, CQC_LANG,
+      NAT_1, MCART_1, FUNCT_1, WELLORD2, CARD_1, XREAL_0, MEMBERED, ORDINAL2,
+      RELSET_1, XBOOLE_0, ZFMISC_1, XCMPLX_0, ORDINAL1, QC_LANG2, TARSKI,
+      CALCUL_1, SETFAM_1, FINSEQ_3, CALCUL_2, INT_1, WELLORD1, ARYTM_2,
+      SUBSTUT1, SUBSTUT2, SUBLEMMA;
+ clusters NAT_1, FINSEQ_1, RELSET_1, CQC_LANG, ARYTM_3, ORDINAL2, XBOOLE_0,
+      FUNCOP_1, SUBSET_1, QC_LANG1, MARGREL1, FUNCT_1, PARTFUN1, FINSET_1,
+      MEMBERED, RELAT_1, XREAL_0, INT_1, ORDINAL1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries and Equivalences of Inconsistency
+
+ reserve a,a1,a2,b,b1,b2,c,d for set,
+         X,Y,Z for Subset of CQC-WFF,
+         i,j,k,l,m,n,n1,n2 for Nat,
+         p,q for Element of CQC-WFF,
+         A for non empty set,
+         P for QC-pred_symbol of k,
+         ll for CQC-variable_list of k,
+         f,f1,f2,g,g1,g2 for FinSequence of CQC-WFF;
+
+definition let D be non empty set, X be Subset of bool D;
+  redefine func union X -> Subset of D;
+end;
+
+ reserve A for non empty finite Subset of NAT;
+
+theorem :: HENMODEL:1
+  for f being Function of n,A st
+     ((ex m st succ m = n) & f is one-to-one & rng f = A &
+     for n,m st m in dom f & n in dom f & n < m holds f.n in f.m) holds
+                                                   f.(union n) = union rng f;
+
+theorem :: HENMODEL:2
+  union A in A & for a st a in A holds (a in union A or a = union A);
+
+definition let A be set;
+  func min* A -> Nat means
+:: HENMODEL:def 1
+   (it in A & for k st k in A holds it <= k) if
+                                   A is non empty Subset of NAT
+          otherwise it = 0;
+end;
+
+ reserve C for non empty set;
+
+theorem :: HENMODEL:3
+  for f being Function of NAT,C, X being finite set st
+    (for n,m st m in dom f & n in dom f & n < m holds f.n c= f.m) &
+                                  X c= union rng f holds ex k st X c= f.k;
+
+definition let X,p;
+  pred X |- p means
+:: HENMODEL:def 2
+    ex f st rng f c= X & |- f^<*p*>;
+end;
+
+definition let X;
+  attr X is Consistent means
+:: HENMODEL:def 3
+   for p holds not (X |- p & X |- 'not' p);
+end;
+
+notation let X;
+  antonym X is Inconsistent for X is Consistent;
+end;
+
+definition let f be FinSequence of CQC-WFF;
+  attr f is Consistent means
+:: HENMODEL:def 4
+   for p holds not (|- f^<*p*> & |- f^<*'not' p*>);
+end;
+
+notation let f be FinSequence of CQC-WFF;
+  antonym f is Inconsistent for f is Consistent;
+end;
+
+theorem :: HENMODEL:4
+  X is Consistent & rng g c= X implies g is Consistent;
+
+theorem :: HENMODEL:5
+  |- f^<*p*> implies |- f^g^<*p*>;
+
+:: Ebb et al, Chapter IV, Lemma 7.2
+
+theorem :: HENMODEL:6
+  X is Inconsistent iff for p holds X |- p;
+
+:: One direction of Ebb et al, Chapter IV, Lemma 7.4
+
+theorem :: HENMODEL:7
+  X is Inconsistent implies
+    ex Y st Y c= X & Y is finite & Y is Inconsistent;
+
+theorem :: HENMODEL:8
+  X \/ {p} |- q implies ex g st rng g c= X & |- g^<*p*>^<*q*>;
+
+:: Corresponds to Ebb et al, Chapter IV, Lemma 7.6 (a)
+
+theorem :: HENMODEL:9
+  X |- p iff X \/ {'not' p} is Inconsistent;
+
+:: Similar to Ebb et al, Chapter IV, Lemma 7.6 (a)
+
+theorem :: HENMODEL:10
+  X |- 'not' p iff X \/ {p} is Inconsistent;
+
+begin :: Unions of Consistent Sets
+
+:: Ebb et al, Chapter IV, Lemma 7.7
+
+theorem :: HENMODEL:11
+  for f being Function of NAT,bool CQC-WFF st
+    (for n,m st m in dom f & n in dom f & n < m holds f.n is Consistent &
+                    f.n c= f.m) holds (union rng f) is Consistent;
+
+begin :: Construction of a Henkin Model
+
+ reserve A for non empty set,
+         v,w for Element of Valuations_in A,
+         J,J' for interpretation of A;
+
+theorem :: HENMODEL:12
+  X is Inconsistent implies for J,v holds not J,v |= X;
+
+theorem :: HENMODEL:13
+  {VERUM} is Consistent;
+
+registration
+  cluster Consistent Subset of CQC-WFF;
+end;
+
+ reserve CX for Consistent Subset of CQC-WFF,
+         P',P1,P2 for Element of QC-pred_symbols;
+
+definition
+  func HCar -> non empty set equals
+:: HENMODEL:def 5
+    bound_QC-variables;
+end;
+
+definition let P be (Element of QC-pred_symbols),
+               ll be CQC-variable_list of (the_arity_of P);
+  redefine func P!ll -> Element of CQC-WFF;
+end;
+
+:: The Henkin Model (Ebb et al, Chapter V, §1)
+
+definition let CX;
+  mode Henkin_interpretation of CX -> interpretation of HCar means
+:: HENMODEL:def 6
+ for P being (Element of QC-pred_symbols),
+      r being Element of relations_on HCar st it.P = r holds
+      for a holds a in r iff ex ll being CQC-variable_list of
+          (the_arity_of P) st a = ll & CX |- P!ll;
+end;
+
+definition
+  func valH -> Element of Valuations_in HCar equals
+:: HENMODEL:def 7
+   id bound_QC-variables;
+end;
+
+begin :: Some Properties of the Henkin Model
+
+ reserve JH for Henkin_interpretation of CX,
+         rel for Element of relations_on HCar;
+
+theorem :: HENMODEL:14
+  valH*'ll = ll;
+
+theorem :: HENMODEL:15
+  |- f^<*VERUM*>;
+
+theorem :: HENMODEL:16
+  JH,valH |= VERUM iff CX |- VERUM;
+
+theorem :: HENMODEL:17
+  JH,valH |= P!ll iff CX |- P!ll;

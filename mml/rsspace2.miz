@@ -261,42 +261,35 @@ registration
 end;
 
 Lm1:for rseq be Real_Sequence st
- ((for n be Nat holds 0 <= rseq.n) & rseq is summable) holds
-  ( for n be Nat holds rseq.n <= (Partial_Sums rseq).n ) &
+ (for n be Nat holds 0 <= rseq.n) holds
   ( for n be Nat holds 0 <= (Partial_Sums rseq).n ) &
-  ( for n be Nat holds (Partial_Sums rseq).n <= Sum rseq) &
-  ( for n be Nat holds rseq.n <= Sum rseq )
+  ( for n be Nat holds rseq.n <= (Partial_Sums rseq).n ) &
+  (rseq is summable implies
+  (( for n be Nat holds (Partial_Sums rseq).n <= Sum rseq) &
+  ( for n be Nat holds rseq.n <= Sum rseq )))
 proof
    let rseq be Real_Sequence such that
-A1:for n be Nat holds 0 <= rseq.n and
-A2:rseq is summable;
+A1:for n be Nat holds 0 <= rseq.n;
 A3:Partial_Sums rseq is non-decreasing by A1,SERIES_1:19;
-A4:Partial_Sums rseq is bounded_above by A1,A2,SERIES_1:20;
-A5:for n be Nat holds (Partial_Sums rseq).n <= Sum rseq
+   thus A6:for n be Nat holds 0 <= Partial_Sums(rseq).n
    proof
      let n be Nat;
-        (Partial_Sums(rseq)).n <= lim Partial_Sums(rseq) by A3,A4,SEQ_4:54;
-     hence (Partial_Sums(rseq)).n <=Sum rseq by SERIES_1:def 3;
-   end;
-A6:for n be Nat holds 0 <= Partial_Sums(rseq).n
-   proof
-     let n be Nat;
-      A7: n=n+0;
+A7:  n=n+0;
 A8:  Partial_Sums(rseq).0 = rseq.0 by SERIES_1:def 1;
-        0 <=rseq.0 by A1;
+     0 <=rseq.0 by A1;
      hence 0 <=Partial_Sums(rseq).n by A3,A7,A8,SEQM_3:11;
    end;
-A9:for n be Nat holds rseq.n <= Partial_Sums(rseq).n
+   thus A9:for n be Nat holds rseq.n <= Partial_Sums(rseq).n
    proof
      let n be Nat;
-        now per cases;
+     now per cases;
        case n=0;
        hence rseq.n <= Partial_Sums(rseq).n by SERIES_1:def 1;
        end;
        case
 A10:   n<>0;
-          0 <= n by NAT_1:18;
-then A11:    0 + 1 <= n by A10,INT_1:20;
+       0 <= n by NAT_1:18;then
+A11:   0 + 1 <= n by A10,INT_1:20;
        set nn=n-1;
 A12:    nn is Nat by A11,INT_1:18;
 A13:    nn+1 =n;
@@ -307,14 +300,18 @@ A13:    nn+1 =n;
      end;
      hence thesis;
    end;
-      for n be Nat holds rseq.n <= Sum rseq
+   assume rseq is summable; then
+A4:Partial_Sums rseq is bounded_above by A1,SERIES_1:20;
+   thus A5: for n be Nat holds (Partial_Sums rseq).n <= Sum rseq
    proof
      let n be Nat;
-A14:  (Partial_Sums(rseq)).n <= Sum rseq by A5;
-    rseq.n <= Partial_Sums(rseq).n by A9;
-     hence rseq.n <= Sum rseq by A14,AXIOMS:22;
+     (Partial_Sums(rseq)).n <= lim Partial_Sums(rseq) by A3,A4,SEQ_4:54;
+     hence (Partial_Sums(rseq)).n <= Sum rseq by SERIES_1:def 3;
    end;
-   hence thesis by A5,A6,A9;
+     let n be Nat;
+A14: (Partial_Sums(rseq)).n <= Sum rseq by A5;
+     rseq.n <= Partial_Sums(rseq).n by A9;
+     hence rseq.n <= Sum rseq by A14,AXIOMS:22;
 end;
 
 Lm2:
@@ -1045,16 +1042,17 @@ end;
 begin  :: Miscellaneous
 
 theorem
-   for r be Real_Sequence st
- ((for n be Nat holds 0 <= r.n) & r is summable) holds
-  ( for n be Nat holds r.n <= (Partial_Sums r).n ) &
+  for r be Real_Sequence st
+ (for n be Nat holds 0 <= r.n) holds
   ( for n be Nat holds 0 <= (Partial_Sums r).n ) &
-  ( for n be Nat holds (Partial_Sums r).n <= Sum r ) &
-  ( for n be Nat holds r.n <= Sum r) by Lm1;
+  ( for n be Nat holds r.n <= (Partial_Sums r).n ) &
+  ( r is summable implies
+    (( for n be Nat holds (Partial_Sums r).n <= Sum r) &
+    ( for n be Nat holds r.n <= Sum r ))) by Lm1;
 
 theorem
-   (for x,y be Real holds (x+y)*(x+y) <= 2*x*x + 2*y*y) &
-(for x,y be Real holds x*x <= 2*(x-y)*(x-y) + 2*y*y) by Lm2;
+  (for x,y be Real holds (x+y)*(x+y) <= 2*x*x + 2*y*y) &
+    (for x,y be Real holds x*x <= 2*(x-y)*(x-y) + 2*y*y) by Lm2;
 
 theorem
    for e being Real, s being Real_Sequence st

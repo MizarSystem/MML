@@ -1,0 +1,189 @@
+:: Consequences of the Sequent Calculus
+::  by Patrick Braselmann and Peter Koepke
+:: 
+:: Received September 25, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary CQC_LANG, QC_LANG1, FINSEQ_1, RELAT_1, QMAX_1, ZF_LANG, BOOLE,
+      FUNCT_1, FINSET_1, FUNCT_2, CALCUL_1, CALCUL_2, ORDINAL2, ORDINAL1,
+      ARYTM, TARSKI, SGRAPH1, CARD_1, FINSEQ_5, ARYTM_1, FINSEQ_2, SUBLEMMA;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, XCMPLX_0, XREAL_0,
+      NUMBERS, ORDINAL2, CARD_1, REAL_1, NAT_1, RELAT_1, FUNCT_1, FINSEQ_1,
+      QC_LANG1, QC_LANG2, QC_LANG3, PARTFUN1, CQC_LANG, CQC_THE1, VALUAT_1,
+      FINSET_1, CQC_THE3, FUNCT_4, FINSEQ_5, FINSEQ_2, FUNCOP_1, FINSUB_1,
+      RELSET_1, FUNCT_2, FRAENKEL, WELLORD2, SGRAPH1, MARGREL1, CQC_SIM1,
+      DOMAIN_1, MCART_1, FINSOP_1, CALCUL_1;
+ constructors QC_LANG3, DOMAIN_1, CQC_THE1, ARYTM_0, VALUAT_1, RELAT_1, REAL_1,
+      CQC_THE3, RECDEF_1, CQC_SIM1, FINSEQ_1, PARTFUN1, FUNCT_2, MARGREL1,
+      CQC_LANG, NAT_1, MCART_1, FUNCT_1, WELLORD2, CARD_1, XREAL_0, MEMBERED,
+      ORDINAL2, RELSET_1, XBOOLE_0, ZFMISC_1, XCMPLX_0, ORDINAL1, QC_LANG2,
+      TARSKI, CALCUL_1, FINSEQ_2, FINSEQ_5, FINSOP_1, SGRAPH1, INT_1;
+ clusters NAT_1, FINSEQ_1, RELSET_1, CQC_LANG, ARYTM_3, ORDINAL2, XBOOLE_0,
+      FUNCOP_1, SUBSET_1, QC_LANG1, MARGREL1, FUNCT_1, PARTFUN1, FINSET_1,
+      MEMBERED, RELAT_1, XREAL_0, INT_1, CALCUL_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: f is Subsequence of g^f
+
+ reserve p,q,p1,p2,q1,q2 for Element of CQC-WFF,
+         k,m,n,i,j,j1 for Nat,
+         f,f1,f2,g,h,h1 for FinSequence of CQC-WFF,
+         a,b,b1,b2,c for natural number;
+
+definition let m,n be natural number;
+  func seq(m,n) -> set equals
+:: CALCUL_2:def 1
+    {k : 1+m <= k & k <= n+m };
+end;
+
+definition let m,n be natural number;
+  redefine func seq(m,n) -> Subset of NAT;
+end;
+
+theorem :: CALCUL_2:1
+  c in seq(a,b) iff 1+a <= c & c <= b+a;
+
+theorem :: CALCUL_2:2
+  seq(a,0) = {};
+
+theorem :: CALCUL_2:3
+  b = 0 or b+a in seq(a,b);
+
+theorem :: CALCUL_2:4
+  b1 <= b2 iff seq(a,b1) c= seq(a,b2);
+
+theorem :: CALCUL_2:5
+  seq(a,b) \/ {a+b+1} = seq(a,b+1);
+
+theorem :: CALCUL_2:6
+  seq(m,n),n are_equipotent;
+
+registration let m,n;
+  cluster seq(m,n) -> finite;
+end;
+
+registration let f;
+  cluster len f -> finite;
+end;
+
+theorem :: CALCUL_2:7
+  seq(m,n) c= Seg (m+n);
+
+theorem :: CALCUL_2:8
+  Seg n misses seq(n,m);
+
+theorem :: CALCUL_2:9
+  for f,g be FinSequence holds
+     Seg len(f^g) = Seg len f \/ seq(len f,len g);
+
+theorem :: CALCUL_2:10
+  len Sgm(seq(len g,len f)) = len f;
+
+theorem :: CALCUL_2:11
+  dom Sgm(seq(len g,len f)) = dom f;
+
+theorem :: CALCUL_2:12
+  rng Sgm(seq(len g,len f)) = seq(len g,len f);
+
+theorem :: CALCUL_2:13
+  i in dom Sgm(seq(len g,len f)) implies
+    Sgm(seq(len g,len f)).i = len g+i;
+
+theorem :: CALCUL_2:14
+  seq(len g,len f) c= dom (g^f);
+
+theorem :: CALCUL_2:15
+  dom((g^f)|seq(len g,len f)) = seq(len g,len f);
+
+theorem :: CALCUL_2:16
+  Seq((g^f)|seq(len g,len f)) = Sgm(seq(len g,len f)) * (g^f);
+
+theorem :: CALCUL_2:17
+  dom Seq((g^f)|seq(len g,len f)) = dom f;
+
+theorem :: CALCUL_2:18
+  f is_Subsequence_of g^f;
+
+definition let D be non empty set, f be FinSequence of D;
+           let P be Permutation of dom f;
+  func Per(f,P) -> FinSequence of D equals
+:: CALCUL_2:def 2
+   P*f;
+end;
+
+ reserve P for Permutation of dom f;
+
+theorem :: CALCUL_2:19
+  dom Per(f,P) = dom f;
+
+theorem :: CALCUL_2:20
+  |- f^<*p*> implies |- g^f^<*p*>;
+
+begin :: The Ordering of the Antecedent is Irrelevant
+
+definition let f;
+  func Begin(f) -> Element of CQC-WFF means
+:: CALCUL_2:def 3
+    it = f.1 if 1 <= len f otherwise it = VERUM;
+end;
+
+definition let f;
+  assume  1 <= len f;
+  func Impl(f) -> Element of CQC-WFF means
+:: CALCUL_2:def 4
+   ex F being FinSequence of CQC-WFF st it = F.(len f) & len F = len f &
+          (F.1 = Begin(f) or len f = 0)  &
+    for n st 1 <= n & n < len f holds ex p,q st p = f.(n+1) & q = F.n &
+                                                             F.(n+1) = p => q;
+end;
+
+:: Some details about the calculus in CALCUL_1
+
+theorem :: CALCUL_2:21
+  |- f^<*p*>^<*p*>;
+
+theorem :: CALCUL_2:22
+  |- f^<*p '&' q*> implies |- f^<*p*>;
+
+theorem :: CALCUL_2:23
+  |- f^<*p '&' q*> implies |- f^<*q*>;
+
+theorem :: CALCUL_2:24
+  |- f^<*p*> & |- f^<*p*>^<*q*> implies |- f^<*q*>;
+
+theorem :: CALCUL_2:25
+  |- f^<*p*> & |- f^<*'not' p*> implies |- f^<*q*>;
+
+theorem :: CALCUL_2:26
+  |- f^<*p*>^<*q*> & |- f^<*'not' p*>^<*q*> implies |- f^<*q*>;
+
+theorem :: CALCUL_2:27
+  |- f^<*p*>^<*q*> implies |- f^<*p => q*>;
+
+theorem :: CALCUL_2:28
+  1 <= len g & |- f^g implies |- f^<*Impl(Rev g)*>;
+
+theorem :: CALCUL_2:29
+  |- Per(f,P)^<*Impl(Rev (f^<*p*>))*> implies |- Per(f,P)^<*p*>;
+
+theorem :: CALCUL_2:30
+  |- f^<*p*> implies |- Per(f,P)^<*p*>;
+
+begin :: Multiple Occurrence in the Antecedent is Irrelevant
+
+notation let n; let c be set;
+  synonym IdFinS(c,n) for n |-> c;
+end;
+
+theorem :: CALCUL_2:31
+  for c being set st 1 <= n holds rng IdFinS(c,n) = rng <*c*>;
+
+definition let D be non empty set, n be Nat, p be Element of D;
+  redefine func IdFinS(p,n) -> FinSequence of D;
+end;
+
+theorem :: CALCUL_2:32
+  1 <= n & |- f^IdFinS(p,n)^<*q*> implies |- f^<*p*>^<*q*>;
