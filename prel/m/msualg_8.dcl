@@ -18,6 +18,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -31,7 +32,6 @@
 <ArticleID name="NAT_LAT"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="MSUALG_4"/>
 <ArticleID name="MSUALG_5"/>
 <ArticleID name="MSUALG_7"/>
@@ -42,14 +42,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="272">
+<Func kind="K" nr="273">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="68"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="66"/>
 <Adjective nr="73"/>
+<Adjective nr="78"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSUALG_8" nr="2">
@@ -58,41 +58,41 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="272">
+<Func kind="K" nr="273">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="68"/>
-<Adjective nr="92"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="66"/>
+<Adjective nr="73"/>
+<Adjective nr="97"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSUALG_8" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="51" value="false"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="56" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="106">
+<Adjective nr="111">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="276">
+<Func kind="K" nr="277">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="61"/>
+<Adjective nr="66"/>
 <Adjective nr="117">
-<Func kind="K" nr="275">
+<Func kind="K" nr="276">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -103,7 +103,7 @@
 </Func>
 </Adjective>
 <Adjective nr="118">
-<Func kind="K" nr="275">
+<Func kind="K" nr="276">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

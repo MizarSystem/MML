@@ -41,6 +41,7 @@
 <ArticleID name="CAT_2"/>
 <ArticleID name="CAT_5"/>
 <ArticleID name="MULTOP_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="ALTCAT_1"/>
 <ArticleID name="ORDERS_3"/>
@@ -48,7 +49,6 @@
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="WELLORD2"/>
 <ArticleID name="YELLOW_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="YELLOW16"/>
 </Signature>
@@ -107,11 +107,11 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="216">
+<Adjective nr="221">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="246">
+<Adjective nr="251">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -225,7 +225,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="382">
+<Func kind="K" nr="395">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -251,7 +251,7 @@
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="383">
+<Func kind="K" nr="396">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -262,7 +262,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="389">
+<Func kind="K" nr="339">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -287,7 +287,7 @@
 <Adjective nr="22">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="250"/>
+<Adjective nr="255"/>
 <Adjective nr="259"/>
 </Cluster>
 </Typ>
@@ -297,7 +297,7 @@
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="382">
+<Func kind="K" nr="395">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -308,7 +308,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="389">
+<Func kind="K" nr="339">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -324,7 +324,7 @@
 <Adjective nr="121"/>
 <Adjective nr="122"/>
 <Adjective nr="123"/>
-<Adjective nr="248"/>
+<Adjective nr="253"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -333,13 +333,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="383">
+<Func kind="K" nr="396">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="119"/>
-<Adjective nr="248"/>
+<Adjective nr="253"/>
 </Cluster>
 </FCluster>
 <CCluster aid="YELLOW16" nr="1">
@@ -353,7 +353,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="250"/>
+<Adjective nr="255"/>
 <Adjective nr="260"/>
 </Cluster>
 </CCluster>

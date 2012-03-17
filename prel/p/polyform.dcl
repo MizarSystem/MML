@@ -99,10 +99,10 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="423">
+<Func kind="K" nr="422">
 <LocusVar nr="1"/>
 <Func kind="K" nr="56">
-<Func kind="K" nr="422">
+<Func kind="K" nr="421">
 <LocusVar nr="1"/>
 </Func>
 <Num nr="1"/>

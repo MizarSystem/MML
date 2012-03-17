@@ -18,6 +18,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 </Signature>
 <Scheme>

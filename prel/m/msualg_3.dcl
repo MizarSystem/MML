@@ -14,6 +14,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSEQ_1"/>
@@ -44,21 +45,21 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="31"/>
-<Adjective nr="87"/>
+<Adjective nr="36"/>
+<Adjective nr="92"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MSUALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="46" value="false"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="51" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="82">
+<Adjective nr="87">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -71,7 +72,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="168">
+<Func kind="K" nr="181">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 <LocusVar nr="2"/>

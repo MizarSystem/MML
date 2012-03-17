@@ -9,9 +9,9 @@ environ
  vocabularies NUMBERS, SCMFSA_2, XBOOLE_0, AMI_1, AMISTD_2, CARD_1, TARSKI,
       TURING_1, SCMFSA6A, FUNCT_4, FSM_1, RELAT_1, UNIALG_2, CIRCUIT2, FUNCT_1,
       SCMFSA6C, SF_MASTR, SUBSET_1, ARYTM_3, FUNCT_7, SCMFSA7B, SCMFSA6B,
-      AMI_3, SCMFSA8A, NAT_1, GRAPHSP, XXREAL_0, MSUALG_1, STRUCT_0, SCMNORM,
-      GLIB_000, ARYTM_1, INT_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      SCMFSA8B;
+      AMI_3, SCMFSA8A, NAT_1, GRAPHSP, XXREAL_0, MSUALG_1, STRUCT_0, GLIB_000,
+      ARYTM_1, INT_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, SCMFSA8B,
+      ORDINAL1, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, NAT_1, INT_1,
       RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, FINSEQ_1, FINSEQ_2,
       STRUCT_0, AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A,
@@ -21,7 +21,7 @@ environ
       SCMFSA_1;
  registrations SETFAM_1, RELAT_1, FUNCT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, CARD_3, AMI_1, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, ORDINAL1,
-      XBOOLE_0, SCMNORM, FINSEQ_1, FINSET_1;
+      XBOOLE_0, SCMNORM, FINSEQ_1, FINSET_1, RELSET_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -31,12 +31,12 @@ theorem :: SCMFSA8B:1
   for s being State of SCM+FSA holds IC SCM+FSA in dom s;
 
 theorem :: SCMFSA8B:2
-  for s being State of SCM+FSA, l being Instruction-Location of SCM+FSA
+  for s being State of SCM+FSA, l being Element of NAT
   holds l in dom s;
 
 theorem :: SCMFSA8B:3
   for I being Program of SCM+FSA, s being State of SCM+FSA st I
-  is_closed_on s holds insloc 0 in dom I;
+  is_closed_on s holds  0 in dom I;
 
 canceled;
 
@@ -50,8 +50,9 @@ theorem :: SCMFSA8B:6
 
 theorem :: SCMFSA8B:7
   for s1,s2 being State of SCM+FSA, I,J being Program of SCM+FSA
-holds DataPart s1 = DataPart s2 implies s1 +* (I +* Start-At insloc 0),s2 +* (J
-  +* Start-At insloc 0) equal_outside NAT;
+holds DataPart s1 = DataPart s2 implies s1 +* (I +*
+ Start-At( 0,SCM+FSA)),s2 +* (J
+  +* Start-At( 0,SCM+FSA)) equal_outside NAT;
 
 theorem :: SCMFSA8B:8
   for s1,s2 being State of SCM+FSA, I being Program of SCM+FSA st
@@ -64,16 +65,23 @@ theorem :: SCMFSA8B:9
 
 theorem :: SCMFSA8B:10
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, l
-being Instruction-Location of SCM+FSA holds I is_closed_on s iff I is_closed_on
-  s +* (I +* Start-At l);
+being Element of NAT holds I is_closed_on s iff I is_closed_on
+  s +* (I +* Start-At(l,SCM+FSA));
 
 theorem :: SCMFSA8B:11
   for s1,s2 being State of SCM+FSA, I being Program of SCM+FSA st
-I +* Start-At insloc 0 c= s1 & I is_closed_on s1 for n being Element of NAT st
-ProgramPart Relocated(I,n) c= s2 & IC s2 = insloc n & DataPart s1 = DataPart s2
-for i being Element of NAT holds IC Computation( s1,i) + n = IC Computation( s2
-,i) & IncAddr(CurInstr ( Computation( s1,i)),n) = CurInstr ( Computation( s2,i)
-  ) & DataPart Computation( s1,i) = DataPart Computation( s2,i);
+I +* Start-At( 0,SCM+FSA) c= s1 & I is_closed_on s1
+ for n being Element of NAT st
+ProgramPart Relocated(I,n) c= s2 & IC s2 =  n & DataPart s1 = DataPart s2
+for i being Element of NAT holds IC Comput(ProgramPart( s1), s1,i) + n = IC
+Comput(ProgramPart( s2
+), s2
+,i) & IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(
+ProgramPart(s1),s1,i)),n)
+ = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),s2,
+i)) &
+  DataPart Comput(ProgramPart( s1), s1,i) = DataPart Comput(ProgramPart( s2),
+s2,i);
 
 theorem :: SCMFSA8B:12
   for s being State of SCM+FSA, i being keeping_0 parahalting
@@ -90,12 +98,12 @@ definition
   let I,J be Program of SCM+FSA;
   func if=0(a,I,J) -> Program of SCM+FSA equals
 :: SCMFSA8B:def 1
-  a =0_goto insloc (card J + 3)
-  ';' J ';' Goto insloc (card I + 1) ';' I ';' Stop SCM+FSA;
+  a =0_goto  (card J + 3)
+  ';' J ';' Goto  (card I + 1) ';' I ';' Stop SCM+FSA;
   func if>0(a,I,J) -> Program of SCM+FSA equals
 :: SCMFSA8B:def 2
-  a >0_goto insloc (card J + 3)
-  ';' J ';' Goto insloc (card I + 1) ';' I ';' Stop SCM+FSA;
+  a >0_goto  (card J + 3)
+  ';' J ';' Goto  (card I + 1) ';' I ';' Stop SCM+FSA;
 end;
 
 definition
@@ -122,8 +130,8 @@ being read-write Int-Location st s.a = 0 & I is_closed_on s & I is_halting_on s
 theorem :: SCMFSA8B:17
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a
   being read-write Int-Location st s.a = 0 & I is_closed_on Initialize s & I
-is_halting_on Initialize s holds IExec(if=0(a,I,J),s) = IExec(I,s) +* Start-At
-  insloc (card I + card J + 3);
+is_halting_on Initialize s holds IExec(if=0(a,I,J),s) = IExec(I,s) +* Start-At(
+   (card I + card J + 3),SCM+FSA);
 
 theorem :: SCMFSA8B:18
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a
@@ -134,18 +142,19 @@ theorem :: SCMFSA8B:19
   for I,J being Program of SCM+FSA, a being read-write
   Int-Location holds for s being State of SCM+FSA st s.a <> 0 & J is_closed_on
 Initialize s & J is_halting_on Initialize s holds IExec(if=0(a,I,J),s) = IExec(
-  J,s) +* Start-At insloc (card I + card J + 3);
+  J,s) +* Start-At((card I+card J+3),SCM+FSA);
 
 theorem :: SCMFSA8B:20
   for s being State of SCM+FSA, I,J being parahalting Program of
 SCM+FSA, a being read-write Int-Location holds if=0(a,I,J) is parahalting & (s.
-  a = 0 implies IExec(if=0(a,I,J),s) = IExec(I,s) +* Start-At insloc (card I +
-card J + 3)) & (s.a <> 0 implies IExec(if=0(a,I,J),s) = IExec(J,s) +* Start-At
-  insloc (card I + card J + 3));
+  a = 0 implies IExec(if=0(a,I,J),s) = IExec(I,s) +* Start-At( (card I +
+card J + 3),SCM+FSA)) & (s.a <> 0 implies IExec(if=0(a,I,J),s) =
+ IExec(J,s) +* Start-At(
+   (card I + card J + 3),SCM+FSA));
 
 theorem :: SCMFSA8B:21
   for s being State of SCM+FSA, I,J being parahalting Program of
-SCM+FSA, a being read-write Int-Location holds IC IExec(if=0(a,I,J),s) = insloc
+SCM+FSA, a being read-write Int-Location holds IC IExec(if=0(a,I,J),s) =
 (card I + card J + 3) & (s.a = 0 implies ((for d being Int-Location holds IExec
   (if=0(a,I,J),s).d = IExec(I,s).d) & for f being FinSeq-Location holds IExec(
   if=0(a,I,J),s).f = IExec(I,s).f)) & (s.a <> 0 implies ((for d being
@@ -161,7 +170,7 @@ theorem :: SCMFSA8B:23
   for I,J being Program of SCM+FSA, a being read-write
   Int-Location holds for s being State of SCM+FSA st s.a > 0 & I is_closed_on
 Initialize s & I is_halting_on Initialize s holds IExec(if>0(a,I,J),s) = IExec(
-  I,s) +* Start-At insloc (card I + card J + 3);
+  I,s) +* Start-At((card I+card J+3),SCM+FSA);
 
 theorem :: SCMFSA8B:24
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a
@@ -172,18 +181,19 @@ theorem :: SCMFSA8B:25
   for I,J being Program of SCM+FSA, a being read-write
   Int-Location holds for s being State of SCM+FSA st s.a <= 0 & J is_closed_on
 Initialize s & J is_halting_on Initialize s holds IExec(if>0(a,I,J),s) = IExec(
-  J,s) +* Start-At insloc (card I + card J + 3);
+  J,s) +* Start-At((card I+card J+3),SCM+FSA);
 
 theorem :: SCMFSA8B:26
   for s being State of SCM+FSA, I,J being parahalting Program of
 SCM+FSA, a being read-write Int-Location holds if>0(a,I,J) is parahalting & (s.
-  a > 0 implies IExec(if>0(a,I,J),s) = IExec(I,s) +* Start-At insloc (card I +
-card J + 3)) & (s.a <= 0 implies IExec(if>0(a,I,J),s) = IExec(J,s) +* Start-At
-  insloc (card I + card J + 3));
+  a > 0 implies IExec(if>0(a,I,J),s) = IExec(I,s) +* Start-At( (card I +
+card J + 3),SCM+FSA)) & (s.a <= 0 implies IExec(if>0(a,I,J),s) =
+ IExec(J,s) +* Start-At(
+   (card I + card J + 3),SCM+FSA));
 
 theorem :: SCMFSA8B:27
   for s being State of SCM+FSA, I,J being parahalting Program of
-SCM+FSA, a being read-write Int-Location holds IC IExec(if>0(a,I,J),s) = insloc
+SCM+FSA, a being read-write Int-Location holds IC IExec(if>0(a,I,J),s) =
 (card I + card J + 3) & (s.a > 0 implies ((for d being Int-Location holds IExec
   (if>0(a,I,J),s).d = IExec(I,s).d) & for f being FinSeq-Location holds IExec(
   if>0(a,I,J),s).f = IExec(I,s).f)) & (s.a <= 0 implies ((for d being
@@ -198,8 +208,8 @@ read-write Int-Location st s.a < 0 & I is_closed_on s & I is_halting_on s holds
 theorem :: SCMFSA8B:29
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a
   being read-write Int-Location st s.a < 0 & I is_closed_on Initialize s & I
-is_halting_on Initialize s holds IExec(if<0(a,I,J),s) = IExec(I,s) +* Start-At
-  insloc (card I + card J + card J + 7);
+is_halting_on Initialize s holds IExec(if<0(a,I,J),s) = IExec(I,s) +* Start-At(
+   (card I + card J + card J + 7),SCM+FSA);
 
 theorem :: SCMFSA8B:30
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a being
@@ -209,8 +219,8 @@ read-write Int-Location st s.a = 0 & J is_closed_on s & J is_halting_on s holds
 theorem :: SCMFSA8B:31
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a
   being read-write Int-Location st s.a = 0 & J is_closed_on Initialize s & J
-is_halting_on Initialize s holds IExec(if<0(a,I,J),s) = IExec(J,s) +* Start-At
-  insloc (card I + card J + card J + 7);
+is_halting_on Initialize s holds IExec(if<0(a,I,J),s) = IExec(J,s) +* Start-At(
+   (card I + card J + card J + 7),SCM+FSA);
 
 theorem :: SCMFSA8B:32
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a being
@@ -220,15 +230,16 @@ read-write Int-Location st s.a > 0 & J is_closed_on s & J is_halting_on s holds
 theorem :: SCMFSA8B:33
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, a
   being read-write Int-Location st s.a > 0 & J is_closed_on Initialize s & J
-is_halting_on Initialize s holds IExec(if<0(a,I,J),s) = IExec(J,s) +* Start-At
-  insloc (card I + card J + card J + 7);
+is_halting_on Initialize s holds IExec(if<0(a,I,J),s) = IExec(J,s) +* Start-At(
+   (card I + card J + card J + 7),SCM+FSA);
 
 theorem :: SCMFSA8B:34
   for s being State of SCM+FSA, I,J being parahalting Program of SCM+FSA
   , a being read-write Int-Location holds if<0(a,I,J) is parahalting & (s.a < 0
-implies IExec(if<0(a,I,J),s) = IExec(I,s) +* Start-At insloc (card I + card J +
-card J + 7)) & (s.a >= 0 implies IExec(if<0(a,I,J),s) = IExec(J,s) +* Start-At
-  insloc (card I + card J + card J + 7));
+implies IExec(if<0(a,I,J),s) = IExec(I,s) +* Start-At( (card I + card J +
+card J + 7),SCM+FSA)) & (s.a >= 0 implies IExec(if<0(a,I,J),s) =
+ IExec(J,s) +* Start-At(
+   (card I + card J + card J + 7),SCM+FSA));
 
 registration
   let I,J be parahalting Program of SCM+FSA;
@@ -283,19 +294,37 @@ theorem :: SCMFSA8B:38
 being Int-Location st I does_not_refer a & (for b being Int-Location st a <> b
   holds s1.b = s2.b) & (for f being FinSeq-Location holds s1.f = s2.f) & I
   is_closed_on s1 holds for k being Element of NAT holds (for b being
-Int-Location st a <> b holds Computation( (s1 +* (I +* Start-At insloc 0)),k).b
-  = Computation( (s2 +* (I +* Start-At insloc 0)),k).b) & (for f being
-  FinSeq-Location holds Computation( (s1 +* (I +* Start-At insloc 0)),k).f =
-Computation( (s2 +* (I +* Start-At insloc 0)),k).f) & IC Computation( (s1 +* (I
-+* Start-At insloc 0)),k) = IC Computation( (s2 +* (I +* Start-At insloc 0)),k)
-  & CurInstr Computation( (s1 +* (I +* Start-At insloc 0)),k) = CurInstr
-  Computation( (s2 +* (I +* Start-At insloc 0)),k);
+Int-Location st a <> b holds Comput(ProgramPart( (s1 +* (I +*
+ Start-At( 0,SCM+FSA)))), (s1 +* (I +*
+ Start-At( 0,SCM+FSA))),k).b
+  = Comput(ProgramPart( (s2 +* (I +* Start-At( 0,SCM+FSA)))), (s2 +* (I +*
+Start-At( 0,SCM+FSA))),k).b) & (for f being
+  FinSeq-Location holds Comput(ProgramPart( (s1 +* (I +*
+   Start-At( 0,SCM+FSA)))), (s1 +* (I +*
+   Start-At( 0,SCM+FSA))),k).f =
+Comput(ProgramPart( (s2 +* (I +* Start-At( 0,SCM+FSA)))), (s2 +* (I +* Start-At
+( 0,SCM+FSA))),k).f) &
+ IC Comput(ProgramPart( (s1 +* (I
++* Start-At( 0,SCM+FSA)))), (s1 +* (I
++* Start-At( 0,SCM+FSA))),k) = IC Comput(ProgramPart( (s2 +* (I +*
+ Start-At( 0,SCM+FSA)))), (s2 +* (I +*
+ Start-At( 0,SCM+FSA))),k)
+  & CurInstr(ProgramPart Comput(ProgramPart( (s1 +* (I +* Start-At( 0,SCM+FSA))
+)), (s1 +* (I +* Start-At( 0,SCM+FSA))),k),
+     Comput(ProgramPart( (s1 +* (I +* Start-At( 0,SCM+FSA)))), (s1 +* (I +*
+Start-At( 0,SCM+FSA))),k))
+   = CurInstr(
+  ProgramPart Comput(ProgramPart( (s2 +* (I +* Start-At( 0,SCM+FSA)))), (s2 +*
+(I +* Start-At( 0,SCM+FSA))),k),
+   Comput(ProgramPart( (s2 +* (I +* Start-At( 0,SCM+FSA)))), (s2 +* (I +*
+Start-At( 0,SCM+FSA))),k));
 
 theorem :: SCMFSA8B:39
   for s being State of SCM+FSA, I,J being Program of SCM+FSA, l
-being Instruction-Location of SCM+FSA holds I is_closed_on s & I is_halting_on
-  s iff I is_closed_on s +* (I +* Start-At l) & I is_halting_on s +* (I +*
-  Start-At l);
+being Element of NAT holds I is_closed_on s & I is_halting_on
+  s iff I is_closed_on s +* (I +* Start-At(l,SCM+FSA)) & I is_halting_on s
+   +* (I +*
+  Start-At(l,SCM+FSA));
 
 theorem :: SCMFSA8B:40
   for s1,s2 being State of SCM+FSA, I being Program of SCM+FSA, a
@@ -316,7 +345,7 @@ implies (for d being Int-Location st a <> d holds IExec(I,s1).d = IExec(I,s2).d
 theorem :: SCMFSA8B:42
   for s being State of SCM+FSA, I,J being parahalting Program of SCM+FSA
 , a,b being read-write Int-Location st I does_not_refer a & J does_not_refer a
-  holds IC IExec(if=0(a,b,I,J),s) = insloc (card I + card J + 5) & (s.a = s.b
+  holds IC IExec(if=0(a,b,I,J),s) =  (card I + card J + 5) & (s.a = s.b
   implies ((for d being Int-Location st a <> d holds IExec(if=0(a,b,I,J),s).d =
   IExec(I,s).d) & for f being FinSeq-Location holds IExec(if=0(a,b,I,J),s).f =
 IExec(I,s).f)) & (s.a <> s.b implies ((for d being Int-Location st a <> d holds
@@ -326,7 +355,7 @@ IExec(I,s).f)) & (s.a <> s.b implies ((for d being Int-Location st a <> d holds
 theorem :: SCMFSA8B:43
   for s being State of SCM+FSA, I,J being parahalting Program of SCM+FSA
 , a,b being read-write Int-Location st I does_not_refer a & J does_not_refer a
-  holds IC IExec(if>0(a,b,I,J),s) = insloc (card I + card J + 5) & (s.a > s.b
+  holds IC IExec(if>0(a,b,I,J),s) =  (card I + card J + 5) & (s.a > s.b
   implies (for d being Int-Location st a <> d holds IExec(if>0(a,b,I,J),s).d =
   IExec(I,s).d) & for f being FinSeq-Location holds IExec(if>0(a,b,I,J),s).f =
   IExec(I,s).f) & (s.a <= s.b implies (for d being Int-Location st a <> d holds

@@ -7,21 +7,22 @@
 environ
 
  vocabularies NUMBERS, STRUCT_0, AMI_1, RELAT_1, SCMFSA_1, FUNCT_7, XBOOLE_0,
-      TARSKI, AMI_3, ZFMISC_1, SUBSET_1, CARD_1, CAT_1, ORDINAL1, AMISTD_1,
-      ARYTM_1, ARYTM_3, NAT_1, FINSET_1, FUNCT_1, AMI_2, XXREAL_0, FINSEQ_1,
-      MCART_1, GRAPHSP, FSM_1, FUNCT_4, FUNCOP_1, INT_1, CARD_3, COMPLEX1,
-      PARTFUN1, FINSEQ_2, SCMNORM, GLIB_000, SCMFSA_2;
+      TARSKI, AMI_3, ZFMISC_1, SUBSET_1, CARD_1, CAT_1, ORDINAL1, ARYTM_1,
+      ARYTM_3, NAT_1, FINSET_1, FUNCT_1, AMI_2, XXREAL_0, FINSEQ_1, MCART_1,
+      GRAPHSP, FSM_1, FUNCT_4, FUNCOP_1, INT_1, CARD_3, COMPLEX1, PARTFUN1,
+      FINSEQ_2, GLIB_000, SCMFSA_2;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, XCMPLX_0,
-      NAT_1, INT_1, RELAT_1, MCART_1, CARD_1, CARD_3, INT_2, FINSEQ_1,
-      FUNCOP_1, STRUCT_0, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSET_1,
-      FUNCT_4, FINSEQ_2, FUNCT_7, AMI_1, SCMNORM, AMI_2, AMI_3, SCMFSA_1,
-      XXREAL_0;
+      XXREAL_0, NAT_1, INT_1, RELAT_1, MCART_1, CARD_1, CARD_3, INT_2,
+      FINSEQ_1, FUNCOP_1, STRUCT_0, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
+      FINSET_1, FUNCT_4, FINSEQ_2, FUNCT_7, AMI_1, SCMNORM, AMI_2, AMI_3,
+      SCMFSA_1;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, INT_2,
-      FINSEQ_4, FINSOP_1, CAT_2, AMI_5, SCMFSA_1, RELSET_1;
+      FINSEQ_4, FINSOP_1, CAT_2, AMI_5, SCMFSA_1, RELSET_1, PRE_POLY, SCMNORM,
+      PBOOLE, ORDINAL2;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FUNCOP_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3,
       STRUCT_0, AMI_1, AMI_2, AMI_3, AMI_5, SCMFSA_1, SCMNORM, CARD_1,
-      FINSET_1, CARD_2;
+      FINSET_1, CARD_2, FUNCT_4, RELSET_1, FUNCT_2, PBOOLE, GRFUNC_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -106,9 +107,14 @@ definition
   func intloc k -> Int-Location equals
 :: SCMFSA_2:def 6
   dl.k;
-  func insloc k -> Instruction-Location of SCM+FSA equals
-:: SCMFSA_2:def 7
-  k;
+:::  func insloc k -> Instruction-Location of SCM+FSA equals
+:::  k;
+:::  coherence
+:::  proof
+:::    il.k in NAT;
+:::    hence thesis;
+:::  end;
+  canceled;
   func fsloc k -> FinSeq-Location equals
 :: SCMFSA_2:def 8
   -(k+1);
@@ -150,13 +156,12 @@ theorem :: SCMFSA_2:28
 theorem :: SCMFSA_2:29
   for x being set st x in SCM+FSA-Data*-Loc holds x is FinSeq-Location;
 
-reserve la,lb for Instruction-Location of SCM+FSA,
-  La for Instruction-Location
-  of SCM,
+reserve la,lb for Element of NAT,
+  La for Element of NAT,
   i for Instruction of SCM+FSA,
   I for Instruction of SCM,
   l for
-  Instruction-Location of SCM+FSA,
+  Element of NAT,
   LA,LB for Element of NAT,
   dA,dB,dC for Element
   of SCM+FSA-Data-Loc,
@@ -228,8 +233,7 @@ definition
   func goto la -> Instruction of SCM+FSA means
 :: SCMFSA_2:def 16
 
-  ex La st la = La & it =
-  goto La;
+  ex La st la = La & it = SCM-goto La;
   let a;
   func a=0_goto la -> Instruction of SCM+FSA means
 :: SCMFSA_2:def 17
@@ -384,7 +388,7 @@ theorem :: SCMFSA_2:73
   SCM-Memory) +* (NAT --> i) is State of SCM;
 
 theorem :: SCMFSA_2:74
-  for s being State of SCM+FSA, s' being State of SCM holds s +* s' +* (
+  for s being State of SCM+FSA, s9 being State of SCM holds s +* s9 +* (
   s|NAT) is State of SCM+FSA;
 
 theorem :: SCMFSA_2:75
@@ -430,17 +434,17 @@ theorem :: SCMFSA_2:83
   for il being Int-Location, dl being FinSeq-Location holds il <> dl;
 
 theorem :: SCMFSA_2:84
-  for il being Instruction-Location of SCM+FSA, dl being Int-Location
+  for il being Element of NAT, dl being Int-Location
   holds il <> dl;
 
 theorem :: SCMFSA_2:85
-  for il being Instruction-Location of SCM+FSA, dl being FinSeq-Location
+  for il being Element of NAT, dl being FinSeq-Location
   holds il <> dl;
 
 theorem :: SCMFSA_2:86
   for s1,s2 being State of SCM+FSA st IC s1 = IC s2 & (for a being
 Int-Location holds s1.a = s2.a) & (for f being FinSeq-Location holds s1.f = s2.
-  f) & for i being Instruction-Location of SCM+FSA holds s1.i = s2.i holds s1 =
+  f) & for i being Element of NAT holds s1.i = s2.i holds s1 =
   s2;
 
 canceled;
@@ -451,33 +455,33 @@ theorem :: SCMFSA_2:88
 begin :: Users guide
 
 theorem :: SCMFSA_2:89
-  Exec(a:=b, s).IC SCM+FSA = Next IC s & Exec(a:=b, s).a = s.b & (
+  Exec(a:=b, s).IC SCM+FSA = succ IC s & Exec(a:=b, s).a = s.b & (
 for c st c <> a holds Exec(a:=b, s).c = s.c) & for f holds Exec(a:=b, s).f = s.
   f;
 
 theorem :: SCMFSA_2:90
-  Exec(AddTo(a,b), s).IC SCM+FSA = Next IC s & Exec(AddTo(a,b), s)
+  Exec(AddTo(a,b), s).IC SCM+FSA = succ IC s & Exec(AddTo(a,b), s)
   .a = s.a + s.b & (for c st c <> a holds Exec(AddTo(a,b), s).c = s.c) & for f
   holds Exec(AddTo(a,b), s).f = s.f;
 
 theorem :: SCMFSA_2:91
-  Exec(SubFrom(a,b), s).IC SCM+FSA = Next IC s & Exec(SubFrom(a,b)
+  Exec(SubFrom(a,b), s).IC SCM+FSA = succ IC s & Exec(SubFrom(a,b)
   , s).a = s.a - s.b & (for c st c <> a holds Exec(SubFrom(a,b), s).c = s.c) &
   for f holds Exec(SubFrom(a,b), s).f = s.f;
 
 theorem :: SCMFSA_2:92
-  Exec(MultBy(a,b), s).IC SCM+FSA = Next IC s & Exec(MultBy(a,b),
+  Exec(MultBy(a,b), s).IC SCM+FSA = succ IC s & Exec(MultBy(a,b),
 s).a = s.a * s.b & (for c st c <> a holds Exec(MultBy(a,b), s).c = s.c) & for f
   holds Exec(MultBy(a,b), s).f = s.f;
 
 theorem :: SCMFSA_2:93
-  Exec(Divide(a,b), s).IC SCM+FSA = Next IC s & (a <> b implies
+  Exec(Divide(a,b), s).IC SCM+FSA = succ IC s & (a <> b implies
 Exec(Divide(a,b), s).a = s.a div s.b) & Exec(Divide(a,b), s).b = s.a mod s.b &
   (for c st c <> a & c <> b holds Exec(Divide(a,b), s).c = s.c) & for f holds
   Exec(Divide(a,b), s).f = s.f;
 
 theorem :: SCMFSA_2:94
-  Exec(Divide(a,a), s).IC SCM+FSA = Next IC s & Exec(Divide(a,a), s).a =
+  Exec(Divide(a,a), s).IC SCM+FSA = succ IC s & Exec(Divide(a,a), s).a =
   s.a mod s.a & (for c st c <> a holds Exec(Divide(a,a), s).c = s.c) & for f
   holds Exec(Divide(a,a), s).f = s.f;
 
@@ -487,31 +491,31 @@ theorem :: SCMFSA_2:95
 
 theorem :: SCMFSA_2:96
   (s.a = 0 implies Exec(a =0_goto l, s).IC SCM+FSA = l) & (s.a <>
-  0 implies Exec(a=0_goto l, s).IC SCM+FSA = Next IC s) & (for c holds Exec(a
+  0 implies Exec(a=0_goto l, s).IC SCM+FSA = succ IC s) & (for c holds Exec(a
   =0_goto l, s).c = s.c) & for f holds Exec(a=0_goto l, s).f = s.f;
 
 theorem :: SCMFSA_2:97
   (s.a > 0 implies Exec(a >0_goto l, s).IC SCM+FSA = l) & (s.a <=
-  0 implies Exec(a>0_goto l, s).IC SCM+FSA = Next IC s) & (for c holds Exec(a
+  0 implies Exec(a>0_goto l, s).IC SCM+FSA = succ IC s) & (for c holds Exec(a
   >0_goto l, s).c = s.c) & for f holds Exec(a>0_goto l, s).f = s.f;
 
 theorem :: SCMFSA_2:98
-  Exec(c:=(g,a), s).IC SCM+FSA = Next IC s & (ex k st k = abs(s.a)
+  Exec(c:=(g,a), s).IC SCM+FSA = succ IC s & (ex k st k = abs(s.a)
 & Exec(c:=(g,a), s).c = (s.g)/.k) & (for b st b <> c holds Exec(c:=(g,a), s).b
   = s.b) & for f holds Exec(c:=(g,a), s).f = s.f;
 
 theorem :: SCMFSA_2:99
-  Exec((g,a):=c, s).IC SCM+FSA = Next IC s & (ex k st k = abs(s.a)
+  Exec((g,a):=c, s).IC SCM+FSA = succ IC s & (ex k st k = abs(s.a)
 & Exec((g,a):=c, s).g = s.g+*(k,s.c)) & (for b holds Exec((g,a):=c, s).b = s.b)
   & for f st f <> g holds Exec((g,a):=c, s).f = s.f;
 
 theorem :: SCMFSA_2:100
-  Exec(c:=len g, s).IC SCM+FSA = Next IC s & Exec(c:=len g, s).c
+  Exec(c:=len g, s).IC SCM+FSA = succ IC s & Exec(c:=len g, s).c
   = len(s.g) & (for b st b <> c holds Exec(c:=len g, s).b = s.b) & for f holds
   Exec(c:=len g, s).f = s.f;
 
 theorem :: SCMFSA_2:101
-  Exec(g:=<0,...,0>c, s).IC SCM+FSA = Next IC s & (ex k st k =
+  Exec(g:=<0,...,0>c, s).IC SCM+FSA = succ IC s & (ex k st k =
 abs(s.c) & Exec(g:=<0,...,0>c, s).g = k |-> 0) & (for b holds Exec(g:=<0,...,0>
   c, s).b = s.b) & for f st f <> g holds Exec(g:=<0,...,0>c, s).f = s.f;
 
@@ -526,7 +530,7 @@ theorem :: SCMFSA_2:103
 
 theorem :: SCMFSA_2:104
   for I being Instruction of SCM+FSA st ex s st Exec(I,s).IC
-  SCM+FSA = Next IC s holds I is non halting;
+  SCM+FSA = succ IC s holds I is non halting;
 
 theorem :: SCMFSA_2:105
   a := b is non halting;

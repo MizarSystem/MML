@@ -9,9 +9,10 @@ environ
  vocabularies NUMBERS, SUBSET_1, AMI_1, AMI_3, SCMFSA_2, AMISTD_2, CARD_1,
       GRAPHSP, ARYTM_3, XXREAL_0, SCMNORM, RELAT_1, FUNCT_1, CARD_3, TARSKI,
       STRUCT_0, FUNCT_4, XBOOLE_0, FUNCOP_1, FSM_1, CIRCUIT2, ARYTM_1, INT_1,
-      COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1;
+      COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1, ORDINAL1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, CARD_3, XCMPLX_0,
-      NAT_1, INT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
+      NAT_1, NAT_D,
+      INT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
       FUNCOP_1, FUNCT_7, FINSEQ_1, FINSEQ_2, STRUCT_0, AMI_1, SCMNORM, AMI_3,
       RELOC, SCMFSA_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, AMI_5, PARTFUN1, RELOC,
@@ -30,7 +31,7 @@ begin :: Incrementing addresses
 
 reserve j, k, l, m, n, p, q for Element of NAT;
 
-reserve L for Instruction-Location of SCM,
+reserve L for Element of NAT,
   A for Data-Location,
   I for
   Instruction of SCM;
@@ -120,28 +121,28 @@ proof
 end;
 
 theorem Th14:
-  for k being Element of NAT,loc being Instruction-Location of
-  SCM+FSA holds IncAddr(goto loc,k) = goto (loc + k)
+  for k being Element of NAT,loc being Element of NAT
+  holds IncAddr(goto loc,k) = goto (loc + k)
 proof
-  let k be Element of NAT, loc be Instruction-Location of SCM+FSA;
+  let k be Element of NAT, loc be Element of NAT;
   consider L such that
 A1: loc = L and
-A2: goto loc = goto L by SCMFSA_2:def 16;
-  reconsider i = goto(L+k) as Instruction of SCM+FSA by SCMFSA_2:38;
+A2: goto loc = SCM-goto L by SCMFSA_2:def 16;
+  reconsider i = SCM-goto(L+k) as Instruction of SCM+FSA by SCMFSA_2:38;
   InsCode (goto loc) = 6 by SCMFSA_2:47;
   then InsCode (goto loc) in {6,7,8} by ENUMSET1:def 1;
-  then ex I being Instruction of SCM st I = goto loc & IncAddr( goto loc,k) =
-  IncAddr(I,k) by Def3;
+  then ex I being Instruction of SCM st I = goto loc &
+   IncAddr( goto loc,k) = IncAddr(I,k) by Def3;
   hence IncAddr(goto loc,k) = i by A2,RELOC:10
     .= goto (loc + k) by A1,SCMFSA_2:def 16;
 end;
 
 theorem Th15:
-  for k being Element of NAT,loc being Instruction-Location of
-SCM+FSA, a being Int-Location holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k
+  for k being Element of NAT,loc being Element of NAT
+, a being Int-Location holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k
   )
 proof
-  let k be Element of NAT, loc be Instruction-Location of SCM+FSA, a be
+  let k be Element of NAT, loc be Element of NAT, a be
   Int-Location;
   consider A,L such that
 A1: a = A & loc = L and
@@ -157,11 +158,11 @@ A2: a=0_goto loc = A=0_goto L by SCMFSA_2:def 17;
 end;
 
 theorem Th16:
-  for k being Element of NAT,loc being Instruction-Location of
-SCM+FSA, a being Int-Location holds IncAddr(a>0_goto loc,k) = a>0_goto (loc + k
+  for k being Element of NAT,loc being Element of NAT
+, a being Int-Location holds IncAddr(a>0_goto loc,k) = a>0_goto (loc + k
   )
 proof
-  let k be Element of NAT, loc be Instruction-Location of SCM+FSA, a be
+  let k be Element of NAT, loc be Element of NAT, a be
   Int-Location;
   consider A,L such that
 A1: a = A & loc = L and
@@ -269,7 +270,7 @@ proof
   per cases by ENUMSET1:def 1;
   suppose
     InsCode i = 6;
-    then consider l being Instruction-Location of SCM+FSA such that
+    then consider l being Element of NAT such that
 A1: i = goto l by SCMFSA_2:59;
     IncAddr(i,m) = goto(l+m) by A1,Th14;
     hence IncAddr(IncAddr(i,m),n) = goto(l+m+n) by Th14
@@ -279,7 +280,7 @@ A1: i = goto l by SCMFSA_2:59;
   suppose
     InsCode i = 7;
     then consider
-    l being Instruction-Location of SCM+FSA, a being Int-Location
+    l being Element of NAT, a being Int-Location
     such that
 A2: i = a=0_goto l by SCMFSA_2:60;
     IncAddr(i,m) = a=0_goto(l+m) by A2,Th15;
@@ -290,7 +291,7 @@ A2: i = a=0_goto l by SCMFSA_2:60;
   suppose
     InsCode i = 8;
     then consider
-    l being Instruction-Location of SCM+FSA, a being Int-Location
+    l being Element of NAT, a being Int-Location
     such that
 A3: i = a>0_goto l by SCMFSA_2:61;
     IncAddr(i,m) = a>0_goto(l+m) by A3,Th16;
@@ -316,7 +317,7 @@ definition
   func IncAddr(p,k) -> preProgram of SCM+FSA means
   :Def6:
   dom it = dom p & for
-  m st insloc m in dom p holds it.insloc m = IncAddr(pi(p,m),k);
+  m st  m in dom p holds it. m = IncAddr(pi(p,m),k);
   existence
   proof
     defpred P [set,set] means ex m st $1 = m & $2 = IncAddr(pi(p,m),k);
@@ -326,8 +327,8 @@ A1: for e being set st e in dom p ex u being set st P[e,u]
 A2:   dom p c= NAT by RELAT_1:def 18;
       assume
       e in dom p;
-      then reconsider e as Instruction-Location of SCM+FSA by A2,AMI_1:def 4;
-      reconsider m = e as Element of NAT by ORDINAL1:def 13;
+      then reconsider e as Element of NAT by A2;
+      reconsider m = e as Element of NAT;
       take IncAddr(pi(p,m),k);
       thus thesis;
     end;
@@ -345,10 +346,9 @@ A6: dom f c= dom the Object-Kind of SCM+FSA by A3,FUNCT_2:def 1;
       let x be set;
       assume
 A7:   x in dom f;
-      then reconsider y = x as Instruction-Location of SCM+FSA by A3,A5,AMI_1:
-      def 4;
-A8:   (the Object-Kind of SCM+FSA).y = ObjectKind y
-        .= the Instructions of SCM+FSA by AMI_1:def 14;
+      then reconsider y = x as Element of NAT by A3,A5;
+A8:   (the Object-Kind of SCM+FSA).y
+        = the Instructions of SCM+FSA by AMI_1:def 14;
       ex m st x = m & f.x = IncAddr(pi(p,m),k) by A3,A4,A7;
       hence thesis by A8;
     end;
@@ -367,18 +367,18 @@ A8:   (the Object-Kind of SCM+FSA).y = ObjectKind y
     thus dom IT = dom p by A3;
     let m;
     assume
-    insloc m in dom p;
-    then ex j st insloc m = j & f.insloc m = IncAddr(pi(p,j),k) by A4;
+     m in dom p;
+    then ex j st  m = j & f. m = IncAddr(pi(p,j),k) by A4;
     hence thesis;
   end;
   uniqueness
   proof
     let IT1,IT2 be preProgram of SCM+FSA such that
 A9: dom IT1 = dom p and
-A10: for m st insloc m in dom p holds IT1.insloc m = IncAddr(pi(p,m) ,
+A10: for m st  m in dom p holds IT1. m = IncAddr(pi(p,m) ,
     k) and
 A11: dom IT2 = dom p and
-A12: for m st insloc m in dom p holds IT2.insloc m = IncAddr(pi(p,m) ,
+A12: for m st  m in dom p holds IT2. m = IncAddr(pi(p,m) ,
     k);
     for x being set st x in dom p holds IT1.x = IT2.x
     proof
@@ -386,13 +386,10 @@ A12: for m st insloc m in dom p holds IT2.insloc m = IncAddr(pi(p,m) ,
       assume
 A13:  x in dom p;
       dom p c= NAT by RELAT_1:def 18;
-      then reconsider l = x as Instruction-Location of SCM+FSA by A13,
-      AMI_1:def
-      4;
-      reconsider m = l as Element of NAT by ORDINAL1:def 13;
-A14:  l = insloc m;
-      hence IT1.x = IncAddr(pi(p,m),k) by A10,A13
-        .= IT2.x by A12,A13,A14;
+      then reconsider l = x as Element of NAT by A13;
+      reconsider m = l as Element of NAT;
+      thus IT1.x = IncAddr(pi(p,m),k) by A10,A13
+        .= IT2.x by A12,A13;
     end;
     hence thesis by A9,A11,FUNCT_1:9;
   end;
@@ -401,14 +398,7 @@ end;
 theorem Th24:
   for p being preProgram of SCM+FSA , k being Element of NAT for l
   being Element of NAT st l in dom p holds IncAddr (p,k).l = IncAddr(pi(p,l),k)
-proof
-  let p be preProgram of SCM+FSA , k be Element of NAT;
-  let l be Element of NAT such that
-A1: l in dom p;
-  reconsider m = l as Element of NAT;
-  l = insloc m;
-  hence thesis by A1,Def6;
-end;
+             by Def6;
 
 theorem
   for I,J being preProgram of SCM+FSA holds IncAddr(I +* J, n) = IncAddr
@@ -418,26 +408,26 @@ proof
 A1: dom IncAddr(J,n) = dom J by Def6;
 A2: now
     let m such that
-A3: insloc m in dom(I +* J);
+A3:  m in dom(I +* J);
     per cases;
     suppose
-A4:   insloc m in dom J;
-A5:   pi(I +* J,m) = (I +* J).insloc m by A3,AMI_1:def 47
-        .= J.insloc m by A4,FUNCT_4:14
+A4:    m in dom J;
+A5:   pi(I +* J,m) = (I +* J). m by A3,AMI_1:def 47
+        .= J. m by A4,FUNCT_4:14
         .= pi(J,m) by A4,AMI_1:def 47;
-      thus (IncAddr(I,n) +* IncAddr(J,n)).insloc m = IncAddr(J,n).insloc m by
+      thus (IncAddr(I,n) +* IncAddr(J,n)). m = IncAddr(J,n). m by
       A1,A4,FUNCT_4:14
         .= IncAddr(pi(I +* J,m),n) by A4,A5,Def6;
     end;
     suppose
-A6:   not insloc m in dom J;
-      insloc m in dom I \/ dom J by A3,FUNCT_4:def 1;
+A6:   not  m in dom J;
+       m in dom I \/ dom J by A3,FUNCT_4:def 1;
       then
-A7:   insloc m in dom I by A6,XBOOLE_0:def 3;
-A8:   pi(I +* J,m) = (I +* J).insloc m by A3,AMI_1:def 47
-        .= I.insloc m by A6,FUNCT_4:12
+A7:    m in dom I by A6,XBOOLE_0:def 3;
+A8:   pi(I +* J,m) = (I +* J). m by A3,AMI_1:def 47
+        .= I. m by A6,FUNCT_4:12
         .= pi(I,m) by A7,AMI_1:def 47;
-      thus (IncAddr(I,n) +* IncAddr(J,n)).insloc m = IncAddr(I,n).insloc m by
+      thus (IncAddr(I,n) +* IncAddr(J,n)). m = IncAddr(I,n). m by
       A1,A6,FUNCT_4:12
         .= IncAddr(pi(I +* J,m),n) by A7,A8,Def6;
     end;
@@ -485,42 +475,42 @@ A7: dom(halt SCM+FSA .--> i) = {halt SCM+FSA} by FUNCOP_1:19;
 A8: now
     let m;
     assume
-A9: insloc m in dom(f*s);
+A9:  m in dom(f*s);
     then
-A10: insloc m in dom s by AMI_1:119;
+A10:  m in dom s by AMI_1:119;
     per cases;
     suppose
-A11:  s.insloc m = halt SCM+FSA;
-A12:  IncAddr(s,n).insloc m = IncAddr(pi(s,m),n) by A10,Th24
+A11:  s. m = halt SCM+FSA;
+A12:  IncAddr(s,n). m = IncAddr(pi(s,m),n) by A10,Th24
         .= IncAddr(halt SCM+FSA,n) by A10,A11,AMI_1:def 47
         .= halt SCM+FSA by Th8;
 A13:  halt SCM+FSA in {halt SCM+FSA} by TARSKI:def 1;
-A14:  pi(f*s,m) = (f*s).insloc m by A9,AMI_1:def 47
+A14:  pi(f*s,m) = (f*s). m by A9,AMI_1:def 47
         .= f.halt SCM+FSA by A10,A11,FUNCT_1:23
         .= (halt SCM+FSA .--> i).halt SCM+FSA by A2,A7,A13,FUNCT_4:14
         .= i by FUNCOP_1:87;
-      thus (g*IncAddr(s,n)).insloc m = g.(IncAddr(s,n).insloc m) by A6,A9,
+      thus (g*IncAddr(s,n)). m = g.(IncAddr(s,n). m) by A6,A9,
       FUNCT_1:23
-        .= (halt SCM+FSA .--> IncAddr(i,n)).(IncAddr(s,n).insloc m) by A5,
+        .= (halt SCM+FSA .--> IncAddr(i,n)).(IncAddr(s,n). m) by A5,
       A12,A13,FUNCT_4:14
         .= IncAddr(pi(f*s,m),n) by A12,A14,FUNCOP_1:87;
     end;
     suppose
-A15:  s.insloc m <> halt SCM+FSA;
+A15:  s. m <> halt SCM+FSA;
 A16:  InsCode IncAddr(pi(s,m),n) = InsCode pi(s,m) by Th22;
-A17:  pi(s,m) = s.insloc m by A10,AMI_1:def 47;
+A17:  pi(s,m) = s. m by A10,AMI_1:def 47;
       then
 A18:  not pi(s,m) in {halt SCM+FSA} by A15,TARSKI:def 1;
       InsCode pi(s,m) <> 0 by A15,A17,SCMFSA_2:122;
       then
 A19:  not IncAddr(pi(s,m),n) in {halt SCM+FSA} by A16,SCMFSA_2:124 ,
       TARSKI:def 1;
-A20:  pi(f*s,m) = (f*s).insloc m by A9,AMI_1:def 47
-        .= f.(s.insloc m) by A10,FUNCT_1:23
+A20:  pi(f*s,m) = (f*s). m by A9,AMI_1:def 47
+        .= f.(s. m) by A10,FUNCT_1:23
         .= (id the Instructions of SCM+FSA).pi(s,m) by A2,A7,A17,A18,FUNCT_4
       :12
         .= pi(s,m) by FUNCT_1:35;
-      thus (g*IncAddr(s,n)).insloc m = g.(IncAddr(s,n).insloc m) by A6,A9,
+      thus (g*IncAddr(s,n)). m = g.(IncAddr(s,n). m) by A6,A9,
       FUNCT_1:23
         .= g.IncAddr(pi(s,m),n) by A10,Def6
         .= (id the Instructions of SCM+FSA).IncAddr(pi(s,m),n) by A5,A19,
@@ -541,10 +531,10 @@ A1: dom IncAddr(I,m) = dom I by Def6;
 A2: now
     let l;
     assume
-A3: insloc l in dom I;
-    then pi(IncAddr(I,m),l) = IncAddr(I,m).insloc l by A1,AMI_1:def 47
+A3:  l in dom I;
+    then pi(IncAddr(I,m),l) = IncAddr(I,m). l by A1,AMI_1:def 47
       .= IncAddr(pi(I,l),m) by A3,Th24;
-    hence IncAddr(IncAddr(I,m),n).insloc l = IncAddr(IncAddr(pi(I,l),m),n) by
+    hence IncAddr(IncAddr(I,m),n). l = IncAddr(IncAddr(pi(I,l),m),n) by
     A1,A3,Th24
       .= IncAddr(pi(I,l),m+n) by Th23;
   end;
@@ -553,43 +543,49 @@ A3: insloc l in dom I;
 end;
 
 theorem
-  for s being State of SCM+FSA holds Exec(IncAddr(CurInstr s,k),s +*
-  Start-At (IC s + k)) = Following(s) +* Start-At (IC Following(s) + k)
+  for p being (the Instructions of SCM+FSA)-valued Function
+  for s being State of SCM+FSA
+   holds Exec(IncAddr(CurInstr(p, s),k),s +*
+  Start-At(IC s+k,SCM+FSA)) = Following(p,s) +*
+   Start-At(IC Following(p,s)+k,SCM+FSA)
 proof
+  let p be (the Instructions of SCM+FSA)-valued Function;
   let s be State of SCM+FSA;
-  set INS = CurInstr s;
-  reconsider m = IC s as Element of NAT by ORDINAL1:def 13;
-A1: Next IC (s +* Start-At (IC s + k)) = Next (insloc(m + k)) by AMI_1:111
-    .= insloc((m + k) + 1) by NAT_1:39
-    .= insloc(m + 1 + k)
-    .= insloc(m + 1) + k
-    .= ((Next IC s) qua Instruction-Location of SCM+FSA) + k by NAT_1:39
-    .= IC (Exec(INS, s) +* Start-At (((Next IC s) qua Instruction-Location
-  of SCM+FSA) + k)) by AMI_1:111;
+  set INS = CurInstr(p, s);
+  reconsider m = IC s as Element of NAT;
+A1: succ IC (s +* Start-At(IC s+k,SCM+FSA)) = succ ((m + k)) by AMI_1:111
+    .= ((m + k) + 1) by NAT_1:39
+    .= (m + 1 + k)
+    .= (m + 1) + k
+    .= ((succ IC s) qua Element of NAT) + k by NAT_1:39
+    .= IC (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)) by AMI_1:111;
 A2: InsCode INS <= 9+1 implies InsCode INS <= 8+1 or InsCode INS = 10 by
   NAT_1:8;
 A3: InsCode INS <= 10+1 implies InsCode INS <= 10 or InsCode INS = 11 by
   NAT_1:8;
 A4: InsCode INS <= 11+1 by SCMFSA_2:35;
 A5: now
-    let d be Instruction-Location of SCM+FSA;
-    thus Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s + k)).d
+    let d be Element of NAT;
+    thus Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d
+     = (s +* Start-At(IC s+k,SCM+FSA)).d
     by AMI_1:def 13
       .= s.d by AMI_1:112
       .= Exec(INS, s).d by AMI_1:def 13
-      .= (Exec(INS, s) +* Start-At (((Next IC s) qua Instruction-Location of
-    SCM+FSA) + k)).d by AMI_1:112;
+      .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by AMI_1:112;
   end;
   per cases by A4,A3,A2,NAT_1:8,33;
   suppose
 A6: InsCode INS = 0;
     then
-A7: Following(s) = Exec(halt SCM+FSA, s) by SCMFSA_2:122
+A7: Following(p,s) = Exec(halt SCM+FSA, s) by SCMFSA_2:122
       .= s by AMI_1:def 8;
     INS = halt SCM+FSA by A6,SCMFSA_2:122;
-    hence Exec(IncAddr(CurInstr s,k),s +* Start-At (IC s + k)) = Exec(halt
-    SCM+FSA, s +* Start-At (IC s + k )) by Th8
-      .= Following(s) +* Start-At (IC Following(s) + k) by A7,AMI_1:def 8;
+    hence Exec(IncAddr(CurInstr(p, s),k),s +*
+     Start-At(IC s+k,SCM+FSA)) = Exec(halt
+    SCM+FSA, s +* Start-At(IC s+k,SCM+FSA)) by Th8
+      .= Following(p,s) +*
+      Start-At(IC Following(p,s)+k,SCM+FSA)
+      by A7,AMI_1:def 8;
   end;
   suppose
     InsCode INS = 1;
@@ -598,11 +594,12 @@ A8: INS = da := db by SCMFSA_2:54;
 A9: IncAddr(INS,k) = INS by A8,Th9;
 A10: now
       let d be FinSeq-Location;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by A8,A9,SCMFSA_2:89
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d
+       = (s +* Start-At(IC s+k,SCM+FSA)).d by A8,A9,SCMFSA_2:89
         .= s.d by SCMFSA_3:12
         .= Exec(INS, s).d by A8,SCMFSA_2:89
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by SCMFSA_3:12;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d
+         by SCMFSA_3:12;
     end;
 A11: now
       let d be Int-Location;
@@ -610,27 +607,27 @@ A11: now
       suppose
 A12:    da = d;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s + k)
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d
+         = (s +* Start-At(IC s+k,SCM+FSA)
         ).db by A8,SCMFSA_2:89
           .= s.db by SCMFSA_3:11
           .= Exec(INS, s).d by A8,A12,SCMFSA_2:89
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by SCMFSA_3:11;
       end;
       suppose
 A13:    da <> d;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s + k)
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d
+         = (s +* Start-At(IC s+k,SCM+FSA)
         ).d by A8,SCMFSA_2:89
           .= s.d by SCMFSA_3:11
           .= Exec(INS, s).d by A8,A13,SCMFSA_2:89
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s) = Next IC s & IC Exec(INS, s +* Start-At (IC s + k))
-    = IC ( Exec(INS, s) +* Start-At (((Next IC s) qua Instruction-Location of
-    SCM+FSA) + k )) by A1,A8,SCMFSA_2:89;
+    IC Exec(INS, s) = succ IC s & IC Exec(INS, s +* Start-At(IC s+k,SCM+FSA))
+    = IC ( Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA))
+     by A1,A8,SCMFSA_2:89;
     hence thesis by A5,A9,A10,A11,SCMFSA_2:86;
   end;
   suppose
@@ -640,11 +637,12 @@ A14: INS = AddTo(da, db) by SCMFSA_2:55;
 A15: IncAddr(INS, k) = INS by A14,Th10;
 A16: now
       let d be FinSeq-Location;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by A14,A15,SCMFSA_2:90
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d
+       = (s +* Start-At(IC s+k,SCM+FSA)).d by A14,A15,SCMFSA_2:90
         .= s.d by SCMFSA_3:12
         .= Exec(INS, s).d by A14,SCMFSA_2:90
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by SCMFSA_3:12;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d
+         by SCMFSA_3:12;
     end;
 A17: now
       let d be Int-Location;
@@ -652,28 +650,28 @@ A17: now
       suppose
 A18:    da = d;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s + k)
-        ).da + (s +* Start-At (IC s + k)).db by A14,SCMFSA_2:90
-          .= s.da + (s +* Start-At (IC s + k)).db by SCMFSA_3:11
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d
+         = (s +* Start-At(IC s+k,SCM+FSA)
+        ).da + (s +* Start-At(IC s+k,SCM+FSA)).db by A14,SCMFSA_2:90
+          .= s.da + (s +* Start-At(IC s+k,SCM+FSA)).db by SCMFSA_3:11
           .= s.da + s.db by SCMFSA_3:11
           .= Exec(INS, s).d by A14,A18,SCMFSA_2:90
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by SCMFSA_3:11;
       end;
       suppose
 A19:    da <> d;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s + k)
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d
+         = (s +* Start-At(IC s+k,SCM+FSA)
         ).d by A14,SCMFSA_2:90
           .= s.d by SCMFSA_3:11
           .= Exec(INS, s).d by A14,A19,SCMFSA_2:90
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s) = Next IC s & IC Exec(INS, s +* Start-At (IC s + k))
-    = IC ( Exec(INS, s) +* Start-At (((Next IC s) qua Instruction-Location of
-    SCM+FSA) + k )) by A1,A14,SCMFSA_2:90;
+    IC Exec(INS, s) = succ IC s & IC Exec(INS, s +* Start-At(IC s+k,SCM+FSA))
+    = IC ( Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA))
+     by A1,A14,SCMFSA_2:90;
     hence thesis by A5,A15,A16,A17,SCMFSA_2:86;
   end;
   suppose
@@ -683,11 +681,13 @@ A20: INS = SubFrom(da, db) by SCMFSA_2:56;
 A21: IncAddr(INS, k) = INS by A20,Th11;
 A22: now
       let d be FinSeq-Location;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by A20,A21,SCMFSA_2:91
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d
+       = (s +* Start-At
+      (IC s + k,SCM+FSA)).d by A20,A21,SCMFSA_2:91
         .= s.d by SCMFSA_3:12
         .= Exec(INS, s).d by A20,SCMFSA_2:91
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by SCMFSA_3:12;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d
+         by SCMFSA_3:12;
     end;
 A23: now
       let d be Int-Location;
@@ -695,28 +695,28 @@ A23: now
       suppose
 A24:    da = d;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s + k)
-        ).da - (s +* Start-At (IC s + k)).db by A20,SCMFSA_2:91
-          .= s.da - (s +* Start-At (IC s + k)).db by SCMFSA_3:11
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d
+         = (s +* Start-At(IC s+k,SCM+FSA)
+        ).da - (s +* Start-At(IC s+k,SCM+FSA)).db by A20,SCMFSA_2:91
+          .= s.da - (s +* Start-At(IC s+k,SCM+FSA)).db by SCMFSA_3:11
           .= s.da - s.db by SCMFSA_3:11
           .= Exec(INS, s).d by A20,A24,SCMFSA_2:91
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by SCMFSA_3:11;
       end;
       suppose
 A25:    da <> d;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s + k)
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d =
+         (s +* Start-At(IC s+k,SCM+FSA)
         ).d by A20,SCMFSA_2:91
           .= s.d by SCMFSA_3:11
           .= Exec(INS, s).d by A20,A25,SCMFSA_2:91
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s) = Next IC s & IC Exec(INS, s +* Start-At (IC s + k))
-    = IC ( Exec(INS, s) +* Start-At (((Next IC s) qua Instruction-Location of
-    SCM+FSA) + k )) by A1,A20,SCMFSA_2:91;
+    IC Exec(INS, s) = succ IC s & IC Exec(INS, s +* Start-At(IC s+k,SCM+FSA))
+    = IC ( Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA))
+     by A1,A20,SCMFSA_2:91;
     hence thesis by A5,A21,A22,A23,SCMFSA_2:86;
   end;
   suppose
@@ -726,11 +726,13 @@ A26: INS = MultBy(da, db) by SCMFSA_2:57;
 A27: IncAddr(INS, k) = INS by A26,Th12;
 A28: now
       let d be FinSeq-Location;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by A26,A27,SCMFSA_2:92
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d =
+       (s +* Start-At
+      (IC s+k,SCM+FSA)).d by A26,A27,SCMFSA_2:92
         .= s.d by SCMFSA_3:12
         .= Exec(INS, s).d by A26,SCMFSA_2:92
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by SCMFSA_3:12;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d
+         by SCMFSA_3:12;
     end;
 A29: now
       let d be Int-Location;
@@ -738,28 +740,28 @@ A29: now
       suppose
 A30:    da = d;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s + k)
-        ).da * (s +* Start-At (IC s + k)).db by A26,SCMFSA_2:92
-          .= s.da * (s +* Start-At (IC s + k)).db by SCMFSA_3:11
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d =
+         (s +* Start-At(IC s+k,SCM+FSA)
+        ).da * (s +* Start-At(IC s+k,SCM+FSA)).db by A26,SCMFSA_2:92
+          .= s.da * (s +* Start-At(IC s+k,SCM+FSA)).db by SCMFSA_3:11
           .= s.da * s.db by SCMFSA_3:11
           .= Exec(INS, s).d by A26,A30,SCMFSA_2:92
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by SCMFSA_3:11;
       end;
       suppose
 A31:    da <> d;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s + k)
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d =
+         (s +* Start-At(IC s+k,SCM+FSA)
         ).d by A26,SCMFSA_2:92
           .= s.d by SCMFSA_3:11
           .= Exec(INS, s).d by A26,A31,SCMFSA_2:92
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s) = Next IC s & IC Exec(INS, s +* Start-At (IC s + k))
-    = IC ( Exec(INS, s) +* Start-At (((Next IC s) qua Instruction-Location of
-    SCM+FSA) + k )) by A1,A26,SCMFSA_2:92;
+    IC Exec(INS, s) = succ IC s & IC Exec(INS, s +* Start-At(IC s+k,SCM+FSA))
+    = IC ( Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA))
+     by A1,A26,SCMFSA_2:92;
     hence thesis by A5,A27,A28,A29,SCMFSA_2:86;
   end;
   suppose
@@ -769,11 +771,13 @@ A32: INS = Divide(da, db) by SCMFSA_2:58;
 A33: IncAddr(INS,k) = INS by A32,Th13;
 A34: now
       let d be FinSeq-Location;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by A32,A33,SCMFSA_2:93
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d =
+       (s +* Start-At
+      (IC s+k,SCM+FSA)).d by A32,A33,SCMFSA_2:93
         .= s.d by SCMFSA_3:12
         .= Exec(INS, s).d by A32,SCMFSA_2:93
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by SCMFSA_3:12;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d
+         by SCMFSA_3:12;
     end;
 A35: now
       let d be Int-Location;
@@ -784,32 +788,37 @@ A36:    da <> db;
           per cases;
           suppose
 A37:        da = d;
-            hence Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s
-            + k)).da div (s +* Start-At (IC s + k)).db by A32,A36,SCMFSA_2:93
-              .= s.da div (s +* Start-At (IC s + k)).db by SCMFSA_3:11
+            hence Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d =
+             (s +* Start-At (IC s
+            + k,SCM+FSA)).da div (s +* Start-At(IC s+k,SCM+FSA)).db
+             by A32,A36,SCMFSA_2:93
+              .= s.da div (s +* Start-At(IC s+k,SCM+FSA)).db by SCMFSA_3:11
               .= s.da div s.db by SCMFSA_3:11
               .= Exec(INS, s).d by A32,A36,A37,SCMFSA_2:93
-              .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-            Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+              .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d
+               by SCMFSA_3:11;
           end;
           suppose
 A38:        db = d;
-            hence Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s
-            + k)).da mod (s +* Start-At (IC s + k)).db by A32,SCMFSA_2:93
-              .= s.da mod (s +* Start-At (IC s + k)).db by SCMFSA_3:11
+            hence Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d =
+             (s +* Start-At (IC s
+            + k,SCM+FSA)).da mod (s +* Start-At(IC s+k,SCM+FSA)).db
+             by A32,SCMFSA_2:93
+              .= s.da mod (s +* Start-At(IC s+k,SCM+FSA)).db by SCMFSA_3:11
               .= s.da mod s.db by SCMFSA_3:11
               .= Exec(INS, s).d by A32,A38,SCMFSA_2:93
-              .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-            Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+              .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d
+               by SCMFSA_3:11;
           end;
           suppose
 A39:        da <> d & db <> d;
-            hence Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s
-            + k)).d by A32,SCMFSA_2:93
+            hence Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d =
+             (s +* Start-At (IC s
+            + k,SCM+FSA)).d by A32,SCMFSA_2:93
               .= s.d by SCMFSA_3:11
               .= Exec(INS, s).d by A32,A39,SCMFSA_2:93
-              .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-            Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+              .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d
+               by SCMFSA_3:11;
           end;
         end;
       end;
@@ -819,71 +828,79 @@ A40:    da = db;
           per cases;
           suppose
 A41:        da = d;
-            hence Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s
-            + k)).da mod (s +* Start-At (IC s + k)).da by A32,A40,SCMFSA_2:94
-              .= s.da mod (s +* Start-At (IC s + k)).da by SCMFSA_3:11
+            hence Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d =
+             (s +* Start-At (IC s
+            + k,SCM+FSA)).da mod (s +* Start-At(IC s+k,SCM+FSA)).da
+             by A32,A40,SCMFSA_2:94
+              .= s.da mod (s +* Start-At(IC s+k,SCM+FSA)).da by SCMFSA_3:11
               .= s.da mod s.da by SCMFSA_3:11
               .= Exec(INS, s).d by A32,A40,A41,SCMFSA_2:94
-              .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-            Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+              .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d
+               by SCMFSA_3:11;
           end;
           suppose
 A42:        da <> d;
-            hence Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s
-            + k)).d by A32,A40,SCMFSA_2:94
+            hence Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d =
+             (s +* Start-At (IC s
+            + k,SCM+FSA)).d by A32,A40,SCMFSA_2:94
               .= s.d by SCMFSA_3:11
               .= Exec(INS, s).d by A32,A40,A42,SCMFSA_2:94
-              .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-            Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+              .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d
+               by SCMFSA_3:11;
           end;
         end;
       end;
     end;
-    IC Exec(INS, s) = Next IC s & IC Exec(INS, s +* Start-At (IC s + k))
-    = IC ( Exec(INS, s) +* Start-At (((Next IC s) qua Instruction-Location of
-    SCM+FSA) + k )) by A1,A32,SCMFSA_2:93;
+    IC Exec(INS, s) = succ IC s & IC Exec(INS, s +* Start-At(IC s+k,SCM+FSA))
+    = IC ( Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA))
+     by A1,A32,SCMFSA_2:93;
     hence thesis by A5,A33,A34,A35,SCMFSA_2:86;
   end;
   suppose
     InsCode INS = 6;
-    then consider loc being Instruction-Location of SCM+FSA such that
+    then consider loc being Element of NAT such that
 A43: INS = goto loc by SCMFSA_2:59;
 A44: IncAddr(INS, k) = goto (loc + k) by A43,Th14;
 A45: now
       let d be Int-Location;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by A44,SCMFSA_2:95
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d =
+       (s +* Start-At
+      (IC s + k,SCM+FSA)).d by A44,SCMFSA_2:95
         .= s.d by SCMFSA_3:11
         .= Exec(INS, s).d by A43,SCMFSA_2:95
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by SCMFSA_3:11;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d
+         by SCMFSA_3:11;
     end;
 A46: IC Exec(INS, s) = loc by A43,SCMFSA_2:95;
 A47: now
-      let d be Instruction-Location of SCM+FSA;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by AMI_1:def 13
+      let d be Element of NAT;
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d =
+       (s +* Start-At
+      (IC s +k,SCM+FSA)).d by AMI_1:def 13
         .= s.d by AMI_1:112
         .= Exec(INS, s).d by AMI_1:def 13
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by AMI_1:112;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by AMI_1:112;
     end;
 A48: now
       let d be FinSeq-Location;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by A44,SCMFSA_2:95
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d =
+       (s +* Start-At
+      (IC s +k,SCM+FSA)).d by A44,SCMFSA_2:95
         .= s.d by SCMFSA_3:12
         .= Exec(INS, s).d by A43,SCMFSA_2:95
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by SCMFSA_3:12;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d
+         by SCMFSA_3:12;
     end;
-    IC Exec(IncAddr(INS, k), s +* Start-At (IC s + k)) = loc + k by A44,
+    IC Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)) = loc + k by A44,
     SCMFSA_2:95
-      .= IC (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)) by A46,AMI_1:
+      .= IC (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)) by A46,AMI_1:
     111;
     hence thesis by A45,A48,A47,SCMFSA_2:86;
   end;
   suppose
     InsCode INS = 7;
     then consider
-    loc being Instruction-Location of SCM+FSA, da being Int-Location
+    loc being Element of NAT, da being Int-Location
     such that
 A49: INS = da=0_goto loc by SCMFSA_2:60;
 A50: IncAddr(INS, k) = da=0_goto (loc + k) by A49,Th15;
@@ -893,77 +910,80 @@ A50: IncAddr(INS, k) = da=0_goto (loc + k) by A49,Th15;
 A51:    s.da=0;
 A52:    now
           let d be Int-Location;
-          thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by A50,SCMFSA_2:96
+          thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by A50,SCMFSA_2:96
             .= s.d by SCMFSA_3:11
             .= Exec(INS, s).d by A49,SCMFSA_2:96
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
           SCMFSA_3:11;
         end;
 A53:    now
           let d be FinSeq-Location;
-          thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by A50,SCMFSA_2:96
+          thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by A50,SCMFSA_2:96
             .= s.d by SCMFSA_3:12
             .= Exec(INS, s).d by A49,SCMFSA_2:96
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
           SCMFSA_3:12;
         end;
 A54:    IC Exec(INS, s) = loc by A49,A51,SCMFSA_2:96;
 A55:    now
-          let d be Instruction-Location of SCM+FSA;
-          thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by AMI_1:def 13
+          let d be Element of NAT;
+          thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by AMI_1:def 13
             .= s.d by AMI_1:112
             .= Exec(INS, s).d by AMI_1:def 13
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by AMI_1:
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by AMI_1:
           112;
         end;
-        (s +* Start-At(IC s + k)).da=0 by A51,SCMFSA_3:11;
-        then IC Exec(IncAddr(INS, k), s +* Start-At (IC s + k)) = loc + k by
+        (s +* Start-At(IC s+k,SCM+FSA)).da=0 by A51,SCMFSA_3:11;
+        then IC Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA))
+         = loc + k by
         A50,SCMFSA_2:96
-          .= IC (Exec(INS,s) +* Start-At (IC Exec(INS, s) + k)) by A54,AMI_1
+          .= IC (Exec(INS,s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA))
+           by A54,AMI_1
         :111;
         hence
-        Exec(IncAddr(INS, k), s +* Start-At (IC s + k)) = Exec(INS, s) +*
-        Start-At (IC Exec(INS, s) + k) by A53,A52,A55,SCMFSA_2:86;
+        Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)) = Exec(INS, s) +*
+        Start-At(IC Exec(INS,s)+k,SCM+FSA) by A53,A52,A55,SCMFSA_2:86;
       end;
       suppose
 A56:    s.da<>0;
 A57:    now
-          let d be Instruction-Location of SCM+FSA;
-          thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by AMI_1:def 13
+          let d be Element of NAT;
+          thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by AMI_1:def 13
             .= s.d by AMI_1:112
             .= Exec(INS, s).d by AMI_1:def 13
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by AMI_1:
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by AMI_1:
           112;
         end;
 A58:    now
           let d be Int-Location;
-          thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by A50,SCMFSA_2:96
+          thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by A50,SCMFSA_2:96
             .= s.d by SCMFSA_3:11
             .= Exec(INS, s).d by A49,SCMFSA_2:96
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
           SCMFSA_3:11;
         end;
 A59:    now
           let d be FinSeq-Location;
-          thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by A50,SCMFSA_2:96
+          thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by A50,SCMFSA_2:96
             .= s.d by SCMFSA_3:12
             .= Exec(INS, s).d by A49,SCMFSA_2:96
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
           SCMFSA_3:12;
         end;
-        (s +* Start-At(IC s + k)).da<>0 & IC Exec(INS, s) = Next IC s by
+        (s +* Start-At(IC s+k,SCM+FSA)).da<>0 & IC Exec(INS, s) = succ IC s by
         A49,A56, SCMFSA_2:96,SCMFSA_3:11;
         then
-        IC Exec(IncAddr(INS, k), s +* Start-At (IC s + k)) = IC (Exec(INS
-        , s) +* Start-At (IC Exec(INS, s) + k)) by A1,A50, SCMFSA_2:96;
-        hence Exec(IncAddr(INS, k), s +* Start-At (IC s + k)) = (Exec(INS, s)
-        +* Start-At (IC Exec(INS, s) + k)) by A59,A58,A57,SCMFSA_2:86;
+        IC Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)) = IC (Exec(INS
+        , s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)) by A1,A50, SCMFSA_2:96;
+        hence Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA))
+         = (Exec(INS, s)
+        +* Start-At(IC Exec(INS,s)+k,SCM+FSA)) by A59,A58,A57,SCMFSA_2:86;
       end;
     end;
     hence thesis;
@@ -971,7 +991,7 @@ A59:    now
   suppose
     InsCode INS = 8;
     then consider
-    loc being Instruction-Location of SCM+FSA, da being Int-Location
+    loc being Element of NAT, da being Int-Location
     such that
 A60: INS = da>0_goto loc by SCMFSA_2:61;
     now
@@ -980,78 +1000,86 @@ A60: INS = da>0_goto loc by SCMFSA_2:61;
 A61:    s.da > 0;
 A62:    now
           let d be Int-Location;
-          thus Exec(da>0_goto (loc + k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by SCMFSA_2:97
+          thus Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA)).d
+           = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by SCMFSA_2:97
             .= s.d by SCMFSA_3:11
             .= Exec(INS, s).d by A60,SCMFSA_2:97
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
           SCMFSA_3:11;
         end;
 A63:    now
           let d be FinSeq-Location;
-          thus Exec(da>0_goto (loc + k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by SCMFSA_2:97
+          thus Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA)).d
+           = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by SCMFSA_2:97
             .= s.d by SCMFSA_3:12
             .= Exec(INS, s).d by A60,SCMFSA_2:97
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
           SCMFSA_3:12;
         end;
 A64:    IC Exec(INS, s) = loc by A60,A61,SCMFSA_2:97;
 A65:    now
-          let d be Instruction-Location of SCM+FSA;
-          thus Exec(da>0_goto (loc + k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by AMI_1:def 13
+          let d be Element of NAT;
+          thus Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA)).d
+           = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by AMI_1:def 13
             .= s.d by AMI_1:112
             .= Exec(INS, s).d by AMI_1:def 13
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by AMI_1:
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by AMI_1:
           112;
         end;
-        (s +* Start-At(IC s + k)).da > 0 by A61,SCMFSA_3:11;
-        then IC Exec(da>0_goto (loc + k), s +* Start-At (IC s + k)) = loc + k
+        (s +* Start-At(IC s+k,SCM+FSA)).da > 0 by A61,SCMFSA_3:11;
+        then IC Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA))
+         = loc + k
         by SCMFSA_2:97
-          .= IC (Exec(INS,s) +* Start-At (IC Exec(INS, s) + k)) by A64,AMI_1
+          .= IC (Exec(INS,s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA))
+           by A64,AMI_1
         :111;
         hence
-        Exec(da>0_goto (loc + k), s +* Start-At (IC s + k)) = Exec(INS,s)
-        +* Start-At (IC Exec(INS, s) + k) by A63,A62,A65,SCMFSA_2:86;
+        Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA)) = Exec(INS,s)
+        +* Start-At(IC Exec(INS,s)+k,SCM+FSA) by A63,A62,A65,SCMFSA_2:86;
       end;
       suppose
 A66:    s.da <= 0;
 A67:    now
-          let d be Instruction-Location of SCM+FSA;
-          thus Exec(da>0_goto (loc + k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by AMI_1:def 13
+          let d be Element of NAT;
+          thus Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA)).d
+           = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by AMI_1:def 13
             .= s.d by AMI_1:112
             .= Exec(INS, s).d by AMI_1:def 13
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by AMI_1:
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by AMI_1:
           112;
         end;
 A68:    now
           let d be Int-Location;
-          thus Exec(da>0_goto (loc + k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by SCMFSA_2:97
+          thus Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA)).d
+           = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by SCMFSA_2:97
             .= s.d by SCMFSA_3:11
             .= Exec(INS, s).d by A60,SCMFSA_2:97
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
           SCMFSA_3:11;
         end;
 A69:    now
           let d be FinSeq-Location;
-          thus Exec(da>0_goto (loc + k), s +* Start-At (IC s + k)).d = (s +*
-          Start-At (IC s + k)).d by SCMFSA_2:97
+          thus Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA)).d
+           = (s +*
+          Start-At(IC s+k,SCM+FSA)).d by SCMFSA_2:97
             .= s.d by SCMFSA_3:12
             .= Exec(INS, s).d by A60,SCMFSA_2:97
-            .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by
+            .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
           SCMFSA_3:12;
         end;
-        (s +* Start-At(IC s + k)).da <= 0 & IC Exec(INS, s) = Next IC s
+        (s +* Start-At(IC s+k,SCM+FSA)).da <= 0 & IC Exec(INS, s) = succ IC s
         by A60,A66, SCMFSA_2:97,SCMFSA_3:11;
         then
-        IC Exec(da>0_goto (loc + k), s +* Start-At (IC s + k)) = IC (Exec
-        (INS, s) +* Start-At (IC Exec(INS, s) + k)) by A1, SCMFSA_2:97;
+        IC Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA)) = IC (Exec
+        (INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)) by A1, SCMFSA_2:97;
         hence
-        Exec(da>0_goto (loc + k), s +* Start-At (IC s + k)) = Exec(INS, s
-        ) +* Start-At (IC Exec(INS, s) + k) by A69,A68,A67,SCMFSA_2:86;
+        Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA)) = Exec(INS, s
+        ) +* Start-At(IC Exec(INS,s)+k,SCM+FSA) by A69,A68,A67,SCMFSA_2:86;
       end;
     end;
     hence thesis by A60,Th16;
@@ -1063,43 +1091,46 @@ A70: INS = da :=(f, db) by SCMFSA_2:62;
 A71: IncAddr(INS,k) = INS by A70,Th17;
 A72: now
       let d be FinSeq-Location;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by A70,A71,SCMFSA_2:98
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d
+       = (s +* Start-At
+      (IC s +k,SCM+FSA)).d by A70,A71,SCMFSA_2:98
         .= s.d by SCMFSA_3:12
         .= Exec(INS, s).d by A70,SCMFSA_2:98
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by SCMFSA_3:12;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d
+         by SCMFSA_3:12;
     end;
 A73: now
       let d be Int-Location;
       consider m being Element of NAT such that
 A74:  m = abs(s.db) and
 A75:  Exec(INS, s).da = (s.f)/.m by A70,SCMFSA_2:98;
-A76:  ex m' being Element of NAT st m' = abs((s +* Start-At (IC s + k)).
-db) & Exec(INS,s +* Start-At (IC s + k)).da = ((s +* Start-At (IC s + k)).f)/.
-      m' by A70,SCMFSA_2:98;
+A76:  ex m9 being Element of NAT st m9 = abs((s +* Start-At(IC s+k,SCM+FSA)).
+db) & Exec(INS,s +* Start-At(IC s+k,SCM+FSA)).da =
+ ((s +* Start-At(IC s+k,SCM+FSA)).f)/.
+      m9 by A70,SCMFSA_2:98;
       per cases;
       suppose
 A77:    da = d;
-        (s +* Start-At (IC s + k)).db = s.db by SCMFSA_3:11;
-        hence Exec(INS, s +* Start-At (IC s + k)).d = (s.f)/.m by A74,A76,
+        (s +* Start-At(IC s+k,SCM+FSA)).db = s.db by SCMFSA_3:11;
+        hence Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d = (s.f)/.m by A74,A76,
         A77,SCMFSA_3:12
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by A75,A77,SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d
+           by A75,A77,SCMFSA_3:11;
       end;
       suppose
 A78:    da <> d;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s + k)
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d =
+         (s +* Start-At(IC s+k,SCM+FSA)
         ).d by A70,SCMFSA_2:98
           .= s.d by SCMFSA_3:11
           .= Exec(INS, s).d by A70,A78,SCMFSA_2:98
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s) = Next IC s & IC Exec(INS, s +* Start-At (IC s + k))
-    = IC ( Exec(INS, s) +* Start-At (((Next IC s) qua Instruction-Location of
-    SCM+FSA) + k )) by A1,A70,SCMFSA_2:98;
+    IC Exec(INS, s) = succ IC s & IC Exec(INS, s +* Start-At(IC s+k,SCM+FSA))
+    = IC ( Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA))
+     by A1,A70,SCMFSA_2:98;
     hence thesis by A5,A71,A72,A73,SCMFSA_2:86;
   end;
   suppose
@@ -1109,44 +1140,49 @@ A79: INS = (f, db):=da by SCMFSA_2:63;
 A80: IncAddr(INS,k) = INS by A79,Th18;
 A81: now
       let d be Int-Location;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by A79,A80,SCMFSA_2:99
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d =
+       (s +* Start-At
+      (IC s +k,SCM+FSA)).d by A79,A80,SCMFSA_2:99
         .= s.d by SCMFSA_3:11
         .= Exec(INS, s).d by A79,SCMFSA_2:99
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by SCMFSA_3:11;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d
+         by SCMFSA_3:11;
     end;
 A82: now
       let g be FinSeq-Location;
       consider m being Element of NAT such that
 A83:  m = abs(s.db) and
 A84:  Exec(INS, s).f = s.f+*(m,s.da) by A79,SCMFSA_2:99;
-A85:  ex m' being Element of NAT st m' = abs((s +* Start-At (IC s + k)).
-db) & Exec(INS,s +* Start-At (IC s + k)).f = (s +* Start-At (IC s + k) ).f +*(
-      m',(s +* Start-At (IC s + k)).da) by A79,SCMFSA_2:99;
+A85:  ex m9 being Element of NAT st m9 = abs((s +* Start-At(IC s+k,SCM+FSA)).
+db) & Exec(INS,s +* Start-At(IC s+k,SCM+FSA)).f =
+ (s +* Start-At(IC s+k,SCM+FSA) ).f +*(
+      m9,(s +* Start-At(IC s+k,SCM+FSA)).da) by A79,SCMFSA_2:99;
       per cases;
       suppose
 A86:    f = g;
-        (s +* Start-At (IC s + k)).f = s.f & (s +* Start-At (IC s + k)).
+        (s +* Start-At(IC s+k,SCM+FSA)).f = s.f &
+         (s +* Start-At(IC s+k,SCM+FSA)).
         db = s.db by SCMFSA_3:11,12;
-        hence Exec(INS, s +* Start-At (IC s + k)).g = s.f+*(m,s.da) by A83,
+        hence Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).g = s.f+*(m,s.da)
+         by A83,
         A85,A86,SCMFSA_3:11
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).g by A84,A86,SCMFSA_3:12;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).g
+           by A84,A86,SCMFSA_3:12;
       end;
       suppose
 A87:    f <> g;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).g = (s +* Start-At (IC s + k)
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).g =
+         (s +* Start-At(IC s+k,SCM+FSA)
         ).g by A79,SCMFSA_2:99
           .= s.g by SCMFSA_3:12
           .= Exec(INS, s).g by A79,A87,SCMFSA_2:99
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).g by SCMFSA_3:12;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).g by SCMFSA_3:12;
       end;
     end;
-    IC Exec(INS, s) = Next IC s & IC Exec(INS, s +* Start-At (IC s + k))
-    = IC ( Exec(INS, s) +* Start-At (((Next IC s) qua Instruction-Location of
-    SCM+FSA) + k )) by A1,A79,SCMFSA_2:99;
+    IC Exec(INS, s) = succ IC s & IC Exec(INS, s +* Start-At(IC s+k,SCM+FSA))
+    = IC ( Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA))
+     by A1,A79,SCMFSA_2:99;
     hence thesis by A5,A80,A81,A82,SCMFSA_2:86;
   end;
   suppose
@@ -1156,38 +1192,40 @@ A88: INS = da :=len f by SCMFSA_2:64;
 A89: IncAddr(INS,k) = INS by A88,Th19;
 A90: now
       let d be FinSeq-Location;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by A88,A89,SCMFSA_2:100
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d =
+       (s +* Start-At
+      (IC s +k,SCM+FSA)).d by A88,A89,SCMFSA_2:100
         .= s.d by SCMFSA_3:12
         .= Exec(INS, s).d by A88,SCMFSA_2:100
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by SCMFSA_3:12;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d
+         by SCMFSA_3:12;
     end;
 A91: now
       let d be Int-Location;
       per cases;
       suppose
 A92:    da = d;
-        hence Exec(INS, s +* Start-At (IC s + k)).d = len((s +* Start-At (IC s
-        + k)).f) by A88,SCMFSA_2:100
+        hence Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d =
+         len((s +* Start-At (IC s
+        + k,SCM+FSA)).f) by A88,SCMFSA_2:100
           .= len(s.f) by SCMFSA_3:12
           .= Exec(INS, s).d by A88,A92,SCMFSA_2:100
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by SCMFSA_3:11;
       end;
       suppose
 A93:    da <> d;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).d = (s +* Start-At (IC s + k)
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d =
+         (s +* Start-At(IC s+k,SCM+FSA)
         ).d by A88,SCMFSA_2:100
           .= s.d by SCMFSA_3:11
           .= Exec(INS, s).d by A88,A93,SCMFSA_2:100
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).d by SCMFSA_3:11;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s) = Next IC s & IC Exec(INS, s +* Start-At (IC s + k))
-    = IC ( Exec(INS, s) +* Start-At (((Next IC s) qua Instruction-Location of
-    SCM+FSA) + k )) by A1,A88,SCMFSA_2:100;
+    IC Exec(INS, s) = succ IC s & IC Exec(INS, s +* Start-At(IC s+k,SCM+FSA))
+    = IC ( Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA))
+     by A1,A88,SCMFSA_2:100;
     hence thesis by A5,A89,A90,A91,SCMFSA_2:86;
   end;
   suppose
@@ -1197,40 +1235,44 @@ A94: INS = f:=<0,...,0>da by SCMFSA_2:65;
 A95: IncAddr(INS,k) = INS by A94,Th20;
 A96: now
       let d be Int-Location;
-      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d = (s +* Start-At
-      (IC s + k)).d by A94,A95,SCMFSA_2:101
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d =
+       (s +* Start-At
+      (IC s +k,SCM+FSA)).d by A94,A95,SCMFSA_2:101
         .= s.d by SCMFSA_3:11
         .= Exec(INS, s).d by A94,SCMFSA_2:101
-        .= (Exec(INS, s) +* Start-At (IC Exec(INS, s) + k)).d by SCMFSA_3:11;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d
+         by SCMFSA_3:11;
     end;
 A97: now
       let g be FinSeq-Location;
 A98:  (ex m being Element of NAT st m = abs(s.da) & Exec(INS, s ).f = m
-|-> 0 )& ex m' being Element of NAT st m' = abs((s +* Start-At (IC s + k)).da)
-      & Exec (INS,s +* Start-At (IC s + k)).f = m' |-> 0 by A94,SCMFSA_2:101;
+|-> 0 )& ex m9 being Element of NAT st m9 =
+ abs((s +* Start-At(IC s+k,SCM+FSA)).da)
+      & Exec (INS,s +* Start-At(IC s+k,SCM+FSA)).f = m9 |-> 0
+       by A94,SCMFSA_2:101;
       per cases;
       suppose
 A99:    f = g;
-        (s +* Start-At (IC s + k)).da = s.da by SCMFSA_3:11;
+        (s +* Start-At(IC s+k,SCM+FSA)).da = s.da by SCMFSA_3:11;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).g = (Exec(INS, s) +* Start-At
-        (((Next IC s) qua Instruction-Location of SCM+FSA) + k)).g by A98,A99,
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).g = (Exec(INS, s) +* Start-At
+        (((succ IC s)) + k,SCM+FSA)).g by A98,A99,
         SCMFSA_3:12;
       end;
       suppose
 A100:   f <> g;
         hence
-        Exec(INS, s +* Start-At (IC s + k)).g = (s +* Start-At (IC s + k)
+        Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).g =
+         (s +* Start-At(IC s+k,SCM+FSA)
         ).g by A94,SCMFSA_2:101
           .= s.g by SCMFSA_3:12
           .= Exec(INS, s).g by A94,A100,SCMFSA_2:101
-          .= (Exec(INS, s) +* Start-At (((Next IC s) qua
-        Instruction-Location of SCM+FSA) + k)).g by SCMFSA_3:12;
+          .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).g by SCMFSA_3:12;
       end;
     end;
-    IC Exec(INS, s) = Next IC s & IC Exec(INS, s +* Start-At (IC s + k))
-    = IC ( Exec(INS, s) +* Start-At (((Next IC s) qua Instruction-Location of
-    SCM+FSA) + k )) by A1,A94,SCMFSA_2:101;
+    IC Exec(INS, s) = succ IC s & IC Exec(INS, s +* Start-At(IC s+k,SCM+FSA))
+    = IC ( Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA))
+     by A1,A94,SCMFSA_2:101;
     hence thesis by A5,A95,A96,A97,SCMFSA_2:86;
   end;
 end;
@@ -1238,19 +1280,21 @@ end;
 theorem
   for INS being Instruction of SCM+FSA, s being State of SCM+FSA, p
 being FinPartState of SCM+FSA, i, j, k being Element of NAT st IC s = j+k holds
-Exec(INS, s +* Start-At (IC s -' k)) = Exec(IncAddr(INS, k), s) +* Start-At (IC
-  Exec(IncAddr(INS,k), s) -' k)
+Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = Exec(IncAddr(INS, k), s)
+ +* Start-At (IC
+  Exec(IncAddr(INS,k), s) -'k,SCM+FSA)
 proof
   let INS be Instruction of SCM+FSA, s be State of SCM+FSA, p be FinPartState
   of SCM+FSA, i, j, k be Element of NAT;
 A1: now
-    let d be Instruction-Location of SCM+FSA;
-    thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)).
+    let d be Element of NAT;
+    thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+     (s +* Start-At(IC s -'k,SCM+FSA)).
     d by AMI_1:def 13
       .= s.d by AMI_1:112
       .= Exec(IncAddr(INS, k), s).d by AMI_1:def 13
       .= (Exec(IncAddr(INS, k), s) +* Start-At (IC Exec(IncAddr(INS,k), s)
-    -' k)).d by AMI_1:112;
+    -'k,SCM+FSA)).d by AMI_1:112;
   end;
 A2: InsCode INS <= 9+1 implies InsCode INS <= 8+1 or InsCode INS = 10 by
   NAT_1:8;
@@ -1260,24 +1304,26 @@ A4: InsCode INS <= 11+1 by SCMFSA_2:35;
   assume
 A5: IC s = j+k;
   then
-A6: Next (IC s -' k) = Next (insloc j + k -' k)
-    .= Next (insloc j) by NAT_D:34
-    .= insloc(j+1) by NAT_1:39
-    .= insloc(j+1) + k -' k by NAT_D:34
-    .= insloc(j+1+k) -' k
-    .= insloc(j+k+1) -' k
-    .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A5,NAT_1:39;
+A6: succ (IC s -'k) = succ ( j + k -'k)
+    .= succ ( j) by NAT_D:34
+    .= (j+1) by NAT_1:39
+    .= (j+1) + k -' k by NAT_D:34
+    .= (j+1+k) -' k
+    .= (j+k+1) -' k
+    .= ((succ IC s)) -' k by A5,NAT_1:39;
   per cases by A4,A3,A2,NAT_1:8,33;
   suppose
 A7: InsCode INS = 0;
 A8: IncAddr (halt SCM+FSA, k) = halt SCM+FSA by Th8;
 A9: INS = halt SCM+FSA by A7,SCMFSA_2:122;
-    hence Exec(INS, s +* Start-At (IC s -' k)) = s +* Start-At (IC s -' k) by
+    hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) =
+     s +* Start-At(IC s -'k,SCM+FSA) by
     AMI_1:def 8
-      .= s +* Start-At (IC Exec(IncAddr(INS,k), s) -' k) by A9,A8,AMI_1:def
+      .= s +* Start-At (IC Exec(IncAddr(INS,k), s) -'k,SCM+FSA)
+       by A9,A8,AMI_1:def
     8
       .= Exec(IncAddr(INS, k), s) +* Start-At (IC Exec(IncAddr(INS,k), s) -'
-    k) by A9,A8,AMI_1:def 8;
+    k,SCM+FSA) by A9,A8,AMI_1:def 8;
   end;
   suppose
     InsCode INS = 1;
@@ -1286,42 +1332,45 @@ A10: INS = da := db by SCMFSA_2:54;
 A11: IncAddr(INS, k) = da := db by A10,Th9;
 A12: now
       let d be FinSeq-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A10,SCMFSA_2:89
         .= s.d by SCMFSA_3:12
         .= Exec(IncAddr(INS, k), s).d by A11,SCMFSA_2:89
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:12;
+      -'k,SCM+FSA)).d by SCMFSA_3:12;
     end;
 A13: now
       let d be Int-Location;
       per cases;
       suppose
 A14:    da = d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).db by A10,SCMFSA_2:89
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s +* Start-At (IC s -'
+        k,SCM+FSA)).db by A10,SCMFSA_2:89
           .= s.db by SCMFSA_3:11
           .= Exec(IncAddr(INS,k), s).d by A11,A14,SCMFSA_2:89
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:11;
+        -'k,SCM+FSA)).d by SCMFSA_3:11;
       end;
       suppose
 A15:    da <> d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).d by A10,SCMFSA_2:89
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d
+         = (s +* Start-At (IC s -'
+        k,SCM+FSA)).d by A10,SCMFSA_2:89
           .= s.d by SCMFSA_3:11
           .= Exec(IncAddr(INS, k), s).d by A11,A15,SCMFSA_2:89
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:11;
+        -'k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At (IC
-    s -' k)) by A10,SCMFSA_2:89
-      .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,AMI_1:
+    IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = succ IC (s +* Start-At (IC
+    s -'k,SCM+FSA)) by A10,SCMFSA_2:89
+      .= ((succ IC s)) -' k by A6,AMI_1:
     111
       .= IC Exec(IncAddr(INS,k), s) -' k by A11,SCMFSA_2:89
       .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-    -' k)) by AMI_1:111;
+    -'k,SCM+FSA)) by AMI_1:111;
     hence thesis by A1,A12,A13,SCMFSA_2:86;
   end;
   suppose
@@ -1331,43 +1380,47 @@ A16: INS = AddTo(da, db) by SCMFSA_2:55;
 A17: IncAddr(INS, k) = AddTo(da, db) by A16,Th10;
 A18: now
       let d be FinSeq-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A16,SCMFSA_2:90
         .= s.d by SCMFSA_3:12
         .= Exec(IncAddr(INS, k), s).d by A17,SCMFSA_2:90
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:12;
+      -'k,SCM+FSA)).d by SCMFSA_3:12;
     end;
 A19: now
       let d be Int-Location;
       per cases;
       suppose
 A20:    da = d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).da + (s +* Start-At (IC s -' k)).db by A16,SCMFSA_2:90
-          .= s.da + (s +* Start-At (IC s -' k)).db by SCMFSA_3:11
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s +* Start-At (IC s -'
+        k,SCM+FSA)).da + (s +* Start-At(IC s -'k,SCM+FSA)).db
+         by A16,SCMFSA_2:90
+          .= s.da + (s +* Start-At(IC s -'k,SCM+FSA)).db by SCMFSA_3:11
           .= s.da + s.db by SCMFSA_3:11
           .= Exec(IncAddr(INS,k), s).d by A17,A20,SCMFSA_2:90
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:11;
+        -'k,SCM+FSA)).d by SCMFSA_3:11;
       end;
       suppose
 A21:    da <> d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).d by A16,SCMFSA_2:90
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s +* Start-At (IC s -'
+        k,SCM+FSA)).d by A16,SCMFSA_2:90
           .= s.d by SCMFSA_3:11
           .= Exec(IncAddr(INS, k), s).d by A17,A21,SCMFSA_2:90
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:11;
+        -'k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At (IC
-    s -' k)) by A16,SCMFSA_2:90
-      .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,AMI_1:
+    IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = succ IC (s +* Start-At (IC
+    s -'k,SCM+FSA)) by A16,SCMFSA_2:90
+      .= ((succ IC s)) -' k by A6,AMI_1:
     111
       .= IC Exec(IncAddr(INS,k), s) -' k by A17,SCMFSA_2:90
       .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-    -' k)) by AMI_1:111;
+    -'k,SCM+FSA)) by AMI_1:111;
     hence thesis by A1,A18,A19,SCMFSA_2:86;
   end;
   suppose
@@ -1377,43 +1430,47 @@ A22: INS = SubFrom(da, db) by SCMFSA_2:56;
 A23: IncAddr(INS, k) = SubFrom(da, db) by A22,Th11;
 A24: now
       let d be FinSeq-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A22,SCMFSA_2:91
         .= s.d by SCMFSA_3:12
         .= Exec(IncAddr(INS, k), s).d by A23,SCMFSA_2:91
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:12;
+      -'k,SCM+FSA)).d by SCMFSA_3:12;
     end;
 A25: now
       let d be Int-Location;
       per cases;
       suppose
 A26:    da = d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).da - (s +* Start-At (IC s -' k)).db by A22,SCMFSA_2:91
-          .= s.da - (s +* Start-At (IC s -' k)).db by SCMFSA_3:11
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s +* Start-At (IC s -'
+        k,SCM+FSA)).da - (s +* Start-At(IC s -'k,SCM+FSA)).db
+         by A22,SCMFSA_2:91
+          .= s.da - (s +* Start-At(IC s -'k,SCM+FSA)).db by SCMFSA_3:11
           .= s.da - s.db by SCMFSA_3:11
           .= Exec(IncAddr(INS,k), s).d by A23,A26,SCMFSA_2:91
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:11;
+        -'k,SCM+FSA)).d by SCMFSA_3:11;
       end;
       suppose
 A27:    da <> d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).d by A22,SCMFSA_2:91
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s +* Start-At (IC s -'
+        k,SCM+FSA)).d by A22,SCMFSA_2:91
           .= s.d by SCMFSA_3:11
           .= Exec(IncAddr(INS, k), s).d by A23,A27,SCMFSA_2:91
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:11;
+        -'k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At (IC
-    s -' k)) by A22,SCMFSA_2:91
-      .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,AMI_1:
+    IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = succ IC (s +* Start-At (IC
+    s -'k,SCM+FSA)) by A22,SCMFSA_2:91
+      .= ((succ IC s)) -' k by A6,AMI_1:
     111
       .= IC Exec(IncAddr(INS,k), s) -' k by A23,SCMFSA_2:91
       .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-    -' k)) by AMI_1:111;
+    -'k,SCM+FSA)) by AMI_1:111;
     hence thesis by A1,A24,A25,SCMFSA_2:86;
   end;
   suppose
@@ -1423,43 +1480,47 @@ A28: INS = MultBy(da, db) by SCMFSA_2:57;
 A29: IncAddr(INS, k) = MultBy(da, db) by A28,Th12;
 A30: now
       let d be FinSeq-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A28,SCMFSA_2:92
         .= s.d by SCMFSA_3:12
         .= Exec(IncAddr(INS, k), s).d by A29,SCMFSA_2:92
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:12;
+      -'k,SCM+FSA)).d by SCMFSA_3:12;
     end;
 A31: now
       let d be Int-Location;
       per cases;
       suppose
 A32:    da = d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).da * (s +* Start-At (IC s -' k)).db by A28,SCMFSA_2:92
-          .= s.da * (s +* Start-At (IC s -' k)).db by SCMFSA_3:11
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s +* Start-At (IC s -'
+        k,SCM+FSA)).da * (s +* Start-At(IC s -'k,SCM+FSA)).db
+         by A28,SCMFSA_2:92
+          .= s.da * (s +* Start-At(IC s -'k,SCM+FSA)).db by SCMFSA_3:11
           .= s.da * s.db by SCMFSA_3:11
           .= Exec(IncAddr(INS,k), s).d by A29,A32,SCMFSA_2:92
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:11;
+        -'k,SCM+FSA)).d by SCMFSA_3:11;
       end;
       suppose
 A33:    da <> d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).d by A28,SCMFSA_2:92
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s +* Start-At (IC s -'
+        k,SCM+FSA)).d by A28,SCMFSA_2:92
           .= s.d by SCMFSA_3:11
           .= Exec(IncAddr(INS, k), s).d by A29,A33,SCMFSA_2:92
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:11;
+        -'k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At (IC
-    s -' k)) by A28,SCMFSA_2:92
-      .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,AMI_1:
+    IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = succ IC (s +* Start-At (IC
+    s -'k,SCM+FSA)) by A28,SCMFSA_2:92
+      .= ((succ IC s)) -' k by A6,AMI_1:
     111
       .= IC Exec(IncAddr(INS,k), s) -' k by A29,SCMFSA_2:92
       .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-    -' k)) by AMI_1:111;
+    -'k,SCM+FSA)) by AMI_1:111;
     hence thesis by A1,A30,A31,SCMFSA_2:86;
   end;
   suppose
@@ -1476,52 +1537,56 @@ A37:    now
           per cases;
           suppose
 A38:        da = d;
-            hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At(IC s
-            -' k)).da div (s +* Start-At(IC s -' k)).db by A34,A36,SCMFSA_2:93
-              .= s.da div (s +* Start-At (IC s -' k)).db by SCMFSA_3:11
+            hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+             (s +* Start-At(IC s
+            -'k,SCM+FSA)).da div (s +* Start-At(IC s -'k,SCM+FSA)).db
+             by A34,A36,SCMFSA_2:93
+              .= s.da div (s +* Start-At(IC s -'k,SCM+FSA)).db by SCMFSA_3:11
               .= s.da div s.db by SCMFSA_3:11
               .= Exec(IncAddr(INS,k), s).d by A35,A36,A38,SCMFSA_2:93
               .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k
-            ),s) -' k)).d by SCMFSA_3:11;
+            ),s) -'k,SCM+FSA)).d by SCMFSA_3:11;
           end;
           suppose
 A39:        db = d;
             hence
-            Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s
-            -' k)).da mod (s +* Start-At (IC s -' k)).db by A34,SCMFSA_2:93
-              .= s.da mod (s +* Start-At (IC s -' k)).db by SCMFSA_3:11
+            Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d = (s +* Start-At (IC s
+            -'k,SCM+FSA)).da mod (s +* Start-At(IC s -'k,SCM+FSA)).db
+             by A34,SCMFSA_2:93
+              .= s.da mod (s +* Start-At(IC s -'k,SCM+FSA)).db by SCMFSA_3:11
               .= s.da mod s.db by SCMFSA_3:11
               .= Exec(IncAddr(INS,k), s).d by A35,A39,SCMFSA_2:93
               .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k
-            ),s) -' k)).d by SCMFSA_3:11;
+            ),s) -'k,SCM+FSA)).d by SCMFSA_3:11;
           end;
           suppose
 A40:        da <> d & db <> d;
             hence
-            Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s
-            -' k)).d by A34,SCMFSA_2:93
+            Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d = (s +* Start-At (IC s
+            -'k,SCM+FSA)).d by A34,SCMFSA_2:93
               .= s.d by SCMFSA_3:11
               .= Exec(IncAddr(INS,k), s).d by A35,A40,SCMFSA_2:93
               .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k
-            ),s) -' k)).d by SCMFSA_3:11;
+            ),s) -'k,SCM+FSA)).d by SCMFSA_3:11;
           end;
         end;
 A41:    now
           let d be FinSeq-Location;
-          thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s
-          -' k)).d by A34,SCMFSA_2:93
+          thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+           (s +* Start-At (IC s
+          -'k,SCM+FSA)).d by A34,SCMFSA_2:93
             .= s.d by SCMFSA_3:12
             .= Exec(IncAddr(INS,k), s).d by A35,SCMFSA_2:93
             .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),
-          s) -' k)).d by SCMFSA_3:12;
+          s) -'k,SCM+FSA)).d by SCMFSA_3:12;
         end;
-        IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At
-        (IC s -' k)) by A34,SCMFSA_2:93
-          .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,
+        IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = succ IC (s +* Start-At
+        (IC s -'k,SCM+FSA)) by A34,SCMFSA_2:93
+          .= ((succ IC s)) -' k by A6,
         AMI_1:111
           .= IC Exec(IncAddr(INS,k), s) -' k by A35,SCMFSA_2:93
           .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),
-        s) -' k)) by AMI_1:111;
+        s) -'k,SCM+FSA)) by AMI_1:111;
         hence thesis by A1,A41,A37,SCMFSA_2:86;
       end;
       suppose
@@ -1531,41 +1596,44 @@ A43:    now
           per cases;
           suppose
 A44:        da = d;
-            hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At(IC s
-            -' k)).da mod (s +* Start-At(IC s -' k)).db by A34,A42,SCMFSA_2:94
-              .= s.da mod (s +* Start-At (IC s -' k)).db by SCMFSA_3:11
+            hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+             (s +* Start-At(IC s
+            -'k,SCM+FSA)).da mod (s +* Start-At(IC s -'k,SCM+FSA)).db
+             by A34,A42,SCMFSA_2:94
+              .= s.da mod (s +* Start-At(IC s -'k,SCM+FSA)).db by SCMFSA_3:11
               .= s.da mod s.db by SCMFSA_3:11
               .= Exec(IncAddr(INS,k), s).d by A35,A42,A44,SCMFSA_2:94
               .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k
-            ),s) -' k)).d by SCMFSA_3:11;
+            ),s) -'k,SCM+FSA)).d by SCMFSA_3:11;
           end;
           suppose
 A45:        da <> d;
             hence
-            Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s
-            -' k)).d by A34,A42,SCMFSA_2:94
+            Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d = (s +* Start-At (IC s
+            -'k,SCM+FSA)).d by A34,A42,SCMFSA_2:94
               .= s.d by SCMFSA_3:11
               .= Exec(IncAddr(INS,k), s).d by A35,A42,A45,SCMFSA_2:94
               .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k
-            ),s) -' k)).d by SCMFSA_3:11;
+            ),s) -'k,SCM+FSA)).d by SCMFSA_3:11;
           end;
         end;
 A46:    now
           let d be FinSeq-Location;
-          thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s
-          -' k)).d by A34,A42,SCMFSA_2:94
+          thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+           (s +* Start-At (IC s
+          -'k,SCM+FSA)).d by A34,A42,SCMFSA_2:94
             .= s.d by SCMFSA_3:12
             .= Exec(IncAddr(INS,k), s).d by A35,A42,SCMFSA_2:94
             .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),
-          s) -' k)).d by SCMFSA_3:12;
+          s) -'k,SCM+FSA)).d by SCMFSA_3:12;
         end;
-        IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At
-        (IC s -' k)) by A34,A42,SCMFSA_2:94
-          .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,
+        IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = succ IC (s +* Start-At
+        (IC s -'k,SCM+FSA)) by A34,A42,SCMFSA_2:94
+          .= ((succ IC s)) -' k by A6,
         AMI_1:111
           .= IC Exec(IncAddr(INS,k), s) -' k by A35,A42,SCMFSA_2:94
           .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),
-        s) -' k)) by AMI_1:111;
+        s) -'k,SCM+FSA)) by AMI_1:111;
         hence thesis by A1,A46,A43,SCMFSA_2:86;
       end;
     end;
@@ -1573,50 +1641,53 @@ A46:    now
   end;
   suppose
     InsCode INS = 6;
-    then consider loc being Instruction-Location of SCM+FSA such that
+    then consider loc being Element of NAT such that
 A47: INS = goto loc by SCMFSA_2:59;
 A48: IncAddr(INS, k) = goto (loc + k) by A47,Th14;
     then
 A49: IC Exec(IncAddr(INS,k), s)= loc + k by SCMFSA_2:95;
 A50: now
       let d be Int-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A47,SCMFSA_2:95
         .= s.d by SCMFSA_3:11
         .= Exec(IncAddr(INS,k), s).d by A48,SCMFSA_2:95
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:11;
+      -'k,SCM+FSA)).d by SCMFSA_3:11;
     end;
 A51: now
       let d be FinSeq-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A47,SCMFSA_2:95
         .= s.d by SCMFSA_3:12
         .= Exec(IncAddr(INS, k), s).d by A48,SCMFSA_2:95
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:12;
+      -'k,SCM+FSA)).d by SCMFSA_3:12;
     end;
-    IC Exec(INS, s +* Start-At (IC s -' k)) = loc by A47,SCMFSA_2:95
+    IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = loc by A47,SCMFSA_2:95
       .= IC Exec(IncAddr(INS,k), s) -' k by A49,NAT_D:34
       .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-    -' k)) by AMI_1:111;
+    -'k,SCM+FSA)) by AMI_1:111;
     hence thesis by A1,A51,A50,SCMFSA_2:86;
   end;
   suppose
     InsCode INS = 7;
     then consider
-    loc being Instruction-Location of SCM+FSA, da being Int-Location
+    loc being Element of NAT, da being Int-Location
     such that
 A52: INS = da=0_goto loc by SCMFSA_2:60;
 A53: IncAddr(INS, k) = da=0_goto (loc + k) by A52,Th15;
 A54: now
       let d be Int-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A52,SCMFSA_2:96
         .= s.d by SCMFSA_3:11
         .= Exec(IncAddr(INS,k), s).d by A53,SCMFSA_2:96
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:11;
+      -'k,SCM+FSA)).d by SCMFSA_3:11;
     end;
 A55: now
       per cases;
@@ -1624,57 +1695,60 @@ A55: now
 A56:    s.da = 0;
         then
 A57:    IC Exec(IncAddr(INS,k), s)= loc + k by A53,SCMFSA_2:96;
-        (s +* Start-At (IC s -' k)).da = 0 by A56,SCMFSA_3:11;
-        then IC Exec(INS, s +* Start-At (IC s -' k)) = loc by A52,
+        (s +* Start-At(IC s -'k,SCM+FSA)).da = 0 by A56,SCMFSA_3:11;
+        then IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = loc by A52,
         SCMFSA_2:96
           .= IC Exec(IncAddr(INS,k), s) -' k by A57,NAT_D:34
           .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),
-        s) -' k)) by AMI_1:111;
+        s) -'k,SCM+FSA)) by AMI_1:111;
         hence
-        IC Exec(INS, s +* Start-At (IC s -' k)) = IC(Exec(IncAddr(INS,k),
-        s) +* Start-At(IC Exec(IncAddr(INS,k),s)-'k));
+        IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = IC(Exec(IncAddr(INS,k),
+        s) +* Start-At(IC Exec(IncAddr(INS,k),s)-'k,SCM+FSA));
       end;
       suppose
 A58:    s.da <> 0;
-        then (s +* Start-At (IC s -' k)).da <> 0 by SCMFSA_3:11;
-        then IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At
-        (IC s -' k)) by A52,SCMFSA_2:96
-          .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,
+        then (s +* Start-At(IC s -'k,SCM+FSA)).da <> 0 by SCMFSA_3:11;
+        then IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) =
+         succ IC (s +* Start-At
+        (IC s -'k,SCM+FSA)) by A52,SCMFSA_2:96
+          .= ((succ IC s)) -' k by A6,
         AMI_1:111
           .= IC Exec(IncAddr(INS,k), s) -' k by A53,A58,SCMFSA_2:96
           .= IC(Exec(IncAddr(INS,k),s) +* Start-At(IC Exec(IncAddr(INS,k),s)
-        -' k)) by AMI_1:111;
+        -'k,SCM+FSA)) by AMI_1:111;
         hence
-        IC Exec(INS, s +* Start-At (IC s -' k)) = IC(Exec(IncAddr(INS,k),
-        s) +* Start-At(IC Exec(IncAddr(INS,k),s)-'k));
+        IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = IC(Exec(IncAddr(INS,k),
+        s) +* Start-At(IC Exec(IncAddr(INS,k),s)-'k,SCM+FSA));
       end;
     end;
     now
       let d be FinSeq-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A52,SCMFSA_2:96
         .= s.d by SCMFSA_3:12
         .= Exec(IncAddr(INS, k), s).d by A53,SCMFSA_2:96
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:12;
+      -'k,SCM+FSA)).d by SCMFSA_3:12;
     end;
     hence thesis by A1,A55,A54,SCMFSA_2:86;
   end;
   suppose
     InsCode INS = 8;
     then consider
-    loc being Instruction-Location of SCM+FSA, da being Int-Location
+    loc being Element of NAT, da being Int-Location
     such that
 A59: INS = da>0_goto loc by SCMFSA_2:61;
 A60: IncAddr(INS, k) = da>0_goto (loc + k) by A59,Th16;
 A61: now
       let d be Int-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A59,SCMFSA_2:97
         .= s.d by SCMFSA_3:11
         .= Exec(IncAddr(INS,k), s).d by A60,SCMFSA_2:97
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:11;
+      -'k,SCM+FSA)).d by SCMFSA_3:11;
     end;
 A62: now
       per cases;
@@ -1682,39 +1756,41 @@ A62: now
 A63:    s.da > 0;
         then
 A64:    IC Exec(IncAddr(INS,k), s)= loc + k by A60,SCMFSA_2:97;
-        (s +* Start-At (IC s -' k)).da > 0 by A63,SCMFSA_3:11;
-        then IC Exec(INS, s +* Start-At (IC s -' k)) = loc by A59,
+        (s +* Start-At(IC s -'k,SCM+FSA)).da > 0 by A63,SCMFSA_3:11;
+        then IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = loc by A59,
         SCMFSA_2:97
           .= IC Exec(IncAddr(INS,k), s) -' k by A64,NAT_D:34
           .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),
-        s) -' k)) by AMI_1:111;
+        s) -'k,SCM+FSA)) by AMI_1:111;
         hence
-        IC Exec(INS, s +* Start-At (IC s -' k)) = IC (Exec(IncAddr(INS,k)
-        ,s) +* Start-At(IC Exec(IncAddr(INS,k),s)-'k));
+        IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = IC (Exec(IncAddr(INS,k)
+        ,s) +* Start-At(IC Exec(IncAddr(INS,k),s)-'k,SCM+FSA));
       end;
       suppose
 A65:    s.da <= 0;
-        then (s +* Start-At (IC s -' k)).da <= 0 by SCMFSA_3:11;
-        then IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At
-        (IC s -' k)) by A59,SCMFSA_2:97
-          .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,
+        then (s +* Start-At(IC s -'k,SCM+FSA)).da <= 0 by SCMFSA_3:11;
+        then IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) =
+         succ IC (s +* Start-At
+        (IC s -'k,SCM+FSA)) by A59,SCMFSA_2:97
+          .= ((succ IC s) ) -' k by A6,
         AMI_1:111
           .= IC Exec(IncAddr(INS,k), s) -' k by A60,A65,SCMFSA_2:97
           .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),
-        s) -' k)) by AMI_1:111;
+        s) -'k,SCM+FSA)) by AMI_1:111;
         hence
-        IC Exec(INS, s +* Start-At (IC s -' k)) = IC (Exec(IncAddr(INS,k)
-        ,s) +* Start-At(IC Exec(IncAddr(INS,k),s)-'k));
+        IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = IC (Exec(IncAddr(INS,k)
+        ,s) +* Start-At(IC Exec(IncAddr(INS,k),s)-'k,SCM+FSA));
       end;
     end;
     now
       let d be FinSeq-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A59,SCMFSA_2:97
         .= s.d by SCMFSA_3:12
         .= Exec(IncAddr(INS, k), s).d by A60,SCMFSA_2:97
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:12;
+      -'k,SCM+FSA)).d by SCMFSA_3:12;
     end;
     hence thesis by A1,A62,A61,SCMFSA_2:86;
   end;
@@ -1725,12 +1801,13 @@ A66: INS = da := (f,db) by SCMFSA_2:62;
 A67: IncAddr(INS, k) = da := (f,db) by A66,Th17;
 A68: now
       let d be FinSeq-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A66,SCMFSA_2:98
         .= s.d by SCMFSA_3:12
         .= Exec(IncAddr(INS, k), s).d by A67,SCMFSA_2:98
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:12;
+      -'k,SCM+FSA)).d by SCMFSA_3:12;
     end;
 A69: now
       let d be Int-Location;
@@ -1740,32 +1817,36 @@ A70:    da = d;
         consider m being Element of NAT such that
 A71:    m = abs(s.db) and
 A72:    Exec(IncAddr(INS,k), s).da = (s.f)/.m by A67,SCMFSA_2:98;
-        (ex m' being Element of NAT st m' = abs((s +* Start-At (IC s -'
-k)).db) & Exec(INS,s +* Start-At (IC s -' k)).da = ((s +* Start-At (IC s -' k))
-.f)/.m' )& (s +* Start-At (IC s -' k)).db = s.db by A66,SCMFSA_2:98,SCMFSA_3:11
+        (ex m9 being Element of NAT st m9 = abs((s +* Start-At (IC s -'
+k,SCM+FSA)).db) & Exec(INS,s +* Start-At(IC s -'k,SCM+FSA)).da =
+ ((s +* Start-At(IC s -'k,SCM+FSA))
+.f)/.m9 )& (s +* Start-At(IC s -'k,SCM+FSA)).db = s.db
+ by A66,SCMFSA_2:98,SCMFSA_3:11
         ;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s.f)/.m by A70,A71,
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s.f)/.m by A70,A71,
         SCMFSA_3:12
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by A70,A72,SCMFSA_3:11;
+        -'k,SCM+FSA)).d by A70,A72,SCMFSA_3:11;
       end;
       suppose
 A73:    da <> d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).d by A66,SCMFSA_2:98
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s +* Start-At (IC s -'
+        k,SCM+FSA)).d by A66,SCMFSA_2:98
           .= s.d by SCMFSA_3:11
           .= Exec(IncAddr(INS, k), s).d by A67,A73,SCMFSA_2:98
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:11;
+        -'k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At (IC
-    s -' k)) by A66,SCMFSA_2:98
-      .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,AMI_1:
+    IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = succ IC (s +* Start-At (IC
+    s -'k,SCM+FSA)) by A66,SCMFSA_2:98
+      .= ((succ IC s) ) -' k by A6,AMI_1:
     111
       .= IC Exec(IncAddr(INS,k), s) -' k by A67,SCMFSA_2:98
       .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-    -' k)) by AMI_1:111;
+    -'k,SCM+FSA)) by AMI_1:111;
     hence thesis by A1,A68,A69,SCMFSA_2:86;
   end;
   suppose
@@ -1775,49 +1856,54 @@ A74: INS = (f,db):= da by SCMFSA_2:63;
 A75: IncAddr(INS, k) = (f,db):=da by A74,Th18;
 A76: now
       let d be Int-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A74,SCMFSA_2:99
         .= s.d by SCMFSA_3:11
         .= Exec(IncAddr(INS, k), s).d by A75,SCMFSA_2:99
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:11;
+      -'k,SCM+FSA)).d by SCMFSA_3:11;
     end;
 A77: now
       let d be FinSeq-Location;
       per cases;
       suppose
 A78:    f = d;
-A79:    (s +* Start-At (IC s -' k)).db = s.db by SCMFSA_3:11;
+A79:    (s +* Start-At(IC s -'k,SCM+FSA)).db = s.db by SCMFSA_3:11;
         consider m being Element of NAT such that
 A80:    m = abs(s.db) and
 A81:    Exec(IncAddr(INS,k), s).f = s.f+*(m,s.da) by A75,SCMFSA_2:
         99;
-        (ex m' being Element of NAT st m' = abs((s +* Start-At (IC s -'
-k)).db) & Exec(INS,s +* Start-At (IC s -' k)).f = (s +* Start-At (IC s -' k)).f
-+*(m',(s +* Start-At (IC s -' k)).da) )& (s +* Start-At (IC s -' k)).da = s.da
+        (ex m9 being Element of NAT st m9 = abs((s +* Start-At (IC s -'
+k,SCM+FSA)).db) & Exec(INS,s +* Start-At(IC s -'k,SCM+FSA)).f =
+ (s +* Start-At(IC s -'k,SCM+FSA)).f
++*(m9,(s +* Start-At(IC s -'k,SCM+FSA)).da) )&
+ (s +* Start-At(IC s -'k,SCM+FSA)).da = s.da
         by A74,SCMFSA_2:99,SCMFSA_3:11;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = s.f+*(m,s.da) by A78,
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         s.f+*(m,s.da) by A78,
         A80,A79,SCMFSA_3:12
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by A78,A81,SCMFSA_3:12;
+        -'k,SCM+FSA)).d by A78,A81,SCMFSA_3:12;
       end;
       suppose
 A82:    f <> d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).d by A74,SCMFSA_2:99
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s +* Start-At (IC s -'
+        k,SCM+FSA)).d by A74,SCMFSA_2:99
           .= s.d by SCMFSA_3:12
           .= Exec(IncAddr(INS, k), s).d by A75,A82,SCMFSA_2:99
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:12;
+        -'k,SCM+FSA)).d by SCMFSA_3:12;
       end;
     end;
-    IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At (IC
-    s -' k)) by A74,SCMFSA_2:99
-      .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,AMI_1:
+    IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = succ IC (s +* Start-At (IC
+    s -'k,SCM+FSA)) by A74,SCMFSA_2:99
+      .= ((succ IC s) ) -' k by A6,AMI_1:
     111
       .= IC Exec(IncAddr(INS,k), s) -' k by A75,SCMFSA_2:99
       .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-    -' k)) by AMI_1:111;
+    -'k,SCM+FSA)) by AMI_1:111;
     hence thesis by A1,A76,A77,SCMFSA_2:86;
   end;
   suppose
@@ -1827,12 +1913,13 @@ A83: INS = da :=len f by SCMFSA_2:64;
 A84: IncAddr(INS, k) = da :=len f by A83,Th19;
 A85: now
       let d be FinSeq-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A83,SCMFSA_2:100
         .= s.d by SCMFSA_3:12
         .= Exec(IncAddr(INS, k), s).d by A84,SCMFSA_2:100
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:12;
+      -'k,SCM+FSA)).d by SCMFSA_3:12;
     end;
 A86: now
       let d be Int-Location;
@@ -1840,30 +1927,31 @@ A86: now
       suppose
 A87:    da = d;
         hence
-        Exec(INS, s +* Start-At (IC s -' k)).d = len((s +* Start-At (IC s
-        -' k)).f) by A83,SCMFSA_2:100
+        Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d = len((s +* Start-At (IC s
+        -'k,SCM+FSA)).f) by A83,SCMFSA_2:100
           .= len(s.f) by SCMFSA_3:12
           .= Exec(IncAddr(INS,k), s).d by A84,A87,SCMFSA_2:100
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:11;
+        -'k,SCM+FSA)).d by SCMFSA_3:11;
       end;
       suppose
 A88:    da <> d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).d by A83,SCMFSA_2:100
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s +* Start-At (IC s -'
+        k,SCM+FSA)).d by A83,SCMFSA_2:100
           .= s.d by SCMFSA_3:11
           .= Exec(IncAddr(INS, k), s).d by A84,A88,SCMFSA_2:100
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:11;
+        -'k,SCM+FSA)).d by SCMFSA_3:11;
       end;
     end;
-    IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At (IC
-    s -' k)) by A83,SCMFSA_2:100
-      .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,AMI_1:
+    IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = succ IC (s +* Start-At (IC
+    s -'k,SCM+FSA)) by A83,SCMFSA_2:100
+      .= ((succ IC s) ) -' k by A6,AMI_1:
     111
       .= IC Exec(IncAddr(INS,k), s) -' k by A84,SCMFSA_2:100
       .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-    -' k)) by AMI_1:111;
+    -'k,SCM+FSA)) by AMI_1:111;
     hence thesis by A1,A85,A86,SCMFSA_2:86;
   end;
   suppose
@@ -1873,44 +1961,47 @@ A89: INS = f:=<0,...,0> da by SCMFSA_2:65;
 A90: IncAddr(INS, k) = f:=<0,...,0>da by A89,Th20;
 A91: now
       let d be Int-Location;
-      thus Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -' k)
+      thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+       (s +* Start-At(IC s -'k,SCM+FSA)
       ).d by A89,SCMFSA_2:101
         .= s.d by SCMFSA_3:11
         .= Exec(IncAddr(INS, k), s).d by A90,SCMFSA_2:101
         .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-      -' k)).d by SCMFSA_3:11;
+      -'k,SCM+FSA)).d by SCMFSA_3:11;
     end;
 A92: now
       let d be FinSeq-Location;
       per cases;
       suppose
 A93:    f = d;
-A94:    (s +* Start-At (IC s -' k)).da = s.da by SCMFSA_3:11;
+A94:    (s +* Start-At(IC s -'k,SCM+FSA)).da = s.da by SCMFSA_3:11;
         (ex m being Element of NAT st m = abs(s.da) & Exec( IncAddr(INS,
-k), s).f = m |-> 0 )& ex m' being Element of NAT st m' = abs((s +* Start-At (IC
-s -' k)). da) & Exec(INS,s +* Start-At (IC s -' k)).f = m' |-> 0 by A89,A90,
+k), s).f = m |-> 0 )& ex m9 being Element of NAT st m9 = abs((s +* Start-At (IC
+s -'k,SCM+FSA)). da) & Exec(INS,s +* Start-At(IC s -'k,SCM+FSA)).f = m9 |-> 0
+ by A89,A90,
         SCMFSA_2:101;
         hence
-        Exec(INS, s +* Start-At (IC s -' k)).d = (Exec(IncAddr(INS,k), s)
-+* Start-At (IC Exec(IncAddr(INS,k),s) -' k)).d by A93,A94, SCMFSA_3:12;
+        Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d = (Exec(IncAddr(INS,k), s)
++* Start-At (IC Exec(IncAddr(INS,k),s) -'k,SCM+FSA)).d by A93,A94, SCMFSA_3:12;
       end;
       suppose
 A95:    f <> d;
-        hence Exec(INS, s +* Start-At (IC s -' k)).d = (s +* Start-At (IC s -'
-        k)).d by A89,SCMFSA_2:101
+        hence Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
+         (s +* Start-At (IC s -'
+        k,SCM+FSA)).d by A89,SCMFSA_2:101
           .= s.d by SCMFSA_3:12
           .= Exec(IncAddr(INS, k), s).d by A90,A95,SCMFSA_2:101
           .= (Exec(IncAddr(INS,k), s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-        -' k)).d by SCMFSA_3:12;
+        -'k,SCM+FSA)).d by SCMFSA_3:12;
       end;
     end;
-    IC Exec(INS, s +* Start-At (IC s -' k)) = Next IC (s +* Start-At (IC
-    s -' k)) by A89,SCMFSA_2:101
-      .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k by A6,AMI_1:
+    IC Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = succ IC (s +* Start-At (IC
+    s -'k,SCM+FSA)) by A89,SCMFSA_2:101
+      .= ((succ IC s) ) -' k by A6,AMI_1:
     111
       .= IC Exec(IncAddr(INS,k), s) -' k by A90,SCMFSA_2:101
       .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s)
-    -' k)) by AMI_1:111;
+    -'k,SCM+FSA)) by AMI_1:111;
     hence thesis by A1,A91,A92,SCMFSA_2:86;
   end;
 end;
@@ -1937,21 +2028,21 @@ A3: x in dom (Shift(IncAddr(p,i),j));
 A4: x in { m+j where m is Element of NAT: m in dom IncAddr(p,i) } by
     VALUED_1:def 12;
     dom (Shift(IncAddr(p,i),j)) c= NAT by RELAT_1:def 18;
-    then reconsider x'=x as Instruction-Location of SCM+FSA by A3,AMI_1:def 4;
-    reconsider xx=x' as Element of NAT by ORDINAL1:def 13;
+    then reconsider x9=x as Element of NAT by A3;
+    reconsider xx=x9 as Element of NAT;
     consider m being Element of NAT such that
 A5: x = m+j and
 A6: m in dom IncAddr(p,i) by A4;
-A7: insloc m in dom p by A6,Def6;
+A7:  m in dom p by A6,Def6;
     dom Shift(p,j) = { mm+j where mm is Element of NAT : mm in dom p} by
     VALUED_1:def 12;
     then
-A8: x' in dom Shift(p,j) by A5,A7;
-A9: pi(p,m) = p.(insloc m) by A7,AMI_1:def 47
-      .= Shift(p,j).((insloc m)+j) by A7,VALUED_1:def 12
-      .= Shift(p,j).(insloc(m+j))
+A8: x9 in dom Shift(p,j) by A5,A7;
+A9: pi(p,m) = p.( m) by A7,AMI_1:def 47
+      .= Shift(p,j).(( m)+j) by A7,VALUED_1:def 12
+      .= Shift(p,j).((m+j))
       .= pi(Shift(p,j),xx) by A5,A8,AMI_1:def 47;
-    thus Shift(IncAddr(p,i),j).x = IncAddr(p,i).(insloc m) by A5,A6,VALUED_1:
+    thus Shift(IncAddr(p,i),j).x = IncAddr(p,i).( m) by A5,A6,VALUED_1:
     def 12
       .= IncAddr(pi(Shift(p,j),xx),i) by A7,A9,Th24
       .= IncAddr(Shift(p,j),i).x by A8,Th24;

@@ -9,17 +9,19 @@ environ
  vocabularies NUMBERS, AMI_1, SCMFSA_2, CARD_1, SCMFSA8B, TURING_1, SCMFSA8A,
       AMISTD_2, ARYTM_3, SUBSET_1, FUNCT_4, FUNCOP_1, AMI_3, RELAT_1, TARSKI,
       XBOOLE_0, CAT_1, NAT_1, SCMFSA6A, FUNCT_1, XXREAL_0, VALUED_1, CARD_3,
-      ARYTM_1, FSM_1, SF_MASTR, SCMFSA7B, UNIALG_2, CIRCUIT2, SCMNORM, GRAPHSP,
-      SCMFSA6B, SCMFSA_9;
+      ARYTM_1, FSM_1, SF_MASTR, SCMFSA7B, UNIALG_2, CIRCUIT2, GRAPHSP,
+      SCMFSA6B, SCMFSA_9, PBOOLE, ORDINAL1, PARTFUN1, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, RELAT_1,
-      FUNCT_1, FUNCT_2, FUNCT_4, CARD_3, AMI_1, NAT_1, VALUED_1, SCMNORM,
-      SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA7B,
-      SCMFSA8A, SCMFSA8B, XXREAL_0;
+      FUNCT_1, FUNCT_2, PARTFUN1, FUNCT_4, CARD_3, AMI_1, VALUED_1, NAT_1,
+      PBOOLE, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SF_MASTR,
+      SCMFSA6B, SCMFSA7B, SCMFSA8A, SCMFSA8B, XXREAL_0;
  constructors XXREAL_0, NAT_1, SEQ_1, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B,
-      SCMFSA8A, SCMFSA8B, SCMNORM, SCMFSA_4, RELSET_1, PRE_POLY;
+      SCMFSA8A, SCMFSA8B, SCMNORM, SCMFSA_4, RELSET_1, PRE_POLY, SCMFSA_7,
+      COMPLEX1, PBOOLE, AFINSQ_1;
  registrations SETFAM_1, FUNCT_1, RELSET_1, NUMBERS, XREAL_0, NAT_1, INT_1,
       CARD_3, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA7B, SCMFSA8A, ORDINAL1,
-      XBOOLE_0, SCMNORM, FINSET_1, VALUED_1, AMI_1;
+      XBOOLE_0, SCMNORM, FINSET_1, VALUED_1, AMI_1, FUNCT_4, RELAT_1, GRFUNC_1,
+      PBOOLE, FRAENKEL, FUNCT_2, XXREAL_0, VALUED_0, AFINSQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -27,11 +29,11 @@ begin
 
 theorem :: SCMFSA_9:1
   for I being Program of SCM+FSA, a being Int-Location holds card
-  if=0(a, I ';' Goto insloc 0, Stop SCM+FSA) = card I + 6;
+  if=0(a, I ';' Goto  0, Stop SCM+FSA) = card I + 6;
 
 theorem :: SCMFSA_9:2
   for I being Program of SCM+FSA, a being Int-Location holds card
-  if>0(a, I ';' Goto insloc 0, Stop SCM+FSA) = card I + 6;
+  if>0(a, I ';' Goto  0, Stop SCM+FSA) = card I + 6;
 
 :: WHILE  Statement
 
@@ -42,17 +44,17 @@ definition
   let I be Program of SCM+FSA;
   func while=0(a,I) -> Program of SCM+FSA equals
 :: SCMFSA_9:def 1
-  if=0(a, I ';' Goto insloc 0,
-  Stop SCM+FSA) +* ( insloc (card I +4) .--> goto insloc 0 );
+  if=0(a, I ';' Goto  0,
+  Stop SCM+FSA) +* (  (card I +4) .--> goto  0 );
   func while>0(a,I) -> Program of SCM+FSA equals
 :: SCMFSA_9:def 2
-  if>0(a, I ';' Goto insloc 0,
-  Stop SCM+FSA) +* ( insloc (card I +4) .--> goto insloc 0 );
+  if>0(a, I ';' Goto  0,
+  Stop SCM+FSA) +* (  (card I +4) .--> goto  0 );
 end;
 
 theorem :: SCMFSA_9:3
   for I being Program of SCM+FSA, a being Int-Location holds card
-  if=0(a,Stop SCM+FSA,if>0(a,Stop SCM+FSA,I ';' Goto insloc 0)) = card I + 11;
+  if=0(a,Stop SCM+FSA,if>0(a,Stop SCM+FSA,I ';' Goto  0)) = card I + 11;
 
 definition
   let a be Int-Location;
@@ -60,7 +62,7 @@ definition
   func while<0(a,I) -> Program of SCM+FSA equals
 :: SCMFSA_9:def 3
   if=0(a,Stop SCM+FSA,if>0(a,
-Stop SCM+FSA,I ';' Goto insloc 0)) +* ( insloc (card I +4) .--> goto insloc 0 )
+Stop SCM+FSA,I ';' Goto  0)) +* (  (card I +4) .--> goto  0 )
   ;
 end;
 
@@ -77,31 +79,31 @@ theorem :: SCMFSA_9:6
   while<0(a,I) = card I + 11;
 
 theorem :: SCMFSA_9:7
-  for a being Int-Location, l being Instruction-Location of SCM+FSA
+  for a being Int-Location, l being Element of NAT
   holds a =0_goto l <> halt SCM+FSA;
 
 theorem :: SCMFSA_9:8
-  for a being Int-Location, l being Instruction-Location of SCM+FSA
+  for a being Int-Location, l being Element of NAT
   holds a >0_goto l <> halt SCM+FSA;
 
 theorem :: SCMFSA_9:9
-  for l being Instruction-Location of SCM+FSA holds goto l <> halt
+  for l being Element of NAT holds goto l <> halt
   SCM+FSA;
 
 theorem :: SCMFSA_9:10
   for a being Int-Location, I being Program of SCM+FSA holds
-  insloc 0 in dom while=0(a,I) & insloc 1 in dom while=0(a,I) & insloc 0 in dom
-  while>0(a,I) & insloc 1 in dom while>0(a,I);
+   0 in dom while=0(a,I) &  1 in dom while=0(a,I) &  0 in dom
+  while>0(a,I) &  1 in dom while>0(a,I);
 
 theorem :: SCMFSA_9:11
   for a being Int-Location, I being Program of SCM+FSA holds
-  while=0(a,I).insloc 0 = a =0_goto insloc 4 & while=0(a,I).insloc 1 = goto
-insloc 2 & while>0(a,I).insloc 0 = a >0_goto insloc 4 & while>0(a,I).insloc 1 =
-  goto insloc 2;
+  while=0(a,I). 0 = a =0_goto  4 & while=0(a,I). 1 = goto
+ 2 & while>0(a,I). 0 = a >0_goto  4 & while>0(a,I). 1 =
+  goto  2;
 
 theorem :: SCMFSA_9:12
   for a being Int-Location, I being Program of SCM+FSA, k being
-  Element of NAT st k < 6 holds insloc k in dom while=0(a,I);
+  Element of NAT st k < 6 holds  k in dom while=0(a,I);
 
 theorem :: SCMFSA_9:13
   for a being Int-Location, I being Program of SCM+FSA, k being
@@ -113,15 +115,15 @@ theorem :: SCMFSA_9:14
 
 theorem :: SCMFSA_9:15
   for a being Int-Location, I being Program of SCM+FSA holds
-  while=0(a,I).insloc 3 = goto insloc (card I +5);
+  while=0(a,I). 3 = goto  (card I +5);
 
 theorem :: SCMFSA_9:16
   for a being Int-Location, I being Program of SCM+FSA holds
-  while=0(a,I).insloc 2 = goto insloc 3;
+  while=0(a,I). 2 = goto  3;
 
 theorem :: SCMFSA_9:17
   for a being Int-Location, I being Program of SCM+FSA,k being Element
-  of NAT st k < card I +6 holds insloc k in dom while=0(a,I);
+  of NAT st k < card I +6 holds  k in dom while=0(a,I);
 
 theorem :: SCMFSA_9:18
   for s being State of SCM+FSA, I being Program of SCM+FSA, a
@@ -131,27 +133,57 @@ being read-write Int-Location st s.a <> 0 holds while=0(a,I) is_halting_on s &
 theorem :: SCMFSA_9:19
   for a being Int-Location, I being Program of SCM+FSA, s being
 State of SCM+FSA,k being Element of NAT st I is_closed_on s & I is_halting_on s
-& k < LifeSpan (s +* (I +* Start-At insloc 0)) & IC Computation( (s +* (while=0
-  (a,I) +* Start-At insloc 0)),1+k) = IC Computation( (s +* ( I +* Start-At
-  insloc 0)),k) + 4 & DataPart Computation( (s +* (while=0(a,I) +* Start-At
-  insloc 0)),1+k) = DataPart Computation( (s +* ( I +* Start-At insloc 0)),k)
-  holds IC Computation( (s +* (while=0(a,I) +* Start-At insloc 0)),1+k+1) = IC
-Computation( (s +* (I +* Start-At insloc 0)),k+1) + 4 & DataPart Computation( (
-s +* (while=0(a,I) +* Start-At insloc 0)),1+k+1) = DataPart Computation( (s +*
-  (I +* Start-At insloc 0)),k+1);
+& k < LifeSpan (s +* (I +* Start-At( 0,SCM+FSA))) &
+IC Comput(ProgramPart( (s +* (while=0
+  (a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while=0
+  (a,I) +* Start-At( 0,SCM+FSA))),1+k) = IC Comput(ProgramPart( (s +* (
+  I +* Start-At(
+   0,SCM+FSA)))), (s +* (
+  I +* Start-At(
+   0,SCM+FSA))),k) + 4 & DataPart Comput(ProgramPart( (s +* (while=0(a,I) +*
+  Start-At(
+   0,SCM+FSA)))), (s +* (while=0(a,I) +*
+  Start-At(
+   0,SCM+FSA))),1+k) = DataPart Comput(ProgramPart( (s +* ( I +*
+  Start-At( 0,SCM+FSA)))), (s +* ( I +*
+  Start-At( 0,SCM+FSA))),k)
+  holds IC Comput(ProgramPart( (s +* (while=0(a,I) +*
+  Start-At( 0,SCM+FSA)))), (s +* (while=0(a,I) +*
+  Start-At( 0,SCM+FSA))),1+k+1) = IC
+Comput(ProgramPart( (s +* (I +* Start-At( 0,SCM+FSA)))), (s +* (I +* Start-At(
+0,SCM+FSA))),k+1) + 4 &
+DataPart Comput(ProgramPart( (
+s +* (while=0(a,I) +* Start-At( 0,SCM+FSA)))), (
+s +* (while=0(a,I) +* Start-At( 0,SCM+FSA))),1+k+1) =
+DataPart Comput(ProgramPart( (s +*
+  (I +* Start-At( 0,SCM+FSA)))), (s +*
+  (I +* Start-At( 0,SCM+FSA))),k+1);
 
 theorem :: SCMFSA_9:20
   for a being Int-Location, I being Program of SCM+FSA, s being
-  State of SCM+FSA st I is_closed_on s & I is_halting_on s & IC Computation( (s
-  +* (while=0(a,I) +* Start-At insloc 0)),(1 + LifeSpan (s +* (I +* Start-At
-insloc 0 )) ) ) = IC Computation( (s +* ( I +* Start-At insloc 0)), LifeSpan (s
-+* (I +* Start-At insloc 0 )) ) + 4 holds CurInstr Computation( (s +* (while=0(
-  a,I) +* Start-At insloc 0)),(1 + LifeSpan (s +* (I +* Start-At insloc 0)))) =
-  goto insloc (card I +4);
+  State of SCM+FSA st I is_closed_on s & I is_halting_on s & IC Comput(
+ProgramPart( (s
+  +* (while=0(a,I) +* Start-At( 0,SCM+FSA)))), (s
+  +* (while=0(a,I) +* Start-At( 0,SCM+FSA))),(1 + LifeSpan (s +*
+  (I +* Start-At(
+ 0,SCM+FSA))) ) ) =
+IC Comput(ProgramPart( (s +* ( I +* Start-At( 0,SCM+FSA)))), (s +* ( I +*
+Start-At( 0,SCM+FSA))),
+LifeSpan (s
++* (I +* Start-At( 0,SCM+FSA) )) ) + 4
+holds CurInstr(ProgramPart Comput(ProgramPart( (s +* (while=0(
+  a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while=0(
+  a,I) +* Start-At( 0,SCM+FSA))),(1 + LifeSpan (s +* (I +*
+  Start-At( 0,SCM+FSA))))),
+   Comput(ProgramPart( (s +* (while=0(
+  a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while=0(
+  a,I) +* Start-At( 0,SCM+FSA))),(1 + LifeSpan (s +* (I +*
+  Start-At( 0,SCM+FSA)))))) =
+  goto  (card I +4);
 
 theorem :: SCMFSA_9:21
   for a being Int-Location, I being Program of SCM+FSA holds
-  while=0(a,I).insloc (card I +4) = goto insloc 0;
+  while=0(a,I). (card I +4) = goto  0;
 
 reserve f for FinSeq-Location,
   c for Int-Location;
@@ -159,10 +191,15 @@ reserve f for FinSeq-Location,
 theorem :: SCMFSA_9:22
   for s being State of SCM+FSA, I being Program of SCM+FSA, a
 being read-write Int-Location st I is_closed_on s & I is_halting_on s & s.a =0
-holds IC Computation( (s +* (while=0(a,I) +* Start-At insloc 0)), (LifeSpan (s
-+* (I +* Start-At insloc 0)) + 3)) = insloc 0 & for k being Element of NAT st k
-  <= LifeSpan (s +* (I +* Start-At insloc 0)) + 3 holds IC Computation( (s +* (
-  while=0(a,I) +* Start-At insloc 0)),k) in dom while=0(a,I);
+holds IC Comput(ProgramPart( (s +* (while=0(a,I) +* Start-At( 0,SCM+FSA)))), (s
++* (while=0(a,I) +* Start-At( 0,SCM+FSA))),
+(LifeSpan (s
++* (I +* Start-At( 0,SCM+FSA))) + 3)) =  0 &
+for k being Element of NAT st k
+  <= LifeSpan (s +* (I +* Start-At( 0,SCM+FSA))) + 3
+  holds IC Comput(ProgramPart( (s +* (
+  while=0(a,I) +* Start-At( 0,SCM+FSA)))), (s +* (
+  while=0(a,I) +* Start-At( 0,SCM+FSA))),k) in dom while=0(a,I);
 
 reserve s for State of SCM+FSA,
   I for Program of SCM+FSA,
@@ -175,9 +212,11 @@ definition
   SCM+FSA means
 :: SCMFSA_9:def 4
 
-  it.0 = s & for i being Nat holds it.(i+1)= Computation( (
-  it.i +* (while=0(a,I) +* (Start-At insloc 0))), (LifeSpan (it.i +* (I +* (
-  Start-At insloc 0))) + 3));
+  it.0 = s & for i being Nat holds it.(i+1)= Comput(ProgramPart( (
+  it.i +* (while=0(a,I) +* (Start-At( 0,SCM+FSA))))), (
+  it.i +* (while=0(a,I) +* (Start-At( 0,SCM+FSA)))),
+  (LifeSpan (it.i +* (I +* (
+  Start-At( 0,SCM+FSA)))) + 3));
 end;
 
 reserve i,k,m,n for Element of NAT;
@@ -195,18 +234,28 @@ theorem :: SCMFSA_9:29
 
 theorem :: SCMFSA_9:30
   for I being Program of SCM+FSA,a being read-write Int-Location,
-  s being State of SCM+FSA holds StepWhile=0(a,I,s).(0+1)= Computation( (s +* (
-while=0(a,I) +* (Start-At insloc 0) )),(LifeSpan (s+* (I +* (Start-At insloc 0)
+  s being State of SCM+FSA holds StepWhile=0(a,I,s).(0+1)= Comput(ProgramPart(
+(s +* (
+while=0(a,I) +* (Start-At( 0,SCM+FSA)) ))), (s +* (
+while=0(a,I) +* (Start-At( 0,SCM+FSA)) )),(LifeSpan (s+* (I +*
+(Start-At( 0,SCM+FSA))
   )) + 3));
 
 theorem :: SCMFSA_9:31
   for I being Program of SCM+FSA,a being read-write Int-Location,
 s being State of SCM+FSA,k,n being Element of NAT st IC StepWhile=0(a,I,s).k =
-  insloc 0 & StepWhile=0(a,I,s).k= Computation( (s +* (while=0(a,I) +* Start-At
-insloc 0)),n) holds StepWhile=0(a,I,s).k = StepWhile=0(a,I,s).k +* (while=0(a,I
-)+* Start-At insloc 0) & StepWhile=0(a,I,s).(k+1)= Computation( (s +* (while=0(
-  a,I) +* Start-At insloc 0)), (n +(LifeSpan (StepWhile=0(a,I,s).k +* (I +*
-  Start-At insloc 0)) + 3)));
+   0 & StepWhile=0(a,I,s).k= Comput(ProgramPart( (s +* (while=0(a,I) +*
+  Start-At(
+ 0,SCM+FSA)))), (s +* (while=0(a,I) +*
+  Start-At(
+ 0,SCM+FSA))),n) holds StepWhile=0(a,I,s).k =
+StepWhile=0(a,I,s).k +* (while=0(a,I
+)+* Start-At( 0,SCM+FSA)) & StepWhile=0(a,I,s).(k+1)=
+Comput(ProgramPart( (s +* (while=0(
+  a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while=0(
+  a,I) +* Start-At( 0,SCM+FSA))), (n +(LifeSpan (StepWhile=0(a,I,s).k
+   +* (I +*
+  Start-At( 0,SCM+FSA))) + 3)));
 
 theorem :: SCMFSA_9:32
   for I being Program of SCM+FSA,a being read-write Int-Location,
@@ -232,7 +281,7 @@ st (for s being State of SCM+FSA holds (f.(StepWhile=0(a,I,s).1) < f.s or f.s =
   0) & ( f.s =0 iff s.a <> 0 )) holds while=0(a,I) is parahalting;
 
 theorem :: SCMFSA_9:35
-  for l1,l2 being Instruction-Location of SCM+FSA,a being
+  for l1,l2 being Element of NAT,a being
   Int-Location holds (l1 .--> goto l2) does_not_destroy a;
 
 theorem :: SCMFSA_9:36
@@ -254,7 +303,7 @@ end;
 
 theorem :: SCMFSA_9:37
   for a being Int-Location, I being Program of SCM+FSA, k being
-  Element of NAT st k < 6 holds insloc k in dom while>0(a,I);
+  Element of NAT st k < 6 holds  k in dom while>0(a,I);
 
 theorem :: SCMFSA_9:38
   for a being Int-Location, I being Program of SCM+FSA, k being
@@ -266,15 +315,15 @@ theorem :: SCMFSA_9:39
 
 theorem :: SCMFSA_9:40
   for a being Int-Location, I being Program of SCM+FSA holds
-  while>0(a,I).insloc 3 = goto insloc (card I +5);
+  while>0(a,I). 3 = goto  (card I +5);
 
 theorem :: SCMFSA_9:41
   for a being Int-Location, I being Program of SCM+FSA holds
-  while>0(a,I).insloc 2 = goto insloc 3;
+  while>0(a,I). 2 = goto  3;
 
 theorem :: SCMFSA_9:42
   for a being Int-Location, I being Program of SCM+FSA, k being Element
-  of NAT st k < card I +6 holds insloc k in dom while>0(a,I);
+  of NAT st k < card I +6 holds  k in dom while>0(a,I);
 
 theorem :: SCMFSA_9:43
   for s being State of SCM+FSA, I being Program of SCM+FSA, a
@@ -284,35 +333,70 @@ being read-write Int-Location st s.a <= 0 holds while>0(a,I) is_halting_on s &
 theorem :: SCMFSA_9:44
   for a being Int-Location, I being Program of SCM+FSA, s being
 State of SCM+FSA,k being Element of NAT st I is_closed_on s & I is_halting_on s
-& k < LifeSpan (s +* (I +* Start-At insloc 0)) & IC Computation( (s +* (while>0
-  (a,I) +* Start-At insloc 0)),1+k) = IC Computation( (s +* ( I +* Start-At
-  insloc 0)),k) + 4 & DataPart Computation( (s +* (while>0(a,I) +* Start-At
-  insloc 0)),1+k) = DataPart Computation( (s +* ( I +* Start-At insloc 0)),k)
-  holds IC Computation( (s +* (while>0(a,I) +* Start-At insloc 0)),1+k+1) = IC
-Computation( (s +* (I +* Start-At insloc 0)),k+1) + 4 & DataPart Computation( (
-s +* (while>0(a,I) +* Start-At insloc 0)),1+k+1) = DataPart Computation( (s +*
-  (I +* Start-At insloc 0)),k+1);
+& k < LifeSpan (s +* (I +* Start-At( 0,SCM+FSA))) &
+IC Comput(ProgramPart( (s +* (while>0
+  (a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while>0
+  (a,I) +* Start-At( 0,SCM+FSA))),1+k) = IC Comput(ProgramPart( (s +* ( I +*
+  Start-At(
+   0,SCM+FSA)))), (s +* ( I +*
+  Start-At(
+   0,SCM+FSA))),k) + 4 & DataPart Comput(ProgramPart( (s +* (while>0(a,I) +*
+  Start-At(
+   0,SCM+FSA)))), (s +* (while>0(a,I) +*
+  Start-At(
+   0,SCM+FSA))),1+k) = DataPart Comput(ProgramPart( (s +* ( I +*
+  Start-At( 0,SCM+FSA)))), (s +* ( I +*
+  Start-At( 0,SCM+FSA))),k)
+  holds IC Comput(ProgramPart( (s +* (while>0(a,I) +*
+  Start-At( 0,SCM+FSA)))), (s +* (while>0(a,I) +*
+  Start-At( 0,SCM+FSA))),1+k+1) = IC
+Comput(ProgramPart( (s +* (I +* Start-At( 0,SCM+FSA)))), (s +* (I +* Start-At(
+0,SCM+FSA))),k+1) + 4 &
+DataPart Comput(ProgramPart( (
+s +* (while>0(a,I) +* Start-At( 0,SCM+FSA)))), (
+s +* (while>0(a,I) +* Start-At( 0,SCM+FSA))),1+k+1) =
+DataPart Comput(ProgramPart( (s +*
+  (I +* Start-At( 0,SCM+FSA)))), (s +*
+  (I +* Start-At( 0,SCM+FSA))),k+1);
 
 theorem :: SCMFSA_9:45
   for a being Int-Location, I being Program of SCM+FSA, s being
-  State of SCM+FSA st I is_closed_on s & I is_halting_on s & IC Computation( (s
-  +* (while>0(a,I) +* Start-At insloc 0)),1 + LifeSpan (s +* (I +* Start-At
-insloc 0 ) ) ) = IC Computation( (s +* ( I +* Start-At insloc 0)), LifeSpan (s
-+* (I +* Start-At insloc 0 ))) + 4 holds CurInstr Computation( (s +* (while>0(a
-  ,I) +* Start-At insloc 0)),1 + LifeSpan (s +* (I +* Start-At insloc 0)) ) =
-  goto insloc (card I +4);
+  State of SCM+FSA st I is_closed_on s & I is_halting_on s & IC Comput(
+ProgramPart( (s
+  +* (while>0(a,I) +* Start-At( 0,SCM+FSA)))), (s
+  +* (while>0(a,I) +* Start-At( 0,SCM+FSA))),1 + LifeSpan (s +*
+  (I +* Start-At(
+ 0,SCM+FSA)) ) ) =
+IC Comput(ProgramPart( (s +* ( I +* Start-At( 0,SCM+FSA)))), (s +* ( I +*
+Start-At( 0,SCM+FSA))),
+LifeSpan (s
++* (I +* Start-At( 0,SCM+FSA) ))) + 4
+holds CurInstr(ProgramPart Comput(ProgramPart( (s +* (while>0(a
+  ,I) +* Start-At( 0,SCM+FSA)))), (s +* (while>0(a
+  ,I) +* Start-At( 0,SCM+FSA))),1 + LifeSpan (s +* (I +*
+  Start-At( 0,SCM+FSA))) ),
+   Comput(ProgramPart( (s +* (while>0(a
+  ,I) +* Start-At( 0,SCM+FSA)))), (s +* (while>0(a
+  ,I) +* Start-At( 0,SCM+FSA))),1 + LifeSpan (s +* (I +*
+  Start-At( 0,SCM+FSA))) )) =
+  goto  (card I +4);
 
 theorem :: SCMFSA_9:46
   for a being Int-Location, I being Program of SCM+FSA holds
-  while>0(a,I).insloc (card I +4) = goto insloc 0;
+  while>0(a,I). (card I +4) = goto  0;
 
 theorem :: SCMFSA_9:47
   for s being State of SCM+FSA, I being Program of SCM+FSA, a
 being read-write Int-Location st I is_closed_on s & I is_halting_on s & s.a >0
-holds IC Computation( (s +* (while>0(a,I) +* Start-At insloc 0)), (LifeSpan (s
-+* (I +* Start-At insloc 0)) + 3)) = insloc 0 & for k being Element of NAT st k
-  <= LifeSpan (s +* (I +* Start-At insloc 0)) + 3 holds IC Computation( (s +* (
-  while>0(a,I) +* Start-At insloc 0)),k) in dom while>0(a,I);
+holds IC Comput(ProgramPart( (s +* (while>0(a,I) +* Start-At( 0,SCM+FSA)))), (s
++* (while>0(a,I) +* Start-At( 0,SCM+FSA))),
+(LifeSpan (s
++* (I +* Start-At( 0,SCM+FSA))) + 3)) =  0 &
+for k being Element of NAT st k
+  <= LifeSpan (s +* (I +* Start-At( 0,SCM+FSA))) + 3
+  holds IC Comput(ProgramPart( (s +* (
+  while>0(a,I) +* Start-At( 0,SCM+FSA)))), (s +* (
+  while>0(a,I) +* Start-At( 0,SCM+FSA))),k) in dom while>0(a,I);
 
 reserve s for State of SCM+FSA,
   I for Program of SCM+FSA,
@@ -325,9 +409,11 @@ definition
   SCM+FSA means
 :: SCMFSA_9:def 5
 
-  it.0 = s & for i being Nat holds it.(i+1)= Computation( (
-  it.i +* (while>0(a,I) +*(Start-At insloc 0))), (LifeSpan (it.i +* (I +* (
-  Start-At insloc 0))) + 3));
+  it.0 = s & for i being Nat holds it.(i+1)= Comput(ProgramPart( (
+  it.i +* (while>0(a,I) +*(Start-At( 0,SCM+FSA))))), (
+  it.i +* (while>0(a,I) +*(Start-At( 0,SCM+FSA)))),
+  (LifeSpan (it.i +* (I +* (
+  Start-At( 0,SCM+FSA)))) + 3));
 end;
 
 canceled 2;
@@ -337,18 +423,28 @@ theorem :: SCMFSA_9:50
 
 theorem :: SCMFSA_9:51
   for I being Program of SCM+FSA,a being read-write Int-Location,
-  s being State of SCM+FSA holds StepWhile>0(a,I,s).(0+1)= Computation( (s +* (
-while>0(a,I) +* (Start-At insloc 0))), (LifeSpan (s+* (I +* (Start-At insloc 0)
+  s being State of SCM+FSA holds StepWhile>0(a,I,s).(0+1)= Comput(ProgramPart(
+(s +* (
+while>0(a,I) +* (Start-At( 0,SCM+FSA))))), (s +* (
+while>0(a,I) +* (Start-At( 0,SCM+FSA)))), (LifeSpan (s+* (I +*
+(Start-At( 0,SCM+FSA))
   )) + 3));
 
 theorem :: SCMFSA_9:52
   for I being Program of SCM+FSA,a being read-write Int-Location,
 s being State of SCM+FSA,k,n being Element of NAT st IC StepWhile>0(a,I,s).k =
-  insloc 0 & StepWhile>0(a,I,s).k= Computation( (s +* (while>0(a,I) +* Start-At
-insloc 0)),n) holds StepWhile>0(a,I,s).k = StepWhile>0(a,I,s).k +* (while>0(a,I
-)+* Start-At insloc 0) & StepWhile>0(a,I,s).(k+1)= Computation( (s +* (while>0(
-  a,I) +* Start-At insloc 0)), (n +(LifeSpan (StepWhile>0(a,I,s).k +* (I +*
-  Start-At insloc 0)) + 3)));
+   0 & StepWhile>0(a,I,s).k= Comput(ProgramPart( (s +* (while>0(a,I) +*
+  Start-At(
+ 0,SCM+FSA)))), (s +* (while>0(a,I) +*
+  Start-At(
+ 0,SCM+FSA))),n)
+ holds StepWhile>0(a,I,s).k = StepWhile>0(a,I,s).k +* (while>0(a,I
+)+* Start-At( 0,SCM+FSA)) & StepWhile>0(a,I,s).(k+1)=
+Comput(ProgramPart( (s +* (while>0(
+  a,I) +* Start-At( 0,SCM+FSA)))), (s +* (while>0(
+  a,I) +* Start-At( 0,SCM+FSA))), (n +(LifeSpan (StepWhile>0(a,I,s).k
+   +* (I +*
+  Start-At( 0,SCM+FSA))) + 3)));
 
 theorem :: SCMFSA_9:53
   for I being Program of SCM+FSA,a being read-write Int-Location,

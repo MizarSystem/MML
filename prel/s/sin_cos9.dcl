@@ -34,16 +34,16 @@
 <FCluster aid="SIN_COS9" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="224"/>
+<Func kind="K" nr="223"/>
 <Func kind="K" nr="79">
 <Func kind="K" nr="59">
 <Func kind="K" nr="68">
-<Func kind="K" nr="227"/>
+<Func kind="K" nr="226"/>
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="K" nr="68">
-<Func kind="K" nr="227"/>
+<Func kind="K" nr="226"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -56,10 +56,10 @@
 <FCluster aid="SIN_COS9" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="225"/>
+<Func kind="K" nr="224"/>
 <Func kind="K" nr="79">
 <Func kind="K" nr="49"/>
-<Func kind="K" nr="227"/>
+<Func kind="K" nr="226"/>
 </Func>
 </Func>
 <Cluster>
@@ -69,7 +69,7 @@
 </FCluster>
 <FCluster aid="SIN_COS9" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="232"/>
+<Func kind="K" nr="231"/>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="7"/>
@@ -77,7 +77,7 @@
 </FCluster>
 <FCluster aid="SIN_COS9" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="233"/>
+<Func kind="K" nr="232"/>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="7"/>
@@ -86,16 +86,16 @@
 <FCluster aid="SIN_COS9" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="224"/>
+<Func kind="K" nr="223"/>
 <Func kind="K" nr="78">
 <Func kind="K" nr="59">
 <Func kind="K" nr="68">
-<Func kind="K" nr="227"/>
+<Func kind="K" nr="226"/>
 <Num nr="4"/>
 </Func>
 </Func>
 <Func kind="K" nr="68">
-<Func kind="K" nr="227"/>
+<Func kind="K" nr="226"/>
 <Num nr="4"/>
 </Func>
 </Func>
@@ -108,10 +108,10 @@
 <FCluster aid="SIN_COS9" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="225"/>
+<Func kind="K" nr="224"/>
 <Func kind="K" nr="78">
 <Func kind="K" nr="68">
-<Func kind="K" nr="227"/>
+<Func kind="K" nr="226"/>
 <Num nr="4"/>
 </Func>
 <Func kind="K" nr="66">
@@ -119,7 +119,7 @@
 <Num nr="3"/>
 <Num nr="4"/>
 </Func>
-<Func kind="K" nr="227"/>
+<Func kind="K" nr="226"/>
 </Func>
 </Func>
 </Func>

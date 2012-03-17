@@ -40,7 +40,7 @@
 <Func kind="K" nr="85"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="185">
+<Func kind="K" nr="184">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -56,7 +56,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="191">
+<Func kind="K" nr="190">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -76,7 +76,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="205">
+<Func kind="K" nr="204">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -91,7 +91,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="208">
+<Func kind="K" nr="207">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -106,7 +106,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="213">
+<Func kind="K" nr="212">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -115,7 +115,7 @@
 </FCluster>
 <FCluster aid="SIN_COS" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="204"/>
+<Func kind="K" nr="203"/>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="15">
@@ -127,7 +127,7 @@
 </FCluster>
 <FCluster aid="SIN_COS" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="207"/>
+<Func kind="K" nr="206"/>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="15">
@@ -139,7 +139,7 @@
 </FCluster>
 <FCluster aid="SIN_COS" nr="8">
 <ArgTypes/>
-<Func kind="K" nr="212"/>
+<Func kind="K" nr="211"/>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="15">

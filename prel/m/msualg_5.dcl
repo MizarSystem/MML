@@ -19,13 +19,13 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="NAT_LAT"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="MSUALG_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="MSUALG_4"/>
 <ArticleID name="MSUALG_5"/>
 </Signature>
@@ -79,14 +79,14 @@
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="90">
+<Adjective nr="95">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="227">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

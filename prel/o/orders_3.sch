@@ -21,6 +21,7 @@
 <ArticleID name="MULTOP_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="ALTCAT_1"/>
 </Signature>
@@ -41,7 +42,7 @@
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="58"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 <Not>
@@ -100,7 +101,7 @@
 <Var nr="5"/>
 <Var nr="6"/>
 </Func>
-<Func kind="K" nr="168">
+<Func kind="K" nr="181">
 <Func kind="F" nr="2">
 <Var nr="4"/>
 <Var nr="5"/>
@@ -202,13 +203,13 @@
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="58"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="58"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 <Not>
@@ -267,7 +268,7 @@
 <Var nr="6"/>
 <Var nr="7"/>
 </Func>
-<Func kind="K" nr="168">
+<Func kind="K" nr="181">
 <Func kind="F" nr="2">
 <Var nr="5"/>
 <Var nr="6"/>
@@ -338,7 +339,7 @@
 <Var nr="6"/>
 <Var nr="7"/>
 </Func>
-<Func kind="K" nr="168">
+<Func kind="K" nr="181">
 <Func kind="F" nr="2">
 <Var nr="5"/>
 <Var nr="6"/>

@@ -21,10 +21,10 @@ environ
       AFINSQ_1, RELAT_1, FINSET_1, CARD_1, AMI_1, CARD_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions TARSKI, FUNCOP_1, CARD_1, AMI_2, FINSEQ_1;
- theorems ZFMISC_1, FUNCT_2, TARSKI, CAT_2, FUNCOP_1, GR_CY_1, INT_1, CARD_3,
-      FINSEQ_1, FINSEQ_4, MCART_1, FUNCT_4, AMI_1, RELAT_1, FUNCT_1, AMI_3,
-      AMI_5, FINSEQ_2, PRE_CIRC, AMI_2, FUNCT_7, RELSET_1, ORDINAL1, XBOOLE_0,
-      XBOOLE_1, NUMBERS, CARD_1, PARTFUN1, NAT_1, FUNCT_5;
+ theorems ZFMISC_1, FUNCT_2, TARSKI, CAT_2, FUNCOP_1, INT_1, CARD_3, FINSEQ_1,
+      FINSEQ_4, MCART_1, FUNCT_4, RELAT_1, FUNCT_1, AMI_3, AMI_5, FINSEQ_2,
+      PRE_CIRC, AMI_2, FUNCT_7, RELSET_1, ORDINAL1, XBOOLE_0, XBOOLE_1,
+      NUMBERS, CARD_1, PARTFUN1, NAT_1, FUNCT_5;
  schemes BINOP_1;
 
 begin
@@ -434,9 +434,8 @@ A1: b in SCM-Data-Loc;
   then
 A2: b in dom SCM-OK by FUNCT_2:def 1;
   b is Data-Location by A1,AMI_3:def 1,def 2;
-  then b is not Instruction-Location of SCM by AMI_5:22;
-  then not b in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|NAT)) by Lm1,
-AMI_1:def 4;
+  then b is not Element of NAT by AMI_5:22;
+  then not b in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|NAT)) by Lm1;
   hence SCM+FSA-OK.b = ((SCM+FSA-Memory --> INT*) +* SCM-OK).b by FUNCT_4:12
     .= SCM-OK.b by A2,FUNCT_4:14
     .= INT by AMI_2:10;
@@ -515,15 +514,15 @@ theorem Th13:
   SCM+FSA-Instr <> INT & NAT <> SCM+FSA-Instr & NAT
   <> INT* & SCM+FSA-Instr <> INT*
 proof
-A0: 2 in NAT;
+ 2 in NAT;
   then
 B0: 2 in INT by NUMBERS:17;
-A1: not ex x,y st 2 = [x,y];
+ not ex x,y st 2 = [x,y];
    then not 2 in [:NAT,proj2 SCM+FSA-Instr:] by RELAT_1:def 1;
    then
 A2:  not 2 in SCM+FSA-Instr by LmX;
-  hence SCM+FSA-Instr <> INT by A2,B0;
-  thus NAT <> SCM+FSA-Instr by A2,A0;
+  hence SCM+FSA-Instr <> INT by B0;
+  thus NAT <> SCM+FSA-Instr by A2;
   0 qua Integer in INT by INT_1:def 1;
   then <*0*> is FinSequence of INT by FINSEQ_1:95;
   then
@@ -557,7 +556,7 @@ A2: i in {NAT} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc by Th8,XBOOLE_0:def 3;
   not i in SCM+FSA-Data*-Loc by A1,Th12,Th13;
   then
 A3: i in {NAT} \/ SCM+FSA-Data-Loc by A2,XBOOLE_0:def 3;
-  not i in SCM+FSA-Data-Loc by A1,Th10,Th13,NUMBERS:27;
+  not i in SCM+FSA-Data-Loc by A1,Th10,NUMBERS:27;
   then i in {NAT} by A3,XBOOLE_0:def 3;
   hence thesis by TARSKI:def 1;
 end;
@@ -574,7 +573,7 @@ A2: i in {NAT} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc by Th8,XBOOLE_0:def 3;
   not i in SCM+FSA-Data*-Loc by A1,Th12,FUNCT_7:18;
   then
 A3: i in {NAT} \/ SCM+FSA-Data-Loc by A2,XBOOLE_0:def 3;
-  not i in {NAT} by A1,Th9,Th13,TARSKI:def 1,NUMBERS:27;
+  not i in {NAT} by A1,Th9,NUMBERS:27,TARSKI:def 1;
   hence thesis by A3,XBOOLE_0:def 3;
 end;
 
@@ -688,20 +687,20 @@ A15:  SCM-OK.x = SCM-Instr by AMI_2:11;
 end;
 
 theorem Th19:
-  for s being SCM+FSA-State, s' being SCM-State holds s +* s' +* s
+  for s being SCM+FSA-State, s9 being SCM-State holds s +* s9 +* s
   |NAT is SCM+FSA-State
 proof
-  let s be SCM+FSA-State, s' be SCM-State;
+  let s be SCM+FSA-State, s9 be SCM-State;
 A1: dom SCM+FSA-OK = SCM+FSA-Memory by FUNCT_2:def 1;
   then reconsider
   f = SCM+FSA-OK as non-empty ManySortedSet of SCM+FSA-Memory by PARTFUN1:def 4
 ,RELAT_1:def 18;
-A2: dom s' = dom SCM-OK by CARD_3:18
+A2: dom s9 = dom SCM-OK by CARD_3:18
     .= SCM-Memory by FUNCT_2:def 1;
   now
     let x be set;
     assume
-A3: x in dom s';
+A3: x in dom s9;
     then
 A4: x in {IC SCM} \/ SCM-Data-Loc or x in NAT by A2,AMI_3:def 1,AMI_5:23
 ,XBOOLE_0:def 3;
@@ -709,22 +708,22 @@ A4: x in {IC SCM} \/ SCM-Data-Loc or x in NAT by A2,AMI_3:def 1,AMI_5:23
     suppose
 A5:   x in {IC SCM};
       reconsider a = x as Element of SCM-Memory by A2,A3;
-A6:   s'.a in pi(product SCM-OK,a) by CARD_3:def 6;
+A6:   s9.a in pi(product SCM-OK,a) by CARD_3:def 6;
 A7:   x = IC SCM by A5,TARSKI:def 1;
       dom SCM-OK = SCM-Memory by FUNCT_2:def 1;
       then pi(product SCM-OK,a) = SCM-OK.a by CARD_3:22
         .= NAT by A7,AMI_2:7,AMI_3:4;
-      hence s'.x in f.x by A5,A6,Th9,AMI_3:4,TARSKI:def 1;
+      hence s9.x in f.x by A5,A6,Th9,AMI_3:4,TARSKI:def 1;
     end;
     suppose
 A8:   x in SCM-Data-Loc;
       reconsider a = x as Element of SCM-Memory by A2,A3;
-A9:   s'.a in pi(product SCM-OK,a) by CARD_3:def 6;
+A9:   s9.a in pi(product SCM-OK,a) by CARD_3:def 6;
       dom SCM-OK = SCM-Memory by FUNCT_2:def 1;
       then
 A10:  pi(product SCM-OK,a) = SCM-OK.a by CARD_3:22;
       SCM+FSA-OK.x = INT by A8,Th10;
-      hence s'.x in f.x by A8,A10,A9,AMI_2:10;
+      hence s9.x in f.x by A8,A10,A9,AMI_2:10;
     end;
     suppose
 A11:  x in NAT;
@@ -733,15 +732,15 @@ A11:  x in NAT;
       then
 A12:  SCM-Instr c= SCM+FSA-Instr by XBOOLE_1:7;
       reconsider a = x as Element of SCM-Memory by A2,A3;
-A13:  s'.a in pi(product SCM-OK,a) by CARD_3:def 6;
+A13:  s9.a in pi(product SCM-OK,a) by CARD_3:def 6;
       dom SCM-OK = SCM-Memory by FUNCT_2:def 1;
       then
 A14:  pi(product SCM-OK,a) = SCM-OK.a by CARD_3:22;
       SCM-OK.x = SCM-Instr & SCM+FSA-OK.x = SCM+FSA-Instr by A11,Th11,AMI_2:11;
-      hence s'.x in f.x by A12,A14,A13;
+      hence s9.x in f.x by A12,A14,A13;
     end;
   end;
-  then s +* s' is SCM+FSA-State by A1,A2,PRE_CIRC:9,XBOOLE_1:7;
+  then s +* s9 is SCM+FSA-State by A1,A2,PRE_CIRC:9,XBOOLE_1:7;
   hence thesis by CARD_3:69;
 end;
 
@@ -1022,9 +1021,9 @@ end;
 definition
   let x be Element of SCM+FSA-Instr, s be SCM+FSA-State;
   func SCM+FSA-Exec-Res(x,s) -> SCM+FSA-State means
-  ex x' being Element of
-  SCM-Instr, s' being SCM-State st x = x' & s' = s|SCM-Memory +* (NAT --> x') &
-it = s +* SCM-Exec-Res(x',s') +* s|NAT if InsCode x <= 8, ex i being Integer, k
+  ex x9 being Element of
+  SCM-Instr, s9 being SCM-State st x = x9 & s9 = s|SCM-Memory +* (NAT --> x9) &
+it = s +* SCM-Exec-Res(x9,s9) +* s|NAT if InsCode x <= 8, ex i being Integer, k
   st k = abs(s.(x int_addr2)) & i = (s.(x coll_addr1))/.k & it = SCM+FSA-Chg(
   SCM+FSA-Chg(s,x int_addr1,i),succ IC s) if InsCode x = 9, ex f being
 FinSequence of INT,k st k = abs(s.(x int_addr2)) & f = s.(x coll_addr1)+*(k,s.(
@@ -1038,14 +1037,14 @@ InsCode x = 10, it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2)
     hereby
       assume
       InsCode x <= 8;
-      then reconsider x' = x as Element of SCM-Instr by Th3;
-      reconsider s' = s|SCM-Memory +* (NAT --> x') as SCM-State by Th18;
-      reconsider s1 = s +* SCM-Exec-Res(x',s') +* s|NAT as SCM+FSA-State by
+      then reconsider x9 = x as Element of SCM-Instr by Th3;
+      reconsider s9 = s|SCM-Memory +* (NAT --> x9) as SCM-State by Th18;
+      reconsider s1 = s +* SCM-Exec-Res(x9,s9) +* s|NAT as SCM+FSA-State by
 Th19;
-      take s1,x',s';
-      thus x = x';
-      thus s' = s|SCM-Memory +* (NAT --> x');
-      thus s1 = s +* SCM-Exec-Res(x',s') +* s|NAT;
+      take s1,x9,s9;
+      thus x = x9;
+      thus s9 = s|SCM-Memory +* (NAT --> x9);
+      thus s1 = s +* SCM-Exec-Res(x9,s9) +* s|NAT;
     end;
     hereby
       reconsider k = abs(s.(x int_addr2)) as Element of NAT;
@@ -1184,7 +1183,7 @@ proof
   let s be SCM+FSA-State, u be Element of NAT, mk be Element of
   SCM+FSA-Data-Loc;
   SCM+FSA-OK.mk = INT & {NAT} = dom(NAT .--> u) by Th10,FUNCOP_1:19;
-  then not mk in dom(NAT .--> u) by Th9,Th13,TARSKI:def 1,NUMBERS:27;
+  then not mk in dom(NAT .--> u) by Th9,NUMBERS:27,TARSKI:def 1;
   hence thesis by FUNCT_4:12;
 end;
 
@@ -1215,7 +1214,7 @@ theorem
 proof
   let s be SCM+FSA-State, t be Element of SCM+FSA-Data-Loc, u be Integer;
   SCM+FSA-OK.t = INT & {t} = dom(t .--> u) by Th10,FUNCOP_1:19;
-  then not NAT in dom(t .--> u) by Th9,Th13,TARSKI:def 1,NUMBERS:27;
+  then not NAT in dom(t .--> u) by Th9,NUMBERS:27,TARSKI:def 1;
   hence thesis by FUNCT_4:12;
 end;
 
@@ -1339,20 +1338,20 @@ S: x in SCM-Instr \/ { [J,<*c,f1,b*>] : J in {9,10} };
   per cases by S,XBOOLE_0:def 3;
   suppose x in SCM-Instr;
    then f in proj2 SCM-Instr by RELAT_1:def 5;
-  hence f is FinSequence by FINSEQ_1:def 19;
+  hence f is FinSequence;
   end;
   suppose x in { [J,<*c,f1,b*>] : J in {9,10}};
    then consider J,c,b,f1 such that
 W:  x = [J,<*c,f1,b*>] & J in {9,10};
   f = <*c,f1,b*> by W,ZFMISC_1:33;
-  hence f is FinSequence by ZFMISC_1:106;
+  hence f is FinSequence;
   end;
   end;
   suppose x in { [K,<*c1,f1*>] : K in {11,12} };
    then consider K,c1,f1 such that
 W: x = [K,<*c1,f1*>] & K in {11,12};
   f = <*c1,f1*> by W,ZFMISC_1:33;
-  hence f is FinSequence by ZFMISC_1:106;
+  hence f is FinSequence;
   end;
   end;
 end;

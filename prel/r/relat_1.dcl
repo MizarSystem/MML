@@ -667,4 +667,58 @@
 <Adjective nr="5"/>
 </Cluster>
 </CCluster>
+<CCluster aid="RELAT_1" nr="6">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="7">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<LocusVar nr="2"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="7">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</CCluster>
+<CCluster aid="RELAT_1" nr="7">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="8">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<LocusVar nr="2"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="8">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</CCluster>
 </Registrations>

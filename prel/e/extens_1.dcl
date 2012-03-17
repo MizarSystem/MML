@@ -18,11 +18,11 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
@@ -37,13 +37,13 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="48" value="false"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="53" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="61">
+<Adjective nr="66">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

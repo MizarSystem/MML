@@ -31,8 +31,8 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="VECTSP_2"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="VECTSP_2"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="FVSUM_1"/>
 <ArticleID name="WELLORD1"/>
@@ -58,7 +58,7 @@
 <Adjective nr="119"/>
 <Adjective nr="124"/>
 <Adjective nr="125"/>
-<Adjective nr="134"/>
+<Adjective nr="139"/>
 <Adjective nr="158"/>
 </Cluster>
 </RCluster>

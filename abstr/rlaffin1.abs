@@ -1,0 +1,473 @@
+:: Affine Indepedence in Vector Spaces
+::  by Karol P\c{a}k
+:: 
+:: Received December 18, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies ALGSTR_0, ARYTM_1, ARYTM_3, XBOOLE_0, CARD_1, CONVEX1, CONVEX2,
+      CONVEX3, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSET_1, FUNCT_1, FUNCT_2,
+      MONOID_0, ORDERS_1, RELAT_1, RLSUB_1, RLVECT_1, RLVECT_2, RLVECT_3,
+      RUSUB_4, SEMI_AF1, SETFAM_1, SUBSET_1, TARSKI, CLASSES1, SUPINF_2,
+      RLVECT_5, REAL_1, NUMBERS, NAT_1, CARD_3, XXREAL_0, STRUCT_0, ZFMISC_1,
+      RLAFFIN1, ORDINAL1, ORDINAL4, PARTFUN1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, ORDERS_1, CARD_1,
+      NUMBERS, XXREAL_0, NAT_1, REAL_1, FINSET_1, SETFAM_1, DOMAIN_1, ALGSTR_0,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, STRUCT_0, FINSEQ_2, SEQ_1,
+      FINSEQ_3, FINSEQOP, CLASSES1, RVSUM_1, RLVECT_1, RLVECT_2, RLVECT_3,
+      RLVECT_5, RLSUB_1, RLSUB_2, RUSUB_4, CONVEX1, CONVEX2, CONVEX3;
+ constructors BINOP_1, BINOP_2, CLASSES1, CONVEX1, CONVEX3, DOMAIN_1, FINSEQ_4,
+      FINSEQOP, FINSOP_1, MATRLIN, ORDERS_1, PARTFUN1, REALSET1, REAL_1,
+      RLVECT_2, RLVECT_3, RLVECT_5, RVSUM_1, RLSUB_2, RUSUB_5, SEQ_1, SETFAM_1,
+      SETWISEO, XXREAL_0, RELSET_1;
+ registrations BINOP_2, CARD_1, CONVEX1, CONVEX2, FINSET_1, FINSEQ_2, FUNCT_1,
+      FUNCT_2, MEMBERED, NAT_1, NUMBERS, RELAT_1, RLVECT_1, RLVECT_3, RUSUB_4,
+      STRUCT_0, SUBSET_1, VALUED_0, XCMPLX_0, XREAL_0, XXREAL_0, RLVECT_5,
+      XBOOLE_0, RELSET_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve x,y for set,
+        r,s for Real,
+        S for non empty addLoopStr,
+        LS,LS1,LS2 for Linear_Combination of S,
+        G for Abelian add-associative right_zeroed right_complementable
+          non empty addLoopStr,
+        LG,LG1,LG2 for Linear_Combination of G,
+        g,h for Element of G,
+        RLS for non empty RLSStruct,
+        R for RealLinearSpace-like(non empty RLSStruct),
+        AR for Subset of R,
+        LR,LR1,LR2 for Linear_Combination of R,
+        V for RealLinearSpace,
+        v,v1,v2,u,w,p for VECTOR of V,
+        A,B for Subset of V,
+        F1,F2 for Subset-Family of V,
+        L,L1,L2 for Linear_Combination of V;
+
+registration
+  let RLS;
+  let A be empty Subset of RLS;
+  cluster conv A -> empty;
+end;
+
+registration let RLS;
+  let A be non empty Subset of RLS;
+  cluster conv A -> non empty;
+end;
+
+theorem :: RLAFFIN1:1
+  for v be Element of R holds conv {v} = {v};
+
+theorem :: RLAFFIN1:2
+  for A be Subset of RLS holds A c= conv A;
+
+theorem :: RLAFFIN1:3
+  for A,B be Subset of RLS st A c= B holds conv A c= conv B;
+
+theorem :: RLAFFIN1:4
+  for S,A be Subset of RLS st A c= conv S holds conv S = conv(S\/A);
+
+theorem :: RLAFFIN1:5
+  for V be add-associative non empty addLoopStr
+     for A be Subset of V for v,w be Element of V
+    holds (v+w)+A = v+(w+A);
+
+theorem :: RLAFFIN1:6
+  for V be Abelian right_zeroed non empty addLoopStr for A be Subset of V
+    holds 0.V + A = A;
+
+theorem :: RLAFFIN1:7
+  for A be Subset of G holds card A = card (g+A);
+
+theorem :: RLAFFIN1:8
+  for v be Element of S holds v + {}S = {}S;
+
+theorem :: RLAFFIN1:9
+  for A,B be Subset of RLS st A c= B holds r*A c= r*B;
+
+theorem :: RLAFFIN1:10
+  (r*s)* AR = r * (s*AR);
+
+theorem :: RLAFFIN1:11
+  1 * AR = AR;
+
+theorem :: RLAFFIN1:12
+  0 * A c= {0.V};
+
+theorem :: RLAFFIN1:13
+  for F be FinSequence of S holds (LS1+LS2) * F = (LS1*F) + (LS2*F);
+
+theorem :: RLAFFIN1:14
+  for F be FinSequence of V holds (r*L) * F = r * (L*F);
+
+theorem :: RLAFFIN1:15
+  A is linearly-independent & A c= B & Lin B = V implies
+    ex I be linearly-independent Subset of V st A c= I & I c= B & Lin I = V;
+
+begin :: Two Transformations of Linear Combinations
+
+definition
+  let G,LG,g;
+  func g + LG -> Linear_Combination of G means
+:: RLAFFIN1:def 1
+    it.h = LG.(h-g);
+end;
+
+theorem :: RLAFFIN1:16
+  Carrier (g+LG) = g + Carrier LG;
+
+theorem :: RLAFFIN1:17
+  g + (LG1+LG2) = (g+LG1) + (g+LG2);
+
+theorem :: RLAFFIN1:18
+  v + (r*L) = r * (v+L);
+
+theorem :: RLAFFIN1:19
+  g + (h+LG) = (g+h) + LG;
+
+theorem :: RLAFFIN1:20
+  g + ZeroLC G = ZeroLC G;
+
+theorem :: RLAFFIN1:21
+  0.G + LG = LG;
+
+definition
+  let R,LR,r;
+  func r (*) LR -> Linear_Combination of R means
+:: RLAFFIN1:def 2
+    for v be Element of R holds it.v = LR.(r"*v)
+       if r<>0 otherwise
+   it = ZeroLC R;
+end;
+
+theorem :: RLAFFIN1:22
+  Carrier (r(*)LR) c= r*Carrier LR;
+
+theorem :: RLAFFIN1:23
+  r <> 0 implies Carrier (r(*)LR) = r * Carrier LR;
+
+theorem :: RLAFFIN1:24
+  r (*) (LR1+LR2) = (r(*)LR1) + (r(*)LR2);
+
+theorem :: RLAFFIN1:25
+  r * (s(*)L) = s (*) (r*L);
+
+theorem :: RLAFFIN1:26
+  r (*) ZeroLC(R) = ZeroLC R;
+
+theorem :: RLAFFIN1:27
+  r(*)(s(*)LR)=(r*s)(*)LR;
+
+theorem :: RLAFFIN1:28
+  1 (*) LR = LR;
+
+
+begin :: The Sum of Coefficients of a Linear Combination
+
+definition
+ let S,LS;
+ func sum LS -> Real means
+:: RLAFFIN1:def 3
+   ex F be FinSequence of S st
+      F is one-to-one & rng F = Carrier LS & it = Sum (LS*F);
+end;
+
+theorem :: RLAFFIN1:29
+  for F be FinSequence of S st Carrier LS misses rng F holds Sum (LS*F) = 0;
+
+theorem :: RLAFFIN1:30
+  for F be FinSequence of S st F is one-to-one & Carrier LS c= rng F
+    holds sum LS = Sum (LS*F);
+
+theorem :: RLAFFIN1:31
+  sum ZeroLC S = 0;
+
+theorem :: RLAFFIN1:32
+  for v be Element of S st Carrier LS c= {v} holds sum LS = LS.v;
+
+theorem :: RLAFFIN1:33
+  for v1,v2 be Element of S st
+      Carrier LS c= {v1,v2} & v1 <> v2 holds sum LS = LS.v1 + LS.v2;
+
+theorem :: RLAFFIN1:34
+  sum (LS1+LS2) = sum LS1 + sum LS2;
+
+theorem :: RLAFFIN1:35
+  sum (r * L) = r * sum L;
+
+theorem :: RLAFFIN1:36
+  sum (L1-L2) =sum L1 - sum L2;
+
+theorem :: RLAFFIN1:37
+  sum LG = sum (g+LG);
+
+theorem :: RLAFFIN1:38
+  r <> 0 implies sum LR = sum (r(*)LR);
+
+theorem :: RLAFFIN1:39
+  Sum (v + L) = (sum L)*v + Sum L;
+
+theorem :: RLAFFIN1:40
+  Sum (r(*)L) = r * Sum L;
+
+begin :: Affine Independence of Vectors
+
+definition
+  let V,A;
+  attr A is affinely-independent means
+:: RLAFFIN1:def 4
+    A is empty or ex v st v in A & -v + A\{0.V} is linearly-independent;
+end;
+
+registration
+  let V;
+  cluster empty -> affinely-independent Subset of V;
+  let v;
+  cluster {v} -> affinely-independent Subset of V;
+  let w;
+  cluster {v,w} -> affinely-independent Subset of V;
+end;
+
+registration
+  let V;
+  cluster non empty trivial affinely-independent Subset of V;
+end;
+
+theorem :: RLAFFIN1:41
+  A is affinely-independent iff for v st v in A holds
+                                      -v + A\{0.V} is linearly-independent;
+
+theorem :: RLAFFIN1:42
+  A is affinely-independent iff
+      for L be Linear_Combination of A st Sum L = 0.V & sum L = 0
+        holds Carrier L = {};
+
+theorem :: RLAFFIN1:43
+  A is affinely-independent & B c= A implies B is affinely-independent;
+
+registration
+  let V;
+  cluster linearly-independent -> affinely-independent Subset of V;
+end;
+
+reserve I for affinely-independent Subset of V;
+
+registration
+  let V,I,v;
+  cluster v + I -> affinely-independent;
+end;
+
+theorem :: RLAFFIN1:44
+  v+A is affinely-independent implies A is affinely-independent;
+
+registration
+  let V,I,r;
+  cluster r*I -> affinely-independent;
+end;
+
+theorem :: RLAFFIN1:45
+  r * A is affinely-independent & r <> 0 implies A is affinely-independent;
+
+theorem :: RLAFFIN1:46
+  0.V in A implies
+    (A is affinely-independent iff A \ {0.V} is linearly-independent);
+
+definition
+  let V;
+  let F be Subset-Family of V;
+  attr F is affinely-independent means
+:: RLAFFIN1:def 5
+   A in F implies A is affinely-independent;
+end;
+
+registration
+  let V;
+  cluster empty -> affinely-independent Subset-Family of V;
+  let I;
+  cluster {I} -> affinely-independent Subset-Family of V;
+end;
+
+registration
+  let V;
+  cluster empty affinely-independent Subset-Family of V;
+  cluster non empty affinely-independent Subset-Family of V;
+end;
+
+theorem :: RLAFFIN1:47
+  F1 is affinely-independent & F2 is affinely-independent implies
+     F1 \/ F2 is affinely-independent;
+
+theorem :: RLAFFIN1:48
+  F1 c= F2 & F2 is affinely-independent implies F1 is affinely-independent;
+
+begin :: Affine Hull
+
+definition
+  let RLS;
+  let A be Subset of RLS;
+  func Affin A -> Subset of RLS equals
+:: RLAFFIN1:def 6
+    meet {B where B is Affine Subset of RLS : A c= B};
+end;
+
+registration
+  let RLS;
+  let A be Subset of RLS;
+  cluster Affin A -> Affine;
+end;
+
+registration
+  let RLS;
+  let A be empty Subset of RLS;
+  cluster Affin A -> empty;
+end;
+
+registration
+  let RLS;
+  let A be non empty Subset of RLS;
+  cluster Affin A -> non empty;
+end;
+
+theorem :: RLAFFIN1:49
+  for A be Subset of RLS holds A c= Affin A;
+
+theorem :: RLAFFIN1:50
+  for A be Affine Subset of RLS holds A = Affin A;
+
+theorem :: RLAFFIN1:51
+  for A,B be Subset of RLS st A c= B & B is Affine holds Affin A c= B;
+
+theorem :: RLAFFIN1:52
+  for A,B be Subset of RLS st A c= B holds Affin A c= Affin B;
+
+theorem :: RLAFFIN1:53
+  Affin (v+A) = v + Affin A;
+
+theorem :: RLAFFIN1:54
+  AR is Affine implies r * AR is Affine;
+
+theorem :: RLAFFIN1:55
+  r <> 0 implies Affin (r*AR) = r * Affin AR;
+
+theorem :: RLAFFIN1:56
+  Affin (r*A) = r * Affin A;
+
+theorem :: RLAFFIN1:57
+  v in Affin A implies Affin A = v + Up Lin (-v+A);
+
+theorem :: RLAFFIN1:58
+  A is affinely-independent iff for B st B c= A & Affin A = Affin B holds A = B
+;
+
+theorem :: RLAFFIN1:59
+  Affin A = {Sum L where L is Linear_Combination of A : sum L=1};
+
+theorem :: RLAFFIN1:60
+  I c=A implies ex Ia be affinely-independent Subset of V st
+    I c= Ia & Ia c= A & Affin Ia = Affin A;
+
+theorem :: RLAFFIN1:61
+  for A,B be finite Subset of V st
+      A is affinely-independent & Affin A = Affin B & card B <= card A
+    holds B is affinely-independent;
+
+theorem :: RLAFFIN1:62
+  L is convex iff sum L = 1 & for v holds 0 <= L.v;
+
+theorem :: RLAFFIN1:63
+  L is convex implies L.x <= 1;
+
+theorem :: RLAFFIN1:64
+  L is convex & L.x = 1 implies Carrier L = {x};
+
+theorem :: RLAFFIN1:65
+  conv A c= Affin A;
+
+theorem :: RLAFFIN1:66
+  x in conv A & (conv A)\{x} is convex implies x in A;
+
+theorem :: RLAFFIN1:67
+  Affin conv A = Affin A;
+
+theorem :: RLAFFIN1:68
+  conv A c= conv B implies Affin A c= Affin B;
+
+theorem :: RLAFFIN1:69
+  for A,B be Subset of RLS st A c= Affin B holds Affin (A\/B) = Affin B;
+
+begin :: Barycentric Coordinates
+
+definition
+  let V;
+  let A such that
+     A is affinely-independent;
+  let x such that
+     x in Affin A;
+  func x |-- A -> Linear_Combination of A means
+:: RLAFFIN1:def 7
+    Sum it = x & sum it = 1;
+end;
+
+theorem :: RLAFFIN1:70
+  v1 in Affin I & v2 in Affin I implies
+  ((1-r)*v1+r*v2) |-- I = (1-r) * (v1|--I) + r * (v2|--I);
+
+theorem :: RLAFFIN1:71
+  x in conv I implies x|--I is convex & 0 <= (x|--I).v & (x|--I).v <= 1;
+
+theorem :: RLAFFIN1:72
+  x in conv I implies ((x|--I).y = 1 iff x = y & x in I);
+
+theorem :: RLAFFIN1:73
+  for I st x in Affin I &
+          for v st v in I holds 0 <= (x|--I).v
+    holds x in conv I;
+
+theorem :: RLAFFIN1:74
+  x in I implies (conv I)\{x} is convex;
+
+theorem :: RLAFFIN1:75
+  for B st x in Affin I &
+           for y st y in B holds (x|--I).y = 0
+    holds x in Affin(I\B) & x |-- I = x |-- (I\B);
+
+theorem :: RLAFFIN1:76
+  for B st x in conv I &
+           for y st y in B holds (x|--I).y = 0
+    holds x in conv (I\B);
+
+theorem :: RLAFFIN1:77
+  B c= I & x in Affin B implies x |-- B = x |-- I;
+
+theorem :: RLAFFIN1:78
+  v1 in Affin A & v2 in Affin A & r+s = 1 implies r*v1 + s*v2 in Affin A;
+
+theorem :: RLAFFIN1:79
+  for A,B be finite Subset of V st
+      A is affinely-independent & Affin A c= Affin B
+    holds card A <= card B;
+
+theorem :: RLAFFIN1:80
+  for A,B be finite Subset of V st
+      A is affinely-independent & Affin A c= Affin B & card A = card B
+    holds B is affinely-independent;
+
+theorem :: RLAFFIN1:81
+  L1.v <> L2.v implies ((r*L1+(1-r)*L2).v = s iff r = (L2.v-s)/(L2.v-L1.v));
+
+theorem :: RLAFFIN1:82
+  A\/{v} is affinely-independent iff
+    A is affinely-independent & (v in A or not v in Affin A);
+
+theorem :: RLAFFIN1:83
+  not w in Affin A & v1 in A & v2 in A & r<>1 & r*w + (1-r)*v1 = s*w + (1-s)*v2
+    implies r = s & v1 = v2;
+
+theorem :: RLAFFIN1:84
+  v in I & w in Affin I & p in Affin(I\{v}) & w = r*v + (1-r)*p
+    implies r = (w|--I).v;
+

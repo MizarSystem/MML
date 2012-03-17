@@ -6,21 +6,21 @@
 
 environ
 
- vocabularies NUMBERS, SUBSET_1, AMI_1, SCMPDS_2, SCMFSA_7, SCMPDS_3, CARD_1,
-      FUNCOP_1, RELAT_1, FINSET_1, FUNCT_1, CAT_1, NAT_1, ARYTM_3, XBOOLE_0,
-      TARSKI, VALUED_1, SCMNORM, FSM_1, INT_1, SCMFSA6A, FUNCT_4, GRAPHSP,
-      AMI_3, FUNCT_7, AMI_2, STRUCT_0, SCMPDS_1, COMPLEX1, XXREAL_0, ARYTM_1,
-      AMISTD_1, TURING_1, AMISTD_2, SCMFSA6B, MSUALG_1, CIRCUIT2, GLIB_000,
-      SCMPDS_4;
+ vocabularies NUMBERS, SUBSET_1, AMI_1, SCMPDS_2, SCMFSA_7, CARD_1, FUNCOP_1,
+      RELAT_1, FINSET_1, FUNCT_1, CAT_1, NAT_1, ARYTM_3, XBOOLE_0, TARSKI,
+      VALUED_1, SCMNORM, FSM_1, INT_1, SCMFSA6A, FUNCT_4, GRAPHSP, AMI_3,
+      FUNCT_7, AMI_2, STRUCT_0, SCMPDS_1, COMPLEX1, XXREAL_0, ARYTM_1,
+      TURING_1, AMISTD_2, SCMFSA6B, MSUALG_1, CIRCUIT2, GLIB_000, SCMPDS_4,
+      ORDINAL1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, INT_1, NAT_1, FINSET_1, INT_2,
-      XXREAL_0, STRUCT_0, AMI_1, SCMNORM, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2,
-      SCMPDS_3;
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, INT_1, NAT_1, FINSET_1,
+      INT_2, XXREAL_0, STRUCT_0, AMI_1, SCMNORM, AMI_2, AMI_3, SCMPDS_1,
+      SCMPDS_2, SCMPDS_3;
  constructors WELLORD2, XXREAL_0, NAT_1, INT_2, AMI_5, SCMPDS_1, SCMPDS_3,
-      DOMAIN_1, SCMNORM, AFINSQ_1, RELSET_1;
+      DOMAIN_1, SCMNORM, AFINSQ_1, RELSET_1, PRE_POLY, PBOOLE;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, AMI_1, SCMPDS_2, AMI_2,
-      SCMNORM, FINSET_1, CARD_1, VALUED_1;
+      SCMNORM, FINSET_1, CARD_1, VALUED_1, FUNCT_4, RELAT_1, PRE_POLY;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -35,7 +35,7 @@ definition
   let i;
   func Load i -> Program of SCMPDS equals
 :: SCMPDS_4:def 1
-  (inspos 0).--> i;
+  ( 0).--> i;
 end;
 
 registration
@@ -61,19 +61,19 @@ definition
   let I;
   func Initialized I -> FinPartState of SCMPDS equals
 :: SCMPDS_4:def 2
-  I +* Start-At(inspos 0);
+  I +* Start-At( 0,SCMPDS);
 end;
 
 canceled 2;
 
 theorem :: SCMPDS_4:6
-  InsCode i in {0,1,4,5,6} or Exec(i,s).IC SCMPDS = Next IC s;
+  InsCode i in {0,1,4,5,6} or Exec(i,s).IC SCMPDS = succ IC s;
 
 theorem :: SCMPDS_4:7
   IC SCMPDS in dom Initialized I;
 
 theorem :: SCMPDS_4:8
-  IC Initialized I = inspos 0;
+  IC Initialized I =  0;
 
 theorem :: SCMPDS_4:9
   I c= Initialized I;
@@ -112,8 +112,8 @@ theorem :: SCMPDS_4:18
 scheme :: SCMPDS_4:sch 1
 
   SCMPDSEx{ F(set) -> Instruction of SCMPDS, G(set) -> Integer, I() ->
-  Instruction-Location of SCMPDS }: ex S being State of SCMPDS st IC S = I() &
-  for i being Element of NAT holds S.inspos i = F(i) & S.DataLoc(i,0) = G(i);
+  Element of NAT }: ex S being State of SCMPDS st IC S = I() &
+  for i being Element of NAT holds S. i = F(i) & S.DataLoc(i,0) = G(i);
 
 theorem :: SCMPDS_4:19
   for s being State of SCMPDS holds dom s = {IC SCMPDS} \/ SCM-Data-Loc
@@ -121,14 +121,14 @@ theorem :: SCMPDS_4:19
 
 theorem :: SCMPDS_4:20
   for s being State of SCMPDS, x being set st x in dom s holds x is
-  Int_position or x = IC SCMPDS or x is Instruction-Location of SCMPDS;
+  Int_position or x = IC SCMPDS or x is Element of NAT;
 
 theorem :: SCMPDS_4:21
   for s1,s2 being State of SCMPDS holds (for l being
-  Instruction-Location of SCMPDS holds s1.l = s2.l) iff s1 | NAT = s2 | NAT;
+  Element of NAT holds s1.l = s2.l) iff s1 | NAT = s2 | NAT;
 
 theorem :: SCMPDS_4:22
-  for i being Instruction-Location of SCMPDS holds not i in SCM-Data-Loc;
+  for i being Element of NAT holds not i in SCM-Data-Loc;
 
 theorem :: SCMPDS_4:23
   for s1,s2 being State of SCMPDS holds (for a being Int_position
@@ -153,7 +153,7 @@ theorem :: SCMPDS_4:28
 
 theorem :: SCMPDS_4:29
   for I being Program of SCMPDS holds (Initialized I).IC SCMPDS =
-  inspos 0;
+   0;
 
 theorem :: SCMPDS_4:30
   for I being Program of SCMPDS holds not IC SCMPDS in dom I;
@@ -165,7 +165,7 @@ theorem :: SCMPDS_4:31
 reserve x for set;
 
 theorem :: SCMPDS_4:32
-  x in dom I implies I.x = (I +* Start-At inspos n).x;
+  x in dom I implies I.x = (I +* Start-At(n,SCMPDS)).x;
 
 theorem :: SCMPDS_4:33
   for I being Program of SCMPDS, x being set st x in dom I holds I.x = (
@@ -193,12 +193,12 @@ definition
 end;
 
 theorem :: SCMPDS_4:37
-  for I,J being Program of SCMPDS, l being Instruction-Location of
-  SCMPDS st l in dom I holds (I ';' J).l = I.l;
+  for I,J being Program of SCMPDS, l being Element of NAT
+  st l in dom I holds (I ';' J).l = I.l;
 
 theorem :: SCMPDS_4:38
-  for I,J being Program of SCMPDS, l being Instruction-Location of
-  SCMPDS st l in dom J holds (I ';' J).(l+card I)= J.l;
+  for I,J being Program of SCMPDS, l being Element of NAT
+  st l in dom J holds (I ';' J).(l+card I)= J.l;
 
 theorem :: SCMPDS_4:39
   for I,J being Program of SCMPDS holds dom I c= dom (I ';' J);
@@ -270,35 +270,35 @@ theorem :: SCMPDS_4:53
   i ';' j ';' k = i ';' (j ';' k);
 
 theorem :: SCMPDS_4:54
-  dom I misses dom Start-At inspos n;
+  dom I misses dom Start-At(n,SCMPDS);
 
 canceled;
 
 theorem :: SCMPDS_4:56
-  I +* Start-At inspos n c= s implies I c= s;
+  I +* Start-At(n,SCMPDS) c= s implies I c= s;
 
 theorem :: SCMPDS_4:57
   Initialized I c= s implies I c= s;
 
 theorem :: SCMPDS_4:58
-  (I +* Start-At inspos n)|NAT = I;
+  (I +* Start-At(n,SCMPDS))|NAT = I;
 
-reserve l,l1,loc for Instruction-Location of SCMPDS;
+reserve l,l1,loc for Element of NAT;
 
 theorem :: SCMPDS_4:59
-  not a in dom Start-At l;
+  not a in dom Start-At(l,SCMPDS);
 
 canceled;
 
 theorem :: SCMPDS_4:61
-  not a in dom (I+*Start-At l);
+  not a in dom (I+*Start-At(l,SCMPDS));
 
 theorem :: SCMPDS_4:62
-  s+*I+*Start-At inspos 0 = s+*Start-At inspos 0+*I;
+  s+*I+*Start-At( 0,SCMPDS) = s+*Start-At( 0,SCMPDS)+*I;
 
 definition
   let s be State of SCMPDS, li be Int_position, k be Integer;
-  redefine func s+*(li,k) -> State of SCMPDS;
+  redefine func s+*(li,k) -> PartState of SCMPDS;
 end;
 
 begin :: The notions of paraclosed,parahalting and their basic properties
@@ -324,7 +324,8 @@ definition
 :: SCMPDS_4:def 9
 
   for s being State of SCMPDS, n being
-  Element of NAT st Initialized stop(I) c= s holds IC Computation(s,n) in dom
+  Element of NAT st Initialized stop(I) c= s holds IC Comput(ProgramPart(s),s,n
+) in dom
   stop(I);
   attr I is parahalting means
 :: SCMPDS_4:def 10
@@ -346,7 +347,7 @@ registration
 end;
 
 definition
-  let la,lb be Instruction-Location of SCMPDS;
+  let la,lb be Element of NAT;
   let a, b be Instruction of SCMPDS;
   redefine func (la,lb) --> (a,b) -> FinPartState of SCMPDS;
 end;
@@ -354,19 +355,20 @@ end;
 canceled 2;
 
 theorem :: SCMPDS_4:66
-  not ProgramPart(s2 +*((IC s2,Next IC s2) --> (goto 1, goto -1)))
-    halts_on s2 +*((IC s2,Next IC s2) --> (goto 1, goto -1));
+  not ProgramPart(s2 +*((IC s2,succ IC s2) --> (goto 1, goto -1)))
+    halts_on s2 +*((IC s2,succ IC s2) --> (goto 1, goto -1));
 
 theorem :: SCMPDS_4:67
   s1,s2 equal_outside NAT & I c= s1 & I c= s2 & (for m st m < n
-  holds IC (Computation(s2,m)) in dom I) implies for m st m <= n holds
-  Computation(s1,m), Computation(s2,m) equal_outside NAT;
+  holds IC (Comput(ProgramPart(s2),s2,m)) in dom I) implies for m st m <= n
+holds
+  Comput(ProgramPart(s1),s1,m), Comput(ProgramPart(s2),s2,m) equal_outside NAT;
 
 theorem :: SCMPDS_4:68
-  for s being State of SCMPDS,l being Instruction-Location of
-  SCMPDS holds l in dom s;
+  for s being State of SCMPDS,l being Element of NAT
+  holds l in dom s;
 
-reserve l1,l2 for Instruction-Location of SCMPDS,
+reserve l1,l2 for Element of NAT,
   i1,i2 for Instruction of
   SCMPDS;
 
@@ -376,22 +378,16 @@ theorem :: SCMPDS_4:69
 canceled;
 
 theorem :: SCMPDS_4:71
-  not IC s in dom I implies not Next IC s in dom I;
+  not IC s in dom I implies not succ IC s in dom I;
 
 registration
   cluster parahalting -> paraclosed Program of SCMPDS;
 end;
 
-canceled;
-
-theorem :: SCMPDS_4:73
-  inspos 0 in dom Stop SCMPDS & (Stop SCMPDS).inspos 0 = halt SCMPDS;
-
-theorem :: SCMPDS_4:74
-  card Stop SCMPDS = 1;
+canceled 3;
 
 theorem :: SCMPDS_4:75
-  inspos 0 in dom stop (I);
+   0 in dom stop (I);
 
 begin :: Shiftability of program blocks and instructions
 
@@ -420,8 +416,8 @@ definition
   attr IT is shiftable means
 :: SCMPDS_4:def 12
 
-  for n,i st inspos n in dom IT & i=IT.(
-  inspos n) holds InsCode i <> 1 & InsCode i <> 3 & i valid_at n;
+  for n,i st  n in dom IT & i=IT.(
+   n) holds InsCode i <> 1 & InsCode i <> 3 & i valid_at n;
 end;
 
 registration
@@ -536,20 +532,24 @@ end;
 
 theorem :: SCMPDS_4:82
   for s1,s2 being State of SCMPDS, n,m being Element of NAT,k1 be
-Integer st IC s1=inspos m & m+k1>=0 & IC s1 + n = IC s2 holds ICplusConst(s1,k1
+Integer st IC s1= m & m+k1>=0 & IC s1 + n = IC s2 holds ICplusConst(s1,k1
   ) +n = ICplusConst(s2,k1);
 
 theorem :: SCMPDS_4:83
   for s1,s2 being State of SCMPDS, n,m being Element of NAT, i
-being Instruction of SCMPDS holds IC s1=inspos m & i valid_at m & InsCode i <>
+being Instruction of SCMPDS holds IC s1= m & i valid_at m & InsCode i <>
   1 & InsCode i <> 3 & IC s1 + n = IC s2 & DataPart s1 = DataPart s2 implies IC
   Exec(i,s1) + n = IC Exec(i,s2) & DataPart Exec(i,s1) = DataPart Exec(i,s2);
 
 theorem :: SCMPDS_4:84
   for J being parahalting shiftable Program of SCMPDS st Initialized
   stop J c= s1 for n being Element of NAT st Shift(stop J,n) c= s2 & IC s2 =
-  inspos n & DataPart s1 = DataPart s2 for i being Element of NAT holds IC
-  Computation(s1,i) + n = IC Computation(s2,i) & CurInstr (Computation(s1,i)) =
-  CurInstr (Computation(s2,i)) & DataPart Computation(s1,i) = DataPart
-  Computation(s2,i);
+   n & DataPart s1 = DataPart s2 for i being Element of NAT holds IC
+  Comput(ProgramPart(s1),s1,i) + n = IC Comput(ProgramPart(s2),s2,i) &
+   CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,
+i)) =
+  CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),s2,i
+)) &
+  DataPart Comput(ProgramPart(s1),s1,i) = DataPart
+  Comput(ProgramPart(s2),s2,i);
 

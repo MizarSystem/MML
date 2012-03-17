@@ -9,8 +9,8 @@ environ
  vocabularies NUMBERS, SUBSET_1, FINSEQ_1, ARYTM_3, ORDINAL4, ARYTM_1, AMI_1,
       SCMFSA_2, RELAT_1, FUNCT_1, PARTFUN1, STRUCT_0, TARSKI, FINSET_1,
       XXREAL_0, NAT_1, CARD_1, XBOOLE_0, INT_1, GRAPHSP, FINSEQ_2, AMI_3,
-      PRE_POLY, FSM_1, CIRCUIT2, SCMNORM, MSUALG_1, COMPLEX1, FUNCT_4,
-      SCMFSA_7;
+      PRE_POLY, FSM_1, CIRCUIT2, MSUALG_1, COMPLEX1, FUNCT_4, SCMFSA_7,
+      ORDINAL1, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, NAT_1, INT_2,
       NAT_D, INT_1, RELAT_1, PARTFUN1, FINSEQ_1, FINSET_1, FINSEQ_2, FUNCT_1,
       FUNCT_7, XXREAL_0, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2, PRE_POLY;
@@ -18,7 +18,7 @@ environ
       DTCONSTR, AMI_3, SCMFSA_2, SCMNORM, NAT_D, RELSET_1, PRE_POLY, SCMFSA_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, FUNCT_7, STRUCT_0,
-      SCMFSA_2, FINSET_1, FINSEQ_2, CARD_1;
+      SCMFSA_2, FINSET_1, FINSEQ_2, CARD_1, RELSET_1, AMI_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -53,7 +53,7 @@ theorem :: SCMFSA_7:29
 
 theorem :: SCMFSA_7:30
   for f being non empty FinSequence of the Instructions of SCM+FSA holds
-  1 in dom f & insloc 0 in dom Load f;
+  1 in dom f &  0 in dom Load f;
 
 theorem :: SCMFSA_7:31
   for p,q being FinSequence of the Instructions of SCM+FSA holds
@@ -124,33 +124,39 @@ theorem :: SCMFSA_7:35
 
 theorem :: SCMFSA_7:36
   for s being State of SCM+FSA st s.intloc 0 = 1 for c0 being
-Element of NAT st IC s = insloc c0 for a being Int-Location, k being Integer st
+Element of NAT st IC s =  c0 for a being Int-Location, k being Integer st
 a <> intloc 0 & (for c being Element of NAT st c in dom aSeq(a,k) holds aSeq(a,
-  k).c = s.insloc (c0 + c -' 1)) holds (for i being Element of NAT st i <= len
-  aSeq(a,k) holds IC Computation(s,i) = insloc (c0 + i) & (for b being
-  Int-Location st b <> a holds Computation(s,i).b = s.b) & (for f being
-FinSeq-Location holds Computation(s,i).f = s.f)) & Computation(s,len aSeq(a,k))
+  k).c = s. (c0 + c -' 1)) holds (for i being Element of NAT st i <= len
+  aSeq(a,k) holds IC Comput(ProgramPart(s),s,i) =  (c0 + i) & (for b being
+  Int-Location st b <> a holds Comput(ProgramPart(s),s,i).b = s.b) & (for f
+being
+FinSeq-Location holds Comput(ProgramPart(s),s,i).f = s.f)) & Comput(ProgramPart
+(s),s,len aSeq(a,k))
   .a = k;
 
 theorem :: SCMFSA_7:37
-  for s being State of SCM+FSA st IC s = insloc 0 & s.intloc 0 = 1
+  for s being State of SCM+FSA st IC s =  0 & s.intloc 0 = 1
 for a being Int-Location for k being Integer st Load aSeq(a,k) c= s & a<>intloc
-0 holds (for i being Element of NAT st i <= len aSeq(a,k) holds IC Computation(
-s,i) = insloc i & (for b being Int-Location st b <> a holds Computation(s,i).b
-  = s.b) & (for f being FinSeq-Location holds Computation(s,i).f = s.f)) &
-  Computation(s,len aSeq(a,k)).a = k;
+0 holds (for i being Element of NAT st i <= len aSeq(a,k) holds IC Comput(
+ProgramPart(
+s),
+s,i) =  i & (for b being Int-Location st b <> a holds Comput(ProgramPart(s),s,i
+).b
+  = s.b) & (for f being FinSeq-Location holds Comput(ProgramPart(s),s,i).f = s.
+f)) &
+  Comput(ProgramPart(s),s,len aSeq(a,k)).a = k;
 
 :: Users' guide
 
 theorem :: SCMFSA_7:38
-  for s being State of SCM+FSA st IC s = insloc 0 & s.intloc 0 = 1 for a
+  for s being State of SCM+FSA st IC s =  0 & s.intloc 0 = 1 for a
   being Int-Location, k being Integer st a:=k c= s & a<>intloc 0
    holds ProgramPart s halts_on s &
     (Result s).a = k & (for b being Int-Location st b <> a holds (Result
   s).b = s.b) & for f being FinSeq-Location holds (Result s).f = s.f;
 
 theorem :: SCMFSA_7:39
-  for s being State of SCM+FSA st IC s = insloc 0 & s.intloc 0 = 1 for f
+  for s being State of SCM+FSA st IC s =  0 & s.intloc 0 = 1 for f
   being FinSeq-Location, p being FinSequence of INT st f:=p c= s
    holds ProgramPart s halts_on s &
     (Result s).f = p & (for b being Int-Location st b <> intloc 1 & b <>

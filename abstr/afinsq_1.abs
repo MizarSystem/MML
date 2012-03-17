@@ -9,38 +9,33 @@ environ
  vocabularies NUMBERS, SUBSET_1, FUNCT_1, ARYTM_3, XXREAL_0, XBOOLE_0, TARSKI,
       NAT_1, ORDINAL1, FINSEQ_1, CARD_1, FINSET_1, RELAT_1, PARTFUN1, FUNCOP_1,
       ORDINAL4, ORDINAL2, ARYTM_1, REAL_1, ZFMISC_1, FUNCT_4, VALUED_0,
-      AFINSQ_1;
+      AFINSQ_1, PRGCOR_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
       FUNCT_1, ORDINAL1, ORDINAL2, ORDINAL4, XCMPLX_0, REAL_1, NAT_1, PARTFUN1,
-      FINSET_1, FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7, XXREAL_0, VALUED_0;
- constructors WELLORD2, FUNCT_4, XXREAL_0, NAT_1, ORDINAL4, FUNCT_7, ORDINAL3,
-      VALUED_1, ENUMSET1;
+      NAT_D, FINSET_1, FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7, XXREAL_0,
+      VALUED_0;
+ constructors WELLORD2, FUNCT_4, XXREAL_0, ORDINAL4, FUNCT_7, ORDINAL3,
+      VALUED_1, ENUMSET1, NAT_D;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      XXREAL_0, XREAL_0, NAT_1, CARD_1, ORDINAL2, NUMBERS;
+      XXREAL_0, XREAL_0, NAT_1, CARD_1, ORDINAL2, NUMBERS, FINSEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin
 
-reserve k,n for Element of NAT,
+reserve k,n for Nat,
   x,y,z,y1,y2,X,Y for set,
   f,g for Function;
 
-::                                           ::
-::   Extended Segments of Natural Numbers    ::
-::                                           ::
+:: Extended Segments of Natural Numbers
 
-theorem :: AFINSQ_1:1
-  n in n+1;
-
-theorem :: AFINSQ_1:2
-  k <= n implies k = k /\ n;
+canceled 2;
 
 theorem :: AFINSQ_1:3
   k = k /\ n implies k <= n;
 
 theorem :: AFINSQ_1:4
-  for n being Nat holds n \/ { n } = n+1;
+  n \/ { n } = n+1;
 
 theorem :: AFINSQ_1:5
   Seg n c= n+1;
@@ -48,13 +43,11 @@ theorem :: AFINSQ_1:5
 theorem :: AFINSQ_1:6
   n+1 = {0} \/ Seg n;
 
-::                            ::
-::  Finite ExFinSequences     ::
-::                            ::
+::  Finite ExFinSequences
 
 theorem :: AFINSQ_1:7
-  for r being Function holds r is finite T-Sequence-like iff ex n
-  st dom r = n;
+  for r being Function holds r is finite T-Sequence-like iff
+  ex n st dom r = n;
 
 definition
   mode XFinSequence is finite T-Sequence;
@@ -62,29 +55,24 @@ end;
 
 reserve p,q,r,s,t for XFinSequence;
 
-registration
-  let p;
+registration let p;
   cluster dom p -> natural;
 end;
 
-notation
-  let p;
+notation let p;
   synonym len p for card p;
 end;
 
-registration
-  let p;
+registration let p;
   identify len p with dom p;
 end;
 
-definition
-  let p;
+definition let p;
   redefine func len p -> Element of NAT;
 end;
 
-definition
+definition let p;
   canceled;
-  let p;
   redefine func dom p -> Subset of NAT;
 end;
 
@@ -92,9 +80,8 @@ theorem :: AFINSQ_1:8
   (ex k st dom f c= k) implies ex p st f c= p;
 
 scheme :: AFINSQ_1:sch 1
-
-  XSeqEx{A()->Nat,P[set,set]}: ex p st dom p = A() & for k st k in A() holds P
-  [k,p.k]
+ XSeqEx{A()->Nat,P[set,set]}:
+  ex p st dom p = A() & for k st k in A() holds P[k,p.k]
 provided
  for k st k in A() ex x st P[k,x];
 
@@ -107,14 +94,16 @@ theorem :: AFINSQ_1:9
   z in p implies ex k st k in dom p & z=[k,p.k];
 
 theorem :: AFINSQ_1:10
-  dom p = dom q & (for k st k in dom p holds p.k = q.k) implies p=
-  q;
+  dom p = dom q & (for k st k in dom p holds p.k = q.k) implies p = q;
 
 theorem :: AFINSQ_1:11
   ( len p = len q & for k st k < len p holds p.k=q.k ) implies p=q;
 
-theorem :: AFINSQ_1:12
-  p|n is XFinSequence;
+canceled;
+
+registration let p,n;
+  cluster p|n -> finite;
+end;
 
 theorem :: AFINSQ_1:13
   rng p c= dom f implies f*p is XFinSequence;
@@ -122,23 +111,18 @@ theorem :: AFINSQ_1:13
 theorem :: AFINSQ_1:14
   k < len p implies dom(p|k) = k;
 
-::                             ::
-::    XFinSequences of D       ::
-::                             ::
+:: XFinSequences of D
 
-registration
-  let D be set;
+registration let D be set;
   cluster finite T-Sequence of D;
 end;
 
-definition
-  let D be set;
+definition let D be set;
   mode XFinSequence of D is finite T-Sequence of D;
 end;
 
 theorem :: AFINSQ_1:15
-  for D being set, f being XFinSequence of D holds f is PartFunc
-  of NAT,D;
+  for D being set, f being XFinSequence of D holds f is PartFunc of NAT,D;
 
 registration
   cluster empty -> T-Sequence-like Function;
@@ -147,7 +131,7 @@ end;
 reserve D for set;
 
 theorem :: AFINSQ_1:16
-  for p being XFinSequence of D holds p|k is XFinSequence of D;
+  for k being Nat,a being set holds k --> a is XFinSequence;
 
 theorem :: AFINSQ_1:17
   for D being non empty set ex p being XFinSequence of D st len p = k;
@@ -162,25 +146,26 @@ theorem :: AFINSQ_1:18
 theorem :: AFINSQ_1:19
   for D be set holds {} is XFinSequence of D;
 
-registration
-  let D be set;
+registration let D be set;
   cluster empty XFinSequence of D;
 end;
 
-definition
-  let x;
+registration
+  let D be non empty set;
+  cluster non empty XFinSequence of D;
+end;
+
+definition let x;
   func <%x%> -> set equals
 :: AFINSQ_1:def 2
   0 .--> x;
 end;
 
-registration
-  let x;
+registration let x;
   cluster <%x%> -> non empty;
 end;
 
-definition
-  let D be set;
+definition let D be set;
   func <%>D -> XFinSequence of D equals
 :: AFINSQ_1:def 3
   {};
@@ -191,11 +176,9 @@ registration
   cluster <%>D -> empty;
 end;
 
-definition
-  let p,q;
+definition let p,q;
   redefine func p^q means
 :: AFINSQ_1:def 4
-
   dom it = len p + len q & (for k st k in dom p
   holds it.k=p.k) & for k st k in dom q holds it.(len p + k) = q.k;
 end;
@@ -330,10 +313,14 @@ theorem :: AFINSQ_1:43
 theorem :: AFINSQ_1:44
   p <> {} implies ex q,x st p=q^<%x%>;
 
-definition
+registration
   let D be non empty set;
-  let x be Element of D;
-  redefine func <%x%> -> XFinSequence of D;
+  let d1 be Element of D;
+  cluster <%d1%> -> D -valued;
+  let d2 be Element of D;
+  cluster <%d1,d2%> -> D -valued;
+  let d3 be Element of D;
+  cluster <%d1,d2,d3%> -> D -valued;
 end;
 
 :: Scheme of induction for extended finite sequences
@@ -390,11 +377,11 @@ theorem :: AFINSQ_1:48
   len Replace(p,i,x) = len p & (i < len p implies Replace(p,i,x).i = x) & for j
   being Element of NAT st j <> i holds Replace(p,i,x).j = p.j;
 
-definition
+registration
   let D be non empty set;
   let p be XFinSequence of D;
   let i be Element of NAT, a be Element of D;
-  redefine func Replace(p,i,a) -> XFinSequence of D;
+  cluster Replace(p,i,a) -> D -valued;
 end;
 
 :: missing, 2008.02.02, A.K.
@@ -410,36 +397,128 @@ end;
 :: 2009.0929, A.T.
 
 theorem :: AFINSQ_1:49
-  for x1, x2, x3, x4 being set, p being XFinSequence
-  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>
+  for x1, x2, x3, x4 being set st
+   p = <%x1%>^<%x2%>^<%x3%>^<%x4%>
   holds len p = 4 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4;
 
 theorem :: AFINSQ_1:50
-  for x1, x2, x3, x4, x5 being set, p being XFinSequence
-  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>
+  for x1, x2, x3, x4, x5 being set st
+     p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>
   holds len p = 5 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5;
 
 theorem :: AFINSQ_1:51
-  for x1, x2, x3, x4, x5, x6 being set, p being XFinSequence
-  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>
+  for x1, x2, x3, x4, x5, x6 being set st
+     p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>
   holds len p = 6 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 &
   p.5 = x6;
 
 theorem :: AFINSQ_1:52
-  for x1, x2, x3, x4, x5, x6, x7 being set, p being XFinSequence
-  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>
+  for x1, x2, x3, x4, x5, x6, x7 being set st
+     p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>
   holds len p = 7 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 &
   p.5 = x6 & p.6 = x7;
 
 theorem :: AFINSQ_1:53
-  for x1,x2,x3,x4, x5, x6, x7, x8 being set, p being XFinSequence
-  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>
+  for x1,x2,x3,x4, x5, x6, x7, x8 being set st
+    p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>
   holds len p = 8 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 &
   p.5 = x6 & p.6 = x7 & p.7 = x8;
 
 theorem :: AFINSQ_1:54
-  for x1,x2,x3,x4,x5,x6,x7, x8, x9 being set, p being XFinSequence
-  st p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>^<%x9%>
+  for x1,x2,x3,x4,x5,x6,x7, x8, x9 being set st
+     p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>^<%x9%>
   holds len p = 9 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 &
   p.5 = x6 & p.6 = x7 & p.7 = x8 & p.8 = x9;
 
+:: K.P. 12.2009
+
+theorem :: AFINSQ_1:55 :: FINSEQ_2:7
+   n <len p implies (p^q).n=p.n;
+
+theorem :: AFINSQ_1:56 :: FINSEQ_2:10
+  len p <= n implies (p|n) = p;
+
+theorem :: AFINSQ_1:57  :: FINSEQ_1:11
+  n <=len p & k in n
+  implies (p|n).k = p.k & k in dom p;
+
+theorem :: AFINSQ_1:58  :: FINSEQ_1:12
+  n <= len p implies len(p|n) = n;
+
+theorem :: AFINSQ_1:59 :: FINSEQ_1:13
+  len(p|n) <= n;
+
+theorem :: AFINSQ_1:60  :: FINSEQ_1:14
+  len p = n+1 implies p = (p|n) ^ <% p.n %>;
+
+theorem :: AFINSQ_1:61  :: CATALAN2:1
+  (p^q)|dom p = p;
+
+theorem :: AFINSQ_1:62 :: CATALAN2:2
+  n <= dom p implies (p^q)|n = p|n;
+
+theorem :: AFINSQ_1:63 :: CATALAN2:3
+  n = dom p + k implies (p^q)|n = p^(q|k);
+
+theorem :: AFINSQ_1:64 :: CATALAN2:4
+  ex q st p = (p|n)^q;
+
+theorem :: AFINSQ_1:65 :: FLANG_1:10
+ len p = n + k implies ex q1, q2 being
+   XFinSequence st len q1 = n & len q2 = k & p = q1 ^ q2;
+
+theorem :: AFINSQ_1:66 :: FSM_3:6
+   <%x%>^p = <%y%>^q implies x = y & p = q;
+
+definition
+  let D be set,q be FinSequence of D;
+  func FS2XFS q -> XFinSequence of D means
+:: AFINSQ_1:def 9
+  len it=len q & for i being Nat st i < len q holds q.(i+1)=it.i;
+end;
+
+reserve i for Nat;
+
+definition
+  let D be set,q be XFinSequence of D;
+  func XFS2FS q -> FinSequence of D means
+:: AFINSQ_1:def 10
+  len it=len q & for i be Nat st 1<=i & i<= len q holds q.(i-'1)=it.i;
+end;
+
+theorem :: AFINSQ_1:67
+  for D being set, n being Nat, r being set st r in D holds
+  (n-->r) is XFinSequence of D;
+
+definition
+  let D be non empty set;
+  let q be FinSequence of D, n be Nat;
+  assume that
+ n>len q and
+ NAT c= D;
+  func FS2XFS*(q,n) -> non empty XFinSequence of D means
+:: AFINSQ_1:def 11
+  len q = it.0 &
+  len it=n & (for i be Nat st 1<=i & i<= len q holds it.i=q.i)&
+  for j being Nat st len q
+  <j & j<n holds it.j=0;
+end;
+
+reserve m for Nat,
+        D for non empty set;
+
+definition
+  let D be non empty set;
+  let p be XFinSequence of D;
+  assume that
+ p.0 is Nat and
+ p.0 in len p;
+  func XFS2FS*(p) -> FinSequence of D means
+:: AFINSQ_1:def 12
+  for m be Nat st m = p.0 holds
+  len it =m & for i st 1<=i & i<= m holds it.i=p.i;
+end;
+
+theorem :: AFINSQ_1:68
+  for p being XFinSequence of D st p.0=0 & 0<len p holds
+  XFS2FS*(p)={};

@@ -7,15 +7,16 @@
 environ
 
  vocabularies NUMBERS, CARD_1, INT_1, POWER, SUBSET_1, XXREAL_0, RELAT_1,
-      ARYTM_3, ARYTM_1, NAT_1, AMI_3, AFINSQ_1, AMI_1, AMISTD_1, ORDINAL4,
-      GRAPHSP, SCM_1, FINSEQ_1, MSUALG_1, FUNCT_1, PRE_FF, CIRCUIT2, FSM_1,
-      NEWTON, FIB_FUSC;
- notations XCMPLX_0, SUBSET_1, NUMBERS, INT_1, NAT_1, NEWTON, POWER, ORDINAL4,
-      AFINSQ_1, FINSEQ_1, AMI_1, SCM_1, AMI_3, PRE_FF, XXREAL_0;
+      ARYTM_3, ARYTM_1, NAT_1, AMI_3, AFINSQ_1, AMI_1, ORDINAL4, GRAPHSP,
+      SCM_1, FINSEQ_1, MSUALG_1, FUNCT_1, PRE_FF, CIRCUIT2, FSM_1, NEWTON,
+      FIB_FUSC, SCMNORM;
+ notations XCMPLX_0, SUBSET_1, NUMBERS, INT_1, NAT_1, NEWTON, POWER, CARD_3,
+      ORDINAL4, FUNCT_1, AFINSQ_1, FINSEQ_1, AMI_1, SCM_1, AMI_3, PRE_FF,
+      XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, NEWTON, POWER, PRE_FF, SCM_1, AFINSQ_1,
-      ORDINAL4;
+      ORDINAL4, FINSUB_1, SCMNORM, CARD_3;
  registrations SETFAM_1, NUMBERS, XREAL_0, INT_1, AMI_3, XBOOLE_0, ORDINAL1,
-      AMI_1, AFINSQ_1;
+      AMI_1, AFINSQ_1, CARD_3, SCMNORM, FUNCT_1, RELSET_1;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
 
 
@@ -25,14 +26,16 @@ definition
   func Fib_Program -> XFinSequence of the Instructions of SCM equals
 :: FIB_FUSC:def 1
   <% dl.1
->0_goto il.2 %>^ <% halt SCM %>^ <% dl.3 := dl.0 %>^ <% SubFrom(dl.1, dl.0) %>^
-<% dl.1 =0_goto il.1 %>^ <% dl.4 := dl.2 %>^ <% dl.2 := dl.3 %>^ <% AddTo(dl.3,
-  dl.4) %>^ <% goto il.3 %>;
+>0_goto 2 %>^ <% halt SCM %>^ <% dl.3 := dl.0 %>^ <% SubFrom(dl.1, dl.0) %>^
+<% dl.1 =0_goto 1 %>^ <% dl.4 := dl.2 %>^ <% dl.2 := dl.3 %>^ <% AddTo(dl.3,
+  dl.4) %>^ <% SCM-goto 3 %>;
 end;
 
 theorem :: FIB_FUSC:1
   for N being Element of NAT, s being State-consisting of 0, 0, 0,
-  Fib_Program, <*1*>^<*N*>^<*0*>^<*0*> holds ProgramPart s halts_on s &
+  Fib_Program, <*1*>^<*N*>^<*0*>^<*0*>
+   holds ProgramPart (s qua PartState of SCM)
+   halts_on s &
    (N = 0 implies
   LifeSpan s = 1) & (N > 0 implies LifeSpan s = 6 * N - 2) & (Result s).dl.3 =
   Fib N;
@@ -52,9 +55,9 @@ definition
   func Fusc_Program -> XFinSequence of the Instructions of SCM equals
 :: FIB_FUSC:def 3
   <% dl.1
-=0_goto il.8 %>^ <% dl.4 := dl.0 %>^ <% Divide(dl.1, dl.4) %>^ <% dl.4 =0_goto
-il.6 %>^ <% AddTo(dl.3, dl.2) %>^ <% goto il.0 %>^ <% AddTo(dl.2, dl.3) %>^ <%
-  goto il.0 %>^ <% halt SCM %>;
+=0_goto 8 %>^ <% dl.4 := dl.0 %>^ <% Divide(dl.1, dl.4) %>^ <% dl.4 =0_goto
+6 %>^ <% AddTo(dl.3, dl.2) %>^ <% SCM-goto 0 %>^ <% AddTo(dl.2, dl.3) %>
+^ <% SCM-goto 0 %>^ <% halt SCM %>;
 end;
 
 theorem :: FIB_FUSC:2

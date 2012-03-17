@@ -10,23 +10,27 @@ environ
       XBOOLE_0, CARD_1, UNIALG_2, SCMFSA6C, SCMFSA6B, FUNCT_1, FUNCT_4,
       SCMFSA6A, TARSKI, RELAT_1, ARYTM_3, GRAPHSP, CIRCUIT2, MSUALG_1,
       SFMASTR1, TURING_1, SCMFSA_9, AMI_3, CARD_3, XXREAL_0, ARYTM_1, SCMFSA9A,
-      COMPLEX1, AOFA_I00, PRE_FF, SFMASTR2;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
-      FUNCT_1, FUNCT_2, PRE_FF, CARD_3, AMI_1, SCMNORM, SCMFSA_2, SCMFSA6A,
+      COMPLEX1, AOFA_I00, PRE_FF, SFMASTR2, NAT_1, SCMNORM;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0,
+      INT_2, XXREAL_0,
+      RELAT_1,
+      FUNCT_1, FUNCT_2, PRE_FF, CARD_3,
+      AMI_1, SCMNORM, SCMFSA_2, SCMFSA6A,
       SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA_9, SFMASTR1, SCMFSA9A,
-      INT_2, XXREAL_0;
+      NAT_1;
  constructors XXREAL_0, NAT_1, INT_2, PRE_FF, SCMFSA6A, SCMFSA6B, SCMFSA6C,
       SCMFSA7B, SCMFSA_9, SFMASTR1, SCMFSA9A, SEQ_1, SCMNORM, RELSET_1,
-      PRE_POLY, SCMFSA_1;
+      PRE_POLY, SCMFSA_1, PBOOLE;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2, SF_MASTR, SCMFSA6B,
-      SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA_9, SFMASTR1, XBOOLE_0;
+      SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA_9, SFMASTR1, XBOOLE_0, FUNCT_4,
+      RELAT_1, FUNCT_2, AMI_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions SCMFSA9A, SUBSET_1, SCMFSA6A, SCMNORM;
  theorems TARSKI, ZFMISC_1, ABSVALUE, NAT_1, INT_1, FUNCT_4, PRE_FF, SCMFSA_2,
       SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
       SCMFSA8C, SCMFSA_9, SFMASTR1, SCMFSA9A, XBOOLE_0, XBOOLE_1, XREAL_1,
-      RELAT_1, XXREAL_0, FUNCT_1, AMI_1;
+      RELAT_1, XXREAL_0, FUNCT_1, AMI_1, PBOOLE;
  schemes FUNCT_2, NAT_1;
 
 begin :: SCM+FSA preliminaries
@@ -41,7 +45,7 @@ reserve s, s1, s2 for State of SCM+FSA,
   good Program of SCM+FSA,
   k, m for Element of NAT;
 set D = Int-Locations \/ FinSeq-Locations;
-set SAt = Start-At insloc 0;
+set SAt = Start-At( 0,SCM+FSA);
 
 theorem Th1:
   I is_closed_on Initialize s & I is_halting_on Initialize s & not
@@ -55,24 +59,24 @@ A3: not a in UsedIntLoc I;
   set Is = Initialize s;
   set sI = s+*Initialized I;
 A4: I+*SAt c= Initialized I & Initialized I c= sI by FUNCT_4:26,SCMFSA8C:19;
-A5: ProgramPart(Is+*(I +* Start-At insloc 0))
-   halts_on Is+*(I +* Start-At insloc 0) by A2,SCMFSA7B:def 8;
+A5: ProgramPart(Is+*(I +* Start-At( 0,SCM+FSA)))
+   halts_on Is+*(I +* Start-At( 0,SCM+FSA)) by A2,SCMFSA7B:def 8;
   NAT misses D by SCMFSA_2:13,14,XBOOLE_1:70;
   then
 A6: dom (s | NAT) misses D by SCMFSA8A:3;
 A7: sI = Is+*(I +* SAt) by SCMFSA8A:13;
-  then for m st m < (LifeSpan sI) holds IC Computation(sI,m) in dom I by A1,
-  SCMFSA7B:def 7;
+  then for m st m < (LifeSpan sI) holds IC Comput(ProgramPart(sI),sI,m) in dom
+I by A1,
+SCMFSA7B:def 7;
   then
-A8: Computation(sI,LifeSpan sI).a = sI.a by A3,A4,
-  SF_MASTR:69,XBOOLE_1:
-  1;
+A8: Comput(ProgramPart(sI),sI,LifeSpan sI).a = sI.a by A3,A4,SF_MASTR:69,
+XBOOLE_1:1;
   DataPart sI = DataPart Is by SCMFSA8B:5;
   then
 A9: sI.a = Is.a by SCMFSA6A:38;
   DataPart IExec(I, s) = DataPart(Result(sI) +* s | NAT) by SCMFSA6B:def 1
     .= DataPart Result sI by A6,FUNCT_4:94,SCMFSA_2:127
-    .= DataPart Computation(sI,LifeSpan sI) by A7,A5,AMI_1:122;
+    .= DataPart Comput(ProgramPart(sI),sI,LifeSpan sI) by A7,A5,AMI_1:122;
   hence thesis by A8,A9,SCMFSA6A:38;
 end;
 
@@ -88,24 +92,24 @@ A3: not a in UsedInt*Loc I;
   set Is = Initialize s;
   set sI = s+*Initialized I;
 A4: I+*SAt c= Initialized I & Initialized I c= sI by FUNCT_4:26,SCMFSA8C:19;
-A5: ProgramPart(Is+*(I +* Start-At insloc 0))
-    halts_on Is+*(I +* Start-At insloc 0) by A2,SCMFSA7B:def 8;
+A5: ProgramPart(Is+*(I +* Start-At( 0,SCM+FSA)))
+    halts_on Is+*(I +* Start-At( 0,SCM+FSA)) by A2,SCMFSA7B:def 8;
   NAT misses D by SCMFSA_2:13,14,XBOOLE_1:70;
   then
 A6: dom (s | NAT) misses D by SCMFSA8A:3;
 A7: sI = Is+*(I +* SAt) by SCMFSA8A:13;
-  then for m st m < (LifeSpan sI) holds IC Computation(sI,m) in dom I by A1,
-  SCMFSA7B:def 7;
+  then for m st m < (LifeSpan sI) holds IC Comput(ProgramPart(sI),sI,m) in dom
+I by A1,
+SCMFSA7B:def 7;
   then
-A8: Computation(sI,LifeSpan sI).a = sI.a by A3,A4,
-  SF_MASTR:71,XBOOLE_1:
-  1;
+A8: Comput(ProgramPart(sI),sI,LifeSpan sI).a = sI.a by A3,A4,SF_MASTR:71,
+XBOOLE_1:1;
   DataPart sI = DataPart Is by SCMFSA8B:5;
   then
 A9: sI.a = Is.a by SCMFSA6A:38;
   DataPart IExec(I, s) = DataPart(Result(sI) +* s | NAT) by SCMFSA6B:def 1
     .= DataPart(Result(sI)) by A6,FUNCT_4:94,SCMFSA_2:127
-    .= DataPart Computation(sI,LifeSpan sI) by A7,A5,AMI_1:122;
+    .= DataPart Comput(ProgramPart(sI),sI,LifeSpan sI) by A7,A5,AMI_1:122;
   hence thesis by A8,A9,SCMFSA6A:38;
 end;
 
@@ -120,8 +124,8 @@ A1: I is_closed_on Initialize s & I is_halting_on Initialize s or I is
 A2: s.intloc 0 = 1 or a is read-write and
 A3: not a in UsedIntLoc I;
 A4: a = intloc 0 or a is read-write by SF_MASTR:def 5;
-  I is_closed_on Initialize s & I is_halting_on Initialize s by A1,
-  SCMFSA7B:24,25;
+  I is_closed_on Initialize s & I is_halting_on Initialize s by A1,SCMFSA7B:24
+,25;
   hence IExec(I, s).a = (Initialize s).a by A3,Th1
     .= s.a by A2,A4,SCMFSA6C:3;
 end;
@@ -193,15 +197,15 @@ A10: now
       let x be set;
       assume
 A11:  x in Iloc;
-      then reconsider x' = x as Int-Location by SCMFSA_2:11;
-      thus s1.x = s2.x' by A8,A11
+      then reconsider x9 = x as Int-Location by SCMFSA_2:11;
+      thus s1.x = s2.x9 by A8,A11
         .= s2.x;
     end;
     let x be set;
     assume
 A12: x in Floc;
-    then reconsider x' = x as FinSeq-Location by SCMFSA_2:12;
-    thus s1.x = s2.x' by A9,A12
+    then reconsider x9 = x as FinSeq-Location by SCMFSA_2:12;
+    thus s1.x = s2.x9 by A9,A12
       .= s2.x;
   end;
   then
@@ -250,14 +254,14 @@ proof
   UsedIntLoc times(a,I) = UsedIntLoc (aux := a) \/ UsedIntLoc while>0(aux,
   I ';' SubFrom(aux, intloc 0)) by SF_MASTR:33
     .= {aux, a} \/ UsedIntLoc while>0(aux, I ';' SubFrom(aux, intloc 0)) by
-  SF_MASTR:18
+SF_MASTR:18
     .= {aux, a} \/ ({aux} \/ UsedIntLoc (I ';' SubFrom(aux,intloc 0))) by
-  SCMFSA9A:30
+SCMFSA9A:30
     .= {aux, a} \/ {aux} \/ UsedIntLoc (I ';' SubFrom(aux, intloc 0)) by
-  XBOOLE_1:4
+XBOOLE_1:4
     .= {aux, a} \/ UsedIntLoc (I ';' SubFrom(aux, intloc 0)) by ZFMISC_1:14
     .= {aux, a} \/ ((UsedIntLoc I) \/ UsedIntLoc SubFrom(aux, intloc 0)) by
-  SF_MASTR:34
+SF_MASTR:34
     .= {aux, a} \/ ((UsedIntLoc I) \/ {aux, intloc 0}) by SF_MASTR:18
     .= {aux, a} \/ (UsedIntLoc I) \/ {aux, intloc 0} by XBOOLE_1:4;
   then
@@ -265,8 +269,8 @@ A1: {aux, a} \/ UsedIntLoc I c= UsedIntLoc times(a, I) by XBOOLE_1:7;
   UsedIntLoc I c= {aux, a} \/ UsedIntLoc I by XBOOLE_1:7;
   then
 A2: UsedIntLoc I c= UsedIntLoc times(a, I) by A1,XBOOLE_1:1;
-  {a} c= {aux, a} & {aux, a} c= {aux, a} \/ UsedIntLoc I by XBOOLE_1:7 ,
-  ZFMISC_1:12;
+  {a} c= {aux, a} & {aux, a} c= {aux, a} \/ UsedIntLoc I by XBOOLE_1:7
+,ZFMISC_1:12;
   then {a} c= {aux, a} \/ UsedIntLoc I by XBOOLE_1:1;
   then {a} c= UsedIntLoc times(a, I) by A1,XBOOLE_1:1;
   hence thesis by A2,XBOOLE_1:8;
@@ -280,7 +284,7 @@ proof
   thus UsedInt*Loc times(a,I) = UsedInt*Loc(aux := a)\/ UsedInt*Loc while>0(
   aux,I ';' SubFrom(aux, intloc 0)) by SF_MASTR:49
     .= {} \/ UsedInt*Loc while>0(aux, I ';' SubFrom(aux, intloc 0)) by
-  SF_MASTR:36
+SF_MASTR:36
     .= UsedInt*Loc (I ';' SubFrom(aux,intloc 0)) by SCMFSA9A:31
     .= (UsedInt*Loc I) \/ UsedInt*Loc SubFrom(aux, intloc 0) by SF_MASTR:50
     .= (UsedInt*Loc I) \/ {} by SF_MASTR:36
@@ -344,8 +348,8 @@ A1: StepTimes(a, I, s).k.intloc 0 = 1 and
 A2: I is_closed_on StepTimes(a, I, s).k & I is_halting_on StepTimes(a, I
   , s).k;
   set ST = StepTimes(a, I, s);
-A3: I is_closed_on Initialize ST.k & I is_halting_on Initialize ST.k by A1,
-  A2, Th4,Th5;
+A3: I is_closed_on Initialize ST.k & I is_halting_on Initialize ST.k by A1,A2
+,Th5;
   set au = 1-stRWNotIn ({a} \/ UsedIntLoc I);
   set SW = StepWhile>0 (au, I ';' SubFrom(au, intloc 0), Exec(au := a,
   Initialize s));
@@ -353,7 +357,7 @@ A4: Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:24;
   Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:25;
   then
 A5: I ';' SubFrom(au, intloc 0) is_halting_on Initialize ST.k by A3,A4,
-  SFMASTR1:4;
+SFMASTR1:4;
   hereby
     per cases;
     suppose
@@ -370,7 +374,7 @@ A5: I ';' SubFrom(au, intloc 0) is_halting_on Initialize ST.k by A3,A4,
       ST.(k+1).intloc 0 = IExec(I ';' SubFrom(au, intloc 0), ST.k).intloc
       0 by SCMFSA6A:38
         .= Exec(SubFrom(au, intloc 0), IExec(I, ST.k)).intloc 0 by A3,
-      SFMASTR1:12
+SFMASTR1:12
         .= IExec(I, ST.k).intloc 0 by SCMFSA_2:91
         .= 1 by A3,SCMFSA8C:96;
     end;
@@ -383,7 +387,7 @@ A6: not au in UsedIntLoc I by XBOOLE_0:def 3;
   then DataPart SW.(k+1) = DataPart IExec(I ';' SubFrom(au, intloc 0), ST.k)
   by A1,A3,A4,A5,SCMFSA9A:38,SFMASTR1:3;
   hence ST.(k+1).au = IExec(I ';' SubFrom(au, intloc 0), ST.k).au by
-  SCMFSA6A:38
+SCMFSA6A:38
     .= Exec(SubFrom(au, intloc 0), IExec(I, ST.k)).au by A3,SFMASTR1:12
     .= IExec(I, ST.k).au - IExec(I, ST.k).intloc 0 by SCMFSA_2:91
     .= IExec(I, ST.k).au - 1 by A3,SCMFSA8C:96
@@ -435,11 +439,11 @@ theorem Th15:
 proof
   assume
 A1: I is parahalting;
-  then reconsider I' = I as parahalting Program of SCM+FSA;
+  then reconsider I9 = I as parahalting Program of SCM+FSA;
   let k be Element of NAT;
   assume
   k < s.a;
-  I' is paraclosed;
+  I9 is paraclosed;
   hence I is_closed_on StepTimes(a,I,s).k by SCMFSA7B:24;
   thus thesis by A1,SCMFSA7B:25;
 end;
@@ -490,7 +494,7 @@ A2: ProperTimesBody a, I, s;
   set au = 1-stRWNotIn ({a} \/ UsedIntLoc I);
   set ST = StepTimes(a, I, s);
   set SW = StepWhile>0 (au, I ';' SubFrom(au, intloc 0), Exec(au := a, Is));
-  defpred X[Element of NAT] means $1 <= s.a implies StepTimes(a, I, s).$1.au+
+  defpred X[Nat] means $1 <= s.a implies StepTimes(a, I, s).$1.au+
   $1 = s.a;
 A3: for k being Element of NAT st X[k] holds X[k+1]
   proof
@@ -510,26 +514,23 @@ A9: now
       then SW.k.au+k < s.a+0 by A7,XREAL_1:10;
       hence contradiction by A5,A7;
     end;
-A10: Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:
-    24;
+A10: Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:24;
 A11: I is_closed_on ST.k by A2,A7,Def3;
     then
 A12: I is_closed_on Initialize ST.k by A8,Th4;
     I is_halting_on ST.k by A2,A7,Def3;
     then
 A13: I is_halting_on Initialize ST.k by A8,A11,Th5;
-    Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:
-    25;
+    Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:25;
     then
-    I ';' SubFrom(au, intloc 0) is_halting_on Initialize ST.k by A12,A13,
-    A10,SFMASTR1:4;
+    I ';' SubFrom(au, intloc 0) is_halting_on Initialize ST.k by A12,A13,A10,
+SFMASTR1:4;
     then
     DataPart SW.(k+1) = DataPart IExec(I ';' SubFrom(au, intloc 0), ST.k)
     by A8,A12,A13,A10,A9,SCMFSA9A:38,SFMASTR1:3;
     then ST.(k+1).au = IExec(I ';' SubFrom(au, intloc 0), ST.k).au by
-    SCMFSA6A:38
-      .= Exec(SubFrom(au, intloc 0), IExec(I, ST.k)).au by A12,A13,SFMASTR1:
-    12
+SCMFSA6A:38
+      .= Exec(SubFrom(au, intloc 0), IExec(I, ST.k)).au by A12,A13,SFMASTR1:12
       .= IExec(I, ST.k).au - IExec(I, ST.k).intloc 0 by SCMFSA_2:91
       .= IExec(I, ST.k).au - 1 by A12,A13,SCMFSA8C:96
       .= (Initialize ST.k).au - 1 by A12,A13,A4,Th1
@@ -562,7 +563,7 @@ A3: s.intloc 0 = 1 or a is read-write;
   set ST = StepTimes(a, I, s);
   set SW = StepWhile>0 (au, I ';' SubFrom(au, intloc 0), Exec(au := a,
   Initialize s));
-  defpred X[Element of NAT] means $1 >= s.a implies ST.$1.au = 0 & ST.$1.
+  defpred X[Nat] means $1 >= s.a implies ST.$1.au = 0 & ST.$1.
   intloc 0 = 1;
 A4: for k st X[k] holds X[k+1]
   proof
@@ -649,10 +650,10 @@ A3: ST.k.au > 0;
 A4: Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:24;
   Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:25;
   then I ';' SubFrom(au, intloc 0) is_halting_on Initialize ST.k by A2,A4,
-  SFMASTR1:4;
+SFMASTR1:4;
   then
-A5: DataPart SW.(k+1) = DataPart IExec(I ';' SubFrom(au, intloc 0), ST.k) by
-  A1,A2,A3,A4,SCMFSA9A:38,SFMASTR1:3;
+A5: DataPart SW.(k+1) = DataPart IExec(I ';' SubFrom(au, intloc 0), ST.k) by A1
+,A2,A3,A4,SCMFSA9A:38,SFMASTR1:3;
 A6: now
     let x be Int-Location;
 A7: not au in {a} \/ UILI by SFMASTR1:21;
@@ -661,14 +662,14 @@ A7: not au in {a} \/ UILI by SFMASTR1:21;
     then
 A8: au <> x by A7,XBOOLE_0:def 3;
     thus ST.(k+1).x = IExec(I ';' SubFrom(au, intloc 0), ST.k).x by A5,
-    SCMFSA6A:38
+SCMFSA6A:38
       .= Exec(SubFrom(au, intloc 0), IExec(I, ST.k)).x by A2,SFMASTR1:12
       .= IExec(I, ST.k).x by A8,SCMFSA_2:91;
   end;
   now
     let x be FinSeq-Location;
     thus ST.(k+1).x = IExec(I ';' SubFrom(au, intloc 0), ST.k).x by A5,
-    SCMFSA6A:38
+SCMFSA6A:38
       .= Exec(SubFrom(au, intloc 0), IExec(I, ST.k)).x by A2,SFMASTR1:13
       .= IExec(I, ST.k).x by SCMFSA_2:91;
   end;
@@ -796,13 +797,11 @@ A12: I is_closed_on Initialize ST.k by A9,Th4;
     I is_halting_on ST.k by A4,A8,Def3;
     then
 A13: I is_halting_on Initialize ST.k by A11,A9,Th5;
-A14: Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:
-    24;
+A14: Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:24;
     then
 A15: ISu is_closed_on Initialize ST.k by A12,A13,SFMASTR1:3;
     hence ISu is_closed_on SW.k by A10,SCMFSA8B:6;
-    Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:
-    25;
+    Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:25;
     then ISu is_halting_on Initialize ST.k by A12,A13,A14,SFMASTR1:4;
     hence thesis by A10,A15,SCMFSA8B:8;
   end;
@@ -811,11 +810,18 @@ A16: DataPart ISW.k = DataPart SW.k by A2,SCMFSA9A:40;
 A17: WithVariantWhile>0 au, ISu, Is1
   proof
     reconsider sa = s.a as Element of NAT by A1;
-    deffunc U(Element of product the Object-Kind of SCM+FSA) = abs($1.au);
+    deffunc U(State of SCM+FSA) = abs($1.au);
     consider f being Function of product the Object-Kind of SCM+FSA,NAT such
     that
-A18: for x being Element of product the Object-Kind of SCM+FSA holds f
+B18: for x being Element of product the Object-Kind of SCM+FSA holds f
     .x = U(x) from FUNCT_2:sch 4;
+A18: for x being State of SCM+FSA holds f.x = U(x)
+     proof let x be State of SCM+FSA;
+      reconsider x as Element of product the Object-Kind of SCM+FSA
+        by PBOOLE:155;
+       f.x = U(x) by B18;
+      hence thesis;
+     end;
     take f;
     let k be Element of NAT;
     DataPart ISW.k = DataPart SW.k by A2,A7,SCMFSA9A:40;
@@ -865,14 +871,15 @@ A33: ISu is_closed_on SW.k by A7,A30,SCMFSA9A:def 4;
 A34: ExitsAtWhile>0(au, ISu, Is1) = K and
 A35: ISW.K.au <= 0 and
 A36: for i being Element of NAT st ISW.i.au <= 0 holds K <= i and
-  DataPart Computation((Is1 +* (WH +* SAt)),(LifeSpan (Is1 +* (WH +* SAt))
+  DataPart Comput(ProgramPart((Is1 +* (WH +* SAt))),(Is1 +* (WH +* SAt)),(
+LifeSpan (Is1 +* (WH +* SAt))
   )) = DataPart ISW.K by A17,SCMFSA9A:def 6;
 A37: WH is_closed_on Is1 by A29,A17,SCMFSA9A:33;
   WH is_halting_on Is1 by A29,A17,SCMFSA9A:33;
   then
 A38: WH is_halting_on s1 by A2,A37,SCMFSA8B:8;
-A39: DataPart IExec(WH, s1) = DataPart ISW.ExitsAtWhile>0(au, ISu, Is1) by
-  A29,A17,SCMFSA9A:42;
+A39: DataPart IExec(WH, s1) = DataPart ISW.ExitsAtWhile>0(au, ISu, Is1) by A29
+,A17,SCMFSA9A:42;
 A40: DataPart ISW.K = DataPart SW.K by A2,A7,SCMFSA9A:40;
   SW.k.au = 0 by A1,A4,A5,A6,Th18;
   then ISW.k.au = 0 by A16,SCMFSA6A:38;
@@ -887,13 +894,13 @@ A44: ISW.K.au+K = k by A40,A42,SCMFSA6A:38;
   now
     hereby
       let x be Int-Location;
-      thus IExec(times(a, I), s).x = IExec(WH, s1).x by A2,A37,A38,SCMFSA8B:6,
-      SFMASTR1:15
+      thus IExec(times(a, I), s).x = IExec(WH, s1).x by A2,A37,A38,SCMFSA8B:6
+,SFMASTR1:15
         .= ST.k.x by A39,A34,A16,A44,A43,SCMFSA6A:38;
     end;
     let x be FinSeq-Location;
-    thus IExec(times(a, I), s).x = IExec(WH, s1).x by A2,A37,A38,SCMFSA8B:6,
-    SFMASTR1:16
+    thus IExec(times(a, I), s).x = IExec(WH, s1).x by A2,A37,A38,SCMFSA8B:6
+,SFMASTR1:16
       .= ST.k.x by A39,A34,A16,A44,A43,SCMFSA6A:38;
   end;
   hence thesis by SCMFSA6A:38;
@@ -961,24 +968,29 @@ A19:  I is_closed_on Initialize ST.k by A16,Th4;
       I is_halting_on ST.k by A6,A15,Def3;
       then
 A20:  I is_halting_on Initialize ST.k by A18,A16,Th5;
-A21:  Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B
-      :24;
+A21:  Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:24;
       then
 A22:  ISu is_closed_on Initialize ST.k by A19,A20,SFMASTR1:3;
       hence ISu is_closed_on SW.k by A17,SCMFSA8B:6;
-      Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by
-      SCMFSA7B:25;
+      Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:25;
       then ISu is_halting_on Initialize ST.k by A19,A20,A21,SFMASTR1:4;
       hence thesis by A17,A22,SCMFSA8B:8;
     end;
 A23: WithVariantWhile>0 au, ISu, Is1
     proof
       reconsider sa = s.a as Element of NAT by A13,INT_1:16;
-      deffunc U(Element of product the Object-Kind of SCM+FSA) = abs($1.au);
+      deffunc U(State of SCM+FSA) = abs($1.au);
       consider f being Function of product the Object-Kind of SCM+FSA,NAT such
       that
-A24:  for x being Element of product the Object-Kind of SCM+FSA holds
+B24:  for x being Element of product the Object-Kind of SCM+FSA holds
       f.x = U(x) from FUNCT_2:sch 4;
+A24: for x being State of SCM+FSA holds f.x = U(x)
+     proof let x be State of SCM+FSA;
+      reconsider x as Element of product the Object-Kind of SCM+FSA
+        by PBOOLE:155;
+       f.x = U(x) by B24;
+      hence thesis;
+     end;
       take f;
       let k be Element of NAT;
       DataPart ISW.k = DataPart SW.k by A4,A14,SCMFSA9A:40;
@@ -1085,7 +1097,7 @@ proof
   set I = I1 ';' i2;
   set au = 1-stRWNotIn ({a} \/ UsedIntLoc I);
   set ST = StepTimes(a, I, s);
-  defpred X[Element of NAT] means ($1 < s.a implies I is_closed_on ST.$1 & I
+  defpred X[Nat] means ($1 < s.a implies I is_closed_on ST.$1 & I
 is_halting_on ST.$1 & ST.$1.intloc 0 = 1) & ($1 <= s.a implies ST.$1.a+$1 = s.a
   & ST.$1.au = ST.$1.a);
   a in {a, intloc 0} by TARSKI:def 2;
@@ -1107,8 +1119,7 @@ A6:   k < s.a;
       then
 A7:   ST.k.a <> 0 by A4;
       then
-A8:   DataPart IExec(I1, ST.k) = DataPart ST.k by A3,A6,
-      SCMFSA9A:28;
+A8:   DataPart IExec(I1, ST.k) = DataPart ST.k by A3,A6,SCMFSA9A:28;
 A9:   I1 is_closed_on ST.k by A7,SCMFSA_9:18;
       then
 A10:  I1 is_closed_on Initialize ST.k by A3,A6,Th4;
@@ -1117,8 +1128,8 @@ A10:  I1 is_closed_on Initialize ST.k by A3,A6,Th4;
 A11:  I1 is_halting_on Initialize ST.k by A3,A6,A9,Th5;
 A12:  k-k < s.a-k by A6,XREAL_1:11;
       hence ST.k.au > 0 by A4,A6;
-      I is_closed_on Initialize ST.k & I is_halting_on Initialize ST.k by
-      A3,A6,Th4,Th5;
+      I is_closed_on Initialize ST.k & I is_halting_on Initialize ST.k by A3,A6
+,Th5;
       then ST.(k+1) | ((UsedIntLoc I) \/ FinSeq-Locations) = IExec(I, ST.k) |
       ((UsedIntLoc I) \/ FinSeq-Locations) by A3,A4,A6,A12,Th20;
       then ST.(k+1).a = IExec(I, ST.k).a by A1,Th7
@@ -1197,8 +1208,7 @@ A33: ProperTimesBody a, I, s
   0 <= s.a;
   then reconsider k = s.a as Element of NAT by INT_1:16;
 A34: StepTimes(a, I, s).k.a+k = s.a by A32;
-  DataPart IExec(times(a, I), s) = DataPart StepTimes(a, I, s).k by A33,
-  Th23;
+  DataPart IExec(times(a, I), s) = DataPart StepTimes(a, I, s).k by A33,Th23;
   hence thesis by A34,SCMFSA6A:38;
 end;
 
@@ -1257,7 +1267,7 @@ A9: s1.N = Exec(i2, IExec(i0 ';' i1, s)).N by SCMFSA6C:7
     .= s.N by SCMFSA6C:3;
   then
 A10: DataPart IExec(I3, s1) = DataPart ST.n by A2,Th23;
-  defpred P[Element of NAT] means $1 <= s1.N implies ST.$1.result = Fib $1 &
+  defpred P[Nat] means $1 <= s1.N implies ST.$1.result = Fib $1 &
   ST.$1.next = Fib ($1+1);
   set UIFS = UsedIntLoc I301 \/ FinSeq-Locations;
   set i4 = N := Nsave;
@@ -1308,7 +1318,7 @@ A22: s1.Nsave = Exec(i2, IExec(i0 ';' i1, s)).Nsave by SCMFSA6C:7
     .= (Initialize s).N by SCMFSA_2:89
     .= s.N by SCMFSA6C:3;
 A23: i02 is_halting_on Initialize s & i02 is_closed_on Initialize s by
-  SCMFSA7B:24,25;
+SCMFSA7B:24,25;
   reconsider i02 as good Program of SCM+FSA;
 A24: s1.next = Exec(i2, IExec(i0 ';' i1, s)).next by SCMFSA6C:7
     .= IExec(i0 ';' i1, s).intloc 0 by SCMFSA_2:89
@@ -1328,7 +1338,7 @@ A27: s1.result = Exec(i2, IExec(i0 ';' i1, s)).result by SCMFSA6C:7
     .= IExec(i0 ';' i1, s).result by A16,SCMFSA_2:89
     .= Exec(i1, Exec(i0, Initialize s)).result by SCMFSA6C:9
     .= Exec(i0,Initialize s).result-Exec(i0, Initialize s).result by
-  SCMFSA_2:91
+SCMFSA_2:91
     .= Fib 0 by PRE_FF:1;
 A28: P[0]
   proof
@@ -1341,8 +1351,8 @@ A29: ST.0 | UIFS = s1 | UIFS by A25,Th19;
 A30: for n being Element of NAT holds P[n] from NAT_1:sch 1(A28, A17);
 A31: I3 is_halting_on s1 by A25,Th24;
   then
-A32: I3 is_closed_on Initialize s1 & I3 is_halting_on Initialize s1 by A25,
-  A26,Th5;
+A32: I3 is_closed_on Initialize s1 & I3 is_halting_on Initialize s1 by A25,A26
+,Th5;
 A33: i02 ';' I3 is_closed_on Initialize s by A26,A23,SFMASTR1:3;
   hence
   IExec(Fib-macro(N, result), s).result = Exec(i4, IExec(i02 ';' I3, s)).
@@ -1352,7 +1362,7 @@ A33: i02 ';' I3 is_closed_on Initialize s by A26,A23,SFMASTR1:3;
     .= ST.n.result by A10,SCMFSA6A:38
     .= Fib n by A9,A30,A2;
   thus IExec(Fib-macro(N, result), s).N = Exec(i4, IExec(i02 ';' I3, s)).N by
-  A26,A31,A23,A33,SFMASTR1:4,12
+A26,A31,A23,A33,SFMASTR1:4,12
     .= IExec( i02 ';' I3, s).Nsave by SCMFSA_2:89
     .= IExec(I3, s1).Nsave by A26,A31,SFMASTR1:8
     .= s.N by A7,A22,A32,Th3;

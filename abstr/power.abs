@@ -9,14 +9,14 @@ environ
  vocabularies NUMBERS, XREAL_0, ORDINAL1, SUBSET_1, INT_1, RAT_1, RELAT_1,
       ARYTM_1, NEWTON, ARYTM_3, CARD_1, PREPOWER, FUNCT_1, XXREAL_0, NAT_1,
       REAL_1, SEQ_1, SEQ_2, ORDINAL2, SQUARE_1, XXREAL_2, SEQ_4, COMPLEX1,
-      VALUED_0, POWER;
+      VALUED_0, POWER, ABIAN;
  notations SUBSET_1, NEWTON, ORDINAL1, XCMPLX_0, XREAL_0, XXREAL_0, COMPLEX1,
       INT_1, RAT_1, REAL_1, NUMBERS, NAT_1, SEQ_1, SEQ_2, SEQM_3, SQUARE_1,
-      SEQ_4, PREPOWER;
+      SEQ_4, PREPOWER, ABIAN;
  constructors REAL_1, SQUARE_1, NAT_1, SEQ_2, SEQM_3, SEQ_4, NEWTON, PREPOWER,
-      SEQ_1, XXREAL_2, RELSET_1;
+      SEQ_1, XXREAL_2, RELSET_1, ABIAN;
  registrations NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, NAT_1, INT_1, RAT_1,
-      MEMBERED, NEWTON, PREPOWER, XBOOLE_0, SEQ_4;
+      MEMBERED, NEWTON, PREPOWER, XBOOLE_0, SEQ_4, ABIAN;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -29,13 +29,13 @@ reserve k, l for Integer;
 reserve p for Rational;
 
 theorem :: POWER:1
-  (ex m st n=2*m) implies (-a) |^ n = a |^ n;
+  n is even implies (-a) |^ n = a |^ n;
 
 theorem :: POWER:2
-  (ex m st n=2*m+1) implies (-a) |^ n = - a |^ n;
+  n is odd implies (-a) |^ n = - a |^ n;
 
 theorem :: POWER:3
-  a>=0 or (ex m st n=2*m) implies a |^ n >= 0;
+  a>=0 or n is even implies a |^ n >= 0;
 
 definition
   let n be Nat;
@@ -44,11 +44,11 @@ definition
 :: POWER:def 1
 
   n -Root a if a>=0 & n>=1,
-  - n -Root (-a) if a<0 & ex m st n=2*m+1;
+  -n -Root (-a) if a<0 & n is odd;
 end;
 
 definition
-  let n;
+  let n be Nat;
   let a be Real;
   redefine func n-root a -> Real;
 end;
@@ -56,7 +56,7 @@ end;
 canceled;
 
 theorem :: POWER:5
-  for n being Nat st n>=1 & a>=0 or ex m st n=2*m+1 holds
+  for n being Nat st n>=1 & a>=0 or n is odd holds
   (n-root a) |^ n = a & n-root (a |^ n) = a;
 
 theorem :: POWER:6
@@ -69,56 +69,57 @@ theorem :: POWER:8
   a>=0 & n>=1 implies n-root a >= 0;
 
 theorem :: POWER:9
-  (ex m st n=2*m+1) implies n-root (-1) = -1;
+  n is odd implies n-root (-1) = -1;
 
 theorem :: POWER:10
   1-root a = a;
 
 theorem :: POWER:11
-  (ex m st n = 2*m + 1) implies n-root a = - n-root (-a);
+  n is odd implies n-root a = - n-root (-a);
 
 theorem :: POWER:12
-  n>=1 & a>=0 & b>=0 or (ex m st n=2*m+1) implies
+  n>=1 & a>=0 & b>=0 or n is odd implies
   n-root (a*b) = n-root a * n-root b;
 
 theorem :: POWER:13
-  a>0 & n>=1 or (a<>0 & ex m st n = 2*m+1) implies n-root (1/a) = 1/(n-root a);
+  a>0 & n>=1 or a<>0 & n is odd implies n-root (1/a) = 1/(n-root a);
 
 theorem :: POWER:14
-  a>=0 & b>0 & n>=1 or (b<>0 & ex m st n=2*m+1) implies
+  a>=0 & b>0 & n>=1 or b<>0 & n is odd implies
   n-root (a/b) = n-root a / n-root b;
 
 theorem :: POWER:15
-  a>=0 & n>=1 & m>=1 or (ex m1,m2 st n=2*m1+1 & m=2*m2+1) implies
+  a>=0 & n>=1 & m>=1 or n is odd & m is odd implies
   n-root (m-root a) = (n*m)-root a;
 
 theorem :: POWER:16
-  a>=0 & n>=1 & m>=1 or (ex m1,m2 st n=2*m1+1 & m=2*m2+1) implies
+  a>=0 & n>=1 & m>=1 or n is odd & m is odd implies
   n-root a * m-root a = (n*m)-root (a |^ (n+m));
 
 theorem :: POWER:17
-  a<=b & (0<=a & n>=1 or ex m st n=2*m+1) implies n-root a <= n-root b;
+  a<=b & (0<=a & n>=1 or n is odd) implies n-root a <= n-root b;
 
 theorem :: POWER:18
-  a<b & (a>=0 & n>=1 or ex m st n=2*m+1) implies n-root a < n-root b;
+  a<b & (a>=0 & n>=1 or n is odd) implies n-root a < n-root b;
 
 theorem :: POWER:19
   a>=1 & n>=1 implies n-root a >= 1 & a >= n-root a;
 
 theorem :: POWER:20
-  a<=-1 & (ex m st n=2*m+1) implies n-root a <= -1 & a <= n-root a;
+  a<=-1 & n is odd implies n-root a <= -1 & a <= n-root a;
 
 theorem :: POWER:21
   a>=0 & a<1 & n>=1 implies a <= n-root a & n-root a < 1;
 
 theorem :: POWER:22
-  a>-1 & a<=0 & (ex m st n=2*m+1) implies a >= n-root a & n-root a > -1;
+  a>-1 & a<=0 & n is odd implies a >= n-root a & n-root a > -1;
 
 theorem :: POWER:23
   a>0 & n>=1 implies n-root a - 1 <= (a-1)/n;
 
 theorem :: POWER:24
-  for s being Real_Sequence, a st a > 0 & (for n st n>=1 holds s.n = n-root a)
+  for s being Real_Sequence, a st a > 0 &
+  (for n st n>=1 holds s.n = n-root a)
   holds s is convergent & lim s = 1;
 
 definition
@@ -212,10 +213,10 @@ theorem :: POWER:53
   a to_power 2 = a^2;
 
 theorem :: POWER:54
-  a<>0 & (ex l st k = 2*l) implies (-a) to_power k = a to_power k;
+  a<>0 & k is even implies (-a) to_power k = a to_power k;
 
 theorem :: POWER:55
-  a<>0 & (ex l st k = 2*l + 1) implies (-a) to_power k = -(a to_power k);
+  a<>0 & k is odd implies (-a) to_power k = -(a to_power k);
 
 theorem :: POWER:56
   -1 < a implies (1 + a) to_power n >= 1 + n * a;
@@ -267,13 +268,15 @@ theorem :: POWER:66
   a>0 & a<1 & b>0 & c>b implies log(a,c) < log(a,b);
 
 theorem :: POWER:67
-  for s being Real_Sequence st for n holds s.n = (1 + 1/(n+1)) to_power (n+1 )
+  for s being Real_Sequence st
+  for n holds s.n = (1 + 1/(n+1)) to_power (n+1 )
   holds s is convergent;
 
 definition
   func number_e -> real number means
 :: POWER:def 4
-  for s being Real_Sequence st for n holds s.n = (1 + 1/(n+1)) to_power (n+1 )
+  for s being Real_Sequence st
+  for n holds s.n = (1 + 1/(n+1)) to_power (n+1)
   holds it = lim s;
 end;
 

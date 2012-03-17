@@ -27,13 +27,13 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="PRE_POLY"/>

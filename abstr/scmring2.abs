@@ -8,17 +8,17 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, CARD_1, XBOOLE_0, STRUCT_0, SCMFSA7B,
       FUNCSDOM, AMI_3, AMI_1, AMI_2, FUNCT_7, TARSKI, RELAT_1, ZFMISC_1, FSM_1,
-      FUNCT_1, CAT_1, FINSEQ_1, GRAPHSP, FUNCT_2, CARD_3, SCMNORM, ORDINAL1,
-      ARYTM_3, ARYTM_1, SUPINF_2, FUNCOP_1, SCMRING1, GLIB_000, MCART_1,
-      FUNCT_4;
+      FUNCT_1, CAT_1, FINSEQ_1, GRAPHSP, FUNCT_2, CARD_3, ORDINAL1, ARYTM_3,
+      ARYTM_1, SUPINF_2, FUNCOP_1, SCMRING1, GLIB_000, MCART_1, FUNCT_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      CARD_1, FUNCT_2, STRUCT_0, ALGSTR_0, FUNCSDOM, MCART_1, CARD_3, FINSEQ_1,
-      FUNCOP_1, FUNCT_4, FUNCT_7, AMI_1, SCMNORM, AMI_2, AMI_3, SCMRING1;
+      CARD_1, FUNCT_2, PBOOLE, STRUCT_0, ALGSTR_0, FUNCSDOM, MCART_1, CARD_3,
+      FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7, AMI_1, SCMNORM, AMI_2, AMI_3,
+      SCMRING1;
  constructors XXREAL_0, NAT_1, FINSEQ_4, REALSET1, CAT_2, AMI_3, SCMRING1,
-      RELSET_1, PARTFUN1;
+      RELSET_1, PARTFUN1, PRE_POLY, SCMNORM, PBOOLE;
  registrations XBOOLE_0, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSEQ_1,
       CARD_3, FINSEQ_5, STRUCT_0, AMI_1, AMI_3, SCMRING1, SCMNORM, AMI_2,
-      FUNCT_1;
+      FUNCT_1, FUNCT_2, RELAT_1, PBOOLE, GRFUNC_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -63,7 +63,7 @@ reserve R for good Ring,
   r for Element of R,
   a, b, c, d1, d2 for Data-Location
   of R,
-  i1 for Instruction-Location of SCM R;
+  i1 for Element of NAT;
 
 theorem :: SCMRING2:1
   x is Data-Location of R iff x in SCM-Data-Loc;
@@ -115,14 +115,14 @@ definition
 end;
 
 definition
-  let R be good Ring, l be Instruction-Location of SCM R;
-  func goto l -> Instruction of SCM R equals
+  let R be good Ring, l be Element of NAT;
+  func goto(l,R) -> Instruction of SCM R equals
 :: SCMRING2:def 8
   [ 6, <*l*>];
 end;
 
 definition
-  let R be good Ring, l be Instruction-Location of SCM R, a be Data-Location
+  let R be good Ring, l be Element of NAT, a be Data-Location
   of R;
   func a=0_goto l -> Instruction of SCM R equals
 :: SCMRING2:def 9
@@ -132,7 +132,8 @@ end;
 theorem :: SCMRING2:8
   for I being set holds I is Instruction of SCM R iff I = [0,{}] or
 (ex a,b st I = a:=b) or (ex a,b st I = AddTo(a,b)) or (ex a,b st I = SubFrom(a,
-b)) or (ex a,b st I = MultBy(a,b)) or (ex i1 st I = goto i1) or (ex a,i1 st I =
+b)) or (ex a,b st I = MultBy(a,b)) or (ex i1 st I = goto(i1,R)) or
+ (ex a,i1 st I =
   a=0_goto i1) or ex a,r st I = a:=r;
 
 reserve s for State of SCM R;
@@ -158,38 +159,38 @@ theorem :: SCMRING2:12
 begin :: Users guide
 
 theorem :: SCMRING2:13
-  Exec(a := b, s).IC SCM R = Next IC s & Exec(a := b, s).a = s.b &
+  Exec(a := b, s).IC SCM R = succ IC s & Exec(a := b, s).a = s.b &
   for c st c <> a holds Exec(a := b, s).c = s.c;
 
 theorem :: SCMRING2:14
-  Exec(AddTo(a,b), s).IC SCM R = Next IC s & Exec(AddTo(a,b), s).a
+  Exec(AddTo(a,b), s).IC SCM R = succ IC s & Exec(AddTo(a,b), s).a
   = s.a + s.b & for c st c <> a holds Exec(AddTo(a,b), s).c = s.c;
 
 theorem :: SCMRING2:15
-  Exec(SubFrom(a,b), s).IC SCM R = Next IC s & Exec(SubFrom(a,b),
+  Exec(SubFrom(a,b), s).IC SCM R = succ IC s & Exec(SubFrom(a,b),
   s).a = s.a - s.b & for c st c <> a holds Exec(SubFrom(a,b), s).c = s.c;
 
 theorem :: SCMRING2:16
-  Exec(MultBy(a,b), s).IC SCM R = Next IC s & Exec(MultBy(a,b), s)
+  Exec(MultBy(a,b), s).IC SCM R = succ IC s & Exec(MultBy(a,b), s)
   .a = s.a * s.b & for c st c <> a holds Exec(MultBy(a,b), s).c = s.c;
 
 theorem :: SCMRING2:17
-  Exec(goto i1, s).IC SCM R = i1 & Exec(goto i1, s).c = s.c;
+  Exec(goto(i1,R), s).IC SCM R = i1 & Exec(goto(i1,R), s).c = s.c;
 
 theorem :: SCMRING2:18
   (s.a = 0.R implies Exec(a =0_goto i1, s).IC SCM R = i1) & (s.a
-<> 0.R implies Exec(a =0_goto i1, s).IC SCM R = Next IC s) & Exec(a =0_goto i1,
+<> 0.R implies Exec(a =0_goto i1, s).IC SCM R = succ IC s) & Exec(a =0_goto i1,
   s).c = s.c;
 
 theorem :: SCMRING2:19
-  Exec(a := r, s).IC SCM R = Next IC s & Exec(a := r, s).a = r &
+  Exec(a := r, s).IC SCM R = succ IC s & Exec(a := r, s).a = r &
   for c st c <> a holds Exec(a := r, s).c = s.c;
 
 begin  :: Halt instruction
 
 theorem :: SCMRING2:20
   for I being Instruction of SCM R st ex s st Exec(I,s).IC SCM R =
-  Next IC s holds I is non halting;
+  succ IC s holds I is non halting;
 
 theorem :: SCMRING2:21
   for I being Instruction of SCM R st I = [0,{}] holds I is
@@ -205,7 +206,7 @@ end;
 
 registration
   let R, i1;
-  cluster goto i1 -> non halting;
+  cluster goto(i1,R) -> non halting;
 end;
 
 registration

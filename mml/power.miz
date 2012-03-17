@@ -9,18 +9,18 @@ environ
  vocabularies NUMBERS, XREAL_0, ORDINAL1, SUBSET_1, INT_1, RAT_1, RELAT_1,
       ARYTM_1, NEWTON, ARYTM_3, CARD_1, PREPOWER, FUNCT_1, XXREAL_0, NAT_1,
       REAL_1, SEQ_1, SEQ_2, ORDINAL2, SQUARE_1, XXREAL_2, SEQ_4, COMPLEX1,
-      VALUED_0, POWER;
+      VALUED_0, POWER, ABIAN;
  notations SUBSET_1, NEWTON, ORDINAL1, XCMPLX_0, XREAL_0, XXREAL_0, COMPLEX1,
       INT_1, RAT_1, REAL_1, NUMBERS, NAT_1, SEQ_1, SEQ_2, SEQM_3, SQUARE_1,
-      SEQ_4, PREPOWER;
+      SEQ_4, PREPOWER, ABIAN;
  constructors REAL_1, SQUARE_1, NAT_1, SEQ_2, SEQM_3, SEQ_4, NEWTON, PREPOWER,
-      SEQ_1, XXREAL_2, RELSET_1;
+      SEQ_1, XXREAL_2, RELSET_1, ABIAN;
  registrations NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, NAT_1, INT_1, RAT_1,
-      MEMBERED, NEWTON, PREPOWER, XBOOLE_0, SEQ_4;
+      MEMBERED, NEWTON, PREPOWER, XBOOLE_0, SEQ_4, ABIAN;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions SQUARE_1, XCMPLX_0;
+ definitions SQUARE_1, XCMPLX_0, ABIAN;
  theorems ABSVALUE, NAT_1, SEQ_2, SEQM_3, INT_1, SEQ_4, NEWTON, PREPOWER,
-      TARSKI, FUNCT_2, XREAL_0, XCMPLX_1, XREAL_1, XXREAL_0;
+      TARSKI, FUNCT_2, XREAL_0, XCMPLX_1, XREAL_1, XXREAL_0, ABIAN;
  schemes SEQ_1;
 
 begin
@@ -31,8 +31,17 @@ reserve m, n, m1, m2 for Element of NAT;
 reserve k, l for Integer;
 reserve p for Rational;
 
+Lm1:
+    now
+      let n be Nat;
+      assume n is odd;
+      then ex m st n=2*m+1 by ABIAN:9;
+      then n>=0+1 by XREAL_1:8;
+      hence 1 <= n;
+    end;
+    
 theorem Th1:
-  (ex m st n=2*m) implies (-a) |^ n = a |^ n
+  n is even implies (-a) |^ n = a |^ n
 proof
   given m such that
 A1: n=2*m;
@@ -57,10 +66,11 @@ A1: n=2*m;
 end;
 
 theorem Th2:
-  (ex m st n=2*m+1) implies (-a) |^ n = - a |^ n
+  n is odd implies (-a) |^ n = - a |^ n
 proof
-  given m such that
-A1: n=2*m+1;
+  assume n is odd;
+  then consider m such that
+A1: n=2*m+1 by ABIAN:9;
   thus
   (-a) |^ n = (-a) |^ (2*m) * (-a) by A1,NEWTON:11
     .= a |^ (2*m) * (-a) by Th1
@@ -69,58 +79,55 @@ A1: n=2*m+1;
 end;
 
 theorem Th3:
-  a>=0 or (ex m st n=2*m) implies a |^ n >= 0
+  a>=0 or n is even implies a |^ n >= 0
 proof
   assume
-A1: a>=0 or ex m st n=2*m;
+A1: a>=0 or n is even;
 A2: now
     let a,n such that
 A3: a>=0;
-A4: now per cases by A3;
-      suppose
-A5:     a>0;
-        thus a |^ n >= 0 by A5,PREPOWER:13;
+    now per cases by A3;
+      suppose a>0;
+        hence a |^ n >= 0 by PREPOWER:13;
       end;
       suppose
 A6:     a=0;
-A7:     now per cases by NAT_1:6;
+        now per cases by NAT_1:6;
           suppose
 A8:         n=0;
-A9:         a |^ n = a GeoSeq.n by PREPOWER:def 1
+            a |^ n = a GeoSeq.n by PREPOWER:def 1
               .= 1 by A8,PREPOWER:4;
-            thus a |^ n >= 0 by A9;
+            hence a |^ n >= 0;
           end;
           suppose
 A10:        ex m being Nat st n = m+1;
             consider m being Nat such that
 A11:        n = m + 1 by A10;
-A12:        a |^ n = a |^ m * a by A11,NEWTON:11
+            a |^ n = a |^ m * a by A11,NEWTON:11
               .= 0 by A6;
-            thus a |^ n >= 0 by A12;
+            hence a |^ n >= 0;
           end;
         end;
-        thus a |^ n >= 0 by A7;
+        hence a |^ n >= 0;
       end;
     end;
-    thus a |^ n >= 0 by A4;
+    hence a |^ n >= 0;
   end;
-A13: now
+  now
     assume
-A14: ex m st n=2*m;
-A15: now per cases;
-      suppose
-A16:    a>=0;
-        thus thesis by A2,A16;
+A14: n is even;
+     now per cases;
+      suppose a>=0;
+        hence thesis by A2;
       end;
-      suppose
-A17:    a<0;
-A18:    (-a) |^ n >= 0 by A2,A17;
-        thus thesis by A14,A18,Th1;
+      suppose a<0;
+        then (-a) |^ n >= 0 by A2;
+        hence thesis by A14,Th1;
       end;
     end;
-    thus thesis by A15;
+    hence thesis;
   end;
-  thus thesis by A1,A2,A13;
+  hence thesis by A1,A2;
 end;
 
 definition
@@ -129,13 +136,13 @@ definition
   func n-root a -> real number equals
   :Def1:
   n -Root a if a>=0 & n>=1,
-  - n -Root (-a) if a<0 & ex m st n=2*m+1;
+  -n -Root (-a) if a<0 & n is odd;
   consistency;
   coherence;
 end;
 
 definition
-  let n;
+  let n be Nat;
   let a be Real;
   redefine func n-root a -> Real;
   coherence by XREAL_0:def 1;
@@ -144,38 +151,37 @@ end;
 canceled;
 
 theorem
-  for n being Nat st n>=1 & a>=0 or ex m st n=2*m+1 holds
+  for n being Nat st n>=1 & a>=0 or n is odd holds
   (n-root a) |^ n = a & n-root (a |^ n) = a
 proof
   let n be Nat;
   assume
-A1: n>=1 & a>=0 or ex m st n=2*m+1;
+A1: n>=1 & a>=0 or n is odd;
 A2: now
     assume that
 A3: n>=1 and
 A4: a>=0;
 A5: n-root a = n -Root a by A3,A4,Def1;
 A6: now per cases by A4;
-      suppose
-A7:     a>0;
-        thus a |^ n >= 0 by A7,PREPOWER:13;
+      suppose a>0;
+        hence a |^ n >= 0 by PREPOWER:13;
       end;
-      suppose
-A8:     a=0;
-        thus a |^ n >= 0 by A8;
+      suppose a=0;
+        hence a |^ n >= 0;
       end;
     end;
-A9: n-root (a |^ n) = n -Root (a |^ n) by A3,A6,Def1;
-    thus thesis by A3,A4,A5,A9,PREPOWER:28;
+    n-root (a |^ n) = n -Root (a |^ n) by A3,A6,Def1;
+    hence thesis by A3,A4,A5,PREPOWER:28;
   end;
 A10: now
     assume
-A11: ex m st n=2*m+1;
-A12: n>=0+1 by A11,XREAL_1:8;
+B1: n is odd;
+    then
+A11: ex m st n=2*m+1 by ABIAN:9;
+A12: n>=1 by B1,Lm1;
 A13: now per cases;
-      suppose
-A14:    a>=0;
-        thus thesis by A2,A12,A14;
+      suppose a>=0;
+        hence thesis by A2,A12;
       end;
       suppose
 A15:    a<0;
@@ -241,11 +247,12 @@ A7:   n-root a = n -Root a by A1,A2,Def1
 end;
 
 theorem
-  (ex m st n=2*m+1) implies n-root (-1) = -1
+  n is odd implies n-root (-1) = -1
 proof
   assume
-A1: ex m st n=2*m+1;
-A2: n>=0+1 by A1,XREAL_1:8;
+A1: n is odd;
+   then
+A2: n>=1 by Lm1;
   thus
   n-root (-1) = - n -Root (-(-1)) by A1,Def1
     .= - 1 by A2,PREPOWER:29;
@@ -272,11 +279,13 @@ A4:   1 = 2*0 + 1;
 end;
 
 theorem Th11:
-  (ex m st n = 2*m + 1) implies n-root a = - n-root (-a)
+  n is odd implies n-root a = - n-root (-a)
 proof
   assume
-A1: ex m st n = 2*m + 1;
-A2: n>=0+1 by A1,XREAL_1:8;
+A0: n is odd;
+    then
+A1: ex m st n = 2*m + 1 by ABIAN:9;
+A2: n>=1 by A0,Lm1;
 A3: now per cases;
     suppose
 A4:   a<0;
@@ -300,11 +309,11 @@ A7:   -a<-0 by A6,XREAL_1:26;
 end;
 
 theorem Th12:
-  n>=1 & a>=0 & b>=0 or (ex m st n=2*m+1) implies
+  n>=1 & a>=0 & b>=0 or n is odd implies
   n-root (a*b) = n-root a * n-root b
 proof
   assume
-A1: n>=1 & a>=0 & b>=0 or ex m st n=2*m+1;
+A1: n>=1 & a>=0 & b>=0 or n is odd;
 A2: now
     let a,b,n;
     assume that
@@ -318,8 +327,9 @@ A5: b>=0;
   end;
 A6: now
     assume
-A7: ex m st n=2*m+1;
-A8: n>=0+1 by A7,XREAL_1:8;
+A7: n is odd;
+    then
+A8: n>=1 by Lm1;
 A9: now per cases;
       suppose
 A10:    a>=0 & b>=0;
@@ -359,10 +369,10 @@ A13:    a<0 & b>=0;
 end;
 
 theorem Th13:
-  a>0 & n>=1 or (a<>0 & ex m st n = 2*m+1) implies n-root (1/a) = 1/(n-root a)
+  a>0 & n>=1 or a<>0 & n is odd implies n-root (1/a) = 1/(n-root a)
 proof
   assume
-A1: a>0 & n>=1 or a<>0 & ex m st n = 2*m+1;
+A1: a>0 & n>=1 or a<>0 & n is odd;
 A2: now
     let a,n;
     assume
@@ -374,8 +384,8 @@ A3: a>0 & n>=1;
 A4: now
     assume that
 A5: a<>0 and
-A6: ex m st n = 2*m+1;
-A7: n>=0+1 by A6,XREAL_1:8;
+A6: n is odd;
+A7: n>=1 by A6,Lm1;
 A8: now per cases by A5;
       suppose
 A9:     a>0;
@@ -398,11 +408,11 @@ A11:    -a>0 by A10,XREAL_1:60;
 end;
 
 theorem
-  a>=0 & b>0 & n>=1 or (b<>0 & ex m st n=2*m+1) implies
+  a>=0 & b>0 & n>=1 or b<>0 & n is odd implies
   n-root (a/b) = n-root a / n-root b
 proof
   assume
-A1: a>=0 & b>0 & n>=1 or (b<>0 & ex m st n=2*m+1);
+A1: a>=0 & b>0 & n>=1 or b<>0 & n is odd;
 A2: now per cases by A1;
     suppose
 A3:   a>=0 & b>0 & n>=1;
@@ -412,7 +422,7 @@ A3:   a>=0 & b>0 & n>=1;
         .= n-root a / n-root b by A3,Def1;
     end;
     suppose
-A4:   b<>0 & ex m st n=2*m+1;
+A4:   b<>0 & n is odd;
       thus n-root (a/b) = n-root (a*(1/b))
         .= n-root a * n-root (1/b) by A4,Th12
         .= n-root a * (1 / n-root b) by A4,Th13
@@ -423,11 +433,11 @@ A4:   b<>0 & ex m st n=2*m+1;
 end;
 
 theorem
-  a>=0 & n>=1 & m>=1 or (ex m1,m2 st n=2*m1+1 & m=2*m2+1) implies
+  a>=0 & n>=1 & m>=1 or n is odd & m is odd implies
   n-root (m-root a) = (n*m)-root a
 proof
   assume
-A1: a>=0 & n>=1 & m>=1 or ex m1,m2 st n=2*m1+1 & m=2*m2+1;
+A1: a>=0 & n>=1 & m>=1 or n is odd & m is odd;
 A2: now
     let a,n,m;
     assume that
@@ -444,9 +454,12 @@ A8: m -Root a >= 0 by A3,A5,A7,Def1;
       .= (n*m)-root a by A3,A6,Def1;
   end;
 A9: now
-    given m1,m2 such that
-A10: n=2*m1+1 and
-A11: m=2*m2+1;
+    assume n is odd;
+    then consider m1 such that
+A10: n=2*m1+1 by ABIAN:9;
+    assume m is odd;
+    then consider m2 such that
+A11: m=2*m2+1 by ABIAN:9;
 A12: n>=0+1 by A10,XREAL_1:8;
 A13: m>=0+1 by A11,XREAL_1:8;
 A14: n*m >= 1 by A12,A13,XREAL_1:161;
@@ -475,11 +488,11 @@ A20:    m -Root (-a) >= 0 by A13,A18,A19,Def1;
 end;
 
 theorem
-  a>=0 & n>=1 & m>=1 or (ex m1,m2 st n=2*m1+1 & m=2*m2+1) implies
+  a>=0 & n>=1 & m>=1 or n is odd & m is odd implies
   n-root a * m-root a = (n*m)-root (a |^ (n+m))
 proof
   assume
-A1: a>=0 & n>=1 & m>=1 or ex m1,m2 st n=2*m1+1 & m=2*m2+1;
+A1: a>=0 & n>=1 & m>=1 or n is odd & m is odd;
 A2: now
     let a,n,m;
     assume that
@@ -494,9 +507,12 @@ A6: n*m>= 1 & a |^ (n+m) >=0 by A3,A4,A5,Th3,XREAL_1:161;
       .= (n*m)-root (a |^ (n+m)) by A6,Def1;
   end;
 A7: now
-    given m1,m2 such that
-A8: n=2*m1+1 and
-A9: m=2*m2+1;
+    assume n is odd;
+    then consider m1 such that
+A8: n=2*m1+1 by ABIAN:9;
+    assume m is odd;
+    then consider m2 such that
+A9: m=2*m2+1 by ABIAN:9;
 A10: n>=0+1 & m>=0+1 by A8,A9,XREAL_1:8;
 A11: n*m >= 1 by A10,XREAL_1:161;
 A12: n+m = 2*(m1+(1+m2)) by A8,A9;
@@ -523,11 +539,11 @@ A16:    a |^ (n+m) >= 0 by A12,Th3;
 end;
 
 theorem
-  a<=b & (0<=a & n>=1 or ex m st n=2*m+1) implies n-root a <= n-root b
+  a<=b & (0<=a & n>=1 or n is odd) implies n-root a <= n-root b
 proof
   assume that
 A1: a<=b and
-A2: 0<=a & n>=1 or ex m st n=2*m+1;
+A2: 0<=a & n>=1 or n is odd;
 A3: now
     let a,b,n;
     assume that
@@ -539,8 +555,9 @@ A7: n -Root a <= n-root b by A4,A5,A6,Def1;
   end;
 A8: now
     assume
-A9: ex m st n=2*m+1;
-A10: n>=0+1 by A9,XREAL_1:8;
+A9: n is odd;
+    then
+A10: n>=1 by Lm1;
 A11: now per cases;
       suppose
 A12:    a>=0;
@@ -574,11 +591,11 @@ A23:        n-root a <= - n-root (-b) by A9,A22,Th11;
 end;
 
 theorem
-  a<b & (a>=0 & n>=1 or ex m st n=2*m+1) implies n-root a < n-root b
+  a<b & (a>=0 & n>=1 or n is odd) implies n-root a < n-root b
 proof
   assume that
 A1: a<b and
-A2: 0<=a & n>=1 or ex m st n=2*m+1;
+A2: 0<=a & n>=1 or n is odd;
 A3: now
     let a,b,n;
     assume that
@@ -590,8 +607,9 @@ A7: n -Root a < n-root b by A4,A5,A6,Def1;
   end;
 A8: now
     assume
-A9: ex m st n=2*m+1;
-A10: n>=0+1 by A9,XREAL_1:8;
+A9: n is odd;
+    then
+A10: n>=1 by Lm1;
 A11: now per cases;
       suppose
 A12:    a>=0;
@@ -636,12 +654,12 @@ A2: n>=1;
 end;
 
 theorem
-  a<=-1 & (ex m st n=2*m+1) implies n-root a <= -1 & a <= n-root a
+  a<=-1 & n is odd implies n-root a <= -1 & a <= n-root a
 proof
   assume that
 A1: a<=-1 and
-A2: ex m st n=2*m+1;
-A3: n>=0+1 & -a>=1 by A1,A2,XREAL_1:8,27;
+A2: n is odd;
+A3: n>=1 & -a>=1 by A1,A2,XREAL_1:27,Lm1;
 A4: n-root (-a) >= 1 by A3,Th19;
 A5: -a >= n-root (-a) by A3,Th19;
 A6: - n-root (-a) <= -1 by A4,XREAL_1:26;
@@ -656,18 +674,20 @@ proof
 A1: a>=0 and
 A2: a<1 and
 A3: n>=1;
-  A4: a <= n -Root a & n -Root a < 1 by A1,A2,A3,PREPOWER:39;
-  thus thesis by A1,A3,A4,Def1;
+  a <= n -Root a & n -Root a < 1 by A1,A2,A3,PREPOWER:39;
+  hence thesis by A1,A3,Def1;
 end;
 
 theorem
-  a>-1 & a<=0 & (ex m st n=2*m+1) implies a >= n-root a & n-root a > -1
+  a>-1 & a<=0 & n is odd implies a >= n-root a & n-root a > -1
 proof
   assume that
 A1: a>-1 and
-A2: a<=0 and
-A3: ex m st n=2*m+1;
-A4: n>=0+1 & -a<1 by A1,A3,XREAL_1:8,27;
+A2: a<=0;
+  assume n is odd;
+  then
+A3: ex m st n=2*m+1 by ABIAN:9;
+A4: n>=1 & -a<1 by A1,A3,XREAL_1:27,Lm1;
 A5: n-root (-a) < 1 by A2,A4,Th21;
 A6: -a <= n-root (-a) by A2,A4,Th21;
 A7: - n-root (-a) > -1 by A5,XREAL_1:26;
@@ -685,7 +705,8 @@ A2: n -Root a - 1 <= (a-1)/n by A1,PREPOWER:40;
 end;
 
 theorem Th24:
-  for s being Real_Sequence, a st a > 0 & (for n st n>=1 holds s.n = n-root a)
+  for s being Real_Sequence, a st a > 0 &
+  (for n st n>=1 holds s.n = n-root a)
   holds s is convergent & lim s = 1
 proof
   let s be Real_Sequence, a;
@@ -693,7 +714,7 @@ proof
 A1: a > 0 and
 A2: for n st n>=1 holds s.n = n-root a;
 A3: now
-    let n;
+    let n be Element of NAT;
     assume
 A4: n>=1;
     thus s.n = n-root a by A2,A4
@@ -1055,7 +1076,7 @@ A4:   a<0;
 end;
 
 theorem Th54:
-  a<>0 & (ex l st k = 2*l) implies (-a) to_power k = a to_power k
+  a<>0 & k is even implies (-a) to_power k = a to_power k
 proof
   assume
 A1: a<>0;
@@ -1092,12 +1113,13 @@ A6:   -a>0 by A5,XREAL_1:60;
 end;
 
 theorem
-  a<>0 & (ex l st k = 2*l + 1) implies (-a) to_power k = -(a to_power k)
+  a<>0 & k is odd implies (-a) to_power k = -(a to_power k)
 proof
   assume
 A1: a<>0;
-  given l such that
-A2: k=2*l + 1;
+  assume k is odd;
+  then consider l such that
+A2: k=2*l + 1 by ABIAN:1;
   reconsider l1=1 as Integer;
 A3: now per cases by A1;
     suppose
@@ -1315,7 +1337,8 @@ A78:      for n holds s.n = F(n) from SEQ_1:sch 1;
 A79:      for n st n>=1 holds s.n = n-root a1 by A78;
 A80:      s is convergent & lim s = 1 by A1,A79,Th24;
           consider n such that
-A81:      for m st m>=n holds abs(s.m - 1)<b/e-1 by A77,A80,SEQ_2:def 7;
+A81:      for m st m>=n holds abs(s.m - 1)<b/e-1
+          by A77,A80,SEQ_2:def 7;
           reconsider m = max(1,n) as Element of NAT by XXREAL_0:16;
 A82:      abs(s.m - 1)<b/e-1 by A81,XXREAL_0:25;
 A83:      abs(m-root a - 1)<b/e-1 by A78,A82;
@@ -1415,7 +1438,8 @@ A145:     for n holds s.n = F(n) from SEQ_1:sch 1;
 A146:     for n st n>=1 holds s.n = n-root (1/a1) by A145;
 A147:     s is convergent & lim s = 1 by A1,A146,Th24;
           consider n such that
-A148:     for m st m>=n holds abs(s.m - 1)<b/e-1 by A144,A147,SEQ_2:def 7;
+A148:     for m st m>=n holds abs(s.m - 1)<b/e-1
+          by A144,A147,SEQ_2:def 7;
           reconsider m = max(1,n) as Element of NAT by XXREAL_0:16;
 A149:     abs(s.m - 1)<b/e-1 by A148,XXREAL_0:25;
 A150:     abs(m-root (1/a) - 1)<b/e-1 by A145,A149;
@@ -1577,13 +1601,14 @@ A9:   log(a,c) = log(a,b);
 end;
 
 theorem
-  for s being Real_Sequence st for n holds s.n = (1 + 1/(n+1)) to_power (n+1 )
+  for s being Real_Sequence st
+  for n holds s.n = (1 + 1/(n+1)) to_power (n+1 )
   holds s is convergent
 proof
   let s be Real_Sequence such that
 A1: for n holds s.n = (1 + 1/(n+1)) to_power (n+1);
 A2: now
-    let n;
+    let n be Element of NAT;
 A3: (1+1/(n+1)) to_power (n+1) > 0 by Th39;
 A4: s.(n+1)/s.n =(1 + 1/(n+1+1)) to_power (n+1+1) / s.n by A1
       .=(1 + 1/(n+1+1)) to_power (n+1+1)/(1+1/(n+1)) to_power (n+1)*1 by A1
@@ -1677,7 +1702,8 @@ end;
 
 definition
   func number_e -> real number means
-  for s being Real_Sequence st for n holds s.n = (1 + 1/(n+1)) to_power (n+1 )
+  for s being Real_Sequence st
+  for n holds s.n = (1 + 1/(n+1)) to_power (n+1)
   holds it = lim s;
   existence
   proof
@@ -1688,7 +1714,7 @@ A1: for n holds s1.n = F(n) from SEQ_1:sch 1;
     let s be Real_Sequence such that
 A2: for n holds s.n = (1 + 1/(n+1)) to_power (n+1);
 A3: now
-      let n;
+      let n be Element of NAT;
       thus s1.n = (1 + 1/(n+1)) to_power (n+1) by A1
         .= s.n by A2;
     end;
@@ -1699,9 +1725,11 @@ A3: now
     let a,b;
     assume that
 A4: for s being Real_Sequence st
-    for n holds s.n = (1 + 1/(n+1)) to_power (n+1) holds a = lim s and
+    for n holds s.n = (1 + 1/(n+1)) to_power (n+1)
+    holds a = lim s and
 A5: for s being Real_Sequence st
-    for n holds s.n = (1 + 1/(n+1)) to_power (n+1) holds b = lim s;
+    for n holds s.n = (1 + 1/(n+1)) to_power (n+1)
+    holds b = lim s;
     deffunc F(Element of NAT) = (1 + 1/($1+1)) to_power ($1+1);
     consider s1 being Real_Sequence such that
 A6: for n holds s1.n = F(n) from SEQ_1:sch 1;

@@ -139,7 +139,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="374">
+<Func kind="K" nr="373">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -166,7 +166,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="374">
+<Func kind="K" nr="373">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -201,7 +201,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="377">
+<Func kind="K" nr="376">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -242,7 +242,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="377">
+<Func kind="K" nr="376">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -278,8 +278,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="365">
-<Func kind="K" nr="377">
+<Func kind="K" nr="364">
+<Func kind="K" nr="376">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <Func kind="K" nr="91"/>
@@ -314,7 +314,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="377">
+<Func kind="K" nr="376">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -363,7 +363,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="378">
+<Func kind="K" nr="377">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -412,7 +412,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="378">
+<Func kind="K" nr="377">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -463,7 +463,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="378">
+<Func kind="K" nr="377">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -512,7 +512,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="379">
+<Func kind="K" nr="378">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -561,7 +561,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="379">
+<Func kind="K" nr="378">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -612,7 +612,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="379">
+<Func kind="K" nr="378">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -654,7 +654,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="382">
+<Func kind="K" nr="381">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -697,7 +697,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="382">
+<Func kind="K" nr="381">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -722,17 +722,17 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="385">
+<Func kind="K" nr="384">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="188"/>
+<Func kind="K" nr="187"/>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="14">
-<Func kind="K" nr="188"/>
+<Func kind="K" nr="187"/>
 </Adjective>
 <Adjective nr="55"/>
 </Cluster>
@@ -746,25 +746,25 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="385">
+<Func kind="K" nr="384">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="188"/>
+<Func kind="K" nr="187"/>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="14">
-<Func kind="K" nr="188"/>
+<Func kind="K" nr="187"/>
 </Adjective>
 <Adjective nr="94"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_3" nr="18">
 <ArgTypes/>
-<Func kind="K" nr="365">
-<Func kind="K" nr="385">
+<Func kind="K" nr="364">
+<Func kind="K" nr="384">
 <Num nr="1"/>
 </Func>
 </Func>
@@ -787,8 +787,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="365">
-<Func kind="K" nr="385">
+<Func kind="K" nr="364">
+<Func kind="K" nr="384">
 <Func kind="K" nr="177">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -809,8 +809,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="365">
-<Func kind="K" nr="385">
+<Func kind="K" nr="364">
+<Func kind="K" nr="384">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -828,17 +828,17 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="386">
+<Func kind="K" nr="385">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="188"/>
+<Func kind="K" nr="187"/>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="14">
-<Func kind="K" nr="188"/>
+<Func kind="K" nr="187"/>
 </Adjective>
 <Adjective nr="55"/>
 <Adjective nr="94"/>

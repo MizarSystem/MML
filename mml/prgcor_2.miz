@@ -7,508 +7,48 @@
 environ
 
  vocabularies NUMBERS, NAT_1, XBOOLE_0, AFINSQ_1, SUBSET_1, TARSKI, CARD_1,
-      FUNCT_1, RELAT_1, ORDINAL1, FINSET_1, FINSEQ_1, XXREAL_0, ARYTM_3,
+      FUNCT_1, RELAT_1, ORDINAL1, FINSEQ_1, XXREAL_0, ARYTM_3,
       ARYTM_1, FUNCOP_1, ORDINAL4, REAL_1, INT_1, CARD_3, PARTFUN1, RVSUM_1,
       FINSEQ_2, PRGCOR_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, ORDINAL1,
-      ORDINAL4, REAL_1, NAT_1, FINSET_1, PARTFUN1, FINSEQ_1, FUNCOP_1, SEQ_1,
+      ORDINAL4, REAL_1, NAT_1, PARTFUN1, FINSEQ_1, FUNCOP_1, SEQ_1,
       AFINSQ_1, INT_1, RVSUM_1, NAT_D, FINSEQ_2, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, PARTFUN1, NAT_D, AFINSQ_1, SEQ_1,
-      BINOP_2, INT_1, VALUED_1, RVSUM_1, RELSET_1, ORDINAL4;
+      BINOP_2, INT_1, VALUED_1, RVSUM_1, RELSET_1, ORDINAL4, FUNCOP_1,
+      FUNCT_7;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
       MEMBERED, FINSEQ_1, AFINSQ_1, XBOOLE_0, VALUED_0, FINSEQ_2, CARD_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI;
- theorems TARSKI, FUNCT_1, NAT_1, ZFMISC_1, RELAT_1, ORDINAL1, FINSEQ_1,
-      FUNCOP_1, ORDINAL3, AFINSQ_1, RVSUM_1, FINSEQ_4, FINSEQ_2, XREAL_1,
+ theorems FUNCT_1, NAT_1, RELAT_1, ORDINAL1, FINSEQ_1,
+      FUNCOP_1, AFINSQ_1, RVSUM_1, FINSEQ_4, FINSEQ_2, XREAL_1,
       XXREAL_0, PARTFUN1, VALUED_1, XREAL_0, FINSEQ_5;
- schemes NAT_1, FINSEQ_1, AFINSQ_1;
+ schemes NAT_1, AFINSQ_1;
 
 begin
 
 reserve k,m,n,i for Nat;
-
-registration
-  let D be non empty set;
-  cluster non empty XFinSequence of D;
-  existence
-  proof
-    consider d being Element of D;
-A1: {d} c= D
-    proof
-      let x be set;
-      assume
-      x in {d};
-      then x=d by TARSKI:def 1;
-      hence thesis;
-    end;
-    for x,y1,y2 being set st [x,y1] in {[0,d]} & [x,y2] in {[0,d]} holds
-    y1 = y2
-    proof
-      let x,y1,y2 be set;
-      assume
-      [x,y1] in {[0,d]} & [x,y2] in {[0,d]};
-      then [x,y1]=[0,d] & [x,y2]=[0,d] by TARSKI:def 1;
-      hence thesis by ZFMISC_1:33;
-    end;
-    then reconsider f={[0,d]} as Function by FUNCT_1:def 1,RELAT_1:4;
-A2: dom f=1 by ORDINAL3:18,RELAT_1:23;
-    then reconsider p= {[0,d]} as T-Sequence by ORDINAL1:def 7;
-    rng p={d} by RELAT_1:23;
-    then p is finite T-Sequence of D by A2,A1,AFINSQ_1:7,RELAT_1:def 19;
-    hence thesis;
-  end;
-end;
-
-canceled;
-
 reserve D for non empty set;
 
-theorem Th2:
-  for f being non empty XFinSequence of D holds len f >0 by AFINSQ_1:18;
+canceled 5;
 
-definition
-  let D be set,q be FinSequence of D;
-  func FS2XFS q -> XFinSequence of D means
-  :Def1:
-  len it=len q & for i st i<
-  len q holds q.(i+1)=it.i;
-  existence
-  proof
-    deffunc F(Nat) =q.($1 +1);
-    ex p being XFinSequence st len p = len q & for k being Element of NAT
-    st k in len q holds p.k=F(k) from AFINSQ_1:sch 2;
-    then consider p being XFinSequence such that
-A1: len p = len q and
-A2: for k being Element of NAT st k in len q holds p.k=F(k);
-    rng p c= D
-    proof
-      let y be set;
-A3:   rng q c= D by FINSEQ_1:def 4;
-      assume
-      y in rng p;
-      then consider x being set such that
-A4:   x in dom p and
-A5:   y=p.x by FUNCT_1:def 5;
-      reconsider nx=x as Element of NAT by A4;
-      nx<len q by A1,A4,NAT_1:45;
-      then
-A6:   nx+1<=len q by NAT_1:13;
-      0+1<=nx+1 by NAT_1:13;
-      then nx+1 in Seg len q by A6,FINSEQ_1:3;
-      then nx+1 in dom q by FINSEQ_1:def 3;
-      then
-A7:   q.(nx+1) in rng q by FUNCT_1:def 5;
-      p.nx= q.(nx +1) by A1,A2,A4;
-      hence thesis by A5,A7,A3;
-    end;
-    then
-A8: p is XFinSequence of D by RELAT_1:def 19;
-    for i being Nat st i<len q holds q.(i+1)=p.i
-    proof
-      let i be Nat;
-      assume
-      i<len q;
-      then i in NAT & i in len q by NAT_1:45,ORDINAL1:def 13;
-      hence thesis by A2;
-    end;
-    hence thesis by A1,A8;
-  end;
-  uniqueness
-  proof
-    thus for p1,p2 being XFinSequence of D st (len p1=len q & for i st i<len q
-holds q.(i+1)=p1.i)& (len p2=len q & for i st i<len q holds q.(i+1)=p2.i) holds
-    p1=p2
-    proof
-      let p1,p2 be XFinSequence of D;
-      assume that
-A9:   len p1=len q and
-A10:  for i st i<len q holds q.(i+1)=p1.i and
-A11:  len p2=len q and
-A12:  for i st i<len q holds q.(i+1)=p2.i;
-      for i be Element of NAT st i<len p1 holds p1.i=p2.i
-      proof
-        let i be Element of NAT;
-        assume
-A13:    i<len p1;
-        then q.(i+1)=p1.i by A9,A10;
-        hence thesis by A9,A12,A13;
-      end;
-      hence thesis by A9,A11,AFINSQ_1:11;
-    end;
-  end;
-end;
+Th5:
+  for p being XFinSequence of D st p.0=0 & 0<len p holds
+  XFS2FS*(p)={} by AFINSQ_1:68;
 
-definition
-  let D be set,q be XFinSequence of D;
-  func XFS2FS q -> FinSequence of D means
-  len it=len q & for i st 1<=i & i<=
-  len q holds q.(i-'1)=it.i;
-  existence
-  proof
-    deffunc F(Nat) =q.($1-'1);
-    ex p being FinSequence st len p = len q & for k being Nat st k in dom
-    p holds p.k=F(k) from FINSEQ_1:sch 2;
-    then consider p being FinSequence such that
-A1: len p = len q and
-A2: for k being Nat st k in dom p holds p.k=F(k);
-    rng p c= D
-    proof
-      let y be set;
-A3:   rng q c= D by RELAT_1:def 19;
-      assume
-      y in rng p;
-      then consider x being set such that
-A4:   x in dom p and
-A5:   y=p.x by FUNCT_1:def 5;
-      reconsider nx=x as Element of NAT by A4;
-A6:   nx in Seg len q by A1,A4,FINSEQ_1:def 3;
-      then 1<=nx by FINSEQ_1:3;
-      then nx-1>=0 by XREAL_1:50;
-      then
-A7:   nx-1=nx-'1 by XREAL_0:def 2;
-A8:   nx-'1<nx-'1+1 by NAT_1:13;
-      nx<=len q by A6,FINSEQ_1:3;
-      then nx-'1<len q by A7,A8,XXREAL_0:2;
-      then nx-'1 in dom q by NAT_1:45;
-      then
-A9:   q.(nx-'1) in rng q by FUNCT_1:def 5;
-      p.nx= q.(nx -'1) by A2,A4;
-      hence thesis by A5,A9,A3;
-    end;
-    then
-A10: p is FinSequence of D by FINSEQ_1:def 4;
-A11: dom p = Seg len q by A1,FINSEQ_1:def 3;
-    for i st 1<=i & i<=len q holds q.(i-'1)=p.i
-    proof
-      let i;
-      assume
-      1<=i & i<=len q;
-      then i in Seg len q by FINSEQ_1:3;
-      hence thesis by A2,A11;
-    end;
-    hence thesis by A1,A10;
-  end;
-  uniqueness
-  proof
-    thus for p1,p2 being FinSequence of D st (len p1=len q & for i st 1<=i & i
-<=len q holds q.(i-'1)=p1.i)& (len p2=len q & for i st 1<=i & i<=len q holds q.
-    (i-'1)=p2.i) holds p1=p2
-    proof
-      let p1,p2 be FinSequence of D;
-      assume that
-A12:  len p1=len q and
-A13:  for i st 1<=i & i<=len q holds q.(i-'1)=p1.i and
-A14:  len p2=len q and
-A15:  for i st 1<=i & i<=len q holds q.(i-'1)=p2.i;
-      for i be Nat st 1<=i & i<=len p1 holds p1.i=p2.i
-      proof
-        let i be Nat;
-        assume
-A16:    1<=i & i<=len p1;
-        then q.(i-'1)=p1.i by A12,A13;
-        hence thesis by A12,A15,A16;
-      end;
-      hence thesis by A12,A14,FINSEQ_1:18;
-    end;
-  end;
-end;
-
-theorem Th3:
-  for k being Nat,a being set holds k --> a is XFinSequence
-proof
-  let k be Nat,a be set;
-  reconsider p = (k --> a) as Function;
-  k in NAT & dom p = k by FUNCOP_1:19,ORDINAL1:def 13;
-  hence thesis by AFINSQ_1:7;
-end;
-
-theorem Th4:
-  for D being set, n being Nat, r being set st r in D holds (n-->r)
-  is XFinSequence of D
-proof
-  let D be set, n be Nat, r be set;
-  reconsider p=(n-->r) as XFinSequence by Th3;
-  assume
-A1: r in D;
-  now
-    per cases;
-    case
-      n<>0;
-      then
-A2:   rng p={r} by FUNCOP_1:14;
-      rng p c= D
-      proof
-        let x be set;
-        assume
-        x in rng p;
-        hence thesis by A1,A2,TARSKI:def 1;
-      end;
-      hence thesis by RELAT_1:def 19;
-    end;
-    case
-      n=0;
-      then (n-->r)={};
-      hence thesis by AFINSQ_1:19;
-    end;
-  end;
-  hence thesis;
-end;
-
-definition
-  let D;
-  let q be FinSequence of D, n be Nat;
-  assume that
-A1: n>len q and
-A2: NAT c= D;
-  func FS2XFS*(q,n) -> non empty XFinSequence of D means
-  :Def3:
-  len q = it.0 &
-len it=n & (for i st 1<=i & i<= len q holds it.i=q.i)& for j being Nat st len q
-  <j & j<n holds it.j=0;
-  existence
-  proof
-    len q in NAT;
-    then reconsider x=len q as Element of D by A2;
-    0 in NAT;
-    then reconsider r=0 as Element of D by A2;
-    reconsider q5= ((n-'len q-'1)-->r) as XFinSequence of D by Th4;
-    <%x%> ^ (FS2XFS q) <>{} by AFINSQ_1:33;
-    then reconsider
-    p0=<%x%> ^ (FS2XFS q)^q5 as non empty XFinSequence of D by AFINSQ_1:33;
-    0 in 1 by NAT_1:45;
-    then
-A3: 0 in dom (<%x%>) by AFINSQ_1:def 5;
-A4: len <%x%>=1 by AFINSQ_1:def 5;
-    then 0 in len <%x%> + len (FS2XFS q) by NAT_1:45;
-    then 0 in len (<%x%> ^ (FS2XFS q)) by AFINSQ_1:20;
-    then
-A5: p0.0=(<%x%> ^ (FS2XFS q)).0 by AFINSQ_1:def 4
-      .=(<%x%>).0 by A3,AFINSQ_1:def 4
-      .=x by AFINSQ_1:def 5;
-A6: for i st 1<=i & i<= len q holds p0.i=q.i
-    proof
-      let i;
-      assume that
-A7:   1<=i and
-A8:   i<= len q;
-      i-1>=0 by A7,XREAL_1:50;
-      then
-A9:   i-'1=i-1 by XREAL_0:def 2;
-      i<i+1 by NAT_1:13;
-      then i-1<i+1-1 by XREAL_1:11;
-      then
-A10:  i-'1 <len q by A8,A9,XXREAL_0:2;
-      then i-'1 in len q by NAT_1:45;
-      then
-A11:  i-'1 in len (FS2XFS q) by Def1;
-      i<1+len q by A8,NAT_1:13;
-      then i< (len (<%x%>)+len (FS2XFS q)) by A4,Def1;
-      then i in (len (<%x%>)+len (FS2XFS q)) by NAT_1:45;
-      then i in len (<%x%> ^ (FS2XFS q)) by AFINSQ_1:20;
-      then p0.i =(<%x%>^(FS2XFS q)).(1+(i-'1)) by A9,AFINSQ_1:def 4
-        .=(FS2XFS q).(i-'1) by A4,A11,AFINSQ_1:def 4
-        .=q.(i-'1+1) by A10,Def1
-        .=q.i by A9;
-      hence thesis;
-    end;
-A12: n-len q>0 by A1,XREAL_1:52;
-    then
-A13: n-'len q=n-len q by XREAL_0:def 2;
-    then n-'len q>=0+1 by A12,NAT_1:13;
-    then
-A14: n-'len q -1>=0 by XREAL_1:50;
-A15: len q5=(n-'len q-'1) by FUNCOP_1:19;
-A16: for j being Nat st len q<j & j<n holds p0.j=0
-    proof
-      let j be Nat;
-      assume that
-A17:  len q<j and
-A18:  j<n;
-A19:  len (<%x%> ^ (FS2XFS q)) =len (<%x%>) + len (FS2XFS q) by AFINSQ_1:20
-        .=1+len q by A4,Def1;
-      len q<n by A17,A18,XXREAL_0:2;
-      then
-A20:  n-len q>0 by XREAL_1:52;
-      then
-A21:  n-'len q=n-len q by XREAL_0:def 2;
-      then n-len q>=0+1 by A20,NAT_1:13;
-      then n-'len q-1>=0 by A21,XREAL_1:50;
-      then
-A22:  n-'len q-'1 =n-(len q+1) by A21,XREAL_0:def 2;
-      1+len q<=j by A17,NAT_1:13;
-      then j-(1+len q)>=0 by XREAL_1:50;
-      then
-A23:  j-'(1+len q)=j-(1+len q) by XREAL_0:def 2;
-      j-(len q+1)< n-(len q+1) by A18,XREAL_1:11;
-      then
-A24:  j-'len (<%x%> ^ (FS2XFS q)) in (n-'len q-'1) by A19,A23,A22,NAT_1:45;
-      j =len (<%x%> ^ (FS2XFS q))+(j-'len (<%x%> ^ (FS2XFS q))) by A19,A23;
-      then p0.j=q5.(j-'len (<%x%> ^ (FS2XFS q))) by A15,A24,AFINSQ_1:def 4
-        .=0 by A24,FUNCOP_1:13;
-      hence thesis;
-    end;
-    len p0=len (<%x%> ^ (FS2XFS q)) + len q5 by AFINSQ_1:20
-      .=len <%x%> + len (FS2XFS q) + len q5 by AFINSQ_1:20
-      .= 1 + len (FS2XFS q) + len q5 by AFINSQ_1:36
-      .=1 + len q + len q5 by Def1
-      .=1+len q+(n-'len q-'1) by FUNCOP_1:19
-      .=(n-(len q+1))+(len q+1) by A13,A14,XREAL_0:def 2
-      .=n;
-    hence thesis by A5,A6,A16;
-  end;
-  uniqueness
-  proof
-    let p1,p2 be non empty XFinSequence of D;
-    assume that
-A25: len q = (p1.0) and
-A26: len p1=n and
-A27: for i st 1<=i & i<= len q holds p1.i=q.i and
-A28: for j being Nat st len q<j & j<n holds p1.j=0 and
-A29: len q = (p2.0) and
-A30: len p2=n and
-A31: for i st 1<=i & i<= len q holds p2.i=q.i and
-A32: for j being Nat st len q<j & j<n holds p2.j=0;
-    for i be Element of NAT st i<n holds p1.i=p2.i
-    proof
-      let i be Element of NAT;
-      assume
-      i<n;
-      then
-A33:  i<0+1 or 1<=i & i<=len q or len q<i & i<n;
-      now
-        per cases by A33,NAT_1:13;
-        case
-          i=0;
-          hence thesis by A25,A29;
-        end;
-        case
-A34:      1<=i & i<=len q;
-          then p1.i=q.i by A27;
-          hence thesis by A31,A34;
-        end;
-        case
-A35:      len q<i & i<n;
-          then p1.i=0 by A28;
-          hence thesis by A32,A35;
-        end;
-      end;
-      hence thesis;
-    end;
-    hence thesis by A26,A30,AFINSQ_1:11;
-  end;
-end;
-
-definition
-  let D;
-  let p be non empty XFinSequence of D;
-  assume that
-A1: p.0 is Nat and
-A2: p.0 in len p;
-  func XFS2FS*(p) -> FinSequence of D means
-  :Def4:
-  for m st m = p.0 holds len
-  it =m & for i st 1<=i & i<= m holds it.i=p.i;
-  existence
-  proof
-    reconsider m0=p.0 as Element of NAT by A1,ORDINAL1:def 13;
-    deffunc F(set)= p.$1;
-    ex q being FinSequence st len q = m0 & for k being Nat st k in dom q
-    holds q.k=F(k) from FINSEQ_1:sch 2;
-    then consider q being FinSequence such that
-A3: len q = m0 and
-A4: for k being Nat st k in dom q holds q.k=F(k);
-    rng q c= D
-    proof
-A5:   m0 < len p by A2,NAT_1:45;
-      let y be set;
-      assume
-      y in rng q;
-      then consider x being set such that
-A6:   x in dom q and
-A7:   y=q.x by FUNCT_1:def 5;
-      reconsider k0=x as Element of NAT by A6;
-      k0 in Seg m0 by A3,A6,FINSEQ_1:def 3;
-      then k0<=m0 by FINSEQ_1:3;
-      then k0 < len p by A5,XXREAL_0:2;
-      then
-A8:   k0 in dom p by NAT_1:45;
-      y=p.k0 by A4,A6,A7;
-      then rng p c= D & y in rng p by A8,FUNCT_1:def 5,RELAT_1:def 19;
-      hence thesis;
-    end;
-    then reconsider q0=q as FinSequence of D by FINSEQ_1:def 4;
-A9: dom q = Seg m0 by A3,FINSEQ_1:def 3;
-    for m st m = (p.0) holds len q0 =m & for i st 1<=i & i<= m holds q0.i
-    =p.i
-    proof
-      let m;
-A10:  for i st 1<=i & i<= m0 holds q0.i=p.i
-      proof
-        let i;
-        assume
-        1<=i & i<= m0;
-        then i in Seg m0 by FINSEQ_1:3;
-        hence thesis by A4,A9;
-      end;
-      assume
-      m = p.0;
-      hence thesis by A3,A10;
-    end;
-    hence thesis;
-  end;
-  uniqueness
-  proof
-    reconsider m2=(p.0) as Nat by A1;
-    let g1,g2 be FinSequence of D;
-    assume that
-A11: for m st m = p.0 holds len g1 =m & for i st 1<=i & i<= m holds g1
-    .i=p. i and
-A12: for m st m = p.0 holds len g2 =m & for i st 1<=i & i<= m holds g2
-    . i=p.i;
-A13: len g1=m2 by A11;
-A14: for i be Nat st 1<=i & i<=len g1 holds g1.i=g2.i
-    proof
-      let i be Nat;
-      assume
-A15:  1<=i & i<=len g1;
-      then g1.i=p.i by A11,A13;
-      hence thesis by A12,A13,A15;
-    end;
-    len g2=m2 by A12;
-    hence thesis by A11,A14,FINSEQ_1:18;
-  end;
-end;
-
-theorem Th5:
-  for p being non empty XFinSequence of D st p.0=0 & 0<len p holds
-  XFS2FS*(p)={}
-proof
-  let p be non empty XFinSequence of D;
-  assume that
-A1: (p.0)=0 and
-A2: 0<len p;
-  set q= XFS2FS*(p);
-  0 in len p by A2,NAT_1:45;
-  then len q=0 by A1,Def4;
-  then q=<*>(D);
-  hence thesis;
-end;
-
-definition
-  let D;
+definition let D;
+  canceled 4;
   let p be XFinSequence of D, q be FinSequence of D;
-  pred p is_an_xrep_of q means
-  :Def5:
+  pred p is_an_xrep_of q means  :Def5:
   NAT c= D & (p.0)=len q & len q < len p &
   for i st 1<=i & i<=len q holds p.i=q.i;
 end;
 
 theorem
-  for p being non empty XFinSequence of D st NAT c= D & (p.0) is Nat & (
-  p.0) in len p holds p is_an_xrep_of (XFS2FS*(p))
+  for p being XFinSequence of D st NAT c= D &
+  (p.0) is Nat & (p.0) in len p holds p is_an_xrep_of (XFS2FS*(p))
 proof
-  let p be non empty XFinSequence of D;
+  let p be XFinSequence of D;
   assume that
 A1: NAT c= D and
 A2: (p.0) is Nat and
@@ -516,14 +56,13 @@ A3: (p.0) in len p;
   reconsider m0=(p.0) as Nat by A2;
 A4: m0<len p by A3,NAT_1:45;
   len (XFS2FS*(p)) =m0 & for i st 1<=i & i<= m0 holds (XFS2FS*(p)).i=p.i
-  by A3,Def4;
+  by A3,AFINSQ_1:def 12;
   hence thesis by A1,A4,Def5;
 end;
 
 definition
   let x,y,a,b,c be set;
-  func IFLGT(x,y,a,b,c) -> set equals
-  :Def6:
+  func IFLGT(x,y,a,b,c) -> set equals :Def6:
   a if x in y, b if x = y otherwise
   c;
   correctness;
@@ -544,16 +83,15 @@ A3: d2 in D and
 A4: d2=len q by A1;
   reconsider d=d2 as Element of D by A3;
   deffunc F(set)= IFEQ($1,0,d,IFLGT($1,len q,q.$1,q.$1,d));
-  ex p being XFinSequence st len p = n & for k being Element of NAT st k
+  ex p being XFinSequence st len p = n & for k be Nat st k
   in n holds p.k=F(k) from AFINSQ_1:sch 2;
   then consider p being XFinSequence such that
 A5: len p = n and
-A6: for k be Element of NAT st k in n holds p.k=F(k);
+A6: for k be Nat st k in n holds p.k=F(k);
   rng p c= D
   proof
     let y be set;
-    assume
-    y in rng p;
+    assume y in rng p;
     then consider x being set such that
 A7: x in dom p and
 A8: y=p.x by FUNCT_1:def 5;
@@ -579,8 +117,7 @@ A12:        x in len q;
 A13:        kx<len q by NAT_1:45;
             0+1<=kx by A10,NAT_1:13;
             then kx in Seg len q by A13,FINSEQ_1:3;
-            then x in dom q by FINSEQ_1:def 3;
-            then
+            then x in dom q by FINSEQ_1:def 3; then
 A14:        q.x in rng q by FUNCT_1:def 5;
 A15:        rng q c= D by FINSEQ_1:def 4;
             F(x)=q.x by A11,A12,Def6;
@@ -622,9 +159,9 @@ A22: i in len q or i=len q by NAT_1:45;
     i<n by A2,A21,XXREAL_0:2;
     then
 A23: i in n by NAT_1:45;
-A24: i in NAT by ORDINAL1:def 13;
+    i in NAT by ORDINAL1:def 13;
     hence p2.i=p.i by A20,AFINSQ_1:48
-      .=F(i) by A6,A23,A24
+      .=F(i) by A6,A23
       .=IFLGT(i,len q,q.i,q.i,d) by A20,FUNCOP_1:def 8
       .=q.i by A22,Def6;
   end;
@@ -658,7 +195,7 @@ A2: b.0 < len a;
   Nat st i<n holds s.(i+1)=s.i + (a.(i+1))*(b.(i+1)) ) & it=s.n;
   existence
   proof
-    reconsider q0=<%0 qua Element of REAL %> as XFinSequence of REAL;
+    reconsider q0=<%0%> as XFinSequence of REAL;
     set n2=len a;
     reconsider nn2=b.0 as Nat by A1;
     reconsider nn=nn2 as Integer;
@@ -669,15 +206,14 @@ A4: for k be natural number st P[k] holds P[k + 1]
     proof
       let k be natural number;
       reconsider k0=k as Nat;
-      assume
-      P[k];
+      assume P[k];
       then consider q2 being XFinSequence of REAL such that
 A5:   len q2= k+1 and
 A6:   q2.0=0 and
 A7:   for k2 being Nat st k2<k & k2<nn2 holds q2.(k2+1) =q2.k2+(a.(k2
       +1)) *(b.(k2+1));
-      reconsider q3=q2^<% q2.k0+(a.(k0+1))*(b.(k0+1)) %> as XFinSequence of
-      REAL;
+      reconsider qab=q2.k0+(a.(k0+1))*(b.(k0+1)) as Real;
+      set q3=q2^<% qab %>;
       0 in len q2 by A5,NAT_1:45;
       then
 A8:   q3.0 =0 by A6,AFINSQ_1:def 4;
@@ -707,7 +243,7 @@ A15:        k2=k;
             0 in 1 by NAT_1:45;
             then
             (<% q2.k0+(a.(k0+1))*(b.(k0+1)) %>).0 = q2.k0+(a.(k0+1))*(b.(
-k0+1)) & 0 in dom (<% q2.k0+(a.(k0+1))*(b.(k0+1)) %>) by AFINSQ_1:38,def 5;
+k0+1)) & 0 in dom (<% q2.k0+(a.(k0+1))*(b.(k0+1)) %>) by AFINSQ_1:def 5;
             then
 A16:        q3.(k2+1+0) =q2.(k0)+(a.(k0+1))*(b.(k0+1)) by A5,A15,AFINSQ_1:def 4
 ;
@@ -796,9 +332,7 @@ A32:  for k being Nat st P2[k] holds P2[k+1]
         assume
 A33:    P2[k];
         now
-          assume
-          k+1<=n;
-          then
+          assume k+1<=n; then
 A34:      k<n by NAT_1:13;
           then s1.(k+1)=s1.k + (a.(k+1))*(b.(k+1)) by A26;
           hence s1.(k+1)=s2.(k+1) by A25,A29,A30,A33,A34;
@@ -873,11 +407,11 @@ st len s=len a +1 & s.0=0 & (for i st i<len a holds s.(i+1)=s.i+a.(i+1)) & Sum
 proof
   let a be FinSequence of REAL;
   deffunc F(Nat) = Sum (a|$1);
-  ex p being XFinSequence st len p = len a +1 & for k being Element of NAT
+  ex p being XFinSequence st len p = len a +1 & for k be Nat
   st k in len a+1 holds p.k=F(k) from AFINSQ_1:sch 2;
   then consider p being XFinSequence such that
 A1: len p = len a +1 and
-A2: for k being Element of NAT st k in len a+1 holds p.k=F(k);
+A2: for k be Nat st k in len a+1 holds p.k=F(k);
   rng p c= REAL
   proof
     let y be set;
@@ -937,8 +471,8 @@ A2: n2>len a;
   set ri= inner_prd_prg(FS2XFS*(a,n2),FS2XFS*(b,n2));
   set pa= FS2XFS*(a,n2);
   set pb= FS2XFS*(b,n2);
-A3: len b = (pb.0) by A1,A2,Def3;
-  len pa=n2 by A2,Def3;
+A3: len b = (pb.0) by A1,A2,AFINSQ_1:def 11;
+  len pa=n2 by A2,AFINSQ_1:def 11;
   then consider s being XFinSequence of REAL, n being Integer such that
   len s=len pa and
 A4: s.0=0 and
@@ -947,8 +481,6 @@ A6: n<>0 implies for i being Nat st i<n holds s.(i+1)=s.i + (pa.(i+1))*
   (pb.(i+1)) and
 A7: ri=s.n by A1,A2,A3,Def7;
 A8: len mlt(ra,rb)=len a by FINSEQ_1:def 18;
-  then
-A9: dom mlt(ra,rb) =Seg len a by FINSEQ_1:def 3;
   for i st i<len mlt(a,b) holds s.(i+1)=s.i+(mlt(a,b)).(i+1)
   proof
     let i;
@@ -956,21 +488,17 @@ A9: dom mlt(ra,rb) =Seg len a by FINSEQ_1:def 3;
 A10: i<len mlt(a,b);
     then
 A11: 1<=i+1 & i+1<=len a by A8,NAT_1:11,13;
-    then
-A12: i+1 in dom(mlt(a,b)) by A9,FINSEQ_1:3;
-A13: pa.(i+1)=a.(i+1) & pb.(i+1)=b.(i+1) by A1,A2,A11,Def3;
-A14: i<n by A1,A2,A5,A8,A10,Def3;
+A13: pa.(i+1)=a.(i+1) & pb.(i+1)=b.(i+1) by A1,A2,A11,AFINSQ_1:def 11;
+A14: i<n by A1,A2,A5,A8,A10,AFINSQ_1:def 11;
     now
       per cases;
-      case
-        n<>0;
+      case n<>0;
         s.(i+1)=s.i + (pa.(i+1))*(pb.(i+1)) by A6,A14
-          .=s.i+(mlt(a,b)).(i+1) by A13,A12,RVSUM_1:86;
+          .=s.i+(mlt(a,b)).(i+1) by A13,RVSUM_1:86;
         hence thesis;
       end;
-      case
-        n=0;
-        hence contradiction by A1,A2,A5,A8,A10,Def3;
+      case n=0;
+        hence contradiction by A1,A2,A5,A8,A10,AFINSQ_1:def 11;
       end;
     end;
     hence thesis;
@@ -1032,13 +560,13 @@ A3: b.0 < m;
   then
 A4: Seg len (a*(XFS2FS*(b)))= dom (XFS2FS*(b)) by FINSEQ_1:def 3;
 A5: b.0 in m by A1,A3,NAT_1:45;
-  then len (XFS2FS*(b)) = b.0 by A2,Def4;
+  then len (XFS2FS*(b)) = b.0 by A2,AFINSQ_1:def 12;
   then
 A6: len c2 =k by A4,FINSEQ_1:def 3;
   then consider p being XFinSequence of REAL such that
 A7: len p=m and
 A8: p is_an_xrep_of c2 by A3,Th7;
-  set p2=Replace(p,0,b.0);
+  reconsider p2=Replace(p,0,b.0) as XFinSequence of REAL;
 A9: now
     assume
     k<>0;
@@ -1048,7 +576,7 @@ A9: now
       assume that
 A10:  1<=i and
 A11:  i<=k;
-      (XFS2FS*(b)).i= b.i by A2,A5,A10,A11,Def4;
+      (XFS2FS*(b)).i= b.i by A2,A5,A10,A11,AFINSQ_1:def 12;
       then
 A12:  (a*(XFS2FS*(b))).i = a*(b.i) by RVSUM_1:66;
       i in NAT & p.i=c2.i by A6,A8,A10,A11,Def5,ORDINAL1:def 13;
@@ -1058,15 +586,13 @@ A12:  (a*(XFS2FS*(b))).i = a*(b.i) by RVSUM_1:66;
   len p=len p2 & p2.0=b.0 by A1,A3,A7,AFINSQ_1:48;
   then m scalar_prd_prg p2,a,b by A2,A7,A9,Def8;
   hence ex c being XFinSequence of REAL st m scalar_prd_prg c,a,b;
-A13: 0 < len b by Th2;
+A13: 0 < len b;
   thus for c being non empty XFinSequence of REAL st m scalar_prd_prg c,a,b
   holds (XFS2FS*(c))=a*(XFS2FS*(b))
   proof
     let c be non empty XFinSequence of REAL;
     assume
 A14: m scalar_prd_prg c,a,b;
-    then
-A15: len b =m by Def8;
     consider n being Integer such that
 A16: c.0=b.0 and
 A17: n=b.0 and
@@ -1074,13 +600,14 @@ A18: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i=a*(b.i) by A14,Def8;
 A19: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
     i being Nat st 1<=i & i<=n holds c.i=a*(b.i)) by A14,Def8;
     then
-A20: len (XFS2FS*(c)) = (c.0) by A5,Def4;
+A20: len (XFS2FS*(c)) = (c.0) by A5,AFINSQ_1:def 12;
     now
       per cases;
       case
         n=0;
         then
-        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL by A13,A15,A19,A17,Th5;
+        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL
+          by A13,A19,A17,AFINSQ_1:68;
         hence thesis by RVSUM_1:68;
       end;
       case
@@ -1094,11 +621,11 @@ A21:      1 <=k3 and
 A22:      k3 <= len p3;
 A23:      (c.0) in len c by A1,A3,A19,NAT_1:45;
           then
-A24:      k3 <= n by A16,A17,A22,Def4;
+A24:      k3 <= n by A16,A17,A22,AFINSQ_1:def 12;
           then
-A25:      b.k3 = (XFS2FS*(b)).k3 by A2,A5,A17,A21,Def4;
-          len p3=n by A16,A17,A23,Def4;
-          then p3.k3=c.k3 by A16,A17,A21,A22,A23,Def4
+A25:      b.k3 = (XFS2FS*(b)).k3 by A2,A5,A17,A21,AFINSQ_1:def 12;
+          len p3=n by A16,A17,A23,AFINSQ_1:def 12;
+          then p3.k3=c.k3 by A16,A17,A21,A22,A23,AFINSQ_1:def 12
             .=a*(b.k3) by A18,A21,A24;
           hence thesis by A25,RVSUM_1:66;
         end;
@@ -1148,13 +675,13 @@ A3: b.0 < m;
   then
 A4: Seg len ( -(XFS2FS*(b)))= dom (XFS2FS*(b)) by FINSEQ_1:def 3;
 A5: b.0 in m by A1,A3,NAT_1:45;
-  then len (XFS2FS*(b)) = b.0 by A2,Def4;
+  then len (XFS2FS*(b)) = b.0 by A2,AFINSQ_1:def 12;
   then
 A6: len c2 =k by A4,FINSEQ_1:def 3;
   then consider p being XFinSequence of REAL such that
 A7: len p=m and
 A8: p is_an_xrep_of c2 by A3,Th7;
-  set p2=Replace(p,0,b.0);
+  reconsider p2=Replace(p,0,b.0) as XFinSequence of REAL;
 A9: k<>0 implies for i being Nat st 1<=i & i<=k holds p2.i= -(b.i)
   proof
     assume
@@ -1163,7 +690,7 @@ A9: k<>0 implies for i being Nat st 1<=i & i<=k holds p2.i= -(b.i)
     assume that
 A10: 1<=i and
 A11: i<=k;
-    (XFS2FS*(b)).i= b.i by A2,A5,A10,A11,Def4;
+    (XFS2FS*(b)).i= b.i by A2,A5,A10,A11,AFINSQ_1:def 12;
     then
 A12: ( -(XFS2FS*(b))).i = -(b.i) by RVSUM_1:35;
     i in NAT & p.i=c2.i by A6,A8,A10,A11,Def5,ORDINAL1:def 13;
@@ -1172,15 +699,13 @@ A12: ( -(XFS2FS*(b))).i = -(b.i) by RVSUM_1:35;
   len p=len p2 & p2.0=b.0 by A1,A3,A7,AFINSQ_1:48;
   then m vector_minus_prg p2,b by A2,A7,A9,Def9;
   hence ex c being XFinSequence of REAL st m vector_minus_prg c,b;
-A13: 0 < len b by Th2;
+A13: 0 < len b;
   thus for c being non empty XFinSequence of REAL st m vector_minus_prg c,b
   holds (XFS2FS*(c))= -(XFS2FS*(b))
   proof
     let c be non empty XFinSequence of REAL;
     assume
 A14: m vector_minus_prg c,b;
-    then
-A15: len b =m by Def9;
     consider n being Integer such that
 A16: c.0=b.0 and
 A17: n=b.0 and
@@ -1188,13 +713,13 @@ A18: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i= -(b.i) by A14,Def9;
 A19: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
     i being Nat st 1<=i & i<=n holds c.i= -(b.i)) by A14,Def9;
     then
-A20: len (XFS2FS*(c)) = (c.0) by A5,Def4;
+A20: len (XFS2FS*(c)) = (c.0) by A5,AFINSQ_1:def 12;
     now
       per cases;
       case
 A21:    n=0;
-        then (XFS2FS*(b))=<*>REAL by A13,A17,Th5;
-        hence thesis by A13,A15,A19,A17,A21,Th5,RVSUM_1:37;
+        then (XFS2FS*(b))=<*>REAL by A13,A17,AFINSQ_1:68;
+        hence thesis by A19,A17,A21,AFINSQ_1:68,RVSUM_1:37;
       end;
       case
         n<>0;
@@ -1204,12 +729,12 @@ A21:    n=0;
           let k3 be Nat;
 A22:      (c.0) in len c by A1,A3,A19,NAT_1:45;
           then
-A23:      len p3=n by A16,A17,Def4;
+A23:      len p3=n by A16,A17,AFINSQ_1:def 12;
           assume
 A24:      1 <=k3 & k3 <= len p3;
           then
-A25:      b.k3 = (XFS2FS*b).k3 by A2,A5,A17,A23,Def4;
-          p3.k3=c.k3 by A16,A17,A24,A22,A23,Def4
+A25:      b.k3 = (XFS2FS*b).k3 by A2,A5,A17,A23,AFINSQ_1:def 12;
+          p3.k3=c.k3 by A16,A17,A24,A22,A23,AFINSQ_1:def 12
             .= -(b.k3) by A18,A24,A23;
           hence thesis by A25,RVSUM_1:35;
         end;
@@ -1264,8 +789,8 @@ A5: b.0 < m;
   reconsider c2= Fa + Fb as FinSequence of REAL;
 A6: b.0 in m by A1,A5,NAT_1:45;
   then
-A7: len (XFS2FS*(a)) = b.0 by A2,A4,Def4;
-A8: len (XFS2FS*(b)) = b.0 by A3,A6,Def4;
+A7: len (XFS2FS*(a)) = b.0 by A2,A4,AFINSQ_1:def 12;
+A8: len (XFS2FS*(b)) = b.0 by A3,A6,AFINSQ_1:def 12;
   then
 A9: len c2=len (XFS2FS*(a)) by A7,RVSUM_1:145;
   then dom c2= Seg len (XFS2FS*(b)) by A8,A7,FINSEQ_1:def 3;
@@ -1276,7 +801,7 @@ A10: len c2 =k by A8,FINSEQ_1:def 3;
   then consider p being XFinSequence of REAL such that
 A11: len p=m and
 A12: p is_an_xrep_of c2 by A5,Th7;
-  set p2=Replace(p,0,b.0);
+  reconsider p2=Replace(p,0,b.0) as XFinSequence of REAL;
 A13: now
     assume
     k<>0;
@@ -1289,7 +814,8 @@ A15:  i<=k;
       i in Seg len c2 by A7,A9,A14,A15,FINSEQ_1:3;
       then
 A16:  i in dom c2 by FINSEQ_1:def 3;
-      (XFS2FS*(a)).i= a.i & (XFS2FS*(b)).i= b.i by A2,A3,A4,A6,A14,A15,Def4;
+      (XFS2FS*(a)).i= a.i & (XFS2FS*(b)).i= b.i
+        by A2,A3,A4,A6,A14,A15,AFINSQ_1:def 12;
       then
 A17:  ((XFS2FS*(a))+(XFS2FS*(b))).i = (a.i)+(b.i) by A16,VALUED_1:def 1;
       i in NAT & p.i=c2.i by A10,A12,A14,A15,Def5,ORDINAL1:def 13;
@@ -1299,15 +825,13 @@ A17:  ((XFS2FS*(a))+(XFS2FS*(b))).i = (a.i)+(b.i) by A16,VALUED_1:def 1;
   len p=len p2 & p2.0=b.0 by A1,A5,A11,AFINSQ_1:48;
   then m vector_add_prg p2,a,b by A2,A3,A11,A13,Def10;
   hence ex c being XFinSequence of REAL st m vector_add_prg c,a,b;
-A18: 0 < len b by Th2;
+A18: 0 < len b;
   thus for c being non empty XFinSequence of REAL st m vector_add_prg c,a,b
   holds (XFS2FS*(c))=(XFS2FS*(a))+(XFS2FS*(b))
   proof
     let c be non empty XFinSequence of REAL;
     assume
 A19: m vector_add_prg c,a,b;
-    then
-A20: len b =m by Def10;
     consider n being Integer such that
 A21: c.0=b.0 and
 A22: n=b.0 and
@@ -1316,13 +840,14 @@ A23: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i=(a.i)+(b.i)
 A24: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
     i being Nat st 1<=i & i<=n holds c.i=(a.i)+(b.i)) by A19,Def10;
     then
-A25: len (XFS2FS*(c)) = (c.0) by A6,Def4;
+A25: len (XFS2FS*(c)) = (c.0) by A6,AFINSQ_1:def 12;
     now
       per cases;
       case
         n=0;
         then
-        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL by A18,A20,A24,A22,Th5;
+        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL
+          by A18,A24,A22,AFINSQ_1:68;
         hence thesis by RVSUM_1:28;
       end;
       case
@@ -1336,15 +861,15 @@ A26:      1 <=k3 and
 A27:      k3 <= len p3;
 A28:      (c.0) in len c by A1,A5,A24,NAT_1:45;
           then
-A29:      k3 <= n by A21,A22,A27,Def4;
+A29:      k3 <= n by A21,A22,A27,AFINSQ_1:def 12;
           then
 A30:      a.k3 = (XFS2FS*(a)).k3 & b.k3 = (XFS2FS*(b)).k3 by A2,A3,A4,A6,A22
-,A26,Def4;
+,A26,AFINSQ_1:def 12;
           k3 in Seg len c2 by A10,A22,A26,A29,FINSEQ_1:3;
           then
 A31:      k3 in dom c2 by FINSEQ_1:def 3;
-          len p3=n by A21,A22,A28,Def4;
-          then p3.k3=c.k3 by A21,A22,A26,A27,A28,Def4
+          len p3=n by A21,A22,A28,AFINSQ_1:def 12;
+          then p3.k3=c.k3 by A21,A22,A26,A27,A28,AFINSQ_1:def 12
             .=(a.k3)+(b.k3) by A23,A26,A29;
           hence thesis by A31,A30,VALUED_1:def 1;
         end;
@@ -1373,11 +898,10 @@ end;
 
 definition
   let a,b,c be XFinSequence of REAL,m be Integer;
-  pred m vector_sub_prg c,a,b means
-  :Def11:
-  len c =m & len a=m & len b =m & ex
-n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for i being Nat st 1<=i & i
-  <=n holds c.i=(a.i)-(b.i) );
+  pred m vector_sub_prg c,a,b means  :Def11:
+  len c =m & len a=m & len b =m &
+  ex n being Integer st c.0=b.0 & n=b.0 &
+  (n<>0 implies for i being Nat st 1<=i & i <=n holds c.i=(a.i)-(b.i) );
 end;
 
 theorem
@@ -1399,8 +923,8 @@ A5: b.0 < m;
   reconsider c2= Fa - Fb as FinSequence of REAL;
 A6: b.0 in m by A1,A5,NAT_1:45;
   then
-A7: len (XFS2FS*(a)) = b.0 by A2,A4,Def4;
-A8: len (XFS2FS*(b)) = b.0 by A3,A6,Def4;
+A7: len (XFS2FS*(a)) = b.0 by A2,A4,AFINSQ_1:def 12;
+A8: len (XFS2FS*(b)) = b.0 by A3,A6,AFINSQ_1:def 12;
   then
 A9: len c2=len (XFS2FS*(a)) by A7,RVSUM_1:146;
   then dom c2= Seg len (XFS2FS*(b)) by A8,A7,FINSEQ_1:def 3;
@@ -1411,21 +935,19 @@ A10: len c2 =k by A8,FINSEQ_1:def 3;
   then consider p being XFinSequence of REAL such that
 A11: len p=m and
 A12: p is_an_xrep_of c2 by A5,Th7;
-  set p2=Replace(p,0,b.0);
+  reconsider p2=Replace(p,0,b.0) as XFinSequence of REAL;
 A13: now
-    assume
-    k<>0;
+    assume k<>0;
     thus for i being Nat st 1<=i & i<=k holds p2.i=(a.i)-(b.i)
     proof
       let i be Nat;
       assume that
 A14:  1<=i and
 A15:  i<=k;
-      i in Seg len c2 by A7,A9,A14,A15,FINSEQ_1:3;
-      then
+      i in Seg len c2 by A7,A9,A14,A15,FINSEQ_1:3; then
 A16:  i in dom c2 by FINSEQ_1:def 3;
-      (XFS2FS*(a)).i= a.i & (XFS2FS*(b)).i= b.i by A2,A3,A4,A6,A14,A15,Def4;
-      then
+      (XFS2FS*(a)).i= a.i & (XFS2FS*(b)).i= b.i
+        by A2,A3,A4,A6,A14,A15,AFINSQ_1:def 12; then
 A17:  ((XFS2FS*(a))-(XFS2FS*(b))).i = (a.i)-(b.i) by A16,VALUED_1:13;
       i in NAT & p.i=c2.i by A10,A12,A14,A15,Def5,ORDINAL1:def 13;
       hence thesis by A14,A17,AFINSQ_1:48;
@@ -1434,15 +956,13 @@ A17:  ((XFS2FS*(a))-(XFS2FS*(b))).i = (a.i)-(b.i) by A16,VALUED_1:13;
   len p=len p2 & p2.0=b.0 by A1,A5,A11,AFINSQ_1:48;
   then m vector_sub_prg p2,a,b by A2,A3,A11,A13,Def11;
   hence ex c being XFinSequence of REAL st m vector_sub_prg c,a,b;
-A18: 0 < len b by Th2;
+A18: 0 < len b;
   thus for c being non empty XFinSequence of REAL st m vector_sub_prg c,a,b
   holds (XFS2FS*(c))=(XFS2FS*(a))-(XFS2FS*(b))
   proof
     let c be non empty XFinSequence of REAL;
     assume
 A19: m vector_sub_prg c,a,b;
-    then
-A20: len b =m by Def11;
     consider n being Integer such that
 A21: c.0=b.0 and
 A22: n=b.0 and
@@ -1451,17 +971,16 @@ A23: n<>0 implies for i being Nat st 1<=i & i<=n holds c.i=(a.i)-(b.i)
 A24: len c =m & ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for
     i being Nat st 1<=i & i<=n holds c.i=(a.i)-(b.i)) by A19,Def11;
     then
-A25: len (XFS2FS*(c)) = (c.0) by A6,Def4;
+A25: len (XFS2FS*(c)) = (c.0) by A6,AFINSQ_1:def 12;
     now
       per cases;
-      case
-        n=0;
+      case n=0;
         then
-        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL by A18,A20,A24,A22,Th5;
+        (XFS2FS*(b))=<*>REAL & (XFS2FS*(c))=<*>REAL
+          by A18,A24,A22,AFINSQ_1:68;
         hence thesis by RVSUM_1:49;
       end;
-      case
-        n<>0;
+      case n<>0;
         set p3=(XFS2FS*(c));
         for k3 being Nat st 1 <=k3 & k3 <= len p3 holds p3.k3=c2.k3
         proof
@@ -1471,15 +990,15 @@ A26:      1 <=k3 and
 A27:      k3 <= len p3;
 A28:      (c.0) in len c by A1,A5,A24,NAT_1:45;
           then
-A29:      k3 <= n by A21,A22,A27,Def4;
+A29:      k3 <= n by A21,A22,A27,AFINSQ_1:def 12;
           then
 A30:      a.k3 = (XFS2FS*(a)).k3 & b.k3 = (XFS2FS*(b)).k3 by A2,A3,A4,A6,A22
-,A26,Def4;
+,A26,AFINSQ_1:def 12;
           k3 in Seg len c2 by A10,A22,A26,A29,FINSEQ_1:3;
           then
 A31:      k3 in dom c2 by FINSEQ_1:def 3;
-A32:      len p3=n by A21,A22,A28,Def4;
-          then p3.k3=c.k3 by A21,A22,A26,A27,A28,Def4
+A32:      len p3=n by A21,A22,A28,AFINSQ_1:def 12;
+          then p3.k3=c.k3 by A21,A22,A26,A27,A28,AFINSQ_1:def 12
             .=(a.k3)-(b.k3) by A23,A26,A27,A32;
           hence thesis by A31,A30,VALUED_1:13;
         end;

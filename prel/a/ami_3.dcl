@@ -18,14 +18,10 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="GRAPH_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="GRAPH_2"/>
-<ArticleID name="TREES_1"/>
-<ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
@@ -33,20 +29,20 @@
 </Signature>
 <FCluster aid="AMI_3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="262"/>
+<Func kind="K" nr="218"/>
 <Cluster>
 <Adjective nr="36" value="false"/>
-<Adjective nr="74">
+<Adjective nr="57">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="75">
+<Adjective nr="58">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="86">
+<Adjective nr="68">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
@@ -55,19 +51,19 @@
 </FCluster>
 <FCluster aid="AMI_3" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="262"/>
+<Func kind="K" nr="218"/>
 <Cluster>
-<Adjective nr="74">
+<Adjective nr="57">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="78">
+<Adjective nr="61">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="80">
+<Adjective nr="63">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
@@ -76,14 +72,14 @@
 </FCluster>
 <FCluster aid="AMI_3" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="262"/>
+<Func kind="K" nr="218"/>
 <Cluster>
-<Adjective nr="74">
+<Adjective nr="57">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="77">
+<Adjective nr="60">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
@@ -92,19 +88,19 @@
 </FCluster>
 <FCluster aid="AMI_3" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="262"/>
+<Func kind="K" nr="218"/>
 <Cluster>
-<Adjective nr="74">
+<Adjective nr="57">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="79">
+<Adjective nr="62">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
 </Adjective>
-<Adjective nr="81">
+<Adjective nr="64">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>

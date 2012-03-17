@@ -19,8 +19,8 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="EQREL_1"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="EQREL_1"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="WELLORD2"/>

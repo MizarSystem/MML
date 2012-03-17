@@ -7,26 +7,29 @@
 environ
 
  vocabularies NUMBERS, SCMPDS_2, FSM_1, AMI_2, SUBSET_1, SCMP_GCD, AMI_3,
-      FUNCT_1, CARD_1, AMI_1, SCMPDS_3, ARYTM_3, CARD_3, XXREAL_0, INT_1,
-      SCMFSA_9, TURING_1, ARYTM_1, SCMPDS_4, SCMFSA_7, SCMPDS_5, RELAT_1,
-      UNIALG_2, SCMFSA7B, SCMFSA6A, FUNCT_4, CIRCUIT2, TARSKI, SCMFSA6B,
-      MSUALG_1, GRAPHSP, STRUCT_0, VALUED_1, SCMNORM, NAT_1, XBOOLE_0,
-      SCMPDS_8;
+      FUNCT_1, CARD_1, AMI_1, ARYTM_3, CARD_3, XXREAL_0, INT_1, SCMFSA_9,
+      TURING_1, ARYTM_1, SCMPDS_4, SCMFSA_7, SCMPDS_5, RELAT_1, UNIALG_2,
+      SCMFSA7B, SCMFSA6A, FUNCT_4, CIRCUIT2, TARSKI, SCMFSA6B, MSUALG_1,
+      GRAPHSP, STRUCT_0, VALUED_1, NAT_1, XBOOLE_0, SCMPDS_8, ORDINAL1,
+      PARTFUN1, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_2, CARD_1, NUMBERS, XCMPLX_0,
-      RELAT_1, FUNCT_1, FUNCT_4, RECDEF_1, INT_1, NAT_1, STRUCT_0, AMI_1,
-      SCMNORM, AMI_2, AMI_3, SCMPDS_2, SCMPDS_3, SCMPDS_4, SCMPDS_5, SCMPDS_6,
-      SCMP_GCD, CARD_3, DOMAIN_1, XXREAL_0;
+      RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_4, RECDEF_1, INT_1, NAT_1, STRUCT_0, AMI_1,
+      SCMNORM, AMI_2, AMI_3, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD,
+      CARD_3, DOMAIN_1, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, RECDEF_1, SCM_1, SCMPDS_4,
-      SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMNORM, SCMPDS_3;
+      SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMNORM, SCMPDS_3, PRE_POLY, PBOOLE,
+      SCMPDS_1, RELSET_1, SCMPDS_7;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, CARD_3, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6,
-      XBOOLE_0, VALUED_0, SCMNORM, VALUED_1, AMI_1;
+      XBOOLE_0, VALUED_0, SCMNORM, VALUED_1, AMI_1, FUNCT_4, RELAT_1, PBOOLE,
+      GRFUNC_1, FRAENKEL, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions FUNCOP_1, AMI_1, AMI_3, AMI_2, SCMPDS_3, SCMNORM;
+ definitions FUNCOP_1, AMI_1, AMI_3, AMI_2, SCMNORM;
  theorems AMI_1, NAT_1, TARSKI, FUNCT_4, FUNCT_1, INT_1, SCMPDS_2, AMI_2,
       SCMPDS_3, GRFUNC_1, SCMPDS_4, SCMPDS_5, SCMPDS_6, ENUMSET1, SCMP_GCD,
       SCMPDS_7, RELAT_1, XBOOLE_1, XREAL_1, ORDINAL1, FUNCOP_1, XXREAL_0,
-      ZFMISC_1;
+      ZFMISC_1, PBOOLE, PARTFUN1;
  schemes NAT_1, SCMPDS_4, FUNCT_2;
 
 begin :: Preliminaries
@@ -56,13 +59,13 @@ definition
   :Def1:
   for x be set holds (x in
   SCM-Data-Loc implies it.x = t.x) & ( x in NAT implies it.x = goto 0) & (x=IC
-  SCMPDS implies it.x=inspos 0);
+  SCMPDS implies it.x= 0);
   existence
   proof
     deffunc V(Element of NAT) = t.DataLoc($1,0);
     deffunc U(Element of NAT) = goto 0;
     consider s being State of SCMPDS such that
-A1: IC s = inspos 0 & for i being Element of NAT holds s.inspos i = U(
+A1: IC s =  0 & for i being Element of NAT holds s. i = U(
     i) & s.DataLoc(i,0) = V(i) from SCMPDS_4:sch 1;
     take s;
     now
@@ -78,16 +81,8 @@ A2:     x=intpos i by Th1;
           .=DataLoc(i,0) by SCMP_GCD:5;
         hence thesis by A1;
       end;
-      thus x in A implies s.x = goto 0
-      proof
-        assume
-        x in A;
-        then reconsider l=x as Instruction-Location of SCMPDS by AMI_1:def 4;
-        reconsider i = l as Element of NAT by ORDINAL1:def 13;
-        l=inspos i;
-        hence thesis by A1;
-      end;
-      thus x=IC SCMPDS implies s.x=inspos 0 by A1;
+      thus x in A implies s.x = goto 0 by A1;
+      thus x=IC SCMPDS implies s.x= 0 by A1;
     end;
     hence thesis;
   end;
@@ -95,9 +90,9 @@ A2:     x=intpos i by Th1;
   proof
     let s1,s2 be State of SCMPDS such that
 A3: for x be set holds (x in D implies s1.x = t.x) & ( x in A implies
-    s1.x = goto 0) & ( x=IC SCMPDS implies s1.x=inspos 0) and
+    s1.x = goto 0) & ( x=IC SCMPDS implies s1.x= 0) and
 A4: for x be set holds (x in D implies s2.x = t.x) & ( x in A implies
-    s2.x = goto 0) & (x=IC SCMPDS implies s2.x=inspos 0);
+    s2.x = goto 0) & (x=IC SCMPDS implies s2.x= 0);
 A5: now
       let a be Int_position;
 A6:   a in D by SCMPDS_2:def 2;
@@ -105,12 +100,11 @@ A6:   a in D by SCMPDS_2:def 2;
         .=s2.a by A4,A6;
     end;
 A7: now
-      let i be Instruction-Location of SCMPDS;
-A8:   i in NAT by AMI_1:def 4;
-      hence s1.i = goto 0 by A3
-        .=s2.i by A4,A8;
+      let i be Element of NAT;
+      thus s1.i = goto 0 by A3
+        .=s2.i by A4;
     end;
-    IC s1 =inspos 0 by A3
+    IC s1 = 0 by A3
       .=IC s2 by A4;
     hence thesis by A5,A7,SCMPDS_2:54;
   end;
@@ -123,10 +117,9 @@ proof
   let t1,t2 be State of SCMPDS;
   set s1=Dstate(t1), s2=Dstate(t2);
 A1: now
-    let i be Instruction-Location of SCMPDS;
-A2: i in NAT by AMI_1:def 4;
-    hence s1.i = goto 0 by Def1
-      .=s2.i by A2,Def1;
+    let i be Element of NAT;
+    thus s1.i = goto 0 by Def1
+      .=s2.i by Def1;
   end;
   assume
 A3: DataPart t1=DataPart t2;
@@ -137,7 +130,7 @@ A5: a in D by SCMPDS_2:def 2;
       .=t2.a by A3,SCMPDS_3:4
       .=s2.a by A5,Def1;
   end;
-  IC s1 =inspos 0 by Def1
+  IC s1 = 0 by Def1
     .=IC s2 by Def1;
   hence thesis by A4,A1,SCMPDS_2:54;
 end;
@@ -169,7 +162,7 @@ proof
   defpred P[set,set] means ex t be State of SCMPDS st t=$1 & (t.a <= 0 implies
   $2 =0) & (t.a > 0 implies $2=t.a);
 A1: now
-    let s be State of SCMPDS;
+    let s be Element of product the Object-Kind of SCMPDS;
     per cases;
     suppose
 A2:   s.a <= 0;
@@ -184,11 +177,17 @@ A3:   s.a > 0;
       thus P[s,y] by A3;
     end;
   end;
-  ex f be Function of product the Object-Kind of SCMPDS,NAT st for s being
-  State of SCMPDS holds P[s,f.s] from FUNCT_2:sch 3(A1);
-  then consider
+  consider
   f be Function of product the Object-Kind of SCMPDS,NAT such that
-A4: for s holds P[s,f.s];
+B4: for s being Element of product the Object-Kind of SCMPDS holds P[s,f.s]
+    from FUNCT_2:sch 3(A1);
+A4: for s holds P[s,f.s]
+   proof
+    let s;
+    reconsider s as Element of product the Object-Kind of SCMPDS by PBOOLE:155;
+     P[s,f.s] by B4;
+   hence thesis;
+   end;
   take f;
   hereby
     let s;
@@ -253,7 +252,7 @@ end;
 
 theorem Th7:
   for a be Int_position,i be Integer,m be Element of NAT,I be
-  Program of SCMPDS holds m < card I+2 iff inspos m in dom while<0(a,i,I)
+  Program of SCMPDS holds m < card I+2 iff  m in dom while<0(a,i,I)
 proof
   let a be Int_position,i be Integer,m be Element of NAT, I be Program of
   SCMPDS;
@@ -263,7 +262,7 @@ end;
 
 theorem Th8:
   for a be Int_position,i be Integer,I be Program of SCMPDS holds
-while<0(a,i,I).inspos 0=(a,i)>=0_goto (card I +2) & while<0(a,i,I).inspos (card
+while<0(a,i,I). 0=(a,i)>=0_goto (card I +2) & while<0(a,i,I). (card
   I+1)=goto -(card I+1)
 proof
   let a be Int_position,i be Integer,I be Program of SCMPDS;
@@ -272,7 +271,7 @@ proof
   set J5=I ';' i2;
   set FLOOP=while<0(a,i,I);
   FLOOP=i1 ';' J5 by SCMPDS_4:51;
-  hence FLOOP.inspos 0=i1 by SCMPDS_6:16;
+  hence FLOOP. 0=i1 by SCMPDS_6:16;
   card I4=card I+1 by SCMPDS_6:15;
   hence thesis by SCMP_GCD:10;
 end;
@@ -289,41 +288,47 @@ proof
 A1: s.d1 >= 0;
   set i1=(a,i)>=0_goto (card I+2), i2=goto -(card I+1);
   set WHL=while<0(a,i,I), pWHL=stop WHL, iWHL=Initialized pWHL, s3 = s +* iWHL
-  , s4 = Computation(s3,1);
-A2: IC s3 =inspos 0 by SCMPDS_6:21;
+  , s4 = Comput(ProgramPart(s3),s3,1);
+A2: IC s3 = 0 by SCMPDS_6:21;
 A3: not d1 in dom iWHL by SCMPDS_4:31;
   not a in dom iWHL by SCMPDS_4:31;
   then
 A4: s3.DataLoc(s3.a,i)=s3.d1 by FUNCT_4:12
     .= s.d1 by A3,FUNCT_4:12;
 A5: WHL = i1 ';' (I ';' i2 ) by SCMPDS_4:51;
-  Computation(s3,0+1) = Following Computation(s3,0) by AMI_1:14
-    .= Following s3 by AMI_1:13
+  Comput(ProgramPart(s3),s3,0+1) = Following(ProgramPart s3,
+  Comput(ProgramPart(s3),s3,0)) by AMI_1:14
+    .= Following(ProgramPart s3,s3) by AMI_1:13
     .= Exec(i1,s3) by A5,SCMPDS_6:22;
   then
 A6: IC s4 = ICplusConst(s3,(card I+2)) by A1,A4,SCMPDS_2:69
-    .= inspos(0+(card I+2)) by A2,SCMPDS_6:23;
+    .= (0+(card I+2)) by A2,SCMPDS_6:23;
 A7: card WHL=card I+2 by Th6;
   then
-A8: inspos(card I+2) in dom pWHL by SCMPDS_6:25;
+A8: (card I+2) in dom pWHL by SCMPDS_6:25;
+Y:  (ProgramPart s4)/.IC s4
+ = s4.IC s4 by AMI_1:150;
   iWHL c= s3 by FUNCT_4:26;
   then pWHL c= s4 by AMI_1:81,SCMPDS_4:57;
-  then s4.inspos(card I+2) = pWHL.inspos(card I+2) by A8,GRFUNC_1:8
+  then s4.(card I+2) = pWHL.(card I+2) by A8,GRFUNC_1:8
     .=halt SCMPDS by A7,SCMPDS_6:25;
   then
-A9: CurInstr s4 = halt SCMPDS by A6;
+A9: CurInstr(ProgramPart s4,s4) = halt SCMPDS by A6,Y;
+TX: ProgramPart s4 = ProgramPart s3
+by AMI_1:144;
   now
     let k be Element of NAT;
     per cases;
     suppose
       0 < k;
       then 1+0 <= k by INT_1:20;
-      hence IC Computation(s3,k) in dom pWHL by A8,A6,A9,AMI_1:52;
+      hence IC Comput(ProgramPart(s3),s3,k) in dom pWHL
+      by A8,A6,A9,AMI_1:52,TX;
     end;
     suppose
       k = 0;
-      then Computation(s3,k) = s3 by AMI_1:13;
-      hence IC Computation(s3,k) in dom pWHL by A2,SCMPDS_4:75;
+      then Comput(ProgramPart(s3),s3,k) = s3 by AMI_1:13;
+      hence IC Comput(ProgramPart(s3),s3,k) in dom pWHL by A2,SCMPDS_4:75;
     end;
   end;
   hence WHL is_closed_on s by SCMPDS_6:def 2;
@@ -334,23 +339,25 @@ end;
 theorem Th10:
   for s being State of SCMPDS,I being Program of SCMPDS,a,c being
 Int_position, i being Integer st s.DataLoc(s.a,i) >= 0 holds IExec(while<0(a,i,
-  I),s) = s +* Start-At inspos (card I + 2)
+  I),s) = s +* Start-At((card I+2),SCMPDS)
 proof
   let s be State of SCMPDS,I be Program of SCMPDS, a,c be Int_position, i be
   Integer;
   set d1=DataLoc(s.a,i);
   set WHL=while<0(a,i,I), pWHL=stop WHL, iWHL=Initialized pWHL, s3 = s +* iWHL
-  , s4 = Computation(s3,1), i1=(a,i)>=0_goto (card I+2), i2=goto -(card I+1);
-  set SAl=Start-At inspos (card I + 2);
-A1: IC s3 =inspos 0 by SCMPDS_6:21;
+  , s4 = Comput(ProgramPart(s3),s3,1), i1=(a,i)>=0_goto (card I+2), i2=goto -(
+card I+1);
+  set SAl=Start-At((card I+2),SCMPDS);
+A1: IC s3 = 0 by SCMPDS_6:21;
 A2: WHL = i1 ';' (I ';' i2) by SCMPDS_4:51;
 A3: not d1 in dom iWHL by SCMPDS_4:31;
   not a in dom iWHL by SCMPDS_4:31;
   then
 A4: s3.DataLoc(s3.a,i)=s3.d1 by FUNCT_4:12
     .= s.d1 by A3,FUNCT_4:12;
-A5: Computation(s3,0+1) = Following Computation(s3,0) by AMI_1:14
-    .= Following s3 by AMI_1:13
+A5: Comput(ProgramPart(s3),s3,0+1) = Following(ProgramPart s3,
+Comput(ProgramPart(s3),s3,0)) by AMI_1:14
+    .= Following(ProgramPart s3,s3) by AMI_1:13
     .= Exec(i1,s3) by A2,SCMPDS_6:22;
   iWHL c= s3 by FUNCT_4:26;
   then
@@ -360,25 +367,34 @@ A7: IExec(WHL,s) = Result s3 +* s | A by SCMPDS_4:def 8;
   s.d1 >= 0;
   then
 A8: IC s4 = ICplusConst(s3,(card I+2)) by A5,A4,SCMPDS_2:69
-    .= inspos(0+(card I+2)) by A1,SCMPDS_6:23;
+    .= (0+(card I+2)) by A1,SCMPDS_6:23;
+Y:  (ProgramPart s4)/.IC s4
+ = s4.IC s4 by AMI_1:150;
 A9: card WHL=card I+2 by Th6;
-  then inspos(card I+2) in dom pWHL by SCMPDS_6:25;
-  then s4.inspos(card I+2) = pWHL.inspos(card I+2) by A6,GRFUNC_1:8
+  then (card I+2) in dom pWHL by SCMPDS_6:25;
+  then s4.(card I+2) = pWHL.(card I+2) by A6,GRFUNC_1:8
     .=halt SCMPDS by A9,SCMPDS_6:25;
   then
-A10: CurInstr s4 = halt SCMPDS by A8;
+A10: CurInstr(ProgramPart s4,s4) = halt SCMPDS by A8,Y;
   then
 A11: ProgramPart s3 halts_on s3 by AMI_1:146;
-A12: CurInstr s3 = i1 by A2,SCMPDS_6:22;
+A12: CurInstr(ProgramPart s3,s3) = i1 by A2,SCMPDS_6:22;
   now
     let l be Element of NAT;
+u: Comput(ProgramPart(s3),s3,0) = s3 by AMI_1:13;
     assume
     l < 0+1;
     then l=0 by NAT_1:13;
-    then CurInstr Computation(s3,l) = CurInstr s3 by AMI_1:13;
-    hence CurInstr Computation(s3,l) <> halt SCMPDS by A12,SCMPDS_6:31;
+    then CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(
+s3),s3,l))
+     = CurInstr(ProgramPart s3,s3) by u;
+    hence CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(
+s3),s3,l)) <>
+     halt SCMPDS by A12,SCMPDS_6:31;
   end;
-  then for l be Element of NAT st CurInstr Computation(s3,l) = halt SCMPDS
+  then for l be Element of NAT
+   st CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(s3),
+s3,l)) = halt SCMPDS
   holds 1 <= l;
   then LifeSpan s3 = 1 by A10,A11,AMI_1:def 46;
   then
@@ -395,14 +411,7 @@ A18:  x is Int_position;
       then x <> IC SCMPDS by SCMPDS_2:52;
       then
 A19:  not x in dom SAl by A16,TARSKI:def 1;
-      now
-        assume
-        x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A14,
-AMI_1:def 4;
-        l=x;
-        hence contradiction by A18,SCMPDS_2:53;
-      end;
+      not x in dom (s | A) by A14,A18,SCMPDS_2:53;
       hence IExec(WHL,s).x = s4.x by A13,A7,FUNCT_4:12
         .= s3.x by A5,A18,SCMPDS_2:69
         .= s.x by A18,SCMPDS_5:19
@@ -410,37 +419,30 @@ AMI_1:def 4;
     end;
     suppose
 A20:  x = IC SCMPDS;
-      now
-        assume
-        x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A14,
-AMI_1:def 4;
-        l=x;
-        hence contradiction by A20,AMI_1:48;
-      end;
-      hence IExec(WHL,s).x = inspos(card I + 2) by A8,A13,A7,A20,FUNCT_4:12
+      not x in dom (s | A) by A14,A20,AMI_1:48;
+      hence IExec(WHL,s).x = (card I + 2) by A8,A13,A7,A20,FUNCT_4:12
         .= (s +* SAl).x by A20,SCMPDS_7:12;
     end;
     suppose
-      x is Instruction-Location of SCMPDS;
+      x is Element of NAT;
       hence IExec(WHL,s).x = (s +* SAl).x by SCMPDS_6:27;
     end;
   end;
-  dom IExec(WHL,s) = the carrier of SCMPDS by AMI_1:79
-    .= dom (s +* SAl) by AMI_1:79;
+  dom IExec(WHL,s) = the carrier of SCMPDS by PARTFUN1:def 4
+    .= dom (s +* SAl) by PARTFUN1:def 4;
   hence thesis by A15,FUNCT_1:9;
 end;
 
 theorem
   for s being State of SCMPDS,I being Program of SCMPDS,a being
 Int_position, i being Integer st s.DataLoc(s.a,i) >= 0 holds IC IExec(while<0(a
-  ,i,I),s) = inspos (card I + 2)
+  ,i,I),s) =  (card I + 2)
 proof
   let s be State of SCMPDS,I be Program of SCMPDS,a be Int_position, i be
   Integer;
   assume
   s.DataLoc(s.a,i) >= 0;
-  then IExec(while<0(a,i,I),s) =s +* Start-At inspos (card I+ 2) by Th10;
+  then IExec(while<0(a,i,I),s) =s +* Start-At((card I+2),SCMPDS) by Th10;
   hence thesis by AMI_1:111;
 end;
 
@@ -454,8 +456,8 @@ proof
   assume
   s.DataLoc(s.a,i) >= 0;
   then
-A1: IExec(while<0(a,i,I),s) = s +* Start-At inspos (card I + 2) by Th10;
-  not b in dom Start-At inspos (card I + 2) by SCMPDS_4:59;
+A1: IExec(while<0(a,i,I),s) = s +* Start-At((card I+2),SCMPDS) by Th10;
+  not b in dom Start-At((card I+2),SCMPDS) by SCMPDS_4:59;
   hence thesis by A1,FUNCT_4:12;
 end;
 
@@ -514,26 +516,20 @@ A9:   t.a()=s().a();
       suppose
 A10:    t.b < 0;
 A11:    dom (t | A) = A by SCMPDS_6:1;
-A12:    now
-          assume
-          a() in dom (t | A);
-          then reconsider l=a() as Instruction-Location of SCMPDS by A11,
-AMI_1:def 4;
-          l=a();
-          hence contradiction by SCMPDS_2:53;
-        end;
+A12: not a() in dom (t | A) by A11,SCMPDS_2:53;
 A13:    IExec(I(),t).a()=t.a() by A4,A8,A9,A10;
-A14:    inspos 0 in dom pWHL by SCMPDS_4:75;
+A14:     0 in dom pWHL by SCMPDS_4:75;
 A15:    dom (t | A) = A by SCMPDS_6:1;
 A16:    not b in dom iWHL by SCMPDS_4:31;
 A17:    WHL = i1 ';' (I() ';' i2) by SCMPDS_4:51;
-        set t2 = t +* IsI, t3 = t +* iWHL, t4 = Computation(t3,1);
+        set t2 = t +* IsI, t3 = t +* iWHL, t4 = Comput(ProgramPart(t3),t3,1);
 A18:    IsI c= t2 by FUNCT_4:26;
-        set m2=LifeSpan t2, t5=Computation(t4,m2), l1=inspos (card I() + 1);
-A19:    IC t3 =inspos 0 by SCMPDS_6:21;
+        set m2=LifeSpan t2, t5=Comput(ProgramPart(t4),t4,m2), l1= (card I() + 1
+);
+A19:    IC t3 = 0 by SCMPDS_6:21;
         set m3=m2 +1;
-        set t6=Computation(t3,m3);
-        set t7=Computation(t3,m3+1);
+        set t6=Comput(ProgramPart(t3),t3,m3);
+        set t7=Comput(ProgramPart(t3),t3,m3+1);
         card I() + 1 < card I() + 2 by XREAL_1:8;
         then
 A20:    l1 in dom WHL by Th7;
@@ -544,8 +540,9 @@ A21:    WHL c= t3 by XBOOLE_1:1;
         then Shift(I(),1) c= t3 by A21,XBOOLE_1:1;
         then
 A22:    Shift(I(),1) c= t4 by AMI_1:81;
-A23:    Computation(t3,0+1) = Following Computation(t3,0) by AMI_1:14
-          .= Following t3 by AMI_1:13
+A23:    Comput(ProgramPart(t3),t3,0+1) = Following(ProgramPart t3,
+Comput(ProgramPart(t3),t3,0)) by AMI_1:14
+          .= Following(ProgramPart t3,t3) by AMI_1:13
           .= Exec(i1,t3) by A17,SCMPDS_6:22;
 A24:    DataPart t2 = DataPart t3 by SCMPDS_4:24,36;
         now
@@ -559,7 +556,7 @@ A25:    DataPart t2 = DataPart t4 by SCMPDS_4:23;
         then
 A26:    ProgramPart t2 halts_on t2 by SCMPDS_6:def 3;
         t2 = t2+*IsI by A18,FUNCT_4:79;
-        then ProgramPart(t2+*IsI) halts_on t2+*IsI by A18,FUNCT_4:79,A26;
+        then ProgramPart(t2+*IsI) halts_on t2+*IsI by A26;
         then
 A27:    I() is_halting_on t2 by SCMPDS_6:def 3;
 A28:    IExec(I(),t) = Result t2 +* t | A by SCMPDS_4:def 8;
@@ -571,24 +568,33 @@ A31:    I() is_closed_on t2 by SCMPDS_6:38;
         then t3.DataLoc(t3.a(),i())= t3.b by A9,FUNCT_4:12
           .= t.b by A16,FUNCT_4:12;
         then
-A32:    IC t4 = Next IC t3 by A10,A23,SCMPDS_2:69
-          .= inspos(0+1) by A19;
+A32:    IC t4 = succ IC t3 by A10,A23,SCMPDS_2:69
+          .= (0+1) by A19;
         then
 A33:    IC t5=l1 by A1,A18,A27,A31,A25,A22,SCMPDS_7:36;
+Y:  (ProgramPart t6)/.IC t6
+ = t6.IC t6 by AMI_1:150;
+ ProgramPart t3 = ProgramPart t4
+by AMI_1:144;
+ then
 A34:    t6=t5 by AMI_1:51;
         then
-A35:    CurInstr t6=t5.l1 by A1,A18,A27,A31,A32,A25,A22,SCMPDS_7:36
+A35:    CurInstr(ProgramPart t6,t6)=t5.l1
+ by A1,A18,A27,A31,A32,A25,A22,SCMPDS_7:36,Y
           .=t4.l1 by AMI_1:54
           .=t3.l1 by AMI_1:54
           .=WHL.l1 by A20,A21,GRFUNC_1:8
           .=i2 by Th8;
-A36:    t7 = Following t6 by AMI_1:14
-          .= Exec(i2,t6) by A35;
+T: ProgramPart t3 = ProgramPart t6
+by AMI_1:144;
+A36:    t7 = Following(ProgramPart t3,t6) by AMI_1:14
+          .= Exec(i2,t6) by A35,T;
         then IC t7=ICplusConst(t6,0-(card I()+1)) by SCMPDS_2:66
-          .=inspos 0 by A33,A34,SCMPDS_7:1;
+          .= 0 by A33,A34,SCMPDS_7:1;
         then
 A37:    t7 +* iWHL=t7 by SCMPDS_7:37;
-A38:    DataPart Computation(t2,m2) = DataPart t5 by A1,A18,A27,A31,A32,A25,A22
+A38:    DataPart Comput(ProgramPart(t2),t2,m2) = DataPart t5 by A1,A18,A27,A31,
+A32,A25,A22
 ,SCMPDS_7:36;
         then
 A39:    DataPart t5 = DataPart Result t2 by A26,AMI_1:122
@@ -608,11 +614,13 @@ A42:      F(Dstate(t7)) < k+1 by A7,A40,XXREAL_0:2;
           F(Dstate(t7)) > k;
           hence contradiction by A42,INT_1:20;
         end;
-A43:    t5.a()=Computation(t2,m2).a() by A38,SCMPDS_4:23
+A43:    t5.a()=Comput(ProgramPart(t2),t2,m2).a() by A38,SCMPDS_4:23
           .=(Result t2).a() by A26,AMI_1:122
           .=s().a() by A9,A13,A28,A12,FUNCT_4:12;
+T1: ProgramPart t4 = ProgramPart t3
+by AMI_1:144;
 A44:    t7.a()=t6.a() by A36,SCMPDS_2:66
-          .=s().a() by A43,AMI_1:51;
+          .=s().a() by A43,AMI_1:51,T1;
         then
 A45:    WHL is_closed_on t7 by A6,A29,A40,A41;
         now
@@ -630,22 +638,27 @@ A47:            k <= m2;
                   per cases;
                   suppose
                     k=0;
-                    hence IC Computation(t3,k) in dom pWHL by A14,A19,AMI_1:13;
+                    hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A14,
+A19,AMI_1:13;
                   end;
                   suppose
                     k<>0;
                     then consider kn be Nat such that
 A48:                k=kn+1 by NAT_1:6;
                     reconsider kn as Element of NAT by ORDINAL1:def 13;
-                    reconsider lm = IC Computation(t2,kn) as Element of NAT by
-ORDINAL1:def 13;
+                    reconsider lm = IC Comput(ProgramPart(t2),t2,kn) as Element
+of NAT;
+t: ProgramPart t3 = ProgramPart t4
+by AMI_1:144;
                     kn < k by A48,XREAL_1:31;
                     then kn < m2 by A47,XXREAL_0:2;
-                    then IC Computation(t2,kn) + 1 = IC Computation(t4,kn) by
+                    then IC Comput(ProgramPart(t2),t2,kn) + 1 = IC Comput(
+ProgramPart(t4),t4,kn) by
 A1,A18,A27,A31,A32,A25,A22,SCMPDS_7:34;
                     then
-A49:                IC Computation(t3,k) =inspos (lm+1) by A48,AMI_1:51;
-                    IC Computation(t2,kn) in dom pI by A30,SCMPDS_6:def 2;
+A49:                IC Comput(ProgramPart(t3),t3,k) = (lm+1) by A48,AMI_1:51,t;
+                    IC Comput(ProgramPart(t2),t2,kn) in dom pI by A30,SCMPDS_6:
+def 2;
                     then lm < card pI by SCMPDS_4:1;
                     then lm < card I()+1 by SCMPDS_5:7;
                     then
@@ -653,14 +666,16 @@ A50:                lm+1 <= card I() +1 by INT_1:20;
                     card I() + 1 < card I() + 3 by XREAL_1:8;
                     then lm+1 < card I() +3 by A50,XXREAL_0:2;
                     then lm+1 < card pWHL by Lm1;
-                    hence IC Computation(t3,k) in dom pWHL by A49,SCMPDS_4:1;
+                    hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A49,
+SCMPDS_4:1;
                   end;
                 end;
               end;
               suppose
 A51:            k=m3;
                 l1 in dom pWHL by A20,SCMPDS_6:18;
-                hence IC Computation(t3,k) in dom pWHL by A1,A18,A27,A31,A32
+                hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A1,A18,A27
+,A31,A32
 ,A25,A22,A34,A51,SCMPDS_7:36;
               end;
             end;
@@ -670,14 +685,19 @@ A51:            k=m3;
             then consider nn be Nat such that
 A52:        k=m3+1+nn by NAT_1:10;
             reconsider nn as Element of NAT by ORDINAL1:def 13;
-            Computation(t3,k)=Computation(t7+*iWHL,nn) by A37,A52,AMI_1:51;
-            hence IC Computation(t3,k) in dom pWHL by A45,SCMPDS_6:def 2;
+ ProgramPart t3 = ProgramPart t7
+by AMI_1:144;
+then
+            Comput(ProgramPart(t3),t3,k)=Comput(ProgramPart(t7+*iWHL),t7+*iWHL,
+nn) by A37,A52,AMI_1:51;
+            hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A45,SCMPDS_6:
+def 2;
           end;
         end;
         hence WHL is_closed_on t by SCMPDS_6:def 2;
         WHL is_halting_on t7 by A6,A29,A44,A40,A41;
         then ProgramPart t7 halts_on t7 by A37,SCMPDS_6:def 3;
-        then ProgramPart t3 halts_on t7 by AMI_1:93,144;
+        then ProgramPart t3 halts_on t7 by AMI_1:144;
         then ProgramPart t3 halts_on t3 by AMI_1:93;
         hence WHL is_halting_on t by SCMPDS_6:def 3;
       end;
@@ -731,7 +751,7 @@ A8: I() is_closed_on sI by SCMPDS_6:38;
   then
 A9: ProgramPart sI halts_on sI by SCMPDS_6:def 3;
   sI = sI+*iI by A7,FUNCT_4:79;
-  then ProgramPart(sI+*iI) halts_on sI+*iI by A7,FUNCT_4:79,A9;
+  then ProgramPart(sI+*iI) halts_on sI+*iI by A9;
   then
 A10: I() is_halting_on sI by SCMPDS_6:def 3;
   set Es=IExec(I(),s()), bj=DataLoc(Es.a(),i());
@@ -759,14 +779,15 @@ A17: P[Dstate Es] by A2,A4,A5;
   from WhileLHalt(A1,A15,A17,A16);
   then
 A18: ProgramPart s2 halts_on s2 by SCMPDS_6:def 3;
-  set s4 = Computation(s1,1);
+  set s4 = Comput(ProgramPart(s1),s1,1);
   set i1=(a(),i())>=0_goto (card I()+2), i2=goto -(card I()+1);
   set b=DataLoc(s().a(),i());
 A19: WHL = i1 ';' (I() ';' i2) by SCMPDS_4:51;
-  set mI=LifeSpan sI, s5=Computation(s4,mI), l1=inspos (card I() + 1);
-A20: IC s1 =inspos 0 by SCMPDS_6:21;
-A21: Computation(s1,0+1) = Following Computation(s1,0) by AMI_1:14
-    .= Following s1 by AMI_1:13
+  set mI=LifeSpan sI, s5=Comput(ProgramPart(s4),s4,mI), l1= (card I() + 1);
+A20: IC s1 = 0 by SCMPDS_6:21;
+A21: Comput(ProgramPart(s1),s1,0+1) = Following(ProgramPart s1,
+Comput(ProgramPart(s1),s1,0)) by AMI_1:14
+    .= Following(ProgramPart s1,s1) by AMI_1:13
     .= Exec(i1,s1) by A19,SCMPDS_6:22;
 A22: DataPart sI = DataPart s1 by SCMPDS_4:24,36;
   now
@@ -777,7 +798,7 @@ A22: DataPart sI = DataPart s1 by SCMPDS_4:24,36;
   then
 A23: DataPart sI = DataPart s4 by SCMPDS_4:23;
   set m3=mI +1;
-  set s6=Computation(s1,m3);
+  set s6=Comput(ProgramPart(s1),s1,m3);
   card I() + 1 < card I() + 2 by XREAL_1:8;
   then
 A24: l1 in dom WHL by Th7;
@@ -788,7 +809,7 @@ A25: dom ps = dom s() /\ A by RELAT_1:90
     .= A by XBOOLE_1:21;
 A26: IExec(I(),s()) | A= (Result sI +* ps) | A by SCMPDS_4:def 8
     .= ps by A25,FUNCT_4:24;
-  set s7=Computation(s1,m3+1);
+  set s7=Comput(ProgramPart(s1),s1,m3+1);
 A27: IExec(I(),s()) = Result sI +* s() | A by SCMPDS_4:def 8;
 A28: dom (s() | A) = A by SCMPDS_6:1;
   WHL c= iWHL & iWHL c= s1 by FUNCT_4:26,SCMPDS_6:17;
@@ -801,36 +822,39 @@ A30: Shift(I(),1) c= s4 by AMI_1:81;
   s1.DataLoc(s1.a(),i())=s1.b by SCMPDS_5:19
     .= s().b by SCMPDS_5:19;
   then
-A31: IC s4 = Next IC s1 by A2,A21,SCMPDS_2:69
-    .= inspos(0+1) by A20;
+A31: IC s4 = succ IC s1 by A2,A21,SCMPDS_2:69
+    .= (0+1) by A20;
   then
 A32: IC s5=l1 by A1,A7,A10,A8,A23,A30,SCMPDS_7:36;
+Y:  (ProgramPart s6)/.IC s6
+ = s6.IC s6 by AMI_1:150;
+ ProgramPart s1 = ProgramPart s4
+by AMI_1:144;
+ then
 A33: s6=s5 by AMI_1:51;
   then
-A34: CurInstr s6=s5.l1 by A1,A7,A10,A8,A31,A23,A30,SCMPDS_7:36
+A34: CurInstr(ProgramPart s6,s6)=s5.l1 by A1,A7,A10,A8,A31,A23,A30,SCMPDS_7:36,
+      Y
     .=s4.l1 by AMI_1:54
     .=s1.l1 by AMI_1:54
     .=WHL.l1 by A24,A29,GRFUNC_1:8
     .=i2 by Th8;
-A35: s7 = Following s6 by AMI_1:14
-    .= Exec(i2,s6) by A34;
+T: ProgramPart s1 = ProgramPart s6
+by AMI_1:144;
+A35: s7 = Following(ProgramPart s1,s6) by AMI_1:14
+    .= Exec(i2,s6) by A34,T;
   then IC s7=ICplusConst(s6,0-(card I()+1)) by SCMPDS_2:66
-    .=inspos 0 by A32,A33,SCMPDS_7:1;
+    .= 0 by A32,A33,SCMPDS_7:1;
   then
-A36: IC s2 =IC Computation(s1,m1) by SCMPDS_6:21;
-A37: DataPart Computation(sI,mI) = DataPart s5 by A1,A7,A10,A8,A31,A23,A30,
+A36: IC s2 =IC Comput(ProgramPart(s1),s1,m1) by SCMPDS_6:21;
+A37: DataPart Comput(ProgramPart(sI),sI,mI) = DataPart s5 by A1,A7,A10,A8,A31,
+A23,A30,
 SCMPDS_7:36;
   now
     let x be Int_position;
 A38: not x in dom iWHL by SCMPDS_4:31;
-A39: now
-      assume
-      x in dom (s() | A);
-      then reconsider l=x as Instruction-Location of SCMPDS by A28,AMI_1:def 4;
-      l=x;
-      hence contradiction by SCMPDS_2:53;
-    end;
-    s5.x=Computation(sI,mI).x by A37,SCMPDS_4:23
+A39: not x in dom (s() | A) by A28,SCMPDS_2:53;
+    s5.x=Comput(ProgramPart(sI),sI,mI).x by A37,SCMPDS_4:23
       .=(Result sI).x by A9,AMI_1:122
       .=IExec(I(),s()).x by A27,A39,FUNCT_4:12;
     hence s7.x=IExec(I(),s()).x by A33,A35,SCMPDS_2:66
@@ -842,25 +866,35 @@ A40: DataPart s7 = DataPart s2 by SCMPDS_4:23;
     .=(Result sI +* ps)|A +* iWHL | A by FUNCT_4:75
     .= ps +* iWHL | A by A25,FUNCT_4:24
     .= s1 | A by FUNCT_4:75
-    .= Computation(s1,m1) | A by SCMPDS_7:6;
+    .= Comput(ProgramPart(s1),s1,m1) | A by SCMPDS_7:6;
   then
-A41: Computation(s1,m1)=s2 by A40,A36,SCMPDS_7:7;
-  then CurInstr Computation(s1,m1)=i1 by A19,SCMPDS_6:22;
+A41: Comput(ProgramPart(s1),s1,m1)=s2 by A40,A36,SCMPDS_7:7;
+  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1),Comput(ProgramPart(s1
+),s1,m1))=i1
+   by A19,SCMPDS_6:22;
   then m0 > m1 by A13,SCMPDS_6:2,31;
   then consider nn be Nat such that
 A42: m0=m1+nn by NAT_1:10;
   reconsider nn as Element of NAT by ORDINAL1:def 13;
-  Computation(s1,m1+m2) = Computation(s2,m2) by A41,AMI_1:51;
-  then CurInstr Computation(s1,m1+m2) = halt SCMPDS by A18,AMI_1:def 46;
+T: ProgramPart s1 = ProgramPart s2
+by A41,AMI_1:144;
+  Comput(ProgramPart(s1),s1,m1+m2) = Comput(ProgramPart(s1),s2,m2) by A41,AMI_1
+:51;
+  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1+m2),Comput(ProgramPart
+(s1),s1,m1+m2))
+   = halt SCMPDS by A18,AMI_1:def 46,T;
   then m1 + m2 >= m0 by A13,AMI_1:def 46;
   then
 A43: m2 >= nn by A42,XREAL_1:8;
-A44: Computation(s1,m0) = Computation(s2,nn) by A41,A42,AMI_1:51;
-  then CurInstr Computation(s2,nn) =halt SCMPDS by A13,AMI_1:def 46;
+A44: Comput(ProgramPart(s1),s1,m0) = Comput(ProgramPart(s1),s2,nn) by A41,A42,
+AMI_1:51;
+  then CurInstr(ProgramPart Comput(ProgramPart(s2),s2,nn),Comput(ProgramPart(s2
+),s2,nn))
+   =halt SCMPDS by A13,AMI_1:def 46,T;
   then nn >= m2 by A18,AMI_1:def 46;
   then nn=m2 by A43,XXREAL_0:1;
-  then Result s1 = Computation(s2,m2) by A13,A44,AMI_1:122;
-  hence IExec(WHL,s()) = Computation(s2,m2) +* ps by SCMPDS_4:def 8
+  then Result s1 = Comput(ProgramPart(s2),s2,m2) by A13,A44,AMI_1:122,T;
+  hence IExec(WHL,s()) = Comput(ProgramPart(s2),s2,m2) +* ps by SCMPDS_4:def 8
     .= Result s2 +* IExec(I(),s()) | A by A18,A26,AMI_1:122
     .= IExec(WHL,IExec(I(),s())) by SCMPDS_4:def 8;
 end;
@@ -914,24 +948,18 @@ A8:   t.a=s.a;
       suppose
 A9:     t.b < 0;
 A10:    dom (t | A) = A by SCMPDS_6:1;
-A11:    now
-          assume
-          a in dom (t | A);
-          then reconsider l=a as Instruction-Location of SCMPDS by A10,
-AMI_1:def 4;
-          l=a;
-          hence contradiction by SCMPDS_2:53;
-        end;
+A11: not a in dom (t | A) by A10,SCMPDS_2:53;
 A12:    IExec(I,t).a=t.a by A3,A7,A8,A9;
-A13:    inspos 0 in dom pWHL by SCMPDS_4:75;
+A13:     0 in dom pWHL by SCMPDS_4:75;
 A14:    not b in dom iWHL by SCMPDS_4:31;
 A15:    WHL = i1 ';' (I ';' i2) by SCMPDS_4:51;
 A16:    f.Dstate(IExec(I,t)) < f.Dstate(t) by A3,A7,A8,A9;
 A17:    dom (t | A) = A by SCMPDS_6:1;
-        set t2 = t +* IsI, t3 = t +* iWHL, t4 = Computation(t3,1);
+        set t2 = t +* IsI, t3 = t +* iWHL, t4 = Comput(ProgramPart(t3),t3,1);
 A18:    IsI c= t2 by FUNCT_4:26;
-A19:    Computation(t3,0+1) = Following Computation(t3,0) by AMI_1:14
-          .= Following t3 by AMI_1:13
+A19:    Comput(ProgramPart(t3),t3,0+1) = Following(ProgramPart t3,
+Comput(ProgramPart(t3),t3,0)) by AMI_1:14
+          .= Following(ProgramPart t3,t3) by AMI_1:13
           .= Exec(i1,t3) by A15,SCMPDS_6:22;
 A20:    DataPart t2 = DataPart t3 by SCMPDS_4:24,36;
         now
@@ -948,11 +976,11 @@ A22:    WHL c= t3 by XBOOLE_1:1;
         then Shift(I,1) c= t3 by A22,XBOOLE_1:1;
         then
 A23:    Shift(I,1) c= t4 by AMI_1:81;
-        set m2=LifeSpan t2, t5=Computation(t4,m2), l1=inspos (card I + 1);
-A24:    IC t3 =inspos 0 by SCMPDS_6:21;
+        set m2=LifeSpan t2, t5=Comput(ProgramPart(t4),t4,m2), l1= (card I + 1);
+A24:    IC t3 = 0 by SCMPDS_6:21;
         set m3=m2 +1;
-        set t6=Computation(t3,m3);
-        set t7=Computation(t3,m3+1);
+        set t6=Comput(ProgramPart(t3),t3,m3);
+        set t7=Comput(ProgramPart(t3),t3,m3+1);
         card I + 1 < card I + 2 by XREAL_1:8;
         then
 A25:    l1 in dom WHL by Th7;
@@ -963,35 +991,44 @@ A27:    I is_closed_on t2 by SCMPDS_6:38;
         then
 A28:    ProgramPart t2 halts_on t2 by SCMPDS_6:def 3;
         t2 = t2+*IsI by A18,FUNCT_4:79;
-        then ProgramPart(t2+*IsI) halts_on t2+*IsI by A18,FUNCT_4:79,A28;
+        then ProgramPart(t2+*IsI) halts_on t2+*IsI by A28;
         then
 A29:    I is_halting_on t2 by SCMPDS_6:def 3;
         not a in dom iWHL by SCMPDS_4:31;
         then t3.DataLoc(t3.a,i)= t3.b by A8,FUNCT_4:12
           .= t.b by A14,FUNCT_4:12;
         then
-A30:    IC t4 = Next IC t3 by A9,A19,SCMPDS_2:69
-          .= inspos(0+1) by A24;
+A30:    IC t4 = succ IC t3 by A9,A19,SCMPDS_2:69
+          .= (0+1) by A24;
         then
 A31:    IC t5=l1 by A1,A18,A29,A27,A21,A23,SCMPDS_7:36;
+Y:  (ProgramPart t6)/.IC t6
+ = t6.IC t6 by AMI_1:150;
+ ProgramPart t3 = ProgramPart t4
+by AMI_1:144;
+ then
 A32:    t6=t5 by AMI_1:51;
         then
-A33:    CurInstr t6=t5.l1 by A1,A18,A29,A27,A30,A21,A23,SCMPDS_7:36
+A33:    CurInstr(ProgramPart t6,t6)=t5.l1
+ by A1,A18,A29,A27,A30,A21,A23,SCMPDS_7:36,Y
           .=t4.l1 by AMI_1:54
           .=t3.l1 by AMI_1:54
           .=WHL.l1 by A25,A22,GRFUNC_1:8
           .=i2 by Th8;
-A34:    DataPart Computation(t2,m2) = DataPart t5 by A1,A18,A29,A27,A30,A21,A23
+A34:    DataPart Comput(ProgramPart(t2),t2,m2) = DataPart t5 by A1,A18,A29,A27,
+A30,A21,A23
 ,SCMPDS_7:36;
         then
 A35:    DataPart t5 =DataPart Result t2 by A28,AMI_1:122
           .= DataPart(Result t2 +* t | A) by A17,AMI_2:29,FUNCT_4:76
 ,SCMPDS_2:100
           .=DataPart IExec(I,t) by SCMPDS_4:def 8;
-A36:    t7 = Following t6 by AMI_1:14
-          .= Exec(i2,t6) by A33;
+T: ProgramPart t3 = ProgramPart t6
+by AMI_1:144;
+A36:    t7 = Following(ProgramPart t3,t6) by AMI_1:14
+          .= Exec(i2,t6) by A33,T;
         then IC t7=ICplusConst(t6,0-(card I+1)) by SCMPDS_2:66
-          .=inspos 0 by A31,A32,SCMPDS_7:1;
+          .= 0 by A31,A32,SCMPDS_7:1;
         then
 A37:    t7 +* iWHL=t7 by SCMPDS_7:37;
 A38:    IExec(I,t) = Result t2 +* t | A by SCMPDS_4:def 8;
@@ -999,15 +1036,8 @@ A39:    now
           let x be Int_position;
           assume
 A40:      x in X;
-A41:      now
-            assume
-            x in dom (t | A);
-            then reconsider l=x as Instruction-Location of SCMPDS by A10,
-AMI_1:def 4;
-            l=x;
-            hence contradiction by SCMPDS_2:53;
-          end;
-          t5.x=Computation(t2,m2).x by A34,SCMPDS_4:23
+A41: not x in dom (t | A) by A10,SCMPDS_2:53;
+          t5.x=Comput(ProgramPart(t2),t2,m2).x by A34,SCMPDS_4:23
             .=(Result t2).x by A28,AMI_1:122
             .=IExec(I,t).x by A38,A41,FUNCT_4:12
             .=t.x by A3,A7,A8,A9,A40
@@ -1025,11 +1055,13 @@ A44:      f.Dstate(t7) > k;
           f.Dstate(t7) < k+1 by A6,A16,A42,XXREAL_0:2;
           hence contradiction by A44,INT_1:20;
         end;
-A45:    t5.a=Computation(t2,m2).a by A34,SCMPDS_4:23
+A45:    t5.a=Comput(ProgramPart(t2),t2,m2).a by A34,SCMPDS_4:23
           .=(Result t2).a by A28,AMI_1:122
           .=s.a by A8,A12,A38,A11,FUNCT_4:12;
+T1: ProgramPart t4 = ProgramPart t3
+by AMI_1:144;
 A46:    t7.a=t6.a by A36,SCMPDS_2:66
-          .=s.a by A45,AMI_1:51;
+          .=s.a by A45,AMI_1:51,T1;
         then
 A47:    WHL is_closed_on t7 by A5,A39,A43;
         now
@@ -1047,22 +1079,27 @@ A49:            k <= m2;
                   per cases;
                   suppose
                     k=0;
-                    hence IC Computation(t3,k) in dom pWHL by A13,A24,AMI_1:13;
+                    hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A13,
+A24,AMI_1:13;
                   end;
                   suppose
                     k<>0;
                     then consider kn be Nat such that
 A50:                k=kn+1 by NAT_1:6;
                     reconsider kn as Element of NAT by ORDINAL1:def 13;
-                    reconsider lm = IC Computation(t2,kn) as Element of NAT by
-ORDINAL1:def 13;
+                    reconsider lm = IC Comput(ProgramPart(t2),t2,kn) as Element
+of NAT;
+t: ProgramPart t3 = ProgramPart t4
+by AMI_1:144;
                     kn < k by A50,XREAL_1:31;
                     then kn < m2 by A49,XXREAL_0:2;
-                    then IC Computation(t2,kn) + 1 = IC Computation(t4,kn) by
+                    then IC Comput(ProgramPart(t2),t2,kn) + 1 = IC Comput(
+ProgramPart(t4),t4,kn) by
 A1,A18,A29,A27,A30,A21,A23,SCMPDS_7:34;
                     then
-A51:                IC Computation(t3,k) =inspos (lm+1) by A50,AMI_1:51;
-                    IC Computation(t2,kn) in dom pI by A26,SCMPDS_6:def 2;
+A51:                IC Comput(ProgramPart(t3),t3,k) = (lm+1) by A50,AMI_1:51,t;
+                    IC Comput(ProgramPart(t2),t2,kn) in dom pI by A26,SCMPDS_6:
+def 2;
                     then lm < card pI by SCMPDS_4:1;
                     then lm < card I+1 by SCMPDS_5:7;
                     then
@@ -1070,14 +1107,16 @@ A52:                lm+1 <= card I +1 by INT_1:20;
                     card I + 1 < card I + 3 by XREAL_1:8;
                     then lm+1 < card I +3 by A52,XXREAL_0:2;
                     then lm+1 < card pWHL by Lm1;
-                    hence IC Computation(t3,k) in dom pWHL by A51,SCMPDS_4:1;
+                    hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A51,
+SCMPDS_4:1;
                   end;
                 end;
               end;
               suppose
 A53:            k=m3;
                 l1 in dom pWHL by A25,SCMPDS_6:18;
-                hence IC Computation(t3,k) in dom pWHL by A1,A18,A29,A27,A30
+                hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A1,A18,A29
+,A27,A30
 ,A21,A23,A32,A53,SCMPDS_7:36;
               end;
             end;
@@ -1087,14 +1126,19 @@ A53:            k=m3;
             then consider nn be Nat such that
 A54:        k=m3+1+nn by NAT_1:10;
             reconsider nn as Element of NAT by ORDINAL1:def 13;
-            Computation(t3,k)=Computation(t7+*iWHL,nn) by A37,A54,AMI_1:51;
-            hence IC Computation(t3,k) in dom pWHL by A47,SCMPDS_6:def 2;
+ ProgramPart t3 = ProgramPart t7
+by AMI_1:144;
+            then
+            Comput(ProgramPart(t3),t3,k)=Comput(ProgramPart(t7+*iWHL),t7+*iWHL,
+nn) by A37,A54,AMI_1:51;
+            hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A47,SCMPDS_6:
+def 2;
           end;
         end;
         hence WHL is_closed_on t by SCMPDS_6:def 2;
         WHL is_halting_on t7 by A5,A46,A39,A43;
         then ProgramPart t7 halts_on t7 by A37,SCMPDS_6:def 3;
-        then ProgramPart t3 halts_on t7 by AMI_1:93,144;
+        then ProgramPart t3 halts_on t7 by AMI_1:144;
         then ProgramPart t3 halts_on t3 by AMI_1:93;
         hence WHL is_halting_on t by SCMPDS_6:def 3;
       end;
@@ -1233,31 +1277,18 @@ A7:   t.a=s.a;
       suppose
 A8:     t.b < 0;
 A9:     dom (t | A) = A by SCMPDS_6:1;
-A10:    now
-          assume
-          a in dom (t | A);
-          then reconsider l=a as Instruction-Location of SCMPDS by A9,
-AMI_1:def 4;
-          l=a;
-          hence contradiction by SCMPDS_2:53;
-        end;
-A11:    now
-          assume
-          b in dom (t | A);
-          then reconsider l=b as Instruction-Location of SCMPDS by A9,
-AMI_1:def 4;
-          l=b;
-          hence contradiction by SCMPDS_2:53;
-        end;
+A10: not a in dom (t | A) by A9,SCMPDS_2:53;
+A11: not b in dom (t | A) by A9,SCMPDS_2:53;
 A12:    IExec(I,t).b > t.b by A2,A6,A7,A8;
-A13:    inspos 0 in dom pWHL by SCMPDS_4:75;
+A13:     0 in dom pWHL by SCMPDS_4:75;
 A14:    IExec(I,t).a=t.a by A2,A6,A7,A8;
 A15:    not b in dom iWHL by SCMPDS_4:31;
 A16:    WHL = i1 ';' (I ';' i2) by SCMPDS_4:51;
-        set t2 = t +* IsI, t3 = t +* iWHL, t4 = Computation(t3,1);
+        set t2 = t +* IsI, t3 = t +* iWHL, t4 = Comput(ProgramPart(t3),t3,1);
 A17:    IsI c= t2 by FUNCT_4:26;
-A18:    Computation(t3,0+1) = Following Computation(t3,0) by AMI_1:14
-          .= Following t3 by AMI_1:13
+A18:    Comput(ProgramPart(t3),t3,0+1) = Following(ProgramPart t3,
+Comput(ProgramPart(t3),t3,0)) by AMI_1:14
+          .= Following(ProgramPart t3,t3) by AMI_1:13
           .= Exec(i1,t3) by A16,SCMPDS_6:22;
 A19:    DataPart t2 = DataPart t3 by SCMPDS_4:24,36;
         now
@@ -1274,11 +1305,11 @@ A21:    WHL c= t3 by XBOOLE_1:1;
         then Shift(I,1) c= t3 by A21,XBOOLE_1:1;
         then
 A22:    Shift(I,1) c= t4 by AMI_1:81;
-        set m2=LifeSpan t2, t5=Computation(t4,m2), l1=inspos (card I + 1);
-A23:    IC t3 =inspos 0 by SCMPDS_6:21;
+        set m2=LifeSpan t2, t5=Comput(ProgramPart(t4),t4,m2), l1= (card I + 1);
+A23:    IC t3 = 0 by SCMPDS_6:21;
         set m3=m2 +1;
-        set t6=Computation(t3,m3);
-        set t7=Computation(t3,m3+1);
+        set t6=Comput(ProgramPart(t3),t3,m3);
+        set t7=Comput(ProgramPart(t3),t3,m3+1);
         card I + 1 < card I + 2 by XREAL_1:8;
         then
 A24:    l1 in dom WHL by Th7;
@@ -1290,56 +1321,58 @@ A27:    I is_closed_on t2 by SCMPDS_6:38;
         then
 A28:    ProgramPart t2 halts_on t2 by SCMPDS_6:def 3;
         t2 = t2+*IsI by A17,FUNCT_4:79;
-        then ProgramPart(t2+*IsI) halts_on t2+*IsI by A17,FUNCT_4:79,A28;
+        then ProgramPart(t2+*IsI) halts_on t2+*IsI by A28;
         then
 A29:    I is_halting_on t2 by SCMPDS_6:def 3;
         not a in dom iWHL by SCMPDS_4:31;
         then t3.DataLoc(t3.a,i)= t3.b by A7,FUNCT_4:12
           .= t.b by A15,FUNCT_4:12;
         then
-A30:    IC t4 = Next IC t3 by A8,A18,SCMPDS_2:69
-          .= inspos(0+1) by A23;
+A30:    IC t4 = succ IC t3 by A8,A18,SCMPDS_2:69
+          .= (0+1) by A23;
         then
 A31:    IC t5=l1 by A1,A17,A29,A27,A20,A22,SCMPDS_7:36;
+Y:  (ProgramPart t6)/.IC t6
+ = t6.IC t6 by AMI_1:150;
+ ProgramPart t3 = ProgramPart t4
+by AMI_1:144;
+ then
 A32:    t6=t5 by AMI_1:51;
         then
-A33:    CurInstr t6=t5.l1 by A1,A17,A29,A27,A30,A20,A22,SCMPDS_7:36
+A33:    CurInstr(ProgramPart t6,t6)=t5.l1
+ by A1,A17,A29,A27,A30,A20,A22,SCMPDS_7:36,Y
           .=t4.l1 by AMI_1:54
           .=t3.l1 by AMI_1:54
           .=WHL.l1 by A24,A21,GRFUNC_1:8
           .=i2 by Th8;
-A34:    DataPart Computation(t2,m2) = DataPart t5 by A1,A17,A29,A27,A30,A20,A22
+A34:    DataPart Comput(ProgramPart(t2),t2,m2) = DataPart t5 by A1,A17,A29,A27,
+A30,A20,A22
 ,SCMPDS_7:36;
         then
-A35:    t5.a=Computation(t2,m2).a by SCMPDS_4:23
+A35:    t5.a=Comput(ProgramPart(t2),t2,m2).a by SCMPDS_4:23
           .=(Result t2).a by A28,AMI_1:122
           .=s.a by A7,A14,A25,A10,FUNCT_4:12;
-A36:    t7 = Following t6 by AMI_1:14
-          .= Exec(i2,t6) by A33;
+T: ProgramPart t3 = ProgramPart t6
+by AMI_1:144;
+A36:    t7 = Following(ProgramPart t3,t6) by AMI_1:14
+          .= Exec(i2,t6) by A33,T;
         then IC t7=ICplusConst(t6,0-(card I+1)) by SCMPDS_2:66
-          .=inspos 0 by A31,A32,SCMPDS_7:1;
+          .= 0 by A31,A32,SCMPDS_7:1;
         then
 A37:    t7 +* iWHL=t7 by SCMPDS_7:37;
 A38:    now
           let x be Int_position;
           assume
 A39:      x in X;
-A40:      now
-            assume
-            x in dom (t | A);
-            then reconsider l=x as Instruction-Location of SCMPDS by A9,
-AMI_1:def 4;
-            l=x;
-            hence contradiction by SCMPDS_2:53;
-          end;
-          t5.x=Computation(t2,m2).x by A34,SCMPDS_4:23
+A40: not x in dom (t | A) by A9,SCMPDS_2:53;
+          t5.x=Comput(ProgramPart(t2),t2,m2).x by A34,SCMPDS_4:23
             .=(Result t2).x by A28,AMI_1:122
             .=IExec(I,t).x by A25,A40,FUNCT_4:12
             .=t.x by A2,A6,A7,A8,A39
             .=s.x by A6,A39;
           hence t7.x=s.x by A32,A36,SCMPDS_2:66;
         end;
-        t5.b=Computation(t2,m2).b by A34,SCMPDS_4:23
+        t5.b=Comput(ProgramPart(t2),t2,m2).b by A34,SCMPDS_4:23
           .=(Result t2).b by A28,AMI_1:122
           .=IExec(I,t).b by A25,A11,FUNCT_4:12;
         then
@@ -1352,8 +1385,10 @@ A43:      -t7.b < k+1 by A5,XXREAL_0:2;
           -t7.b > k;
           hence contradiction by A43,INT_1:20;
         end;
+T1: ProgramPart t4 = ProgramPart t3
+by AMI_1:144;
 A44:    t7.a=t6.a by A36,SCMPDS_2:66
-          .=s.a by A35,AMI_1:51;
+          .=s.a by A35,AMI_1:51,T1;
         then
 A45:    WHL is_closed_on t7 by A4,A38,A42;
         now
@@ -1371,22 +1406,27 @@ A47:            k <= m2;
                   per cases;
                   suppose
                     k=0;
-                    hence IC Computation(t3,k) in dom pWHL by A13,A23,AMI_1:13;
+                    hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A13,
+A23,AMI_1:13;
                   end;
                   suppose
                     k<>0;
                     then consider kn be Nat such that
 A48:                k=kn+1 by NAT_1:6;
                     reconsider kn as Element of NAT by ORDINAL1:def 13;
-                    reconsider lm = IC Computation(t2,kn) as Element of NAT by
-ORDINAL1:def 13;
+                    reconsider lm = IC Comput(ProgramPart(t2),t2,kn) as Element
+of NAT;
+t: ProgramPart t3 = ProgramPart t4
+by AMI_1:144;
                     kn < k by A48,XREAL_1:31;
                     then kn < m2 by A47,XXREAL_0:2;
-                    then IC Computation(t2,kn) + 1 = IC Computation(t4,kn) by
+                    then IC Comput(ProgramPart(t2),t2,kn) + 1 = IC Comput(
+ProgramPart(t4),t4,kn) by
 A1,A17,A29,A27,A30,A20,A22,SCMPDS_7:34;
                     then
-A49:                IC Computation(t3,k) =inspos (lm+1) by A48,AMI_1:51;
-                    IC Computation(t2,kn) in dom pI by A26,SCMPDS_6:def 2;
+A49:                IC Comput(ProgramPart(t3),t3,k) = (lm+1) by A48,AMI_1:51,t;
+                    IC Comput(ProgramPart(t2),t2,kn) in dom pI by A26,SCMPDS_6:
+def 2;
                     then lm < card pI by SCMPDS_4:1;
                     then lm < card I+1 by SCMPDS_5:7;
                     then
@@ -1394,14 +1434,16 @@ A50:                lm+1 <= card I +1 by INT_1:20;
                     card I + 1 < card I + 3 by XREAL_1:8;
                     then lm+1 < card I +3 by A50,XXREAL_0:2;
                     then lm+1 < card pWHL by Lm1;
-                    hence IC Computation(t3,k) in dom pWHL by A49,SCMPDS_4:1;
+                    hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A49,
+SCMPDS_4:1;
                   end;
                 end;
               end;
               suppose
 A51:            k=m3;
                 l1 in dom pWHL by A24,SCMPDS_6:18;
-                hence IC Computation(t3,k) in dom pWHL by A1,A17,A29,A27,A30
+                hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A1,A17,A29
+,A27,A30
 ,A20,A22,A32,A51,SCMPDS_7:36;
               end;
             end;
@@ -1411,14 +1453,19 @@ A51:            k=m3;
             then consider nn be Nat such that
 A52:        k=m3+1+nn by NAT_1:10;
             reconsider nn as Element of NAT by ORDINAL1:def 13;
-            Computation(t3,k)=Computation(t7+*iWHL,nn) by A37,A52,AMI_1:51;
-            hence IC Computation(t3,k) in dom pWHL by A45,SCMPDS_6:def 2;
+ ProgramPart t3 = ProgramPart t7
+by AMI_1:144;
+then
+            Comput(ProgramPart(t3),t3,k)=Comput(ProgramPart(t7+*iWHL),t7+*iWHL,
+nn) by A37,A52,AMI_1:51;
+            hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A45,SCMPDS_6:
+def 2;
           end;
         end;
         hence WHL is_closed_on t by SCMPDS_6:def 2;
         WHL is_halting_on t7 by A4,A44,A38,A42;
         then ProgramPart t7 halts_on t7 by A37,SCMPDS_6:def 3;
-        then ProgramPart t3 halts_on t7 by AMI_1:93,144;
+        then ProgramPart t3 halts_on t7 by AMI_1:144;
         then ProgramPart t3 halts_on t3 by AMI_1:93;
         hence WHL is_halting_on t by SCMPDS_6:def 3;
       end;
@@ -1487,7 +1534,7 @@ A6: for x st x in X holds s.x=s.x;
   then
 A7: ProgramPart sI halts_on sI by SCMPDS_6:def 3;
   sI = sI+*iI by A5,FUNCT_4:79;
-  then ProgramPart(sI+*iI) halts_on sI+*iI by A5,FUNCT_4:79,A7;
+  then ProgramPart(sI+*iI) halts_on sI+*iI by A7;
   then
 A8: I is_halting_on sI by SCMPDS_6:def 3;
 A9: Es.a=s.a by A1,A3,A6;
@@ -1516,11 +1563,12 @@ A15: dom (s | A) = A by SCMPDS_6:1;
 A16: dom ps = dom s /\ A by RELAT_1:90
     .= ({IC SCMPDS} \/ D \/ A) /\ A by SCMPDS_4:19
     .= A by XBOOLE_1:21;
-  set s4 = Computation(s1,1);
-A17: IC s1 =inspos 0 by SCMPDS_6:21;
+  set s4 = Comput(ProgramPart(s1),s1,1);
+A17: IC s1 = 0 by SCMPDS_6:21;
 A18: WHL = i1 ';' (I ';' i2) by SCMPDS_4:51;
-A19: Computation(s1,0+1) = Following Computation(s1,0) by AMI_1:14
-    .= Following s1 by AMI_1:13
+A19: Comput(ProgramPart(s1),s1,0+1) = Following(ProgramPart s1,
+Comput(ProgramPart(s1),s1,0)) by AMI_1:14
+    .= Following(ProgramPart s1,s1) by AMI_1:13
     .= Exec(i1,s1) by A18,SCMPDS_6:22;
 A20: IExec(I,s) | A= (Result sI +* ps) | A by SCMPDS_4:def 8
     .= ps by A16,FUNCT_4:24;
@@ -1529,9 +1577,9 @@ A21: not b in dom iWHL by SCMPDS_4:31;
   then s1.DataLoc(s1.a,i)=s1.b by FUNCT_4:12
     .= s.b by A21,FUNCT_4:12;
   then
-A22: IC s4 = Next IC s1 by A1,A19,SCMPDS_2:69
-    .= inspos(0+1) by A17;
-  set mI=LifeSpan sI, s5=Computation(s4,mI), l1=inspos (card I + 1);
+A22: IC s4 = succ IC s1 by A1,A19,SCMPDS_2:69
+    .= (0+1) by A17;
+  set mI=LifeSpan sI, s5=Comput(ProgramPart(s4),s4,mI), l1= (card I + 1);
 A23: DataPart sI = DataPart s1 by SCMPDS_4:24,36;
   now
     let a;
@@ -1541,11 +1589,11 @@ A23: DataPart sI = DataPart s1 by SCMPDS_4:24,36;
   then
 A24: DataPart sI = DataPart s4 by SCMPDS_4:23;
   set m3=mI +1;
-  set s6=Computation(s1,m3);
+  set s6=Comput(ProgramPart(s1),s1,m3);
   card I + 1 < card I + 2 by XREAL_1:8;
   then
 A25: l1 in dom WHL by Th7;
-  set s7=Computation(s1,m3+1);
+  set s7=Comput(ProgramPart(s1),s1,m3+1);
 A26: IExec(I,s) = Result sI +* s | A by SCMPDS_4:def 8;
   WHL c= iWHL & iWHL c= s1 by FUNCT_4:26,SCMPDS_6:17;
   then
@@ -1559,32 +1607,35 @@ A28: Shift(I,1) c= s4 by AMI_1:81;
 A29: I is_closed_on sI by SCMPDS_6:38;
   then
 A30: IC s5=l1 by A2,A5,A8,A22,A24,A28,SCMPDS_7:36;
+Y:  (ProgramPart s6)/.IC s6
+ = s6.IC s6 by AMI_1:150;
+ ProgramPart s1 = ProgramPart s4
+by AMI_1:144;
+ then
 A31: s6=s5 by AMI_1:51;
   then
-A32: CurInstr s6=s5.l1 by A2,A5,A8,A29,A22,A24,A28,SCMPDS_7:36
+A32: CurInstr(ProgramPart s6,s6)=s5.l1 by A2,A5,A8,A29,A22,A24,A28,SCMPDS_7:36,
+Y
     .=s4.l1 by AMI_1:54
     .=s1.l1 by AMI_1:54
     .=WHL.l1 by A25,A27,GRFUNC_1:8
     .=i2 by Th8;
-A33: s7 = Following s6 by AMI_1:14
-    .= Exec(i2,s6) by A32;
+T: ProgramPart s1 = ProgramPart s6
+by AMI_1:144;
+A33: s7 = Following(ProgramPart s1,s6) by AMI_1:14
+    .= Exec(i2,s6) by A32,T;
   then IC s7=ICplusConst(s6,0-(card I+1)) by SCMPDS_2:66
-    .=inspos 0 by A30,A31,SCMPDS_7:1;
+    .= 0 by A30,A31,SCMPDS_7:1;
   then
-A34: IC s2 =IC Computation(s1,m1) by SCMPDS_6:21;
-A35: DataPart Computation(sI,mI) = DataPart s5 by A2,A5,A8,A29,A22,A24,A28,
+A34: IC s2 =IC Comput(ProgramPart(s1),s1,m1) by SCMPDS_6:21;
+A35: DataPart Comput(ProgramPart(sI),sI,mI) = DataPart s5 by A2,A5,A8,A29,A22,
+A24,A28,
 SCMPDS_7:36;
   now
     let x be Int_position;
 A36: not x in dom iWHL by SCMPDS_4:31;
-A37: now
-      assume
-      x in dom (s | A);
-      then reconsider l=x as Instruction-Location of SCMPDS by A15,AMI_1:def 4;
-      l=x;
-      hence contradiction by SCMPDS_2:53;
-    end;
-    s5.x=Computation(sI,mI).x by A35,SCMPDS_4:23
+A37: not x in dom (s | A) by A15,SCMPDS_2:53;
+    s5.x=Comput(ProgramPart(sI),sI,mI).x by A35,SCMPDS_4:23
       .=(Result sI).x by A7,AMI_1:122
       .=IExec(I,s).x by A26,A37,FUNCT_4:12;
     hence s7.x=IExec(I,s).x by A31,A33,SCMPDS_2:66
@@ -1596,25 +1647,35 @@ A38: DataPart s7 = DataPart s2 by SCMPDS_4:23;
     .=(Result sI +* ps)|A +* iWHL | A by FUNCT_4:75
     .= ps +* iWHL | A by A16,FUNCT_4:24
     .= s1 | A by FUNCT_4:75
-    .= Computation(s1,m1) | A by SCMPDS_7:6;
+    .= Comput(ProgramPart(s1),s1,m1) | A by SCMPDS_7:6;
   then
-A39: Computation(s1,m1)=s2 by A38,A34,SCMPDS_7:7;
-  then CurInstr Computation(s1,m1)=i1 by A18,SCMPDS_6:22;
+A39: Comput(ProgramPart(s1),s1,m1)=s2 by A38,A34,SCMPDS_7:7;
+  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1),Comput(ProgramPart(s1
+),s1,m1))=i1
+   by A18,SCMPDS_6:22;
   then m0 > m1 by A4,SCMPDS_6:2,31;
   then consider nn be Nat such that
 A40: m0=m1+nn by NAT_1:10;
   reconsider nn as Element of NAT by ORDINAL1:def 13;
-  Computation(s1,m1+m2) = Computation(s2,m2) by A39,AMI_1:51;
-  then CurInstr Computation(s1,m1+m2) = halt SCMPDS by A14,AMI_1:def 46;
+T: ProgramPart s1 = ProgramPart s2
+by A39,AMI_1:144;
+  Comput(ProgramPart(s1),s1,m1+m2) = Comput(ProgramPart(s1),s2,m2) by A39,AMI_1
+:51;
+  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1+m2),Comput(ProgramPart
+(s1),s1,m1+m2))
+   = halt SCMPDS by A14,AMI_1:def 46,T;
   then m1 + m2 >= m0 by A4,AMI_1:def 46;
   then
 A41: m2 >= nn by A40,XREAL_1:8;
-A42: Computation(s1,m0) = Computation(s2,nn) by A39,A40,AMI_1:51;
-  then CurInstr Computation(s2,nn) =halt SCMPDS by A4,AMI_1:def 46;
+A42: Comput(ProgramPart(s1),s1,m0) = Comput(ProgramPart(s1),s2,nn) by A39,A40,
+AMI_1:51;
+  then CurInstr(ProgramPart Comput(ProgramPart(s2),s2,nn),Comput(ProgramPart(s2
+),s2,nn))
+   =halt SCMPDS by A4,AMI_1:def 46,T;
   then nn >= m2 by A14,AMI_1:def 46;
   then nn=m2 by A41,XXREAL_0:1;
-  then Result s1 = Computation(s2,m2) by A4,A42,AMI_1:122;
-  hence IExec(WHL,s) = Computation(s2,m2) +* ps by SCMPDS_4:def 8
+  then Result s1 = Comput(ProgramPart(s2),s2,m2) by A4,A42,AMI_1:122,T;
+  hence IExec(WHL,s) = Comput(ProgramPart(s2),s2,m2) +* ps by SCMPDS_4:def 8
     .= Result s2 +* IExec(I,s) | A by A14,A20,AMI_1:122
     .= IExec(WHL,IExec(I,s)) by SCMPDS_4:def 8;
 end;
@@ -1675,7 +1736,7 @@ end;
 
 theorem Th18:
   for a be Int_position,i be Integer,m be Element of NAT,I be
-  Program of SCMPDS holds m < card I+2 iff inspos m in dom while>0(a,i,I)
+  Program of SCMPDS holds m < card I+2 iff  m in dom while>0(a,i,I)
 proof
   let a be Int_position,i be Integer,m be Element of NAT, I be Program of
   SCMPDS;
@@ -1685,7 +1746,7 @@ end;
 
 theorem Th19:
   for a be Int_position,i be Integer,I be Program of SCMPDS holds
-while>0(a,i,I).inspos 0=(a,i)<=0_goto (card I +2) & while>0(a,i,I).inspos (card
+while>0(a,i,I). 0=(a,i)<=0_goto (card I +2) & while>0(a,i,I). (card
   I+1)=goto -(card I+1)
 proof
   let a be Int_position,i be Integer,I be Program of SCMPDS;
@@ -1694,7 +1755,7 @@ proof
   set J5=I ';' i2;
   set WHL=while>0(a,i,I);
   WHL=i1 ';' J5 by SCMPDS_4:51;
-  hence WHL.inspos 0=i1 by SCMPDS_6:16;
+  hence WHL. 0=i1 by SCMPDS_6:16;
   card I4=card I+1 by SCMPDS_6:15;
   hence thesis by SCMP_GCD:10;
 end;
@@ -1711,41 +1772,47 @@ proof
 A1: s.d1 <= 0;
   set i1=(a,i)<=0_goto (card I+2), i2=goto -(card I+1);
   set WHL=while>0(a,i,I), pWHL=stop WHL, iWHL=Initialized pWHL, s3 = s +* iWHL
-  , s4 = Computation(s3,1);
-A2: IC s3 =inspos 0 by SCMPDS_6:21;
+  , s4 = Comput(ProgramPart(s3),s3,1);
+A2: IC s3 = 0 by SCMPDS_6:21;
 A3: not d1 in dom iWHL by SCMPDS_4:31;
   not a in dom iWHL by SCMPDS_4:31;
   then
 A4: s3.DataLoc(s3.a,i)=s3.d1 by FUNCT_4:12
     .= s.d1 by A3,FUNCT_4:12;
 A5: WHL = i1 ';' (I ';' i2 ) by SCMPDS_4:51;
-  Computation(s3,0+1) = Following Computation(s3,0) by AMI_1:14
-    .= Following s3 by AMI_1:13
+  Comput(ProgramPart(s3),s3,0+1) = Following(ProgramPart s3,
+  Comput(ProgramPart(s3),s3,0)) by AMI_1:14
+    .= Following(ProgramPart s3,s3) by AMI_1:13
     .= Exec(i1,s3) by A5,SCMPDS_6:22;
   then
 A6: IC s4 = ICplusConst(s3,(card I+2)) by A1,A4,SCMPDS_2:68
-    .= inspos(0+(card I+2)) by A2,SCMPDS_6:23;
+    .= (0+(card I+2)) by A2,SCMPDS_6:23;
 A7: card WHL=card I+2 by Th17;
   then
-A8: inspos(card I+2) in dom pWHL by SCMPDS_6:25;
+A8: (card I+2) in dom pWHL by SCMPDS_6:25;
+Y:  (ProgramPart s4)/.IC s4
+ = s4.IC s4 by AMI_1:150;
   iWHL c= s3 by FUNCT_4:26;
   then pWHL c= s4 by AMI_1:81,SCMPDS_4:57;
-  then s4.inspos(card I+2) = pWHL.inspos(card I+2) by A8,GRFUNC_1:8
+  then s4.(card I+2) = pWHL.(card I+2) by A8,GRFUNC_1:8
     .=halt SCMPDS by A7,SCMPDS_6:25;
   then
-A9: CurInstr s4 = halt SCMPDS by A6;
+A9: CurInstr(ProgramPart s4,s4) = halt SCMPDS by A6,Y;
+TX: ProgramPart s4 = ProgramPart s3
+by AMI_1:144;
   now
     let k be Element of NAT;
     per cases;
     suppose
       0 < k;
       then 1+0 <= k by INT_1:20;
-      hence IC Computation(s3,k) in dom pWHL by A8,A6,A9,AMI_1:52;
+      hence IC Comput(ProgramPart(s3),s3,k) in dom pWHL
+      by A8,A6,A9,AMI_1:52,TX;
     end;
     suppose
       k = 0;
-      then Computation(s3,k) = s3 by AMI_1:13;
-      hence IC Computation(s3,k) in dom pWHL by A2,SCMPDS_4:75;
+      then Comput(ProgramPart(s3),s3,k) = s3 by AMI_1:13;
+      hence IC Comput(ProgramPart(s3),s3,k) in dom pWHL by A2,SCMPDS_4:75;
     end;
   end;
   hence WHL is_closed_on s by SCMPDS_6:def 2;
@@ -1756,23 +1823,27 @@ end;
 theorem Th21:
   for s being State of SCMPDS,I being Program of SCMPDS,a,c being
 Int_position, i being Integer st s.DataLoc(s.a,i) <= 0 holds IExec(while>0(a,i,
-  I),s) = s +* Start-At inspos (card I + 2)
+  I),s) = s +* Start-At((card I+2),SCMPDS)
 proof
   let s be State of SCMPDS,I be Program of SCMPDS, a,c be Int_position, i be
   Integer;
   set d1=DataLoc(s.a,i);
   set WHL=while>0(a,i,I), pWHL=stop WHL, iWHL=Initialized pWHL, s3 = s +* iWHL
-  , s4 = Computation(s3,1), i1=(a,i)<=0_goto (card I+2), i2=goto -(card I+1);
-  set SAl=Start-At inspos (card I + 2);
-A1: IC s3 =inspos 0 by SCMPDS_6:21;
+  , s4 = Comput(ProgramPart(s3),s3,1), i1=(a,i)<=0_goto (card I+2), i2=goto -(
+card I+1);
+  set SAl=Start-At((card I+2),SCMPDS);
+A1: IC s3 = 0 by SCMPDS_6:21;
 A2: WHL = i1 ';' (I ';' i2) by SCMPDS_4:51;
 A3: not d1 in dom iWHL by SCMPDS_4:31;
   not a in dom iWHL by SCMPDS_4:31;
   then
 A4: s3.DataLoc(s3.a,i)=s3.d1 by FUNCT_4:12
     .= s.d1 by A3,FUNCT_4:12;
-A5: Computation(s3,0+1) = Following Computation(s3,0) by AMI_1:14
-    .= Following s3 by AMI_1:13
+A5: Comput(ProgramPart(s3),s3,0+1) =
+Following(ProgramPart s3,Comput(ProgramPart(s3),s3,0)
+)
+ by AMI_1:14
+    .= Following(ProgramPart s3,s3) by AMI_1:13
     .= Exec(i1,s3) by A2,SCMPDS_6:22;
   iWHL c= s3 by FUNCT_4:26;
   then
@@ -1782,25 +1853,34 @@ A7: IExec(WHL,s) = Result s3 +* s | A by SCMPDS_4:def 8;
   s.d1 <= 0;
   then
 A8: IC s4 = ICplusConst(s3,(card I+2)) by A5,A4,SCMPDS_2:68
-    .= inspos(0+(card I+2)) by A1,SCMPDS_6:23;
+    .= (0+(card I+2)) by A1,SCMPDS_6:23;
+Y:  (ProgramPart s4)/.IC s4
+ = s4.IC s4 by AMI_1:150;
 A9: card WHL=card I+2 by Th17;
-  then inspos(card I+2) in dom pWHL by SCMPDS_6:25;
-  then s4.inspos(card I+2) = pWHL.inspos(card I+2) by A6,GRFUNC_1:8
+  then (card I+2) in dom pWHL by SCMPDS_6:25;
+  then s4.(card I+2) = pWHL.(card I+2) by A6,GRFUNC_1:8
     .=halt SCMPDS by A9,SCMPDS_6:25;
   then
-A10: CurInstr s4 = halt SCMPDS by A8;
+A10: CurInstr(ProgramPart s4,s4) = halt SCMPDS by A8,Y;
   then
 A11: ProgramPart s3 halts_on s3 by AMI_1:146;
-A12: CurInstr s3 = i1 by A2,SCMPDS_6:22;
+A12: CurInstr(ProgramPart s3,s3) = i1 by A2,SCMPDS_6:22;
   now
     let l be Element of NAT;
+u: Comput(ProgramPart(s3),s3,0) = s3 by AMI_1:13;
     assume
     l < 0+1;
     then l=0 by NAT_1:13;
-    then CurInstr Computation(s3,l) = CurInstr s3 by AMI_1:13;
-    hence CurInstr Computation(s3,l) <> halt SCMPDS by A12,SCMPDS_6:30;
+    then CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(
+s3),s3,l))
+     = CurInstr(ProgramPart s3,s3) by u;
+    hence CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(
+s3),s3,l)) <>
+     halt SCMPDS by A12,SCMPDS_6:30;
   end;
-  then for l be Element of NAT st CurInstr Computation(s3,l) = halt SCMPDS
+  then for l be Element of NAT st
+   CurInstr(ProgramPart Comput(ProgramPart(s3),s3,l),Comput(ProgramPart(s3),s3,
+l)) = halt SCMPDS
   holds 1 <= l;
   then LifeSpan s3 = 1 by A10,A11,AMI_1:def 46;
   then
@@ -1817,14 +1897,7 @@ A18:  x is Int_position;
       then x <> IC SCMPDS by SCMPDS_2:52;
       then
 A19:  not x in dom SAl by A16,TARSKI:def 1;
-      now
-        assume
-        x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A14,
-AMI_1:def 4;
-        l=x;
-        hence contradiction by A18,SCMPDS_2:53;
-      end;
+      not x in dom (s | A) by A14,A18,SCMPDS_2:53;
       hence IExec(WHL,s).x = s4.x by A13,A7,FUNCT_4:12
         .= s3.x by A5,A18,SCMPDS_2:68
         .= s.x by A18,SCMPDS_5:19
@@ -1832,37 +1905,30 @@ AMI_1:def 4;
     end;
     suppose
 A20:  x = IC SCMPDS;
-      now
-        assume
-        x in dom (s | A);
-        then reconsider l=x as Instruction-Location of SCMPDS by A14,
-AMI_1:def 4;
-        l=x;
-        hence contradiction by A20,AMI_1:48;
-      end;
-      hence IExec(WHL,s).x = inspos(card I + 2) by A8,A13,A7,A20,FUNCT_4:12
+      not x in dom (s | A) by A14,A20,AMI_1:48;
+      hence IExec(WHL,s).x = (card I + 2) by A8,A13,A7,A20,FUNCT_4:12
         .= (s +* SAl).x by A20,SCMPDS_7:12;
     end;
     suppose
-      x is Instruction-Location of SCMPDS;
+      x is Element of NAT;
       hence IExec(WHL,s).x = (s +* SAl).x by SCMPDS_6:27;
     end;
   end;
-  dom IExec(WHL,s) = the carrier of SCMPDS by AMI_1:79
-    .= dom (s +* SAl) by AMI_1:79;
+  dom IExec(WHL,s) = the carrier of SCMPDS by PARTFUN1:def 4
+    .= dom (s +* SAl) by PARTFUN1:def 4;
   hence thesis by A15,FUNCT_1:9;
 end;
 
 theorem
   for s being State of SCMPDS,I being Program of SCMPDS,a being
 Int_position, i being Integer st s.DataLoc(s.a,i) <= 0 holds IC IExec(while>0(a
-  ,i,I),s) = inspos (card I + 2)
+  ,i,I),s) =  (card I + 2)
 proof
   let s be State of SCMPDS,I be Program of SCMPDS,a be Int_position, i be
   Integer;
   assume
   s.DataLoc(s.a,i) <= 0;
-  then IExec(while>0(a,i,I),s) =s +* Start-At inspos (card I+ 2) by Th21;
+  then IExec(while>0(a,i,I),s) =s +* Start-At((card I+2),SCMPDS) by Th21;
   hence thesis by AMI_1:111;
 end;
 
@@ -1876,8 +1942,8 @@ proof
   assume
   s.DataLoc(s.a,i) <= 0;
   then
-A1: IExec(while>0(a,i,I),s) = s +* Start-At inspos (card I + 2) by Th21;
-  not b in dom Start-At inspos (card I + 2) by SCMPDS_4:59;
+A1: IExec(while>0(a,i,I),s) = s +* Start-At((card I+2),SCMPDS) by Th21;
+  not b in dom Start-At((card I+2),SCMPDS) by SCMPDS_4:59;
   hence thesis by A1,FUNCT_4:12;
 end;
 
@@ -1936,26 +2002,20 @@ A9:   t.a()=s().a();
       suppose
 A10:    t.b > 0;
 A11:    dom (t | A) = A by SCMPDS_6:1;
-A12:    now
-          assume
-          a() in dom (t | A);
-          then reconsider l=a() as Instruction-Location of SCMPDS by A11,
-AMI_1:def 4;
-          l=a();
-          hence contradiction by SCMPDS_2:53;
-        end;
+A12:  not a() in dom (t | A) by A11,SCMPDS_2:53;
 A13:    IExec(I(),t).a()=t.a() by A4,A8,A9,A10;
-A14:    inspos 0 in dom pWHL by SCMPDS_4:75;
+A14:     0 in dom pWHL by SCMPDS_4:75;
 A15:    dom (t | A) = A by SCMPDS_6:1;
 A16:    not b in dom iWHL by SCMPDS_4:31;
 A17:    WHL = i1 ';' (I() ';' i2) by SCMPDS_4:51;
-        set t2 = t +* IsI, t3 = t +* iWHL, t4 = Computation(t3,1);
+        set t2 = t +* IsI, t3 = t +* iWHL, t4 = Comput(ProgramPart(t3),t3,1);
 A18:    IsI c= t2 by FUNCT_4:26;
-        set m2=LifeSpan t2, t5=Computation(t4,m2), l1=inspos (card I() + 1);
-A19:    IC t3 =inspos 0 by SCMPDS_6:21;
+        set m2=LifeSpan t2, t5=Comput(ProgramPart(t4),t4,m2), l1= (card I() + 1
+);
+A19:    IC t3 = 0 by SCMPDS_6:21;
         set m3=m2 +1;
-        set t6=Computation(t3,m3);
-        set t7=Computation(t3,m3+1);
+        set t6=Comput(ProgramPart(t3),t3,m3);
+        set t7=Comput(ProgramPart(t3),t3,m3+1);
         card I() + 1 < card I() + 2 by XREAL_1:8;
         then
 A20:    l1 in dom WHL by Th18;
@@ -1966,8 +2026,9 @@ A21:    WHL c= t3 by XBOOLE_1:1;
         then Shift(I(),1) c= t3 by A21,XBOOLE_1:1;
         then
 A22:    Shift(I(),1) c= t4 by AMI_1:81;
-A23:    Computation(t3,0+1) = Following Computation(t3,0) by AMI_1:14
-          .= Following t3 by AMI_1:13
+A23:    Comput(ProgramPart(t3),t3,0+1) = Following(ProgramPart t3,
+Comput(ProgramPart(t3),t3,0)) by AMI_1:14
+          .= Following(ProgramPart t3,t3) by AMI_1:13
           .= Exec(i1,t3) by A17,SCMPDS_6:22;
 A24:    DataPart t2 = DataPart t3 by SCMPDS_4:24,36;
         now
@@ -1981,7 +2042,7 @@ A25:    DataPart t2 = DataPart t4 by SCMPDS_4:23;
         then
 A26:    ProgramPart t2 halts_on t2 by SCMPDS_6:def 3;
         t2 = t2+*IsI by A18,FUNCT_4:79;
-        then ProgramPart(t2+*IsI) halts_on t2+*IsI by A18,FUNCT_4:79,A26;
+        then ProgramPart(t2+*IsI) halts_on t2+*IsI by A26;
         then
 A27:    I() is_halting_on t2 by SCMPDS_6:def 3;
 A28:    IExec(I(),t) = Result t2 +* t | A by SCMPDS_4:def 8;
@@ -1993,24 +2054,33 @@ A31:    I() is_closed_on t2 by SCMPDS_6:38;
         then t3.DataLoc(t3.a(),i())= t3.b by A9,FUNCT_4:12
           .= t.b by A16,FUNCT_4:12;
         then
-A32:    IC t4 = Next IC t3 by A10,A23,SCMPDS_2:68
-          .= inspos(0+1) by A19;
+A32:    IC t4 = succ IC t3 by A10,A23,SCMPDS_2:68
+          .= (0+1) by A19;
         then
 A33:    IC t5=l1 by A1,A18,A27,A31,A25,A22,SCMPDS_7:36;
+Y:  (ProgramPart t6)/.IC t6
+ = t6.IC t6 by AMI_1:150;
+ ProgramPart t3 = ProgramPart t4
+by AMI_1:144;
+ then
 A34:    t6=t5 by AMI_1:51;
         then
-A35:    CurInstr t6=t5.l1 by A1,A18,A27,A31,A32,A25,A22,SCMPDS_7:36
+A35:    CurInstr(ProgramPart t6,t6)=t5.l1
+ by A1,A18,A27,A31,A32,A25,A22,SCMPDS_7:36,Y
           .=t4.l1 by AMI_1:54
           .=t3.l1 by AMI_1:54
           .=WHL.l1 by A20,A21,GRFUNC_1:8
           .=i2 by Th19;
-A36:    t7 = Following t6 by AMI_1:14
-          .= Exec(i2,t6) by A35;
+T: ProgramPart t3 = ProgramPart t6
+by AMI_1:144;
+A36:    t7 = Following(ProgramPart t3,t6) by AMI_1:14
+          .= Exec(i2,t6) by A35,T;
         then IC t7=ICplusConst(t6,0-(card I()+1)) by SCMPDS_2:66
-          .=inspos 0 by A33,A34,SCMPDS_7:1;
+          .= 0 by A33,A34,SCMPDS_7:1;
         then
 A37:    t7 +* iWHL=t7 by SCMPDS_7:37;
-A38:    DataPart Computation(t2,m2) = DataPart t5 by A1,A18,A27,A31,A32,A25,A22
+A38:    DataPart Comput(ProgramPart(t2),t2,m2) = DataPart t5 by A1,A18,A27,A31,
+A32,A25,A22
 ,SCMPDS_7:36;
         then
 A39:    DataPart t5 =DataPart Result t2 by A26,AMI_1:122
@@ -2030,11 +2100,13 @@ A42:      F(Dstate(t7)) < k+1 by A7,A40,XXREAL_0:2;
           F(Dstate(t7)) > k;
           hence contradiction by A42,INT_1:20;
         end;
-A43:    t5.a()=Computation(t2,m2).a() by A38,SCMPDS_4:23
+A43:    t5.a()=Comput(ProgramPart(t2),t2,m2).a() by A38,SCMPDS_4:23
           .=(Result t2).a() by A26,AMI_1:122
           .=s().a() by A9,A13,A28,A12,FUNCT_4:12;
+T1: ProgramPart t4 = ProgramPart t3
+by AMI_1:144;
 A44:    t7.a()=t6.a() by A36,SCMPDS_2:66
-          .=s().a() by A43,AMI_1:51;
+          .=s().a() by A43,AMI_1:51,T1;
         then
 A45:    WHL is_closed_on t7 by A6,A29,A40,A41;
         now
@@ -2052,22 +2124,27 @@ A47:            k <= m2;
                   per cases;
                   suppose
                     k=0;
-                    hence IC Computation(t3,k) in dom pWHL by A14,A19,AMI_1:13;
+                    hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A14,
+A19,AMI_1:13;
                   end;
                   suppose
                     k<>0;
                     then consider kn be Nat such that
 A48:                k=kn+1 by NAT_1:6;
                     reconsider kn as Element of NAT by ORDINAL1:def 13;
-                    reconsider lm = IC Computation(t2,kn) as Element of NAT by
-ORDINAL1:def 13;
+                    reconsider lm = IC Comput(ProgramPart(t2),t2,kn) as Element
+of NAT;
+t: ProgramPart t3 = ProgramPart t4
+by AMI_1:144;
                     kn < k by A48,XREAL_1:31;
                     then kn < m2 by A47,XXREAL_0:2;
-                    then IC Computation(t2,kn) + 1 = IC Computation(t4,kn) by
+                    then IC Comput(ProgramPart(t2),t2,kn) + 1 = IC Comput(
+ProgramPart(t4),t4,kn) by
 A1,A18,A27,A31,A32,A25,A22,SCMPDS_7:34;
                     then
-A49:                IC Computation(t3,k) =inspos (lm+1) by A48,AMI_1:51;
-                    IC Computation(t2,kn) in dom pI by A30,SCMPDS_6:def 2;
+A49:                IC Comput(ProgramPart(t3),t3,k) = (lm+1) by A48,AMI_1:51,t;
+                    IC Comput(ProgramPart(t2),t2,kn) in dom pI by A30,SCMPDS_6:
+def 2;
                     then lm < card pI by SCMPDS_4:1;
                     then lm < card I()+1 by SCMPDS_5:7;
                     then
@@ -2075,14 +2152,16 @@ A50:                lm+1 <= card I() +1 by INT_1:20;
                     card I() + 1 < card I() + 3 by XREAL_1:8;
                     then lm+1 < card I() +3 by A50,XXREAL_0:2;
                     then lm+1 < card pWHL by Lm3;
-                    hence IC Computation(t3,k) in dom pWHL by A49,SCMPDS_4:1;
+                    hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A49,
+SCMPDS_4:1;
                   end;
                 end;
               end;
               suppose
 A51:            k=m3;
                 l1 in dom pWHL by A20,SCMPDS_6:18;
-                hence IC Computation(t3,k) in dom pWHL by A1,A18,A27,A31,A32
+                hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A1,A18,A27
+,A31,A32
 ,A25,A22,A34,A51,SCMPDS_7:36;
               end;
             end;
@@ -2091,16 +2170,20 @@ A51:            k=m3;
             k >= m3+1;
             then consider nn be Nat such that
 A52:        k=m3+1+nn by NAT_1:10;
+T: ProgramPart t3 = ProgramPart t7
+by AMI_1:144;
 A53:        nn in NAT by ORDINAL1:def 13;
-            then Computation(t3,k)=Computation(t7+*iWHL,nn) by A37,A52,AMI_1:51
+            then Comput(ProgramPart(t3),t3,k)=Comput(ProgramPart(t7+*iWHL),t7+*
+iWHL,nn) by A37,A52,AMI_1:51,T
 ;
-            hence IC Computation(t3,k) in dom pWHL by A45,A53,SCMPDS_6:def 2;
+            hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A45,A53,
+SCMPDS_6:def 2;
           end;
         end;
         hence WHL is_closed_on t by SCMPDS_6:def 2;
         WHL is_halting_on t7 by A6,A29,A44,A40,A41;
         then ProgramPart t7 halts_on t7 by A37,SCMPDS_6:def 3;
-        then ProgramPart t3 halts_on t7 by AMI_1:93,144;
+        then ProgramPart t3 halts_on t7 by AMI_1:144;
         then ProgramPart t3 halts_on t3 by AMI_1:93;
         hence WHL is_halting_on t by SCMPDS_6:def 3;
       end;
@@ -2154,7 +2237,7 @@ A8: I() is_closed_on sI by SCMPDS_6:38;
   then
 A9: ProgramPart sI halts_on sI by SCMPDS_6:def 3;
   sI = sI+*iI by A7,FUNCT_4:79;
-  then ProgramPart(sI+*iI) halts_on sI+*iI by A7,FUNCT_4:79,A9;
+  then ProgramPart(sI+*iI) halts_on sI+*iI by A9;
   then
 A10: I() is_halting_on sI by SCMPDS_6:def 3;
   set Es=IExec(I(),s()), bj=DataLoc(Es.a(),i());
@@ -2182,14 +2265,15 @@ A17: P[Dstate Es] by A2,A4,A5;
   from WhileGHalt(A1,A15,A17,A16);
   then
 A18: ProgramPart s2 halts_on s2 by SCMPDS_6:def 3;
-  set s4 = Computation(s1,1);
+  set s4 = Comput(ProgramPart(s1),s1,1);
   set i1=(a(),i())<=0_goto (card I()+2), i2=goto -(card I()+1);
   set b=DataLoc(s().a(),i());
 A19: WHL = i1 ';' (I() ';' i2) by SCMPDS_4:51;
-  set mI=LifeSpan sI, s5=Computation(s4,mI), l1=inspos (card I() + 1);
-A20: IC s1 =inspos 0 by SCMPDS_6:21;
-A21: Computation(s1,0+1) = Following Computation(s1,0) by AMI_1:14
-    .= Following s1 by AMI_1:13
+  set mI=LifeSpan sI, s5=Comput(ProgramPart(s4),s4,mI), l1= (card I() + 1);
+A20: IC s1 = 0 by SCMPDS_6:21;
+A21: Comput(ProgramPart(s1),s1,0+1) = Following(ProgramPart s1,
+Comput(ProgramPart(s1),s1,0)) by AMI_1:14
+    .= Following(ProgramPart s1,s1) by AMI_1:13
     .= Exec(i1,s1) by A19,SCMPDS_6:22;
 A22: DataPart sI = DataPart s1 by SCMPDS_4:24,36;
   now
@@ -2200,7 +2284,7 @@ A22: DataPart sI = DataPart s1 by SCMPDS_4:24,36;
   then
 A23: DataPart sI = DataPart s4 by SCMPDS_4:23;
   set m3=mI +1;
-  set s6=Computation(s1,m3);
+  set s6=Comput(ProgramPart(s1),s1,m3);
   card I() + 1 < card I() + 2 by XREAL_1:8;
   then
 A24: l1 in dom WHL by Th18;
@@ -2211,7 +2295,7 @@ A25: dom ps = dom s() /\ A by RELAT_1:90
     .= A by XBOOLE_1:21;
 A26: IExec(I(),s()) | A= (Result sI +* ps) | A by SCMPDS_4:def 8
     .= ps by A25,FUNCT_4:24;
-  set s7=Computation(s1,m3+1);
+  set s7=Comput(ProgramPart(s1),s1,m3+1);
 A27: IExec(I(),s()) = Result sI +* s() | A by SCMPDS_4:def 8;
 A28: dom (s() | A) = A by SCMPDS_6:1;
   WHL c= iWHL & iWHL c= s1 by FUNCT_4:26,SCMPDS_6:17;
@@ -2224,36 +2308,39 @@ A30: Shift(I(),1) c= s4 by AMI_1:81;
   s1.DataLoc(s1.a(),i())=s1.b by SCMPDS_5:19
     .= s().b by SCMPDS_5:19;
   then
-A31: IC s4 = Next IC s1 by A2,A21,SCMPDS_2:68
-    .= inspos(0+1) by A20;
+A31: IC s4 = succ IC s1 by A2,A21,SCMPDS_2:68
+    .= (0+1) by A20;
   then
 A32: IC s5=l1 by A1,A7,A10,A8,A23,A30,SCMPDS_7:36;
+Y:  (ProgramPart s6)/.IC s6
+ = s6.IC s6 by AMI_1:150;
+ ProgramPart s1 = ProgramPart s4
+by AMI_1:144;
+ then
 A33: s6=s5 by AMI_1:51;
   then
-A34: CurInstr s6=s5.l1 by A1,A7,A10,A8,A31,A23,A30,SCMPDS_7:36
+A34: CurInstr(ProgramPart s6,s6)=s5.l1 by A1,A7,A10,A8,A31,A23,A30,SCMPDS_7:36,
+Y
     .=s4.l1 by AMI_1:54
     .=s1.l1 by AMI_1:54
     .=WHL.l1 by A24,A29,GRFUNC_1:8
     .=i2 by Th19;
-A35: s7 = Following s6 by AMI_1:14
-    .= Exec(i2,s6) by A34;
+T: ProgramPart s1 = ProgramPart s6
+by AMI_1:144;
+A35: s7 = Following(ProgramPart s1,s6) by AMI_1:14
+    .= Exec(i2,s6) by A34,T;
   then IC s7=ICplusConst(s6,0-(card I()+1)) by SCMPDS_2:66
-    .=inspos 0 by A32,A33,SCMPDS_7:1;
+    .= 0 by A32,A33,SCMPDS_7:1;
   then
-A36: IC s2 =IC Computation(s1,m1) by SCMPDS_6:21;
-A37: DataPart Computation(sI,mI) = DataPart s5 by A1,A7,A10,A8,A31,A23,A30,
+A36: IC s2 =IC Comput(ProgramPart(s1),s1,m1) by SCMPDS_6:21;
+A37: DataPart Comput(ProgramPart(sI),sI,mI) = DataPart s5 by A1,A7,A10,A8,A31,
+A23,A30,
 SCMPDS_7:36;
   now
     let x be Int_position;
 A38: not x in dom iWHL by SCMPDS_4:31;
-A39: now
-      assume
-      x in dom (s() | A);
-      then reconsider l=x as Instruction-Location of SCMPDS by A28,AMI_1:def 4;
-      l=x;
-      hence contradiction by SCMPDS_2:53;
-    end;
-    s5.x=Computation(sI,mI).x by A37,SCMPDS_4:23
+A39: not x in dom (s() | A) by A28,SCMPDS_2:53;
+    s5.x=Comput(ProgramPart(sI),sI,mI).x by A37,SCMPDS_4:23
       .=(Result sI).x by A9,AMI_1:122
       .=IExec(I(),s()).x by A27,A39,FUNCT_4:12;
     hence s7.x=IExec(I(),s()).x by A33,A35,SCMPDS_2:66
@@ -2265,25 +2352,35 @@ A40: DataPart s7 = DataPart s2 by SCMPDS_4:23;
     .=(Result sI +* ps)|A +* iWHL | A by FUNCT_4:75
     .= ps +* iWHL | A by A25,FUNCT_4:24
     .= s1 | A by FUNCT_4:75
-    .= Computation(s1,m1) | A by SCMPDS_7:6;
+    .= Comput(ProgramPart(s1),s1,m1) | A by SCMPDS_7:6;
   then
-A41: Computation(s1,m1)=s2 by A40,A36,SCMPDS_7:7;
-  then CurInstr Computation(s1,m1)=i1 by A19,SCMPDS_6:22;
+A41: Comput(ProgramPart(s1),s1,m1)=s2 by A40,A36,SCMPDS_7:7;
+  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1),Comput(ProgramPart(s1
+),s1,m1))=i1
+   by A19,SCMPDS_6:22;
   then m0 > m1 by A13,SCMPDS_6:2,30;
   then consider nn be Nat such that
 A42: m0=m1+nn by NAT_1:10;
   reconsider nn as Element of NAT by ORDINAL1:def 13;
-  Computation(s1,m1+m2) = Computation(s2,m2) by A41,AMI_1:51;
-  then CurInstr Computation(s1,m1+m2) = halt SCMPDS by A18,AMI_1:def 46;
+T: ProgramPart s1 = ProgramPart s2
+by A41,AMI_1:144;
+  Comput(ProgramPart(s1),s1,m1+m2) = Comput(ProgramPart(s1),s2,m2) by A41,AMI_1
+:51;
+  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1+m2),Comput(ProgramPart
+(s1),s1,m1+m2))
+   = halt SCMPDS by A18,AMI_1:def 46,T;
   then m1 + m2 >= m0 by A13,AMI_1:def 46;
   then
 A43: m2 >= nn by A42,XREAL_1:8;
-A44: Computation(s1,m0) = Computation(s2,nn) by A41,A42,AMI_1:51;
-  then CurInstr Computation(s2,nn) =halt SCMPDS by A13,AMI_1:def 46;
+A44: Comput(ProgramPart(s1),s1,m0) = Comput(ProgramPart(s1),s2,nn) by A41,A42,
+AMI_1:51;
+  then CurInstr(ProgramPart Comput(ProgramPart(s2),s2,nn),Comput(ProgramPart(s2
+),s2,nn))
+   =halt SCMPDS by A13,AMI_1:def 46,T;
   then nn >= m2 by A18,AMI_1:def 46;
   then nn=m2 by A43,XXREAL_0:1;
-  then Result s1 = Computation(s2,m2) by A13,A44,AMI_1:122;
-  hence IExec(WHL,s()) = Computation(s2,m2) +* ps by SCMPDS_4:def 8
+  then Result s1 = Comput(ProgramPart(s2),s2,m2) by A13,A44,AMI_1:122,T;
+  hence IExec(WHL,s()) = Comput(ProgramPart(s2),s2,m2) +* ps by SCMPDS_4:def 8
     .= Result s2 +* IExec(I(),s()) | A by A18,A26,AMI_1:122
     .= IExec(WHL,IExec(I(),s())) by SCMPDS_4:def 8;
 end;
@@ -2345,23 +2442,17 @@ A10:  t.a=s.a;
       suppose
 A11:    t.b > 0;
 A12:    dom (t | A) = A by SCMPDS_6:1;
-A13:    now
-          assume
-          a in dom (t | A);
-          then reconsider l=a as Instruction-Location of SCMPDS by A12,
-AMI_1:def 4;
-          l=a;
-          hence contradiction by SCMPDS_2:53;
-        end;
+A13: not a in dom (t | A) by A12,SCMPDS_2:53;
 A14:    IExec(I,t).a=t.a by A4,A8,A9,A10,A11;
-A15:    inspos 0 in dom pWHL by SCMPDS_4:75;
+A15:     0 in dom pWHL by SCMPDS_4:75;
 A16:    dom (t | A) = A by SCMPDS_6:1;
 A17:    not b in dom iWHL by SCMPDS_4:31;
 A18:    WHL = i1 ';' (I ';' i2) by SCMPDS_4:51;
-        set t2 = t +* IsI, t3 = t +* iWHL, t4 = Computation(t3,1);
+        set t2 = t +* IsI, t3 = t +* iWHL, t4 = Comput(ProgramPart(t3),t3,1);
 A19:    IsI c= t2 by FUNCT_4:26;
-A20:    Computation(t3,0+1) = Following Computation(t3,0) by AMI_1:14
-          .= Following t3 by AMI_1:13
+A20:    Comput(ProgramPart(t3),t3,0+1) = Following(ProgramPart t3,
+Comput(ProgramPart(t3),t3,0)) by AMI_1:14
+          .= Following(ProgramPart t3,t3) by AMI_1:13
           .= Exec(i1,t3) by A18,SCMPDS_6:22;
 A21:    DataPart t2 = DataPart t3 by SCMPDS_4:24,36;
         now
@@ -2379,11 +2470,11 @@ A23:    WHL c= t3 by XBOOLE_1:1;
         then
 A24:    Shift(I,1) c= t4 by AMI_1:81;
 A25:    IExec(I,t) = Result t2 +* t | A by SCMPDS_4:def 8;
-        set m2=LifeSpan t2, t5=Computation(t4,m2), l1=inspos (card I + 1);
-A26:    IC t3 =inspos 0 by SCMPDS_6:21;
+        set m2=LifeSpan t2, t5=Comput(ProgramPart(t4),t4,m2), l1= (card I + 1);
+A26:    IC t3 = 0 by SCMPDS_6:21;
         set m3=m2 +1;
-        set t6=Computation(t3,m3);
-        set t7=Computation(t3,m3+1);
+        set t6=Comput(ProgramPart(t3),t3,m3);
+        set t7=Comput(ProgramPart(t3),t3,m3+1);
         card I + 1 < card I + 2 by XREAL_1:8;
         then
 A27:    l1 in dom WHL by Th18;
@@ -2394,31 +2485,40 @@ A29:    I is_closed_on t2 by SCMPDS_6:38;
         then
 A30:    ProgramPart t2 halts_on t2 by SCMPDS_6:def 3;
         t2 = t2+*IsI by A19,FUNCT_4:79;
-        then ProgramPart(t2+*IsI) halts_on t2+*IsI by A19,FUNCT_4:79,A30;
+        then ProgramPart(t2+*IsI) halts_on t2+*IsI by A30;
         then
 A31:    I is_halting_on t2 by SCMPDS_6:def 3;
         not a in dom iWHL by SCMPDS_4:31;
         then t3.DataLoc(t3.a,i)= t3.b by A10,FUNCT_4:12
           .= t.b by A17,FUNCT_4:12;
         then
-A32:    IC t4 = Next IC t3 by A11,A20,SCMPDS_2:68
-          .= inspos(0+1) by A26;
+A32:    IC t4 = succ IC t3 by A11,A20,SCMPDS_2:68
+          .= (0+1) by A26;
         then
 A33:    IC t5=l1 by A1,A19,A31,A29,A22,A24,SCMPDS_7:36;
+Y:  (ProgramPart t6)/.IC t6
+ = t6.IC t6 by AMI_1:150;
+ ProgramPart t3 = ProgramPart t4
+by AMI_1:144;
+ then
 A34:    t6=t5 by AMI_1:51;
         then
-A35:    CurInstr t6=t5.l1 by A1,A19,A31,A29,A32,A22,A24,SCMPDS_7:36
+A35:    CurInstr(ProgramPart t6,t6)=t5.l1
+ by A1,A19,A31,A29,A32,A22,A24,SCMPDS_7:36,Y
           .=t4.l1 by AMI_1:54
           .=t3.l1 by AMI_1:54
           .=WHL.l1 by A27,A23,GRFUNC_1:8
           .=i2 by Th19;
-A36:    t7 = Following t6 by AMI_1:14
-          .= Exec(i2,t6) by A35;
+T: ProgramPart t3 = ProgramPart t6
+by AMI_1:144;
+A36:    t7 = Following(ProgramPart t3,t6) by AMI_1:14
+          .= Exec(i2,t6) by A35,T;
         then IC t7=ICplusConst(t6,0-(card I+1)) by SCMPDS_2:66
-          .=inspos 0 by A33,A34,SCMPDS_7:1;
+          .= 0 by A33,A34,SCMPDS_7:1;
         then
 A37:    t7 +* iWHL=t7 by SCMPDS_7:37;
-A38:    DataPart Computation(t2,m2) = DataPart t5 by A1,A19,A31,A29,A32,A22,A24
+A38:    DataPart Comput(ProgramPart(t2),t2,m2) = DataPart t5 by A1,A19,A31,A29,
+A32,A22,A24
 ,SCMPDS_7:36;
         then
 A39:    DataPart t5 =DataPart Result t2 by A30,AMI_1:122
@@ -2457,11 +2557,13 @@ A47:      x in X;
             .=IExec(I,t).x by A39,SCMPDS_3:4;
           hence t7.x >= c+t7.b by A4,A8,A9,A10,A11,A45,A47;
         end;
-A48:    t5.a=Computation(t2,m2).a by A38,SCMPDS_4:23
+A48:    t5.a=Comput(ProgramPart(t2),t2,m2).a by A38,SCMPDS_4:23
           .=(Result t2).a by A30,AMI_1:122
           .=s.a by A10,A14,A25,A13,FUNCT_4:12;
+T1: ProgramPart t4 = ProgramPart t3
+by AMI_1:144;
 A49:    t7.a=t6.a by A36,SCMPDS_2:66
-          .=s.a by A48,AMI_1:51;
+          .=s.a by A48,AMI_1:51,T1;
         then
 A50:    WHL is_closed_on t7 by A6,A46,A40,A43;
         now
@@ -2479,22 +2581,27 @@ A52:            k <= m2;
                   per cases;
                   suppose
                     k=0;
-                    hence IC Computation(t3,k) in dom pWHL by A15,A26,AMI_1:13;
+                    hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A15,
+A26,AMI_1:13;
                   end;
                   suppose
                     k<>0;
                     then consider kn be Nat such that
 A53:                k=kn+1 by NAT_1:6;
                     reconsider kn as Element of NAT by ORDINAL1:def 13;
-                    reconsider lm = IC Computation(t2,kn) as Element of NAT by
-ORDINAL1:def 13;
+                    reconsider lm = IC Comput(ProgramPart(t2),t2,kn) as Element
+of NAT;
+t: ProgramPart t3 = ProgramPart t4
+by AMI_1:144;
                     kn < k by A53,XREAL_1:31;
                     then kn < m2 by A52,XXREAL_0:2;
-                    then IC Computation(t2,kn) + 1 = IC Computation(t4,kn) by
+                    then IC Comput(ProgramPart(t2),t2,kn) + 1 = IC Comput(
+ProgramPart(t4),t4,kn) by
 A1,A19,A31,A29,A32,A22,A24,SCMPDS_7:34;
                     then
-A54:                IC Computation(t3,k) =inspos (lm+1) by A53,AMI_1:51;
-                    IC Computation(t2,kn) in dom pI by A28,SCMPDS_6:def 2;
+A54:                IC Comput(ProgramPart(t3),t3,k) = (lm+1) by A53,AMI_1:51,t;
+                    IC Comput(ProgramPart(t2),t2,kn) in dom pI by A28,SCMPDS_6:
+def 2;
                     then lm < card pI by SCMPDS_4:1;
                     then lm < card I+1 by SCMPDS_5:7;
                     then
@@ -2502,14 +2609,16 @@ A55:                lm+1 <= card I +1 by INT_1:20;
                     card I + 1 < card I + 3 by XREAL_1:8;
                     then lm+1 < card I +3 by A55,XXREAL_0:2;
                     then lm+1 < card pWHL by Lm3;
-                    hence IC Computation(t3,k) in dom pWHL by A54,SCMPDS_4:1;
+                    hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A54,
+SCMPDS_4:1;
                   end;
                 end;
               end;
               suppose
 A56:            k=m3;
                 l1 in dom pWHL by A27,SCMPDS_6:18;
-                hence IC Computation(t3,k) in dom pWHL by A1,A19,A31,A29,A32
+                hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A1,A19,A31
+,A29,A32
 ,A22,A24,A34,A56,SCMPDS_7:36;
               end;
             end;
@@ -2518,16 +2627,20 @@ A56:            k=m3;
             k >= m3+1;
             then consider nn be Nat such that
 A57:        k=m3+1+nn by NAT_1:10;
+T: ProgramPart t3 = ProgramPart t7
+by AMI_1:144;
 A58:        nn in NAT by ORDINAL1:def 13;
-            then Computation(t3,k)=Computation(t7+*iWHL,nn) by A37,A57,AMI_1:51
+            then Comput(ProgramPart(t3),t3,k)=Comput(ProgramPart(t7+*iWHL),t7+*
+iWHL,nn) by A37,A57,AMI_1:51,T
 ;
-            hence IC Computation(t3,k) in dom pWHL by A50,A58,SCMPDS_6:def 2;
+            hence IC Comput(ProgramPart(t3),t3,k) in dom pWHL by A50,A58,
+SCMPDS_6:def 2;
           end;
         end;
         hence WHL is_closed_on t by SCMPDS_6:def 2;
         WHL is_halting_on t7 by A6,A49,A46,A40,A43;
         then ProgramPart t7 halts_on t7 by A37,SCMPDS_6:def 3;
-        then ProgramPart t3 halts_on t7 by AMI_1:93,144;
+        then ProgramPart t3 halts_on t7 by AMI_1:144;
         then ProgramPart t3 halts_on t3 by AMI_1:93;
         hence WHL is_halting_on t by SCMPDS_6:def 3;
       end;
@@ -2579,11 +2692,12 @@ proof
   set i1=(a,i)<=0_goto (card I+2), i2=goto -(card I+1);
   assume
 A1: s.b > 0;
-  set s4 = Computation(s1,1);
-A2: IC s1 =inspos 0 by SCMPDS_6:21;
+  set s4 = Comput(ProgramPart(s1),s1,1);
+A2: IC s1 = 0 by SCMPDS_6:21;
 A3: WHL = i1 ';' (I ';' i2) by SCMPDS_4:51;
-A4: Computation(s1,0+1) = Following Computation(s1,0) by AMI_1:14
-    .= Following s1 by AMI_1:13
+A4: Comput(ProgramPart(s1),s1,0+1) = Following(ProgramPart s1,
+Comput(ProgramPart(s1),s1,0)) by AMI_1:14
+    .= Following(ProgramPart s1,s1) by AMI_1:13
     .= Exec(i1,s1) by A3,SCMPDS_6:22;
   set m0=LifeSpan s1;
 A5: dom (s | A) = A by SCMPDS_6:1;
@@ -2646,14 +2760,14 @@ A25: DataPart sI = DataPart s1 by SCMPDS_4:24,36;
   end;
   then
 A26: DataPart sI = DataPart s4 by SCMPDS_4:23;
-  set mI=LifeSpan sI, s5=Computation(s4,mI), l1=inspos (card I + 1);
+  set mI=LifeSpan sI, s5=Comput(ProgramPart(s4),s4,mI), l1= (card I + 1);
   WHL c= iWHL & iWHL c= s1 by FUNCT_4:26,SCMPDS_6:17;
   then
 A27: WHL c= s1 by XBOOLE_1:1;
   set m3=mI +1;
 A28: IExec(I,s) = Result sI +* s | A by SCMPDS_4:def 8;
-  set s7=Computation(s1,m3+1);
-  set s6=Computation(s1,m3);
+  set s7=Comput(ProgramPart(s1),s1,m3+1);
+  set s6=Comput(ProgramPart(s1),s1,m3);
   card I + 1 < card I + 2 by XREAL_1:8;
   then
 A29: l1 in dom WHL by Th18;
@@ -2665,7 +2779,7 @@ A30: Shift(I,1) c= s4 by AMI_1:81;
   then
 A31: ProgramPart sI halts_on sI by SCMPDS_6:def 3;
   sI = sI+*iI by A14,FUNCT_4:79;
-  then ProgramPart(sI+*iI) halts_on sI+*iI by A14,FUNCT_4:79,A31;
+  then ProgramPart(sI+*iI) halts_on sI+*iI by A31;
   then
 A32: I is_halting_on sI by SCMPDS_6:def 3;
 A33: IExec(I,s) | A= (Result sI +* ps) | A by SCMPDS_4:def 8
@@ -2675,39 +2789,42 @@ A34: not b in dom iWHL by SCMPDS_4:31;
   then s1.DataLoc(s1.a,i)=s1.b by FUNCT_4:12
     .= s.b by A34,FUNCT_4:12;
   then
-A35: IC s4 = Next IC s1 by A1,A4,SCMPDS_2:68
-    .= inspos(0+1) by A2;
+A35: IC s4 = succ IC s1 by A1,A4,SCMPDS_2:68
+    .= (0+1) by A2;
   I is_closed_on s by A1,A9,A10,A12;
   then
 A36: I is_closed_on sI by SCMPDS_6:38;
   then
 A37: IC s5=l1 by A7,A14,A32,A35,A26,A30,SCMPDS_7:36;
+Y:  (ProgramPart s6)/.IC s6
+ = s6.IC s6 by AMI_1:150;
+ ProgramPart s1 = ProgramPart s4
+by AMI_1:144;
+ then
 A38: s6=s5 by AMI_1:51;
   then
-A39: CurInstr s6=s5.l1 by A7,A14,A32,A36,A35,A26,A30,SCMPDS_7:36
+A39: CurInstr(ProgramPart s6,s6)=s5.l1
+ by A7,A14,A32,A36,A35,A26,A30,SCMPDS_7:36,Y
     .=s4.l1 by AMI_1:54
     .=s1.l1 by AMI_1:54
     .=WHL.l1 by A29,A27,GRFUNC_1:8
     .=i2 by Th19;
-A40: s7 = Following s6 by AMI_1:14
-    .= Exec(i2,s6) by A39;
+T: ProgramPart s1 = ProgramPart s6
+by AMI_1:144;
+A40: s7 = Following(ProgramPart s1,s6) by AMI_1:14
+    .= Exec(i2,s6) by A39,T;
   then IC s7=ICplusConst(s6,0-(card I+1)) by SCMPDS_2:66
-    .=inspos 0 by A37,A38,SCMPDS_7:1;
+    .= 0 by A37,A38,SCMPDS_7:1;
   then
-A41: IC s2 =IC Computation(s1,m1) by SCMPDS_6:21;
-A42: DataPart Computation(sI,mI) = DataPart s5 by A7,A14,A32,A36,A35,A26,A30,
+A41: IC s2 =IC Comput(ProgramPart(s1),s1,m1) by SCMPDS_6:21;
+A42: DataPart Comput(ProgramPart(sI),sI,mI) = DataPart s5 by A7,A14,A32,A36,A35
+,A26,A30,
 SCMPDS_7:36;
   now
     let x be Int_position;
 A43: not x in dom iWHL by SCMPDS_4:31;
-A44: now
-      assume
-      x in dom (s | A);
-      then reconsider l=x as Instruction-Location of SCMPDS by A5,AMI_1:def 4;
-      l=x;
-      hence contradiction by SCMPDS_2:53;
-    end;
-    s5.x=Computation(sI,mI).x by A42,SCMPDS_4:23
+A44: not x in dom (s | A) by A5,SCMPDS_2:53;
+    s5.x=Comput(ProgramPart(sI),sI,mI).x by A42,SCMPDS_4:23
       .=(Result sI).x by A31,AMI_1:122
       .=IExec(I,s).x by A28,A44,FUNCT_4:12;
     hence s7.x=IExec(I,s).x by A38,A40,SCMPDS_2:66
@@ -2719,25 +2836,35 @@ A45: DataPart s7 = DataPart s2 by SCMPDS_4:23;
     .=(Result sI +* ps)|A +* iWHL | A by FUNCT_4:75
     .= ps +* iWHL | A by A6,FUNCT_4:24
     .= s1 | A by FUNCT_4:75
-    .= Computation(s1,m1) | A by SCMPDS_7:6;
+    .= Comput(ProgramPart(s1),s1,m1) | A by SCMPDS_7:6;
   then
-A46: Computation(s1,m1)=s2 by A45,A41,SCMPDS_7:7;
-  then CurInstr Computation(s1,m1)=i1 by A3,SCMPDS_6:22;
+A46: Comput(ProgramPart(s1),s1,m1)=s2 by A45,A41,SCMPDS_7:7;
+  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1),Comput(ProgramPart(s1
+),s1,m1))=i1
+   by A3,SCMPDS_6:22;
   then m0 > m1 by A11,SCMPDS_6:2,30;
   then consider nn be Nat such that
 A47: m0=m1+nn by NAT_1:10;
   reconsider nn as Element of NAT by ORDINAL1:def 13;
-  Computation(s1,m1+m2) = Computation(s2,m2) by A46,AMI_1:51;
-  then CurInstr Computation(s1,m1+m2) = halt SCMPDS by A24,AMI_1:def 46;
+T: ProgramPart s1 = ProgramPart s2
+by A46,AMI_1:144;
+  Comput(ProgramPart(s1),s1,m1+m2) = Comput(ProgramPart(s1),s2,m2) by A46,AMI_1
+:51;
+  then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m1+m2),Comput(ProgramPart
+(s1),s1,m1+m2))
+   = halt SCMPDS by A24,AMI_1:def 46,T;
   then m1 + m2 >= m0 by A11,AMI_1:def 46;
   then
 A48: m2 >= nn by A47,XREAL_1:8;
-A49: Computation(s1,m0) = Computation(s2,nn) by A46,A47,AMI_1:51;
-  then CurInstr Computation(s2,nn) =halt SCMPDS by A11,AMI_1:def 46;
+A49: Comput(ProgramPart(s1),s1,m0) = Comput(ProgramPart(s1),s2,nn) by A46,A47,
+AMI_1:51;
+  then CurInstr(ProgramPart Comput(ProgramPart(s2),s2,nn),Comput(ProgramPart(s2
+),s2,nn))
+   =halt SCMPDS by A11,AMI_1:def 46,T;
   then nn >= m2 by A24,AMI_1:def 46;
   then nn=m2 by A48,XXREAL_0:1;
-  then Result s1 = Computation(s2,m2) by A11,A49,AMI_1:122;
-  hence IExec(WHL,s) = Computation(s2,m2) +* ps by SCMPDS_4:def 8
+  then Result s1 = Comput(ProgramPart(s2),s2,m2) by A11,A49,AMI_1:122,T;
+  hence IExec(WHL,s) = Comput(ProgramPart(s2),s2,m2) +* ps by SCMPDS_4:def 8
     .= Result s2 +* IExec(I,s) | A by A24,A33,AMI_1:122
     .= IExec(WHL,IExec(I,s)) by SCMPDS_4:def 8;
 end;

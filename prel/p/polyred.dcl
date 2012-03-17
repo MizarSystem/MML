@@ -30,6 +30,7 @@
 <ArticleID name="NAT_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="RELAT_2"/>
@@ -48,7 +49,6 @@
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="NAT_D"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="PRE_POLY"/>
 <ArticleID name="BAGORDER"/>
@@ -137,10 +137,10 @@
 <Adjective nr="112"/>
 <Adjective nr="113"/>
 <Adjective nr="116"/>
-<Adjective nr="206"/>
-<Adjective nr="207"/>
-<Adjective nr="208"/>
-<Adjective nr="209"/>
+<Adjective nr="211"/>
+<Adjective nr="212"/>
+<Adjective nr="213"/>
+<Adjective nr="214"/>
 </Cluster>
 </RCluster>
 <FCluster aid="POLYRED" nr="1">
@@ -159,7 +159,7 @@
 <Adjective nr="112"/>
 <Adjective nr="113"/>
 <Adjective nr="116"/>
-<Adjective nr="206"/>
+<Adjective nr="211"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -268,7 +268,7 @@
 <Adjective nr="41">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="192"/>
+<Adjective nr="197"/>
 <Adjective nr="222"/>
 </Cluster>
 </Typ>
@@ -345,10 +345,10 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="136"/>
-<Adjective nr="139"/>
 <Adjective nr="141"/>
-<Adjective nr="143"/>
+<Adjective nr="144"/>
+<Adjective nr="146"/>
+<Adjective nr="148"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="K" nr="11">
@@ -369,8 +369,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="130"/>
-<Adjective nr="167"/>
+<Adjective nr="135"/>
+<Adjective nr="172"/>
 </Cluster>
 </FCluster>
 <FCluster aid="POLYRED" nr="4">
@@ -387,9 +387,9 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="136"/>
-<Adjective nr="139"/>
-<Adjective nr="143"/>
+<Adjective nr="141"/>
+<Adjective nr="144"/>
+<Adjective nr="148"/>
 <Adjective nr="224">
 <LocusVar nr="1"/>
 </Adjective>
@@ -413,8 +413,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="130"/>
-<Adjective nr="203"/>
+<Adjective nr="135"/>
+<Adjective nr="208"/>
 </Cluster>
 </FCluster>
 <FCluster aid="POLYRED" nr="5">
@@ -431,10 +431,10 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="136"/>
-<Adjective nr="139"/>
 <Adjective nr="141"/>
-<Adjective nr="143"/>
+<Adjective nr="144"/>
+<Adjective nr="146"/>
+<Adjective nr="148"/>
 <Adjective nr="224">
 <LocusVar nr="1"/>
 </Adjective>

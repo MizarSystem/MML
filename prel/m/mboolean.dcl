@@ -18,6 +18,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="MBOOLEAN"/>
 </Signature>
@@ -39,7 +40,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="147">
+<Func kind="K" nr="160">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -61,9 +62,9 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="148">
+<Func kind="K" nr="161">
 <LocusVar nr="1"/>
-<Func kind="K" nr="136">
+<Func kind="K" nr="148">
 <LocusVar nr="1"/>
 </Func>
 </Func>

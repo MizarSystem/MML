@@ -22,7 +22,8 @@ environ
  definitions VALUED_1, XCMPLX_0;
  theorems ABSVALUE, NAT_1, SEQ_1, SEQ_2, INT_1, SQUARE_1, SEQ_4, RAT_1,
       RFUNCT_2, TARSKI, FUNCT_2, NEWTON, XREAL_0, XCMPLX_0, XCMPLX_1, FUNCOP_1,
-      COMPLEX1, XREAL_1, XXREAL_0, INT_2, ORDINAL1, NAT_D, VALUED_1, VALUED_0;
+      COMPLEX1, XREAL_1, XXREAL_0, INT_2, ORDINAL1, NAT_D, VALUED_1, VALUED_0,
+      FUNCT_1;
  schemes NAT_1, SEQ_1, FUNCT_2;
 
 begin
@@ -2144,13 +2145,31 @@ end;
 
 definition
   let IT be Real_Sequence;
-  attr IT is Rational_Sequence-like means
+  redefine attr IT is rational-valued means
   :Def6:
   for n holds IT.n is Rational;
+  compatibility
+  proof
+    thus IT is rational-valued implies for n holds IT.n is Rational;
+    assume
+A1: for n holds IT.n is Rational;
+    now
+      let x;
+      per cases;
+      suppose x in dom IT;
+        then x in NAT by FUNCT_2:def 1;
+        hence IT.x is rational by A1;
+      end;
+      suppose not x in dom IT;
+        hence IT.x is rational by FUNCT_1:def 4;
+      end;
+    end;
+    hence thesis by VALUED_0:10;
+  end;
 end;
 
 registration
-  cluster Rational_Sequence-like Real_Sequence;
+  cluster rational-valued Real_Sequence;
   existence
   proof
     reconsider s = NAT --> 0 as Real_Sequence by FUNCOP_1:57;
@@ -2161,20 +2180,20 @@ registration
 end;
 
 definition
-  mode Rational_Sequence is Rational_Sequence-like Real_Sequence;
+  mode Rational_Sequence is rational-valued Real_Sequence;
 end;
 
-definition
-  let s be Rational_Sequence,n;
-  redefine func s.n -> Rational;
-  coherence by Def6;
+registration
+  let s be Rational_Sequence, n;
+  cluster s.n -> rational;
+  coherence;
 end;
 
 canceled;
 
 theorem Th79:
-  for a be real number ex s being Rational_Sequence st s is
-  convergent & lim s = a & for n holds s.n<=a
+  for a be real number ex s being Rational_Sequence st
+  s is convergent & lim s = a & for n holds s.n<=a
 proof
   let a be real number;
   deffunc O(Element of NAT) = [\($1+1)*a/]/($1+1);
@@ -2895,8 +2914,7 @@ theorem Th85:
   a > 0 implies a #R 0 = 1
 proof
   reconsider s = NAT --> 0 as Real_Sequence by FUNCOP_1:57;
-  for n holds s.n is Rational;
-  then reconsider s as Rational_Sequence by Def6;
+  reconsider s as Rational_Sequence;
   assume
 A1: a > 0;
   s.0 = 0 by FUNCOP_1:13;
@@ -2919,8 +2937,7 @@ theorem
   a > 0 implies a #R 1 = a
 proof
   reconsider s = NAT --> 1 as Real_Sequence by FUNCOP_1:57;
-  for n holds s.n is Rational;
-  then reconsider s as Rational_Sequence by Def6;
+  reconsider s as Rational_Sequence;
   s.0 = 1 by FUNCOP_1:13;
   then
 A1: lim s = 1 by SEQ_4:41;
@@ -2970,8 +2987,7 @@ A1: a>0;
   then reconsider s = NAT --> p as Real_Sequence by FUNCOP_1:57;
 A2: lim s = s.0 by SEQ_4:41
     .= p by FUNCOP_1:13;
-  for n holds s.n is Rational;
-  then reconsider s as Rational_Sequence by Def6;
+  reconsider s as Rational_Sequence;
 A3: now
     let n be Nat;
     reconsider nn=n as Element of NAT by ORDINAL1:def 13;
@@ -3002,12 +3018,7 @@ A5: a>0;
   then
 A6: a #Q sb is convergent by A1,Th82;
 A7: a #Q sc is convergent by A5,A3,Th82;
-  now
-    let n;
-    sb.n + sc.n = (sb + sc).n by SEQ_1:11;
-    hence (sb + sc).n is Rational;
-  end;
-  then reconsider s = sb + sc as Rational_Sequence by Def6;
+  reconsider s = sb + sc as Rational_Sequence;
 A8: lim s = b + c by A1,A2,A3,A4,SEQ_2:20;
 A9: now
     let n;
@@ -3610,12 +3621,7 @@ proof
 A1: s1 is convergent and
 A2: b = lim s1 and
   for n holds s1.n>=b by Th80;
-  now
-    let n;
-    (p(#)s1).n = p*s1.n by SEQ_1:13;
-    hence (p(#)s1).n is Rational;
-  end;
-  then reconsider s2 = p(#)s1 as Rational_Sequence by Def6;
+  reconsider s2 = p(#)s1 as Rational_Sequence;
   assume
 A3: a>0;
 A4: now

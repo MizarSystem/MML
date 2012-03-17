@@ -1668,7 +1668,9 @@ INDENT is the current indentation level."
 	 (spec (completing-read (if default
 				    (format "%s(default %s) " string default)
 				  string)
-				'tags-complete-tag
+				;; for Emacs 23 tags-complete-tag no longer exists
+				(if (fboundp 'tags-complete-tag) 'tags-complete-tag
+				  (tags-lazy-completion-table))
 				nil nil default nil default)))
     (if (equal spec "")
 	(or default (error "There is no default tag"))
@@ -2963,6 +2965,7 @@ numeric character."
 "Replace non-alphanumeric chars in STR by %code."
 (let ((slist (string-to-list str))
       (space (nreverse (string-to-list (format "%%%x" 32))))
+      (nl (nreverse (string-to-list "%0A")))
       res codel)
   (if (eq mizar-emacs 'xemacs)
       (setq slist (mapcar 'char-to-int slist)))
@@ -2970,8 +2973,10 @@ numeric character."
     (let ((i (car slist)))
       (cond ((alfanump i)
 	     (setq res (cons i res)))
-	    ((member i '(32 10 9 13))        ; "[ \n\t\r]"
+	    ((member i '(32 9)) ; 10 9 13))        ; "[ \n\t\r]"
 	     (setq res (append space res)))
+	    ((member i '(10 13)) ; 10 9 13))        ; "[ \n\t\r]"
+	     (setq res (append nl res)))
 	    (t
 	     (setq codel (nreverse (string-to-list (format "%x" i))))
 	     (setq res (nconc codel (cons 37 res))))))
@@ -5518,6 +5523,34 @@ file suffix to use."
   (customize-variable 'browse-url-generic-program)
   )
 )
+
+;;;;;;;;;;;;;;;   AR 4 mizar and html and mw services
+(defcustom ar4mizar-server "http://mws.cs.ru.nl/"
+"Server for the AR4Mizar services."
+:type 'string
+:group 'mizar-proof-advisor)
+
+
+(defcustom ar4mizar-cgi "~mptp/cgi-bin/MizAR.cgi"
+"Path to the ar4mizar CGI script on `ar4mizar-server'."
+:type 'string
+:group 'mizar-proof-advisor)
+
+
+(defun mizar-post-to-ar4mizar (&optional suffix)
+"Browse in a HTML browser the article or an environment file.
+A XSLT-capable browser like Mozilla or IE has to be default in
+Emacs - you may need to customize the variable
+`browse-url-browser-function' for this, and possibly (if 
+the previous is set to `browse-url-generic') also the variable 
+`browse-url-generic-program'.  Argument SUFFIX is a
+file suffix to use."
+(interactive)
+(let* ((aname (file-name-nondirectory
+		(file-name-sans-extension
+		 (buffer-file-name)))))
+      (browse-url (concat ar4mizar-server ar4mizar-cgi "?Formula=" (query-handle-chars-cgi (buffer-string)) "&Name=" aname))))
+
 
 
 ;; Menu for the mizar editing buffers

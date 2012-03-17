@@ -1,0 +1,4255 @@
+:: Abstract Simplicial Complexes
+::  by Karol P\c{a}k
+:: 
+:: Received December 18, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM_1, XBOOLE_0, CARD_1, CLASSES1, COHSP_1, FINSET_1, FUNCT_1,
+      GROUP_4, INT_1, MATROID0, ORDERS_1, PARTFUN1, PRE_TOPC, RELAT_1, RELAT_2,
+      NUMBERS, SETFAM_1, SGRAPH1, SUBSET_1, TARSKI, TRIANG_1, WELLORD1,
+      ZFMISC_1, SIMPLEX0, XXREAL_0, NAT_1, ORDINAL1, FUNCOP_1, ARYTM_3,
+      RCOMP_1, STRUCT_0, GLIB_000, XREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, RELAT_1, RELAT_2, FUNCT_1,
+      FUNCT_2, NUMBERS, WELLORD1, ORDINAL1, ORDERS_1, FINSET_1, CARD_1,
+      XREAL_0, XXREAL_0, XXREAL_3, NAT_1, INT_1, SETFAM_1, DOMAIN_1, STRUCT_0,
+      PRE_TOPC, TOPS_2, PCOMPS_1, PENCIL_1, CLASSES1, MATROID0, RELSET_1,
+      COHSP_1, FUNCOP_1;
+ constructors SETFAM_1, XXREAL_3, REAL_1, TOPS_2, BORSUK_1, WELLORD1, BINOP_2,
+      CLASSES1, COH_SP, LEXBFS, MATROID0, COHSP_1, FUNCOP_1;
+ registrations BORSUK_3, CARD_1, COHSP_1, FIB_NUM2, FINSET_1, FUNCT_1, INT_1,
+      MATROID0, NAT_1, ORDINAL1, PENCIL_1, REALSET1, RELAT_1, SETFAM_1,
+      SUBSET_1, STRUCT_0, XBOOLE_0, XREAL_0, XXREAL_0, XXREAL_3, FUNCOP_1;
+ requirements REAL, SUBSET, NUMERALS, ARITHM, BOOLE;
+ definitions CLASSES1, COHSP_1, FUNCOP_1, MATROID0, ORDINAL1, SETFAM_1,
+      STRUCT_0, SUBSET_1, TARSKI, TOPS_2, VECTSP_1, XBOOLE_0, XXREAL_3;
+ theorems CARD_1, CARD_2, CARD_3, CLASSES1, COHSP_1, COMBGRAS, COMPL_SP,
+      FINSET_1, FUNCT_1, FUNCT_2, FUNCOP_1, INT_1, MATROID0, NAT_1, NUMBERS,
+      ORDERS_1, ORDINAL1, PENCIL_1, PRE_TOPC, RELAT_1, RELAT_2, SETFAM_1,
+      STIRL2_1, SUBSET_1, WELLORD1, WELLORD2, TARSKI, TOPS_2, XREAL_0,
+      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, XXREAL_3, ZFMISC_1;
+ schemes CLASSES1, FRAENKEL, FUNCT_2, NAT_1;
+
+begin :: Preliminaries
+
+reserve x,y,X,Y,Z for set,
+        D for non empty set,
+        n,k for Nat,
+        i,i1,i2 for Integer;
+
+notation let X;
+  antonym X is with_empty_element for X is with_non-empty_elements;
+end;
+
+registration
+  cluster empty -> finite-membered set;
+  coherence
+  proof
+  let X;
+  assume A1: X is empty;
+  let x;
+  thus thesis by A1;
+ end;
+  let X be finite set;
+  cluster {X} -> finite-membered;
+  coherence
+  proof
+  let x;
+  thus thesis by TARSKI:def 1;
+ end;
+  cluster bool X -> finite-membered;
+  coherence
+  proof
+  let x;
+  thus thesis;
+ end;
+  let Y be finite set;
+  cluster {X,Y} -> finite-membered;
+  coherence
+  proof
+  let x;
+  thus thesis by TARSKI:def 2;
+ end;
+end;
+
+registration
+  let X be finite-membered set;
+  cluster -> finite-membered Subset of X;
+  coherence
+  proof
+  let S be Subset of X;
+  let x be set;
+  thus thesis by MATROID0:def 5;
+ end;
+  let Y be finite-membered set;
+  cluster X \/ Y -> finite-membered;
+  coherence
+  proof
+  let x be set;
+  assume x in X\/Y;
+  then x in X or x in Y by XBOOLE_0:def 3;
+  hence thesis by MATROID0:def 5;
+ end;
+end;
+
+registration
+  let X be finite finite-membered set;
+  cluster union X -> finite;
+  coherence
+  proof
+  for x st x in X holds x is finite by MATROID0:def 5;
+  hence thesis by FINSET_1:25;
+ end;
+end;
+
+registration
+  cluster empty -> subset-closed set;
+  coherence
+  proof
+  let X be set;
+  assume X is empty;
+  then for x,y st x in X & y c=x holds y in X;
+  hence thesis by CLASSES1:def 1;
+ end;
+  cluster with_empty_element -> non empty set;
+  coherence by SETFAM_1:def 9;
+  cluster non empty subset-closed -> with_empty_element set;
+  coherence
+  proof
+  let X;
+  assume A1: X is non empty subset-closed;
+  then consider x such that
+   A2: x in X by XBOOLE_0:def 1;
+  {}c=x by XBOOLE_1:2;
+  then {} in X by A1,A2,CLASSES1:def 1;
+  hence thesis;
+ end;
+end;
+
+registration
+  let X;
+  cluster Sub_of_Fin X -> finite-membered;
+  coherence
+  proof
+  let x;
+  assume x in Sub_of_Fin X;
+  hence thesis by COHSP_1:def 3;
+ end;
+end;
+
+registration
+  let X be subset-closed set;
+  cluster Sub_of_Fin X -> subset-closed;
+  coherence
+  proof
+  let x,y;
+  assume x in Sub_of_Fin X & y c=x;
+  hence thesis by CLASSES1:def 1;
+ end;
+end;
+
+theorem
+  Y is subset-closed iff for X st X in Y holds bool X c= Y
+ proof
+  hereby assume A1: Y is subset-closed;
+   let X;
+   assume A2: X in Y;
+   thus bool X c=Y
+   proof
+    let x be set;
+    assume x in bool X;
+    hence thesis by A1,A2,CLASSES1:def 1;
+   end;
+  end;
+  assume A3: for X st X in Y holds bool X c=Y;
+  let x,y;
+  assume that
+   A4: x in Y and
+   A5: y c=x;
+  A6: y in bool x by A5;
+  bool x c=Y by A3,A4;
+  hence thesis by A6;
+ end;
+
+registration
+  let A,B be subset-closed set;
+  cluster A \/ B -> subset-closed;
+  coherence
+  proof
+  let x,y;
+  assume that
+   A1: x in A\/B and
+   A2: y c=x;
+  x in A or x in B by A1,XBOOLE_0:def 3;
+  then y in A or y in B by A2,CLASSES1:def 1;
+  hence y in A\/B by XBOOLE_0:def 3;
+ end;
+  cluster A /\ B -> subset-closed;
+  coherence
+  proof
+  let x,y;
+  assume that
+   A3: x in A/\B and
+   A4: y c=x;
+  x in B by A3,XBOOLE_0:def 4;
+  then A5: y in B by A4,CLASSES1:def 1;
+  x in A by A3,XBOOLE_0:def 4;
+  then y in A by A4,CLASSES1:def 1;
+  hence y in A/\B by A5,XBOOLE_0:def 4;
+ end;
+end;
+
+Lm1: for X ex F be subset-closed set st F=union{bool x where x is Element of X:
+x in X} & X c=F & for Y st X c=Y & Y is subset-closed holds F c=Y
+ proof
+  let X;
+  set B={bool x where x is Element of X:x in X};
+  now let a,b be set such that
+    A1: a in union B and
+    A2: b c=a;
+   consider y such that
+    A3: a in y and
+    A4: y in B by A1,TARSKI:def 4;
+   consider x be Element of X such that
+    A5: y=bool x and
+    x in X by A4;
+   b c=x by A2,A3,A5,XBOOLE_1:1;
+   hence b in union B by A4,A5,TARSKI:def 4;
+  end;
+  then reconsider U=union B as subset-closed set by CLASSES1:def 1;
+  take U;
+  thus U=union B;
+  thus X c=U
+  proof
+   let x such that
+    A6: x in X;
+   x c=x & bool x in B by A6;
+   hence thesis by TARSKI:def 4;
+  end;
+  let Y such that
+   A7: X c=Y & Y is subset-closed;
+  let x;
+  assume x in U;
+  then consider y such that
+   A8: x in y and
+   A9: y in B by TARSKI:def 4;
+  ex x be Element of X st y=bool x & x in X by A9;
+  hence x in Y by A7,A8,CLASSES1:def 1;
+ end;
+
+definition
+  let X;
+  func subset-closed_closure_of X -> subset-closed set means :Def1:
+    X c= it &
+    for Y st X c= Y & Y is subset-closed holds it c= Y;
+  existence
+  proof
+  ex F be subset-closed set st F=union{bool x where x is Element of X:x in X} &
+X c=F & for Y st X c=Y & Y is subset-closed holds F c=Y by Lm1;
+  hence thesis;
+ end;
+  uniqueness
+  proof
+  let F1,F2 be subset-closed set;
+  assume X c=F1 & (for Y st X c=Y & Y is subset-closed holds F1 c=Y) & X c=F2 &
+for Y st X c=Y & Y is subset-closed holds F2 c=Y;
+  then F1 c=F2 & F2 c=F1;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+end;
+
+theorem Th2:
+  x in subset-closed_closure_of X iff ex y st x c= y & y in X
+ proof
+  set B={bool x1 where x1 is Element of X:x1 in X};
+  consider F be subset-closed set such that
+   A1: F=union B and
+   A2: X c=F & for Y st X c=Y & Y is subset-closed holds F c=Y by Lm1;
+  A3: F=subset-closed_closure_of X by A2,Def1;
+  hereby assume x in subset-closed_closure_of X;
+   then consider y such that
+    A4: x in y and
+    A5: y in B by A1,A3,TARSKI:def 4;
+   consider x1 be Element of X such that
+    A6: bool x1=y & x1 in X by A5;
+   reconsider y=x1 as set;
+   take y;
+   thus x c=y & y in X by A4,A6;
+  end;
+  given y such that
+   A7: x c=y and
+   A8: y in X;
+  bool y in B by A8;
+  hence thesis by A1,A3,A7,TARSKI:def 4;
+ end;
+
+definition
+  let X;
+  let F be Subset-Family of X;
+  redefine func subset-closed_closure_of F -> subset-closed Subset-Family of X;
+  coherence
+  proof
+  set FIC=subset-closed_closure_of F;
+  FIC c=bool X
+  proof
+   let x be set;
+   assume x in FIC;
+   then ex y st x c=y & y in F by Th2;
+   then x c=X by XBOOLE_1:1;
+   hence thesis;
+  end;
+  hence thesis;
+ end;
+end;
+
+registration
+  cluster subset-closed_closure_of {} -> empty;
+  coherence
+  proof
+  assume subset-closed_closure_of{} is non empty;
+  then consider x be set such that
+   A1: x in subset-closed_closure_of{} by XBOOLE_0:def 1;
+  ex y st x c=y & y in {} by A1,Th2;
+  hence thesis;
+ end;
+  let X be non empty set;
+  cluster subset-closed_closure_of X -> non empty;
+  coherence
+  proof
+  ex x st x in X by XBOOLE_0:def 1;
+  hence thesis by Th2;
+ end;
+end;
+
+registration
+  let X be with_non-empty_element set;
+  cluster subset-closed_closure_of X -> with_non-empty_element;
+  coherence
+  proof
+  consider b be non empty set such that
+   A1: b in X by SETFAM_1:def 11;
+  b in subset-closed_closure_of X by A1,Th2;
+  hence thesis by SETFAM_1:def 11;
+ end;
+end;
+
+registration
+  let X be finite-membered set;
+  cluster subset-closed_closure_of X -> finite-membered;
+  coherence
+  proof
+  let x be set;
+  assume x in subset-closed_closure_of X;
+  then consider y such that
+   A1: x c=y and
+   A2: y in X by Th2;
+  y is finite by A2,MATROID0:def 5;
+  hence thesis by A1;
+ end;
+end;
+
+theorem Th3:
+  X c=Y & Y is subset-closed implies subset-closed_closure_of X c= Y
+ proof
+  assume A1: X c=Y & Y is subset-closed;
+  let x;
+  assume x in subset-closed_closure_of X;
+  then ex y st x c=y & y in X by Th2;
+  hence thesis by A1,CLASSES1:def 1;
+ end;
+
+theorem Th4:
+  subset-closed_closure_of {X} = bool X
+ proof
+  set f=subset-closed_closure_of{X};
+  A1: X in {X} by TARSKI:def 1;
+  hereby let x;
+   assume x in f;
+   then consider y such that
+    A2: x c=y and
+    A3: y in {X} by Th2;
+   y=X by A3,TARSKI:def 1;
+   hence x in bool X by A2;
+  end;
+  let x;
+  assume x in bool X;
+  hence thesis by A1,Th2;
+ end;
+
+theorem
+  subset-closed_closure_of (X\/Y) =
+    subset-closed_closure_of X \/ subset-closed_closure_of Y
+ proof
+  set fxy=subset-closed_closure_of(X\/Y);
+  set fx=subset-closed_closure_of X;
+  set fy=subset-closed_closure_of Y;
+  hereby let x;
+   assume x in fxy;
+   then consider y such that
+    A1: x c=y and
+    A2: y in X\/Y by Th2;
+   y in X or y in Y by A2,XBOOLE_0:def 3;
+   then x in fx or x in fy by A1,Th2;
+   hence x in fx\/fy by XBOOLE_0:def 3;
+  end;
+  let x;
+  assume A3: x in fx\/fy;
+  per cases by A3,XBOOLE_0:def 3;
+  suppose x in fx;
+   then consider y such that
+    A4: x c=y and
+    A5: y in X by Th2;
+   y in X\/Y by A5,XBOOLE_0:def 3;
+   hence thesis by A4,Th2;
+  end;
+  suppose x in fy;
+   then consider y such that
+    A6: x c=y and
+    A7: y in Y by Th2;
+   y in X\/Y by A7,XBOOLE_0:def 3;
+   hence thesis by A6,Th2;
+  end;
+ end;
+
+theorem Th6:
+  X is_finer_than Y iff
+    subset-closed_closure_of X c= subset-closed_closure_of Y
+ proof
+  set fx=subset-closed_closure_of X;
+  set fy=subset-closed_closure_of Y;
+  hereby assume A1: X is_finer_than Y;
+   thus fx c=fy
+   proof
+    let x;
+    assume x in fx;
+    then consider y such that
+     A2: x c=y and
+     A3: y in X by Th2;
+    consider c be set such that
+     A4: c in Y and
+     A5: y c=c by A1,A3,SETFAM_1:def 2;
+    x c=c by A2,A5,XBOOLE_1:1;
+    hence thesis by A4,Th2;
+   end;
+  end;
+  assume A6: fx c=fy;
+  let x;
+  assume x in X;
+  then x in fx by Th2;
+  then ex y st x c=y & y in Y by A6,Th2;
+  hence thesis;
+ end;
+
+theorem Th7:
+  X is subset-closed implies subset-closed_closure_of X = X
+  proof
+  set f=subset-closed_closure_of X;
+  assume A1: X is subset-closed;
+  thus f c=X
+  proof
+   let x;
+   assume x in f;
+   then ex y st x c=y & y in X by Th2;
+   hence x in X by A1,CLASSES1:def 1;
+  end;
+  thus thesis by Def1;
+ end;
+
+theorem
+  subset-closed_closure_of X c= X implies X is subset-closed
+  proof
+  set f=subset-closed_closure_of X;
+  assume A1: f c=X;
+  let x,y;
+  assume x in X & y c=x;
+  then y in f by Th2;
+  hence y in X by A1;
+ end;
+
+definition
+  let Y,X;
+  let n be set;
+  func the_subsets_with_limited_card(n,X,Y) -> Subset-Family of Y means :Def2:
+    for A be Subset of Y holds A in it iff A in X & card A c= card n;
+  existence
+  proof
+  set SS={A where A is Subset of Y:A in X & card A c=card n};
+  SS c=bool Y
+  proof
+   let x;
+   assume x in SS;
+   then ex A be Subset of Y st x=A & A in X & card A c=card n;
+   hence thesis;
+  end;
+  then reconsider SS as Subset-Family of Y;
+  take SS;
+  let A be Subset of Y;
+  hereby assume A in SS;
+   then ex B be Subset of Y st B=A & B in X & card B c=card n;
+   hence A in X & card A c=card n;
+  end;
+  assume A in X & card A c=card n;
+  hence thesis;
+ end;
+  uniqueness
+  proof
+  let S1,S2 be Subset-Family of Y;
+  assume that
+   A1: for A be Subset of Y holds A in S1 iff A in X & card A c=card n and
+   A2: for A be Subset of Y holds A in S2 iff A in X & card A c=card n;
+  thus S1 c=S2
+  proof
+   let x;
+   assume A3: x in S1;
+   then x in X & card x c=card n by A1;
+   hence thesis by A2,A3;
+  end;
+  let x;
+  assume A4: x in S2;
+  then x in X & card x c=card n by A2;
+  hence thesis by A1,A4;
+ end;
+end;
+
+registration
+  let D;
+  cluster finite with_non-empty_element subset-closed
+          finite-membered Subset-Family of D;
+  existence
+  proof
+  consider x be set such that
+   A1: x in D by XBOOLE_0:def 1;
+  {x}c=D by A1,ZFMISC_1:37;
+  then reconsider XX=bool{x} as Subset-Family of D by ZFMISC_1:79;
+  take XX;
+  {x} in bool{x} by ZFMISC_1:def 1;
+  hence thesis by SETFAM_1:def 11;
+ end;
+end;
+
+registration
+  let Y,X;
+  let n be finite set;
+  cluster the_subsets_with_limited_card(n,X,Y) -> finite-membered;
+  coherence
+  proof
+  let A be set;
+  assume A in the_subsets_with_limited_card(n,X,Y);
+  then card A c=card n by Def2;
+  hence thesis;
+ end;
+end;
+
+registration
+  let Y;
+  let X be subset-closed set;
+  let n be set;
+  cluster the_subsets_with_limited_card(n,X,Y) -> subset-closed;
+  coherence
+  proof
+  let x,y;
+  assume that
+   A1: x in the_subsets_with_limited_card(n,X,Y) and
+   A2: y c=x;
+  x in X by A1,Def2;
+  then A3: y in X by A2,CLASSES1:def 1;
+  card x c=card n & card y c=card x by A1,A2,Def2,CARD_1:27;
+  then A4: card y c=card n by XBOOLE_1:1;
+  y c=Y by A1,A2,XBOOLE_1:1;
+  hence thesis by A3,A4,Def2;
+ end;
+end;
+
+registration
+  let Y;
+  let X be with_empty_element set;
+  let n be set;
+  cluster the_subsets_with_limited_card(n,X,Y) -> with_empty_element;
+  coherence
+  proof
+  A1: {}c=Y by XBOOLE_1:2;
+  card{}c=card n & {} in X by SETFAM_1:def 9;
+  then {} in the_subsets_with_limited_card(n,X,Y) by A1,Def2;
+  hence thesis;
+ end;
+end;
+
+registration
+  let D;
+  let X be with_non-empty_element subset-closed Subset-Family of D;
+  let n be non empty set;
+  cluster the_subsets_with_limited_card(n,X,D) -> with_non-empty_element;
+  coherence
+  proof
+  consider x be non empty set such that
+   A1: x in X by SETFAM_1:def 11;
+  consider y be set such that
+   A2: y in x by XBOOLE_0:def 1;
+  {}c=card n;
+  then {} in card n by CARD_1:13;
+  then 1 c=card n by CARD_3:109;
+  then A3: card{y}c=card n by CARD_1:50;
+  {y}c=x by A2,ZFMISC_1:37;
+  then {y} in X by A1,CLASSES1:def 1;
+  then {y} in the_subsets_with_limited_card(n,X,D) by A3,Def2;
+  hence thesis by SETFAM_1:def 11;
+ end;
+end;
+
+notation let X;
+  let Y be Subset-Family of X;
+  let n be set;
+  synonym the_subsets_with_limited_card(n,Y)
+      for the_subsets_with_limited_card(n,Y,X);
+end;
+
+registration
+  cluster empty -> c=-linear set;
+  coherence
+  proof
+  let X be set;
+  assume A1: X is empty;
+  let x,y;
+  thus thesis by A1;
+ end;
+end;
+
+registration
+  let X be c=-linear set;
+  cluster -> c=-linear Subset of X;
+  coherence
+  proof
+  let Y be Subset of X;
+  let x,y;
+  assume x in Y & y in Y;
+  hence thesis by ORDINAL1:def 9;
+ end;
+end;
+
+theorem Th9:
+  X is non empty finite c=-linear implies union X in X
+ proof
+  assume X is non empty finite c=-linear;
+  then consider U be set such that
+   A1: U in X and
+   A2: for x st x in X holds x c=U by FINSET_1:31;
+  A3: union X c=U
+  proof
+   let x;
+   assume x in union X;
+   then consider y such that
+    A4: x in y and
+    A5: y in X by TARSKI:def 4;
+   y c=U by A2,A5;
+   hence thesis by A4;
+  end;
+  U c=union X by A1,ZFMISC_1:92;
+  hence thesis by A1,A3,XBOOLE_0:def 10;
+ end;
+
+theorem Th10:
+  for X be finite c=-linear set st
+      X is with_non-empty_elements
+    holds card X c= card union X
+ proof
+  let X be finite c=-linear set;
+  defpred P[Nat] means
+   for X be finite c=-linear set st X is with_non-empty_elements & card union X
+=$1 holds card X c=card union X;
+  defpred Q[Nat] means
+   for n be Nat st n<=$1 holds P[n];
+  assume A1: X is with_non-empty_elements;
+  A2: for m be Nat st Q[m] holds Q[m+1]
+  proof
+   let m be Nat such that
+    A3: Q[m];
+   let n be Nat;
+   assume A4: n<=m+1;
+   let X be finite c=-linear set such that
+    A5: X is with_non-empty_elements and
+    A6: card union X=n;
+   reconsider u=union X as finite set by A6;
+   reconsider Xu=X\{u} as finite c=-linear set;
+   per cases by A4,NAT_1:8;
+   suppose n<=m;
+    hence thesis by A3,A5,A6;
+   end;
+   suppose A7: n=m+1;
+    then X is non empty by A6,ZFMISC_1:2;
+    then A8: X=Xu\/{u} by Th9,ZFMISC_1:140;
+    then u=union Xu\/union{u} by ZFMISC_1:96
+     .=union Xu\/u by ZFMISC_1:31;
+    then A9: union Xu c=u by XBOOLE_1:11;
+    then reconsider uXu=union Xu as finite set;
+    uXu<>u
+    proof
+     assume A10: uXu=u;
+     then Xu is non empty by A6,A7,ZFMISC_1:2;
+     then u in Xu by A10,Th9;
+     hence thesis by ZFMISC_1:64;
+    end;
+    then A11: uXu c<u by A9,XBOOLE_0:def 8;
+    then card uXu<m+1 by A6,A7,CARD_2:67;
+    then card uXu<=m by NAT_1:13;
+    then card Xu c=card uXu by A3,A5;
+    then card Xu<=card uXu by NAT_1:40;
+    then card Xu<card u by A11,CARD_2:67,XXREAL_0:2;
+    then A12: 1+card Xu<=card u by NAT_1:13;
+    not u in Xu by ZFMISC_1:64;
+    then 1+card Xu=card X by A8,CARD_2:54;
+    hence thesis by A12,NAT_1:40;
+   end;
+  end;
+  A13: Q[0 qua Nat]
+  proof
+   let n be Nat;
+   assume A14: n<=0;
+   let X be finite c=-linear set such that
+    A15: X is with_non-empty_elements & card union X=n;
+   X is empty by A14,A15;
+   hence thesis;
+  end;
+  A16: for n be Nat holds Q[n] from NAT_1:sch 2(A13,A2);
+  per cases;
+  suppose union X is non finite;
+   hence thesis;
+  end;
+  suppose union X is finite;
+   thus thesis by A1,A16;
+  end;
+ end;
+
+theorem
+  X is c=-linear & union X misses x implies
+    X\/{union X\/x} is c=-linear
+ proof
+  assume that
+   A1: X is c=-linear and
+   union X misses x;
+  set U=union X;
+  set Ux=U\/x;
+  A2: U c=Ux by XBOOLE_1:7;
+  let x1,x2 be set such that
+   A3: x1 in X\/{Ux} & x2 in X\/{Ux};
+  per cases by A3,XBOOLE_0:def 3;
+  suppose x1 in X & x2 in X;
+   hence thesis by A1,ORDINAL1:def 9;
+  end;
+  suppose A4: x1 in {Ux} & x2 in {Ux};
+   then x1=Ux by TARSKI:def 1;
+   hence thesis by A4,TARSKI:def 1;
+  end;
+  suppose x1 in X & x2 in {Ux};
+   then x1 c=U & x2=Ux by TARSKI:def 1,ZFMISC_1:92;
+   then x1 c=x2 by A2,XBOOLE_1:1;
+   hence thesis by XBOOLE_0:def 9;
+  end;
+  suppose x2 in X & x1 in {Ux};
+   then x2 c=U & x1=Ux by TARSKI:def 1,ZFMISC_1:92;
+   then x2 c=x1 by A2,XBOOLE_1:1;
+   hence thesis by XBOOLE_0:def 9;
+  end;
+ end;
+
+theorem Th12:
+  for X be non empty set
+    ex Y be Subset-Family of X st
+      Y is with_non-empty_elements c=-linear & X in Y & card X = card Y &
+      for Z st Z in Y & card Z <> 1 ex x st x in Z & Z\{x} in Y
+ proof
+  let X be non empty set;
+  consider R be Relation such that
+   A1: R well_orders X by WELLORD2:26;
+  set RX=R|_2 X;
+  deffunc F(set)=X\(RX-Seg($1));
+  A2: for x st x in X holds F(x) in bool X;
+  consider f be Function of X,bool X such that
+   A3: for x st x in X holds f.x=F(x) from FUNCT_2:sch 2(A2);
+  take Y=rng f;
+  A4: dom f=X by FUNCT_2:def 1;
+  thus Y is with_non-empty_elements
+  proof
+   assume Y is with_empty_element;
+   then {} in Y by SETFAM_1:def 9;
+   then consider x such that
+    A5: x in dom f and
+    A6: f.x={} by FUNCT_1:def 5;
+   {}=F(x) by A3,A5,A6;
+   then X c=RX-Seg(x) by XBOOLE_1:37;
+   hence thesis by A4,A5,WELLORD1:def 1;
+  end;
+  thus Y is c=-linear
+  proof
+   let x,y;
+   assume that
+    A7: x in Y and
+    A8: y in Y;
+   consider a be set such that
+    A9: a in dom f & f.a=x by A7,FUNCT_1:def 5;
+   consider b be set such that
+    A10: b in dom f & f.b=y by A8,FUNCT_1:def 5;
+   RX-Seg(a),RX-Seg(b)are_c=-comparable by A1,WELLORD1:33,WELLORD2:25;
+   then RX-Seg(a)c=RX-Seg(b) or RX-Seg(b)c=RX-Seg(a) by XBOOLE_0:def 9;
+   then F(b)c=F(a) or F(a)c=F(b) by XBOOLE_1:34;
+   then A11: F(a),F(b)are_c=-comparable by XBOOLE_0:def 9;
+   x=F(a) by A3,A9;
+   hence thesis by A3,A10,A11;
+  end;
+  A12: field RX=X by A1,WELLORD2:25;
+  then consider x such that
+   A13: x in X and
+   A14: for y st y in X holds[x,y] in RX by A1,WELLORD1:11,WELLORD2:25;
+  A15: RX is well-ordering by A1,WELLORD2:25;
+  then A16: RX is well_founded by WELLORD1:def 4;
+  RX is antisymmetric by A15,WELLORD1:def 4;
+  then A17: RX is_antisymmetric_in X by A12,RELAT_2:def 12;
+  A18: RX-Seg(x)={}
+  proof
+   assume RX-Seg(x)<>{};
+   then consider y such that
+    A19: y in RX-Seg(x) by XBOOLE_0:def 1;
+   A20: y<>x by A19,WELLORD1:def 1;
+   A21: [y,x] in RX by A19,WELLORD1:def 1;
+   then A22: x in X by A12,RELAT_1:30;
+   A23: y in X by A12,A21,RELAT_1:30;
+   then [x,y] in RX by A14;
+   hence thesis by A17,A20,A21,A22,A23,RELAT_2:def 4;
+  end;
+  f.x=F(x) by A3,A13;
+  hence X in Y by A4,A13,A18,FUNCT_1:def 5;
+  now let x1,x2 be set;
+   reconsider R1=RX-Seg(x1),R2=RX-Seg(x2) as Subset of X by A12,WELLORD1:13;
+   assume that
+    A24: x1 in X & x2 in X and
+    A25: f.x1=f.x2;
+   R1`=f.x1 & f.x2=R2` by A3,A24;
+   then R1=R2 by A25,SUBSET_1:64;
+   then [x1,x2] in RX & [x2,x1] in RX by A12,A15,A24,WELLORD1:37;
+   hence x1=x2 by A17,A24,RELAT_2:def 4;
+  end;
+  then f is one-to-one by FUNCT_2:25;
+  then X,Y are_equipotent by A4,WELLORD2:def 4;
+  hence card X=card Y by CARD_1:21;
+  let Z;
+  assume that
+   A26: Z in Y and
+   A27: card Z<>1;
+  consider x such that
+   A28: x in dom f and
+   A29: f.x=Z by A26,FUNCT_1:def 5;
+  A30: {x}c=X by A28,ZFMISC_1:37;
+  take x;
+  A31: not x in RX-Seg(x) by WELLORD1:def 1;
+  A32: Z=X\(RX-Seg(x)) by A3,A28,A29;
+  hence x in Z by A28,A31,XBOOLE_0:def 5;
+  RX-Seg(x)c=X by A12,WELLORD1:13;
+  then reconsider Rxx=RX-Seg(x)\/{x} as Subset of X by A30,XBOOLE_1:8;
+  X\Rxx<>{}
+  proof
+   assume X\Rxx={};
+   then X c=Rxx by XBOOLE_1:37;
+   then Z=Rxx\RX-Seg(x) by A32,XBOOLE_0:def 10
+    .={x}\RX-Seg(x) by XBOOLE_1:40
+    .={x} by A31,ZFMISC_1:67;
+   hence contradiction by A27,CARD_1:50;
+  end;
+  then consider a be set such that
+   A33: a in Rxx` and
+   A34: RX-Seg(a)misses Rxx` by A12,A16,WELLORD1:def 2;
+  A35: not a in Rxx by A33,XBOOLE_0:def 5;
+  x in {x} by TARSKI:def 1;
+  then A36: x<>a by A35,XBOOLE_0:def 3;
+  RX is connected by A15,WELLORD1:def 4;
+  then RX is_connected_in X by A12,RELAT_2:def 14;
+  then A37: [x,a] in RX or[a,x] in RX by A28,A33,A36,RELAT_2:def 6;
+  A38: not a in RX-Seg(x) by A35,XBOOLE_0:def 3;
+  then x in RX-Seg(a) by A36,A37,WELLORD1:def 1;
+  then A39: {x}c=RX-Seg(a) by ZFMISC_1:37;
+  RX-Seg(a)c=X by A12,WELLORD1:13;
+  then A40: RX-Seg(a)c=Rxx by A34,SUBSET_1:44;
+  RX-Seg(x)c=RX-Seg(a) by A12,A15,A28,A33,A37,A38,WELLORD1:37,def 1;
+  then Rxx c=RX-Seg(a) by A39,XBOOLE_1:8;
+  then Rxx=RX-Seg(a) by A40,XBOOLE_0:def 10;
+  then f.a=X\Rxx by A3,A33
+   .=(X\RX-Seg(x))\{x} by XBOOLE_1:41
+   .=Z\{x} by A3,A28,A29;
+  hence thesis by A4,A33,FUNCT_1:def 5;
+ end;
+
+theorem
+  for Y be Subset-Family of X st
+     Y is finite with_non-empty_elements c=-linear & X in Y
+  ex Y1 be Subset-Family of X st
+    Y c= Y1 & Y1 is with_non-empty_elements c=-linear & card X = card Y1 &
+    for Z st Z in Y1 & card Z <> 1 ex x st x in Z & Z\{x} in Y1
+ proof
+  let Y be Subset-Family of X such that
+   A1: Y is finite with_non-empty_elements c=-linear and
+   A2: X in Y;
+  defpred P[set,set] means
+   $1 in $2 & $2 in Y & for y st y in Y & $1 in y holds$2c=y;
+  A3: for x st x in X ex y st P[x,y]
+  proof
+   let x;
+   set U={A where A is Subset of X:x in A & A in Y};
+   A4: U c=Y
+   proof
+    let y;
+    assume y in U;
+    then ex A be Subset of X st y=A & x in A & A in Y;
+    hence thesis;
+   end;
+   then reconsider U as Subset-Family of X by XBOOLE_1:1;
+   assume x in X;
+   then X in U by A2;
+   then consider m be set such that
+    A5: m in U and
+    A6: for y st y in U holds m c=y by A1,A4,FINSET_1:30;
+   take m;
+   ex A be Subset of X st m=A & x in A & A in Y by A5;
+   hence x in m & m in Y;
+   let y;
+   assume y in Y & x in y;
+   then y in U;
+   hence thesis by A6;
+  end;
+  consider f be Function such that
+   A7: dom f=X & for x st x in X holds P[x,f.x] from CLASSES1:sch 1(A3);
+  defpred Q[set,set] means
+   ($2 in Y or$2 is empty) & $2c<$1 & (for x st x in Y & x c<$1 holds x c=$2) &
+(for x st x in Y & $2c=x & x c=$1 holds x=$1 or x=$2);
+  A8: for x st x in Y ex y st y in bool X & Q[x,y]
+  proof
+   let x;
+   assume A9: x in Y;
+   set U={A where A is Subset of X:A c<x & A in Y};
+   A10: U c=Y
+   proof
+    let y;
+    assume y in U;
+    then ex A be Subset of X st y=A & A c<x & A in Y;
+    hence thesis;
+   end;
+   then reconsider U as Subset-Family of X by XBOOLE_1:1;
+   take u=union U;
+   thus u in bool X;
+   A11: for y st y in Y & y c<x holds y c=u
+   proof
+    let y;
+    assume that
+     A12: y in Y and
+     A13: y c<x;
+    reconsider A=y as Subset of X by A12;
+    y in U by A12,A13;
+    hence thesis by ZFMISC_1:92;
+   end;
+   per cases;
+   suppose U is empty;
+    hence (u in Y or u is empty) & u c<x & for y st y in Y & y c<x holds y
+c=u by A1,A9,A11,XBOOLE_1:61,ZFMISC_1:2;
+    let y;
+    assume that
+     A14: y in Y and
+     A15: u c=y and
+     A16: y c=x;
+    assume y<>x;
+    then y c<x by A16,XBOOLE_0:def 8;
+    then y c=u by A11,A14;
+    hence thesis by A15,XBOOLE_0:def 10;
+   end;
+   suppose U is non empty;
+    then u in U by A1,A10,Th9;
+    then ex A be Subset of X st A=u & A c<x & A in Y;
+    hence (u in Y or u is empty) & u c<x & for y st y in Y & y c<x holds y
+c=u by A11;
+    let y;
+    assume that
+     A17: y in Y and
+     A18: u c=y and
+     A19: y c=x;
+    assume y<>x;
+    then y c<x by A19,XBOOLE_0:def 8;
+    then y c=u by A11,A17;
+    hence thesis by A18,XBOOLE_0:def 10;
+   end;
+  end;
+  consider g be Function of Y,bool X such that
+   A20: for x st x in Y holds Q[x,g.x] from FUNCT_2:sch 1(A8);
+  defpred R[set,set] means
+   ex h be Function of$1\(g.$1),bool($1\(g.$1)) st$2=h & h is one-to-one & rng
+h is with_non-empty_elements c=-linear & dom h in rng h & for Z st Z in rng h &
+card Z<>1 ex x st x in Z & Z\{x} in rng h;
+  A21: for x st x in Y ex y st R[x,y]
+  proof
+   let y;
+   assume y in Y;
+   then g.y c<y by A20;
+   then y\(g.y)<>{} by XBOOLE_1:105;
+   then consider Z be Subset-Family of y\(g.y) such that
+    A22: Z is with_non-empty_elements c=-linear & y\(g.y) in Z and
+    A23: card(y\g.y)=card Z and
+    A24: for z be set st z in Z & card z<>1 ex x st x in z & z\{x} in Z by Th12
+;
+   y\g.y,Z are_equipotent by A23,CARD_1:21;
+   then consider h be Function such that
+    A25: h is one-to-one and
+    A26: dom h=y\g.y & rng h=Z by WELLORD2:def 4;
+   reconsider h as Function of y\g.y,bool(y\g.y) by A26,FUNCT_2:4;
+   take h;
+   thus thesis by A22,A24,A25,A26;
+  end;
+  consider h be Function such that
+   A27: dom h=Y & for x st x in Y holds R[x,h.x] from CLASSES1:sch 1(A21);
+  now let x;
+   assume x in dom h;
+   then ex H be Function of x\(g.x),bool(x\(g.x)) st h.x=H & H is one-to-one &
+rng H is with_non-empty_elements c=-linear & dom H in rng H & for Z st Z in rng
+H & card Z<>1 ex x st x in Z & Z\{x} in rng H by A27;
+   hence h.x is Function;
+  end;
+  then reconsider h as Function-yielding Function by FUNCOP_1:def 6;
+  deffunc Z(set)=g.(f.$1)\/(h.(f.$1)).$1;
+  A28: for x st x in X holds x in (f.x)\(g.(f.x))
+  proof
+   let x;
+   assume A29: x in X;
+   then A30: f.x in Y by A7;
+   assume A31: not x in (f.x)\(g.(f.x));
+   x in f.x by A7,A29;
+   then A32: x in g.(f.x) by A31,XBOOLE_0:def 5;
+   then g.(f.x) in Y by A20,A30;
+   then A33: f.x c=g.(f.x) by A7,A32;
+   g.(f.x)c<f.x by A20,A30;
+   hence thesis by A33,XBOOLE_0:def 8;
+  end;
+  A34: for x st x in X holds Z(x) in bool X
+  proof
+   let x;
+   set fx=f.x;
+   assume A35: x in X;
+   then A36: fx in Y by A7;
+   then consider H be Function of fx\(g.fx),bool(fx\(g.fx)) such that
+    A37: h.fx=H and
+    H is one-to-one and
+    rng H is with_non-empty_elements c=-linear and
+    dom H in rng H and
+    for Z st Z in rng H & card Z<>1 ex x st x in Z & Z\{x} in rng H by A27;
+   A38: x in fx\(g.fx) by A28,A35;
+   dom H=fx\(g.fx) by FUNCT_2:def 1;
+   then H.x in rng H by A38,FUNCT_1:def 5;
+   then H.x c=fx by XBOOLE_1:1;
+   then A39: H.x c=X by A36,XBOOLE_1:1;
+   g.fx in Y or g.fx is empty by A20,A36;
+   then Z(x)c=X by A37,A39,XBOOLE_1:8;
+   hence thesis;
+  end;
+  consider z be Function of X,bool X such that
+   A40: for x st x in X holds z.x=Z(x) from FUNCT_2:sch 2(A34);
+  A41: dom z=X by FUNCT_2:def 1;
+  A42: Y c=rng z
+  proof
+   let y;
+   assume A43: y in Y;
+   then consider H be Function of y\(g.y),bool(y\(g.y)) such that
+    A44: h.y=H and
+    H is one-to-one and
+    rng H is with_non-empty_elements c=-linear and
+    A45: dom H in rng H and
+    for Z st Z in rng H & card Z<>1 ex x st x in Z & Z\{x} in rng H by A27;
+   consider x such that
+    A46: x in dom H and
+    A47: H.x=dom H by A45,FUNCT_1:def 5;
+   A48: dom H=y\(g.y) by FUNCT_2:def 1;
+   then A49: x in y by A46;
+   then A50: x in f.x by A7,A43;
+   g.y c<y by A20,A43;
+   then A51: g.y c=y by XBOOLE_0:def 8;
+   A52: f.x c=y by A7,A43,A49;
+   A53: f.x in Y by A7,A43,A49;
+   f.x=y
+   proof
+    assume f.x<>y;
+    then f.x c<y by A52,XBOOLE_0:def 8;
+    then f.x c=g.y by A20,A43,A53;
+    hence contradiction by A46,A50,XBOOLE_0:def 5;
+   end;
+   then z.x=g.y\/(y\(g.y)) by A40,A43,A44,A47,A48,A49
+    .=y by A51,XBOOLE_1:45;
+   hence thesis by A41,A43,A49,FUNCT_1:def 5;
+  end;
+  A54: for Z st Z in rng z & card Z<>1 ex x st x in Z & Z\{x} in rng z
+  proof
+   let Z;
+   assume that
+    A55: Z in rng z and
+    A56: card Z<>1;
+   consider x be set such that
+    A57: x in dom z and
+    A58: z.x=Z by A55,FUNCT_1:def 5;
+   set fx=f.x;
+   A59: fx in Y by A7,A57;
+   then consider H be Function of fx\(g.fx),bool(fx\(g.fx)) such that
+    A60: h.fx=H and
+    H is one-to-one and
+    rng H is with_non-empty_elements c=-linear and
+    dom H in rng H and
+    A61: for Z st Z in rng H & card Z<>1 ex x st x in Z & Z\{x} in rng H by
+A27;
+   A62: z.x=g.fx\/H.x by A40,A57,A60;
+   A63: dom H=fx\(g.fx) by FUNCT_2:def 1;
+   x in fx\(g.fx) by A28,A57;
+   then A64: H.x in rng H by A63,FUNCT_1:def 5;
+   per cases;
+   suppose A65: card(H.x)=1;
+    then g.fx<>{} by A56,A58,A62;
+    then A66: g.fx in Y by A20,A59;
+    consider a be set such that
+     A67: H.x={a} by A65,CARD_2:60;
+    take a;
+    A68: a in H.x by A67,TARSKI:def 1;
+    then A69: not a in g.fx by A64,XBOOLE_0:def 5;
+    thus a in Z by A58,A62,A68,XBOOLE_0:def 3;
+    Z\{a}=(g.fx\/H.x)\H.x by A40,A57,A58,A60,A67
+     .=g.fx\H.x by XBOOLE_1:40
+     .=g.fx by A67,A69,ZFMISC_1:65;
+    hence thesis by A42,A66;
+   end;
+   suppose card(H.x)<>1;
+    then consider a be set such that
+     A70: a in H.x and
+     A71: H.x\{a} in rng H by A61,A64;
+    A72: not a in g.fx by A64,A70,XBOOLE_0:def 5;
+    take a;
+    thus a in Z by A58,A62,A70,XBOOLE_0:def 3;
+    consider b be set such that
+     A73: b in dom H and
+     A74: H.b=H.x\{a} by A71,FUNCT_1:def 5;
+    A75: b in fx by A63,A73;
+    then A76: b in f.b by A7,A59;
+    A77: f.b in Y by A7,A59,A75;
+    A78: f.b c=fx by A7,A59,A75;
+    fx=f.b
+    proof
+     assume fx<>f.b;
+     then f.b c<fx by A78,XBOOLE_0:def 8;
+     then f.b c=g.fx by A20,A59,A77;
+     hence contradiction by A73,A76,XBOOLE_0:def 5;
+    end;
+    then z.b=g.fx\/(H.x\{a}) by A40,A59,A60,A74,A75
+     .=(g.fx\/H.x)\{a} by A72,XBOOLE_1:87,ZFMISC_1:56
+     .=Z\{a} by A58,A40,A57,A60;
+    hence thesis by A41,A59,A75,FUNCT_1:def 5;
+   end;
+  end;
+  A79: rng z is c=-linear
+  proof
+   let y1,y2 be set;
+   assume that
+    A80: y1 in rng z and
+    A81: y2 in rng z;
+   consider x1 be set such that
+    A82: x1 in dom z and
+    A83: z.x1=y1 by A80,FUNCT_1:def 5;
+   consider x2 be set such that
+    A84: x2 in dom z and
+    A85: z.x2=y2 by A81,FUNCT_1:def 5;
+   set fx1=f.x1,fx2=f.x2;
+   A86: x1 in fx1\(g.fx1) by A28,A82;
+   A87: fx1 in Y by A7,A82;
+   then consider H1 be Function of fx1\(g.fx1),bool(fx1\(g.fx1)) such that
+    A88: h.fx1=H1 and
+    H1 is one-to-one and
+    rng H1 is with_non-empty_elements c=-linear and
+    dom H1 in rng H1 and
+    for Z st Z in rng H1 & card Z<>1 ex x st x in Z & Z\{x} in rng H1 by A27;
+   A89: z.x1=g.fx1\/H1.x1 by A40,A82,A88;
+   dom H1=fx1\(g.fx1) by FUNCT_2:def 1;
+   then A90: H1.x1 in rng H1 by A86,FUNCT_1:def 5;
+   A91: x2 in fx2\(g.fx2) by A28,A84;
+   A92: fx2 in Y by A7,A84;
+   then consider H2 be Function of fx2\(g.fx2),bool(fx2\(g.fx2)) such that
+    A93: h.fx2=H2 and
+    H2 is one-to-one and
+    A94: rng H2 is with_non-empty_elements c=-linear and
+    dom H2 in rng H2 and
+    for Z st Z in rng H2 & card Z<>1 ex x st x in Z & Z\{x} in rng H2 by A27;
+   A95: z.x2=g.fx2\/H2.x2 by A40,A84,A93;
+   dom H2=fx2\(g.fx2) by FUNCT_2:def 1;
+   then A96: H2.x2 in rng H2 by A91,FUNCT_1:def 5;
+   A97: fx1,fx2 are_c=-comparable by A1,A87,A92,ORDINAL1:def 9;
+   per cases by A97,XBOOLE_0:def 9;
+   suppose A98: fx1=fx2;
+    then H1.x1,H1.x2 are_c=-comparable by A88,A90,A93,A94,A96,ORDINAL1:def
+9;
+    then H1.x1 c=H1.x2 or H1.x2 c=H1.x1 by XBOOLE_0:def 9;
+    then z.x1 c=z.x2 or z.x2 c=z.x1 by A88,A89,A93,A95,A98,XBOOLE_1:9;
+    hence thesis by A83,A85,XBOOLE_0:def 9;
+   end;
+   suppose fx1 c=fx2 & fx1<>fx2;
+    then fx1 c<fx2 by XBOOLE_0:def 8;
+    then A99: fx1 c=g.fx2 by A20,A87,A92;
+    g.fx2 c=z.x2 by A95,XBOOLE_1:7;
+    then A100: fx1 c=z.x2 by A99,XBOOLE_1:1;
+    g.fx1 c<fx1 by A20,A87;
+    then g.fx1 c=fx1 by XBOOLE_0:def 8;
+    then A101: g.fx1\/(fx1\(g.fx1))=fx1 by XBOOLE_1:45;
+    z.x1 c=g.fx1\/(fx1\(g.fx1)) by A89,A90,XBOOLE_1:9;
+    then z.x1 c=z.x2 by A100,A101,XBOOLE_1:1;
+    hence thesis by A83,A85,XBOOLE_0:def 9;
+   end;
+   suppose fx2 c=fx1 & fx1<>fx2;
+    then fx2 c<fx1 by XBOOLE_0:def 8;
+    then A102: fx2 c=g.fx1 by A20,A87,A92;
+    g.fx1 c=z.x1 by A89,XBOOLE_1:7;
+    then A103: fx2 c=z.x1 by A102,XBOOLE_1:1;
+    g.fx2 c<fx2 by A20,A92;
+    then g.fx2 c=fx2 by XBOOLE_0:def 8;
+    then A104: g.fx2\/(fx2\(g.fx2))=fx2 by XBOOLE_1:45;
+    z.x2 c=g.fx2\/(fx2\(g.fx2)) by A95,A96,XBOOLE_1:9;
+    then z.x2 c=z.x1 by A103,A104,XBOOLE_1:1;
+    hence thesis by A83,A85,XBOOLE_0:def 9;
+   end;
+  end;
+  A105: rng z is with_non-empty_elements
+  proof
+   assume rng z is non with_non-empty_elements;
+   then {} in rng z by SETFAM_1:def 9;
+   then consider x such that
+    A106: x in dom z and
+    A107: z.x={} by FUNCT_1:def 5;
+   set fx=f.x;
+   A108: x in fx\(g.fx) by A28,A106;
+   fx in Y by A7,A106;
+   then consider H be Function of fx\(g.fx),bool(fx\(g.fx)) such that
+    A109: h.fx=H and
+    H is one-to-one and
+    A110: rng H is with_non-empty_elements c=-linear and
+    dom H in rng H and
+    for Z st Z in rng H & card Z<>1 ex x st x in Z & Z\{x} in rng H by A27;
+   dom H=fx\(g.fx) by FUNCT_2:def 1;
+   then A111: H.x in rng H by A108,FUNCT_1:def 5;
+   z.x=g.fx\/H.x by A40,A106,A109;
+   hence contradiction by A107,A110,A111;
+  end;
+  take rng z;
+  for x1,x2 be set st x1 in dom z & x2 in dom z & z.x1=z.x2 holds x1=x2
+  proof
+   let x1,x2 be set;
+   set f1=f.x1,f2=f.x2;
+   assume that
+    A112: x1 in dom z and
+    A113: x2 in dom z and
+    A114: z.x1=z.x2;
+   A115: z.x1=Z(x1) & z.x2=Z(x2) by A40,A112,A113;
+   A116: f2 in Y by A7,A113;
+   then consider H2 be Function of f2\(g.f2),bool(f2\(g.f2)) such that
+    A117: h.f2=H2 and
+    A118: H2 is one-to-one and
+    A119: rng H2 is with_non-empty_elements c=-linear and
+    dom H2 in rng H2 and
+    for Z st Z in rng H2 & card Z<>1 ex x st x in Z & Z\{x} in rng H2 by A27;
+   dom H2=f2\(g.f2) by FUNCT_2:def 1;
+   then A120: x2 in dom H2 by A28,A113;
+   then A121: H2.x2 in rng H2 by FUNCT_1:def 5;
+   then A122: g.f2 misses H2.x2 by XBOOLE_1:63,79;
+   A123: f1 in Y by A7,A112;
+   then consider H1 be Function of f1\(g.f1),bool(f1\(g.f1)) such that
+    A124: h.f1=H1 and
+    H1 is one-to-one and
+    A125: rng H1 is with_non-empty_elements c=-linear and
+    dom H1 in rng H1 and
+    for Z st Z in rng H1 & card Z<>1 ex x st x in Z & Z\{x} in rng H1 by A27;
+   dom H1=f1\(g.f1) by FUNCT_2:def 1;
+   then A126: x1 in dom H1 by A28,A112;
+   then A127: H1.x1 in rng H1 by FUNCT_1:def 5;
+   then A128: g.f1 misses H1.x1 by XBOOLE_1:63,79;
+   A129: f1,f2 are_c=-comparable by A1,A116,A123,ORDINAL1:def 9;
+   per cases by A129,XBOOLE_0:def 9;
+   suppose A130: f1=f2;
+    then H1.x1=H1.x2 by A114,A115,A117,A122,A124,A128,XBOOLE_1:71;
+    hence thesis by A117,A118,A120,A124,A126,A130,FUNCT_1:def 8;
+   end;
+   suppose A131: f1 c=f2 & f1<>f2;
+    g.f1 c<f1 by A20,A123;
+    then g.f1 c=f1 by XBOOLE_0:def 8;
+    then g.f1\/(f1\(g.f1))=f1 by XBOOLE_1:45;
+    then A132: Z(x2)c=f1 by A114,A115,A124,A127,XBOOLE_1:9;
+    f1 c<f2 by A131,XBOOLE_0:def 8;
+    then f1 c=g.f2 by A20,A116,A123;
+    then Z(x2)c=g.f2 by A132,XBOOLE_1:1;
+    then H2.x2 c=g.f2 by A117,XBOOLE_1:11;
+    hence thesis by A119,A121,XBOOLE_1:67,79;
+   end;
+   suppose A133: f2 c=f1 & f1<>f2;
+    g.f2 c<f2 by A20,A116;
+    then g.f2 c=f2 by XBOOLE_0:def 8;
+    then g.f2\/(f2\(g.f2))=f2 by XBOOLE_1:45;
+    then A134: Z(x1)c=f2 by A114,A115,A117,A121,XBOOLE_1:9;
+    f2 c<f1 by A133,XBOOLE_0:def 8;
+    then f2 c=g.f1 by A20,A116,A123;
+    then Z(x1)c=g.f1 by A134,XBOOLE_1:1;
+    then H1.x1 c=g.f1 by A124,XBOOLE_1:11;
+    hence thesis by A125,A127,XBOOLE_1:67,79;
+   end;
+  end;
+  then z is one-to-one by FUNCT_1:def 8;
+  then X,rng z are_equipotent by A41,WELLORD2:def 4;
+  hence thesis by A42,A54,A79,A105,CARD_1:21;
+ end;
+
+begin  :: Simplicial Complexes
+
+definition
+  mode SimplicialComplexStr is TopStruct;
+end;
+
+reserve K for SimplicialComplexStr;
+
+notation let K;
+  let A be Subset of K;
+  synonym A is simplex-like for A is open;
+end;
+
+notation let K;
+  let S be Subset-Family of K;
+  synonym S is simplex-like for S is open;
+end;
+
+registration
+  let K;
+  cluster empty simplex-like Subset-Family of K;
+  existence
+  proof
+  take E={}bool the carrier of K;
+  for A be Subset of K holds A in E implies A is open;
+  hence thesis by TOPS_2:def 1;
+ end;
+end;
+
+theorem Th14:
+  for S be Subset-Family of K holds
+    S is simplex-like iff S c= the topology of K
+  proof
+  let S be Subset-Family of K;
+  hereby assume A1: S is simplex-like;
+   thus S c=the topology of K
+   proof
+    let x;
+    assume A2: x in S;
+    then reconsider A=x as Subset of K;
+    A is simplex-like by A1,A2,TOPS_2:def 1;
+    hence thesis by PRE_TOPC:def 5;
+   end;
+  end;
+  assume A3: S c=the topology of K;
+  let A be Subset of K;
+  assume A in S;
+  hence thesis by A3,PRE_TOPC:def 5;
+ end;
+
+definition
+  let K;
+  let v be Element of K;
+  attr v is vertex-like means :Def3:
+    ex S be Subset of K st S is simplex-like & v in S;
+end;
+
+definition
+  let K;
+  func Vertices K -> Subset of K means :Def4:
+    for v be Element of K holds v in it iff v is vertex-like;
+  existence
+  proof
+  set B={v where v is Element of K:v is vertex-like};
+  B c=[#]K
+  proof
+   let x;
+   assume x in B;
+   then consider v be Element of K such that
+    A1: x=v and
+    A2: v is vertex-like;
+   ex S be Subset of K st S is simplex-like & v in S by A2,Def3;
+   hence thesis by A1;
+  end;
+  then reconsider B as Subset of K;
+  defpred P[Element of K] means
+   $1 is vertex-like;
+  take B;
+  let v be Element of K;
+  hereby assume v in B;
+   then ex w be Element of K st v=w & w is vertex-like;
+   hence v is vertex-like;
+  end;
+  assume v is vertex-like;
+  hence thesis;
+ end;
+  uniqueness
+  proof
+  let V1,V2 be Subset of K such that
+   A3: for v be Element of K holds v in V1 iff v is vertex-like and
+   A4: for v be Element of K holds v in V2 iff v is vertex-like;
+  hereby let x;
+   assume A5: x in V1;
+   then reconsider v=x as Element of K;
+   v is vertex-like by A3,A5;
+   hence x in V2 by A4;
+  end;
+  let x;
+  assume A6: x in V2;
+  then reconsider v=x as Element of K;
+  v is vertex-like by A4,A6;
+  hence thesis by A3;
+ end;
+end;
+
+definition
+  let K be SimplicialComplexStr;
+  mode Vertex of K is Element of Vertices K;
+end;
+
+definition
+  let K be SimplicialComplexStr;
+  attr K is finite-vertices means :Def5:
+    Vertices K is finite;
+end;
+
+definition
+  let K;
+  attr K is locally-finite means :Def6:
+    for v be Vertex of K holds
+      {S where S is Subset of K : S is simplex-like & v in S} is finite;
+end;
+
+definition
+  let K;
+  attr K is empty-membered means :Def7:
+    the topology of K is empty-membered;
+  attr K is with_non-empty_elements means :Def8:
+    the topology of K is with_non-empty_elements;
+end;
+
+notation let K;
+  antonym K is with_non-empty_element for K is empty-membered;
+  antonym K is with_empty_element for K is with_non-empty_elements;
+end;
+
+definition
+  let X;
+  mode SimplicialComplexStr of X -> SimplicialComplexStr means :Def9:
+    [#]it c= X;
+  existence
+  proof
+  take S=the empty TopStruct;
+  thus thesis by XBOOLE_1:2;
+ end;
+end;
+
+definition
+  let X;
+  let KX be SimplicialComplexStr of X;
+  attr KX is total means :Def10:
+    [#]KX = X;
+end;
+
+Lm2: Vertices K is empty iff K is empty-membered
+ proof
+  hereby assume A1: Vertices K is empty;
+   assume K is with_non-empty_element;
+   then the topology of K is with_non-empty_element by Def7;
+   then consider D such that
+    A2: D in the topology of K by SETFAM_1:def 11;
+   reconsider S=D as Subset of K by A2;
+   the Element of D in S;
+   then reconsider v=the Element of D as Element of K;
+   S is simplex-like by A2,PRE_TOPC:def 5;
+   then v is vertex-like by Def3;
+   hence contradiction by A1,Def4;
+  end;
+  assume A3: K is empty-membered;
+  assume Vertices K is non empty;
+  then consider x such that
+   A4: x in Vertices K by XBOOLE_0:def 1;
+  reconsider x as Element of K by A4;
+  x is vertex-like by A4,Def4;
+  then consider S be Subset of K such that
+   A5: S is simplex-like and
+   A6: x in S by Def3;
+  S in the topology of K by A5,PRE_TOPC:def 5;
+  then the topology of K is with_non-empty_element by A6,SETFAM_1:def 11;
+  hence contradiction by A3,Def7;
+ end;
+
+Lm3: for S be Subset of K st S is simplex-like & x in S holds x in Vertices K
+ proof
+  let S be Subset of K such that
+   A1: S is simplex-like and
+   A2: x in S;
+  reconsider v=x as Element of K by A2;
+  v is vertex-like by A1,A2,Def3;
+  hence thesis by Def4;
+ end;
+
+Lm4: for A be Subset of K st A is simplex-like holds A c=Vertices K
+ proof
+  let A be Subset of K;
+  assume A1: A is simplex-like;
+  let x;
+  thus thesis by A1,Lm3;
+ end;
+
+Lm5: Vertices K=union the topology of K
+ proof
+  hereby let x such that
+    A1: x in Vertices(K);
+   reconsider v=x as Element of K by A1;
+   v is vertex-like by A1,Def4;
+   then consider S be Subset of K such that
+    A2: S is simplex-like and
+    A3: v in S by Def3;
+   S in the topology of K by A2,PRE_TOPC:def 5;
+   hence x in union the topology of K by A3,TARSKI:def 4;
+  end;
+  let x;
+  assume x in union the topology of K;
+  then consider y such that
+   A4: x in y and
+   A5: y in the topology of K by TARSKI:def 4;
+  reconsider y as Subset of K by A5;
+  y is simplex-like by A5,PRE_TOPC:def 5;
+  hence thesis by A4,Lm3;
+ end;
+
+Lm6: K is finite-vertices implies the topology of K is finite
+ proof
+  Vertices K=union the topology of K by Lm5;
+  then A1: the topology of K c=bool Vertices K by ZFMISC_1:100;
+  assume K is finite-vertices;
+  then Vertices K is finite by Def5;
+  hence thesis by A1;
+ end;
+
+registration
+  cluster with_empty_element -> non void SimplicialComplexStr;
+  coherence
+  proof
+  let K;
+  assume K is with_empty_element;
+  then the topology of K is with_empty_element by Def8;
+  hence thesis by PENCIL_1:def 4;
+ end;
+  cluster with_non-empty_element -> non void SimplicialComplexStr;
+  coherence
+  proof
+  let K;
+  assume K is with_non-empty_element;
+  then the topology of K is with_non-empty_element by Def7;
+  hence thesis by PENCIL_1:def 4;
+ end;
+  cluster non void empty-membered -> with_empty_element SimplicialComplexStr;
+  coherence
+  proof
+  let K;
+  assume K is non void empty-membered;
+  then the topology of K is with_empty_element by Def7;
+  hence thesis by Def8;
+ end;
+  cluster non void subset-closed -> with_empty_element SimplicialComplexStr;
+  coherence
+  proof
+  let K;
+  assume A1: K is non void subset-closed;
+  then ex x be set st x in the_family_of K by XBOOLE_0:def 1;
+  hence thesis by A1,Def8;
+ end;
+  cluster empty-membered-> subset-closed finite-vertices SimplicialComplexStr;
+  coherence
+  proof
+  let K;
+  assume A2: K is empty-membered;
+  then A3: the topology of K is empty-membered by Def7;
+  thus K is subset-closed
+  proof
+   let x,y such that
+    A4: x in the_family_of K and
+    A5: y c=x;
+   x is empty by A3,A4,SETFAM_1:def 11;
+   hence thesis by A4,A5;
+  end;
+  Vertices K is empty by A2,Lm2;
+  hence thesis by Def5;
+ end;
+  cluster finite-vertices-> locally-finite finite-degree SimplicialComplexStr;
+  coherence
+  proof
+  let K;
+  assume A6: K is finite-vertices;
+  then reconsider V=Vertices(K) as finite Subset of K by Def5;
+  thus K is locally-finite
+  proof
+   let v be Vertex of K;
+   A7: {S where S is Subset of K:S is simplex-like & v in S}c=the topology of
+K
+   proof
+    let x;
+    assume x in {S where S is Subset of K:S is simplex-like & v in S};
+    then ex S be Subset of K st x=S & S is simplex-like & v in S;
+    hence thesis by PRE_TOPC:def 5;
+   end;
+   the topology of K is finite by A6,Lm6;
+   hence thesis by A7;
+  end;
+  thus K is finite-membered
+  proof
+   let x;
+   assume A8: x in the_family_of K;
+   then reconsider X=x as Subset of K;
+   X is simplex-like by A8,PRE_TOPC:def 5;
+   then X c=V by Lm4;
+   hence thesis;
+  end;
+  take card V;
+  let A be finite Subset of K;
+  assume A is open;
+  hence thesis by Lm4,NAT_1:44;
+ end;
+  cluster locally-finite subset-closed -> finite-membered SimplicialComplexStr;
+  coherence
+  proof
+  let K be SimplicialComplexStr;
+  assume A9: K is locally-finite subset-closed;
+  the_family_of K is finite-membered
+  proof
+   let x;
+   assume A10: x in the_family_of K;
+   then reconsider A=x as Subset of K;
+   A11: K is non void by A10,PENCIL_1:def 4;
+   A12: A is simplex-like by A10,PRE_TOPC:def 5;
+   per cases;
+   suppose x is empty;
+    hence thesis;
+   end;
+   suppose x is non empty;
+    then consider a be set such that
+     A13: a in A by XBOOLE_0:def 1;
+    reconsider a as Element of K by A13;
+    a is vertex-like by A12,A13,Def3;
+    then reconsider a as Vertex of K by Def4;
+    set Aa=A\{a};
+    set X={S where S is Subset of K:a in S & S c=A};
+    defpred P[set,set] means
+     $1\{a}=$2;
+    set Z={y where y is Element of bool Aa:ex w being Subset of K st P[w,y] & w
+in X};
+    A14: bool Aa c=Z
+    proof
+     let y;
+     assume A15: y in bool Aa;
+     then reconsider B=y as Subset of K by XBOOLE_1:1;
+     not a in B by A15,ZFMISC_1:64;
+     then A16: (B\/{a})\{a}=B by ZFMISC_1:141;
+     A17: {a}c=A by A13,ZFMISC_1:37;
+     Aa c=A by XBOOLE_1:36;
+     then y c=A by A15,XBOOLE_1:1;
+     then A18: B\/{a}c=A by A17,XBOOLE_1:8;
+     then A19: B\/{a} is Subset of K by XBOOLE_1:1;
+     a in {a} by TARSKI:def 1;
+     then a in B\/{a} by XBOOLE_0:def 3;
+     then B\/{a} in X by A18,A19;
+     hence thesis by A15,A16,A19;
+    end;
+    set Y={S where S is Subset of K:S is simplex-like & a in S};
+    A20: X c=Y
+    proof
+     let y;
+     assume y in X;
+     then consider S be Subset of K such that
+      A21: y=S & a in S and
+      A22: S c=A;
+     S is simplex-like by A9,A11,A12,A22,MATROID0:1;
+     hence thesis by A21;
+    end;
+    Y is finite by A9,Def6;
+    then A23: X is finite by A20;
+    A24: for w be Subset of K,x,y be Element of bool Aa st P[w,x] & P[w,y]
+holds x=y;
+    Z is finite from FRAENKEL:sch 28(A23,A24);
+    then A25: Aa is finite by A14;
+    A=Aa\/{a} by A13,ZFMISC_1:140;
+    hence x is finite by A25;
+   end;
+  end;
+  hence thesis by MATROID0:def 6;
+ end;
+end;
+
+registration
+  let X;
+  cluster empty void empty-membered strict SimplicialComplexStr of X;
+  existence
+  proof
+  [#]TopStruct(# {},{}bool{} #)c=X by XBOOLE_1:2;
+  then reconsider T=TopStruct(# {},{}bool{} #) as SimplicialComplexStr of X by
+Def9;
+  take T;
+  thus thesis;
+ end;
+end;
+
+registration
+  let D;
+  cluster non empty non void total empty-membered
+            strict SimplicialComplexStr of D;
+  existence
+  proof
+  reconsider B=bool 0 as Subset-Family of D by XBOOLE_1:2,ZFMISC_1:79;
+  [#]TopStruct(# D,B #)c=D;
+  then reconsider T=TopStruct(# D,B #) as SimplicialComplexStr of D by Def9;
+  take T;
+  for x be non empty set holds not x in B;
+  then [#]T=D & B is empty-membered by SETFAM_1:def 11;
+  hence thesis by Def7,Def10,PENCIL_1:def 4;
+ end;
+  cluster non empty total with_empty_element with_non-empty_element
+            finite-vertices subset-closed strict SimplicialComplexStr of D;
+  existence
+  proof
+  set E=the Element of D;
+  reconsider B=bool{E} as Subset-Family of D by ZFMISC_1:79;
+  [#]TopStruct(# D,B #)c=[#]D;
+  then reconsider T=TopStruct(# D,B #) as SimplicialComplexStr of D by Def9;
+  take T;
+  A1: Vertices(T)c={E}
+  proof
+   let x such that
+    A2: x in Vertices(T);
+   reconsider v=x as Element of T by A2;
+   v is vertex-like by A2,Def4;
+   then consider S be Subset of T such that
+    A3: S is simplex-like and
+    A4: v in S by Def3;
+   S in B by A3,PRE_TOPC:def 5;
+   hence thesis by A4;
+  end;
+  {E} in B by ZFMISC_1:def 1;
+  then B is with_non-empty_element by SETFAM_1:def 11;
+  then A5: [#]T=D & T is with_non-empty_element by Def7;
+  B=the_family_of T;
+  then T is subset-closed by MATROID0:def 3;
+  hence thesis by A1,A5,Def5,Def10;
+ end;
+end;
+
+registration
+  cluster non empty with_empty_element with_non-empty_element finite-vertices
+            subset-closed strict SimplicialComplexStr;
+  existence
+  proof
+  take T=the non empty with_empty_element with_non-empty_element
+finite-vertices subset-closed strict SimplicialComplexStr of(the non empty set
+);
+  thus thesis;
+ end;
+end;
+
+registration
+  let K be with_non-empty_element SimplicialComplexStr;
+  cluster Vertices K -> non empty;
+  coherence by Lm2;
+end;
+
+registration
+  let K be finite-vertices SimplicialComplexStr;
+  cluster simplex-like -> finite Subset-Family of K;
+  coherence
+  proof
+  let S be Subset-Family of K;
+  assume S is simplex-like;
+  then A1: S c=the topology of K by Th14;
+  Vertices K=union the topology of K by Lm5;
+  then A2: the topology of K c=bool Vertices K by ZFMISC_1:100;
+  Vertices K is finite by Def5;
+  hence thesis by A1,A2;
+ end;
+end;
+
+registration
+  let K be finite-membered SimplicialComplexStr;
+  cluster simplex-like -> finite-membered Subset-Family of K;
+  coherence
+  proof
+  let S be Subset-Family of K;
+  assume A1: S is simplex-like;
+  let x;
+  assume A2: x in S;
+  then reconsider X=x as Subset of K;
+  X is simplex-like by A1,A2,TOPS_2:def 1;
+  then A3: X in the topology of K by PRE_TOPC:def 5;
+  the_family_of K is finite-membered by MATROID0:def 6;
+  hence thesis by A3,MATROID0:def 5;
+ end;
+end;
+
+theorem
+  Vertices K is empty iff K is empty-membered by Lm2;
+
+theorem
+  Vertices K = union the topology of K by Lm5;
+
+theorem
+  for S be Subset of K st S is simplex-like holds S c= Vertices K by Lm4;
+
+theorem
+  K is finite-vertices implies the topology of K is finite by Lm6;
+
+theorem Th19:
+  the topology of K is finite & K is non finite-vertices implies
+    K is non finite-membered
+ proof
+  defpred P[set,set] means
+   $1 in $2;
+  set V=Vertices K;
+  assume that
+   A1: the topology of K is finite and
+   A2: K is non finite-vertices;
+  A3: V is infinite by A2,Def5;
+  A4: V=union the topology of K by Lm5;
+  A5: for x st x in V ex y st y in the topology of K & P[x,y]
+  proof
+   let x;
+   assume x in V;
+   then ex y st x in y & y in the topology of K by A4,TARSKI:def 4;
+   hence thesis;
+  end;
+  consider f be Function of V,the topology of K such that
+   A6: for x st x in V holds P[x,f.x] from FUNCT_2:sch 1(A5);
+  the topology of K is non empty by A2,A4,Def5;
+  then dom f=V by FUNCT_2:def 1;
+  then consider x such that
+   A7: x in rng f and
+   A8: f"{x} is infinite by A1,A3,COMPL_SP:24;
+  x in the topology of K by A7;
+  then reconsider x as Subset of K;
+  f"{x}c=x
+  proof
+   let y;
+   assume y in f"{x};
+   then f.y in {x} & y in f.y by A6,FUNCT_1:def 13;
+   hence thesis by TARSKI:def 1;
+  end;
+  then x is non finite by A8;
+  then the_family_of K is non finite-membered by A7,MATROID0:def 5;
+  hence thesis by MATROID0:def 6;
+ end;
+
+theorem Th20:
+  K is subset-closed & the topology of K is finite implies
+    K is finite-vertices
+  proof
+  assume that
+   A1: K is subset-closed and
+   A2: the topology of K is finite;
+  assume K is non finite-vertices;
+  then K is non finite-membered by A2,Th19;
+  then the_family_of K is non finite-membered by MATROID0:def 6;
+  then consider x such that
+   A3: x in the_family_of K and
+   A4: x is non finite by MATROID0:def 5;
+  {x}c=the_family_of K by A3,ZFMISC_1:37;
+  then subset-closed_closure_of{x}c=the_family_of K by A1,Th3;
+  then bool x c=the_family_of K by Th4;
+  hence contradiction by A2,A4;
+ end;
+
+begin :: The Simplicial Complex Generated on the Set
+
+definition
+  let X;
+  let Y be Subset-Family of X;
+  func Complex_of Y -> strict SimplicialComplexStr of X equals
+    TopStruct(# X,subset-closed_closure_of Y #);
+  coherence
+  proof
+  [#]TopStruct(# X,subset-closed_closure_of Y #)=X;
+  hence thesis by Def9;
+ end;
+end;
+
+registration
+  let X;
+  let Y be Subset-Family of X;
+  cluster Complex_of Y -> total subset-closed;
+  coherence
+  proof
+  [#](Complex_of Y)=X & subset-closed_closure_of Y=the_family_of TopStruct(# X,
+subset-closed_closure_of Y #);
+  hence thesis by Def10,MATROID0:def 3;
+ end;
+end;
+
+registration
+  let X;
+  let Y be non empty Subset-Family of X;
+  cluster Complex_of Y -> with_empty_element;
+  coherence by Def8;
+end;
+
+registration
+  let X;
+  let Y be finite-membered Subset-Family of X;
+  cluster Complex_of Y -> finite-membered;
+  coherence
+  proof
+  subset-closed_closure_of Y=the_family_of Complex_of Y;
+  hence thesis by MATROID0:def 6;
+ end;
+end;
+
+registration
+  let X;
+  let Y be finite finite-membered Subset-Family of X;
+  cluster Complex_of Y -> finite-vertices;
+  coherence
+  proof
+  set C=Complex_of Y;
+  reconsider Y1=Y as Subset-Family of union Y by ZFMISC_1:100;
+  subset-closed_closure_of Y1 c=bool union Y;
+  then A1: union the topology of C c=union bool union Y by ZFMISC_1:95;
+  union bool union Y=union Y by ZFMISC_1:99;
+  then Vertices C c=union Y by A1,Lm5;
+  hence thesis by Def5;
+ end;
+end;
+
+theorem
+  K is subset-closed implies the TopStruct of K = Complex_of the topology of K
+ proof
+  assume K is subset-closed;
+  then the_family_of K is subset-closed;
+  hence thesis by Th7;
+ end;
+
+definition
+  let X;
+  mode SimplicialComplex of X is finite-membered subset-closed
+         SimplicialComplexStr of X;
+end;
+
+definition
+  let K be non void SimplicialComplexStr;
+  mode Simplex of K is simplex-like Subset of K;
+end;
+
+registration
+  let K be with_empty_element SimplicialComplexStr;
+  cluster empty -> simplex-like Subset of K;
+  coherence
+  proof
+  let S be Subset of K;
+  assume A1: S is empty;
+  the topology of K is with_empty_element by Def8;
+  then S in the topology of K by A1,SETFAM_1:def 9;
+  hence thesis by PRE_TOPC:def 5;
+ end;
+  cluster empty Simplex of K;
+  existence
+  proof
+  {}K is simplex-like;
+  hence thesis;
+ end;
+end;
+
+registration
+  let K be non void finite-membered SimplicialComplexStr;
+  cluster finite Simplex of K;
+  existence
+  proof
+  consider S be set such that
+   A1: S in the topology of K by XBOOLE_0:def 1;
+  reconsider S as Simplex of K by A1,PRE_TOPC:def 5;
+  S is finite;
+  hence thesis;
+ end;
+end;
+
+begin :: The Degree of Simplicial Complexes
+
+definition
+  let K;
+  func degree K -> ext-real number means :Def12:
+    (for S be finite Subset of K st S is simplex-like holds card S <= it+1) &
+     ex S be Subset of K st S is simplex-like & card S = it+1
+           if K is non void finite-degree,
+   it = -1 if K is void
+           otherwise
+   it = +infty;
+  existence
+  proof
+  now defpred P[Nat] means
+    for S be finite Subset of K st S is simplex-like holds card S<=$1;
+   assume A1: K is non void finite-degree;
+   then A2: the_family_of K is finite-membered by MATROID0:def 6;
+   A3: ex n be Nat st P[n] by A1,MATROID0:def 7;
+   consider k be Nat such that
+    A4: P[k] and
+    A5: for n be Nat st P[n] holds k<=n from NAT_1:sch 5(A3);
+   take D=k-1;
+   thus for S be finite Subset of K st S is simplex-like holds card S<=D+1 by
+A4;
+   assume A6: for S be Subset of K st S is simplex-like holds card S<>D+1;
+   per cases;
+   suppose A7: k=0;
+    consider S be set such that
+     A8: S in the topology of K by A1,XBOOLE_0:def 1;
+    reconsider S as finite Subset of K by A2,A8,MATROID0:def 5;
+    A9: S is simplex-like by A8,PRE_TOPC:def 5;
+    then card S=0 by A4,A7;
+    hence contradiction by A6,A7,A9;
+   end;
+   suppose k>0;
+    then reconsider k1=k-1 as Element of NAT by NAT_1:20;
+    P[k1]
+    proof
+     let S be finite Subset of K;
+     assume A10: S is simplex-like;
+     then card S<=k1+1 by A4;
+     then card S<k1+1 by A6,A10,XXREAL_0:1;
+     hence thesis by NAT_1:13;
+    end;
+    then k1+1<=k1 by A5;
+    hence contradiction by NAT_1:13;
+   end;
+  end;
+  hence thesis;
+ end;
+  uniqueness
+  proof
+  let D1,D2 be ext-real number;
+  now assume A11: K is non void finite-degree;
+   assume A12: for S be finite Subset of K st S is simplex-like holds card S<=
+D1+1;
+   given S1 be Subset of K such that
+    A13: S1 is simplex-like & card S1=D1+1;
+   assume A14: for S be finite Subset of K st S is simplex-like holds card S<=
+D2+1;
+   given S2 be Subset of K such that
+    A15: S2 is simplex-like & card S2=D2+1;
+   A16: D2+1<=D1+1 by A11,A12,A15;
+   D1+1<=D2+1 by A11,A13,A14;
+   hence D1=D2 by A16,XXREAL_0:1,XXREAL_3:11;
+  end;
+  hence thesis;
+ end;
+  consistency;
+end;
+
+registration
+  let K be finite-degree SimplicialComplexStr;
+  cluster degree K + 1 -> natural;
+  coherence
+  proof
+  per cases;
+  suppose K is void;
+   then degree K+1=-1+1 by Def12
+    .=0;
+   hence thesis;
+  end;
+  suppose K is non void;
+   then consider S be Subset of K such that
+    A1: S is simplex-like and
+    A2: card S=degree K+1 by Def12;
+   the_family_of K is finite-membered & S in the topology of K by A1,MATROID0:
+def 6,PRE_TOPC:def 5;
+   then S is finite by MATROID0:def 5;
+   hence thesis by A2;
+  end;
+ end;
+  cluster degree K -> integer;
+  coherence
+  proof
+  degree K=(degree K+1)-1 by XXREAL_3:24;
+  hence thesis;
+ end;
+end;
+
+theorem Th22:
+  degree K = -1 iff K is empty-membered
+ proof
+  per cases;
+  suppose K is void;
+   hence thesis by Def12;
+  end;
+  suppose A1: K is non void;
+   hereby assume A2: degree K=-1;
+    then A3: K is finite-degree by A1,Def12;
+    assume K is with_non-empty_element;
+    then the topology of K is with_non-empty_element by Def7;
+    then consider S be non empty set such that
+     A4: S in the topology of K by SETFAM_1:def 11;
+    reconsider S as Subset of K by A4;
+    A5: S is simplex-like by A4,PRE_TOPC:def 5;
+    then reconsider S as finite Subset of K by A1,A3;
+    card S<=-1+1 by A1,A2,A3,A5,Def12;
+    then card S=0;
+    hence contradiction;
+   end;
+   assume A6: K is empty-membered;
+   then consider S be Subset of K such that
+    A7: S is simplex-like and
+    A8: card S=degree K+1 by A1,Def12;
+   A9: S in the topology of K by A7,PRE_TOPC:def 5;
+   assume degree K<>-1;
+   then card S<>-1+1 by A8,XXREAL_3:11;
+   then A10: S is non empty;
+   the topology of K is empty-membered by A6,Def7;
+   hence thesis by A9,A10,SETFAM_1:def 11;
+  end;
+ end;
+
+theorem Th23:
+  -1 <= degree K
+ proof
+  per cases;
+  suppose K is void;
+   hence thesis by Def12;
+  end;
+  suppose A1: K is non void finite-degree;
+   then reconsider d=degree K as Integer;
+   0=-1+1 & d+1>=0 by A1;
+   hence thesis by XREAL_1:8;
+  end;
+  suppose K is non void non finite-degree;
+   hence thesis by Def12;
+  end;
+ end;
+
+theorem Th24:
+  for S be finite Subset of K st S is simplex-like holds card S <= degree K+1
+ proof
+  let S be finite Subset of K such that
+   A1: S is simplex-like;
+  S in the topology of K by A1,PRE_TOPC:def 5;
+  then A2: K is non void by PENCIL_1:def 4;
+  per cases;
+  suppose K is finite-degree;
+   hence thesis by A1,A2,Def12;
+  end;
+  suppose K is non finite-degree;
+   then degree K=+infty by A2,Def12;
+   then degree K+1=+infty by XXREAL_3:def 2;
+   hence thesis by XXREAL_0:3;
+  end;
+ end;
+
+theorem Th25:
+ K is non void or i >= -1 implies
+  (degree K <= i
+iff
+   K is finite-membered &
+   for S be finite Subset of K st S is simplex-like holds card S <= i+1)
+ proof
+  assume A1: K is non void or i>=-1;
+  per cases;
+  suppose A2: K is void;
+   A3: now let S be finite Subset of K;
+    assume S is simplex-like;
+    then S in the topology of K by PRE_TOPC:def 5;
+    hence card S<=i+1 by A2,PENCIL_1:def 4;
+   end;
+   K is empty-membered by A2;
+   hence thesis by A1,A2,A3,Th22;
+  end;
+  suppose A4: K is non void;
+   hereby assume A5: degree K<=i;
+    then A6: degree K+1<=i+1 by XXREAL_3:36;
+    i in REAL by XREAL_0:def 1;
+    then A7: degree K<>+infty by A5,XXREAL_0:9;
+    then K is finite-degree or K is empty-membered by Def12;
+    hence K is finite-membered;
+    let S be finite Subset of K;
+    assume A8: S is simplex-like;
+    K is non void finite-degree or K is void by A7,Def12;
+    then card S<=degree K+1 by A4,A8,Def12;
+    hence card S<=i+1 by A6,XXREAL_0:2;
+   end;
+   assume that
+    A9: K is finite-membered and
+    A10: for S be finite Subset of K st S is simplex-like holds card S<=i+1;
+   consider S be set such that
+    A11: S in the topology of K by A4,XBOOLE_0:def 1;
+   reconsider S as Subset of K by A11;
+   A12: S is simplex-like by A11,PRE_TOPC:def 5;
+   then reconsider S as finite Subset of K by A4,A9;
+   card S<=i+1 by A10,A12;
+   then reconsider i1=i+1 as Element of NAT by INT_1:16;
+   for A be finite Subset of K st A is open holds card A<=i1 by A10;
+   then A13: K is finite-degree by A9,MATROID0:def 7;
+   then reconsider d=degree K as Integer;
+   ex S1 be Subset of K st S1 is simplex-like & card S1=degree K+1 by 
+A4,A13,
+Def12;
+   then d+1<=i+1 by A4,A9,A10;
+   hence thesis by XREAL_1:8;
+  end;
+ end;
+
+theorem
+  for A be finite Subset of X holds degree Complex_of {A} = card A - 1
+ proof
+  let A be finite Subset of X;
+  set C=Complex_of{A};
+  A1: the topology of C=bool A by Th4;
+  now let S be finite Subset of C;
+   assume S is simplex-like;
+   then S in the topology of C by PRE_TOPC:def 5;
+   hence card S<=(card A-1)+1 by A1,NAT_1:44;
+  end;
+  then A2: degree C<=card A-1 by Th25;
+  A c=A;
+  then reconsider A1=A as finite Simplex of C by A1,PRE_TOPC:def 5;
+  card A=card A-1+1 & card A1<=degree C+1 by Def12;
+  then card A-1<=degree C by XREAL_1:10;
+  hence card A-1=degree C by A2,XXREAL_0:1;
+ end;
+
+begin :: Subcomplexes
+
+definition
+  let X;
+  let KX be SimplicialComplexStr of X;
+  mode SubSimplicialComplex of KX -> SimplicialComplex of X means :Def13:
+   [#]it c= [#]KX & the topology of it c= the topology of KX;
+  existence
+  proof
+  set T=TopStruct(# 0,{}bool 0 #);
+  the_family_of T is empty & [#]T c=X by XBOOLE_1:2;
+  then reconsider T=TopStruct(# 0,{}bool 0 #) as SimplicialComplex of X by Def9
+,MATROID0:def 3,def 6;
+  take T;
+  thus thesis by XBOOLE_1:2;
+ end;
+end;
+
+reserve KX for SimplicialComplexStr of X,
+        SX for SubSimplicialComplex of KX;
+
+registration
+  let X,KX;
+  cluster empty void strict SubSimplicialComplex of KX;
+  existence
+  proof
+  set C=Complex_of{}bool{};
+  the topology of C={};
+  then A1: [#]C c=[#]KX & the topology of C c=the topology of KX by XBOOLE_1:2;
+  [#]C c=X by XBOOLE_1:2;
+  then C is SimplicialComplexStr of X by Def9;
+  then reconsider C as SubSimplicialComplex of KX by A1,Def13;
+  take C;
+  thus thesis;
+ end;
+end;
+
+registration
+  let X;
+  let KX be void SimplicialComplexStr of X;
+  cluster -> void SubSimplicialComplex of KX;
+  coherence
+  proof
+  let S be SubSimplicialComplex of KX;
+  the topology of S c=the topology of KX & the topology of KX is empty by Def13
+,PENCIL_1:def 4;
+  hence thesis;
+ end;
+end;
+
+registration
+  let D;
+  let KD be non void subset-closed SimplicialComplexStr of D;
+  cluster non void SubSimplicialComplex of KD;
+  existence
+  proof
+  A1: the_family_of KD is subset-closed;
+  consider x such that
+   A2: x in the topology of KD by XBOOLE_0:def 1;
+  per cases;
+  suppose x is empty;
+   then reconsider x as empty Subset of KD by A2;
+   set S=Complex_of{x};
+   A3: [#]S=[#]KD;
+   [#]KD c=D by Def9;
+   then reconsider S as SimplicialComplex of D by A3,Def9;
+   take S;
+   {x}c=the topology of KD by A2,ZFMISC_1:37;
+   then subset-closed_closure_of{x}c=the topology of KD by A1,Th3;
+   hence thesis by A3,Def13;
+  end;
+  suppose A4: x is non empty;
+   set d=the Element of x;
+   d in x by A4;
+   then reconsider dd={d} as Subset of KD by A2,ZFMISC_1:37;
+   set S=Complex_of{dd};
+   A5: [#]S=[#]KD;
+   [#]KD c=D by Def9;
+   then reconsider S as SimplicialComplex of D by A5,Def9;
+   take S;
+   dd c=x by A4,ZFMISC_1:37;
+   then dd in the topology of KD by A1,A2,CLASSES1:def 1;
+   then {dd}c=the topology of KD by ZFMISC_1:37;
+   then the topology of S c=the topology of KD by A1,Th3;
+   hence thesis by A5,Def13;
+  end;
+ end;
+end;
+
+registration
+  let X;
+  let KX be finite-vertices SimplicialComplexStr of X;
+  cluster -> finite-vertices SubSimplicialComplex of KX;
+  coherence
+  proof
+  let SX be SubSimplicialComplex of KX;
+  A1: Vertices KX is finite by Def5;
+  the topology of SX c=the topology of KX by Def13;
+  then A2: union the topology of SX c=union the topology of KX by ZFMISC_1:95;
+  union the topology of SX=Vertices SX & union the topology of KX=Vertices KX
+by Lm5;
+  hence thesis by A2,A1,Def5;
+ end;
+end;
+
+registration
+  let X;
+  let KX be finite-degree SimplicialComplexStr of X;
+  cluster -> finite-degree SubSimplicialComplex of KX;
+  coherence
+  proof
+  let S be SubSimplicialComplex of KX;
+  consider n be Nat such that
+   A1: for A be finite Subset of KX st A is simplex-like holds card A<=n by
+MATROID0:def 7;
+  thus S is finite-membered;
+  take n;
+  let A be finite Subset of S;
+  assume A is simplex-like;
+  then A2: A in the topology of S by PRE_TOPC:def 5;
+  [#]S c=[#]KX by Def13;
+  then reconsider A1=A as finite Subset of KX by XBOOLE_1:1;
+  the topology of S c=the topology of KX by Def13;
+  then A1 is simplex-like by A2,PRE_TOPC:def 5;
+  hence thesis by A1;
+ end;
+end;
+
+theorem Th27:
+  for S1 be SubSimplicialComplex of SX holds S1 is SubSimplicialComplex of KX
+ proof
+  let S1 be SubSimplicialComplex of SX;
+  [#]SX c=[#]KX & [#]S1 c=[#]SX by Def13;
+  then A1: [#]S1 c=[#]KX by XBOOLE_1:1;
+  the topology of SX c=the topology of KX & the topology of S1 c=the topology
+of SX by Def13;
+  then the topology of S1 c=the topology of KX by XBOOLE_1:1;
+  hence thesis by A1,Def13;
+ end;
+
+theorem Th28:
+  for A be Subset of KX
+    for S be finite-membered Subset-Family of A st
+        subset-closed_closure_of S c=the topology of KX
+      holds Complex_of S is strict SubSimplicialComplex of KX
+ proof
+  let A be Subset of KX;
+  let S be finite-membered Subset-Family of A such that
+   A1: subset-closed_closure_of S c=the topology of KX;
+  set C=Complex_of S;
+  [#]KX c=X by Def9;
+  then [#]C c=X by XBOOLE_1:1;
+  then [#]C c=[#]KX & C is strict SimplicialComplexStr of X by Def9;
+  hence thesis by A1,Def13;
+ end;
+
+theorem
+  for KX be subset-closed SimplicialComplexStr of X
+    for A be Subset of KX for S be finite-membered Subset-Family of A st
+        S c= the topology of KX
+      holds Complex_of S is strict SubSimplicialComplex of KX
+ proof
+  let KX be subset-closed SimplicialComplexStr of X;
+  let A be Subset of KX;
+  let S be finite-membered Subset-Family of A;
+  A1: the_family_of KX is subset-closed;
+  assume S c=the topology of KX;
+  hence thesis by A1,Th3,Th28;
+ end;
+
+theorem
+  for Y1,Y2 be Subset-Family of X st
+      Y1 is finite-membered & Y1 is_finer_than Y2
+    holds Complex_of Y1 is SubSimplicialComplex of Complex_of Y2
+ proof
+  let Y1,Y2 be Subset-Family of X such that
+   A1: Y1 is finite-membered and
+   A2: Y1 is_finer_than Y2;
+  set C1=Complex_of Y1,C2=Complex_of Y2;
+  A3: [#]C1=X & [#]C2=X;
+  subset-closed_closure_of Y1 c=subset-closed_closure_of Y2 by A2,Th6;
+  hence thesis by A1,A3,Def13;
+ end;
+
+theorem
+  Vertices SX c= Vertices KX
+ proof
+  let x;
+  assume A1: x in Vertices SX;
+  then reconsider v=x as Element of SX;
+  v is vertex-like by A1,Def4;
+  then consider S be Subset of SX such that
+   A2: S is simplex-like and
+   A3: v in S by Def3;
+  A4: the topology of SX c=the topology of KX by Def13;
+  A5: S in the topology of SX by A2,PRE_TOPC:def 5;
+  then S in the topology of KX by A4;
+  then reconsider S as Subset of KX;
+  v in S by A3;
+  then reconsider v as Element of KX;
+  S is simplex-like by A4,A5,PRE_TOPC:def 5;
+  then v is vertex-like by A3,Def3;
+  hence thesis by Def4;
+ end;
+
+theorem Th32:
+  degree SX <= degree KX
+ proof
+  per cases;
+  suppose A1: SX is non finite-degree;
+   SX is non void
+   proof
+    assume SX is void;
+    then SX is empty-membered;
+    hence contradiction by A1;
+   end;
+   then KX is non finite-degree non void & degree SX=+infty by A1,Def12;
+   hence thesis by Def12;
+  end;
+  suppose SX is void;
+   then degree SX=-1 by Def12;
+   hence thesis by Th23;
+  end;
+  suppose A2: SX is non void finite-degree;
+   then A3: KX is non void;
+   per cases;
+   suppose KX is non finite-degree;
+    then degree KX=+infty by A3,Def12;
+    hence thesis by XXREAL_0:3;
+   end;
+   suppose A4: KX is finite-degree;
+    A5: the topology of SX c=the topology of KX by Def13;
+    consider S be Subset of SX such that
+     A6: S is simplex-like and
+     A7: card S=degree SX+1 by A2,Def12;
+    A8: S in the topology of SX by A6,PRE_TOPC:def 5;
+    then S in the topology of KX by A5;
+    then reconsider S1=S as finite Subset of KX by A4,A7;
+    S1 is simplex-like by A5,A8,PRE_TOPC:def 5;
+    then degree SX+1<=degree KX+1 by A3,A4,A7,Def12;
+    then A9: degree SX+1-1<=degree KX+1-1 by XXREAL_3:39;
+    degree SX+1-1=degree SX by XXREAL_3:24;
+    hence thesis by A9,XXREAL_3:24;
+   end;
+  end;
+ end;
+
+definition
+  let X,KX,SX;
+  attr SX is maximal means :Def14:
+    for A be Subset of SX st A in the topology of KX holds A is simplex-like;
+end;
+
+theorem Th33:
+  SX is maximal iff bool[#]SX /\ the topology of KX c= the topology of SX
+ proof
+  hereby assume A1: SX is maximal;
+   thus bool[#]SX/\the topology of KX c=the topology of SX
+   proof
+    let x;
+    assume A2: x in bool[#]SX/\the topology of KX;
+    then reconsider A=x as Subset of SX by XBOOLE_0:def 4;
+    A in the topology of KX by A2,XBOOLE_0:def 4;
+    then A is simplex-like by A1,Def14;
+    hence thesis by PRE_TOPC:def 5;
+   end;
+  end;
+  assume A3: bool[#]SX/\the topology of KX c=the topology of SX;
+  let A be Subset of SX;
+  assume A in the topology of KX;
+  then A in bool[#]SX/\the topology of KX by XBOOLE_0:def 4;
+  hence thesis by A3,PRE_TOPC:def 5;
+ end;
+
+registration
+  let X,KX;
+  cluster maximal strict SubSimplicialComplex of KX;
+  existence
+  proof
+  set B=bool{}/\the topology of KX;
+  reconsider B as finite-membered subset-closed Subset-Family of{}KX by
+XBOOLE_1:17,ZFMISC_1:1,39;
+  subset-closed_closure_of B=B by Th7;
+  then reconsider C=Complex_of B as strict SubSimplicialComplex of KX by Th28,
+XBOOLE_1:17;
+  take C;
+  C=TopStruct(# {}KX,B #) & bool[#]C=bool{} by Th7;
+  hence thesis by Th33;
+ end;
+end;
+
+theorem Th34:
+  for S1 be SubSimplicialComplex of SX st
+      SX is maximal & S1 is maximal
+    holds S1 is maximal SubSimplicialComplex of KX
+ proof
+  let S1 be SubSimplicialComplex of SX;
+  reconsider s1=S1 as SubSimplicialComplex of KX by Th27;
+  assume that
+   A1: SX is maximal and
+   A2: S1 is maximal;
+  A3: [#]S1 c=[#]SX by Def13;
+  now let A be Subset of s1;
+   reconsider a=A as Subset of SX by A3,XBOOLE_1:1;
+   assume A in the topology of KX;
+   then a is simplex-like by A1,Def14;
+   then a in the topology of SX by PRE_TOPC:def 5;
+   hence A is simplex-like by A2,Def14;
+  end;
+  hence S1 is maximal SubSimplicialComplex of KX by Def14;
+ end;
+
+theorem
+  for S1 be SubSimplicialComplex of SX st
+      S1 is maximal SubSimplicialComplex of KX
+    holds S1 is maximal
+ proof
+  let S1 be SubSimplicialComplex of SX;
+  assume S1 is maximal SubSimplicialComplex of KX;
+  then reconsider s1=S1 as maximal SubSimplicialComplex of KX;
+  the topology of SX c=the topology of KX by Def13;
+  then A1: bool[#]s1/\the topology of SX c=bool[#]s1/\the topology of KX by
+XBOOLE_1:26;
+  bool[#]s1/\the topology of KX c=the topology of s1 by Th33;
+  then bool[#]S1/\the topology of SX c=the topology of S1 by A1,XBOOLE_1:1;
+  hence thesis by Th33;
+ end;
+
+theorem Th36:
+  for K1,K2 be maximal SubSimplicialComplex of KX st
+      [#]K1 = [#]K2
+    holds the TopStruct of K1 = the TopStruct of K2
+ proof
+  let K1,K2 be maximal SubSimplicialComplex of KX;
+  assume A1: [#]K1=[#]K2;
+  set TOP1=the topology of K1,TOP2=the topology of K2,TOP=the topology of KX;
+  A2: TOP/\bool[#]K2 c=TOP2 by Th33;
+  TOP1 c=TOP by Def13;
+  then A3: TOP1 c=TOP/\bool[#]K1 by XBOOLE_1:19;
+  TOP2 c=TOP by Def13;
+  then A4: TOP2 c=TOP/\bool[#]K2 by XBOOLE_1:19;
+  TOP/\bool[#]K1 c=TOP1 by Th33;
+  then TOP1=TOP/\bool[#]K1 by A3,XBOOLE_0:def 10
+   .=TOP2 by A1,A2,A4,XBOOLE_0:def 10;
+  hence thesis by A1;
+ end;
+
+definition
+  let X;
+  let KX be subset-closed SimplicialComplexStr of X;
+  let A be Subset of KX such that
+    A1: bool A /\ the topology of KX is finite-membered;
+  func KX|A -> maximal strict SubSimplicialComplex of KX means :Def15:
+    [#]it = A;
+  existence
+  proof
+  the_family_of KX is subset-closed;
+  then reconsider BA=bool A/\the topology of KX as finite-membered
+subset-closed Subset-Family of A by A1,XBOOLE_1:17;
+  set KA=TopStruct(# A,BA #);
+  A2: [#]KA c=[#]KX & the topology of KA c=the topology of KX by XBOOLE_1:17;
+  BA=the_family_of KA;
+  then A3: KA is subset-closed finite-membered by MATROID0:def 3,def 6;
+  [#]KX c=X by Def9;
+  then [#]KA c=X by XBOOLE_1:1;
+  then KA is SimplicialComplexStr of X by Def9;
+  then reconsider KA as maximal strict SubSimplicialComplex of KX by A2,A3,
+Def13,Th33;
+  take KA;
+  thus thesis;
+ end;
+  uniqueness by Th36;
+end;
+
+reserve SC for SimplicialComplex of X;
+
+definition
+  let X,SC;
+  let A be Subset of SC;
+  redefine func SC|A -> maximal strict SubSimplicialComplex of SC means :Def16:
+    [#]it = A;
+  coherence;
+  compatibility
+  proof
+  let KA be maximal strict SubSimplicialComplex of SC;
+  the_family_of SC is finite-membered & bool A/\the topology of SC c=the
+topology of SC by MATROID0:def 6,XBOOLE_1:17;
+  hence thesis by Def15;
+ end;
+end;
+
+theorem Th37:
+  for A be Subset of SC holds
+    the topology of SC|A = bool A /\ the topology of SC
+ proof
+  let A be Subset of SC;
+  A1: [#](SC|A)=A by Def16;
+  then A2: bool A/\the topology of SC c=the topology of SC|A by Th33;
+  the topology of SC|A c=the topology of SC by Def13;
+  then the topology of SC|A c=bool A/\the topology of SC by A1,XBOOLE_1:19;
+  hence thesis by A2,XBOOLE_0:def 10;
+ end;
+
+theorem
+  for A,B be Subset of SC for B1 be Subset of SC|A st B1 = B
+   holds SC|A|B1 = SC|B
+ proof
+  let A,B be Subset of SC;
+  let B1 be Subset of SC|A;
+  reconsider SCAB=SC|A|B1 as maximal strict SubSimplicialComplex of SC by 
+Th34;
+  assume A1: B1=B;
+  [#]SCAB=B1 by Def16;
+  hence thesis by A1,Def16;
+ end;
+
+theorem
+  SC|[#]SC = the TopStruct of SC
+ proof
+  set T=the TopStruct of SC;
+  A1: [#]T c=[#]SC & bool[#]T/\the topology of SC=the topology of SC by
+XBOOLE_1:28;
+  the_family_of SC=the_family_of T & the_family_of SC is finite-membered
+subset-closed by MATROID0:def 6;
+  then A2: T is finite-membered subset-closed by MATROID0:def 3,def 6;
+  [#]SC c=X by Def9;
+  then [#]T c=X;
+  then T is SimplicialComplexStr of X by Def9;
+  then reconsider T as maximal SubSimplicialComplex of SC by A1,A2,Def13,Th33;
+  [#]T=[#]SC;
+  hence thesis by Def16;
+ end;
+
+theorem
+  for A,B be Subset of SC st A c= B holds SC|A is SubSimplicialComplex of SC|B
+ proof
+  let A,B be Subset of SC;
+  A1: bool A/\the topology of SC=the topology of SC|A & bool B/\the topology of
+SC=the topology of SC|B by Th37;
+  assume A2: A c=B;
+  then bool A c=bool B by ZFMISC_1:79;
+  then A3: bool A/\the topology of SC c=bool B/\the topology of SC by XBOOLE_1:
+27;
+  [#](SC|A)=A & [#](SC|B)=B by Def16;
+  hence thesis by A2,A3,A1,Def13;
+ end;
+
+registration
+  cluster -> finite Integer;
+  coherence
+  proof
+  let i be Integer;
+  i in NAT\/[:{0},NAT:]\{[0,0]} by INT_1:def 2,NUMBERS:def 4;
+  then i in NAT or i in [:{0},NAT:] by XBOOLE_0:def 3;
+  then i in NAT or ex x,y be set st x in {0} & y in NAT & i=[x,y] by ZFMISC_1:
+def 2;
+  hence thesis;
+ end;
+end;
+
+begin :: The Skelton of a Simplicial Complex
+
+definition
+  let X,KX;
+  let i be real number;
+  func Skeleton_of(KX,i) -> SimplicialComplexStr of X equals
+    Complex_of the_subsets_with_limited_card(i + 1,the topology of KX);
+  coherence
+  proof
+  set C=Complex_of the_subsets_with_limited_card(i+1,the topology of KX);
+  [#]KX c=X by Def9;
+  then [#]C c=X;
+  hence thesis by Def9;
+ end;
+end;
+
+registration
+  let X,KX;
+  cluster Skeleton_of(KX,-1) -> empty-membered;
+  coherence
+  proof
+  assume Skeleton_of(KX,-1) is with_non-empty_element;
+  then the topology of Skeleton_of(KX,-1) is with_non-empty_element by Def7;
+  then consider x be non empty set such that
+   A1: x in the topology of Skeleton_of(KX,-1) by SETFAM_1:def 11;
+  consider b be set such that
+   A2: x c=b and
+   A3: b in the_subsets_with_limited_card(-1+1,the topology of KX) by A1,Th2;
+  card b c=card(-1+1) by A3,Def2;
+  then card b c={};
+  then b is empty;
+  hence thesis by A2;
+ end;
+  let i;
+  cluster Skeleton_of(KX,i) -> finite-degree;
+  coherence
+  proof
+  reconsider i1=i+1 as Integer;
+  set SUB=the_subsets_with_limited_card(i+1,the topology of KX);
+  set C=Complex_of SUB;
+  now let A be finite Subset of C;
+   assume A is open;
+   then A in subset-closed_closure_of SUB by PRE_TOPC:def 5;
+   then consider B be set such that
+    A4: A c=B & B in SUB by Th2;
+   card A c=card B & card B c=card i1 by A4,Def2,CARD_1:27;
+   then card A c=card i1 by XBOOLE_1:1;
+   hence card A<=card i1 by NAT_1:40;
+  end;
+  hence thesis by MATROID0:def 7;
+ end;
+end;
+
+registration
+  let X;
+  let KX be empty-membered SimplicialComplexStr of X;
+  let i;
+  cluster Skeleton_of(KX,i) -> empty-membered;
+  coherence
+  proof
+  assume Skeleton_of(KX,i) is with_non-empty_element;
+  then the topology of Skeleton_of(KX,i) is with_non-empty_element by Def7;
+  then consider x be non empty set such that
+   A1: x in the topology of Skeleton_of(KX,i) by SETFAM_1:def 11;
+  A2: the topology of KX is empty-membered by Def7;
+  consider y such that
+   A3: x c=y and
+   A4: y in the_subsets_with_limited_card(i+1,the topology of KX) by A1,Th2;
+  y in the topology of KX by A4,Def2;
+  then y is empty by A2,SETFAM_1:def 11;
+  hence thesis by A3;
+ end;
+end;
+
+registration
+  let D;
+  let KD be non void subset-closed SimplicialComplexStr of D;
+  let i;
+  cluster Skeleton_of(KD,i) -> non void;
+  coherence
+  proof
+  consider x such that
+   A1: x in the topology of KD by XBOOLE_0:def 1;
+  reconsider x as Simplex of KD by A1,PRE_TOPC:def 5;
+  reconsider E={} as Subset of KD by XBOOLE_1:2;
+  E in the topology of KD & card E c=card(i+1) by PRE_TOPC:def 5;
+  then E in the_subsets_with_limited_card(i+1,the topology of KD) by Def2;
+  hence thesis;
+ end;
+end;
+
+theorem
+  -1 <= i1 & i1 <= i2 implies
+    Skeleton_of(KX,i1) is SubSimplicialComplex of Skeleton_of(KX,i2)
+ proof
+  assume that
+   A1: -1<=i1 and
+   A2: i1<=i2;
+  -1<=i2 by A1,A2,XXREAL_0:2;
+  then A3: -1+1<=i2+1 by XREAL_1:8;
+  -1+1<=i1+1 by A1,XREAL_1:8;
+  then reconsider I1=i1+1,I2=i2+1 as Element of NAT by A3,INT_1:16;
+  the_subsets_with_limited_card(i1+1,the topology of KX)c=
+the_subsets_with_limited_card(i2+1,the topology of KX)
+  proof
+   let x;
+   I1<=I2 by A2,XREAL_1:8;
+   then A4: card I1 c=card I2 by NAT_1:41;
+   assume A5: x in the_subsets_with_limited_card(i1+1,the topology of KX);
+   then card x c=card I1 by Def2;
+   then A6: card x c=card I2 by A4,XBOOLE_1:1;
+   x in the topology of KX by A5,Def2;
+   hence thesis by A6,Def2;
+  end;
+  then the_subsets_with_limited_card(i1+1,the topology of KX)is_finer_than
+the_subsets_with_limited_card(i2+1,the topology of KX) by SETFAM_1:17;
+  then A7: the topology of Skeleton_of(KX,i1)c=the topology of Skeleton_of(KX,
+i2) by Th6;
+  [#]Skeleton_of(KX,i1)=[#]Skeleton_of(KX,i2);
+  hence thesis by A7,Def13;
+ end;
+
+definition
+  let X;
+  let KX be subset-closed SimplicialComplexStr of X;
+  let i;
+  redefine func Skeleton_of(KX,i) -> SubSimplicialComplex of KX;
+  coherence
+  proof
+  A1: the_subsets_with_limited_card(i+1,the topology of KX)c=the topology of KX
+  proof
+   let x;
+   assume x in the_subsets_with_limited_card(i+1,the topology of KX);
+   hence thesis by Def2;
+  end;
+  the_family_of KX is subset-closed;
+  then [#]Skeleton_of(KX,i)=[#]KX & subset-closed_closure_of
+the_subsets_with_limited_card(i+1,the topology of KX)c=the topology of KX by A1
+,Th3;
+  hence thesis by Def13;
+ end;
+end;
+
+theorem
+  KX is subset-closed & Skeleton_of(KX,i) is empty-membered implies
+    KX is empty-membered or i = -1
+ proof
+  assume KX is subset-closed;
+  then A1: the_family_of KX is subset-closed;
+  assume A2: Skeleton_of(KX,i) is empty-membered;
+  assume KX is with_non-empty_element;
+  then the topology of KX is with_non-empty_element by Def7;
+  then consider x be non empty set such that
+   A3: x in the topology of KX by SETFAM_1:def 11;
+  consider y such that
+   A4: y in x by XBOOLE_0:def 1;
+  assume i<>-1;
+  then {}c=card(i+1) & i+1 is non empty;
+  then {} in card(i+1) by CARD_1:13;
+  then 1 c=card(i+1) by CARD_3:109;
+  then A5: card{y}c=card(i+1) by CARD_1:50;
+  {y}c=x by A4,ZFMISC_1:37;
+  then {y} in the topology of KX by A1,A3,CLASSES1:def 1;
+  then {y} in the_subsets_with_limited_card(i+1,the topology of KX) by A5,Def2
+;
+  then A6: {y} in the topology of Skeleton_of(KX,i) by Th2;
+  the topology of Skeleton_of(KX,i) is empty-membered by A2,Def7;
+  hence thesis by A6,SETFAM_1:def 11;
+ end;
+
+theorem
+  degree Skeleton_of(KX,i) <= degree KX
+ proof
+  set S=Skeleton_of(KX,i);
+  per cases;
+  suppose KX is void or S is void;
+   then KX is empty-membered or S is empty-membered;
+   then degree Skeleton_of(KX,i)=-1 by Th22;
+   hence thesis by Th23;
+  end;
+  suppose A1: KX is non void finite-degree & S is non void;
+   then reconsider d=degree KX as Integer;
+   now let s be finite Subset of S;
+    assume s is simplex-like;
+    then s in subset-closed_closure_of the_subsets_with_limited_card(i+1,the
+topology of KX) by PRE_TOPC:def 5;
+    then consider a be set such that
+     A2: s c=a and
+     A3: a in the_subsets_with_limited_card(i+1,the topology of KX) by Th2;
+    A4: card a c=card(i+1) by A3,Def2;
+    A5: a in the topology of KX by A3,Def2;
+    reconsider a as finite Subset of KX by A3,A4;
+    card s c=card a by A2,CARD_1:27;
+    then A6: card s<=card a by NAT_1:40;
+    a is simplex-like & KX is non void by A5,PENCIL_1:def 4,PRE_TOPC:def 5;
+    then card a<=d+1 by Th25;
+    hence card s<=d+1 by A6,XXREAL_0:2;
+   end;
+   hence thesis by A1,Th25;
+  end;
+  suppose A7: KX is non finite-degree;
+   KX is non void
+   proof
+    assume KX is void;
+    then KX is empty-membered;
+    hence thesis by A7;
+   end;
+   then degree KX=+infty by A7,Def12;
+   hence thesis by XXREAL_0:3;
+  end;
+ end;
+
+theorem
+  -1 <= i implies degree Skeleton_of(KX,i) <= i
+ proof
+  set swlc=the_subsets_with_limited_card(i+1,the topology of KX);
+  set S=Skeleton_of(KX,i);
+  assume A1: -1<=i;
+  then -1+1<=i+1 by XREAL_1:8;
+  then reconsider i1=i+1 as Element of NAT by INT_1:16;
+  now let A be finite Subset of S;
+   assume A is simplex-like;
+   then A in the topology of S by PRE_TOPC:def 5;
+   then consider x such that
+    A2: A c=x & x in swlc by Th2;
+   card x c=card(i+1) & card A c=card x by A2,Def2,CARD_1:27;
+   then A3: card A c=card i1 by XBOOLE_1:1;
+   card card A=card A;
+   hence card A<=i+1 by A3,NAT_1:41;
+  end;
+  hence thesis by A1,Th25;
+ end;
+
+theorem
+  -1 <= i & Skeleton_of(KX,i) = the TopStruct of KX implies degree KX <= i
+ proof
+  assume A1: -1<=i;
+  per cases;
+  suppose KX is empty-membered;
+   hence thesis by A1,Th22;
+  end;
+  suppose A2: KX is with_non-empty_element;
+   -1+1<=i+1 by A1,XREAL_1:8;
+   then reconsider i1=i+1 as Element of NAT by INT_1:16;
+   assume A3: Skeleton_of(KX,i)=the TopStruct of KX;
+   A4: now let S be finite Subset of KX;
+    assume S is simplex-like;
+    then S in subset-closed_closure_of the_subsets_with_limited_card(i1,the
+topology of KX) by A3,PRE_TOPC:def 5;
+    then consider y such that
+     A5: S c=y & y in the_subsets_with_limited_card(i1,the topology of KX) by
+Th2;
+    card S c=card y & card y c=card i1 by A5,Def2,CARD_1:27;
+    then A6: card S c=card i1 by XBOOLE_1:1;
+    card S=card card S;
+    hence card S<=i1 by A6,NAT_1:41;
+   end;
+   now let x;
+    assume x in the topology of KX;
+    then consider y such that
+     A7: x c=y & y in the_subsets_with_limited_card(i1,the topology of KX) by
+A3,Th2;
+    card x c=card y & card y c=card i1 by A7,Def2,CARD_1:27;
+    hence x is finite;
+   end;
+   then the_family_of KX is finite-membered by MATROID0:def 5;
+   then KX is finite-membered by MATROID0:def 6;
+   hence thesis by A2,A4,Th25;
+  end;
+ end;
+
+theorem
+  KX is subset-closed & degree KX <= i implies
+    Skeleton_of(KX,i) = the TopStruct of KX
+ proof
+  assume that
+   A1: KX is subset-closed and
+   A2: degree KX<=i;
+  set S=Skeleton_of(KX,i);
+  i in REAL by XREAL_0:def 1;
+  then degree KX<+infty by A2,XXREAL_0:2,9;
+  then A3: KX is finite-degree or KX is empty-membered by Def12;
+  then A4: the_family_of KX is finite-membered by MATROID0:def 6;
+  A5: the topology of KX c=the topology of S
+  proof
+   let x;
+   A6: degree KX+1<=i+1 by A2,XXREAL_3:38;
+   assume A7: x in the topology of KX;
+   then reconsider A=x as finite Subset of KX by A4,MATROID0:def 5;
+   A is simplex-like & KX is non void by A7,PENCIL_1:def 4,PRE_TOPC:def 5;
+   then card A<=degree KX+1 by A3,Def12;
+   then card A<=i+1 & i+1 in NAT by A6,INT_1:16,XXREAL_0:2;
+   then card card A c=card(i+1) by NAT_1:41;
+   then A in the_subsets_with_limited_card(i+1,the topology of KX) by A7,Def2;
+   hence thesis by Th2;
+  end;
+  A8: the_subsets_with_limited_card(i+1,the topology of KX)c=the topology of
+KX
+  proof
+   let x;
+   thus thesis by Def2;
+  end;
+  the_family_of KX is subset-closed by A1;
+  then the topology of S c=the topology of KX by A8,Th3;
+  hence thesis by A5,XBOOLE_0:def 10;
+ end;
+
+reserve K for non void subset-closed SimplicialComplexStr;
+
+Lm7: -1<=i & i<=degree K implies ex S be Simplex of K st card S=i+1
+ proof
+  assume that
+   A1: -1<=i and
+   A2: i<=degree K;
+  -1+1<=i+1 by A1,XREAL_1:8;
+  then reconsider i1=i+1 as Element of NAT by INT_1:16;
+  per cases;
+  suppose A3: not K is finite-degree;
+   per cases by A3,MATROID0:def 7;
+   suppose not K is finite-membered;
+    then not the_family_of K is finite-membered by MATROID0:def 6;
+    then consider A be set such that
+     A4: A in the_family_of K and
+     A5: A is infinite by MATROID0:def 5;
+    card i1 c=card A by A5;
+    then consider f be Function such that
+     A6: f is one-to-one & dom f=i1 and
+     A7: rng f c=A by CARD_1:26;
+    rng f in the_family_of K by A4,A7,CLASSES1:def 1;
+    then reconsider R=rng f as Simplex of K by PRE_TOPC:def 5;
+    take R;
+    R,i1 are_equipotent by A6,WELLORD2:def 4;
+    hence thesis by CARD_1:def 5;
+   end;
+   suppose for n be Nat ex A be finite Subset of K st A is open & card A>n;
+    then consider A be finite Subset of K such that
+     A8: A is simplex-like and
+     A9: card A>i1;
+    card i1 in card card A by A9,NAT_1:42;
+    then card i1 c=card A by CARD_1:13;
+    then consider f be Function such that
+     A10: f is one-to-one & dom f=i1 and
+     A11: rng f c=A by CARD_1:26;
+    A in the_family_of K by A8,PRE_TOPC:def 5;
+    then rng f in the_family_of K by A11,CLASSES1:def 1;
+    then reconsider R=rng f as Simplex of K by PRE_TOPC:def 5;
+    take R;
+    R,i1 are_equipotent by A10,WELLORD2:def 4;
+    hence thesis by CARD_1:def 5;
+   end;
+  end;
+  suppose A12: K is finite-degree;
+   then reconsider d=degree K as Integer;
+   consider S be Subset of K such that
+    A13: S is simplex-like and
+    A14: card S=degree K+1 by A12,Def12;
+   reconsider s=S as finite Subset of K by A12,A13;
+   i+1<=d+1 by A2,XREAL_1:8;
+   then i1 c=card s by A14,NAT_1:40;
+   then card i1 c=card card s by CARD_1:72;
+   then consider f be Function such that
+    A15: f is one-to-one & dom f=i1 and
+    A16: rng f c=S by CARD_1:26;
+   S in the_family_of K by A13,PRE_TOPC:def 5;
+   then rng f in the_family_of K by A16,CLASSES1:def 1;
+   then reconsider R=rng f as Simplex of K by PRE_TOPC:def 5;
+   take R;
+   R,i1 are_equipotent by A15,WELLORD2:def 4;
+   hence thesis by CARD_1:def 5;
+  end;
+ end;
+
+definition
+  let K;
+  let i be real number such that
+  A1: i is integer;
+  mode Simplex of i,K -> finite Simplex of K means :Def18:
+    card it = i+1 if -1 <= i & i <= degree K
+                  otherwise
+    it is empty;
+  existence
+  proof
+  A2: now reconsider S={}K as Simplex of K;
+   assume A3: -1>i or i>degree K;
+   take S;
+   S is empty;
+   hence thesis by A3;
+  end;
+  now assume A4: -1<=i & i<=degree K;
+   then consider S be Simplex of K such that
+    A5: card S=i+1 by A1,Lm7;
+   take S;
+   S is finite by A1,A5;
+   hence thesis by A4,A5;
+  end;
+  hence thesis by A2;
+ end;
+  correctness;
+end;
+
+registration
+  let K;
+  cluster -> empty Simplex of-1,K;
+  coherence
+  proof
+  let S be Simplex of-1,K;
+  -1<=degree K by Th23;
+  then card S=-1+1 by Def18
+   .=0;
+  hence thesis;
+ end;
+end;
+
+theorem
+  for S be Simplex of i,K st S is non empty holds i is natural
+ proof
+  let S be Simplex of i,K;
+  assume S is non empty;
+  then -1<=i & i<>-1 by Def18;
+  then -1<i by XXREAL_0:1;
+  then i>=0 by INT_1:21;
+  then i in NAT by INT_1:16;
+  hence thesis;
+ end;
+
+theorem
+  for S be finite Simplex of K holds S is Simplex of card S - 1,K
+  proof
+  let S be finite Simplex of K;
+  card S<=degree K+1 by Th24;
+  then card S-1<=degree K+1-1 by XXREAL_3:39;
+  then A1: card S-1<=degree K by XXREAL_3:24;
+  card S-1>=0-1 & card S=card S-1+1 by XREAL_1:8;
+  hence thesis by A1,Def18;
+ end;
+
+theorem
+  for K be non void subset-closed SimplicialComplexStr of D
+    for S be non void SubSimplicialComplex of K
+      for i be Integer,A be Simplex of i,S st
+          A is non empty or i <= degree S or degree S = degree K
+        holds A is Simplex of i,K
+  proof
+  let K be non void subset-closed SimplicialComplexStr of D;
+  let S be non void SubSimplicialComplex of K;
+  let i be Integer,A be Simplex of i,S such that
+   A1: A is non empty or i<=degree S or degree S=degree K;
+  A in the topology of S & the topology of S c=the topology of K by Def13,
+PRE_TOPC:def 5;
+  then A in the topology of K;
+  then reconsider B=A as Simplex of K by PRE_TOPC:def 5;
+  A2: degree S<=degree K by Th32;
+  per cases by A1;
+  suppose A3: A is non empty;
+   then A4: -1<=i by Def18;
+   A5: i<=degree S by A3,Def18;
+   -1<=i by A3,Def18;
+   then A6: card B=i+1 by A5,Def18;
+   i<=degree K by A2,A5,XXREAL_0:2;
+   hence thesis by A6,A4,Def18;
+  end;
+  suppose A7: i<=degree S;
+   then A8: i<=degree K by A2,XXREAL_0:2;
+   per cases;
+   suppose A9: -1<=i;
+    then card B=i+1 by A7,Def18;
+    hence thesis by A8,A9,Def18;
+   end;
+   suppose A10: -1>i;
+    then B is empty by Def18;
+    hence thesis by A10,Def18;
+   end;
+  end;
+  suppose A11: degree S=degree K;
+   per cases;
+   suppose A12: -1<=i & i<=degree S;
+    then card B=i+1 by Def18;
+    hence thesis by A11,A12,Def18;
+   end;
+   suppose A13: -1>i or i>degree S;
+    then B is empty by Def18;
+    hence thesis by A11,A13,Def18;
+   end;
+  end;
+ end;
+
+definition
+  let K;
+  let i be real number such that
+    A1: i is integer and
+    A2: i <= degree K;
+  let S be Simplex of i,K;
+  mode Face of S -> Simplex of max(i-1,-1),K means :Def19:
+     it c= S;
+  existence
+  proof
+  per cases;
+  suppose i<0;
+   then i-1<0-1 by XREAL_1:10;
+   then reconsider F=the Simplex of-1,K as Simplex of max(i-1,-1),K
+     by XXREAL_0:def 10;
+   take F;
+   thus thesis by XBOOLE_1:2;
+  end;
+  suppose A3: i>=0;
+   then A4: card S=i+1 by A1,A2,Def18;
+   then S is non empty by A3;
+   then consider x be set such that
+    A5: x in S by XBOOLE_0:def 1;
+   reconsider I=i as Element of NAT by A1,A3,INT_1:16;
+   i-1<=degree K-0 by A2,XXREAL_3:39;
+   then A6: i-1<=degree K by XXREAL_3:4;
+   reconsider Sx=S\{x} as Simplex of K;
+   A7: card Sx=I-1+1 by A4,A5,STIRL2_1:65;
+   A8: i-1>=0-1 by A3,XREAL_1:8;
+   then max(i-1,-1)=i-1 by XXREAL_0:def 10;
+   then reconsider Sx as Simplex of max(i-1,-1),K by A6,A7,A8,Def18;
+   take Sx;
+   thus thesis by XBOOLE_1:36;
+  end;
+ end;
+end;
+
+theorem
+  for S be Simplex of n,K st n<=degree K holds
+    X is Face of S iff ex x st x in S & S\{x} = X
+ proof
+  let S be Simplex of n,K such that
+   A1: n<=degree K;
+  n-1<=n-0 by XREAL_1:8;
+  then A2: n-1<=degree K by A1,XXREAL_0:2;
+  reconsider N=n as Integer;
+  A3: n-1>=0-1 by XREAL_1:8;
+  then A4: max(n-1,-1)=n-1 by XXREAL_0:def 10;
+  A5: card S=N+1 by A1,Def18;
+  hereby assume X is Face of S;
+   then reconsider f=X as Face of S;
+   A6: f c=S by A1,Def19;
+   card f=n-1+1 by A2,A3,A4,Def18;
+   then card(S\f)=n+1-n by A5,A6,CARD_2:63
+    .=1;
+   then consider x such that
+    A7: S\f={x} by CARD_2:60;
+   take x;
+   x in {x} by TARSKI:def 1;
+   hence x in S by A7,XBOOLE_0:def 5;
+   thus S\{x}=f/\S by A7,XBOOLE_1:48
+    .=X by A6,XBOOLE_1:28;
+  end;
+  given x such that
+   A8: x in S and
+   A9: S\{x}=X;
+  reconsider f=X as finite Simplex of K by A9;
+  n in NAT by ORDINAL1:def 13;
+  then card f=n-1+1 by A5,A8,A9,STIRL2_1:65;
+  then A10: f is Simplex of n-1,K by A2,A3,Def18;
+  X c=S by A9,XBOOLE_1:36;
+  hence thesis by A1,A4,A10,Def19;
+ end;
+
+begin :: The Subdivision of a Simplicial Complex
+
+reserve P for Function;
+
+definition
+  let X,KX,P;
+  func subdivision(P,KX) -> strict SimplicialComplexStr of X means :Def20:
+    [#]it = [#]KX &
+    for A be Subset of it holds
+       A is simplex-like iff
+       ex S be c=-linear finite simplex-like Subset-Family of KX st A = P.:S;
+  existence
+  proof
+  defpred P[set] means
+   ex S be c=-linear finite simplex-like Subset-Family of KX st$1=P.:S;
+  set SS={A where A is Subset of KX:P[A]};
+  SS c=bool the carrier of KX
+  proof
+   let x;
+   assume x in SS;
+   then ex A be Subset of KX st x=A & P[A];
+   hence thesis;
+  end;
+  then reconsider SS as Subset-Family of KX;
+  set PP=TopStruct(# the carrier of KX,SS #);
+  [#]PP=[#]KX & [#]KX c=X by Def9;
+  then reconsider PP as strict SimplicialComplexStr of X by Def9;
+  take PP;
+  thus[#]PP=[#]KX;
+  let A be Subset of PP;
+  hereby assume A is simplex-like;
+   then A in SS by PRE_TOPC:def 5;
+   then ex B be Subset of KX st B=A & P[B];
+   hence P[A];
+  end;
+  assume P[A];
+  then A in SS;
+  hence thesis by PRE_TOPC:def 5;
+ end;
+  uniqueness
+  proof
+  let P1,P2 be strict SimplicialComplexStr of X such that
+   A1: [#]P1=[#]KX and
+   A2: for A be Subset of P1 holds A is simplex-like iff ex S be c=-linear
+finite simplex-like Subset-Family of KX st A=P.:S and
+   A3: [#]P2=[#]KX and
+   A4: for A be Subset of P2 holds A is simplex-like iff ex S be c=-linear
+finite simplex-like Subset-Family of KX st A=P.:S;
+  now let x;
+   hereby assume A5: x in the topology of P1;
+    then reconsider A=x as Subset of P1;
+    reconsider B=A as Subset of P2 by A1,A3;
+    A is simplex-like by A5,PRE_TOPC:def 5;
+    then ex S be c=-linear finite simplex-like Subset-Family of KX st A=P.:S by
+A2;
+    then B is simplex-like by A4;
+    hence x in the topology of P2 by PRE_TOPC:def 5;
+   end;
+   assume A6: x in the topology of P2;
+   then reconsider A=x as Subset of P2;
+   reconsider B=A as Subset of P1 by A1,A3;
+   A is simplex-like by A6,PRE_TOPC:def 5;
+   then ex S be c=-linear finite simplex-like Subset-Family of KX st A=P.:S by
+A4;
+   then B is simplex-like by A2;
+   hence x in the topology of P1 by PRE_TOPC:def 5;
+  end;
+  hence thesis by A1,A3,TARSKI:2;
+ end;
+end;
+
+
+registration
+  let X,KX,P;
+  cluster subdivision(P,KX)
+            -> with_empty_element subset-closed finite-membered;
+  coherence
+  proof
+  set PP=subdivision(P,KX);
+  set S=the empty c=-linear simplex-like Subset-Family of KX;
+  P.:S={}KX by RELAT_1:149;
+  then {}PP is simplex-like by Def20;
+  then {} in the topology of PP by PRE_TOPC:def 5;
+  then the topology of PP is with_empty_element;
+  hence PP is with_empty_element by Def8;
+  thus PP is subset-closed
+  proof
+   let x,y;
+   assume that
+    A1: x in the_family_of PP and
+    A2: y c=x;
+   reconsider X=x,Y=y as Subset of PP by A1,A2,XBOOLE_1:1;
+   X is simplex-like by A1,PRE_TOPC:def 5;
+   then consider S be c=-linear finite simplex-like Subset-Family of KX such
+that
+    A3: X=P.:S by Def20;
+   set S1={A where A is Subset of KX:A in S & P.A in Y};
+   S1 c=S
+   proof
+    let x;
+    assume x in S1;
+    then ex A be Subset of KX st A=x & A in S & P.A in Y;
+    hence thesis;
+   end;
+   then reconsider S1 as c=-linear finite simplex-like Subset-Family of KX 
+by
+TOPS_2:18,XBOOLE_1:1;
+   A4: P.:S1 c=Y
+   proof
+    let x;
+    assume x in P.:S1;
+    then consider y such that
+     y in dom P and
+     A5: y in S1 and
+     A6: P.y=x by FUNCT_1:def 12;
+    ex B be Subset of KX st y=B & B in S & P.B in Y by A5;
+    hence thesis by A6;
+   end;
+   Y c=P.:S1
+   proof
+    let x;
+    assume A7: x in Y;
+    then consider y such that
+     A8: y in dom P and
+     A9: y in S and
+     A10: P.y=x by A2,A3,FUNCT_1:def 12;
+    y in S1 by A7,A9,A10;
+    hence thesis by A8,A10,FUNCT_1:def 12;
+   end;
+   then P.:S1=Y by A4,XBOOLE_0:def 10;
+   then Y is simplex-like by Def20;
+   hence thesis by PRE_TOPC:def 5;
+  end;
+  let x;
+  assume A11: x in the_family_of PP;
+  then reconsider A=x as Subset of PP;
+  A is simplex-like by A11,PRE_TOPC:def 5;
+  then ex S be c=-linear finite simplex-like Subset-Family of KX st A=P.:S by
+Def20;
+  hence thesis;
+ end;
+end;
+
+registration
+  let X;
+  let KX be void SimplicialComplexStr of X;
+  let P;
+  cluster subdivision(P,KX) -> empty-membered;
+  coherence
+  proof
+  set PP=subdivision(P,KX);
+  assume PP is with_non-empty_element;
+  then the topology of PP is with_non-empty_element by Def7;
+  then consider x be non empty set such that
+   A1: x in the topology of PP by SETFAM_1:def 11;
+  reconsider A=x as Simplex of PP by A1,PRE_TOPC:def 5;
+  consider S be c=-linear finite simplex-like Subset-Family of KX such that
+   A2: A=P.:S by Def20;
+  A=P.:(S/\dom P) by A2,RELAT_1:145;
+  then S/\dom P is non empty by RELAT_1:149;
+  then consider y such that
+   A3: y in S/\dom P by XBOOLE_0:def 1;
+  A4: y in S by A3,XBOOLE_0:def 4;
+  reconsider y as Subset of KX by A3;
+  y is simplex-like by A4,TOPS_2:def 1;
+  then y in the topology of KX by PRE_TOPC:def 5;
+  hence thesis by PENCIL_1:def 4;
+ end;
+end;
+
+theorem Th51:
+  degree subdivision(P,KX) <= degree KX + 1
+  proof
+  set PP=subdivision(P,KX);
+  per cases;
+  suppose KX is void;
+   then KX is empty-membered & degree PP=-1 by Th22;
+   hence thesis;
+  end;
+  suppose A1: KX is non void non finite-degree;
+   A2: degree PP<=+infty & degree KX+0<=degree KX+1 by XXREAL_0:3,XXREAL_3:38;
+   degree KX+0=degree KX & degree KX=+infty by A1,Def12,XXREAL_3:4;
+   hence thesis by A2,XXREAL_0:2;
+  end;
+  suppose A3: KX is non void finite-degree;
+   then reconsider d=degree KX as Integer;
+   reconsider d1=d+1 as Nat by A3;
+   for A be finite Subset of PP st A is simplex-like holds card A<=(d+1)+1
+   proof
+    let A be finite Subset of PP;
+    assume A is simplex-like;
+    then consider S be c=-linear finite simplex-like Subset-Family of KX such
+that
+     A4: A=P.:S by Def20;
+    set Sd=S/\dom P;
+    A=P.:(S/\dom P) by A4,RELAT_1:145;
+    then card A c=card Sd by CARD_2:3;
+    then A5: card A<=card Sd by NAT_1:40;
+    Sd\{{}}c=S by XBOOLE_1:18,36;
+    then reconsider SP=Sd\{{}} as c=-linear finite simplex-like Subset-Family
+of KX by TOPS_2:18;
+    SP\/{{}}=Sd\/{{}} by XBOOLE_1:39;
+    then A6: card{{}}=1 & card Sd<=card(SP\/{{}}) by CARD_1:50,NAT_1:44,
+XBOOLE_1:7;
+    card(SP\/{{}})<=card SP+card{{}} by CARD_2:62;
+    then A7: card Sd<=card SP+1 by A6,XXREAL_0:2;
+    per cases;
+    suppose A8: SP is empty;
+     0+1<=d1+1 by XREAL_1:8;
+     then card Sd<=d1+1 by A6,A8,XXREAL_0:2;
+     hence thesis by A5,XXREAL_0:2;
+    end;
+    suppose A9: SP is non empty;
+     reconsider uSP=union SP as Subset of KX;
+     union SP in SP by A9,Th9;
+     then A10: uSP is simplex-like by TOPS_2:def 1;
+     not{} in SP by ZFMISC_1:64;
+     then SP is with_non-empty_elements by SETFAM_1:def 9;
+     then A11: card SP c=card union SP by Th10;
+     reconsider uSP as finite Subset of KX by A3;
+     card uSP<=d1 by A3,A10,Th25;
+     then card uSP c=d1 by NAT_1:40;
+     then card SP c=d1 by A11,XBOOLE_1:1;
+     then card SP<=d1 by NAT_1:40;
+     then card SP+1<=d1+1 by XREAL_1:8;
+     then card Sd<=d1+1 by A7,XXREAL_0:2;
+     hence thesis by A5,XXREAL_0:2;
+    end;
+   end;
+   hence thesis by Th25;
+  end;
+ end;
+
+theorem Th52:
+  dom P is with_non-empty_elements implies
+    degree subdivision(P,KX) <= degree KX
+  proof
+  assume A1: dom P is with_non-empty_elements;
+  set PP=subdivision(P,KX);
+  per cases;
+  suppose A2: KX is non finite-degree;
+   KX is non void
+   proof
+    assume KX is void;
+    then KX is empty-membered;
+    hence thesis by A2;
+   end;
+   then degree KX=+infty by A2,Def12;
+   hence thesis by XXREAL_0:3;
+  end;
+  suppose A3: KX is finite-degree;
+   then reconsider d=degree KX as Integer;
+   reconsider d1=d+1 as Nat by A3;
+   for A be finite Subset of PP st A is simplex-like holds card A<=d+1
+   proof
+    let A be finite Subset of PP;
+    assume A is simplex-like;
+    then consider S be c=-linear finite simplex-like Subset-Family of KX such
+that
+     A4: A=P.:S by Def20;
+    A5: A=P.:(S/\dom P) by A4,RELAT_1:145;
+    per cases;
+    suppose S/\dom P is empty;
+     then 0<=d1 & A={} by A5,RELAT_1:149;
+     hence thesis;
+    end;
+    suppose A6: S/\dom P is non empty;
+     reconsider uSP=union(S/\dom P) as Subset of KX;
+     A7: S/\dom P c=S by XBOOLE_1:17;
+     then union(S/\dom P) in S/\dom P by A6,Th9;
+     then union(S/\dom P) in S by XBOOLE_0:def 4;
+     then A8: uSP is simplex-like by TOPS_2:def 1;
+     then A9: uSP in the topology of KX by PRE_TOPC:def 5;
+     the_family_of KX is finite-membered by A3,MATROID0:def 6;
+     then reconsider uSP as finite Subset of KX by A9,MATROID0:def 5;
+     KX is non void by A9,PENCIL_1:def 4;
+     then card uSP<=d+1 by A8,Th25;
+     then A10: card uSP c=d1 by NAT_1:40;
+     card(S/\dom P)c=card union(S/\dom P) by A1,A7,Th10;
+     then A11: card(S/\dom P)c=d1 by A10,XBOOLE_1:1;
+     card A c=card(S/\dom P) by A5,CARD_2:3;
+     then card A c=d1 by A11,XBOOLE_1:1;
+     hence thesis by NAT_1:40;
+    end;
+   end;
+   hence thesis by Th25;
+  end;
+ end;
+
+registration
+  let X;
+  let KX be finite-degree SimplicialComplexStr of X;
+  let P;
+  cluster subdivision(P,KX) -> finite-degree;
+  coherence
+  proof
+  assume subdivision(P,KX) is non finite-degree;
+  then degree KX+1 in REAL & degree subdivision(P,KX)=+infty
+    by Def12,XREAL_0:def 1;
+  hence thesis by Th51,XXREAL_0:9;
+ end;
+end;
+
+registration
+  let X;
+  let KX be finite-vertices SimplicialComplexStr of X;
+  let P;
+  cluster subdivision(P,KX) -> finite-vertices;
+  coherence
+  proof
+  reconsider V=Vertices KX as finite Subset of KX by Def5;
+  set PP=subdivision(P,KX);
+  set TOP=the topology of PP;
+  defpred F[set,set] means
+   P.:$2=$1;
+  bool V=bool union the topology of KX by Lm5;
+  then A1: the topology of KX c=bool V by ZFMISC_1:100;
+  A2: for x st x in TOP ex y st y in bool bool V & F[x,y]
+  proof
+   let x such that
+    A3: x in TOP;
+   reconsider X=x as Subset of PP by A3;
+   X is simplex-like by A3,PRE_TOPC:def 5;
+   then consider S be c=-linear finite simplex-like Subset-Family of KX such
+that
+    A4: X=P.:S by Def20;
+   take S;
+   S c=the topology of KX
+   proof
+    let y such that
+     A5: y in S;
+    reconsider Y=y as Subset of KX by A5;
+    Y is simplex-like by A5,TOPS_2:def 1;
+    hence thesis by PRE_TOPC:def 5;
+   end;
+   then S c=bool V by A1,XBOOLE_1:1;
+   hence thesis by A4;
+  end;
+  consider f be Function of TOP,bool bool V such that
+   A6: for x st x in TOP holds F[x,f.x] from FUNCT_2:sch 1(A2);
+  now let x1,x2 be set such that
+    A7: x1 in dom f and
+    A8: x2 in dom f & f.x1=f.x2;
+   thus x1=P.:(f.x1) by A6,A7
+    .=x2 by A6,A8;
+  end;
+  then A9: f is one-to-one by FUNCT_1:def 8;
+  dom f=TOP & rng f c=bool bool V by FUNCT_2:def 1;
+  then card TOP c=card bool bool V by A9,CARD_1:26;
+  then TOP is finite;
+  hence thesis by Th20;
+ end;
+end;
+
+theorem
+  for KX be subset-closed SimplicialComplexStr of X
+  for P st dom P is with_non-empty_elements &
+           for n st n <= degree KX ex S be Subset of KX st
+             S is simplex-like & card S = n+1 & BOOL S c=dom P &
+             P.:BOOL S is Subset of KX & P|BOOL S is one-to-one
+    holds degree subdivision(P,KX) = degree KX
+ proof
+  let K be subset-closed SimplicialComplexStr of X;
+  let P be Function such that
+   A1: dom P is with_non-empty_elements and
+   A2: for n st n<=degree K ex S be Subset of K st S is simplex-like & card S=n
++1 & BOOL S c=dom P & P.:BOOL S is Subset of K & P|BOOL S is one-to-one;
+  set PP=subdivision(P,K);
+  A3: degree PP<=degree K by A1,Th52;
+  A4: for n st n<=degree K ex S be Simplex of PP st card S=n+1
+  proof
+   let n;
+   A5: [#]K=[#]PP by Def20;
+   assume n<=degree K;
+   then consider A be Subset of K such that
+    A6: A is simplex-like and
+    A7: card A=n+1 and
+    A8: BOOL A c=dom P and
+    A9: P.:BOOL A is Subset of K and
+    A10: P|BOOL A is one-to-one by A2;
+   A11: dom(P|BOOL A)=BOOL A by A8,RELAT_1:91;
+   A is non empty by A7;
+   then consider S be Subset-Family of A such that
+    A12: S is with_non-empty_elements c=-linear and
+    A in S and
+    A13: card A=card S and
+    for Z st Z in S & card Z<>1 ex x st x in Z & Z\{x} in S by Th12;
+   bool A c=bool the carrier of K by ZFMISC_1:79;
+   then reconsider SS=S as Subset-Family of K by XBOOLE_1:1;
+   A14: S c=BOOL A
+   proof
+    let x;
+    assume x in S;
+    then x in bool A\{{}} by A12,ZFMISC_1:64;
+    hence thesis by ORDERS_1:def 2;
+   end;
+   then P.:S c=P.:BOOL A by RELAT_1:156;
+   then reconsider PS=P.:SS as Subset of PP by A5,A9,XBOOLE_1:1;
+   A15: A in the_family_of K by A6,PRE_TOPC:def 5;
+   SS is simplex-like
+   proof
+    let B be Subset of K;
+    assume B in SS;
+    then B in the_family_of K by A15,CLASSES1:def 1;
+    hence thesis by PRE_TOPC:def 5;
+   end;
+   then SS is c=-linear finite simplex-like Subset-Family of K by A7,A12,A13;
+   then reconsider PS as Simplex of PP by Def20;
+   P.:S=(P|BOOL A).:S by A14,RELAT_1:162;
+   then card PS=n+1 by A7,A10,A11,A13,A14,COMBGRAS:4;
+   hence thesis;
+  end;
+  per cases;
+  suppose A16: K is empty-membered;
+   A17: degree PP>=-1 by Th23;
+   degree K=-1 by A16,Th22;
+   hence thesis by A3,A17,XXREAL_0:1;
+  end;
+  suppose A18: K is with_non-empty_element finite-degree;
+   then reconsider d=degree K,dPP=degree PP as Integer;
+   A19: -1<=d by Th23;
+   d<>-1 by A18,Th22;
+   then -1<d by A19,XXREAL_0:1;
+   then 0<=d by INT_1:21;
+   then reconsider d as Element of NAT by INT_1:16;
+   ex S be Simplex of PP st card S=d+1 by A4;
+   then dPP+1>=d+1 by A18,Def12;
+   then dPP>=d by XREAL_1:8;
+   hence thesis by A3,XXREAL_0:1;
+  end;
+  suppose K is non void non finite-degree;
+   then A20: degree K=+infty by Def12;
+   PP is non finite-degree
+   proof
+    assume A21: PP is finite-degree;
+    then reconsider d=degree PP+1 as Nat;
+    consider S be Subset of PP such that
+     A22: S is simplex-like and
+     A23: card S=d by A21,Def12;
+    reconsider S as finite Subset of PP by A22;
+    ex S1 be Simplex of PP st card S1=card S+1 by A4,A20,XXREAL_0:3;
+    then d+1<=d by A21,A23,Def12;
+    hence contradiction by NAT_1:13;
+   end;
+   hence thesis by A20,Def12;
+  end;
+ end;
+
+theorem Th54:
+  Y c=Z implies
+    subdivision(P|Y,KX) is SubSimplicialComplex of subdivision(P|Z,KX)
+ proof
+  set PY=subdivision(P|Y,KX);
+  set PZ=subdivision(P|Z,KX);
+  A1: dom(P|Z)=Z/\dom P by RELAT_1:90;
+  assume A2: Y c=Z;
+  then Y/\Z=Y by XBOOLE_1:28;
+  then A3: dom(P|Y)=(Z/\Y)/\dom P by RELAT_1:90
+   .=Y/\dom(P|Z) by A1,XBOOLE_1:16;
+  A4: [#]PY=[#]KX by Def20;
+  hence [#]PY c=[#]PZ by Def20;
+  let x;
+  assume x in the topology of PY;
+  then reconsider A=x as Simplex of PY by PRE_TOPC:def 5;
+  [#]PZ=[#]KX by Def20;
+  then reconsider B=A as Subset of PZ by A4;
+  consider S be c=-linear finite simplex-like Subset-Family of KX such that
+   A5: A=(P|Y).:S by Def20;
+  S/\Y c=S by XBOOLE_1:17;
+  then reconsider SY=S/\Y as c=-linear finite simplex-like Subset-Family of KX
+by TOPS_2:18;
+  A6: dom(P|Y)c=Y & dom(P|Y)/\S c=dom(P|Y) by RELAT_1:87,XBOOLE_1:17;
+  then A7: dom(P|Y)/\S c=Y by XBOOLE_1:1;
+  B=(P|Y).:(dom(P|Y)/\S) by A5,RELAT_1:145
+   .=P.:(dom(P|Y)/\S) by A6,RELAT_1:162,XBOOLE_1:1
+   .=(P|Z).:(dom(P|Y)/\S) by A2,A7,RELAT_1:162,XBOOLE_1:1
+   .=(P|Z).:(dom(P|Z)/\SY) by A3,XBOOLE_1:16
+   .=(P|Z).:SY by RELAT_1:145;
+  then B is simplex-like by Def20;
+  hence thesis by PRE_TOPC:def 5;
+ end;
+
+theorem
+  dom P/\the topology of KX c= Y implies
+    subdivision(P|Y,KX) = subdivision(P,KX)
+ proof
+  set PX=subdivision(P|Y,KX);
+  set PP=subdivision(P,KX);
+  A1: (P|Y)|dom(P|Y)=P|(dom(P|Y)) by RELAT_1:87,103;
+  A2: [#]PX=[#]KX & [#]PP=[#]KX by Def20;
+  assume A3: dom P/\the topology of KX c=Y;
+  A4: the topology of PP c=the topology of PX
+  proof
+   let x;
+   assume x in the topology of PP;
+   then reconsider A=x as Simplex of PP by PRE_TOPC:def 5;
+   reconsider B=A as Subset of PX by A2;
+   consider S be c=-linear finite simplex-like Subset-Family of KX such that
+    A5: A=P.:S by Def20;
+   A6: S/\dom P c=Y
+   proof
+    let x;
+    assume A7: x in S/\dom P;
+    then reconsider A=x as Subset of KX;
+    x in S by A7,XBOOLE_0:def 4;
+    then A is simplex-like by TOPS_2:def 1;
+    then A8: A in the topology of KX by PRE_TOPC:def 5;
+    x in dom P by A7,XBOOLE_0:def 4;
+    then A in (the topology of KX)/\dom P by A8,XBOOLE_0:def 4;
+    hence thesis by A3;
+   end;
+   then A9: S/\dom P/\Y=S/\dom P by XBOOLE_1:28;
+   B=P.:(S/\dom P) by A5,RELAT_1:145
+    .=(P|Y).:(S/\dom P/\Y) by A6,A9,RELAT_1:162
+    .=(P|Y).:(S/\(dom P/\Y)) by XBOOLE_1:16
+    .=(P|Y).:(S/\dom(P|Y)) by RELAT_1:90
+    .=(P|Y).:S by RELAT_1:145;
+   then B is simplex-like by Def20;
+   hence thesis by PRE_TOPC:def 5;
+  end;
+  P|dom P=P & P|Y=(P|Y)|dom(P|Y) by RELAT_1:98;
+  then PX is SubSimplicialComplex of PP by A1,Th54,RELAT_1:89;
+  then the topology of PX c=the topology of PP by Def13;
+  hence thesis by A2,A4,XBOOLE_0:def 10;
+ end;
+
+theorem Th56:
+  Y c= Z implies
+    subdivision(Y|P,KX) is SubSimplicialComplex of subdivision(Z|P,KX)
+ proof
+  assume A1: Y c=Z;
+  set PZ=subdivision(Z|P,KX);
+  set PY=subdivision(Y|P,KX);
+  A2: [#]PY=[#]KX by Def20;
+  hence [#]PY c=[#]PZ by Def20;
+  let x;
+  assume x in the topology of PY;
+  then reconsider A=x as Simplex of PY by PRE_TOPC:def 5;
+  consider S be c=-linear finite simplex-like Subset-Family of KX such that
+   A3: A=Y|P.:S by Def20;
+  S/\dom(Y|P)c=S by XBOOLE_1:17;
+  then reconsider Sd=S/\dom(Y|P) as c=-linear finite simplex-like Subset-Family
+of KX by TOPS_2:18;
+  Y|(Z|P)=Y|P by A1,RELAT_1:130;
+  then A4: (Y|P).:Sd c=(Z|P).:Sd by RELAT_1:117,157;
+  [#]PZ=[#]KX by Def20;
+  then reconsider A as Subset of PZ by A2;
+  A5: Z|P.:Sd c=Y|P.:Sd
+  proof
+   let y;
+   assume y in (Z|P).:Sd;
+   then consider x such that
+    A6: x in dom(Z|P) and
+    A7: x in Sd and
+    A8: (Z|P).x=y by FUNCT_1:def 12;
+   A9: x in dom(Y|P) by A7,XBOOLE_0:def 4;
+   P.x=y by A6,A8,FUNCT_1:85;
+   then (Y|P).x=y by A9,FUNCT_1:85;
+   hence thesis by A7,A9,FUNCT_1:def 12;
+  end;
+  A=Y|P.:Sd by A3,RELAT_1:145;
+  then A=Z|P.:Sd by A4,A5,XBOOLE_0:def 10;
+  then A is simplex-like by Def20;
+  hence thesis by PRE_TOPC:def 5;
+ end;
+
+theorem
+ P.:(the topology of KX) c= Y implies subdivision(Y|P,KX) = subdivision(P,KX)
+ proof
+  set PK=subdivision(P,KX);
+  P=rng P|P & Y|(rng P|P)=(Y/\rng P)|P by RELAT_1:126,127;
+  then reconsider PY=subdivision(Y|P,KX) as SubSimplicialComplex of PK by Th56,
+XBOOLE_1:17;
+  A1: [#]PY=[#]KX & [#]PK=[#]KX by Def20;
+  assume A2: P.:(the topology of KX)c=Y;
+  A3: the topology of PK c=the topology of PY
+  proof
+   let x;
+   assume x in the topology of PK;
+   then reconsider A=x as Simplex of PK by PRE_TOPC:def 5;
+   consider S be c=-linear finite simplex-like Subset-Family of KX such that
+    A4: A=P.:S by Def20;
+   reconsider A as Subset of PY by A1;
+   S c=the topology of KX
+   proof
+    let y such that
+     A5: y in S;
+    reconsider y as Subset of KX by A5;
+    y is simplex-like by A5,TOPS_2:def 1;
+    hence thesis by PRE_TOPC:def 5;
+   end;
+   then A c=P.:(the topology of KX) by A4,RELAT_1:156;
+   then A/\Y=A by A2,XBOOLE_1:1,28;
+   then A=Y|P.:S by A4,FUNCT_1:126;
+   then A is simplex-like by Def20;
+   hence thesis by PRE_TOPC:def 5;
+  end;
+  the topology of PY c=the topology of PK by Def13;
+  hence thesis by A1,A3,XBOOLE_0:def 10;
+ end;
+
+theorem Th58:
+  subdivision(P,SX) is SubSimplicialComplex of subdivision(P,KX)
+ proof
+  set PS=subdivision(P,SX);
+  set PK=subdivision(P,KX);
+  A1: [#]SX c=[#]KX by Def13;
+  A2: [#]PK=[#]KX by Def20;
+  hence [#]PS c=[#]PK by A1,Def20;
+  let x;
+  assume x in the topology of PS;
+  then reconsider A=x as Simplex of PS by PRE_TOPC:def 5;
+  [#]PS=[#]SX by Def20;
+  then reconsider B=A as Subset of PK by A1,A2,XBOOLE_1:1;
+  consider SS be c=-linear finite simplex-like Subset-Family of SX such that
+   A3: A=P.:SS by Def20;
+  bool[#]SX c=bool[#]KX by A1,ZFMISC_1:79;
+  then reconsider SK=SS as c=-linear finite Subset-Family of KX by XBOOLE_1:1;
+  SK is simplex-like
+  proof
+   let C be Subset of KX;
+   assume A4: C in SK;
+   then reconsider c =C as Subset of SX;
+   c is simplex-like by A4,TOPS_2:def 1;
+   then A5: c in the topology of SX by PRE_TOPC:def 5;
+   the topology of SX c=the topology of KX by Def13;
+   hence thesis by A5,PRE_TOPC:def 5;
+  end;
+  then B is simplex-like by A3,Def20;
+  hence thesis by PRE_TOPC:def 5;
+ end;
+
+theorem
+  for A be Subset of subdivision(P,KX) st
+      dom P c=the topology of SX & A = [#]SX
+    holds subdivision(P,SX)=subdivision(P,KX)|A
+ proof
+  set PK=subdivision(P,KX);
+  reconsider PS=subdivision(P,SX) as strict SubSimplicialComplex of PK by Th58;
+  let A be Subset of subdivision(P,KX) such that
+   A1: dom P c=the topology of SX and
+   A2: A=[#]SX;
+  now let a be Subset of PS;
+   assume a in the topology of PK;
+   then reconsider b=a as Simplex of PK by PRE_TOPC:def 5;
+   consider SS be c=-linear finite simplex-like Subset-Family of KX such that
+    A3: b=P.:SS by Def20;
+   SS/\dom P c=dom P by XBOOLE_1:17;
+   then A4: SS/\dom P c=the topology of SX by A1,XBOOLE_1:1;
+   SS/\dom P c=SS by XBOOLE_1:17;
+   then reconsider Sd=SS/\dom P as c=-linear finite Subset-Family of SX by A4,
+XBOOLE_1:1;
+   A5: Sd is simplex-like
+   proof
+    let B be Subset of SX;
+    assume B in Sd;
+    then B in dom P by XBOOLE_0:def 4;
+    hence thesis by A1,PRE_TOPC:def 5;
+   end;
+   P.:SS=P.:Sd by RELAT_1:145;
+   hence a is simplex-like by A3,A5,Def20;
+  end;
+  then A6: PS is maximal by Def14;
+  [#]PS=[#]SX by Def20;
+  hence thesis by A2,A6,Def16;
+ end;
+
+theorem Th60:
+  for K1,K2 be SimplicialComplexStr of X st
+      the TopStruct of K1 = the TopStruct of K2
+    holds subdivision(P,K1) = subdivision(P,K2)
+ proof
+  let K1,K2 be SimplicialComplexStr of X such that
+   A1: the TopStruct of K1=the TopStruct of K2;
+  set P1=subdivision(P,K1),P2=subdivision(P,K2);
+  A2: [#]K1=[#]P1 & [#]K2=[#]P2 by Def20;
+  A3: the topology of P1 c=the topology of P2
+  proof
+   let x;
+   assume A4: x in the topology of P1;
+   then reconsider A=x as Subset of P1;
+   reconsider A1=A as Subset of P2 by A1,A2;
+   A is simplex-like by A4,PRE_TOPC:def 5;
+   then consider S be c=-linear finite simplex-like Subset-Family of K1 such
+that
+    A5: A=P.:S by Def20;
+   reconsider S1=S as Subset-Family of K2 by A1;
+   S c=the topology of K1 by Th14;
+   then S1 is simplex-like by A1,Th14;
+   then A1 is simplex-like by A5,Def20;
+   hence thesis by PRE_TOPC:def 5;
+  end;
+  the topology of P2 c=the topology of P1
+  proof
+   let x;
+   assume A6: x in the topology of P2;
+   then reconsider A=x as Subset of P2;
+   reconsider A1=A as Subset of P1 by A1,A2;
+   A is simplex-like by A6,PRE_TOPC:def 5;
+   then consider S be c=-linear finite simplex-like Subset-Family of K2 such
+that
+    A7: A=P.:S by Def20;
+   reconsider S1=S as Subset-Family of K1 by A1;
+   S c=the topology of K2 by Th14;
+   then S1 is simplex-like by A1,Th14;
+   then A1 is simplex-like by A7,Def20;
+   hence thesis by PRE_TOPC:def 5;
+  end;
+  hence thesis by A1,A2,A3,XBOOLE_0:def 10;
+ end;
+
+definition
+  let X,KX,P,n;
+  func subdivision(n,P,KX) -> SimplicialComplexStr of X means :Def21:
+    ex F be Function st
+         F.0 = KX & F.n = it & dom F = NAT &
+         for k for KX1 be SimplicialComplexStr of X st KX1 = F.k
+           holds F.(k+1) = subdivision(P,KX1);
+  existence
+  proof
+  defpred F[set,set] means
+   for SX be SimplicialComplexStr of X st the topology of SX=$1 & [#]SX=[#]KX
+holds the topology of subdivision(P,SX)=$2;
+  set BBK=bool bool[#]KX;
+  A1: for x st x in BBK ex y st y in BBK & F[x,y]
+  proof
+   let x;
+   assume A2: x in BBK;
+   per cases;
+   suppose ex SX be SimplicialComplexStr of X st the topology of SX=x & [#]SX=
+[#]KX;
+    then consider SX be SimplicialComplexStr of X such that
+     A3: the topology of SX=x and
+     A4: [#]SX=[#]KX;
+    take T=the topology of subdivision(P,SX);
+    [#]subdivision(P,SX)=[#]SX by Def20;
+    hence T in BBK by A4;
+    let SX1 be SimplicialComplexStr of X such that
+     A5: the topology of SX1=x & [#]SX1=[#]KX;
+    the TopStruct of SX=the TopStruct of SX1 by A3,A4,A5;
+    hence thesis by Th60;
+   end;
+   suppose A6: for SX be SimplicialComplexStr of X holds the topology of SX<>x
+or[#]SX<>[#]KX;
+    take x;
+    thus thesis by A2,A6;
+   end;
+  end;
+  consider f being Function of BBK,BBK such that
+   A7: for x st x in BBK holds F[x,f.x] from FUNCT_2:sch 1(A1);
+  deffunc G(set,set)=f.$2;
+  consider g being Function such that
+   A8: dom g=NAT & g.0=the topology of KX & for n being Nat holds g.(n+1)=G(n,
+g.n) from NAT_1:sch 11;
+  defpred P[Nat] means
+   (ex SX be SimplicialComplexStr of X st the topology of SX=g.$1 & [#]SX=[#]KX
+& ($1>0 implies SX is strict)) & for SX be SimplicialComplexStr of X st the
+topology of SX=g.$1 & [#]SX=[#]KX holds g.($1+1)=
+the topology of subdivision(P,SX);
+  g.(0+1)=f.(the topology of KX) by A8;
+  then A9: g.1=the topology of subdivision(P,KX) by A7;
+  A10: P[0 qua Nat]
+  proof
+   thus ex SX be SimplicialComplexStr of X st the topology of SX=g.0 & [#]SX=
+[#]KX & (0>0 implies SX is strict) by A8;
+   let SX be SimplicialComplexStr of X;
+   assume the topology of SX=g.0 & [#]SX=[#]KX;
+   then the TopStruct of SX=the TopStruct of KX by A8;
+   hence thesis by A9,Th60;
+  end;
+  defpred H[set,set] means
+   for k be Nat st k=$1 holds(k=0 implies $2=KX) & (k>0 implies for SF be
+Subset-Family of KX st SF=g.k holds$2=TopStruct(# the carrier of KX,SF #));
+  A11: for k be Nat st P[k] holds P[k+1]
+  proof
+   let k be Nat;
+   set k1=k+1;
+   given SX be SimplicialComplexStr of X such that
+    A12: the topology of SX=g.k and
+    A13: [#]SX=[#]KX and
+    k>0 implies SX is strict;
+   assume for SX be SimplicialComplexStr of X st the topology of SX=g.k & [#]SX
+=[#]KX holds g.k1=the topology of subdivision(P,SX);
+   then A14: g.k1=the topology of subdivision(P,SX) by A12,A13;
+   [#]subdivision(P,SX)=[#]KX by A13,Def20;
+   hence ex SX be SimplicialComplexStr of X st the topology of SX=g.k1 &
+[#]SX=[#]KX & (k1>0 implies SX is strict) by A14;
+   let S1 be SimplicialComplexStr of X;
+   assume A15: the topology of S1=g.k1 & [#]S1=[#]KX;
+   g.(k1+1)=f.(g.k1) by A8;
+   hence thesis by A7,A15;
+  end;
+  A16: for k be Nat holds P[k] from NAT_1:sch 2(A10,A11);
+  A17: for x st x in NAT ex y st H[x,y]
+  proof
+   let x;
+   assume x in NAT;
+   then reconsider m=x as Nat;
+   per cases;
+   suppose A18: m=0;
+    take KX;
+    thus thesis by A18;
+   end;
+   suppose A19: m>0;
+    then reconsider m1=m-1 as Nat by NAT_1:20;
+    consider K1 be SimplicialComplexStr of X such that
+     A20: the topology of K1=g.m and
+     A21: [#]K1=[#]KX and
+     m>0 implies K1 is strict by A16;
+    reconsider TOP=the topology of K1 as Subset-Family of KX by A21;
+    take T=TopStruct(# the carrier of KX,TOP #);
+    thus thesis by A19,A20;
+   end;
+  end;
+  consider h being Function such that
+   A22: dom h=NAT & for x st x in NAT holds H[x,h.x] from CLASSES1:sch 1(A17);
+  A23: 0 in NAT by ORDINAL1:def 13;
+  then A24: h.0=KX by A22;
+  A25: for k be Nat for K1 be SimplicialComplexStr of X st h.k=K1 holds h.(k+1)
+=subdivision(P,K1)
+  proof
+   let k be Nat;
+   let KK be SimplicialComplexStr of X such that
+    A26: h.k=KK;
+   P[k+1] by A16;
+   then consider K1 be SimplicialComplexStr of X such that
+    A27: the topology of K1=g.(k+1) and
+    A28: [#]K1=[#]KX;
+   reconsider TOP1=the topology of K1 as Subset-Family of KX by A28;
+   A29: k in NAT by ORDINAL1:def 13;
+   P[k] by A16;
+   then consider K2 be SimplicialComplexStr of X such that
+    A30: the topology of K2=g.k and
+    A31: [#]K2=[#]KX;
+   reconsider TOP2=the topology of K2 as Subset-Family of KX by A31;
+   A32: [#]subdivision(P,KK)=[#]KK by Def20;
+   per cases;
+   suppose A33: k=0;
+    then TOP1=the topology of subdivision(P,KK) by A8,A10,A24,A26,A27;
+    hence thesis by A22,A24,A26,A27,A32,A33;
+   end;
+   suppose k>0;
+    then A34: KK=TopStruct(# the carrier of KX,TOP2 #) by A22,A26,A29,A30;
+    then [#]KK=[#]KX;
+    then g.(k+1)=the topology of subdivision(P,KK) by A16,A30,A34;
+    hence thesis by A22,A32,A34;
+   end;
+  end;
+  per cases;
+  suppose A35: n=0;
+   take KX;
+   thus thesis by A22,A24,A25,A35;
+  end;
+  suppose A36: n>0;
+   consider K1 be SimplicialComplexStr of X such that
+    A37: the topology of K1=g.n and
+    A38: [#]K1=[#]KX and
+    A39: n>0 implies K1 is strict by A16;
+   reconsider K1 as strict SimplicialComplexStr of X by A36,A39;
+   reconsider TOP=the topology of K1 as Subset-Family of KX by A38;
+   take K1,h;
+   thus h.0=KX by A22,A23;
+   n in NAT by ORDINAL1:def 13;
+   hence thesis by A22,A25,A36,A37,A38;
+  end;
+ end;
+  uniqueness
+  proof
+  let P1,P2 be SimplicialComplexStr of X;
+  given F1 be Function such that
+   A40: F1.0=KX and
+   A41: F1.n=P1 and
+   dom F1=NAT and
+   A42: for k for KX1 be SimplicialComplexStr of X st KX1=F1.k holds 
+F1.(k+1)=
+subdivision(P,KX1);
+  given F2 be Function such that
+   A43: F2.0=KX and
+   A44: F2.n=P2 and
+   dom F2=NAT and
+   A45: for k for KX1 be SimplicialComplexStr of X st KX1=F2.k holds 
+F2.(k+1)=
+subdivision(P,KX1);
+  defpred P[Nat] means
+   F1.$1=F2.$1 & ex KX1 be SimplicialComplexStr of X st KX1=F1.$1;
+  A46: for k st P[k] holds P[k+1]
+  proof
+   let k such that
+    A47: P[k];
+   consider KX1 be SimplicialComplexStr of X such that
+    A48: KX1=F1.k by A47;
+   F1.(k+1)=subdivision(P,KX1) by A42,A48;
+   hence thesis by A45,A47,A48;
+  end;
+  A49: P[0 qua Nat] by A40,A43;
+  for k holds P[k] from NAT_1:sch 2(A49,A46);
+  hence thesis by A41,A44;
+ end;
+end;
+
+theorem Th61:
+  subdivision(0,P,KX) = KX
+ proof
+  ex F be Function st F.0=KX & F.0=subdivision(0,P,KX) & dom F=NAT & 
+for k for
+KX1 be SimplicialComplexStr of X st KX1=F.k holds 
+F.(k+1)=subdivision(P,KX1) by
+Def21;
+  hence thesis;
+ end;
+
+theorem Th62:
+  subdivision(1,P,KX) = subdivision(P,KX)
+ proof
+  consider F be Function such that
+   A1: F.0=KX and
+   A2: F.1=subdivision(1,P,KX) and
+   dom F=NAT and
+   A3: for k for KX1 be SimplicialComplexStr of X st KX1=F.k holds F.(k+1)=
+subdivision(P,KX1) by Def21;
+  F.(0+1)=subdivision(P,KX) by A1,A3;
+  hence thesis by A2;
+ end;
+
+theorem Th63:
+  for n,k be Element of NAT holds
+    subdivision(n+k,P,KX) = subdivision(n,P,subdivision(k,P,KX))
+ proof
+  let n,k be Element of NAT;
+  consider Fn be Function such that
+   A1: Fn.0=subdivision(k,P,KX) and
+   A2: Fn.n=subdivision(n,P,subdivision(k,P,KX)) and
+   dom Fn=NAT and
+   A3: for m be Nat for KX1 be SimplicialComplexStr of X st KX1=Fn.m holds Fn.(
+m+1)=subdivision(P,KX1) by Def21;
+  consider Fnm be Function such that
+   A4: Fnm.0=KX and
+   A5: Fnm.(n+k)=subdivision(n+k,P,KX) and
+   dom Fnm=NAT and
+   A6: for m be Nat for KX1 be SimplicialComplexStr of X st KX1=Fnm.m holds Fnm
+.(m+1)=subdivision(P,KX1) by Def21;
+  defpred R[Nat] means
+   $1<=n implies Fn.$1=Fnm.($1+k) & ex SX be SimplicialComplexStr of X st Fn.$1
+=SX;
+  A7: for m be Nat st R[m] holds R[m+1]
+  proof
+   let m be Nat such that
+    A8: R[m];
+   assume A9: m+1<=n;
+   then consider SX be SimplicialComplexStr of X such that
+    A10: Fn.m=SX by A8,NAT_1:13;
+   subdivision(P,SX)=Fnm.(m+k+1) by A6,A8,A9,A10,NAT_1:13;
+   hence thesis by A3,A10;
+  end;
+  consider Fm be Function such that
+   A11: Fm.0=KX and
+   A12: Fm.k=subdivision(k,P,KX) and
+   dom Fm=NAT and
+   A13: for m be Nat for KX1 be SimplicialComplexStr of X st KX1=Fm.m holds Fm.
+(m+1)=subdivision(P,KX1) by Def21;
+  defpred P[Nat] means
+   $1<=k implies Fm.$1=Fnm.$1 & ex SX be SimplicialComplexStr of X st Fm.$1=SX;
+  A14: for m be Nat st P[m] holds P[m+1]
+  proof
+   let m be Nat such that
+    A15: P[m];
+   assume A16: m+1<=k;
+   then consider SX be SimplicialComplexStr of X such that
+    A17: Fm.m=SX by A15,NAT_1:13;
+   subdivision(P,SX)=Fnm.(m+1) by A6,A15,A16,A17,NAT_1:13;
+   hence thesis by A13,A17;
+  end;
+  A18: P[0 qua Nat] by A4,A11;
+  for k holds P[k] from NAT_1:sch 2(A18,A14);
+  then A19: R[0 qua Nat] by A1,A12;
+  for k holds R[k] from NAT_1:sch 2(A19,A7);
+  hence thesis by A2,A5;
+ end;
+
+theorem
+  [#]subdivision(n,P,KX) = [#]KX
+ proof
+  defpred P[Nat] means
+   [#]subdivision($1,P,KX)=[#]KX;
+  A1: for n st P[n] holds P[n+1]
+  proof
+   let n;
+   n in NAT by ORDINAL1:def 13;
+   then A2: subdivision(n+1,P,KX)=subdivision(1,P,subdivision(n,P,KX)) by Th63
+    .=subdivision(P,subdivision(n,P,KX)) by Th62;
+   assume[#]subdivision(n,P,KX)=[#]KX;
+   hence thesis by A2,Def20;
+  end;
+  A3: P[0 qua Nat] by Th61;
+  for n holds P[n] from NAT_1:sch 2(A3,A1);
+  hence thesis;
+ end;
+
+theorem
+  subdivision(n,P,SX) is SubSimplicialComplex of subdivision(n,P,KX)
+ proof
+  defpred P[Nat] means
+   subdivision($1,P,SX) is SubSimplicialComplex of subdivision($1,P,KX);
+  A1: for n st P[n] holds P[n+1]
+  proof
+   let n;
+   assume P[n];
+   then reconsider Pn=subdivision(n,P,SX) as
+     SubSimplicialComplex of subdivision(n,P,KX);
+   A2: n in NAT by ORDINAL1:def 13;
+   then A3: subdivision(n+1,P,SX)=subdivision(1,P,Pn) by Th63
+    .=subdivision(P,Pn) by Th62;
+   subdivision(n+1,P,KX)=subdivision(1,P,subdivision(n,P,KX)) by A2,Th63
+    .=subdivision(P,subdivision(n,P,KX)) by Th62;
+   hence thesis by A3,Th58;
+  end;
+  subdivision(0,P,SX)=SX by Th61;
+  then A4: P[0] by Th61;
+  for n holds P[n] from NAT_1:sch 2(A4,A1);
+  hence thesis;
+ end;

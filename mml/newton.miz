@@ -21,7 +21,7 @@ environ
       CARD_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FINSEQ_1, SQUARE_1, FINSEQ_2, RVSUM_1;
- theorems TARSKI, NAT_1, RVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCT_1, INT_1,
+ theorems TARSKI, NAT_1, RVSUM_1, FINSEQ_1, FINSEQ_2, FUNCT_1, INT_1,
       XREAL_0, XBOOLE_0, XCMPLX_1, INT_2, CARD_2, CARD_1, XBOOLE_1, XREAL_1,
       XCMPLX_0, XXREAL_0, RELAT_1, FINSOP_1, ORDINAL1, NAT_D, PARTFUN1,
       VALUED_1, FUNCOP_1;
@@ -132,13 +132,9 @@ proof
 end;
 
 theorem Th7:
-  dom G = dom (a*G)
-proof
-  len (a*G) = len G by Th6;
-  hence thesis by FINSEQ_3:31;
-end;
+  dom G = dom (a*G) by VALUED_1:def 5;
 
-::    x |^ n  Function                                                      ::
+:: x |^ n  Function ::
 
 definition
   let i be Nat;
@@ -147,8 +143,7 @@ definition
   coherence
   proof
     let z be set;
-    assume
-    z in rng (i |-> x);
+    assume z in rng (i |-> x);
     hence thesis;
   end;
 end;
@@ -207,8 +202,7 @@ proof
 A1: for s st P[s] holds P[s+1]
   proof
     let s;
-    assume
-    z|^(s+1) = z|^s*z;
+    assume z|^(s+1) = z|^s*z;
     reconsider z as Element of COMPLEX by XCMPLX_0:def 2;
     z|^(s+1+1) = Product(((s+1) |-> z) ^ <*z*>) by FINSEQ_2:74
       .= Product((s+1) |-> z)*z by RVSUM_1:126;
@@ -306,7 +300,7 @@ A2: P[1] by Th10;
   hence thesis;
 end;
 
-::     n!  Function                                                         ::
+:: n!  Function ::
 
 definition
   let n be Nat;
@@ -336,12 +330,6 @@ end;
 registration
   let n be Nat;
   cluster n! -> real;
-  coherence;
-end;
-
-definition
-  let n be Nat;
-  redefine func n! -> Real;
   coherence;
 end;
 
@@ -386,7 +374,7 @@ A2: P[0] by RVSUM_1:124;
 end;
 
 theorem Th23:
-  s!>0
+  s! > 0
 proof
   defpred P[Nat] means $1!>0;
 A1: now
@@ -401,17 +389,18 @@ A2: P[0] by RVSUM_1:124;
   hence thesis;
 end;
 
-canceled;
-
-theorem Th25:
-  (s!) * (t!)<>0
-proof
-A1: t!<>0 by Th23;
-  s!<>0 by Th23;
-  hence thesis by A1;
+registration
+  let n;
+  cluster n! -> positive;
+  coherence by Th23;
 end;
 
-::     n choose k  Function                                                 ::
+canceled;
+
+theorem
+  (s!) * (t!) <> 0;
+
+:: n choose k  Function ::
 
 definition
   let k,n be Nat;
@@ -494,10 +483,9 @@ theorem Th29:
   s choose 0 = 1
 proof
   reconsider m = s-0 as Element of NAT by ORDINAL1:def 13;
-A1: s!<>0 by Th23;
   m = s;
   then (s choose 0) = (s!)/(1 * (s!)) by Def3,Th18
-    .= 1 by A1,XCMPLX_1:60;
+    .= 1 by XCMPLX_1:60;
   hence thesis;
 end;
 
@@ -535,28 +523,23 @@ A1: s<t;
     thus ((t+1) choose (s+1)) = (t choose (s+1)) + (t choose s)
     proof
       reconsider m1 = t-s as Element of NAT by A1,INT_1:18;
-A2:   ((s!) * (m1!))<>0 by Th25;
 A3:   s+1<=t by A1,NAT_1:13;
       then reconsider m2 = t-(s+1) as Element of NAT by INT_1:18;
-A4:   ((s+1)!) * (m2!)<>0 by Th25;
 A5:   s+1<=t+1 by A1,XREAL_1:8;
       then reconsider m = (t+1)-(s+1) as Element of NAT by INT_1:18;
-A6:   s!<>0 by Th23;
-A7:   m2!<>0 by Th23;
       (t choose (s+1)) = (t!)/(((s+1)!) * (m2!)) by A3,Def3;
       then
 A8:   (t choose (s+1)) + (t choose s) = (t!)/(((s+1)!) * (m2!)) + (t!)/((s
       !) * (m1!)) by A1,Def3
         .= ((t!)*((s!)*(m1!))+(t!)*(((s+1)!)*(m2!)))/((((s+1)!)*(m2!))*((s!)
-      *(m1!))) by A4,A2,XCMPLX_1:117
+      *(m1!))) by XCMPLX_1:117
         .= (t!*((s!)*(m1!))+(t!)*(s!*(s+1)*(m2!)))/((((s+1)!)*(m2!))*((s!)*(
       m1!))) by Th21
         .= (s!*((t!)*((m1!)+(s+1)*(m2!))))/(s!*((m1!)*((s+1)!*(m2!))))
-        .=(t!*(((m2+1)!)+(s+1)*(m2!)))/(m1!*((s+1)!*(m2!))) by A6,XCMPLX_1:
-      92
+        .=(t!*(((m2+1)!)+(s+1)*(m2!)))/(m1!*((s+1)!*(m2!))) by XCMPLX_1:92
         .= (t!*((m2!)*(m2+1)+(m2!)*(s+1)))/(m1!*((s+1)!*(m2!))) by Th21
         .= (m2!*((t!)*((m2+1)+(s+1))))/(m2!*(((s+1)!)*(m1!)))
-        .= ((t!)*(t-(s-(s+1))))/(((s+1)!)*(m1!)) by A7,XCMPLX_1:92
+        .= ((t!)*(t-(s-(s+1))))/(((s+1)!)*(m1!)) by XCMPLX_1:92
         .= ((t+1)!)/(((s+1)!)*(m1!)) by Th21;
       m = m1;
       hence thesis by A8,A5,Def3;
@@ -826,7 +809,6 @@ A4: i = 1 by A2,A3,TARSKI:def 1;
   1 in dom (a,b) In_Power 0 by A2,TARSKI:def 1;
   then F.1 = (0 choose 0)*a|^l1*b|^m1 by A4,Def4
     .= 1*a|^0*b|^0 by A4,Th31
-    .= 1*1*b|^0 by RVSUM_1:124
     .= 1 by RVSUM_1:124;
   hence thesis by A1,FINSEQ_1:57;
 end;
@@ -1059,8 +1041,7 @@ A49:  now
     len ((a,b) In_Power (n+1)) = len F by A6,Def4;
     hence thesis by A2,A4,A8,Th3;
   end;
-  (a+b) |^ 0 = 1 by RVSUM_1:124
-    .= Sum<*1 qua Real*> by FINSOP_1:12
+  (a+b) |^ 0 = Sum<*1 qua Real*> by FINSOP_1:12,RVSUM_1:124
     .= Sum((a,b) In_Power 0) by Th38;
   then
 A50: P[0];
@@ -1072,8 +1053,8 @@ definition
   let n be Nat;
   func Newton_Coeff n -> FinSequence of REAL means
   :Def5:
-  len it = n+1 & for i
-  ,k be Nat st i in dom it & k = i-1 holds it.i = n choose k;
+  len it = n+1 & for i,k be Nat st i in dom it & k = i-1 holds
+  it.i = n choose k;
   existence
   proof
     reconsider n as Element of NAT by ORDINAL1:def 13;
@@ -1183,7 +1164,7 @@ begin :: Addenda
 :: from NAT_LAT
 
 theorem Th45:
-  l >= 1 implies k*l>=k
+  l >= 1 implies k*l >= k
 proof
   assume
 A1: l>=1;
@@ -1207,7 +1188,7 @@ A5: P[0];
 end;
 
 theorem Th46:
-  l >= 1 & n >= k*l implies n>=k
+  l >= 1 & n >= k*l implies n >= k
 proof
   assume that
 A1: l>=1 and
@@ -1630,10 +1611,8 @@ end;
 theorem
   n gcd m divides n lcm m
 proof
-  set K = n gcd m;
-  set N = n lcm m;
-A1: n divides N by NAT_D:def 4;
-  K divides n by NAT_D:def 5;
+A1: n divides n lcm m by NAT_D:def 4;
+  n gcd m divides n by NAT_D:def 5;
   hence thesis by A1,NAT_D:4;
 end;
 
@@ -1643,11 +1622,10 @@ reserve p,q for Nat;
 reserve i0,i,i1,i2,i3,i4 for Integer;
 
 theorem
-  0 < m implies n mod m= n - m * (n div m)
+  0 < m implies n mod m = n - m * (n div m)
 proof
   reconsider z1=m * (n div m),z2=(n mod m) as Integer;
-  assume
-  m >0;
+  assume m >0;
   then n - z1 = z1 + z2 -z1 by NAT_D:2;
   hence thesis;
 end;
@@ -1717,10 +1695,10 @@ A15: s divides m and
 A16: s divides n;
     consider r being Nat such that
 A17: n = s*r by A16,NAT_D:def 3;
-    reconsider p'=p,s'=s as Integer;
+    reconsider p9=p,s9=s as Integer;
     consider l being Nat such that
 A18: m = s*l by A15,NAT_D:def 3;
-    ex i4 st p'=s'*i4
+    ex i4 st p9=s9*i4
     proof
       take i*l+i0*r;
       thus thesis by A8,A18,A17;
@@ -1845,8 +1823,8 @@ proof
   let x;
   assume
 A1: x in SetPrimenumber p;
-  then reconsider x' = x as Element of NAT;
-  x' is prime by A1,Def7;
+  then reconsider x9 = x as Element of NAT;
+  x9 is prime by A1,Def7;
   hence thesis by Def6;
 end;
 
@@ -1858,11 +1836,11 @@ A1: p <= q;
   let x;
   assume
 A2: x in SetPrimenumber p;
-  then reconsider x' = x as Element of NAT;
-  x' < p by A2,Def7;
+  then reconsider x9 = x as Element of NAT;
+  x9 < p by A2,Def7;
   then
-A3: x' < q by A1,XXREAL_0:2;
-  x' is prime by A2,Def7;
+A3: x9 < q by A1,XXREAL_0:2;
+  x9 is prime by A2,Def7;
   hence thesis by A3,Def7;
 end;
 
@@ -1922,8 +1900,8 @@ A3:   2<=l;
       then consider j being Element of NAT such that
 A4:   j is prime and
 A5:   j divides (l!+1) by INT_2:48;
-      reconsider j'=j as Prime by A4;
-      take j';
+      reconsider j9=j as Prime by A4;
+      take j9;
 A6:   j<>0 by A4,INT_2:def 5;
       j<>1 by A4,INT_2:def 5;
       hence thesis by A5,A6,Th51,Th54;
@@ -2168,38 +2146,38 @@ A1: i is prime;
 A2: i divides m * n and
 A3: not( (i divides m or i divides n));
 A4: ex i be Nat st P[i] by A1,A2,A3;
-  consider p' being Nat such that
-A5: P[p'] and
-A6: for p1 being Nat st P[p1] holds p' <= p1 from NAT_1:sch 5(A4);
-  defpred Q[Nat] means ex n being Nat st p' divides $1 * n & not p' divides $1
-  & not p' divides n;
+  consider p9 being Nat such that
+A5: P[p9] and
+A6: for p1 being Nat st P[p1] holds p9 <= p1 from NAT_1:sch 5(A4);
+  defpred Q[Nat] means ex n being Nat st p9 divides $1 * n & not p9 divides $1
+  & not p9 divides n;
 A7: ex i be Nat st Q[i] by A5;
   consider m be Nat such that
 A8: Q[m] and
 A9: for m1 being Nat st Q[m1] holds m <= m1 from NAT_1:sch 5(A7);
 A10: m > 0 by A8;
   consider n being Nat such that
-A11: p' divides m * n and
-A12: not p' divides m and
-A13: not p' divides n by A8;
-A14: m < p'
+A11: p9 divides m * n and
+A12: not p9 divides m and
+A13: not p9 divides n by A8;
+A14: m < p9
   proof
-    set m1 = m mod p';
+    set m1 = m mod p9;
     assume
-A15: m >= p';
-A16: p' > 0 by A5,INT_2:def 5;
-    then m = p'* (m div p') + m1 by NAT_D:2;
+A15: m >= p9;
+A16: p9 > 0 by A5,INT_2:def 5;
+    then m = p9* (m div p9) + m1 by NAT_D:2;
     then
-A17: m * n = p' * (m div p') * n + m1 * n;
-    m1 < p' by A16,NAT_D:1;
+A17: m * n = p9 * (m div p9) * n + m1 * n;
+    m1 < p9 by A16,NAT_D:1;
     then
 A18: m1 < m by A15,XXREAL_0:2;
-A19: p' divides p' * (m div p') by NAT_D:def 3;
-    p' divides p' * ((m div p') * n) by NAT_D:def 3;
+A19: p9 divides p9 * (m div p9) by NAT_D:def 3;
+    p9 divides p9 * ((m div p9) * n) by NAT_D:def 3;
     then
-A20: p' divides m1 * n by A11,A17,NAT_D:10;
-    m = p'* (m div p') + m1 by A16,NAT_D:2;
-    then not p' divides m1 by A12,A19,NAT_D:8;
+A20: p9 divides m1 * n by A11,A17,NAT_D:10;
+    m = p9* (m div p9) + m1 by A16,NAT_D:2;
+    then not p9 divides m1 by A12,A19,NAT_D:8;
     hence contradiction by A9,A13,A18,A20;
   end;
 A21: m < 2
@@ -2210,20 +2188,20 @@ A21: m < 2
 A22: p1 is prime and
 A23: p1 divides m by INT_2:48;
 A24: p1 > 1 by A22,INT_2:def 5;
-A25: not p1 divides p'
+A25: not p1 divides p9
     proof
       assume
-      p1 divides p';
-      then p1 = 1 or p1 = p' by A5,INT_2:def 5;
+      p1 divides p9;
+      then p1 = 1 or p1 = p9 by A5,INT_2:def 5;
       hence contradiction by A8,A22,A23,INT_2:def 5;
     end;
     p1 <= m by A10,A23,NAT_D:7;
     then
-A26: not p' <= p1 by A14,XXREAL_0:2;
+A26: not p9 <= p1 by A14,XXREAL_0:2;
 A27: p1 <> 0 by A22,INT_2:def 5;
     consider k being Nat such that
-A28: m * n = p' * k by A11,NAT_D:def 3;
-    p1 divides p' * k by A23,A28,NAT_D:9;
+A28: m * n = p9 * k by A11,NAT_D:def 3;
+    p1 divides p9 * k by A23,A28,NAT_D:9;
     then p1 divides k by A6,A22,A26,A25;
     then consider k1 being Nat such that
 A29: k = p1 * k1 by NAT_D:def 3;
@@ -2241,11 +2219,11 @@ A32: m1 <> m
     then m1 <= m by A10,NAT_D:7;
     then
 A33: m1 < m by A32,XXREAL_0:1;
-    (p' * k1) * p1 = p1 *(m1 * n) by A28,A29,A30;
-    then m1 * n = p' * k1 by A27,XCMPLX_1:5;
+    (p9 * k1) * p1 = p1 *(m1 * n) by A28,A29,A30;
+    then m1 * n = p9 * k1 by A27,XCMPLX_1:5;
     then
-A34: p' divides m1 * n by NAT_D:def 3;
-    not p' divides m1 by A12,A30,NAT_D:9;
+A34: p9 divides m1 * n by NAT_D:def 3;
+    not p9 divides m1 by A12,A30,NAT_D:9;
     hence contradiction by A9,A13,A33,A34;
   end;
   m >= 2
@@ -2306,8 +2284,7 @@ end;
 theorem
   n > 0 implies 0 |^ n = 0
 proof
-  assume
-  n>0;
+  assume n>0;
   then n>=1+0 by NAT_1:13;
   hence thesis by Th16;
 end;
@@ -2319,6 +2296,7 @@ definition
   redefine func m|^n -> Element of NAT;
   coherence by ORDINAL1:def 13;
 end;
+
 :: from HEINE, 2007.07.27, A.T.
 
 defpred P[Nat] means 2|^$1 >= $1 + 1;
@@ -2359,7 +2337,7 @@ end;
 reserve k,i for Element of NAT;
 
 scheme
-  Euklides' { F(Nat)->Element of NAT,G(Nat)-> Element of NAT,a()->Element of
+  Euklides9 { F(Nat)->Element of NAT,G(Nat)-> Element of NAT,a()->Element of
   NAT,b()->Element of NAT } : ex k st F(k) = a() gcd b() & G(k) = 0
 provided
 A1: 0 < b() and

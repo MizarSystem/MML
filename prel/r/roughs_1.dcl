@@ -309,7 +309,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="325">
+<Func kind="K" nr="326">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -336,7 +336,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="326">
+<Func kind="K" nr="327">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

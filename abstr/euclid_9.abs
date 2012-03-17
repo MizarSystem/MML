@@ -1,0 +1,322 @@
+:: The Correspondence Between $n$-dimensional {E}uclidean Space and the 
+:: Product of $n$ Real Lines
+::  by Artur Korni{\l}owicz
+:: 
+:: Received November 30, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies RELAT_1, FUNCT_1, VALUED_0, MEMBERED, ARYTM_1, COMPLEX1, ARYTM_3,
+      XCMPLX_0, FINSEQ_1, EUCLID, PRE_TOPC, ORDINAL2, METRIC_1, XREAL_0,
+      TOPMETR, RCOMP_1, PCOMPS_1, FINSEQ_2, RVSUM_1, SQUARE_1, FUNCT_4,
+      VALUED_2, SUBSET_1, FUNCOP_1, PARTFUN1, CARD_3, MONOID_0, CANTOR_1,
+      QC_LANG1, SETFAM_1, RLVECT_2, WAYBEL18, RLVECT_3, PBOOLE, TOPGEN_2,
+      STRUCT_0, FINSET_1, FUNCT_2, TARSKI, CARD_1, YELLOW_8, NAT_1, ORDINAL1,
+      ZFMISC_1, XBOOLE_0, VALUED_1, NUMBERS, XXREAL_0, XXREAL_1, EUCLID_9,
+      REAL_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, FINSET_1, TOPS_2, RELAT_1,
+      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, ORDINAL1, NUMBERS, VALUED_0,
+      VALUED_1, XCMPLX_0, XREAL_0, XXREAL_0, XXREAL_2, REAL_1, CARD_3,
+      MEMBERED, COMPLEX1, SQUARE_1, CANTOR_1, NAT_1, FUNCOP_1, FINSEQ_1,
+      FINSEQ_2, RCOMP_1, FUNCT_7, VALUED_2, STRUCT_0, RVSUM_1, MONOID_0,
+      PRE_TOPC, METRIC_1, PCOMPS_1, TOPMETR, ALGSTR_0, EUCLID, PRALG_1,
+      YELLOW_8, WAYBEL18, BORSUK_4, TOPGEN_2, TOPREAL9, TOPREALB;
+ constructors SEQ_1, MONOID_0, FUNCT_7, VALUED_2, TOPREAL9, TOPREALB, BORSUK_4,
+      COMPLEX1, SQUARE_1, FUNCSDOM, WAYBEL18, SETFAM_1, BINOP_2, XXREAL_2,
+      TOPGEN_2;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, MEMBERED,
+      XCMPLX_0, XREAL_0, VALUED_2, STRUCT_0, EUCLID, MONOID_0, TOPREALB,
+      XXREAL_0, NAT_1, TOPMETR, FUNCT_2, RVSUM_1, TOPREAL9, SQUARE_1, PCOMPS_1,
+      RCOMP_1, FUNCT_7, NUMBERS, FINSEQ_1, FUNCOP_1, WAYBEL18, JORDAN2B,
+      ZFMISC_1, SERIES_3, FINSEQ_2, XXREAL_2, FINSET_1, PARTFUN3;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
+
+
+begin
+
+reserve
+  x, y for set,
+  i, k, n for Nat,
+  r, s for real number,
+  f1, f2 for n-long real-valued FinSequence;
+
+registration
+  let s be real number; let r be non positive (real number);
+  cluster ]. s-r , s+r .[ -> empty;
+  cluster [. s-r , s+r .[ -> empty;
+  cluster ]. s-r , s+r .] -> empty;
+end;
+
+registration
+  let s be real number; let r be negative (real number);
+  cluster [. s-r , s+r .] -> empty;
+end;
+
+registration
+  let f be empty-yielding Function;
+  let x;
+  cluster f.x -> empty;
+end;
+
+registration
+  let i;
+  cluster i |-> 0 -> empty-yielding;
+end;
+
+registration
+  let n; let f be n-long complex-valued FinSequence;
+  cluster -f -> n-long;
+  cluster f" -> n-long;
+  cluster f^2 -> n-long;
+  cluster abs f -> n-long;
+  let g be n-long complex-valued FinSequence;
+  cluster f + g -> n-long;
+  cluster f - g -> n-long;
+  cluster f (#) g -> n-long;
+  cluster f /" g -> n-long;
+end;
+
+registration
+  let c be complex number, n be Nat, f be n-long complex-valued FinSequence;
+  cluster c + f -> n-long;
+  cluster f - c -> n-long;
+  cluster c (#) f -> n-long;
+end;
+
+registration
+  let f be real-valued Function;
+  cluster {f} -> real-functions-membered;
+  let g be real-valued Function;
+  cluster {f,g} -> real-functions-membered;
+end;
+
+registration
+  let n; let D be set;
+  cluster n-tuples_on D -> FinSequence-membered;
+end;
+
+registration
+  let n;
+  cluster REAL n -> FinSequence-membered;
+end;
+
+registration
+  let n;
+  cluster REAL n -> real-functions-membered;
+end;
+
+registration
+  let n, x, y; let f be n-long FinSequence;
+  cluster f+*(x,y) -> n-long;
+end;
+
+theorem :: EUCLID_9:1
+  for f being n-long FinSequence st f is empty holds n = 0;
+
+theorem :: EUCLID_9:2
+  for f being n-long real-valued FinSequence holds f in REAL n;
+
+theorem :: EUCLID_9:3
+  for f, g being complex-valued Function holds abs(f-g) = abs(g-f);
+
+definition
+  let n, f1, f2;
+  func max_diff_index(f1,f2) -> Nat equals
+:: EUCLID_9:def 1
+  the Element of abs(f1-f2) " { sup rng abs(f1-f2) };
+  commutativity;
+end;
+
+theorem :: EUCLID_9:4
+  n <> 0 implies max_diff_index(f1,f2) in dom f1;
+
+theorem :: EUCLID_9:5
+  abs(f1-f2).x <= abs(f1-f2).max_diff_index(f1,f2);
+
+registration
+  cluster RealSpace -> real-membered;
+end;
+
+registration
+  cluster TopSpaceMetr Euclid 0 -> trivial;
+end;
+
+registration
+  let n;
+  cluster Euclid n -> constituted-FinSeqs;
+end;
+
+registration
+  let n;
+  cluster -> REAL-valued Point of Euclid n;
+end;
+
+registration
+  let n;
+  cluster -> n-long Point of Euclid n;
+end;
+
+theorem :: EUCLID_9:6
+  Family_open_set(Euclid 0) = {{},{{}}};
+
+theorem :: EUCLID_9:7
+  for B being Subset of Euclid 0 holds B = {} or B = {{}};
+
+reserve e, e1 for Point of Euclid n;
+
+definition
+  let n, e;
+  func @e -> Point of TopSpaceMetr Euclid n equals
+:: EUCLID_9:def 2
+  e;
+end;
+
+registration
+  let n, e;
+  let r be non positive (real number);
+  cluster Ball(e,r) -> empty;
+end;
+
+registration
+  let n, e;
+  let r be positive (real number);
+  cluster Ball(e,r) -> non empty;
+end;
+
+theorem :: EUCLID_9:8
+  for p1, p2 being Point of TOP-REAL n st i in dom p1 holds
+  (p1/.i - p2/.i)^2 <= Sum sqr (p1-p2);
+
+theorem :: EUCLID_9:9
+  for a, o, p being Element of TOP-REAL n st a in Ball(o,r) holds
+  for x being set holds abs((a-o).x) < r & abs(a.x-o.x) < r;
+
+theorem :: EUCLID_9:10
+  for a, o being Point of Euclid n st a in Ball(o,r) holds
+  for x being set holds abs((a-o).x) < r & abs(a.x-o.x) < r;
+
+definition
+  let f be real-valued Function, r be real number;
+  func Intervals(f,r) -> Function means
+:: EUCLID_9:def 3
+
+  dom it = dom f &
+  for x being set st x in dom f holds it.x = ].f.x-r,f.x+r.[;
+end;
+
+registration
+  let r;
+  cluster Intervals({},r) -> empty;
+end;
+
+registration
+  let f be real-valued FinSequence; let r;
+  cluster Intervals(f,r) -> FinSequence-like;
+end;
+
+definition
+  let n, e, r;
+  func OpenHypercube(e,r) -> Subset of TopSpaceMetr Euclid n equals
+:: EUCLID_9:def 4
+  product Intervals(e,r);
+end;
+
+theorem :: EUCLID_9:11
+  0 < r implies e in OpenHypercube(e,r);
+
+registration
+  let n be non zero Nat; let e be Point of Euclid n;
+  let r be non positive (real number);
+  cluster OpenHypercube(e,r) -> empty;
+end;
+
+theorem :: EUCLID_9:12
+  for e being Point of Euclid 0 holds OpenHypercube(e,r) = {{}};
+
+registration
+  let e be Point of Euclid 0;
+  let r;
+  cluster OpenHypercube(e,r) -> non empty;
+end;
+
+registration
+  let n, e; let r be positive (real number);
+  cluster OpenHypercube(e,r) -> non empty;
+end;
+
+theorem :: EUCLID_9:13
+  r <= s implies OpenHypercube(e,r) c= OpenHypercube(e,s);
+
+theorem :: EUCLID_9:14
+  (n <> 0 or 0 < r) & e1 in OpenHypercube(e,r) implies
+  for x being set holds abs((e1-e).x) < r & abs(e1.x-e.x) < r;
+
+theorem :: EUCLID_9:15
+  n <> 0 & e1 in OpenHypercube(e,r) implies Sum sqr (e1-e) < n*r^2;
+
+theorem :: EUCLID_9:16
+  n <> 0 & e1 in OpenHypercube(e,r) implies dist(e1,e) < r * sqrt(n);
+
+theorem :: EUCLID_9:17
+  n <> 0 implies OpenHypercube(e,r/sqrt(n)) c= Ball(e,r);
+
+theorem :: EUCLID_9:18
+  n <> 0 implies OpenHypercube(e,r) c= Ball(e,r*sqrt(n));
+
+theorem :: EUCLID_9:19
+  e1 in Ball(e,r) implies
+  ex m being non zero Element of NAT st OpenHypercube(e1,1/m) c= Ball(e,r);
+
+theorem :: EUCLID_9:20
+  n <> 0 & e1 in OpenHypercube(e,r) implies r > abs(e1-e).max_diff_index(e1,e);
+
+theorem :: EUCLID_9:21
+  OpenHypercube(e1,r-abs(e1-e).max_diff_index(e1,e)) c= OpenHypercube(e,r);
+
+theorem :: EUCLID_9:22
+  Ball(e,r) c= OpenHypercube(e,r);
+
+registration
+  let n, e, r;
+  cluster OpenHypercube(e,r) -> open;
+end;
+
+theorem :: EUCLID_9:23
+  for V being Subset of TopSpaceMetr Euclid n holds V is open implies
+  for e being Point of Euclid n st e in V
+  ex m being non zero Element of NAT st OpenHypercube(e,1/m) c= V;
+
+theorem :: EUCLID_9:24
+  for V being Subset of TopSpaceMetr Euclid n st
+  for e being Point of Euclid n st e in V
+  ex r being real number st r > 0 & OpenHypercube(e,r) c= V
+  holds V is open;
+
+definition
+  let n, e;
+  func OpenHypercubes(e) -> Subset-Family of TopSpaceMetr Euclid n equals
+:: EUCLID_9:def 5
+  {OpenHypercube(e,1/m) where m is non zero Element of NAT: not contradiction};
+end;
+
+registration
+  let n, e;
+  cluster OpenHypercubes(e) -> non empty open @e-quasi_basis;
+end;
+
+theorem :: EUCLID_9:25
+  Funcs(Seg n,REAL) = product Carrier (Seg n --> R^1);
+
+theorem :: EUCLID_9:26
+  n <> 0 implies
+  for PP being Subset-Family of TopSpaceMetr Euclid n st
+  PP = product_prebasis (Seg n --> R^1) holds PP is quasi_prebasis;
+
+theorem :: EUCLID_9:27
+  for PP being Subset-Family of TopSpaceMetr Euclid n st
+  PP = product_prebasis (Seg n --> R^1) holds PP is open;
+
+theorem :: EUCLID_9:28
+  TopSpaceMetr Euclid n = product(Seg n --> R^1);
+

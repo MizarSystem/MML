@@ -19,6 +19,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="UNIALG_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
@@ -30,7 +31,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="BINOP_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
@@ -162,7 +162,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="18" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="58"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -306,7 +306,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="18" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="58"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -391,7 +391,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="18" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="58"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

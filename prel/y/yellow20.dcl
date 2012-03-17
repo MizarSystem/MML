@@ -14,6 +14,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSEQ_1"/>
@@ -36,7 +37,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="31"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -46,7 +47,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="155">
+<Func kind="K" nr="168">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -60,37 +61,37 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="63"/>
-<Adjective nr="64"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="59"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="18">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="88">
+<Adjective nr="42" value="false"/>
+<Adjective nr="59"/>
+<Adjective nr="93">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="232">
+<Func kind="K" nr="245">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="97">
+<Adjective nr="102">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="100">
+<Adjective nr="105">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="101">
+<Adjective nr="106">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -100,33 +101,33 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="63"/>
-<Adjective nr="64"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="59"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="18">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="88">
+<Adjective nr="42" value="false"/>
+<Adjective nr="59"/>
+<Adjective nr="93">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="232">
+<Func kind="K" nr="245">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="97">
+<Adjective nr="102">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="98">
+<Adjective nr="103">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>

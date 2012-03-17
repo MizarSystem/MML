@@ -18,6 +18,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="POWER"/>
 <ArticleID name="SERIES_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -33,7 +34,6 @@
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="BORSUK_1"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_2"/>
 </Signature>
 <RCluster aid="TIETZE" nr="1">
@@ -66,9 +66,9 @@
 <Func kind="K" nr="44"/>
 </Adjective>
 <Adjective nr="33"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
+<Adjective nr="45"/>
 <Adjective nr="103"/>
 </Cluster>
 </RCluster>
@@ -76,12 +76,12 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="50">
+<Adjective nr="62">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -92,13 +92,13 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="131">
+<Func kind="K" nr="133">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
-<Adjective nr="85">
+<Adjective nr="59"/>
+<Adjective nr="97">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

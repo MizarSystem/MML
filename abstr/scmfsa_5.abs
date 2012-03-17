@@ -9,15 +9,17 @@ environ
  vocabularies SUBSET_1, NUMBERS, AMI_1, SCMFSA_2, AMISTD_2, ARYTM_3, FUNCT_4,
       VALUED_1, XBOOLE_0, FUNCT_1, RELAT_1, TARSKI, CARD_3, FSM_1, CIRCUIT2,
       CARD_1, XXREAL_0, SCMNORM, GRAPHSP, AMI_3, ARYTM_1, INT_1, COMPLEX1,
-      PARTFUN1, FINSEQ_1, FINSEQ_2, GLIB_000, STRUCT_0, MSUALG_1, TURING_1;
+      PARTFUN1, FINSEQ_1, FINSEQ_2, GLIB_000, STRUCT_0, MSUALG_1, TURING_1,
+      NAT_1, ORDINAL1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, INT_2,
-      INT_1, NAT_1, PARTFUN1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FUNCT_4,
-      FUNCT_7, CARD_3, VALUED_1, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4,
-      XXREAL_0;
+      INT_1, NAT_1, NAT_D, PARTFUN1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2,
+      FUNCT_4, FUNCT_7, CARD_3, VALUED_1, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2,
+      SCMFSA_4, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, RELOC, PARTFUN1, SCMFSA_4,
-      SCMNORM, NAT_D, RELSET_1, SCMFSA_1;
+      SCMNORM, NAT_D, RELSET_1, SCMFSA_1, PRE_POLY;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, NUMBERS, XREAL_0, INT_1,
-      CARD_3, AMI_1, SCMFSA_2, ORDINAL1, SCMNORM, FINSET_1, RELAT_1, VALUED_1;
+      CARD_3, AMI_1, SCMFSA_2, ORDINAL1, SCMNORM, FINSET_1, RELAT_1, VALUED_1,
+      GRFUNC_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -29,8 +31,8 @@ definition
   let p be FinPartState of SCM+FSA, k be Element of NAT;
   func Relocated( p, k ) -> FinPartState of SCM+FSA equals
 :: SCMFSA_5:def 1
-  Start-At ((IC p)+k)
-  +* IncAddr([Shift(ProgramPart(p),k)],k)+*DataPart p;
+  Start-At(IC p +k,SCM+FSA)
+  +* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p;
 end;
 
 theorem :: SCMFSA_5:1
@@ -39,7 +41,7 @@ theorem :: SCMFSA_5:1
 
 theorem :: SCMFSA_5:2
   for p being FinPartState of SCM+FSA,k being Element of NAT holds
-  ProgramPart(Relocated(p,k)) = IncAddr([Shift(ProgramPart p,k)],k);
+  ProgramPart(Relocated(p,k)) = IncAddr(Shift(ProgramPart p,k),k);
 
 theorem :: SCMFSA_5:3
   for p being FinPartState of SCM+FSA holds dom ProgramPart(
@@ -47,7 +49,7 @@ theorem :: SCMFSA_5:3
 
 theorem :: SCMFSA_5:4
   for p being FinPartState of SCM+FSA, k being Element of NAT, l
-being Instruction-Location of SCM+FSA holds l in dom p iff l+k in dom Relocated
+being Element of NAT holds l in dom p iff l+k in dom Relocated
   (p,k);
 
 theorem :: SCMFSA_5:5
@@ -65,7 +67,7 @@ being Element of NAT, I being Instruction of SCM+FSA st loc in dom ProgramPart
 
 theorem :: SCMFSA_5:8
   for p being FinPartState of SCM+FSA,k being Element of NAT holds
-  Start-At (IC p + k) c= Relocated(p,k);
+  Start-At(IC p +k,SCM+FSA) c= Relocated(p,k);
 
 theorem :: SCMFSA_5:9
   for s being data-only FinPartState of SCM+FSA, p being
@@ -82,17 +84,25 @@ begin :: Main theorems of relocatability
 theorem :: SCMFSA_5:11
   for k being Element of NAT for p being autonomic FinPartState of
   SCM+FSA st IC SCM+FSA in dom p for s being State of SCM+FSA st p c= s for i
-being Element of NAT holds Computation(s+*Relocated(p,k),i) = Computation(s,i)
-  +* Start-At (IC Computation(s,i) + k) +* ProgramPart (Relocated(p,k));
+being Element of NAT holds Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p
+,k),i) = Comput(ProgramPart(s),s,i)
+  +* Start-At(IC Comput(ProgramPart(s),s,i) +k,SCM+FSA) +* ProgramPart (
+Relocated(p,k));
 
 theorem :: SCMFSA_5:12
   for k being Element of NAT, p being autonomic FinPartState of
   SCM+FSA, s1, s2 being State of SCM+FSA st IC SCM+FSA in dom p & p c= s1 &
-Relocated(p,k) c= s2 for i being Element of NAT holds IC Computation(s1,i) + k
-  = IC Computation(s2,i) & IncAddr(CurInstr( Computation(s1,i)), k) = CurInstr(
-Computation(s2,i)) & Computation(s1,i)|dom (DataPart p) = Computation(s2,i)|dom
-  (DataPart (Relocated(p,k))) & DataPart Computation(s1 +* DataPart s2,i) =
-  DataPart Computation(s2,i);
+Relocated(p,k) c= s2 for i being Element of NAT holds IC Comput(ProgramPart(s1)
+,s1,i) + k
+  = IC Comput(ProgramPart(s2),s2,i) & IncAddr(CurInstr(
+  ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,i)), k)
+   = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),
+s2,i)) &
+    Comput(ProgramPart(s1),s1,i)|dom (DataPart p) = Comput(ProgramPart(s2),s2,i
+)|dom
+  (DataPart (Relocated(p,k))) & DataPart Comput(ProgramPart(s1 +* DataPart s2),
+s1 +* DataPart s2,i) =
+  DataPart Comput(ProgramPart(s2),s2,i);
 
 theorem :: SCMFSA_5:13
   for p being autonomic FinPartState of SCM+FSA , k being Element
@@ -101,16 +111,21 @@ of NAT st IC SCM+FSA in dom p holds p is halting iff Relocated(p,k) is halting;
 theorem :: SCMFSA_5:14
   for k being Element of NAT for p being autonomic FinPartState of
   SCM+FSA st IC SCM+FSA in dom p for s being State of SCM+FSA st Relocated(p,k)
-c= s holds for i being Element of NAT holds Computation(s,i) = Computation(s+*p
-  ,i) +* Start-At (IC Computation(s+*p,i) + k) +* s|dom ProgramPart p +*
+c= s holds for i being Element of NAT holds Comput(ProgramPart(s),s,i) = Comput
+(ProgramPart(s+*p
+  ),s+*p
+  ,i) +* Start-At(IC Comput(ProgramPart(s+*p),s+*p,i) +k,SCM+FSA) +* s|dom
+ProgramPart p +*
   ProgramPart (Relocated(p,k));
 
 theorem :: SCMFSA_5:15
   for k being Element of NAT for p being FinPartState of SCM+FSA
 st IC SCM+FSA in dom p for s being State of SCM+FSA st p c= s & Relocated(p,k)
-  is autonomic holds for i being Element of NAT holds Computation(s,i) =
-Computation(s+*Relocated(p,k),i) +* Start-At (IC Computation(s+*Relocated(p,k),
-  i) -' k) +* s|dom ProgramPart Relocated(p,k) +* ProgramPart (p);
+  is autonomic holds for i being Element of NAT holds Comput(ProgramPart(s),s,i
+) =
+Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) +* Start-At (IC
+Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),
+  i) -'k,SCM+FSA) +* s|dom ProgramPart Relocated(p,k) +* ProgramPart (p);
 
 theorem :: SCMFSA_5:16
   for p being FinPartState of SCM+FSA st IC SCM+FSA in dom p for k

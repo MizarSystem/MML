@@ -33,8 +33,8 @@
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="ORDERS_1"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="ORDERS_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="WELLORD1"/>
@@ -59,7 +59,7 @@
 <Func kind="K" nr="85"/>
 </Func>
 </Adjective>
-<Adjective nr="127"/>
+<Adjective nr="132"/>
 <Adjective nr="150"/>
 <Adjective nr="153"/>
 <Adjective nr="157"/>

@@ -28,7 +28,7 @@
 </Signature>
 <FCluster aid="COMPTRIG" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="208"/>
+<Func kind="K" nr="207"/>
 <Cluster>
 <Adjective nr="23"/>
 <Adjective nr="26" value="false"/>

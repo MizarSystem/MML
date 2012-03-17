@@ -11,19 +11,19 @@ environ
       AMISTD_2, RELAT_1, TARSKI, XXREAL_0, ARYTM_3, FSM_1, XBOOLE_0, FUNCT_4,
       NUMBERS, SCMFSA6C, UNIALG_2, CIRCUIT2, FUNCT_1, MSUALG_1, SUBSET_1,
       NAT_1, FUNCT_7, STRUCT_0, FINSET_1, SCMFSA_1, ZFMISC_1, SCMNORM, PRE_FF,
-      ARYTM_1, SFMASTR1;
+      ARYTM_1, SFMASTR1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
-      XCMPLX_0, FINSET_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_7,
-      PRE_FF, CARD_3, STRUCT_0, AMI_1, SCMNORM, SCMFSA_1, SCMFSA_2, SCMFSA_4,
-      SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A,
-      SCMFSA8B, SCMFSA8C, XXREAL_0, SEQ_4;
+      XCMPLX_0, FINSET_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
+      FUNCT_7, PRE_FF, CARD_3, STRUCT_0, AMI_1, SCMNORM, SCMFSA_1, SCMFSA_2,
+      SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B,
+      SCMFSA8A, SCMFSA8B, SCMFSA8C, XXREAL_0, SEQ_4;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, NAT_1, SEQ_4, PRE_FF, SCM_1,
       SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B,
       SCMFSA8C, SCMNORM, SCMFSA_4, XXREAL_2, RELSET_1, PRE_POLY, SCMFSA_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FINSET_1, NUMBERS, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3, AMI_5,
       SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8C,
-      SCMFSA_9, XXREAL_2;
+      SCMFSA_9, XXREAL_2, SCMNORM, FUNCT_4, RELAT_1, AMI_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -55,12 +55,12 @@ registration
 end;
 
 registration
-  let l be Instruction-Location of SCM+FSA;
+  let l be Element of NAT;
   cluster goto l -> good;
 end;
 
 registration
-  let a be Int-Location, l be Instruction-Location of SCM+FSA;
+  let a be Int-Location, l be Element of NAT;
   cluster a =0_goto l -> good;
   cluster a >0_goto l -> good;
 end;
@@ -135,7 +135,7 @@ reserve s, S for State of SCM+FSA,
 ::           Initialized I is halting
 
 theorem :: SFMASTR1:2
-  DataPart(I +* Start-At insloc 0) = {};
+  DataPart(I +* Start-At( 0,SCM+FSA)) = {};
 
 theorem :: SFMASTR1:3
   I is_halting_on Initialize S & I is_closed_on Initialize S & J
@@ -147,9 +147,11 @@ theorem :: SFMASTR1:4  :: SCMFSA6B:27
   is_halting_on Initialize S;
 
 theorem :: SFMASTR1:5  :: SCMFSA6B:27
-  I is_closed_on s & I +* Start-At insloc 0 c= s & ProgramPart s halts_on s
-implies for m being Element of NAT st m <= LifeSpan s holds Computation( s,m),
-  Computation((s+*(I ';' J)),m) equal_outside NAT;
+  I is_closed_on s & I +* Start-At( 0,SCM+FSA) c= s &
+  ProgramPart s halts_on s
+implies for m being Element of NAT st m <= LifeSpan s holds Comput(ProgramPart(
+s), s,m),
+  Comput(ProgramPart((s+*(I ';' J))),(s+*(I ';' J)),m) equal_outside NAT;
 
 theorem :: SFMASTR1:6
   Ig is_halting_on Initialize s & J is_halting_on IExec(Ig, s) & Ig
@@ -160,7 +162,8 @@ Initialized (Ig ';' J)) = LifeSpan (s +* Initialized Ig) + 1 + LifeSpan (Result
 theorem :: SFMASTR1:7  :: Main theorem
   Ig is_halting_on Initialize s & J is_halting_on IExec(Ig, s) & Ig
 is_closed_on Initialize s & J is_closed_on IExec(Ig, s) implies IExec(Ig ';' J,
-  s) = IExec(J, IExec(Ig, s))+*Start-At(IC IExec(J, IExec(Ig, s))+card Ig);
+  s) = IExec(J, IExec(Ig, s))+*
+  Start-At(IC IExec(J, IExec(Ig, s))+card Ig,SCM+FSA);
 
 theorem :: SFMASTR1:8
   (Ig is parahalting or Ig is_halting_on Initialize s & Ig

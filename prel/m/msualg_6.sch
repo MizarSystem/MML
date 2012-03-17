@@ -18,13 +18,13 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="REWRITE1"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="MSUALG_4"/>
 <ArticleID name="MSUALG_6"/>
 </Signature>
@@ -32,13 +32,13 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="47" value="false"/>
-<Adjective nr="56" value="false"/>
+<Adjective nr="52" value="false"/>
+<Adjective nr="61" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="71">
+<Adjective nr="76">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -62,7 +62,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="19">
-<Func kind="K" nr="207">
+<Func kind="K" nr="208">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
@@ -133,7 +133,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="19">
-<Func kind="K" nr="207">
+<Func kind="K" nr="208">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
@@ -255,7 +255,7 @@
 <Var nr="3"/>
 <Var nr="4"/>
 </Func>
-<Func kind="K" nr="186">
+<Func kind="K" nr="187">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="2"/>
@@ -285,7 +285,7 @@
 <Var nr="3"/>
 <Var nr="4"/>
 </Func>
-<Func kind="K" nr="186">
+<Func kind="K" nr="187">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="2"/>
@@ -478,13 +478,13 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="47" value="false"/>
-<Adjective nr="56" value="false"/>
+<Adjective nr="52" value="false"/>
+<Adjective nr="61" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="71">
+<Adjective nr="76">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -669,7 +669,7 @@
 <Var nr="5"/>
 <Var nr="6"/>
 </Func>
-<Func kind="K" nr="186">
+<Func kind="K" nr="187">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -697,7 +697,7 @@
 <Var nr="6"/>
 </Func>
 </Func>
-<Func kind="K" nr="186">
+<Func kind="K" nr="187">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -806,7 +806,7 @@
 <Var nr="5"/>
 <Var nr="6"/>
 </Func>
-<Func kind="K" nr="186">
+<Func kind="K" nr="187">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -834,7 +834,7 @@
 <Var nr="6"/>
 </Func>
 </Func>
-<Func kind="K" nr="186">
+<Func kind="K" nr="187">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -1086,7 +1086,7 @@
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="186">
+<Func kind="K" nr="187">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -1183,7 +1183,7 @@
 <Var nr="6"/>
 <Var nr="7"/>
 </Func>
-<Func kind="K" nr="186">
+<Func kind="K" nr="187">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -1333,7 +1333,7 @@
 <Var nr="6"/>
 <Var nr="7"/>
 </Func>
-<Func kind="K" nr="186">
+<Func kind="K" nr="187">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -1404,7 +1404,7 @@
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="186">
+<Func kind="K" nr="187">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>

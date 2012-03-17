@@ -9,16 +9,16 @@ environ
  vocabularies NUMBERS, SUBSET_1, SCMFSA_2, AMI_1, RELAT_1, AMI_3, FSM_1,
       STRUCT_0, FUNCT_4, FUNCOP_1, XBOOLE_0, TARSKI, FUNCT_1, XXREAL_0,
       ARYTM_3, AMI_2, GRAPHSP, SCMNORM, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      CARD_1, INT_1, CIRCUIT2, ARYTM_1;
+      CARD_1, INT_1, CIRCUIT2, ARYTM_1, ORDINAL1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, INT_2, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_4, INT_1, NAT_1, DOMAIN_1, STRUCT_0, FUNCOP_1,
       FINSEQ_1, FINSEQ_2, SCMNORM, AMI_1, AMI_2, AMI_3, FUNCT_7, SCMFSA_2,
       XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, NAT_1, INT_2, AMI_5, SCMFSA_2,
-      SCMNORM, RELSET_1, SCMFSA_1;
+      SCMNORM, RELSET_1, SCMFSA_1, PRE_POLY;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, NUMBERS, XREAL_0, INT_1,
       FINSEQ_1, CARD_3, STRUCT_0, AMI_1, AMI_3, AMI_5, SCMFSA_2, FINSET_1,
-      ORDINAL1, SCMNORM;
+      ORDINAL1, SCMNORM, RELSET_1, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -55,12 +55,12 @@ theorem :: SCMFSA_3:10
   preProgram of SCM+FSA holds Exec (i, s +* p) = Exec (i,s) +* p;
 
 theorem :: SCMFSA_3:11
-  for s being State of SCM+FSA, iloc being Instruction-Location of
-  SCM+FSA, a being Int-Location holds s.a = (s +* Start-At iloc).a;
+  for s being State of SCM+FSA, iloc being Element of NAT
+  , a being Int-Location holds s.a = (s +* Start-At(iloc,SCM+FSA)).a;
 
 theorem :: SCMFSA_3:12
-  for s being State of SCM+FSA, iloc being Instruction-Location of
-  SCM+FSA, a being FinSeq-Location holds s.a = (s +* Start-At iloc).a;
+  for s being State of SCM+FSA, iloc being Element of NAT
+  , a being FinSeq-Location holds s.a = (s +* Start-At(iloc,SCM+FSA)).a;
 
 begin :: Autonomic finite partial states of SCM+FSA
 
@@ -91,97 +91,140 @@ theorem :: SCMFSA_3:16
 theorem :: SCMFSA_3:17
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s
   being State of SCM+FSA st p c= s for i being Element of NAT holds IC
-  Computation(s,i) in dom ProgramPart(p);
+  Comput(ProgramPart(s),s,i) in dom ProgramPart(p);
 
 theorem :: SCMFSA_3:18
   for p being autonomic non NAT-defined FinPartState of SCM+FSA,
   s1, s2 being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT
-holds IC Computation(s1,i) = IC Computation(s2,i) & CurInstr ( Computation(s1,i
-  )) = CurInstr ( Computation(s2,i));
+holds IC Comput(ProgramPart(s1),s1,i) = IC Comput(ProgramPart(s2),s2,i) &
+ CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,i)
+)
+  = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),s2
+,i));
 
 theorem :: SCMFSA_3:19
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
 being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da, db
-  being Int-Location st CurInstr ( Computation(s1,i)) = da := db & da in dom p
-  holds Computation(s1,i).db = Computation(s2,i).db;
+  being Int-Location st
+   CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,
+i))
+   = da := db & da in dom p
+  holds Comput(ProgramPart(s1),s1,i).db = Comput(ProgramPart(s2),s2,i).db;
 
 theorem :: SCMFSA_3:20
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
 being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da, db
-being Int-Location st CurInstr ( Computation(s1,i)) = AddTo(da, db) & da in dom
-  p holds Computation(s1,i).da + Computation(s1,i).db = Computation(s2,i).da +
-  Computation(s2,i).db;
+being Int-Location st
+ CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,i)
+) = AddTo(da, db)
+  & da in dom
+  p holds Comput(ProgramPart(s1),s1,i).da + Comput(ProgramPart(s1),s1,i).db =
+Comput(ProgramPart(s2),s2,i).da +
+  Comput(ProgramPart(s2),s2,i).db;
 
 theorem :: SCMFSA_3:21
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
 being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da, db
-  being Int-Location st CurInstr ( Computation(s1,i)) = SubFrom(da, db) & da in
-dom p holds Computation(s1,i).da - Computation(s1,i).db = Computation(s2,i).da
-  - Computation(s2,i).db;
+  being Int-Location st
+   CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,
+i)) = SubFrom(da, db)
+    & da in
+dom p holds Comput(ProgramPart(s1),s1,i).da - Comput(ProgramPart(s1),s1,i).db =
+Comput(ProgramPart(s2),s2,i).da
+  - Comput(ProgramPart(s2),s2,i).db;
 
 theorem :: SCMFSA_3:22
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
 being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da, db
-  being Int-Location st CurInstr ( Computation(s1,i)) = MultBy(da, db) & da in
-dom p holds Computation(s1,i).da * Computation(s1,i).db = Computation(s2,i).da
-  * Computation(s2,i).db;
+  being Int-Location st
+   CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,
+i)) = MultBy(da, db)
+    & da in
+dom p holds Comput(ProgramPart(s1),s1,i).da * Comput(ProgramPart(s1),s1,i).db =
+Comput(ProgramPart(s2),s2,i).da
+  * Comput(ProgramPart(s2),s2,i).db;
 
 theorem :: SCMFSA_3:23
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
 being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da, db
-  being Int-Location st CurInstr ( Computation(s1,i)) = Divide(da, db) & da in
-  dom p & da <> db holds Computation(s1,i).da div Computation(s1,i).db =
-  Computation(s2,i).da div Computation(s2,i).db;
+  being Int-Location st
+   CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,
+i)) = Divide(da, db)
+    & da in
+  dom p & da <> db holds Comput(ProgramPart(s1),s1,i).da div Comput(ProgramPart
+(s1),s1,i).db =
+  Comput(ProgramPart(s2),s2,i).da div Comput(ProgramPart(s2),s2,i).db;
 
 theorem :: SCMFSA_3:24
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
 being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da, db
-  being Int-Location st CurInstr ( Computation(s1,i)) = Divide(da, db) & db in
-dom p holds Computation(s1,i).da mod Computation(s1,i).db = Computation(s2,i).
-  da mod Computation(s2,i).db;
+  being Int-Location st
+   CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,
+i)) = Divide(da, db)
+    & db in
+dom p holds Comput(ProgramPart(s1),s1,i).da mod Comput(ProgramPart(s1),s1,i).db
+= Comput(ProgramPart(s2),s2,i).
+  da mod Comput(ProgramPart(s2),s2,i).db;
 
 theorem :: SCMFSA_3:25
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
   being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da
-  being Int-Location, loc being Instruction-Location of SCM+FSA st CurInstr (
-Computation(s1,i)) = da=0_goto loc & loc <> Next (IC Computation(s1,i)) holds (
-  Computation(s1,i).da = 0 iff Computation(s2,i).da = 0);
+  being Int-Location, loc being Element of NAT st
+   CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,
+i)) = da=0_goto loc &
+    loc <> succ (IC Comput(ProgramPart(s1),s1,i)) holds (
+  Comput(ProgramPart(s1),s1,i).da = 0 iff Comput(ProgramPart(s2),s2,i).da = 0);
 
 theorem :: SCMFSA_3:26
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
   being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da
-  being Int-Location, loc being Instruction-Location of SCM+FSA st CurInstr (
-Computation(s1,i)) = da>0_goto loc & loc <> Next (IC Computation(s1,i)) holds (
-  Computation(s1,i).da > 0 iff Computation(s2,i).da > 0);
+  being Int-Location, loc being Element of NAT st
+   CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,
+i)) = da>0_goto loc &
+    loc <> succ (IC Comput(ProgramPart(s1),s1,i)) holds (
+  Comput(ProgramPart(s1),s1,i).da > 0 iff Comput(ProgramPart(s2),s2,i).da > 0);
 
 theorem :: SCMFSA_3:27
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
 being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da, db
-being Int-Location, f being FinSeq-Location st CurInstr ( Computation(s1,i)) =
+being Int-Location, f being FinSeq-Location st
+ CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,i)
+) =
   da := (f,db) & da in dom p for k1,k2 being Element of NAT st k1 = abs(
-Computation(s1,i).db) & k2 = abs( Computation(s2,i).db) holds ( Computation(s1,
-  i).f)/.k1 = ( Computation(s2,i).f)/.k2;
+Comput(ProgramPart(s1),s1,i).db) & k2 = abs( Comput(ProgramPart(s2),s2,i).db)
+holds ( Comput(ProgramPart(s1),s1,
+  i).f)/.k1 = ( Comput(ProgramPart(s2),s2,i).f)/.k2;
 
 theorem :: SCMFSA_3:28
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
 being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da, db
-being Int-Location, f being FinSeq-Location st CurInstr ( Computation(s1,i)) =
-(f,db):=da & f in dom p for k1,k2 being Element of NAT st k1 = abs( Computation
-  (s1,i).db) & k2 = abs( Computation(s2,i).db) holds Computation(s1,i).f+*(k1,
-  Computation(s1,i).da) = Computation(s2,i).f+*(k2, Computation(s2,i).da);
+being Int-Location, f being FinSeq-Location st
+ CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,i)
+) =
+(f,db):=da & f in dom p for k1,k2 being Element of NAT st k1 = abs( Comput(
+ProgramPart(s1),s1,i).db) & k2 = abs( Comput(ProgramPart(s2),s2,i).db) holds
+Comput(ProgramPart(s1),s1,i).f+*(k1,
+  Comput(ProgramPart(s1),s1,i).da) = Comput(ProgramPart(s2),s2,i).f+*(k2,
+Comput(ProgramPart(s2),s2,i).da);
 
 theorem :: SCMFSA_3:29
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
   being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da
-being Int-Location, f being FinSeq-Location st CurInstr ( Computation(s1,i)) =
-da :=len f & da in dom p holds len( Computation(s1,i).f) = len( Computation(s2,
+being Int-Location, f being FinSeq-Location st
+ CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,i)
+) =
+da :=len f & da in dom p holds len( Comput(ProgramPart(s1),s1,i).f) = len(
+Comput(ProgramPart(s2),s2,
   i).f);
 
 theorem :: SCMFSA_3:30
   for p being autonomic non NAT-defined FinPartState of SCM+FSA, s1, s2
   being State of SCM+FSA st p c= s1 & p c= s2 for i being Element of NAT, da
-being Int-Location, f being FinSeq-Location st CurInstr ( Computation(s1,i)) =
+being Int-Location, f being FinSeq-Location st
+ CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,i)
+) =
   f:=<0,...,0>da & f in dom p for k1,k2 being Element of NAT st k1 = abs(
-Computation(s1,i).da) & k2 = abs( Computation(s2,i).da) holds k1 |-> 0 = k2 |->
+Comput(ProgramPart(s1),s1,i).da) & k2 = abs( Comput(ProgramPart(s2),s2,i).da)
+holds k1 |-> 0 = k2 |->
   0;
 

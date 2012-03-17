@@ -13,14 +13,16 @@ environ
       FRECHET, CARD_3, AMISTD_2, AMISTD_3;
  notations TARSKI, XBOOLE_0, SETFAM_1, ZFMISC_1, SUBSET_1, FINSET_1, CARD_1,
       NUMBERS, ORDINAL1, ORDINAL2, MEMBERED, SEQ_4, XXREAL_0, NAT_1, RELAT_1,
-      FUNCT_1, FUNCT_2, BINOP_1, WELLORD1, WELLORD2, FUNCOP_1, FINSEQ_1,
-      FINSEQ_2, TREES_1, TREES_2, STRUCT_0, AMI_1, AMISTD_1, AMISTD_2;
+      FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, WELLORD1, WELLORD2, FUNCOP_1,
+      FINSEQ_1, FINSEQ_2, TREES_1, TREES_2, STRUCT_0, AMI_1, AMISTD_1,
+      AMISTD_2;
  constructors WELLORD1, PARTFUN1, WELLORD2, BINOP_1, ORDINAL2, XXREAL_0, NAT_1,
       SEQM_3, ORDERS_1, FINSEQ_2, SEQ_4, REALSET1, AMISTD_2, XXREAL_2,
-      VALUED_0, SEQ_2, RELSET_1;
+      VALUED_0, SEQ_2, RELSET_1, TREES_2;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCOP_1, FINSET_1, XXREAL_0,
       NAT_1, CARD_1, MEMBERED, FINSEQ_1, TREES_2, FINSEQ_6, AMI_1, AMISTD_1,
-      SETFAM_1, CARD_3, VALUED_0, XXREAL_2, RELSET_1, FUNCT_1, FINSEQ_2;
+      SETFAM_1, CARD_3, VALUED_0, XXREAL_2, RELSET_1, FUNCT_1, FINSEQ_2,
+      SUBSET_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
 
 
@@ -31,8 +33,7 @@ begin
 reserve x, y, z, X for set,
   m, n for natural number,
   O for Ordinal,
-  R, S for
-  Relation;
+  R, S for Relation;
 
 theorem :: AMISTD_3:1
   dom R = {x} & rng R = {y} implies R = x .--> y;
@@ -168,26 +169,26 @@ theorem :: AMISTD_3:20
 :: First Location
 
 reserve
-  N for with_non-empty_elements set,
-  S for
+  N for with_non-empty_elements non empty set,
+  S for steady-programmed
   standard (IC-Ins-separated definite (non empty stored-program AMI-Struct over
   N)),
-  L, l1 for Instruction-Location of S,
+  L, l1 for Element of NAT,
   J for Instruction of S,
   F for
-  IL-Subset of S;
+  Subset of NAT;
 
 definition
-  let N be with_non-empty_elements set;
+  let N be with_non-empty_elements non empty set;
   let S be standard (IC-Ins-separated definite (non empty stored-program
   AMI-Struct over N));
   let F be FinPartState of S such that
  F is non empty & F is NAT-defined;
-  func FirstLoc F -> Instruction-Location of S means
+  func FirstLoc F -> Element of NAT means
 :: AMISTD_3:def 2
 
-  ex M being non
-empty Subset of NAT st M = { locnum l where l is Instruction-Location of S : l
+  ex M being non empty Subset of NAT st M
+ = { locnum(l,S) where l is Element of NAT : l
   in dom F } & it = il.(S, min M);
 end;
 
@@ -197,11 +198,11 @@ theorem :: AMISTD_3:21
 
 theorem :: AMISTD_3:22
   for F, G being non empty NAT-defined FinPartState of S st F c= G holds
-  FirstLoc G <= FirstLoc F;
+  FirstLoc G <= FirstLoc F, S;
 
 theorem :: AMISTD_3:23
   for F being non empty NAT-defined FinPartState of S st l1 in dom
-  F holds FirstLoc F <= l1;
+  F holds FirstLoc F <= l1, S;
 
 theorem :: AMISTD_3:24
   for F being lower non empty NAT-defined FinPartState of S holds
@@ -210,86 +211,95 @@ theorem :: AMISTD_3:24
 :: LocNums
 
 definition
-  let N be with_non-empty_elements set, S be standard (IC-Ins-separated
-definite (non empty stored-program AMI-Struct over N)), F be IL-Subset of S
+  let N be with_non-empty_elements non empty set,
+  S be standard (IC-Ins-separated
+definite (non empty stored-program AMI-Struct over N)), F be Subset of NAT
   ;
-  func LocNums F -> Subset of NAT equals
+  func LocNums(F,S) -> Subset of NAT equals
 :: AMISTD_3:def 3
-  {locnum l where l is
-  Instruction-Location of S : l in F};
+  {locnum(l,S) where l is
+  Element of NAT : l in F};
 end;
 
 theorem :: AMISTD_3:25
-  locnum l1 in LocNums F iff l1 in F;
+  locnum(l1,S) in LocNums(F,S) iff l1 in F;
 
 registration
-  let N be with_non-empty_elements set, S be standard (IC-Ins-separated
+  let N be with_non-empty_elements non empty set,
+  S be standard (IC-Ins-separated
   definite (non empty stored-program AMI-Struct over N)), F be empty
-  IL-Subset of S;
-  cluster LocNums F -> empty;
+  Subset of NAT;
+  cluster LocNums(F,S) -> empty;
 end;
 
 registration
-  let N be with_non-empty_elements set, S be standard (IC-Ins-separated
-  definite (non empty stored-program AMI-Struct over N)), F be non empty
-  IL-Subset of S;
-  cluster LocNums F -> non empty;
+  let N be with_non-empty_elements non empty set,
+  S be standard (IC-Ins-separated
+  definite steady-programmed
+   (non empty stored-program AMI-Struct over N)), F be non empty
+  Subset of NAT;
+  cluster LocNums(F,S) -> non empty;
 end;
 
 theorem :: AMISTD_3:26
-  F = {il.(S,n)} implies LocNums F = {n};
+  F = {il.(S,n)} implies LocNums(F,S) = {n};
 
 theorem :: AMISTD_3:27
-  F, LocNums F are_equipotent;
+  F, LocNums(F,S) are_equipotent;
 
 theorem :: AMISTD_3:28
-  card F c= order_type_of RelIncl LocNums F;
+  card F c= order_type_of RelIncl LocNums(F,S);
 
 theorem :: AMISTD_3:29
-  S is realistic & J is halting implies LocNums NIC(J,L) = {locnum
-  L};
+  S is realistic & J is halting implies LocNums(NIC(J,L),S)
+   = {locnum(L,S)};
 
 theorem :: AMISTD_3:30
-  S is realistic & J is sequential implies LocNums NIC(J,L) = {locnum
-  NextLoc L};
-  let N be with_non-empty_elements set, S be standard (IC-Ins-separated
-definite (non empty stored-program AMI-Struct over N)), M be IL-Subset of S
+  S is realistic & J is sequential implies LocNums(NIC(J,L),S) =
+   {locnum(NextLoc(L,S),S)};
+  let N be with_non-empty_elements non empty set,
+  S be standard (IC-Ins-separated
+definite (non empty stored-program AMI-Struct over N)), M be Subset of NAT
   ;
-  func LocSeq M -> T-Sequence of NAT means
+  func LocSeq(M,S) -> T-Sequence of NAT means
 :: AMISTD_3:def 4
 
   dom it = card M & for m
 being set st m in card M holds it.m = il.(S, canonical_isomorphism_of (RelIncl
-  order_type_of RelIncl LocNums M, RelIncl LocNums M).m);
+  order_type_of RelIncl LocNums(M,S), RelIncl LocNums(M,S)).m);
 end;
 
 theorem :: AMISTD_3:31
-  F = {il.(S,n)} implies LocSeq F = 0 .--> il.(S,n);
+  F = {il.(S,n)} implies LocSeq(F,S) = 0 .--> il.(S,n);
 
 registration
-  let N be with_non-empty_elements set, S be standard (IC-Ins-separated
-definite (non empty stored-program AMI-Struct over N)), M be IL-Subset of S
+  let N be with_non-empty_elements non empty set,
+  S be standard (IC-Ins-separated
+definite steady-programmed
+ (non empty stored-program AMI-Struct over N)), M be Subset of NAT
   ;
-  cluster LocSeq M -> one-to-one;
+  cluster LocSeq(M,S) -> one-to-one;
 end;
 
 :: Tree of Execution
 
 definition
-  let N be with_non-empty_elements set, S be standard (IC-Ins-separated
+  let N be with_non-empty_elements non empty set,
+  S be standard (IC-Ins-separated
   definite (non empty stored-program AMI-Struct over N)), M be NAT-defined
   FinPartState of S;
-  func ExecTree(M) -> IL-DecoratedTree of S means
+  func ExecTree(M) -> DecoratedTree of NAT means
 :: AMISTD_3:def 5
 
   it.{} = FirstLoc(M) &
   for t being Element of dom it holds succ t = { t^<*k*> where k is Element of
 NAT: k in card NIC(pi(M,it.t),it.t) } & for m being Element of NAT st m in card
-  NIC(pi(M,it.t),it.t) holds it.(t^<*m*>) = (LocSeq NIC(pi(M,it.t),it.t)).m;
+  NIC(pi(M,it.t),it.t) holds it.(t^<*m*>) = (LocSeq(NIC(pi(M,it.t),it.t),S)).m;
 end;
 
 theorem :: AMISTD_3:32
-  for S being standard halting realistic (IC-Ins-separated definite (non
+  for S being standard halting realistic (IC-Ins-separated definite
+   steady-programmed (non
   empty stored-program AMI-Struct over N)) holds ExecTree Stop S =
   TrivialInfiniteTree --> il.(S,0);
 

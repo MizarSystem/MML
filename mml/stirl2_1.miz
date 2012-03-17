@@ -8,29 +8,28 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, XBOOLE_0, XXREAL_0, NAT_1, ORDINAL1, CARD_1,
       TARSKI, ARYTM_3, ARYTM_1, FUNCT_1, RELAT_1, FUNCT_2, INT_1, FINSET_1,
-      AFINSQ_1, BINOP_1, SETWISEO, FINSEQ_1, FINSOP_1, FUNCOP_1, ORDINAL4,
-      CARD_3, BINOP_2, ZFMISC_1, NEWTON, REALSET1, STIRL2_1;
+      AFINSQ_1, BINOP_1, FINSEQ_1, FINSOP_1, CARD_3, BINOP_2, ZFMISC_1, 
+      NEWTON, REALSET1, STIRL2_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
-      FUNCT_1, RELSET_1, ORDINAL1, SEQ_4, PARTFUN1, FINSET_1, ORDINAL4,
-      AFINSQ_1, XCMPLX_0, XXREAL_0, FUNCT_2, NAT_1, INT_1, BINOP_1, BINOP_2,
-      NEWTON, SETWISEO, DOMAIN_1, FUNCOP_1, RECDEF_1;
- constructors PARTFUN1, WELLORD2, BINOP_1, DOMAIN_1, SETWISEO, REAL_1,
-      SQUARE_1, NAT_1, BINOP_2, SEQ_4, NEWTON, AFINSQ_1, RECDEF_1, XXREAL_2,
-      RELSET_1, ORDINAL4;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
-      FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED, AFINSQ_1,
-      CARD_1, VALUED_0, XXREAL_2, RELSET_1;
+      FUNCT_1, RELSET_1, ORDINAL1, SEQ_4, PARTFUN1, FINSET_1, AFINSQ_1, 
+      AFINSQ_2, XXREAL_0, FUNCT_2, NAT_1, INT_1, BINOP_1, BINOP_2, NEWTON, 
+      DOMAIN_1;
+ constructors  WELLORD2, DOMAIN_1, SETWISEO, REAL_1, BINOP_2, SEQ_4, NEWTON, 
+      AFINSQ_1, AFINSQ_2, RELSET_1, PARTFUN3, SEQ_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, 
+ FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED, AFINSQ_1,
+      CARD_1, VALUED_0, XXREAL_2, RELSET_1,AFINSQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, FUNCT_1;
  theorems AFINSQ_1, TARSKI, FUNCT_1, XBOOLE_0, ZFMISC_1, RELAT_1, XBOOLE_1,
       NAT_1, FUNCT_2, AXIOMS, XCMPLX_1, CARD_2, INT_1, ORDINAL1, WELLORD2,
-      FRAENKEL, SUBSET_1, ENUMSET1, CARD_1, BINOP_1, BINOP_2, NEWTON, WSIERP_1,
-      SETWISEO, FUNCOP_1, XREAL_1, XXREAL_0, XXREAL_2;
+      FRAENKEL, SUBSET_1, ENUMSET1, CARD_1, BINOP_2, NEWTON, WSIERP_1,
+      XREAL_1, XXREAL_0, XXREAL_2,AFINSQ_2;
  schemes FUNCT_2, NAT_1, INT_1;
 
 begin
 
-reserve k, l, m, n, i, j for Element of NAT,
+reserve k, l, m, n, i, j for Nat,
   K, N for non empty Subset of NAT,
   Ke, Ne, Me for Subset of NAT,
   X,Y for set;
@@ -118,16 +117,20 @@ A5:   Ne\Ke c=Ne by XBOOLE_1:36;
 end;
 
 theorem Th5:
+for n be Element of NAT holds
   min* {n} = n & min {n} = n
 proof
+ let n be Element of NAT;
 A1: min* {n} in {n} by NAT_1:def 1;
   min*{n}=min {n} by Th1;
   hence thesis by A1,TARSKI:def 1;
 end;
 
 theorem Th6:
+for n,k be Element of NAT holds
   min* {n,k} = min(n,k) & min {n,k} = min(n,k)
 proof
+let n,k be Element of NAT;
 A1: min {n} = n by Th5;
   {n,k}={n}\/{k} by ENUMSET1:41;
   then
@@ -137,8 +140,10 @@ A2: min {n,k} = min(min {n},min {k}) by Th2;
 end;
 
 theorem
+for n,k,l be Element of NAT holds
   min* {n,k,l} = min(n,min(k,l))
 proof
+let n,k,l be Element of NAT;
 A1: min {n,k,l}=min* {n,k,l} by Th1;
   {n,k,l}={n}\/{k,l} by ENUMSET1:42;
   then
@@ -153,11 +158,11 @@ proof
   now
     let x be set;
     assume
-    x in {l: l<n};
-    then ex l st x=l & l<n;
+    x in {l where l is Element of NAT: l<n};
+    then ex l be Element of NAT st x=l & l<n;
     hence x in NAT;
   end;
-  then {l:l<n} c= NAT by TARSKI:def 3;
+  then {l where l is Element of NAT:l<n} c= NAT by TARSKI:def 3;
   hence thesis by AXIOMS:30;
 end;
 
@@ -174,8 +179,8 @@ A1: min* N in N by NAT_1:def 1;
   assume
   N c= n;
   then min*N in n by A1;
-  then min* N in {l:l<n} by AXIOMS:30;
-  then ex l st min* N = l & l<n;
+  then min* N in {l where l is Element of NAT:l<n} by AXIOMS:30;
+  then ex l be Element of NAT st min* N = l & l<n;
   hence thesis by NAT_1:20;
 end;
 
@@ -184,9 +189,9 @@ theorem Th10:
 proof
   assume
   k in n;
-  then k in {l:l<n} by AXIOMS:30;
+  then k in {l where l is Element of NAT:l<n} by AXIOMS:30;
   then
-A1: ex l st k=l & l<n;
+A1: ex l be Element of NAT st k=l & l<n;
   then
 A2: n-1 is Element of NAT by NAT_1:20;
   k<(n-1)+1 by A1;
@@ -204,7 +209,7 @@ proof
     end;
     suppose
       0<n;
-      then 0 in {l:l<n};
+      then 0 in {l where l is Element of NAT:l<n};
       then
 A1:   0 in n by AXIOMS:30;
       n is Subset of NAT by Th8;
@@ -233,11 +238,11 @@ A3: min* N >=n-1;
   now
     let k be set such that
 A4: k in N;
-    reconsider k'=k as Element of NAT by A4;
-    min* N <=k' by A4,NAT_1:def 1;
+    reconsider k9=k as Element of NAT by A4;
+    min* N <=k9 by A4,NAT_1:def 1;
     then
-A5: n-1 <=k' by A3,XXREAL_0:2;
-    k' <= n-1 by A1,A4,Th10;
+A5: n-1 <=k9 by A3,XXREAL_0:2;
+    k9 <= n-1 by A1,A4,Th10;
     then n-1 = k by A5,XXREAL_0:1;
     hence k in {n-1} by TARSKI:def 1;
   end;
@@ -380,7 +385,7 @@ theorem Th18:
   f is onto "increasing implies for m st m < k holds m <= min* f"{
   m}
 proof
-  defpred M[Element of NAT] means $1<k implies $1<=min* f"{$1};
+  defpred M[Nat] means $1<k implies $1<=min* f"{$1};
   assume that
 A1: f is onto "increasing;
 A2: for m st M[m] holds M[m + 1]
@@ -401,7 +406,7 @@ A7: m < m+1 by NAT_1:19;
     hence thesis by NAT_1:13;
   end;
 A8: M[0];
-  for m holds M[m] from NAT_1:sch 1(A8,A2);
+  for m holds M[m] from NAT_1:sch 2(A8,A2);
   hence thesis;
 end;
 
@@ -485,10 +490,10 @@ A4:   for x be set st x in 0 holds f.x=x;
     suppose
 A5:   n>0;
 A6:   now
-        let m' be set such that
-A7:     m' in n;
+        let m9 be set such that
+A7:     m9 in n;
         n is Subset of NAT by Th8;
-        then reconsider m=m' as Element of NAT by A7;
+        then reconsider m=m9 as Element of NAT by A7;
         m in rng f by A1,A2,A7,FUNCT_2:def 3;
         then
 A8:     ex x be set st x in dom f & f.x =m by FUNCT_1:def 5;
@@ -504,7 +509,7 @@ A10:    m <= min* f"{m} by A1,Th18;
 A11:    min* F=m by A10,XXREAL_0:1;
         min* F in F by NAT_1:def 1;
         then f.m in {m} by A11,FUNCT_1:def 13;
-        hence f.m'=m' by TARSKI:def 1;
+        hence f.m9=m9 by TARSKI:def 1;
       end;
       dom f = n by A2,A5,FUNCT_2:def 1;
       hence thesis by A6,FUNCT_1:34;
@@ -527,22 +532,22 @@ A6: m in rng f and
 A7: l<m;
 A8: ex x be set st f"{l} = {x} by A1,A5,FUNCT_1:144;
 A9: l in {l} by TARSKI:def 1;
-    consider l' be set such that
-A10: l' in dom f and
-A11: f.l'=l by A5,FUNCT_1:def 5;
-    l = l' by A1,A10,A11,FUNCT_1:35;
+    consider l9 be set such that
+A10: l9 in dom f and
+A11: f.l9=l by A5,FUNCT_1:def 5;
+    l = l9 by A1,A10,A11,FUNCT_1:35;
     then l in f"{l} by A10,A11,A9,FUNCT_1:def 13;
-    then f"{l}={l} by A8,TARSKI:def 1;
+    then f"{l}={l} & l in NAT by A8,TARSKI:def 1;
     then
 A12: min* f"{l} = l by Th5;
 A13: m in {m} by TARSKI:def 1;
 A14: ex x be set st f"{m} = {x} by A1,A6,FUNCT_1:144;
-    consider m' be set such that
-A15: m' in dom f and
-A16: f.m'=m by A6,FUNCT_1:def 5;
-    m = m' by A1,A15,A16,FUNCT_1:35;
+    consider m9 be set such that
+A15: m9 in dom f and
+A16: f.m9=m by A6,FUNCT_1:def 5;
+    m = m9 by A1,A15,A16,FUNCT_1:35;
     then m in f"{m} by A15,A16,A13,FUNCT_1:def 13;
-    then f"{m}={m} by A14,TARSKI:def 1;
+    then f"{m}={m} & m in NAT by A14,TARSKI:def 1;
     hence min* f"{l} < min* f"{m} by A7,A12,Th5;
   end;
   rng f=n by A1,RELAT_1:71;
@@ -571,8 +576,6 @@ A3:   dom f = n by A2;
 A4:   dom f=n and
 A5:   rng f={0} by FUNCT_1:15;
       reconsider f as Function of n,{0} by A4,A5,FUNCT_2:3;
-A6:   for l,m st l in rng f & m in rng f & l < m holds min* f"{l} < min*
-      f"{m} by TARSKI:def 1;
       rng f c= k
       proof
         let x be set such that
@@ -581,6 +584,8 @@ A7:     x in rng f;
         hence thesis by A1,A7,NAT_1:45;
       end;
       then reconsider f as Function of n,k by FUNCT_2:8;
+A6:   for l,m st l in rng f & m in rng f & l < m holds min* f"{l} < min*
+      f"{m} by A5,TARSKI:def 1;
       f is "increasing by A1,A6,Def1;
       hence thesis;
     end;
@@ -609,7 +614,7 @@ A4:   dom f = n by A3;
     suppose
 A5:   n>0;
       then reconsider k1=k-1 as Element of NAT by A1,NAT_1:20;
-      reconsider k,n as non empty Element of NAT by A1,A5;
+      reconsider k,n as non empty Element of NAT by A1,A5,ORDINAL1:def 13;
       defpred F[Element of n,Element of k] means $2=min($1,k1);
 A6:   for x be Element of n ex y be Element of k st F[x,y]
       proof
@@ -623,10 +628,10 @@ A7:     k1<k1+1 by NAT_1:13;
       consider f be Function of n,k such that
 A8:   for m be Element of n holds F[m,f.m] from FUNCT_2:sch 3(A6);
       now
-        let m' be set such that
-A9:     m' in k;
+        let m9 be set such that
+A9:     m9 in k;
         k is Subset of NAT by Th8;
-        then reconsider m=m' as Element of NAT by A9;
+        then reconsider m=m9 as Element of NAT by A9;
 A10:    m<k1+1 by A9,NAT_1:45;
         then m <n by A2,XXREAL_0:2;
         then
@@ -636,7 +641,7 @@ A12:    m in dom f by FUNCT_2:def 1;
         m<=k1 by A10,NAT_1:13;
         then min(m,k1)=m by XXREAL_0:def 9;
         then f.m=m by A8,A11;
-        hence m' in rng f by A12,FUNCT_1:def 5;
+        hence m9 in rng f by A12,FUNCT_1:def 5;
       end;
       then k c= rng f by TARSKI:def 3;
       then k=rng f by XBOOLE_0:def 10;
@@ -670,18 +675,18 @@ A21:    f"{m} is non empty by A19,A18,FUNCT_1:def 13;
 A22:        m<k1;
             now
 A23:          n is Subset of NAT by Th8;
-              let l' be set such that
-A24:          l' in f"{m};
-              l' in dom f by A24,FUNCT_1:def 13;
-              then l' in n;
-              then reconsider l=l' as Element of NAT by A23;
+              let l9 be set such that
+A24:          l9 in f"{m};
+              l9 in dom f by A24,FUNCT_1:def 13;
+              then l9 in n;
+              then reconsider l=l9 as Element of NAT by A23;
               f.l in {m} by A24,FUNCT_1:def 13;
               then
 A25:          f.l=m by TARSKI:def 1;
               l in dom f by A24,FUNCT_1:def 13;
               then min(l,k1)=m by A8,A25;
               then l=m by A22,XXREAL_0:15;
-              hence l' in {m} by TARSKI:def 1;
+              hence l9 in {m} by TARSKI:def 1;
             end;
             then
 A26:        f"{m} c= {m} by TARSKI:def 3;
@@ -760,20 +765,19 @@ A4:   F c= Funcs(n(),k())
 end;
 
 theorem Th24:
-  for n,k be Nat holds {f where f is Function of n,k:f is onto
-  "increasing} is finite
+  for n,k holds {f where f is Function of n,k:f is onto "increasing} is finite
 proof
-  let n,k be Nat;
+  let n,k;
   defpred P[Function of n,k] means $1 is onto "increasing;
   {f where f is Function of n,k:P[f]} is finite from Sch1;
   hence thesis;
 end;
 
 theorem Th25:
-  for n,k being Nat holds card {f where f is Function of n,k:f is
-  onto "increasing} is Element of NAT
+  for n,k holds card {f where f is Function of n,k:f is  onto "increasing} 
+    is Element of NAT
 proof
-  let n,k be Nat;
+  let n,k;
   set F= {f where f is Function of n,k:f is onto "increasing};
   consider m being Nat such that
 A1: F,m are_equipotent by Th24,CARD_1:74;
@@ -786,8 +790,7 @@ end;
 definition
   let n,k be Nat;
   func n block k -> Element of NAT equals
-  card {f where f is Function of n,k:f
-  is onto "increasing};
+  card {f where f is Function of n,k:f is onto "increasing};
   coherence by Th25;
 end;
 
@@ -1026,18 +1029,18 @@ proof
   set F2={f where f is Function of X1(),Y1(): P[f,X1(),Y1()]& rng (f|X()) c=Y(
   )& for x st x in X1()\X() holds f.x=F(x)};
   set F1={f where f is Function of X(),Y(): P[f,X(),Y()]};
-A5: for f' be set st f' in F1 ex g' be set st g' in F2 & FF[f',g']
+A5: for f9 be set st f9 in F1 ex g9 be set st g9 in F2 & FF[f9,g9]
   proof
-    let f' be set;
+    let f9 be set;
     assume
-    f' in F1;
+    f9 in F1;
     then consider f be Function of X(),Y() such that
-A6: f=f' and
+A6: f=f9 and
 A7: P[f,X(),Y()];
     consider h be Function of X1(),Y1() such that
 A8: h|X() = f & for x st x in X1()\X() holds h.x=F(x) from Sch2(A1,A2
     , A3);
-A9: FF[f',h] by A6,A8;
+A9: FF[f9,h] by A6,A8;
 A10: rng f c= Y();
     P[h,X1(),Y1()] by A4,A7,A8;
     then h in F2 by A8,A10;
@@ -1344,14 +1347,13 @@ A4:   f.n>k;
     end;
     suppose
 A5:   f.n<k;
-A6:   f.n in k+1;
 A7:   min* f"{k} <=(n+1)-1 by Th16;
 A8:   rng f = k+1 by A1,FUNCT_2:def 3;
       k<k+1 by NAT_1:13;
       then
 A9:   k in rng f by A8,NAT_1:45;
-      k+1 is Subset of NAT by Th8;
-      then min* f"{f.n} < min* f"{k} by A1,A5,A8,A6,A9,Def1;
+       min* f"{f.n} < min* f"{k} & k in NAT & n in NAT
+  by A1,A5,A8,A9,Def1,ORDINAL1:def 13;
       hence contradiction by A2,A7,Th5;
     end;
   end;
@@ -1397,9 +1399,9 @@ A9: x in dom f and
 A10: f.x=k1 by A8,FUNCT_1:def 5;
 A11: dom f = n by A8,FUNCT_2:def 1;
     x in n by A9;
-    then reconsider x'=x as Element of NAT by A7;
-A12: x' <n by A9,NAT_1:45;
-A13: f.x'=g.x' by A2,A9,FUNCT_1:70;
+    then reconsider x9=x as Element of NAT by A7;
+A12: x9 <n by A9,NAT_1:45;
+A13: f.x9=g.x9 by A2,A9,FUNCT_1:70;
 A14: dom g =n+m by A8,FUNCT_2:def 1;
     n <= n+m by NAT_1:11;
     then
@@ -1415,8 +1417,8 @@ A18:  n1 in n by A11,A17,FUNCT_1:def 13;
     end;
     k1 in {k1} by TARSKI:def 1;
     then
-A19: x' in g"{k1} by A9,A10,A11,A14,A15,A13,FUNCT_1:def 13;
-    then min* g"{k1} <= x' by NAT_1:def 1;
+A19: x9 in g"{k1} by A9,A10,A11,A14,A15,A13,FUNCT_1:def 13;
+    then min* g"{k1} <= x9 by NAT_1:def 1;
     then min* g"{k1} < n by A12,XXREAL_0:2;
     then
 A20: min* g"{k1} in dom f by A11,NAT_1:45;
@@ -1426,11 +1428,11 @@ A20: min* g"{k1} in dom f by A11,NAT_1:45;
     then min* g"{k1} in f"{k1} by A20,FUNCT_1:def 13;
     hence thesis by A9,A10,A11,A14,A15,A13,A16,FUNCT_1:def 5,NAT_1:def 1;
   end;
-  then
-A21: j in rng g by A4;
-A22: min* f"{j}=min* g"{ j} by A4,A6;
-A23: min* f"{i}=min* g"{i} by A3,A6;
-  i in rng g by A3,A6;
+D:  i in NAT & j in NAT by ORDINAL1:def 13;
+A21: j in rng g by A4,A6,D;
+A22: min* f"{j}=min* g"{ j} by A4,A6,D;
+A23: min* f"{i}=min* g"{i} by A3,A6,D;
+  i in rng g by A3,A6,D;
   hence thesis by A1,A5,A21,A23,A22,Def1;
 end;
 
@@ -1482,7 +1484,8 @@ A15:      f.n=k by A1,A2,Th34;
 A16:      i in dom f/\n by A8,RELAT_1:90;
           then i in dom f by XBOOLE_0:def 4;
           then i in f"{f.n} by A13,A14,A15,FUNCT_1:def 13;
-          then i >= min* f"{f.n} by NAT_1:def 1;
+          then i >= min* f"{f.n} & i in NAT & n in NAT
+            by NAT_1:def 1,ORDINAL1:def 13;
           then
 A17:      i >= n by A2,Th5;
           i in n by A16,XBOOLE_0:def 4;
@@ -1506,16 +1509,16 @@ A20:      n=dom f /\n by A19,XBOOLE_1:28;
           let k1 be set such that
 A21:      k1 in k;
           k is Subset of NAT by Th8;
-          then reconsider k'=k1 as Element of NAT by A21;
-          k'<k by A21,NAT_1:45;
-          then k' < k+1 by NAT_1:13;
+          then reconsider k9=k1 as Element of NAT by A21;
+          k9<k by A21,NAT_1:45;
+          then k9 < k+1 by NAT_1:13;
           then
-A22:      k' in k+1 by NAT_1:45;
+A22:      k9 in k+1 by NAT_1:45;
 A23:      dom f=n+1 by FUNCT_2:def 1;
           rng f = k+1 by A1,FUNCT_2:def 3;
           then consider n1 be set such that
 A24:      n1 in dom f and
-A25:      f.n1=k' by A22,FUNCT_1:def 5;
+A25:      f.n1=k9 by A22,FUNCT_1:def 5;
           n+1 is Subset of NAT by Th8;
           then reconsider n1 as Element of NAT by A24,A23;
           n1<n+1 by A24,NAT_1:45;
@@ -1569,13 +1572,7 @@ A3: f|n =g;
     end;
     suppose
 A4:   k>0;
-      n<n+1 by NAT_1:13;
-      then
-A5:   n in n+1 by NAT_1:45;
 A6:   rng f = k by A1,FUNCT_2:def 3;
-      dom f=n+1 by A4,FUNCT_2:def 1;
-      then
-A7:   f.n in rng f by A5,FUNCT_1:def 5;
       now
           k=k+0;
           then
@@ -1744,7 +1741,7 @@ A40:  n1<=n by NAT_1:13;
 A41:      n1<n;
           g.n1 in {k1} by A39,FUNCT_1:def 13;
           then
-A42:      f.n1 in {k1} by A3,A39,A41;
+A42:      f.n1 in {k1} by A3,A41;
           n1 in dom f by A37,A41,NAT_1:45;
           then n1 in f"{k1} by A42,FUNCT_1:def 13;
           hence min* f"{k1}<=n1 by NAT_1:def 1;
@@ -1778,13 +1775,14 @@ A48: not l in rng f;
     then l in k by NAT_1:45;
     hence thesis by A1,A48,FUNCT_2:def 3;
   end;
+F:i in NAT & j in NAT by ORDINAL1:def 13;
   now
     per cases;
     suppose
 A49:  i in rng f & j in rng f;
       then
-A50:  min* g"{j}=min* f"{j} by A26;
-      min* g"{i}=min* f"{i} by A26,A49;
+A50:  min* g"{j}=min* f"{j} by A26,F;
+      min* g"{i}=min* f"{i} by A26,A49,F;
       hence thesis by A1,A46,A49,A50,Def1;
     end;
     suppose
@@ -1793,7 +1791,7 @@ A51:  i in rng f & not j in rng f;
 A52:  n<>0;
       then min* f"{i} <= n-1 by Th16;
       then
-A53:  min* g"{i} <=n-1 by A26,A51;
+A53:  min* g"{i} <=n-1 by A26,A51,F;
       n-1 is Element of NAT by A52,NAT_1:20;
       then
 A54:  (n-1)<(n-1)+1 by NAT_1:13;
@@ -1826,10 +1824,10 @@ A2: f=g|n and
 A3: g.n = k;
   k+1 c= rng g
   proof
-    let x' be set such that
-A4: x' in k+1;
+    let x9 be set such that
+A4: x9 in k+1;
     k+1 is Subset of NAT by Th8;
-    then reconsider x=x' as Element of NAT by A4;
+    then reconsider x=x9 as Element of NAT by A4;
     x<k+1 by A4,NAT_1:45;
     then
 A5: x<=k by NAT_1:13;
@@ -1917,10 +1915,10 @@ A7: n c= n+1 by NAT_1:40;
     n=0 iff k=0 by A1,Def1;
     then
 A8: dom f = n by FUNCT_2:def 1;
-    let x' be set such that
-A9: x' in k;
+    let x9 be set such that
+A9: x9 in k;
     k is Subset of NAT by Th8;
-    then reconsider x=x' as Element of NAT by A9;
+    then reconsider x=x9 as Element of NAT by A9;
     rng f=k by A1,FUNCT_2:def 3;
     then consider y be set such that
 A10: y in dom f and
@@ -1999,9 +1997,9 @@ A9:   not n in n;
 A10:  for f be Function of n\/{n},k\/{k} st f.n=k holds P[f,n\/{n},k\/{k}
       ] iff P[f|n,n,k]
       proof
-        let f' be Function of n\/{n},k\/{k} such that
-A11:    f'.n=k;
-        thus P[f',n\/{n},k\/{k}] implies P[f'|n,n,k]
+        let f9 be Function of n\/{n},k\/{k} such that
+A11:    f9.n=k;
+        thus P[f9,n\/{n},k\/{k}] implies P[f9|n,n,k]
         proof
           n<=n+1 by NAT_1:11;
           then
@@ -2009,9 +2007,9 @@ A12:      n c=n+1 by NAT_1:40;
 A13:      n+1=n\/{n} by AFINSQ_1:4;
 A14:      k+1=k\/{k} by AFINSQ_1:4;
           assume
-          P[f',n\/{n},k\/{k}];
+          P[f9,n\/{n},k\/{k}];
           then consider f be Function of n+1,k+1 such that
-A15:      f=f' and
+A15:      f=f9 and
 A16:      f is onto "increasing and
 A17:      n < n+1 implies f"{f.n}={n} by A13,A14;
 A18:      rng (f|n) c= k by A16,A17,Th37,NAT_1:13;
@@ -2026,14 +2024,14 @@ A21:      j=k;
           fi is onto "increasing by A16,A17,A20,A21,Th37,NAT_1:13;
           hence thesis by A15,A20;
         end;
-        thus P[f'|n,n,k] implies P[f',n\/{n},k\/{k}]
+        thus P[f9|n,n,k] implies P[f9,n\/{n},k\/{k}]
         proof
           n\/{n}=n+1 by AFINSQ_1:4;
-          then reconsider f=f' as Function of n+1,k+1 by AFINSQ_1:4;
+          then reconsider f=f9 as Function of n+1,k+1 by AFINSQ_1:4;
           assume
-          P[f'|n,n,k];
+          P[f9|n,n,k];
           then
-A22:      ex fn be Function of n,k st fn=f'|n & fn is onto "increasing
+A22:      ex fn be Function of n,k st fn=f9|n & fn is onto "increasing
           &( n < n implies fn"{fn.n}={n});
           let i,j such that
 A23:      i=n\/{n} and
@@ -2107,8 +2105,8 @@ A46:    P[f,n\/{n},k\/{k}] and
 A47:    k+1=k\/{k} by AFINSQ_1:4;
         n+1=n\/{n} by AFINSQ_1:4;
         then
-        ex f' be Function of n+1,k+1 st f=f' & f' is onto "increasing & (
-        n < n+1 implies f'"{f'.n}={n}) by A46,A47;
+        ex f9 be Function of n+1,k+1 st f=f9 & f9 is onto "increasing & (
+        n < n+1 implies f9"{f9.n}={n}) by A46,A47;
         hence thesis by A45,NAT_1:13;
       end;
       then F1=FF1 by A31,XBOOLE_0:def 10;
@@ -2145,19 +2143,19 @@ A3:   not n in n;
 A4:   for f be Function of n\/{n},k\/{l} st f.n=l holds P[f,n\/{n},k\/{l}]
       iff P[f|n,n,k]
       proof
-        let f' be Function of n\/{n},k\/{l} such that
-A5:     f'.n=l;
-        thus P[f',n\/{n},k\/{l}] implies P[f'|n,n,k]
+        let f9 be Function of n\/{n},k\/{l} such that
+A5:     f9.n=l;
+        thus P[f9,n\/{n},k\/{l}] implies P[f9|n,n,k]
         proof
           n<=n+1 by NAT_1:13;
           then
 A6:       n c=n+1 by NAT_1:40;
           assume
-A7:       P[f',n\/{n},k\/{l}];
+A7:       P[f9,n\/{n},k\/{l}];
 A8:       n+1=n\/{n} by AFINSQ_1:4;
           k=k\/{l} by A1,Lm1;
           then consider f be Function of n+1,k such that
-A9:       f=f' and
+A9:       f=f9 and
 A10:      f is onto "increasing and
 A11:      n < n+1 implies f"{f.n}<>{n} by A7,A8;
 A12:      dom (f|n)=dom f /\ n by RELAT_1:90;
@@ -2172,14 +2170,14 @@ A15:      j=k;
           fi is onto "increasing by A10,A11,A14,A15,Th38,NAT_1:13;
           hence thesis by A9,A14;
         end;
-        thus P[f'|n,n,k] implies P[f',n\/{n},k\/{l}]
+        thus P[f9|n,n,k] implies P[f9,n\/{n},k\/{l}]
         proof
           n\/{n}=n+1 by AFINSQ_1:4;
-          then reconsider f=f' as Function of n+1,k by A1,Lm1;
+          then reconsider f=f9 as Function of n+1,k by A1,Lm1;
           assume
-          P[f'|n,n,k];
+          P[f9|n,n,k];
           then
-A16:      ex fn be Function of n,k st fn=f'|n & fn is onto "increasing
+A16:      ex fn be Function of n,k st fn=f9|n & fn is onto "increasing
           &( n < n implies fn"{fn.n}<>{n});
           let i,j such that
 A17:      i=n\/{n} and
@@ -2252,8 +2250,8 @@ A41:    P[f,n\/{n},k\/{l}] and
         rng (f|n) c=k and
 A42:    f.n=l;
         k=k\/{l} by A1,Lm1;
-        then ex f' be Function of n+1,k st f=f' & f' is onto "increasing & (n
-        < n+1 implies f'"{f'.n}<>{n}) by A41,A39;
+        then ex f9 be Function of n+1,k st f=f9 & f9 is onto "increasing & (n
+        < n+1 implies f9"{f9.n}<>{n}) by A41,A39;
         hence thesis by A40,A42,NAT_1:13;
       end;
       then F1=FF1 by A25,XBOOLE_0:def 10;
@@ -2265,608 +2263,21 @@ end;
 
 reserve D for non empty set,
   F,G for XFinSequence of D,
-  Fn for XFinSequence of
-  NAT,
+  Fn for XFinSequence of NAT,
   b for BinOp of D,
   d,d1,d2 for Element of D;
 
 definition
-  let D,F,b;
-  assume
-A1: b is having_a_unity or len F >= 1;
-  func b "**" F -> Element of D means
-  :Def3:
-  it = the_unity_wrt b if b is
-having_a_unity & len F = 0 otherwise ex f be Function of NAT,D st f.0 = F.0 & (
-  for n st n+1 < len F holds f.(n + 1) = b.(f.n,F.(n + 1))) & it = f.(len F-1);
-  existence
-  proof
-    now
-      per cases;
-      suppose
-        len F = 0;
-        hence thesis by A1;
-      end;
-      suppose
-A2:     len F <> 0;
-        defpred P[Element of NAT] means for F st len F = $1 & len F <> 0 ex d
-be Element of D,f be Function of NAT,D st f.0 = F.0 & (for n st n+1 < len F
-        holds f.(n + 1) = b.(f.n,F.(n + 1))) & d = f.(len F-1);
-A3:     for k st P[k] holds P[k + 1]
-        proof
-          let k such that
-A4:       P[k];
-          let F such that
-A5:       len F = k + 1 and
-          len F <> 0;
-          reconsider G = F|k as XFinSequence of D by AFINSQ_1:16;
-A6:       k<k+1 by NAT_1:13;
-          then
-A7:       len G = k by A5,AFINSQ_1:14;
-          now
-            per cases;
-            suppose
-A8:           len G = 0;
-              then 0 in dom F by A5,A7,CARD_1:87,TARSKI:def 1;
-              then
-A9:           F.0 in rng F by FUNCT_1:def 5;
-              rng F c= D by RELAT_1:def 19;
-              then reconsider f = NAT --> F.0 as Function of NAT,D by A9,
-              FUNCOP_1:57;
-              take d = f.0,f;
-              thus f.0 = F.0 by FUNCOP_1:13;
-              thus for n st n+1 < len F holds f.(n + 1) = b.(f.n,F.(n + 1)) by
-              A5,A7,A8,NAT_1:14;
-              k<k+1 by NAT_1:13;
-              hence d = f.(len F-1) by A5,A8,AFINSQ_1:14;
-            end;
-            suppose
-A10:          len G <> 0;
-              k < len F by A5,NAT_1:13;
-              then k in dom F by NAT_1:45;
-              then
-A11:          F.k in rng F by FUNCT_1:def 5;
-              rng F c= D by RELAT_1:def 19;
-              then reconsider d1 = F.k as Element of D by A11;
-A12:          0 in len G by A10,NAT_1:45;
-              consider d be Element of D,f be Function of NAT,D such that
-A13:          f.0 = G.0 and
-A14:          for n st n+1<len G holds f.(n + 1)=b.(f.n,G.(n + 1)) and
-A15:          d = f.(len G-1) by A4,A5,A6,A10,AFINSQ_1:14;
-              deffunc F(Element of NAT) = f.$1;
-              consider h be Function of NAT,D such that
-A16:          h.k = b.(d,d1) and
-A17:          for n be Element of NAT st n <> k holds h.n = F(n) from
-              FUNCT_2:sch 6;
-              take a = h.k, h;
-              h.0=f.0 by A7,A10,A17;
-              hence h.0 =F.0 by A13,A12,FUNCT_1:70;
-              thus for n st n+1 < len F holds h.(n + 1) = b.(h.n,F.(n + 1))
-              proof
-                let n;
-                assume
-                n+1 < len F;
-                then
-A18:            n+1 <= len G by A5,A7,NAT_1:13;
-                now
-                  per cases by A18,XXREAL_0:1;
-                  suppose
-A19:                n+1 = len G;
-                    then
-A20:                n<k by A7,NAT_1:13;
-                    n+1=k by A5,A6,A19,AFINSQ_1:14;
-                    hence thesis by A15,A16,A17,A19,A20;
-                  end;
-                  suppose
-A21:                n+1 < len G;
-                    then n+1 in dom G by NAT_1:45;
-                    then
-A22:                G.(n+1)=F.(n+1) by FUNCT_1:70;
-                    n<=n+1 by NAT_1:11;
-                    then
-A23:                f.n=h.n by A7,A17,A21;
-                    f.(n+1)=h.(n+1) by A7,A17,A21;
-                    hence thesis by A14,A21,A22,A23;
-                  end;
-                end;
-                hence thesis;
-              end;
-              thus a = h.(len F-1) by A5;
-            end;
-          end;
-          hence thesis;
-        end;
-A24:    P[0];
-        for k holds P[k] from NAT_1:sch 1(A24,A3);
-        hence thesis by A2;
-      end;
-    end;
-    hence thesis;
-  end;
-  uniqueness
-  proof
-    let d1,d2 be Element of D;
-    thus b is having_a_unity & len F=0 & d1 = the_unity_wrt b & d2 =
-    the_unity_wrt b implies d1 = d2;
-A25: (len F-1) +1 =len F;
-    assume
-    not b is having_a_unity or len F <> 0;
-    then 0< len F by A1;
-    then
-A26: len F-1 is Element of NAT by NAT_1:20;
-    given f1 be Function of NAT,D such that
-A27: f1.0 = F.0 and
-A28: for n st n+1<len F holds f1.(n + 1) = b.(f1.n,F.(n + 1)) and
-A29: d1 = f1.(len F-1);
-    given f2 be Function of NAT,D such that
-A30: f2.0 = F.0 and
-A31: for n st n+1<len F holds f2.(n + 1) = b.(f2.n,F.(n + 1)) and
-A32: d2 = f2.(len F-1);
-    defpred P[Element of NAT] means $1+1 <= len F implies f1.$1 = f2.$1;
-A33: for n st P[n] holds P[n + 1]
-    proof
-      let n such that
-A34:  P[n];
-      assume
-      (n+1)+1 <= len F;
-      then
-A35:  n+1<len F by NAT_1:13;
-      then f2.(n+1)=b.(f2.n,F.(n+1)) by A31;
-      hence thesis by A28,A34,A35;
-    end;
-A36: P[0] by A27,A30;
-    for n holds P[n] from NAT_1:sch 1(A36,A33);
-    hence thesis by A29,A32,A25,A26;
-  end;
-  consistency;
+  canceled;
 end;
 
-theorem Th44:
-  b "**" <%d%> = d
-proof
-  len<%d%> = 1 by AFINSQ_1:36;
-  then ex f be Function of NAT,D st f.0=<%d%>.0& (for n st n+1 < len <%d%>
-  holds f.(n+1) = b.(f.n,<%d%>.(n+1)))& b "**" <%d%>=f.(1-1) by Def3;
-  hence thesis by AFINSQ_1:38;
-end;
-
-theorem Th45:
-  b is having_a_unity or len F > 0 implies b "**" (F ^ <% d %>) =
-  b.(b "**" F,d)
-proof
-  assume
-A1: b is having_a_unity or len F > 0;
-  now
-    per cases;
-    suppose
-A2:   len F<0+1;
-      then F={} by NAT_1:13;
-      then F ^ <% d %>=<%d%> by AFINSQ_1:32;
-      then
-A3:   b "**" (F ^<% d %>)=d by Th44;
-      len F=0 by A2,NAT_1:13;
-      then b "**" F = the_unity_wrt b by A1,Def3;
-      hence thesis by A1,A2,A3,NAT_1:13,SETWISEO:23;
-    end;
-    suppose
-A4:   len F>=1;
-      set G = F ^ <% d %>;
-      reconsider lenF1=len F-1 as Element of NAT by A4,NAT_1:21;
-A5:   G.(len F)=d by AFINSQ_1:40;
-A6:   len G=len F+len <%d%> by AFINSQ_1:20
-        .=len F+1 by AFINSQ_1:36;
-      then 1 <= len G by NAT_1:12;
-      then consider f1 be Function of NAT,D such that
-A7:   f1.0 = G.0 and
-A8:   for n st n+1 < len G holds f1.(n+1)=b.(f1.n,G.(n+1)) and
-A9:   b "**" G = f1.(len G-1) by Def3;
-      consider f be Function of NAT,D such that
-A10:  f.0 = F.0 and
-A11:  for n st n+1 < len F holds f.(n+1)=b.(f.n,F.(n+1)) and
-A12:  b "**" F = f.(len F-1) by A4,Def3;
-      defpred P[Element of NAT] means $1+1 < len G implies f.$1 = f1.$1;
-A13:  for n st P[n] holds P[n + 1]
-      proof
-        let n such that
-A14:    P[n];
-        set n1=n+1;
-        assume
-A15:    n1+1<len G;
-        then n1<len G by NAT_1:13;
-        then
-A16:    f1.n1=b.(f1.n,G.(n+1)) by A8;
-A17:    (n1+1)+(-1)<(len F+1)+(-1) by A6,A15,XREAL_1:10;
-        then
-A18:    n1 in len F by NAT_1:45;
-        f.n1=b.(f.n,F.n1) by A11,A17;
-        hence thesis by A14,A15,A16,A18,AFINSQ_1:def 4,NAT_1:13;
-      end;
-      0 in len F by A4,NAT_1:45;
-      then
-A19:  P[0] by A10,A7,AFINSQ_1:def 4;
-A20:  for n holds P[n] from NAT_1:sch 1(A19,A13);
-A21:  lenF1+1<len G by A6,NAT_1:13;
-      then b "**" G = b.(f1.(lenF1),G.(lenF1+1)) by A6,A8,A9;
-      hence thesis by A12,A20,A21,A5;
-    end;
-  end;
-  hence thesis;
-end;
-
-theorem Th46:
-  F <> <%>D implies ex G,d st F = G^<%d%>
-proof
-A1: rng F c= D by RELAT_1:def 19;
-  assume
-  F <> <%>D;
-  then consider G be XFinSequence,x such that
-A2: F=G^<%x%> by AFINSQ_1:44;
-  len <%x%> =1 by AFINSQ_1:36;
-  then
-A3: len G + 1 = len F by A2,AFINSQ_1:20;
-A4: len G < len G+1 by NAT_1:13;
-  rng G c= D
-  proof
-    let y;
-    assume
-    y in rng G;
-    then consider x such that
-A5: x in dom G and
-A6: G.x=y by FUNCT_1:def 5;
-    dom G c= dom F by A3,A4,NAT_1:40;
-    then
-A7: F.x in rng F by A5,FUNCT_1:def 5;
-A8: rng F c= D by RELAT_1:def 19;
-    F.x=G.x by A2,A5,AFINSQ_1:def 4;
-    hence thesis by A6,A7,A8;
-  end;
-  then
-A9: G is XFinSequence of D by RELAT_1:def 19;
-  len G in dom F by A3,A4,NAT_1:45;
-  then F.(len G) in rng F by FUNCT_1:def 5;
-  then x is Element of D by A2,A1,AFINSQ_1:40;
-  hence thesis by A2,A9;
-end;
-
-scheme
-  Sch5{D()->non empty set, P[set]}: for F be XFinSequence of D() holds P[F]
-provided
-A1: P[<%>D()] and
-A2: for F be XFinSequence of D(),d be Element of D() st P[F] holds P[F^
-<%d%>]
-proof
-  defpred R[set] means for F be XFinSequence of D() st len F = $1 holds P[F];
-A3: for n st R[n] holds R[n+1]
-  proof
-    let n such that
-A4: for F be XFinSequence of D() st len F=n holds P[F];
-    let F be XFinSequence of D();
-    assume
-A5: len F = n + 1;
-    then F<><%>D();
-    then consider G be XFinSequence of D(), d be Element of D() such that
-A6: F = G^<%d%> by Th46;
-    len<%d%>=1 by AFINSQ_1:38;
-    then len F = len G + 1 by A6,AFINSQ_1:20;
-    hence thesis by A2,A4,A5,A6;
-  end;
-  let F be XFinSequence of D();
-A7: len F=len F;
-  card X = {} implies X = {};
-  then
-A8: R[0] by A1;
-  for i holds R[i] from NAT_1:sch 1(A8,A3);
-  hence thesis by A7;
-end;
-
-theorem
-  b is associative & (b is having_a_unity or len F >= 1 & len G >= 1)
-  implies b "**" (F ^ G) = b.(b "**" F,b "**" G)
-proof
-  defpred P[XFinSequence of D] means for F,b st b is associative & (b is
-  having_a_unity or len F >= 1 & len $1 >= 1) holds b "**" (F^$1)=b.(b "**" F,b
-  "**" $1);
-A1: for G,d st P[G] holds P[G ^ <%d%>]
-  proof
-    let G,d such that
-A2: P[G];
-    let F,b such that
-A3: b is associative and
-A4: b is having_a_unity or len F >= 1 & len(G ^ <% d %>) >= 1;
-    now
-      per cases;
-      suppose
-A5:     len G<>0;
-        then
-        b is having_a_unity or len F>=1&len (F^G)=len F+len G & len F+len
-        G >len F+0 by A4,AFINSQ_1:20,XREAL_1:10;
-        then b.(b "**" (F ^ G),d)=b "**" ((F ^ G)^<%d%>) by Th45;
-        then
-A6:     b "**" (F ^ (G ^ <% d %>)) = b.(b "**" (F ^ G),d) by
-        AFINSQ_1
-        :30;
-        len G>=1 by A5,NAT_1:14;
-        then b "**" (F ^ (G ^ <% d %>))=b.(b.(b "**" F,b "**" G),d) by A2,A3,
-        A4,A6
-          .= b.(b "**" F,b.(b "**" G,d)) by A3,BINOP_1:def 3
-          .= b.(b "**" F,b "**" (G ^ <% d %>)) by A5,Th45;
-        hence thesis;
-      end;
-      suppose
-        len G=0;
-        then
-A7:     G = {};
-        hence b "**" (F ^(G ^ <% d %>)) = b "**"(F^<% d %>) by AFINSQ_1:32
-          .= b.(b "**" F,d) by A4,Th45
-          .= b.(b "**" F,b "**" <%d%>) by Th44
-          .= b.(b "**" F,b "**" (G ^ <% d %>)) by A7,AFINSQ_1:32;
-      end;
-    end;
-    hence thesis;
-  end;
-A8: P[<%>D]
-  proof
-    let F,b;
-    assume that
-    b is associative and
-A9: b is having_a_unity or len F >= 1 & len <%>D >= 1;
-    thus b "**" (F ^ <%>D) = b "**" F by AFINSQ_1:32
-      .= b.(b "**" F,the_unity_wrt b) by A9,SETWISEO:23
-      .= b.(b "**" F,b "**" <%>D) by A9,Def3,CARD_1:47;
-  end;
-  for G holds P[G] from Sch5(A8,A1);
-  hence thesis;
-end;
+canceled 6;
 
 definition
-  let D;
-  let d,d1;
-  redefine func <%d,d1%> -> XFinSequence of D;
-  coherence
-  proof
-    <%d,d1%>=<%d%>^<%d1%> by AFINSQ_1:def 6;
-    hence thesis;
-  end;
-  let d2;
-  redefine func <%d,d1,d2%> -> XFinSequence of D;
-  coherence
-  proof
-    <%d,d1,d2%>=<%d%>^<%d1%>^<%d2%> by AFINSQ_1:def 7;
-    hence thesis;
-  end;
+  canceled;
 end;
 
-theorem
-  b "**" <%d1,d2%> = b.(d1,d2)
-proof
-A1: <%d1,d2%>.0=d1 by AFINSQ_1:42;
-  len <%d1,d2%>=2 by AFINSQ_1:42;
-  then consider f be Function of NAT,D such that
-A2: f.0 = <%d1,d2%>.0 and
-A3: for n st n+1 < 2 holds f.(n + 1) = b.(f.n,<%d1,d2%>.(n + 1)) and
-A4: b "**" <%d1,d2%> = f.(2-1) by Def3;
-  f.(0+1)=b.(f.0,<%d1,d2%>.(0+1)) by A3;
-  hence thesis by A2,A4,A1,AFINSQ_1:42;
-end;
-
-theorem
-  b "**" <%d,d1,d2%> = b.(b.(d,d1),d2)
-proof
-  set F=<%d,d1,d2%>;
-A1: F.0=d by AFINSQ_1:43;
-A2: F.1=d1 by AFINSQ_1:43;
-  len F=3 by AFINSQ_1:43;
-  then consider f be Function of NAT,D such that
-A3: f.0 = F.0 and
-A4: for n st n+1 < 3 holds f.(n + 1) = b.(f.n,F.(n + 1)) and
-A5: b "**" F = f.(3-1) by Def3;
-A6: f.(1+1)=b.(f.1,F.(1+1)) by A4;
-  f.(0+1)=b.(f.0,F.(0+1)) by A4;
-  hence thesis by A3,A5,A6,A1,A2,AFINSQ_1:43;
-end;
-
-definition
-  let Fn;
-  func Sum(Fn) -> Element of NAT equals
-  addnat "**" Fn;
-  coherence;
-end;
-
-theorem Th50:
-  (for n st n in dom Fn holds Fn.n <= k) implies Sum (Fn)<=len Fn
-  * k
-proof
-  assume
-A1: for n st n in dom Fn holds Fn.n <= k;
-  now
-    per cases;
-    suppose
-      dom Fn=0;
-      hence thesis by Def3,BINOP_2:5;
-    end;
-    suppose
-A2:   dom Fn>0;
-      then consider f be Function of NAT,NAT such that
-A3:   f.0 = Fn.0 and
-A4:   for n st n+1 < len Fn holds f.(n + 1) = addnat.(f.n,Fn.(n + 1)) and
-A5:   addnat "**" Fn= f.(len Fn-1) by Def3;
-      defpred P[Element of NAT] means $1 < len Fn implies f.$1 <=($1+1)*k;
-A6:   for m st P[m] holds P[m+1]
-      proof
-        let m such that
-A7:     P[m];
-        assume
-A8:     m + 1 < len Fn;
-        then f.(m+1)=addnat.(f.m,Fn.(m+1)) by A4;
-        then
-A9:     f.(m + 1) = f.m + Fn.(m+1) by BINOP_2:def 23;
-        m+1 in len Fn by A8,NAT_1:45;
-        then Fn.(m+1) <= k by A1;
-        then f.(m+1) <=(m+1) * k +k by A7,A8,A9,NAT_1:13,XREAL_1:9;
-        hence thesis;
-      end;
-      reconsider lenFn1=len Fn -1 as Element of NAT by A2,NAT_1:20;
-A10:  lenFn1<lenFn1+1 by NAT_1:13;
-A11:  P[0]
-      proof
-        assume
-        0<len Fn;
-        then 0 in dom Fn by NAT_1:45;
-        hence thesis by A1,A3;
-      end;
-      for m holds P[m] from NAT_1:sch 1(A11,A6);
-      hence thesis by A5,A10;
-    end;
-  end;
-  hence thesis;
-end;
-
-theorem Th51:
-  (for n st n in dom Fn holds Fn.n >= k) implies Sum (Fn) >= len
-  Fn * k
-proof
-  assume
-A1: for n st n in dom Fn holds Fn.n >= k;
-  now
-    per cases;
-    suppose
-      dom Fn=0;
-      hence thesis;
-    end;
-    suppose
-A2:   dom Fn>0;
-      then consider f be Function of NAT,NAT such that
-A3:   f.0 = Fn.0 and
-A4:   for n st n+1 < len Fn holds f.(n + 1) = addnat.(f.n,Fn.(n + 1)) and
-A5:   addnat "**" Fn= f.(len Fn-1) by Def3;
-      defpred P[Element of NAT] means $1 < len Fn implies f.$1 >= ($1+1)*k;
-A6:   for m st P[m] holds P[m+1]
-      proof
-        let m such that
-A7:     P[m];
-        assume
-A8:     m + 1 < len Fn;
-        then f.(m+1)=addnat.(f.m,Fn.(m+1)) by A4;
-        then
-A9:     f.(m + 1) = f.m + Fn.(m+1) by BINOP_2:def 23;
-        m+1 in len Fn by A8,NAT_1:45;
-        then Fn.(m+1) >= k by A1;
-        then f.(m+1) >=(m+1) * k +k by A7,A8,A9,NAT_1:13,XREAL_1:9;
-        hence thesis;
-      end;
-      reconsider lenFn1=len Fn -1 as Element of NAT by A2,NAT_1:20;
-A10:  lenFn1<lenFn1+1 by NAT_1:13;
-A11:  P[0]
-      proof
-        assume
-        0<len Fn;
-        then 0 in dom Fn by NAT_1:45;
-        hence thesis by A1,A3;
-      end;
-      for m holds P[m] from NAT_1:sch 1(A11,A6);
-      hence thesis by A5,A10;
-    end;
-  end;
-  hence thesis;
-end;
-
-theorem Th52:
-  (len Fn > 0 & ex x st x in dom Fn & Fn.x = k) implies Sum Fn >=
-  k
-proof
-  assume that
-A1: len Fn > 0 and
-A2: ex x st x in dom Fn & Fn.x = k;
-  consider x such that
-A3: x in dom Fn and
-A4: Fn.x = k by A2;
-  reconsider lenFn1=len Fn-1 as Element of NAT by A1,NAT_1:20;
-A5: dom Fn=lenFn1+1;
-  reconsider x as Element of NAT by A3;
-A6: lenFn1 < lenFn1+1 by NAT_1:13;
-  x < dom Fn by A3,NAT_1:45;
-  then
-A7: x<=lenFn1 by A5,NAT_1:13;
-  consider f be Function of NAT,NAT such that
-A8: f.0 = Fn.0 and
-A9: for n st n+1 < len Fn holds f.(n + 1) = addnat.(f.n,Fn.(n + 1)) and
-A10: addnat "**" Fn= f.(len Fn-1) by A1,Def3;
-  defpred P[Nat] means x <= $1 & $1 < len Fn implies f.$1 >= k;
-  now
-    per cases;
-    suppose
-A11:  x=0;
-      assume that
-      x <= x and
-      x < len Fn;
-      thus f.x>=k by A4,A8,A11;
-    end;
-    suppose
-      x>0;
-      then reconsider x1=x-1 as Element of NAT by NAT_1:20;
-      assume that
-      x <= x and
-A12:  x < len Fn;
-      x1+1 < len Fn by A12;
-      then f.x = addnat.(f.x1,Fn.x) by A9;
-      then f.x=f.x1+Fn.x by BINOP_2:def 23;
-      then f.x>=k+0 by A4,XREAL_1:9;
-      hence f.x>=k;
-    end;
-  end;
-  then
-A13: P[x];
-A14: for m be Nat st m>=x & P[m] holds P[m+1]
-  proof
-    let m be Nat such that
-A15: m>=x and
-A16: P[m];
-    reconsider m1 = m as Element of NAT by ORDINAL1:def 13;
-    assume that
-    x <= m+1 and
-A17: m+1 < len Fn;
-    f.(m1 + 1) = addnat.(f.m1,Fn.(m1 + 1)) by A9,A17;
-    then f.(m1+1)=f.m1+Fn.(m1+1) by BINOP_2:def 23;
-    then f.(m+1) >= k+0 by A15,A16,A17,NAT_1:13,XREAL_1:9;
-    hence thesis;
-  end;
-  for m be Nat st m>=x holds P[m] from NAT_1:sch 8(A13,A14);
-  hence thesis by A10,A7,A6;
-end;
-
-theorem
-  Sum Fn=0 iff (len Fn=0 or for n st n in dom Fn holds Fn.n=0)
-proof
-A1: Sum Fn=0 implies (len Fn=0 or for n st n in dom Fn holds Fn.n=0)
-  proof
-    assume
-A2: Sum Fn=0;
-    now
-      per cases;
-      suppose
-        len Fn=0;
-        hence thesis;
-      end;
-      suppose
-A3:     len Fn>0;
-        assume that
-        not len Fn=0 and
-A4:     not( for n st n in dom Fn holds Fn.n=0);
-        thus contradiction by A2,A3,A4,Th52;
-      end;
-    end;
-    hence thesis;
-  end;
-  (len Fn=0 or for n st n in dom Fn holds Fn.n=0) implies Sum Fn=0
-  proof
-    assume
-    len Fn=0 or for n st n in dom Fn holds Fn.n=0;
-    then for n st n in dom Fn holds Fn.n<=0;
-    then Sum Fn <= len Fn*0 by Th50;
-    hence thesis;
-  end;
-  hence thesis by A1;
-end;
+canceled 4;
 
 theorem Th54:
   for f be Function, n holds union (rng (f|n)) \/ f.n=union rng (f
@@ -2963,9 +2374,8 @@ A25:    X=n;
   end;
 end;
 
-scheme
-  Sch6{D()->non empty set,n()->Element of NAT,P[set,set]}: ex p be
-  XFinSequence of D() st dom p = n() & for k st k in n() holds P[k,p.k]
+scheme Sch6{D()->non empty set,n()->Nat,P[set,set]}:
+  ex p be XFinSequence of D() st dom p = n() & for k st k in n() holds P[k,p.k]
 provided
 A1: for k st k in n() ex x be Element of D() st P[k,x]
 proof
@@ -2974,8 +2384,8 @@ A2: for k be set st k in n() ex x be set st x in D() & P[k,x]
     let k be set such that
 A3: k in n();
     n() is Subset of NAT by Th8;
-    then reconsider k'=k as Element of NAT by A3;
-    ex x be Element of D() st P[k',x] by A1,A3;
+    then reconsider k9=k as Element of NAT by A3;
+    ex x be Element of D() st P[k9,x] by A1,A3;
     hence thesis;
   end;
   consider f be Function of n(),D() such that
@@ -2995,7 +2405,7 @@ A1: for i st i in dom F() holds F().i is finite and
 A2: for i,j st i in dom F() & j in dom F() & i<>j holds F().i misses F()
 .j
 proof
-  defpred FF[Element of NAT,set] means $2=card (F().$1);
+  defpred FF[Nat,set] means $2=card (F().$1);
 A3: for k st k in len F() ex x be Element of NAT st FF[k,x]
   proof
     let k;
@@ -3012,20 +2422,24 @@ A5: dom CardF=len F() & for k st k in len F() holds FF[k,CardF.k] from
   take CardF;
   thus dom CardF = dom F() by A5;
   thus for i st i in dom CardF holds CardF.i=card (F().i) by A5;
-  now
+ 
+H:    addnat "**" CardF  = Sum CardF by AFINSQ_2:63;
     per cases;
     suppose
-A6:   len CardF=0;
-      then union rng F() is empty by A5,RELAT_1:65,ZFMISC_1:2;
-      hence thesis by A6,Def3,BINOP_2:5;
+A6:   len CardF=0;then
+  union rng F() is empty by A5,RELAT_1:65,ZFMISC_1:2;
+
+
+      hence thesis by A6,AFINSQ_2:def 9,BINOP_2:5,H;
     end;
     suppose
 A7:   len CardF<>0;
       then consider f be Function of NAT,NAT such that
 A8:   f.0 = CardF.0 and
-A9:   for n st n+1<len CardF holds f.(n+1)=addnat.(f.n,CardF.(n + 1)) and
-A10:  addnat "**" CardF = f.(len CardF-1) by Def3;
-      defpred P[Element of NAT] means $1<len CardF implies card union rng (F()
+A9:   for n be Nat
+      st n+1<len CardF holds f.(n+1)=addnat.(f.n,CardF.(n + 1)) and
+A10:  addnat "**" CardF = f.(len CardF-1) by AFINSQ_2:def 9;
+      defpred P[Nat] means $1<len CardF implies card union rng (F()
       |($1+1))=f.$1 & union rng (F()|($1+1)) is finite;
 A11:  for k st P[k] holds P[k + 1]
       proof
@@ -3053,8 +2467,7 @@ A20:      Y in rng Fk1 by TARSKI:def 4;
           consider X be set such that
 A21:      X in dom Fk1 and
 A22:      Fk1.X=Y by A20,FUNCT_1:def 5;
-          X in dom F()/\k1 by A21,RELAT_1:90;
-          then reconsider X as Element of NAT;
+          reconsider X as Element of NAT by A21;
 A23:      Fk1.X=F().X by A21,FUNCT_1:70;
 A24:      X in dom F()/\k1 by A21,RELAT_1:90;
           then X in k1 by XBOOLE_0:def 4;
@@ -3086,11 +2499,10 @@ A30:    union rng (F()|(0+1)) = union rng (F()|(0))\/F().0 by Th54;
         0 in len CardF by A7,NAT_1:45;
         hence thesis by A1,A5,A8,A30,ZFMISC_1:2;
       end;
-      for k being Element of NAT holds P[k] from NAT_1:sch 1(A29,A11);
-      hence thesis by A10,A27,A28;
+      for k be Nat holds P[k] from NAT_1:sch 2(A29,A11);
+     
+      hence thesis by A10,A27,A28,H;
     end;
-  end;
-  hence thesis;
 end;
 
 scheme
@@ -3103,7 +2515,7 @@ A1: f() is onto one-to-one and
 A2: Y() is non empty and
 A3: x() in X()
 proof
-  defpred FF[Element of NAT,set] means $2={g where g is Function of X(),Y():P[
+  defpred FF[Nat,set] means $2={g where g is Function of X(),Y():P[
   g]& g.x()=f().$1};
   consider n being Nat such that
 A4: Y(),n are_equipotent by CARD_1:74;
@@ -3186,10 +2598,8 @@ A27:  card Y()=card n by A4,CARD_1:21;
       then consider y such that
 A28:  y in dom f() and
 A29:  f().y=g.x() by A26,FUNCT_1:def 5;
-      y in card Y() by A28;
-      then
       F.y={g1 where g1 is Function of X(),Y():P[g1] & g1.x()=f().y} by A6
-      ,A27,A25;
+      ,A27,A25,A28;
       then
 A30:  g in F.y by A24,A29;
       F.y in rng F by A6,A28,A27,A25,FUNCT_1:def 5;
@@ -3226,10 +2636,9 @@ A35: i in dom CardF;
 end;
 
 theorem Th55:
-  for n,k being Nat holds k * (n block k)= card{f where f is
+k * (n block k)= card{f where f is
   Function of n+1,k: f is onto "increasing & f"{f.n}<>{n}}
 proof
-  let n,k be Nat;
   now
     per cases;
     suppose
@@ -3259,7 +2668,6 @@ A3:   k is non empty;
       <>{n}};
       defpred P[set] means ex f be Function of n+1,k st f=$1& f is onto
       "increasing&f"{f.n}<>{n};
-A4:   k in NAT by ORDINAL1:def 13;
       n<n+1 by NAT_1:13;
       then
 A5:   n in n+1 by NAT_1:45;
@@ -3275,14 +2683,13 @@ A10:  dom F = card k and
 A11:  card{g where g is Function of n+1,k:P[g]} = Sum(F) and
 A12:  for i st i in dom F holds F.i = card{g where g is Function of n
       +1,k:P[g] & g.n=f.i} from Sch8(A9,A3,A5);
-A13:  n in NAT by ORDINAL1:def 13;
-A14:  for i st i in dom F holds F.i = n block k
+A14:  for i be Nat st i in dom F holds F.i = n block k
       proof
         set F2={g where g is Function of n,k:g is onto "increasing};
-        let i such that
+        let i be Nat such that
 A15:    i in dom F;
 A16:    f.i in rng f by A7,A10,A15,FUNCT_1:def 5;
-        k is Subset of NAT by A4,Th8;
+        k is Subset of NAT by Th8;
         then reconsider fi=f.i as Element of NAT by A8,A16;
 A17:    fi<k by A16,NAT_1:45;
         set F1={g where g is Function of n+1,k:P[g] & g.n=fi};
@@ -3307,12 +2714,12 @@ A18:    F1 c= F
           hence thesis;
         end;
         then F=F1 by A18,XBOOLE_0:def 10;
-        then card F1=card F2 by A13,A4,A17,Th43;
+        then card F1=card F2 by A17,Th43;
         hence thesis by A12,A15;
       end;
-      then for i st i in dom F holds F.i <= n block k;
+      then for i be Nat st i in dom F holds F.i <= n block k;
       then
-A19:  Sum F <= len F * (n block k) by Th50;
+A19:  Sum F <= len F * (n block k) by AFINSQ_2:71;
       set G={g where g is Function of n+1,k:P[g]};
 A20:  G1 c= G
       proof
@@ -3332,9 +2739,9 @@ A21:  G c= G1
         then ex g be Function of n+1,k st x=g & P[g];
         hence thesis;
       end;
-      for i st i in dom F holds F.i >= n block k by A14;
+      for i be Nat st i in dom F holds F.i >= n block k by A14;
       then
-A22:  Sum F >= len F * (n block k) by Th51;
+A22:  Sum F >= len F * (n block k) by AFINSQ_2:72;
       card k =k by CARD_1:def 5;
       then Sum F= k*(n block k) by A10,A19,A22,XXREAL_0:1;
       hence thesis by A11,A20,A21,XBOOLE_0:def 10;
@@ -3346,10 +2753,9 @@ end;
 :: Recursive dependence
 
 theorem Th56:
-  for n,k being Nat holds (n+1) block (k+1) = (k+1)*(n block (k+1)
+(n+1) block (k+1) = (k+1)*(n block (k+1)
   ) + (n block k)
 proof
-  let n,k be Nat;
   set F={f where f is Function of n+1,k+1:f is onto "increasing};
   set F1={f where f is Function of n+1,k+1:f is onto "increasing&f"{f.n}={n}};
   set F2={f where f is Function of n+1,k+1:f is onto "increasing&f"{f.n}<>{n}};
@@ -3417,27 +2823,24 @@ A9: F1 c= Funcs(n+1,k+1)
   end;
   Funcs(n+1,k+1) is finite by FRAENKEL:16;
   then reconsider F1,F2 as finite set by A9,A8;
-A10: card F2= (k+1) * (n block (k+1)) by Th55;
-A11: k in NAT by ORDINAL1:def 13;
-  n in NAT by ORDINAL1:def 13;
-  then card F1= n block k by A11,Th42;
+  reconsider k1=k+1 as Element of NAT;
+A10: card F2= k1 * (n block k1) by Th55;
+  card F1= n block k by Th42;
   hence thesis by A4,A5,A10,CARD_2:53;
 end;
 
 theorem Th57:
-  for n being Nat holds n>=1 implies n block 2 = 1/2 * (2 |^ n - 2
+n>=1 implies n block 2 = 1/2 * (2 |^ n - 2
   )
 proof
   defpred P[Nat] means $1 block 2 = 1/2 * (2 |^ $1-2);
-  let n be Nat;
 A1: for k be Nat st k>=1 & P[k] holds P[k + 1]
   proof
     let k be Nat such that
 A2: k >=1 and
 A3: P[k];
-A4: k in NAT by ORDINAL1:def 13;
     (k+1) block 2 = 2*( k block (1+1)) + (k block 1) by Th56
-      .=2 * (1/2 * (2 |^ k - 2)) + 1 by A2,A3,A4,Th32
+      .=2 * (1/2 * (2 |^ k - 2)) + 1 by A2,A3,Th32
       .=1/2* (2* 2 |^ k - 2)
       .=1/2* (2 |^ (k+1)-2) by NEWTON:11;
     hence thesis;
@@ -3475,9 +2878,10 @@ end;
 
 Lm2: n|^3=n*n*n
 proof
-  thus n|^3=n|^(2+1)
-    .=n|^2*n by NEWTON:11
+  reconsider n as Element of NAT by ORDINAL1:def 13;
+  n|^(2+1)=(n|^2)*n by NEWTON:11
     .=n*n*n by WSIERP_1:2;
+hence thesis;
 end;
 
 theorem
@@ -3491,8 +2895,7 @@ A1: for k be Nat st k>=3 & P[k] holds P[k+1]
     let k be Nat such that
 A2: k>=3 and
 A3: P[k];
-    k in NAT by ORDINAL1:def 13;
-    then k block 3 = 1/6 * (3|^k-3*2|^k+3) by A2,Th58,XXREAL_0:2;
+    k block 3 = 1/6 * (3|^k-3*2|^k+3) by A2,Th58,XXREAL_0:2;
     hence (k+1) block 4 = 4*(k block (3+1)) +(1/6*(3|^k-3*2|^k+3)) by Th56
       .=1/24*((4*4|^k)- 4*(3*3|^k)+ 6*(2*2|^k) - 4) by A3
       .=1/24*(4|^(k+1)- 4*(3*3|^k)+ 6*(2*2|^k) - 4) by NEWTON:11
@@ -3596,7 +2999,7 @@ end;
 theorem Th62:
   (n + 1) block n = (n + 1) choose 2
 proof
-  defpred P[Element of NAT] means ($1+1) block $1 = ($1+1) choose 2;
+  defpred P[Nat] means ($1+1) block $1 = ($1+1) choose 2;
 A1: for k st P[k] holds P[k+1]
   proof
     let k such that
@@ -3611,14 +3014,14 @@ A2: P[k];
   1 block 0 =0 by Th31;
   then
 A3: P[0] by NEWTON:def 3;
-  for k holds P[k] from NAT_1:sch 1(A3,A1);
+  for k holds P[k] from NAT_1:sch 2(A3,A1);
   hence thesis;
 end;
 
 theorem
   (n + 2) block n = 3*((n + 2) choose 4) + ((n + 2) choose 3)
 proof
-  defpred P[Element of NAT] means ($1+2)block $1=3*(($1+2)choose 4)+(($1+2)
+  defpred P[Nat] means ($1+2)block $1=3*(($1+2)choose 4)+(($1+2)
   choose 3);
 A1: 2 choose 3=0 by NEWTON:def 3;
 A2: for k st P[k] holds P[k+1]
@@ -3644,7 +3047,7 @@ A4: k1*((k1+1) block k1)=k1*(k2 choose 2) by Th62
   2 choose 4=0 by NEWTON:def 3;
   then
 A5: P[0] by A1,Th31;
-  for k holds P[k] from NAT_1:sch 1(A5,A2);
+  for k holds P[k] from NAT_1:sch 2(A5,A2);
   hence thesis;
 end;
 
@@ -3712,8 +3115,8 @@ proof
   assume that
 A1: card X=k+1 and
 A2: x in X;
-  reconsider X'=X as finite set by A1;
-  set Xx=X'\{x};
+  reconsider X9=X as finite set by A1;
+  set Xx=X9\{x};
   {x} c= X by A2,ZFMISC_1:37;
   then {x} /\X ={x} by XBOOLE_1:28;
   then Xx \/ {x} = X by XBOOLE_1:51;
@@ -3731,7 +3134,7 @@ A1: P[{}] and
 A2: for F be Function st for x st x in rng F & Q[x,F] holds P[F|(dom F\F
 "{x})] holds P[F]
 proof
-  defpred R[Element of NAT] means for F be Function st card rng F=$1 holds P[F
+  defpred R[Nat] means for F be Function st card rng F=$1 holds P[F
   ];
 A3: for n st R[n] holds R[n+1]
   proof
@@ -3757,7 +3160,6 @@ A6:   x in rng F and
   then consider n being Nat such that
 A7: rng F,n are_equipotent by CARD_1:74;
 A8: card rng F=n by A7,CARD_1:def 5;
-A9: n in NAT by ORDINAL1:def 13;
 A10: R[0]
   proof
     let F be Function;
@@ -3766,8 +3168,8 @@ A10: R[0]
     then rng F={};
     hence thesis by A1,RELAT_1:64;
   end;
-  for k holds R[k] from NAT_1:sch 1(A10,A3);
-  hence thesis by A9,A8;
+  for k holds R[k] from NAT_1:sch 2(A10,A3);
+  hence thesis by A8;
 end;
 
 theorem Th66:
@@ -3783,17 +3185,17 @@ A1: N,n are_equipotent by CARD_1:74;
   F is one-to-one and
 A2: dom F = n and
 A3: rng F = N by A1,WELLORD2:def 4;
-  n in NAT by ORDINAL1:def 13;
-  then reconsider F as XFinSequence by A2,AFINSQ_1:7;
+  reconsider F as XFinSequence by A2,AFINSQ_1:7;
   reconsider F as XFinSequence of NAT by A3,RELAT_1:def 19;
-  take k=Sum(F);
+  reconsider k=Sum F as Element of NAT by ORDINAL1:def 13;
+  take k;
   let n such that
 A4: n in N;
   F <>0 by A3,A4;
   then
 A5: len F>0;
   ex x st x in dom F & F.x=n by A3,A4,FUNCT_1:def 5;
-  hence thesis by A5,Th52;
+  hence thesis by A5,AFINSQ_2:73;
 end;
 
 theorem Th67:
@@ -3809,10 +3211,10 @@ A2: not x in X;
   let F be Function of X,Y;
   y in {y} by TARSKI:def 1;
   then
-A3: for x' be set st x' in X1\X holds F(x') in Y1 by XBOOLE_0:def 3;
+A3: for x9 be set st x9 in X1\X holds F(x9) in Y1 by XBOOLE_0:def 3;
 A4: X c= X1 & Y c= Y1 by XBOOLE_1:7;
   consider G be Function of X1,Y1 such that
-A5: G|X = F & for x' be set st x' in X1\X holds G.x' = F(x') from Sch2(
+A5: G|X = F & for x9 be set st x9 in X1\X holds G.x9 = F(x9) from Sch2(
   A3,A4,A1);
   x in {x} by TARSKI:def 1;
   then x in X1 by XBOOLE_0:def 3;
@@ -3844,13 +3246,13 @@ A5:   Fx in Y\/{y};
         suppose
           Fx in Y;
           then Fx in rng F by A4,FUNCT_2:def 3;
-          then consider x' be set such that
-A6:       x' in dom F and
-A7:       F.x'=Fx by FUNCT_1:def 5;
-A8:       x' in X by A6;
+          then consider x9 be set such that
+A6:       x9 in dom F and
+A7:       F.x9=Fx by FUNCT_1:def 5;
+A8:       x9 in X by A6;
 A9:       dom G=X\/{x} by FUNCT_2:def 1;
 A10:      X c= X\/{x} by XBOOLE_1:7;
-          G.x'=F.x' by A2,A6,FUNCT_1:70;
+          G.x9=F.x9 by A2,A6,FUNCT_1:70;
           hence thesis by A7,A8,A10,A9,FUNCT_1:def 5;
         end;
         suppose
@@ -3876,14 +3278,14 @@ A16: F is one-to-one;
 A17: x1 in dom G and
 A18: x2 in dom G and
 A19: G.x1=G.x2;
-A20: for x' be set st x' in X holds x' in dom F & F.x'=G.x' & G.x'<>y
+A20: for x9 be set st x9 in X holds x9 in dom F & F.x9=G.x9 & G.x9<>y
     proof
-      let x' be set such that
-A21:  x' in X;
-A22:  x' in dom F by A1,A21,FUNCT_2:def 1;
+      let x9 be set such that
+A21:  x9 in X;
+A22:  x9 in dom F by A1,A21,FUNCT_2:def 1;
       then
-A23:  F.x' in rng F by FUNCT_1:def 5;
-      F.x'=G.x' by A2,A22,FUNCT_1:70;
+A23:  F.x9 in rng F by FUNCT_1:def 5;
+      F.x9=G.x9 by A2,A22,FUNCT_1:70;
       hence thesis by A15,A21,A23,FUNCT_2:def 1;
     end;
     now
@@ -3922,7 +3324,7 @@ theorem Th69:
 card N st Order is bijective & for n,k st n in dom Order & k in dom Order & n<k
   holds Order.n < Order.k
 proof
-  defpred P[Element of NAT] means for N be finite Subset of NAT st card N = $1
+  defpred P[Nat] means for N be finite Subset of NAT st card N = $1
 holds ex F be Function of N,card N st F is bijective & for n,k st n in dom F &
   k in dom F & n<k holds F.n < F.k;
 A1: for k st P[k] holds P[k+1]
@@ -3935,9 +3337,9 @@ A3: card N =k+1;
     ex x st x in N by A3,CARD_1:47,XBOOLE_0:def 1;
     then
 A4: ex n be Nat st M[n];
-    consider m' be Element of NAT such that
-A5: for n st n in N holds n<=m' by Th66;
-A6: for n be Nat st M[n] holds n<=m' by A5;
+    consider m9 be Nat such that
+A5: for n st n in N holds n<=m9 by Th66;
+A6: for n be Nat st M[n] holds n<=m9 by A5;
     consider m be Nat such that
 A7: M[m] & for n be Nat st M[n] holds n <= m from NAT_1:sch 6(A6,A4
     );
@@ -3956,14 +3358,14 @@ A12: card Nm is empty implies Nm is empty;
 A13: G|Nm=F and
 A14: G.m=k by A12,Th67;
     N=Nm\/{m} by A7,ZFMISC_1:140;
-    then reconsider G'=G as Function of N,card N by A3,A10,AFINSQ_1:4;
-    take G';
+    then reconsider G9=G as Function of N,card N by A3,A10,AFINSQ_1:4;
+    take G9;
     not k in card Nm by A10;
     then G is one-to-one onto by A8,A12,A13,A14,Th68;
-    hence G' is bijective by A11;
-    thus for n,k st n in dom G' & k in dom G' & n<k holds G'.n < G'.k
+    hence G9 is bijective by A11;
+    thus for n,k st n in dom G9 & k in dom G9 & n<k holds G9.n < G9.k
     proof
-A15:  for i st i in Nm holds i < m & G'.i <k
+A15:  for i st i in Nm holds i < m & G9.i <k
       proof
         let i such that
 A16:    i in Nm;
@@ -3975,15 +3377,15 @@ A17:    i<>m by TARSKI:def 1;
 A18:    i <= m by A7;
         i in dom F by A16,FUNCT_2:def 1;
         then
-A19:    F.i=G'.i by A13,FUNCT_1:70;
+A19:    F.i=G9.i by A13,FUNCT_1:70;
         card Nm=k by A3,A7,Th65;
         hence thesis by A16,A19,A18,A17,NAT_1:45,XXREAL_0:1;
       end;
       let i,j such that
-A20:  i in dom G' and
-A21:  j in dom G' and
+A20:  i in dom G9 and
+A21:  j in dom G9 and
 A22:  i<j;
-A23:  dom G'=Nm\/{m} by FUNCT_2:def 1;
+A23:  dom G9=Nm\/{m} by FUNCT_2:def 1;
       now
         per cases by A20,A21,A23,XBOOLE_0:def 3;
         suppose
@@ -3991,14 +3393,14 @@ A24:      i in Nm & j in Nm;
           then
 A25:      j in dom F by FUNCT_2:def 1;
           then
-A26:      F.j=G'.j by A13,FUNCT_1:70;
+A26:      F.j=G9.j by A13,FUNCT_1:70;
 A27:      i in dom F by A24,FUNCT_2:def 1;
-          then F.i=G'.i by A13,FUNCT_1:70;
+          then F.i=G9.i by A13,FUNCT_1:70;
           hence thesis by A9,A22,A27,A25,A26;
         end;
         suppose
 A28:      i in Nm & j in {m};
-          then G'.i<k by A15;
+          then G9.i<k by A15;
           hence thesis by A14,A28,TARSKI:def 1;
         end;
         suppose
@@ -4030,7 +3432,7 @@ A34: card N=0;
     hence P is bijective;
     thus thesis;
   end;
-  for k holds P[k] from NAT_1:sch 1(A31,A1);
+  for k holds P[k] from NAT_1:sch 2(A31,A1);
   hence thesis;
 end;
 
@@ -4126,18 +3528,18 @@ A1: n in N and
 A2: F is bijective and
 A3: for n,k st n in dom F & k in dom F & n<k holds F.n < F.k;
   rng F=card N by A2,FUNCT_2:def 3;
-  then reconsider F'=F" as Function of card N,N by A2,FUNCT_2:31;
+  then reconsider F9=F" as Function of card N,N by A2,FUNCT_2:31;
 
   defpred P[set,set] means for k st k=$1 holds (k < n implies $2=F".((F.k)+1))
   & (k = n implies $2=F".0) & (k > n implies $2=k);
 
 A4: dom F=N by A1,FUNCT_2:def 1;
-A5: dom F'=card N by A1,FUNCT_2:def 1;
+A5: dom F9=card N by A1,FUNCT_2:def 1;
 A6: for x st x in N ex y st y in N & P[x,y]
   proof
-    let x' be set such that
-A7: x' in N;
-    reconsider x=x' as Element of NAT by A7;
+    let x9 be set such that
+A7: x9 in N;
+    reconsider x=x9 as Element of NAT by A7;
     now
       per cases by XXREAL_0:1;
       suppose
@@ -4147,19 +3549,19 @@ A8:     x < n;
 A9:     (F.x)+1 <=F.n by NAT_1:13;
         F.n < card N by A1,NAT_1:45;
         then (F.x)+1 < card N by A9,XXREAL_0:2;
-        then (F.x)+1 in dom F' by A5,NAT_1:45;
+        then (F.x)+1 in dom F9 by A5,NAT_1:45;
         then
-A10:    F'.((F.x)+1) in rng F' by FUNCT_1:def 5;
+A10:    F9.((F.x)+1) in rng F9 by FUNCT_1:def 5;
         set FF=F".((F.x)+1);
-        P[x',FF] by A8;
+        P[x9,FF] by A8;
         hence thesis by A10;
       end;
       suppose
 A11:    x = n;
-        0 in dom F' by A1,A5,NAT_1:45;
+        0 in dom F9 by A1,A5,NAT_1:45;
         then
-A12:    F'.0 in rng F' by FUNCT_1:def 5;
-        P[x',F".0] by A11;
+A12:    F9.0 in rng F9 by FUNCT_1:def 5;
+        P[x9,F".0] by A11;
         hence thesis by A12;
       end;
       suppose
@@ -4174,17 +3576,17 @@ A12:    F'.0 in rng F' by FUNCT_1:def 5;
 A13: for x st x in N holds P[x,P.x] from FUNCT_2:sch 1(A6);
   N c= rng P
   proof
-    let Px' be set such that
-A14: Px' in N;
-    reconsider Px=Px' as Element of NAT by A14;
+    let Px9 be set such that
+A14: Px9 in N;
+    reconsider Px=Px9 as Element of NAT by A14;
     now
       per cases;
       suppose
 A15:    Px<=n;
-        rng (F')=N by A2,A4,FUNCT_1:55;
+        rng (F9)=N by A2,A4,FUNCT_1:55;
         then consider x such that
-A16:    x in dom F' and
-A17:    F'.x=Px by A14,FUNCT_1:def 5;
+A16:    x in dom F9 and
+A17:    F9.x=Px by A14,FUNCT_1:def 5;
         card N is Subset of NAT by Th8;
         then reconsider x as Element of NAT by A5,A16;
         now
@@ -4413,20 +3815,20 @@ A3: rng P={};
 A4: for F be Function st for x st x in rng F & Q[x,F] holds P[F|(dom F\F"{x}
   )] holds P[F]
   proof
-    let F' be Function such that
-A5: for x st x in rng F' & Q[x,F'] holds P[F'|(dom F'\F'"{x})];
+    let F9 be Function such that
+A5: for x st x in rng F9 & Q[x,F9] holds P[F9|(dom F9\F9"{x})];
     let N,K be Subset of NAT,F be Function of N,K such that
-A6: F=F' and
+A6: F=F9 and
 A7: rng F is finite;
     now
       per cases;
       suppose
-        rng F' is empty;
-        then F'={};
+        rng F9 is empty;
+        then F9={};
         hence thesis by A1,A6;
       end;
       suppose
-A8:     rng F' is non empty;
+A8:     rng F9 is non empty;
         then reconsider domF=dom F as non empty Subset of NAT by A6,
         RELAT_1:65
         ,XBOOLE_1:1;
@@ -4568,7 +3970,7 @@ A42:        Orde is bijective and
 A43:        for n,k st n in dom Orde & k in dom Orde & n<k holds Orde
             .n < Orde.k by Th69;
             rng Orde=card rF by A42,FUNCT_2:def 3;
-            then reconsider Orde'=Orde" as Function of card rF,rF by A42,
+            then reconsider Orde9=Orde" as Function of card rF,rF by A42,
             FUNCT_2:31;
             consider P1 be Permutation of rF such that
 A44:        for k st k in rF holds (k < F.m implies P1.k=Orde".((Orde
@@ -4666,20 +4068,20 @@ A70:            Orde.n<Orde.k;
                 hence contradiction by A43,A68,A69,A70;
               end;
 A71:          for n,k st n in rng Orde & k in rng Orde holds n < k
-              implies Orde'.n<Orde'.k
+              implies Orde9.n<Orde9.k
               proof
                 let n,k such that
 A72:            n in rng Orde and
 A73:            k in rng Orde;
-A74:            n = Orde.(Orde'.n) by A42,A72,FUNCT_1:57;
-A75:            dom Orde = rng Orde' by A42,FUNCT_1:55;
-A76:            k = Orde.(Orde'.k) by A42,A73,FUNCT_1:57;
+A74:            n = Orde.(Orde9.n) by A42,A72,FUNCT_1:57;
+A75:            dom Orde = rng Orde9 by A42,FUNCT_1:55;
+A76:            k = Orde.(Orde9.k) by A42,A73,FUNCT_1:57;
                 assume
 A77:            n < k;
-A78:            rng Orde = dom Orde' by A42,FUNCT_1:55;
+A78:            rng Orde = dom Orde9 by A42,FUNCT_1:55;
                 then
-A79:            Orde'.n in dom Orde by A72,A75,FUNCT_1:def 5;
-                Orde'.k in dom Orde by A73,A78,A75,FUNCT_1:def 5;
+A79:            Orde9.n in dom Orde by A72,A75,FUNCT_1:def 5;
+                Orde9.k in dom Orde by A73,A78,A75,FUNCT_1:def 5;
                 hence thesis by A67,A77,A74,A76,A79;
               end;
               rng FD =rng F\{F.m} by Th64;
@@ -4730,9 +4132,9 @@ A101:             j1 in rng FD or j1 in {F.m} by A89,A80,XBOOLE_0:def
                     then
 A102:               Orde.i1+1 >Orde.j1+1 by XREAL_1:10;
 A103:               Orde.i1+1 in rng Orde by A84,A59,A98;
-A104:               Orde'.(Orde.j1+1)= j by A44,A94,A96,A98;
+A104:               Orde9.(Orde.j1+1)= j by A44,A94,A96,A98;
 A105:               Orde.j1+1 in rng Orde by A88,A59,A98;
-                    Orde'.(Orde.i1+1)=i by A44,A92,A93,A98;
+                    Orde9.(Orde.i1+1)=i by A44,A92,A93,A98;
                     hence contradiction by A83,A71,A102,A103,A105,A104;
                   end;
                   then min* G"{i1}<min* G"{j1} by A19,A20,A98,A99,A101
@@ -4775,9 +4177,9 @@ A115:             i1 < F.m & j1=F.m;
 A116:             0 in rng Orde by NAT_1:45;
                   Orde.i1+1 in rng Orde by A84,A59,A115;
                   then
-A117:             Orde'.(Orde.i1+1)>Orde'.0 by A71,A116;
-A118:             P1.j1=Orde'.0 by A44,A94,A115;
-                  Orde'.(Orde.i1+1)=i by A44,A92,A93,A115;
+A117:             Orde9.(Orde.i1+1)>Orde9.0 by A71,A116;
+A118:             P1.j1=Orde9.0 by A44,A94,A115;
+                  Orde9.(Orde.i1+1)=i by A44,A92,A93,A115;
                   hence thesis by A83,A95,A117,A118,TARSKI:def 1;
                 end;
                 suppose
@@ -4803,14 +4205,14 @@ A124:             i1 > F.m & j1=F.m;
 A125:             dom Orde=rF by FUNCT_2:def 1;
                   rng (Orde")=dom Orde by A42,FUNCT_1:55;
                   then consider x such that
-A126:             x in dom Orde' and
-A127:             Orde'.x=i1 by A84,A125,FUNCT_1:def 5;
+A126:             x in dom Orde9 and
+A127:             Orde9.x=i1 by A84,A125,FUNCT_1:def 5;
 A128:             x in card rF by A126;
                   card rF is Subset of NAT by Th8;
                   then reconsider x as Element of NAT by A128;
                   P1.i1=i1 by A44,A84,A124;
                   then
-A129:             Orde'.x < Orde'.0 by A44,A83,A88,A93,A96,A124,A127;
+A129:             Orde9.x < Orde9.0 by A44,A83,A88,A93,A96,A124,A127;
 A130:             card rF=rng Orde by A42,FUNCT_2:def 3;
                   then 0 in rng Orde by NAT_1:45;
                   then x <=0 by A71,A126,A130,A129;
@@ -4840,12 +4242,11 @@ A137:             Orde.j1+1 < Orde.(F.m) or Orde.j1+1 = Orde.(F.m) by
                   XXREAL_0:1;
                   F.m in dom Orde by A9,A88,A59,A135;
                   then
-A138:             Orde'.(Orde.(F.m))=F.m by A42,FUNCT_1:56;
+A138:             Orde9.(Orde.(F.m))=F.m by A42,FUNCT_1:56;
 A139:             P1.i1=i1 by A44,A84,A135;
-A140:             Orde'.(Orde.j1+1)=P1.j1 by A44,A88,A135;
-A141:             Orde.(F.m) is Element of NAT by A88,A59,A135;
+A140:             Orde9.(Orde.j1+1)=P1.j1 by A44,A88,A135;
                   Orde.j1+1 in rng Orde by A88,A59,A135;
-                  then P1.j1<=F.m by A71,A137,A141,A136,A138,A140;
+                  then P1.j1<=F.m by A71,A137,A136,A138,A140;
                   hence thesis by A83,A93,A96,A135,A139,XXREAL_0:2;
                 end;
               end;
@@ -4963,19 +4364,19 @@ A7: I1={};
 A8: for F be Function st for x st x in rng F & Q[x,F] holds P[F|(dom F\F"{x
   })] holds P[F]
   proof
-    let F' be Function such that
-A9: for x st x in rng F' & Q[x,F'] holds P[F'|(dom F'\F'"{x})];
+    let F9 be Function such that
+A9: for x st x in rng F9 & Q[x,F9] holds P[F9|(dom F9\F9"{x})];
     now
       per cases;
       suppose
-        F'={};
+        F9={};
         hence thesis by A1;
       end;
       suppose
-A10:    F'<>{};
+A10:    F9<>{};
         let Ne,Ke,Me be Subset of NAT;
         let F be Function of Ne,Ke such that
-A11:    F=F';
+A11:    F=F9;
         Ke is non empty by A10,A11;
         then reconsider domF=dom F as non empty Subset of NAT by A10,A11,
         FUNCT_2:def 1;

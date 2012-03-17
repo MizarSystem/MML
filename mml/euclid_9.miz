@@ -1,0 +1,1399 @@
+:: The Correspondence Between $n$-dimensional {E}uclidean Space and the 
+:: Product of $n$ Real Lines
+::  by Artur Korni{\l}owicz
+:: 
+:: Received November 30, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies RELAT_1, FUNCT_1, VALUED_0, MEMBERED, ARYTM_1, COMPLEX1, ARYTM_3,
+      XCMPLX_0, FINSEQ_1, EUCLID, PRE_TOPC, ORDINAL2, METRIC_1, XREAL_0,
+      TOPMETR, RCOMP_1, PCOMPS_1, FINSEQ_2, RVSUM_1, SQUARE_1, FUNCT_4,
+      VALUED_2, SUBSET_1, FUNCOP_1, PARTFUN1, CARD_3, MONOID_0, CANTOR_1,
+      QC_LANG1, SETFAM_1, RLVECT_2, WAYBEL18, RLVECT_3, PBOOLE, TOPGEN_2,
+      STRUCT_0, FINSET_1, FUNCT_2, TARSKI, CARD_1, YELLOW_8, NAT_1, ORDINAL1,
+      ZFMISC_1, XBOOLE_0, VALUED_1, NUMBERS, XXREAL_0, XXREAL_1, EUCLID_9,
+      REAL_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, FINSET_1, TOPS_2, RELAT_1,
+      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, ORDINAL1, NUMBERS, VALUED_0,
+      VALUED_1, XCMPLX_0, XREAL_0, XXREAL_0, XXREAL_2, REAL_1, CARD_3,
+      MEMBERED, COMPLEX1, SQUARE_1, CANTOR_1, NAT_1, FUNCOP_1, FINSEQ_1,
+      FINSEQ_2, RCOMP_1, FUNCT_7, VALUED_2, STRUCT_0, RVSUM_1, MONOID_0,
+      PRE_TOPC, METRIC_1, PCOMPS_1, TOPMETR, ALGSTR_0, EUCLID, PRALG_1,
+      YELLOW_8, WAYBEL18, BORSUK_4, TOPGEN_2, TOPREAL9, TOPREALB;
+ constructors SEQ_1, MONOID_0, FUNCT_7, VALUED_2, TOPREAL9, TOPREALB, BORSUK_4,
+      COMPLEX1, SQUARE_1, FUNCSDOM, WAYBEL18, SETFAM_1, BINOP_2, XXREAL_2,
+      TOPGEN_2;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, MEMBERED,
+      XCMPLX_0, XREAL_0, VALUED_2, STRUCT_0, EUCLID, MONOID_0, TOPREALB,
+      XXREAL_0, NAT_1, TOPMETR, FUNCT_2, RVSUM_1, TOPREAL9, SQUARE_1, PCOMPS_1,
+      RCOMP_1, FUNCT_7, NUMBERS, FINSEQ_1, FUNCOP_1, WAYBEL18, JORDAN2B,
+      ZFMISC_1, SERIES_3, FINSEQ_2, XXREAL_2, FINSET_1, PARTFUN3;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
+ definitions RELAT_1, CARD_3, FINSEQ_1, MONOID_0, TOPS_2, CANTOR_1, YELLOW_8,
+      TARSKI, XBOOLE_0, LATTICE7, FUNCT_1, XCMPLX_0, SQUARE_1, VALUED_1,
+      FINSEQ_2, VALUED_2, METRIC_1, PCOMPS_1, TOPMETR, EUCLID, BORSUK_4,
+      TOPREALB;
+ theorems FUNCT_1, PARTFUN1, FUNCT_2, VALUED_1, FUNCT_7, VALUED_2, TOPMETR,
+      TOPREAL9, EUCLID, GOBOARD6, METRIC_1, XBOOLE_1, XXREAL_0, XREAL_1,
+      XBOOLE_0, RCOMP_1, FINSEQ_2, XREAL_0, FRECHET, FINSEQ_1, FUNCOP_1,
+      PRE_TOPC, SQUARE_1, RVSUM_1, COMPLEX1, XXREAL_1, RELAT_1, XCMPLX_1,
+      ORDINAL1, MATRPROB, JORDAN2C, TARSKI, ZFMISC_1, WAYBEL18, FINSEQ_3,
+      CANTOR_1, XXREAL_2, YELLOW_9, CARD_3, SUBSET_1, FCONT_3, PRALG_1,
+      PCOMPS_1, SETFAM_1, TOPGEN_2, RINFSUP1;
+ schemes FUNCT_1, PBOOLE, PRE_CIRC;
+
+begin
+
+reserve
+  x, y for set,
+  i, k, n for Nat,
+  r, s for real number,
+  f1, f2 for n-long real-valued FinSequence;
+
+registration
+  let s be real number; let r be non positive (real number);
+  cluster ]. s-r , s+r .[ -> empty;
+  coherence
+  proof
+    s+r <= s-r by XREAL_1:8;
+    hence thesis by XXREAL_1:28;
+  end;
+  cluster [. s-r , s+r .[ -> empty;
+  coherence
+  proof
+    s+r <= s-r by XREAL_1:8;
+    hence thesis by XXREAL_1:27;
+  end;
+  cluster ]. s-r , s+r .] -> empty;
+  coherence
+  proof
+    s+r <= s-r by XREAL_1:8;
+    hence thesis by XXREAL_1:26;
+  end;
+end;
+
+registration
+  let s be real number; let r be negative (real number);
+  cluster [. s-r , s+r .] -> empty;
+  coherence
+  proof
+    s+r < s-r by XREAL_1:8;
+    hence thesis by XXREAL_1:29;
+  end;
+end;
+
+registration
+  let f be empty-yielding Function;
+  let x;
+  cluster f.x -> empty;
+  coherence
+  proof
+    x in dom f or not x in dom f;
+    hence thesis by FUNCT_1:def 4,def 14;
+  end;
+end;
+
+registration
+  let i;
+  cluster i |-> 0 -> empty-yielding;
+  coherence
+  proof
+    let x;
+    dom (i|->0) = Seg i by FUNCOP_1:19;
+    hence thesis by FINSEQ_2:71;
+  end;
+end;
+
+registration
+  let n; let f be n-long complex-valued FinSequence;
+  cluster -f -> n-long;
+  coherence
+  proof
+A1: dom - f = dom f by VALUED_1:8;
+    len f = n by FINSEQ_1:def 18;
+    hence len -f = n by A1,FINSEQ_3:31;
+  end;
+  cluster f" -> n-long;
+  coherence
+  proof
+A2: dom(f") = dom f by VALUED_1:def 7;
+    len f = n by FINSEQ_1:def 18;
+    hence len(f") = n by A2,FINSEQ_3:31;
+  end;
+  cluster f^2 -> n-long;
+  coherence
+  proof
+A3: dom(f^2) = dom f by VALUED_1:11;
+    len f = n by FINSEQ_1:def 18;
+    hence len(f^2) = n by A3,FINSEQ_3:31;
+  end;
+  cluster abs f -> n-long;
+  coherence
+  proof
+A4: dom abs f = dom f by VALUED_1:def 11;
+    len f = n by FINSEQ_1:def 18;
+    hence len abs f = n by A4,FINSEQ_3:31;
+  end;
+  let g be n-long complex-valued FinSequence;
+  cluster f + g -> n-long;
+  coherence
+  proof
+A5: n in NAT by ORDINAL1:def 13;
+A6: dom(f+g) = dom f /\ dom g by VALUED_1:def 1;
+    len f = n & len g = n by FINSEQ_1:def 18;
+    then dom f = Seg n & dom g = Seg n by FINSEQ_1:def 3;
+    hence len(f+g) = n by A5,A6,FINSEQ_1:def 3;
+  end;
+  cluster f - g -> n-long;
+  coherence;
+  cluster f (#) g -> n-long;
+  coherence
+  proof
+A7: n in NAT by ORDINAL1:def 13;
+A8: dom(f(#)g) = dom f /\ dom g by VALUED_1:def 4;
+    len f = n & len g = n by FINSEQ_1:def 18;
+    then dom f = Seg n & dom g = Seg n by FINSEQ_1:def 3;
+    hence len(f(#)g) = n by A7,A8,FINSEQ_1:def 3;
+  end;
+  cluster f /" g -> n-long;
+  coherence;
+end;
+
+registration
+  let c be complex number, n be Nat, f be n-long complex-valued FinSequence;
+  cluster c + f -> n-long;
+  coherence
+  proof
+A1: dom(c+f) = dom f by VALUED_1:def 2;
+    len f = n by FINSEQ_1:def 18;
+    hence len(c+f) = n by A1,FINSEQ_3:31;
+  end;
+  cluster f - c -> n-long;
+  coherence;
+  cluster c (#) f -> n-long;
+  coherence
+  proof
+A2: dom(c(#)f) = dom f by VALUED_1:def 5;
+    len f = n by FINSEQ_1:def 18;
+    hence len(c(#)f) = n by A2,FINSEQ_3:31;
+  end;
+end;
+
+registration
+  let f be real-valued Function;
+  cluster {f} -> real-functions-membered;
+  coherence
+  proof
+    let x;
+    thus thesis by TARSKI:def 1;
+  end;
+  let g be real-valued Function;
+  cluster {f,g} -> real-functions-membered;
+  coherence
+  proof
+    let x;
+    thus thesis by TARSKI:def 2;
+  end;
+end;
+
+registration
+  let n; let D be set;
+  cluster n-tuples_on D -> FinSequence-membered;
+  coherence
+  proof
+    let x;
+    assume x in n-tuples_on D;
+    then ex s being Element of D* st x = s & len s = n;
+    hence thesis;
+  end;
+end;
+
+registration
+  let n;
+  cluster REAL n -> FinSequence-membered;
+  coherence;
+end;
+
+registration
+  let n;
+  cluster REAL n -> real-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in REAL n;
+    then reconsider x as Element of REAL n;
+    x is real-valued;
+    hence thesis;
+  end;
+end;
+
+registration
+  let n, x, y; let f be n-long FinSequence;
+  cluster f+*(x,y) -> n-long;
+  coherence
+  proof
+    dom(f+*(x,y)) = dom f by FUNCT_7:32;
+    hence len(f+*(x,y)) = len f by FINSEQ_3:31
+    .= n by FINSEQ_1:def 18;
+  end;
+end;
+
+theorem Th1:
+  for f being n-long FinSequence st f is empty holds n = 0
+  proof
+    let f be n-long FinSequence;
+    assume f is empty;
+    then
+A1: dom f = Seg 0;
+    len f = n by FINSEQ_1:def 18;
+    hence thesis by A1,FINSEQ_1:def 3;
+  end;
+
+theorem Th2:
+  for f being n-long real-valued FinSequence holds f in REAL n
+  proof
+    let f be n-long real-valued FinSequence;
+    rng f c= REAL;
+    then f is FinSequence of REAL by FINSEQ_1:def 4;
+    then
+A1: f is Element of REAL* by FINSEQ_1:def 11;
+    len f = n by FINSEQ_1:def 18;
+    hence thesis by A1;
+  end;
+
+theorem Th3:
+  for f, g being complex-valued Function holds abs(f-g) = abs(g-f)
+  proof
+    let f, g be complex-valued Function;
+    f-g = -(g-f) by VALUED_2:18;
+    hence thesis by EUCLID:8;
+  end;
+
+definition
+  let n, f1, f2;
+  func max_diff_index(f1,f2) -> Nat equals
+  the Element of abs(f1-f2) " { sup rng abs(f1-f2) };
+  coherence;
+  commutativity
+  proof
+    let i,f1,f2;
+    abs(f1-f2) = abs(f2-f1) by Th3;
+    hence thesis;
+  end;
+end;
+
+theorem
+  n <> 0 implies max_diff_index(f1,f2) in dom f1
+  proof
+    set F = abs(f1-f2);
+    assume n <> 0;
+    then F is non empty by Th1;
+    then sup rng F in rng F by XXREAL_2:def 6;
+    then
+A1: F"{sup rng F} <> {} by FUNCT_1:142;
+A2: dom f1 = Seg n by EUCLID:3;
+A3: dom abs(f1-f2) = Seg n by EUCLID:3;
+A4: F"{sup rng F} c= dom F by RELAT_1:167;
+    max_diff_index(f1,f2) in F"{sup rng F} by A1;
+    hence thesis by A4,A2,A3;
+  end;
+
+theorem Th5:
+  abs(f1-f2).x <= abs(f1-f2).max_diff_index(f1,f2)
+  proof
+    set F = abs(f1-f2);
+A1: dom F = dom(f1-f2) by VALUED_1:def 11
+    .= dom f1 /\ dom f2 by VALUED_1:12;
+    set m = max_diff_index(f1,f2);
+A2: dom f1 = Seg n & dom f2 = Seg n by EUCLID:3;
+    per cases;
+    suppose x in dom f1;
+      then
+A3:   F.x in rng F by A2,A1,FUNCT_1:def 5;
+      then sup rng F in rng F by XXREAL_2:def 6;
+      then
+      F"{sup rng F} <> {} by FUNCT_1:142;
+      then F.m in {sup rng F} by FUNCT_1:def 13;
+      then F.m = sup rng F by TARSKI:def 1;
+      hence thesis by A3,XXREAL_2:4;
+    end;
+    suppose not x in dom f1;
+      then
+A4:   not x in dom F by A1,XBOOLE_0:def 4;
+      F.m = abs((f1-f2).m) by VALUED_1:18;
+      hence thesis by A4,FUNCT_1:def 4;
+    end;
+  end;
+
+registration
+  cluster RealSpace -> real-membered;
+  coherence
+  proof
+    thus the carrier of RealSpace is real-membered;
+  end;
+end;
+
+registration
+  cluster TopSpaceMetr Euclid 0 -> trivial;
+  coherence by JORDAN2C:113;
+end;
+
+registration
+  let n;
+  cluster Euclid n -> constituted-FinSeqs;
+  coherence
+  proof
+    let a be Element of Euclid n;
+    thus thesis;
+  end;
+end;
+
+registration
+  let n;
+  cluster -> REAL-valued Point of Euclid n;
+  coherence
+  proof
+    let a be Element of Euclid n;
+    let y;
+    assume y in rng a;
+    hence y in REAL by XREAL_0:def 1;
+  end;
+end;
+
+registration
+  let n;
+  cluster -> n-long Point of Euclid n;
+  coherence;
+end;
+
+theorem Th6:
+  Family_open_set(Euclid 0) = {{},{{}}}
+  proof
+    the TopStruct of TOP-REAL 0 = TopSpaceMetr Euclid 0 by EUCLID:def 8;
+    hence thesis by YELLOW_9:9,JORDAN2C:113;
+  end;
+
+theorem
+  for B being Subset of Euclid 0 holds B = {} or B = {{}}
+  by ZFMISC_1:39,JORDAN2C:113;
+
+reserve e, e1 for Point of Euclid n;
+
+definition
+  let n, e;
+  func @e -> Point of TopSpaceMetr Euclid n equals
+  e;
+  coherence;
+end;
+
+registration
+  let n, e;
+  let r be non positive (real number);
+  cluster Ball(e,r) -> empty;
+  coherence
+  proof
+    assume not thesis;
+    then consider x being Point of Euclid n such that
+A1: x in Ball(e,r) by SUBSET_1:10;
+    dist(x,e) < r by A1,METRIC_1:12;
+    hence thesis by METRIC_1:5;
+  end;
+end;
+
+registration
+  let n, e;
+  let r be positive (real number);
+  cluster Ball(e,r) -> non empty;
+  coherence by GOBOARD6:4;
+end;
+
+theorem Th8:
+  for p1, p2 being Point of TOP-REAL n st i in dom p1 holds
+  (p1/.i - p2/.i)^2 <= Sum sqr (p1-p2)
+  proof
+    let p1, p2 be Point of TOP-REAL n such that
+A1: i in dom p1;
+    set e = sqr(p1-p2);
+    reconsider P = p1, X = p2 as FinSequence of REAL by EUCLID:27;
+A2: now
+      let i be Nat such that i in dom e;
+      e.i = ((p1-p2).i)^2 by VALUED_1:11;
+      hence 0 <= e.i;
+    end;
+A3: dom e = dom (p1-p2) by VALUED_1:11;
+A4: p1-p2 = p1 qua real-valued Function -p2 by EUCLID:73;
+    then
+A5: dom (p1-p2) = dom p1 /\ dom p2 by VALUED_1:12;
+A6: dom p1 = Seg n by EUCLID:3
+    .= dom p2 by EUCLID:3;
+A7: p1.i = p1/.i by A1,PARTFUN1:def 8;
+A8: p2.i = p2/.i by A1,A6,PARTFUN1:def 8;
+    e.i = ((p1-p2).i)^2 by VALUED_1:11
+    .= (p1/.i - p2/.i)^2 by A7,A8,A1,A6,A4,A5,VALUED_1:13;
+    hence thesis by A1,A2,A3,A6,A5,MATRPROB:5;
+  end;
+
+theorem Th9:
+  for a, o, p being Element of TOP-REAL n st a in Ball(o,r) holds
+  for x being set holds abs((a-o).x) < r & abs(a.x-o.x) < r
+  proof
+    let a, o, p be Element of TOP-REAL n;
+A1: n in NAT by ORDINAL1:def 13;
+    assume
+A2: a in Ball(o,r);
+    then
+A3: |.a-o.| < r by A1,TOPREAL9:7;
+    0 <= Sum sqr (a-o) by RVSUM_1:116;
+    then (sqrt Sum sqr (a-o))^2 = Sum sqr (a-o) by SQUARE_1:def 4;
+    then
+A4: Sum sqr (a-o) < r^2 by A3,SQUARE_1:78;
+A5: o-a = o qua real-valued FinSequence - a by EUCLID:73;
+A6: a-o = a qua real-valued FinSequence - o by EUCLID:73;
+    then
+A7: sqr(a-o) = sqr(o-a) by A5,EUCLID:23;
+A8: r > 0 by A2;
+    let x;
+A9: dom(a-o) = dom a /\ dom o by A6,VALUED_1:12;
+A10: dom a = Seg n & dom o = Seg n by EUCLID:3;
+    per cases;
+    suppose
+A11: x in dom a;
+    then reconsider x as Nat;
+A12: (a-o).x = a.x - o.x by A11,A6,A9,A10,VALUED_1:13;
+A13: a/.x = a.x & o/.x = o.x by A11,A10,PARTFUN1:def 8;
+    now
+      assume o.x - a.x >= r;
+      then
+A14:   (o.x - a.x)^2 >= r^2 by A8,SQUARE_1:77;
+      Sum sqr (o-a) >= (o/.x-a/.x)^2 by A11,A10,Th8;
+      hence contradiction by A4,A14,A7,A13,XXREAL_0:2;
+    end;
+    then
+A15: o.x - r < a.x by XREAL_1:13;
+    now
+      assume a.x - o.x >= r;
+      then
+A16:   (a.x - o.x)^2 >= r^2 by A8,SQUARE_1:77;
+      Sum sqr (a-o) >= (a/.x-o/.x)^2 by A11,Th8;
+      hence contradiction by A4,A16,A13,XXREAL_0:2;
+    end;
+    then a.x < o.x + r by XREAL_1:21;
+    hence thesis by A12,A15,RINFSUP1:1;
+    end;
+    suppose
+A17:   not x in dom a;
+      then not x in dom abs(a-o) by A9,A10,VALUED_1:def 11;
+      then abs(a-o).x = 0 by FUNCT_1:def 4;
+      then
+A18:   abs((a-o).x) = 0 by VALUED_1:18;
+      a.x = 0 & o.x = 0 by A10,A17,FUNCT_1:def 4;
+      hence thesis by A18,A2;
+    end;
+  end;
+
+theorem Th10:
+  for a, o being Point of Euclid n st a in Ball(o,r) holds
+  for x being set holds abs((a-o).x) < r & abs(a.x-o.x) < r
+  proof
+    let a, o be Point of Euclid n;
+    reconsider a1 = a, o1 = o as Point of TOP-REAL n by EUCLID:71;
+    n in NAT by ORDINAL1:def 13;
+    then
+A1: Ball(o,r) = Ball(o1,r) by TOPREAL9:13;
+    a-o = a1-o1 by EUCLID:73;
+    hence thesis by A1,Th9;
+  end;
+
+definition
+  let f be real-valued Function, r be real number;
+  func Intervals(f,r) -> Function means
+:Def3:
+  dom it = dom f &
+  for x being set st x in dom f holds it.x = ].f.x-r,f.x+r.[;
+  existence
+  proof
+    deffunc F(set) = ].f.$1-r,f.$1+r.[;
+    ex g being Function st dom g = dom f &
+    for x st x in dom f holds g.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let g, h be Function such that
+A1: dom g = dom f and
+A2: for x being set st x in dom f holds g.x = ].f.x-r,f.x+r.[ and
+A3: dom h = dom f and
+A4: for x being set st x in dom f holds h.x = ].f.x-r,f.x+r.[;
+    now
+      let x;
+      assume
+A5:   x in dom g;
+      hence g.x = ].f.x-r,f.x+r.[ by A1,A2
+      .= h.x by A1,A4,A5;
+    end;
+    hence thesis by A1,A3,FUNCT_1:9;
+  end;
+end;
+
+registration
+  let r;
+  cluster Intervals({},r) -> empty;
+  coherence
+  proof
+    dom Intervals({},r) = dom {} by Def3;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be real-valued FinSequence; let r;
+  cluster Intervals(f,r) -> FinSequence-like;
+  coherence
+  proof
+    take len f;
+    dom Intervals(f,r) = dom f by Def3;
+    hence thesis by FINSEQ_1:def 3;
+  end;
+end;
+
+definition
+  let n, e, r;
+  func OpenHypercube(e,r) -> Subset of TopSpaceMetr Euclid n equals
+  product Intervals(e,r);
+  coherence
+  proof
+    set T = TopSpaceMetr Euclid n;
+    set f = Intervals(e,r);
+    product f c= the carrier of T
+    proof
+      let x;
+      assume x in product f;
+      then consider g being Function such that
+A1:   x = g and
+A2:   dom g = dom f and
+A3:   for y being set st y in dom f holds g.y in f.y by CARD_3:def 5;
+A4:   dom f = dom e by Def3;
+A5:   dom e = Seg n by EUCLID:3;
+      reconsider x as FinSequence by A1,A2,A4,A5,FINSEQ_1:def 2;
+      rng x c= REAL
+      proof
+        let b be set;
+        assume b in rng x;
+        then consider a being set such that
+A6:     a in dom x and
+A7:     x .a = b by FUNCT_1:def 5;
+A8:     g.a in f.a by A1,A2,A3,A6;
+        f.a = ].e.a-r,e.a+r.[ by A1,A2,A4,A6,Def3;
+        hence thesis by A1,A7,A8;
+      end;
+      then x is FinSequence of REAL by FINSEQ_1:def 4;
+      then
+A9:   x in REAL* by FINSEQ_1:def 11;
+      len e = n by FINSEQ_1:def 18;
+      then len x = n by A1,A2,A4,FINSEQ_3:31;
+      hence thesis by A9;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th11:
+  0 < r implies e in OpenHypercube(e,r)
+  proof
+    assume
+A1: 0 < r;
+    set f = Intervals(e,r);
+A2: dom f = dom e by Def3;
+    now
+      let x;
+      assume x in dom f;
+      then
+A3:   f.x = ].e.x-r,e.x+r.[ by A2,Def3;
+A4:   e.x-r < e.x-0 by A1,XREAL_1:12;
+      e.x+0 < e.x+r by A1,XREAL_1:10;
+      hence e.x in f.x by A3,A4,XXREAL_1:4;
+    end;
+    hence thesis by A2,CARD_3:18;
+  end;
+
+registration
+  let n be non zero Nat; let e be Point of Euclid n;
+  let r be non positive (real number);
+  cluster OpenHypercube(e,r) -> empty;
+  coherence
+  proof
+    assume not thesis;
+    then consider x being set such that
+A1: x in OpenHypercube(e,r) by XBOOLE_0:def 1;
+    reconsider x as Point of TopSpaceMetr Euclid n by A1;
+    reconsider e1 = e, x as real-valued Function;
+    set f = Intervals(e,r);
+A2: dom f = dom e by Def3;
+A3: dom e = Seg n by EUCLID:3;
+    consider N being set such that
+A4: N in Seg n by XBOOLE_0:def 1;
+    f.N = ].e1.N-r,e1.N+r.[ by A4,A3,Def3;
+    hence thesis by A1,A2,A3,A4,CARD_3:18;
+  end;
+end;
+
+theorem Th12:
+  for e being Point of Euclid 0 holds OpenHypercube(e,r) = {{}} by CARD_3:19;
+
+registration
+  let e be Point of Euclid 0;
+  let r;
+  cluster OpenHypercube(e,r) -> non empty;
+  coherence by CARD_3:19;
+end;
+
+registration
+  let n, e; let r be positive (real number);
+  cluster OpenHypercube(e,r) -> non empty;
+  coherence by Th11;
+end;
+
+theorem Th13:
+  r <= s implies OpenHypercube(e,r) c= OpenHypercube(e,s)
+  proof
+    assume
+A1: r <= s;
+A2: dom Intervals(e,s) = dom e by Def3;
+A3: dom Intervals(e,r) = dom e by Def3;
+    now
+      let x;
+      assume
+A4:   x in dom Intervals(e,r);
+      reconsider u = e.x as real number;
+A5:   Intervals(e,r).x = ].u-r,u+r.[ & Intervals(e,s).x = ].u-s,u+s.[
+      by A4,A3,Def3;
+      u-s <= u-r & u+r <= u+s by A1,XREAL_1:8,12;
+      hence Intervals(e,r).x c= Intervals(e,s).x by A5,XXREAL_1:46;
+    end;
+    hence thesis by A2,A3,CARD_3:38;
+  end;
+
+theorem Th14:
+  (n <> 0 or 0 < r) & e1 in OpenHypercube(e,r) implies
+  for x being set holds abs((e1-e).x) < r & abs(e1.x-e.x) < r
+  proof
+    assume that
+A1: n <> 0 or 0 < r and
+A2: e1 in OpenHypercube(e,r);
+A3: dom e1 = Seg n & dom e = Seg n by EUCLID:3;
+A4: dom(e1-e) = dom e1 /\ dom e by VALUED_1:12;
+    let x be set;
+    per cases;
+    suppose
+A5:   x in dom e1;
+      then
+A6:   (e1-e).x = e1.x-e.x by A3,A4,VALUED_1:13;
+A7:   e1.x in REAL & e.x in REAL & r in REAL by XREAL_0:def 1;
+      dom e = dom Intervals(e,r) by Def3;
+      then
+A8:   e1.x in Intervals(e,r).x by A5,A3,A2,CARD_3:18;
+      Intervals(e,r).x = ].e.x-r,e.x+r.[ by A3,A5,Def3;
+      hence thesis by A6,A8,A7,FCONT_3:9;
+    end;
+    suppose
+A9:   not x in dom e1;
+      then not x in dom abs(e1-e) by A4,A3,VALUED_1:def 11;
+      then abs(e1-e).x = 0 by FUNCT_1:def 4;
+      then
+A10:   abs((e1-e).x) = 0 by VALUED_1:18;
+      e1.x = 0 & e.x = 0 by A3,A9,FUNCT_1:def 4;
+      hence thesis by A10,A1,A2;
+    end;
+  end;
+
+theorem Th15:
+  n <> 0 & e1 in OpenHypercube(e,r) implies Sum sqr (e1-e) < n*r^2
+  proof
+    assume that
+A1: n <> 0 and
+A2: e1 in OpenHypercube(e,r);
+    set R1 = sqr(e1-e);
+    set R2 = n|->(r^2);
+A3: REAL n = n-tuples_on REAL;
+A4: R1 in n-tuples_on REAL by Th2;
+A5: R2 in n-tuples_on REAL by A3,Th2;
+A6: now
+      let i;
+      assume
+A7:   i in Seg n;
+A8:   dom e1 = Seg n & dom e = Seg n by EUCLID:3;
+      dom(e1-e) = dom e1 /\ dom e by VALUED_1:12;
+      then
+A9:   (e1-e).i = e1.i-e.i by A7,A8,VALUED_1:13;
+A10:   R1.i = ((e1-e).i)^2 by VALUED_1:11;
+A11:   R2.i = r^2 by A7,FINSEQ_2:71;
+A12:   abs(e1.i-e.i) < r by A1,A2,Th14;
+      ((e1-e).i)^2 = (abs((e1-e).i))^2 by COMPLEX1:161;
+      hence R1.i < R2.i by A9,A10,A11,A12,SQUARE_1:78;
+    end;
+    then
+A13: for i st i in Seg n holds R1.i <= R2.i;
+    ex i st i in Seg n & R1.i < R2.i
+    proof
+      consider i being set such that
+A14:   i in Seg n by A1,XBOOLE_0:def 1;
+      reconsider i as Nat by A14;
+      take i;
+      thus thesis by A14,A6;
+    end;
+    then Sum R1 < Sum R2 by A4,A5,A13,RVSUM_1:113;
+    hence thesis by RVSUM_1:110;
+  end;
+
+theorem Th16:
+  n <> 0 & e1 in OpenHypercube(e,r) implies dist(e1,e) < r * sqrt(n)
+  proof
+    assume that
+A1: n <> 0 and
+A2: e1 in OpenHypercube(e,r);
+A3: dist(e1,e) = |.e1-e.| by EUCLID:def 6;
+    0 <= Sum sqr (e1-e) by RVSUM_1:116;
+    then
+A4: sqrt Sum sqr (e1-e) < sqrt(n*r^2) by A1,A2,Th15,SQUARE_1:95;
+    0 <= r by A1,A2;
+    then sqrt(r^2) = r by SQUARE_1:89;
+    hence thesis by A3,A4,SQUARE_1:97;
+  end;
+
+theorem Th17:
+  n <> 0 implies OpenHypercube(e,r/sqrt(n)) c= Ball(e,r)
+  proof
+    assume
+A1: n <> 0;
+    let x;
+    assume
+A2: x in OpenHypercube(e,r/sqrt(n));
+    then reconsider x as Point of Euclid n;
+A3: dist(x,e) < r/sqrt(n)*sqrt(n) by A1,A2,Th16;
+    r/sqrt(n)*sqrt(n) = r by A1,XCMPLX_1:88;
+    hence thesis by A3,METRIC_1:12;
+  end;
+
+theorem
+  n <> 0 implies OpenHypercube(e,r) c= Ball(e,r*sqrt(n))
+  proof
+    assume
+A1: n <> 0;
+    then
+A2: OpenHypercube(e,r*sqrt(n)/sqrt(n)) c= Ball(e,r*sqrt(n)) by Th17;
+    r/sqrt(n)*sqrt(n) = r by A1,XCMPLX_1:88;
+    hence thesis by A2,XCMPLX_1:75;
+  end;
+
+theorem Th19:
+  e1 in Ball(e,r) implies
+  ex m being non zero Element of NAT st OpenHypercube(e1,1/m) c= Ball(e,r)
+  proof
+    reconsider B = Ball(e,r) as Subset of TopSpaceMetr Euclid n;
+    assume
+A1: e1 in Ball(e,r);
+    B is open by TOPMETR:21;
+    then consider s being real number such that
+A2: s > 0 and
+A3: Ball(e1,s) c= B by A1,TOPMETR:22;
+A4: s/sqrt(n) is Real by XREAL_0:def 1;
+    per cases;
+    suppose
+A5:   n <> 0;
+      then consider m being Element of NAT such that
+A6:   1/m < s/sqrt(n) and
+A7:   m > 0 by A2,A4,FRECHET:40;
+      reconsider m as non zero Element of NAT by A7;
+A8:   OpenHypercube(e1,s/sqrt(n)) c= Ball(e1,s) by A5,Th17;
+      OpenHypercube(e1,1/m) c= OpenHypercube(e1,s/sqrt(n)) by A6,Th13;
+      then OpenHypercube(e1,1/m) c= Ball(e1,s) by A8,XBOOLE_1:1;
+      hence thesis by A3,XBOOLE_1:1;
+    end;
+    suppose n = 0;
+      then (OpenHypercube(e1,1/1) = {} or OpenHypercube(e1,1/1) = {{}}) &
+      Ball(e,r) = {{}} by A1,ZFMISC_1:39,JORDAN2C:113;
+      hence thesis;
+    end;
+end;
+
+theorem Th20:
+  n <> 0 & e1 in OpenHypercube(e,r) implies r > abs(e1-e).max_diff_index(e1,e)
+  proof
+    set d = max_diff_index(e1,e);
+    abs(e1-e).d = abs((e1-e).d) by VALUED_1:18;
+    hence thesis by Th14;
+  end;
+
+theorem Th21:
+  OpenHypercube(e1,r-abs(e1-e).max_diff_index(e1,e)) c= OpenHypercube(e,r)
+  proof
+    set d = max_diff_index(e1,e);
+    set F = abs(e1-e);
+    set s = r-F.d;
+A1: dom e1 = Seg n & dom e = Seg n by EUCLID:3;
+    let y be Point of TopSpaceMetr Euclid n;
+    assume
+A2: y in OpenHypercube(e1,s);
+    reconsider y as Point of Euclid n;
+A3: dom y = dom Intervals(e1,s) by A2,CARD_3:18;
+A4: dom Intervals(e1,s) = dom e1 by Def3;
+A5: dom y = dom Intervals(e,r) by A1,A3,A4,Def3;
+    now
+      let x;
+      assume
+A6:   x in dom Intervals(e,r);
+      then
+A7:   Intervals(e,r).x = ].e.x-r,e.x+r.[ by A1,A3,A4,A5,Def3;
+A8:   Intervals(e1,s).x = ].e1.x-s,e1.x+s.[ by A3,A4,A5,A6,Def3;
+      y.x in Intervals(e1,s).x by A2,A3,A5,A6,CARD_3:18;
+      then
+A9:   abs(y.x-e1.x) < s by A8,RCOMP_1:8;
+      dom(e1-e) = dom e1 /\ dom e by VALUED_1:12;
+      then abs(e1.x-e.x) = abs((e1-e).x) by A1,A3,A4,A5,A6,VALUED_1:13
+      .= abs(e1-e).x by VALUED_1:18;
+      then
+A10:   abs(y.x-e1.x) + abs(e1.x-e.x) < s + F.d by A9,Th5,XREAL_1:10;
+      abs(y.x-e.x) <= abs(y.x-e1.x) + abs(e1.x-e.x) by COMPLEX1:149;
+      then abs(y.x-e.x) < r by A10,XXREAL_0:2;
+      hence y.x in Intervals(e,r).x by A7,RCOMP_1:8;
+    end;
+    hence thesis by A5,CARD_3:18;
+  end;
+
+theorem Th22:
+  Ball(e,r) c= OpenHypercube(e,r)
+  proof
+    let g be set;
+    assume
+A1: g in Ball(e,r);
+    then reconsider g as Point of Euclid n;
+A2: dom Intervals(e,r) = dom e by Def3;
+A3: dom g = Seg n & dom e = Seg n by EUCLID:3;
+    now
+      let x;
+      reconsider u = e.x, v = g.x as Real by XREAL_0:def 1;
+      assume
+A4:   x in dom Intervals(e,r);
+      then
+A5:   Intervals(e,r).x = ].u-r,u+r.[ by A2,Def3;
+      dom(g-e) = dom g /\ dom e by VALUED_1:12;
+      then
+A6:   (g-e).x = v-u by A2,A3,A4,VALUED_1:13;
+A7:   v = u + (v-u);
+      abs((g-e).x) < r by A1,Th10;
+      hence g.x in Intervals(e,r).x by A6,A5,A7,FCONT_3:11;
+    end;
+    hence thesis by A2,A3,CARD_3:18;
+  end;
+
+registration
+  let n, e, r;
+  cluster OpenHypercube(e,r) -> open;
+  coherence
+  proof
+    per cases;
+    suppose
+A1:   n <> 0;
+      for p being Point of Euclid n st p in OpenHypercube(e,r)
+      ex s being real number st s > 0 & Ball(p,s) c= OpenHypercube(e,r)
+      proof
+        let p be Point of Euclid n;
+        assume
+A2:     p in OpenHypercube(e,r);
+        set d = abs(p-e).max_diff_index(p,e);
+        take s = r-d;
+        r-d > d-d by A1,A2,Th20,XREAL_1:10;
+        hence s > 0;
+A3:     OpenHypercube(p,s) c= OpenHypercube(e,r) by Th21;
+        Ball(p,s) c= OpenHypercube(p,s) by Th22;
+        hence Ball(p,s) c= OpenHypercube(e,r) by A3,XBOOLE_1:1;
+      end;
+      hence thesis by TOPMETR:22;
+    end;
+    suppose
+A4:   n = 0;
+      then OpenHypercube(e,r) = {{}} by Th12;
+      then OpenHypercube(e,r) in the topology of TopSpaceMetr Euclid 0
+      by Th6,TARSKI:def 2;
+      hence thesis by A4,PRE_TOPC:def 5;
+    end;
+  end;
+end;
+
+theorem
+  for V being Subset of TopSpaceMetr Euclid n holds V is open implies
+  for e being Point of Euclid n st e in V
+  ex m being non zero Element of NAT st OpenHypercube(e,1/m) c= V
+  proof
+    let V be Subset of TopSpaceMetr Euclid n;
+    assume
+A1: V is open;
+    let e be Point of Euclid n;
+    assume e in V;
+    then consider r being real number such that
+A2: r > 0 and
+A3: Ball(e,r) c= V by A1,TOPMETR:22;
+    consider m being non zero Element of NAT such that
+A4: OpenHypercube(e,1/m) c= Ball(e,r) by A2,GOBOARD6:4,Th19;
+    take m;
+    thus thesis by A3,A4,XBOOLE_1:1;
+  end;
+
+theorem
+  for V being Subset of TopSpaceMetr Euclid n st
+  for e being Point of Euclid n st e in V
+  ex r being real number st r > 0 & OpenHypercube(e,r) c= V
+  holds V is open
+  proof
+    let V be Subset of TopSpaceMetr Euclid n;
+    assume
+A1: for e being Point of Euclid n st e in V
+    ex r being real number st r > 0 & OpenHypercube(e,r) c= V;
+    for e be Point of Euclid n st e in V
+    ex r being real number st r > 0 & Ball(e,r) c= V
+    proof
+      let e be Point of Euclid n;
+      assume e in V;
+      then consider r being real number such that
+A2:   r > 0 and
+A3:   OpenHypercube(e,r) c= V by A1;
+      Ball(e,r) c= OpenHypercube(e,r) by Th22;
+      hence thesis by A2,A3,XBOOLE_1:1;
+    end;
+    hence thesis by TOPMETR:22;
+  end;
+
+deffunc K(Nat,Point of Euclid $1) =
+{OpenHypercube($2,1/m) where m is non zero Element of NAT: not contradiction};
+
+definition
+  let n, e;
+  func OpenHypercubes(e) -> Subset-Family of TopSpaceMetr Euclid n equals
+  {OpenHypercube(e,1/m) where m is non zero Element of NAT: not contradiction};
+  coherence
+  proof
+    K(n,e) c= bool the carrier of TopSpaceMetr Euclid n
+    proof
+      let x;
+      assume x in K(n,e);
+      then ex m being non zero Element of NAT st x = OpenHypercube(e,1/m);
+      hence thesis by ZFMISC_1:def 1;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  let n, e;
+  cluster OpenHypercubes(e) -> non empty open @e-quasi_basis;
+  coherence
+  proof
+    set T = TopSpaceMetr Euclid n;
+    OpenHypercube(e,1/1) in OpenHypercubes(e);
+    hence OpenHypercubes(e) is non empty;
+    hereby
+      let A be Subset of T;
+      assume A in OpenHypercubes(e);
+      then ex m being non zero Element of NAT st A = OpenHypercube(e,1/m);
+      hence A is open;
+    end;
+    now
+      let Y be set;
+      assume Y in OpenHypercubes(e);
+      then ex m being non zero Element of NAT st Y = OpenHypercube(e,1/m);
+      hence @e in Y by Th11;
+    end;
+    hence @e in Intersect OpenHypercubes(e) by SETFAM_1:58;
+    let S be Subset of T such that
+A1: S is open and
+A2: @e in S;
+    consider r being real number such that
+A3: r > 0 and
+A4: Ball(e,r) c= S by A1,A2,TOPMETR:22;
+    consider m being non zero Element of NAT such that
+A5: OpenHypercube(e,1/m) c= Ball(e,r) by A3,GOBOARD6:4,Th19;
+    take V = OpenHypercube(e,1/m);
+    thus V in OpenHypercubes(e);
+    thus V c= S by A4,A5,XBOOLE_1:1;
+  end;
+end;
+
+Lm1: now
+  set J = {} --> R^1;
+  set C = Carrier J;
+  set P = product J;
+  set T = TopSpaceMetr Euclid 0;
+A1: the carrier of P = product C by WAYBEL18:def 3;
+  dom C = {} by PARTFUN1:def 4;
+  then
+A2: C = {};
+    {the carrier of T} is Basis of T by YELLOW_9:10;
+    hence T = P by A2,A1,YELLOW_9:10,25,CARD_3:19,JORDAN2C:113;
+end;
+
+theorem Th25:
+  Funcs(Seg n,REAL) = product Carrier (Seg n --> R^1)
+  proof
+    set J = Seg n --> R^1;
+    set C = Carrier J;
+A1: dom C = Seg n by PARTFUN1:def 4;
+    thus Funcs(Seg n,REAL) c= product C
+    proof
+      let f be set;
+      assume f in Funcs(Seg n,REAL);
+      then reconsider f as Function of Seg n,REAL by FUNCT_2:121;
+A2:   dom f = Seg n by FUNCT_2:def 1;
+      now
+        let x;
+        assume
+A3:     x in dom C;
+        then
+A4:     ex R being 1-sorted st R = J.x & C.x = the carrier of R
+        by A1,PRALG_1:def 13;
+        f.x in REAL by A1,A3,FUNCT_2:7;
+        hence f.x in C.x by A4,A1,A3,FUNCOP_1:13;
+      end;
+      hence thesis by A2,A1,CARD_3:18;
+    end;
+    let x be set;
+    assume x in product C;
+    then consider g being Function such that
+A5: x = g and
+A6: dom g = dom C and
+A7: for y being set st y in dom C holds g.y in C.y by CARD_3:def 5;
+    rng g c= REAL
+    proof
+      let z be set;
+      assume z in rng g;
+      then consider a being set such that
+A8:   a in dom g and
+A9:   g.a = z by FUNCT_1:def 5;
+A10:   ex R being 1-sorted st R = J.a & C.a = the carrier of R
+      by A1,A6,A8,PRALG_1:def 13;
+      J.a = R^1 by A1,A6,A8,FUNCOP_1:13;
+      hence thesis by A6,A7,A8,A9,A10;
+    end;
+    hence thesis by A1,A5,A6,FUNCT_2:def 2;
+  end;
+
+theorem Th26:
+  n <> 0 implies
+  for PP being Subset-Family of TopSpaceMetr Euclid n st
+  PP = product_prebasis (Seg n --> R^1) holds PP is quasi_prebasis
+  proof
+    assume
+A1: n <> 0;
+    set E = Euclid n;
+    set T = TopSpaceMetr E;
+    let PP be Subset-Family of T;
+    set J = Seg n --> R^1;
+    set C = Carrier J;
+    set S = Seg n;
+    reconsider S as non empty finite set by A1;
+    assume
+A2: PP = product_prebasis (Seg n --> R^1);
+A3: REAL n = Funcs(Seg n,REAL) by FINSEQ_2:111;
+A4: dom C = Seg n by PARTFUN1:def 4;
+A5: Funcs(Seg n,REAL) = product C by Th25;
+    defpred P[set,set] means ex e being Point of E st e = $1 &
+    $2 = OpenHypercubes(e);
+A6: for i being Element of T ex j being set st P[i,j]
+    proof
+      let i be Element of T;
+      reconsider j = i as Point of E;
+      take OpenHypercubes(j),j;
+      thus thesis;
+    end;
+    consider NS being ManySortedSet of T such that
+A7: for x being Point of T holds P[x,NS.x] from PBOOLE:sch 6(A6);
+     now
+       let x be Point of T;
+       reconsider y = x as Point of E;
+       P[y,NS.y] by A7;
+       hence NS.x is Basis of x;
+     end;
+     then reconsider NS as Neighborhood_System of T by TOPGEN_2:def 3;
+     take B = Union NS;
+     let b be set;
+     assume b in B;
+     then consider Z being set such that
+A8:  b in Z and
+A9:  Z in rng NS by TARSKI:def 4;
+     consider x such that
+A10:  x in dom NS and
+A11:  NS.x = Z by A9,FUNCT_1:def 5;
+     reconsider x as Point of E by A10,PARTFUN1:def 4;
+A12: dom x = Seg n by EUCLID:3;
+     P[x,NS.x] by A7;
+     then consider m being non zero Element of NAT such that
+A13:  b = OpenHypercube(x,1/m) by A8,A11;
+     deffunc A(set) = product(C+*($1,R^1(].x .$1-1/m,x .$1+1/m.[)));
+     defpred R[set] means not contradiction;
+     set Y = {A(q) where q is Element of S : R[q]};
+A14: Y is finite from PRE_CIRC:sch 1;
+     Y c= bool the carrier of T
+     proof
+       let s be set;
+       assume s in Y;
+       then consider q being Element of S such that
+A15:    s = A(q);
+       A(q) c= the carrier of T
+       proof
+         let z be set;
+         set f = C+*(q,R^1(].x .q-1/m,x .q+1/m.[));
+         assume z in A(q);
+         then consider g being Function such that
+A16:      z = g and
+A17:      dom g = dom f and
+A18:      for d being set st d in dom f holds g.d in f.d by CARD_3:def 5;
+A19:      dom f = dom C by FUNCT_7:32;
+         then reconsider g as FinSequence by A4,A17,FINSEQ_1:def 2;
+         rng g c= REAL
+         proof
+           let b be set;
+           assume b in rng g;
+           then consider a being set such that
+A20:        a in dom g and
+A21:        g.a = b by FUNCT_1:def 5;
+A22:        g.a in f.a by A17,A18,A20;
+           per cases;
+           suppose a = q;
+             then f.a = R^1(].x .q-1/m,x .q+1/m.[) by A17,A19,A20,FUNCT_7:33;
+             hence thesis by A21,A22;
+           end;
+           suppose a <> q;
+             then
+A23:          f.a = C.a by FUNCT_7:34;
+             ex R being 1-sorted st R = J.a & C.a = the carrier of R
+             by A20,A17,A19,A4,PRALG_1:def 13;
+             hence thesis by A21,A22,A23,A20,A17,A19,A4,FUNCOP_1:13;
+           end;
+         end;
+         then g is FinSequence of REAL by FINSEQ_1:def 4;
+         then
+A24:      g is Element of REAL* by FINSEQ_1:def 11;
+         n in NAT by ORDINAL1:def 13;
+         then len g = n by A4,A17,A19,FINSEQ_1:def 3;
+         hence thesis by A16,A24;
+       end;
+       hence thesis by A15,ZFMISC_1:def 1;
+     end;
+     then reconsider Y as Subset-Family of T;
+A25: Y c= PP
+     proof
+       let z be set;
+       assume
+A26:   z in Y;
+       then consider i being Element of S such that
+A27:   z = A(i);
+       J.i = R^1 by FUNCOP_1:13;
+       hence thesis by A2,A5,A26,A3,A27,WAYBEL18:def 2;
+     end;
+     consider N being set such that
+A28:  N in S by XBOOLE_0:def 1;
+A29: A(N) in Y by A28;
+     then
+A30: Intersect Y = meet Y by SETFAM_1:def 10;
+A31: dom Intervals(x,1/m) = dom x by Def3;
+A32:
+      now
+        let i be Element of S;
+        set f = C+*(i,R^1(].x .i-1/m,x .i+1/m.[));
+        thus product Intervals(x,1/m) c= product f
+        proof
+          let d be set;
+          assume d in product Intervals(x,1/m);
+          then consider d1 being Function such that
+A33:       d = d1 and
+A34:       dom d1 = dom Intervals(x,1/m) and
+A35:       for a being set st a in dom Intervals(x,1/m) holds
+          d1.a in Intervals(x,1/m).a by CARD_3:def 5;
+A36:      dom f = dom C by FUNCT_7:32;
+          now
+            let k be set;
+            assume
+A37:        k in dom f;
+            then
+A38:        Intervals(x,1/m).k = ].x .k-1/m,x .k+1/m.[ by A4,A36,A12,Def3;
+A39:        d1.k in Intervals(x,1/m).k by A35,A4,A31,A12,A36,A37;
+            per cases;
+            suppose k = i;
+              hence d1.k in f.k by A38,A39,A37,A36,FUNCT_7:33;
+            end;
+            suppose k <> i;
+              then
+A40:          f.k = C.k by FUNCT_7:34;
+A41:           ex R being 1-sorted st R = J.k & C.k = the carrier of R
+              by A37,A36,A4,PRALG_1:def 13;
+              d1.k in REAL by A38,A39;
+              hence d1.k in f.k by A40,A41,A37,A36,A4,FUNCOP_1:13;
+            end;
+          end;
+          hence d in product f by A33,A4,A34,A31,A12,A36,CARD_3:18;
+        end;
+      end;
+      b = Intersect Y
+      proof
+        now
+          let M be set;
+          assume M in Y;
+          then ex i being Element of S st M = A(i);
+          hence b c= M by A13,A32;
+        end;
+        hence b c= Intersect Y by A30,A29,SETFAM_1:6;
+        let q be set;
+        assume
+A42:     q in Intersect Y;
+        reconsider q as Function by A42;
+A43:     dom q = Seg n by A42,EUCLID:3;
+        now
+          let a be set such that
+A44:       a in dom Intervals(x,1/m);
+A45:       Intervals(x,1/m).a = ].x .a-1/m,x .a+1/m.[ by A44,A31,Def3;
+          set f = C+*(a,R^1(].x .a-1/m,x .a+1/m.[));
+          A(a) in Y by A44,A31,A12;
+          then
+A46:       q in A(a) by A42,SETFAM_1:58;
+          then
+A47:       dom q = dom f by CARD_3:18;
+          then
+A48:       q.a in f.a by A43,A44,A31,A12,A46,CARD_3:18;
+          dom f = dom C by FUNCT_7:32;
+          hence q.a in Intervals(x,1/m).a
+          by A45,A48,A43,A44,A31,A12,A47,FUNCT_7:33;
+        end;
+        hence thesis by A13,A43,A31,A12,CARD_3:18;
+      end;
+      hence thesis by A25,A14,CANTOR_1:def 4;
+    end;
+
+theorem Th27:
+  for PP being Subset-Family of TopSpaceMetr Euclid n st
+  PP = product_prebasis (Seg n --> R^1) holds PP is open
+  proof
+    let PP be Subset-Family of TopSpaceMetr Euclid n;
+    set J = Seg n --> R^1;
+    set C = Carrier J;
+    set T = TopSpaceMetr Euclid n;
+    set E = Euclid n;
+    assume
+A2: PP = product_prebasis (Seg n --> R^1);
+    let x be Subset of T;
+    assume x in PP;
+    then consider i being set, R being TopStruct, V being Subset of R
+    such that
+A16: i in Seg n and
+A17: V is open and
+A18: R = J.i and
+A19: x = product (C +* (i,V)) by A2,WAYBEL18:def 2;
+    n <> 0 by A16;
+    then reconsider S  = Seg n as non empty finite set;
+A3: dom C = Seg n by PARTFUN1:def 4;
+A4: now
+       let i be set;
+       let e, y be Point of E;
+       let r be real number;
+       assume
+A5:    y in Ball(e,r);
+       set O = ].e.i-r, e.i+r.[;
+       set G = C +* (i,O);
+A6:    dom y = Seg n by EUCLID:3;
+A7:    dom G = dom C by FUNCT_7:32;
+       now
+         let a be set;
+         assume
+A8:      a in dom G;
+         per cases;
+         suppose
+A9:        a = i;
+A10:       r is Real & e.i is Real & y.i is Real & y.i-e.i is Real
+           by XREAL_0:def 1;
+A11:        y.i = e.i + (y.i-e.i);
+A12:       dom e = Seg n by EUCLID:3;
+           dom(y-e) = dom y /\ dom e by VALUED_1:12;
+           then
+A13:        (y-e).i = y.i-e.i by A6,A12,A8,A9,A3,A7,VALUED_1:13;
+           abs((y-e).i) < r by A5,Th10;
+           then y.i in O by A13,A10,A11,FCONT_3:11;
+           hence y.a in G.a by A9,A7,A8,FUNCT_7:33;
+         end;
+         suppose a <> i;
+           then
+A14:        G.a = C.a by FUNCT_7:34;
+A15:        ex R being 1-sorted st R = J.a & C.a = the carrier of R
+           by A8,A7,A3,PRALG_1:def 13;
+           y.a in REAL by XREAL_0:def 1;
+           hence y.a in G.a by A14,A8,A7,A3,A15,FUNCOP_1:13;
+         end;
+       end;
+       hence y in product G by A7,A3,A6,CARD_3:18;
+     end;
+     set F = C +* (i,V);
+A20:  R = R^1 by A16,A18,FUNCOP_1:13;
+     for e being Element of E st e in x
+     ex r being Real st r > 0 & Ball(e,r) c= x
+     proof
+       let e be Element of E;
+       assume
+A21:    e in x;
+A22:    dom F = dom C by FUNCT_7:32;
+       then
+A23:    e.i in F.i by A16,A3,A21,A19,CARD_3:18;
+A24:    F.i = V by A16,A3,FUNCT_7:33;
+       then consider r being Real such that
+A25:    r > 0 and
+A26:    ].e.i-r, e.i+r.[ c= V by A17,A20,A23,FRECHET:8;
+       take r;
+       thus r > 0 by A25;
+       let y;
+       assume
+A27:    y in Ball(e,r);
+       then reconsider y as Point of E;
+       set O = ].e.i-r, e.i+r.[;
+       set G = C +* (i,O);
+A28:    dom G = dom C by FUNCT_7:32;
+A29:    y in product G by A27,A4;
+       now
+         let a be set;
+         assume
+A30:      a in dom G;
+         per cases;
+         suppose a = i;
+           hence G.a c= F.a by A26,A24,A28,A30,FUNCT_7:33;
+         end;
+         suppose a <> i;
+           then G.a = C.a & F.a = C.a by FUNCT_7:34;
+           hence G.a c= F.a;
+         end;
+       end;
+       then product G c= product F by A22,CARD_3:38,FUNCT_7:32;
+       hence thesis by A29,A19;
+     end;
+     then x in the topology of T by PCOMPS_1:def 5;
+     hence thesis by PRE_TOPC:def 5;
+   end;
+
+theorem
+  TopSpaceMetr Euclid n = product(Seg n --> R^1)
+  proof
+    set J = Seg n --> R^1;
+    per cases;
+    suppose
+A1:   n = 0;
+      then J = {} --> R^1;
+      hence thesis by A1,Lm1;
+    end;
+    suppose
+A2:   n <> 0;
+A3:   REAL n = Funcs(Seg n,REAL) by FINSEQ_2:111;
+A4:   Funcs(Seg n,REAL) = product Carrier J by Th25;
+      then reconsider PP = product_prebasis J as
+      Subset-Family of TopSpaceMetr Euclid n by FINSEQ_2:111;
+A5:   PP is open by Th27;
+      PP is quasi_prebasis by A2,Th26;
+      hence thesis by A4,A3,A5,WAYBEL18:def 3;
+    end;
+  end;
+

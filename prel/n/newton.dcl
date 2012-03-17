@@ -186,18 +186,12 @@
 <Adjective nr="21"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="21"/>
-</Cluster>
-</Typ>
 </ArgTypes>
-<Func kind="K" nr="175">
+<Func kind="K" nr="173">
 <LocusVar nr="1"/>
-<LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NEWTON" nr="7">
@@ -213,12 +207,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="175">
+<Func kind="K" nr="174">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NEWTON" nr="8">
@@ -228,26 +222,47 @@
 <Adjective nr="21"/>
 </Cluster>
 </Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="21"/>
+</Cluster>
+</Typ>
 </ArgTypes>
-<Func kind="K" nr="182">
+<Func kind="K" nr="174">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="21"/>
+</Cluster>
+</FCluster>
+<FCluster aid="NEWTON" nr="9">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="21"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="181">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="33"/>
 </Cluster>
 </FCluster>
-<FCluster aid="NEWTON" nr="9">
+<FCluster aid="NEWTON" nr="10">
 <ArgTypes/>
-<Func kind="K" nr="182">
+<Func kind="K" nr="181">
 <Num nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="11"/>
 </Cluster>
 </FCluster>
-<FCluster aid="NEWTON" nr="10">
+<FCluster aid="NEWTON" nr="11">
 <ArgTypes/>
-<Func kind="K" nr="181"/>
+<Func kind="K" nr="180"/>
 <Cluster>
 <Adjective nr="11" value="false"/>
 <Adjective nr="33" value="false"/>

@@ -19,8 +19,6 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FUNCT_7"/>
 <ArticleID name="AFINSQ_1"/>
 <ArticleID name="CATALAN2"/>
 <ArticleID name="REWRITE3"/>
@@ -36,7 +34,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="50">
+<Adjective nr="48">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -51,7 +49,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="30">
-<Func kind="K" nr="191">
+<Func kind="K" nr="159">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -64,10 +62,10 @@
 <Cluster>
 <Adjective nr="36" value="false"/>
 <Adjective nr="42"/>
-<Adjective nr="50">
+<Adjective nr="48">
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="51">
+<Adjective nr="49">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

@@ -14,6 +14,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSEQ_1"/>
@@ -30,30 +31,30 @@
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="74"/>
-<Adjective nr="75"/>
-<Adjective nr="76"/>
-<Adjective nr="78"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="81"/>
+<Adjective nr="83"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="184">
+<Func kind="K" nr="197">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="42"/>
-<Adjective nr="46" value="false"/>
-<Adjective nr="81"/>
-<Adjective nr="85"/>
-<Adjective nr="87"/>
+<Adjective nr="47"/>
+<Adjective nr="51" value="false"/>
+<Adjective nr="86"/>
+<Adjective nr="90"/>
+<Adjective nr="92"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="75"/>
+<Adjective nr="80"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -66,15 +67,15 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="71"/>
-<Adjective nr="75"/>
+<Adjective nr="76"/>
+<Adjective nr="80"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="74"/>
+<Adjective nr="79"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -87,15 +88,15 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="71"/>
-<Adjective nr="74"/>
+<Adjective nr="76"/>
+<Adjective nr="79"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="76"/>
+<Adjective nr="81"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -108,19 +109,19 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="71"/>
 <Adjective nr="76"/>
+<Adjective nr="81"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="74"/>
-<Adjective nr="75"/>
-<Adjective nr="76"/>
-<Adjective nr="78"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="81"/>
+<Adjective nr="83"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -133,8 +134,8 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="71"/>
-<Adjective nr="78"/>
+<Adjective nr="76"/>
+<Adjective nr="83"/>
 </Cluster>
 </FCluster>
 </Registrations>

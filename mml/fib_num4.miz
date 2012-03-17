@@ -1,0 +1,2663 @@
+:: Representation of the {F}ibonacci and {L}ucas Numbers in Terms of 
+:: the Floor and Ceiling Functor
+::  by Magdalena Jastrz\c{e}bska
+:: 
+:: Received November 30, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM_1, ARYTM_3, SQUARE_1, PRE_FF, NAT_1, FIB_NUM, POWER, INT_1,
+      FIB_NUM3, XBOOLE_0, CARD_1, ORDINAL1, NUMBERS, ABIAN, XXREAL_0, RELAT_1,
+      NEWTON, PREPOWER, XREAL_0, COMPLEX1, ZFMISC_1, SUBSET_1;
+ notations TARSKI, ORDINAL1, SUBSET_1, XBOOLE_0, CARD_1, NUMBERS, XCMPLX_0,
+      XXREAL_0, XREAL_0, SQUARE_1, INT_1, NAT_1, INT_2, NAT_D, RELAT_1,
+      FUNCT_1, FUNCT_2, PRE_FF, REALSET1, NEWTON, POWER, ABSVALUE, FIB_NUM3,
+      PREPOWER, XXREAL_2, ABIAN, DOMAIN_1, FINSEQ_1, COMPLEX1, REAL_1, FIB_NUM,
+      PYTHTRIP, PEPIN;
+ constructors REAL_1, NAT_1, NAT_D, FINSOP_1, NEWTON, PREPOWER, POWER,
+      REALSET1, PRE_FF, BINARITH, ABIAN, PEPIN, PYTHTRIP, FIB_NUM, XXREAL_2,
+      ABSVALUE, NUMBERS, XCMPLX_0, XREAL_0, XXREAL_0, COMPLEX1, INT_1,
+      FIB_NUM3, ORDERS_2, SUBSET_1;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
+      ABSVALUE, NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, NAT_1, INT_1, MEMBERED,
+      XCMPLX_0, COMPLEX1, XREAL_1, REAL_1, FIB_NUM3, POWER, NEWTON, PREPOWER,
+      ABIAN, NAT_2, VALUED_0, XXREAL_2;
+ requirements SUBSET, NUMERALS, REAL, ARITHM, BOOLE;
+ definitions TARSKI, XBOOLE_0, SQUARE_1, ABSVALUE, INT_1, XXREAL_0, XREAL_0,
+      POWER;
+ theorems NAT_1, PRE_FF, SQUARE_1, POWER, NEWTON, PREPOWER, XCMPLX_1, NAT_2,
+      FIB_NUM, ABIAN, XXREAL_0, COMPLEX1, INT_1, FIB_NUM3, FIB_NUM2, XREAL_1,
+      NAT_D, ABSVALUE, PSCOMP_1, SERIES_1, POLYFORM, ORDINAL1;
+ schemes NAT_1, NAT_2;
+
+begin :: Preliminaries
+
+tt1:
+  for m,n being natural number holds
+    -m <= m * (-1) to_power n
+  proof
+    let m,n be natural number;
+    n is even or n is odd; then
+    (-1) to_power n = 1 or (-1) to_power n = -1 by FIB_NUM2:3,5;
+    hence thesis;
+  end;
+
+tt2:
+  for m,n being natural number holds
+    -m * (-1) to_power n >= -m
+  proof
+    let m,n be natural number;
+    n is even or n is odd; then
+    (-1) to_power n = 1 or (-1) to_power n = -1 by FIB_NUM2:3,5;
+    hence thesis;
+  end;
+
+theorem JakPower36:
+  for a,b being real number, c being natural number holds
+    (a / b) to_power c = (a to_power c) / (b to_power c)
+  proof
+    let a,b be real number;
+    let c be natural number;
+    (a / b) to_power c = (a*(1/b)) |^ c by XCMPLX_1:100
+    .= a to_power c * (1/b) |^ c by NEWTON:12
+    .= a to_power c * (1/ b |^ c) by PREPOWER:14
+    .= (a to_power c) / (b |^ c) by XCMPLX_1:100;
+    hence thesis;
+  end;
+
+theorem JakPower32:
+  for a being real number, b,c being integer number st a <> 0 holds
+    a to_power (b+c) = a to_power b * a to_power c
+  proof
+    let a be real number;
+    let b,c be integer number;
+    assume AA: a <> 0;
+    thus a to_power b * a to_power c = a #Z b * a to_power c by POWER:50
+    .= a #Z b * a #Z c by POWER:50
+    .= a #Z (b+c) by AA,PREPOWER:54
+    .= a to_power (b+c) by POWER:50;
+  end;
+
+theorem pomoc1:
+  for n being natural number, a being real number st n is even & a <> 0 holds
+    (-a) to_power n = a to_power n
+  proof
+    let n be natural number;
+    let a be real number;
+    assume n is even & a <> 0; then
+    a <> 0 & ex l being Integer st n = 2 * l by ABIAN:def 1;
+    hence thesis by POWER:54;
+  end;
+
+theorem pomoc2:
+  for n being natural number, a being real number st n is odd & a <> 0 holds
+    (-a) to_power n = -(a to_power n)
+  proof
+    let n be natural number;
+    let a be real number;
+    assume n is odd & a <> 0; then
+    a <> 0 & ex l being Integer st n = 2 * l + 1 by ABIAN:1;
+    hence thesis by POWER:55;
+  end;
+
+albet3:
+  tau * tau_bar = -1
+  proof
+    tau * tau_bar = (1^2 - (sqrt 5)^2) / 4 by FIB_NUM:def 1,def 2
+    .= (1 - 5) / 4 by SQUARE_1:def 4;
+    hence thesis;
+  end;
+
+albet2:
+  tau_bar / tau = (sqrt 5 - 3)/2
+  proof
+    sqrt 5 > 1 by SQUARE_1:83,95; then
+    - sqrt 5 < - 1 by XREAL_1:26; then
+a1: - sqrt 5 + 1 < -1 + 1 by XREAL_1:8;
+    tau_bar / tau = ((1-sqrt 5)*2) / ((1+sqrt 5)*2)
+    by XCMPLX_1:85,FIB_NUM:def 1,def 2
+    .= (1-sqrt 5) / (1+sqrt 5) by XCMPLX_1:92
+    .= ((1-sqrt 5) * (1-sqrt 5)) / ((1+sqrt 5) * (1-sqrt 5)) by XCMPLX_1:92,a1
+    .= (1 - 2*sqrt 5 + (sqrt 5)^2) / (1^2 - (sqrt 5)^2)
+    .= (1 - 2*sqrt 5 + 5) / (1^2 - (sqrt 5)^2) by SQUARE_1:def 4
+    .= (6 - 2*sqrt 5)/ (1^2 - 5) by SQUARE_1:def 4
+    .= (2 * (3 - sqrt 5)) / ((-2) * 2);
+    hence thesis;
+  end;
+
+albet4:
+  tau / tau_bar = (-3-sqrt 5)/2
+  proof
+A0: sqrt 5 > 0 by SQUARE_1:93;
+    tau / tau_bar = ((1+sqrt 5) * 2) / ((1-sqrt 5) * 2)
+    by XCMPLX_1:85,FIB_NUM:def 1,def 2
+    .= (1 + sqrt 5) / (1 - sqrt 5) by XCMPLX_1:92
+    .= ((1+sqrt 5) * (1+sqrt 5)) / ((1-sqrt 5) * (1+sqrt 5)) by A0,XCMPLX_1:92
+    .= ((1+sqrt 5) * (1+sqrt 5)) / (1 - (sqrt 5)^2)
+    .= ((1+sqrt 5) * (1+sqrt 5)) / (1 - 5) by SQUARE_1:def 4
+    .= (1 + 2*sqrt 5 + (sqrt 5)^2) / (-4)
+    .= (1 + 2*sqrt 5 + 5) / (-4) by SQUARE_1:def 4;
+    hence thesis;
+  end;
+
+alfa2:
+  tau to_power 2 = (3 + sqrt 5) / 2
+  proof
+    tau to_power 2 = ((1+sqrt 5) / 2) ^2 by FIB_NUM:def 1,POWER:53
+    .= (1^2 + 2 * 1 * sqrt 5 + (sqrt 5)^2) / 4
+    .= (1 + 2 * sqrt 5 + 5) / 4 by SQUARE_1:def 4
+    .= (2 * (3 + sqrt 5)) / (2 * 2);
+    hence thesis;
+  end;
+
+beta2:
+  tau_bar to_power 2 = (3 - sqrt 5) / 2
+  proof
+    tau_bar to_power 2 = ((1 - sqrt 5) / 2) ^2 by FIB_NUM:def 2,POWER:53
+    .= (1^2 - 2 * 1 * sqrt 5 + (sqrt 5)^2) / 4
+    .= (1 - 2 * sqrt 5 + 5) / 4 by SQUARE_1:def 4
+    .= (2 * (3 - sqrt 5)) / (2 * 2);
+    hence thesis;
+  end;
+
+beta3:
+  tau_bar to_power 3 = 2 - sqrt 5
+  proof
+    1 < sqrt 5 by SQUARE_1:83,95; then
+a0: 1 - sqrt 5 < sqrt 5 - sqrt 5 by XREAL_1:11;
+    thus tau_bar to_power 3 = ((1-sqrt 5) / 2) to_power (2+1)
+      by FIB_NUM:def 2
+    .= ((1-sqrt 5)/2) to_power 2 * ((1-sqrt 5)/2) to_power 1 by JakPower32,a0
+    .= ((1-sqrt 5)/2) to_power 2 * ((1-sqrt 5)/2) by POWER:30
+    .= ((1-sqrt 5)/2) ^2 * ((1-sqrt 5) / 2) by POWER:53
+    .= ((1 - 2 * 1 * sqrt 5 + (sqrt 5) ^2) * (1 - sqrt 5)) / 8
+    .= ((1 - 2 * sqrt 5 + 5) * (1 - sqrt 5)) / 8 by SQUARE_1:def 4
+    .= (6 - 8 * sqrt 5 + 2 * (sqrt 5) ^2) / 8
+    .= (6 - 8 * sqrt 5 + 2 * 5) / 8 by SQUARE_1:def 4
+    .= 2 - sqrt 5;
+  end;
+
+beta6:
+  tau_bar to_power 6 = 9 - 4 * sqrt 5
+  proof
+    thus tau_bar to_power 6 = tau_bar to_power (3*2)
+    .= (2 - sqrt 5) to_power 2 by beta3,NEWTON:14
+    .= (2 - sqrt 5) ^2 by POWER:53
+    .= 2 ^2 - 2 * 2 * sqrt 5 + (sqrt 5) ^2
+    .= 4 - 4 * sqrt 5 + 5 by SQUARE_1:def 4
+    .= 9 - 4 * sqrt 5;
+  end;
+
+theorem hop3:
+  abs tau_bar < 1
+  proof
+    sqrt 5 < sqrt (3 ^2) by SQUARE_1:95; then
+    sqrt 5 < 3 by SQUARE_1:def 4; then
+    sqrt 5 - 1 < 2 + 1 - 1 by XREAL_1:11; then
+    - (sqrt 5 - 1) > -2 by XREAL_1:26; then
+    (1 - sqrt 5) / 2 > (-2) / 2 by XREAL_1:76; then
+A1: abs tau_bar < abs(-1) + abs 0 by PSCOMP_1:4,FIB_NUM:def 2;
+    abs (-1) = - -1 by ABSVALUE:def 1; then
+    abs tau_bar < 1 + 0 by A1,ABSVALUE:7;
+    hence thesis;
+  end;
+
+hop2:
+  for n being natural number holds
+  ((abs tau_bar) to_power n) * (1/sqrt 5) > 0
+  proof
+    let n be natural number;
+    set b = tau_bar;
+a1: sqrt 5 > 0 by SQUARE_1:93;
+    abs b = -b by ABSVALUE:def 1; then
+    (abs b) to_power n > 0 & 1 / sqrt 5 > 0 by POWER:39,a1;
+    hence thesis;
+  end;
+
+hop4:
+  for n being natural number holds
+  ((abs tau_bar) to_power n) * (1/sqrt 5) < 1/2
+  proof
+    let n be natural number;
+X:  2 < sqrt 5 by SQUARE_1:85,95; then
+c2: 2 / 2 < sqrt 5 / 2 by XREAL_1:76;
+    set b = tau_bar;
+a1: sqrt 5 <> 0 by SQUARE_1:82,95;
+a4: sqrt 5 > 0 by SQUARE_1:93;
+    per cases;
+    suppose K1: n <> 0;
+      abs b <> 0 by ABSVALUE:7; then
+      abs b < 1 & abs b > 0 by hop3,COMPLEX1:132; then
+      (abs b) to_power n < 1 to_power n by POWER:42,K1; then
+      (abs b) to_power n < 1 by POWER:31; then
+      (abs b) to_power n < sqrt 5 / 2 by c2,XXREAL_0:2; then
+      ((abs b) to_power n) / (sqrt 5 / 1) <
+      (sqrt 5 / 2) / (sqrt 5 / 1) by XREAL_1:76,a4; then
+      ((abs b) to_power n) / (sqrt 5) <
+      (1 * sqrt 5) / (2 * sqrt 5) by XCMPLX_1:85; then
+      ((abs b) to_power n) * (1/sqrt 5) < (1 * sqrt 5) / (2 * sqrt 5)
+        by XCMPLX_1:100;
+      hence thesis by a1,XCMPLX_1:92;
+    end;
+    suppose n = 0; then
+      (abs tau_bar) to_power n = 1 by POWER:29;
+      hence thesis by X,XREAL_1:78;
+    end;
+  end;
+
+theorem pom1:
+  for n being natural number, r being non empty real number st n is even holds
+    r to_power n > 0
+  proof
+    let n be natural number;
+    let r be non empty real number;
+    assume A0: n is even;
+    per cases;
+    suppose r > 0;
+      hence thesis by POWER:39;
+    end;
+    suppose B1: r < 0;
+      r to_power n = (-r) to_power n by pomoc1,A0;
+      hence thesis by POWER:39,B1;
+    end;
+  end;
+
+theorem pom2:
+  for n being natural number, r being real number st n is odd & r < 0 holds
+    r to_power n < 0
+  proof
+    let n be natural number;
+    let r be real number;
+    assume A0: n is odd;
+    assume A1: r < 0;
+d6: r to_power n = (--r) to_power n
+    .= - ((-r) to_power n) by pomoc2,A0,A1;
+    (-r) to_power n > 0 by POWER:39,A1;
+    hence thesis by d6;
+  end;
+
+theorem hop8:
+  for n being natural number st n <> 0 holds
+    tau_bar to_power n < 1/2
+  proof
+    let n be natural number;
+    assume n <> 0; then
+    n + 1 > 0 + 1 by XREAL_1:10; then
+    n + 1 >= 1 + 1 by NAT_1:13; then
+C1: n + 1 = 2 or n >= 2 by NAT_1:8;
+    per cases by C1;
+    suppose n = 1;
+      hence thesis by POWER:30;
+    end;
+    suppose n >= 2; then
+    n <> 0 & n <> 1; then
+B0: n is non trivial Nat by NAT_2:def 1;
+    (tau_bar) to_power n < 1/2
+    proof
+      defpred P[Nat] means (abs tau_bar) to_power $1 < 1/2;
+C1:   (abs tau_bar) to_power 2 = (- tau_bar) to_power 2 by ABSVALUE:def 1
+        .= (- tau_bar) ^2 by POWER:53
+        .= (1 ^2 - 2 * 1 * sqrt 5 + (sqrt 5) ^2) / 4 by FIB_NUM:def 2
+        .= (1 - 2 * sqrt 5 + 5) / 4 by SQUARE_1:def 4
+        .= (3 - sqrt 5) / 2;
+      sqrt 5 > 2 by SQUARE_1:85,95; then
+      - sqrt 5 < - 2 by XREAL_1:26; then
+      - sqrt 5 + 3 < - 2 + 3 by XREAL_1:10; then
+B1:   P[2] by C1,XREAL_1:76;
+B2:   for k being non trivial Nat st P[k] holds P[k+1]
+      proof
+        let k be non trivial Nat;
+g2:     abs tau_bar = - tau_bar by ABSVALUE:def 1;
+        assume P[k]; then
+        (abs tau_bar to_power k) * (abs tau_bar) < (1/2) * (abs tau_bar)
+        by XREAL_1:70,g2; then
+b3:     (abs tau_bar to_power k) * (abs tau_bar to_power 1) <
+        (1/2) * (abs tau_bar) by POWER:30;
+        (1/2) * (abs tau_bar) < (1/2)*1 by XREAL_1:70,hop3; then
+        (abs tau_bar to_power k) * (abs tau_bar to_power 1) < 1/2
+          by b3,XXREAL_0:2;
+        hence thesis by JakPower32,g2;
+      end;
+bb4:  for n being non trivial Nat holds P[n] from NAT_2:sch 2(B1, B2);
+      for n being non trivial Nat holds tau_bar to_power n < 1/2
+      proof
+        let n be non trivial Nat;
+        (abs tau_bar) to_power n < 1/2 by bb4; then
+        abs (tau_bar to_power n) < 1/2 &
+        tau_bar to_power n <= abs (tau_bar to_power n)
+        by SERIES_1:2,ABSVALUE:11;
+        hence thesis by XXREAL_0:2;
+      end;
+      hence thesis by B0;
+    end;
+    hence thesis;
+    end;
+  end;
+
+theorem
+  for n,m being natural number, r being real number st
+    m is odd & n >= m & r < 0 & r > -1 holds
+  r to_power n >= r to_power m
+  proof
+    let n,m be natural number;
+    let r be real number;
+    assume A0: m is odd;
+    assume A1: n >= m;
+    assume A2: r < 0 & r > -1;
+zz: n + 1 > m + 0 by XREAL_1:10,A1;
+    per cases by zz,NAT_1:22;
+    suppose n = m;
+      hence thesis;
+    end;
+    suppose D2: n > m;
+    reconsider t = n-m as natural number by D2,NAT_1:21;
+C2: r to_power n - r to_power m = r to_power (t + m) - r to_power m
+    .= r to_power t * r to_power m - 1 * r to_power m by JakPower32,A2
+    .= (r to_power t - 1) * r to_power m;
+C3: r to_power m <= 0 by pom2,A2,A0;
+D1: t <> 0 by D2;
+X:  abs r <= 1 by A2,ABSVALUE:12;
+    abs r <> 1
+    proof
+      assume abs r = 1; then
+      abs r = abs 1;
+      hence thesis by A2,ABSVALUE:45;
+    end; then
+H3: abs r < 1 by X,XXREAL_0:1;
+    - r > 0 by A2; then
+    abs r > 0 & t > 0 by D1,ABSVALUE:def 1,A2; then
+    (abs r) to_power t < 1 to_power t by POWER:42,H3; then
+    (abs r) to_power t < 1 by POWER:31; then
+    abs (r to_power t) < 1 & r to_power t <=
+    abs (r to_power t) by SERIES_1:2,ABSVALUE:11; then
+    r to_power t < 1 by XXREAL_0:2; then
+    r to_power t - 1 <= 1 - 1 by XREAL_1:11; then
+    r to_power n - r to_power m + r to_power m >=
+    0 + r to_power m by XREAL_1:8,C2,C3;
+    hence thesis;
+    end;
+  end;
+
+theorem hopp9:
+  for n,m being natural number st m is odd & n >= m holds
+  tau_bar to_power n >= tau_bar to_power m
+  proof
+    let n,m be natural number;
+    assume A1: m is odd;
+    assume n >= m; then
+zz: n + 1 > m + 0 by XREAL_1:10;
+    per cases by zz,NAT_1:22;
+    suppose n = m;
+      hence thesis;
+    end;
+    suppose A2: n > m; then
+    reconsider t = n-m as natural number by NAT_1:21;
+C2: tau_bar to_power n - tau_bar to_power m =
+    tau_bar to_power (t + m) - tau_bar to_power m
+    .= tau_bar to_power t * tau_bar to_power m - 1 * tau_bar to_power m
+    by JakPower32
+    .= (tau_bar to_power t - 1) * tau_bar to_power m;
+C3: tau_bar to_power m <= 0 by pom2,A1;
+D1: t <> 0 by A2;
+    - tau_bar > 0; then
+    abs tau_bar > 0 & t > 0 by D1,ABSVALUE:def 1; then
+    (abs tau_bar) to_power t < 1 to_power t by POWER:42,hop3; then
+    (abs tau_bar) to_power t < 1 by POWER:31; then
+    abs (tau_bar to_power t) < 1 & tau_bar to_power t <=
+    abs (tau_bar to_power t) by SERIES_1:2,ABSVALUE:11; then
+    tau_bar to_power t < 1 by XXREAL_0:2; then
+    tau_bar to_power t - 1 <= 1 - 1 by XREAL_1:11; then
+    tau_bar to_power n - tau_bar to_power m + tau_bar to_power m >=
+    0 + tau_bar to_power m by XREAL_1:8,C2,C3;
+    hence thesis;
+    end;
+  end;
+
+theorem hopp10:
+  for n,m being natural number st n is even & m is even & n >= m holds
+  tau_bar to_power n <= tau_bar to_power m
+  proof
+    let n,m be natural number;
+    assume A0: n is even & m is even & n >= m; then
+ze: n + 1 > m + 0 by XREAL_1:10;
+    per cases by ze,NAT_1:22;
+    suppose n = m;
+      hence thesis;
+    end;
+    suppose A2: n > m; then
+      reconsider t = n - m as natural number by NAT_1:21;
+C2:   tau_bar to_power n - tau_bar to_power m =
+      tau_bar to_power (t+m) - tau_bar to_power m
+      .= tau_bar to_power t * tau_bar to_power m - 1 * tau_bar to_power m
+      by JakPower32
+      .= (tau_bar to_power t - 1) * tau_bar to_power m;
+C3:   tau_bar to_power m > 0 by pom1,A0;
+      n - m > m - m by XREAL_1:11,A2; then
+      tau_bar to_power t < 1 by hop8,XXREAL_0:2; then
+      tau_bar to_power t - 1 < 1 - 1 by XREAL_1:11; then
+      tau_bar to_power n - tau_bar to_power m + tau_bar to_power m <
+      0 + tau_bar to_power m by XREAL_1:8,C2,C3;
+      hence thesis;
+    end;
+  end;
+
+theorem luc1:
+  for m,n being non empty natural number st m >= n holds Lucas m >= Lucas n
+  proof
+    let m,n be non empty natural number;
+    assume pc: m >= n;
+    per cases by pc,XXREAL_0:1;
+    suppose m = n;
+      hence thesis;
+    end;
+    suppose P0: m > n;
+    then consider k being natural number such that A1: m = n + k by NAT_1:10;
+A3: for k, n being non empty Nat holds Lucas (n+k) >= Lucas (n)
+    proof
+      defpred P[Nat] means
+      for n being non empty Nat holds Lucas (n+$1) >= Lucas (n);
+B1:   P[1]
+      proof
+        let n be non empty Nat;
+        n - 0 is Element of NAT & n+1 is Element of NAT by ORDINAL1:def 13;
+        hence thesis by FIB_NUM3:18;
+      end;
+B2:   for k being non empty Nat st P[k] holds P[k + 1]
+      proof
+        let k be non empty Nat;
+        assume B4: P[k];
+        for n being non empty Nat holds Lucas (n + (k + 1)) >= Lucas n
+        proof
+          let n be non empty Nat;
+          reconsider p = n + k as Element of NAT by ORDINAL1:def 13;
+          p is non empty Element of NAT; then
+          Lucas (n + k) >= Lucas n & Lucas (n + k + 1) >= Lucas (n + k)
+            by B4,FIB_NUM3:18;
+          hence thesis by XXREAL_0:2;
+        end;
+        hence thesis;
+      end;
+      for k being non empty Nat holds P[k] from NAT_1:sch 10(B1,B2);
+      hence thesis;
+    end;
+    k is non empty Nat & n is non empty Nat by A1,P0;
+    hence thesis by A1,A3;
+    end;
+  end;
+
+C2: tau_bar ^2 = (3 - sqrt 5) / 2 by beta2,POWER:53;
+d3: sqrt 5 > 0 by SQUARE_1:93; then
+    sqrt 5 + 3 > -sqrt 5 + 3 by XREAL_1:8; then
+    (sqrt 5 + 3) / 2 > (-sqrt 5 + 3) / 2 by XREAL_1:76; then
+B0: tau ^2 > tau_bar ^2 by alfa2,POWER:53,C2;
+    sqrt 5 < sqrt (3 ^2) by SQUARE_1:95; then
+    sqrt 5 < 3 by SQUARE_1:def 4; then
+    sqrt 5 - 3 < 3 - 3 by XREAL_1:11; then
+D2: (sqrt 5 - 3) / 2 < 0;
+
+theorem
+  for n being non empty natural number holds
+    tau to_power n > tau_bar to_power n
+  proof
+    let n be non empty natural number;
+    set tb = tau_bar;
+    per cases;
+    suppose A1: n is even;
+      n - 0 is Element of NAT by NAT_1:21; then
+      consider k being Element of NAT such that A2: n = 2*k by ABIAN:def 2,A1;
+A3:   k > 0 by A2;
+A4:   tau to_power n = (tau to_power 2) to_power k by NEWTON:14,A2
+      .= (tau ^2) to_power k by POWER:53;
+      tau_bar to_power n = (tau_bar to_power 2) to_power k by NEWTON:14,A2
+      .= (tau_bar)^2 to_power k by POWER:53;
+      hence thesis by A3,A4,B0,POWER:42;
+    end;
+    suppose A1: n is odd;
+      consider k being Element of NAT such that A2: n = 2*k+1 by A1,ABIAN:9;
+      set kk = tau to_power (2*k);
+d1:   (tau/tb) to_power (2*k) = (tau/tb) to_power 2 to_power k by NEWTON:14
+      .= ((tau/tb) ^2) to_power k by POWER:53;
+      tb to_power (2 * k) = (tb to_power 2) to_power k by NEWTON:14
+      .= (tau_bar ^2) to_power k by POWER:53; then
+D4:   tb to_power (2 * k) > 0 by POWER:39;
+      (tau / tb) to_power (2*k) > (sqrt 5 - 3)/2 by d1,POWER:39,D2; then
+      (tau / tb) to_power (2*k) * ((-3-sqrt 5)/2) < (tb/tau) * ((-3-sqrt 5)/2)
+      by d3,XREAL_1:71,albet2; then
+      (tau/tb) to_power (2*k) * (tau/tb) < 1 by XCMPLX_1:113,albet4; then
+      (kk/tb to_power (2*k)) * (tau/tb) < 1 by JakPower36; then
+      kk * (1/tb to_power (2*k)) * (tau/tb) < 1 by XCMPLX_1:100; then
+      kk*(1/tb to_power (2*k)) * (tau/tb)*tb to_power (2*k) <
+      1 * (tb to_power (2*k)) by XREAL_1:70,D4; then
+      kk * (tau/tb)*(tb to_power (2*k) *(1/tb to_power (2*k)))
+      < 1 * (tb to_power (2*k)); then
+      kk * (tau/tb)*(tb to_power (2*k)/tb to_power (2*k)) <
+      1 * (tb to_power (2*k)) by XCMPLX_1:100; then
+      kk*(tau/tb)*1 < tb to_power (2*k) by D4,XCMPLX_1:60; then
+      kk * (tau *(1/tb))*1 < tb to_power (2*k) by XCMPLX_1:100; then
+      kk * (tau *(1/tb)) * 1 * tb > tb to_power (2*k) * tb
+      by XREAL_1:71; then
+      kk * tau * ((1/tb) *1 *tb) > tb to_power (2*k) * tb; then
+      kk * tau * (tb / tb) > tb to_power (2*k) * tb by XCMPLX_1:100; then
+      kk *tau*1 > tb to_power (2*k) * tb by XCMPLX_1:60; then
+      kk*tau > tb to_power (2*k)*tb to_power 1 by POWER:30;then
+      kk * tau > tb to_power (2*k+1) by JakPower32; then
+      kk * tau to_power 1 > tb to_power (2*k+1) by POWER:30;
+      hence thesis by A2,JakPower32;
+    end;
+  end;
+
+theorem hop9:
+  for n being natural number st n > 1 holds
+    -1/2 < tau_bar to_power n
+  proof
+    let n be natural number;
+    set tb = tau_bar;
+    assume A0: n > 1;
+ab: n - 0 is Element of NAT by NAT_1:21;
+a1: n + 1 > 1 + 1 by XREAL_1:10,A0;
+    per cases;
+    suppose n is even; then
+      consider k being Element of NAT such that
+d0:   n = 2 * k by ab,ABIAN:def 2;
+X:    0^2 = 0;
+      tau_bar to_power n = tau_bar to_power k to_power 2 by d0,NEWTON:14
+      .= (tau_bar to_power k) ^2 by POWER:53;
+      hence thesis by SQUARE_1:74,X;
+    end;
+    suppose dd: n is odd;
+      n >= 2 by a1,NAT_1:13; then
+      n = 2 or n > 2 by XXREAL_0:1; then
+      n + 1 > 2 + 1 by XREAL_1:8,POLYFORM:5,dd; then
+      n >= 3 by NAT_1:13; then
+d0:   tau_bar to_power n >= tau_bar to_power 3 by hopp9,POLYFORM:6;
+      sqrt 5 < sqrt ((5 / 2) ^2) by SQUARE_1:95; then
+      sqrt 5 < 5 / 2 by SQUARE_1:def 4; then
+      2 * sqrt 5 < 2 * (5 / 2) by XREAL_1:70; then
+      -2 * sqrt 5 > - 5 by XREAL_1:26; then
+      - 2 * sqrt 5 + 4 > -5 + 4 by XREAL_1:8; then
+      (2 * (2 - sqrt 5)) / 2 > (-1) / 2 by XREAL_1:76;
+      hence thesis by XXREAL_0:2,d0,beta3;
+    end;
+  end;
+
+theorem mag1:
+  for n being natural number st n > 2 holds
+    tau_bar to_power n >= - 1/sqrt 5
+  proof
+    let n be natural number;
+    assume A0: n > 2;
+    n >= 2+1 by A0,NAT_1:13; then
+b2: tau_bar to_power n >= tau_bar to_power 3 by hopp9,POLYFORM:6;
+B3: sqrt 5 > 0 by SQUARE_1:93;
+    sqrt 5 >= 2 by SQUARE_1:85,94; then
+    2 * sqrt 5 >= 2 * 2 by XREAL_1:66; then
+    2 * sqrt 5 - 5 >= 4 - 5 by XREAL_1:11; then
+    2 * sqrt 5 - (sqrt 5)^2 >= -1 by SQUARE_1:def 4; then
+    ((2 - sqrt 5) * sqrt 5) / sqrt 5 >= (-1) / sqrt 5 by B3,XREAL_1:74; then
+    ((2 - sqrt 5) * sqrt 5) / sqrt 5 >= -1 / sqrt 5 by XCMPLX_1:188; then
+    2 - sqrt 5 >= -1 / sqrt 5 by XCMPLX_1:90,B3;
+    hence thesis by b2,beta3,XXREAL_0:2;
+  end;
+
+theorem mag2:
+  for n being natural number st n >= 2 holds
+    tau_bar to_power n <= 1/sqrt 5
+  proof
+    let n be natural number;
+    assume A0: n >= 2;
+    per cases;
+    suppose B1: n is even;
+c1:   sqrt 5 > 0 by SQUARE_1:93;
+B2:   tau_bar to_power n <= (3 - sqrt 5) / 2 by beta2,A0,B1,hopp10,POLYFORM:5;
+      sqrt 5 <= sqrt ((7/3) ^2) by SQUARE_1:94; then
+      sqrt 5 <= 7/3 by SQUARE_1:def 4; then
+      3 * sqrt 5 <= (7 / 3) * 3 by XREAL_1:66; then
+      3 * sqrt 5 - 5 <= 7 - 5 by XREAL_1:11; then
+      3 * sqrt 5 - (sqrt 5) ^2 <= 2 by SQUARE_1:def 4; then
+      (3 * sqrt 5 - sqrt 5 * sqrt 5) / 2 <= 2 / 2 by XREAL_1:74; then
+      (((3-sqrt 5) / 2) * sqrt 5) / sqrt 5 <= 1 / sqrt 5 by c1,XREAL_1:74; then
+      (3 - sqrt 5) / 2 <= 1 / sqrt 5 by c1,XCMPLX_1:90;
+      hence thesis by B2,XXREAL_0:2;
+    end;
+    suppose n is odd; then
+B1:   tau_bar to_power n < 0 by pom2;
+      sqrt 5 >= sqrt 0 by SQUARE_1:94;
+      hence thesis by B1,SQUARE_1:82;
+    end;
+  end;
+
+theorem Lemat11:
+  for n being natural number holds
+  (tau_bar to_power n)/sqrt 5 + 1/2 > 0 &
+  (tau_bar to_power n)/sqrt 5 + 1/2 < 1
+  proof
+  let n be natural number;
+    set b = (1-sqrt 5)/2;
+A1: abs b = -b by ABSVALUE:def 1,FIB_NUM:def 2;
+C0: ((abs b) to_power n) * (1/sqrt 5) < 1/2 by hop4,FIB_NUM:def 2;
+    (b to_power n)*(1/sqrt 5) + 1/2 > 0 & (b to_power n)*(1/sqrt 5) + 1/2 < 1
+    proof
+      per cases;
+      suppose F1: n is even;
+        (abs b) to_power n = b to_power n by F1,pomoc1,FIB_NUM:def 2,A1; then
+        (b to_power n)*(1/sqrt 5) > 0 & (b to_power n)*(1/sqrt 5) < 1/2
+        by hop2,FIB_NUM:def 2,hop4; then
+        (b to_power n) * (1/sqrt 5) > 0  &
+        (b to_power n) * (1/sqrt 5) + 1/2 < 1/2 + 1/2 by XREAL_1:10;
+        hence thesis;
+      end;
+      suppose n is odd; then
+        (abs b) to_power n = - (b to_power n) by pomoc2,FIB_NUM:def 2,A1; then
+        (-(b to_power n))*(1/sqrt 5) > 0 & - (b to_power n)*(1/sqrt 5) < 1/2
+        by hop2,FIB_NUM:def 2,C0; then
+        -(b to_power n)/sqrt 5 > 0 & - (b to_power n)/sqrt 5 < 1/2
+        by XCMPLX_1:100; then
+        (b to_power n)/sqrt 5 < 0 & - -(b to_power n)/sqrt 5 > - (1/2)
+        by XREAL_1:26; then
+        (b to_power n)/sqrt 5 + 1/2 < 0 + 1/2 &
+        (b to_power n)/sqrt 5 + 1/2 > -1/2 + 1/2 by XREAL_1:10; then
+        (b to_power n)/sqrt 5 + 1/2 < 1 & (b to_power n)/sqrt 5 + 1/2 > 0
+        by XXREAL_0:2;
+        hence thesis by XCMPLX_1:100;
+      end;
+      end;
+    hence thesis by FIB_NUM:def 2,XCMPLX_1:100;
+  end;
+
+begin :: Formulas for the Fibonacci Numbers
+
+theorem
+  for n being natural number holds
+    [\ (tau to_power n )/sqrt 5 + 1/2 /] = Fib n
+  proof
+    let n be natural number;
+    set tn = tau_bar to_power n;
+a1: Fib n = ((tau to_power n) - tn)/(sqrt 5) + 1/2 - 1/2 by FIB_NUM:7
+    .= (tau to_power n)/sqrt 5 - tn / sqrt 5 + 1/2 - 1/2 by XCMPLX_1:121
+    .= ((tau to_power n)/sqrt 5 + 1/2) - (tn/sqrt 5 + 1/2);
+    tn/sqrt 5 + 1/2 > 0 by Lemat11; then
+a3: tn/sqrt 5 + 1/2 + Fib n > 0 + Fib n by XREAL_1:8;
+    tn/sqrt 5 + 1/2 < 1 by Lemat11; then
+    tn/sqrt 5 + 1/2 - 1/2 < 1 - 1/2 by XREAL_1:11; then
+    - (tn/sqrt 5) > - (1/2) by XREAL_1:26; then
+    - (tn/sqrt 5) + (tau to_power n)/sqrt 5 >
+    - (1/2) + (tau to_power n)/sqrt 5 by XREAL_1:8; then
+    (tau to_power n)/sqrt 5 - (tn/sqrt 5) >
+    - (1/2) + (tau to_power n)/sqrt 5; then
+    ((tau to_power n) - tn)/sqrt 5 >
+    - (1/2) + (tau to_power n)/sqrt 5 by XCMPLX_1:121; then
+    Fib n  > (tau to_power n )/sqrt 5 + 1/2 - 1 by FIB_NUM:7;
+    hence thesis by a3,INT_1:def 4,a1;
+  end;
+
+theorem
+  for n being natural number st n <> 0 holds
+    [/ (tau to_power n)/sqrt 5 - 1/2 \] = Fib n
+  proof
+    let n be natural number;
+    set tn = tau to_power n;
+    set tbn = tau_bar to_power n;
+    assume A0: n <> 0;
+B0: sqrt 5 > 0 by SQUARE_1:93;
+A1: tn / sqrt 5 - 1/2 <= Fib n
+    proof
+      1 <= sqrt 5 by SQUARE_1:83,94; then
+B1:   1 / 2 <= sqrt 5 / 2 by XREAL_1:74;
+      tbn <= sqrt 5 / 2 by B1,XXREAL_0:2,A0,hop8; then
+      tbn / sqrt 5 <= sqrt 5 / 2 / sqrt 5 by B0,XREAL_1:74; then
+      tbn / sqrt 5 <= sqrt 5 / sqrt 5 / 2 by XCMPLX_1:48; then
+      tbn / sqrt 5 <= 1 / 2 by XCMPLX_1:60,B0; then
+      -tbn / sqrt 5 >= -1 / 2 by XREAL_1:26; then
+      -tbn / sqrt 5 + tn/sqrt 5 >= -1/2 + tn / sqrt 5 by XREAL_1:8; then
+      tn / sqrt 5 - tbn / sqrt 5 >= -1/2 + tn / sqrt 5; then
+      (tn - tbn) / sqrt 5 >= tn / sqrt 5 - 1/2 by XCMPLX_1:121;
+      hence thesis by FIB_NUM:7;
+    end;
+    tn / sqrt 5 - 1 / 2 + 1 > Fib n
+    proof
+      n+1 > 0+1 by XREAL_1:8,A0; then
+pc:   n >= 1 by NAT_1:13;
+      per cases by XXREAL_0:1,pc;
+      suppose AA: n = 1; then
+C1:     tn / sqrt 5 - 1/2 + 1 = tau / sqrt 5 - 1/2 + 1 by POWER:30
+        .= (1 + sqrt 5) / 2 / sqrt 5 + (1 - 1/2) by FIB_NUM:def 1
+        .= (1 + sqrt 5) / sqrt 5 / 2 + 1 / 2 by XCMPLX_1:48
+        .= ((1 + sqrt 5) / sqrt 5 + 1) / 2
+        .= (1 / sqrt 5 + sqrt 5 / sqrt 5 + 1) / 2 by XCMPLX_1:63
+        .= (1 / sqrt 5 + 1 + 1) / 2 by B0,XCMPLX_1:60
+        .= 1 / sqrt 5 / 2 + 2 / 2;
+        1/sqrt 5/2 + 1 > 0 + 1 by XREAL_1:8,B0;
+        hence thesis by AA,PRE_FF:1,C1;
+      end;
+      suppose AA: n > 1;
+      1 < sqrt 5 by SQUARE_1:83,95; then
+      1 / 2 < sqrt 5 / 2 by XREAL_1:76; then
+B1:   - 1 / 2 > - sqrt 5 / 2 by XREAL_1:26;
+      tbn > - 1 / 2 by AA,hop9; then
+      tbn > - sqrt 5 / 2 by B1,XXREAL_0:2; then
+      tbn / sqrt 5 > (-sqrt 5 / 2) / sqrt 5 by B0,XREAL_1:76; then
+      tbn / sqrt 5 > - (sqrt 5 / 2 / sqrt 5) by XCMPLX_1:188; then
+      tbn / sqrt 5 > - (sqrt 5 / sqrt 5 / 2) by XCMPLX_1:48; then
+      tbn / sqrt 5 > - 1 / 2 by B0,XCMPLX_1:60; then
+      -tbn / sqrt 5 < - -1 / 2 by XREAL_1:26; then
+      - tbn / sqrt 5 + tn / sqrt 5 < 1 / 2 + tn / sqrt 5 by XREAL_1:8; then
+      tn / sqrt 5 - tbn / sqrt 5 < 1 / 2 + tn / sqrt 5; then
+      (tn - tbn) / sqrt 5 < 1 / 2 + tn / sqrt 5 by XCMPLX_1:121;
+      hence thesis by FIB_NUM:7;
+      end;
+    end;
+    hence thesis by A1,INT_1:def 5;
+  end;
+
+set s5 = sqrt 5;
+
+d0: 1 < s5 by SQUARE_1:83,95;
+    1 - s5 <> 0 by SQUARE_1:83,95; then
+    (1 - s5) ^2 > 0 by SQUARE_1:74; then
+d1: (1 - s5) to_power 2 > 0 by POWER:53;
+d3: s5 > 0 by SQUARE_1:93;
+    2 * 1 < 2 * s5 by XREAL_1:70,d0; then
+    - 2 * s5 < - 2 by XREAL_1:26; then
+    - 2 * s5 + 6 < - 2 + 6 by XREAL_1:10; then
+    1 - 2 * s5 + 5 < 4; then
+    1 ^2 - 2 * 1 * s5 + s5 ^2 < 4 by SQUARE_1:def 4; then
+    (1 - s5) ^2 < 2 ^2; then
+    (1 - s5) ^2 < 2 to_power 2 by POWER:53; then
+xx: (1 - s5) to_power 2 < 2 to_power 2 by POWER:53;
+
+theorem
+  for n being natural number st n <> 0 holds
+    [\ (tau to_power (2*n)) / sqrt 5 /] = Fib (2*n)
+    proof
+      let n be natural number;
+      assume a0: n <> 0;
+A3:   (tau to_power (2*n)) / s5 - 1 < Fib (2*n)
+      proof
+d2:     2 to_power (2*n) > 0 by POWER:39;
+        (1 - s5) to_power 2 to_power n < (2 to_power 2) to_power n
+        by a0,d1,POWER:42,xx; then
+        ((1-s5) to_power 2) to_power n < 2 to_power (2*n) by POWER:38; then
+        (1 - s5) to_power (2*n) < 2 to_power (2*n) by NEWTON:14; then
+        ((1 - s5) to_power (2*n)) / (2 to_power (2*n)) <
+        (2 to_power (2*n)) / (2 to_power (2*n)) by XREAL_1:76,d2; then
+        ((1 - s5) to_power (2*n)) / (2 to_power (2*n)) < 1
+        by XCMPLX_1:60,d2; then
+        tau_bar to_power (2*n) < 1 by FIB_NUM:def 2,JakPower36; then
+        tau_bar to_power (2*n) < s5 by XXREAL_0:2,d0; then
+        (tau_bar to_power (2*n))/s5 < s5 /s5 by XREAL_1:76,d3; then
+        (tau_bar to_power (2*n)) / s5 < 1 by d3,XCMPLX_1:60; then
+        - ((tau_bar to_power (2*n)) / s5) > -1 by XREAL_1:26; then
+        - ((tau_bar to_power (2*n))/s5) + (tau to_power (2*n)) / s5 >
+        -1 + (tau to_power (2*n)) / s5 by XREAL_1:10; then
+        (tau to_power (2*n)) / s5 - ((tau_bar to_power (2*n))/s5) >
+        -1 + (tau to_power (2*n)) / s5; then
+        (tau to_power (2*n) - tau_bar to_power (2*n)) / s5 >
+        -1 + (tau to_power (2*n)) / sqrt 5 by XCMPLX_1:121;
+        hence thesis by FIB_NUM:7;
+      end;
+      tau_bar to_power (2*n) = tau_bar to_power 2 |^ n by NEWTON:14
+      .= tau_bar ^2 to_power n by POWER:53; then
+      tau_bar to_power (2*n) > 0 by POWER:39; then
+      - (tau_bar to_power (2*n)) / sqrt 5 + (tau to_power (2*n)) / s5 <
+      0 + (tau to_power (2*n)) / s5 by XREAL_1:10,d3; then
+      (tau to_power (2*n)) / s5 - (tau_bar to_power (2*n)) / s5 <
+      (tau to_power (2*n)) / s5; then
+      (tau to_power (2*n) - tau_bar to_power (2*n)) / s5 <
+      (tau to_power (2*n)) / s5 by XCMPLX_1:121; then
+      Fib (2*n) <= (tau to_power (2*n)) / s5 by FIB_NUM:7;
+      hence thesis by A3,INT_1:def 4;
+   end;
+
+theorem
+  for n being natural number holds
+    [/ (tau to_power (2*n+1)) / sqrt 5 \] = Fib (2*n+1)
+  proof
+    let n be natural number;
+A1: Fib (2 * n + 1) =
+    ((tau to_power (2*n+1)) - (tau_bar to_power (2*n+1)))/(sqrt 5) by FIB_NUM:7
+    .= (tau to_power (2*n+1))/sqrt 5 - (tau_bar to_power (2*n+1))/sqrt 5
+    by XCMPLX_1:121;
+T1: sqrt 5 > 0 by SQUARE_1:82,95;
+    tau_bar to_power (2*n+1) < 0
+    proof
+      set t = - tau_bar;
+a3:   tau_bar to_power (2*n+1) = (-t) to_power (2*n+1)
+      .= - (t to_power (2*n+1)) by pomoc2;
+      t to_power (2*n+1) > 0 by POWER:39;
+      hence thesis by a3;
+    end; then
+S1:(tau to_power (2*n+1)) / sqrt 5 <= Fib (2*n+1) by A1,XREAL_1:48,T1;
+   (tau_bar to_power (2*n+1)) / sqrt 5 + 1 / 2 > 0 by Lemat11; then
+S2:(tau_bar to_power (2*n+1)) / sqrt 5 + 1/2 - 1/2 > 0 - 1/2 by XREAL_1:11;
+   (tau_bar to_power (2*n+1)) / sqrt 5 > -1 by S2,XXREAL_0:2; then
+   - ((tau_bar to_power (2*n+1)) / sqrt 5) < - -1 by XREAL_1:26; then
+   - ((tau_bar to_power (2*n+1)) / sqrt 5) + (tau to_power (2*n+1)) / sqrt 5 <
+   1 + (tau to_power (2*n+1)) / sqrt 5 by XREAL_1:10; then
+   (tau to_power (2*n+1)) / sqrt 5 - ((tau_bar to_power (2*n+1)) / sqrt 5) <
+   1 + (tau to_power (2*n+1)) / sqrt 5; then
+   (tau to_power (2*n+1) - tau_bar to_power (2*n+1)) / sqrt 5 <
+   1 + (tau to_power (2*n+1)) / sqrt 5 by XCMPLX_1:121; then
+   Fib (2*n+1) < (tau to_power (2*n+1)) / sqrt 5 + 1 by FIB_NUM:7;
+   hence thesis by S1,INT_1:def 5;
+  end;
+
+theorem Tw13a:
+  for n being natural number st n >= 2 & n is even holds
+    Fib (n+1) = [\ tau * Fib n + 1 /]
+  proof
+    let n be natural number;
+    assume A0: n >= 2 & n is even;
+    set t = tau;
+    set tb = tau_bar;
+B0: sqrt 5 > 0 by SQUARE_1:82,95;
+B2: t * tb = (1 ^2 - (sqrt 5) ^2) / 4 by FIB_NUM:def 1,FIB_NUM:def 2
+    .= (1-5)/4 by SQUARE_1:def 4
+    .= -1;
+    tb to_power n = (-tb) to_power n by A0,pomoc1; then
+H1: tb to_power n > 0 by POWER:39;
+B3: tb to_power 2 + 1 = tb ^2 + 1 by POWER:53
+    .= (1 ^2 - 2 * 1 * sqrt 5 + (sqrt 5) ^2) / 4 + 1 by FIB_NUM:def 2
+    .= (1 - 2 * sqrt 5 + 5) / 4 + 1 by SQUARE_1:def 4
+    .= (5 - sqrt 5) / 2
+    .= ((sqrt 5) ^2 - sqrt 5) / 2 by SQUARE_1:def 4
+    .= -(sqrt 5) * tb by FIB_NUM:def 2;
+    t * Fib n = t * ((t to_power n - tb to_power n) / sqrt 5) by FIB_NUM:7
+    .= (t * (t to_power n - tb to_power n)) / sqrt 5 by XCMPLX_1:75
+    .= (t * (t to_power n) - t * (tb to_power n)) / sqrt 5
+    .= ((t to_power 1) * (t to_power n) - t * (tb to_power n)) / sqrt 5
+    by POWER:30
+    .= (t to_power (n+1) - t * (tb to_power ((n-1)+1))) / sqrt 5 by POWER:32
+    .= (t to_power (n+1) - t * ((tb to_power (n-1)) * (tb to_power 1))) /sqrt 5
+    by JakPower32
+    .= (t to_power (n+1) - t * ((tb to_power (n-1)) * tb)) / sqrt 5
+    by POWER:30
+    .= (t to_power (n+1) - t * tb * (tb to_power (n-1))) / sqrt 5
+    .= (t to_power (n+1) - (-1) * (tb to_power (n-1))+
+    tb to_power (n-1) - tb to_power (n-1)) / sqrt 5 by B2
+    .= (((t to_power (n+1) - tb to_power (n+1))) + (tb to_power (n-1) +
+    tb to_power (n+1))) / sqrt 5
+    .= ((t to_power (n+1) - tb to_power (n+1))) / sqrt 5 + (tb to_power (n-1) +
+    tb to_power ((n-1)+2)) / sqrt 5 by XCMPLX_1:63
+    .= Fib (n+1) + (tb to_power (n-1) +
+    tb to_power ((n-1)+2)) / sqrt 5 by FIB_NUM:7
+    .= Fib (n+1) + ((tb to_power (n-1)) * 1 +
+    (tb to_power (n-1)) * (tb to_power 2)) / sqrt 5 by JakPower32
+    .= Fib (n+1) + ((tb to_power (n-1)) * (1 + (tb to_power 2))) / sqrt 5
+    .= Fib (n+1) + ((tb to_power (n-1)) * (-(sqrt 5) * tb)) / sqrt 5 by B3
+    .= Fib (n+1) + ((-1) * (tb to_power (n-1)) * tb * (sqrt 5)) / sqrt 5
+    .= Fib (n+1) + ((-1) * (tb to_power (n-1))*tb) by XCMPLX_1:90,B0
+    .= Fib (n+1) - ((tb to_power (n-1)) * tb)
+    .= Fib (n+1) - ((tb to_power (n-1)) * (tb to_power 1)) by POWER:30
+    .= Fib (n+1) - (tb to_power (n-1+1)) by JakPower32
+    .= Fib (n+1) - (tb to_power n); then
+C2:  Fib (n+1) = (t * Fib n + 1) - (1 - (tb to_power n));
+    tb to_power n < 1 by hop8,XXREAL_0:2,A0; then
+    - (tb to_power n) > - 1 by XREAL_1:26; then
+    - (tb to_power n) + 1 > - 1 + 1 by XREAL_1:10; then
+D1: Fib (n+1) < t * Fib n + 1 by C2,XREAL_1:46;
+    t * Fib n + 1 < Fib (n+1) + 1
+    proof
+M1:   t * Fib n = t * ((t to_power n - tb to_power n) / sqrt 5) by FIB_NUM:7
+      .= (t*(t to_power n - tb to_power n)) / sqrt 5 by XCMPLX_1:75
+      .= (t*t to_power n - t * tb to_power n) / sqrt 5
+      .= (t to_power 1 * t to_power n - t * tb to_power n) /sqrt 5 by POWER:30
+      .= (t to_power (n+1) - t * tb to_power n) / sqrt 5 by POWER:32
+      .= t to_power (n+1)/sqrt 5 - (t * tb to_power n) /sqrt 5 by XCMPLX_1:121;
+M2:   Fib (n+1) = (t to_power (n+1) - tb to_power (n+1)) / sqrt 5 by FIB_NUM:7
+      .= t to_power (n+1) / sqrt 5 - tb to_power (n+1) /sqrt 5 by XCMPLX_1:121;
+      (tb to_power n * t) > (tb to_power n * tb) by H1,XREAL_1:70; then
+      (tb to_power n * t) > (tb to_power n * tb to_power 1) by POWER:30; then
+      (t * tb to_power n)/sqrt 5 > (tb to_power n * tb to_power 1) / sqrt 5
+      by XREAL_1:76,B0; then
+      (t * tb to_power n)/sqrt 5 > tb to_power (n+1)/sqrt 5 by JakPower32; then
+      - (t * tb to_power n)/sqrt 5 < - tb to_power (n+1) /sqrt 5 by XREAL_1:26;
+      then - (t * tb to_power n) / sqrt 5 + t to_power (n+1) / sqrt 5 <
+      - tb to_power (n+1) / sqrt 5 + t to_power (n+1) / sqrt 5 by XREAL_1:10;
+      hence thesis by XREAL_1:10,M1,M2;
+    end; then
+    t * Fib n + 1 - 1 < Fib (n+1) + 1 - 1 by XREAL_1:11;
+    hence thesis by D1,INT_1:def 4;
+  end;
+
+theorem Tw13b:
+  for n being natural number st n >= 2 & n is odd holds
+    Fib (n+1) = [/ tau * Fib n - 1 \]
+  proof
+    let n be natural number;
+    assume A0: n >= 2 & n is odd;
+B1: sqrt 5 > 0 by SQUARE_1:82,95;
+    tau * tau_bar to_power n + sqrt 5 >= tau_bar to_power (n+1)
+    proof
+      set tbn = tau_bar to_power n;
+dd:   tbn < 0 by A0,pom2;
+      tau + sqrt 5 / tbn <= tau_bar
+      proof
+        n > 1 by A0,XXREAL_0:2; then
+        tbn >= - 1 / 2 by hop9; then
+        tbn > -1 by XXREAL_0:2; then
+        tbn + 1 >= - 1 + 1 by XREAL_1:8; then
+        (tbn + 1) / tbn <= 0 / tbn by dd; then
+        tbn / tbn + 1/ tbn <= 0 by XCMPLX_1:63; then
+        1 + 1 / tbn <= 0 by XCMPLX_1:60,dd; then
+        (1 + 1 / tbn) * sqrt 5 <= 0 * sqrt 5 by B1; then
+        1 * sqrt 5 + (1 / tbn) * sqrt 5 <= 0; then
+        sqrt 5 + sqrt 5 / tbn <= 0 by XCMPLX_1:75; then
+        sqrt 5 / 2 + sqrt 5 / tbn + sqrt 5 / 2 - sqrt 5 / 2 <= 0 - sqrt 5 / 2
+        by XREAL_1:11; then
+        sqrt 5 / 2 + sqrt 5 / tbn + 1/2 <= - sqrt 5 / 2 + 1/2 by XREAL_1:8;
+        hence thesis by FIB_NUM:def 1,def 2;
+      end; then
+      (tau + sqrt 5 / tbn) * tbn >= tau_bar * tbn by XREAL_1:67,dd; then
+      (tau + sqrt 5 / tbn) * tbn >= tau_bar to_power 1 * tbn by POWER:30; then
+      tau *tbn + (sqrt 5 / tbn) * tbn >= tau_bar to_power (n+1) by JakPower32;
+      hence thesis by dd,XCMPLX_1:88;
+    end; then
+    - (tau * tau_bar to_power n + sqrt 5) <= - tau_bar to_power (n+1)
+    by XREAL_1:26; then
+    - tau * tau_bar to_power n - sqrt 5 + tau to_power (n+1) <=
+    - tau_bar to_power (n+1) +  tau to_power (n+1) by XREAL_1:8; then
+    tau to_power (n+1) - tau * tau_bar to_power n - sqrt 5 <=
+    tau to_power (n+1) - tau_bar to_power (n+1); then
+    tau to_power 1 * tau to_power n - tau * tau_bar to_power n - sqrt 5 <=
+    tau to_power (n+1) - tau_bar to_power (n+1) by POWER:32; then
+    tau * tau to_power n - tau * tau_bar to_power n - sqrt 5 <=
+    (tau to_power (n+1) - tau_bar to_power (n+1)) by POWER:30; then
+    (tau * (tau to_power n - tau_bar to_power n) - sqrt 5) / sqrt 5 <=
+    (tau to_power (n+1)-tau_bar to_power (n+1))/sqrt 5 by XREAL_1:74,B1; then
+    (tau * (tau to_power n - tau_bar to_power n))/sqrt 5 - sqrt 5 / sqrt 5 <=
+    (tau to_power (n+1) - tau_bar to_power (n+1))/sqrt 5 by XCMPLX_1:121; then
+    tau * ((tau to_power n - tau_bar to_power n)/sqrt 5) - sqrt 5 / sqrt 5 <=
+    (tau to_power (n+1) - tau_bar to_power (n+1))/sqrt 5 by XCMPLX_1:75; then
+    tau * ((tau to_power n - tau_bar to_power n) / sqrt 5) - 1 <=
+    (tau to_power (n+1) - tau_bar to_power (n+1)) / sqrt 5
+      by XCMPLX_1:60,B1; then
+    tau * ((tau to_power n - tau_bar to_power n) / sqrt 5) - 1 <= Fib (n+1)
+      by FIB_NUM:7; then
+A1: tau * Fib n - 1 <= Fib (n+1) by FIB_NUM:7;
+    tau * Fib n - 1 + 1 > Fib (n+1)
+    proof
+      set tn = tau to_power n;
+      set tbn = tau_bar to_power n;
+c1:   tau * Fib n = tau * ((tn - tbn) / sqrt 5) by FIB_NUM:7
+      .= (tau * (tn - tbn)) / sqrt 5 by XCMPLX_1:75;
+c3:   tbn < 0 by pom2,A0;
+      tau > tau_bar to_power 1 by POWER:30; then
+      tau * tbn < tau_bar to_power 1 * tbn by c3,XREAL_1:71; then
+      tau * tbn < tau_bar to_power (n+1) by JakPower32; then
+      - tau * tbn > - tau_bar to_power (n+1) by XREAL_1:26; then
+      - tau * tbn + tau to_power (n+1) >
+      - tau_bar to_power (n+1) + tau to_power (n+1) by XREAL_1:8; then
+      tau to_power (n+1) - tau * tbn >
+      tau to_power (n+1) - tau_bar to_power (n+1); then
+      tau to_power 1 * tn - tau * tbn >
+      tau to_power (n+1) - tau_bar to_power (n+1) by JakPower32; then
+      tau * tn - tau * tbn > tau to_power (n+1) - tau_bar to_power (n+1)
+        by POWER:30; then
+      (tau * (tn - tbn)) / sqrt 5 >
+      (tau to_power (n+1) - tau_bar to_power (n+1)) / sqrt 5 by XREAL_1:76,B1;
+      hence thesis by c1,FIB_NUM:7;
+    end;
+    hence thesis by A1,INT_1:def 5;
+  end;
+
+theorem Wn14:
+  for n being natural number st n >= 2 holds
+    Fib (n+1) = [\ (Fib n + sqrt 5 * Fib n + 1) / 2 /]
+  proof
+    let n be natural number;
+    assume A0: n >= 2;
+CC: sqrt 5 > 0 by SQUARE_1:93;
+    set tn = tau to_power n;
+    set tb = tau_bar;  set s5 = sqrt 5;
+    set tbn = tb to_power n;
+    per cases;
+    suppose ST1: n is even; then
+C1:   tbn > 0 by pom1;
+B1:   (Fib n + sqrt 5 * Fib n + 1) / 2 >= Fib (n+1)
+      proof
+        tbn <= 1/2 by hop8,A0; then
+        2 * tbn <= 2 * (1/2) by XREAL_1:66; then
+        (2 * tbn) / tbn <= 1 / tbn by C1,XREAL_1:74; then
+        2 <= 1 / tbn by C1,XCMPLX_1:90; then
+        2 * s5 <= (1 / tbn) * s5 by XREAL_1:66,CC; then
+        s5 + s5 <= (1 * s5) / tbn by XCMPLX_1:75; then
+        s5 + s5 - s5 <= (1*s5)/tbn - s5 by XREAL_1:11; then
+        - s5 >= -(s5/tbn - s5) by XREAL_1:26; then
+        - s5 + 1 >= - s5 / tbn + s5 + 1 by XREAL_1:8; then
+        tau_bar >= ((s5+1)-s5/tbn)/2 by FIB_NUM:def 2,XREAL_1:74; then
+        tau_bar * tbn >= (tau - (s5 / tbn) / 2) * tbn
+        by C1,XREAL_1:66,FIB_NUM:def 1; then
+        tb * tbn >= (tau - (sqrt 5 / 2) / tbn) * tbn by XCMPLX_1:48; then
+        tb * tbn >= tau * tbn - ((s5 / 2) / tbn) * tbn; then
+        tb * tbn >= tau * tbn - (s5 / 2) by C1,XCMPLX_1:88; then
+        tb to_power 1 * tbn >= tau * tbn - (s5/2) by POWER:30; then
+        tb to_power (n+1) >= tau * tbn - (s5/2) by JakPower32; then
+        - tb to_power (n+1) <= -(tau*tbn - (s5/2)) by XREAL_1:26; then
+        - tb to_power (n+1) + tau to_power (n+1) <=
+        - tau * tbn + (sqrt 5/2) + tau to_power (n+1) by XREAL_1:8; then
+        -tb to_power (n+1) + tau to_power (n+1) <=
+        tau to_power (n+1) - tau * tbn + (s5/2); then
+        - tb to_power (n+1) + tau to_power (n+1) <=
+        tn*tau to_power 1-tau * tbn+(s5/2) by JakPower32; then
+        - tb to_power (n+1) + tau to_power (n+1) <=
+        tn * tau - tau * tbn + (s5/2) by POWER:30; then
+        (tau to_power (n+1)-tau_bar to_power (n+1))/sqrt 5 <=
+        (tau*(tn - tbn) + (s5/2))/s5 by CC,XREAL_1:74; then
+        Fib (n+1) <= (tau * (tn - tbn) + (s5/2)) / s5 by FIB_NUM:7; then
+        Fib (n+1) <= (tau * (tn - tbn))/s5 + (s5/2)/s5 by XCMPLX_1:63; then
+        Fib (n+1) <= tau * ((tn - tbn)/s5) + (s5/2)/s5 by XCMPLX_1:75; then
+        Fib (n+1) <= tau * Fib n + (s5 / 2) / sqrt 5 by FIB_NUM:7; then
+        Fib (n+1) <= tau * Fib n + (s5 / s5) / 2 by XCMPLX_1:48; then
+        Fib (n+1) <= tau * Fib n + 1 / 2 by CC,XCMPLX_1:60;
+        hence thesis by FIB_NUM:def 1;
+      end;
+      (Fib n + s5 * Fib n + 1) / 2 - 1 < Fib (n+1)
+      proof
+        Fib (n+1) = [\ tau * Fib n + 1 /] by A0,ST1,Tw13a; then
+B2:     tau * Fib n + 1 - 1 < Fib (n+1) by INT_1:def 4;
+        (Fib n+s5*Fib n+1) <= (Fib n+s5 * Fib n + 2) by XREAL_1:8; then
+        (Fib n+s5*Fib n+1)/2 <= (Fib n+s5*Fib n+2)/2 by XREAL_1:74;then
+        (Fib n+s5 * Fib n + 1)/2-1 <= tau * Fib n + 1 - 1
+        by XREAL_1:11,FIB_NUM:def 1;
+        hence thesis by B2,XXREAL_0:2;
+      end;
+      hence thesis by INT_1:def 4,B1;
+    end;
+    suppose ST2: n is odd;
+B1:   (Fib n + sqrt 5 * Fib n + 1) / 2 >= Fib (n+1)
+      proof
+        Fib (n+1) = [/ tau * Fib n - 1 \] by A0,ST2,Tw13b; then
+c1:     tau * Fib n - 1 + 1 > Fib (n+1) by INT_1:def 5;
+        1 + (Fib n+sqrt 5*Fib n) > 0 + (Fib n+sqrt 5*Fib n) by XREAL_1:8; then
+        (Fib n+sqrt 5 * Fib n + 1)/2 > (Fib n+sqrt 5 * Fib n)/2 by XREAL_1:76;
+        hence thesis by c1,XXREAL_0:2,FIB_NUM:def 1;
+      end;
+      (Fib n + (sqrt 5) * Fib n + 1) / 2 - 1 < Fib (n+1)
+      proof
+        n > 1 by A0,XXREAL_0:2; then
+        (2 * sqrt 5) * tbn > (2 * sqrt 5) * (-1/2) by XREAL_1:70,CC,hop9; then
+        - (2 * sqrt 5) * tbn < - (2 * sqrt 5) * (-1/2) by XREAL_1:26; then
+        1*tn +sqrt 5*tn - 2*tau*tn + 2*tb*tbn - sqrt 5*tbn - 1*tbn + 2*tau*tn <
+        sqrt 5 + 2 * tau * tn by XREAL_1:8,FIB_NUM:def 1,def 2; then
+        tn + sqrt 5 * tn + 2 * tb * tbn - sqrt 5 * tbn - tbn - 2 * tb * tbn <
+        sqrt 5 + 2 * tau * tn - 2 * tb * tbn by XREAL_1:11; then
+        ((1+sqrt 5) * (tn-tbn)) /sqrt 5 < (sqrt 5 + 2*tau*tn - 2*tb*tbn)/sqrt 5
+        by CC,XREAL_1:76; then
+        (1 + sqrt 5) * ((tn - tbn) / sqrt 5) <
+        (sqrt 5 + 2 * (tau * tn) - 2 * tb * tbn) / sqrt 5 by XCMPLX_1:75; then
+        (1 + sqrt 5) * Fib n < (sqrt 5 + 2 * (tau*tn) - 2 * tb * tbn) / sqrt 5
+        by FIB_NUM:7; then
+        (1 + sqrt 5) * Fib n <
+        (sqrt 5 + 2 * (tau to_power 1*tn) - 2*tb*tbn) /sqrt 5 by POWER:30; then
+        (1 + sqrt 5) * Fib n <
+        (sqrt 5 + 2*tau to_power (n+1) - 2*(tb*tbn))/sqrt 5 by JakPower32; then
+        (1+sqrt 5) * Fib n < (sqrt 5 + 2 * tau to_power (n+1) -
+        2 * (tb to_power 1 * tbn)) / sqrt 5 by POWER:30; then
+        (1 + sqrt 5) * Fib n < (sqrt 5 + 2 * tau to_power (n+1) -
+        2 * tb to_power (n+1)) / sqrt 5 by JakPower32; then
+        (1 + sqrt 5) * Fib n <
+        (sqrt 5 + 2 * (tau to_power (n+1) - tb to_power (n+1))) / sqrt 5; then
+        (1+sqrt 5) * Fib n < sqrt 5 / sqrt 5 + (2 * (tau to_power (n+1) -
+        tb to_power (n+1))) / sqrt 5 by XCMPLX_1:63; then
+        (1 + sqrt 5) * Fib n < sqrt 5 / sqrt 5 + 2 * ((tau to_power (n+1) -
+        tb to_power (n+1)) / sqrt 5) by XCMPLX_1:75; then
+        (1+sqrt 5) * Fib n < sqrt 5 / sqrt 5 + 2 * Fib (n+1) by FIB_NUM:7; then
+        (1 + sqrt 5) * Fib n < 1 + 2 * Fib (n+1) by CC,XCMPLX_1:60; then
+        ((1 +sqrt 5) * Fib n) / 2 < (1 + 2 * Fib (n+1)) / 2 by XREAL_1:76; then
+        ((1+sqrt 5) * Fib n) / 2 -1/2 < 1/2 + Fib (n+1) - 1/2 by XREAL_1:11;
+        hence thesis;
+      end;
+      hence thesis by B1,INT_1:def 4;
+    end;
+  end;
+
+theorem
+  for n being natural number st n >= 2 holds
+    Fib (n+1) = [/ (Fib n + sqrt 5 * Fib n - 1)/2 \]
+  proof
+    let n be natural number;
+    assume A0: n >= 2;
+    Fib (n+1) = [\ (Fib n + sqrt 5 * Fib n + 1) / 2 /] by Wn14,A0; then
+a1: (Fib n + sqrt 5 * Fib n + 1)/2 - 1 < Fib (n+1) by INT_1:def 4;
+    (Fib n + sqrt 5 * Fib n - 1)/2 + 1 > Fib (n+1)
+    proof
+      Fib (n+1) = [\ (Fib n + sqrt 5 * Fib n + 1) / 2 /] by Wn14,A0; then
+C2:   (Fib n + sqrt 5 * Fib n - 1)/2 + 1 >= Fib (n+1) by INT_1:def 4;
+      (Fib n + sqrt 5 * Fib n - 1)/2 + 1 <> Fib (n+1)
+      proof
+        set tn = tau to_power n;
+        set tbn = tau_bar to_power n;
+        set t1 = tau to_power (n+1);
+        set t2 = tau_bar to_power (n+1);
+        set s5 = sqrt 5;
+b0:     s5 > 0 by SQUARE_1:93;
+        assume (Fib n + s5 * Fib n - 1)/2 + 1 = Fib (n+1); then
+        Fib n * (1 + s5) + 1 = 2 * Fib (n+1); then
+        ((tn - tbn)/s5) * (1+s5) + 1 = 2 * Fib (n+1) by FIB_NUM:7; then
+        ((((tn - tbn)/s5) * (1+s5)) + 1) * s5 =
+        (2 * ((t1-t2)/s5))*s5 by FIB_NUM:7; then
+        ((tn - tbn) / s5 * (1+s5)) * s5 + 1 * s5 =
+        2*(((t1-t2)/s5)*s5); then
+        ((tn - tbn) / s5 * (1+s5)) * s5 + s5 =
+        2 * (t1-t2) by XCMPLX_1:88,b0; then
+        (((tn-tbn)*(1+s5))/s5)*s5+s5 = 2 * t1 - 2 * t2 by XCMPLX_1:75; then
+        (tn - tbn) * (1 + s5) + s5 = 2 * t1 -
+        2 * t2 by XCMPLX_1:88,b0; then
+        tn*(1+s5)-(tbn+tbn*s5)+s5=2*(tn*tau to_power 1)
+        - 2 * t2 by JakPower32; then
+        tn*(1+s5)-tbn*(1+s5)+s5= 2*(tn*tau to_power 1)
+        -2*(tbn*tau_bar to_power 1) by JakPower32;then
+        tn*(1+s5)-tbn*(1+s5) + s5 = 2 * (tn * tau) -
+        2 * (tbn * tau_bar to_power 1) by POWER:30; then
+        (tn - tbn) * (1+s5) + s5 = 2 * (tn * tau) -
+        2 * (tbn * tau_bar) by POWER:30; then
+        tn*(1+s5 - 2*tau) + tbn* (2*tau_bar - (1+s5))+s5 = 0; then
+        (-2 * tbn + 1)*sqrt 5 = 0 by FIB_NUM:def 1,def 2; then
+        -2 * tbn + 1 = 0 by b0;
+        hence contradiction by hop8,A0;
+      end;
+      hence thesis by C2,XXREAL_0:1;
+    end;
+    hence thesis by a1,INT_1:def 5;
+  end;
+
+theorem
+  for n being natural number holds
+    Fib (n+1) = (Fib n + sqrt(5*(Fib n)^2 + 4*(-1) to_power n))/2
+   proof
+     let n be natural number;
+A0:  n - 0 is Element of NAT by NAT_1:21;
+A1:  2 * Fib (n+1) = Fib n + Lucas n by FIB_NUM3:24;
+A3:  (Lucas n)^2 - 5*(Fib n)^2 = (Lucas n) to_power 2 - 5*(Fib n)^2 by POWER:53
+     .= (Lucas n) to_power 2 - 5 * (Fib n) to_power 2 by POWER:53
+     .= - (5 * (Fib n) |^2 - (Lucas n) |^2)
+     .= - (4 * (-1) to_power (n+1)) by FIB_NUM3:30,A0
+     .= (-1) * ((-1) to_power (n+1) * 4)
+     .= (-1) to_power 1 * ((-1) to_power (n+1) * 4) by POWER:30
+     .= ((-1) to_power 1 * (-1) to_power (n+1)) * 4
+     .= (-1) to_power (n + 1 + 1) * 4 by JakPower32
+     .= (-1) to_power (n + 2) * 4
+     .= (-1) to_power n * (-1) to_power 2 * 4 by JakPower32
+     .= (-1) to_power n * 1 * 4 by FIB_NUM2:5,POLYFORM:5;
+     Fib (n+1) = (Fib n + Lucas n) / 2 by A1;
+     hence thesis by SQUARE_1:def 4,A3;
+  end;
+
+theorem
+  for n being natural number st n >= 2 holds
+    Fib (n+1) = [\ (Fib(n) + 1 + sqrt(5*(Fib(n))^2 - 2 * Fib(n) + 1) )/2 /]
+  proof
+    let n be natural number;
+    assume A0: n >= 2;
+aa: n - 0 is Element of NAT by NAT_1:21;
+z1: n - 1 >= 2 - 1 by A0,XREAL_1:11;
+z0: (n + 1 -' 1) + 1 = (n + 1 - 1) + 1 by NAT_D:37
+    .= (n - 1 + 1) + 1
+    .= (n -' 1 + 1) + 1 by z1,NAT_D:39;
+a1: Fib (n+1) = Fib (((n-'1)+1)+1) by z0,NAT_D:34
+    .= Fib (n-'1) + Fib (n-'1+1) by PRE_FF:1
+    .= Fib (n-'1) + Fib (n+1-'1) by NAT_D:38,A0,XXREAL_0:2
+    .= Fib (n -' 1) + Fib (n) by NAT_D:34;
+    reconsider m = n -' 1 + 1 as natural number;
+    n + 2 >= 2 + 2 by XREAL_1:8,A0; then
+    reconsider p = n + 2 - 1 as natural number by NAT_1:21,XXREAL_0:2;
+A1: Lucas (n) - Fib(n) = Lucas (n+1-'1) - Fib (n) by NAT_D:34
+    .= Lucas (n-'1+1) - Fib n by NAT_D:38,A0,XXREAL_0:2
+    .= Fib(n-'1) + Fib((n-'1)+2) - Fib(n) by FIB_NUM3:20
+    .= Fib (n-'1) + Fib (n+2-'1) - Fib (n) by NAT_D:38,A0,XXREAL_0:2
+    .= Fib (n-'1) + Fib p - Fib (n) by NAT_D:37
+    .= 2 * Fib (n-'1) by a1;
+A2: (Lucas (n))^2 - 5 * (Fib n) ^2 =
+    (Lucas (n))^2 - 5 * (Fib n) to_power 2 by POWER:53
+    .= (Lucas n) to_power 2 - 5 * (Fib n) |^2 by POWER:53
+    .= (-1) * (5 * (Fib (n)) |^2 - (Lucas (n)) |^2)
+    .= (-1) * (4 * (-1) to_power (n+1)) by FIB_NUM3:30,aa
+    .= 4 * ((-1) * (-1) to_power (n+1))
+    .= 4 * ((-1) to_power 1 * (-1) to_power (n+1)) by POWER:30
+    .= 4 * (-1) to_power (1+(n+1)) by JakPower32
+    .= 4 * (-1) to_power (n+2)
+    .= 4 * ((-1) to_power n * (-1) to_power 2) by JakPower32
+    .= 4 * ((-1) to_power n * (-1) ^2) by POWER:53
+    .= 4 * (-1) to_power n;
+    n -' 1 >= 2 -'1 & 2-1>= 1 by  A0,NAT_D:42; then
+    n -'1 >= 2-1 by NAT_D:39; then
+d1: Fib (n-'1) >= 1 by PRE_FF:1,FIB_NUM2:47;
+    1 >= (-1) to_power n
+    proof
+      per cases;
+      suppose n is even;
+        hence thesis by FIB_NUM2:5;
+      end;
+      suppose n is odd;
+        hence thesis by FIB_NUM2:3;
+      end;
+    end; then
+    (-1) to_power n <= Fib (n-'1) by d1,XXREAL_0:2; then
+    (Lucas n)^2 - 5 * (Fib n)^2 <= 2 * 2 * Fib (n-'1) by A2,XREAL_1:66; then
+    (Lucas n)^2 - 5 * (Fib n)^2 - 2 * Lucas (n) <=
+    2 * Lucas (n) - 2 * Fib (n) - 2 * Lucas (n)
+      by XREAL_1:11,A1; then
+    (Lucas n)^2 - 5 * (Fib n)^2 - 2 * Lucas (n) + 1 <= - 2 * Fib (n) + 1
+      by XREAL_1:8; then
+a6: (Lucas n)^2 - 5 * (Fib n)^2 - 2 * Lucas (n) + 1 + 5 * (Fib n)^2 <=
+    - 2 * Fib (n) + 1 + 5 * (Fib n)^2 by XREAL_1:8;
+v1: n + 2 -' 1 = n + 2 - 1 by NAT_D:37 .= n + 1;
+w1: Lucas n = Lucas (n+1-'1) by NAT_D:34
+    .= Lucas (n -' 1 + 1) by NAT_D:38,A0,XXREAL_0:2
+    .= Fib (n -' 1) + Fib ((n -' 1) + 2) by FIB_NUM3:20
+    .= Fib (n -' 1) + Fib (n + 2 -' 1) by A0,NAT_D:38,XXREAL_0:2
+    .= 2 * Fib (n + 1) - Fib n by a1,v1;
+x1: 2 * Fib (n-'1) >= 2 * 0;
+    n >= 1 by A0,XXREAL_0:2; then
+pp: Fib n >= 1 by PRE_FF:1,FIB_NUM2:47; then
+    -Fib n <= -1 by XREAL_1:26; then
+    -Fib n + 1 <= -1 + 1 by XREAL_1:8; then
+    2 * Fib (n -'1) + Fib n >= - Fib n + 1 + Fib n by XREAL_1:8,x1; then
+v3: 2 * Fib (n-'1) + Fib n - 1 >= 1 - 1 by XREAL_1:11;
+    sqrt ((2 * Fib (n+1) - Fib n - 1) ^2) <= sqrt (5*(Fib n)^2 - 2 * Fib n + 1)
+    by SQUARE_1:94,w1,a6; then
+    2 * Fib (n+1) - Fib n - 1 <= sqrt (5*(Fib n) ^2 - 2 * Fib n + 1)
+    by a1,SQUARE_1:89,v3; then
+    2 * Fib (n+1) - Fib n - 1 + Fib n <=
+    sqrt (5 * (Fib n) ^2 - 2 * Fib n + 1) + Fib n by XREAL_1:8; then
+    2 * Fib (n+1) - Fib n - 1 + Fib n + 1 <=
+    sqrt (5*(Fib n) ^2 - 2 * Fib n + 1) + Fib n + 1 by XREAL_1:8; then
+a8: (2 * Fib (n+1)) / 2 <=
+    (sqrt (5*(Fib n) ^2 - 2 * Fib n + 1) + Fib n + 1) / 2 by XREAL_1:74;
+d1: 5 * (Fib n) ^2 - 2 * Fib n = (5 * Fib n - 2) * Fib n;
+    5 * Fib n >= 5 * 1 by XREAL_1:66,pp; then
+    5 * Fib n - 2 >= 5 - 2 by XREAL_1:11; then
+c1: 5 * Fib n - 2 >= 0 by XXREAL_0:2;
+c2: Fib (n+1) + Fib (n+1) - Fib n + 1 = Fib (n+1) + Fib (n-'1) + 1 by a1;
+    (Lucas n) ^2 - 5*(Fib n) ^2 > -2 * (Lucas n + Fib n)
+    proof
+      set t = tau;
+      set tb = tau_bar;
+      set tn = tau to_power n;
+      set tbn = tau_bar to_power n;
+q1:   Fib n > 0 by FIB_NUM2:23,47,A0;
+      Lucas n >= n by FIB_NUM3:17; then
+      Lucas n >= 2 by XXREAL_0:2,A0; then
+      Lucas n + Fib n > 0 + 2 by q1,XREAL_1:10; then
+      (Lucas n + Fib n) * 2 > 2 * 2 by XREAL_1:70; then
+q2:   -(Lucas n + Fib n) * 2 < -4 by XREAL_1:26;
+      -4 <= 4 * (-1) to_power n by tt1;
+      hence thesis by A2,q2,XXREAL_0:2;
+    end; then
+    (Lucas n) ^2 - 5*(Fib n) ^2 + 2 * Lucas (n) >
+    -2 * (Lucas n + Fib n) + 2 * Lucas (n) by XREAL_1:8; then
+    (Lucas n) ^2 - 5 * (Fib n) ^2 + 2 * Lucas n + 5 * (Fib n) ^2 >
+    -2 * Fib n + 5 * (Fib n) ^2 by XREAL_1:8; then
+    (Lucas n) ^2 + 2* Lucas (n) * 1 + 1 ^2 > -2 * Fib n + 5 * (Fib n) ^2 + 1 ^2
+    by XREAL_1:8; then
+    sqrt((2 * Fib (n+1)- Fib n + 1) ^2) > sqrt(-2 * Fib n + 5*(Fib n) ^2 + 1)
+    by SQUARE_1:95,c1,d1,w1; then
+    2*Fib (n+1)-Fib n+1  > sqrt(-2*Fib n+5*(Fib n)^2+1) by SQUARE_1:89,c2; then
+    2*Fib (n+1)-Fib n+1-1  > sqrt(-2*Fib n+5*(Fib n)^2+1)-1 by XREAL_1:11; then
+    2 * Fib (n+1) - Fib n + Fib n  >
+    sqrt(-2 * Fib n + 5 * (Fib n) ^2 + 1) - 1 + Fib n by XREAL_1:8; then
+    (2 * Fib (n+1) ) / 2  >
+    (sqrt(-2 * Fib n + 5*(Fib n)^2 + 1) - 1 + Fib n) / 2 by XREAL_1:76; then
+    (Fib n + 1 + sqrt (5*(Fib(n)) ^2 - 2 * Fib n + 1)) / 2 - 1 < Fib (n+1);
+    hence thesis by INT_1:def 4,a8;
+  end;
+
+B2: sqrt 5 > 0 by SQUARE_1:93;
+D1: sqrt 5 / ((sqrt 5 - 5) * tau) = sqrt 5 / ((sqrt 5 - (sqrt 5) ^2) * tau)
+        by SQUARE_1:def 4
+     .= sqrt 5 / (sqrt 5 * ((1 - sqrt 5) * tau))
+     .= sqrt 5 / sqrt 5 / ((1 - sqrt 5) * tau) by XCMPLX_1:79
+     .= 1 / (((1 - sqrt 5) * (1+sqrt 5)) /2) by XCMPLX_1:60,B2,FIB_NUM:def 1
+     .= (1 * 2) / ((1 - sqrt 5) * (1 + sqrt 5)) by XCMPLX_1:78
+     .= 2 / (1 ^2 - (sqrt 5) ^2)
+     .= 2 / (1 ^2 - 5) by SQUARE_1:def 4
+     .= -1/2;
+
+theorem
+  for n being natural number st n >= 2 holds
+  Fib n = [\ (1/tau) * (Fib (n+1) + 1/2)/]
+  proof
+    let n be natural number;
+    assume A0: n >= 2; then
+AA: n > 1 by XXREAL_0:2;
+    set tbn = tau_bar to_power n;
+    sqrt 5 < sqrt (5 ^2) by SQUARE_1:95; then
+    sqrt 5 < 5 by SQUARE_1:def 4; then
+B4: sqrt 5 - 5 < 5 - 5 by XREAL_1:11;
+A1: (1 / tau) * (Fib (n+1) + 1/2) >= Fib n
+    proof
+      set tbm = tau_bar to_power (n+1);
+      set tn = tau to_power n;
+      tbm / tau - sqrt 5 / (2 * tau) <= tbn
+      proof
+        per cases;
+        suppose C2: n is even;
+          sqrt 5 / ((sqrt 5 - 5) * tau) <= tbn by D1,AA,hop9; then
+          (sqrt 5 / ((sqrt 5 - 5) * tau)) *  ((sqrt 5 - 5) * tau) >=
+          tbn * ((sqrt 5 - 5) * tau) by XREAL_1:67,B4; then
+C0:       sqrt 5 >= tbn * ((sqrt 5 - 5) * tau) by B4,XCMPLX_1:88;
+C3:       tbn > 0 by pom1,C2; then
+          sqrt 5 / tbn >= (tau *(sqrt 5 - 5)*tbn) / tbn by XREAL_1:74,C0; then
+          sqrt 5 / tbn >= tau * (sqrt 5 - 5) by XCMPLX_1:90,C3; then
+          (sqrt 5/tbn) / tau >= ((sqrt 5 - 5)*tau) / tau by XREAL_1:74; then
+          (sqrt 5 / tbn) / tau >= sqrt 5 - 5 by XCMPLX_1:90; then
+          sqrt 5 / (tbn * tau) >= sqrt 5 - 5 by XCMPLX_1:79; then
+          sqrt 5 /(tbn*tau)+(-sqrt 5+5)>=sqrt 5-5+(-sqrt 5+5) by XREAL_1:8;then
+          - (sqrt 5 / (tbn * tau) - sqrt 5 + 5) <= 0; then
+          - (sqrt 5 / (tbn*tau)) + sqrt 5 - 5 + 2 <= 0 + 2 by XREAL_1:8; then
+          (- sqrt 5/(tbn*tau) + (sqrt 5 - 3)) / 2 <= 2 / 2 by XREAL_1:74; then
+          - sqrt 5 / (tbn * tau) / 2 + tau_bar / tau <= 1 by albet2; then
+          - sqrt 5 / (tbn * tau * 2) + tau_bar / tau <= 1 by XCMPLX_1:79; then
+          (tau_bar/tau-sqrt 5/(2*tbn*tau))*tbn <= 1*tbn by XREAL_1:66,C3; then
+          (tau_bar/tau) * tbn - (sqrt 5/(2*tbn*tau)) * tbn <= tbn; then
+          (tau_bar*tbn)/tau-(sqrt 5/(2*tbn*tau))*tbn <= tbn by XCMPLX_1:75;then
+          (tau_bar to_power 1 * tbn) / tau - (sqrt 5/(2*tbn*tau)) * tbn <= tbn
+            by POWER:30; then
+          tau_bar to_power (n+1) / tau - (sqrt 5 / ((2*tau)*tbn)) * tbn <= tbn
+            by JakPower32; then
+          tau_bar to_power (n+1) / tau - ((sqrt 5/(2*tau))/tbn) * tbn <= tbn
+            by XCMPLX_1:79;
+          hence thesis by C3,XCMPLX_1:88;
+        end;
+        suppose n is odd; then
+C3:       tbn < 0 by pom2;
+          sqrt 5 / (tau * (sqrt 5-5)) <= tbn by D1,AA,hop9;  then
+          (sqrt 5 / (tau * (sqrt 5-5))) * (sqrt 5 - 5) >= tbn * (sqrt 5 - 5)
+            by XREAL_1:67,B4; then
+          (sqrt 5 / tau / (sqrt 5-5)) * (sqrt 5 - 5) >= tbn * (sqrt 5 - 5)
+            by XCMPLX_1:79; then
+          (sqrt 5/ tau) >= tbn * (sqrt 5 - 5) by XCMPLX_1:88,B4; then
+          (sqrt 5/ tau)/tbn <= (tbn * (sqrt 5 - 5))/tbn by XREAL_1:75,C3; then
+          sqrt 5 / (tau * tbn) <= (tbn * (sqrt 5 - 5))/tbn by XCMPLX_1:79; then
+          sqrt 5 / (tau * tbn) <= sqrt 5 - 5 by C3,XCMPLX_1:90; then
+          - (sqrt 5 / (tau * tbn)) >= -(sqrt 5 - 5) by XREAL_1:26; then
+          - (sqrt 5 / (tau * tbn)) + (sqrt 5-3)>= - sqrt 5 + 5 + (sqrt 5-3)
+            by XREAL_1:8; then
+          (-(sqrt 5 / (tau * tbn)) + (sqrt 5-3)) /2 >= 2 /2 by XREAL_1:74; then
+          tau_bar /tau - (sqrt 5 / (tau * tbn)) / 2 >= 1 by albet2; then
+          tau_bar /tau - (sqrt 5 / (tau * tbn*2)) >= 1 by XCMPLX_1:79; then
+          (tau_bar/tau-sqrt 5/(tau*tbn*2))*tbn <= 1*tbn by XREAL_1:67,C3; then
+          (tau_bar/tau)*tbn - (sqrt 5/(tau*2*tbn))*tbn <= tbn; then
+          (tau_bar/tau)*tbn-(sqrt 5/(tau*2)/tbn)*tbn <= tbn by XCMPLX_1:79;then
+          (tau_bar /tau)*tbn - sqrt 5 / (tau*2) <= tbn by C3,XCMPLX_1:88; then
+          tau_bar * tbn/tau - sqrt 5 / (tau * 2) <= tbn by XCMPLX_1:75; then
+          tau_bar to_power 1 * tbn/tau - sqrt 5 / (tau * 2) <= tbn by POWER:30;
+          hence thesis by JakPower32;
+        end;
+      end; then
+      - (tbm / tau - (sqrt 5 / (2 * tau))) >= - tbn by XREAL_1:26; then
+      - tbm/tau + sqrt 5/(2*tau) + (tn*tau)/tau >= - tbn + (tn*tau)/tau
+      by XREAL_1:8; then
+      (tn*tau)/tau - tbm/tau + sqrt 5/(2*tau) >= -tbn + (tn*tau)/tau; then
+      (tn*tau-tbm)/tau+sqrt 5/(2*tau) >= -tbn+(tn*tau)/tau by XCMPLX_1:121;then
+      (tn*tau - tbm)/tau + sqrt 5/(2*tau) >= -tbn + tn by XCMPLX_1:90; then
+      (tn*tau to_power 1-tbm)/tau + sqrt 5/(2*tau) >= tn-tbn by POWER:30; then
+      (tau to_power (n+1) - tbm) / tau + sqrt 5 / (2 * tau) >= tn - tbn
+        by JakPower32; then
+      ((tau to_power (n+1) - tbm) / tau + sqrt 5 / (2 * tau)) / sqrt 5 >=
+      (tn - tbn) / sqrt 5 by B2,XREAL_1:74; then
+      ((tau to_power (n+1) - tbm) /tau + sqrt 5 /(2*tau)) /sqrt 5 >= Fib n
+        by FIB_NUM:7; then
+      ((tau to_power (n+1) - tbm) /tau) /sqrt 5 + (sqrt 5 /(2*tau)) /sqrt 5 >=
+      Fib n by XCMPLX_1:63; then
+      ((tau to_power (n+1) - tbm)/sqrt 5) /tau + (sqrt 5/(2*tau)) /sqrt 5 >=
+      Fib n by XCMPLX_1:48; then
+      Fib (n+1)/tau + (sqrt 5/(2*tau))/sqrt 5 >= Fib n by FIB_NUM:7; then
+      Fib (n+1)/tau + 1/(2*tau)*(sqrt 5/sqrt 5) >= Fib n by XCMPLX_1:105; then
+      Fib (n+1)/tau + 1/(2*tau) * 1 >= Fib n by XCMPLX_1:60,B2; then
+      Fib (n+1) / tau + (1/2) / tau >= Fib n by XCMPLX_1:79; then
+      (Fib (n+1) + 1/2) / tau >= Fib n by XCMPLX_1:63;
+      hence thesis by XCMPLX_1:100;
+    end;
+    (1/tau) * (Fib (n+1) + 1/2) - 1 < Fib n
+    proof
+      1 < sqrt 5 by SQUARE_1:83,95; then
+      1 / 2 <  sqrt 5 / 2 by XREAL_1:76; then
+      tbn < sqrt 5 / 2 by XXREAL_0:2,hop8,A0; then
+      tbn * sqrt 5 < (tau - 1/2) * sqrt 5 by XREAL_1:70,B2,FIB_NUM:def 1; then
+      tbn * tau - tbn * tau_bar < tau * sqrt 5 - ((1*sqrt 5) / 2)
+      by FIB_NUM:def 1,def 2; then
+      tbn*tau-tbn*tau_bar to_power 1 < tau*sqrt 5-(sqrt 5/2) by POWER:30; then
+      tbn*tau-tau_bar to_power (n+1) < tau*sqrt 5-(sqrt 5/2) by JakPower32;then
+      tbn * tau - tau_bar to_power (n+1) + sqrt 5 /2 <
+      tau * sqrt 5 - (sqrt 5/2) + sqrt 5/2 by XREAL_1:8; then
+      tbn * tau - tau_bar to_power (n+1) + sqrt 5 / 2 - tbn * tau <
+      tau * sqrt 5 - tbn * tau by XREAL_1:11; then
+      - tau_bar to_power (n+1) + sqrt 5 /2 - tau * sqrt 5 <
+      tau * sqrt 5 - tbn * tau - tau * sqrt 5 by XREAL_1:11; then
+      (- tau_bar to_power (n+1) + (sqrt 5 / 2) - (tau * sqrt 5)) / tau <
+      (- tbn * tau) / tau by XREAL_1:76; then
+      (-tau_bar to_power (n+1))/tau + (sqrt 5/2)/tau - (tau*sqrt 5)/tau <
+      (-tbn * tau) / tau by XCMPLX_1:125; then
+      -tau_bar to_power (n+1)/tau + (sqrt 5/2)/tau - tau*sqrt 5/tau <
+      ((-tbn) * tau) / tau by XCMPLX_1:188; then
+      - tau_bar to_power (n+1) /tau + (sqrt 5/2) /tau - tau*sqrt 5 /tau < -tbn
+      by XCMPLX_1:90; then
+      - tau_bar to_power (n+1) /tau + (sqrt 5/2) /tau - sqrt 5 < -tbn
+      by XCMPLX_1:90; then
+      - tau_bar to_power (n+1)/tau+(sqrt 5/2)/tau- sqrt 5+ tau to_power n * 1 <
+      - tbn + tau to_power n by XREAL_1:8; then
+      (-tau_bar to_power (n+1)/tau + (sqrt 5/2)/tau-sqrt 5+tau to_power n*1)/
+      sqrt 5 < (tau to_power n - tbn)/sqrt 5 by XREAL_1:76,B2; then
+      ( -tau_bar to_power (n+1)/tau + (sqrt 5/2)/tau - sqrt 5 +
+      tau to_power n * 1)/sqrt 5 < Fib n by FIB_NUM:7; then
+      ( -tau_bar to_power (n+1)/tau + (sqrt 5/2)/tau - sqrt 5 +
+      tau to_power n * (tau/tau))/sqrt 5 < Fib n by XCMPLX_1:60; then
+      ( -tau_bar to_power (n+1)/tau + (sqrt 5/2)/tau +
+      tau to_power n * (tau/tau) - sqrt 5)/sqrt 5 < Fib n; then
+      ( -tau_bar to_power (n+1)/tau + (sqrt 5/2)/tau +
+      (tau to_power n * tau)/tau - sqrt 5)/sqrt 5 < Fib n
+      by XCMPLX_1:75; then
+      ( -tau_bar to_power (n+1)/tau + (sqrt 5/2)/tau +
+      (tau to_power n * tau)/tau)/sqrt 5 - sqrt 5/sqrt 5 < Fib n
+      by XCMPLX_1:121; then
+      ( -tau_bar to_power (n+1)/tau + (sqrt 5/2)/tau +
+      (tau to_power n * tau)/tau)/sqrt 5 - 1 < Fib n by XCMPLX_1:60,B2; then
+      (( -tau_bar to_power (n+1))/tau + (sqrt 5/2)/tau +
+      (tau to_power n * tau)/tau)/sqrt 5 - 1 < Fib n by XCMPLX_1:188; then
+      ((-tau_bar to_power (n+1) + (sqrt 5/2) +
+      (tau to_power n * tau))/tau)/sqrt 5 - 1 < Fib n by XCMPLX_1:64; then
+      ((-tau_bar to_power (n+1) + (sqrt 5/2) +
+      (tau to_power n * tau))/sqrt 5)/tau - 1 < Fib n by XCMPLX_1:48; then
+      ((-tau_bar to_power (n+1) + (tau to_power n * tau) +
+      sqrt 5/2)/sqrt 5)*(1/tau) - 1 < Fib n by XCMPLX_1:100; then
+      ((-tau_bar to_power (n+1) + (tau to_power n * tau))/sqrt 5 +
+      (sqrt 5/2)/sqrt 5)*(1/tau) - 1 < Fib n by XCMPLX_1:63; then
+      ((-tau_bar to_power (n+1) + (tau to_power n * tau to_power 1))/sqrt 5 +
+      (sqrt 5/2)/sqrt 5)*(1/tau) - 1 < Fib n by POWER:30; then
+      (( -tau_bar to_power (n+1)+ tau to_power (n+1))/sqrt 5 +
+      (sqrt 5/2)/sqrt 5)*(1/tau) - 1 < Fib n by JakPower32; then
+      ((tau to_power (n+1) -tau_bar to_power (n+1))/sqrt 5 +
+      (sqrt 5/2)/sqrt 5)*(1/tau) - 1 < Fib n; then
+      (Fib (n+1) + (sqrt 5/2)/sqrt 5)*(1/tau) - 1 < Fib n by FIB_NUM:7; then
+      (Fib (n+1) + (sqrt 5/sqrt 5)/2)*(1/tau) - 1 < Fib n by XCMPLX_1:48;
+      hence thesis by XCMPLX_1:60,B2;
+    end;
+    hence thesis by A1,INT_1:def 4;
+  end;
+
+tt:  sqrt 5 > 1 by SQUARE_1:83,95; then
+y2:  sqrt 5 - 1 > 1 - 1 & sqrt 5 > 0 by XREAL_1:11;
+     sqrt 5 > 2 by SQUARE_1:85,95; then
+     - sqrt 5 < -2 by XREAL_1:26; then
+     - sqrt 5 + 5 < - 2 + 5 by XREAL_1:8; then
+     - sqrt 5 + (sqrt 5) ^2 < 3 by SQUARE_1:def 4; then
+     (sqrt 5 * (sqrt 5 - 1)) / 5 < 3 / 5 by XREAL_1:76; then
+     (sqrt 5 - 1) * (sqrt 5 / 5) < 6 / 10; then
+     (sqrt 5-1)*(sqrt 5/(sqrt 5)^2) < 6/10 by SQUARE_1:def 4; then
+     (sqrt 5-1)*((1*sqrt 5)/(sqrt 5*sqrt 5)) < 6/10 & sqrt 5 > 0
+       by SQUARE_1:93; then
+     (sqrt 5 - 1) * (1 / sqrt 5) < 6 / 10 by XCMPLX_1:92; then
+Y3:  (sqrt 5 - 1) / sqrt 5 < 6 / 10 by XCMPLX_1:100;
+     sqrt ((3/2) ^2) <= sqrt 5 by SQUARE_1:94; then
+     3 / 2 <= sqrt 5 by SQUARE_1:def 4; then
+     (3 / 2) * 2 <= sqrt 5 * 2 by XREAL_1:66; then
+g8:  3/4 <= (2 * sqrt 5) / (2 * 2) by XREAL_1:74;
+r2:  sqrt 5 - 1 > 1 - 1 & sqrt 5 > 0 by XREAL_1:11,tt;
+     -1+sqrt 5 < 0+sqrt 5 & sqrt 5 > 0 by XREAL_1:8,SQUARE_1:93; then
+     (sqrt 5 - 1) / sqrt 5 < sqrt 5 / sqrt 5 & sqrt 5 > 0
+       by XREAL_1:76; then
+R3:  (sqrt 5 - 1) / sqrt 5 < 1 by XCMPLX_1:60;
+     sqrt 5 < sqrt (3 ^2) by SQUARE_1:95; then
+     sqrt 5 < 3 by SQUARE_1:def 4; then
+     - sqrt 5 > - 3 by XREAL_1:26; then
+rt:  - sqrt 5 + 3 > -3 + 3 by XREAL_1:8;
+     - sqrt 5 < - 1 by XREAL_1:26,tt; then
+     - sqrt 5 + 3 < - 1 + 3 by XREAL_1:8; then
+xx:  (3 - sqrt 5) / 2 < 2 / 2 by XREAL_1:76;
+
+theorem
+  for n,k being natural number st (n >= k & k > 1) or (k = 1 & n > k) holds
+  [\ tau to_power k * Fib n + 1/2 /] = Fib (n + k)
+  proof
+    let n,k be natural number;
+    set tb = tau_bar;
+    set tk = tau to_power k;
+    set tbk = tau_bar to_power k;
+    set ts = tau to_power (n+k);
+    set tbs = tau_bar to_power (n+k);
+    set tn = tau to_power n;
+    set tbn = tau_bar to_power n;
+    assume A0: (n >= k & k > 1) or (k = 1 & n > k);
+B0: tk * Fib n = tk * ((tn - tbn) / sqrt 5) by FIB_NUM:7
+    .= (tk * (tn - tbn)) / sqrt 5 by XCMPLX_1:75
+    .= ((tk * tn - tbs) + (tbs - tk * tbn)) / sqrt 5
+    .= ((ts - tbs) + (tbs - tk * tbn)) / sqrt 5 by JakPower32
+    .= (ts - tbs) / sqrt 5 + (tbs - tk * tbn) / sqrt 5 by XCMPLX_1:63
+    .= Fib (n+k) + (tbs - tk * tbn) / sqrt 5 by FIB_NUM:7
+    .= Fib (n+k) + (tbn * tbk - tk * tbn) / sqrt 5 by JakPower32
+    .= Fib (n+k) + (( - tbn) * (tk - tbk)) / sqrt 5
+    .= Fib (n+k) + (- tbn) * ((tk - tbk) / sqrt 5) by XCMPLX_1:75
+    .= Fib (n+k) + (- tbn) * Fib k by FIB_NUM:7
+    .= Fib (n+k) - tbn * Fib k;
+A1: tk * Fib n + 1/2 >= Fib (n+k)
+    proof
+      tbn * Fib k <= 1/2
+      proof
+        per cases;
+        suppose T1: n is even;
+          consider m being Nat such that T2: n = k + m by A0,NAT_1:10;
+T3:       sqrt 5 > 0 by SQUARE_1:93;
+          set tbm = tau_bar to_power m;
+          tbm * ((-1) to_power k - tb to_power (2*k)) <= sqrt 5 / 2
+          proof
+            per cases;
+            suppose S1: k is even;
+              tb to_power (2*k) > 0 by pom1; then
+S2:           - tb to_power (2*k) + 1 < 0 + 1 by XREAL_1:8;
+              tb to_power (2*k) < 1 by XXREAL_0:2,hop8,A0; then
+              - tb to_power (2*k) > - 1 by XREAL_1:26; then
+S3:           - tb to_power (2*k) + 1 > - 1 + 1 by XREAL_1:8;
+              m is even by T1,T2,S1; then
+s4:           tbm > 0 by pom1; then
+S4:           abs tbm >= 0 by ABSVALUE:def 1;
+              tbm <= sqrt 5 / 2
+              proof
+G1:             sqrt 5 > 2 by SQUARE_1:85,95;
+                per cases;
+                suppose g2: m = 0;
+                  sqrt 5 / 2 >= 2 / 2 by G1,XREAL_1:74;
+                  hence thesis by g2,POWER:29;
+                end;
+                suppose P2: m > 0;
+                  sqrt 5 >= 1 by G1,XXREAL_0:2; then
+                  sqrt 5 / 2 >= 1 / 2 by XREAL_1:74;
+                  hence thesis by P2,hop8,XXREAL_0:2;
+                end;
+              end; then
+              abs tbm <= sqrt 5/2 by s4,ABSVALUE:def 1; then
+S5:           abs tbm * (1 - tb to_power (2*k)) <= (sqrt 5/2) * 1
+                by S2,S3,S4,XREAL_1:68;
+              tbm * (1 - tb to_power (2*k)) <= abs tbm * (1 -tb to_power (2*k))
+                by S3,XREAL_1:66,ABSVALUE:11; then
+              tbm * (1 - tb to_power (2*k)) <= sqrt 5 / 2 by S5,XXREAL_0:2;
+              hence thesis by S1,FIB_NUM2:5;
+            end;
+            suppose S1: k is odd; then
+S2:           m is odd by T1,T2;
+              m <> 0 by S1,T1,T2; then
+pc:           m >= 1 by NAT_1:14;
+              per cases by pc,XXREAL_0:1;
+              suppose Y1: m = 1;
+                tb * (- 1 - tb to_power (2*k)) <= sqrt 5 / 2
+                proof
+y4:               tb to_power (2*k) > 0 by pom1;
+                  tb to_power (2*k) < 1 / 2 by hop8,A0; then
+                  tb to_power (2*k) + 1 < 1 / 2 + 1 by XREAL_1:8; then
+                  ((sqrt 5 - 1) / sqrt 5) * (1 + tb to_power (2*k)) <
+                  (6 / 10) * (3 / 2) by y2,Y3,y4,XREAL_1:100; then
+                  (((sqrt 5 - 1) / sqrt 5) * (1 + tb to_power (2*k))) < 1 &
+                  sqrt 5 > 0 by XXREAL_0:2,SQUARE_1:93; then
+                  (((sqrt 5 - 1) / sqrt 5) * (1 + tb to_power (2*k))) *sqrt 5 <
+                  1 * sqrt 5 by XREAL_1:70; then
+                  ((sqrt 5-1) * (1/sqrt 5)) * (1+tb to_power (2*k)) * sqrt 5 <
+                  sqrt 5 by XCMPLX_1:100; then
+                  (sqrt 5 - 1)* (1+tb to_power (2*k)) * (sqrt 5 *(1/sqrt 5)) <
+                  sqrt 5; then
+                  (sqrt 5-1)* (1+tb to_power (2*k))*(sqrt 5/sqrt 5) < 1*sqrt 5
+                  & sqrt 5 > 0 by XCMPLX_1:100,SQUARE_1:93; then
+                  (sqrt 5-1)*(1+tb to_power (2*k))*1<sqrt 5 by XCMPLX_1:60;then
+                  ((1 - sqrt 5) * ( - 1 - tb to_power (2*k))) / 2 < sqrt 5 / 2
+                    by XREAL_1:76;
+                  hence thesis by FIB_NUM:def 2;
+                end; then
+                tbm * (- 1 - tb to_power (2*k)) <= sqrt 5 / 2 by Y1,POWER:30;
+                hence thesis by S1,FIB_NUM2:3;
+              end;
+              suppose G0: m > 1;
+G1:             tbm < 0 by S2,pom2;
+G4:             tbm * (-1-tb to_power (2*k)) = -tbm * (1+tb to_power (2*k));
+G5:             tb to_power (2*k) > 0 by pom1;
+                tb to_power (2*k) <= 1 / 2 by A0,hop8; then
+g7:             tb to_power (2*k) + 1 <= 1/2 + 1 by XREAL_1:8;
+                tbm > -1/2 by hop9,G0; then
+                - tbm < - -1/2 by XREAL_1:26; then
+                (-tbm) * (1 + tb to_power (2*k)) <= (1 / 2) * (3 / 2)
+                  by XREAL_1:68,G1,G5,g7; then
+                -tbm * (1 + tb to_power (2*k)) <= sqrt 5 / 2 by XXREAL_0:2,g8;
+                hence thesis by FIB_NUM2:3,S1,G4;
+              end;
+            end;
+          end; then
+          tbm*(tk*tbk-tb to_power (k+k)) <= sqrt 5/2 by NEWTON:12,albet3; then
+          tbm * (tk * tbk - tbk * tbk) <= sqrt 5 / 2 by JakPower32; then
+          ((tbm * tbk) * (tk - tbk)) / sqrt 5 <= (sqrt 5 / 2) / sqrt 5
+            by T3,XREAL_1:74; then
+          (tbm*tbk) * ((tk - tbk) / sqrt 5) <= (sqrt 5 / 2)/sqrt 5
+            by XCMPLX_1:75; then
+          (tbm * tbk) * Fib k <= (sqrt 5 / 2) / sqrt 5 by FIB_NUM:7; then
+          tbn * Fib k <= (sqrt 5 / 2) / sqrt 5 by T2,JakPower32; then
+          tbn * Fib k <= (1 * sqrt 5) / (2 * sqrt 5) by XCMPLX_1:79;
+          hence thesis by T3,XCMPLX_1:92;
+        end;
+        suppose n is odd; then
+          tbn < 0 by pom2;
+          hence thesis;
+        end;
+      end; then
+      - tbn * Fib k >= - 1/2 by XREAL_1:26; then
+      - tbn * Fib k + 1/2 >= - 1/2 + 1/2 by XREAL_1:8; then
+      - tbn * Fib k + 1/2 + Fib (n+k) >= 0 + Fib (n+k) by XREAL_1:8;
+      hence thesis by B0;
+    end;
+    tk * Fib n + 1/2 - 1 < Fib (n+k)
+    proof
+      tbn * Fib k > - 1/2
+      proof
+        per cases;
+        suppose n is even; then
+          tbn > 0 by pom1;
+          hence thesis;
+        end;
+        suppose T1: n is odd;
+          consider m being Nat such that T2: n = k + m by A0,NAT_1:10;
+          set tbm = tau_bar to_power m;
+          per cases;
+          suppose P1: k is even; then
+P2:         m is odd by T1,T2; then
+P3:         tbm < 0 by pom2;
+            0 = 2 * 0; then
+pc:         m >= 1 by P2,NAT_1:14;
+            per cases by pc,XXREAL_0:1;
+            suppose r1: m = 1;
+              ((3-sqrt 5)/2) to_power k < 1 to_power k by POWER:42,xx,rt,A0;
+              then
+              ((3 - sqrt 5) / 2) to_power k < 1 by POWER:31; then
+              - ((3-sqrt 5)/2) to_power k > - 1 by XREAL_1:26; then
+R4:           - ((3-sqrt 5)/2) to_power k + 1 > - 1 + 1 by XREAL_1:8;
+              ((3-sqrt 5)/2) to_power k > 0 by rt,POWER:39; then
+R5:           - ((3-sqrt 5)/2) to_power k + 1 < 0 + 1 by XREAL_1:8;
+R6:           1 - tb to_power (2*k) = (-1) to_power k - tb to_power (2*k)
+                by P1,FIB_NUM2:5
+              .= tk * tbk - tb to_power (k+k) by NEWTON:12,albet3
+              .= tk * tbk - tbk * tbk by JakPower32
+              .= tbk * (tk - tbk);
+              ((sqrt 5 - 1) / sqrt 5) * (1-((3-sqrt 5) / 2) to_power k) < 1 * 1
+                by r2,R3,R4,R5,XREAL_1:100; then
+              - ((sqrt 5-1)/sqrt 5) * (1-((3-sqrt 5)/2) to_power k) > -1
+                by XREAL_1:26; then
+              (- (sqrt 5-1) /sqrt 5) * (1-((3-sqrt 5)/2) to_power k) > -1; then
+              ((- (sqrt 5-1)) / sqrt 5) * (1 - ((3-sqrt 5)/2) to_power k) > -1
+                by XCMPLX_1:188; then
+              ((1-sqrt 5)/sqrt 5) * (1 - tb to_power (2*k)) > - 1
+                by NEWTON:14,beta2; then
+              (((1-sqrt 5) / sqrt 5) * (1-tb to_power (2*k))) / 2 > (-1) / 2
+                by XREAL_1:76; then
+              ((1-sqrt 5) /sqrt 5) * ((1-tb to_power (2*k)) / 2) > (-1)/2; then
+              ((1-sqrt 5)*(1/sqrt 5)) * ((1-tb to_power (2*k))*(1/2)) > (-1)/2
+                by XCMPLX_1:100; then
+              tb*(1/sqrt 5)*(1-tb to_power (2*k)) > -1/2 by FIB_NUM:def 2; then
+              tb*(1/sqrt 5) * (tbk * (tk-tbk)) > - 1/2 by R6; then
+              tb * tbk * ((tk-tbk) * (1/sqrt 5)) > - 1/2; then
+              tb * tbk * ((tk-tbk)/sqrt 5) > -1/2 by XCMPLX_1:100; then
+              tb to_power 1 * tbk * ((tk-tbk)/sqrt 5) > - 1/2 by POWER:30; then
+              tb to_power (1+k) * ((tk-tbk) / sqrt 5) > - 1/2 by JakPower32;
+              hence thesis by r1,T2,FIB_NUM:7;
+            end;
+            suppose m > 1; then
+              tbm > - 1/2 by hop9; then
+r1:           - tbm < - -1/2 by XREAL_1:26;
+              sqrt 5 > 1 by SQUARE_1:83,95; then
+              - sqrt 5 < - 1 by XREAL_1:26; then
+r0:           (- sqrt 5) / 2 < (-1) / 2 by XREAL_1:76;
+              tb to_power (2*k) > 0 & tb to_power (2*k) < 1/2
+                by pom1,hop8,A0; then
+              - tb to_power (2*k) < 0 & - tb to_power (2*k) > - 1/2
+                by XREAL_1:26; then
+              - tb to_power (2*k) + 1 < 0+1 & -tb to_power (2*k) + 1 > -1/2 + 1
+                by XREAL_1:8; then
+              (-tbm) * (1-tb to_power (2*k)) < (1/2) * 1
+                by r1,P3,XREAL_1:100; then
+              - -tbm * (1 - tb to_power (2*k)) > - 1/2 by XREAL_1:26; then
+              tbm * ((-1) to_power k - tb to_power (2*k)) > - 1/2
+                by P1,FIB_NUM2:5; then
+              tbm * ((-1) to_power k - tb to_power (2*k)) > -sqrt 5/2
+              by r0,XXREAL_0:2; then
+              tbm * (tk * tbk - tb to_power (k+k)) > - sqrt 5 / 2
+                by NEWTON:12,albet3; then
+              tbm * (tk * tbk - tbk * tbk) > - sqrt 5 / 2 by JakPower32; then
+              (tbm * tbk) * (tk - tbk) > - sqrt 5 / 2; then
+              tbn * (tk - tbk) > - sqrt 5 / 2 & sqrt 5 > 0
+                by JakPower32,T2,SQUARE_1:93; then
+              (tbn*(tk-tbk))/sqrt 5 > (-sqrt 5/2)/sqrt 5 by XREAL_1:76; then
+              tbn * ((tk-tbk)/sqrt 5) > (-sqrt 5/2)/sqrt 5 by XCMPLX_1:75; then
+              tbn * Fib k > ((-sqrt 5)/2)/sqrt 5 by FIB_NUM:7; then
+              tbn * Fib k > ((-1) * sqrt 5) / (2 * sqrt 5) & sqrt 5 > 0
+                by SQUARE_1:93,XCMPLX_1:79; then
+              tbn * Fib k > (-1) / 2 by XCMPLX_1:92;
+              hence thesis;
+            end;
+          end;
+          suppose P1: k is odd; then
+P2:         m is even by T1,T2;
+            per cases;
+            suppose p3: m = 0;
+              per cases by A0;
+              suppose k = 1;
+                hence thesis by A0,p3,T2;
+              end;
+              suppose k > 1; then
+                k >= 1+1 by NAT_1:13; then
+                k = 2 or k > 2 by XXREAL_0:1; then
+                k + 1 > 2 + 1 by XREAL_1:8,P1,POLYFORM:5; then
+                k >= 3 by NAT_1:13; then
+                k * 2 >= 3 * 2 by XREAL_1:66; then
+                tb to_power (k*2) <= tb to_power (3*2) by hopp10; then
+F2:             tb to_power (2*k) + 1 <= 9-4*sqrt 5 + 1 by beta6,XREAL_1:8;
+                sqrt ((20/9) ^2) < sqrt 5 by SQUARE_1:95; then
+                20 / 9 < sqrt 5 by SQUARE_1:def 4; then
+                (20 / 9) * 9 < 9 * sqrt 5 by XREAL_1:70; then
+                20-8*sqrt 5 < sqrt 5 + 8*sqrt 5 - 8*sqrt 5 by XREAL_1:11; then
+                (20-8*sqrt 5) / 2 < sqrt 5 / 2 by XREAL_1:76; then
+                tb to_power (2*k) + 1 < sqrt 5 / 2 by XXREAL_0:2,F2; then
+                - (tb to_power (2*k) + 1) > - sqrt 5 / 2 by XREAL_1:26; then
+                - tb to_power (2*k) + - 1 > - sqrt 5 / 2; then
+                - tb to_power (2*k) + (-1) to_power k > - sqrt 5 / 2
+                  by FIB_NUM2:3,P1; then
+                - tb to_power (k+k) + tk * tbk >
+                - sqrt 5 / 2 by NEWTON:12,albet3; then
+                - tbk * tbk + tk * tbk > - sqrt 5 / 2 by JakPower32; then
+                tbk * (-tbk + tk) > -sqrt 5/2 & sqrt 5 > 0 by SQUARE_1:93; then
+                (tbk * ( - tbk + tk)) / sqrt 5 >
+                (- sqrt 5 / 2) / sqrt 5 by XREAL_1:76; then
+                tbk*((tk-tbk)/sqrt 5) > (-sqrt 5/2)/sqrt 5 by XCMPLX_1:75; then
+                tbk * Fib k > (- sqrt 5 / 2) / sqrt 5 by FIB_NUM:7; then
+                tbk * Fib k > - (sqrt 5 / 2) / sqrt 5 by XCMPLX_1:188; then
+                tbk * Fib k > - (sqrt 5 / sqrt 5) / 2 & sqrt 5 > 0
+                by XCMPLX_1:48,SQUARE_1:93;
+                hence thesis by p3,T2,XCMPLX_1:60;
+              end;
+            end;
+            suppose m > 0; then
+R1:           tbm > 0 & tbm < 1/2 by P2,pom1,hop8;
+              sqrt ((3/2) ^2) < sqrt 5 by SQUARE_1:95; then
+              3 / 2 < sqrt 5 by SQUARE_1:def 4; then
+              (3 / 2) * 2 < sqrt 5 * 2 by XREAL_1:70; then
+r3:           3 / (2 * 2) < (2 * sqrt 5) / (2 * 2) by XREAL_1:76;
+R2:           tb to_power (2*k) < 1/2 & tb to_power (2*k) > 0
+              by hop8,A0,pom1; then
+              tb to_power (2*k) + 1 < 1/2 + 1 by XREAL_1:8; then
+              tbm*(tb to_power (2*k)+1) < 1/2*(1/2+1) by R1,R2,XREAL_1:98; then
+              tbm * (tb to_power (2*k) + 1) < sqrt 5/2 by r3,XXREAL_0:2; then
+              - tbm * (tb to_power (2*k) + 1) > - sqrt 5/2 by XREAL_1:26; then
+              tbm * (- tb to_power (2*k) +- 1) > - sqrt 5/2; then
+              tbm * (- tb to_power (2*k) + (-1) to_power k) > - sqrt 5/2
+              by P1,FIB_NUM2:3; then
+              tbm * (- tb to_power (k+k) + tk * tbk) > - sqrt 5/2
+              by NEWTON:12,albet3; then
+              tbm * (- tbk * tbk + tk * tbk) > - sqrt 5/2 by JakPower32; then
+              (tbm * tbk) * (tk - tbk) > - sqrt 5/2; then
+              tbn * (tk - tbk) > - sqrt 5 / 2 & sqrt 5 > 0
+              by T2,JakPower32,SQUARE_1:93; then
+              (tbn * (tk-tbk)) /sqrt 5 > (-sqrt 5/2)/sqrt 5 by XREAL_1:76; then
+              tbn*((tk - tbk)/sqrt 5) > (-sqrt 5/2)/sqrt 5 by XCMPLX_1:75; then
+              tbn * Fib k > ((-sqrt 5)/2)/sqrt 5 by FIB_NUM:7; then
+              tbn * Fib k > ((-1) * sqrt 5) / (2 * sqrt 5) & sqrt 5 > 0
+              by SQUARE_1:93,XCMPLX_1:79; then
+              tbn * Fib k > (-1)/2 by XCMPLX_1:92;
+              hence thesis;
+            end;
+          end;
+        end;
+      end; then
+      - tbn * Fib k < - -1/2 by XREAL_1:26; then
+      - tbn * Fib k + 1/2 < 1/2 + 1/2 by XREAL_1:8; then
+      - tbn * Fib k + 1/2 - 1 < 1 - 1 by XREAL_1:11; then
+      - tbn * Fib k + 1/2 - 1 + Fib (n+k) < 0 + Fib (n+k) by XREAL_1:8;
+      hence thesis by B0;
+    end;
+    hence thesis by A1,INT_1:def 4;
+  end;
+
+begin :: Formulas for the Lucas Numbers
+
+theorem
+  for n being natural number st n >= 2 holds
+  Lucas(n) = [\ tau to_power n + 1/2 /]
+  proof
+    let n be natural number;
+    assume B0: n >= 2;
+    1/2 >= tau_bar to_power n by hop8,B0; then
+    tau to_power n+1/2 >= tau to_power n + tau_bar to_power n by XREAL_1:8;
+    then
+B1: tau to_power n + 1/2 >= Lucas n by FIB_NUM3:21;
+    n > 1 by B0,XXREAL_0:2; then
+    1/2 - 1 < tau_bar to_power n by hop9; then
+    tau to_power n+(1/2-1)< tau to_power n+tau_bar to_power n by XREAL_1:8;
+    then tau to_power n + 1/2 - 1 < Lucas n by FIB_NUM3:21;
+    hence thesis by B1,INT_1:def 4;
+  end;
+
+theorem
+  for n being natural number st n >= 2 holds
+  Lucas (n) = [/ tau to_power n - 1/2 \]
+  proof
+    let n be natural number;
+    assume A0: n >= 2; then
+    n > 1 by XXREAL_0:2; then
+    -1/2 <= tau_bar to_power n by hop9; then
+    -1/2+tau to_power n <= tau_bar to_power n+tau to_power n by XREAL_1:8; then
+A1: tau to_power n - 1/2 <= Lucas (n) by FIB_NUM3:21;
+    tau_bar to_power n < 1/2 by hop8,A0; then
+    tau_bar to_power n+tau to_power n < 1/2 + tau to_power n by XREAL_1:8;then
+    tau to_power n - 1/2 + 1 > Lucas n by FIB_NUM3:21;
+    hence thesis by A1,INT_1:def 5;
+  end;
+
+theorem
+  for n being natural number st n >= 2 holds
+  Lucas (2*n) = [/ tau to_power (2*n) \]
+  proof
+    let n be natural number;
+    assume A0: n >= 2;
+B0: tau_bar to_power (2*n) = (tau_bar to_power n) to_power 2 by NEWTON:14
+    .= (tau_bar to_power n) ^2 by POWER:53;
+B1: n - 0 is Element of NAT by NAT_1:21;
+    tau_bar to_power n <> 0 by FIB_NUM3:1,B1; then
+    tau_bar to_power (2*n) > 0 by SQUARE_1:74,B0; then
+    0 + tau to_power (2*n) <= tau to_power (2*n) + tau_bar to_power (2*n)
+      by XREAL_1:8; then
+A1: tau to_power (2*n) <= Lucas (2*n) by FIB_NUM3:21;
+    tau_bar to_power (2*n) < 1 by hop8,XXREAL_0:2,A0; then
+    tau_bar to_power (2*n) + tau to_power (2*n) < 1 + tau to_power (2*n)
+      by XREAL_1:8; then
+    tau to_power (2*n) + 1 > Lucas (2*n) by FIB_NUM3:21;
+    hence thesis by A1,INT_1:def 5;
+  end;
+
+theorem
+  for n being natural number st n >= 2 holds
+  Lucas (2*n+1) = [\ tau to_power (2*n+1) /]
+  proof
+    let n be natural number;
+    assume n >= 2; then
+    2 * n >= 2 * 2 by XREAL_1:66; then
+    2 * n + 1 >= 4 + 1 by XREAL_1:8; then
+B0: 2 * n + 1 > 1 by XXREAL_0:2;
+    tau_bar to_power (2*n+1) <= 0 by pom2; then
+    tau to_power (2*n+1) + 0 >= tau to_power (2*n+1) + tau_bar to_power (2*n+1)
+      by XREAL_1:8; then
+A1: tau to_power (2*n+1) >= Lucas (2*n+1) by FIB_NUM3:21;
+    -1/2 <= tau_bar to_power (2 * n +1 ) by hop9,B0; then
+    tau_bar to_power (2 * n + 1) > -1 by XXREAL_0:2; then
+    -1 + tau to_power (2*n+1) < tau to_power (2*n+1) + tau_bar to_power (2*n+1)
+      by XREAL_1:8; then
+    tau to_power (2*n+1) - 1 < Lucas (2*n+1) by FIB_NUM3:21;
+    hence thesis by A1,INT_1:def 4;
+  end;
+
+theorem
+  for n being natural number st n >= 2 & n is odd holds
+  Lucas (n+1) = [\ tau * Lucas (n) + 1 /]
+  proof
+    let n be natural number;
+    set tn = tau_bar to_power n;
+    assume A0: n >= 2 & n is odd;
+A1: tau * Lucas (n) + 1 >= Lucas (n+1)
+    proof
+      per cases by A0,XXREAL_0:1;
+      suppose b1: n = 2;
+        sqrt 5 >= 1 by SQUARE_1:83,94; then
+        sqrt 5 * 3 >= 1 * 3 by XREAL_1:66; then
+        5 + sqrt 5 * 3 >= 3 + 5 by XREAL_1:8; then
+        (5 + sqrt 5 * 3) / 2 >= 8 / 2 by XREAL_1:74;
+        hence thesis by b1,FIB_NUM3:15,14,FIB_NUM:def 1;
+      end;
+      suppose c0: n > 2;
+c1:     sqrt 5 > 0 by SQUARE_1:93;
+        tn>= -1/sqrt 5 & sqrt 5 > 0 by mag1,c0,SQUARE_1:93;then
+        tn*(sqrt 5) >= (-1/sqrt 5)*(sqrt 5) by XREAL_1:66; then
+        tn * (sqrt 5) >= sqrt 5 * ((-1)/sqrt 5) by XCMPLX_1:188; then
+        tn*(sqrt 5) >=(sqrt 5*(-1))/sqrt 5 by XCMPLX_1:75; then
+        tn*(sqrt 5)>= (sqrt 5/sqrt 5)*(-1) by XCMPLX_1:75; then
+        tn * (sqrt 5) >= 1 * (-1) by XCMPLX_1:60,c1; then
+        - (tau_bar to_power n * sqrt 5) <= -(-1) by XREAL_1:26; then
+        tn * tau_bar - tn * tau <= 1 by FIB_NUM:def 1,def 2; then
+        tn * tau_bar to_power 1-tn * tau <= 1 by POWER:30; then
+        tau_bar to_power (n+1)- tn*tau <= 1 by JakPower32; then
+        tau_bar to_power (n+1) - tn * tau +
+        tn*tau <= 1 + tn*tau by XREAL_1:8; then
+        tn * tau + 1 + tau to_power (n+1) >=
+        tau_bar to_power (n+1) + tau to_power (n+1) by XREAL_1:8; then
+        tn * tau + 1 + tau to_power n * tau to_power 1 >=
+        tau_bar to_power (n+1)+tau to_power (n+1) by JakPower32; then
+        tn * tau + 1 + tau to_power n * tau >=
+        tau_bar to_power (n+1) + tau to_power (n+1) by POWER:30; then
+        (tn + tau to_power n) * tau + 1 >=
+        tau_bar to_power (n+1) + tau to_power (n+1); then
+        Lucas (n) * tau + 1 >=
+        tau_bar to_power (n+1) + tau to_power (n+1) by FIB_NUM3:21;
+        hence thesis by FIB_NUM3:21;
+      end;
+    end;
+    tau * Lucas n + 1 - 1 < Lucas (n+1)
+    proof
+d1:   Lucas (n+1) = tau to_power (n+1) + tau_bar to_power (n+1) by FIB_NUM3:21;
+d2:   tau*Lucas n = tau * (tau to_power n + tn) by FIB_NUM3:21
+      .= tau * tau to_power n + tau * tau_bar to_power n
+      .= tau to_power 1 * tau to_power n + tau * tau_bar to_power n by POWER:30
+      .= tau to_power (n+1) + tau * tau_bar to_power n by JakPower32;
+d3:   tn < 0 by pom2,A0;
+      tau*tn < tau_bar*tn by d3,XREAL_1:71;then
+      tau * tn < tau_bar to_power 1 * tn by POWER:30; then
+      tau * tn < tau_bar to_power (n+1) by JakPower32;
+      hence thesis by d1,d2,XREAL_1:8;
+    end;
+    hence thesis by INT_1:def 4,A1;
+  end;
+
+theorem
+  for n being natural number st n >= 2 & n is even holds
+  Lucas (n+1) = [/ tau * Lucas n - 1 \]
+  proof
+    let n be natural number;
+    set tn = tau_bar to_power n;
+    assume A0: n >= 2 & n is even;
+A1: Lucas (n+1) = tau to_power (n+1) + tau_bar to_power (n+1) by FIB_NUM3:21;
+A2: tau * Lucas n = tau * (tau to_power n + tau_bar to_power n) by FIB_NUM3:21
+    .= tau * tau to_power n + tau * tau_bar to_power n
+    .= tau to_power 1 * tau to_power n + tau * tau_bar to_power n by POWER:30
+    .= tau to_power (n+1) + tau * tn by JakPower32;
+A3: tau * Lucas n - 1 <= Lucas (n+1)
+    proof
+      tau * tn - 1 <= tau_bar to_power (n+1)
+      proof
+e1:     tn > 0 by pom1,A0;
+        tn <= 1 / sqrt 5 by mag2,A0; then
+        1 / tn >= 1 / (1/sqrt 5) by XREAL_1:120,pom1,A0; then
+        1 / tn >= sqrt 5 by XCMPLX_1:52; then
+        (1 / tn) * 2 >= (sqrt 5) * 2 by XREAL_1:66; then
+        (1 / tn) * 2 + 1 >= 2 * sqrt 5 + 1 by XREAL_1:8; then
+        (1 / tn) * 2 + 1 - sqrt 5 >= 2 * sqrt 5 + 1 - sqrt 5
+          by XREAL_1:15; then
+        ((1 / tn) * 2 + (1 - sqrt 5)) / 2 >= (sqrt 5 + 1)/2
+          by XREAL_1:74; then
+        ((1 / tn) + tau_bar) * tn >=
+        tau * tn by e1,XREAL_1:66,FIB_NUM:def 2,def 1; then
+        (1 / tn) * tn + tau_bar * tn >= tau * tn; then
+        (1 / tn) * tn +
+        tau_bar to_power 1 * tn >= tau * tn by POWER:30; then
+        1 + tau_bar to_power 1 * tn >= tau * tn by XCMPLX_1:88,e1; then
+        1 + tau_bar to_power (n+1) >= tau*tn by JakPower32; then
+        1 + tau_bar to_power (n+1) - 1 >= tau * tn - 1 by XREAL_1:11;
+        hence thesis;
+      end; then
+      tau to_power (n+1) + (tau * tn - 1) <=
+      tau to_power (n+1) + tau_bar to_power (n+1) by XREAL_1:8;
+      hence thesis by A2,FIB_NUM3:21;
+    end;
+    tau * Lucas n - 1 + 1 > Lucas (n+1)
+    proof
+      tn = (- tau_bar) to_power n by A0,pomoc1; then
+B1:   tn > 0 by POWER:39;
+      tau * tn > tau_bar * tn by B1,XREAL_1:70; then
+      tau * tn > tau_bar to_power 1 * tn by POWER:30; then
+      tau * tn > tau_bar to_power (n+1) by JakPower32;
+      hence thesis by A1,A2,XREAL_1:8;
+    end;
+    hence thesis by A3,INT_1:def 5;
+  end;
+
+theorem
+  for n being natural number st n <> 1 holds
+  Lucas (n+1) = (Lucas n + sqrt(5*((Lucas n)^2 - 4*(-1) to_power n)))/2
+  proof
+    let n be natural number;
+    assume A0: n <> 1;
+B1: (Lucas n)^2 - (-1) to_power n * 4 >= 0
+    proof
+      per cases by A0,NAT_1:26;
+      suppose n = 0; then
+        (Lucas n)^2 - (-1) to_power n * 4 = 2*2 - 1*4 by POWER:29,FIB_NUM3:11;
+        hence thesis;
+      end;
+      suppose n > 1; then
+        n + 1 > 1 + 1 by XREAL_1:10; then
+        n >= 2 & Lucas n >= n by FIB_NUM3:17,NAT_1:13; then
+        Lucas n >= 2 by XXREAL_0:2; then
+        (Lucas n) ^2 >= 2 ^2 by SQUARE_1:77; then
+        (Lucas n) ^2 >= 2*2 & - 4*(-1) to_power n >= -4 by tt2; then
+        (Lucas n) ^2 +(- 4 * (-1) to_power n) >= 2 * 2 + (-4) by XREAL_1:9;
+        hence thesis;
+      end;
+    end;
+A0: n - 0 is Element of NAT by NAT_1:21; then
+    2 * Lucas (n+1) = Lucas n*1 + 5 * Fib n*1 by FIB_NUM3:11,26,PRE_FF:1; then
+A1: Lucas (n+1) = (5 * Fib n + Lucas n) / 2;
+A2: (Lucas n)^2 - 5*(Fib n)^2 = (Lucas n) to_power 2 - 5*(Fib n)^2 by POWER:53
+    .= (Lucas n) to_power 2 - 5 * (Fib n) to_power 2 by POWER:53
+    .= - (5 * (Fib n) |^2 - (Lucas n) |^2)
+    .= - (4 * (-1) to_power (n+1)) by FIB_NUM3:30,A0
+    .= (-1) * ((-1) to_power (n+1) * 4)
+    .= (-1) to_power 1 * ((-1) to_power (n+1) * 4) by POWER:30
+    .= ((-1) to_power 1 * (-1) to_power (n+1)) * 4
+    .= (-1) to_power (n + 1 + 1) * 4 by JakPower32
+    .= (-1) to_power (n + 2) * 4
+    .= (-1) to_power n * (-1) to_power 2 * 4 by JakPower32
+    .= (-1) to_power n * 1 * 4 by FIB_NUM2:5,POLYFORM:5;
+    Fib n = sqrt (((Lucas n)^2 - (-1) to_power n * 4)/5)
+      by A2,SQUARE_1:def 4;then
+    Lucas (n+1) = (5 * (sqrt ((Lucas n)^2 - (-1) to_power n * 4)/(sqrt 5)) +
+    Lucas n)/2 by SQUARE_1:99,B1,A1
+    .= ((sqrt ((Lucas n)^2 - (-1) to_power n * 4) * 5)/(sqrt 5) + Lucas n)/2
+    by XCMPLX_1:75
+    .= (sqrt ((Lucas n)^2 - (-1) to_power n * 4) * (5/(sqrt 5)) + Lucas n)/2
+    by XCMPLX_1:75
+    .= (sqrt ((Lucas n)^2-(-1) to_power n*4)*sqrt 5+Lucas n)/2 by SQUARE_1:103
+    .= (sqrt (((Lucas n)^2-(-1) to_power n*4)*5)+Lucas n)/2 by B1,SQUARE_1:97;
+    hence thesis;
+  end;
+
+theorem
+  for n being natural number st n >= 4 holds
+  Lucas (n+1) = [\ (Lucas n + 1 + sqrt(5*(Lucas n)^2 - 2*Lucas n + 1))/2 /]
+  proof
+    let n be natural number;
+    set tb = tau_bar;
+    set tbn = tau_bar to_power n;
+    set tn = tau to_power n;
+    assume A0: n >= 4;
+C0: sqrt 5 > 0 by SQUARE_1:93;
+A1: (Lucas n + 1 + sqrt (5 * (Lucas n) ^2 - 2 * Lucas n + 1)) /2 >= Lucas (n+1)
+    proof
+ZX:   n - 0 is non empty Element of NAT by NAT_1:21,A0;
+      Lucas (n+1) >= n + 1 & n + 1 >= 0 + 1 by FIB_NUM3:17,XREAL_1:8; then
+      Lucas (n+1) >= Lucas n & Lucas (n+1) >= 1
+      by FIB_NUM3:18,XXREAL_0:2,ZX; then
+      Lucas (n+1) + Lucas (n+1) >= Lucas n + 1 by XREAL_1:9; then
+      Lucas (n+1)+Lucas (n+1)-Lucas n >= Lucas n+1-Lucas n by XREAL_1:11; then
+F0:   2 * Lucas (n+1) - Lucas n - 1 >= 1 - 1 by XREAL_1:11;
+      2*Lucas (n+1)-Lucas n - 1 = 2 * Lucas (n+1) - (tn+tbn) - 1 by FIB_NUM3:21
+      .= 2 * (tau to_power (n+1) + tau_bar to_power (n+1)) - (tn + tbn) - 1
+      by FIB_NUM3:21
+      .= 2 *(tn*tau to_power 1+tau_bar to_power (n+1))-(tn+tbn)-1 by JakPower32
+      .= 2 * (tn*tau + tau_bar to_power (n+1)) - (tn+tbn) - 1 by POWER:30
+      .= 2 * (tn*tau + tbn * tb to_power 1) - (tn+tbn) - 1 by JakPower32
+      .= 2 * (tn * tau + tbn * tb) - (tn + tbn) - 1 by POWER:30
+      .= (tn - tbn) * sqrt 5 - 1 by FIB_NUM:def 1,def 2
+      .= (((tn - tbn) / sqrt 5) * sqrt 5) * sqrt 5 - 1 by C0,XCMPLX_1:88
+      .= (Fib n * sqrt 5) * sqrt 5 - 1 by FIB_NUM:7
+      .= Fib n * (sqrt 5) ^2 - 1
+      .= 5 * Fib n - 1 by SQUARE_1:def 4; then
+G1:   (2 * Lucas (n+1) - Lucas n - 1)^2 = (5 * Fib n)^2 - 2 * (5*Fib n)*1 + 1^2
+      by SQUARE_1:64
+      .= 25 * (Fib n) ^2 - 10 * Fib n + 1;
+      5 * (Lucas n) ^2 - 2 * Lucas n >= 25 * (Fib n) ^2 - 10 * Fib n
+      proof
+        per cases by A0,XXREAL_0:1;
+        suppose n = 4;
+          hence thesis by FIB_NUM3:16,FIB_NUM2:25;
+        end;
+        suppose n > 4; then
+K1:       n >= 4+1 by NAT_1:13;
+          set s5 = sqrt 5;
+LW:       5 *(Lucas n)^2 - 2*Lucas n =5*(Lucas n)^2 - 2*(tn+tbn) by FIB_NUM3:21
+          .= 5 * (tn + tbn) ^2 - 2 * (tn + tbn) by FIB_NUM3:21
+          .= 5 * tn ^2 + 5 * 2 * tn * tbn + 5 * tbn ^2 - 2 * tn - 2 * tbn;
+PR:       25 * (Fib n)^2 - 10 * Fib n = 25 * (Fib n)^2 - 10 * ((tn-tbn)/s5)
+          by FIB_NUM:7
+          .= 25 * ((tn-tbn) / s5)^2 - 10 * ((tn-tbn) / s5) by FIB_NUM:7
+          .= 25 * ((tn-tbn)^2/s5^2)- 10 *((tn-tbn)/s5) by XCMPLX_1:77
+          .= 25 * ((tn-tbn)^2 / 5) - 10 * ((tn-tbn)/s5) by SQUARE_1:def 4
+          .= 5 *tn^2 - 5*2*tn*tbn + 5*tbn^2 - 10*(((tn-tbn)*s5)/s5^2)
+          by XCMPLX_1:92,C0
+          .= 5 * tn^2 - 10*tn*tbn + 5 * tbn^2 - 10 * (((tn-tbn)*s5)/5)
+          by SQUARE_1:def 4
+          .= 5 * tn^2 - 10*tn*tbn + 5 * tbn^2 - 2*tn*s5 + 2 * tbn * s5;
+K2:       n -' 1 + 1 = n + 1 -' 1 by NAT_D:38,A0,XXREAL_0:2
+          .= n by NAT_D:34;
+aa:       -10 <= 10 * (-1) to_power n by tt1;
+          n -' 1 >= 5 -' 1 by K1,NAT_D:42; then
+          n -' 1 >= 5 - 1 by NAT_D:39; then
+          Lucas (n-'1) >= 7 by FIB_NUM3:16,luc1; then
+          Lucas (n-'1) >= 5 by XXREAL_0:2; then
+          Lucas (n-'1) * (-2) <= 5 * (-2) by XREAL_1:67; then
+          Lucas (n-'1+1) - (2 * Lucas (n-'1) + Lucas (n-'1+1)) <= -10; then
+          Lucas n - 5 * Fib n <= -10 by K2,FIB_NUM3:22; then
+          tn + tbn - 5 * Fib n <= -10 by FIB_NUM3:21; then
+          tn + tbn - 5 * ((tn-tbn) / s5) <= -10 by FIB_NUM:7; then
+          tn + tbn - 5 * ((tn-tbn) * (1/s5)) <= -10 by XCMPLX_1:100; then
+          tn + tbn - 5 * (1/s5) * (tn-tbn) <= -10; then
+          tn +tbn-(s5)^2*(1/s5)*(tn-tbn) <= -10 by SQUARE_1:def 4; then
+          tn + tbn - s5 * (s5 * (1/s5)) * (tn-tbn) <= -10; then
+          tn+tbn-s5*(s5/s5)*(tn-tbn) <= -10 by XCMPLX_1:100; then
+          tn + tbn - s5*1*(tn-tbn) <= -10 by XCMPLX_1:60,C0; then
+          tn + tbn - s5 * tn + s5 * tbn <= 10 * (tau * tb) to_power n
+          by albet3,aa,XXREAL_0:2; then
+          tn + tbn - s5 * tn + sqrt 5 * tbn - 10 * (tau*tb) to_power n <=
+          10*(tau*tb) to_power n - 10*(tau*tb) to_power n by XREAL_1:11; then
+          tn + tbn - s5 * tn + s5 * tbn - 10 * (tau*tb) to_power n +
+          sqrt 5 * tn <= 0 + s5 * tn by XREAL_1:8; then
+          tn + tbn + s5 * tbn - 10*(tau*tb) to_power n <= s5 * tn; then
+          tn +tbn+s5*tbn - 10*(tn*tbn) <= s5*tn by NEWTON:12; then
+          (-10 * tn * tbn + tn + tbn + tbn * s5) * 2 <= (tn * s5) * 2
+          by XREAL_1:66; then
+          -(- 20 * tn * tbn + 2 * tn + 2 * tbn + 2*tbn*s5) >= - 2*tn*s5
+          by XREAL_1:26; then
+          10*tn*tbn - 2*tn - 2*tbn - 2*tbn*s5 + 10*tn*tbn - 10*tn*tbn >=
+          - 2 * tn * s5 - 10 * tn * tbn by XREAL_1:11; then
+          10*tn*tbn - 2*tn-2*tbn - 2*tbn*s5 + 2*tbn*s5 >=
+          - 10*tn*tbn - 2*tn*s5 + 2*tbn*s5 by XREAL_1:8; then
+          10 * tn * tbn - 2 * tn - 2 * tbn + 5 * tbn ^2 >=
+          - 10*tn*tbn - 2*tn*s5 + 2*tbn*s5 + 5*tbn^2 by XREAL_1:8; then
+          10 * tn * tbn + 5 * tbn ^2 - 2 * tn - 2 * tbn + 5 * tn ^2 >=
+          - 10*tn*tbn + 5*tbn^2 - 2*tn*s5 + 2 * tbn * s5 + 5 * tn ^2
+          by XREAL_1:8;
+          hence thesis by LW,PR;
+        end;
+      end; then
+      5 * (Lucas n) ^2 - 2 * Lucas n + 1 >= (2 * Lucas (n+1) - Lucas n - 1) ^2
+      by G1,XREAL_1:8; then
+      sqrt (5*(Lucas n)^2 - 2*Lucas n + 1) >=
+      sqrt ((2 * Lucas (n+1) - Lucas n - 1) ^2) by SQUARE_1:94; then
+      sqrt (5 * (Lucas n) ^2 - 2 * Lucas n + 1) >= 2 *Lucas (n+1) - Lucas n - 1
+      by F0,SQUARE_1:def 4; then
+      sqrt (5 * (Lucas n) ^2 - 2 * Lucas n + 1)+(Lucas n + 1) >=
+      2 * Lucas (n+1) - Lucas n - 1 + (Lucas n + 1) by XREAL_1:8; then
+      (Lucas n + 1 + sqrt (5 * (Lucas n) ^2 - 2 * Lucas n + 1)) / 2 >=
+      (2 * Lucas (n+1)) / 2 by XREAL_1:74;
+      hence thesis;
+    end;
+    (Lucas n + 1 + sqrt (5*(Lucas n) ^2 - 2 * Lucas n + 1))/2 - 1 < Lucas (n+1)
+    proof
+      Lucas n >= n by FIB_NUM3:17; then
+BB:   Lucas n >= 4 by A0,XXREAL_0:2; then
+B0:   Lucas n / 5 >= 4 / 5 by XREAL_1:74;
+      Fib n >= 3 by FIB_NUM2:25,47,A0; then
+      Fib n + Lucas n / 5 >= 3 + 4/5 by B0,XREAL_1:9; then
+B1:   2 < Fib n + Lucas n / 5 by XXREAL_0:2;
+      n is even or n is odd; then
+      (-1) to_power n <= 1 by FIB_NUM2:3,5; then
+      2 * (-1) to_power n <= 2 * 1 by XREAL_1:66; then
+      2 * (-1) to_power n < Fib n + Lucas n / 5 by B1,XXREAL_0:2; then
+      2 * (-1) to_power n < ((tn-tbn)/sqrt 5) + Lucas n/5 by FIB_NUM:7; then
+      2 * (-1) to_power n < ((tn-tbn)/sqrt 5) + (tn+tbn)/5 by FIB_NUM3:21; then
+      (2 * (-1) to_power n) * 10 < (((tn-tbn) / sqrt 5) + (tn+tbn) / 5) * 10
+      by XREAL_1:70; then
+      20 * (-1) to_power n < ((tn-tbn) / sqrt 5) * (2*5) + (tn+tbn) * 2; then
+      20 * (-1) to_power n < ((tn-tbn) / sqrt 5) * (2*(sqrt 5)^2) + (tn+tbn)*2
+      by SQUARE_1:def 4; then
+      20*(-1) to_power n<((tn-tbn)/sqrt 5)*sqrt 5*(sqrt 5*2)+(tn+tbn)*2; then
+      20*(-1) to_power n<(tn-tbn)*(2*sqrt 5)+(tn+tbn)*2 by XCMPLX_1:88,C0; then
+      20 * (-1) to_power n + (5*(tn)^2 + 5*(tbn)^2 + 1) <
+      (tn-tbn)*(2*sqrt 5)+(tn+tbn)*2+(5*(tn)^2+5*(tbn)^2+1) by XREAL_1:8; then
+      20 * (-1) to_power n + (5*(tn)^2 + 5*(tbn)^2 + 1) -(tn+tbn)*2 <
+      (tn-tbn)*(2*sqrt 5) + (tn+tbn)*2 + (5*(tn)^2 + 5*(tbn)^2 + 1)-(tn+tbn)*2
+      by XREAL_1:11; then
+      10*(-1) to_power n + 10 * (-1) to_power n + 5*(tn)^2 + 5*(tbn)^2 + 1 -
+      (tn+tbn)*2 -10*(-1) to_power n <
+      (tn-tbn)*(2*sqrt 5) + (5*(tn)^2 + 5*(tbn)^2 + 1)-10*(-1) to_power n
+      by XREAL_1:11; then
+      5*(2 * (tau*tau_bar) to_power n + (tn)^2 + (tbn)^2) + 1 -2*tn-2*tbn <
+      (2*sqrt 5)*tn-(2*sqrt 5)*tbn + 5*(tn)^2 + 5*(tbn)^2 -
+      10*(-1) to_power n + 1 by albet3; then
+      5*(2 * (tn *tbn) + (tn)^2 + (tbn)^2) + 1 -2*tn-2*tbn <
+      (2*sqrt 5)*tn-(2*sqrt 5)*tbn + 5*(tn)^2 + 5*(tbn)^2 -
+      5*2*(-1) to_power n + 1 by NEWTON:12; then
+      5*(tn+tbn)^2 + 1 -2*tn-2*tbn <(2*sqrt 5)*tn-(2*sqrt 5)*tbn +
+      5*((tn)^2 +(tbn)^2 -2*(tau*tau_bar) to_power n) + 1
+      by albet3; then
+      5 * (tn + tbn)^2 +1 - 2 * tn - 2 * tbn < (2*sqrt 5)*tn - (2*sqrt 5)*tbn +
+      5 * ((tn)^2 + (tbn)^2 - 2 * (tn * tbn)) + 1 by NEWTON:12; then
+E1:   5 * (tn + tbn)^2 + 1 - 2 * (tn + tbn) < (2 * sqrt 5) * tn -
+      (2 * sqrt 5) * tbn + 5 * (tn - tbn)^2 + 1;
+E2:   5 * (Lucas n) ^2 + 1 - 2 * Lucas n >= 0
+      proof
+        5 * Lucas n >= 5 * 4 by BB,XREAL_1:68; then
+        5 * Lucas n - 2 >= 20 - 2 by XREAL_1:11; then
+        Lucas n * (5 * Lucas n - 2) >= 4 * 18 by BB,XREAL_1:68; then
+        Lucas n * (5 * Lucas n - 2) + 1 >= 4 * 18 + 1 by XREAL_1:8;
+        hence thesis;
+      end;
+E3:   2 * tau to_power (n+1) - tn + 2 * tau_bar to_power (n+1) - tbn + 1 > 0
+      proof
+        2 * tau to_power (n+1) - tn + 2 * tau_bar to_power (n+1) - tbn + 1 =
+        2*(tn*tau to_power 1)-tn+2*tau_bar to_power (n+1)-tbn + 1 by JakPower32
+        .= 2*(tn*tau to_power 1)-tn+2*(tbn*tb to_power 1)-tbn + 1 by JakPower32
+        .= 2*(tn*tau) - tn + 2*(tbn*tb to_power 1) - tbn + 1 by POWER:30
+        .= tn * sqrt 5 + 2 * (tbn * tb) - tbn + 1 by FIB_NUM:def 1,POWER:30
+        .= sqrt 5 * (tn - tbn) * 1 + 1 by FIB_NUM:def 2
+        .= sqrt 5 * (tn - tbn) * (sqrt 5 / sqrt 5) + 1 by XCMPLX_1:60,C0
+        .= sqrt 5 * (tn - tbn) * (sqrt 5 * (1 / sqrt 5)) + 1 by XCMPLX_1:100
+        .= sqrt 5 * ((tn - tbn) * (1 / sqrt 5)) * sqrt 5 + 1
+        .= sqrt 5 * ((tn - tbn) / sqrt 5) * sqrt 5 + 1 by XCMPLX_1:100
+        .= sqrt 5 * Fib n * sqrt 5 + 1 by FIB_NUM:7
+        .= (sqrt 5) ^2 * Fib n + 1
+        .= 5 * Fib n + 1 by SQUARE_1:def 4;
+        hence thesis;
+      end;
+      (2*sqrt 5) *tn - (2*sqrt 5) *tbn + 5 * (tn-tbn) ^2 + 1 = 2*sqrt 5*tn -
+      2 * sqrt 5 * tbn + (sqrt 5) ^2 * (tn - tbn) ^2 + 1 by SQUARE_1:def 4
+      .= (2 * tau * tn - 1 * tn + 2 * tb * tbn - 1 * tbn + 1) ^2
+      by FIB_NUM:def 1,def 2
+      .= (2*tau to_power 1 * tn - 1*tn + 2*tb*tbn - 1*tbn + 1) ^2 by POWER:30
+      .= (2 * (tau to_power 1*tn)-1*tn + 2*tb to_power 1*tbn - 1*tbn + 1) ^2
+      by POWER:30
+      .= (2*tau to_power (n+1)-tn+2*(tb to_power 1*tbn)-tbn+1)^2 by JakPower32
+      .= (2*tau to_power (n+1) - tn + 2*tau_bar to_power (n+1) - tbn + 1) ^2
+      by JakPower32; then
+      5 * (Lucas n) ^2 + 1 - 2 * (tn+tbn) < (2 * tau to_power (n+1) - tn +
+      2 * tau_bar to_power (n+1) - tbn + 1) ^2 by E1,FIB_NUM3:21; then
+      5 * (Lucas n) ^2 + 1 - 2 * Lucas n < (2 * tau to_power (n+1) - tn +
+      2 * tau_bar to_power (n+1) - tbn + 1) ^2 by FIB_NUM3:21; then
+      sqrt (5*(Lucas n)^2 + 1 - 2*Lucas n) < sqrt ((2*tau to_power (n+1) - tn +
+      2 * tau_bar to_power (n+1) - tbn + 1) ^2) by SQUARE_1:95,E2; then
+      sqrt (5 * (Lucas n) ^2 + 1 - 2 * Lucas n) <
+      2 * (tau to_power (n+1) + tau_bar to_power (n+1)) - tn
+      - tbn + 1 by SQUARE_1:89,E3; then
+      sqrt (5 *(Lucas n) ^2 - 2 * Lucas n + 1) < 2 *Lucas (n+1) - tn - tbn + 1
+      by FIB_NUM3:21; then
+      1 + sqrt (5*(Lucas n)^2 - 2*Lucas n + 1) < 2*Lucas (n+1) + 1 -tn - tbn +1
+      by XREAL_1:8; then
+      tn + tbn + 1 + sqrt (5 * (Lucas n) ^2 - 2 * Lucas n + 1) - tn - tbn <
+      2 * Lucas (n+1) + 2 - tn - tbn; then
+      Lucas n + 1 + sqrt (5 * (Lucas n) ^2 - 2 * Lucas n + 1) - tn - tbn <
+      2 * Lucas (n+1) + 2 - tn - tbn by FIB_NUM3:21; then
+      Lucas n + 1 + sqrt (5 * (Lucas n) ^2 - 2 * Lucas n + 1) - tn <
+      2 * Lucas (n+1) + 2 - tn by XREAL_1:11; then
+      Lucas n + 1 + sqrt (5 * (Lucas n) ^2 - 2 * Lucas n + 1) - 2 + 2 <
+      2 * Lucas (n+1) + 2 by XREAL_1:11; then
+      Lucas n + 1 + sqrt (5 * (Lucas n) ^2 - 2 * Lucas n + 1) - 2 <
+      2 * Lucas (n+1) by XREAL_1:8; then
+      ((Lucas n + 1 + sqrt (5 * (Lucas n) ^2 - 2 * Lucas n + 1)) - 2) / 2 <
+      (2 * Lucas (n+1)) / 2 by XREAL_1:76;
+      hence thesis;
+    end;
+    hence thesis by A1,INT_1:def 4;
+  end;
+
+theorem
+  for n being natural number st n > 2 holds
+    Lucas n = [\ (1/tau) * (Lucas (n+1) + 1/2) /]
+  proof
+    let n be natural number;
+    assume A0: n > 2; then
+B0: n > 1 by XXREAL_0:2;
+B2: sqrt 5 > 0 by SQUARE_1:93;
+    set tbn = tau_bar to_power n;
+A1: (1/tau) * (Lucas (n+1) + 1/2) >= Lucas (n)
+    proof
+      tbn <= 1 / (2 * sqrt 5)
+      proof
+        per cases;
+        suppose B4: n is even;
+          n >= 2 + 1 by NAT_1:13,A0; then
+          n = 3 or n > 3 by XXREAL_0:1; then
+          n = 3 or n >= 3+1 by NAT_1:8; then
+B6:       tbn <= tau_bar to_power 4 by hopp10,POLYFORM:6,B4;
+B7:       tau_bar to_power (3+1) = tau_bar to_power 3 * tau_bar to_power 1
+          by JakPower32
+          .= (2 - sqrt 5) * tau_bar by POWER:30,beta3
+          .= (2 - 2*sqrt 5 - sqrt 5 + (sqrt 5) ^2) / 2 by FIB_NUM:def 2
+          .= (2 - 3 * sqrt 5 + 5) / 2 by SQUARE_1:def 4
+          .= (7 - 3 * sqrt 5) / 2;
+          sqrt 5 <= sqrt ((16/7) ^2) by SQUARE_1:94; then
+          sqrt 5 <= 16/7 by SQUARE_1:def 4; then
+          7 * sqrt 5 <= (16/7) * 7 by XREAL_1:66; then
+          7 * sqrt 5 - 3 * 5 <= 16 - 3*5 by XREAL_1:11; then
+          7 * sqrt 5 - 3 * (sqrt 5) ^2 <= 1 by SQUARE_1:def 4; then
+          ((7-3*sqrt 5)*sqrt 5) / sqrt 5 <= 1 / sqrt 5 by XREAL_1:74,B2; then
+          7 - 3 * sqrt 5 <= 1 / sqrt 5 by XCMPLX_1:90,B2; then
+          (7 - 3 * sqrt 5) / 2 <= (1 / sqrt 5) / 2 by XREAL_1:74; then
+          tau_bar to_power 4 <= 1 / (2 * sqrt 5) by B7,XCMPLX_1:79;
+          hence thesis by B6,XXREAL_0:2;
+        end;
+        suppose n is odd; then
+          tbn < 0 by pom2;
+          hence thesis by B2;
+        end;
+      end; then
+      tbn * sqrt 5 <= (1 / (2 * sqrt 5)) * sqrt 5 by XREAL_1:66,B2; then
+      tbn * sqrt 5 <= 1/2 by XCMPLX_1:93,B2; then
+      - tbn * sqrt 5 >= - 1/2 by XREAL_1:26; then
+      tau_bar * tbn - tau * tbn + (1/2 + tau*tbn) >= - 1/2 + (1/2 + tau * tbn)
+      by XREAL_1:8,FIB_NUM:def 1,def 2; then
+      (tau_bar * tbn + 1/2) / tau >= (tbn * tau)/tau by XREAL_1:74; then
+      (tau_bar * tbn + 1/2) / tau >= tbn by XCMPLX_1:90; then
+      (tau_bar * tbn + 1/2) / tau + tau to_power (n+1) / tau >=
+      tbn + tau to_power (n+1) / tau by XREAL_1:8; then
+      (tau_bar * tbn + 1/2 + tau to_power (n+1))/tau  >=
+      tbn + tau to_power (n+1) / tau by XCMPLX_1:63; then
+      (tau_bar to_power 1 * tbn + 1/2 + tau to_power (n+1)) / tau >=
+      tbn + tau to_power (n + 1) / tau by POWER:30; then
+      (tau_bar to_power 1 * tbn + tau to_power (n+1) + 1/2) / tau >=
+      tbn + (tau to_power n * tau to_power 1) / tau by JakPower32; then
+      (tau_bar to_power (1+n) + tau to_power (n+1) + 1/2)/tau >=
+      tbn + (tau to_power n * tau to_power 1) / tau by JakPower32; then
+      (Lucas (n+1) + 1/2)/tau >=
+      tbn + (tau to_power n * tau to_power 1) / tau by FIB_NUM3:21; then
+      (Lucas (n+1)+1/2)/tau >= tbn+(tau to_power n*tau)/tau by POWER:30; then
+      (Lucas (n+1) + 1/2)/tau >= tbn + tau to_power n by XCMPLX_1:90; then
+      (Lucas (n+1) + 1/2)/tau >= Lucas n by FIB_NUM3:21;
+      hence thesis by XCMPLX_1:100;
+    end;
+      (1/tau) * (Lucas (n+1) + 1/2) - 1 < Lucas n
+      proof
+        tbn > -1/2 by hop9,B0; then
+        - tbn < - (-1/2) by XREAL_1:26; then
+        (- tbn) * sqrt 5 < (1/2)*sqrt 5 by XREAL_1:70,B2; then
+        tbn * tau_bar - tbn * tau + (tbn * tau + 1/2) <
+        tau - 1/2 + (tbn * tau + 1/2) by XREAL_1:8,FIB_NUM:def 1,def 2; then
+        tbn * tau_bar + 1/2 - tau < tau - 1/2 + tbn * tau + 1/2 - tau
+          by XREAL_1:11; then
+        (tbn * tau_bar + 1/2 - tau)/tau < (tbn * tau)/tau by XREAL_1:76; then
+        (tbn * tau_bar) / tau + (1/2) / tau - tau / tau <
+        (tbn * tau) / tau by XCMPLX_1:125; then
+        (tbn * tau_bar) / tau + (1/2) /tau - tau/tau < tbn by XCMPLX_1:90; then
+        (tbn * tau_bar) / tau + (1 / 2) / tau - 1 < tbn by XCMPLX_1:60; then
+        (tbn * tau_bar) / tau + (1 / 2) / tau - 1 + tau to_power n <
+        tbn + tau to_power n by XREAL_1:8; then
+        (tbn * tau_bar) / tau + (1 / 2) / tau + tau to_power n * 1-1 < Lucas n
+          by FIB_NUM3:21; then
+        (tbn * tau_bar)/tau + (1 / 2) / tau + tau to_power n * (tau /tau) - 1 <
+        Lucas n by XCMPLX_1:60; then
+        (tbn * tau_bar)/tau + (1/2)/tau + (tau to_power n * tau)/tau - 1 <
+        Lucas n by XCMPLX_1:75; then
+        (tbn * tau_bar + 1/2 + tau to_power n * tau) / tau - 1 < Lucas n
+          by XCMPLX_1:64; then
+        (tbn * tau_bar to_power 1 + 1/2 + tau to_power n * tau) / tau - 1 <
+        Lucas n by POWER:30; then
+        (tbn * tau_bar to_power 1 + 1/2 + tau to_power n * tau to_power 1) /
+        tau - 1 < Lucas n by POWER:30; then
+        (tau_bar to_power (n+1) + 1/2 + tau to_power n * tau to_power 1) /
+        tau - 1 < Lucas n by JakPower32; then
+        (tau_bar to_power (n+1) + 1/2 + tau to_power (n+1)) / tau - 1 <
+        Lucas n by JakPower32; then
+        (tau_bar to_power (n+1) + tau to_power (n+1) + 1/2) / tau - 1 <
+        Lucas n; then
+        (Lucas (n+1) + 1/2) / tau - 1 < Lucas n by FIB_NUM3:21;
+        hence thesis by XCMPLX_1:100;
+      end;
+      hence thesis by INT_1:def 4,A1;
+    end;
+
+theorem
+  for n,k being natural number st n >= 4 & k >= 1 & n > k & n is odd holds
+  Lucas (n+k) = [\ tau to_power k * Lucas n + 1 /]
+  proof
+    let n,k be natural number;
+    assume A0: n >= 4 & k >= 1 & n > k & n is odd;
+    set tb = tau_bar;
+    set tk = tau to_power k;
+    set tn = tau to_power n;
+    set tbn = tau_bar to_power n;
+F:  sqrt 5 > 1 by SQUARE_1:83,95;
+A1: tau to_power k * Lucas n + 1 >= Lucas (n+k)
+    proof
+      tk * tbn + 1 >= tb to_power (n+k)
+      proof
+        consider m being Nat such that V1: n = k + m by A0,NAT_1:10;
+V0:     m is non empty Nat by A0,V1; then
+h0:     m >= 1 by NAT_1:14;
+t1:     ((1-sqrt 5) to_power m * (-1) to_power k) / 2 to_power m + 1 >=
+        (1-sqrt 5) to_power (2*k+m) / 2 to_power (2*k+m)
+        proof
+          per cases;
+          suppose W1: k is even; then
+W2:         m is odd by A0,V1;
+m1:         2 to_power m > 0 by POWER:39;
+W3:         ((1-sqrt 5) to_power m * (-1) to_power k) / 2 to_power m + 1 =
+            ((1-sqrt 5) to_power m *1) / 2 to_power m + 1 by W1,FIB_NUM2:5
+            .= (( - ( - 1 + sqrt 5)) to_power m) / 2 to_power m +
+            2 to_power m / 2 to_power m by XCMPLX_1:60,m1
+            .= (((-1) * (sqrt 5 - 1)) to_power m + 2 to_power m) / 2 to_power m
+              by XCMPLX_1:63
+            .= ((-1) to_power m * (sqrt 5-1) to_power m +
+            2 to_power m) / 2 to_power m by NEWTON:12
+            .= (2 to_power m + (-1) * (sqrt 5-1) to_power m) / 2 to_power m
+              by W2,FIB_NUM2:3
+            .= (2 to_power m - (sqrt 5 - 1) to_power m) / 2 to_power m;
+z:          sqrt (3 ^2) > sqrt 5 & sqrt 5 > sqrt 1 by SQUARE_1:95; then
+            3 > sqrt 5 & sqrt 5 > 1 by SQUARE_1:83,def 4; then
+            3 - 1 > sqrt 5 - 1 & sqrt 5 - 1 > 1 - 1 by XREAL_1:11; then
+            2 to_power m > (sqrt 5 - 1) to_power m by POWER:42,V0; then
+w4:         2 to_power m - (sqrt 5-1) to_power m > (sqrt 5-1) to_power m -
+            (sqrt 5-1) to_power m by XREAL_1:11;
+W5:         (1-sqrt 5) to_power (2*k+m) / 2 to_power (2*k+m)
+            = ((-1) * (-1+sqrt 5)) to_power (2*k+m) / 2 to_power (2*k+m)
+            .= ((-1) to_power (2*k+m) * (-1+sqrt 5) to_power (2*k+m)) /
+            2 to_power (2*k+m) by NEWTON:12
+            .= ((-1) * (-1+sqrt 5) to_power (2*k+m)) / 2 to_power (2*k+m)
+            by W2,FIB_NUM2:3
+            .= (-1) * ((-1+sqrt 5) to_power (2*k+m) / 2 to_power (2*k+m))
+            by XCMPLX_1:75;
+            sqrt 5 - 1 > 1 - 1 by z,XREAL_1:11,SQUARE_1:83; then
+            (- 1 + sqrt 5) to_power (2*k+m) > 0 by POWER:39; then
+            (1 - sqrt 5) to_power (2*k+m) / 2 to_power (2*k+m) <= 0 by W5;
+            hence thesis by w4,W3;
+          end;
+          suppose W1: k is odd; then
+W2:         m is even by A0,V1;
+m1:         2 to_power m > 0 by POWER:39;
+m2:         2 to_power (2*k) > 0 by POWER:39;
+            m > 1 by W2,POLYFORM:4,XXREAL_0:1,h0; then
+V2:         m - 1 is non empty Nat by NAT_1:20;
+W3:         ((1-sqrt 5) to_power m * (-1) to_power k) / 2 to_power m + 1 =
+            ((1-sqrt 5) to_power m * (-1)) / 2 to_power m + 1
+              by W1,FIB_NUM2:3
+            .= ((1-sqrt 5) to_power m *(-1)) / 2 to_power m +
+            2 to_power m / 2 to_power m by XCMPLX_1:60,m1
+            .= (((-1) * (-1+sqrt 5)) to_power m * (-1) +
+            2 to_power m) / 2 to_power m by XCMPLX_1:63
+            .= (((-1) to_power m) * ((-1+sqrt 5) to_power m) * (-1) +
+            2 to_power m) / 2 to_power m by NEWTON:12
+            .= (1 * ((-1 + sqrt 5) to_power m) * (-1) +
+            2 to_power m) / 2 to_power m by W2,FIB_NUM2:5
+            .= ((-((-1+sqrt 5) to_power m) + 2 to_power m) * 2 to_power (2*k))/
+            (2 to_power m * 2 to_power (2*k)) by XCMPLX_1:92,m2
+            .= (-((-1+sqrt 5) to_power m) * 2 to_power (2*k) +
+            2 to_power m * 2 to_power (2*k)) / 2 to_power (m+2*k) by JakPower32
+            .= (-((-1+sqrt 5) to_power m) * 2 to_power (2*k) +
+            2 to_power (m+2*k)) / 2 to_power (m+2*k) by JakPower32
+            .= (2 to_power (m+2*k) - (-1+sqrt 5) to_power m *
+            2 to_power (2*k)) / 2 to_power (m+2*k);
+W4:         (1-sqrt 5) to_power (2*k+m) / 2 to_power (2*k+m) =
+             ((-1) * (-1+sqrt 5)) to_power (2*k+m) / 2 to_power (2*k+m)
+            .= ((-1) to_power (2*k+m) * (-1+sqrt 5) to_power (2*k+m)) /
+            2 to_power (2*k+m) by NEWTON:12
+            .= (1 * (- 1 + sqrt 5) to_power (2*k+m)) / 2 to_power (2*k+m)
+            by W2,FIB_NUM2:5
+            .= ((sqrt 5 - 1) to_power (2*k+m)) / 2 to_power (2*k+m);
+            2 to_power m - (sqrt 5 - 1) to_power m >= (sqrt 5 - 1) to_power m
+            proof
+              defpred P[Nat] means
+              2 to_power ($1+1) - (sqrt 5 - 1) to_power ($1+1) >=
+              (sqrt 5 - 1) to_power ($1+1);
+S1:           2 to_power (1+1) - (sqrt 5 - 1) to_power (1+1) =
+              2 ^2 - (sqrt 5-1) to_power 2 by POWER:53
+              .= 4 - (sqrt 5-1) ^2 by POWER:53
+              .= 4 - ((sqrt 5) ^2 - 2 * sqrt 5 * 1 + 1 ^2)
+              .= 4 - (5 - 2 * sqrt 5 + 1) by SQUARE_1:def 4
+              .= 2 * sqrt 5 - 2;
+S2:           (sqrt 5 - 1) to_power (1+1) = (sqrt 5 - 1) ^2 by POWER:53
+              .= (sqrt 5) ^2 - 2 * sqrt 5 * 1 + 1 ^2
+              .= 5 - 2 * sqrt 5 + 1 by SQUARE_1:def 4
+              .= 6 - 2 * sqrt 5;
+              sqrt 5 >= sqrt (2 ^2) by SQUARE_1:95; then
+              sqrt 5 >= 2 by SQUARE_1:def 4; then
+              sqrt 5 * 4 >= 2 * 4 by XREAL_1:66; then
+              sqrt 5 * 2 + sqrt 5 * 2 - 2 >= 6 + 2 - 2 by XREAL_1:11; then
+              sqrt 5*2 + sqrt 5*2 -2-2*sqrt 5 >= 6 - 2*sqrt 5 by XREAL_1:11;
+              then
+B1:           P[1] by S1,S2;
+B2:           for k being non empty Nat st P[k] holds P[k+1]
+              proof
+                let k be non empty Nat;
+X1:             sqrt 5 - 1 > 1 - 1 by F,XREAL_1:11;
+                assume P[k]; then
+                2 to_power (k+1) - (sqrt 5 - 1) to_power (k+1) + (sqrt 5 - 1)
+                to_power (k+1) >= (sqrt 5 - 1) to_power (k+1) +
+                (sqrt 5 - 1) to_power (k+1) by XREAL_1:8; then
+                2 to_power (k+1) * (sqrt 5-1) >=
+                2*(sqrt 5-1) to_power (k+1) * (sqrt 5-1) by XREAL_1:66,X1; then
+                2 to_power (k+1) * (sqrt 5-1) >=
+                2*((sqrt 5 - 1) to_power (k+1) * (sqrt 5-1)); then
+                2 to_power (k+1) * (sqrt 5-1) >= 2*((sqrt 5 - 1) to_power (k+1)
+                * (sqrt 5-1) to_power 1) by POWER:30; then
+BT:             2 to_power (k+1) * (sqrt 5-1) >=
+                2 * (sqrt 5 - 1) to_power (k+1+1) by JakPower32,X1;
+                sqrt (3 ^2) >= sqrt 5 by SQUARE_1:95; then
+                3 >= sqrt 5 by SQUARE_1:def 4; then
+                3 - 1 >= sqrt 5 - 1 by XREAL_1:11; then
+                2 * 2 to_power (k+1) >= (sqrt 5-1) * 2 to_power (k+1)
+                by XREAL_1:66; then
+                2 to_power 1 * 2 to_power (k+1) >=
+                (sqrt 5-1) * 2 to_power (k+1) by POWER:30; then
+                2 to_power (1+k+1) >= (sqrt 5-1) * 2 to_power (k+1)
+                by JakPower32; then
+                2 to_power (1+k+1) >= 2 * (sqrt 5 - 1) to_power (k+1+1)
+                by BT,XXREAL_0:2; then
+                2 to_power (1+k+1) - (sqrt 5 - 1) to_power (k+1+1)  >=
+                2 * (sqrt 5 - 1) to_power (k+1+1)-(sqrt 5 - 1) to_power (k+1+1)
+                by XREAL_1:11;
+                hence thesis;
+              end;
+              for k being non empty Nat holds P[k] from NAT_1:sch 10(B1,B2);
+              then 2 to_power (m-1+1) - (sqrt 5 - 1) to_power (m-1+1) >=
+              (sqrt 5 - 1) to_power (m-1+1) by V2;
+              hence thesis;
+            end; then
+            (2 to_power m - (sqrt 5 - 1) to_power m)* 2 to_power (2*k) >=
+            (sqrt 5 - 1) to_power m * 2 to_power (2*k) by XREAL_1:66; then
+            2 to_power m * 2 to_power (2*k)-
+            (sqrt 5-1) to_power m * 2 to_power (2*k) >=
+            (sqrt 5 - 1) to_power m * 2 to_power (2*k); then
+            2 to_power (m+2*k) - (sqrt 5 - 1) to_power m * 2 to_power (2*k) >=
+            (sqrt 5 - 1) to_power m * 2 to_power (2*k) by JakPower32; then
+            (2 to_power (m + 2 * k) -
+            (sqrt 5 - 1) to_power m * 2 to_power (2*k)) / 2 to_power (m+2*k) >=
+            ((sqrt 5 - 1) to_power m * 2 to_power (2*k)) / 2 to_power (m+2*k)
+              by XREAL_1:74; then
+w6:         (2 to_power m * 2 to_power (2*k) -
+            (sqrt 5 - 1) to_power m * 2 to_power (2*k)) / 2 to_power (m+2*k) >=
+            ((sqrt 5 - 1) to_power m * 2 to_power (2*k)) / 2 to_power (m+2*k)
+              by JakPower32;
+X1:         sqrt 5 - 1 > 1 - 1 by F,XREAL_1:11;
+            sqrt (3 ^2) > sqrt 5 & sqrt 5 > sqrt 1 by SQUARE_1:95; then
+            3 > sqrt 5 & sqrt 5 > 1 by SQUARE_1:83,def 4; then
+M4:         3 - 1 > sqrt 5 - 1 & sqrt 5 - 1 > 1 - 1 by XREAL_1:11; then
+m5:         (sqrt 5 - 1) to_power m > 0 by POWER:39;
+            2 to_power (2*k) >= (sqrt 5-1) to_power (2*k)
+            by POWER:42,M4,A0; then
+            2 to_power (2*k) * (sqrt 5-1) to_power m >=
+            (sqrt 5-1) to_power (2*k)*(sqrt 5-1) to_power m
+            by XREAL_1:66,m5; then
+            (2 to_power (2*k) * (sqrt 5-1) to_power m) / 2 to_power (2*k+m) >=
+            ((sqrt 5-1) to_power (2*k) * (sqrt 5-1) to_power m) /
+            2 to_power (2*k+m) by XREAL_1:74; then
+            ((2 to_power m - (sqrt 5-1) to_power m) * 2 to_power (2*k)) /
+            2 to_power (m+2*k) >=
+            ((sqrt 5-1) to_power (2*k)*(sqrt 5-1) to_power m) /
+            2 to_power (2*k+m) by w6,XXREAL_0:2; then
+            (2 to_power m *2 to_power (2*k) -
+            (sqrt 5-1) to_power m * 2 to_power (2*k)) / 2 to_power (m+2*k) >=
+            ((sqrt 5-1) to_power (2*k+m)) /2 to_power (2*k+m) by JakPower32,X1;
+            hence thesis by W3,W4,JakPower32;
+          end;
+        end;
+        sqrt 5 - 1 > 1 - 1 by F,XREAL_1:11; then
+YX:     - (sqrt 5 - 1) < 0;
+        ((1+sqrt 5)*(1-sqrt 5)) / 2 to_power 2 = ((1+sqrt 5)*(1-sqrt 5)) / 2^2
+          by POWER:53
+        .= (1 ^2 - (sqrt 5) ^2) / 4
+        .= (1 - 5) / 4 by SQUARE_1:def 4
+        .= - 1; then
+        (-1) to_power k =
+         ((1+sqrt 5) * (1-sqrt 5)) to_power k  / (2 to_power 2) to_power k
+        by JakPower36
+        .= ((1+sqrt 5)*(1-sqrt 5)) to_power k  / 2 to_power (2*k)
+        by NEWTON:14; then
+        ((1-sqrt 5) to_power m * (((1+sqrt 5) * (1-sqrt 5)) to_power k) /
+        2 to_power (2*k)) / 2 to_power m + 1 >=
+        (1-sqrt 5) to_power (2*k+m) /2 to_power (2*k+m) by XCMPLX_1:75,t1; then
+        ((1-sqrt 5) to_power m * (((1+sqrt 5)*(1-sqrt 5)) to_power k)) /
+        (2 to_power (2*k)*2 to_power m) + 1 >=
+        (1-sqrt 5) to_power (2*k+m) / 2 to_power (2*k+m) by XCMPLX_1:79; then
+        ((1-sqrt 5) to_power m * (((1+sqrt 5)*(1-sqrt 5)) to_power k)) /
+        2 to_power (2*k+m) + 1 >=
+        (1-sqrt 5) to_power (2*k+m) / 2 to_power (2*k+m) by JakPower32; then
+        ((1-sqrt 5) to_power m * ((1+sqrt 5) to_power k *
+        (1-sqrt 5) to_power k)) / 2 to_power (2*k+m) + 1 >=
+        (1-sqrt 5) to_power (2*k+m) / 2 to_power (2*k+m) by NEWTON:12; then
+        ((1-sqrt 5) to_power m *(1-sqrt 5) to_power k*(1+sqrt 5) to_power k) /
+        2 to_power (2*k+m) + 1 >=
+        (1-sqrt 5) to_power (2*k+m) / 2 to_power (2*k+m); then
+        ((1-sqrt 5) to_power (m+k) *(1+sqrt 5) to_power k) /
+        2 to_power (k+k+m) + 1 >=
+        (1-sqrt 5) to_power (2*k+m) / 2 to_power (2*k+m) by JakPower32,YX; then
+        ((1-sqrt 5) to_power n *(1+sqrt 5) to_power k) /2 to_power (k+n) + 1 >=
+        ((1-sqrt 5)/2) to_power (k+k+m) by V1,JakPower36; then
+        ((1-sqrt 5) to_power n *(1+sqrt 5) to_power k) /
+        (2 to_power n * 2 to_power k) + 1 >=
+        tb to_power (k+n) by JakPower32,FIB_NUM:def 2,V1; then
+        ((1-sqrt 5) to_power n/2 to_power n) * ((1+sqrt 5) to_power k /
+        (2 to_power k)) + 1 >= tb to_power (k+n) by XCMPLX_1:77; then
+        (((1-sqrt 5)/2) to_power n) *((1+sqrt 5) to_power k / (2 to_power k))+1
+        >= tb to_power (k+n) by JakPower36;
+        hence thesis by FIB_NUM:def 1,def 2,JakPower36;
+      end; then
+      tk * tbn + 1 + tau to_power (n+k) >=
+      tb to_power (n+k) + tau to_power (n+k) by XREAL_1:8; then
+      tau to_power (n+k)+tk*tbn+1 >= tau to_power (n+k)+tb to_power (n+k); then
+      tk*tn+tk*tbn+1 >= tau to_power (n+k)+tb to_power (n+k) by JakPower32;then
+      tk * (tn + tbn) + 1 >= Lucas (n+k) by FIB_NUM3:21;
+      hence thesis by FIB_NUM3:21;
+    end;
+    tau to_power k * Lucas n + 1 - 1 < Lucas (n+k)
+    proof
+      defpred P[Nat] means tau to_power $1 * Lucas n < Lucas (n+ $1);
+      tbn < 0 by pom2,A0; then
+      tbn * tau - tbn * tb < 0; then
+      tbn * tau - tbn * tb to_power 1 < 0 by POWER:30; then
+      tbn * tau - tb to_power (n+1) < 0 by JakPower32; then
+      tbn*tau - tb to_power (n+1) + (tau to_power (n+1) +tb to_power (n+1)) <
+      0 + (tau to_power (n+1) + tb to_power (n+1)) by XREAL_1:8; then
+      tbn * tau + tau to_power (n+1) < Lucas (n+1) by FIB_NUM3:21; then
+      tbn * tau + tn * tau to_power 1 < Lucas (n+1) by JakPower32; then
+      tbn * tau + tn * tau < Lucas (n+1) by POWER:30; then
+      (tbn + tn) * tau < Lucas (n+1); then
+      Lucas n * tau < Lucas (n+1) by FIB_NUM3:21; then
+B1:   P[1] by POWER:30;
+B2:   for m being non empty Nat st P[m] holds P[m + 1]
+      proof
+        let m be non empty Nat;
+        assume P[m];
+K1:     (1-sqrt 5) to_power (m+1) < (1+sqrt 5) to_power (m+1)
+        proof
+          reconsider s = m + 1 as Element of NAT by ORDINAL1:def 13;
+          (1 - sqrt 5) to_power s <=
+          abs ((1 - sqrt 5) to_power s) by ABSVALUE:11; then
+a1:       (1-sqrt 5) to_power s <= (abs(1-sqrt 5)) to_power s by SERIES_1:2;
+          sqrt 5 > sqrt 1 by SQUARE_1:95; then
+          - sqrt 5 < - 1 by XREAL_1:26,SQUARE_1:83; then
+a2:       - sqrt 5 + 1 < - 1 + 1 by XREAL_1:8; then
+A5:       abs (1 - sqrt 5) = - (1 - sqrt 5) by ABSVALUE:def 1;
+          - (1 - sqrt 5) = -1 + sqrt 5; then
+          - (1 - sqrt 5) < 1 + sqrt 5 by XREAL_1:8; then
+          (abs (1 - sqrt 5)) to_power s < (1 + sqrt 5) to_power s
+            by POWER:42,A5,a2;
+          hence thesis by a1,XXREAL_0:2;
+        end;
+        2 to_power (m + 1) > 0 by POWER:39; then
+        ((1 - sqrt 5) to_power (m+1)) / (2 to_power (m+1)) <
+        ((1 + sqrt 5) to_power (m+1))/(2 to_power (m+1)) by XREAL_1:76,K1; then
+        ((1 - sqrt 5)/2) to_power (m+1) <
+        ((1 + sqrt 5) to_power (m+1)) / (2 to_power (m+1)) by JakPower36; then
+        tb to_power (m+1) < tau to_power (m+1) & tbn < 0
+        by FIB_NUM:def 1,def 2,A0,pom2,JakPower36; then
+        tb to_power (m+1) * tbn > tau to_power (m+1) * tbn by XREAL_1:71; then
+        tb to_power (m+1) * tbn + tau to_power (n+m+1) >
+        tau to_power (m+1) * tbn + tau to_power (n+m+1) by XREAL_1:8; then
+        tb to_power (m+1+n) + tau to_power (n+m+1) >
+        tau to_power (m+1) * tbn + tau to_power (n+m+1) by JakPower32; then
+        tb to_power (m+1+n) + tau to_power (n+m+1) >
+        tau to_power (m+1) * tbn + tn * tau to_power (m+1) by JakPower32; then
+        Lucas (n+m+1) > tau to_power (m+1) * (tbn + tn) by FIB_NUM3:21;
+        hence thesis by FIB_NUM3:21;
+      end;
+      for m being non empty Nat holds P[m] from NAT_1:sch 10(B1,B2);
+      hence thesis by A0;
+    end;
+    hence thesis by A1,INT_1:def 4;
+  end;

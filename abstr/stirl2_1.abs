@@ -8,24 +8,23 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, XBOOLE_0, XXREAL_0, NAT_1, ORDINAL1, CARD_1,
       TARSKI, ARYTM_3, ARYTM_1, FUNCT_1, RELAT_1, FUNCT_2, INT_1, FINSET_1,
-      AFINSQ_1, BINOP_1, SETWISEO, FINSEQ_1, FINSOP_1, FUNCOP_1, ORDINAL4,
-      CARD_3, BINOP_2, ZFMISC_1, NEWTON, REALSET1, STIRL2_1;
+      AFINSQ_1, BINOP_1, FINSEQ_1, FINSOP_1, CARD_3, BINOP_2, ZFMISC_1, NEWTON,
+      REALSET1, STIRL2_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
-      FUNCT_1, RELSET_1, ORDINAL1, SEQ_4, PARTFUN1, FINSET_1, ORDINAL4,
-      AFINSQ_1, XCMPLX_0, XXREAL_0, FUNCT_2, NAT_1, INT_1, BINOP_1, BINOP_2,
-      NEWTON, SETWISEO, DOMAIN_1, FUNCOP_1, RECDEF_1;
- constructors PARTFUN1, WELLORD2, BINOP_1, DOMAIN_1, SETWISEO, REAL_1,
-      SQUARE_1, NAT_1, BINOP_2, SEQ_4, NEWTON, AFINSQ_1, RECDEF_1, XXREAL_2,
-      RELSET_1, ORDINAL4;
+      FUNCT_1, RELSET_1, ORDINAL1, SEQ_4, PARTFUN1, FINSET_1, AFINSQ_1,
+      AFINSQ_2, XXREAL_0, FUNCT_2, NAT_1, INT_1, BINOP_1, BINOP_2, NEWTON,
+      DOMAIN_1;
+ constructors WELLORD2, DOMAIN_1, SETWISEO, REAL_1, BINOP_2, SEQ_4, NEWTON,
+      AFINSQ_1, AFINSQ_2, RELSET_1, PARTFUN3, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED, AFINSQ_1,
-      CARD_1, VALUED_0, XXREAL_2, RELSET_1;
+      CARD_1, VALUED_0, XXREAL_2, RELSET_1, AFINSQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin
 
-reserve k, l, m, n, i, j for Element of NAT,
+reserve k, l, m, n, i, j for Nat,
   K, N for non empty Subset of NAT,
   Ke, Ne, Me for Subset of NAT,
   X,Y for set;
@@ -43,12 +42,15 @@ theorem :: STIRL2_1:4
   not min* Ne in Ne/\Ke implies min* Ne = min* (Ne\Ke);
 
 theorem :: STIRL2_1:5
+for n be Element of NAT holds
   min* {n} = n & min {n} = n;
 
 theorem :: STIRL2_1:6
+for n,k be Element of NAT holds
   min* {n,k} = min(n,k) & min {n,k} = min(n,k);
 
 theorem :: STIRL2_1:7
+for n,k,l be Element of NAT holds
   min* {n,k,l} = min(n,min(k,l));
 
 theorem :: STIRL2_1:8
@@ -144,12 +146,11 @@ scheme :: STIRL2_1:sch 1
   Sch1{n,k() -> Nat,P[set]}: {f where f is Function of n(),k():P[f]} is finite;
 
 theorem :: STIRL2_1:24
-  for n,k be Nat holds {f where f is Function of n,k:f is onto
-  "increasing} is finite;
+  for n,k holds {f where f is Function of n,k:f is onto "increasing} is finite;
 
 theorem :: STIRL2_1:25
-  for n,k being Nat holds card {f where f is Function of n,k:f is
-  onto "increasing} is Element of NAT;
+  for n,k holds card {f where f is Function of n,k:f is  onto "increasing}
+    is Element of NAT;
 
 :: Stirling Numbers of the second kind
 
@@ -157,8 +158,7 @@ definition
   let n,k be Nat;
   func n block k -> Element of NAT equals
 :: STIRL2_1:def 2
-  card {f where f is Function of n,k:f
-  is onto "increasing};
+  card {f where f is Function of n,k:f is onto "increasing};
 end;
 
 theorem :: STIRL2_1:26
@@ -265,93 +265,33 @@ onto "increasing & f"{f.n}<>{n} & f.n=l}= card{f where f is Function of n,k: f
 
 reserve D for non empty set,
   F,G for XFinSequence of D,
-  Fn for XFinSequence of
-  NAT,
+  Fn for XFinSequence of NAT,
   b for BinOp of D,
   d,d1,d2 for Element of D;
 
 definition
-  let D,F,b;
-  assume
- b is having_a_unity or len F >= 1;
-  func b "**" F -> Element of D means
-:: STIRL2_1:def 3
-
-  it = the_unity_wrt b if b is
-having_a_unity & len F = 0 otherwise ex f be Function of NAT,D st f.0 = F.0 & (
-  for n st n+1 < len F holds f.(n + 1) = b.(f.n,F.(n + 1))) & it = f.(len F-1);
+  canceled;
 end;
 
-theorem :: STIRL2_1:44
-  b "**" <%d%> = d;
-
-theorem :: STIRL2_1:45
-  b is having_a_unity or len F > 0 implies b "**" (F ^ <% d %>) =
-  b.(b "**" F,d);
-
-theorem :: STIRL2_1:46
-  F <> <%>D implies ex G,d st F = G^<%d%>;
-
-scheme :: STIRL2_1:sch 5
-
-  Sch5{D()->non empty set, P[set]}: for F be XFinSequence of D() holds P[F]
-provided
- P[<%>D()] and
- for F be XFinSequence of D(),d be Element of D() st P[F] holds P[F^
-<%d%>];
-
-theorem :: STIRL2_1:47
-  b is associative & (b is having_a_unity or len F >= 1 & len G >= 1)
-  implies b "**" (F ^ G) = b.(b "**" F,b "**" G);
+canceled 6;
 
 definition
-  let D;
-  let d,d1;
-  redefine func <%d,d1%> -> XFinSequence of D;
-  let d2;
-  redefine func <%d,d1,d2%> -> XFinSequence of D;
+  canceled;
 end;
 
-theorem :: STIRL2_1:48
-  b "**" <%d1,d2%> = b.(d1,d2);
-
-theorem :: STIRL2_1:49
-  b "**" <%d,d1,d2%> = b.(b.(d,d1),d2);
-
-definition
-  let Fn;
-  func Sum(Fn) -> Element of NAT equals
-:: STIRL2_1:def 4
-  addnat "**" Fn;
-end;
-
-theorem :: STIRL2_1:50
-  (for n st n in dom Fn holds Fn.n <= k) implies Sum (Fn)<=len Fn
-  * k;
-
-theorem :: STIRL2_1:51
-  (for n st n in dom Fn holds Fn.n >= k) implies Sum (Fn) >= len
-  Fn * k;
-
-theorem :: STIRL2_1:52
-  (len Fn > 0 & ex x st x in dom Fn & Fn.x = k) implies Sum Fn >=
-  k;
-
-theorem :: STIRL2_1:53
-  Sum Fn=0 iff (len Fn=0 or for n st n in dom Fn holds Fn.n=0);
+canceled 4;
 
 theorem :: STIRL2_1:54
   for f be Function, n holds union (rng (f|n)) \/ f.n=union rng (f
   |(n+1));
 
-scheme :: STIRL2_1:sch 6
-
-  Sch6{D()->non empty set,n()->Element of NAT,P[set,set]}: ex p be
-  XFinSequence of D() st dom p = n() & for k st k in n() holds P[k,p.k]
+scheme :: STIRL2_1:sch 5
+ Sch6{D()->non empty set,n()->Nat,P[set,set]}:
+  ex p be XFinSequence of D() st dom p = n() & for k st k in n() holds P[k,p.k]
 provided
  for k st k in n() ex x be Element of D() st P[k,x];
 
-scheme :: STIRL2_1:sch 7
+scheme :: STIRL2_1:sch 6
 
   Sch7{D()->non empty set,F()-> XFinSequence of D()}: ex CardF be XFinSequence
 of NAT st dom CardF = dom F() & (for i st i in dom CardF holds CardF.i=card (F(
@@ -361,7 +301,7 @@ provided
  for i,j st i in dom F() & j in dom F() & i<>j holds F().i misses F()
 .j;
 
-scheme :: STIRL2_1:sch 8
+scheme :: STIRL2_1:sch 7
 
   Sch8{X,Y()->finite set,x()->set,P[set],f()->Function of card Y(),Y()}: ex F
 be XFinSequence of NAT st dom F = card Y() & card{g where g is Function of X(),
@@ -373,17 +313,17 @@ provided
  x() in X();
 
 theorem :: STIRL2_1:55
-  for n,k being Nat holds k * (n block k)= card{f where f is
+k * (n block k)= card{f where f is
   Function of n+1,k: f is onto "increasing & f"{f.n}<>{n}};
 
 :: Recursive dependence
 
 theorem :: STIRL2_1:56
-  for n,k being Nat holds (n+1) block (k+1) = (k+1)*(n block (k+1)
+(n+1) block (k+1) = (k+1)*(n block (k+1)
   ) + (n block k);
 
 theorem :: STIRL2_1:57
-  for n being Nat holds n>=1 implies n block 2 = 1/2 * (2 |^ n - 2
+n>=1 implies n block 2 = 1/2 * (2 |^ n - 2
   );
 
 theorem :: STIRL2_1:58
@@ -413,7 +353,7 @@ theorem :: STIRL2_1:64
 theorem :: STIRL2_1:65
   card X=k+1 & x in X implies card (X\{x})=k;
 
-scheme :: STIRL2_1:sch 9
+scheme :: STIRL2_1:sch 8
 
   Sch9{P[set],Q[set,Function]}: for F be Function st rng F is finite holds P[F
   ]

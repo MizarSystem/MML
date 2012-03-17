@@ -39,6 +39,7 @@
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="GR_CY_1"/>
 <ArticleID name="MONOID_0"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="WELLORD2"/>
@@ -48,7 +49,6 @@
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="WAYBEL_9"/>
 <ArticleID name="WAYBEL11"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PRALG_1"/>
 <ArticleID name="WAYBEL_3"/>
@@ -89,7 +89,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="186">
+<Adjective nr="191">
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="248">
@@ -112,7 +112,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="186">
+<Adjective nr="191">
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="248">
@@ -136,10 +136,10 @@
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="103"/>
-<Adjective nr="186">
+<Adjective nr="191">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="187"/>
+<Adjective nr="192"/>
 <Adjective nr="248">
 <LocusVar nr="1"/>
 </Adjective>
@@ -217,7 +217,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="21">
-<Func kind="K" nr="324">
+<Func kind="K" nr="336">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -355,7 +355,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="203">
+<Adjective nr="208">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -399,7 +399,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="175"/>
+<Adjective nr="180"/>
 </Cluster>
 </CCluster>
 <CCluster aid="YELLOW14" nr="4">
@@ -408,7 +408,7 @@
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="102"/>
-<Adjective nr="222"/>
+<Adjective nr="227"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -426,10 +426,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="193">
+<Adjective nr="198">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="219">
+<Adjective nr="224">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -440,15 +440,15 @@
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="102"/>
-<Adjective nr="222"/>
+<Adjective nr="227"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="193">
+<Adjective nr="198">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="219">
+<Adjective nr="224">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

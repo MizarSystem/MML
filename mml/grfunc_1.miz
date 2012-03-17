@@ -11,7 +11,7 @@ environ
  constructors TARSKI, SUBSET_1, FUNCT_1, ENUMSET1;
  registrations FUNCT_1, RELAT_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, FUNCT_1, RELAT_1, XBOOLE_0;
+ definitions TARSKI, RELAT_1, XBOOLE_0, FUNCT_1;
  theorems TARSKI, XBOOLE_0, ZFMISC_1, FUNCT_1, RELAT_1, XBOOLE_1, ENUMSET1;
 
 begin
@@ -341,7 +341,7 @@ A7: x1 in dom g & x2 in dom g implies h.x1 = g.x1 & h.x2 = g.x2 by A2,
 end;
 
 theorem
-  f \ X is Function by Th6,XBOOLE_1:36;
+  f \ X is Function;
 
 canceled 7;
 
@@ -539,14 +539,7 @@ end;
 registration
   let f be Function, A be set;
   cluster f \ A -> Function-like;
-  coherence
-  proof
-    let x,y1,y2;
-    assume
-    [x,y1] in f \ A & [x,y2] in f \ A;
-    then [x,y1] in f & [x,y2] in f by XBOOLE_0:def 5;
-    hence thesis by FUNCT_1:def 1;
-  end;
+  coherence;
 end;
 
 theorem
@@ -554,7 +547,7 @@ theorem
 proof
   let f, g be Function such that
 A1: x in dom f \ dom g;
-  f \ g c= f & dom f \ dom g c= dom (f \ g) by RELAT_1:15,XBOOLE_1:36;
+  f \ g c= f & dom f \ dom g c= dom (f \ g) by RELAT_1:15;
   hence thesis by A1,Th8;
 end;
 
@@ -601,3 +594,28 @@ X:   F.x in g.x by Z,FUNCT_1:def 20;
   end;
 end;
 
+:: 2009.10.17, A.T.
+
+theorem Th176:
+ g c= f implies g = f|dom g
+ proof
+  assume
+Z:  g c= f;
+   then dom g c= dom f by RELAT_1:25;
+  hence dom g = dom(f|dom g) by RELAT_1:91;
+  let x;
+  assume
+Z1: x in dom g;
+  hence g.x = f.x by Z,Th8
+      .= (f|dom g).x by Z1,FUNCT_1:72;
+ end;
+
+registration
+ let f be Function, g be f-compatible Function;
+ cluster -> f-compatible Subset of g;
+ coherence
+  proof let h be Subset of g;
+   h = g|dom h by Th176;
+   hence thesis;
+  end;
+end;

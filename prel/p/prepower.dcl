@@ -53,7 +53,7 @@
 <Adjective nr="28"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
-<Adjective nr="41"/>
+<Adjective nr="31"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PREPOWER" nr="1">
@@ -112,6 +112,37 @@
 </Func>
 <Cluster>
 <Adjective nr="26"/>
+</Cluster>
+</FCluster>
+<FCluster aid="PREPOWER" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster>
+<Adjective nr="6"/>
+<Adjective nr="15">
+<Func kind="K" nr="85"/>
+<Func kind="K" nr="81"/>
+</Adjective>
+<Adjective nr="31"/>
+</Cluster>
+<Func kind="K" nr="21">
+<Func kind="K" nr="22">
+<Func kind="K" nr="85"/>
+<Func kind="K" nr="81"/>
+</Func>
+</Func>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="85"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="13">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 </Registrations>

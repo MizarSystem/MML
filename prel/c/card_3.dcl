@@ -304,6 +304,22 @@
 </Cluster>
 </FCluster>
 <CCluster aid="CARD_3" nr="1">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="7"/>
+<Adjective nr="12"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="12"/>
+<Adjective nr="39"/>
+</Cluster>
+</CCluster>
+<CCluster aid="CARD_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -339,7 +355,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="CARD_3" nr="2">
+<CCluster aid="CARD_3" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="41"/>
@@ -352,7 +368,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </CCluster>
-<CCluster aid="CARD_3" nr="3">
+<CCluster aid="CARD_3" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="29" value="false"/>
@@ -366,22 +382,22 @@
 <Adjective nr="33"/>
 </Cluster>
 </CCluster>
-<CCluster aid="CARD_3" nr="4">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="43"/>
-</Cluster>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="42"/>
-</Cluster>
-</CCluster>
 <CCluster aid="CARD_3" nr="5">
 <ArgTypes/>
 <Cluster>
+<Adjective nr="43"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="29" value="false"/>
+<Adjective nr="42"/>
+</Cluster>
+</CCluster>
+<CCluster aid="CARD_3" nr="6">
+<ArgTypes/>
+<Cluster>
 <Adjective nr="29" value="false"/>
 <Adjective nr="42"/>
 </Cluster>
@@ -392,7 +408,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </CCluster>
-<CCluster aid="CARD_3" nr="6">
+<CCluster aid="CARD_3" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="29"/>
@@ -404,29 +420,29 @@
 <Adjective nr="42"/>
 </Cluster>
 </CCluster>
-<CCluster aid="CARD_3" nr="7">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="42"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="42"/>
-</Cluster>
-</CCluster>
 <CCluster aid="CARD_3" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
+<Adjective nr="42"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="42"/>
+</Cluster>
+</CCluster>
+<CCluster aid="CARD_3" nr="9">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
 <Adjective nr="40"/>
 </Cluster>
 </Typ>
@@ -442,7 +458,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </CCluster>
-<CCluster aid="CARD_3" nr="9">
+<CCluster aid="CARD_3" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -461,35 +477,6 @@
 </Typ>
 <Cluster>
 <Adjective nr="16">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-</CCluster>
-<CCluster aid="CARD_3" nr="10">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="7"/>
-<Adjective nr="8"/>
-<Adjective nr="10">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="12"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="122">
-<LocusVar nr="2"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="10">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -497,6 +484,35 @@
 <CCluster aid="CARD_3" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="8"/>
+<Adjective nr="10">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="122">
+<LocusVar nr="2"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="10">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</CCluster>
+<CCluster aid="CARD_3" nr="12">
+<ArgTypes>
+<Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="12"/>
@@ -516,7 +532,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="CARD_3" nr="12">
+<CCluster aid="CARD_3" nr="13">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -544,7 +560,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="CARD_3" nr="13">
+<CCluster aid="CARD_3" nr="14">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

@@ -1,0 +1,822 @@
+:: Abstract Simplicial Complexes
+::  by Karol P\c{a}k
+:: 
+:: Received December 18, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM_1, XBOOLE_0, CARD_1, CLASSES1, COHSP_1, FINSET_1, FUNCT_1,
+      GROUP_4, INT_1, MATROID0, ORDERS_1, PARTFUN1, PRE_TOPC, RELAT_1, RELAT_2,
+      NUMBERS, SETFAM_1, SGRAPH1, SUBSET_1, TARSKI, TRIANG_1, WELLORD1,
+      ZFMISC_1, SIMPLEX0, XXREAL_0, NAT_1, ORDINAL1, FUNCOP_1, ARYTM_3,
+      RCOMP_1, STRUCT_0, GLIB_000, XREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, RELAT_1, RELAT_2, FUNCT_1,
+      FUNCT_2, NUMBERS, WELLORD1, ORDINAL1, ORDERS_1, FINSET_1, CARD_1,
+      XREAL_0, XXREAL_0, XXREAL_3, NAT_1, INT_1, SETFAM_1, DOMAIN_1, STRUCT_0,
+      PRE_TOPC, TOPS_2, PCOMPS_1, PENCIL_1, CLASSES1, MATROID0, RELSET_1,
+      COHSP_1, FUNCOP_1;
+ constructors SETFAM_1, XXREAL_3, REAL_1, TOPS_2, BORSUK_1, WELLORD1, BINOP_2,
+      CLASSES1, COH_SP, LEXBFS, MATROID0, COHSP_1, FUNCOP_1;
+ registrations BORSUK_3, CARD_1, COHSP_1, FIB_NUM2, FINSET_1, FUNCT_1, INT_1,
+      MATROID0, NAT_1, ORDINAL1, PENCIL_1, REALSET1, RELAT_1, SETFAM_1,
+      SUBSET_1, STRUCT_0, XBOOLE_0, XREAL_0, XXREAL_0, XXREAL_3, FUNCOP_1;
+ requirements REAL, SUBSET, NUMERALS, ARITHM, BOOLE;
+
+
+begin :: Preliminaries
+
+reserve x,y,X,Y,Z for set,
+        D for non empty set,
+        n,k for Nat,
+        i,i1,i2 for Integer;
+
+notation let X;
+  antonym X is with_empty_element for X is with_non-empty_elements;
+end;
+
+registration
+  cluster empty -> finite-membered set;
+  let X be finite set;
+  cluster {X} -> finite-membered;
+  cluster bool X -> finite-membered;
+  let Y be finite set;
+  cluster {X,Y} -> finite-membered;
+end;
+
+registration
+  let X be finite-membered set;
+  cluster -> finite-membered Subset of X;
+  let Y be finite-membered set;
+  cluster X \/ Y -> finite-membered;
+end;
+
+registration
+  let X be finite finite-membered set;
+  cluster union X -> finite;
+end;
+
+registration
+  cluster empty -> subset-closed set;
+  cluster with_empty_element -> non empty set;
+  cluster non empty subset-closed -> with_empty_element set;
+end;
+
+registration
+  let X;
+  cluster Sub_of_Fin X -> finite-membered;
+end;
+
+registration
+  let X be subset-closed set;
+  cluster Sub_of_Fin X -> subset-closed;
+end;
+
+theorem :: SIMPLEX0:1
+  Y is subset-closed iff for X st X in Y holds bool X c= Y;
+
+registration
+  let A,B be subset-closed set;
+  cluster A \/ B -> subset-closed;
+  cluster A /\ B -> subset-closed;
+end;
+
+definition
+  let X;
+  func subset-closed_closure_of X -> subset-closed set means
+:: SIMPLEX0:def 1
+    X c= it &
+    for Y st X c= Y & Y is subset-closed holds it c= Y;
+end;
+
+theorem :: SIMPLEX0:2
+  x in subset-closed_closure_of X iff ex y st x c= y & y in X;
+
+definition
+  let X;
+  let F be Subset-Family of X;
+  redefine func subset-closed_closure_of F -> subset-closed Subset-Family of X;
+end;
+
+registration
+  cluster subset-closed_closure_of {} -> empty;
+  let X be non empty set;
+  cluster subset-closed_closure_of X -> non empty;
+end;
+
+registration
+  let X be with_non-empty_element set;
+  cluster subset-closed_closure_of X -> with_non-empty_element;
+end;
+
+registration
+  let X be finite-membered set;
+  cluster subset-closed_closure_of X -> finite-membered;
+end;
+
+theorem :: SIMPLEX0:3
+  X c=Y & Y is subset-closed implies subset-closed_closure_of X c= Y;
+
+theorem :: SIMPLEX0:4
+  subset-closed_closure_of {X} = bool X;
+
+theorem :: SIMPLEX0:5
+  subset-closed_closure_of (X\/Y) =
+    subset-closed_closure_of X \/ subset-closed_closure_of Y;
+
+theorem :: SIMPLEX0:6
+  X is_finer_than Y iff
+    subset-closed_closure_of X c= subset-closed_closure_of Y;
+
+theorem :: SIMPLEX0:7
+  X is subset-closed implies subset-closed_closure_of X = X;
+
+theorem :: SIMPLEX0:8
+  subset-closed_closure_of X c= X implies X is subset-closed;
+
+definition
+  let Y,X;
+  let n be set;
+  func the_subsets_with_limited_card(n,X,Y) -> Subset-Family of Y means
+:: SIMPLEX0:def 2
+    for A be Subset of Y holds A in it iff A in X & card A c= card n;
+end;
+
+registration
+  let D;
+  cluster finite with_non-empty_element subset-closed
+          finite-membered Subset-Family of D;
+end;
+
+registration
+  let Y,X;
+  let n be finite set;
+  cluster the_subsets_with_limited_card(n,X,Y) -> finite-membered;
+end;
+
+registration
+  let Y;
+  let X be subset-closed set;
+  let n be set;
+  cluster the_subsets_with_limited_card(n,X,Y) -> subset-closed;
+end;
+
+registration
+  let Y;
+  let X be with_empty_element set;
+  let n be set;
+  cluster the_subsets_with_limited_card(n,X,Y) -> with_empty_element;
+end;
+
+registration
+  let D;
+  let X be with_non-empty_element subset-closed Subset-Family of D;
+  let n be non empty set;
+  cluster the_subsets_with_limited_card(n,X,D) -> with_non-empty_element;
+end;
+
+notation let X;
+  let Y be Subset-Family of X;
+  let n be set;
+  synonym the_subsets_with_limited_card(n,Y)
+      for the_subsets_with_limited_card(n,Y,X);
+end;
+
+registration
+  cluster empty -> c=-linear set;
+end;
+
+registration
+  let X be c=-linear set;
+  cluster -> c=-linear Subset of X;
+end;
+
+theorem :: SIMPLEX0:9
+  X is non empty finite c=-linear implies union X in X;
+
+theorem :: SIMPLEX0:10
+  for X be finite c=-linear set st
+      X is with_non-empty_elements
+    holds card X c= card union X;
+
+theorem :: SIMPLEX0:11
+  X is c=-linear & union X misses x implies
+    X\/{union X\/x} is c=-linear;
+
+theorem :: SIMPLEX0:12
+  for X be non empty set
+    ex Y be Subset-Family of X st
+      Y is with_non-empty_elements c=-linear & X in Y & card X = card Y &
+      for Z st Z in Y & card Z <> 1 ex x st x in Z & Z\{x} in Y;
+
+theorem :: SIMPLEX0:13
+  for Y be Subset-Family of X st
+     Y is finite with_non-empty_elements c=-linear & X in Y
+  ex Y1 be Subset-Family of X st
+    Y c= Y1 & Y1 is with_non-empty_elements c=-linear & card X = card Y1 &
+    for Z st Z in Y1 & card Z <> 1 ex x st x in Z & Z\{x} in Y1;
+
+begin  :: Simplicial Complexes
+
+definition
+  mode SimplicialComplexStr is TopStruct;
+end;
+
+reserve K for SimplicialComplexStr;
+
+notation let K;
+  let A be Subset of K;
+  synonym A is simplex-like for A is open;
+end;
+
+notation let K;
+  let S be Subset-Family of K;
+  synonym S is simplex-like for S is open;
+end;
+
+registration
+  let K;
+  cluster empty simplex-like Subset-Family of K;
+end;
+
+theorem :: SIMPLEX0:14
+  for S be Subset-Family of K holds
+    S is simplex-like iff S c= the topology of K;
+
+definition
+  let K;
+  let v be Element of K;
+  attr v is vertex-like means
+:: SIMPLEX0:def 3
+    ex S be Subset of K st S is simplex-like & v in S;
+end;
+
+definition
+  let K;
+  func Vertices K -> Subset of K means
+:: SIMPLEX0:def 4
+    for v be Element of K holds v in it iff v is vertex-like;
+end;
+
+definition
+  let K be SimplicialComplexStr;
+  mode Vertex of K is Element of Vertices K;
+end;
+
+definition
+  let K be SimplicialComplexStr;
+  attr K is finite-vertices means
+:: SIMPLEX0:def 5
+    Vertices K is finite;
+end;
+
+definition
+  let K;
+  attr K is locally-finite means
+:: SIMPLEX0:def 6
+    for v be Vertex of K holds
+      {S where S is Subset of K : S is simplex-like & v in S} is finite;
+end;
+
+definition
+  let K;
+  attr K is empty-membered means
+:: SIMPLEX0:def 7
+    the topology of K is empty-membered;
+  attr K is with_non-empty_elements means
+:: SIMPLEX0:def 8
+    the topology of K is with_non-empty_elements;
+end;
+
+notation let K;
+  antonym K is with_non-empty_element for K is empty-membered;
+  antonym K is with_empty_element for K is with_non-empty_elements;
+end;
+
+definition
+  let X;
+  mode SimplicialComplexStr of X -> SimplicialComplexStr means
+:: SIMPLEX0:def 9
+    [#]it c= X;
+end;
+
+definition
+  let X;
+  let KX be SimplicialComplexStr of X;
+  attr KX is total means
+:: SIMPLEX0:def 10
+    [#]KX = X;
+end;
+
+registration
+  cluster with_empty_element -> non void SimplicialComplexStr;
+  cluster with_non-empty_element -> non void SimplicialComplexStr;
+  cluster non void empty-membered -> with_empty_element SimplicialComplexStr;
+  cluster non void subset-closed -> with_empty_element SimplicialComplexStr;
+  cluster empty-membered-> subset-closed finite-vertices SimplicialComplexStr;
+  cluster finite-vertices-> locally-finite finite-degree SimplicialComplexStr;
+  cluster locally-finite subset-closed -> finite-membered SimplicialComplexStr;
+end;
+
+registration
+  let X;
+  cluster empty void empty-membered strict SimplicialComplexStr of X;
+end;
+
+registration
+  let D;
+  cluster non empty non void total empty-membered
+            strict SimplicialComplexStr of D;
+  cluster non empty total with_empty_element with_non-empty_element
+            finite-vertices subset-closed strict SimplicialComplexStr of D;
+end;
+
+registration
+  cluster non empty with_empty_element with_non-empty_element finite-vertices
+            subset-closed strict SimplicialComplexStr;
+end;
+
+registration
+  let K be with_non-empty_element SimplicialComplexStr;
+  cluster Vertices K -> non empty;
+end;
+
+registration
+  let K be finite-vertices SimplicialComplexStr;
+  cluster simplex-like -> finite Subset-Family of K;
+end;
+
+registration
+  let K be finite-membered SimplicialComplexStr;
+  cluster simplex-like -> finite-membered Subset-Family of K;
+end;
+
+theorem :: SIMPLEX0:15
+  Vertices K is empty iff K is empty-membered;
+
+theorem :: SIMPLEX0:16
+  Vertices K = union the topology of K;
+
+theorem :: SIMPLEX0:17
+  for S be Subset of K st S is simplex-like holds S c= Vertices K;
+
+theorem :: SIMPLEX0:18
+  K is finite-vertices implies the topology of K is finite;
+
+theorem :: SIMPLEX0:19
+  the topology of K is finite & K is non finite-vertices implies
+    K is non finite-membered;
+
+theorem :: SIMPLEX0:20
+  K is subset-closed & the topology of K is finite implies
+    K is finite-vertices;
+
+begin :: The Simplicial Complex Generated on the Set
+
+definition
+  let X;
+  let Y be Subset-Family of X;
+  func Complex_of Y -> strict SimplicialComplexStr of X equals
+:: SIMPLEX0:def 11
+    TopStruct(# X,subset-closed_closure_of Y #);
+end;
+
+registration
+  let X;
+  let Y be Subset-Family of X;
+  cluster Complex_of Y -> total subset-closed;
+end;
+
+registration
+  let X;
+  let Y be non empty Subset-Family of X;
+  cluster Complex_of Y -> with_empty_element;
+end;
+
+registration
+  let X;
+  let Y be finite-membered Subset-Family of X;
+  cluster Complex_of Y -> finite-membered;
+end;
+
+registration
+  let X;
+  let Y be finite finite-membered Subset-Family of X;
+  cluster Complex_of Y -> finite-vertices;
+end;
+
+theorem :: SIMPLEX0:21
+  K is subset-closed implies the TopStruct of K = Complex_of the topology of K;
+
+definition
+  let X;
+  mode SimplicialComplex of X is finite-membered subset-closed
+         SimplicialComplexStr of X;
+end;
+
+definition
+  let K be non void SimplicialComplexStr;
+  mode Simplex of K is simplex-like Subset of K;
+end;
+
+registration
+  let K be with_empty_element SimplicialComplexStr;
+  cluster empty -> simplex-like Subset of K;
+  cluster empty Simplex of K;
+end;
+
+registration
+  let K be non void finite-membered SimplicialComplexStr;
+  cluster finite Simplex of K;
+end;
+
+begin :: The Degree of Simplicial Complexes
+
+definition
+  let K;
+  func degree K -> ext-real number means
+:: SIMPLEX0:def 12
+    (for S be finite Subset of K st S is simplex-like holds card S <= it+1) &
+     ex S be Subset of K st S is simplex-like & card S = it+1
+           if K is non void finite-degree,
+   it = -1 if K is void
+           otherwise
+   it = +infty;
+end;
+
+registration
+  let K be finite-degree SimplicialComplexStr;
+  cluster degree K + 1 -> natural;
+  cluster degree K -> integer;
+end;
+
+theorem :: SIMPLEX0:22
+  degree K = -1 iff K is empty-membered;
+
+theorem :: SIMPLEX0:23
+  -1 <= degree K;
+
+theorem :: SIMPLEX0:24
+  for S be finite Subset of K st S is simplex-like holds card S <= degree K+1;
+
+theorem :: SIMPLEX0:25
+ K is non void or i >= -1 implies
+  (degree K <= i
+iff
+   K is finite-membered &
+   for S be finite Subset of K st S is simplex-like holds card S <= i+1);
+
+theorem :: SIMPLEX0:26
+  for A be finite Subset of X holds degree Complex_of {A} = card A - 1;
+
+begin :: Subcomplexes
+
+definition
+  let X;
+  let KX be SimplicialComplexStr of X;
+  mode SubSimplicialComplex of KX -> SimplicialComplex of X means
+:: SIMPLEX0:def 13
+   [#]it c= [#]KX & the topology of it c= the topology of KX;
+end;
+
+reserve KX for SimplicialComplexStr of X,
+        SX for SubSimplicialComplex of KX;
+
+registration
+  let X,KX;
+  cluster empty void strict SubSimplicialComplex of KX;
+end;
+
+registration
+  let X;
+  let KX be void SimplicialComplexStr of X;
+  cluster -> void SubSimplicialComplex of KX;
+end;
+
+registration
+  let D;
+  let KD be non void subset-closed SimplicialComplexStr of D;
+  cluster non void SubSimplicialComplex of KD;
+end;
+
+registration
+  let X;
+  let KX be finite-vertices SimplicialComplexStr of X;
+  cluster -> finite-vertices SubSimplicialComplex of KX;
+end;
+
+registration
+  let X;
+  let KX be finite-degree SimplicialComplexStr of X;
+  cluster -> finite-degree SubSimplicialComplex of KX;
+end;
+
+theorem :: SIMPLEX0:27
+  for S1 be SubSimplicialComplex of SX holds S1 is SubSimplicialComplex of KX;
+
+theorem :: SIMPLEX0:28
+  for A be Subset of KX
+    for S be finite-membered Subset-Family of A st
+        subset-closed_closure_of S c=the topology of KX
+      holds Complex_of S is strict SubSimplicialComplex of KX;
+
+theorem :: SIMPLEX0:29
+  for KX be subset-closed SimplicialComplexStr of X
+    for A be Subset of KX for S be finite-membered Subset-Family of A st
+        S c= the topology of KX
+      holds Complex_of S is strict SubSimplicialComplex of KX;
+
+theorem :: SIMPLEX0:30
+  for Y1,Y2 be Subset-Family of X st
+      Y1 is finite-membered & Y1 is_finer_than Y2
+    holds Complex_of Y1 is SubSimplicialComplex of Complex_of Y2;
+
+theorem :: SIMPLEX0:31
+  Vertices SX c= Vertices KX;
+
+theorem :: SIMPLEX0:32
+  degree SX <= degree KX;
+
+definition
+  let X,KX,SX;
+  attr SX is maximal means
+:: SIMPLEX0:def 14
+    for A be Subset of SX st A in the topology of KX holds A is simplex-like;
+end;
+
+theorem :: SIMPLEX0:33
+  SX is maximal iff bool[#]SX /\ the topology of KX c= the topology of SX;
+
+registration
+  let X,KX;
+  cluster maximal strict SubSimplicialComplex of KX;
+end;
+
+theorem :: SIMPLEX0:34
+  for S1 be SubSimplicialComplex of SX st
+      SX is maximal & S1 is maximal
+    holds S1 is maximal SubSimplicialComplex of KX;
+
+theorem :: SIMPLEX0:35
+  for S1 be SubSimplicialComplex of SX st
+      S1 is maximal SubSimplicialComplex of KX
+    holds S1 is maximal;
+
+theorem :: SIMPLEX0:36
+  for K1,K2 be maximal SubSimplicialComplex of KX st
+      [#]K1 = [#]K2
+    holds the TopStruct of K1 = the TopStruct of K2;
+
+definition
+  let X;
+  let KX be subset-closed SimplicialComplexStr of X;
+  let A be Subset of KX such that
+     bool A /\ the topology of KX is finite-membered;
+  func KX|A -> maximal strict SubSimplicialComplex of KX means
+:: SIMPLEX0:def 15
+    [#]it = A;
+end;
+
+reserve SC for SimplicialComplex of X;
+
+definition
+  let X,SC;
+  let A be Subset of SC;
+  redefine func SC|A -> maximal strict SubSimplicialComplex of SC means
+:: SIMPLEX0:def 16
+    [#]it = A;
+end;
+
+theorem :: SIMPLEX0:37
+  for A be Subset of SC holds
+    the topology of SC|A = bool A /\ the topology of SC;
+
+theorem :: SIMPLEX0:38
+  for A,B be Subset of SC for B1 be Subset of SC|A st B1 = B
+   holds SC|A|B1 = SC|B;
+
+theorem :: SIMPLEX0:39
+  SC|[#]SC = the TopStruct of SC;
+
+theorem :: SIMPLEX0:40
+  for A,B be Subset of SC st A c= B holds SC|A is SubSimplicialComplex of SC|B;
+
+registration
+  cluster -> finite Integer;
+end;
+
+begin :: The Skelton of a Simplicial Complex
+
+definition
+  let X,KX;
+  let i be real number;
+  func Skeleton_of(KX,i) -> SimplicialComplexStr of X equals
+:: SIMPLEX0:def 17
+    Complex_of the_subsets_with_limited_card(i + 1,the topology of KX);
+end;
+
+registration
+  let X,KX;
+  cluster Skeleton_of(KX,-1) -> empty-membered;
+  let i;
+  cluster Skeleton_of(KX,i) -> finite-degree;
+end;
+
+registration
+  let X;
+  let KX be empty-membered SimplicialComplexStr of X;
+  let i;
+  cluster Skeleton_of(KX,i) -> empty-membered;
+end;
+
+registration
+  let D;
+  let KD be non void subset-closed SimplicialComplexStr of D;
+  let i;
+  cluster Skeleton_of(KD,i) -> non void;
+end;
+
+theorem :: SIMPLEX0:41
+  -1 <= i1 & i1 <= i2 implies
+    Skeleton_of(KX,i1) is SubSimplicialComplex of Skeleton_of(KX,i2);
+
+definition
+  let X;
+  let KX be subset-closed SimplicialComplexStr of X;
+  let i;
+  redefine func Skeleton_of(KX,i) -> SubSimplicialComplex of KX;
+end;
+
+theorem :: SIMPLEX0:42
+  KX is subset-closed & Skeleton_of(KX,i) is empty-membered implies
+    KX is empty-membered or i = -1;
+
+theorem :: SIMPLEX0:43
+  degree Skeleton_of(KX,i) <= degree KX;
+
+theorem :: SIMPLEX0:44
+  -1 <= i implies degree Skeleton_of(KX,i) <= i;
+
+theorem :: SIMPLEX0:45
+  -1 <= i & Skeleton_of(KX,i) = the TopStruct of KX implies degree KX <= i;
+
+theorem :: SIMPLEX0:46
+  KX is subset-closed & degree KX <= i implies
+    Skeleton_of(KX,i) = the TopStruct of KX;
+
+reserve K for non void subset-closed SimplicialComplexStr;
+
+definition
+  let K;
+  let i be real number such that
+   i is integer;
+  mode Simplex of i,K -> finite Simplex of K means
+:: SIMPLEX0:def 18
+    card it = i+1 if -1 <= i & i <= degree K
+                  otherwise
+    it is empty;
+end;
+
+registration
+  let K;
+  cluster -> empty Simplex of-1,K;
+end;
+
+theorem :: SIMPLEX0:47
+  for S be Simplex of i,K st S is non empty holds i is natural;
+
+theorem :: SIMPLEX0:48
+  for S be finite Simplex of K holds S is Simplex of card S - 1,K;
+
+theorem :: SIMPLEX0:49
+  for K be non void subset-closed SimplicialComplexStr of D
+    for S be non void SubSimplicialComplex of K
+      for i be Integer,A be Simplex of i,S st
+          A is non empty or i <= degree S or degree S = degree K
+        holds A is Simplex of i,K;
+
+definition
+  let K;
+  let i be real number such that
+     i is integer and
+     i <= degree K;
+  let S be Simplex of i,K;
+  mode Face of S -> Simplex of max(i-1,-1),K means
+:: SIMPLEX0:def 19
+     it c= S;
+end;
+
+theorem :: SIMPLEX0:50
+  for S be Simplex of n,K st n<=degree K holds
+    X is Face of S iff ex x st x in S & S\{x} = X;
+
+begin :: The Subdivision of a Simplicial Complex
+
+reserve P for Function;
+
+definition
+  let X,KX,P;
+  func subdivision(P,KX) -> strict SimplicialComplexStr of X means
+:: SIMPLEX0:def 20
+    [#]it = [#]KX &
+    for A be Subset of it holds
+       A is simplex-like iff
+       ex S be c=-linear finite simplex-like Subset-Family of KX st A = P.:S;
+end;
+
+
+registration
+  let X,KX,P;
+  cluster subdivision(P,KX)
+            -> with_empty_element subset-closed finite-membered;
+end;
+
+registration
+  let X;
+  let KX be void SimplicialComplexStr of X;
+  let P;
+  cluster subdivision(P,KX) -> empty-membered;
+end;
+
+theorem :: SIMPLEX0:51
+  degree subdivision(P,KX) <= degree KX + 1;
+
+theorem :: SIMPLEX0:52
+  dom P is with_non-empty_elements implies
+    degree subdivision(P,KX) <= degree KX;
+
+registration
+  let X;
+  let KX be finite-degree SimplicialComplexStr of X;
+  let P;
+  cluster subdivision(P,KX) -> finite-degree;
+end;
+
+registration
+  let X;
+  let KX be finite-vertices SimplicialComplexStr of X;
+  let P;
+  cluster subdivision(P,KX) -> finite-vertices;
+end;
+
+theorem :: SIMPLEX0:53
+  for KX be subset-closed SimplicialComplexStr of X
+  for P st dom P is with_non-empty_elements &
+           for n st n <= degree KX ex S be Subset of KX st
+             S is simplex-like & card S = n+1 & BOOL S c=dom P &
+             P.:BOOL S is Subset of KX & P|BOOL S is one-to-one
+    holds degree subdivision(P,KX) = degree KX;
+
+theorem :: SIMPLEX0:54
+  Y c=Z implies
+    subdivision(P|Y,KX) is SubSimplicialComplex of subdivision(P|Z,KX);
+
+theorem :: SIMPLEX0:55
+  dom P/\the topology of KX c= Y implies
+    subdivision(P|Y,KX) = subdivision(P,KX);
+
+theorem :: SIMPLEX0:56
+  Y c= Z implies
+    subdivision(Y|P,KX) is SubSimplicialComplex of subdivision(Z|P,KX);
+
+theorem :: SIMPLEX0:57
+ P.:(the topology of KX) c= Y implies subdivision(Y|P,KX) = subdivision(P,KX);
+
+theorem :: SIMPLEX0:58
+  subdivision(P,SX) is SubSimplicialComplex of subdivision(P,KX);
+
+theorem :: SIMPLEX0:59
+  for A be Subset of subdivision(P,KX) st
+      dom P c=the topology of SX & A = [#]SX
+    holds subdivision(P,SX)=subdivision(P,KX)|A;
+
+theorem :: SIMPLEX0:60
+  for K1,K2 be SimplicialComplexStr of X st
+      the TopStruct of K1 = the TopStruct of K2
+    holds subdivision(P,K1) = subdivision(P,K2);
+
+definition
+  let X,KX,P,n;
+  func subdivision(n,P,KX) -> SimplicialComplexStr of X means
+:: SIMPLEX0:def 21
+    ex F be Function st
+         F.0 = KX & F.n = it & dom F = NAT &
+         for k for KX1 be SimplicialComplexStr of X st KX1 = F.k
+           holds F.(k+1) = subdivision(P,KX1);
+end;
+
+theorem :: SIMPLEX0:61
+  subdivision(0,P,KX) = KX;
+
+theorem :: SIMPLEX0:62
+  subdivision(1,P,KX) = subdivision(P,KX);
+
+theorem :: SIMPLEX0:63
+  for n,k be Element of NAT holds
+    subdivision(n+k,P,KX) = subdivision(n,P,subdivision(k,P,KX));
+
+theorem :: SIMPLEX0:64
+  [#]subdivision(n,P,KX) = [#]KX;
+
+theorem :: SIMPLEX0:65
+  subdivision(n,P,SX) is SubSimplicialComplex of subdivision(n,P,KX);

@@ -7,17 +7,19 @@
 environ
 
  vocabularies NUMBERS, SCMPDS_2, AMI_1, INT_1, FUNCOP_1, SUBSET_1, FSM_1,
-      FUNCT_1, SCMNORM, AMISTD_1, CIRCUIT2, FUNCT_4, XBOOLE_0, SETFAM_1, AMI_3,
+      FUNCT_1, AMISTD_1, CIRCUIT2, FUNCT_4, XBOOLE_0, SETFAM_1, AMI_3,
       COMPLEX1, ARYTM_3, ORDINAL1, XXREAL_0, ARYTM_1, CARD_1, AMI_2, RELAT_1,
-      GRAPHSP, SCMPDS_3, TARSKI, FINSET_1, XREAL_0, GOBOARD5;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, FUNCT_1, INT_1, NAT_1, FINSET_1, COMPLEX1, INT_2,
-      RELAT_1, FUNCT_4, AMI_1, AMI_2, AMI_3, SCMPDS_2, SCMPDS_3, SCMNORM,
-      AMISTD_1;
+      GRAPHSP, TARSKI, FINSET_1, XREAL_0, GOBOARD5, CARD_3, PARTFUN1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, CARD_3, NUMBERS,
+      XCMPLX_0, XXREAL_0, XREAL_0, FUNCT_1, INT_1, NAT_1, FINSET_1, COMPLEX1,
+      INT_2, PARTFUN1, FUNCOP_1, PBOOLE, RELAT_1, FUNCT_4, STRUCT_0, AMI_1,
+      AMI_2, AMI_3, SCMPDS_2, SCMPDS_3, SCMNORM, AMISTD_1;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, NAT_D, REALSET1, AMI_3,
-      SCMPDS_1, SCMPDS_3, AMISTD_2, SCMNORM;
+      SCMPDS_1, SCMPDS_3, AMISTD_2, SCMNORM, PRE_POLY, PBOOLE, ORDERS_1;
  registrations SETFAM_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, MEMBERED, CARD_3, SCMPDS_2, SCMNORM, FUNCT_1, AMI_1;
+      INT_1, MEMBERED, CARD_3, SCMPDS_2, SCMNORM, FUNCT_1, AMI_1, RELAT_1,
+      FUNCT_2, PBOOLE, GRFUNC_1, FRAENKEL, XBOOLE_0, FUNCOP_1, FUNCT_4,
+      FINSET_1, FINSEQ_1, STRUCT_0, PRE_POLY, FUNCT_7;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
 
 
@@ -26,7 +28,7 @@ begin
 reserve a, b for Int_position,
   i for Instruction of SCMPDS,
   l for
-  Instruction-Location of SCMPDS,
+  Element of NAT,
   k, k1, k2 for Integer;
 
 definition
@@ -36,12 +38,17 @@ end;
 
 canceled 6;
 
+registration
+  let k;
+  cluster JUMP (goto k) -> empty;
+end;
+
 theorem :: SCMPDS_9:7
-  (for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i,s
-  ).IC SCMPDS = Next IC s) implies NIC(i, l) = {Next l};
+  (for s being State of SCMPDS st IC s = l & s.l = i
+   holds Exec(i,s).IC SCMPDS = succ IC s) implies NIC(i, l) = {succ l};
 
 theorem :: SCMPDS_9:8
-  (for l being Instruction-Location of SCMPDS holds NIC(i,l)={Next
+  (for l being Element of NAT holds NIC(i,l)={succ
   l}) implies JUMP i is empty;
 
 theorem :: SCMPDS_9:9
@@ -51,45 +58,40 @@ theorem :: SCMPDS_9:10
   NIC(return a,l) = {k where k is Element of NAT: k > 1};
 
 theorem :: SCMPDS_9:11
-  NIC(saveIC(a,k1), l) = {Next l};
+  NIC(saveIC(a,k1), l) = {succ l};
 
 theorem :: SCMPDS_9:12
-  NIC(a:=k1, l) = {Next l};
+  NIC(a:=k1, l) = {succ l};
 
 theorem :: SCMPDS_9:13
-  NIC((a,k1):=k2, l) = {Next l};
+  NIC((a,k1):=k2, l) = {succ l};
 
 theorem :: SCMPDS_9:14
-  NIC((a,k1):=(b,k2), l) = {Next l};
+  NIC((a,k1):=(b,k2), l) = {succ l};
 
 theorem :: SCMPDS_9:15
-  NIC(AddTo(a,k1,k2), l) = {Next l};
+  NIC(AddTo(a,k1,k2), l) = {succ l};
 
 theorem :: SCMPDS_9:16
-  NIC(AddTo(a,k1,b,k2), l) = {Next l};
+  NIC(AddTo(a,k1,b,k2), l) = {succ l};
 
 theorem :: SCMPDS_9:17
-  NIC(SubFrom(a,k1,b,k2), l) = {Next l};
+  NIC(SubFrom(a,k1,b,k2), l) = {succ l};
 
 theorem :: SCMPDS_9:18
-  NIC(MultBy(a,k1,b,k2), l) = {Next l};
+  NIC(MultBy(a,k1,b,k2), l) = {succ l};
 
 theorem :: SCMPDS_9:19
-  NIC(Divide(a,k1,b,k2), l) = {Next l};
+  NIC(Divide(a,k1,b,k2), l) = {succ l};
 
 theorem :: SCMPDS_9:20
-  NIC((a,k1)<>0_goto k2,l) = { Next l, abs( (k2+ l) ) };
+  NIC((a,k1)<>0_goto k2,l) = { succ l, abs( (k2+ l) ) };
 
 theorem :: SCMPDS_9:21
-  NIC((a,k1)<=0_goto k2,l) = { Next l, abs( (k2+ l) ) };
+  NIC((a,k1)<=0_goto k2,l) = { succ l, abs( (k2+ l) ) };
 
 theorem :: SCMPDS_9:22
-  NIC((a,k1)>=0_goto k2,l) = { Next l, abs( (k2+ l) ) };
-
-registration
-  let k;
-  cluster JUMP (goto k) -> empty;
-end;
+  NIC((a,k1)>=0_goto k2,l) = { succ l, abs( (k2+ l) ) };
 
 theorem :: SCMPDS_9:23
   JUMP (return a) = {k where k is Element of NAT: k > 1};
@@ -140,7 +142,7 @@ registration
 end;
 
 theorem :: SCMPDS_9:24
-  SUCC(l) = NAT;
+  SUCC(l,SCMPDS) = NAT;
 
 registration
   cluster SCMPDS -> non InsLoc-antisymmetric;

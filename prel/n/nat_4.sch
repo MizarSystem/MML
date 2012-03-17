@@ -24,10 +24,10 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FINSEQ_3"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
@@ -85,9 +85,9 @@
 <Func kind="K" nr="44"/>
 <Func kind="K" nr="48"/>
 </Typ>
-<Func kind="K" nr="409">
+<Func kind="K" nr="408">
 <Var nr="5"/>
-<Func kind="K" nr="420">
+<Func kind="K" nr="419">
 <Var nr="3"/>
 <Var nr="5"/>
 </Func>
@@ -153,9 +153,9 @@
 <Func kind="K" nr="44"/>
 <Func kind="K" nr="48"/>
 </Typ>
-<Func kind="K" nr="409">
+<Func kind="K" nr="408">
 <Var nr="5"/>
-<Func kind="K" nr="420">
+<Func kind="K" nr="419">
 <Var nr="3"/>
 <Var nr="5"/>
 </Func>
@@ -171,7 +171,7 @@
 <Pred kind="R" nr="2">
 <Func kind="K" nr="395">
 <Var nr="1"/>
-<Func kind="K" nr="420">
+<Func kind="K" nr="419">
 <Var nr="3"/>
 <Var nr="1"/>
 </Func>
@@ -181,7 +181,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="420">
+<Func kind="K" nr="419">
 <Func kind="K" nr="356">
 <Func kind="K" nr="168">
 <Var nr="4"/>
@@ -238,9 +238,9 @@
 <Func kind="K" nr="44"/>
 <Func kind="K" nr="48"/>
 </Typ>
-<Func kind="K" nr="409">
+<Func kind="K" nr="408">
 <Var nr="5"/>
-<Func kind="K" nr="420">
+<Func kind="K" nr="419">
 <Var nr="3"/>
 <Var nr="5"/>
 </Func>
@@ -255,7 +255,7 @@
 <Pred kind="R" nr="2">
 <Func kind="K" nr="395">
 <Var nr="1"/>
-<Func kind="K" nr="420">
+<Func kind="K" nr="419">
 <Var nr="3"/>
 <Var nr="1"/>
 </Func>
@@ -264,7 +264,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="420">
+<Func kind="K" nr="419">
 <Func kind="K" nr="356">
 <Func kind="K" nr="168">
 <Var nr="4"/>
@@ -272,7 +272,7 @@
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="420">
+<Func kind="K" nr="419">
 <Var nr="3"/>
 <Var nr="1"/>
 </Func>

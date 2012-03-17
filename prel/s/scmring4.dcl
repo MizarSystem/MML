@@ -24,14 +24,10 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="GRAPH_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="GRAPH_2"/>
-<ArticleID name="TREES_1"/>
-<ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="AMI_2"/>
 <ArticleID name="SCMRING1"/>
@@ -49,59 +45,47 @@
 <Adjective nr="93"/>
 <Adjective nr="100"/>
 <Adjective nr="101"/>
-<Adjective nr="149"/>
+<Adjective nr="131"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="1">
 <Cluster/>
-<Func kind="K" nr="224">
-<Func kind="U" nr="13">
-<Func kind="K" nr="13">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-<Func kind="K" nr="327">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Func>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4" value="false">
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="254"/>
 </Adjective>
 <Adjective nr="4">
 <Func kind="U" nr="1">
-<Func kind="K" nr="327">
+<Func kind="K" nr="283">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="10">
-<Func kind="U" nr="13">
+<Func kind="U" nr="11">
 <Func kind="K" nr="13">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="327">
+<Func kind="K" nr="283">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Adjective>
 <Adjective nr="26"/>
-<Adjective nr="123"/>
-<Adjective nr="141">
+<Adjective nr="114"/>
+<Adjective nr="124">
 <Func kind="K" nr="13">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="327">
+<Func kind="K" nr="283">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>

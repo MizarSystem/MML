@@ -10,28 +10,35 @@ environ
  vocabularies NUMBERS, SUBSET_1, FUNCT_1, NAT_1, TARSKI, MEMBERED, ORDINAL1,
       FINSET_1, RELAT_1, AFINSQ_1, ARYTM_1, ARYTM_3, FINSEQ_1, XXREAL_0,
       CARD_1, XBOOLE_0, ORDINAL4, FINSEQ_5, RFINSEQ, JORDAN3, CARD_3, XCMPLX_0,
-      AFINSQ_2;
- notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, RELAT_1, FUNCT_1,
-      XCMPLX_0, REAL_1, NAT_1, FINSET_1, ORDINAL1, XXREAL_0, NAT_D, AFINSQ_1,
-      CARD_FIN, SEQ_1, MEMBERED, VALUED_1;
- constructors WELLORD2, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, ORDINAL4, FUNCT_7,
-      FUNCOP_1, RLVECT_1, ORDINAL3, VALUED_1, PARTFUN1, SEQ_1, AFINSQ_1, NAT_D,
-      MATRIX_7, NUMBERS, XCMPLX_0, REAL_1, CARD_FIN, RECDEF_1, MEMBERED,
-      VALUED_0;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0,
-      XREAL_0, NAT_1, CARD_1, VALUED_0, VALUED_1, AFINSQ_1, NUMBERS, FINSET_1,
-      MEMBERED;
+      AFINSQ_2, BINOP_1, SETWISEO, FINSOP_1, FUNCOP_1, BINOP_2, VALUED_0,
+      FUNCT_2, INT_1, PRGCOR_2, XREAL_0, SEQ_1, SERIES_1, VALUED_1, RAT_1,
+      SQUARE_1, COMPLEX1, PARTFUN3;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, XREAL_0, NUMBERS, RELAT_1,
+      FUNCT_1, XCMPLX_0, NAT_1, FINSET_1, ORDINAL1, XXREAL_0, NAT_D, AFINSQ_1,
+      SEQ_1, MEMBERED, VALUED_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, INT_1,
+      BINOP_1, BINOP_2, SETWISEO, PRGCOR_2, FINSOP_1, FINSEQ_1, RECDEF_1,
+      VALUED_0, SERIES_1, RAT_1, PARTFUN3;
+ constructors SERIES_1, PARTFUN3, WELLORD2, DOMAIN_1, SETWISEO, XXREAL_0,
+      REAL_1, NAT_1, FINSOP_1, NEWTON, NAT_D, PRGCOR_2, RECDEF_1, BINOP_2,
+      RELSET_1, ORDINAL4, FUNCT_4, XREAL_0, FUNCT_7, FUNCOP_1, RLVECT_1,
+      ORDINAL3, VALUED_1, SEQ_1, AFINSQ_1, MATRIX_7, NUMBERS, XCMPLX_0,
+      MEMBERED, VALUED_0, RELAT_2, MCART_1, SETFAM_1, FUNCT_2, BINOP_1,
+      SQUARE_1, SEQ_4, XXREAL_2, RAT_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
+      FUNCOP_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, BINOP_2, CARD_1,
+      FINSEQ_1, AFINSQ_1, RELSET_1, ORDINAL3, VALUED_1, VALUED_0, MEMBERED;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Preparation
 
-reserve k,n for Element of NAT,
+reserve i,j,k,n,m for Nat,
   x,y,z,y1,y2,X,Y,D for set,
-  f,g for Function;
+  p,q for XFinSequence;
+
 
 theorem :: AFINSQ_2:1
-  for x being set, i being Nat st x in i holds x is Element of NAT;
+  x in i implies x is Element of NAT;
 
 registration
   cluster -> natural-membered Nat;
@@ -40,185 +47,168 @@ end;
 begin :: Additional Properties of Zero Based Finite Sequence
 
 theorem :: AFINSQ_2:2
-  for X0 being finite natural-membered set holds ex m being Nat st
-  X0 c= m;
+  for X0 being finite natural-membered set holds ex n st X0 c= n;
 
 theorem :: AFINSQ_2:3  :: from FINSEQ_2:11
-  for p being XFinSequence, b being set holds b in rng p implies ex
-  i being Element of NAT st i in dom p & p.i = b;
+x in rng p implies ex
+  i being Element of NAT st i in dom p & p.i = x;
 
 theorem :: AFINSQ_2:4  ::from FINSEQ_2:14
-  for D being set,p being XFinSequence holds (for i being Nat st i
-  in dom p holds p.i in D) implies p is XFinSequence of D;
+  for p st for i st i in dom p holds p.i in D
+   holds p is XFinSequence of D;
 
 scheme :: AFINSQ_2:sch 1
 
-  XSeqLambdaD{i()->Nat,D()->non empty set,F(set)->Element of D()}: ex z being
-XFinSequence of D() st len z = i() & for j being Nat st j in i() holds z.j = F(
-  j);
+  XSeqLambdaD{i()->Nat,D()->non empty set,F(set)->Element of D()}:
+  ex p being XFinSequence of D() st len p = i() &
+    for j st j in i() holds p.j = F(j);
 
-theorem :: AFINSQ_2:5  ::from FINSEQ_2:10
-  for p,q being XFinSequence holds len p = len q & (for j being Nat
-  st j in dom p holds p.j = q.j) implies p = q;
+canceled;
 
-definition
-  let f be XFinSequence of REAL, a be Element of REAL;
-  redefine func f+a -> XFinSequence of REAL;
+registration
+  cluster empty natural-valued XFinSequence;
+  let p be complex-valued T-Sequence-like Function;
+  cluster -p -> T-Sequence-like;
+  cluster p" -> T-Sequence-like;
+  cluster p^2 -> T-Sequence-like;
+cluster abs p -> T-Sequence-like;
+  let q be complex-valued T-Sequence-like Function;
+  cluster p+q -> T-Sequence-like;
+  cluster p-q -> T-Sequence-like;
+  cluster p(#)q -> T-Sequence-like;
+  cluster p/"q -> T-Sequence-like;
 end;
 
-theorem :: AFINSQ_2:6
-  for f being XFinSequence of REAL, a being Element of REAL holds
-  len(f+a) = len f & for i being Nat st i<len f holds (f+a).i=f.i+a;
+registration
+  let p be complex-valued finite Function;
+  cluster -p -> finite;
+  cluster p" -> finite;
+  cluster p^2 -> finite;
+  cluster abs p -> finite;
+  let q be complex-valued Function;
+  cluster p+q -> finite;
+  cluster p-q -> finite;
+  cluster p(#)q -> finite;
+  cluster p/"q -> finite;
+  cluster q/"p -> finite;
+end;
 
-theorem :: AFINSQ_2:7
-  for f1,f2 being XFinSequence,i being Nat st i <len f1 holds (f1^
-  f2).i=f1.i;
+
+registration
+  let p be complex-valued T-Sequence-like Function;
+  let c be complex number;
+  cluster c+p -> T-Sequence-like;
+  cluster p-c -> T-Sequence-like;
+  cluster c(#)p -> T-Sequence-like;
+end;
+
+registration
+  let p be complex-valued finite Function;
+  let c be complex number;
+  cluster c+p -> finite;
+  cluster p-c -> finite;
+  cluster c(#)p -> finite;
+end;
+
+canceled 2;
 
 definition
-  let f be XFinSequence;
-  func Rev f -> XFinSequence means
+  let p;
+  func Rev p -> XFinSequence means
 :: AFINSQ_2:def 1
 
-  len it = len f & for i being Element
-  of NAT st i in dom it holds it.i = f.(len f - (i + 1));
+  len it = len p & for i st i in dom it holds it.i = p.(len p - (i + 1));
 end;
 
 theorem :: AFINSQ_2:8  ::from FINSEQ_5:60
-  for f being XFinSequence holds dom f = dom Rev f & rng f = rng
-  Rev f;
+  dom p = dom Rev p & rng p = rng Rev p;
 
-definition
+registration
   let D be set, f be XFinSequence of D;
-  redefine func Rev f -> XFinSequence of D;
+  cluster Rev f -> D -valued;
 end;
 
-theorem :: AFINSQ_2:9 ::from FINSEQ_1:63
-  for p being XFinSequence holds p <> {} implies ex q being XFinSequence
-  ,x being set st p=q^<%x%>;
-
-theorem :: AFINSQ_2:10
-  for n be Nat for f being XFinSequence st len f<=n holds (f|n) =
-  f;
-
-theorem :: AFINSQ_2:11  ::from RFINSEQ:19
-  for f be XFinSequence, n,m be Nat holds n <=len f & m in n
-  implies (f|n).m = f.m & m in dom f;
-
-theorem :: AFINSQ_2:12
-  for i being Element of NAT,q being XFinSequence st i <= len q
-  holds len(q|i) = i;
-
-theorem :: AFINSQ_2:13
-  for i being Element of NAT,q being XFinSequence holds len(q|i)
-  <= i;
-
-theorem :: AFINSQ_2:14
-  for f be XFinSequence, n be Element of NAT st len f = n+1 holds f = (f
-  |n) ^ <% f.n %>;
+canceled 6;
 
 definition
-  let f be XFinSequence, n be Nat;
-  func f /^ n -> XFinSequence means
+  let p,n;
+  func p /^ n -> XFinSequence means
 :: AFINSQ_2:def 2
 
-  len it = len f -' n & for m be Nat
-  st m in dom it holds it.m = f.(m+n);
+  len it = len p -' n & for m st m in dom it holds it.m = p.(m+n);
 end;
 
 theorem :: AFINSQ_2:15
-  for f being XFinSequence, n being Nat st n>=len f holds f/^n={};
+  n >= len p implies p/^n={};
 
 theorem :: AFINSQ_2:16
-  for f being XFinSequence,n being Nat st n < len f holds len (f/^
-  n) = len f -n;
+  n < len p implies len (p/^n) = len p -n;
 
 theorem :: AFINSQ_2:17
-  for f being XFinSequence, n,m being Nat st m+n<len f holds (f/^n
-  ).m = f.(m+n);
+  m+n<len p implies (p/^n).m = p.(m+n);
 
 registration
-  let f be one-to-one XFinSequence, n being Nat;
+  let f be one-to-one XFinSequence, n;
   cluster f/^n -> one-to-one;
 end;
 
 theorem :: AFINSQ_2:18
-  for f being XFinSequence,n being Nat holds rng (f/^n) c= rng f;
+  rng (p/^n) c= rng p;
 
-theorem :: AFINSQ_2:19  ::from FINSEQ_5:31
-  for f being XFinSequence holds f/^0 = f;
+theorem :: AFINSQ_2:19  ::FINSEQ_5:31
+ p/^0 = p;
 
-theorem :: AFINSQ_2:20  ::from FINSEQ_5:39
-  for i being Nat,f,g being XFinSequence holds (f^g)/^(len f + i)
-  = g/^i;
+theorem :: AFINSQ_2:20  ::FINSEQ_5:39
+  (p^q)/^(len p + i) = q/^i;
 
-theorem :: AFINSQ_2:21  ::from FINSEQ_5:40
-  for f,g being XFinSequence holds (f^g)/^(len f) = g;
+theorem :: AFINSQ_2:21  ::FINSEQ_5:40
+  (p^q)/^(len p) = q;
 
-theorem :: AFINSQ_2:22 ::from RFINSEQ:21
-  for f be XFinSequence, n be Element of NAT holds (f|n)^(f/^n) = f;
+theorem :: AFINSQ_2:22 ::RFINSEQ:21
+  (p|n)^(p/^n) = p;
 
-definition
-  let D be set, f be XFinSequence of D, n be Nat;
-  redefine func f /^ n -> XFinSequence of D;
+registration
+  let D be set, f be XFinSequence of D, n;
+  cluster f /^ n -> D -valued;
 end;
 
-definition
-  let f be XFinSequence,k1,k2 be Nat;
-  func mid(f,k1,k2) -> XFinSequence means
-:: AFINSQ_2:def 3
+reserve k1,k2 for Nat;
 
-  for k11,k21 being Element of
-  NAT st k11=k1 & k21=k2 holds it=(f|k21)/^(k11-'1);
+definition
+  let p,k1,k2;
+  func mid(p,k1,k2) -> XFinSequence equals
+:: AFINSQ_2:def 3
+  (p|k2)/^(k1-'1);
 end;
 
 theorem :: AFINSQ_2:23
-  for f being XFinSequence,k1,k2 being Nat st k1>k2 holds mid(f,k1
-  ,k2) = {};
+  k1>k2 implies mid(p,k1,k2) = {};
 
 theorem :: AFINSQ_2:24
-  for f being XFinSequence,k1,k2 being Nat st 1<=k1 & k2<=len f holds
-  mid(f,k1,k2) = (f/^(k1-'1))|(k2+1-'k1);
+  1<=k1 & k2<=len p implies mid(p,k1,k2) = (p/^(k1-'1))|(k2+1-'k1);
 
-theorem :: AFINSQ_2:25  ::from FINSEQ_8:5
-  for f being XFinSequence,k2 being Nat holds mid(f,1,k2)=f|k2;
+theorem :: AFINSQ_2:25  :: FINSEQ_8:5
+  mid(p,1,k)=p|k;
 
-theorem :: AFINSQ_2:26 ::from FINSEQ_8:6
-  for f being XFinSequence of D,k2 being Nat st len f<=k2 holds mid(f,1,
-  k2)=f;
+theorem :: AFINSQ_2:26 :: FINSEQ_8:6
+  len p<=k implies mid(p,1,k)=p;
 
-theorem :: AFINSQ_2:27 ::from FINSEQ_8:8
-  for f being XFinSequence,k2 being Element of NAT holds mid(f,0,k2)=mid
-  (f,1,k2);
+theorem :: AFINSQ_2:27 :: FINSEQ_8:8
+  mid(p,0,k)=mid(p,1,k);
 
-theorem :: AFINSQ_2:28 ::from FINSEQ_8:9
-  for f,g being XFinSequence holds mid(f^g,len f+1,len f+len g)=g;
-
-definition
-  let D be set, f be XFinSequence of D, k1,k2 be Nat;
-  redefine func mid(f,k1,k2) -> XFinSequence of D;
-end;
-
-definition
-  let f be XFinSequence of REAL;
-  func Sum f -> Element of REAL means
-:: AFINSQ_2:def 4
-
-  ex g being XFinSequence of REAL
-st len f=len g & f.0=g.0 & (for i being Nat st i+1<len f holds g.(i+1)=(g.i)+(f
-  .(i+1))) & it=g.(len f-'1);
-end;
+theorem :: AFINSQ_2:28 :: FINSEQ_8:9
+  mid(p^q,len p+1,len p+len q)=q;
 
 registration
-  let f be empty XFinSequence of REAL;
-  cluster Sum f -> zero;
+  let D be set, f be XFinSequence of D, k1,k2;
+  cluster mid(f,k1,k2) -> D-valued;
 end;
 
-theorem :: AFINSQ_2:29
-  for f being empty XFinSequence of REAL holds Sum f=0;
+definition
+  canceled;
+end;
 
-theorem :: AFINSQ_2:30 ::from RLVECT_1:58
-  for h1,h2 being XFinSequence of REAL holds Sum (h1^h2)= Sum h1 + Sum
-  h2;
+canceled 2;
 
 begin :: Selected Subsequences
 
@@ -236,16 +226,15 @@ registration
   cluster Sgm0 A -> one-to-one;
 end;
 
-theorem :: AFINSQ_2:31  ::from FINSEQ_3:44
-  for A being finite natural-membered set holds len(Sgm0 A) = card
-  A;
+theorem :: AFINSQ_2:31  :: FINSEQ_3:44
+  for A being finite natural-membered set holds len(Sgm0 A) = card A;
 
 theorem :: AFINSQ_2:32
   for X,Y being finite natural-membered set st X c= Y & X <> {}
   holds (Sgm0 Y).0 <= (Sgm0 X).0;
 
 theorem :: AFINSQ_2:33
-  for n being Nat holds (Sgm0 {n}).0=n;
+  (Sgm0 {n}).0=n;
 
 definition
   let B1,B2 be set;
@@ -260,8 +249,7 @@ definition
   pred B1 <N= B2 means
 :: AFINSQ_2:def 7
 
-  for n,m being Nat st n in B1 & m in B2 holds n<=
-  m;
+  for n,m st n in B1 & m in B2 holds n <= m;
 end;
 
 theorem :: AFINSQ_2:34
@@ -279,25 +267,26 @@ theorem :: AFINSQ_2:37
   st x in X & {x} <N= Y) holds (Sgm0 X).0 <= (Sgm0 Y).0;
 
 theorem :: AFINSQ_2:38
-  for X0,Y0 being finite natural-membered set, i being Nat st X0
-<N< Y0 & i < (card X0) holds rng((Sgm0 (X0\/Y0))|(card X0))=X0 & ((Sgm0 (X0\/Y0
-  ))|(card X0)).i = (Sgm0 (X0 \/ Y0)).i;
+  for X0,Y0 being finite natural-membered set st
+    X0 <N< Y0 & i < (card X0) holds
+  rng((Sgm0 (X0\/Y0))|(card X0))=X0 &
+  ((Sgm0 (X0\/Y0))|(card X0)).i = (Sgm0 (X0 \/ Y0)).i;
 
 theorem :: AFINSQ_2:39
-  for X,Y being finite natural-membered set,i being Nat st X <N< Y & i
-  in card (X) holds (Sgm0 (X\/Y)).i in X;
+  for X,Y being finite natural-membered set st
+     X <N< Y & i in card (X) holds (Sgm0 (X\/Y)).i in X;
 
 theorem :: AFINSQ_2:40
-  for X,Y being finite natural-membered set, i being Nat st X <N<
+  for X,Y being finite natural-membered set st X <N<
   Y & i< len (Sgm0 X) holds (Sgm0 X).i = (Sgm0 (X \/ Y)).i;
 
 theorem :: AFINSQ_2:41
-  for X0,Y0 being finite natural-membered set, i being Nat st X0
+  for X0,Y0 being finite natural-membered set st X0
 <N< Y0 & i < (card Y0) holds rng((Sgm0 (X0\/Y0))/^(card X0))=Y0 & ((Sgm0 (X0\/
   Y0))/^(card X0)).i = (Sgm0 (X0 \/ Y0)).(i+(card X0));
 
 theorem :: AFINSQ_2:42
-  for X,Y being finite natural-membered set,i being Nat st X <N< Y
+  for X,Y being finite natural-membered set st X <N< Y
   & i< len (Sgm0 Y) holds (Sgm0 Y).i = (Sgm0 (X \/ Y)).(i+len (Sgm0 X));
 
 theorem :: AFINSQ_2:43
@@ -312,9 +301,9 @@ theorem :: AFINSQ_2:45
   for X,Y being finite natural-membered set st X <> {} & X <N< Y
   holds (Sgm0 X).0 = (Sgm0 (X \/ Y)).0;
 
-theorem :: AFINSQ_2:46 ::from FINSEQ_3
-  for X,Y being finite natural-membered set holds X <N< Y iff Sgm0(X \/
-  Y) = Sgm0(X) ^ Sgm0(Y);
+theorem :: AFINSQ_2:46  ::from FINSEQ_3
+  for X,Y being finite natural-membered set holds
+X <N< Y iff Sgm0(X \/Y) = Sgm0(X) ^ Sgm0(Y);
 
 definition
   let f be XFinSequence;
@@ -326,19 +315,20 @@ definition
 end;
 
 theorem :: AFINSQ_2:47
-  for f being XFinSequence for B being set holds len SubXFinS (f,B
-)=card (B/\ (len f)) & for i being Nat st i < len SubXFinS (f,B) holds SubXFinS
-  (f,B).i=f.((Sgm0 (B/\ (len f))).i);
+  for B being set holds len SubXFinS (p,B)=
+   card (B/\ (len p)) &
+  for i st i < len SubXFinS (p,B) holds SubXFinS
+  (p,B).i=p.((Sgm0 (B/\ (len p))).i);
 
-definition
+registration
   let D be set;
   let f be XFinSequence of D, B be set;
-  redefine func SubXFinS(f,B) -> XFinSequence of D;
+  cluster SubXFinS(f,B) -> D-valued;
 end;
 
 registration
-  let f be XFinSequence;
-  cluster SubXFinS (f,{}) -> empty;
+  let p;
+  cluster SubXFinS (p,{}) -> empty;
 end;
 
 registration
@@ -346,8 +336,210 @@ registration
   cluster SubXFinS ({},B) -> empty;
 end;
 
-theorem :: AFINSQ_2:48
-  for B1,B2 being finite natural-membered set, f being XFinSequence of
-  REAL st B1 <N< B2 holds Sum (SubXFinS(f,B1\/B2))=Sum (SubXFinS(f,B1))+Sum (
-  SubXFinS(f,B2));
+canceled; :: AFINSQ_2:48 => AFINSQ_2:83
 
+reserve D for non empty set,
+  F,G for XFinSequence of D,
+  b for BinOp of D,
+  d,d1,d2 for Element of D;
+
+registration
+  let n be Nat;
+  let x be set;
+  cluster n --> x -> T-Sequence-like;
+end;
+
+scheme :: AFINSQ_2:sch 2
+
+  Sch5{D()->set, P[set]}: for F be XFinSequence of D() holds P[F]
+provided
+ P[<%>D()] and
+ for F be XFinSequence of D(),d be Element of D() st P[F] holds P[F^<%d%>];
+
+definition
+  let D;
+  let F be XFinSequence;
+  assume F is D-valued;
+  let b;
+  assume  b is having_a_unity or len F >= 1;
+  func b "**" F -> Element of D means
+:: AFINSQ_2:def 9  :: STIRL2_1:def 3
+  it = the_unity_wrt b if b is having_a_unity & len F = 0
+    otherwise ex f be Function of NAT,D st f.0 = F.0 &
+   (for n st n+1 < len F holds f.(n + 1) = b.(f.n,F.(n + 1))) &
+it = f.(len F-1);
+end;
+
+theorem :: AFINSQ_2:49   :: STIRL2_1:44
+  b "**" <%d%> = d;
+
+theorem :: AFINSQ_2:50   :: STIRL2_1:48
+  b "**" <%d1,d2%> = b.(d1,d2);
+
+theorem :: AFINSQ_2:51  :: STIRL2_1:49
+  b "**" <%d,d1,d2%> = b.(b.(d,d1),d2);
+
+theorem :: AFINSQ_2:52   :: STIRL2_1:45
+  b is having_a_unity or len F > 0 implies b "**" (F ^ <% d %>) =
+  b.(b "**" F,d);
+
+theorem :: AFINSQ_2:53  :: STIRL2_1:46
+  b is associative & (b is having_a_unity or len F >= 1 & len G >= 1)
+  implies b "**" (F ^ G) = b.(b "**" F,b "**" G);
+
+theorem :: AFINSQ_2:54  :: STIRL2_1:47
+  b is associative & (b is having_a_unity or len F >= 1 & len G >= 1)
+  implies b "**" (F ^ G) = b.(b "**" F,b "**" G);
+
+
+theorem :: AFINSQ_2:55  :: CARD_FIN:42
+  n in dom F & (b is having_a_unity or n <> 0 ) implies
+   b.(b "**" F|n, F.n) = b "**" F|(n+1);
+
+theorem :: AFINSQ_2:56  :: CARD_FIN:47
+b is having_a_unity or len F >= 1 implies b "**" F = b "**" (XFS2FS F);
+
+theorem :: AFINSQ_2:57  ::CARD_FIN:43
+  for P be Permutation of dom F st b is commutative associative &
+    (b is having_a_unity or len F >= 1) &
+    G = F * P holds b "**" F = b "**" G;
+
+theorem :: AFINSQ_2:58 :: CARD_FIN:62
+  for bFG be XFinSequence of D st b is commutative associative &
+         (b is having_a_unity or len F >= 1) &
+         len F=len G & len F=len bFG &
+         (for n st n in dom bFG holds bFG.n=b.(F.n,G.n))
+  holds b "**" F^G = b "**" bFG;
+
+theorem :: AFINSQ_2:59
+  for D1,D2 be non empty set
+    for b1 be BinOp of D1,b2 be BinOp of D2 st
+        len F >= 1 &
+        D c= D1 /\ D2 &
+        for x,y st x in D & y in D holds b1.(x,y)=b2.(x,y) & b1.(x,y) in D
+    holds b1 "**" F = b2 "**" F;
+
+reserve F for XFinSequence,
+        rF,rF1,rF2 for real-valued XFinSequence,
+        r for real number,
+        cF,cF1,cF2 for complex-valued XFinSequence,
+        c,c1,c2 for complex number;
+
+definition
+  let F;
+  func Sum F ->Element of COMPLEX equals
+:: AFINSQ_2:def 10
+    addcomplex "**" F;
+end;
+
+registration
+  let f be empty complex-valued XFinSequence;
+  cluster Sum f -> zero;
+end;
+
+theorem :: AFINSQ_2:60
+   F is real-valued implies Sum F = addreal "**" F;
+
+theorem :: AFINSQ_2:61
+  F is rational-valued implies Sum F = addrat "**" F;
+
+theorem :: AFINSQ_2:62
+  F is integer-valued implies Sum F = addint "**" F;
+
+theorem :: AFINSQ_2:63
+  F is natural-valued implies Sum F = addnat "**" F;
+
+registration
+  let F be real-valued XFinSequence;
+  cluster Sum F -> real;
+end;
+
+registration
+  let F be rational-valued XFinSequence;
+  cluster Sum F -> rational;
+end;
+
+registration
+  let F be integer-valued XFinSequence;
+  cluster Sum F -> integer;
+end;
+
+registration
+  let F be natural-valued XFinSequence;
+  cluster Sum F -> natural;
+end;
+
+registration
+  cluster natural-valued -> nonnegative-yielding Relation;
+end;
+
+theorem :: AFINSQ_2:64
+  cF = {} implies Sum cF = 0;
+
+theorem :: AFINSQ_2:65
+   Sum <%c%> = c;
+
+theorem :: AFINSQ_2:66
+   Sum <%c1,c2%> = c1 + c2;
+
+theorem :: AFINSQ_2:67  :: RLVECT_1:58 NUMERAL1:1
+  Sum(cF1^cF2)=Sum(cF1)+Sum(cF2);
+
+theorem :: AFINSQ_2:68 :: NUMERAL1:2
+  for S being Real_Sequence st rF=S|(n+1) holds Sum rF = Partial_Sums(S).n;
+
+theorem :: AFINSQ_2:69  :: NUMERAL1:4
+  len rF1 = len rF2 &
+  (for i st i in dom rF1 holds rF1.i<=rF2.i) implies
+  Sum rF1 <= Sum rF2;
+
+theorem :: AFINSQ_2:70
+  Sum (n-->c) = n*c;
+
+theorem :: AFINSQ_2:71 :: STIRL2_1:50
+  (for n st n in dom rF holds rF.n <= r) implies
+   Sum rF <= len rF * r;
+
+theorem :: AFINSQ_2:72 :: STIRL2_1:51
+  (for n st n in dom rF holds rF.n >= r) implies
+  Sum rF >= len rF *r;
+
+theorem :: AFINSQ_2:73  :: STIRL2_1:52
+  rF is nonnegative-yielding & len rF > 0 &
+  (ex x st x in dom rF & rF.x = r) implies Sum rF >= r;
+
+theorem :: AFINSQ_2:74  :: STIRL2_1:53
+  rF is nonnegative-yielding implies
+  (Sum rF=0 iff (len rF=0 or rF = len rF --> 0));
+
+theorem :: AFINSQ_2:75
+  c(#)cF|n = (c(#)cF)|n;
+
+theorem :: AFINSQ_2:76
+  c * Sum cF = Sum (c(#)cF);
+
+theorem :: AFINSQ_2:77  :: CARD_FIN:44
+   n in dom cF implies Sum (cF|n) + cF.n = Sum (cF|(n+1));
+
+theorem :: AFINSQ_2:78  ::CARD_FIN:13
+for f be Function st
+  f.y=x & y in dom f holds {y}\/(f|(dom f\{y}))"{x}=f"{x};
+
+theorem :: AFINSQ_2:79  :: CARD_FIN:15
+ for f be Function st f.y<>x holds (f|(dom f\{y}))"{x}=f"{x};
+
+theorem :: AFINSQ_2:80 :: CATALAN2:45
+  rng cF c= {0,c} implies Sum cF = c * card (cF"{c});
+
+theorem :: AFINSQ_2:81 :: CATALAN2:48
+  Sum cF = Sum Rev cF;
+
+theorem :: AFINSQ_2:82
+  for f be Function,p,q,fp,fq be XFinSequence st
+       rng p c= dom f & rng q c= dom f & fp = f*p & fq = f*q
+    holds fp ^ fq = f*(p^q);
+
+theorem :: AFINSQ_2:83
+  for B1,B2 being finite natural-membered set st
+     B1 <N< B2 holds
+Sum (SubXFinS(cF,B1\/B2))=Sum (SubXFinS(cF,B1))+Sum(SubXFinS(cF,B2));

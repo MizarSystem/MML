@@ -24,16 +24,14 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="GRAPH_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="GRAPH_2"/>
-<ArticleID name="TREES_1"/>
-<ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
+<ArticleID name="AMI_2"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="SCMFSA_1"/>
 <ArticleID name="SCMFSA_2"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
@@ -48,48 +46,66 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="127"/>
+<Adjective nr="109"/>
 </Cluster>
-<Func kind="U" nr="8">
+<Func kind="U" nr="6">
 <Func kind="K" nr="2">
 <Func kind="K" nr="89"/>
-<Func kind="K" nr="285">
+<Func kind="K" nr="258">
 <Func kind="K" nr="89"/>
 </Func>
 </Func>
-<Func kind="K" nr="288"/>
+<Func kind="K" nr="281"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="387">
+<Func kind="K" nr="372">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
+<Adjective nr="4"/>
 <Adjective nr="7">
 <Func kind="K" nr="90"/>
 </Adjective>
+<Adjective nr="7">
+<Func kind="U" nr="1">
+<Func kind="K" nr="281"/>
+</Func>
+</Adjective>
+<Adjective nr="9"/>
+<Adjective nr="13">
+<Func kind="U" nr="7">
+<Func kind="K" nr="2">
+<Func kind="K" nr="89"/>
+<Func kind="K" nr="258">
+<Func kind="K" nr="89"/>
+</Func>
+</Func>
+<Func kind="K" nr="281"/>
+</Func>
+</Adjective>
 <Adjective nr="44"/>
-<Adjective nr="120"/>
-<Adjective nr="122"/>
+<Adjective nr="102"/>
+<Adjective nr="104"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SCMISORT" nr="2">
 <ArgTypes>
-<Typ kind="M" nr="29">
+<Typ kind="M" nr="15">
 <Cluster>
-<Adjective nr="123" value="false"/>
+<Adjective nr="105" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="29">
+<Typ kind="M" nr="15">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="295">
+<Func kind="K" nr="287">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="127"/>
+<Adjective nr="109"/>
 </Cluster>
 </FCluster>
 </Registrations>

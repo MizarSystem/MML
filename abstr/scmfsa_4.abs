@@ -9,9 +9,9 @@ environ
  vocabularies NUMBERS, SUBSET_1, AMI_1, AMI_3, SCMFSA_2, AMISTD_2, CARD_1,
       GRAPHSP, ARYTM_3, XXREAL_0, SCMNORM, RELAT_1, FUNCT_1, CARD_3, TARSKI,
       STRUCT_0, FUNCT_4, XBOOLE_0, FUNCOP_1, FSM_1, CIRCUIT2, ARYTM_1, INT_1,
-      COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1;
+      COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1, ORDINAL1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, CARD_3, XCMPLX_0,
-      NAT_1, INT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
+      NAT_1, NAT_D, INT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
       FUNCOP_1, FUNCT_7, FINSEQ_1, FINSEQ_2, STRUCT_0, AMI_1, SCMNORM, AMI_3,
       RELOC, SCMFSA_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, AMI_5, PARTFUN1, RELOC,
@@ -26,7 +26,7 @@ begin :: Incrementing addresses
 
 reserve j, k, l, m, n, p, q for Element of NAT;
 
-reserve L for Instruction-Location of SCM,
+reserve L for Element of NAT,
   A for Data-Location,
   I for
   Instruction of SCM;
@@ -69,17 +69,17 @@ theorem :: SCMFSA_4:13
   (Divide(a,b),k) = Divide(a,b);
 
 theorem :: SCMFSA_4:14
-  for k being Element of NAT,loc being Instruction-Location of
-  SCM+FSA holds IncAddr(goto loc,k) = goto (loc + k);
+  for k being Element of NAT,loc being Element of NAT
+  holds IncAddr(goto loc,k) = goto (loc + k);
 
 theorem :: SCMFSA_4:15
-  for k being Element of NAT,loc being Instruction-Location of
-SCM+FSA, a being Int-Location holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k
+  for k being Element of NAT,loc being Element of NAT
+, a being Int-Location holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k
   );
 
 theorem :: SCMFSA_4:16
-  for k being Element of NAT,loc being Instruction-Location of
-SCM+FSA, a being Int-Location holds IncAddr(a>0_goto loc,k) = a>0_goto (loc + k
+  for k being Element of NAT,loc being Element of NAT
+, a being Int-Location holds IncAddr(a>0_goto loc,k) = a>0_goto (loc + k
   );
 
 theorem :: SCMFSA_4:17
@@ -120,7 +120,7 @@ definition
 :: SCMFSA_4:def 6
 
   dom it = dom p & for
-  m st insloc m in dom p holds it.insloc m = IncAddr(pi(p,m),k);
+  m st  m in dom p holds it. m = IncAddr(pi(p,m),k);
 end;
 
 theorem :: SCMFSA_4:24
@@ -143,14 +143,18 @@ theorem :: SCMFSA_4:27
   IncAddr(I,m+n);
 
 theorem :: SCMFSA_4:28
-  for s being State of SCM+FSA holds Exec(IncAddr(CurInstr s,k),s +*
-  Start-At (IC s + k)) = Following(s) +* Start-At (IC Following(s) + k);
+  for p being (the Instructions of SCM+FSA)-valued Function
+  for s being State of SCM+FSA
+   holds Exec(IncAddr(CurInstr(p, s),k),s +*
+  Start-At(IC s+k,SCM+FSA)) = Following(p,s) +*
+   Start-At(IC Following(p,s)+k,SCM+FSA);
 
 theorem :: SCMFSA_4:29
   for INS being Instruction of SCM+FSA, s being State of SCM+FSA, p
 being FinPartState of SCM+FSA, i, j, k being Element of NAT st IC s = j+k holds
-Exec(INS, s +* Start-At (IC s -' k)) = Exec(IncAddr(INS, k), s) +* Start-At (IC
-  Exec(IncAddr(INS,k), s) -' k);
+Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = Exec(IncAddr(INS, k), s)
+ +* Start-At (IC
+  Exec(IncAddr(INS,k), s) -'k,SCM+FSA);
 
 begin :: Shifting the finite partial state
 

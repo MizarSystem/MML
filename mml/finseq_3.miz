@@ -76,10 +76,10 @@ end;
 theorem Th7:
   Seg k = {} iff not k in Seg k
    proof
-    thus Seg k = {} implies not k in Seg k by FINSEQ_1:4,5;
+    thus Seg k = {} implies not k in Seg k;
     assume not k in Seg k;
-     then k = 0 by FINSEQ_1:4,5;
-    hence Seg k = {} by FINSEQ_1:4,5;
+    then k = 0 by FINSEQ_1:5;
+    hence Seg k = {};
    end;
 
 canceled;
@@ -272,7 +272,7 @@ A5:       1 + 1 <= k by NAT_1:13;
 A6:       1 = x & 2 = x or 1 = x & 2 = y or 2 = x & 1 = y or 1 = y & 2 =
           y by A1,FINSEQ_1:4,ZFMISC_1:28;
           now
-            k in Seg k by A1,FINSEQ_1:4,5,Th7;
+            k in Seg k by A1,Th7;
             then
 A7:         k = 1 or k = 2 by A1,A6,TARSKI:def 2;
             assume
@@ -399,10 +399,10 @@ end;
 canceled 3;
 
 theorem
-  {} <> <* x,y *> by CARD_1:47,FINSEQ_1:61;
+  {} <> <* x,y *>;
 
 theorem
-  {} <> <* x,y,z *> by CARD_1:47,FINSEQ_1:62;
+  {} <> <* x,y,z *>;
 
 theorem Th40:
   <* x *> <> <* y,z *>
@@ -1197,19 +1197,17 @@ end;
 theorem Th54:
   Sgm(Seg k) = idseq k
 proof
-  defpred P[Element of NAT] means Sgm(Seg $1) = idseq $1;
-A1: k is Element of NAT by ORDINAL1:def 13;
-A2: for k being Element of NAT st P[k] holds P[k+1] by Lm5;
+  defpred P[Nat] means Sgm(Seg $1) = idseq $1;
+A2: for k being Nat st P[k] holds P[k+1] by Lm5;
 A3: P[0] by Th49;
-  for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A2);
-  hence thesis by A1;
+  for k being Nat holds P[k] from NAT_1:sch 2(A3,A2);
+  hence thesis;
 end;
 
 theorem Th55:
   p | Seg n = p iff len p <= n
 proof
-  n is Element of NAT by ORDINAL1:def 13;
-  hence p | Seg n = p implies len p <= n by FINSEQ_1:107;
+  thus p | Seg n = p implies len p <= n by FINSEQ_1:107;
   assume
   len p <= n;
   then Seg(len p) c= Seg n by FINSEQ_1:7;
@@ -1231,12 +1229,10 @@ end;
 theorem
   idseq n | Seg m = idseq m iff m <= n
 proof
-A1: m is Element of NAT by ORDINAL1:def 13;
   thus idseq n | Seg m = idseq m implies m <= n
   proof
-    assume
-    idseq n | Seg m = idseq m;
-    then len(idseq m) <= len(idseq n) by A1,FINSEQ_1:100;
+    assume idseq n | Seg m = idseq m;
+    then len(idseq m) <= len(idseq n) by FINSEQ_1:100;
     then m <= len(idseq n) by FINSEQ_1:def 18;
     hence thesis by FINSEQ_1:def 18;
   end;
@@ -1298,8 +1294,7 @@ A5: l = 1 by TARSKI:def 1;
 end;
 
 theorem
-  p | X is FinSequence iff ex k being Element of NAT st X /\ dom p = Seg
-  k
+  p | X is FinSequence iff ex k being Element of NAT st X /\ dom p = Seg k
 proof
   thus p | X is FinSequence implies ex k being Element of NAT st X /\ dom p =
   Seg k
@@ -2185,7 +2180,7 @@ A3: y in A;
 A4: <* y *> - A = {} by A3,Lm7;
   <* x *> - A = {} by A2,Lm7;
   hence <* x,y *> - A = {} ^ {} by A4,A1,Lm11
-    .= {} by FINSEQ_1:47;
+    .= {};
 end;
 
 theorem Th85:
@@ -2270,7 +2265,7 @@ A2: <* x,y *> - A = <* x,y *>;
     then
     <* x,y *> - A = {} or <* x,y *> - A = <* x *> or <* x,y *> - A = <* y
     *> by Th84,Th85,Th87;
-    hence thesis by A2,Th40,CARD_1:47,FINSEQ_1:61;
+    hence thesis by A2,Th40;
   end;
   assume that
 A3: not x in A and
@@ -2601,14 +2596,10 @@ end;
 Lm13: for l for p,A st len p = l for n st n in dom p holds for B being finite
 set st B = {k where k is Element of NAT: k in dom p & k <= n & p.k in A} holds
 p.n in A or (p - A).(n - card B) = p.n
-
 proof
-
   defpred P[Element of NAT] means for p,A st len p = $1 for n st n in dom p
-
 holds for B being finite set st B = {k where k is Element of NAT : k in dom p &
   k <= n & p.k in A} holds p.n in A or (p - A).(n - card B) = p.n;
-
 A1: P[0]
   proof
     let p,A;
@@ -3191,9 +3182,9 @@ A2: dom (p*q) = dom q by RELAT_1:46;
 end;
 
 theorem Th113:
-  for p being FinSequence holds (i in dom p implies ex m being
-Nat st len p = m + 1 & len Del(p,i) = m) & (not i in dom p implies Del(p,i) = p
-  )
+  for p being FinSequence holds
+  (i in dom p implies ex m being Nat st len p = m + 1 & len Del(p,i) = m) &
+  (not i in dom p implies Del(p,i) = p)
 proof
   let p be FinSequence;
   hereby
@@ -3209,16 +3200,16 @@ A1: card ((Seg(len p) \ {i}) \/ {i})=card (Seg(len p) \ {i}) +1 by
     CARD_2:54;
     assume
 A2: i in dom p;
-    then reconsider D' = dom p as non empty set;
+    then reconsider D9 = dom p as non empty set;
     reconsider D = rng p as non empty set by A2,FUNCT_1:12;
-    reconsider r = p as Function of D',D by FUNCT_2:3;
+    reconsider r = p as Function of D9,D by FUNCT_2:3;
 A3: dom p = Seg len p by FINSEQ_1:def 3;
     for x holds x in (Seg(len p) \ {i}) implies x in Seg(len p) by
     XBOOLE_0:def 5;
     then
 A4: (Seg(len p) \ {i}) c= Seg len p by TARSKI:def 3;
     then rng Sgm(Seg(len p) \ {i}) c= Seg len p by FINSEQ_1:def 13;
-    then reconsider q = Sgm((dom p) \ {i}) as FinSequence of D' by
+    then reconsider q = Sgm((dom p) \ {i}) as FinSequence of D9 by
     A3,FINSEQ_1:
     def 4;
     p <> {} by A2;
@@ -3247,19 +3238,19 @@ A6: len(r*q) = len q by FINSEQ_2:37;
 end;
 
 theorem
-  for D being non empty set for p being FinSequence of D holds Del(p,i)
-  is FinSequence of D
+  for D being non empty set for p being FinSequence of D holds
+  Del(p,i) is FinSequence of D
 proof
   let D be non empty set, p be FinSequence of D;
   per cases;
   suppose
     i in dom p;
-    then reconsider D'=Seg(len p) as non empty set by FINSEQ_1:def 3;
+    then reconsider D9=Seg(len p) as non empty set by FINSEQ_1:def 3;
     for x holds x in (Seg(len p) \ {i}) implies x in Seg(len p) by
     XBOOLE_0:def 5;
     then Seg(len p) \ {i} c= Seg(len p) by TARSKI:def 3;
     then rng Sgm(Seg(len p) \ {i}) c= Seg(len p) by FINSEQ_1:def 13;
-    then reconsider q=Sgm(Seg(len p) \ {i}) as FinSequence of D' by
+    then reconsider q=Sgm(Seg(len p) \ {i}) as FinSequence of D9 by
     FINSEQ_1:def
     4;
     p * q = Del(p,i) by FINSEQ_1:def 3;
@@ -3304,23 +3295,23 @@ end;
 reserve J for Element of NAT;
 
 theorem Th117:
-  for i,k,m,n being Element of NAT st n=m+1 & k in Seg n & i in
-Seg m holds (1<=i & i<k implies Sgm(Seg n \ {k}).i = i) & (k<=i & i<=m implies
-  Sgm(Seg n \ {k}).i = i+1)
+  for i,k,m,n being Nat st n=m+1 & k in Seg n & i in Seg m holds
+  (1<=i & i<k implies Sgm(Seg n \ {k}).i = i) &
+  (k<=i & i<=m implies Sgm(Seg n \ {k}).i = i+1)
 proof
-  defpred P[Element of NAT] means for n,k,i being Element of NAT st n = $1 + 1
+  defpred P[Nat] means for n,k,i being Nat st n = $1 + 1
 & k in Seg n & i in Seg $1 holds (1<=i & i<k implies Sgm(Seg n \ {k}).i = i) &
   (k<=i & i<=$1implies Sgm(Seg n \ {k}).i = i+1);
-  let i,k,m,n be Element of NAT;
+  let i,k,m,n be Nat;
   assume that
 A1: n = m + 1 and
 A2: k in Seg n and
 A3: i in Seg m;
-A4: for k being Element of NAT st P[k] holds P[k+1]
+A4: for k being Nat st P[k] holds P[k+1]
   proof
-    let k being Element of NAT such that
+    let k being Nat such that
 A5: P[k];
-    let g,i,n be Element of NAT;
+    let g,i,n be Nat;
     assume that
 A6: g = k+1 + 1 and
 A7: i in Seg g and
@@ -3415,8 +3406,9 @@ A38:      not m in {i} by A37,TARSKI:def 1;
         then Sgm(X).(k+1) in X by A14,FUNCT_1:def 5;
         then
 A39:    ex J st Sgm(X).(k+1) = J & 1<=J & J<=g & J<>i by A28;
+BB:     g in NAT by ORDINAL1:def 13;
         1<=g by A9,A12,XXREAL_0:2;
-        then g in rng Sgm(X) by A14,A27,A28;
+        then g in rng Sgm(X) by A14,A27,A28,BB;
         then consider x be Nat such that
 A40:    x in dom Sgm(X) and
 A41:    Sgm(X).x=g by FINSEQ_2:11;
@@ -3505,7 +3497,7 @@ A64:              s<>i by A61,TARSKI:def 1;
                   then
 A65:              x=g by TARSKI:def 1;
                   1<=g by A9,A12,XXREAL_0:2;
-                  hence thesis by A27,A28,A65;
+                  hence thesis by A27,A28,A65,BB;
                 end;
               end;
               hence thesis;
@@ -3552,15 +3544,14 @@ A75:        i<=n and
     hence thesis;
   end;
 A76: P[0];
-  for k being Element of NAT holds P[k] from NAT_1:sch 1(A76,A4);
+  for k being Nat holds P[k] from NAT_1:sch 2(A76,A4);
   hence thesis by A1,A2,A3;
 end;
 
 theorem Th118:
-  for f being FinSequence, n,m st len f = m+1 & n in dom f holds
-  len Del(f,n)=m
+  for f being FinSequence st len f = m+1 & n in dom f holds len Del(f,n) = m
 proof
-  let f be FinSequence, n,m such that
+  let f be FinSequence such that
 A1: len f = m+1 and
 A2: n in dom f;
   ex k being Nat st len f = k+1 & len Del(f,n) = k by A2,Th113;
@@ -3568,16 +3559,17 @@ A2: n in dom f;
 end;
 
 theorem
-  for f being FinSequence,n,m,k being Element of NAT st len f = m+1 & k<
-  n holds Del(f,n).k = f.k
+  for f being FinSequence st k < n holds Del(f,n).k = f.k
 proof
-  let f be FinSequence,n,m,k be Element of NAT;
-  assume that
-A1: len f = m+1 and
+  let f be FinSequence;
+  assume
 A2: k<n;
   per cases;
-  suppose
-A3: n in dom f;
+  suppose that
+A3: n in dom f and
+B1: f <> {};
+    consider m being Nat such that
+A1: len f = m+1 by B1,NAT_1:6;
     now
       per cases;
       suppose
@@ -3613,16 +3605,16 @@ A11:    not k in dom Del (f,n) by A10,FINSEQ_1:3;
     hence thesis;
   end;
   suppose
-    not n in dom f;
+    not n in dom f or f = {};
     hence thesis by Th113;
   end;
 end;
 
 theorem
-  for f being FinSequence,n,m,k being Element of NAT st len f = m+1 & n
-  in dom f & n<=k & k<=m holds Del(f,n).k = f.(k+1)
+  for f being FinSequence st len f = m+1 & n in dom f & n<=k & k<=m
+  holds Del(f,n).k = f.(k+1)
 proof
-  let f be FinSequence,n,m,k be Element of NAT;
+  let f be FinSequence;
   assume that
 A1: len f = m+1 and
 A2: n in dom f and
@@ -3875,12 +3867,12 @@ proof
   let f be FinSubsequence;
   assume
   f is FinSequence;
-  then reconsider ss'=f as FinSequence;
+  then reconsider ss9=f as FinSequence;
   consider k be Nat such that
-A1: dom ss' = Seg k by FINSEQ_1:def 2;
+A1: dom ss9 = Seg k by FINSEQ_1:def 2;
   k in NAT by ORDINAL1:def 13;
   then
-A2: len ss' <= k by A1,FINSEQ_1:def 3;
+A2: len ss9 <= k by A1,FINSEQ_1:def 3;
   Seq f = f* Sgm Seg k by A1,FINSEQ_1:def 14
     .= f* idseq k by Th54
     .= f by A2,FINSEQ_2:64;
@@ -3924,9 +3916,7 @@ theorem Th7X:
 proof
   let A be set, i be Nat;
   hereby
-    assume
-    i <> 0;
-    then 0 < i by NAT_1:3;
+    assume i <> 0;
     then
 A1: 0+1 <= i by NAT_1:13;
     assume that
@@ -3934,14 +3924,12 @@ A2: A = {} and
 A3: i-tuples_on A <> {};
     reconsider B = i-tuples_on A as non empty FinSequenceSet of A by A3;
     consider p being Element of B;
-    B = {s where s is Element of A*: len s = i} & p in B by FINSEQ_2:def 4;
-    then
-Y:    ex s being Element of A* st p = s & len s = i;
+    B = {s where s is Element of A*: len s = i} & p in B;
+    then ex s being Element of A* st p = s & len s = i;
     then 1 in dom p by A1,Th27;
-    then dom p <> {};
     then
 X:    rng p <> {} by RELAT_1:65;
-     rng p c= A by Y,FINSEQ_1:def 4;
+     rng p c= A by FINSEQ_1:def 4;
     hence contradiction by A2,X;
   end;
   assume that
@@ -3964,10 +3952,8 @@ registration
     let f, g be Function such that
 A1: f in S and
 A2: g in S;
-A3: S = { s where s is Element of D*: len s = i } by FINSEQ_2:def 4;
-    then
 A4: ex s being Element of D* st f = s & len s = i by A1;
-    ex s being Element of D* st g = s & len s = i by A2,A3;
+    ex s being Element of D* st g = s & len s = i by A2;
     hence thesis by A4,Th31;
   end;
 end;
@@ -4006,12 +3992,11 @@ A2:     x = g and
 A3:     dom g = dom product" S and
 A4:     for z being set st z in dom product" S holds g.z in (product" S).z
         by CARD_3:def 5;
-A5:     S = { s where s is Element of D*: len s = i } by FINSEQ_2:def 4;
         consider s being Element of S;
         s in S;
         then consider t being Element of D* such that
 A6:     s = t and
-A7:     len t = i by A5;
+A7:     len t = i;
 A8:     dom g = DOM S by A3,CARD_3:92
           .= dom s by CARD_3:def 12;
         dom s = Seg len t by A6,FINSEQ_1:def 3;
@@ -4030,20 +4015,19 @@ A11:      g.a = y by FUNCT_1:def 5;
 A12:      f in S and
 A13:      g.a = f.a by CARD_3:def 6;
           consider w being Element of D* such that
-A14:      f = w and len w = i by A5,A12;
+A14:      f = w and len w = i by A12;
           dom g = dom w by A8,A12,A14,CARD_3:def 10;
           then
 X:          w.a in rng w by A10,FUNCT_1:def 5;
             rng w c= D by FINSEQ_1:def 4;
-          hence thesis by A11,A13,A14,RELAT_1:def 19,X;
+          hence thesis by A11,A13,A14,X;
         end;
         then reconsider g as FinSequence of D by A9,FINSEQ_1:def 4;
 A15:    g in D* by FINSEQ_1:def 11;
         len g = i by A6,A7,A8,Th31;
-        hence thesis by A2,A5,A15;
+        hence thesis by A2,A15;
       end;
       hence thesis;
     end;
   end;
 end;
-
