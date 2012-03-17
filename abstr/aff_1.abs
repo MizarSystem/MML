@@ -19,11 +19,9 @@ reserve AS for AffinSpace;
 reserve a,a9,b,b9,c,d,o,p,q,r,s,x,y,z,t,u,w for Element of AS;
 
 definition
-  let AS;
-  let a,b,c;
+  let AS,a,b,c;
   pred LIN a,b,c means
 :: AFF_1:def 1
-
   a,b // a,c;
 end;
 
@@ -39,8 +37,8 @@ theorem :: AFF_1:12
   x,y // z,z & z,z // x,y;
 
 theorem :: AFF_1:13
-  x,y // z,t implies x,y // t,z & y,x // z,t & y,x // t,z & z,t //
-  x,y & z,t // y,x & t,z // x,y & t,z // y,x;
+  x,y // z,t implies x,y // t,z & y,x // z,t & y,x // t,z &
+  z,t // x,y & z,t // y,x & t,z // x,y & t,z // y,x;
 
 theorem :: AFF_1:14
   a<>b & ( a,b // x,y & a,b // z,t or a,b // x,y & z,t // a,b or x
@@ -82,7 +80,7 @@ definition
   func Line(a,b) -> Subset of AS means
 :: AFF_1:def 2
 
-  for x holds x in it iff LIN a,b, x;
+  for x holds x in it iff LIN a,b,x;
 end;
 
 reserve A,C,D,K for Subset of AS;
@@ -108,24 +106,24 @@ theorem :: AFF_1:28
 ::                   Definition of the Line
 ::
 
-definition
-  let AS;
-  let A;
+definition let AS,A;
   attr A is being_line means
 :: AFF_1:def 3
+  ex a,b st a <> b & A = Line(a,b);
+end;
 
-  ex a,b st a<>b & A=Line(a,b);
+registration let AS;
+  cluster being_line Subset of AS;
 end;
 
 :: Otrzymujemy stad zasadnicze stwierdzenie, ze kazda prosta
-:: jest jednoznacznie wyznaczona przez swoje dowolne dwa
-:: punkty.
+:: jest jednoznacznie wyznaczona przez swoje dowolne dwa punkty.
 
 canceled;
 
 theorem :: AFF_1:30
-  for a,b,A,C holds A is being_line & C is being_line & a in A & b
-  in A & a in C & b in C implies a=b or A=C;
+  A is being_line & C is being_line & a in A & b in A & a in C & b in C
+  implies a=b or A=C;
 
 theorem :: AFF_1:31
   A is being_line implies ex a,b st a in A & b in A & a<>b;
@@ -141,9 +139,7 @@ theorem :: AFF_1:33
 ::
 
 definition
-  let AS;
-  let a,b;
-  let A;
+  let AS,a,b,A;
   pred a,b // A means
 :: AFF_1:def 4
 
@@ -164,7 +160,7 @@ theorem :: AFF_1:36
   c in Line(a,b) & a<>b implies (d in Line(a,b) iff a,b // c,d);
 
 theorem :: AFF_1:37
-  A is being_line & a in A implies (b in A iff a,b // A );
+  A is being_line & a in A implies (b in A iff a,b // A);
 
 theorem :: AFF_1:38
   a<>b & A=Line(a,b) iff A is being_line & a in A & b in A & a<>b;
@@ -178,23 +174,24 @@ theorem :: AFF_1:40
 theorem :: AFF_1:41
   c in A & d in A & A is being_line & c <>d implies (a,b // A iff a,b // c,d);
 
-canceled;
+theorem :: AFF_1:42
+  a,b // A implies ex c,d st c <>d & c in A & d in A & a,b // c,d;
 
 theorem :: AFF_1:43
   a<>b implies a,b // Line(a,b);
 
 theorem :: AFF_1:44
-  A is being_line implies (a,b // A iff ex c,d st c <>d & c in A &
-  d in A & a,b // c,d );
+  for A be being_line Subset of AS holds
+  (a,b // A iff ex c,d st c <>d & c in A & d in A & a,b // c,d );
 
 theorem :: AFF_1:45
-  A is being_line & a,b // A & c,d // A implies a,b // c,d;
+  for A be being_line Subset of AS st a,b // A & c,d // A holds a,b // c,d;
 
 theorem :: AFF_1:46
   a,b // A & a,b // p,q & a<>b implies p,q // A;
 
 theorem :: AFF_1:47
-  A is being_line implies a,a // A;
+  for A be being_line Subset of AS holds a,a // A;
 
 theorem :: AFF_1:48
   a,b // A implies b,a // A;
@@ -210,8 +207,9 @@ theorem :: AFF_1:51
   & C=Line(c,d);
 
 theorem :: AFF_1:52
-  A is being_line & C is being_line & a in A & b in A & c in C & d
-  in C & a<>b & c <>d implies (A // C iff a,b // c,d);
+  for A, C be being_line Subset of AS st
+    a in A & b in A & c in C & d in C & a<>b & c<>d holds
+      (A // C iff a,b // c,d);
 
 theorem :: AFF_1:53
   a in A & b in A & c in C & d in C & A // C implies a,b // c,d;
@@ -220,13 +218,17 @@ theorem :: AFF_1:54
   a in A & b in A & A // C implies a,b // C;
 
 theorem :: AFF_1:55
-  A is being_line implies A // A;
+  for A being being_line Subset of AS holds A // A;
+
+definition let AS; let A,B be being_line Subset of AS;
+  redefine pred A // B;
+  reflexivity;
+end;
 
 theorem :: AFF_1:56
   A // C implies C // A;
 
-definition
-  let AS,A,C;
+definition let AS,A,C;
   redefine pred A // C;
   symmetry;
 end;
@@ -249,11 +251,11 @@ theorem :: AFF_1:61
   implies a9=b9;
 
 theorem :: AFF_1:62
-  A is being_line & a in A & b in A & c in A & a<>b & a,b // c,d implies d in A
-;
+  for A be being_line Subset of AS st
+  a in A & b in A & c in A & a<>b & a,b // c,d holds d in A;
 
 theorem :: AFF_1:63
-  for a, A st A is being_line ex C st a in C & A // C;
+  for A be being_line Subset of AS ex C st a in C & A // C;
 
 theorem :: AFF_1:64
   A // C & A // D & p in C & p in D implies C=D;
@@ -282,8 +284,8 @@ theorem :: AFF_1:70
   ,b // a9,x implies b9=x;
 
 theorem :: AFF_1:71
-  for a,b,A holds A is being_line & a in A & b in A & a<>b implies A=
-  Line(a,b);
+  for a,b,A holds A is being_line & a in A & b in A & a<>b implies
+    A = Line(a,b);
 
 ::
 ::                 Facts about Affine Plane
@@ -294,8 +296,8 @@ reserve a,b,c,d,x,p,q for Element of AP;
 reserve A,C for Subset of AP;
 
 theorem :: AFF_1:72
-  A is being_line & C is being_line & not A // C implies ex x st x
-  in A & x in C;
+  A is being_line & C is being_line & not A // C implies
+    ex x st x in A & x in C;
 
 theorem :: AFF_1:73
   A is being_line & not a,b // A implies ex x st x in A & LIN a,b,x;

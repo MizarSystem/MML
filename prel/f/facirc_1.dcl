@@ -451,23 +451,23 @@
 <Adjective nr="22">
 <Func kind="K" nr="164">
 <Num nr="2"/>
-<Func kind="K" nr="357"/>
+<Func kind="K" nr="171"/>
 </Func>
-<Func kind="K" nr="357"/>
+<Func kind="K" nr="171"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="14">
 <Func kind="K" nr="15">
 <Func kind="K" nr="164">
 <Num nr="2"/>
-<Func kind="K" nr="357"/>
+<Func kind="K" nr="171"/>
 </Func>
-<Func kind="K" nr="357"/>
+<Func kind="K" nr="171"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="366">
+<Func kind="K" nr="365">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

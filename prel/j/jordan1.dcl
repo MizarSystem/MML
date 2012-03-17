@@ -20,6 +20,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CONNSP_1"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
@@ -36,7 +37,11 @@
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL1"/>
+<ArticleID name="FINSUB_1"/>
 <ArticleID name="RLSUB_1"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="WELLORD1"/>
+<ArticleID name="PRE_POLY"/>
 <ArticleID name="RLVECT_2"/>
 <ArticleID name="CONVEX1"/>
 </Signature>
@@ -55,7 +60,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="164">
+<Adjective nr="185">
 <Func kind="K" nr="281">
 <Num nr="2"/>
 </Func>
@@ -77,7 +82,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="164">
+<Adjective nr="185">
 <Func kind="K" nr="281">
 <Num nr="2"/>
 </Func>
@@ -99,7 +104,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="164">
+<Adjective nr="185">
 <Func kind="K" nr="281">
 <Num nr="2"/>
 </Func>
@@ -121,7 +126,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="164">
+<Adjective nr="185">
 <Func kind="K" nr="281">
 <Num nr="2"/>
 </Func>
@@ -136,7 +141,7 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="164">
+<Adjective nr="185">
 <Func kind="K" nr="281">
 <LocusVar nr="1"/>
 </Func>

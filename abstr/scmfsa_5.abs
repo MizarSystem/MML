@@ -14,12 +14,12 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, INT_2,
       ORDINAL1, INT_1, NAT_1, NAT_D, FINSET_1, PARTFUN1, RELAT_1, FUNCT_1,
       FINSEQ_1, FINSEQ_2, FUNCT_4, FUNCT_7, VALUED_1, STRUCT_0, COMPOS_1,
-      AMI_1, AMISTD_2, SCMFSA_2, XXREAL_0;
+      EXTPRO_1, AMI_1, AMISTD_2, SCMFSA_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_D, RELSET_1, PRE_POLY, AMISTD_2,
-      SCMFSA_2, SCMFSA_3;
+      SCMFSA_2, SCMFSA_3, AMI_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, NUMBERS, XREAL_0, INT_1,
       CARD_3, AMI_1, SCMFSA_2, ORDINAL1, FINSET_1, RELAT_1, VALUED_1, GRFUNC_1,
-      FUNCT_2, AMISTD_2, SCMFSA10, COMPOS_1;
+      FUNCT_2, AMISTD_2, SCMFSA10, COMPOS_1, EXTPRO_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -86,8 +86,17 @@ theorem :: SCMFSA_5:16
   for p being FinPartState of SCM+FSA st IC SCM+FSA in dom p for k
   being Element of NAT holds p is autonomic iff Relocated(p,k) is autonomic;
 
+registration
+  let l be Element of NAT;
+  let p be l-started autonomic halting FinPartState of SCM+FSA,
+    k be Element of NAT;
+  cluster Relocated(p,k) -> halting;
+end;
+
 theorem :: SCMFSA_5:17
-  for p being halting autonomic FinPartState of SCM+FSA st IC
+  for l being Element of NAT
+  for p being halting autonomic non program-free l-started
+   FinPartState of SCM+FSA st IC
   SCM+FSA in dom p for k being Element of NAT
    holds DataPart(Result(ProgramPart(p),p)) =
   DataPart(Result(ProgramPart(Relocated(p,k)),Relocated(p,k)));
@@ -95,8 +104,11 @@ theorem :: SCMFSA_5:17
 :: Relocatability
 
 theorem :: SCMFSA_5:18
-  for F being PartFunc of FinPartSt SCM+FSA, FinPartSt SCM+FSA, p being
-  FinPartState of SCM+FSA st IC SCM+FSA in dom p & F is data-only for k being
+  for F being PartFunc of FinPartSt SCM+FSA, FinPartSt SCM+FSA,
+      l being Element of NAT,
+      p being halting autonomic non program-free l-started
+       FinPartState of SCM+FSA
+       st IC SCM+FSA in dom p & F is data-only for k being
   Element of NAT holds ProgramPart p, p computes F
    iff ProgramPart Relocated( p,k) ,Relocated( p,k) computes F;
 

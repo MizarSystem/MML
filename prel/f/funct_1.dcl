@@ -630,4 +630,37 @@
 <Adjective nr="15"/>
 </Cluster>
 </CCluster>
+<CCluster aid="FUNCT_1" nr="11">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="10">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="12"/>
+<Adjective nr="16">
+<LocusVar nr="2"/>
+</Adjective>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="10">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="12"/>
+</Cluster>
+</CCluster>
 </Registrations>

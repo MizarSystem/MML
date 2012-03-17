@@ -10,16 +10,16 @@ environ
       FUNCOP_1, RELAT_1, FUNCT_1, TARSKI, XBOOLE_0, CARD_1, CAT_1, NAT_1,
       ARYTM_3, FINSET_1, STRUCT_0, XXREAL_0, AMISTD_2, VALUED_1, FSM_1,
       GRAPHSP, FUNCT_7, ARYTM_1, INT_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      TURING_1, SCMFSA6A, ORDINAL1, RELOC, SCMFSA6C;
+      TURING_1, SCMFSA6A, ORDINAL1, RELOC;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
       NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
       FUNCOP_1, FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1, AFINSQ_1, STRUCT_0,
-      COMPOS_1, AMI_1, FUNCT_7, SCMFSA_2, AMISTD_2, XXREAL_0;
+      COMPOS_1, EXTPRO_1, AMI_1, FUNCT_7, SCMFSA_2, AMISTD_2, XXREAL_0;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, INT_2, AMISTD_2, SCMFSA_2,
-      RELSET_1, VALUED_1, AMI_3;
+      RELSET_1, VALUED_1, AMI_3, AMI_1, PRE_POLY;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
       FINSET_1, NUMBERS, XREAL_0, INT_1, STRUCT_0, AMI_1, SCMFSA_2, FUNCT_4,
-      RELAT_1, VALUED_1, SCMFSA10, AMISTD_2, COMPOS_1;
+      RELAT_1, VALUED_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -48,19 +48,7 @@ canceled 14;
 
 registration
   let I be Program of SCM+FSA;
-  cluster Directed I -> initial;
-end;
-
-definition
-  let i;
-  func Macro i -> Program of SCM+FSA equals
-:: SCMFSA6A:def 3
-  ( 0, 1) --> (i,halt SCM+FSA);
-end;
-
-registration
-  let i;
-  cluster Macro i -> non empty;
+  cluster Directed I -> initial non empty;
 end;
 
 canceled;
@@ -96,6 +84,7 @@ reserve a,b for Int-Location,
   s,s1,s2 for State of SCM+FSA;
 
 definition
+ canceled;
   let I be PartState of SCM+FSA;
   func Initialized I -> PartState of SCM+FSA equals
 :: SCMFSA6A:def 4
@@ -118,6 +107,11 @@ theorem :: SCMFSA6A:25
 
 theorem :: SCMFSA6A:26
   I c= Initialized I;
+
+registration
+  let I be non halt-free Program of SCM+FSA;
+  cluster Initialized I -> non halt-free;
+end;
 
 canceled 5;
 
@@ -173,7 +167,7 @@ theorem :: SCMFSA6A:41
 canceled;
 
 theorem :: SCMFSA6A:43
-  for I being Program of SCM+FSA holds dom Initialized I = dom I
+  for p being PartState of SCM+FSA holds dom Initialized p = dom p
   \/ {intloc 0} \/ {IC SCM+FSA};
 
 theorem :: SCMFSA6A:44
@@ -189,8 +183,7 @@ theorem :: SCMFSA6A:46
   1 & (Initialized I).IC SCM+FSA =  0;
 
 theorem :: SCMFSA6A:47
-  for I being Program of SCM+FSA holds not intloc 0 in dom I & not
-  IC SCM+FSA in dom I;
+  for I being Program of SCM+FSA holds not intloc 0 in dom I;
 
 theorem :: SCMFSA6A:48
   for I being Program of SCM+FSA, a being Int-Location st a <>
@@ -223,6 +216,11 @@ definition
   func I ';' J -> Program of SCM+FSA equals
 :: SCMFSA6A:def 5
   Directed I +* ProgramPart Relocated(J, card I);
+end;
+
+registration
+ let I be Program of SCM+FSA, J be non halt-free Program of SCM+FSA;
+  cluster I ';' J -> non halt-free;
 end;
 
 theorem :: SCMFSA6A:54
@@ -329,4 +327,11 @@ theorem :: SCMFSA6A:73
 theorem :: SCMFSA6A:74
   i ';' j ';' k = i ';' (j ';' k);
 
+theorem :: SCMFSA6A:75
+ card(i ';' J) = card J + 2;
 
+theorem :: SCMFSA6A:76
+ card(I ';' j) = card I + 2;
+
+theorem :: SCMFSA6A:77
+ card(i ';' j) = 4;

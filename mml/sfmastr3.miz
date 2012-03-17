@@ -14,25 +14,26 @@ environ
       AOFA_I00, FUNCT_2, FINSEQ_2, SFMASTR3, NAT_1, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, CARD_3,
       INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCT_7, GRAPH_2,
-      FINSEQ_1, FINSEQ_2, COMPOS_1, AMI_1, SCMFSA_2, SCMFSA6A,
+      FINSEQ_1, FINSEQ_2, COMPOS_1, EXTPRO_1, AMI_1, SCMFSA_2, SCMFSA6A,
       SCMFSA6B,
       SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
       SCMFSA9A, XXREAL_0, NAT_1;
  constructors SETWISEO, REAL_1, INT_2, MESFUNC1, SCMFSA6A, SCMFSA6B, SCMFSA6C,
       SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMFSA9A, RELSET_1,
-      PBOOLE, GRAPH_2;
+      PBOOLE, GRAPH_2, SCMFSA7B, AMI_1;
  registrations SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2,
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9,
-      SFMASTR1, XBOOLE_0, VALUED_0, AMI_1, AFINSQ_1, FUNCOP_1, COMPOS_1;
+      SFMASTR1, XBOOLE_0, VALUED_0, AMI_1, AFINSQ_1, FUNCOP_1, COMPOS_1,
+      EXTPRO_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, SCMFSA7B, SCMFSA9A, GRAPH_2, SCMFSA6A, COMPOS_1,
+ definitions TARSKI, SCMFSA7B, SCMFSA9A, GRAPH_2, SCMFSA6A, COMPOS_1, EXTPRO_1,
       AMI_1;
  theorems TARSKI, ZFMISC_1, ENUMSET1, ABSVALUE, NAT_1, INT_1, RELAT_1, FUNCT_7,
       FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, GRAPH_2, AMI_1, SCMFSA_2,
       SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
       SCMFSA8C, SCMFSA_9, SFMASTR1, SCMFSA9A, SFMASTR2, XBOOLE_0, XBOOLE_1,
-      XREAL_1, XXREAL_0, PARTFUN1, AFINSQ_1, PBOOLE;
+      XREAL_1, XXREAL_0, PARTFUN1, AFINSQ_1, PBOOLE, EXTPRO_1;
  schemes FUNCT_2, NAT_1;
 
 begin :: SCM+FSA preliminaries
@@ -53,7 +54,6 @@ theorem Th7:
   I is_closed_on Initialized s & I is_halting_on Initialized s & I
   does not destroy aa implies IExec(I,s).aa = (Initialized s).aa
 proof
-  set D = Int-Locations \/ FinSeq-Locations;
   set a = aa;
 A1: DataPart Initialized s = DataPart(Initialized s +*
 (I +* Start-At( 0,SCM+FSA)
@@ -65,15 +65,13 @@ A1: DataPart Initialized s = DataPart(Initialized s +*
   (I +* Start-At( 0,SCM+FSA)))),(Initialized s +*
   (I +* Start-At( 0,SCM+FSA))),0
   ).a by SCMFSA8C:89
-    .= (Initialized s +* (I +* Start-At( 0,SCM+FSA))).a by AMI_1:13
+    .= (Initialized s +* (I +* Start-At( 0,SCM+FSA))).a by EXTPRO_1:3
     .= (Initialized s).a by A1,SCMFSA6A:38;
 end;
 
 theorem Th8:
-  s.intloc 0 = 1 implies DataPart IExec(Stop SCM+FSA, s) = DataPart
-  s
+  s.intloc 0 = 1 implies DataPart IExec(Stop SCM+FSA, s) = DataPart s
 proof
-  set D = Int-Locations \/ FinSeq-Locations;
   assume
 A1: s.intloc 0 = 1;
   thus DataPart IExec(Stop SCM+FSA, s) = DataPart(Initialized s +* Start-At(
@@ -402,7 +400,6 @@ theorem Th24:
 StepForUp(a, bb, cc, Ig, s).k & Ig is_halting_on StepForUp(a, bb, cc, Ig, s).k
   implies StepForUp(a, bb, cc, Ig, s).(k+1).intloc 0 = 1
 proof
-  set D = Int-Locations \/ FinSeq-Locations;
   set I = Ig;
   assume that
 A1: StepForUp(a, bb, cc, I, s).k.intloc 0 = 1 and
@@ -448,7 +445,6 @@ does not destroy a implies StepForUp(a, bb, cc, Ig, s).k.a = k+s.bb & StepForUp
 (a, bb, cc, Ig, s).k.a <= s.cc+1) & StepForUp(a, bb, cc, Ig, s).k.(1-stRWNotIn
   ({a, bb, cc} \/ UsedIntLoc Ig)) + k = s.cc-s.bb+1
 proof
-  set D = Int-Locations \/ FinSeq-Locations;
   set I = Ig;
   assume that
 A1: s.intloc 0 = 1 and
@@ -567,7 +563,6 @@ theorem Th26:
 holds StepForUp(a, bb, cc, Ig, s).k.(1-stRWNotIn({a, bb, cc} \/ UsedIntLoc Ig))
   > 0 iff k < s.cc-s.bb+1
 proof
-  set D = Int-Locations \/ FinSeq-Locations;
   set I = Ig;
   set SF = StepForUp(a, bb, cc, I, s);
   set aux = (1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I));
@@ -628,7 +623,6 @@ bb+1 implies StepForUp(a, bb, cc, Ig, s).(k+1) | (({a, bb, cc} \/ UsedIntLoc Ig
 ) \/ FinSeq-Locations) = IExec(Ig ';' AddTo(a, intloc 0), StepForUp(a, bb, cc,
   Ig, s).k) | (({a, bb, cc} \/ UsedIntLoc Ig) \/ FinSeq-Locations)
 proof
-  set D = Int-Locations \/ FinSeq-Locations;
   set FL = FinSeq-Locations;
   set I = Ig;
   assume that
@@ -810,7 +804,6 @@ theorem Th30:
   , cc} \/ UsedIntLoc I holds IExec(for-up(a, bb, cc, I), s).x = s.x) & for f
   holds IExec(for-up(a, bb, cc, I), s).f = s.f
 proof
-  set D = Int-Locations \/ FinSeq-Locations;
   assume that
 A1: s.intloc 0 = 1 and
 A2: s.bb > s.cc;
@@ -898,7 +891,6 @@ A14: x <> aux by SFMASTR1:21;
 end;
 
 Lm1: now
-  set D = Int-Locations \/ FinSeq-Locations;
   let s, a, bb, cc;
   let I be good Program of SCM+FSA such that
 A1: s.intloc 0 = 1 and
@@ -1028,7 +1020,6 @@ theorem Th31:
 Ig, s or Ig is parahalting) implies DataPart IExec(for-up(a, bb, cc, Ig), s) =
   DataPart StepForUp(a, bb, cc, Ig, s).k
 proof
-  set D = Int-Locations \/ FinSeq-Locations;
   set SAt = Start-At( 0,SCM+FSA);
   set I = Ig;
   assume that
@@ -1269,7 +1260,6 @@ theorem Th36:
   , bb, c), s).f = s.f & IExec(FinSeqMin(f, aa, bb, c), s).aa = s.aa & IExec(
   FinSeqMin(f, aa, bb, c), s).bb = s.bb
 proof
-  set D = Int-Locations \/ FinSeq-Locations;
   assume that
 A1: aa <> c and
 A2: bb <> c and
@@ -1574,7 +1564,6 @@ theorem Th37:
 & s.intloc 0 = 1 implies IExec(FinSeqMin(f, aa, bb, c), s).c = min_at(s.f, abs(
   s.aa), abs(s.bb))
 proof
-  set D = Int-Locations \/ FinSeq-Locations;
   set a = aa, b = bb;
   assume that
 A1: 1 <= s.a and
@@ -2136,7 +2125,6 @@ theorem
 proof
   set minpos = 2-ndRWNotIn {} Int-Locations;
   set cv = 1-stRWNotIn {} Int-Locations;
-  set D = Int-Locations \/ FinSeq-Locations;
   let S be State of SCM+FSA such that
 A1: S = IExec(Selection-sort f, s);
   set I22 = swap(f, cv, minpos);

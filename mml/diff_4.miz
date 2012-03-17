@@ -1,0 +1,1897 @@
+:: Difference and Difference Quotient -- Part {IV}
+::  by Xiquan Liang , Ling Tang and Xichun Jiang
+:: 
+:: Received July 12, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies DIFF_1, ARYTM_3, ARYTM_1, FUNCT_1, SUBSET_1, NUMBERS, RELAT_1,
+      ZFMISC_1, REAL_1, XXREAL_0, SQUARE_1, SIN_COS, VALUED_1, CARD_1, XREAL_0,
+      POWER, ORDINAL1, SIN_COS4, XBOOLE_0, TAYLOR_1, LIMFUNC1, NEWTON;
+ notations ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, NAT_1, SERIES_1, XXREAL_0,
+      TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, PARTFUN1,
+      RELAT_1, VALUED_0, VALUED_1, SEQ_1, FUNCOP_1, NAT_D, NEWTON, FUNCT_2,
+      RELSET_1, SEQFUNC, SQUARE_1, SIN_COS, SIN_COS4, DIFF_1, DIFF_2, FDIFF_9,
+      RFUNCT_1, COMPLEX1, MEMBERED, MEMBER_1, FUNCT_3, TAYLOR_1, POWER,
+      PARTFUN2, LIMFUNC1;
+ constructors PARTFUN1, REAL_1, NAT_1, SEQFUNC, NEWTON, SERIES_1, MEASURE6,
+      NAT_D, PARTFUN3, DIFF_1, SEQ_1, FUNCOP_1, RELSET_1, DIFF_2, VALUED_2,
+      SQUARE_1, SIN_COS, SIN_COS4, JORDAN16, FDIFF_9, XCMPLX_0, FUNCT_1,
+      FUNCT_3, XXREAL_0, COMPLEX1, VALUED_1, RFUNCT_1, XREAL_0, PARTFUN2,
+      SEQ_2, SIN_COS5, TAYLOR_1, POWER, RCOMP_1, LIMFUNC1, FDIFF_1, PREPOWER;
+ registrations XBOOLE_0, RELAT_1, ORDINAL1, PARTFUN1, NUMBERS, XREAL_0,
+      MEMBERED, VALUED_0, VALUED_1, DIFF_1, FUNCT_2, VALUED_2, RELSET_1,
+      SQUARE_1, SIN_COS, XCMPLX_0, RFUNCT_1, FUNCT_1, TAYLOR_1, NEWTON, SEQ_2,
+      XXREAL_0, POWER, INT_1, RCOMP_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions DIFF_1, VALUED_1, DIFF_2, VALUED_2, SIN_COS4, SQUARE_1, SIN_COS,
+      FDIFF_9, XCMPLX_0, RFUNCT_1, FUNCT_1, TAYLOR_1, POWER, NEWTON, XREAL_0,
+      TARSKI, PARTFUN1, XBOOLE_0, VALUED_0, SEQ_2, LIMFUNC1;
+ theorems XCMPLX_1, NEWTON, RFUNCT_1, ZFMISC_1, VALUED_1, DIFF_1, SIN_COS4,
+      FDIFF_8, XBOOLE_0, DIFF_3, XXREAL_0, SIN_COS5, TAYLOR_1, POWER, SIN_COS,
+      XXREAL_1, XREAL_0;
+ schemes NAT_1;
+
+begin
+
+ reserve n,m,i,p for Element of NAT,
+         h,k,r,r1,r2,x,x0,x1,x2,x3 for Real;
+ reserve f,f1,f2,g for Function of REAL,REAL;
+
+theorem Th29:
+  x0>0 & x1>0 implies
+  log(number_e,x0) - log(number_e,x1) = log(number_e,x0/x1)
+proof
+  assume
+A1:x0>0 & x1>0;
+  number_e > 1 by TAYLOR_1:11,XXREAL_0:2;
+  hence thesis by A1,POWER:62;
+end;
+
+theorem
+  x0>0 & x1>0 implies
+  log(number_e,x0) + log(number_e,x1) = log(number_e,x0*x1)
+proof
+  assume
+A1:x0>0 & x1>0;
+  number_e > 1 by TAYLOR_1:11,XXREAL_0:2;
+  hence thesis by A1,POWER:61;
+end;
+
+theorem Th31:
+  x>0 implies log(number_e,x) = ln.x
+proof
+  assume
+A1: x>0;
+  x in right_open_halfline(0)
+  proof
+    x in {g where g is Real : 0<g} by A1;
+    hence thesis by XXREAL_1:230;
+  end;
+  hence thesis by TAYLOR_1:def 2;
+end;
+
+theorem Th32:
+  x0>0 & x1>0 implies ln.x0 - ln.x1 = ln.(x0/x1)
+proof
+  assume
+A1: x0>0 & x1>0;
+A3: log(number_e,x0/x1) = ln.(x0/x1)
+  proof
+A4: x0/x1 in REAL by XREAL_0:def 1;
+    x0/x1 in right_open_halfline(0)
+  proof
+    x0/x1 in {g where g is Real : 0<g} by A1,A4;
+    hence thesis by XXREAL_1:230;
+  end;
+  hence thesis by TAYLOR_1:def 2;
+  end;
+  ln.x0-ln.x1 = log(number_e,x0)-ln.x1 by A1,Th31
+    .= log(number_e,x0)-log(number_e,x1) by A1,Th31
+    .= log(number_e,x0/x1) by A1,Th29;
+  hence thesis by A3;
+end;
+
+:: f.x=k/(x^2)
+
+theorem
+  (for x holds f.x = k/(x^2)) & x0<>0 & x1<>0 & x2<>0 & x3<>0
+  & x0,x1,x2,x3 are_mutually_different implies
+  [!f,x0,x1,x2,x3!] = k*((1/(x1*x2*x0))*(1/x0+1/x2+1/x1)
+  -(1/(x2*x1*x3))*(1/x3+1/x1+1/x2))/(x0-x3)
+proof
+  assume that
+A1:for x holds f.x = k/(x^2) and
+A2:x0<>0 & x1<>0 & x2<>0 & x3<>0 and
+A3: x0,x1,x2,x3 are_mutually_different;
+  x0 <> x1 & x0 <> x2 & x1 <> x2 by A3,ZFMISC_1:def 6;
+  then x0,x1,x2 are_mutually_different by ZFMISC_1:def 5; then
+A:  [!f,x0,x1,x2!] = (k/(x0*x1*x2))*(1/x0+1/x1+1/x2) by A1,A2,DIFF_3:49
+          .= k*(1/(x1*x2*x0))*(1/x0+1/x2+1/x1);
+  x1 <> x2 & x1 <> x3 & x2 <> x3 by A3,ZFMISC_1:def 6;
+  then x1,x2,x3 are_mutually_different by ZFMISC_1:def 5;
+  then [!f,x1,x2,x3!] = (k/(x1*x2*x3))*(1/x1+1/x2+1/x3) by A1,A2,DIFF_3:49;
+  hence thesis by A;
+end;
+
+::  f.x=(cot(x))^2
+
+theorem
+  x0 in dom cot & x1 in dom cot
+  implies [!cot(#)cot,x0,x1!] = -((cos(x1))^2-(cos(x0))^2)
+  /(((sin(x0)*sin(x1))^2)*(x0-x1))
+proof
+  assume that
+A1:x0 in dom cot & x1 in dom cot;
+A2:sin(x0)<>0 & sin(x1)<>0 by A1,FDIFF_8:2;
+  [!cot(#)cot,x0,x1!] = (cot.x0*cot.x0-(cot(#)cot).x1)/(x0-x1) by VALUED_1:5
+    .= ((cot.x0*cot.x0)-(cot.x1*cot.x1))/(x0-x1) by VALUED_1:5
+    .= (((cos.x0*(sin.x0)")*cot.x0)-(cot.x1*cot.x1))/(x0-x1)
+                                               by A1,RFUNCT_1:def 4
+    .= (((cos.x0*(sin.x0)")*(cos.x0*(sin.x0)"))-(cot.x1*cot.x1))/(x0-x1)
+                                                     by A1,RFUNCT_1:def 4
+    .= (((cos.x0*(sin.x0)")*(cos.x0*(sin.x0)"))
+       -((cos.x1*(sin.x1)")*cot.x1))/(x0-x1) by A1,RFUNCT_1:def 4
+    .= ((cot(x0))^2-(cot(x1))^2)/(x0-x1) by A1,RFUNCT_1:def 4
+    .= ((cot(x0)-cot(x1))*(cot(x0)+cot(x1)))/(x0-x1)
+    .= ((-sin(x0-x1)/(sin(x0)*sin(x1)))*(cot(x0)+cot(x1)))/(x0-x1)
+                                                            by A2,SIN_COS4:28
+    .= (-(sin(x0-x1)/(sin(x0)*sin(x1)))*(cot(x0)+cot(x1)))/(x0-x1)
+    .= (-(sin(x0-x1)/(sin(x0)*sin(x1)))*(sin(x0+x1)/(sin(x0)*sin(x1))))/(x0-x1)
+                                                             by A2,SIN_COS4:27
+    .= (-(sin(x0+x1)*sin(x0-x1))/((sin(x0)*sin(x1))^2))/(x0-x1) by XCMPLX_1:77
+    .= (-((cos(x1))^2-(cos(x0))^2)/((sin(x0)*sin(x1))^2))/(x0-x1)
+                                                       by SIN_COS4:42
+    .= -((cos(x1))^2-(cos(x0))^2)/((sin(x0)*sin(x1))^2)/(x0-x1)
+    .= -((cos(x1))^2-(cos(x0))^2)/(((sin(x0)*sin(x1))^2)*(x0-x1))
+                                                    by XCMPLX_1:79;
+  hence thesis;
+end;
+
+theorem
+  x in dom cot & x+h in dom cot implies
+  fD(cot(#)cot,h).x = (1/2)*(cos(2*(x+h))-cos(2*x))/((sin(x+h)*sin(x))^2)
+proof
+  set f=cot(#)cot;
+  assume
+A1:x in dom cot & x+h in dom cot;
+A2:sin(x)<>0 & sin(x+h)<>0 by A1,FDIFF_8:2;
+  x in dom f & x+h in dom f
+  proof
+    x in dom cot /\ dom cot & x+h in dom cot /\ dom cot by A1;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  fD(f,h).x = (cot(#)cot).(x+h) - (cot(#)cot).x by DIFF_1:1
+    .= cot.(x+h)*cot.(x+h)-(cot(#)cot).x by VALUED_1:5
+    .= cot.(x+h)*cot.(x+h)-cot.x*cot.x by VALUED_1:5
+    .= cos.(x+h)*(sin.(x+h))"*cot.(x+h)-cot.x*cot.x by A1,RFUNCT_1:def 4
+    .= cos.(x+h)*(sin.(x+h))"*(cos.(x+h)*(sin.(x+h))")-cot.x*cot.x
+                                                     by A1,RFUNCT_1:def 4
+    .= cos.(x+h)*(sin.(x+h))"*(cos.(x+h)*(sin.(x+h))")
+       -(cos.x*(sin.x)")*cot.x by A1,RFUNCT_1:def 4
+    .= (cot(x+h))^2-(cot(x))^2 by A1,RFUNCT_1:def 4
+    .= (cot(x+h)-cot(x))*(cot(x+h)+cot(x))
+    .= (-sin(x+h-x)/(sin(x+h)*sin(x)))*(cot(x+h)+cot(x)) by A2,SIN_COS4:28
+    .= (-sin(x+h-x)/(sin(x+h)*sin(x)))*(sin(x+h+x)/(sin(x+h)*sin(x)))
+                                                         by A2,SIN_COS4:27
+    .= -(sin(x+h-x)/(sin(x+h)*sin(x)))*(sin(x+h+x)/(sin(x+h)*sin(x)))
+    .= -(sin(2*x+h)*sin(h))/((sin(x+h)*sin(x))^2) by XCMPLX_1:77
+    .= -(-(1/2)*(cos(2*x+h+h)-cos(2*x+h-h)))/((sin(x+h)*sin(x))^2)
+                                                          by SIN_COS4:33
+    .= (1/2)*(cos(2*(x+h))-cos(2*x))/((sin(x+h)*sin(x))^2);
+  hence thesis;
+end;
+
+theorem
+  x in dom cot & x-h in dom cot implies
+  bD(cot(#)cot,h).x = (1/2)*(cos(2*x)-cos(2*(h-x)))/((sin(x)*sin(x-h))^2)
+proof
+  set f=cot(#)cot;
+  assume
+A1:x in dom cot & x-h in dom cot;
+A2:sin(x)<>0 & sin(x-h)<>0 by A1,FDIFF_8:2;
+  x in dom f & x-h in dom f
+  proof
+    x in dom cot /\ dom cot & x-h in dom cot /\ dom cot by A1;
+    hence thesis by VALUED_1:def 4;
+  end; then
+  bD(f,h).x = (cot(#)cot).x - (cot(#)cot).(x-h) by DIFF_1:38
+    .= cot.x*cot.x-(cot(#)cot).(x-h) by VALUED_1:5
+    .= cot.x*cot.x-cot.(x-h)*cot.(x-h) by VALUED_1:5
+    .= cos.x*(sin.x)"*cot.x-cot.(x-h)*cot.(x-h) by A1,RFUNCT_1:def 4
+    .= cos.x*(sin.x)"*(cos.x*(sin.x)")-cot.(x-h)*cot.(x-h)
+                                                     by A1,RFUNCT_1:def 4
+    .= cos.x*(sin.x)"*(cos.x*(sin.x)")
+       -(cos.(x-h)*(sin.(x-h))")*cot.(x-h) by A1,RFUNCT_1:def 4
+    .= (cot(x))^2-(cot(x-h))^2 by A1,RFUNCT_1:def 4
+    .= (cot(x)-cot(x-h))*(cot(x)+cot(x-h))
+    .= (-sin(x-(x-h))/(sin(x)*sin(x-h)))*(cot(x)+cot(x-h)) by A2,SIN_COS4:28
+    .= -(sin(x-(x-h))/(sin(x)*sin(x-h)))*(cot(x)+cot(x-h))
+    .= -(sin(h)/(sin(x)*sin(x-h)))*(sin(x+(x-h))/(sin(x)*sin(x-h)))
+                                                         by A2,SIN_COS4:27
+    .= -(sin(h)*sin(2*x-h))/((sin(x)*sin(x-h))^2) by XCMPLX_1:77
+    .= -(-(1/2)*(cos(h+(2*x-h))-cos(h-(2*x-h))))/((sin(x)*sin(x-h))^2)
+                                                          by SIN_COS4:33
+    .= (1/2)*(cos(2*x)-cos(2*(h-x)))/((sin(x)*sin(x-h))^2);
+  hence thesis;
+end;
+
+theorem
+  x+h/2 in dom cot & x-h/2 in dom cot implies
+  cD(cot(#)cot,h).x = (1/2)*(cos(h+2*x)-cos(h-2*x))/((sin(x+h/2)*sin(x-h/2))^2)
+proof
+  set f=cot(#)cot;
+  assume
+A1:x+h/2 in dom cot & x-h/2 in dom cot;
+A2:sin(x+h/2)<>0 & sin(x-h/2)<>0 by A1,FDIFF_8:2;
+  x+h/2 in dom f & x-h/2 in dom f
+  proof
+    x+h/2 in dom cot /\ dom cot & x-h/2 in dom cot /\ dom cot by A1;
+    hence thesis by VALUED_1:def 4;
+  end; then
+  cD(f,h).x = (cot(#)cot).(x+h/2) - (cot(#)cot).(x-h/2) by DIFF_1:39
+    .= cot.(x+h/2)*cot.(x+h/2)-(cot(#)cot).(x-h/2) by VALUED_1:5
+    .= cot.(x+h/2)*cot.(x+h/2)-cot.(x-h/2)*cot.(x-h/2) by VALUED_1:5
+    .= cos.(x+h/2)*(sin.(x+h/2))"*cot.(x+h/2)-cot.(x-h/2)*cot.(x-h/2)
+                                                      by A1,RFUNCT_1:def 4
+    .= cos.(x+h/2)*(sin.(x+h/2))"*(cos.(x+h/2)*(sin.(x+h/2))")
+       -cot.(x-h/2)*cot.(x-h/2) by A1,RFUNCT_1:def 4
+    .= cos.(x+h/2)*(sin.(x+h/2))"*(cos.(x+h/2)*(sin.(x+h/2))")
+       -(cos.(x-h/2)*(sin.(x-h/2))")*cot.(x-h/2) by A1,RFUNCT_1:def 4
+    .= (cot(x+h/2))^2-(cot(x-h/2))^2 by A1,RFUNCT_1:def 4
+    .= (cot(x+h/2)-cot(x-h/2))*(cot(x+h/2)+cot(x-h/2))
+    .= (-sin((x+h/2)-(x-h/2))/(sin(x+h/2)*sin(x-h/2)))*(cot(x+h/2)+cot(x-h/2))
+                                                            by A2,SIN_COS4:28
+    .= (-sin(h)/(sin(x+h/2)*sin(x-h/2)))
+       *(sin((x+h/2)+(x-h/2))/(sin(x+h/2)*sin(x-h/2))) by A2,SIN_COS4:27
+    .= -(sin(h)/(sin(x+h/2)*sin(x-h/2)))
+       *(sin((x+h/2)+(x-h/2))/(sin(x+h/2)*sin(x-h/2)))
+    .= -(sin(h)*sin(2*x))/((sin(x+h/2)*sin(x-h/2))^2) by XCMPLX_1:77
+    .= -(-(1/2)*(cos(h+(2*x))-cos(h-(2*x))))/((sin(x+h/2)*sin(x-h/2))^2)
+                                                          by SIN_COS4:33
+    .= (1/2)*(cos(h+2*x)-cos(h-2*x))/((sin(x+h/2)*sin(x-h/2))^2);
+  hence thesis;
+end;
+
+:: f.x=(cosec(x))^2
+
+theorem
+  x0 in dom cosec & x1 in dom cosec implies
+  [!cosec(#)cosec,x0,x1!] = 4*(sin(x1+x0)*sin(x1-x0))
+  /((cos(x0+x1)-cos(x0-x1))^2*(x0-x1))
+proof
+  assume
+A1:x0 in dom cosec & x1 in dom cosec;
+A2:sin.x0<>0 & sin.x1<>0 by A1,RFUNCT_1:13;
+  [!cosec(#)cosec,x0,x1!] = (cosec.x0*cosec.x0-(cosec(#)cosec).x1)/(x0-x1)
+                                                         by VALUED_1:5
+    .= (cosec.x0*cosec.x0-cosec.x1*cosec.x1)/(x0-x1) by VALUED_1:5
+    .= ((sin.x0)"*cosec.x0-cosec.x1*cosec.x1)/(x0-x1) by A1,RFUNCT_1:def 8
+    .= ((sin.x0)"*(sin.x0)"-cosec.x1*cosec.x1)/(x0-x1) by A1,RFUNCT_1:def 8
+    .= ((sin.x0)"*(sin.x0)"-(sin.x1)"*cosec.x1)/(x0-x1) by A1,RFUNCT_1:def 8
+    .= (((sin.x0)")^2-((sin.x1)")^2)/(x0-x1) by A1,RFUNCT_1:def 8
+    .= ((1/sin.x0-1/sin.x1)*(1/sin.x0+1/sin.x1))/(x0-x1)
+    .= (((1*sin.x1-1*sin.x0)/(sin.x0*sin.x1))*(1/sin.x0+1/sin.x1))/(x0-x1)
+                                                       by A2,XCMPLX_1:131
+    .= (((sin.x1-sin.x0)/(sin.x0*sin.x1))*((sin.x1+sin.x0)/(sin.x0*sin.x1)))
+       /(x0-x1) by A2,XCMPLX_1:117
+    .= (((sin.x1-sin.x0)*(sin.x1+sin.x0))/((sin.x0*sin.x1)*(sin.x0*sin.x1)))
+       /(x0-x1) by XCMPLX_1:77
+    .= ((sin(x1)*sin(x1)-sin(x0)*sin(x0))/((sin(x0)*sin(x1))^2))/(x0-x1)
+    .= ((sin(x1+x0)*sin(x1-x0))/((sin(x0)*sin(x1))^2))/(x0-x1)
+                                                              by SIN_COS4:41
+    .= ((sin(x1+x0)*sin(x1-x0))
+       /((-(1/2)*(cos(x0+x1)-cos(x0-x1)))^2))/(x0-x1) by SIN_COS4:33
+    .= (1*(sin(x1+x0)*sin(x1-x0))
+       /((1/4)*(cos(x0+x1)-cos(x0-x1))^2))/(x0-x1)
+    .= ((1/(1/4))*((sin(x1+x0)*sin(x1-x0))
+       /(cos(x0+x1)-cos(x0-x1))^2))/(x0-x1) by XCMPLX_1:77
+    .= (4*(sin(x1+x0)*sin(x1-x0)))/(cos(x0+x1)-cos(x0-x1))^2/(x0-x1)
+    .= 4*(sin(x1+x0)*sin(x1-x0))/((cos(x0+x1)-cos(x0-x1))^2*(x0-x1))
+                                                     by XCMPLX_1:79;
+  hence thesis;
+end;
+
+theorem
+  x in dom cosec & x+h in dom cosec implies
+  fD(cosec(#)cosec,h).x = -4*sin(2*x+h)*sin(h)/(cos(2*x+h)-cos(h))^2
+proof
+  set f=cosec(#)cosec;
+  assume
+A1:x in dom cosec & x+h in dom cosec;
+A2:sin.x<>0 & sin.(x+h)<>0 by A1,RFUNCT_1:13;
+  x in dom f & x+h in dom f
+  proof
+    x in dom cosec /\ dom cosec & x+h in dom cosec /\ dom cosec by A1;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  fD(f,h).x = (cosec(#)cosec).(x+h)-(cosec(#)cosec).x by DIFF_1:1
+    .= cosec.(x+h)*cosec.(x+h)-(cosec(#)cosec).x by VALUED_1:5
+    .= cosec.(x+h)*cosec.(x+h)-cosec.x*cosec.x by VALUED_1:5
+    .= (sin.(x+h))"*cosec.(x+h)-cosec.x*cosec.x by A1,RFUNCT_1:def 8
+    .= (sin.(x+h))"*(sin.(x+h))"-cosec.x*cosec.x by A1,RFUNCT_1:def 8
+    .= (sin.(x+h))"*(sin.(x+h))"-(sin.x)"*cosec.x by A1,RFUNCT_1:def 8
+    .= ((sin.(x+h))")^2-((sin.x)")^2 by A1,RFUNCT_1:def 8
+    .= (1/sin.(x+h)-1/sin.x)*(1/sin.(x+h)+1/sin.x)
+    .= ((1*sin.x-1*sin.(x+h))/(sin.(x+h)*sin.x))*(1/sin.(x+h)+1/sin.x)
+                                                       by A2,XCMPLX_1:131
+    .= ((sin.x-sin.(x+h))/(sin.(x+h)*sin.x))
+       *((sin.x+sin.(x+h))/(sin.(x+h)*sin.x)) by A2,XCMPLX_1:117
+    .= ((sin.x-sin.(x+h))*(sin.x+sin.(x+h)))
+       /((sin.(x+h)*sin.x)*(sin.(x+h)*sin.x)) by XCMPLX_1:77
+    .= (sin(x)*sin(x)-sin(x+h)*sin(x+h))/(sin(x+h)*sin(x))^2
+    .= (sin(x+(x+h))*sin(x-(x+h)))/(sin(x+h)*sin(x))^2 by SIN_COS4:41
+    .= (sin(2*x+h)*sin(-h))
+       /(-(1/2)*(cos((x+h)+x)-cos((x+h)-x)))^2 by SIN_COS4:33
+    .= (sin(2*x+h)*(-sin(h)))/((1/4)*(cos(2*x+h)-cos(h))^2) by SIN_COS:34
+    .= -1*(sin(2*x+h)*sin(h))/((1/4)*(cos(2*x+h)-cos(h))^2)
+    .= -(1/(1/4))*((sin(2*x+h)*sin(h))/(cos(2*x+h)-cos(h))^2) by XCMPLX_1:77
+    .= -4*sin(2*x+h)*sin(h)/(cos(2*x+h)-cos(h))^2;
+  hence thesis;
+end;
+
+theorem
+  x in dom cosec & x-h in dom cosec implies
+  bD(cosec(#)cosec,h).x = -4*sin(2*x-h)*sin(h)/(cos(2*x-h)-cos(h))^2
+proof
+  set f=cosec(#)cosec;
+  assume
+A1:x in dom cosec & x-h in dom cosec;
+A2:sin.x<>0 & sin.(x-h)<>0 by A1,RFUNCT_1:13;
+  x in dom f & x-h in dom f
+  proof
+    x in dom cosec /\ dom cosec & x-h in dom cosec /\ dom cosec by A1;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  bD(f,h).x = (cosec(#)cosec).x-(cosec(#)cosec).(x-h) by DIFF_1:38
+    .= cosec.x*cosec.x-(cosec(#)cosec).(x-h) by VALUED_1:5
+    .= cosec.x*cosec.x-cosec.(x-h)*cosec.(x-h) by VALUED_1:5
+    .= (sin.x)"*cosec.x-cosec.(x-h)*cosec.(x-h) by A1,RFUNCT_1:def 8
+    .= (sin.x)"*(sin.x)"-cosec.(x-h)*cosec.(x-h) by A1,RFUNCT_1:def 8
+    .= (sin.x)"*(sin.x)"-(sin.(x-h))"*cosec.(x-h) by A1,RFUNCT_1:def 8
+    .= ((sin.x)")^2-((sin.(x-h))")^2 by A1,RFUNCT_1:def 8
+    .= (1/sin.x-1/sin.(x-h))*(1/sin.x+1/sin.(x-h))
+    .= ((1*sin.(x-h)-1*sin.x)/(sin.x*sin.(x-h)))*(1/sin.x+1/sin.(x-h))
+                                                       by A2,XCMPLX_1:131
+    .= ((sin.(x-h)-sin.x)/(sin.x*sin.(x-h)))
+       *((sin.(x-h)+sin.x)/(sin.x*sin.(x-h))) by A2,XCMPLX_1:117
+    .= ((sin.(x-h)-sin.x)*(sin.(x-h)+sin.x))
+       /((sin.x*sin.(x-h))*(sin.x*sin.(x-h))) by XCMPLX_1:77
+    .= (sin(x-h)*sin(x-h)-sin(x)*sin(x))/(sin(x)*sin(x-h))^2
+    .= (sin((x-h)+x)*sin((x-h)-x))/(sin(x)*sin(x-h))^2 by SIN_COS4:41
+    .= (sin(2*x-h)*sin(-h))
+       /(-(1/2)*(cos(x+(x-h))-cos(x-(x-h))))^2 by SIN_COS4:33
+    .= (sin(2*x-h)*(-sin(h)))/((1/4)*(cos(2*x-h)-cos(h))^2) by SIN_COS:34
+    .= -1*(sin(2*x-h)*sin(h))/((1/4)*(cos(2*x-h)-cos(h))^2)
+    .= -(1/(1/4))*((sin(2*x-h)*sin(h))/(cos(2*x-h)-cos(h))^2) by XCMPLX_1:77
+    .= -4*sin(2*x-h)*sin(h)/(cos(2*x-h)-cos(h))^2;
+  hence thesis;
+end;
+
+theorem
+  x+h/2 in dom cosec & x-h/2 in dom cosec implies
+  cD(cosec(#)cosec,h).x = -4*sin(2*x)*sin(h)/(cos(2*x)-cos(h))^2
+proof
+  set f=cosec(#)cosec;
+  assume
+A1:x+h/2 in dom cosec & x-h/2 in dom cosec;
+A2:sin.(x+h/2)<>0 & sin.(x-h/2)<>0 by A1,RFUNCT_1:13;
+  x+h/2 in dom f & x-h/2 in dom f
+  proof
+    x+h/2 in dom cosec /\ dom cosec & x-h/2 in dom cosec /\ dom cosec by A1;
+    hence thesis by VALUED_1:def 4;
+  end; then
+  cD(f,h).x = (cosec(#)cosec).(x+h/2)-(cosec(#)cosec).(x-h/2) by DIFF_1:39
+    .= cosec.(x+h/2)*cosec.(x+h/2)-(cosec(#)cosec).(x-h/2) by VALUED_1:5
+    .= cosec.(x+h/2)*cosec.(x+h/2)-cosec.(x-h/2)*cosec.(x-h/2) by VALUED_1:5
+    .= (sin.(x+h/2))"*cosec.(x+h/2)-cosec.(x-h/2)*cosec.(x-h/2)
+                                                      by A1,RFUNCT_1:def 8
+    .= (sin.(x+h/2))"*(sin.(x+h/2))"-cosec.(x-h/2)*cosec.(x-h/2)
+                                                      by A1,RFUNCT_1:def 8
+    .= (sin.(x+h/2))"*(sin.(x+h/2))"-(sin.(x-h/2))"*cosec.(x-h/2)
+                                                       by A1,RFUNCT_1:def 8
+    .= ((sin.(x+h/2))")^2-((sin.(x-h/2))")^2 by A1,RFUNCT_1:def 8
+    .= (1/sin.(x+h/2)-1/sin.(x-h/2))*(1/sin.(x+h/2)+1/sin.(x-h/2))
+    .= ((1*sin.(x-h/2)-1*sin.(x+h/2))/(sin.(x+h/2)*sin.(x-h/2)))
+       *(1/sin.(x+h/2)+1/sin.(x-h/2)) by A2,XCMPLX_1:131
+    .= ((sin.(x-h/2)-sin.(x+h/2))/(sin.(x+h/2)*sin.(x-h/2)))
+       *((sin.(x-h/2)+sin.(x+h/2))/(sin.(x+h/2)*sin.(x-h/2)))
+                                                        by A2,XCMPLX_1:117
+    .= ((sin.(x-h/2)-sin.(x+h/2))*(sin.(x-h/2)+sin.(x+h/2)))
+       /((sin.(x+h/2)*sin.(x-h/2))*(sin.(x+h/2)*sin.(x-h/2))) by XCMPLX_1:77
+    .= (sin(x-h/2)*sin(x-h/2)-sin(x+h/2)*sin(x+h/2))/(sin(x+h/2)*sin(x-h/2))^2
+    .= (sin((x-h/2)+(x+h/2))*sin((x-h/2)-(x+h/2)))/(sin(x+h/2)*sin(x-h/2))^2
+                                                                by SIN_COS4:41
+    .= (sin(2*x)*sin(-h))
+       /(-(1/2)*(cos((x+h/2)+(x-h/2))-cos((x+h/2)-(x-h/2))))^2 by SIN_COS4:33
+    .= (sin(2*x)*(-sin(h)))/((1/4)*(cos(2*x)-cos(h))^2) by SIN_COS:34
+    .= -1*(sin(2*x)*sin(h))/((1/4)*(cos(2*x)-cos(h))^2)
+    .= -(1/(1/4))*((sin(2*x)*sin(h))/(cos(2*x)-cos(h))^2) by XCMPLX_1:77
+    .= -4*sin(2*x)*sin(h)/(cos(2*x)-cos(h))^2;
+  hence thesis;
+end;
+
+:: f.x=(sec(x))^2
+
+theorem
+  x0 in dom sec & x1 in dom sec implies
+  [!sec(#)sec,x0,x1!] = 4*(sin(x0+x1)*sin(x0-x1))
+  /((cos(x0+x1)+cos(x0-x1))^2*(x0-x1))
+proof
+  assume
+A1:x0 in dom sec & x1 in dom sec;
+A2:cos.x0<>0 & cos.x1<>0 by A1,RFUNCT_1:13;
+  [!sec(#)sec,x0,x1!] = (sec.x0*sec.x0-(sec(#)sec).x1)/(x0-x1) by VALUED_1:5
+    .= (sec.x0*sec.x0-sec.x1*sec.x1)/(x0-x1) by VALUED_1:5
+    .= ((cos.x0)"*sec.x0-sec.x1*sec.x1)/(x0-x1) by A1,RFUNCT_1:def 8
+    .= ((cos.x0)"*(cos.x0)"-sec.x1*sec.x1)/(x0-x1) by A1,RFUNCT_1:def 8
+    .= ((cos.x0)"*(cos.x0)"-(cos.x1)"*sec.x1)/(x0-x1) by A1,RFUNCT_1:def 8
+    .= (((cos.x0)")^2-((cos.x1)")^2)/(x0-x1) by A1,RFUNCT_1:def 8
+    .= ((1/cos.x0-1/cos.x1)*(1/cos.x0+1/cos.x1))/(x0-x1)
+    .= (((1*cos.x1-1*cos.x0)/(cos.x0*cos.x1))*(1/cos.x0+1/cos.x1))/(x0-x1)
+                                                       by A2,XCMPLX_1:131
+    .= (((cos.x1-cos.x0)/(cos.x0*cos.x1))*((cos.x1+cos.x0)/(cos.x0*cos.x1)))
+       /(x0-x1) by A2,XCMPLX_1:117
+    .= (((cos.x1-cos.x0)*(cos.x1+cos.x0))/((cos.x0*cos.x1)*(cos.x0*cos.x1)))
+       /(x0-x1) by XCMPLX_1:77
+    .= ((cos(x1)*cos(x1)-cos(x0)*cos(x0))/((cos(x0)*cos(x1))^2))/(x0-x1)
+    .= ((sin(x0+x1)*sin(x0-x1))/((cos(x0)*cos(x1))^2))/(x0-x1)
+                                                              by SIN_COS4:42
+    .= ((sin(x0+x1)*sin(x0-x1))
+       /(((1/2)*(cos(x0+x1)+cos(x0-x1)))^2))/(x0-x1) by SIN_COS4:36
+    .= (1*(sin(x0+x1)*sin(x0-x1))
+       /((1/4)*(cos(x0+x1)+cos(x0-x1))^2))/(x0-x1)
+    .= ((1/(1/4))*((sin(x0+x1)*sin(x0-x1))
+       /(cos(x0+x1)+cos(x0-x1))^2))/(x0-x1) by XCMPLX_1:77
+    .= (4*(sin(x0+x1)*sin(x0-x1)))/(cos(x0+x1)+cos(x0-x1))^2/(x0-x1)
+    .= 4*(sin(x0+x1)*sin(x0-x1))/((cos(x0+x1)+cos(x0-x1))^2*(x0-x1))
+                                                     by XCMPLX_1:79;
+  hence thesis;
+end;
+
+theorem
+  x in dom sec & x+h in dom sec implies
+  fD(sec(#)sec,h).x = 4*sin(2*x+h)*sin(h)/(cos(2*x+h)+cos(h))^2
+proof
+  set f=sec(#)sec;
+  assume
+A1:x in dom sec & x+h in dom sec;
+A2:cos.x<>0 & cos.(x+h)<>0 by A1,RFUNCT_1:13;
+  x in dom f & x+h in dom f
+  proof
+    x in dom sec /\ dom sec & x+h in dom sec /\ dom sec by A1;
+    hence thesis by VALUED_1:def 4;
+  end; then
+  fD(f,h).x = (sec(#)sec).(x+h)-(sec(#)sec).x by DIFF_1:1
+    .= sec.(x+h)*sec.(x+h)-(sec(#)sec).x by VALUED_1:5
+    .= sec.(x+h)*sec.(x+h)-sec.x*sec.x by VALUED_1:5
+    .= (cos.(x+h))"*sec.(x+h)-sec.x*sec.x by A1,RFUNCT_1:def 8
+    .= (cos.(x+h))"*(cos.(x+h))"-sec.x*sec.x by A1,RFUNCT_1:def 8
+    .= (cos.(x+h))"*(cos.(x+h))"-(cos.x)"*sec.x by A1,RFUNCT_1:def 8
+    .= ((cos.(x+h))")^2-((cos.x)")^2 by A1,RFUNCT_1:def 8
+    .= (1/cos.(x+h)-1/cos.x)*(1/cos.(x+h)+1/cos.x)
+    .= ((1*cos.x-1*cos.(x+h))/(cos.(x+h)*cos.x))*(1/cos.(x+h)+1/cos.x)
+                                                       by A2,XCMPLX_1:131
+    .= ((cos.x-cos.(x+h))/(cos.(x+h)*cos.x))
+       *((cos.x+cos.(x+h))/(cos.(x+h)*cos.x)) by A2,XCMPLX_1:117
+    .= ((cos.x-cos.(x+h))*(cos.x+cos.(x+h)))
+       /((cos.(x+h)*cos.x)*(cos.(x+h)*cos.x)) by XCMPLX_1:77
+    .= (cos(x)*cos(x)-cos(x+h)*cos(x+h))/(cos(x+h)*cos(x))^2
+    .= (sin((x+h)+x)*sin((x+h)-x))/(cos(x+h)*cos(x))^2 by SIN_COS4:42
+    .= (sin(2*x+h)*sin(h))
+       /((1/2)*(cos((x+h)+x)+cos((x+h)-x)))^2 by SIN_COS4:36
+    .= 1*(sin(2*x+h)*sin(h))/((1/4)*(cos(2*x+h)+cos(h))^2)
+    .= (1/(1/4))*((sin(2*x+h)*sin(h))/(cos(2*x+h)+cos(h))^2) by XCMPLX_1:77
+    .= 4*sin(2*x+h)*sin(h)/(cos(2*x+h)+cos(h))^2;
+  hence thesis;
+end;
+
+theorem
+  x in dom sec & x-h in dom sec implies
+  bD(sec(#)sec,h).x = 4*sin(2*x-h)*sin(h)/(cos(2*x-h)+cos(h))^2
+proof
+  set f=sec(#)sec;
+  assume
+A1:x in dom sec & x-h in dom sec;
+A2:cos.x<>0 & cos.(x-h)<>0 by A1,RFUNCT_1:13;
+  x in dom f & x-h in dom f
+  proof
+    x in dom sec /\ dom sec & x-h in dom sec /\ dom sec by A1;
+    hence thesis by VALUED_1:def 4;
+  end; then
+  bD(f,h).x = (sec(#)sec).x-(sec(#)sec).(x-h) by DIFF_1:38
+    .= sec.x*sec.x-(sec(#)sec).(x-h) by VALUED_1:5
+    .= sec.x*sec.x-sec.(x-h)*sec.(x-h) by VALUED_1:5
+    .= (cos.x)"*sec.x-sec.(x-h)*sec.(x-h) by A1,RFUNCT_1:def 8
+    .= (cos.x)"*(cos.x)"-sec.(x-h)*sec.(x-h) by A1,RFUNCT_1:def 8
+    .= (cos.x)"*(cos.x)"-(cos.(x-h))"*sec.(x-h) by A1,RFUNCT_1:def 8
+    .= ((cos.x)")^2-((cos.(x-h))")^2 by A1,RFUNCT_1:def 8
+    .= (1/cos.x-1/cos.(x-h))*(1/cos.x+1/cos.(x-h))
+    .= ((1*cos.(x-h)-1*cos.x)/(cos.x*cos.(x-h)))*(1/cos.x+1/cos.(x-h))
+                                                       by A2,XCMPLX_1:131
+    .= ((cos.(x-h)-cos.x)/(cos.x*cos.(x-h)))
+       *((cos.(x-h)+cos.x)/(cos.x*cos.(x-h))) by A2,XCMPLX_1:117
+    .= ((cos.(x-h)-cos.x)*(cos.(x-h)+cos.x))
+       /((cos.x*cos.(x-h))*(cos.x*cos.(x-h))) by XCMPLX_1:77
+    .= (cos(x-h)*cos(x-h)-cos(x)*cos(x))/(cos(x)*cos(x-h))^2
+    .= (sin(x+(x-h))*sin(x-(x-h)))/(cos(x)*cos(x-h))^2 by SIN_COS4:42
+    .= (sin(2*x-h)*sin(h))
+       /((1/2)*(cos(x+(x-h))+cos(x-(x-h))))^2 by SIN_COS4:36
+    .= 1*(sin(2*x-h)*sin(h))/((1/4)*(cos(2*x-h)+cos(h))^2)
+    .= (1/(1/4))*((sin(2*x-h)*sin(h))/(cos(2*x-h)+cos(h))^2) by XCMPLX_1:77
+    .= 4*sin(2*x-h)*sin(h)/(cos(2*x-h)+cos(h))^2;
+  hence thesis;
+end;
+
+theorem
+  x+h/2 in dom sec & x-h/2 in dom sec implies
+  cD(sec(#)sec,h).x = 4*sin(2*x)*sin(h)/(cos(2*x)+cos(h))^2
+proof
+  set f=sec(#)sec;
+  assume
+A1:x+h/2 in dom sec & x-h/2 in dom sec;
+A2:cos.(x+h/2)<>0 & cos.(x-h/2)<>0 by A1,RFUNCT_1:13;
+  x+h/2 in dom f & x-h/2 in dom f
+  proof
+    x+h/2 in dom sec /\ dom sec & x-h/2 in dom sec /\ dom sec by A1;
+    hence thesis by VALUED_1:def 4;
+  end; then
+  cD(f,h).x = (sec(#)sec).(x+h/2)-(sec(#)sec).(x-h/2) by DIFF_1:39
+    .= sec.(x+h/2)*sec.(x+h/2)-(sec(#)sec).(x-h/2) by VALUED_1:5
+    .= sec.(x+h/2)*sec.(x+h/2)-sec.(x-h/2)*sec.(x-h/2) by VALUED_1:5
+    .= (cos.(x+h/2))"*sec.(x+h/2)-sec.(x-h/2)*sec.(x-h/2)
+                                                      by A1,RFUNCT_1:def 8
+    .= (cos.(x+h/2))"*(cos.(x+h/2))"-sec.(x-h/2)*sec.(x-h/2)
+                                                      by A1,RFUNCT_1:def 8
+    .= (cos.(x+h/2))"*(cos.(x+h/2))"-(cos.(x-h/2))"*sec.(x-h/2)
+                                                       by A1,RFUNCT_1:def 8
+    .= ((cos.(x+h/2))")^2-((cos.(x-h/2))")^2 by A1,RFUNCT_1:def 8
+    .= (1/cos.(x+h/2)-1/cos.(x-h/2))*(1/cos.(x+h/2)+1/cos.(x-h/2))
+    .= ((1*cos.(x-h/2)-1*cos.(x+h/2))/(cos.(x+h/2)*cos.(x-h/2)))
+       *(1/cos.(x+h/2)+1/cos.(x-h/2)) by A2,XCMPLX_1:131
+    .= ((cos.(x-h/2)-cos.(x+h/2))/(cos.(x+h/2)*cos.(x-h/2)))
+       *((cos.(x-h/2)+cos.(x+h/2))/(cos.(x+h/2)*cos.(x-h/2)))
+                                                    by A2,XCMPLX_1:117
+    .= ((cos.(x-h/2)-cos.(x+h/2))*(cos.(x-h/2)+cos.(x+h/2)))
+       /((cos.(x+h/2)*cos.(x-h/2))*(cos.(x+h/2)*cos.(x-h/2))) by XCMPLX_1:77
+    .= (cos(x-h/2)*cos(x-h/2)-cos(x+h/2)*cos(x+h/2))/(cos(x+h/2)*cos(x-h/2))^2
+    .= (sin((x+h/2)+(x-h/2))*sin((x+h/2)-(x-h/2)))/(cos(x+h/2)*cos(x-h/2))^2
+                                                                by SIN_COS4:42
+    .= (sin(2*x)*sin(h))
+       /((1/2)*(cos((x+h/2)+(x-h/2))+cos((x+h/2)-(x-h/2))))^2 by SIN_COS4:36
+    .= 1*(sin(2*x)*sin(h))/((1/4)*(cos(2*x)+cos(h))^2)
+    .= (1/(1/4))*((sin(2*x)*sin(h))/(cos(2*x)+cos(h))^2) by XCMPLX_1:77
+    .= 4*sin(2*x)*sin(h)/(cos(2*x)+cos(h))^2;
+  hence thesis;
+end;
+
+::  f.x=cosec(x)*sec(x)
+
+theorem
+  x0 in (dom cosec)/\(dom sec) & x1 in (dom cosec)/\(dom sec) implies
+  [!cosec(#)sec,x0,x1!] = 4*(cos(x1+x0)*sin(x1-x0))/(sin(2*x0)*sin(2*x1))
+  /(x0-x1)
+proof
+  assume
+A1:x0 in (dom cosec)/\(dom sec) & x1 in (dom cosec)/\(dom sec);
+A2:x0 in dom cosec & x0 in dom sec by A1,XBOOLE_0:def 4;
+A3:x1 in dom cosec & x1 in dom sec by A1,XBOOLE_0:def 4;
+A4:sin.x0<>0 & cos.x0<>0 by A2,RFUNCT_1:13;
+A5:sin.x1<>0 & cos.x1<>0 by A3,RFUNCT_1:13;
+  [!cosec(#)sec,x0,x1!] = (cosec.x0*sec.x0-(cosec(#)sec).x1)/(x0-x1)
+                                                         by VALUED_1:5
+    .= (cosec.x0*sec.x0-cosec.x1*sec.x1)/(x0-x1) by VALUED_1:5
+    .= ((sin.x0)"*sec.x0-cosec.x1*sec.x1)/(x0-x1) by A2,RFUNCT_1:def 8
+    .= ((sin.x0)"*(cos.x0)"-cosec.x1*sec.x1)/(x0-x1) by A2,RFUNCT_1:def 8
+    .= ((sin.x0)"*(cos.x0)"-(sin.x1)"*sec.x1)/(x0-x1) by A3,RFUNCT_1:def 8
+    .= ((sin.x0)"*(cos.x0)"-(sin.x1)"*(cos.x1)")/(x0-x1) by A3,RFUNCT_1:def 8
+    .= ((sin.x0*cos.x0)"-(sin.x1)"*(cos.x1)")/(x0-x1) by XCMPLX_1:205
+    .= (1/(sin.x0*cos.x0)-1/(sin.x1*cos.x1))/(x0-x1) by XCMPLX_1:205
+    .= ((1*(sin.x1*cos.x1)-1*(sin.x0*cos.x0))
+       /((sin.x0*cos.x0)*(sin.x1*cos.x1)))/(x0-x1) by A4,A5,XCMPLX_1:131
+    .= ((cos(x1+x0)*sin(x1-x0))/((1/2*(2*sin(x0)*cos(x0)))
+       *(1/2*(2*sin(x1)*cos(x1)))))/(x0-x1) by SIN_COS4:44
+    .= ((cos(x1+x0)*sin(x1-x0))/((1/2*sin(2*x0))*(1/2*(2*sin(x1)*cos(x1)))))
+       /(x0-x1) by SIN_COS5:5
+    .= ((cos(x1+x0)*sin(x1-x0))/((1/2*sin(2*x0))*(1/2*sin(2*x1))))/(x0-x1)
+                                                              by SIN_COS5:5
+    .= ((cos(x1+x0)*sin(x1-x0))/((sin(2*x0)*sin(2*x1))*1/4))/(x0-x1)
+    .= (1/(1/4)*((cos(x1+x0)*sin(x1-x0))/(sin(2*x0)*sin(2*x1))))/(x0-x1)
+                                                            by XCMPLX_1:104
+    .= 4*(cos(x1+x0)*sin(x1-x0))/(sin(2*x0)*sin(2*x1))/(x0-x1);
+  hence thesis;
+end;
+
+theorem
+  x+h in (dom cosec)/\(dom sec) & x in (dom cosec)/\(dom sec) implies
+  fD(cosec(#)sec,h).x = -4*((cos(2*x+h)*sin(h))/(sin(2*(x+h))*sin(2*x)))
+proof
+  set f=cosec(#)sec;
+  assume
+A1:x+h in (dom cosec)/\(dom sec) & x in (dom cosec)/\(dom sec);
+A2:x+h in dom cosec & x+h in dom sec by A1,XBOOLE_0:def 4;
+A3:x in dom cosec & x in dom sec by A1,XBOOLE_0:def 4;
+A4:sin.(x+h)<>0 & cos.(x+h)<>0 by A2,RFUNCT_1:13;
+A5:sin.x<>0 & cos.x<>0 by A3,RFUNCT_1:13;
+  x in dom f & x+h in dom f by A1,VALUED_1:def 4;
+  then
+  fD(f,h).x = (cosec(#)sec).(x+h)-(cosec(#)sec).x by DIFF_1:1
+    .= cosec.(x+h)*sec.(x+h)-(cosec(#)sec).x by VALUED_1:5
+    .= cosec.(x+h)*sec.(x+h)-cosec.x*sec.x by VALUED_1:5
+    .= (sin.(x+h))"*sec.(x+h)-cosec.x*sec.x by A2,RFUNCT_1:def 8
+    .= (sin.(x+h))"*(cos.(x+h))"-cosec.x*sec.x by A2,RFUNCT_1:def 8
+    .= (sin.(x+h))"*(cos.(x+h))"-(sin.x)"*sec.x by A3,RFUNCT_1:def 8
+    .= (sin.(x+h))"*(cos.(x+h))"-(sin.x)"*(cos.x)" by A3,RFUNCT_1:def 8
+    .= (sin.(x+h)*cos.(x+h))"-(sin.x)"*(cos.x)" by XCMPLX_1:205
+    .= 1/(sin.(x+h)*cos.(x+h))-1/(sin.x*cos.x) by XCMPLX_1:205
+    .= (1*(sin.x*cos.x)-1*(sin.(x+h)*cos.(x+h)))
+       /((sin.(x+h)*cos.(x+h))*(sin.x*cos.x)) by A4,A5,XCMPLX_1:131
+    .= (cos(x+(x+h))*sin(x-(x+h)))
+       /((sin(x+h)*cos(x+h))*(sin(x)*cos(x))) by SIN_COS4:44
+    .= (cos(2*x+h)*sin(-h))
+       /((1*sin(x+h)*cos(x+h))*(1*sin(x)*cos(x)))
+    .= (cos(2*x+h)*(-sin(h)))
+       /((1/2*2*sin(x+h)*cos(x+h))*(1/2*2*sin(x)*cos(x))) by SIN_COS:34
+    .= (-(cos(2*x+h)*sin(h)))
+       /((1/2*(2*sin(x+h)*cos(x+h)))*(1/2*(2*sin(x)*cos(x))))
+    .= (-(cos(2*x+h)*sin(h)))
+       /((1/2*sin(2*(x+h)))*(1/2*(2*sin(x)*cos(x)))) by SIN_COS5:5
+    .= (-(cos(2*x+h)*sin(h)))
+       /((1/2*sin(2*(x+h)))*(1/2*sin(2*x))) by SIN_COS5:5
+    .= -(cos(2*x+h)*sin(h))/((sin(2*(x+h))*sin(2*x))*(1/4))
+    .= -(1/(1/4))*((cos(2*x+h)*sin(h))/(sin(2*(x+h))*sin(2*x))) by XCMPLX_1:104
+    .= -4*((cos(2*x+h)*sin(h))/(sin(2*(x+h))*sin(2*x)));
+  hence thesis;
+end;
+
+theorem
+  x-h in (dom cosec)/\(dom sec) & x in (dom cosec)/\(dom sec) implies
+  bD(cosec(#)sec,h).x = -4*((cos(2*x-h)*sin(h))/(sin(2*x)*sin(2*(x-h))))
+proof
+  set f=cosec(#)sec;
+  assume
+A1:x-h in (dom cosec)/\(dom sec) & x in (dom cosec)/\(dom sec);
+A2:x-h in dom cosec & x-h in dom sec by A1,XBOOLE_0:def 4;
+A3:x in dom cosec & x in dom sec by A1,XBOOLE_0:def 4;
+A4:sin.(x-h)<>0 & cos.(x-h)<>0 by A2,RFUNCT_1:13;
+A5:sin.x<>0 & cos.x<>0 by A3,RFUNCT_1:13;
+  x in dom f & x-h in dom f by A1,VALUED_1:def 4;
+  then
+  bD(f,h).x = (cosec(#)sec).x-(cosec(#)sec).(x-h) by DIFF_1:38
+    .= cosec.x*sec.x-(cosec(#)sec).(x-h) by VALUED_1:5
+    .= cosec.x*sec.x-cosec.(x-h)*sec.(x-h) by VALUED_1:5
+    .= (sin.x)"*sec.x-cosec.(x-h)*sec.(x-h) by A3,RFUNCT_1:def 8
+    .= (sin.x)"*(cos.x)"-cosec.(x-h)*sec.(x-h) by A3,RFUNCT_1:def 8
+    .= (sin.x)"*(cos.x)"-(sin.(x-h))"*sec.(x-h) by A2,RFUNCT_1:def 8
+    .= (sin.x)"*(cos.x)"-(sin.(x-h))"*(cos.(x-h))" by A2,RFUNCT_1:def 8
+    .= (sin.x*cos.x)"-(sin.(x-h))"*(cos.(x-h))" by XCMPLX_1:205
+    .= 1/(sin.x*cos.x)-1/(sin.(x-h)*cos.(x-h)) by XCMPLX_1:205
+    .= (1*(sin.(x-h)*cos.(x-h))-1*(sin.x*cos.x))
+       /((sin.x*cos.x)*(sin.(x-h)*cos.(x-h))) by A4,A5,XCMPLX_1:131
+    .= (cos((x-h)+x)*sin((x-h)-x))
+       /((sin(x)*cos(x))*(sin(x-h)*cos(x-h))) by SIN_COS4:44
+    .= (cos(2*x-h)*(-sin(h)))
+       /((1/2*2*sin(x)*cos(x))*(1/2*2*sin(x-h)*cos(x-h))) by SIN_COS:34
+    .= (-(cos(2*x-h)*sin(h)))
+       /((1/2*(2*sin(x)*cos(x)))*(1/2*(2*sin(x-h)*cos(x-h))))
+    .= (-(cos(2*x-h)*sin(h)))
+       /((1/2*sin(2*x))*(1/2*(2*sin(x-h)*cos(x-h)))) by SIN_COS5:5
+    .= (-(cos(2*x-h)*sin(h)))
+       /((1/2*sin(2*x))*(1/2*sin(2*(x-h)))) by SIN_COS5:5
+    .= -(cos(2*x-h)*sin(h))/((sin(2*x)*sin(2*(x-h)))*(1/4))
+    .= -(1/(1/4))*((cos(2*x-h)*sin(h))/(sin(2*x)*sin(2*(x-h)))) by XCMPLX_1:104
+    .= -4*((cos(2*x-h)*sin(h))/(sin(2*x)*sin(2*(x-h))));
+  hence thesis;
+end;
+
+theorem
+  x+h/2 in (dom cosec)/\(dom sec) & x-h/2 in (dom cosec)/\(dom sec) implies
+  cD(cosec(#)sec,h).x = -4*((cos(2*x)*sin(h))/(sin(2*x+h)*sin(2*x-h)))
+proof
+  set f=cosec(#)sec;
+  assume
+A1:x+h/2 in (dom cosec)/\(dom sec) & x-h/2 in (dom cosec)/\(dom sec);
+A2:x+h/2 in dom cosec & x+h/2 in dom sec by A1,XBOOLE_0:def 4;
+A3:x-h/2 in dom cosec & x-h/2 in dom sec by A1,XBOOLE_0:def 4;
+A4:sin.(x+h/2)<>0 & cos.(x+h/2)<>0 by A2,RFUNCT_1:13;
+A5:sin.(x-h/2)<>0 & cos.(x-h/2)<>0 by A3,RFUNCT_1:13;
+  x+h/2 in dom f & x-h/2 in dom f by A1,VALUED_1:def 4;
+  then
+  cD(f,h).x = (cosec(#)sec).(x+h/2)-(cosec(#)sec).(x-h/2) by DIFF_1:39
+    .= cosec.(x+h/2)*sec.(x+h/2)-(cosec(#)sec).(x-h/2) by VALUED_1:5
+    .= cosec.(x+h/2)*sec.(x+h/2)-cosec.(x-h/2)*sec.(x-h/2) by VALUED_1:5
+    .= (sin.(x+h/2))"*sec.(x+h/2)-cosec.(x-h/2)*sec.(x-h/2)
+                                                     by A2,RFUNCT_1:def 8
+    .= (sin.(x+h/2))"*(cos.(x+h/2))"-cosec.(x-h/2)*sec.(x-h/2)
+                                                     by A2,RFUNCT_1:def 8
+    .= (sin.(x+h/2))"*(cos.(x+h/2))"-(sin.(x-h/2))"*sec.(x-h/2)
+                                                     by A3,RFUNCT_1:def 8
+    .= (sin.(x+h/2))"*(cos.(x+h/2))"-(sin.(x-h/2))"*(cos.(x-h/2))"
+                                                     by A3,RFUNCT_1:def 8
+    .= (sin.(x+h/2)*cos.(x+h/2))"-(sin.(x-h/2))"*(cos.(x-h/2))" by XCMPLX_1:205
+    .= 1/(sin.(x+h/2)*cos.(x+h/2))-1/(sin.(x-h/2)*cos.(x-h/2))
+                                                         by XCMPLX_1:205
+    .= (1*(sin.(x-h/2)*cos.(x-h/2))-1*(sin.(x+h/2)*cos.(x+h/2)))
+       /((sin.(x+h/2)*cos.(x+h/2))*(sin.(x-h/2)*cos.(x-h/2)))
+                                                    by A4,A5,XCMPLX_1:131
+    .= (cos((x-h/2)+(x+h/2))*sin((x-h/2)-(x+h/2)))
+       /((sin(x+h/2)*cos(x+h/2))*(sin(x-h/2)*cos(x-h/2))) by SIN_COS4:44
+    .= (cos(2*x)*sin(-h))
+       /((1*sin(x+h/2)*cos(x+h/2))*(1*sin(x-h/2)*cos(x-h/2)))
+    .= (cos(2*x)*(-sin(h)))
+       /((1/2*2*sin(x+h/2)*cos(x+h/2))*(1/2*2*sin(x-h/2)*cos(x-h/2)))
+                                                           by SIN_COS:34
+    .= (-(cos(2*x)*sin(h)))
+       /((1/2*(2*sin(x+h/2)*cos(x+h/2)))*(1/2*(2*sin(x-h/2)*cos(x-h/2))))
+    .= (-(cos(2*x)*sin(h)))
+       /((1/2*sin(2*(x+h/2)))*(1/2*(2*sin(x-h/2)*cos(x-h/2)))) by SIN_COS5:5
+    .= (-(cos(2*x)*sin(h)))
+       /((1/2*sin(2*(x+h/2)))*(1/2*sin(2*(x-h/2)))) by SIN_COS5:5
+    .= -(cos(2*x)*sin(h))/((sin(2*x+h)*sin(2*x-h))*(1/4))
+    .= -(1/(1/4))*((cos(2*x)*sin(h))/(sin(2*x+h)*sin(2*x-h))) by XCMPLX_1:104
+    .= -4*((cos(2*x)*sin(h))/(sin(2*x+h)*sin(2*x-h)));
+  hence thesis;
+end;
+
+:: f.x=(tan(x))^2*cos(x)
+
+theorem
+  x0 in dom tan & x1 in dom tan implies
+  [!tan(#)tan(#)cos,x0,x1!] = [!tan(#)sin,x0,x1!]
+proof
+  assume
+A1:x0 in dom tan & x1 in dom tan;
+  [!tan(#)tan(#)cos,x0,x1!] = ((tan(#)tan).x0*cos.x0
+       -(tan(#)tan(#)cos).x1)/(x0-x1) by VALUED_1:5
+    .= (tan.x0*tan.x0*cos.x0-(tan(#)tan(#)cos).x1)/(x0-x1) by VALUED_1:5
+    .= (tan.x0*tan.x0*cos.x0-(tan(#)tan).x1*cos.x1)/(x0-x1) by VALUED_1:5
+    .= (tan.x0*tan.x0*cos.x0-tan.x1*tan.x1*cos.x1)/(x0-x1) by VALUED_1:5
+    .= ((sin.x0*(cos.x0)")*tan.x0*cos.x0-tan.x1*tan.x1*cos.x1)/(x0-x1)
+                                                   by A1,RFUNCT_1:def 4
+    .= ((sin.x0*(cos.x0)"*tan.x0*cos.x0)
+       -(sin.x1*(cos.x1)"*tan.x1*cos.x1))/(x0-x1) by A1,RFUNCT_1:def 4
+    .= ((sin.x0*(cos.x0*(1/cos.x0))*tan.x0)
+       -(sin.x1*(cos.x1*(1/cos.x1))*tan.x1))/(x0-x1)
+    .= ((sin.x0*1*tan.x0)
+       -(sin.x1*(cos.x1*(1/cos.x1))*tan.x1))/(x0-x1)
+                                          by A1,FDIFF_8:1,XCMPLX_1:107
+    .= ((sin.x0*1*tan.x0)
+       -(sin.x1*1*tan.x1))/(x0-x1) by A1,FDIFF_8:1,XCMPLX_1:107
+    .= ((tan(#)sin).x0-tan.x1*sin.x1)/(x0-x1) by VALUED_1:5
+    .= [!tan(#)sin,x0,x1!] by VALUED_1:5;
+  hence thesis;
+end;
+
+theorem
+  x in dom tan & x+h in dom tan implies
+  fD(tan(#)tan(#)cos,h).x = (tan(#)sin).(x+h)-(tan(#)sin).x
+proof
+  set f=tan(#)tan(#)cos;
+  assume
+A1:x in dom tan & x+h in dom tan;
+  x in dom f & x+h in dom f
+  proof
+    set f1=tan(#)tan;
+    set f2=cos;
+A2: x in dom f1 & x+h in dom f1
+    proof
+      x in dom tan /\ dom tan & x+h in dom tan /\ dom tan by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x in dom f1 /\ dom f2 & x+h in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  fD(f,h).x = (tan(#)tan(#)cos).(x+h)-(tan(#)tan(#)cos).x by DIFF_1:1
+    .= (tan(#)tan).(x+h)*cos.(x+h)-(tan(#)tan(#)cos).x by VALUED_1:5
+    .= tan.(x+h)*tan.(x+h)*cos.(x+h)-(tan(#)tan(#)cos).x by VALUED_1:5
+    .= tan.(x+h)*tan.(x+h)*cos.(x+h)-(tan(#)tan).x*cos.x by VALUED_1:5
+    .= tan.(x+h)*tan.(x+h)*cos.(x+h)-tan.x*tan.x*cos.x by VALUED_1:5
+    .= (sin.(x+h)*(cos.(x+h))")*tan.(x+h)*cos.(x+h)-tan.x*tan.x*cos.x
+                                                   by A1,RFUNCT_1:def 4
+    .= (sin.(x+h)*(cos.(x+h))"*tan.(x+h)*cos.(x+h))
+       -(sin.x*(cos.x)"*tan.x*cos.x) by A1,RFUNCT_1:def 4
+    .= sin.(x+h)*tan.(x+h)*(cos.(x+h)*(1/cos.(x+h)))
+       -sin.x*tan.x*(cos.x*(1/cos.x))
+    .= sin.(x+h)*tan.(x+h)*1-sin.x*tan.x*(cos.x*(1/cos.x))
+                                     by A1,FDIFF_8:1,XCMPLX_1:107
+    .= sin.(x+h)*tan.(x+h)*1-sin.x*tan.x*1 by A1,FDIFF_8:1,XCMPLX_1:107
+    .= (tan(#)sin).(x+h)-tan.x*sin.x by VALUED_1:5
+    .= (tan(#)sin).(x+h)-(tan(#)sin).x by VALUED_1:5;
+  hence thesis;
+end;
+
+theorem
+  x in dom tan & x-h in dom tan implies
+  bD(tan(#)tan(#)cos,h).x = (tan(#)sin).x-(tan(#)sin).(x-h)
+proof
+  set f=tan(#)tan(#)cos;
+  assume
+A1:x in dom tan & x-h in dom tan;
+  x in dom f & x-h in dom f
+  proof
+    set f1=tan(#)tan;
+    set f2=cos;
+A2: x in dom f1 & x-h in dom f1
+    proof
+      x in dom tan /\ dom tan & x-h in dom tan /\ dom tan by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x in dom f1 /\ dom f2 & x-h in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  bD(f,h).x = (tan(#)tan(#)cos).x-(tan(#)tan(#)cos).(x-h) by DIFF_1:38
+    .= (tan(#)tan).x*cos.x-(tan(#)tan(#)cos).(x-h) by VALUED_1:5
+    .= tan.x*tan.x*cos.x-(tan(#)tan(#)cos).(x-h) by VALUED_1:5
+    .= tan.x*tan.x*cos.x-(tan(#)tan).(x-h)*cos.(x-h) by VALUED_1:5
+    .= tan.x*tan.x*cos.x-tan.(x-h)*tan.(x-h)*cos.(x-h) by VALUED_1:5
+    .= (sin.x*(cos.x)")*tan.x*cos.x-tan.(x-h)*tan.(x-h)*cos.(x-h)
+                                                   by A1,RFUNCT_1:def 4
+    .= (sin.x*(cos.x)"*tan.x*cos.x)
+       -(sin.(x-h)*(cos.(x-h))"*tan.(x-h)*cos.(x-h)) by A1,RFUNCT_1:def 4
+    .= sin.x*tan.x*(cos.x*(1/cos.x))
+       -sin.(x-h)*tan.(x-h)*(cos.(x-h)*(1/cos.(x-h)))
+    .= sin.x*tan.x*1-sin.(x-h)*tan.(x-h)*(cos.(x-h)*(1/cos.(x-h)))
+                                            by A1,FDIFF_8:1,XCMPLX_1:107
+    .= sin.x*tan.x*1-sin.(x-h)*tan.(x-h)*1 by A1,FDIFF_8:1,XCMPLX_1:107
+    .= (tan(#)sin).x-tan.(x-h)*sin.(x-h) by VALUED_1:5
+    .= (tan(#)sin).x-(tan(#)sin).(x-h) by VALUED_1:5;
+  hence thesis;
+end;
+
+theorem
+  x+h/2 in dom tan & x-h/2 in dom tan implies
+  cD(tan(#)tan(#)cos,h).x = (tan(#)sin).(x+h/2)-(tan(#)sin).(x-h/2)
+proof
+  set f=tan(#)tan(#)cos;
+  assume
+A1:x+h/2 in dom tan & x-h/2 in dom tan;
+  x+h/2 in dom f & x-h/2 in dom f
+  proof
+    set f1=tan(#)tan;
+    set f2=cos;
+A2: x+h/2 in dom f1 & x-h/2 in dom f1
+    proof
+      x+h/2 in dom tan /\ dom tan & x-h/2 in dom tan /\ dom tan by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x+h/2 in dom f1 /\ dom f2 & x-h/2 in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  cD(f,h).x = (tan(#)tan(#)cos).(x+h/2)-(tan(#)tan(#)cos).(x-h/2) by DIFF_1:39
+    .= (tan(#)tan).(x+h/2)*cos.(x+h/2)-(tan(#)tan(#)cos).(x-h/2) by VALUED_1:5
+    .= tan.(x+h/2)*tan.(x+h/2)*cos.(x+h/2)-(tan(#)tan(#)cos).(x-h/2)
+                                                                by VALUED_1:5
+    .= tan.(x+h/2)*tan.(x+h/2)*cos.(x+h/2)-(tan(#)tan).(x-h/2)*cos.(x-h/2)
+                                                             by VALUED_1:5
+    .= tan.(x+h/2)*tan.(x+h/2)*cos.(x+h/2)-tan.(x-h/2)*tan.(x-h/2)*cos.(x-h/2)
+                                                                  by VALUED_1:5
+    .= (sin.(x+h/2)*(cos.(x+h/2))")*tan.(x+h/2)*cos.(x+h/2)
+       -tan.(x-h/2)*tan.(x-h/2)*cos.(x-h/2) by A1,RFUNCT_1:def 4
+    .= (sin.(x+h/2)*(cos.(x+h/2))"*tan.(x+h/2)*cos.(x+h/2))
+       -(sin.(x-h/2)*(cos.(x-h/2))"*tan.(x-h/2)*cos.(x-h/2))
+                                                   by A1,RFUNCT_1:def 4
+    .= sin.(x+h/2)*tan.(x+h/2)*(cos.(x+h/2)*(1/cos.(x+h/2)))
+       -sin.(x-h/2)*tan.(x-h/2)*(cos.(x-h/2)*(1/cos.(x-h/2)))
+    .= sin.(x+h/2)*tan.(x+h/2)*1
+       -sin.(x-h/2)*tan.(x-h/2)*(cos.(x-h/2)*(1/cos.(x-h/2)))
+                                                 by A1,FDIFF_8:1,XCMPLX_1:107
+    .= sin.(x+h/2)*tan.(x+h/2)*1-sin.(x-h/2)*tan.(x-h/2)*1
+                                                 by A1,FDIFF_8:1,XCMPLX_1:107
+    .= (tan(#)sin).(x+h/2)-tan.(x-h/2)*sin.(x-h/2) by VALUED_1:5
+    .= (tan(#)sin).(x+h/2)-(tan(#)sin).(x-h/2) by VALUED_1:5;
+  hence thesis;
+end;
+
+::  f.x=(cot(x))^2*sin(x)
+
+theorem
+  x0 in dom cot & x1 in dom cot implies
+  [!cot(#)cot(#)sin,x0,x1!] = [!cot(#)cos,x0,x1!]
+proof
+  assume
+A1:x0 in dom cot & x1 in dom cot;
+  [!cot(#)cot(#)sin,x0,x1!] = ((cot(#)cot).x0*sin.x0
+       -(cot(#)cot(#)sin).x1)/(x0-x1) by VALUED_1:5
+    .= (cot.x0*cot.x0*sin.x0-(cot(#)cot(#)sin).x1)/(x0-x1) by VALUED_1:5
+    .= (cot.x0*cot.x0*sin.x0-(cot(#)cot).x1*sin.x1)/(x0-x1) by VALUED_1:5
+    .= (cot.x0*cot.x0*sin.x0-cot.x1*cot.x1*sin.x1)/(x0-x1) by VALUED_1:5
+    .= ((cos.x0*(sin.x0)")*cot.x0*sin.x0-cot.x1*cot.x1*sin.x1)/(x0-x1)
+                                                   by A1,RFUNCT_1:def 4
+    .= ((cos.x0*(sin.x0)"*cot.x0*sin.x0)
+       -(cos.x1*(sin.x1)"*cot.x1*sin.x1))/(x0-x1) by A1,RFUNCT_1:def 4
+    .= ((cot.x0*cos.x0*(sin.x0*(1/sin.x0)))
+       -(cot.x1*cos.x1*(sin.x1*(1/sin.x1))))/(x0-x1)
+    .= ((cot.x0*cos.x0*1)
+       -(cot.x1*cos.x1*(sin.x1*(1/sin.x1))))/(x0-x1)
+                                        by A1,FDIFF_8:2,XCMPLX_1:107
+    .= ((cot.x0*cos.x0*1)
+       -(cot.x1*cos.x1*1))/(x0-x1) by A1,FDIFF_8:2,XCMPLX_1:107
+    .= ((cot(#)cos).x0-cot.x1*cos.x1)/(x0-x1) by VALUED_1:5
+    .= [!cot(#)cos,x0,x1!] by VALUED_1:5;
+  hence thesis;
+end;
+
+theorem
+  x in dom cot & x+h in dom cot implies
+  fD(cot(#)cot(#)sin,h).x = (cot(#)cos).(x+h)-(cot(#)cos).x
+proof
+  set f=cot(#)cot(#)sin;
+  assume
+A1:x in dom cot & x+h in dom cot;
+  x in dom f & x+h in dom f
+  proof
+    set f1=cot(#)cot;
+    set f2=sin;
+A2: x in dom f1 & x+h in dom f1
+    proof
+      x in dom cot /\ dom cot & x+h in dom cot /\ dom cot by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x in dom f1 /\ dom f2 & x+h in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  fD(f,h).x = (cot(#)cot(#)sin).(x+h)-(cot(#)cot(#)sin).x by DIFF_1:1
+    .= (cot(#)cot).(x+h)*sin.(x+h)-(cot(#)cot(#)sin).x by VALUED_1:5
+    .= cot.(x+h)*cot.(x+h)*sin.(x+h)-(cot(#)cot(#)sin).x by VALUED_1:5
+    .= cot.(x+h)*cot.(x+h)*sin.(x+h)-(cot(#)cot).x*sin.x by VALUED_1:5
+    .= cot.(x+h)*cot.(x+h)*sin.(x+h)-cot.x*cot.x*sin.x by VALUED_1:5
+    .= (cos.(x+h)*(sin.(x+h))")*cot.(x+h)*sin.(x+h)-cot.x*cot.x*sin.x
+                                                by A1,RFUNCT_1:def 4
+    .= (cos.(x+h)*(sin.(x+h))"*cot.(x+h)*sin.(x+h))
+       -(cos.x*(sin.x)"*cot.x*sin.x) by A1,RFUNCT_1:def 4
+    .= cot.(x+h)*cos.(x+h)*(sin.(x+h)*(1/sin.(x+h)))
+       -cot.x*cos.x*(sin.x*(1/sin.x))
+    .= cot.(x+h)*cos.(x+h)*1-cot.x*cos.x*(sin.x*(1/sin.x))
+                                        by A1,FDIFF_8:2,XCMPLX_1:107
+    .= cot.(x+h)*cos.(x+h)*1-cot.x*cos.x*1 by A1,FDIFF_8:2,XCMPLX_1:107
+    .= (cot(#)cos).(x+h)-cot.x*cos.x by VALUED_1:5
+    .= (cot(#)cos).(x+h)-(cot(#)cos).x by VALUED_1:5;
+  hence thesis;
+end;
+
+theorem
+  x in dom cot & x-h in dom cot implies
+  bD(cot(#)cot(#)sin,h).x = (cot(#)cos).x-(cot(#)cos).(x-h)
+proof
+  set f=cot(#)cot(#)sin;
+  assume
+A1:x in dom cot & x-h in dom cot;
+  x in dom f & x-h in dom f
+  proof
+    set f1=cot(#)cot;
+    set f2=sin;
+A2: x in dom f1 & x-h in dom f1
+    proof
+      x in dom cot /\ dom cot & x-h in dom cot /\ dom cot by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x in dom f1 /\ dom f2 & x-h in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  bD(f,h).x = (cot(#)cot(#)sin).x-(cot(#)cot(#)sin).(x-h) by DIFF_1:38
+    .= (cot(#)cot).x*sin.x-(cot(#)cot(#)sin).(x-h) by VALUED_1:5
+    .= cot.x*cot.x*sin.x-(cot(#)cot(#)sin).(x-h) by VALUED_1:5
+    .= cot.x*cot.x*sin.x-(cot(#)cot).(x-h)*sin.(x-h) by VALUED_1:5
+    .= cot.x*cot.x*sin.x-cot.(x-h)*cot.(x-h)*sin.(x-h) by VALUED_1:5
+    .= (cos.x*(sin.x)")*cot.x*sin.x-cot.(x-h)*cot.(x-h)*sin.(x-h)
+                                                by A1,RFUNCT_1:def 4
+    .= (cos.x*(sin.x)"*cot.x*sin.x)
+       -(cos.(x-h)*(sin.(x-h))"*cot.(x-h)*sin.(x-h)) by A1,RFUNCT_1:def 4
+    .= cot.x*cos.x*(sin.x*(1/sin.x))
+       -cot.(x-h)*cos.(x-h)*(sin.(x-h)*(1/sin.(x-h)))
+    .= cot.x*cos.x*1-cot.(x-h)*cos.(x-h)*(sin.(x-h)*(1/sin.(x-h)))
+                                           by A1,FDIFF_8:2,XCMPLX_1:107
+    .= cot.x*cos.x*1-cot.(x-h)*cos.(x-h)*1 by A1,FDIFF_8:2,XCMPLX_1:107
+    .= (cot(#)cos).x-cot.(x-h)*cos.(x-h) by VALUED_1:5
+    .= (cot(#)cos).x-(cot(#)cos).(x-h) by VALUED_1:5;
+  hence thesis;
+end;
+
+theorem
+  x+h/2 in dom cot & x-h/2 in dom cot implies
+  cD(cot(#)cot(#)sin,h).x = (cot(#)cos).(x+h/2)-(cot(#)cos).(x-h/2)
+proof
+  set f=cot(#)cot(#)sin;
+  assume
+A1:x+h/2 in dom cot & x-h/2 in dom cot;
+  x+h/2 in dom f & x-h/2 in dom f
+  proof
+    set f1=cot(#)cot;
+    set f2=sin;
+A2: x+h/2 in dom f1 & x-h/2 in dom f1
+    proof
+      x+h/2 in dom cot /\ dom cot & x-h/2 in dom cot /\ dom cot by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x+h/2 in dom f1 /\ dom f2 & x-h/2 in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  cD(f,h).x = (cot(#)cot(#)sin).(x+h/2)-(cot(#)cot(#)sin).(x-h/2) by DIFF_1:39
+    .= (cot(#)cot).(x+h/2)*sin.(x+h/2)-(cot(#)cot(#)sin).(x-h/2) by VALUED_1:5
+    .= cot.(x+h/2)*cot.(x+h/2)*sin.(x+h/2)-(cot(#)cot(#)sin).(x-h/2)
+                                                              by VALUED_1:5
+    .= cot.(x+h/2)*cot.(x+h/2)*sin.(x+h/2)-(cot(#)cot).(x-h/2)*sin.(x-h/2)
+                                                              by VALUED_1:5
+    .= cot.(x+h/2)*cot.(x+h/2)*sin.(x+h/2)-cot.(x-h/2)*cot.(x-h/2)*sin.(x-h/2)
+                                                              by VALUED_1:5
+    .= (cos.(x+h/2)*(sin.(x+h/2))")*cot.(x+h/2)*sin.(x+h/2)
+       -cot.(x-h/2)*cot.(x-h/2)*sin.(x-h/2) by A1,RFUNCT_1:def 4
+    .= (cos.(x+h/2)*(sin.(x+h/2))"*cot.(x+h/2)*sin.(x+h/2))
+       -(cos.(x-h/2)*(sin.(x-h/2))"*cot.(x-h/2)*sin.(x-h/2))
+                                                by A1,RFUNCT_1:def 4
+    .= cot.(x+h/2)*cos.(x+h/2)*(sin.(x+h/2)*(1/sin.(x+h/2)))
+       -cot.(x-h/2)*cos.(x-h/2)*(sin.(x-h/2)*(1/sin.(x-h/2)))
+    .= cot.(x+h/2)*cos.(x+h/2)*1
+       -cot.(x-h/2)*cos.(x-h/2)*(sin.(x-h/2)*(1/sin.(x-h/2)))
+                                                by A1,FDIFF_8:2,XCMPLX_1:107
+    .= cot.(x+h/2)*cos.(x+h/2)*1-cot.(x-h/2)*cos.(x-h/2)*1
+                                             by A1,FDIFF_8:2,XCMPLX_1:107
+    .= (cot(#)cos).(x+h/2)-cot.(x-h/2)*cos.(x-h/2) by VALUED_1:5
+    .= (cot(#)cos).(x+h/2)-(cot(#)cos).(x-h/2) by VALUED_1:5;
+  hence thesis;
+end;
+
+::f.x = ln.x
+
+theorem
+  x0>0 & x1>0 implies [!ln,x0,x1!] = (ln.(x0/x1))/(x0-x1) by Th32;
+
+theorem
+  x>0 & x+h>0 implies fD(ln,h).x = ln.(1+h/x)
+proof
+  set f=ln;
+  assume
+A1: x>0 & x+h>0;
+A2: x in right_open_halfline(0)
+  proof
+    x in {g where g is Real : 0<g} by A1;
+    hence thesis by XXREAL_1:230;
+  end;
+A3: x+h in right_open_halfline(0)
+  proof
+    x+h in {g where g is Real : 0<g} by A1;
+    hence thesis by XXREAL_1:230;
+  end;
+  fD(f,h).x = ln.(x+h) - ln.x by DIFF_1:1,A2,A3,TAYLOR_1:18
+    .= ln.((x+h)/x) by A1,Th32
+    .= ln.(x/x+h/x)
+    .= ln.(1+h/x) by A1,XCMPLX_1:60;
+  hence thesis;
+end;
+
+theorem
+  x>0 & x-h>0 implies bD(ln,h).x = ln.(1+h/(x-h))
+proof
+  set f=ln;
+  assume
+A1: x>0 & x-h>0;
+A2: x in right_open_halfline(0)
+  proof
+    x in {g where g is Real : 0<g} by A1;
+    hence thesis by XXREAL_1:230;
+  end;
+A3: x-h in right_open_halfline(0)
+  proof
+    x-h in {g where g is Real : 0<g} by A1;
+    hence thesis by XXREAL_1:230;
+  end;
+  bD(f,h).x = ln.x - ln.(x-h) by DIFF_1:38,A2,A3,TAYLOR_1:18
+    .= ln.(x/(x-h)) by A1,Th32
+    .= ln.((x-h)/(x-h)+h/(x-h))
+    .= ln.(1+h/(x-h)) by A1,XCMPLX_1:60;
+  hence thesis;
+end;
+
+theorem
+  x+h/2>0 & x-h/2>0 implies cD(ln,h).x = ln.(1+h/(x-h/2))
+proof
+  set f=ln;
+  assume
+A1: x+h/2>0 & x-h/2>0;
+A2: x+h/2 in right_open_halfline(0)
+  proof
+    x+h/2 in {g where g is Real : 0<g} by A1;
+    hence thesis by XXREAL_1:230;
+  end;
+A3: x-h/2 in right_open_halfline(0)
+  proof
+    x-h/2 in {g where g is Real : 0<g} by A1;
+    hence thesis by XXREAL_1:230;
+  end;
+  cD(f,h).x = ln.(x+h/2) - ln.(x-h/2) by DIFF_1:39,A2,A3,TAYLOR_1:18
+    .= ln.((x-h/2+h)/(x-h/2)) by A1,Th32
+    .= ln.((x-h/2)/(x-h/2)+h/(x-h/2))
+    .= ln.(1+h/(x-h/2)) by A1,XCMPLX_1:60;
+  hence thesis;
+end;
+
+theorem
+  for h,k being real number holds
+  exp_R(h-k) = exp_R(h) / exp_R(k)
+proof
+  let h,k be real number;
+  exp_R(h-k) = exp_R(h) * exp_R(-k) by SIN_COS:55
+    .= exp_R(h)*(1/exp_R(k)) by TAYLOR_1:4
+    .= exp_R(h) / exp_R(k);
+  hence thesis;
+end;
+
+:: f.x = fD(g,h).x
+
+theorem
+  fD(f,h).x = Shift(f,h).x - f.x
+proof
+  fD(f,h).x = (fdif(f,h).1).x by DIFF_3:7
+    .= Shift(f,h).x - f.x by DIFF_1:11;
+  hence thesis;
+end;
+
+theorem
+  (for x holds f.x = fD(g,h).x) implies
+  [!f,x0,x1!] = [!g,x0+h,x1+h!]-[!g,x0,x1!]
+proof
+  assume
+A1: for x holds f.x = fD(g,h).x;
+  [!f,x0,x1!] = (fD(g,h).x0-f.x1)/(x0-x1) by A1
+    .= (fD(g,h).x0-fD(g,h).x1)/(x0-x1) by A1
+    .= ((g.(x0+h)-g.x0)-fD(g,h).x1)/(x0-x1) by DIFF_1:3
+    .= ((g.(x0+h)-g.x0)-(g.(x1+h)-g.x1))/(x0-x1) by DIFF_1:3
+    .= [!g,x0+h,x1+h!]-[!g,x0,x1!];
+  hence thesis;
+end;
+
+theorem
+  fD(fD(f,h),h).x = fD(f,2*h).x-2*fD(f,h).x
+proof
+  fD(fD(f,h),h).x = fD(f,h).(x+h)-fD(f,h).x by DIFF_1:3
+    .= (f.((x+h)+h)-f.(x+h))-fD(f,h).x by DIFF_1:3
+    .= (f.((x+h)+h)-f.(x+h))-(f.(x+h)-f.x) by DIFF_1:3
+    .= (f.(x+2*h)-f.x)-(2*f.(x+h)-2*f.x)
+    .= fD(f,2*h).x-2*(f.(x+h)-f.x) by DIFF_1:3
+    .= fD(f,2*h).x-2*fD(f,h).x by DIFF_1:3;
+  hence thesis;
+end;
+
+theorem
+  bD(fD(f,h),h).x = fD(f,h).x-bD(f,h).x
+proof
+  bD(fD(f,h),h).x = fD(f,h).x-fD(f,h).(x-h) by DIFF_1:4
+    .= fD(f,h).x-(f.((x-h)+h)-f.(x-h)) by DIFF_1:3
+    .= fD(f,h).x-bD(f,h).x by DIFF_1:4;
+  hence thesis;
+end;
+
+theorem
+  cD(fD(f,h),h).x = fD(f,h).(x+h/2)-cD(f,h).x
+proof
+  cD(fD(f,h),h).x = fD(f,h).(x+h/2)-fD(f,h).(x-h/2) by DIFF_1:5
+    .= fD(f,h).(x+h/2)-(f.((x-h/2)+h)-f.(x-h/2)) by DIFF_1:3
+    .= fD(f,h).(x+h/2)-cD(f,h).x by DIFF_1:5;
+  hence thesis;
+end;
+
+theorem Th43:
+  fdif(f,h).1.x = fdif(f,h).0.(x+h)-fdif(f,h).0.x
+proof
+  fdif(f,h).1.x = fD(f,h).x by DIFF_3:7
+    .= f.(x+h)-f.x by DIFF_1:3
+    .= fdif(f,h).0.(x+h)-f.x by DIFF_1:def 6
+    .= fdif(f,h).0.(x+h)-fdif(f,h).0.x by DIFF_1:def 6;
+  hence thesis;
+end;
+
+theorem
+  fdif(f,h).(n+1).x = fdif(f,h).n.(x+h)-fdif(f,h).n.x
+proof
+  defpred X[Element of NAT] means
+  fdif(f,h).($1+1).x = fdif(f,h).$1.(x+h)-fdif(f,h).$1.x;
+A1: for i st X[i] holds X[i+1]
+    proof
+      let i;
+      assume
+      fdif(f,h).(i+1).x = fdif(f,h).i.(x+h)-fdif(f,h).i.x;
+A2:   fdif(f,h).(i+1) is Function of REAL,REAL by DIFF_1:2;
+      fdif(f,h).(i+2).x = fdif(f,h).(i+1+1).x
+        .= fD(fdif(f,h).(i+1),h).x by DIFF_1:def 6
+        .= fdif(f,h).(i+1).(x+h)-fdif(f,h).(i+1).x by A2,DIFF_1:3;
+      hence thesis;
+    end;
+A3:X[0] by Th43;
+  for n holds X[n] from NAT_1:sch 1(A3,A1);
+  hence thesis;
+end;
+
+:: f.x = bD(g,h).x
+
+theorem
+  bD(f,h).x = f.x - Shift(f,-h).x
+proof
+  bD(f,h).x = (bdif(f,h).1).x by DIFF_3:11
+    .= f.x - Shift(f,-h).x by DIFF_1:18;
+  hence thesis;
+end;
+
+theorem
+  (for x holds f.x = bD(g,h).x) implies
+  [!f,x0,x1!] = [!g,x0,x1!]-[!g,x0-h,x1-h!]
+proof
+  assume
+A1: for x holds f.x = bD(g,h).x;
+  [!f,x0,x1!] = (bD(g,h).x0-f.x1)/(x0-x1) by A1
+    .= (bD(g,h).x0-bD(g,h).x1)/(x0-x1) by A1
+    .= ((g.x0-g.(x0-h))-bD(g,h).x1)/(x0-x1) by DIFF_1:4
+    .= ((g.x0-g.(x0-h))-(g.x1-g.(x1-h)))/(x0-x1) by DIFF_1:4
+    .= [!g,x0,x1!]-[!g,x0-h,x1-h!];
+  hence thesis;
+end;
+
+theorem
+  fD(bD(f,h),h).x = fD(f,h).x-bD(f,h).x
+proof
+  fD(bD(f,h),h).x = bD(f,h).(x+h)-bD(f,h).x by DIFF_1:3
+    .= (f.(x+h)-f.((x+h)-h))-bD(f,h).x by DIFF_1:4
+    .= fD(f,h).x-bD(f,h).x by DIFF_1:3;
+  hence thesis;
+end;
+
+theorem
+  bD(bD(f,h),h).x = 2*bD(f,h).x-bD(f,2*h).x
+proof
+  bD(bD(f,h),h).x = bD(f,h).x-bD(f,h).(x-h) by DIFF_1:4
+    .= f.x-f.(x-h)-bD(f,h).(x-h) by DIFF_1:4
+    .= f.x-f.(x-h)-(f.(x-h)-f.((x-h)-h)) by DIFF_1:4
+    .= 2*(f.x-f.(x-h))-(f.x-f.(x-2*h))
+    .= 2*bD(f,h).x-(f.x-f.(x-2*h)) by DIFF_1:4
+    .= 2*bD(f,h).x-bD(f,2*h).x by DIFF_1:4;
+  hence thesis;
+end;
+
+theorem
+  cD(bD(f,h),h).x = cD(f,h).x-bD(f,h).(x-h/2)
+proof
+  cD(bD(f,h),h).x = bD(f,h).(x+h/2)-bD(f,h).(x-h/2) by DIFF_1:5
+    .= f.(x+h/2)-f.((x+h/2)-h)-bD(f,h).(x-h/2) by DIFF_1:4
+    .= cD(f,h).x-bD(f,h).(x-h/2) by DIFF_1:5;
+  hence thesis;
+end;
+
+theorem Th50:
+  bdif(f,h).1.x = bdif(f,h).0.x-bdif(f,h).0.(x-h)
+proof
+  bdif(f,h).1.x = bD(f,h).x by DIFF_3:11
+    .= f.x-f.(x-h) by DIFF_1:4
+    .= bdif(f,h).0.x-f.(x-h) by DIFF_1:def 7
+    .= bdif(f,h).0.x-bdif(f,h).0.(x-h) by DIFF_1:def 7;
+  hence thesis;
+end;
+
+theorem
+  bdif(f,h).(n+1).x = bdif(f,h).n.x-bdif(f,h).n.(x-h)
+proof
+  defpred X[Element of NAT] means
+  bdif(f,h).($1+1).x = bdif(f,h).$1.x-bdif(f,h).$1.(x-h);
+A1: for i st X[i] holds X[i+1]
+    proof
+      let i;
+      assume
+      bdif(f,h).(i+1).x = bdif(f,h).i.x-bdif(f,h).i.(x-h);
+A2:   bdif(f,h).(i+1) is Function of REAL,REAL by DIFF_1:12;
+      bdif(f,h).(i+2).x = bdif(f,h).(i+1+1).x
+        .= bD(bdif(f,h).(i+1),h).x by DIFF_1:def 7
+        .= bdif(f,h).(i+1).x-bdif(f,h).(i+1).(x-h) by A2,DIFF_1:4;
+      hence thesis;
+    end;
+A3:X[0] by Th50;
+  for n holds X[n] from NAT_1:sch 1(A3,A1);
+  hence thesis;
+end;
+
+:: f.x = cD(g,h).x
+
+theorem
+  cD(f,h).x = Shift(f,h/2).x - Shift(f,-h/2).x
+proof
+  cD(f,h).x = (cdif(f,h).1).x by DIFF_3:16
+    .= Shift(f,h/2).x - Shift(f,-h/2).x by DIFF_1:25;
+  hence thesis;
+end;
+
+theorem
+  (for x holds f.x = cD(g,h).x) implies
+  [!f,x0,x1!] = [!g,x0+h/2,x1+h/2!]-[!g,x0-h/2,x1-h/2!]
+proof
+  assume
+A1: for x holds f.x = cD(g,h).x;
+  [!f,x0,x1!] = (cD(g,h).x0-f.x1)/(x0-x1) by A1
+    .= (cD(g,h).x0-cD(g,h).x1)/(x0-x1) by A1
+    .= ((g.(x0+h/2)-g.(x0-h/2))-cD(g,h).x1)/(x0-x1) by DIFF_1:5
+    .= ((g.(x0+h/2)-g.(x0-h/2))-(g.(x1+h/2)-g.(x1-h/2)))/(x0-x1) by DIFF_1:5
+    .= [!g,x0+h/2,x1+h/2!]-[!g,x0-h/2,x1-h/2!];
+  hence thesis;
+end;
+
+theorem
+  fD(cD(f,h),h).x = fD(f,h).(x+h/2)-cD(f,h).x
+proof
+  fD(cD(f,h),h).x = cD(f,h).(x+h)-cD(f,h).x by DIFF_1:3
+    .= (f.((x+h)+h/2)-f.((x+h)-h/2))-cD(f,h).x by DIFF_1:5
+    .= f.((x+h/2)+h)-f.(x+h/2)-cD(f,h).x
+    .= fD(f,h).(x+h/2)-cD(f,h).x by DIFF_1:3;
+  hence thesis;
+end;
+
+theorem
+  bD(cD(f,h),h).x = cD(f,h).x-bD(f,h).(x-h/2)
+proof
+  bD(cD(f,h),h).x = cD(f,h).x-cD(f,h).(x-h) by DIFF_1:4
+    .= cD(f,h).x-(f.((x-h)+h/2)-f.((x-h)-h/2)) by DIFF_1:5
+    .= cD(f,h).x-(f.(x-h/2)-f.((x-h/2)-h))
+    .= cD(f,h).x-bD(f,h).(x-h/2) by DIFF_1:4;
+  hence thesis;
+end;
+
+theorem
+  cD(cD(f,h),h).x = fD(f,h).x-bD(f,h).x
+proof
+  cD(cD(f,h),h).x = cD(f,h).(x+h/2)-cD(f,h).(x-h/2) by DIFF_1:5
+    .= f.((x+h/2)+h/2)-f.((x+h/2)-h/2)-cD(f,h).(x-h/2) by DIFF_1:5
+    .= f.((x+h/2)+h/2)-f.((x+h/2)-h/2)-(f.((x-h/2)+h/2)-f.((x-h/2)-h/2))
+                                                             by DIFF_1:5
+    .= f.(x+h)-f.x-(f.x-f.(x-h))
+    .= fD(f,h).x-(f.x-f.(x-h)) by DIFF_1:3
+    .= fD(f,h).x-bD(f,h).x by DIFF_1:4;
+  hence thesis;
+end;
+
+theorem Th57:
+  cdif(f,h).1.x = cdif(f,h).0.(x+h/2)-cdif(f,h).0.(x-h/2)
+proof
+  cdif(f,h).1.x = cD(f,h).x by DIFF_3:16
+    .= f.(x+h/2)-f.(x-h/2) by DIFF_1:5
+    .= cdif(f,h).0.(x+h/2)-f.(x-h/2) by DIFF_1:def 8
+    .= cdif(f,h).0.(x+h/2)-cdif(f,h).0.(x-h/2) by DIFF_1:def 8;
+  hence thesis;
+end;
+
+theorem
+  cdif(f,h).(n+1).x = cdif(f,h).n.(x+h/2)-cdif(f,h).n.(x-h/2)
+proof
+  defpred X[Element of NAT] means
+  cdif(f,h).($1+1).x = cdif(f,h).$1.(x+h/2)-cdif(f,h).$1.(x-h/2);
+A1: for i st X[i] holds X[i+1]
+    proof
+      let i;
+      assume
+      cdif(f,h).(i+1).x = cdif(f,h).i.(x+h/2)-cdif(f,h).i.(x-h/2);
+A2:   cdif(f,h).(i+1) is Function of REAL,REAL by DIFF_1:19;
+      cdif(f,h).(i+2).x = cdif(f,h).(i+1+1).x
+        .= cD(cdif(f,h).(i+1),h).x by DIFF_1:def 8
+        .= cdif(f,h).(i+1).(x+h/2)-cdif(f,h).(i+1).(x-h/2) by A2,DIFF_1:5;
+      hence thesis;
+    end;
+A3:X[0] by Th57;
+  for n holds X[n] from NAT_1:sch 1(A3,A1);
+  hence thesis;
+end;
+
+:: f.x=(tan(x))^2*sin(x)
+
+theorem
+  x0 in dom tan & x1 in dom tan implies
+  [!tan(#)tan(#)sin,x0,x1!] = ((sin(x0))|^3*(cos(x1))^2
+  -(sin(x1))|^3*(cos(x0))^2)/((cos(x0))^2*(cos(x1))^2*(x0-x1))
+proof
+  assume
+A1:x0 in dom tan & x1 in dom tan;
+A2:cos(x0)<>0 & cos(x1)<>0 by A1,FDIFF_8:1;
+  [!tan(#)tan(#)sin,x0,x1!] = ((tan(#)tan).x0*sin.x0
+       -(tan(#)tan(#)sin).x1)/(x0-x1) by VALUED_1:5
+    .= (tan.x0*tan.x0*sin.x0-(tan(#)tan(#)sin).x1)/(x0-x1) by VALUED_1:5
+    .= (tan.x0*tan.x0*sin.x0-(tan(#)tan).x1*sin.x1)/(x0-x1) by VALUED_1:5
+    .= (tan.x0*tan.x0*sin.x0-tan.x1*tan.x1*sin.x1)/(x0-x1) by VALUED_1:5
+    .= ((sin.x0*(cos.x0)")*tan.x0*sin.x0
+       -tan.x1*tan.x1*sin.x1)/(x0-x1) by A1,RFUNCT_1:def 4
+    .= ((sin.x0*(cos.x0)")*(sin.x0*(cos.x0)")*sin.x0
+       -tan.x1*tan.x1*sin.x1)/(x0-x1) by A1,RFUNCT_1:def 4
+    .= ((sin.x0*(cos.x0)")*(sin.x0*(cos.x0)")*sin.x0
+       -(sin.x1*(cos.x1)")*tan.x1*sin.x1)/(x0-x1) by A1,RFUNCT_1:def 4
+    .= ((sin.x0*(cos.x0)")*(sin.x0*(cos.x0)")*sin.x0
+       -(sin.x1*(cos.x1)")*(sin.x1*(cos.x1)")*sin.x1)/(x0-x1)
+                                                     by A1,RFUNCT_1:def 4
+    .= ((sin.x0*sin.x0*sin.x0*(cos.x0)"*(cos.x0)")
+       -(sin.x1*sin.x1*sin.x1*(cos.x1)"*(cos.x1)"))/(x0-x1)
+    .= (((sin.x0|^1*sin.x0)*sin.x0*(cos.x0)"*(cos.x0)")
+       -(sin.x1*sin.x1*sin.x1*(cos.x1)"*(cos.x1)"))/(x0-x1) by NEWTON:10
+    .= ((sin.x0|^(1+1)*sin.x0*(cos.x0)"*(cos.x0)")
+       -(sin.x1*sin.x1*sin.x1*(cos.x1)"*(cos.x1)"))/(x0-x1) by NEWTON:11
+    .= ((sin.x0|^(2+1)*(cos.x0)"*(cos.x0)")
+       -(sin.x1*sin.x1*sin.x1*(cos.x1)"*(cos.x1)"))/(x0-x1) by NEWTON:11
+    .= ((sin.x0|^3*(cos.x0)"*(cos.x0)")
+       -(sin.x1|^1*sin.x1*sin.x1*(cos.x1)"*(cos.x1)"))/(x0-x1) by NEWTON:10
+    .= ((sin.x0|^3*(cos.x0)"*(cos.x0)")
+       -(sin.x1|^(1+1)*sin.x1*(cos.x1)"*(cos.x1)"))/(x0-x1) by NEWTON:11
+    .= ((sin.x0|^3*(cos.x0)"*(cos.x0)")
+       -(sin.x1|^(2+1)*(cos.x1)"*(cos.x1)"))/(x0-x1) by NEWTON:11
+    .= ((sin.x0|^3*((cos.x0)"*(cos.x0)"))
+       -(sin.x1|^3*(cos.x1)"*(cos.x1)"))/(x0-x1)
+    .= ((sin.x0|^3*(cos.x0*cos.x0)")
+       -(sin.x1|^3*((cos.x1)"*(cos.x1)")))/(x0-x1) by XCMPLX_1:205
+    .= ((sin.x0)|^3/(cos.x0)^2-(sin.x1)|^3/(cos.x1)^2)/(x0-x1)
+                                                         by XCMPLX_1:205
+    .= ((sin(x0))|^3*(cos(x1))^2-(sin(x1))|^3*(cos(x0))^2)
+       /((cos(x0))^2*(cos(x1))^2)/(x0-x1) by A2,XCMPLX_1:131
+    .= ((sin(x0))|^3*(cos(x1))^2-(sin(x1))|^3*(cos(x0))^2)
+       /((cos(x0))^2*(cos(x1))^2*(x0-x1)) by XCMPLX_1:79;
+  hence thesis;
+end;
+
+theorem
+  x in dom tan & x+h in dom tan implies
+  fD(tan(#)tan(#)sin,h).x = sin.(x+h)|^3*(cos.(x+h))"|^2 - sin.x|^3*(cos.x)"|^2
+proof
+  set f=tan(#)tan(#)sin;
+  assume
+A1: x in dom tan & x+h in dom tan;
+  x in dom f & x+h in dom f
+  proof
+    set f1=tan(#)tan;
+    set f2=sin;
+A2: x in dom f1 & x+h in dom f1
+    proof
+      x in dom tan /\ dom tan & x+h in dom tan /\ dom tan by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x in dom f1 /\ dom f2 & x+h in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  fD(f,h).x = (tan(#)tan(#)sin).(x+h) - (tan(#)tan(#)sin).x by DIFF_1:1
+    .= (tan(#)tan).(x+h)*sin.(x+h) - (tan(#)tan(#)sin).x by VALUED_1:5
+    .= (tan(#)tan).(x+h)*sin.(x+h) - (tan(#)tan).x*sin.x by VALUED_1:5
+    .= tan.(x+h)*tan.(x+h)*sin.(x+h) - (tan(#)tan).x*sin.x by VALUED_1:5
+    .= tan.(x+h)*tan.(x+h)*sin.(x+h) - tan.x*tan.x*sin.x by VALUED_1:5
+    .= (sin.(x+h)*(cos.(x+h))")*tan.(x+h)*sin.(x+h)
+       - tan.x*tan.x*sin.x by A1,RFUNCT_1:def 4
+    .= (sin.(x+h)*(cos.(x+h))")*(sin.(x+h)*(cos.(x+h))")*sin.(x+h)
+       - tan.x*tan.x*sin.x by A1,RFUNCT_1:def 4
+    .= (sin.(x+h)*(cos.(x+h))")*(sin.(x+h)*(cos.(x+h))")*sin.(x+h)
+       - (sin.x*(cos.x)")*tan.x*sin.x by A1,RFUNCT_1:def 4
+    .= (sin.(x+h)*(cos.(x+h))")*(sin.(x+h)*(cos.(x+h))")*sin.(x+h)
+       - (sin.x*(cos.x)")*(sin.x*(cos.x)")*sin.x by A1,RFUNCT_1:def 4
+    .= (sin.(x+h)*sin.(x+h)*sin.(x+h))*((cos.(x+h))"*(cos.(x+h))")
+       - (sin.x*sin.x*sin.x)*((cos.x)"*(cos.x)")
+    .= (sin.(x+h)|^1*sin.(x+h)*sin.(x+h))*((cos.(x+h))"*(cos.(x+h))")
+       - (sin.x*sin.x*sin.x)*((cos.x)"*(cos.x)") by NEWTON:10
+    .= (sin.(x+h)|^(1+1)*sin.(x+h))*((cos.(x+h))"*(cos.(x+h))")
+       - (sin.x*sin.x*sin.x)*((cos.x)"*(cos.x)") by NEWTON:11
+    .= sin.(x+h)|^(2+1)*((cos.(x+h))"*(cos.(x+h))")
+       - (sin.x*sin.x*sin.x)*((cos.x)"*(cos.x)") by NEWTON:11
+    .= sin.(x+h)|^3*((cos.(x+h))"|^1*(cos.(x+h))")
+       - (sin.x*sin.x*sin.x)*((cos.x)"*(cos.x)") by NEWTON:10
+    .= sin.(x+h)|^3*(cos.(x+h))"|^(1+1)
+       - (sin.x*sin.x*sin.x)*((cos.x)"*(cos.x)") by NEWTON:11
+    .= sin.(x+h)|^3*(cos.(x+h))"|^2
+       - (sin.x|^1*sin.x*sin.x)*((cos.x)"*(cos.x)") by NEWTON:10
+    .= sin.(x+h)|^3*(cos.(x+h))"|^2
+       - (sin.x|^(1+1)*sin.x)*((cos.x)"*(cos.x)") by NEWTON:11
+    .= sin.(x+h)|^3*(cos.(x+h))"|^2
+       - sin.x|^(2+1)*((cos.x)"*(cos.x)") by NEWTON:11
+    .= sin.(x+h)|^3*(cos.(x+h))"|^2
+       - sin.x|^3*((cos.x)"|^1*(cos.x)") by NEWTON:10
+    .= sin.(x+h)|^3*(cos.(x+h))"|^2
+       - sin.x|^3*(cos.x)"|^(1+1) by NEWTON:11
+    .= sin.(x+h)|^3*(cos.(x+h))"|^2 - sin.x|^3*(cos.x)"|^2;
+  hence thesis;
+end;
+
+theorem
+  x in dom tan & x-h in dom tan implies
+  bD(tan(#)tan(#)sin,h).x = sin.x|^3*(cos.x)"|^2 - sin.(x-h)|^3*(cos.(x-h))"|^2
+proof
+  set f=tan(#)tan(#)sin;
+  assume
+A1: x in dom tan & x-h in dom tan;
+  x in dom f & x-h in dom f
+  proof
+    set f1=tan(#)tan;
+    set f2=sin;
+A2: x in dom f1 & x-h in dom f1
+    proof
+      x in dom tan /\ dom tan & x-h in dom tan /\ dom tan by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x in dom f1 /\ dom f2 & x-h in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  bD(f,h).x = (tan(#)tan(#)sin).x - (tan(#)tan(#)sin).(x-h) by DIFF_1:38
+    .= (tan(#)tan).x*sin.x - (tan(#)tan(#)sin).(x-h) by VALUED_1:5
+    .= (tan(#)tan).x*sin.x - (tan(#)tan).(x-h)*sin.(x-h) by VALUED_1:5
+    .= tan.x*tan.x*sin.x - (tan(#)tan).(x-h)*sin.(x-h) by VALUED_1:5
+    .= tan.x*tan.x*sin.x - tan.(x-h)*tan.(x-h)*sin.(x-h) by VALUED_1:5
+    .= (sin.x*(cos.x)")*tan.x*sin.x
+       - tan.(x-h)*tan.(x-h)*sin.(x-h) by A1,RFUNCT_1:def 4
+    .= (sin.x*(cos.x)")*(sin.x*(cos.x)")*sin.x
+       - tan.(x-h)*tan.(x-h)*sin.(x-h) by A1,RFUNCT_1:def 4
+    .= (sin.x*(cos.x)")*(sin.x*(cos.x)")*sin.x
+       - (sin.(x-h)*(cos.(x-h))")*tan.(x-h)*sin.(x-h) by A1,RFUNCT_1:def 4
+    .= (sin.x*(cos.x)")*(sin.x*(cos.x)")*sin.x
+       - (sin.(x-h)*(cos.(x-h))")*(sin.(x-h)*(cos.(x-h))")*sin.(x-h)
+                                                      by A1,RFUNCT_1:def 4
+    .= (sin.x*sin.x*sin.x)*((cos.x)"*(cos.x)")
+       - (sin.(x-h)*sin.(x-h)*sin.(x-h))*((cos.(x-h))"*(cos.(x-h))")
+    .= (sin.x|^1*sin.x*sin.x)*((cos.x)"*(cos.x)")
+       - (sin.(x-h)*sin.(x-h)*sin.(x-h))*((cos.(x-h))"*(cos.(x-h))")
+                                                             by NEWTON:10
+    .= (sin.x|^(1+1)*sin.x)*((cos.x)"*(cos.x)")
+       - (sin.(x-h)*sin.(x-h)*sin.(x-h))*((cos.(x-h))"*(cos.(x-h))")
+                                                             by NEWTON:11
+    .= sin.x|^(2+1)*((cos.x)"*(cos.x)")
+       - (sin.(x-h)*sin.(x-h)*sin.(x-h))*((cos.(x-h))"*(cos.(x-h))")
+                                                             by NEWTON:11
+    .= sin.x|^3*((cos.x)"|^1*(cos.x)")
+       - (sin.(x-h)*sin.(x-h)*sin.(x-h))*((cos.(x-h))"*(cos.(x-h))")
+                                                             by NEWTON:10
+    .= sin.x|^3*(cos.x)"|^(1+1)
+       - (sin.(x-h)*sin.(x-h)*sin.(x-h))*((cos.(x-h))"*(cos.(x-h))")
+                                                             by NEWTON:11
+    .= sin.x|^3*(cos.x)"|^2
+       - (sin.(x-h)|^1*sin.(x-h)*sin.(x-h))*((cos.(x-h))"*(cos.(x-h))")
+                                                             by NEWTON:10
+    .= sin.x|^3*(cos.x)"|^2
+       - (sin.(x-h)|^(1+1)*sin.(x-h))*((cos.(x-h))"*(cos.(x-h))") by NEWTON:11
+    .= sin.x|^3*(cos.x)"|^2
+       - sin.(x-h)|^(2+1)*((cos.(x-h))"*(cos.(x-h))") by NEWTON:11
+    .= sin.x|^3*(cos.x)"|^2
+       - sin.(x-h)|^3*((cos.(x-h))"|^1*(cos.(x-h))") by NEWTON:10
+    .= sin.x|^3*(cos.x)"|^2
+       - sin.(x-h)|^3*(cos.(x-h))"|^(1+1) by NEWTON:11
+    .= sin.x|^3*(cos.x)"|^2 - sin.(x-h)|^3*(cos.(x-h))"|^2;
+  hence thesis;
+end;
+
+theorem
+  x+h/2 in dom tan & x-h/2 in dom tan implies
+  cD(tan(#)tan(#)sin,h).x = sin.(x+h/2)|^3*(cos.(x+h/2))"|^2
+  -sin.(x-h/2)|^3*(cos.(x-h/2))"|^2
+proof
+  set f=tan(#)tan(#)sin;
+  assume
+A1: x+h/2 in dom tan & x-h/2 in dom tan;
+  x+h/2 in dom f & x-h/2 in dom f
+  proof
+    set f1=tan(#)tan;
+    set f2=sin;
+A2: x+h/2 in dom f1 & x-h/2 in dom f1
+    proof
+      x+h/2 in dom tan /\ dom tan & x-h/2 in dom tan /\ dom tan by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x+h/2 in dom f1 /\ dom f2 & x-h/2 in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  cD(f,h).x = (tan(#)tan(#)sin).(x+h/2) - (tan(#)tan(#)sin).(x-h/2)
+    by DIFF_1:39
+    .= (tan(#)tan).(x+h/2)*sin.(x+h/2) - (tan(#)tan(#)sin).(x-h/2)
+                                                           by VALUED_1:5
+    .= (tan(#)tan).(x+h/2)*sin.(x+h/2) - (tan(#)tan).(x-h/2)*sin.(x-h/2)
+                                                           by VALUED_1:5
+    .= tan.(x+h/2)*tan.(x+h/2)*sin.(x+h/2) - (tan(#)tan).(x-h/2)*sin.(x-h/2)
+                                                             by VALUED_1:5
+    .= tan.(x+h/2)*tan.(x+h/2)*sin.(x+h/2)
+       - tan.(x-h/2)*tan.(x-h/2)*sin.(x-h/2) by VALUED_1:5
+    .= (sin.(x+h/2)*(cos.(x+h/2))")*tan.(x+h/2)*sin.(x+h/2)
+       - tan.(x-h/2)*tan.(x-h/2)*sin.(x-h/2) by A1,RFUNCT_1:def 4
+    .= (sin.(x+h/2)*(cos.(x+h/2))")*(sin.(x+h/2)*(cos.(x+h/2))")*sin.(x+h/2)
+       - tan.(x-h/2)*tan.(x-h/2)*sin.(x-h/2) by A1,RFUNCT_1:def 4
+    .= (sin.(x+h/2)*(cos.(x+h/2))")*(sin.(x+h/2)*(cos.(x+h/2))")*sin.(x+h/2)
+       - (sin.(x-h/2)*(cos.(x-h/2))")*tan.(x-h/2)*sin.(x-h/2)
+                                                        by A1,RFUNCT_1:def 4
+    .= (sin.(x+h/2)*(cos.(x+h/2))")*(sin.(x+h/2)*(cos.(x+h/2))")*sin.(x+h/2)
+       - (sin.(x-h/2)*(cos.(x-h/2))")*(sin.(x-h/2)*(cos.(x-h/2))")*sin.(x-h/2)
+                                                      by A1,RFUNCT_1:def 4
+    .= (sin.(x+h/2)*sin.(x+h/2)*sin.(x+h/2))*((cos.(x+h/2))"*(cos.(x+h/2))")
+       - (sin.(x-h/2)*sin.(x-h/2)*sin.(x-h/2))*((cos.(x-h/2))"*(cos.(x-h/2))")
+    .= (sin.(x+h/2)|^1*sin.(x+h/2)*sin.(x+h/2))*((cos.(x+h/2))"*(cos.(x+h/2))")
+       - (sin.(x-h/2)*sin.(x-h/2)*sin.(x-h/2))*((cos.(x-h/2))"*(cos.(x-h/2))")
+                                                             by NEWTON:10
+    .= (sin.(x+h/2)|^(1+1)*sin.(x+h/2))*((cos.(x+h/2))"*(cos.(x+h/2))")
+       - (sin.(x-h/2)*sin.(x-h/2)*sin.(x-h/2))*((cos.(x-h/2))"*(cos.(x-h/2))")
+                                                             by NEWTON:11
+    .= sin.(x+h/2)|^(2+1)*((cos.(x+h/2))"*(cos.(x+h/2))")
+       - (sin.(x-h/2)*sin.(x-h/2)*sin.(x-h/2))*((cos.(x-h/2))"*(cos.(x-h/2))")
+                                                             by NEWTON:11
+    .= sin.(x+h/2)|^3*((cos.(x+h/2))"|^1*(cos.(x+h/2))")
+       - (sin.(x-h/2)*sin.(x-h/2)*sin.(x-h/2))*((cos.(x-h/2))"*(cos.(x-h/2))")
+                                                             by NEWTON:10
+    .= sin.(x+h/2)|^3*(cos.(x+h/2))"|^(1+1)
+       - (sin.(x-h/2)*sin.(x-h/2)*sin.(x-h/2))*((cos.(x-h/2))"*(cos.(x-h/2))")
+                                                             by NEWTON:11
+    .= sin.(x+h/2)|^3*(cos.(x+h/2))"|^2
+       - (sin.(x-h/2)|^1*sin.(x-h/2)*sin.(x-h/2))
+       *((cos.(x-h/2))"*(cos.(x-h/2))") by NEWTON:10
+    .= sin.(x+h/2)|^3*(cos.(x+h/2))"|^2
+       - (sin.(x-h/2)|^(1+1)*sin.(x-h/2))*((cos.(x-h/2))"*(cos.(x-h/2))")
+                                                                by NEWTON:11
+    .= sin.(x+h/2)|^3*(cos.(x+h/2))"|^2
+       - sin.(x-h/2)|^(2+1)*((cos.(x-h/2))"*(cos.(x-h/2))") by NEWTON:11
+    .= sin.(x+h/2)|^3*(cos.(x+h/2))"|^2
+       - sin.(x-h/2)|^3*((cos.(x-h/2))"|^1*(cos.(x-h/2))") by NEWTON:10
+    .= sin.(x+h/2)|^3*(cos.(x+h/2))"|^2
+       - sin.(x-h/2)|^3*(cos.(x-h/2))"|^(1+1) by NEWTON:11
+    .= sin.(x+h/2)|^3*(cos.(x+h/2))"|^2 - sin.(x-h/2)|^3*(cos.(x-h/2))"|^2;
+  hence thesis;
+end;
+
+::  f.x=(cot(x))^2*cos(x)
+
+theorem
+  x0 in dom cot & x1 in dom cot implies
+  [!cot(#)cot(#)cos,x0,x1!] = ((cos(x0))|^3*(sin(x1))^2-(cos(x1))|^3
+  *(sin(x0))^2)/((sin(x0))^2*(sin(x1))^2*(x0-x1))
+proof
+  assume
+A1:x0 in dom cot & x1 in dom cot;
+A2:sin(x0)<>0 & sin(x1)<>0 by A1,FDIFF_8:2;
+  [!cot(#)cot(#)cos,x0,x1!] = ((cot(#)cot).x0*cos.x0
+       -(cot(#)cot(#)cos).x1)/(x0-x1) by VALUED_1:5
+    .= (cot.x0*cot.x0*cos.x0-(cot(#)cot(#)cos).x1)/(x0-x1) by VALUED_1:5
+    .= (cot.x0*cot.x0*cos.x0-(cot(#)cot).x1*cos.x1)/(x0-x1) by VALUED_1:5
+    .= (cot.x0*cot.x0*cos.x0-cot.x1*cot.x1*cos.x1)/(x0-x1) by VALUED_1:5
+    .= ((cos.x0*(sin.x0)")*cot.x0*cos.x0
+       -cot.x1*cot.x1*cos.x1)/(x0-x1) by A1,RFUNCT_1:def 4
+    .= ((cos.x0*(sin.x0)")*(cos.x0*(sin.x0)")*cos.x0
+       -cot.x1*cot.x1*cos.x1)/(x0-x1) by A1,RFUNCT_1:def 4
+    .= ((cos.x0*(sin.x0)")*(cos.x0*(sin.x0)")*cos.x0
+       -(cos.x1*(sin.x1)")*cot.x1*cos.x1)/(x0-x1) by A1,RFUNCT_1:def 4
+    .= ((cos.x0*(sin.x0)")*(cos.x0*(sin.x0)")*cos.x0
+       -(cos.x1*(sin.x1)")*(cos.x1*(sin.x1)")*cos.x1)/(x0-x1)
+                                                     by A1,RFUNCT_1:def 4
+    .= ((cos.x0*cos.x0*cos.x0*(sin.x0)"*(sin.x0)")
+       -(cos.x1*cos.x1*cos.x1*(sin.x1)"*(sin.x1)"))/(x0-x1)
+    .= (((cos.x0|^1*cos.x0)*cos.x0*(sin.x0)"*(sin.x0)")
+       -(cos.x1*cos.x1*cos.x1*(sin.x1)"*(sin.x1)"))/(x0-x1) by NEWTON:10
+    .= ((cos.x0|^(1+1)*cos.x0*(sin.x0)"*(sin.x0)")
+       -(cos.x1*cos.x1*cos.x1*(sin.x1)"*(sin.x1)"))/(x0-x1) by NEWTON:11
+    .= ((cos.x0|^(2+1)*(sin.x0)"*(sin.x0)")
+       -(cos.x1*cos.x1*cos.x1*(sin.x1)"*(sin.x1)"))/(x0-x1) by NEWTON:11
+    .= ((cos.x0|^3*(sin.x0)"*(sin.x0)")
+       -(cos.x1|^1*cos.x1*cos.x1*(sin.x1)"*(sin.x1)"))/(x0-x1) by NEWTON:10
+    .= ((cos.x0|^3*(sin.x0)"*(sin.x0)")
+       -(cos.x1|^(1+1)*cos.x1*(sin.x1)"*(sin.x1)"))/(x0-x1) by NEWTON:11
+    .= ((cos.x0|^3*(sin.x0)"*(sin.x0)")
+       -(cos.x1|^(2+1)*(sin.x1)"*(sin.x1)"))/(x0-x1) by NEWTON:11
+    .= ((cos.x0|^3*((sin.x0)"*(sin.x0)"))
+       -(cos.x1|^3*(sin.x1)"*(sin.x1)"))/(x0-x1)
+    .= ((cos.x0|^3*(sin.x0*sin.x0)")
+       -(cos.x1|^3*((sin.x1)"*(sin.x1)")))/(x0-x1) by XCMPLX_1:205
+    .= ((cos.x0)|^3/(sin.x0)^2-(cos.x1)|^3/(sin.x1)^2)/(x0-x1)
+                                                         by XCMPLX_1:205
+    .= ((cos(x0))|^3*(sin(x1))^2-(cos(x1))|^3*(sin(x0))^2)
+       /((sin(x0))^2*(sin(x1))^2)/(x0-x1) by A2,XCMPLX_1:131
+    .= ((cos(x0))|^3*(sin(x1))^2-(cos(x1))|^3*(sin(x0))^2)
+       /((sin(x0))^2*(sin(x1))^2*(x0-x1)) by XCMPLX_1:79;
+  hence thesis;
+end;
+
+theorem
+  x in dom cot & x+h in dom cot implies
+  fD(cot(#)cot(#)cos,h).x = cos.(x+h)|^3*(sin.(x+h))"|^2 - cos.x|^3*(sin.x)"|^2
+proof
+  set f=cot(#)cot(#)cos;
+  assume
+A1: x in dom cot & x+h in dom cot;
+  x in dom f & x+h in dom f
+  proof
+    set f1=cot(#)cot;
+    set f2=cos;
+A2: x in dom f1 & x+h in dom f1
+    proof
+      x in dom cot /\ dom cot & x+h in dom cot /\ dom cot by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x in dom f1 /\ dom f2 & x+h in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  fD(f,h).x = (cot(#)cot(#)cos).(x+h) - (cot(#)cot(#)cos).x by DIFF_1:1
+    .= (cot(#)cot).(x+h)*cos.(x+h) - (cot(#)cot(#)cos).x by VALUED_1:5
+    .= (cot(#)cot).(x+h)*cos.(x+h) - (cot(#)cot).x*cos.x by VALUED_1:5
+    .= cot.(x+h)*cot.(x+h)*cos.(x+h) - (cot(#)cot).x*cos.x by VALUED_1:5
+    .= cot.(x+h)*cot.(x+h)*cos.(x+h) - cot.x*cot.x*cos.x by VALUED_1:5
+    .= (cos.(x+h)*(sin.(x+h))")*cot.(x+h)*cos.(x+h)
+       - cot.x*cot.x*cos.x by A1,RFUNCT_1:def 4
+    .= (cos.(x+h)*(sin.(x+h))")*(cos.(x+h)*(sin.(x+h))")*cos.(x+h)
+       - cot.x*cot.x*cos.x by A1,RFUNCT_1:def 4
+    .= (cos.(x+h)*(sin.(x+h))")*(cos.(x+h)*(sin.(x+h))")*cos.(x+h)
+       - (cos.x*(sin.x)")*cot.x*cos.x by A1,RFUNCT_1:def 4
+    .= (cos.(x+h)*(sin.(x+h))")*(cos.(x+h)*(sin.(x+h))")*cos.(x+h)
+       - (cos.x*(sin.x)")*(cos.x*(sin.x)")*cos.x by A1,RFUNCT_1:def 4
+    .= (cos.(x+h)*cos.(x+h)*cos.(x+h))*((sin.(x+h))"*(sin.(x+h))")
+       - (cos.x*cos.x*cos.x)*((sin.x)"*(sin.x)")
+    .= (cos.(x+h)|^1*cos.(x+h)*cos.(x+h))*((sin.(x+h))"*(sin.(x+h))")
+       - (cos.x*cos.x*cos.x)*((sin.x)"*(sin.x)") by NEWTON:10
+    .= (cos.(x+h)|^(1+1)*cos.(x+h))*((sin.(x+h))"*(sin.(x+h))")
+       - (cos.x*cos.x*cos.x)*((sin.x)"*(sin.x)") by NEWTON:11
+    .= cos.(x+h)|^(2+1)*((sin.(x+h))"*(sin.(x+h))")
+       - (cos.x*cos.x*cos.x)*((sin.x)"*(sin.x)") by NEWTON:11
+    .= cos.(x+h)|^3*((sin.(x+h))"|^1*(sin.(x+h))")
+       - (cos.x*cos.x*cos.x)*((sin.x)"*(sin.x)") by NEWTON:10
+    .= cos.(x+h)|^3*(sin.(x+h))"|^(1+1)
+       - (cos.x*cos.x*cos.x)*((sin.x)"*(sin.x)") by NEWTON:11
+    .= cos.(x+h)|^3*(sin.(x+h))"|^2
+       - (cos.x|^1*cos.x*cos.x)*((sin.x)"*(sin.x)") by NEWTON:10
+    .= cos.(x+h)|^3*(sin.(x+h))"|^2
+       - (cos.x|^(1+1)*cos.x)*((sin.x)"*(sin.x)") by NEWTON:11
+    .= cos.(x+h)|^3*(sin.(x+h))"|^2
+       - cos.x|^(2+1)*((sin.x)"*(sin.x)") by NEWTON:11
+    .= cos.(x+h)|^3*(sin.(x+h))"|^2
+       - cos.x|^3*((sin.x)"|^1*(sin.x)") by NEWTON:10
+    .= cos.(x+h)|^3*(sin.(x+h))"|^2
+       - cos.x|^3*(sin.x)"|^(1+1) by NEWTON:11
+    .= cos.(x+h)|^3*(sin.(x+h))"|^2 - cos.x|^3*(sin.x)"|^2;
+  hence thesis;
+end;
+
+theorem
+  x in dom cot & x-h in dom cot implies
+  bD(cot(#)cot(#)cos,h).x = cos.x|^3*(sin.x)"|^2 - cos.(x-h)|^3*(sin.(x-h))"|^2
+proof
+  set f=cot(#)cot(#)cos;
+  assume
+A1: x in dom cot & x-h in dom cot;
+  x in dom f & x-h in dom f
+  proof
+    set f1=cot(#)cot;
+    set f2=cos;
+A2: x in dom f1 & x-h in dom f1
+    proof
+      x in dom cot /\ dom cot & x-h in dom cot /\ dom cot by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x in dom f1 /\ dom f2 & x-h in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  bD(f,h).x = (cot(#)cot(#)cos).x - (cot(#)cot(#)cos).(x-h) by DIFF_1:38
+    .= (cot(#)cot).x*cos.x - (cot(#)cot(#)cos).(x-h) by VALUED_1:5
+    .= (cot(#)cot).x*cos.x - (cot(#)cot).(x-h)*cos.(x-h) by VALUED_1:5
+    .= cot.x*cot.x*cos.x - (cot(#)cot).(x-h)*cos.(x-h) by VALUED_1:5
+    .= cot.x*cot.x*cos.x - cot.(x-h)*cot.(x-h)*cos.(x-h) by VALUED_1:5
+    .= (cos.x*(sin.x)")*cot.x*cos.x
+       - cot.(x-h)*cot.(x-h)*cos.(x-h) by A1,RFUNCT_1:def 4
+    .= (cos.x*(sin.x)")*(cos.x*(sin.x)")*cos.x
+       - cot.(x-h)*cot.(x-h)*cos.(x-h) by A1,RFUNCT_1:def 4
+    .= (cos.x*(sin.x)")*(cos.x*(sin.x)")*cos.x
+       - (cos.(x-h)*(sin.(x-h))")*cot.(x-h)*cos.(x-h) by A1,RFUNCT_1:def 4
+    .= (cos.x*(sin.x)")*(cos.x*(sin.x)")*cos.x
+       - (cos.(x-h)*(sin.(x-h))")*(cos.(x-h)*(sin.(x-h))")*cos.(x-h)
+                                                      by A1,RFUNCT_1:def 4
+    .= (cos.x*cos.x*cos.x)*((sin.x)"*(sin.x)")
+       - (cos.(x-h)*cos.(x-h)*cos.(x-h))*((sin.(x-h))"*(sin.(x-h))")
+    .= (cos.x|^1*cos.x*cos.x)*((sin.x)"*(sin.x)")
+       - (cos.(x-h)*cos.(x-h)*cos.(x-h))*((sin.(x-h))"*(sin.(x-h))")
+                                                             by NEWTON:10
+    .= (cos.x|^(1+1)*cos.x)*((sin.x)"*(sin.x)")
+       - (cos.(x-h)*cos.(x-h)*cos.(x-h))*((sin.(x-h))"*(sin.(x-h))")
+                                                             by NEWTON:11
+    .= cos.x|^(2+1)*((sin.x)"*(sin.x)")
+       - (cos.(x-h)*cos.(x-h)*cos.(x-h))*((sin.(x-h))"*(sin.(x-h))")
+                                                             by NEWTON:11
+    .= cos.x|^3*((sin.x)"|^1*(sin.x)")
+       - (cos.(x-h)*cos.(x-h)*cos.(x-h))*((sin.(x-h))"*(sin.(x-h))")
+                                                             by NEWTON:10
+    .= cos.x|^3*(sin.x)"|^(1+1)
+       - (cos.(x-h)*cos.(x-h)*cos.(x-h))*((sin.(x-h))"*(sin.(x-h))")
+                                                             by NEWTON:11
+    .= cos.x|^3*(sin.x)"|^2
+       - (cos.(x-h)|^1*cos.(x-h)*cos.(x-h))*((sin.(x-h))"*(sin.(x-h))")
+                                                             by NEWTON:10
+    .= cos.x|^3*(sin.x)"|^2
+       - (cos.(x-h)|^(1+1)*cos.(x-h))*((sin.(x-h))"*(sin.(x-h))") by NEWTON:11
+    .= cos.x|^3*(sin.x)"|^2
+       - cos.(x-h)|^(2+1)*((sin.(x-h))"*(sin.(x-h))") by NEWTON:11
+    .= cos.x|^3*(sin.x)"|^2
+       - cos.(x-h)|^3*((sin.(x-h))"|^1*(sin.(x-h))") by NEWTON:10
+    .= cos.x|^3*(sin.x)"|^2
+       - cos.(x-h)|^3*(sin.(x-h))"|^(1+1) by NEWTON:11
+    .= cos.x|^3*(sin.x)"|^2 - cos.(x-h)|^3*(sin.(x-h))"|^2;
+  hence thesis;
+end;
+
+theorem
+  x+h/2 in dom cot & x-h/2 in dom cot implies
+  cD(cot(#)cot(#)cos,h).x = cos.(x+h/2)|^3*(sin.(x+h/2))"|^2
+  - cos.(x-h/2)|^3*(sin.(x-h/2))"|^2
+proof
+  set f=cot(#)cot(#)cos;
+  assume
+A1: x+h/2 in dom cot & x-h/2 in dom cot;
+  x+h/2 in dom f & x-h/2 in dom f
+  proof
+    set f1=cot(#)cot;
+    set f2=cos;
+A2: x+h/2 in dom f1 & x-h/2 in dom f1
+    proof
+      x+h/2 in dom cot /\ dom cot & x-h/2 in dom cot /\ dom cot by A1;
+      hence thesis by VALUED_1:def 4;
+    end;
+    x+h/2 in dom f1 /\ dom f2 & x-h/2 in dom f1 /\ dom f2
+                                        by A2,SIN_COS:27,XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+  end;
+  then
+  cD(f,h).x = (cot(#)cot(#)cos).(x+h/2) - (cot(#)cot(#)cos).(x-h/2)
+    by DIFF_1:39
+    .= (cot(#)cot).(x+h/2)*cos.(x+h/2) - (cot(#)cot(#)cos).(x-h/2)
+                                                           by VALUED_1:5
+    .= (cot(#)cot).(x+h/2)*cos.(x+h/2) - (cot(#)cot).(x-h/2)*cos.(x-h/2)
+                                                           by VALUED_1:5
+    .= cot.(x+h/2)*cot.(x+h/2)*cos.(x+h/2) - (cot(#)cot).(x-h/2)*cos.(x-h/2)
+                                                             by VALUED_1:5
+    .= cot.(x+h/2)*cot.(x+h/2)*cos.(x+h/2)
+       - cot.(x-h/2)*cot.(x-h/2)*cos.(x-h/2) by VALUED_1:5
+    .= (cos.(x+h/2)*(sin.(x+h/2))")*cot.(x+h/2)*cos.(x+h/2)
+       - cot.(x-h/2)*cot.(x-h/2)*cos.(x-h/2) by A1,RFUNCT_1:def 4
+    .= (cos.(x+h/2)*(sin.(x+h/2))")*(cos.(x+h/2)*(sin.(x+h/2))")*cos.(x+h/2)
+       - cot.(x-h/2)*cot.(x-h/2)*cos.(x-h/2) by A1,RFUNCT_1:def 4
+    .= (cos.(x+h/2)*(sin.(x+h/2))")*(cos.(x+h/2)*(sin.(x+h/2))")*cos.(x+h/2)
+       - (cos.(x-h/2)*(sin.(x-h/2))")*cot.(x-h/2)*cos.(x-h/2)
+                                                        by A1,RFUNCT_1:def 4
+    .= (cos.(x+h/2)*(sin.(x+h/2))")*(cos.(x+h/2)*(sin.(x+h/2))")*cos.(x+h/2)
+       - (cos.(x-h/2)*(sin.(x-h/2))")*(cos.(x-h/2)*(sin.(x-h/2))")*cos.(x-h/2)
+                                                      by A1,RFUNCT_1:def 4
+    .= (cos.(x+h/2)*cos.(x+h/2)*cos.(x+h/2))*((sin.(x+h/2))"*(sin.(x+h/2))")
+       - (cos.(x-h/2)*cos.(x-h/2)*cos.(x-h/2))*((sin.(x-h/2))"*(sin.(x-h/2))")
+    .= (cos.(x+h/2)|^1*cos.(x+h/2)*cos.(x+h/2))*((sin.(x+h/2))"*(sin.(x+h/2))")
+       - (cos.(x-h/2)*cos.(x-h/2)*cos.(x-h/2))*((sin.(x-h/2))"*(sin.(x-h/2))")
+                                                             by NEWTON:10
+    .= (cos.(x+h/2)|^(1+1)*cos.(x+h/2))*((sin.(x+h/2))"*(sin.(x+h/2))")
+       - (cos.(x-h/2)*cos.(x-h/2)*cos.(x-h/2))*((sin.(x-h/2))"*(sin.(x-h/2))")
+                                                             by NEWTON:11
+    .= cos.(x+h/2)|^(2+1)*((sin.(x+h/2))"*(sin.(x+h/2))")
+       - (cos.(x-h/2)*cos.(x-h/2)*cos.(x-h/2))*((sin.(x-h/2))"*(sin.(x-h/2))")
+                                                             by NEWTON:11
+    .= cos.(x+h/2)|^3*((sin.(x+h/2))"|^1*(sin.(x+h/2))")
+       - (cos.(x-h/2)*cos.(x-h/2)*cos.(x-h/2))*((sin.(x-h/2))"*(sin.(x-h/2))")
+                                                             by NEWTON:10
+    .= cos.(x+h/2)|^3*(sin.(x+h/2))"|^(1+1)
+       - (cos.(x-h/2)*cos.(x-h/2)*cos.(x-h/2))*((sin.(x-h/2))"*(sin.(x-h/2))")
+                                                             by NEWTON:11
+    .= cos.(x+h/2)|^3*(sin.(x+h/2))"|^2
+       - (cos.(x-h/2)|^1*cos.(x-h/2)*cos.(x-h/2))
+       *((sin.(x-h/2))"*(sin.(x-h/2))") by NEWTON:10
+    .= cos.(x+h/2)|^3*(sin.(x+h/2))"|^2
+       - (cos.(x-h/2)|^(1+1)*cos.(x-h/2))*((sin.(x-h/2))"*(sin.(x-h/2))")
+                                                                by NEWTON:11
+    .= cos.(x+h/2)|^3*(sin.(x+h/2))"|^2
+       - cos.(x-h/2)|^(2+1)*((sin.(x-h/2))"*(sin.(x-h/2))") by NEWTON:11
+    .= cos.(x+h/2)|^3*(sin.(x+h/2))"|^2
+       - cos.(x-h/2)|^3*((sin.(x-h/2))"|^1*(sin.(x-h/2))") by NEWTON:10
+    .= cos.(x+h/2)|^3*(sin.(x+h/2))"|^2
+       - cos.(x-h/2)|^3*(sin.(x-h/2))"|^(1+1) by NEWTON:11
+    .= cos.(x+h/2)|^3*(sin.(x+h/2))"|^2 - cos.(x-h/2)|^3*(sin.(x-h/2))"|^2;
+  hence thesis;
+end;

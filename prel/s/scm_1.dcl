@@ -11,8 +11,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -20,33 +18,48 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="RECDEF_2"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
-<ArticleID name="CARD_3"/>
-<ArticleID name="RECDEF_2"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="ORDINAL4"/>
 <ArticleID name="AFINSQ_1"/>
 <ArticleID name="COMPOS_1"/>
-<ArticleID name="AMI_1"/>
+<ArticleID name="EXTPRO_1"/>
+<ArticleID name="AMI_3"/>
 <ArticleID name="AMI_2"/>
-<ArticleID name="SCMPDS_2"/>
+<ArticleID name="SCM_1"/>
 </Signature>
-<RCluster aid="SCMPDS_3" nr="1">
-<ArgTypes/>
-<Typ kind="M" nr="1">
+<RCluster aid="SCM_1" nr="1">
+<ArgTypes>
+<Typ kind="M" nr="4">
 <Cluster/>
+<Func kind="K" nr="66"/>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="315"/>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="315"/>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="13">
+<Cluster/>
+<LocusVar nr="1"/>
+<LocusVar nr="3"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="7" value="false">
-<Func kind="K" nr="287"/>
-</Adjective>
 <Adjective nr="7">
 <Func kind="U" nr="1">
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="298"/>
 </Func>
 </Adjective>
 <Adjective nr="9"/>
@@ -55,16 +68,20 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="298"/>
 </Func>
 </Adjective>
-<Adjective nr="23"/>
-<Adjective nr="57"/>
-<Adjective nr="81">
+<Adjective nr="31">
+<Func kind="U" nr="1">
+<Func kind="K" nr="298"/>
+</Func>
+</Adjective>
+<Adjective nr="70">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="298"/>
+<LocusVar nr="2"/>
 </Adjective>
 </Cluster>
 </RCluster>

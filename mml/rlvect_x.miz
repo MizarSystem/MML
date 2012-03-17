@@ -1,0 +1,1651 @@
+:: Formalization of Integral Linear Space
+::  by Yuichi Futa , Hiroyuki Okazaki and Yasunari Shidama
+:: 
+:: Received August 17, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies REAL_1, SUBSET_1, NUMBERS, RLVECT_1, RLSUB_1, FINSET_1, RLVECT_2,
+      FINSEQ_1, STRUCT_0, FUNCT_1, XBOOLE_0, VALUED_1, ORDINAL4, ARYTM_3,
+      RELAT_1, PARTFUN1, NAT_1, INT_1, CARD_3, CARD_1, SUPINF_2, TARSKI,
+      FUNCT_2, ARYTM_1, RLVECT_3, RLVECT_X, XXREAL_0, VALUED_0, FUNCT_4,
+      FUNCOP_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, DOMAIN_1, FUNCOP_1, FUNCT_4, FINSET_1, NUMBERS, XXREAL_0,
+      REAL_1, NAT_1, INT_1, VALUED_0, BINOP_2, FINSEQ_1, SEQ_1, STRUCT_0,
+      RLVECT_1, RLSUB_1, RLVECT_2, RLVECT_3, RUSUB_4, VFUNCT_1, BINOM;
+ constructors FINSEQ_4, REALSET1, RLSUB_2, RLVECT_2, RLVECT_3, FUNCT_4,
+      ARYTM_1, ARYTM_0, RUSUB_4, SQUARE_1, XXREAL_2, BINOP_2, SEQ_1, FUNCSDOM,
+      VALUED_2, TOPREALB, VFUNCT_1, BINOM;
+ registrations XBOOLE_0, FUNCT_1, RELSET_1, FINSET_1, NUMBERS, STRUCT_0,
+      ORDINAL1, REAL_1, INT_1, XREAL_0, RLVECT_2, VALUED_0, FINSEQ_1, FINSEQ_2,
+      CARD_1, RVSUM_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+ definitions RLVECT_2, TARSKI, RUSUB_4, FINSEQ_1;
+ theorems FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, RLSUB_1,
+      RLVECT_1, RLVECT_2, TARSKI, ZFMISC_1, RELAT_1, XBOOLE_0, XBOOLE_1,
+      STRUCT_0, PARTFUN1, RLVECT_3, INT_1, NUMBERS, NAT_1, XREAL_0, XXREAL_0,
+      ENUMSET1, RLVECT_4, VFUNCT_1, BINOM, FUNCOP_1, FINSEQ_5, FUNCT_4;
+ schemes FINSEQ_1, NAT_1, FUNCT_2, RLVECT_4;
+
+begin :: 1. Preliminaries
+
+ reconsider z0=0 as Real;
+ deffunc H(set)=0;
+
+theorem
+  for X be RealLinearSpace,
+      R1, R2 be FinSequence of X
+    st len R1 = len R2 holds Sum(R1+R2) = Sum(R1) + Sum(R2)
+proof
+  let X be RealLinearSpace,
+      R1, R2 be FinSequence of X;
+  assume len R1 = len R2; then
+  dom R1 = dom R2 by FINSEQ_3:31;
+  hence thesis by BINOM:7;
+end;
+
+theorem
+  for X be RealLinearSpace,
+      R1, R2, R3 be FinSequence of X
+    st len R1 = len R2 & R3 = R1-R2 holds Sum(R3) = Sum(R1) - Sum(R2)
+proof
+  let X be RealLinearSpace,
+      R1, R2, R3 be FinSequence of X;
+  assume AS: len R1 = len R2 & R3 = R1 - R2; then
+P0: dom R1 = dom R2 by FINSEQ_3:31;
+P1: dom R3 = dom R1 /\ dom R2 by AS,VFUNCT_1:def 2
+          .= dom R1 by P0; then
+P2: len R3 = len R1 by FINSEQ_3:31;
+  for k be Element of NAT st k in dom R1 holds R3.k = R1/.k - R2/.k
+  proof
+    let k be Element of NAT;
+    assume P31: k in dom R1;
+    hence R3.k = R3/.k by P1,PARTFUN1:def 8
+             .= R1/.k - R2/.k by AS,VFUNCT_1:def 2,P31,P1;
+  end;
+  hence thesis by AS,P2,RLVECT_2:7;
+end;
+
+theorem SM3:
+  for X be RealLinearSpace,
+      R1, R2 be FinSequence of X,
+      a be Element of REAL st R2 = a(#)R1 holds Sum(R2) = a * Sum(R1)
+proof
+  let X be RealLinearSpace,
+      R1, R2 be FinSequence of X,
+      a be Element of REAL;
+  assume AS: R2 = a(#)R1;
+  dom R2 = dom R1 by VFUNCT_1:def 4,AS; then
+P1: len R2 = len R1 by FINSEQ_3:31;
+  for k be Element of NAT st k in dom R1 holds R2.k = a * R1/.k
+  proof
+    let k be Element of NAT;
+    assume k in dom R1; then
+P21: k in dom R2 by VFUNCT_1:def 4,AS;
+    hence R2.k = R2/.k by PARTFUN1:def 8
+             .= a * R1/.k by P21,AS,VFUNCT_1:def 4;
+  end;
+  hence thesis by P1,RLVECT_2:5;
+end;
+
+begin :: 2. Integral Linear Space
+
+reserve x,y for set;
+reserve a,b for Real;
+reserve i,j for Integer;
+reserve V for RealLinearSpace;
+reserve W1,W2,W3 for Subspace of V;
+reserve v,v1,v2,v3,u,w,w1,w2,w3 for VECTOR of V;
+reserve A,B,C for Subset of V;
+reserve L,L1,L2 for Linear_Combination of V;
+reserve l,l1,l2 for Linear_Combination of A;
+
+definition let V,i,L;
+  func i * L -> Linear_Combination of V means  :Def13:
+  for v holds it.v = i * L.v;
+  existence
+  proof
+    deffunc F(Element of V)=i * L.$1;
+    consider f being Function of the carrier of V, REAL such that
+A1: for v being Element of V holds f.v = F(v) from FUNCT_2:sch 4;
+    reconsider f as Element of Funcs(the carrier of V,REAL) by FUNCT_2:11;
+    now
+      let v be Element of V;
+      assume not v in Carrier(L);
+      then L.v = 0;
+      hence f.v = i * 0 by A1
+        .= 0;
+    end;
+    then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+    take f;
+    let v;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let L1,L2;
+    assume that
+A2: for v holds L1.v = i * L.v and
+A3: for v holds L2.v = i * L.v;
+    let v;
+    thus L1.v = i * L.v by A2
+      .= L2.v by A3;
+  end;
+end;
+
+definition let V,A;
+  func Z_Lin(A) -> Subset of V equals
+  {Sum(l) : rng l c= INT};
+  correctness
+  proof
+    set A1 = {Sum(l) : rng l c= INT};
+    A1 c= the carrier of V
+    proof
+      let x;
+      assume x in A1;
+      then ex l st x = Sum(l) & rng l c= INT;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem LM000:
+  a = i implies a*l = i*l
+proof
+  assume AS:a=i;
+  for v be VECTOR of V holds (i*l).v = a * l.v by AS,Def13;
+  hence thesis by RLVECT_2:def 13;
+end;
+
+theorem LM001:
+  rng l1 c= INT & rng l2 c= INT implies rng (l1+l2) c= INT
+proof
+  assume AS: rng l1 c= INT & rng l2 c= INT;
+    let y be set;
+    assume AD:y in rng (l1+l2);
+    consider x be set such that
+R1: x in the carrier of V & y=(l1+l2).x by AD,FUNCT_2:17;
+    reconsider z=x as VECTOR of V by R1;
+    l1.z in rng l1 by FUNCT_2:6; then
+    reconsider z1=l1.z as Integer by AS;
+    l2.z in rng l2 by FUNCT_2:6; then
+    reconsider z2=l2.z as Integer by AS;
+    (l1+l2).z = z1+ z2 by RLVECT_2:def 12;
+    hence y in INT by R1;
+end;
+
+theorem LM002:
+  rng l c= INT implies rng (i*l) c= INT
+proof
+  assume AS:rng l c= INT;
+    let y be set;
+    assume AD:y in rng (i*l);
+    consider x be set such that
+R1: x in the carrier of V & y=(i*l).x by AD,FUNCT_2:17;
+    reconsider z=x as VECTOR of V by R1;
+    reconsider ii=i as Real by XREAL_0:def 1;
+    l.z in rng l by FUNCT_2:6; then
+    reconsider z1=l.z as Integer by AS;
+    (i*l).z = (ii*l).z by LM000
+           .= i*z1 by RLVECT_2:def 13;
+    hence y in INT by R1;
+end;
+
+theorem LM003:
+  rng (ZeroLC(V)) c= INT
+  proof
+    let y be set;
+    assume AD:y in rng (ZeroLC(V));
+    consider x be set such that
+R1: x in the carrier of V & y=(ZeroLC(V)).x by AD,FUNCT_2:17;
+    reconsider z = x as VECTOR of V by R1;
+    ZeroLC(V).z = 0 by RLVECT_2:30;
+    hence y in INT by R1,NUMBERS:17,TARSKI:def 3;
+  end;
+
+theorem LM004:
+  Z_Lin(A) c= the carrier of Lin(A)
+proof
+    let x be set;
+    assume x in Z_Lin(A); then
+    consider l1 being Linear_Combination of A such that
+A4: x = Sum(l1) & rng l1 c= INT;
+    x in Lin(A) by A4,RLVECT_3:17;
+    hence thesis by STRUCT_0:def 5;
+end;
+
+theorem LM010:
+  v in Z_Lin(A) & u in Z_Lin(A) implies v + u in Z_Lin(A)
+  proof
+    assume that
+A2: v in Z_Lin(A) and
+A3: u in Z_Lin(A);
+    consider l1 being Linear_Combination of A such that
+A4: v = Sum(l1) & rng l1 c= INT by A2;
+    consider l2 being Linear_Combination of A such that
+A5: u = Sum(l2) & rng l2 c= INT by A3;
+    reconsider f = l1 + l2 as Linear_Combination of A by RLVECT_2:59;
+A6: rng f c= INT by A4,A5,LM001;
+    v + u = Sum(f) by A4,A5,RLVECT_3:1;
+    hence thesis by A6;
+  end;
+
+theorem LM020:
+  v in Z_Lin(A) implies i*v in Z_Lin(A)
+  proof
+    assume v in Z_Lin(A);
+    then consider l such that
+A6: v = Sum(l) & rng l c= INT;
+    reconsider a=i as Real by XREAL_0:def 1;
+X1: a*l=i*l by LM000; then
+    reconsider f = i * l as Linear_Combination of A by RLVECT_2:67;
+A7: i * v = Sum(f) by A6,X1,RLVECT_3:2;
+    rng (i * l) c= INT by LM002,A6;
+    hence thesis by A7;
+  end;
+
+theorem LM030:
+  0.V in Z_Lin(A)
+proof
+  reconsider l = ZeroLC(V) as Linear_Combination of A by RLVECT_2:34;
+P1: Sum(l) = 0.V by RLVECT_2:48;
+  rng l c= INT by LM003;
+  hence thesis by P1;
+end;
+
+theorem Th18:
+  x in A implies x in Z_Lin(A)
+proof
+  assume
+A1: x in A;
+  then reconsider v = x as VECTOR of V;
+  consider f being Function of the carrier of V, REAL such that
+A2: f.v = 1 and
+A3: for u st u <> v holds f.u = H(u) from FUNCT_2:sch 6;
+  reconsider f as Element of Funcs(the carrier of V, REAL) by FUNCT_2:11;
+  ex T being finite Subset of V st for u st not u in T holds f.u = 0
+  proof
+    take T = {v};
+    let u;
+    assume not u in T;
+    then u <> v by TARSKI:def 1;
+    hence thesis by A3;
+  end;
+  then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+A4: Carrier(f) c= {v}
+  proof
+    let x;
+    assume x in Carrier(f);
+    then consider u such that
+A5: x = u and
+A6: f.u <> 0;
+    u = v by A3,A6;
+    hence thesis by A5,TARSKI:def 1;
+  end;
+  then reconsider f as Linear_Combination of {v} by RLVECT_2:def 8;
+A7: Sum(f) = f.v * v by RLVECT_2:50
+    .= v by A2, RLVECT_1:def 11;
+  {v} c= A by A1,ZFMISC_1:37;
+  then Carrier(f) c= A by A4,XBOOLE_1:1;
+  then reconsider f as Linear_Combination of A by RLVECT_2:def 8;
+  rng f c= INT
+  proof
+    let y be set;
+    assume AD:y in rng f;
+    consider x be set
+    such that R1: x in the carrier of V & y=f.x by AD,FUNCT_2:17;
+    reconsider z=x as VECTOR of V by R1;
+    per cases;
+    suppose z <> v; then
+      f.z = 0 by A3;
+      hence y in INT by R1,NUMBERS:17,TARSKI:def 3;
+    end;
+    suppose z = v;
+      hence y in INT by R1,A2,NUMBERS:17,TARSKI:def 3;
+    end;
+  end;
+  hence thesis by A7;
+end;
+
+theorem Th23:
+  A c= B implies Z_Lin(A) c= Z_Lin(B)
+proof
+  assume
+A1: A c= B;
+  let v be set;
+    assume v in Z_Lin(A);
+    then consider l such that
+A2: v = Sum(l) & rng l c= INT;
+    reconsider l as Linear_Combination of B by A1,RLVECT_2:33;
+    Sum(l) = v by A2;
+    hence v in Z_Lin(B) by A2;
+end;
+
+theorem
+  Z_Lin(A \/ B) = Z_Lin(A) + Z_Lin(B)
+proof
+  now
+    let v be set;
+    assume v in Z_Lin(A \/ B);
+    then consider l being Linear_Combination of A \/ B such that
+A1: v = Sum(l) & rng l c= INT;
+    deffunc F(set)=l.$1;
+    set D = Carrier(l) \ A;
+    set C = Carrier(l) /\ A;
+    defpred P[set] means $1 in C;
+    defpred D[set] means $1 in D;
+A2: for x st x in the carrier of V holds (P[x] implies F(x) in REAL) & (
+    not P[x ] implies H(x) in REAL);
+    consider f being Function of the carrier of V, REAL such that
+A3: for x st x in the carrier of V holds (P[x] implies f.x = F(x)) &
+    (not P[x] implies f.x = H(x)) from FUNCT_2:sch 5 (A2);
+    reconsider C as finite Subset of V;
+    reconsider f as Element of Funcs(the carrier of V, REAL) by FUNCT_2:11;
+    for u holds not u in C implies f.u = 0 by A3;
+    then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+B3: rng f c= INT
+    proof
+      let y be set;
+      assume AD:y in rng f;
+      consider x be set such that
+R1:   x in the carrier of V & y=f.x by AD,FUNCT_2:17;
+       reconsider z=x as VECTOR of V by R1;
+       per cases;
+         suppose not z in C; then
+         f.z = 0 by A3;
+         hence y in INT by R1,NUMBERS:17,TARSKI:def 3;
+        end;
+         suppose z in C; then
+         f.z = l.z by A3; then
+         f.z in rng l by FUNCT_2:6;
+         hence y in INT by R1,A1;
+        end;
+      end;
+A4: Carrier(f) c= C
+    proof
+      let x;
+      assume x in Carrier(f); then
+A5:   ex u st x = u & f.u <> 0;
+      assume not x in C;
+      hence thesis by A3,A5;
+    end;
+    C c= A by XBOOLE_1:17;
+    then Carrier(f) c= A by A4,XBOOLE_1:1;
+    then reconsider f as Linear_Combination of A by RLVECT_2:def 8;
+A6: for x st x in the carrier of V holds (D[x] implies F(x) in REAL) & (
+    not D[x] implies H(x) in REAL);
+    consider g being Function of the carrier of V, REAL such that
+A7: for x st x in the carrier of V holds (D[x] implies g.x = F(x)) &
+    (not D[x] implies g.x = H(x)) from FUNCT_2:sch 5(A6);
+    reconsider D as finite Subset of V;
+    reconsider g as Element of Funcs(the carrier of V, REAL) by FUNCT_2:11;
+    for u holds not u in D implies g.u = 0 by A7;
+    then reconsider g as Linear_Combination of V by RLVECT_2:def 5;
+B7: rng g c= INT
+   proof
+       let y be set;
+       assume AD:y in rng g;
+       consider x be set
+         such that R1: x in the carrier of V & y=g.x by AD,FUNCT_2:17;
+       reconsider z=x as VECTOR of V by R1;
+       per cases;
+         suppose not z in D;
+         then g.z = 0 by A7;
+         hence y in INT by R1,NUMBERS:17,TARSKI:def 3;
+        end;
+         suppose z in D;
+         then g.z = l.z by A7;
+         then g.z in rng l by FUNCT_2:6;
+         hence y in INT by R1,A1;
+        end;
+      end;
+A8: D c= B
+    proof
+      let x;
+      assume x in D; then
+A9:   x in Carrier(l) & not x in A by XBOOLE_0:def 5;
+      Carrier(l) c= A \/ B by RLVECT_2:def 8;
+      hence thesis by A9,XBOOLE_0:def 3;
+    end;
+    Carrier(g) c= D
+    proof
+      let x;
+      assume x in Carrier(g); then
+A10:  ex u st x = u & g.u <> 0;
+      assume not x in D;
+      hence thesis by A7,A10;
+    end;
+    then Carrier(g) c= B by A8,XBOOLE_1:1;
+    then reconsider g as Linear_Combination of B by RLVECT_2:def 8;
+    l = f + g
+    proof
+      let v;
+      now
+        per cases;
+        suppose
+A11:      v in C;
+A12:      now
+            assume v in D;
+            then not v in A by XBOOLE_0:def 5;
+            hence contradiction by A11,XBOOLE_0:def 4;
+          end;
+          thus (f + g).v = f.v + g.v by RLVECT_2:def 12
+            .= l.v + g.v by A3,A11
+            .= l.v + z0 by A7,A12
+            .= l.v;
+        end;
+        suppose
+A13:      not v in C;
+          now
+            per cases;
+            suppose
+A14:          v in Carrier(l);
+A15:          now
+                assume not v in D;
+                then not v in Carrier(l) or v in A by XBOOLE_0:def 5;
+                hence contradiction by A13,A14,XBOOLE_0:def 4;
+              end;
+              thus (f + g). v = f.v + g.v by RLVECT_2:def 12
+                .= z0 + g.v by A3,A13
+                .= l.v by A7,A15;
+            end;
+            suppose
+A16:          not v in Carrier(l); then
+A17:          not v in D by XBOOLE_0:def 5;
+A18:          not v in C by A16,XBOOLE_0:def 4;
+              thus (f + g).v = f.v + g.v by RLVECT_2:def 12
+                .= z0 + g.v by A3,A18
+                .= z0 + z0 by A7,A17
+                .= l.v by A16;
+            end;
+          end;
+          hence thesis;
+        end;
+      end;
+      hence thesis;
+    end;
+    then
+A19: v = Sum(f) + Sum(g) by A1,RLVECT_3:1;
+    Sum(f) in Z_Lin(A) & Sum(g) in Z_Lin(B) by B3,B7;
+    hence v in Z_Lin(A) + Z_Lin(B) by A19;
+  end;
+  then
+A20: Z_Lin(A \/ B) c= Z_Lin(A) + Z_Lin(B) by TARSKI:def 3;
+XX1: Z_Lin(A) c=Z_Lin(A \/ B) & Z_Lin(B) c= Z_Lin(A \/ B) by Th23
+,XBOOLE_1:7;
+ now let x be set;
+   assume x in Z_Lin(A) + Z_Lin(B); then
+   consider u,v be Element of V such that
+A21:x=u+v & u in Z_Lin(A) & v in Z_Lin(B);
+    thus x in Z_Lin(A \/ B) by A21,XX1,LM010;
+ end; then
+    Z_Lin(A) + Z_Lin(B) c= Z_Lin(A \/ B) by TARSKI:def 3;
+  hence thesis by A20,XBOOLE_0:def 10;
+end;
+
+theorem
+  Z_Lin(A /\ B) c= Z_Lin(A) /\ Z_Lin(B)
+proof
+  Z_Lin(A /\ B) c=Z_Lin(A) & Z_Lin(A /\ B) c=Z_Lin(B) by Th23,XBOOLE_1:17;
+  hence thesis by XBOOLE_1:19;
+end;
+
+theorem R4Th11:
+  x in Z_Lin{v} iff ex a be Integer st x = a * v
+proof
+  thus x in Z_Lin{v} implies ex a be Integer st x = a * v
+  proof
+    assume x in Z_Lin{v};
+    then consider l being Linear_Combination of {v} such that
+A1: x = Sum(l) & rng l c= INT;
+A2: Sum(l) = l.v * v by RLVECT_2:50;
+        ex f being Function st l = f & dom f = the carrier of V
+              & rng f c= REAL by FUNCT_2:def 2; then
+        l.v in rng l by FUNCT_1:12;
+    hence thesis by A1,A2;
+  end;
+  given a0 be Integer such that
+A2: x = a0 * v;
+  reconsider a=a0 as Real by XREAL_0:def 1;
+  consider f being Function of the carrier of V, REAL such that
+A3: f.v = a and
+A4: for z being VECTOR of V st z <> v holds f.z = H(z) from FUNCT_2:sch 6;
+  reconsider f as Element of Funcs(the carrier of V,REAL) by FUNCT_2:11;
+A40:now
+    let z be VECTOR of V;
+    assume not z in {v};
+    then z <> v by TARSKI:def 1;
+    hence f.z = 0 by A4;
+  end;
+  then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+  Carrier f c= {v}
+  proof
+    let x;
+    assume
+A5: x in Carrier f;
+    then f.x <> 0 by RLVECT_2:28;
+    then x = v by A4,A5;
+    hence thesis by TARSKI:def 1;
+  end;
+  then reconsider f as Linear_Combination of {v} by RLVECT_2:def 8;
+A6:Sum(f) = x by A2,A3,RLVECT_2:50;
+   rng f c= INT
+      proof
+       let y be set;
+       assume AD:y in rng f;
+       consider x be set
+         such that R1: x in the carrier of V & y=f.x by AD,FUNCT_2:17;
+       reconsider z=x as VECTOR of V by R1;
+       per cases;
+         suppose not z in {v}; then
+         f.z = 0 by A40;
+         hence y in INT by R1,NUMBERS:17,TARSKI:def 3;
+        end;
+         suppose z in {v}; then
+         f.z = a0 by A3,TARSKI:def 1;
+         hence y in INT by R1,INT_1:def 2;
+        end;
+      end;
+  hence thesis by A6;
+end;
+
+theorem
+  v in Z_Lin{v}
+proof
+  v in {v} by TARSKI:def 1;
+  hence thesis by Th18;
+end;
+
+theorem
+  x in v + Z_Lin{w} iff ex a be Integer st x = v + a * w
+proof
+  thus x in v + Z_Lin{w} implies ex a be Integer st x = v + a * w
+  proof
+    assume x in v + Z_Lin{w};
+    then consider u being VECTOR of V such that
+A2: x = v + u and
+A1: u in Z_Lin{w};
+    ex a be Integer st u = a * w by A1,R4Th11;
+    hence thesis by A2;
+  end;
+  given a0 be Integer such that
+A3: x = v + a0 * w;
+  a0 * w in Z_Lin{w} by R4Th11;
+  hence thesis by A3;
+end;
+
+theorem R4Th14:
+  x in Z_Lin{w1,w2} iff ex a,b be Integer st x = a * w1 + b * w2
+proof
+  thus x in Z_Lin{w1,w2} implies ex a,b be Integer
+    st x = a * w1 + b * w2
+  proof
+    assume
+A1: x in Z_Lin{w1,w2};
+    now
+      per cases;
+      suppose
+        w1 = w2;
+        then {w1,w2} = {w1} by ENUMSET1:69;
+        then consider a be Integer such that
+A2:     x = a * w1 by A1,R4Th11;
+        consider b be Integer such that
+AA:     b = 0;
+        x = a * w1 + 0.V by A2,RLVECT_1:10;
+        then x = a * w1 + b * w2 by RLVECT_1:23,AA;
+        hence thesis;
+      end;
+      suppose
+A3:     w1 <> w2;
+        consider l being Linear_Combination of {w1,w2} such that
+A4:     x = Sum(l) & rng l c= INT by A1;
+A5:     x = l.w1 * w1 + l.w2 * w2 by A3,A4,RLVECT_2:51;
+        ex f being Function st l = f & dom f = the carrier of V
+              & rng f c= REAL by FUNCT_2:def 2; then
+        l.w1 in rng l & l.w2 in rng l by FUNCT_1:12;
+        hence thesis by A4,A5;
+      end;
+    end;
+    hence thesis;
+  end;
+  given a0,b0 be Integer such that
+A5: x = a0 * w1 + b0 * w2;
+  reconsider a=a0,b=b0 as Real by XREAL_0:def 1;
+  now
+    per cases;
+    suppose
+A6:   w1 = w2;
+      then x = (a + b) * w1 by A5,RLVECT_1:def 9;
+      then x in Z_Lin{w1} by R4Th11;
+      hence thesis by A6,ENUMSET1:69;
+    end;
+    suppose
+A7:   w1 <> w2;
+      consider f being Function of the carrier of V, REAL such that
+A8:   f.w1 = a & f.w2 = b and
+A9:   for u st u <> w1 & u <> w2 holds f.u = H(u) from FUNCT_2:sch 7(A7);
+      reconsider f as Element of Funcs(the carrier of V,REAL) by FUNCT_2:11;
+A90:  now
+        let u;
+        assume not u in {w1,w2};
+        then u <> w1 & u <> w2 by TARSKI:def 2;
+        hence f.u = 0 by A9;
+      end;
+      then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+      Carrier f c= {w1,w2}
+      proof
+        let x;
+        assume that
+A10:    x in Carrier f and
+A11:    not x in {w1,w2};
+        x <> w1 & x <> w2 by A11,TARSKI:def 2;
+        then f.x = 0 by A9,A10;
+        hence contradiction by A10,RLVECT_2:28;
+      end;
+      then reconsider f as Linear_Combination of {w1,w2} by RLVECT_2:def 8;
+A12:  x = Sum(f) by A5,A7,A8,RLVECT_2:51;
+      rng f c= INT
+      proof
+       let y be set;
+       assume AD:y in rng f;
+       consider x be set
+         such that R1: x in the carrier of V & y=f.x by AD,FUNCT_2:17;
+       reconsider v=x as VECTOR of V by R1;
+       per cases;
+         suppose not v in {w1,w2}; then
+         f.v = 0 by A90;
+         hence y in INT by R1,NUMBERS:17,TARSKI:def 3;
+        end;
+         suppose v in {w1,w2}; then
+         f.v = a0 or f.v = b0 by A8,TARSKI:def 2;
+         hence y in INT by R1,INT_1:def 2;
+        end;
+      end;
+      hence thesis by A12;
+    end;
+  end;
+  hence thesis;
+end;
+
+theorem
+  w1 in Z_Lin{w1,w2}
+proof
+  w1 in {w1,w2} by TARSKI:def 2;
+  hence thesis by Th18;
+end;
+
+theorem
+  x in v + Z_Lin{w1,w2} iff ex a,b be Integer
+    st x = v + a * w1 + b * w2
+proof
+  thus x in v + Z_Lin{w1,w2} implies
+    ex a,b be Integer st x = v + a * w1 + b * w2
+  proof
+    assume x in v + Z_Lin{w1,w2};
+    then consider u such that
+A2: x = v + u and
+A1: u in Z_Lin{w1,w2};
+    consider a,b be Integer such that
+A3: u = a * w1 + b * w2 by A1,R4Th14;
+    take a,b;
+    thus thesis by A2,A3,RLVECT_1:def 6;
+  end;
+  given a,b be Integer such that
+A4: x = v + a * w1 + b * w2;
+  a * w1 + b * w2 in Z_Lin{w1,w2} by R4Th14;
+  then v + (a * w1 + b * w2) in v + Z_Lin{w1,w2};
+  hence thesis by A4,RLVECT_1:def 6;
+end;
+
+theorem R4Th17:
+  x in Z_Lin{v1,v2,v3} iff ex a,b,c be Integer
+   st x = a * v1 + b * v2 + c * v3
+proof
+  thus x in Z_Lin{v1,v2,v3} implies ex a,b,c be Integer
+   st x = a * v1 + b * v2 + c * v3
+  proof
+    assume
+A1: x in Z_Lin{v1,v2,v3};
+    now
+      per cases;
+      suppose
+A2:     v1 <> v2 & v1 <> v3 & v2 <> v3;
+        consider l being Linear_Combination of {v1,v2,v3} such that
+A3:     x = Sum(l) & rng l c= INT by A1;
+A4:     x = l.v1 * v1 + l.v2 * v2 + l.v3 * v3 by A2,A3,RLVECT_4:9;
+        ex f being Function st l = f & dom f = the carrier of V
+              & rng f c= REAL by FUNCT_2:def 2; then
+        l.v1 in rng l & l.v2 in rng l & l.v3 in rng l by FUNCT_1:12;
+        hence thesis by A3,A4;
+      end;
+      suppose
+        v1 = v2 or v1 = v3 or v2 = v3; then
+A4:     {v1,v2,v3} = {v1,v3} or {v1,v2,v3} = {v1,v1,v2} or {v1,v2,v3} = {
+        v3,v3,v1} by ENUMSET1:70,100;
+        now
+          per cases by A4,ENUMSET1:70;
+          suppose
+            {v1,v2,v3} = {v1,v2};
+            then consider a,b be Integer such that
+A5:         x = a * v1 + b * v2 by A1,R4Th14;
+            consider c be Integer such that
+A7:         c = 0;
+            x = a * v1 + b * v2 + 0.V by A5,RLVECT_1:10
+              .= a * v1 + b * v2 + c * v3 by RLVECT_1:23,A7;
+            hence thesis;
+          end;
+          suppose
+            {v1,v2,v3} = {v1,v3};
+            then consider a,b be Integer such that
+A6:         x = a * v1 + b * v3 by A1,R4Th14;
+            consider c be Integer such that
+A8:         c = 0;
+            x = a * v1 + 0.V + b * v3 by A6,RLVECT_1:10
+              .= a * v1 + c * v2 + b * v3 by RLVECT_1:23,A8;
+            hence thesis;
+          end;
+        end;
+        hence thesis;
+      end;
+    end;
+    hence thesis;
+  end;
+  given a0,b0,c0 be Integer such that
+A7: x = a0 * v1 + b0 * v2 + c0 * v3;
+  reconsider a=a0, b=b0, c = c0 as Real by XREAL_0:def 1;
+  now
+    per cases;
+    suppose
+A8:   v1 = v2 or v1 = v3 or v2 = v3;
+      now
+        per cases by A8;
+        suppose v1 = v2;
+          then {v1,v2,v3} = {v1,v3} & x = (a + b) * v1 + c * v3 by A7,
+            ENUMSET1:70,RLVECT_1:def 9;
+          hence thesis by R4Th14;
+        end;
+        suppose
+A9:       v1 = v3; then
+A10:      {v1,v2,v3} = {v1,v1,v2} by ENUMSET1:98
+            .= {v2,v1} by ENUMSET1:70;
+          x = b * v2 + (a * v1 + c * v1) by A7,A9,RLVECT_1:def 6
+            .= b * v2 + (a + c) * v1 by RLVECT_1:def 9;
+          hence thesis by A10,R4Th14;
+        end;
+        suppose
+A11:      v2 = v3;
+          then
+A12:      {v1,v2,v3} = {v2,v2,v1} by ENUMSET1:100
+            .= {v1,v2} by ENUMSET1:70;
+          x = a * v1 + (b * v2 + c * v2) by A7,A11,RLVECT_1:def 6
+            .= a * v1 + (b + c) * v2 by RLVECT_1:def 9;
+          hence thesis by A12,R4Th14;
+        end;
+      end;
+      hence thesis;
+    end;
+    suppose
+A13:  v1 <> v2 & v1 <> v3 & v2 <> v3;
+A14:  v1 <> v3 by A13;
+A15:  v2 <> v3 by A13;
+A16:  v1 <> v2 by A13;
+      consider f being Function of the carrier of V,REAL such that
+A17:  f.v1 = a & f.v2 = b & f.v3 = c and
+A18:  for v st v <> v1 & v <> v2 & v <> v3 holds f.v = H(v) from
+      RLVECT_4:sch 1(A16,A14, A15);
+      reconsider f as Element of Funcs(the carrier of V,REAL) by FUNCT_2:11;
+A180:   now
+        let v;
+        assume
+A19:    not v in {v1,v2,v3};
+        then
+A20:    v <> v3 by ENUMSET1:def 1;
+        v <> v1 & v <> v2 by A19,ENUMSET1:def 1;
+        hence f.v = 0 by A18,A20;
+      end;
+      then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+      Carrier f c= {v1,v2,v3}
+      proof
+        let x;
+        assume that
+A21:    x in Carrier f and
+A22:    not x in {v1,v2,v3};
+A23:    x <> v3 by A22,ENUMSET1:def 1;
+        x <> v1 & x <> v2 by A22,ENUMSET1:def 1;
+        then f.x = 0 by A18,A21,A23;
+        hence thesis by A21,RLVECT_2:28;
+      end;
+      then reconsider f as Linear_Combination of {v1,v2,v3} by RLVECT_2:def 8;
+A24:  x = Sum(f) by A7,A13,A17,RLVECT_4:9;
+     rng f c= INT
+      proof
+       let y be set;
+       assume AD:y in rng f;
+       consider x be set
+         such that R1: x in the carrier of V & y=f.x by AD,FUNCT_2:17;
+       reconsider v=x as VECTOR of V by R1;
+       per cases;
+         suppose not v in {v1,v2,v3};
+         then f.v = 0 by A180;
+         hence y in INT by R1,NUMBERS:17,TARSKI:def 3;
+        end;
+         suppose v in {v1,v2,v3}; then
+         f.v = a0 or f.v = b0 or f.v = c0 by A17,ENUMSET1:def 1;
+         hence y in INT by R1,INT_1:def 2;
+        end;
+      end;
+      hence thesis by A24;
+    end;
+  end;
+  hence thesis;
+end;
+
+theorem
+  w1 in Z_Lin{w1,w2,w3} & w2 in Z_Lin{w1,w2,w3} & w3 in Z_Lin{w1,w2,w3}
+proof
+A1: w3 in {w1,w2,w3} by ENUMSET1:def 1;
+  w1 in {w1,w2,w3} & w2 in {w1,w2,w3} by ENUMSET1:def 1;
+  hence thesis by A1,Th18;
+end;
+
+theorem
+  x in v + Z_Lin{w1,w2,w3}
+   iff ex a,b,c be Integer st x = v + a * w1 + b * w2 + c * w3
+proof
+  thus x in v + Z_Lin{w1,w2,w3} implies ex a,b,c be Integer
+    st x = v + a * w1 + b * w2 + c * w3
+  proof
+    assume x in v + Z_Lin{w1,w2,w3};
+    then consider u such that
+A2: x = v + u and
+A1: u in Z_Lin{w1,w2,w3};
+    consider a,b,c be Integer such that
+A3: u = a * w1 + b * w2 + c * w3 by A1,R4Th17;
+    take a,b,c;
+    x = v + (a * w1 + b * w2) + c * w3 by A2,A3,RLVECT_1:def 6;
+    hence thesis by RLVECT_1:def 6;
+  end;
+  given a,b,c be Integer such that
+A4: x = v + a * w1 + b * w2 + c * w3;
+  a * w1 + b * w2 + c * w3 in Z_Lin{w1,w2,w3} by R4Th17;
+  then v + (a * w1 + b * w2 + c * w3) in v + Z_Lin{w1,w2,w3};
+  then v + (a * w1 + b * w2) + c * w3 in v + Z_Lin{w1,w2,w3}
+    by RLVECT_1:def 6;
+  hence thesis by A4,RLVECT_1:def 6;
+end;
+
+LM0440:
+ for RS be RealLinearSpace,
+     X be Subset of RS,
+     g1,h1 be FinSequence of RS,
+        a1 be integer-valued FinSequence st
+       rng g1 c= X & len g1 =len h1 & len g1 = len a1 &
+       for i be Nat
+         st i in Seg (len g1) holds
+           h1/.i=(a1.i)*(g1/.i)
+ holds Sum(h1) in Z_Lin(X)
+  proof
+    let RS be RealLinearSpace, X be Subset of RS;
+    defpred P[Nat] means
+    for g,h be FinSequence of RS,
+     s be integer-valued FinSequence st
+            rng g c= X &
+            len g = $1 & len g = len h & len g = len s &
+            for i be Nat st i in Seg (len g) holds
+              h/.i=(s.i)*(g/.i) holds
+  Sum(h) in Z_Lin(X);
+P0: P[0]
+proof
+ let g,h be FinSequence of RS, s be integer-valued FinSequence;
+ set x = Sum(h);
+ assume AS1:rng g c= X &
+    len g = 0 & len g = len h & len g = len s &
+    for i be Nat st i in Seg (len g) holds h/.i=(s.i)*(g/.i);
+  Sum(h) = Sum(<*> the carrier of RS) by AS1,FINSEQ_1:28
+      .=0.RS by RLVECT_1:60;
+  hence x in Z_Lin(X) by LM030;
+end;
+P1: now let n be Nat;
+    assume P10: P[n];
+   now let g,h be FinSequence of RS,
+     s be integer-valued FinSequence, x be set;
+     assume AS1: x=Sum(h) & rng g c= X &
+            len g = n+1 & len g = len h & len g = len s &
+            for i be Nat st i in Seg (len g) holds h/.i=(s.i)*(g/.i);
+     reconsider gn = g|n as FinSequence of RS;
+     reconsider hn = h|n as FinSequence of RS;
+     reconsider sn = s|n as real-valued FinSequence;
+     rng gn c= X & len gn = n & len gn = len hn & len gn = len sn &
+            for i be Nat st i in Seg (len gn) holds
+              hn/.i=(sn.i)*(gn/.i)
+     proof
+       rng gn c= rng g by RELAT_1:99;
+       then B0: rng gn c= X by AS1,XBOOLE_1:1;
+       B1: n <= len g by AS1,NAT_1:11;
+       B3: n <= len h by AS1,NAT_1:11;
+       B4: len hn = n by AS1,NAT_1:11,FINSEQ_1:80;
+       B5: len sn = n by AS1,NAT_1:11,FINSEQ_1:80;
+       for i be Nat st i in Seg (len gn) holds
+       hn/.i=(sn.i)*(gn/.i)
+       proof
+         per cases;
+         suppose n = 0;
+           hence thesis;
+         end;
+         suppose n <> 0;
+           then C1: n >= 1 by NAT_1:14;
+           let i be Nat;
+           assume i in Seg (len gn);
+           then C2: i in Seg (n) by AS1,NAT_1:11,FINSEQ_1:80;
+           n in Seg (len g) by B1,C1,FINSEQ_1:3;
+           then n in dom g by FINSEQ_1:def 3;
+           then C4: gn/.i = g/.i by C2,FINSEQ_4:86;
+           n in Seg (len h) by B3,C1,FINSEQ_1:3;
+           then n in dom h by FINSEQ_1:def 3;
+           then C5: hn/.i = h/.i by C2,FINSEQ_4:86;
+           i <= n by C2,FINSEQ_1:3;
+           then sn.i = s.i by FINSEQ_3:121;
+           hence thesis by AS1,C2,C4,C5,FINSEQ_2:9;
+         end;
+       end;
+       hence thesis by B0,B4,B5,AS1,NAT_1:11,FINSEQ_1:80;
+     end; then
+     Q3:Sum(hn) in Z_Lin(X) by P10;
+     Q4: n+1 in Seg (len g) by AS1,FINSEQ_1:6;
+     Q5: h/.(n+1) = s.(n+1)*g/.(n+1) by AS1,FINSEQ_1:6;
+     Q6: h = hn ^ <* s.(n+1)*g/.(n+1) *> by AS1,Q5,FINSEQ_5:24;
+     Q7: n+1 in dom g by Q4,FINSEQ_1:def 3;
+     then g/.(n+1) = g.(n+1) by PARTFUN1:def 8;
+     then g/.(n+1) in rng g by Q7,FUNCT_1:12;
+     then g/.(n+1) in Z_Lin(X) by AS1,Th18; then
+     Q8: s.(n+1)*(g/.(n+1)) in Z_Lin(X) by LM020;
+     Sum(h) = Sum(hn)+Sum(<* s.(n+1)*g/.(n+1) *>) by Q6,RLVECT_1:58
+           .= Sum(hn)+ s.(n+1)*(g/.(n+1)) by RLVECT_1:61;
+     hence x in Z_Lin(X) by AS1,Q3,Q8,LM010;
+    end;
+    hence P[n+1];
+end;
+for n be Nat holds P[n] from NAT_1:sch 2(P0,P1);
+hence thesis;
+end;
+
+LM0450:
+for x be set st x in Z_Lin(A) holds
+    ex g1,h1 be FinSequence of V,
+        a1 be integer-valued FinSequence
+   st x=Sum(h1) &
+       rng g1 c= A & len g1 =len h1 & len g1 = len a1 &
+       for i be Nat st i in Seg (len g1) holds h1/.i=(a1.i)*(g1/.i)
+proof
+let x be set;
+assume x in Z_Lin(A); then
+  consider z be Linear_Combination of A such that
+   P1: x=Sum(z) & rng z c= INT;
+   consider F be FinSequence of V such that
+   P3:  F is one-to-one & rng F = Carrier(z) & Sum(z)
+      = Sum(z (#) F) by RLVECT_2:def 10;
+P4: len (z (#) F) = len F &
+      for i be Nat st i in dom (z (#) F)
+     holds (z (#) F).i = z.(F/.i) * F/.i by RLVECT_2:def 9;
+  defpred P0[Nat,set] means $2=z.(F/.$1);
+  P5: now let k be Nat;
+      assume k in Seg (len F);
+      z.(F/.k) in rng z by FUNCT_2:6;
+      hence ex x being Element of INT st P0[k,x] by P1;
+  end;
+consider u be FinSequence of INT such that
+  P6: dom u = Seg (len F)
+  & for i be Nat st i in Seg (len F) holds P0[i,u.i]
+     from FINSEQ_1:sch 5(P5);
+ X1: rng F c= A by P3,RLVECT_2:def 8;
+ X2: len F = len (z (#) F) by RLVECT_2:def 9;
+ X3: len F = len u by P6,FINSEQ_1:def 3;
+   now
+     let i be Nat;
+     assume X51: i in Seg (len F); then
+X52: i in dom (z (#) F) by P4,FINSEQ_1:def 3;
+     hence (z (#) F)/.i = (z (#) F).i by PARTFUN1:def 8
+                    .= z.(F/.i) * F/.i by X52,RLVECT_2:def 9
+                    .=u.i * F/.i by P6,X51;
+    end;
+   hence thesis by X1,X2,X3,P1,P3;
+end;
+
+theorem
+  for x be set holds x in Z_Lin(A) iff
+    ex g1,h1 be FinSequence of V,
+        a1 be integer-valued FinSequence
+   st x=Sum(h1) &
+       rng g1 c= A & len g1 =len h1 & len g1 = len a1 &
+       for i be Nat
+        st i in Seg (len g1) holds
+           h1/.i=(a1.i)*(g1/.i) by LM0440,LM0450;
+
+definition
+  let RS be RealLinearSpace;
+  let f be FinSequence of RS;
+  func Z_Lin(f) -> Subset of RS equals
+    {Sum(g) where g is (len f)-long FinSequence of RS :
+    ex a be (len f)-long integer-valued FinSequence
+     st for i be Nat st i in Seg (len f) holds g/.i=(a.i)*(f/.i)};
+correctness
+proof
+now let x be set;
+  assume x in {Sum(g) where g is (len f)-long FinSequence of RS :
+  ex a be (len f)-long integer-valued FinSequence
+   st for i be Nat
+       st i in Seg (len f) holds
+     g/.i=(a.i)*(f/.i)}; then
+  ex g be (len f)-long FinSequence of RS st
+  x=Sum(g) & ex a be (len f)-long integer-valued FinSequence
+   st for i be Nat st i in Seg (len f) holds g/.i=(a.i)*(f/.i);
+  hence x in the carrier of RS;
+end;
+hence thesis by TARSKI:def 3;
+end;
+end;
+
+theorem SLM001:
+for RS be RealLinearSpace,
+      f be FinSequence of RS,
+      x be set holds
+   x in Z_Lin(f) iff
+     ex g be (len f)-long FinSequence of RS,
+          a be (len f)-long integer-valued FinSequence st
+          x=Sum(g) & for i be Nat st i in Seg (len f) holds
+          g/.i=(a.i)*(f/.i)
+proof
+let RS be RealLinearSpace,
+      f be FinSequence of RS,
+      x be set;
+ hereby assume x in Z_Lin(f); then
+consider g be (len f)-long FinSequence of RS such that
+P1: x=Sum(g) & ex s be (len f)-long integer-valued FinSequence
+          st for i be Nat st i in Seg (len f) holds
+          g/.i=(s.i)*(f/.i);
+consider s be (len f)-long integer-valued FinSequence such that
+P10: for i be Nat st i in Seg (len f) holds g/.i=(s.i)*(f/.i) by P1;
+take g,s;
+thus x=Sum(g) & for i be Nat st i in Seg (len f) holds
+          g/.i=(s.i)*(f/.i) by P1,P10;
+end;
+assume ex g be (len f)-long FinSequence of RS,
+          a be (len f)-long integer-valued FinSequence st
+          x=Sum(g) & for i be Nat st i in Seg (len f) holds
+          g/.i=(a.i)*(f/.i);
+hence x in Z_Lin(f);
+end;
+
+theorem SLM010:
+for RS be RealLinearSpace,
+      f be FinSequence of RS,
+      x, y being Element of RS,
+      a, b being Element of INT
+    st x in Z_Lin(f) & y in Z_Lin(f) holds
+(a * x) + (b * y) in Z_Lin(f)
+proof
+let RS be RealLinearSpace;
+let f be FinSequence of RS;
+let x, y be Element of RS;
+let a, b be Element of INT;
+ assume AS:x in Z_Lin(f) & y in Z_Lin(f);
+consider g be (len f)-long FinSequence of RS,
+          s be (len f)-long integer-valued FinSequence such that
+P1:     x=Sum(g) &
+          for i be Nat st i in Seg (len f) holds
+          g/.i=(s.i)*(f/.i) by AS,SLM001;
+consider h be (len f)-long FinSequence of RS,
+         t be (len f)-long integer-valued FinSequence such that
+P2:    y=Sum(h) & for i be Nat st i in Seg (len f) holds
+          h/.i=(t.i)*(f/.i) by AS,SLM001;
+defpred P0[Nat,set] means $2=a*(s.$1) + b*(t.$1);
+D2: for k be Nat st k in Seg (len f) holds
+      ex x being Element of INT st P0[k,x];
+consider u be FinSequence of INT such that
+X0: dom u = Seg (len f)
+  & for i be Nat st i in Seg (len f) holds P0[i,u.i] from FINSEQ_1:sch 5(D2);
+ len u = len f by X0,FINSEQ_1:def 3;
+ then
+ reconsider u as (len f)-long integer-valued FinSequence by FINSEQ_1:def 18;
+defpred P1[Nat,set] means $2=a*g/.$1 + b*h/.$1;
+D1: for k be Nat st k in Seg (len f) holds
+            ex x being Element of RS st P1[k,x];
+consider w be FinSequence of RS such that
+X01: dom w = Seg (len f)
+  & for i be Nat st i in Seg (len f) holds P1[i,w.i]
+         from FINSEQ_1:sch 5(D1);
+len w = len f by X01,FINSEQ_1:def 3; then
+ reconsider w as (len f)-long FinSequence of RS by FINSEQ_1:def 18;
+X1: now let i be Nat;
+   assume A1: i in Seg (len f);
+     hence w/.i=w.i by X01,PARTFUN1:def 8
+        .=a*g/.i + b*h/.i by X01,A1;
+end;
+reconsider a0=a as Element of REAL by NUMBERS:15,TARSKI:def 3;
+reconsider b0=b as Element of REAL by NUMBERS:15,TARSKI:def 3;
+dom (a0(#)g) = dom g by VFUNCT_1:def 4
+             .= Seg (len g) by FINSEQ_1:def 3;
+then
+Y2: a0(#)g is FinSequence-like by FINSEQ_1:def 2;
+rng (a0(#)g) c= the carrier of RS; then
+reconsider ag = a0(#)g as FinSequence of RS by Y2,FINSEQ_1:def 4;
+dom (b0(#)h) = dom h by VFUNCT_1:def 4
+             .= Seg (len h) by FINSEQ_1:def 3;
+then
+Y4: b0(#)h is FinSequence-like by FINSEQ_1:def 2;
+rng (b0(#)h) c= the carrier of RS;
+then
+reconsider bh = b0(#)h as FinSequence of RS by Y4,FINSEQ_1:def 4;
+H5: dom (a0(#)g) = dom g by VFUNCT_1:def 4
+                 .=Seg (len g) by FINSEQ_1:def 3
+                 .=Seg (len f) by FINSEQ_1:def 18; then
+H1: len ag = len f by FINSEQ_1:def 3;
+H3: dom (b0(#)h) = dom h by VFUNCT_1:def 4
+                 .=Seg (len h) by FINSEQ_1:def 3
+                 .=Seg (len f) by FINSEQ_1:def 18;
+X4:now let i be Element of NAT;
+   assume D0:i in dom ag;
+   hence w.i = a*g/.i + b*h/.i by X01,H5
+    .= ag/.i + b*h/.i by D0,VFUNCT_1:def 4
+    .= ag/.i + bh/.i by D0,H3,H5,VFUNCT_1:def 4;
+end;
+X5: len ag = len bh & len ag = len w by X01,H1,H3,FINSEQ_1:def 3;
+P4:  for i be Nat st i in Seg (len f) holds
+          w/.i=(u.i)*(f/.i)
+proof
+ let i be Nat;
+   assume AS1:i in Seg (len f);
+   hence w/.i=a*g/.i + b*h/.i by X1
+       .=a*((s.i)*(f/.i)) + b*h/.i by AS1,P1
+       .=a*((s.i)*(f/.i)) + b*((t.i)*(f/.i)) by AS1,P2
+       .=(a*(s.i))*(f/.i) + b*((t.i)*(f/.i)) by RLVECT_1:def 10
+       .=(a*(s.i))*(f/.i) + (b*(t.i))*(f/.i) by RLVECT_1:def 10
+       .= (a*(s.i) + b*(t.i))* (f/.i) by RLVECT_1:def 9
+       .= (u.i)*(f/.i) by AS1,X0;
+end;
+(a * x) + (b * y) = Sum(ag) + (b * Sum(h)) by P1,P2,SM3
+ .= Sum(ag) + Sum(bh) by SM3
+ .= Sum(w) by X4,X5,RLVECT_2:4;
+hence (a * x) + (b * y) in Z_Lin(f) by P4;
+end;
+
+theorem SLM0010:
+  for RS be RealLinearSpace,
+      f be FinSequence of RS st f = (Seg len f) --> 0.RS
+    holds Sum(f)=0.RS
+proof
+  let RS be RealLinearSpace, f be FinSequence of RS;
+  assume AS:f = (Seg len f) --> 0.RS;
+X1:now let k be Element of NAT, v be Element of RS;
+     assume P214: k in dom f & v = f.k; then
+     k in Seg (len f) by FINSEQ_1:def 3; then
+     f.k = 0.RS by AS,FUNCOP_1:13;
+     hence f.k = -v by P214,RLVECT_1:25;
+   end;
+   len f = len f;
+   then Sum(f) = -Sum(f) by X1,RLVECT_1:57;
+   hence thesis by RLVECT_1:33;
+end;
+
+theorem SLM0100:
+for RS be RealLinearSpace,
+      f be FinSequence of RS,
+      v be Element of RS ,i be Nat st i in Seg (len f)
+    & f = ( (Seg (len f)) --> 0.RS) +* ( {i} --> v)
+holds Sum(f)=v
+proof
+  let RS be RealLinearSpace, f be FinSequence of RS;
+  let v be Element of RS, i be Nat;
+  defpred P[Nat] means for g be FinSequence of RS
+   st len g = $1 & i in Seg (len g) &
+   g = ( (Seg (len g)) --> 0.RS) +* ( {i} --> v) holds Sum(g)=v;
+P0: P[0];
+P1: now let n be Nat;
+    assume P10: P[n];
+     now let f be FinSequence of RS;
+     assume AS: len f = n+1 & i in Seg (len f) &
+     f = ((Seg len f) --> 0.RS) +* ( {i} --> v);
+     reconsider g = f|n as FinSequence of RS;
+     n+1 in Seg (n+1) by FINSEQ_1:6; then
+     Q2: n+1 in dom f by FINSEQ_1:def 3,AS;
+     P11: len g = n by AS,NAT_1:11,FINSEQ_1:80;
+     f = (f|n) ^<*f.(n+1)*> by AS,FINSEQ_3:61
+          .=g ^<*f/.(n+1)*> by Q2,PARTFUN1:def 8;
+    then
+    P12: Sum(f)=Sum(g)+Sum(<*f/.(n+1)*>) by RLVECT_1:58;
+    A0: dom ( {i} --> v) = {i} by FUNCOP_1:19;
+    let f1 be Function such that A1: f1 = (( Seg (len f)) --> 0.RS);
+    let f2 be Function such that A2: f2 = ( {i} --> v);
+    per cases;
+    suppose A3: i = n+1;
+      then dom f2 = {n+1} by A2,FUNCOP_1:19;
+      then g = f1|Seg(n) by AS,A1,A2,FINSEQ_3:15,FUNCT_4:76
+      .= ( ( Seg(len f) /\ Seg(n)) --> 0.RS) by A1,FUNCOP_1:18;
+      then P13: g = ( ( Seg (n)) --> 0.RS) by AS,NAT_1:11,FINSEQ_1:9;
+      A5: n+1 in {n+1} by ZFMISC_1:37;
+      then n+1 in dom f2 by A2,A3,FUNCOP_1:19;
+      then f.(n+1) = f2.(n+1) by AS,A2,FUNCT_4:14
+      .= v by A2,A3,A5,FUNCOP_1:13;
+      then P14: f/.(n+1) = v by Q2,PARTFUN1:def 8;
+      Sum(g) = 0.RS by P11,P13,SLM0010;
+      hence Sum(f) = 0.RS + v by P12,P14,RLVECT_1:61
+             .= v by RLVECT_1:10;
+     end;
+    suppose A6: i <> n+1;
+     then i < n+1 or i > n+1 by XXREAL_0:1;
+     then 1 <= i & i <= n by AS,FINSEQ_1:3,NAT_1:13; then
+     P16: i in Seg (len g) by P11,FINSEQ_1:3;
+     g = f1|Seg(n) +* f2|Seg(n) by AS,A1,A2,FUNCT_4:75
+     .= ( ( Seg(len f) /\ Seg(n)) --> 0.RS) +* f2|Seg(n) by A1,FUNCOP_1:18
+     .= ( ( Seg len g) --> 0.RS) +* f2|Seg(n) by AS,P11,NAT_1:11,FINSEQ_1:9
+     .= ( ( Seg len g) --> 0.RS) +*
+({i} /\ Seg (n) --> v) by A2,FUNCOP_1:18; then
+     P17: g = ( (Seg (len g)) --> 0.RS)
++* ( {i} --> v) by P11,P16,ZFMISC_1:52;
+     not {n+1} c= dom f2 by A0,A2,A6,ZFMISC_1:6;
+     then not n+1 in dom f2 by ZFMISC_1:37;
+     then f.(n+1) = f1.(n+1) by AS,A1,A2,FUNCT_4:12
+     .= 0.RS by AS,A1,FINSEQ_1:6,FUNCOP_1:13;
+     then P18: f/.(n+1) = 0.RS by Q2,PARTFUN1:def 8;
+     Sum(g) = v by P16,P17,P11,P10;
+     hence Sum(f) = v + 0.RS by P12,P18,RLVECT_1:61
+             .= v by RLVECT_1:10;
+    end;
+end;
+hence P[n+1];
+end;
+for n be Nat holds P[n] from NAT_1:sch 2(P0,P1);
+hence thesis;
+end;
+
+theorem SLM0200:
+for RS be RealLinearSpace,
+      f be FinSequence of RS,
+       i be Nat st i in Seg (len f) holds f/.i in Z_Lin(f)
+proof
+  let RS be RealLinearSpace, f be FinSequence of RS;
+  let i be Nat;
+  assume AS: i in Seg (len f);
+  set s = ( (Seg len f) --> 0) +* ( {i} --> 1);
+P0:dom s = Seg len f
+  proof
+  dom s = dom ((Seg (len f)) --> 0) \/ dom( {i} -->1) by FUNCT_4:def 1
+  .= (Seg (len f)) \/ dom( {i} -->1) by FUNCOP_1:19
+  .= (Seg (len f)) \/ {i} by FUNCOP_1:19;
+  hence thesis by ZFMISC_1:46, AS;
+end; then
+P1: s is FinSequence-like by FINSEQ_1:def 2;
+rng s c= INT
+proof
+  A0: rng ( (Seg (len f)) --> 0) \/
+ rng ( {i} --> 1) = {0} \/ rng ( {i} --> 1) by AS,FUNCOP_1:14
+  .= {0} \/ {1} by FUNCOP_1:14;
+  0 in INT by INT_1:def 1;
+  then A1: {0} c= INT by ZFMISC_1:37;
+  1 in INT by INT_1:def 1; then
+  A2: {1} c= INT by ZFMISC_1:37;
+  A3: {0} \/ {1} c= INT by A1, A2, XBOOLE_1:8;
+  rng s c= rng ( (Seg (len f)) --> 0) \/ rng ( {i} --> 1) by FUNCT_4:18;
+  hence thesis by A0,A3,XBOOLE_1:1;
+end; then
+reconsider s as FinSequence of INT by P1,FINSEQ_1:def 4;
+  len s = len f by P0,FINSEQ_1:def 3; then
+ reconsider s as (len f)-long integer-valued FinSequence by FINSEQ_1:def 18;
+  defpred Q[Nat,set] means $2=s.$1*f/.$1;
+P3: for k be Nat st k in Seg (len f) holds
+      ex x being Element of RS st Q[k,x];
+  consider w be FinSequence of RS such that
+P4: dom w = Seg len f & for i be Nat st i in Seg (len f) holds
+          Q[i,w.i] from FINSEQ_1:sch 5(P3);
+P5:len w = len f by P4,FINSEQ_1:def 3;
+ then reconsider w as (len f)-long FinSequence of RS by FINSEQ_1:def 18;
+now let i be Nat;
+   assume A1: i in Seg len f;
+     hence w/.i=w.i by P4,PARTFUN1:def 8
+        .=s.i*f/.i by P4,A1;
+end; then
+P6:Sum(w) in Z_Lin(f);
+P7:w = ( (Seg (len w)) --> 0.RS) +* ( {i} --> f/.i)
+proof
+  consider w1 be Function such that B0: w1 = (( Seg (len f)) --> 0.RS);
+  B1: dom w1 = Seg (len f) by B0,FUNCOP_1:19;
+  consider w2 be Function such that B2: w2 = ( {i} --> f/.i);
+  B3: dom w2 = {i} by B2,FUNCOP_1:19;
+  consider ww be Function such that B4: ww = w1 +* w2;
+  B5: dom ww = Seg (len f) \/ {i} by B1,B3,B4,FUNCT_4:def 1
+  .= Seg (len f) by AS,ZFMISC_1:46; then
+  reconsider ww as FinSequence by FINSEQ_1:def 2;
+  rng w1 c= {0.RS} by B0,FUNCOP_1:19;
+  then B9: rng w1 c= (the carrier of RS) by XBOOLE_1:1;
+  rng w2 c= {f/.i} by B2,FUNCOP_1:19;
+  then B13: rng w2 c= (the carrier of RS) by XBOOLE_1:1;
+  B14: rng ww c= rng w1 \/ rng w2 by B4,FUNCT_4:18;
+  rng w1 \/ rng w2 c= (the carrier of RS) by B9,B13,XBOOLE_1:8;
+  then rng ww c= (the carrier of RS) by B14,XBOOLE_1:1;
+  then
+  reconsider ww as FinSequence of RS by FINSEQ_1:def 4;
+  for j being Nat st j in dom w holds w/.j = ww/.j
+  proof
+    let j be Nat such that C0: j in dom w;
+    C1: dom({i} --> 1) ={i} by FUNCOP_1:19;
+    per cases;
+    suppose C2: j in dom w2;
+      then C3: j = i by B3,TARSKI:def 1;
+      then w/.j = w.i by C0,PARTFUN1:def 8;
+      then C4: w/.j = s.i*f/.i by P4,C0,C3;
+      C5:i in {i} by TARSKI:def 1;
+      then C6: s.i = ({i} --> 1).i by C1,FUNCT_4:14
+      .= 1 by C5,FUNCOP_1:13;
+      ww/.j = ww.j by P4,B5,C0,PARTFUN1:def 8
+      .= w2.j by B4,C2,FUNCT_4:14
+      .= f/.i by B2,B3,C2,FUNCOP_1:13;
+      hence thesis by C4,C6,RLVECT_1:def 11;
+    end;
+    suppose C7: not j in dom w2;
+      w/.j = w.j by C0,PARTFUN1:def 8;
+      then C9: w/.j = s.j*f/.j by P4,C0;
+      not j in dom({i} --> 1) by B3,C7;
+      then C10: s.j = ( (Seg (len f)) --> 0).j by FUNCT_4:12
+      .= 0 by P4,C0,FUNCOP_1:13;
+      ww/.j = ww.j by P4,B5,C0,PARTFUN1:def 8
+      .= w1.j by B4,C7,FUNCT_4:12
+      .= 0.RS by P4,B0,C0,FUNCOP_1:13;
+      hence thesis by C9,C10,RLVECT_1:23;
+    end;
+  end;
+  hence thesis by P4,P5,B0,B2,B4,B5,FINSEQ_5:13;
+end;
+i in Seg (len w) by P4,FINSEQ_1:def 3,AS;
+hence f/.i in Z_Lin(f) by P6,P7,SLM0100;
+end;
+
+theorem SLM0300:
+  for RS be RealLinearSpace,
+      f be FinSequence of RS holds
+    rng f c= Z_Lin(f)
+proof
+  let RS be RealLinearSpace, f be FinSequence of RS;
+  let y be set;
+    assume y in rng f; then
+    consider x be set such that
+P1: x in dom f & y=f.x by FUNCT_1:def 5;
+P2: x in Seg len f by FINSEQ_1:def 3,P1;
+    reconsider i=x as Nat by P1;
+    y=f/.i by P1,PARTFUN1:def 8;
+    hence y in Z_Lin(f) by P2,SLM0200;
+end;
+
+theorem SLM0400:
+for RS be RealLinearSpace,
+      f be non empty FinSequence of RS,
+     g,h be FinSequence of RS,
+     s be integer-valued FinSequence
+        st rng g c= Z_Lin(f) &
+            len g = len s & len g = len h &
+            for i be Nat st i in Seg (len g) holds
+              h/.i=(s.i)*(g/.i) holds
+  Sum(h) in Z_Lin(f)
+proof
+let RS be RealLinearSpace,
+    f be non empty FinSequence of RS;
+1<=1 & 1 <= len f by FINSEQ_1:28; then
+1 in Seg (len f); then
+A1:f/.1 in Z_Lin(f) by SLM0200;
+reconsider z0=0 as Element of INT by NUMBERS:17,TARSKI:def 3;
+reconsider z1=1 as Element of INT by NUMBERS:17,TARSKI:def 3;
+z0 * (f/.1) + z0 * (f/.1) in Z_Lin(f) by SLM010,A1; then
+z0 * (f/.1) + 0.RS in Z_Lin(f) by RLVECT_1:23; then
+X1: 0.RS + 0.RS in Z_Lin(f) by RLVECT_1:23;
+defpred P[Nat] means
+for g,h be FinSequence of RS,
+     s be integer-valued FinSequence
+        st rng g c= Z_Lin(f) &
+            len g = $1 & len g = len s & len g = len h &
+            for i be Nat st i in Seg (len g) holds
+              h/.i=(s.i)*(g/.i) holds
+  Sum(h) in Z_Lin(f);
+P0: P[0]
+proof
+let g,h be FinSequence of RS, s be integer-valued FinSequence;
+ assume AS1:rng g c= Z_Lin(f) &
+            len g = 0 & len g = len s & len g = len h &
+            for i be Nat st i in Seg (len g) holds
+              h/.i=(s.i)*(g/.i);
+Sum(h)= Sum(<*> the carrier of RS) by AS1,FINSEQ_1:28
+      .=0.RS by RLVECT_1:60;
+hence Sum(h) in Z_Lin(f) by X1,RLVECT_1:10;
+end;
+P1:now let n be Nat;
+    assume P10: P[n];
+   now let g,h be FinSequence of RS,
+     s be integer-valued FinSequence;
+     assume AS1:rng g c= Z_Lin(f) &
+            len g = n+1 & len g = len s & len g = len h &
+            for i be Nat st i in Seg (len g) holds h/.i=(s.i)*(g/.i);
+     reconsider gn = g|n as FinSequence of RS;
+     reconsider hn = h|n as FinSequence of RS;
+     reconsider sn = s|n as integer-valued FinSequence;
+     Q2:rng gn c= Z_Lin(f) &
+            len gn = n & len gn = len sn & len gn = len hn &
+            for i be Nat st i in Seg (len gn) holds
+              hn/.i=(sn.i)*(gn/.i)
+     proof
+       B0: rng gn c= rng g by RELAT_1:99;
+       B1: n <= len g by AS1,NAT_1:11;
+       B3: n <= len h by AS1,NAT_1:11;
+       B4: len hn = n by AS1,NAT_1:11,FINSEQ_1:80;
+       B5: len sn = n by AS1,NAT_1:11,FINSEQ_1:80;
+       for i be Nat st i in Seg (len gn) holds hn/.i=(sn.i)*(gn/.i)
+       proof
+         per cases;
+         suppose n = 0;
+           hence thesis;
+         end;
+         suppose n <> 0;
+           then C1: n >= 1 by NAT_1:14;
+           let i be Nat;
+           assume i in Seg (len gn);
+           then C2: i in Seg (n) by AS1,NAT_1:11,FINSEQ_1:80;
+           n in Seg (len g) by B1,C1,FINSEQ_1:3;
+           then n in dom g by FINSEQ_1:def 3;
+           then C4: gn/.i = g/.i by C2,FINSEQ_4:86;
+           n in Seg (len h) by B3,C1,FINSEQ_1:3;
+           then n in dom h by FINSEQ_1:def 3;
+           then C5: hn/.i = h/.i by C2,FINSEQ_4:86;
+           i <= n by C2,FINSEQ_1:3;
+           then sn.i = s.i by FINSEQ_3:121;
+           hence thesis by AS1,C2,C4,C5,FINSEQ_2:9;
+         end;
+       end;
+       hence thesis by B0,B1,B4,B5,AS1,FINSEQ_1:80,XBOOLE_1:1;
+     end;
+     Q3:Sum(hn) in Z_Lin(f) by Q2,P10;
+     Q4: n+1 in Seg (len g) by AS1,FINSEQ_1:6;
+     Q5: h/.(n+1) = s.(n+1)*g/.(n+1) by AS1,FINSEQ_1:6;
+     Q6: h = hn ^ <* s.(n+1)*g/.(n+1) *> by AS1,Q5,FINSEQ_5:24;
+     Q7: n+1 in dom g by FINSEQ_1:def 3,Q4;
+     then g/.(n+1) = g.(n+1) by PARTFUN1:def 8;
+     then g/.(n+1) in rng g by Q7,FUNCT_1:12;
+     then
+     z1*s.(n+1)*(g/.(n+1)) + z0 * (g/.(n+1)) in Z_Lin(f) by AS1,SLM010;
+     then z1*s.(n+1)*(g/.(n+1)) + 0.RS in Z_Lin(f) by RLVECT_1:23;
+     then z1*s.(n+1)*(g/.(n+1)) in Z_Lin(f) by RLVECT_1:10;
+     then z1*Sum(hn)+z1* (s.(n+1)*(g/.(n+1))) in Z_Lin(f) by Q3,SLM010;
+     then
+     Q8: z1*Sum(hn)+s.(n+1)*(g/.(n+1)) in Z_Lin(f) by RLVECT_1:def 11;
+     Sum(h) =Sum(hn)+Sum(<* s.(n+1)*(g/.(n+1)) *>) by Q6,RLVECT_1:58
+            .=Sum(hn)+ s.(n+1)*(g/.(n+1)) by RLVECT_1:61;
+     hence Sum(h) in Z_Lin(f) by Q8,RLVECT_1:def 11;
+    end;
+    hence P[n+1];
+end;
+for n be Nat holds P[n] from NAT_1:sch 2(P0,P1);
+hence thesis;
+end;
+
+theorem
+  for RS be RealLinearSpace,
+      f be non empty FinSequence of RS holds
+    Z_Lin (rng f) = Z_Lin f
+proof
+let RS be RealLinearSpace,
+    f be non empty FinSequence of RS;
+ for x be set holds x in Z_Lin (rng f) iff x in Z_Lin f
+proof
+  let x be set;
+  hereby assume x in Z_Lin (rng f); then
+    consider g,h be FinSequence of RS,
+        a be integer-valued FinSequence such that
+P1:x=Sum(h) & rng g c= rng f & len g =len h & len g = len a &
+     for i be Nat st i in Seg (len g) holds
+     h/.i=(a.i)*(g/.i) by LM0450;
+  rng f c= Z_Lin f by SLM0300;
+  hence x in Z_Lin f by P1,XBOOLE_1:1,SLM0400;
+end;
+assume x in Z_Lin f;
+then consider g be (len f)-long FinSequence of RS,
+       a be (len f)-long integer-valued FinSequence such that
+  P1:  x=Sum(g) & for i be Nat st i in Seg (len f) holds
+          g/.i=(a.i)*(f/.i) by SLM001;
+  len f =len g & len a = len f by FINSEQ_1:def 18;
+  hence x in Z_Lin (rng f) by P1,LM0440;
+end;
+hence thesis by TARSKI:2;
+end;
+
+theorem SLM0440:
+  Lin Z_Lin A = Lin A
+proof
+  for x be set st x in A holds x in Z_Lin(A) by Th18; then
+  A c= Z_Lin(A) by TARSKI:def 3; then
+P2: Lin(A) is Subspace of Lin(Z_Lin(A)) by RLVECT_3:23;
+  reconsider W = the carrier of Lin(A) as Subset of V by RLSUB_1:def 2;
+  Lin(Z_Lin A) is Subspace of Lin(W) by RLVECT_3:23,LM004; then
+  Lin(Z_Lin A) is Subspace of Lin(A) by RLVECT_3:21;
+  hence thesis by P2,RLSUB_1:34;
+end;
+
+theorem SLM0450:
+  for x be set, g1,h1 be FinSequence of V,
+      a1 be integer-valued FinSequence st x=Sum(h1) &
+    rng g1 c= Z_Lin(A) & len g1 =len h1 & len g1 = len a1 &
+    for i be Nat st i in Seg (len g1) holds
+        h1/.i=(a1.i)*(g1/.i) holds x in Z_Lin(A)
+proof
+  reconsider z0=0 as Element of INT by NUMBERS:17,TARSKI:def 3;
+  reconsider z1=1 as Element of INT by NUMBERS:17,TARSKI:def 3;
+  defpred P[Nat] means for x be set, g1,h1 be FinSequence of V,
+  a1 be integer-valued FinSequence st x = Sum(h1) &
+  rng g1 c= Z_Lin(A) & len g1 = $1 & len g1 =len h1 & len g1 = len a1 &
+  for i be Nat st i in Seg (len g1) holds
+  h1/.i=(a1.i)*(g1/.i) holds x in Z_Lin(A);
+  P0: P[0]
+  proof
+    let x be set, g1,h1 be FinSequence of V,
+    a1 be integer-valued FinSequence;
+    assume AS1: x = Sum(h1) &
+    rng g1 c= Z_Lin(A) & len g1 = 0 & len g1 =len h1 & len g1 = len a1 &
+    for i be Nat st i in Seg (len g1) holds h1/.i=(a1.i)*(g1/.i);
+    Sum(h1) = Sum(<*> the carrier of V) by AS1,FINSEQ_1:28
+    .= 0.V by RLVECT_1:60;
+    hence x in Z_Lin(A) by AS1,LM030;
+  end;
+P1: now let n be Nat;
+    assume P2: P[n];
+    now let x be set, g1,h1 be FinSequence of V,
+      a1 be integer-valued FinSequence;
+      assume AS1: x = Sum(h1) &
+      rng g1 c= Z_Lin(A) & len g1 = n+1 & len g1 =len h1 & len g1 = len a1 &
+      for i be Nat st i in Seg (len g1) holds h1/.i=(a1.i)*(g1/.i);
+      reconsider gn = g1|n as FinSequence of V;
+      reconsider hn = h1|n as FinSequence of V;
+      reconsider an = a1|n as integer-valued FinSequence;
+      Q0:rng gn c= Z_Lin(A) &
+            len gn = n & len gn = len an & len gn = len hn &
+            for i be Nat st i in Seg (len gn) holds
+              hn/.i=(an.i)*(gn/.i)
+      proof
+        B0: rng gn c= rng g1 by RELAT_1:99;
+        B1: n <= len g1 by AS1,NAT_1:11;
+        B3: n <= len h1 by AS1,NAT_1:11;
+        B4: len hn = n by AS1,NAT_1:11,FINSEQ_1:80;
+        B5: len an = n by AS1,NAT_1:11,FINSEQ_1:80;
+        for i be Nat st i in Seg (len gn) holds
+        hn/.i=(an.i)*(gn/.i)
+        proof
+          per cases;
+          suppose n = 0;
+            hence thesis;
+          end;
+          suppose n <> 0;
+            then C1: n >= 1 by NAT_1:14;
+            let i be Nat;
+            assume i in Seg (len gn);
+            then C2: i in Seg (n) by AS1,NAT_1:11,FINSEQ_1:80;
+            n in Seg (len g1) by B1,C1,FINSEQ_1:3;
+            then n in dom g1 by FINSEQ_1:def 3;
+            then C4: gn/.i = g1/.i by C2,FINSEQ_4:86;
+            n in Seg (len h1) by B3,C1,FINSEQ_1:3;
+            then n in dom h1 by FINSEQ_1:def 3;
+            then C5: hn/.i = h1/.i by C2,FINSEQ_4:86;
+            i <= n by C2,FINSEQ_1:3;
+            then an.i = a1.i by FINSEQ_3:121;
+            hence thesis by AS1,C2,C4,C5,FINSEQ_2:9;
+          end;
+        end;
+        hence thesis by AS1,B0,B1,B4,B5,FINSEQ_1:80,XBOOLE_1:1;
+      end;
+      Q2: n+1 in Seg (len g1) by AS1,FINSEQ_1:6;
+      Q3: h1/.(n+1) = a1.(n+1)*g1/.(n+1) by AS1,FINSEQ_1:6;
+      Q4: h1 = hn ^ <* a1.(n+1)*g1/.(n+1) *> by AS1,Q3,FINSEQ_5:24;
+      Q5: n+1 in dom g1 by Q2,FINSEQ_1:def 3; then
+      g1/.(n+1) = g1.(n+1) by PARTFUN1:def 8; then
+      g1/.(n+1) in rng g1 by Q5,FUNCT_1:12; then
+      z1*a1.(n+1)*(g1/.(n+1)) in Z_Lin(A) &
+      z0*(g1/.(n+1)) in Z_Lin(A) by AS1,LM020; then
+      z1*a1.(n+1)*(g1/.(n+1)) + z0*(g1/.(n+1)) in Z_Lin(A) by LM010; then
+      z1*a1.(n+1)*(g1/.(n+1)) + 0.V in Z_Lin(A) by RLVECT_1:23; then
+      Q7: z1*(a1.(n+1))*(g1/.(n+1)) in Z_Lin(A) by RLVECT_1:10;
+      z1*Sum(hn) in Z_Lin(A) by P2,Q0,LM020;
+      then Q8: z1*Sum(hn)+z1*(a1.(n+1))*(g1/.(n+1)) in Z_Lin(A) by Q7,LM010;
+      Sum(h1) =Sum(hn)+Sum(<* a1.(n+1)*(g1/.(n+1)) *>) by Q4,RLVECT_1:58
+      .=Sum(hn)+ a1.(n+1)*(g1/.(n+1)) by RLVECT_1:61;
+      hence Sum(h1)in Z_Lin(A) by Q8,RLVECT_1:def 11;
+    end;
+    hence P[n+1];
+  end;
+  for n be Nat holds P[n] from NAT_1:sch 2(P0,P1);
+  hence thesis;
+end;
+
+theorem
+  Z_Lin Z_Lin A = Z_Lin A
+proof
+  for x be set st x in A holds x in Z_Lin(A) by Th18;
+  then A c= Z_Lin(A) by TARSKI:def 3; then
+P2: Z_Lin(A) c= Z_Lin( Z_Lin(A)) by Th23;
+  Z_Lin Z_Lin A c= Z_Lin(A)
+  proof
+    let x be set;
+    assume x in Z_Lin( Z_Lin(A));
+    then consider g1,h1 be FinSequence of V,
+    a1 be integer-valued FinSequence such that
+P1: x=Sum(h1) &
+    rng g1 c= Z_Lin(A) & len g1 = len h1 & len g1 = len a1 &
+    for i be Nat st i in Seg (len g1) holds h1/.i=(a1.i)*(g1/.i) by LM0450;
+    thus x in Z_Lin(A) by P1,SLM0450;
+  end;
+  hence thesis by XBOOLE_0:def 10,P2;
+end;
+
+theorem
+  Z_Lin(A) = Z_Lin(B) implies Lin(A) = Lin(B)
+proof
+  assume Z_Lin(A) = Z_Lin(B);
+  hence Lin(A) = Lin( Z_Lin(B)) by SLM0440
+            .= Lin(B) by SLM0440;
+end;
+

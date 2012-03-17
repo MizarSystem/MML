@@ -1,0 +1,620 @@
+:: Externally programmed machines
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received June 30, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies STRUCT_0, SUBSET_1, XBOOLE_0, FUNCT_1, NUMBERS, CARD_3, ORDINAL1,
+      CARD_1, FUNCOP_1, FUNCT_4, RELAT_1, TARSKI, CAT_1, FSM_1, SETFAM_1,
+      GLIB_000, FINSET_1, CIRCUIT2, NAT_1, ARYTM_3, XXREAL_0, MSUALG_1,
+      TURING_1, PARTFUN1, MCART_1, ZFMISC_1, GRAPHSP, ARYTM_1, FUNCT_7, AMI_1,
+      PBOOLE, SCMNORM, GROUP_9, RECDEF_2, COMPOS_1, AMISTD_2, CARD_5, UNIALG_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, ORDINAL1,
+      PBOOLE, NUMBERS, FUNCT_7, CARD_3, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1,
+      FINSET_1, NAT_1, FUNCOP_1, FUNCT_4, FINSEQ_1, FUNCT_2, DOMAIN_1,
+      RECDEF_2, STRUCT_0, GROUP_9, XXREAL_0, COMPOS_1;
+ constructors SETFAM_1, DOMAIN_1, FUNCT_4, XXREAL_0, FUNCT_7, GRAPH_2,
+      RELSET_1, PRE_POLY, PBOOLE, RECDEF_2, COMPOS_1;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
+      FUNCOP_1, FUNCT_4, FINSET_1, XREAL_0, FINSEQ_1, CARD_3, STRUCT_0, INT_1,
+      RELSET_1, GRFUNC_1, PRE_POLY, PBOOLE, COMPOS_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: General concepts
+
+definition
+  let N be set;
+  struct (COM-Struct over N) AMI-Struct over N (# carrier -> set,
+    Instruction-Counter -> Element of the carrier,
+    Instructions -> non empty set,
+    haltF -> Element of the Instructions,
+    Object-Kind -> Function of the carrier, N \/ { the Instructions, NAT },
+    Execution -> Action of the Instructions, product the Object-Kind
+     #);
+end;
+
+definition
+  let N be set;
+  func Trivial-AMI N -> strict AMI-Struct over N means
+:: EXTPRO_1:def 1
+
+  the carrier of it = succ NAT & the Instruction-Counter of it = NAT &
+  the Instructions of it = {[0,{},{}]} &
+  the haltF of it = [0,{},{}] &
+  the Object-Kind of it = (NAT --> {[0,{},{}]}) +* (NAT .--> NAT) &
+  the Execution of it
+    = [0,{},{}] .--> id product((NAT --> {[0,{},{}]}) +* (NAT .--> NAT));
+end;
+
+registration
+  let N be set;
+  cluster Trivial-AMI N-> non empty stored-program;
+end;
+
+registration
+  let N be set;
+  cluster non empty stored-program AMI-Struct over N;
+end;
+
+definition
+  let N be with_non-empty_elements set;
+  let S be AMI-Struct over N;
+  let I be Instruction of S, s be State of S;
+  func Exec(I,s) -> State of S equals
+:: EXTPRO_1:def 2
+  ((the Execution of S).I).s;
+end;
+
+reserve N for with_non-empty_elements set;
+
+definition
+  let N;
+  let S be AMI-Struct over N;
+  let I be Instruction of S;
+  attr I is halting means
+:: EXTPRO_1:def 3
+
+  for s being State of S holds Exec(I,s) = s;
+end;
+
+definition
+  let N;
+  let S be AMI-Struct over N;
+  attr S is halting means
+:: EXTPRO_1:def 4
+ the haltF of S is halting;
+end;
+
+registration
+  let N;
+  cluster Trivial-AMI N -> halting;
+end;
+
+registration
+  let N;
+  cluster halting AMI-Struct over N;
+end;
+
+registration
+  let N;
+  let S be halting (AMI-Struct over N);
+  cluster halt S -> halting;
+end;
+
+registration
+  let N;
+  let S be halting (AMI-Struct over N);
+  cluster halting Instruction of S;
+end;
+
+theorem :: EXTPRO_1:1
+  for s being State of Trivial-AMI N, i being Instruction of
+  Trivial-AMI N holds Exec(i,s) = s;
+
+registration
+  let E be set;
+  cluster Trivial-AMI E -> IC-Ins-separated definite;
+end;
+
+registration
+  let M be set;
+  cluster IC-Ins-separated definite strict (non empty stored-program
+    AMI-Struct over M);
+end;
+
+registration
+  let N;
+  cluster IC-Ins-separated halting  definite strict (non
+    empty stored-program AMI-Struct over N);
+end;
+
+theorem :: EXTPRO_1:2
+  for s1, s2 being State of Trivial-AMI N st IC s1 = IC s2 holds s1=s2;
+
+begin :: General theory
+
+reserve x,y,z,A,B for set,
+  f,g,h for Function,
+  i,j,k for Element of NAT;
+
+reserve S for IC-Ins-separated definite (non empty stored-program AMI-Struct
+  over N),
+  s for State of S;
+
+definition
+  let N be non empty with_non-empty_elements set;
+  let S be IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let s be State of S;
+  let p be (the Instructions of S)-valued Function;
+  func Following(p,s) -> State of S equals
+:: EXTPRO_1:def 5
+  Exec(CurInstr(p,s),s);
+end;
+
+definition
+  let N be non empty with_non-empty_elements set;
+  let S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N);
+  let p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S, k be Nat;
+  func Comput(p,s,k) -> State of S means
+:: EXTPRO_1:def 6
+
+  ex f being Function of NAT, product the Object-Kind of S st
+  it = f.k & f.0 = s & for i being Nat holds f.(i+1) = Following(p,f.i);
+end;
+
+definition
+  let N be non empty with_non-empty_elements set;
+  let S be halting IC-Ins-separated definite (non empty stored-program
+  AMI-Struct over N);
+  let p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S;
+  pred p halts_on s means
+:: EXTPRO_1:def 7
+
+  ex k being Nat
+   st IC Comput(p,s,k) in dom p & CurInstr(p,Comput(p,s,k)) = halt S;
+end;
+
+theorem :: EXTPRO_1:3
+  for N being non empty with_non-empty_elements set
+  for S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N),
+  p be NAT-defined (the Instructions of S)-valued Function,
+  s be State of S holds Comput(p,s,0) = s;
+
+theorem :: EXTPRO_1:4
+  for N being non empty with_non-empty_elements set
+  for S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N),
+  p be NAT-defined (the Instructions of S)-valued Function,
+  s be State of S, k be Nat holds
+  Comput(p,s,k+1) = Following(p,Comput(p,s,k));
+
+reserve N for non empty with_non-empty_elements set,
+ S for IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N),
+  s for State of S;
+
+theorem :: EXTPRO_1:5
+  for p being NAT-defined (the Instructions of S)-valued Function
+  for k holds Comput(p,s,i+k) = Comput(p,Comput(p,s,i),k);
+
+theorem :: EXTPRO_1:6
+  i <= j implies
+ for N for S being halting IC-Ins-separated
+  definite (non empty stored-program AMI-Struct over N)
+  for p being NAT-defined (the Instructions of S)-valued Function
+  for s being State of S st CurInstr(p,Comput(p,s,i)) = halt S
+ holds Comput(p,s,j) = Comput(p,s,i);
+
+reserve n for Element of NAT;
+
+definition
+  let N;
+  let S be halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+   let p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S such that
+ p halts_on s;
+  func Result(p,s) -> State of S means
+:: EXTPRO_1:def 8
+
+  ex k st it = Comput(p,s,k) & CurInstr(p,it) = halt S;
+end;
+
+theorem :: EXTPRO_1:7
+  for S being  IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for P being (the Instructions of S)-valued ManySortedSet of NAT
+  for s being State of S
+ holds Comput(P,s,k+1) = Exec(P.(IC Comput(P,s,k)),Comput(P,s,k));
+
+theorem :: EXTPRO_1:8
+  for S being IC-Ins-separated halting definite
+(non empty stored-program AMI-Struct over N)
+  for P being (the Instructions of S)-valued ManySortedSet of NAT
+  for s being State of S, k st P.IC Comput(P,s,k) = halt S
+  holds Result(P,s) = Comput(P,s,k);
+
+theorem :: EXTPRO_1:9
+  for S being IC-Ins-separated halting definite
+(non empty stored-program AMI-Struct over N)
+  for P being (the Instructions of S)-valued ManySortedSet of NAT
+  for s being State of S st ex k st P.IC Comput(P,s,k) = halt S
+ for i holds Result(P,s) = Result(P,Comput(P,s,i));
+
+definition
+  let N;
+  let S be IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let IT be PartState of S;
+  attr IT is autonomic means
+:: EXTPRO_1:def 9
+
+  for s1,s2 being State of S st IT c= s1 &
+  IT c= s2 for i holds Comput(ProgramPart s1,s1,i)|dom IT
+   = Comput(ProgramPart s2,s2,i)|dom IT;
+end;
+
+definition
+  let N;
+  let S be halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let IT be PartState of S;
+  attr IT is halting means
+:: EXTPRO_1:def 10
+
+  for s being State of S st IT c= s holds ProgramPart s halts_on s;
+end;
+
+registration
+  let N;
+  cluster Trivial-AMI N -> realistic;
+end;
+
+registration
+  let N;
+  cluster halting realistic strict
+   (IC-Ins-separated definite (non empty stored-program AMI-Struct over N));
+end;
+
+begin :: Preprograms
+
+theorem :: EXTPRO_1:10
+  for S being halting realistic IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for l being Element of NAT
+  for P being NAT-defined (the Instructions of S)-valued Function
+   st l .--> halt S c= P
+  for p being l-started PartState of S
+   holds p +* P is halting;
+
+theorem :: EXTPRO_1:11
+  for S being realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for l being Element of NAT
+  for P being NAT-defined (the Instructions of S)-valued Function
+   st l .--> halt S c= P
+  for p being l-started PartState of S
+  for s being State of S st p +* P c= s
+   for i holds Comput(ProgramPart s,s,i) = s;
+
+theorem :: EXTPRO_1:12
+  for S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for l being Element of NAT
+  for P being NAT-defined (the Instructions of S)-valued Function
+   st l .--> halt S c= P
+  for p being l-started PartState of S
+   holds p +* P is autonomic;
+
+registration
+  let N;
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let l be Element of NAT;
+  cluster autonomic halting
+    non program-free l-started FinPartState of S;
+end;
+
+definition
+  let N;
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let P be non halt-free
+   (NAT-defined (the Instructions of S)-valued Function);
+  mode Autonomy of P -> FinPartState of S means
+:: EXTPRO_1:def 11
+ it +* P is autonomic halting;
+end;
+
+definition
+  let N be with_non-empty_elements non empty set;
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let p be non halt-free
+   (NAT-defined (the Instructions of S)-valued Function);
+  let d be FinPartState of S;
+  assume
+ d is Autonomy of p & p = ProgramPart d;
+  func Result(p,d) -> FinPartState of S means
+:: EXTPRO_1:def 12
+  for s being State of S st d c= s
+  holds it = (Result(ProgramPart(s),s))|dom d;
+end;
+
+begin :: Computability
+
+definition
+  let N;
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let p be non halt-free
+   (NAT-defined (the Instructions of S)-valued Function);
+  let d be FinPartState of S, F be Function;
+  pred p,d computes F means
+:: EXTPRO_1:def 13
+
+  for x being set st x in dom F
+   ex s being FinPartState of S
+    st x = s & d +* s is Autonomy of p & F.s c= Result(p,d+* s);
+end;
+
+theorem :: EXTPRO_1:13
+  for S being realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+ for p being non halt-free
+  (NAT-defined (the Instructions of S)-valued Function)
+ for d being FinPartState of S holds
+  p,d computes {};
+
+theorem :: EXTPRO_1:14
+  for S being realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for p being non halt-free
+   (NAT-defined (the Instructions of S)-valued Function)
+  for d being FinPartState of S
+  holds d is Autonomy of p iff p,d computes {} .--> Result(p,d);
+
+theorem :: EXTPRO_1:15
+  for S being realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for p being non halt-free
+   (NAT-defined (the Instructions of S)-valued Function)
+  for d being FinPartState of S
+    holds d is Autonomy of p iff p,d computes {} .--> {};
+
+begin :: InsType & InsCode
+
+registration
+  let N be set;
+  cluster Trivial-AMI N -> standard-ins;
+end;
+
+registration
+  let N;
+  cluster IC-Ins-separated definite standard-ins (non empty stored-program
+    AMI-Struct over N);
+end;
+
+begin :: Some Remarks on AMI-Struct
+
+reserve N for with_non-empty_elements non empty set;
+
+theorem :: EXTPRO_1:16
+  for S being IC-Ins-separated halting definite
+(non empty stored-program AMI-Struct over N),
+  p be NAT-defined (the Instructions of S)-valued Function,
+    s being State of S holds p halts_on s
+   iff ex i st p halts_at IC Comput(p,s,i);
+
+theorem :: EXTPRO_1:17
+  for S being halting IC-Ins-separated definite
+(non empty stored-program AMI-Struct over N),
+  p be NAT-defined (the Instructions of S)-valued Function,
+  s being State of S,
+    k being Nat st p halts_on s
+  holds Result(p,s) = Comput(p,s,k) iff p halts_at IC Comput(p,s,k);
+
+theorem :: EXTPRO_1:18
+  for S being halting IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N)
+ for P being (the Instructions of S)-valued NAT-defined Function,
+  s being State of S, k st P halts_at IC Comput(P,s,k)
+   holds Result(P,s) = Comput(P,s,k);
+
+theorem :: EXTPRO_1:19
+  i <= j implies for S being halting
+IC-Ins-separated definite (non empty stored-program AMI-Struct over N)
+ for P being (the Instructions of S)-valued NAT-defined Function
+ for s being State of S st P halts_at IC Comput(P,s,i)
+  holds P halts_at IC Comput(P,s,j);
+
+theorem :: EXTPRO_1:20
+  i <= j implies for S being halting IC-Ins-separated
+definite (non empty stored-program AMI-Struct over N)
+ for P being (the Instructions of S)-valued NAT-defined Function
+ for s being State of S st P halts_at IC Comput(P,s,i)
+   holds Comput(P,s,j) = Comput(P,s,i);
+
+theorem :: EXTPRO_1:21
+  for S being  IC-Ins-separated halting definite (non
+empty stored-program AMI-Struct over N)
+ for P being (the Instructions of S)-valued ManySortedSet of NAT
+ for s being State of S st ex k st P halts_at IC Comput(P,s,k)
+   for i holds Result(P,s) = Result(P,Comput(P,s,i));
+
+definition
+  let N be with_non-empty_elements non empty set;
+  let S be halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S such that
+ p halts_on s;
+  func LifeSpan(p,s) -> Element of NAT means
+:: EXTPRO_1:def 14
+
+  CurInstr(p,Comput(p,s,it)) = halt S &
+  for k being Element of NAT st
+   CurInstr(p,Comput(p,s,k)) = halt S
+  holds it <= k;
+end;
+
+theorem :: EXTPRO_1:22
+  for N being non empty with_non-empty_elements set,
+      S be IC-Ins-separated definite halting
+       (non empty stored-program AMI-Struct over N),
+      p being NAT-defined (the Instructions of S)-valued Function,
+      s being State of S, m being Element of NAT
+   holds p halts_on s iff p halts_on Comput(p,s,m);
+
+reserve N for with_non-empty_elements non empty set,
+  S for IC-Ins-separated (non empty AMI-Struct over N);
+
+reserve m,n for Element of NAT;
+
+theorem :: EXTPRO_1:23
+  for S being halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N),
+   p being NAT-defined (the Instructions of S)-valued Function,
+   s being State of S
+  st p halts_on s
+ holds Result(p,s) = Comput(p,s,LifeSpan(p,s));
+
+theorem :: EXTPRO_1:24
+  for N being non empty with_non-empty_elements set,
+  S being halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N),
+  P being (the Instructions of S)-valued ManySortedSet of NAT,
+  s being State of S, k being Element of NAT
+   st CurInstr(P,Comput(P,s,k)) = halt S
+ holds Comput(P,s,LifeSpan(P,s)) = Comput(P,s,k);
+
+theorem :: EXTPRO_1:25
+ for N being non empty with_non-empty_elements set
+ for S being halting IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N)
+  for p being NAT-defined (the Instructions of S)-valued Function
+ for s being State of S st LifeSpan(p,s) <= j & p halts_on s
+   holds Comput(p,s,j) = Comput(p,s,LifeSpan(p,s));
+
+theorem :: EXTPRO_1:26
+  for N being with_non-empty_elements non empty set,
+      S being realistic IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over N),
+      t, u being State of S,
+      e being Element of NAT,
+      I being Instruction of S st u = t+*((IC S, e)-->(e, I))
+    holds u.e = I & IC u = e &
+     IC Following(ProgramPart u,u) = Exec(u.IC u, u).IC S;
+
+theorem :: EXTPRO_1:27
+  for S being halting IC-Ins-separated definite (non empty
+  stored-program AMI-Struct over N),
+  P being (the Instructions of S)-valued ManySortedSet of NAT,
+  s being State of S st s = Following(P,s)
+  holds for n holds Comput(P,s,n) = s;
+
+theorem :: EXTPRO_1:28
+  for N being with_non-empty_elements non empty set,
+      S being IC-Ins-separated definite
+           (non empty stored-program AMI-Struct over N),
+      P being (the Instructions of S)-valued ManySortedSet of NAT,
+      s being State of S, i being Instruction of S
+   holds Exec(P.IC s,s).IC S = IC Following(P,s);
+
+theorem :: EXTPRO_1:29
+  for N being with_non-empty_elements non empty set, S being realistic
+IC-Ins-separated definite
+ (non empty stored-program AMI-Struct over N), t, u
+  being State of S, il being Element of NAT, e being Element of
+ObjectKind IC S, I being Element of (the Object-Kind of S).il
+ st e = il & u = t+*((IC S, il
+)-->(e, I)) holds u.il = I & IC u = il & IC Following(ProgramPart u,u)
+ = Exec(u.IC u, u).IC S;
+
+theorem :: EXTPRO_1:30
+ for S being  IC-Ins-separated definite halting
+  (non empty stored-program AMI-Struct over N)
+   for P being (the Instructions of S)-valued ManySortedSet of NAT
+   for s being State of S holds P halts_on s
+   iff ex k st CurInstr(P,Comput(P,s,k)) = halt S;
+
+registration let N;
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  cluster autonomic non NAT-defined FinPartState of S;
+end;
+
+registration
+  let N;
+  let S be halting realistic IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  cluster halting FinPartState of S;
+end;
+
+registration
+  let N;
+  let S be halting realistic IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let p be halting non program-free PartState of S;
+ cluster ProgramPart p -> non halt-free;
+end;
+
+registration
+  let N;
+  let S be halting realistic IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+ cluster halting non program-free -> non halt-free PartState of S;
+end;
+
+reserve S for IC-Ins-separated definite halting
+  (non empty stored-program AMI-Struct over N);
+
+theorem :: EXTPRO_1:31
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S st ex k being Element of NAT st F.(IC
+  Comput(F,s,k)) = halt S holds F halts_on s;
+
+theorem :: EXTPRO_1:32
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S, k being Element of NAT st F.(IC
+  Comput(F,s,k)) = halt S holds Result(F,s) = Comput(F,s,k);
+
+theorem :: EXTPRO_1:33
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S, k being Element of NAT
+   holds F.(IC Comput(F,s,k)) <> halt S &
+   F.(IC Comput(F,s,k+1)) = halt S iff LifeSpan(F,s) = k+1 & F halts_on s;
+
+theorem :: EXTPRO_1:34
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S, k being Element of NAT st IC
+  Comput(F,s,k) <> IC Comput(F,s,k+1) & F.(IC Comput(F,s,k+1)) = halt S
+   holds LifeSpan(F,s) = k+1;
+
+theorem :: EXTPRO_1:35
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S, k being Element of NAT st
+    F halts_on Comput(F,s,k) & 0 < LifeSpan(F,Comput(F,s,k))
+  holds LifeSpan(F,s) = k+LifeSpan(F,Comput(F,s,k));
+
+theorem :: EXTPRO_1:36
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S, k being Element of NAT
+   st F halts_on Comput(F,s,k)
+   holds Result(F,Comput(F,s,k))
+    = Result(F,s);
+

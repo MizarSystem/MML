@@ -16,7 +16,7 @@ environ
  constructors SETFAM_1, DOMAIN_1, REAL_1, NAT_1, MEMBERED, XXREAL_1, PROB_1,
       LIMFUNC1, NEWTON, TOPS_1, COMPTS_1, CONNSP_2;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, STRUCT_0, PRE_TOPC, TOPS_1;
+      MEMBERED, STRUCT_0, PRE_TOPC, TOPS_1, NEWTON;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -43,8 +43,7 @@ end;
 definition
   func DOM -> Subset of REAL equals
 :: URYSOHN1:def 5
-  (halfline 0) \/ DYADIC \/
-  right_open_halfline 1;
+  (halfline 0) \/ DYADIC \/ right_open_halfline 1;
 end;
 
 definition
@@ -58,8 +57,8 @@ end;
 canceled 4;
 
 theorem :: URYSOHN1:5
-  for n being Element of NAT holds for x being Real st x in dyadic(
-  n) holds 0 <= x & x <= 1;
+  for n being Element of NAT holds for x being Real st
+  x in dyadic(n) holds 0 <= x & x <= 1;
 
 theorem :: URYSOHN1:6
   dyadic(0) = {0,1};
@@ -68,29 +67,24 @@ theorem :: URYSOHN1:7
   dyadic(1) = {0,1/2,1};
 
 registration
-  let n be Element of NAT;
+  let n be Nat;
   cluster dyadic(n) -> non empty;
 end;
 
-canceled;
-
-theorem :: URYSOHN1:9
-  for n being Element of NAT holds ex FS being FinSequence st (dom
-FS = Seg ((2|^n)+1) & for i being Element of NAT st i in dom FS holds FS.i = (i
-  -1)/(2|^n));
+canceled 2;
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   func dyad(n) -> FinSequence means
 :: URYSOHN1:def 6
 
-  dom it = Seg((2|^n)+1) & for i
-  being Element of NAT st i in dom it holds it.i = (i-1)/(2|^n);
+  dom it = Seg((2|^n)+1) &
+  for i being Element of NAT st i in dom it holds it.i = (i-1)/(2|^n);
 end;
 
 theorem :: URYSOHN1:10
-  for n being Element of NAT holds dom dyad(n) = Seg((2|^n)+1) & rng
-  dyad(n) = dyadic(n);
+  for n being Element of NAT holds
+  dom dyad(n) = Seg((2|^n)+1) & rng dyad(n) = dyadic(n);
 
 registration
   cluster DYADIC -> non empty;
@@ -118,46 +112,46 @@ theorem :: URYSOHN1:15
   for n being Element of NAT holds 1/(2|^(n+1)) in dyadic(n+1) \ dyadic(n);
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   let x be Element of dyadic(n);
-  func axis(x,n) -> Element of NAT means
+  func axis(x) -> Element of NAT means
 :: URYSOHN1:def 7
 
   x = it/(2|^n);
 end;
 
 theorem :: URYSOHN1:16
-  for n being Element of NAT holds for x being Element of dyadic(n
-  ) holds x = axis(x,n)/(2|^n) & axis(x,n) <= (2|^n);
+  for n being Element of NAT holds for x being Element of dyadic(n) holds
+  x = axis(x)/(2|^n) & axis(x) <= (2|^n);
 
 theorem :: URYSOHN1:17
   for n being Element of NAT holds for x being Element of dyadic(n)
-  holds (axis(x,n)-1)/(2|^n) < x & x < (axis(x,n)+1)/(2|^n);
+  holds (axis(x)-1)/(2|^n) < x & x < (axis(x)+1)/(2|^n);
 
 theorem :: URYSOHN1:18
-  for n being Element of NAT holds for x being Element of dyadic(n
-  ) holds (axis(x,n)-1)/(2|^n) < (axis(x,n)+1)/(2|^n);
+  for n being Element of NAT holds for x being Element of dyadic(n) holds
+  (axis(x)-1)/(2|^n) < (axis(x)+1)/(2|^n);
 
 canceled;
 
 theorem :: URYSOHN1:20
   for n being Element of NAT holds for x being Element of dyadic(n
-+1) holds (not x in dyadic(n) implies (axis(x,n+1)-1)/(2|^(n+1)) in dyadic(n) &
-  (axis(x,n+1)+1)/(2|^(n+1)) in dyadic(n) );
++1) holds (not x in dyadic(n) implies (axis(x)-1)/(2|^(n+1)) in dyadic(n) &
+  (axis(x)+1)/(2|^(n+1)) in dyadic(n) );
 
 theorem :: URYSOHN1:21
-  for n being Element of NAT holds for x1,x2 being Element of
-  dyadic(n) st x1 < x2 holds axis(x1,n) < axis(x2,n);
+  for n being Element of NAT holds for x1,x2 being Element of dyadic(n) st
+  x1 < x2 holds axis(x1) < axis(x2);
 
 theorem :: URYSOHN1:22
   for n being Element of NAT holds for x1,x2 being Element of
-dyadic(n) st x1 < x2 holds x1 <= (axis(x2,n)-1)/(2|^n) & (axis(x1,n)+1)/(2|^n)
+dyadic(n) st x1 < x2 holds x1 <= (axis(x2)-1)/(2|^n) & (axis(x1)+1)/(2|^n)
   <= x2;
 
 theorem :: URYSOHN1:23
   for n being Element of NAT holds for x1,x2 being Element of
-dyadic(n+1) st x1 < x2 & not x1 in dyadic(n) & not x2 in dyadic(n) holds (axis(
-  x1,n+1)+1)/(2|^(n+1)) <= (axis(x2,n+1)-1)/(2|^(n+1));
+dyadic(n+1) st x1 < x2 & not x1 in dyadic(n) & not x2 in dyadic(n) holds
+(axis(x1)+1)/(2|^(n+1)) <= (axis(x2)-1)/(2|^(n+1));
 
 begin
 

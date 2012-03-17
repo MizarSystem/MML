@@ -31,12 +31,12 @@ environ
       COMPLEX1, ABSVALUE, RSSPACE3, FINSEQ_1, FINSEQ_2, RVSUM_1, FUNCT_2,
       LOPBAN_1, ZFMISC_1, FUNCOP_1, SEQ_1, NAT_1, SQUARE_1, FUNCT_1, FINSEQ_5,
       XREAL_1, RFUNCT_4, JORDAN2C, BHSP_2, BHSP_1, EUCLID_2, EUCLID_4,
-      EUCLIDLP, BHSP_3, XXREAL_0, VALUED_1, NORMSP_0;
+      EUCLIDLP, BHSP_3, XXREAL_0, VALUED_1, NORMSP_0, ORDINAL1;
  schemes NAT_1, SEQ_1, BINOP_1, BINOP_2, FUNCT_2, FINSEQ_1;
 
 begin :: R^n space as RealLinearSpace
 
-reserve n for Element of NAT;
+reserve n for Nat;
 
 Lm1: for n being Nat ex ADD be BinOp of REAL n st (for a,b being Element of
 REAL n holds ADD.(a,b) = a+b) & ADD is commutative associative
@@ -164,7 +164,7 @@ A3: for x being Element of REAL n holds g.x = |.x.|;
 end;
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   func REAL-NS n -> strict non empty NORMSTR means
   :Def4:
   the carrier of it =
@@ -179,13 +179,14 @@ definition
 end;
 
 registration
-  let n be non empty Element of NAT;
+  let n be non empty Nat;
   cluster REAL-NS n -> non trivial;
   coherence
   proof
+A1: n in NAT by ORDINAL1:def 13;
     the carrier of REAL-NS n = REAL n by Def4
       .= the carrier of TOP-REAL n by EUCLID:25;
-    hence thesis;
+    hence thesis by A1;
   end;
 end;
 
@@ -203,10 +204,10 @@ A1: x=y;
 end;
 
 theorem Th2:
-  for n be Element of NAT for x,y be VECTOR of REAL-NS n, a,b be
+  for n be Nat for x,y be VECTOR of REAL-NS n, a,b be
   Element of REAL n st x=a & y=b holds x+y = a + b
 proof
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be VECTOR of REAL-NS n;
   let a,b be Element of REAL n;
   assume x=a & y=b;
@@ -228,7 +229,7 @@ A1: x = y;
 end;
 
 registration
-  let n be Element of NAT;
+  let n be Nat;
   cluster REAL-NS n -> reflexive discerning RealNormSpace-like
   vector-distributive scalar-distributive scalar-associative scalar-unital
   Abelian add-associative right_zeroed right_complementable;
@@ -430,23 +431,24 @@ end;
 theorem Th6:
   for f be FinSequence of REAL st dom f = Seg n holds f is Element of REAL n
 proof
+a1: n in NAT by ORDINAL1:def 13;
   let f be FinSequence of REAL;
   assume dom f= Seg n;
-  then len f = n by FINSEQ_1:def 3;
+  then len f = n by a1,FINSEQ_1:def 3;
   then f is Element of n-tuples_on REAL by FINSEQ_2:110;
   hence thesis by EUCLID:def 1;
 end;
 
 theorem Th7:
-  for n be Element of NAT, x be Element of REAL n st (for i be
+  for n be Nat, x be Element of REAL n st (for i be
   Element of NAT st i in Seg n holds 0 <= x.i) holds 0 <= Sum x & for i be
   Element of NAT st i in Seg n holds x.i <= Sum x
 proof
-  defpred P[Element of NAT] means for x be Element of REAL $1 st (for i be
+  defpred P[Nat] means for x be Element of REAL $1 st (for i be
   Element of NAT st i in Seg $1 holds 0 <= x.i) holds 0 <= Sum x & (for i be
   Element of NAT st i in Seg $1 holds x.i <= Sum x);
 A1: now
-    let k be Element of NAT such that
+    let k be Nat such that
 A2: P[k];
     now
       let x be Element of REAL (k+1);
@@ -514,15 +516,14 @@ A18:        x.i <= Sum xk by A8,A17,FUNCT_1:72;
     hence P[k+1];
   end;
 A19: P[0] by RVSUM_1:102;
-  thus for k be Element of NAT holds P[k] from NAT_1:sch 1(A19,A1);
+  thus for k be Nat holds P[k] from NAT_1:sch 2(A19,A1);
 end;
 
 theorem Th8:
-  for x be Element of REAL n holds for i be Element of NAT st i in
-  Seg n holds abs(x.i) <= |.x.|
+  for x be Element of REAL n, i be Nat st i in Seg n holds abs(x.i) <= |.x.|
 proof
   let x be Element of REAL n;
-  let i be Element of NAT;
+  let i be Nat;
   reconsider sx = sqr x as Element of REAL n by EUCLID:def 1;
 A1: now
     let k be Element of NAT;
@@ -555,7 +556,7 @@ end;
 
 theorem Th9:
   for x be Point of REAL-NS n, y be Element of REAL n st x=y holds
-  for i be Element of NAT st i in Seg n holds abs(y.i) <= ||.x.||
+  for i be Nat st i in Seg n holds abs(y.i) <= ||.x.||
 proof
   let x be Point of REAL-NS n, y be Element of REAL n;
   assume x=y;
@@ -567,6 +568,7 @@ theorem Th10:
   for x be Element of REAL (n+1) holds |.x.|^2 = |.(x|n).|^2 + (x. (n+1))^2
 proof
   let x be Element of REAL (n+1);
+  reconsider n as Element of NAT by ORDINAL1:def 13;
   reconsider x as Element of (n+1)-tuples_on REAL by EUCLID:def 1;
 A1: x|n = x|Seg n by FINSEQ_1:def 15;
 A2: n+1 = len x by FINSEQ_1:def 18;
@@ -612,8 +614,8 @@ A6: x = x| (n+1) by A2,FINSEQ_1:79
 end;
 
 definition
-  let n be Element of NAT;
-  let f be Function of NAT, REAL n, k be Element of NAT;
+  let n be Nat;
+  let f be Function of NAT, REAL n, k be Nat;
   redefine func f.k -> Element of REAL n;
   coherence
   proof
@@ -623,19 +625,19 @@ definition
 end;
 
 theorem Th11:
-  for n be Element of NAT for x be Point of REAL-NS n, xs be
+  for n be Nat for x be Point of REAL-NS n, xs be
 Element of REAL n, seq be sequence of REAL-NS n, xseq be Function of NAT, REAL
   n st xs = x & xseq = seq holds ( seq is convergent & lim seq = x iff for i be
   Element of NAT st i in Seg n ex rseqi be Real_Sequence st for k be Element of
   NAT holds rseqi.k = (xseq.k).i & rseqi is convergent & xs.i = lim rseqi )
 proof
-  defpred P[Element of NAT] means for x be Point of REAL-NS $1, xs be Element
+  defpred P[Nat] means for x be Point of REAL-NS $1, xs be Element
 of REAL $1, seq be sequence of REAL-NS $1, xseq be Function of NAT, REAL $1 st
 xs= x & xseq=seq holds ((seq is convergent & lim seq = x) iff (for i be Element
   of NAT st i in Seg $1 ex rseqi be Real_Sequence st for k be Element of NAT
   holds rseqi.k = (xseq.k).i & rseqi is convergent & xs.i= lim rseqi));
 A1: now
-    let n be Element of NAT;
+    let n be Nat;
     assume
 A2: P[n];
     now
@@ -809,20 +811,19 @@ A40:        for k be Element of NAT st m<=k holds abs(seq2.k-0) < e*e
             now
               let k be Element of NAT such that
 A41:          m<= k;
-A42:          0 <= ||.seq.k - x.|| by NORMSP_1:8;
               ||.seq - x.||.k = ||.(seq - x).k.|| by NORMSP_0:def 4
                 .= ||.seq.k - x.|| by NORMSP_1:def 7;
               then seq2.k = ( ||.seq.k - x.|| )*( ||.seq.k - x.|| ) by SEQ_1:12
 ;
               then
-abs(seq2.k-0 ) = ||.seq.k - x.|| * ||.seq.k - x.|| by A42,ABSVALUE:def 1;
+abs(seq2.k-0 ) = ||.seq.k - x.|| * ||.seq.k - x.|| by ABSVALUE:def 1;
               then
 A43:          ||.seq.k - x.|| * ||.seq.k - x.|| < e*e by A40,A41;
 A44:          sqrt( ||.seq.k - x.|| * ||.seq.k - x.|| ) = sqrt( ||.seq.k
               - x.||^2)
-                .= ||.seq.k - x.|| by NORMSP_1:8,SQUARE_1:89;
+                .= ||.seq.k - x.|| by SQUARE_1:89;
               sqrt(e*e) = sqrt(e^2) .= e by A39,SQUARE_1:89;
-              hence ||.seq.k - x.|| < e by A42,A43,A44,SQUARE_1:95;
+              hence ||.seq.k - x.|| < e by A43,A44,SQUARE_1:95;
             end;
             hence thesis;
           end;
@@ -921,7 +922,7 @@ A61:    0 < r;
     end;
     hence thesis;
   end;
-  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A54,A1);
+  thus for n be Nat holds P[n] from NAT_1:sch 2(A54,A1);
 end;
 
 theorem Th12:
@@ -1023,7 +1024,7 @@ A2: for x,y be Element of REAL n holds scalar2.(x,y) = Sum mlt(x,y);
 end;
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   func REAL-US n -> strict non empty UNITSTR means
   :Def6:
   the carrier of it =
@@ -1038,23 +1039,25 @@ definition
 end;
 
 registration
-  let n be non empty Element of NAT;
+  let n be non empty Nat;
   cluster REAL-US n -> non trivial;
   coherence
   proof
+a1: n in NAT by ORDINAL1:def 13;
     the carrier of REAL-US n = REAL n by Def6
       .= the carrier of TOP-REAL n by EUCLID:25;
-    hence thesis;
+    hence thesis by a1;
   end;
 end;
 
 registration
-  let n be Element of NAT;
+  let n be Nat;
   cluster REAL-US n -> RealUnitarySpace-like vector-distributive
   scalar-distributive scalar-associative scalar-unital Abelian
     add-associative right_zeroed right_complementable;
   coherence
   proof
+a1: n in NAT by ORDINAL1:def 13;
     now
       let x,y,z be Point of REAL-US n, a be Real;
       reconsider x1=x, y1=y, z1=z as Element of REAL n by Def6;
@@ -1092,7 +1095,7 @@ A7:         k in dom mlt(x1,x1) by A6,RVSUM_1:def 9;
             then (x1.k)^2 = 0 by RVSUM_1:86;
             hence thesis by SQUARE_1:74;
           end;
-          then x1 = n |-> (0 qua Real) by RFUNCT_4:4;
+          then x1 = n |-> (0 qua Real) by a1,RFUNCT_4:4;
           then x = 0*n by EUCLID:def 4;
           hence contradiction by A5,Def6;
         end;
@@ -1301,19 +1304,20 @@ A26:  u + (v + w) = (Euclid_add n).(u1,v+w) by Def6
     reconsider v1=v as Element of REAL n by Def6;
     reconsider w = -v1 as Element of REAL-US n by Def6;
     take w;
+a1: n in NAT by ORDINAL1:def 13;
     thus v + w = (Euclid_add n).(v1,-v1) by Def6
       .= v1 + -v1 by Def1
-      .= 0*n by EUCLIDLP:7
+      .= 0*n by a1,EUCLIDLP:7
       .= 0.(REAL-US n) by Def6;
   end;
 end;
 
 theorem Th13:
-  for n be Element of NAT, a be Real, x1,y1 be Point of REAL-NS n,
+  for n be Nat, a be Real, x1,y1 be Point of REAL-NS n,
 x2,y2 be Point of REAL-US n st x1 = x2 & y1 = y2 holds x1 + y1 = x2 + y2 & -x1
   = -x2 & a * x1 = a * x2
 proof
-  let n be Element of NAT, a be Real;
+  let n be Nat, a be Real;
   let x1,y1 be Point of REAL-NS n;
   reconsider x=x1, y=y1 as Element of REAL n by Def4;
   let x2,y2 be Point of REAL-US n;
@@ -1331,10 +1335,10 @@ A2: y1 = y2;
 end;
 
 theorem
-  for n be Element of NAT, x1 be Point of REAL-NS n, x2 be Point of
+  for n be Nat, x1 be Point of REAL-NS n, x2 be Point of
   REAL-US n st x1 = x2 holds ||.x1.||^2 = x2 .|. x2
 proof
-  let n be Element of NAT, x1 be Point of REAL-NS n, x2 be Point of REAL-US n;
+  let n be Nat, x1 be Point of REAL-NS n, x2 be Point of REAL-US n;
   reconsider x=x1 as Element of REAL n by Def4;
   assume
 A1: x1 = x2;
@@ -1346,22 +1350,22 @@ A1: x1 = x2;
 end;
 
 theorem Th15:
-  for n be Element of NAT, f be set holds f is sequence of REAL-NS
+  for n be Nat, f be set holds f is sequence of REAL-NS
   n iff f is sequence of REAL-US n
 proof
-  let n be Element of NAT, f be set;
+  let n be Nat, f be set;
   the carrier of REAL-NS n = REAL n by Def4
     .= the carrier of REAL-US n by Def6;
   hence thesis;
 end;
 
 theorem Th16:
-  for n be Element of NAT, seq1 be sequence of REAL-NS n, seq2 be
+  for n be Nat, seq1 be sequence of REAL-NS n, seq2 be
 sequence of REAL-US n st seq1 = seq2 holds (seq1 is convergent implies seq2 is
   convergent & lim seq1 = lim seq2) & (seq2 is convergent implies seq1 is
   convergent & lim seq1 = lim seq2)
 proof
-  let n be Element of NAT;
+  let n be Nat;
   let seq1 be sequence of REAL-NS n;
   let seq2 be sequence of REAL-US n;
   assume
@@ -1499,11 +1503,11 @@ A20:  p = seq1.k - LIMIT by A1,Th13;
 end;
 
 theorem
-  for n be Element of NAT, seq1 be sequence of REAL-NS n, seq2 be
+  for n be Nat, seq1 be sequence of REAL-NS n, seq2 be
   sequence of REAL-US n st seq1 = seq2 & seq1 is Cauchy_sequence_by_Norm holds
   seq2 is Cauchy
 proof
-  let n be Element of NAT, seq1 be sequence of REAL-NS n, seq2 be sequence of
+  let n be Nat, seq1 be sequence of REAL-NS n, seq2 be sequence of
   REAL-US n;
   assume that
 A1: seq1 = seq2 and
@@ -1530,11 +1534,11 @@ A4: ||. seq1.m1 - seq1.m2 .|| = |.p.| by Th1
 end;
 
 theorem Th18:
-  for n be Element of NAT, seq1 be sequence of REAL-NS n, seq2 be
+  for n be Nat, seq1 be sequence of REAL-NS n, seq2 be
   sequence of REAL-US n st seq1 = seq2 & seq2 is Cauchy holds seq1 is
   Cauchy_sequence_by_Norm
 proof
-  let n be Element of NAT, seq1 be sequence of REAL-NS n, seq2 be sequence of
+  let n be Nat, seq1 be sequence of REAL-NS n, seq2 be sequence of
   REAL-US n;
   assume that
 A1: seq1 = seq2 and
@@ -1561,11 +1565,10 @@ A5: dist(seq2.m1, seq2.m2) < r by A3;
   hence thesis by A5;
 end;
 
-Lm4: for n be Element of NAT holds REAL-US n is complete
-proof
-  let n be Element of NAT;
-  for seq be sequence of REAL-US n holds seq is Cauchy implies seq is
-  convergent
+registration
+  let n;
+  cluster REAL-US n -> complete;
+  coherence
   proof
     let seq be sequence of REAL-US n;
     reconsider seq9 = seq as sequence of REAL-NS n by Th15;
@@ -1573,11 +1576,4 @@ proof
     then seq9 is convergent by Th12,Th18;
     hence thesis by Th16;
   end;
-  hence REAL-US n is complete by BHSP_3:def 6;
-end;
-
-registration
-  let n;
-  cluster REAL-US n -> complete;
-  coherence by Lm4;
 end;

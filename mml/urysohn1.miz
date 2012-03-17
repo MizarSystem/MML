@@ -3,7 +3,7 @@
 ::
 :: Received July 29, 1995
 :: Copyright (c) 1995 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, NAT_1, SUBSET_1, REAL_1, CARD_1, XXREAL_0, NEWTON,
@@ -16,7 +16,7 @@ environ
  constructors SETFAM_1, DOMAIN_1, REAL_1, NAT_1, MEMBERED, XXREAL_1, PROB_1,
       LIMFUNC1, NEWTON, TOPS_1, COMPTS_1, CONNSP_2;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, STRUCT_0, PRE_TOPC, TOPS_1;
+      MEMBERED, STRUCT_0, PRE_TOPC, TOPS_1, NEWTON;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, CONNSP_2, XBOOLE_0, PROB_1, LIMFUNC1, SUBSET_1, STRUCT_0,
       PRE_TOPC;
@@ -119,8 +119,7 @@ end;
 
 definition
   func DOM -> Subset of REAL equals
-  (halfline 0) \/ DYADIC \/
-  right_open_halfline 1;
+  (halfline 0) \/ DYADIC \/ right_open_halfline 1;
   coherence;
 end;
 
@@ -140,8 +139,8 @@ end;
 canceled 4;
 
 theorem Th5:
-  for n being Element of NAT holds for x being Real st x in dyadic(
-  n) holds 0 <= x & x <= 1
+  for n being Element of NAT holds for x being Real st
+  x in dyadic(n) holds 0 <= x & x <= 1
 proof
   let n be Element of NAT;
   let x be Real;
@@ -253,29 +252,28 @@ A8:   x = i/2 by A1,A5,Def3;
 end;
 
 registration
-  let n be Element of NAT;
+  let n be Nat;
   cluster dyadic(n) -> non empty;
   coherence
   proof
-    consider x being Real such that
-A1: x = 0/(2|^n);
+    set x = 0/(2|^n);
     ex i being Element of NAT st 0 <= i & i <= (2|^n) & x = i/(2|^n)
     proof
       take 0;
-      thus thesis by A1,NEWTON:102;
+      thus thesis by NEWTON:102;
     end;
     hence thesis by Def3;
   end;
 end;
 
-canceled;
+canceled 2;
 
-theorem Th9:
-  for n being Element of NAT holds ex FS being FinSequence st (dom
-FS = Seg ((2|^n)+1) & for i being Element of NAT st i in dom FS holds FS.i = (i
-  -1)/(2|^n))
+Th9:
+  for n being Nat holds
+  ex FS being FinSequence st (dom FS = Seg ((2|^n)+1) &
+  for i being Element of NAT st i in dom FS holds FS.i = (i-1)/(2|^n))
 proof
-  let n be Element of NAT;
+  let n be Nat;
   deffunc F(Nat)=($1-1)/(2|^n);
   consider FS being FinSequence such that
 A1: len FS = (2|^n)+1 & for i being Nat st i in dom FS holds FS.i = F(i)
@@ -285,11 +283,11 @@ A1: len FS = (2|^n)+1 & for i being Nat st i in dom FS holds FS.i = F(i)
 end;
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   func dyad(n) -> FinSequence means
   :Def6:
-  dom it = Seg((2|^n)+1) & for i
-  being Element of NAT st i in dom it holds it.i = (i-1)/(2|^n);
+  dom it = Seg((2|^n)+1) &
+  for i being Element of NAT st i in dom it holds it.i = (i-1)/(2|^n);
   existence by Th9;
   uniqueness
   proof
@@ -314,17 +312,17 @@ A6:   k in X;
 end;
 
 theorem
-  for n being Element of NAT holds dom dyad(n) = Seg((2|^n)+1) & rng
-  dyad(n) = dyadic(n)
+  for n being Element of NAT holds
+  dom dyad(n) = Seg((2|^n)+1) & rng dyad(n) = dyadic(n)
 proof
   let n be Element of NAT;
-A1: dom (dyad(n)) = Seg((2|^n)+1) by Def6;
-  for x being set holds x in rng (dyad(n)) iff x in dyadic(n)
+A1: dom dyad(n) = Seg((2|^n)+1) by Def6;
+  for x being set holds x in rng dyad(n) iff x in dyadic(n)
   proof
     let x be set;
-A2: x in rng (dyad(n)) implies x in dyadic(n)
+A2: x in rng dyad(n) implies x in dyadic(n)
     proof
-      assume x in rng (dyad(n));
+      assume x in rng dyad(n);
       then consider y being set such that
 A3:   y in dom (dyad(n)) and
 A4:   x = (dyad(n)).y by FUNCT_1:def 5;
@@ -477,16 +475,16 @@ proof
 end;
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   let x be Element of dyadic(n);
-  func axis(x,n) -> Element of NAT means
+  func axis(x) -> Element of NAT means
   :Def7:
   x = it/(2|^n);
   existence
   proof
     consider i being Element of NAT such that
     0 <= i and
-    i <= (2|^n) and
+    i <= 2|^n and
 A1: x = i/(2|^n) by Def3;
     take i;
     thus thesis by A1;
@@ -504,8 +502,8 @@ A3: (2|^n) <> 0 by NEWTON:102;
 end;
 
 theorem Th16:
-  for n being Element of NAT holds for x being Element of dyadic(n
-  ) holds x = axis(x,n)/(2|^n) & axis(x,n) <= (2|^n)
+  for n being Element of NAT holds for x being Element of dyadic(n) holds
+  x = axis(x)/(2|^n) & axis(x) <= (2|^n)
 proof
   let n be Element of NAT;
   let x be Element of dyadic(n);
@@ -515,22 +513,22 @@ end;
 
 theorem
   for n being Element of NAT holds for x being Element of dyadic(n)
-  holds (axis(x,n)-1)/(2|^n) < x & x < (axis(x,n)+1)/(2|^n)
+  holds (axis(x)-1)/(2|^n) < x & x < (axis(x)+1)/(2|^n)
 proof
   let n be Element of NAT;
   let x be Element of dyadic(n);
-A1: 0 + axis(x,n) < 1 + axis(x,n) & 0 < 2|^n by NEWTON:102,XREAL_1:10;
-  x = axis(x,n)/(2|^n) & -1 + axis(x,n) < 0 + axis(x,n) by Def7,XREAL_1:10;
+A1: 0 + axis(x) < 1 + axis(x) & 0 < 2|^n by NEWTON:102,XREAL_1:10;
+  x = axis(x)/(2|^n) & -1 + axis(x) < 0 + axis(x) by Def7,XREAL_1:10;
   hence thesis by A1,XREAL_1:76;
 end;
 
 theorem Th18:
-  for n being Element of NAT holds for x being Element of dyadic(n
-  ) holds (axis(x,n)-1)/(2|^n) < (axis(x,n)+1)/(2|^n)
+  for n being Element of NAT holds for x being Element of dyadic(n) holds
+  (axis(x)-1)/(2|^n) < (axis(x)+1)/(2|^n)
 proof
   let n be Element of NAT;
   let x be Element of dyadic(n);
-  -1 + axis(x,n) < 1 + axis(x,n) & 0 < 2|^n by NEWTON:102,XREAL_1:10;
+  -1 + axis(x) < 1 + axis(x) & 0 < 2|^n by NEWTON:102,XREAL_1:10;
   hence thesis by XREAL_1:76;
 end;
 
@@ -538,17 +536,17 @@ canceled;
 
 theorem Th20:
   for n being Element of NAT holds for x being Element of dyadic(n
-+1) holds (not x in dyadic(n) implies (axis(x,n+1)-1)/(2|^(n+1)) in dyadic(n) &
-  (axis(x,n+1)+1)/(2|^(n+1)) in dyadic(n) )
++1) holds (not x in dyadic(n) implies (axis(x)-1)/(2|^(n+1)) in dyadic(n) &
+  (axis(x)+1)/(2|^(n+1)) in dyadic(n) )
 proof
   let n be Element of NAT;
   let x be Element of dyadic(n+1);
   assume
 A1: not x in dyadic(n);
-  thus (axis(x,n+1)-1)/(2|^(n+1)) in dyadic(n)
+  thus (axis(x)-1)/(2|^(n+1)) in dyadic(n)
   proof
     consider a being Real such that
-A2: a = (axis(x,n+1)-1)/(2|^(n+1));
+A2: a = (axis(x)-1)/(2|^(n+1));
     ex i being Element of NAT st 0 <= i & i <= (2|^n) & a = i/(2|^n)
     proof
       consider s being Element of NAT such that
@@ -591,10 +589,10 @@ A13:      0 <= k by NAT_1:2;
     end;
     hence thesis by A2,Def3;
   end;
-  thus (axis(x,n+1)+1)/(2|^(n+1)) in dyadic(n)
+  thus (axis(x)+1)/(2|^(n+1)) in dyadic(n)
   proof
     consider a being Real such that
-A14: a = (axis(x,n+1)+1)/(2|^(n+1));
+A14: a = (axis(x)+1)/(2|^(n+1));
     ex i being Element of NAT st 0 <= i & i <= (2|^n) & a = i/(2|^n)
     proof
       consider s being Element of NAT such that
@@ -648,44 +646,44 @@ A26:      0 <= l by NAT_1:2;
 end;
 
 theorem Th21:
-  for n being Element of NAT holds for x1,x2 being Element of
-  dyadic(n) st x1 < x2 holds axis(x1,n) < axis(x2,n)
+  for n being Element of NAT holds for x1,x2 being Element of dyadic(n) st
+  x1 < x2 holds axis(x1) < axis(x2)
 proof
   let n be Element of NAT;
   let x1,x2 be Element of dyadic(n);
 A1: 0 < (2|^n) by NEWTON:102;
-  x1 = axis(x1,n)/(2|^n) & x2 = axis(x2,n)/(2|^n) by Th16;
+  x1 = axis(x1)/(2|^n) & x2 = axis(x2)/(2|^n) by Th16;
   hence thesis by A1,XREAL_1:74;
 end;
 
 theorem Th22:
   for n being Element of NAT holds for x1,x2 being Element of
-dyadic(n) st x1 < x2 holds x1 <= (axis(x2,n)-1)/(2|^n) & (axis(x1,n)+1)/(2|^n)
+dyadic(n) st x1 < x2 holds x1 <= (axis(x2)-1)/(2|^n) & (axis(x1)+1)/(2|^n)
   <= x2
 proof
   let n be Element of NAT;
   let x1,x2 be Element of dyadic(n);
   assume
 A1: x1 < x2;
-  then axis(x1,n) < axis(x2,n) by Th21;
+  then axis(x1) < axis(x2) by Th21;
   then
-A2: axis(x1,n) + 1 <= axis(x2,n) by NAT_1:13;
-  axis(x1,n) < axis(x2,n) by A1,Th21;
-  then axis(x1,n) + 1 <= axis(x2,n) by NAT_1:13;
+A2: axis(x1) + 1 <= axis(x2) by NAT_1:13;
+  axis(x1) < axis(x2) by A1,Th21;
+  then axis(x1) + 1 <= axis(x2) by NAT_1:13;
   then
-A3: axis(x1,n) <= axis(x2,n) - 1 by XREAL_1:21;
+A3: axis(x1) <= axis(x2) - 1 by XREAL_1:21;
   0 < (2|^n) by NEWTON:102;
   then
-A4: (axis(x1,n)+ 1)/(2|^n) <= axis(x2,n)/(2|^n) by A2,XREAL_1:74;
+A4: (axis(x1)+ 1)/(2|^n) <= axis(x2)/(2|^n) by A2,XREAL_1:74;
   0 < (2|^n) by NEWTON:102;
-  then axis(x1,n)/(2|^n) <= (axis(x2,n) - 1)/(2|^n) by A3,XREAL_1:74;
+  then axis(x1)/(2|^n) <= (axis(x2) - 1)/(2|^n) by A3,XREAL_1:74;
   hence thesis by A4,Th16;
 end;
 
 theorem Th23:
   for n being Element of NAT holds for x1,x2 being Element of
-dyadic(n+1) st x1 < x2 & not x1 in dyadic(n) & not x2 in dyadic(n) holds (axis(
-  x1,n+1)+1)/(2|^(n+1)) <= (axis(x2,n+1)-1)/(2|^(n+1))
+dyadic(n+1) st x1 < x2 & not x1 in dyadic(n) & not x2 in dyadic(n) holds
+(axis(x1)+1)/(2|^(n+1)) <= (axis(x2)-1)/(2|^(n+1))
 proof
   let n be Element of NAT;
   let x1,x2 be Element of dyadic(n+1);
@@ -694,11 +692,11 @@ A1: x1 < x2 and
 A2: not x1 in dyadic(n) and
 A3: not x2 in dyadic(n);
   consider k2 being Element of NAT such that
-A4: axis(x2,n+1) = 2 * k2 or axis(x2,n+1) = 2 * k2 + 1 by SCHEME1:1;
-A5: axis(x2,n+1) <> k2 * 2
+A4: axis(x2) = 2 * k2 or axis(x2) = 2 * k2 + 1 by SCHEME1:1;
+A5: axis(x2) <> k2 * 2
   proof
     assume
-A6: axis(x2,n+1) = k2 * 2;
+A6: axis(x2) = k2 * 2;
     then x2 = (k2 * 2)/(2|^(n+1)) by Th16;
     then
 A7: x2 = (k2 * 2)/((2|^n) * 2) by NEWTON:11
@@ -712,11 +710,11 @@ A8: k2 <= ((2|^n)* 2)/2 by XREAL_1:79;
     hence thesis by A3,A7,A8,Def3;
   end;
   consider k1 being Element of NAT such that
-A9: axis(x1,n+1) = 2 * k1 or axis(x1,n+1) = 2 * k1 + 1 by SCHEME1:1;
-A10: not axis(x1,n+1) = k1 * 2
+A9: axis(x1) = 2 * k1 or axis(x1) = 2 * k1 + 1 by SCHEME1:1;
+A10: not axis(x1) = k1 * 2
   proof
     assume
-A11: axis(x1,n+1) = k1 * 2;
+A11: axis(x1) = k1 * 2;
     then x1 = (k1 * 2)/(2|^(n+1)) by Th16;
     then
 A12: x1 = (k1 * 2)/((2|^n) * 2) by NEWTON:11
@@ -738,7 +736,7 @@ A13: k1 <= ((2|^n)* 2)/2 by XREAL_1:79;
 end;
 
 begin
- 
+
 ::
 ::                             Normal TopSpaces
 ::
@@ -851,7 +849,7 @@ A2:   not p = q;
 A3:   G1 is open & p in G1 & q in G1` by A1,A2,PRE_TOPC:def 15;
       consider G2 being Subset of T such that
 A4:   G2 is open & q in G2 & p in G2` by A1,A2,PRE_TOPC:def 15;
-      take W = G1, V = G2;
+      take G1,G2;
       thus thesis by A3,A4,XBOOLE_0:def 5;
     end;
     assume
@@ -865,7 +863,7 @@ A6: W is open and
 A7: p in W & not q in W and
     q in V and
     not p in V by A5;
-    take G = W;
+    take W;
     thus thesis by A6,A7,XBOOLE_0:def 5;
   end;
 end;
@@ -1303,7 +1301,7 @@ A16: A = [#](T);
 end;
 
 begin
- 
+
 ::
 ::              Some increasing family of sets in normal space
 ::
@@ -1358,20 +1356,19 @@ A7:   0 < r;
   reconsider S = dyadic(n+1) \ dyadic(n) as non empty set by Th15;
 A8: 0 in dyadic(n+1) & 1 in dyadic(n+1) by Th12;
   defpred P[Element of S,Subset of T] means for r being Element of dyadic(n+1)
-st r in S & $1 = r holds for r1,r2 being Element of dyadic(n) st r1 = (axis(r,n
-+1)-1)/(2|^(n+1)) & r2 = (axis(r,n+1)+1)/(2|^(n+1)) holds $2 is Between of G.r1
-  , G.r2;
+st r in S & $1 = r holds for r1,r2 being Element of dyadic(n) st
+r1 = (axis(r)-1)/(2|^(n+1)) & r2 = (axis(r)+1)/(2|^(n+1)) holds
+$2 is Between of G.r1,G.r2;
 A9: for x being Element of S ex y being Subset of T st P[x,y]
   proof
     let x be Element of S;
 A10: not x in dyadic(n) by XBOOLE_0:def 5;
     reconsider x as Element of dyadic(n+1) by XBOOLE_0:def 5;
-    (axis(x,n+1)-1)/(2|^(n+1)) in dyadic(n) & (axis(x,n+1)+1)/(2|^(n+1))
+    (axis(x)-1)/(2|^(n+1)) in dyadic(n) & (axis(x)+1)/(2|^(n+1))
     in dyadic(n) by A10,Th20;
     then consider q1,q2 being Element of dyadic(n) such that
-A11: q1 = (axis(x,n+1)-1)/(2|^(n+1)) & q2 = (axis(x,n+1)+1)/(2|^(n+1));
-    consider Q0 being Between of G.q1, G.q2;
-    take Q0;
+A11: q1 = (axis(x)-1)/(2|^(n+1)) & q2 = (axis(x)+1)/(2|^(n+1));
+    take the Between of G.q1, G.q2;
     thus thesis by A11;
   end;
   consider D being Function of S,bool the carrier of T such that
@@ -1423,11 +1420,11 @@ A20:    F.r1 = G.r1 & F.r2 = G.r2 by A17;
       suppose
 A21:    r1 in dyadic(n) & not r2 in dyadic(n);
         then
-        (axis(r2,n+1)-1)/(2|^(n+1)) in dyadic(n) & (axis(r2,n+1)+1)/(2|^(
+        (axis(r2)-1)/(2|^(n+1)) in dyadic(n) & (axis(r2)+1)/(2|^(
         n+1)) in dyadic(n) by Th20;
         then consider q1,q2 being Element of dyadic(n) such that
-A22:    q1 = (axis(r2,n+1)-1)/(2|^(n+1)) and
-A23:    q2 = (axis(r2,n+1)+1)/(2|^(n+1));
+A22:    q1 = (axis(r2)-1)/(2|^(n+1)) and
+A23:    q2 = (axis(r2)+1)/(2|^(n+1));
 A24:    r1 <= q1 by A18,A22,Th22;
         r2 in S by A21,XBOOLE_0:def 5;
         then
@@ -1467,11 +1464,11 @@ A37:        G.q1 is open by A5,A32,A34;
       suppose
 A38:    not r1 in dyadic(n) & r2 in dyadic(n);
         then
-        (axis(r1,n+1)-1)/(2|^(n+1)) in dyadic(n) & (axis(r1,n+1)+1)/(2|^(
-        n+1)) in dyadic(n) by Th20;
+        (axis(r1)-1)/(2|^(n+1)) in dyadic(n) &
+        (axis(r1)+1)/(2|^(n+1)) in dyadic(n) by Th20;
         then consider q1,q2 being Element of dyadic(n) such that
-A39:    q1 = (axis(r1,n+1)-1)/(2|^(n+1)) and
-A40:    q2 = (axis(r1,n+1)+1)/(2|^(n+1));
+A39:    q1 = (axis(r1)-1)/(2|^(n+1)) and
+A40:    q2 = (axis(r1)+1)/(2|^(n+1));
 A41:    q2 <= r2 by A18,A40,Th22;
         r1 in S by A38,XBOOLE_0:def 5;
         then
@@ -1512,22 +1509,22 @@ A54:        Cl(G.q2) c= F.r2 by A17,A51;
       suppose
 A55:    not r1 in dyadic(n) & not r2 in dyadic(n);
         then
-        (axis(r1,n+1)-1)/(2|^(n+1)) in dyadic(n) & (axis(r1,n+1)+1)/(2|^(
-        n+1)) in dyadic(n) by Th20;
+        (axis(r1)-1)/(2|^(n+1)) in dyadic(n) &
+        (axis(r1)+1)/(2|^(n+1)) in dyadic(n) by Th20;
         then consider q11,q21 being Element of dyadic(n) such that
-A56:    q11 = (axis(r1,n+1)-1)/(2|^(n+1)) and
-A57:    q21 = (axis(r1,n+1)+1)/(2|^(n+1));
+A56:    q11 = (axis(r1)-1)/(2|^(n+1)) and
+A57:    q21 = (axis(r1)+1)/(2|^(n+1));
         r1 in S by A55,XBOOLE_0:def 5;
         then
 A58:    D.r1 is Between of (G.q11),(G.q21) by A12,A56,A57;
 A59:    q11 < q21 by A56,A57,Th18;
         then
 A60:    G.q21 is open by A5;
-        (axis(r2,n+1)-1)/(2|^(n+1)) in dyadic(n) & (axis(r2,n+1)+1)/(2|^
-        (n+1)) in dyadic(n) by A55,Th20;
+        (axis(r2)-1)/(2|^(n+1)) in dyadic(n) &
+        (axis(r2)+1)/(2|^(n+1)) in dyadic(n) by A55,Th20;
         then consider q12,q22 being Element of dyadic(n) such that
-A61:    q12 = (axis(r2,n+1)-1)/(2|^(n+1)) and
-A62:    q22 = (axis(r2,n+1)+1)/(2|^(n+1));
+A61:    q12 = (axis(r2)-1)/(2|^(n+1)) and
+A62:    q22 = (axis(r2)+1)/(2|^(n+1));
         r2 in S by A55,XBOOLE_0:def 5;
         then
 A63:    D.r2 is Between of (G.q12),(G.q22) by A12,A61,A62;

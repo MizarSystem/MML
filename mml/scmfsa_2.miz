@@ -10,25 +10,27 @@ environ
       TARSKI, AMI_3, ZFMISC_1, SUBSET_1, CARD_1, CAT_1, ORDINAL1, ARYTM_1,
       ARYTM_3, NAT_1, FINSET_1, FUNCT_1, AMI_2, XXREAL_0, FINSEQ_1, MCART_1,
       GRAPHSP, FSM_1, FUNCT_4, FUNCOP_1, INT_1, CARD_3, COMPLEX1, PARTFUN1,
-      FINSEQ_2, GLIB_000, SCMFSA_2, RECDEF_2, COMPOS_1;
+      FINSEQ_2, GLIB_000, SCMFSA_2, RECDEF_2, COMPOS_1, AMISTD_2;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, XCMPLX_0,
       XXREAL_0, NAT_1, INT_1, RELAT_1, MCART_1, CARD_1, CARD_3, INT_2,
       FINSEQ_1, FUNCOP_1, STRUCT_0, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       FINSET_1, FUNCT_4, FINSEQ_2, FUNCT_7, RECDEF_2,
-      COMPOS_1, AMI_1, AMI_2, AMI_3, SCMFSA_1;
+      COMPOS_1, EXTPRO_1, AMI_1,
+      AMI_2, AMI_3, SCMFSA_1;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, REAL_1, INT_2, FINSEQ_4, CAT_2,
-      AMI_5, SCMFSA_1, RELSET_1, PRE_POLY, RECDEF_2;
+      AMI_5, SCMFSA_1, RELSET_1, PRE_POLY, RECDEF_2, AMI_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       NUMBERS, XREAL_0, NAT_1, INT_1, CARD_3, STRUCT_0, AMI_1, AMI_2, AMI_3,
-      SCMFSA_1, CARD_1, FINSET_1, CARD_2, RELSET_1, FUNCT_2, COMPOS_1;
+      SCMFSA_1, CARD_1, FINSET_1, CARD_2, RELSET_1, FUNCT_2, COMPOS_1,
+      EXTPRO_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI,
+ definitions TARSKI, EXTPRO_1,
       COMPOS_1, AMI_1, FUNCT_1, WELLORD2, XBOOLE_0, AMI_2, AMI_3, RELAT_1,
       STRUCT_0, SCMFSA_1, FUNCOP_1, CARD_1, NAT_1;
  theorems MCART_1, SCMFSA_1, AMI_1, TARSKI, INT_1, RELAT_1, AMI_5, FUNCT_2,
       FUNCT_4, CARD_3, FUNCOP_1, FUNCT_1, AMI_3, NAT_1, CARD_1, AMI_2, FUNCT_7,
       ZFMISC_1, ORDINAL1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, NUMBERS,
-      FINSEQ_1, FINSET_1, PBOOLE, PARTFUN1, RECDEF_2, COMPOS_1;
+      FINSEQ_1, FINSET_1, PBOOLE, PARTFUN1, RECDEF_2, COMPOS_1, EXTPRO_1;
  schemes FUNCT_2;
 
 begin :: The SCM+FSA Computer
@@ -88,7 +90,7 @@ definition
   coherence;
 end;
 
-theorem
+theorem Th8:
   the carrier of SCM+FSA = Int-Locations \/ FinSeq-Locations \/ {IC
   SCM+FSA} \/ NAT by Th7,SCMFSA_1:8,XBOOLE_1:4;
 
@@ -285,18 +287,14 @@ reserve la,lb for Element of NAT,
   La for Element of NAT,
   i for Instruction of SCM+FSA,
   I for Instruction of SCM,
-  l for
-  Element of NAT,
+  l for Element of NAT,
   LA,LB for Element of NAT,
-  dA,dB,dC for Element
-  of SCM+FSA-Data-Loc,
+  dA,dB,dC for Element of SCM+FSA-Data-Loc,
   DA,DB,DC for Element of SCM-Data-Loc,
-  fA,fB for Element of
-  SCM+FSA-Data*-Loc,
+  fA,fB for Element of SCM+FSA-Data*-Loc,
   f,g for FinSeq-Location,
   A,B for Data-Location,
-  a,b,c,db for
-  Int-Location;
+  a,b,c,db for Int-Location;
 
 begin :: The Instruction Structure
 
@@ -1018,10 +1016,19 @@ proof
   hence thesis by Th79;
 end;
 
+  [0,{},{}] in SCM+FSA-Instr by SCMFSA_1:4;
+  then the haltF of SCM+FSA = [0,{},{}] by FUNCT_7:def 1;
+  then
+LmX: halt SCM+FSA = [0,{},{}];
+
 registration
-  cluster SCM+FSA -> realistic IC-Ins-separated definite steady-programmed;
+  cluster SCM+FSA -> proper-halt
+   realistic IC-Ins-separated definite steady-programmed;
   coherence
   proof
+    JumpPart halt SCM+FSA is empty by LmX,RECDEF_2:def 2;
+    then halt SCM+FSA is ins-loc-free by COMPOS_1:def 37;
+   hence SCM+FSA is proper-halt by COMPOS_1:def 39;
     thus SCM+FSA is realistic
     proof
       assume the Instruction-Counter of SCM+FSA in NAT;
@@ -1825,7 +1832,7 @@ A2: i is halting;
   let S be State of SCM+FSA;
   reconsider s = (S|SCM-Memory) +* (NAT --> i) as State of SCM by Th73;
   thus Exec(I,S) = S +* Exec(i,s) +* S|NAT by A1,Th75
-    .= S +* s +* S|NAT by A2,AMI_1:def 8
+    .= S +* s +* S|NAT by A2,EXTPRO_1:def 3
     .= S by Th76;
 end;
 
@@ -1841,7 +1848,7 @@ A1: Exec(I,s).IC SCM+FSA = succ IC s;
   then reconsider w = T.NAT as Element of NAT;
   assume I is halting;
   then
-A2: Exec(I,s).IC SCM+FSA = T.NAT by Th7,AMI_1:def 8;
+A2: Exec(I,s).IC SCM+FSA = T.NAT by Th7,EXTPRO_1:def 3;
   Exec(I,s).IC SCM+FSA = succ w by A1,FUNCT_7:def 1,SCMFSA_1:5;
   hence contradiction by A2;
 end;
@@ -1934,7 +1941,7 @@ A9: (w +* (NAT .--> la)).NAT = (NAT .--> la).NAT by FUNCT_4:14
   (w +* (NAT .--> la)).NAT = SCM+FSA-Chg(w,a3).NAT
     .= a3 by SCMFSA_1:20
     .= Exec(goto la,t).NAT by Th7,Th95
-    .= t.NAT by A1,AMI_1:def 8;
+    .= t.NAT by A1,EXTPRO_1:def 3;
   hence contradiction by A4,A9;
 end;
 
@@ -1992,7 +1999,7 @@ A10: t.a <> 0;
     IC t = IC w by FUNCT_7:def 1,SCMFSA_1:5;
     then
 A11: Exec(a=0_goto la,t).IC SCM+FSA = succ e by A10,Th96;
-    Exec(a=0_goto la,t).IC SCM+FSA = w.NAT by A4,Th7,AMI_1:def 8;
+    Exec(a=0_goto la,t).IC SCM+FSA = w.NAT by A4,Th7,EXTPRO_1:def 3;
     hence contradiction by A11;
   end;
   suppose
@@ -2000,7 +2007,7 @@ A12: t.a = 0;
     (w +* (NAT .--> la)).NAT = (SCM+FSA-Chg(w,a3)).NAT
       .= a3 by SCMFSA_1:20
       .= Exec(a=0_goto la,t).NAT by A12,Th7,Th96
-      .= t.NAT by A4,AMI_1:def 8;
+      .= t.NAT by A4,EXTPRO_1:def 3;
     hence contradiction by A6,A9;
   end;
 end;
@@ -2059,7 +2066,7 @@ A10: t.a <= 0;
     IC t = IC w by FUNCT_7:def 1,SCMFSA_1:5;
     then
 A11: Exec(a>0_goto la,t).IC SCM+FSA = succ e by A10,Th97;
-    Exec(a>0_goto la,t).IC SCM+FSA = w.NAT by A4,Th7,AMI_1:def 8;
+    Exec(a>0_goto la,t).IC SCM+FSA = w.NAT by A4,Th7,EXTPRO_1:def 3;
     hence contradiction by A11;
   end;
   suppose
@@ -2067,7 +2074,7 @@ A12: t.a > 0;
     (w +* (NAT .--> la)).NAT = (SCM+FSA-Chg(w,a3)).NAT
       .= a3 by SCMFSA_1:20
       .= Exec(a>0_goto la,t).NAT by A12,Th7,Th97
-      .= t.NAT by A4,AMI_1:def 8;
+      .= t.NAT by A4,EXTPRO_1:def 3;
     hence contradiction by A6,A9;
   end;
 end;
@@ -2333,4 +2340,8 @@ FUNCT_7:def 1,SCMFSA_1:5
     .= SCM-Memory \/ FinSeq-Locations \ ({NAT} \/ NAT)
     .= Int-Locations \/ FinSeq-Locations by A2,A4,XBOOLE_1:42;
 end;
+
+theorem
+ for i,j being Nat st i <> j
+  holds intloc i <> intloc j by AMI_3:52;
 

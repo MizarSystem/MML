@@ -14,16 +14,16 @@ environ
       SCM_HALT, PARTFUN1, SCMNORM, RELOC;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, RELAT_1, FINSEQ_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, VALUED_1,
-      STRUCT_0, COMPOS_1, AMI_1, AMISTD_2, SCMFSA_2, FUNCOP_1, SCMFSA6B,
-      SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA7B, NAT_D,
-      SCMFSA_3, SCMFSA6C, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, REAL_1, SCM_1, SCMFSA_3, SCMFSA6A, SF_MASTR,
-      SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, AMISTD_2, NAT_D,
-      RELSET_1, VALUED_1;
+      STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, AMISTD_2, SCMFSA_2, FUNCOP_1,
+      SCMFSA6B, SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SFMASTR1, SCMFSA8C,
+      SCMFSA7B, NAT_D, SCMFSA_3, SCMFSA6C, XXREAL_0;
+ constructors SFMASTR1, DOMAIN_1, XXREAL_0, REAL_1, SCM_1, SCMFSA_3, SCMFSA6A,
+      SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, AMISTD_2,
+      NAT_D, RELSET_1, VALUED_1, SCMFSA7B, AMI_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
       SCMFSA8A, SCMFSA8C, SCMFSA_9, ORDINAL1, AMI_1, RELAT_1, SCMFSA10,
-      AMISTD_2, COMPOS_1;
+      AMISTD_2, COMPOS_1, SFMASTR1, EXTPRO_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -50,10 +50,9 @@ dom I;
   attr I is keepInt0_1 means
 :: SCM_HALT:def 3
 
-  for s being State of SCM+FSA st
-Initialized I c= s for k being Element of NAT holds (Comput(ProgramPart(s),s,k)
-).intloc 0
-  = 1;
+  for s being State of SCM+FSA st Initialized I c= s
+   for k being Element of NAT
+    holds (Comput(ProgramPart(s),s,k)).intloc 0 = 1;
 end;
 
 theorem :: SCM_HALT:1
@@ -135,10 +134,8 @@ theorem :: SCM_HALT:14
 s1 & Initialized I c= s2 & s1,s2 equal_outside NAT holds for k being Element of
   NAT holds Comput(ProgramPart(s1),s1,k), Comput(ProgramPart(s2),s2,k)
 equal_outside NAT &
-  CurInstr(ProgramPart Comput(ProgramPart(s1),s1,k),Comput(ProgramPart(s1),s1,k
-))
-   = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,k),Comput(ProgramPart(s2),
-s2,k));
+  CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,k))
+   = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,k));
 
 theorem :: SCM_HALT:15
   for I being InitHalting Program of SCM+FSA st Initialized I c=
@@ -206,12 +203,8 @@ s,LifeSpan(ProgramPart(s +*I),s +*I) + 1
 theorem :: SCM_HALT:23
   for I being InitHalting Program of SCM+FSA st Initialized I c= s
 holds for k being Element of NAT st k <= LifeSpan(ProgramPart(s),s)
- holds CurInstr(ProgramPart Comput(ProgramPart(
-  (s +* Directed I)),
-  (s +* Directed I),k),
-  Comput(ProgramPart(
-  (s +* Directed I)),
-  (s +* Directed I),k)) <> halt SCM+FSA;
+ holds CurInstr(ProgramPart((s +* Directed I)),
+  Comput(ProgramPart((s +* Directed I)),(s +* Directed I),k)) <> halt SCM+FSA;
 
 theorem :: SCM_HALT:24
   for I being InitClosed Program of SCM+FSA
@@ -591,8 +584,8 @@ theorem :: SCM_HALT:66
   for s being State of SCM+FSA, I being InitHalting Program of SCM+FSA
 st Initialized I c= s holds for k being Element of NAT st k <= LifeSpan(
 ProgramPart(s),s) holds
-  CurInstr(ProgramPart Comput(ProgramPart( (s +* loop I)), (s +* loop I),k),
-   Comput(ProgramPart( (s +* loop I)), (s +* loop I),k)) <> halt SCM+FSA;
+  CurInstr(ProgramPart(s +* loop I),
+   Comput(ProgramPart(s +* loop I), s +* loop I,k)) <> halt SCM+FSA;
 
 theorem :: SCM_HALT:67
   I c= s +* Initialized I;
@@ -610,11 +603,9 @@ theorem :: SCM_HALT:69
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
   is_closed_onInit s & I is_halting_onInit s for m being Element of NAT st m <
 LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I) holds
- CurInstr(ProgramPart Comput(ProgramPart( (s +* Initialized I)), (s +*
-Initialized I),m),
+ CurInstr(ProgramPart( (s +* Initialized I)),
   Comput(ProgramPart( (s +* Initialized I)), (s +* Initialized I),m))
-  = CurInstr(ProgramPart Comput(ProgramPart((s +* Initialized(loop I))),(s +*
-Initialized(loop I)),m),
+  = CurInstr(ProgramPart((s +* Initialized(loop I))),
    Comput(ProgramPart((s +* Initialized(loop I))),(s +* Initialized(loop I)),m)
 );
 
@@ -625,18 +616,14 @@ theorem :: SCM_HALT:70
 theorem :: SCM_HALT:71
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
   is_closed_onInit s & I is_halting_onInit s
-   holds CurInstr(
-   ProgramPart Comput(ProgramPart( (s +*Initialized (loop I))), (s +*
-Initialized (loop I)),
-      LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I)),
+   holds CurInstr(ProgramPart(s +*Initialized (loop I)),
    Comput(ProgramPart( (s +*Initialized (loop I))), (s +*Initialized (loop I)),
 LifeSpan(ProgramPart(s +* Initialized I),s +* Initialized I)))
     = goto  0 & for m
   being Element of NAT st m <= LifeSpan(ProgramPart(s +* Initialized I),s +*
 Initialized I)
    holds CurInstr(
-  ProgramPart Comput(ProgramPart( (s +* Initialized (loop I))), (s +*
-Initialized (loop I)),m),
+  ProgramPart( (s +* Initialized (loop I))),
   Comput(ProgramPart( (s +* Initialized (loop I))), (s +* Initialized (loop I))
 ,m))
    <> halt SCM+FSA;
@@ -722,7 +709,7 @@ holds IExec(Times(a,I),s).b =IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s
 
 definition
   let i be Instruction of SCM+FSA;
-  attr i is good means
+  redefine attr i is good means
 :: SCM_HALT:def 6
 
   i does not destroy intloc 0;
@@ -730,38 +717,6 @@ end;
 
 registration
   cluster parahalting good Instruction of SCM+FSA;
-end;
-
-registration
-  let i be good Instruction of SCM+FSA, J be good Program of SCM+FSA;
-  cluster i ';' J -> good;
-  cluster J ';' i -> good;
-end;
-
-registration
-  let i,j be good Instruction of SCM+FSA;
-  cluster i ';' j -> good;
-end;
-
-registration
-  let a be read-write Int-Location,b be Int-Location;
-  cluster a := b -> good;
-  cluster SubFrom(a,b) -> good;
-end;
-
-registration
-  let a be read-write Int-Location,b be Int-Location,f be FinSeq-Location;
-  cluster a:=(f,b) -> good;
-end;
-
-registration
-  let a,b be Int-Location,f be FinSeq-Location;
-  cluster (f,a):=b -> good;
-end;
-
-registration
-  let a be read-write Int-Location,f be FinSeq-Location;
-  cluster a:=len f -> good;
 end;
 
 registration

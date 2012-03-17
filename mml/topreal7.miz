@@ -3,14 +3,14 @@
 ::
 :: Received February 21, 1999
 :: Copyright (c) 1999 Association of Mizar Users
- 
+
 environ
 
  vocabularies NUMBERS, SUBSET_1, FINSEQ_1, XBOOLE_0, METRIC_1, REAL_1,
       XXREAL_0, ARYTM_3, RELAT_1, TARSKI, ORDINAL4, NAT_1, ARYTM_1, FUNCT_1,
       FINSEQ_2, RVSUM_1, COMPLEX1, EUCLID, SQUARE_1, STRUCT_0, ZFMISC_1,
       PRE_TOPC, MCART_1, CARD_1, RELAT_2, PCOMPS_1, SETFAM_1, BORSUK_1,
-      RCOMP_1, T_0TOPSP, CARD_3, ORDINAL2, TOPREAL7;
+      RCOMP_1, T_0TOPSP, CARD_3, ORDINAL2, TOPREAL7, TOPS_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2,
       COMPLEX1, BINOP_1, MCART_1, NUMBERS, XXREAL_0, DOMAIN_1, REAL_1,
       SQUARE_1, NAT_1, FINSEQ_1, SEQ_1, RVSUM_1, FINSEQOP, STRUCT_0, PRE_TOPC,
@@ -1057,13 +1057,10 @@ A14:  r1 > 0 & Ball(m,r1) c= Ball(n,r) by A3,A12;
   hence thesis by A1,A4,PCOMPS_1:def 6;
 end;
 
-theorem
-  [:TopSpaceMetr Euclid i,TopSpaceMetr Euclid j:], TopSpaceMetr Euclid (
-  i+j) are_homeomorphic
+LM:  ex f be Function of [:TopSpaceMetr Euclid i,TopSpaceMetr Euclid j:],
+  TopSpaceMetr Euclid (i+j) st f is being_homeomorphism &
+  for fi,fj be FinSequence st [fi,fj] in dom f holds f.(fi,fj) = fi^fj
 proof
-  TopSpaceMetr max-Prod2(Euclid i,Euclid j), TopSpaceMetr Euclid (i+j)
-  are_homeomorphic
-  proof
     set ci = the carrier of Euclid i, cj = the carrier of Euclid j, cij = the
     carrier of Euclid (i+j);
     defpred P[Element of ci,Element of cj,set] means ex fi, fj being
@@ -1076,7 +1073,8 @@ A2: for x being Element of ci, y being Element of cj ex u being Element of
       let x be Element of ci, y be Element of cj;
       x is Element of REAL i & y is Element of REAL j;
       then reconsider fi = x, fj = y as FinSequence of REAL;
-      fi ^ fj is Tuple of i+j, REAL by FINSEQ_2:127;
+      fi ^ fj is Tuple of i+j, REAL
+      by FINSEQ_2:127;
       then reconsider u = fi ^ fj as Element of cij by FINSEQ_2:151;
       take u;
       thus thesis;
@@ -1089,15 +1087,20 @@ A4: [:ci,cj:] = the carrier of max-Prod2(Euclid i,Euclid j) by Def1;
     then reconsider
     f as Function of TopSpaceMetr max-Prod2(Euclid i,Euclid j),
     TopSpaceMetr Euclid (i+j) by A4,A1;
+H:  [:TopSpaceMetr Euclid i,TopSpaceMetr Euclid j:] =
+       TopSpaceMetr max-Prod2(Euclid i,Euclid j) by Th25;
+then reconsider f as Function of [:TopSpaceMetr Euclid i,
+      TopSpaceMetr Euclid j:],TopSpaceMetr Euclid (i+j);
     take f;
-    thus dom f = [#] TopSpaceMetr max-Prod2(Euclid i,Euclid j) by FUNCT_2:def
-    1;
+    thus dom f = [#] [:TopSpaceMetr Euclid i,TopSpaceMetr Euclid j:]
+      by FUNCT_2:def 1;
     thus
 A5: rng f = [#]TopSpaceMetr Euclid (i+j)
     proof
       thus rng f c= [#]TopSpaceMetr Euclid (i+j);
       let y be set;
-      assume y in [#]TopSpaceMetr Euclid (i+j);
+      assume
+      y in [#]TopSpaceMetr Euclid (i+j);
       then reconsider k = y as Element of REAL (i+j) by TOPMETR:16;
       len k = i + j by FINSEQ_1:def 18;
       then consider g, h being FinSequence of REAL such that
@@ -1115,16 +1118,18 @@ A9:   [g,h] in dom f by FUNCT_2:def 1;
 A10: f is one-to-one
     proof
       let x1, x2 be set;
-      assume x1 in dom f;
+      assume
+      x1 in dom f;
       then consider x1a, x1b being set such that
 A11:  x1a in ci and
 A12:  x1b in cj and
-A13:  x1 = [x1a,x1b] by A4,A1,ZFMISC_1:def 2;
-      assume x2 in dom f;
+A13:  x1 = [x1a,x1b] by A4,A1,ZFMISC_1:def 2,H;
+      assume
+      x2 in dom f;
       then consider x2a, x2b being set such that
 A14:  x2a in ci and
 A15:  x2b in cj and
-A16:  x2 = [x2a,x2b] by A4,A1,ZFMISC_1:def 2;
+A16:  x2 = [x2a,x2b] by A4,A1,ZFMISC_1:def 2,H;
       assume
 A17:  f.x1 = f.x2;
       consider fi1, fj1 being FinSequence of REAL such that
@@ -1147,7 +1152,8 @@ A26: for P being Subset of TopSpaceMetr max-Prod2(Euclid i,Euclid j) st P
     is open holds f""P is open
     proof
       let P be Subset of TopSpaceMetr max-Prod2(Euclid i,Euclid j);
-      assume P is open;
+      assume
+      P is open;
       then P in the topology of TopSpaceMetr max-Prod2(Euclid i,Euclid j) by
       PRE_TOPC:def 5;
       then
@@ -1157,7 +1163,8 @@ A28:  for x being Point of Euclid (i+j) st x in f.:P ex r being Real st r
       > 0 & Ball(x,r) c= f.:P
       proof
         let x be Point of Euclid (i+j);
-        assume x in f.:P;
+        assume
+        x in f.:P;
         then consider a being set such that
 A29:    a in the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j) and
 A30:    a in P and
@@ -1244,13 +1251,14 @@ A54:    (Pitag_dist i).(gg2,a12) < r by EUCLID:def 6;
       then f.:P in the topology of TopSpaceMetr Euclid (i+j) by TOPMETR
       :16;
       hence f""P in the topology of TopSpaceMetr Euclid (i+j) by A5,A10,
-      TOPS_2:67;
+      TOPS_2:67,H;
     end;
 A55: for P being Subset of TopSpaceMetr Euclid (i+j) st P is open holds f"
     P is open
     proof
       let P be Subset of TopSpaceMetr Euclid (i+j);
-      assume P is open;
+      assume
+      P is open;
       then P in the topology of TopSpaceMetr Euclid (i+j) by PRE_TOPC:def
       5;
       then
@@ -1332,17 +1340,39 @@ A74:    len x1f = i & len x2f = j by A72,FINSEQ_1:def 18;
         then f.b in Ball(fx,r) by METRIC_1:12;
         hence thesis by A60,A63,FUNCT_2:46;
       end;
-      f"P is Subset of max-Prod2(Euclid i,Euclid j) by TOPMETR:16;
+      f"P is Subset of max-Prod2(Euclid i,Euclid j) by H,TOPMETR:16;
       then f"P in Family_open_set max-Prod2(Euclid i,Euclid j) by A57,
       PCOMPS_1:def 5;
       hence
-      f"P in the topology of TopSpaceMetr max-Prod2(Euclid i,Euclid j) by
-      TOPMETR:16;
+      f"P in the topology of [:TopSpaceMetr Euclid i,TopSpaceMetr Euclid j:] by
+      TOPMETR:16,H;
     end;
     [#]TopSpaceMetr Euclid (i+j) <> {};
     hence f is continuous by A55,TOPS_2:55;
     [#]TopSpaceMetr max-Prod2(Euclid i, Euclid j) <> {};
-    hence thesis by A26,TOPS_2:55;
-  end;
-  hence thesis by Th25;
+    hence f" is continuous by A26,TOPS_2:55,H;
+    let fi,fj be FinSequence;
+    assume B1:[fi,fj] in dom f;
+    then reconsider Fi=fi as Element of ci by A1,H,A4,ZFMISC_1:106;
+    reconsider Fj=fj as Element of cj by B1,A1,H,A4,ZFMISC_1:106;
+    P[Fi,Fj,f.(Fi,Fj)]  by A3;
+    hence f.(fi,fj) = fi^fj;
 end;
+
+theorem
+  [:TopSpaceMetr Euclid i,TopSpaceMetr Euclid j:],
+    TopSpaceMetr Euclid (i+j) are_homeomorphic
+proof
+ consider f be Function of [:TopSpaceMetr Euclid i,TopSpaceMetr Euclid j:],
+   TopSpaceMetr Euclid (i+j) such that
+A1:f is being_homeomorphism and
+  for fi,fj be FinSequence st [fi,fj] in dom f holds f.(fi,fj) = fi^fj by LM;
+ take f;
+ thus thesis by A1;
+end;
+
+theorem
+  ex f be Function of [:TopSpaceMetr Euclid i,TopSpaceMetr Euclid j:],
+    TopSpaceMetr Euclid (i+j) st f is being_homeomorphism &
+  for fi,fj be FinSequence st [fi,fj] in dom f holds f.(fi,fj) = fi^fj by LM;
+

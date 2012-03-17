@@ -1,0 +1,482 @@
+:: The {M}ycielskian of a Graph
+::  by Piotr Rudnicki and Lorna Stewart
+:: 
+:: Received July 2, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies MYCIELSK, FINSET_1, DILWORTH, CARD_1, ARYTM_3, ARYTM_1, FUNCT_1,
+      RELAT_1, RELAT_2, YELLOW_0, TARSKI, EQREL_1, CIRCUIT2, SUBSET_1,
+      COMBGRAS, NECKLACE, NEWTON, XREAL_0, XXREAL_0, ORDINAL1, NAT_1, XBOOLE_0,
+      ORDERS_2, STRUCT_0, ZFMISC_1, FUNCT_2, NUMBERS;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, FINSET_1, CARD_1, SUBSET_1, STRUCT_0,
+      ORDINAL1, ORDERS_2, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, NAT_D, RELAT_1,
+      RELSET_1, RELAT_2, PARTFUN1, EQREL_1, FUNCT_1, FUNCT_2, NEWTON, YELLOW_0,
+      NECKLACE, DILWORTH, NUMBERS;
+ constructors STRUCT_0, NECKLACE, NECKLA_3, RELSET_1, SETFAM_1, XXREAL_0,
+      NAT_1, NAT_D, FUNCT_2, NEWTON, YELLOW_0, DILWORTH, DOMAIN_1;
+ registrations SUBSET_1, XBOOLE_0, STRUCT_0, XCMPLX_0, XXREAL_0, XREAL_0,
+      NAT_1, CARD_1, RELSET_1, PARTFUN1, ZFMISC_1, ORDINAL1, EQREL_1, NECKLA_3,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, DILWORTH, NUMBERS, NEWTON, NECKLACE,
+      YELLOW_0, YELLOW14, ORDERS_2;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
+
+
+begin :: MML Remarks
+
+  :: Note: PUA2MSS1:11 can be now proven without non empty for X
+  :: See func P | S below
+
+begin  :: Preliminaries
+       :: Facts that I could not find in MML.
+
+theorem :: MYCIELSK:1 :: TimesM:
+for x, y, z being real number st 0 <= x holds x*(y-'z) = x*y -' x*z;
+
+theorem :: MYCIELSK:2  :: Nat0:
+for x, y, z being Nat holds x in y \ z iff z <= x & x < y;
+
+theorem :: MYCIELSK:3  :: U5s:
+for A, B, C, D, E, X being set
+ st X c= A or X c= B or X c= C or X c= D or X c= E
+  holds X c= A \/ B \/ C \/ D \/ E;
+
+theorem :: MYCIELSK:4  :: U5:
+for A, B, C, D, E, x being set holds
+ x in A \/ B \/ C \/ D \/ E iff x in A or x in B or x in C or x in D or x in E;
+
+theorem :: MYCIELSK:5  :: Sym0a:
+for R being symmetric RelStr, x, y being set
+ st x in the carrier of R & y in the carrier of R &
+    [x,y] in the InternalRel of R
+  holds [y,x] in the InternalRel of R;
+
+theorem :: MYCIELSK:6  :: Sym0:
+for R being symmetric RelStr, x, y being Element of R st x <= y holds y <= x;
+
+begin  :: Partitions
+
+theorem :: MYCIELSK:7  :: Partcard:
+for X being set, P being a_partition of X holds card P c= card X;
+
+definition
+  let X be set, P be a_partition of X, S be Subset of X;
+  func P | S -> a_partition of S equals
+:: MYCIELSK:def 1
+    {x /\ S where x is Element of P: x meets S};
+end;
+
+registration
+  let X be set;
+  cluster finite a_partition of X;
+end;
+
+registration
+  let X be set, P be finite a_partition of X, S be Subset of X;
+  cluster P | S -> finite;
+end;
+
+theorem :: MYCIELSK:8  :: Tpart0:
+for X being set, P being finite a_partition of X, S being Subset of X
+ holds card (P | S) <= card P;
+
+theorem :: MYCIELSK:9  :: Tpart1:
+for X being set, P being finite a_partition of X, S being Subset of X
+ holds (for p being set st p in P holds p meets S)
+   iff card (P | S) = card P;
+
+theorem :: MYCIELSK:10  :: Tsr0:
+for R being RelStr, C being Coloring of R, S being Subset of R
+ holds C | S is Coloring of subrelstr S;
+
+begin :: Chromatic number and clique cover number
+
+      :: This section could be moved to DILWORTH or better yet to some
+      :: article with preliminaries where RelStr represents a graph.
+      :: But then some stuff from NECKLACE would have to be moved.
+      :: I decided not to move stuff around until there is much more
+      :: material and then a bigger reorganisation would be in place
+      :: 2009.08.06
+
+definition
+  let R be RelStr;  :: finitely_colorable sounds better
+  attr R is with_finite_chromatic# means
+:: MYCIELSK:def 2
+  ex C being Coloring of R st C is finite;
+end;
+
+registration
+  cluster with_finite_chromatic# RelStr;
+end;
+
+registration
+  cluster finite -> with_finite_chromatic# RelStr;
+end;
+
+registration
+  let R be with_finite_chromatic# RelStr;
+  cluster finite Coloring of R;
+end;
+
+registration
+  let R be with_finite_chromatic# RelStr, S be Subset of R;
+  cluster subrelstr S -> with_finite_chromatic#;
+end;
+
+definition
+  let R be with_finite_chromatic# RelStr;
+  func chromatic# R -> Nat means
+:: MYCIELSK:def 3
+  (ex C being finite Coloring of R st card C = it)
+   & for C being finite Coloring of R holds it <= card C;
+end;
+
+registration
+  let R be empty RelStr;
+  cluster chromatic# R -> empty;
+end;
+
+registration
+  let R be non empty with_finite_chromatic#  RelStr;
+  cluster chromatic# R -> positive;
+end;
+
+definition
+  let R be RelStr;
+  attr R is with_finite_cliquecover# means
+:: MYCIELSK:def 4
+  ex C being Clique-partition of R st C is finite;
+end;
+
+registration
+  cluster with_finite_cliquecover# RelStr;
+end;
+
+registration
+  cluster finite -> with_finite_cliquecover# RelStr;
+end;
+
+registration
+  let R be with_finite_cliquecover# RelStr;
+  cluster finite Clique-partition of R;
+end;
+
+registration
+  let R be with_finite_cliquecover# RelStr, S be Subset of R;
+  cluster subrelstr S -> with_finite_cliquecover#;
+end;
+
+definition
+  let R be with_finite_cliquecover# RelStr;
+  func cliquecover# R -> Nat means
+:: MYCIELSK:def 5
+  (ex C being finite Clique-partition of R st card C = it)
+   & for C being finite Clique-partition of R holds it <= card C;
+end;
+
+registration
+  let R be empty RelStr;
+  cluster cliquecover# R -> empty;
+end;
+
+registration
+  let R be non empty with_finite_cliquecover# RelStr;
+  cluster cliquecover# R -> positive;
+end;
+
+  :: Note: for empty RelStr clique# = 0, stability# = 0, chromatic# = 0,
+  ::       cliquecover# = 0 follows from clusters.
+
+theorem :: MYCIELSK:11  :: Maxclique:
+for R being finite RelStr holds clique# R <= card the carrier of R;
+
+theorem :: MYCIELSK:12 :: Maxstability:
+for R being finite RelStr holds stability# R <= card the carrier of R;
+
+theorem :: MYCIELSK:13  :: Maxchromatic:
+for R being finite RelStr holds chromatic# R <= card the carrier of R;
+
+theorem :: MYCIELSK:14 :: Maxclicover:
+for R being finite RelStr holds cliquecover# R <= card the carrier of R;
+
+theorem :: MYCIELSK:15  :: CliChr:
+          :: more general than DILWORTH:50 for finite RelStr
+for R being with_finite_clique# with_finite_chromatic# RelStr
+ holds clique# R <= chromatic# R;
+
+theorem :: MYCIELSK:16 :: StaCov:
+                :: more general than DILWORTH:46 for finite RelStr
+for R being with_finite_stability# with_finite_cliquecover# RelStr
+ holds stability# R <= cliquecover# R;
+
+begin :: Complement
+
+theorem :: MYCIELSK:17  :: DCompl:
+for R being RelStr, x, y being Element of R,
+    a, b being Element of ComplRelStr R
+ st x = a & y = b & x <= y holds not a <= b;
+
+theorem :: MYCIELSK:18  :: DCompl1:
+for R being RelStr, x, y being Element of R,
+    a, b being Element of ComplRelStr R
+ st x = a & y = b & x <> y & x in the carrier of R & not a <= b holds x <= y;
+
+registration
+  let R be finite RelStr;
+  cluster ComplRelStr R -> finite;
+end;
+
+theorem :: MYCIELSK:19  :: CliStaCompl:
+for R being symmetric RelStr, C being Clique of R
+  holds C is StableSet of ComplRelStr R;
+
+theorem :: MYCIELSK:20  :: CliComplSta:
+for R being symmetric RelStr, C being Clique of ComplRelStr R
+  holds C is StableSet of R;
+
+theorem :: MYCIELSK:21  :: StaCliCompl:
+for R being RelStr, C being StableSet of R holds C is Clique of ComplRelStr R;
+
+theorem :: MYCIELSK:22  :: StaComplCli:
+for R being RelStr, C being StableSet of ComplRelStr R holds C is Clique of R;
+
+registration
+  let R be with_finite_clique# RelStr;
+  cluster ComplRelStr R -> with_finite_stability#;
+end;
+
+registration
+  let R be with_finite_stability# symmetric RelStr;
+  cluster ComplRelStr R -> with_finite_clique#;
+end;
+
+theorem :: MYCIELSK:23  :: cliRstaCR:
+for R being with_finite_clique# symmetric RelStr
+  holds clique# R = stability# ComplRelStr R;
+
+theorem :: MYCIELSK:24 :: staRcliCR:
+for R being with_finite_stability# symmetric RelStr
+  holds stability# R = clique# ComplRelStr R;
+
+theorem :: MYCIELSK:25  :: ChrClicoCompl:
+for R being RelStr, C being Coloring of R
+  holds C is Clique-partition of ComplRelStr R;
+
+theorem :: MYCIELSK:26  :: ClicoComplChr:
+for R being symmetric RelStr, C being Clique-partition of ComplRelStr R
+  holds C is Coloring of R;
+
+theorem :: MYCIELSK:27  :: ClicoChrCompl:
+for R being symmetric RelStr, C being Clique-partition of R
+  holds C is Coloring of ComplRelStr R;
+
+theorem :: MYCIELSK:28  :: ChrComplClico:
+for R being RelStr, C being Coloring of ComplRelStr R
+  holds C is Clique-partition of R;
+
+registration
+  let R be with_finite_chromatic# RelStr;
+  cluster ComplRelStr R -> with_finite_cliquecover#;
+end;
+
+registration
+  let R be with_finite_cliquecover# symmetric RelStr;
+  cluster ComplRelStr R -> with_finite_chromatic#;
+end;
+
+theorem :: MYCIELSK:29  :: chrRcovCR:
+for R being with_finite_chromatic# symmetric RelStr
+  holds chromatic# R = cliquecover# ComplRelStr R;
+
+theorem :: MYCIELSK:30 :: covRchrCR:
+for R being with_finite_cliquecover# symmetric RelStr
+  holds cliquecover# R = chromatic# ComplRelStr R;
+
+begin :: Adjacent set
+
+definition
+ let R be RelStr, v be Element of R;
+ func Adjacent v -> Subset of R  means
+:: MYCIELSK:def 6
+  for x being Element of R holds x in it iff x < v or v < x;
+end;
+
+theorem :: MYCIELSK:31   ::  AdjCol:
+for R being with_finite_chromatic# RelStr,
+    C being finite Coloring of R, c being set
+ st c in C & card C = chromatic# R
+  ex v being Element of R st v in c &
+   for d being Element of C st d <> c
+    ex w being Element of R st w in Adjacent(v) & w in d;
+
+begin  :: Natural numbers as vertices
+
+definition
+  let n be Nat;
+  mode NatRelStr of n -> strict RelStr means
+:: MYCIELSK:def 7
+   the carrier of it = n;
+end;
+
+registration
+  cluster -> empty NatRelStr of 0;
+end;
+
+registration
+  let n be non empty Nat;
+  cluster -> non empty NatRelStr of n;
+end;
+
+registration
+  let n be Nat;
+  cluster -> finite NatRelStr of n;
+  cluster irreflexive NatRelStr of n;
+end;
+
+definition
+  let n be Nat;
+  func CompleteRelStr n -> NatRelStr of n means
+:: MYCIELSK:def 8
+    the InternalRel of it = [: n, n :] \ id n;
+end;
+
+theorem :: MYCIELSK:32  :: CRS:
+for n being Nat, x,y being set
+ st x in n & y in n
+  holds [x,y] in the InternalRel of CompleteRelStr n iff x <> y;
+
+registration
+  let n be Nat;
+  cluster CompleteRelStr n -> irreflexive symmetric;
+end;
+
+registration
+  let n be Nat;
+  cluster [#]CompleteRelStr n -> clique;
+end;
+
+theorem :: MYCIELSK:33  :: CompleteCli:
+for n being Nat holds clique# CompleteRelStr n = n;
+
+theorem :: MYCIELSK:34 :: CompleteSta:
+for n being non empty Nat holds stability# CompleteRelStr n = 1;
+
+theorem :: MYCIELSK:35  :: CompleteChr:
+for n being Nat holds chromatic# CompleteRelStr n = n;
+
+theorem :: MYCIELSK:36 :: CompleteClico
+for n being non empty Nat holds cliquecover# CompleteRelStr n = 1;
+
+begin :: Mycielskian of a graph
+
+definition
+  let n be Nat, R be NatRelStr of n;
+                                              :: Note: no assumptions about R
+  func Mycielskian R -> NatRelStr of 2*n+1 means
+:: MYCIELSK:def 9
+  the InternalRel of it =
+      (the InternalRel of R)
+   \/ { [x,y+n] where x, y is Element of NAT : [x,y] in the InternalRel of R }
+   \/ { [x+n,y] where x, y is Element of NAT : [x,y] in the InternalRel of R }
+   \/ [: {2*n}, 2*n \ n :]
+   \/ [: 2*n \ n, {2*n} :];
+end;
+
+theorem :: MYCIELSK:37  :: cMR0:
+for n being Nat, R being NatRelStr of n
+ holds the carrier of R c= the carrier of Mycielskian R;
+
+theorem :: MYCIELSK:38  :: iMR0:
+for n being Nat, R being NatRelStr of n, x, y being Nat
+ st [x,y] in the InternalRel of Mycielskian R
+  holds x < n & y < n or x < n & n <= y & y < 2*n or n <= x & x < 2*n & y < n
+     or x = 2*n & n <= y & y < 2*n or n <= x & x < 2*n & y = 2*n;
+
+theorem :: MYCIELSK:39  :: iMR1ba:
+for n being Nat, R being NatRelStr of n
+ holds the InternalRel of R c= the InternalRel of Mycielskian R;
+
+theorem :: MYCIELSK:40  :: iMR1b:
+for n being Nat, R being NatRelStr of n, x, y being set
+ st x in n & y in n & [x,y] in the InternalRel of Mycielskian R
+  holds [x,y] in the InternalRel of R;
+
+theorem :: MYCIELSK:41  :: iMR1a:
+for n being Nat, R being NatRelStr of n, x, y being Nat
+ st [x,y] in the InternalRel of R holds
+         [x,y+n] in the InternalRel of Mycielskian R
+       & [x+n,y] in the InternalRel of Mycielskian R;
+
+theorem :: MYCIELSK:42  :: iMR1c:
+for n being Nat, R being NatRelStr of n, x, y being Nat
+ st x in n & [x,y+n] in the InternalRel of Mycielskian R
+  holds [x,y] in the InternalRel of R;
+
+theorem :: MYCIELSK:43  :: iMR1d:
+for n being Nat, R being NatRelStr of n, x, y being Nat
+ st y in n & [x+n,y] in the InternalRel of Mycielskian R
+  holds [x,y] in the InternalRel of R;
+
+theorem :: MYCIELSK:44  :: iMR1e:
+for n being Nat, R being NatRelStr of n, m being Nat
+ st n <= m & m < 2*n
+  holds [m,2*n] in the InternalRel of Mycielskian R
+      & [2*n,m] in the InternalRel of Mycielskian R;
+
+theorem :: MYCIELSK:45  :: Msubrel:
+for n being Nat, R being NatRelStr of n, S being Subset of Mycielskian R
+ st S = n holds R = subrelstr S;
+
+theorem :: MYCIELSK:46  :: MClique:
+for n being Nat, R being irreflexive NatRelStr of n
+ st 2 <= clique# R holds clique# R = clique# Mycielskian R;
+
+theorem :: MYCIELSK:47  :: Tchro0:
+for R being with_finite_chromatic# RelStr, S being Subset of R
+ holds chromatic# R >= chromatic# subrelstr S;
+
+theorem :: MYCIELSK:48
+    :: :: Mchromatic:    :: even when n = 0 or n = 1 and then
+                       :: Mycielskian n = 2 is compl(P_3) (Thanks Lorna)
+                       :: and if we continue we have disconnected graphs.
+for n being Nat, R being irreflexive NatRelStr of n
+ holds chromatic# Mycielskian R = 1 + chromatic# R;
+
+definition
+  let n be Nat;
+  func Mycielskian n -> NatRelStr of 3*2|^n-'1 means
+:: MYCIELSK:def 10
+  ex myc being Function
+   st it = myc.n & dom myc = NAT & myc.0 = CompleteRelStr 2 &
+                    :: can start with empty RelStr, numbers will change
+                    :: and the M_2 ... will not be connected
+      for k being Nat, R being NatRelStr of 3*2|^k-'1
+       st R = myc.k holds myc.(k+1) = Mycielskian R;
+end;
+
+theorem :: MYCIELSK:49  :: Mycn1:
+ Mycielskian 0 = CompleteRelStr 2 &
+ for k being Nat holds Mycielskian (k+1) = Mycielskian Mycielskian k;
+
+registration
+  let n be Nat;
+  cluster Mycielskian n -> irreflexive;
+end;
+
+registration
+  let n be Nat;
+  cluster Mycielskian n -> symmetric;
+end;
+
+theorem :: MYCIELSK:50  :: Mycth:
+for n being Nat
+ holds clique# Mycielskian n = 2 & chromatic# Mycielskian n = n+2;
+
+theorem :: MYCIELSK:51
+for n being Nat
+ ex R being finite RelStr st clique# R = 2 & chromatic# R > n;
+
+theorem :: MYCIELSK:52
+for n being Nat
+ ex R being finite RelStr st stability# R = 2 & cliquecover# R > n;

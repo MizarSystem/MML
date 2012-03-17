@@ -1,0 +1,303 @@
+:: Difference and Difference Quotient -- Part {IV}
+::  by Xiquan Liang , Ling Tang and Xichun Jiang
+:: 
+:: Received July 12, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies DIFF_1, ARYTM_3, ARYTM_1, FUNCT_1, SUBSET_1, NUMBERS, RELAT_1,
+      ZFMISC_1, REAL_1, XXREAL_0, SQUARE_1, SIN_COS, VALUED_1, CARD_1, XREAL_0,
+      POWER, ORDINAL1, SIN_COS4, XBOOLE_0, TAYLOR_1, LIMFUNC1, NEWTON;
+ notations ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, NAT_1, SERIES_1, XXREAL_0,
+      TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, PARTFUN1,
+      RELAT_1, VALUED_0, VALUED_1, SEQ_1, FUNCOP_1, NAT_D, NEWTON, FUNCT_2,
+      RELSET_1, SEQFUNC, SQUARE_1, SIN_COS, SIN_COS4, DIFF_1, DIFF_2, FDIFF_9,
+      RFUNCT_1, COMPLEX1, MEMBERED, MEMBER_1, FUNCT_3, TAYLOR_1, POWER,
+      PARTFUN2, LIMFUNC1;
+ constructors PARTFUN1, REAL_1, NAT_1, SEQFUNC, NEWTON, SERIES_1, MEASURE6,
+      NAT_D, PARTFUN3, DIFF_1, SEQ_1, FUNCOP_1, RELSET_1, DIFF_2, VALUED_2,
+      SQUARE_1, SIN_COS, SIN_COS4, JORDAN16, FDIFF_9, XCMPLX_0, FUNCT_1,
+      FUNCT_3, XXREAL_0, COMPLEX1, VALUED_1, RFUNCT_1, XREAL_0, PARTFUN2,
+      SEQ_2, SIN_COS5, TAYLOR_1, POWER, RCOMP_1, LIMFUNC1, FDIFF_1, PREPOWER;
+ registrations XBOOLE_0, RELAT_1, ORDINAL1, PARTFUN1, NUMBERS, XREAL_0,
+      MEMBERED, VALUED_0, VALUED_1, DIFF_1, FUNCT_2, VALUED_2, RELSET_1,
+      SQUARE_1, SIN_COS, XCMPLX_0, RFUNCT_1, FUNCT_1, TAYLOR_1, NEWTON, SEQ_2,
+      XXREAL_0, POWER, INT_1, RCOMP_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve n,m,i,p for Element of NAT,
+         h,k,r,r1,r2,x,x0,x1,x2,x3 for Real;
+ reserve f,f1,f2,g for Function of REAL,REAL;
+
+theorem :: DIFF_4:1
+  x0>0 & x1>0 implies
+  log(number_e,x0) - log(number_e,x1) = log(number_e,x0/x1);
+
+theorem :: DIFF_4:2
+  x0>0 & x1>0 implies
+  log(number_e,x0) + log(number_e,x1) = log(number_e,x0*x1);
+
+theorem :: DIFF_4:3
+  x>0 implies log(number_e,x) = ln.x;
+
+theorem :: DIFF_4:4
+  x0>0 & x1>0 implies ln.x0 - ln.x1 = ln.(x0/x1);
+
+:: f.x=k/(x^2)
+
+theorem :: DIFF_4:5
+  (for x holds f.x = k/(x^2)) & x0<>0 & x1<>0 & x2<>0 & x3<>0
+  & x0,x1,x2,x3 are_mutually_different implies
+  [!f,x0,x1,x2,x3!] = k*((1/(x1*x2*x0))*(1/x0+1/x2+1/x1)
+  -(1/(x2*x1*x3))*(1/x3+1/x1+1/x2))/(x0-x3);
+
+::  f.x=(cot(x))^2
+
+theorem :: DIFF_4:6
+  x0 in dom cot & x1 in dom cot
+  implies [!cot(#)cot,x0,x1!] = -((cos(x1))^2-(cos(x0))^2)
+  /(((sin(x0)*sin(x1))^2)*(x0-x1));
+
+theorem :: DIFF_4:7
+  x in dom cot & x+h in dom cot implies
+  fD(cot(#)cot,h).x = (1/2)*(cos(2*(x+h))-cos(2*x))/((sin(x+h)*sin(x))^2);
+
+theorem :: DIFF_4:8
+  x in dom cot & x-h in dom cot implies
+  bD(cot(#)cot,h).x = (1/2)*(cos(2*x)-cos(2*(h-x)))/((sin(x)*sin(x-h))^2);
+
+theorem :: DIFF_4:9
+  x+h/2 in dom cot & x-h/2 in dom cot implies
+  cD(cot(#)cot,h).x = (1/2)*(cos(h+2*x)-cos(h-2*x))/((sin(x+h/2)*sin(x-h/2))^2)
+;
+
+:: f.x=(cosec(x))^2
+
+theorem :: DIFF_4:10
+  x0 in dom cosec & x1 in dom cosec implies
+  [!cosec(#)cosec,x0,x1!] = 4*(sin(x1+x0)*sin(x1-x0))
+  /((cos(x0+x1)-cos(x0-x1))^2*(x0-x1));
+
+theorem :: DIFF_4:11
+  x in dom cosec & x+h in dom cosec implies
+  fD(cosec(#)cosec,h).x = -4*sin(2*x+h)*sin(h)/(cos(2*x+h)-cos(h))^2;
+
+theorem :: DIFF_4:12
+  x in dom cosec & x-h in dom cosec implies
+  bD(cosec(#)cosec,h).x = -4*sin(2*x-h)*sin(h)/(cos(2*x-h)-cos(h))^2;
+
+theorem :: DIFF_4:13
+  x+h/2 in dom cosec & x-h/2 in dom cosec implies
+  cD(cosec(#)cosec,h).x = -4*sin(2*x)*sin(h)/(cos(2*x)-cos(h))^2;
+
+:: f.x=(sec(x))^2
+
+theorem :: DIFF_4:14
+  x0 in dom sec & x1 in dom sec implies
+  [!sec(#)sec,x0,x1!] = 4*(sin(x0+x1)*sin(x0-x1))
+  /((cos(x0+x1)+cos(x0-x1))^2*(x0-x1));
+
+theorem :: DIFF_4:15
+  x in dom sec & x+h in dom sec implies
+  fD(sec(#)sec,h).x = 4*sin(2*x+h)*sin(h)/(cos(2*x+h)+cos(h))^2;
+
+theorem :: DIFF_4:16
+  x in dom sec & x-h in dom sec implies
+  bD(sec(#)sec,h).x = 4*sin(2*x-h)*sin(h)/(cos(2*x-h)+cos(h))^2;
+
+theorem :: DIFF_4:17
+  x+h/2 in dom sec & x-h/2 in dom sec implies
+  cD(sec(#)sec,h).x = 4*sin(2*x)*sin(h)/(cos(2*x)+cos(h))^2;
+
+::  f.x=cosec(x)*sec(x)
+
+theorem :: DIFF_4:18
+  x0 in (dom cosec)/\(dom sec) & x1 in (dom cosec)/\(dom sec) implies
+  [!cosec(#)sec,x0,x1!] = 4*(cos(x1+x0)*sin(x1-x0))/(sin(2*x0)*sin(2*x1))
+  /(x0-x1);
+
+theorem :: DIFF_4:19
+  x+h in (dom cosec)/\(dom sec) & x in (dom cosec)/\(dom sec) implies
+  fD(cosec(#)sec,h).x = -4*((cos(2*x+h)*sin(h))/(sin(2*(x+h))*sin(2*x)));
+
+theorem :: DIFF_4:20
+  x-h in (dom cosec)/\(dom sec) & x in (dom cosec)/\(dom sec) implies
+  bD(cosec(#)sec,h).x = -4*((cos(2*x-h)*sin(h))/(sin(2*x)*sin(2*(x-h))));
+
+theorem :: DIFF_4:21
+  x+h/2 in (dom cosec)/\(dom sec) & x-h/2 in (dom cosec)/\(dom sec) implies
+  cD(cosec(#)sec,h).x = -4*((cos(2*x)*sin(h))/(sin(2*x+h)*sin(2*x-h)));
+
+:: f.x=(tan(x))^2*cos(x)
+
+theorem :: DIFF_4:22
+  x0 in dom tan & x1 in dom tan implies
+  [!tan(#)tan(#)cos,x0,x1!] = [!tan(#)sin,x0,x1!];
+
+theorem :: DIFF_4:23
+  x in dom tan & x+h in dom tan implies
+  fD(tan(#)tan(#)cos,h).x = (tan(#)sin).(x+h)-(tan(#)sin).x;
+
+theorem :: DIFF_4:24
+  x in dom tan & x-h in dom tan implies
+  bD(tan(#)tan(#)cos,h).x = (tan(#)sin).x-(tan(#)sin).(x-h);
+
+theorem :: DIFF_4:25
+  x+h/2 in dom tan & x-h/2 in dom tan implies
+  cD(tan(#)tan(#)cos,h).x = (tan(#)sin).(x+h/2)-(tan(#)sin).(x-h/2);
+
+::  f.x=(cot(x))^2*sin(x)
+
+theorem :: DIFF_4:26
+  x0 in dom cot & x1 in dom cot implies
+  [!cot(#)cot(#)sin,x0,x1!] = [!cot(#)cos,x0,x1!];
+
+theorem :: DIFF_4:27
+  x in dom cot & x+h in dom cot implies
+  fD(cot(#)cot(#)sin,h).x = (cot(#)cos).(x+h)-(cot(#)cos).x;
+
+theorem :: DIFF_4:28
+  x in dom cot & x-h in dom cot implies
+  bD(cot(#)cot(#)sin,h).x = (cot(#)cos).x-(cot(#)cos).(x-h);
+
+theorem :: DIFF_4:29
+  x+h/2 in dom cot & x-h/2 in dom cot implies
+  cD(cot(#)cot(#)sin,h).x = (cot(#)cos).(x+h/2)-(cot(#)cos).(x-h/2);
+
+::f.x = ln.x
+
+theorem :: DIFF_4:30
+  x0>0 & x1>0 implies [!ln,x0,x1!] = (ln.(x0/x1))/(x0-x1);
+
+theorem :: DIFF_4:31
+  x>0 & x+h>0 implies fD(ln,h).x = ln.(1+h/x);
+
+theorem :: DIFF_4:32
+  x>0 & x-h>0 implies bD(ln,h).x = ln.(1+h/(x-h));
+
+theorem :: DIFF_4:33
+  x+h/2>0 & x-h/2>0 implies cD(ln,h).x = ln.(1+h/(x-h/2));
+
+theorem :: DIFF_4:34
+  for h,k being real number holds
+  exp_R(h-k) = exp_R(h) / exp_R(k);
+
+:: f.x = fD(g,h).x
+
+theorem :: DIFF_4:35
+  fD(f,h).x = Shift(f,h).x - f.x;
+
+theorem :: DIFF_4:36
+  (for x holds f.x = fD(g,h).x) implies
+  [!f,x0,x1!] = [!g,x0+h,x1+h!]-[!g,x0,x1!];
+
+theorem :: DIFF_4:37
+  fD(fD(f,h),h).x = fD(f,2*h).x-2*fD(f,h).x;
+
+theorem :: DIFF_4:38
+  bD(fD(f,h),h).x = fD(f,h).x-bD(f,h).x;
+
+theorem :: DIFF_4:39
+  cD(fD(f,h),h).x = fD(f,h).(x+h/2)-cD(f,h).x;
+
+theorem :: DIFF_4:40
+  fdif(f,h).1.x = fdif(f,h).0.(x+h)-fdif(f,h).0.x;
+
+theorem :: DIFF_4:41
+  fdif(f,h).(n+1).x = fdif(f,h).n.(x+h)-fdif(f,h).n.x;
+
+:: f.x = bD(g,h).x
+
+theorem :: DIFF_4:42
+  bD(f,h).x = f.x - Shift(f,-h).x;
+
+theorem :: DIFF_4:43
+  (for x holds f.x = bD(g,h).x) implies
+  [!f,x0,x1!] = [!g,x0,x1!]-[!g,x0-h,x1-h!];
+
+theorem :: DIFF_4:44
+  fD(bD(f,h),h).x = fD(f,h).x-bD(f,h).x;
+
+theorem :: DIFF_4:45
+  bD(bD(f,h),h).x = 2*bD(f,h).x-bD(f,2*h).x;
+
+theorem :: DIFF_4:46
+  cD(bD(f,h),h).x = cD(f,h).x-bD(f,h).(x-h/2);
+
+theorem :: DIFF_4:47
+  bdif(f,h).1.x = bdif(f,h).0.x-bdif(f,h).0.(x-h);
+
+theorem :: DIFF_4:48
+  bdif(f,h).(n+1).x = bdif(f,h).n.x-bdif(f,h).n.(x-h);
+
+:: f.x = cD(g,h).x
+
+theorem :: DIFF_4:49
+  cD(f,h).x = Shift(f,h/2).x - Shift(f,-h/2).x;
+
+theorem :: DIFF_4:50
+  (for x holds f.x = cD(g,h).x) implies
+  [!f,x0,x1!] = [!g,x0+h/2,x1+h/2!]-[!g,x0-h/2,x1-h/2!];
+
+theorem :: DIFF_4:51
+  fD(cD(f,h),h).x = fD(f,h).(x+h/2)-cD(f,h).x;
+
+theorem :: DIFF_4:52
+  bD(cD(f,h),h).x = cD(f,h).x-bD(f,h).(x-h/2);
+
+theorem :: DIFF_4:53
+  cD(cD(f,h),h).x = fD(f,h).x-bD(f,h).x;
+
+theorem :: DIFF_4:54
+  cdif(f,h).1.x = cdif(f,h).0.(x+h/2)-cdif(f,h).0.(x-h/2);
+
+theorem :: DIFF_4:55
+  cdif(f,h).(n+1).x = cdif(f,h).n.(x+h/2)-cdif(f,h).n.(x-h/2);
+
+:: f.x=(tan(x))^2*sin(x)
+
+theorem :: DIFF_4:56
+  x0 in dom tan & x1 in dom tan implies
+  [!tan(#)tan(#)sin,x0,x1!] = ((sin(x0))|^3*(cos(x1))^2
+  -(sin(x1))|^3*(cos(x0))^2)/((cos(x0))^2*(cos(x1))^2*(x0-x1));
+
+theorem :: DIFF_4:57
+  x in dom tan & x+h in dom tan implies
+  fD(tan(#)tan(#)sin,h).x = sin.(x+h)|^3*(cos.(x+h))"|^2 - sin.x|^3*(cos.x)"|^2
+;
+
+theorem :: DIFF_4:58
+  x in dom tan & x-h in dom tan implies
+  bD(tan(#)tan(#)sin,h).x = sin.x|^3*(cos.x)"|^2 - sin.(x-h)|^3*(cos.(x-h))"|^2
+;
+
+theorem :: DIFF_4:59
+  x+h/2 in dom tan & x-h/2 in dom tan implies
+  cD(tan(#)tan(#)sin,h).x = sin.(x+h/2)|^3*(cos.(x+h/2))"|^2
+  -sin.(x-h/2)|^3*(cos.(x-h/2))"|^2;
+
+::  f.x=(cot(x))^2*cos(x)
+
+theorem :: DIFF_4:60
+  x0 in dom cot & x1 in dom cot implies
+  [!cot(#)cot(#)cos,x0,x1!] = ((cos(x0))|^3*(sin(x1))^2-(cos(x1))|^3
+  *(sin(x0))^2)/((sin(x0))^2*(sin(x1))^2*(x0-x1));
+
+theorem :: DIFF_4:61
+  x in dom cot & x+h in dom cot implies
+  fD(cot(#)cot(#)cos,h).x = cos.(x+h)|^3*(sin.(x+h))"|^2 - cos.x|^3*(sin.x)"|^2
+;
+
+theorem :: DIFF_4:62
+  x in dom cot & x-h in dom cot implies
+  bD(cot(#)cot(#)cos,h).x = cos.x|^3*(sin.x)"|^2 - cos.(x-h)|^3*(sin.(x-h))"|^2
+;
+
+theorem :: DIFF_4:63
+  x+h/2 in dom cot & x-h/2 in dom cot implies
+  cD(cot(#)cot(#)cos,h).x = cos.(x+h/2)|^3*(sin.(x+h/2))"|^2
+  - cos.(x-h/2)|^3*(sin.(x-h/2))"|^2;

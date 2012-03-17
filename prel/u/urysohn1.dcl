@@ -22,9 +22,10 @@
 </Signature>
 <FCluster aid="URYSOHN1" nr="1">
 <ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="67"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="20"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="122">

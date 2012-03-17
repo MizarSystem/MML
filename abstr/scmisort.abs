@@ -16,45 +16,35 @@ environ
       RELOC;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       FUNCOP_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCT_7,
-      FINSEQ_1, CARD_3, VALUED_1, PBOOLE, STRUCT_0, COMPOS_1, AMI_1, AMISTD_2,
-      SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A,
-      SCMFSA_9, SCMFSA8B, INT_1, SCMBSORT, FINSUB_1, SCMFSA8C, CLASSES1,
-      RFINSEQ, SCM_HALT, INT_2, NAT_1, XXREAL_0;
+      FINSEQ_1, CARD_3, VALUED_1, PBOOLE, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1,
+      AMISTD_2, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
+      SCMFSA8A, SCMFSA_9, SCMFSA8B, INT_1, SCMBSORT, FINSUB_1, SCMFSA8C,
+      CLASSES1, RFINSEQ, SCM_HALT, INT_2, NAT_1, XXREAL_0;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, REAL_1, SEQ_1, INT_2, AMI_5,
       SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA_9,
       SFMASTR1, SCM_HALT, SCMBSORT, CLASSES1, AMISTD_2, RELSET_1, PRE_POLY,
-      PBOOLE;
+      PBOOLE, SCMFSA7B, AMI_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FINSUB_1,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, STRUCT_0, SCMFSA_2,
-      SF_MASTR, SCMFSA6C, SCMFSA8A, SCMFSA_9, SCM_HALT, VALUED_0, ORDINAL1,
-      FINSET_1, VALUED_1, FUNCT_2, FUNCT_4, RELAT_1, AMI_1, AMISTD_2, SCMFSA10,
-      SCMFSA6A, COMPOS_1;
+      SF_MASTR, SCMFSA8C, SCMFSA6C, SCMFSA8A, SCMFSA_9, SCM_HALT, VALUED_0,
+      ORDINAL1, FINSET_1, VALUED_1, FUNCT_2, FUNCT_4, RELAT_1, AMI_1, AMISTD_2,
+      SCMFSA10, SCMFSA6A, COMPOS_1, SFMASTR1, EXTPRO_1;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
 
 
 begin :: Preliminaries
 
-registration
-  let i be good Instruction of SCM+FSA;
-  cluster Macro i -> good;
-end;
-
-registration
-  let a be read-write Int-Location,b be Int-Location;
-  cluster AddTo(a,b) -> good;
-end;
-
 canceled;
 
 theorem :: SCMISORT:2
   for p be preProgram of SCM+FSA,l be Element of NAT,
-  ic be Instruction of SCM+FSA st l in dom p & (ex pc be Instruction of SCM+FSA
-st pc=p.l & UsedIntLoc pc=UsedIntLoc ic) holds UsedIntLoc p = UsedIntLoc (p+*(l
-  .-->ic));
+  ic be Instruction of SCM+FSA st l in dom p &
+  (ex pc be Instruction of SCM+FSA st pc=p.l & UsedIntLoc pc=UsedIntLoc ic)
+   holds UsedIntLoc p = UsedIntLoc (p+*(l.-->ic));
 
 theorem :: SCMISORT:3
-  for a being Int-Location,I being Program of SCM+FSA holds if>0(a, I
-  ';' Goto  0,Stop SCM+FSA).(card I +4) = goto  (card I +4);
+  for a being Int-Location,I being Program of SCM+FSA
+   holds if>0(a, I';' Goto  0,Stop SCM+FSA).(card I +4) = goto  (card I +4);
 
 theorem :: SCMISORT:4
   for p be preProgram of SCM+FSA,l be Element of NAT,
@@ -314,17 +304,30 @@ definition
   let f be FinSeq-Location;
   func insert-sort f -> Program of SCM+FSA equals
 :: SCMISORT:def 2
-  (((intloc 2):= intloc 0) ';'
-((intloc 3):= intloc 0) ';' ((intloc 4):= intloc 0) ';' ((intloc 5):= intloc 0)
-  ';' ((intloc 6):= intloc 0)) ';' ((intloc 1):=len f) ';' SubFrom(intloc 1,
-intloc 0) ';' Times(intloc 1, (((intloc 2):=len f) ';' SubFrom(intloc 2,intloc
-1) ';' ((intloc 3) := intloc 2) ';' AddTo(intloc 3,intloc 0) ';' ((intloc 6):=(
-f,intloc 3)) ';' SubFrom(intloc 4,intloc 4)) ';' while>0(intloc 2, ((intloc 5)
-:=(f,intloc 2)) ';' SubFrom(intloc 5,intloc 6) ';' if>0(intloc 5,Macro SubFrom(
-intloc 2,intloc 2), AddTo(intloc 4,intloc 0) ';' SubFrom(intloc 2,intloc 0)) )
-';' Times(intloc 4, ((intloc 2):=intloc 3) ';' SubFrom(intloc 3,intloc 0) ';' (
-  (intloc 5):=(f,intloc 2)) ';' ((intloc 6):=(f,intloc 3)) ';' ((f,intloc 2):=
-  intloc 6) ';'((f,intloc 3):=intloc 5) ) );
+   (((intloc 2):= intloc 0) ';'
+    ((intloc 3):= intloc 0) ';'
+    ((intloc 4):= intloc 0) ';'
+    ((intloc 5):= intloc 0) ';'
+    ((intloc 6):= intloc 0)) ';'
+    ((intloc 1):=len f) ';'
+    SubFrom(intloc 1,intloc 0) ';'
+    Times(intloc 1, (((intloc 2):=len f) ';'
+    SubFrom(intloc 2,intloc 1) ';'
+    ((intloc 3) := intloc 2) ';'
+    AddTo(intloc 3,intloc 0) ';'
+    ((intloc 6):=(f,intloc 3)) ';'
+    SubFrom(intloc 4,intloc 4)) ';'
+    while>0(intloc 2, ((intloc 5):=(f,intloc 2)) ';'
+    SubFrom(intloc 5,intloc 6) ';'
+    if>0(intloc 5,
+       Macro SubFrom(intloc 2,intloc 2), AddTo(intloc 4,intloc 0) ';'
+    SubFrom(intloc 2,intloc 0)) ) ';'
+    Times(intloc 4, ((intloc 2):=intloc 3) ';'
+    SubFrom(intloc 3,intloc 0) ';'
+    ((intloc 5):=(f,intloc 2)) ';'
+    ((intloc 6):=(f,intloc 3)) ';'
+    ((f,intloc 2):= intloc 6) ';'
+    ((f,intloc 3):=intloc 5) ) );
 end;
 
 definition
@@ -350,7 +353,7 @@ theorem :: SCMISORT:41
   ';' k2 ';' k3 ';' k4 ';'k5) =10;
 
 theorem :: SCMISORT:42
-  for f being FinSeq-Location holds card (insert-sort f) = 82;
+  for f being FinSeq-Location holds card insert-sort f = 82;
 
 theorem :: SCMISORT:43
   for f being FinSeq-Location, k being Element of NAT st k < 82
@@ -360,11 +363,13 @@ theorem :: SCMISORT:44
   insert-sort (fsloc 0) is keepInt0_1 InitHalting;
 
 theorem :: SCMISORT:45
-  for s be State of SCM+FSA holds s.(fsloc 0), IExec(insert-sort (
-fsloc 0),s).(fsloc 0) are_fiberwise_equipotent & for i,j be Element of NAT st i
->=1 & j<=len (s.(fsloc 0)) & i<j for x1,x2 be Integer st x1 =IExec(insert-sort
-(fsloc 0),s).(fsloc 0).i & x2=IExec(insert-sort (fsloc 0),s).(fsloc 0).j holds
-  x1 >= x2;
+  for s be State of SCM+FSA
+   holds s.(fsloc 0), IExec(insert-sort (fsloc 0),s).(fsloc 0)
+    are_fiberwise_equipotent &
+ for i,j be Element of NAT st i >=1 & j<=len (s.(fsloc 0)) & i<j
+ for x1,x2 be Integer st x1 =IExec(insert-sort (fsloc 0),s).(fsloc 0).i &
+     x2=IExec(insert-sort (fsloc 0),s).(fsloc 0).j
+  holds x1 >= x2;
 
 theorem :: SCMISORT:46
   for i being Element of NAT, s being State of SCM+FSA, w being
@@ -381,8 +386,11 @@ theorem :: SCMISORT:48
   for w being FinSequence of INT holds Initialized
   Insert-Sort-Algorithm +* ((fsloc 0) .--> w) is autonomic;
 
+registration
+ cluster Insert-Sort-Algorithm -> non halt-free;
+end;
+
 theorem :: SCMISORT:49
-  ProgramPart Initialized Insert-Sort-Algorithm,
-  Initialized Insert-Sort-Algorithm
-   computes Sorting-Function;
+  Insert-Sort-Algorithm, Initialized Insert-Sort-Algorithm
+     computes Sorting-Function;
 

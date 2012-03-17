@@ -10,37 +10,22 @@ environ
       ORDINAL4, ARYTM_3, FUNCT_1, ARYTM_1, XXREAL_0, RELAT_1, FSM_1, BINTREE1,
       DTCONSTR, STRUCT_0, XBOOLE_0, LANG1, AMI_2, ZFMISC_1, TDGROUP, TARSKI,
       CARD_1, TREES_4, TREES_3, QC_LANG1, CAT_1, INT_1, TREES_2, MCART_1,
-      GRAPHSP, FINSET_1, ORDINAL1, CONNSP_3, FUNCT_2, MSUALG_1, SCM_COMP,
-      SCMNORM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
-      NAT_1, INT_1, MCART_1, FUNCT_1, FUNCT_2, TREES_2, TREES_3, TREES_4,
-      ORDINAL1, FINSET_1, AFINSQ_1, STRUCT_0, COMPOS_1, AMI_1, AMI_2, AMI_3,
-      SCM_1, FINSEQ_1, FINSEQ_2, LANG1, BINTREE1, DTCONSTR, LIMFUNC1, PARTFUN1,
-      PRE_POLY;
+      GRAPHSP, CONNSP_3, FUNCT_2, MSUALG_1, SCM_COMP, SCMNORM, PARTFUN1,
+      VALUED_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
+      XXREAL_0, NAT_1, INT_1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2, VALUED_1,
+      TREES_2, TREES_3, TREES_4, ORDINAL1, AFINSQ_1, STRUCT_0, COMPOS_1,
+      EXTPRO_1, AMI_2, AMI_3, SCM_1, FINSEQ_1, FINSEQ_2, LANG1, BINTREE1,
+      DTCONSTR, LIMFUNC1, PARTFUN1, PRE_POLY;
  constructors LIMFUNC1, DTCONSTR, BINTREE1, SCM_1, DOMAIN_1, PRE_POLY,
       ORDINAL4, AFINSQ_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FUNCT_2, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, TREES_3, STRUCT_0,
-      DTCONSTR, BINTREE1, AMI_2, AMI_3, AFINSQ_1, AMI_1, COMPOS_1;
+      DTCONSTR, BINTREE1, AMI_2, AMI_3, AFINSQ_1, COMPOS_1, SCM_1, PBOOLE;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
 begin
-
-:: Auxiliary theorems about SCM
-
-theorem :: SCM_COMP:1
-  for I1, I2 being XFinSequence of the Instructions of SCM, D being
-  FinSequence of INT, il, ps, ds being Element of NAT, s being State-consisting
-of il, ps, ds, I1^I2, D holds s is State-consisting of il, ps, ds, I1, D & s is
-  State-consisting of il, (ps+len I1), ds, I2, D;
-
-theorem :: SCM_COMP:2
-  for I1, I2 being XFinSequence of the Instructions of SCM, il, ps,
-ds, k, il1 being Element of NAT, s being State-consisting of il, ps, ds, I1^I2,
-<*>INT, u being State of SCM st u = Comput(ProgramPart(s),s,k) & il1 = IC u
-holds u is
-  State-consisting of il1, (ps + len I1), ds, I2, <*>INT;
 
 definition
   func SCM-AE -> binary with_terminals with_nonterminals
@@ -73,6 +58,8 @@ definition
 :: SCM_COMP:def 2
   t;
 end;
+
+canceled 2;
 
 theorem :: SCM_COMP:3
   for nt being NonTerminal of SCM-AE holds nt = [0,0] or nt = [0,1]
@@ -241,19 +228,26 @@ theorem :: SCM_COMP:13
   being Element of NAT st dn <= max_Data-Loc_in term holds s1.dl.dn = s2.dl.dn
   holds term @ s1 = term @ s2;
 
+reserve F for total
+ (NAT-defined (the Instructions of SCM)-valued Function);
+
 theorem :: SCM_COMP:14
-  for term being bin-term for aux, n, k being Element of NAT, s
-  being State-consisting of n, n, k, SCM-Compile(term, aux), <*>INT st aux >
-  max_Data-Loc_in term ex i being Element of NAT, u being State of SCM st u =
-  Comput(ProgramPart(s),s,i+1) & i+1 = len SCM-Compile(term, aux) & IC Comput(
-ProgramPart(s),s,i) =
+  for F for term being bin-term for aux, n, k being Element of NAT
+    st Shift(SCM-Compile(term, aux),n) c= F
+  for s being n-started State-consisting of k, <*>INT
+   st aux > max_Data-Loc_in term
+ ex i being Element of NAT, u being State of SCM st u =
+  Comput(F,s,i+1) & i+1 = len SCM-Compile(term, aux) & IC Comput(
+F,s,i) =
   (n+i) & IC u = (n+(i+1)) & u.dl.aux = term@s & for dn being Element of
   NAT st dn < aux holds s.dl.dn = u.dl.dn;
 
 theorem :: SCM_COMP:15
-  for term being bin-term, aux, n, k being Element of NAT, s being
-State-consisting of n, n, k, SCM-Compile(term, aux)^<%halt SCM%>, <*>INT st aux
-  > max_Data-Loc_in term holds ProgramPart s halts_on s &
-   (Result(ProgramPart(s),s)).dl.aux = term@s &
-  LifeSpan(ProgramPart(s),s) = len SCM-Compile(term, aux);
+  for F for term being bin-term, aux, n, k being Element of NAT
+   st Shift(SCM-Compile(term, aux)^<%halt SCM%>,n) c= F
+  for s being n-started State-consisting of k,
+         <*>INT st aux
+  > max_Data-Loc_in term holds F halts_on s &
+   (Result(F,s)).dl.aux = term@s &
+  LifeSpan(F,s) = len SCM-Compile(term, aux);
 

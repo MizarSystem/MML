@@ -12,13 +12,13 @@ environ
       AMI_7, ORDINAL1, UNIALG_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, REALSET1,
       MCART_1, NUMBERS, FUNCOP_1, FUNCT_4, NAT_1,
-      STRUCT_0, COMPOS_1, AMI_1, FUNCT_7, AMISTD_1, AMISTD_2;
- constructors REALSET1, AMISTD_2, NAT_1;
- registrations SETFAM_1, FUNCOP_1, STRUCT_0, AMI_1, AMISTD_1, AMISTD_2,
-      REALSET1, CARD_1, RELSET_1, ORDINAL1, COMPOS_1;
+      STRUCT_0, COMPOS_1, EXTPRO_1, FUNCT_7, AMISTD_1, AMISTD_2;
+ constructors REALSET1, AMISTD_2, NAT_1, PRE_POLY, EXTPRO_1;
+ registrations SETFAM_1, FUNCOP_1, STRUCT_0, AMISTD_1, AMISTD_2,
+      REALSET1, CARD_1, RELSET_1, ORDINAL1, COMPOS_1, EXTPRO_1;
  requirements SUBSET, BOOLE;
- definitions AMI_1, COMPOS_1, AMISTD_1, XBOOLE_0, FUNCOP_1;
- theorems AMI_1, FUNCT_7, TARSKI, AMISTD_1, SUBSET_1, FUNCOP_1, FUNCT_4,
+ definitions EXTPRO_1, COMPOS_1, AMISTD_1, XBOOLE_0, FUNCOP_1;
+ theorems FUNCT_7, TARSKI, AMISTD_1, SUBSET_1, FUNCOP_1, FUNCT_4,
       ZFMISC_1, YELLOW_8, FUNCT_1, YELLOW15, XBOOLE_0, XBOOLE_1, RELAT_1,
       PARTFUN1, MCART_1, ORDINAL1, COMPOS_1;
  schemes SUBSET_1;
@@ -60,23 +60,7 @@ empty stored-program AMI-Struct over N), s be State of A, o be Object of A,
   end;
 end;
 
-theorem
-  for A being steady-programmed IC-Ins-separated definite (non empty
-stored-program AMI-Struct over N), s being State of A, o being Object of A,
-f being Element of NAT, I being Instruction of A, w being Element of
-  ObjectKind o st f <> o holds Exec(I,s).f = Exec(I,s+*(o,w)).f
-proof
-  let A be steady-programmed IC-Ins-separated definite (non empty
-  stored-program AMI-Struct over N), s be State of A, o be Object of A, f be
-Element of NAT, I being Instruction of A, w be Element of ObjectKind
-  o such that
-A1: f <> o;
-  thus Exec(I,s).f = s.f by AMI_1:def 13
-    .= s+*(o,w).f by A1,FUNCT_7:34
-    .= Exec(I,s+*(o,w)).f by AMI_1:def 13;
-end;
-
-canceled;
+canceled 2;
 
 theorem Th6:
   for A being standard (IC-Ins-separated definite (non empty
@@ -107,32 +91,6 @@ A1: I is sequential and
 A2: o <> IC A;
   thus IC Exec(I,s+*(o,w)) = IC Exec(I,s) by A1,A2,Th6
     .= IC (Exec(I,s) +* (o,w)) by A2,FUNCT_7:34;
-end;
-
-theorem
-  for A being standard steady-programmed (IC-Ins-separated definite (non
-empty stored-program AMI-Struct over N)), I being Instruction of A, s being
-  State of A, o being Object of A, w being Element of ObjectKind o, i being
-  Element of NAT holds Exec(I,s+*(o,w)).i = (Exec(I,s) +* (o,w)).i
-proof
-  let A be standard steady-programmed (IC-Ins-separated definite (non empty
-stored-program AMI-Struct over N)), I be Instruction of A, s be State of A,
-o be Object of A, w be Element of ObjectKind o, i be Element of NAT;
-A1: Exec(I,s+*(o,w)).i = (s+*(o,w)).i by AMI_1:def 13;
-A2: dom Exec(I,s) = the carrier of A by PARTFUN1:def 4;
-A3: dom s = the carrier of A by PARTFUN1:def 4;
-  per cases;
-  suppose
-A4: i = o;
-    hence Exec(I,s+*(o,w)).i = w by A1,A3,FUNCT_7:33
-      .= (Exec(I,s) +* (o,w)).i by A2,A4,FUNCT_7:33;
-  end;
-  suppose
-A5: i <> o;
-    hence Exec(I,s+*(o,w)).i = s.i by A1,FUNCT_7:34
-      .= Exec(I,s).i by AMI_1:def 13
-      .= (Exec(I,s) +* (o,w)).i by A5,FUNCT_7:34;
-  end;
 end;
 
 begin :: Input and Output of Instructions
@@ -186,9 +144,8 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  cluster steady-programmed with_explicit_jumps
-    without_implicit_jumps IC-good Exec-preserving with_non_trivial_ObjectKinds
-with_non_trivial_Instructions
+  cluster with_explicit_jumps IC-good Exec-preserving
+  with_non_trivial_ObjectKinds with_non_trivial_Instructions
  (regular J/A-independent homogeneous standard halting realistic
   (standard-ins IC-Ins-separated
     definite (non empty stored-program AMI-Struct over N)));
@@ -365,7 +322,7 @@ definition
   coherence;
 end;
 
-canceled;
+canceled 2;
 
 theorem Th10:
   for A being with_non_trivial_ObjectKinds IC-Ins-separated
@@ -666,7 +623,7 @@ end;
 
 registration
   let N;
-  cluster with_non_trivial_Instructions steady-programmed IC-Ins-separated
+  cluster with_non_trivial_Instructions IC-Ins-separated
     definite (non empty stored-program AMI-Struct over N);
   existence
   proof
@@ -675,30 +632,7 @@ registration
   end;
 end;
 
-theorem
-  for A being with_non_trivial_Instructions steady-programmed
-  IC-Ins-separated definite (non empty stored-program AMI-Struct over N), f
-  being Element of NAT, I being Instruction of A holds not f in
-  Out_\_Inp I
-proof
-  let A be with_non_trivial_Instructions steady-programmed IC-Ins-separated
-  definite (non empty stored-program AMI-Struct over N), f be
-  Element of NAT, I be Instruction of A;
-  consider t being State of A;
-  consider J being set such that
-A1: J in the Instructions of A and
-A2: t.f <> J by YELLOW15:4;
-X: f in NAT;
-  NAT c= the carrier of A by COMPOS_1:def 2;
-  then reconsider ff=f as Object of A by X;
-  reconsider J as Element of ObjectKind ff by A1,COMPOS_1:def 8;
-  reconsider s = t +* (ff,J) as State of A;
-A3: dom t = the carrier of A by PARTFUN1:def 4;
-A4: Exec(I,t).f = t.f by AMI_1:def 13;
-  Exec(I,s).ff = s.ff by AMI_1:def 13
-    .= J by A3,FUNCT_7:33;
-  hence thesis by A2,A4,Def4;
-end;
+canceled;
 
 theorem
   for A being standard (IC-Ins-separated definite (non empty
@@ -709,7 +643,7 @@ proof
   AMI-Struct over N)), I be Instruction of A;
   consider t being State of A;
   set l = IC A;
-   reconsider sICt = succ IC t as Element of NAT by ORDINAL1:def 13;
+   reconsider sICt = succ IC t as Element of NAT;
    reconsider w = sICt as Element of ObjectKind l by COMPOS_1:def 6;
   set s = t +* (l,w);
   assume for s being State of A holds Exec(I,s).IC A = succ IC s;
@@ -799,7 +733,7 @@ A2: Exec(I,s+*(ff,w)) <> Exec(I,s) +* (ff,w) by Z,Def5;
   set p = ff .--> w;
   f in NAT & dom p = {f} by FUNCOP_1:19;
   then dom p c= NAT by ZFMISC_1:37;
-  then reconsider p as NAT-defined FinPartState of A by RELAT_1:def 18;
+  then reconsider p as NAT-defined FinPartState of A;
   dom s = the carrier of A by PARTFUN1:def 4;
   then
 A3: dom Exec(I,s) = the carrier of A & s+*(f,w) = s +* p by FUNCT_7:def 3
@@ -808,18 +742,22 @@ A3: dom Exec(I,s) = the carrier of A & s+*(f,w) = s +* p by FUNCT_7:def 3
   hence thesis by A2,A3,FUNCT_7:def 3;
 end;
 
-theorem
-  for A being IC-Ins-separated definite (standard-ins non empty
-stored-program AMI-Struct over N), I being Instruction of A, o being Object
-  of A st I is jump-only holds o in Output I implies o = IC A
-proof
-  let A be IC-Ins-separated definite (standard-ins non empty stored-program
-  AMI-Struct over N), I be Instruction of A, o be Object of A;
-  assume
-A1: for s being State of A, o being Object of A, J being Instruction of
-  A st InsCode I = InsCode J & o <> IC A holds Exec(J,s).o = s.o;
-  assume o in Output I;
-  then ex s being State of A st s.o <> Exec(I,s).o by Def3;
-  hence thesis by A1;
-end;
+:: Twierdzenie to moze zostac przywrocone, jak zostanie wyrzucona
+:: wlasnosc 'stored-program', teraz jest prawdziwe jedynie
+:: dla 'steady-programmed'
+
+::theorem
+::  for A being IC-Ins-separated definite (standard-ins non empty
+::stored-program AMI-Struct over N), I being Instruction of A, o being Object
+::  of A st I is jump-only holds o in Output I implies o = IC A
+::proof
+::  let A be IC-Ins-separated definite (standard-ins non empty stored-program
+::  AMI-Struct over N), I be Instruction of A, o be Object of A;
+::  assume
+::A1: for s being State of A, o being Object of A, J being Instruction of
+::  A st InsCode I = InsCode J & o <> IC A holds Exec(J,s).o = s.o;
+::  assume o in Output I;
+::  then ex s being State of A st s.o <> Exec(I,s).o by Def3;
+::  hence thesis by A1;
+::end;
 

@@ -9,22 +9,22 @@ environ
  vocabularies NUMBERS, SUBSET_1, STRUCT_0, AMI_1, AMI_2, FUNCT_7, XBOOLE_0,
       RELAT_1, TARSKI, ZFMISC_1, CAT_1, FSM_1, FUNCT_1, INT_1, NAT_1, GRAPHSP,
       FINSEQ_1, CARD_1, ORDINAL1, ARYTM_3, ARYTM_1, FUNCOP_1, XXREAL_0,
-      GLIB_000, MCART_1, FUNCT_4, CARD_3, AMI_3, RECDEF_2, COMPOS_1;
+      GLIB_000, FUNCT_4, AMI_3, RECDEF_2, COMPOS_1, AMISTD_2;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, XCMPLX_0, FUNCT_1,
       XXREAL_0, INT_1, NAT_1, ZFMISC_1, MCART_1, FUNCOP_1, CARD_1, CARD_3,
       RELAT_1, FUNCT_4, FUNCT_7, FINSEQ_1, RECDEF_2,
-      STRUCT_0, COMPOS_1, AMI_1, AMI_2;
- constructors DOMAIN_1, XXREAL_0, FINSEQ_4, CAT_2, AMI_1, AMI_2, RELSET_1,
-      PRE_POLY, RECDEF_2;
+      STRUCT_0, COMPOS_1, EXTPRO_1, AMI_2;
+ constructors DOMAIN_1, XXREAL_0, FINSEQ_4, CAT_2, AMI_2, RELSET_1,
+      PRE_POLY, RECDEF_2, EXTPRO_1;
  registrations XBOOLE_0, SETFAM_1, ORDINAL1, FUNCOP_1, NUMBERS, XREAL_0, INT_1,
-      CARD_3, AMI_1, AMI_2, XXREAL_0, FUNCT_1, FINSEQ_1, FUNCT_2, RELSET_1,
-      COMPOS_1;
+      CARD_3, AMI_2, XXREAL_0, FUNCT_1, FINSEQ_1, FUNCT_2, RELSET_1,
+      COMPOS_1, EXTPRO_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions RELAT_1, COMPOS_1, AMI_1, FUNCOP_1, AMI_2, CARD_1, NAT_1;
- theorems TARSKI, ZFMISC_1, ENUMSET1, AMI_2, FUNCOP_1, FUNCT_4, AMI_1, CARD_3,
+ definitions RELAT_1, COMPOS_1, EXTPRO_1, FUNCOP_1, AMI_2, CARD_1, NAT_1;
+ theorems TARSKI, ZFMISC_1, ENUMSET1, AMI_2, FUNCOP_1, FUNCT_4, CARD_3,
       FUNCT_2, MCART_1, INT_1, STRUCT_0, ORDINAL1, XBOOLE_0, XBOOLE_1, FUNCT_7,
       ARYTM_3, XXREAL_0, NAT_1, RELAT_1, FINSEQ_1, FUNCT_1, PARTFUN1, PBOOLE,
-      RECDEF_2, COMPOS_1;
+      RECDEF_2, COMPOS_1, EXTPRO_1;
 
 begin :: A small concrete machine
 
@@ -66,10 +66,18 @@ end;
 
 canceled 2;
 
+  [0,{},{}] in SCM-Instr by AMI_2:2;
+  then the haltF of SCM = [0,{},{}] by FUNCT_7:def 1;
+  then
+LmX: halt SCM = [0,{},{}];
+
 registration
-  cluster SCM -> IC-Ins-separated definite;
+  cluster SCM -> proper-halt IC-Ins-separated definite;
   coherence
   proof
+    JumpPart halt SCM is empty by LmX,RECDEF_2:def 2;
+    then halt SCM is ins-loc-free by COMPOS_1:def 37;
+   hence SCM is proper-halt by COMPOS_1:def 39;
     IC SCM = NAT by AMI_2:30,FUNCT_7:def 1;
     then ObjectKind IC SCM = NAT by AMI_2:def 5;
     hence SCM is IC-Ins-separated by COMPOS_1:def 6;
@@ -446,7 +454,7 @@ proof
   given s such that
 A1: Exec(I, s).IC SCM = succ IC s;
   assume I is halting;
-  then Exec(I,s).IC SCM = s.NAT by Th4,AMI_1:def 8;
+  then Exec(I,s).IC SCM = s.NAT by Th4,EXTPRO_1:def 3;
   hence contradiction by A1,Th4;
   IC s = s.NAT by AMI_2:30,FUNCT_7:def 1;
   then reconsider w = s.NAT as Element of NAT;
@@ -574,7 +582,7 @@ A10: (w +* (NAT .--> loc)).NAT = (NAT .--> loc).NAT by FUNCT_4:14
   then w +* (NAT .--> loc) = SCM-Chg(w,V jump_address) by AMI_2:24
     .= SCM-Exec-Res(V,w) by AMI_2:def 16
     .= Exec(SCM-goto loc,t) by AMI_2:def 17
-    .= t by A1,AMI_1:def 8;
+    .= t by A1,EXTPRO_1:def 3;
   hence contradiction by A4,A10;
 end;
 
@@ -634,7 +642,7 @@ A13: w.(V cond_address) <> 0;
     IC t = IC w & t.a <> 0 by A4,A12,A13,AMI_2:25,30,FUNCT_7:def 1;
     then
 A14: Exec(a=0_goto loc,t).IC SCM = succ e by Th14;
-    Exec(a=0_goto loc,t).IC SCM = w.NAT by A11,Th4,AMI_1:def 8;
+    Exec(a=0_goto loc,t).IC SCM = w.NAT by A11,Th4,EXTPRO_1:def 3;
     hence contradiction by A14;
   end;
   suppose
@@ -648,7 +656,7 @@ A14: Exec(a=0_goto loc,t).IC SCM = succ e by Th14;
 
       .= SCM-Exec-Res(V,w) by A12,AMI_2:def 16
       .= Exec(a=0_goto loc,t) by AMI_2:def 17
-      .= t by A11,AMI_1:def 8;
+      .= t by A11,EXTPRO_1:def 3;
     hence contradiction by A6,A10;
   end;
 end;
@@ -709,7 +717,7 @@ A13: w.(V cond_address) <= 0;
     IC t = IC w & t.a <= 0 by A4,A12,A13,AMI_2:25,30,FUNCT_7:def 1;
     then
 A14: Exec(a>0_goto loc,t).IC SCM = succ e by Th15;
-    Exec(a>0_goto loc,t).IC SCM = w.NAT by A11,Th4,AMI_1:def 8;
+    Exec(a>0_goto loc,t).IC SCM = w.NAT by A11,Th4,EXTPRO_1:def 3;
     hence contradiction by A14;
   end;
   suppose
@@ -723,7 +731,7 @@ A14: Exec(a>0_goto loc,t).IC SCM = succ e by Th15;
 
       .= SCM-Exec-Res(V,w) by A12,AMI_2:def 16
       .= Exec(a>0_goto loc,t) by AMI_2:def 17
-      .= t by A11,AMI_1:def 8;
+      .= t by A11,EXTPRO_1:def 3;
     hence contradiction by A6,A10;
   end;
 end;
@@ -856,167 +864,6 @@ Lm13: halt SCM = [0,{},{}] by Lm12;
 
 begin :: Small concrete model
 
-Lm14: for s being State of SCM, i being Instruction of SCM, l being
-Element of NAT holds Exec(i,s).l = s.l
-
-proof
-  let s be State of SCM, i be Instruction of SCM, l be Element of NAT;
-
-  reconsider c = i as Element of SCM-Instr;
-  reconsider S = s as Element of product SCM-OK by PBOOLE:155;
-  reconsider l9 = l as Element of NAT;
-
-  c in { [SCM-Halt,{},{}] } \/ { [Y,<*a2*>,{}] : Y = 6 }
-   \/ { [K,<*a1*>,<*b1*>]: K
-  in { 7,8 } } or c in { [T,{},<*b2,c1*>] : T in { 1,2,3,4,5}
-   } by XBOOLE_0:def 3;
-
-  then
-A1: c in { [SCM-Halt,{},{}] } \/ { [Y,<*a2*>,{}] : Y = 6 }
- or c in { [K,<*a1*>,<*b1*>]
-  : K in { 7,8 } } or c in { [T,{},<*b2,c1*>] : T in { 1,2,3,4,5} } by
-XBOOLE_0:def 3;
-
-  now
-    per cases by A1,XBOOLE_0:def 3;
-    case
-      c in { [SCM-Halt,{},{}] };
-      then c = [SCM-Halt,{},{}] by TARSKI:def 1;
-      then
-A2:   c`3_3 = {} & c`2_3 = {} by RECDEF_2:def 2,def 3;
-
-      then
-A3:   ( not(ex mk, ml being Element of SCM-Data-Loc st c = [ 3, {}, <*mk, ml*>
-
-]))& not( ex mk, ml being Element of SCM-Data-Loc st c = [ 4, {}, <*mk, ml*>])
- by RECDEF_2:def 3;
-
-A4:   ( not(ex mk being Element of NAT, ml being Element of SCM-Data-Loc
-
-st c = [ 7, <*mk*>, <*ml*>]))& not(ex mk being Element of NAT,
- ml being Element of
-      SCM-Data-Loc st c = [ 8, <*mk*>, <*ml*>]) by A2,RECDEF_2:def 3;
-
-A5:   ( not(ex mk, ml being Element of SCM-Data-Loc st c = [ 5, {}, <*mk, ml*>
-
-]))& not( ex mk being Element of NAT st c = [ 6, <*mk*>, {}])
-     by A2,RECDEF_2:def 2,def 3;
-
-      ( not(ex mk, ml being Element of SCM-Data-Loc st c = [ 1, {}, <*mk, ml*>
-
-]))& not( ex mk, ml being Element of SCM-Data-Loc st c = [ 2, {}, <*mk, ml*>])
-       by A2,RECDEF_2:def 3;
-
-      hence SCM-Exec-Res(c,S).l9 = S.l9 by A3,A5,A4,AMI_2:def 16;
-    end;
-    case
-      c in { [Y,<*a2*>,{}] : Y = 6 };
-      then ex Y,a2 st c = [Y,<*a2*>,{}] & Y = 6;
-
-      hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S,c jump_address).l9 by AMI_2:def 16
-
-        .= S.l9 by AMI_2:18;
-    end;
-    case
-      c in { [K,<*a1*>,<*b1*>]: K in { 7,8 } };
-      then consider K,a1,b1 such that
-A6:   c = [K,<*a1*>,<*b1*>]and
-A7:   K in { 7,8 };
-      now
-        per cases by A7,TARSKI:def 2;
-        case
-          K=7;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S,IFEQ(S.(c cond_address),0,c
-          cjump_address,succ IC S)).l9 by A6,AMI_2:def 16
-
-            .= S.l9 by AMI_2:18;
-        end;
-        case
-          K=8;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S,IFGT(S.(c cond_address),0,c
-          cjump_address,succ IC S)).l9 by A6,AMI_2:def 16
-
-            .= S.l9 by AMI_2:18;
-        end;
-      end;
-      hence SCM-Exec-Res(c,S).l9 = S.l9;
-    end;
-    case
-      c in { [T,{},<*b2,c1*>] : T in { 1,2,3,4,5} };
-      then consider T,b2,c1 such that
-A8:   c = [T,{},<*b2,c1*>] and
-A9:   T in { 1,2,3,4,5};
-      now
-        per cases by A9,ENUMSET1:def 3;
-        case
-          T = 1;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SCM-Chg(S, c address_1,S.(c
-          address_2)), succ IC S).l9 by A8,AMI_2:def 16
-
-            .= SCM-Chg(S, c address_1,S.(c address_2)).l9 by AMI_2:18
-            .= S.l9 by AMI_2:22;
-        end;
-        case
-          T = 2;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SCM-Chg(S,c address_1, S.(c
-          address_1)+S.(c address_2)),succ IC S).l9 by A8,AMI_2:def 16
-
-            .= SCM-Chg(S,c address_1,S.(c address_1)+S.(c address_2)).l9 by
-AMI_2:18
-
-            .= S.l9 by AMI_2:22;
-        end;
-        case
-          T = 3;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SCM-Chg(S,c address_1, S.(c
-          address_1)-S.(c address_2)),succ IC S).l9 by A8,AMI_2:def 16
-
-            .= SCM-Chg(S,c address_1,S.(c address_1)-S.(c address_2)).l9 by
-AMI_2:18
-
-            .= S.l9 by AMI_2:22;
-        end;
-        case
-          T = 4;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SCM-Chg(S,c address_1, S.(c
-          address_1)*S.(c address_2)),succ IC S).l9 by A8,AMI_2:def 16
-
-            .= SCM-Chg(S,c address_1,S.(c address_1)*S.(c address_2)).l9 by
-AMI_2:18
-
-            .= S.l9 by AMI_2:22;
-        end;
-        case
-          T = 5;
-
-          hence
-          SCM-Exec-Res(c,S).l9 = SCM-Chg(SCM-Chg( SCM-Chg(S,c address_1,S
-
-.(c address_1) div S.(c address_2)), c address_2,S.(c address_1) mod S.(c
-          address_2)),succ IC S).l9 by A8,AMI_2:def 16
-
-            .= SCM-Chg( SCM-Chg(S,c address_1,S.(c address_1) div S.(c
-
-address_2)), c address_2,S.(c address_1) mod S.(c address_2)).l9 by AMI_2:18
-
-            .= SCM-Chg(S,c address_1,S.(c address_1) div S.(c address_2)).l9
-          by AMI_2:22
-
-            .= S.l9 by AMI_2:22;
-        end;
-      end;
-      hence SCM-Exec-Res(c,S).l9 = S.l9;
-    end;
-  end;
-  hence thesis by AMI_2:def 17;
-end;
-
 canceled 35;
 
 theorem Th51:
@@ -1027,15 +874,9 @@ proof
 end;
 
 registration
-  cluster SCM -> steady-programmed realistic;
+  cluster SCM -> realistic;
   coherence
   proof
-    thus SCM is steady-programmed
-    proof
-      let s be State of SCM, i be Instruction of SCM, l be
-      Element of NAT;
-      thus Exec(i,s).l = s.l by Lm14;
-    end;
     thus thesis by Th51;
   end;
 end;
@@ -1158,7 +999,7 @@ theorem
 theorem
   halt SCM = [0,{},{}] by Lm12;
 
-theorem
+theorem Th72:
   Data-Locations SCM = SCM-Data-Loc
 proof
   SCM-Data-Loc misses {NAT} by AMI_2:27,ZFMISC_1:56;
@@ -1171,3 +1012,10 @@ AMI_2:30,FUNCT_7:def 1
     .= SCM-Data-Loc by A1,XBOOLE_1:83;
 end;
 
+theorem
+ for d being Data-Location holds
+  d in Data-Locations SCM
+proof let d be Data-Location;
+ d in SCM-Data-Loc by Def2;
+ hence thesis by Th72;
+end;

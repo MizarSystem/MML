@@ -162,7 +162,7 @@ proof
   hence thesis by Lm9;
 end;
 
-Lm13: {H} is Subset of Subformulae H by Lm9,MODELC_2:27;
+Lm13: {H} is Subset of Subformulae H by Lm9;
 
 Lm14: H is negative or H is next implies {the_argument_of H} is Subset of
 Subformulae H
@@ -346,7 +346,7 @@ definition
   let v;
   func Seed v -> Subset of Subformulae v equals
   {v};
-  correctness by Lm9,MODELC_2:27;
+  correctness by Lm9;
 end;
 
 registration
@@ -486,10 +486,8 @@ definition
   \/ 'X' CastLTL(the LTLnext of N);
   correctness
   proof
-    set S3= CastLTL(the LTLnext of N);
     set S2= the LTLnew of N;
     set S1= the LTLold of N;
-    reconsider S3 as Subset of LTL_WFF;
     S1 is Subset of LTL_WFF & S2 is Subset of LTL_WFF by MODELC_2:47;
     then S1 \/ S2 c= LTL_WFF by XBOOLE_1:8;
     hence thesis by XBOOLE_1:8;
@@ -1361,8 +1359,7 @@ Lm21: (H is negative or H is next) implies Subformulae H = (Subformulae
 the_argument_of H) \/ {H}
 proof
   set H1 = the_argument_of H;
-  H is_subformula_of H by MODELC_2:27;
-  then H in Subformulae H by MODELC_2:45;
+  H in Subformulae H by MODELC_2:45;
   then
 A1: {H} c= Subformulae H by ZFMISC_1:37;
   assume
@@ -1411,8 +1408,7 @@ proof
   set H2 = the_right_argument_of H;
   set SUBF = (Subformulae the_left_argument_of H) \/ (Subformulae
   the_right_argument_of H);
-  H is_subformula_of H by MODELC_2:27;
-  then H in Subformulae H by MODELC_2:def 24;
+  H in Subformulae H by MODELC_2:def 24;
   then
 A1: {H} c= Subformulae H by ZFMISC_1:37;
   assume
@@ -1486,8 +1482,7 @@ A4: G is_subformula_of H by MODELC_2:def 24;
     assume x in {H};
     then
 A5: x = H by TARSKI:def 1;
-    H is_subformula_of H by MODELC_2:27;
-    hence thesis by A5,MODELC_2:45;
+    hence thesis by MODELC_2:45;
   end;
   hence thesis by A2,TARSKI:2;
 end;
@@ -4196,10 +4191,8 @@ A1: for x st x in LN holds F(x) in Y
       let x;
       set N1 = the LTLold of CastNode(x,v);
       set N2 = the LTLnew of CastNode(x,v);
-      set N3 = the LTLnext of CastNode(x,v);
       assume x in LN;
       then ex N being strict LTLnode over v st x=N by Def30;
-      then reconsider x as strict LTLnode over v;
       set M1 = [N1,N2];
       set X1 = [:X,X:];
       Y =[:X1,X:] & M1 in X1 by ZFMISC_1:106,def 3;
@@ -5346,10 +5339,8 @@ proof
   set H2 = the_right_argument_of H;
   set SNO = the LTLold of SN;
   set SNN = the LTLnew of SN;
-  set SNX = the LTLnext of SN;
   set NO = the LTLold of N;
   set NN = the LTLnew of N;
-  set NX = the LTLnext of N;
   assume N is non elementary;
   then
 A1: H in the LTLnew of N by Th58;
@@ -5575,8 +5566,6 @@ A1: H is neg-inner-most;
   suppose
 A2: H is negative;
     set G = the_argument_of H;
-    H is_subformula_of H by MODELC_2:27;
-    then
 A3: G is atomic by A1,A2,Def37;
     H = 'not' G by A2,MODELC_2:def 18;
     hence thesis by A3,Def38;
@@ -6330,15 +6319,12 @@ A116: v in {v} & len(v)<=n by TARSKI:def 1;
 A117: the LTLnext of Run00 c= the LTLold of Run01 by A4,Th37;
   Run(0) = CastNode(init v,v) by A1,TARSKI:def 1
     .= init v by Def16;
-  then Shift(w,0) |= v by A117,A115,A116,MODELC_2:27;
+  then Shift(w,0) |= v by A117,A115,A116;
   hence thesis by MODELC_2:79;
 end;
 
 definition
-  let w;
-  let v;
-  let U;
-  let N;
+  let w,v,U,N;
   assume that
 A1: N is non elementary and
 A2: w |= *N;
@@ -6351,7 +6337,6 @@ choice_succ_func(w,v,U)|**(i+1)).N,v) is_succ_of CastNode((choice_succ_func(w,v
   for i st i<=it holds w |= *CastNode((choice_succ_func(w,v,U)|**i).N,v);
   existence
   proof
-    set f = choice_succ_func(w,v,U);
 A3: w |= *CastNode(N,v) by A2,Def16;
     N in LTLNodes(v) & CastNode(N,v) is non elementary by A1,Def16,Def30;
     hence thesis by A3,Th51,Th62;
@@ -6658,7 +6643,6 @@ end;
 theorem
   w |= 'X' v implies w |= * (init v)
 proof
-  set N = init v;
   assume
 A1: w |= 'X' v;
   for H be LTL-formula st H in 'X' CastLTL(Seed v) holds w|= H
@@ -6908,8 +6892,6 @@ A37:        M2 = M1 \/ {G}
                 suppose
 A38:              not ( not G is Until & w0 |= *SuccNode1(G,N1) or G
                   is Until & w0 |/= the_right_argument_of G );
-                  set G2 = the_right_argument_of G;
-                  set S1 = SuccNode1(G,N1);
               N2 = SuccNode2(G,N1) by A32,A38,Def35;
                   hence thesis by A36,Def5;
                 end;
@@ -6985,7 +6967,6 @@ end;
 theorem Th75:
   w |= v implies w is-accepted-by BAutomaton(v)
 proof
-  set B = BAutomaton(v);
   set LS = LTLStates(v);
   set LT = Tran_LTL(v);
   set IS = InitS_LTL(v);
@@ -7046,7 +7027,6 @@ A11: for n holds CastSeq(w,AtomicFamily).n in Label_(Run(n+1))
     proof
       let n;
       reconsider n as Element of NAT by ORDINAL1:def 13;
-      set Rn = Run(n);
       set Rn1 = Run(n+1);
       set w1= Shift(w,n);
       set X = CastSeq(w,AtomicFamily).n;

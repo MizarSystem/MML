@@ -16,15 +16,16 @@ environ
       ORDINAL1, PARTFUN1, SCMNORM, SCMFSA6C;
  notations XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, RELAT_1, FUNCT_1, PARTFUN1,
       VALUED_1, XCMPLX_0, FUNCT_4, INT_1, INT_2, NAT_1, STRUCT_0, COMPOS_1,
-      AMI_1, AMI_2, SCMPDS_2, SCMPDS_4, SCMPDS_6, SCMP_GCD, SCMPDS_5, SCMPDS_8,
-      FUNCT_2, CARD_3, DOMAIN_1, FINSEQ_1, GR_CY_1, PRE_FF, SCPISORT, XXREAL_0;
+      EXTPRO_1, AMI_1, AMI_2, SCMPDS_2, SCMPDS_4, SCMPDS_6, SCMP_GCD, SCMPDS_5,
+      SCMPDS_8, FUNCT_2, CARD_3, DOMAIN_1, FINSEQ_1, GR_CY_1, PRE_FF, SCPISORT,
+      XXREAL_0;
  constructors DOMAIN_1, REAL_1, NAT_D, RECDEF_1, PRE_FF, MESFUNC1, GR_CY_1,
       SCM_1, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT,
-      BINOP_2;
+      BINOP_2, AMI_1;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, NAT_1,
       INT_1, CARD_3, STRUCT_0, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6,
       SCMPDS_8, XBOOLE_0, FINSEQ_1, CARD_1, VALUED_1, AMI_1, VALUED_0, RELAT_1,
-      FUNCT_2, COMPOS_1, AFINSQ_1;
+      FUNCT_2, COMPOS_1, AFINSQ_1, EXTPRO_1;
  requirements NUMERALS, REAL, SUBSET, ARITHM, BOOLE;
 
 
@@ -61,11 +62,12 @@ P[set]}: F(Dstate IExec(while<0(a(),i(),I()),s()))=0 & P[Dstate IExec(while<0(a
   (),i(),I()),s())]
 provided
  card I() > 0 and
- for t be State of SCMPDS st P[Dstate t] holds F(Dstate(t))=0 iff t.
-DataLoc(s().a(),i()) >= 0 and
+ for t be State of SCMPDS st P[Dstate t] holds F(Dstate(t))=0
+   iff t.DataLoc(s().a(),i()) >= 0 and
  P[Dstate s()] and
- for t be State of SCMPDS st P[Dstate t] & t.a()=s().a() & t.DataLoc(
-s().a(),i()) < 0 holds IExec(I(),t).a()=t.a() & I() is_closed_on t & I()
+ for t be State of SCMPDS st P[Dstate t] & t.a()=s().a() &
+   t.DataLoc(s().a(),i()) < 0
+ holds IExec(I(),t).a()=t.a() & I() is_closed_on t & I()
 is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) & P[Dstate(IExec(I(),t))
 ];
 
@@ -90,10 +92,12 @@ definition
 end;
 
 theorem :: SCPINVAR:8
-  for s being State of SCMPDS,I being halt-free shiftable Program
+  for s being 0-started State of SCMPDS,
+    I being halt-free shiftable Program
   of SCMPDS, a,b,c being Int_position,n,i,p0 be Element of NAT,f be FinSequence
   of INT st card I >0 & f is_FinSequence_on s,p0 & len f=n & s.b=0 & s.a=0 & s.
-intpos i=-n & s.c = p0+1 & (for t be State of SCMPDS st (ex g be FinSequence of
+intpos i=-n & s.c = p0+1 &
+ (for t be State of SCMPDS st (ex g be FinSequence of
 INT st g is_FinSequence_on s,p0 & len g=t.intpos i+n & t.b=Sum g & t.c = p0+1+
   len g) & t.a=0 & t.intpos i < 0 & for i be Element of NAT st i > p0 holds t.
 intpos i=s.intpos i holds IExec(I,t).a=0 & I is_closed_on t & I is_halting_on t
@@ -104,7 +108,8 @@ IExec(I,t).b=Sum g) & for i be Element of NAT st i > p0 holds IExec(I,t).intpos
   is_closed_on s & while<0(a,i,I) is_halting_on s;
 
 theorem :: SCPINVAR:9
-  for s being State of SCMPDS,n,p0 be Element of NAT, f be FinSequence
+  for s being 0-started State of SCMPDS,n,
+    p0 be Element of NAT, f be FinSequence
 of INT st p0 >= 3 & f is_FinSequence_on s,p0 & len f=n holds IExec(sum(n,p0),s)
   .intpos 1=Sum f & sum(n,p0) is parahalting;
 
@@ -149,7 +154,8 @@ Fib (k+1+1)) holds IExec(while>0(a,i,I),s).f0=Fib n & IExec(while>0(a,i,I),s).
 ;
 
 theorem :: SCPINVAR:11
-  for s being State of SCMPDS,n be Element of NAT holds IExec(Fib-macro(
+  for s being 0-started State of SCMPDS,
+  n be Element of NAT holds IExec(Fib-macro(
 n),s).intpos 1=Fib n & IExec(Fib-macro(n),s).intpos 2=Fib (n+1) & Fib-macro(n)
   is parahalting;
 

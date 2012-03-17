@@ -1,0 +1,242 @@
+:: The Definition of Topological Manifolds
+::  by Marco Riccardi
+:: 
+:: Received August 17, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, PRE_TOPC, EUCLID, ARYTM_1,
+      ARYTM_3, SUPINF_2, XBOOLE_0, FUNCOP_1, ORDINAL2, TOPS_1, RCOMP_1,
+      XXREAL_0, METRIC_1, TARSKI, STRUCT_0, REAL_1, COMPLEX1, SETFAM_1,
+      PCOMPS_1, TOPS_2, T_0TOPSP, CONNSP_2, FUNCT_1, RELAT_1, CARD_1, SQUARE_1,
+      TOPMETR, MEMBERED, XXREAL_1, XXREAL_2, WAYBEL23, COMPTS_1, RLVECT_3,
+      NATTRA_1, ZFMISC_1, FRECHET, CARD_3, MFOLD_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, TOPS_2, RELAT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, ORDINAL1, NAT_1, NUMBERS, VALUED_0,
+      VALUED_1, XCMPLX_0, XREAL_0, XXREAL_0, COMPLEX1, REAL_1, STRUCT_0,
+      RVSUM_1, PRE_TOPC, METRIC_1, TOPREAL9, TOPS_1, ALGSTR_0, RLVECT_1,
+      BORSUK_3, CONNSP_2, TSEP_1, METRIZTS, PCOMPS_1, COMPTS_1, EUCLID,
+      SQUARE_1, TOPMETR, TMAP_1, XXREAL_1, MEMBERED, XXREAL_2, TOPREAL6,
+      WAYBEL23, CANTOR_1, CARD_1, TDLAT_3, ZFMISC_1, CARD_3, YELLOW_8, FRECHET;
+ constructors MONOID_0, TOPREAL9, TOPREALB, SQUARE_1, FUNCSDOM, TOPS_1, TSEP_1,
+      BORSUK_3, METRIZTS, PCOMPS_1, RLVECT_1, COMPLEX1, COMPTS_1, XCMPLX_0,
+      NAT_1, EUCLID, BINOP_2, TOPMETR, TMAP_1, MEMBERED, XXREAL_2, TOPREAL6,
+      SEQ_1, WAYBEL23, CANTOR_1, TDLAT_3, FUNCT_2, YELLOW_8, FRECHET;
+ registrations XBOOLE_0, XXREAL_0, XREAL_0, XCMPLX_0, SQUARE_1, NAT_1,
+      MEMBERED, STRUCT_0, METRIC_1, MONOID_0, EUCLID, TOPALG_2, VALUED_0,
+      FINSEQ_1, FUNCT_1, RELAT_1, PRE_TOPC, TOPS_1, CARD_1, TSEP_1, TOPREAL9,
+      PCOMPS_1, RLVECT_1, COMPLEX1, TMAP_1, COMPTS_1, TOPMETR, XXREAL_2,
+      TOPREAL6, SPPOL_1, WAYBEL23, METRIZTS, RLVECT_3, TOPREAL1, YELLOW13,
+      YELLOW_8, KURATO_2, SUBSET_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+registration
+  let x, y be set;
+  cluster {[x,y]} -> one-to-one;
+end;
+
+reserve n for natural number;
+
+theorem :: MFOLD_1:1
+  for T being non empty TopSpace holds T , T | [#]T are_homeomorphic;
+
+theorem :: MFOLD_1:2
+  for X being non empty SubSpace of TOP-REAL n, f being Function of X,R^1
+  st f is continuous
+  ex g being Function of X,TOP-REAL n st
+  (for a being Point of X, b being Point of TOP-REAL n, r being real number
+  st a = b & f.a = r holds g.b = r*b) & g is continuous;
+
+definition
+  let n;
+  let S be Subset of TOP-REAL n;
+  attr S is ball means
+:: MFOLD_1:def 1
+  ex p being Point of TOP-REAL n, r being real number st S = Ball(p,r);
+end;
+
+registration
+  let n;
+  cluster ball Subset of TOP-REAL n;
+  cluster ball -> open Subset of TOP-REAL n;
+end;
+
+registration
+  let n;
+  cluster non empty ball Subset of TOP-REAL n;
+end;
+
+reserve p for Point of TOP-REAL n, r for real number;
+
+theorem :: MFOLD_1:3
+  for S being open Subset of TOP-REAL n st p in S holds
+  ex B being ball Subset of TOP-REAL n st B c= S & p in B;
+
+definition
+  let n,p,r;
+  func Tball(p,r) -> SubSpace of TOP-REAL n equals
+:: MFOLD_1:def 2
+  (TOP-REAL n) | Ball(p,r);
+end;
+
+definition
+  let n;
+  func Tunit_ball(n) -> SubSpace of TOP-REAL n equals
+:: MFOLD_1:def 3
+  Tball(0.(TOP-REAL n),1);
+end;
+
+registration
+  let n;
+  cluster Tunit_ball(n) -> non empty;
+  let p;
+  let s be positive (real number);
+  cluster Tball(p,s) -> non empty;
+end;
+
+theorem :: MFOLD_1:4
+  the carrier of Tball(p,r) = Ball(p,r);
+
+theorem :: MFOLD_1:5
+  n <> 0 & p is Point of Tunit_ball(n) implies |. p .| < 1;
+
+theorem :: MFOLD_1:6
+  for f being Function of Tunit_ball n, TOP-REAL n st n <> 0 &
+  for a being Point of Tunit_ball n, b being Point of TOP-REAL n
+      st a = b holds f.a = 1/(1-|.b.|*|.b.|)*b
+  holds f is being_homeomorphism;
+
+:: like TOPREALB:19
+theorem :: MFOLD_1:7
+  for r being positive (real number),
+      f being Function of Tunit_ball(n), Tball(p,r) st n <> 0
+  & for a being Point of Tunit_ball(n), b being Point of TOP-REAL n
+      st a = b holds f.a = r*b+p
+  holds f is being_homeomorphism;
+
+theorem :: MFOLD_1:8
+  Tunit_ball n, TOP-REAL n are_homeomorphic;
+
+reserve q for Point of TOP-REAL n;
+
+theorem :: MFOLD_1:9
+  for r,s being positive (real number) holds
+  Tball(p,r), Tball(q,s) are_homeomorphic;
+
+theorem :: MFOLD_1:10
+  for B being non empty ball Subset of TOP-REAL n
+  holds B, [#]TOP-REAL n are_homeomorphic;
+
+theorem :: MFOLD_1:11
+  for M, N being non empty TopSpace
+  for p being Point of M, U being a_neighborhood of p, B being open Subset of N
+  st U,B are_homeomorphic
+  ex V being open Subset of M, S being open Subset of N
+     st V c= U & p in V & V,S are_homeomorphic;
+
+begin :: Manifold
+
+reserve M for non empty TopSpace;
+
+definition
+  let n, M;
+  attr M is n-locally_euclidean means
+:: MFOLD_1:def 4
+  for p being Point of M holds
+  ex U being a_neighborhood of p, S being open Subset of TOP-REAL n
+    st U,S are_homeomorphic;
+end;
+
+registration
+  let n;
+  cluster TOP-REAL n -> n-locally_euclidean;
+end;
+
+registration
+  let n;
+  cluster n-locally_euclidean (non empty TopSpace);
+end;
+
+:: Lemma 2.13a
+theorem :: MFOLD_1:12
+  M is n-locally_euclidean iff
+  for p being Point of M holds
+  ex U being a_neighborhood of p, B being ball Subset of TOP-REAL n
+    st U,B are_homeomorphic;
+
+:: Lemma 2.13b
+theorem :: MFOLD_1:13
+  M is n-locally_euclidean iff
+  for p being Point of M holds
+  ex U being a_neighborhood of p st U,[#]TOP-REAL n are_homeomorphic;
+
+registration
+  let n;
+  cluster n-locally_euclidean -> first-countable (non empty TopSpace);
+end;
+
+registration
+  cluster 0-locally_euclidean -> discrete (non empty TopSpace);
+  cluster discrete -> 0-locally_euclidean (non empty TopSpace);
+end;
+
+registration
+  let n;
+  cluster TOP-REAL n -> second-countable;
+end;
+
+registration
+  let n;
+  cluster second-countable Hausdorff n-locally_euclidean (non empty TopSpace);
+end;
+
+definition
+  let n, M;
+  attr M is n-manifold means
+:: MFOLD_1:def 5
+  M is second-countable Hausdorff n-locally_euclidean;
+end;
+
+definition
+  let M;
+  attr M is manifold-like means
+:: MFOLD_1:def 6
+  ex n st M is n-manifold;
+end;
+
+registration
+  let n;
+  cluster n-manifold (non empty TopSpace);
+end;
+
+registration
+  let n;
+  cluster n-manifold ->
+          second-countable Hausdorff n-locally_euclidean (non empty TopSpace);
+  cluster second-countable Hausdorff n-locally_euclidean ->
+          n-manifold (non empty TopSpace);
+  cluster n-manifold -> manifold-like (non empty TopSpace);
+end;
+
+registration
+  cluster second-countable discrete -> 0-manifold (non empty TopSpace);
+end;
+
+:: Lemma 2.16
+registration
+  let n;
+  let M be n-manifold (non empty TopSpace);
+  cluster open -> n-manifold (non empty SubSpace of M);
+end;
+
+registration
+  cluster manifold-like (non empty TopSpace);
+end;
+
+definition
+  mode manifold is manifold-like (non empty TopSpace);
+end;

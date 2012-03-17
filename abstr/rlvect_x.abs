@@ -1,0 +1,225 @@
+:: Formalization of Integral Linear Space
+::  by Yuichi Futa , Hiroyuki Okazaki and Yasunari Shidama
+:: 
+:: Received August 17, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies REAL_1, SUBSET_1, NUMBERS, RLVECT_1, RLSUB_1, FINSET_1, RLVECT_2,
+      FINSEQ_1, STRUCT_0, FUNCT_1, XBOOLE_0, VALUED_1, ORDINAL4, ARYTM_3,
+      RELAT_1, PARTFUN1, NAT_1, INT_1, CARD_3, CARD_1, SUPINF_2, TARSKI,
+      FUNCT_2, ARYTM_1, RLVECT_3, RLVECT_X, XXREAL_0, VALUED_0, FUNCT_4,
+      FUNCOP_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, DOMAIN_1, FUNCOP_1, FUNCT_4, FINSET_1, NUMBERS, XXREAL_0,
+      REAL_1, NAT_1, INT_1, VALUED_0, BINOP_2, FINSEQ_1, SEQ_1, STRUCT_0,
+      RLVECT_1, RLSUB_1, RLVECT_2, RLVECT_3, RUSUB_4, VFUNCT_1, BINOM;
+ constructors FINSEQ_4, REALSET1, RLSUB_2, RLVECT_2, RLVECT_3, FUNCT_4,
+      ARYTM_1, ARYTM_0, RUSUB_4, SQUARE_1, XXREAL_2, BINOP_2, SEQ_1, FUNCSDOM,
+      VALUED_2, TOPREALB, VFUNCT_1, BINOM;
+ registrations XBOOLE_0, FUNCT_1, RELSET_1, FINSET_1, NUMBERS, STRUCT_0,
+      ORDINAL1, REAL_1, INT_1, XREAL_0, RLVECT_2, VALUED_0, FINSEQ_1, FINSEQ_2,
+      CARD_1, RVSUM_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin
+
+theorem :: RLVECT_X:1
+  for X be RealLinearSpace,
+      R1, R2 be FinSequence of X
+    st len R1 = len R2 holds Sum(R1+R2) = Sum(R1) + Sum(R2);
+
+theorem :: RLVECT_X:2
+  for X be RealLinearSpace,
+      R1, R2, R3 be FinSequence of X
+    st len R1 = len R2 & R3 = R1-R2 holds Sum(R3) = Sum(R1) - Sum(R2);
+
+theorem :: RLVECT_X:3
+  for X be RealLinearSpace,
+      R1, R2 be FinSequence of X,
+      a be Element of REAL st R2 = a(#)R1 holds Sum(R2) = a * Sum(R1);
+
+begin :: 2. Integral Linear Space
+
+reserve x,y for set;
+reserve a,b for Real;
+reserve i,j for Integer;
+reserve V for RealLinearSpace;
+reserve W1,W2,W3 for Subspace of V;
+reserve v,v1,v2,v3,u,w,w1,w2,w3 for VECTOR of V;
+reserve A,B,C for Subset of V;
+reserve L,L1,L2 for Linear_Combination of V;
+reserve l,l1,l2 for Linear_Combination of A;
+
+definition let V,i,L;
+  func i * L -> Linear_Combination of V means
+:: RLVECT_X:def 1
+  for v holds it.v = i * L.v;
+end;
+
+definition let V,A;
+  func Z_Lin(A) -> Subset of V equals
+:: RLVECT_X:def 2
+  {Sum(l) : rng l c= INT};
+end;
+
+theorem :: RLVECT_X:4
+  a = i implies a*l = i*l;
+
+theorem :: RLVECT_X:5
+  rng l1 c= INT & rng l2 c= INT implies rng (l1+l2) c= INT;
+
+theorem :: RLVECT_X:6
+  rng l c= INT implies rng (i*l) c= INT;
+
+theorem :: RLVECT_X:7
+  rng (ZeroLC(V)) c= INT;
+
+theorem :: RLVECT_X:8
+  Z_Lin(A) c= the carrier of Lin(A);
+
+theorem :: RLVECT_X:9
+  v in Z_Lin(A) & u in Z_Lin(A) implies v + u in Z_Lin(A);
+
+theorem :: RLVECT_X:10
+  v in Z_Lin(A) implies i*v in Z_Lin(A);
+
+theorem :: RLVECT_X:11
+  0.V in Z_Lin(A);
+
+theorem :: RLVECT_X:12
+  x in A implies x in Z_Lin(A);
+
+theorem :: RLVECT_X:13
+  A c= B implies Z_Lin(A) c= Z_Lin(B);
+
+theorem :: RLVECT_X:14
+  Z_Lin(A \/ B) = Z_Lin(A) + Z_Lin(B);
+
+theorem :: RLVECT_X:15
+  Z_Lin(A /\ B) c= Z_Lin(A) /\ Z_Lin(B);
+
+theorem :: RLVECT_X:16
+  x in Z_Lin{v} iff ex a be Integer st x = a * v;
+
+theorem :: RLVECT_X:17
+  v in Z_Lin{v};
+
+theorem :: RLVECT_X:18
+  x in v + Z_Lin{w} iff ex a be Integer st x = v + a * w;
+
+theorem :: RLVECT_X:19
+  x in Z_Lin{w1,w2} iff ex a,b be Integer st x = a * w1 + b * w2;
+
+theorem :: RLVECT_X:20
+  w1 in Z_Lin{w1,w2};
+
+theorem :: RLVECT_X:21
+  x in v + Z_Lin{w1,w2} iff ex a,b be Integer
+    st x = v + a * w1 + b * w2;
+
+theorem :: RLVECT_X:22
+  x in Z_Lin{v1,v2,v3} iff ex a,b,c be Integer
+   st x = a * v1 + b * v2 + c * v3;
+
+theorem :: RLVECT_X:23
+  w1 in Z_Lin{w1,w2,w3} & w2 in Z_Lin{w1,w2,w3} & w3 in Z_Lin{w1,w2,w3};
+
+theorem :: RLVECT_X:24
+  x in v + Z_Lin{w1,w2,w3}
+   iff ex a,b,c be Integer st x = v + a * w1 + b * w2 + c * w3;
+
+theorem :: RLVECT_X:25
+  for x be set holds x in Z_Lin(A) iff
+    ex g1,h1 be FinSequence of V,
+        a1 be integer-valued FinSequence
+   st x=Sum(h1) &
+       rng g1 c= A & len g1 =len h1 & len g1 = len a1 &
+       for i be Nat
+        st i in Seg (len g1) holds
+           h1/.i=(a1.i)*(g1/.i);
+
+definition
+  let RS be RealLinearSpace;
+  let f be FinSequence of RS;
+  func Z_Lin(f) -> Subset of RS equals
+:: RLVECT_X:def 3
+    {Sum(g) where g is (len f)-long FinSequence of RS :
+    ex a be (len f)-long integer-valued FinSequence
+     st for i be Nat st i in Seg (len f) holds g/.i=(a.i)*(f/.i)};
+end;
+
+theorem :: RLVECT_X:26
+for RS be RealLinearSpace,
+      f be FinSequence of RS,
+      x be set holds
+   x in Z_Lin(f) iff
+     ex g be (len f)-long FinSequence of RS,
+          a be (len f)-long integer-valued FinSequence st
+          x=Sum(g) & for i be Nat st i in Seg (len f) holds
+          g/.i=(a.i)*(f/.i);
+
+theorem :: RLVECT_X:27
+for RS be RealLinearSpace,
+      f be FinSequence of RS,
+      x, y being Element of RS,
+      a, b being Element of INT
+    st x in Z_Lin(f) & y in Z_Lin(f) holds
+(a * x) + (b * y) in Z_Lin(f);
+
+theorem :: RLVECT_X:28
+  for RS be RealLinearSpace,
+      f be FinSequence of RS st f = (Seg len f) --> 0.RS
+    holds Sum(f)=0.RS;
+
+theorem :: RLVECT_X:29
+for RS be RealLinearSpace,
+      f be FinSequence of RS,
+      v be Element of RS ,i be Nat st i in Seg (len f)
+    & f = ( (Seg (len f)) --> 0.RS) +* ( {i} --> v)
+holds Sum(f)=v;
+
+theorem :: RLVECT_X:30
+for RS be RealLinearSpace,
+      f be FinSequence of RS,
+       i be Nat st i in Seg (len f) holds f/.i in Z_Lin(f);
+
+theorem :: RLVECT_X:31
+  for RS be RealLinearSpace,
+      f be FinSequence of RS holds
+    rng f c= Z_Lin(f);
+
+theorem :: RLVECT_X:32
+for RS be RealLinearSpace,
+      f be non empty FinSequence of RS,
+     g,h be FinSequence of RS,
+     s be integer-valued FinSequence
+        st rng g c= Z_Lin(f) &
+            len g = len s & len g = len h &
+            for i be Nat st i in Seg (len g) holds
+              h/.i=(s.i)*(g/.i) holds
+  Sum(h) in Z_Lin(f);
+
+theorem :: RLVECT_X:33
+  for RS be RealLinearSpace,
+      f be non empty FinSequence of RS holds
+    Z_Lin (rng f) = Z_Lin f;
+
+theorem :: RLVECT_X:34
+  Lin Z_Lin A = Lin A;
+
+theorem :: RLVECT_X:35
+  for x be set, g1,h1 be FinSequence of V,
+      a1 be integer-valued FinSequence st x=Sum(h1) &
+    rng g1 c= Z_Lin(A) & len g1 =len h1 & len g1 = len a1 &
+    for i be Nat st i in Seg (len g1) holds
+        h1/.i=(a1.i)*(g1/.i) holds x in Z_Lin(A);
+
+theorem :: RLVECT_X:36
+  Z_Lin Z_Lin A = Z_Lin A;
+
+theorem :: RLVECT_X:37
+  Z_Lin(A) = Z_Lin(B) implies Lin(A) = Lin(B);
+

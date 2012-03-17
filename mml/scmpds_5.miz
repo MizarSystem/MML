@@ -8,24 +8,26 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, SCMPDS_2, AMI_1, FSM_1, INT_1, SETFAM_1,
       RELAT_1, SCMFSA_7, CARD_1, SCMPDS_4, FUNCT_1, AMISTD_2, VALUED_1,
-      ARYTM_3, TARSKI, XXREAL_0, SCMFSA6A, TURING_1, FUNCT_4, XBOOLE_0,
+      ARYTM_3, TARSKI, XXREAL_0, TURING_1, FUNCT_4, XBOOLE_0,
       SCMFSA6B, FUNCT_7, CIRCUIT2, GRAPHSP, MSUALG_1, AMI_2, AMI_3, SCMPDS_1,
       COMPLEX1, STRUCT_0, ARYTM_1, NAT_1, SCMPDS_5, ORDINAL1, PARTFUN1,
       SCMNORM, GLIB_000, SCMFSA6C;
  notations TARSKI, XBOOLE_0, SETFAM_1, ENUMSET1, SUBSET_1, CARD_1, NUMBERS,
       XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, INT_1, NAT_1, STRUCT_0,
-      COMPOS_1, AMI_1, VALUED_1, AMI_2, FUNCT_7, SCMPDS_1, SCMPDS_2,
+      COMPOS_1, EXTPRO_1,
+      AMI_1, VALUED_1, AMI_2, FUNCT_7, SCMPDS_1, SCMPDS_2,
       INT_2, SCMPDS_4, XXREAL_0;
  constructors ENUMSET1, XXREAL_0, REAL_1, INT_2, SCMPDS_1, SCMPDS_4,
-      PRE_POLY, DOMAIN_1;
+      PRE_POLY, DOMAIN_1, AMI_1;
  registrations SETFAM_1, FUNCT_1, NUMBERS, XREAL_0, INT_1, AMI_1, SCMPDS_2,
-      SCMPDS_4, ORDINAL1, XBOOLE_0, VALUED_1, AFINSQ_1, COMPOS_1;
+      SCMPDS_4, ORDINAL1, XBOOLE_0, VALUED_1, AFINSQ_1, COMPOS_1, RELAT_1,
+      EXTPRO_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions FUNCOP_1, COMPOS_1, AMI_1, SCMPDS_4, NAT_1, AFINSQ_1;
+ definitions FUNCOP_1, COMPOS_1, AMI_1, SCMPDS_4, NAT_1, AFINSQ_1, EXTPRO_1;
  theorems AMI_1, NAT_1, TARSKI, FUNCT_4, FUNCT_1, INT_1, RELAT_1, SCMPDS_2,
       FUNCT_7, SCMPDS_3, CARD_1, ENUMSET1, ABSVALUE, GRFUNC_1, SCMPDS_4,
       LATTICE2, XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1, FUNCOP_1, XXREAL_0,
-      AMI_2, VALUED_1, AFINSQ_1, PBOOLE, PARTFUN1, COMPOS_1;
+      AMI_2, VALUED_1, AFINSQ_1, PBOOLE, PARTFUN1, COMPOS_1, EXTPRO_1;
  schemes NAT_1;
 
 begin :: Preliminaries
@@ -33,12 +35,10 @@ begin :: Preliminaries
 reserve x for set,
   m,n for Element of NAT,
   a,b,c for Int_position,
-  i for
-  Instruction of SCMPDS,
+  i for Instruction of SCMPDS,
   s,s1,s2 for State of SCMPDS,
   k1,k2 for Integer,
-  loc,l1
-  for Element of NAT,
+  loc,l1 for Element of NAT,
   I,J for Program of SCMPDS,
   N for with_non-empty_elements set;
 
@@ -54,14 +54,14 @@ proof
 end;
 
 theorem Th3:
-  loc in dom (stop I) & (stop I).loc <> halt SCMPDS implies loc in
-  dom I
+  loc in dom stop I & (stop I).loc <> halt SCMPDS implies loc in dom I
 proof
   assume that
 A1: loc in dom (stop I) and
 A2: (stop I).loc <> halt SCMPDS;
   set SS=Stop SCMPDS, S2=Shift(SS, card I);
-  assume not loc in dom I;
+  assume
+  not loc in dom I;
   then loc in dom S2 by A1,FUNCT_4:13;
   then loc in {l1+ card I where l1 is Element of NAT : l1 in dom SS} by
 VALUED_1:def 12;
@@ -72,7 +72,7 @@ y:  0 in dom Stop SCMPDS by COMPOS_1:45;
 x: (Stop SCMPDS). 0 = halt SCMPDS by AFINSQ_1:38;
   dom SS = { 0} by AFINSQ_1:36,CARD_1:87;
   then l1= 0 by A4,TARSKI:def 1;
-  hence contradiction by A2,A3,x,y,SCMPDS_4:38;
+  hence contradiction by A2,A3,x,y,AFINSQ_1:def 4;
 end;
 
 theorem
@@ -94,18 +94,18 @@ A1: dom Load i = { 0} by FUNCOP_1:19;
 end;
 
 theorem
-  card stop I = card I + 1 by LL,SCMPDS_4:45;
+  card stop I = card I + 1 by LL,AFINSQ_1:20;
 
 theorem Th8:
   card stop Load i = 2
 proof
-  thus card stop Load i = card (Load i) +1 by LL,SCMPDS_4:45
+  thus card stop Load i = card (Load i) +1 by LL,AFINSQ_1:20
     .=1+1 by Th6
     .=2;
 end;
 
 theorem Th9:
-   0 in dom stop (Load i) &  1 in dom stop (Load i)
+   0 in dom stop Load i &  1 in dom stop Load i
 proof
   card stop Load i = 2 by Th8;
   hence thesis by AFINSQ_1:70;
@@ -116,12 +116,12 @@ theorem Th10:
 proof
   set II=Load i;
    0 in dom II by Th5;
-  hence (stop II). 0 =II. 0 by SCMPDS_4:37
+  hence (stop II). 0 =II. 0 by AFINSQ_1:def 4
     .=i by FUNCOP_1:87;
 y:  0 in dom Stop SCMPDS by COMPOS_1:45;
 x: (Stop SCMPDS). 0 = halt SCMPDS by AFINSQ_1:38;
    1 = 0 + card II by Th6;
-  hence thesis by x,y,SCMPDS_4:38;
+  hence thesis by x,y,AFINSQ_1:def 4;
 end;
 
 theorem Th11:
@@ -153,60 +153,32 @@ A3: x= 0 or x= 1;
 end;
 
 theorem
-  dom (stop Load i)={ 0, 1}
+  dom stop Load i = {0,1}
 proof
   for x holds (x in dom (stop Load i) iff x= 0 or x= 1) by Th11;
   hence thesis by TARSKI:def 2;
 end;
 
-theorem Th13:
-   0 in dom (Initialize stop Load i) &  1 in dom (
-Initialize stop Load i) & (Initialize stop Load i). 0=i & (Initialize
-  stop Load i). 1=halt SCMPDS
-proof
-  set si=stop Load i, Ii=Initialize si;
-A1:  0 in dom si by Th9;
-A2:  1 in dom si by Th9;
-  si c= Ii by SCMPDS_4:9;
-  then dom si c= dom Ii by RELAT_1:25;
-  hence  0 in dom Ii &  1 in dom Ii by A1,A2;
-  thus Ii. 0=si. 0 by A1,SCMPDS_4:33
-    .=i by Th10;
-  thus Ii. 1=si. 1 by A2,SCMPDS_4:33
-    .=halt SCMPDS by Th10;
-end;
-
-canceled;
+canceled 2;
 
 theorem Th15:
-  for I,J being Program of SCMPDS holds Initialize I c=
-  Initialize stop (I ';' J)
+  for I,J being Program of SCMPDS holds I c= stop (I ';' J)
 proof
   let I,J be Program of SCMPDS;
-  set SA0=Start-At( 0,SCMPDS), IS=I ';' (J ';' Stop SCMPDS),
-  Ip=Initialize stop
-  (I ';' J);
-A1: Ip= IS +* SA0 by SCMPDS_4:46;
-A2: I c= IS by SCMPDS_4:40;
-  dom IS misses dom SA0 by SCMPDS_4:54;
-  then IS c= Ip by A1,FUNCT_4:33;
-  then
-A3: I c= Ip by A2,XBOOLE_1:1;
-  dom I misses dom SA0 by SCMPDS_4:54;
-  then
-A4: I \/ SA0 =Initialize I by FUNCT_4:32;
-  SA0 c= Ip by FUNCT_4:26;
-  hence thesis by A3,A4,XBOOLE_1:8;
+  set IS=I ';' (J ';' Stop SCMPDS),
+  Ip=stop (I ';' J);
+A2: I c= IS by AFINSQ_1:78;
+  thus thesis by A2,AFINSQ_1:30;
 end;
 
 theorem Th16:
   dom stop I c= dom stop (I ';' J)
 proof
   set sI=stop I, sIJ=stop (I ';'J);
-A1: card sIJ=card (I ';' J) +1 by LL,SCMPDS_4:45
-    .=card I + card J +1 by SCMPDS_4:45
+A1: card sIJ=card (I ';' J) +1 by LL,AFINSQ_1:20
+    .=card I + card J +1 by AFINSQ_1:20
     .=card I + 1 + card J;
-  card sI=card I +1 by LL,SCMPDS_4:45;
+  card sI=card I +1 by LL,AFINSQ_1:20;
   then
 A2: card sI <= card sIJ by A1,NAT_1:11;
   now
@@ -225,15 +197,13 @@ A3: x in dom sI;
 end;
 
 theorem Th17:
-  for I,J being Program of SCMPDS holds Initialize stop I +*
-  Initialize stop (I ';' J) = Initialize stop (I ';' J)
+  for I,J being Program of SCMPDS holds
+   stop I +* stop (I ';' J) = stop (I ';' J)
 proof
   let I,J be Program of SCMPDS;
-  set sI=stop I, IsI=Initialize sI, sIJ=stop (I ';' J), IsIJ=Initialize sIJ;
-A1: dom IsI = dom sI \/ {IC SCMPDS} by COMPOS_1:76;
-A2: dom IsIJ = dom sIJ \/ {IC SCMPDS} by COMPOS_1:76;
+  set sI=stop I, IsI=sI, sIJ=stop (I ';' J), IsIJ= sIJ;
   dom sI c= dom sIJ by Th16;
-  hence thesis by A1,A2,FUNCT_4:20,XBOOLE_1:9;
+  hence thesis by FUNCT_4:20;
 end;
 
 theorem Th18:
@@ -241,35 +211,36 @@ theorem Th18:
 proof
 A1: IC Initialize I =  0 by COMPOS_1:def 16;
 A2: IC SCMPDS in dom Initialize I by COMPOS_1:def 16;
-  assume Initialize I c= s;
+  assume
+  Initialize I c= s;
   hence thesis by A1,A2,GRFUNC_1:8;
 end;
 
 theorem Th19:
   (Initialize s +* I).a = s.a
 proof
-I1: s +* Initialize I = Initialize s +* I by SCMPDS_4:5;
+I1: s +* Initialize I = Initialize s +* I by COMPOS_1:125;
   not a in dom Initialize I by SCMPDS_4:31;
   hence thesis by I1,FUNCT_4:12;
 end;
 
 theorem Th20:
-  for I being parahalting Program of SCMPDS st Initialize stop I
-  c= s1 & Initialize stop I c= s2 & s1,s2 equal_outside NAT
+  for s1,s2 being 0-started State of SCMPDS
+  for I being parahalting Program of SCMPDS st stop I c= s1 &
+  stop I c= s2 & s1,s2 equal_outside NAT
   for k being Element of NAT holds
    Comput(ProgramPart(s1),s1,k),
    Comput(ProgramPart(s2),s2,k) equal_outside NAT &
    CurInstr(ProgramPart (s1),Comput(ProgramPart(s1),s1,k))
     = CurInstr(ProgramPart (s2),Comput(ProgramPart(s2),s2,k))
 proof
+  let s1,s2 be 0-started State of SCMPDS;
   let I be parahalting Program of SCMPDS;
   set SI=stop I;
   assume that
-A1: Initialize SI c= s1 and
-A2: Initialize SI c= s2 and
+A1: SI c= s1 and
+A2: SI c= s2 and
 A3: s1,s2 equal_outside NAT;
-A4: SI c= s2 by A2,SCMPDS_4:57;
-A5: SI c= s1 by A1,SCMPDS_4:57;
   hereby
     let k be Element of NAT;
 A6: IC Comput(ProgramPart(s1),s1,k) in dom SI by A1,SCMPDS_4:def 9;
@@ -278,42 +249,36 @@ A7: IC Comput(ProgramPart(s2),s2,k) in dom SI by A2,SCMPDS_4:def 9;
 in dom
     SI by A2,SCMPDS_4:def 9;
     hence Comput(ProgramPart(s1),s1,k), Comput(ProgramPart(s2),s2,k)
-equal_outside NAT by A3,A5,A4,SCMPDS_4:67;
+equal_outside NAT by A3,A1,A2,SCMPDS_4:67;
     then
 A8: IC Comput(ProgramPart(s1),s1,k) = IC Comput(ProgramPart(s2),s2,k) by
 COMPOS_1:24;
-Y:  (ProgramPart Comput(ProgramPart(s2),s2,k))/.IC Comput(ProgramPart(s2),s2,k)
- = Comput(ProgramPart(s2),s2,k).IC Comput(ProgramPart(s2),s2,k) by COMPOS_1:38;
-Z:  (ProgramPart Comput(ProgramPart(s1),s1,k))/.IC Comput(ProgramPart(s1),s1,k)
- = Comput(ProgramPart(s1),s1,k).IC Comput(ProgramPart(s1),s1,k) by COMPOS_1:38;
-TX2: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,k)
-by AMI_1:123;
-TX1: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
-by AMI_1:123;
     thus CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,k))
-     = s2.IC Comput(ProgramPart(s2),s2,k) by Y,TX2,AMI_1:54
-      .= SI.IC Comput(ProgramPart(s2),s2,k) by A4,A7,GRFUNC_1:8
-      .= s1.IC Comput(ProgramPart(s1),s1,k) by A5,A8,A6,GRFUNC_1:8
+     = s2.IC Comput(ProgramPart(s2),s2,k) by COMPOS_1:38
+      .= SI.IC Comput(ProgramPart(s2),s2,k) by A2,A7,GRFUNC_1:8
+      .= s1.IC Comput(ProgramPart(s1),s1,k) by A1,A8,A6,GRFUNC_1:8
       .= CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,k))
-       by Z,TX1,AMI_1:54;
+       by COMPOS_1:38;
   end;
 end;
 
 theorem Th21:
-  for I being parahalting Program of SCMPDS st Initialize stop I
-c= s1 & Initialize stop I c= s2 & s1,s2 equal_outside NAT holds LifeSpan(
-ProgramPart(s1),s1) =
-  LifeSpan(ProgramPart(s2),s2) & Result(ProgramPart(s1),s1), Result(ProgramPart
-(s2),s2) equal_outside NAT
+  for s1,s2 being 0-started State of SCMPDS
+  for I being parahalting Program of SCMPDS st stop I c= s1 &
+      stop I c= s2 & s1,s2 equal_outside NAT
+  holds LifeSpan(ProgramPart(s1),s1) =
+  LifeSpan(ProgramPart(s2),s2) &
+  Result(ProgramPart(s1),s1), Result(ProgramPart(s2),s2) equal_outside NAT
 proof
+  let s1,s2 be 0-started State of SCMPDS;
   let I be parahalting Program of SCMPDS;
   set SI=stop I;
   assume that
-A1: Initialize SI c= s1 and
-A2: Initialize SI c= s2 and
+A1: SI c= s1 and
+A2: SI c= s2 and
 A3: s1,s2 equal_outside NAT;
-A4: ProgramPart s2 halts_on s2 by A2,SCMPDS_4:63;
-A5: ProgramPart s1 halts_on s1 by A1,SCMPDS_4:63;
+A4: ProgramPart s2 halts_on s2 by A2,SCMPDS_4:def 10;
+A5: ProgramPart s1 halts_on s1 by A1,SCMPDS_4:def 10;
 A6: now
     let l be Element of NAT;
     assume
@@ -321,21 +286,21 @@ A7: CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,l)) = halt SCMPDS;
     CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,l))
      = CurInstr(ProgramPart (s2),Comput(ProgramPart(s2),s2,l))
      by A1,A2,A3,Th20;
-    hence LifeSpan(ProgramPart(s1),s1) <= l by A5,A7,AMI_1:def 46;
+    hence LifeSpan(ProgramPart(s1),s1) <= l by A5,A7,EXTPRO_1:def 14;
   end;
   CurInstr(ProgramPart s2,
 Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)))
    = CurInstr(ProgramPart s1,
    Comput(ProgramPart(s1),s1,LifeSpan(ProgramPart(s1),s1)))
     by A1,A2,A3,Th20
-    .= halt SCMPDS by A5,AMI_1:def 46;
+    .= halt SCMPDS by A5,EXTPRO_1:def 14;
   hence LifeSpan(ProgramPart(s1),s1) = LifeSpan(ProgramPart(s2),s2) by A6,A4,
-AMI_1:def 46;
+EXTPRO_1:def 14;
    then
 A8: Result(ProgramPart(s2),s2) = Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart
-(s1),s1)) by A4,AMI_1:122;
+(s1),s1)) by A2,EXTPRO_1:23,SCMPDS_4:def 10;
   Result(ProgramPart(s1),s1) = Comput(ProgramPart(s1),s1,LifeSpan(ProgramPart(
-s1),s1)) by A5,AMI_1:122;
+s1),s1)) by A1,EXTPRO_1:23,SCMPDS_4:def 10;
   hence thesis by A1,A2,A3,A8,Th20;
 end;
 
@@ -353,24 +318,26 @@ A2: dom (s | NAT) = dom s /\ NAT by RELAT_1:90
 end;
 
 theorem Th23:
+  for s being 0-started State of SCMPDS
   for I being parahalting Program of SCMPDS, J being Program of
-SCMPDS st Initialize stop I c= s for m st m <= LifeSpan(ProgramPart(s),s)
-holds Comput(
-ProgramPart(s),s,
+SCMPDS st stop I c= s for m st m <= LifeSpan(ProgramPart(s),s)
+holds Comput(ProgramPart(s),s,
   m),Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),m) equal_outside NAT
 proof
+  let s be 0-started State of SCMPDS;
   let I be parahalting Program of SCMPDS, J be Program of SCMPDS;
   set SI=stop I;
   defpred X[Element of NAT] means $1 <= LifeSpan(ProgramPart(s),s) implies
 Comput(ProgramPart(s
 ),s,$1),
   Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),$1) equal_outside NAT;
-A1: Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),0) = s+*(I ';' J) by AMI_1:13
+A1: Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),0) = s+*(I ';' J) by
+EXTPRO_1:3
 ;
   assume
-A2: Initialize SI c= s;
+A2: SI c= s;
   then
-A3: ProgramPart s halts_on s by SCMPDS_4:63;
+A3: ProgramPart s halts_on s by SCMPDS_4:def 10;
 A4: for m st X[m] holds X[m+1]
   proof
     dom(I ';' J) = dom I \/ dom Shift(J, card I) by FUNCT_4:def 1;
@@ -387,83 +354,77 @@ A7: m+1 <= LifeSpan(ProgramPart(s),s);
     then
 A8: IC (Comput(ProgramPart(s),s,m)) = IC (Comput(ProgramPart(s+*(I ';' J)),s+*(
 I ';' J),m)) by A6,COMPOS_1:24,NAT_1:13;
-T: ProgramPart (s+*(I ';' J)) =
-ProgramPart Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),m)
-by AMI_1:123;
+T1: ProgramPart (s+*(I ';' J))
+   = ProgramPart Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),m) by AMI_1:123;
 A9: Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),m+1)
  = Following(ProgramPart (s+*(I ';' J)),
  Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),m))
-    by AMI_1:14
-      .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J
-),m),
+    by EXTPRO_1:4
+      .= Exec(CurInstr(ProgramPart(s+*(I ';' J)),
       Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),m)), Comput(ProgramPart(s+*
 (I ';' J)
     ),s+*(I ';' J)
-    ,m)) by T;
-T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,m)
-by AMI_1:123;
+    ,m));
 A10: Comput(ProgramPart(s),s,m+1)
  = Following(ProgramPart s,Comput(ProgramPart(s),s,m))
- by AMI_1:14
-      .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s),s,m),Comput(
-ProgramPart(s),s,m)),
-      Comput(ProgramPart(s),s,m)) by T;
+ by EXTPRO_1:4
+      .= Exec(CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,m)),
+      Comput(ProgramPart(s),s,m));
 A11: I ';' J c= Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),m) by AMI_1:81
 ,FUNCT_4:26;
 A12: IC Comput(ProgramPart(s),s,m) in dom SI by A2,SCMPDS_4:def 9;
-Y:  (ProgramPart Comput(ProgramPart(s),s,m))/.IC Comput(ProgramPart(s),s,m)
- = Comput(ProgramPart(s),s,m).IC Comput(ProgramPart(s),s,m) by COMPOS_1:38;
-TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,m)
-by AMI_1:123;
-    dom SI misses dom Start-At( 0,SCMPDS) by SCMPDS_4:54;
-    then SI c= SI +* Start-At( 0,SCMPDS) by FUNCT_4:33;
-    then SI c= s by A2,XBOOLE_1:1;
-    then SI c= Comput(ProgramPart(s),s,m) by AMI_1:81;
+TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,m) by AMI_1:123;
+Y:  (ProgramPart(s))/.IC Comput(ProgramPart(s),s,m)
+ = Comput(ProgramPart(s),s,m).IC Comput(ProgramPart(s),s,m)
+    by TX,COMPOS_1:38;
+    SI c= Comput(ProgramPart(s),s,m) by A2,AMI_1:81;
     then
 A13: CurInstr(ProgramPart s,Comput(ProgramPart(s),s,m)
 )
- = SI.IC (Comput(ProgramPart(s),s,m)) by A12,Y,TX,GRFUNC_1:8;
-Y:  (ProgramPart Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),m))/.IC Comput(
+ = SI.IC (Comput(ProgramPart(s),s,m)) by A12,Y,GRFUNC_1:8;
+Y:  (ProgramPart(s+*(I ';' J)))/.IC Comput(
 ProgramPart(s+*(I ';' J)),s+*(I ';' J),m)
  = Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),m).IC Comput(ProgramPart(s+*(I
-';' J)),s+*(I ';' J),m) by COMPOS_1:38;
+';' J)),s+*(I ';' J),m) by T1,COMPOS_1:38;
     m < LifeSpan(ProgramPart(s),s) by A7,NAT_1:13;
-    then SI.IC(Comput(ProgramPart(s),s,m)) <> halt SCMPDS by A3,A13,
-AMI_1:def 46;
+    then
+ SI.IC(Comput(ProgramPart(s),s,m)) <> halt SCMPDS by A3,A13,EXTPRO_1:def 14;
     then
 A14: IC Comput(ProgramPart(s),s,m) in dom I by A12,Th3;
-    then CurInstr(ProgramPart Comput(ProgramPart(s),s,m),Comput(ProgramPart(s),
-s,m))
-    =I.IC (Comput(ProgramPart(s),s,m)) by A13,TX,SCMPDS_4:37
-      .=(I ';' J).IC(Comput(ProgramPart(s),s,m)) by A14,SCMPDS_4:37
-      .= CurInstr(ProgramPart Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),m),
+    then
+XX:  IC(Comput(ProgramPart(s),s,m)) in dom I;
+    then CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,m))
+    =I.IC (Comput(ProgramPart(s),s,m)) by A13,AFINSQ_1:def 4
+      .=(I ';' J).IC(Comput(ProgramPart(s),s,m))
+              by XX,AFINSQ_1:def 4
+      .= CurInstr(ProgramPart(s+*(I ';' J)),
       Comput(ProgramPart(s+*(I ';' J)),s+*(I ';' J),m))
        by A8,A11,A14,A5,Y,GRFUNC_1:8;
     hence thesis by A6,A7,A10,A9,NAT_1:13,SCMPDS_4:15;
   end;
-  Comput(ProgramPart(s),s,0) = s by AMI_1:13;
+  Comput(ProgramPart(s),s,0) = s by EXTPRO_1:3;
   then
 A15: X[0] by A1,FUNCT_7:132;
   thus for m holds X[m] from NAT_1:sch 1(A15,A4);
 end;
 
 theorem Th24:
-  for I being parahalting Program of SCMPDS, J being Program of
-SCMPDS st Initialize stop I c= s for m st
- m <= LifeSpan(ProgramPart(s),s)
-  holds Comput(ProgramPart(s),s,m),
-  Comput(ProgramPart(Initialize s+*stop(I ';' J)),
-  Initialize s+*stop(I ';' J),m) equal_outside NAT
+ for s being 0-started State of SCMPDS
+ for I being parahalting Program of SCMPDS, J being Program of SCMPDS
+   st stop I c= s
+ for m st m <= LifeSpan(ProgramPart(s),s)
+ holds Comput(ProgramPart(s),s,m),
+  Comput(ProgramPart(s+*stop(I ';' J)), s+*stop(I ';' J),m) equal_outside NAT
 proof
+  let s be 0-started State of SCMPDS;
   let I be parahalting Program of SCMPDS, J be Program of SCMPDS;
   assume
-A1: Initialize stop I c= s;
+A1: stop I c= s;
   set sIJ=stop (I ';' J), SS=Stop SCMPDS;
   let m;
   assume
 A2: m <= LifeSpan(ProgramPart(s),s);
-  sIJ= I ';' (J ';' SS) by SCMPDS_4:46;
-  then Initialize s +* sIJ =s +* (I ';' (J ';' SS)) by A1,SCMPDS_4:34;
+  s +* sIJ =s +* (I ';' (J ';' SS)) by AFINSQ_1:30;
   hence thesis by A1,A2,Th23;
 end;
 
@@ -471,20 +432,12 @@ Lm1: Load (DataLoc(0,0):=0) is parahalting
 proof
   set SA0 = Start-At( 0,SCMPDS);
   set ii= DataLoc(0,0):=0, m0= stop Load ii, m1 = Initialize m0;
-  let s such that
-A1: m1 c= s;
-A2: m0 c= s by A1,SCMPDS_4:57;
+  let s be 0-started State of SCMPDS such that
+A2: m0 c= s;
   take 1;
      IC Comput(ProgramPart(s),s,1) in NAT;
     hence IC Comput(ProgramPart(s),s,1) in dom ProgramPart s by COMPOS_1:34;
-  dom SA0 = {IC SCMPDS} by FUNCOP_1:19;
-  then
-A3: IC SCMPDS in dom SA0 by TARSKI:def 1;
-  SA0 c= m1 by FUNCT_4:26;
-  then SA0 c= s by A1,XBOOLE_1:1;
-  then
-A4: IC s = SA0.IC SCMPDS by A3,GRFUNC_1:8
-    .=  0 by FUNCOP_1:87;
+A4: IC s =  0 by COMPOS_1:def 16;
   then
 A5: IC Exec(ii, s) = succ  0 by SCMPDS_2:57
     .=  (0+1);
@@ -495,20 +448,13 @@ A6: s. 1 = halt SCMPDS by Th10;
    0 in dom m0 by Th9;
   then
 A7: m0. 0 = s. 0 by A2,GRFUNC_1:8;
-Y:  (ProgramPart s)/.IC s
- = s.IC s by COMPOS_1:38;
-Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
- = Comput(ProgramPart(s),s,1).IC Comput(ProgramPart(s),s,1) by COMPOS_1:38;
-NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
-by AMI_1:123;
+Y:  (ProgramPart s)/.IC s = s.IC s by COMPOS_1:38;
   Comput(ProgramPart(s),s,0+1) =
   Following(ProgramPart s,Comput(ProgramPart(s),s,0))
-   by AMI_1:14
-    .= Following(ProgramPart s,s) by AMI_1:13
+   by EXTPRO_1:4
+    .= Following(ProgramPart s,s) by EXTPRO_1:3
     .= Exec(ii,s) by A4,A7,Th10,Y;
-   then CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,1))
-    = halt SCMPDS by A6,A5,Z,NX,AMI_1:def 13;
-  hence thesis;
+  hence thesis by A6,A5,COMPOS_1:38;
 end;
 
 begin :: Non halting instrutions and parahalting instrutions
@@ -544,7 +490,8 @@ proof
   set i=goto k1;
   assume
 A1: k1 <>0;
-  assume i is not No-StopCode;
+  assume
+  i is not No-StopCode;
   then i=halt SCMPDS by Def1;
   hence contradiction by A1,SCMPDS_2:85;
 end;
@@ -696,20 +643,12 @@ proof
   assume
 A1: for s holds Exec(i,s).IC SCMPDS = succ IC s;
   set m0= stop Load i, m1 = Initialize m0;
-  let t be State of SCMPDS such that
-A2: m1 c= t;
-A3: m0 c= t by A2,SCMPDS_4:57;
+  let t be 0-started State of SCMPDS such that
+A3: m0 c= t;
   take 1;
      IC Comput(ProgramPart(t),t,1) in NAT;
     hence IC Comput(ProgramPart(t),t,1) in dom ProgramPart t by COMPOS_1:34;
-  dom SA0 = {IC SCMPDS} by FUNCOP_1:19;
-  then
-A4: IC SCMPDS in dom SA0 by TARSKI:def 1;
-  SA0 c= m1 by FUNCT_4:26;
-  then SA0 c= t by A2,XBOOLE_1:1;
-  then
-A5: IC t = SA0.IC SCMPDS by A4,GRFUNC_1:8
-    .=  0 by FUNCOP_1:87;
+A5: IC t =  0 by COMPOS_1:def 16;
   then
 A6: IC Exec(i, t) = succ  0 by A1
     .=  (0+1);
@@ -720,20 +659,13 @@ A7: t. 1 = halt SCMPDS by Th10;
    0 in dom m0 by Th9;
   then
 A8: m0. 0 = t. 0 by A3,GRFUNC_1:8;
-Z:  (ProgramPart Comput(ProgramPart(t),t,1))/.IC Comput(ProgramPart(t),t,1)
- = Comput(ProgramPart(t),t,1).IC Comput(ProgramPart(t),t,1) by COMPOS_1:38;
-V:  (ProgramPart t)/.IC t
- = t.IC t by COMPOS_1:38;
-NX: ProgramPart t = ProgramPart Comput(ProgramPart(t),t,1)
-by AMI_1:123;
+V:  (ProgramPart t)/.IC t = t.IC t by COMPOS_1:38;
   Comput(ProgramPart(t),t,0+1)
    = Following(ProgramPart t,Comput(ProgramPart(t),t,0))
-   by AMI_1:14
-    .= Following(ProgramPart t,t) by AMI_1:13
+   by EXTPRO_1:4
+    .= Following(ProgramPart t,t) by EXTPRO_1:3
     .= Exec(i,t) by A5,A8,Th10,V;
-   then CurInstr(ProgramPart (t),Comput(ProgramPart(t),t,1))
-    = halt SCMPDS by A6,A7,Z,NX,AMI_1:def 13;
-  hence thesis;
+  hence thesis by A6,A7,COMPOS_1:38;
 end;
 
 registration
@@ -817,43 +749,44 @@ theorem Th26:
 proof
   consider s such that
 A1: for a holds s.a = 2 by SCMPDS_2:73;
-  assume InsCode i=1;
+  assume
+  InsCode i=1;
   then consider a such that
 A2: i = return a by SCMPDS_2:36;
-  assume i is parahalting;
+  assume
+  i is parahalting;
   then reconsider Li = Load i as parahalting Program of SCMPDS;
   set pi=stop Li;
   set s1=Initialize s +* pi;
-I1: s +* Initialize pi = Initialize s +* pi by SCMPDS_4:5;
+I1: s +* Initialize pi = Initialize s +* pi by COMPOS_1:125;
   s1.DataLoc(s1.a,RetIC)=s.DataLoc(s1.a,RetIC) by Th19
     .=2 by A1;
   then
 A3: Exec(i, s1).IC SCMPDS =(abs(2))+2 by A2,SCMPDS_2:70
-    .=(2)+2 by ABSVALUE:def 1
+    .= 2+2 by ABSVALUE:def 1
     .= 4;
   set C1=Comput(ProgramPart(s1),s1,1);
-  Initialize pi c= s1 by I1,FUNCT_4:26;
+A4: IC C1 in dom pi by FUNCT_4:26,SCMPDS_4:def 9;
+   0 in dom pi by Th9;
   then
-A4: IC C1 in dom pi by SCMPDS_4:def 9;
-   0 in dom Initialize pi by Th13;
-  then
-A5: s1. 0=(Initialize pi). 0 by I1,FUNCT_4:14
-    .=i by Th13;
+A5: s1. 0= pi. 0 by FUNCT_4:14
+    .=i by Th10;
 A6: card pi = 2 by Th8;
 Y:  (ProgramPart s1)/.IC s1
  = s1.IC s1 by COMPOS_1:38;
   Comput(ProgramPart(s1),s1,0+1)
    = Following(ProgramPart s1,Comput(ProgramPart(s1),
 s1,0))
-   by AMI_1:14
-    .= Following(ProgramPart s1,s1) by AMI_1:13
+   by EXTPRO_1:4
+    .= Following(ProgramPart s1,s1) by EXTPRO_1:3
     .= Exec(i, s1) by A5,Th18,Y,I1,FUNCT_4:26;
   hence contradiction by A3,A4,A6,AFINSQ_1:70;
 end;
 
 definition
   let N be with_non-empty_elements set;
-  let S be halting (AMI-Struct over N);
+:::  let S be halting (AMI-Struct over N);
+  let S be definite (non empty stored-program AMI-Struct over N);
   let IT be  NAT-defined (the Instructions of S)-valued Function;
   redefine attr IT is halt-free means
   :Def3:
@@ -880,7 +813,6 @@ Z:   for x being Element of NAT
 W1:   x in dom IT and
 W2:   halt S = IT.x by FUNCT_1:def 5;
      dom IT c= NAT by RELAT_1:def 18;
-     then x in NAT by W1;
     hence contradiction by W1,W2,Z;
    end;
 end;
@@ -893,7 +825,8 @@ registration
     take II=Load ii;
     now
       let x be Element of NAT;
-      assume x in dom II;
+      assume
+      x in dom II;
       then x in { 0} by FUNCOP_1:19;
       then x= 0 by TARSKI:def 1;
       then
@@ -921,7 +854,7 @@ A2:   x in dom IJ;
       per cases by A2,A1,XBOOLE_0:def 3;
       suppose
 A3:     x in dom I;
-        then I.x=IJ.x by SCMPDS_4:37;
+        then I.x=IJ.x by AFINSQ_1:def 4;
         hence IJ.x<>halt SCMPDS by A3,Def3;
       end;
       suppose
@@ -929,7 +862,7 @@ A3:     x in dom I;
         then consider n such that
 A4:     x = n+card I and
 A5:     n in dom J;
-        J. n =IJ.x by A4,A5,SCMPDS_4:38;
+        J. n =IJ.x by A4,A5,AFINSQ_1:def 4;
         hence IJ.x<>halt SCMPDS by A5,Def3;
       end;
     end;
@@ -945,7 +878,8 @@ registration
     set p=Load i;
     now
       let x be Element of NAT;
-      assume x in dom p;
+      assume
+      x in dom p;
       then x =  0 by Th2;
       then p.x=i by FUNCOP_1:87;
       hence p.x <>halt SCMPDS by Def1;
@@ -975,81 +909,67 @@ registration
 end;
 
 theorem Th27:
-  for I being parahalting halt-free Program of SCMPDS st
-  Initialize (stop I) c= s holds IC Comput(ProgramPart( s), s,LifeSpan(
-ProgramPart(Initialize s +* stop I),Initialize s +* stop I)) =  card I
+  for s being 0-started State of SCMPDS
+  for I being parahalting halt-free Program of SCMPDS st stop I c= s
+   holds IC Comput(ProgramPart( s), s,
+     LifeSpan(ProgramPart(s +* stop I),s +* stop I))
+     =  card I
 proof
+  let s be 0-started State of SCMPDS;
   let I be parahalting halt-free Program of SCMPDS;
-A1: stop I c= Initialize stop I by SCMPDS_4:9;
   set Css= Comput(ProgramPart( s), s,LifeSpan(ProgramPart(s),s));
   reconsider n = IC Css as Element of NAT;
-I1: Initialize s +* stop I = s +* Initialize stop I by SCMPDS_4:5;
   assume
-A2: Initialize stop I c= s;
+A2: stop I c= s;
   then
-A3: ProgramPart s halts_on s by SCMPDS_4:63;
-X: Initialize stop I +* s = s & Initialize s +* stop I = s by A2,I1,FUNCT_4:79;
-  I c= stop I by SCMPDS_4:40;
-  then I c= Initialize stop I by A1,XBOOLE_1:1;
+A3: ProgramPart s halts_on s by SCMPDS_4:def 10;
+X:  s +* stop I = s by A2,FUNCT_4:79;
+  I c= stop I by AFINSQ_1:78;
   then
 A4: I c= s by A2,XBOOLE_1:1;
   now
-Y:  (ProgramPart Css)/.IC Css
- = Css.IC Css by COMPOS_1:38;
-TX: ProgramPart s = ProgramPart Css
-by AMI_1:123;
     assume
 A5: IC Css in dom I;
     then I.IC Css=s.IC Css by A4,GRFUNC_1:8
-      .=CurInstr(ProgramPart s,Css) by Y,TX,AMI_1:54
-      .=halt SCMPDS by A3,AMI_1:def 46;
+      .=CurInstr(ProgramPart s,Css) by COMPOS_1:38
+      .=halt SCMPDS by A3,EXTPRO_1:def 14;
     hence contradiction by A5,Def3;
   end;
   then
 A6: n >= card I by AFINSQ_1:70;
-A7: card stop I =card I + 1 by LL,SCMPDS_4:45;
+A7: card stop I =card I + 1 by LL,AFINSQ_1:20;
   IC Css in dom stop(I) by A2,SCMPDS_4:def 9;
   then n < card I + 1 by A7,AFINSQ_1:70;
   then n <= card I by NAT_1:13;
-  then n=card I by A6,XXREAL_0:1;
-  hence thesis by X;
+  hence thesis by X,A6,XXREAL_0:1;
 end;
 
 theorem Th28:
+ for s being 0-started State of SCMPDS
   for I being parahalting Program of SCMPDS,k be Element of NAT st
-k < LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +* stop I)
-holds IC Comput(ProgramPart(Initialize s +* stop I),
-    (Initialize s +* stop I),k) in dom I
-proof
+     k < LifeSpan(ProgramPart(s +* stop I),s +* stop I)
+holds IC Comput(ProgramPart(s +* stop I),(s +* stop I),k) in dom I
+proof let s be 0-started State of SCMPDS;
   let I be parahalting Program of SCMPDS,k be Element of NAT;
-  set ss= Initialize s +* stop I, m=LifeSpan(ProgramPart(ss),ss);
+  set ss= s +* stop I, m=LifeSpan(ProgramPart(ss),ss);
   set Sk= Comput(ProgramPart( ss), ss,k), Ik=IC Sk;
-I1: s +* Initialize stop I = Initialize s +* stop I by SCMPDS_4:5;
-A1: ProgramPart ss halts_on ss by I1,FUNCT_4:26,SCMPDS_4:63;
+A1: ProgramPart ss halts_on ss by FUNCT_4:26,SCMPDS_4:def 10;
   reconsider n = Ik as Element of NAT;
-A2: Initialize stop I c= ss by I1,FUNCT_4:26;
-  then
-A3: Ik in dom stop(I) by SCMPDS_4:def 9;
-  stop I c= Initialize stop I by SCMPDS_4:9;
-  then
-A4: stop I c= ss by A2,XBOOLE_1:1;
+A3: Ik in dom stop(I) by FUNCT_4:26,SCMPDS_4:def 9;
+A4: stop I c= ss by FUNCT_4:26;
   assume
 A5: k < m;
 A6: now
-Y:  (ProgramPart Sk)/.IC Sk
- = Sk.IC Sk by COMPOS_1:38;
     assume
 A7: n = card I;
 y:  0 in dom Stop SCMPDS by COMPOS_1:45;
 x: (Stop SCMPDS). 0 = halt SCMPDS by AFINSQ_1:38;
-TX: ProgramPart Sk = ProgramPart ss
-by AMI_1:123;
-    CurInstr(ProgramPart ss,Sk) =ss.Ik by Y,TX,AMI_1:54
+    CurInstr(ProgramPart ss,Sk) =ss.Ik by COMPOS_1:38
       .=(stop I).(0+n) by A3,A4,GRFUNC_1:8
-      .=halt SCMPDS by A7,x,y,SCMPDS_4:38;
-    hence contradiction by A5,A1,AMI_1:def 46;
+      .=halt SCMPDS by A7,x,y,AFINSQ_1:def 4;
+    hence contradiction by A5,A1,EXTPRO_1:def 14;
   end;
-  card stop I=card I + 1 by LL,SCMPDS_4:45;
+  card stop I=card I + 1 by LL,AFINSQ_1:20;
   then n < card I + 1 by A3,AFINSQ_1:70;
   then n <= card I by INT_1:20;
   then n < card I by A6,XXREAL_0:1;
@@ -1057,71 +977,59 @@ by AMI_1:123;
 end;
 
 theorem Th29:
+  for s being 0-started State of SCMPDS
   for I being parahalting Program of SCMPDS,k be Element of NAT st
-Initialize I c= s & k <= LifeSpan(ProgramPart(Initialize s +* stop I),
-   Initialize s +* stop(I))
-   holds Comput(
-ProgramPart( s), s,k), Comput(ProgramPart( (Initialize s +* stop(I))), (
-  Initialize s +* stop(I)),k) equal_outside NAT
+ I c= s & k <= LifeSpan(ProgramPart(s +* stop I),s +* stop I)
+   holds Comput(ProgramPart s, s,k),
+      Comput(ProgramPart(s +* stop I),s +* stop I,k) equal_outside NAT
 proof
+  let s be 0-started State of SCMPDS;
   let I be parahalting Program of SCMPDS,k be Element of NAT;
   set
-  m=LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +* stop I);
+  m=LifeSpan(ProgramPart(s +* stop I),s +* stop I);
   assume that
-A1: Initialize I c= s and
+A1: I c= s and
 A2: k <= m;
-  set s2 = Initialize s +* stop I;
+  set s2 = s +* stop I;
   defpred P[Element of NAT] means $1 <= m implies Comput(ProgramPart(s),s,$1),
   Comput(ProgramPart(s2),s2,$1) equal_outside NAT;
-I2: s +* Initialize I = Initialize s +* I by SCMPDS_4:5;
-A3: Initialize s +* stop I = s +* stop(I) by A1,SCMPDS_4:34;
-A4: s = Initialize s +* I by A1,I2,FUNCT_4:79
-    .=s +* I by A1,SCMPDS_4:34;
+A4: s = s +* I by A1,FUNCT_4:79;
 A5: now
     let k be Element of NAT;
     assume
 A6: P[k];
     now
-T: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,k)
-by AMI_1:123;
 A7:   Comput(ProgramPart(s2),s2,k+1)
- = Following(ProgramPart s2,Comput(ProgramPart(s2),s2
-,k))
- by AMI_1:14
-        .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s2),s2,k),
-        Comput(ProgramPart(s2),s2,k)),Comput(ProgramPart(s2),s2,k)) by T;
-T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:123;
+ = Following(ProgramPart s2,Comput(ProgramPart(s2),s2,k))
+ by EXTPRO_1:4
+        .= Exec(CurInstr(ProgramPart(s2),
+        Comput(ProgramPart(s2),s2,k)),Comput(ProgramPart(s2),s2,k));
 A8:   Comput(ProgramPart(s),s,k+1)
  = Following(ProgramPart s,Comput(ProgramPart(s),s,k))
-by AMI_1:14
-        .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(
-ProgramPart(s),s,k)),
-        Comput(ProgramPart(s),s,k)) by T;
+by EXTPRO_1:4
+        .= Exec(CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,k)),
+        Comput(ProgramPart(s),s,k));
 A9:   k < k+1 by XREAL_1:31;
       assume
 A10:  k+1 <= m;
-      then k < m by A9,XXREAL_0:2;
       then
-A11:  IC Comput(ProgramPart(s2),s2,k) in dom I by Th28;
+B11:    k < m by A9,XXREAL_0:2;
+      then
+  IC Comput(ProgramPart(s2),s2,k) in dom I by Th28;
       then
 A12:  IC Comput(ProgramPart(s2),s2,k) in dom (stop I) by FUNCT_4:13;
-Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by COMPOS_1:38;
-Z:  (ProgramPart Comput(ProgramPart(s2),s2,k))/.IC Comput(ProgramPart(s2),s2,k)
- = Comput(ProgramPart(s2),s2,k).IC Comput(ProgramPart(s2),s2,k) by COMPOS_1:38;
-      IC Comput(ProgramPart(s),s,k) = IC Comput(ProgramPart(s2),s2,k) by A6,A10
-,A9,COMPOS_1:24,XXREAL_0:2;
-      then CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(ProgramPart(s
-),s,k))
-       = s.IC Comput(ProgramPart(s2),s2,k) by Y,AMI_1:54
-        .= I.IC Comput(ProgramPart(s2),s2,k) by A4,A11,FUNCT_4:14
-        .= (stop I).IC Comput(ProgramPart(s2),s2,k) by A11,SCMPDS_4:37
-        .= (Initialize s +* stop I).IC Comput(ProgramPart(s2),s2,k)
+XX:   IC Comput(ProgramPart s2,s2,k) in dom I by B11,Th28;
+      IC Comput(ProgramPart(s),s,k) = IC Comput(ProgramPart(s2),s2,k)
+        by A6,A10,A9,COMPOS_1:24,XXREAL_0:2;
+      then CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,k))
+       = s.IC Comput(ProgramPart(s2),s2,k) by COMPOS_1:38
+        .= I.IC Comput(ProgramPart(s2),s2,k) by A4,B11,Th28,FUNCT_4:14
+        .= (stop I).IC Comput(ProgramPart(s2),s2,k)
+             by XX,AFINSQ_1:def 4
+        .= (s +* stop I).IC Comput(ProgramPart(s2),s2,k)
          by A12,FUNCT_4:14
-        .= CurInstr(ProgramPart Comput(ProgramPart(s2),s2,k),Comput(ProgramPart
-(s2),s2,k))
-         by Z,AMI_1:54;
+        .= CurInstr(ProgramPart(s2),Comput(ProgramPart(s2),s2,k))
+         by COMPOS_1:38;
       hence Comput(ProgramPart(s),s,k+1),Comput(ProgramPart(s2),s2,k+1)
 equal_outside NAT by A6,A10,A9,A8,A7,SCMPDS_4:15,XXREAL_0:2;
     end;
@@ -1129,132 +1037,108 @@ equal_outside NAT by A6,A10,A9,A8,A7,SCMPDS_4:15,XXREAL_0:2;
   end;
 A13: P[0]
   proof
-    assume 0 <= m;
-A14: Comput(ProgramPart(s2),s2,0)=Initialize s +* stop I by AMI_1:13;
-    Comput(ProgramPart(s),s,0)=s by AMI_1:13;
-    hence thesis by A3,A14,FUNCT_7:132;
+    assume
+    0 <= m;
+A14: Comput(ProgramPart(s2),s2,0)= s +* stop I by EXTPRO_1:3;
+    Comput(ProgramPart(s),s,0)=s by EXTPRO_1:3;
+    hence thesis by A14,FUNCT_7:132;
   end;
   for k be Element of NAT holds P[k] from NAT_1:sch 1(A13,A5);
   hence thesis by A2;
 end;
 
 theorem Th30:
-  for I being parahalting halt-free Program of SCMPDS st
-Initialize I c= s holds IC Comput(ProgramPart(s),s,
-LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +* stop I))
-  =  card I
+  for s being 0-started State of SCMPDS
+  for I being parahalting halt-free Program of SCMPDS st I c= s
+   holds IC Comput(ProgramPart s,s,
+    LifeSpan(ProgramPart(s +* stop I),s +* stop I)) =  card I
 proof
+  let s be 0-started State of SCMPDS;
   let I be parahalting halt-free Program of SCMPDS;
-  set ss = Initialize s +* stop I, m=LifeSpan(ProgramPart(ss),ss);
-I1: s +* Initialize stop I = Initialize s +* stop I by SCMPDS_4:5;
-I2: ss +* Initialize stop I = Initialize ss +* stop I by SCMPDS_4:5;
-A1: Initialize stop I c= ss by I1,FUNCT_4:26;
-XX: Initialize stop I +* ss = ss & Initialize ss +* stop I = ss
-by A1,I2,FUNCT_4:79;
-  assume Initialize I c= s;
-  hence IC Comput(ProgramPart(s),s,m) = IC Comput(ProgramPart( ss), ss,m) by
-Th29,COMPOS_1:24
-    .=IC Comput(ProgramPart( ss), ss,
-    LifeSpan(ProgramPart(Initialize ss +* stop I),Initialize ss +* stop I)
-) by XX
-    .= card I by Th27,I1,FUNCT_4:26;
+  set ss = s +* stop I, m=LifeSpan(ProgramPart(ss),ss);
+A1: stop I c= ss by FUNCT_4:26;
+XX: stop I +* ss = ss & ss +* stop I = ss
+by A1,FUNCT_4:79;
+  assume I c= s;
+  hence IC Comput(ProgramPart(s),s,m)
+     = IC Comput(ProgramPart( ss), ss,m) by Th29,COMPOS_1:24
+    .= card I by Th27,XX,FUNCT_4:26;
 end;
 
 theorem Th31:
-  for I being parahalting Program of SCMPDS st Initialize I c= s
-  holds CurInstr(
-   ProgramPart Comput(ProgramPart( s), s,
-   LifeSpan(ProgramPart(Initialize s +* stop(I)),Initialize s +* stop(I))),
-   Comput(ProgramPart( s), s,LifeSpan(ProgramPart(Initialize s +* stop(I)),
-   Initialize s +* stop(I))))
-   = halt
-SCMPDS or IC Comput(ProgramPart( s), s,
-  LifeSpan(ProgramPart(Initialize s +* stop(I)),Initialize s +* stop(I))) =
-card I
+  for s being 0-started State of SCMPDS
+  for I being parahalting Program of SCMPDS st I c= s
+  holds CurInstr(ProgramPart s,
+   Comput(ProgramPart s, s,LifeSpan(ProgramPart(s +* stop I),
+    s +* stop I))) = halt SCMPDS or
+   IC Comput(ProgramPart( s), s,
+  LifeSpan(ProgramPart(s +* stop I),s +* stop I)) = card I
 proof
+  let s be 0-started State of SCMPDS;
   let I be parahalting Program of SCMPDS;
-  set ss = Initialize s +* stop I, m=LifeSpan(ProgramPart(ss),ss);
-I1: s +* Initialize stop I = Initialize s +* stop I by SCMPDS_4:5;
-I2: ss +* Initialize stop I = Initialize ss +* stop I by SCMPDS_4:5;
-  set s1=Comput(ProgramPart(s),s,m), s2= Comput(ProgramPart( ss), ss,LifeSpan(
-ProgramPart(Initialize ss +* stop I),Initialize ss +* stop I)), Ik = IC s2;
-A1: ProgramPart ss halts_on ss by I1,FUNCT_4:26,SCMPDS_4:63;
+  set ss = s +* stop I, m=LifeSpan(ProgramPart(ss),ss);
+  set s1=Comput(ProgramPart(s),s,m),
+      s2= Comput(ProgramPart( ss), ss,
+       LifeSpan(ProgramPart(Initialize ss +* stop I),Initialize ss +* stop I)),
+      Ik = IC s2;
+A1: ProgramPart ss halts_on ss by FUNCT_4:26,SCMPDS_4:def 10;
   reconsider n = Ik as Element of NAT;
-A2: Initialize stop I c= ss by I1,FUNCT_4:26;
+A2: stop I c= ss by FUNCT_4:26;
+A3: Ik in dom stop(I) by FUNCT_4:26,SCMPDS_4:def 9;
+  Initialize ss = ss by COMPOS_1:79;
   then
-A3: Ik in dom stop(I) by SCMPDS_4:def 9;
-XX: Initialize stop I +* ss = ss & Initialize ss +* stop I = ss
-by A2,I2,FUNCT_4:79;
-xx: Initialize stop I +* ss = ss & Initialize ss +* stop I = ss by A2,I2,
-FUNCT_4:79;
-  card stop I = card I + 1 by LL,SCMPDS_4:45;
+XX: Initialize ss +* stop I = ss by A2,FUNCT_4:79;
+  card stop I = card I + 1 by LL,AFINSQ_1:20;
   then n < card I + 1 by A3,AFINSQ_1:70;
   then
 A4: n <= card I by INT_1:20;
-  stop I c= Initialize stop I by SCMPDS_4:9;
-  then
-A5: stop I c= ss by A2,XBOOLE_1:1;
+A5: stop I c= ss by FUNCT_4:26;
   assume
-A6: Initialize I c= s;
+A6: I c= s;
   then
-A7: IC s1 = IC Comput(ProgramPart( ss), ss,m) by Th29,COMPOS_1:24
-    .=Ik by XX;
-A8: I c= s by A6,SCMPDS_4:57;
+A7: IC s1 =Ik by XX,Th29,COMPOS_1:24;
   now
     per cases by A4,XXREAL_0:1;
     case
       n < card I;
       then
 A9:    n in dom I by AFINSQ_1:70;
-Z:  (ProgramPart s1)/.IC s1
- = s1.IC s1 by COMPOS_1:38;
-V:  (ProgramPart s2)/.IC s2
- = s2.IC s2 by COMPOS_1:38;
-TX: ProgramPart ss = ProgramPart
-Comput(ProgramPart( ss), ss,LifeSpan(ProgramPart(
-ss),ss))
-by AMI_1:123;
       thus halt SCMPDS
-       = CurInstr(ProgramPart ss,
-       Comput(ProgramPart( ss), ss,LifeSpan(ProgramPart(ss),ss))) by A1,
-AMI_1:def 46
-        .= CurInstr(ProgramPart s2,s2) by xx,TX
-        .=ss.Ik by V,AMI_1:54
+        = CurInstr(ProgramPart ss,s2) by XX,A1,EXTPRO_1:def 14
+        .=ss.Ik by COMPOS_1:38
         .=(stop I).Ik by A3,A5,GRFUNC_1:8
-        .=I.Ik by A9,SCMPDS_4:37
-        .=s.IC s1 by A8,A7,A9,GRFUNC_1:8
-        .=CurInstr(ProgramPart s1,s1) by Z,AMI_1:54;
+        .=I.Ik by A9,AFINSQ_1:def 4
+        .=s.IC s1 by A6,A7,A9,GRFUNC_1:8
+        .=CurInstr(ProgramPart s,s1) by COMPOS_1:38;
     end;
     case
       n = card I;
-      hence IC s1=  card I by A7;
+      hence IC s1=  card I by A6,XX,Th29,COMPOS_1:24;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th32:
-  for I being parahalting halt-free Program of SCMPDS,k being
-Element of NAT st Initialize I c= s & k < LifeSpan(
-ProgramPart(Initialize s +*
-stop(I)),Initialize s +* stop(I))
-  holds CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(ProgramPart(s),s
-,k)) <> halt SCMPDS
+  for s being 0-started State of SCMPDS
+  for I being parahalting halt-free Program of SCMPDS,k being Element of NAT
+   st I c= s & k < LifeSpan(ProgramPart(s +* stop I),s +* stop I)
+  holds CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,k)) <> halt SCMPDS
 proof
+  let s be 0-started State of SCMPDS;
   let I be parahalting halt-free Program of SCMPDS,k be Element of NAT;
-  set sI=Initialize s +* stop(I), s1= Comput(ProgramPart( s), s,k), s2= Comput
-(ProgramPart( sI), sI,
-  k);
+  set sI=s +* stop(I), s1= Comput(ProgramPart( s), s,k),
+      s2= Comput(ProgramPart( sI), sI,k);
   assume that
-A1: Initialize I c= s and
+A1: I c= s and
 A2: k < LifeSpan(ProgramPart(sI),sI);
-A3: I c= s1 by A1,AMI_1:81,SCMPDS_4:57;
+A3: I c= s1 by A1,AMI_1:81;
 A4: IC s2 in dom I by A2,Th28;
-Y:  (ProgramPart s1)/.IC s1
- = s1.IC s1 by COMPOS_1:38;
-  CurInstr(ProgramPart s1,s1)=s1.IC s2 by A1,A2,Th29,Y,COMPOS_1:24
+TT: ProgramPart s1 = ProgramPart s by AMI_1:123;
+Y:  (ProgramPart s)/.IC s1 = s1.IC s1 by TT,COMPOS_1:38;
+  CurInstr(ProgramPart s,s1)=s1.IC s2 by A1,A2,Th29,Y,COMPOS_1:24
     .=I.IC s2 by A3,A4,GRFUNC_1:8;
-  hence thesis by A4,Def3;
+  hence thesis by A4,Def3,TT;
 end;
 
 theorem Th33:
@@ -1272,13 +1156,11 @@ proof
   set s1 = Initialize s +* spI;
   set s2 = s +* ((I ';' J) +* SA0);
   set n=LifeSpan(ProgramPart(s1),s1);
-I1: s +* Initialize spI = Initialize s +* spI by SCMPDS_4:5;
   defpred X[Element of NAT] means $1 <= n implies Comput(ProgramPart(s1),s1,$1)
 ,
   Comput(ProgramPart(s2),s2,$1) equal_outside NAT;
-A2: s2 = s +* (I ';' J) +* SA0 by FUNCT_4:15
-    .= s+*SA0+*(I ';' J) by SCMPDS_4:62;
-A3: Initialize spI c= s1 by I1,FUNCT_4:26;
+A2: s2 = Initialize(s +* (I ';' J)) by FUNCT_4:15
+    .= Initialize s+*(I ';' J) by COMPOS_1:83;
 A4: for n being Element of NAT st X[n] holds X[n+1]
   proof
     let m be Element of NAT;
@@ -1286,164 +1168,158 @@ A4: for n being Element of NAT st X[n] holds X[n+1]
 A5: m <= n implies Comput(ProgramPart(s1),s1,m), Comput(ProgramPart(s2),s2,m)
 equal_outside
     NAT;
-T: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,m)
-by AMI_1:123;
 A6: Comput(ProgramPart(s2),s2,m+1)
  = Following(ProgramPart s2,Comput(ProgramPart(s2),s2
 ,m))
- by AMI_1:14
-      .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s2),s2,m),Comput(
-ProgramPart(s2),s2,m)),
-      Comput(ProgramPart(s2),s2,m)) by T;
-A7: IC Comput(ProgramPart(s1),s1,m) in dom spI by A3,SCMPDS_4:def 9;
-T: ProgramPart s1 = ProgramPart Comput(ProgramPart(
-s1),s1,m)
-by AMI_1:123;
+ by EXTPRO_1:4
+      .= Exec(CurInstr(ProgramPart(s2),Comput(ProgramPart(s2),s2,m)),
+      Comput(ProgramPart(s2),s2,m));
+A7: IC Comput(ProgramPart(s1),s1,m) in dom spI by FUNCT_4:26,SCMPDS_4:def 9;
 A8: Comput(ProgramPart(s1),s1,m+1) = Following(ProgramPart s1,
-Comput(ProgramPart(s1),s1,m)) by AMI_1:14
-      .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m),Comput(
-ProgramPart(s1),s1,m)),
-      Comput(ProgramPart(s1),s1,m)) by T;
+Comput(ProgramPart(s1),s1,m)) by EXTPRO_1:4
+      .= Exec(CurInstr(ProgramPart(s1),Comput(ProgramPart(s1),s1,m)),
+      Comput(ProgramPart(s1),s1,m));
     assume
 A9: m+1 <= n;
     then
 A10: IC Comput(ProgramPart(s1),s1,m) = IC Comput(ProgramPart(s2),s2,m) by A5,
 COMPOS_1:24,NAT_1:13;
-    m < n by A9,NAT_1:13;
+B11:  m < n by A9,NAT_1:13;
     then
-A11: IC Comput(ProgramPart(s1),s1,m) in dom I by Th28;
+ IC Comput(ProgramPart(s1),s1,m) in dom I by Th28;
     then
 A12: IC Comput(ProgramPart(s1),s1,m) in dom (I ';' J) by FUNCT_4:13;
-Y:  (ProgramPart Comput(ProgramPart(s1),s1,m))/.IC Comput(ProgramPart(s1),s1,m)
- = Comput(ProgramPart(s1),s1,m).IC Comput(ProgramPart(s1),s1,m) by COMPOS_1:38;
-Z:  (ProgramPart Comput(ProgramPart(s2),s2,m))/.IC Comput(ProgramPart(s2),s2,m)
- = Comput(ProgramPart(s2),s2,m).IC Comput(ProgramPart(s2),s2,m) by COMPOS_1:38;
-    CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m),Comput(ProgramPart(s1),s1
-,m))
-     = s1.IC Comput(ProgramPart(s1),s1,m) by Y,AMI_1:54
+XX:   IC Comput(ProgramPart s1,s1,m) in dom I by B11,Th28;
+    CurInstr(ProgramPart(s1),Comput(ProgramPart(s1),s1,m))
+     = s1.IC Comput(ProgramPart(s1),s1,m) by COMPOS_1:38
       .= spI.IC Comput(ProgramPart(s1),s1,m) by A7,FUNCT_4:14
-      .= I.IC Comput(ProgramPart(s1),s1,m) by A11,SCMPDS_4:37
-      .= (I ';' J).IC Comput(ProgramPart(s1),s1,m) by A11,SCMPDS_4:37
+      .= I.IC Comput(ProgramPart(s1),s1,m) by XX,AFINSQ_1:def 4
+      .= (I ';' J).IC Comput(ProgramPart(s1),s1,m)
+            by XX,AFINSQ_1:def 4
       .= s2.IC Comput(ProgramPart(s1),s1,m) by A2,A12,FUNCT_4:14
-      .=CurInstr(ProgramPart Comput(ProgramPart(s2),s2,m),Comput(ProgramPart(s2
-),s2,m))
-       by A10,Z,AMI_1:54;
+      .=CurInstr(ProgramPart(s2),Comput(ProgramPart(s2),s2,m))
+       by A10,COMPOS_1:38;
     hence thesis by A5,A9,A8,A6,NAT_1:13,SCMPDS_4:15;
   end;
-A13: Comput(ProgramPart(s2),s2,0) = s2 by AMI_1:13;
-A14: Comput(ProgramPart(s1),s1,0) = s1 by AMI_1:13;
+A13: Comput(ProgramPart(s2),s2,0) = s2 by EXTPRO_1:3;
+A14: Comput(ProgramPart(s1),s1,0) = s1 by EXTPRO_1:3;
 A15: s +* SA0, s +* SA0 +* (I ';' J) equal_outside NAT by FUNCT_7:132;
   s +* SA0 +* spI, s +* SA0 equal_outside NAT by FUNCT_7:28,132;
   then
 A16: X[0] by A2,A15,A14,A13,FUNCT_7:29;
 A17: for k being Element of NAT holds X[k] from NAT_1:sch 1(A16, A4);
-  assume k <= n;
+  assume
+  k <= n;
   hence thesis by A17;
 end;
 
 theorem Th34:
-  for I being parahalting Program of SCMPDS,J being Program of
-  SCMPDS, k being Element of NAT st
-   k <= LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +* stop I)
-  holds Comput(ProgramPart(Initialize s +* stop I), Initialize s +* stop I,k),
-  Comput(ProgramPart( (Initialize s +* stop (I ';' J))),
-  (Initialize s +* stop (I ';' J)),k) equal_outside NAT
+  for s being 0-started State of SCMPDS
+  for I being parahalting Program of SCMPDS,J being Program of SCMPDS,
+      k being Element of NAT st
+   k <= LifeSpan(ProgramPart(s +* stop I),s +* stop I)
+  holds Comput(ProgramPart(s +* stop I), s +* stop I,k),
+  Comput(ProgramPart(s +* stop (I ';' J)),s +* stop (I ';' J),k)
+     equal_outside NAT
 proof
+  let s be 0-started State of SCMPDS;
   let I be parahalting Program of SCMPDS,J be Program of SCMPDS, k be Element
   of NAT;
-A1: Initialize stop (I ';' J) = (I ';' (J ';' Stop SCMPDS)) +* Start-At(
-   0,SCMPDS) by SCMPDS_4:46;
+A1: stop (I ';' J) = (I ';' (J ';' Stop SCMPDS)) by AFINSQ_1:30;
+AA: s = Initialize s by COMPOS_1:78;
 I2: Initialize s +* stop (I ';' J) = s +* Initialize stop (I ';' J)
-by SCMPDS_4:5;
+by COMPOS_1:125;
   assume
-  k <= LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +* stop I);
-  hence thesis by A1,Th33,I2;
+  k <= LifeSpan(ProgramPart(s +* stop I),s +* stop I);
+  hence thesis by A1,Th33,I2,AA;
 end;
 
 registration
   let I be parahalting Program of SCMPDS, J be parahalting shiftable Program
   of SCMPDS;
-  cluster I ';' J -> parahalting;
+  cluster I ';' J -> parahalting Program of SCMPDS;
   coherence
   proof
-    let s be State of SCMPDS;
-    set sIJ = stop(I ';' J);
+    let p be Program of SCMPDS such that
+Z:   p = I ';' J;
+    let s be 0-started State of SCMPDS;
+    set sIJ = stop p;
     set spJ = stop J, s1 = Initialize s +* stop(I), m1
     = LifeSpan(ProgramPart(s1),s1),
     s3 = Initialize Comput(ProgramPart( s1), s1,m1) +* spJ,
-    m3 = LifeSpan(ProgramPart s3,
-s3), D =
-    SCM-Data-Loc;
-I2: Initialize Comput(ProgramPart( s1), s1,m1) +* spJ =
-      Comput(ProgramPart( s1), s1,m1) +* Initialize spJ by SCMPDS_4:5;
-A1: DataPart s3 = DataPart Comput(ProgramPart( s1), s1,m1) +*
-DataPart Initialize spJ by I2,FUNCT_4:75;
+    m3 = LifeSpan(ProgramPart s3,s3),
+    D = SCM-Data-Loc;
+A1: DataPart s3 = DataPart Initialize Comput(ProgramPart( s1), s1,m1) +*
+DataPart spJ by FUNCT_4:75;
 A2: now
       let x be set;
-      assume x in dom (DataPart Initialize spJ);
+      assume x in dom DataPart spJ;
       then
-A3:   x in dom Initialize spJ /\ D by RELAT_1:90,SCMPDS_2:100;
-      then
-A4:   x in dom Initialize spJ by XBOOLE_0:def 4;
+A3:   x in dom spJ /\ D by RELAT_1:90,SCMPDS_2:100;
 A5:   x in D by A3,XBOOLE_0:def 4;
-      per cases by A4,COMPOS_1:77;
+      per cases by A3,XBOOLE_0:def 4;
       suppose
 A6:     x in dom spJ;
         dom spJ c= NAT by RELAT_1:def 18;
         then reconsider l=x as Element of NAT by A6;
-        (DataPart Initialize spJ).l =
-        (DataPart Comput(ProgramPart( s1), s1,m1)).l by A5,SCMPDS_4:22;
-        hence (DataPart Initialize spJ).x =
-        (DataPart Comput(ProgramPart( s1), s1,m1)).x;
+        (DataPart spJ).l =
+        (DataPart Initialize Comput(ProgramPart( s1), s1,m1)).l
+        by A5,SCMPDS_4:22;
+        hence (DataPart spJ).x =
+        (DataPart Initialize Comput(ProgramPart( s1), s1,m1)).x;
       end;
       suppose
         x = IC SCMPDS;
-        hence (DataPart Initialize spJ).x =
-        (DataPart Comput(ProgramPart( s1), s1,m1)).x
+        hence (DataPart spJ).x =
+        (DataPart Initialize Comput(ProgramPart( s1), s1,m1)).x
 by A3,SCMPDS_3:6,XBOOLE_0:def 4;
       end;
     end;
-A7: dom (DataPart Initialize spJ) = dom Initialize spJ /\ D
+A7: dom (DataPart spJ) = dom spJ /\ D
 by RELAT_1:90,SCMPDS_2:100;
-A8: Initialize spJ c= s3 by I2,FUNCT_4:26;
-    then
-A9: ProgramPart s3 halts_on s3 by AMI_1:def 26;
-    dom Initialize spJ c= dom s3 by A8,GRFUNC_1:8;
-    then dom Initialize spJ c= the carrier of SCMPDS by PARTFUN1:def 4;
-    then dom (DataPart Initialize spJ) c= (the carrier of SCMPDS) /\ D
+A8: spJ c= s3 by FUNCT_4:26;
+A9: ProgramPart s3 halts_on s3 by FUNCT_4:26,SCMPDS_4:def 10;
+    dom spJ c= dom s3 by A8,GRFUNC_1:8;
+    then dom spJ c= the carrier of SCMPDS by PARTFUN1:def 4;
+    then dom (DataPart spJ) c= (the carrier of SCMPDS) /\ D
     by A7,XBOOLE_1:26;
-    then dom (DataPart Initialize spJ) c=
-    dom ( Comput(ProgramPart( s1), s1,m1)) /\ D by PARTFUN1:def 4;
-    then dom (DataPart Initialize spJ) c=
-    dom (DataPart Comput(ProgramPart( s1), s1,m1))
+    then dom (DataPart spJ) c=
+    dom (Initialize Comput(ProgramPart( s1), s1,m1)) /\ D by PARTFUN1:def 4;
+    then dom (DataPart spJ) c=
+    dom (DataPart Initialize Comput(ProgramPart( s1), s1,m1))
 by RELAT_1:90,SCMPDS_2:100;
-    then DataPart Initialize spJ c=
-    DataPart Comput(ProgramPart( s1), s1,m1) by A2,GRFUNC_1:8;
     then
-A10: DataPart Comput(ProgramPart(s1),s1,m1) = DataPart s3 by A1,LATTICE2:8;
-A11: Initialize I c= Initialize sIJ by Th15;
+WW:     DataPart spJ c=
+    DataPart Initialize
+    Comput(ProgramPart( s1), s1,m1) by A2,GRFUNC_1:8;
+
+A10: DataPart Comput(ProgramPart(s1),s1,m1)
+  =DataPart Initialize
+Comput(ProgramPart(s1),s1,m1) by COMPOS_1:80
+ .= DataPart s3
+     by A1,WW,LATTICE2:8;
+A11: I c= sIJ by Z,Th15;
     set s4 = Comput(ProgramPart(s),s,m1);
-I1: Initialize s +* sIJ = s +* Initialize sIJ by SCMPDS_4:5;
+UU: ProgramPart s4 = ProgramPart s by AMI_1:123;
+I1: Initialize s +* sIJ = s +* Initialize sIJ by COMPOS_1:125;
     assume
-A12: Initialize sIJ c= s;
-    then
-A13: sIJ c= s by SCMPDS_4:57;
-    s = Initialize s +* sIJ by A12,I1,FUNCT_4:79
+A12: sIJ c= s;
+AA: s = Initialize s by COMPOS_1:78;
+    s = Initialize s +* sIJ by A12,AA,FUNCT_4:79
       .= s +* ((I ';' (J ';' Stop SCMPDS)) +* Start-At( 0,SCMPDS))
-       by I1,SCMPDS_4:46;
+       by Z,I1,AFINSQ_1:30;
+    then s4, Comput(ProgramPart(s1),s1,m1) equal_outside NAT
+     by Th33,FUNCT_7:28;
+
     then
-A14: DataPart s4 = DataPart s3 by A10,Th33,SCMPDS_4:24;
-    per cases by A12,A11,Th31,XBOOLE_1:1;
+A14: DataPart s4 = DataPart s3 by A10,COMPOS_1:138;
+    per cases by A12,A11,Th31,AA,XBOOLE_1:1;
     suppose
-A15:  CurInstr(ProgramPart s4,s4) = halt SCMPDS;
+A15:  CurInstr(ProgramPart s,s4) = halt SCMPDS;
       take m1;
      IC Comput(ProgramPart(s),s,m1) in NAT;
     hence IC Comput(ProgramPart(s),s,m1) in dom ProgramPart s by COMPOS_1:34;
- ProgramPart s = ProgramPart Comput(ProgramPart(s),s,m1)
-by AMI_1:123;
-   then CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,m1))
-    = halt SCMPDS by A15;
-  hence thesis;
+  thus thesis by A15;
     end;
     suppose
 A16:  IC s4 =  card I;
@@ -1451,34 +1327,18 @@ A16:  IC s4 =  card I;
       take m;
      IC Comput(ProgramPart(s),s,m) in NAT;
     hence IC Comput(ProgramPart(s),s,m) in dom ProgramPart s by COMPOS_1:34;
-T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,m1)
-by AMI_1:123;
 x: Comput(ProgramPart(s),s,m1+m3)
- = Comput(ProgramPart(s),Comput(ProgramPart(s),s,m1),m3) by AMI_1:51;
-      sIJ = I ';' (J ';' Stop SCMPDS) by SCMPDS_4:46
+ = Comput(ProgramPart(s),Comput(ProgramPart(s),s,m1),m3) by EXTPRO_1:5;
+      sIJ = I ';' (J ';' Stop SCMPDS) by Z,AFINSQ_1:30
         .= I +* Shift(spJ, card I);
       then Shift(spJ, card I) c= sIJ by FUNCT_4:26;
-      then Shift(spJ, card I) c= s by A13,XBOOLE_1:1;
-      then Shift(spJ, card I) c= s4 by AMI_1:81;
+      then Shift(spJ, card I) c= s by A12,XBOOLE_1:1;
       then
-     CurInstr(ProgramPart Comput(ProgramPart(s3),s3,m3),Comput(ProgramPart(s3),
-s3,m3))
- = CurInstr(ProgramPart Comput(ProgramPart(s4),s4,m3),Comput(ProgramPart(s4),s4
-,m3)) by A8,A14,A16,SCMPDS_4:84;
-      then
-Y:   CurInstr(ProgramPart Comput(ProgramPart(s3),s3,m3),Comput(ProgramPart(s3),
-s3,m3))
- = CurInstr(ProgramPart Comput(ProgramPart(s),s,m1+m3),Comput(ProgramPart(s),s,
-m1+m3)) by x,T;
-TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,m3)
-by AMI_1:123;
-TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,m)
-by AMI_1:123;
-    CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,m3))
-     = halt SCMPDS by A9,AMI_1:def 46;
-   then CurInstr(ProgramPart s,Comput(ProgramPart(s),s,m))
-    = halt SCMPDS by Y,TX,TX3;
-  hence thesis;
+AA:    Shift(spJ, card I) c= s4 by AMI_1:81;
+   CurInstr(ProgramPart(s3),Comput(ProgramPart(s3),s3,m3))
+ = CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,m1+m3))
+      by x,A8,A14,A16,UU,AA,SCMPDS_4:84;
+  hence thesis by A9,EXTPRO_1:def 14;
     end;
   end;
 end;
@@ -1505,25 +1365,26 @@ registration
 end;
 
 theorem Th35:
-  for s,s1 being State of SCMPDS, J being parahalting shiftable
-  Program of SCMPDS st s= Comput(ProgramPart( (s1+*Initialize stop J)), (s1+*
-Initialize stop J),m) holds Exec(
-CurInstr(ProgramPart s,s),s +* Start-At(IC s + n,SCMPDS))
- = Following(ProgramPart s,s) +*
-Start-At (IC Following(ProgramPart s,s) + n,SCMPDS)
+  for s being State of SCMPDS, s1 being 0-started State of SCMPDS,
+      J being parahalting shiftable Program of SCMPDS
+    st s = Comput(ProgramPart(s1+*stop J),
+   s1+* stop J,m) holds
+    Exec(CurInstr(ProgramPart s,s),s +* Start-At(IC s + n,SCMPDS))
+  = Following(ProgramPart s,s) +*
+    Start-At (IC Following(ProgramPart s,s) + n,SCMPDS)
 proof
-  let s,s1 be State of SCMPDS, J be parahalting shiftable Program of SCMPDS;
-  set pJ=stop J, IsJ=Initialize pJ, s2=s1+*IsJ;
+  let s be State of SCMPDS, s1 be 0-started State of SCMPDS,
+      J be parahalting shiftable Program of SCMPDS;
+  set pJ=stop J, IsJ=Initialize pJ, s2=s1+*pJ;
   set i = CurInstr(ProgramPart s,s), ss=s +* Start-At(IC s + n,SCMPDS);
   reconsider k = IC s as Element of NAT;
   reconsider Nl=succ IC s as Element of NAT;
 A1: succ IC ss = (k + n + 1) by FUNCT_4:121
     .= IC (Exec(i, s) +*Start-At (Nl + n,SCMPDS)) by FUNCT_4:121;
-A2: IsJ c= s2 by FUNCT_4:26;
   assume
 A3: s=Comput(ProgramPart(s2),s2,m);
   then
-A4: IC s in dom pJ by A2,SCMPDS_4:def 9;
+A4: IC s in dom pJ by FUNCT_4:26,SCMPDS_4:def 9;
   reconsider n1 = IC s as Element of NAT;
   set IEn=IC Exec(i,s)+n;
 A5: IC ss = IC s + n by FUNCT_4:121;
@@ -1536,7 +1397,7 @@ A6: now
   end;
 Y:  (ProgramPart s)/.IC s
  = s.IC s by COMPOS_1:38;
-  pJ c= s by A3,A2,AMI_1:81,SCMPDS_4:57;
+  pJ c= s by A3,AMI_1:81,FUNCT_4:26;
   then
 A7: i=pJ.( n1) by A4,Y,GRFUNC_1:8;
   then
@@ -1960,46 +1821,39 @@ end;
 begin :: Computation of two consecutive program blocks
 
 theorem
+  for s being 0-started State of SCMPDS
   for I being parahalting halt-free Program of SCMPDS,J being
-  parahalting shiftable Program of SCMPDS,k being Element of NAT st Initialize
+  parahalting shiftable Program of SCMPDS,k being Element of NAT st
   stop (I ';' J) c= s holds Comput(ProgramPart(
-   Initialize Result(ProgramPart(Initialize s +* stop I),Initialize s +*stop I)
+   Initialize Result(ProgramPart(s +* stop I),s +*stop I)
       +* stop J ),
-  Initialize Result(ProgramPart(Initialize s +*stop I),Initialize s +* stop I)
-   +* stop J,k) +*
+  Initialize Result(ProgramPart(s +*stop I),s +* stop I) +* stop J,k) +*
   Start-At (IC Comput(ProgramPart(
   Initialize Result(
-      ProgramPart(Initialize s +* stop I),Initialize s +* stop I)
-       +* stop J ),
-   (Initialize Result(ProgramPart(Initialize s +*stop I),
-      Initialize s +*stop I) +* stop J ),k) + card I,SCMPDS),
-  Comput(ProgramPart( (Initialize s +* stop (I ';' J))),
-   (Initialize s +* stop (I ';' J)),
-    (LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +* stop I)+k))
-    equal_outside NAT
+      ProgramPart(s +* stop I),s +* stop I) +* stop J ),
+   (Initialize Result(ProgramPart(s +*stop I),
+      s +*stop I) +* stop J ),k) + card I,SCMPDS),
+  Comput(ProgramPart(s +* stop (I ';' J)),s +* stop (I ';' J),
+   LifeSpan(ProgramPart(s +* stop I),s +* stop I)+k) equal_outside NAT
 proof
+  let s be 0-started State of SCMPDS;
   set SA0=Start-At( 0,SCMPDS);
   let I be parahalting halt-free Program of SCMPDS,J be parahalting
   shiftable Program of SCMPDS,k be Element of NAT;
-  set sIsI = Initialize s +* stop I, RI = Result(ProgramPart(sIsI),
-sIsI), pJ= stop J,
- RIJ = Initialize RI +* pJ, pIJ = stop (I ';' J),
- sIsIJ = Initialize s +* pIJ;
-I1: s +* Initialize stop I = Initialize s +* stop I by SCMPDS_4:5;
-I2: s +* Initialize pIJ = Initialize s +* pIJ by SCMPDS_4:5;
-I3: RI +* Initialize pJ = Initialize RI +* pJ by SCMPDS_4:5;
- Initialize stop I c= sIsI by I1,FUNCT_4:26;
-  then
-B1: ProgramPart sIsI halts_on sIsI by SCMPDS_4:63;
+  set sIsI = s +* stop I, RI = Result(ProgramPart(sIsI),sIsI), pJ= stop J,
+   RIJ = Initialize RI +* pJ, pIJ = stop (I ';' J),
+   sIsIJ = s +* pIJ;
+I3: RI +* Initialize pJ = Initialize RI +* pJ by COMPOS_1:125;
+B1: ProgramPart sIsI halts_on sIsI by FUNCT_4:26,SCMPDS_4:def 10;
   set s2 = Comput(ProgramPart( sIsIJ), sIsIJ,LifeSpan(ProgramPart(sIsI),sIsI)+0
 );
   set s1 = RIJ +* Start-At (IC RIJ + card I,SCMPDS);
   set m1 = LifeSpan(ProgramPart(sIsI),sIsI);
-A2: Initialize I c= Initialize pIJ by Th15;
+A2: I c= pIJ by Th15;
   assume
-A3: Initialize pIJ c= s;
+A3: pIJ c= s;
   then
-A4: s = sIsIJ by I2,FUNCT_4:79;
+A4: s = sIsIJ by FUNCT_4:79;
 A5: now
     thus IC s1 = IC (RI +* (stop J +* SA0)) + card I by I3,FUNCT_4:121
       .= IC (RI +* stop J +* SA0) + card I by FUNCT_4:15
@@ -2011,13 +1865,14 @@ A6:   not a in dom (stop J+*SA0) by SCMPDS_4:61;
       not a in dom Start-At (IC RIJ + card I,SCMPDS) by SCMPDS_4:59;
       hence s1.a = RIJ.a by FUNCT_4:12
         .= RI.a by A6,I3,FUNCT_4:12
-        .= Comput(ProgramPart( sIsI), sIsI,m1).a by B1,AMI_1:122
+        .= Comput(ProgramPart( sIsI), sIsI,m1).a by B1,EXTPRO_1:23
         .= s2.a by Th34,SCMPDS_4:13;
     end;
   end;
   defpred X[Element of NAT] means Comput(ProgramPart( RIJ), RIJ,$1) +* Start-At
 (IC
-  Comput(ProgramPart( RIJ), RIJ,$1) + card I,SCMPDS), Comput(ProgramPart( sIsIJ
+  Comput(ProgramPart( RIJ), RIJ,$1) + card I,SCMPDS),
+   Comput(ProgramPart( sIsIJ
 ), sIsIJ,LifeSpan(ProgramPart(sIsI),sIsI)+$1)
   equal_outside NAT;
 A7: pIJ c= sIsIJ by FUNCT_4:26;
@@ -2041,20 +1896,18 @@ Y:  (ProgramPart CIJk)/.IC CIJk
 A11:  CurInstr(ProgramPart CIJk,CIJk) = CIJk.IC CRSk by A9,Y,COMPOS_1:24
         .= CIJk.(IC CRk + card I) by FUNCT_4:121;
       reconsider n = IC CRk as Element of NAT;
-A12:  pIJ = I ';' pJ by SCMPDS_4:46;
-      Initialize pJ c= RIJ by I3,FUNCT_4:26;
-      then
-A13:  IC CRk in dom pJ by SCMPDS_4:def 9;
+A12:  pIJ = I ';' pJ by AFINSQ_1:30;
+A13:  IC CRk in dom pJ by FUNCT_4:26,SCMPDS_4:def 9;
       then n < card pJ by AFINSQ_1:70;
       then n+card I < card pJ + card I by XREAL_1:8;
-      then n+card I < card pIJ by A12,SCMPDS_4:45;
+      then n+card I < card pIJ by A12,AFINSQ_1:20;
       then
 A14:  IC CRk + card I in dom pIJ by AFINSQ_1:70;
 Y:  (ProgramPart CRk)/.IC CRk
  = CRk.IC CRk by COMPOS_1:38;
       pJ c= CRk by AMI_1:81,FUNCT_4:26;
       hence CurInstr(ProgramPart CRk,CRk) =pJ.IC CRk by A13,Y,GRFUNC_1:8
-        .=pIJ.(IC CRk + card I) by A13,A12,SCMPDS_4:38
+        .=pIJ.(IC CRk + card I) by A13,A12,AFINSQ_1:def 4
         .= sIsIJ.(IC CRk + card I) by A7,A14,GRFUNC_1:8
         .= CurInstr(ProgramPart CIJk,CIJk) by A11,AMI_1:54;
     end;
@@ -2066,19 +1919,19 @@ Y:  (ProgramPart CRk)/.IC CRk
     then
 A15: Exec(CurInstr(ProgramPart CIJk,CIJk), CIJk),
 Following(ProgramPart CRk,CRk) +* Start-At (IC Following(ProgramPart CRk,CRk)
- + card I,SCMPDS) equal_outside NAT by Th35,I3;
+ + card I,SCMPDS) equal_outside NAT by Th35;
 T: ProgramPart sIsIJ = ProgramPart CIJk
 by AMI_1:123;
     CIJk1 = Comput(ProgramPart( sIsIJ), sIsIJ,LifeSpan(ProgramPart(sIsI),sIsI)+
 k+1);
     then
-A16: CIJk1 = Following(ProgramPart sIsIJ,CIJk) by AMI_1:14;
+A16: CIJk1 = Following(ProgramPart sIsIJ,CIJk) by EXTPRO_1:4;
 A17: now
       let a be Int_position;
 S: ProgramPart RIJ = ProgramPart CRk
 by AMI_1:123;
       thus CRSk1.a = CRk1.a by SCMPDS_3:14
-        .= (Following(ProgramPart RIJ,CRk)).a by AMI_1:14
+        .= (Following(ProgramPart RIJ,CRk)).a by EXTPRO_1:4
         .= (Following(ProgramPart CRk,CRk) +*
         Start-At (IC Following(ProgramPart CRk,CRk) + card I,SCMPDS)).a
          by S,SCMPDS_3:14
@@ -2087,7 +1940,7 @@ by AMI_1:123;
 S: ProgramPart RIJ = ProgramPart CRk
 by AMI_1:123;
     IC CRSk1 = IC CRk1 + card I by FUNCT_4:121
-      .= IC Following(ProgramPart RIJ,CRk) + card I by AMI_1:14;
+      .= IC Following(ProgramPart RIJ,CRk) + card I by EXTPRO_1:4;
     then
     IC CRSk1=IC (Following(ProgramPart CRk,CRk) +*
     Start-At (IC Following(ProgramPart CRk,CRk) + card I,SCMPDS))
@@ -2095,22 +1948,24 @@ by AMI_1:123;
       .= IC CIJk1 by A16,A15,T,COMPOS_1:24;
     hence thesis by A17,SCMPDS_4:11;
   end;
-  Comput(ProgramPart( RIJ), RIJ,0) = RIJ by AMI_1:13;
+  Comput(ProgramPart( RIJ), RIJ,0) = RIJ by EXTPRO_1:3;
   then
 A18: X[0] by A5,SCMPDS_4:11;
   for k being Element of NAT holds X[k] from NAT_1:sch 1(A18,A8);
   hence thesis;
 end;
 
-Lm3: for I being parahalting halt-free Program of SCMPDS,J being parahalting
-shiftable Program of SCMPDS,s,s1 being State of SCMPDS st Initialize stop (I
-';' J) c= s & s1=Initialize s +* stop I holds IC Comput(ProgramPart( s), s,
+Lm3:
+ for I being parahalting halt-free Program of SCMPDS,J being parahalting
+shiftable Program of SCMPDS,
+  s being 0-started State of SCMPDS,
+  s1 being State of SCMPDS st stop (I
+';' J) c= s & s1= s +* stop I holds IC Comput(ProgramPart( s), s,
 LifeSpan(ProgramPart(s1),s1)) = card I &
  DataPart Comput(ProgramPart( s), s,LifeSpan(ProgramPart(s1),s1)) =
 DataPart (Initialize Comput(ProgramPart(s1),s1,LifeSpan(ProgramPart(s1),s1))
  +* stop J) & Shift(stop J,card I)
-c= Comput(ProgramPart( s), s
-,LifeSpan(ProgramPart(s1),s1)) &
+  c= Comput(ProgramPart( s), s,LifeSpan(ProgramPart(s1),s1)) &
 LifeSpan(ProgramPart(s),s) = LifeSpan(
 ProgramPart(s1),s1) + LifeSpan(ProgramPart(
 Initialize Result(ProgramPart(s1),s1) +*
@@ -2120,28 +1975,30 @@ proof
   set D = SCM-Data-Loc;
 
   let I be parahalting halt-free Program of SCMPDS,J be parahalting
-  shiftable Program of SCMPDS,s,s1 be State of SCMPDS;
-
+  shiftable Program of SCMPDS,s be 0-started State of SCMPDS,
+  s1 be State of SCMPDS;
+AA: Initialize s = s by COMPOS_1:78;
   set spJ = stop J,
   sIJ = stop (I ';' J), m1 = LifeSpan(ProgramPart(s1),s1),
   s3 = Initialize Comput(ProgramPart( s1), s1, m1) +* spJ;
 I1: Initialize Comput(ProgramPart( s1), s1, m1) +* spJ =
-  Comput(ProgramPart( s1), s1, m1) +* Initialize spJ by SCMPDS_4:5;
+  Comput(ProgramPart( s1), s1, m1) +* Initialize spJ by COMPOS_1:125;
   set m3 = LifeSpan(ProgramPart(s3),s3);
   assume that
-A1: Initialize sIJ c= s and
-A2: s1=Initialize s +* stop I;
-I2: Initialize s +* stop I = s +* Initialize stop I by SCMPDS_4:5;
+A1: sIJ c= s and
+A2: s1= s +* stop I;
 A3: DataPart s3 = DataPart Comput(ProgramPart( s1), s1,m1) +*
       DataPart Initialize spJ by I1,FUNCT_4:75;
 
   set s4 = Comput(ProgramPart(s),s,m1);
-A4: Initialize I c= Initialize sIJ by Th15;
+UU: ProgramPart s4 = ProgramPart s by AMI_1:123;
+A4: I c= sIJ by Th15;
   hence
 A5: IC s4 =  card I by A1,A2,Th30,XBOOLE_1:1;
 A6: now
     let x be set;
-    assume x in dom (DataPart Initialize spJ);
+    assume
+    x in dom (DataPart Initialize spJ);
     then
 A7: x in dom Initialize spJ /\ D by RELAT_1:90,SCMPDS_2:100;
     then
@@ -2168,90 +2025,72 @@ A10:  x in dom spJ;
 
     end;
   end;
-A11: dom (DataPart Initialize spJ) = dom Initialize spJ /\ D
+A11: dom (DataPart spJ) = dom spJ /\ D
 by RELAT_1:90,SCMPDS_2:100;
   reconsider m = m1 + m3 as Element of NAT;
-  sIJ = I ';' (J ';' Stop SCMPDS) by SCMPDS_4:46
+  sIJ = I ';' (J ';' Stop SCMPDS) by AFINSQ_1:30
     .= I +* Shift(spJ, card I);
   then
 A12: Shift(spJ, card I) c= sIJ by FUNCT_4:26;
-A13: Initialize spJ c= s3 by I1,FUNCT_4:26;
-  then
-A14: ProgramPart s3 halts_on s3 by AMI_1:def 26;
-I3: Initialize s +* sIJ = s +* Initialize sIJ by SCMPDS_4:5;
-  dom Initialize spJ c= dom s3 by A13,GRFUNC_1:8;
-  then dom Initialize spJ c= the carrier of SCMPDS by PARTFUN1:def 4;
+A13: spJ c= s3 by FUNCT_4:26;
+A14: ProgramPart s3 halts_on s3 by FUNCT_4:26,SCMPDS_4:def 10;
+I3: Initialize s +* sIJ = s +* Initialize sIJ by COMPOS_1:125;
+XX: DataPart Initialize spJ = DataPart spJ by COMPOS_1:80;
+  dom spJ c= dom s3 by A13,GRFUNC_1:8;
+  then dom spJ c= the carrier of SCMPDS by PARTFUN1:def 4;
 
-  then dom (DataPart Initialize spJ) c= (the carrier of SCMPDS) /\ D
+  then dom (DataPart spJ) c= (the carrier of SCMPDS) /\ D
   by A11,XBOOLE_1:26;
 
-  then dom (DataPart Initialize spJ) c=
+  then dom (DataPart spJ) c=
   dom ( Comput(ProgramPart( s1), s1,m1)) /\ D by PARTFUN1:def 4;
 
-  then dom (DataPart Initialize spJ) c=
+  then dom (DataPart spJ) c=
   dom DataPart Comput(ProgramPart(s1),s1,m1) by RELAT_1:90,SCMPDS_2:100;
 
-  then DataPart Initialize spJ c= DataPart Comput(ProgramPart( s1), s1,m1)
-  by A6,GRFUNC_1:8;
+  then DataPart spJ c= DataPart Comput(ProgramPart( s1), s1,m1)
+  by A6,XX,GRFUNC_1:8;
   then
-A15: DataPart Comput(ProgramPart( s1), s1,m1) = DataPart s3 by A3,LATTICE2:8;
-  s = Initialize s +* sIJ by A1,I3,FUNCT_4:79
+A15: DataPart Comput(ProgramPart( s1), s1,m1) = DataPart s3
+ by A3,XX,LATTICE2:8;
+  s = Initialize s +* sIJ by A1,AA,FUNCT_4:79
     .= s +* ((I ';' (J ';' Stop SCMPDS)) +* Start-At( 0,SCMPDS))
-    by I3,SCMPDS_4:46;
+    by I3,AFINSQ_1:30;
   hence
-A16: DataPart s4 = DataPart s3 by A2,A15,Th33,SCMPDS_4:24;
-T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,
-m1)
-by AMI_1:123;
+A16: DataPart s4 = DataPart s3 by A2,A15,Th33,AA,COMPOS_1:138;
+T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,m1) by AMI_1:123;
 x: Comput(ProgramPart(s),s,m1+m3)
- = Comput(ProgramPart(s),Comput(ProgramPart(s),s,m1),m3) by AMI_1:51;
-TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,m3)
-by AMI_1:123;
-TX4: ProgramPart s4 = ProgramPart Comput(ProgramPart(s4),s4,m3)
-by AMI_1:123;
-  sIJ c= s by A1,SCMPDS_4:57;
-  then Shift(spJ, card I) c= s by A12,XBOOLE_1:1;
+ = Comput(ProgramPart(s),Comput(ProgramPart(s),s,m1),m3) by EXTPRO_1:5;
+  Shift(spJ, card I) c= s by A12,A1,XBOOLE_1:1;
   hence
 A17: Shift(spJ, card I) c= s4 by AMI_1:81;
 
-  then CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,m3))
-   = CurInstr(ProgramPart s4,Comput(ProgramPart(s4),s4,m3))
-    by A13,A5,A16,TX4,TX3,SCMPDS_4:84;
   then CurInstr(ProgramPart (s3),Comput(ProgramPart(s3),s3,m3))
-   = CurInstr(ProgramPart s,Comput(ProgramPart(s),s,m1+m3)) by x,T;
+   = CurInstr(ProgramPart s,Comput(ProgramPart(s),s,m1+m3))
+      by x,T,A13,A5,A16,SCMPDS_4:84;
   then
 A18: CurInstr(ProgramPart s,Comput(ProgramPart(s),s,m))
- = halt SCMPDS by A14,AMI_1:def 46;
+ = halt SCMPDS by A14,EXTPRO_1:def 14;
 A19: now
     let k be Element of NAT;
-    assume m1 + k < m;
+    assume
+    m1 + k < m;
     then
 A20: k < m3 by XREAL_1:8;
     assume
 A21: CurInstr(ProgramPart s,Comput(ProgramPart(s),s,m1+k))
  = halt SCMPDS;
-T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,
-m1)
-by AMI_1:123;
-TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:123;
-TX4: ProgramPart s4 = ProgramPart Comput(ProgramPart(s4),s4,k)
-by AMI_1:123;
 x: Comput(ProgramPart(s),s,m1+k) =
-Comput(ProgramPart(s),Comput(ProgramPart(s),s,m1),k) by AMI_1:51;
+Comput(ProgramPart(s),Comput(ProgramPart(s),s,m1),k) by EXTPRO_1:5;
     CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,k))
-     = CurInstr(ProgramPart s4,Comput(ProgramPart(s4),s4,k))
-      by A13,A5,A16,A17,TX4,TX3,SCMPDS_4:84
-
-      .= halt SCMPDS by A21,x,T;
-    hence contradiction by A14,A20,AMI_1:def 46;
+     = halt SCMPDS by A21,x,A13,A5,A16,A17,UU,SCMPDS_4:84;
+    hence contradiction by A14,A20,EXTPRO_1:def 14;
   end;
   now
     let k be Element of NAT;
     assume
 A22: k < m;
-TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:123;
+TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k) by AMI_1:123;
     per cases;
     suppose
       k < m1;
@@ -2275,149 +2114,121 @@ A24: for k being Element of NAT st CurInstr(ProgramPart (s),
 Comput(ProgramPart(s),s,k))
  = halt SCMPDS
   holds m <= k;
- Initialize stop I c= s1 by A2,I2,FUNCT_4:26;
-  then
- ProgramPart s1 halts_on s1 by SCMPDS_4:63;
+ ProgramPart s1 halts_on s1 by A2,FUNCT_4:26,SCMPDS_4:def 10;
   then
 X: Result(ProgramPart(s1),s1) =
-    Comput(ProgramPart s1,s1,LifeSpan(ProgramPart(s1),s1)) by AMI_1:122;
-  ProgramPart s halts_on s by A1,SCMPDS_4:63;
-  then LifeSpan(ProgramPart(s),s) = m by A18,A24,AMI_1:def 46;
-  hence thesis by X;
+    Comput(ProgramPart s1,s1,LifeSpan(ProgramPart(s1),s1)) by EXTPRO_1:23;
+  ProgramPart s halts_on s by A1,SCMPDS_4:def 10;
+  hence thesis by X,A18,A24,EXTPRO_1:def 14;
 end;
 
 theorem Th37:
-  for I being parahalting halt-free Program of SCMPDS,J being
-parahalting shiftable Program of SCMPDS holds
- LifeSpan(ProgramPart(Initialize s +*
-stop (
-  I ';' J)),Initialize s +* stop (
-  I ';' J)) = LifeSpan(ProgramPart(Initialize s +* stop I),
-    Initialize s +* stop I) +
-    LifeSpan(ProgramPart(Initialize Result(ProgramPart(Initialize s +*
-  stop I),Initialize s +*
-  stop I) +* stop J),Initialize Result(ProgramPart(Initialize s +*
-  stop I),Initialize s +*
-  stop I) +* stop J)
+  for s being 0-started State of SCMPDS
+  for I being parahalting halt-free Program of SCMPDS,
+      J being parahalting shiftable Program of SCMPDS holds
+ LifeSpan(ProgramPart(s +* stop(I ';' J)), s +* stop (I ';' J))
+  = LifeSpan(ProgramPart(s +* stop I),s +* stop I) +
+    LifeSpan(ProgramPart(Initialize Result(ProgramPart(s +*
+  stop I),s +* stop I) +* stop J),
+  Initialize Result(ProgramPart(s +* stop I),s +* stop I) +* stop J)
 proof
+  let s be 0-started State of SCMPDS;
   set SA0= Start-At( 0,SCMPDS);
   let I be parahalting halt-free Program of SCMPDS,J be parahalting
   shiftable Program of SCMPDS;
   set sI=stop I, sIJ = stop (I ';' J),
-  s1=Initialize s +* sIJ, s2=Initialize s +* stop I;
-I1: Initialize s +* sIJ = s +* Initialize sIJ by SCMPDS_4:5;
-I2: Initialize s +* sI = s +* Initialize sI by SCMPDS_4:5;
-A1: Initialize sIJ c= s1 by I1,FUNCT_4:26;
+  s1= s +* sIJ, s2= s +* stop I;
+A1: sIJ c= s1 by FUNCT_4:26;
   set
-  s3=Initialize Result(ProgramPart(Initialize s1 +* stop I),
-  Initialize s1 +* stop I) +* stop J,
+  s3=Initialize Result(ProgramPart(s1 +* stop I),s1 +* stop I) +* stop J,
   s4=Initialize Result(ProgramPart(s2),s2) +* stop J;
-I5: Result(ProgramPart(s2),s2) +* Initialize stop J
-    = Initialize Result(ProgramPart(s2),s2) +* stop J by SCMPDS_4:5;
-I3: Result(ProgramPart(Initialize s1 +* stop I),
-  Initialize s1 +* stop I) +* Initialize stop J
-   = Initialize Result(ProgramPart(Initialize s1 +* stop I),
-  Initialize s1 +* stop I) +* stop J by SCMPDS_4:5;
-A2: Initialize stop I c= s2 by I2,FUNCT_4:26;
-I4: s1 +* Initialize stop I = Initialize s1 +* stop I by SCMPDS_4:5;
-  Initialize s1 +* stop I = s1 +* sI by I1,FUNCT_4:26,SCMPDS_4:34;
-  then
-A3: s1, Initialize s1 +* stop I equal_outside NAT by FUNCT_7:132;
-A4: Initialize stop J c= s4 by I5,FUNCT_4:26;
-A5: s2,s+*SA0 equal_outside NAT by FUNCT_7:28,132;
-A6: Initialize stop J c= s3 by I3,FUNCT_4:26;
-  s+*SA0,s1 equal_outside NAT by FUNCT_7:132;
+A2: stop I c= s2 by FUNCT_4:26;
+A3: s1, s1 +* stop I equal_outside NAT by FUNCT_7:132;
+A4: stop J c= s4 by FUNCT_4:26;
+A5: s2,s equal_outside NAT by FUNCT_7:28,132;
+A6: stop J c= s3 by FUNCT_4:26;
+  s,s1 equal_outside NAT by FUNCT_7:132;
   then s2, s1 equal_outside NAT by A5,FUNCT_7:29;
   then
-A7: s2,s1+*Initialize stop I equal_outside NAT by A3,I4,FUNCT_7:29;
-A8: Initialize stop I c= Initialize s1 +* stop I by I4,FUNCT_4:26;
-  then Result(ProgramPart(s2),s2),Result(
-  ProgramPart(Initialize s1 +* stop I),Initialize s1 +* stop I)
-equal_outside NAT by A7,A2,Th21,I4;
-  then s4,s3 equal_outside NAT by I3,I5,FUNCT_7:106;
+A7: s2,s1+* stop I equal_outside NAT by A3,FUNCT_7:29;
+A8: stop I c= s1 +* stop I by FUNCT_4:26;
+  then Result(ProgramPart(s2),s2),
+   Result(
+  ProgramPart(s1 +* stop I),s1 +* stop I) equal_outside NAT by A7,A2,Th21;
+  then Initialize Result(ProgramPart(s2),s2),
+   Initialize Result(
+  ProgramPart(s1 +* stop I),s1 +* stop I) equal_outside NAT by COMPOS_1:81;
+  then s4,s3 equal_outside NAT by FUNCT_7:106;
   then
-A9: LifeSpan(ProgramPart(s3),s3) = LifeSpan(ProgramPart(s4),s4) by A6,A4,Th21;
-  LifeSpan(ProgramPart(Initialize s1 +* stop I),Initialize s1 +* stop I) =
-  LifeSpan(ProgramPart(s2),s2) by A7,A8,A2,Th21,I4;
+A9: LifeSpan(ProgramPart(s3),s3) = LifeSpan(ProgramPart s4,s4) by A6,A4,Th21;
+  LifeSpan(ProgramPart(s1 +* stop I),s1 +* stop I) =
+  LifeSpan(ProgramPart(s2),s2) by A7,A8,A2,Th21;
   hence thesis by A1,A9,Lm3;
 end;
 
 theorem Th38:
+  for s being 0-started State of SCMPDS
   for I being parahalting halt-free Program of SCMPDS,J being
 parahalting shiftable Program of SCMPDS holds IExec(I ';' J,s) = IExec(J,IExec(
   I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I,SCMPDS)
 proof
+  let s be 0-started State of SCMPDS;
   set SA0= Start-At( 0,SCMPDS);
   let I be parahalting halt-free Program of SCMPDS,J be parahalting
   shiftable Program of SCMPDS;
-  set A = NAT, D = SCM-Data-Loc, ps = s | A, sI = stop I,
+  set A = NAT, D = SCM-Data-Loc, ps = s | NAT, sI = stop I,
   sIJ = stop (I ';' J),
    s1 = Initialize s +* stop I, m1 = LifeSpan(ProgramPart(s1),s1),
-  s2 = Initialize s +* stop (I ';' J), s3 =
+  s2 = s +* stop (I ';' J), s3 =
   Initialize Comput(ProgramPart(s1),s1,m1) +* stop J,
   m3 = LifeSpan(ProgramPart(s3),s3);
 I1: Initialize Comput(ProgramPart(s1),s1,m1) +* stop J
-      = Comput(ProgramPart(s1),s1,m1) +* Initialize stop J by SCMPDS_4:5;
-A1: Initialize stop J c= s3 by I1,FUNCT_4:26;
-A2: Initialize stop J c= s3 by I1,FUNCT_4:26;
-B1: ProgramPart s3 halts_on s3 by A1,SCMPDS_4:63;
+      = Comput(ProgramPart(s1),s1,m1) +* Initialize stop J by COMPOS_1:125;
+A1: stop J c= s3 by FUNCT_4:26;
+B1: ProgramPart s3 halts_on s3 by FUNCT_4:26,SCMPDS_4:def 10;
 A3: IExec(I,s) | A = ps by PBOOLE:157;
-I2: s2 +* Initialize stop I = Initialize s2 +* stop I by SCMPDS_4:5;
-I3: s +* Initialize stop (I ';' J) = Initialize s +* stop (I ';' J)
-by SCMPDS_4:5;
-  Initialize s2 +* stop I = s2 +* sI by I3,FUNCT_4:26,SCMPDS_4:34;
+I2: s2 +* Initialize stop I = Initialize s2 +* stop I by COMPOS_1:125;
+AA: Initialize s = s by COMPOS_1:78;
+  Initialize s2 +* stop I = s2 +* sI by COMPOS_1:78;
   then
 A4: s2, s2 +* Initialize stop I equal_outside A by I2,FUNCT_7:132;
-A5: Initialize stop J c= s3 by I1,FUNCT_4:26;
-A6: Initialize stop J c= IExec(I,s) +* Initialize stop J by FUNCT_4:26;
-I4: Initialize s1 +* sIJ = s1 +* Initialize sIJ by SCMPDS_4:5;
-I5: Initialize s +* stop I = s +* Initialize stop I by SCMPDS_4:5;
-I6: Initialize s2 +* sIJ = s2 +* Initialize sIJ by SCMPDS_4:5;
-A7: Initialize s1 +* sIJ =s +* (Initialize stop I +* Initialize sIJ)
-by I4,I5,FUNCT_4:15
-    .= Initialize s +* sIJ by Th17,I3
-    .=s2;
-I7: Initialize IExec(I,s) +* stop J = IExec(I,s) +* Initialize stop J
-          by SCMPDS_4:5;
-A8: Initialize stop J c= Result(ProgramPart(s1),s1) +* Initialize stop J
-by FUNCT_4:26;
-A9: Initialize stop J c= Initialize IExec(I,s) +* stop J by I7,FUNCT_4:26;
+A7: s1 +* sIJ =s +* (stop I +* sIJ) by AA,FUNCT_4:15
+    .=s2 by Th17;
+A9: stop J c= Initialize IExec(I,s) +* stop J by FUNCT_4:26;
 A10: dom ps = dom s /\ A by RELAT_1:90
     .= ({IC SCMPDS} \/ D \/ A) /\ A by SCMPDS_4:19
     .= A by XBOOLE_1:21;
-A11: Initialize stop I c= s1 by I5,FUNCT_4:26;
-  then ProgramPart s1 halts_on s1 by SCMPDS_4:63;
+A11: stop I c= s1 by FUNCT_4:26;
+  ProgramPart s1 halts_on s1 by FUNCT_4:26,SCMPDS_4:def 10;
   then
-A12: IExec(I,s) = Comput(ProgramPart(s1),s1,m1) +* ps
-by AMI_1:122;
-A13: Comput(ProgramPart(s1),s1,m1) +* Initialize stop J,
-Comput(ProgramPart(s1),s1,m1) +* ps
-+* Initialize stop J equal_outside
+ IExec(I,s) = Comput(ProgramPart(s1),s1,m1) +* ps
+by EXTPRO_1:23;
+  then
+B12: Initialize Comput(ProgramPart(s1),s1,m1) +* ps
+      = Initialize IExec(I,s) by COMPOS_1:83;
+ s3, Initialize Comput(ProgramPart(s1),s1,m1) +* ps +* stop J
+equal_outside
   dom ps by FUNCT_7:31,106;
   then
-  Comput(ProgramPart(s1),s1,m1) +* ps +* Initialize stop J,
-  Comput(ProgramPart(s1),s1,m1) +*
-Initialize stop J equal_outside
-  dom ps by FUNCT_7:28;
-  then Result(ProgramPart(IExec(I,s) +* Initialize stop J),
-  Initialize IExec(I,s) +* stop J), Result(
-ProgramPart(s3),s3) equal_outside A by A10,A9,A2,A12,Th21,I1,I7;
+ Initialize IExec(I,s) +* stop J,s3 equal_outside NAT
+ by B12,A10,FUNCT_7:28;
+  then Result(ProgramPart(Initialize IExec(I,s) +* stop J),
+  Initialize IExec(I,s) +* stop J),
+     Result(ProgramPart(s3),s3) equal_outside A by A1,A9,Th21;
   then Result(ProgramPart(Initialize IExec(I,s) +* stop J),
   Initialize IExec(I,s) +* stop J) +* ps = Result(
-ProgramPart(s3),s3) +* ps by A10,I7,FUNCT_7:108;
+ProgramPart(s3),s3) +* ps by A10,FUNCT_7:108;
   then
 A14: IExec(J,IExec(I,s)) = Comput(ProgramPart(s3),s3,m3) +* ps by B1,A3,
-AMI_1:122;
+EXTPRO_1:23;
 A15: s1,s+*SA0 equal_outside A by FUNCT_7:28,132;
-A16: Initialize stop I c= Initialize s2 +* stop I by I2,FUNCT_4:26;
-X: Initialize s2 +* stop I +* Initialize sIJ =
-s2 +* (Initialize stop I +* Initialize sIJ) by I2,FUNCT_4:15;
-X1: Initialize s2 +* sIJ = s +* (Initialize sIJ +* Initialize sIJ)
-by I3,I6,FUNCT_4:15;
-X2: s2 +* (Initialize stop I +* Initialize sIJ)
-    = s2 +* Initialize sIJ by Th17
-   .= Initialize s2 +* sIJ by I6;
-  s+*SA0,s2 equal_outside A by FUNCT_7:132;
+A16: stop I c= Initialize s2 +* stop I by FUNCT_4:26;
+LL: Initialize s2 = s2 by COMPOS_1:78;
+X: Initialize s2 +* stop I +* sIJ = s2 +* (stop I +* sIJ) by LL,FUNCT_4:15;
+X1: Initialize s2 +* sIJ = s +* (sIJ +* sIJ) by LL,FUNCT_4:15;
+X2: s2 +* (stop I +* sIJ)
+   = s2 +* sIJ by Th17;
+  s+*SA0,s2 equal_outside A by AA,FUNCT_7:132;
   then s1, s2 equal_outside A by A15,FUNCT_7:29;
   then s1,Initialize s2+*stop I equal_outside A
    by A4,I2,FUNCT_7:29;
@@ -2425,90 +2236,73 @@ X2: s2 +* (Initialize stop I +* Initialize sIJ)
 A17: LifeSpan(ProgramPart(Initialize s2 +* stop I),
 Initialize s2 +* stop I) = m1
 by A11,A16,Th21;
-I7: Initialize(Initialize s2 +* stop I) +* sIJ
-  = (Initialize s2 +* stop I) +* Initialize sIJ by SCMPDS_4:5;
  set S1=Initialize s2 +* stop I;
-  Comput(ProgramPart S1,S1,m1),
-  Comput(ProgramPart(Initialize S1+*stop(I ';' J)),
-  Initialize S1+*stop(I ';' J),m1) equal_outside NAT by A16,A17,Th24;
-  then
-XX: DataPart Comput(ProgramPart S1,S1,m1) =
-  DataPart Comput(ProgramPart(Initialize S1 +* sIJ),Initialize S1 +* sIJ,m1)
-  by SCMPDS_4:24
-    .= DataPart
-    Comput(ProgramPart( (s2 +* (Initialize stop I +* Initialize sIJ))),
-     (s2 +* (Initialize stop I +* Initialize sIJ
-)),m1) by X,I7
-    .= DataPart Comput(ProgramPart( (Initialize s2 +* sIJ)),
-    (Initialize s2 +* sIJ),m1) by X2
-    .= DataPart Comput(ProgramPart( (s +* (Initialize sIJ +* Initialize sIJ))),
-     (s +* (Initialize sIJ +* Initialize sIJ
-)),m1) by X1
+XX: DataPart Comput(ProgramPart S1,S1,m1)
+    = DataPart Comput(ProgramPart( (s2 +* sIJ)),
+    (s2 +* sIJ),m1) by X2,X,A16,A17,Th24,COMPOS_1:138
     .= DataPart Comput(ProgramPart(s1),s1,m1)
-    by A11,A7,Th24,I3,SCMPDS_4:24;
+    by A11,A7,Th24,X1,LL,COMPOS_1:138;
 A18: DataPart(Comput(ProgramPart(Initialize s2 +* stop I),
-(Initialize s2 +* stop I),m1) +* Initialize stop J) =
-     DataPart(Comput(ProgramPart(Initialize s2 +* stop I),
-(Initialize s2 +* stop I),m1)) +* DataPart Initialize stop J
-         by FUNCT_4:75
-     .= DataPart Comput(ProgramPart(s1),s1,m1) +*
-     DataPart Initialize stop J by XX
+(Initialize s2 +* stop I),m1) +* Initialize stop J)
+     = DataPart Comput(ProgramPart(s1),s1,m1) +*
+     DataPart Initialize stop J by XX,FUNCT_4:75
     .= DataPart(Comput(ProgramPart( s1), s1,m1) +* Initialize stop J)
     by FUNCT_4:75;
-A19: Initialize sIJ c= s2 by I3,FUNCT_4:26;
+A19: sIJ c= s2 by FUNCT_4:26;
   then
 A20: DataPart Comput(ProgramPart(s2),s2,m1) =
  DataPart(Initialize Comput(ProgramPart( (Initialize s2
 +* stop I)), (Initialize s2 +* stop I),m1) +*
-  stop J) by A17,Lm3
+  stop J) by A17,Lm3,LL
   .= DataPart(Comput(ProgramPart( (Initialize s2
 +* stop I)), (Initialize s2 +* stop I),m1) +*
-  Initialize stop J) by SCMPDS_4:5;
+  Initialize stop J) by COMPOS_1:125;
 A21: Shift(stop J,card I) c= Comput(ProgramPart(s2),s2,m1)
-by A19,A17,Lm3;
-A22: IC Comput(ProgramPart(s2),s2,m1) =  card I by A19,A17,Lm3;
+by A19,A17,Lm3,LL;
+A22: IC Comput(ProgramPart(s2),s2,m1) =  card I by A19,A17,Lm3,LL;
   then
 A23: IC Comput(ProgramPart( Comput(ProgramPart(s2),s2,m1)), Comput(ProgramPart(
 s2),s2,m1),m3) = IC Comput(ProgramPart(s3),s3,m3) + card I
-  by A20,A21,A5,A18,I1,SCMPDS_4:84;
-T1: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,m1)
-by AMI_1:123;
+  by A20,A21,A18,I1,A1,SCMPDS_4:84;
+T1: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,m1) by AMI_1:123;
 
 A24: DataPart Comput(ProgramPart( Comput(ProgramPart(s2),s2,m1)), Comput(
 ProgramPart(s2),s2,m1),m3) = DataPart Comput(ProgramPart(s3),s3,
-  m3) by A22,A20,A21,A5,A18,I1,SCMPDS_4:84;
-X: ProgramPart s1 halts_on s1 by A11,SCMPDS_4:63;
-  then
-A25: s3 = Initialize Result(ProgramPart(s1),s1) +* stop J by AMI_1:122;
-IX: IExec(I,s) +* Initialize stop J = Initialize IExec(I,s) +* stop J
-              by SCMPDS_4:5;
-  Result(ProgramPart(s1),s1) = Comput(ProgramPart(s1),s1,m1) by X,AMI_1:122;
+  m3) by A22,A20,A21,A18,I1,A1,SCMPDS_4:84;
+X: ProgramPart s1 halts_on s1 by FUNCT_4:26,SCMPDS_4:def 10;
+A25: s3 = Initialize Result(ProgramPart(s1),s1) +* stop J
+   by A11,EXTPRO_1:23,SCMPDS_4:def 10;
+ set SS1 = Initialize Result(ProgramPart s1,s1) +* stop J,
+     SS2 = Initialize IExec(I,s) +* stop J;
+yy: Result(ProgramPart(s1),s1) = Comput(ProgramPart(s1),s1,m1)
+ by A11,EXTPRO_1:23,SCMPDS_4:def 10;
+
+  s3,Initialize IExec(I,s) +* stop J equal_outside NAT
+   by B12,A10,FUNCT_7:31,106;
   then
 A26: IC Result(ProgramPart(Initialize Result(ProgramPart s1,s1) +* stop J),
-Initialize Result(ProgramPart s1,s1) +* stop J) = IC Result(
+Initialize Result(ProgramPart s1,s1) +* stop J)
+= IC Result(
 ProgramPart(Initialize IExec(I,s) +* stop J),Initialize IExec(I,s) +* stop J)
-by A10,A13,A8,A6,Th21,I1,IX,COMPOS_1:24;
-Y:   ProgramPart s2 halts_on s2 by A19,SCMPDS_4:63;
+by Th21,A1,A9,yy,COMPOS_1:24;
 XX: s3 = Initialize Result(ProgramPart s1,s1) +* stop J
-by X,AMI_1:122;
+by X,EXTPRO_1:23;
 A27: IC IExec(I ';' J,s) = IC Result(ProgramPart(Initialize s +* sIJ),
 Initialize s +* sIJ) by Th22
-    .= IC Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s2),s2)) by Y,
-AMI_1:122
-    .= IC Comput(ProgramPart(s2),s2,m1+m3) by A25,Th37
-    .= IC Comput(ProgramPart(s3),s3,m3) + card I by A23,T1,AMI_1:51
-    .= IC Result(ProgramPart(s3),s3) + card I by B1,AMI_1:122
-    .= IC Result(ProgramPart(Initialize Result(ProgramPart s1,s1) +* stop J),
-    Initialize Result(ProgramPart s1,s1) +* stop J) + card I by XX
-    .= IC IExec(J,IExec(I,s)) + card I by A26,Th22;
+    .= IC Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s2),s2))
+     by A19,AA,EXTPRO_1:23,SCMPDS_4:def 10
+    .= IC Comput(ProgramPart(s2),s2,m1+m3) by A25,Th37,AA
+    .= IC Comput(ProgramPart(s3),s3,m3) + card I by A23,T1,EXTPRO_1:5
+    .= IC Result(ProgramPart(s3),s3) + card I by B1,EXTPRO_1:23
+    .= IC IExec(J,IExec(I,s)) + card I by A26,Th22,XX;
   IExec(I ';' J,s) = Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s2),s2)) +*
-ps by Y,AMI_1:122
+ps by A19,AA,EXTPRO_1:23,SCMPDS_4:def 10
 
-    .= Comput(ProgramPart(s2),s2,m1+m3) +* ps by A25,Th37;
+    .= Comput(ProgramPart(s2),s2,m1+m3) +* ps by A25,Th37,AA;
   then
 A28: DataPart IExec(I ';' J,s) = DataPart Comput(ProgramPart(s2),s2,m1+m3) by
 A10,AMI_2:29,FUNCT_4:76,SCMPDS_2:100
-    .= DataPart Comput(ProgramPart(s3),s3,m3) by A24,T1,AMI_1:51
+    .= DataPart Comput(ProgramPart(s3),s3,m3) by A24,T1,EXTPRO_1:5
     .= DataPart IExec(J,IExec(I,s))
      by A10,A14,AMI_2:29,FUNCT_4:76,SCMPDS_2:100;
   hereby
@@ -2546,7 +2340,7 @@ A36:    x is Element of NAT;
 A37:    not x in dom Start-At(l,SCMPDS) by A29,TARSKI:def 1;
         IExec(I ';' J,s) | A = ps by PBOOLE:157
           .= IExec(J,IExec(I,s)) | A by A3,PBOOLE:157;
-        then IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A36,SCMPDS_4:21;
+        then IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A36,COMPOS_1:127;
         hence
         IExec(I ';' J,s).x = (IExec(J,IExec(I,s)) +* Start-At (IC IExec(J
         ,IExec(I,s)) + card I,SCMPDS)).x by A37,FUNCT_4:12;
@@ -2560,10 +2354,12 @@ A37:    not x in dom Start-At(l,SCMPDS) by A29,TARSKI:def 1;
 end;
 
 theorem
-  for I being parahalting halt-free Program of SCMPDS,J being
+ for s being 0-started State of SCMPDS
+ for I being parahalting halt-free Program of SCMPDS,J being
   parahalting shiftable Program of SCMPDS holds IExec(I ';' J, s).a = IExec(J,
   IExec(I,s)).a
 proof
+  let s be 0-started State of SCMPDS;
   let I be parahalting halt-free Program of SCMPDS,J be parahalting
   shiftable Program of SCMPDS;
 A1: not a in dom Start-At (IC IExec(J,IExec(I,s)) + card I,SCMPDS)
@@ -2576,8 +2372,7 @@ end;
 begin :: Computation of the program consisting of a instruction and a block
 
 theorem Th40:
-  IC Initialize s =  0 & (Initialize s).a = s.a & (
-  Initialize s).loc = s.loc
+  IC Initialize s =  0 & (Initialize s).a = s.a & (Initialize s).loc = s.loc
 proof
   dom Start-At( 0,SCMPDS) = {IC SCMPDS} by FUNCOP_1:19;
   then
@@ -2602,7 +2397,8 @@ A1: (X \/ Y) \ Y \/ Y = X \/ Y \/ Y by XBOOLE_1:39
 A2: Y misses (X \/ Y) \ Y by XBOOLE_1:79;
 A3: X misses Y
   proof
-    assume X meets Y;
+    assume
+    X meets Y;
     then consider x such that
 A4: x in X and
 A5: x in Y by XBOOLE_0:3;
@@ -2630,8 +2426,8 @@ end;
 canceled;
 
 theorem Th43:
-  DataPart s1 = DataPart s2 & InsCode i <> 3 implies DataPart Exec
-  (i,s1) = DataPart Exec(i,s2)
+  DataPart s1 = DataPart s2 & InsCode i <> 3 implies
+   DataPart Exec(i,s1) = DataPart Exec(i,s2)
 proof
   assume that
 A1: DataPart s1 = DataPart s2 and
@@ -2955,11 +2751,11 @@ proof
   set Li=Load i, Mi= stop Li;
   set sI = Initialize s+*Mi;
   set Is = Initialize s;
-I1: Initialize s+*Mi = s+*Initialize Mi by SCMPDS_4:5;
+I1: Initialize s+*Mi = s+*Initialize Mi by COMPOS_1:125;
   set IC1 = IC Comput(ProgramPart( sI), sI,1);
-A1: ProgramPart sI halts_on sI by I1,FUNCT_4:26,SCMPDS_4:63;
-A2:  1 in dom Initialize Mi by Th13;
-A3:  0 in dom Initialize Mi by Th13;
+A1: ProgramPart sI halts_on sI by FUNCT_4:26,SCMPDS_4:def 10;
+A2:  1 in dom Mi by Th9;
+A3:  0 in dom Mi by Th9;
 A4: now
     set Y = NAT;
     set X = SCM-Data-Loc \/ {IC SCMPDS};
@@ -2976,11 +2772,11 @@ A10: dom s = X \/ Y by PARTFUN1:def 4,SCMPDS_3:5;
     now
       thus dom (Exec(i, Is) | Y) = dom s /\ Y by A9,A10,RELAT_1:90,SCMPDS_3:5;
       let x;
-      assume x in dom (Exec(i, Is) | Y);
+      assume
+      x in dom (Exec(i, Is) | Y);
       then
 A11:  x in Y /\ (X \/ Y) by A9,RELAT_1:90,SCMPDS_3:5;
-      then x is Element of NAT by XBOOLE_1:21;
-      then reconsider x9 = x as Element of NAT;
+      then reconsider x9 = x as Element of NAT by XBOOLE_1:21;
       x in Y by A11,XBOOLE_1:21;
       hence (Exec(i, Is)|Y).x = (Exec(i, Is)).x by FUNCT_1:72
         .= Is.x9 by AMI_1:def 13
@@ -2993,7 +2789,8 @@ A12: Exec(i, Is) | Y = s | Y by FUNCT_1:68;
 A13: IExec(Li, s) | Y = s | Y by A5,A10,A7,FUNCT_4:93,SCMPDS_3:5;
     X misses Y
     proof
-      assume X meets Y;
+      assume
+      X meets Y;
       then consider x such that
 A14:  x in X and
 A15:  x in Y by XBOOLE_0:3;
@@ -3017,18 +2814,16 @@ A17: Exec(i, Is)| (X \/ Y) = IExec(Li,s) | (X \/ Y) by A6,A13,A12,RELAT_1:185;
     thus Exec(i, Is) = Exec(i, Is)| (X \/ Y) by A9,RELAT_1:98,SCMPDS_3:5
       .= IExec(Li, s) by A8,A17,RELAT_1:98,SCMPDS_3:5;
   end;
-A18: (Initialize Mi). 1=halt SCMPDS by Th13;
-A19: (Initialize Mi). 0 = i by Th13;
-A20: Initialize Mi c= sI by I1,FUNCT_4:26;
-  then
-A21: IC1 in dom Mi by SCMPDS_4:def 9;
+A18: Mi. 1=halt SCMPDS by Th10;
+A19: Mi. 0 = i by Th10;
+A20: Mi c= sI by FUNCT_4:26;
+A21: IC1 in dom Mi by FUNCT_4:26,SCMPDS_4:def 9;
 Y:  (ProgramPart sI)/.IC sI
  = sI.IC sI by COMPOS_1:38;
 A22: Comput(ProgramPart( sI), sI,0+1)
- = Following(ProgramPart sI,Comput(ProgramPart(sI),sI
-,0))
-by AMI_1:14
-    .= Following(ProgramPart sI,sI) by AMI_1:13
+ = Following(ProgramPart sI,Comput(ProgramPart(sI),sI,0))
+by EXTPRO_1:4
+    .= Following(ProgramPart sI,sI) by EXTPRO_1:3
     .= Exec(sI. 0, sI) by Th18,Y,I1,FUNCT_4:26
     .= Exec(i, sI) by A3,A19,A20,GRFUNC_1:8;
   per cases by A21,Th11;
@@ -3039,20 +2834,16 @@ A23: IC1 =  0;
       .=  1;
     then
 A24: Ni in {0,1,4,5,6} by A22,A23,SCMPDS_4:6;
-TX: ProgramPart sI = ProgramPart Comput(ProgramPart(sI),sI,1)
-by AMI_1:123;
-Y:  (ProgramPart Comput(ProgramPart(sI),sI,1))/.IC Comput(ProgramPart(sI),sI,1)
- = Comput(ProgramPart(sI),sI,1).IC Comput(ProgramPart(sI),sI,1) by COMPOS_1:38;
 A25: CurInstr(ProgramPart(sI),Comput(ProgramPart(sI),
 sI,1)) = sI. 0
- by A22,A23,Y,TX,AMI_1:def 13
+ by A23,COMPOS_1:38
       .= i by A3,A19,A20,GRFUNC_1:8;
 A26: Ni <> 1 by Th26;
     hereby
       per cases;
       suppose
         i = halt SCMPDS;
-        hence thesis by A1,A4,A22,A25,AMI_1:def 22;
+        hence thesis by A1,A4,A22,A25,EXTPRO_1:def 8;
       end;
       suppose
 A27:    i <> halt SCMPDS;
@@ -3082,46 +2873,42 @@ A29:    now
           end;
         end;
 A30:    Following(ProgramPart sI,sI)
- = Following(ProgramPart sI,Comput(ProgramPart(sI),sI
-,0))
-by AMI_1:13
-          .= Exec(i, sI) by A22,AMI_1:14;
+ = Following(ProgramPart sI,Comput(ProgramPart(sI),sI,0)) by EXTPRO_1:3
+          .= Exec(i, sI) by A22,EXTPRO_1:4;
 A31:    IC sI = IC Exec(i, sI) by A22,A23,Th18,I1,FUNCT_4:26;
         then
 A32:    sI = Exec(i, sI) by A29,A28,SCMPDS_2:54;
         now
           let n;
-          Comput(ProgramPart( sI), sI,n) = sI by A31,A29,A28,A30,AMI_1:130
+          Comput(ProgramPart( sI), sI,n) = sI by A31,A29,A28,A30,EXTPRO_1:27
 ,SCMPDS_2:54
             .= Following(ProgramPart sI,Comput(ProgramPart(sI),sI,0))
-            by A32,A30,AMI_1:13
-            .= Comput(ProgramPart( sI), sI,0+1) by AMI_1:14;
+            by A32,A30,EXTPRO_1:3
+            .= Comput(ProgramPart( sI), sI,0+1) by EXTPRO_1:4;
           hence CurInstr(ProgramPart sI,Comput(ProgramPart(sI),sI,n))
            <> halt SCMPDS by A25,A27;
         end;
-        then not ProgramPart sI halts_on sI by AMI_1:146;
-        hence thesis by I1,FUNCT_4:26,SCMPDS_4:63;
+        then not ProgramPart sI halts_on sI by EXTPRO_1:30;
+        hence thesis by FUNCT_4:26,SCMPDS_4:def 10;
       end;
     end;
   end;
   suppose
 S:    IC1 =  1;
-TX: ProgramPart sI = ProgramPart Comput(ProgramPart(sI),sI,1)
-by AMI_1:123;
-  (ProgramPart Comput(ProgramPart(sI),sI,1))/.IC Comput(ProgramPart(sI),sI,1)
- = Comput(ProgramPart(sI),sI,1).IC Comput(ProgramPart(sI),sI,1) by COMPOS_1:38;
-    then CurInstr(ProgramPart(sI),Comput(ProgramPart(sI),sI,1))
-     = sI. 1 by A22,S,TX,AMI_1:def 13
+    CurInstr(ProgramPart(sI),Comput(ProgramPart(sI),sI,1))
+     = sI. 1 by S,COMPOS_1:38
       .= halt SCMPDS by A2,A18,A20,GRFUNC_1:8;
-    hence thesis by A1,A4,A22,AMI_1:def 22;
+    hence thesis by A1,A4,A22,EXTPRO_1:def 8;
   end;
 end;
 
 theorem Th46:
-  for I being parahalting halt-free Program of SCMPDS,j being
-parahalting shiftable Instruction of SCMPDS holds IExec(I ';' j, s).a = Exec(j,
-  IExec(I, s)).a
+ for s being 0-started State of SCMPDS
+  for I being parahalting halt-free Program of SCMPDS,
+      j being parahalting shiftable Instruction of SCMPDS
+ holds IExec(I ';' j, s).a = Exec(j,IExec(I, s)).a
 proof
+  let s be 0-started State of SCMPDS;
   let I be parahalting halt-free Program of SCMPDS,j be parahalting
   shiftable Instruction of SCMPDS;
   set Mj = Load j;
@@ -3141,10 +2928,12 @@ A3: DataPart Initialize IExec(I,s) = DataPart IExec(I, s) by SCMPDS_4:23;
 end;
 
 theorem
+  for s being 0-started State of SCMPDS
   for i being No-StopCode parahalting Instruction of SCMPDS, j being
 shiftable parahalting Instruction of SCMPDS holds IExec(i ';' j, s).a = Exec(j,
   Exec(i, Initialize s)).a
 proof
+  let s be 0-started State of SCMPDS;
   let i be No-StopCode parahalting Instruction of SCMPDS, j be shiftable
   parahalting Instruction of SCMPDS;
   set Mi = Load i;
@@ -3153,3 +2942,11 @@ proof
     .= Exec(j, Exec(i, Initialize s)).a by Th45;
 end;
 
+theorem
+  IExec(I,Initialize s) = IExec(I,s)
+proof
+  (Initialize s)|NAT = s|NAT +* Start-At(0,SCMPDS)|NAT by FUNCT_4:75
+    .= s|NAT +* {} by COMPOS_1:47
+    .= s|NAT by FUNCT_4:22;
+ hence IExec(I,Initialize s) = IExec(I,s);
+end;

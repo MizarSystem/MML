@@ -33,7 +33,7 @@ definition
   field it = X & for Y,Z st Y in X & Z in X holds [Y,Z] in it iff Y c= Z;
   existence
   proof
-    defpred P[set,set] means ex Y,Z st $1 = Y & $2 = Z & Y c= Z;
+    defpred P[set,set] means $1 c= $2;
     consider R such that
 A1: [x,y] in R iff x in X & y in X & P[x,y] from RELAT_1:sch 1;
     take R;
@@ -61,14 +61,8 @@ A3:     now
     end;
     let Y,Z such that
 A4: Y in X & Z in X;
-    thus [Y,Z] in R implies Y c= Z
-    proof
-      assume [Y,Z] in R;
-      then ex V1,V2 being set st V1 = Y & V2 = Z & V1 c= V2 by A1;
-      hence thesis;
-    end;
-    assume Y c= Z;
-    hence thesis by A1,A4;
+    thus [Y,Z] in R implies Y c= Z by A1;
+    thus thesis by A1,A4;
   end;
   uniqueness
   proof
@@ -153,7 +147,7 @@ proof
   assume that
 A1: Y c= field RelIncl A and
 A2: Y <> {};
-  defpred P[Ordinal] means $1 in Y;
+  defpred P[set] means $1 in Y;
   consider x being Element of Y;
 A3: field RelIncl A = A by Def1;
   then x in A by A1,A2,TARSKI:def 3;
@@ -1009,20 +1003,19 @@ A2: for X,Y st X in M & Y in M & X <> Y holds X misses Y;
 A3: R well_orders union M by Th26;
 A4: R is_reflexive_in union M by A3,WELLORD1:def 5;
 A5: R is_connected_in union M by A3,WELLORD1:def 5;
-  defpred Ch[set,set] means ex X st $1 = X & $2 in X & for z st z in X holds [
-  $2,z] in R;
+  defpred Ch[set,set] means $2 in $1 & for z st z in $1 holds [$2,z] in R;
 A6: R is_antisymmetric_in union M by A3,WELLORD1:def 5;
 A7: for x,y,z st x in M & Ch[x,y] & Ch[x,z] holds y = z
   proof
     let x,y,z such that
 A8: x in M;
-    given Y such that
-A9: x = Y & y in Y and
-A10: for u st u in Y holds [y,u] in R;
+    assume that
+A9: y in x and
+A10: for u st u in x holds [y,u] in R;
 A11: y in union M by A8,A9,TARSKI:def 4;
-    given Z such that
-A12: x = Z & z in Z and
-A13: for u st u in Z holds [z,u] in R;
+    assume that
+A12: z in x and
+A13: for u st u in x holds [z,u] in R;
 A14: z in union M by A8,A12,TARSKI:def 4;
     [y,z] in R & [z,y] in R by A9,A10,A12,A13;
     hence thesis by A6,A11,A14,RELAT_2:def 4;
@@ -1039,8 +1032,8 @@ A18: x c= union M by ZFMISC_1:92;
     then consider y such that
 A19: y in x and
 A20: R-Seg(y) misses x by A15,A18,WELLORD1:def 3;
-    take y,x;
-    thus x = x & y in x by A19;
+    take y;
+    thus y in x by A19;
     let z;
     assume
 A21: z in x;
@@ -1057,13 +1050,6 @@ A23: dom f = M & for x st x in M holds Ch[x,f.x] from FUNCT_1:sch 2(A7,
   let X such that
 A24: X in M;
   take x = f.X;
-A25: for X st X in M holds f.X in X
-  proof
-    let X;
-    assume X in M;
-    then ex Y st X = Y & f.X in Y & for z st z in Y holds [f.X,z] in R by A23;
-    hence thesis;
-  end;
   thus Choice /\ X c= { x }
   proof
     let y;
@@ -1080,7 +1066,7 @@ A29: y = f.z by FUNCT_1:def 5;
     then X misses z by A2,A23,A24,A28;
     then
 A30: X /\ z = {} by XBOOLE_0:def 7;
-    f.z in z by A23,A25,A28;
+    f.z in z by A23,A28;
     hence contradiction by A27,A29,A30,XBOOLE_0:def 4;
   end;
   let y;
@@ -1088,7 +1074,7 @@ A30: X /\ z = {} by XBOOLE_0:def 7;
   then
 A31: y = x by TARSKI:def 1;
   then
-A32: y in X by A24,A25;
+A32: y in X by A24,A23;
   y in Choice by A23,A24,A31,FUNCT_1:def 5;
   hence thesis by A32,XBOOLE_0:def 4;
 end;
@@ -1101,8 +1087,7 @@ proof
 A1: for X st X in M holds X <> {};
   consider R such that
 A2: R well_orders union M by Th26;
-  defpred Ch[set,set] means ex X st $1 = X & $2 in X & for z st z in X holds [
-  $2,z] in R;
+  defpred Ch[set,set] means $2 in $1 & for z st z in $1 holds [$2,z] in R;
 A3: R is_connected_in union M by A2,WELLORD1:def 5;
 A4: R is_reflexive_in union M by A2,WELLORD1:def 5;
 A5: R is_well_founded_in union M by A2,WELLORD1:def 5;
@@ -1117,8 +1102,8 @@ A8: x c= union M by ZFMISC_1:92;
     then consider y such that
 A9: y in x and
 A10: R-Seg(y) misses x by A5,A8,WELLORD1:def 3;
-    take y,x;
-    thus x = x & y in x by A9;
+    take y;
+    thus y in x by A9;
     let z;
     assume
 A11: z in x;
@@ -1134,26 +1119,21 @@ A14: for x,y,z st x in M & Ch[x,y] & Ch[x,z] holds y = z
   proof
     let x,y,z such that
 A15: x in M;
-    given Y such that
-A16: x = Y & y in Y and
-A17: for u st u in Y holds [y,u] in R;
+    assume that
+A16: y in x and
+A17: for u st u in x holds [y,u] in R;
 A18: y in union M by A15,A16,TARSKI:def 4;
-    given Z such that
-A19: x = Z & z in Z and
-A20: for u st u in Z holds [z,u] in R;
+    assume that
+A19: z in x and
+A20: for u st u in x holds [z,u] in R;
 A21: z in union M by A15,A19,TARSKI:def 4;
     [y,z] in R & [z,y] in R by A16,A17,A19,A20;
     hence thesis by A13,A18,A21,RELAT_2:def 4;
   end;
   consider f such that
-A22: dom f = M & for x st x in M holds Ch[x,f.x] from FUNCT_1:sch 2(A14,
-  A6 );
-  take Choice = f;
-  thus dom Choice = M by A22;
-  let X;
-  assume X in M;
-  then ex Y st X = Y & f.X in Y & for z st z in Y holds [f.X,z] in R by A22;
-  hence thesis;
+A22: dom f = M & for x st x in M holds Ch[x,f.x] from FUNCT_1:sch 2(A14,A6);
+  take f;
+  thus thesis by A22;
 end;
 
 begin :: Addenda
@@ -1165,23 +1145,20 @@ scheme
 provided
 A1: for x st x in X() ex y st y in Y() & P[x,y]
 proof
-  defpred Q[set,set] means ex X st $2 = X & for y holds y in X iff y in Y() &
-  P[$1,y];
+  defpred Q[set,set] means for y holds y in $2 iff y in Y() & P[$1,y];
 A2: for e,u1,u2 being set st e in X() & Q[e,u1] & Q[e,u2] holds u1 = u2
   proof
     let e,u1,u2 be set such that
     e in X();
-    given X such that
-A3: u1 = X and
-A4: for y holds y in X iff y in Y() & P[e,y];
+    assume
+A4: for y holds y in u1 iff y in Y() & P[e,y];
     defpred A[set] means $1 in Y() & P[e,$1];
-A5: for x be set holds x in X iff A[x] by A4;
-    given Y such that
-A6: u2 = Y and
-A7: for y holds y in Y iff y in Y() & P[e,y];
-A8: for x be set holds x in Y iff A[x] by A7;
-    X = Y from XBOOLE_0:sch 2(A5,A8);
-    hence thesis by A3,A6;
+A5: for x be set holds x in u1 iff A[x] by A4;
+    assume
+A7: for y holds y in u2 iff y in Y() & P[e,y];
+A8: for x be set holds x in u2 iff A[x] by A7;
+    u1 = u2 from XBOOLE_0:sch 2(A5,A8);
+    hence thesis;
   end;
 A9: for x st x in X() ex y st Q[x,y]
   proof
@@ -1190,12 +1167,11 @@ A9: for x st x in X() ex y st Q[x,y]
     defpred R[set] means P[x,$1];
     consider X such that
 A10: y in X iff y in Y() & R[y] from XBOOLE_0:sch 1;
-    take X,X;
+    take X;
     thus thesis by A10;
   end;
   consider G being Function such that
-A11: dom G = X() & for x st x in X() holds Q[x,G.x] from FUNCT_1:sch 2(
-  A2, A9);
+A11: dom G = X() & for x st x in X() holds Q[x,G.x] from FUNCT_1:sch 2(A2,A9);
 A12: now
     assume X() <> {};
     then reconsider D = rng G as non empty set by A11,RELAT_1:65;
@@ -1204,8 +1180,8 @@ A12: now
       assume X in D;
       then consider x such that
 A13:  x in dom G & X = G.x by FUNCT_1:def 5;
-      ( ex Y st X = Y & for y holds y in Y iff y in Y() & P[x,y])& ex y
-      st y in Y() & P[x,y] by A1,A11,A13;
+      (for y holds y in X iff y in Y() & P[x,y]) &
+      ex y st y in Y() & P[x,y] by A1,A11,A13;
       hence X <> {};
     end;
     then consider F be Function such that
@@ -1223,24 +1199,17 @@ A16: dom (F*G) = X() by A11,A14,RELAT_1:46;
         then consider y such that
 A17:    y in dom F and
 A18:    x = F.y by FUNCT_1:def 5;
-        consider z such that
-A19:    z in dom G & y = G.z by A14,A17,FUNCT_1:def 5;
-        consider X such that
-A20:    y = X and
-A21:    for x holds x in X iff x in Y() & P[z,x] by A11,A19;
-        x in X by A14,A15,A17,A18,A20;
-        hence thesis by A21;
+A19:    ex z st z in dom G & y = G.z by A14,A17,FUNCT_1:def 5;
+        x in y by A14,A15,A17,A18;
+        hence thesis by A11,A19;
       end;
       hence rng f c= Y() by A14,RELAT_1:47;
       let x;
       assume
 A22:  x in X();
-      then consider X such that
-A23:  G.x = X and
-A24:  for y holds y in X iff y in Y() & P[x,y] by A11;
-      f.x = F.X & X in D by A11,A16,A22,A23,FUNCT_1:22,def 5;
-      then f.x in X by A15;
-      hence thesis by A24;
+      then f.x = F.(G.x) & G.x in D by A11,A16,FUNCT_1:22,def 5;
+      then f.x in G.x by A15;
+      hence thesis by A11,A22;
     end;
   end;
   now
@@ -1250,7 +1219,6 @@ A25: X() = {};
     thus thesis
     proof
       take F;
-      thus dom F = X() by A25;
       thus thesis by A25,RELAT_1:60,XBOOLE_1:2;
     end;
   end;

@@ -15,20 +15,21 @@ environ
       CARD_1, XXREAL_0, NUMBERS, XCMPLX_0, NAT_1, MEMBERED, FUNCT_1, RELSET_1,
       PARTFUN1, MCART_1, VALUED_1,
       DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1, FINSET_1,
-      FUNCT_4, AFINSQ_1,
-      STRUCT_0, GRAPH_2, NAT_D, XXREAL_2, COMPOS_1, AMI_1, FUNCT_2;
- constructors WELLORD2, REAL_1, FINSEQ_4, REALSET1, NAT_D, AMI_1, XXREAL_2,
-      RELSET_1, PRE_POLY, GRAPH_2, AFINSQ_1, MCART_1;
+      FUNCT_4, AFINSQ_1, STRUCT_0, GRAPH_2, NAT_D, XXREAL_2, COMPOS_1,
+      EXTPRO_1, FUNCT_2;
+ constructors WELLORD2, REAL_1, FINSEQ_4, REALSET1, NAT_D, XXREAL_2, COMPOS_1,
+      EXTPRO_1, RELSET_1, PRE_POLY, GRAPH_2, AFINSQ_1, MCART_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       FUNCOP_1, FINSET_1, NUMBERS, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, CARD_3,
-      REALSET1, FUNCT_7, STRUCT_0, AMI_1, JORDAN1J, CARD_1, XXREAL_2, RELSET_1,
-      FUNCT_4, AFINSQ_1, ORDINAL1, ZFMISC_1, SUBSET_1, VALUED_1, COMPOS_1;
+      REALSET1, FUNCT_7, STRUCT_0, JORDAN1J, CARD_1, XXREAL_2, RELSET_1,
+      FUNCT_4, AFINSQ_1, ORDINAL1, ZFMISC_1, SUBSET_1, VALUED_1, COMPOS_1,
+      EXTPRO_1;
  requirements NUMERALS, BOOLE, REAL, SUBSET, ARITHM;
- definitions TARSKI, STRUCT_0, COMPOS_1, AMI_1, YELLOW_8, XBOOLE_0, FUNCOP_1,
-      NAT_1, RELAT_1, FUNCT_4, NAT_D, AFINSQ_1, VALUED_1;
- theorems TARSKI, FINSEQ_4, FINSEQ_1, NAT_1, AMI_1, FUNCT_4, FUNCT_1,
+ definitions TARSKI, STRUCT_0, COMPOS_1, EXTPRO_1, YELLOW_8, XBOOLE_0,
+      FUNCOP_1, NAT_1, RELAT_1, FUNCT_4, NAT_D, AFINSQ_1, VALUED_1;
+ theorems TARSKI, FINSEQ_4, FINSEQ_1, NAT_1, FUNCT_4, FUNCT_1,
       FUNCT_2, ENUMSET1, ZFMISC_1, CARD_1, FUNCOP_1, CARD_3, ORDINAL1,
-      MCART_1, GRFUNC_1, FINSEQ_3, INT_1, SETFAM_1, REVROT_1,
+      MCART_1, GRFUNC_1, FINSEQ_3, INT_1, SETFAM_1, REVROT_1, EXTPRO_1,
       RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, COMPOS_1,
       PARTFUN1, FINSET_1, XREAL_0, NAT_D, PBOOLE, AFINSQ_1, RECDEF_2;
  schemes NAT_1, FINSEQ_2, FUNCT_2;
@@ -68,18 +69,20 @@ end;
 canceled 12;
 
 definition
-  let N be with_non-empty_elements set;
+  let N be with_non-empty_elements non empty set;
   let S be non empty stored-program standard-ins AMI-Struct over N;
   let T be InsType of S;
   canceled 2;
   attr T is jump-only means
   for s being State of S, o being Object of S, I
-  being Instruction of S st InsCode I = T & o <> IC S holds Exec(I, s).o = s.o;
+  being Instruction of S st InsCode I = T & ::: o <> IC S
+   o in Data-Locations S
+  holds Exec(I, s).o = s.o;
 end;
 
 definition
 
-  let N be with_non-empty_elements set;
+  let N be with_non-empty_elements non empty set;
   let S be non empty stored-program standard-ins AMI-Struct over N;
   let I be Instruction of S;
   attr I is jump-only means
@@ -92,17 +95,14 @@ definition
   let N,S; let l be Nat;
   let i be Element of the Instructions of S;
   func NIC(i,l) -> Subset of NAT equals
-  { IC Following(ProgramPart ss,ss) : IC ss = l & (ProgramPart ss)/.l = i };
+   { IC Exec(i,ss) : IC ss = l };
   coherence
   proof
-    { IC Following(ProgramPart ss,ss) : IC ss = l & (ProgramPart ss)/.l = i }
-     c= NAT
+    { IC Exec(i,ss) : IC ss = l } c= NAT
     proof
       let e be set;
-      assume e in { IC Following(ProgramPart ss,ss) : IC ss = l &
-       (ProgramPart ss)/.l = i };
-      then ex ss st e = IC Following(ProgramPart ss,ss) & IC ss = l &
-       (ProgramPart ss)/.l = i;
+      assume e in { IC Exec(i,ss) : IC ss = l };
+      then ex ss st e = IC Exec(i,ss) & IC ss = l;
       hence thesis;
     end;
     hence thesis;
@@ -112,7 +112,7 @@ end;
 Lm2: now
   let N;
 
-  let S be realistic IC-Ins-separated definite steady-programmed
+  let S be realistic IC-Ins-separated definite
   (non empty stored-program
   AMI-Struct over N), i be Element of the Instructions of S, l be
   Element of NAT, s be State of S, f be FinPartState of S such that
@@ -135,8 +135,7 @@ end;
 registration
 
   let N be with_non-empty_elements non empty set,
-  S be realistic IC-Ins-separated
-  definite steady-programmed
+  S be realistic IC-Ins-separated definite
    (non empty stored-program AMI-Struct over N), i be Element of the
   Instructions of S, l be Element of NAT;
   cluster NIC(i,l) -> non empty;
@@ -217,11 +216,11 @@ B4: x in {p} by A3,SETFAM_1:def 1;
 end;
 
 theorem Th15:
-  for S being realistic IC-Ins-separated definite steady-programmed
+  for S being realistic IC-Ins-separated definite
    (non empty stored-program AMI-Struct over N), il being Element of NAT,
    i being Instruction of S st i is halting holds NIC(i,il) = {il}
 proof
-  let S be realistic IC-Ins-separated definite steady-programmed
+  let S be realistic IC-Ins-separated definite
    (non empty stored-program
   AMI-Struct over N), il be Element of NAT, i be Instruction of S
   such that
@@ -230,7 +229,7 @@ A1: for s being State of S holds Exec(i,s) = s;
     let n be set;
     assume n in NIC(i,il);
     then ex s being Element of product the Object-Kind of S
-    st n = IC Following(ProgramPart s,s) & IC s = il & (ProgramPart s)/.il = i;
+    st n = IC Exec(i,s) & IC s = il;
     then n = il by A1;
     hence n in {il} by TARSKI:def 1;
   end;
@@ -266,8 +265,6 @@ definition
     for n st 1 <= n & n < len f holds f/.(n+1) in SUCC(f/.n,S);
 end;
 
-canceled 2;
-
 LemRefle:
   ex f being non empty FinSequence of NAT st f/.1
 = k & f/.len f = k & for n st 1 <= n & n < len f
@@ -280,8 +277,9 @@ LemRefle:
     hence thesis by FINSEQ_1:56;
   end;
 
+canceled 3;
 
-theorem Th18:
+theorem Th19:
    S is standard iff
    for k being Element of NAT holds k+1 in SUCC(k,S) &
     for j being Element of NAT st j in SUCC(k,S) holds k <= j
@@ -541,30 +539,11 @@ A83: P[0];
  end;
 end;
 
-theorem Th19:
-  S is standard iff
-  for k being Element of NAT holds k+1 in SUCC(k,S) & for j
-  being Element of NAT st j in SUCC(k,S) holds k <= j
-proof
-  hereby
-    assume S is standard;
-    hence for k being
-Element of NAT holds k+1 in SUCC(k,S) & for j being Element of NAT st j
-    in SUCC(k,S) holds k <= j by Th18;
-  end;
-  assume
-A4: for k being Element of NAT holds k+1 in SUCC(k,S) & for j being
-  Element of NAT st j in SUCC(k,S) holds k <= j;
-  thus S is standard by A4,Th18;
-end;
-
 Lm3: for a,b being set holds dom ((NAT --> a)+*(NAT .-->b)) = NAT \/ {NAT}
 proof
   let a,b be set;
-
   thus dom ((NAT --> a)+*(NAT .-->b)) = dom (NAT --> a) \/ dom (NAT .-->b) by
 FUNCT_4:def 1
-
     .= NAT \/ dom (NAT .-->b) by FUNCOP_1:19
     .= NAT \/ {NAT} by FUNCOP_1:19;
 end;
@@ -758,7 +737,7 @@ end;
 
 registration
   let N be with_non-empty_elements set;
-  cluster STC N -> IC-Ins-separated definite realistic steady-programmed;
+  cluster STC N -> IC-Ins-separated definite realistic;
   coherence
   proof
     set IT = STC N;
@@ -784,60 +763,8 @@ A5:   not l in dom (NAT .-->NAT) by TARSKI:def 1;
         .= (NAT --> III).l by A5,FUNCT_4:12
         .= the Instructions of IT by A3,FUNCOP_1:13;
     end;
-    thus IT is realistic
-    proof
       assume the Instruction-Counter of IT in NAT;
       hence contradiction by Def11;
-    end;
-    thus IT is steady-programmed
-    proof
-      let s be State of IT, i be Instruction of IT, l be Element of NAT;
-      consider f being Function of product the Object-Kind of IT, product the
-      Object-Kind of IT such that
-A6:   for s being Element of product the Object-Kind of IT holds f.s
-      = s+*(NAT .-->succ(s.NAT)) and
-A7:   the Execution of IT = ([1,0,0] .--> f) +* ([0,0,0] .--> id product
-      the Object-Kind of IT) by Def11;
-B6:   for s being State of IT holds f.s = s+*(NAT .-->succ(s.NAT))
-       proof let s be State of IT;
-        reconsider s as Element of product the Object-Kind of IT by PBOOLE:155;
-         f.s = s+*(NAT .-->succ(s.NAT)) by A6;
-        hence thesis;
-       end;
-      reconsider ss=s as Element of product the Object-Kind of IT
-       by PBOOLE:155;
-      not l in {NAT} by TARSKI:def 1;
-      then
-A8:   not l in dom (NAT .-->succ(s.NAT)) by FUNCOP_1:19;
-      per cases by A3,TARSKI:def 2;
-      suppose
-A9:     i = [1,0,0];
-        then
-A10:    i in {[1,0,0]} by TARSKI:def 1;
-        now
-          assume i in dom ([0,0,0] .--> id product the Object-Kind of IT);
-          then i in {[0,0,0]} by FUNCOP_1:19;
-          then i = [0,0,0] by TARSKI:def 1;
-          hence contradiction by A9,MCART_1:28;
-        end;
-        then (the Execution of IT).i = ([1,0,0] .--> f).i by A7,FUNCT_4:12
-          .= f by A10,FUNCOP_1:13;
-        hence Exec(i,s).l = (s+*(NAT .-->succ(s.NAT))).l by B6
-          .= s.l by A8,FUNCT_4:12;
-      end;
-      suppose
-        i = [0,0,0];
-        then
-A11:    i in {[0,0,0]} by TARSKI:def 1;
-        then i in dom ([0,0,0] .--> id product the Object-Kind of IT) by
-FUNCOP_1:19;
-        then (the Execution of IT).i = ([0,0,0] .--> id product the Object-Kind
-        of IT).i by A7,FUNCT_4:14
-          .= id product the Object-Kind of IT by A11,FUNCOP_1:13;
-         then (the Execution of IT).i.ss = ss by FUNCT_1:35;
-        hence thesis;
-      end;
-    end;
   end;
 end;
 
@@ -948,13 +875,12 @@ proof
   set M = STC N;
   let s be State of M, o be Object of M, I be Instruction of M such that
   InsCode I = InsCode i and
-A1: o <> IC M;
+A1: o in Data-Locations M;
 A2: the Instruction-Counter of M = NAT by Def11;
   the carrier of M = NAT \/ {NAT} by Def11;
-  then o in NAT or o in {NAT} by XBOOLE_0:def 3;
-  then reconsider l = o as Element of NAT by A2,A1,TARSKI:def 1;
-  Exec(i,s).l = s.l by AMI_1:def 13;
-  hence thesis by AMI_1:def 13;
+  then Data-Locations M = (NAT \/ {NAT}) \ ({NAT} \/ NAT) by A2
+       .= {} by XBOOLE_1:37;
+   hence thesis by A1;
 end;
 
 Lm5: for l being Element of NAT, i being Element of the
@@ -969,16 +895,15 @@ proof
 A1: l = z and
 A2: InsCode i = 1;
   set M = STC N;
-  set F = { IC Following(ProgramPart ss,ss)
-    where ss is Element of product the Object-Kind of STC N:
-    IC ss = l & (ProgramPart ss)/.l = i };
+  set F = { IC Exec(i,ss)
+   where ss is Element of product the Object-Kind of STC N: IC ss = l};
   now
     set f = (NAT) --> i;
     consider w being State of M;
     reconsider l9 = l as Element of ObjectKind IC M by COMPOS_1:def 6;
     set u = (IC M).-->l9;
 A4: dom u = {IC M} by FUNCOP_1:19;
-    reconsider s = w +* f as State of M by COMPOS_1:41;
+    reconsider s = w +* f as State of M;
     let y be set;
 A5: dom f = NAT by FUNCOP_1:19;
     reconsider t = s+*u as Element of product the Object-Kind of STC N
@@ -994,7 +919,7 @@ A6: (ProgramPart t)/.l = t.l by COMPOS_1:38
       assume y in F;
 
       then ex s being Element of product the Object-Kind of STC N
-      st y = IC Following(ProgramPart s,s) & IC s = l & (ProgramPart s)/.l = i;
+      st y = IC Exec(i,s) & IC s = l;
 
       then y = succ z by A1,A2,Lm4
         .= z+1;
@@ -1138,7 +1063,7 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  cluster standard halting realistic steady-programmed
+  cluster standard halting realistic
 standard-ins (IC-Ins-separated definite (non empty stored-program AMI-Struct
     over N));
   existence
@@ -1175,13 +1100,13 @@ definite (non empty stored-program AMI-Struct over N)), i be Instruction of
 end;
 
 theorem Th41:
-  for S being standard realistic (IC-Ins-separated definite steady-programmed
+  for S being standard realistic (IC-Ins-separated definite
    (non
 empty stored-program AMI-Struct over N)), il being Element of NAT,
   i being Instruction of S st i is sequential holds NIC(i,il)
    = {succ il}
 proof
-  let S be standard realistic (IC-Ins-separated definite steady-programmed
+  let S be standard realistic (IC-Ins-separated definite
    (non empty
   stored-program AMI-Struct over N)), il be Element of NAT, i be
   Instruction of S such that
@@ -1209,24 +1134,21 @@ A5:   (ProgramPart u)/.il = u.il by COMPOS_1:38
 A6:   IC u = ((IC S, il)-->(il1, I)).IC S by FUNCT_4:14
         .= il by COMPOS_1:3,FUNCT_4:66;
       then IC Following(ProgramPart u,u) = succ il by A1,A5;
-      hence x in {IC Following(ProgramPart ss,ss)
+      hence x in {IC Exec(i,ss)
        where ss is Element of product the Object-Kind of S
-        : IC ss = il & (ProgramPart ss)/.il=i} by A3,A6,A5;
+        : IC ss = il} by A3,A6,A5;
     end;
     now
-      assume x in {IC Following(ProgramPart ss,ss)
-       where ss is Element of product the Object-Kind of S
-      : IC ss = il & (ProgramPart ss)/.il=i};
+      assume x in {IC Exec(i,ss)
+       where ss is Element of product the Object-Kind of S : IC ss = il};
       then ex s being Element of product the Object-Kind of S
-       st x = IC Following(ProgramPart s,s) & IC s = il &
-        (ProgramPart s)/.il = i;
+       st x = IC Exec(i,s) & IC s = il;
       hence x = succ il by A1;
     end;
     hence
-    x in {succ il} iff x in {IC Following(ProgramPart ss,ss)
+    x in {succ il} iff x in {IC Exec(i,ss)
        where ss is Element of product the Object-Kind of S
-     : IC ss = il & (ProgramPart ss)/.il=i}
-     by A2,TARSKI:def 1;
+     : IC ss = il } by A2,TARSKI:def 1;
   end;
   hence thesis by TARSKI:2;
 end;
@@ -1234,8 +1156,7 @@ end;
 registration
   let N;
   let S be realistic standard (IC-Ins-separated definite
-   steady-programmed (non empty
-  stored-program AMI-Struct over N));
+   (non empty stored-program AMI-Struct over N));
   cluster sequential -> non halting Instruction of S;
   coherence
 proof
@@ -1267,15 +1188,14 @@ A1: l in JUMP i by XBOOLE_0:def 1;
   then l in NIC(i,l) by A1,SETFAM_1:def 1;
   then consider s being Element of product the Object-Kind of T
   such that
-A2: l = IC Following(ProgramPart s,s) & IC s = l & (ProgramPart s)/.l = i;
+A2: l = IC Exec(i,s) & IC s = l;
   take s;
-  thus thesis by A2,ORDINAL1:14;
+  thus thesis by A2;
 end;
 
 begin :: Closedness of finite partial states
 
 definition
-
   let N be with_non-empty_elements non empty set;
   let S be IC-Ins-separated definite (non empty stored-program AMI-Struct over
   N);
@@ -1284,72 +1204,67 @@ definition
   :Def17:
   for l being Element of NAT st l in dom F holds NIC (F/.l, l) c= dom F;
   attr F is really-closed means
-  for s being State of S st F c= s & IC s in dom F
-   for k being Element of NAT holds IC Comput(ProgramPart(s),s,k) in dom F;
+  for s being State of S st IC s in dom F
+   for k being Element of NAT holds IC Comput(F,s,k) in dom F;
 end;
 
 definition
   let N be with_non-empty_elements non empty set;
   let S be standard (IC-Ins-separated definite (non empty stored-program
   AMI-Struct over N));
-  let F be FinPartState of S;
+  let F be NAT-defined (the Instructions of S)-valued Function;
   attr F is para-closed means
-  for s being State of S st F c= s & IC s = 0
-   for k being Element of NAT holds IC Comput(ProgramPart(s),s,k) in dom F;
+  for s being State of S st IC s = 0
+   for k being Element of NAT holds IC Comput(F,s,k) in dom F;
 end;
 
 theorem Th44:
-  for S being standard steady-programmed (IC-Ins-separated
+  for S being standard (IC-Ins-separated
 definite (non empty stored-program AMI-Struct over N)),
    F being NAT-defined (the Instructions of S)-valued
   FinPartState of S st F is really-closed & 0 in dom F holds F is
   para-closed
 proof
-  let S be standard steady-programmed (IC-Ins-separated definite (non empty
+  let S be standard (IC-Ins-separated definite (non empty
 stored-program AMI-Struct over N)),
       F be NAT-defined (the Instructions of S)-valued
 FinPartState of S such
   that
-A1: ( for s being State of S st F c= s & IC s in dom F for k being
-  Element of NAT holds IC Comput(ProgramPart(s),s,k) in dom F)& 0 in dom
-F;
+A1: ( for s being State of S st IC s in dom F for k being
+  Element of NAT holds IC Comput(F,s,k) in dom F)& 0 in dom F;
   let s be State of S;
-  assume F c= s & IC s = 0;
+  assume IC s = 0;
   hence thesis by A1;
 end;
 
 theorem Th45:
-  for S being IC-Ins-separated definite steady-programmed (non
+  for S being IC-Ins-separated definite
+  (non
 empty stored-program AMI-Struct over N),
   F being NAT-defined (the Instructions of S)-valued FinPartState of
   S st F is closed holds F is really-closed
 proof
-  let S be IC-Ins-separated definite steady-programmed (non empty
+  let S be IC-Ins-separated definite
+   (non empty
   stored-program AMI-Struct over N),
   F be NAT-defined (the Instructions of S)-valued FinPartState of S such
   that
 A1: F is closed;
   let s be State of S such that
-A2: F c= s and
 A3: IC s in dom F;
-  defpred P[Element of NAT] means IC Comput(ProgramPart(s),s,$1) in dom F;
+  defpred P[Element of NAT] means IC Comput(F,s,$1) in dom F;
 A4: now
     let k be Element of NAT such that
 A5: P[k];
-    reconsider t = Comput(ProgramPart(s),s,k)
+    reconsider t = Comput(F,s,k)
      as Element of product the Object-Kind of S by PBOOLE:155;
-    set l = IC Comput(ProgramPart(s),s,k);
-X:    F/.l = F.l & F.l = s.l by A2,A5,GRFUNC_1:8,PARTFUN1:def 8;
-    (ProgramPart t)/.l = t.l by COMPOS_1:38
-       .= F/.l by X,AMI_1:54;
-    then
-A6: IC Following(ProgramPart t,t) in NIC(F/.l,l);
-T: ProgramPart s = ProgramPart t by AMI_1:123;
-A7: Comput(ProgramPart(s),s,k+1) = Following(ProgramPart s,t) by AMI_1:14;
+    set l = IC Comput(F,s,k);
+A6: IC Following(F,t) in NIC(F/.l,l);
+A7: Comput(F,s,k+1) = Following(F,t) by EXTPRO_1:4;
     NIC(F/.l, l) c= dom F by A1,A5,Def17;
-    hence P[k+1] by A6,A7,T;
+    hence P[k+1] by A6,A7;
   end;
-A8: P[0] by A3,AMI_1:13;
+A8: P[0] by A3,EXTPRO_1:3;
   thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A8,A4);
 end;
 
@@ -1357,7 +1272,7 @@ registration
 
   let N be with_non-empty_elements non empty set,
   S be IC-Ins-separated definite
-  steady-programmed (non empty stored-program AMI-Struct over N);
+  (non empty stored-program AMI-Struct over N);
   cluster closed -> really-closed
    (NAT-defined (the Instructions of S)-valued FinPartState of S);
   coherence by Th45;
@@ -1365,14 +1280,13 @@ end;
 
 theorem Th46:
   for S being standard realistic halting (IC-Ins-separated
-definite steady-programmed
+definite
  (non empty stored-program AMI-Struct over N)) holds 0 .-->
   halt S qua NAT-defined (the Instructions of S)-valued
    FinPartState of S is closed
 proof
   let S be standard realistic halting (IC-Ins-separated definite
-   steady-programmed (non empty
-  stored-program AMI-Struct over N));
+    (non empty stored-program AMI-Struct over N));
   reconsider F = 0 .--> halt S as
    NAT-defined (the Instructions of S)-valued FinPartState of S;
   let l be Element of NAT;
@@ -1388,8 +1302,8 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be standard steady-programmed (
-  IC-Ins-separated definite (non empty stored-program AMI-Struct over N));
+  S be standard
+  (IC-Ins-separated definite (non empty stored-program AMI-Struct over N));
   cluster really-closed initial non empty -> para-closed (NAT-defined
     (the Instructions of S)-valued FinPartState of S);
   coherence
@@ -1424,8 +1338,7 @@ end;
 registration
   let N be with_non-empty_elements non empty set;
   let S be standard halting realistic (IC-Ins-separated definite
-   steady-programmed (non empty
-  stored-program AMI-Struct over N));
+   (non empty stored-program AMI-Struct over N));
   cluster trivial closed initial non empty
   (NAT-defined (the Instructions of S)-valued FinPartState of S);
   existence
@@ -1440,7 +1353,7 @@ end;
 registration
   let N be with_non-empty_elements non empty set;
   let S be standard halting realistic (IC-Ins-separated definite
-   steady-programmed (non empty
+    (non empty
   stored-program AMI-Struct over N));
   cluster halt-ending unique-halt trivial closed (initial non empty NAT-defined
     (the Instructions of S)-valued FinPartState of S);
@@ -1459,8 +1372,7 @@ end;
 registration
   let N be with_non-empty_elements non empty set;
   let S be standard realistic halting (IC-Ins-separated definite
-   steady-programmed(non empty
-  stored-program AMI-Struct over N));
+   (non empty stored-program AMI-Struct over N));
   cluster closed pre-Macro of S;
   existence
   proof
@@ -1468,7 +1380,7 @@ registration
     FinPartState of S;
     F.(LastLoc F) = halt S & for l being Element of NAT st F.l
     = halt S & l in dom F holds l = LastLoc F by Lm7;
-    then reconsider F as pre-Macro of S by COMPOS_1:def 25,def 26;
+    then reconsider F as pre-Macro of S by COMPOS_1:def 25;
     take F;
     thus thesis by Th46;
   end;
@@ -1481,14 +1393,14 @@ theorem
 proof
   let i be Instruction of Trivial-AMI(N);
   set M = Trivial-AMI(N);
-A1: the Instructions of M = {[0,{},{}]} by AMI_1:def 2;
+A1: the Instructions of M = {[0,{},{}]} by EXTPRO_1:def 1;
   let s be State of M;
   reconsider s as Element of product the Object-Kind of M by PBOOLE:155;
   the Object-Kind of M = (NAT --> {[0,{},{}]}) +* (NAT .--> NAT)
-   by AMI_1:def 2;
+   by EXTPRO_1:def 1;
   then
   (the Execution of M).i = ([0,{},{}] .--> id product the Object-Kind of M).i
-  by AMI_1:def 2
+  by EXTPRO_1:def 1
     .= id product the Object-Kind of M by A1,FUNCOP_1:13;
   then (the Execution of M).i.s = s by FUNCT_1:35;
   hence thesis;
@@ -1499,7 +1411,7 @@ theorem
   InsCode i = 0
 proof
   let i be Element of the Instructions of Trivial-AMI(N);
-  the Instructions of Trivial-AMI(N) = {[0,{},{}]} by AMI_1:def 2;
+  the Instructions of Trivial-AMI(N) = {[0,{},{}]} by EXTPRO_1:def 1;
   then i = [0,{},{}] by TARSKI:def 1;
   hence thesis by RECDEF_2:def 1;
 end;
@@ -1510,9 +1422,9 @@ begin :: Addenda
 
 theorem
   for N being with_non-empty_elements non empty set, S
-being IC-Ins-separated definite (non empty stored-program AMI-Struct over N)
-, i being Instruction of S, l being Element of NAT holds JUMP(i) c=
-  NIC(i,l)
+being IC-Ins-separated definite (non empty stored-program AMI-Struct over N),
+ i being Instruction of S, l being Element of NAT
+ holds JUMP(i) c= NIC(i,l)
 proof
   let N be with_non-empty_elements non empty set,
   S be IC-Ins-separated definite (non

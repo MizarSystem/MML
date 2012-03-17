@@ -10,16 +10,17 @@ environ
       XBOOLE_0, ALGSTR_0, RELAT_1, PARTFUN1, ARYTM_3, CARD_3, ORDINAL4,
       XXREAL_0, TARSKI, CARD_1, SUPINF_2, ARYTM_1, NAT_1, FUNCT_2, FINSET_1,
       FUNCOP_1, VALUED_1, RLSUB_1, QC_LANG1, BINOP_1, ZFMISC_1, XREAL_0,
-      ORDINAL1, RLVECT_2;
+      ORDINAL1, RLVECT_2, LATTICES, VECTSP_1, PRE_POLY;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, ORDINAL1, NUMBERS,
       XCMPLX_0, XREAL_0, FINSET_1, FINSEQ_1, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, FUNCOP_1, DOMAIN_1, VALUED_1, STRUCT_0, ALGSTR_0,
-      RLVECT_1, REAL_1, RLSUB_1, NAT_1, BINOP_1, XXREAL_0;
+      PRE_POLY, PARTFUN1, FUNCT_2, FUNCOP_1, DOMAIN_1, VALUED_1, STRUCT_0,
+      ALGSTR_0, GROUP_1, RLVECT_1, VECTSP_1, REAL_1, RLSUB_1, NAT_1, BINOP_1,
+      XXREAL_0;
  constructors PARTFUN1, BINOP_1, DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1,
-      FINSEQ_4, RLSUB_1, VALUED_1, RELSET_1;
+      FINSEQ_4, RLSUB_1, VALUED_1, RELSET_1, VECTSP_1, PRE_POLY, RLVECT_1;
  registrations SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2, FINSET_1, NUMBERS,
       XREAL_0, STRUCT_0, RLVECT_1, RLSUB_1, VALUED_1, VALUED_0, MEMBERED,
-      FINSEQ_1, CARD_1;
+      FINSEQ_1, CARD_1, VECTSP_1, VECTSP_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -31,7 +32,7 @@ reserve x,y,y1,y2 for set,
   V for RealLinearSpace,
   u,v,v1,v2,v3,w for VECTOR of V,
   a,b for Real,
-  F,G,H1,H2 for FinSequence of the carrier of V,
+  F,G,H1,H2 for FinSequence of V,
   A,B for Subset of V,
   f for Function of the carrier of V, REAL;
 
@@ -49,8 +50,7 @@ end;
 canceled 2;
 
 theorem :: RLVECT_2:3
-  for S being non empty 1-sorted,v being Element of S holds vector(S,v)
-  = v;
+  for S being non empty 1-sorted,v being Element of S holds vector(S,v) = v;
 
 theorem :: RLVECT_2:4
   for V being Abelian add-associative right_zeroed
@@ -93,8 +93,8 @@ definition
   func Sum(T) -> Element of V means
 :: RLVECT_2:def 4
 
-  ex F be FinSequence of the carrier
-  of V st rng F = T & F is one-to-one & it = Sum(F);
+  ex F be FinSequence of the carrier of V st rng F = T & F is one-to-one &
+  it = Sum(F);
 end;
 
 canceled 4;
@@ -157,18 +157,27 @@ definition
     means
 :: RLVECT_2:def 5
 
-    ex T being finite Subset of V st for v being Element of V st not v
-    in T holds it.v = 0;
+    ex T being finite Subset of V st for v being Element of V st not v in T
+    holds it.v = 0;
 end;
 
 reserve K,L,L1,L2,L3 for Linear_Combination of V;
 
+notation
+  let V be non empty addLoopStr, L be Element of Funcs(the carrier of V, REAL);
+  synonym Carrier L for support L;
+end;
+
 definition
-  let V be non empty addLoopStr, L be Linear_Combination of V;
-  func Carrier(L) -> finite Subset of V equals
+  let V be non empty addLoopStr, L be Element of Funcs(the carrier of V, REAL);
+  redefine func Carrier(L) -> Subset of V equals
 :: RLVECT_2:def 6
-  {v where v is Element of V : L.
-  v <> 0};
+  {v where v is Element of V : L.v <> 0};
+end;
+
+registration
+  let V be non empty addLoopStr, L be Linear_Combination of V;
+  cluster Carrier(L) -> finite;
 end;
 
 canceled 3;
@@ -490,3 +499,58 @@ definition
 :: RLVECT_2:def 22
   the carrier of it = {l : not contradiction};
 end;
+
+reserve x,y for set,
+  k,n for Element of NAT;
+
+theorem :: RLVECT_2:100
+  for R being add-associative right_zeroed right_complementable
+  Abelian associative well-unital distributive (non empty doubleLoopStr),
+      a being
+  Element of R for V being Abelian add-associative right_zeroed
+  right_complementable vector-distributive scalar-distributive
+  scalar-associative scalar-unital (non empty VectSpStr over R), F,G being
+FinSequence of V st len F = len G & for k for v being Element of
+  V st k in dom F & v = G.k holds F.k = a * v holds Sum(F) = a * Sum(G);
+
+theorem :: RLVECT_2:101
+  for R being add-associative right_zeroed right_complementable Abelian
+associative well-unital distributive (non empty doubleLoopStr), a being Element
+  of R for V being Abelian add-associative right_zeroed right_complementable
+vector-distributive scalar-distributive scalar-associative scalar-unital
+(non empty VectSpStr over R), F,G being FinSequence of V
+st len F = len G & for k st k in dom F holds G.k = a * F/.k holds Sum(G) =
+  a * Sum(F);
+
+theorem :: RLVECT_2:102
+  for R being add-associative right_zeroed right_complementable Abelian
+  associative well-unital distributive (non empty doubleLoopStr) for V being
+Abelian add-associative right_zeroed right_complementable (non empty VectSpStr
+over R), F,G,H being FinSequence of V st len F = len G & len F =
+len H & for k st k in dom F holds H.k = F/.k - G/.k holds Sum(H) = Sum(F) - Sum
+  (G);
+
+theorem :: RLVECT_2:103
+  for R being add-associative right_zeroed right_complementable Abelian
+associative well-unital distributive (non empty doubleLoopStr), a being Element
+  of R for V being Abelian add-associative right_zeroed right_complementable
+vector-distributive scalar-distributive scalar-associative scalar-unital
+(non empty VectSpStr over R) holds a * Sum(<*>(the carrier of V)) =
+  0.V;
+
+theorem :: RLVECT_2:104
+  for R being add-associative right_zeroed right_complementable Abelian
+    associative well-unital distributive (non empty doubleLoopStr),
+  a being Element of R
+  for V being Abelian add-associative right_zeroed right_complementable
+    vector-distributive scalar-distributive scalar-associative scalar-unital
+ (non empty VectSpStr over R), v,u being Element of V holds a * Sum
+  <* v,u *> = a * v + a * u;
+
+theorem :: RLVECT_2:105
+  for R being add-associative right_zeroed right_complementable Abelian
+associative well-unital distributive (non empty doubleLoopStr), a being Element
+  of R for V being Abelian add-associative right_zeroed right_complementable
+  vector-distributive scalar-distributive scalar-associative scalar-unital
+   (non empty VectSpStr over R), v,u,w being Element of V holds a *
+  Sum<* v,u,w *> = a * v + a * u + a * w;

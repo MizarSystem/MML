@@ -6,22 +6,22 @@
 
 environ
 
- vocabularies NUMBERS, INT_1, FINSEQ_1, SUBSET_1, FSM_1, AMI_3, NAT_1,
+ vocabularies NUMBERS, INT_1, FINSEQ_1, SUBSET_1, FSM_1, AMI_3,
       PARTFUN1, AMI_1, SCMNORM, RELAT_1, FUNCT_1, CIRCUIT2, MSUALG_1, ARYTM_3,
       XXREAL_0, CARD_1, TARSKI, AFINSQ_1, AMI_2, ORDINAL4, GRAPHSP, ARYTM_1,
-      MCART_1, SCM_1, STRUCT_0, ORDINAL1, RECDEF_2;
+      SCM_1, STRUCT_0, ORDINAL1, RECDEF_2, FUNCT_4;
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1, MCART_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, XXREAL_0, AFINSQ_1, RECDEF_2,
-      AMI_2, STRUCT_0, COMPOS_1, AMI_1, AMI_3;
+      FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, XXREAL_0, AFINSQ_1, FUNCT_4,
+      RECDEF_2, AMI_2, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_3;
  constructors XXREAL_0, AMI_3, RELSET_1, AMI_2, AFINSQ_1, ORDINAL4, PRE_POLY,
-      RECDEF_2;
+      RECDEF_2, AMISTD_2;
  registrations XBOOLE_0, SETFAM_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, AMI_3, AMI_2, AMI_1, AFINSQ_1, RELAT_1, COMPOS_1;
+      INT_1, AMI_3, AMI_2, AFINSQ_1, RELAT_1, COMPOS_1, PBOOLE, FINSEQ_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions AFINSQ_1, COMPOS_1, AMI_1, NAT_1, AMI_3;
- theorems NAT_1, INT_1, MCART_1, FUNCT_1, FUNCT_2, FINSEQ_1, AMI_1, AMI_2,
-      AMI_3, FINSEQ_3, RELSET_1, ORDINAL1, RELAT_1, AFINSQ_1, PARTFUN1,
-      RECDEF_2, COMPOS_1;
+ definitions AFINSQ_1, COMPOS_1, EXTPRO_1, NAT_1, AMI_3, FUNCOP_1;
+ theorems NAT_1, INT_1, FUNCT_1, FUNCT_2, FINSEQ_1, AMI_2, AMI_3, FINSEQ_3,
+      RELSET_1, RELAT_1, AFINSQ_1, PARTFUN1, RECDEF_2, COMPOS_1, FUNCT_4,
+      FUNCOP_1, TARSKI, EXTPRO_1, GRFUNC_1, CARD_1;
  schemes PARTFUN1, WELLORD2;
 
 begin
@@ -36,53 +36,6 @@ definition
     hence thesis;
   end;
 end;
-
-canceled 2;
-
-theorem Th3:
-  for s being State of SCM st ex k being Element of NAT st s.(IC
-  Comput(ProgramPart(s),s,k)) = halt SCM holds ProgramPart s halts_on s
-proof
-  let s be State of SCM;
-  given k being Element of NAT such that
-A1: s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
-  take k;
-NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:123;
-Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by COMPOS_1:38;
-   IC Comput(ProgramPart(s),s,k) in NAT;
-  hence IC Comput(ProgramPart(s),s,k) in dom ProgramPart s by COMPOS_1:34;
-   CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,k))
-    = halt SCM by A1,Y,NX,AMI_1:54;
-  hence CurInstr(ProgramPart s, Comput(ProgramPart(s),s,k)) = halt SCM;
-end;
-
-theorem Th4:
-  for s being State of SCM, k being Element of NAT st s.(IC
-  Comput(ProgramPart(s),s,k)) = halt SCM holds (Result(ProgramPart(s),s)) =
-Comput(ProgramPart(s),s,k)
-proof
-  let s be State of SCM, k be Element of NAT;
-TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:123;
-Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by COMPOS_1:38;
-  assume
-Z:  s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
-  then
-X:  ProgramPart s halts_on s by Th3;
-  CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k)) = halt SCM
-   by Z,Y,TX,AMI_1:54;
-  hence thesis by X,AMI_1:def 22;
-end;
-
-canceled 2;
-
-theorem Th7:
-  for n, m being Element of NAT holds
-  IC SCM <> n & IC SCM <> dl.n &
-   n <> dl.m by AMI_3:56,57;
 
 Lm1: now
   let p be FinSequence, n be Element of NAT;
@@ -102,71 +55,22 @@ A1: p.(n+1) in rng p by Lm1;
   hence p.(n+1) in x by A1;
 end;
 
-Lm1: now
-  let p be XFinSequence, n be Element of NAT;
-  assume n < len p;
-  hence n in dom p by NAT_1:45;
-  hence p.n in rng p by FUNCT_1:def 5;
-end;
-
-Lm2: now
-  let n be Element of NAT, x be set;
-  let p be XFinSequence of x;
-  assume n < len p;
-  then
-A1: p.n in rng p by Lm1;
-  rng p c= x by RELAT_1:def 19;
-  hence p.n in x by A1;
-end;
-
 definition
-  let I be XFinSequence of the Instructions of SCM, D be FinSequence of INT,
-     il, ps, ds be Element of NAT;
-  mode State-consisting of il, ps, ds, I, D -> State of SCM means
-    :Def1:
-    IC it = il &
-    (for k being Element of NAT st k < len I holds it.(ps+k) = I.k) &
+  let D be FinSequence of INT, ds be Element of NAT;
+  mode State-consisting of ds, D -> State of SCM means
+:Def1:
     for k being Element of NAT st k < len D holds it.dl.(ds+k) = D.(k+1);
   existence
   proof
     defpred X[set] means $1 = NAT;
-    deffunc U(set) = il;
+    deffunc U(set) = 0;
     consider s being State of SCM;
-    defpred X[set,set] means (ex n being Element of NAT st $1 = (ps+n) & n
-< len I & $2 = I.n) or $2 = halt SCM & not ex n being Element of NAT st $1
-    = (ps+n) & n < len I;
     deffunc V(set) = s.$1;
     consider s1 being Function such that
 A1: dom s1 = SCM-Memory & for x being set st x in SCM-Memory holds (X
-[x] implies s1.x = U(x)) & (not X[x] implies s1.x = V(x)) from PARTFUN1:sch 1;
+[x] implies s1.x = U(x)) & (not X[x] implies s1.x = V(x))
+     from PARTFUN1:sch 1;
     defpred X[set] means ex n being Element of NAT st $1 = n;
-A2: for x being set st x in SCM-Memory ex y being set st y in SCM-Instr &
-    X[x,y]
-    proof
-      let x be set;
-      assume x in SCM-Memory;
-      per cases;
-      suppose
-        ex n being Element of NAT st x = (ps+n) & n < len I;
-        then consider n being Element of NAT such that
-A3:     x = (ps+n) and
-A4:     n < len I;
-        reconsider y = I.n as Element of the Instructions of SCM by A4,Lm2;
-        take y;
-        thus y in SCM-Instr;
-        thus thesis by A3,A4;
-      end;
-      suppose
-A5:     not ex n being Element of NAT st x = (ps+n) & n < len I;
-        take halt SCM;
-        thus thesis by A5;
-      end;
-    end;
-    consider I1 being Function such that
-A6: dom I1 = SCM-Memory & rng I1 c= SCM-Instr & for x being set st x
-    in SCM-Memory holds X[x,I1.x] from WELLORD2:sch 1(A2 );
-    reconsider I1 as Function of SCM-Memory, the Instructions of SCM by A6,
-FUNCT_2:def 1,RELSET_1:11;
     defpred X[set,set] means (ex n being Element of NAT st $1 = dl.(ds+n) & n
 < len D & $2 = D.(n+1)) or $2 = 0 & not ex n being Element of NAT st $1 = dl.(
     ds+n) & n < len D;
@@ -200,7 +104,9 @@ Z:     x in SCM-Memory;
       per cases;
       suppose
         x = NAT;
-        then s1.n = il & (the Object-Kind of SCM).x = NAT by A1,AMI_2:30,def 5;
+        then
+        s1.n = 0 &
+         (the Object-Kind of SCM).x = NAT by A1,AMI_2:30,def 5;
         hence s1.x in (the Object-Kind of SCM).x;
       end;
       suppose
@@ -213,34 +119,9 @@ X:         s1.n = s.x by A1;
     end;
     reconsider D1 as Function of SCM-Memory, INT by A11,FUNCT_2:def 1
 ,RELSET_1:11;
-    deffunc U(set) = I1.$1;
     reconsider s1 as State of SCM by A1,A13,FUNCT_1:def 20,PARTFUN1:def 4
 ,RELAT_1:def 18;
     deffunc V(set) = s1.$1;
-    consider s2 being Function such that
-A14: dom s2 = SCM-Memory & for x being set st x in SCM-Memory holds (X
-[x] implies s2.x = U(x)) & (not X[x] implies s2.x = V(x)) from PARTFUN1:sch 1;
-    now
-      let x be set;
-      assume x in SCM-Memory;
-      then reconsider n = x as Element of SCM-Memory;
-      per cases;
-      suppose
-A15:    ex n being Element of NAT st x = n;
-        then reconsider a=x as Element of NAT;
-A16:    (the Object-Kind of SCM).a = SCM-Instr by AMI_2:11;
-        s2.x = I1.n by A14,A15;
-        hence s2.x in (the Object-Kind of SCM).x by A16;
-      end;
-      suppose
-        not ex n being Element of NAT st x = n;
-        then s2.n = s1.x by A14;
-        hence s2.x in (the Object-Kind of SCM).x by A1,FUNCT_1:def 20;
-      end;
-    end;
-    then reconsider s2 as State of SCM by A14,FUNCT_1:def 20,PARTFUN1:def 4
-,RELAT_1:def 18;
-    deffunc V(set) = s2.$1;
     defpred X[set] means ex n being Element of NAT st $1 = dl.n;
     deffunc U(set) = D1.$1;
     consider s3 being Function such that
@@ -262,28 +143,14 @@ A19:    (the Object-Kind of SCM).x = INT by AMI_2:10;
       suppose
         not ex n being Element of NAT st x = dl.n;
         then
-X:       s3.n = s2.x by A17;
-         dom s2 = the carrier of SCM by PARTFUN1:def 4;
+X:       s3.n = s1.x by A17;
+         dom s1 = the carrier of SCM by PARTFUN1:def 4;
         hence s3.x in (the Object-Kind of SCM).x by X,FUNCT_1:def 20;
       end;
     end;
     then reconsider s3 as State of SCM by A17,FUNCT_1:def 20,PARTFUN1:def 4
 ,RELAT_1:def 18;
     take s3;
-    thus IC s3 = s2.NAT by A17,Th7,AMI_3:4
-      .= s1.NAT by A14,Th7,AMI_3:4
-      .= il by A1,AMI_2:30;
-    hereby
-      let k be Element of NAT;
-Y:    ps+k in NAT;
-      assume k<len I;
-      then
-A20:  ex k9 being Element of NAT st (ps+k) = (ps+k9) & k9 < len I &
-      I1.(ps+k) = I.k9 by A6,Y;
-      for n being Element of NAT holds (ps+k) <> dl.n by AMI_3:56;
-      hence s3.(ps+k) = s2.(ps+k) by A17,Y
-        .= I.k by A14,A20,Y;
-    end;
     let k be Element of NAT;
     assume k < len D;
     then consider k9 being Element of NAT such that
@@ -295,37 +162,42 @@ A22: D1.dl.(ds+k) = D.(k9+1) by A11;
   end;
 end;
 
-canceled 6;
+registration
+  let D be FinSequence of INT, il, ds be Element of NAT;
+ cluster il-started State-consisting of ds, D;
+ existence
+  proof
+   set s = the State-consisting of ds, D;
+   set s1 = s +* Start-At(il,SCM);
+   for k being Element of NAT st k < len D holds s1.dl.(ds+k) = D.(k+1)
+    proof let k be Element of NAT;
+     assume
+Z:    k < len D;
+A:   dom Start-At(il,SCM) = {IC SCM} by FUNCOP_1:19;
+      dl.(ds+k) <> IC SCM by AMI_3:57;
+     then not dl.(ds+k) in dom Start-At(il,SCM) by A,TARSKI:def 1;
+     hence s1.dl.(ds+k) = s.dl.(ds+k) by FUNCT_4:12
+        .= D.(k+1) by Z,Def1;
+    end;
+   then reconsider s1 as State-consisting of ds, D by Def1;
+   take s1;
+   thus IC s1 = il by COMPOS_1:142;
+  end;
+end;
+
+canceled 12;
 
 theorem
-  for I1, I2, I3, I4, I5, I6, I7, I8, I9 being Instruction of SCM, i1,
-i2, i3, i4 being Integer, il being Element of NAT, s being State-consisting of
-il, 0, 0, <%I1%>^<%I2%>^<%I3%>^<%I4%>^<%I5%>^<%I6%>^<%I7%>^<%I8%>^<%I9%>,
-   <*i1*>^<*i2*>^<*i3*>^<*i4*>
-holds IC s = il & s.0 = I1 & s.1 = I2 & s.2
-= I3 & s.3 = I4 & s.4 = I5 & s.5 = I6 & s.6 = I7 & s.7 = I8 & s.
-  8 = I9 & s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4
+  for i1, i2, i3, i4 being Integer, il being Element of NAT,
+ s being il-started State-consisting of 0, <*i1*>^<*i2*>^<*i3*>^<*i4*>
+holds
+  s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4
 proof
-  let I1, I2, I3, I4, I5, I6, I7, I8, I9 be Instruction of SCM, i1, i2, i3, i4
-be Integer, il be Element of NAT, s be State-consisting of il, 0, 0, <%I1%>^<%
-I2%>^<%I3%>^<%I4%>^<%I5%>^<%I6%>^<%I7%>^<%I8%>^<%I9%>, <*i1*>^<*i2*>^<*i3*>^<*
+  let i1, i2, i3, i4 be Integer, il be Element of NAT,
+   s be il-started State-consisting of 0, <*i1*>^<*i2*>^<*i3*>^<*
   i4*>;
-  set I = <%I1%>^<%I2%>^<%I3%>^<%I4%>^<%I5%>^<%I6%>^<%I7%>^<%I8%>^<%I9%>, D =
-  <*i1*>^<*i2*>^<*i3*>^<*i4*>;
-A1: I.2 = I3 & I.3 = I4 by AFINSQ_1:54;
-A2: I.6 = I7 & I.7 = I8 by AFINSQ_1:54;
-  thus IC s = il by Def1;
-A3: I.4=I5 & I.5 = I6 by AFINSQ_1:54;
-A4: I.8 = I9 & len I=9 by AFINSQ_1:54;
-A5: 0+7=7 & 0+8=8;
-A6: 0+5=5 & 0+6=6;
+  set D = <*i1*>^<*i2*>^<*i3*>^<*i4*>;
 A7: 0+2=2 & 0+3=3;
-A8: 0+3=3 & 0+4=4;
-A9: 0+0=0 & 0+2=2 & 0+1=1;
-  I.0 = I1 & I.(1) = I2 by AFINSQ_1:54;
-  hence  s.0 = I1 & s.1 = I2 & s.2 = I3 & s.3 = I4 & s.4 = I5 &
-     s.5 = I6 & s.6 = I7 & s.7 = I8 & s.8 = I9
-   by A1,A3,A2,A4,A9,A8,A6,A5,Def1;
 A10: D.(2+1) = i3 & D.(3+1) = i4 by FINSEQ_1:87;
 A11: len D = 4 & 0+0=0 by FINSEQ_1:87;
   D.(0+1) = i1 & D.(1+1) = i2 by FINSEQ_1:87;
@@ -333,292 +205,213 @@ A11: len D = 4 & 0+0=0 by FINSEQ_1:87;
 end;
 
 theorem Th15:
-  for I1, I2 being Instruction of SCM, i1, i2 being Integer, il
-being Element of NAT, s being State-consisting of il, 0, 0, <%I1%>^<%I2%>, <*i1
-*>^<*i2*> holds IC s = il & s.0 = I1 & s.1 = I2 & s.dl.0 = i1 & s.dl.1
-  = i2
+  for i1, i2 being Integer, il being Element of NAT,
+  s being il-started State-consisting of 0, <*i1*>^<*i2*> holds
+   s.dl.0 = i1 & s.dl.1 = i2
 proof
-  let I1, I2 be Instruction of SCM, i1, i2 be Integer, il be Element of NAT, s
-  be State-consisting of il, 0, 0, <%I1%>^<%I2%>, <*i1*>^<*i2*>;
-  set ins = <%I1%>^<%I2%>, data = <*i1*>^<*i2*>;
+  let i1, i2 be Integer, il be Element of NAT,
+      s be il-started State-consisting of 0, <*i1*>^<*i2*>;
+  set data = <*i1*>^<*i2*>;
 A1: 0+0=0;
 A2: data = <*i1, i2*> by FINSEQ_1:def 9;
   then
 A3: len data = 2 & data.(0+1) = i1 by FINSEQ_1:61;
-  thus IC s = il by Def1;
+ data.(1+1) = i2 by A2,FINSEQ_1:61;
+  hence thesis by A3,A1,Def1;
+end;
+
+theorem Th15A:
+  for I1, I2 being Instruction of SCM
+  for F being total
+   (NAT-defined (the Instructions of SCM-valued) Function)
+   st <%I1%>^<%I2%> c= F
+   holds F.0 = I1 & F.1 = I2
+proof
+  let I1, I2 be Instruction of SCM;
+  let F be total
+   (NAT-defined (the Instructions of SCM-valued) Function) such that
+Z: <%I1%>^<%I2%> c= F;
+  set ins = <%I1%>^<%I2%>;
 A4: ins = <%I1, I2%>;
   then
 A5: ins.1 = I2 by AFINSQ_1:42;
-A6: data.(1+1) = i2 by A2,FINSEQ_1:61;
-  len ins = 2 & ins.0 = I1 by A4,AFINSQ_1:42;
-  hence thesis by A5,A3,A6,A1,Def1;
+X:  ins.0 = I1 by A4,AFINSQ_1:42;
+    len ins = 2 by A4,AFINSQ_1:42;
+   then 0 in dom ins & 1 in dom ins by CARD_1:88,TARSKI:def 2;
+  hence thesis by Z,A5,X,GRFUNC_1:8;
 end;
 
-theorem Th16:
-  for s being State of SCM, k being Element of NAT holds s.(IC
-  Comput(ProgramPart(s),s,k)) <> halt SCM & s.(IC Comput(ProgramPart(s),s,k+1))
-= halt SCM iff
-  LifeSpan(ProgramPart(s),s) = k+1 & ProgramPart s halts_on s
-proof
-  let s be State of SCM, k be Element of NAT;
-TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:123;
-TY: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k+1)
-by AMI_1:123;
-  hereby
-    assume that
-A1: s.(IC Comput(ProgramPart(s),s,k)) <> halt SCM and
-A2: s.(IC Comput(ProgramPart(s),s,k+1)) = halt SCM;
-Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by TX,COMPOS_1:38;
-A3: CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k))
-<> halt SCM
-by A1,Y,AMI_1:54;
-A4: now
-      let i be Element of NAT;
-      assume that
-A5:   CurInstr(ProgramPart s,Comput(ProgramPart(s),s,i)) = halt SCM and
-A6:   k+1 > i;
-      i <= k by A6,NAT_1:13;
-      then Comput(ProgramPart(s),s,k) = Comput(ProgramPart(s),s,i)
-       by A5,AMI_1:52;
-      hence contradiction by A3,A5;
-    end;
-Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k+1)
- = Comput(ProgramPart(s),s,k+1).IC Comput(ProgramPart(s),s,k+1)
-  by TY,COMPOS_1:38;
-    ProgramPart s halts_on s & CurInstr(ProgramPart s,
-    Comput(ProgramPart(s),s,k+1)) = halt SCM
-     by A2,Th3,Y,AMI_1:54;
-    hence LifeSpan(ProgramPart(s),s) = k+1 & ProgramPart s halts_on s by A4,
-AMI_1:def 46;
-  end;
-  assume
-A7: LifeSpan(ProgramPart(s),s) = k+1 & ProgramPart s halts_on s;
-A8: now
-    assume CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k)) = halt SCM;
-    then k+1 <= k by A7,AMI_1:def 46;
-    hence contradiction by NAT_1:13;
-  end;
-Z:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by TX,COMPOS_1:38;
-Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k+1)
- = Comput(ProgramPart(s),s,k+1).IC Comput(ProgramPart(s),s,k+1)
-    by TY,COMPOS_1:38;
-  CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k+1))
-   = halt SCM by A7,AMI_1:def 46;
-  hence thesis by A8,Y,Z,AMI_1:54;
-end;
+reserve F for total
+  (NAT-defined (the Instructions of SCM)-valued Function);
 
-theorem Th17:
-  for s being State of SCM, k being Element of NAT st IC
-  Comput(ProgramPart(s),s,k) <> IC Comput(ProgramPart(s),s,k+1) & s.(IC Comput(
-ProgramPart(s),s,k+1)) = halt
-  SCM holds LifeSpan(ProgramPart(s),s) = k+1
-proof
-  let s be State of SCM, k be Element of NAT;
-  assume that
-A1: IC Comput(ProgramPart(s),s,k) <> IC Comput(ProgramPart(s),s,k+1) and
-A2: s.(IC Comput(ProgramPart(s),s,k+1)) = halt SCM;
-Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by COMPOS_1:38;
-  now
-T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:123;
-    assume s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
-    then CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,k)) = halt SCM
-    by Y,T,AMI_1:54;
-    hence contradiction by A1,AMI_1:52,NAT_1:11;
-  end;
-  hence thesis by A2,Th16;
-end;
-
-Lm3: for k being Element of NAT, s being State of SCM holds Comput(ProgramPart(
-s),s,k+1)
-= Exec(CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(ProgramPart(s),s,
-k)),
-Comput(ProgramPart(s),s,k))
-
+Lm3:
+ for k being Element of NAT, s being State of SCM
+ holds Comput(F,s,k+1) = Exec(CurInstr(F,Comput(F,s,k)),Comput(F,s,k))
 proof
   let k be Element of NAT, s be State of SCM;
-T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:123;
-  thus Comput(ProgramPart(s),s,k+1)
-   = Following(ProgramPart s,Comput(ProgramPart(s),s,k
-))
-   by AMI_1:14
-    .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(ProgramPart(
-s),s,k)),
-    Comput(ProgramPart(s),s,k)) by T;
+  thus Comput(F,s,k+1) = Following(F,Comput(F,s,k)) by EXTPRO_1:4
+    .= Exec(CurInstr(F,Comput(F,s,k)),Comput(F,s,k));
 end;
 
 Lm4: now
+   let F be total
+  (NAT-defined (the Instructions of SCM)-valued Function);
   let k, n be Element of NAT, s be State of SCM, a, b be Data-Location;
   assume
-A1: IC Comput(ProgramPart(s),s,k) = n;
-  set csk1 = Comput(ProgramPart(s),s,k+1);
-  set csk = Comput(ProgramPart(s),s,k);
+A1: IC Comput(F,s,k) = n;
+  set csk1 = Comput(F,s,k+1);
+  set csk = Comput(F,s,k);
   assume
-
-A2: s.n = a := b or s.n = AddTo(a,b) or s.n = SubFrom(a, b) or
-  s.n = MultBy(a, b) or a<>b & s.n = Divide(a,b);
-
-Y:  (ProgramPart csk)/.IC csk
- = csk.IC csk by COMPOS_1:38;
-  thus csk1 = (Exec(CurInstr(ProgramPart csk,csk), csk)) by Lm3
-    .= (Exec(s.n, csk)) by A1,Y,AMI_1:54;
+A2: F.n = a := b or F.n = AddTo(a,b) or F.n = SubFrom(a, b) or
+  F.n = MultBy(a, b) or a<>b & F.n = Divide(a,b);
+XX: dom F = NAT by PARTFUN1:def 4;
+  thus csk1 = (Exec(CurInstr(F,csk), csk)) by Lm3
+    .= Exec(F.n, csk) by A1,XX,PARTFUN1:def 8;
   hence IC csk1 = succ IC csk by A2,AMI_3:8,9,10,11,12
-    .= (n+1) by A1;
+    .= n+1 by A1;
 end;
 
+canceled 2;
+
 theorem Th18:
-  for k, n being Element of NAT, s being State of SCM, a, b being
-  Data-Location st IC Comput(ProgramPart(s),s,k) = n & s.n = a := b holds IC
-Comput(ProgramPart(s),s,k+1) = (n+1) & Comput(ProgramPart(s),s,k+1).a = Comput(
-ProgramPart(s),s,k).b & for
-d being Data-Location st d <> a holds Comput(ProgramPart(s),s,k+1).d = Comput(
-ProgramPart(s),s,k).d
+  for k, n being Element of NAT, s being State of SCM,
+    a, b being Data-Location st
+  IC Comput(F,s,k) = n & F.n = a := b
+ holds IC Comput(F,s,k+1) = n+1 &
+  Comput(F,s,k+1).a = Comput(F,s,k).b &
+  for d being Data-Location st d <> a
+   holds Comput(F,s,k+1).d = Comput(F,s,k).d
 proof
   let k, n be Element of NAT, s be State of SCM, a, b be Data-Location;
   assume
-A1: IC Comput(ProgramPart(s),s,k) = n;
-  set csk1 = Comput(ProgramPart(s),s,k+1);
-  set csk = Comput(ProgramPart(s),s,k);
+A1: IC Comput(F,s,k) = n;
   assume
-A2: s.n = a := b;
-  then csk1 = Exec(a:=b, csk) by A1,Lm4;
+A2: F.n = a := b;
+  then Comput(F,s,k+1)
+   = Exec(a:=b, Comput(F,s,k)) by A1,Lm4;
   hence thesis by A1,A2,Lm4,AMI_3:8;
 end;
 
 theorem Th19:
   for k, n being Element of NAT, s being State of SCM, a, b being
-  Data-Location st IC Comput(ProgramPart(s),s,k) = n & s.n = AddTo(a,b) holds
-IC
-  Comput(ProgramPart(s),s,k+1) = (n+1) & Comput(ProgramPart(s),s,k+1).a =
-Comput(ProgramPart(s),s,k).a+
-Comput(ProgramPart(s),s,k).b & for d being Data-Location st d <> a holds Comput
-(ProgramPart(s),s,k+
-  1).d = Comput(ProgramPart(s),s,k).d
+  Data-Location st IC Comput(F,s,k) = n & F.n = AddTo(a,b)
+  holds IC Comput(F,s,k+1) = n+1 &
+    Comput(F,s,k+1).a = Comput(F,s,k).a+
+Comput(F,s,k).b & for d being Data-Location st d <> a holds Comput
+(F,s,k+
+  1).d = Comput(F,s,k).d
 proof
   let k, n be Element of NAT, s be State of SCM, a, b be Data-Location;
   assume
-A1: IC Comput(ProgramPart(s),s,k) = n;
-  set csk1 = Comput(ProgramPart(s),s,k+1);
-  set csk = Comput(ProgramPart(s),s,k);
+A1: IC Comput(F,s,k) = n;
   assume
-A2: s.n = AddTo(a,b);
-  then csk1 = Exec(AddTo(a,b), csk) by A1,Lm4;
+A2: F.n = AddTo(a,b);
+  then Comput(F,s,k+1)
+   = Exec(AddTo(a,b), Comput(F,s,k)) by A1,Lm4;
   hence thesis by A1,A2,Lm4,AMI_3:9;
 end;
 
 theorem Th20:
   for k, n being Element of NAT, s being State of SCM, a, b being
-  Data-Location st IC Comput(ProgramPart(s),s,k) = n & s.n = SubFrom(a,b) holds
-IC
-  Comput(ProgramPart(s),s,k+1) = (n+1) & Comput(ProgramPart(s),s,k+1).a =
-Comput(ProgramPart(s),s,k).a-
-Comput(ProgramPart(s),s,k).b & for d being Data-Location st d <> a holds Comput
-(ProgramPart(s),s,k+
-  1).d = Comput(ProgramPart(s),s,k).d
+  Data-Location st IC Comput(F,s,k) = n & F.n = SubFrom(a,b)
+   holds IC Comput(F,s,k+1) = n+1 &
+   Comput(F,s,k+1).a =
+Comput(F,s,k).a-
+Comput(F,s,k).b & for d being Data-Location st d <> a holds Comput
+(F,s,k+
+  1).d = Comput(F,s,k).d
 proof
   let k, n be Element of NAT, s be State of SCM, a, b be Data-Location;
   assume
-A1: IC Comput(ProgramPart(s),s,k)= n;
-  set csk1 = Comput(ProgramPart(s),s,k+1);
-  set csk = Comput(ProgramPart(s),s,k);
+A1: IC Comput(F,s,k)= n;
   assume
-A2: s.n = SubFrom(a,b);
-  then csk1 = Exec(SubFrom(a,b), csk) by A1,Lm4;
+A2: F.n = SubFrom(a,b);
+  then Comput(F,s,k+1) =
+   Exec(SubFrom(a,b), Comput(F,s,k)) by A1,Lm4;
   hence thesis by A1,A2,Lm4,AMI_3:10;
 end;
 
 theorem Th21:
   for k, n being Element of NAT, s being State of SCM, a, b being
-  Data-Location st IC Comput(ProgramPart(s),s,k) = n & s.n = MultBy(a,b) holds
+  Data-Location st IC Comput(F,s,k) = n & F.n = MultBy(a,b) holds
 IC
-  Comput(ProgramPart(s),s,k+1) = (n+1) & Comput(ProgramPart(s),s,k+1).a =
-Comput(ProgramPart(s),s,k).a*
-Comput(ProgramPart(s),s,k).b & for d being Data-Location st d <> a holds Comput
-(ProgramPart(s),s,k+
-  1).d = Comput(ProgramPart(s),s,k).d
+  Comput(F,s,k+1) = (n+1) & Comput(F,s,k+1).a =
+Comput(F,s,k).a*
+Comput(F,s,k).b & for d being Data-Location st d <> a holds Comput
+(F,s,k+
+  1).d = Comput(F,s,k).d
 proof
   let k, n be Element of NAT, s be State of SCM, a, b be Data-Location;
   assume
-A1: IC Comput(ProgramPart(s),s,k) = n;
-  set csk1 = Comput(ProgramPart(s),s,k+1);
-  set csk = Comput(ProgramPart(s),s,k);
+A1: IC Comput(F,s,k) = n;
   assume
-A2: s.n = MultBy(a,b);
-  then csk1 = Exec(MultBy(a,b), csk) by A1,Lm4;
+A2: F.n = MultBy(a,b);
+  then Comput(F,s,k+1)
+   = Exec(MultBy(a,b), Comput(F,s,k)) by A1,Lm4;
   hence thesis by A1,A2,Lm4,AMI_3:11;
 end;
 
 theorem Th22:
   for k, n being Element of NAT, s being State of SCM, a, b being
-Data-Location st IC Comput(ProgramPart(s),s,k) = n & s.n = Divide(a,b) & a<>b
+Data-Location st IC Comput(F,s,k) = n & F.n = Divide(a,b) & a<>b
 holds
-  IC Comput(ProgramPart(s),s,k+1) = (n+1) & Comput(ProgramPart(s),s,k+1).a =
-Comput(ProgramPart(s),s,k).a
-  div Comput(ProgramPart(s),s,k).b & Comput(ProgramPart(s),s,k+1).b = Comput(
-ProgramPart(s),s,k).a mod
-  Comput(ProgramPart(s),s,k).b & for d being Data-Location st d <> a & d <> b
+  IC Comput(F,s,k+1) = (n+1) & Comput(F,s,k+1).a =
+Comput(F,s,k).a
+  div Comput(F,s,k).b & Comput(F,s,k+1).b = Comput(
+F,s,k).a mod
+  Comput(F,s,k).b & for d being Data-Location st d <> a & d <> b
 holds
-  Comput(ProgramPart(s),s,k+1).d = Comput(ProgramPart(s),s,k).d
+  Comput(F,s,k+1).d = Comput(F,s,k).d
 proof
   let k, n be Element of NAT, s be State of SCM, a, b be Data-Location;
   assume
-A1: IC Comput(ProgramPart(s),s,k) = n;
-  set csk1 = Comput(ProgramPart(s),s,k+1);
-  set csk = Comput(ProgramPart(s),s,k);
+A1: IC Comput(F,s,k) = n;
   assume
-A2: s.n = Divide(a,b) & a <> b;
-  then csk1 = Exec(Divide(a,b), csk) by A1,Lm4;
+A2: F.n = Divide(a,b) & a <> b;
+  then Comput(F,s,k+1)
+   = Exec(Divide(a,b), Comput(F,s,k)) by A1,Lm4;
   hence thesis by A1,A2,Lm4,AMI_3:12;
 end;
 
 theorem Th23:
   for k, n being Element of NAT, s being State of SCM, il being
-  Element of NAT st IC Comput(ProgramPart(s),s,k) = n &
-   s.n = SCM-goto il
-holds IC Comput(ProgramPart(s),s,k+1) = il & for d being Data-Location holds
-Comput(ProgramPart(
-  s),
-  s,k+1).d = Comput(ProgramPart(s),s,k).d
+  Element of NAT st IC Comput(F,s,k) = n &
+   F.n = SCM-goto il
+holds IC Comput(F,s,k+1) = il & for d being Data-Location holds
+   Comput(F,s,k+1).d = Comput(F,s,k).d
 proof
   let k, n be Element of NAT, s be State of SCM, il be Element of NAT;
   assume
-A1: IC Comput(ProgramPart(s),s,k) = n & s.n = SCM-goto il;
-  set csk1 = Comput(ProgramPart(s),s,k+1);
-  set csk = Comput(ProgramPart(s),s,k);
-Y:  (ProgramPart csk)/.IC csk
- = csk.IC csk by COMPOS_1:38;
-A2: csk1 = Exec(CurInstr(ProgramPart csk,csk), csk) by Lm3
-    .= Exec(SCM-goto il, csk) by A1,Y,AMI_1:54;
+A1: IC Comput(F,s,k) = n & F.n = SCM-goto il;
+  set csk1 = Comput(F,s,k+1);
+  set csk = Comput(F,s,k);
+XX:  dom F = NAT by PARTFUN1:def 4;
+A2: csk1 = Exec(CurInstr(F,csk), csk) by Lm3
+    .= Exec(SCM-goto il, csk) by A1,XX,PARTFUN1:def 8;
   hence IC csk1 = il by AMI_3:13;
   thus thesis by A2,AMI_3:13;
 end;
 
 theorem Th24:
   for k, n being Element of NAT, s being State of SCM, a being
-  Data-Location, il being Element of NAT st IC Comput(ProgramPart(s),s,k) =
-  n & s.n = a =0_goto il holds ( Comput(ProgramPart(s),s,k).a = 0 implies IC
-Comput(ProgramPart(s),s,k+1) = il) & ( Comput(ProgramPart(s),s,k).a <>0 implies
-IC Comput(ProgramPart(s),s,k+
-  1) = (n+1)) & for d being Data-Location holds Comput(ProgramPart(s),s,k+1).d
+  Data-Location, il being Element of NAT st IC Comput(F,s,k) =
+  n & F.n = a =0_goto il holds ( Comput(F,s,k).a = 0 implies IC
+Comput(F,s,k+1) = il) & ( Comput(F,s,k).a <>0 implies
+IC Comput(F,s,k+
+  1) = (n+1)) & for d being Data-Location holds Comput(F,s,k+1).d
 =
-  Comput(ProgramPart(s),s,k).d
+  Comput(F,s,k).d
 proof
   let k, n be Element of NAT, s be State of SCM, a be Data-Location, il be
   Element of NAT;
   assume that
-A1: IC Comput(ProgramPart(s),s,k) = n and
-A2: s.n = a =0_goto il;
-  set csk1 = Comput(ProgramPart(s),s,k+1);
-  set csk = Comput(ProgramPart(s),s,k);
-Y:  (ProgramPart csk)/.IC csk
- = csk.IC csk by COMPOS_1:38;
-A3: csk1 = Exec(CurInstr(ProgramPart csk,csk), csk) by Lm3
-    .= Exec(a =0_goto il, csk) by A1,A2,Y,AMI_1:54;
+A1: IC Comput(F,s,k) = n and
+A2: F.n = a =0_goto il;
+  set csk1 = Comput(F,s,k+1);
+  set csk = Comput(F,s,k);
+XX:  dom F = NAT by PARTFUN1:def 4;
+A3: csk1 = Exec(CurInstr(F,csk), csk) by Lm3
+    .= Exec(a =0_goto il, csk) by A1,A2,XX,PARTFUN1:def 8;
   hence csk.a = 0 implies IC csk1 = il by AMI_3:14;
   hereby
     assume csk.a <> 0;
@@ -630,30 +423,29 @@ end;
 
 theorem Th25:
   for k, n being Element of NAT, s being State of SCM, a being
-  Data-Location, il being Element of NAT st IC Comput(ProgramPart(s),s,k) =
-  n & s.n = a >0_goto il holds ( Comput(ProgramPart(s),s,k).a > 0 implies IC
-Comput(ProgramPart(s),s,k+1) = il) & ( Comput(ProgramPart(s),s,k).a <= 0
-implies IC Comput(ProgramPart(s),s,k
-  +1) = (n+1)) & for d being Data-Location holds Comput(ProgramPart(s),s,k+1).d
+  Data-Location, il being Element of NAT st IC Comput(F,s,k) =
+  n & F.n = a >0_goto il holds ( Comput(F,s,k).a > 0 implies IC
+Comput(F,s,k+1) = il) & ( Comput(F,s,k).a <= 0
+implies IC Comput(F,s,k
+  +1) = (n+1)) & for d being Data-Location holds Comput(F,s,k+1).d
 =
-  Comput(ProgramPart(s),s,k).d
+  Comput(F,s,k).d
 proof
   let k, n be Element of NAT, s be State of SCM, a be Data-Location, il be
   Element of NAT;
   assume that
-A1: IC Comput(ProgramPart(s),s,k) = n and
-A2: s.n = a >0_goto il;
-  set csk1 = Comput(ProgramPart(s),s,k+1);
-  set csk = Comput(ProgramPart(s),s,k);
-Y:  (ProgramPart csk)/.IC csk
- = csk.IC csk by COMPOS_1:38;
-A3: csk1 = Exec(CurInstr(ProgramPart csk,csk), csk) by Lm3
-    .= Exec(a >0_goto il, csk) by A1,A2,Y,AMI_1:54;
+A1: IC Comput(F,s,k) = n and
+A2: F.n = a >0_goto il;
+  set csk1 = Comput(F,s,k+1);
+  set csk = Comput(F,s,k);
+XX:  dom F = NAT by PARTFUN1:def 4;
+A3: csk1 = Exec(CurInstr(F,csk), csk) by Lm3
+    .= Exec(a >0_goto il, csk) by A1,A2,XX,PARTFUN1:def 8;
   hence csk.a > 0 implies IC csk1 = il by AMI_3:15;
   hereby
     assume csk.a <= 0;
     hence IC csk1 = succ n by A1,A3,AMI_3:15
-      .= (n+1);
+      .= n+1;
   end;
   thus thesis by A3,AMI_3:15;
 end;
@@ -671,103 +463,16 @@ theorem Th26:
   for a being Data-Location, i being Element of NAT holds
    (a >0_goto i)`1_3 = 8 by AMI_3:71,RECDEF_2:def 1;
 
-canceled;
+canceled 3;
 
 theorem
-  for s1, s2 being State of SCM, k, c being Element of NAT st s2 =
-Comput(ProgramPart(s1),s1,k) & LifeSpan(ProgramPart(s2),s2) = c & ProgramPart
-s2 halts_on s2 &
- 0 < c holds LifeSpan(ProgramPart(s1),s1) =
-  k+c
+  for i1, i2, i3, i4 being Integer,
+  s being State of SCM st s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4
+   holds s is State-consisting of 0, <*i1*>^<*i2*>^<*i3*>^<*i4*>
 proof
-  let s1, s2 be State of SCM, k, c be Element of NAT;
-  assume that
-A1: s2 = Comput(ProgramPart(s1),s1,k) and
-A2: LifeSpan(ProgramPart(s2),s2) = c & ProgramPart s2 halts_on s2 and
-A3: 0 < c;
-  consider l being Nat such that
-A4: c = l+1 by A3,NAT_1:6;
-  reconsider l as Element of NAT by ORDINAL1:def 13;
-T: ProgramPart s1 = ProgramPart s2 by A1,AMI_1:123;
-  s2.(IC Comput(ProgramPart(s2),s2,l+1)) = halt SCM by A2,A4,Th16;
-  then s2.(IC Comput(ProgramPart(s1),s1,k+(l+1))) = halt SCM by A1,T,AMI_1:51;
-  then
-A5: s1.(IC Comput(ProgramPart(s1),s1,k+(l+1))) = halt SCM by A1,AMI_1:54;
-  s2.(IC Comput(ProgramPart(s2),s2,l)) <> halt SCM by A2,A4,Th16;
-  then s2.(IC Comput(ProgramPart(s1),s1,k+l)) <> halt SCM by A1,T,AMI_1:51;
-  then s1.(IC Comput(ProgramPart(s1),s1,k+l)) <> halt SCM by A1,AMI_1:54;
-  hence LifeSpan(ProgramPart(s1),s1) = (k+l)+1 by A5,Th16
-    .= k+c by A4;
-end;
-
-theorem
-  for s1 being State of SCM, k being Element of NAT
-   st ProgramPart s1 halts_on Comput(ProgramPart(s1),s1,k)
-   holds Result(ProgramPart(Comput(ProgramPart(s1),s1,k)),Comput(ProgramPart(s1
-),s1,k)) = Result(ProgramPart(s1),s1)
-proof
-  let s1 be State of SCM, k be Element of NAT;
-  set s2 = Comput(ProgramPart(s1),s1,k);
-  assume
-A2: ProgramPart s1 halts_on s2;
-  then ProgramPart s2 halts_on s2 by AMI_1:123;
-  then consider l being Element of NAT such that
-A4: Result(ProgramPart(s2),s2) = Comput(ProgramPart(s2),s2,l) &
-    CurInstr(ProgramPart s2,Result(ProgramPart(s2),s2)) = halt SCM
-     by AMI_1:def 22;
-A3: ProgramPart s1 halts_on s1 by A2,AMI_1:93;
-T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
-by AMI_1:123;
-  Comput(ProgramPart(s1),Comput(ProgramPart(s1),s1,k),l)
-   = Comput(ProgramPart(s1),s1,k+l) by AMI_1:51;
-  hence thesis by A3,A4,T,AMI_1:def 22;
-end;
-
-theorem
-  for I1, I2, I3, I4, I5, I6, I7, I8, I9 being Instruction of SCM, i1,
-i2, i3, i4 being Integer, il being Element of NAT, s being State of SCM st IC s
-= il & s.0 = I1 & s.1 = I2 & s.2 = I3 & s.3 = I4 & s.4 = I5 &
-s.5 = I6 & s.6 = I7 & s.7 = I8 & s.8 = I9 & s.dl.0 = i1 & s.dl.1 =
-i2 & s.dl.2 = i3 & s.dl.3 = i4 holds s is State-consisting of il, 0, 0, <%I1%>^
-<%I2%>^<%I3%>^<%I4%>^<%I5%>^<%I6%>^<%I7%>^<%I8%>^<%I9%>, <*i1*>^<*i2*>^<*i3*>^
-  <*i4*>
-proof
-  let I1, I2, I3, I4, I5, I6, I7, I8, I9 be Instruction of SCM, i1, i2, i3, i4
-  be Integer, il be Element of NAT, s be State of SCM such that
-A1: IC s = il and
-A2: s.0 = I1 & s.1 = I2 & s.2 = I3 & s.3 = I4 & s.4 = I5
-  & s. 5 = I6 & s.6 = I7 & s.7 = I8 & s.8 = I9 and
+  let i1, i2, i3, i4 be Integer, s be State of SCM such that
 A3: s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4;
-  set I = <%I1%>^<%I2%>^<%I3%>^<%I4%>^<%I5%>^<%I6%>^<%I7%>^<%I8%>^<%I9%>, D =
-  <*i1*>^<*i2*>^<*i3*>^<*i4*>;
-A4: now
-    let k be Element of NAT;
-A5: len I=9 & 9=8+1 by AFINSQ_1:54;
-A6: 8=7+1;
-    assume k < len I;
-    then k <= 8 by A5,NAT_1:13;
-    then
-A7: k <= 7 or k=8 by A6,NAT_1:8;
-A8: 6=5+1;
-    7=6+1;
-    then k <= 6 or k=7 or k=8 by A7,NAT_1:8;
-    then
-A9: k <= 5 or k = 6 or k=7 or k=8 by A8,NAT_1:8;
-A10: 4=3+1;
-    5=4+1;
-    then k <= 4 or k=5 or k = 6 or k=7 or k=8 by A9,NAT_1:8;
-    then
-A11: k <= 3 or k=4 or k=5 or k = 6 or k=7 or k=8 by A10,NAT_1:8;
-A12: 2=1+1;
-    3=2+1;
-    then k <= 2 or k=3 or k=4 or k=5 or k = 6 or k=7 or k=8 by A11,NAT_1:8;
-    then
-A13: k <= 1 or k= 2 or k=3 or k=4 or k=5 or k = 6 or k=7 or k=8 by A12,NAT_1:8;
-    1=0+1;
-    then k=0 or k=1 or k=2 or k=3 or k=4 or k=5 or k=6 or k=7 or k=8 by A13,
-NAT_1:8;
-    hence s.(0+k)=I.k by A2,AFINSQ_1:54;
-  end;
+  set D = <*i1*>^<*i2*>^<*i3*>^<*i4*>;
   now
     let k be Element of NAT;
 A14: len D=4 & 4=3+1 by FINSEQ_1:87;
@@ -782,260 +487,327 @@ A17: 1=0+1;
     then k=0 or k=1 or k=2 or k=3 by A17,NAT_1:8;
     hence s.dl.(0+k)=D.(k+1) by A3,FINSEQ_1:87;
   end;
-  hence thesis by A1,A4,Def1;
+  hence thesis by Def1;
 end;
 
 :: Empty program
 
 theorem
-  for s being State-consisting of 0, 0, 0, <%halt SCM%>, <*>INT
-   holds ProgramPart s halts_on s & LifeSpan(ProgramPart(s),s) = 0 & Result(
-ProgramPart(s),s) = s
+  for F being total
+   (NAT-defined (the Instructions of SCM)-valued Function)
+    st <%halt SCM%> c= F
+  for s being 0-started State-consisting of 0, <*>INT
+   holds F halts_on s & LifeSpan(F,s) = 0 & Result(F,s) = s
 proof
-  let s be State-consisting of 0, 0, 0, <%halt SCM%>, <*>INT;
-  1 = len <%halt SCM%> by AFINSQ_1:38;
+  let F be total
+   (NAT-defined (the Instructions of SCM)-valued Function) such that
+Z: <%halt SCM%> c= F;
+  let s be 0-started State-consisting of 0, <*>INT;
+  1 = dom <%halt SCM%> by AFINSQ_1:36;
   then
-A1: s.(0+0) = <%halt SCM%>.0 by Def1
+  0 in dom<%halt SCM%> by CARD_1:87,TARSKI:def 1;
+  then
+A1: F.(0+0) = <%halt SCM%>.0 by Z,GRFUNC_1:8
     .= halt SCM by AFINSQ_1:38;
-A2: s = Comput(ProgramPart(s),s,0) by AMI_1:13;
-  s.IC s = halt SCM by A1,Def1;
+A2: s = Comput(F,s,0) by EXTPRO_1:3;
+ F.IC s = halt SCM by A1,COMPOS_1:def 16;
   hence
-A3: ProgramPart s halts_on s by Th3,A2;
-Y:  (ProgramPart s)/.IC s = s.IC s by COMPOS_1:38;
-  CurInstr(ProgramPart s,s) = halt SCM by A1,Def1,Y;
-  hence LifeSpan(ProgramPart(s),s) = 0 by A3,A2,AMI_1:def 46;
-  IC s = 0 by Def1;
-  hence thesis by A1,A2,Th4;
+A3: F halts_on s by EXTPRO_1:31,A2;
+  dom F = NAT by PARTFUN1:def 4;
+  then CurInstr(F,s) = F.IC s by PARTFUN1:def 8
+       .= halt SCM by A1,COMPOS_1:def 16;
+  hence LifeSpan(F,s) = 0 by A3,A2,EXTPRO_1:def 14;
+  IC s = 0 by COMPOS_1:def 16;
+  hence thesis by A1,A2,EXTPRO_1:32;
 end;
 
 :: Assignment
 
 theorem
-  for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%dl.0
-  := dl.1%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s &
-   LifeSpan(ProgramPart(s),s) = 1 & (
-Result(ProgramPart(s),s)).dl.0 = i2 & for d being Data-Location st d<>dl.0
-holds (Result(ProgramPart(s),s)).d =
-  s.d
+  for F being total
+   (NAT-defined (the Instructions of SCM)-valued Function)
+    st <%dl.0 := dl.1%>^<%halt SCM%> c= F
+  for i1, i2 being Integer,
+      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+   holds F halts_on s & LifeSpan(F,s) = 1 & (Result(F,s)).dl.0 = i2 &
+  for d being Data-Location st d<>dl.0
+   holds (Result(F,s)).d = s.d
 proof
-  let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%dl.0 := dl.1%>^<%
-  halt SCM%>, <*i1*>^<*i2*>;
-  set s1 = Comput(ProgramPart(s),s,0+1);
+  let F be total
+   (NAT-defined (the Instructions of SCM)-valued Function) such that
+Z: <%dl.0 := dl.1%>^<%halt SCM%> c= F;
+  let i1, i2 be Integer,
+    s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+  set s1 = Comput(F,s,0+1);
 A1: s.dl.1 = i2 by Th15;
-A2: IC s = 0 & s = Comput(ProgramPart(s),s,0) by Th15,AMI_1:13;
-A3: s.0 = dl.0 := dl.1 by Th15;
+A2: IC s = 0 & s = Comput(F,s,0) by COMPOS_1:def 16,EXTPRO_1:3;
+A3: F.0 = dl.0 := dl.1 by Z,Th15A;
   then
-A4: IC s1 = (0+1) by A2,Th18;
-A5: s.1 = halt SCM by Th15;
-  hence ProgramPart s halts_on s by A4,Th3;
-  thus LifeSpan(ProgramPart(s),s) = 1 by A5,A2,A4,Th17;
+A4: IC s1 = 0+1 by A2,Th18;
+A5: F.1 = halt SCM by Z,Th15A;
+  hence F halts_on s by A4,EXTPRO_1:31;
+  thus LifeSpan(F,s) = 1 by A5,A2,A4,EXTPRO_1:34;
   s1.dl.0 = s.dl.1 by A3,A2,Th18;
-  hence (Result(ProgramPart(s),s)).dl.0 = i2 by A5,A1,A4,Th4;
+  hence (Result(F,s)).dl.0 = i2 by A5,A1,A4,EXTPRO_1:32;
   let d be Data-Location;
   assume
 A6: d<>dl.0;
-  thus (Result(ProgramPart(s),s)).d = s1.d by A5,A4,Th4
+  thus (Result(F,s)).d = s1.d by A5,A4,EXTPRO_1:32
     .= s.d by A3,A2,A6,Th18;
 end;
 
 :: Adding two integers
 
 theorem
-  for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%AddTo
-(dl.0,dl.1)%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s &
- LifeSpan(ProgramPart(s),s) = 1 &
-(Result(ProgramPart(s),s)).dl.0 = i1 + i2 & for d being Data-Location st d<>dl.
-0 holds Result(ProgramPart s,
-  s).d = s.d
+  for F being total
+   (NAT-defined (the Instructions of SCM)-valued Function)
+    st <%AddTo(dl.0,dl.1)%>^<%halt SCM%> c= F
+  for i1, i2 being Integer,
+      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+  holds F halts_on s & LifeSpan(F,s) = 1 & (Result(F,s)).dl.0 = i1 + i2 &
+  for d being Data-Location st d<>dl.0 holds Result(F,s).d = s.d
 proof
-  let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%AddTo(dl.0,dl.1)
-  %>^<%halt SCM%>, <*i1*>^<*i2*>;
-  set s0 = Comput(ProgramPart(s),s,0);
-  set s1 = Comput(ProgramPart(s),s,0+1);
-A1: s = s0 by AMI_1:13;
+  let F be total
+   (NAT-defined (the Instructions of SCM)-valued Function) such that
+Z: <%AddTo(dl.0,dl.1)%>^<%halt SCM%> c= F;
+  let i1, i2 be Integer,
+      s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+  set s0 = Comput(F,s,0);
+  set s1 = Comput(F,s,0+1);
+A1: s = s0 by EXTPRO_1:3;
 A2: s.dl.0 = i1 & s.dl.1 = i2 by Th15;
-A3: IC s = 0 by Th15;
-A4: s.0 = AddTo(dl.0,dl.1) by Th15;
+A3: IC s = 0 by COMPOS_1:def 16;
+A4: F.0 = AddTo(dl.0,dl.1) by Z,Th15A;
   then
 A5: IC s1 = (0+1) by A3,A1,Th19;
-A6: s.1 = halt SCM by Th15;
-  hence ProgramPart s halts_on s by A5,Th3;
-  thus LifeSpan(ProgramPart(s),s) = 1 by A3,A6,A1,A5,Th17;
+A6: F.1 = halt SCM by Z,Th15A;
+  hence F halts_on s by A5,EXTPRO_1:31;
+  thus LifeSpan(F,s) = 1 by A3,A6,A1,A5,EXTPRO_1:34;
   s1.dl.0 = s0.dl.0 + s0.dl.1 by A3,A4,A1,Th19;
-  hence (Result(ProgramPart(s),s)).dl.0 = i1 + i2 by A6,A2,A1,A5,Th4;
+  hence (Result(F,s)).dl.0 = i1 + i2 by A6,A2,A1,A5,EXTPRO_1:32;
   let d be Data-Location;
   assume
 A7: d<>dl.0;
-  thus (Result(ProgramPart(s),s)).d = s1.d by A6,A5,Th4
+  thus (Result(F,s)).d = s1.d by A6,A5,EXTPRO_1:32
     .= s.d by A3,A4,A1,A7,Th19;
 end;
 
 :: Subtracting two integers
 
 theorem
-  for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%
-SubFrom(dl.0,dl.1)%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s
- & LifeSpan(ProgramPart s,s) = 1 &
- (Result(ProgramPart(s),s)).dl.0 = i1 - i2 & for d being Data-Location
+  for F being total
+   (NAT-defined (the Instructions of SCM)-valued Function)
+    st <%SubFrom(dl.0,dl.1)%>^<%halt SCM%> c= F
+  for i1, i2 being Integer,
+      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+    holds F halts_on s
+ & LifeSpan(F,s) = 1 &
+ (Result(F,s)).dl.0 = i1 - i2 & for d being Data-Location
 st d<>dl.0 holds
-  (Result(ProgramPart(s),s)).d = s.d
+  (Result(F,s)).d = s.d
 proof
-  let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%SubFrom(dl.0,dl.1
-  )%>^<%halt SCM%>, <*i1*>^<*i2*>;
-  set s0 = Comput(ProgramPart(s),s,0);
-  set s1 = Comput(ProgramPart(s),s,0+1);
-A1: s = s0 by AMI_1:13;
+  let F being total
+   (NAT-defined (the Instructions of SCM)-valued Function) such that
+Z: <%SubFrom(dl.0,dl.1)%>^<%halt SCM%> c= F;
+  let i1, i2 be Integer,
+      s be 0-started State-consisting of 0,
+  <*i1*>^<*i2*>;
+  set s0 = Comput(F,s,0);
+  set s1 = Comput(F,s,0+1);
+A1: s = s0 by EXTPRO_1:3;
 A2: s.dl.0 = i1 & s.dl.1 = i2 by Th15;
-A3: IC s = 0 by Th15;
-A4: s.0 = SubFrom(dl.0,dl.1) by Th15;
+A3: IC s = 0 by COMPOS_1:def 16;
+A4: F.0 = SubFrom(dl.0,dl.1) by Z,Th15A;
   then
 A5: IC s1 = (0+1) by A3,A1,Th20;
-A6: s.1 = halt SCM by Th15;
-  hence ProgramPart s halts_on s by A5,Th3;
-  thus LifeSpan(ProgramPart(s),s) = 1 by A3,A6,A1,A5,Th17;
+A6: F.1 = halt SCM by Z,Th15A;
+  hence F halts_on s by A5,EXTPRO_1:31;
+  thus LifeSpan(F,s) = 1 by A3,A6,A1,A5,EXTPRO_1:34;
   s1.dl.0 = s0.dl.0 - s0.dl.1 by A3,A4,A1,Th20;
-  hence (Result(ProgramPart(s),s)).dl.0 = i1 - i2 by A6,A2,A1,A5,Th4;
+  hence (Result(F,s)).dl.0 = i1 - i2 by A6,A2,A1,A5,EXTPRO_1:32;
   let d be Data-Location;
   assume
 A7: d<>dl.0;
-  thus (Result(ProgramPart(s),s)).d = s1.d by A6,A5,Th4
+  thus (Result(F,s)).d = s1.d by A6,A5,EXTPRO_1:32
     .= s.d by A3,A4,A1,A7,Th20;
 end;
 
 :: Multiplying two integers
 
 theorem
-  for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%
-MultBy(dl.0,dl.1)%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s
- & LifeSpan(ProgramPart(s),s)
-= 1 & (Result(ProgramPart(s),s)).dl.0 = i1 * i2 & for d being Data-Location st
-d<>dl.0 holds (
-  Result(ProgramPart(s),s)).d = s.d
+  for F being total
+   (NAT-defined (the Instructions of SCM)-valued Function)
+    st <%MultBy(dl.0,dl.1)%>^<%halt SCM%> c= F
+  for i1, i2 being Integer,
+     s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+  holds F halts_on s & LifeSpan(F,s) = 1 & (Result(F,s)).dl.0 = i1 * i2 &
+   for d being Data-Location st d<>dl.0 holds (Result(F,s)).d = s.d
 proof
-  let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%MultBy(dl.0,dl.1)
-  %>^<%halt SCM%>, <*i1*>^<*i2*>;
-  set s0 = Comput(ProgramPart(s),s,0);
-  set s1 = Comput(ProgramPart(s),s,0+1);
-A1: s = s0 by AMI_1:13;
+  let F being total
+   (NAT-defined (the Instructions of SCM)-valued Function) such that
+Z: <%MultBy(dl.0,dl.1)%>^<%halt SCM%> c= F;
+  let i1, i2 be Integer,
+      s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+  set s0 = Comput(F,s,0);
+  set s1 = Comput(F,s,0+1);
+A1: s = s0 by EXTPRO_1:3;
 A2: s.dl.0 = i1 & s.dl.1 = i2 by Th15;
-A3: IC s = 0 by Th15;
-A4: s.0 = MultBy(dl.0,dl.1) by Th15;
+A3: IC s = 0 by COMPOS_1:def 16;
+A4: F.0 = MultBy(dl.0,dl.1) by Z,Th15A;
   then
 A5: IC s1 = (0+1) by A3,A1,Th21;
-A6: s.1 = halt SCM by Th15;
-  hence ProgramPart s halts_on s by A5,Th3;
-  thus LifeSpan(ProgramPart(s),s) = 1 by A3,A6,A1,A5,Th17;
+A6: F.1 = halt SCM by Z,Th15A;
+  hence F halts_on s by A5,EXTPRO_1:31;
+  thus LifeSpan(F,s) = 1 by A3,A6,A1,A5,EXTPRO_1:34;
   s1.dl.0 = s0.dl.0 * s0.dl.1 by A3,A4,A1,Th21;
-  hence (Result(ProgramPart(s),s)).dl.0 = i1 * i2 by A6,A2,A1,A5,Th4;
+  hence (Result(F,s)).dl.0 = i1 * i2 by A6,A2,A1,A5,EXTPRO_1:32;
   let d be Data-Location;
   assume
 A7: d<>dl.0;
-  thus (Result(ProgramPart(s),s)).d = s1.d by A6,A5,Th4
+  thus (Result(F,s)).d = s1.d by A6,A5,EXTPRO_1:32
     .= s.d by A3,A4,A1,A7,Th21;
 end;
 
 :: Dividing two integers
 
 theorem
-  for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%
-Divide(dl.0,dl.1)%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s
- & LifeSpan(ProgramPart(s),s)
-  = 1 & (Result(ProgramPart(s),s)).dl.0 = i1 div i2 & (Result(ProgramPart(s),s)
+  for F being total
+   (NAT-defined (the Instructions of SCM)-valued Function)
+    st <%Divide(dl.0,dl.1)%>^<%halt SCM%> c= F
+  for i1, i2 being Integer,
+    s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+   holds F halts_on s
+ & LifeSpan(F,s)
+  = 1 & (Result(F,s)).dl.0 = i1 div i2 & (Result(F,s)
 ).dl.1 = i1 mod i2 & for d being
-  Data-Location st d<>dl.0 & d<>dl.1 holds (Result(ProgramPart(s),s)).d = s.d
+  Data-Location st d<>dl.0 & d<>dl.1 holds (Result(F,s)).d = s.d
 proof
-  let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%Divide(dl.0,dl.1)
-  %>^<%halt SCM%>, <*i1*>^<*i2*>;
-  set s1 = Comput(ProgramPart(s),s,0+1);
+  let F being total
+   (NAT-defined (the Instructions of SCM)-valued Function) such that
+Z: <%Divide(dl.0,dl.1)%>^<%halt SCM%> c= F;
+  let i1, i2 be Integer,
+      s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+  set s1 = Comput(F,s,0+1);
 A1: dl.0 <> dl.1 by AMI_3:52;
-A2: IC s = 0 & s.0 = Divide(dl.0,dl.1) by Th15;
+A2: IC s = 0 & F.0 = Divide(dl.0,dl.1) by Z,Th15A,COMPOS_1:def 16;
 A3: s.dl.0 = i1 & s.dl.1 = i2 by Th15;
-A4: s = Comput(ProgramPart(s),s,0) by AMI_1:13;
-  s.1 = halt SCM by Th15;
+A4: s = Comput(F,s,0) by EXTPRO_1:3;
+  F.1 = halt SCM by Z,Th15A;
   then
-A5: s.(IC s1) = halt SCM by A2,A1,A4,Th22;
-  hence ProgramPart s halts_on s by Th3;
+A5: F.(IC s1) = halt SCM by A2,A1,A4,Th22;
+  hence F halts_on s by EXTPRO_1:31;
   Divide(dl.0, dl.1) <> halt SCM by Th26;
-  hence LifeSpan(ProgramPart(s),s) = 1 by A2,A4,A5,Th16;
-  thus (Result(ProgramPart(s),s)).dl.0 = s1.dl.0 by A5,Th4
+  hence LifeSpan(F,s) = 1 by A2,A4,A5,EXTPRO_1:33;
+  thus (Result(F,s)).dl.0 = s1.dl.0 by A5,EXTPRO_1:32
     .= i1 div i2 by A2,A3,A1,A4,Th22;
-  thus (Result(ProgramPart(s),s)).dl.1 = s1.dl.1 by A5,Th4
+  thus (Result(F,s)).dl.1 = s1.dl.1 by A5,EXTPRO_1:32
     .= i1 mod i2 by A2,A3,A1,A4,Th22;
   let d be Data-Location;
   assume
 A6: d<>dl.0 & d<>dl.1;
-  thus (Result(ProgramPart(s),s)).d = s1.d by A5,Th4
+  thus (Result(F,s)).d = s1.d by A5,EXTPRO_1:32
     .= s.d by A2,A1,A4,A6,Th22;
 end;
 
 :: Unconditional jump
 
 theorem
-  for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%SCM-goto
-1%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s &
- LifeSpan(ProgramPart(s),s) = 1 & for d
-  being Data-Location holds (Result(ProgramPart(s),s)).d = s.d
+  for F being total
+   (NAT-defined (the Instructions of SCM)-valued Function)
+    st <%SCM-goto 1%>^<%halt SCM%> c= F
+  for i1, i2 being Integer,
+      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+    holds F halts_on s &
+ LifeSpan(F,s) = 1 & for d
+  being Data-Location holds (Result(F,s)).d = s.d
 proof
-  let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%SCM-goto 1%>^<%
-  halt SCM%>, <*i1*>^<*i2*>;
-  set s1 = Comput(ProgramPart(s),s,0+1);
-A1: IC s = 0 & s = Comput(ProgramPart(s),s,0) by Th15,AMI_1:13;
-A2: s.0 = SCM-goto 1 by Th15;
+  let F being total
+   (NAT-defined (the Instructions of SCM)-valued Function) such that
+Z: <%SCM-goto 1%>^<%halt SCM%> c= F;
+  let i1, i2 be Integer,
+      s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+  set s1 = Comput(F,s,0+1);
+A1: IC s = 0 & s = Comput(F,s,0) by COMPOS_1:def 16,EXTPRO_1:3;
+A2: F.0 = SCM-goto 1 by Z,Th15A;
   then
 A3: IC s1 = (0+1) by A1,Th23;
-A4: s.1 = halt SCM by Th15;
-  hence ProgramPart s halts_on s by A3,Th3;
-  thus LifeSpan(ProgramPart(s),s) = 1 by A4,A1,A3,Th17;
+A4: F.1 = halt SCM by Z,Th15A;
+  hence F halts_on s by A3,EXTPRO_1:31;
+  thus LifeSpan(F,s) = 1 by A4,A1,A3,EXTPRO_1:34;
   let d be Data-Location;
-  thus (Result(ProgramPart(s),s)).d = s1.d by A4,A3,Th4
+  thus (Result(F,s)).d = s1.d by A4,A3,EXTPRO_1:32
     .= s.d by A2,A1,Th23;
 end;
 
 :: Jump at zero
 
 theorem
-  for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%dl.0
-=0_goto 1%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s
- & LifeSpan(ProgramPart(s),s) = 1
-  & for d being Data-Location holds (Result(ProgramPart(s),s)).d = s.d
+  for F being total
+   (NAT-defined (the Instructions of SCM)-valued Function)
+    st <%dl.0=0_goto 1%>^<%halt SCM%> c= F
+  for i1, i2 being Integer,
+      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+    holds F halts_on s
+ & LifeSpan(F,s) = 1
+  & for d being Data-Location holds (Result(F,s)).d = s.d
 proof
-  let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%dl.0 =0_goto 1
-  %>^<%halt SCM%>, <*i1*>^<*i2*>;
-  set s1 = Comput(ProgramPart(s),s,0+1);
-A1: s.0 = dl.0 =0_goto 1 by Th15;
-A2: s.1 = halt SCM by Th15;
-A3: IC s = 0 & s = Comput(ProgramPart(s),s,0) by Th15,AMI_1:13;
+  let F being total
+   (NAT-defined (the Instructions of SCM)-valued Function) such that
+Z: <%dl.0=0_goto 1%>^<%halt SCM%> c= F;
+  let i1, i2 be Integer,
+      s be 0-started State-consisting of 0,
+   <*i1*>^<*i2*>;
+  set s1 = Comput(F,s,0+1);
+A1: F.0 = dl.0 =0_goto 1 by Z,Th15A;
+A2: F.1 = halt SCM by Z,Th15A;
+A3: IC s = 0 & s = Comput(F,s,0) by COMPOS_1:def 16,EXTPRO_1:3;
   s.dl.0 = i1 by Th15;
   then
 A4: IC s1 = (0+1) by A1,A3,Th24;
-  hence ProgramPart s halts_on s by A2,Th3;
-  thus LifeSpan(ProgramPart(s),s) = 1 by A2,A3,A4,Th17;
+  hence F halts_on s by A2,EXTPRO_1:31;
+  thus LifeSpan(F,s) = 1 by A2,A3,A4,EXTPRO_1:34;
   let d be Data-Location;
-  thus (Result(ProgramPart(s),s)).d = s1.d by A2,A4,Th4
+  thus (Result(F,s)).d = s1.d by A2,A4,EXTPRO_1:32
     .= s.d by A1,A3,Th24;
 end;
 
 :: Jump at greater than zero
 
 theorem
-  for i1, i2 being Integer, s being State-consisting of 0, 0, 0, <%dl.0
->0_goto 1%>^<%halt SCM%>, <*i1*>^<*i2*> holds ProgramPart s halts_on s
- & LifeSpan(ProgramPart(s),s) = 1
-  & for d being Data-Location holds (Result(ProgramPart(s),s)).d = s.d
+  for F being total
+   (NAT-defined (the Instructions of SCM)-valued Function)
+    st <%dl.0>0_goto 1%>^<%halt SCM%> c= F
+  for i1, i2 being Integer,
+      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+    holds F halts_on s
+ & LifeSpan(F,s) = 1
+  & for d being Data-Location holds (Result(F,s)).d = s.d
 proof
-  let i1, i2 be Integer, s be State-consisting of 0, 0, 0, <%dl.0 >0_goto 1
-  %>^<%halt SCM%>, <*i1*>^<*i2*>;
-  set s1 = Comput(ProgramPart(s),s,0+1);
-A1: s.0 = dl.0 >0_goto 1 by Th15;
-A2: s.1 = halt SCM by Th15;
-A3: IC s = 0 & s = Comput(ProgramPart(s),s,0) by Th15,AMI_1:13;
+  let F being total
+   (NAT-defined (the Instructions of SCM)-valued Function) such that
+Z: <%dl.0>0_goto 1%>^<%halt SCM%> c= F;
+  let i1, i2 be Integer,
+      s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+  set s1 = Comput(F,s,0+1);
+A1: F.0 = dl.0 >0_goto 1 by Z,Th15A;
+A2: F.1 = halt SCM by Z,Th15A;
+A3: IC s = 0 & s = Comput(F,s,0) by COMPOS_1:def 16,EXTPRO_1:3;
   s.dl.0 = i1 by Th15;
   then
 A4: IC s1 = (0+1) by A1,A3,Th25;
-  hence ProgramPart s halts_on s by A2,Th3;
-  thus LifeSpan(ProgramPart(s),s) = 1 by A2,A3,A4,Th17;
+  hence F halts_on s by A2,EXTPRO_1:31;
+  thus LifeSpan(F,s) = 1 by A2,A3,A4,EXTPRO_1:34;
   let d be Data-Location;
-  thus (Result(ProgramPart(s),s)).d = s1.d by A2,A4,Th4
+  thus (Result(F,s)).d = s1.d by A2,A4,EXTPRO_1:32
     .= s.d by A1,A3,Th25;
 end;
 
+theorem
+ for s being State of SCM, n being Element of NAT
+ holds s is State-consisting of n, <*>INT
+ proof let s be State of SCM, n be Element of NAT;
+  let k be Element of NAT;
+  thus thesis;
+:::  for k being Element of NAT st k < len D holds s.dl.(n+k) = D.(k+1);
+::: holds s is State-consisting of k, <*>INT
+ end;

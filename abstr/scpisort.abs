@@ -11,17 +11,18 @@ environ
       AMI_1, SCMFSA6B, SCMPDS_4, UNIALG_2, SCMFSA7B, TURING_1, SCMFSA_7, INT_1,
       CARD_1, SCMPDS_7, AMI_3, ARYTM_1, VALUED_1, TARSKI, SCMFSA6A, FUNCT_4,
       CIRCUIT2, GRAPHSP, MSUALG_1, XBOOLE_0, SCMISORT, SCMFSA_9, SCMFSA8B,
-      COMPLEX1, SCPISORT, ORDINAL1, PARTFUN1, SCMNORM, SCMFSA6C;
+      COMPLEX1, SCPISORT, ORDINAL1, PARTFUN1, SCMNORM, SCMFSA6C, SCMPDS_5;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, RELAT_1, FUNCT_1,
-      PARTFUN1, VALUED_1, XCMPLX_0, FUNCT_4, INT_1, NAT_1, COMPLEX1, AMI_1,
-      COMPOS_1, AMI_2, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD,
+      PARTFUN1, VALUED_1, XCMPLX_0, FUNCT_4, INT_1, NAT_1, COMPLEX1, EXTPRO_1,
+      AMI_1, COMPOS_1, AMI_2, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD,
       DOMAIN_1, FINSEQ_1, SCMPDS_7, SCMPDS_8, GRAPH_2, CLASSES1, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, INT_2, SCM_1, SCMPDS_4, SCMPDS_5,
-      SCMPDS_6, SCMP_GCD, SCMPDS_7, SCMPDS_8, CLASSES1, PRE_POLY, GRAPH_2;
+      SCMPDS_6, SCMP_GCD, SCMPDS_7, SCMPDS_8, CLASSES1, PRE_POLY, GRAPH_2,
+      AMI_1;
  registrations SETFAM_1, RELAT_1, FUNCT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, MEMBERED, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMPDS_7,
       SCMPDS_8, XBOOLE_0, VALUED_0, ORDINAL1, CARD_1, VALUED_1, AMI_1,
-      GRFUNC_1, COMPOS_1, AFINSQ_1;
+      GRFUNC_1, COMPOS_1, AFINSQ_1, EXTPRO_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -155,15 +156,17 @@ y+c holds for-down(a,i,n,I) is_closed_on s & for-down(a,i,n,I) is_halting_on s;
 theorem :: SCPISORT:13
   for s being State of SCMPDS,I being halt-free shiftable
 Program of SCMPDS, a,x,y be Int_position, i,c be Integer,n be Element of NAT st
-n > 0 & s.x >= s.y +c & s.DataLoc(s.a,i) > 0 & for t be State of SCMPDS st t.x
+n > 0 & s.x >= s.y +c & s.DataLoc(s.a,i) > 0 &
+for t be State of SCMPDS st t.x
 >= t.y +c & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I ';' AddTo(a,i,-n),t).a
   =t.a & IExec(I ';' AddTo(a,i,-n),t).DataLoc(s.a,i)=t.DataLoc(s.a,i)-n & I
   is_closed_on t & I is_halting_on t & IExec(I ';' AddTo(a,i,-n),t).x>=IExec(I
-';' AddTo(a,i,-n),t).y+c holds IExec(for-down(a,i,n,I),s) = IExec(for-down(a,i,
+';' AddTo(a,i,-n),t).y+c
+holds IExec(for-down(a,i,n,I),s) = IExec(for-down(a,i,
   n,I),IExec(I ';' AddTo(a,i,-n),s));
 
 theorem :: SCPISORT:14
-  for s being State of SCMPDS,I being halt-free shiftable Program of
+  for s being 0-started State of SCMPDS,I being halt-free shiftable Program of
 SCMPDS , a be Int_position, i be Integer,n be Element of NAT st s.DataLoc(s.a,i
 ) > 0 & n > 0 & card I > 0 & a <> DataLoc(s.a,i) & (for t be State of SCMPDS st
 t.a=s.a holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i)=t.DataLoc(s.a,i) & I
@@ -195,7 +198,8 @@ theorem :: SCPISORT:16
   p0 >= 7 implies insert-sort (n,p0) is parahalting;
 
 theorem :: SCPISORT:17
-  for s being State of SCMPDS,f,g be FinSequence of INT, k0,k
+  for s being 0-started State of SCMPDS,
+  f,g be FinSequence of INT, k0,k
 being Element of NAT st s.(intpos 4) >= 7+s.(intpos 6) & s.GBP=0 & k=s.(intpos
   6) & k0=s.(intpos 4)-s.(intpos 6)-1 & f is_FinSequence_on s,k0 & g
 is_FinSequence_on IExec(while>0(GBP,6,((GBP,5):=(intpos 4,-1)) ';' (SubFrom(GBP
@@ -208,8 +212,9 @@ intpos 4,0)) ';' ((intpos 4,0 ):=(GBP,5)) ';' (AddTo(GBP,4,-1)) ';' (AddTo(GBP,
   Element of NAT st 1 <= j & j <= k+1 & g.i=f.j;
 
 theorem :: SCPISORT:18
-  for s being State of SCMPDS,f,g be FinSequence of INT,p0, n being
-Element of NAT st p0 >= 6 & len f=n & len g = n & f is_FinSequence_on s,p0 & g
-  is_FinSequence_on IExec(insert-sort(n,p0+1),s),p0 holds f,g
-  are_fiberwise_equipotent & g is_non_decreasing_on 1,n;
+  for s being 0-started State of SCMPDS,f,g be FinSequence of INT,p0,
+      n being Element of NAT
+     st p0 >= 6 & len f=n & len g = n & f is_FinSequence_on s,p0 &
+     g is_FinSequence_on IExec(insert-sort(n,p0+1),s),p0
+      holds f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,n;
 

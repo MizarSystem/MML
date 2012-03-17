@@ -90,11 +90,11 @@
 </FCluster>
 <FCluster aid="REAL_NS1" nr="2">
 <ArgTypes>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
+<Adjective nr="10"/>
 </Cluster>
-<Func kind="K" nr="32"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="460">
@@ -108,9 +108,10 @@
 </FCluster>
 <FCluster aid="REAL_NS1" nr="3">
 <ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="32"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="10"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="460">
@@ -134,9 +135,10 @@
 </FCluster>
 <FCluster aid="REAL_NS1" nr="4">
 <ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="32"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="10"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="460">
@@ -150,11 +152,11 @@
 </FCluster>
 <FCluster aid="REAL_NS1" nr="5">
 <ArgTypes>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
+<Adjective nr="10"/>
 </Cluster>
-<Func kind="K" nr="32"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="463">
@@ -168,9 +170,10 @@
 </FCluster>
 <FCluster aid="REAL_NS1" nr="6">
 <ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="32"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="10"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="463">
@@ -192,9 +195,10 @@
 </FCluster>
 <FCluster aid="REAL_NS1" nr="7">
 <ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="32"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="10"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="463">

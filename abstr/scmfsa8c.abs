@@ -14,15 +14,16 @@ environ
       ORDINAL1, PARTFUN1, RELOC;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, FUNCOP_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, VALUED_1,
-      AFINSQ_1, STRUCT_0, COMPOS_1, AMI_1, AMISTD_2, SCMFSA_2, SF_MASTR,
-      SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, NAT_D,
-      XXREAL_0;
+      AFINSQ_1, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, AMISTD_2, SCMFSA_2,
+      SF_MASTR, SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
+      NAT_D, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, SCMFSA6A, SF_MASTR, SCMFSA6B,
-      SCMFSA6C, SCMFSA8A, SCMFSA8B, AMISTD_2, NAT_D, RELSET_1, PRE_POLY;
+      SCMFSA6C, SCMFSA8A, SCMFSA8B, AMISTD_2, NAT_D, RELSET_1, PRE_POLY,
+      SCMFSA7B, AMI_1;
  registrations SETFAM_1, FUNCT_1, FUNCOP_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, AMI_1, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
-      SCMFSA8A, ORDINAL1, XBOOLE_0, AFINSQ_1, VALUED_1, RELAT_1, SCMFSA10,
-      AMISTD_2, COMPOS_1;
+      SCMFSA8A, SCMFSA8B, ORDINAL1, XBOOLE_0, AFINSQ_1, VALUED_1, RELAT_1,
+      SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -34,20 +35,18 @@ canceled;
 
 theorem :: SCMFSA8C:2
   for s being State of SCM+FSA,P being initial FinPartState of
-  SCM+FSA st P is_pseudo-closed_on s for k being Element of NAT st (for n being
-Element of NAT st n <= k
- holds IC Comput(ProgramPart( (s +* (P +* Start-At( 0,SCM+FSA)))), (s +* (P +*
-Start-At( 0,SCM+FSA))),
-  n) in dom P) holds k < pseudo-LifeSpan(s,P);
+  SCM+FSA st P is_pseudo-closed_on s
+  for k being Element of NAT st
+    for n being Element of NAT st n <= k
+     holds IC Comput(ProgramPart(s +* (P +* Start-At(0,SCM+FSA))),
+        s +* (P +* Start-At( 0,SCM+FSA)),n) in dom P
+  holds k < pseudo-LifeSpan(s,P);
 
-canceled 5;
-
-theorem :: SCMFSA8C:8
-  for i being Instruction of SCM+FSA holds IncAddr(i,0) = i;
+canceled 6;
 
 theorem :: SCMFSA8C:9
-  for P being preProgram of SCM+FSA holds ProgramPart Relocated(P,0
-  ) = P;
+  for P being preProgram of SCM+FSA holds
+   ProgramPart Relocated(P,0) = P;
 
 canceled 2;
 
@@ -56,9 +55,10 @@ theorem :: SCMFSA8C:12
   P c= Q holds ProgramPart Relocated(P,k) c= ProgramPart Relocated(Q,k);
 
 theorem :: SCMFSA8C:13
-  for I,J being Program of SCM+FSA, k being Element of NAT st card
-I <= k & k < card I + card J holds for i being Instruction of SCM+FSA st i = J.
-   (k -' card I) holds (I ';' J). k = IncAddr(i,card I);
+  for I,J being Program of SCM+FSA, k being Element of NAT
+     st card I <= k & k < card I + card J
+  for i being Instruction of SCM+FSA st i = J.(k -' card I)
+   holds (I ';' J). k = IncAddr(i,card I);
 
 theorem :: SCMFSA8C:14
   for s being State of SCM+FSA st s.intloc 0 = 1 & IC s =  0
@@ -78,9 +78,9 @@ theorem :: SCMFSA8C:17
   IExec(I,s) = IExec(I,Initialized s);
 
 theorem :: SCMFSA8C:18
-  for s being State of SCM+FSA, I being Program of SCM+FSA st s.
-  intloc 0 = 1 holds s +* (I +* Start-At( 0,SCM+FSA)) =
-  s +* Initialized I;
+  for s being State of SCM+FSA, I being Program of SCM+FSA
+   st s.intloc 0 = 1
+  holds s +* Initialize I = s +* Initialized I;
 
 theorem :: SCMFSA8C:19
   for I being Program of SCM+FSA holds I +* Start-At( 0,SCM+FSA) c=
@@ -667,8 +667,8 @@ end;
 canceled;
 
 theorem :: SCMFSA8C:105
-  for I being Program of SCM+FSA, a being Int-Location holds I
-  does not destroy a implies loop I does not destroy a;
+  for I being Program of SCM+FSA, a being Int-Location holds
+   loop I destroys a implies I destroys a;
 
 registration
   let I be good Program of SCM+FSA;
@@ -760,8 +760,13 @@ definition
   let I be Program of SCM+FSA;
   func Times(a,I) -> Program of SCM+FSA equals
 :: SCMFSA8C:def 5
-  if>0(a,loop if=0(a,Goto
-  2,I ';' SubFrom(a,intloc 0)), Stop SCM+FSA);
+  if>0(a,loop if=0(a,Goto 2,I ';' SubFrom(a,intloc 0)), Stop SCM+FSA);
+end;
+
+registration
+  let a be Int-Location;
+  let I be Program of SCM+FSA;
+  cluster Times(a,I) -> non halt-free;
 end;
 
 theorem :: SCMFSA8C:115

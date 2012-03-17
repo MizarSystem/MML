@@ -1,0 +1,190 @@
+:: Normal Subgroup of Product of Groups
+::  by Hiroyuki Okazaki , Kenichi Arai and Yasunari Shidama
+:: 
+:: Received July 2, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies FINSEQ_1, FUNCT_1, RELAT_1, RLVECT_2, CARD_3, TARSKI, BINOP_1,
+      GROUP_1, XXREAL_0, GROUP_2, CARD_1, NUMBERS, FUNCT_4, GROUP_6, GROUP_7,
+      FUNCOP_1, ALGSTR_0, GROUP_12, PARTFUN1, FUNCT_2, SUBSET_1, XBOOLE_0,
+      STRUCT_0, NAT_1, ORDINAL4, PRE_TOPC, ARYTM_1, ARYTM_3;
+ notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1, CARD_3, NAT_1, NUMBERS, FINSEQ_1,
+      XXREAL_0, STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2, GROUP_3, GROUP_4,
+      GROUP_6, PRALG_1, GROUP_7, FUNCT_7;
+ constructors BINOP_1, XXREAL_0, REALSET1, FUNCT_4, GROUP_6, MONOID_0, PRALG_1,
+      GROUP_4, GROUP_7, FUNCT_7, RELSET_1;
+ registrations XBOOLE_0, XREAL_0, STRUCT_0, GROUP_2, MONOID_0, ORDINAL1, NAT_1,
+      FUNCT_2, FUNCOP_1, CARD_1, CARD_3, GROUP_7, XXREAL_0, RELSET_1, FINSEQ_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+registration
+  let I be non empty set, F be Group-like multMagma-Family of I;
+  let i be Element of I;
+  cluster F.i -> Group-like multMagma;
+end;
+
+registration
+  let I be non empty set, F be associative multMagma-Family of I;
+  let i be Element of I;
+  cluster F.i -> associative multMagma;
+end;
+
+registration
+  let I be non empty set, F be commutative multMagma-Family of I;
+  let i be Element of I;
+  cluster F.i -> commutative multMagma;
+end;
+
+reserve
+  I for non empty set,
+  F for associative Group-like multMagma-Family of I,
+  i, j for Element of I;
+
+theorem :: GROUP_12:1
+  for x be Function, g be Element of F.i holds
+  ( dom x = I & x.i = g & for j be Element of I st j <> i holds x.j = 1_F.j )
+  iff
+  x = (1_product F)+*(i,g);
+
+definition
+  let I be non empty set,
+  F be associative Group-like multMagma-Family of I,
+  i be Element of I;
+  func ProjSet(F,i) -> Subset of product F means
+:: GROUP_12:def 1
+  for x be set holds x in it iff
+  ex g be Element of F.i st x = 1_product F +* (i,g);
+end;
+
+registration
+  let I be non empty set,
+  F be associative Group-like multMagma-Family of I,
+  i be Element of I;
+  cluster ProjSet(F,i) -> non empty;
+end;
+
+theorem :: GROUP_12:2
+  for x0 be set holds x0 in ProjSet(F,i) iff
+  ex x be Function,g be Element of F.i st x = x0 & dom x = I & x.i = g
+  & for j be Element of I st j <> i holds x.j = 1_F.j;
+
+theorem :: GROUP_12:3
+  for g1,g2 be Element of product F,
+  z1,z2 be Element of F.i st
+  g1 = (1_(product F))+* (i,z1) &
+  g2 = (1_(product F))+* (i,z2) holds
+  g1 * g2 = (1_product F)+* (i,z1*z2);
+
+theorem :: GROUP_12:4
+  for g1 be Element of product F,
+  z1 be Element of F.i st
+  g1 = (1_product F)+* (i,z1) holds
+  g1" = (1_product F)+* (i,z1");
+
+theorem :: GROUP_12:5
+  for g1,g2 be Element of product F
+  st g1 in ProjSet(F,i) & g2 in ProjSet(F,i)
+  holds g1 * g2 in ProjSet(F,i);
+
+theorem :: GROUP_12:6
+  for g be Element of product F st g in ProjSet(F,i)
+  holds g" in ProjSet(F,i);
+
+definition
+  let I be non empty set,
+  F be associative Group-like multMagma-Family of I,
+  i be Element of I;
+  func ProjGroup(F,i) -> strict Subgroup of product F means
+:: GROUP_12:def 2
+  the carrier of it = ProjSet(F,i);
+end;
+
+definition let I, F, i;
+  func 1ProdHom (F,i) -> Homomorphism of F.i, ProjGroup(F,i) means
+:: GROUP_12:def 3
+  for x be Element of F.i holds it.x = 1_product F +* (i,x);
+end;
+
+registration let I, F, i;
+  cluster 1ProdHom (F,i) -> bijective;
+end;
+
+registration
+  let I,F,i;
+  cluster ProjGroup(F,i) -> normal;
+end;
+
+theorem :: GROUP_12:7
+  for x,y be Element of product F st i <> j &
+  x in ProjGroup(F,i) & y in ProjGroup(F,j) holds x*y = y*x;
+
+reserve n for non empty Nat;
+
+theorem :: GROUP_12:8
+  for F being associative Group-like multMagma-Family of Seg n,
+  J be Nat,
+  GJ be Group
+  st 1 <= J & J <= n & GJ = F.J holds
+  for x be Element of product F,
+  s be FinSequence of product F st len s < J
+  & (for k be Element of Seg n st k in dom s holds s.k in ProjGroup(F,k))
+  & x = Product s holds x.J = 1_GJ;
+
+theorem :: GROUP_12:9
+  for F be associative Group-like multMagma-Family of Seg n,
+  x be Element of product F,
+  s be FinSequence of product F st len s = n
+  & (for k be Element of Seg n holds s.k in ProjGroup(F,k))
+  & x = Product s holds
+  for i be Nat st
+  1<= i & i<= n holds
+  ex si be Element of product F st si=s.i & x.i = si.i;
+
+theorem :: GROUP_12:10
+  for F be associative Group-like multMagma-Family of Seg n,
+  x be Element of product F,
+  s,t be FinSequence of product F st len s = n
+  & (for k be Element of Seg n holds s.k in ProjGroup(F,k)) &
+  x=Product s & len t = n
+  & (for k be Element of Seg n holds t.k in ProjGroup(F,k))
+  & x=Product t holds s=t;
+
+theorem :: GROUP_12:11
+  for F be associative Group-like multMagma-Family of Seg n,
+  x be Element of product F
+  ex s be FinSequence of product F st len s = n &
+  (for k be Element of Seg n holds s.k in ProjGroup(F,k)) & x=Product s;
+
+theorem :: GROUP_12:12
+  for G being commutative Group,
+  F being associative Group-like multMagma-Family of Seg n
+  st (for i be Element of Seg n holds F.i is Subgroup of G)
+  & (for x be Element of G
+  ex s be FinSequence of G st len s = n
+  & (for k be Element of Seg n holds s.k in F.k) & x=Product s )
+  & ( for s,t be FinSequence of G st
+  len s = n & (for k be Element of Seg n holds s.k in F.k) & len t = n
+  & (for k be Element of Seg n holds t.k in F.k)
+  & Product s=Product t holds s=t ) holds
+  ex f being Homomorphism of product F,G
+  st f is bijective &
+  for x be Element of product F
+  ex s be FinSequence of G st len s= n &
+  (for k be Element of Seg n holds s.k in F.k) & s=x & f.x = Product s;
+
+theorem :: GROUP_12:13
+  for G,F being associative commutative Group-like multMagma-Family of Seg n
+  st
+  for k be Element of Seg n holds F.k = ProjGroup(G,k)
+  holds
+  ex f being Homomorphism of product F,product G
+  st f is bijective &
+  for x be Element of product F
+  ex s be FinSequence of product G st len s= n &
+  (for k be Element of Seg n holds s.k in F.k) & s=x & f.x = Product s;

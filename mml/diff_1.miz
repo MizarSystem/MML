@@ -29,7 +29,6 @@ begin
 
 reserve n,m,k,i for Element of NAT,
   h,r,r1,r2,x0,x1,x2,x for Real,
-
   S for Functional_Sequence of REAL,REAL,
   y for set;
 
@@ -170,8 +169,6 @@ registration
   end;
 end;
 
-canceled;
-
 definition
   let f be PartFunc of REAL,REAL, h be real number;
   func cD(f,h) -> PartFunc of REAL,REAL equals
@@ -255,6 +252,21 @@ notation
 end;
 
 reserve f,f1,f2 for Function of REAL,REAL;
+
+theorem
+  for f being PartFunc of REAL, REAL st x in dom f & x+h in dom f holds
+    fD(f,h).x = f.(x+h) - f.x
+proof
+  let f be PartFunc of REAL, REAL;
+  assume
+A0: x in dom f & x+h in dom f;
+A3: dom Shift(f,h) = -h ++ dom f by Def1;
+A4: (-h) + (x + h) in ((-h) ++ dom f) by A0,MEASURE6:82; then
+A2: Shift(f,h).x = f.(x+h) by Def1;
+  x in (dom Shift(f,h)) /\ dom f by XBOOLE_0:def 4,A4,A3,A0; then
+  x in dom fD(f,h) by VALUED_1:12;
+  hence fD(f,h).x = f.(x+h) - f.x by A2,VALUED_1:13;
+end;
 
 theorem Th2:
   for n be Nat holds fdif(f,h).n is Function of REAL,REAL
@@ -1596,3 +1608,39 @@ A16: (S.2).0 = (2 choose 0) * (fdif(f1,h).0).x * fdif(f2,h).(2-'0).(x+0*h)
     .= fdif(f1(#)f2,h).2.x by A13,A16,A8,A15,SERIES_1:def 1;
   hence thesis by A11;
 end;
+
+theorem
+  for f being PartFunc of REAL, REAL st x in dom f & x-h in dom f holds
+  bD(f,h).x = f.x - f.(x-h)
+proof
+  let f be PartFunc of REAL, REAL;
+  assume
+A0: x in dom f & x-h in dom f;
+A3: dom Shift(f,-h) = - -h ++ dom f by Def1;
+A4: h + (x - - -h) in (- -h ++ dom f) by A0,MEASURE6:82; then
+A2: Shift(f,-h).x = f.(x+-h) by Def1;
+  x in (dom Shift(f,-h)) /\ dom f by XBOOLE_0:def 4,A4,A3,A0; then
+  x in dom bD(f,h) by VALUED_1:12;
+  hence thesis by A2,VALUED_1:13;
+end;
+
+theorem
+  for f being PartFunc of REAL, REAL st x+h/2 in dom f & x-h/2 in dom f holds
+  cD(f,h).x = f.(x+h/2) - f.(x-h/2)
+proof
+  let f be PartFunc of REAL, REAL;
+  assume
+A0: x+h/2 in dom f & x-h/2 in dom f;
+A3: dom Shift(f,-h/2) = - -(h/2) ++ dom f by Def1;
+a3: dom Shift(f,h/2) = - (h/2) ++ dom f by Def1;
+K:  -(h/2) in REAL & h/2 in REAL;
+aa: -(h/2) + (x + (h/2)) in (-(h/2) ++ dom f) by A0,MEASURE6:82; then
+a2: Shift(f,h/2).x = f.(x+h/2) by Def1;
+A4: h/2 + (x - (h/2)) in (- -(h/2) ++ dom f) by A0,MEASURE6:82; then
+A2: Shift(f,-h/2).x = f.(x+-h/2) by Def1;
+  x in (dom Shift(f,h/2)) /\ (dom Shift(f,-h/2))
+    by XBOOLE_0:def 4,aa,A4,a3,A3; then
+  x in dom cD(f,h) by VALUED_1:12;
+  hence thesis by A2,a2,VALUED_1:13;
+end;
+

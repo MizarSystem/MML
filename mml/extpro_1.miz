@@ -1,0 +1,1723 @@
+:: Externally programmed machines
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received June 30, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies STRUCT_0, SUBSET_1, XBOOLE_0, FUNCT_1, NUMBERS, CARD_3, ORDINAL1,
+      CARD_1, FUNCOP_1, FUNCT_4, RELAT_1, TARSKI, CAT_1, FSM_1, SETFAM_1,
+      GLIB_000, FINSET_1, CIRCUIT2, NAT_1, ARYTM_3, XXREAL_0, MSUALG_1,
+      TURING_1, PARTFUN1, MCART_1, ZFMISC_1, GRAPHSP, ARYTM_1, FUNCT_7, AMI_1,
+      PBOOLE, SCMNORM, GROUP_9, RECDEF_2, COMPOS_1, AMISTD_2, CARD_5, UNIALG_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, ORDINAL1,
+      PBOOLE, NUMBERS, FUNCT_7, CARD_3, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1,
+      FINSET_1, NAT_1, FUNCOP_1, FUNCT_4, FINSEQ_1, FUNCT_2, DOMAIN_1,
+      RECDEF_2, STRUCT_0, GROUP_9, XXREAL_0, COMPOS_1;
+ constructors SETFAM_1, DOMAIN_1, FUNCT_4, XXREAL_0, FUNCT_7, GRAPH_2,
+      RELSET_1, PRE_POLY, PBOOLE, RECDEF_2, COMPOS_1;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
+      FUNCOP_1, FUNCT_4, FINSET_1, XREAL_0, FINSEQ_1, CARD_3, STRUCT_0, INT_1,
+      RELSET_1, GRFUNC_1, PRE_POLY, PBOOLE, COMPOS_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, STRUCT_0, FUNCOP_1, ORDINAL1, RELAT_1, PBOOLE, FUNCT_1,
+      PARTFUN1, MCART_1, ZFMISC_1, COMPOS_1;
+ theorems ZFMISC_1, FUNCT_2, TARSKI, NAT_1, CQC_LANG, CARD_3, FINSEQ_1,
+      FUNCT_4, FUNCOP_1, FINSET_1, FUNCT_1, GRFUNC_1, RELAT_1, RELSET_1,
+      XBOOLE_0, XBOOLE_1, ORDINAL1, MCART_1, ENUMSET1, SUBSET_1, XXREAL_0,
+      FUNCT_7, INT_1, PARTFUN1, PBOOLE, RECDEF_2, FUNCT_5, COMPOS_1;
+ schemes NAT_1, FRAENKEL;
+
+begin :: General concepts
+
+definition
+  let N be set;
+  struct (COM-Struct over N) AMI-Struct over N (# carrier -> set,
+    Instruction-Counter -> Element of the carrier,
+    Instructions -> non empty set,
+    haltF -> Element of the Instructions,
+    Object-Kind -> Function of the carrier, N \/ { the Instructions, NAT },
+    Execution -> Action of the Instructions, product the Object-Kind
+     #);
+end;
+
+definition
+  let N be set;
+  func Trivial-AMI N -> strict AMI-Struct over N means
+:Def2:
+  the carrier of it = succ NAT & the Instruction-Counter of it = NAT &
+  the Instructions of it = {[0,{},{}]} &
+  the haltF of it = [0,{},{}] &
+  the Object-Kind of it = (NAT --> {[0,{},{}]}) +* (NAT .--> NAT) &
+  the Execution of it
+    = [0,{},{}] .--> id product((NAT --> {[0,{},{}]}) +* (NAT .--> NAT));
+  existence
+  proof
+    reconsider I = {[0,{},{}]} as non empty set;
+    reconsider i = [0,{},{}] as Element of I by TARSKI:def 1;
+    set f = (NAT --> I) +* (NAT .--> NAT);
+A1: dom f = dom(NAT --> I) \/ dom(NAT .--> NAT) by FUNCT_4:def 1
+      .= NAT \/ dom(NAT .--> NAT) by FUNCOP_1:19
+      .= succ NAT by FUNCOP_1:19;
+    rng(NAT --> I) c= {I} & rng(NAT .--> NAT) c= {NAT} by FUNCOP_1:19;
+    then rng(NAT --> I) \/ rng(NAT .--> NAT) c= {I} \/ {NAT} by XBOOLE_1:13;
+    then rng f c= rng(NAT --> I) \/ rng(NAT .--> NAT) &
+     rng(NAT --> I) \/ rng(NAT .--> NAT) c= { I,NAT} by ENUMSET1:41,FUNCT_4:18;
+    then
+A2: rng f c= { I,NAT} by XBOOLE_1:1;
+    { I,NAT } c= N \/ {I, NAT} by XBOOLE_1:7;
+    then rng f c= N \/ {I, NAT} by A2,XBOOLE_1:1;
+    then reconsider f as Function of succ NAT, N \/ {I, NAT} by A1,
+FUNCT_2:def 1,RELSET_1:11;
+    reconsider y = NAT as Element of succ NAT by ORDINAL1:10;
+    reconsider E = I --> id product f as Action of I, product f
+       by FUNCOP_1:57,FUNCT_2:12;
+    take AMI-Struct(#succ NAT,y,I,i,f,E #);
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+registration
+  let N be set;
+  cluster Trivial-AMI N-> non empty stored-program;
+  coherence
+  proof
+    set S = Trivial-AMI N;
+A1: the carrier of S = succ NAT by Def2;
+    thus the carrier of S is non empty by Def2;
+    thus NAT c= the carrier of S by A1,XBOOLE_1:7;
+  end;
+end;
+
+registration
+  let N be set;
+  cluster non empty stored-program AMI-Struct over N;
+  existence
+  proof
+    take Trivial-AMI N;
+    thus thesis;
+  end;
+end;
+
+definition
+  let N be with_non-empty_elements set;
+  let S be AMI-Struct over N;
+  let I be Instruction of S, s be State of S;
+  func Exec(I,s) -> State of S equals
+  ((the Execution of S).I).s;
+  coherence
+  proof
+    consider f being Function such that
+A1: (the Execution of S).I = f & dom f = product the Object-Kind of S and
+A2: rng f c= product the Object-Kind of S by FUNCT_2:def 2;
+   reconsider s as Element of product the Object-Kind of S by PBOOLE:155;
+    (the Execution of S).I.s in rng f by A1,FUNCT_1:def 5;
+    hence thesis by A2;
+  end;
+end;
+
+reserve N for with_non-empty_elements set;
+
+definition
+  let N;
+  let S be AMI-Struct over N;
+  let I be Instruction of S;
+  attr I is halting means
+:Def8:
+  for s being State of S holds Exec(I,s) = s;
+end;
+
+definition
+  let N;
+  let S be AMI-Struct over N;
+  attr S is halting means
+:Def9: the haltF of S is halting;
+end;
+
+registration
+  let N;
+  cluster Trivial-AMI N -> halting;
+  coherence
+proof
+  set T = Trivial-AMI N;
+  set f = (NAT --> {[0,{},{}]}) +* (NAT .--> NAT);
+A1: product the Object-Kind of T = product f by Def2;
+  set I = the haltF of T;
+A2: I = [0,{},{}] by Def2;
+  let s be State of T;
+   reconsider ss=s as Element of product the Object-Kind of T by PBOOLE:155;
+  (I .--> id product f).I = id product f by FUNCOP_1:87;
+  hence Exec(I,s) = (id product f).ss by A2,Def2
+    .= s by A1,FUNCT_1:35;
+end;
+end;
+
+registration
+  let N;
+  cluster halting AMI-Struct over N;
+  existence
+  proof
+    take Trivial-AMI N;
+    thus thesis;
+  end;
+end;
+
+registration
+  let N;
+  let S be halting (AMI-Struct over N);
+  cluster halt S -> halting;
+  coherence by Def9;
+end;
+
+registration
+  let N;
+  let S be halting (AMI-Struct over N);
+  cluster halting Instruction of S;
+  existence
+   proof
+    take halt S;
+    thus thesis;
+   end;
+end;
+
+theorem
+  for s being State of Trivial-AMI N, i being Instruction of
+  Trivial-AMI N holds Exec(i,s) = s
+proof
+  set T = Trivial-AMI N;
+  let s be State of Trivial-AMI N, i be Instruction of Trivial-AMI N;
+  set f = (NAT --> {[0,{},{}]}) +* (NAT .--> NAT);
+A1: product the Object-Kind of T = product f by Def2;
+   reconsider ss=s as Element of product the Object-Kind of T by PBOOLE:155;
+  the Instructions of T = {[0,{},{}]} by Def2;
+  then (i .--> id product f).i = id product f & i = [0,{},{}] by FUNCOP_1:87
+,TARSKI:def 1;
+  hence Exec(i,s) = (id product f).ss by Def2
+    .= s by A1,FUNCT_1:35;
+end;
+
+registration
+  let E be set;
+  cluster Trivial-AMI E -> IC-Ins-separated definite;
+  coherence
+   proof
+  thus Trivial-AMI E is IC-Ins-separated
+proof
+  dom(NAT .--> NAT) = {NAT} by FUNCOP_1:19;
+  then
+A1: NAT in dom(NAT .--> NAT) by TARSKI:def 1;
+  IC Trivial-AMI E = NAT by Def2;
+  hence ObjectKind IC Trivial-AMI E
+   = ((NAT --> {[0,{},{}]}) +* (NAT .--> NAT)).
+  NAT by Def2
+    .= (NAT .--> NAT).NAT by A1,FUNCT_4:14
+    .= NAT by FUNCOP_1:87;
+end;
+  let l be Element of NAT;
+A1: l in NAT;
+  now
+    assume l in {NAT};
+    then l = NAT by TARSKI:def 1;
+    hence contradiction by A1;
+  end;
+  then
+A2: not l in dom(NAT .--> NAT) by FUNCOP_1:19;
+  thus (the Object-Kind of Trivial-AMI E).l
+     = ((NAT --> {[0,{},{}]}) +* (NAT .--> NAT)).l by Def2
+    .= (NAT --> {[0,{},{}]}).l by A2,FUNCT_4:12
+    .= {[0,{},{}]} by FUNCOP_1:13
+    .= the Instructions of Trivial-AMI E by Def2;
+   end;
+end;
+
+registration
+  let M be set;
+  cluster IC-Ins-separated definite strict (non empty stored-program
+    AMI-Struct over M);
+  existence
+  proof
+    take Trivial-AMI M;
+    thus thesis;
+  end;
+end;
+
+registration
+  let N;
+  cluster IC-Ins-separated halting  definite strict (non
+    empty stored-program AMI-Struct over N);
+  existence
+  proof
+    take Trivial-AMI N;
+    thus thesis;
+  end;
+end;
+
+theorem
+  for s1, s2 being State of Trivial-AMI N st IC s1 = IC s2 holds s1=s2
+proof
+  set T = Trivial-AMI N;
+  let s1,s2 be State of Trivial-AMI N such that
+A1: IC s1 = IC s2;
+A2: dom s1 = the carrier of T by PARTFUN1:def 4;
+A3: now
+    let x be set;
+    assume
+A4: x in dom s1;
+    dom s1 = the carrier of T by PARTFUN1:def 4
+      .= succ NAT by Def2;
+    then
+A5: x in NAT or x in {NAT} by A4,XBOOLE_0:def 3;
+    per cases by A5,TARSKI:def 1;
+    suppose
+A6:   x in NAT;
+      then x <> NAT;
+      then not x in {NAT} by TARSKI:def 1;
+      then
+A7:   not x in dom(NAT .--> NAT) by FUNCOP_1:19;
+A8:   (the Object-Kind of T).x = ((NAT --> {[0,{},{}]}) +* (NAT .--> NAT)).x
+by Def2
+        .= (NAT --> {[0,{},{}]}).x by A7,FUNCT_4:12
+        .= {[0,{},{}]} by A6,FUNCOP_1:13;
+      x in dom s2 by A2,A4,PARTFUN1:def 4;
+      then
+A9:   s2.x in {[0,{},{}]} by A8,FUNCT_1:def 20;
+      s1.x in {[0,{},{}]} by A4,A8,FUNCT_1:def 20;
+      hence s1.x = [0,{},{}] by TARSKI:def 1
+        .= s2.x by A9,TARSKI:def 1;
+    end;
+    suppose
+A10:  x = NAT;
+      hence s1.x = IC s1 by Def2
+        .= s2.x by A1,A10,Def2;
+    end;
+  end;
+  dom s1 =dom s2 by A2,PARTFUN1:def 4;
+  hence thesis by A3,FUNCT_1:9;
+end;
+
+begin :: General theory
+
+reserve x,y,z,A,B for set,
+  f,g,h for Function,
+  i,j,k for Element of NAT;
+
+reserve S for IC-Ins-separated definite (non empty stored-program AMI-Struct
+  over N),
+  s for State of S;
+
+definition
+  let N be non empty with_non-empty_elements set;
+  let S be IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let s be State of S;
+  let p be (the Instructions of S)-valued Function;
+  func Following(p,s) -> State of S equals
+  Exec(CurInstr(p,s),s);
+  correctness;
+end;
+
+definition
+  let N be non empty with_non-empty_elements set;
+  let S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N);
+  let p be NAT-defined (the Instructions of S)-valued Function;
+  deffunc F(set,State of S) = down Following(p,$2);
+  let s be State of S, k be Nat;
+  func Comput(p,s,k) -> State of S means
+:Def19:
+  ex f being Function of NAT, product the Object-Kind of S st
+  it = f.k & f.0 = s & for i being Nat holds f.(i+1) = Following(p,f.i);
+  existence
+  proof
+    reconsider ss=s as Element of product the Object-Kind of S by PBOOLE:155;
+    consider f being Function of NAT, product the Object-Kind of S such that
+A1: f.0 = ss and
+A2: for n being Nat holds f.(n+1) = F(n,f.n) from NAT_1:sch 12;
+    take f.k, f;
+    thus f.k = f.k;
+    thus f.0 = s by A1;
+    let i be Nat;
+    thus f.(i+1) = F(i,f.i) by A2
+       .= Following(p,f.i);
+  end;
+  uniqueness
+  proof
+    let s1,s2 be State of S;
+    given f1 being Function of NAT, product the Object-Kind of S such that
+A3: s1 = f1.k and
+B4: f1.0 = s and
+B5: for i being Nat holds f1.(i+1) = Following(p,f1.i);
+    given f2 being Function of NAT, product the Object-Kind of S such that
+A6: s2 = f2.k and
+B7: f2.0 = s and
+B8: for i being Nat holds f2.(i+1) = Following(p,f2.i);
+    reconsider s as Element of product the Object-Kind of S by PBOOLE:155;
+A4: f1.0 = s by B4;
+A5: for i being Nat holds f1.(i+1) = F(i,f1.i) by B5;
+A7: f2.0 = s by B7;
+A8: for i being Nat holds f2.(i+1) = F(i,f2.i) by B8;
+    f1 = f2 from NAT_1:sch 16(A4,A5,A7,A8);
+    hence thesis by A3,A6;
+  end;
+end;
+
+definition
+  let N be non empty with_non-empty_elements set;
+  let S be halting IC-Ins-separated definite (non empty stored-program
+  AMI-Struct over N);
+  let p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S;
+  pred p halts_on s means
+:Def20:
+  ex k being Nat
+   st IC Comput(p,s,k) in dom p & CurInstr(p,Comput(p,s,k)) = halt S;
+end;
+
+theorem Th3:
+  for N being non empty with_non-empty_elements set
+  for S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N),
+  p be NAT-defined (the Instructions of S)-valued Function,
+  s be State of S holds Comput(p,s,0) = s
+proof let N be non empty with_non-empty_elements set;
+  let S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N),
+  p be NAT-defined (the Instructions of S)-valued Function,
+  s be State of S;
+  ex f being Function of NAT, product the Object-Kind of S st
+  Comput(p,s,0) = f.0 & f.0 = s & for i being Nat holds
+  f.(i+1) = Following(p,f.i) by Def19;
+  hence thesis;
+end;
+
+theorem Th14:
+  for N being non empty with_non-empty_elements set
+  for S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N),
+  p be NAT-defined (the Instructions of S)-valued Function,
+  s be State of S, k be Nat holds
+  Comput(p,s,k+1) = Following(p,Comput(p,s,k))
+proof let N be non empty with_non-empty_elements set;
+  let S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N),
+  p be NAT-defined (the Instructions of S)-valued Function,
+  s be State of S, k be Nat;
+  deffunc F(set,State of S) = down Following(p,$2);
+  reconsider s as Element of product the Object-Kind of S by PBOOLE:155;
+  consider f being Function of NAT, product the Object-Kind of S such that
+A1: Comput(p,s,k+1) = f.(k+1) and
+A2: f.0 = s and
+B3: for i being Nat holds f.(i+1) = Following(p,f.i) by Def19;
+  consider g being Function of NAT, product the Object-Kind of S such that
+A4: Comput(p,s,k) = g.k and
+A5: g.0 = s and
+B6: for i being Nat holds g.(i+1) = Following(p,g.i) by Def19;
+A3: for i being Nat holds f.(i+1) = F(i,f.i) by B3;
+A6: for i being Nat holds g.(i+1) = F(i,g.i) by B6;
+  f = g from NAT_1:sch 16(A2,A3,A5,A6);
+  hence thesis by A1,A4,B6;
+end;
+
+reserve N for non empty with_non-empty_elements set,
+ S for IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N),
+  s for State of S;
+
+theorem Th5:
+  for p being NAT-defined (the Instructions of S)-valued Function
+  for k holds Comput(p,s,i+k) = Comput(p,Comput(p,s,i),k)
+proof let p be NAT-defined (the Instructions of S)-valued Function;
+  defpred P[Element of NAT] means Comput(p,s,i+$1)
+   = Comput(p, Comput(p,s,i),$1);
+A1: now
+    let k;
+    assume
+A2: P[k];
+    Comput(p,s,i+(k+1)) = Comput(p,s,i+k+1)
+      .= Following(p, Comput(p,s,i+k)) by Th14
+      .= Comput(p, Comput(p,s,i),k+1) by A2,Th14;
+    hence P[k+1];
+  end;
+A3: P[ 0] by Th3;
+  thus for k holds P[k] from NAT_1:sch 1(A3,A1);
+end;
+
+theorem Th6:
+  i <= j implies
+ for N for S being halting IC-Ins-separated
+  definite (non empty stored-program AMI-Struct over N)
+  for p being NAT-defined (the Instructions of S)-valued Function
+  for s being State of S st CurInstr(p,Comput(p,s,i)) = halt S
+ holds Comput(p,s,j) = Comput(p,s,i)
+proof
+  assume i <= j;
+  then consider k being Nat such that
+A1: j = i + k by NAT_1:10;
+  reconsider k as Element of NAT by ORDINAL1:def 13;
+A2: j = i + k by A1;
+  let N;
+  let S be halting IC-Ins-separated definite (non empty stored-program
+  AMI-Struct over N);
+  let p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S such that
+A3: CurInstr(p,Comput(p,s,i))
+ = halt S;
+  defpred P[Element of NAT] means Comput(p,s,i+$1)
+   = Comput(p,s,i);
+A4: now
+    let k;
+    assume
+A5: P[k];
+    Comput(p,s,i+(k+1)) = Comput(p,s,i+k+1)
+      .= Following(p,Comput(p,s,i+k)) by Th14
+      .= Comput(p,s,i) by A3,A5,Def8;
+    hence P[k+1];
+  end;
+A6: P[ 0];
+  for k holds P[k] from NAT_1:sch 1(A6,A4);
+  hence thesis by A2;
+end;
+
+reserve n for Element of NAT;
+
+definition
+  let N;
+  let S be halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+   let p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S such that
+A1: p halts_on s;
+  func Result(p,s) -> State of S means
+:Def22:
+  ex k st it = Comput(p,s,k) & CurInstr(p,it) = halt S;
+  uniqueness
+  proof
+    let s1,s2 be State of S;
+    given k1 being Element of NAT such that
+A2: s1 = Comput(p,s,k1) & CurInstr(p, s1) = halt S;
+    given k2 being Element of NAT such that
+A3: s2 = Comput(p,s,k2) & CurInstr(p, s2) = halt S;
+    k1 <= k2 or k2 <= k1;
+    hence thesis by A2,A3,Th6;
+  end;
+  correctness
+  proof
+    consider k being Nat such that
+     IC Comput(p,s,k) in dom p and
+W:   CurInstr(p, Comput(p,s,k)) = halt S by A1,Def20;
+     k in NAT by ORDINAL1:def 13;
+    hence thesis by W;
+  end;
+end;
+
+theorem
+  for S being  IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for P being (the Instructions of S)-valued ManySortedSet of NAT
+  for s being State of S
+ holds Comput(P,s,k+1) = Exec(P.(IC Comput(P,s,k)),Comput(P,s,k))
+proof
+  let S be  IC-Ins-separated definite (non empty
+  stored-program AMI-Struct over N);
+  let P be (the Instructions of S)-valued ManySortedSet of NAT;
+  let s be State of S;
+D: dom P = NAT by PARTFUN1:def 4;
+  thus Comput(P,s,k+1) = Following(P,Comput(P,s,k)) by Th14
+   .= Exec(P.(IC Comput(P,s,k)),Comput(P,s,k)) by D,PARTFUN1:def 8;
+end;
+
+theorem Th56:
+  for S being IC-Ins-separated halting definite
+(non empty stored-program AMI-Struct over N)
+  for P being (the Instructions of S)-valued ManySortedSet of NAT
+  for s being State of S, k st P.IC Comput(P,s,k) = halt S
+  holds Result(P,s) = Comput(P,s,k)
+proof
+  let S be IC-Ins-separated halting definite (non empty
+  stored-program AMI-Struct over N);
+  let P be (the Instructions of S)-valued ManySortedSet of NAT;
+  let s be State of S, k;
+D: dom P = NAT by PARTFUN1:def 4;
+  assume P.IC Comput(P,s,k) = halt S;
+  then
+A1: CurInstr(P,Comput(P,s,k)) = halt S by D,PARTFUN1:def 8;
+  then P halts_on s by Def20,D;
+ hence thesis by A1,Def22;
+end;
+
+theorem Th57:
+  for S being IC-Ins-separated halting definite
+(non empty stored-program AMI-Struct over N)
+  for P being (the Instructions of S)-valued ManySortedSet of NAT
+  for s being State of S st ex k st P.IC Comput(P,s,k) = halt S
+ for i holds Result(P,s) = Result(P,Comput(P,s,i))
+proof
+  let S be IC-Ins-separated halting definite (non empty
+  stored-program AMI-Struct over N);
+  let P be (the Instructions of S)-valued ManySortedSet of NAT;
+  let s be State of S;
+  given k such that
+A1: P.IC Comput(P,s,k) = halt S;
+  let i;
+XX: dom P = NAT by PARTFUN1:def 4;
+  set s9 = Comput(P,s,k);
+A2: CurInstr(P, s9) = halt S by A1,XX,PARTFUN1:def 8;
+  now
+    per cases;
+    suppose
+      i <= k;
+      then consider j being Nat such that
+A3:   k = i + j by NAT_1:10;
+      reconsider j as Element of NAT by ORDINAL1:def 13;
+A4:   Comput(P,s,k) = Comput(P,Comput(P,s,i),j) by A3,Th5;
+A5:   P halts_on Comput(P,s,i) by A2,A4,Def20,XX;
+      thus Result(P,s) = s9 by A1,Th56
+        .= Result(P,Comput(P,s,i)) by A2,A4,A5,Def22;
+    end;
+    suppose
+A6:   i >= k;
+A7:   Comput(P,Comput(P,s,k),0) = Comput(P,s,k) by Th3;
+A8:   Comput(P,s,i) = s9 by A2,A6,Th6;
+A9:   P halts_on Comput(P,s,i) by Def20,XX,A8,A2,A7;
+      thus Result(P,s) = s9 by A1,Th56
+        .= Result(P,Comput(P,s,i)) by A2,A8,A7,A9,Def22;
+    end;
+  end;
+  hence thesis;
+end;
+
+definition
+  let N;
+  let S be IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let IT be PartState of S;
+  attr IT is autonomic means
+:Def25:
+  for s1,s2 being State of S st IT c= s1 &
+  IT c= s2 for i holds Comput(ProgramPart s1,s1,i)|dom IT
+   = Comput(ProgramPart s2,s2,i)|dom IT;
+end;
+
+definition
+  let N;
+  let S be halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let IT be PartState of S;
+  attr IT is halting means
+:Def10:
+  for s being State of S st IT c= s holds ProgramPart s halts_on s;
+end;
+
+registration
+  let N;
+  cluster Trivial-AMI N -> realistic;
+  coherence
+proof
+  assume
+A1: the Instruction-Counter of Trivial-AMI N in NAT;
+  the Instruction-Counter of Trivial-AMI N = NAT by Def2;
+  hence thesis by A1;
+end;
+end;
+
+registration
+  let N;
+  cluster halting realistic strict
+   (IC-Ins-separated definite (non empty stored-program AMI-Struct over N));
+  existence
+  proof
+    take Trivial-AMI N;
+    thus thesis;
+  end;
+end;
+
+begin :: Preprograms
+
+theorem Th10:
+  for S being halting realistic IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for l being Element of NAT
+  for P being NAT-defined (the Instructions of S)-valued Function
+   st l .--> halt S c= P
+  for p being l-started PartState of S
+   holds p +* P is halting
+proof
+  let S be halting realistic IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let l be Element of NAT;
+  let P be NAT-defined (the Instructions of S)-valued Function such that
+A1: l .--> halt S c= P;
+  let p be l-started PartState of S;
+   set h = halt S;
+   set I = p +* P;
+   let s be State of S such that
+A3: I c= s;
+B3: Start-At(l,S) c= p by COMPOS_1:151;
+B4: P c= I by FUNCT_4:26;
+   take 0;
+     IC Comput(ProgramPart s,s,0) in NAT;
+   hence IC Comput(ProgramPart s,s,0) in dom ProgramPart s by COMPOS_1:34;
+    dom Start-At(l,S) misses dom P by COMPOS_1:130;
+    then Start-At(l,S) c= I by B3,FUNCT_4:125;
+    then
+B1: Start-At(l,S) c= s by A3,XBOOLE_1:1;
+
+    l.-->h c= I by A1,B4,XBOOLE_1:1;
+    then l.-->h c= s by A3,XBOOLE_1:1;
+    then
+B4: l.-->h c= ProgramPart s by RELAT_1:210;
+B7:  dom(l.-->h) = {l} by FUNCOP_1:19;
+    IC S in dom Start-At(l,S) by COMPOS_1:52;
+    then
+B5: IC s = IC Start-At(l,S) by B1,GRFUNC_1:8
+      .= l by COMPOS_1:64;
+B3: IC s in dom(l.-->h) by B7,B5,TARSKI:def 1;
+B2: dom(l.-->h) c= dom ProgramPart s by B4,RELAT_1:25;
+    thus CurInstr(ProgramPart s, Comput(ProgramPart s,s,0))
+       = CurInstr(ProgramPart s, s) by Th3
+      .= (ProgramPart s).IC s by B2,B3,PARTFUN1:def 8
+      .= (l.-->h).IC s by B3,B4,GRFUNC_1:8
+      .= CurInstr(l .--> h,s) by B3,PARTFUN1:def 8
+      .= halt S by B1,COMPOS_1:6;
+end;
+
+theorem Th11:
+  for S being realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for l being Element of NAT
+  for P being NAT-defined (the Instructions of S)-valued Function
+   st l .--> halt S c= P
+  for p being l-started PartState of S
+  for s being State of S st p +* P c= s
+   for i holds Comput(ProgramPart s,s,i) = s
+proof
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let l be Element of NAT;
+  let P be NAT-defined (the Instructions of S)-valued Function such that
+Z1: l .--> halt S c= P;
+  let p be l-started PartState of S;
+  let s be State of S such that
+A3: p +* P c= s;
+AA: Start-At(l,S) c= p by COMPOS_1:151;
+  defpred P[Element of NAT] means Comput(ProgramPart s,s,$1) = s;
+    dom Start-At(l,S) misses dom P by COMPOS_1:130;
+    then Start-At(l,S) c= p +* P by AA,FUNCT_4:125;
+    then
+B3: Start-At(l,S) c= s by A3,XBOOLE_1:1;
+A4: now
+    let i;
+    assume
+A5: P[i];
+    P c= p +* P by FUNCT_4:26;
+    then P c= s by A3,XBOOLE_1:1;
+    then
+B5: l .--> halt S c= s by Z1,XBOOLE_1:1;
+
+    Comput(ProgramPart s,s,i+1)
+       = Following(ProgramPart s, s) by A5,Th14
+      .= Exec(halt S,s) by B3,B5,COMPOS_1:6,RELAT_1:210
+      .= s by Def8;
+    hence P[i+1];
+  end;
+A6: P[ 0] by Th3;
+  thus for i holds P[i] from NAT_1:sch 1(A6,A4);
+end;
+
+theorem Th12:
+  for S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for l being Element of NAT
+  for P being NAT-defined (the Instructions of S)-valued Function
+   st l .--> halt S c= P
+  for p being l-started PartState of S
+   holds p +* P is autonomic
+proof
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let l be Element of NAT;
+  let P be NAT-defined (the Instructions of S)-valued Function such that
+Z1: l .--> halt S c= P;
+  let p be l-started PartState of S;
+  let s1,s2 be State of S;
+   set I = p +* P;
+    assume that
+A3: I c= s1 and
+A4: I c= s2;
+    let i;
+   thus Comput(ProgramPart s1,s1,i)|dom I
+      = s1|dom I by Z1,A3,Th11
+     .= I by A3,GRFUNC_1:64
+     .= s2|dom I by A4,GRFUNC_1:64
+     .= Comput(ProgramPart s2,s2,i)|dom I by Z1,A4,Th11;
+end;
+
+registration
+  let N;
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let l be Element of NAT;
+  cluster autonomic halting
+    non program-free l-started FinPartState of S;
+  existence
+  proof
+    reconsider h = halt S as Element of (the Object-Kind of S).0
+     by COMPOS_1:def 8;
+x:  (IC S,l) --> (l, h) = Start-At(l,S) +* (l .--> h) by FUNCT_4:def 4;
+    Start-At(l,S) +* (l .--> halt S) is
+      (the carrier of S)-defined (the Object-Kind of S)-compatible;
+    then reconsider p = (IC S,l) --> (l, halt S)
+     as FinPartState of S by FUNCT_4:def 4;
+A:   p is autonomic halting by Th10,Th12,x;
+     dom p = {IC S, l} by FUNCT_4:65;
+     then
+X1:  IC S in dom p by TARSKI:def 2;
+     IC S <> l by COMPOS_1:3;
+     then IC p = l by FUNCT_4:66;
+     then
+X:   p is l-started by X1,COMPOS_1:def 16;
+
+     dom(l .--> h) = {l} by FUNCOP_1:19;
+     then
+C:   dom(l .--> h) c= NAT;
+     p|NAT = Start-At(l,S)|NAT +* (l .--> h)|NAT by x,FUNCT_4:75
+        .= {} +* (l .--> h)|NAT by COMPOS_1:47
+        .= (l .--> h)|NAT by FUNCT_4:21
+        .= l .--> h by C,RELAT_1:97;
+     then p|NAT <> {};
+     then p is non program-free by COMPOS_1:def 29;
+    hence thesis by A,X;
+  end;
+end;
+
+definition
+  let N;
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let P be non halt-free
+   (NAT-defined (the Instructions of S)-valued Function);
+  mode Autonomy of P -> FinPartState of S means
+:Def11: it +* P is autonomic halting;
+  existence
+  proof
+    halt S in rng P by COMPOS_1:def 7;
+    then consider x such that
+W1:  x in dom P and
+W2:  P.x = halt S by FUNCT_1:def 5;
+    dom P c= NAT by RELAT_1:def 18;
+    then reconsider m = x as Element of NAT by W1;
+    [m,halt S] in P by W1,W2,FUNCT_1:def 4;
+    then {[m,halt S]} c= P by ZFMISC_1:37;
+    then
+A1: m .--> halt S c= P by FUNCT_4:87;
+   take d = Start-At(m,S);
+   thus d +* P is autonomic by A1,Th12;
+   thus d +* P is halting by A1,Th10;
+  end;
+end;
+
+definition
+  let N be with_non-empty_elements non empty set;
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let p be non halt-free
+   (NAT-defined (the Instructions of S)-valued Function);
+  let d be FinPartState of S;
+  assume
+A1: d is Autonomy of p & p = ProgramPart d;
+  func Result(p,d) -> FinPartState of S means
+  for s being State of S st d c= s
+  holds it = (Result(ProgramPart(s),s))|dom d;
+  existence
+  proof
+    consider h being State of S such that
+A3:  d c= h by PBOOLE:156;
+    d +* p = d by A1,FUNCT_4:80;
+    then
+XX:  d is halting autonomic by A1,Def11;
+    then ProgramPart h halts_on h by A3,Def10;
+    then consider k1 being Element of NAT such that
+A4: Result(ProgramPart(h),h) = Comput(ProgramPart h,h,k1) and
+A5: CurInstr(ProgramPart(h), Result(ProgramPart(h),h)) =
+halt S by Def22;
+    reconsider R = (Result(ProgramPart(h),h))|dom d as FinPartState of S;
+    take R;
+    let s be State of S such that
+A6: d c= s;
+    ProgramPart s halts_on s by A6,Def10,XX;
+    then consider k2 being Element of NAT such that
+A7: Result(ProgramPart(s),s) = Comput(ProgramPart s,s,k2) and
+A8: CurInstr(ProgramPart(s), Result(ProgramPart(s),s)) = halt S by Def22;
+      per cases;
+      suppose
+        k1 <= k2;
+        then Result(ProgramPart(h),h) = Comput(ProgramPart h,h,k2)
+         by A4,A5,Th6;
+        hence thesis by A3,A6,A7,Def25,XX;
+      end;
+      suppose
+        k1 >= k2;
+        then Result(ProgramPart(s),s) = Comput(ProgramPart s,s,k1)
+         by A7,A8,Th6;
+        hence thesis by A3,A6,A4,Def25,XX;
+      end;
+  end;
+  correctness
+  proof
+    consider h being State of S such that
+A10:  d c= h by PBOOLE:156;
+    let p1,p2 be FinPartState of S such that
+A11: for s being State of S st d c= s
+ holds p1 = (Result(ProgramPart(s),s))|dom d and
+A12: for s being State of S st d c= s
+ holds p2 = (Result(ProgramPart(s),s))|dom d;
+    thus p1 = (Result(ProgramPart(h),h))|dom d by A11,A10
+      .= p2 by A12,A10;
+  end;
+end;
+
+begin :: Computability
+
+definition
+  let N;
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let p be non halt-free
+   (NAT-defined (the Instructions of S)-valued Function);
+  let d be FinPartState of S, F be Function;
+  pred p,d computes F means
+:Def29:
+  for x being set st x in dom F
+   ex s being FinPartState of S
+    st x = s & d +* s is Autonomy of p & F.s c= Result(p,d+* s);
+end;
+
+theorem
+  for S being realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+ for p being non halt-free
+  (NAT-defined (the Instructions of S)-valued Function)
+ for d being FinPartState of S holds
+  p,d computes {}
+proof
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let p be non halt-free
+   (NAT-defined (the Instructions of S)-valued Function);
+  let d be FinPartState of S;
+  let x be set;
+  assume
+A1: x in dom {};
+  then reconsider x as FinPartState of S;
+  take x;
+  thus thesis by A1;
+end;
+
+theorem
+  for S being realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for p being non halt-free
+   (NAT-defined (the Instructions of S)-valued Function)
+  for d being FinPartState of S
+  holds d is Autonomy of p iff p,d computes {} .--> Result(p,d)
+proof
+  let S be realistic halting IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N);
+  let p be non halt-free
+   (NAT-defined (the Instructions of S)-valued Function);
+  let d be FinPartState of S;
+  thus d is Autonomy of p implies p,d computes {} .--> Result(p,d)
+  proof
+A1: dom({} .--> Result(p,d)) = {{}} by FUNCOP_1:19;
+    assume
+A2:  d is Autonomy of p;
+    let x be set;
+    assume x in dom({} .--> Result(p,d));
+    then
+A3: x = {} by A1,TARSKI:def 1;
+    then reconsider s = x as FinPartState of S by FUNCT_1:174,RELAT_1:206;
+    take s;
+    thus x = s;
+    thus d +* s is Autonomy of p by A2,A3,FUNCT_4:22;
+   d+*s = d by A3,FUNCT_4:22;
+    hence thesis by A3,FUNCOP_1:87;
+  end;
+  dom({} .--> Result(p,d)) = {{}} by FUNCOP_1:19;
+  then
+A4: {} in dom({} .--> Result(p,d)) by TARSKI:def 1;
+  assume p,d computes {} .--> Result(p,d);
+  then ex s being FinPartState of S
+    st {} = s & d +* s is Autonomy of p &
+      ({} .--> Result(p,d)).s c= Result(p,d+* s)
+     by A4,Def29;
+  hence thesis by FUNCT_4:22;
+end;
+
+theorem
+  for S being realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)
+  for p being non halt-free
+   (NAT-defined (the Instructions of S)-valued Function)
+  for d being FinPartState of S
+    holds d is Autonomy of p iff p,d computes {} .--> {}
+proof
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let p be non halt-free
+   (NAT-defined (the Instructions of S)-valued Function);
+  let d be FinPartState of S;
+  thus d is Autonomy of p implies p,d computes {} .--> {}
+  proof
+A1: dom({} .--> {}) = {{}} by FUNCOP_1:19;
+    assume
+A2:  d is Autonomy of p;
+    let x be set;
+    assume x in dom({} .--> {});
+    then
+A3: x = {} by A1,TARSKI:def 1;
+    then reconsider s = x as FinPartState of S by FUNCT_1:174,RELAT_1:206;
+    take s;
+    thus x = s;
+    thus d +* s is Autonomy of p by A2,A3,FUNCT_4:22;
+    ({} .--> {}).s = {} by A3,FUNCOP_1:87;
+    hence thesis by XBOOLE_1:2;
+  end;
+  dom({} .--> {}) = {{}} by FUNCOP_1:19;
+  then
+A4: {} in dom({} .--> {}) by TARSKI:def 1;
+  assume p,d computes {} .--> {};
+  then ex s being FinPartState of S
+    st {} = s & d +* s is Autonomy of p &
+    ({} .--> {}).s c= Result(p,d+* s) by A4,Def29;
+  hence thesis by FUNCT_4:22;
+end;
+
+begin :: InsType & InsCode
+
+registration
+  let N be set;
+  cluster Trivial-AMI N -> standard-ins;
+  coherence
+  proof
+    {} in ((union N) \/ the carrier of Trivial-AMI N)* by FINSEQ_1:66;
+    then
+A1: {{}} c= ((union N) \/ the carrier of Trivial-AMI N)* by ZFMISC_1:37;
+    take X = (union N) \/ the carrier of Trivial-AMI N;
+    {} in NAT* by FINSEQ_1:66;
+    then
+X:  {{}} c= NAT* by ZFMISC_1:37;
+    the Instructions of Trivial-AMI N = {[0,{},{}]} by Def2
+      .= [:{0},{{}},{{}}:] by MCART_1:39;
+    hence the Instructions of Trivial-AMI N c= [: NAT,NAT*,X*:]
+     by A1,X,MCART_1:77;
+  end;
+end;
+
+registration
+  let N;
+  cluster IC-Ins-separated definite standard-ins (non empty stored-program
+    AMI-Struct over N);
+  existence
+  proof
+    take Trivial-AMI N;
+    thus thesis;
+  end;
+end;
+
+begin :: Some Remarks on AMI-Struct
+
+reserve N for with_non-empty_elements non empty set;
+
+theorem Th83:
+  for S being IC-Ins-separated halting definite
+(non empty stored-program AMI-Struct over N),
+  p be NAT-defined (the Instructions of S)-valued Function,
+    s being State of S holds p halts_on s
+   iff ex i st p halts_at IC Comput(p,s,i)
+proof
+  let S be IC-Ins-separated halting definite
+  (non empty stored-program AMI-Struct over N);
+  let p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S;
+  hereby
+    assume p halts_on s;
+    then consider i being Nat such that
+A0: IC Comput(p,s,i) in dom p and
+A1: CurInstr(p,Comput(p,s,i)) = halt S by Def20;
+     reconsider i as Element of NAT by ORDINAL1:def 13;
+    take i;
+    p.IC Comput(p,s,i) = halt S by A0,A1,PARTFUN1:def 8;
+    hence p halts_at IC Comput(p,s,i) by A0,COMPOS_1:def 19;
+  end;
+  given i being Element of NAT such that
+A0: p halts_at IC Comput(p,s,i);
+A2: IC Comput(p,s,i) in dom p by A0,COMPOS_1:def 19;
+A3: p.IC Comput(p,s,i) = halt S by A0,COMPOS_1:def 19;
+  take i;
+  thus IC Comput(p,s,i) in dom p by A0,COMPOS_1:def 19;
+  thus CurInstr(p,Comput(p,s,i)) = halt S by A2,A3,PARTFUN1:def 8;
+end;
+
+theorem Th85:
+  for S being halting IC-Ins-separated definite
+(non empty stored-program AMI-Struct over N),
+  p be NAT-defined (the Instructions of S)-valued Function,
+  s being State of S,
+    k being Nat st p halts_on s
+  holds Result(p,s) = Comput(p,s,k) iff p halts_at IC Comput(p,s,k)
+proof
+  let S be halting IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N);
+  let p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S, k being Nat;
+  assume
+Z0: p halts_on s;
+   then consider n being Nat such that
+G1: IC Comput(p,s,n) in dom p and
+G2: CurInstr(p,Comput(p,s,n)) = halt S by Def20;
+  hereby
+    assume
+Z:    Result(p,s) = Comput(p,s,k);
+    consider i being Element of NAT such that
+W1:  Result(p,s) = Comput(p,s,i) and
+W2:  CurInstr(p,Result(p,s)) = halt S by Z0,Def22;
+    reconsider i,n as Element of NAT by ORDINAL1:def 13;
+Y:  now per cases;
+     suppose i <= n;
+     hence Comput(p,s,i) = Comput(p,s,n) by W1,W2,Th6;
+     end;
+     suppose n <= i;
+     hence Comput(p,s,i) = Comput(p,s,n) by G2,Th6;
+     end;
+    end;
+    p.IC Comput(p,s,k) = halt S by Y,W2,Z,G1,W1,PARTFUN1:def 8;
+    hence p halts_at IC Comput(p,s,k) by Y,G1,W1,Z,COMPOS_1:def 19;
+  end;
+  assume that
+Z1: IC Comput(p,s,k) in dom p and
+Z2:  p.IC Comput(p,s,k) = halt S;
+X:  CurInstr(p,Comput(p,s,k)) = halt S by Z1,Z2,PARTFUN1:def 8;
+    reconsider k,n as Element of NAT by ORDINAL1:def 13;
+    now per cases;
+     suppose n <= k;
+     hence Comput(p,s,k) = Comput(p,s,n) by G2,Th6;
+     end;
+     suppose k <= n;
+     hence Comput(p,s,k) = Comput(p,s,n) by X,Th6;
+     end;
+    end;
+  hence thesis by G2,Def22,Z0;
+end;
+
+theorem Th87:
+  for S being halting IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N)
+ for P being (the Instructions of S)-valued NAT-defined Function,
+  s being State of S, k st P halts_at IC Comput(P,s,k)
+   holds Result(P,s) = Comput(P,s,k)
+proof
+  let S be halting IC-Ins-separated definite (non empty
+  stored-program AMI-Struct over N),
+  P be (the Instructions of S)-valued NAT-defined Function,
+  s be State of S, k;
+  assume
+A1: P halts_at IC Comput(P,s,k);
+  then P halts_on s by Th83;
+  hence thesis by A1,Th85;
+end;
+
+theorem Th88:
+  i <= j implies for S being halting
+IC-Ins-separated definite (non empty stored-program AMI-Struct over N)
+ for P being (the Instructions of S)-valued NAT-defined Function
+ for s being State of S st P halts_at IC Comput(P,s,i)
+  holds P halts_at IC Comput(P,s,j)
+proof
+  assume
+A1: i <= j;
+  let S be halting IC-Ins-separated definite (non empty
+     stored-program AMI-Struct over N),
+   p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S;
+  assume that
+A3: IC Comput(p,s,i) in dom p and
+A2: p.IC Comput(p,s,i) = halt S;
+X: CurInstr(p,Comput(p,s,i)) = halt S by A3,A2,PARTFUN1:def 8;
+  hence IC Comput(p,s,j) in dom p by A3,A1,Th6;
+  thus p.IC Comput(p,s,j) = halt S by A1,A2,X,Th6;
+end;
+
+theorem
+  i <= j implies for S being halting IC-Ins-separated
+definite (non empty stored-program AMI-Struct over N)
+ for P being (the Instructions of S)-valued NAT-defined Function
+ for s being State of S st P halts_at IC Comput(P,s,i)
+   holds Comput(P,s,j) = Comput(P,s,i)
+proof
+  assume
+A1: i <= j;
+  let S be halting IC-Ins-separated definite (non empty
+  stored-program AMI-Struct over N),
+  P be (the Instructions of S)-valued NAT-defined Function,
+  s be State of S;
+  assume
+A2: P halts_at IC Comput(P,s,i);
+  then P halts_at IC Comput(P,s,j) by A1,Th88;
+  hence Comput(P,s,j) = Result(P,s) by Th87
+    .= Comput(P,s,i) by A2,Th87;
+end;
+
+theorem
+  for S being  IC-Ins-separated halting definite (non
+empty stored-program AMI-Struct over N)
+ for P being (the Instructions of S)-valued ManySortedSet of NAT
+ for s being State of S st ex k st P halts_at IC Comput(P,s,k)
+   for i holds Result(P,s) = Result(P,Comput(P,s,i))
+proof
+  let S be  IC-Ins-separated halting definite (non empty
+  stored-program AMI-Struct over N),
+  P be (the Instructions of S)-valued ManySortedSet of NAT,
+  s be State of S;
+  given k such that
+A1: P halts_at IC Comput(P,s,k);
+  let i;
+   P.IC Comput(P,s,k) = halt S by A1,COMPOS_1:def 21;
+  hence thesis by Th57;
+end;
+
+definition
+  let N be with_non-empty_elements non empty set;
+  let S be halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S such that
+A1: p halts_on s;
+  func LifeSpan(p,s) -> Element of NAT means
+:Def46:
+  CurInstr(p,Comput(p,s,it)) = halt S &
+  for k being Element of NAT st
+   CurInstr(p,Comput(p,s,k)) = halt S
+  holds it <= k;
+  existence
+  proof
+    defpred X[Nat] means
+     CurInstr(p,Comput(p,s,$1))=halt S;
+    consider k being Nat such that IC Comput(p,s,k) in dom p and
+W:   CurInstr(p, Comput(p,s,k)) = halt S by A1,Def20;
+A2: ex k being Nat st X[k] by W;
+    consider k being Nat such that
+A3: X[k] & for n being Nat st X[n] holds k <= n from NAT_1:sch 5(A2);
+    reconsider k as Element of NAT by ORDINAL1:def 13;
+    take k;
+    thus thesis by A3;
+  end;
+  uniqueness
+  proof
+    let it1, it2 be Element of NAT;
+    assume
+A4: not thesis;
+    then it1 <= it2 & it2 <= it1;
+    hence contradiction by A4,XXREAL_0:1;
+  end;
+end;
+
+theorem Th22:
+  for N being non empty with_non-empty_elements set,
+      S be IC-Ins-separated definite halting
+       (non empty stored-program AMI-Struct over N),
+      p being NAT-defined (the Instructions of S)-valued Function,
+      s being State of S, m being Element of NAT
+   holds p halts_on s iff p halts_on Comput(p,s,m)
+proof
+  let N be non empty with_non-empty_elements set;
+  let S be IC-Ins-separated definite halting
+   (non empty stored-program
+  AMI-Struct over N),
+  p be NAT-defined (the Instructions of S)-valued Function,
+  s be State of S, m be Element of NAT;
+  hereby
+    assume p halts_on s;
+    then consider n being Nat such that
+W0:  IC Comput(p,s,n) in dom p and
+W:   CurInstr(p, Comput(p,s,n)) = halt S by Def20;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+    per cases;
+    suppose
+      n <= m;
+      then
+       Comput(p,s,n) = Comput(p,s,m+0) by W,Th6
+        .= Comput(p,Comput(p,s,m),0) by Th5;
+      hence p halts_on Comput(p,s,m) by Def20,W,W0;
+    end;
+    suppose
+      n >= m;
+      then reconsider k = n - m as Element of NAT by INT_1:18;
+      Comput(p,Comput(p,s,m),k)
+         = Comput(p,s,m+k) by Th5
+        .= Comput(p,s,n);
+     hence p halts_on Comput(p,s,m)
+      by Def20,W0,W;
+    end;
+  end;
+  given n being Nat such that
+W1: IC Comput(p, Comput(p,s,m),n) in dom p and
+W2: CurInstr(p, Comput(p,Comput(p,s,m),n)) = halt S;
+   reconsider nn=n as Element of NAT by ORDINAL1:def 13;
+  take m+nn;
+  thus IC Comput(p,s,m+nn) in dom p &
+   CurInstr(p, Comput(p,s,m+nn)) = halt S by W1,W2,Th5;
+end;
+
+reserve N for with_non-empty_elements non empty set,
+  S for IC-Ins-separated (non empty AMI-Struct over N);
+
+reserve m,n for Element of NAT;
+
+theorem
+  for S being halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N),
+   p being NAT-defined (the Instructions of S)-valued Function,
+   s being State of S
+  st p halts_on s
+ holds Result(p,s) = Comput(p,s,LifeSpan(p,s))
+proof
+  let S be halting IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N);
+  let p be NAT-defined (the Instructions of S)-valued Function;
+  let s be State of S;
+  assume
+A1: p halts_on s;
+  then
+A2: CurInstr(p,Comput(p,s,LifeSpan(p,s))) = halt S by Def46;
+  consider m such that
+A3: Result(p,s) = Comput(p,s,m) and
+A4: CurInstr(p, Result(p,s)) = halt S by A1,Def22;
+  LifeSpan(p,s) <= m by A1,A3,A4,Def46;
+  hence thesis by A2,A3,Th6;
+end;
+
+theorem
+  for N being non empty with_non-empty_elements set,
+  S being halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N),
+  P being (the Instructions of S)-valued ManySortedSet of NAT,
+  s being State of S, k being Element of NAT
+   st CurInstr(P,Comput(P,s,k)) = halt S
+ holds Comput(P,s,LifeSpan(P,s)) = Comput(P,s,k)
+proof
+  let N be non empty with_non-empty_elements set, S be halting
+IC-Ins-separated definite
+ (non empty stored-program AMI-Struct over N),
+     P being (the Instructions of S)-valued ManySortedSet of NAT,
+     s be State of S, k be Element of NAT such that
+A1: CurInstr(P,Comput(P,s,k)) = halt S;
+X: dom P = NAT by PARTFUN1:def 4;
+A2: P halts_on s by Def20,X,A1;
+  set Ls = LifeSpan(P,s);
+A3: CurInstr(P,Comput(P,s,Ls)) = halt S by A2,Def46;
+  Ls <= k by A1,A2,Def46;
+  hence thesis by A3,Th6;
+end;
+
+theorem
+ for N being non empty with_non-empty_elements set
+ for S being halting IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N)
+  for p being NAT-defined (the Instructions of S)-valued Function
+ for s being State of S st LifeSpan(p,s) <= j & p halts_on s
+   holds Comput(p,s,j) = Comput(p,s,LifeSpan(p,s))
+proof
+  let N be non empty with_non-empty_elements set,
+  S be halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N),
+  p being NAT-defined (the Instructions of S)-valued Function,
+  s be State of S;
+  assume that
+A1: LifeSpan(p,s) <= j and
+A2: p halts_on s;
+  CurInstr(p,Comput(p,s,LifeSpan(p,s))) = halt S by A2,Def46;
+  hence thesis by A1,Th6;
+end;
+
+theorem
+  for N being with_non-empty_elements non empty set,
+      S being realistic IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over N),
+      t, u being State of S,
+      e being Element of NAT,
+      I being Instruction of S st u = t+*((IC S, e)-->(e, I))
+    holds u.e = I & IC u = e &
+     IC Following(ProgramPart u,u) = Exec(u.IC u, u).IC S
+proof
+
+ let N be with_non-empty_elements non empty set,
+     S be realistic IC-Ins-separated definite
+      (non empty stored-program AMI-Struct over N),
+     t, u be State of S,
+     e be Element of NAT,
+     I be Instruction of S such that
+A2: u = t+*((IC S, e)-->(e, I));
+A3: dom ((IC S, e)-->(e, I)) = {IC S, e} by FUNCT_4:65;
+  then e in dom ((IC S, e)-->(e, I)) by TARSKI:def 2;
+  hence u.e = ((IC S, e)-->(e, I)).e by A2,FUNCT_4:14
+    .= I by FUNCT_4:66;
+   reconsider il = e as Element of NAT;
+X: IC S <> il by COMPOS_1:def 12;
+  IC S in dom ((IC S, e)-->(e, I)) by A3,TARSKI:def 2;
+  hence IC u = ((IC S, e)-->(e, I)).IC S by A2,FUNCT_4:14
+    .= e by X,FUNCT_4:66;
+  thus thesis by COMPOS_1:38;
+end;
+
+theorem
+  for S being halting IC-Ins-separated definite (non empty
+  stored-program AMI-Struct over N),
+  P being (the Instructions of S)-valued ManySortedSet of NAT,
+  s being State of S st s = Following(P,s)
+  holds for n holds Comput(P,s,n) = s
+proof
+  let S be halting IC-Ins-separated definite (non empty stored-program
+  AMI-Struct over N),
+  P be (the Instructions of S)-valued ManySortedSet of NAT,
+  s be State of S;
+  defpred X[Element of NAT] means Comput(P,s,$1) = s;
+  assume s = Following(P,s);
+  then
+A1: for n st X[n] holds X[n+1] by Th14;
+A2: X[ 0] by Th3;
+  thus for n holds X[n] from NAT_1:sch 1(A2, A1);
+end;
+
+theorem
+  for N being with_non-empty_elements non empty set,
+      S being IC-Ins-separated definite
+           (non empty stored-program AMI-Struct over N),
+      P being (the Instructions of S)-valued ManySortedSet of NAT,
+      s being State of S, i being Instruction of S
+   holds Exec(P.IC s,s).IC S = IC Following(P,s)
+proof
+  let N be with_non-empty_elements non empty set,
+      S be IC-Ins-separated definite
+           (non empty stored-program AMI-Struct over N),
+      P be (the Instructions of S)-valued ManySortedSet of NAT,
+      s be State of S, i being Instruction of S;
+ NAT = dom P by PARTFUN1:def 4;
+ hence Exec(P.IC s,s).IC S = IC Following(P,s) by PARTFUN1:def 8;
+end;
+
+theorem
+  for N being with_non-empty_elements non empty set, S being realistic
+IC-Ins-separated definite
+ (non empty stored-program AMI-Struct over N), t, u
+  being State of S, il being Element of NAT, e being Element of
+ObjectKind IC S, I being Element of (the Object-Kind of S).il
+ st e = il & u = t+*((IC S, il
+)-->(e, I)) holds u.il = I & IC u = il & IC Following(ProgramPart u,u)
+ = Exec(u.IC u, u).IC S
+proof
+  let N be with_non-empty_elements non empty set,
+  S be realistic IC-Ins-separated
+  definite
+   (non empty stored-program AMI-Struct over N), t, u be State of S,
+il be Element of NAT, e be Element of ObjectKind IC S, I be Element
+  of (the Object-Kind of S).il such that
+A1: e = il and
+A2: u = t+*((IC S, il)-->(e, I));
+A3: dom ((IC S, il)-->(e, I)) = {IC S, il} by FUNCT_4:65;
+  then il in dom ((IC S, il)-->(e, I)) by TARSKI:def 2;
+  hence u.il = ((IC S, il)-->(e, I)).il by A2,FUNCT_4:14
+    .= I by FUNCT_4:66;
+  IC S in dom ((IC S, il)-->(e, I)) by A3,TARSKI:def 2;
+  hence IC u = ((IC S, il)-->(e, I)).IC S by A2,FUNCT_4:14
+    .= il by A1,COMPOS_1:3,FUNCT_4:66;
+  thus thesis by COMPOS_1:38;
+end;
+
+theorem Th30:
+ for S being  IC-Ins-separated definite halting
+  (non empty stored-program AMI-Struct over N)
+   for P being (the Instructions of S)-valued ManySortedSet of NAT
+   for s being State of S holds P halts_on s
+   iff ex k st CurInstr(P,Comput(P,s,k)) = halt S
+proof
+ let S be  IC-Ins-separated definite halting
+  (non empty stored-program AMI-Struct over N);
+ let P be (the Instructions of S)-valued ManySortedSet of NAT;
+ let s be State of S;
+ thus P halts_on s
+   implies ex k st CurInstr(P,Comput(P,s,k))
+    = halt S
+  proof
+   given k being Nat such that
+    IC Comput(P,s,k) in dom P and
+G2: CurInstr(P, Comput(P,s,k)) = halt S;
+   take k;
+   thus k is Element of NAT by ORDINAL1:def 13;
+   thus CurInstr(P,Comput(P,s,k)) = halt S by G2;
+  end;
+ given k such that
+G: CurInstr(P,Comput(P,s,k)) = halt S;
+ take k;
+  IC Comput(P,s,k) in NAT;
+ hence IC Comput(P,s,k) in dom P  by PARTFUN1:def 4;
+ thus CurInstr(P, Comput(P,s,k)) = halt S by G;
+end;
+
+registration let N;
+  let S be realistic halting IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  cluster autonomic non NAT-defined FinPartState of S;
+  existence
+  proof
+    set P = (IC S, 0)-->(0, halt S);
+A:  P = Start-At(0,S) +* (0 .--> halt S) by FUNCT_4:def 4;
+    then reconsider P as FinPartState of S;
+    take P;
+    thus P is autonomic by Th12,A;
+      dom P = { IC S, 0 } by FUNCT_4:65;
+      then
+A1:   IC S in dom P by TARSKI:def 2;
+    not dom P c= NAT by A1,COMPOS_1:3;
+    hence thesis by RELAT_1:def 18;
+  end;
+end;
+
+registration
+  let N;
+  let S be halting realistic IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  cluster halting FinPartState of S;
+ existence
+  proof
+   take Start-At(0,S) +* (0 .--> halt S);
+   thus thesis by Th10;
+  end;
+end;
+
+registration
+  let N;
+  let S be halting realistic IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+  let p be halting non program-free PartState of S;
+ cluster ProgramPart p -> non halt-free;
+ coherence
+  proof
+   per cases;
+   suppose
+S:  for i being Instruction of S holds i = halt S;
+     ProgramPart p <> {} by COMPOS_1:def 29;
+     then rng ProgramPart p <> {};
+     then consider x such that
+W:    x in rng ProgramPart p by XBOOLE_0:def 1;
+     rng ProgramPart p c= the Instructions of S by RELAT_1:def 19;
+     then x in the Instructions of S by W;
+     then x = halt S by S;
+    hence halt S in rng ProgramPart p by W;
+   end;
+   suppose not for i being Instruction of S holds i = halt S;
+    then consider i being Instruction of S such that
+W0:  i <> halt S;
+    reconsider s = (the State of S) +* (NAT --> i) +* p as State of S;
+W:   p c= s by FUNCT_4:26;
+    then
+C:  ProgramPart p c= ProgramPart s by RELAT_1:105;
+    ProgramPart s halts_on s by W,Def10;
+    then consider k being Nat such that
+ IC Comput(ProgramPart s,s,k) in dom ProgramPart s and
+W2: CurInstr(ProgramPart s,Comput(ProgramPart s,s,k)) = halt S by Def20;
+    set m = IC Comput(ProgramPart s,s,k);
+    dom ProgramPart s = NAT by PARTFUN1:def 4;
+    then m in dom ProgramPart s;
+    then
+B:   (ProgramPart s).m = (ProgramPart s)/.m by PARTFUN1:def 8
+       .= halt S by W2;
+A:  now assume not m in dom ProgramPart p;
+      then
+A1:    not m in dom p by RELAT_1:86;
+      dom(NAT --> i) = NAT by FUNCOP_1:19;
+      then
+A2:   m in dom(NAT --> i);
+      (ProgramPart s).m = s.m by COMPOS_1:2
+         .= ((the State of S) +* (NAT --> i)).m by A1,FUNCT_4:12
+         .= (NAT --> i).m by A2,FUNCT_4:14
+         .= i by FUNCOP_1:13;
+     hence contradiction by B,W0;
+    end;
+    then (ProgramPart p).m = halt S by C,B,GRFUNC_1:8;
+   hence halt S in rng ProgramPart p by A,FUNCT_1:12;
+  end;
+ end;
+end;
+
+registration
+  let N;
+  let S be halting realistic IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N);
+ cluster halting non program-free -> non halt-free PartState of S;
+ coherence
+  proof let p be PartState of S;
+F: rng ProgramPart p c= rng p by RELAT_1:99;
+   assume p is halting non program-free;
+    then ProgramPart p is non halt-free;
+    then halt S in rng ProgramPart p by COMPOS_1:def 7;
+   hence halt S in rng p by F;
+  end;
+end;
+
+reserve S for IC-Ins-separated definite halting
+  (non empty stored-program AMI-Struct over N);
+
+theorem Th31:
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S st ex k being Element of NAT st F.(IC
+  Comput(F,s,k)) = halt S holds F halts_on s
+proof
+  let F be total
+   (NAT-defined (the Instructions of S)-valued Function);
+  let s be State of S;
+  given k being Element of NAT such that
+A1: F.(IC Comput(F,s,k)) = halt S;
+  take k;
+   dom F = NAT by PARTFUN1:def 4;
+  hence IC Comput(F,s,k) in dom F;
+  hence CurInstr(F, Comput(F,s,k)) = halt S by A1,PARTFUN1:def 8;
+end;
+
+theorem Th4:
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S, k being Element of NAT st F.(IC
+  Comput(F,s,k)) = halt S holds Result(F,s) = Comput(F,s,k)
+proof
+  let F be total
+   (NAT-defined (the Instructions of S)-valued Function);
+  let s be State of S, k be Element of NAT;
+  assume
+Z:  F.(IC Comput(F,s,k)) = halt S;
+  then
+X:  F halts_on s by Th31;
+   dom F = NAT by PARTFUN1:def 4;
+  then IC Comput(F,s,k) in dom F;
+  then CurInstr(F,Comput(F,s,k)) = halt S by Z,PARTFUN1:def 8;
+  hence thesis by X,Def22;
+end;
+
+theorem Th33:
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S, k being Element of NAT
+   holds F.(IC Comput(F,s,k)) <> halt S &
+   F.(IC Comput(F,s,k+1)) = halt S iff LifeSpan(F,s) = k+1 & F halts_on s
+proof
+  let F be total
+   (NAT-defined (the Instructions of S)-valued Function);
+  let s be State of S, k be Element of NAT;
+YY:  dom F = NAT by PARTFUN1:def 4;
+  then
+XX:  IC Comput(F,s,k) in dom F;
+XX1:  IC Comput(F,s,k+1) in dom F by YY;
+  hereby
+    assume that
+A1: F.(IC Comput(F,s,k)) <> halt S and
+A2: F.(IC Comput(F,s,k+1)) = halt S;
+A3: CurInstr(F,Comput(F,s,k)) <> halt S by A1,PARTFUN1:def 8,XX;
+A4: now
+      let i be Element of NAT;
+      assume that
+A5:   CurInstr(F,Comput(F,s,i)) = halt S and
+A6:   k+1 > i;
+      i <= k by A6,NAT_1:13;
+      hence contradiction by A3,A5,Th6;
+    end;
+X1:  F halts_on s by A2,Th31;
+     CurInstr(F,Comput(F,s,k+1)) = halt S by A2,PARTFUN1:def 8,XX1;
+    hence LifeSpan(F,s) = k+1 & F halts_on s by A4,Def46,X1;
+  end;
+  assume
+A7: LifeSpan(F,s) = k+1 & F halts_on s;
+A8: now
+    assume CurInstr(F,Comput(F,s,k)) = halt S;
+    then k+1 <= k by A7,Def46;
+    hence contradiction by NAT_1:13;
+  end;
+  CurInstr(F,Comput(F,s,k+1)) = halt S by A7,Def46;
+  hence thesis by A8,PARTFUN1:def 8,XX,XX1;
+end;
+
+theorem Th17:
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S, k being Element of NAT st IC
+  Comput(F,s,k) <> IC Comput(F,s,k+1) & F.(IC Comput(F,s,k+1)) = halt S
+   holds LifeSpan(F,s) = k+1
+proof
+  let F be total
+   (NAT-defined (the Instructions of S)-valued Function);
+  let s be State of S, k be Element of NAT;
+  assume that
+A1: IC Comput(F,s,k) <> IC Comput(F,s,k+1) and
+A2: F.(IC Comput(F,s,k+1)) = halt S;
+  dom F = NAT by PARTFUN1:def 4;
+  then
+XX:  IC Comput(F,s,k) in dom F;
+  now
+    assume F.(IC Comput(F,s,k)) = halt S;
+    then CurInstr(F,Comput(F,s,k)) = halt S by PARTFUN1:def 8,XX;
+    hence contradiction by A1,Th6,NAT_1:11;
+  end;
+  hence thesis by A2,Th33;
+end;
+
+theorem
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S, k being Element of NAT st
+    F halts_on Comput(F,s,k) & 0 < LifeSpan(F,Comput(F,s,k))
+  holds LifeSpan(F,s) = k+LifeSpan(F,Comput(F,s,k))
+proof
+  let F be total
+   (NAT-defined (the Instructions of S)-valued Function);
+  let s be State of S, k be Element of NAT;
+  set s2 = Comput(F,s,k), c = LifeSpan(F,Comput(F,s,k));
+  assume that
+A2: F halts_on s2 and
+A3: 0 < c;
+  consider l being Nat such that
+A4: c = l+1 by A3,NAT_1:6;
+  reconsider l as Element of NAT by ORDINAL1:def 13;
+  F.(IC Comput(F,s2,l+1)) = halt S by A2,A4,Th33;
+  then F.(IC Comput(F,s,k+(l+1))) = halt S by Th5;
+  then
+A5: F.(IC Comput(F,s,k+(l+1))) = halt S; ::: by A1,AMI_1:54;
+  F.(IC Comput(F,s2,l)) <> halt S by A2,A4,Th33;
+  then F.(IC Comput(F,s,k+l)) <> halt S by Th5;
+  then F.(IC Comput(F,s,k+l)) <> halt S; ::: by A1,AMI_1:54;
+  hence LifeSpan(F,s) = (k+l)+1 by A5,Th33
+    .= k+c by A4;
+end;
+
+theorem
+  for F being total
+   (NAT-defined (the Instructions of S)-valued Function)
+  for s being State of S, k being Element of NAT
+   st F halts_on Comput(F,s,k)
+   holds Result(F,Comput(F,s,k))
+    = Result(F,s)
+proof
+  let F be total
+   (NAT-defined (the Instructions of S)-valued Function);
+  let s be State of S, k be Element of NAT;
+  set s2 = Comput(F,s,k);
+  assume
+A2: F halts_on s2;
+  then consider l being Element of NAT such that
+A4: Result(F,s2) = Comput(F,s2,l) &
+    CurInstr(F,Result(F,s2)) = halt S by Def22;
+A3: F halts_on s by A2,Th22;
+  Comput(F,Comput(F,s,k),l) = Comput(F,s,k+l) by Th5;
+  hence thesis by A3,A4,Def22;
+end;
+

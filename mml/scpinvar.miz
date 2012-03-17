@@ -16,25 +16,26 @@ environ
       ORDINAL1, PARTFUN1, SCMNORM, SCMFSA6C;
  notations XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, RELAT_1, FUNCT_1, PARTFUN1,
       VALUED_1, XCMPLX_0, FUNCT_4, INT_1, INT_2, NAT_1, STRUCT_0, COMPOS_1,
-      AMI_1,
+      EXTPRO_1, AMI_1,
       AMI_2, SCMPDS_2, SCMPDS_4, SCMPDS_6, SCMP_GCD, SCMPDS_5,
       SCMPDS_8, FUNCT_2, CARD_3, DOMAIN_1, FINSEQ_1, GR_CY_1, PRE_FF, SCPISORT,
       XXREAL_0;
  constructors DOMAIN_1, REAL_1, NAT_D, RECDEF_1, PRE_FF, MESFUNC1, GR_CY_1,
       SCM_1, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT,
-      BINOP_2;
+      BINOP_2, AMI_1;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, NAT_1,
       INT_1, CARD_3, STRUCT_0, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6,
       SCMPDS_8, XBOOLE_0, FINSEQ_1, CARD_1, VALUED_1, AMI_1, VALUED_0,
-      RELAT_1, FUNCT_2, COMPOS_1, AFINSQ_1;
+      RELAT_1, FUNCT_2, COMPOS_1, AFINSQ_1, EXTPRO_1;
  requirements NUMERALS, REAL, SUBSET, ARITHM, BOOLE;
- definitions FUNCOP_1, COMPOS_1, AMI_1, AMI_3, SCMPDS_2, SCMP_GCD;
+ definitions FUNCOP_1, COMPOS_1, EXTPRO_1, AMI_1, AMI_3, SCMPDS_2, SCMP_GCD,
+ SCPISORT;
  theorems AMI_1, AMI_3, NAT_1, TARSKI, FUNCT_4, INT_1, SCMPDS_2, ABSVALUE,
       GRFUNC_1, SCMPDS_4, SCMPDS_5, SCMPDS_6, ENUMSET1, INT_2, SCMPDS_8,
       RELAT_1, SCMP_GCD, SCMPDS_7, FUNCT_1, FINSEQ_1, RVSUM_1, FINSEQ_2,
       PRE_FF, SCPISORT, XBOOLE_1, XREAL_1, COMPLEX1, XXREAL_0, PREPOWER,
       ORDINAL1, FUNCOP_1, AMI_2, ZFMISC_1, NAT_D, FINSEQ_3, PBOOLE, PARTFUN1,
-      AFINSQ_1, COMPOS_1, FUNCT_7;
+      AFINSQ_1, COMPOS_1, FUNCT_7, EXTPRO_1;
  schemes NAT_1, SCMPDS_8, FUNCT_2;
 
 begin :: Preliminaries
@@ -54,7 +55,7 @@ proof
 A1: i ';' j ';' I =i ';' jI by SCMPDS_4:52
     .=Load i ';' jI by SCMPDS_4:def 4;
    0 in dom Load i by SCMPDS_5:2;
-  hence (i ';' j ';' I). 0 =(Load i). 0 by A1,SCMPDS_4:37
+  hence (i ';' j ';' I). 0 =(Load i). 0 by A1,AFINSQ_1:def 4
     .=i by SCMPDS_5:4;
 A2:  0 in dom Load j by SCMPDS_5:2;
   card jI=card I+1 by SCMPDS_6:15;
@@ -62,9 +63,9 @@ A2:  0 in dom Load j by SCMPDS_5:2;
   then
 A3: card Load i=1 &  0 in dom jI by AFINSQ_1:70,SCMPDS_5:6;
   thus (i ';' j ';' I). 1 =(Load i ';' jI). (0+1) by A1
-    .=jI. 0 by A3,SCMPDS_4:38
+    .=jI. 0 by A3,AFINSQ_1:def 4
     .=(Load j ';' I). 0 by SCMPDS_4:def 4
-    .=(Load j). 0 by A2,SCMPDS_4:37
+    .=(Load j). 0 by A2,AFINSQ_1:def 4
     .=j by SCMPDS_5:4;
 end;
 
@@ -165,16 +166,18 @@ P[set]}: F(Dstate IExec(while<0(a(),i(),I()),s()))=0 & P[Dstate IExec(while<0(a
   (),i(),I()),s())]
 provided
 A1: card I() > 0 and
-A2: for t be State of SCMPDS st P[Dstate t] holds F(Dstate(t))=0 iff t.
-DataLoc(s().a(),i()) >= 0 and
+A2: for t be State of SCMPDS st P[Dstate t] holds F(Dstate(t))=0
+   iff t.DataLoc(s().a(),i()) >= 0 and
 A3: P[Dstate s()] and
-A4: for t be State of SCMPDS st P[Dstate t] & t.a()=s().a() & t.DataLoc(
-s().a(),i()) < 0 holds IExec(I(),t).a()=t.a() & I() is_closed_on t & I()
+A4: for t be State of SCMPDS st P[Dstate t] & t.a()=s().a() &
+   t.DataLoc(s().a(),i()) < 0
+ holds IExec(I(),t).a()=t.a() & I() is_closed_on t & I()
 is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) & P[Dstate(IExec(I(),t))
 ]
 proof
   set b=DataLoc(s().a(),i()), WHL=while<0(a(),i(),I());
-  defpred Q[Element of NAT] means for t be State of SCMPDS st F(Dstate t) <=
+  defpred Q[Element of NAT] means
+  for t be State of SCMPDS st F(Dstate t) <=
   $1 & t.a()=s().a() & P[Dstate t] holds F(Dstate IExec(WHL,t))=0 & P[Dstate
   IExec(WHL,t)];
 A5: Q[0]
@@ -214,8 +217,8 @@ A16:    u.b < 0 by A2,A14,A15;
 A17:    Iu.a()=s().a() & P[Dstate Iu] by A4,A13,A14;
         deffunc F(State of SCMPDS) = F($1);
 A18:    P[Dstate u] by A14;
-A19:    for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0 holds t.
-        DataLoc(u.a(),i()) >= 0 by A2,A13;
+A19:    for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0
+       holds t.DataLoc(u.a(),i()) >= 0 by A2,A13;
         F(Dstate Iu) < F(Dstate u) by A4,A13,A14,A16;
         then F(Dstate Iu)+1 <= F(Dstate u) by INT_1:20;
         then F(Dstate Iu)+1 <= k+1 by A12,XXREAL_0:2;
@@ -261,10 +264,12 @@ definition
 end;
 
 theorem Th8:
-  for s being State of SCMPDS,I being halt-free shiftable Program
+  for s being 0-started State of SCMPDS,
+    I being halt-free shiftable Program
   of SCMPDS, a,b,c being Int_position,n,i,p0 be Element of NAT,f be FinSequence
   of INT st card I >0 & f is_FinSequence_on s,p0 & len f=n & s.b=0 & s.a=0 & s.
-intpos i=-n & s.c = p0+1 & (for t be State of SCMPDS st (ex g be FinSequence of
+intpos i=-n & s.c = p0+1 &
+ (for t be State of SCMPDS st (ex g be FinSequence of
 INT st g is_FinSequence_on s,p0 & len g=t.intpos i+n & t.b=Sum g & t.c = p0+1+
   len g) & t.a=0 & t.intpos i < 0 & for i be Element of NAT st i > p0 holds t.
 intpos i=s.intpos i holds IExec(I,t).a=0 & I is_closed_on t & I is_halting_on t
@@ -274,7 +279,8 @@ IExec(I,t).b=Sum g) & for i be Element of NAT st i > p0 holds IExec(I,t).intpos
   i=s.intpos i) holds IExec(while<0(a,i,I),s).b=Sum f & while<0(a,i,I)
   is_closed_on s & while<0(a,i,I) is_halting_on s
 proof
-  let s be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a,b,c
+  let s be 0-started State of SCMPDS,
+      I be halt-free shiftable Program of SCMPDS, a,b,c
   be Int_position,n,i,p0 be Element of NAT,f be FinSequence of INT;
   assume
 A1: card I > 0;
@@ -442,14 +448,15 @@ end;
 set j1= AddTo(GBP,1,a3,0), j2= AddTo(GBP,2,1), j3= AddTo(GBP,3,1), WB= j1 ';'
 j2 ';' j3, WH= while<0(GBP,2,WB);
 
-Lm1: for s being State of SCMPDS,m be Element of NAT st s.GBP=0 & s.a3=m holds
+Lm1: for s being 0-started State of SCMPDS,
+        m be Element of NAT st s.GBP=0 & s.a3=m holds
 IExec(WB,s).GBP=0 & IExec(WB,s).a1=s.a1+s.intpos m & IExec(WB,s).a2=s.a2+1 &
 IExec(WB,s).a3=m+1 & for i be Element of NAT st i >3 holds IExec(WB,s).intpos i
 =s.intpos i
 
 proof
   set a=GBP;
-  let s be State of SCMPDS,m be Element of NAT;
+  let s be 0-started State of SCMPDS,m be Element of NAT;
   assume that
 A1: s.a=0 and
 A2: s.a3=m;
@@ -545,13 +552,15 @@ proof
     .=3;
 end;
 
-Lm3: for s being State of SCMPDS,n,p0 be Element of NAT,f be FinSequence of
+Lm3: for s being 0-started State of SCMPDS,
+n,p0 be Element of NAT,f be FinSequence of
 INT st p0 >= 3 & f is_FinSequence_on s,p0 & len f=n & s.a1=0 & s.GBP=0 & s.a2=-
 n & s.a3=p0+1 holds IExec(WH,s).a1=Sum f & WH is_closed_on s & WH is_halting_on
 s
 
 proof
-  let s be State of SCMPDS,n,p0 be Element of NAT,f be FinSequence of INT;
+  let s be 0-started State of SCMPDS,
+      n,p0 be Element of NAT,f be FinSequence of INT;
   set a=GBP;
   assume that
 A1: p0 >= 3 and
@@ -569,11 +578,16 @@ A6: t.a3 = p0+1+len g;
     assume that
 A7: t.a=0 and
     t.a2 < 0;
+X1:  IExec(WB,t) =  IExec(WB,Initialize t) by SCMPDS_5:48;
+X2: (Initialize t).a3 = t.a3 by SCMPDS_5:40;
+X3: (Initialize t).a1 = t.a1 by SCMPDS_5:40;
+X4: (Initialize t).a = t.a by SCMPDS_5:40;
+X5: (Initialize t).a2 = t.a2 by SCMPDS_5:40;
     assume
 A8: for i be Element of NAT st i > p0 holds t.intpos i=s.intpos i;
-    thus IExec(WB,t).a=0 by A6,A7,Lm1;
+    thus IExec(WB,t).a=0 by A6,A7,Lm1,X1,X2,X4;
     thus WB is_closed_on t & WB is_halting_on t by SCMPDS_6:34,35;
-    thus IExec(WB,t).a2=t.a2+1 by A6,A7,Lm1;
+    thus IExec(WB,t).a2=t.a2+1 by A6,A7,Lm1,X1,X2,X4,X5;
 
     thus ex g be FinSequence of INT st g is_FinSequence_on s,p0 & len g=t.a2+n
     +1 & IExec(WB,t).a3 = p0+1+len g & IExec(WB,t).a1=Sum g
@@ -585,7 +599,7 @@ A10:  h is_FinSequence_on s,p0 by SCPISORT:3;
       take h;
       thus h is_FinSequence_on s,p0 by A10;
       thus len h=t.a2+n+1 by A4,A9;
-      thus IExec(WB,t).a3 =p0+1+len g+1 by A6,A7,Lm1
+      thus IExec(WB,t).a3 =p0+1+len g+1 by A6,A7,Lm1,X1,X2,X4
         .=p0+1+len h by A9;
 A11:  p0+1 > p0 by XREAL_1:31;
       set m=len h;
@@ -621,37 +635,41 @@ A19:      i in dom g by FINSEQ_1:def 3;
       len (g^<*q*>)=len h by A9,FINSEQ_2:19;
       then
 A20:  g^<*q*>=h by A14,FINSEQ_1:18;
+Y0:   (Initialize t).intpos(p0+1+len g) = t.intpos(p0+1+len g) by SCMPDS_5:40;
       h.m=s.intpos(p0+m) by A10,A12,SCPISORT:def 1
         .=t.intpos(p0+1+len g) by A8,A9,A13;
-      hence IExec(WB,t).a1=t.a1+h.m by A6,A7,Lm1
+      hence IExec(WB,t).a1=t.a1+h.m by A6,A7,Lm1,X1,X2,X3,X4,Y0
         .=Sum h by A5,A20,RVSUM_1:104;
     end;
     hereby
       let i be Element of NAT;
+Y0:   (Initialize t).intpos i = t.intpos i by SCMPDS_5:40;
       assume
 A21:  i > p0;
       then i > 3 by A1,XXREAL_0:2;
-      hence IExec(WB,t).intpos i=t.intpos i by A6,A7,Lm1
+      hence IExec(WB,t).intpos i=t.intpos i by A6,A7,Lm1,X1,X2,X4,Y0
         .=s.intpos i by A8,A21;
     end;
   end;
   hence thesis by A2,Lm2,Th8;
 end;
 
-Lm4: for s being State of SCMPDS,n,p0 be Element of NAT,f be FinSequence of
+Lm4: for s being 0-started State of SCMPDS,
+  n,p0 be Element of NAT,f be FinSequence of
 INT st p0 >= 3 & f is_FinSequence_on s,p0 & len f=n holds IExec(sum(n,p0),s).a1
 =Sum f & sum(n,p0) is_halting_on s
 
 proof
-  let s be State of SCMPDS,n,p0 be Element of NAT,f be FinSequence of INT;
+  let s be 0-started State of SCMPDS,
+      n,p0 be Element of NAT,f be FinSequence of INT;
   assume that
 A1: p0 >= 3 and
 A2: f is_FinSequence_on s,p0 and
 A3: len f=n;
 
-  set a=GBP, i1=a:=0, i2=a1:=0, i3=a2:=-n, i4=a3:=(p0+1), t0=Initialize s, I4
-  =i1 ';' i2 ';' i3 ';' i4, t1=IExec(I4,s), t2=IExec(i1 ';' i2 ';' i3,s), t3=
-  IExec(i1 ';' i2,s), t4=Exec(i1, t0);
+  set a=GBP, i1=a:=0, i2=a1:=0, i3=a2:=-n, i4=a3:=(p0+1), t0=Initialize s,
+    I4 =i1 ';' i2 ';' i3 ';' i4, t1=IExec(I4,s), t2=IExec(i1 ';' i2 ';' i3,s),
+    t3= IExec(i1 ';' i2,s), t4=Exec(i1, t0);
 
   now
     let i be Element of NAT;
@@ -684,6 +702,12 @@ A11: intpos (p0+i) <> a2 by ZFMISC_1:33;
   end;
   then
 A12: f is_FinSequence_on t1,p0 by SCPISORT:def 1;
+B12: f is_FinSequence_on Initialize t1,p0
+   proof let i be Element of NAT;
+    assume 1 <= i & i <= len f;
+     then f.i=t1.intpos(p0+i) by A12,SCPISORT:def 1;
+    hence thesis by SCMPDS_5:40;
+   end;
 A13: t4.a=0 by SCMPDS_2:57;
 A14: t3.a=Exec(i2, t4).a by SCMPDS_5:47
     .=0 by A13,AMI_3:52,SCMPDS_2:57;
@@ -691,42 +715,58 @@ A15: t2.a=Exec(i3, t3).a by SCMPDS_5:46
     .=0 by A14,AMI_3:52,SCMPDS_2:57;
 A16: t1.a3=Exec(i4, t2).a3 by SCMPDS_5:46
     .=p0+1 by SCMPDS_2:57;
+B16: (Initialize t1).a3 = t1.a3 by SCMPDS_5:40;
 A17: t3.a1=Exec(i2, t4).a1 by SCMPDS_5:47
     .=0 by SCMPDS_2:57;
 A18: t2.a1=Exec(i3, t3).a1 by SCMPDS_5:46
     .=0 by A17,AMI_3:52,SCMPDS_2:57;
+B19: (Initialize t1).a1 = t1.a1 by SCMPDS_5:40;
 A19: t1.a1=Exec(i4, t2).a1 by SCMPDS_5:46
     .=0 by A18,AMI_3:52,SCMPDS_2:57;
 A20: t2.a2=Exec(i3, t3).a2 by SCMPDS_5:46
     .=-n by SCMPDS_2:57;
+B21: (Initialize t1).a2 = t1.a2 by SCMPDS_5:40;
+BX: (Initialize t1).a = t1.a by SCMPDS_5:40;
 A21: t1.a2=Exec(i4, t2).a2 by SCMPDS_5:46
     .=-n by A20,AMI_3:52,SCMPDS_2:57;
 A22: t1.a=Exec(i4, t2).a by SCMPDS_5:46
     .=0 by A15,AMI_3:52,SCMPDS_2:57;
 
+  then WH is_closed_on Initialize t1 & WH is_halting_on Initialize t1
+   by A1,A3,A19,A21,A16,Lm3,B12,B16,B19,B21,BX;
   then
-A23: WH is_closed_on t1 & WH is_halting_on t1 by A1,A3,A19,A21,A16,A12,Lm3;
+A23: WH is_closed_on t1 & WH is_halting_on t1 by SCMPDS_6:139,140;
 
-  IExec(WH,t1).a1=Sum f by A1,A3,A22,A19,A21,A16,A12,Lm3;
+  IExec(WH,t1) = IExec(WH,Initialize t1) by SCMPDS_5:48;
+  then IExec(WH,t1).a1=Sum f by A1,A3,A22,A19,A21,A16,Lm3,B12,B16,B19,B21,BX;
   hence IExec(sum(n,p0),s).a1=Sum f by A23,SCPISORT:8;
   thus thesis by A23,SCPISORT:10;
 end;
 
 theorem
-  for s being State of SCMPDS,n,p0 be Element of NAT, f be FinSequence
+  for s being 0-started State of SCMPDS,n,
+    p0 be Element of NAT, f be FinSequence
 of INT st p0 >= 3 & f is_FinSequence_on s,p0 & len f=n holds IExec(sum(n,p0),s)
   .intpos 1=Sum f & sum(n,p0) is parahalting
 proof
-  let s be State of SCMPDS,n,p0 be Element of NAT,f be FinSequence of INT;
+  let s be 0-started State of SCMPDS,
+      n,p0 be Element of NAT,f be FinSequence of INT;
   assume that
 A1: p0 >= 3 and
 A2: f is_FinSequence_on s,p0 & len f=n;
   thus IExec(sum(n,p0),s).a1=Sum f by A1,A2,Lm4;
   now
     let t be State of SCMPDS;
-    ex g be FinSequence of INT st len g=n & g is_FinSequence_on t,p0 by
-SCPISORT:3;
-    hence sum(n,p0) is_halting_on t by A1,Lm4;
+    consider g being FinSequence of INT such that
+W:     len g=n & g is_FinSequence_on t,p0 by SCPISORT:3;
+     g is_FinSequence_on Initialize t,p0
+  proof let i be Element of NAT;
+    assume 1 <= i & i <= len g;
+     then g.i=t.intpos(p0+i) by W,SCPISORT:def 1;
+    hence thesis by SCMPDS_5:40;
+   end;
+     then sum(n,p0) is_halting_on Initialize t by A1,Lm4,W;
+    hence sum(n,p0) is_halting_on t by SCMPDS_6:140;
   end;
   hence thesis by SCMPDS_6:35;
 end;
@@ -958,9 +998,12 @@ proof
   set a=GBP;
   let s be State of SCMPDS;
 
-  set t0=Initialize s, t1=IExec(WB,s), t2=IExec(j1 ';' j2 ';' j3,s), t3=IExec
-  (j1 ';' j2,s), t4=Exec(j1, t0), a4=intpos 4;
-
+  set t0=Initialize s, t1=IExec(WB,s), t2=IExec(j1 ';' j2 ';' j3,s),
+      t3=IExec(j1 ';' j2,s), t4=Exec(j1, t0), a4=intpos 4;
+X0: Initialize t0 = t0;
+X1: t1=IExec(WB,t0) by SCMPDS_5:48;
+X2: t2=IExec(j1 ';' j2 ';' j3,t0) by SCMPDS_5:48;
+X3: t3=IExec(j1 ';' j2,t0) by SCMPDS_5:48;
   assume s.a=0;
   then
 A1: t0.a=0 by SCMPDS_5:40;
@@ -978,16 +1021,16 @@ A4: DataLoc(t4.a,2)=intpos (0+2) by SCMP_GCD:5;
   0 <> abs(t4.GBP+2) by A3,ABSVALUE:def 1;
   then
 A5: a <> DataLoc(t4.GBP,2) by ZFMISC_1:33;
-A6: t3.a=Exec(j2,t4).a by SCMPDS_5:47
+A6: t3.a=Exec(j2,t4).a by X0,X3,SCMPDS_5:47
     .=0 by A3,A5,SCMPDS_2:61;
   then
 A7: DataLoc(t3.a,1)=intpos (0+1) by SCMP_GCD:5;
   4 <> abs(t4.GBP+2) by A3,ABSVALUE:def 1;
   then
 A8: a4 <> DataLoc(t4.GBP,2) by ZFMISC_1:33;
-A9: t3.a4=Exec(j2,t4).a4 by SCMPDS_5:47
+A9: t3.a4=Exec(j2,t4).a4 by X0,X3,SCMPDS_5:47
     .=s.a2 by A2,A8,SCMPDS_2:61;
-A10: t2.a1=Exec(j3,t3).a1 by SCMPDS_5:46
+A10: t2.a1=Exec(j3,t3).a1 by X2,X3,SCMPDS_5:46
     .=t3.DataLoc(t3.a,4) by A7,SCMPDS_2:59
     .=s.a2 by A6,A9,SCMP_GCD:5;
   3 <> abs(t4.GBP+2) by A3,ABSVALUE:def 1;
@@ -1011,17 +1054,17 @@ A14: t4.a3=t0.a3 by SCMPDS_2:59
   0 <> abs(t3.GBP+1) by A6,ABSVALUE:def 1;
   then
 A15: a <> DataLoc(t3.GBP,1) by ZFMISC_1:33;
-A16: t2.a=Exec(j3,t3).a by SCMPDS_5:46
+A16: t2.a=Exec(j3,t3).a by X2,X3,SCMPDS_5:46
     .=0 by A6,A15,SCMPDS_2:59;
   then
 A17: DataLoc(t2.a,3)=intpos (0+3) by SCMP_GCD:5;
   2 <> abs(t3.GBP+1) by A6,ABSVALUE:def 1;
   then
 A18: a2 <> DataLoc(t3.GBP,1) by ZFMISC_1:33;
-A19: t3.a2=Exec(j2,t4).a2 by SCMPDS_5:47
+A19: t3.a2=Exec(j2,t4).a2 by X0,X3,SCMPDS_5:47
     .=t4.a2+t4.DataLoc(t4.a,1) by A4,SCMPDS_2:61
     .=s.a2+s.a1 by A3,A13,A12,SCMP_GCD:5;
-A20: t2.a2=Exec(j3,t3).a2 by SCMPDS_5:46
+A20: t2.a2=Exec(j3,t3).a2 by X2,X3,SCMPDS_5:46
     .=s.a2+s.a1 by A19,A18,SCMPDS_2:59;
   3 <> abs(t3.GBP+1) by A6,ABSVALUE:def 1;
   then
@@ -1029,23 +1072,23 @@ A21: a3 <> DataLoc(t3.GBP,1) by ZFMISC_1:33;
   0 <> abs(t2.GBP+3) by A16,ABSVALUE:def 1;
   then
 A22: a <> DataLoc(t2.GBP,3) by ZFMISC_1:33;
-  thus t1.a=Exec(j4,t2).a by SCMPDS_5:46
+  thus t1.a=Exec(j4,t2).a by X1,X2,SCMPDS_5:46
     .=0 by A16,A22,SCMPDS_2:60;
   1 <> abs(t2.GBP+3) by A16,ABSVALUE:def 1;
   then
 A23: a1 <> DataLoc(t2.GBP,3) by ZFMISC_1:33;
-  thus t1.a1=Exec(j4,t2).a1 by SCMPDS_5:46
+  thus t1.a1=Exec(j4,t2).a1 by X1,X2,SCMPDS_5:46
     .=s.a2 by A10,A23,SCMPDS_2:60;
   2 <> abs(t2.GBP+3) by A16,ABSVALUE:def 1;
   then
 A24: a2 <> DataLoc(t2.GBP,3) by ZFMISC_1:33;
-A25: t3.a3=Exec(j2,t4).a3 by SCMPDS_5:47
+A25: t3.a3=Exec(j2,t4).a3 by X0,X3,SCMPDS_5:47
     .=s.a3 by A14,A11,SCMPDS_2:61;
-A26: t2.a3=Exec(j3,t3).a3 by SCMPDS_5:46
+A26: t2.a3=Exec(j3,t3).a3 by X2,X3,SCMPDS_5:46
     .=s.a3 by A25,A21,SCMPDS_2:59;
-  thus t1.a2=Exec(j4,t2).a2 by SCMPDS_5:46
+  thus t1.a2=Exec(j4,t2).a2 by X1,X2,SCMPDS_5:46
     .=s.a1+s.a2 by A20,A24,SCMPDS_2:60;
-  thus t1.a3=Exec(j4,t2).a3 by SCMPDS_5:46
+  thus t1.a3=Exec(j4,t2).a3 by X1,X2,SCMPDS_5:46
     .=t2.a3+-1 by A17,SCMPDS_2:60
     .=s.a3-1 by A26;
 end;
@@ -1084,17 +1127,18 @@ A4: t.a=0 and
   hence thesis by A1,Lm6,Th10;
 end;
 
-Lm8: for s being State of SCMPDS,n be Element of NAT holds IExec(Fib-macro(n),
+Lm8: for s being 0-started State of SCMPDS,
+n be Element of NAT holds IExec(Fib-macro(n),
 s).a1=Fib n & IExec(Fib-macro(n),s).a2=Fib (n+1) & Fib-macro(n) is_halting_on s
 
 proof
-  let s be State of SCMPDS,n be Element of NAT;
+  let s be 0-started State of SCMPDS,n be Element of NAT;
 
   set a=GBP, i1=a:=0, i2=a1:=0, i3=a2:=1, i4=a3:=n, I4=i1 ';' i2 ';' i3 ';' i4
 
-, t1=IExec(I4,s), t2=IExec(i1 ';' i2 ';' i3,s), t3=IExec(i1 ';' i2,s), t4=Exec(
+, t1=IExec(I4,s),
+  t2=IExec(i1 ';' i2 ';' i3,s), t3=IExec(i1 ';' i2,s), t4=Exec(
   i1, Initialize s);
-
 A1: t4.a=0 by SCMPDS_2:57;
 A2: t3.a=Exec(i2, t4).a by SCMPDS_5:47
     .=0 by A1,AMI_3:52,SCMPDS_2:57;
@@ -1124,14 +1168,19 @@ A11: WH is_closed_on t1 & WH is_halting_on t1 by A6,A8,A9,Lm7;
 end;
 
 theorem
-  for s being State of SCMPDS,n be Element of NAT holds IExec(Fib-macro(
+  for s being 0-started State of SCMPDS,
+  n be Element of NAT holds IExec(Fib-macro(
 n),s).intpos 1=Fib n & IExec(Fib-macro(n),s).intpos 2=Fib (n+1) & Fib-macro(n)
   is parahalting
 proof
-  let s be State of SCMPDS,n be Element of NAT;
+  let s be 0-started State of SCMPDS,n be Element of NAT;
   thus IExec(Fib-macro(n),s).a1=Fib n & IExec(Fib-macro(n),s).a2=Fib (n+1) by
 Lm8;
-  for t be State of SCMPDS holds Fib-macro(n) is_halting_on t by Lm8;
+  for t be State of SCMPDS holds Fib-macro(n) is_halting_on t
+   proof let t be State of SCMPDS;
+     Fib-macro(n) is_halting_on Initialize t by Lm8;
+    hence thesis by SCMPDS_6:140;
+   end;
   hence thesis by SCMPDS_6:35;
 end;
 
@@ -1158,7 +1207,7 @@ proof
   set i1=(a,i)<>0_goto 2, i2=goto (card I+2);
   set I4=i1 ';' i2 ';' I;
   thus card while<>0(a,i,I) =card I4+1 by SCMP_GCD:8
-    .=card (i1 ';' i2)+ card I+1 by SCMPDS_4:45
+    .=card (i1 ';' i2)+ card I+1 by AFINSQ_1:20
     .=2+card I +1 by SCMP_GCD:9
     .=card I + 3;
 end;
@@ -1205,7 +1254,7 @@ proof
 A1: WHL=i1 ';' i2 ';' (I ';' i3) by SCMPDS_4:47;
   hence WHL. 0=i1 by Th5;
   thus WHL. 1=i2 by A1,Th5;
-  card I4=card (i1 ';' i2)+ card I by SCMPDS_4:45
+  card I4=card (i1 ';' i2)+ card I by AFINSQ_1:20
     .=card I +2 by SCMP_GCD:9;
   hence thesis by SCMP_GCD:10;
 end;
@@ -1233,7 +1282,7 @@ A1: s.b = 0;
   set WHL=while<>0(a,i,I), pWH=stop WHL, iWH=Initialize pWH,
   s3 = Initialize s +* pWH,
   s4 = Comput(ProgramPart(s3),s3,1), s5 = Comput(ProgramPart(s3),s3,2);
-I1: s3 = s +* Initialize pWH by SCMPDS_4:5;
+I1: s3 = s +* Initialize pWH by COMPOS_1:125;
 A2: not b in dom iWH by SCMPDS_4:31;
   not a in dom iWH by SCMPDS_4:31;
   then
@@ -1243,15 +1292,15 @@ A3: s3.DataLoc(s3.a,i)=s3.b by I1,FUNCT_4:12
 A4: IC s3 = 0 by SCMPDS_6:21;
 A5: WHL = i1 ';' (i2 ';' I ';' i3 ) by Lm10;
   Comput(ProgramPart(s3),s3,0+1) = Following(ProgramPart s3,
-  Comput(ProgramPart(s3),s3,0)) by AMI_1:14
-    .= Following(ProgramPart s3,s3) by AMI_1:13
+  Comput(ProgramPart(s3),s3,0)) by EXTPRO_1:4
+    .= Following(ProgramPart s3,s3) by EXTPRO_1:3
     .= Exec(i1,s3) by A5,I1,SCMPDS_6:22;
   then
 A6: IC s4 = succ IC s3 by A3,SCMPDS_2:67
     .= (0+1) by A4;
 A7: iWH c= s3 by I1,FUNCT_4:26;
   then
-A8: pWH c= s4 by AMI_1:81,SCMPDS_4:57;
+A8: pWH c= s4 by AMI_1:81,COMPOS_1:132;
 A9:  1 in dom WHL by Th14;
   then  1 in dom pWH by SCMPDS_6:18;
   then
@@ -1265,7 +1314,7 @@ Y:  (ProgramPart s4)/.IC s4
  = s4.IC s4 by COMPOS_1:38;
 T: ProgramPart s3 = ProgramPart s4
 by AMI_1:123;
-  Comput(ProgramPart(s3),s3,1+1) = Following(ProgramPart s3,s4) by AMI_1:14
+  Comput(ProgramPart(s3),s3,1+1) = Following(ProgramPart s3,s4) by EXTPRO_1:4
     .= Exec(i2,s4) by A6,A10,Y,T;
   then
 A13: IC s5 = ICplusConst(s4,card I+2) by SCMPDS_2:66
@@ -1273,7 +1322,7 @@ A13: IC s5 = ICplusConst(s4,card I+2) by SCMPDS_2:66
     .= (card I+(2+1));
 Y:  (ProgramPart s5)/.IC s5
  = s5.IC s5 by COMPOS_1:38;
-  pWH c= s5 by A7,AMI_1:81,SCMPDS_4:57;
+  pWH c= s5 by A7,AMI_1:81,COMPOS_1:132;
   then s5.(card I+3) = pWH.(card I+3) by A12,GRFUNC_1:8
     .=halt SCMPDS by A11,SCMPDS_6:25;
   then
@@ -1288,8 +1337,8 @@ A15: k = 0 or 0 + 1 <= k by INT_1:20;
     per cases by A15,XXREAL_0:1;
     suppose
       k = 0;
-      then Comput(ProgramPart(s3),s3,k) = s3 by AMI_1:13;
-      hence IC Comput(ProgramPart(s3),s3,k) in dom pWH by A4,SCMPDS_4:75;
+      then Comput(ProgramPart(s3),s3,k) = s3 by EXTPRO_1:3;
+      hence IC Comput(ProgramPart(s3),s3,k) in dom pWH by A4,COMPOS_1:135;
     end;
     suppose
       k = 1;
@@ -1299,11 +1348,11 @@ A15: k = 0 or 0 + 1 <= k by INT_1:20;
       1 < k;
       then 1+1 <= k by INT_1:20;
       hence IC Comput(ProgramPart(s3),s3,k) in dom pWH
-      by A12,A13,A14,TX,AMI_1:52;
+      by A12,A13,A14,TX,EXTPRO_1:6;
     end;
   end;
   hence WHL is_closed_on s by SCMPDS_6:def 2;
-  ProgramPart s3 halts_on s3 by A14,TX,AMI_1:146;
+  ProgramPart s3 halts_on s3 by A14,TX,EXTPRO_1:30;
   hence thesis by SCMPDS_6:def 3;
 end;
 
@@ -1321,17 +1370,17 @@ A1: s.b = 0;
   set WHL=while<>0(a,i,I), pWH=stop WHL, iWH=Initialize pWH,
   s3 = Initialize s +* pWH,
   s4 = Comput(ProgramPart(s3),s3,1), s5 = Comput(ProgramPart(s3),s3,2);
-I1: s3 = s +* Initialize pWH by SCMPDS_4:5;
+I1: s3 = s +* Initialize pWH by COMPOS_1:125;
 A2: IC s3 = 0 by SCMPDS_6:21;
 A3: iWH c= s3 by I1,FUNCT_4:26;
   then
-A4: pWH c= s4 by AMI_1:81,SCMPDS_4:57;
-A5: pWH c= s5 by A3,AMI_1:81,SCMPDS_4:57;
+A4: pWH c= s4 by AMI_1:81,COMPOS_1:132;
+A5: pWH c= s5 by A3,AMI_1:81,COMPOS_1:132;
 A6: not b in dom iWH by SCMPDS_4:31;
 A7: WHL = i1 ';' (i2 ';' I ';' i3 ) by Lm10;
 A8: Comput(ProgramPart(s3),s3,0+1) = Following(ProgramPart s3,
-Comput(ProgramPart(s3),s3,0)) by AMI_1:14
-    .= Following(ProgramPart s3,s3) by AMI_1:13
+Comput(ProgramPart(s3),s3,0)) by EXTPRO_1:4
+    .= Following(ProgramPart s3,s3) by EXTPRO_1:3
     .= Exec(i1,s3) by A7,I1,SCMPDS_6:22;
 A9:  1 in dom WHL by Th14;
   then  1 in dom pWH by SCMPDS_6:18;
@@ -1350,7 +1399,8 @@ A12: IC s4 = succ IC s3 by A8,SCMPDS_2:67
 T4: ProgramPart s3 = ProgramPart s4 by AMI_1:123;
 T5: ProgramPart s3 = ProgramPart s5 by AMI_1:123;
 Y:  (ProgramPart s3)/.IC s4 = s4.IC s4 by T4,COMPOS_1:38;
-A13: Comput(ProgramPart(s3),s3,1+1) = Following(ProgramPart s3,s4) by AMI_1:14
+A13: Comput(ProgramPart(s3),s3,1+1) = Following(ProgramPart s3,s4) by
+EXTPRO_1:4
     .= Exec(i2,s4) by A12,A10,Y;
   then
 A14: IC s5 = ICplusConst(s4,card I+2) by SCMPDS_2:66
@@ -1364,9 +1414,9 @@ A15: card WHL=card I+3 by Th12;
     .=halt SCMPDS by A15,SCMPDS_6:25;
   then
 A16: CurInstr(ProgramPart s3,s5) = halt SCMPDS by A14,Y;
-  then ProgramPart s3 halts_on s3 by AMI_1:146;
+  then ProgramPart s3 halts_on s3 by EXTPRO_1:30;
   then
-A17: s5 = Result(ProgramPart(s3),s3) by A16,AMI_1:def 22;
+A17: s5 = Result(ProgramPart(s3),s3) by A16,EXTPRO_1:def 8;
 A18: IExec(WHL,s) = Result(ProgramPart(s3),s3) +* s | A by SCMPDS_4:def 8;
 A19: now
     let x be set;
@@ -1390,7 +1440,7 @@ A23:  not x in dom SAl by A20,TARSKI:def 1;
 A24:  x = IC SCMPDS;
       not x in dom (s | A) by A11,A24,COMPOS_1:3;
       hence IExec(WHL,s).x = (card I + 3) by A14,A17,A18,A24,FUNCT_4:12
-        .= (s +* SAl).x by A24,SCMPDS_7:12;
+        .= (s +* SAl).x by A24,FUNCT_4:121;
     end;
     suppose
       x is Element of NAT;
@@ -1449,7 +1499,7 @@ registration
   proof
     set WHL=while<>0(a,i,I), i1=(a,i)<>0_goto 2, i2=goto (card I+2), PF= i1
     ';' i2 ';' I;
-    card PF=card (i1 ';' i2)+ card I by SCMPDS_4:45
+    card PF=card (i1 ';' i2)+ card I by AFINSQ_1:20
       .=2+card I by SCMP_GCD:9;
     then PF=Load i1 ';' Load i2 ';' I & card PF+ -(card I+2) =0 by
 SCMPDS_4:def 6;
@@ -1518,15 +1568,15 @@ A10:    t.b <> 0;
 A11:    dom ProgramPart t = A by COMPOS_1:34;
 A12:  not a() in dom (t | A) by A11,SCMPDS_2:53;
 A13:    IExec(I(),t).a()=t.a() by A4,A8,A9,A10;
-A14:     0 in dom pWH by SCMPDS_4:75;
+A14:     0 in dom pWH by COMPOS_1:135;
 A15:    dom ProgramPart t = A by COMPOS_1:34;
 A16:    WHL = i1 ';' (i2 ';' I() ';' i3) by Lm10;
 A17:    not b in dom Initialize pWH by SCMPDS_4:31;
         set t2 = Initialize t +* pI,
             t3 = Initialize t +* pWH,
         t4 = Comput(ProgramPart(t3),t3,1);
-I2:     t2 = t +* Initialize pI by SCMPDS_4:5;
-I3:     t3 = t +* Initialize pWH by SCMPDS_4:5;
+I2:     t2 = t +* Initialize pI by COMPOS_1:125;
+I3:     t3 = t +* Initialize pWH by COMPOS_1:125;
 A18:    Initialize pI c= t2 by I2,FUNCT_4:26;
         set m2=LifeSpan(ProgramPart(t2),t2), t5=Comput(ProgramPart(t4),t4,m2),
 l2= (card I() + 2
@@ -1547,10 +1597,10 @@ A21:    WHL c= t3 by XBOOLE_1:1;
         then
 A22:    Shift(I(),2) c= t4 by AMI_1:81;
 A23:    Comput(ProgramPart(t3),t3,0+1) = Following(ProgramPart t3,
-Comput(ProgramPart(t3),t3,0)) by AMI_1:14
-          .= Following(ProgramPart t3,t3) by AMI_1:13
+Comput(ProgramPart(t3),t3,0)) by EXTPRO_1:4
+          .= Following(ProgramPart t3,t3) by EXTPRO_1:3
           .= Exec(i1,t3) by A16,I3,SCMPDS_6:22;
-A24:    DataPart t2 = DataPart t3 by FUNCT_7:134,SCMPDS_4:24;
+A24:    DataPart t2 = DataPart t3 by COMPOS_1:138,FUNCT_7:134;
         now
           let a;
           thus t2.a = t3.a by A24,SCMPDS_4:23
@@ -1561,7 +1611,7 @@ A25:    DataPart t2 = DataPart t4 by SCMPDS_4:23;
         I() is_halting_on t by A4,A8,A9,A10;
         then
 A26:    ProgramPart t2 halts_on t2 by SCMPDS_6:def 3;
-I4:     Initialize t2+*pI =  t2+*Initialize pI by SCMPDS_4:5;
+I4:     Initialize t2+*pI =  t2+*Initialize pI by COMPOS_1:125;
         t2 = Initialize t2+*pI by A18,I4,FUNCT_4:79;
         then ProgramPart(Initialize t2+*pI) halts_on Initialize t2+*pI by A26;
         then
@@ -1585,7 +1635,7 @@ Y:  (ProgramPart t6)/.IC t6
  ProgramPart t3 = ProgramPart t4
 by AMI_1:123;
  then
-A34:    t6=t5 by AMI_1:51;
+A34:    t6=t5 by EXTPRO_1:5;
         then
 A35:    CurInstr(ProgramPart t6,t6)
 =t5.l2 by A1,A18,A27,A31,A32,A25,A22,Y,SCMPDS_7:36
@@ -1595,7 +1645,7 @@ A35:    CurInstr(ProgramPart t6,t6)
           .=i3 by Th15;
 T: ProgramPart t3 = ProgramPart t6
 by AMI_1:123;
-A36:    t7 = Following(ProgramPart t3,t6) by AMI_1:14
+A36:    t7 = Following(ProgramPart t3,t6) by EXTPRO_1:4
           .= Exec(i3,t6) by A35,T;
         then IC t7=ICplusConst(t6,0-(card I()+2)) by SCMPDS_2:66
           .= 0 by A33,A34,SCMPDS_7:1;
@@ -1604,7 +1654,7 @@ A37:    Initialize t7 +* pWH=t7 by SCMPDS_7:37;
 A38:    DataPart Comput(ProgramPart(t2),t2,m2) = DataPart t5 by A1,A18,A27,A31
 ,A32,A25,A22,SCMPDS_7:36;
         then
-A39:    DataPart t5 = DataPart(Result(ProgramPart(t2),t2)) by A26,AMI_1:122
+A39:    DataPart t5 = DataPart(Result(ProgramPart(t2),t2)) by A26,EXTPRO_1:23
           .= DataPart(Result(ProgramPart(t2),t2) +* t | A) by A15,AMI_2:29
 ,FUNCT_4:76,SCMPDS_2:100
           .= DataPart IExec(I(),t) by SCMPDS_4:def 8;
@@ -1621,12 +1671,12 @@ A42:      F(Dstate(t7)) < k+1 by A7,A40,XXREAL_0:2;
           hence contradiction by A42,INT_1:20;
         end;
 A43:    t5.a()=Comput(ProgramPart(t2),t2,m2).a() by A38,SCMPDS_4:23
-          .=(Result(ProgramPart(t2),t2)).a() by A26,AMI_1:122
+          .=(Result(ProgramPart(t2),t2)).a() by A26,EXTPRO_1:23
           .=s().a() by A9,A13,A28,A12,FUNCT_4:12;
 T1: ProgramPart t4 = ProgramPart t3
 by AMI_1:123;
 A44:    t7.a()=t6.a() by A36,SCMPDS_2:66
-          .=s().a() by A43,T1,AMI_1:51;
+          .=s().a() by A43,T1,EXTPRO_1:5;
         then
 A45:    WHL is_closed_on t7 by A6,A29,A40,A41;
         now
@@ -1645,7 +1695,7 @@ A47:            k <= m2;
                   suppose
                     k=0;
                     hence IC Comput(ProgramPart(t3),t3,k) in dom pWH by A14,A19
-,AMI_1:13;
+,EXTPRO_1:3;
                   end;
                   suppose
                     k<>0;
@@ -1661,7 +1711,8 @@ by AMI_1:123;
                     then IC Comput(ProgramPart(t2),t2,kn) + 2 = IC Comput(
 ProgramPart(t4),t4,kn) by A1,A18,A27,A31,A32,A25,A22,SCMPDS_7:34;
                     then
-A49:                IC Comput(ProgramPart(t3),t3,k) = (lm+2) by A48,t,AMI_1:51;
+A49:                IC Comput(ProgramPart(t3),t3,k) = (lm+2) by A48,t,
+EXTPRO_1:5;
                     IC Comput(ProgramPart(t2),t2,kn) in dom pI by A30,
 SCMPDS_6:def 2;
                     then lm < card pI by AFINSQ_1:70;
@@ -1695,7 +1746,7 @@ by AMI_1:123;
        then
             Comput(ProgramPart(t3),t3,k)=
             Comput(ProgramPart(Initialize t7+*pWH),Initialize t7+*pWH,nn
-) by A37,A52,AMI_1:51;
+) by A37,A52,EXTPRO_1:5;
             hence IC Comput(ProgramPart(t3),t3,k) in dom pWH by A45,
 SCMPDS_6:def 2;
           end;
@@ -1704,7 +1755,7 @@ SCMPDS_6:def 2;
         WHL is_halting_on t7 by A6,A29,A44,A40,A41;
         then ProgramPart t7 halts_on t7 by A37,SCMPDS_6:def 3;
         then ProgramPart t3 halts_on t7 by AMI_1:123;
-        then ProgramPart t3 halts_on t3 by AMI_1:93;
+        then ProgramPart t3 halts_on t3 by EXTPRO_1:22;
         hence WHL is_halting_on t by SCMPDS_6:def 3;
       end;
     end;
@@ -1745,13 +1796,13 @@ proof
   set WHL=while<>0(a(),i(),I()),
   s1= Initialize s() +* stop WHL,
   ps= ProgramPart s();
-I1: s1= s() +* Initialize stop WHL by SCMPDS_4:5;
+I1: s1= s() +* Initialize stop WHL by COMPOS_1:125;
   set sI= Initialize s() +* stop I(),
     m1=LifeSpan(ProgramPart(sI),sI)+2,
     s2=Initialize IExec(I(),s()) +*stop WHL,
     m2=LifeSpan(ProgramPart s2,s2);
-I2: sI= s() +* Initialize stop I() by SCMPDS_4:5;
-I3: s2=IExec(I(),s()) +*Initialize stop WHL by SCMPDS_4:5;
+I2: sI= s() +* Initialize stop I() by COMPOS_1:125;
+I3: s2=IExec(I(),s()) +*Initialize stop WHL by COMPOS_1:125;
 A6: Initialize stop I() c= sI by I2,FUNCT_4:26;
   I() is_closed_on s() by A2,A4,A5;
   then
@@ -1759,7 +1810,7 @@ A7: I() is_closed_on sI by SCMPDS_6:38;
   I() is_halting_on s() by A2,A4,A5;
   then
 A8: ProgramPart sI halts_on sI by SCMPDS_6:def 3;
-I4: Initialize sI+*stop I() =  sI+*Initialize stop I() by SCMPDS_4:5;
+I4: Initialize sI+*stop I() =  sI+*Initialize stop I() by COMPOS_1:125;
   sI = Initialize sI+*stop I() by A6,I4,FUNCT_4:79;
   then ProgramPart(Initialize sI+*stop I()) halts_on
    Initialize sI+*stop I() by A8;
@@ -1793,14 +1844,14 @@ A17: for t be State of SCMPDS st P[Dstate t] & t.a()=s().a() & t.DataLoc(s().
 is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) & P[Dstate(IExec(I(),t))
   ] by A5;
 A18: Comput(ProgramPart(s1),s1,0+1) = Following(ProgramPart s1,
-Comput(ProgramPart(s1),s1,0)) by AMI_1:14
-    .= Following(ProgramPart s1,s1) by AMI_1:13
+Comput(ProgramPart(s1),s1,0)) by EXTPRO_1:4
+    .= Following(ProgramPart s1,s1) by EXTPRO_1:3
     .= Exec(i1,s1) by A11,I1,SCMPDS_6:22;
   Shift(I(),2) c= WHL by Lm11;
   then Shift(I(),2) c= s1 by A15,XBOOLE_1:1;
   then
 A19: Shift(I(),2) c= s4 by AMI_1:81;
-A20: DataPart sI = DataPart s1 by FUNCT_7:134,SCMPDS_4:24;
+A20: DataPart sI = DataPart s1 by COMPOS_1:138,FUNCT_7:134;
   now
     let a;
     thus sI.a = s1.a by A20,SCMPDS_4:23
@@ -1820,7 +1871,7 @@ Y:  (ProgramPart s6)/.IC s6
  ProgramPart s1 = ProgramPart s4
 by AMI_1:123;
  then
-A24: s6=s5 by AMI_1:51;
+A24: s6=s5 by EXTPRO_1:5;
   then
 A25: CurInstr(ProgramPart s6,s6)=s5.l2 by A1,A6,A9,A7,A22,A21,A19,Y,SCMPDS_7:36
     .=s4.l2 by AMI_1:54
@@ -1829,7 +1880,7 @@ A25: CurInstr(ProgramPart s6,s6)=s5.l2 by A1,A6,A9,A7,A22,A21,A19,Y,SCMPDS_7:36
     .=i3 by Th15;
 T: ProgramPart s1 = ProgramPart s6
 by AMI_1:123;
-A26: s7 = Following(ProgramPart s1,s6) by AMI_1:14
+A26: s7 = Following(ProgramPart s1,s6) by EXTPRO_1:4
     .= Exec(i3,s6) by A25,T;
   then IC s7=ICplusConst(s6,0-(card I()+2)) by SCMPDS_2:66
     .= 0 by A23,A24,SCMPDS_7:1;
@@ -1842,7 +1893,7 @@ A28: DataPart Comput(ProgramPart(sI),sI,mI) = DataPart s5 by A1,A6,A9,A7,A22
 A29: not x in dom Initialize stop WHL by SCMPDS_4:31;
 A30: not x in dom (s() | A) by A14,SCMPDS_2:53;
     s5.x=Comput(ProgramPart(sI),sI,mI).x by A28,SCMPDS_4:23
-      .=(Result(ProgramPart(sI),sI)).x by A8,AMI_1:122
+      .=(Result(ProgramPart(sI),sI)).x by A8,EXTPRO_1:23
       .=IExec(I(),s()).x by A13,A30,FUNCT_4:12;
     hence s7.x=IExec(I(),s()).x by A24,A26,SCMPDS_2:66
       .=s2.x by A29,I3,FUNCT_4:12;
@@ -1898,23 +1949,23 @@ T: ProgramPart s1 = ProgramPart s2
 by A41,AMI_1:123;
  then
   Comput(ProgramPart(s1),s1,m1+m2) = Comput(ProgramPart(s2),s2,m2) by A41,
-AMI_1:51;
+EXTPRO_1:5;
   then CurInstr(ProgramPart (s1),Comput(ProgramPart(s1),s1,m1+m2))
-   = halt SCMPDS by A40,T,AMI_1:def 46;
-  then m1 + m2 >= m0 by A35,AMI_1:def 46;
+   = halt SCMPDS by A40,T,EXTPRO_1:def 14;
+  then m1 + m2 >= m0 by A35,EXTPRO_1:def 14;
   then
 A43: m2 >= nn by A42,XREAL_1:8;
 A44: Comput(ProgramPart(s1),s1,m0) = Comput(ProgramPart(s2),s2,nn) by A41,A42,T
-,AMI_1:51;
+,EXTPRO_1:5;
   then CurInstr(ProgramPart (s2),Comput(ProgramPart(s2),s2,nn))
-   =halt SCMPDS by A35,T,AMI_1:def 46;
-  then nn >= m2 by A40,AMI_1:def 46;
+   =halt SCMPDS by A35,T,EXTPRO_1:def 14;
+  then nn >= m2 by A40,EXTPRO_1:def 14;
   then nn=m2 by A43,XXREAL_0:1;
   then Result(ProgramPart(s1),s1) = Comput(ProgramPart(s2),s2,m2) by A35,A44,
-AMI_1:122;
+EXTPRO_1:23;
   hence IExec(WHL,s()) = Comput(ProgramPart(s2),s2,m2) +* ps
    by SCMPDS_4:def 8
-    .= Result(ProgramPart(s2),s2) +* IExec(I(),s()) | A by A40,A33,AMI_1:122
+    .= Result(ProgramPart(s2),s2) +* IExec(I(),s()) | A by A40,A33,EXTPRO_1:23
     .= IExec(WHL,IExec(I(),s())) by SCMPDS_4:def 8;
 end;
 
@@ -2438,7 +2489,7 @@ end;
 theorem
   card GCD-Algorithm=12
 proof
-  thus card GCD-Algorithm=card (i1 ';' i2 ';' i3) + card WH by SCMPDS_4:45
+  thus card GCD-Algorithm=card (i1 ';' i2 ';' i3) + card WH by AFINSQ_1:20
     .=card (i1 ';' i2) +1+ card WH by SCMP_GCD:8
     .=2+1+ 9 by Lm13,SCMP_GCD:9
     .=12;
@@ -2451,50 +2502,53 @@ a2-s.a1 & IExec(WB,s).a1=s.a1) & IExec(WB,s).GBP=0 & IExec(WB,s).a3=IExec(WB,s)
 
 proof
   let s be State of SCMPDS;
-  set s1=IExec(IF,s), s2=IExec(IF ';' k1,s), a=GBP;
+  set s1=IExec(IF,s), s2=IExec(IF ';' k1,s), a=GBP, t0 = Initialize s;
+X1: s1=IExec(IF,t0) by SCMPDS_5:48;
+Y1: IExec(WB,s)=IExec(WB,t0) by SCMPDS_5:48;
+X2: s2=IExec(IF ';' k1,t0) by SCMPDS_5:48;
 A1: now
     assume
 A2: s1.GBP=0;
     then
 A3: DataLoc(s1.a,3)=intpos (0+3) by SCMP_GCD:5;
-A4: s2.a3 =Exec(k1, s1).a3 by SCMPDS_5:46
+A4: s2.a3 =Exec(k1, s1).a3 by X1,X2,SCMPDS_5:46
       .=s1.DataLoc(s1.a,1) by A3,SCMPDS_2:59
       .=s1.intpos (0+1) by A2,SCMP_GCD:5;
     1 <> abs(s1.GBP+3) by A2,ABSVALUE:def 1;
     then
 A5: a1 <> DataLoc(s1.GBP,3) by ZFMISC_1:33;
-A6: s2.a1 =Exec(k1, s1).a1 by SCMPDS_5:46
+A6: s2.a1 =Exec(k1, s1).a1 by X1,X2,SCMPDS_5:46
       .=s1.a1 by A5,SCMPDS_2:59;
     2 <> abs(s1.GBP+3) by A2,ABSVALUE:def 1;
     then
 A7: a2 <> DataLoc(s1.GBP,3) by ZFMISC_1:33;
-A8: s2.a2 =Exec(k1, s1).a2 by SCMPDS_5:46
+A8: s2.a2 =Exec(k1, s1).a2 by X1,X2,SCMPDS_5:46
       .=s1.a2 by A7,SCMPDS_2:59;
     0 <> abs(s1.GBP+3) by A2,ABSVALUE:def 1;
     then
 A9: a <> DataLoc(s1.GBP,3) by ZFMISC_1:33;
-A10: s2.a =Exec(k1, s1).a by SCMPDS_5:46
+A10: s2.a =Exec(k1, s1).a by X1,X2,SCMPDS_5:46
       .=0 by A2,A9,SCMPDS_2:59;
     then
 A11: DataLoc(s2.a,3)=intpos (0+3) by SCMP_GCD:5;
     0 <> abs(s2.GBP+3) by A10,ABSVALUE:def 1;
     then
 A12: a <> DataLoc(s2.GBP,3) by ZFMISC_1:33;
-    thus IExec(WB,s).a =Exec(k2, s2).a by SCMPDS_5:46
+    thus IExec(WB,s).a =Exec(k2, s2).a by X2,Y1,SCMPDS_5:46
       .=0 by A10,A12,SCMPDS_2:62;
     1 <> abs(s2.GBP+3) by A10,ABSVALUE:def 1;
     then
 A13: a1 <> DataLoc(s2.GBP,3) by ZFMISC_1:33;
     thus
-A14: IExec(WB,s).a1 =Exec(k2, s2).a1 by SCMPDS_5:46
+A14: IExec(WB,s).a1 =Exec(k2, s2).a1 by X2,Y1,SCMPDS_5:46
       .=s1.a1 by A6,A13,SCMPDS_2:62;
     2 <> abs(s2.GBP+3) by A10,ABSVALUE:def 1;
     then
 A15: a2 <> DataLoc(s2.GBP,3) by ZFMISC_1:33;
     thus
-A16: IExec(WB,s).a2 =Exec(k2, s2).a2 by SCMPDS_5:46
+A16: IExec(WB,s).a2 =Exec(k2, s2).a2 by X2,Y1,SCMPDS_5:46
       .=s1.a2 by A8,A15,SCMPDS_2:62;
-    thus IExec(WB,s).a3 =Exec(k2, s2).a3 by SCMPDS_5:46
+    thus IExec(WB,s).a3 =Exec(k2, s2).a3 by X2,Y1,SCMPDS_5:46
       .=s2.a3-s2.DataLoc(s2.a,2) by A11,SCMPDS_2:62
       .=IExec(WB,s).a1-IExec(WB,s).a2 by A10,A8,A4,A14,A16,SCMP_GCD:5;
   end;
@@ -2625,6 +2679,10 @@ A1: s.a1 > 0 & s.a2 > 0;
   set t0=Initialize s, t1=IExec(i1 ';' i2 ';' i3,s), t2=IExec(i1 ';' i2,s),
   t3=Exec(i1, t0), a=GBP;
 
+X0: t0=Initialize t0;
+X1: t1=IExec(i1 ';' i2 ';' i3,t0) by SCMPDS_5:48;
+X2: t2=IExec(i1 ';' i2,t0) by SCMPDS_5:48;
+
 A2: t3.a1=t0.a1 by AMI_3:52,SCMPDS_2:57
     .=s.a1 by SCMPDS_5:40;
 A3: t3.a=0 by SCMPDS_2:57;
@@ -2633,41 +2691,41 @@ A4: DataLoc(t3.a,3)=intpos (0+3) by SCMP_GCD:5;
   1 <> abs(t3.GBP+3) by A3,ABSVALUE:def 1;
   then
 A5: a1 <> DataLoc(t3.GBP,3) by ZFMISC_1:33;
-A6: t2.a1=Exec(i2,t3).a1 by SCMPDS_5:47
+A6: t2.a1=Exec(i2,t3).a1 by X0,X2,SCMPDS_5:47
     .=s.a1 by A2,A5,SCMPDS_2:59;
 A7: t3.a2=t0.a2 by AMI_3:52,SCMPDS_2:57
     .=s.a2 by SCMPDS_5:40;
-A8: t2.a3=Exec(i2,t3).a3 by SCMPDS_5:47
+A8: t2.a3=Exec(i2,t3).a3 by X0,X2,SCMPDS_5:47
     .=t3.DataLoc(t3.a,1) by A4,SCMPDS_2:59
     .=s.a1 by A3,A2,SCMP_GCD:5;
   2 <> abs(t3.GBP+3) by A3,ABSVALUE:def 1;
   then
 A9: a2 <> DataLoc(t3.GBP,3) by ZFMISC_1:33;
-A10: t2.a2=Exec(i2,t3).a2 by SCMPDS_5:47
+A10: t2.a2=Exec(i2,t3).a2 by X0,X2,SCMPDS_5:47
     .=s.a2 by A7,A9,SCMPDS_2:59;
   0 <> abs(t3.GBP+3) by A3,ABSVALUE:def 1;
   then
 A11: a <> DataLoc(t3.GBP,3) by ZFMISC_1:33;
-A12: t2.a=Exec(i2,t3).a by SCMPDS_5:47
+A12: t2.a=Exec(i2,t3).a by X0,X2,SCMPDS_5:47
     .=0 by A3,A11,SCMPDS_2:59;
   then
 A13: DataLoc(t2.a,3)=intpos (0+3) by SCMP_GCD:5;
   0 <> abs(t2.GBP+3) by A12,ABSVALUE:def 1;
   then
 A14: a <> DataLoc(t2.GBP,3) by ZFMISC_1:33;
-A15: t1.a=Exec(i3,t2).a by SCMPDS_5:46
+A15: t1.a=Exec(i3,t2).a by X1,X2,SCMPDS_5:46
     .=0 by A12,A14,SCMPDS_2:62;
   1 <> abs(t2.GBP+3) by A12,ABSVALUE:def 1;
   then
 A16: a1 <> DataLoc(t2.GBP,3) by ZFMISC_1:33;
-A17: t1.a1=Exec(i3,t2).a1 by SCMPDS_5:46
+A17: t1.a1=Exec(i3,t2).a1 by X1,X2,SCMPDS_5:46
     .=s.a1 by A6,A16,SCMPDS_2:62;
   2 <> abs(t2.GBP+3) by A12,ABSVALUE:def 1;
   then
 A18: a2 <> DataLoc(t2.GBP,3) by ZFMISC_1:33;
-A19: t1.a2=Exec(i3,t2).a2 by SCMPDS_5:46
+A19: t1.a2=Exec(i3,t2).a2 by X1,X2,SCMPDS_5:46
     .=s.a2 by A10,A18,SCMPDS_2:62;
-A20: t1.a3=Exec(i3,t2).a3 by SCMPDS_5:46
+A20: t1.a3=Exec(i3,t2).a3 by X1,X2,SCMPDS_5:46
     .=t2.a3-t2.DataLoc(t2.a,2) by A13,SCMPDS_2:62
     .=t1.a1-t1.a2 by A12,A10,A8,A17,A19,SCMP_GCD:5;
   then

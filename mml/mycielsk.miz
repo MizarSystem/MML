@@ -1,0 +1,3330 @@
+:: The {M}ycielskian of a Graph
+::  by Piotr Rudnicki and Lorna Stewart
+:: 
+:: Received July 2, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies MYCIELSK, FINSET_1, DILWORTH, CARD_1, ARYTM_3, ARYTM_1, FUNCT_1,
+      RELAT_1, RELAT_2, YELLOW_0, TARSKI, EQREL_1, CIRCUIT2, SUBSET_1,
+      COMBGRAS, NECKLACE, NEWTON, XREAL_0, XXREAL_0, ORDINAL1, NAT_1, XBOOLE_0,
+      ORDERS_2, STRUCT_0, ZFMISC_1, FUNCT_2, NUMBERS;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, FINSET_1, CARD_1, SUBSET_1, STRUCT_0,
+      ORDINAL1, ORDERS_2, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, NAT_D, RELAT_1,
+      RELSET_1, RELAT_2, PARTFUN1, EQREL_1, FUNCT_1, FUNCT_2, NEWTON, YELLOW_0,
+      NECKLACE, DILWORTH, NUMBERS;
+ constructors STRUCT_0, NECKLACE, NECKLA_3, RELSET_1, SETFAM_1, XXREAL_0,
+      NAT_1, NAT_D, FUNCT_2, NEWTON, YELLOW_0, DILWORTH, DOMAIN_1;
+ registrations SUBSET_1, XBOOLE_0, STRUCT_0, XCMPLX_0, XXREAL_0, XREAL_0,
+      NAT_1, CARD_1, RELSET_1, PARTFUN1, ZFMISC_1, ORDINAL1, EQREL_1, NECKLA_3,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, DILWORTH, NUMBERS, NEWTON, NECKLACE,
+      YELLOW_0, YELLOW14, ORDERS_2;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
+ definitions STRUCT_0, XREAL_0, TARSKI, XBOOLE_0, RELAT_2, FUNCT_1, DILWORTH,
+      NECKLACE, SUBSET_1, EQREL_1, ORDERS_2;
+ theorems NEWTON, NAT_1, NAT_D, XREAL_0, XREAL_1, XXREAL_0, ORDINAL1, FUNCT_1,
+      DILWORTH, XBOOLE_0, XBOOLE_1, TARSKI, NECKLACE, PENCIL_1, ZFMISC_1,
+      ORDERS_2, EULER_1, CARD_2, CARD_1, YELLOW_0, RELSET_1, EQREL_1, FUNCT_2,
+      RELAT_1, FINSET_1, FINSEQ_4, RELAT_2, SUBSET_1;
+ schemes RECDEF_1, NAT_1, CLASSES1, PRE_CIRC, FUNCT_1, FUNCT_2, DILWORTH;
+
+begin :: MML Remarks
+
+  :: Note: PUA2MSS1:11 can be now proven without non empty for X
+  :: See func P | S below
+
+begin  :: Preliminaries
+       :: Facts that I could not find in MML.
+
+theorem :: TimesM:
+for x, y, z being real number st 0 <= x holds x*(y-'z) = x*y -' x*z
+proof let x, y, z be real number;
+ assume A0: x >= 0;
+  per cases;
+  suppose S1: y-z >= 0;
+    A1: x*(y-z) >= 0 by A0, S1;
+    thus x*(y-'z) = x*(y-z) by S1, XREAL_0:def 2
+         .= x*y - x*z
+         .= x*y -' x*z by A1, XREAL_0:def 2;
+  end;
+  suppose S1: y-z < 0;
+    per cases by A0;
+    suppose S2: x = 0;
+      thus x*(y-'z) = x*y -' x*z by S2, XREAL_1:234;
+    end;
+    suppose S2: x > 0;
+        x*(y-z) < 0 by S1, S2;
+      then A1: x*y - x*z < 0;
+     thus x*(y-'z) = x*0 by S1, XREAL_0:def 2
+      .= x*y -' x*z by A1, XREAL_0:def 2;
+    end;
+  end;
+end;
+
+theorem Nat0: :: Nat0:
+for x, y, z being Nat holds x in y \ z iff z <= x & x < y
+proof
+ let x, y, z be Nat;
+ hereby assume
+ A: x in y \ z;
+    not x in z by A, XBOOLE_0:def 5;
+   hence z <= x by NAT_1:45;
+   thus x < y by A, NAT_1:45;
+ end;
+ assume z <= x & x < y;
+  then x in y & not x in z by NAT_1:45;
+ hence x in y \ z by XBOOLE_0:def 5;
+end;
+
+theorem U5s: :: U5s:
+for A, B, C, D, E, X being set
+ st X c= A or X c= B or X c= C or X c= D or X c= E
+  holds X c= A \/ B \/ C \/ D \/ E
+proof
+ let A, B, C, D, E, X be set;
+ assume A: X c= A or X c= B or X c= C or X c= D or X c= E;
+ per cases by A;
+  suppose X c= A;
+    then X c= A \/ B by XBOOLE_1:10;
+    then X c= A \/ B \/ C by XBOOLE_1:10;
+    then X c= A \/ B \/ C \/ D by XBOOLE_1:10;
+    hence X c= A \/ B \/ C \/ D \/ E by XBOOLE_1:10;
+  end;
+  suppose X c= B;
+    then X c= A \/ B by XBOOLE_1:10;
+    then X c= A \/ B \/ C by XBOOLE_1:10;
+    then X c= A \/ B \/ C \/ D by XBOOLE_1:10;
+    hence X c= A \/ B \/ C \/ D \/ E by XBOOLE_1:10;
+  end;
+  suppose X c= C;
+    then X c= A \/ B \/ C by XBOOLE_1:10;
+    then X c= A \/ B \/ C \/ D by XBOOLE_1:10;
+    hence X c= A \/ B \/ C \/ D \/ E by XBOOLE_1:10;
+  end;
+  suppose X c= D;
+    then X c= A \/ B \/ C \/ D by XBOOLE_1:10;
+    hence X c= A \/ B \/ C \/ D \/ E by XBOOLE_1:10;
+  end;
+  suppose X c= E;
+    hence X c= A \/ B \/ C \/ D \/ E by XBOOLE_1:10;
+  end;
+end;
+
+theorem U5: :: U5:
+for A, B, C, D, E, x being set holds
+ x in A \/ B \/ C \/ D \/ E iff x in A or x in B or x in C or x in D or x in E
+proof
+ let A, B, C, D, E, x be set;
+ hereby
+  assume x in A \/ B \/ C \/ D \/ E;
+  then x in A \/ B \/ C \/ D or x in E by XBOOLE_0:def 3;
+  then x in A \/ B \/ C or x in D or x in E by XBOOLE_0:def 3;
+  then x in A \/ B or x in C or x in D or x in E by XBOOLE_0:def 3;
+  hence x in A or x in B or x in C or x in D or x in E by XBOOLE_0:def 3;
+ end;
+ assume A: x in A or x in B or x in C or x in D or x in E;
+ per cases by A;
+ suppose x in A;
+   then x in A \/ B by XBOOLE_0:def 3;
+   then x in A \/ B \/ C by XBOOLE_0:def 3;
+   then x in A \/ B \/ C \/ D by XBOOLE_0:def 3;
+  hence x in A \/ B \/ C \/ D \/ E by XBOOLE_0:def 3;
+ end;
+ suppose x in B;
+   then x in A \/ B by XBOOLE_0:def 3;
+   then x in A \/ B \/ C by XBOOLE_0:def 3;
+   then x in A \/ B \/ C \/ D by XBOOLE_0:def 3;
+  hence x in A \/ B \/ C \/ D \/ E by XBOOLE_0:def 3;
+ end;
+ suppose x in C;
+   then x in A \/ B \/ C by XBOOLE_0:def 3;
+   then x in A \/ B \/ C \/ D by XBOOLE_0:def 3;
+  hence x in A \/ B \/ C \/ D \/ E by XBOOLE_0:def 3;
+ end;
+ suppose x in D;
+   then x in A \/ B \/ C \/ D by XBOOLE_0:def 3;
+  hence x in A \/ B \/ C \/ D \/ E by XBOOLE_0:def 3;
+ end;
+ suppose x in E;
+  hence x in A \/ B \/ C \/ D \/ E by XBOOLE_0:def 3;
+ end;
+end;
+
+theorem Sym0a: :: Sym0a:
+for R being symmetric RelStr, x, y being set
+ st x in the carrier of R & y in the carrier of R &
+    [x,y] in the InternalRel of R
+  holds [y,x] in the InternalRel of R
+proof
+ let R be symmetric RelStr, x, y be set;
+   set cR = the carrier of R, iR = the InternalRel of R;
+ assume that
+A0: x in cR and
+A1: y in cR and
+C: [x,y] in the InternalRel of R;
+   iR is_symmetric_in cR by NECKLACE:def 4;
+ hence [y,x] in iR by A0, A1, C, RELAT_2:def 3;
+end;
+
+theorem Sym0: :: Sym0:
+for R being symmetric RelStr, x, y being Element of R st x <= y holds y <= x
+proof
+ let R be symmetric RelStr, x, y be Element of R; assume
+A: x <= y;
+   set cR = the carrier of R, iR = the InternalRel of R;
+B: iR is_symmetric_in cR by NECKLACE:def 4;
+C: [x,y] in iR by A, ORDERS_2:def 9;
+   then x in cR & y in cR by ZFMISC_1:106;
+   then [y,x] in iR by B, C, RELAT_2:def 3;
+ hence y <= x by ORDERS_2:def 9;
+end;
+
+begin  :: Partitions
+
+theorem Partcard: :: Partcard:
+for X being set, P being a_partition of X holds card P c= card X
+proof
+ let X be set, P be a_partition of X;
+ defpred P[set,set] means
+  $2 = choose $1;
+ P: for e being set st e in P ex u being set st P[e,u];
+  consider f being Function such that
+A: dom f = P and
+B: for e being set st e in P holds P[e,f.e] from CLASSES1:sch 1(P);
+C: f is one-to-one proof
+    let x1, x2 be set such that
+   A1: x1 in dom f and
+   B1: x2 in dom f and
+   C1: f.x1 = f.x2;
+   D1: x1 <> {} by A, A1, EQREL_1:def 6;
+   E1: x2 <> {} by A, B1, EQREL_1:def 6;
+       f.x1 = choose x1 & f.x2 = choose x2 by A1, B1, A, B;
+       then x1 meets x2 by C1, D1, E1, XBOOLE_0:3;
+    hence x1 = x2 by A1, B1, A, EQREL_1:def 6;
+   end;
+  rng f c= X proof
+    let y be set;
+    assume y in rng f;
+     then consider x being set such that
+  A1: x in dom f and
+  B1: y = f.x by FUNCT_1:def 5;
+  C1: f.x = choose x by A, B, A1;
+      x <> {} by A, A1, EQREL_1:def 6;
+      then f.x in x by C1;
+    hence y in X by A1, A, B1;
+  end;
+ hence card P c= card X by A, C, CARD_1:26;
+end;
+
+definition
+  let X be set, P be a_partition of X, S be Subset of X;
+  func P | S -> a_partition of S equals
+    {x /\ S where x is Element of P: x meets S};
+           :: Note: PUA2MSS1:11 can be now proven without non empty for X
+           :: replace?
+  coherence proof
+   set D = {x /\ S where x is Element of P: x meets S};
+A: D c= bool S proof
+    let a be set;
+    assume a in D;
+    then consider x being Element of P such that
+   A1: a = x /\ S and
+       x meets S;
+       a c= S by A1, XBOOLE_1:17;
+     hence thesis;
+   end;
+B: union D = S proof
+    thus union D c= S proof
+      let x be set;
+      assume x in union D;
+      then consider Y being set such that
+    A1: x in Y and
+    B1: Y in D by TARSKI:def 4;
+      thus x in S by A1, A, B1;
+    end;
+    thus S c= union D proof
+      let s be set;
+      assume A0: s in S;
+       then s in X;
+       then s in union P by EQREL_1:def 6;
+       then consider p being set such that
+     A1: s in p and
+     B1: p in P by TARSKI:def 4;
+         p meets S by A1, A0, XBOOLE_0:3;
+         then
+     C1: p /\ S in D by B1;
+         s in p /\ S by A1, A0, XBOOLE_0:def 4;
+       hence s in union D by C1, TARSKI:def 4;
+    end;
+   end;
+    now
+      let A be Subset of S;
+      assume A in D;
+         then consider x being Element of P such that
+      B1: A = x /\ S and
+      C1: x meets S;
+          consider z being set such that
+      D1: z in x and
+      E1: z in S by C1, XBOOLE_0:3;
+          reconsider Xp1 = X as non empty set by E1;
+          reconsider Pp1 = P as a_partition of Xp1;
+      thus A<>{} by D1, E1, B1, XBOOLE_0:def 4;
+      let B be Subset of S;
+      assume B in D;
+         then consider y being Element of P such that
+      G1: B = y /\ S and y meets S;
+      I1: x in Pp1 & y in Pp1;
+      per cases by I1, EQREL_1:def 6;
+      suppose x = y;
+        hence A = B or A misses B by B1, G1;
+      end;
+      suppose x misses y;
+        hence A = B or A misses B by B1, G1, XBOOLE_1:76;
+      end;
+    end;
+   hence thesis by A, B, EQREL_1:def 6;
+  end;
+end;
+
+registration
+  let X be set;
+  cluster finite a_partition of X;
+  existence proof
+    per cases;
+    suppose X = {};
+      hence thesis by EQREL_1:54;
+    end;
+    suppose X <> {};
+       then {X} is a_partition of X by EQREL_1:48;
+      hence thesis;
+    end;
+  end;
+end;
+
+registration
+  let X be set, P be finite a_partition of X, S be Subset of X;
+  cluster P | S -> finite;
+  coherence proof :: f: P -> P |(S) and rng is finite
+  defpred P[set,set] means
+    $2 = $1 /\ S;
+  P: for e being set st e in P ex u being set st P[e,u];
+     consider f being Function such that
+  A: dom f = P and
+  B: for e being set st e in P holds P[e,f.e] from CLASSES1:sch 1(P);
+  C: rng f is finite by A, FINSET_1:26;
+     P |(S) c= rng f proof
+       let x be set;
+       assume x in P |(S);
+       then consider xx being Element of P such that
+     A1: x = xx /\ S and
+     B1: xx meets S;
+         consider y being set such that y in xx and
+     D1: y in S by B1, XBOOLE_0:3;
+         reconsider Xp1 = X as non empty set by D1;
+         E1: P is a_partition of Xp1;
+         then x = f.xx by B, A1;
+      hence x in rng f by E1, A, FUNCT_1:def 5;
+     end;
+   hence thesis by C;
+  end;
+end;
+
+theorem Tpart0: :: Tpart0:
+for X being set, P being finite a_partition of X, S being Subset of X
+ holds card (P | S) <= card P
+proof
+ let X be set, P be finite a_partition of X, S be Subset of X;
+ per cases;
+ suppose S1: X = {};
+   then A1: P = {} by EQREL_1:41;
+   S = {} by S1;
+  hence card (P | S) <= card P by A1, EQREL_1:41;
+ end;
+ suppose X <> {};
+   then reconsider Pp1 = P as finite non empty set;
+   defpred P[set] means $1 meets S;
+   deffunc F(set) = $1 /\ S;
+   P: P | S = {F(x) where x is Element of Pp1: P[x]};
+   card (P | S) <= card Pp1 from DILWORTH:sch 1(P);
+  hence thesis;
+ end;
+end;
+
+theorem Tpart1: :: Tpart1:
+for X being set, P being finite a_partition of X, S being Subset of X
+ holds (for p being set st p in P holds p meets S)
+   iff card (P | S) = card P
+proof
+ let X be set, P be finite a_partition of X, S be Subset of X;
+ per cases;
+ suppose S1: X = {};
+   hereby
+     assume for p being set st p in P holds p meets S;
+     S = {} by S1;
+     hence card (P | S) = {} by CARD_1:47, EQREL_1:41
+        .= card P by S1, EQREL_1:41,CARD_1:47;
+   end;
+   thus thesis by S1,EQREL_1:41;
+ end;
+ suppose S1: X <> {};
+   set PS = P | S;
+   reconsider Pp1 = P as finite non empty set by S1;
+   hereby
+     assume A1: for p being set st p in P holds p meets S;
+     consider p being Element of P;
+     p in Pp1;
+     then p meets S by A1;
+     then p /\ S in PS;
+     then reconsider PSp1 = PS as non empty finite set;
+     defpred P[set,set] means
+      $1 in P & $2 = $1 /\ S;
+   P: for x being set st x in P ex y being set st y in PSp1 & P[x,y] proof
+       let x be set;
+       assume A2: x in P;
+       take x /\ S;
+         x meets S by A2, A1;
+         hence thesis by A2;
+      end;
+      consider f being Function of P,PSp1 such that
+   Q: for x being set st x in P holds P[x,f.x] from FUNCT_2:sch 1(P);
+      now
+       let x1,x2 be set such that
+      A2: x1 in P and
+      B2: x2 in P and
+      C2: f.x1 = f.x2;
+      F2: f.x1 = x1 /\ S by A2, Q;
+      G2: f.x2 = x2 /\ S by B2, Q;
+          x1 meets S by A2, A1;
+          then f.x1 in PS by F2, A2;
+          then f.x1 <> {} by EQREL_1:def 6;
+          then consider x being set such that
+      H2: x in f.x1 by XBOOLE_0:def 1;
+          x in x1 & x in x2 by H2, C2,F2,G2,XBOOLE_0:def 4;
+          then  x1 meets x2 by XBOOLE_0:3;
+       hence x1 = x2 by A2, B2, EQREL_1:def 6;
+      end;
+      then R: f is one-to-one by FUNCT_2:25;
+      rng f = PSp1 proof
+       thus rng f c= PSp1 proof
+        let y be set;
+        assume y in rng f;
+        then consider x being set such that
+       A2: x in P and
+       B2: f.x = y by FUNCT_2:17;
+         x meets S by A1, A2;
+         then x /\ S in PS by A2;
+        hence y in PSp1 by B2, A2, Q;
+       end;
+       thus PSp1 c= rng f proof
+         let y be set;
+         assume y in PSp1;
+         then consider p being Element of P such that
+       A2: y = p /\ S and p meets S;
+       C2: p in Pp1;
+           then f.p = p /\ S by Q;
+         hence y in rng f by A2, C2, FUNCT_2:6;
+       end;
+      end;
+      then f is onto by FUNCT_2:def 3;
+     hence card (P | S) = card P by R, EULER_1:12;
+   end;
+   assume A1: card (P | S) = card P;
+     defpred P[set,set] means
+       $1 in PS & $2 in Pp1 & $1 = $2 /\ S;
+   P: for x being set st x in PS ex y being set st y in Pp1 & P[x,y] proof
+       let x be set;
+       assume A0: x in PS;
+       then consider p being Element of P such that
+      A1: x = p /\ S and p meets S;
+        take p;
+        thus thesis by A0, A1;
+      end;
+      consider f being Function of PS,Pp1 such that
+   Q: for x being set st x in PS holds P[x,f.x] from FUNCT_2:sch 1(P);
+   R: f is one-to-one proof
+        let x1,x2 be set such that
+      A1: x1 in dom f and
+      B1: x2 in dom f and
+      C1: f.x1 = f.x2;
+          x1 = f.x1 /\ S by A1, Q;
+     hence x1 = x2 by C1, B1, Q;
+   end;
+   S: rng f = P by A1, R, FINSEQ_4:78;
+   let p be set;
+   assume p in P;
+     then consider ps being set such that
+   T: ps in dom f and
+   U: p = f.ps by S, FUNCT_1:def 5;
+   Ua: dom f = PS by FUNCT_2:def 1;
+   V: ps = p /\ S by U, T, Q;
+       ps is non empty by T, Ua, EQREL_1:def 6;
+       then ex x being set st x in ps by XBOOLE_0:def 1;
+   hence p meets S by V, XBOOLE_0:4;
+ end;
+end;
+
+theorem Tsr0: :: Tsr0:
+for R being RelStr, C being Coloring of R, S being Subset of R
+ holds C | S is Coloring of subrelstr S
+proof
+ let R be RelStr, C be Coloring of R, S be Subset of R;
+ set sS = subrelstr S; 
+A: the carrier of sS = S by YELLOW_0:def 15;
+  now
+    let x be set;
+    assume x in C | S;
+     then consider c being Element of C such that
+    A1: x = c /\ S and
+    B1: c meets S;
+        consider z being set such that z in c and
+    D1: z in S by B1, XBOOLE_0:3;
+    E1: sS is non empty by YELLOW_0:def 15, D1;
+    F1: R is non empty by D1;
+        reconsider Rp1 = R as non empty RelStr by D1;
+           reconsider xp1= x as Subset of sS by A, A1, XBOOLE_1:17;
+        xp1 is stable proof
+          let a, b be Element of sS such that
+        A2: a in xp1 and
+        B2: b in xp1 and
+        C2: a <> b;
+        D2: a in c & b in c by A2, B2, A1, XBOOLE_0:def 4;
+            reconsider ap1 = a, bp1 = b as Element of R by E1,F1,YELLOW_0:59;
+        E2: C is Coloring of Rp1;
+            then c in C;
+            then reconsider cp1 = c as Subset of R;
+        G2: cp1 is stable by E2, DILWORTH:def 12;
+          assume a <= b or b <= a;
+          then ap1 <= bp1 or bp1 <= ap1 by YELLOW_0:60;
+         hence contradiction by C2, D2, G2, DILWORTH:def 2;
+        end;
+    hence x is StableSet of sS;
+  end;
+ hence C | S is Coloring of sS by A, DILWORTH:def 12;
+end;
+
+begin :: Chromatic number and clique cover number
+
+      :: This section could be moved to DILWORTH or better yet to some
+      :: article with preliminaries where RelStr represents a graph.
+      :: But then some stuff from NECKLACE would have to be moved.
+      :: I decided not to move stuff around until there is much more
+      :: material and then a bigger reorganisation would be in place
+      :: 2009.08.06
+
+definition
+  let R be RelStr;  :: finitely_colorable sounds better
+  attr R is with_finite_chromatic# means                     :Lwfchr:
+  ex C being Coloring of R st C is finite;
+end;
+
+registration
+  cluster with_finite_chromatic# RelStr;
+  existence proof
+     take R = the empty RelStr;
+     reconsider S = {} as a_partition of the carrier of R by EQREL_1:54;
+     take S;
+     thus S is finite;
+  end;
+end;
+
+registration
+  cluster finite -> with_finite_chromatic# RelStr;
+  coherence proof
+   let R be RelStr;      set cR = the carrier of R;
+   assume A0: R is finite;
+   per cases;
+   suppose R is empty;
+     then reconsider S = {} as a_partition of cR by EQREL_1:54;
+     for x being set st x in S holds x is StableSet of R;
+     then reconsider S as Coloring of R by DILWORTH:def 12;
+     take S;
+     thus S is finite;
+   end;
+   suppose S: R is non empty;
+     reconsider cRp1 = cR as finite non empty set by S, A0;
+     set S = SmallestPartition cR;
+       deffunc F(set) = {$1};
+       defpred P[set] means not contradiction;
+    A1: S = {F(x) where x is Element of cRp1: P[x]} by EQREL_1:46;
+    B1: {F(x) where x is Element of cRp1: P[x]} is finite from PRE_CIRC:sch 1;
+     now let z being set;
+       assume z in S;
+        then ex x being Element of cR st z = {x} & not contradiction by A1;
+       hence z is StableSet of R by S, SUBSET_1:55;
+     end;
+     then reconsider S as Coloring of R by DILWORTH:def 12;
+     take S;
+     thus thesis by B1;
+   end;
+  end;
+end;
+
+registration
+  let R be with_finite_chromatic# RelStr;
+  cluster finite Coloring of R;
+  existence by Lwfchr;
+end;
+
+registration
+  let R be with_finite_chromatic# RelStr, S be Subset of R;
+  cluster subrelstr S -> with_finite_chromatic#;
+  coherence proof
+    set sS = subrelstr S;
+    consider C being Coloring of R such that
+  A: C is finite by Lwfchr;
+  B: the carrier of sS = S by YELLOW_0:def 15;
+     reconsider CS = C | S as a_partition of S;
+     for x being set st x in CS holds x is StableSet of sS proof
+      let x be set;
+      assume x in CS;
+        then consider X being Element of C such that
+      A1: x = X /\ S and
+      B1: X meets S;
+          ex y being set st y in X & y in S by B1, XBOOLE_0:3;
+          then X is StableSet of R by DILWORTH:def 12;
+      hence x is StableSet of sS by A1, DILWORTH:31;
+     end;
+     then CS is Coloring of sS by B, DILWORTH:def 12;
+    hence thesis by A, Lwfchr;
+  end;
+end;
+
+definition
+  let R be with_finite_chromatic# RelStr;
+  func chromatic# R -> Nat means                       :Lchro:
+  (ex C being finite Coloring of R st card C = it)
+   & for C being finite Coloring of R holds it <= card C;
+  existence proof
+   defpred P[Nat] means ex C being finite Coloring of R st card C = $1;
+    consider C being Coloring of R such that
+ A: C is finite by Lwfchr;
+    card C = card C; then
+ P: ex k being Nat st P[k] by A;
+    consider n being Nat such that
+ Q1: P[n] and
+ Q2: for k being Nat st P[k] holds n <= k from NAT_1:sch 5(P);
+   take n;
+   thus ex C being finite Coloring of R st card C = n by Q1;
+   let C be finite Coloring of R;
+   thus n <= card C by Q2;
+ end;
+ uniqueness proof
+  let it1, it2 be Nat such that
+ A1: ex C being finite Coloring of R st card C = it1 and
+ B1: for C being finite Coloring of R holds it1 <= card C and
+ A2: ex C being finite Coloring of R st card C = it2 and
+ B2: for C being finite Coloring of R holds it2 <= card C;
+   consider C1 being finite Coloring of R such that
+ C1: card C1 = it1 by A1;
+   consider C2 being finite Coloring of R such that
+ C2: card C2 = it2 by A2;
+    it1 <= card C2 & it2 <= card C1 by B1, B2;
+  hence it1 = it2 by C1, C2, XXREAL_0:1;
+ end;
+end;
+
+registration
+  let R be empty RelStr;
+  cluster chromatic# R -> empty;
+  coherence proof
+    consider C being finite Coloring of R such that
+  A: card C = chromatic# R by Lchro;
+    C is empty by EQREL_1:41;
+   hence thesis by A;
+  end;
+end;
+
+registration
+  let R be non empty with_finite_chromatic#  RelStr;
+  cluster chromatic# R -> positive;
+  coherence proof
+    ex C being finite Coloring of R st card C = chromatic# R by Lchro;
+    hence thesis;
+  end;
+end;
+
+definition
+  let R be RelStr;
+  attr R is with_finite_cliquecover# means                  :Lwfcc:
+  ex C being Clique-partition of R st C is finite;
+end;
+
+registration
+  cluster with_finite_cliquecover# RelStr;
+  existence proof
+     take R = the empty RelStr;
+     reconsider S = {} as a_partition of the carrier of R by EQREL_1:54;
+     reconsider S as Clique-partition of R;
+     take S;
+     thus S is finite;
+  end;
+end;
+
+registration
+  cluster finite -> with_finite_cliquecover# RelStr;
+  coherence proof
+   let R be RelStr;      set cR = the carrier of R;
+   assume A0: R is finite;
+   per cases;
+   suppose R is empty;
+     then reconsider S = {} as a_partition of cR by EQREL_1:54;
+     for x being set st x in S holds x is Clique of R;
+     then reconsider S as Clique-partition of R by DILWORTH:def 11;
+     take S;
+     thus S is finite;
+   end;
+   suppose S: R is non empty;
+     reconsider cRp1 = cR as finite non empty set by S, A0;
+     set S = SmallestPartition cR;
+       deffunc F(set) = {$1};
+       defpred P[set] means not contradiction;
+    A1: S = {F(x) where x is Element of cRp1: P[x]} by EQREL_1:46;
+    B1: {F(x) where x is Element of cRp1: P[x]} is finite from PRE_CIRC:sch 1;
+     now let z being set;
+       assume A: z in S;
+       ex x being Element of cR st z = {x} & not contradiction by A, A1;
+      hence z is Clique of R by S, SUBSET_1:55;
+     end;
+     then reconsider S as Clique-partition of R by DILWORTH:def 11;
+     take S;
+     thus thesis by B1;
+   end;
+  end;
+end;
+
+registration
+  let R be with_finite_cliquecover# RelStr;
+  cluster finite Clique-partition of R;
+  existence by Lwfcc;
+end;
+
+registration
+  let R be with_finite_cliquecover# RelStr, S be Subset of R;
+  cluster subrelstr S -> with_finite_cliquecover#;
+  coherence proof
+    set sS = subrelstr S;
+    consider C being Clique-partition of R such that
+  A: C is finite by Lwfcc;
+  B: the carrier of sS = S by YELLOW_0:def 15;
+     reconsider CS = C | S as a_partition of S;
+     for x being set st x in CS holds x is Clique of sS proof
+      let x be set;
+      assume x in CS;
+        then consider X being Element of C such that
+      A1: x = X /\ S and
+      B1: X meets S;
+          ex y being set st y in X & y in S by B1, XBOOLE_0:3;
+          then X is Clique of R by DILWORTH:def 11;
+      hence x is Clique of sS by A1, DILWORTH:29;
+     end;
+     then CS is Clique-partition of sS by B, DILWORTH:def 11;
+    hence thesis by A, Lwfcc;
+  end;
+end;
+
+definition
+  let R be with_finite_cliquecover# RelStr;
+  func cliquecover# R -> Nat means                       :Lclico:
+  (ex C being finite Clique-partition of R st card C = it)
+   & for C being finite Clique-partition of R holds it <= card C;
+ existence proof
+   defpred P[Nat] means ex C being finite Clique-partition of R st card C = $1;
+    consider C being Clique-partition of R such that
+ A: C is finite by Lwfcc;
+    card C = card C; then
+ P: ex k being Nat st P[k] by A;
+    consider n being Nat such that
+ Q1: P[n] and
+ Q2: for k being Nat st P[k] holds n <= k from NAT_1:sch 5(P);
+   take n;
+   thus ex C being finite Clique-partition of R st card C = n by Q1;
+   let C be finite Clique-partition of R;
+   thus n <= card C by Q2;
+ end;
+ uniqueness proof
+  let it1, it2 be Nat such that
+ A1: ex C being finite Clique-partition of R st card C = it1 and
+ B1: for C being finite Clique-partition of R holds it1 <= card C and
+ A2: ex C being finite Clique-partition of R st card C = it2 and
+ B2: for C being finite Clique-partition of R holds it2 <= card C;
+   consider C1 being finite Clique-partition of R such that
+ C1: card C1 = it1 by A1;
+   consider C2 being finite Clique-partition of R such that
+ C2: card C2 = it2 by A2;
+    it1 <= card C2 & it2 <= card C1 by B1, B2;
+  hence it1 = it2 by C1, C2, XXREAL_0:1;
+ end;
+end;
+
+registration
+  let R be empty RelStr;
+  cluster cliquecover# R -> empty;
+  coherence proof
+    consider C being finite Clique-partition of R such that
+  A: card C = cliquecover# R by Lclico;
+    C is empty by EQREL_1:41;
+   hence thesis by A;
+  end;
+end;
+
+registration
+  let R be non empty with_finite_cliquecover# RelStr;
+  cluster cliquecover# R -> positive;
+  coherence proof
+    consider C being finite Clique-partition of R such that
+  A: card C = cliquecover# R by Lclico;
+   thus thesis by A;
+  end;
+end;
+
+  :: Note: for empty RelStr clique# = 0, stability# = 0, chromatic# = 0,
+  ::       cliquecover# = 0 follows from clusters.
+
+theorem Maxclique: :: Maxclique:
+for R being finite RelStr holds clique# R <= card the carrier of R
+proof
+let R be finite RelStr;
+  consider C being finite Clique of R such that
+A: card C = clique# R by DILWORTH:def 4;
+  card C c= card the carrier of R by CARD_1:27;
+ hence clique# R <= card the carrier of R by A, NAT_1:40;
+end;
+
+theorem :: Maxstability:
+for R being finite RelStr holds stability# R <= card the carrier of R
+proof
+ let R be finite RelStr;
+  consider C being finite StableSet of R such that
+A: card C = stability# R by DILWORTH:def 6;
+   card C c= card the carrier of R by CARD_1:27;
+ hence stability# R <= card the carrier of R by A, NAT_1:40;
+end;
+
+theorem Maxchromatic: :: Maxchromatic:
+for R being finite RelStr holds chromatic# R <= card the carrier of R
+proof
+ let R be finite RelStr;
+  consider C being finite Coloring of R such that
+A: card C = chromatic# R by Lchro;
+  card C c= card the carrier of R by Partcard;
+ hence chromatic# R <= card the carrier of R by A, NAT_1:40;
+end;
+
+theorem :: Maxclicover:
+for R being finite RelStr holds cliquecover# R <= card the carrier of R
+proof
+ let R be finite RelStr;
+  consider C being finite Clique-partition of R such that
+A: card C = cliquecover# R by Lclico;
+  card C c= card the carrier of R by Partcard;
+ hence cliquecover# R <= card the carrier of R by A, NAT_1:40;
+end;
+
+theorem CliChr: :: CliChr:
+          :: more general than DILWORTH:50 for finite RelStr
+for R being with_finite_clique# with_finite_chromatic# RelStr
+ holds clique# R <= chromatic# R
+proof
+ let P be with_finite_clique# with_finite_chromatic# RelStr;
+ assume A: clique# P > chromatic# P;
+ consider A being Clique of P such that
+B: card A = clique# P by DILWORTH:def 4;
+ consider C being finite Coloring of P such that
+Aa: card C = chromatic# P by Lchro;
+   card card C = card C & card card A = card A;
+   then C: card C in card A by Aa, A, B, NAT_1:42;
+   set cP = the carrier of P;
+  per cases;
+  suppose P is empty;
+    hence contradiction by A;
+  end;
+  suppose S1: P is non empty;
+  defpred P[set,set] means $1 in A & $2 in C & $1 in $2;
+P: for x being set st x in A ex y being set st y in C & P[x,y] proof
+     let x be set; assume
+   A1: x in A; then
+       reconsider xp1 = x as Element of P;
+       cP is non empty by S1;
+       then xp1 in cP;
+       then x in union C by EQREL_1:def 6;
+       then consider y being set such that
+   B1: x in y and
+   C1: y in C by TARSKI:def 4;
+       take y;
+       thus thesis by A1, B1, C1;
+   end;
+   consider f being Function of A, C such that
+Q: for x being set st x in A holds P[x,f.x] from FUNCT_2:sch 1(P);
+    consider x,y being set such that
+  A1: x in A and
+  B1: y in A and
+  C1: x <> y and
+  D1: f.x = f.y by S1, C, FINSEQ_4:80;
+      f.x in C by A1, FUNCT_2:7; then
+  E1: f.x is StableSet of P by DILWORTH:def 12;
+      x in f.x & y in f.x by D1, A1, B1, Q;
+    hence contradiction by E1, A1, B1, C1, DILWORTH:15;
+  end;
+end;
+
+theorem :: StaCov:
+                :: more general than DILWORTH:46 for finite RelStr
+for R being with_finite_stability# with_finite_cliquecover# RelStr
+ holds stability# R <= cliquecover# R
+proof
+ let R be with_finite_stability# with_finite_cliquecover# RelStr;
+ assume A: stability# R > cliquecover# R;
+ consider A being StableSet of R such that
+B: card A = stability# R by DILWORTH:def 6;
+ consider C being finite Clique-partition of R such that
+Aa: card C = cliquecover# R by Lclico;
+   card card C = card C & card card A = card A;
+   then C: card C in card A by Aa, A, B, NAT_1:42;
+   set cR = the carrier of R;
+  per cases;
+  suppose R is empty;
+    hence contradiction by A;
+  end;
+  suppose S1: R is non empty;
+  defpred P[set,set] means
+    $1 in A & $2 in C & $1 in $2;
+R: for x being set st x in A ex y being set st y in C & P[x,y] proof
+     let x be set such that
+   A1: x in A;
+       reconsider xp1 = x as Element of R by A1;
+       cR is non empty by S1;
+       then xp1 in cR;
+       then x in union C by EQREL_1:def 6;
+       then consider y being set such that
+   B1: x in y and
+   C1: y in C by TARSKI:def 4;
+       take y;
+       thus thesis by A1, B1, C1;
+   end;
+   consider f being Function of A, C such that
+Q: for x being set st x in A holds P[x,f.x] from FUNCT_2:sch 1(R);
+    consider x,y being set such that
+  A1: x in A and
+  B1: y in A and
+  C1: x <> y and
+  D1: f.x = f.y by S1, C, FINSEQ_4:80;
+      f.x in C by A1, FUNCT_2:7; then
+  E1: f.x is Clique of R by DILWORTH:def 11;
+      x in f.x & y in f.x by D1, A1, B1, Q;
+    hence contradiction by E1, A1, B1, C1, DILWORTH:15;
+  end;
+end;
+
+begin :: Complement
+
+theorem DCompl: :: DCompl:
+for R being RelStr, x, y being Element of R,
+    a, b being Element of ComplRelStr R
+ st x = a & y = b & x <= y holds not a <= b
+proof
+ let R be RelStr, x, y be Element of R,
+     a, b be Element of ComplRelStr R such that
+A: x = a and
+B: y = b;
+   set cR = the carrier of R, iR = the InternalRel of R;
+   set CR = ComplRelStr R;
+   set iCR = the InternalRel of CR;
+D: iCR = iR` \ id cR by NECKLACE:def 9;
+     assume x <= y;
+      then [x,y] in iR by ORDERS_2:def 9;
+      then not [x,y] in iR` by XBOOLE_0:def 5;
+      then not [x,y] in iCR by D, XBOOLE_0:def 5;
+     hence not a <= b by A, B, ORDERS_2:def 9;
+end;
+
+theorem DCompl1: :: DCompl1:
+for R being RelStr, x, y being Element of R,
+    a, b being Element of ComplRelStr R
+ st x = a & y = b & x <> y & x in the carrier of R & not a <= b holds x <= y
+proof
+ let R be RelStr, x, y be Element of R,
+     a, b be Element of ComplRelStr R such that
+A: x = a and
+B: y = b and
+C: x <> y and
+Ca: x in the carrier of R;
+   set cR = the carrier of R, iR = the InternalRel of R;
+   set CR = ComplRelStr R;
+   set iCR = the InternalRel of CR;
+D: iCR = iR` \ id cR by NECKLACE:def 9;
+F: [x,y] in [:cR,cR:] by Ca, ZFMISC_1:def 2;
+   assume not a <= b;
+    then A1: not [x,y] in iCR by A, B, ORDERS_2:def 9;
+       not [x,y] in id cR by C, RELAT_1:def 10;
+    then not [x,y] in iR` by D, A1, XBOOLE_0:def 5;
+    then [x,y] in iR by F, XBOOLE_0:def 5;
+   hence x <= y by ORDERS_2:def 9;
+end;
+
+registration
+  let R be finite RelStr;
+  cluster ComplRelStr R -> finite;
+  coherence proof
+    the carrier of R = the carrier of ComplRelStr R by NECKLACE:def 9;
+    hence thesis;
+  end;
+end;
+
+theorem CliStaCompl: :: CliStaCompl:
+for R being symmetric RelStr, C being Clique of R
+  holds C is StableSet of ComplRelStr R
+proof
+ let R be symmetric RelStr, C be Clique of R;
+    now
+      let x, y be Element of ComplRelStr R such that
+    A1: x in C and
+    B1: y in C and
+    C1: x <> y;
+        reconsider a = x, b = y as Element of R by NECKLACE:def 9;
+        a <= b or b <= a by A1, B1, C1, DILWORTH:6;
+        then a <= b & b <= a by Sym0;
+      hence not x <= y & not y <= x by DCompl;
+    end;
+   hence C is StableSet of ComplRelStr R by NECKLACE:def 9, DILWORTH:def 2;
+end;
+
+theorem CliComplSta: :: CliComplSta:
+for R being symmetric RelStr, C being Clique of ComplRelStr R
+  holds C is StableSet of R
+proof
+ let R be symmetric RelStr, C be Clique of ComplRelStr R;
+    now
+      let x, y be Element of R such that
+    A1: x in C and
+    B1: y in C and
+    C1: x <> y;
+        reconsider a = x, b = y as Element of ComplRelStr R by NECKLACE:def 9;
+        a <= b or b <= a by A1, B1, C1, DILWORTH:6;
+        then a <= b & b <= a by Sym0;
+      hence not x <= y & not y <= x by DCompl;
+    end;
+   hence C is StableSet of R by NECKLACE:def 9, DILWORTH:def 2;
+end;
+
+theorem StaCliCompl: :: StaCliCompl:
+for R being RelStr, C being StableSet of R holds C is Clique of ComplRelStr R
+proof
+ let R be RelStr, C be StableSet of R;
+   set CR = ComplRelStr R;
+A: C is Subset of CR by NECKLACE:def 9;
+  now
+    let a, b be Element of CR such that
+  A: a in C and
+  B: b in C and
+  C: a <> b;
+     reconsider ap1 = a, bp1 = b as Element of R by NECKLACE:def 9;
+     not ap1 <= bp1 & not bp1 <= ap1 by A, B, C, DILWORTH:def 2;
+   hence a <= b or b <= a by A, C, DCompl1;
+  end;
+ hence C is Clique of ComplRelStr R by A, DILWORTH:6;
+end;
+
+theorem StaComplCli: :: StaComplCli:
+for R being RelStr, C being StableSet of ComplRelStr R holds C is Clique of R
+proof
+ let R be RelStr, C be StableSet of ComplRelStr R;
+A0: the carrier of R = the carrier of ComplRelStr R by NECKLACE:def 9;
+   now
+     let a, b be Element of R such that
+   A: a in C and
+   B: b in C and
+   C: a <> b;
+    reconsider ap1 = a, bp1 = b as Element of ComplRelStr R by NECKLACE:def 9;
+      not ap1 <= bp1 & not bp1 <= ap1 by A, B, C, DILWORTH:def 2;
+     hence a <= b or b <= a by C, A, A0, DCompl1;
+   end;
+ hence C is Clique of R by NECKLACE:def 9, DILWORTH:6;
+end;
+
+registration
+  let R be with_finite_clique# RelStr;
+  cluster ComplRelStr R -> with_finite_stability#;
+  coherence proof
+    set CR = ComplRelStr R;
+    consider C be finite Clique of R such that
+  A: for D being finite Clique of R holds card D <= card C by DILWORTH:def 3;
+    assume not thesis;
+    then
+  B: for A being finite StableSet of CR
+      ex B being finite StableSet of CR st card B > card A by DILWORTH:def 5;
+     defpred P[Nat] means
+        ex S being finite StableSet of CR st card S > $1;
+        consider B being finite StableSet of CR such that
+     A1: card B > card {}CR by B;
+  P0: P[0] by A1;
+  P1: for n being Nat st P[n] holds P[n+1] proof
+       let n be Nat;
+       assume P[n];
+         then consider S being finite StableSet of CR such that
+       A2: card S > n;
+         consider T being finite StableSet of CR such that
+       B2: card T > card S by B;
+         card S >= n+1 by A2, NAT_1:13;
+         then card T > n+1 by B2, XXREAL_0:2;
+       hence P[n+1];
+      end;
+      for n being Nat holds P[n] from NAT_1:sch 2(P0,P1);
+     then consider S being finite StableSet of CR such that
+  R: card S > card C;
+     S is Clique of R by StaComplCli;
+   hence contradiction by A, R;
+  end;
+end;
+
+registration
+  let R be with_finite_stability# symmetric RelStr;
+  cluster ComplRelStr R -> with_finite_clique#;
+  coherence proof
+    set CR = ComplRelStr R;
+    consider C be finite StableSet of R such that
+  A: for D being finite StableSet of R holds card D <= card C
+      by DILWORTH:def 5;
+    assume not thesis;
+    then
+  B: for C being finite Clique of CR
+      ex D being finite Clique of CR st card D > card C by DILWORTH:def 3;
+     defpred P[Nat] means
+        ex S being finite Clique of CR st card S > $1;
+        consider B being finite Clique of CR such that
+     A1: card B > card {}CR by B;
+  P0: P[0] by A1;
+  P1: for n being Nat st P[n] holds P[n+1] proof
+       let n be Nat;
+       assume P[n];
+         then consider S being finite Clique of CR such that
+       A2: card S > n;
+         consider T being finite Clique of CR such that
+       B2: card T > card S by B;
+         card S >= n+1 by A2, NAT_1:13;
+         then card T > n+1 by B2, XXREAL_0:2;
+       hence P[n+1];
+      end;
+      for n being Nat holds P[n] from NAT_1:sch 2(P0,P1);
+     then consider S being finite Clique of CR such that
+  R: card S > card C;
+     S is StableSet of R by CliComplSta;
+   hence contradiction by A, R;
+  end;
+end;
+
+theorem cliRstaCR: :: cliRstaCR:
+for R being with_finite_clique# symmetric RelStr
+  holds clique# R = stability# ComplRelStr R
+proof
+ let R be with_finite_clique# symmetric RelStr;
+    set k = stability# ComplRelStr R;
+   consider A being finite StableSet of ComplRelStr R such that
+A: card(A) = k by DILWORTH:def 6;
+   A is Clique of R by StaComplCli;
+   then
+Z: ex C being finite Clique of R st card C = k by A;
+   now let T be finite Clique of R;
+     T is StableSet of ComplRelStr R by CliStaCompl;
+    hence card T <= k by DILWORTH:def 6;
+   end;
+ hence clique# R = stability# ComplRelStr R by Z, DILWORTH:def 4;
+end;
+
+theorem :: staRcliCR:
+for R being with_finite_stability# symmetric RelStr
+  holds stability# R = clique# ComplRelStr R
+proof
+ let R be with_finite_stability# symmetric RelStr;
+   set CR = ComplRelStr R;   set k = clique# CR;
+   consider A being finite Clique of CR such that
+A: card A = k by DILWORTH:def 4;
+   A is StableSet of R by CliComplSta;
+   then
+Z: ex C being finite StableSet of R st card C = k by A;
+   now let T be finite StableSet of R;
+     T is Clique of CR by StaCliCompl;
+    hence card T <= k by DILWORTH:def 4;
+   end;
+ hence stability# R = clique# ComplRelStr R by Z, DILWORTH:def 6;
+end;
+
+theorem ChrClicoCompl: :: ChrClicoCompl:
+for R being RelStr, C being Coloring of R
+  holds C is Clique-partition of ComplRelStr R
+proof
+ let R be RelStr, C be Coloring of R;
+A: the carrier of R = the carrier of ComplRelStr R by NECKLACE:def 9;
+    now
+      let x be set;
+      assume x in C;
+        then x is StableSet of R by DILWORTH:def 12;
+      hence x is Clique of ComplRelStr R by StaCliCompl;
+    end;
+ hence C is Clique-partition of ComplRelStr R by A, DILWORTH:def 11;
+end;
+
+theorem ClicoComplChr: :: ClicoComplChr:
+for R being symmetric RelStr, C being Clique-partition of ComplRelStr R
+  holds C is Coloring of R
+proof
+ let R be symmetric RelStr, C being Clique-partition of ComplRelStr R;
+  set CR = ComplRelStr R;
+A: the carrier of R = the carrier of CR by NECKLACE:def 9;
+    now
+      let x be set;
+      assume x in C;
+        then x is Clique of CR by DILWORTH:def 11;
+      hence x is StableSet of R by CliComplSta;
+    end;
+ hence C is Coloring of R by A, DILWORTH:def 12;
+end;
+
+theorem ClicoChrCompl: :: ClicoChrCompl:
+for R being symmetric RelStr, C being Clique-partition of R
+  holds C is Coloring of ComplRelStr R
+proof
+ let R be symmetric RelStr, C being Clique-partition of R;
+  set CR = ComplRelStr R;
+A: the carrier of R = the carrier of CR by NECKLACE:def 9;
+    now
+      let x be set;
+      assume x in C;
+        then x is Clique of R by DILWORTH:def 11;
+      hence x is StableSet of CR by CliStaCompl;
+    end;
+ hence C is Coloring of ComplRelStr R by A, DILWORTH:def 12;
+end;
+
+theorem ChrComplClico: :: ChrComplClico:
+for R being RelStr, C being Coloring of ComplRelStr R
+  holds C is Clique-partition of R
+proof
+ let R be RelStr, C being Coloring of ComplRelStr R;
+  set CR = ComplRelStr R;
+A: the carrier of R = the carrier of CR by NECKLACE:def 9;
+    now
+      let x be set;
+      assume x in C;
+        then x is StableSet  of CR by DILWORTH:def 12;
+      hence x is Clique of R by StaComplCli;
+    end;
+ hence C is Clique-partition of R by A, DILWORTH:def 11;
+end;
+
+registration
+  let R be with_finite_chromatic# RelStr;
+  cluster ComplRelStr R -> with_finite_cliquecover#;
+  coherence proof
+    consider C being Coloring of R such that
+  A: C is finite by Lwfchr;
+    C is Clique-partition of ComplRelStr R by ChrClicoCompl;
+   hence thesis by A, Lwfcc;
+  end;
+end;
+
+registration
+  let R be with_finite_cliquecover# symmetric RelStr;
+  cluster ComplRelStr R -> with_finite_chromatic#;
+  coherence proof
+    consider C being Clique-partition of R such that
+  A: C is finite by Lwfcc;
+    C is Coloring of ComplRelStr R by ClicoChrCompl;
+   hence thesis by A, Lwfchr;
+  end;
+end;
+
+theorem chrRcovCR: :: chrRcovCR:
+for R being with_finite_chromatic# symmetric RelStr
+  holds chromatic# R = cliquecover# ComplRelStr R
+proof
+ let R be with_finite_chromatic# symmetric RelStr;
+ set CR = ComplRelStr R;      set k = cliquecover# CR;
+    consider C being finite Clique-partition of CR such that
+ Aa: card C = k by Lclico;
+    C is Coloring of R by ClicoComplChr;
+    then
+ A: ex C being finite Coloring of R st card C = k by Aa;
+   now
+     let C be finite Coloring of R;
+     assume A1: k > card C;
+     C is Clique-partition of CR by ChrClicoCompl;
+     hence contradiction by A1, Lclico;
+   end;
+ hence chromatic# R = cliquecover# CR by A, Lchro;
+end;
+
+theorem :: covRchrCR:
+for R being with_finite_cliquecover# symmetric RelStr
+  holds cliquecover# R = chromatic# ComplRelStr R
+proof
+ let R be with_finite_cliquecover# symmetric RelStr;
+ set CR = ComplRelStr R;      set k = chromatic# CR;
+    consider C being finite Coloring of CR such that
+ Aa: card C = k by Lchro;
+    C is Clique-partition of R by ChrComplClico;
+    then
+ A: ex C being finite Clique-partition of R st card C = k by Aa;
+   now
+     let C be finite Clique-partition of R;
+     assume A1: k > card C;
+     C is Coloring of CR by ClicoChrCompl;
+     hence contradiction by A1, Lchro;
+   end;
+ hence cliquecover# R = chromatic# CR by A, Lclico;
+end;
+
+begin :: Adjacent set
+
+definition
+ let R be RelStr, v be Element of R;
+ func Adjacent v -> Subset of R  means                  :LAdjset:
+  for x being Element of R holds x in it iff x < v or v < x;
+ existence proof
+   set D = {x where x is Element of R : x < v or v < x};
+   set cR = the carrier of R, iR = the InternalRel of R;
+   D c= the carrier of R proof
+     let x be set;
+     assume x in D;
+      then consider a being Element of R such that
+   A: x = a and
+   C: a < v or v < a;
+      per cases by C;
+      suppose a < v;
+        then a <= v by ORDERS_2:def 10;
+        then [a,v] in iR by ORDERS_2:def 9;
+        then [a,v] in [:cR,cR:];
+        hence x in the carrier of R by A, ZFMISC_1:106;
+      end;
+      suppose v < a;
+        then v <= a by ORDERS_2:def 10;
+        then [v,a] in iR by ORDERS_2:def 9;
+        then [v,a] in [:cR,cR:];
+        hence x in the carrier of R by A, ZFMISC_1:106;
+      end;
+   end;
+   then reconsider D as Subset of R;
+   take D;
+   let x be Element of R;
+   hereby
+     assume x in D;
+      then consider a being Element of R such that
+   A: x = a and
+   C: a < v or v < a;
+     thus x < v or v < x by A, C;
+   end;
+   assume x < v or v < x;
+   hence x in D;
+ end;
+ uniqueness proof
+ let it1, it2 be Subset of R such that
+A: for x being Element of R
+    holds x in it1 iff x < v or v < x and
+B: for x being Element of R
+    holds x in it2 iff x < v or v < x;
+ hereby
+  let x be set;
+  assume A1: x in it1;
+    then reconsider xp1 = x as Element of R;
+    xp1 < v or v < xp1 by A, A1;
+  hence x in it2 by B;
+ end;
+  let x be set;
+  assume A1: x in it2;
+    then reconsider xp1 = x as Element of R;
+    xp1 < v or v < xp1 by B, A1;
+  hence x in it1 by A;
+ end;
+end;
+
+theorem  AdjCol: ::  AdjCol:
+for R being with_finite_chromatic# RelStr,
+    C being finite Coloring of R, c being set
+ st c in C & card C = chromatic# R
+  ex v being Element of R st v in c &
+   for d being Element of C st d <> c
+    ex w being Element of R st w in Adjacent(v) & w in d
+proof
+ let R be with_finite_chromatic# RelStr,
+     C be finite Coloring of R, c be set such that
+AA: c in C and
+A: card C = chromatic# R;
+   assume
+B: not thesis;
+   set cR = the carrier of R;
+AA3: union C = cR by EQREL_1:def 6;
+   reconsider c as Subset of cR by AA;
+AA1: c <> {} by AA, EQREL_1:def 6;
+   set Cc = C\{c};
+AA2a: c in {c} by TARSKI:def 1;
+   per cases;
+   suppose S1: Cc is empty;
+     consider v being set such that
+   A1: v in c by AA1, XBOOLE_0:def 1;
+     reconsider v as Element of R by A1;
+     consider d being Element of C such that
+   B1: d <> c and for w being Element of R
+                        holds not (w in Adjacent(v) & w in d) by A1,B;
+     0 = card C - card{c} by AA, EULER_1:5, S1, CARD_1:47;
+     then 0+1 = card C - 1 +1 by CARD_1:50;
+     then consider x being set such that
+   D1: C = {x} by CARD_2:60;
+      c = x & d = x by AA, D1, TARSKI:def 1;
+     hence thesis by B1;
+   end;
+   suppose Cc is non empty;
+     then reconsider Cc as non empty set;
+   defpred P[set, set] means
+   for vv being Element of cR st $1 = vv
+    holds $2 <> c & $2 in C &
+    for w being Element of R holds not (w in Adjacent(vv) & w in $2);
+P1: for e being set st e in c ex u being set st P[e,u] proof
+      let v be set such that
+    A1: v in c;
+        reconsider vv = v as Element of cR by A1;
+        consider d being Element of C such that
+    B1: d <> c and
+    C1: for w being Element of R
+         holds not (w in Adjacent(vv) & w in d) by A1,B;
+         take d;
+         thus thesis by B1, C1, AA;
+    end;
+   consider r being Function such that
+D: dom r = c and
+E: for e being set st e in c holds P[e,r.e] from CLASSES1:sch 1(P1);
+   defpred DP[set] means not contradiction;
+   deffunc DF(set) = $1 \/ r"{$1};
+   reconsider Cc as finite non empty set;
+   set D = { DF(d) where d is Element of Cc : DP[d] };
+   consider d being set such that
+Dd: d in Cc by XBOOLE_0:def 1;
+Dee: d \/ r"{d} in D by Dd;
+F: D c= bool cR proof
+    let x be set;
+    assume x in D;
+      then consider d being Element of Cc such that
+    A1: x = d \/ r"{d};
+    B1: r"{d} c= c by D, RELAT_1:167;
+    B1a: r"{d} c= cR by B1, XBOOLE_1:1;
+        d in C by XBOOLE_0:def 5;
+        then x c= cR by A1, B1a, XBOOLE_1:8;
+     hence x in bool cR;
+   end;
+G: union D = cR proof
+     thus union D c= cR proof
+       let x be set;
+       assume x in union D;
+        then consider Y being set such that
+     A1: x in Y and
+     B1: Y in D by TARSKI:def 4;
+        thus x in cR by A1, B1, F;
+     end;
+     thus cR c= union D proof
+       let x be set;
+       assume A1a: x in cR;
+       then consider d being set such that
+     A1: x in d and
+     B1: d in C by AA3, TARSKI:def 4;
+         reconsider xp1 = x as Element of cR by A1a;
+       per cases;
+       suppose S2: d = c;
+         then r.xp1 <> c by A1, E;
+         then A2: not r.xp1 in {c} by TARSKI:def 1;
+           r.xp1 in C by A1, S2, E; then
+         B2: r.xp1 in Cc by A2, XBOOLE_0:def 5;
+           r.xp1 in {r.xp1} by TARSKI:def 1;
+           then x in r"{r.xp1} by A1, S2, D, FUNCT_1:def 13;
+           then C2: x in r.xp1 \/ r"{r.xp1} by XBOOLE_0:def 3;
+           r.xp1 \/ r"{r.xp1} in D by B2;
+         hence x in union D by C2, TARSKI:def 4;
+       end;
+       suppose d <> c;
+         then not d in {c} by TARSKI:def 1;
+         then d in Cc by B1, XBOOLE_0:def 5;
+         then A2: d \/ r"{d} in D;
+           x in d \/ r"{d} by A1, XBOOLE_0:def 3;
+         hence x in union D by A2, TARSKI:def 4;
+       end;
+     end;
+   end;
+H: for A being Subset of cR st A in D holds A <> {} &
+    for B being Subset of cR st B in D holds A = B or A misses B proof
+     let A be Subset of cR;
+     assume A in D;
+       then consider da being Element of Cc such that
+     B1: A = da \/ r"{da};
+     B1a: da in C by XBOOLE_0:def 5;
+       then da is non empty by EQREL_1:def 6;
+     hence A <> {} by B1;
+     let B be Subset of cR;
+     assume B in D;
+       then consider db being Element of Cc such that
+     D1: B = db \/ r"{db};
+     E1: db in C by XBOOLE_0:def 5;
+     per cases;
+     suppose da = db;
+      hence A = B or A misses B by B1, D1;
+     end;
+     suppose S1: da <> db;
+       then A2a: da misses db by B1a, E1, EQREL_1:def 6;
+       A2b: r"{da} misses r"{db} by S1, ZFMISC_1:17, FUNCT_1:141;
+      assume A <> B;
+      assume A meets B;
+        then consider x being set such that
+      B2: x in A and
+      C2: x in B by XBOOLE_0:3;
+      per cases by B2, C2, B1, D1, XBOOLE_0:def 3;
+      suppose x in da & x in db;
+        hence contradiction by A2a, XBOOLE_0:3;
+      end;
+      suppose that S2a: x in da and S2b: x in r"{db};
+      A3: da <> c by AA2a, XBOOLE_0:def 5;
+        r"{db} c= c by D, RELAT_1:167;
+        then da meets c by S2a, S2b, XBOOLE_0:3;
+        hence contradiction by A3, B1a, AA, EQREL_1:def 6;
+      end;
+      suppose that S2a: x in r"{da} and S2b: x in db;
+      A3: db <> c by AA2a, XBOOLE_0:def 5;
+        r"{da} c= c by D, RELAT_1:167;
+        then db meets c by S2a, S2b, XBOOLE_0:3;
+        hence contradiction by A3, E1, AA, EQREL_1:def 6;
+      end;
+      suppose x in r"{da} & x in r"{db};
+        hence contradiction by A2b, XBOOLE_0:3;
+      end;
+     end;
+   end;
+   reconsider D as a_partition of cR by F, G, H, EQREL_1:def 6;
+   now
+     let x be set;
+     assume A1: x in D;
+     then reconsider S = x as Subset of R;
+       consider d being Element of Cc such that
+   B1: x = d \/ r"{d} by A1;
+   C1: r"{d} c= c by D, RELAT_1:167;
+   D1: d in C by XBOOLE_0:def 5;
+   E1: d is StableSet of R by D1, DILWORTH:def 12;
+   F1: c is StableSet of R by AA, DILWORTH:def 12;
+     S is stable proof
+       let a, b be Element of R such that
+     A2: a in S and
+     B2: b in S and
+     C2: a <> b;
+       per cases by A2, B2, B1, XBOOLE_0:def 3;
+       suppose a in d & b in d;
+         hence not a <= b & not b <= a by E1, C2, DILWORTH:def 2;
+       end;
+       suppose that A3: a in d and B3: b in r"{d};
+             r.b in {d} by B3, FUNCT_1:def 13;
+             then r.b = d by TARSKI:def 1;
+             then not a in Adjacent(b) by A3, C1, B3,E;
+             then not a < b & not b < a by LAdjset;
+         hence not a <= b & not b <= a by C2, ORDERS_2:def 10;
+       end;
+       suppose that A3: a in r"{d} and B3: b in d;
+             r.a in {d} by A3, FUNCT_1:def 13;
+             then r.a = d by TARSKI:def 1;
+             then not b in Adjacent(a) by B3, C1, A3, E;
+             then not a < b & not b < a by LAdjset;
+         hence not a <= b & not b <= a by C2, ORDERS_2:def 10;
+       end;
+       suppose a in r"{d} & b in r"{d};
+         hence not a <= b & not b <= a by C1, F1, C2, DILWORTH:def 2;
+       end;
+     end;
+     hence x is StableSet of R;
+   end;
+   then reconsider D as Coloring of R by DILWORTH:def 12;
+   card Cc = card C - card{c} by AA, EULER_1:5;
+   then card Cc + 1 = card C -1+1 by CARD_1:50;
+   then I: card Cc < card C by NAT_1:13;
+
+   deffunc FS(set) = $1 \/ r"{$1};
+   consider s being Function such that
+sA: dom s = Cc and
+sB: for x being set st x in Cc holds s.x = FS(x) from FUNCT_1:sch 3;
+sr:  rng s c= D proof
+      let y be set;
+      assume y in rng s;
+      then consider d being set such that
+    A1: d in dom s and
+    B1: y = s.d by FUNCT_1:def 5;
+        y = d \/ r"{d} by sA, sB, A1, B1;
+      hence y in D by A1, sA;
+    end;
+   then reconsider s as Function of Cc, D by sA, FUNCT_2:4;
+s1: s is one-to-one proof
+      let x1, x2 be set such that
+    A1: x1 in dom s and
+    B1: x2 in dom s and
+    C1: s.x1 = s.x2;
+    D1: s.x1 = x1 \/ r"{x1} by A1, sB;
+    E1: s.x2 = x2 \/ r"{x2} by B1, sB;
+        thus x1 c= x2 proof
+          let x be set;
+          assume A2: x in x1;
+            then B2: x in s.x1 by D1, XBOOLE_0:def 3;
+          per cases by B2, C1, E1, XBOOLE_0:def 3;
+          suppose x in x2;
+            hence thesis;
+          end;
+          suppose S3: x in r"{x2};
+            A3a: r"{x2} c= dom r by RELAT_1:167;
+            B3: x1 in C by A1, XBOOLE_0:def 5;
+            then reconsider x1 as Subset of cR;
+            x1 meets c by A3a, S3, D, A2, XBOOLE_0:3;
+            then x1 = c by B3, AA, EQREL_1:def 6;
+          hence thesis by AA2a, A1, XBOOLE_0:def 5;
+          end;
+        end;
+        thus x2 c= x1 proof
+          let x be set;
+          assume A2: x in x2;
+            then B2: x in s.x2 by E1, XBOOLE_0:def 3;
+          per cases by B2, C1, D1, XBOOLE_0:def 3;
+          suppose x in x1;
+            hence thesis;
+          end;
+          suppose S3: x in r"{x1};
+            A3a:  r"{x1} c= dom r by RELAT_1:167;
+          B3: x2 in C by B1, XBOOLE_0:def 5;
+            then reconsider x2 as Subset of cR;
+            x2 meets c by A3a, S3, D, A2, XBOOLE_0:3;
+            then x2 = c by B3, AA, EQREL_1:def 6;
+          hence thesis by AA2a, XBOOLE_0:def 5, B1;
+          end;
+        end;
+    end;
+    D c= rng s proof
+     let x be set;
+     assume x in D;
+     then consider d being Element of Cc such that
+    A1: x = d \/ r"{d};
+        s.d = d \/ r"{d} by sB;
+     hence x in rng s by A1, sA, FUNCT_1:def 5;
+    end;
+    then D = rng s by sr, XBOOLE_0:def 10;
+    then s is onto by FUNCT_2:def 3;
+   then J: card Cc = card D by s1, Dee, EULER_1:12;
+   then D is finite;
+  hence contradiction by I, J, A, Lchro;
+ end;
+end;
+
+begin  :: Natural numbers as vertices
+
+definition
+  let n be Nat;
+  mode NatRelStr of n -> strict RelStr means              :LNRS:
+   the carrier of it = n;
+  existence proof
+    reconsider I = {} as Relation of n,n by RELSET_1:25;
+    take RelStr (# n, I #);
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster -> empty NatRelStr of 0;
+  coherence proof
+    let R be NatRelStr of 0;
+      the carrier of R = 0 by LNRS;
+    hence thesis;
+  end;
+end;
+
+registration
+  let n be non empty Nat;
+  cluster -> non empty NatRelStr of n;
+  coherence by LNRS;
+end;
+
+registration
+  let n be Nat;
+  cluster -> finite NatRelStr of n;
+  coherence proof
+   let R be NatRelStr of n;
+    the carrier of R = n by LNRS;
+   hence thesis;
+  end;
+  cluster irreflexive NatRelStr of n;
+  existence proof
+    reconsider I = {} as Relation of n,n by RELSET_1:25;
+    set R = RelStr (# n, I #);
+    reconsider R as NatRelStr of n by LNRS;
+    R is irreflexive proof
+     let x be set;
+     assume x in the carrier of R;
+     thus not [x,x] in the InternalRel of R;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition
+  let n be Nat;
+  func CompleteRelStr n -> NatRelStr of n means       :LCRS:
+    the InternalRel of it = [: n, n :] \ id n;
+  existence proof
+    [:n,n:] c= [:n,n:];
+    then reconsider f = [:n,n:] as Relation of n;
+    reconsider R = RelStr(# n, f\id n #) as NatRelStr of n by LNRS;
+    take R;
+    thus the InternalRel of R = [: n, n :] \ id n;
+  end;
+  uniqueness
+  proof
+    let C1, C2 be NatRelStr of n;
+    the carrier of C1 = n & the carrier of C2 = n by LNRS;
+    hence thesis;
+  end;
+end;
+
+theorem CRS: :: CRS:
+for n being Nat, x,y being set
+ st x in n & y in n
+  holds [x,y] in the InternalRel of CompleteRelStr n iff x <> y
+proof
+let n be Nat, x,y be set; assume
+A: x in n & y in n;
+  hereby
+    assume [x,y] in the InternalRel of CompleteRelStr n;
+      then [x,y] in [:n,n:] \ id n by LCRS;
+      then not [x,y] in id n by XBOOLE_0:def 5;
+    hence x <> y by A, RELAT_1:def 10;
+  end;
+  assume x <> y;
+  then [x,y] in [:n,n:] & not [x,y] in id n by A, RELAT_1:def 10, ZFMISC_1:106;
+  then [x,y] in [:n,n:] \ id n by XBOOLE_0:def 5;
+  hence [x,y] in the InternalRel of CompleteRelStr n by LCRS;
+end;
+
+registration
+  let n be Nat;
+  cluster CompleteRelStr n -> irreflexive symmetric;
+  coherence proof
+    set R = CompleteRelStr n;
+    set cR = the carrier of R, iR = the InternalRel of R;
+A1: cR = n by LNRS;
+    thus R is irreflexive proof
+      let x be set;
+      assume x in cR;
+      hence not [x,x] in iR by A1,CRS;
+    end;
+    thus R is symmetric proof
+      let x, y be set;
+      assume x in cR & y in cR;
+       then A: x in n & y in n by LNRS;
+      assume [x,y] in iR;
+      hence thesis by A, CRS;
+    end;
+  end;
+end;
+
+registration
+  let n be Nat;
+  cluster [#]CompleteRelStr n -> clique;
+coherence
+proof
+  set R = CompleteRelStr n;
+  set iR = the InternalRel of R;
+  let x, y be set;
+  assume x in [#]R & y in [#]R;
+   then A: x in n & y in n by LNRS;
+  assume x <> y;
+  hence [x,y] in iR or [y,x] in iR by A, CRS;
+end;
+end;
+
+theorem CompleteCli: :: CompleteCli:
+for n being Nat holds clique# CompleteRelStr n = n
+proof
+ let n be Nat;
+ set R = CompleteRelStr n;
+Aa: card card n = card n;
+    [#]R = n by LNRS;
+   then
+A: ex C being finite Clique of R st card C = n by Aa,CARD_1:71;
+   for T being finite Clique of R holds card T <= n proof
+   let T be finite Clique of R;
+   card n = n by Aa, CARD_1:71;
+   then
+ A1: card the carrier of R = n by LNRS;
+ B1: card T <= clique# R by DILWORTH:def 4;
+     clique# R <= n by A1, Maxclique;
+   hence thesis by B1, XXREAL_0:2;
+ end;
+ hence clique# R = n by A, DILWORTH:def 4;
+end;
+
+theorem :: CompleteSta:
+for n being non empty Nat holds stability# CompleteRelStr n = 1
+proof
+ let n be non empty Nat;
+ set R = CompleteRelStr n;
+   [#]R is Clique of R;
+ hence stability# CompleteRelStr n = 1 by DILWORTH:20;
+end;
+
+theorem CompleteChr: :: CompleteChr:
+for n being Nat holds chromatic# CompleteRelStr n = n
+proof
+ let n be Nat;
+ set R = CompleteRelStr n;
+   clique# R = n by CompleteCli;
+   then
+B: n <= chromatic# R by CliChr;
+C: chromatic# R <= card the carrier of R by Maxchromatic;
+    card card n = card n;
+    then
+    card n = n by CARD_1:71;
+    then card the carrier of R = n by LNRS;
+ hence chromatic# CompleteRelStr n = n by B, C, XXREAL_0:1;
+end;
+
+theorem :: CompleteClico
+for n being non empty Nat holds cliquecover# CompleteRelStr n = 1
+proof
+let n be non empty Nat;
+   set R = CompleteRelStr n; set cR = the carrier of R;
+   reconsider C = {cR} as a_partition of cR by EQREL_1:48;
+A3: now let x be set;
+     assume x in C;
+       then x = [#]R by TARSKI:def 1;
+       hence x is Clique of R;
+   end;
+A: now
+     take C;
+     thus C is finite;
+     thus C is Clique-partition of R by A3, DILWORTH:def 11;
+     thus card C = 1 by CARD_1:50;
+   end;
+   now
+     let C be finite Clique-partition of R;
+       0+1 <= card C by NAT_1:13;
+     hence 1 <= card C;
+   end;
+ hence cliquecover# CompleteRelStr n = 1 by A, Lclico;
+end;
+
+begin :: Mycielskian of a graph
+
+definition
+  let n be Nat, R be NatRelStr of n;
+                                              :: Note: no assumptions about R
+  func Mycielskian R -> NatRelStr of 2*n+1 means          :LMR:
+  the InternalRel of it =
+      (the InternalRel of R)
+   \/ { [x,y+n] where x, y is Element of NAT : [x,y] in the InternalRel of R }
+   \/ { [x+n,y] where x, y is Element of NAT : [x,y] in the InternalRel of R }
+   \/ [: {2*n}, 2*n \ n :]
+   \/ [: 2*n \ n, {2*n} :];
+  existence proof
+    set cR = the carrier of R, iR = the InternalRel of R;
+    set cMR = 2*n+1;
+    set iMR = iR
+   \/ { [x,y+n] where x, y is Element of NAT : [x,y] in iR }
+   \/ { [x+n,y] where x, y is Element of NAT : [x,y] in iR }
+   \/ [: {2*n}, 2*n \ n :] \/ [: 2*n \ n, {2*n} :];
+   B: cR = n by LNRS;
+     n <= n+n by NAT_1:11;
+     then
+   C: n < 2*n+1 by NAT_1:13;
+     iMR c= [:cMR, cMR:] proof
+       let z be set;
+       assume A: z in iMR;
+       per cases by A, U5;
+       suppose z in iR;
+           then consider c, d being set such that
+       A1: c in cR and
+       B1: d in cR and
+       C1: z = [c,d] by ZFMISC_1:def 2;
+           reconsider c, d as Nat by B, A1, B1, NECKLACE:4;
+           c < n & d < n by B, A1, B1, NAT_1:45;
+           then c < cMR & d < cMR by C, XXREAL_0:2;
+           then c in cMR & d in cMR by NAT_1:45;
+         hence z in [:cMR, cMR:] by C1, ZFMISC_1:def 2;
+       end;
+       suppose z in { [x,y+n] where x, y is Element of NAT : [x,y] in iR };
+         then consider x, y being Element of NAT such that
+       A1: z = [x,y+n] and
+       B1: [x,y] in iR;
+           x in cR by B1, ZFMISC_1:106;
+           then x < n by B, NAT_1:45;
+           then x < cMR by C, XXREAL_0:2;
+           then C1: x in cMR by NAT_1:45;
+           y in cR by B1, ZFMISC_1:106;
+           then y < n by B, NAT_1:45;
+           then y+n < n+n by XREAL_1:8;
+           then y+n < 2*n+1 by NAT_1:13;
+           then y+n in cMR by NAT_1:45;
+         hence z in [:cMR, cMR:] by A1, C1, ZFMISC_1:def 2;
+       end;
+       suppose z in { [x+n,y] where x, y is Element of NAT : [x,y] in iR };
+         then consider x, y being Element of NAT such that
+       A1: z = [x+n,y] and
+       B1: [x,y] in iR;
+           y in cR by B1, ZFMISC_1:106;
+           then y < n by B, NAT_1:45;
+           then y < cMR by C, XXREAL_0:2;
+           then C1: y in cMR by NAT_1:45;
+           x in cR by B1, ZFMISC_1:106;
+           then x < n by B, NAT_1:45;
+           then x+n < n+n by XREAL_1:8;
+           then x+n < 2*n+1 by NAT_1:13;
+           then x+n in cMR by NAT_1:45;
+         hence z in [:cMR, cMR:] by A1, C1, ZFMISC_1:def 2;
+       end;
+       suppose z in [: {2*n}, 2*n \ n :];
+         then consider c, d being set such that
+       A1: c in {2*n} and
+       B1: d in 2*n \ n and
+       C1: z = [c,d] by ZFMISC_1:def 2;
+       D1: c = 2*n by A1, TARSKI:def 1;
+           reconsider c as Nat by A1, TARSKI:def 1;
+           c < 2*n+1 by D1, NAT_1:13;
+           then E1: c in cMR by NAT_1:45;
+           reconsider d as Nat by B1, NECKLACE:4;
+           d < 2*n by B1, Nat0;
+           then d < cMR by NAT_1:13;
+           then d in cMR by NAT_1:45;
+         hence z in [:cMR, cMR:] by E1, C1, ZFMISC_1:def 2;
+       end;
+       suppose z in [: 2*n \ n, {2*n} :];
+         then consider c, d being set such that
+       A1: c in 2*n \ n and
+       B1: d in {2*n} and
+       C1: z = [c,d] by ZFMISC_1:def 2;
+       D1: d = 2*n by B1, TARSKI:def 1;
+           reconsider d as Nat by B1, TARSKI:def 1;
+           d < 2*n+1 by D1, NAT_1:13;
+           then E1: d in cMR by NAT_1:45;
+           reconsider c as Nat by A1, NECKLACE:4;
+           c < 2*n by A1, Nat0;
+           then c < cMR by NAT_1:13;
+           then c in cMR by NAT_1:45;
+         hence z in [:cMR, cMR:] by E1, C1, ZFMISC_1:def 2;
+       end;
+     end;
+     then reconsider iMR as Relation of cMR;
+     set MR = RelStr (# cMR, iMR #);
+     take MR;
+     thus the carrier of MR = 2*n+1;  :: for NatRelStr
+     thus the InternalRel of MR = iR
+   \/ { [x,y+n] where x, y is Element of NAT : [x,y] in iR }
+   \/ { [x+n,y] where x, y is Element of NAT : [x,y] in iR }
+   \/ [: {2*n}, 2*n \ n :] \/ [: 2*n \ n, {2*n} :];
+  end;
+  uniqueness
+  proof
+    let A, B be NatRelStr of 2*n+1;
+    the carrier of A = 2*n+1 & the carrier of B = 2*n+1 by LNRS;
+    hence thesis;
+end;
+end;
+
+theorem cMR0: :: cMR0:
+for n being Nat, R being NatRelStr of n
+ holds the carrier of R c= the carrier of Mycielskian R
+proof
+   let n be Nat, R be NatRelStr of n;
+A: the carrier of R = n by LNRS;
+ n <= n+n by NAT_1:12;
+ then n <= 2*n+1 by NAT_1:12;
+ then n c= 2*n+1 by NAT_1:40;
+ hence the carrier of R c= the carrier of Mycielskian R by A, LNRS;
+end;
+
+theorem iMR0: :: iMR0:
+for n being Nat, R being NatRelStr of n, x, y being Nat
+ st [x,y] in the InternalRel of Mycielskian R
+  holds x < n & y < n or x < n & n <= y & y < 2*n or n <= x & x < 2*n & y < n
+     or x = 2*n & n <= y & y < 2*n or n <= x & x < 2*n & y = 2*n
+proof
+ let n be Nat, R be NatRelStr of n, a, b being Nat;
+ set cR = the carrier of R, iR = the InternalRel of R;
+ defpred LHS[] means [a,b] in the InternalRel of Mycielskian R;
+ defpred RHS[] means
+        a < n & b < n or a < n & n <= b & b < 2*n or n <= a & a < 2*n & b < n
+     or a = 2*n & n <= b & b < 2*n or n <= a & a < 2*n & b = 2*n;
+B: the InternalRel of Mycielskian R = iR
+   \/ { [x,y+n] where x, y is Element of NAT : [x,y] in iR }
+   \/ { [x+n,y] where x, y is Element of NAT : [x,y] in iR }
+   \/ [: {2*n}, 2*n \ n :] \/ [: 2*n \ n, {2*n} :] by LMR;
+ assume A: LHS[];
+   per cases by A, B, U5;
+   suppose [a,b] in iR;
+     then a in cR & b in cR by ZFMISC_1:106;
+     then a in n & b in n by LNRS;
+     hence RHS[] by NAT_1:45;
+   end;
+   suppose [a,b] in { [x,y+n] where x, y is Element of NAT : [x,y] in iR };
+      then consider x, y being Element of NAT such that
+   A1: [x,y+n] = [a,b] and
+   B1: [x,y] in iR;
+            y in cR by B1, ZFMISC_1:106;
+       then y in n by LNRS;
+       then y < n by NAT_1:45;
+       then C1: y+n < n+n by XREAL_1:8;
+            x in cR by B1, ZFMISC_1:106;
+       then x in n by LNRS;
+       then x < n by NAT_1:45;
+     hence RHS[] by C1, A1, ZFMISC_1:33;
+   end;
+   suppose [a,b] in { [x+n,y] where x, y is Element of NAT : [x,y] in iR };
+      then consider x, y being Element of NAT such that
+   A1: [x+n,y] = [a,b] and
+   B1: [x,y] in iR;
+            x in cR by B1, ZFMISC_1:106;
+       then x in n by LNRS;
+       then x < n by NAT_1:45;
+       then C1: x+n < n+n by XREAL_1:8;
+            y in cR by B1, ZFMISC_1:106;
+       then y in n by LNRS;
+       then y < n by NAT_1:45;
+     hence RHS[] by C1, A1, ZFMISC_1:33;
+   end;
+   suppose S1: [a,b] in [: {2*n}, 2*n \ n :];
+       A1: b in 2*n \ n by S1, ZFMISC_1:106;
+       a in {2*n} by S1, ZFMISC_1:106;
+     hence RHS[] by A1, Nat0, TARSKI:def 1;
+   end;
+   suppose S1: [a,b] in [: 2*n \ n, {2*n} :];
+       A1: a in 2*n \ n by S1, ZFMISC_1:106;
+       b in {2*n} by S1, ZFMISC_1:106;
+     hence RHS[] by A1, Nat0, TARSKI:def 1;
+   end;
+end;
+
+theorem iMR1ba: :: iMR1ba:
+for n being Nat, R being NatRelStr of n
+ holds the InternalRel of R c= the InternalRel of Mycielskian R
+proof
+ let n be Nat, R be NatRelStr of n;
+ set iR = the InternalRel of R;
+ set MR = Mycielskian R;
+ set iMR = the InternalRel of MR;
+ iMR = iR
+   \/ { [x,y+n] where x, y is Element of NAT : [x,y] in iR }
+   \/ { [x+n,y] where x, y is Element of NAT : [x,y] in iR }
+   \/ [: {2*n}, 2*n \ n :] \/ [: 2*n \ n, {2*n} :] by LMR;
+ hence iR c= iMR by U5s;
+end;
+
+theorem iMR1b: :: iMR1b:
+for n being Nat, R being NatRelStr of n, x, y being set
+ st x in n & y in n & [x,y] in the InternalRel of Mycielskian R
+  holds [x,y] in the InternalRel of R
+proof
+ let n be Nat, R be NatRelStr of n, a, b be set such that
+A: a in n and
+B: b in n and
+C: [a,b] in the InternalRel of Mycielskian R;
+ set iR = the InternalRel of R;
+ set MR = Mycielskian R;
+ set iMR = the InternalRel of MR;
+D: iMR = iR
+   \/ { [x,y+n] where x, y is Element of NAT : [x,y] in iR }
+   \/ { [x+n,y] where x, y is Element of NAT : [x,y] in iR }
+   \/ [: {2*n}, 2*n \ n :] \/ [: 2*n \ n, {2*n} :] by LMR;
+  per cases by C, D, U5;
+  suppose [a,b] in iR;
+    hence [a,b] in iR;
+  end;
+  suppose [a,b] in { [x,y+n] where x, y is Element of NAT : [x,y] in iR };
+    then consider x, y being Element of NAT such that
+  A1: [a,b] = [x,y+n] and [x,y] in iR;
+      b = y+n by A1, ZFMISC_1:33;
+      then y+n < n by B, NAT_1:45;
+      then y < n-n by XREAL_1:22;
+      then y < 0;
+     hence [a,b] in iR;
+  end;
+  suppose [a,b] in { [x+n,y] where x, y is Element of NAT : [x,y] in iR };
+    then consider x, y being Element of NAT such that
+  A1: [a,b] = [x+n,y] and [x,y] in iR;
+      a = x+n by A1, ZFMISC_1:33;
+      then x+n < n by A, NAT_1:45;
+      then x < n-n by XREAL_1:22;
+      then x < 0;
+     hence [a,b] in iR;
+  end;
+  suppose [a,b] in [: {2*n}, 2*n \ n :];
+     then consider c, d being set such that
+    A1: c in {2*n} and d in 2*n \ n and
+    C1: [a,b] = [c,d] by ZFMISC_1:def 2;
+    D1: c = 2*n by A1, TARSKI:def 1;
+    E1: c = a by C1, ZFMISC_1:33;
+        n+n < n by A, E1, D1, NAT_1:45;
+        then n < n-n by XREAL_1:22;
+        then n < 0;
+      hence [a,b] in iR;
+  end;
+  suppose [a,b] in [: 2*n \ n, {2*n} :];
+     then consider c, d being set such that c in 2*n \ n and
+    B1: d in {2*n} and
+    C1: [a,b] = [c,d] by ZFMISC_1:def 2;
+    D1: d = 2*n by B1, TARSKI:def 1;
+    E1: d = b by C1, ZFMISC_1:33;
+        n+n < n by B, E1, D1, NAT_1:45;
+        then n < n-n by XREAL_1:22;
+        then n < 0;
+      hence [a,b] in iR;
+  end;
+end;
+
+theorem iMR1a: :: iMR1a:
+for n being Nat, R being NatRelStr of n, x, y being Nat
+ st [x,y] in the InternalRel of R holds
+         [x,y+n] in the InternalRel of Mycielskian R
+       & [x+n,y] in the InternalRel of Mycielskian R
+proof
+  let n be Nat, R be NatRelStr of n, a, b be Nat such that
+C: [a,b] in the InternalRel of R;
+ set iR = the InternalRel of R;
+ set MR = Mycielskian R;
+ set iMR = the InternalRel of MR;
+D: iMR = iR
+   \/ { [x,y+n] where x, y is Element of NAT : [x,y] in iR }
+   \/ { [x+n,y] where x, y is Element of NAT : [x,y] in iR }
+   \/ [: {2*n}, 2*n \ n :] \/ [: 2*n \ n, {2*n} :] by LMR;
+   reconsider ap1 = a, bp1 = b as Element of NAT by ORDINAL1:def 13;
+  [ap1,bp1+n] in { [x,y+n] where x, y is Element of NAT : [x,y] in iR } by C;
+ hence [a,b+n] in iMR by D, U5;
+  [ap1+n,bp1] in { [x+n,y] where x, y is Element of NAT : [x,y] in iR } by C;
+ hence [a+n,b] in iMR by D, U5;
+end;
+
+theorem iMR1c: :: iMR1c:
+for n being Nat, R being NatRelStr of n, x, y being Nat
+ st x in n & [x,y+n] in the InternalRel of Mycielskian R
+  holds [x,y] in the InternalRel of R
+proof
+ let n be Nat, R be NatRelStr of n, a, b be Nat;
+ set cR = the carrier of R, iR = the InternalRel of R;
+ set MR = Mycielskian R;
+ set iMR = the InternalRel of MR;
+ assume that
+A: a in n and
+C: [a,b+n] in iMR;
+D: iMR = iR
+   \/ { [x,y+n] where x, y is Element of NAT : [x,y] in iR }
+   \/ { [x+n,y] where x, y is Element of NAT : [x,y] in iR }
+   \/ [: {2*n}, 2*n \ n :] \/ [: 2*n \ n, {2*n} :] by LMR;
+  per cases by C, D, U5;
+    suppose [a,b+n] in iR;
+      then b+n in cR by ZFMISC_1:106;
+      then b+n in n by LNRS;
+      then b+n < n by NAT_1:45;
+      then b < n-n by XREAL_1:22;
+      then b < 0;
+      hence [a,b] in iR;
+    end;
+    suppose [a,b+n] in { [x,y+n] where x, y is Element of NAT : [x,y] in iR };
+      then consider x, y being Element of NAT such that
+    A1: [a,b+n] = [x,y+n] and
+    B1: [x,y] in iR;
+        b+n = y+n by A1, ZFMISC_1:33;
+      hence [a,b] in iR by B1, A1, ZFMISC_1:33;
+    end;
+    suppose [a,b+n] in { [x+n,y] where x, y is Element of NAT : [x,y] in iR };
+      then consider x, y being Element of NAT such that
+    A1: [a,b+n] = [x+n,y] and
+    B1: [x,y] in iR;
+        b+n = y by A1, ZFMISC_1:33;
+        then b+n in cR by B1, ZFMISC_1:106;
+        then b+n in n by LNRS;
+        then b+n < n by NAT_1:45;
+        then b < n-n by XREAL_1:22;
+        then b < 0;
+      hence [a,b] in iR;
+    end;
+    suppose [a,b+n] in [: {2*n}, 2*n \ n :];
+      then consider c, d being set such that
+    A1: c in {2*n} and d in 2*n \ n and
+    C1: [a,b+n] = [c,d] by ZFMISC_1:def 2;
+    D1: c = 2*n by A1, TARSKI:def 1;
+    E1: c = a by C1, ZFMISC_1:33;
+        n+n < n by A, E1, D1, NAT_1:45;
+        then n < n-n by XREAL_1:22;
+        then n < 0;
+      hence [a,b] in iR;
+    end;
+    suppose [a,b+n] in [: 2*n \ n, {2*n} :];
+      then consider c, d being set such that
+    A1: c in 2*n \ n and d in {2*n} and
+    C1: [a,b+n] = [c,d] by ZFMISC_1:def 2;
+        c = a by C1, ZFMISC_1:33;
+        then n <= a by A1, Nat0;
+      hence [a,b] in iR by A, NAT_1:45;
+    end;
+end;
+
+theorem iMR1d: :: iMR1d:
+for n being Nat, R being NatRelStr of n, x, y being Nat
+ st y in n & [x+n,y] in the InternalRel of Mycielskian R
+  holds [x,y] in the InternalRel of R
+proof
+ let n be Nat, R be NatRelStr of n, a, b be Nat;
+ set cR = the carrier of R, iR = the InternalRel of R;
+ set MR = Mycielskian R;
+ set iMR = the InternalRel of MR;
+ assume that
+A: b in n and
+C: [a+n,b] in iMR;
+D: iMR = iR
+   \/ { [x,y+n] where x, y is Element of NAT : [x,y] in iR }
+   \/ { [x+n,y] where x, y is Element of NAT : [x,y] in iR }
+   \/ [: {2*n}, 2*n \ n :] \/ [: 2*n \ n, {2*n} :] by LMR;
+  per cases by C, D, U5;
+    suppose [a+n,b] in iR;
+      then a+n in cR by ZFMISC_1:106;
+      then a+n in n by LNRS;
+      then a+n < n by NAT_1:45;
+      then a < n-n by XREAL_1:22;
+      then a < 0;
+      hence [a,b] in iR;
+    end;
+    suppose [a+n,b] in { [x,y+n] where x, y is Element of NAT : [x,y] in iR };
+      then consider x, y being Element of NAT such that
+    A1: [a+n,b] = [x,y+n] and
+    B1: [x,y] in iR;
+        a+n = x by A1, ZFMISC_1:33;
+        then a+n in cR by B1, ZFMISC_1:106;
+        then a+n in n by LNRS;
+        then a+n < n by NAT_1:45;
+        then a < n-n by XREAL_1:22;
+        then a < 0;
+      hence [a,b] in iR;
+    end;
+    suppose [a+n,b] in { [x+n,y] where x, y is Element of NAT : [x,y] in iR };
+      then consider x, y being Element of NAT such that
+    A1: [a+n,b] = [x+n,y] and
+    B1: [x,y] in iR;
+        a+n = x+n by A1, ZFMISC_1:33;
+      hence [a,b] in iR by B1, A1, ZFMISC_1:33;
+    end;
+    suppose [a+n,b] in [: {2*n}, 2*n \ n :];
+      then consider c, d being set such that c in {2*n} and
+    B1: d in 2*n \ n and
+    C1: [a+n,b] = [c,d] by ZFMISC_1:def 2;
+        b = d by C1, ZFMISC_1:33;
+        then n <= b by B1, Nat0;
+      hence [a,b] in iR by A, NAT_1:45;
+    end;
+    suppose [a+n,b] in [: 2*n \ n, {2*n} :];
+      then consider c, d being set such that c in 2*n \ n and
+    B1: d in {2*n} and
+    C1: [a+n,b] = [c,d] by ZFMISC_1:def 2;
+    D1: d = 2*n by B1, TARSKI:def 1;
+        d = b by C1, ZFMISC_1:33;
+        then n+n < n by A, D1, NAT_1:45;
+        then n < n-n by XREAL_1:22;
+        then n < 0;
+      hence [a,b] in iR;
+    end;
+end;
+
+theorem iMR1e: :: iMR1e:
+for n being Nat, R being NatRelStr of n, m being Nat
+ st n <= m & m < 2*n
+  holds [m,2*n] in the InternalRel of Mycielskian R
+      & [2*n,m] in the InternalRel of Mycielskian R
+proof
+ let n be Nat, R be NatRelStr of n, m be Nat such that
+A: n <= m and
+B: m < 2*n;
+ set iR = the InternalRel of R;
+ set MR = Mycielskian R;
+ set iMR = the InternalRel of MR;
+D: iMR = iR
+   \/ { [x,y+n] where x, y is Element of NAT : [x,y] in iR }
+   \/ { [x+n,y] where x, y is Element of NAT : [x,y] in iR }
+   \/ [: {2*n}, 2*n \ n :] \/ [: 2*n \ n, {2*n} :] by LMR;
+E: m in 2*n \ n by A, B, Nat0;
+F: 2*n in {2*n} by TARSKI:def 1;
+   then [m,2*n] in [: 2*n \ n, {2*n} :] by E, ZFMISC_1:def 2;
+  hence [m,2*n] in iMR by D, XBOOLE_0:def 3;
+        [2*n,m] in [: {2*n}, 2*n \ n :] by E, F, ZFMISC_1:def 2;
+  hence [2*n,m] in iMR by D, U5;
+end;
+
+theorem Msubrel: :: Msubrel:
+for n being Nat, R being NatRelStr of n, S being Subset of Mycielskian R
+ st S = n holds R = subrelstr S
+proof
+ let n be Nat, R be NatRelStr of n, S be Subset of Mycielskian R such that
+A: S = n;
+   set cR = the carrier of R, iR = the InternalRel of R;
+   set sS = subrelstr S; set csS = the carrier of sS;
+   set isS = the InternalRel of sS;
+   set MR = Mycielskian R;
+   set cMR = the carrier of MR, iMR = the InternalRel of MR;
+B: cR = n by LNRS;
+Ba: csS = n by A, YELLOW_0:def 15;
+C: iR = isS proof
+    thus iR c= isS proof
+      let z be set;
+      assume A0: z in iR;
+       then consider x, y being set such that
+      A1: x in cR and
+      B1: y in cR and
+      C1: z = [x,y] by ZFMISC_1:def 2;
+          cR c= cMR by cMR0;
+          then reconsider xMR = x, yMR = y as Element of MR by A1, B1;
+          reconsider xsS = x, ysS = y as Element of sS by A1, B1, LNRS, Ba;
+          iR c= iMR by iMR1ba;
+          then xMR <= yMR by A0, C1, ORDERS_2:def 9;
+          then xsS <= ysS by Ba, B, B1, YELLOW_0:61;
+      hence z in isS by C1, ORDERS_2:def 9;
+    end;
+    thus isS c= iR proof
+      let z be set;
+      assume A0: z in isS;
+       then consider x, y being set such that
+      A1: x in csS and
+      B1: y in csS and
+      C1: z = [x,y] by ZFMISC_1:def 2;
+          cR c= cMR by cMR0;
+          then reconsider xMR = x, yMR = y as Element of MR by A1, B1, B, Ba;
+          reconsider xsS = x, ysS = y as Element of sS by A1, B1;
+          xsS <= ysS by A0, C1, ORDERS_2:def 9;
+          then xMR <= yMR by YELLOW_0:60;
+          then z in iMR by C1, ORDERS_2:def 9;
+      hence z in iR by A1, B1, Ba, C1, iMR1b;
+    end;
+   end;
+ thus R = subrelstr S by LNRS, Ba, C;
+end;
+
+theorem MClique: :: MClique:
+for n being Nat, R being irreflexive NatRelStr of n
+ st 2 <= clique# R holds clique# R = clique# Mycielskian R
+proof
+  let n be Nat, R be irreflexive NatRelStr of n such that
+A: 2 <= clique# R and
+B: clique# R <> clique# Mycielskian R;
+   set cR = the carrier of R; set iR = the InternalRel of R;
+   set MR = Mycielskian R;
+   set cMR = the carrier of MR; set iMR = the InternalRel of MR;
+   set cnMR = clique# MR;
+Carn: cR = n by LNRS;
+Car: cR c= cMR by cMR0;
+   consider C being finite Clique of R such that
+C: card C = clique# R by DILWORTH:def 4;
+     n <= n+n by NAT_1:11;
+     then n < 2*n+1 by NAT_1:13;
+     then n c= 2*n+1 by NAT_1:40;
+     then reconsider S = n as Subset of MR by LNRS;
+F: R = subrelstr S by Msubrel;
+   then C is Clique of MR by DILWORTH:28;
+   then card C <= cnMR by DILWORTH:def 4;
+   then
+D: clique# R < cnMR by B, C, XXREAL_0:1;
+   then 2 < cnMR by A, XXREAL_0:2;
+   then
+Da: 2+1 <= cnMR by NAT_1:13;
+   consider D being finite Clique of MR such that
+E: card D = cnMR by DILWORTH:def 4;
+   per cases;
+   suppose S1: D c= n;
+          D /\ S is Clique of R by F, DILWORTH:29;
+     then D is Clique of R by S1, XBOOLE_1:28;
+     hence contradiction by E, D, DILWORTH:def 4;
+   end;
+   suppose not D c= n;
+     then consider x being set such that
+   A1: x in D and
+   B1: not x in n by TARSKI:def 3;
+       x in cMR by A1; then
+   C1: x in 2*n+1 by LNRS;
+       reconsider x as Nat by C1, NECKLACE:4;
+       reconsider xp1 = x as Element of MR by A1;
+   D1: x >= n by B1, NAT_1:45;
+       x < 2*n+1 by C1, NAT_1:45;
+       then
+   E1: x <= 2*n by NAT_1:13;
+
+   F1: for y being set st y in D & x <> y holds y in n proof
+         let y be set such that
+       A2: y in D and
+       B2: x <> y and
+       C2: not y in n;
+           y in cMR by A2; then
+       D2: y in 2*n+1 by LNRS;
+           reconsider y as Nat by D2, NECKLACE:4;
+           reconsider yp1 = y as Element of MR by A2;
+       D2a: y >= n by C2, NAT_1:45;
+           y < 2*n+1 by D2, NAT_1:45;
+           then
+       E2: y <= 2*n by NAT_1:13;
+           set DD = D \ {x,y};
+           {x,y} c= D by A2, A1, ZFMISC_1:38;
+           then F2a: card DD = card D - card {x,y} by CARD_2:63;
+           1+2-2 <= card D -2 by Da, E, XREAL_1:11;
+           then 1 <= card DD by F2a, B2, CARD_2:76;
+           then consider z being set such that
+       G2: z in DD by XBOOLE_0:def 1, CARD_1:47;
+      A2z: z in D by G2, XBOOLE_0:def 5;
+      A2zz: z in cMR by G2;
+           reconsider zp1 = z as Element of MR by G2;
+      D2z: z in 2*n+1 by A2zz, LNRS;
+           reconsider z as Nat by D2z, NECKLACE:4;
+           x in {x,y} by TARSKI:def 2;
+           then
+      G2z: z <> x by G2, XBOOLE_0:def 5;
+           y in {x,y} by TARSKI:def 2;
+           then
+      H2z: z <> y by G2, XBOOLE_0:def 5;
+         per cases by E1, E2, XXREAL_0:1;
+         suppose S1: x < 2*n & y < 2*n;
+           xp1 <= yp1 or yp1 <= xp1 by A1, A2, B2, DILWORTH:6;
+           then [x,y] in iMR or [y,x] in iMR by ORDERS_2:def 9;
+          hence contradiction by D1, S1, D2a, iMR0;
+         end;
+         suppose S1: x < 2*n & y = 2*n;
+            xp1 <= zp1 or zp1 <= xp1 by G2z, A2z, A1, DILWORTH:6;
+            then A3: [x,z] in iMR or [z,x] in iMR by ORDERS_2:def 9;
+            yp1 <= zp1 or zp1 <= yp1 by H2z, A2z, A2, DILWORTH:6;
+            then [y,z] in iMR or [z,y] in iMR by ORDERS_2:def 9;
+            then n <= z & z < 2*n by S1, D2a, iMR0;
+          hence contradiction by A3, S1, D1, iMR0;
+         end;
+         suppose S1: x = 2*n & y < 2*n;
+            yp1 <= zp1 or zp1 <= yp1 by H2z, A2z, A2, DILWORTH:6;
+            then B3: [y,z] in iMR or [z,y] in iMR by ORDERS_2:def 9;
+            xp1 <= zp1 or zp1 <= xp1 by G2z, A2z, A1, DILWORTH:6;
+            then [x,z] in iMR or [z,x] in iMR by ORDERS_2:def 9;
+            then n <= z & z < 2*n by S1, D1, iMR0;
+          hence contradiction by B3, S1, D2a, iMR0;
+         end;
+         suppose x = 2*n & y = 2*n;
+          hence contradiction by B2;
+         end;
+       end;
+  C2X: card (D\{x}) = card D - card {x} by A1, EULER_1:5
+                       .= card D - 1 by CARD_1:50;
+       per cases by E1, XXREAL_0:1;
+       suppose S2: x < 2*n;
+         consider xx being Nat such that
+   A2: x = n+xx by D1, NAT_1:10;
+           n + xx < n + n by S2, A2;
+           then B2a: xx < n by XREAL_1:8;
+           then B2: xx in n by NAT_1:45;
+           reconsider xxp1 = xx as Element of MR by B2, Car, Carn;
+       C2: now
+            assume xx in D;
+              then xp1 <= xxp1 or xxp1 <= xp1 by A1, B2a, D1, DILWORTH:6;
+              then [x,xx] in iMR or [xx,x] in iMR by ORDERS_2:def 9;
+              then [xx,xx] in iR or [xx,xx] in iR by B2, A2, iMR1c, iMR1d;
+            hence contradiction by B2, Carn, NECKLACE:def 6;
+           end;
+           set DD = (D\{x}) \/ {xx};
+           DD c= cR proof
+             let a be set;
+             assume a in DD;
+             then a in D\{x} or a in {xx} by XBOOLE_0:def 3;
+             then a in D & not a in {x} or a = xx
+                         by TARSKI:def 1, XBOOLE_0:def 5;
+             then a in D & a <> x or a = xx by TARSKI:def 1;
+             hence a in cR by B2a, NAT_1:45, F1, Carn;
+           end;
+           then reconsider DD as Subset of R;
+           now
+             let a, b be Element of R such that
+           A3: a in DD and
+           B3: b in DD and
+           C3: a <> b;
+               a in D\{x} or a in {xx} by A3, XBOOLE_0:def 3;
+               then
+           D3: a in D & not a in {x} or a = xx by XBOOLE_0:def 5, TARSKI:def 1;
+               b in D\{x} or b in {xx} by B3, XBOOLE_0:def 3;
+               then
+           E3: b in D & not b in {x} or b = xx by XBOOLE_0:def 5, TARSKI:def 1;
+           F3: a in cR & b in cR by A3;
+               reconsider an = a, bn = b as Nat by A3, Carn, NECKLACE:4;
+               reconsider ap1 = a, bp1 = b as Element of MR by F3, Car;
+             per cases by C3, D3, E3, TARSKI:def 1;
+             suppose S3: a in D & a <> x & b in D & b <> x;
+                    ap1 <= bp1 or bp1 <= ap1 by S3, C3, DILWORTH:6;
+               hence a <= b or b <= a by F, A3, YELLOW_0:61;
+             end;
+             suppose S3: a in D & a <> x & b = xx;
+                    ap1 <= xp1 or xp1 <= ap1 by S3, A1, DILWORTH:6;
+               then [ap1,x] in iMR or [x,ap1] in iMR by ORDERS_2:def 9;
+               then [an, xx] in iR or [xx,an] in iR
+                  by Carn,B2a,A2,iMR1c,iMR1d;
+               hence a <= b or b <= a by S3, ORDERS_2:def 9;
+             end;
+             suppose S3: a = xx & b in D & b <> x;
+                    bp1 <= xp1 or xp1 <= bp1 by S3, A1, DILWORTH:6;
+               then [bp1,x] in iMR or [x,bp1] in iMR by ORDERS_2:def 9;
+               then [bn, xx] in iR or [xx,bn] in iR
+                  by Carn,B2a, A2,iMR1c,iMR1d;
+               hence a <= b or b <= a by S3, ORDERS_2:def 9;
+             end;
+           end;
+           then reconsider DD as Clique of R by DILWORTH:6;
+       C2a: not xx in D\{x} by C2, XBOOLE_0:def 5;
+            card DD = card D - 1 + 1 by C2a, C2X, CARD_2:54 .= card D;
+         hence contradiction by E, D, DILWORTH:def 4;
+       end;
+       suppose S2: x = 2*n;
+       2+1-1 <= card D -1 by E, Da, XREAL_1:11;
+       then 2 c= card (D\{x}) by C2X, NAT_1:40;
+       then consider y, z being set such that
+   G1: y in D\{x} and z in D\{x} and y <> z by PENCIL_1:2;
+   J1: y in D by G1, ZFMISC_1:64;
+   K1: x <> y by G1, ZFMISC_1:64;
+       y in the carrier of MR by G1;
+       then y in 2*n+1 by LNRS;
+       then reconsider y as Nat by NECKLACE:4;
+       reconsider yp1 = y as Element of MR by G1;
+       yp1 <= xp1 or xp1 <= yp1 by K1, J1, A1, DILWORTH:6;
+       then  L1: [y,x] in iMR or [x,y] in iMR by ORDERS_2:def 9;
+       y in n by F1, J1, K1;
+       then  M1: y < n by NAT_1:45;
+          n <= n+n by NAT_1:11;
+        hence contradiction by L1, S2, M1, iMR0;
+       end;
+   end;
+end;
+
+theorem Tchro0: :: Tchro0:
+for R being with_finite_chromatic# RelStr, S being Subset of R
+ holds chromatic# R >= chromatic# subrelstr S
+proof
+ let R be with_finite_chromatic# RelStr, S be Subset of R;
+   consider C be finite Coloring of R such that
+A: card C = chromatic# R by Lchro;
+   C | S is Coloring of subrelstr S by Tsr0;
+   then
+B: card (C | S) >= chromatic# subrelstr S by Lchro;
+   card C >= card (C | S) by Tpart0;
+ hence chromatic# R >= chromatic# subrelstr S by A, B, XXREAL_0:2;
+end;
+
+theorem Mchromatic:    :: :: Mchromatic:    :: even when n = 0 or n = 1 and then
+                       :: Mycielskian n = 2 is compl(P_3) (Thanks Lorna)
+                       :: and if we continue we have disconnected graphs.
+for n being Nat, R being irreflexive NatRelStr of n
+ holds chromatic# Mycielskian R = 1 + chromatic# R
+proof
+ let n be Nat, R be irreflexive NatRelStr of n;
+ set cR = the carrier of R, iR = the InternalRel of R; set cnR = chromatic# R;
+ set MR = Mycielskian R; set cnMR = chromatic# MR;
+ set cMR = the carrier of MR, iMR = the InternalRel of MR;
+A: cR = n by LNRS;
+Z1: ex C being finite Coloring of MR st card C = 1+cnR proof
+      consider C being finite Coloring of R such that
+  A1: card C = cnR by Lchro;
+      defpred P[set,set] means
+        $2 = { m+n where m is Element of NAT : m in $1 };
+  P1: for e being set st e in C ex u being set st P[e,u];
+      consider r being Function such that dom r = C and
+  C1: for e being set st e in C holds P[e,r.e] from CLASSES1:sch 1(P1);
+      set D = { d \/ r.d where d is Element of C : d in C };
+  D1: card D = card C proof
+        per cases;
+        suppose S2: D is empty;
+           now assume C is non empty;
+               then consider c being set such that
+           A3: c in C by XBOOLE_0:def 1;
+               c \/ r.c in D by A3;
+             hence contradiction by S2;
+           end;
+          hence thesis by S2;
+        end;
+        suppose S2: D is non empty;
+            defpred R[set,set] means $2 = $1 \/ r.$1;
+        R2: for e being set st e in C ex u being set st R[e,u];
+            consider s being Function such that
+        B2: dom s = C and
+        C2: for e being set st e in C holds R[e,s.e] from CLASSES1:sch 1(R2);
+        D2a: rng s c= D proof
+             let y be set;
+             assume y in rng s;
+               then consider x being set such that
+           A3: x in dom s and
+           B3: y = s.x by FUNCT_1:def 5;
+               y = x \/ r.x by A3, B3, B2, C2;
+             hence y in D by A3, B2;
+           end;
+           then reconsider s as Function of C, D by B2, FUNCT_2:4;
+            D c= rng s proof
+              let x be set;
+              assume x in D;
+                then consider c being Element of C such that
+              A3: x = c \/ r.c and
+              B3: c in C;
+                  x = s.c by A3, B3, C2;
+              hence x in rng s by B3, B2, FUNCT_1:def 5;
+            end;
+            then rng s = D by D2a, XBOOLE_0:def 10;
+            then
+         D2: s is onto by FUNCT_2:def 3;
+            s is one-to-one proof
+              let x1,x2 be set such that
+            A3: x1 in dom s and
+            B3: x2 in dom s and
+            C3: s.x1 = s.x2;
+            D3: s.x1 = x1 \/ r.x1 by A3, C2;
+            E3: s.x2 = x2 \/ r.x2 by B3, C2;
+              thus x1 c= x2 proof
+                let x be set;
+                assume A4: x in x1;
+                  B4: x in s.x1 by D3, A4, XBOOLE_0:def 3;
+                  per cases by B4, C3, E3, XBOOLE_0:def 3;
+                  suppose x in x2;
+                    hence thesis;
+                  end;
+                  suppose x in r.x2;
+                    then x in { m+n where m is Element of NAT : m in x2 }
+                                 by C1, B3;
+                    then consider m being Element of NAT such that
+                  A5: x = m+n and m in x2;
+                      m+n < 0+n by A4, A5, A3, B2, A, NAT_1:45;
+                    hence thesis by XREAL_1:8;
+                  end;
+              end;
+              thus x2 c= x1 proof
+                let x be set;
+                assume A4: x in x2;
+                  B4: x in s.x2 by E3, A4, XBOOLE_0:def 3;
+                  per cases by B4, C3, D3, XBOOLE_0:def 3;
+                  suppose x in x1;
+                    hence thesis;
+                  end;
+                  suppose x in r.x1;
+                    then x in { m+n where m is Element of NAT : m in x1 }
+                                 by C1, A3;
+                    then consider m being Element of NAT such that
+                  A5: x = m+n and m in x1;
+                      m+n < 0+n by A4, A5, B3, B2, A, NAT_1:45;
+                    hence thesis by XREAL_1:8;
+                  end;
+              end;
+            end;
+         hence thesis by D2, S2, EULER_1:12;
+        end;
+      end;
+       then
+  D1a: D is finite;
+      set E = D \/ {{2*n}};
+  F1a: union E c= cMR proof
+         let x be set;
+         assume x in union E;
+         then consider Y being set such that
+       A2: x in Y and
+       B2: Y in E by TARSKI:def 4;
+         per cases by B2, XBOOLE_0:def 3;
+         suppose Y in D;
+           then consider d being Element of C such that
+         A3: Y = d \/ r.d and
+         B3: d in C;
+         D3: r.d = { m+n where m is Element of NAT : m in d } by B3, C1;
+           per cases by A2, A3, XBOOLE_0:def 3;
+           suppose A2a: x in d;
+                reconsider a = x as Nat by A2a, B3, A, NECKLACE:4;
+                a < n by A2a, B3, A, NAT_1:45;
+                then a+0 < n+n by XREAL_1:10;
+                then a < 2*n+1 by NAT_1:13;
+                then a in 2*n+1 by NAT_1:45;
+             hence x in cMR by LNRS;
+           end;
+           suppose x in r.d;
+             then consider m being Element of NAT such that
+           A2: x = m+n and
+           B2: m in d by D3;
+                 m < n by B2, B3, A, NAT_1:45;
+               then m+n < n+n by XREAL_1:8;
+               then m+n < 2*n + 1 by NAT_1:13;
+               then x in 2*n+1 by A2, NAT_1:45;
+             hence x in cMR by LNRS;
+           end;
+         end;
+         suppose Y in {{2*n}};
+           then Y = {2*n} by TARSKI:def 1;
+           then B2: x = 2*n by A2, TARSKI:def 1;
+             2*n < 2*n+1 by NAT_1:13;
+             then 2*n in 2*n+1 by NAT_1:45;
+           hence x in cMR by B2, LNRS;
+         end;
+       end;
+  E1: E c= bool cMR proof
+       let X be set;
+       assume A2: X in E;
+           X c= cMR proof
+             let x be set;
+             assume x in X;
+             then x in union E by A2, TARSKI:def 4;
+             hence x in cMR by F1a;
+           end;
+         hence X in bool cMR;
+       end;
+  F1: union E = cMR proof
+       thus union E c= cMR by F1a;
+       thus cMR c= union E proof
+         let x be set;
+         assume x in cMR;
+            then A2: x in 2*n+1 by LNRS;
+            then reconsider a = x as Nat by NECKLACE:4;
+            a < 2*n+1 by A2, NAT_1:45;
+            then B2: a <= 2*n by NAT_1:13;
+         per cases;
+         suppose a < n;
+           then a in n by NAT_1:45;
+           then a in union C by A, EQREL_1:def 6;
+            then consider c being set such that
+         B2: a in c and
+         C2: c in C by TARSKI:def 4;
+         D2: x in c \/ r.c by B2, XBOOLE_0:def 3;
+               c \/ r.c in D by C2;
+               then c \/ r.c in E by XBOOLE_0:def 3;
+             hence x in union E by D2, TARSKI:def 4;
+         end;
+         suppose S1: a >= n;
+           per cases by B2, XXREAL_0:1;
+           suppose S2: a < n+n;
+             consider b being Nat such that
+           A2: a = n + b by S1, NAT_1:10;
+               reconsider b as Element of NAT by ORDINAL1:def 13;
+               b < n by A2, S2, XREAL_1:8;
+               then b in cR by A, NAT_1:45;
+               then b in union C by EQREL_1:def 6;
+               then consider c being set such that
+           B2: b in c and
+           C2: c in C by TARSKI:def 4;
+               r.c = { m+n where m is Element of NAT : m in c } by C2, C1;
+               then a in r.c by B2, A2;
+               then D2: x in c \/ r.c by XBOOLE_0:def 3;
+               c \/ r.c in D by C2;
+               then c \/ r.c in E by XBOOLE_0:def 3;
+             hence x in union E by D2, TARSKI:def 4;
+           end;
+           suppose a = 2*n;
+             then A2: a in {2*n} by TARSKI:def 1;
+               {2*n} in {{2*n}} by TARSKI:def 1;
+               then {2*n} in E by XBOOLE_0:def 3;
+             hence x in union E by A2, TARSKI:def 4;
+           end;
+         end;
+       end;
+      end;
+      now let A be Subset of cMR such that
+      A2: A in E;
+       thus A<>{} proof
+         per cases by A2, XBOOLE_0:def 3;
+         suppose A in D;
+           then consider d being Element of C such that
+         A3: A = d \/ r.d and
+         B3: d in C;
+             d <> {} by B3, EQREL_1:def 6;
+           hence thesis by A3;
+         end;
+         suppose A in {{2*n}};
+           hence thesis by TARSKI:def 1;
+         end;
+       end;
+       let B be Subset of cMR such that
+      B2: B in E;
+       assume C2: A <> B;
+       assume A meets B;
+         then consider x being set such that
+       D2: x in A and
+       E2: x in B by XBOOLE_0:3;
+         per cases by A2, B2, XBOOLE_0:def 3;
+         suppose that S1a: A in D and S1b: B in D;
+             consider d being Element of C such that
+         C3a: A = d \/ r.d and
+         D3a: d in C by S1a;
+             consider e being Element of C such that
+         C3b: B = e \/ r.e and
+         D3b: e in C by S1b;
+           per cases by C3a, C3b, D2, E2, XBOOLE_0:def 3;
+           suppose x in d & x in e;
+               then d meets e by XBOOLE_0:3;
+               then d = e by D3a, D3b, EQREL_1:def 6;
+             hence contradiction by C3a, C3b, C2;
+           end;
+           suppose that S2a: x in d and S2b: x in r.e;
+               x in { m+n where m is Element of NAT : m in e } by S2b, D3b, C1;
+               then consider mb being Element of NAT such that
+             A4a: x = mb+n and mb in e;
+                  mb+n < n+0 by A4a, S2a, D3a, A, NAT_1:45;
+             hence contradiction by XREAL_1:8;
+           end;
+           suppose that S2a: x in r.d and S2b: x in e;
+               x in { m+n where m is Element of NAT : m in d } by S2a, D3a, C1;
+               then consider ma being Element of NAT such that
+             A4a: x = ma+n and ma in d;
+                  ma+n < n+0 by A4a, S2b, D3b, A, NAT_1:45;
+             hence contradiction by XREAL_1:8;
+           end;
+           suppose that S2a: x in r.d and S2b: x in r.e;
+               x in { m+n where m is Element of NAT : m in d } by S2a, D3a, C1;
+               then consider ma being Element of NAT such that
+             A4a: x = ma+n and
+             B4a: ma in d;
+               x in { m+n where m is Element of NAT : m in e } by S2b, D3b, C1;
+               then consider mb being Element of NAT such that
+             A4b: x = mb+n and
+             B4b: mb in e;
+               d meets e by A4a, A4b, B4a, B4b, XBOOLE_0:3;
+               then d = e by D3a, D3b, EQREL_1:def 6;
+             hence contradiction by C3a, C3b, C2;
+           end;
+         end;
+         suppose that S1a: A in D and S1b: B in {{2*n}};
+              B = {2*n} by S1b, TARSKI:def 1;
+             then B3: x = 2*n by E2, TARSKI:def 1;
+             consider d being Element of C such that
+         C3: A = d \/ r.d and
+         D3: d in C by S1a;
+             per cases by C3, D2, XBOOLE_0:def 3;
+             suppose x in d;
+               then n+n < n by D3, A, B3, NAT_1:45;
+               hence contradiction by NAT_1:11;
+             end;
+             suppose x in r.d;
+               then x in { m+n where m is Element of NAT : m in d } by D3, C1;
+               then consider m being Element of NAT such that
+             A4: x = m+n and
+             B4: m in d;
+                 m in n by B4, D3, A;
+               hence contradiction by A4, B3;
+             end;
+         end;
+         suppose that S1a: A in {{2*n}} and S1b: B in D;
+             A = {2*n} by S1a, TARSKI:def 1;
+             then B3: x = 2*n by D2, TARSKI:def 1;
+             consider d being Element of C such that
+         C3: B = d \/ r.d and
+         D3: d in C by S1b;
+             per cases by C3, E2, XBOOLE_0:def 3;
+             suppose x in d;
+               then n+n < n by D3, A, B3, NAT_1:45;
+               hence contradiction by NAT_1:11;
+             end;
+             suppose x in r.d;
+               then x in { m+n where m is Element of NAT : m in d } by D3, C1;
+               then consider m being Element of NAT such that
+             A4: x = m+n and
+             B4: m in d;
+                 m in n by B4, D3, A;
+               hence contradiction by A4, B3;
+             end;
+         end;
+         suppose A in {{2*n}} & B in {{2*n}};
+           then A = {2*n} & B = {2*n} by TARSKI:def 1;
+          hence contradiction by C2;
+         end;
+      end;
+      then reconsider E as a_partition of cMR by E1, F1, EQREL_1:def 6;
+      now
+        let x be set;
+        assume A2: x in E;
+        per cases by A2, XBOOLE_0:def 3;
+        suppose x in D;
+           then consider d being Element of C such that
+        A3: x = d \/ r.d and
+        B3: d in C;
+             reconsider d as Subset of R by B3;
+        D3: r.d = { m+n where m is Element of NAT : m in d } by B3, C1;
+        C3: x c= cMR proof
+             let a be set;
+             assume A4: a in x;
+             per cases by A3, A4, XBOOLE_0:def 3;
+             suppose S5: a in d;
+               then reconsider ap1 = a as Nat by A, NECKLACE:4;
+             B5: ap1 < n by S5, A, NAT_1:45;
+                 n <= n+n by NAT_1:12;
+                 then ap1 < n+n by B5, XXREAL_0:2;
+                 then ap1 < 2*n+1 by NAT_1:13;
+                 then a in 2*n+1 by NAT_1:45;
+               hence a in cMR by LNRS;
+             end;
+             suppose a in r.d;
+                 then consider am being Element of NAT such that
+             B5: a = am+n and
+             C5: am in d by D3;
+                 am < n by C5, A, NAT_1:45;
+                 then am+n < n+n by XREAL_1:8;
+                 then am+n < 2*n+1 by NAT_1:13;
+                 then a in 2*n+1 by B5, NAT_1:45;
+               hence a in cMR by LNRS;
+             end;
+            end;
+
+        A2e: now let x be Nat;
+               assume x in r.d;
+               then consider m being Element of NAT such that
+             A3: x = m+n and
+             B3: m in d by D3;
+               thus n <= x by A3, NAT_1:11;
+                 m < n by NAT_1:45, B3, A;
+               then m+n < n+n by XREAL_1:8;
+               hence x < 2*n by A3;
+             end;
+        A2f: d is stable by B3, DILWORTH:def 12;
+           now
+             let a, b be Element of MR such that
+           A4: a in x and
+           B4: b in x and
+           C4: a <> b and
+           D4: a <= b or b <= a;
+           D4a: [a,b] in iMR or [b,a] in iMR by D4, ORDERS_2:def 9;
+                per cases by A4, B4, A3, XBOOLE_0:def 3;
+             suppose S5: a in d & b in d;
+               then B5: [a,b] in iR or [b,a] in iR by A, D4a, iMR1b;
+               reconsider a, b as Element of R by S5;
+               a <= b or b <= a by B5, ORDERS_2:def 9;
+              hence contradiction by S5, C4, A2f, DILWORTH:def 2;
+             end;
+             suppose that S5a: a in d and S5b: b in r.d;
+                 consider bm being Element of NAT such that
+             B5: b = bm+n and
+             C5: bm in d by S5b, D3;
+                 reconsider ap1 = a as Nat by S5a, A, NECKLACE:4;
+             D5: [ap1,bm] in iR or [bm,ap1] in iR by D4a,iMR1c,iMR1d,B5,S5a,A;
+                reconsider bmp1 = bm, a as Element of R by C5, S5a;
+             E5: bmp1 <= a or a <= bmp1 by D5, ORDERS_2:def 9;
+                bmp1 <> a by D5, S5a, NECKLACE:def 6;
+               hence contradiction by E5, C5, S5a, A2f, DILWORTH:def 2;
+             end;
+             suppose that S5a: a in r.d and S5b: b in d;
+                 consider am being Element of NAT such that
+             B5: a = am+n and
+             C5: am in d by S5a, D3;
+                 reconsider bp1 = b as Nat by S5b, A, NECKLACE:4;
+             D5: [am,bp1] in iR or [bp1,am] in iR by D4a,iMR1c,iMR1d,B5,S5b,A;
+                 reconsider amp1 = am, b as Element of R by C5, S5b;
+             E5: amp1 <= b or b <= amp1 by D5, ORDERS_2:def 9;
+                amp1 <> b by D5, S5b, NECKLACE:def 6;
+               hence contradiction by E5, C5, S5b, A2f, DILWORTH:def 2;
+             end;
+             suppose that S5a: a in r.d and S5b: b in r.d;
+                 consider am being Element of NAT such that
+             B5: a = am+n and am in d by S5a, D3;
+                 consider bm being Element of NAT such that
+             D5: b = bm+n and bm in d by S5b, D3;
+                 n <= am+n & am+n < 2*n & n <= bm+n & bm+n < 2*n
+                    by S5a, S5b,B5,D5, A2e;
+               hence contradiction by B5, D5, D4a, iMR0;
+             end;
+           end;
+          hence x is StableSet of MR by C3, DILWORTH:def 2;
+        end;
+        suppose x in {{2*n}};
+          then S2: x = {2*n} by TARSKI:def 1;
+           2*n < 2*n+1 by NAT_1:13;
+           then 2*n in 2*n+1 by NAT_1:45;
+           then A3: 2*n in cMR by LNRS;
+                x is Subset of MR by S2, A3, SUBSET_1:55;
+          hence x is StableSet of MR by S2;
+        end;
+      end;
+      then reconsider E as Coloring of MR by DILWORTH:def 12;
+      take E;
+      now assume {2*n} in D;
+          then consider d being Element of C such that
+      A2: {2*n} = d \/ r.d and
+      A2a: d in C;
+      B2: 2*n in d \/ r.d by A2, TARSKI:def 1;
+        per cases by B2, XBOOLE_0:def 3;
+        suppose  2*n in d;
+            then 2*n in cR by A2a;
+            then 2*n in n by LNRS;
+            then n+n < n by NAT_1:45;
+          hence contradiction by NAT_1:11;
+        end;
+        suppose 2*n in r.d;
+          then 2*n in { m+n where m is Element of NAT : m in d } by A2a, C1;
+          then consider m being Element of NAT such that
+        A3: 2*n = m+n and
+        B3: m in d;
+            m in cR by A2a, B3;
+            then m in n by LNRS;
+          hence contradiction by A3;
+        end;
+      end;
+      hence card E = 1 + cnR by D1, D1a, A1, CARD_2:54;
+  end;
+  for C being finite Coloring of MR holds 1+cnR <= card C proof
+       :: Is Lorna's construction simpler to formalise?
+       :: (Showing that the color of 2*n cannot appear in R)
+    let E be finite Coloring of MR;
+    assume 1+cnR > card E;
+      then A1: cnR >= card E by NAT_1:13;
+      A1a: cnMR <= card E by Lchro;
+      then B1: cnMR <= cnR by A1, XXREAL_0:2;
+           n <= n+n by NAT_1:11;
+        then n < 2*n+1 by NAT_1:13;
+        then n c= 2*n+1 by NAT_1:40;
+        then reconsider S = n as Subset of MR by LNRS;
+      C1: R = subrelstr S by Msubrel;
+        then cnR <= cnMR by Tchro0;
+      then cnR = cnMR by B1, XXREAL_0:1;
+      then D1a: card E = cnR by A1,A1a, XXREAL_0:1;
+        reconsider C = E |(S) as Coloring of R by C1, Tsr0;
+      E1: card C >= cnR by Lchro;
+      F1a:  card C <= card E by Tpart0;
+      then F1: card C = cnR by D1a, E1, XXREAL_0:1;
+           2*n < 2*n+1 by NAT_1:13;
+      then 2*n in 2*n+1 by NAT_1:45;
+      then 2*n in cMR by LNRS;
+      then 2*n in union E by EQREL_1:def 6;
+      then consider e being set such that
+   K1a: 2*n in e and
+   K1b: e in E by TARSKI:def 4;
+        reconsider e as Subset of MR by K1b;
+        reconsider n2 = 2*n as Element of MR by K1a, K1b;
+        set se = e /\ S;
+       e meets S by D1a, F1, K1b, Tpart1;
+       then L1: se in C by K1b;
+         then consider mp1 being Element of R such that
+   L1a: mp1 in se  and
+   H1: for d being Element of C st d <> se
+         ex w being Element of R st w in Adjacent(mp1) & w in d
+              by F1a, D1a, E1, XXREAL_0:1, AdjCol;
+      reconsider m = mp1 as Nat by L1a, L1, NECKLACE:4;
+      set mn = m+n;
+      L1cc: 0+n <= mn by XREAL_1:8;
+         m < n by L1a, L1, NAT_1:45;
+      then L1c: mn < n+n by XREAL_1:8;
+      then mn < 2*n+1 by NAT_1:13;
+      then L1dd: mn in 2*n+1 by NAT_1:45;
+      then mn in cMR by LNRS;
+      then mn in union E by EQREL_1:def 6;
+      then consider f being set such that
+   M1a: mn in f and
+   M1b: f in E by TARSKI:def 4;
+      reconsider f as Subset of MR by M1b;
+      reconsider mnp1 = mn as Element of MR by L1dd, LNRS;
+   M: now assume A2: e <> f;
+          set sf = f /\ S;
+          f meets S by D1a, F1, M1b, Tpart1;
+          then B2: sf in C by M1b;
+      B2a: sf c= f by XBOOLE_1:17;
+          now
+           assume A3: sf = se;
+              sf <> {} by B2, EQREL_1:def 6;
+              then consider x being set such that
+           B3: x in sf by XBOOLE_0:def 1;
+               se c= e by XBOOLE_1:17;
+               then e meets f by A3, B3, B2a, XBOOLE_0:3;
+           hence contradiction by A2, M1b, K1b, EQREL_1:def 6;
+          end;
+          then consider wp1 being Element of R such that
+      D2: wp1 in Adjacent(mp1) and
+      E2: wp1 in sf by B2, H1;
+          reconsider w = wp1 as Nat by E2, B2, NECKLACE:4;
+      G2: w < n by E2, B2, NAT_1:45;
+          mp1 < wp1 or wp1 < mp1 by D2, LAdjset;
+          then mp1 <= wp1 or wp1 <= mp1 by ORDERS_2:def 10;
+          then [m, w] in iR or [w, m] in iR by ORDERS_2:def 9;
+          then H2: [m+n, w] in iMR or [w, m+n] in iMR by iMR1a;
+          reconsider wp2 = wp1 as Element of MR by E2;
+          f is stable by M1b, DILWORTH:def 12;
+          then not wp2 <= mnp1 & not mnp1 <= wp2
+                              by G2, L1cc, E2, B2a, M1a, DILWORTH:def 2;
+       hence contradiction by H2, ORDERS_2:def 9;
+      end;
+   N: [mn,2*n] in iMR by L1c, L1cc, iMR1e;
+      e is stable by K1b, DILWORTH:def 12;
+      then not mnp1 <= n2 & not n2 <= mnp1 by K1a, M1a, M, L1c, DILWORTH:def 2;
+    hence contradiction by N, ORDERS_2:def 9;
+  end;
+ hence chromatic# Mycielskian R = 1 + chromatic# R by Z1, Lchro;
+end;
+
+UniqMyc: now
+  let myc1, myc2 be Function such that
+  B1: dom myc1 = NAT and
+  C1: myc1.0 = CompleteRelStr 2 and
+  D1: for k being Nat, R being NatRelStr of 3*2|^k-'1
+       st R = myc1.k holds myc1.(k+1) = Mycielskian R and
+  B2: dom myc2 = NAT and
+  C2: myc2.0 = CompleteRelStr 2 and
+  D2: for k being Nat, R being NatRelStr of 3*2|^k-'1
+       st R = myc2.k holds myc2.(k+1) = Mycielskian R;
+   defpred P2[Nat] means
+    myc1.$1 is NatRelStr of 3*2|^$1-'1 & myc1.$1 = myc2.$1;
+      3*2|^0-'1 = 3*1-'1 by NEWTON:9 .= 2+1-'1 .= 2 by NAT_D:34;
+      then
+  P1: P2[0] by C1, C2;
+  P2: for k being Nat st P2[k] holds P2[k+1] proof
+       let k be Nat such that
+      A1: P2[k];
+          reconsider R = myc1.k as NatRelStr of 3*2|^k-'1 by A1;
+      C1: myc1.(k+1) = Mycielskian R by D1;
+      D1aa: 3*2|^k >= 1*2|^k by XREAL_1:66;
+             2|^k >= k+1 & k+1 >= 1 by NEWTON:104, NAT_1:11;
+           then 2|^k >= 1 by XXREAL_0:2;
+           then D1ab: 3*2|^k >= 1 by D1aa, XXREAL_0:2;
+           then D1a: 3*2|^k-1 >= 1-1 by XREAL_1:11;
+           2*2|^k >= 1*2|^k by XREAL_1:66;
+           then 2|^(k+1) >= 2|^k by NEWTON:11;
+           then 3*2|^(k+1) >= 3*2|^k by XREAL_1:66;
+           then 3*2|^(k+1) >= 1 by D1ab, XXREAL_0:2;
+           then D1b: 3*2|^(k+1)-1 >= 1-1 by XREAL_1:11;
+                2*(3*2|^k-'1)+1 = 2*(3*2|^k-1)+1 by D1a, XREAL_0:def 2
+             .= 3*(2*2|^k)-2+1
+             .= 3*2|^(k+1)-2+1 by NEWTON:11
+             .= 3*2|^(k+1)-'1 by D1b, XREAL_0:def 2;
+       hence P2[k+1] by C1, A1, D2;
+      end;
+     for n being Nat holds P2[n] from NAT_1:sch 2(P1,P2);
+     then for x being set st x in dom myc1 holds myc1.x = myc2.x by B1;
+  hence myc1 = myc2 by B1, B2, FUNCT_1:9;
+end;
+
+definition
+  let n be Nat;
+  func Mycielskian n -> NatRelStr of 3*2|^n-'1 means       :LMycn:
+  ex myc being Function
+   st it = myc.n & dom myc = NAT & myc.0 = CompleteRelStr 2 &
+                    :: can start with empty RelStr, numbers will change
+                    :: and the M_2 ... will not be connected
+      for k being Nat, R being NatRelStr of 3*2|^k-'1
+       st R = myc.k holds myc.(k+1) = Mycielskian R;
+  existence proof
+    defpred P[Nat,set,set] means
+     ($2 is NatRelStr of 3*2|^$1-'1 implies
+       ex R being NatRelStr of 3*2|^$1-'1 st $2 = R & $3 = Mycielskian R)
+   & (not $2 is NatRelStr of 3*2|^$1-'1 implies $3 = $2);
+  P: for n being Element of NAT for x being set ex y being set st P[n,x,y]
+     proof let n be Element of NAT, x being set;
+       per cases;
+       suppose x is NatRelStr of 3*2|^n-'1;
+        then reconsider R = x as NatRelStr of 3*2|^n-'1;
+        Mycielskian R = Mycielskian R;
+        hence ex y being set st P[n,x,y];
+       end;
+       suppose not x is NatRelStr of 3*2|^n-'1;
+         hence thesis;
+       end;
+     end;
+   consider f being Function such that
+  A: dom f = NAT and
+  B: f.0 = CompleteRelStr 2 and
+  C: for n being Element of NAT holds P[n,f.n,f.(n+1)] from RECDEF_1:sch 1(P);
+     defpred P2[Nat] means f.$1 is NatRelStr of 3*2|^$1-'1;
+      3*2|^0-'1 = 3*1-'1 by NEWTON:9 .= 2+1-'1 .= 2 by NAT_D:34;
+      then
+  P1: P2[0] by B;
+  P2: for k being Element of NAT st P2[k] holds P2[k+1] proof
+       let k be Element of NAT such that
+      A1: P2[k];
+         consider R being NatRelStr of 3*2|^k-'1 such that f.k = R and
+      C1: f.(k+1) = Mycielskian R by A1, C;
+      D1aa: 3*2|^k >= 1*2|^k by XREAL_1:66;
+             2|^k >= k+1 & k+1 >= 1 by NEWTON:104, NAT_1:11;
+           then 2|^k >= 1 by XXREAL_0:2;
+           then D1ab: 3*2|^k >= 1 by D1aa, XXREAL_0:2;
+           then D1a: 3*2|^k-1 >= 1-1 by XREAL_1:11;
+           2*2|^k >= 1*2|^k by XREAL_1:66;
+           then 2|^(k+1) >= 2|^k by NEWTON:11;
+           then 3*2|^(k+1) >= 3*2|^k by XREAL_1:66;
+           then 3*2|^(k+1) >= 1 by D1ab, XXREAL_0:2;
+           then D1b: 3*2|^(k+1)-1 >= 1-1 by XREAL_1:11;
+                2*(3*2|^k-'1)+1 = 2*(3*2|^k-1)+1 by D1a, XREAL_0:def 2
+             .= 3*(2*2|^k)-2+1
+             .= 3*2|^(k+1)-2+1 by NEWTON:11
+             .= 3*2|^(k+1)-'1 by D1b, XREAL_0:def 2;
+       hence P2[k+1] by C1;
+      end;
+  D: for n being Element of NAT holds P2[n] from NAT_1:sch 1(P1,P2);
+  n is Element of NAT by ORDINAL1:def 13;
+    then reconsider IT = f.n as NatRelStr of 3*2|^n-'1 by D;
+  take IT;
+  take myc = f;
+  thus IT = myc.n;
+  thus dom myc = NAT by A;
+  thus myc.0 = CompleteRelStr 2 by B;
+  let k be Nat;
+  E: k is Element of NAT by ORDINAL1:def 13;
+  let R be NatRelStr of 3*2|^k-'1;
+  assume A1: R = myc.k;
+    then consider RR being NatRelStr of 3*2|^k-'1 such that
+  F: f.k = RR and
+  G: f.(k+1) = Mycielskian RR by E, C;
+  thus myc.(k+1) = Mycielskian R by G, A1, F;
+  end;
+  uniqueness by UniqMyc;
+end;
+
+theorem Mycn1: :: Mycn1:
+ Mycielskian 0 = CompleteRelStr 2 &
+ for k being Nat holds Mycielskian (k+1) = Mycielskian Mycielskian k
+proof
+  consider myc being Function such that
+A: Mycielskian 0 = myc.0 and
+   dom myc = NAT and
+C: myc.0 = CompleteRelStr 2 and
+   for k being Nat, R being NatRelStr of 3*2|^k-'1
+       st R = myc.k holds myc.(k+1) = Mycielskian R by LMycn;
+ thus Mycielskian 0 = CompleteRelStr 2 by A, C;
+ let k be Nat;
+  consider myc1 being Function such that
+A1: Mycielskian k = myc1.k and
+B1: dom myc1 = NAT & myc1.0 = CompleteRelStr 2 &
+    for k being Nat, R being NatRelStr of 3*2|^k-'1
+       st R = myc1.k holds myc1.(k+1) = Mycielskian R by LMycn;
+  consider myc2 being Function such that
+A2: Mycielskian (k+1) = myc2.(k+1) and
+B2: dom myc2 = NAT & myc2.0 = CompleteRelStr 2 and
+D2: for k being Nat, R being NatRelStr of 3*2|^k-'1
+       st R = myc2.k holds myc2.(k+1) = Mycielskian R by LMycn;
+    myc1 = myc2 by B1, B2, D2, UniqMyc;
+  hence thesis by A1, D2, A2;
+end;
+
+registration
+  let n be Nat;
+  cluster Mycielskian n -> irreflexive;
+  coherence proof
+   defpred P[Nat] means Mycielskian $1 is irreflexive;
+  P0: P[0] by Mycn1;
+  P1: for n being Nat st P[n] holds P[n+1] proof
+        let n be Nat;
+        set cMRn = the carrier of Mycielskian n;
+        set iMRn = the InternalRel of Mycielskian n;
+        set cMRn1 = the carrier of Mycielskian (n+1);
+        set iMRn1 = the InternalRel of Mycielskian (n+1);
+        assume A1: P[n];
+        assume not P[n+1];
+          then consider x being set such that
+        C1: x in cMRn1 and
+        D1: [x,x] in iMRn1 by NECKLACE:def 6;
+        E1: Mycielskian (n+1) = Mycielskian Mycielskian n by Mycn1;
+            set N = 3*2|^n-'1;
+        F1: cMRn1 = 2*N+1 by E1, LNRS;
+        G1: cMRn = N by LNRS;
+            reconsider x as Nat by F1, C1, NECKLACE:4;
+            x < N & x < N or x < N & N <= x & x < 2*N or
+            N <= x & x < 2*N & x < N or x = 2*N & N <= x & x < 2*N or
+            N <= x & x < 2*N & x = 2*N by E1, D1, iMR0;
+            then H1: x in N by NAT_1:45;
+            then [x,x] in iMRn by D1, E1, iMR1b;
+         hence contradiction by A1, G1, H1, NECKLACE:def 6;
+      end;
+   for n being Nat holds P[n] from NAT_1:sch 2(P0,P1);
+   hence thesis;
+  end;
+end;
+
+registration
+  let n be Nat;
+  cluster Mycielskian n -> symmetric;
+  coherence proof
+   defpred P[Nat] means Mycielskian $1 is symmetric;
+  P0: P[0] by Mycn1;
+  P1: for n being Nat st P[n] holds P[n+1] proof
+        let n be Nat;
+        set cMRn = the carrier of Mycielskian n;
+        set iMRn = the InternalRel of Mycielskian n;
+        set cMRn1 = the carrier of Mycielskian (n+1);
+        set iMRn1 = the InternalRel of Mycielskian (n+1);
+        assume A1: P[n];
+        E1: Mycielskian (n+1) = Mycielskian Mycielskian n by Mycn1;
+            set N = 3*2|^n-'1;
+        F1: cMRn1 = 2*N+1 by E1, LNRS;
+        F1a: cMRn = N by LNRS;
+        let x, y be set such that
+        H1: x in cMRn1 and
+        I1: y in cMRn1 and
+        J1: [x,y] in iMRn1;
+           reconsider xp1 = x, yp1 = y as Nat by F1, H1, I1, NECKLACE:4;
+        L1: [xp1,yp1] in iMRn1 by J1;
+        per cases by L1, E1, iMR0;
+        suppose xp1 < N & yp1 < N;
+          then xp1 in N & yp1 in N by NAT_1:45;
+          then A2: [yp1,xp1] in iMRn by A1, F1a, Sym0a, J1, E1, iMR1b;
+               iMRn c= iMRn1 by E1, iMR1ba;
+         hence [y,x] in iMRn1 by A2;
+        end;
+        suppose that S1: xp1 < N and S2: N <= yp1 and S3:  yp1 < 2*N;
+          consider yy being Nat such that
+        A2: yp1 =  N + yy by S2, NAT_1:10;
+        B2: xp1 in N by S1, NAT_1:45;
+            yy +N < N + N by S3, A2;
+            then yy < N by XREAL_1:8;
+            then C2: yy in N by NAT_1:45;
+                 [x,yy] in iMRn by J1, B2, A2, E1, iMR1c;
+          then [yy,x] in iMRn by C2, B2, F1a, A1, Sym0a;
+         hence [y,x] in iMRn1 by E1, L1, A2, iMR1a;
+        end;
+        suppose that S1: N <= xp1 and S2: xp1 < 2*N and S3: yp1 < N;
+          consider xx being Nat such that
+        A2: xp1 = N + xx by S1, NAT_1:10;
+        B2: yp1 in N by S3, NAT_1:45;
+            xx+N < N+N by A2, S2;
+            then xx < N by XREAL_1:8;
+            then C2: xx in N by NAT_1:45;
+                     [xx,y] in iMRn by B2,J1,E1,A2,iMR1d;
+            then [y,xx] in iMRn by C2, B2, F1a, A1, Sym0a;
+          hence [y,x] in iMRn1 by E1, L1, A2, iMR1a;
+        end;
+        suppose xp1 = 2*N & N <= yp1 & yp1 < 2*N;
+          hence [y,x] in iMRn1 by E1, iMR1e;
+        end;
+        suppose N <= xp1 & xp1 < 2*N & yp1 = 2*N;
+          hence [y,x] in iMRn1 by E1, iMR1e;
+        end;
+      end;
+   for n being Nat holds P[n] from NAT_1:sch 2(P0,P1);
+   hence thesis;
+  end;
+end;
+
+theorem Mycth: :: Mycth:
+for n being Nat
+ holds clique# Mycielskian n = 2 & chromatic# Mycielskian n = n+2
+proof
+  defpred P[Nat] means
+   clique# Mycielskian $1 = 2 & chromatic# Mycielskian $1 = $1+2;
+ P0: clique# Mycielskian 0 = clique# CompleteRelStr 2 by Mycn1
+     .= 2 by CompleteCli;
+   chromatic# Mycielskian 0 = chromatic# CompleteRelStr 2 by Mycn1
+     .= 2 by CompleteChr;
+     then
+ P1: P[0] by P0;
+ P2: for n being Nat st P[n] holds P[n+1] proof
+      let n be Nat such that
+     A: clique# Mycielskian n = 2 and
+     B: chromatic# Mycielskian n = n+2;
+     C: Mycielskian (n+1) = Mycielskian Mycielskian n by Mycn1;
+      thus clique# Mycielskian (n+1) = 2 by A, C, MClique;
+      thus chromatic# Mycielskian (n+1)
+         = 1 + chromatic# Mycielskian n by C, Mchromatic
+        .= n+1+2 by B;
+     end;
+ for n being Nat holds P[n] from NAT_1:sch 2(P1, P2);
+ hence thesis;
+end;
+
+theorem
+for n being Nat
+ ex R being finite RelStr st clique# R = 2 & chromatic# R > n
+proof
+ let n be Nat;
+ take Mycielskian n;
+  n+1+1 > n+1 & n+1 > n by NAT_1:13;
+  then n+2 > n by XXREAL_0:2;
+ hence thesis by Mycth;
+end;
+
+theorem
+for n being Nat
+ ex R being finite RelStr st stability# R = 2 & cliquecover# R > n
+proof
+ let n be Nat;
+ set R = Mycielskian n;
+  n+1+1 > n+1 & n+1 > n by NAT_1:13;
+  then n+2 > n by XXREAL_0:2;
+ then A: clique# R = 2 & chromatic# R > n by Mycth;
+ take S = ComplRelStr R;
+ thus stability# S = 2 by A, cliRstaCR;
+ thus cliquecover# S > n by A, chrRcovCR;
+end;

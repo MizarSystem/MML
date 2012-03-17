@@ -1,0 +1,1170 @@
+:: Normal Subgroup of Product of Groups
+::  by Hiroyuki Okazaki , Kenichi Arai and Yasunari Shidama
+:: 
+:: Received July 2, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies FINSEQ_1, FUNCT_1, RELAT_1, RLVECT_2, CARD_3, TARSKI, BINOP_1,
+      GROUP_1, XXREAL_0, GROUP_2, CARD_1, NUMBERS, FUNCT_4, GROUP_6, GROUP_7,
+      FUNCOP_1, ALGSTR_0, GROUP_12, PARTFUN1, FUNCT_2, SUBSET_1, XBOOLE_0,
+      STRUCT_0, NAT_1, ORDINAL4, PRE_TOPC, ARYTM_1, ARYTM_3;
+ notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1, CARD_3, NAT_1, NUMBERS, FINSEQ_1,
+      XXREAL_0, STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2, GROUP_3, GROUP_4,
+      GROUP_6, PRALG_1, GROUP_7, FUNCT_7;
+ constructors BINOP_1, XXREAL_0, REALSET1, FUNCT_4, GROUP_6, MONOID_0, PRALG_1,
+      GROUP_4, GROUP_7, FUNCT_7, RELSET_1;
+ registrations XBOOLE_0, XREAL_0, STRUCT_0, GROUP_2, MONOID_0, ORDINAL1, NAT_1,
+      FUNCT_2, FUNCOP_1, CARD_1, CARD_3, GROUP_7, XXREAL_0, RELSET_1, FINSEQ_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions GROUP_2, FINSEQ_1;
+ theorems PRALG_1, FUNCT_1, CARD_3, FUNCT_2, TARSKI, GROUP_1, GROUP_2, GROUP_3,
+      GROUP_4, GROUP_6, FINSEQ_2, XREAL_1, ORDINAL1, FINSEQ_1, FINSEQ_3, NAT_1,
+      XBOOLE_0, RELAT_1, XXREAL_0, GROUP_7, FUNCT_7, YELLOW17, STRUCT_0,
+      PARTFUN1;
+ schemes NAT_1, SUBSET_1, FUNCT_2, XBOOLE_0, FINSEQ_1;
+
+begin
+
+registration
+  let I be non empty set, F be Group-like multMagma-Family of I;
+  let i be Element of I;
+  cluster F.i -> Group-like multMagma;
+  coherence by GROUP_7:def 6;
+end;
+
+registration
+  let I be non empty set, F be associative multMagma-Family of I;
+  let i be Element of I;
+  cluster F.i -> associative multMagma;
+  coherence by GROUP_7:def 7;
+end;
+
+registration
+  let I be non empty set, F be commutative multMagma-Family of I;
+  let i be Element of I;
+  cluster F.i -> commutative multMagma;
+  coherence by GROUP_7:def 8;
+end;
+
+reserve
+  I for non empty set,
+  F for associative Group-like multMagma-Family of I,
+  i, j for Element of I;
+
+theorem LMPX1:
+  for x be Function, g be Element of F.i holds
+  ( dom x = I & x.i = g & for j be Element of I st j <> i holds x.j = 1_F.j )
+  iff
+  x = (1_product F)+*(i,g)
+  proof
+    let x be Function, g be Element of (F.i);
+    L: now assume
+    R1: x = (1_product F)+* (i,g);
+    W1: the carrier of product F = product Carrier F by GROUP_7:def 2;
+    thus W2: dom x = dom (1_(product F)) by R1,FUNCT_7:32
+    .= I by PARTFUN1:def 4,W1;
+    dom x = dom (1_(product F)) by R1,FUNCT_7:32;
+    hence x.i = g by R1,FUNCT_7:33,W2;
+    thus for j be Element of I st j <> i holds x.j = 1_F.j
+    proof
+      let j be Element of I;
+      assume j <> i; then
+      x.j = (1_(product F)).j by R1,FUNCT_7:34;
+      hence x.j = 1_F.j by GROUP_7:9;
+    end;
+  end;
+  now assume AS1:
+    dom x = I & x.i = g & for j be Element of I st j <>i holds x.j = 1_F.j;
+    the carrier of product F = product Carrier F by GROUP_7:def 2; then
+    A3: dom (1_(product F)) = I by PARTFUN1:def 4;
+    A2: dom ((1_(product F))+* (i,g))=dom x by AS1,A3,FUNCT_7:32;
+    set FG=(1_(product F))+* (i,g);
+    now let j0 be set;
+      assume j0 in dom x; then
+      reconsider j=j0 as Element of I by AS1;
+      per cases;
+      suppose C1: j <> i; then
+        x.j = 1_F.j by AS1;
+        hence x.j0 = (1_(product F)).j by GROUP_7:9
+        .= FG.j0 by FUNCT_7:34,C1;
+      end;
+      suppose j = i;
+        hence x.j0 = FG.j0 by FUNCT_7:33,A3,AS1;
+      end;
+    end;
+    hence x = (1_(product F))+* (i,g) by A2,FUNCT_1:9;
+  end;
+  hence thesis by L;
+end;
+
+definition
+  let I be non empty set,
+  F be associative Group-like multMagma-Family of I,
+  i be Element of I;
+  func ProjSet(F,i) -> Subset of product F means :defPrj:
+  for x be set holds x in it iff
+  ex g be Element of F.i st x = 1_product F +* (i,g);
+  existence
+  proof
+    set CF= the carrier of product F;
+    defpred P[set] means ex g be Element of F.i
+    st $1 = (1_(product F))+* (i,g);
+    consider H be Subset of CF such that
+    P1: for x be set holds x in H iff x in CF & P[x] from SUBSET_1:sch 1;
+    take H;
+    set Gi = F.i;
+    the carrier of product F = product Carrier F by GROUP_7:def 2; then
+    A3: dom (1_(product F)) = I by PARTFUN1:def 4;
+    A2: dom ((1_(product F))+* (i,1_Gi)) = dom (1_(product F)) by FUNCT_7:32;
+    R1: now let x be set;
+    assume
+A1: P[x];
+W1: the carrier of product F = product Carrier F by GROUP_7:def 2;
+    ex Ri being 1-sorted st Ri = F.i & (Carrier F).i = the carrier of Ri
+    by PRALG_1:def 13;
+    hence x in CF by A1,W1,YELLOW17:2;
+  end;
+  let x be set;
+  x in H iff x in CF & P[x] by P1;
+  hence thesis by R1;
+end;
+uniqueness
+proof
+  let F1,F2 be Subset of product F;
+  defpred P[set] means ex g be Element of F.i st $1 = 1_product F +* (i,g);
+  assume
+  A1: for x being set holds x in F1 iff P[x];
+  assume
+  A2: for x being set holds x in F2 iff P[x];
+  thus thesis from XBOOLE_0:sch 2(A1,A2);
+end;
+end;
+
+registration
+  let I be non empty set,
+  F be associative Group-like multMagma-Family of I,
+  i be Element of I;
+  cluster ProjSet(F,i) -> non empty;
+  coherence
+  proof
+    set Gi=F.i;
+    the carrier of product F = product Carrier F by GROUP_7:def 2; then
+    A3: dom (1_(product F)) = I by PARTFUN1:def 4;
+    A2: dom ((1_(product F))+* (i,1_Gi)) = dom (1_(product F)) by FUNCT_7:32;
+    set FG=(1_(product F))+* (i,1_Gi);
+    reconsider FG as I-defined Function by A2,A3,RELAT_1:def 18;
+    now let j be Element of I;
+      per cases;
+      suppose C1: j <> i;
+        thus FG.j = (1_(product F)).j by FUNCT_7:34,C1
+        .= 1_F.j by GROUP_7:9;
+      end;
+      suppose j = i;
+        hence FG.j =1_F.j by FUNCT_7:33,A3;
+      end;
+    end;
+    hence thesis by defPrj;
+  end;
+end;
+
+theorem LMP1:
+  for x0 be set holds x0 in ProjSet(F,i) iff
+  ex x be Function,g be Element of F.i st x = x0 & dom x = I & x.i = g
+  & for j be Element of I st j <> i holds x.j = 1_F.j
+  proof
+    let x0 be set;
+    defpred P[set] means
+    ex g be Element of F.i st $1 = (1_(product F))+* (i,g);
+    L: now assume x0 in ProjSet(F,i); then
+    consider g be Element of F.i such that
+    R1: x0 = (1_(product F))+* (i,g) by defPrj;
+    reconsider x=x0 as Function by R1;
+    take x,g;
+    thus x=x0;
+    thus dom x = I & x.i = g & for j be Element of I st j <> i holds
+    x.j = 1_F.j by R1,LMPX1;
+  end;
+  now assume
+    R1: ex x be Function,g be Element of F.i st x=x0 &
+    dom x = I & x.i = g &
+    for j be Element of I st j <> i holds x.j = 1_F.j;
+    thus x0 in ProjSet(F,i)
+    proof
+      consider x be Function,g be Element of (F.i) such that
+      Q1: x=x0 & dom x = I & x.i = g &
+      for j be Element of I st j <> i holds x.j = 1_F.j by R1;
+      x = (1_(product F))+* (i,g) by LMPX1,Q1;
+      hence x0 in ProjSet(F,i) by defPrj,Q1;
+    end;
+  end;
+  hence thesis by L;
+end;
+
+theorem LMPX2:
+  for g1,g2 be Element of product F,
+  z1,z2 be Element of F.i st
+  g1 = (1_(product F))+* (i,z1) &
+  g2 = (1_(product F))+* (i,z2) holds
+  g1 * g2 = (1_product F)+* (i,z1*z2)
+  proof
+    let g1,g2 be Element of product F,
+    z1,z2 be Element of F.i;
+    assume AS1: g1=((1_(product F))+* (i,z1)) &
+    g2=((1_(product F))+* (i,z2));
+    set x1=g1, x2 = g2;
+    B1: x1=g1 & dom x1 = I & x1.i = z1 &
+    for j be Element of I st j <> i holds x1.j = 1_F.j by LMPX1,AS1;
+    B2: x2=g2 & dom x2 = I & x2.i = z2 &
+    for j be Element of I st j <> i holds x2.j = 1_F.j by LMPX1,AS1;
+    set x12=g1*g2;
+    the carrier of product F = product Carrier F by GROUP_7:def 2; then
+    B3: dom x12 = I by PARTFUN1:def 4;
+    X1: x12.i = z1*z2 by GROUP_7:4,B1,B2;
+    for j be Element of I st i <> j holds x12.j = 1_F.j
+    proof
+      let j be Element of I;
+      assume B4: i <> j; then
+B5:   x1.j = 1_F.j by LMPX1,AS1;
+      x2.j = 1_F.j by B4,LMPX1,AS1;
+      hence x12.j = 1_F.j*1_F.j by GROUP_7:4,B5
+      .= 1_F.j by GROUP_1:def 5;
+    end;
+    hence thesis by B3,X1,LMPX1;
+  end;
+
+theorem LMPX3:
+  for g1 be Element of product F,
+  z1 be Element of F.i st
+  g1 = (1_product F)+* (i,z1) holds
+  g1" = (1_product F)+* (i,z1")
+  proof
+    let g1 be Element of product F,
+    z1 be Element of F.i;
+    assume AS1: g1=1_(product F)+* (i,z1);
+    set x1=g1;
+    B1: x1=g1 & dom x1 = I & x1.i = z1 &
+    for j be Element of I st j <> i holds x1.j = 1_F.j by LMPX1,AS1;
+    set x12=g1";
+    the carrier of product F = product Carrier F by GROUP_7:def 2; then
+    B3: dom x12 = I by PARTFUN1:def 4;
+    X1: x12.i = z1" by GROUP_7:11,B1;
+    X2: for j be Element of I st i <> j holds x12.j = 1_F.j
+    proof
+      let j be Element of I;
+      assume i <> j; then
+      x1.j = 1_F.j by LMPX1,AS1;
+      hence x12.j = (1_F.j)" by GROUP_7:11
+      .= 1_F.j by GROUP_1:16;
+    end;
+    thus thesis by B3,X1,X2,LMPX1;
+  end;
+
+theorem LMP2:
+  for g1,g2 be Element of product F
+  st g1 in ProjSet(F,i) & g2 in ProjSet(F,i)
+  holds g1 * g2 in ProjSet(F,i)
+  proof
+    let g1,g2 be Element of product F;
+    assume A1:
+    g1 in ProjSet(F,i) & g2 in ProjSet(F,i);
+    consider z1 be Element of (F.i) such that
+    B1: g1 = 1_product F +* (i,z1) by defPrj,A1;
+    consider z2 be Element of (F.i) such that
+    B2: g2 = 1_product F +* (i,z2) by defPrj,A1;
+    g1*g2 = ((1_(product F))+* (i,z1*z2)) by LMPX2,B1,B2;
+    hence g1*g2 in ProjSet(F,i) by defPrj;
+  end;
+
+theorem LMP2x:
+  for g be Element of product F st g in ProjSet(F,i)
+  holds g" in ProjSet(F,i)
+  proof
+    let g be Element of product F;
+    assume A1: g in ProjSet(F,i);
+    consider z be Element of (F.i) such that
+    B1: g = 1_product F +* (i,z) by defPrj,A1;
+    g" = (1_product F)+* (i,z") by LMPX3,B1;
+    hence g" in ProjSet(F,i) by defPrj;
+  end;
+
+definition
+  let I be non empty set,
+  F be associative Group-like multMagma-Family of I,
+  i be Element of I;
+  func ProjGroup(F,i) -> strict Subgroup of product F means  :defPrjGroup:
+  the carrier of it = ProjSet(F,i);
+  existence
+  proof
+    (for g1,g2 be Element of product F
+    st g1 in ProjSet(F,i) & g2 in ProjSet(F,i)
+    holds g1 * g2 in ProjSet(F,i)) &
+    (for g be Element of product F st g in ProjSet(F,i)
+    holds g" in ProjSet(F,i)) by LMP2,LMP2x;
+    hence thesis by GROUP_2:61;
+  end;
+  uniqueness by GROUP_2:68;
+end;
+
+Lm1:
+  ex f being Homomorphism of F.i,ProjGroup(F,i)
+  st f is bijective &
+  for x be Element of F.i holds f.x = 1_product F +* (i,x)
+  proof
+    AS1: the carrier of ProjGroup(F,i) = ProjSet(F,i) by defPrjGroup;
+    defpred P[set,set] means $2=1_product F +* (i,$1);
+    P1: for x being Element of F.i
+    ex y being Element of ProjGroup(F,i) st P[x,y]
+    proof
+      let x be Element of F.i;
+      1_product F +* (i,x) in ProjSet(F,i) by defPrj;
+      hence thesis by AS1;
+    end;
+    consider f be Function of F.i,
+    the carrier of ProjGroup(F,i) such that
+    P2: for x being Element of the carrier of F.i
+    holds P[x,f.x] from FUNCT_2:sch 3(P1);
+    for a,b be Element of F.i holds f.(a*b) = f.a * f.b
+    proof
+      let a,b be Element of F.i;
+A3:   f.a=1_product F +* (i,a) by P2;
+A4:   f.b=1_product F +* (i,b) by P2;
+A5:   f.(a*b)=1_product F +* (i,a*b) by P2;
+      the carrier of ProjGroup(F,i) = ProjSet(F,i) by defPrjGroup; then
+      reconsider ffa=f.a,ffb=f.b as Element of product F by TARSKI:def 3;
+      thus f.a * f.b =ffa*ffb by GROUP_2:52
+      .=f.(a*b) by A5,A3,A4,LMPX2;
+    end; then
+    reconsider f as Homomorphism of F.i,ProjGroup(F,i) by GROUP_6:def 7;
+    take f;
+    now let x be set;
+      assume x in the carrier of (ProjGroup(F,i)); then
+      consider g be Element of F.i such that K1:
+      x = 1_product F +* (i,g) by defPrj,AS1;
+      x =f.g by K1,P2;
+      hence x in rng f by FUNCT_2:6;
+    end; then
+    X1: the carrier of (ProjGroup(F,i)) c= rng f by TARSKI:def 3;
+    rng f = the carrier of (ProjGroup(F,i)) by X1,XBOOLE_0:def 10;
+    then
+    P3: f is onto by FUNCT_2:def 3;
+    for x1,x2 be set st x1 in the carrier of F.i
+    & x2 in the carrier of F.i & f.x1 = f.x2 holds x1 = x2
+    proof
+      let x1,x2 be set;
+      assume ASS: x1 in the carrier of F.i
+      & x2 in the carrier of F.i & f.x1 = f.x2;
+      then reconsider xx1=x1,xx2=x2 as Element of the carrier of F.i;
+A1:   f.xx1=1_product F +* (i,xx1) by P2;
+A21:  1_product F +* (i,xx1) = 1_product F +* (i,xx2) by ASS,A1,P2;
+      the carrier of product F = product Carrier F by GROUP_7:def 2; then
+ZZZ1: dom (1_(product F)) = I by PARTFUN1:def 4;
+      thus x1= ((1_product F)+*(i.-->xx1)).i by FUNCT_7:96
+      .= (1_product F +* (i,xx1)).i by ZZZ1,FUNCT_7:def 3
+      .= ((1_product F)+*(i.-->xx2)).i by ZZZ1,FUNCT_7:def 3,A21
+      .=x2 by FUNCT_7:96;
+    end;
+    then f is one-to-one by FUNCT_2:25;
+    hence f is bijective by P3;
+    thus thesis by P2;
+  end;
+
+definition let I, F, i;
+  func 1ProdHom (F,i) -> Homomorphism of F.i, ProjGroup(F,i) means :1Def:
+  for x be Element of F.i holds it.x = 1_product F +* (i,x);
+  existence
+  proof
+    ex f being Homomorphism of F.i,ProjGroup(F,i) st f is bijective &
+    for x be Element of F.i holds f.x = 1_product F +* (i,x) by Lm1;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F1, F2 be Homomorphism of F.i, ProjGroup(F,i) such that
+A1: for x be Element of F.i holds F1.x = 1_product F +* (i,x) and
+A2: for x be Element of F.i holds F2.x = 1_product F +* (i,x);
+    now let x be Element of F.i;
+      thus F1.x = 1_product F +* (i,x) by A1 .= F2.x by A2;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+end;
+
+registration let I, F, i;
+  cluster 1ProdHom (F,i) -> bijective;
+  coherence
+  proof
+    consider f being Homomorphism of F.i,ProjGroup(F,i) such that
+A1: f is bijective &
+    for x be Element of F.i holds f.x = 1_product F +* (i,x) by Lm1;
+    set F2 = 1ProdHom (F,i);
+    for x be Element of F.i holds
+      f.x = F2.x by 1Def,A1;
+    hence thesis by A1,FUNCT_2:113;
+  end;
+end;
+
+registration
+  let I,F,i;
+  cluster ProjGroup(F,i) -> normal;
+  correctness
+  proof
+    set H = ProjGroup(F,i);
+    set G = product F;
+    LM1:for a be Element of G holds (a* H)* a" c= the carrier of H
+    proof
+      let a be Element of G;
+      now let x be set;
+        assume x in (a*H)*a"; then
+        consider h be Element of G such that
+        A1: x = h * a" & h in (a*H) by GROUP_2:34;
+        consider k be Element of G such that
+        A2: h = a*k & k in H by GROUP_2:125,A1;
+        k in the carrier of H by A2,STRUCT_0:def 5;
+        then k in ProjSet(F,i) by defPrjGroup;
+        then consider m be Function,g be Element of (F.i) such that
+        X0: m=k & dom m = I & m.i = g &
+        for j be Element of I st j <> i holds m.j = 1_F.j by LMP1;
+        set n=(a*k)*a";
+        W0: the carrier of product F = product Carrier F by GROUP_7:def 2;
+        Y0: dom (Carrier F) = I by PARTFUN1:def 4;
+        X1: dom n = I by PARTFUN1:def 4,W0;
+        set Gi=F.i;
+        consider Ri being 1-sorted such that
+    B3: Ri = F.i & (Carrier F).i = the carrier of Ri by PRALG_1:def 13;
+        set ak=a*k, ad=a";
+        reconsider xa=a.i, xk=k.i as Element of Gi by B3,CARD_3:18,W0,Y0;
+        X10: ak.i = xa*xk by GROUP_7:4;
+        X11: ad.i = xa" by GROUP_7:11;
+        X2: n.i = (xa*xk)*xa" by X10,X11,GROUP_7:4;
+        now let j be Element of I;
+          assume j <> i; then
+X4:       m.j = 1_F.j by X0;
+          set Gj=F.j;
+          consider Rj being 1-sorted such that
+      B3: Rj = F.j & (Carrier F).j = the carrier of Rj by PRALG_1:def 13;
+          reconsider xa=a.j, xk=k.j as Element of Gj by B3,CARD_3:18,W0,Y0;
+     X10: ak.j = xa*xk by GROUP_7:4;
+     X11: ad.j = xa" by GROUP_7:11;
+          thus n.j = (xa*xk)*xa" by X10,X11,GROUP_7:4
+          .= xa*xa" by GROUP_1:def 5,X4,X0
+          .= 1_Gj by GROUP_1:def 6;
+        end; then
+        n in ProjSet(F,i) by X1,X2,LMP1;
+        hence x in the carrier of H by defPrjGroup,A1,A2;
+      end;
+      hence (a* H)* a" c= the carrier of H by TARSKI:def 3;
+    end;
+    LM2:for a be Element of G holds a* H c= H* a
+    proof
+      let a be Element of G;
+      P1: (a* H)* a" c= the carrier of H by LM1;
+      P2: a"*a = 1_(product F) by GROUP_1:def 6;
+      ((a* H)* a")*a =(a*(H* a"))*a by GROUP_2:128
+      .=a*((H* a")*a) by GROUP_2:39
+      .=a*(H* (a"*a)) by GROUP_2:129
+      .=a*H by P2,GROUP_2:132;
+      hence thesis by P1,GROUP_3:5;
+    end;
+    LM3:for a be Element of G holds H*a c= a*H
+    proof
+      let a be Element of G;
+      P1: (a"* H)* a"" c= the carrier of H by LM1;
+      P2: a*a" = 1_(product F) by GROUP_1:def 6;
+      a*((a"* H)* a) = a*(a"* (H* a)) by GROUP_2:128
+      .=(a*a")*(H *a) by GROUP_2:38
+      .=((a*a")*H) *a by GROUP_2:128
+      .=H*a by P2,GROUP_2:132;
+      hence thesis by P1,GROUP_3:5;
+    end;
+    for a be Element of G holds a* H = H*a
+    proof
+      let a be Element of G;
+      P1: a* H c= H* a by LM2;
+      H*a c= a*H by LM3;
+      hence thesis by P1,XBOOLE_0:def 10;
+    end;
+    hence thesis by GROUP_3:140;
+  end;
+end;
+
+theorem
+  for x,y be Element of product F st i <> j &
+  x in ProjGroup(F,i) & y in ProjGroup(F,j) holds x*y = y*x
+  proof
+    set G = product F;
+    let x,y be Element of G;
+    assume AS0: i <> j & x in ProjGroup(F,i) & y in ProjGroup(F,j);
+    PP: the carrier of ProjGroup(F,i) = ProjSet(F,i)
+    & the carrier of ProjGroup(F,j) = ProjSet(F,j) by defPrjGroup;
+    AS1: x in ProjSet(F,i) & y in ProjSet(F,j) by PP,AS0,STRUCT_0:def 5;
+    consider xx be Function,gx be Element of (F.i) such that
+    X0: xx=x & dom xx = I & xx.i = gx &
+    for k be Element of I st k <> i holds xx.k = 1_F.k by AS1,LMP1;
+    consider yy be Function,gy be Element of (F.j) such that
+    Y0: yy=y & dom yy = I & yy.j = gy &
+    for k be Element of I st k <> j holds yy.k = 1_F.k by AS1,LMP1;
+    W0: the carrier of product F = product Carrier F by GROUP_7:def 2;
+    set xy=x*y;
+    set yx=y*x;
+    XY1: dom xy = I by PARTFUN1:def 4,W0;
+    YX1: dom yx = I by PARTFUN1:def 4,W0;
+    for k be set st k in dom xy holds xy.k = yx.k
+    proof
+      let k0 be set;
+      assume k0 in dom xy;
+      then reconsider k=k0 as Element of I by PARTFUN1:def 4,W0;
+      per cases;
+      suppose C1: k0 <> i & k0 <> j; then
+C11:    xx.k = 1_F.k by X0;
+C12:    yy.k = 1_F.k by C1,Y0;
+        xy.k = (1_F.k) * (1_F.k) by X0,Y0,C11,C12,GROUP_7:4
+        .=yx.k by X0,Y0,C11,C12,GROUP_7:4;
+        hence xy.k0 = yx. k0;
+      end;
+      suppose C2: k0 = i or k0 = j;
+        per cases by C2;
+        suppose C21: k0 = i; then
+C12:      yy.k = 1_F.k by AS0,Y0;
+          reconsider gx as Element of F.k by C21;
+          xy.k = gx * (1_F.k) by X0,Y0,C12,C21,GROUP_7:4
+          .=gx by GROUP_1:def 5
+          .=(1_F.k)*gx by GROUP_1:def 5
+          .=yx.k by X0,Y0,C12,C21,GROUP_7:4;
+          hence xy.k0 = yx. k0;
+        end;
+        suppose C22: k0 = j; then
+C12:      xx.k = 1_F.k by AS0,X0;
+          reconsider gy as Element of F.k by C22;
+          xy.k = (1_F.k)*gy by X0,Y0,C12,C22,GROUP_7:4
+          .=gy by GROUP_1:def 5
+          .=gy*(1_F.k) by GROUP_1:def 5
+          .=yx.k by X0,Y0,C12,C22,GROUP_7:4;
+          hence xy.k0 = yx. k0;
+        end;
+      end;
+    end;
+    hence thesis by XY1,YX1,FUNCT_1:9;
+  end;
+
+reserve n for non empty Nat;
+
+theorem LMP400:
+  for F being associative Group-like multMagma-Family of Seg n,
+  J be Nat,
+  GJ be Group
+  st 1 <= J & J <= n & GJ = F.J holds
+  for x be Element of product F,
+  s be FinSequence of product F st len s < J
+  & (for k be Element of Seg n st k in dom s holds s.k in ProjGroup(F,k))
+  & x = Product s holds x.J = 1_GJ
+  proof
+    let F be associative Group-like multMagma-Family of Seg n,
+    J be Nat,
+    GJ be Group;
+    assume A0: 1<=J & J <= n & GJ=F.J;
+    defpred P[Nat] means
+    for x be Element of product F,
+    s be FinSequence of product F st
+    len s < J & len s=$1
+    & (for k be Element of Seg n st k in dom s holds s.k
+    in ProjGroup(F,k)) & x=Product s holds x.J = 1_GJ;
+    P0: P[0]
+    proof
+      let x be Element of product F,
+      s be FinSequence of product F;
+      assume P01: len s < J & len s=0
+      & (for k be Element of Seg n st k in dom s holds s.k
+      in ProjGroup(F,k)) & x=Product s;
+      s= <*> the carrier of product F by P01; then
+P02:  x= 1_(product F) by P01,GROUP_4:11;
+      J in Seg n by A0,FINSEQ_1:3;
+      hence x.J = 1_GJ by A0,P02,GROUP_7:9;
+    end;
+    PN: for m be Element of NAT st P[m] holds P[m+1]
+    proof
+      let m be Element of NAT;
+      assume PN1:P[m];
+      let x be Element of product F,
+      s be FinSequence of product F;
+      assume PN2: len s < J & len s=m+1
+      & (for k be Element of Seg n st k in dom s holds s.k
+      in ProjGroup(F,k)) & x=Product s;
+      LMMTM1: m < m+1 by NAT_1:13;
+      XXXK: 1<= len s by NAT_1:11,PN2;
+      1<= len s & len s <=n by PN2,A0,XXREAL_0:2,NAT_1:11;
+      then len s in Seg n; then
+      reconsider ls=len s as Element of Seg n;
+      set t=s|m;
+P214: now let k be Element of Seg n;
+      assume P215P: k in dom t;
+P215: t.k =s.k by FUNCT_1:70,P215P;
+      k in dom s by P215P,RELAT_1:86;
+      hence t.k in ProjGroup(F,k) by P215,PN2;
+    end;
+    set y=Product t;
+    dom s= Seg (m+1) by PN2,FINSEQ_1:def 3;
+    then Seg m c= dom s by FINSEQ_1:7,LMMTM1;
+    then LLTMP:dom t = Seg m by RELAT_1:91;
+    then LLTM:len t =m by FINSEQ_1:def 3;
+    LLTM22: len t = (len s) -1 by LLTMP,FINSEQ_1:def 3,PN2;
+    P215: y.J = 1_GJ by PN1,P214,LLTM22,PN2,XREAL_1:53;
+    len s in Seg len s by XXXK; then
+    P218: len s in dom s by FINSEQ_1:def 3;
+    then reconsider sn=s.len s as Element of product F by FINSEQ_2:13;
+    LLTM2222:len t +1 =len s by LLTMP,FINSEQ_1:def 3,PN2;
+    len (t^<* sn *>) = len s by LLTM2222,FINSEQ_2:19;
+    then LLTM222D: dom (t^<* sn *>)=Seg len s by FINSEQ_1:def 3
+    .=dom s by FINSEQ_1:def 3;
+    P216: s=t^<* sn *>
+    proof
+      for k be Nat st k in dom s holds s.k = (t^<* sn *>).k
+      proof
+        let k be Nat;
+        assume k in dom s;
+        then ASP216A: k in Seg (len t +1) by LLTM2222,FINSEQ_1:def 3;
+        now per cases by FINSEQ_2:8,ASP216A;
+          case C1P216:k in Seg len t;
+            then k in dom t by FINSEQ_1:def 3; then
+            (t^<* sn *>).k=t.k by FINSEQ_1:def 7
+            .=s.k by FUNCT_1:72,C1P216,LLTM;
+            hence thesis;
+          end;
+          case k= len t +1;
+            hence thesis by LLTM2222,FINSEQ_1:59;
+          end;
+        end;
+        hence thesis;
+      end;
+      hence thesis by FINSEQ_1:17,LLTM222D;
+    end;
+P217: x = y*sn by GROUP_4:9,P216,PN2;
+    s.len s in ProjGroup(F,ls) by PN2,P218; then
+    s.len s in the carrier of ProjGroup(F,ls) by STRUCT_0:def 5; then
+    P218:s.len s in ProjSet(F,ls) by defPrjGroup;
+    consider snn be Function,gn be Element of (F.ls) such that
+    P220: snn=sn & dom snn = Seg n & snn.ls = gn &
+    for k be Element of Seg n st k <> ls holds snn.k = 1_F.k by P218,LMP1;
+    thus x.J = 1_GJ
+    proof
+      reconsider J0=J as Element of Seg n by FINSEQ_1:3,A0;
+      P226: snn.J0 = 1_F.J0 by P220,PN2;
+      thus x.J =(1_F.J0)*(1_F.J0) by GROUP_7:4,P215,P220,P226,P217,A0
+      .=1_GJ by GROUP_1:def 5,A0;
+    end;
+  end;
+  for m be Element of NAT holds P[m] from NAT_1:sch 1(P0,PN);
+  hence thesis;
+end;
+
+theorem LMP500:
+  for F be associative Group-like multMagma-Family of Seg n,
+  x be Element of product F,
+  s be FinSequence of product F st len s = n
+  & (for k be Element of Seg n holds s.k in ProjGroup(F,k))
+  & x = Product s holds
+  for i be Nat st
+  1<= i & i<= n holds
+  ex si be Element of product F st si=s.i & x.i = si.i
+  proof
+    let F be associative Group-like multMagma-Family of Seg n;
+    defpred P[Nat] means for x be Element of product F,
+    s be FinSequence of product F st
+    1 <= len s & len s <= $1 & $1 <=n
+    & (for k be Element of Seg n st k in dom s holds s.k
+    in ProjGroup(F,k)) & x=Product s holds
+    for i be Nat st 1<= i & i<=len s holds
+    ex si be Element of product F st si=s.i & x.i = si.i;
+    P0: P[ 0 ];
+    PN: for m be Element of NAT st P[m] holds P[m+1]
+    proof
+      let m be Element of NAT;
+      assume PN1: P[m];
+      let x be Element of product F,
+      s be FinSequence of product F;
+      assume PN2: 1 <= len s & len s <= m+1 & m+1 <= n
+      & (for k be Element of Seg n st k in dom s holds s.k
+      in ProjGroup(F,k)) & x=Product s;
+      per cases;
+      suppose m=0; then
+        PN211N:len s= 1 by XXREAL_0:1,PN2; then
+        PN22: s = <* (s.1) *> by FINSEQ_1:57;
+        thus for i be Nat st 1<= i & i<=len s holds
+        ex si be Element of product F st si=s.i & x.i = si.i
+        proof
+          let i be Nat;
+          assume PN24P: 1<= i & i<=len s;
+          1 in Seg len s by PN2; then
+          1 in dom s by FINSEQ_1:def 3; then
+          reconsider si=s.1 as Element of product F by FINSEQ_2:13;
+          take si;
+          thus thesis by PN24P,PN22,GROUP_4:12,PN2,PN211N,XXREAL_0:1;
+        end;
+      end;
+      suppose PN21: m<>0;
+        now per cases;
+          suppose PN211: len s <=m;
+            1 <= len s & len s <= m &m <= n
+            proof
+              (m+1)-1 <= n -0 by XREAL_1:15,PN2;
+              hence thesis by PN2,PN211;
+            end;
+            hence for i be Nat st 1<= i & i<=len s holds
+            ex si be Element of product F
+            st si=s.i & x.i = si.i by PN1,PN2;
+          end;
+          suppose PN212: len s > m;
+PN2120:     len s = m+1 by NAT_1:8,PN2,PN212;
+LSLTN:      len s <= n by PN2,NAT_1:8,PN212;
+            then len s in Seg n by PN2; then
+            reconsider ls=len s as Element of Seg n;
+            set t=s|m;
+LMMTM1:     m < m+1 by NAT_1:13;
+            dom s= Seg (m+1) by PN2120,FINSEQ_1:def 3;
+            then Seg m c= dom s by FINSEQ_1:7,LMMTM1;
+            then dom t = Seg m by RELAT_1:91;
+            then LLTM:len t =m by FINSEQ_1:def 3;
+LMMT1:      0+1 <= m by NAT_1:13,PN21;
+P213:       (m+1)-1 <= n -0 by XREAL_1:15,PN2;
+aa:         dom s = Seg len s & dom t = Seg len t by FINSEQ_1:def 3;
+P214:       now let k be Element of Seg n;
+            assume P215ttt: k in dom t; then
+P215:       t.k = s.k by FUNCT_1:70;
+            Seg len t c= Seg len s by LLTM,PN212,FINSEQ_1:7;
+            hence t.k in ProjGroup(F,k) by P215,PN2,P215ttt,aa;
+          end;
+          set y=Product t;
+P218:     len s in Seg len s by PN2; then
+          reconsider sn=s.len s as Element of product F by aa,FINSEQ_2:13;
+P216:     s=t^<* sn *> by PN2120,FINSEQ_3:61;
+P217:     x = y*sn by GROUP_4:9,P216,PN2;
+          s.len s in ProjGroup(F,ls) by aa,PN2,P218; then
+          s.len s in the carrier of ProjGroup(F,ls) by STRUCT_0:def 5; then
+P218:     s.len s in ProjSet(F,ls) by defPrjGroup;
+          set Gn=F.ls;
+          consider snn be Function,gn be Element of F.ls such that
+P220:     snn=sn & dom snn = Seg n & snn.ls = gn &
+          for k be Element of Seg n st k <> ls holds snn.k = 1_F.k
+          by P218,LMP1;
+          thus for i be Nat st 1<= i & i<=len s
+          holds ex si be Element of product F st si=s.i & x.i = si.i
+          proof
+            let i be Nat;
+            assume P222:1<= i & i<=len s;
+            per cases;
+            suppose P223: i <> len s; then
+              P2231: i < len s by P222,XXREAL_0:1;
+              len s = len t + len (<* sn *>) by P216,FINSEQ_1:35
+              .= len t + 1 by FINSEQ_1:57; then
+              P2232: 1<= i & i<=len t by P222,NAT_1:13,P2231;
+              then consider ti be Element of product F such that
+              P224: ti=t.i & y.i = ti.i by PN1,P213,P214,LLTM,LMMT1;
+              P227:t.i =s.i by FINSEQ_1:85,P2232,P216;
+              1<=i & i <= n by P2232,XXREAL_0:2,P213,LLTM; then
+              reconsider ii=i as Element of Seg n by FINSEQ_1:3;
+P226:         sn.ii = 1_F.ii by P220,P223;
+              consider Rii being 1-sorted such that
+              C3: Rii = F.ii & (Carrier F).ii = the carrier of Rii
+              by PRALG_1:def 13;
+              W0:the carrier of product F = product Carrier F
+                by GROUP_7:def 2;
+              Y0: dom (Carrier F) = Seg n by PARTFUN1:def 4;
+              reconsider tii=ti.i as Element of F.ii by C3,CARD_3:18,W0,Y0;
+              x.i =tii*(1_F.ii) by GROUP_7:4,P224,P226,P217
+              .=ti.i by GROUP_1:def 5;
+              hence thesis by P224,P227;
+            end;
+            suppose P223: i = len s;
+              P224: y.i = 1_Gn by P223,LMP400,P214,PN212,LLTM,LSLTN,P222;
+              x.i =(1_Gn)*gn by GROUP_7:4,P223,P224,P220,P217
+              .=sn.i by GROUP_1:def 5,P220,P223;
+              hence thesis by P223;
+            end;
+          end;
+        end;
+      end;
+      hence for i be Nat st 1<= i & i<=len s
+      holds ex si be Element of product F st si=s.i & x.i = si.i;
+    end;
+  end;
+  X1: for m be Element of NAT holds P[m] from NAT_1:sch 1(P0,PN);
+  thus for x be Element of product F,
+  s be FinSequence of product F st len s = n
+  & (for k be Element of Seg n holds s.k in ProjGroup(F,k)) & x=Product s
+  holds
+  for i be Nat st 1<= i & i<= n holds
+  ex si be Element of product F st si=s.i & x.i = si.i
+  proof
+    let x be Element of product F, s be FinSequence of product F;
+    assume ASX: len s = n
+    & (for k be Element of Seg n holds s.k
+    in ProjGroup(F,k)) & x=Product s;
+Y1: 1<=len s & len s <= n by ASX,NAT_1:14;
+    for k be Element of Seg n st k in dom s holds s.k in ProjGroup(F,k) by ASX;
+    hence thesis by ASX,Y1,X1;
+  end;
+end;
+
+theorem THA1:
+  for F be associative Group-like multMagma-Family of Seg n,
+  x be Element of product F,
+  s,t be FinSequence of product F st len s = n
+  & (for k be Element of Seg n holds s.k in ProjGroup(F,k)) &
+  x=Product s & len t = n
+  & (for k be Element of Seg n holds t.k in ProjGroup(F,k))
+  & x=Product t holds s=t
+  proof
+    let F be associative Group-like multMagma-Family of Seg n,
+    x be Element of product F, s,t be FinSequence of product F;
+    set I = Seg n;
+    assume that
+    A1: len s = n and
+    A2: (for k be Element of I holds s.k in ProjGroup(F,k)) and
+    A3: x=Product s and
+    B1: len t = n and
+    B2: (for k be Element of I holds t.k in ProjGroup(F,k)) and
+    B3: x=Product t;
+    now let i be Nat;
+      assume P1: 1<=i & i<= n; then
+      reconsider i0=i as Element of I by FINSEQ_1:3;
+      consider si be Element of product F such that
+      P2: si=s.i & x.i = si.i by A1,A2,A3,P1,LMP500;
+      consider ti be Element of product F such that
+      P3: ti=t.i & x.i = ti.i by B1,B2,B3,P1,LMP500;
+      s.i0 in ProjGroup(F,i0) by A2; then
+      s.i0 in the carrier of ProjGroup(F,i0) by STRUCT_0:def 5; then
+      P4:s.i0 in ProjSet(F,i0) by defPrjGroup;
+      consider sn be Function,gn be Element of (F.i0) such that
+      P5:sn=si & dom sn = I & sn.i0 = gn &
+      for k be Element of I st k <> i0 holds sn.k = 1_F.k by P2,P4,LMP1;
+      t.i0 in ProjGroup(F,i0) by B2; then
+      t.i0 in the carrier of ProjGroup(F,i0) by STRUCT_0:def 5;
+      then
+      Q4:t.i0 in ProjSet(F,i0) by defPrjGroup;
+      consider tn be Function,fn be Element of (F.i0) such that
+      Q5: tn=ti & dom tn = I & tn.i0 = fn &
+      for k be Element of I st k <> i0 holds tn.k = 1_F.k by P3,Q4,LMP1;
+      now let x be set;
+        assume x in dom sn; then
+        reconsider j=x as Element of I by P5;
+        per cases;
+        suppose j=i;
+          hence sn.x=tn.x by P2,P3,P5,Q5;
+        end;
+        suppose XX3: j<>i; then
+          sn.j = 1_F.j by P5;
+          hence sn.x=tn.x by XX3,Q5;
+        end;
+      end;
+      hence s.i = t.i by P2,P3,P5,Q5,FUNCT_1:9;
+    end;
+    hence thesis by A1,B1,FINSEQ_1:18;
+  end;
+
+theorem THA2:
+  for F be associative Group-like multMagma-Family of Seg n,
+  x be Element of product F
+  ex s be FinSequence of product F st len s = n &
+  (for k be Element of Seg n holds s.k in ProjGroup(F,k)) & x=Product s
+  proof
+    let F be associative Group-like multMagma-Family of Seg n,
+    x be Element of product F;
+    set I = Seg n;
+    defpred P[Nat,set] means
+    ex k be Element of I,g be Element of F.k st k=$1 &
+    x.k=g & $2=(1_product F)+* (k,g);
+    P1: for k be Nat st k in Seg n
+    ex z being Element of product F st P[k,z]
+    proof
+      let k be Nat;
+      assume k in Seg n; then
+      reconsider k0=k as Element of I;
+      P4: the carrier of product F = product Carrier F by GROUP_7:def 2;
+      P5: dom Carrier F = I by PARTFUN1:def 4;
+      consider Rj being 1-sorted such that
+      C3: Rj = F.k0 & (Carrier F).k0 = the carrier of Rj by PRALG_1:def 13;
+      reconsider g=x.k0 as Element of F.k0 by C3,P5,P4,CARD_3:18;
+      1_product F +* (k0,g) in ProjSet(F,k0) by defPrj; then
+      reconsider z= 1_product F +* (k0,g) as Element of product F;
+      take z;
+      thus P[k,z];
+    end;
+    consider s be FinSequence of product F such that
+    P2: dom s= Seg n & for k be Nat st k in Seg n holds P[k,s.k]
+    from FINSEQ_1:sch 5(P1);
+    take s;
+    n in NAT by ORDINAL1:def 13;
+    hence XX1: len s = n by P2,FINSEQ_1:def 3;
+    thus XX2: for k be Element of I holds s.k in ProjGroup(F,k)
+    proof
+      let k be Element of Seg n;
+      ex k0 be Element of I,g be Element of F.k0 st k0=k &
+      x.k0=g & s.k=(1_product F)+* (k0,g) by P2; then
+      L1: s.k in ProjSet(F,k) by defPrj;
+      the carrier of (ProjGroup(F,k)) = ProjSet(F,k)
+      by defPrjGroup;
+      hence thesis by L1,STRUCT_0:def 5;
+    end;
+    set y=Product s;
+    W0: the carrier of product F = product Carrier F by GROUP_7:def 2;
+    XX4: dom x = Seg n by PARTFUN1:def 4,W0;
+    XX5: dom y = Seg n by PARTFUN1:def 4,W0;
+    XX6: dom (1_product F)= I by PARTFUN1:def 4,W0;
+    now let t be set;
+      assume t in dom x; then
+      XP2S: t in Seg n by PARTFUN1:def 4,W0; then
+      reconsider i=t as Nat;
+      1<=i & i<= n by FINSEQ_1:3,XP2S; then
+      XP3:  ex si be Element of product F st
+      si=s.i & y.i = si.i by LMP500,XX1,XX2;
+      ex i1 be Element of I,g be Element of F.i1 st i1=i &
+      x.i1=g & s.i=(1_product F)+* (i1,g) by XP2S,P2;
+      hence x.t=y.t by XX6,FUNCT_7:33,XP3;
+    end;
+    hence thesis by XX4,XX5,FUNCT_1:9;
+  end;
+
+theorem LST:
+  for G being commutative Group,
+  F being associative Group-like multMagma-Family of Seg n
+  st (for i be Element of Seg n holds F.i is Subgroup of G)
+  & (for x be Element of G
+  ex s be FinSequence of G st len s = n
+  & (for k be Element of Seg n holds s.k in F.k) & x=Product s )
+  & ( for s,t be FinSequence of G st
+  len s = n & (for k be Element of Seg n holds s.k in F.k) & len t = n
+  & (for k be Element of Seg n holds t.k in F.k)
+  & Product s=Product t holds s=t ) holds
+  ex f being Homomorphism of product F,G
+  st f is bijective &
+  for x be Element of product F
+  ex s be FinSequence of G st len s= n &
+  (for k be Element of Seg n holds s.k in F.k) & s=x & f.x = Product s
+  proof
+    let G be commutative Group,
+    F be associative Group-like multMagma-Family of Seg n;
+    set I = Seg n;
+    assume that
+    AS2: for i be Element of I holds F.i is Subgroup of G and
+    AS3: for x be Element of G ex s be FinSequence of G st
+    len s = n
+    & (for k be Element of I holds s.k in F.k) & x=Product s and
+    AS4: for s,t be FinSequence of G st
+    len s = n & (for k be Element of I holds s.k in F.k)
+    & len t = n & (for k be Element of I holds t.k in F.k)
+    & Product s=Product t holds s=t;
+    LM1: for x being Element of product F
+    holds x is FinSequence of G & dom x = I &
+    dom x = dom (Carrier F) &
+    for i be set st i in dom (Carrier F) holds x.i in (Carrier F).i
+    proof
+      let x be Element of product F;
+      W0: the carrier of product F = product Carrier F by GROUP_7:def 2;
+      W12: dom (Carrier F) = I by PARTFUN1:def 4;
+      dom x = Seg n by W0,PARTFUN1:def 4; then
+      reconsider s=x as FinSequence by FINSEQ_1:def 2;
+      W2: for i be Element of I holds x.i in the carrier of (F.i)
+      proof
+        let i be Element of I;
+        ex R being 1-sorted st R = F.i &
+        (Carrier F).i = the carrier of R by PRALG_1:def 13;
+        hence x.i in the carrier of (F.i) by W12,CARD_3:18,W0;
+      end;
+      for i be Nat st i in dom s holds s.i in the carrier of G
+      proof
+        let i be Nat;
+        assume i in dom s; then
+        reconsider j=i as Element of I by W0,PARTFUN1:def 4;
+        W22: s.j in the carrier of (F.j) by W2;
+        F.j is Subgroup of G by AS2;
+        then
+        the carrier of (F.j) c= the carrier of G by GROUP_2:def 5;
+        hence s.i in the carrier of G by W22;
+      end;
+      hence thesis by FINSEQ_2:14,CARD_3:18,W0,PARTFUN1:def 4;
+    end;
+    defpred P[set,set] means ex s be FinSequence of G st len s= n &
+    (for k be Element of I holds s.k in F.k) & s=$1 & $2 = Product s;
+    P1: for x being Element of
+    product F ex y being Element of G st P[x,y]
+    proof
+      let x be Element of product F;
+QR1:  x is FinSequence of G & dom x = I & dom x = dom (Carrier F) &
+      for i be set st i in dom Carrier F holds x.i in (Carrier F).i by LM1;
+      reconsider s=x as FinSequence of G by LM1;
+QR2:  dom x = Seg n by LM1;
+W2:   for i be Element of I holds x.i in the carrier of (F.i)
+      proof
+        let i be Element of I;
+        ex R being 1-sorted st R = F.i &
+        (Carrier F).i = the carrier of R by PRALG_1:def 13;
+        hence x.i in the carrier of (F.i) by QR1;
+      end;
+      n in NAT by ORDINAL1:def 13; then
+      X1:len s=n by QR2,FINSEQ_1:def 3;
+      X2:now let k be Element of I;
+      s.k in the carrier of (F.k) by W2;
+      hence s.k in F.k by STRUCT_0:def 5;
+    end;
+    take Product s;
+    thus P[x,Product s] by X1,X2;
+  end;
+  consider f be Function of product F, G such that
+  P2: for x being Element of (the carrier of product F)
+  holds P[x,f.x] from FUNCT_2:sch 3(P1);
+  for a,b being Element of product F
+  holds f.(a * b) = f.a * f.b
+  proof
+    let a,b be Element of product F;
+    QR1:a is FinSequence of G & dom a = I &
+    dom a = dom (Carrier F) &
+    for i be set st i in dom (Carrier F) holds a.i in (Carrier F).i by LM1;
+    reconsider a1=a as FinSequence of G by LM1;
+    QR2:b is FinSequence of G &
+    dom b = I &
+    dom b = dom (Carrier F) &
+    for i be set st i in dom (Carrier F) holds b.i in (Carrier F).i by LM1;
+    reconsider b1=b as FinSequence of G by LM1;
+    QR3:a*b is FinSequence of G &
+    dom (a*b) = I &
+    dom (a*b) = dom (Carrier F) &
+    for i be set st i in dom (Carrier F) holds (a*b).i in (Carrier F).i
+    by LM1;
+    reconsider ab1=a*b as FinSequence of G by LM1;
+    K0: now let k be Element of NAT;
+    assume k in dom(ab1);
+    then reconsider k0= k as Element of I by LM1;
+    ex R being 1-sorted st R = F.k0 &
+    (Carrier F).k0 = the carrier of R by PRALG_1:def 13; then
+    reconsider aa=a.k0 as Element of (F.k0) by QR1;
+    ex R being 1-sorted st R = F.k0 &
+    (Carrier F).k0 = the carrier of R by PRALG_1:def 13; then
+    reconsider bb=b.k0 as Element of (F.k0) by QR2;
+    ex R being 1-sorted st R = F.k0 &
+    (Carrier F).k0 = the carrier of R by PRALG_1:def 13; then
+    A1: aa =(a1/.k0) by PARTFUN1:def 8,QR1;
+    A2: bb=(b1/.k0) by PARTFUN1:def 8,QR2;
+    A3: F.k0 is Subgroup of G by AS2;
+    thus (ab1).k =aa * bb by GROUP_7:4
+    .= (a1/.k) * (b1/.k) by A1,A2,A3,GROUP_2:52;
+  end;
+  K1: ex sa be FinSequence of G st len sa= n &
+  (for k be Element of I holds sa.k in F.k) & sa=a
+  & f.a = Product sa by P2;
+  K2:ex sb be FinSequence of G st len sb= n &
+  (for k be Element of I holds sb.k in F.k) & sb=b
+  & f.b = Product sb by P2;
+  ex sab be FinSequence of G st len sab= n &
+  (for k be Element of I holds sab.k in F.k) & sab=a*b
+  & f.(a*b) = Product sab by P2;
+  hence thesis by K0,K1,K2,GROUP_4:20;
+end; then
+reconsider f as Homomorphism of product F,G by GROUP_6:def 7;
+take f;
+now let y be set;
+  assume y in the carrier of G; then
+  consider s be FinSequence of G such that
+  R1: len s = n
+  & (for k be Element of I holds s.k in F.k) & y=Product s by AS3;
+  W0: the carrier of product F = product Carrier F by GROUP_7:def 2;
+  W11: dom s = I by R1,FINSEQ_1:def 3;
+  W12: dom Carrier F = I by PARTFUN1:def 4;
+  W2: for x be set st x in dom Carrier F holds s.x in (Carrier F).x
+  proof
+    let x be set;
+    assume x in dom Carrier F;
+    then reconsider i=x as Element of I by PARTFUN1:def 4;
+    P2: s.i in F.i by R1;
+    ex R being 1-sorted st R = F.i &
+    (Carrier F).i = the carrier of R by PRALG_1:def 13;
+    hence s.x in (Carrier F).x by STRUCT_0:def 5,P2;
+  end;
+  reconsider x=s as Element of product F by CARD_3:18,W0,W11,W12,W2;
+  ex t be FinSequence of G st len t= n &
+  (for k be Element of I holds t.k in F.k) & t=x
+  & f.x = Product t by P2;
+  hence y in rng f by FUNCT_2:6,R1;
+end; then
+X1: the carrier of G c= rng f by TARSKI:def 3;
+rng f = the carrier of G by X1,XBOOLE_0:def 10; then
+P3: f is onto by FUNCT_2:def 3;
+for x1,x2 be set st x1 in the carrier of product F
+& x2 in the carrier of product F & f.x1 = f.x2 holds x1 = x2
+proof
+  let x1,x2 be set;
+  assume AS: x1 in the carrier of product F
+  & x2 in the carrier of product F & f.x1=f.x2;
+  consider s be FinSequence of G such that
+  Q1: len s= n & (for k be Element of I holds s.k in F.k) & s=x1
+  & f.x1 = Product s by P2,AS;
+  consider t be FinSequence of G such that Q2: len t= n &
+  (for k be Element of I holds t.k in F.k) & t=x2
+  & f.x2 = Product t by P2,AS;
+  thus x1=x2 by AS4,Q1,AS,Q2;
+end;
+then f is one-to-one by FUNCT_2:25;
+hence thesis by P2,P3;
+end;
+
+theorem
+  for G,F being associative commutative Group-like multMagma-Family of Seg n
+  st
+  for k be Element of Seg n holds F.k = ProjGroup(G,k)
+  holds
+  ex f being Homomorphism of product F,product G
+  st f is bijective &
+  for x be Element of product F
+  ex s be FinSequence of product G st len s= n &
+  (for k be Element of Seg n holds s.k in F.k) & s=x & f.x = Product s
+  proof
+    let G,F be associative commutative Group-like
+         multMagma-Family of Seg n;
+    assume AS: for k be Element of Seg n
+    holds F.k = ProjGroup(G,k);
+P1: for i be Element of Seg n holds F.i is Subgroup of product G
+    proof
+      let i be Element of Seg n;
+      F.i = ProjGroup(G,i) by AS;
+      hence thesis;
+    end;
+P2: for x be Element of product G
+    ex s be FinSequence of product G st len s = n
+    & (for k be Element of Seg n holds s.k in F.k) & x=Product s
+    proof
+      let x be Element of product G;
+      consider s be FinSequence of product G such that
+      AEXS: len s = n
+      & (for k be Element of Seg n holds s.k in ProjGroup(G,k)) &
+      x=Product s by THA2;
+      take s;
+      for k be Element of Seg n holds s.k in F.k
+      proof
+        let k be Element of Seg n;
+        s.k in ProjGroup(G,k) by AEXS;
+        hence thesis by AS;
+      end;
+      hence thesis by AEXS;
+    end;
+    for s,t be FinSequence of product G st
+    len s = n & (for k be Element of Seg n holds s.k in F.k) & len t = n
+    & (for k be Element of Seg n holds t.k in F.k)
+    & Product s=Product t holds s=t
+    proof
+      let s,t be FinSequence of product G;
+      assume ASP3:
+      len s = n & (for k be Element of Seg n holds s.k in F.k) &
+      len t = n & (for k be Element of Seg n holds t.k in F.k) &
+      Product s=Product t;
+      for k be Element of Seg n holds
+      t.k in ProjGroup(G,k) & s.k in ProjGroup(G,k)
+      proof
+        let k be Element of Seg n;
+        s.k in F.k & t.k in F.k by ASP3;
+        hence thesis by AS;
+      end;
+      hence thesis by ASP3,THA1;
+    end;
+    hence thesis by P1,P2,LST;
+  end;

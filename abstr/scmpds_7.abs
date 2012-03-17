@@ -7,21 +7,23 @@
 environ
 
  vocabularies NUMBERS, SUBSET_1, SCMPDS_2, AMI_1, FSM_1, INT_1, AMI_2, ARYTM_1,
-      COMPLEX1, ARYTM_3, CARD_1, SCMFSA6A, RELAT_1, FUNCT_4, FUNCOP_1,
-      XBOOLE_0, CIRCUIT2, FUNCT_1, NAT_1, TARSKI, TURING_1, VALUED_1, SCMPDS_4,
-      AMISTD_2, XXREAL_0, AMI_3, SCMFSA_7, FUNCT_7, UNIALG_2, SCMFSA7B,
-      GRAPHSP, MSUALG_1, CAT_1, SCMFSA6B, SCMPDS_5, STRUCT_0, SFMASTR3,
-      SEMI_AF1, SCMP_GCD, FINSEQ_1, CARD_3, FINSEQ_3, SCMPDS_7, ORDINAL1,
-      PARTFUN1, SCMNORM, SCMFSA6C;
+      COMPLEX1, ARYTM_3, CARD_1, RELAT_1, FUNCT_4, FUNCOP_1, XBOOLE_0,
+      CIRCUIT2, FUNCT_1, NAT_1, TARSKI, TURING_1, VALUED_1, SCMPDS_4, AMISTD_2,
+      XXREAL_0, AMI_3, SCMFSA_7, FUNCT_7, UNIALG_2, SCMFSA7B, GRAPHSP,
+      MSUALG_1, SCMFSA6B, SCMPDS_5, STRUCT_0, SFMASTR3, SEMI_AF1, SCMP_GCD,
+      FINSEQ_1, CARD_3, FINSEQ_3, SCMPDS_7, ORDINAL1, PARTFUN1, SCMNORM,
+      SCMFSA6C;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, COMPLEX1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, INT_1, NAT_1,
-      FUNCOP_1, AFINSQ_1, VALUED_1, STRUCT_0, COMPOS_1, AMI_1, AMI_2, FUNCT_7,
-      SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, FINSEQ_1, WSIERP_1;
+      FUNCOP_1, AFINSQ_1, VALUED_1, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, AMI_2,
+      FUNCT_7, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, FINSEQ_1,
+      WSIERP_1;
  constructors ENUMSET1, XXREAL_0, REAL_1, INT_2, WSIERP_1, SCM_1, SCMPDS_4,
-      SCMPDS_5, SCMPDS_6, SCMP_GCD, SEQ_1;
+      SCMPDS_5, SCMPDS_6, SCMP_GCD, SEQ_1, AMI_1;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, SCMPDS_2, SCMPDS_4, SCMPDS_5, XBOOLE_0,
-      VALUED_0, FINSEQ_1, CARD_1, VALUED_1, AMI_1, FUNCT_4, COMPOS_1, AFINSQ_1;
+      VALUED_0, FINSEQ_1, CARD_1, VALUED_1, AMI_1, FUNCT_4, COMPOS_1, AFINSQ_1,
+      RELAT_1, EXTPRO_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -42,35 +44,13 @@ theorem :: SCMPDS_7:1  ::SCMPDS_6:23
   for s being State of SCMPDS,m,n being Element of NAT st IC s=
    m holds ICplusConst(s,n-m)= n;
 
-canceled 2;
-
-theorem :: SCMPDS_7:4
-  IC s =  0 implies Initialize s = s;
-
-canceled 2;
+canceled 5;
 
 theorem :: SCMPDS_7:7
   for s1,s2 being State of SCMPDS st IC s1= IC s2 & DataPart s1 =
   DataPart s2 & ProgramPart s1 = ProgramPart s2 holds s1=s2;
 
-canceled;
-
-theorem :: SCMPDS_7:9
-  x in dom I implies I.x = (s +* (I +* Start-At(l,SCMPDS))).x;
-
-theorem :: SCMPDS_7:10
-  loc in dom I implies (Initialize s +* I).loc = I.loc;
-
-theorem :: SCMPDS_7:11 :: SCMPDS_5:19,40
-  (s +* (I +* Start-At(l,SCMPDS))).a = s.a;
-
-theorem :: SCMPDS_7:12
-  (s +* Start-At(loc,SCMPDS)).IC SCMPDS = loc;
-
-canceled;
-
-theorem :: SCMPDS_7:14
-  (I ';' i ';' j). card I =i;
+canceled 7;
 
 theorem :: SCMPDS_7:15
   i ';' I ';' j ';' k = i ';' (I ';' j ';' k);
@@ -211,11 +191,11 @@ Comput(ProgramPart
 (s2),s2,LifeSpan(ProgramPart(s1),s1));
 
 theorem :: SCMPDS_7:37
-  for s being State of SCMPDS,I being Program of SCMPDS,n being
-  Element of NAT st IC Comput(ProgramPart(Initialize s+*I),Initialize s+*I,n)
-=  0 holds
-Initialize Comput(ProgramPart(Initialize s+*I),Initialize s+*I,n) +* I =
-Comput(ProgramPart(Initialize s+*I),Initialize s+*I,n);
+  for s being 0-started State of SCMPDS,I being Program of SCMPDS,
+      n being Element of NAT
+  st IC Comput(ProgramPart(s+*I),s+*I,n) =  0 holds
+    Initialize Comput(ProgramPart(s+*I),s+*I,n) +* I =
+       Comput(ProgramPart(s+*I),s+*I,n);
 
 theorem :: SCMPDS_7:38  ::SCMPDS_5:33
   for I being Program of SCMPDS,J being Program of SCMPDS, k being
@@ -465,17 +445,21 @@ theorem :: SCMPDS_7:67
   for s being State of SCMPDS,I being halt-free shiftable
 Program of SCMPDS, a be Int_position, i be Integer,n be Element of NAT,X be set
   st s.DataLoc(s.a,i) > 0 & not DataLoc(s.a,i) in X & n > 0 & card I > 0 & a <>
-DataLoc(s.a,i) & (for t be State of SCMPDS st (for x be Int_position st x in X
-holds t.x=s.x) & t.a=s.a holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i)=t.
-  DataLoc(s.a,i) & I is_closed_on t & I is_halting_on t & for y be Int_position
-  st y in X holds IExec(I,t).y=t.y) holds for-down(a,i,n,I) is_closed_on s &
-  for-down(a,i,n,I) is_halting_on s;
+DataLoc(s.a,i) &
+ (for t be 0-started State of SCMPDS st (for x be Int_position st x in X
+   holds t.x=s.x) & t.a=s.a holds IExec(I,t).a=t.a &
+     IExec(I,t).DataLoc(s.a,i)=t.DataLoc(s.a,i) &
+     I is_closed_on t & I is_halting_on t &
+     for y be Int_position st y in X holds IExec(I,t).y=t.y)
+ holds for-down(a,i,n,I) is_closed_on s &
+       for-down(a,i,n,I) is_halting_on s;
 
 theorem :: SCMPDS_7:68
-  for s being State of SCMPDS,I being halt-free shiftable
+  for s being 0-started State of SCMPDS,I being halt-free shiftable
 Program of SCMPDS, a be Int_position, i be Integer,n be Element of NAT,X be set
   st s.DataLoc(s.a,i) > 0 & not DataLoc(s.a,i) in X & n > 0 & card I > 0 & a <>
-DataLoc(s.a,i) & (for t be State of SCMPDS st (for x be Int_position st x in X
+DataLoc(s.a,i) &
+  (for t be 0-started State of SCMPDS st (for x be Int_position st x in X
 holds t.x=s.x) & t.a=s.a holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i)=t.
   DataLoc(s.a,i) & I is_closed_on t & I is_halting_on t & for y be Int_position
   st y in X holds IExec(I,t).y=t.y) holds IExec(for-down(a,i,n,I),s) = IExec(
@@ -506,18 +490,18 @@ definition
 end;
 
 theorem :: SCMPDS_7:69
-  for s being State of SCMPDS st s.GBP=0 holds for-down(GBP,2,1,
+  for s being 0-started State of SCMPDS st s.GBP=0 holds for-down(GBP,2,1,
   Load AddTo(GBP,3,1)) is_closed_on s & for-down(GBP,2,1, Load AddTo(GBP,3,1))
   is_halting_on s;
 
 theorem :: SCMPDS_7:70
-  for s being State of SCMPDS,n be Element of NAT st s.GBP=0 & s.
-intpos 2=n & s.intpos 3=0 holds IExec(for-down(GBP,2,1, Load AddTo(GBP,3,1)),s)
-  .intpos 3=n;
+  for s being 0-started State of SCMPDS,n be Element of NAT
+   st s.GBP=0 & s.intpos 2=n & s.intpos 3=0
+   holds IExec(for-down(GBP,2,1, Load AddTo(GBP,3,1)),s).intpos 3=n;
 
 theorem :: SCMPDS_7:71
-  for s being State of SCMPDS,n be Element of NAT holds IExec(sum(n),s).
-  intpos 3 =n;
+  for s being 0-started State of SCMPDS,n be Element of NAT
+   holds IExec(sum(n),s).intpos 3 =n;
 
 :: sum=Sum x1+x2+...+x2
 
@@ -531,15 +515,16 @@ definition
 end;
 
 theorem :: SCMPDS_7:72
-  for s being State of SCMPDS,sp,cv,result,pp,pD be Element of NAT
+  for s being 0-started State of SCMPDS,sp,cv,result,pp,pD be Element of NAT
 st s.intpos sp > sp & cv < result & s.intpos pp=pD & s.intpos sp+result < pp &
-pp <pD & pD < s.intpos pD holds for-down(intpos sp,cv,1, AddTo(intpos sp,result
-,intpos pD,0) ';' AddTo(intpos pp,0,1)) is_closed_on s & for-down(intpos sp,cv,
-1, AddTo(intpos sp,result,intpos pD,0) ';' AddTo(intpos pp,0,1)) is_halting_on
-  s;
+pp <pD & pD < s.intpos pD
+ holds for-down(intpos sp,cv,1, AddTo(intpos sp,result,intpos pD,0) ';'
+  AddTo(intpos pp,0,1)) is_closed_on s &
+   for-down(intpos sp,cv,1, AddTo(intpos sp,result,intpos pD,0) ';'
+  AddTo(intpos pp,0,1)) is_halting_on s;
 
 theorem :: SCMPDS_7:73
-  for s being State of SCMPDS,sp,cv,result,pp,pD be Element of NAT
+  for s being 0-started State of SCMPDS,sp,cv,result,pp,pD be Element of NAT
 , f be FinSequence of NAT st s.intpos sp > sp & cv < result & s.intpos pp=pD &
   s.intpos sp+result < pp & pp <pD & pD < s.intpos pD & s.DataLoc(s.intpos sp,
 result)=0 & len f = s.DataLoc(s.intpos sp,cv) & for k be Element of NAT st k <
@@ -548,7 +533,8 @@ len f holds f.(k+1)=s.DataLoc(s.intpos pD,k) holds IExec(for-down(intpos sp,cv,
   intpos sp,result)=Sum f;
 
 theorem :: SCMPDS_7:74
-  for s being State of SCMPDS,sp,cv,result,pp,pD be Element of NAT, f be
+  for s being 0-started State of SCMPDS,
+   sp,cv,result,pp,pD be Element of NAT, f be
 FinSequence of NAT st s.intpos sp > sp & cv < result & s.intpos sp+result < pp
   & pp <pD & pD < s.intpos pD & len f = s.DataLoc(s.intpos sp,cv) & for k be
 Element of NAT st k < len f holds f.(k+1)=s.DataLoc(s.intpos pD,k) holds IExec(

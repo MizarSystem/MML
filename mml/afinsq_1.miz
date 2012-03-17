@@ -47,7 +47,7 @@ theorem
 theorem Th4:
   n \/ { n } = n+1
 proof
-  n+1 = succ n by NAT_1:39;
+  n+1 = succ n;
   hence thesis;
 end;
 
@@ -322,9 +322,7 @@ proof
   set p = k --> y;
   dom p = k by FUNCOP_1:19;
   then reconsider p = k --> y as XFinSequence by Th7;
-  rng p c= {y} & {y} c= D by FUNCOP_1:19,ZFMISC_1:37;
-  then rng p c= D by XBOOLE_1:1;
-  then reconsider p as XFinSequence of D by RELAT_1:def 19;
+  reconsider p as XFinSequence of D;
   take p;
   thus thesis by FUNCOP_1:19;
 end;
@@ -391,8 +389,8 @@ registration
 end;
 
 definition let p,q;
-  redefine func p^q means  :Def4:
-  dom it = len p + len q & (for k st k in dom p
+  redefine func p^q means
+:Def4: dom it = len p + len q & (for k st k in dom p
   holds it.k=p.k) & for k st k in dom q holds it.(len p + k) = q.k;
   compatibility
   proof
@@ -2261,9 +2259,8 @@ proof
     assume
 A2: x in dom F;
     then reconsider f = x as Element of NAT;
-A3: f < card F by A2,Th70;
-    reconsider i = f as Element of NAT;
-    thus x in { k where k is Element of NAT: k < card F } by A3;
+    f < card F by A2,Th70;
+    hence x in { k where k is Element of NAT: k < card F };
   end;
   let x be set;
   assume x in { k where k is Element of NAT: k < card F };
@@ -2378,7 +2375,7 @@ end;
 
 reserve l for Element of NAT;
 
-theorem Th2:
+theorem
  for I being finite initial NAT-defined Function, J being Function
  holds dom I misses dom Shift(J,card I)
 proof let I be finite initial NAT-defined Function, J be Function;
@@ -2397,7 +2394,7 @@ end;
 
 :: from SCMPDS_4, 2010.05.14, A.T.
 
-theorem Th71:
+theorem
   not m in dom p implies not succ m in dom p
 proof
   assume not m in dom p;
@@ -2456,7 +2453,7 @@ end;
 
 :: missing, 2010.05.15, A.T.
 
-theorem
+theorem Th78:
  p c= p^q
 proof
 A: dom p c= dom(p^q) by Th24;
@@ -2470,4 +2467,147 @@ Z:  x in dom p;
   end;
  hence thesis by A,GRFUNC_1:8;
 end;
+
+theorem
+  len(p^<%x%>) = len p + 1
+ proof
+  thus len(p^<%x%>) = len p + len<%x%> by Th20
+      .= len p + 1 by Th36;
+ end;
+
+theorem
+ <%x,y%> = (0,1) --> (x,y)
+proof
+A: dom<%x,y%> = len<%x,y%>
+    .= {0,1} by Th42,CARD_1:88;
+B: <%x,y%>.0 = x by Th42;
+  <%x,y%>.1 = y by Th42;
+ hence <%x,y%> = (0,1) --> (x,y) by A,B,FUNCT_4:69;
+end;
+
+reserve M for Element of NAT;
+
+theorem Th81:
+ p^q = p +* Shift(q, card p)
+proof
+F: dom Shift(q, card p) = { M+card p:M in dom q } by VALUED_1:def 12;
+   for x holds x in dom(p^q) iff x in dom p or x in dom Shift(q, card p)
+    proof let x;
+     thus x in dom(p^q) implies x in dom p or x in dom Shift(q, card p)
+      proof assume
+ZZ:     x in dom(p^q);
+        then reconsider k = x as Nat;
+       per cases by ZZ,Th23;
+       suppose k in dom p;
+       hence x in dom p or x in dom Shift(q, card p);
+       end;
+       suppose ex n st n in dom q & k=len p + n;
+       hence x in dom p or x in dom Shift(q, card p) by F;
+       end;
+      end;
+     assume
+Z:    x in dom p or x in dom Shift(q, card p);
+     per cases by Z;
+     suppose
+S:    x in dom p;
+      dom p c= dom(p^q) by Th24;
+     hence x in dom(p^q) by S;
+     end;
+     suppose x in dom Shift(q, card p);
+      then ex M st x = M+card p & M in dom q by F;
+     hence x in dom(p^q) by Th26;
+     end;
+    end;
+   then
+A: dom(p^q) = dom p \/ dom Shift(q, card p) by XBOOLE_0:def 3;
+  for x st x in dom p \/ dom Shift(q, card p)
+   holds (x in dom Shift(q, card p) implies (p^q).x = Shift(q, card p).x) &
+    (not x in dom Shift(q, card p) implies (p^q).x = p.x)
+  proof let x such that
+Z:   x in dom p \/ dom Shift(q, card p);
+   hereby assume
+ZZ:  x in dom Shift(q, card p);
+     then reconsider k = x as Nat;
+     consider M such that
+W1:   x = M+card p and
+W2:   M in dom q by ZZ,F;
+     set m = k -' len p;
+A: len p + m = k by NAT_D:34,W1;
+    hence (p^q).x = q.m by W1,W2,Def4
+       .= Shift(q, card p).x by W1,W2,A,VALUED_1:def 12;
+   end;
+   assume not x in dom Shift(q, card p);
+    then x in dom p by Z,XBOOLE_0:def 3;
+   hence (p^q).x = p.x by Def4;
+  end;
+ hence p^q = p +* Shift(q, card p) by A,FUNCT_4:def 1;
+end;
+
+theorem
+ p +* (p ^ q) = p ^ q & (p ^ q) +* p = p ^ q
+proof
+  p c= p ^ q by Th78;
+ hence thesis by FUNCT_4:79;
+end;
+
+reserve m,n for Element of NAT;
+
+theorem Th83:
+ for I being finite initial NAT-defined Function, J being Function
+ holds dom Shift(I,n) misses dom Shift(J,n+card I)
+proof let I be finite initial NAT-defined Function, J be Function;
+  assume
+A1: dom Shift(I,n) meets dom Shift(J,n+card I);
+  dom Shift(J,n+card I) = { l+(n+card I): l in dom J } by VALUED_1:def 12;
+  then consider x being set such that
+A2: x in dom Shift(I,n) and
+A3: x in { l+(n+card I): l in dom J } by A1,XBOOLE_0:3;
+ dom Shift(I,n) = { m+n:m in dom I } by VALUED_1:def 12;
+  then consider m such that
+W1: x = m+n and
+W2: m in dom I by A2;
+  consider l such that
+A4: x = l+(n+card I) and
+  l in dom J by A3;
+  m < card I by W2,Th70;
+  then m+n < n+card I by XREAL_1:8;
+  then l+(n+card I) < n+card I by W1,A4;
+  hence contradiction by NAT_1:11;
+end;
+
+theorem Th84:
+ Shift(p,n) c= Shift(p^q,n)
+ proof
+    p^q = p +* Shift(q, card p) by Th81;
+    then
+A:   Shift(p^q,n) = Shift(p,n) +* Shift(Shift(q,card p),n) by VALUED_1:24;
+    Shift(Shift(q,card p),n) = Shift(q,n+card p) by VALUED_1:22;
+    then dom Shift(p,n) misses dom Shift(Shift(q,card p),n) by Th83;
+   hence Shift(p,n) c=  Shift(p^q,n) by A,FUNCT_4:33;
+ end;
+
+theorem Th85:
+ Shift(q,n+card p) c= Shift(p^q,n)
+ proof
+A: Shift(Shift(q,card p),n) = Shift(q,n+card p) by VALUED_1:22;
+    p^q = p +* Shift(q, card p) by Th81;
+    then Shift(p^q,n) = Shift(p,n) +* Shift(Shift(q,card p),n) by VALUED_1:24;
+   hence thesis by A,FUNCT_4:26;
+ end;
+
+theorem
+ Shift(p^q,n) c= X implies Shift(p,n) c= X
+ proof assume
+Z: Shift(p^q,n) c= X;
+   Shift(p,n) c= Shift(p^q,n) by Th84;
+  hence Shift(p,n) c= X by Z,XBOOLE_1:1;
+ end;
+
+theorem
+ Shift(p^q,n) c= X implies Shift(q,n+card p) c= X
+ proof assume
+Z: Shift(p^q,n) c= X;
+   Shift(q,n+card p) c= Shift(p^q,n) by Th85;
+  hence thesis by Z,XBOOLE_1:1;
+ end;
 

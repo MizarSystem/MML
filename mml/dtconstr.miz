@@ -19,11 +19,11 @@ environ
       PRE_POLY;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0,
       XREAL_0, NAT_1, FINSEQ_1, TREES_1, TREES_2, TREES_3, STRUCT_0, LANG1,
-      FINSET_1, CARD_1, FINSEQ_2, TREES_4;
+      FINSET_1, CARD_1, FINSEQ_2, TREES_4, VALUED_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FINSEQ_1, XBOOLE_0;
  theorems TARSKI, NAT_1, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_6, MCART_1,
-      LANG1, FINSEQ_1, FINSEQ_2, FINSEQ_3, CARD_5, TREES_1, TREES_3, TREES_4,
+      LANG1, FINSEQ_1, FINSEQ_2, CARD_5, TREES_1, TREES_3, TREES_4,
       CARD_3, RELSET_1, XBOOLE_0, XBOOLE_1, MEASURE2, XXREAL_0, ORDINAL1,
       PRE_POLY;
  schemes NAT_1, CQC_SIM1, FINSEQ_1, RELSET_1, FRAENKEL, FUNCT_2, WELLORD2;
@@ -449,7 +449,6 @@ A24:    pn.k in rng pn by A13,A16,A22,FUNCT_1:def 5;
         then reconsider pnk = pn.k as Element of NAT by A18;
         consider s being Nat such that
 A25:    n = pnk + s by A21,A24,NAT_1:10;
-        reconsider s as Element of NAT by ORDINAL1:def 13;
         deffunc H(set,set) =
         { [o1, NTermVal(o1, pr1 roots p1, pr2 roots p1)]-tree p1
         where o1 is Symbol of G(), p1 is Element of (f.$1)* :
@@ -2104,23 +2103,10 @@ A1: roots <*t*> = <*0*> or roots <*t*> = <*1*> by Th4;
 end;
 
 definition
-  let x be FinSequence of NAT such that
-A1: x <> {};
-  func plus-one x -> Element of NAT means
-  :Def10:
-  ex n being Element of NAT st it = n+1 & x.1 = n;
-  existence
-  proof
-    len x >= 0+1 by A1,NAT_1:13;
-    then 1 in dom x by FINSEQ_3:27;
-    then
-A2: x.1 in rng x by FUNCT_1:def 5;
-    rng x c= NAT by FINSEQ_1:def 4;
-    then reconsider n = x.1 as Element of NAT by A2;
-    take n+1, n;
-    thus thesis;
-  end;
-  correctness;
+  let x be FinSequence of NAT;
+  func plus-one x -> Element of NAT equals
+  (x.1) + 1;
+  coherence;
 end;
 
 deffunc N(set,set,FinSequence of NAT) = plus-one($3);
@@ -2230,13 +2216,9 @@ A8: dt in TS(PN) by Th5;
     then
 A9: dt = NAT-to-PN.(PN-to-NAT.dt) by A5;
 A10: PN-to-NAT * ts = <*PN-to-NAT.dt*> by A7,FINSEQ_2:39;
-    reconsider N = PN-to-NAT.dt as Element of NAT;
-    reconsider x = <*N*> as FinSequence of NAT;
-    consider n being Element of NAT such that
-A11: plus-one(x) = n+1 and
-A12: <*N*>.1 = n by Def10;
-    N = n by A12,FINSEQ_1:57;
-    then NAT-to-PN.(n+1) = PNsucc dt by A9,Def13
+    set N = PN-to-NAT.dt;
+A11: plus-one(<*N*>) = N+1 by FINSEQ_1:57;
+    NAT-to-PN.(N+1) = PNsucc dt by A9,Def13
       .= nt-tree ts by A6,A7,Lm2,TARSKI:def 2;
     hence P[nt-tree ts] by A4,A10,A11,Def11;
   end;
@@ -2258,11 +2240,9 @@ A2: dt.r = O or dt.r = S by Lm2,TARSKI:def 2;
 A3: NAT-to-PN.(n+1) = PNsucc (NAT-to-PN.n) by Def13
     .= S-tree <*NAT-to-PN.n*>;
 A4: S ==> roots <*NAT-to-PN.n*> by A2,Lm3,Lm4,Th4;
-A5: ex k being Element of NAT st ( plus-one <*n*> = k+1)&( <*n
-  *>.1 = k) by Def10;
   <*PN-to-NAT.(NAT-to-PN.n)*> = PN-to-NAT * <*NAT-to-PN.n*> by FINSEQ_2:39;
   then PN-to-NAT.(S-tree <*NAT-to-PN.n*>) = plus-one <*n*> by A1,A4,Def11
-    .= n+1 by A5,FINSEQ_1:57;
+    .= n+1 by FINSEQ_1:57;
   hence n+1 = PN-to-NAT.(NAT-to-PN.(n+1)) by A3;
 end;
 
@@ -2272,8 +2252,7 @@ proof
   defpred P[Element of NAT] means $1 = PN-to-NAT.(NAT-to-PN.$1);
 A1: P[0] by Lm17;
 A2: for n being Element of NAT st P[n] holds P[n+1] by Lm18;
-  thus for n being Element of NAT holds P[n] from NAT_1:sch 1 (A1,A2
-  );
+  thus for n being Element of NAT holds P[n] from NAT_1:sch 1 (A1,A2);
 end;
 
 begin

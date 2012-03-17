@@ -15,29 +15,29 @@ environ
       XCMPLX_0, FINSET_1, FINSUB_1, NAT_1, INT_1, VALUED_1, STRUCT_0, SETWISEO,
       SEQ_4, CARD_3, FINSEQ_1, FINSEQ_2, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FUNCT_2, FUNCT_4, FUNCT_7, COMPOS_1,
-      AMI_1, AMI_3, SCMFSA_2, AMISTD_2,
+      EXTPRO_1, AMI_1, AMI_3, SCMFSA_2, AMISTD_2,
       SCMFSA6A, INT_2, XXREAL_0;
  constructors SETWISEO, INT_2, SEQ_4, AMI_5, SCMFSA6A,
-      RELSET_1, VALUED_1, AMISTD_2;
+      RELSET_1, VALUED_1, AMISTD_2, AMI_1;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1,
       FINSUB_1, NUMBERS, XREAL_0, INT_1, MEMBERED, CARD_3, AMI_1, AMI_5,
       SCMFSA_2, XBOOLE_0, XXREAL_2, VALUED_1, FINSEQ_1, AMISTD_2,
-      SCMFSA10, COMPOS_1;
+      SCMFSA10, COMPOS_1, EXTPRO_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions XBOOLE_0, FUNCOP_1, AMI_1, COMPOS_1, AMI_3, SCMFSA_2, SCMFSA6A,
+ definitions XBOOLE_0, FUNCOP_1,
+      EXTPRO_1, AMI_1, COMPOS_1, AMI_3, SCMFSA_2, SCMFSA6A,
       AMISTD_2;
  theorems TARSKI, ENUMSET1, ZFMISC_1, FINSEQ_1, FINSUB_1, SETWISEO, NAT_1,
-      RELAT_1, GRFUNC_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_7, FUNCOP_1, CARD_3,
-      AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, XBOOLE_0, XBOOLE_1,
-      ORDINAL1, AMI_3, VALUED_1, XXREAL_2, PARTFUN1, MCART_1, AMISTD_2,
-      COMPOS_1;
+      RELAT_1, GRFUNC_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_7, CARD_3,
+      AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA6A, XBOOLE_0, XBOOLE_1, ORDINAL1,
+      AMI_3, VALUED_1, XXREAL_2, PARTFUN1, MCART_1, COMPOS_1, EXTPRO_1;
  schemes NAT_1, DOMAIN_1, FUNCT_2;
 
 begin :: Preliminaries
 
 registration
   cluster Int-Locations -> non empty;
-  coherence;
+  coherence by AMI_3:72;
 end;
 
 registration
@@ -131,10 +131,8 @@ theorem
 proof
   assume
 A1: goto l1 = goto l2;
-A2: goto l1 = SCM-goto l1 by SCMFSA_2:def 16;
-A3: goto l2 = SCM-goto l2 by SCMFSA_2:def 16;
   <*l1*>.1 = l1 & <*l2*>.1 = l2 by FINSEQ_1:57;
-  hence thesis by A1,A2,A3,MCART_1:28;
+  hence thesis by A1,MCART_1:28;
 end;
 
 theorem Th11:
@@ -487,7 +485,7 @@ A1: for e being Element of the Instructions of SCM+FSA ex u being Element
     Int-Locations such that
 A2: for i being Element of the Instructions of SCM+FSA holds P[i,UIL.i
     ] from FUNCT_2:sch 3(A1);
-    set IT = Union (UIL * p), dp = dom p, Up =UIL * p;
+    set IT = Union (UIL * p), Up =UIL * p;
     take IT;
     Fin Int-Locations c= bool Int-Locations by FINSUB_1:26;
     then rng Up c= rng UIL & rng UIL c= bool Int-Locations by RELAT_1:45
@@ -831,7 +829,7 @@ A7: rng p c= dom UIL by RELAT_1:def 19;
 A8: rng Ip c= dom UIL by A6,RELAT_1:def 19;
     then
 A9: dom f = dom Ip by RELAT_1:46;
-A10: dom Ip = dom p by AMISTD_2:def 15;
+A10: dom Ip = dom p by COMPOS_1:def 40;
     hence dom f = dom g by A7,A9,RELAT_1:46;
     let x be set;
     assume
@@ -841,7 +839,7 @@ A11: x in dom f;
     dom p c= NAT by RELAT_1:def 18;
     then reconsider x9 = x as Element of NAT by A10,A9,A11;
     reconsider m = x9 as Element of NAT;
-A12: Ip.x = IncAddr(p/.m,k) by A10,A9,A11,AMISTD_2:def 15
+A12: Ip.x = IncAddr(p/.m,k) by A10,A9,A11,COMPOS_1:def 40
       .= IncAddr(px, k) by A10,A9,A11,PARTFUN1:def 8;
     Ip.x in rng Ip by A9,A11,FUNCT_1:def 5;
     then reconsider Ipx = Ip.x as Instruction of SCM+FSA by A8,FUNCT_2:def 1;
@@ -858,7 +856,7 @@ theorem Th29:
   UsedIntLoc I = UsedIntLoc ProgramPart Relocated (I, k)
 proof
   UsedIntLoc ProgramPart Relocated (I, k) = UsedIntLoc Reloc(
-  ProgramPart I,k) by AMISTD_2:69
+  ProgramPart I,k) by COMPOS_1:116
     .= UsedIntLoc Shift (ProgramPart I, k) by Th28
     .= UsedIntLoc ProgramPart I by Th26;
   hence thesis by RELAT_1:209;
@@ -1098,7 +1096,7 @@ A1: for e being Element of the Instructions of SCM+FSA ex u being Element
     FinSeq-Locations such that
 A2: for i being Element of the Instructions of SCM+FSA holds P[i,UIL.i
     ] from FUNCT_2:sch 3(A1);
-    set IT = Union (UIL * p), dp = dom p, Up = UIL * p;
+    set IT = Union (UIL * p), Up = UIL * p;
     take IT;
     Fin FinSeq-Locations c= bool FinSeq-Locations by FINSUB_1:26;
     then rng Up c= rng UIL & rng UIL c= bool FinSeq-Locations by RELAT_1:45
@@ -1437,7 +1435,7 @@ A7: rng p c= dom UIL by RELAT_1:def 19;
 A8: rng Ip c= dom UIL by A6,RELAT_1:def 19;
     then
 A9: dom f = dom Ip by RELAT_1:46;
-A10: dom Ip = dom p by AMISTD_2:def 15;
+A10: dom Ip = dom p by COMPOS_1:def 40;
     hence dom f = dom g by A7,A9,RELAT_1:46;
     let x be set;
     assume
@@ -1447,7 +1445,7 @@ A11: x in dom f;
     dom p c= NAT by RELAT_1:def 18;
     then reconsider x9 = x as Element of NAT by A10,A9,A11;
     reconsider m = x9 as Element of NAT;
-A12: Ip.x = IncAddr(p/.m,k) by A10,A9,A11,AMISTD_2:def 15
+A12: Ip.x = IncAddr(p/.m,k) by A10,A9,A11,COMPOS_1:def 40
       .= IncAddr(px, k) by A10,A9,A11,PARTFUN1:def 8;
     Ip.x in rng Ip by A9,A11,FUNCT_1:def 5;
     then reconsider Ipx = Ip.x as Instruction of SCM+FSA by A8,FUNCT_2:def 1;
@@ -1464,7 +1462,7 @@ theorem Th45:
   UsedInt*Loc I = UsedInt*Loc ProgramPart Relocated (I, k)
 proof
   UsedInt*Loc ProgramPart Relocated (I, k) = UsedInt*Loc Reloc(
-  ProgramPart(I),k) by AMISTD_2:69
+  ProgramPart(I),k) by COMPOS_1:116
     .= UsedInt*Loc Shift (ProgramPart I, k) by Th44
     .= UsedInt*Loc ProgramPart I by Th42;
   hence thesis by RELAT_1:209;
@@ -1599,7 +1597,7 @@ of NAT st it = intloc min sn & sn = {k where k is Element of NAT : not intloc k
     defpred X[Element of NAT] means not intloc $1 in L;
     set sn = {k where k is Element of NAT : X[k]};
 A1: sn is Subset of NAT from DOMAIN_1:sch 7;
-    not Int-Locations c= L;
+    not Int-Locations c= L by AMI_3:72;
     then consider x being set such that
 A2: x in Int-Locations and
 A3: not x in L by TARSKI:def 3;
@@ -1856,47 +1854,7 @@ begin :: Semantics
 
 reserve s, t for State of SCM+FSA;
 
-theorem Th64:
-  dom I misses dom Start-At( n,SCM+FSA)
-proof
-A1: dom Start-At( n,SCM+FSA) = {IC SCM+FSA} by FUNCOP_1:19;
-  assume dom I /\ dom (Start-At( n,SCM+FSA)) <> {};
-  then consider x being set such that
-A2: x in dom I /\ dom (Start-At( n,SCM+FSA)) by XBOOLE_0:def 1;
-  x in dom I & x in dom (Start-At( n,SCM+FSA)) by A2,XBOOLE_0:def 4;
-  then dom I c= NAT & IC SCM+FSA in dom I by A1,RELAT_1:def 18,TARSKI:def 1;
-  then reconsider l = IC SCM+FSA as Element of NAT;
-  l = IC SCM+FSA;
-  hence contradiction by COMPOS_1:3;
-end;
-
-theorem Th65:
-  IC SCM+FSA in dom (I +* Start-At( n,SCM+FSA))
-proof
-  dom Start-At( n,SCM+FSA) = {IC SCM+FSA} by FUNCOP_1:19;
-  then IC SCM+FSA in dom Start-At( n,SCM+FSA) by TARSKI:def 1;
-  hence thesis by FUNCT_4:13;
-end;
-
-theorem Th66:
-  (I +* Start-At( n,SCM+FSA)).IC SCM+FSA =  n
-proof
-  dom Start-At( n,SCM+FSA) = {IC SCM+FSA} by FUNCOP_1:19;
-  then
-A1: IC SCM+FSA in dom Start-At( n,SCM+FSA) by TARSKI:def 1;
-  (Start-At( n,SCM+FSA)).IC SCM+FSA =  n by FUNCOP_1:87;
-  hence thesis by A1,FUNCT_4:14;
-end;
-
-theorem Th67:
-  I +* Start-At( n,SCM+FSA) c= s implies IC s =  n
-proof
-  assume
-A1: I +* Start-At( n,SCM+FSA) c= s;
-  IC SCM+FSA in dom (I +* Start-At( n,SCM+FSA)) by Th65;
-  hence IC s = (I +* Start-At( n,SCM+FSA)).IC SCM+FSA by A1,GRFUNC_1:8
-    .=  n by Th66;
-end;
+canceled 4;
 
 theorem Th68:
   not c in UsedIntLoc i implies Exec(i, s).c = s.c
@@ -1910,7 +1868,7 @@ A4: InsCode i <= 11+1 by SCMFSA_2:35;
   suppose
     InsCode i = 0;
     then i = halt SCM+FSA by SCMFSA_2:122;
-    hence thesis by AMI_1:def 8;
+    hence thesis by EXTPRO_1:def 3;
   end;
   suppose
     InsCode i = 1;
@@ -2020,7 +1978,7 @@ A7: IC sm in dom I by A2;
 A8: I.IC sm in rng I by FUNCT_1:def 5;
 Y:  (ProgramPart sm)/.IC sm
  = sm.IC sm by COMPOS_1:38;
-    dom I misses dom Start-At( 0,SCM+FSA) by Th64;
+    dom I misses dom Start-At( 0,SCM+FSA) by COMPOS_1:140;
     then I c= I+*Start-At( 0,SCM+FSA) by FUNCT_4:33;
     then I c= s by A1,XBOOLE_1:1;
     then I c= sm by AMI_1:81;
@@ -2031,10 +1989,10 @@ A9: not a in UsedIntLoc sm.IC sm by A3;
 T: ProgramPart s = ProgramPart sm
 by AMI_1:123;
     thus Comput(ProgramPart(s),s,m+1).a = (Following(ProgramPart s,sm)).a by
-AMI_1:14
+EXTPRO_1:4
       .= s.a by A5,A6,A9,Th68,Y,T,NAT_1:13;
   end;
-A10: X[0] by AMI_1:13;
+A10: X[0] by EXTPRO_1:3;
   for m holds X[m] from NAT_1:sch 1(A10, A4);
   hence thesis;
 end;
@@ -2051,7 +2009,7 @@ A4: InsCode i <= 11+1 by SCMFSA_2:35;
   suppose
     InsCode i = 0;
     then i = halt SCM+FSA by SCMFSA_2:122;
-    hence thesis by AMI_1:def 8;
+    hence thesis by EXTPRO_1:def 3;
   end;
   suppose
     InsCode i = 1;
@@ -2146,7 +2104,7 @@ A7: IC sm in dom I by A2;
 A8: I.IC sm in rng I by FUNCT_1:def 5;
 Y:  (ProgramPart sm)/.IC sm
  = sm.IC sm by COMPOS_1:38;
-    dom I misses dom Start-At( 0,SCM+FSA) by Th64;
+    dom I misses dom Start-At( 0,SCM+FSA) by COMPOS_1:140;
     then I c= I+*Start-At( 0,SCM+FSA) by FUNCT_4:33;
     then I c= s by A1,XBOOLE_1:1;
     then I c= sm by AMI_1:81;
@@ -2157,10 +2115,10 @@ A9: not f in UsedInt*Loc sm.IC sm by A3;
 T: ProgramPart s = ProgramPart sm
 by AMI_1:123;
     thus Comput(ProgramPart(s),s,m+1).f = (Following(ProgramPart s,sm)).f by
-AMI_1:14
+EXTPRO_1:4
       .= s.f by A5,A6,A9,Th70,Y,T,NAT_1:13;
   end;
-A10: X[0] by AMI_1:13;
+A10: X[0] by EXTPRO_1:3;
   for m holds X[m] from NAT_1:sch 1(A10, A4);
   hence thesis;
 end;
@@ -2189,8 +2147,8 @@ A7: InsCode i <= 11+1 by SCMFSA_2:35;
     InsCode i = 0;
     then
 A8: i = halt SCM+FSA by SCMFSA_2:122;
-    then Exec(i, s) = s by AMI_1:def 8;
-    hence thesis by A1,A2,A3,A8,AMI_1:def 8;
+    then Exec(i, s) = s by EXTPRO_1:def 3;
+    hence thesis by A1,A2,A3,A8,EXTPRO_1:def 3;
   end;
   suppose
     InsCode i = 1;
@@ -2558,7 +2516,7 @@ A6: now
 A7: P[m];
     thus P[m+1]
     proof
-      dom I misses dom Start-At( 0,SCM+FSA) by Th64;
+      dom I misses dom Start-At( 0,SCM+FSA) by COMPOS_1:140;
       then
 A8:   I c= I +* Start-At( 0,SCM+FSA) by FUNCT_4:33;
       then I c= t by A2,XBOOLE_1:1;
@@ -2572,7 +2530,7 @@ T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,m)
 by AMI_1:123;
 A10:  Comput(ProgramPart(s),s,m1) =
 Following(ProgramPart s,Comput(ProgramPart(s),s,m))
- by AMI_1:14
+ by EXTPRO_1:4
         .= Exec( Comput(ProgramPart(s),s,m).IC Comput(ProgramPart(s),s,m),
 Comput(ProgramPart(s),s,m))
          by Y,T;
@@ -2635,7 +2593,7 @@ T: ProgramPart t = ProgramPart Comput(ProgramPart(t),t,m)
 by AMI_1:123;
 A18:  Comput(ProgramPart(t),t,m1) =
 Following(ProgramPart t,Comput(ProgramPart(t),t,m))
- by AMI_1:14
+ by EXTPRO_1:4
         .= Exec( Comput(ProgramPart(t),t,m).IC Comput(ProgramPart(t),t,m),
 Comput(ProgramPart(t),t,m))
          by Y,T;
@@ -2710,10 +2668,10 @@ A10,Th70
   end;
 A31: P[0]
   proof
-A32: IC Comput(ProgramPart(t),t,0) = IC t by AMI_1:13
-      .=  0 by A2,Th67;
-A33: IC Comput(ProgramPart(s),s,0) = IC s by AMI_1:13
-      .=  0 by A1,Th67;
+A32: IC Comput(ProgramPart(t),t,0) = IC t by EXTPRO_1:3
+      .=  0 by A2,COMPOS_1:143;
+A33: IC Comput(ProgramPart(s),s,0) = IC s by EXTPRO_1:3
+      .=  0 by A1,COMPOS_1:143;
     assume 0 < n;
     hence IC Comput(ProgramPart(t),t,0) in dom I by A5,A33,A32;
     thus IC Comput(ProgramPart(s),s,0) = IC Comput(ProgramPart(t),t,0) by A33
@@ -2722,18 +2680,18 @@ A33: IC Comput(ProgramPart(s),s,0) = IC s by AMI_1:13
       let a;
       assume
 A34:  a in UsedIntLoc I;
-      thus Comput(ProgramPart(s),s,0).a = s.a by AMI_1:13
+      thus Comput(ProgramPart(s),s,0).a = s.a by EXTPRO_1:3
         .= (s | UsedIntLoc I).a by A34,FUNCT_1:72
         .= t.a by A3,A34,FUNCT_1:72
-        .= Comput(ProgramPart(t),t,0).a by AMI_1:13;
+        .= Comput(ProgramPart(t),t,0).a by EXTPRO_1:3;
     end;
     let f;
     assume
 A35: f in UsedInt*Loc I;
-    thus Comput(ProgramPart(s),s,0).f = s.f by AMI_1:13
+    thus Comput(ProgramPart(s),s,0).f = s.f by EXTPRO_1:3
       .= (s | UsedInt*Loc I).f by A35,FUNCT_1:72
       .= t.f by A4,A35,FUNCT_1:72
-      .= Comput(ProgramPart(t),t,0).f by AMI_1:13;
+      .= Comput(ProgramPart(t),t,0).f by EXTPRO_1:3;
   end;
 A36: for m holds P[m] from NAT_1:sch 1(A31, A6);
   hence for m st m < n holds IC Comput(ProgramPart(t),t,m) in dom I;
@@ -2743,28 +2701,28 @@ A37: m <= n;
   per cases by NAT_1:6;
   suppose
 A38: m = 0;
-A39: IC Comput(ProgramPart(t),t,0) = IC t by AMI_1:13
-      .=  0 by A2,Th67;
-    IC Comput(ProgramPart(s),s,0) = IC s by AMI_1:13
-      .=  0 by A1,Th67;
+A39: IC Comput(ProgramPart(t),t,0) = IC t by EXTPRO_1:3
+      .=  0 by A2,COMPOS_1:143;
+    IC Comput(ProgramPart(s),s,0) = IC s by EXTPRO_1:3
+      .=  0 by A1,COMPOS_1:143;
     hence IC Comput(ProgramPart(s),s,m) = IC Comput(ProgramPart(t),t,m) by A38
 ,A39;
     hereby
       let a;
       assume
 A40:  a in UsedIntLoc I;
-      thus Comput(ProgramPart(s),s,m).a = s.a by A38,AMI_1:13
+      thus Comput(ProgramPart(s),s,m).a = s.a by A38,EXTPRO_1:3
         .= (s | UsedIntLoc I).a by A40,FUNCT_1:72
         .= t.a by A3,A40,FUNCT_1:72
-        .= Comput(ProgramPart(t),t,m).a by A38,AMI_1:13;
+        .= Comput(ProgramPart(t),t,m).a by A38,EXTPRO_1:3;
     end;
     let f;
     assume
 A41: f in UsedInt*Loc I;
-    thus Comput(ProgramPart(s),s,m).f = s.f by A38,AMI_1:13
+    thus Comput(ProgramPart(s),s,m).f = s.f by A38,EXTPRO_1:3
       .= (s | UsedInt*Loc I).f by A41,FUNCT_1:72
       .= t.f by A4,A41,FUNCT_1:72
-      .= Comput(ProgramPart(t),t,m).f by A38,AMI_1:13;
+      .= Comput(ProgramPart(t),t,m).f by A38,EXTPRO_1:3;
   end;
   suppose
     ex p being Nat st m = p+1;
@@ -2802,7 +2760,7 @@ T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,p)
 by AMI_1:123;
 A47: Comput(ProgramPart(s),s,p1) =
 Following(ProgramPart s,Comput(ProgramPart(s),s,p))
- by AMI_1:14
+ by EXTPRO_1:4
       .= Exec( Comput(ProgramPart(s),s,p).IC Comput(ProgramPart(s),s,p), Comput
 (ProgramPart(s),s,p))
               by Y,T;
@@ -2825,7 +2783,7 @@ s),s,p).x9 by A48,FUNCT_1:72
 A49: Comput(ProgramPart(s),s,p) | UsedIntLoc I = Comput(ProgramPart(t),t,p) |
 UsedIntLoc I by FUNCT_1:68;
 A50: IC Comput(ProgramPart(s),s,p) = IC Comput(ProgramPart(t),t,p) by A36,A43;
-    dom I misses dom Start-At( 0,SCM+FSA) by Th64;
+    dom I misses dom Start-At( 0,SCM+FSA) by COMPOS_1:140;
     then
 A51: I c= I +* Start-At( 0,SCM+FSA) by FUNCT_4:33;
     then I c= s by A1,XBOOLE_1:1;
@@ -2839,7 +2797,7 @@ T: ProgramPart t = ProgramPart Comput(ProgramPart(t),t,p)
 by AMI_1:123;
 A53: Comput(ProgramPart(t),t,p1) =
 Following(ProgramPart t,Comput(ProgramPart(t),t,p))
- by AMI_1:14
+ by EXTPRO_1:4
       .= Exec( Comput(ProgramPart(t),t,p).IC Comput(ProgramPart(t),t,p), Comput
 (ProgramPart(t),t,p))
               by Y,T;

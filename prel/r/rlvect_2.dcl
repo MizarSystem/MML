@@ -28,29 +28,31 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
+<ArticleID name="FINSUB_1"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="WELLORD1"/>
+<ArticleID name="PRE_POLY"/>
 <ArticleID name="RLVECT_2"/>
 </Signature>
 <FCluster aid="RLVECT_2" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="38" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
 </Cluster>
 </Typ>
-</ArgTypes>
-<Func kind="K" nr="240">
+<Typ kind="M" nr="14">
+<Cluster/>
 <LocusVar nr="1"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="267">
+<LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RLVECT_2" nr="2">
@@ -69,12 +71,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="245">
+<Func kind="K" nr="286">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="85"/>
+<Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RLVECT_2" nr="3">
@@ -93,7 +94,31 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="245">
+<Func kind="K" nr="291">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="38" value="false"/>
+<Adjective nr="85"/>
+</Cluster>
+</FCluster>
+<FCluster aid="RLVECT_2" nr="4">
+<ArgTypes>
+<Typ kind="G" nr="12">
+<Cluster>
+<Adjective nr="38" value="false"/>
+<Adjective nr="61"/>
+<Adjective nr="86"/>
+<Adjective nr="87"/>
+<Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="291">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

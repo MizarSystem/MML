@@ -1,0 +1,2771 @@
+:: Cartesian Products of Family of Real Linear Spaces
+::  by Hiroyuki Okazaki , Noboru Endou and Yasunari Shidama
+:: 
+:: Received August 17, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, CARD_3, FUNCT_1, RELAT_1, FUNCT_2, FINSEQ_1,
+      PRE_TOPC, XBOOLE_0, NORMSP_0, STRUCT_0, RLVECT_1, NORMSP_1, COMPLEX1,
+      ARYTM_3, REAL_1, PRVECT_3, RFINSEQ, ARYTM_1, SQUARE_1, RVSUM_1, XXREAL_0,
+      CARD_1, SUPINF_2, SEQ_2, ORDINAL2, XREAL_0, ORDINAL1, TARSKI, NAT_1,
+      PRVECT_1, PRVECT_2, ZFMISC_1, ORDINAL4, GROUP_2, ALGSTR_0, BINOP_1,
+      EUCLID, REWRITE1, RSSPACE3, RELAT_2, METRIC_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
+      RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, NUMBERS,
+      XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, SQUARE_1, NAT_1, VALUED_0, COMPLEX1,
+      CARD_3, FINSEQ_1, FINSEQ_2, FINSEQ_4, RVSUM_1, RFINSEQ, STRUCT_0,
+      ALGSTR_0, PRE_TOPC, RLVECT_1, NORMSP_0, NORMSP_1, EUCLID, RSSPACE3,
+      LOPBAN_1, PRVECT_1, PRVECT_2;
+ constructors REAL_1, SQUARE_1, RSSPACE3, COMPLEX1, LOPBAN_1, SEQ_1, RVSUM_1,
+      BINOP_2, PRVECT_2, FINSEQ_4, RFINSEQ, FINSEQOP, TOPMETR;
+ registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, FUNCT_1,
+      FUNCT_2, NUMBERS, XBOOLE_0, VALUED_0, EUCLID, PRVECT_2, ALGSTR_0,
+      FINSEQ_2, FINSEQ_1, CARD_3, NORMSP_0, LOPBAN_1, RLVECT_1, NORMSP_1,
+      RELAT_1, SUBSET_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ definitions EUCLID, PRVECT_2, BINOP_1, RLVECT_1, VALUED_1, ALGSTR_0, NORMSP_0,
+      STRUCT_0;
+ theorems TARSKI, XBOOLE_0, XREAL_0, RLVECT_1, FINSEQ_1, FINSEQ_2, RVSUM_1,
+      NORMSP_0, RFINSEQ, NAT_1, TOPREAL6, SQUARE_1, RELSET_1, RELAT_1, FUNCT_1,
+      FUNCT_2, NORMSP_1, LOPBAN_1, BINOP_1, CARD_3, ALGSTR_0, EUCLID, RSSPACE3,
+      XXREAL_0, PRVECT_1, PRVECT_2, ZFMISC_1, FINSEQ_3, SUBSET_1, TOPREAL7;
+ schemes FUNCT_2, BINOP_1;
+
+begin :: Preliminaries
+
+reserve G,F for RealLinearSpace;
+
+theorem
+  for D,E,F,G be non empty set
+  ex I be Function of [: [:D,E:],[:F,G:] :], [:[:D,F:],[:E,G:]:]
+  st I is one-to-one & I is onto
+  & for d,e,f,g be set st d in D & e in E & f in F & g in G
+  holds I.([d,e],[f,g]) = [[d,f],[e,g]]
+  proof
+    let D,E,F,G be non empty set;
+    defpred P0[set,set,set] means
+    ex d,e,f,g be set
+    st d in D & e in E & f in F & g in G
+    & $1=[d,e] & $2=[f,g] & $3= [[d,f],[e,g]];
+    P1:for x,y be set st x in [:D,E:] & y in [:F,G:]
+    ex z be set st z in [:[:D,F:],[:E,G:]:] & P0[x,y,z]
+    proof
+      let x,y be set;
+      assume AS: x in [:D,E:] & y in [:F,G:];
+      consider d,e be set such that
+      AS1: d in D & e in E & x=[d,e] by ZFMISC_1:def 2,AS;
+      consider f,g be set such that
+      AS2: f in F & g in G & y=[f,g] by ZFMISC_1:def 2,AS;
+      [d,f] in [:D,F:] & [e,g] in [:E,G:] by AS1,AS2,ZFMISC_1:106; then
+      [[d,f],[e,g]] in [:[:D,F:],[:E,G:]:] by ZFMISC_1:106;
+      hence thesis by AS1,AS2;
+    end;
+    consider I be Function of
+    [: [:D,E:],[:F,G:] :], [:[:D,F:],[:E,G:]:] such that
+    P2: for x,y be set st x in [:D,E:] & y in [:F,G:]
+    holds P0[x,y,I.(x,y)] from BINOP_1:sch 1(P1);
+    AP5: for d,e,f,g be set st d in D & e in E & f in F & g in G
+    holds I.([d,e],[f,g]) = [[d,f],[e,g]]
+    proof
+      let d,e,f,g be set;
+      assume AS1:d in D & e in E & f in F & g in G;
+      PP1:[d,e] in [:D,E:] & [f,g] in [:F,G:] by AS1,ZFMISC_1:106;
+      consider d1,e1,f1,g1 be set such that
+      PP3: d1 in D & e1 in E & f1 in F & g1 in G
+      & [d,e]=[d1,e1] & [f,g]=[f1,g1]
+      & I.([d,e],[f,g])= [[d1,f1],[e1,g1]] by PP1,P2;
+      d1=d & e1=e & f1=f & g1=g by PP3,ZFMISC_1:33;
+      hence I.([d,e],[f,g])= [[d,f],[e,g]] by PP3;
+    end;
+AP6:I is one-to-one
+    proof
+      now let z1,z2 be set;
+        assume P3: z1 in [: [:D,E:],[:F,G:] :] & z2 in [: [:D,E:],[:F,G:] :]
+        & I.z1=I.z2;
+        consider de1,fg1 be set such that
+        P4:   de1 in [:D,E:] & fg1 in [:F,G:] & z1=[de1,fg1]
+          by ZFMISC_1:def 2,P3;
+        consider d1,e1 be set such that
+        P5:   d1 in D & e1 in E & de1=[d1,e1] by ZFMISC_1:def 2,P4;
+        consider f1,g1 be set such that
+        P6:   f1 in F & g1 in G & fg1=[f1,g1] by ZFMISC_1:def 2,P4;
+        consider de2,fg2 be set such that
+        Q4:   de2 in [:D,E:] & fg2 in [:F,G:] & z2=[de2,fg2]
+          by ZFMISC_1:def 2,P3;
+        consider d2,e2 be set such that
+        Q5:   d2 in D & e2 in E & de2=[d2,e2] by ZFMISC_1:def 2,Q4;
+        consider f2,g2 be set such that
+        Q6:   f2 in F & g2 in G & fg2=[f2,g2] by ZFMISC_1:def 2,Q4;
+        [[d1,f1],[e1,g1]] = I.([d1,e1],[f1,g1]) by AP5,P5,P6
+        .= I.([d2,e2],[f2,g2]) by P3,P4,P5,P6,Q4,Q5,Q6
+        .= [[d2,f2],[e2,g2]] by AP5,Q5,Q6;
+        then [d1,f1] = [d2,f2] & [e1,g1] = [e2,g2] by ZFMISC_1:33;
+        then d1=d2 & f1=f2 & e1=e2 & g1=g2 by ZFMISC_1:33;
+        hence  z1=z2 by P4,P5,P6,Q4,Q5,Q6;
+      end;
+      hence thesis by FUNCT_2:25;
+    end;
+    I is onto
+    proof
+      now let w be set;
+        assume P3: w in [: [:D,F:],[:E,G:] :];
+        consider df,eg be set such that
+        P4:   df in [:D,F:] & eg in [:E,G:] & w=[df,eg] by ZFMISC_1:def 2,P3;
+        consider d,f be set such that
+        P5:   d in D & f in F & df=[d,f] by ZFMISC_1:def 2,P4;
+        consider e,g be set such that
+        P6:   e in E & g in G & eg=[e,g] by ZFMISC_1:def 2,P4;
+        PP1: [d,e] in [:D,E:] & [f,g] in [:F,G:] by P5,P6,ZFMISC_1:106;
+        reconsider z = [[d,e],[f,g]] as Element of [:[:D,E:],[:F,G:]:]
+        by PP1,ZFMISC_1:106;
+        w = I.([d,e],[f,g]) by AP5,P4,P5,P6; then
+        w = I.z;
+        hence w in rng I by FUNCT_2:189;
+      end;
+      then [:[:D,F:],[:E,G:]:] c= rng I by TARSKI:def 3;
+      then [:[:D,F:],[:E,G:]:] = rng I by XBOOLE_0:def 10;
+      hence thesis by FUNCT_2:def 3;
+    end;
+    hence thesis by AP5,AP6;
+  end;
+
+theorem Th002AA:
+  for X be non empty set, D be Function st dom D = {1} & D.1 = X
+  ex I be Function of X,product D
+  st I is one-to-one & I is onto
+  & for x be set st x in X holds I.x = <*x*>
+  proof
+    let X be non empty set, D be Function;
+    assume AS: dom D ={1} & D.1 = X;
+    defpred P[set,set] means $2 = <* $1 *>;
+    P1:for x be set st x in X
+    ex z be set st z in product D & P[x,z]
+    proof
+      let x be set;
+      assume AS0: x in X;
+      X0: dom <*x*> = Seg len <*x*> by FINSEQ_1:def 3
+      .= {1} by FINSEQ_1:4,57;
+      now let i be set;
+        assume i in dom <*x*>; then
+        i = 1 by X0,TARSKI:def 1;
+        hence <*x*>.i in D.i by AS,AS0,FINSEQ_1:57;
+      end; then
+      <*x*> in product D by X0,AS,CARD_3:18;
+      hence ex z be set st z in product D & P[x,z];
+    end;
+    consider I be Function of X, product D such that
+    P2: for x be set st x in X holds P[x,I.x] from FUNCT_2:sch 1(P1);
+    now assume {} in rng D; then
+      ex x be set st x in dom D & D.x={} by FUNCT_1:def 5;
+      hence contradiction by AS,TARSKI:def 1;
+    end; then
+    A6:product D <> {} by CARD_3:37;
+    now let z1,z2 be set;
+      assume P3: z1 in X & z2 in X & I.z1=I.z2;
+      <*z1*> = I.z1 by P2,P3
+      .= <*z2*> by P2,P3;
+      hence z1 = z2 by FINSEQ_1:97;
+    end; then
+    P3:I is one-to-one by A6,FUNCT_2:25;
+    now let w be set;
+      assume w in product D; then
+      consider g be Function such that
+      X1:  w = g & dom g = dom D
+      & for i be set st i in dom D holds g.i in D.i by CARD_3:def 5;
+      reconsider g as FinSequence by AS,X1,FINSEQ_1:4,def 2;
+      set x = g.1;
+      X3: len g = 1 by AS,X1,FINSEQ_1:4,def 3;
+      1 in dom D by AS,TARSKI:def 1; then
+      P40:x in X & w=<*x*> by X1,X3,AS,FINSEQ_1:57; then
+      w = I.x by P2;
+      hence w in rng I by P40,A6,FUNCT_2:189;
+    end; then
+    product D c= rng I by TARSKI:def 3; then
+    product D = rng I by XBOOLE_0:def 10; then
+    I is onto by FUNCT_2:def 3;
+    hence thesis by P2,P3;
+  end;
+
+theorem Th002:
+  for X,Y be non empty set, D be Function
+  st dom D = {1,2} & D.1 = X & D.2 = Y
+  ex I be Function of [:X,Y:],product D
+  st I is one-to-one & I is onto
+  & for x,y be set st x in X & y in Y holds I.(x,y) = <*x,y*>
+  proof
+    let X,Y be non empty set, D be Function;
+    assume AS: dom D ={1,2} & D.1 = X & D.2 = Y;
+    defpred P[set,set,set] means $3 = <* $1,$2 *>;
+    P1:for x,y be set st x in X & y in Y
+    ex z be set st z in product D & P[x,y,z]
+    proof
+      let x,y be set;
+      assume AS0: x in X & y in Y;
+      X0: dom <*x,y*> = Seg len <*x,y*> by FINSEQ_1:def 3
+      .= {1,2} by FINSEQ_1:4,61;
+      now let i be set;
+        assume i in dom <*x,y*>; then
+        i = 1 or i = 2 by X0,TARSKI:def 2;
+        hence <*x,y*>.i in D.i by AS,AS0,FINSEQ_1:61;
+      end; then
+      <*x,y*> in product D by X0,AS,CARD_3:18;
+      hence ex z be set st z in product D & P[x,y,z];
+    end;
+    consider I be Function of [:X,Y:], product D such that
+    P2: for x,y be set st x in X & y in Y
+    holds P[x,y,I.(x,y)] from BINOP_1:sch 1(P1);
+    now assume {} in rng D; then
+      ex x be set st x in dom D & D.x={} by FUNCT_1:def 5;
+      hence contradiction by AS,TARSKI:def 2;
+    end; then
+    A6:product D <> {} by CARD_3:37;
+    now let z1,z2 be set;
+      assume P3: z1 in [:X,Y:] & z2 in [:X,Y:] & I.z1=I.z2; then
+      consider x1,y1 be set such that
+      P4:  x1 in X & y1 in Y & z1=[x1,y1] by ZFMISC_1:def 2;
+      consider x2,y2 be set such that
+      P5:  x2 in X & y2 in Y & z2=[x2,y2] by ZFMISC_1:def 2,P3;
+      <*x1,y1*> = I.(x1,y1) by P2,P4
+      .= I.(x2,y2) by P3,P4,P5
+      .= <*x2,y2*> by P2,P5; then
+      x1 = x2 & y1 = y2 by FINSEQ_1:98;
+      hence z1=z2 by P4,P5;
+    end; then
+    P3:I is one-to-one by A6,FUNCT_2:25;
+    now let w be set;
+      assume w in product D; then
+      consider g be Function such that
+      X1:  w = g & dom g = dom D
+      & for i be set st i in dom D holds g.i in D.i by CARD_3:def 5;
+      reconsider g as FinSequence by AS,X1,FINSEQ_1:4,def 2;
+      set x=g.1; set y=g.2;
+      X3: len g = 2 by AS,X1,FINSEQ_1:4,def 3;
+      1 in dom D & 2 in dom D by AS,TARSKI:def 2; then
+      P40:x in X & y in Y & w=<*x,y*> by X1,X3,AS,FINSEQ_1:61;
+      reconsider z = [x,y] as Element of [:X,Y:] by P40,ZFMISC_1:106;
+      w = I.(x,y) by P2,P40
+      .= I.z;
+      hence w in rng I by A6,FUNCT_2:189;
+    end; then
+    product D c= rng I by TARSKI:def 3; then
+    product D = rng I by XBOOLE_0:def 10; then
+    I is onto by FUNCT_2:def 3;
+    hence thesis by P2,P3;
+  end;
+
+theorem Th002AB:
+  for X be non empty set
+  ex I be Function of X,product <*X*>
+  st I is one-to-one & I is onto
+  & for x be set st x in X holds I.x = <*x*>
+  proof
+    let X be non empty set;
+    dom <*X*> = {1} & <*X*>.1 = X by FINSEQ_1:4,55,57;
+    hence thesis by Th002AA;
+  end;
+
+registration
+  let X,Y be non-empty non empty FinSequence;
+  cluster X^Y -> non-empty;
+  correctness
+  proof
+    now let z be set;
+      assume Z081:z in dom (X^Y); then
+      reconsider k=z as Element of NAT;
+      per cases by FINSEQ_1:38,Z081;
+      suppose C1: k in dom X; then
+        X.k = (X^Y).k by FINSEQ_1:def 7;
+        hence (X^Y).z is non empty by C1;
+      end;
+      suppose ex n be Nat st n in dom Y & k=len X + n; then
+        consider n be Nat such that
+        C21:  n in dom Y & k = len X + n;
+        Y.n = (X^Y).k by C21,FINSEQ_1:def 7;
+        hence (X^Y).z is non empty by C21;
+      end;
+    end;
+    hence thesis by FUNCT_1:def 15;
+  end;
+end;
+
+theorem Th002A:
+  for X,Y be non empty set
+  ex I be Function of [:X,Y:],product <*X,Y*>
+  st I is one-to-one & I is onto
+  & for x,y be set st x in X & y in Y holds I.(x,y) = <*x,y*>
+  proof
+    let X,Y be non empty set;
+    dom <*X,Y*> = {1,2} & <*X,Y*>.1 = X & <*X,Y*>.2 = Y
+    by FINSEQ_1:61,4,FINSEQ_3:29;
+    hence thesis by Th002;
+  end;
+
+theorem Th002A1:
+  for X,Y be non-empty non empty FinSequence
+  ex I be Function of [: product X,product Y :],product(X^Y)
+  st I is one-to-one & I is onto
+  & for x,y be FinSequence st x in product X & y in product Y
+  holds I.(x,y) = x^y
+  proof
+    let X,Y be non-empty non empty FinSequence;
+    defpred P[set,set,set] means
+    ex x,y be FinSequence st x=$1 & y=$2 & $3 = x^y;
+    P1:for x,y be set st x in product X & y in product Y
+    ex z be set st z in product (X^Y) & P[x,y,z]
+    proof
+      let x,y be set;
+      assume AS0: x in product X & y in product Y; then
+      consider g be Function such that
+      Z01: x = g & dom g = dom X
+      & for z be set st z in dom X holds g.z in X.z by CARD_3:def 5;
+      Z02:dom g = Seg len X by Z01,FINSEQ_1:def 3; then
+      reconsider g as FinSequence by FINSEQ_1:def 2;
+      consider h be Function such that
+      Z04: y = h & dom h = dom Y
+      & for z be set st z in dom Y holds h.z in Y.z by CARD_3:def 5,AS0;
+      Z05:dom h = Seg len Y by Z04,FINSEQ_1:def 3; then
+      reconsider h as FinSequence by FINSEQ_1:def 2;
+      Z03:len g = len X & len h = len Y by FINSEQ_1:def 3,Z02,Z05;
+      Z07:dom (g^h) = Seg (len g + len h) by FINSEQ_1:def 7
+      .= Seg len (X^Y) by Z03,FINSEQ_1:35
+      .= dom (X^Y) by FINSEQ_1:def 3;
+      for z be set st z in dom (X^Y) holds (g^h).z in (X^Y).z
+      proof
+        let z be set;
+        assume Z081:z in dom (X^Y); then
+        reconsider k=z as Element of NAT;
+        per cases by FINSEQ_1:38,Z081;
+        suppose C1: k in dom X; then
+          C11:  g.k in X.k by Z01;
+          g.k = (g^h).k by C1,Z01,FINSEQ_1:def 7;
+          hence (g^h).z in (X^Y).z by C11,C1,FINSEQ_1:def 7;
+        end;
+        suppose ex n be Nat st n in dom Y & k=len X + n; then
+          consider n be Nat such that
+          C21:   n in dom Y & k=len X + n;
+          C11:  h.n in Y.n by C21,Z04;
+          h.n = (g^h).k by C21,Z03,Z04,FINSEQ_1:def 7;
+          hence (g^h).z in (X^Y).z by C11,C21,FINSEQ_1:def 7;
+        end;
+      end; then
+      (g^h) in product (X^Y) by Z07,CARD_3:18;
+      hence thesis by Z01,Z04;
+    end;
+    consider I be Function of [:product X,product Y:], product (X^Y) such that
+    P2: for x,y be set st x in product X & y in product Y
+    holds P[x,y,I.(x,y)] from BINOP_1:sch 1(P1);
+    P2X:
+    for x,y be FinSequence st x in product X & y in product Y
+    holds I.(x,y) = x^y
+    proof
+      let x,y be FinSequence;
+      assume x in product X & y in product Y; then
+      ex x1,y1 be FinSequence st x=x1 & y=y1 & I.(x,y)=x1^y1 by P2;
+      hence thesis;
+    end;
+    now let z1,z2 be set;
+      assume P3: z1 in [:product X,product Y:] & z2 in [:product X,product Y:]
+      & I.z1=I.z2;
+      consider x1,y1 be set such that
+      P4:  x1 in product X & y1 in product Y & z1=[x1,y1]
+      by ZFMISC_1:def 2,P3;
+      consider x2,y2 be set such that
+      P5:  x2 in product X & y2 in product Y & z2=[x2,y2]
+      by ZFMISC_1:def 2,P3;
+      consider xx1,yy1 be FinSequence such that
+      P60: xx1=x1 & yy1=y1 & I.(x1,y1) = xx1^yy1 by P2,P4;
+      consider xx2,yy2 be FinSequence such that
+      P61: xx2=x2 & yy2=y2 & I.(x2,y2) = xx2^yy2 by P2,P5;
+      P81:dom xx1 = dom X by P4,P60,CARD_3:18
+      .= dom xx2 by P5,P61,CARD_3:18;
+      xx1 = (xx1^yy1) | (dom xx1) by FINSEQ_1:33
+      .= xx2 by P3,P4,P5,P60,P61,P81,FINSEQ_1:33;
+      hence z1=z2 by P3,P4,P5,P60,P61,FINSEQ_1:46;
+    end; then
+    P3:I is one-to-one by FUNCT_2:25;
+    now let w be set;
+      assume w in product (X^Y); then
+      consider g be Function such that
+      X1:  w = g & dom g = dom (X^Y)
+      & for i be set st i in dom (X^Y) holds g.i in (X^Y).i by CARD_3:def 5;
+      X2: dom g = Seg len (X^Y) by X1,FINSEQ_1:def 3; then
+      reconsider g as FinSequence by FINSEQ_1:def 2;
+      set x = g | (len X);
+      set y = g/^(len X);
+      A1: g is FinSequence of rng g by FINSEQ_1:def 4;
+      rng g <> {} by X1,RELAT_1:65; then
+      A3: x^y = g by RFINSEQ:21,A1;
+      XX3:len(X^Y) = len X + len Y by FINSEQ_1:35; then
+      XX4:len X <=len(X^Y) by NAT_1:11;
+      XX2:len g= len (X^Y) by FINSEQ_1:def 3,X2; then
+      len(g|len X) = len X by XX3,NAT_1:11,FINSEQ_1:80; then
+      Z07:dom x = Seg len X by FINSEQ_1:def 3
+      .= dom X by FINSEQ_1:def 3;
+      for z be set st z in dom X holds x.z in X.z
+      proof
+        let z be set;
+        assume C1:z in dom X; then
+        reconsider k = z as Element of NAT;
+        C2:  dom X c= dom (X^Y) by FINSEQ_1:39;
+        C12: x.k = g.k by C1,A3,Z07,FINSEQ_1:def 7;
+        X.k = (X^Y).k by C1,FINSEQ_1:def 7;
+        hence x.z in X.z by C12,X1,C1,C2;
+      end; then
+      A4: x in product X by Z07,CARD_3:18;
+      dom x = Seg len X by Z07,FINSEQ_1:def 3; then
+      A41:len x = len X by FINSEQ_1:def 3;
+      len y = len g - len X by XX4,XX2,RFINSEQ:def 2
+      .= len Y by XX2,XX3; then
+      Seg len y = dom Y by FINSEQ_1:def 3; then
+      Z09:dom y = dom Y by FINSEQ_1:def 3;
+      for z be set st z in dom Y holds y.z in Y.z
+      proof
+        let z be set;
+        assume C1:z in dom Y; then
+        reconsider k=z as Element of NAT;
+        C12: y.k = g.(len X + k) by C1,A3,A41,Z09,FINSEQ_1:def 7;
+        Y.k = (X^Y).(len X + k) by C1,FINSEQ_1:def 7;
+        hence y.z in Y.z by C12,X1,FINSEQ_1:41,C1;
+      end; then
+      A5: y in product Y by Z09,CARD_3:18;
+      reconsider z = [x,y] as Element of [:product X,product Y:]
+      by A4,A5,ZFMISC_1:106;
+      w = I.(x,y) by X1,A3,P2X,A4,A5
+      .= I.z;
+      hence w in rng I by FUNCT_2:189;
+    end; then
+    product (X^Y) c= rng I by TARSKI:def 3; then
+    product (X^Y) = rng I by XBOOLE_0:def 10; then
+    I is onto by FUNCT_2:def 3;
+    hence thesis by P2X,P3;
+  end;
+
+LM01:
+  for G,F be non empty 1-sorted, x be set st
+  x in [: the carrier of G, the carrier of F :] holds
+  ex x1 be Point of G, x2 be Point of F st x = [x1,x2] by SUBSET_1:65;
+
+Th010:
+  for G,F be non empty addLoopStr
+  ex ADGF be Function of
+  [:[:the carrier of G,the carrier of F:],
+  [:the carrier of G,the carrier of F:] :],
+  [:the carrier of G,the carrier of F:]
+  st for g1,g2 be Point of G, f1,f2 be Point of F
+  holds ADGF.([g1,f1],[g2,f2]) = [g1+g2,f1+f2]
+  proof
+    let G,F be non empty addLoopStr;
+    defpred ADP[set,set,set] means
+    ex g1,g2 be Point of G,f1,f2 be Point of F
+    st $1=[g1,f1] & $2=[g2,f2] & $3= [g1+g2,f1+f2];
+    P1:for x,y be set st x in [:the carrier of G,the carrier of F:]
+    & y in [:the carrier of G,the carrier of F:]
+    ex z be set st z in [:the carrier of G,the carrier of F:] & ADP[x,y,z]
+    proof
+      let x,y be set;
+      assume AS1: x in [:the carrier of G,the carrier of F:]
+      & y in [:the carrier of G,the carrier of F:]; then
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x=[x1,x2] by LM01;
+      consider y1 be Point of G, y2 be Point of F such that
+      P2:  y=[y1,y2] by LM01,AS1;
+      reconsider z = [x1+y1,x2+y2]
+      as Element of [:the carrier of G,the carrier of F:];
+      z in [:the carrier of G,the carrier of F:] & ADP[x,y,z] by P1,P2;
+      hence thesis;
+    end;
+    consider ADGF be Function of [:[:the carrier of G,the carrier of F:],
+    [:the carrier of G,the carrier of F:] :],
+    [:the carrier of G,the carrier of F:] such that
+    P2: for x,y be set st x in [:the carrier of G,the carrier of F:]
+    & y in [:the carrier of G,the carrier of F:]
+    holds ADP[x,y,ADGF.(x,y)] from BINOP_1:sch 1(P1);
+    now let g1,g2 be Point of G, f1,f2 be Point of F;
+      consider gg1,gg2 be Point of G, ff1,ff2 be Point of F such that
+      P5:  [g1,f1] = [gg1,ff1] & [g2,f2] = [gg2,ff2]
+      & ADGF.([g1,f1],[g2,f2])= [gg1+gg2,ff1+ff2] by P2;
+      g1=gg1 & f1=ff1 & g2=gg2 & f2=ff2 by ZFMISC_1:33,P5;
+      hence ADGF.([g1,f1],[g2,f2]) = [g1+g2,f1+f2] by P5;
+    end;
+    hence thesis;
+  end;
+
+definition
+  let G,F be non empty addLoopStr;
+  func prod_ADD(G,F) -> BinOp of [:the carrier of G,the carrier of F:] means
+  :defADD:
+  for g1,g2 be Point of G, f1,f2 be Point of F
+  holds it.([g1,f1],[g2,f2]) = [g1+g2,f1+f2];
+  existence by Th010;
+  uniqueness
+  proof
+    let H1,H2 be BinOp of [:the carrier of G,the carrier of F:];
+    assume
+    A1: for g1,g2 be Point of G, f1,f2 be Point of F
+    holds H1.([g1,f1],[g2,f2]) = [g1+g2,f1+f2];
+    assume
+    A2: for g1,g2 be Point of G, f1,f2 be Point of F
+    holds H2.([g1,f1],[g2,f2]) = [g1+g2,f1+f2];
+    now let x,y be Element of [:the carrier of G,the carrier of F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      consider y1 be Point of G, y2 be Point of F such that
+      P2:  y = [y1,y2] by LM01;
+      thus H1.(x,y) = [x1+y1,x2+y2] by A1,P1,P2
+      .= H2.(x,y) by A2,P1,P2;
+    end;
+    hence H1=H2 by BINOP_1:2;
+  end;
+end;
+
+Th011:
+  for G,F be non empty RLSStruct
+  ex MLTGF be Function of
+  [:REAL, [:the carrier of G,the carrier of F:] :],
+  [:the carrier of G,the carrier of F:]
+  st for r be Element of REAL, g be Point of G , f be Point of F
+  holds MLTGF.(r,[g,f]) = [r*g,r*f]
+  proof
+    let G,F be non empty RLSStruct;
+    defpred MLT[set,set,set] means
+    ex r be Element of REAL, g be Point of G, f be Point of F
+    st r = $1 & $2=[g,f] & $3= [r*g,r*f];
+    set CarrG = the carrier of G;
+    set CarrF = the carrier of F;
+    P1:for x,y be set st x in REAL & y in [:CarrG,CarrF:]
+    ex z be set st z in [:CarrG,CarrF:] & MLT[x,y,z]
+    proof
+      let x,y be set;
+      assume AS1: x in REAL & y in [:CarrG,CarrF:]; then
+      reconsider r=x as Element of REAL;
+      consider y1 be Point of G, y2 be Point of F such that
+      P2:  y = [y1,y2] by AS1,LM01;
+      set z = [r*y1,r*y2];
+      z in [:CarrG,CarrF:] & MLT[x,y,z] by P2;
+      hence thesis;
+    end;
+    consider MLTGF be Function of [:REAL,[:CarrG,CarrF:] :],[:CarrG,CarrF:]
+    such that
+    P2: for x,y be set st x in REAL & y in [:CarrG,CarrF:]
+    holds MLT[x,y,MLTGF.(x,y)] from BINOP_1:sch 1(P1);
+    now let r be Element of REAL, g be Point of G, f be Point of F;
+      MLT[r,[g,f],MLTGF.(r,[g,f])] by P2; then
+      consider rr be Element of REAL, gg be Point of G,
+      ff be Point of F such that
+      P5:  rr=r & [g,f]=[gg,ff] & MLTGF.(r,[g,f]) = [rr*gg,r*ff];
+      g=gg & f=ff by ZFMISC_1:33,P5;
+      hence MLTGF.(r,[g,f]) = [r*g,r*f] by P5;
+    end;
+    hence thesis;
+  end;
+
+definition let G,F be non empty RLSStruct;
+  func prod_MLT(G,F) -> Function of
+  [:REAL, [:the carrier of G,the carrier of F:] :],
+  [:the carrier of G,the carrier of F:] means :defMLT:
+  for r be Element of REAL, g be Point of G, f be Point of F
+  holds it.(r,[g,f]) = [r*g,r*f];
+  existence by Th011;
+  uniqueness
+  proof
+    let H1,H2 be Function of
+    [:REAL, [:the carrier of G,the carrier of F:] :],
+    [:the carrier of G,the carrier of F:];
+    assume
+    A1: for r be Element of REAL, g be Point of G, f be Point of F
+    holds H1.(r,[g,f]) = [r*g,r*f];
+    assume
+    A2: for r be Element of REAL, g be Point of G, f be Point of F
+    holds H2.(r,[g,f]) = [r*g,r*f];
+    now let r be Element of REAL ,x be Element of
+      [:the carrier of G,the carrier of F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      thus H1.(r,x) = [r*x1,r*x2] by A1,P1
+      .= H2.(r,x) by A2,P1;
+    end;
+    hence H1=H2 by BINOP_1:2;
+  end;
+end;
+
+definition let G,F be non empty addLoopStr;
+  func prod_ZERO(G,F) -> Element of [:the carrier of G,the carrier of F:]
+  equals [0.G,0.F];
+  correctness;
+end;
+
+definition let G,F be non empty addLoopStr;
+  func [:G,F:] -> strict non empty addLoopStr equals
+  addLoopStr (# [:the carrier of G,the carrier of F:],
+  prod_ADD(G,F), prod_ZERO(G,F) #);
+  correctness;
+end;
+
+registration
+  let G,F be Abelian (non empty addLoopStr);
+  cluster [:G,F:] -> Abelian;
+  correctness
+  proof
+    let x,y be Element of [:G,F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      consider y1 be Point of G, y2 be Point of F such that
+      P2:  y = [y1,y2] by LM01;
+      thus x+y = [x1+y1,x2+y2] by P1,P2,defADD
+      .= y+x by P1,P2,defADD;
+  end;
+end;
+
+registration
+  let G,F be add-associative (non empty addLoopStr);
+  cluster [:G,F:] -> add-associative;
+  correctness
+  proof
+    let x,y,z be Element of [:G,F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      consider y1 be Point of G, y2 be Point of F such that
+      P2:  y = [y1,y2] by LM01;
+      consider z1 be Point of G, z2 be Point of F such that
+      P3:  z = [z1,z2] by LM01;
+      A1: (x1+y1)+z1 = x1+(y1+z1) & (x2+y2)+z2 = x2+(y2+z2) by RLVECT_1:def 6;
+      thus (x+y)+z = prod_ADD(G,F).([x1+y1,x2+y2],[z1,z2]) by P1,P2,P3,defADD
+      .= [(x1+y1)+z1,(x2+y2)+z2] by defADD
+      .=prod_ADD(G,F).([x1,x2],[(y1+z1),(y2+z2)] ) by A1,defADD
+      .=x+(y+z) by P1,P2,P3,defADD;
+  end;
+end;
+
+registration
+  let G,F be right_zeroed (non empty addLoopStr);
+  cluster [:G,F:] -> right_zeroed;
+  correctness
+  proof
+    let x be Element of [:G,F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x=[x1,x2] by LM01;
+      x1+0.G = x1 & x2+0.F = x2 by RLVECT_1:def 7;
+      hence x+0.[:G,F:] =x by P1,defADD;
+  end;
+end;
+
+registration
+  let G,F be right_complementable (non empty addLoopStr);
+  cluster [:G,F:] -> right_complementable;
+  correctness
+  proof
+      let x be Element of [:G,F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      consider y1 be Point of G such that
+      P2:  x1+y1 = 0.G by ALGSTR_0:def 11;
+      consider y2 be Point of F such that
+      P3:  x2+y2 = 0.F by ALGSTR_0:def 11;
+      reconsider y=[y1,y2] as Element of [:G,F:];
+      take y;
+      thus thesis by P1,P2,P3,defADD;
+  end;
+end;
+
+theorem
+  for G,F be non empty addLoopStr holds
+  ( for x be set holds
+  (x is Point of [:G,F:]
+  iff ex x1 be Point of G, x2 be Point of F st x=[x1,x2]) )
+  & ( for x,y be Point of [:G,F:],
+  x1,y1 be Point of G ,x2,y2 be Point of F
+  st x=[x1,x2] & y=[y1,y2] holds x+y = [x1+y1,x2+y2] )
+  & 0.[:G,F:] = [0.G,0.F] by LM01,defADD;
+
+theorem
+  for G,F be add-associative right_zeroed
+  right_complementable (non empty addLoopStr),
+  x be Point of [:G,F:], x1 be Point of G, x2 be Point of F
+  st x=[x1,x2] holds -x = [-x1,-x2]
+  proof
+    let G,F be add-associative right_zeroed right_complementable
+    (non empty addLoopStr);
+    let x be Point of [:G,F:];
+    let x1 be Point of G, x2 be Point of F;
+    assume B3: x=[x1,x2];
+    reconsider y = [-x1,-x2 ] as Point of [:G,F:];
+    x+y = [x1+-x1,x2+-x2] by B3,defADD
+    .= [0.G,x2+-x2] by RLVECT_1:def 13
+    .= 0.[:G,F:] by RLVECT_1:def 13;
+    hence thesis by RLVECT_1:def 13;
+  end;
+
+registration
+  let G,F be Abelian add-associative
+  right_zeroed right_complementable strict (non empty addLoopStr);
+  cluster [:G,F:] -> strict Abelian add-associative
+    right_zeroed right_complementable;
+  correctness;
+end;
+
+definition let G,F be non empty RLSStruct;
+  func [:G,F:] -> strict non empty RLSStruct equals
+  RLSStruct (# [:the carrier of G,the carrier of F:],
+  prod_ZERO(G,F), prod_ADD(G,F), prod_MLT(G,F) #);
+  correctness;
+end;
+
+registration
+  let G,F be Abelian (non empty RLSStruct);
+  cluster [:G,F:] -> Abelian;
+  correctness
+  proof
+    let x,y be Element of [:G,F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      consider y1 be Point of G, y2 be Point of F such that
+      P2:  y = [y1,y2] by LM01;
+      x+y = [x1+y1,x2+y2] by P1,P2,defADD;
+      hence x+y = y+x by P1,P2,defADD;
+  end;
+end;
+
+registration
+  let G,F be add-associative (non empty RLSStruct);
+  cluster [:G,F:] -> add-associative;
+  correctness
+  proof
+    let x,y,z be Element of [:G,F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1: x = [x1,x2] by LM01;
+      consider y1 be Point of G, y2 be Point of F such that
+      P2: y = [y1,y2] by LM01;
+      consider z1 be Point of G, z2 be Point of F such that
+      P3: z = [z1,z2] by LM01;
+      A1:(x1+y1)+z1 = x1+(y1+z1) & (x2+y2)+z2 = x2+(y2+z2) by RLVECT_1:def 6;
+      thus (x+y)+z = prod_ADD(G,F).([x1+y1,x2+y2],[z1,z2]) by P1,P2,P3,defADD
+      .= [x1+(y1+z1),x2+(y2+z2)] by A1,defADD
+      .=prod_ADD(G,F).([x1,x2],[(y1+z1),(y2+z2)] ) by defADD
+      .=x+(y+z) by P1,P2,P3,defADD;
+  end;
+end;
+
+registration
+  let G,F be right_zeroed (non empty RLSStruct);
+  cluster [:G,F:] -> right_zeroed;
+  correctness
+  proof
+    let x be Element of [:G,F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      x1+0.G = x1 & x2+0.F = x2 by RLVECT_1:def 7;
+      hence x+0.[:G,F:] = x by P1,defADD;
+  end;
+end;
+
+registration
+  let G,F be right_complementable (non empty RLSStruct);
+  cluster [:G,F:] -> right_complementable;
+  correctness
+  proof
+      let x be Element of [:G,F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      consider y1 be Point of G such that
+      P2:  x1+y1 = 0.G by ALGSTR_0:def 11;
+      consider y2 be Point of F such that
+      P3:  x2+y2 = 0.F by ALGSTR_0:def 11;
+      reconsider y=[y1,y2] as Element of [:G,F:];
+      take y;
+      thus thesis by P1,P2,P3,defADD;
+  end;
+end;
+
+theorem ThZ02:
+  for G,F be non empty RLSStruct holds
+  ( for x be set holds
+  (x is Point of [:G,F:]
+  iff ex x1 be Point of G, x2 be Point of F st x=[x1,x2]) )
+  & ( for x,y be Point of [:G,F:], x1,y1 be Point of G, x2,y2 be Point of F
+  st x=[x1,x2] & y=[y1,y2] holds x+y = [x1+y1,x2+y2] )
+  & 0.[:G,F:] = [0.G,0.F]
+  & ( for x be Point of [:G,F:], x1 be Point of G, x2 be Point of F,
+  a be real number
+  st x=[x1,x2] holds a*x = [a*x1,a*x2] )
+  proof
+    let G,F be non empty RLSStruct;
+    for x be Point of [:G,F:], x1 be Point of G, x2 be Point of F,
+    a be real number
+    st x=[x1,x2] holds a*x = [a*x1,a*x2]
+    proof
+      let x be Point of [:G,F:], x1 be Point of G, x2 be Point of F,
+      a be real number;
+      reconsider a0=a as Element of REAL by XREAL_0:def 1;
+      assume B3: x=[x1,x2];
+      a*x = prod_MLT(G,F).(a0,x);
+      hence a*x = [a*x1,a*x2] by B3,defMLT;
+    end;
+    hence thesis by defADD,LM01;
+  end;
+
+theorem
+  for G,F be add-associative right_zeroed
+  right_complementable (non empty RLSStruct),
+  x be Point of [:G,F:], x1 be Point of G, x2 be Point of F
+  st x=[x1,x2] holds -x = [-x1,-x2]
+  proof
+    let G,F be add-associative right_zeroed right_complementable
+    (non empty RLSStruct);
+    let x be Point of [:G,F:], x1 be Point of G, x2 be Point of F;
+    assume B3: x=[x1,x2];
+    reconsider y = [-x1,-x2 ] as Point of [:G,F:];
+    x+y = [x1+-x1,x2+-x2] by B3,defADD
+    .= [0.G,x2+-x2] by RLVECT_1:def 13
+    .= 0.[:G,F:] by RLVECT_1:def 13;
+    hence thesis by RLVECT_1:def 13;
+  end;
+
+registration
+  let G,F be vector-distributive (non empty RLSStruct);
+  cluster [:G,F:] -> vector-distributive;
+  correctness
+  proof
+    let a0 be real number, x,y be VECTOR of [:G,F:];
+      reconsider a=a0 as Element of REAL by XREAL_0:def 1;
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      consider y1 be Point of G, y2 be Point of F such that
+      P2:  y = [y1,y2] by LM01;
+      P3: a*(x1+y1) = a0*x1 + a0*y1 & a*(x2+y2) = a0*x2 + a0*y2
+        by RLVECT_1:def 8;
+      thus a0*(x+y) = prod_MLT(G,F).(a,[x1+y1,x2+y2]) by P1,P2,defADD
+      .= [a*(x1+y1),a*(x2+y2)] by defMLT
+      .= prod_ADD(G,F).([a*x1,a*x2],[a*y1,a*y2]) by P3,defADD
+      .= prod_ADD(G,F).(prod_MLT(G,F).(a,[x1,x2]),[a*y1,a*y2]) by defMLT
+      .= a0*x + a0*y by P1,P2,defMLT;
+  end;
+end;
+
+registration
+  let G,F be scalar-distributive (non empty RLSStruct);
+  cluster [:G,F:] -> scalar-distributive;
+  correctness
+  proof
+    let a0,b0 be real number, x be VECTOR of [:G,F:];
+      reconsider a=a0, b=b0 as Element of REAL by XREAL_0:def 1;
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      P3: (a+b)*x1 = a0*x1 + b0*x1 & (a+b)*x2 = a0*x2 + b0*x2
+        by RLVECT_1:def 9;
+      thus (a0+b0)*x = [(a+b)*x1,(a+b)*x2] by P1,defMLT
+      .= prod_ADD(G,F).([a*x1,a*x2],[b*x1,b*x2]) by P3,defADD
+      .= prod_ADD(G,F).(prod_MLT(G,F).(a,[x1,x2]),[b*x1,b*x2]) by defMLT
+      .= a0*x + b0*x by P1,defMLT;
+  end;
+end;
+
+registration
+  let G,F be scalar-associative (non empty RLSStruct);
+  cluster [:G,F:] -> scalar-associative;
+  correctness
+  proof
+    let a0,b0 be real number, x be VECTOR of [:G,F:];
+      reconsider a=a0, b=b0 as Element of REAL by XREAL_0:def 1;
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      P3: (a*b)*x1 = a0 * (b0*x1) & (a*b)*x2 = a0 * (b0*x2) by RLVECT_1:def 10;
+      thus (a0*b0)*x = [(a*b)*x1,(a*b)*x2] by P1,defMLT
+      .= prod_MLT(G,F).(a,[b*x1,b*x2]) by P3,defMLT
+      .= a0*(b0*x) by P1,defMLT;
+  end;
+end;
+
+registration
+  let G,F be scalar-unital (non empty RLSStruct);
+  cluster [:G,F:] -> scalar-unital;
+  correctness
+  proof
+    let x be VECTOR of [:G,F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      1*x1 = x1 & 1*x2 = x2 by RLVECT_1:def 11;
+      hence 1*x = x by P1,defMLT;
+  end;
+end;
+
+registration
+  let G be Abelian add-associative right_zeroed right_complementable
+  scalar-distributive vector-distributive scalar-associative
+  scalar-unital (non empty RLSStruct);
+  cluster <* G *> -> RealLinearSpace-yielding;
+  correctness
+  proof
+    let S be set;
+      assume S in rng <*G*>; then
+      consider i be set such that
+      A1:  i in dom <*G*> & <*G*>.i = S by FUNCT_1:def 5;
+      reconsider i as Element of NAT by A1;
+      dom <*G*> = {1} by FINSEQ_1:4,def 8; then
+      i = 1 by A1,TARSKI:def 1;
+      hence S is RealLinearSpace by A1,FINSEQ_1:57;
+  end;
+end;
+
+registration
+  let G,F be Abelian add-associative right_zeroed right_complementable
+  scalar-distributive vector-distributive scalar-associative
+  scalar-unital (non empty RLSStruct);
+  cluster <* G,F *> -> RealLinearSpace-yielding;
+  correctness
+  proof
+      let S be set;
+      assume S in rng <*G,F*>; then
+      consider i be set such that
+      A1:  i in dom <*G,F*> & <*G,F*>.i = S by FUNCT_1:def 5;
+      dom <*G,F*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29; then
+      i=1 or i=2 by A1,TARSKI:def 2;
+      hence S is RealLinearSpace by A1,FINSEQ_1:61;
+  end;
+end;
+
+begin :: Cartesian Product of Real Linear Spaces
+
+theorem ThHOM01AA:
+  for X be RealLinearSpace holds
+  ex I be Function of X, product <*X*>
+  st I is one-to-one & I is onto
+  & ( for x be Point of X holds I.x = <*x*> )
+  & ( for v,w be Point of X holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of X, r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.X)=0.product <*X*>
+  proof
+    let X be RealLinearSpace;
+    set CarrX = the carrier of X;
+    consider I be Function of CarrX,product <*CarrX*> such that
+    P1: I is one-to-one & I is onto
+    & for x be set st x in CarrX holds I.x = <*x*> by Th002AB;
+    len carr <*X*> = len <*X*> by PRVECT_2:def 4; then
+    Q0:len carr <*X*> = 1 by FINSEQ_1:57;
+    Q2:dom <*X*> = {1} by FINSEQ_1:def 8,4;
+    Q20:<*X*>.1 = X by FINSEQ_1:def 8;
+    1 in {1} by TARSKI:def 1; then
+    (carr <*X*>).1= the carrier of X by Q2,Q20,PRVECT_2:def 4; then
+    P4:carr <*X*> = <* CarrX *> by Q0,FINSEQ_1:57; then
+    reconsider I as Function of X,product <*X*>;
+    P2:for x be Point of X holds I.x = <*x*> by P1;
+    P5:for v,w be Point of X holds I.(v+w) = I.v + I.w
+    proof
+      let v,w be Point of X;
+      P55:I.v = <*v*> & I.w = <*w*> & I.(v+w) = <*v+w*> by P1;
+      P58:<*v*>.1 = v & <*w*>.1 = w by FINSEQ_1:57;
+      reconsider Iv = I.v, Iw = I.w as Element of product carr <*X*>;
+      1 in {1} by TARSKI:def 1; then
+      reconsider j1=1 as Element of dom carr <*X*> by Q0,FINSEQ_1:4,def 3;
+      X1: (addop <*X*>).j1 = the addF of (<*X*>.j1) by PRVECT_2:def 5;
+      X2: ([:addop <*X*>:].(Iv,Iw)).j1
+      = ((addop <*X*>).j1).(Iv.j1,Iw.j1) by PRVECT_1:def 10
+      .= v+w by X1,P55,P58,FINSEQ_1:57;
+      consider Ivw be Function such that
+      XX1: I.v + I.w = Ivw & dom Ivw = dom carr <*X*>
+      & for i be set st i in dom carr <*X*> holds Ivw.i in carr (<*X*>).i
+      by CARD_3:def 5;
+      X5: dom Ivw = Seg 1 by Q0,XX1,FINSEQ_1:def 3; then
+      reconsider Ivw as FinSequence by FINSEQ_1:def 2;
+      len Ivw = 1 by FINSEQ_1:def 3,X5;
+      hence thesis by P55,XX1,X2,FINSEQ_1:57;
+    end;
+    P6:for v be Point of X, r be Element of REAL holds I.(r*v)=r*(I.v)
+    proof
+      let v be Point of X, r be Element of REAL;
+      P55:I.v = <*v*> & I.(r*v) = <* r*v *> by P1;
+      P58:<*v*>.1 = v by FINSEQ_1:57;
+      1 in {1} by TARSKI:def 1; then
+      reconsider j1=1 as Element of dom carr <*X*> by Q0,FINSEQ_1:4,def 3;
+      X1: (multop <*X*>).j1 = the Mult of (<*X*>.j1) by PRVECT_2:def 8;
+      reconsider Iv = I.v as Element of product carr <*X*>;
+      X2: ([:multop <*X*>:].(r,Iv)).j1
+      = ((multop <*X*>).j1).(r,Iv.j1) by PRVECT_2:def 2
+      .= r*v by X1,P55,P58,FINSEQ_1:57;
+      consider Ivw be Function such that
+      XX1: r*(I.v) = Ivw & dom Ivw = dom carr <*X*>
+      & for i be set st i in dom carr <*X*> holds Ivw.i in carr (<*X*>).i
+      by CARD_3:def 5;
+      X5: dom Ivw = Seg 1 by Q0,XX1,FINSEQ_1:def 3; then
+      reconsider Ivw as FinSequence by FINSEQ_1:def 2;
+      len Ivw = 1 by FINSEQ_1:def 3,X5;
+      hence thesis by P55,XX1,X2,FINSEQ_1:57;
+    end;
+    I.(0.X) = I.(0.X + 0.X) by RLVECT_1:def 7
+    .= I.(0.X) + I.(0.X) by P5; then
+    I.(0.X) - I.(0.X)
+    = I.(0.X) + (I.(0.X) - I.(0.X)) by RLVECT_1:42
+    .= I.(0.X) + 0.product <*X*> by RLVECT_1:28
+    .= I.(0.X) by RLVECT_1:def 7; then
+    0.product <*X*> = I.(0.X) by RLVECT_1:28;
+    hence thesis by P1,P2,P4,P5,P6;
+  end;
+
+registration
+  let G,F be non empty RealLinearSpace-yielding FinSequence;
+  cluster G^F -> RealLinearSpace-yielding;
+  correctness
+  proof
+      let S be set;
+      assume S in rng (G^F); then
+      consider i be set such that
+      A1:  i in dom (G^F) & (G^F).i = S by FUNCT_1:def 5;
+      reconsider i as Element of NAT by A1;
+      per cases by FINSEQ_1:38,A1;
+      suppose A3: i in dom G; then
+        X1:  (G^F).i = G.i by FINSEQ_1:def 7;
+        G.i in rng G by A3,FUNCT_1:12;
+        hence S is RealLinearSpace by X1,A1,PRVECT_2:def 3;
+      end;
+      suppose ex n be Nat st n in dom F & i=len G + n; then
+        consider n be Nat such that
+        A41:  n in dom F & i=len G + n;
+        X1:  (G^F).i = F.n by A41,FINSEQ_1:def 7;
+        F.n in rng F by A41,FUNCT_1:12;
+        hence S is RealLinearSpace by X1,A1,PRVECT_2:def 3;
+      end;
+  end;
+end;
+
+theorem ThHOM01:
+  for X,Y be RealLinearSpace holds
+  ex I be Function of [:X,Y:],product <*X,Y*>
+  st I is one-to-one & I is onto
+  & ( for x be Point of X, y be Point of Y holds I.(x,y) = <*x,y*> )
+  & ( for v,w be Point of [:X,Y:] holds I.(v+w)=(I.v) + (I.w) )
+  & ( for v be Point of [:X,Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:X,Y:])=0.product <*X,Y*>
+  proof
+    let X,Y be RealLinearSpace;
+    set CarrX = the carrier of X;
+    set CarrY = the carrier of Y;
+    consider I be Function of [:CarrX,CarrY:],product <*CarrX,CarrY*> such that
+    P1: I is one-to-one & I is onto
+    & for x,y be set st x in CarrX & y in CarrY
+    holds I.(x,y) = <*x,y*> by Th002A;
+    len carr <*X,Y*> = len <*X,Y*> by PRVECT_2:def 4; then
+    Q0:len carr <*X,Y*> = 2 by FINSEQ_1:61; then
+    Q01:dom carr <*X,Y*> = {1,2} by FINSEQ_1:4,def 3;
+    len <*X,Y*> = 2 by FINSEQ_1:61; then
+    Q2:dom <*X,Y*> = {1,2} by FINSEQ_1:4,def 3;
+    Q20:<*X,Y*>.1 = X & <*X,Y*>.2 = Y by FINSEQ_1:61;
+    1 in {1,2} & 2 in {1,2} by TARSKI:def 2; then
+    (carr <*X,Y*>).1 = CarrX & (carr <*X,Y*>).2 = CarrY
+    by Q2,Q20,PRVECT_2:def 4; then
+    Q5:carr <*X,Y*> = <* CarrX,CarrY *> by Q0,FINSEQ_1:61; then
+    reconsider I as Function of [:X,Y:],product <*X,Y*>;
+    P2:for x be Point of X,y be Point of Y holds I.(x,y) = <*x,y*> by P1;
+    P5:for v,w be Point of [:X,Y:] holds I.(v+w) = I.v + I.w
+    proof
+      let v,w be Point of [:X,Y:];
+      consider x1 be Point of X, y1 be Point of Y such that
+      P52: v = [x1,y1] by LM01;
+      consider x2 be Point of X, y2 be Point of Y such that
+      P53: w = [x2,y2] by LM01;
+      I.v = I.(x1,y1) & I.w = I.(x2,y2) by P52,P53; then
+      P55:I.v = <*x1,y1*> & I.w = <*x2,y2*> by P1;
+      P57:I.(v+w) =I.(x1+x2,y1+y2) by P52,P53,defADD
+      .= <* x1+x2,y1+y2 *> by P1;
+      P58:<*x1,y1*>.1 = x1 & <*x2,y2*>.1 = x2
+      & <*x1,y1*>.2 = y1 & <*x2,y2*>.2 = y2 by FINSEQ_1:61;
+      reconsider Iv = I.v, Iw = I.w as Element of product carr <*X,Y*>;
+      reconsider j1=1, j2=2 as Element of dom (carr <*X,Y*>)
+        by Q01,TARSKI:def 2;
+      X1: (addop <*X,Y*>).j1 = the addF of (<*X,Y*>.j1) by PRVECT_2:def 5;
+      X2: ([:addop <*X,Y*>:].(Iv,Iw)).j1
+      = ((addop <*X,Y*>).j1).(Iv.j1,Iw.j1) by PRVECT_1:def 10
+      .= x1+x2 by X1,P55,P58,FINSEQ_1:61;
+      X3: (addop <*X,Y*>).j2 = the addF of (<*X,Y*>.j2) by PRVECT_2:def 5;
+      X4: ([:addop <*X,Y*>:].(Iv,Iw)).j2
+      = ((addop <*X,Y*>).j2).(Iv.j2,Iw.j2) by PRVECT_1:def 10
+      .= y1+y2 by X3,P55,P58,FINSEQ_1:61;
+      consider Ivw be Function such that
+      XX1: I.v + I.w = Ivw & dom Ivw = dom carr <*X,Y*>
+      & for i be set st i in dom carr <*X,Y*> holds Ivw.i in carr (<*X,Y*>).i
+      by CARD_3:def 5;
+      X5: dom Ivw = Seg 2 by Q0,XX1,FINSEQ_1:def 3; then
+      reconsider Ivw as FinSequence by FINSEQ_1:def 2;
+      len Ivw = 2 by FINSEQ_1:def 3,X5;
+      hence thesis by P57,XX1,X2,X4,FINSEQ_1:61;
+    end;
+    P6:for v be Point of [:X,Y:], r be Element of REAL holds I.(r*v)=r*(I.v)
+    proof
+      let v be Point of [:X,Y:], r be Element of REAL;
+      consider x1 be Point of X, y1 be Point of Y such that
+      P52: v = [x1,y1] by LM01;
+      P55:I.v =I.(x1,y1) by P52 .= <*x1,y1*> by P1;
+      P57:I.(r*v) =I.(r*x1,r*y1) by P52,defMLT .= <* r*x1,r*y1 *> by P1;
+      P58:<*x1,y1*>.1 = x1 & <*x1,y1*>.2 = y1 by FINSEQ_1:61;
+      reconsider j1=1, j2=2 as Element of dom carr <*X,Y*> by Q01,TARSKI:def 2;
+      X1: (multop <*X,Y*>).j1 = the Mult of (<*X,Y*>.j1)
+      & (multop <*X,Y*>).j2 = the Mult of (<*X,Y*>.j2) by PRVECT_2:def 8;
+      reconsider Iv = I.v as Element of product carr <*X,Y*>;
+      ([:multop <*X,Y*>:].(r,Iv)).j1 = ((multop <*X,Y*>).j1).(r,Iv.j1)
+      & ([:multop <*X,Y*>:].(r,Iv)).j2 = ((multop <*X,Y*>).j2).(r,Iv.j2)
+      by PRVECT_2:def 2; then
+      X2: ([:multop <*X,Y*>:].(r,Iv)).j1 = r*x1
+      & ([:multop <*X,Y*>:].(r,Iv)).j2 = r*y1 by X1,P55,P58,FINSEQ_1:61;
+      consider Ivw be Function such that
+      XX1: r*(I.v) = Ivw & dom Ivw = dom carr <*X,Y*>
+      & for i be set st i in dom carr <*X,Y*> holds Ivw.i in carr (<*X,Y*>).i
+      by CARD_3:def 5;
+      X5: dom Ivw = Seg 2 by Q0,XX1,FINSEQ_1:def 3; then
+      reconsider Ivw as FinSequence by FINSEQ_1:def 2;
+      len Ivw = 2 by FINSEQ_1:def 3,X5;
+      hence thesis by P57,XX1,X2,FINSEQ_1:61;
+    end;
+    I.(0.[:X,Y:]) = I.(0.[:X,Y:] + 0.[:X,Y:]) by RLVECT_1:def 7
+    .= I.(0.[:X,Y:]) + I.(0.[:X,Y:]) by P5; then
+    I.(0.[:X,Y:]) - I.(0.[:X,Y:])
+    = I.(0.[:X,Y:]) + (I.(0.[:X,Y:]) - I.(0.[:X,Y:])) by RLVECT_1:42
+    .= I.(0.[:X,Y:]) + 0.product <*X,Y*> by RLVECT_1:28
+    .= I.(0.[:X,Y:]) by RLVECT_1:def 7; then
+    0.product <*X,Y*> = I.(0.[:X,Y:]) by RLVECT_1:28;
+    hence thesis by P2,P5,P6,P1,Q5;
+  end;
+
+LMPROD1:
+for X be non-empty non empty FinSequence, x be set
+st x in product X holds x is FinSequence
+proof
+  let X be non-empty non empty FinSequence, x be set;
+  assume x in product X; then
+  consider g be Function such that
+  X1: x = g & dom g = dom X
+  & for i be set st i in dom X holds g.i in X.i by CARD_3:def 5;
+  dom g = Seg len X by X1,FINSEQ_1:def 3;
+  hence x is FinSequence by X1,FINSEQ_1:def 2;
+end;
+
+theorem ThHOM01A:
+  for X,Y be non empty RealLinearSpace-Sequence
+  holds ex I be Function of [:product X,product Y:],product (X^Y)
+  st I is one-to-one & I is onto
+  & ( for x be Point of product X, y be Point of product Y
+  holds ex x1,y1 be FinSequence st x=x1 & y=y1 & I.(x,y) = x1^y1 )
+  & ( for v,w be Point of [:product X,product Y:]
+  holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:product X,product Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:product X,product Y:]) = 0.product (X^Y)
+  proof
+    let X,Y be non empty RealLinearSpace-Sequence;
+    reconsider CX = carr X, CY = carr Y as non-empty non empty FinSequence;
+    A1:len CX = len X & len CY = len Y
+    & len carr (X^Y) = len (X^Y) by PRVECT_2:def 4;
+    consider I be Function of [:product CX,product CY:],product (CX^CY)
+    such that
+    P1: I is one-to-one & I is onto
+    & for x,y be FinSequence st x in product CX & y in product CY
+    holds I.(x,y) = x^y by Th002A1;
+    set PX = product X;
+    set PY = product Y;
+    len carr (X^Y) = len X + len Y & len (CX^CY) =len X + len Y
+    by A1,FINSEQ_1:35; then
+    Q3:dom carr (X^Y) = dom (CX^CY) by FINSEQ_3:31;
+    Q4:for k be Nat st k in dom carr (X^Y) holds carr (X^Y).k = (CX^CY).k
+    proof
+      let k be Nat;
+      assume R1: k in dom carr (X^Y); then
+      reconsider k1=k as Element of dom (X^Y) by A1,FINSEQ_3:31;
+      A9: carr (X^Y).k = the carrier of ((X^Y).k1) by PRVECT_2:def 4;
+      R2: k in dom (X^Y) by A1,R1,FINSEQ_3:31;
+      per cases by R2,FINSEQ_1:38;
+      suppose A80: k in dom X; then
+        A81: k in dom CX by A1,FINSEQ_3:31;
+        reconsider k2=k1 as Element of dom X by A80;
+        thus carr (X^Y).k = the carrier of (X.k2) by A9,FINSEQ_1:def 7
+        .= CX.k by PRVECT_2:def 4
+        .= (CX^CY).k by A81,FINSEQ_1:def 7;
+      end;
+      suppose ex n be Nat st n in dom Y & k=len X + n; then
+        consider n be Nat such that
+        A90:  n in dom Y & k=len X + n;
+        A91: n in dom CY by A1,A90,FINSEQ_3:31;
+        reconsider n1=n as Element of dom Y by A90;
+        thus carr (X^Y).k = the carrier of (Y.n1) by A9,A90,FINSEQ_1:def 7
+        .= CY.n by PRVECT_2:def 4
+        .= (CX^CY).k by A91,A90,A1,FINSEQ_1:def 7;
+      end;
+    end; then
+    Q5:carr (X^Y) = CX^CY by Q3,FINSEQ_1:17;
+    reconsider I as Function of [:PX,PY:] ,product (X^Y) by Q3,Q4,FINSEQ_1:17;
+    P2:for x be Point of product X, y be Point of product Y
+    holds ex x1,y1 be FinSequence st x=x1 & y=y1 & I.(x,y) = x1^y1
+    proof
+      let x be Point of PX, y be Point of PY;
+      reconsider x1=x, y1=y as FinSequence by LMPROD1;
+      I.(x,y) = x1^y1 by P1;
+      hence thesis;
+    end;
+    P5:for v,w be Point of [:PX,PY:] holds I.(v+w) = I.v + I.w
+    proof
+      let v,w be Point of [:PX,PY:];
+      consider x1 be Point of PX, y1 be Point of PY such that
+      P52: v = [x1,y1] by LM01;
+      consider x2 be Point of PX, y2 be Point of PY such that
+      P53: w = [x2,y2] by LM01;
+      reconsider xx1=x1, xx2=x2 as FinSequence by LMPROD1;
+      reconsider yy1=y1, yy2=y2 as FinSequence by LMPROD1;
+      reconsider xx12=x1+x2, yy12=y1+y2 as FinSequence by LMPROD1;
+      P4: dom xx1 = dom CX & dom xx2 = dom CX & dom xx12 = dom CX
+      & dom yy1 = dom CY & dom yy2 = dom CY & dom yy12 = dom CY by CARD_3:18;
+      I.v = I.(x1,y1) & I.w = I.(x2,y2) by P52,P53; then
+      P55:I.v = xx1^yy1 & I.w = xx2^yy2 by P1;
+      I.(v+w) = I.(x1+x2,y1+y2) by P52,P53,defADD; then
+      P57:I.(v+w) = xx12^yy12 by P1; then
+      X5: dom (xx12^yy12) = dom carr (X^Y) by CARD_3:18;
+      reconsider Iv = I.v, Iw = I.w as Element of product carr (X^Y);
+      reconsider Ivw = I.v + I.w as FinSequence by LMPROD1;
+      XX1:dom Ivw = dom carr (X^Y) by CARD_3:18;
+      for j0 be Nat st j0 in dom Ivw holds Ivw.j0 = (xx12^yy12).j0
+      proof
+        let j0 be Nat;
+        assume j0 in dom Ivw; then
+        reconsider j=j0 as Element of dom carr (X^Y) by CARD_3:18;
+        X21: Ivw.j0 = ((addop (X^Y)).j).(Iv.j,Iw.j) by PRVECT_1:def 10
+        .= (the addF of (X^Y).j).(Iv.j,Iw.j) by PRVECT_2:def 5;
+        per cases by X21,Q3,FINSEQ_1:38;
+        suppose C1: j0 in dom CX; then
+          j0 in dom X by A1,FINSEQ_3:31; then
+          C13:  (X^Y).j = X.j0 by FINSEQ_1:def 7;
+          C17:  Iv.j = xx1.j & Iw.j = xx2.j by C1,P4,P55,FINSEQ_1:def 7;
+          F16:  (xx12^yy12).j0 = xx12.j0 by C1,P4,FINSEQ_1:def 7;
+          reconsider j1=j0 as Element of dom carr X by C1;
+          (the addF of (X^Y).j).(Iv.j,Iw.j)
+          =((addop X ).j1).(xx1.j1,xx2.j1) by C13,C17,PRVECT_2:def 5
+          .= (xx12^yy12).j0 by F16,PRVECT_1:def 10;
+          hence Ivw.j0 = (xx12^yy12).j0 by X21;
+        end;
+        suppose ex n be Nat st n in dom CY & j0=len CX + n; then
+          consider n be Nat such that
+          C1:    n in dom CY & j0=len CX + n;
+          G2:   len CX= len xx1 & len CX = len xx2 & len CX= len xx12
+          by P4,FINSEQ_3:31;
+          n in dom Y by A1,C1,FINSEQ_3:31; then
+          C13:  (X^Y).j = Y.n by C1,A1,FINSEQ_1:def 7;
+          C17:  Iv.j = yy1.n & Iw.j = yy2.n by P4,P55,C1,G2,FINSEQ_1:def 7;
+          F16:  (xx12^yy12).j0 = yy12.n by C1,G2,P4,FINSEQ_1:def 7;
+          reconsider j1=n as Element of dom carr Y by C1;
+          (the addF of (X^Y).j).(Iv.j,Iw.j)
+          = ((addop Y).j1).(yy1.j1,yy2.j1) by C13,C17,PRVECT_2:def 5
+          .= (xx12^yy12).j0 by F16,PRVECT_1:def 10;
+          hence Ivw.j0 = (xx12^yy12).j0 by X21;
+        end;
+      end;
+      hence thesis by P57,X5,XX1,FINSEQ_1:17;
+    end;
+    P6:for v be Point of [:PX,PY:], r be Element of REAL holds I.(r*v)=r*(I.v)
+    proof
+      let v be Point of [:PX,PY:],r be Element of REAL;
+      consider x1 be Point of PX, y1 be Point of PY such that
+      P52: v = [x1,y1] by LM01;
+      reconsider xx1=x1, yy1=y1 as FinSequence by LMPROD1;
+      reconsider rxx1=r*x1, ryy1=r*y1 as FinSequence by LMPROD1;
+      P4: dom xx1 = dom CX & dom yy1 = dom CY
+      & dom rxx1 = dom CX & dom ryy1 = dom CY by CARD_3:18;
+      P55:I.v = I.(x1,y1) by P52 .= xx1^yy1 by P1;
+      P57:I.(r*v) = I.(r*x1,r*y1) by P52,defMLT .= rxx1^ryy1 by P1;
+      reconsider Iv = I.v as Element of product carr (X^Y);
+      reconsider rIv=r*I.v as FinSequence by LMPROD1;
+      XX1:dom rIv = dom carr (X^Y) by CARD_3:18;
+      X5: dom (rxx1^ryy1) = dom carr (X^Y) by P57,CARD_3:18;
+      for j0 be Nat st j0 in dom rIv holds rIv.j0 = (rxx1^ryy1).j0
+      proof
+        let j0 be Nat;
+        assume X20:j0 in dom rIv; then
+        reconsider j=j0 as Element of dom carr (X^Y) by CARD_3:18;
+        X21: rIv.j0 = ((multop (X^Y)).j).(r,Iv.j) by PRVECT_2:def 2
+        .= (the Mult of (X^Y).j).(r,Iv.j) by PRVECT_2:def 8;
+        per cases by Q3,X20,XX1,FINSEQ_1:38;
+        suppose C1: j0 in dom CX; then
+          j0 in dom X by A1,FINSEQ_3:31; then
+          C13:  (X^Y).j = X.j0 by FINSEQ_1:def 7;
+          C17:  Iv.j = xx1.j by C1,P4,P55,FINSEQ_1:def 7;
+          F16:  (rxx1^ryy1).j0 = rxx1.j0 by C1,P4,FINSEQ_1:def 7;
+          reconsider j1=j0 as Element of dom carr X by C1;
+          (the Mult of (X^Y).j).(r,Iv.j)
+          = ((multop X ).j1).(r,xx1.j1) by C13,C17,PRVECT_2:def 8
+          .= (rxx1^ryy1).j0 by F16,PRVECT_2:def 2;
+          hence rIv.j0 = (rxx1^ryy1).j0 by X21;
+        end;
+        suppose ex n be Nat st n in dom CY & j0=len CX + n; then
+          consider n be Nat such that
+          C1:    n in dom CY & j0=len CX + n;
+          G2:   len CX= len xx1 & len CX= len rxx1 by P4,FINSEQ_3:31;
+          n in dom Y by C1,A1,FINSEQ_3:31; then
+          C13:  (X^Y).j = Y.n by C1,A1,FINSEQ_1:def 7;
+          C17:  Iv.j = yy1.n by P55,C1,P4,G2,FINSEQ_1:def 7;
+          F16:  (rxx1^ryy1).j0 = ryy1.n by C1,G2,P4,FINSEQ_1:def 7;
+          reconsider j1=n as Element of dom carr Y by C1;
+          (the Mult of (X^Y).j).(r,Iv.j)
+          = ((multop Y ).j1).(r,yy1.j1) by C13,C17,PRVECT_2:def 8
+          .= (rxx1^ryy1).j0 by F16,PRVECT_2:def 2;
+          hence rIv.j0 = (rxx1^ryy1).j0 by X21;
+        end;
+      end;
+      hence thesis by P57,X5,XX1,FINSEQ_1:17;
+    end;
+    I.(0.[:PX,PY:]) = I.(0.[:PX,PY:] + 0.[:PX,PY:]) by RLVECT_1:def 7
+    .= I.(0.[:PX,PY:]) + I.(0.[:PX,PY:]) by P5; then
+    I.(0.[:PX,PY:]) - I.(0.[:PX,PY:])
+    = I.(0.[:PX,PY:]) + (I.(0.[:PX,PY:]) - I.(0.[:PX,PY:])) by RLVECT_1:42
+    .= I.(0.[:PX,PY:]) + 0. product (X^Y) by RLVECT_1:28
+    .= I.(0.[:PX,PY:]) by RLVECT_1:def 7; then
+    0. product (X^Y) = I.(0.[:PX,PY:]) by RLVECT_1:28;
+    hence thesis by P2,P5,P6,P1,Q5;
+  end;
+
+theorem
+  for G,F be RealLinearSpace holds
+  ( for x be set holds
+  ( x is Point of product <*G,F*>
+  iff ex x1 be Point of G, x2 be Point of F st x=<* x1,x2 *> ) )
+  & ( for x,y be Point of product <*G,F*>,
+  x1,y1 be Point of G ,x2,y2 be Point of F
+  st x = <*x1,x2*> & y = <*y1,y2*>
+  holds x+y = <*x1+y1,x2+y2*> )
+  & 0.(product <*G,F*>) = <* 0.G,0.F *>
+  & ( for x be Point of product <*G,F*>, x1 be Point of G, x2 be Point of F
+  st x=<* x1,x2 *> holds -x = <* -x1,-x2 *> )
+  & ( for x be Point of product <*G,F*>, x1 be Point of G, x2 be Point of F,
+  a be real number
+  st x = <*x1,x2*> holds a*x = <* a*x1,a*x2 *> )
+  proof
+    let G,F be RealLinearSpace;
+    consider I be Function of [:G,F:], product <* G,F *> such that
+    AS: I is one-to-one & I is onto
+    & ( for x be Point of G, y be Point of F holds I.(x,y) = <* x,y *> )
+    & ( for v,w  be Point of [:G,F:] holds I.(v+w) = I.v + I.w )
+    & ( for v be Point of [:G,F:], r be Element of REAL holds I.(r*v)=r*(I.v) )
+    & 0. product <*G,F*> = I.(0.[:G,F:]) by ThHOM01;
+    thus
+    X1: for x be set holds
+    ( x is Point of product <*G,F*>
+    iff ex x1 be Point of G, x2 be Point of F st x=<* x1,x2 *> )
+    proof
+      let y be set;
+      hereby assume y is Point of product <*G,F*>; then
+        y in the carrier of product <*G,F*>; then
+        y in rng I by AS,FUNCT_2:def 3; then
+        consider x be Element of the carrier of [:G,F:] such that
+        X11:  y = I.x by FUNCT_2:190;
+        consider x1 be Point of G, x2 be Point of F such that
+        X12:  x=[x1,x2] by LM01;
+        take x1,x2;
+        I.(x1,x2) = <*x1,x2*> by AS;
+        hence y = <*x1,x2*> by X11,X12;
+      end;
+      now assume ex x1 be Point of G, x2 be Point of F st y = <*x1,x2*>; then
+        consider x1 be Point of G, x2 be Point of F such that
+        X21:  y = <*x1,x2*>;
+        X22: I.[x1,x2] in rng I by FUNCT_2:189;
+        I.(x1,x2) = <*x1,x2*> by AS;
+        hence y is Point of product <*G,F*> by X21,X22;
+      end;
+      hence thesis;
+    end;
+    thus
+    X2: for x,y be Point of product <*G,F*>,
+    x1,y1 be Point of G, x2,y2 be Point of F
+    st x = <*x1,x2*> & y = <*y1,y2*>
+    holds x+y = <*x1+y1,x2+y2*>
+    proof
+      let x,y be Point of product <*G,F*>;
+      let x1,y1 be Point of G, x2,y2 be Point of F;
+      assume B3: x = <*x1,x2*> & y = <*y1,y2*>;
+      reconsider z=[x1,x2], w=[y1,y2] as Point of [:G,F:];
+      X0: z+w = [x1+y1,x2+y2] by defADD;
+      I.(x1+y1,x2+y2) = <* x1+y1,x2+y2 *>
+      & I.(x1,x2) = <* x1,x2 *> & I.(y1,y2) = <* y1,y2 *> by AS;
+      hence <* x1+y1,x2+y2 *> =x+y by AS,X0,B3;
+    end;
+    thus
+    X3: 0. product <*G,F*> = <* 0.G,0.F *>
+    proof
+      I.(0.G,0.F) = <* 0.G,0.F *> by AS;
+      hence thesis by AS;
+    end;
+    thus for x be Point of product <*G,F*>,
+    x1 be Point of G, x2 be Point of F
+    st x = <*x1,x2*> holds -x = <* -x1,-x2 *>
+    proof
+      let x be Point of product <*G,F*>;
+      let x1 be Point of G, x2 be Point of F;
+      assume B3: x=<* x1,x2 *>;
+      reconsider y = <* -x1,-x2 *> as Point of product <*G,F*> by X1;
+      x+y = <* x1+-x1,x2+-x2 *> by X2,B3
+      .= <* 0.G,x2+-x2 *> by RLVECT_1:def 13
+      .= 0.(product <*G,F*>) by X3,RLVECT_1:def 13;
+      hence thesis by RLVECT_1:def 13;
+    end;
+    thus for x be Point of product <*G,F*>,
+    x1 be Point of G, x2 be Point of F, a be real number
+    st x=<* x1,x2 *> holds a*x = <* a*x1,a*x2 *>
+    proof
+      let x be Point of product <*G,F*>;
+      let x1 be Point of G, x2 be Point of F, a be real number;
+      assume B3: x=<* x1,x2 *>;
+      reconsider a0=a as Element of REAL by XREAL_0:def 1;
+      reconsider y=[x1,x2] as Point of [:G,F:];
+      Y1: <* x1,x2 *> = I.(x1,x2) by AS;
+      I.(a*y) = I.(a0*x1,a0*x2) by ThZ02
+      .= <* a0*x1,a0*x2 *> by AS;
+      hence thesis by AS,B3,Y1;
+    end;
+  end;
+
+begin :: Cartesian Product of Real Normed Linear Spaces
+
+Th021:
+  for G,F be non empty NORMSTR
+  ex NORMGF be Function of [:the carrier of G,the carrier of F:],REAL
+  st for g be Point of G, f be Point of F
+  holds ex v be Element of REAL 2
+  st v = <* ||.g.||,||.f.|| *> & NORMGF.(g,f) = |.v.|
+  proof
+    let G,F be non empty NORMSTR;
+    defpred NRM[set,set,set] means
+    ex g be Point of G, f be Point of F, v be Element of REAL 2
+    st $1=g & $2=f & v=<* ||.g.||,||.f.|| *> & $3 = |.v.|;
+    P1:for x,y be set st x in the carrier of G & y in the carrier of F
+    ex z be set st z in REAL & NRM[x,y,z]
+    proof
+      let x,y be set;
+      assume AS1: x in the carrier of G & y in the carrier of F; then
+      reconsider g=x as Point of G;
+      reconsider f=y as Point of F by AS1;
+      reconsider v=<* ||.g.||,||.f.|| *> as Element of REAL 2 by FINSEQ_2:121;
+      |.v.| in REAL;
+      hence thesis;
+    end;
+    consider NORMGF be Function of [:the carrier of G,the carrier of F:], REAL
+    such that
+    P2: for x,y be set st x in the carrier of G & y in the carrier of F
+    holds NRM[x,y,NORMGF.(x,y)] from BINOP_1:sch 1(P1);
+    now let g be Point of G, f be Point of F;
+      ex gg be Point of G, ff be Point of F, v be Element of REAL 2 st
+      g=gg & f=ff & v=<* ||.gg.||,||.ff.|| *> & NORMGF.(g,f)  = |.v.| by P2;
+      hence ex v be Element of REAL 2 st
+      v=<* ||.g.||,||.f.|| *> & NORMGF.(g,f) = |. v .|;
+    end;
+    hence thesis;
+  end;
+
+definition let G,F be non empty NORMSTR;
+  func prod_NORM(G,F) -> Function of
+  [:the carrier of G,the carrier of F:], REAL means :defNORM:
+  for g be Point of G, f be Point of F
+  holds ex v be Element of REAL 2
+  st v= <* ||.g.||,||.f.|| *> & it.(g,f) = |.v.|;
+  existence by Th021;
+  uniqueness
+  proof
+    let H1,H2 be Function of [:the carrier of G,the carrier of F:],REAL;
+    assume
+    A1: for g be Point of G, f be Point of F
+    ex v be Element of REAL 2 st v=<* ||.g.||,||.f.|| *> & H1.(g,f) = |.v.|;
+    assume
+    A2: for g be Point of G, f be Point of F
+    ex v be Element of REAL 2 st v=<* ||.g.||,||.f.|| *> & H2.(g,f) = |.v.|;
+    now let g be Element of the carrier of G, f be Element of the carrier of F;
+      A11:ex v1 be Element of REAL 2 st
+      v1=<* ||.g.||,||.f.|| *> & H1.(g,f) = |.v1.| by A1;
+      ex v2 be Element of REAL 2 st
+      v2=<* ||.g.||,||.f.|| *> & H2.(g,f) = |.v2.| by A2;
+      hence H1.(g,f) = H2.(g,f) by A11;
+    end;
+    hence H1=H2 by BINOP_1:2;
+  end;
+end;
+
+definition let G,F be non empty NORMSTR;
+  func [:G,F:] -> strict non empty NORMSTR equals
+  NORMSTR (# [:the carrier of G,the carrier of F:],
+  prod_ZERO(G,F), prod_ADD(G,F), prod_MLT(G,F), prod_NORM(G,F) #);
+  correctness;
+end;
+
+registration
+  let G,F be RealNormSpace;
+  cluster [:G,F:] -> reflexive discerning RealNormSpace-like;
+  correctness
+  proof
+    now let x be Point of [:G,F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      consider v be Element of REAL 2 such that
+      A11: v=<* ||.x1.||,||.x2.|| *> & prod_NORM(G,F).(x1,x2) = |.v.|
+        by defNORM;
+      assume x = 0.[:G,F:]; then
+      x1=0.G & x2=0.F by P1,ZFMISC_1:33; then
+      ||.x1.||=0 & ||.x2.|| =0; then
+      v=0*2 by A11,FINSEQ_2:75;
+      hence ||.x.|| = 0 by A11,P1,EUCLID:10;
+    end; then
+    ||. 0.[:G,F:] .|| = 0;
+    hence [:G,F:] is reflexive by NORMSP_0:def 6;
+    now let x be Point of [:G,F:];
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x=[x1,x2] by LM01;
+      consider v be Element of REAL 2 such that
+      A11: v=<* ||.x1.||,||.x2.|| *> & prod_NORM(G,F).(x1,x2) = |.v.|
+        by defNORM;
+      assume ||.x.|| = 0; then
+      v =0*2 by A11,P1,EUCLID:11; then
+      X0: v=<* 0,0 *> by FINSEQ_2:75;
+      ||.x1.|| = v.1 & ||.x2.|| = v.2 by A11,FINSEQ_1:61; then
+      ||.x1.|| = 0 & ||.x2.|| = 0 by X0,FINSEQ_1:61; then
+      x1 = 0.G & x2 = 0.F by NORMSP_0:def 5;
+      hence x=0.[:G,F:] by P1;
+    end;
+    hence [:G,F:] is discerning by NORMSP_0:def 5;
+    now let x,y be Point of [:G,F:], a be Real;
+      consider x1 be Point of G, x2 be Point of F such that
+      P1:  x = [x1,x2] by LM01;
+      consider y1 be Point of G, y2 be Point of F such that
+      P2:  y = [y1,y2] by LM01;
+      consider v be Element of REAL 2 such that
+      A11: v=<* ||.x1.||,||.x2.|| *> & prod_NORM(G,F).(x1,x2) = |.v.|
+        by defNORM;
+      consider z be Element of REAL 2 such that
+      A21: z=<* ||.y1.||,||.y2.|| *> & prod_NORM(G,F).(y1,y2) = |.z.|
+        by defNORM;
+      thus ||.a * x.|| = abs(a) * ||.x.||
+      proof
+        consider w be Element of REAL 2 such that
+        X1:   w=<* ||. a*x1 .||,||. a*x2 .|| *> &
+        prod_NORM(G,F).(a*x1,a*x2) = |.w.| by defNORM;
+        reconsider aa= abs(a) ,xx1 = ||.x1.||, xx2=||.x2.|| as real number;
+        ||. a*x1 .|| = abs(a)*||.x1.|| & ||. a*x2 .||=abs(a)*||.x2.||
+        by NORMSP_1:def 2; then
+        w = aa * |[ xx1,xx2 ]| by X1,EUCLID:62
+        .= abs(a)* v by A11,EUCLID:69; then
+        |.w.| = abs(abs a)*|.v.| by EUCLID:14
+        .= abs(a)*|.v.|;
+        hence thesis by A11,X1,P1,defMLT;
+      end;
+      thus ||.x + y.|| <= ||.x.|| + ||.y.||
+      proof
+        consider w be Element of REAL 2 such that
+        X1:   w=<* ||. x1+y1 .||,||. x2+y2 .|| *>
+        & prod_NORM(G,F).(x1+y1,x2+y2) = |.w.| by defNORM;
+        X4:  ||.x + y.|| = |.w.| by X1,P1,P2,defADD;
+        X5:  ||. x1+y1 .||<=||.x1.|| + ||.y1.|| &
+          ||. x2+y2 .||<=||.x2.|| + ||.y2.|| by NORMSP_1:def 2;
+        set t = <* ||.x1.|| + ||.y1.||,||.x2.|| + ||.y2.|| *>;
+        reconsider t as FinSequence of REAL;
+        X6:  len w = 2 & len t = 2 by FINSEQ_1:61,X1;
+        now let i be Element of NAT;
+          assume i in Seg len w; then
+          X62:  i in Seg 2 by FINSEQ_1:61,X1;
+          per cases by X62,FINSEQ_1:4,TARSKI:def 2;
+          suppose X63: i=1; then
+            w.i = ||. x1+y1 .|| by X1,FINSEQ_1:61;
+            hence 0 <= w.i & w.i <= t.i by X5,X63,FINSEQ_1:61,NORMSP_1:8;
+          end;
+          suppose X64: i=2; then
+            w.i = ||. x2+y2 .|| by X1,FINSEQ_1:61;
+            hence 0 <= w.i & w.i <= t.i by X5,X64,FINSEQ_1:61,NORMSP_1:8;
+          end;
+        end; then
+        X7:  |.w.| <= |.t.| by PRVECT_2:2,X6;
+        t = |[ ||.x1.||,||.x2.|| ]| + |[ ||.y1.||,||.y2.|| ]| by EUCLID:60
+        .= v + z by A11,A21,EUCLID:68; then
+        |.t.| <= |.v.| + |.z.| by EUCLID:15;
+        hence thesis by X4,P1,A11,P2,A21,XXREAL_0:2,X7;
+      end;
+    end;
+    hence thesis by NORMSP_1:def 2;
+  end;
+end;
+
+registration
+  let G,F be reflexive discerning RealNormSpace-like
+  scalar-distributive vector-distributive scalar-associative
+  scalar-unital Abelian add-associative
+  right_zeroed right_complementable (non empty NORMSTR);
+  cluster [:G,F:] -> strict reflexive discerning RealNormSpace-like
+  scalar-distributive vector-distributive scalar-associative
+  scalar-unital Abelian add-associative right_zeroed right_complementable;
+  correctness
+  proof
+    reconsider G0 = G, F0 = F as RealLinearSpace;
+    the RLSStruct of [:G,F:] = [:G0,F0:];
+    hence thesis by RSSPACE3:4;
+  end;
+end;
+
+registration
+  let G be reflexive discerning RealNormSpace-like scalar-distributive
+  vector-distributive scalar-associative scalar-unital Abelian
+  add-associative right_zeroed right_complementable (non empty NORMSTR);
+  cluster <*G*> -> RealNormSpace-yielding;
+  correctness
+  proof
+      let S be set;
+      assume S in rng <*G*>; then
+      consider i be set such that
+      A1:  i in dom <*G*> & <*G*>.i = S by FUNCT_1:def 5;
+      reconsider i as Element of NAT by A1;
+      len <*G*> = 1 by FINSEQ_1:57; then
+      dom <*G*> = {1} by FINSEQ_1:def 3,4; then
+      i=1 by A1,TARSKI:def 1;
+      hence S is RealNormSpace by A1,FINSEQ_1:57;
+  end;
+end;
+
+registration
+  let G,F be reflexive discerning RealNormSpace-like scalar-distributive
+  vector-distributive scalar-associative scalar-unital Abelian
+  add-associative right_zeroed right_complementable (non empty NORMSTR);
+  cluster <*G,F*> -> RealNormSpace-yielding;
+  correctness
+  proof
+      let S be set;
+      assume S in rng <*G,F*>; then
+      consider i be set such that
+      A1:  i in dom <*G,F*> & <*G,F*>.i = S by FUNCT_1:def 5;
+      reconsider i as Element of NAT by A1;
+      dom <*G,F*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29; then
+      i=1 or i=2 by A1,TARSKI:def 2;
+      hence S is RealNormSpace by A1,FINSEQ_1:61;
+  end;
+end;
+
+theorem ThHOM02:
+  for X,Y be RealNormSpace
+  holds ex I be Function of [:X,Y:],product <*X,Y*>
+  st I is one-to-one & I is onto
+  & ( for x be Point of X, y be Point of Y holds I.(x,y) = <*x,y*> )
+  & ( for v,w be Point of [:X,Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:X,Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & 0. product <*X,Y*> = I.(0.[:X,Y:])
+  & ( for v be Point of [:X,Y:] holds ||. I.v .|| = ||.v.|| )
+  proof
+    let X,Y be RealNormSpace;
+    reconsider X0=X, Y0=Y as RealLinearSpace;
+    consider I0 be Function of [:X0,Y0:],product <*X0,Y0*> such that
+    P1: I0 is one-to-one & I0 is onto
+    & ( for x be Point of X, y be Point of Y holds I0.(x,y) = <*x,y*> )
+    & ( for v,w be Point of [:X0,Y0:] holds I0.(v+w) = I0.v + I0.w )
+    & ( for v be Point of [:X0,Y0:], r be Element of REAL
+    holds I0.(r*v)=r*(I0.v) )
+    & 0. product <*X0,Y0*>  = I0.(0.[:X0,Y0:]) by ThHOM01;
+    XX:product <*X,Y*>
+    = NORMSTR(# product carr <*X,Y*>, zeros <*X,Y*>, [:addop <*X,Y*>:],
+    [:multop <*X,Y*>:], productnorm <*X,Y*> #) by PRVECT_2:6; then
+    reconsider I = I0 as Function of [:X,Y:],product <*X,Y*>;
+    take I;
+    thus I is one-to-one & I is onto
+    & ( for x be Point of X,y be Point of Y
+    holds I.(x,y) = <*x,y*> ) by P1,XX;
+    thus for v,w be Point of [:X,Y:] holds I.(v+w) = I.v + I.w
+    proof
+      let v,w be Point of [:X,Y:];
+      reconsider v0=v, w0=w as Point of [:X0,Y0:];
+      thus I.(v+w) = I0.(v0+w0)
+      .= I0.v0 + I0.w0 by P1
+      .= I.v + I.w by XX;
+    end;
+    thus for v be Point of [:X,Y:], r be Element of REAL
+    holds I.(r*v)=r*(I.v)
+    proof
+      let v be Point of [:X,Y:], r be Element of REAL;
+      reconsider v0=v as Point of [:X0,Y0:];
+      thus I.(r*v) = I0.(r*v0)
+      .= r*(I0.v0) by P1
+      .= r*(I.v) by XX;
+    end;
+    thus 0. product <*X,Y*> = I.(0.[:X,Y:]) by P1,XX;
+    for v be Point of [:X,Y:] holds ||. I.v .|| = ||.v.||
+    proof
+      let v be Point of [:X,Y:];
+      consider x1 be Point of X, y1 be Point of Y such that
+      PP1: v = [x1,y1] by LM01;
+      consider v1 be Element of REAL 2 such that
+      PP2: v1=<* ||.x1.||,||.y1.|| *> & prod_NORM(X,Y).(x1,y1) = |.v1.|
+        by defNORM;
+      P55:I.v = I.(x1,y1) by PP1
+      .= <*x1,y1*> by P1;
+      reconsider Iv=I.v as Element of product carr <*X,Y*> by XX;
+      P58:<*x1,y1*>.1 = x1 & <*x1,y1*>.2 = y1 by FINSEQ_1:61;
+      1 in {1,2} & 2 in {1,2} by TARSKI:def 2; then
+      reconsider j1=1, j2=2 as Element of dom <*X,Y*>
+        by FINSEQ_1:4,FINSEQ_3:29;
+      X2: normsequence(<*X,Y*>,Iv).j1
+      = (the normF of <*X,Y*>.j1).(Iv.j1) by PRVECT_2:def 11
+      .= ||.x1.|| by P55,P58,FINSEQ_1:61;
+      X3: normsequence(<*X,Y *>,Iv).j2
+      = (the normF of <*X,Y*>.j2).(Iv.j2) by PRVECT_2:def 11
+      .= ||.y1.|| by P55,P58,FINSEQ_1:61;
+      len normsequence(<*X,Y*>,Iv)
+      = len <*X,Y*> by PRVECT_2:def 11
+      .= 2 by FINSEQ_1:61; then
+      normsequence(<*X,Y*>,Iv) = v1 by PP2,X2,X3,FINSEQ_1:61;
+      hence thesis by PP2,PP1,XX,PRVECT_2:def 12;
+    end;
+    hence thesis;
+  end;
+
+theorem ThHOM02AA:
+  for X be RealNormSpace
+  holds ex I be Function of X ,product <*X*>
+  st I is one-to-one & I is onto
+  & ( for x be Point of X holds I.x = <*x*> )
+  & ( for v,w be Point of X holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of X, r be Element of REAL holds I.(r*v)=r*(I.v) )
+  & 0. product <*X*> = I.(0.X)
+  & ( for v be Point of X holds ||. I.v .|| = ||.v.|| )
+  proof
+    let X be RealNormSpace;
+    reconsider X0= X as RealLinearSpace;
+    consider I0 be Function of X0,product <*X0*> such that
+    P1: I0 is one-to-one & I0 is onto
+    & ( for x be Point of X holds I0.x = <*x*> )
+    & ( for v,w be Point of X0 holds I0.(v+w) = I0.v + I0.w )
+    & ( for v be Point of X0, r be Element of REAL
+    holds I0.(r*v)=r*(I0.v) )
+    & 0. product <*X0*> = I0.(0.X0) by ThHOM01AA;
+    XX:product <*X*>
+    = NORMSTR(# product carr <*X*>, zeros <*X*>, [:addop <*X*>:]
+    ,[:multop <*X*>:], productnorm <*X*> #) by PRVECT_2:6; then
+    reconsider I=I0 as Function of X,product <*X*>;
+    take I;
+    thus I is one-to-one & I is onto
+    & ( for x be Point of X holds I.x = <*x*> ) by P1,XX;
+    thus for v,w be Point of X holds I.(v+w) = I.v + I.w
+    proof
+      let v,w be Point of X;
+      reconsider v0=v, w0=w as Point of X0;
+      thus I.(v+w) = I0.v0 + I0.w0 by P1
+      .= I.v + I.w by XX;
+    end;
+    thus for v be Point of X, r be Element of REAL holds I.(r*v)=r*(I.v)
+    proof
+      let v be Point of X, r be Element of REAL;
+      reconsider v0=v as Point of X0;
+      thus I.(r*v) = r*(I0.v0) by P1 .= r*(I.v) by XX;
+    end;
+    thus 0. product <*X*> = I.(0.X) by P1,XX;
+    thus for v be Point of X holds ||. I.v .|| = ||.v.||
+    proof
+      let v be Point of X;
+      len <* ||.v.|| *> = 1 by FINSEQ_1:57; then
+      reconsider v1=<* ||.v.|| *> as Element of REAL 1 by FINSEQ_2:110;
+      P54:|.v1.| = sqrt Sum <*||.v.||^2*> by RVSUM_1:81
+      .= sqrt (||.v.||^2) by RVSUM_1:103
+      .= ||.v.|| by SQUARE_1:89,NORMSP_1:8;
+      P55:I.v = <* v *> by P1;
+      reconsider Iv=I.v as Element of product carr <*X*> by XX;
+      P58:<*v*>.1 = v by FINSEQ_1:57;
+      1 in {1} by TARSKI:def 1; then
+      reconsider j1=1 as Element of dom <*X*> by FINSEQ_1:4,def 8;
+      X2: normsequence(<*X*>,Iv).j1
+      = (the normF of (<*X*>.j1)).(Iv.j1) by PRVECT_2:def 11
+      .= ||.v.|| by P55,P58,FINSEQ_1:57;
+      len normsequence(<*X*>,Iv) = len <*X*> by PRVECT_2:def 11
+      .= 1 by FINSEQ_1:57; then
+      normsequence(<*X*>,Iv) = v1 by X2,FINSEQ_1:57;
+      hence thesis by P54,XX,PRVECT_2:def 12;
+    end;
+  end;
+
+registration
+  let G,F be non empty RealNormSpace-yielding FinSequence;
+  cluster G^F -> non empty RealNormSpace-yielding;
+  correctness
+  proof
+    for S be set st S in rng (G^F) holds S is RealNormSpace
+    proof
+      let S be set;
+      assume S in rng (G^F); then
+      consider i be set such that
+      A1:  i in dom (G^F) & (G^F).i = S by FUNCT_1:def 5;
+      reconsider i as Element of NAT by A1;
+      per cases by FINSEQ_1:38,A1;
+      suppose A3: i in dom G; then
+        G.i in rng G by FUNCT_1:12; then
+        G.i is RealNormSpace by PRVECT_2:def 10;
+        hence S is RealNormSpace by A1,A3,FINSEQ_1:def 7;
+      end;
+      suppose ex n be Nat st n in dom F & i=len G + n; then
+        consider n be Nat such that
+        A41:  n in dom F & i=len G + n;
+        F.n in rng F by A41,FUNCT_1:12; then
+        F.n is RealNormSpace by PRVECT_2:def 10;
+        hence S is RealNormSpace by A1,A41,FINSEQ_1:def 7;
+      end;
+    end;
+    hence thesis by PRVECT_2:def 10;
+  end;
+end;
+
+RVSQR1:
+  for F1,F2 be FinSequence of REAL holds sqr (F1^F2) = sqr(F1)^sqr(F2)
+  by TOPREAL7:11;
+
+theorem ThHOM02A:
+  for X,Y be non empty RealNormSpace-Sequence
+  holds ex I be Function of [:product X,product Y:],product (X^Y)
+  st I is one-to-one & I is onto
+  & ( for x be Point of product X, y be Point of product Y
+  holds ex x1,y1 be FinSequence st x=x1 & y=y1 & I.(x,y) = x1^y1 )
+  & ( for v,w be Point of [:product X,product Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:product X,product Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:product X,product Y:]) = 0.product (X^Y)
+  & ( for v be Point of [:product X,product Y:] holds ||. I.v .|| = ||.v.|| )
+  proof
+    let X,Y be non empty RealNormSpace-Sequence;
+    reconsider X0=X, Y0=Y as non empty RealLinearSpace-Sequence;
+    set PX = product X;
+    set PY = product Y;
+    set PX0 = product X0;
+    set PY0 = product Y0;
+    reconsider CX = carr X, CY = carr Y as non-empty non empty FinSequence;
+    reconsider CX0 = carr X0, CY0 = carr Y0 as non-empty non empty FinSequence;
+    P4X1:
+    product X = NORMSTR(# product carr X, zeros X,
+    [:addop X:],[:multop X:], productnorm X #) &
+    product Y = NORMSTR(# product carr Y, zeros Y,
+    [:addop Y:],[:multop Y:], productnorm Y #) by PRVECT_2:6;
+    V4:for g1,g2 be Point of PX, f1,f2 be Point of PY
+    holds (prod_ADD(PX0,PY0)).([g1,f1],[g2,f2]) = [g1+g2,f1+f2]
+    proof
+      let g1,g2 be Point of PX, f1,f2  be Point of PY;
+      reconsider g10=g1, g20=g2 as Point of PX0 by P4X1;
+      reconsider f10=f1, f20=f2 as Point of PY0 by P4X1;
+      g10+g20 =g1+g2 & f10+f20 =f1+f2 by P4X1;
+      hence (prod_ADD(PX0,PY0)).([g1,f1],[g2,f2])
+      = [g1+g2,f1+f2] by defADD;
+    end;
+    P0:for r be Element of REAL, g be Point of PX, f be Point of PY
+    holds (prod_MLT(PX0,PY0)).(r,[g,f]) = [r*g,r*f]
+    proof
+      let r be Element of REAL, g be Point of PX, f be Point of PY;
+      reconsider g0=g as Point of PX0 by P4X1;
+      reconsider f0=f as Point of PY0 by P4X1;
+      r*g0=r*g & r*f0=r*f by P4X1;
+      hence (prod_MLT(PX0,PY0)).(r,[g,f]) = [r*g,r*f] by defMLT;
+    end;
+    SX0:
+    len carr (X^Y) = len (X^Y) & len carr (X0^Y0) = len (X0^Y0)
+    & len CX = len X & len CY = len Y
+    & len CX0 = len X0 & len CY0 = len Y0 by PRVECT_2:def 4;
+    consider I0 be Function of [:PX0,PY0:], product (X0^Y0) such that
+    P1: I0 is one-to-one & I0 is onto
+    & ( for x be Point of PX0, y be Point of PY0
+    ex x1,y1 be FinSequence st x=x1 & y=y1 & I0.(x,y) = x1^y1 )
+    & ( for v,w be Point of [:PX0,PY0:] holds I0.(v+w) = I0.v + I0.w )
+    & ( for v  be Point of [:PX0,PY0:], r be Element of REAL
+    holds I0.(r*v)=r*(I0.v) )
+    & 0. product (X0^Y0) = I0.(0.[:PX0,PY0:]) by ThHOM01A;
+    XX:product (X^Y)
+    = NORMSTR(# product carr (X^Y), zeros (X^Y), [:addop (X^Y):],
+    [:multop (X^Y):], productnorm (X^Y) #) by PRVECT_2:6; then
+    reconsider I=I0 as Function of [:PX,PY:],product (X^Y) by P4X1;
+    take I;
+    thus I is one-to-one & I is onto by P1,XX;
+    thus for x be Point of PX, y be Point of PY
+    holds ex x1,y1 be FinSequence
+    st x=x1 & y=y1 & I.(x,y) = x1^y1 by P4X1,P1;
+    Z1C:
+    for x,y be FinSequence
+    st x in the carrier of product X & y in the carrier of product Y
+    holds I.(x,y) = x^y
+    proof
+      let x,y be FinSequence;
+      assume x in the carrier of product X
+      & y in the carrier of product Y; then
+      ex x1,y1 be FinSequence st x=x1 & y=y1 & I.(x,y) = x1^y1 by P4X1,P1;
+      hence thesis;
+    end;
+    thus for v,w be Point of [:PX,PY:] holds I.(v+w) = I.v + I.w
+    proof
+      let v,w be Point of [:PX,PY:];
+      reconsider v0=v, w0=w as Point of [:PX0,PY0:] by P4X1;
+      v+w = v0+w0 by V4,P4X1,defADD; then
+      I.(v+w) = I0.v0 + I0.w0 by P1;
+      hence I.(v+w) = I.v + I.w by XX;
+    end;
+    thus for v be Point of [:PX,PY:], r be Element of REAL
+    holds I.(r*v)=r*(I.v)
+    proof
+      let v be Point of [:PX,PY:], r be Element of REAL;
+      reconsider v0=v as Point of [:PX0,PY0:] by P4X1;
+      r*v = r*v0 by P0,P4X1,defMLT; then
+      I.(r*v) = r*(I0.v0) by P1;
+      hence I.(r*v) = r*(I.v) by XX;
+    end;
+    thus 0. product (X^Y) = I.(0.[:PX,PY:]) by P4X1,P1,XX;
+    for v be Point of [:PX,PY:] holds ||. I.v .|| = ||.v.||
+    proof
+      let v be Point of [:PX,PY:];
+      consider x1 be Point of PX, y1 be Point of PY such that
+      PPP1: v = [x1,y1] by LM01;
+      consider v1 be Element of REAL 2 such that
+      PPP2:v1=<* ||.x1.||,||.y1.|| *> &
+      prod_NORM(PX,PY).(x1,y1) = |.v1.| by defNORM;
+      reconsider Ix1=x1, Iy1=y1 as FinSequence by P4X1,LMPROD1;
+      XX1:dom Ix1 = dom carr X & dom Iy1 = dom carr Y by P4X1,CARD_3:18;
+      P55:I.v = I.(x1,y1) by PPP1 .= Ix1^Iy1 by Z1C;
+      reconsider Iv=I.v as Element of product carr (X^Y) by XX;
+      reconsider Ix=x1 as Element of product carr X by P4X1;
+      reconsider Iy=y1 as Element of product carr Y by P4X1;
+      P61:||. I.v .|| = |.normsequence((X^Y),Iv).| by XX,PRVECT_2:def 12
+      .= sqrt Sum sqr normsequence((X^Y),Iv);
+      P62:len normsequence((X^Y),Iv) = len (X^Y)
+      & len normsequence(X,Ix) = len X
+      & len normsequence(Y,Iy) = len Y by PRVECT_2:def 11;
+      U1: |.v1.| = sqrt Sum <* ||.x1.||^2,||.y1.||^2*> by PPP2,TOPREAL6:16
+      .=sqrt (||.x1.||^2+||.y1.||^2) by RVSUM_1:107;
+      U20:0<= Sum sqr normsequence(X,Ix)
+      & 0<= Sum sqr normsequence(Y,Iy) by RVSUM_1:116;
+      ||.x1.||^2 = |.normsequence(X,Ix).|^2
+      & ||.y1.||^2 = |.normsequence(Y,Iy).|^2 by P4X1,PRVECT_2:def 12; then
+      U2: ||.x1.||^2 = Sum sqr normsequence(X,Ix)
+      & ||.y1.||^2 = Sum sqr normsequence(Y,Iy) by U20,SQUARE_1:def 4;
+      len normsequence((X^Y),Iv)
+      = len normsequence(X,Ix) + len normsequence(Y,Iy) by P62,FINSEQ_1:35
+      .= len (normsequence(X,Ix)^normsequence(Y,Iy)) by FINSEQ_1:35; then
+      U4: dom normsequence((X^Y),Iv)
+      = dom (normsequence(X,Ix)^normsequence(Y,Iy)) by FINSEQ_3:31;
+      for k be Nat st k in dom normsequence((X^Y),Iv) holds
+      (normsequence((X^Y),Iv)).k = (normsequence(X,Ix)^normsequence(Y,Iy)).k
+      proof
+        let k be Nat;
+        assume k in dom normsequence((X^Y),Iv); then
+        R1:  k in Seg len normsequence((X^Y),Iv) by FINSEQ_1:def 3; then
+        R2:  k in dom (X^Y) by P62,FINSEQ_1:def 3;
+        reconsider k1=k as Element of dom (X^Y) by R1,P62,FINSEQ_1:def 3;
+        A9: (normsequence((X^Y),Iv)).k
+        = (the normF of (X^Y).k1).(Iv.k1) by PRVECT_2:def 11;
+        AB0: dom Ix1 = Seg len carr X & dom Iy1 = Seg len carr Y
+        by XX1,FINSEQ_1:def 3; then
+        AA1: dom Ix1 = dom X & dom Iy1 = dom Y by SX0,FINSEQ_1:def 3;
+        per cases by R2,FINSEQ_1:38;
+        suppose A80: k in dom X;
+          len X = len normsequence(X,Ix) by PRVECT_2:def 11; then
+          A81:  k in dom normsequence(X,Ix) by A80,FINSEQ_3:31;
+          reconsider k2=k1 as Element of dom X by A80;
+          AA2:  Iv.k = Ix1.k by A80,AA1,P55,FINSEQ_1:def 7;
+          thus (normsequence((X^Y),Iv)).k
+          = (the normF of X.k2).(Iv.k2) by A9,FINSEQ_1:def 7
+          .= (normsequence(X,Ix)).k2 by AA2,PRVECT_2:def 11
+          .= (normsequence(X,Ix)^normsequence(Y,Iy)).k by A81,FINSEQ_1:def 7;
+        end;
+        suppose ex n be Nat st n in dom Y & k=len X + n; then
+          consider n be Nat such that
+          A90:   n in dom Y & k=len X + n;
+          len Y = len normsequence(Y,Iy) by PRVECT_2:def 11; then
+          A81:  n in dom normsequence(Y,Iy) by A90,FINSEQ_3:31;
+          reconsider n1=n as Element of dom Y by A90;
+          len Ix1= len X by AB0,SX0,FINSEQ_1:def 3; then
+          AA2:  Iv.k = Iy1.n by P55,A90,AA1,FINSEQ_1:def 7;
+          thus (normsequence((X^Y),Iv)).k
+          = (the normF of Y.n1).(Iv.k1) by A9,A90,FINSEQ_1:def 7
+          .= (normsequence(Y,Iy)).n1 by AA2,PRVECT_2:def 11
+          .= (normsequence(X,Ix)^normsequence(Y,Iy)).k
+          by A81,A90,P62,FINSEQ_1:def 7;
+        end;
+      end; then
+      normsequence((X^Y),Iv) = normsequence(X,Ix)^normsequence(Y,Iy)
+      by U4,FINSEQ_1:17; then
+      sqr normsequence((X^Y),Iv)
+      = sqr normsequence(X,Ix) ^ sqr normsequence(Y,Iy) by RVSQR1;
+      hence thesis by U1,P61,U2,PPP2,PPP1,RVSUM_1:105;
+    end;
+    hence thesis;
+  end;
+
+theorem ThZ03:
+  for G,F be RealNormSpace holds
+  ( for x be set holds
+  ( x is Point of [:G,F:]
+  iff ex x1 be Point of G ,x2 be Point of F st x=[x1,x2]) )
+  & ( for x,y be Point of [:G,F:], x1,y1 be Point of G, x2,y2 be Point of F
+  st x=[x1,x2] & y=[y1,y2] holds x+y = [x1+y1,x2+y2] )
+  & 0.[:G,F:] = [0.G,0.F]
+  & ( for x be Point of [:G,F:], x1 be Point of G, x2 be Point of F
+  st x=[x1,x2] holds -x = [-x1,-x2] )
+  & ( for x be Point of [:G,F:], x1 be Point of G, x2 be Point of F,
+  a be real number
+  st x=[x1,x2] holds a*x = [a*x1,a*x2] )
+  & ( for x be Point of [:G,F:], x1 be Point of G, x2 be Point of F
+  st x=[x1,x2] holds
+  ex w be Element of REAL 2 st
+  w=<* ||.x1.||,||.x2.|| *> & ||.x.|| = |.w.| )
+  proof
+    let G,F be RealNormSpace;
+    thus for x be set holds
+    ( x is Point of [:G,F:]
+    iff ex x1 be Point of G, x2 be Point of F st x=[x1,x2] ) by LM01;
+    thus for x,y be Point of [:G,F:], x1,y1 be Point of G,x2,y2 be Point of F
+    st x=[x1,x2] & y=[y1,y2] holds x+y = [x1+y1,x2+y2] by defADD;
+    thus 0.[:G,F:] = [0.G,0.F];
+    thus for x be Point of [:G,F:], x1 be Point of G ,x2 be Point of F
+    st x=[x1,x2] holds -x = [-x1,-x2]
+    proof
+      let x be Point of [:G,F:];
+      let x1 be Point of G, x2 be Point of F;
+      assume B3: x=[x1,x2];
+      reconsider y= [-x1,-x2 ] as Point of [:G,F:];
+      x+y = [x1+-x1,x2+-x2] by B3,defADD
+      .= [0.G,x2+-x2] by RLVECT_1:def 13
+      .= 0.[:G,F:] by RLVECT_1:def 13;
+      hence thesis by RLVECT_1:def 13;
+    end;
+    thus for x be Point of [:G,F:], x1 be Point of G,
+    x2 be Point of F, a be real number
+    st x=[x1,x2] holds a*x = [a*x1,a*x2]
+    proof
+      let x be Point of [:G,F:];
+      let x1 be Point of G, x2 be Point of F, a be real number;
+      assume B3: x=[x1,x2];
+      reconsider a0=a as Element of REAL by XREAL_0:def 1;
+      thus a*x = prod_MLT(G,F).(a0,x) .= [a*x1,a*x2] by B3,defMLT;
+    end;
+    thus for x be Point of [:G,F:], x1 be Point of G ,x2 be Point of F
+    st x=[x1,x2] holds
+    ex w be Element of REAL 2
+    st w=<* ||.x1.||,||.x2.|| *> & ||.x.||  = |.w.|
+    proof
+      let x be Point of [:G,F:], x1 be Point of G, x2 be Point of F;
+      assume B1: x=[x1,x2];
+      ex w be Element of REAL 2 st
+      w=<* ||.x1.||,||.x2.|| *> & prod_NORM(G,F).(x1,x2) = |.w.| by defNORM;
+      hence thesis by B1;
+    end;
+  end;
+
+theorem ThZ03A:
+  for G,F be RealNormSpace holds
+  ( for x be set holds
+  ( x is Point of product <*G,F*>
+  iff ex x1 be Point of G, x2 be Point of F st x=<* x1,x2 *> ) )
+  & ( for x,y be Point of product <*G,F*>,
+  x1,y1 be Point of G, x2,y2 be Point of F
+  st x=<*x1,x2*> & y=<*y1,y2*> holds x+y = <* x1+y1,x2+y2 *> )
+  & 0.(product <*G,F*>) = <* 0.G,0.F *>
+  & ( for x be Point of product <*G,F*>, x1 be Point of G, x2 be Point of F
+  st x=<*x1,x2*> holds -x = <* -x1,-x2 *> )
+  & ( for x be Point of product <*G,F*>,
+  x1 be Point of G, x2 be Point of F, a be real number
+  st x=<*x1,x2*> holds a*x = <* a*x1,a*x2 *> )
+  & ( for x be Point of product <*G,F*>, x1 be Point of G, x2 be Point of F
+  st x=<*x1,x2*> holds
+  ex w be Element of REAL 2 st
+  w=<* ||.x1.||,||.x2.|| *> & ||.x.||  = |.w.| )
+  proof
+    let G,F be RealNormSpace;
+    consider I be Function of [:G,F:] ,product <*G,F*> such that
+    AS: I is one-to-one & I is onto
+    & ( for x be Point of G, y be Point of F holds I.(x,y) = <*x,y*> )
+    & ( for v,w be Point of [:G,F:] holds I.(v+w) = I.v + I.w )
+    & ( for v be Point of [:G,F:], r be Element of REAL holds I.(r*v)=r*(I.v) )
+    & 0. product <*G,F*> = I.(0.[:G,F:])
+    & ( for v be Point of [:G,F:] holds ||. I.v .|| = ||.v.|| ) by ThHOM02;
+    thus
+    X1: for x be set holds
+    (x is Point of product <*G,F*>
+    iff ex x1 be Point of G, x2 be Point of F st x=<*x1,x2*> )
+    proof
+      let y be set;
+      hereby assume y is Point of product <*G,F*>; then
+        y in the carrier of product <*G,F*>; then
+        y in rng I by AS,FUNCT_2:def 3; then
+        consider x be Element of the carrier of [:G,F:] such that
+        X11:  y = I.x by FUNCT_2:190;
+        consider x1 be Point of G, x2 be Point of F such that
+        X12:  x=[x1,x2] by LM01;
+        take x1,x2;
+        I.(x1,x2) = <*x1,x2*> by AS;
+        hence y= <*x1,x2*> by X11,X12;
+      end;
+      hereby assume ex x1 be Point of G, x2 be Point of F st
+        y=<* x1,x2 *>; then
+        consider x1 be Point of G, x2 be Point of F such that
+        X21:  y=<*x1,x2*>;
+        X22: I.([x1,x2]) in rng I by FUNCT_2:189;
+        I.(x1,x2) = <*x1,x2*> by AS;
+        hence y is Point of product <*G,F*> by X21,X22;
+      end;
+    end;
+    thus
+    X2: for x,y be Point of product <*G,F*>,
+    x1,y1 be Point of G, x2,y2 be Point of F
+    st x=<*x1,x2*> & y=<*y1,y2*> holds x+y = <* x1+y1,x2+y2 *>
+    proof
+      let x,y be Point of product <*G,F*>;
+      let x1,y1 be Point of G, x2,y2 be Point of F;
+      assume B3: x=<*x1,x2*> & y=<*y1,y2*>;
+      reconsider z=[x1,x2], w=[y1,y2] as Point of [:G,F:];
+      X0: z+w = [x1+y1,x2+y2] by defADD;
+      X1: I.(x1+y1,x2+y2) = <* x1+y1,x2+y2 *> by AS;
+      I.(x1,x2) = <* x1,x2 *> & I.(y1,y2) = <* y1,y2 *> by AS;
+      hence <* x1+y1,x2+y2 *> = x+y by AS,X0,X1,B3;
+    end;
+    thus
+    X3: 0. product <*G,F*> = <* 0.G,0.F *>
+    proof
+      I.(0.G,0.F) =<* 0.G,0.F *> by AS;
+      hence thesis by AS;
+    end;
+    thus for x be Point of product <*G,F*>,
+    x1 be Point of G, x2 be Point of F
+    st x=<*x1,x2*> holds -x = <* -x1,-x2 *>
+    proof
+      let x be Point of  product <*G,F*>;
+      let x1 be Point of G, x2 be Point of F;
+      assume B3: x=<* x1,x2 *>;
+      reconsider y=<* -x1,-x2 *> as Point of product <*G,F*> by X1;
+      x+y = <* x1+-x1,x2+-x2 *> by X2,B3
+      .= <* 0.G,x2+-x2 *> by RLVECT_1:def 13
+      .= 0.(product <*G,F*>) by X3,RLVECT_1:def 13;
+      hence thesis by RLVECT_1:def 13;
+    end;
+    thus for x be Point of product <*G,F*>,
+    x1 be Point of G, x2 be Point of F, a be real number
+    st x=<*x1,x2*> holds a*x = <* a*x1,a*x2 *>
+    proof
+      let x be Point of product <*G,F*>;
+      let x1 be Point of G, x2 be Point of F, a be real number;
+      assume B3: x=<*x1,x2*>;
+      reconsider a0=a as Element of REAL by XREAL_0:def 1;
+      reconsider y=[x1,x2] as Point of [:G,F:];
+      Y1: <*x1,x2*> = I.(x1,x2) by AS;
+      I.(a*y) = I.(a0*x1,a0*x2) by ThZ03
+      .= <* a0*x1,a0*x2 *> by AS;
+      hence thesis by B3,Y1,AS;
+    end;
+    thus for x be Point of product <*G,F*>,
+    x1 be Point of G, x2 be Point of F st x=<*x1,x2*>
+    holds ex w be Element of REAL 2 st
+    w=<* ||.x1.||,||.x2.|| *> & ||.x.||  = |.w.|
+    proof
+      let x be Point of product <*G,F*>;
+      let x1 be Point of G, x2 be Point of F;
+      assume B3: x=<*x1,x2*>;
+      reconsider y=[x1,x2] as Point of [:G,F:];
+      consider w be Element of REAL 2 such that
+      Y1:  w=<* ||.x1.||,||.x2.|| *> & ||.y.||  = |.w.| by ThZ03;
+      take w;
+      Y2: I.y = I.(x1,x2) .=x by AS,B3;
+      thus w=<* ||.x1.||,||.x2.|| *> by Y1;
+      thus||.x.|| = |.w.| by AS,Y1,Y2;
+    end;
+  end;
+
+registration
+  let X,Y be complete RealNormSpace;
+  cluster [:X,Y:] -> complete;
+  coherence
+  proof
+    P3:dom <*X,Y*> ={1,2} by FINSEQ_1:4,FINSEQ_3:29;
+    now let i be Element of dom <*X,Y*>;
+      i=1 or i=2 by P3,TARSKI:def 2;
+      hence <*X,Y*>.i is complete by FINSEQ_1:61;
+    end; then
+    P1:product <*X,Y*> is complete by PRVECT_2:14;
+    consider I be Function of [:X,Y:], product <*X,Y*> such that
+    P2: I is one-to-one & I is onto
+    & ( for x be Point of X, y be Point of Y holds I.(x,y) = <*x,y*> )
+    & ( for v,w  be Point of [:X,Y:] holds I.(v+w) = I.v + I.w )
+    & ( for v be Point of [:X,Y:], r be Element of REAL holds I.(r*v)=r*(I.v) )
+    & 0. product <*X,Y*> = I.(0.[:X,Y:])
+    & ( for v be Point of [:X,Y:] holds ||. I.v .|| = ||.v.|| ) by ThHOM02;
+    H1:now let v,w be Point of [:X,Y:];
+    thus I.(v-w) = I.(v+(-1)*w) by RLVECT_1:29
+    .= I.v + I.((-1)*w) by P2
+    .= I.v + (-1)*(I.w) by P2
+    .= I.v - I.w by RLVECT_1:29;
+  end;
+  H2:now let v,w be Point of [:X,Y:];
+  thus ||. I.v-I.w .|| = ||. I.(v-w) .|| by H1
+  .= ||. v-w .|| by P2;
+end;
+now let seq be sequence of [:X,Y:];
+  assume P3: seq is Cauchy_sequence_by_Norm;
+  reconsider Iseq = I*seq as sequence of product <*X,Y*>;
+  now let r be Real;
+    assume r > 0; then
+    consider k be Element of NAT such that
+    P5:   for n,m be Element of NAT st n >= k & m >= k
+    holds ||.( seq.n) - (seq.m).|| < r by P3,RSSPACE3:10;
+    take k;
+    hereby let n, m be Element of NAT;
+      assume n >= k & m >= k; then
+      P6:   ||. seq.n - seq.m .|| < r by P5;
+      NAT = dom seq by FUNCT_2:def 1; then
+      Iseq.n= I.(seq.n) & Iseq.m= I.(seq.m) by FUNCT_1:23;
+      hence ||. Iseq.n - Iseq.m .|| < r by P6,H2;
+    end;
+  end; then
+  Iseq is Cauchy_sequence_by_Norm by RSSPACE3:10; then
+  P7: Iseq is convergent by P1,LOPBAN_1:def 16;
+  dom (I") = rng I & rng (I") = dom I by FUNCT_1:55,P2; then
+  dom (I") = the carrier of product <*X,Y*> &
+  rng (I") = the carrier of [:X,Y:] by P2,FUNCT_2:def 1,def 3; then
+  reconsider Lseq = I".(lim Iseq) as Point of [:X,Y:] by FUNCT_1:12;
+  rng I = the carrier of product <*X,Y*> by P2,FUNCT_2:def 3; then
+  P9: I.Lseq = lim Iseq by P2,FUNCT_1:57;
+  now let r be Real;
+    assume 0 < r; then
+    consider m be Element of NAT such that
+    P10:  for n be Element of NAT
+    st m <= n holds ||. Iseq.n - lim Iseq .|| < r by P7,NORMSP_1:def 11;
+    take m;
+    thus for n be Element of NAT st m <= n holds ||. seq.n - Lseq .|| < r
+    proof
+      let n be Element of NAT;
+      assume m <= n; then
+      P11:  ||. Iseq.n - lim Iseq .|| < r by P10;
+      NAT = dom seq by FUNCT_2:def 1; then
+      Iseq.n = I.(seq.n) by FUNCT_1:23;
+      hence ||. seq.n - Lseq .|| < r by P9,H2,P11;
+    end;
+  end;
+  hence seq is convergent by NORMSP_1:def 9;
+end;
+hence thesis by LOPBAN_1:def 16;
+end;
+end;
+
+theorem
+  for X,Y be non empty RealNormSpace-Sequence
+  holds ex I be Function of product <* product X,product Y *>,product (X^Y)
+  st I is one-to-one & I is onto
+  & ( for x be Point of product X, y be Point of product Y
+  holds ex x1,y1 be FinSequence
+  st x=x1 & y=y1 & I.<*x,y*> = x1^y1 )
+  & ( for v,w be Point of product <* product X,product Y *>
+  holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of product <* product X,product Y *>,
+  r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.(product <* product X,product Y *>)) = 0.product (X^Y)
+  & ( for v be Point of product <* product X,product Y *>
+  holds ||. I.v .|| = ||.v.|| )
+  proof
+    let X,Y be non empty RealNormSpace-Sequence;
+    set PX = product X;
+    set PY = product Y;
+    set PXY = product(X^Y);
+    consider K be Function of [:PX,PY:],PXY such that
+    P1: K is one-to-one & K is onto
+    & ( for x be Point of PX, y be Point of PY
+    holds ex x1,y1 be FinSequence st x=x1 & y=y1 & K.(x,y) = x1^y1 )
+    & ( for v,w be Point of [:PX,PY:] holds K.(v+w) = K.v + K.w )
+    & ( for v be Point of [:PX,PY:], r be Element of REAL
+    holds K.(r*v)=r*(K.v) )
+    & K.(0.[:PX,PY:]) = 0.PXY
+    & ( for v be Point of [:PX,PY:] holds ||. K.v .|| = ||.v.|| ) by ThHOM02A;
+    consider J be Function of [:PX,PY:],product<*PX,PY*> such that
+    P2: J is one-to-one & J is onto
+    & ( for x be Point of PX, y be Point of PY holds J.(x,y) = <*x,y*> )
+    & ( for v,w be Point of [:PX,PY:] holds J.(v+w) = J.v + J.w )
+    & ( for v be Point of [:PX,PY:], r be Element of REAL
+    holds J.(r*v)=r*(J.v) )
+    & 0. product <*PX,PY*> = J.(0.[:PX,PY:])
+    & ( for v be Point of [:PX,PY:] holds ||. J.v .|| = ||.v.|| ) by ThHOM02;
+    P7:rng J = the carrier of product <*PX,PY*> by P2,FUNCT_2:def 3; then
+    reconsider JB=J" as Function of the carrier of product <*PX,PY*>,
+    the carrier of [:PX,PY:] by FUNCT_2:31,P2;
+    P4:dom (J") = rng J & rng (J") = dom J by FUNCT_1:55,P2; then
+    P5:dom (J") = the carrier of product <*PX,PY*> by P2,FUNCT_2:def 3;
+    P6:rng (J") = the carrier of [:PX,PY:] by P4,FUNCT_2:def 1;
+    reconsider I= K*JB as Function of product <*PX,PY*>,PXY;
+    take I;
+    thus I is one-to-one by P1,P2;
+    rng K = the carrier of PXY by FUNCT_2:def 3,P1; then
+    rng I = the carrier of PXY by FUNCT_2:20,P6;
+    hence I is onto by FUNCT_2:def 3;
+    thus for x be Point of PX, y be Point of PY
+    holds ex x1,y1 be FinSequence st x=x1 & y=y1 & I.<*x,y*> = x1^y1
+    proof
+      let x be Point of PX, y be Point of PY;
+      consider x1,y1 be FinSequence such that
+      H1:  x=x1 & y=y1 & K.(x,y) = x1^y1 by P1;
+      H2: J.(x,y) = <*x,y*> by P2;
+      [x,y] in the carrier of [:PX,PY:]; then
+      H4: [x,y] in dom J by FUNCT_2:def 1;
+      <*x,y*> is Point of product <*PX,PY*> by ThZ03A; then
+      I.<*x,y*> = K.(JB.(J.[x,y])) by H2,P5,FUNCT_1:23; then
+      I.<*x,y*> = x1^y1 by H1,H4,FUNCT_1:56,P2;
+      hence thesis by H1;
+    end;
+
+    thus for v,w be Point of product <*PX,PY*> holds I.(v+w) = I.v + I.w
+    proof
+      let v,w be Point of product <*PX,PY*>;
+      consider x be Element of the carrier of [:PX,PY:] such that
+      S1:  v=J.x by P7,FUNCT_2:190;
+      consider y be Element of the carrier of [:PX,PY:] such that
+      S2:  w=J.y by P7,FUNCT_2:190;
+      x in the carrier of [:PX,PY:] & y in the carrier of [:PX,PY:]
+      & x + y in the carrier of [:PX,PY:]; then
+      x in dom J & y in dom J & x + y in dom J by FUNCT_2:def 1; then
+      S1A:JB.v = x & JB.w = y & JB.(J.(x+y)) = x+y by S1,S2,FUNCT_1:56,P2;
+      v in rng J & w in rng J by P7; then
+      S1D:v in dom JB & w in dom JB by FUNCT_1:55,P2;
+      v+w = J.(x+y) by S1,S2,P2; then
+      I.(v+w) = K.(x+y) by S1A,P5,FUNCT_1:23
+      .= K.x + K.y by P1
+      .= (K*JB).v + K.(JB.w) by S1A,S1D,FUNCT_1:23;
+      hence I.(v+w) = I.v + I.w by S1D,FUNCT_1:23;
+    end;
+    thus for v be Point of product <*PX,PY*>, r be Element of REAL
+    holds I.(r*v)=r*(I.v)
+    proof
+      let v be Point of product <*PX,PY*>, r be Element of REAL;
+      consider x be Element of the carrier of [:PX,PY:] such that
+      S1:  v=J.x by P7,FUNCT_2:190;
+      x in the carrier of [:PX,PY:]; then
+      x in dom J by FUNCT_2:def 1; then
+      S1A:JB.v = x by S1,FUNCT_1:56,P2;
+      v in rng J by P7; then
+      S1D:v in dom JB by FUNCT_1:55,P2;
+      r*x in the carrier of [:PX,PY:]; then
+      S4: r*x in dom J by FUNCT_2:def 1;
+      r*v =J.(r*x) by S1,P2; then
+      I.(r*v) = K.(JB.(J.(r*x))) by P5,FUNCT_1:23;
+      hence I.(r*v) = K.(r*x) by S4,FUNCT_1:56,P2
+      .= r*(K.x) by P1
+      .= r*(I.v) by S1A,S1D,FUNCT_1:23;
+    end;
+    thus I.(0.(product<*PX,PY*>)) = 0.product(X^Y)
+    proof
+      0.([:PX,PY:]) in the carrier of [:PX,PY:]; then
+      S1B:0.([:PX,PY:]) in dom J by FUNCT_2:def 1;
+      0. product <*PX,PY*> in rng J by P7; then
+      0.(product <*PX,PY*>) in dom JB by FUNCT_1:55,P2; then
+      I.(0.(product <*PX,PY*>)) = K.(JB.(J.(0.([:PX,PY:])))) by P2,FUNCT_1:23;
+      hence I.(0.(product <*PX,PY*>)) = 0.PXY by P1,S1B,FUNCT_1:56,P2;
+    end;
+    thus for v be Point of product <*PX,PY*> holds ||. I.v .|| = ||.v.||
+    proof
+      let v be Point of product <*PX,PY*>;
+      consider x be Element of the carrier of [:PX,PY:] such that
+      S1:  v=J.x by P7,FUNCT_2:190;
+      x in the carrier of [:PX,PY:]; then
+      S1B:x in dom J by FUNCT_2:def 1;
+      v in rng J by P7; then
+      v in dom JB by FUNCT_1:55,P2; then
+      I.v = K.(JB.(J.x)) by S1,FUNCT_1:23
+      .= K.x by S1B,FUNCT_1:56,P2; then
+      ||. I.v .|| =||.x.|| by P1;
+      hence ||. I.v .|| = ||.v.|| by P2,S1;
+    end;
+  end;
+
+theorem LMHOM01A1:
+  for X,Y be non empty RealLinearSpace
+  holds ex I be Function of [:X,Y:],[:X,product <*Y*>:]
+  st I is one-to-one & I is onto
+  & ( for x be Point of X, y be Point of Y holds I.(x,y) = [x,<*y*>] )
+  & ( for v,w be Point of [:X,Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:X,Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:X,Y:]) = 0.([:X,product<*Y*>:])
+  proof
+    let X,Y be non empty RealLinearSpace;
+    consider J be Function of Y,product <*Y*> such that
+    P0: J is one-to-one & J is onto
+    & ( for y be Point of Y holds J.y = <*y*> )
+    & ( for v,w be Point of Y holds J.(v+w) = J.v + J.w )
+    & ( for v be Point of Y, r be Element of REAL holds J.(r*v)=r*(J.v) )
+    & J.(0.Y)=0.product <*Y*> by ThHOM01AA;
+    defpred P[set,set,set] means $3 = [ $1,<* $2 *> ];
+    R1:for x,y be set st x in the carrier of X & y in the carrier of Y
+    ex z be set st z in the carrier of [:X,product <*Y*>:] & P[x,y,z]
+    proof
+      let x,y be set;
+      assume AS0: x in the carrier of X & y in the carrier of Y; then
+      reconsider y0=y as Point of Y;
+      J.y0 = <*y0*> by P0; then
+      [x,<*y*>] in [:the carrier of X,the carrier of product <*Y*>:]
+      by ZFMISC_1:106,AS0;
+      hence thesis;
+    end;
+    consider I be Function of [:the carrier of X,the carrier of Y:],
+    the carrier of [:X,product <*Y*>:] such that
+    R2: for x,y be set st x in the carrier of X & y in the carrier of Y
+    holds P[x,y,I.(x,y)] from BINOP_1:sch 1(R1);
+    reconsider I as Function of [:X,Y:],[:X, product <*Y*>:];
+    take I;
+    now let z1,z2 be set;
+      assume P3: z1 in the carrier of [:X,Y:] & z2 in the carrier of [:X,Y:]
+      & I.z1=I.z2;
+      consider x1,y1 be set such that
+      P4:  x1 in the carrier of X & y1 in the carrier of Y & z1=[x1,y1]
+      by ZFMISC_1:def 2,P3;
+      consider x2,y2 be set such that
+      P5:  x2 in the carrier of X & y2 in the carrier of Y & z2=[x2,y2]
+      by ZFMISC_1:def 2,P3;
+      [x1,<*y1*>] = I.(x1,y1) by R2,P4
+      .= I.(x2,y2) by P3,P4,P5
+      .= [x2,<*y2*>] by R2,P5; then
+      x1=x2 & <*y1*>=<*y2*> by ZFMISC_1:33;
+      hence z1=z2 by P4,P5,FINSEQ_1:97;
+    end;
+    hence I is one-to-one by FUNCT_2:25;
+    now let w be set;
+      assume w in the carrier of [:X, product <*Y*>:]; then
+      consider x,y1 be set such that
+      P4:  x in the carrier of X & y1 in the carrier of product <*Y*> &
+      w=[x,y1] by ZFMISC_1:def 2;
+      y1 in rng J by FUNCT_2:def 3,P0,P4; then
+      consider y be set such that
+      P5:  y in the carrier of Y & y1=J.y by FUNCT_2:17;
+      reconsider z = [x,y] as Element of [:the carrier of X,the carrier of Y:]
+      by P4,P5,ZFMISC_1:106;
+      J.y = <*y*> by P5,P0; then
+      w = I.(x,y) by R2,P4,P5; then
+      w = I.z;
+      hence w in rng I by FUNCT_2:6;
+    end; then
+    the carrier of [:X, product <*Y*>:] c= rng I by TARSKI:def 3; then
+    the carrier of [:X, product <*Y*>:] = rng I by XBOOLE_0:def 10;
+    hence I is onto by FUNCT_2:def 3;
+    thus for x be Point of X, y be Point of Y holds I.(x,y) = [x,<*y*>] by R2;
+    thus for v,w be Point of [:X,Y:] holds I.(v+w) = I.v + I.w
+    proof
+      let v,w be Point of [:X,Y:];
+      consider x1 be Point of X, x2 be Point of Y such that
+      A1:  v=[x1,x2] by LM01;
+      consider y1 be Point of X, y2 be Point of Y such that
+      A2:  w=[y1,y2] by LM01;
+      A4: I.(v+w) = I.(x1+y1,x2+y2) by A1,A2,defADD
+      .= [x1+y1,<*x2+y2*>] by R2;
+      I.v = I.(x1,x2) & I.w = I.(y1,y2) by A1,A2; then
+      A5: I.v = [x1,<*x2*>] & I.w = [y1,<*y2*>] by R2;
+      A7: J.x2 = <*x2*> & J.y2 = <*y2*> by P0; then
+      reconsider xx2=<*x2*> as Point of product <*Y*>;
+      reconsider yy2=<*y2*> as Point of product <*Y*> by A7;
+      <*x2+y2*> = J.(x2+y2) by P0
+      .= xx2+yy2 by A7,P0;
+      hence I.v + I.w = I.(v+w) by A4,A5,defADD;
+    end;
+    thus for v be Point of [:X,Y:], r be Element of REAL
+    holds I.(r*v)=r*(I.v)
+    proof
+      let v be Point of [:X,Y:], r be Element of REAL;
+      consider x1 be Point of X, x2 be Point of Y such that
+      A1:  v=[x1,x2] by LM01;
+      A4: I.(r*v) = I.(r*x1,r*x2) by A1,ThZ02
+      .= [r*x1,<*r*x2*>] by R2;
+      A5: I.v = I.(x1,x2) by A1
+      .= [x1,<*x2*>] by R2;
+      A7: J.x2 = <*x2*> by P0; then
+      reconsider xx2=<*x2*> as Point of product <*Y*>;
+      <* r*x2 *> = J.(r*x2) by P0
+      .= r*xx2 by A7,P0;
+      hence r*(I.v) = I.(r*v) by A4,A5,ThZ02;
+    end;
+    A9:<*0.Y*> = 0.product <*Y*> by P0;
+    I.(0.[:X,Y:]) = I.(0.X,0.Y);
+    hence I.(0.[:X,Y:]) = 0.([:X,product <*Y*>:]) by A9,R2;
+  end;
+
+theorem
+  for X be non empty RealLinearSpace-Sequence, Y be RealLinearSpace
+  holds ex I be Function of [:product X,Y:],product(X^<*Y*>)
+  st I is one-to-one & I is onto
+  & ( for x be Point of product X, y be Point of Y
+  ex x1,y1 be FinSequence st x=x1 & <*y*> =y1 & I.(x,y) = x1^y1 )
+  & ( for v,w be Point of [:product X,Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:product X,Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:product X,Y:]) = 0.product (X^<*Y*>)
+  proof
+    let X be non empty RealLinearSpace-Sequence;
+    let Y be non empty RealLinearSpace;
+    consider I be Function of [:product X,Y:],[:product X, product <*Y*>:]
+    such that
+    P1: I is one-to-one & I is onto
+    & ( for x be Point of product X, y be Point of Y holds
+      I.(x,y) = [x,<*y*>] )
+    & ( for v,w be Point of [:product X,Y:] holds I.(v+w) = I.v + I.w )
+    & ( for v be Point of [:product X,Y:], r be Element of REAL
+    holds I.(r*v)=r*(I.v) )
+    & I.(0.[:product X,Y:]) =0.([:product X,product <*Y*>:]) by LMHOM01A1;
+    consider J be Function of [:product X,product <*Y*>:],product (X^<*Y*>)
+    such that
+    P2: J is one-to-one & J is onto
+    & ( for x be Point of product X, y be Point of product<*Y*>
+    ex x1,y1 be FinSequence st x=x1 & y=y1 & J.(x,y) = x1^y1 )
+    & ( for v,w be Point of [:product X,product <*Y*>:]
+    holds J.(v+w) = J.v + J.w )
+    & ( for v be Point of [:product X,product <*Y*>:], r be Element of REAL
+    holds J.(r*v)=r*(J.v) )
+    & J.(0.[:product X,product <*Y*>:]) = 0.product (X^<*Y*>) by ThHOM01A;
+    set K=J*I;
+    reconsider K as Function of [:product X,Y:],product (X^<*Y*>);
+    take K;
+    thus K is one-to-one by P1,P2;
+    A1:rng J = the carrier of product (X^<*Y*>) by P2,FUNCT_2:def 3;
+    rng I = the carrier of [:product X,product <*Y*>:] by P1,FUNCT_2:def 3;
+      then
+    rng(J*I) = J.:(the carrier of [:product X,product <*Y*>:]) by RELAT_1:160
+    .= the carrier of product (X^<*Y*>) by A1,RELSET_1:38;
+    hence K is onto by FUNCT_2:def 3;
+    thus for x be Point of product X, y be Point of Y
+    holds ex x1,y1 be FinSequence st x=x1 & <*y*> =y1 & K.(x,y) = x1^y1
+    proof
+      let x be Point of product X, y be Point of Y;
+      Q1: I.(x,y) = [x,<*y*>] by P1;
+      [x,y] in the carrier of [:product X,Y:]; then
+      [x,<*y*>] in the carrier of [:product X,product <*Y*>:]
+      by Q1,FUNCT_2:7; then
+      reconsider yy=<*y*> as Point of product <*Y*> by ZFMISC_1:106;
+      consider x1,y1 be FinSequence such that
+      Q2:  x=x1 & yy=y1 & J.(x,yy) = x1^y1 by P2;
+      J.(x,yy) = J.(I.([x,y])) by Q1
+      .= K.(x,y) by FUNCT_2:21;
+      hence thesis by Q2;
+    end;
+    thus for v,w be Point of [:product X,Y:] holds K.(v+w) = K.v + K.w
+    proof
+      let v,w be Point of [:product X,Y:];
+      thus K.(v+w) = J.(I.(v+w)) by FUNCT_2:21
+      .= J.(I.v + I.w) by P1
+      .= J.(I.v) + J.(I.w) by P2
+      .= K.v + J.(I.w) by FUNCT_2:21
+      .= K.v + K.w by FUNCT_2:21;
+    end;
+    thus for v be Point of [:product X,Y:], r be Element of REAL
+    holds K.(r*v)=r*(K.v)
+    proof
+      let v be Point of [:product X,Y:], r be Element of REAL;
+      thus K.(r*v) = J.(I.(r*v)) by FUNCT_2:21
+      .= J.(r*(I.v)) by P1
+      .= r*(J.(I.v)) by P2
+      .= r*(K.v) by FUNCT_2:21;
+    end;
+    thus K.(0.[:product X,Y:]) = 0.product (X^<*Y*>) by P1,P2,FUNCT_2:21;
+  end;
+
+theorem LMHOM02A1:
+  for X ,Y be non empty RealNormSpace
+  ex I be Function of [:X,Y:],[:X,product<*Y*>:]
+  st I is one-to-one & I is onto
+  & ( for x be Point of X, y be Point of Y holds I.(x,y) = [x,<*y*>]  )
+  & ( for v,w be Point of [:X,Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:X,Y:], r be Element of REAL holds I.(r*v)=r*(I.v) )
+  & I.(0.[:X,Y:]) = 0.([:X,product <*Y*>:])
+  & ( for v be Point of [:X,Y:] holds ||. I.v .|| = ||.v.|| )
+  proof
+    let X,Y be non empty RealNormSpace;
+    consider J be Function of Y, product <*Y*> such that
+    P0: J is one-to-one & J is onto
+    & ( for y be Point of Y holds J.y = <*y*> )
+    & ( for v,w be Point of Y holds J.(v+w) = J.v + J.w )
+    & ( for v be Point of Y, r be Element of REAL holds J.(r*v)=r*(J.v) )
+    & J.(0.Y)=0.product <*Y*>
+    & ( for v be Point of Y holds ||. J.v .|| = ||.v.|| ) by ThHOM02AA;
+    defpred P[set,set,set] means $3 = [ $1,<* $2 *> ];
+    R1:for x,y be set st x in the carrier of X & y in the carrier of Y
+    ex z be set st z in the carrier of [:X,product <*Y*>:] & P[x,y,z]
+    proof
+      let x,y be set;
+      assume AS0: x in the carrier of X & y in the carrier of Y; then
+      reconsider y0=y as Point of Y;
+      J.y0 = <* y0 *> by P0; then
+      [x,<*y*>] in [:the carrier of X,the carrier of product <*Y*>:]
+      by ZFMISC_1:106,AS0;
+      hence thesis;
+    end;
+    consider I be Function of [:the carrier of X,the carrier of Y:],
+    the carrier of [:X,product <*Y*>:] such that
+    R2: for x,y be set st x in the carrier of X & y in the carrier of Y
+    holds P[x,y,I.(x,y)] from BINOP_1:sch 1(R1);
+    reconsider I as Function of [:X,Y:],[:X, product <*Y*>:];
+    take I;
+    thus I is one-to-one
+    proof
+      now let z1,z2 be set;
+        assume P3: z1 in the carrier of [:X,Y:] & z2 in the carrier of [:X,Y:]
+        & I.z1=I.z2; then
+        consider x1,y1 be set such that
+P4:     x1 in the carrier of X & y1 in the carrier of Y & z1=[x1,y1]
+        by ZFMISC_1:def 2;
+        consider x2,y2 be set such that
+P5:     x2 in the carrier of X & y2 in the carrier of Y & z2=[x2,y2]
+        by ZFMISC_1:def 2,P3;
+P6:     [x1,<*y1*>] = I.(x1,y1) by R2,P4
+        .= I.(x2,y2) by P3,P4,P5
+        .= [x2,<*y2*>] by R2,P5; then
+        <*y1*> = <*y2*> by ZFMISC_1:33; then
+        y1 = y2 by FINSEQ_1:97;
+        hence z1=z2 by P4,P5,P6,ZFMISC_1:33;
+      end;
+      hence thesis by FUNCT_2:25;
+    end;
+    thus I is onto
+    proof
+      now let w be set;
+        assume w in the carrier of [:X, product <*Y*>:]; then
+        consider x,y1 be set such that
+        P4:   x in the carrier of X & y1 in the carrier of product <*Y*>
+        & w=[x,y1] by ZFMISC_1:def 2;
+        y1 in rng J by FUNCT_2:def 3,P0,P4; then
+        consider y be set such that
+        P5:  y in the carrier of Y & y1=J.y by FUNCT_2:17;
+        P6:  J.y = <*y*> by P5,P0;
+        reconsider z = [x,y] as Element of
+          [:the carrier of X,the carrier of Y:] by P4,P5,ZFMISC_1:106;
+        w = I.(x,y) by R2,P4,P5,P6
+        .= I.z;
+        hence w in rng I by FUNCT_2:6;
+      end; then
+      the carrier of [:X,product <*Y*>:] c= rng I by TARSKI:def 3; then
+      the carrier of [:X, product <*Y*>:] = rng I by XBOOLE_0:def 10;
+      hence thesis by FUNCT_2:def 3;
+    end;
+    thus for x be Point of X, y be Point of Y holds I.(x,y) = [x,<*y*>] by R2;
+    thus for v,w be Point of [:X,Y:] holds I.(v+w) = I.v + I.w
+    proof
+      let v,w be Point of [:X,Y:];
+      consider x1 be Point of X, x2 be Point of Y such that
+      A1:  v=[x1,x2] by LM01;
+      consider y1 be Point of X, y2 be Point of Y such that
+      A2:  w=[y1,y2] by LM01;
+      A4: I.(v+w) = I.(x1+y1,x2+y2) by A1,A2,defADD
+      .= [x1+y1,<*x2+y2*>] by R2;
+      I.v = I.(x1,x2) & I.w = I.(y1,y2) by A1,A2; then
+      A5: I.v = [x1,<*x2*>] & I.w = [y1,<*y2*>] by R2;
+      A7: J.x2 = <*x2*> & J.y2 = <*y2*> by P0; then
+      reconsider xx2=<*x2*> as Point of product <*Y*>;
+      reconsider yy2=<*y2*> as Point of product <*Y*> by A7;
+      <*x2+y2*> = J.(x2+y2) by P0
+      .= xx2+yy2 by A7,P0;
+      hence I.v + I.w = I.(v+w) by A4,A5,defADD;
+    end;
+    thus for v be Point of [:X,Y:], r be Element of REAL holds I.(r*v)=r*(I.v)
+    proof
+      let v be Point of [:X,Y:], r be Element of REAL;
+      consider x1 be Point of X, x2 be Point of Y such that
+      A1:  v=[x1,x2] by LM01;
+      A4: I.(r*v) = I.(r*x1,r*x2) by A1,ThZ03
+      .= [r*x1,<*r*x2*>] by R2;
+      A5: I.v = I.(x1,x2) by A1
+      .= [x1,<*x2*>] by R2;
+      A7: J.x2 = <*x2*> by P0; then
+      reconsider xx2=<*x2*> as Point of product <*Y*>;
+      <* r*x2 *> = J.(r*x2) by P0
+      .= r*xx2 by A7,P0;
+      hence r*(I.v) = I.(r*v) by A4,A5,ThZ03;
+    end;
+    A9:<*0.Y *> = 0.product <*Y*> by P0;
+    I.(0.[: X,Y:]) = I.(0.X,0.Y);
+    hence I.(0.[:X,Y:]) = 0.([:X,product <*Y*>:]) by A9,R2;
+    thus for v be Point of [:X,Y:] holds ||. I.v .|| = ||.v.||
+    proof
+      let v be Point of [:X,Y:];
+      consider x1 be Point of X, x2 be Point of Y such that
+      A1:  v=[x1,x2] by LM01;
+      A7: J.x2 = <*x2*> by P0; then
+      reconsider xx2=<*x2*> as Point of product <*Y*>;
+      A10:ex w be Element of REAL 2 st
+      w=<* ||.x1.||,||.x2.|| *> & ||.v.||  = |.w.| by A1,ThZ03;
+      I.v = I.(x1,x2) by A1
+      .= [x1,<*x2*>] by R2; then
+      ex s be Element of REAL 2 st s=<* ||.x1.||,||.xx2.|| *> &
+      ||. I.v .|| = |.s.| by ThZ03;
+      hence ||. I.v .|| = ||.v.|| by A7,P0,A10;
+    end;
+  end;
+
+theorem
+  for X be non empty RealNormSpace-Sequence, Y be RealNormSpace
+  ex I be Function of [:product X,Y:],product(X^<*Y*>)
+  st I is one-to-one & I is onto
+  & ( for x be Point of product X, y be Point of Y
+  ex x1,y1 be FinSequence st x=x1 & <*y*>=y1 & I.(x,y) = x1^y1 )
+  & ( for v,w be Point of [:product X,Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:product X,Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:product X,Y:]) = 0.product(X^<*Y*>)
+  & ( for v be Point of [:product X,Y:] holds ||. I.v .|| = ||.v.|| )
+  proof
+    let X be non empty RealNormSpace-Sequence, Y be RealNormSpace;
+    consider I be Function of [:product X,Y:],[:product X,product <*Y*>:]
+    such that
+    P1: I is one-to-one & I is onto
+    & ( for x be Point of product X, y be Point of Y holds
+      I.(x,y) = [x,<*y*>] )
+    & ( for v,w be Point of [:product X,Y:] holds I.(v+w) = I.v + I.w )
+    & ( for v be Point of [:product X,Y:], r be Element of REAL
+    holds I.(r*v)=r*(I.v) )
+    & I.(0.[: product X,Y:]) = 0.([:product X,product <*Y*>:])
+    & ( for v be Point of [:product X,Y:] holds ||. I.v .|| = ||.v.|| )
+    by LMHOM02A1;
+    consider J be Function of [:product X,product <*Y*>:],product(X^<*Y*>)
+    such that
+    P2: J is one-to-one & J is onto
+    & ( for x be Point of product X, y be Point of product <*Y*>
+    ex x1,y1 be FinSequence st x=x1 & y=y1 & J.(x,y) = x1^y1 )
+    & ( for v,w be Point of [:product X,product <*Y*>:]
+    holds J.(v+w) = J.v + J.w )
+    & ( for v be Point of [:product X,product <*Y*>:], r be Element of REAL
+    holds J.(r*v)=r*(J.v) )
+    & J.(0.[:product X,product <*Y*>:]) = 0.product (X^<*Y*>)
+    & ( for v be Point of [:product X,product <*Y*>:]
+    holds ||. J.v .|| = ||.v.|| ) by ThHOM02A;
+    set K=J*I;
+    reconsider K as Function of [:product X,Y:],product (X^<*Y*>);
+    take K;
+    thus K is one-to-one by P1,P2;
+    A1:rng J = the carrier of product (X^<*Y*>) by P2,FUNCT_2:def 3;
+    rng I = the carrier of [:product X,product<*Y*>:] by P1,FUNCT_2:def 3; then
+    rng(J*I) = J.:(the carrier of [:product X,product <*Y*>:]) by RELAT_1:160
+    .= the carrier of product (X^<*Y*>) by A1,RELSET_1:38;
+    hence K is onto by FUNCT_2:def 3;
+    thus for x be Point of product X, y be Point of Y
+    ex x1,y1 be FinSequence st x=x1 & <*y*> =y1 & K.(x,y) = x1^y1
+    proof
+      let x be Point of product X, y be Point of Y;
+      Q1: I.(x,y) = [x,<*y*>] by P1;
+      [x,y] in the carrier of [: product X,Y:]; then
+      [x,<*y*>] in the carrier of [:product X,product <*Y*>:]
+      by Q1,FUNCT_2:7; then
+      reconsider yy=<*y*> as Point of product <*Y*> by ZFMISC_1:106;
+      consider x1,y1 be FinSequence such that
+      Q2:  x=x1 & yy=y1 & J.(x,yy) = x1^y1 by P2;
+      J.(x,yy) = J.(I.([x,y])) by Q1
+      .= K.(x,y) by FUNCT_2:21;
+      hence thesis by Q2;
+    end;
+    thus for v,w be Point of [:product X,Y:] holds K.(v+w) = K.v + K.w
+    proof
+      let v,w be Point of [:product X,Y:];
+      thus K.(v+w) = J.(I.(v+w)) by FUNCT_2:21
+      .= J.(I.v + I.w) by P1
+      .= J.(I.v) + J.(I.w) by P2
+      .= K.v + J.(I.w) by FUNCT_2:21
+      .=K.v + K.w by FUNCT_2:21;
+    end;
+    thus for v be Point of [:product X,Y:], r be Element of REAL
+    holds K.(r*v)=r*(K.v)
+    proof
+      let v be Point of [:product X,Y:], r be Element of REAL;
+      thus K.(r*v) = J.(I.(r*v)) by FUNCT_2:21
+      .= J.(r* (I.v)) by P1
+      .= r* (J.(I.v)) by P2
+      .= r* (K.v) by FUNCT_2:21;
+    end;
+    thus K.(0.[:product X,Y:]) = 0.product (X^<*Y*>) by P1,P2,FUNCT_2:21;
+    thus for v be Point of [:product X,Y:] holds ||. K.v .|| = ||.v.||
+    proof
+      let v be Point of [:product X,Y:];
+      thus ||. K.v .|| = ||. J.(I.v) .|| by FUNCT_2:21
+      .= ||. I.v .|| by P2
+      .= ||.v.|| by P1;
+    end;
+  end;
+

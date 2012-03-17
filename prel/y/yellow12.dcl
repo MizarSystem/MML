@@ -214,48 +214,6 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="YELLOW12" nr="5">
-<ArgTypes>
-<Typ kind="G" nr="6">
-<Cluster>
-<Adjective nr="43" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="G" nr="6">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-<Func kind="U" nr="5">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-<Cluster>
-<Adjective nr="43" value="false"/>
-<Adjective nr="54"/>
-</Cluster>
-</FCluster>
-<FCluster aid="YELLOW12" nr="6">
-<ArgTypes>
-<Typ kind="G" nr="6">
-<Cluster>
-<Adjective nr="55"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="G" nr="6">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-<Func kind="U" nr="5">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-<Cluster>
-<Adjective nr="54"/>
-<Adjective nr="55"/>
-</Cluster>
-</FCluster>
 <CCluster aid="YELLOW12" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">

@@ -1,7 +1,5 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.144 $
-;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
 ;;; Commentary:
@@ -117,6 +115,11 @@ Valid values are 'gnuemacs,'Xemacs and 'winemacs.")
 (defgroup mizar-education nil
   "Options for nonstandard Mizaring used when teaching Mizar"
   :group 'mizar)
+
+(defgroup mizar-remote nil
+  "Options for running Mizar and related utilities remotely"
+  :group 'mizar)
+
 
 (defcustom mizar-newline-indents nil
 "*Newline indents."
@@ -511,7 +514,8 @@ common mizar editing functions."
   (define-key mizar-mode-map "\C-c\C-a" 'mizar-inacc)
   (define-key mizar-mode-map "\C-c\C-z" 'mizar-make-theorem-summary)
   (define-key mizar-mode-map "\C-c\C-r" 'mizar-make-reserve-summary)
-  (define-key mizar-mode-map "\C-cr" 'mizar-occur-refs)
+  (define-key mizar-mode-map "\C-cr" 'mizar-it-remote)
+  (define-key mizar-mode-map "\C-ca" 'mizar-remote-solve-atp)
   (define-key mizar-mode-map "\C-ce" 'mizar-show-environ)
   (define-key mizar-mode-map "\C-cs" 'mizar-insert-skeleton)
   (define-key mizar-mode-map "\C-cu" 'mizar-run-all-irr-utils)
@@ -1387,6 +1391,14 @@ This is used e.g. for grepping if `mizar-grep-in-mml-order' is non-nil."
 :group 'mizar-files
 :group 'mizar-grep)
 
+(defcustom mizar-mml-ini (concat mizfiles "mml.ini")
+"The mml.ini file with info about the current version of Mizar and MML.
+This is used e.g. for selecting the right library version when working
+with remote services."
+:type 'string
+:group 'mizar-files
+:group 'mizar-grep)
+
 (defun mizar-toggle-grep-case-sens ()
 "Toggle the case sensitivity of MML grepping."
 (interactive)
@@ -1403,8 +1415,17 @@ and because shell-expansion is difficult across various shells an OSs.")
 If initialized, also contains the size and modifications time of
 `mizar-mml-lar', which are checked before using it.")
 
+(defvar mizar-version-data nil
+"Holds assoc list of verifier and mml version data parsed from `mizar-mml-ini'.
+If initialized, also contains the size and modifications time of
+`mizar-mml-ini', which are checked before using it.
+Use `mizar-get-version-value' to get values, e.g.,:
+(mizar-get-version-value \"NumberOfArticles\") to get \"1080\".")
+
+
 (defun mizar-init-mml-order ()
-"Initialize `mizar-mml-order-list' if necessary.  Return it."
+"Initialize `mizar-mml-order-list' if necessary.  Return it. 
+If `mizar-mml-lar' is not readable, return nil (not error)."
 (when (file-readable-p mizar-mml-lar)
   (let ((nsize (file-size mizar-mml-lar)) (ntime (file-mtime mizar-mml-lar)))
     (if (and mizar-mml-order-list
@@ -1416,6 +1437,39 @@ If initialized, also contains the size and modifications time of
 	(goto-char (point-min))
 	(setq mizar-mml-order-list 
 	      (list nsize ntime (delete "" (split-string (buffer-string) "\n")))))))))
+
+
+(defun mizar-init-version-data ()
+"Initialize `mizar-version-data' if necessary.  Return it.
+If `mizar-mml-ini' is not readable, return nil (not error)."
+(when (file-readable-p mizar-mml-ini)
+  (let ((nsize (file-size mizar-mml-ini)) (ntime (file-mtime mizar-mml-ini)))
+    (if (and mizar-version-data
+	     (= nsize (car mizar-version-data))
+	     (equal ntime (cadr mizar-version-data)))
+	mizar-version-data
+      (with-temp-buffer
+	(insert-file-contents mizar-mml-ini)
+	(goto-char (point-min))
+	(setq mizar-version-data
+	      (list nsize ntime 
+		    (mapcar '(lambda (x) (split-string x "=")) 
+			    ;; using cdr to get rid of the first element "[Mizar verifier]"
+			    (delete "[MML]" (delete "" (cdr (split-string (buffer-string) "\n"))))))))))))
+
+(defun mizar-get-version-value (key)
+"Gets value of KEY from `mizar-version-data'. 
+Nil if not existing or version data not available."
+(when (mizar-init-version-data)
+  (cadr (assoc key (third mizar-version-data)))))
+
+(defun mizar-mml-version ()
+"Get the version of the library from mml.ini, nil if mml.ini not readable."
+(when (mizar-init-version-data)
+  (let ((anr (cadr (assoc "NumberOfArticles" (third mizar-version-data))))
+	(mmlver (cadr (assoc "MMLVersion" (third mizar-version-data)))))
+    (when (and anr mmlver)
+      (concat mmlver "." anr)))))
 
 (defun mizar-grep-prepare-flist (ext)
 "Return a string of files ending with EXT for grep.
@@ -4376,7 +4430,7 @@ then the MoMM db."
   (message "No position at point"))))
 
 ;;;;;;;;;;;;;;;;;;;;; Mizar TWiki  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar mizar-twiki-url "http://wiki.mizar.org/cgi-bin/twiki/view/Mizar/")
+(defvar mizar-twiki-url "http://wiki.mizar.org/bin/view/Mizar/")
 (defvar mizar-twiki-questions (concat mizar-twiki-url "MizarQuestion"))
 (defvar mizar-twiki-features (concat mizar-twiki-url "FeatureBrainstorming"))
 (defvar mizar-twiki-language (concat mizar-twiki-url "MizarLanguage"))
@@ -4860,13 +4914,16 @@ Normal users should not change this option."
 
 (defun mizar-call-util (program &optional buffer &rest args)
 "Wrapper around `call-process', handling mizar options.
-Currently only `mizar-allow-long-lines'."
-(if mizar-allow-long-lines
-    (apply 'call-process program nil buffer nil "-l" args)
-  (apply 'call-process program nil buffer nil args)))
+Currently only `mizar-allow-long-lines'.
+If PROGRAM is elisp function, it is called instead of using `call-process'."
+(if (functionp program)
+    (apply program (cons buffer args))
+  (if mizar-allow-long-lines
+      (apply 'call-process program nil buffer nil "-l" args)
+    (apply 'call-process program nil buffer nil args))))
 
-(defun mizar-accom (accomname force buffer article)
-(if mizar-forbid-accommodation 0
+(defun mizar-accom (accomname force buffer article &optional never)
+(if (or never mizar-forbid-accommodation) 0
   (if force (mizar-call-util accomname buffer "-a" article)
     (mizar-call-util accomname buffer article))))
 
@@ -4958,29 +5015,31 @@ modified with errors right after the verification
 
 (make-variable-buffer-local 'last-verification-date)
 
-(defun mizar-it (&optional util noqr compil silent forceacc options)
+(defun mizar-it (&optional util noqr compil silent forceacc noacc options)
 "Run mizar verifier on the text in the current .miz buffer.
 Show the result in buffer *mizar-output*.
 In interactive use, a prefix argument directs this command
 to read verifier options from the minibuffer.
 
 If OPTIONS are given, pass them to the verifier.
-If UTIL is given, run it instead of verifier.
+If UTIL is given (either a command string or elisp function), use it instead of verifier.
 If `mizar-use-momm', run tptpver instead.
 If NOQR, does not use quick run.
 If COMPIL, emulate compilation-like behavior for error messages.
 If SILENT, just run UTIL without messaging and errorflagging.
-If FORCEACC, run makeenv with the -a option."
+If FORCEACC, run makeenv with the -a option.
+If NOACC, never try to accommodate."
   (interactive (if current-prefix-arg
 		   (list nil nil nil nil nil 
 			 (read-string "Verifier options: "))))
   (if (or noqr (not mizar-quick-run)) 
       (mizar-it-noqr options util forceacc)
-  (let ((util (or util (if mizar-use-momm mizar-momm-verifier
+  (let* ((util (or util (if mizar-use-momm mizar-momm-verifier
 			 mizar-verifier)))
+	(util-name (if (stringp util) util (symbol-name util)))
 	(makeenv makeenv)
 	(options (or options "")))
-    (if (eq mizar-emacs 'winemacs)
+    (if (and (eq mizar-emacs 'winemacs) (stringp util))
 	(progn
 	  (setq util (concat mizfiles util)
 		makeenv (concat mizfiles makeenv))))
@@ -4989,8 +5048,8 @@ If FORCEACC, run makeenv with the -a option."
 	  ((and (not mizar-forbid-accommodation)
 		(not (executable-find makeenv)))
 	   (error (concat makeenv " not found or not executable!!")))
-	  ((not (executable-find util))
-	   (error (concat util " not found or not executable!!")))
+	  ((and (stringp util) (not (executable-find util)))
+	   (error (concat util-name " not found or not executable!!")))
 	  (t
 	   (let* ((name (file-name-sans-extension (buffer-file-name)))
 		  (fname (file-name-nondirectory name))
@@ -5002,7 +5061,7 @@ If FORCEACC, run makeenv with the -a option."
 	     (unwind-protect
 		 (cond
 		  (silent 
-		   (let ((excode (mizar-accom makeenv forceacc nil name)))
+		   (let ((excode (mizar-accom makeenv forceacc nil name noacc)))
 		     (if (and (numberp excode) (= 0 excode))
 			 (mizar-call-util util nil "-q" name)
 		       (error "Makeenv error, try mizaring first!"))))
@@ -5012,29 +5071,31 @@ If FORCEACC, run makeenv with the -a option."
 		   (let ((cbuf (get-buffer-create "*compilation*")))
 		     (switch-to-buffer-other-window cbuf)
 		     (erase-buffer)
-		     (insert "Running " util " on " fname " ...\n")
+		     (insert "Running " util-name " on " fname " ...\n")
 		     (sit-for 0)	; force redisplay
 					; call-process can return string (signal-description)
-		     (let ((excode (mizar-accom makeenv forceacc cbuf name)))
+		     (let ((excode (mizar-accom makeenv forceacc cbuf name noacc)))
 		       (if (and (numberp excode) (= 0 excode))
 			   (mizar-call-util util cbuf "-q" name)))
 		     (other-window 1)))
 		  (t
 		   (save-excursion
-		     (message (concat "Running " util " on " fname " ..."))
+		     (message (concat "Running " util-name " on " fname " ..."))
 		     (if (get-buffer "*mizar-output*")
 			 (progn 
 			   (if (get-buffer-window "*mizar-output*")
 			       (delete-window (get-buffer-window "*mizar-output*")))
 			   (kill-buffer "*mizar-output*")))
 		     (let* ((mizout (get-buffer-create "*mizar-output*"))
-			    (excode (mizar-accom makeenv forceacc mizout name)))
+			    (excode (mizar-accom makeenv forceacc mizout name noacc)))
 		       (if (and (numberp excode) (= 0 excode))
-			   (shell-command (concat 
-					   util (if mizar-allow-long-lines " -q -l " 
-						  " -q ") options " "
-						  (shell-quote-argument name))
-					  mizout)
+			   (if (functionp util) 
+			       (apply util (list mizout))
+			     (shell-command (concat 
+					     util (if mizar-allow-long-lines " -q -l " 
+						    " -q ") options " "
+						    (shell-quote-argument name))
+					    mizout))
 			 (display-buffer mizout)))
 		     (message " ... done"))))
 	       (if old-dir (setq default-directory old-dir))
@@ -5063,7 +5124,14 @@ If FORCEACC, run makeenv with the -a option."
 "Call the mizp.pl parallel verifier on the article.
 Only usable on systems with Perl and libxml installed."
   (interactive)
-(mizar-it "mizp.pl" nil nil nil nil mizar-parallel-options))
+(mizar-it "mizp.pl" nil nil nil nil nil mizar-parallel-options))
+
+(defun mizar-it-remote ()
+"Call the remote verifier.
+Only usable if connected to internet."
+  (interactive)
+(mizar-it 'mizar-it-remote-intern nil nil nil nil t))
+
 
 (defun mizar-irrths ()
 "Call Irrelevant Theorems & Schemes Detector on the article."
@@ -5553,13 +5621,12 @@ file suffix to use."
 (defcustom ar4mizar-server "http://mws.cs.ru.nl/"
 "Server for the AR4Mizar services."
 :type 'string
-:group 'mizar-proof-advisor)
+:group 'mizar-remote)
 
-
-(defcustom ar4mizar-cgi "~mptp/cgi-bin/MizAR.cgi"
+(defcustom ar4mizar-cgi "~mptp/cgi-bin/MizAR1096.cgi"
 "Path to the ar4mizar CGI script on `ar4mizar-server'."
 :type 'string
-:group 'mizar-proof-advisor)
+:group 'mizar-remote)
 
 ;; this sucks - the article is encoded as cgi argument of http-get
 (defun mizar-post-to-ar4mizar-old (&optional suffix)
@@ -5578,7 +5645,7 @@ file suffix to use."
 
 ;; borrowed from somewhere - http-post code
 ;; the problem is to pass things to a browser
-(defun my-url-http-post (url args)
+(defun my-url-http-post (url args &optional output-buffer synchronous)
       "Send ARGS to URL as a POST request."
       (let ((url-request-method "POST")
             (url-request-extra-headers
@@ -5591,38 +5658,137 @@ file suffix to use."
                         args
                         "&")))
         ;; if you want, replace `my-switch-to-url-buffer' with `my-kill-url-buffer'
-        (url-retrieve url 'my-switch-to-url-buffer)))
+	(if synchronous
+	    (save-excursion
+	      (set-buffer (url-retrieve-synchronously url))
+	      (buffer-string))
+        (url-retrieve url 'my-switch-to-url-buffer))))
 
-    (defun my-kill-url-buffer (status)
-      "Kill the buffer returned by `url-retrieve'."
-      (kill-buffer (current-buffer)))
+(defun my-kill-url-buffer (status)
+  "Kill the buffer returned by `url-retrieve'."
+  (kill-buffer (current-buffer)))
 
-    (defun my-switch-to-url-buffer (status)
-      "Switch to the buffer returned by `url-retreive'.
+
+
+(defun add-invisible-overlay (start end)
+  "Add an overlay from `start' to `end' in the current buffer."
+  (let ((overlay (make-overlay start end)))
+    (overlay-put overlay 'invisible 'miz-ar4miz-invis)))
+
+
+(defun my-switch-to-url-buffer (status)
+  "Switch to the buffer returned by `url-retreive'.
     The buffer contains the raw HTTP response sent by the server."
-      (switch-to-buffer (current-buffer)))
+  (switch-to-buffer-other-window (current-buffer))
+  (let ((bufname "*atp-output*"))
+     (if (get-buffer bufname) (kill-buffer bufname))
+     (rename-buffer bufname)
+     (add-to-invisibility-spec 'miz-ar4miz-invis)
+     (make-variable-buffer-local 'line-move-ignore-invisible)
+     (setq line-move-ignore-invisible t)
+     (save-excursion
+       (goto-char (point-min))
+       (let* ((start-position (point-min))
+	      (search-text ".*\\(:::\\|Request took\\).*")
+	      (pos (re-search-forward search-text nil t)))
+	 (while pos
+	   (beginning-of-line)
+	   (add-invisible-overlay start-position (point))
+	   (forward-line 1)
+	   (setq start-position (point))
+	   (if (eq (point) (point-max))
+	       (setq pos nil)
+	     (setq pos (re-search-forward search-text nil t))))
+	 (add-invisible-overlay start-position (point-max))))))
 
+
+(defconst ar4mizar-separator "==========" "String used for separating parts of the ar4mizar response")
+
+(defcustom mizar-remote-parallelization 1 
+"*Parallelization factor (number of CPUs) for remote processing.
+Only applies when remote processing is done.
+The value 1 is default - no parallelization."
+:type 'integer
+:group 'mizar-remote)
+
+
+;; frontend
+(defun mizar-remote-solve-atp (&optional positions output-buffer)
+"Send the current article to a remote server for verification and
+ask a remote ATP for solving of all Mizar-unsolved problems.
+Calls `mizar-remote-solve'.
+"
+(interactive "*P")
+(mizar-remote-solve t positions output-buffer))
 
 ;; this is good, but only for getting errors or other text info
 ;; it does not launch browser
-(defun mizar-post-to-ar4mizar-new1 (&optional suffix)
-"Browse in a HTML browser the article or an environment file.
-A XSLT-capable browser like Mozilla or IE has to be default in
-Emacs - you may need to customize the variable
-`browse-url-browser-function' for this, and possibly (if 
-the previous is set to `browse-url-generic') also the variable 
-`browse-url-generic-program'.  Argument SUFFIX is a
-file suffix to use."
-(interactive)
+(defun mizar-remote-solve (&optional solve positions output-buffer)
+"Send the current article to a remote server for verification and advice.
+If SOLVE is non-nil, ask a remote ATP for solving of all Mizar-unsolved problems.
+If SOLVE is nil, put errors directly into the .err file (as if it was done by local verification),
+and put the verification message into OUTPUT-BUFFER.
+"
+(interactive "*P")
 (let* ((aname (file-name-nondirectory
 		(file-name-sans-extension
-		 (buffer-file-name)))))
-(my-url-http-post (concat ar4mizar-server ar4mizar-cgi) `(("Formula" . ,(buffer-substring-no-properties (point-min) (point-max))) ("Name" . ,aname)))))
+		 (buffer-file-name))))
+       (dir (file-name-directory (buffer-file-name)))
+       (errfile (concat (file-name-sans-extension (buffer-file-name)) ".err"))
+       (vocfile (car (file-expand-wildcards (concat dir "../dict/*.voc") t)))
+       (solve-it (if solve '("ProveUnsolved" . "All")))
+       (vocname (if vocfile (file-name-nondirectory vocfile)))
+       (vocstring (if vocfile (with-temp-buffer
+				(insert-file-contents vocfile)
+				(buffer-substring-no-properties (point-min) (point-max))))))
+
+
+
+  ;; still TODO - will not work without output-buffer nonnil, works through mizar-it-remote
+  (if solve
+      (my-url-http-post 
+       (concat ar4mizar-server ar4mizar-cgi) 
+       `(("Formula" . ,(buffer-substring-no-properties (point-min) (point-max)))
+	 ("Name" . ,aname) ("MMLVersion" . "4.145.1096") ("Verify" . "1") 
+	 ("Parallelize" . ,(number-to-string mizar-remote-parallelization)) ("MODE" . "TEXT") ,solve-it 
+	 ,(if vocfile (cons "VocSource" "CONTENT"))
+	 ,(if vocfile (cons "VocName" vocname))
+	 ,(if vocfile (cons "VocContent" vocstring)) 
+	 )
+       output-buffer (not solve)
+       )
+    
+    (let* 
+	((res
+	   (my-url-http-post 
+	    (concat ar4mizar-server ar4mizar-cgi) 
+	    `(("Formula" . ,(buffer-substring-no-properties (point-min) (point-max))) 
+	      ("Name" . ,aname) ("MMLVersion" . "4.145.1096") ("Verify" . "1") 
+	      ("Parallelize" . ,(number-to-string mizar-remote-parallelization)) ("MODE" . "TEXT") ,solve-it
+	      ,(if vocfile (cons "VocSource" "CONTENT"))
+	      ,(if vocfile (cons "VocName" vocname))
+	      ,(if vocfile (cons "VocContent" vocstring)) 
+	      )
+	    output-buffer (not solve)))
+	 (strlist (split-string res ar4mizar-separator))
+	 (header (car strlist))
+	 (verif-string (second strlist))
+	 (error-string (third strlist)))
+	 (save-excursion
+	   (set-buffer output-buffer)
+	   (insert verif-string))
+	 (with-temp-buffer
+	   (insert error-string)
+	   (write-region (point-min) (point-max) errfile))))))
+
+
+(defun mizar-it-remote-intern (&optional output-buffer)
+  (mizar-remote-solve nil nil output-buffer))
 
 ;; the current version - creates a local html file with form
-;; that gts submitted on-load
+;; that gets submitted on-load
 ;; TODO: use mml.ini as additional argument selecting the library version
-(defun mizar-post-to-ar4mizar (&optional htmlonly)
+(defun mizar-browse-remote (&optional htmlonly)
 "Send the contents of the buffers to the MizAR service.
 With prefix argument, only htmlize, do not crete atp problems and links.
 Browse result in a HTML browser.
@@ -5636,18 +5802,34 @@ the previous is set to `browse-url-generic') also the variable
        (aname (file-name-nondirectory
 		(file-name-sans-extension
 		 fname)))
+       (dir (file-name-directory (buffer-file-name)))
+       (vocfile (car (file-expand-wildcards (concat dir "../dict/*.voc") t)))
+       (vocname (if vocfile (file-name-nondirectory vocfile)))
+       (vocstring (if vocfile (with-temp-buffer
+				(insert-file-contents vocfile)
+				(htmlize-protect-string (buffer-substring-no-properties (point-min) (point-max))))))
        (requestfile (concat fname ".html"))
        (contents (htmlize-protect-string (buffer-substring-no-properties (point-min) (point-max))))
        (htmlcontents (concat 
 		      mizar-ar4mizar-html-start contents 
 		      "</textarea><INPUT TYPE=\"hidden\" NAME=\"Name\" VALUE=\"" aname 
 		      "\"> <INPUT TYPE=\"submit\" VALUE=\"Send\">"
-		      (if htmlonly "" "<INPUT TYPE=\"hidden\" NAME=\"GenATP\" VALUE=\"1\">") 
-		      "</FORM> </body> </html>" 
+		      "<INPUT TYPE=\"hidden\" NAME=\"MMLVersion\" VALUE=\"4.145.1096\">"
+		      "<INPUT TYPE=\"hidden\" NAME=\"HTMLize\" VALUE=\"1\">"
+		      "<INPUT TYPE=\"hidden\" NAME=\"Parallelize\" VALUE=\"" 
+		      (number-to-string mizar-remote-parallelization) "\">" 
+		      (if (not vocfile) "" 
+			(concat "<INPUT TYPE=\"hidden\" NAME=\"VocSource\" VALUE=\"CONTENT\">"
+			"<INPUT TYPE=\"hidden\" NAME=\"VocName\" VALUE=\"" vocname "\">"
+			"<INPUT TYPE=\"hidden\" NAME=\"VocContent\" VALUE=\"" vocstring "\">"))
+		      (if htmlonly ""
+			           "<INPUT TYPE=\"hidden\" NAME=\"GenATP\" VALUE=\"1\">") 
+		      "</FORM></div> </body> </html>" 
 		      )))
   (with-temp-buffer
     (insert htmlcontents)
     (write-region (point-min) (point-max) requestfile))
+  (message "Opening the HTML in your browser ... ")
 (browse-url (concat "file:///" requestfile))))
 
 ;; stolen from htmlize.el
@@ -5690,8 +5872,8 @@ frm.submit();
 }
 window.onload = myfunc;
 </script>
-  </head> <body>
-        <FORM ID=\"myform\" METHOD=\"POST\"  ACTION=\"http://mws.cs.ru.nl/~mptp/cgi-bin/MizAR.cgi\" enctype=\"multipart/form-data\">
+  </head> <body>Posting to the server ...<div style=\"display:none\">
+        <FORM ID=\"myform\" METHOD=\"POST\"  ACTION=\"http://mws.cs.ru.nl/~mptp/cgi-bin/MizAR1096.cgi\" enctype=\"multipart/form-data\">
             <INPUT TYPE=\"hidden\" NAME=\"ProblemSource\" VALUE=\"Formula\">
 		<textarea name=\"Formula\" tabindex=\"3\"  rows=\"8\" cols=\"80\" id=\"FORMULAEProblemTextBox\">"
 )
@@ -5700,7 +5882,48 @@ window.onload = myfunc;
 ;; Menu for the mizar editing buffers
 (defvar mizar-menu
   '(list  "Mizar"
-	  ["Customize Mizar Mode" (customize-group 'mizar) t]
+	  ["Customize Mizar Mode" (customize-group 'mizar) t]	    
+	  '("Select HTML browser" 
+	    ["mozilla" (customize-save-variable 'browse-url-browser-function 'browse-url-mozilla) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-mozilla) 
+	     :active (functionp 'browse-url-mozilla)]
+	    ["firefox" (customize-save-variable 'browse-url-browser-function 'browse-url-firefox) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-firefox) 
+	     :active (functionp 'browse-url-firefox)]
+["default-windows-browser" (customize-save-variable 'browse-url-browser-function 'browse-url-default-windows-browser) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-default-windows-browser) 
+	     :active (functionp 'browse-url-default-windows-browser)]
+["default-macosx-browser" (customize-save-variable 'browse-url-browser-function 'browse-url-default-macosx-browser) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-default-macosx-browser) 
+	     :active (functionp 'browse-url-default-macosx-browser)]
+["galeon" (customize-save-variable 'browse-url-browser-function 'browse-url-galeon) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-galeon) 
+	     :active (functionp 'browse-url-galeon)]
+["epiphany" (customize-save-variable 'browse-url-browser-function 'browse-url-epiphany) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-epiphany) 
+	     :active (functionp 'browse-url-epiphany)]
+["w3" (customize-save-variable 'browse-url-browser-function 'browse-url-w3) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-w3) 
+	     :active (functionp 'browse-url-w3)]
+["gnome-moz" (customize-save-variable 'browse-url-browser-function 'browse-url-gnome-moz) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-gnome-moz) 
+	     :active (functionp 'browse-url-gnome-moz)]
+["kde" (customize-save-variable 'browse-url-browser-function 'browse-url-kde) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-kde) 
+	     :active (functionp 'browse-url-kde)]
+["elinks" (customize-save-variable 'browse-url-browser-function 'browse-url-elinks) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-elinks) 
+	     :active (functionp 'browse-url-elinks)]
+["Any text browser" (customize-save-variable 'browse-url-browser-function 'browse-url-text-*) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-text-*) 
+	     :active (functionp 'browse-url-text-*)]
+["generic" (customize-save-variable 'browse-url-browser-function 'browse-url-generic) 
+	     :style radio :selected (equal browse-url-browser-function 'browse-url-generic) 
+	     :active (functionp 'browse-url-generic)]
+["other" (customize-variable 'browse-url-browser-function) t]
+	    )
+
+
 	  ["Browse HTML Help" (browse-url html-help-url) t]	  
 	  '("Goto errors"
 	    ["Next error"  mizar-next-error t]
@@ -5717,13 +5940,11 @@ window.onload = myfunc;
 	    )
 	  '("Browse as HTML" 
 	    :help "Mizar has to be run first. Mozilla or IE needed."
-	    ["Browse current article" (mizar-browse-as-html) t]
+	    ["Browse current article" (mizar-browse-remote t) t]
 	    ["Browse environmental clusters" (mizar-browse-as-html "ecl") t]
 	    ["Browse environmental theorems" (mizar-browse-as-html "eth") t]
 	    ["Browse environmental constructors" (mizar-browse-as-html "atr") t]
 	    ["Browse environmental notations" (mizar-browse-as-html "eno") t]
-	    ["Set Mozilla (Firefox) as the default browser" 
-	     (mizar-browser-customize) t]
 	    )
 	  '("MoMM"
 	    ["Use MoMM (needs to be installed)" mizar-toggle-momm :style toggle
@@ -5823,6 +6044,15 @@ window.onload = myfunc;
 	  ["View theorems" mizar-make-theorem-summary t]
 	  ["Reserv. before point" mizar-make-reserve-summary t]
 	  "-"
+	  '("Remote solving"
+	    ["Verify remotely" mizar-it-remote (mizar-buf-verifiable-p)]
+	    ["Verify and HTMLize remotely" (mizar-browse-remote t) t]
+	    ["Solve with ATP remotely" mizar-remote-solve-atp (mizar-buf-verifiable-p)]
+	    ["Verify, HTMLize, and make ATP problems remotely" (mizar-browse-remote) t]
+	    ["Set remote parallelization" 
+	     (customize-variable 'mizar-remote-parallelization)
+	     :active t]
+	    )
 	  ["Run Mizar" mizar-it (mizar-buf-verifiable-p)]
 	  ["Accommodate & Run Mizar" (mizar-it nil nil nil nil t) (mizar-buf-verifiable-p)]
 	  ["Mizar Compile" mizar-compile (mizar-buf-verifiable-p)]

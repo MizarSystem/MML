@@ -1,0 +1,472 @@
+:: Cartesian Products of Family of Real Linear Spaces
+::  by Hiroyuki Okazaki , Noboru Endou and Yasunari Shidama
+:: 
+:: Received August 17, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, CARD_3, FUNCT_1, RELAT_1, FUNCT_2, FINSEQ_1,
+      PRE_TOPC, XBOOLE_0, NORMSP_0, STRUCT_0, RLVECT_1, NORMSP_1, COMPLEX1,
+      ARYTM_3, REAL_1, PRVECT_3, RFINSEQ, ARYTM_1, SQUARE_1, RVSUM_1, XXREAL_0,
+      CARD_1, SUPINF_2, SEQ_2, ORDINAL2, XREAL_0, ORDINAL1, TARSKI, NAT_1,
+      PRVECT_1, PRVECT_2, ZFMISC_1, ORDINAL4, GROUP_2, ALGSTR_0, BINOP_1,
+      EUCLID, REWRITE1, RSSPACE3, RELAT_2, METRIC_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
+      RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, NUMBERS,
+      XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, SQUARE_1, NAT_1, VALUED_0, COMPLEX1,
+      CARD_3, FINSEQ_1, FINSEQ_2, FINSEQ_4, RVSUM_1, RFINSEQ, STRUCT_0,
+      ALGSTR_0, PRE_TOPC, RLVECT_1, NORMSP_0, NORMSP_1, EUCLID, RSSPACE3,
+      LOPBAN_1, PRVECT_1, PRVECT_2;
+ constructors REAL_1, SQUARE_1, RSSPACE3, COMPLEX1, LOPBAN_1, SEQ_1, RVSUM_1,
+      BINOP_2, PRVECT_2, FINSEQ_4, RFINSEQ, FINSEQOP, TOPMETR;
+ registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, FUNCT_1,
+      FUNCT_2, NUMBERS, XBOOLE_0, VALUED_0, EUCLID, PRVECT_2, ALGSTR_0,
+      FINSEQ_2, FINSEQ_1, CARD_3, NORMSP_0, LOPBAN_1, RLVECT_1, NORMSP_1,
+      RELAT_1, SUBSET_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve G,F for RealLinearSpace;
+
+theorem :: PRVECT_3:1
+  for D,E,F,G be non empty set
+  ex I be Function of [: [:D,E:],[:F,G:] :], [:[:D,F:],[:E,G:]:]
+  st I is one-to-one & I is onto
+  & for d,e,f,g be set st d in D & e in E & f in F & g in G
+  holds I.([d,e],[f,g]) = [[d,f],[e,g]];
+
+theorem :: PRVECT_3:2
+  for X be non empty set, D be Function st dom D = {1} & D.1 = X
+  ex I be Function of X,product D
+  st I is one-to-one & I is onto
+  & for x be set st x in X holds I.x = <*x*>;
+
+theorem :: PRVECT_3:3
+  for X,Y be non empty set, D be Function
+  st dom D = {1,2} & D.1 = X & D.2 = Y
+  ex I be Function of [:X,Y:],product D
+  st I is one-to-one & I is onto
+  & for x,y be set st x in X & y in Y holds I.(x,y) = <*x,y*>;
+
+theorem :: PRVECT_3:4
+  for X be non empty set
+  ex I be Function of X,product <*X*>
+  st I is one-to-one & I is onto
+  & for x be set st x in X holds I.x = <*x*>;
+
+registration
+  let X,Y be non-empty non empty FinSequence;
+  cluster X^Y -> non-empty;
+end;
+
+theorem :: PRVECT_3:5
+  for X,Y be non empty set
+  ex I be Function of [:X,Y:],product <*X,Y*>
+  st I is one-to-one & I is onto
+  & for x,y be set st x in X & y in Y holds I.(x,y) = <*x,y*>;
+
+theorem :: PRVECT_3:6
+  for X,Y be non-empty non empty FinSequence
+  ex I be Function of [: product X,product Y :],product(X^Y)
+  st I is one-to-one & I is onto
+  & for x,y be FinSequence st x in product X & y in product Y
+  holds I.(x,y) = x^y;
+
+definition
+  let G,F be non empty addLoopStr;
+  func prod_ADD(G,F) -> BinOp of [:the carrier of G,the carrier of F:] means
+:: PRVECT_3:def 1
+
+  for g1,g2 be Point of G, f1,f2 be Point of F
+  holds it.([g1,f1],[g2,f2]) = [g1+g2,f1+f2];
+end;
+
+definition let G,F be non empty RLSStruct;
+  func prod_MLT(G,F) -> Function of
+  [:REAL, [:the carrier of G,the carrier of F:] :],
+  [:the carrier of G,the carrier of F:] means
+:: PRVECT_3:def 2
+  for r be Element of REAL, g be Point of G, f be Point of F
+  holds it.(r,[g,f]) = [r*g,r*f];
+end;
+
+definition let G,F be non empty addLoopStr;
+  func prod_ZERO(G,F) -> Element of [:the carrier of G,the carrier of F:]
+  equals
+:: PRVECT_3:def 3
+[0.G,0.F];
+end;
+
+definition let G,F be non empty addLoopStr;
+  func [:G,F:] -> strict non empty addLoopStr equals
+:: PRVECT_3:def 4
+  addLoopStr (# [:the carrier of G,the carrier of F:],
+  prod_ADD(G,F), prod_ZERO(G,F) #);
+end;
+
+registration
+  let G,F be Abelian (non empty addLoopStr);
+  cluster [:G,F:] -> Abelian;
+end;
+
+registration
+  let G,F be add-associative (non empty addLoopStr);
+  cluster [:G,F:] -> add-associative;
+end;
+
+registration
+  let G,F be right_zeroed (non empty addLoopStr);
+  cluster [:G,F:] -> right_zeroed;
+end;
+
+registration
+  let G,F be right_complementable (non empty addLoopStr);
+  cluster [:G,F:] -> right_complementable;
+end;
+
+theorem :: PRVECT_3:7
+  for G,F be non empty addLoopStr holds
+  ( for x be set holds
+  (x is Point of [:G,F:]
+  iff ex x1 be Point of G, x2 be Point of F st x=[x1,x2]) )
+  & ( for x,y be Point of [:G,F:],
+  x1,y1 be Point of G ,x2,y2 be Point of F
+  st x=[x1,x2] & y=[y1,y2] holds x+y = [x1+y1,x2+y2] )
+  & 0.[:G,F:] = [0.G,0.F];
+
+theorem :: PRVECT_3:8
+  for G,F be add-associative right_zeroed
+  right_complementable (non empty addLoopStr),
+  x be Point of [:G,F:], x1 be Point of G, x2 be Point of F
+  st x=[x1,x2] holds -x = [-x1,-x2];
+
+registration
+  let G,F be Abelian add-associative
+  right_zeroed right_complementable strict (non empty addLoopStr);
+  cluster [:G,F:] -> strict Abelian add-associative
+    right_zeroed right_complementable;
+end;
+
+definition let G,F be non empty RLSStruct;
+  func [:G,F:] -> strict non empty RLSStruct equals
+:: PRVECT_3:def 5
+  RLSStruct (# [:the carrier of G,the carrier of F:],
+  prod_ZERO(G,F), prod_ADD(G,F), prod_MLT(G,F) #);
+end;
+
+registration
+  let G,F be Abelian (non empty RLSStruct);
+  cluster [:G,F:] -> Abelian;
+end;
+
+registration
+  let G,F be add-associative (non empty RLSStruct);
+  cluster [:G,F:] -> add-associative;
+end;
+
+registration
+  let G,F be right_zeroed (non empty RLSStruct);
+  cluster [:G,F:] -> right_zeroed;
+end;
+
+registration
+  let G,F be right_complementable (non empty RLSStruct);
+  cluster [:G,F:] -> right_complementable;
+end;
+
+theorem :: PRVECT_3:9
+  for G,F be non empty RLSStruct holds
+  ( for x be set holds
+  (x is Point of [:G,F:]
+  iff ex x1 be Point of G, x2 be Point of F st x=[x1,x2]) )
+  & ( for x,y be Point of [:G,F:], x1,y1 be Point of G, x2,y2 be Point of F
+  st x=[x1,x2] & y=[y1,y2] holds x+y = [x1+y1,x2+y2] )
+  & 0.[:G,F:] = [0.G,0.F]
+  & ( for x be Point of [:G,F:], x1 be Point of G, x2 be Point of F,
+  a be real number
+  st x=[x1,x2] holds a*x = [a*x1,a*x2] );
+
+theorem :: PRVECT_3:10
+  for G,F be add-associative right_zeroed
+  right_complementable (non empty RLSStruct),
+  x be Point of [:G,F:], x1 be Point of G, x2 be Point of F
+  st x=[x1,x2] holds -x = [-x1,-x2];
+
+registration
+  let G,F be vector-distributive (non empty RLSStruct);
+  cluster [:G,F:] -> vector-distributive;
+end;
+
+registration
+  let G,F be scalar-distributive (non empty RLSStruct);
+  cluster [:G,F:] -> scalar-distributive;
+end;
+
+registration
+  let G,F be scalar-associative (non empty RLSStruct);
+  cluster [:G,F:] -> scalar-associative;
+end;
+
+registration
+  let G,F be scalar-unital (non empty RLSStruct);
+  cluster [:G,F:] -> scalar-unital;
+end;
+
+registration
+  let G be Abelian add-associative right_zeroed right_complementable
+  scalar-distributive vector-distributive scalar-associative
+  scalar-unital (non empty RLSStruct);
+  cluster <* G *> -> RealLinearSpace-yielding;
+end;
+
+registration
+  let G,F be Abelian add-associative right_zeroed right_complementable
+  scalar-distributive vector-distributive scalar-associative
+  scalar-unital (non empty RLSStruct);
+  cluster <* G,F *> -> RealLinearSpace-yielding;
+end;
+
+begin :: Cartesian Product of Real Linear Spaces
+
+theorem :: PRVECT_3:11
+  for X be RealLinearSpace holds
+  ex I be Function of X, product <*X*>
+  st I is one-to-one & I is onto
+  & ( for x be Point of X holds I.x = <*x*> )
+  & ( for v,w be Point of X holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of X, r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.X)=0.product <*X*>;
+
+registration
+  let G,F be non empty RealLinearSpace-yielding FinSequence;
+  cluster G^F -> RealLinearSpace-yielding;
+end;
+
+theorem :: PRVECT_3:12
+  for X,Y be RealLinearSpace holds
+  ex I be Function of [:X,Y:],product <*X,Y*>
+  st I is one-to-one & I is onto
+  & ( for x be Point of X, y be Point of Y holds I.(x,y) = <*x,y*> )
+  & ( for v,w be Point of [:X,Y:] holds I.(v+w)=(I.v) + (I.w) )
+  & ( for v be Point of [:X,Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:X,Y:])=0.product <*X,Y*>;
+
+theorem :: PRVECT_3:13
+  for X,Y be non empty RealLinearSpace-Sequence
+  holds ex I be Function of [:product X,product Y:],product (X^Y)
+  st I is one-to-one & I is onto
+  & ( for x be Point of product X, y be Point of product Y
+  holds ex x1,y1 be FinSequence st x=x1 & y=y1 & I.(x,y) = x1^y1 )
+  & ( for v,w be Point of [:product X,product Y:]
+  holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:product X,product Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:product X,product Y:]) = 0.product (X^Y);
+
+theorem :: PRVECT_3:14
+  for G,F be RealLinearSpace holds
+  ( for x be set holds
+  ( x is Point of product <*G,F*>
+  iff ex x1 be Point of G, x2 be Point of F st x=<* x1,x2 *> ) )
+  & ( for x,y be Point of product <*G,F*>,
+  x1,y1 be Point of G ,x2,y2 be Point of F
+  st x = <*x1,x2*> & y = <*y1,y2*>
+  holds x+y = <*x1+y1,x2+y2*> )
+  & 0.(product <*G,F*>) = <* 0.G,0.F *>
+  & ( for x be Point of product <*G,F*>, x1 be Point of G, x2 be Point of F
+  st x=<* x1,x2 *> holds -x = <* -x1,-x2 *> )
+  & ( for x be Point of product <*G,F*>, x1 be Point of G, x2 be Point of F,
+  a be real number
+  st x = <*x1,x2*> holds a*x = <* a*x1,a*x2 *> );
+
+begin
+
+definition let G,F be non empty NORMSTR;
+  func prod_NORM(G,F) -> Function of
+  [:the carrier of G,the carrier of F:], REAL means
+:: PRVECT_3:def 6
+  for g be Point of G, f be Point of F
+  holds ex v be Element of REAL 2
+  st v= <* ||.g.||,||.f.|| *> & it.(g,f) = |.v.|;
+end;
+
+definition let G,F be non empty NORMSTR;
+  func [:G,F:] -> strict non empty NORMSTR equals
+:: PRVECT_3:def 7
+  NORMSTR (# [:the carrier of G,the carrier of F:],
+  prod_ZERO(G,F), prod_ADD(G,F), prod_MLT(G,F), prod_NORM(G,F) #);
+end;
+
+registration
+  let G,F be RealNormSpace;
+  cluster [:G,F:] -> reflexive discerning RealNormSpace-like;
+end;
+
+registration
+  let G,F be reflexive discerning RealNormSpace-like
+  scalar-distributive vector-distributive scalar-associative
+  scalar-unital Abelian add-associative
+  right_zeroed right_complementable (non empty NORMSTR);
+  cluster [:G,F:] -> strict reflexive discerning RealNormSpace-like
+  scalar-distributive vector-distributive scalar-associative
+  scalar-unital Abelian add-associative right_zeroed right_complementable;
+end;
+
+registration
+  let G be reflexive discerning RealNormSpace-like scalar-distributive
+  vector-distributive scalar-associative scalar-unital Abelian
+  add-associative right_zeroed right_complementable (non empty NORMSTR);
+  cluster <*G*> -> RealNormSpace-yielding;
+end;
+
+registration
+  let G,F be reflexive discerning RealNormSpace-like scalar-distributive
+  vector-distributive scalar-associative scalar-unital Abelian
+  add-associative right_zeroed right_complementable (non empty NORMSTR);
+  cluster <*G,F*> -> RealNormSpace-yielding;
+end;
+
+theorem :: PRVECT_3:15
+  for X,Y be RealNormSpace
+  holds ex I be Function of [:X,Y:],product <*X,Y*>
+  st I is one-to-one & I is onto
+  & ( for x be Point of X, y be Point of Y holds I.(x,y) = <*x,y*> )
+  & ( for v,w be Point of [:X,Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:X,Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & 0. product <*X,Y*> = I.(0.[:X,Y:])
+  & ( for v be Point of [:X,Y:] holds ||. I.v .|| = ||.v.|| );
+
+theorem :: PRVECT_3:16
+  for X be RealNormSpace
+  holds ex I be Function of X ,product <*X*>
+  st I is one-to-one & I is onto
+  & ( for x be Point of X holds I.x = <*x*> )
+  & ( for v,w be Point of X holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of X, r be Element of REAL holds I.(r*v)=r*(I.v) )
+  & 0. product <*X*> = I.(0.X)
+  & ( for v be Point of X holds ||. I.v .|| = ||.v.|| );
+
+registration
+  let G,F be non empty RealNormSpace-yielding FinSequence;
+  cluster G^F -> non empty RealNormSpace-yielding;
+end;
+
+theorem :: PRVECT_3:17
+  for X,Y be non empty RealNormSpace-Sequence
+  holds ex I be Function of [:product X,product Y:],product (X^Y)
+  st I is one-to-one & I is onto
+  & ( for x be Point of product X, y be Point of product Y
+  holds ex x1,y1 be FinSequence st x=x1 & y=y1 & I.(x,y) = x1^y1 )
+  & ( for v,w be Point of [:product X,product Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:product X,product Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:product X,product Y:]) = 0.product (X^Y)
+  & ( for v be Point of [:product X,product Y:] holds ||. I.v .|| = ||.v.|| );
+
+theorem :: PRVECT_3:18
+  for G,F be RealNormSpace holds
+  ( for x be set holds
+  ( x is Point of [:G,F:]
+  iff ex x1 be Point of G ,x2 be Point of F st x=[x1,x2]) )
+  & ( for x,y be Point of [:G,F:], x1,y1 be Point of G, x2,y2 be Point of F
+  st x=[x1,x2] & y=[y1,y2] holds x+y = [x1+y1,x2+y2] )
+  & 0.[:G,F:] = [0.G,0.F]
+  & ( for x be Point of [:G,F:], x1 be Point of G, x2 be Point of F
+  st x=[x1,x2] holds -x = [-x1,-x2] )
+  & ( for x be Point of [:G,F:], x1 be Point of G, x2 be Point of F,
+  a be real number
+  st x=[x1,x2] holds a*x = [a*x1,a*x2] )
+  & ( for x be Point of [:G,F:], x1 be Point of G, x2 be Point of F
+  st x=[x1,x2] holds
+  ex w be Element of REAL 2 st
+  w=<* ||.x1.||,||.x2.|| *> & ||.x.|| = |.w.| );
+
+theorem :: PRVECT_3:19
+  for G,F be RealNormSpace holds
+  ( for x be set holds
+  ( x is Point of product <*G,F*>
+  iff ex x1 be Point of G, x2 be Point of F st x=<* x1,x2 *> ) )
+  & ( for x,y be Point of product <*G,F*>,
+  x1,y1 be Point of G, x2,y2 be Point of F
+  st x=<*x1,x2*> & y=<*y1,y2*> holds x+y = <* x1+y1,x2+y2 *> )
+  & 0.(product <*G,F*>) = <* 0.G,0.F *>
+  & ( for x be Point of product <*G,F*>, x1 be Point of G, x2 be Point of F
+  st x=<*x1,x2*> holds -x = <* -x1,-x2 *> )
+  & ( for x be Point of product <*G,F*>,
+  x1 be Point of G, x2 be Point of F, a be real number
+  st x=<*x1,x2*> holds a*x = <* a*x1,a*x2 *> )
+  & ( for x be Point of product <*G,F*>, x1 be Point of G, x2 be Point of F
+  st x=<*x1,x2*> holds
+  ex w be Element of REAL 2 st
+  w=<* ||.x1.||,||.x2.|| *> & ||.x.||  = |.w.| );
+
+registration
+  let X,Y be complete RealNormSpace;
+  cluster [:X,Y:] -> complete;
+end;
+
+theorem :: PRVECT_3:20
+  for X,Y be non empty RealNormSpace-Sequence
+  holds ex I be Function of product <* product X,product Y *>,product (X^Y)
+  st I is one-to-one & I is onto
+  & ( for x be Point of product X, y be Point of product Y
+  holds ex x1,y1 be FinSequence
+  st x=x1 & y=y1 & I.<*x,y*> = x1^y1 )
+  & ( for v,w be Point of product <* product X,product Y *>
+  holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of product <* product X,product Y *>,
+  r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.(product <* product X,product Y *>)) = 0.product (X^Y)
+  & ( for v be Point of product <* product X,product Y *>
+  holds ||. I.v .|| = ||.v.|| );
+
+theorem :: PRVECT_3:21
+  for X,Y be non empty RealLinearSpace
+  holds ex I be Function of [:X,Y:],[:X,product <*Y*>:]
+  st I is one-to-one & I is onto
+  & ( for x be Point of X, y be Point of Y holds I.(x,y) = [x,<*y*>] )
+  & ( for v,w be Point of [:X,Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:X,Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:X,Y:]) = 0.([:X,product<*Y*>:]);
+
+theorem :: PRVECT_3:22
+  for X be non empty RealLinearSpace-Sequence, Y be RealLinearSpace
+  holds ex I be Function of [:product X,Y:],product(X^<*Y*>)
+  st I is one-to-one & I is onto
+  & ( for x be Point of product X, y be Point of Y
+  ex x1,y1 be FinSequence st x=x1 & <*y*> =y1 & I.(x,y) = x1^y1 )
+  & ( for v,w be Point of [:product X,Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:product X,Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:product X,Y:]) = 0.product (X^<*Y*>);
+
+theorem :: PRVECT_3:23
+  for X ,Y be non empty RealNormSpace
+  ex I be Function of [:X,Y:],[:X,product<*Y*>:]
+  st I is one-to-one & I is onto
+  & ( for x be Point of X, y be Point of Y holds I.(x,y) = [x,<*y*>]  )
+  & ( for v,w be Point of [:X,Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:X,Y:], r be Element of REAL holds I.(r*v)=r*(I.v) )
+  & I.(0.[:X,Y:]) = 0.([:X,product <*Y*>:])
+  & ( for v be Point of [:X,Y:] holds ||. I.v .|| = ||.v.|| );
+
+theorem :: PRVECT_3:24
+  for X be non empty RealNormSpace-Sequence, Y be RealNormSpace
+  ex I be Function of [:product X,Y:],product(X^<*Y*>)
+  st I is one-to-one & I is onto
+  & ( for x be Point of product X, y be Point of Y
+  ex x1,y1 be FinSequence st x=x1 & <*y*>=y1 & I.(x,y) = x1^y1 )
+  & ( for v,w be Point of [:product X,Y:] holds I.(v+w) = I.v + I.w )
+  & ( for v be Point of [:product X,Y:], r be Element of REAL
+  holds I.(r*v)=r*(I.v) )
+  & I.(0.[:product X,Y:]) = 0.product(X^<*Y*>)
+  & ( for v be Point of [:product X,Y:] holds ||. I.v .|| = ||.v.|| );
+

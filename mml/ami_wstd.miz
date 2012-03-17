@@ -16,22 +16,24 @@ environ
       PARTFUN1, MCART_1,
       DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1, FINSET_1,
       FUNCT_4, AFINSQ_1,
-      STRUCT_0, GRAPH_2, NAT_D, XXREAL_2, COMPOS_1, AMI_1, FUNCT_2, AMISTD_1;
+      STRUCT_0, GRAPH_2, NAT_D, XXREAL_2, COMPOS_1, EXTPRO_1, AMI_1, FUNCT_2,
+      AMISTD_1;
  constructors WELLORD2, REAL_1, FINSEQ_4, REALSET1, NAT_D, AMI_1, XXREAL_2,
       RELSET_1, PRE_POLY, GRAPH_2, AFINSQ_1, MCART_1, AMISTD_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       FUNCOP_1, FINSET_1, NUMBERS, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, CARD_3,
       REALSET1, FUNCT_7, STRUCT_0, AMI_1, JORDAN1J, CARD_1, XXREAL_2, RELSET_1,
-      FUNCT_4, AFINSQ_1, ORDINAL1, ZFMISC_1, SUBSET_1, AMISTD_1, COMPOS_1;
+      FUNCT_4, AFINSQ_1, ORDINAL1, ZFMISC_1, SUBSET_1, AMISTD_1, COMPOS_1,
+      EXTPRO_1;
  requirements NUMERALS, BOOLE, REAL, SUBSET, ARITHM;
- definitions TARSKI, STRUCT_0, COMPOS_1, AMI_1, YELLOW_8, XBOOLE_0, FUNCOP_1,
-      NAT_1, RELAT_1, FUNCT_4, NAT_D, AFINSQ_1, AMISTD_1;
+ definitions TARSKI, STRUCT_0, COMPOS_1, EXTPRO_1, YELLOW_8, XBOOLE_0,
+      FUNCOP_1, NAT_1, RELAT_1, FUNCT_4, NAT_D, AFINSQ_1, AMISTD_1;
  theorems TARSKI, FINSEQ_4, FINSEQ_1, GRAPH_2, NAT_1, FUNCT_4, FUNCT_1,
       FUNCT_2, RELAT_1, ZFMISC_1, CARD_1, FUNCOP_1, ORDINAL1,
       GRFUNC_1, FINSEQ_3, INT_1, REVROT_1, FUNCT_7,
       XBOOLE_0, MEMBERED, XREAL_1, XXREAL_0, FINSEQ_6,
       PARTFUN1, XXREAL_2, XREAL_0, NAT_D, PBOOLE, RECDEF_2,
-      AMISTD_1, COMPOS_1;
+      AMISTD_1, COMPOS_1, EXTPRO_1;
  schemes NAT_1, FUNCT_7, FINSEQ_2, FRAENKEL, DOMAIN_1, FINSEQ_4;
 
 begin :: Ami-Struct
@@ -55,9 +57,9 @@ definition
   let N,S; let l1,l2 be Nat;
   pred l1 <= l2, S means
   :Def8:
-  ex f being non empty FinSequence of NAT st f/.1
-= l1 & f/.len f = l2 & for n st 1 <= n & n < len f
- holds f/.(n+1) in SUCC(f/.n,S);
+  ex f being non empty FinSequence of NAT st
+  f/.1 = l1 & f/.len f = l2 & for n st 1 <= n & n < len f
+  holds f/.(n+1) in SUCC(f/.n,S);
 end;
 
 canceled 15;
@@ -583,16 +585,16 @@ proof
 A1: l = z and
 A2: InsCode i = 1;
   set M = STC N;
-  set F = { IC Following(ProgramPart ss,ss)
+  set F = { IC Exec(i,ss)
     where ss is Element of product the Object-Kind of STC N:
-    IC ss = l & (ProgramPart ss)/.l = i };
+    IC ss = l };
   now
     set f = (NAT) --> i;
     consider w being State of M;
     reconsider l9 = l as Element of ObjectKind IC M by COMPOS_1:def 6;
     set u = (IC M).-->l9;
 A4: dom u = {IC M} by FUNCOP_1:19;
-    reconsider s = w +* f as State of M by COMPOS_1:41;
+    reconsider s = w +* f as State of M;
     let y be set;
 A5: dom f = NAT by FUNCOP_1:19;
     reconsider t = s+*u as Element of product the Object-Kind of STC N
@@ -607,7 +609,7 @@ A6: (ProgramPart t)/.l = t.l by COMPOS_1:38
     hereby
       assume y in F;
       then ex s being Element of product the Object-Kind of STC N
-      st y = IC Following(ProgramPart s,s) & IC s = l & (ProgramPart s)/.l = i;
+      st y = IC Exec(i,s) & IC s = l;
       then y = succ z by A1,A2,Lm4
         .= z+1;
       hence y in {z+1} by TARSKI:def 1;
@@ -993,23 +995,21 @@ A5:   (ProgramPart u)/.il = u.il by COMPOS_1:38
 A6:   IC u = ((IC S, il)-->(il1, I)).IC S by FUNCT_4:14
         .= il by COMPOS_1:3,FUNCT_4:66;
       then IC Following(ProgramPart u,u) = NextLoc(il,S) by A1,A5;
-      hence x in {IC Following(ProgramPart ss,ss)
+      hence x in {IC Exec(i,ss)
        where ss is Element of product the Object-Kind of S
-        : IC ss = il & (ProgramPart ss)/.il=i} by A3,A6,A5;
+        : IC ss = il } by A3,A6,A5;
     end;
     now
-      assume x in {IC Following(ProgramPart ss,ss)
+      assume x in {IC Exec(i,ss)
        where ss is Element of product the Object-Kind of S
-      : IC ss = il & (ProgramPart ss)/.il=i};
+      : IC ss = il};
       then ex s being Element of product the Object-Kind of S
-       st x = IC Following(ProgramPart s,s) & IC s = il &
-        (ProgramPart s)/.il = i;
+       st x = IC Exec(i,s) & IC s = il;
       hence x = NextLoc(il,S) by A1;
     end;
     hence
-    x in {NextLoc(il,S)} iff x in {IC Following(ProgramPart ss,ss)
-       where ss is Element of product the Object-Kind of S
-     : IC ss = il & (ProgramPart ss)/.il=i}
+    x in {NextLoc(il,S)} iff x in {IC Exec(i,ss)
+       where ss is Element of product the Object-Kind of S: IC ss = il}
      by A2,TARSKI:def 1;
   end;
   hence thesis by TARSKI:2;
@@ -1050,10 +1050,10 @@ definition
   let N be with_non-empty_elements non empty set;
   let S be weakly_standard (IC-Ins-separated definite (non empty stored-program
   AMI-Struct over N));
-  let F be FinPartState of S;
+  let F be NAT-defined (the Instructions of S)-valued Function;
   attr F is para-closed means
-  for s being State of S st F c= s & IC s = il.(S,0)
-   for k being Element of NAT holds IC Comput(ProgramPart(s),s,k) in dom F;
+  for s being State of S st IC s = il.(S,0)
+   for k being Element of NAT holds IC Comput(F,s,k) in dom F;
 end;
 
 theorem Th44:
@@ -1068,11 +1068,11 @@ proof
 stored-program AMI-Struct over N)),
       F be NAT-defined (the Instructions of S)-valued
    FinPartState of S such that
-A1: ( for s being State of S st F c= s & IC s in dom F for k being
-  Element of NAT holds IC Comput(ProgramPart(s),s,k) in dom F)& il.(S,0) in dom
-F;
+A1: ( for s being State of S st IC s in dom F
+  for k being
+  Element of NAT holds IC Comput(F,s,k) in dom F)& il.(S,0) in dom F;
   let s be State of S;
-  assume F c= s & IC s = il.(S,0);
+  assume IC s = il.(S,0);
   hence thesis by A1;
 end;
 

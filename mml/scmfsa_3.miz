@@ -8,23 +8,22 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, SCMFSA_2, AMI_1, RELAT_1, AMI_3, FSM_1,
       STRUCT_0, FUNCT_4, FUNCOP_1, XBOOLE_0, TARSKI, FUNCT_1, XXREAL_0,
-      ARYTM_3, AMI_2, GRAPHSP, SCMNORM, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
+      ARYTM_3, GRAPHSP, SCMNORM, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
       CARD_1, INT_1, CIRCUIT2, ARYTM_1, ORDINAL1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, INT_2, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_4, INT_1, NAT_1, DOMAIN_1, STRUCT_0, FUNCOP_1,
-      FINSEQ_1, FINSEQ_2, COMPOS_1,
-      AMI_1, AMI_2, AMI_3, FUNCT_7, SCMFSA_2,
-      XXREAL_0;
+      FINSEQ_1, FINSEQ_2, COMPOS_1, EXTPRO_1, AMI_1,
+      AMI_3, FUNCT_7, SCMFSA_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, INT_2, AMI_5, SCMFSA_2, RELSET_1,
-      PRE_POLY;
+      PRE_POLY, AMI_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, NUMBERS, XREAL_0, INT_1,
       FINSEQ_1, CARD_3, STRUCT_0, AMI_1, AMI_3, AMI_5, SCMFSA_2, FINSET_1,
-      ORDINAL1, RELSET_1, FUNCT_2, COMPOS_1;
+      ORDINAL1, RELSET_1, FUNCT_2, COMPOS_1, EXTPRO_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions COMPOS_1, AMI_1, AMI_3, FUNCOP_1, SCMFSA_2;
+ definitions COMPOS_1, EXTPRO_1, AMI_1, AMI_3, FUNCOP_1, SCMFSA_2;
  theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, FUNCOP_1, TARSKI, FUNCT_4, FUNCT_1,
       ZFMISC_1, INT_1, RELAT_1, AMI_5, SCMFSA_2, SCMFSA_1, ABSVALUE, FINSEQ_2,
-      XBOOLE_0, XBOOLE_1, AMI_2, NUMBERS, PBOOLE, PARTFUN1, COMPOS_1;
+      XBOOLE_0, XBOOLE_1, AMI_2, NUMBERS, PBOOLE, PARTFUN1, COMPOS_1, EXTPRO_1;
 
 begin
 
@@ -55,7 +54,7 @@ theorem
   I for s being State of SCM+FSA, S being State of SCM st S = s|(the carrier of
 SCM) +* ((NAT) --> I) holds Exec(i,s) = s +*Exec(I,S) +* s|NAT by SCMFSA_2:75;
 
-theorem Th4:
+theorem
   for s1,s2 being State of SCM+FSA st (s1 | (Int-Locations \/
   FinSeq-Locations \/ {IC SCM+FSA})) = (s2 | (Int-Locations \/ FinSeq-Locations
   \/ {IC SCM+FSA})) for l being Instruction of SCM+FSA holds Exec (l,s1) | (
@@ -100,7 +99,8 @@ A12: Int-Locations \/ FinSeq-Locations c= (Int-Locations \/ FinSeq-Locations
     then reconsider I = l as Instruction of SCM by SCMFSA_2:34;
     reconsider S1 = s1|(the carrier of SCM) +* ((NAT) --> I), S2 = s2|(the
     carrier of SCM) +* ((NAT) --> I) as State of SCM by SCMFSA_2:73;
-A13: SCM-Data-Loc c= Int-Locations \/ FinSeq-Locations by XBOOLE_1:7;
+A13: Data-Locations SCM c= Int-Locations \/ FinSeq-Locations
+ by AMI_3:72,XBOOLE_1:7;
     not IC SCM+FSA in NAT by COMPOS_1:3;
     then
 A14: NAT misses {IC SCM+FSA} by ZFMISC_1:56;
@@ -113,24 +113,26 @@ A15: (NAT) /\ (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) = {} by
 XBOOLE_0:def 7;
     not IC SCM in NAT by COMPOS_1:3;
     then NAT misses {IC SCM} by ZFMISC_1:56;
-    then dom((NAT) --> I) = NAT & NAT misses SCM-Data-Loc \/ {IC SCM} by
-AMI_2:29,FUNCOP_1:19,XBOOLE_1:70;
+    then dom((NAT) --> I) = NAT & NAT misses Data-Locations SCM \/ {IC SCM} by
+AMI_2:29,AMI_3:72,FUNCOP_1:19,XBOOLE_1:70;
     then
-A16: ((NAT) --> I)|(SCM-Data-Loc \/ {IC SCM}) = {} by RELAT_1:95;
+A16: ((NAT) --> I)|(Data-Locations SCM \/ {IC SCM}) = {} by RELAT_1:95;
     then
-A17: S1 | (SCM-Data-Loc \/ {IC SCM}) = s1|(the carrier of SCM) | (
-    SCM-Data-Loc \/ {IC SCM}) +* {} by FUNCT_4:75
-      .= s1|(the carrier of SCM) | (SCM-Data-Loc \/ {IC SCM}) by FUNCT_4:22
-      .= s1|(SCM-Data-Loc \/ {IC SCM}) by AMI_5:23,RELAT_1:103,XBOOLE_1:7
+A17: S1 | (Data-Locations SCM \/ {IC SCM}) = s1|(the carrier of SCM) | (
+    Data-Locations SCM \/ {IC SCM}) +* {} by FUNCT_4:75
+      .= s1|(the carrier of SCM) | (Data-Locations SCM \/ {IC SCM})
+         by FUNCT_4:22
+      .= s1|(Data-Locations SCM \/ {IC SCM}) by RELAT_1:103
       .= s1|(Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) |(
-    SCM-Data-Loc \/ {IC SCM}) by A13,AMI_3:4,RELAT_1:103,SCMFSA_2:7,XBOOLE_1:9
-      .= s2|(SCM-Data-Loc \/ {IC SCM}) by A2,A13,AMI_3:4,RELAT_1:103,SCMFSA_2:7
-,XBOOLE_1:9
-      .= s2|(the carrier of SCM) | (SCM-Data-Loc \/ {IC SCM}) by AMI_5:23
-,RELAT_1:103,XBOOLE_1:7
-      .= s2|(the carrier of SCM) | (SCM-Data-Loc \/ {IC SCM}) +* {} by
+    Data-Locations SCM \/ {IC SCM})
+       by A13,AMI_3:4,RELAT_1:103,SCMFSA_2:7,XBOOLE_1:9
+      .= s2|(Data-Locations SCM \/ {IC SCM})
+      by A2,A13,AMI_3:4,RELAT_1:103,SCMFSA_2:7,XBOOLE_1:9
+      .= s2|(the carrier of SCM) | (Data-Locations SCM \/ {IC SCM}) by
+RELAT_1:103
+      .= s2|(the carrier of SCM) | (Data-Locations SCM \/ {IC SCM}) +* {} by
 FUNCT_4:22
-      .= S2 | (SCM-Data-Loc \/ {IC SCM}) by A16,FUNCT_4:75;
+      .= S2 | (Data-Locations SCM \/ {IC SCM}) by A16,FUNCT_4:75;
 A18: (the carrier of SCM) /\ FinSeq-Locations = {} by SCMFSA_1:33
 ,XBOOLE_0:def 7;
     then dom Exec(I,S1) /\ FinSeq-Locations = {} by PARTFUN1:def 4;
@@ -143,7 +145,7 @@ by FUNCT_4:83
       .= DataPart Exec(I,S1) +* {} +* Exec(I,S1) |{IC SCM+FSA} by A19,AMI_3:72
 ,FUNCT_4:83
       .= DataPart Exec(I,S1) +* Exec(I,S1) |{IC SCM+FSA} by FUNCT_4:22
-      .= Exec(I,S1) | (SCM-Data-Loc \/ {IC SCM}) by AMI_3:4,72,FUNCT_4:83
+      .= Exec(I,S1) | (Data-Locations SCM \/ {IC SCM}) by AMI_3:4,FUNCT_4:83
 ,SCMFSA_2:7;
 A21: s1|(NAT) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) = s1|(
 (NAT) /\ (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})) by RELAT_1:100
@@ -158,7 +160,7 @@ FUNCT_4:83
       .= DataPart Exec(I,S2) +* {} +* Exec(I,S2) |{IC SCM+FSA} by A22,AMI_3:72
 ,FUNCT_4:83
       .= DataPart Exec(I,S2) +* Exec(I,S2) |{IC SCM+FSA} by FUNCT_4:22
-      .= Exec(I,S2) | (SCM-Data-Loc \/ {IC SCM}) by AMI_3:4,72,FUNCT_4:83
+      .= Exec(I,S2) | (Data-Locations SCM \/ {IC SCM}) by AMI_3:4,FUNCT_4:83
 ,SCMFSA_2:7;
 A24: s2|(NAT) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) = s2|(
 (NAT) /\ (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})) by RELAT_1:100
@@ -171,9 +173,9 @@ s1 +*Exec(I,S1) +* s1|NAT) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}
       .= (s1 +*Exec(I,S1)) | (Int-Locations \/ FinSeq-Locations \/ {IC
     SCM+FSA}) by FUNCT_4:22
       .= (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})) +* Exec(
-    I,S1) | (SCM-Data-Loc \/ {IC SCM}) by A20,FUNCT_4:75
+    I,S1) | (Data-Locations SCM \/ {IC SCM}) by A20,FUNCT_4:75
       .= (s2 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})) +* Exec(
-    I,S2) | (SCM-Data-Loc \/ {IC SCM}) by A2,A17,AMI_5:58
+    I,S2) | (Data-Locations SCM \/ {IC SCM}) by A2,A17,AMI_5:58
       .= (s2 +*Exec(I,S2)) | (Int-Locations \/ FinSeq-Locations \/ {IC
     SCM+FSA}) by A23,FUNCT_4:75
       .= (s2 +*Exec(I,S2)) | (Int-Locations \/ FinSeq-Locations \/ {IC
@@ -537,50 +539,7 @@ definition
  coherence;
 end;
 
-canceled 5;
-
-theorem
-  for i being Instruction of SCM+FSA, s being State of SCM+FSA, p being
-  preProgram of SCM+FSA holds Exec (i, s +* p) = Exec (i,s) +* p
-proof
-  let i be Instruction of SCM+FSA, s be State of SCM+FSA, p be preProgram of
-  SCM+FSA;
-A1: now
-    assume {IC SCM+FSA} meets NAT;
-    then consider x being set such that
-A2: x in {IC SCM+FSA} and
-A3: x in NAT by XBOOLE_0:3;
-    reconsider l = x as Element of NAT by A3;
-    l = IC SCM+FSA by A2,TARSKI:def 1;
-    hence contradiction by COMPOS_1:3;
-  end;
-  Int-Locations \/ FinSeq-Locations misses NAT by SCMFSA_2:13,14,XBOOLE_1:70;
-  then
-  dom p c= NAT & Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} misses
-  NAT by A1,RELAT_1:def 18,XBOOLE_1:70;
-  then
-A4: Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} misses dom p by
-XBOOLE_1:63;
-  then
-A5: s|(Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) = (s +* p) | (
-  Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by FUNCT_4:76;
-A6: (Exec(i,s) +* p)|(Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) =
-Exec(i,s)|(Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by A4,FUNCT_4:76
-    .= Exec(i,s +* p) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
-  by A5,Th4;
-A7: ProgramPart Exec (i, s +* p) = ProgramPart (s +* p) by AMI_1:117
-    .= ProgramPart s +* p|NAT by FUNCT_4:75
-    .= ProgramPart Exec (i,s) +* p|NAT by AMI_1:117
-    .= ProgramPart (Exec (i, s) +* p) by FUNCT_4:75;
-  thus Exec (i, s +* p) = Exec (i, s +* p)| dom(Exec (i, s +* p)) by RELAT_1:97
-    .= Exec (i, s +* p)| (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}
-  \/ NAT) by PARTFUN1:def 4,SCMFSA_2:8
-    .= (Exec (i, s) +* p)| (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA
-  }) +* (Exec (i, s) +* p)|NAT by A6,A7,FUNCT_4:83
-    .= (Exec (i,s) +* p)| the carrier of SCM+FSA by FUNCT_4:83,SCMFSA_2:8
-    .= (Exec (i,s) +* p)| dom(Exec (i, s) +* p) by PARTFUN1:def 4
-    .= Exec (i,s) +* p by RELAT_1:97;
-end;
+canceled 6;
 
 theorem
   for s being State of SCM+FSA, iloc being Element of NAT
@@ -654,7 +613,7 @@ A3: dom DataPart p c= Int-Locations \/ FinSeq-Locations by RELAT_1:87
 A4: (NAT) \ dom p <> {} by XBOOLE_1:37;
     then il in NAT by XBOOLE_0:def 5;
     then reconsider il as Element of NAT;
-    not Int-Locations c= dom p;
+    not Int-Locations c= dom p by AMI_3:72;
     then
 A5: Int-Locations \ dom p <> {} by XBOOLE_1:37;
     then d2 in Int-Locations by XBOOLE_0:def 5;
@@ -860,8 +819,8 @@ Y:  (ProgramPart s2)/.IC s2
  = s2.IC s2 by COMPOS_1:38;
 A45:  Comput(ProgramPart(s2),s2,0+1).d1
  = (Following(ProgramPart s2,Comput(ProgramPart(s2),
-s2,0))).d1 by AMI_1:14
-        .= (Following(ProgramPart s2,s2)).d1 by AMI_1:13
+s2,0))).d1 by EXTPRO_1:4
+        .= (Following(ProgramPart s2,s2)).d1 by EXTPRO_1:3
         .= 1 by A35,A44,A40,Y,SCMFSA_2:89;
       DataPart p c= p by RELAT_1:88;
       then
@@ -870,8 +829,8 @@ Y:  (ProgramPart s1)/.IC s1
  = s1.IC s1 by COMPOS_1:38;
       Comput(ProgramPart(s1),s1,0+1).d1 =
        (Following(ProgramPart s1,Comput(ProgramPart(s1),s1,0))).d1
-       by AMI_1:14
-        .= (Following(ProgramPart s1,s1)).d1 by AMI_1:13
+       by EXTPRO_1:4
+        .= (Following(ProgramPart s1,s1)).d1 by EXTPRO_1:3
         .= 0 by A19,A29,A26,Y,SCMFSA_2:89;
       then ( Comput(ProgramPart(s1),s1,1)|dom p).d1 = 0 by A6,A46,A30,
 FUNCT_1:70;
@@ -1085,8 +1044,8 @@ Y:  (ProgramPart s2)/.IC s2
 A88:  Comput(ProgramPart(s2),s2,0+1).d1 =
  (Following(ProgramPart s2,Comput(ProgramPart(s2),s2,
 0))).d1
- by AMI_1:14
-        .= (Following(ProgramPart s2,s2)).d1 by AMI_1:13
+ by EXTPRO_1:4
+        .= (Following(ProgramPart s2,s2)).d1 by EXTPRO_1:3
         .= <*0*> by A78,A87,A72,A83,Y;
 X:    dom p c= the carrier of SCM+FSA by RELAT_1:def 18;
       dom ( Comput(ProgramPart(s2),s2,1)) = the carrier of SCM+FSA by
@@ -1100,8 +1059,8 @@ Y:  (ProgramPart s1)/.IC s1
 A90:  dom DataPart p c= dom p by RELAT_1:25;
       Comput(ProgramPart(s1),s1,0+1).d1
        = (Following(ProgramPart s1,Comput(ProgramPart (s1),s1,0))).d1
-        by AMI_1:14
-        .= (Following(ProgramPart s1,s1)).d1 by AMI_1:13
+        by EXTPRO_1:4
+        .= (Following(ProgramPart s1,s1)).d1 by EXTPRO_1:3
         .= {} by A57,A68,A51,A64,Y;
       then ( Comput(ProgramPart(s1),s1,1)|dom p).d1 = {} by A6,A90,A69,
 FUNCT_1:70;
@@ -1110,29 +1069,6 @@ dom p by A6,A90,A89,A88,FUNCT_1:70;
     end;
   end;
   hence contradiction;
-end;
-
-registration
-  cluster autonomic non NAT-defined FinPartState of SCM+FSA;
-  existence
-  proof
-    set P = (IC SCM+FSA, 0)-->(0, halt SCM+FSA);
-    P = Start-At( 0,SCM+FSA)+*(( 0) .--> halt SCM+FSA)
-     by FUNCT_4:def 4;
-    then reconsider P as FinPartState of SCM+FSA;
-    take P;
-    thus P is autonomic by AMI_1:67;
-    now
-      assume
-A1:   dom P c= NAT;
-A2:   dom P = { IC SCM+FSA, 0 } by FUNCT_4:65;
-      then IC SCM+FSA in dom P by TARSKI:def 2;
-      then reconsider l = IC SCM+FSA as Element of NAT by A1;
-      l in dom P by A2,TARSKI:def 2;
-      hence contradiction by COMPOS_1:3;
-    end;
-    hence thesis by RELAT_1:def 18;
-  end;
 end;
 
 theorem Th15:
@@ -1213,11 +1149,11 @@ A13: Comput(ProgramPart(s1),s1,1)|dom p = Comput(ProgramPart(s2),s2,1)|dom p;
 A14: (Following(ProgramPart s1,s1))|dom p
 = (Following(ProgramPart s1,Comput(ProgramPart(s1),s1
 ,0)))|dom p
-by AMI_1:13
-      .= Comput(ProgramPart(s1),s1,0+1)|dom p by AMI_1:14
+by EXTPRO_1:3
+      .= Comput(ProgramPart(s1),s1,0+1)|dom p by EXTPRO_1:4
       .= (Following(ProgramPart s2,Comput(ProgramPart (s2),s2,0)))|dom p
-      by A13,AMI_1:14
-      .= (Following(ProgramPart s2,s2))|dom p by AMI_1:13;
+      by A13,EXTPRO_1:4
+      .= (Following(ProgramPart s2,s2))|dom p by EXTPRO_1:3;
     dom p1 = dom p \/ dom ((il .--> goto  0)) by FUNCT_4:def 1;
     then il in dom p1 by A11,XBOOLE_0:def 3;
     then
@@ -1314,17 +1250,17 @@ A22:  p.x = p1.x by A21,FUNCT_4:17;
     hence
 A23: p c= s1 by A20,GRFUNC_1:8;
     then
-A24: (Cs1i|dom p) = (Csi|dom p) by A1,AMI_1:def 25;
+A24: (Cs1i|dom p) = (Csi|dom p) by A1,EXTPRO_1:def 9;
     dom s2 = the carrier of SCM+FSA by PARTFUN1:def 4;
     then dom p c= dom s2 by RELAT_1:def 18;
     hence p c= s2 by A15,GRFUNC_1:8;
     then
-A25: (Cs1i|dom p) = (Cs2i|dom p) by A23,AMI_1:def 25;
+A25: (Cs1i|dom p) = (Cs2i|dom p) by A23,EXTPRO_1:def 9;
     take k = i+1;
     set Cs1k = Comput(ProgramPart(s1),s1,k);
 T: ProgramPart s1 = ProgramPart Cs1i
 by AMI_1:123;
-A26: Cs1k = Following(ProgramPart s1,Cs1i) by AMI_1:14
+A26: Cs1k = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
       .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
 Y:  (ProgramPart s1)/.IC Cs1i
  = Cs1i.IC Cs1i by T,COMPOS_1:38;
@@ -1335,7 +1271,7 @@ A28: Cs1k.IC SCM+FSA = loc by A26,A19,Y,SCMFSA_2:95;
     set Cs2k = Comput(ProgramPart(s2),s2,k);
 T: ProgramPart s2 = ProgramPart Cs2i
 by AMI_1:123;
-A29: Cs2k = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A29: Cs2k = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
       .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
 Z:  (ProgramPart s2)/.IC Cs2i
  = Cs2i.IC Cs2i by T,COMPOS_1:38;
@@ -1370,7 +1306,7 @@ A3: IC Cs1i = IC Cs2i
 A4: IC Comput(ProgramPart(s1),s1,i) <> IC Comput(ProgramPart(s2),s2,i);
     (Cs1i|dom p).IC SCM+FSA = Cs1i.IC SCM+FSA & (Cs2i|dom p).IC SCM+FSA =
     Cs2i. IC SCM+FSA by Th15,FUNCT_1:72;
-    hence contradiction by A1,A2,A4,AMI_1:def 25;
+    hence contradiction by A1,A2,A4,EXTPRO_1:def 9;
   end;
   set I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,i));
   thus I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,i))
@@ -1397,7 +1333,7 @@ V:  (ProgramPart s1)/.IC Comput(ProgramPart(s1),s1,i)
     assume
 Z:    I <> CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,i));
    Comput(ProgramPart(s1),s1,i)|dom p = Comput(ProgramPart(s2),s2,i)|dom p by
-A1,A2,AMI_1:def 25;
+A1,A2,EXTPRO_1:def 9;
 
     hence contradiction by A3,A7,A6,Y,Z,V;
   end;
@@ -1421,7 +1357,7 @@ A1: p c= s1 & p c= s2;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
 A3: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
   Cs2i1.da by FUNCT_1:72;
@@ -1429,14 +1365,14 @@ A3: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
 A4: I = da := db and
 A5: da in dom p & Comput(ProgramPart(s1),s1,i).db <> Comput(ProgramPart(s2),s2,
 i).db;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
   then
 A6: Cs1i1.da = Cs1i.db by A4,SCMFSA_2:89;
   I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
 s2,i)) by A1,Th18;
   then Cs2i1.da = Cs2i.db by A2,A4,SCMFSA_2:89;
-  hence contradiction by A1,A3,A5,A6,AMI_1:def 25;
+  hence contradiction by A1,A3,A5,A6,EXTPRO_1:def 9;
 end;
 
 theorem
@@ -1458,7 +1394,7 @@ A1: p c= s1 & p c= s2;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
 A3: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
   Cs2i1.da by FUNCT_1:72;
@@ -1467,14 +1403,14 @@ A4: I = AddTo(da, db) and
 A5: da in dom p & Comput(ProgramPart(s1),s1,i).da + Comput(ProgramPart(s1),s1,i
 ).db <>
   Comput(ProgramPart(s2),s2, i).da + Comput(ProgramPart(s2),s2,i).db;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
   then
 A6: Cs1i1.da = Cs1i.da + Cs1i.db by A4,SCMFSA_2:90;
   I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
 s2,i)) by A1,Th18;
   then Cs2i1.da = Cs2i.da + Cs2i.db by A2,A4,SCMFSA_2:90;
-  hence contradiction by A1,A3,A5,A6,AMI_1:def 25;
+  hence contradiction by A1,A3,A5,A6,EXTPRO_1:def 9;
 end;
 
 theorem
@@ -1497,7 +1433,7 @@ A1: p c= s1 & p c= s2;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
 A3: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
   Cs2i1.da by FUNCT_1:72;
@@ -1506,14 +1442,14 @@ A4: I = SubFrom(da, db) and
 A5: da in dom p & Comput(ProgramPart(s1),s1,i).da - Comput(ProgramPart(s1),s1,i
 ).db <>
   Comput(ProgramPart(s2),s2, i).da - Comput(ProgramPart(s2),s2,i).db;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
   then
 A6: Cs1i1.da = Cs1i.da - Cs1i.db by A4,SCMFSA_2:91;
   I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
 s2,i)) by A1,Th18;
   then Cs2i1.da = Cs2i.da - Cs2i.db by A2,A4,SCMFSA_2:91;
-  hence contradiction by A1,A3,A5,A6,AMI_1:def 25;
+  hence contradiction by A1,A3,A5,A6,EXTPRO_1:def 9;
 end;
 
 theorem
@@ -1536,7 +1472,7 @@ A1: p c= s1 & p c= s2;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
 A3: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
   Cs2i1.da by FUNCT_1:72;
@@ -1545,14 +1481,14 @@ A4: I = MultBy(da, db) and
 A5: da in dom p & Comput(ProgramPart(s1),s1,i).da * Comput(ProgramPart(s1),s1,i
 ).db <>
   Comput(ProgramPart(s2),s2, i).da * Comput(ProgramPart(s2),s2,i).db;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
   then
 A6: Cs1i1.da = Cs1i.da * Cs1i.db by A4,SCMFSA_2:92;
   I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
 s2,i)) by A1,Th18;
   then Cs2i1.da = Cs2i.da * Cs2i.db by A2,A4,SCMFSA_2:92;
-  hence contradiction by A1,A3,A5,A6,AMI_1:def 25;
+  hence contradiction by A1,A3,A5,A6,EXTPRO_1:def 9;
 end;
 
 theorem
@@ -1575,7 +1511,7 @@ A1: p c= s1 & p c= s2;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
 A3: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
   Cs2i1.da by FUNCT_1:72;
@@ -1586,14 +1522,14 @@ A6: da <> db and
 A7: Comput(ProgramPart(s1),s1,i).da div Comput(ProgramPart(s1),s1,i).db <>
 Comput(ProgramPart(s2),s2,i).
   da div Comput(ProgramPart(s2),s2,i).db;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
   then
 A8: Cs1i1.da = Cs1i.da div Cs1i.db by A4,A6,SCMFSA_2:93;
   I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
 s2,i)) by A1,Th18;
   then Cs2i1.da = Cs2i.da div Cs2i.db by A2,A4,A6,SCMFSA_2:93;
-  hence contradiction by A1,A3,A5,A7,A8,AMI_1:def 25;
+  hence contradiction by A1,A3,A5,A7,A8,EXTPRO_1:def 9;
 end;
 
 theorem
@@ -1615,7 +1551,7 @@ A1: p c= s1 & p c= s2;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A2: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
   assume that
 A3: I = Divide(da, db) and
@@ -1624,14 +1560,14 @@ A5: Comput(ProgramPart(s1),s1,i).da mod Comput(ProgramPart(s1),s1,i).db <>
 Comput(ProgramPart(s2),s2,i).
   da mod Comput(ProgramPart(s2),s2,i).db;
 A6: (Cs1i1|dom p).db = Cs1i1.db & (Cs2i1|dom p).db = Cs2i1.db by A4,FUNCT_1:72;
-  Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+  Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
   then
 A7: Cs1i1.db = Cs1i.da mod Cs1i.db by A3,SCMFSA_2:93;
   I = CurInstr(ProgramPart s2,Comput(ProgramPart(s2),
 s2,i)) by A1,Th18;
   then Cs2i1.db = Cs2i.da mod Cs2i.db by A2,A3,SCMFSA_2:93;
-  hence contradiction by A1,A5,A6,A7,AMI_1:def 25;
+  hence contradiction by A1,A5,A6,A7,EXTPRO_1:def 9;
 end;
 
 theorem
@@ -1651,9 +1587,9 @@ A1: p c= s1 & p c= s2;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+A2: Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
-A3: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A3: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
 A4: (Cs1i1|dom p).IC SCM+FSA = Cs1i1.IC SCM+FSA & (Cs2i1|dom p).IC SCM+FSA =
   Cs2i1.IC SCM+FSA by Th15,FUNCT_1:72;
@@ -1667,9 +1603,9 @@ A8: now
     then
     Cs2i1.IC SCM+FSA = loc & Cs1i1.IC SCM+FSA = succ IC Cs1i by A7,A2,A3,A5,
 SCMFSA_2:96;
-    hence contradiction by A1,A4,A6,AMI_1:def 25;
+    hence contradiction by A1,A4,A6,EXTPRO_1:def 9;
   end;
-A9: (Cs1i1|dom p) = (Cs2i1|dom p) by A1,AMI_1:def 25;
+A9: (Cs1i1|dom p) = (Cs2i1|dom p) by A1,EXTPRO_1:def 9;
   now
     assume
     Comput(ProgramPart(s1),s1,i).da = 0 & Comput(ProgramPart(s2),s2,i).da <> 0;
@@ -1695,15 +1631,15 @@ A1: p c= s1 & p c= s2;
   let i be Element of NAT, da be Int-Location, loc be Element of NAT;
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: (Cs1i1|dom p) = (Cs2i1|dom p) by A1,AMI_1:def 25;
+A2: (Cs1i1|dom p) = (Cs2i1|dom p) by A1,EXTPRO_1:def 9;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i = Comput(ProgramPart(s1),s1,i);
   set I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,i));
-A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
 A4: (Cs1i1|dom p).IC SCM+FSA = Cs1i1.IC SCM+FSA & (Cs2i1|dom p).IC SCM+FSA =
   Cs2i1.IC SCM+FSA by Th15,FUNCT_1:72;
-A5: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A5: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
   assume that
 A6: I = da>0_goto loc and
@@ -1744,15 +1680,15 @@ A1: p c= s1 & p c= s2;
   let i be Element of NAT, da, db be Int-Location, f be FinSeq-Location;
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: Cs1i1|dom p = Cs2i1|dom p by A1,AMI_1:def 25;
+A2: Cs1i1|dom p = Cs2i1|dom p by A1,EXTPRO_1:def 9;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i = Comput(ProgramPart(s1),s1,i);
   set I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,i));
-A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
 A4: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
   Cs2i1.da by FUNCT_1:72;
-A5: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A5: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
   assume that
 A6: I = da := (f,db) and
@@ -1787,15 +1723,15 @@ A1: p c= s1 & p c= s2;
   let i be Element of NAT, da, db be Int-Location, f be FinSeq-Location;
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: Cs1i1|dom p = Cs2i1|dom p by A1,AMI_1:def 25;
+A2: Cs1i1|dom p = Cs2i1|dom p by A1,EXTPRO_1:def 9;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i = Comput(ProgramPart(s1),s1,i);
   set I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,i));
-A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
 A4: f in dom p implies (Cs1i1|dom p).f = Cs1i1.f & (Cs2i1|dom p).f = Cs2i1.f
   by FUNCT_1:72;
-A5: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A5: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
   assume that
 A6: I = (f,db):=da and
@@ -1823,15 +1759,15 @@ A1: p c= s1 & p c= s2;
   let i be Element of NAT, da be Int-Location, f be FinSeq-Location;
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: Cs1i1|dom p = Cs2i1|dom p by A1,AMI_1:def 25;
+A2: Cs1i1|dom p = Cs2i1|dom p by A1,EXTPRO_1:def 9;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i = Comput(ProgramPart(s1),s1,i);
   set I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,i));
-A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
 A4: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da & (Cs2i1|dom p).da =
   Cs2i1.da by FUNCT_1:72;
-A5: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A5: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
   assume that
 A6: I = da :=len f and
@@ -1859,15 +1795,15 @@ A1: p c= s1 & p c= s2;
   let i be Element of NAT, da be Int-Location, f be FinSeq-Location;
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
-A2: Cs1i1|dom p = Cs2i1|dom p by A1,AMI_1:def 25;
+A2: Cs1i1|dom p = Cs2i1|dom p by A1,EXTPRO_1:def 9;
   set Cs2i = Comput(ProgramPart(s2),s2,i);
   set Cs1i = Comput(ProgramPart(s1),s1,i);
   set I = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,i));
-A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
+A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
 A4: f in dom p implies (Cs1i1|dom p).f = Cs1i1.f & (Cs2i1|dom p).f = Cs2i1.f
   by FUNCT_1:72;
-A5: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
+A5: Cs2i1 = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
     .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
   assume that
 A6: I = f:=<0,...,0>da and

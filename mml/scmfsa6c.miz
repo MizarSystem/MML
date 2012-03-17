@@ -13,18 +13,19 @@ environ
       MSUALG_1, AOFA_I00, SCMFSA6C, ORDINAL1, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, INT_1, COMPLEX1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      FUNCOP_1, FUNCT_4, STRUCT_0, COMPOS_1, AMI_1, FUNCT_7, SCMFSA_2,
+      FUNCOP_1, FUNCT_4, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, FUNCT_7,
+      SCMFSA_2,
       SCMFSA6A, SF_MASTR, SCMFSA6B, XXREAL_0;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, INT_2, SCMFSA6A, SF_MASTR,
-      SCMFSA6B, RELSET_1, PRE_POLY, AMISTD_2;
+      SCMFSA6B, RELSET_1, PRE_POLY, AMISTD_2, AMI_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       NUMBERS, XREAL_0, INT_1, AMI_1, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B,
-      ORDINAL1, RELSET_1, COMPOS_1;
+      ORDINAL1, RELSET_1, COMPOS_1, STRUCT_0, EXTPRO_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions FUNCOP_1, COMPOS_1, AMI_1, SCMFSA6B, SCMFSA6A;
+ definitions FUNCOP_1, COMPOS_1, EXTPRO_1, AMI_1, SCMFSA6B, SCMFSA6A, PARTFUN1;
  theorems RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, SCMFSA_3, ZFMISC_1, FUNCOP_1,
       TARSKI, NAT_1, AMI_1, SCMFSA_2, ENUMSET1, GRFUNC_1, SCMFSA6A, SF_MASTR,
-      SCMFSA6B, XBOOLE_0, XBOOLE_1, PARTFUN1, AFINSQ_1, COMPOS_1;
+      SCMFSA6B, XBOOLE_0, XBOOLE_1, PARTFUN1, AFINSQ_1, COMPOS_1, EXTPRO_1;
 
 begin :: Consequences of the main theorem from SCMFSA6B
 
@@ -118,7 +119,7 @@ A12:  0 in dom m1 by FUNCT_4:13;
 Y:  (ProgramPart s)/.IC s
  = s.IC s by COMPOS_1:38;
  Comput(ProgramPart(s),s,0) =
-  s by AMI_1:13;
+  s by EXTPRO_1:3;
   then
   CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,0))
    = CurInstr(ProgramPart s,s)
@@ -132,23 +133,23 @@ Lm2: Macro halt SCM+FSA is keeping_0 parahalting
 proof
   set Mi = Macro halt SCM+FSA;
   hereby
-A1:  0 in dom (Mi +* Start-At( 0,SCM+FSA)) by SCMFSA6B:31;
+A1:  0 in dom (Mi +* Start-At( 0,SCM+FSA)) by COMPOS_1:146,SCMFSA6B:31;
     let s be State of SCM+FSA;
     assume
 A2: Mi +* Start-At( 0,SCM+FSA) c= s;
     let k be Element of NAT;
-A3: s = Comput(ProgramPart(s),s,0) by AMI_1:13;
+A3: s = Comput(ProgramPart(s),s,0) by EXTPRO_1:3;
 Y:  (ProgramPart s)/.IC s
  = s.IC s by COMPOS_1:38;
  Comput(ProgramPart(s),s,0) =
-  s by AMI_1:13;
+  s by EXTPRO_1:3;
   then
     CurInstr(ProgramPart Comput(ProgramPart(s),s,0),Comput(ProgramPart(s),s,0))
      = CurInstr(ProgramPart s,s)
-      .= s. 0 by A2,Y,SF_MASTR:67
+      .= s. 0 by A2,Y,COMPOS_1:143
       .= (Mi +* Start-At( 0,SCM+FSA)). 0 by A2,A1,GRFUNC_1:8
-      .= halt SCM+FSA by SCMFSA6B:33;
-    hence (Comput(ProgramPart(s),s,k)).intloc 0 = s.intloc 0 by A3,AMI_1:52
+      .= halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
+    hence (Comput(ProgramPart(s),s,k)).intloc 0 = s.intloc 0 by A3,EXTPRO_1:6
 ,NAT_1:2;
   end;
   thus thesis by Lm1;
@@ -209,7 +210,7 @@ A5: IC Exec(a:=b, s) = succ  0 by SCMFSA_2:89
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A2,GRFUNC_1:8;
     then
-A6: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A6: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
      0 in dom Ma by SCMFSA6B:32;
     then
 A7: Ma. 0 = s. 0 by A2,GRFUNC_1:8;
@@ -220,9 +221,9 @@ Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
 NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
 by AMI_1:123;
     Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-    Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(a:=b, s) by A4,A7,Y,SCMFSA6B:33;
+    Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(a:=b, s) by A4,A7,Y,COMPOS_1:148,SCMFSA6B:33;
      then CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,1))
       = halt SCM+FSA by A6,A5,Z,NX,AMI_1:def 13;
     hence thesis;
@@ -251,7 +252,7 @@ A12: IC Exec(AddTo(a,b), s) = succ  0 by SCMFSA_2:90
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A9,GRFUNC_1:8;
     then
-A13: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A13: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
      0 in dom Ma by SCMFSA6B:32;
     then
 A14: Ma. 0 = s. 0 by A9,GRFUNC_1:8;
@@ -262,9 +263,9 @@ Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
 NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
 by AMI_1:123;
     Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-    Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(AddTo(a,b), s) by A11,A14,Y,SCMFSA6B:33;
+    Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(AddTo(a,b), s) by A11,A14,Y,COMPOS_1:148,SCMFSA6B:33;
      then CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,1))
       = halt SCM+FSA by A13,A12,Z,NX,AMI_1:def 13;
     hence thesis;
@@ -293,7 +294,7 @@ A19: IC Exec(SubFrom(a,b), s) = succ  0 by SCMFSA_2:91
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A16,GRFUNC_1:8;
     then
-A20: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A20: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
 Y:  (ProgramPart s)/.IC s
  = s.IC s by COMPOS_1:38;
 Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
@@ -304,9 +305,9 @@ A21: Ma. 0 = s. 0 by A16,GRFUNC_1:8;
 NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
 by AMI_1:123;
     Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-    Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(SubFrom(a,b), s) by A18,A21,Y,SCMFSA6B:33;
+    Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(SubFrom(a,b), s) by A18,A21,Y,COMPOS_1:148,SCMFSA6B:33;
      then CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,1))
       = halt SCM+FSA by A20,A19,Z,NX,AMI_1:def 13;
     hence thesis;
@@ -335,7 +336,7 @@ A26: IC Exec(MultBy(a,b), s) = succ  0 by SCMFSA_2:92
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A23,GRFUNC_1:8;
     then
-A27: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A27: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
      0 in dom Ma by SCMFSA6B:32;
     then
 A28: Ma. 0 = s. 0 by A23,GRFUNC_1:8;
@@ -346,9 +347,9 @@ Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
 NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
 by AMI_1:123;
     Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-    Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(MultBy(a,b), s) by A25,A28,Y,SCMFSA6B:33;
+    Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(MultBy(a,b), s) by A25,A28,Y,COMPOS_1:148,SCMFSA6B:33;
      then CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,1))
       = halt SCM+FSA by A27,A26,Z,NX,AMI_1:def 13;
     hence thesis;
@@ -377,7 +378,7 @@ A33: IC Exec(Divide(a,b), s) = succ  0 by SCMFSA_2:93
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A30,GRFUNC_1:8;
     then
-A34: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A34: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
      0 in dom Ma by SCMFSA6B:32;
     then
 A35: Ma. 0 = s. 0 by A30,GRFUNC_1:8;
@@ -388,9 +389,9 @@ Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
 NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
 by AMI_1:123;
     Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-    Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(Divide(a,b), s) by A32,A35,Y,SCMFSA6B:33;
+    Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(Divide(a,b), s) by A32,A35,Y,COMPOS_1:148,SCMFSA6B:33;
      then CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,1))
       = halt SCM+FSA by A34,A33,Z,NX,AMI_1:def 13;
     hence thesis;
@@ -420,7 +421,7 @@ A40: IC Exec(b:=(f,a), s) = succ  0 by SCMFSA_2:98
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A37,GRFUNC_1:8;
     then
-A41: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A41: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
      0 in dom Ma by SCMFSA6B:32;
     then
 A42: Ma. 0 = s. 0 by A37,GRFUNC_1:8;
@@ -431,9 +432,9 @@ Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
 NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
 by AMI_1:123;
     Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-    Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(b:=(f,a), s) by A39,A42,Y,SCMFSA6B:33;
+    Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(b:=(f,a), s) by A39,A42,Y,COMPOS_1:148,SCMFSA6B:33;
      then CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,1))
       = halt SCM+FSA by A41,A40,Z,NX,AMI_1:def 13;
     hence thesis;
@@ -464,7 +465,7 @@ A47:  IC Exec((f,a):=b, s) = succ  0 by SCMFSA_2:99
        1 in dom Ma by SCMFSA6B:32;
       then Ma. 1 = s. 1 by A44,GRFUNC_1:8;
       then
-A48:  s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A48:  s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
        0 in dom Ma by SCMFSA6B:32;
       then
 A49:  Ma. 0 = s. 0 by A44,GRFUNC_1:8;
@@ -475,9 +476,9 @@ Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
 NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
 by AMI_1:123;
       Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-      Comput(ProgramPart(s),s,0)) by AMI_1:14
-        .= Following(ProgramPart s,s) by AMI_1:13
-        .= Exec((f,a):=b, s) by A46,A49,Y,SCMFSA6B:33;
+      Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+        .= Following(ProgramPart s,s) by EXTPRO_1:3
+        .= Exec((f,a):=b, s) by A46,A49,Y,COMPOS_1:148,SCMFSA6B:33;
      then CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,1))
       = halt SCM+FSA by A48,A47,Z,NX,AMI_1:def 13;
       hence thesis;
@@ -507,13 +508,13 @@ Y:  (ProgramPart s)/.IC s
 Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
  = Comput(ProgramPart(s),s,1).IC Comput(ProgramPart(s),s,1) by COMPOS_1:38;
 A55:  Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-Comput(ProgramPart(s),s,0)) by AMI_1:14
-        .= Following(ProgramPart s,s) by AMI_1:13
-        .= Exec((f,a):=b, s) by A53,A54,Y,SCMFSA6B:33;
+Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+        .= Following(ProgramPart s,s) by EXTPRO_1:3
+        .= Exec((f,a):=b, s) by A53,A54,Y,COMPOS_1:148,SCMFSA6B:33;
        1 in dom Ma by SCMFSA6B:32;
       then Ma. 1 = s. 1 by A51,GRFUNC_1:8;
       then
-A56:  s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A56:  s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
 T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
 by AMI_1:123;
       IC Exec((f,a):=b, s) = succ  0 by A53,SCMFSA_2:99
@@ -525,12 +526,12 @@ A57:  CurInstr(ProgramPart Comput(ProgramPart(s),s,1),Comput(ProgramPart(s),s,1
       per cases by NAT_1:14;
       suppose
         k = 0;
-        hence thesis by AMI_1:13;
+        hence thesis by EXTPRO_1:3;
       end;
       suppose
 A58:    1 <= k;
         Comput(ProgramPart(s),s,1).intloc 0 = s.intloc 0 by A55,SCMFSA_2:99;
-        hence thesis by A57,A58,T,AMI_1:52;
+        hence thesis by A57,A58,T,EXTPRO_1:6;
       end;
     end;
   end;
@@ -562,7 +563,7 @@ A5: IC Exec(a:=len f, s) = succ  0 by SCMFSA_2:100
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A2,GRFUNC_1:8;
     then
-A6: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A6: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
      0 in dom Ma by SCMFSA6B:32;
     then
 A7: Ma. 0 = s. 0 by A2,GRFUNC_1:8;
@@ -573,9 +574,9 @@ Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
 NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
 by AMI_1:123;
     Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-    Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(a:=len f, s) by A4,A7,Y,SCMFSA6B:33;
+    Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(a:=len f, s) by A4,A7,Y,COMPOS_1:148,SCMFSA6B:33;
      then CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,1))
       = halt SCM+FSA by A5,A6,Z,NX,AMI_1:def 13;
     hence thesis;
@@ -606,7 +607,7 @@ A12:  IC Exec(f:=<0,...,0>a, s) = succ  0 by SCMFSA_2:101
        1 in dom Ma by SCMFSA6B:32;
       then Ma. 1 = s. 1 by A9,GRFUNC_1:8;
       then
-A13:  s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A13:  s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
        0 in dom Ma by SCMFSA6B:32;
       then
 A14:  Ma. 0 = s. 0 by A9,GRFUNC_1:8;
@@ -617,9 +618,9 @@ Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
 NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
 by AMI_1:123;
       Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-      Comput(ProgramPart(s),s,0)) by AMI_1:14
-        .= Following(ProgramPart s,s) by AMI_1:13
-        .= Exec(f:=<0,...,0>a, s) by A11,A14,Y,SCMFSA6B:33;
+      Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+        .= Following(ProgramPart s,s) by EXTPRO_1:3
+        .= Exec(f:=<0,...,0>a, s) by A11,A14,Y,COMPOS_1:148,SCMFSA6B:33;
      then CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,1))
       = halt SCM+FSA by A12,A13,Z,NX,AMI_1:def 13;
       hence thesis;
@@ -649,13 +650,13 @@ Y:  (ProgramPart s)/.IC s
 Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
  = Comput(ProgramPart(s),s,1).IC Comput(ProgramPart(s),s,1) by COMPOS_1:38;
 A20:  Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-Comput(ProgramPart(s),s,0)) by AMI_1:14
-        .= Following(ProgramPart s,s) by AMI_1:13
-        .= Exec(f:=<0,...,0>a, s) by A18,A19,Y,SCMFSA6B:33;
+Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+        .= Following(ProgramPart s,s) by EXTPRO_1:3
+        .= Exec(f:=<0,...,0>a, s) by A18,A19,Y,COMPOS_1:148,SCMFSA6B:33;
        1 in dom Ma by SCMFSA6B:32;
       then Ma. 1 = s. 1 by A16,GRFUNC_1:8;
       then
-A21:  s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A21:  s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
 T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,1)
 by AMI_1:123;
       IC Exec(f:=<0,...,0>a, s) = succ  0 by A18,SCMFSA_2:101
@@ -667,12 +668,12 @@ A22:  CurInstr(ProgramPart Comput(ProgramPart(s),s,1),Comput(ProgramPart(s),s,1
       per cases by NAT_1:14;
       suppose
         k = 0;
-        hence thesis by AMI_1:13;
+        hence thesis by EXTPRO_1:3;
       end;
       suppose
 A23:    1 <= k;
         Comput(ProgramPart(s),s,1).intloc 0 = s.intloc 0 by A20,SCMFSA_2:101;
-        hence thesis by A22,A23,T,AMI_1:52;
+        hence thesis by A22,A23,T,EXTPRO_1:6;
       end;
     end;
   end;
@@ -706,13 +707,13 @@ Y:  (ProgramPart s)/.IC s
 Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
  = Comput(ProgramPart(s),s,1).IC Comput(ProgramPart(s),s,1) by COMPOS_1:38;
 A6: Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(a:=b, s) by A4,A5,Y,SCMFSA6B:33;
+Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(a:=b, s) by A4,A5,Y,COMPOS_1:148,SCMFSA6B:33;
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A2,GRFUNC_1:8;
     then
-A7: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A7: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
     IC Exec(a:=b, s) = succ  0 by A4,SCMFSA_2:89
       .=  (0+1);
     then
@@ -723,12 +724,12 @@ by AMI_1:123;
     per cases by NAT_1:14;
     suppose
       k = 0;
-      hence thesis by AMI_1:13;
+      hence thesis by EXTPRO_1:3;
     end;
     suppose
 A9:   1 <= k;
       Comput(ProgramPart(s),s,1).intloc 0 = s.intloc 0 by A6,SCMFSA_2:89;
-      hence thesis by A8,A9,T,AMI_1:52;
+      hence thesis by A8,A9,T,EXTPRO_1:6;
     end;
   end;
   cluster AddTo(a, b) -> keeping_0;
@@ -757,13 +758,13 @@ Y:  (ProgramPart s)/.IC s
 Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
  = Comput(ProgramPart(s),s,1).IC Comput(ProgramPart(s),s,1) by COMPOS_1:38;
 A15: Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(AddTo(a,b), s) by A13,A14,Y,SCMFSA6B:33;
+Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(AddTo(a,b), s) by A13,A14,Y,COMPOS_1:148,SCMFSA6B:33;
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A11,GRFUNC_1:8;
     then
-A16: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A16: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
     IC Exec(AddTo(a,b), s) = succ  0 by A13,SCMFSA_2:90
       .=  (0+1);
     then
@@ -775,12 +776,12 @@ by AMI_1:123;
     per cases by NAT_1:14;
     suppose
       k = 0;
-      hence thesis by AMI_1:13;
+      hence thesis by EXTPRO_1:3;
     end;
     suppose
 A18:  1 <= k;
       Comput(ProgramPart(s),s,1).intloc 0 = s.intloc 0 by A15,SCMFSA_2:90;
-      hence thesis by A17,A18,T,AMI_1:52;
+      hence thesis by A17,A18,T,EXTPRO_1:6;
     end;
   end;
   cluster SubFrom(a, b) -> keeping_0;
@@ -809,13 +810,13 @@ Y:  (ProgramPart s)/.IC s
 Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
  = Comput(ProgramPart(s),s,1).IC Comput(ProgramPart(s),s,1) by COMPOS_1:38;
 A24: Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(SubFrom(a,b), s) by A22,A23,Y,SCMFSA6B:33;
+Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(SubFrom(a,b), s) by A22,A23,Y,COMPOS_1:148,SCMFSA6B:33;
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A20,GRFUNC_1:8;
     then
-A25: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A25: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
     IC Exec(SubFrom(a,b), s) = succ  0 by A22,SCMFSA_2:91
       .=  (0+1);
     then
@@ -827,12 +828,12 @@ by AMI_1:123;
     per cases by NAT_1:14;
     suppose
       k = 0;
-      hence thesis by AMI_1:13;
+      hence thesis by EXTPRO_1:3;
     end;
     suppose
 A27:  1 <= k;
       Comput(ProgramPart(s),s,1).intloc 0 = s.intloc 0 by A24,SCMFSA_2:91;
-      hence thesis by A26,A27,T,AMI_1:52;
+      hence thesis by A26,A27,T,EXTPRO_1:6;
     end;
   end;
   cluster MultBy(a, b) -> keeping_0;
@@ -861,13 +862,13 @@ Y:  (ProgramPart s)/.IC s
 Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
  = Comput(ProgramPart(s),s,1).IC Comput(ProgramPart(s),s,1) by COMPOS_1:38;
 A33: Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(MultBy(a,b), s) by A31,A32,Y,SCMFSA6B:33;
+Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(MultBy(a,b), s) by A31,A32,Y,COMPOS_1:148,SCMFSA6B:33;
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A29,GRFUNC_1:8;
     then
-A34: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A34: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
     IC Exec(MultBy(a,b), s) = succ  0 by A31,SCMFSA_2:92
       .=  (0+1);
     then
@@ -879,12 +880,12 @@ by AMI_1:123;
     per cases by NAT_1:14;
     suppose
       k = 0;
-      hence thesis by AMI_1:13;
+      hence thesis by EXTPRO_1:3;
     end;
     suppose
 A36:  1 <= k;
       Comput(ProgramPart(s),s,1).intloc 0 = s.intloc 0 by A33,SCMFSA_2:92;
-      hence thesis by A35,A36,T,AMI_1:52;
+      hence thesis by A35,A36,T,EXTPRO_1:6;
     end;
   end;
 end;
@@ -917,13 +918,13 @@ Y:  (ProgramPart s)/.IC s
 Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
  = Comput(ProgramPart(s),s,1).IC Comput(ProgramPart(s),s,1) by COMPOS_1:38;
 A6: Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(Divide(a,b), s) by A4,A5,Y,SCMFSA6B:33;
+Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(Divide(a,b), s) by A4,A5,Y,COMPOS_1:148,SCMFSA6B:33;
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A2,GRFUNC_1:8;
     then
-A7: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A7: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
     IC Exec(Divide(a,b), s) = succ  0 by A4,SCMFSA_2:93
       .=  (0+1);
     then
@@ -934,12 +935,12 @@ by AMI_1:123;
     per cases by NAT_1:14;
     suppose
       k = 0;
-      hence thesis by AMI_1:13;
+      hence thesis by EXTPRO_1:3;
     end;
     suppose
 A9:   1 <= k;
       Comput(ProgramPart(s),s,1).intloc 0 = s.intloc 0 by A6,SCMFSA_2:93;
-      hence thesis by A8,A9,T,AMI_1:52;
+      hence thesis by A8,A9,T,EXTPRO_1:6;
     end;
   end;
 end;
@@ -972,13 +973,13 @@ Y:  (ProgramPart s)/.IC s
 Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
  = Comput(ProgramPart(s),s,1).IC Comput(ProgramPart(s),s,1) by COMPOS_1:38;
 A6: Comput(ProgramPart(s),s,0+1) = Following(ProgramPart s,
-Comput(ProgramPart(s),s,0)) by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(b:=(f,a), s) by A4,A5,Y,SCMFSA6B:33;
+Comput(ProgramPart(s),s,0)) by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(b:=(f,a), s) by A4,A5,Y,COMPOS_1:148,SCMFSA6B:33;
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A2,GRFUNC_1:8;
     then
-A7: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A7: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
     IC Exec(b:=(f,a), s) = succ  0 by A4,SCMFSA_2:98
       .=  (0+1);
     then
@@ -989,12 +990,12 @@ by AMI_1:123;
     per cases by NAT_1:14;
     suppose
       k = 0;
-      hence thesis by AMI_1:13;
+      hence thesis by EXTPRO_1:3;
     end;
     suppose
 A9:   1 <= k;
       Comput(ProgramPart(s),s,1).intloc 0 = s.intloc 0 by A6,SCMFSA_2:98;
-      hence thesis by A8,A9,T,AMI_1:52;
+      hence thesis by A8,A9,T,EXTPRO_1:6;
     end;
   end;
 end;
@@ -1028,13 +1029,13 @@ Z:  (ProgramPart Comput(ProgramPart(s),s,1))/.IC Comput(ProgramPart(s),s,1)
  = Comput(ProgramPart(s),s,1).IC Comput(ProgramPart(s),s,1) by COMPOS_1:38;
 A6: Comput(ProgramPart(s),s,0+1) =
 Following(ProgramPart s,Comput(ProgramPart(s),s,0))
- by AMI_1:14
-      .= Following(ProgramPart s,s) by AMI_1:13
-      .= Exec(b:=len f, s) by A4,A5,Y,SCMFSA6B:33;
+ by EXTPRO_1:4
+      .= Following(ProgramPart s,s) by EXTPRO_1:3
+      .= Exec(b:=len f, s) by A4,A5,Y,COMPOS_1:148,SCMFSA6B:33;
      1 in dom Ma by SCMFSA6B:32;
     then Ma. 1 = s. 1 by A2,GRFUNC_1:8;
     then
-A7: s. 1 = halt SCM+FSA by SCMFSA6B:33;
+A7: s. 1 = halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
     IC Exec(b:=len f, s) = succ  0 by A4,SCMFSA_2:100
       .=  (0+1);
     then
@@ -1045,12 +1046,12 @@ by AMI_1:123;
     per cases by NAT_1:14;
     suppose
       k = 0;
-      hence thesis by AMI_1:13;
+      hence thesis by EXTPRO_1:3;
     end;
     suppose
 A9:   1 <= k;
       Comput(ProgramPart(s),s,1).intloc 0 = s.intloc 0 by A6,SCMFSA_2:100;
-      hence thesis by A8,A9,T,AMI_1:52;
+      hence thesis by A8,A9,T,EXTPRO_1:6;
     end;
   end;
 end;
@@ -1101,21 +1102,15 @@ registration
   cluster Initialized s -> total;
   coherence
   proof
-    reconsider EI = {} as FinPartState of SCM+FSA by FUNCT_1:174,RELAT_1:206;
-A1: for m,n be Nat st n in dom EI & m < n holds m in dom EI;
-X:  rng EI c= the Instructions of SCM+FSA by RELAT_1:60,XBOOLE_1:2;
-    dom EI c= NAT by RELAT_1:60,XBOOLE_1:2;
-    then reconsider EI as Program of SCM+FSA
-     by A1,X,AFINSQ_1:def 13,RELAT_1:def 18,def 19;
-    s +* ((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA) = s +* EI
-     +* ((intloc 0
-    ) .--> 1) +* Start-At( 0,SCM+FSA) by FUNCT_4:22
-      .= s +* EI +* (((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA))
-       by FUNCT_4:15
-      .= s +* (EI +* (((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA)))
-       by FUNCT_4:15
-      .= s +* Initialized EI by FUNCT_4:15;
-    hence thesis;
+C: dom s = the carrier of SCM+FSA by PARTFUN1:def 4;
+   then
+A:  intloc 0 in the carrier of SCM+FSA by RELAT_1:def 18;
+B:  IC SCM+FSA in dom s by COMPOS_1:9;
+   thus dom Initialized s
+      = dom s \/ {intloc 0} \/ {IC SCM+FSA} by SCMFSA6A:43
+     .= dom s \/ {IC SCM+FSA} by A,C,ZFMISC_1:46
+     .= dom s by B,ZFMISC_1:46
+     .= the carrier of SCM+FSA by C;
   end;
 end;
 
@@ -1229,8 +1224,8 @@ A9: dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations)) = (
     InsCode i = 0;
     then
 A10: i = halt SCM+FSA by SCMFSA_2:122;
-    then Exec (i,s1) = s1 by AMI_1:def 8;
-    hence thesis by A1,A10,AMI_1:def 8;
+    then Exec (i,s1) = s1 by EXTPRO_1:def 3;
+    hence thesis by A1,A10,EXTPRO_1:def 3;
   end;
   suppose
     InsCode i = 1;
@@ -2127,11 +2122,11 @@ proof
   set Is = Initialized s;
   set IC1 = IC Comput(ProgramPart(sI),sI,1);
   reconsider Mi9 = Mi as parahalting Program of SCM+FSA;
-A1:  0 in dom Initialized Mi by SCMFSA6B:31;
+A1:  0 in dom Initialized Mi by COMPOS_1:146,SCMFSA6B:31;
   Mi+*SA0 c= sI by FUNCT_4:26,SCMFSA6B:8;
   then
 A2: IC1 in dom Mi9 by SCMFSA6B:def 2;
-A3: (Initialized Mi). 1=halt SCM+FSA by SCMFSA6B:33;
+A3: (Initialized Mi). 1=halt SCM+FSA by COMPOS_1:148,SCMFSA6B:33;
 A4: Initialized Mi c= sI by FUNCT_4:26;
 A5: now
     set Y = NAT;
@@ -2207,14 +2202,14 @@ A20: Exec(i, Is)| (X \/ Y) = IExec(Mi, s) | (X \/ Y) by A8,A15,A14,RELAT_1:185;
   then
 A21: dom Mi c= dom Initialized Mi by RELAT_1:25;
 A22:  1 in dom Mi by SCMFSA6B:32;
-A23: (Initialized Mi). 0 = i by SCMFSA6B:33;
+A23: (Initialized Mi). 0 = i by COMPOS_1:148,SCMFSA6B:33;
 Y:  (ProgramPart sI)/.IC sI
  = sI.IC sI by COMPOS_1:38;
 Z:  (ProgramPart Comput(ProgramPart(sI),sI,1))/.IC Comput(ProgramPart(sI),sI,1)
  = Comput(ProgramPart(sI),sI,1).IC Comput(ProgramPart(sI),sI,1) by COMPOS_1:38;
 A24: Comput(ProgramPart(sI),sI,0+1) = Following(ProgramPart sI,
-Comput(ProgramPart(sI),sI,0)) by AMI_1:14
-    .= Following(ProgramPart sI,sI) by AMI_1:13
+Comput(ProgramPart(sI),sI,0)) by EXTPRO_1:4
+    .= Following(ProgramPart sI,sI) by EXTPRO_1:3
     .= Exec(sI. 0, sI) by Y,FUNCT_4:26,SCMFSA6B:34
     .= Exec(i, sI) by A1,A23,A4,GRFUNC_1:8;
 TX: ProgramPart sI = ProgramPart Comput(ProgramPart(sI),sI,1)
@@ -2237,8 +2232,8 @@ A27: InsCode i in {0, 6, 7, 8} by A24,A25,SCMFSA6A:23;
         InsCode i = 0;
         then
 A28:    i = halt SCM+FSA by SCMFSA_2:122;
-        then ProgramPart sI halts_on sI by A26,AMI_1:146;
-        hence thesis by A5,A24,A26,A28,AMI_1:def 22;
+        then ProgramPart sI halts_on sI by A26,EXTPRO_1:30;
+        hence thesis by A5,A24,A26,A28,EXTPRO_1:def 8;
       end;
       suppose
 A29:    InsCode i = 6 or InsCode i = 7 or InsCode i = 8;
@@ -2286,20 +2281,20 @@ A32:    now
 A33:    sI = Exec(i, sI) by A30,A32,A31,SCMFSA_2:86;
 A34:    Following(ProgramPart sI,sI) =
 Following(ProgramPart sI,Comput(ProgramPart(sI),sI,0)
-) by AMI_1:13
-          .= Exec(i, sI) by A24,AMI_1:14;
+) by EXTPRO_1:3
+          .= Exec(i, sI) by A24,EXTPRO_1:4;
         now
           let n be Element of NAT;
-          Comput(ProgramPart(sI),sI,n) = sI by A33,A34,AMI_1:130
+          Comput(ProgramPart(sI),sI,n) = sI by A33,A34,EXTPRO_1:27
             .= Following(ProgramPart sI,Comput(
 ProgramPart(sI),sI,0))
-             by A33,A34,AMI_1:13
-            .= Comput(ProgramPart(sI),sI,0+1) by AMI_1:14;
+             by A33,A34,EXTPRO_1:3
+            .= Comput(ProgramPart(sI),sI,0+1) by EXTPRO_1:4;
           hence CurInstr(ProgramPart(sI),Comput(ProgramPart(sI),sI,n))
            <> halt SCM+FSA by A26,A29,SCMFSA_2:124;
         end;
-        then not ProgramPart sI halts_on sI by AMI_1:146;
-        hence thesis by A4,AMI_1:def 26;
+        then not ProgramPart sI halts_on sI by EXTPRO_1:30;
+        hence thesis by A4,EXTPRO_1:def 10;
       end;
     end;
   end;
@@ -2312,8 +2307,8 @@ A35: CurInstr(ProgramPart(sI),Comput(ProgramPart(sI),
 sI,1))
  = sI. 1 by A24,S,TX,AMI_1:def 13
       .= halt SCM+FSA by A21,A22,A3,A4,GRFUNC_1:8;
-    then ProgramPart sI halts_on sI by AMI_1:146;
-    hence thesis by A5,A24,A35,AMI_1:def 22;
+    then ProgramPart sI halts_on sI by EXTPRO_1:30;
+    hence thesis by A5,A24,A35,EXTPRO_1:def 8;
   end;
 end;
 

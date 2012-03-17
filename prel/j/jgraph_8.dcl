@@ -21,6 +21,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
@@ -46,7 +47,10 @@
 <ArticleID name="JGRAPH_6"/>
 <ArticleID name="TOPALG_2"/>
 <ArticleID name="TOPREALA"/>
+<ArticleID name="FINSUB_1"/>
 <ArticleID name="RLSUB_1"/>
+<ArticleID name="WELLORD1"/>
+<ArticleID name="PRE_POLY"/>
 <ArticleID name="RLVECT_2"/>
 <ArticleID name="CONVEX1"/>
 </Signature>
@@ -73,15 +77,15 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="366">
+<Func kind="K" nr="378">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="178">
-<Func kind="K" nr="280">
+<Adjective nr="191">
+<Func kind="K" nr="292">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -110,14 +114,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="377">
+<Func kind="K" nr="389">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="175">
+<Adjective nr="180">
 <Num nr="2"/>
 </Adjective>
 </Cluster>

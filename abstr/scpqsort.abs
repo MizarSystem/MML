@@ -15,14 +15,16 @@ environ
       SCMNORM, SCMFSA6C;
  notations TARSKI, XBOOLE_0, FUNCT_2, SUBSET_1, CARD_1, NUMBERS, XXREAL_0,
       RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, VALUED_1, XCMPLX_0, RECDEF_1, INT_1,
-      NAT_1, COMPOS_1, AMI_1, AMI_2, FUNCT_7, SCMPDS_2, SCMPDS_4, SCMPDS_5,
-      SCMPDS_6, SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8, GRAPH_2, CLASSES1,
-      SCPISORT;
+      NAT_1, COMPOS_1, EXTPRO_1, AMI_1, AMI_2, FUNCT_7, SCMPDS_2, SCMPDS_4,
+      SCMPDS_5, SCMPDS_6, SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8, GRAPH_2,
+      CLASSES1, SCPISORT;
  constructors REAL_1, RECDEF_1, NEWTON, MESFUNC1, SCM_1, SCMPDS_4, SCMPDS_5,
-      SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT, CLASSES1, GRAPH_2, VALUED_1;
+      SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT, CLASSES1, GRAPH_2, VALUED_1,
+      AMI_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMPDS_8,
-      ORDINAL1, VALUED_0, VALUED_1, AMI_1, RELAT_1, COMPOS_1, AFINSQ_1;
+      ORDINAL1, VALUED_0, VALUED_1, AMI_1, RELAT_1, COMPOS_1, AFINSQ_1,
+      EXTPRO_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -64,11 +66,13 @@ theorem :: SCPQSORT:4
 theorem :: SCPQSORT:5
   for s being State of SCMPDS,I being halt-free shiftable Program
   of SCMPDS, a,x,y be Int_position, i,c be Integer st card I > 0 & s.x >= c+s.
-DataLoc(s.a,i) & (for t be State of SCMPDS st t.x >= c+t.DataLoc(s.a,i) & t.y=s
+DataLoc(s.a,i) &
+(for t be State of SCMPDS st t.x >= c+t.DataLoc(s.a,i) & t.y=s
 .y & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,t).a=t.a & I is_closed_on t &
 I is_halting_on t & IExec(I,t).DataLoc(s.a,i) < t.DataLoc(s.a,i) & IExec(I,t).x
-  >= c+IExec(I,t).DataLoc(s.a,i) & IExec(I,t).y=t.y) holds while>0(a,i,I)
-is_closed_on s & while>0(a,i,I) is_halting_on s & (s.DataLoc(s.a,i) > 0 implies
+  >= c+IExec(I,t).DataLoc(s.a,i) & IExec(I,t).y=t.y)
+ holds while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s &
+ (s.DataLoc(s.a,i) > 0 implies
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
 
 theorem :: SCPQSORT:6
@@ -141,22 +145,29 @@ theorem :: SCPQSORT:12
   card Partition=38;
 
 theorem :: SCPQSORT:13
-  for s be State of SCMPDS,md,p0 be Element of NAT st s.GBP=0 & s.
+  for s be 0-started State of SCMPDS,
+  md,p0 be Element of NAT st s.GBP=0 & s.
   intpos 2=md & md >= p0+1 & p0 >= 7 holds Partition is_closed_on s & Partition
   is_halting_on s;
 
 theorem :: SCPQSORT:14
-  for s be State of SCMPDS,md,p0,n be Element of NAT,f,f1 be
+  for s be 0-started State of SCMPDS,
+  md,p0,n be Element of NAT,f,f1 be
 FinSequence of INT st s.GBP=0 & s.intpos 4-s.intpos 2 > 0 & s.intpos 2=md & md
   >= p0+1 & s.intpos 4 <= p0+n & p0 >= 7 & f is_FinSequence_on s,p0 & len f=n &
-f1 is_FinSequence_on IExec(Partition,s),p0 & len f1=n holds IExec(Partition,s).
-GBP=0 & IExec(Partition,s).intpos 1=s.intpos 1 & f,f1 are_fiberwise_equipotent
-& ex m4 be Element of NAT st m4=IExec(Partition,s).intpos 4 & md <= m4 & m4 <=
-s.intpos 4 & (for i be Element of NAT st md<=i & i < m4 holds IExec(Partition,s
-).intpos m4 >= IExec(Partition,s).intpos i) & (for i be Element of NAT st m4 <
-  i & i <= s.intpos 4 holds IExec(Partition,s).intpos m4 <= IExec(Partition,s).
-  intpos i) & for i be Element of NAT st i >= p0+1 & (i < s.intpos 2 or i > s.
-  intpos 4) holds IExec(Partition,s).intpos i = s.intpos i;
+f1 is_FinSequence_on IExec(Partition,s),p0 & len f1=n holds
+IExec(Partition,s).GBP=0 &
+IExec(Partition,s).intpos 1=s.intpos 1 &
+ f,f1 are_fiberwise_equipotent
+& ex m4 be Element of NAT
+   st m4=IExec(Partition,s).intpos 4 &
+      md <= m4 & m4 <= s.intpos 4 &
+  (for i be Element of NAT st md<=i & i < m4
+    holds IExec(Partition,s).intpos m4 >= IExec(Partition,s).intpos i) &
+  (for i be Element of NAT st m4 < i & i <= s.intpos 4
+    holds IExec(Partition,s).intpos m4 <= IExec(Partition,s).intpos i) &
+  for i be Element of NAT st i >= p0+1 & (i < s.intpos 2 or i > s.
+    intpos 4) holds IExec(Partition,s).intpos i = s.intpos i;
 
 theorem :: SCPQSORT:15
   Partition is halt-free shiftable;
@@ -171,7 +182,7 @@ theorem :: SCPQSORT:17
   parahalting;
 
 theorem :: SCPQSORT:18
-  for s being State of SCMPDS,p0,n being Element of NAT st p0 >= 7 holds
+  for s being 0-started State of SCMPDS,p0,n being Element of NAT st p0 >= 7
 ex f,g be FinSequence of INT st len f=n & f is_FinSequence_on s,p0 & len g = n
   & g is_FinSequence_on IExec(QuickSort(n,p0),s),p0 & f,g
   are_fiberwise_equipotent & g is_non_decreasing_on 1,n;

@@ -200,9 +200,10 @@
 </FCluster>
 <FCluster aid="NAT_1" nr="7">
 <ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="32"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="6"/>
+</Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -214,15 +215,7 @@
 </Func>
 <Cluster>
 <Adjective nr="8"/>
-<Adjective nr="16"/>
-<Adjective nr="21"/>
 </Cluster>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="16"/>
-<Adjective nr="21"/>
-</Cluster>
-</Typ>
 </FCluster>
 <CCluster aid="NAT_1" nr="1">
 <ArgTypes/>

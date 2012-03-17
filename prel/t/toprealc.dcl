@@ -54,9 +54,9 @@
 <ArticleID name="TOPALG_2"/>
 <ArticleID name="TOPREALB"/>
 <ArticleID name="SQUARE_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>

@@ -22,8 +22,6 @@ environ
 
 begin :: Chap. 1  Boolean Operations
 
-
-
 definition
   let k,l be boolean set;
   canceled 2;
@@ -95,8 +93,8 @@ definition
   let p,q be boolean-valued Function;
   func p 'or' q -> boolean-valued Function means
   :Def5:
-  dom it = dom p /\ dom
-  q & for x being set st x in dom it holds it.x = (p.x) 'or' (q.x);
+  dom it = dom p /\ dom q &
+  for x being set st x in dom it holds it.x = (p.x) 'or' (q.x);
   existence
   proof
     deffunc F(set) = (p.$1) 'or' (q.$1);
@@ -136,8 +134,8 @@ A7:   x in dom s1;
   idempotence;
   func p 'xor' q -> Function means
   :Def6:
-  dom it = dom p /\ dom q & for x
-  being set st x in dom it holds it.x = (p.x) 'xor' (q.x);
+  dom it = dom p /\ dom q &
+  for x being set st x in dom it holds it.x = (p.x) 'xor' (q.x);
   existence
   proof
     deffunc F(set) = (p.$1) 'xor' (q.$1);
@@ -277,8 +275,8 @@ definition
   let p,q be boolean-valued Function;
   func p 'imp' q -> Function means
   :Def9:
-  dom it = dom p /\ dom q & for x
-  being set st x in dom it holds it.x = (p.x) => (q.x);
+  dom it = dom p /\ dom q &
+  for x being set st x in dom it holds it.x = (p.x) => (q.x);
   existence
   proof
     deffunc F(set) = (p.$1) => (q.$1);
@@ -307,8 +305,8 @@ A6:   x in dom s1;
   end;
   func p 'eqv' q -> Function means
   :Def10:
-  dom it = dom p /\ dom q & for x
-  being set st x in dom it holds it.x = (p.x) <=> (q.x);
+  dom it = dom p /\ dom q &
+  for x being set st x in dom it holds it.x = (p.x) <=> (q.x);
   existence
   proof
     deffunc F(set) = (p.$1) <=> (q.$1);
@@ -3301,3 +3299,145 @@ A12:    not D in {{}} by TARSKI:def 1;
   end;
   hence thesis by SETFAM_1:def 2;
 end;
+
+begin :: BINARI_5
+
+definition
+  let x, y be Element of BOOLEAN;
+  redefine func x 'nand' y -> Element of BOOLEAN;
+  correctness
+  proof
+    x 'nand' y =FALSE or x 'nand' y = TRUE by XBOOLEAN:def 3;
+    hence thesis;
+  end;
+end;
+
+definition
+  let x, y be Element of BOOLEAN;
+  redefine func x 'nor' y -> Element of BOOLEAN;
+  correctness
+  proof
+    x 'nor' y =FALSE or x 'nor' y = TRUE by XBOOLEAN:def 3;
+    hence thesis;
+  end;
+end;
+
+definition
+  let x, y be boolean set;
+  redefine func x <=> y equals
+  'not' (x 'xor' y);
+  correctness;
+end;
+
+definition
+  let x, y be Element of BOOLEAN;
+  redefine func x <=> y -> Element of BOOLEAN;
+  correctness
+  proof
+    x <=> y =FALSE or x <=> y = TRUE by XBOOLEAN:def 3;
+    hence thesis;
+  end;
+end;
+
+reserve x,y,z for boolean set;
+
+theorem
+  TRUE 'nand' x = 'not' x;
+
+theorem
+  FALSE 'nand' x = TRUE;
+
+theorem
+  x 'nand' x = 'not' x & 'not' (x 'nand' x) = x;
+
+theorem
+  'not' (x 'nand' y) = x '&' y;
+
+theorem
+  x 'nand' 'not' x = TRUE & 'not' (x 'nand' 'not' x) = FALSE by XBOOLEAN
+  :135,138;
+
+theorem
+  x 'nand' (y '&' z) = 'not' (x '&' y '&' z);
+
+theorem
+  x 'nand' (y '&' z) = (x '&' y) 'nand' z;
+
+theorem
+  TRUE 'nor' x = FALSE;
+
+theorem
+  FALSE 'nor' x = 'not' x;
+
+theorem
+  x 'nor' x = 'not' x & 'not' (x 'nor' x) = x;
+
+theorem
+  'not' (x 'nor' y) = x 'or' y;
+
+theorem
+  x 'nor' 'not' x = FALSE & 'not' (x 'nor' 'not' x) = TRUE by XBOOLEAN:
+  134,138;
+
+theorem
+  x 'nor' (y 'or' z) = 'not' (x 'or' y 'or' z);
+
+theorem
+  TRUE <=> x = x;
+
+theorem
+  FALSE <=> x = 'not' x;
+
+theorem
+  x <=> x = TRUE & 'not' (x <=> x) = FALSE by XBOOLEAN:125,143;
+
+theorem
+  'not' (x <=> y) = x 'xor' y;
+
+theorem
+  x <=> 'not' x = FALSE & 'not' (x <=> 'not' x) = TRUE by XBOOLEAN:129,
+  142;
+
+theorem
+  x <= (y => z) iff x '&' y <= z
+proof
+  thus x <= (y => z) implies x '&' y <= z
+  proof
+    assume x <= (y => z);
+    then
+A3: x => (y => z) = TRUE by Def3;
+    x => (y => z) = (x '&' y) => z;
+    hence thesis by A3,Def3;
+  end;
+    assume x '&' y <= z; then
+A2: (x '&' y) => z = TRUE by Def3;
+    (x '&' y) => z = x => (y => z);
+    hence thesis by A2,Def3;
+end;
+
+theorem
+  x <=> y = (x => y) '&' (y => x);
+
+theorem
+  x => y = 'not' y => 'not' x;
+
+theorem
+  x <=> y = 'not' x <=> 'not' y;
+
+theorem
+  x=TRUE & (x => y)=TRUE implies y=TRUE;
+
+theorem
+  y=TRUE implies (x => y)=TRUE;
+
+theorem
+  ('not' x)=TRUE implies (x => y)=TRUE;
+
+theorem
+  z => (y => x)=TRUE implies y => (z => x)=TRUE;
+
+theorem
+  z => (y => x)=TRUE & y=TRUE implies z => x=TRUE;
+
+theorem
+  z => (y => x)=TRUE & y=TRUE & z = TRUE implies x=TRUE;

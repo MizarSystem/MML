@@ -10,25 +10,25 @@ environ
       FUNCOP_1, RELAT_1, FUNCT_1, TARSKI, XBOOLE_0, CARD_1, CAT_1, NAT_1,
       ARYTM_3, FINSET_1, STRUCT_0, XXREAL_0, AMISTD_2, VALUED_1, FSM_1,
       GRAPHSP, FUNCT_7, ARYTM_1, INT_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      TURING_1, SCMFSA6A, ORDINAL1, RELOC, SCMFSA6C;
+      TURING_1, SCMFSA6A, ORDINAL1, RELOC;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
       NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
       FUNCOP_1, FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1, AFINSQ_1, STRUCT_0,
-      COMPOS_1, AMI_1, FUNCT_7, SCMFSA_2, AMISTD_2, XXREAL_0;
+      COMPOS_1, EXTPRO_1, AMI_1, FUNCT_7, SCMFSA_2, AMISTD_2, XXREAL_0;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, INT_2, AMISTD_2, SCMFSA_2,
-      RELSET_1, VALUED_1, AMI_3;
+      RELSET_1, VALUED_1, AMI_3, AMI_1, PRE_POLY;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
       FINSET_1, NUMBERS, XREAL_0, INT_1, STRUCT_0, AMI_1, SCMFSA_2,
-      FUNCT_4, RELAT_1, VALUED_1, SCMFSA10, AMISTD_2, COMPOS_1;
+      FUNCT_4, RELAT_1, VALUED_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FUNCOP_1, SCMFSA_2, FUNCT_7, XBOOLE_0, TARSKI,
-      COMPOS_1, AMI_1, FUNCT_4,
+      COMPOS_1, EXTPRO_1, AMI_1, FUNCT_4,
       AFINSQ_1, AMISTD_2;
  theorems FUNCT_2, RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, ZFMISC_1, FUNCOP_1,
       TARSKI, NAT_1, SCMFSA_4, AMI_1, SCMFSA_2, CARD_1, WELLORD2, CARD_2,
-      ENUMSET1, INT_1, SCMFSA_5, GRFUNC_1, FINSEQ_1, RELSET_1, XBOOLE_0,
+      ENUMSET1, INT_1, GRFUNC_1, FINSEQ_1, RELSET_1, XBOOLE_0,
       XBOOLE_1, XREAL_1, ORDINAL1, AMI_3, VALUED_1, PARTFUN1, AFINSQ_1,
-      AMISTD_2, SCMFSA10, COMPOS_1;
+      SCMFSA10, COMPOS_1, EXTPRO_1;
  schemes DOMAIN_1, FRAENKEL, FUNCT_7, CLASSES1;
 
 begin
@@ -56,46 +56,19 @@ canceled 14;
 
 registration
   let I be Program of SCM+FSA;
-  cluster Directed I -> initial;
+  cluster Directed I -> initial non empty;
   coherence
   proof
-    let m,n be Nat such that
+   thus Directed I is initial
+    proof let m,n be Nat such that
 A1: n in dom Directed I and
 A2: m < n;
      n in dom I by A1,FUNCT_4:105;
     then  m in dom I by A2,AFINSQ_1:def 13;
     hence thesis by FUNCT_4:105;
+   end;
+   thus Directed I is non empty;
   end;
-end;
-
-definition
-  let i;
-  func Macro i -> Program of SCM+FSA equals
-  ( 0, 1) --> (i,halt SCM+FSA);
-  coherence
-  proof
-    set I = ( 0, 1) --> (i,halt SCM+FSA);
-A1: dom I = { 0, 1} by FUNCT_4:65;
-A6: I is initial
-    proof
-      let m,n be Nat such that
-A7:   n in dom I and
-A8:   m < n;
-       n =  0 or  n =  1 by A1,A7,TARSKI:def 2;
-      then n = 0+1 by A8,NAT_1:2;
-      then m <= 0 by A8,NAT_1:13;
-      then m = 0 by NAT_1:3;
-      hence thesis by A1,TARSKI:def 2;
-    end;
-    thus thesis by A1,A6,RELAT_1:def 18;
-  end;
-  correctness;
-end;
-
-registration
-  let i;
-  cluster Macro i -> non empty;
-  coherence;
 end;
 
 canceled;
@@ -106,9 +79,9 @@ proof
   assume
 A1: dom I meets dom ProgramPart Relocated(J, card I);
   dom ProgramPart Relocated(J, card I) = dom Reloc(ProgramPart J,
-  card I) by AMISTD_2:69
+  card I) by COMPOS_1:116
     .= dom Reloc(J,card I) by RELAT_1:209
-    .= dom Shift(J,card I) by AMISTD_2:def 15
+    .= dom Shift(J,card I) by COMPOS_1:def 40
     .= { l+card I: l in dom J } by VALUED_1:def 12;
   then consider x being set such that
 A2: x in dom I and
@@ -186,10 +159,10 @@ A9: dom Shift(I,m) = A by VALUED_1:def 12;
   then
 A10: dom Shift(I,m),dom I are_equipotent by A4,A7,A8,A9,WELLORD2:22;
   thus card ProgramPart Relocated(I, m) = card Reloc(ProgramPart I,m)
-   by AMISTD_2:69
+   by COMPOS_1:116
     .= card Reloc(I,m) by RELAT_1:209
     .= card dom Reloc(I,m) by CARD_1:104
-    .= card dom Shift(I,m) by AMISTD_2:def 15
+    .= card dom Shift(I,m) by COMPOS_1:def 40
     .= card dom I by A10,CARD_1:21
     .= card I by CARD_1:104;
 end;
@@ -235,12 +208,12 @@ A7: rng I c= the Instructions of SCM+FSA by RELAT_1:def 19;
   ProgramPart Directed I = Directed I by RELAT_1:209
     .= f*I by A5,A7,FUNCT_7:118;
   hence ProgramPart Relocated(Directed I, m) =
-  Reloc(f*I,m) by AMISTD_2:69
+  Reloc(f*I,m) by COMPOS_1:116
     .= IncAddr(f*Shift(I,m),m) by VALUED_1:23
     .= ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto (m
   + card I)))* Reloc(I,m) by A4,SCMFSA_4:26
     .= ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto (m
-  + card I)))* ProgramPart Relocated(I, m) by A6,AMISTD_2:69;
+  + card I)))* ProgramPart Relocated(I, m) by A6,COMPOS_1:116;
 end;
 
 canceled;
@@ -251,9 +224,9 @@ Relocated(I +* J, n) = ProgramPart Relocated(I,n) +* ProgramPart Relocated(J,n)
 proof
   let I,J be FinPartState of SCM+FSA;
 A1: ProgramPart Relocated(I,n) = Reloc(ProgramPart I,n) &
-ProgramPart Relocated(J,n) = Reloc(ProgramPart J,n) by AMISTD_2:69;
+ProgramPart Relocated(J,n) = Reloc(ProgramPart J,n) by COMPOS_1:116;
   thus ProgramPart Relocated(I +* J, n)
-     = Reloc(ProgramPart(I +* J),n) by AMISTD_2:69
+     = Reloc(ProgramPart(I +* J),n) by COMPOS_1:116
     .= IncAddr(Shift(ProgramPart I +* ProgramPart J,n),n) by FUNCT_4:75
     .= IncAddr(Shift(ProgramPart I,n) +* Shift(ProgramPart J,n),n) by
 VALUED_1:24
@@ -266,13 +239,13 @@ theorem Th22:
   ProgramPart Relocated(I, m + n)
 proof
   thus ProgramPart Relocated(ProgramPart Relocated(I,m), n) = Reloc
-  (ProgramPart ProgramPart Relocated(I,m),n) by AMISTD_2:69
+  (ProgramPart ProgramPart Relocated(I,m),n) by COMPOS_1:116
     .= Reloc(ProgramPart Relocated(I,m),n) by RELAT_1:209
-    .= Reloc(Reloc(ProgramPart I,m),n) by AMISTD_2:69
-    .= IncAddr(IncAddr(Shift(Shift(ProgramPart I,m),n),m),n) by AMISTD_2:75
+    .= Reloc(Reloc(ProgramPart I,m),n) by COMPOS_1:116
+    .= IncAddr(IncAddr(Shift(Shift(ProgramPart I,m),n),m),n) by COMPOS_1:121
     .= IncAddr(IncAddr(Shift(ProgramPart I,m+n),m),n) by VALUED_1:22
     .= Reloc(ProgramPart I,m+n) by SCMFSA_4:27
-    .= ProgramPart Relocated(I, m + n) by AMISTD_2:69;
+    .= ProgramPart Relocated(I, m + n) by COMPOS_1:116;
 end;
 
 reserve a,b for Int-Location,
@@ -280,6 +253,7 @@ reserve a,b for Int-Location,
   s,s1,s2 for State of SCM+FSA;
 
 definition
+ canceled;
   let I be PartState of SCM+FSA;
   func Initialized I -> PartState of SCM+FSA equals
   I +* ((intloc 0) .--> 1) +* Start-At( 0,SCM+FSA);
@@ -304,7 +278,7 @@ A5:   (the Object-Kind of SCM+FSA).l = ObjectKind l
       hence J.x in (the Object-Kind of SCM+FSA).x by A5,A3;
     end;
     reconsider J as FinPartState of SCM+FSA
-     by A1,A2,FUNCT_1:def 20,RELAT_1:def 18;
+     by A2,FUNCT_1:def 20;
     I +* J +* Start-At( 0,SCM+FSA) is PartState of SCM+FSA;
     hence thesis;
   end;
@@ -423,6 +397,18 @@ A3: not intloc 0 in dom I by A1,SCMFSA_2:84;
   hence thesis by FUNCT_4:33;
 end;
 
+registration
+  let I be non halt-free Program of SCM+FSA;
+  cluster Initialized I -> non halt-free;
+  coherence
+   proof
+A:   halt SCM+FSA in rng I by COMPOS_1:def 7;
+     I c= Initialized I by Th26;
+     then rng I c= rng Initialized I by RELAT_1:25;
+    hence halt SCM+FSA in rng Initialized I by A;
+   end;
+end;
+
 canceled 5;
 
 theorem
@@ -439,8 +425,8 @@ A4: InsCode i <= 11+1 by SCMFSA_2:35;
     InsCode i = 0;
     then
 A5: i = halt SCM+FSA by SCMFSA_2:122;
-    then Exec(i,s1) = s1 by AMI_1:def 8;
-    hence thesis by A1,A5,AMI_1:def 8;
+    then Exec(i,s1) = s1 by EXTPRO_1:def 3;
+    hence thesis by A1,A5,EXTPRO_1:def 3;
   end;
   suppose
     InsCode i = 1;
@@ -975,7 +961,7 @@ A17:  (the Object-Kind of SCM+FSA).x = ObjectKind IC SCM+FSA by TARSKI:def 1
       x in NAT;
       then reconsider l = x as Element of NAT;
       (the Object-Kind of SCM+FSA).l = the Instructions of SCM+FSA
-            by COMPOS_1:3,def 8,SCMFSA_2:85;
+            by COMPOS_1:def 8;
       hence f.x in (the Object-Kind of SCM+FSA).x by A12,COMPOS_1:3,SCMFSA_2:84
 ,85;
     end;
@@ -1032,13 +1018,7 @@ end;
 theorem
   for s1,s2 being State of SCM+FSA holds (for l being
   Element of NAT holds s1.l = s2.l) iff s1 | NAT = s2 | NAT
-proof
-  let s1,s2 be State of SCM+FSA;
-A1: (for l being Element of NAT holds s1.l = s2.l) implies
-  for l being set st l in NAT holds s1.l = s2.l;
-  NAT c= dom s1 & NAT c= dom s2 by COMPOS_1:21;
-  hence thesis by A1,FUNCT_1:165;
-end;
+             by COMPOS_1:136;
 
 theorem
   for i being Element of NAT holds not i in
@@ -1121,14 +1101,7 @@ end;
 
 theorem
   for s1,s2 being State of SCM+FSA st s1,s2 equal_outside NAT holds
-  DataPart s1 = DataPart s2
-proof
-  let s1,s2 be State of SCM+FSA;
-  assume s1,s2 equal_outside NAT;
-  then ( for a being Int-Location holds s1.a = s2.a)& for f being
-  FinSeq-Location holds s1.f = s2.f by SCMFSA10:92,93;
-  hence thesis by Th38;
-end;
+  DataPart s1 = DataPart s2 by COMPOS_1:138;
 
 canceled;
 
@@ -1195,7 +1168,7 @@ A13: InsCode i <= 11+1 by SCMFSA_2:35;
     InsCode i = 0;
     then
 A14: i = halt SCM+FSA by SCMFSA_2:122;
-    then Exec(i,s1) = s1 & Exec(i,s2) = s2 by AMI_1:def 8;
+    then Exec(i,s1) = s1 & Exec(i,s2) = s2 by EXTPRO_1:def 3;
     hence thesis by A1,A2,A14,SCMFSA_4:8;
   end;
   suppose
@@ -1587,15 +1560,15 @@ end;
 canceled;
 
 theorem Th43:
-  for I being Program of SCM+FSA holds dom Initialized I = dom I
+  for p being PartState of SCM+FSA holds dom Initialized p = dom p
   \/ {intloc 0} \/ {IC SCM+FSA}
 proof
-  let I be Program of SCM+FSA;
+  let p be PartState of SCM+FSA;
 A1: dom ((intloc 0) .--> 1) = {intloc 0} & dom Start-At( 0,SCM+FSA) = {IC
   SCM+FSA} by FUNCOP_1:19;
-  thus dom Initialized I = dom (I +* ((intloc 0) .--> 1)) \/ dom Start-At(
+  thus dom Initialized p = dom (p +* ((intloc 0) .--> 1)) \/ dom Start-At(
    0,SCM+FSA) by FUNCT_4:def 1
-    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} by A1,FUNCT_4:def 1;
+    .= dom p \/ {intloc 0} \/ {IC SCM+FSA} by A1,FUNCT_4:def 1;
 end;
 
 theorem Th44:
@@ -1655,13 +1628,11 @@ FUNCT_4:12
 end;
 
 theorem Th47:
-  for I being Program of SCM+FSA holds not intloc 0 in dom I & not
-  IC SCM+FSA in dom I
+  for I being Program of SCM+FSA holds not intloc 0 in dom I
 proof
   let I be Program of SCM+FSA;
-A1: dom I c= NAT by RELAT_1:def 18;
+ dom I c= NAT by RELAT_1:def 18;
   hence not intloc 0 in dom I by SCMFSA_2:84;
-  thus thesis by A1,COMPOS_1:3;
 end;
 
 theorem Th48:
@@ -1737,7 +1708,7 @@ A1: x in dom I;
   then
 A2: not x in dom ((intloc 0) .--> 1) by TARSKI:def 1;
   dom Start-At( 0,SCM+FSA) = {IC SCM+FSA} & x <> IC SCM+FSA
-   by A1,Th47,FUNCOP_1:19
+   by A1,COMPOS_1:139,FUNCOP_1:19
 ;
   then not x in dom Start-At( 0,SCM+FSA) by TARSKI:def 1;
   hence (Initialized I).x = (I +* ((intloc 0) .--> 1)).x by FUNCT_4:12
@@ -1797,7 +1768,7 @@ A12:  not x in dom I by A10,Th47;
 A13:  x = IC SCM+FSA;
       then
 A14:  x in dom Initialized J by Th24;
-A15:  not x in dom I by A13,Th47;
+A15:  not x in dom I by A13,COMPOS_1:139;
       thus (Initialized I).x =  0 by A13,Th46
         .= (Initialized J).x by A13,Th46
         .= s.x by A2,A14,GRFUNC_1:8
@@ -1896,9 +1867,9 @@ definition
 A1:   n in dom(P) and
 A2:   m < n;
        ProgramPart Relocated(J,card I) = Reloc(ProgramPart J,card I)
-         by AMISTD_2:69;
+         by COMPOS_1:116;
       then dom Directed I = dom I & dom ProgramPart Relocated(J,card I) = D by
-AMISTD_2:70,FUNCT_4:105;
+COMPOS_1:117,FUNCT_4:105;
       then
 A3:   dom(P) = dom I \/ D by FUNCT_4:def 1;
       per cases by A1,A3,XBOOLE_0:def 3;
@@ -1937,6 +1908,19 @@ A6:         m = card I + l1 by NAT_1:10;
   correctness;
 end;
 
+registration
+ let I be Program of SCM+FSA, J be non halt-free Program of SCM+FSA;
+  cluster I ';' J -> non halt-free;
+  coherence
+   proof
+     Reloc(J,card I) is non halt-free;
+     then Reloc(ProgramPart J,card I) is non halt-free by RELAT_1:209;
+     then ProgramPart Relocated(J, card I) is non halt-free;
+     then Directed I +* ProgramPart Relocated(J, card I) is non halt-free;
+    hence thesis;
+   end;
+end;
+
 theorem
   for I,J being Program of SCM+FSA, l being Element of NAT
    st l in dom I & I.l <> halt SCM+FSA holds (I ';' J).l = I.l
@@ -1945,11 +1929,12 @@ proof
   that
 A1: l in dom I and
 A2: I.l <> halt SCM+FSA;
-  ProgramPart Relocated(J, card I) = Reloc(ProgramPart J,card I) by AMISTD_2:69
+  ProgramPart Relocated(J, card I) = Reloc(ProgramPart J,card I) by
+COMPOS_1:116
 ;
   then
 A3: dom ProgramPart Relocated(J, card I) = dom Shift(ProgramPart J,card I)
-  by AMISTD_2:def 15;
+  by COMPOS_1:def 40;
   now
     assume l in dom(ProgramPart Relocated(J, card I));
     then l in { m+card I: m in dom ProgramPart J } by A3,VALUED_1:def 12;
@@ -2016,7 +2001,7 @@ A3: x in dom Initialized (I ';' J);
     per cases by A3,Th44;
     suppose
 A4:   x in dom (I ';' J);
-      then x <> IC SCM+FSA by Th47;
+      then x <> IC SCM+FSA by COMPOS_1:139;
       then not x in {IC SCM+FSA} by TARSKI:def 1;
       then
 A5:   not x in dom Start-At( 0,SCM+FSA) by FUNCOP_1:19;
@@ -2037,7 +2022,7 @@ A7:   x = intloc 0;
     end;
     suppose
 A8:   x = IC SCM+FSA;
-      then not x in dom (I ';' J) by Th47;
+      then not x in dom (I ';' J) by COMPOS_1:139;
       hence (Initialized I+*(I ';' J)).x = (Initialized I).x by FUNCT_4:12
         .=  0 by A8,Th46
         .= (Initialized (I ';' J)).x by A8,Th46;
@@ -2150,13 +2135,13 @@ proof
   let I be preProgram of SCM+FSA;
   let k be Element of NAT;
 A1: dom ProgramPart I = dom I by RELAT_1:209;
-A2: dom ProgramPart Relocated(I,k) = dom Reloc(ProgramPart I,k) by AMISTD_2:69
-       .= {m + k: m in dom I} by A1,AMISTD_2:70;
+A2: dom ProgramPart Relocated(I,k) = dom Reloc(ProgramPart I,k) by COMPOS_1:116
+       .= {m + k: m in dom I} by A1,COMPOS_1:117;
 A3: dom ProgramPart Directed I= dom Directed I by RELAT_1:209
     .= dom I by FUNCT_4:105;
 A4: dom ProgramPart Relocated(Directed I,k)
-     = dom Reloc(ProgramPart Directed I,k) by AMISTD_2:69
-    .= {m + k: m in dom I} by A3,AMISTD_2:70
+     = dom Reloc(ProgramPart Directed I,k) by COMPOS_1:116
+    .= {m + k: m in dom I} by A3,COMPOS_1:117
 ;
 A5: now
     let x be set;
@@ -2176,7 +2161,7 @@ A10:    i0 = halt SCM+FSA;
         then
 A11:    i = goto  card I by A8,FUNCT_4:112;
 A12:    (ProgramPart Relocated(I,k)).x = Relocated(I,k).x by A2,A6,Th64
-          .= IncAddr(i0,k) by A1,A7,A8,AMISTD_2:76
+          .= IncAddr(i0,k) by A1,A7,A8,COMPOS_1:122
           .= halt SCM+FSA by A10,SCMFSA_4:8;
         then (ProgramPart Relocated(I,k)).x in {halt SCM+FSA} by TARSKI:def 1;
         then (ProgramPart Relocated(I,k)).x in dom (halt SCM+FSA .--> goto
@@ -2194,7 +2179,7 @@ by FUNCT_4:14
       suppose
 A13:    i0 <> halt SCM+FSA;
 A14:    (ProgramPart Relocated(I,k)).x = Relocated(I,k).x by A2,A6,Th64
-          .= IncAddr(i0,k) by A1,A7,A8,AMISTD_2:76;
+          .= IncAddr(i0,k) by A1,A7,A8,COMPOS_1:122;
         InsCode i0 <> 0 by A13,SCMFSA_2:122;
         then IncAddr(i0,k) <> halt SCM+FSA by SCMFSA_2:124,SCMFSA_4:22;
         then not (ProgramPart Relocated(I,k)).x in {halt SCM+FSA} by A14,
@@ -2211,7 +2196,7 @@ TARSKI:def 1;
     end;
     (ProgramPart Relocated(Directed I,k)).x = Relocated(Directed I,k).x
     by A4,A6,Th64
-      .= IncAddr(i,k) by A3,A7,A8,AMISTD_2:76;
+      .= IncAddr(i,k) by A3,A7,A8,COMPOS_1:122;
     hence (ProgramPart Relocated(Directed I,k)).x = (Directed(ProgramPart
     Relocated(I,k), (card I + k))).x by A9;
   end;
@@ -2270,4 +2255,25 @@ theorem
 theorem
   i ';' j ';' k = i ';' (j ';' k) by Th67;
 
+theorem
+ card(i ';' J) = card J + 2
+ proof
+  thus card(i ';' J) = card Macro i + card J by Th61
+     .= card J + 2 by COMPOS_1:150;
+ end;
 
+theorem
+ card(I ';' j) = card I + 2
+ proof
+  thus card(I ';' j) = card Macro j + card I by Th61
+     .= card I + 2 by COMPOS_1:150;
+ end;
+
+theorem
+ card(i ';' j) = 4
+ proof
+  thus card(i ';' j) = card Macro i + card Macro j by Th61
+     .= card Macro i + 2 by COMPOS_1:150
+     .= 2 + 2 by COMPOS_1:150
+     .= 4;
+ end;

@@ -9,19 +9,19 @@ environ
  vocabularies NUMBERS, SUBSET_1, FINSEQ_1, AMI_1, SCMFSA_2, RELAT_1, SCMFSA_7,
       ARYTM_3, ARYTM_1, TARSKI, FUNCT_1, XXREAL_0, PARTFUN1, CAT_1, NAT_1,
       CARD_1, FUNCOP_1, SCMFSA6A, ORDINAL4, AMI_3, FUNCT_4, INT_1, GRAPHSP,
-      FSM_1, FINSEQ_2, CIRCUIT2, SCMNORM, SCMFSA6B, GLIB_000, SF_MASTR,
-      MSUALG_1, XBOOLE_0, PRE_POLY, COMPLEX1, UNIALG_2, AMISTD_2, SCMFSA7B,
-      ORDINAL1, SCMFSA6C;
+      FSM_1, CIRCUIT2, SCMNORM, SCMFSA6B, GLIB_000, SF_MASTR, MSUALG_1,
+      XBOOLE_0, PRE_POLY, UNIALG_2, AMISTD_2, SCMFSA7B, ORDINAL1, AFINSQ_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, FINSEQ_1,
-      FINSEQ_2, NAT_D, FUNCOP_1, AFINSQ_1, COMPOS_1, AMI_1, SCMFSA_2, SCMFSA_7,
-      SCMFSA6A, SF_MASTR, SCMFSA6B, INT_2, XXREAL_0, PRE_POLY;
+      FINSEQ_2, NAT_D, FUNCOP_1, AFINSQ_1, AFINSQ_2, COMPOS_1, EXTPRO_1, AMI_1,
+      SCMFSA_2, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, INT_2, XXREAL_0,
+      PRE_POLY;
  constructors ENUMSET1, XXREAL_0, REAL_1, AMI_5, SCMFSA_7, SCMFSA6A, SF_MASTR,
-      SCMFSA6B, NAT_D, RELSET_1, PRE_POLY;
+      SCMFSA6B, NAT_D, RELSET_1, PRE_POLY, DOMAIN_1, AFINSQ_2, PARTFUN3, AMI_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, FUNCT_7, AMI_1, SCMFSA_2,
       SF_MASTR, SCMFSA6B, ORDINAL1, FINSET_1, FINSEQ_2, CARD_1, AFINSQ_1,
-      COMPOS_1;
+      COMPOS_1, AFINSQ_2, ORDINAL5, EXTPRO_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -29,33 +29,7 @@ begin
 
 reserve m for Element of NAT;
 
-theorem :: SCMFSA7B:1
-  for p being FinSequence of the Instructions of SCM+FSA holds dom
-  Load p = { m: m < len p};
-
-theorem :: SCMFSA7B:2
-  for p being FinSequence of the Instructions of SCM+FSA holds rng
-  Load p = rng p;
-
-registration
-  let p be FinSequence of the Instructions of SCM+FSA;
-  cluster Load p -> initial NAT-defined (the Instructions of SCM+FSA)-valued;
-end;
-
-theorem :: SCMFSA7B:3
-  for i being Instruction of SCM+FSA holds Load <* i *> =  0 .-->
-  i;
-
-theorem :: SCMFSA7B:4
-  for i being Instruction of SCM+FSA holds dom Macro i = {  0
-  ,  1 };
-
-theorem :: SCMFSA7B:5
-  for i being Instruction of SCM+FSA holds Macro i = Load <* i,halt
-  SCM+FSA *>;
-
-theorem :: SCMFSA7B:6
-  for i being Instruction of SCM+FSA holds card Macro i = 2;
+canceled 6;
 
 theorem :: SCMFSA7B:7
   for i being Instruction of SCM+FSA holds (i = halt SCM+FSA implies (
@@ -63,12 +37,12 @@ theorem :: SCMFSA7B:7
   Directed Macro i). 0 = i);
 
 theorem :: SCMFSA7B:8
-  for i being Instruction of SCM+FSA holds (Directed Macro i). 1 =
-  goto  2;
+  for i being Instruction of SCM+FSA holds (Directed Macro i). 1 = goto  2;
 
 registration
   let a be Int-Location, k be Integer;
-  cluster a := k -> initial NAT-defined (the Instructions of SCM+FSA)-valued;
+  cluster a := k -> initial non empty
+    NAT-defined (the Instructions of SCM+FSA)-valued;
 end;
 
 registration
@@ -84,7 +58,8 @@ theorem :: SCMFSA7B:9
 
 registration
   let f be FinSeq-Location, p be FinSequence of INT;
-  cluster f := p -> initial NAT-defined (the Instructions of SCM+FSA)-valued;
+  cluster f := p -> initial non empty
+  NAT-defined (the Instructions of SCM+FSA)-valued;
 end;
 
 registration
@@ -144,63 +119,59 @@ definition
   attr I is good means
 :: SCMFSA7B:def 5
 
-  I does not destroy intloc 0;
-end;
-
-registration
-  cluster halt-free good Program of SCM+FSA;
+  not I destroys intloc 0;
 end;
 
 theorem :: SCMFSA7B:11
-  for a being Int-Location holds halt SCM+FSA does not destroy a;
+  for a being Int-Location holds not halt SCM+FSA destroys a;
 
 theorem :: SCMFSA7B:12
-  for a,b,c being Int-Location holds a <> b implies b := c
-  does not destroy a;
+  for a,b,c being Int-Location holds a <> b implies
+   not b := c destroy a;
 
 theorem :: SCMFSA7B:13
-  for a,b,c being Int-Location holds a <> b implies AddTo(b,c)
-  does not destroy a;
+  for a,b,c being Int-Location holds a <> b implies
+  not AddTo(b,c) destroy a;
 
 theorem :: SCMFSA7B:14
-  for a,b,c being Int-Location holds a <> b implies SubFrom(b,c)
-  does not destroy a;
+  for a,b,c being Int-Location holds a <> b implies
+   not SubFrom(b,c) destroy a;
 
 theorem :: SCMFSA7B:15
-  for a,b,c being Int-Location holds a <> b implies MultBy(b,c)
-  does not destroy a;
+  for a,b,c being Int-Location holds a <> b implies
+  not MultBy(b,c) destroy a;
 
 theorem :: SCMFSA7B:16
-  for a,b,c being Int-Location holds a <> b & a <> c implies Divide(b,c)
-  does not destroy a;
+  for a,b,c being Int-Location holds a <> b & a <> c implies
+  not Divide(b,c) destroy a;
 
 theorem :: SCMFSA7B:17
   for a being Int-Location, l being Element of NAT
-  holds goto l does not destroy a;
+  holds not goto l destroy a;
 
 theorem :: SCMFSA7B:18
   for a,b being Int-Location, l being Element of NAT
-  holds b =0_goto l does not destroy a;
+  holds not b =0_goto l destroy a;
 
 theorem :: SCMFSA7B:19
   for a,b being Int-Location, l being Element of NAT
-  holds b >0_goto l does not destroy a;
+  holds not b >0_goto l destroy a;
 
 theorem :: SCMFSA7B:20
   for a,b,c being Int-Location, f being FinSeq-Location holds a <> b
-  implies b := (f,c) does not destroy a;
+  implies not b := (f,c) destroy a;
 
 theorem :: SCMFSA7B:21
-  for a,b,c being Int-Location, f being FinSeq-Location holds (f,c):= b
-  does not destroy a;
+  for a,b,c being Int-Location, f being FinSeq-Location holds
+  not (f,c):= b destroy a;
 
 theorem :: SCMFSA7B:22
   for a,b being Int-Location, f being FinSeq-Location holds a <> b
-  implies b :=len f does not destroy a;
+  implies not b :=len f destroy a;
 
 theorem :: SCMFSA7B:23
-  for a,b being Int-Location, f being FinSeq-Location holds f
-  :=<0,...,0> b does not destroy a;
+  for a,b being Int-Location, f being FinSeq-Location holds
+   not f:=<0,...,0> b destroy a;
 
 definition
   canceled;
@@ -229,11 +200,11 @@ theorem :: SCMFSA7B:25
 
 theorem :: SCMFSA7B:26
   for i being Instruction of SCM+FSA, a being Int-Location, s
-  being State of SCM+FSA holds i does not destroy a implies Exec(i,s).a = s.a;
+  being State of SCM+FSA holds not i destroy a implies Exec(i,s).a = s.a;
 
 theorem :: SCMFSA7B:27
   for s being State of SCM+FSA, I being Program of SCM+FSA, a
-being Int-Location st I does not destroy a & I is_closed_on s holds for k being
+being Int-Location st not I destroy a & I is_closed_on s holds for k being
   Element of NAT holds Comput(ProgramPart(s +* (I +* Start-At( 0,SCM+FSA))),s
 +* (I +* Start-At( 0,SCM+FSA)),k).a = s.a;
 
