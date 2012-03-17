@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -34,7 +34,6 @@
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="MCART_1"/>
-<ArticleID name="PROB_1"/>
 <ArticleID name="LANG1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
@@ -51,7 +50,7 @@
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="79" value="false"/>
-<Adjective nr="112"/>
+<Adjective nr="109"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
@@ -59,7 +58,7 @@
 <Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="111">
+<Adjective nr="108">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -75,7 +74,7 @@
 <Func kind="K" nr="20">
 <Func kind="U" nr="12">
 <LocusVar nr="1"/>
-<Func kind="K" nr="382">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -93,8 +92,8 @@
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="79" value="false"/>
+<Adjective nr="106"/>
 <Adjective nr="109"/>
-<Adjective nr="112"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
@@ -102,7 +101,7 @@
 <Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="111">
+<Adjective nr="108">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -121,7 +120,7 @@
 <Func kind="K" nr="20">
 <Func kind="U" nr="12">
 <LocusVar nr="1"/>
-<Func kind="K" nr="382">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -142,8 +141,8 @@
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="79" value="false"/>
+<Adjective nr="106"/>
 <Adjective nr="109"/>
-<Adjective nr="112"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
@@ -151,7 +150,7 @@
 <Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="111">
+<Adjective nr="108">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -170,7 +169,7 @@
 <Func kind="K" nr="20">
 <Func kind="U" nr="12">
 <LocusVar nr="1"/>
-<Func kind="K" nr="382">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -183,7 +182,7 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="17"/>
-<Adjective nr="96"/>
+<Adjective nr="93"/>
 </Cluster>
 </CCluster>
-</Clusters>
+</Registrations>

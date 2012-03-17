@@ -36,12 +36,11 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="REALSET2"/>
 <ArticleID name="MSUALG_1"/>
-<ArticleID name="PROB_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="LANG1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="TREES_4"/>
 <ArticleID name="DTCONSTR"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="MSAFREE"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="MSUALG_2"/>
@@ -84,7 +83,7 @@
 </Func>
 <Func kind="U" nr="12">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="369">
+<Func kind="K" nr="355">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 </Func>
@@ -98,7 +97,7 @@
 <And>
 <Pred kind="R" nr="35">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="369">
+<Func kind="K" nr="355">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 </Func>
@@ -122,13 +121,13 @@
 </Typ>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="20">
-<Func kind="K" nr="401">
+<Func kind="K" nr="387">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
 <Func kind="U" nr="12">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="369">
+<Func kind="K" nr="355">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 </Func>
@@ -140,7 +139,7 @@
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="318">
+<Func kind="K" nr="310">
 <Func kind="K" nr="4">
 <Var nr="3"/>
 <Var nr="2"/>

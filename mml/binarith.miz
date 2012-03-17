@@ -9,18 +9,18 @@ environ
  vocabulary MONOID_0, FUNCT_1, RELAT_1, MIDSP_3, FINSEQ_1, MARGREL1, ZF_LANG,
       ORDINAL2, ARYTM_1, CQC_LANG, POWER, SETWISEO, BOOLE, FINSEQ_2, BINARITH,
       FINSEQ_4, ARYTM;
- notation XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0,
+ notations XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, NAT_1, MARGREL1, FUNCT_1, FUNCT_2, BINOP_1, BINOP_2, SETWISEO,
       SETWOP_2, SERIES_1, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_4;
  constructors REAL_1, NAT_1, MARGREL1, BINOP_1, INT_1, SETWISEO, SERIES_1,
       CQC_LANG, FINSOP_1, FINSEQ_4, MEMBERED, XBOOLE_0, BINOP_2;
- clusters INT_1, FUNCT_1, RELSET_1, MARGREL1, NAT_1, MEMBERED, ZFMISC_1,
+ registrations INT_1, FUNCT_1, RELSET_1, MARGREL1, NAT_1, MEMBERED, ZFMISC_1,
       XBOOLE_0, ORDINAL2, XCMPLX_0, XREAL_0, FINSEQ_2, BINOP_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FINSEQ_1, TARSKI;
  theorems REAL_1, NAT_1, INT_1, MARGREL1, FINSEQ_1, FINSEQ_2, FINSEQ_4, AXIOMS,
       FUNCT_1, TARSKI, CQC_LANG, POWER, CARD_5, CARD_1, FINSOP_1, XBOOLE_0,
-      XCMPLX_1, BINOP_2;
+      XCMPLX_1, BINOP_2, SQUARE_1, REAL_2;
  schemes FINSEQ_1, FINSEQ_2, RECDEF_1, NAT_1;
 
 begin
@@ -1466,3 +1466,53 @@ A56:                   d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
           Absval(z1+z2) + IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (n))
           .= Absval(z1) + Absval(z2) by Th47;
     end;
+
+begin :: Addenda
+
+reserve a,b,c for natural number;
+
+:: from SCMFSA_7, 2005.02.05, A.T.
+
+theorem
+  c <= a & c <= b & a -' c = b -' c implies a = b
+ proof
+    assume A1: a >= c & b >= c & a -' c = b -' c;
+    then a - c >= 0 by SQUARE_1:12;
+    then
+A2: a -' c = a - c by Def3;
+    b - c >= 0 by A1,SQUARE_1:12;then
+    a + (-c) = b + (-c) by A1,A2,Def3;
+    hence thesis by XCMPLX_1:2;
+ end;
+
+theorem
+   b <= a implies a -' b = a - b
+ proof
+    assume a >= b;
+    then a - b >= 0 by SQUARE_1:12;
+    hence thesis by Def3;
+ end;
+
+:: from GOBOARD9, 2005.02.05, A.T.
+
+theorem
+ a -' a = 0
+  proof a-a = 0; hence thesis by Def3; end;
+
+theorem
+ a -' b <= a
+  proof per cases;
+   suppose
+A1: a-b >= 0;
+       b >= 0 by NAT_1:18;
+    then a-b <= a-0 by REAL_2:106;
+   hence thesis by A1,Def3;
+   end;
+   suppose a-b < 0;
+    then a-'b = 0 by Def3;
+   hence thesis by NAT_1:18;
+  end;
+  end;
+
+
+

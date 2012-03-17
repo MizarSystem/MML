@@ -10,20 +10,20 @@ environ
       TARSKI, MCART_1, PROB_1, RLVECT_1, CARD_2, ORDINAL2, FINSET_1, ARYTM_1,
       CLASSES1, ZFMISC_1, WELLORD1, WELLORD2, RELAT_2, CARD_3, HAHNBAN,
       FRAENKEL, AMI_1, ZF_REFLE;
- notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REAL_1, ORDINAL2, NAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REAL_1, ORDINAL2, NAT_1,
       RELAT_1, RELAT_2, FUNCT_1, FUNCT_2, FRAENKEL, SETFAM_1, ORDINAL1,
-      WELLORD1, MCART_1, WELLORD2, CARD_1, FUNCOP_1, FUNCT_4, FINSET_1, PROB_1,
-      CARD_2, CLASSES1;
+      WELLORD1, MCART_1, WELLORD2, CARD_1, FUNCOP_1, FUNCT_4, FINSET_1, CARD_2,
+      CLASSES1;
  constructors REAL_1, NAT_1, RELAT_2, WELLORD1, MCART_1, WELLORD2, FUNCOP_1,
-      PROB_1, CARD_2, CLASSES1, MEMBERED, XBOOLE_0, FRAENKEL;
- clusters RELAT_1, FUNCT_1, FINSET_1, CARD_1, FUNCOP_1, ORDINAL1, MEMBERED,
-      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2, SETFAM_1, RELSET_1;
+      CARD_2, CLASSES1, MEMBERED, XBOOLE_0, FRAENKEL, SETFAM_1, XREAL_0;
+ registrations RELAT_1, FUNCT_1, FINSET_1, CARD_1, FUNCOP_1, ORDINAL1,
+      MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2, SETFAM_1, RELSET_1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, FUNCT_1, RELAT_2, WELLORD1, WELLORD2, XBOOLE_0, FRAENKEL;
  theorems TARSKI, ZFMISC_1, FINSET_1, FUNCT_1, FUNCT_2, MCART_1, ORDINAL1,
       RELAT_1, RELAT_2, WELLORD1, WELLORD2, CARD_1, FUNCOP_1, FUNCT_4, FUNCT_5,
-      CARD_2, CLASSES1, GRFUNC_1, PROB_1, XBOOLE_0, XBOOLE_1, XCMPLX_1,
-      RELSET_1, SETFAM_1;
+      CARD_2, CLASSES1, GRFUNC_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, RELSET_1,
+      SETFAM_1;
  schemes NAT_1, FUNCT_1, PARTFUN1, ORDINAL1, FUNCT_5, RELAT_1, XBOOLE_0;
 
 begin
@@ -153,7 +153,9 @@ A4:   dom a2 = dom f & for x st x in dom f holds a2.x = [:f.x,{x}:];
      hence thesis by A3,A4,FUNCT_1:9;
     end;
 
- canceled;
+  func Union f -> set equals :Def4:
+    union rng f;
+  correctness;
 
  defpred P[set] means
  ex g st $1 = g & dom g = dom f & for x st x in dom f holds g.x in f.x;
@@ -260,13 +262,13 @@ A1:  x in dom f & y in dom f & x <> y;
 Lm1: rng {} = {};
 
 theorem
-     Union {} = {} by Lm1,PROB_1:def 3,ZFMISC_1:2;
+     Union {} = {} by Lm1,Def4,ZFMISC_1:2;
 
 theorem
  Th15: Union (X --> Y) c= Y
   proof let x; assume
         x in Union (X --> Y);
-    then x in union rng (X --> Y) by PROB_1:def 3;
+    then x in union rng (X --> Y) by Def4;
    then consider Z such that
 A1:  x in Z & Z in rng (X --> Y) by TARSKI:def 4;
  A2:   ex z st z in dom (X --> Y) & Z = (X --> Y).z by A1,FUNCT_1:def 5;
@@ -282,7 +284,7 @@ A1:  X <> {};
    thus Union (X --> Y) c= Y by Th15;
         dom (X --> Y) = X & (X --> Y).x = Y by A1,FUNCOP_1:13,19;
     then Y in rng (X --> Y) & Union (X --> Y) = union rng (X --> Y)
-     by A1,FUNCT_1:def 5,PROB_1:def 3;
+     by A1,FUNCT_1:def 5,Def4;
    hence thesis by ZFMISC_1:92;
   end;
 
@@ -563,7 +565,7 @@ then A9:  Card pi(X,x) <=` Card Y by A4,CARD_1:28;
 theorem
  Th32: x in Union disjoin f implies ex y,z st x = [y,z]
   proof
-A1:  Union disjoin f = union rng disjoin f by PROB_1:def 3;
+A1:  Union disjoin f = union rng disjoin f by Def4;
    assume x in Union disjoin f;
    then consider X such that
 A2:  x in X & X in rng disjoin f by A1,TARSKI:def 4;
@@ -577,7 +579,7 @@ A3:  y in dom disjoin f & X = (disjoin f).y by A2,FUNCT_1:def 5;
 theorem
  Th33: x in Union disjoin f iff x`2 in dom f & x`1 in f.(x`2) & x = [x`1,x`2]
   proof
-A1:  Union disjoin f = union rng disjoin f by PROB_1:def 3;
+A1:  Union disjoin f = union rng disjoin f by Def4;
    thus x in Union disjoin f implies
       x`2 in dom f & x`1 in f.(x`2) & x = [x`1,x`2]
      proof
@@ -617,7 +619,7 @@ theorem
  Th35: f <= g implies Union f c= Union g
   proof assume f <= g;
 then A1:  dom f c= dom g & (for x st x in dom f holds f.x = g.x) by GRFUNC_1:8;
-A2:  Union f = union rng f & Union g = union rng g by PROB_1:def 3;
+A2:  Union f = union rng f & Union g = union rng g by Def4;
    let x; assume x in Union f;
    then consider X such that
 A3:  x in X & X in rng f by A2,TARSKI:def 4;
@@ -632,7 +634,7 @@ theorem
  Th36: Union disjoin (Y --> X) = [:X,Y:]
   proof set f = Y --> X;
 A1:  dom f = Y & for x st x in Y holds f.x = X by FUNCOP_1:13,19;
-A2:  Union disjoin f = union rng disjoin f by PROB_1:def 3;
+A2:  Union disjoin f = union rng disjoin f by Def4;
    thus Union disjoin f c= [:X,Y:]
      proof let x; assume x in Union disjoin f;
       then consider Z such that
@@ -752,7 +754,7 @@ A1:  dom F = dom G & for x st x in dom F holds F.x c= G.x;
 A2:  Sum F = Card Union disjoin F & Sum G = Card Union disjoin G by Def7;
         Union disjoin F c= Union disjoin G
      proof let x; assume x in Union disjoin F;
-       then x in union rng disjoin F by PROB_1:def 3;
+       then x in union rng disjoin F by Def4;
       then consider X such that
 A3:     x in X & X in rng disjoin F by TARSKI:def 4;
       consider y such that
@@ -764,7 +766,7 @@ A4:     y in dom disjoin F & X = (disjoin F).y by A3,FUNCT_1:def 5;
      then X c= [:G.y,{y}:] & [:G.y,{y}:] in rng disjoin G
         by FUNCT_1:def 5,ZFMISC_1:118;
        then x in union rng disjoin G by A3,TARSKI:def 4;
-      hence thesis by PROB_1:def 3;
+      hence thesis by Def4;
      end;
    hence thesis by A2,CARD_1:27;
   end;
@@ -854,7 +856,7 @@ theorem
   proof dom ({} --> K) = {} by FUNCOP_1:16;
     then dom disjoin ({} --> K) = {} by Def3;
     then rng disjoin ({} --> K) = {} by RELAT_1:65;
-    then Union disjoin ({} --> K) = {} by PROB_1:def 3,ZFMISC_1:2;
+    then Union disjoin ({} --> K) = {} by Def4,ZFMISC_1:2;
    hence thesis by Def7,CARD_1:47;
   end;
 
@@ -904,7 +906,7 @@ theorem
  Th54: Card Union f <=` Sum Card f
   proof
 A1:  now assume dom f = {};
-     then {} = union rng f by RELAT_1:65,ZFMISC_1:2 .= Union f by PROB_1:def 3
+     then {} = union rng f by RELAT_1:65,ZFMISC_1:2 .= Union f by Def4
 ;
      hence thesis by CARD_1:47,XBOOLE_1:2;
     end;
@@ -997,7 +999,7 @@ then A25:   [z,y] in DD & [z,y]`1 = z & [z,y]`2 = y by MCART_1:7,TARSKI:def 4;
         hence thesis by A19,A23,A24,A25,FUNCT_1:def 5;
        end;
       then Card union rng f <=` Card DD & DD = Union disjoin Card f &
-       union rng f = Union f by A19,CARD_1:28,PROB_1:def 3;
+       union rng f = Union f by A19,CARD_1:28,Def4;
      hence thesis by Def7;
     end;
    hence thesis by A1;
@@ -1147,7 +1149,7 @@ A31:    t = g & dom g = dom K & for x st x in dom K holds g.x in
       then t in product G by A30,TARSKI:def 3;
      then consider y such that
 A32:   y in dom f & t = f.y by A25,FUNCT_1:def 5;
-          Union disjoin F = union rng disjoin F by PROB_1:def 3;
+          Union disjoin F = union rng disjoin F by Def4;
      then consider X such that
 A33:   y in X & X in rng disjoin F by A25,A32,TARSKI:def 4;
      consider x such that

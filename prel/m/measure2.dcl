@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -27,6 +27,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="MEASURE1"/>
 <ArticleID name="MEASURE2"/>
@@ -39,42 +40,10 @@
 <Typ kind="M" nr="14">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="43">
+<Adjective nr="44">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="46">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-<LocusVar nr="1"/>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="24">
-<Cluster/>
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Typ>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="34"/>
 <Adjective nr="47">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Adjective>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="14">
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="43">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="46">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -95,4 +64,36 @@
 </Adjective>
 </Cluster>
 </RCluster>
-</Clusters>
+<RCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="14">
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="44">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="47">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+<LocusVar nr="1"/>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="24">
+<Cluster/>
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="49">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Adjective>
+</Cluster>
+</RCluster>
+</Registrations>

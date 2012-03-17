@@ -11,22 +11,23 @@ environ
       COMPLFLD, GROUP_1, REALSET1, POLYNOM1, TARSKI, CARD_1, CARD_3, SETWISEO,
       ALGSEQ_1, POLYNOM3, POLYNOM2, ALGSTR_2, FUNCT_4, VECTSP_2, FUNCOP_1,
       FUNCT_2, RFINSEQ, POLYNOM5, FVSUM_1, FINSET_1, NEWTON, MCART_1, SGRAPH1,
-      CAT_1, DTCONSTR, MEMBERED, ANPROJ_1, UPROOTS, ORDINAL2;
- notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, ORDINAL1, ORDINAL2, NUMBERS,
-      XREAL_0, ZFMISC_1, REALSET1, REAL_1, NAT_1, SETWISEO, RLVECT_1, VECTSP_1,
-      VECTSP_2, BINOP_1, RELAT_1, FUNCT_1, FUNCT_2, SETWOP_2, FINSEQ_1,
-      FINSEQ_2, FINSEQ_4, FINSOP_1, TOPREAL1, NORMSP_1, BINARITH, RVSUM_1,
-      BINOP_2, ALGSEQ_1, COMPLFLD, POLYNOM3, POLYNOM4, POLYNOM5, CARD_1,
-      FINSET_1, GROUP_1, MCART_1, PRE_CIRC, FUNCT_4, RLVECT_2, CQC_LANG,
-      DTCONSTR, RFINSEQ, POLYNOM1, FVSUM_1, WSIERP_1, MEMBERED, REALSET2;
- constructors REAL_1, FINSOP_1, MONOID_0, WELLORD2, TOPREAL1, BINARITH,
-      POLYNOM4, FVSUM_1, POLYNOM5, PREPOWER, SETWOP_2, WELLFND1, PRE_CIRC,
-      FINSEQOP, ALGSTR_1, RLVECT_2, CQC_LANG, POLYNOM2, WSIERP_1, SETWISEO,
-      GOBOARD1, ORDINAL2, NORMSP_1, BINOP_2, DTCONSTR;
- clusters XREAL_0, STRUCT_0, RELSET_1, SEQ_1, VECTSP_1, VECTSP_2, FINSEQ_2,
-      POLYNOM1, POLYNOM3, MONOID_0, NAT_1, INT_1, POLYNOM5, FINSEQ_1, FINSET_1,
-      CARD_1, MEMBERED, FUNCT_1, ALGSTR_1, SUBSET_1, ORDINAL2, RFINSEQ,
-      GOBRD13, PRE_CIRC, TREES_2, CHAIN_1, POLYNOM7, BINOP_2;
+      CAT_1, DTCONSTR, MEMBERED, ANPROJ_1, UPROOTS, ORDINAL2, SEQ_1, PBOOLE;
+ notations TARSKI, XBOOLE_0, XCMPLX_0, SUBSET_1, STRUCT_0, ORDINAL1, ORDINAL2,
+      NUMBERS, XREAL_0, ZFMISC_1, REALSET1, REAL_1, NAT_1, SETWISEO, RLVECT_1,
+      VECTSP_1, VECTSP_2, BINOP_1, RELAT_1, FUNCT_1, FUNCT_2, SETWOP_2,
+      FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSOP_1, TOPREAL1, NORMSP_1, BINARITH,
+      RVSUM_1, BINOP_2, ALGSEQ_1, COMPLFLD, POLYNOM3, POLYNOM4, POLYNOM5,
+      CARD_1, FINSET_1, GROUP_1, MCART_1, PRE_CIRC, FUNCT_4, RLVECT_2,
+      CQC_LANG, DTCONSTR, RFINSEQ, SEQ_1, PBOOLE, POLYNOM1, FVSUM_1, WSIERP_1,
+      MEMBERED, REALSET2;
+ constructors REAL_1, FINSOP_1, MONOID_0, WELLORD2, BINARITH, POLYNOM4,
+      POLYNOM5, PREPOWER, SETWOP_2, WELLFND1, PRE_CIRC, FINSEQOP, ALGSTR_1,
+      RLVECT_2, CQC_LANG, POLYNOM2, WSIERP_1, SETWISEO, GOBOARD1, NORMSP_1,
+      DTCONSTR;
+ registrations XREAL_0, STRUCT_0, RELSET_1, VECTSP_1, POLYNOM1, POLYNOM3,
+      MONOID_0, NAT_1, INT_1, POLYNOM5, FINSEQ_1, FINSET_1, CARD_1, MEMBERED,
+      FUNCT_1, ALGSTR_1, SUBSET_1, ORDINAL2, RFINSEQ, GOBRD13, PRE_CIRC,
+      TREES_2, CHAIN_1, POLYNOM7, BINOP_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
 
 
@@ -112,29 +113,49 @@ for X being set, S, T being finite Subset of X, n being Nat
  st S misses T holds (S \/ T, n)-bag = (S,n)-bag + (T,n)-bag;
 
 definition
-  let A be set, b be bag of A;
-  func degree b -> Nat means
+ let X be set;
+ mode Rbag of X is real-yielding finite-support ManySortedSet of X;
+end;
+
+definition
+  let A be set, b be Rbag of A;
+  func Sum b -> real number means
 :: UPROOTS:def 3
+  ex f being FinSequence of REAL st it = Sum f & f = b*canFS(support b);
+end;
+
+notation
+  let A be set, b be bag of A;
+  synonym degree b for Sum b;
+end;
+
+definition
+  let A be set, b be bag of A;
+  redefine func degree b -> Nat means
+:: UPROOTS:def 4
   ex f being FinSequence of NAT st it = Sum f & f = b*canFS(support b);
 end;
 
-theorem :: UPROOTS:13  :: BAGDEG0:
-for A being set, b being bag of A holds b = EmptyBag A iff degree b = 0;
+theorem :: UPROOTS:13  :: BAGDEG0a:
+for A being set, b being Rbag of A st b = EmptyBag A holds Sum b = 0;
 
-theorem :: UPROOTS:14  :: BAGDEG1:
+theorem :: UPROOTS:14  :: BAGDEG0:
+for A being set, b being bag of A st Sum b = 0 holds b = EmptyBag A;
+
+theorem :: UPROOTS:15  :: BAGDEG1:
 for A being set, S being finite Subset of A, b being bag of A
  holds S = support b & degree b = card S iff b = (S, 1)-bag;
 
-theorem :: UPROOTS:15  :: BAGDEG2c:
-for A being set, S being finite Subset of A, b being bag of A
+theorem :: UPROOTS:16  :: BAGDEG2c:
+for A being set, S being finite Subset of A, b being Rbag of A
  st support b c= S
-  ex f being FinSequence of NAT st f = b*canFS(S) & degree b = Sum f;
+  ex f being FinSequence of REAL st f = b*canFS(S) & Sum b = Sum f;
 
-theorem :: UPROOTS:16  :: BAGDEG2:
-for A being set, b, b1, b2 being bag of A
- st b = b1 + b2 holds degree b = degree b1 + degree b2;
+theorem :: UPROOTS:17  :: BAGDEG2:
+for A being set, b, b1, b2 being Rbag of A
+ st b = b1 + b2 holds Sum b = Sum b1 + Sum b2;
 
-theorem :: UPROOTS:17  :: GROUP_4:18 but about a different Product
+theorem :: UPROOTS:18  :: GROUP_4:18 but about a different Product
 for L being associative commutative unital (non empty HGrStr),
     f, g being FinSequence of L, p being Permutation of dom f
   st g = f * p holds Product(g) = Product(f);
@@ -144,11 +165,11 @@ begin :: More on polynomials
 definition
   let L be non empty ZeroStr, p be Polynomial of L;
   attr p is non-zero means
-:: UPROOTS:def 4
+:: UPROOTS:def 5
    p <> 0_. L;
 end;
 
-theorem :: UPROOTS:18  :: lenNZ
+theorem :: UPROOTS:19  :: lenNZ
 for L being non empty ZeroStr, p being Polynomial of L
  holds p is non-zero iff len p > 0;
 
@@ -162,15 +183,15 @@ registration
   cluster <%x, 1.L%> -> non-zero;
 end;
 
-theorem :: UPROOTS:19
+theorem :: UPROOTS:20
 for L being non empty ZeroStr, p being Polynomial of L
  st len p > 0 holds p.(len p -'1) <> 0.L;
 
-theorem :: UPROOTS:20  :: plen1:
+theorem :: UPROOTS:21  :: plen1:
 for L being non empty ZeroStr, p being AlgSequence of L
  st len p = 1 holds p = <%p.0%> & p.0 <> 0.L;
 
-theorem :: UPROOTS:21  :: P4Th5: from POLYNOM4:5 right-distributive
+theorem :: UPROOTS:22  :: P4Th5: from POLYNOM4:5 right-distributive
 for L be add-associative right_zeroed right_complementable
          right-distributive (non empty doubleLoopStr),
     p be Polynomial of L holds p*'(0_.(L)) = 0_.(L);
@@ -181,7 +202,7 @@ registration
      non degenerated (unital (non empty doubleLoopStr));
 end;
 
-theorem :: UPROOTS:22  :: pintdom:
+theorem :: UPROOTS:23  :: pintdom:
 for L being add-associative right_zeroed right_complementable distributive
             domRing-like (non empty doubleLoopStr),
     p, q being Polynomial of L
@@ -198,100 +219,100 @@ registration
   cluster p*'q -> non-zero;
 end;
 
-theorem :: UPROOTS:23 :: pcomring0:
+theorem :: UPROOTS:24 :: pcomring0:
    for L being non degenerated comRing, p, q being Polynomial of L
  holds Roots p \/ Roots q c= Roots (p*'q);
 
-theorem :: UPROOTS:24  :: pdomring0:
+theorem :: UPROOTS:25  :: pdomring0:
 for L being domRing, p, q being Polynomial of L
  holds Roots (p*'q) = Roots p \/ Roots q;
 
-theorem :: UPROOTS:25  :: puminus:
+theorem :: UPROOTS:26  :: puminus:
 for L being add-associative right_zeroed right_complementable distributive
             (non empty doubleLoopStr),
     p being (Polynomial of L), pc being (Element of Polynom-Ring L)
  st p = pc holds -p = -pc;
 
-theorem :: UPROOTS:26  :: pminus:
+theorem :: UPROOTS:27  :: pminus:
 for L being add-associative right_zeroed right_complementable distributive
             (non empty doubleLoopStr),
     p, q being (Polynomial of L), pc, qc being (Element of Polynom-Ring L)
  st p= pc & q = qc holds p-q = pc-qc;
 
-theorem :: UPROOTS:27  :: distrminus:
+theorem :: UPROOTS:28  :: distrminus:
 for L being Abelian add-associative right_zeroed right_complementable
             distributive (non empty doubleLoopStr),
     p, q, r being (Polynomial of L)
  holds  p*'q-p*'r = p*'(q-r);
 
-theorem :: UPROOTS:28  :: minus0:
+theorem :: UPROOTS:29  :: minus0:
 for L being add-associative right_zeroed right_complementable distributive
             (non empty doubleLoopStr),
     p, q being (Polynomial of L)
  st p-q = 0_. L holds p = q;
 
-theorem :: UPROOTS:29  :: pcanc0:
+theorem :: UPROOTS:30  :: pcanc0:
 for L being Abelian add-associative right_zeroed right_complementable
             distributive domRing-like (non empty doubleLoopStr),
     p, q, r being Polynomial of L
  st p <> 0_. L & p*'q = p*'r holds q = r;
 
-theorem :: UPROOTS:30  :: pexp0:
+theorem :: UPROOTS:31  :: pexp0:
 for L being domRing, n being Nat, p being Polynomial of L
  st p <> 0_. L holds p`^n <> 0_. L;
 
-theorem :: UPROOTS:31   :: pexp1:
+theorem :: UPROOTS:32   :: pexp1:
 for L being comRing, i, j being Nat, p being Polynomial of L
  holds (p`^i) *' (p`^j) = p `^(i+j);
 
-theorem :: UPROOTS:32  :: poly1b:
+theorem :: UPROOTS:33  :: poly1b:
 for L being non empty multLoopStr_0 holds 1_.(L) = <%1.L%>;
 
-theorem :: UPROOTS:33  :: poly1a
+theorem :: UPROOTS:34  :: poly1a
    for L being add-associative right_zeroed right_complementable right_unital
             right-distributive (non empty doubleLoopStr),
     p being Polynomial of L
  holds p*'<%1.L%> = p;
 
-theorem :: UPROOTS:34
+theorem :: UPROOTS:35
 for L being add-associative right_zeroed right_complementable distributive
                                                  (non empty doubleLoopStr),
     p, q being Polynomial of L
  st len p = 0 or len q = 0 holds len (p*'q) = 0;
 
-theorem :: UPROOTS:35  :: LM1
+theorem :: UPROOTS:36  :: LM1
 for L being add-associative right_zeroed right_complementable distributive
                                                  (non empty doubleLoopStr),
     p, q being Polynomial of L
  st p*'q is non-zero holds p is non-zero & q is non-zero;
 
-theorem :: UPROOTS:36 :: LM1a
+theorem :: UPROOTS:37 :: LM1a
    for L being add-associative right_zeroed right_complementable distributive
          commutative associative left_unital (non empty doubleLoopStr),
     p, q being Polynomial of L
  st p.(len p -'1) * q.(len q -'1) <> 0.L holds 0 < len (p*'q);
 
-theorem :: UPROOTS:37  :: LM2
+theorem :: UPROOTS:38  :: LM2
 for L being add-associative right_zeroed right_complementable distributive
     commutative associative left_unital domRing-like (non empty doubleLoopStr),
     p, q being Polynomial of L
  st 1 < len p & 1 < len q holds len p < len (p*'q);
 
-theorem :: UPROOTS:38  :: f2mpoly:
+theorem :: UPROOTS:39  :: f2mpoly:
 for L being add-associative right_zeroed right_complementable
             left-distributive (non empty doubleLoopStr),
     a, b being Element of L, p being Polynomial of L
  holds (<%a, b%>*'p).0 = a*p.0 &
        for i being Nat holds (<%a, b%>*'p).(i+1) = a*p.(i+1)+b*p.i;
 
-theorem :: UPROOTS:39  :: LM3a
+theorem :: UPROOTS:40  :: LM3a
 for L being add-associative right_zeroed right_complementable distributive
             unital commutative associative
             non degenerated (non empty doubleLoopStr),
     r being Element of L, q being non-zero Polynomial of L
  holds len (<%r, 1.L%>*'q) = len q + 1;
 
-theorem :: UPROOTS:40  :: pexp2
+theorem :: UPROOTS:41  :: pexp2
 for L being non degenerated comRing, x being Element of L, i being Nat
  holds len (<%x, 1.L%>`^i) = i+1;
 
@@ -300,12 +321,12 @@ registration
   cluster <%x, 1.L%>`^n -> non-zero;
 end;
 
-theorem :: UPROOTS:41  :: pexp3
+theorem :: UPROOTS:42  :: pexp3
 for L being non degenerated comRing, x being Element of L,
     q being non-zero (Polynomial of L),  i being Nat
  holds len ((<%x, 1.L%>`^i)*'q) = i + len q;
 
-theorem :: UPROOTS:42  :: LM3:
+theorem :: UPROOTS:43  :: LM3:
 for L being add-associative right_zeroed right_complementable distributive
             unital commutative associative
             non degenerated (non empty doubleLoopStr),
@@ -317,30 +338,30 @@ begin :: Little Bezout theorem
 definition
   let L be non empty ZeroStr, p be Polynomial of L; let n be Nat;
   func poly_shift(p,n) -> Polynomial of L means
-:: UPROOTS:def 5
+:: UPROOTS:def 6
     for i being Nat holds it.i = p.(n + i);
 end;
 
-theorem :: UPROOTS:43  :: PS0:
+theorem :: UPROOTS:44  :: PS0:
 for L being non empty ZeroStr,p being Polynomial of L holds poly_shift(p,0) = p
 ;
 
-theorem :: UPROOTS:44  :: PS1:
+theorem :: UPROOTS:45  :: PS1:
 for L being non empty ZeroStr,  n being Nat, p being Polynomial of L
  st n >= len p holds poly_shift(p,n) = 0_. L;
 
-theorem :: UPROOTS:45  :: PS2:
+theorem :: UPROOTS:46  :: PS2:
 for L being non degenerated (non empty multLoopStr_0),
     n being Nat, p being Polynomial of L
  st n <= len p holds len poly_shift(p,n) + n = len p;
 
-theorem :: UPROOTS:46  :: evps:
+theorem :: UPROOTS:47  :: evps:
 for L being  non degenerated comRing,
     x being Element of L, n being Nat, p being Polynomial of L
  st n < len p holds eval(poly_shift(p,n),x) = x*eval(poly_shift(p,n+1),x) + p.n
 ;
 
-theorem :: UPROOTS:47  :: Roots0:
+theorem :: UPROOTS:48  :: Roots0:
 for L being non degenerated comRing, p being Polynomial of L
  st len p = 1 holds Roots p = {};
 
@@ -348,34 +369,34 @@ definition
   let L be non degenerated comRing, r be Element of L,  p be Polynomial of L
   such that  r is_a_root_of p;
   func poly_quotient(p,r) -> Polynomial of L means
-:: UPROOTS:def 6
+:: UPROOTS:def 7
      len it + 1 = len p &
      for i being Nat holds it.i = eval(poly_shift(p, i+1),r) if len p > 0
   otherwise it = 0_. L;
 end;
 
-theorem :: UPROOTS:48  :: pqlen:
+theorem :: UPROOTS:49  :: pqlen:
 for L being non degenerated comRing,
     r being Element of L, p being non-zero Polynomial of L
  st r is_a_root_of p holds len poly_quotient(p,r) > 0;
 
-theorem :: UPROOTS:49  :: Roots1:
+theorem :: UPROOTS:50  :: Roots1:
 for L being add-associative right_zeroed right_complementable
             left-distributive unital (non empty doubleLoopStr),
     x being Element of L
  holds Roots <%-x, 1.L%> = {x};
 
-theorem :: UPROOTS:50  :: BZA:
+theorem :: UPROOTS:51  :: BZA:
 for L being non trivial comRing,
     x being Element of L, p, q  being Polynomial of L
  st p = <%-x,1.L%>*'q holds x is_a_root_of p;
 
-theorem :: UPROOTS:51   :: Factor theorem (Bezout)
+theorem :: UPROOTS:52   :: Factor theorem (Bezout)
 for L being non degenerated comRing,
     r being Element of L, p being Polynomial of L
  st r is_a_root_of p holds p = <%-r,1.L%>*'poly_quotient(p,r);
 
-theorem :: UPROOTS:52 :: Factor theorem (Bezout)
+theorem :: UPROOTS:53 :: Factor theorem (Bezout)
    for L being non degenerated comRing,
     r being Element of L, p, q being Polynomial of L
  st p = <%-r,1.L%>*'q holds r is_a_root_of p;
@@ -391,51 +412,51 @@ definition
   let L be non degenerated comRing, x be Element of L,
       p be non-zero (Polynomial of L);
   func multiplicity(p,x) -> Nat means
-:: UPROOTS:def 7
+:: UPROOTS:def 8
   ex F being finite non empty Subset of NAT
    st F = {k where k is Nat : ex q being Polynomial of L
                       st p = (<%-x, 1.L%>`^k) *' q} &
       it = max F;
 end;
 
-theorem :: UPROOTS:53  :: MULTI1:
+theorem :: UPROOTS:54  :: MULTI1:
 for L being non degenerated comRing,
     p being non-zero (Polynomial of L), x being Element of L
  holds x is_a_root_of p iff multiplicity(p,x) >= 1;
 
-theorem :: UPROOTS:54  :: MULTI2:
+theorem :: UPROOTS:55  :: MULTI2:
 for L being non degenerated comRing,
     x being Element of L holds multiplicity(<%-x, 1.L%>,x) = 1;
 
 definition
   let L be domRing, p be non-zero Polynomial of L;
   func BRoots(p) -> bag of the carrier of L means
-:: UPROOTS:def 8
+:: UPROOTS:def 9
    support it = Roots p &
    for x being Element of L holds it.x = multiplicity(p,x);
 end;
 
-theorem :: UPROOTS:55  :: BR1e:
+theorem :: UPROOTS:56  :: BR1e:
 for L being domRing, x being Element of L
  holds BRoots <%-x, 1.L%> = ({x}, 1)-bag;
 
-theorem :: UPROOTS:56  :: BR1da:
+theorem :: UPROOTS:57  :: BR1da:
 for L being domRing, x be Element of L, p, q being non-zero Polynomial of L
   holds multiplicity(p*'q,x) = multiplicity(p,x) + multiplicity(q,x);
 
-theorem :: UPROOTS:57  :: BR1d:
+theorem :: UPROOTS:58  :: BR1d:
 for L being domRing, p, q being non-zero Polynomial of L
  holds BRoots(p*'q) = BRoots(p) + BRoots(q);
 
-theorem :: UPROOTS:58  :: BR1b:
+theorem :: UPROOTS:59  :: BR1b:
 for L being domRing, p being non-zero Polynomial of L
  st len p = 1 holds degree BRoots p = 0;
 
-theorem :: UPROOTS:59  :: BR1c:
+theorem :: UPROOTS:60  :: BR1c:
 for L being domRing, x be Element of L, n being Nat
  holds degree BRoots (<%-x, 1.L%>`^n) = n;
 
-theorem :: UPROOTS:60 :: BR2
+theorem :: UPROOTS:61 :: BR2
    for L being algebraic-closed domRing, p being non-zero Polynomial of L
  holds degree BRoots p = len p -' 1;
 
@@ -444,7 +465,7 @@ definition
                                                 (non empty doubleLoopStr),
       c be Element of L, n be Nat;
   func fpoly_mult_root(c,n) -> FinSequence of Polynom-Ring L means
-:: UPROOTS:def 9
+:: UPROOTS:def 10
     len it = n &
     for i being Nat st i in dom it holds it.i = <% -c, 1.L%>;
 end;
@@ -454,7 +475,7 @@ definition
                                                 (non empty doubleLoopStr),
       b be bag of the carrier of L;
   func poly_with_roots(b) -> Polynomial of L means
-:: UPROOTS:def 10
+:: UPROOTS:def 11
 
  ex f being FinSequence of (the carrier of Polynom-Ring L)*,
     s being FinSequence of L
@@ -463,18 +484,18 @@ definition
    & it = Product FlattenSeq f;
 end;
 
-theorem :: UPROOTS:61  :: poly1:
+theorem :: UPROOTS:62  :: poly1:
 for L being Abelian add-associative right_zeroed right_complementable
             commutative distributive right_unital (non empty doubleLoopStr)
  holds poly_with_roots(EmptyBag the carrier of L) = <%1.L%>;
 
-theorem :: UPROOTS:62  :: poly1_1:
+theorem :: UPROOTS:63  :: poly1_1:
 for L being add-associative right_zeroed right_complementable distributive
                                                  (non empty doubleLoopStr),
     c being Element of L
   holds poly_with_roots(({c},1)-bag) = <% -c, 1.L %>;
 
-theorem :: UPROOTS:63  :: PWRBBa:
+theorem :: UPROOTS:64  :: PWRBBa:
 for L being add-associative right_zeroed right_complementable distributive
                                                 (non empty doubleLoopStr),
     b being bag of the carrier of L,
@@ -484,7 +505,7 @@ for L being add-associative right_zeroed right_complementable distributive
     (for i being Nat st i in dom f holds f.i = fpoly_mult_root(s/.i,b.(s/.i)))
   holds len FlattenSeq f = degree b;
 
-theorem :: UPROOTS:64  :: PWRBBb:
+theorem :: UPROOTS:65  :: PWRBBb:
 for L being add-associative right_zeroed right_complementable distributive
                                                 (non empty doubleLoopStr),
     b being bag of the carrier of L,
@@ -496,16 +517,16 @@ for L being add-associative right_zeroed right_complementable distributive
   holds (c in support b implies card ((FlattenSeq f)"{<% -c, 1.L%>}) = b.c) &
         (not c in support b implies card ((FlattenSeq f)"{<% -c, 1.L%>}) = 0);
 
-theorem :: UPROOTS:65  :: PWRBB:
+theorem :: UPROOTS:66  :: PWRBB:
 for L being comRing
 for b1,b2 being bag of the carrier of L holds
   poly_with_roots(b1+b2) = (poly_with_roots b1)*'(poly_with_roots b2);
 
-theorem :: UPROOTS:66  :: PWRBR1
+theorem :: UPROOTS:67  :: PWRBR1
    for L being algebraic-closed domRing, p being non-zero (Polynomial of L)
  st p.(len p-'1) = 1.L holds p = poly_with_roots(BRoots(p));
 
-theorem :: UPROOTS:67
+theorem :: UPROOTS:68
    for L being comRing, s being non empty finite Subset of L,
     f being FinSequence of Polynom-Ring L
  st len f = card s &
@@ -513,7 +534,7 @@ theorem :: UPROOTS:67
      st i in dom f & c = (canFS(s)).i holds f.i = <% -c, 1.L %>
   holds poly_with_roots((s,1)-bag) = Product(f);
 
-theorem :: UPROOTS:68 :: PolyEval1:
+theorem :: UPROOTS:69 :: PolyEval1:
    for L being non trivial comRing, s being non empty finite Subset of L,
     x being Element of L, f being FinSequence of L
  st len f = card s &

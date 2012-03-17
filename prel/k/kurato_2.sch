@@ -17,10 +17,13 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="PROB_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="FUNCT_6"/>
+<ArticleID name="PROB_1"/>
 <ArticleID name="KURATO_2"/>
 </Signature>
 <Scheme>
@@ -68,7 +71,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="113">
+<Func kind="K" nr="138">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -130,7 +133,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="113">
+<Func kind="K" nr="138">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -357,7 +360,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="148">
+<Func kind="K" nr="158">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -387,7 +390,7 @@
 <Var nr="2"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="148">
+<Func kind="K" nr="158">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -43,28 +43,28 @@
 <Adjective nr="59">
 <Func kind="K" nr="2">
 <Func kind="K" nr="55"/>
-<Func kind="K" nr="245">
+<Func kind="K" nr="246">
 <Func kind="K" nr="55"/>
 </Func>
 </Func>
-<Func kind="K" nr="247"/>
+<Func kind="K" nr="248"/>
 </Adjective>
 <Adjective nr="60"/>
 <Adjective nr="66"/>
 </Cluster>
 <Func kind="K" nr="2">
 <Func kind="K" nr="55"/>
-<Func kind="K" nr="245">
+<Func kind="K" nr="246">
 <Func kind="K" nr="55"/>
 </Func>
 </Func>
-<Func kind="K" nr="247"/>
+<Func kind="K" nr="248"/>
 </Typ>
 <Typ kind="M" nr="18">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="289">
+<Func kind="K" nr="290">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -74,14 +74,14 @@
 <Adjective nr="59">
 <Func kind="K" nr="2">
 <Func kind="K" nr="55"/>
-<Func kind="K" nr="245">
+<Func kind="K" nr="246">
 <Func kind="K" nr="55"/>
 </Func>
 </Func>
-<Func kind="K" nr="247"/>
+<Func kind="K" nr="248"/>
 </Adjective>
 <Adjective nr="60"/>
 <Adjective nr="66"/>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

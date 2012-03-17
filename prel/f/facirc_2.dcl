@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XBOOLE_0"/>
@@ -35,7 +35,6 @@
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="PROB_1"/>
 <ArticleID name="LANG1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
@@ -62,9 +61,9 @@
 <Cluster>
 <Adjective nr="78"/>
 <Adjective nr="79"/>
-<Adjective nr="122"/>
-<Adjective nr="123"/>
-<Adjective nr="124"/>
+<Adjective nr="119"/>
+<Adjective nr="120"/>
+<Adjective nr="121"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -73,18 +72,18 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="453">
+<Func kind="K" nr="439">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="78"/>
 <Adjective nr="79"/>
-<Adjective nr="114"/>
-<Adjective nr="122"/>
+<Adjective nr="111"/>
+<Adjective nr="119"/>
+<Adjective nr="120"/>
+<Adjective nr="121"/>
 <Adjective nr="123"/>
-<Adjective nr="124"/>
-<Adjective nr="126"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -109,11 +108,11 @@
 <Adjective nr="87"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
-<Adjective nr="118"/>
-<Adjective nr="120"/>
-<Adjective nr="128" value="false"/>
-<Adjective nr="129" value="false"/>
-<Adjective nr="130"/>
+<Adjective nr="115"/>
+<Adjective nr="117"/>
+<Adjective nr="125" value="false"/>
+<Adjective nr="126" value="false"/>
+<Adjective nr="127"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -122,7 +121,7 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="130"/>
+<Adjective nr="127"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -134,7 +133,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="128" value="false"/>
+<Adjective nr="125" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -158,14 +157,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="458">
+<Func kind="K" nr="444">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="128"/>
+<Adjective nr="125"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -177,9 +176,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="122"/>
-<Adjective nr="123"/>
-<Adjective nr="124"/>
+<Adjective nr="119"/>
+<Adjective nr="120"/>
+<Adjective nr="121"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -191,7 +190,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="128" value="false"/>
+<Adjective nr="125" value="false"/>
 </Cluster>
 </CCluster>
-</Clusters>
+</Registrations>

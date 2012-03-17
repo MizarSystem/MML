@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
@@ -30,18 +30,6 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="154"/>
-<Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes/>
 <Func kind="K" nr="155"/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -56,6 +44,18 @@
 <ArgTypes/>
 <Func kind="K" nr="156"/>
 <Cluster>
+<Adjective nr="12" value="false"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="48"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="157"/>
+<Cluster>
 <Adjective nr="1"/>
 <Adjective nr="12" value="false"/>
 </Cluster>
@@ -64,13 +64,13 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="149">
-<Func kind="K" nr="157"/>
+<Func kind="K" nr="150">
+<Func kind="K" nr="158"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="154"/>
+<Func kind="K" nr="155"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="11">
@@ -83,4 +83,4 @@
 <Adjective nr="41"/>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

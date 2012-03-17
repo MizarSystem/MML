@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -73,33 +73,33 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="288">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="91"/>
-<Adjective nr="95"/>
-<Adjective nr="100"/>
-<Adjective nr="101"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="G" nr="11">
-<Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="80" value="false"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="6" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
 <Func kind="K" nr="289">
 <LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="27" value="false"/>
+<Adjective nr="91"/>
+<Adjective nr="95"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="11">
+<Cluster>
+<Adjective nr="27" value="false"/>
+<Adjective nr="80" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="6" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="290">
+<LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -120,7 +120,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="291">
+<Func kind="K" nr="292">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -132,4 +132,4 @@
 <Adjective nr="101"/>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
@@ -234,7 +234,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="428">
+<Func kind="K" nr="430">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -273,7 +273,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="428">
+<Func kind="K" nr="430">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -341,4 +341,4 @@
 <Adjective nr="217"/>
 </Cluster>
 </CCluster>
-</Clusters>
+</Registrations>

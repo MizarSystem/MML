@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -17,6 +17,9 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 </Signature>
 <RCluster>
@@ -32,7 +35,7 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="25"/>
-<Adjective nr="33">
+<Adjective nr="37">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -75,9 +78,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="25"/>
-<Adjective nr="33">
+<Adjective nr="37">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </CCluster>
-</Clusters>
+</Registrations>

@@ -18,9 +18,9 @@
 <ArticleID name="MARGREL1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="UNIALG_1"/>
@@ -152,12 +152,12 @@
 <Cluster/>
 </Typ>
 <For>
-<Typ kind="M" nr="17">
+<Typ kind="M" nr="15">
 <Cluster/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="134">
+<Func kind="K" nr="125">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -208,12 +208,12 @@
 <Cluster/>
 </Typ>
 <For>
-<Typ kind="M" nr="17">
+<Typ kind="M" nr="15">
 <Cluster/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="134">
+<Func kind="K" nr="125">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -246,8 +246,8 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="17">
-<Func kind="K" nr="135">
-<Func kind="K" nr="117">
+<Func kind="K" nr="126">
+<Func kind="K" nr="108">
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="93"/>
@@ -255,8 +255,8 @@
 <Func kind="K" nr="93"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="135">
-<Func kind="K" nr="117">
+<Func kind="K" nr="126">
+<Func kind="K" nr="108">
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="93"/>

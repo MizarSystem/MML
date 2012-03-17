@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
@@ -65,7 +65,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="339">
+<Func kind="K" nr="340">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -80,7 +80,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="339">
+<Func kind="K" nr="340">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -90,7 +90,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="339">
+<Func kind="K" nr="340">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -156,19 +156,19 @@
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="339">
+<Func kind="K" nr="340">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="278">
+<Func kind="K" nr="279">
 <Func kind="K" nr="13">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="339">
+<Func kind="K" nr="340">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
@@ -179,4 +179,4 @@
 <Adjective nr="104"/>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

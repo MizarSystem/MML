@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -55,7 +55,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="339">
+<Func kind="K" nr="341">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -79,7 +79,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="339">
+<Func kind="K" nr="341">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -115,7 +115,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="343">
+<Func kind="K" nr="345">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -134,7 +134,7 @@
 <Adjective nr="43"/>
 <Adjective nr="69"/>
 <Adjective nr="133">
-<Func kind="K" nr="342">
+<Func kind="K" nr="344">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -145,7 +145,7 @@
 </Func>
 </Adjective>
 <Adjective nr="134">
-<Func kind="K" nr="342">
+<Func kind="K" nr="344">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -157,4 +157,4 @@
 </Adjective>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -107,7 +107,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -171,9 +171,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="42">
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="223"/>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </CCluster>
-</Clusters>
+</Registrations>

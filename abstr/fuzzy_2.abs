@@ -8,11 +8,11 @@ environ
 
  vocabulary FUZZY_1, FUNCT_1, FUNCT_3, BOOLE, SQUARE_1, RELAT_1, SUBSET_1,
       ARYTM_1, PARTFUN1, RCOMP_1, INTEGRA1, ORDINAL2, FUZZY_2;
- notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, SQUARE_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, SQUARE_1,
       REAL_1, RELSET_1, PARTFUN1, RFUNCT_1, INTEGRA1, SEQ_1, RCOMP_1, PSCOMP_1,
       FUZZY_1;
  constructors FUZZY_1, SQUARE_1, INTEGRA2, RFUNCT_1, REAL_1, PSCOMP_1;
- clusters RELSET_1, INTEGRA1, MEMBERED;
+ registrations RELSET_1, INTEGRA1, MEMBERED;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -22,222 +22,113 @@ reserve x,y,y1,y2 for set;
 reserve C for non empty set;
 reserve c for Element of C;
 reserve f,h,g,h1 for Membership_Func of C;
-reserve A for FuzzySet of C,f;
-reserve B for FuzzySet of C,g;
-reserve D for FuzzySet of C,h;
-reserve D1 for FuzzySet of C,h1;
-reserve X for Universal_FuzzySet of C;
-reserve E for Empty_FuzzySet of C;
 
 :::::Basic Properties of Membership Function and Difference Set:::::
 
 theorem :: FUZZY_2:1
-for x be Element of C,h be Membership_Func of C holds
-0 <= h.x & h.x <= 1;
+  for x be Element of C,h be Membership_Func of C holds
+  0 <= h.x & h.x <= 1;
 
 theorem :: FUZZY_2:2
-for x be Element of C holds (EMF(C)).x = 0 & (UMF(C)).x = 1;
-
-theorem :: FUZZY_2:3
-for c holds f.c <= h.c implies max(f,min(g,h)).c = min(max(f,g),h).c;
-
-theorem :: FUZZY_2:4
-   A c= D implies A \/ (B /\ D) = (A \/ B) /\ D;
+  f c= h implies max(f,min(g,h)) = min(max(f,g),h);
 
 definition
 let C be non empty set;
 let f,g be Membership_Func of C;
-let A be FuzzySet of C,f;
-let B be FuzzySet of C,g;
-func A\B ->
-FuzzySet of C,min(f,1_minus g) equals
+func f\g -> Membership_Func of C equals
 :: FUZZY_2:def 1
-    [:C,min(f,1_minus g).:C:];
+min(f,1_minus g);
 end;
 
-canceled;
+theorem :: FUZZY_2:3
+  1_minus (f\g) = max(1_minus f,g);
+
+theorem :: FUZZY_2:4
+  f c= g implies f\h c= g\h;
+
+theorem :: FUZZY_2:5
+  f c= g implies h\g c= h\f;
 
 theorem :: FUZZY_2:6
-1_minus min(f,1_minus g) = max(1_minus f,g);
+  f c= g & h c= h1 implies f\h1 c= g\h;
 
 theorem :: FUZZY_2:7
-   (A\B)` = A` \/ B;
+  f\g c= f;
 
 theorem :: FUZZY_2:8
-for c holds f.c <= g.c implies
-min(f,1_minus h).c <= min(g,1_minus h).c;
+  f\g c= f \+\ g;
 
 theorem :: FUZZY_2:9
-   A c= B implies A\D c= B\D;
+  f\EMF(C) = f;
 
 theorem :: FUZZY_2:10
-for c holds f.c <= g.c implies
-min(h,1_minus g).c <= min(h,1_minus f).c;
+  EMF(C)\f = EMF(C);
 
 theorem :: FUZZY_2:11
-   A c= B implies D\B c= D\A;
+  f\g c= f\min(f,g);
 
 theorem :: FUZZY_2:12
-for c holds f.c <= g.c & h.c <= h1.c implies
-min(f,1_minus h1).c <= min(g,1_minus h).c;
+  max(min(f,g),f\g) c= f;
 
 theorem :: FUZZY_2:13
-   A c= B & D c= D1 implies A\D1 c= B\D;
+  max(f,g\f) c= max(f,g);
 
 theorem :: FUZZY_2:14
-for c holds min(f,1_minus g).c <= f.c;
+  f\(g\h) = max(f\g,min(f,h));
 
 theorem :: FUZZY_2:15
-   A\B c= A;
+  min(f,g) c= f\(f\g);
 
 theorem :: FUZZY_2:16
-for c holds min(f,1_minus g).c <= max(min(f,1_minus(g)),min(1_minus(f),g)).c;
+  f\g c= max(f,g)\g;
 
 theorem :: FUZZY_2:17
-   A\B c= A \+\ B;
+  f\max(g,h) = min(f\g,f\h);
 
 theorem :: FUZZY_2:18
-   A\E = A;
+  f\min(g,h) = max(f\g,f\h);
 
 theorem :: FUZZY_2:19
-   E\A = E;
+  (f\g)\h = f\max(g,h);
 
 theorem :: FUZZY_2:20
-for c holds min(f,1_minus g).c <= min(f,1_minus min(f,g)).c;
+  f \+\ g c= max(f,g)\min(f,g);
 
 theorem :: FUZZY_2:21
-   A\B c= A\(A /\ B);
+  max(f,g)\h = max(f\h,g\h);
 
 theorem :: FUZZY_2:22
-for c holds max(min(f,g),min(f,1_minus g)).c <= f.c;
+  f\g c= h & g\f c= h implies f \+\ g c= h;
 
 theorem :: FUZZY_2:23
-for c holds max(f,min(g,1_minus f)).c <= max(f,g).c;
+   min(f,g\h) = min(f,g)\h;
 
 theorem :: FUZZY_2:24
-   A \/ (B\A) c= A \/ B;
+  min(f,g\h) c= min(f,g)\min(f,h);
 
 theorem :: FUZZY_2:25
-   (A /\ B) \/ (A\B) c= A;
+  f \+\ g c= max(f,g)\min(f,g);
 
 theorem :: FUZZY_2:26
-min(f,1_minus min(g,1_minus h)) = max(min(f,1_minus g),min(f,h));
+  max(min(f,g),1_minus max(f,g)) c= 1_minus (f \+\ g);
 
 theorem :: FUZZY_2:27
-   A\(B\D) = (A\B) \/ (A /\ D);
+  (f \+\ g)\h = max(f\max(g,h),g\max(f,h));
 
 theorem :: FUZZY_2:28
-for c holds min(f,g).c <= min(f,1_minus(min(f,1_minus g))).c;
+  max(f\ max(g,h),min(min(f,g),h)) c= f\(g \+\ h);
 
 theorem :: FUZZY_2:29
-   A /\ B c= A\(A\B);
+  f c= g implies max(f,g\f) c= g;
 
 theorem :: FUZZY_2:30
-for c holds min(f,1_minus g).c <= min(max(f,g),1_minus g).c;
+  max(f \+\ g,min(f,g)) c= max(f,g);
 
 theorem :: FUZZY_2:31
-   A\B c= (A \/ B)\B;
+  f\g = EMF(C) implies f c= g;
 
 theorem :: FUZZY_2:32
-min(f,1_minus max(g,h)) = min(min(f,1_minus g),min(f,1_minus h));
-
-theorem :: FUZZY_2:33
-   A\(B \/ D) = (A\B) /\ (A\D);
-
-theorem :: FUZZY_2:34
-min(f,1_minus min(g,h)) = max(min(f,1_minus g),min(f,1_minus h));
-
-theorem :: FUZZY_2:35
-   A\(B /\ D) = (A\B) \/ (A\D);
-
-theorem :: FUZZY_2:36
-min(min(f,1_minus g),1_minus h) = min(f,1_minus max(g,h));
-
-theorem :: FUZZY_2:37
-   (A\B)\D = A\(B \/ D);
-
-theorem :: FUZZY_2:38
-for c holds
-min(max(f,g),1_minus min(f,g)).c >= max(min(f,1_minus g),min(g,1_minus f)).c;
-
-theorem :: FUZZY_2:39
-   (A\B) \/ (B\A) c= (A \/ B)\(A /\ B);
-
-theorem :: FUZZY_2:40
-min(max(f,g),1_minus h) = max(min(f,1_minus h),min(g,1_minus h));
-
-theorem :: FUZZY_2:41
-   (A \/ B)\D = (A\D) \/ (B\D);
-
-theorem :: FUZZY_2:42
-for c holds min(f,1_minus g).c <= h.c & min(g,1_minus f).c <= h.c
-implies max(min(f,1_minus g),min(1_minus f,g)).c <= h.c;
-
-theorem :: FUZZY_2:43
-   A\B c= D & B\A c= D implies A \+\ B c= D;
-
-theorem :: FUZZY_2:44
-   A /\ (B\D) = (A /\ B)\D;
-
-theorem :: FUZZY_2:45
-for c holds min(f,min(g,1_minus h)).c <= min(min(f,g),1_minus min(f,h)).c;
-
-theorem :: FUZZY_2:46
-   A /\ (B\D) c= (A /\ B)\(A /\ D);
-
-theorem :: FUZZY_2:47
-for c holds
-min(max(f,g),1_minus min(f,g)).c >= max(min(f,1_minus g),min(1_minus f,g)).c;
-
-theorem :: FUZZY_2:48
-   A \+\ B c= (A \/ B)\(A /\ B);
-
-theorem :: FUZZY_2:49
-for c holds
-max(min(f,g),1_minus max(f,g)).c
-<= (1_minus max(min(f,1_minus g),min(1_minus f,g))).c;
-
-theorem :: FUZZY_2:50
-   (A /\ B) \/ (A \/ B)` c= (A \+\ B)`;
-
-theorem :: FUZZY_2:51
-min(max(min(f,1_minus g),min(1_minus f,g)),1_minus h)
-=max(min(f,1_minus max(g,h)),min(g,1_minus max(f,h)));
-
-theorem :: FUZZY_2:52
-   (A \+\ B)\D = (A\(B \/ D)) \/ (B\(A \/ D));
-
-theorem :: FUZZY_2:53
-for c holds
-min(f,1_minus max(min(g,1_minus h),min(1_minus g,h))).c
->= max(min(f,1_minus max(g,h)),min(min(f,g),h)).c;
-
-theorem :: FUZZY_2:54
-   (A\(B \/ D)) \/ ((A /\ B) /\ D) c= A\(B \+\ D);
-
-theorem :: FUZZY_2:55
-for c holds f.c <= g.c implies g.c >= max(f,min(g,1_minus f)).c;
-
-theorem :: FUZZY_2:56
-   A c= B implies A \/ (B\A) c= B;
-
-theorem :: FUZZY_2:57
-   for c holds
-max(f,g).c >= max(max(min(f,1_minus g),min(1_minus f,g)),min(f,g)).c;
-
-canceled;
-
-theorem :: FUZZY_2:59
-min(f,1_minus g) = EMF(C) implies for c holds f.c <= g.c;
-
-theorem :: FUZZY_2:60
-   A\B = E implies A c= B;
-
-theorem :: FUZZY_2:61
-min(f,g) = EMF(C) implies min(f,1_minus g) = f;
-
-theorem :: FUZZY_2:62
-   A /\ B = E implies A\B = A;
+  min(f,g) = EMF(C) implies f\g = f;
 
 begin
 :::::Algebraic Product and Algebraic Sum:::::
@@ -248,6 +139,7 @@ let h,g be Membership_Func of C;
 func h*g -> Membership_Func of C means
 :: FUZZY_2:def 2
 for c being Element of C holds it.c = (h.c)*(g.c);
+ commutativity;
 end;
 
 definition
@@ -256,162 +148,81 @@ let h,g be Membership_Func of C;
 func h ++ g -> Membership_Func of C means
 :: FUZZY_2:def 3
 for c being Element of C holds it.c = h.c + g.c -(h.c)*(g.c);
+ commutativity;
 end;
 
-definition
-let C be non empty set;
-let h,g be Membership_Func of C;
-let A be FuzzySet of C,h;
-let B be FuzzySet of C,g;
-func A * B -> FuzzySet of C,h*g equals
-:: FUZZY_2:def 4
-    [:C,(h*g).:C:];
-end;
+theorem :: FUZZY_2:33
+  f*f c= f & f c= f ++ f;
 
-definition
-let C be non empty set;
-let h,g be Membership_Func of C;
-let A be FuzzySet of C,h;
-let B be FuzzySet of C,g;
-func A ++ B -> FuzzySet of C,(h ++ g) equals
-:: FUZZY_2:def 5
-    [:C,(h ++ g).:C:];
-end;
-
-theorem :: FUZZY_2:63
-for c holds (f*f).c <= f.c & (f ++ f).c >= f.c;
-
-theorem :: FUZZY_2:64
-   A*A c= A & A c= A ++ A;
-
-theorem :: FUZZY_2:65
-f*g = g*f & f ++ g = g ++ f;
-
-theorem :: FUZZY_2:66
-   A*B = B*A & A ++ B = B ++ A;
-
-theorem :: FUZZY_2:67
+theorem :: FUZZY_2:34
 (f*g)*h = f*(g*h);
 
-theorem :: FUZZY_2:68
-   (A*B)*D = A*(B*D);
-
-theorem :: FUZZY_2:69
+theorem :: FUZZY_2:35
 (f ++ g) ++ h = f ++ (g ++ h);
 
-theorem :: FUZZY_2:70
-   (A ++ B) ++ D = A ++ (B ++ D);
+theorem :: FUZZY_2:36
+  f*(f ++ g) c= f & f c= f ++ (f*g);
 
-theorem :: FUZZY_2:71
-for c holds (f*(f ++ g)).c <= f.c & (f ++ (f*g)).c >= f.c;
+theorem :: FUZZY_2:37
+  f*(g ++ h) c= (f*g) ++ (f*h);
 
-theorem :: FUZZY_2:72
-   A*(A ++ B) c= A & A c= A ++ (A*B);
+theorem :: FUZZY_2:38
+  (f ++ g)*(f ++ h) c= f ++ (g*h);
 
-theorem :: FUZZY_2:73
-for c holds (f*(g ++ h)).c <= ((f*g) ++ (f*h)).c;
-
-theorem :: FUZZY_2:74
-   A*(B ++ D) c= (A*B) ++ (A*D);
-
-theorem :: FUZZY_2:75
-for c holds ((f ++ g)*(f ++ h)).c <= (f ++ (g*h)).c;
-
-theorem :: FUZZY_2:76
-   (A ++ B)*(A ++ D) c= A ++ (B*D);
-
-theorem :: FUZZY_2:77
+theorem :: FUZZY_2:39
 1_minus (f*g) = (1_minus f) ++ (1_minus g);
 
-theorem :: FUZZY_2:78
-   (A*B)` = A` ++ B`;
-
-theorem :: FUZZY_2:79
+theorem :: FUZZY_2:40
 1_minus(f ++ g) = (1_minus f)*(1_minus g);
 
-theorem :: FUZZY_2:80
-   (A ++B)` = (A`)*(B`);
-
-theorem :: FUZZY_2:81
+theorem :: FUZZY_2:41
 f ++ g = 1_minus((1_minus f)*(1_minus g));
 
-theorem :: FUZZY_2:82
-   A ++ B = (A`*B`)`;
-
-theorem :: FUZZY_2:83
+theorem :: FUZZY_2:42
 f*(EMF(C)) = EMF(C) & f*(UMF(C)) = f;
 
-theorem :: FUZZY_2:84
-   A*E = E & A*X = A;
-
-theorem :: FUZZY_2:85
+theorem :: FUZZY_2:43
 f ++ EMF(C) = f & f ++ UMF(C) = UMF(C);
 
-theorem :: FUZZY_2:86
-   A ++ E = A & A ++ X = X;
+theorem :: FUZZY_2:44
+  f*g c= min(f,g);
 
-canceled 2;
+theorem :: FUZZY_2:45
+  max(f,g) c= f ++ g;
 
-theorem :: FUZZY_2:89
-   E c= A*A` & A ++ A` c= X;
+theorem :: FUZZY_2:46
+  for a,b,c be Real st 0 <= c holds
+  c*max(a,b) = max(c*a,c*b) & c*min(a,b) = min(c*a,c*b);
 
-theorem :: FUZZY_2:90
-for c holds (f*g).c <= min(f,g).c;
+theorem :: FUZZY_2:47
+  for a,b,c be Real holds
+  c + max(a,b) = max(c+a,c+b) & c + min(a,b) = min(c+a,c+b);
 
-theorem :: FUZZY_2:91
-   A*B c= A /\ B;
+theorem :: FUZZY_2:48
+  f*max(g,h) = max(f*g,f*h);
 
-theorem :: FUZZY_2:92
-for c holds max(f,g).c <= (f ++ g).c;
-
-theorem :: FUZZY_2:93
-   A \/ B c= A ++ B;
-
-theorem :: FUZZY_2:94
-   for a,b,c be Real st 0 <= c holds
-c*max(a,b) = max(c*a,c*b) & c*min(a,b) = min(c*a,c*b);
-
-theorem :: FUZZY_2:95
-   for a,b,c be Real holds
-c + max(a,b) = max(c+a,c+b) & c + min(a,b) = min(c+a,c+b);
-
-theorem :: FUZZY_2:96
-f*max(g,h) = max(f*g,f*h);
-
-theorem :: FUZZY_2:97
+theorem :: FUZZY_2:49
 f*min(g,h) = min(f*g,f*h);
 
-theorem :: FUZZY_2:98
-   A*(B /\ D) = (A*B) /\ (A*D) & A*(B \/ D) = (A*B) \/ (A*D);
+theorem :: FUZZY_2:50
+  f ++ max(g,h) = max((f ++ g),(f ++ h));
 
-theorem :: FUZZY_2:99
-f ++ max(g,h) = max((f ++ g),(f ++ h));
-
-theorem :: FUZZY_2:100
+theorem :: FUZZY_2:51
 f ++ min(g,h) = min((f ++ g),(f ++ h));
 
-theorem :: FUZZY_2:101
-   A ++ (B \/ D) = (A ++ B) \/ (A ++ D) & A ++ (B /\ D) = (A ++ B) /\ (A ++ D);
+theorem :: FUZZY_2:52
+  max(f,g)*max(f,h) c= max(f,(g*h));
 
-theorem :: FUZZY_2:102
-for c holds (max(f,g)*max(f,h)).c <= max(f,(g*h)).c;
+theorem :: FUZZY_2:53
+  min(f,g)*min(f,h) c= min(f,(g*h));
 
-theorem :: FUZZY_2:103
-for c holds (min(f,g)*min(f,h)).c <= min(f,(g*h)).c;
-
-theorem :: FUZZY_2:104
-   (A \/ B)*(A \/ D) c= A \/ (B*D) & (A /\ B)*(A /\ D) c= A /\ (B*D);
-
-theorem :: FUZZY_2:105
+theorem :: FUZZY_2:54
 for c be Element of C,f,g be Membership_Func of C holds
 (f ++ g).c = 1 - ((1 - f.c)*(1 - g.c));
 
-theorem :: FUZZY_2:106
-for c holds max(f,g ++ h).c <= (max(f,g) ++ max(f,h)).c;
+theorem :: FUZZY_2:55
+  max(f,g ++ h) c= max(f,g) ++ max(f,h);
 
-theorem :: FUZZY_2:107
-for c holds min(f,g ++ h).c <= (min(f,g) ++ min(f,h)).c;
+theorem :: FUZZY_2:56
+  min(f,g ++ h) c= min(f,g) ++ min(f,h);
 
-theorem :: FUZZY_2:108
-   A \/ (B ++ D) c= (A \/ B) ++ (A \/ D) & A /\ (B ++ D) c= (A /\ B) ++ (A /\ D
-);

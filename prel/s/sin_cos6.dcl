@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XCMPLX_0"/>
@@ -581,4 +581,4 @@
 <Adjective nr="7"/>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

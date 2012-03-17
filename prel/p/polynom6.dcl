@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
@@ -22,6 +22,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FINSUB_1"/>
@@ -107,42 +108,42 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="53"/>
 <Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="61"/>
-<Adjective nr="63"/>
-<Adjective nr="73"/>
-<Adjective nr="89" value="false"/>
+<Adjective nr="57"/>
+<Adjective nr="62"/>
+<Adjective nr="64"/>
+<Adjective nr="74"/>
+<Adjective nr="90" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="398">
+<Func kind="K" nr="409">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="53"/>
 <Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="61"/>
-<Adjective nr="63"/>
-<Adjective nr="69"/>
+<Adjective nr="57"/>
+<Adjective nr="62"/>
+<Adjective nr="64"/>
 <Adjective nr="70"/>
 <Adjective nr="71"/>
 <Adjective nr="72"/>
 <Adjective nr="73"/>
 <Adjective nr="74"/>
-<Adjective nr="89" value="false"/>
-<Adjective nr="112"/>
+<Adjective nr="75"/>
+<Adjective nr="90" value="false"/>
 <Adjective nr="113"/>
 <Adjective nr="114"/>
 <Adjective nr="115"/>
 <Adjective nr="116"/>
 <Adjective nr="117"/>
+<Adjective nr="118"/>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

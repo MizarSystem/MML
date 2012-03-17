@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.100 $
+;; $Revision: 1.102 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -275,17 +275,15 @@ see `mmlquery-program-name'.
 'translate for expanded formula in absolute notation,
 'raw for the internal Mizar representation,
 'xml for xml internal Mizar representation
-'expanded for expansion of clusters,
 
-The values 'xml 'raw and 'expanded are for debugging only, do
+The values 'xml and 'raw are for debugging only, do
 not use them to get constructor explanatios."
 :type '(choice (const :tag "sorted list of constructors" sorted)
 	       (const :tag "unsorted list of constructors" constructor)
 	       (const :tag "mmlquery input" mmlquery)
 	       (const :tag "translated formula" translate)
 	       (const :tag "nontranslated (raw) formula" raw)
-	       (const :tag "nontranslated (xml) formula" xml)
-	       (const :tag "raw formula with expanded clusters" expanded))
+	       (const :tag "nontranslated (xml) formula" xml))
 :group 'mizar-constructor-explanations)
 
 (defcustom mizar-underline-expls nil
@@ -301,10 +299,10 @@ When `mizar-underline-expls' is non-nil, it is also underlined."
 :type 'integer
 :group 'mizar-constructor-explanations)
 
-(defvar alioth-url "http://alioth.uwb.edu.pl/cgi-bin/query/")
+(defvar merak-url "http://merak.pb.bialystok.pl/cgi-bin/mmlquery/")
 (defvar megrez-url "http://megrez.mizar.org/cgi-bin/")
 
-(defcustom query-url megrez-url
+(defcustom query-url merak-url
 "*URL for the MMLQuery html browser."
 :type 'string
 :group 'mizar-mml-query)
@@ -393,7 +391,8 @@ MoMM should be installed for this."
 (defcustom mizar-main-keywords 
 (list "theorem" "scheme" "definition" "registration" 
       "notation" "schemes" "constructors" "definitions" 
-      "theorems" "vocabulary" "clusters" "requirements" )
+      "theorems" "vocabulary" "requirements" "registrations" 
+      "notations")
 "*Keywords starting main mizar text items. 
 Now also the environmental declarations."
 :type '(repeat string)
@@ -680,7 +679,7 @@ Used for exact completion.")
     (cond
      ((looking-at "::::::") 0)		;Large comment starts
      ((looking-at "::") (current-column)) ;Small comment starts
-     ((looking-at "\\b\\(theorem\\|scheme\\|definition\\|registration\\|environ\\|vocabulary\\|constructors\\|requirements\\|notation\\|clusters\\|reserve\\|begin\\)\\b") 0)
+     ((looking-at "\\b\\(theorem\\|scheme\\|definition\\|registration\\|registrations\\|environ\\|vocabulary\\|constructors\\|requirements\\|notation\\|notations\\|reserve\\|begin\\)\\b") 0)
      ((bobp) 0)				;Beginning of buffer
      (t
       (let ((empty t) ind more less res)
@@ -712,7 +711,7 @@ Used for exact completion.")
 	  ;; Real mizar code
 	  (cond ((looking-at "\\b\\(proof\\|now\\|hereby\\|case\\|suppose\\)\\b")
 		 (setq res (+ ind mizar-indent-width)))
-		((looking-at "\\b\\(definition\\|scheme\\|theorem\\|registration\\|vocabulary\\|constructors\\|requirements\\|notation\\|clusters\\|reserve\\|begin\\)\\b")
+		((looking-at "\\b\\(definition\\|scheme\\|theorem\\|registration\\|registrations\\|vocabulary\\|constructors\\|requirements\\|notation\\|notations\\|reserve\\|begin\\)\\b")
 		 (setq res (+ ind 2)))
  		(t (setq res ind)))
 	  (if less (max (- ind mizar-indent-width) 0)
@@ -2494,7 +2493,7 @@ Commands:
 (defun mizar-ask-meaning-query (cstr)
 "Send a constructor query CSTR to MML Query."
 (interactive "s")
-(mizar-ask-query (concat query-url "emacs_search?entry=" cstr)))
+(mizar-ask-query (concat query-url "meaning?entry=" cstr)))
 
 (defun mizar-res-at-point (pos &optional agg2str)
 "Get the mmlquery resource around POS, if AGG2STR, 
@@ -2621,7 +2620,6 @@ a list of resources.")
 (cond 
  ((eq mizar-expl-kind 'xml) frm)
  ((eq mizar-expl-kind 'raw) (frmrepr frm))
- ((eq mizar-expl-kind 'expanded) (frmrepr frm))
  ((eq mizar-expl-kind 'translate) (expfrmrepr frm))
  ((eq mizar-expl-kind 'constructors)
   (prin1-to-string (expfrmrepr frm t)))
@@ -4170,7 +4168,7 @@ then the MoMM db."
   (message "No position at point"))))
 
 ;;;;;;;;;;;;;;;;;;;;; Mizar TWiki  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar mizar-twiki-url "http://alioth.uwb.edu.pl/twiki/bin/view/Mizar/")
+(defvar mizar-twiki-url "http://wiki.mizar.org/cgi-bin/twiki/view/Mizar/")
 (defvar mizar-twiki-questions (concat mizar-twiki-url "MizarQuestion"))
 (defvar mizar-twiki-features (concat mizar-twiki-url "FeatureBrainstorming"))
 (defvar mizar-twiki-language (concat mizar-twiki-url "MizarLanguage"))
@@ -4376,8 +4374,8 @@ Show them in the buffer *Constructors List*."
   ("Attributes" "[ \n\r]\\(attr\\b.*\\)" 1)
   ("Predicates" "[ \n\r]\\(pred\\b.*\\)" 1)
   ("Functors" "[ \n\r]\\(func\\b.*\\)" 1)
-  ("Notation" "[ \n\r]\\(\\(synonym\\|antonym\\)\\b.*\\)" 1)
-  ("Clusters" "[ \n\r]\\(cluster\\b.*\\)" 1)
+  ("Notations" "[ \n\r]\\(\\(synonym\\|antonym\\)\\b.*\\)" 1)
+  ("Registrations" "[ \n\r]\\(cluster\\b.*\\)" 1)
   ("Schemes" "^[ ]*scheme[ \n\r]+\\([a-zA-Z0-9_']+\\)" 1)
   ("Named Defs" "[ \n\r]\\(:[a-zA-Z0-9_']+:\\)[ \n\r]" 1)
   ("Named Theorems" "^[ ]*theorem[ \n\r]+\\([a-zA-Z0-9_']+:\\)[ \n\r]" 1)
@@ -5175,7 +5173,7 @@ if that value is non-nil."
 	    ["Query window" query-start-entry t]
 	    ("MML Query server"
 	     ["Megrez" (setq query-url megrez-url) :style radio :selected (equal query-url megrez-url) :active t]
-	     ["Alioth" (setq query-url alioth-url) :style radio :selected (equal query-url alioth-url) :active t]
+	     ["Merak" (setq query-url merak-url) :style radio :selected (equal query-url merak-url) :active t]
 	     )
 	    ("MML Query browser" 
 	     :help "The preferred browser for WWW version of MMLQuery"
@@ -5201,9 +5199,9 @@ if that value is non-nil."
 	    ["translated formula" (mizar-toggle-cstr-expl 'translate)
 	     :style radio :selected
 	     (and mizar-do-expl (eq mizar-expl-kind 'translate)) :active t]
-;; 	    ["expanded formula" (mizar-toggle-cstr-expl 'expanded)
+;; 	    ["xml formula" (mizar-toggle-cstr-expl 'xml)
 ;; 	     :style radio :selected
-;; 	     (and mizar-do-expl (eq mizar-expl-kind 'expanded)) :active t]
+;; 	     (and mizar-do-expl (eq mizar-expl-kind 'xml)) :active t]
 ;; 	    ["raw formula" (mizar-toggle-cstr-expl 'raw)
 ;; 	     :style radio :selected
 ;; 	     (and mizar-do-expl (eq mizar-expl-kind 'raw)) :active t]

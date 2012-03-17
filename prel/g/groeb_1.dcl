@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -34,6 +34,7 @@
 <ArticleID name="DICKSON"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FINSUB_1"/>
@@ -63,10 +64,10 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="10">
-<Func kind="K" nr="406">
+<Func kind="K" nr="418">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="426">
+<Func kind="K" nr="438">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -79,4 +80,4 @@
 <Adjective nr="83"/>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

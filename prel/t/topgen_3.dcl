@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -14,10 +14,10 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TEX_2"/>
@@ -55,11 +55,11 @@
 <Adjective nr="9"/>
 <Adjective nr="10"/>
 <Adjective nr="18" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -68,10 +68,10 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="18" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -80,9 +80,9 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="18" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -91,8 +91,8 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="18" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -220,4 +220,4 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

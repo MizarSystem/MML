@@ -10,14 +10,14 @@ environ
       RELAT_1, COMPLEX1, PRE_TOPC, EUCLID, METRIC_1, FUNCT_1, TOPREAL1, SEQ_2,
       SEQ_4, BOOLE, SUBSET_1, PCOMPS_1, ABSVALUE, COMPTS_1, TEX_2, BORSUK_1,
       TOPS_2, ORDINAL2, MCART_1, FINSEQ_4, SETFAM_1, TARSKI, SPPOL_1;
- notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, SQUARE_1, STRUCT_0, SEQ_4, FUNCT_1, PRE_TOPC,
       BORSUK_1, FINSET_1, FINSEQ_1, METRIC_1, PCOMPS_1, TOPS_2, REALSET1,
       COMPTS_1, FINSEQ_4, EUCLID, TEX_2, TOPREAL1;
  constructors NAT_1, REAL_1, INT_1, ABSVALUE, SQUARE_1, SEQ_4, TOPS_2,
       REALSET1, COMPTS_1, TOPMETR, TDLAT_3, TEX_2, TOPREAL1, FINSEQ_4,
       MEMBERED, ORDINAL2, REALSET2, COMPLEX1;
- clusters FINSET_1, PRE_TOPC, INT_1, TEX_2, RELSET_1, TREES_3, TREES_2,
+ registrations FINSET_1, PRE_TOPC, INT_1, TEX_2, RELSET_1, TREES_3, TREES_2,
       STRUCT_0, EUCLID, TOPREAL1, XREAL_0, MEMBERED, ZFMISC_1, NUMBERS,
       ORDINAL2, COMPLEX1, FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -26,7 +26,7 @@ environ
       SUBSET_1, FINSET_1, FINSEQ_1, PRE_TOPC, METRIC_1, TOPS_1, TOPS_2, SEQ_4,
       EUCLID, TOPMETR, TOPREAL1, TOPREAL3, PCOMPS_1, COMPTS_1, TEX_2, GOBOARD2,
       FINSEQ_3, REALSET1, HEINE, TDLAT_3, PARTFUN2, XREAL_0, SETFAM_1,
-      XBOOLE_0, XBOOLE_1, XCMPLX_1;
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1;
  schemes FRAENKEL;
 
 begin :: Preliminaires
@@ -36,25 +36,16 @@ reserve r,r1,r2,s,s1,s2 for real number;
 
 canceled 4;
 
-theorem Th5:
-  r<=s implies r-1<=s & r-1<s & r<=s+1 & r<s+1
-proof assume r<=s;
- then A1:r-1<=s-1 by REAL_1:49;  A2: s-1<s-1+1 by REAL_1:69;
- then r-1<s by A1,AXIOMS:22; then r-1+1<s+1 by REAL_1:53;
-hence thesis by A1,A2,AXIOMS:22;
-end;
+theorem
+  r<=s implies r-1<=s & r-1<s & r<=s+1 & r<s+1 by XREAL_1:147,149;
 
 theorem
-      (n<k implies n<=k-1) &
-  (r<s implies r-1<=s & r-1<s & r<=s+1 & r<s+1)
+  n<k implies n<=k-1
 proof
- hereby
    assume n<k;
    then n+1<=k by NAT_1:38;
    then n+1-1<=k-1 by REAL_1:49;
    hence n<=k-1;
- end;
- thus thesis by Th5;
 end;
 
 theorem
@@ -66,71 +57,19 @@ A1:  1<=k-m & k-m<=n;
  hence thesis by A1,FINSEQ_1:3;
 end;
 
-theorem Th8:
-  r1>=0 & r2>=0 & r1+r2=0 implies r1=0 & r2=0
-proof assume that
-A1: r1>=0 & r2>=0 & r1+r2=0 and
-A2: r1<>0 or r2<>0;
- per cases by A2;
-  suppose r1<>0;
-   then 0+r2<r1+r2 by A1,REAL_1:53;
-   hence contradiction by A1;
-  end;
-  suppose r2<>0;
-   then 0+r1<r1+r2 by A1,REAL_1:53;
-   hence contradiction by A1;
-end;
-end;
+theorem
+  r1>=0 & r2>=0 & r1+r2=0 implies r1=0 & r2=0 by XREAL_1:29;
 
 theorem
-       r1<=0 & r2<=0 & r1+r2=0 implies r1=0 & r2=0
-proof assume
-A1: r1<=0 & r2<=0 & r1+r2=0;
-then A2: -r1>=-0 & -r2>=-0 by REAL_1:50;
-      0 = -(r1+r2) by A1 .= -r1+-r2;
-  then -r1=-0 & -r2=-0 by A2,Th8;
- hence thesis;
-end;
-
-Lm1:1/1 = 1;
+       r1<=0 & r2<=0 & r1+r2=0 implies r1=0 & r2=0 by XREAL_1:30;
 
 theorem
       0<=r1 & r1<=1 & 0<=r2 & r2<=1 & r1*r2=1 implies r1=1 & r2=1
-proof assume
-A1: 0<=r1 & r1<=1 & 0<=r2 & r2<=1 & r1*r2=1;
-A2: now per cases by A1;
-   case r1=0;
-   hence contradiction by A1;
-   end;
-   case A3:r1>0;
-        r2=1/r1 by A1,XCMPLX_1:74;
-    then r2>=1 by A1,A3,Lm1,REAL_2:152;
-    hence r2=1 by A1,AXIOMS:21;
-  end;
-  end;
-      now per cases by A1;
-   case r2=0;
-   hence contradiction by A1;
-   end;
-   case A4:r2>0;
-        r1=1/r2 by A1,XCMPLX_1:74;
-    then r1>=1 by A1,A4,Lm1,REAL_2:152;
-    hence r1=1 by A1,AXIOMS:21;
-  end;
-  end;
- hence thesis by A2;
-end;
+               by XREAL_1:152;
 
 theorem Th11:
    r1>=0 & r2>=0 & s1>=0 & s2>=0 & r1*s1+r2*s2=0
-     implies (r1=0 or s1=0) & (r2=0 or s2=0)
-proof assume
-A1: r1>=0 & r2>=0 & s1>=0 & s2>=0 & r1*s1+r2*s2=0;
-then A2: r1*s1>=r1*0 by AXIOMS:25;
-      r2*s2>=0 * s2 by A1,AXIOMS:25;
-  then r1*s1=0 & r2*s2=0 by A1,A2,Th8;
- hence thesis by XCMPLX_1:6;
-end;
+     implies (r1=0 or s1=0) & (r2=0 or s2=0) by XREAL_1:73;
 
 theorem Th12:
   0<=r & r<=1 & s1>=0 & s2>=0 & r*s1+(1-r)*s2=0

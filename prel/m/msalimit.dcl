@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XBOOLE_0"/>
@@ -132,7 +132,7 @@
 </ArgTypes>
 <Func kind="K" nr="28">
 <Func kind="K" nr="28">
-<Func kind="K" nr="238">
+<Func kind="K" nr="239">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -172,7 +172,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="28">
-<Func kind="K" nr="237">
+<Func kind="K" nr="238">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -212,7 +212,7 @@
 <LocusVar nr="3"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="272">
+<Func kind="K" nr="273">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -231,7 +231,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="274"/>
+<Func kind="K" nr="275"/>
 <Cluster>
 <Adjective nr="25"/>
 <Adjective nr="78"/>
@@ -246,7 +246,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="275">
+<Func kind="K" nr="276">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -254,4 +254,4 @@
 <Adjective nr="116"/>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

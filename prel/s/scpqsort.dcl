@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
@@ -43,7 +43,7 @@
 <Func kind="K" nr="13">
 <Func kind="K" nr="82"/>
 </Func>
-<Func kind="K" nr="262"/>
+<Func kind="K" nr="263"/>
 </Adjective>
 <Adjective nr="62"/>
 <Adjective nr="65"/>
@@ -51,7 +51,7 @@
 <Func kind="K" nr="13">
 <Func kind="K" nr="82"/>
 </Func>
-<Func kind="K" nr="262"/>
+<Func kind="K" nr="263"/>
 </Typ>
 <Typ kind="M" nr="13">
 <Cluster>
@@ -59,7 +59,7 @@
 <Func kind="K" nr="13">
 <Func kind="K" nr="82"/>
 </Func>
-<Func kind="K" nr="262"/>
+<Func kind="K" nr="263"/>
 </Adjective>
 <Adjective nr="62"/>
 <Adjective nr="65"/>
@@ -67,7 +67,7 @@
 <Func kind="K" nr="13">
 <Func kind="K" nr="82"/>
 </Func>
-<Func kind="K" nr="262"/>
+<Func kind="K" nr="263"/>
 </Typ>
 <Typ kind="M" nr="18">
 <Cluster/>
@@ -78,7 +78,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="299">
+<Func kind="K" nr="300">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 <LocusVar nr="1"/>
@@ -92,10 +92,10 @@
 <Func kind="K" nr="13">
 <Func kind="K" nr="82"/>
 </Func>
-<Func kind="K" nr="262"/>
+<Func kind="K" nr="263"/>
 </Adjective>
 <Adjective nr="62"/>
 <Adjective nr="65"/>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

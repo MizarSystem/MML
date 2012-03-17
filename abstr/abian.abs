@@ -8,14 +8,14 @@ environ
 
  vocabulary SETFAM_1, FUNCT_1, ARYTM, MATRIX_2, INT_1, ARYTM_1, FUNCT_4,
       TRIANG_1, ZF_REFLE, FUNCOP_1, RELAT_1, SQUARE_1, BOOLE, KNASTER, TARSKI,
-      FINSET_1, EQREL_1, MCART_1, NAT_1, ABIAN;
- notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XREAL_0, MCART_1, DOMAIN_1, FINSET_1, SETFAM_1, CQC_SIM1, RELAT_1,
-      FUNCT_1, FUNCT_2, FUNCOP_1, INT_1, NAT_1, EQREL_1, TRIANG_1, FUNCT_7,
+      FINSET_1, EQREL_1, MCART_1, NAT_1, REALSET1, ABIAN;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, MCART_1, DOMAIN_1, FINSET_1, SETFAM_1, REALSET1, CQC_SIM1,
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, INT_1, NAT_1, EQREL_1, FUNCT_7,
       KNASTER;
- constructors DOMAIN_1, CQC_SIM1, REAL_1, TRIANG_1, AMI_1, KNASTER, INT_1,
-      FUNCT_7, MEMBERED;
- clusters SUBSET_1, INT_1, FINSET_1, RELSET_1, PRALG_3, PUA2MSS1, TRIANG_1,
+ constructors DOMAIN_1, CQC_SIM1, REAL_1, KNASTER, INT_1, NAT_1, FUNCT_7,
+      MEMBERED, REALSET1;
+ registrations SUBSET_1, INT_1, FINSET_1, RELSET_1, EQREL_1, PUA2MSS1,
       MEMBERED, PARTFUN1, ORDINAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
@@ -130,23 +130,6 @@ definition
  redefine func iter(f, n) -> Function of E, E;
 end;
 
-registration
-  let A be set, B be with_non-empty_element set;
- cluster non-empty Function of A, B;
-end;
-
-registration
-let A be non empty set, B be with_non-empty_element set,
-    f be non-empty Function of A, B,
-    a be Element of A;
- cluster f.a -> non empty;
-end;
-
-registration
- let X be non empty set;
- cluster bool X -> with_non-empty_element;
-end;
-
 theorem :: ABIAN:2
  for S being non empty Subset of NAT st 0 in S
   holds min S = 0;
@@ -156,14 +139,28 @@ theorem :: ABIAN:3
      x being Element of E
   holds iter(f,0).x = x;
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: from KNASTER, 2005.02.06, A.T.
+
+definition
+  let x be set, f be Function;
+ pred x is_a_fixpoint_of f means
+:: ABIAN:def 3
+ x in dom f & x = f.x;
+end;
+
+definition
+  let A be non empty set, a be Element of A, f be Function of A, A;
+ redefine pred a is_a_fixpoint_of f means
+:: ABIAN:def 4
+ a = f.a;
+end;
 
 definition
  let f be Function;
  pred f has_a_fixpoint means
-:: ABIAN:def 3
+:: ABIAN:def 5
  ex x st x is_a_fixpoint_of f;
- end;
+end;
 
 notation
  let f be Function;
@@ -173,7 +170,7 @@ end;
 definition
  let X be set, x be Element of X;
  attr x is covering means
-:: ABIAN:def 4
+:: ABIAN:def 6
  union x = union union X;
 end;
 
@@ -186,7 +183,7 @@ registration
 end;
 
 theorem :: ABIAN:5
-    for E being set, f being Function of E, E,
+ for E being set, f being Function of E, E,
     sE being non empty covering Subset-Family of E
   st for X being Element of sE holds X misses f.:X
    holds f has_no_fixpoint;
@@ -194,7 +191,7 @@ theorem :: ABIAN:5
 definition
  let E, f;
  func =_f -> Equivalence_Relation of E means
-:: ABIAN:def 5
+:: ABIAN:def 7
 
   for x, y st x in E & y in E
    holds [x,y] in it iff ex k, l st iter(f,k).x = iter(f,l).y;
@@ -208,6 +205,45 @@ theorem :: ABIAN:7
  for E being non empty set, f being Function of E, E,
      c being Element of Class =_f, e being Element of c, n
    holds iter(f, n).e in c;
+
+definition let E;
+ attr E is empty-membered means
+:: ABIAN:def 8
+ for x st x in E holds x is empty;
+end;
+
+registration
+ cluster empty-membered -> trivial set;
+end;
+
+notation let E;
+ antonym E is with_non-empty_element for E is empty-membered;
+end;
+
+registration
+cluster with_non-empty_element set;
+end;
+
+registration
+  let A be set, B be with_non-empty_element set;
+ cluster non-empty Function of A, B;
+end;
+
+registration
+cluster with_non-empty_element -> non empty set;
+end;
+
+registration
+let A be non empty set, B be with_non-empty_element set,
+    f be non-empty Function of A, B,
+    a be Element of A;
+ cluster f.a -> non empty;
+end;
+
+registration
+ let X be non empty set;
+ cluster bool X -> with_non-empty_element;
+end;
 
 theorem :: ABIAN:8
     for E being non empty set, f being Function of E, E

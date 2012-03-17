@@ -10,26 +10,26 @@ environ
  vocabulary ARYTM, SEQ_1, PARTFUN1, ARYTM_1, RELAT_1, BOOLE, SQUARE_1, ARYTM_3,
       PROB_1, RCOMP_1, SEQ_2, FUNCT_1, ORDINAL2, ABSVALUE, SEQM_3, LATTICES,
       RFUNCT_1, RFUNCT_2, FINSEQ_1, LIMFUNC1;
- notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, SEQ_1, SEQ_2, SEQM_3, PROB_1, RELSET_1,
       SQUARE_1, PARTFUN1, RFUNCT_1, RCOMP_1, RFUNCT_2;
  constructors REAL_1, NAT_1, ABSVALUE, SEQ_2, SEQM_3, PROB_1, SQUARE_1,
       COMPLEX1, RFUNCT_1, RCOMP_1, RFUNCT_2, PARTFUN1, MEMBERED, XBOOLE_0;
- clusters RELSET_1, XREAL_0, SEQ_1, SEQM_3, ARYTM_3, MEMBERED, ZFMISC_1,
+ registrations RELSET_1, XREAL_0, SEQ_1, SEQM_3, ARYTM_3, MEMBERED, ZFMISC_1,
       XBOOLE_0, COMPLEX1, SQUARE_1, XCMPLX_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SEQ_2, XBOOLE_0;
  theorems AXIOMS, TARSKI, REAL_1, NAT_1, ABSVALUE, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
       SQUARE_1, RFUNCT_1, RFUNCT_2, PROB_1, RCOMP_1, FUNCT_1, FUNCT_2, XREAL_0,
-      XBOOLE_0, XBOOLE_1, REAL_2, FINSEQ_2, XCMPLX_0, XCMPLX_1;
+      XBOOLE_0, XBOOLE_1, REAL_2, FINSEQ_2, XCMPLX_0, XCMPLX_1, XREAL_1;
  schemes SEQ_1, RCOMP_1;
 
 begin
 
-reserve r,r1,r2,g,g1,g2 for real number;
-reserve n,m,k for Nat;
-reserve seq,seq1,seq2 for Real_Sequence;
-reserve f,f1,f2 for PartFunc of REAL,REAL;
+ reserve r,r1,r2,g,g1,g2 for real number,
+         n,m,k for Nat,
+         seq,seq1,seq2 for Real_Sequence,
+         f,f1,f2 for PartFunc of REAL,REAL;
 
 Lm1: (-1)*(-1)=1;
 Lm2: 0<g & r<=r1 implies r-g<r1 & r<r1+g
@@ -52,41 +52,40 @@ proof assume A1: rng seq c=dom(f1(#)f2);
 end;
 
 definition let n,m;
-  redefine func max(n,m) ->Nat;
+  redefine func max(n,m) -> Nat;
   coherence by FINSEQ_2:1;
 end;
 
 theorem Th1:
-0<=r1 & r1<r2 & 0<g1 & g1<=g2 implies r1*g1<r2*g2
-proof assume A1: 0<=r1 & r1<r2 & 0<g1 & g1<=g2; then A2: r1*g1<=r1*g2 by
-AXIOMS:25;
-r1*g2<r2*g2 by A1,REAL_1:70;
- hence thesis by A2,AXIOMS:22;
-end;
+  0<=r1 & r1<r2 & 0<g1 & g1<=g2 implies r1*g1<r2*g2 by XREAL_1:99;
 
 notation let r be real number;
   synonym left_open_halfline(r) for halfline(r);
-  end;
-
-reserve r,r1,r2,g,g1,g2 for Real;
+end;
 
 definition let r be real number;
-func left_closed_halfline(r) ->Subset of REAL equals :Def1: {g: g<=r};
+  func left_closed_halfline(r) -> Subset of REAL equals :Def1:
+    {g where g is Real : g<=r};
 coherence
- proof now let x be set; assume x in {g: g<=r}; then ex g st x=g & g<=r;
+ proof now let x be set; assume x in {g where g is Real: g<=r};
+ then ex g being Real st x=g & g<=r;
 hence x in REAL;
   end; hence thesis by TARSKI:def 3;
  end;
-func right_closed_halfline(r) ->Subset of REAL equals :Def2: {g: r<=g};
+  func right_closed_halfline(r) -> Subset of REAL equals :Def2:
+    {g where g is Real: r<=g};
 coherence
- proof now let x be set; assume x in {g: r<=g}; then ex g st x=g & r<=g;
+ proof now let x be set; assume x in {g where g is Real : r<=g};
+ then ex g being Real st x=g & r<=g;
 hence x in REAL;
   end; hence thesis by TARSKI:def 3;
  end;
-func right_open_halfline(r) ->Subset of REAL equals :Def3: {g: r<g};
+  func right_open_halfline(r) -> Subset of REAL equals :Def3:
+    {g where g is Real : r<g};
 coherence
- proof now let x be set; assume x in {g: r<g}; then ex g st x=g & r<g;
-hence x in REAL;
+ proof now let x be set; assume x in {g where g is Real : r<g};
+ then ex g being Real st x=g & r<g;
+  hence x in REAL;
   end; hence thesis by TARSKI:def 3;
  end;
 end;
@@ -94,224 +93,235 @@ end;
 canceled 6;
 
 theorem
-    r1<=r2 implies right_open_halfline(r2) c= right_open_halfline(r1)
+  r1<=r2 implies right_open_halfline(r2) c= right_open_halfline(r1)
 proof assume A1: r1<=r2; let x be set;
 assume x in right_open_halfline(r2);
- then x in {r: r2<r} by Def3; then consider r such that
- A2: r=x & r2<r;   r1<r by A1,A2,AXIOMS:22; then x in {g: r1<g} by A2;
+ then x in {r where r is Real : r2<r} by Def3;
+ then consider r being Real such that
+ A2: r=x & r2<r; r1<r by A1,A2,AXIOMS:22;
+ then x in {g where g is Real : r1<g} by A2;
  hence thesis by Def3;
 end;
 
 theorem
-    r1<=r2 implies right_closed_halfline(r2) c= right_closed_halfline(r1)
+  r1<=r2 implies right_closed_halfline(r2) c= right_closed_halfline(r1)
 proof assume A1: r1<=r2; let x be set;
  assume x in right_closed_halfline(r2);
- then x in {r: r2<=r} by Def2; then consider r such that
- A2: r=x & r2<=r;   r1<=r by A1,A2,AXIOMS:22; then x in {g: r1<=g} by A2;
+ then x in {r where r is Real : r2<=r} by Def2;
+ then consider r being Real such that
+ A2: r=x & r2<=r;   r1<=r by A1,A2,AXIOMS:22;
+ then x in {g where g is Real: r1<=g} by A2;
  hence thesis by Def2;
 end;
 
 theorem
-    right_open_halfline(r) c= right_closed_halfline(r)
+  right_open_halfline(r) c= right_closed_halfline(r)
 proof let x be set; assume x in right_open_halfline(r);
- then x in {r2: r<r2} by Def3;
- then consider r1 such that A1: r1=x & r<r1;
-     x in {g: r<=g} by A1; hence thesis by Def2;
+ then x in {r2 where r2 is Real : r<r2} by Def3;
+ then consider r1 being Real such that A1: r1=x & r<r1;
+ x in {g where g is Real : r<=g} by A1; hence thesis by Def2;
 end;
 
 theorem
-    ].r,g.[ c= right_open_halfline(r)
+  ].r,g.[ c= right_open_halfline(r)
 proof let x be set; assume x in ].r,g.[;
- then x in {r1: r<r1 & r1<g} by RCOMP_1:def 2;
- then ex g1 st g1=x & r<g1 & g1<g;
- then x in {g2: r<g2}; hence thesis by Def3;
+ then x in {r1 where r1 is Real : r<r1 & r1<g} by RCOMP_1:def 2;
+ then ex g1 being Real st g1=x & r<g1 & g1<g;
+ then x in {g2 where g2 is Real : r<g2}; hence thesis by Def3;
 end;
 
 theorem
-    [.r,g.] c= right_closed_halfline(r)
+  [.r,g.] c= right_closed_halfline(r)
 proof let x be set; assume x in [.r,g.];
- then x in {r1: r<=r1 & r1<=g} by RCOMP_1:def 1;
- then ex g1 st g1=x & r<=g1 & g1<=g;
- then x in {g2: r<=g2}; hence thesis by Def2;
+ then x in {r1 where r1 is Real : r<=r1 & r1<=g} by RCOMP_1:def 1;
+ then ex g1 being Real st g1=x & r<=g1 & g1<=g;
+ then x in {g2 where g2 is Real : r<=g2}; hence thesis by Def2;
 end;
 
 theorem
-    r1<=r2 implies left_open_halfline(r1) c= left_open_halfline(r2)
+  r1<=r2 implies left_open_halfline(r1) c= left_open_halfline(r2)
 proof assume A1: r1<=r2; let x be set; assume x in left_open_halfline(r1);
- then x in {r: r<r1} by PROB_1:def 15; then consider r such that A2: r=x & r<
-r1;
-     r<r2 by A1,A2,AXIOMS:22; then x in {g: g<r2} by A2
-; hence thesis by PROB_1:def 15;
+ then x in {r where r is Real : r<r1} by PROB_1:def 15;
+ then consider r being Real such that A2: r=x & r<r1;
+  r<r2 by A1,A2,AXIOMS:22; then x in {g where g is Real : g<r2} by A2;
+  hence thesis by PROB_1:def 15;
 end;
 
 theorem
-    r1<=r2 implies left_closed_halfline(r1) c= left_closed_halfline(r2)
+  r1<=r2 implies left_closed_halfline(r1) c= left_closed_halfline(r2)
 proof assume A1: r1<=r2;
  let x be set; assume x in left_closed_halfline(r1);
- then x in {r: r<=r1} by Def1
-;
- then consider r such that A2: r=x & r<=r1;   r<=r2 by A1,A2,AXIOMS:22;
- then x in {g: g<=r2} by A2; hence thesis by Def1;
+ then x in {r where r is Real : r<=r1} by Def1;
+ then consider r being Real such that A2: r=x & r<=r1;
+ r<=r2 by A1,A2,AXIOMS:22;
+ then x in {g where g is Real: g<=r2} by A2; hence thesis by Def1;
 end;
 
 theorem
-    left_open_halfline(r) c= left_closed_halfline(r)
+  left_open_halfline(r) c= left_closed_halfline(r)
 proof let x be set; assume x in left_open_halfline(r);
- then x in {r2: r2<r} by PROB_1:def 15; then consider r1 such that A1: r1=x &
-r1<r;
-     x in {g: g<=r} by A1; hence thesis by Def1;
+ then x in {r2 where r2 is Real : r2<r} by PROB_1:def 15;
+ then consider r1 being Real such that A1: r1=x & r1<r;
+  x in {g where g is Real : g<=r} by A1; hence thesis by Def1;
 end;
 
 theorem
-    ].g,r.[ c= left_open_halfline(r)
+  ].g,r.[ c= left_open_halfline(r)
 proof let x be set; assume x in ].g,r.[;
-then x in {r1: g<r1 & r1<r} by RCOMP_1:def 2
-;
- then ex g1 st g1=x & g<g1 & g1<r;
- then x in {g2: g2<r}; hence thesis by PROB_1:def 15;
+then x in {r1 where r1 is Real: g<r1 & r1<r} by RCOMP_1:def 2;
+ then ex g1 being Real st g1=x & g<g1 & g1<r;
+ then x in {g2 where g2 is Real: g2<r}; hence thesis by PROB_1:def 15;
 end;
 
 theorem
-    [.g,r.] c= left_closed_halfline(r)
+  [.g,r.] c= left_closed_halfline(r)
 proof let x be set; assume x in [.g,r.];
-then x in {r1: g<=r1 & r1<=r} by RCOMP_1:def 1;
- then ex g1 st g1=x & g<=g1 & g1<=r;
- then x in {g2: g2<=r}; hence thesis by Def1;
+then x in {r1 where r1 is Real : g<=r1 & r1<=r} by RCOMP_1:def 1;
+ then ex g1 being Real st g1=x & g<=g1 & g1<=r;
+ then x in {g2 where g2 is Real : g2<=r}; hence thesis by Def1;
 end;
 
 theorem Th18:
-left_open_halfline(r) /\ right_open_halfline(g) = ].g,r.[
+  left_open_halfline(r) /\ right_open_halfline(g) = ].g,r.[
 proof thus left_open_halfline(r)/\right_open_halfline(g)c=].g,r.[
- proof let x be set; assume x in left_open_halfline(r)/\right_open_halfline(g)
-;
+ proof let x be set;
+ assume x in left_open_halfline(r)/\right_open_halfline(g);
   then A1: x in left_open_halfline(r) &
-  x in right_open_halfline(g) by XBOOLE_0:def 3
-;
-  then x in {r1: r1<r} by PROB_1:def 15; then A2: ex t1 be Real st
- t1=x & t1<r;   x in {g1: g<g1} by A1,Def3; then ex g1 st g1=x & g<g1;
-then x in {g2: g<g2 & g2<r} by A2; hence x in ].g,r.[ by RCOMP_1:def 2;
+  x in right_open_halfline(g) by XBOOLE_0:def 3;
+  then x in {r1 where r1 is Real: r1<r} by PROB_1:def 15;
+  then A2: ex t1 be Real st t1=x & t1<r;
+  x in {g1 where g1 is Real: g<g1} by A1,Def3;
+  then ex g1 being Real st g1=x & g<g1;
+  then x in {g2 where g2 is Real : g<g2 & g2<r} by A2;
+  hence x in ].g,r.[ by RCOMP_1:def 2;
  end;
  let x be set; assume x in ].g,r.[;
- then x in {r1: g<r1 & r1<r} by RCOMP_1:def 2
-;
- then A3: ex r2 st r2=x & g<r2 & r2<r; then x in {g1: g<g1};
- then A4: x in right_open_halfline(g) by Def3;   x in {g2: g2<r} by A3;
- then x in left_open_halfline(r) by PROB_1:def 15; hence thesis by A4,
-XBOOLE_0:def 3
-;
+ then x in {r1 where r1 is Real: g<r1 & r1<r} by RCOMP_1:def 2;
+ then A3: ex r2 being Real st r2=x & g<r2 & r2<r;
+ then x in {g1 where g1 is Real: g<g1};
+ then A4: x in right_open_halfline(g) by Def3;
+ x in {g2 where g2 is Real: g2<r} by A3;
+ then x in left_open_halfline(r) by PROB_1:def 15;
+ hence thesis by A4,XBOOLE_0:def 3;
 end;
 
 theorem Th19:
-left_closed_halfline(r) /\ right_closed_halfline(g) = [.g,r.]
+  left_closed_halfline(r) /\ right_closed_halfline(g) = [.g,r.]
 proof thus left_closed_halfline(r)/\right_closed_halfline(g)c=[.g,r.]
  proof let x be set;
  assume x in left_closed_halfline(r)/\right_closed_halfline(g);
   then A1: x in left_closed_halfline(r) & x in right_closed_halfline(g) by
-XBOOLE_0:def 3
-;
-  then x in {r1: r1<=r} by Def1; then A2: ex t1 be Real st
- t1=x & t1<=r;   x in {g1: g<=g1} by A1,Def2; then ex g1 st g1=x & g<=g1;
-then x in {g2: g<=g2 & g2<=r} by A2; hence x in [.g,r.] by RCOMP_1:def 1;
+XBOOLE_0:def 3;
+  then x in {r1 where r1 is Real: r1<=r} by Def1;
+  then A2: ex t1 be Real st t1=x & t1<=r;
+  x in {g1 where g1 is Real: g<=g1} by A1,Def2;
+  then ex g1 being Real st g1=x & g<=g1;
+  then x in {g2 where g2 is Real: g<=g2 & g2<=r} by A2;
+  hence x in [.g,r.] by RCOMP_1:def 1;
  end;
  let x be set; assume x in [.g,r.];
- then x in {r1: g<=r1 & r1<=r} by RCOMP_1:def 1
-;
- then A3: ex r2 st r2=x & g<=r2 & r2<=r;
- then x in {g1: g<=g1}; then A4: x in right_closed_halfline(g) by Def2;
-     x in {g2: g2<=r} by A3; then x in left_closed_halfline(r) by Def1;
+ then x in {r1 where r1 is Real: g<=r1 & r1<=r} by RCOMP_1:def 1;
+ then A3: ex r2 being Real st r2=x & g<=r2 & r2<=r;
+ then x in {g1 where g1 is Real: g<=g1};
+ then A4: x in right_closed_halfline(g) by Def2;
+ x in {g2 where g2 is Real: g2<=r} by A3;
+ then x in left_closed_halfline(r) by Def1;
  hence thesis by A4,XBOOLE_0:def 3;
 end;
 
 theorem
-    r<=r1 implies ].r1,r2.[ c= right_open_halfline(r) &
-[.r1,r2.] c= right_closed_halfline(r)
+  r<=r1 implies ].r1,r2.[ c= right_open_halfline(r) &
+    [.r1,r2.] c= right_closed_halfline(r)
 proof assume A1: r<=r1; thus ].r1,r2.[c=right_open_halfline(r)
  proof let x be set; assume x in ].r1,r2.[;
- then x in {g: r1<g & g<r2} by RCOMP_1:def 2;
-  then consider g1 such that A2: x=g1 & r1<g1 & g1<r2;   r<g1 by A1,A2,
-AXIOMS:22
-;
-  then x in {g2: r<g2} by A2; hence thesis by Def3;
+ then x in {g where g is Real : r1<g & g<r2} by RCOMP_1:def 2;
+  then consider g1 being Real such that A2: x=g1 & r1<g1 & g1<r2;
+  r<g1 by A1,A2,AXIOMS:22;
+  then x in {g2 where g2 is Real : r<g2} by A2; hence thesis by Def3;
  end;
  let x be set;
- assume x in [.r1,r2.]; then x in {g: r1<=g & g<=r2} by RCOMP_1:def 1
-;
- then consider g1 such that A3: x=g1 & r1<=g1 & g1<=r2;   r<=
-g1 by A1,A3,AXIOMS:22;
- then x in {g2: r<=g2} by A3; hence thesis by Def2;
+ assume x in [.r1,r2.];
+ then x in {g where g is Real : r1<=g & g<=r2} by RCOMP_1:def 1;
+ then consider g1 being Real such that A3: x=g1 & r1<=g1 & g1<=r2;
+ r<=g1 by A1,A3,AXIOMS:22;
+ then x in {g2 where g2 is Real : r<=g2} by A3; hence thesis by Def2;
 end;
 
 theorem
-    r<r1 implies [.r1,r2.] c= right_open_halfline(r)
+  r<r1 implies [.r1,r2.] c= right_open_halfline(r)
 proof assume A1: r<r1; let x be set; assume x in [.r1,r2.];
- then x in {g: r1<=g & g<=r2} by RCOMP_1:def 1; then consider g1 such that
+ then x in {g where g is Real : r1<=g & g<=r2} by RCOMP_1:def 1;
+ then consider g1 being Real such that
  A2: x=g1 & r1<=g1 & g1<=r2;   r<g1 by A1,A2,AXIOMS:22;
- then x in {g2: r<g2} by A2; hence thesis by Def3;
+ then x in {g2 where g2 is Real : r<g2} by A2; hence thesis by Def3;
 end;
 
 theorem
-    r2<=r implies ].r1,r2.[ c= left_open_halfline(r) &
-[.r1,r2.] c= left_closed_halfline(r)
+  r2<=r implies ].r1,r2.[ c= left_open_halfline(r) &
+    [.r1,r2.] c= left_closed_halfline(r)
 proof assume A1: r2<=r; thus ].r1,r2.[c=left_open_halfline(r)
  proof let x be set; assume x in ].r1,r2.[;
- then x in {g: r1<g & g<r2} by RCOMP_1:def 2;
-  then consider g1 such that A2: x=g1 & r1<g1 & g1<r2;   g1<r by A1,A2,
-AXIOMS:22
-;
-  then x in {g2: g2<r} by A2; hence thesis by PROB_1:def 15;
+ then x in {g where g is Real: r1<g & g<r2} by RCOMP_1:def 2;
+  then consider g1 being Real such that A2: x=g1 & r1<g1 & g1<r2;
+  g1<r by A1,A2,AXIOMS:22;
+  then x in {g2 where g2 is Real: g2<r} by A2; hence thesis by PROB_1:def 15;
  end;
  let x be set; assume x in [.r1,r2.];
- then x in {g: r1<=g & g<=r2} by RCOMP_1:def 1
-;
- then consider g1 such that A3: x=g1 & r1<=g1 & g1<=r2;   g1<=
-r by A1,A3,AXIOMS:22;
- then x in {g2: g2<=r} by A3; hence thesis by Def1;
+ then x in {g where g is Real : r1<=g & g<=r2} by RCOMP_1:def 1;
+ then consider g1 being Real such that A3: x=g1 & r1<=g1 & g1<=r2;
+ g1<=r by A1,A3,AXIOMS:22;
+ then x in {g2 where g2 is Real : g2<=r} by A3; hence thesis by Def1;
 end;
 
 theorem
-    r2<r implies [.r1,r2.] c= left_open_halfline(r)
+  r2<r implies [.r1,r2.] c= left_open_halfline(r)
 proof assume A1: r2<r; let x be set; assume x in [.r1,r2.];
- then x in {g: r1<=g & g<=r2} by RCOMP_1:def 1; then consider g1 such that
+ then x in {g where g is Real : r1<=g & g<=r2} by RCOMP_1:def 1;
+ then consider g1 being Real such that
  A2: x=g1 & r1<=g1 & g1<=r2;   g1<r by A1,A2,AXIOMS:22;
- then x in {g2: g2<r} by A2; hence thesis by PROB_1:def 15;
+ then x in {g2 where g2 is Real : g2<r} by A2; hence thesis by PROB_1:def 15;
 end;
 
 theorem Th24:
-REAL \ right_open_halfline(r) = left_closed_halfline(r) &
-REAL \ right_closed_halfline(r) = left_open_halfline(r) &
-REAL \ left_open_halfline(r) = right_closed_halfline(r) &
-REAL \ left_closed_halfline(r) = right_open_halfline(r)
-proof now let x be set;
+  REAL \ right_open_halfline(r) = left_closed_halfline(r) &
+  REAL \ right_closed_halfline(r) = left_open_halfline(r) &
+  REAL \ left_open_halfline(r) = right_closed_halfline(r) &
+  REAL \ left_closed_halfline(r) = right_open_halfline(r)
+proof
+ now let x be set;
  thus x in REAL\right_open_halfline(r) implies x in left_closed_halfline(r)
  proof assume A1: x in REAL\right_open_halfline(r);
   then A2: x in REAL & not x in right_open_halfline(r) by XBOOLE_0:def 4;
   reconsider x'=x as Real by A1,XBOOLE_0:def 4;
-      not x' in {g: r<g} by A2,Def3;
-  then x'<=r; then x in {g1: g1<=r}; hence thesis by Def1;
+      not x' in {g where g is Real : r<g} by A2,Def3;
+  then x'<=r; then x in {g1 where g1 is Real : g1<=r}; hence thesis by Def1;
  end;
  thus x in left_closed_halfline(r) implies x in REAL\right_open_halfline(r)
  proof assume x in left_closed_halfline(r);
-  then x in {r2: r2<=r} by Def1; then A3: ex g2 st x=g2 & g2<=r;
- then not ex g2 st x=g2 & r<g2;
-  then not x in {g1: r<g1}; then not x in right_open_halfline(r) by Def3;
+  then x in {r2 where r2 is Real: r2<=r} by Def1;
+  then A3: ex g2 being Real st x=g2 & g2<=r;
+ then not ex g2 being Real st x=g2 & r<g2;
+  then not x in {g1 where g1 is Real: r<g1};
+  then not x in right_open_halfline(r) by Def3;
   hence thesis by A3,XBOOLE_0:def 4;
  end;
  end; hence REAL\right_open_halfline(r)=left_closed_halfline(r) by TARSKI:2;
-     now let x be set;
+ now let x be set;
  thus x in REAL\right_closed_halfline(r) implies x in left_open_halfline(r)
  proof assume A4: x in REAL\right_closed_halfline(r);
   then A5: x in REAL & not x in right_closed_halfline(r) by XBOOLE_0:def 4;
-  reconsider x'=x as Real by A4,XBOOLE_0:def 4;   not x' in {g: r<=g} by A5,
-Def2
-;
-then x'<r; then x in {g1: g1<r};
+  reconsider x'=x as Real by A4,XBOOLE_0:def 4;
+  not x' in {g where g is Real : r<=g} by A5,Def2;
+then x'<r; then x in {g1 where g1 is Real: g1<r};
   hence thesis by PROB_1:def 15;
  end;
  thus x in left_open_halfline(r) implies x in REAL\right_closed_halfline(r)
  proof assume x in left_open_halfline(r);
-  then x in {r2: r2<r} by PROB_1:def 15; then A6: ex g2 st x=g2 & g2<r;
- then not ex g1 st x=g1 & r<=g1;
-  then not x in {g: r<=g}; then not x in right_closed_halfline(r) by Def2;
+  then x in {r2 where r2 is Real : r2<r} by PROB_1:def 15;
+  then A6: ex g2 being Real st x=g2 & g2<r;
+ then not ex g1 being Real st x=g1 & r<=g1;
+  then not x in {g where g is Real : r<=g};
+  then not x in right_closed_halfline(r) by Def2;
   hence thesis by A6,XBOOLE_0:def 4;
  end;
 end; hence REAL\right_closed_halfline(r)=left_open_halfline(r) by TARSKI:2;
@@ -320,40 +330,43 @@ end; hence REAL\right_closed_halfline(r)=left_open_halfline(r) by TARSKI:2;
  proof assume A7: x in REAL\left_open_halfline(r);
   then A8: x in REAL & not x in left_open_halfline(r) by XBOOLE_0:def 4;
   reconsider x'=x as Real by A7,XBOOLE_0:def 4;
-      not x' in {g: g<r} by A8,PROB_1:def 15;
-  then r<=x'; then x in {g1: r<=g1}; hence thesis by Def2;
+      not x' in {g where g is Real : g<r} by A8,PROB_1:def 15;
+  then r<=x'; then x in {g1 where g1 is Real : r<=g1}; hence thesis by Def2;
  end;
  thus x in right_closed_halfline(r) implies x in REAL\left_open_halfline(r)
  proof assume x in right_closed_halfline(r);
-  then x in {r2: r<=r2} by Def2; then A9: ex g2 st x=g2 & r<=g2;
- then not ex g2 st x=g2 & g2<r;
-  then not x in {g1: g1<r}; then not x in left_open_halfline(r) by
-PROB_1:def 15;
+  then x in {r2 where r2 is Real : r<=r2} by Def2;
+  then A9: ex g2 being Real st x=g2 & r<=g2;
+ then not ex g2 being Real st x=g2 & g2<r;
+  then not x in {g1 where g1 is Real: g1<r};
+  then not x in left_open_halfline(r) by PROB_1:def 15;
   hence thesis by A9,XBOOLE_0:def 4;
  end;
  end; hence REAL\left_open_halfline(r)=right_closed_halfline(r) by TARSKI:2;
-     now let x be set;
+ now let x be set;
  thus x in REAL\left_closed_halfline(r) implies x in right_open_halfline(r)
  proof assume A10: x in REAL\left_closed_halfline(r);
   then A11: x in REAL & not x in left_closed_halfline(r) by XBOOLE_0:def 4;
-  reconsider x'=x as Real by A10,XBOOLE_0:def 4
-;   not x' in {g: g<=r} by A11,Def1;
-then r<x'; then x in {g1: r<g1};
+  reconsider x'=x as Real by A10,XBOOLE_0:def 4;
+  not x' in {g where g is Real: g<=r} by A11,Def1;
+then r<x'; then x in {g1 where g1 is Real : r<g1};
   hence thesis by Def3;
  end;
  thus x in right_open_halfline(r) implies x in REAL\left_closed_halfline(r)
  proof assume x in right_open_halfline(r);
-  then x in {r2: r<r2} by Def3; then A12: ex g2 st x=g2 & r<g2;
- then not ex g1 st x=g1 & g1<=r;
-  then not x in {g: g<=r}; then not x in left_closed_halfline(r) by Def1;
+  then x in {r2 where r2 is Real: r<r2} by Def3;
+  then A12: ex g2 being Real st x=g2 & r<g2;
+ then not ex g1 being Real st x=g1 & g1<=r;
+  then not x in {g where g is Real: g<=r};
+  then not x in left_closed_halfline(r) by Def1;
   hence thesis by A12,XBOOLE_0:def 4;
  end;
 end; hence thesis by TARSKI:2;
 end;
 
 theorem
-    REAL \ ].r1,r2.[ = left_closed_halfline(r1) \/ right_closed_halfline(r2) &
-REAL \ [.r1,r2.] = left_open_halfline(r1) \/ right_open_halfline(r2)
+  REAL \ ].r1,r2.[ = left_closed_halfline(r1) \/ right_closed_halfline(r2) &
+    REAL \ [.r1,r2.] = left_open_halfline(r1) \/ right_open_halfline(r2)
 proof
  thus REAL\].r1,r2.[=REAL\(left_open_halfline(r2)/\right_open_halfline(r1))
   by Th18
@@ -370,8 +383,8 @@ proof
 end;
 
 theorem Th26:
-(seq is non-decreasing implies seq is bounded_below) &
-(seq is non-increasing implies seq is bounded_above)
+  (seq is non-decreasing implies seq is bounded_below) &
+    (seq is non-increasing implies seq is bounded_above)
 proof
 thus seq is non-decreasing implies seq is bounded_below
  proof assume A1: seq is non-decreasing; take seq.0-1;
@@ -456,25 +469,26 @@ proof assume A1: seq is convergent & 0<lim seq;
  then lim(seq-s1)=(lim seq)/2+(lim seq)/2-(lim seq)/2 by A1,A3,SEQ_4:59
  .=(lim seq)/2;
  then A4: 0<lim(seq-s1) by A1,SEQ_2:3;
-     s1 is convergent by A3,SEQ_4:39; then seq-s1 is convergent by A1,SEQ_2:25
-;
+ s1 is convergent by A3,SEQ_4:39; then seq-s1 is convergent by A1,SEQ_2:25;
  then consider n such that A5: for m st n<=m holds 0<(seq-s1).m by A4,Th29;
  take n; let m; assume n<=m; then 0<(seq-s1).m by A5;
  then 0<seq.m-s1.m by RFUNCT_2:6; then 0<seq.m-(lim seq)/2 by A2;
  then 0+(lim seq)/2<seq.m by REAL_1:86; hence thesis;
 end;
 
+ reserve r,r1,r2,g,g1,g2 for Real;
+
 definition let seq;
- attr seq is divergent_to+infty means :Def4:
-  for r ex n st for m st n<=m holds r<seq.m;
- attr seq is divergent_to-infty means :Def5:
-  for r ex n st for m st n<=m holds seq.m<r;
+  attr seq is divergent_to+infty means :Def4:
+    for r ex n st for m st n<=m holds r<seq.m;
+  attr seq is divergent_to-infty means :Def5:
+    for r ex n st for m st n<=m holds seq.m<r;
 end;
 
 canceled 2;
 
 theorem
-    seq is divergent_to+infty or seq is divergent_to-infty implies
+  seq is divergent_to+infty or seq is divergent_to-infty implies
 ex n st for m st n<=m holds seq^\m is_not_0
 proof assume A1: seq is divergent_to+infty or seq is divergent_to-infty;
      now per cases by A1;
@@ -498,7 +512,7 @@ theorem Th34:
 (seq^\k is divergent_to-infty implies seq is divergent_to-infty)
 proof
 thus seq^\k is divergent_to+infty implies seq is divergent_to+infty
- proof assume A1: seq^\k is divergent_to+infty; let r;
+ proof assume A1: seq^\k is divergent_to+infty; let r be Real;
   consider n1 be Nat such that
   A2: for m st n1<=m holds r<(seq^\k).m by A1,Def4;
   take n=n1+k; let m; assume n<=m; then consider n2 be Nat such that
@@ -507,28 +521,26 @@ thus seq^\k is divergent_to+infty implies seq is divergent_to+infty
 ; then r<(seq^\k).(n1+n2) by A2;
   hence r<seq.m by A4,SEQM_3:def 9;
  end;
- assume A5: seq^\k is divergent_to-infty; let r; consider n1 be Nat such that
+ assume A5: seq^\k is divergent_to-infty; let r be Real;
+ consider n1 be Nat such that
  A6: for m st n1<=m holds (seq^\k).m<r by A5,Def5;
  take n=n1+k; let m; assume n<=m; then consider n2 be Nat such that
  A7: m=n+n2 by NAT_1:28;
- A8: n1+n2+k=m by A7;   n1<=n1+n2 by NAT_1:37; then (seq^\k).(n1+n2
-)<
-r
-by A6;
+ A8: n1+n2+k=m by A7;   n1<=n1+n2 by NAT_1:37;
+ then (seq^\k).(n1+n2)< r by A6;
  hence seq.m<r by A8,SEQM_3:def 9;
 end;
 
 theorem Th35:
 seq1 is divergent_to+infty & seq2 is divergent_to+infty implies
 seq1+seq2 is divergent_to+infty
-proof assume A1: seq1 is divergent_to+infty & seq2 is divergent_to+infty; let r
-;
+proof assume A1: seq1 is divergent_to+infty & seq2 is divergent_to+infty;
+let r be Real;
  consider n1 be Nat such that A2: for m st n1<=m holds r/2<seq1.m by A1,Def4;
  consider n2 be Nat such that A3: for m st n2<=m holds r/2<seq2.m by A1,Def4;
  take n=max(n1,n2); let m such that A4: n<=m;
-     n1<=n by SQUARE_1:46; then n1<=m by A4,AXIOMS:22; then A5: r/2<seq1.m by
-A2
-;
+ n1<=n by SQUARE_1:46; then n1<=m by A4,AXIOMS:22; then
+ A5: r/2<seq1.m by A2;
      n2<=n by SQUARE_1:46; then n2<=m by A4,AXIOMS:22; then r/2<seq2.m by A3;
  then r/2+r/2<seq1.m+seq2.m by A5,REAL_1:67;
  hence thesis by SEQ_1:11;
@@ -540,7 +552,7 @@ seq1+seq2 is divergent_to+infty
 proof assume A1: seq1 is divergent_to+infty & seq2 is bounded_below;
  then consider M be real number such that
  A2: for n holds M<seq2.n by SEQ_2:def 4;
- let r;
+ let r be Real;
      r-M is Real by XREAL_0:def 1;
  then consider n such that A3: for m st n<=m holds r-M<seq1.m by A1,Def4;
  take n; let m; assume n<=m; then A4: r-M<seq1.m by A3;
@@ -551,8 +563,8 @@ end;
 theorem Th37:
 seq1 is divergent_to+infty & seq2 is divergent_to+infty implies
 seq1(#)seq2 is divergent_to+infty
-proof assume A1: seq1 is divergent_to+infty & seq2 is divergent_to+infty; let r
-;
+proof assume A1: seq1 is divergent_to+infty & seq2 is divergent_to+infty;
+let r be Real;
  consider n1 be Nat such that A2: for m st n1<=m holds sqrt abs(r)<seq1.m
   by A1,Def4;
  consider n2 be Nat such that A3: for m st n2<=m holds sqrt abs(r)<seq2.m
@@ -573,7 +585,7 @@ theorem Th38:
 seq1 is divergent_to-infty & seq2 is divergent_to-infty implies
 seq1+seq2 is divergent_to-infty
 proof assume A1: seq1 is divergent_to-infty & seq2 is divergent_to-infty;
-let r;
+let r be Real;
  consider n1 be Nat such that A2: for m st n1<=m holds seq1.m<r/2 by A1,Def5;
  consider n2 be Nat such that A3: for m st n2<=m holds seq2.m<r/2 by A1,Def5;
  take n=max(n1,n2); let m such that A4: n<=m;
@@ -590,7 +602,7 @@ seq1+seq2 is divergent_to-infty
 proof assume A1: seq1 is divergent_to-infty & seq2 is bounded_above;
  then consider M be real number such that
  A2: for n holds seq2.n<M by SEQ_2:def 3;
- let r;
+ let r be Real;
      r-M is Real by XREAL_0:def 1;
  then consider n such that A3: for m st n<=m holds seq1.m<r-M by A1,Def5;
  take n; let m; assume n<=m; then A4: seq1.m<r-M by A3;
@@ -605,14 +617,14 @@ theorem Th40:
 seq is constant)
 proof
 thus seq is divergent_to+infty & r>0 implies r(#)seq is divergent_to+infty
- proof assume A1: seq is divergent_to+infty & r>0; let g;
+ proof assume A1: seq is divergent_to+infty & r>0; let g be Real;
   consider n such that A2: for m st n<=m holds g/r<seq.m by A1,Def4;
  take n; let m; assume n<=m; then g/r<seq.m by A2;
   then g/r*r<r*seq.m by A1,REAL_1:70; then g<r*seq.m by A1,XCMPLX_1:88;
   hence thesis by SEQ_1:13;
  end;
 thus seq is divergent_to+infty & r<0 implies r(#)seq is divergent_to-infty
- proof assume A3: seq is divergent_to+infty & r<0; let g;
+ proof assume A3: seq is divergent_to+infty & r<0; let g be Real;
   consider n such that A4: for m st n<=m holds g/r<seq.m by A3,Def4;
  take n; let m; assume n<=m; then g/r<seq.m by A4;
   then r*seq.m<g/r*r by A3,REAL_1:71; then r*seq.m<g by A3,XCMPLX_1:88;
@@ -641,14 +653,14 @@ theorem Th41:
 seq is constant)
 proof
 thus seq is divergent_to-infty & r>0 implies r(#)seq is divergent_to-infty
- proof assume A1: seq is divergent_to-infty & r>0; let g;
+ proof assume A1: seq is divergent_to-infty & r>0; let g be Real;
   consider n such that A2: for m st n<=m holds seq.m<g/r by A1,Def5;
  take n; let m; assume n<=m; then seq.m<g/r by A2;
   then r*seq.m<g/r*r by A1,REAL_1:70; then r*seq.m<g by A1,XCMPLX_1:88;
   hence thesis by SEQ_1:13;
  end;
 thus seq is divergent_to-infty & r<0 implies r(#)seq is divergent_to+infty
- proof assume A3: seq is divergent_to-infty & r<0; let g;
+ proof assume A3: seq is divergent_to-infty & r<0; let g be Real;
   consider n such that A4: for m st n<=m holds seq.m<g/r by A3,Def5;
  take n; let m; assume n<=m; then seq.m<g/r by A4;
   then g/r*r<r*seq.m by A3,REAL_1:71; then g<r*seq.m by A3,XCMPLX_1:88;
@@ -671,15 +683,15 @@ thus seq is divergent_to-infty & r<0 implies r(#)seq is divergent_to+infty
 end;
 
 theorem
-    (seq is divergent_to+infty implies -seq is divergent_to-infty) &
-(seq is divergent_to-infty implies -seq is divergent_to+infty)
+  (seq is divergent_to+infty implies -seq is divergent_to-infty) &
+    (seq is divergent_to-infty implies -seq is divergent_to+infty)
 proof A1: (-1)(#)seq=-seq by SEQ_1:25;
  hence seq is divergent_to+infty implies -seq is divergent_to-infty by Th40;
  assume seq is divergent_to-infty; hence thesis by A1,Th41;
 end;
 
 theorem
-    seq is bounded_below & seq1 is divergent_to-infty implies
+  seq is bounded_below & seq1 is divergent_to-infty implies
 seq-seq1 is divergent_to+infty
 proof assume A1: seq is bounded_below & seq1 is divergent_to-infty;
  A2: (-1)(#)seq1+seq=seq+-seq1 by SEQ_1:25
@@ -688,25 +700,25 @@ proof assume A1: seq is bounded_below & seq1 is divergent_to-infty;
 end;
 
 theorem
-    seq is bounded_above & seq1 is divergent_to+infty implies
-seq-seq1 is divergent_to-infty
+  seq is bounded_above & seq1 is divergent_to+infty implies
+    seq-seq1 is divergent_to-infty
 proof assume A1: seq is bounded_above & seq1 is divergent_to+infty;
- A2: (-1)(#)seq1+seq=seq+-seq1 by SEQ_1:25
+A2: (-1)(#)seq1+seq=seq+-seq1 by SEQ_1:25
  .=seq-seq1 by SEQ_1:15;
-     (-1)(#)seq1 is divergent_to-infty by A1,Th40; hence thesis by A1,A2,Th39;
+  (-1)(#)seq1 is divergent_to-infty by A1,Th40; hence thesis by A1,A2,Th39;
 end;
 
 theorem
-    seq is divergent_to+infty & seq1 is convergent implies
- seq+seq1 is divergent_to+infty
+  seq is divergent_to+infty & seq1 is convergent implies
+    seq+seq1 is divergent_to+infty
 proof assume A1: seq is divergent_to+infty & seq1 is convergent;
  then seq1 is bounded by SEQ_2:27; then seq1 is bounded_below by SEQ_2:def 5;
  hence thesis by A1,Th36;
 end;
 
 theorem
-    seq is divergent_to-infty & seq1 is convergent implies
- seq+seq1 is divergent_to-infty
+  seq is divergent_to-infty & seq1 is convergent implies
+    seq+seq1 is divergent_to-infty
 proof assume A1: seq is divergent_to-infty & seq1 is convergent;
  then seq1 is bounded by SEQ_2:27; then seq1 is bounded_above by SEQ_2:def 5;
  hence thesis by A1,Th39;
@@ -714,7 +726,7 @@ end;
 
 theorem Th47:
 (for n holds seq.n=n) implies seq is divergent_to+infty
-proof assume A1: for n holds seq.n=n; let r;
+proof assume A1: for n holds seq.n=n; let r be Real;
  consider n such that A2: r<n by SEQ_4:10; take n; let m; assume n<=m;
  then r<m by A2,AXIOMS:22; hence r<seq.m by A1;
 end;
@@ -740,7 +752,7 @@ seq1(#)seq2 is divergent_to+infty
 proof assume A1: seq1 is divergent_to+infty & ex r st r>0 &
  for n holds seq2.n>=r;
  then consider M be Real such that A2: M>0 & for n holds seq2.n>=M;
- let r; consider n such that
+ let r be Real; consider n such that
  A3: for m st n<=m holds abs(r)/M<seq1.m by A1,Def4;
  take n; let m; assume n<=m; then A4: abs(r)/M<seq1.m by A3;
  A5: M<=seq2.m by A2;   0<=abs(r) by ABSVALUE:5;
@@ -751,7 +763,7 @@ then A6: abs(r)<seq1.m*seq2.m by A2,XCMPLX_1:88;   r<=abs(r) by ABSVALUE:11;
 end;
 
 theorem
-    seq1 is divergent_to-infty & (ex r st 0<r & for n holds seq2.n>=r) implies
+  seq1 is divergent_to-infty & (ex r st 0<r & for n holds seq2.n>=r) implies
 seq1(#)seq2 is divergent_to-infty
 proof assume A1: seq1 is divergent_to-infty &
  (ex r st 0<r & for n holds seq2.n>=r);
@@ -777,7 +789,8 @@ end;
 theorem Th52:
 (seq is divergent_to+infty or seq is divergent_to-infty) implies
 abs(seq) is divergent_to+infty
-proof assume A1: seq is divergent_to+infty or seq is divergent_to-infty; let r;
+proof assume A1: seq is divergent_to+infty or seq is divergent_to-infty;
+let r be Real;
      now per cases by A1;
  suppose seq is divergent_to+infty;
   then consider n such that A2: for m st n<=m holds abs(r)<seq.m by Def4;
@@ -799,9 +812,8 @@ theorem Th53:
 seq is divergent_to+infty & seq1 is_subsequence_of seq implies
 seq1 is divergent_to+infty
 proof assume A1: seq is divergent_to+infty & seq1 is_subsequence_of seq;
- then consider Ns be increasing Seq_of_Nat such that A2: seq1=seq*Ns by
-SEQM_3:def 10
-;
+ then consider Ns be increasing Seq_of_Nat such that
+ A2: seq1=seq*Ns by SEQM_3:def 10;
  let r; consider n such that A3: for m st n<=m holds r<seq.m by A1,Def4;
  take n; let m; A4: m<=Ns.m by SEQM_3:33; assume n<=m;
  then n<=Ns.m by A4,AXIOMS:22; then r<seq.(Ns.m) by A3;
@@ -813,8 +825,7 @@ seq is divergent_to-infty & seq1 is_subsequence_of seq implies
 seq1 is divergent_to-infty
 proof assume A1: seq is divergent_to-infty & seq1 is_subsequence_of seq;
  then consider Ns be increasing Seq_of_Nat such that A2: seq1=seq*Ns by
-SEQM_3:def 10
-;
+SEQM_3:def 10;
  let r; consider n such that A3: for m st n<=m holds seq.m<r by A1,Def5;
  take n; let m; A4: m<=Ns.m by SEQM_3:33;
  assume n<=m; then n<=Ns.m by A4,AXIOMS:22; then seq.(Ns.m)<r by A3;
@@ -840,8 +851,8 @@ Th34;
 end;
 
 theorem Th56:
-seq is non-decreasing & not seq is bounded_above implies
- seq is divergent_to+infty
+  seq is non-decreasing & not seq is bounded_above implies
+    seq is divergent_to+infty
 proof assume A1: seq is non-decreasing & not seq is bounded_above;
  let r; consider n such that A2: r+1<=seq.n by A1,SEQ_2:def 3; take n; let m;
  assume n<=m; then seq.n<=seq.m by A1,SEQM_3:12;
@@ -850,8 +861,8 @@ proof assume A1: seq is non-decreasing & not seq is bounded_above;
 end;
 
 theorem Th57:
-seq is non-increasing & not seq is bounded_below implies
- seq is divergent_to-infty
+  seq is non-increasing & not seq is bounded_below implies
+    seq is divergent_to-infty
 proof assume A1: seq is non-increasing & not seq is bounded_below;
  let r; consider n such that A2: seq.n<=r-1 by A1,SEQ_2:def 4;
  take n; let m; assume n<=m; then seq.m<=seq.n by A1,SEQM_3:14;
@@ -860,22 +871,22 @@ proof assume A1: seq is non-increasing & not seq is bounded_below;
 end;
 
 theorem
-    seq is increasing & not seq is bounded_above implies seq is
-divergent_to+infty
+  seq is increasing & not seq is bounded_above implies
+    seq is divergent_to+infty
 proof assume A1: seq is increasing & not seq is bounded_above;
  then seq is non-decreasing by SEQM_3:23; hence thesis by A1,Th56;
 end;
 
 theorem
-    seq is decreasing & not seq is bounded_below implies seq is
-divergent_to-infty
+  seq is decreasing & not seq is bounded_below implies
+    seq is divergent_to-infty
 proof assume A1: seq is decreasing & not seq is bounded_below;
  then seq is non-increasing by SEQM_3:24; hence thesis by A1,Th57;
 end;
 
 theorem
-    seq is monotone implies seq is convergent or seq is divergent_to+infty or
-seq is divergent_to-infty
+  seq is monotone implies seq is convergent or seq is divergent_to+infty or
+    seq is divergent_to-infty
 proof assume A1: seq is monotone;
      now per cases by A1,SEQM_3:def 7;
  suppose A2: seq is non-decreasing; then A3: seq is bounded_below by Th26;
@@ -890,9 +901,9 @@ proof assume A1: seq is monotone;
   end; hence thesis;
  end;
  suppose A5: seq is non-increasing; then A6: seq is bounded_above by Th26;
-      now per cases;
+ now per cases;
   suppose seq is bounded_below; then A7: seq is bounded by A6,SEQ_2:def 5;
-       seq is monotone by A5,SEQM_3:def 7;
+   seq is monotone by A5,SEQM_3:def 7;
    hence thesis by A7,SEQ_4:53;
   end;
   suppose not seq is bounded_below;
@@ -908,7 +919,7 @@ theorem Th61:
 seq" is convergent & lim(seq")=0
 proof assume that A1: seq is divergent_to+infty or
  seq is divergent_to-infty;
-     now per cases by A1;
+ now per cases by A1;
  suppose A2: seq is divergent_to+infty;
   A3: now let r be real number such that A4: 0<r;
        r" is Real by XREAL_0:def 1;
@@ -978,8 +989,8 @@ proof assume A1: seq is_not_0 & seq is convergent & lim seq=0;
      -abs(r)<=r by ABSVALUE:11;
  then A4: -abs(r)-1<r by Lm2; take m=max(k,o); let n;
  assume A5: m<=n;   o<=m by SQUARE_1:46;
- then o<=n by A5,AXIOMS:22; then A6: abs(seq.n-0)<l" by A3;   k<=m by
-SQUARE_1:46
+ then o<=n by A5,AXIOMS:22; then A6: abs(seq.n-0)<l" by A3;
+ k<=m by SQUARE_1:46
 ; then k<= n by A5,AXIOMS:22;
  then A7: seq.n<0 by A2; then A8: 0<-(seq.n) by REAL_1:66;
      -(seq.n)<l" by A6,A7,ABSVALUE:def 1;
@@ -1007,26 +1018,25 @@ proof assume A1: seq is_not_0 & seq is convergent & lim seq=0 &
 end;
 
 theorem
-    seq is_not_0 & seq is convergent & lim seq=0 & seq is increasing implies
-seq" is divergent_to-infty
+  seq is_not_0 & seq is convergent & lim seq=0 & seq is increasing implies
+    seq" is divergent_to-infty
 proof assume A1: seq is_not_0 & seq is convergent & lim seq=0 &
  seq is increasing; then seq is non-decreasing by SEQM_3:23;
  hence thesis by A1,Th64;
 end;
 
 theorem
-    seq is_not_0 & seq is convergent & lim seq=0 & seq is decreasing implies
-seq" is divergent_to+infty
+  seq is_not_0 & seq is convergent & lim seq=0 & seq is decreasing implies
+    seq" is divergent_to+infty
 proof assume A1: seq is_not_0 & seq is convergent & lim seq=0 &
  seq is decreasing; then seq is non-increasing by SEQM_3:24;
  hence thesis by A1,Th65;
 end;
 
 theorem
-    seq1 is bounded & (seq2 is divergent_to+infty or seq2 is divergent_to-infty
-)
-&
-seq2 is_not_0 implies seq1/"seq2 is convergent & lim(seq1/"seq2)=0
+  seq1 is bounded &
+  (seq2 is divergent_to+infty or seq2 is divergent_to-infty) &
+    seq2 is_not_0 implies seq1/"seq2 is convergent & lim(seq1/"seq2)=0
 proof assume A1: seq1 is bounded &
  (seq2 is divergent_to+infty or seq2 is divergent_to-infty) & seq2 is_not_0;
  then A2: seq2" is convergent & lim(seq2")=0 by Th61;
@@ -1084,7 +1094,7 @@ end;
 canceled 6;
 
 theorem
-    f is convergent_in+infty iff
+  f is convergent_in+infty iff
 (for r ex g st r<g & g in dom f) &
 (ex g st for g1 st 0<g1 ex r st for r1 st r<r1 &
  r1 in dom f holds abs(f.r1-g)<g1)
@@ -1141,7 +1151,7 @@ A16:  g1 is Real by XREAL_0:def 1;
 end;
 
 theorem
-    f is convergent_in-infty iff
+  f is convergent_in-infty iff
 (for r ex g st g<r & g in dom f) &
 ex g st for g1 st 0<g1 ex r st for r1 st r1<r & r1 in dom f holds
   abs(f.r1-g)<g1
@@ -1230,8 +1240,7 @@ proof thus f is divergent_in+infty_to+infty implies
   then f*s is divergent_to+infty by A1,A8,Def7;
   then consider n such that A10: for m st n<=m holds g<(f*s).m by Def4;
       g<(f*s).n by A10; then g<f.(s.n) by A9,RFUNCT_2:21; hence contradiction
-by A5
-;
+by A5;
  end;
  assume that A11: for r ex g st r<g & g in dom f and
  A12: for g ex r st for r1 st r<r1 & r1 in dom f holds g<f.r1;
@@ -1278,8 +1287,7 @@ proof thus f is divergent_in+infty_to-infty implies
   then f*s is divergent_to-infty by A1,A8,Def8;
   then consider n such that A10: for m st n<=m holds (f*s).m<g by Def5;
       (f*s).n<g by A10; then f.(s.n)<g by A9,RFUNCT_2:21;
-  hence contradiction by A5
-;
+  hence contradiction by A5;
  end;
  assume that A11: for r ex g st r<g & g in dom f and
  A12: for g ex r st for r1 st r<r1 & r1 in dom f holds f.r1<g;
@@ -1653,8 +1661,7 @@ by Lm4;
   A7: rng(seq^\k)c=rng seq by RFUNCT_2:7;
   then A8: rng(seq^\k)c=dom f1 & rng(seq^\k)c=dom f2 by A4,XBOOLE_1:1;
   then A9: f1*(seq^\k) is divergent_to+infty by A1,A6,Def10;
-      now thus 0<r2 by A2; let n; A10: (seq^\k).n in rng(seq^\k) by RFUNCT_2:10
-;
+  now thus 0<r2 by A2; let n; A10: (seq^\k).n in rng(seq^\k) by RFUNCT_2:10;
        k<=n+k by NAT_1:37
 ; then seq.(n+k)<r1 by A5; then (seq^\k).n<r1 by SEQM_3:def 9;
    then (seq^\k).n in {g2: g2<r1};

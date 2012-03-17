@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
@@ -35,12 +35,12 @@
 </Typ>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="51"/>
+<Adjective nr="50"/>
 <Adjective nr="52"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -50,7 +50,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="42" value="false"/>
-<Adjective nr="53"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -64,7 +64,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="54"/>
+<Adjective nr="55"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -85,7 +85,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="55">
+<Adjective nr="56">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -99,7 +99,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="53"/>
+<Adjective nr="54"/>
 </Cluster>
 </CCluster>
-</Clusters>
+</Registrations>

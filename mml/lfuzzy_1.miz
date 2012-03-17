@@ -10,7 +10,7 @@ environ
       QC_LANG1, FUZZY_3, SEQ_1, FUZZY_1, GROUP_1, LATTICE2, LATTICE3, WAYBEL_0,
       SQUARE_1, BOOLE, SEQ_4, BHSP_3, ORDINAL2, FUNCT_2, PARTFUN1, FUNCT_4,
       CARD_3, WAYBEL_1, FUNCOP_1, FUZZY_4, FUNCT_3, LFUZZY_1;
- notation TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, ORDINAL1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, ORDINAL1,
       ORDINAL2, NUMBERS, XCMPLX_0, DOMAIN_1, PARTFUN1, CARD_3, RELAT_2,
       FUNCT_3, RFUNCT_1, SUBSET_1, XREAL_0, NAT_1, SQUARE_1, SEQ_1, SEQ_4,
       RCOMP_1, RELSET_1, STRUCT_0, LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1,
@@ -18,11 +18,11 @@ environ
  constructors NAT_1, WAYBEL_2, PSCOMP_1, WAYBEL_3, FUZZY_4, DOMAIN_1, ORDERS_3,
       PRE_CIRC, FUZZY_3, MONOID_0, LFUZZY_0, RFUNCT_1, REAL_1, PRALG_1,
       BINOP_2, REALSET2;
- clusters SUBSET_1, LATTICE3, RELSET_1, STRUCT_0, MONOID_0, SEQ_1, NAT_1,
+ registrations SUBSET_1, LATTICE3, RELSET_1, STRUCT_0, MONOID_0, SEQ_1, NAT_1,
       ORDINAL2, WAYBEL_2, WAYBEL10, WAYBEL17, LFUZZY_0, INT_1, MEMBERED,
       BINARITH, FUNCOP_1, PBOOLE;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, FUZZY_1;
  theorems ZFMISC_1, WAYBEL_1, AXIOMS, RELAT_1, LATTICE3, SQUARE_1, YELLOW_0,
       XREAL_0, TARSKI, TOPMETR3, YELLOW_2, WAYBEL_3, CARD_3, YELLOW_1,
       FUNCOP_1, FUZZY_2, FUZZY_4, FUNCT_3, FUZZY_1, PARTFUN1, LFUZZY_0,
@@ -41,7 +41,7 @@ for a,b,c,d being real number st a <= b & c <= d holds min(a,c) <= min(b,d)
 A1:a <= b & c <= d;
    reconsider a,b,c,d as Element of REAL by XREAL_0:def 1;
     a <= b & c <= d by A1;
-   hence thesis by FUZZY_1:44;
+   hence thesis by FUZZY_1:26;
   end;
 
 registration
@@ -49,46 +49,6 @@ registration
   cluster -> real-yielding Membership_Func of X;
   coherence;
 end;
-
-definition
-  let f,g be real-yielding Function;
-  pred f is_less_than g means:Def1:
-   dom f c= dom g &
-   for x being set st x in dom f holds f.x <= g.x;
-end;
-
-notation
- let X be non empty set;
- let f,g be Membership_Func of X;
- synonym f c= g for f is_less_than g;
-end;
-
-definition
- let X be non empty set;
- let f,g be Membership_Func of X;
- redefine pred f is_less_than g means :Def2:
-  for x being Element of X holds f.x <= g.x;
-  compatibility
-  proof
-   thus f is_less_than g iff for x being Element of X holds f.x <= g.x
-    proof
-     hereby assume
-A1:     f is_less_than g;
-     thus for x being Element of X holds f.x <= g.x
-      proof
-       let x be Element of X;
-        dom f = X by FUZZY_1:def 1;
-       hence thesis by A1,Def1;
-      end;
-     end;
-     assume
-A2:  for x being Element of X holds f.x <= g.x;
-A3:  dom f = X & dom g = X by FUZZY_1:def 1;
-      for x being set st x in dom f holds f.x <= g.x by A2;
-     hence f is_less_than g by A3,Def1;
-    end;
-  end;
-  end;
 
 definition
  let X,Y be non empty set;
@@ -107,7 +67,7 @@ A1:  f is_less_than g;
       proof
        let x be Element of X, y be Element of Y;
         dom f = [:X,Y:] & [x,y] in [:X,Y:] by FUZZY_1:def 1;
-       hence thesis by A1,Def1;
+       hence thesis by A1,FUZZY_1:def 2;
       end;
      end;
      assume
@@ -125,7 +85,7 @@ A1:  f is_less_than g;
         f. [x,y] <= g. [x,y] by A2;
        hence thesis by A5;
       end;
-     hence f is_less_than g by A3,Def1;
+     hence f is_less_than g by A3,FUZZY_1:def 2;
     end;
   end;
 end;
@@ -172,14 +132,14 @@ theorem Th3:
       let R,S be Membership_Func of X;
       hereby assume R=S;
         then for x being Element of X holds R.x <= S.x & S.x <= R.x;
-        hence R c= S & S c= R by Def2;
+        hence R c= S & S c= R by FUZZY_1:def 3;
       end;
       assume
 A1:   R c= S & S c= R;
        for x being Element of X holds R.x = S.x
         proof
           let x be Element of X;
-           R.x <R= S.x & S.x <R= R.x by A1,Def2;
+           R.x <R= S.x & S.x <R= R.x by A1,FUZZY_1:def 3;
           hence thesis by AXIOMS:21;
         end;
       hence R=S by Th1;
@@ -191,7 +151,7 @@ theorem Th4:
     proof
       let R be Membership_Func of X;
        for x being Element of X holds R.x <= R.x;
-      hence thesis by Def2;
+      hence thesis;
     end;
 
 theorem Th5:
@@ -204,10 +164,10 @@ A1:   R c= S & S c= T;
        for x being Element of X holds R.x <= T.x
         proof
           let x be Element of X;
-           R.x <R= S.x & S.x <R= T.x by A1,Def2;
+           R.x <R= S.x & S.x <R= T.x by A1,FUZZY_1:def 3;
           hence thesis by AXIOMS:22;
         end;
-      hence thesis by Def2;
+      hence thesis by FUZZY_1:def 3;
     end;
 
 theorem Th6:
@@ -232,27 +192,27 @@ A3:       x in X & z in Z by A2,ZFMISC_1:106;
               let y be set; assume
                y in Y;
               then [x,y] in [:X,Y:] & [y,z] in [:Y,Z:] by A3,ZFMISC_1:106;
-              hence thesis by A1,Def2;
+              hence thesis by A1,FUZZY_1:def 3;
             end;
-          hence thesis by A2,A3,FUZZY_4:29;
+          hence thesis by A2,A3,FUZZY_4:18;
         end;
-      hence thesis by Def2;
+      hence thesis by FUZZY_1:def 3;
     end;
 
 definition
   let X be non empty set;
   let f,g be Membership_Func of X;
   redefine func min(f,g);
-  commutativity by FUZZY_1:7;
+  commutativity;
   redefine func max(f,g);
-  commutativity by FUZZY_1:7;
+  commutativity;
 end;
 
 theorem
   for f,g being Membership_Func of X holds min(f,g) c= f
   proof let f,g be Membership_Func of X;
     let x be Element of X;
-     min(f,g).x = min(f.x,g.x) by FUZZY_1:def 5;
+     min(f,g).x = min(f.x,g.x) by FUZZY_1:def 4;
     hence min(f,g).x <= f.x by SQUARE_1:35;
   end;
 
@@ -260,7 +220,7 @@ theorem
   for f,g being Membership_Func of X holds f c= max(f,g)
   proof let f,g be Membership_Func of X;
     let x be Element of X;
-     max(f,g).x = max(f.x,g.x) by FUZZY_1:def 6;
+     max(f,g).x = max(f.x,g.x) by FUZZY_1:def 5;
     hence thesis by SQUARE_1:46;
   end;
 
@@ -288,7 +248,7 @@ then A1:    Imf(X,X) c= R by Def4;
      proof
       let x be Element of X;
        Imf(X,X). [x,x] <= R. [x,x] & Imf(X,X). [x,x] = 1
-        by A1,Def3,FUZZY_4:def 6;
+        by A1,Def3,FUZZY_4:def 4;
       then R. [x,x] <= 1 & R. [x,x] >= 1 by FUZZY_4:4;
       hence thesis by AXIOMS:21;
      end;
@@ -301,11 +261,11 @@ A2: for x being Element of X holds R. [x,x] = 1;
         per cases;
         suppose
 A3:     x = y;
-then Imf(X,X). [x,y] = 1 by FUZZY_4:def 6;
+then Imf(X,X). [x,y] = 1 by FUZZY_4:def 4;
         hence thesis by A2,A3;
         end;
         suppose not x=y;
-        then Imf(X,X). [x,y] = 0 by FUZZY_4:def 6;
+        then Imf(X,X). [x,y] = 0 by FUZZY_4:def 4;
         hence thesis by FUZZY_4:4;
        end;
        end;
@@ -387,13 +347,13 @@ A1:  Y = dom min(R,S,x,z)
        then consider y being Element of Y such that
 A2:    c = R. [x,y] "/\" S. [y,z];
         c   = min(R. [x,y], S. [y,z] qua real number) by A2,LFUZZY_0:5
-        .= min(R,S,x,z).y by FUZZY_4:def 3;
+        .= min(R,S,x,z).y by FUZZY_4:def 2;
        hence c in rng min(R,S,x,z) by A1,PARTFUN1:27;
        end;
        assume c in rng min(R,S,x,z);
        then consider y being Element of Y such that
 A3:    y in dom min(R,S,x,z) & c = min(R,S,x,z).y by PARTFUN1:26;
-        c = min(R. [x,y], S. [y,z] qua real number) by A3,FUZZY_4:def 3
+        c = min(R. [x,y], S. [y,z] qua real number) by A3,FUZZY_4:def 2
         .= R. [x,y] "/\" S. [y,z] by LFUZZY_0:5;
        hence c in L;
       end;
@@ -460,7 +420,7 @@ A4:      r = R. [x,y] "/\" R. [y,z];
          hence thesis by A4,LFUZZY_0:3;
         end;
        then upper_bound W <= R. [x,z] by A3,TOPMETR3:1;
-       hence thesis by FUZZY_4:def 4;
+       hence thesis by FUZZY_4:def 3;
       end;
     end;
   end;
@@ -508,8 +468,8 @@ registration
         suppose
 A1:     not x=y;
         hence Imf(X,X). [x,y]
-        = 0 by FUZZY_4:def 6
-        .= Imf(X,X). [y,x] by A1,FUZZY_4:def 6;
+        = 0 by FUZZY_4:def 4
+        .= Imf(X,X). [y,x] by A1,FUZZY_4:def 4;
     end;
     end;
    thus Imf(X,X) is transitive
@@ -525,21 +485,21 @@ A2:     x = z;
 A3:     x = y;
           Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
           = min(Imf(X,X). [x,y], Imf(X,X). [y,z]) by LFUZZY_0:5
-         .= 1 by A2,A3,FUZZY_4:def 6;
+         .= 1 by A2,A3,FUZZY_4:def 4;
          then Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
-         <= Imf(X,X). [x,z] by A2,FUZZY_4:def 6;
+         <= Imf(X,X). [x,z] by A2,FUZZY_4:def 4;
          hence thesis by LFUZZY_0:3;
          end;
          suppose
 A4:     not x=y;
             Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
             = min(Imf(X,X). [x,y],Imf(X,X). [y,z]) by LFUZZY_0:5
-           .= min(Imf(X,X). [x,y],0) by A2,A4,FUZZY_4:def 6
-           .= min(0,0) by A4,FUZZY_4:def 6
+           .= min(Imf(X,X). [x,y],0) by A2,A4,FUZZY_4:def 4
+           .= min(0,0) by A4,FUZZY_4:def 4
            .= 0;
            then Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= 1;
            then Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
-         by A2,FUZZY_4:def 6;
+         by A2,FUZZY_4:def 4;
            hence thesis by LFUZZY_0:3;
         end;
         end;
@@ -553,11 +513,11 @@ A5:     not x=z;
 A6:       x=y;
             Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
             = min(Imf(X,X). [x,y],Imf(X,X). [y,z]) by LFUZZY_0:5
-           .= min(Imf(X,X). [x,y],0) by A5,A6,FUZZY_4:def 6
-           .= min(1,0) by A6,FUZZY_4:def 6
+           .= min(Imf(X,X). [x,y],0) by A5,A6,FUZZY_4:def 4
+           .= min(1,0) by A6,FUZZY_4:def 4
            .= 0 by SQUARE_1:def 1;
            then Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
-         by A5,FUZZY_4:def 6;
+         by A5,FUZZY_4:def 4;
            hence thesis by LFUZZY_0:3;
            end;
            suppose
@@ -569,22 +529,22 @@ A7:       x <> y;
 A8:         y=z;
                Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
               = min(Imf(X,X). [x,y],Imf(X,X). [y,z]) by LFUZZY_0:5
-              .= min(Imf(X,X). [x,y],1) by A8,FUZZY_4:def 6
-              .= min(0,1) by A7,FUZZY_4:def 6
+              .= min(Imf(X,X). [x,y],1) by A8,FUZZY_4:def 4
+              .= min(0,1) by A7,FUZZY_4:def 4
               .= 0 by SQUARE_1:def 1;
               then Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
-            by A5,FUZZY_4:def 6;
+            by A5,FUZZY_4:def 4;
               hence thesis by LFUZZY_0:3;
               end;
               suppose
 A9:         y <> z;
                Imf(X,X). [x,y] "/\" Imf(X,X). [y,z]
               = min(Imf(X,X). [x,y],Imf(X,X). [y,z]) by LFUZZY_0:5
-              .= min(Imf(X,X). [x,y],0) by A9,FUZZY_4:def 6
-              .= min(0,0) by A7,FUZZY_4:def 6
+              .= min(Imf(X,X). [x,y],0) by A9,FUZZY_4:def 4
+              .= min(0,0) by A7,FUZZY_4:def 4
               .= 0;
               then Imf(X,X). [x,y] "/\" Imf(X,X). [y,z] <= Imf(X,X). [x,z]
-            by A5,FUZZY_4:def 6;
+            by A5,FUZZY_4:def 4;
               hence thesis by LFUZZY_0:3;
             end;
             end;
@@ -594,10 +554,10 @@ A9:         y <> z;
     end;
    thus Imf(X,X) is reflexive
     proof
-     thus for x being Element of X holds Imf(X,X). [x,x] = 1 by FUZZY_4:def 6;
+     thus for x being Element of X holds Imf(X,X). [x,x] = 1 by FUZZY_4:def 4;
     end;
    thus for x,y being Element of X holds
-    Imf(X,X). [x,y] <> 0 & x <> y implies Imf(X,X). [y,x] = 0 by FUZZY_4:def 6;
+    Imf(X,X). [x,y] <> 0 & x <> y implies Imf(X,X). [y,x] = 0 by FUZZY_4:def 4;
   end;
 end;
 
@@ -617,7 +577,7 @@ R is symmetric & S is symmetric implies converse min(R,S) = min(R,S)
   let R,S be RMembership_Func of X,X;
   assume R is symmetric & S is symmetric;
 then converse R = R & converse S =S by Def6;
-hence thesis by FUZZY_4:11;
+hence thesis by FUZZY_4:8;
  end;
 
 theorem Th10:
@@ -627,7 +587,7 @@ R is symmetric & S is symmetric implies converse max(R,S) = max(R,S)
   let R,S be RMembership_Func of X,X;
   assume R is symmetric & S is symmetric;
 then converse R = R & converse S =S by Def6;
-  hence thesis by FUZZY_4:9;
+  hence thesis by FUZZY_4:7;
  end;
 
 registration
@@ -647,6 +607,12 @@ registration
    end;
 end;
 
+for C1,C2,C3 being non empty set
+for f,g be RMembership_Func of C1,C2,
+    h   be RMembership_Func of C2,C3
+holds
+ min(f,g)(#)h c= min(f(#)h,g(#)h) by FUZZY_4:16;
+
 theorem Th11:
 for R,S being RMembership_Func of X,X holds
 R is transitive & S is transitive implies min(R,S) (#) min(R,S) c= min(R,S)
@@ -655,13 +621,18 @@ R is transitive & S is transitive implies min(R,S) (#) min(R,S) c= min(R,S)
    assume R is transitive & S is transitive;
 then A1:   R(#)R c= R & S(#)S c= S by Def8;
      let x be Element of X, y be Element of X;
+     [x,y] is Element of [:X,X:];
+     (min(R,S) (#) min(R,S)) c=
+       min(min(R,S) (#) R, min(R,S) (#) S) by FUZZY_4:15; then
 A2:  (min(R,S) (#) min(R,S)). [x,y]
-       <= min(min(R,S) (#) R, min(R,S) (#) S). [x,y] by FUZZY_4:23;
+       <= min(min(R,S) (#) R, min(R,S) (#) S). [x,y] by FUZZY_1:def 3;
+     min(R,S) (#) R c= min(R(#)R, S(#)R) &
+     min(R,S) (#) S c= min(R(#)S, S(#)S) by FUZZY_4:16; then
       min(min(R,S) (#) R, min(R,S) (#) S). [x,y]
      = min((min(R,S) (#) R). [x,y], (min(R,S) (#) S). [x,y]) &
      (min(R,S) (#) R). [x,y] <= min(R(#)R, S(#)R). [x,y] &
      (min(R,S) (#) S). [x,y] <= min(R(#)S, S(#)S). [x,y]
-           by FUZZY_1:def 5,FUZZY_4:25;
+           by FUZZY_1:def 4,FUZZY_1:def 3;
      then min(min(R,S) (#) R, min(R,S) (#) S). [x,y]
      <= min(min(R(#)R, S(#)R). [x,y],min(R(#)S, S(#)S). [x,y]) by Lm1;
      then A3:     (min(R,S) (#) min(R,S)). [x,y]
@@ -669,7 +640,7 @@ A2:  (min(R,S) (#) min(R,S)). [x,y]
       by A2,AXIOMS:22;
       min(R(#)R, S(#)R). [x,y] = min((R(#)R). [x,y], (S(#)R). [x,y]) &
      min(R(#)S, S(#)S). [x,y] = min((S(#)S). [x,y], (R(#)S). [x,y])
-     by FUZZY_1:def 5;
+     by FUZZY_1:def 4;
      then min(R(#)R, S(#)R). [x,y] <= (R(#)R). [x,y] &
      min(R(#)S, S(#)S). [x,y] <= (S(#)S). [x,y] &
      (R(#)R). [x,y] <= R. [x,y] & (S(#)S). [x,y] <= S. [x,y]
@@ -680,7 +651,7 @@ A2:  (min(R,S) (#) min(R,S)). [x,y]
      <= min(R. [x,y], S. [x,y]) by Lm1;
      then (min(R,S) (#) min(R,S)). [x,y] <= min(R. [x,y], S. [x,y])
      by A3,AXIOMS:22;
-     hence thesis by FUZZY_1:def 5;
+     hence thesis by FUZZY_1:def 4;
   end;
 
 registration
@@ -841,23 +812,23 @@ theorem
    thus Zmf(X,X) is symmetric
     proof
        let x,y be Element of X;
-        Zmf(X,X). [x,y] = 0 & Zmf(X,X). [y,x] = 0 by FUZZY_4:32;
+        Zmf(X,X). [x,y] = 0 & Zmf(X,X). [y,x] = 0 by FUZZY_4:20;
        hence thesis;
     end;
    thus Zmf(X,X) is antisymmetric
     proof
        let x,y be Element of X;
-       thus thesis by FUZZY_4:32;
+       thus thesis by FUZZY_4:20;
     end;
    thus Zmf(X,X) is transitive
     proof
        let x,y,z be Element of X;
 A1:    Zmf(X,X). [x,y] "/\" Zmf(X,X). [y,z]
        = min(Zmf(X,X). [x,y], Zmf(X,X). [y,z]) by LFUZZY_0:5
-       .= min(0, Zmf(X,X). [y,z]) by FUZZY_4:32
-       .= min(0,0) by FUZZY_4:32
+       .= min(0, Zmf(X,X). [y,z]) by FUZZY_4:20
+       .= min(0,0) by FUZZY_4:20
        .= 0;
-        Zmf(X,X). [x,z] = 0 by FUZZY_4:32;
+        Zmf(X,X). [x,z] = 0 by FUZZY_4:20;
        hence thesis by A1,LFUZZY_0:3;
     end;
   end;
@@ -869,25 +840,25 @@ theorem
     proof
         let x,y be Element of X;
         thus Umf(X,X). [x,y]
-        = 1 by FUZZY_4:31
-        .= Umf(X,X). [y,x] by FUZZY_4:31;
+        = 1 by FUZZY_4:20
+        .= Umf(X,X). [y,x] by FUZZY_4:20;
     end;
    thus Umf(X,X) is transitive
     proof
         let x,y,z be Element of X;
          Umf(X,X). [x,y] "/\" Umf(X,X). [y,z]
         = min(Umf(X,X). [x,y], Umf(X,X). [y,z]) by LFUZZY_0:5
-        .= min(1,Umf(X,X). [y,z]) by FUZZY_4:31
-        .= min(1,1) by FUZZY_4:31
+        .= min(1,Umf(X,X). [y,z]) by FUZZY_4:20
+        .= min(1,1) by FUZZY_4:20
         .= 1;
         then Umf(X,X). [x,y] "/\" Umf(X,X). [y,z]
-        <= Umf(X,X). [x,z] by FUZZY_4:31;
+        <= Umf(X,X). [x,z] by FUZZY_4:20;
         hence thesis by LFUZZY_0:3;
     end;
    thus Umf(X,X) is reflexive
     proof
      let x be Element of X;
-     thus thesis by FUZZY_4:31;
+     thus thesis by FUZZY_4:20;
     end;
   end;
 
@@ -897,10 +868,10 @@ theorem
    let R be RMembership_Func of X,X;
    set S = max(R,converse R);
    let x,y be Element of X;
-   thus S. [x,y] = max(R. [x,y], (converse R). [x,y]) by FUZZY_1:def 6
+   thus S. [x,y] = max(R. [x,y], (converse R). [x,y]) by FUZZY_1:def 5
        .= max(R. [x,y], R. [y,x]) by FUZZY_4:def 1
        .= max((converse R). [y,x], R. [y,x]) by FUZZY_4:def 1
-       .= S. [y,x] by FUZZY_1:def 6;
+       .= S. [y,x] by FUZZY_1:def 5;
   end;
 
 theorem
@@ -910,10 +881,10 @@ theorem
    set S = min(R,converse R);
    let x,y be Element of X;
    thus
-      S. [x,y] = min(R. [x,y], (converse R). [x,y]) by FUZZY_1:def 5
+      S. [x,y] = min(R. [x,y], (converse R). [x,y]) by FUZZY_1:def 4
        .= min(R. [x,y], R. [y,x]) by FUZZY_4:def 1
        .= min((converse R). [y,x], R. [y,x]) by FUZZY_4:def 1
-       .= S. [y,x] by FUZZY_1:def 5;
+       .= S. [y,x] by FUZZY_1:def 4;
   end;
 
 theorem
@@ -927,11 +898,11 @@ for R' being RMembership_Func of X,X
    assume
 A1:     T is symmetric & R c= T;
        let x,y be Element of X;
-A2:    R. [x,y] <= T. [x,y] & R. [y,x] <= T. [y,x] by A1,Def2;
+A2:    R. [x,y] <= T. [x,y] & R. [y,x] <= T. [y,x] by A1,FUZZY_1:def 3;
        then R. [y,x] <= T. [x,y] by A1,Def7;
        then max(R. [x,y], R. [y,x]) <= T. [x,y] by A2,SQUARE_1:50;
        then max(R. [x,y], (converse R). [x,y]) <= T. [x,y] by FUZZY_4:def 1;
-       hence thesis by FUZZY_1:def 6;
+       hence thesis by FUZZY_1:def 5;
   end;
 
 theorem
@@ -945,11 +916,11 @@ for R' being RMembership_Func of X,X
    assume
 A1:     T is symmetric & T c= R;
        let x,y be Element of X;
-A2:    T. [x,y] <= R. [x,y] & T. [y,x] <= R. [y,x] by A1,Def2;
+A2:    T. [x,y] <= R. [x,y] & T. [y,x] <= R. [y,x] by A1,FUZZY_1:def 3;
        then T. [x,y] <= R. [y,x] by A1,Def7;
        then T. [x,y] <= min(R. [x,y], R. [y,x]) by A2,SQUARE_1:39;
        then T. [x,y] <= min(R. [x,y], (converse R). [x,y]) by FUZZY_4:def 1;
-       hence thesis by FUZZY_1:def 5;
+       hence thesis by FUZZY_1:def 4;
   end;
 
 begin :: Transitive closure of a fuzzy relation
@@ -1077,7 +1048,7 @@ A4:               c = Imf(X,X). [x,z] "/\" R. [z,y];
 A5:                  x = z;
 A6:               R. [z,y] <= 1 by FUZZY_4:4;
                    c = min(Imf(X,X). [x,z],R. [z,y]) by A4,LFUZZY_0:5
-                  .= min(R. [z,y],1) by A5,FUZZY_4:def 6
+                  .= min(R. [z,y],1) by A5,FUZZY_4:def 4
                   .= R. [x,y] by A5,A6,SQUARE_1:def 1;
                   hence thesis by LFUZZY_0:3;
                   end;
@@ -1085,7 +1056,7 @@ A6:               R. [z,y] <= 1 by FUZZY_4:4;
 A7:                  x <> z;
 A8:               0 <= R. [z,y] by FUZZY_4:4;
                    c = min(Imf(X,X). [x,z],R. [z,y]) by A4,LFUZZY_0:5
-                  .= min(R. [z,y],0) by A7,FUZZY_4:def 6
+                  .= min(R. [z,y],0) by A7,FUZZY_4:def 4
                   .= 0 by A8,SQUARE_1:def 1;
                   then c <= R. [x,y] by FUZZY_4:4;
                   hence thesis by LFUZZY_0:3;
@@ -1101,7 +1072,7 @@ A8:               0 <= R. [z,y] by FUZZY_4:4;
 A10:          R. [x,y] <= 1 by FUZZY_4:4;
                Imf(X,X). [x,x] "/\" R. [x,y]
                = min(Imf(X,X). [x,x], R. [x,y]) by LFUZZY_0:5
-              .= min(1, R. [x,y]) by FUZZY_4:def 6
+              .= min(1, R. [x,y]) by FUZZY_4:def 4
               .= R. [x,y] by A10,SQUARE_1:def 1;
               then R. [x,y] in S;
               hence thesis by A9,LATTICE3:def 9;
@@ -1142,7 +1113,7 @@ A4:               c = R. [x,z] "/\" Imf(X,X). [z,y];
 A5:                  y = z;
 A6:               R. [x,z] <= 1 by FUZZY_4:4;
                    c = min(R. [x,z],Imf(X,X). [z,y]) by A4,LFUZZY_0:5
-                  .= min(R. [x,z],1) by A5,FUZZY_4:def 6
+                  .= min(R. [x,z],1) by A5,FUZZY_4:def 4
                   .= R. [x,y] by A5,A6,SQUARE_1:def 1;
                   hence thesis by LFUZZY_0:3;
                   end;
@@ -1150,7 +1121,7 @@ A6:               R. [x,z] <= 1 by FUZZY_4:4;
 A7:               not y = z;
 A8:               0 <= R. [x,z] by FUZZY_4:4;
                    c = min(R. [x,z],Imf(X,X). [z,y]) by A4,LFUZZY_0:5
-                  .= min(R. [x,z],0) by A7,FUZZY_4:def 6
+                  .= min(R. [x,z],0) by A7,FUZZY_4:def 4
                   .= 0 by A8,SQUARE_1:def 1;
                   then c <= R. [x,y] by FUZZY_4:4;
                   hence thesis by LFUZZY_0:3;
@@ -1166,7 +1137,7 @@ A8:               0 <= R. [x,z] by FUZZY_4:4;
 A10:          R. [x,y] <= 1 by FUZZY_4:4;
                R. [x,y] "/\" Imf(X,X). [y,y]
                = min(R. [x,y],Imf(X,X). [y,y]) by LFUZZY_0:5
-              .= min( R. [x,y],1) by FUZZY_4:def 6
+              .= min( R. [x,y],1) by FUZZY_4:def 4
               .= R. [x,y] by A10,SQUARE_1:def 1;
               then R. [x,y] in S;
               hence thesis by A9,LATTICE3:def 9;
@@ -1325,7 +1296,7 @@ A2:    (TrCl R). [x,y]   = "\/"(pi(Q, [x,y]), RealPoset [. 0,1 .]) by Th29;
        then R. [x,y] <<= (TrCl R). [x,y] by A2,YELLOW_2:24;
        hence thesis by A1,LFUZZY_0:3;
       end;
-     hence thesis by Def2;
+     hence thesis by FUZZY_1:def 3;
     end;
 
 theorem Th31:
@@ -1348,7 +1319,7 @@ A3:    (TrCl R). [x,y]   = "\/"(pi(Q, [x,y]), RealPoset [. 0,1 .]) by Th29;
        then (n' iter R). [x,y] <<= (TrCl R). [x,y] by A3,YELLOW_2:24;
        hence thesis by A2,LFUZZY_0:3;
       end;
-     hence thesis by Def2;
+     hence thesis by FUZZY_1:def 3;
     end;
 
 theorem Th32:
@@ -2128,7 +2099,7 @@ A6:               i+j > 0 by A5,ANALOAF:2;
 A7:               f = (i+j) iter R by A5,Th27;
                   reconsider f as RMembership_Func of X,X by A5;
                    f c= TrCl R by A6,A7,Th31;
-                  then f.c <= (TrCl R).c by Def2;
+                  then f.c <= (TrCl R).c by FUZZY_1:def 3;
                   hence thesis by A4,LFUZZY_0:3;
                 end;
               hence thesis by LATTICE3:def 9;
@@ -2136,7 +2107,7 @@ A7:               f = (i+j) iter R by A5,Th27;
           then "\/"(pi(A,c),RP) <<= (TrCl R).c by YELLOW_0:32;
           hence thesis by A3,LFUZZY_0:3;
         end;
-      then (TrCl R)(#)(TrCl R) c= (TrCl R) by Def2;
+      then (TrCl R)(#)(TrCl R) c= (TrCl R) by FUZZY_1:def 3;
       hence thesis by Def8;
     end;
 end;
@@ -2153,13 +2124,12 @@ then A2:   R (#) R c= R by Def8;
       defpred P[Nat] means $1 iter R c= R;
       reconsider n as non empty Nat by A1,ORDINAL2:def 21;
        1 iter R = R by Th25;
-then A3:   P[1] by Th4;
+then A3:   P[1];
 A4:   for k being non empty Nat st P[k] holds P[k+1]
         proof
           let k be non empty Nat; assume
 A5:       P[k];
-           R c= R by Th4;
-          then k iter R (#) R c= R(#)R by A5,Th6;
+          k iter R (#) R c= R(#)R by A5,Th6;
           then (k+1) iter R c= R(#)R by Th26;
           hence thesis by A2,Th5;
         end;
@@ -2204,14 +2174,14 @@ A6:              f in Q & b = f.c by CARD_3:def 6;
                  consider n be Nat such that
 A7:              f = n iter R & n>0 by A6;
                   n iter R c= R by A1,A7,Th37;
-                 then (n iter R).c <= R.c by Def2;
+                 then (n iter R).c <= R.c by FUZZY_1:def 3;
                  hence thesis by A6,A7,LFUZZY_0:3;
                end;
              then R.c is_>=_than pi(Q,c) by LATTICE3:def 9;
              then (TrCl R).c <<= R.c by A5,YELLOW_0:32;
              hence thesis by LFUZZY_0:3;
            end;
-         hence thesis by Def2;
+         hence thesis by FUZZY_1:def 3;
        end;
      hence thesis by A2,Th3;
    end;
@@ -2226,7 +2196,7 @@ A1:   R c= S;
       defpred P[natural number] means $1 iter R c= $1 iter S;
        0 iter R = Imf(X,X) by Th24
       .= 0 iter S by Th24;
-then A2:   P[0] by Th3;
+then A2:   P[0];
 A3:   for k being natural number st P[k] holds P[k+1]
         proof
           let k be natural number; assume
@@ -2279,7 +2249,7 @@ A6:                   f = n iter R & n>0 by A5;
                        n iter R c= n iter S & n iter S c= TrCl S
                         by A1,A6,Th31,Th39;
                       then n iter R c= TrCl S by Th5;
-                      then (n iter R).c <= (TrCl S).c by Def2;
+                      then (n iter R).c <= (TrCl S).c by FUZZY_1:def 3;
                       hence thesis by A5,A6,LFUZZY_0:3;
                     end;
                   hence thesis by LATTICE3:def 9;
@@ -2287,7 +2257,7 @@ A6:                   f = n iter R & n>0 by A5;
               then "\/"(pi(Q,c),RP) <<= (TrCl S).c by YELLOW_0:32;
               hence thesis by A4,LFUZZY_0:3;
             end;
-          hence thesis by Def2;
+          hence thesis by FUZZY_1:def 3;
         end;
       hence thesis by A1,Th38;
     end;

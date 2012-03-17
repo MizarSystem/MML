@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -12,14 +12,14 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELSET_1"/>
-<ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LANG1"/>
 <ArticleID name="FUNCT_6"/>
@@ -47,7 +47,7 @@
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="K" nr="72"/>
 </Typ>
@@ -56,13 +56,13 @@
 <Adjective nr="2"/>
 <Adjective nr="3" value="false"/>
 <Adjective nr="5"/>
-<Adjective nr="21"/>
-<Adjective nr="24"/>
+<Adjective nr="17"/>
+<Adjective nr="23"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="K" nr="72"/>
 </Typ>
@@ -71,8 +71,8 @@
 <Adjective nr="2"/>
 <Adjective nr="3"/>
 <Adjective nr="5"/>
-<Adjective nr="21"/>
-<Adjective nr="24"/>
+<Adjective nr="17"/>
+<Adjective nr="23"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -128,7 +128,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -149,7 +149,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -171,7 +171,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="3" value="false"/>
@@ -195,7 +195,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -222,7 +222,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -250,7 +250,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="3" value="false"/>
@@ -276,4 +276,4 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

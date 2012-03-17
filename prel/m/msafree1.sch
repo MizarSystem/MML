@@ -15,11 +15,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="SETFAM_1"/>
-<ArticleID name="PROB_1"/>
-<ArticleID name="PROB_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="PROB_1"/>
+<ArticleID name="PROB_2"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -355,13 +355,13 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="87">
+<Func kind="K" nr="92">
 <Func kind="F" nr="3"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="87">
+<Func kind="K" nr="92">
 <Func kind="F" nr="3"/>
 </Func>
 </Typ>
@@ -417,7 +417,7 @@
 <For>
 <Typ kind="M" nr="47">
 <Cluster/>
-<Func kind="K" nr="87">
+<Func kind="K" nr="92">
 <Func kind="F" nr="3"/>
 </Func>
 </Typ>
@@ -567,7 +567,7 @@
 <For>
 <Typ kind="M" nr="47">
 <Cluster/>
-<Func kind="K" nr="87">
+<Func kind="K" nr="92">
 <Func kind="F" nr="3"/>
 </Func>
 </Typ>

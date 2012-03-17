@@ -37,6 +37,7 @@
 <ArticleID name="ALGSEQ_1"/>
 <ArticleID name="FVSUM_1"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRIX_2"/>
@@ -110,7 +111,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="96">
-<Func kind="K" nr="386">
+<Func kind="K" nr="397">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="113">
@@ -135,7 +136,7 @@
 <Pred kind="R" nr="2">
 <Var nr="3"/>
 <Func kind="K" nr="210">
-<Func kind="K" nr="386">
+<Func kind="K" nr="397">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="113">
@@ -149,7 +150,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="20">
-<Func kind="K" nr="386">
+<Func kind="K" nr="397">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="113">
@@ -243,7 +244,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="415">
+<Func kind="K" nr="426">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>

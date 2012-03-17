@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XBOOLE_0"/>
@@ -134,4 +134,4 @@
 <Adjective nr="20"/>
 </Cluster>
 </CCluster>
-</Clusters>
+</Registrations>

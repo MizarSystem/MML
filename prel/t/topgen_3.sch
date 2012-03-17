@@ -11,9 +11,9 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
+<ArticleID name="ARYTM_3"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="ARYTM_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TOPS_1"/>
@@ -84,7 +84,7 @@
 </Not>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="92"/>
+<Func kind="K" nr="72"/>
 </Pred>
 <Pred kind="P" nr="1">
 <Func kind="F" nr="1"/>
@@ -205,9 +205,9 @@
 </Not>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="2">
-<Func kind="K" nr="92"/>
+<Func kind="K" nr="72"/>
 </Func>
-<Func kind="K" nr="92"/>
+<Func kind="K" nr="72"/>
 </Pred>
 <For>
 <Typ kind="M" nr="2">

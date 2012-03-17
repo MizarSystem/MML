@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -30,7 +30,7 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="PROB_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FRECHET"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="SEQM_3"/>
@@ -115,14 +115,14 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="80"/>
+<Adjective nr="78"/>
+<Adjective nr="86">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="87">
+<LocusVar nr="1"/>
+</Adjective>
 <Adjective nr="88">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="89">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="90">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -138,7 +138,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="239">
+<Func kind="K" nr="231">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -169,8 +169,8 @@
 <Adjective nr="20" value="false"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="66"/>
-<Adjective nr="72"/>
+<Adjective nr="64"/>
+<Adjective nr="70"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -187,7 +187,7 @@
 <Adjective nr="20" value="false"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="66"/>
+<Adjective nr="64"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -270,7 +270,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="80"/>
+<Adjective nr="78"/>
 </Cluster>
 <Typ kind="M" nr="8">
 <Cluster/>
@@ -300,13 +300,13 @@
 </Func>
 </Func>
 </Adjective>
+<Adjective nr="86">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="87">
+<LocusVar nr="1"/>
+</Adjective>
 <Adjective nr="88">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="89">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="90">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -329,7 +329,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="80"/>
+<Adjective nr="78"/>
 </Cluster>
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="40">
@@ -340,14 +340,14 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="19">
+<Typ kind="M" nr="15">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
-<Adjective nr="80"/>
+<Adjective nr="78"/>
 </Cluster>
 </CCluster>
-</Clusters>
+</Registrations>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -37,7 +37,6 @@
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="PROB_1"/>
 <ArticleID name="LANG1"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
@@ -61,65 +60,65 @@
 <Adjective nr="7">
 <Func kind="K" nr="211">
 <LocusVar nr="1"/>
-<Func kind="K" nr="415"/>
+<Func kind="K" nr="401"/>
 </Func>
-<Func kind="K" nr="415"/>
+<Func kind="K" nr="401"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="211">
 <LocusVar nr="1"/>
-<Func kind="K" nr="415"/>
+<Func kind="K" nr="401"/>
 </Func>
-<Func kind="K" nr="415"/>
+<Func kind="K" nr="401"/>
 </Typ>
-<Typ kind="M" nr="52">
+<Typ kind="M" nr="48">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="414">
+<Func kind="K" nr="400">
 <LocusVar nr="1"/>
-<Func kind="K" nr="415"/>
+<Func kind="K" nr="401"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="82">
-<Func kind="K" nr="412">
+<Func kind="K" nr="398">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
 <Adjective nr="83">
-<Func kind="K" nr="412">
+<Func kind="K" nr="398">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="111">
-<Func kind="K" nr="412">
+<Adjective nr="108">
+<Func kind="K" nr="398">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="112">
-<Func kind="K" nr="412">
+<Adjective nr="109">
+<Func kind="K" nr="398">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="119">
-<Func kind="K" nr="412">
+<Adjective nr="116">
+<Func kind="K" nr="398">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="121">
-<Func kind="K" nr="412">
+<Adjective nr="118">
+<Func kind="K" nr="398">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
 </Cluster>
 </FCluster>
-</Clusters>
+</Registrations>

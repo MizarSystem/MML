@@ -1,6 +1,6 @@
 #!/bin/sh
 
-HEADER_STR="Installation of Mizar System Version 7.2.01 (Linux/FPC) (MML 4.23.889)"
+HEADER_STR="Installation of Mizar System Version 7.3.01 (Linux/FPC) (MML 4.24.889)"
 LDIR=`pwd`
 INSTALL_BIN='/usr/local/bin'
 INSTALL_DOC='/usr/local/doc/mizar'

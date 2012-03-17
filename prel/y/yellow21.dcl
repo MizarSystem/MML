@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
@@ -155,7 +155,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="460">
+<Func kind="K" nr="462">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -170,7 +170,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="460">
+<Func kind="K" nr="462">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -323,7 +323,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="464">
+<Func kind="K" nr="466">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -353,7 +353,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="464">
+<Func kind="K" nr="466">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -361,14 +361,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="464">
+<Func kind="K" nr="466">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="284">
-<Func kind="K" nr="464">
+<Func kind="K" nr="285">
+<Func kind="K" nr="466">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
@@ -388,7 +388,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="465">
+<Func kind="K" nr="467">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -396,14 +396,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="465">
+<Func kind="K" nr="467">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="284">
-<Func kind="K" nr="465">
+<Func kind="K" nr="285">
+<Func kind="K" nr="467">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
@@ -423,7 +423,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="466">
+<Func kind="K" nr="468">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -431,14 +431,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="466">
+<Func kind="K" nr="468">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="284">
-<Func kind="K" nr="466">
+<Func kind="K" nr="285">
+<Func kind="K" nr="468">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
@@ -783,4 +783,4 @@
 <Adjective nr="203"/>
 </Cluster>
 </CCluster>
-</Clusters>
+</Registrations>

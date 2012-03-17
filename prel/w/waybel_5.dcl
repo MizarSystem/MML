@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Clusters>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XBOOLE_0"/>
@@ -91,7 +91,7 @@
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
-<Func kind="K" nr="227">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -102,7 +102,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="23">
-<Func kind="K" nr="344">
+<Func kind="K" nr="346">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -124,7 +124,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="274">
+<Func kind="K" nr="275">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -153,7 +153,7 @@
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
-<Func kind="K" nr="227">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 <Func kind="U" nr="1">
 <LocusVar nr="3"/>
@@ -162,7 +162,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="23">
-<Func kind="K" nr="347">
+<Func kind="K" nr="349">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
@@ -191,7 +191,7 @@
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
-<Func kind="K" nr="227">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 <Func kind="U" nr="1">
 <LocusVar nr="3"/>
@@ -200,7 +200,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="23">
-<Func kind="K" nr="348">
+<Func kind="K" nr="350">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
@@ -231,7 +231,7 @@
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
-<Func kind="K" nr="227">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -314,4 +314,4 @@
 <Adjective nr="169"/>
 </Cluster>
 </CCluster>
-</Clusters>
+</Registrations>
