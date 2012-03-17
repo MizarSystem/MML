@@ -15,7 +15,7 @@ environ
  constructors ABSVALUE, REAL_1, SEQ_2, PCOMPS_1, NAT_1, TBSP_1, BHSP_3,
       MEMBERED, XBOOLE_0;
  clusters METRIC_1, STRUCT_0, XREAL_0, RELSET_1, SEQM_3, ARYTM_3, SEQ_1,
-      MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+      MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2, TBSP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -80,7 +80,8 @@ canceled;
 theorem :: METRIC_6:10
   for x ex S st rng S = {x};
 
-definition let X; let S; let x;
+definition let X be non empty MetrStruct; let S be sequence of X;
+           let x be Element of X;
  canceled 3;
 
   pred S is_convergent_in_metrspace_to x means
@@ -89,18 +90,19 @@ definition let X; let S; let x;
             dist(S.n,x) < r;
 end;
 
-definition let X; let V be Subset of X;
-  redefine canceled;
+definition let X be symmetric triangle (non empty MetrStruct);
+           let V be Subset of X;
+  canceled;
 
-attr V is bounded means
+  redefine attr V is bounded means
 :: METRIC_6:def 10
-      ex r,x st 0 < r & V c= Ball(x,r);
+      ex r being Real, x being Element of X st 0 < r & V c= Ball(x,r);
 end;
 
-definition let X; let S;
+definition let X be non empty MetrStruct; let S be sequence of X;
   attr S is bounded means
 :: METRIC_6:def 11
-    ex r,x st 0 < r & rng S c= Ball(x,r);
+    ex r being Real, x being Element of X st 0 < r & rng S c= Ball(x,r);
 end;
 
 definition let X; let V; let S;
@@ -137,13 +139,6 @@ definition let X; let S; let T;
     for n holds it.n = dist(S.n,T.n);
 end;
 
-definition let X; let S;
-  assume  S is convergent;
-  func lim S -> Element of X means
-:: METRIC_6:def 16
-    for r st 0 < r ex m st for n st m <= n holds dist(S.n,it) < r;
-end;
-
 canceled 3;
 
 theorem :: METRIC_6:26
@@ -167,11 +162,11 @@ theorem :: METRIC_6:30
 theorem :: METRIC_6:31
    (for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S)
            implies
-        (for V st (x in V & V in Family_open_set X) holds
+        (for V st x in V & V in Family_open_set X holds
         V contains_almost_all_sequence S);
 
 theorem :: METRIC_6:32
-   (for V st (x in V & V in Family_open_set X) holds
+   (for V st x in V & V in Family_open_set X holds
         V contains_almost_all_sequence S) implies
         S is_convergent_in_metrspace_to x;
 
@@ -210,17 +205,16 @@ theorem :: METRIC_6:40
 canceled;
 
 theorem :: METRIC_6:42
-    S is constant implies S is Cauchy;
+  S is constant implies S is Cauchy;
 
 theorem :: METRIC_6:43
-    S is convergent implies S is bounded;
+  S is convergent implies S is bounded;
 
 theorem :: METRIC_6:44
   S is Cauchy implies S is bounded;
 
 registration let M be non empty MetrSpace;
   cluster constant -> convergent sequence of M;
-  cluster convergent -> Cauchy sequence of M;
   cluster Cauchy -> bounded sequence of M;
 end;
 

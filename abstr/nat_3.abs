@@ -1,0 +1,482 @@
+:: Fundamental {T}heorem of {A}rithmetic
+::  by Artur Korni{\l}owicz and Piotr Rudnicki
+:: 
+:: Received February 13, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary GROUP_1, ARYTM_3, ORDINAL2, ARYTM, POLYNOM1, FILTER_0, FUNCT_1,
+      FINSEQ_1, ALGSEQ_1, CARD_3, FINSET_1, ARYTM_1, BOOLE, SEQM_3, PBOOLE,
+      NAT_1, RELAT_1, NAT_LAT, FUNCOP_1, CARD_1, SEQ_1, REALSET1, SQUARE_1,
+      FINSEQ_2, UPROOTS, VECTSP_1, FUNCT_2, SETWISEO, SGRAPH1, NAT_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, REALSET1, ORDINAL1, ORDINAL2,
+      CARD_1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, NAT_1, INT_2, NEWTON,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, SEQ_1, SEQM_3, NAT_LAT, PBOOLE,
+      POLYNOM1, POLYNOM2, RVSUM_1, WSIERP_1, BINARITH, TREES_4, UPROOTS,
+      PRE_CIRC, VECTSP_1, SETWOP_2;
+ constructors POLYNOM2, WSIERP_1, FINSOP_1, EULER_2, NAT_LAT, REAL_1, BINARITH,
+      FINSEQOP, SEQ_2, DOMAIN_1, UPROOTS, PRE_CIRC, FACIRC_1, SETWISEO,
+      BINOP_1;
+ clusters XREAL_0, NAT_1, INT_1, POLYNOM1, RELSET_1, CARD_5, MEMBERED,
+      BINARITH, PRE_CIRC, SEQ_1, RELAT_1, TEX_2, FINSET_1, CIRCCMB3, XCMPLX_0,
+      FUNCT_1, NEWTON;
+ requirements NUMERALS, SUBSET, ARITHM, REAL, BOOLE;
+
+
+begin :: Preliminaries
+
+reserve a, b, n for natural number,
+        r for Real,
+        f for FinSequence of REAL;
+
+registration
+  let X be empty set;
+  cluster card X -> empty;
+end;
+
+registration
+  cluster natural-yielding -> real-yielding Relation;
+end;
+
+registration :: cirrcmb3
+  cluster natural-yielding FinSequence;
+ end;
+
+registration
+  let a be non empty natural number;
+  let b be natural number;
+  cluster a |^ b -> non empty;
+end;
+
+registration
+  cluster -> non empty Prime;
+end;
+
+reserve p for Prime;
+
+registration
+  cluster SetPrimes -> infinite;
+end;
+
+theorem :: NAT_3:1
+for a, b, c, d being natural number st a divides c & b divides d
+ holds a*b divides c*d;
+
+theorem :: NAT_3:2
+1 < a implies b <= a |^ b;
+
+theorem :: NAT_3:3
+a <> 0 implies n divides n |^ a;
+
+theorem :: NAT_3:4
+for i, j, m, n being natural number
+ st i < j & m |^ j divides n holds m |^ (i+1) divides n;
+
+theorem :: NAT_3:5
+p divides a |^ b implies p divides a;
+
+theorem :: NAT_3:6
+for a being Prime st a divides p |^ b holds a = p;
+
+theorem :: NAT_3:7
+for f being FinSequence of NAT st a in rng f holds a divides Product f;
+
+theorem :: NAT_3:8
+for f being FinSequence of SetPrimes st p divides Product f holds p in rng f;
+
+:: Power
+
+definition
+  let f be real-yielding FinSequence;
+  let a be natural number;
+  func f |^ a -> FinSequence means
+:: NAT_3:def 1
+  len it = len f &
+  for i being set st i in dom it holds it.i = f.i |^ a;
+end;
+
+registration
+  let f be real-yielding FinSequence;
+  let a be natural number;
+  cluster f |^ a -> real-yielding;
+end;
+
+registration
+  let f be natural-yielding FinSequence;
+  let a be natural number;
+  cluster f |^ a -> natural-yielding;
+end;
+
+definition
+  let f be FinSequence of REAL;
+  let a be natural number;
+  redefine func f |^ a -> FinSequence of REAL;
+end;
+
+definition
+  let f be FinSequence of NAT;
+  let a be natural number;
+  redefine func f |^ a -> FinSequence of NAT;
+end;
+
+theorem :: NAT_3:9
+f |^ 0 = (len f) |-> 1;
+
+theorem :: NAT_3:10
+f |^ 1 = f;
+
+theorem :: NAT_3:11
+<*>REAL |^ a = <*>REAL;
+
+theorem :: NAT_3:12
+<*r*>|^a = <*r|^a*>;
+
+theorem :: NAT_3:13
+(f^<*r*>) |^ a = (f|^a)^(<*r*>|^a);
+
+theorem :: NAT_3:14
+Product (f|^(b+1)) = Product (f|^b) * Product f;
+
+theorem :: NAT_3:15
+Product (f|^a) = (Product f) |^ a;
+
+begin :: More about bags
+
+registration :: cluster natural-yielding FinSequence;
+   let X be set;
+   cluster natural-yielding finite-support ManySortedSet of X;
+end;
+
+definition
+  let X be set, b be real-yielding ManySortedSet of X, a be natural number;
+  func a * b -> ManySortedSet of X means
+:: NAT_3:def 2
+  for i being set holds it.i = a * b.i;
+end;
+
+registration
+  let X be set, b be real-yielding ManySortedSet of X, a be natural number;
+  cluster a * b -> real-yielding;
+end;
+
+registration
+  let X be set, b be natural-yielding ManySortedSet of X, a be natural number;
+  cluster a * b -> natural-yielding;
+end;
+
+registration
+  let X be set, b be real-yielding ManySortedSet of X;
+  cluster support (0*b) -> empty;
+end;
+
+theorem :: NAT_3:16
+for X being set, b being real-yielding ManySortedSet of X
+ st a <> 0 holds support b = support (a*b);
+
+registration
+  let X be set, b be real-yielding finite-support ManySortedSet of X,
+      a be natural number;
+  cluster a * b -> finite-support;
+end;
+
+definition
+  let X be set; let b1, b2 be real-yielding ManySortedSet of X;
+  func min(b1,b2) -> ManySortedSet of X means
+:: NAT_3:def 3
+  for i being set holds (b1.i <= b2.i implies it.i = b1.i) &
+                        (b1.i > b2.i implies it.i = b2.i);
+end;
+
+registration
+  let X be set; let b1, b2 be real-yielding ManySortedSet of X;
+  cluster min(b1,b2) -> real-yielding;
+end;
+
+registration
+  let X be set; let b1, b2 be natural-yielding ManySortedSet of X;
+  cluster min(b1,b2) -> natural-yielding;
+end;
+
+theorem :: NAT_3:17
+for X being set, b1, b2 being real-yielding finite-support ManySortedSet of X
+  holds support min(b1,b2) c= support b1 \/ support b2;
+
+registration
+  let X be set; let b1, b2 be real-yielding finite-support ManySortedSet of X;
+  cluster min(b1,b2) -> finite-support;
+end;
+
+definition
+  let X be set; let b1, b2 be real-yielding ManySortedSet of X;
+  func max(b1,b2) -> ManySortedSet of X means
+:: NAT_3:def 4
+  for i being set holds (b1.i <= b2.i implies it.i = b2.i) &
+                        (b1.i > b2.i implies it.i = b1.i);
+end;
+
+registration
+  let X be set; let b1, b2 be real-yielding ManySortedSet of X;
+  cluster max(b1,b2) -> real-yielding;
+end;
+
+registration
+  let X be set; let b1, b2 be natural-yielding ManySortedSet of X;
+  cluster max(b1,b2) -> natural-yielding;
+end;
+
+theorem :: NAT_3:18
+for X being set, b1, b2 being real-yielding finite-support ManySortedSet of X
+  holds support max(b1,b2) c= support b1 \/ support b2;
+
+registration
+  let X be set; let b1, b2 be real-yielding finite-support ManySortedSet of X;
+  cluster max(b1,b2) -> finite-support;
+end;
+
+definition
+  let A be set, b be bag of A;
+  func Product b -> natural number means
+:: NAT_3:def 5
+  ex f being FinSequence of NAT st it = Product f & f = b*canFS(support b);
+end;
+
+definition
+  let A be set, b be bag of A;
+  redefine func Product b -> Nat;
+end;
+
+theorem :: NAT_3:19
+for X being set, a, b being bag of X
+ st support a misses support b holds Product (a+b) = (Product a) * Product b;
+
+definition
+  let X be set, b be real-yielding ManySortedSet of X,
+      n be non empty natural number;
+  func b |^ n -> ManySortedSet of X means
+:: NAT_3:def 6
+  support it = support b &
+  for i being set holds it.i = b.i |^ n;
+end;
+
+registration
+  let X be set, b be natural-yielding ManySortedSet of X,
+      n be non empty natural number;
+  cluster b |^ n -> natural-yielding;
+end;
+
+registration
+  let X be set, b be real-yielding finite-support ManySortedSet of X,
+      n be non empty natural number;
+  cluster b |^ n -> finite-support;
+end;
+
+theorem :: NAT_3:20
+for A being set holds Product EmptyBag A = 1;
+
+begin :: Multiplicity of a divisor
+
+definition
+  let n, d be natural number such that
+ d <> 1 and
+ n <> 0;
+  func d |-count n -> Nat means
+:: NAT_3:def 7
+  d |^ it divides n & not d |^ (it+1) divides n;
+end;
+
+theorem :: NAT_3:21
+n <> 1 implies n |-count 1 = 0;
+
+theorem :: NAT_3:22
+1 < n implies n |-count n = 1;
+
+theorem :: NAT_3:23
+b <> 0 & b < a & a <> 1 implies a |-count b = 0;
+
+theorem :: NAT_3:24
+a <> 1 & a <> p implies a |-count p = 0;
+
+theorem :: NAT_3:25
+1 < b implies b |-count (b|^a) = a;
+
+theorem :: NAT_3:26
+b <> 1 & a <> 0 & b divides b |^ (b |-count a) implies b divides a;
+
+theorem :: NAT_3:27
+b <> 1 implies (a <> 0 & b |-count a = 0 iff not b divides a);
+
+theorem :: NAT_3:28
+for a, b being non empty natural number
+  holds p |-count (a*b) = (p |-count a) + (p |-count b);
+
+theorem :: NAT_3:29
+for a, b being non empty natural number
+  holds p |^ (p |-count (a*b)) = (p |^ (p |-count a)) * (p |^ (p |-count b));
+
+theorem :: NAT_3:30
+for a, b being non empty natural number
+ st b divides a holds p |-count b <= p |-count a;
+
+theorem :: NAT_3:31
+for a, b being non empty natural number
+ st b divides a holds p |-count (a div b) = (p |-count a) -' (p |-count b);
+
+theorem :: NAT_3:32
+for a being non empty natural number
+ holds p |-count (a|^b) = b * (p |-count a);
+
+begin :: Exponents in prime-power factorization
+
+definition
+  let n be natural number;
+  func prime_exponents n -> ManySortedSet of SetPrimes means
+:: NAT_3:def 8
+  for p being Prime holds it.p = p |-count n;
+end;
+
+notation
+  let n be natural number;
+  synonym pfexp n for prime_exponents n; :: for prime factors exponents
+end;
+
+theorem :: NAT_3:33
+for x being set st x in dom pfexp n holds x is Prime;
+
+theorem :: NAT_3:34
+for x being set st x in support pfexp n holds x is Prime;
+
+theorem :: NAT_3:35
+a > n & n <> 0 implies (pfexp n).a = 0;
+
+registration
+  let n be natural number;
+  cluster pfexp n -> natural-yielding;
+end;
+
+theorem :: NAT_3:36
+a in support pfexp b implies a divides b;
+
+theorem :: NAT_3:37
+b is non empty & a is Prime & a divides b implies a in support pfexp b;
+
+registration
+  let n be non empty natural number;
+  cluster pfexp n -> finite-support;
+end;
+
+theorem :: NAT_3:38
+for a being non empty natural number st p divides a holds (pfexp a).p <> 0;
+
+theorem :: NAT_3:39
+pfexp 1 = EmptyBag SetPrimes;
+
+registration
+  cluster support pfexp 1 -> empty;
+end;
+
+theorem :: NAT_3:40
+(pfexp (p|^a)).p = a;
+
+theorem :: NAT_3:41
+(pfexp p).p = 1;
+
+theorem :: NAT_3:42
+a <> 0 implies support pfexp (p|^a) = {p};
+
+theorem :: NAT_3:43
+support pfexp p = {p};
+
+registration
+  let p be Prime;
+  let a be non empty natural number;
+  cluster support pfexp (p|^a) -> non empty trivial;
+end;
+
+registration
+  let p be Prime;
+  cluster support pfexp p -> non empty trivial;
+end;
+
+theorem :: NAT_3:44
+for a, b being non empty Nat
+ st a,b are_relative_prime holds support pfexp a misses support pfexp b;
+
+theorem :: NAT_3:45
+for a,b being non empty natural number
+  holds support pfexp a c= support pfexp (a*b);
+
+theorem :: NAT_3:46
+for a, b being non empty Nat
+ holds support pfexp (a*b) = support pfexp a \/ support pfexp b;
+
+theorem :: NAT_3:47
+for a, b being non empty Nat st a,b are_relative_prime
+ holds card support pfexp (a*b) =  card support pfexp a + card support pfexp b;
+
+theorem :: NAT_3:48
+for a, b being non empty natural number
+ holds support pfexp a = support pfexp (a|^b);
+
+  reserve n, m for non empty natural number;
+
+theorem :: NAT_3:49
+pfexp (n*m) = pfexp n + pfexp m;
+
+theorem :: NAT_3:50
+m divides n implies pfexp (n div m) = pfexp n -' pfexp m;
+
+theorem :: NAT_3:51
+pfexp (n|^a) = a * pfexp n;
+
+theorem :: NAT_3:52
+support pfexp n = {} implies n = 1;
+
+theorem :: NAT_3:53
+for m, n being non empty Nat holds pfexp (n hcf m) = min(pfexp n, pfexp m);
+
+theorem :: NAT_3:54
+for m, n being non empty Nat holds pfexp (n lcm m) = max(pfexp n, pfexp m);
+
+begin :: Prime-power factorization
+
+definition
+  let n be non empty natural number;
+  func prime_factorization n -> ManySortedSet of SetPrimes means
+:: NAT_3:def 9
+  support it = support pfexp n &
+  for p being natural number st p in support pfexp n holds
+    it.p = p |^ (p |-count n);
+end;
+
+notation
+  let n be non empty natural number;
+  synonym ppf n for prime_factorization n; :: for prime-power factorization
+end;
+
+registration
+  let n be non empty natural number;
+  cluster ppf n -> natural-yielding finite-support;
+end;
+
+theorem :: NAT_3:55
+p |-count n = 0 implies (ppf n).p = 0;
+
+theorem :: NAT_3:56
+p |-count n <> 0 implies (ppf n).p = p |^ (p |-count n);
+
+theorem :: NAT_3:57
+support ppf n = {} implies n = 1;
+
+theorem :: NAT_3:58
+for a, b being non empty Nat st a, b are_relative_prime
+ holds ppf (a*b) = ppf a + ppf b;
+
+theorem :: NAT_3:59
+(ppf (p |^ n)).p = p |^ n;
+
+theorem :: NAT_3:60
+ppf (n|^m) = (ppf n) |^ m;
+
+theorem :: NAT_3:61
+Product ppf n = n;

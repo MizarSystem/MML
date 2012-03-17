@@ -1,0 +1,552 @@
+:: Complex {B}anach Space of Bounded Linear Operators
+::  by Noboru Endou
+:: 
+:: Received February 24, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, NORMSP_1, RLVECT_1, QC_LANG1, FUNCT_1, ARYTM, ARYTM_1,
+      ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, GRCAT_1, UNIALG_1, LATTICES,
+      FUNCOP_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SEQM_3, BHSP_3, RSSPACE,
+      RSSPACE3, PARTFUN1, LOPBAN_1, XCMPLX_0, COMPLEX1, CLVECT_1, CFUNCT_1,
+      CLOPBAN1, CSSPACE3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, STRUCT_0, XCMPLX_0,
+      XREAL_0, ORDINAL1, NUMBERS, ARYTM_0, REAL_1, NAT_1, PSCOMP_1, ALG_1,
+      RLVECT_1, FRAENKEL, ABSVALUE, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
+      FUNCSDOM, COMPLEX1, CFUNCT_1, CLVECT_1, CSSPACE, CSSPACE3, LOPBAN_1;
+ constructors FUNCT_3, ARYTM_0, REAL_1, NAT_1, DOMAIN_1, PSCOMP_1, FUNCSDOM,
+      PREPOWER, PARTFUN1, COMPLEX1, LOPBAN_1, CSSPACE3;
+ clusters SUBSET_1, RELSET_1, STRUCT_0, FUNCOP_1, RLVECT_1, XREAL_0, MEMBERED,
+      SEQ_1, CLVECT_1, CSSPACE3;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Complex Vector Space of Operators
+
+definition
+  let X be set;
+  let Y be non empty set;
+  let F be Function of [:COMPLEX, Y:], Y;
+  let c be complex number, f be Function of X, Y;
+  redefine func F[;](c,f) -> Element of Funcs(X, Y);
+end;
+
+theorem :: CLOPBAN1:1
+for X be non empty set, Y be ComplexLinearSpace
+ ex MULT be Function of
+  [:COMPLEX, Funcs(X,the carrier of Y):], Funcs(X,the carrier of Y) st
+    for c be Complex, f be Element of Funcs(X,the carrier of Y) holds
+     for s be Element of X holds (MULT.[c,f]).s = c*(f.s);
+
+definition
+  let X be non empty set;
+  let Y be ComplexLinearSpace;
+  func FuncExtMult(X,Y) -> Function of [:COMPLEX,Funcs(X,the carrier of Y):],
+     Funcs(X,the carrier of Y) means
+:: CLOPBAN1:def 1
+     for c being Complex,
+    f being Element of Funcs(X,the carrier of Y),
+      x being Element of X holds
+      (it.[c,f]).x = c*(f.x);
+end;
+
+reserve X,A,B for non empty set;
+reserve Y for ComplexLinearSpace;
+reserve f,g,h for Element of Funcs(X,the carrier of Y);
+
+theorem :: CLOPBAN1:2
+for x being Element of X holds (FuncZero(X,Y)).x = 0.Y;
+
+reserve a,b for Complex;
+
+theorem :: CLOPBAN1:3
+h = (FuncExtMult(X,Y)).[a,f] iff
+ for x being Element of X holds h.x = a*(f.x);
+
+reserve u,v,w for VECTOR of CLSStruct(#Funcs(X,the carrier of Y),
+            (FuncZero(X,Y)),FuncAdd(X,Y),FuncExtMult(X,Y)#);
+
+theorem :: CLOPBAN1:4
+(FuncAdd(X,Y)).(f,g) = (FuncAdd(X,Y)).(g,f);
+
+theorem :: CLOPBAN1:5
+(FuncAdd(X,Y)).(f,(FuncAdd(X,Y)).(g,h))
+  = (FuncAdd(X,Y)).((FuncAdd(X,Y)).(f,g),h);
+
+theorem :: CLOPBAN1:6
+(FuncAdd(X,Y)).(FuncZero(X,Y),f) = f;
+
+theorem :: CLOPBAN1:7
+(FuncAdd(X,Y)).(f,(FuncExtMult(X,Y)).[-1r,f]) = FuncZero(X,Y);
+
+theorem :: CLOPBAN1:8
+(FuncExtMult(X,Y)).[1r,f] = f;
+
+theorem :: CLOPBAN1:9
+(FuncExtMult(X,Y)).[a,(FuncExtMult(X,Y)).[b,f]] = (FuncExtMult(X,Y)).[a*b,f];
+
+theorem :: CLOPBAN1:10
+(FuncAdd(X,Y)).((FuncExtMult(X,Y)).[a,f],(FuncExtMult(X,Y)).[b,f])
+  = (FuncExtMult(X,Y)).[a+b,f];
+
+theorem :: CLOPBAN1:11
+CLSStruct(#Funcs(X,the carrier of Y),(FuncZero(X,Y)),FuncAdd(X,Y),
+  FuncExtMult(X,Y)#) is ComplexLinearSpace;
+
+definition
+  let X be non empty set;
+  let Y be ComplexLinearSpace;
+  func ComplexVectSpace(X,Y) -> ComplexLinearSpace equals
+:: CLOPBAN1:def 2
+   CLSStruct(#Funcs(X,the carrier of Y),
+              (FuncZero(X,Y)),FuncAdd(X,Y),FuncExtMult(X,Y)#);
+end;
+
+registration
+  let X be non empty set;
+  let Y be ComplexLinearSpace;
+  cluster ComplexVectSpace(X,Y) -> strict;
+end;
+
+registration
+  let X be non empty set;
+  let Y be ComplexLinearSpace;
+  cluster -> Function-like Relation-like VECTOR of ComplexVectSpace(X,Y);
+end;
+
+definition
+ let X be non empty set;
+ let Y be ComplexLinearSpace;
+ let f be VECTOR of ComplexVectSpace(X,Y);
+ let x be Element of X;
+ redefine func f.x -> VECTOR of Y;
+end;
+
+theorem :: CLOPBAN1:12
+for X be non empty set, Y be ComplexLinearSpace,
+  f,g,h be VECTOR of ComplexVectSpace(X,Y) holds
+    h = f+g iff for x be Element of X holds h.x = f.x + g.x;
+
+theorem :: CLOPBAN1:13
+for X be non empty set, Y be ComplexLinearSpace,
+ f,h be VECTOR of ComplexVectSpace(X,Y), c be Complex holds
+  h = c*f iff for x be Element of X holds h.x = c * f.x;
+
+theorem :: CLOPBAN1:14
+for X be non empty set, Y be ComplexLinearSpace holds
+ 0.ComplexVectSpace(X,Y) = X --> 0.Y;
+
+begin :: Complex Vector Space of Linear Operators
+
+definition
+  let X be non empty CLSStruct;
+  let Y be non empty LoopStr;
+  let IT be Function of X, Y;
+  attr IT is additive means
+:: CLOPBAN1:def 3
+  for x,y being VECTOR of X holds IT.(x+y) = IT.x+IT.y;
+end;
+
+definition
+  let X, Y be non empty CLSStruct;
+  let IT be Function of X,Y;
+  attr IT is homogeneous means
+:: CLOPBAN1:def 4
+   for x being VECTOR of X, r being Complex holds IT.(r*x) = r*IT.x;
+end;
+
+registration
+  let X be non empty CLSStruct;
+  let Y be ComplexLinearSpace;
+  cluster additive homogeneous Function of X,Y;
+end;
+
+definition
+  let X, Y be ComplexLinearSpace;
+  mode LinearOperator of X,Y is additive homogeneous Function of X,Y;
+end;
+
+definition
+  let X, Y be ComplexLinearSpace;
+  func LinearOperators(X,Y) -> Subset of
+     ComplexVectSpace(the carrier of X, Y) means
+:: CLOPBAN1:def 5
+   for x being set holds x in it
+     iff
+   x is LinearOperator of X,Y;
+end;
+
+registration
+  let X, Y be ComplexLinearSpace;
+  cluster LinearOperators(X,Y)  -> non empty;
+end;
+
+theorem :: CLOPBAN1:15
+for X,Y be ComplexLinearSpace holds LinearOperators(X,Y) is lineary-closed;
+
+theorem :: CLOPBAN1:16
+for X,Y be ComplexLinearSpace holds
+ CLSStruct (# LinearOperators(X,Y),
+        Zero_(LinearOperators(X,Y),ComplexVectSpace(the carrier of X,Y)),
+        Add_(LinearOperators(X,Y), ComplexVectSpace(the carrier of X,Y)),
+        Mult_(LinearOperators(X,Y), ComplexVectSpace(the carrier of X,Y)) #)
+  is Subspace of ComplexVectSpace(the carrier of X,Y);
+
+registration
+  let X,Y be ComplexLinearSpace;
+  cluster CLSStruct (# LinearOperators(X,Y),
+        Zero_(LinearOperators(X,Y),ComplexVectSpace(the carrier of X,Y)),
+        Add_(LinearOperators(X,Y), ComplexVectSpace(the carrier of X,Y)),
+        Mult_(LinearOperators(X,Y), ComplexVectSpace(the carrier of X,Y)) #)
+ -> Abelian add-associative right_zeroed right_complementable
+        ComplexLinearSpace-like;
+end;
+
+theorem :: CLOPBAN1:17
+for X,Y be ComplexLinearSpace holds
+ CLSStruct (# LinearOperators(X,Y),
+           Zero_(LinearOperators(X,Y),ComplexVectSpace(the carrier of X,Y)),
+           Add_(LinearOperators(X,Y), ComplexVectSpace(the carrier of X,Y)),
+           Mult_(LinearOperators(X,Y), ComplexVectSpace(the carrier of X,Y)) #)
+  is ComplexLinearSpace;
+
+definition
+  let X, Y be ComplexLinearSpace;
+  func C_VectorSpace_of_LinearOperators(X,Y)
+        -> ComplexLinearSpace equals
+:: CLOPBAN1:def 6
+  CLSStruct (# LinearOperators(X,Y),
+       Zero_(LinearOperators(X,Y),ComplexVectSpace(the carrier of X,Y)),
+       Add_(LinearOperators(X,Y), ComplexVectSpace(the carrier of X,Y)),
+       Mult_(LinearOperators(X,Y), ComplexVectSpace(the carrier of X,Y)) #);
+end;
+
+registration
+  let X, Y be ComplexLinearSpace;
+  cluster C_VectorSpace_of_LinearOperators(X,Y) -> strict;
+end;
+
+registration
+ let X,Y be ComplexLinearSpace;
+ cluster -> Function-like Relation-like Element of
+            C_VectorSpace_of_LinearOperators(X,Y);
+end;
+
+definition
+ let X,Y be ComplexLinearSpace;
+ let f be Element of C_VectorSpace_of_LinearOperators(X,Y);
+ let v be VECTOR of X;
+ redefine func f.v -> VECTOR of Y;
+end;
+
+theorem :: CLOPBAN1:18
+for X,Y be ComplexLinearSpace,
+  f,g,h be VECTOR of C_VectorSpace_of_LinearOperators(X,Y) holds
+    h = f+g iff for x be VECTOR of X holds h.x = f.x + g.x;
+
+theorem :: CLOPBAN1:19
+for X,Y be ComplexLinearSpace,
+ f,h be VECTOR of C_VectorSpace_of_LinearOperators(X,Y),
+  c be Complex holds
+    h = c*f iff for x be VECTOR of X holds h.x = c * f.x;
+
+theorem :: CLOPBAN1:20
+for X,Y be ComplexLinearSpace holds
+  0.C_VectorSpace_of_LinearOperators(X,Y) = (the carrier of X) -->0.Y;
+
+theorem :: CLOPBAN1:21
+for X,Y be ComplexLinearSpace holds
+ (the carrier of X) --> 0.Y is LinearOperator of X,Y;
+
+begin :: Complex Normed Linear Space of Bounded Linear Operators
+
+theorem :: CLOPBAN1:22
+for X be ComplexNormSpace, seq be sequence of X, g be Point of X holds
+  seq is convergent & lim seq = g implies
+   ||.seq.|| is convergent & lim ||.seq.|| = ||.g.||;
+
+definition
+  let X, Y be ComplexNormSpace;
+  let IT be LinearOperator of X,Y;
+  attr IT is bounded means
+:: CLOPBAN1:def 7
+  ex K being Real st 0 <= K &
+   for x being VECTOR of X holds
+       ||. IT.x .|| <= K * ||. x .||;
+end;
+
+theorem :: CLOPBAN1:23
+for X,Y be ComplexNormSpace holds
+  for f be LinearOperator of X,Y st (for x be VECTOR of X holds f.x=0.Y)
+    holds f is bounded;
+
+registration
+  let X, Y be ComplexNormSpace;
+  cluster bounded LinearOperator of X,Y;
+end;
+
+definition
+  let X,Y be ComplexNormSpace;
+  func BoundedLinearOperators(X,Y) ->
+    Subset of C_VectorSpace_of_LinearOperators(X,Y) means
+:: CLOPBAN1:def 8
+   for x being set holds x in it
+     iff
+   x is bounded LinearOperator of X,Y;
+end;
+
+registration
+  let X, Y be ComplexNormSpace;
+  cluster BoundedLinearOperators(X,Y) -> non empty;
+end;
+
+theorem :: CLOPBAN1:24
+for X,Y be ComplexNormSpace holds
+  BoundedLinearOperators(X,Y) is lineary-closed;
+
+theorem :: CLOPBAN1:25
+for X,Y be ComplexNormSpace holds
+  CLSStruct (# BoundedLinearOperators(X,Y),
+    Zero_(BoundedLinearOperators(X,Y), C_VectorSpace_of_LinearOperators(X,Y)),
+    Add_(BoundedLinearOperators(X,Y), C_VectorSpace_of_LinearOperators(X,Y)),
+    Mult_(BoundedLinearOperators(X,Y),C_VectorSpace_of_LinearOperators(X,Y)) #)
+   is Subspace of C_VectorSpace_of_LinearOperators(X,Y);
+
+registration
+  let X, Y be ComplexNormSpace;
+cluster
+  CLSStruct (# BoundedLinearOperators(X,Y),
+    Zero_(BoundedLinearOperators(X,Y), C_VectorSpace_of_LinearOperators(X,Y)),
+    Add_(BoundedLinearOperators(X,Y), C_VectorSpace_of_LinearOperators(X,Y)),
+    Mult_(BoundedLinearOperators(X,Y),C_VectorSpace_of_LinearOperators(X,Y)) #)
+ -> Abelian add-associative right_zeroed right_complementable
+        ComplexLinearSpace-like;
+end;
+
+theorem :: CLOPBAN1:26
+for X, Y be ComplexNormSpace holds
+  CLSStruct (# BoundedLinearOperators(X,Y),
+   Zero_(BoundedLinearOperators(X,Y), C_VectorSpace_of_LinearOperators(X,Y)),
+   Add_(BoundedLinearOperators(X,Y), C_VectorSpace_of_LinearOperators(X,Y)),
+   Mult_(BoundedLinearOperators(X,Y),C_VectorSpace_of_LinearOperators(X,Y)) #)
+  is ComplexLinearSpace;
+
+definition
+let X, Y be ComplexNormSpace;
+func C_VectorSpace_of_BoundedLinearOperators(X,Y)
+         -> ComplexLinearSpace equals
+:: CLOPBAN1:def 9
+ CLSStruct (# BoundedLinearOperators(X,Y),
+  Zero_(BoundedLinearOperators(X,Y), C_VectorSpace_of_LinearOperators(X,Y)),
+  Add_(BoundedLinearOperators(X,Y), C_VectorSpace_of_LinearOperators(X,Y)),
+  Mult_(BoundedLinearOperators(X,Y), C_VectorSpace_of_LinearOperators(X,Y)) #);
+end;
+
+registration
+  let X,Y be ComplexNormSpace;
+  cluster C_VectorSpace_of_BoundedLinearOperators(X,Y) -> strict;
+end;
+
+registration
+ let X,Y be ComplexNormSpace;
+ cluster -> Function-like Relation-like Element of
+            C_VectorSpace_of_BoundedLinearOperators(X,Y);
+end;
+
+definition
+ let X,Y be ComplexNormSpace;
+ let f be Element of C_VectorSpace_of_BoundedLinearOperators(X,Y);
+ let v be VECTOR of X;
+ redefine func f.v -> VECTOR of Y;
+end;
+
+theorem :: CLOPBAN1:27
+for X,Y be ComplexNormSpace,
+  f,g,h be VECTOR of C_VectorSpace_of_BoundedLinearOperators(X,Y) holds
+    h = f+g iff for x be VECTOR of X holds h.x = f.x + g.x;
+
+theorem :: CLOPBAN1:28
+for X,Y be ComplexNormSpace,
+  f,h be VECTOR of C_VectorSpace_of_BoundedLinearOperators(X,Y),
+   c be Complex holds
+    h = c*f iff for x be VECTOR of X holds h.x = c * f.x;
+
+theorem :: CLOPBAN1:29
+for X,Y be ComplexNormSpace holds
+  0.C_VectorSpace_of_BoundedLinearOperators(X,Y) = (the carrier of X) --> 0.Y;
+
+definition
+  let X, Y be ComplexNormSpace;
+  let f be set such that
+  f in BoundedLinearOperators(X,Y);
+  func modetrans(f,X,Y) -> bounded LinearOperator of X,Y equals
+:: CLOPBAN1:def 10
+    f;
+end;
+
+definition
+   let X, Y be ComplexNormSpace;
+   let u be LinearOperator of X,Y;
+   func PreNorms(u) -> non empty Subset of REAL equals
+:: CLOPBAN1:def 11
+  {||.u.t.|| where t is VECTOR of X : ||.t.|| <= 1 };
+end;
+
+theorem :: CLOPBAN1:30
+for X,Y be ComplexNormSpace, g be bounded LinearOperator of X,Y holds
+  PreNorms(g) is non empty bounded_above;
+
+theorem :: CLOPBAN1:31
+for X,Y be ComplexNormSpace, g be LinearOperator of X,Y holds
+  g is bounded iff PreNorms(g) is bounded_above;
+
+theorem :: CLOPBAN1:32
+for X,Y be ComplexNormSpace
+  ex NORM be Function of BoundedLinearOperators(X,Y),REAL st
+    for f be set st f in BoundedLinearOperators(X,Y) holds
+      NORM.f = sup PreNorms(modetrans(f,X,Y));
+
+definition
+   let X, Y be ComplexNormSpace;
+   func BoundedLinearOperatorsNorm(X,Y)
+     -> Function of BoundedLinearOperators(X,Y), REAL means
+:: CLOPBAN1:def 12
+  for x be set st x in BoundedLinearOperators(X,Y) holds
+    it.x = sup PreNorms(modetrans(x,X,Y));
+end;
+
+theorem :: CLOPBAN1:33
+for X,Y be ComplexNormSpace, f be bounded LinearOperator of X,Y holds
+  modetrans(f,X,Y)=f;
+
+theorem :: CLOPBAN1:34
+for X,Y be ComplexNormSpace, f be bounded LinearOperator of X,Y holds
+  BoundedLinearOperatorsNorm(X,Y).f = sup PreNorms(f);
+
+definition let X,Y be ComplexNormSpace;
+ func C_NormSpace_of_BoundedLinearOperators(X,Y) -> non empty CNORMSTR equals
+:: CLOPBAN1:def 13
+  CNORMSTR (# BoundedLinearOperators(X,Y),
+        Zero_(BoundedLinearOperators(X,Y),
+        C_VectorSpace_of_LinearOperators(X,Y)),
+         Add_(BoundedLinearOperators(X,Y),
+         C_VectorSpace_of_LinearOperators(X,Y)),
+          Mult_(BoundedLinearOperators(X,Y),
+          C_VectorSpace_of_LinearOperators(X,Y)),
+          BoundedLinearOperatorsNorm(X,Y) #);
+end;
+
+theorem :: CLOPBAN1:35
+for X,Y be ComplexNormSpace holds
+ (the carrier of X) --> 0.Y
+  = 0.C_NormSpace_of_BoundedLinearOperators(X,Y);
+
+theorem :: CLOPBAN1:36
+for X,Y be ComplexNormSpace,
+ f being Point of C_NormSpace_of_BoundedLinearOperators(X,Y),
+   g be bounded LinearOperator of X,Y st g=f holds
+    for t be VECTOR of X holds ||.g.t.|| <= ||.f.|| * ||.t.||;
+
+theorem :: CLOPBAN1:37
+for X,Y be ComplexNormSpace,
+ f being Point of C_NormSpace_of_BoundedLinearOperators(X,Y) holds
+   0 <= ||.f.||;
+
+theorem :: CLOPBAN1:38
+for X,Y be ComplexNormSpace,
+ f being Point of C_NormSpace_of_BoundedLinearOperators(X,Y)
+  st f = 0.C_NormSpace_of_BoundedLinearOperators(X,Y) holds
+   0 = ||.f.||;
+
+registration
+let X,Y be ComplexNormSpace;
+ cluster -> Function-like Relation-like
+   Element of C_NormSpace_of_BoundedLinearOperators(X,Y);
+end;
+
+definition
+ let X,Y be ComplexNormSpace;
+ let f be Element of C_NormSpace_of_BoundedLinearOperators(X,Y);
+ let v be VECTOR of X;
+ redefine func f.v -> VECTOR of Y;
+end;
+
+theorem :: CLOPBAN1:39
+for X,Y be ComplexNormSpace,
+ f,g,h be Point of C_NormSpace_of_BoundedLinearOperators(X,Y) holds
+   h = f+g iff for x be VECTOR of X holds h.x = f.x + g.x;
+
+theorem :: CLOPBAN1:40
+for X,Y be ComplexNormSpace,
+ f,h be Point of C_NormSpace_of_BoundedLinearOperators(X,Y),
+  c be Complex holds
+    h = c*f iff for x be VECTOR of X holds h.x = c * f.x;
+
+theorem :: CLOPBAN1:41
+for X,Y be ComplexNormSpace,
+ f, g being Point of C_NormSpace_of_BoundedLinearOperators(X,Y),
+  c be Complex holds
+  ( ||.f.|| = 0 iff
+  f = 0.C_NormSpace_of_BoundedLinearOperators(X,Y) ) &
+  ||.c*f.|| = |.c.| * ||.f.|| &
+  ||.f+g.|| <= ||.f.|| + ||.g.||;
+
+theorem :: CLOPBAN1:42
+for X,Y be ComplexNormSpace holds
+  C_NormSpace_of_BoundedLinearOperators(X,Y) is ComplexNormSpace-like;
+
+theorem :: CLOPBAN1:43
+for X,Y be ComplexNormSpace holds
+  C_NormSpace_of_BoundedLinearOperators(X,Y) is ComplexNormSpace;
+
+registration
+   let X,Y be ComplexNormSpace;
+   cluster C_NormSpace_of_BoundedLinearOperators(X,Y) ->
+               ComplexNormSpace-like ComplexLinearSpace-like
+               Abelian add-associative right_zeroed right_complementable;
+end;
+
+theorem :: CLOPBAN1:44
+for X,Y be ComplexNormSpace,
+ f,g,h be Point of C_NormSpace_of_BoundedLinearOperators(X,Y) holds
+  h = f-g iff for x be VECTOR of X holds h.x = f.x - g.x;
+
+begin :: Complex Banach Space of Bounded Linear Operators
+
+definition let X be ComplexNormSpace;
+  attr X is complete means
+:: CLOPBAN1:def 14
+    for seq be sequence of X holds
+    seq is Cauchy_sequence_by_Norm implies seq is convergent;
+end;
+
+registration
+  cluster complete ComplexNormSpace;
+end;
+
+definition
+  mode ComplexBanachSpace is complete ComplexNormSpace;
+end;
+
+theorem :: CLOPBAN1:45
+for X be ComplexNormSpace, seq be sequence of X st seq is convergent holds
+  ||.seq.|| is convergent & lim ||.seq.|| = ||.lim seq.||;
+
+theorem :: CLOPBAN1:46
+for X,Y be ComplexNormSpace st Y is complete
+ for seq be sequence of C_NormSpace_of_BoundedLinearOperators(X,Y)
+   st seq is Cauchy_sequence_by_Norm holds
+    seq is convergent;
+
+theorem :: CLOPBAN1:47
+for X be ComplexNormSpace, Y be ComplexBanachSpace holds
+  C_NormSpace_of_BoundedLinearOperators(X,Y) is ComplexBanachSpace;
+
+registration
+  let X be ComplexNormSpace;
+  let Y be ComplexBanachSpace;
+  cluster C_NormSpace_of_BoundedLinearOperators (X,Y) -> complete;
+end;
+

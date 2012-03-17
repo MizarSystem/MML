@@ -9,24 +9,25 @@ environ
  vocabulary FUNCT_1, RELAT_1, PARTFUN1, BOOLE, SEQ_1, FINSEQ_1, ARYTM_1,
       ABSVALUE, ARYTM_3, TDGROUP, SEQ_2, ORDINAL2, FCONT_1, SQUARE_1, SEQFUNC,
       ARYTM;
- notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2,
+      NUMBERS, XCMPLX_0, XREAL_0,
       NAT_1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, RFUNCT_1, ABSVALUE,
       SEQ_1, SEQ_2, FCONT_1, LIMFUNC1;
  constructors REAL_1, PARTFUN1, RFUNCT_1, ABSVALUE, SEQ_2, FCONT_1, LIMFUNC1,
       MEMBERED, XBOOLE_0;
  clusters RELSET_1, XREAL_0, SEQ_1, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS,
-      ORDINAL2;
+      ORDINAL2, ARYTM_3;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems FUNCT_1, PARTFUN1, REAL_1, TARSKI, ABSVALUE, RFUNCT_1, SEQ_1, SEQ_2,
       SEQ_4, ZFMISC_1, RFUNCT_2, SQUARE_1, FCONT_1, AXIOMS, FUNCT_2, RELAT_1,
-      XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+      XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_1, ORDINAL2;
  schemes FUNCT_1, SEQ_1;
 
 begin
 
- reserve D,D1,D2 for non empty set,
-         x,y,z for set,
+ reserve D for non empty set,
+         D1,D2,x,y,z for set,
          n,k for Nat,
          p,x1,r for Real,
          f for Function;
@@ -50,12 +51,12 @@ end;
 
 reserve F,F1,F2 for Functional_Sequence of D1,D2;
 
-definition let D1,D2,F,n;
+definition let D1,D2,F; let n be natural number;
  redefine func F.n -> PartFunc of D1,D2;
   coherence
    proof
-      n in NAT; then n in dom F by Def1; then A1: F.n in rng F by FUNCT_1:def 5
-;
+      n in NAT by ORDINAL2:def 21;
+      then n in dom F by Def1; then A1: F.n in rng F by FUNCT_1:def 5;
       rng F c= PFuncs(D1,D2) by Def1; hence thesis by A1,PARTFUN1:120;
    end;
 end;
@@ -124,7 +125,7 @@ for F1,F2 st (for n holds F1.n = F2.n) holds F1 = F2
     hence thesis by Lm2;
    end;
 
-scheme ExFuncSeq{D1() -> non empty set, D2() -> non empty set,
+scheme ExFuncSeq{D1() -> set, D2() -> set,
                  F(Nat)->PartFunc of D1(),D2()}:
 ex G being Functional_Sequence of D1(), D2() st for n holds G.n = F(n)
 proof

@@ -18,13 +18,14 @@ environ
       DOMAIN_1, NAT_1, FINSEQ_4, MEMBERED, XBOOLE_0, ORDINAL2, ORDINAL1;
  clusters SUBSET_1, FINSEQ_1, GROUP_3, INT_1, LATTICES, GROUP_1, RELSET_1,
       STRUCT_0, RLSUB_2, GROUP_2, XREAL_0, ZFMISC_1, XBOOLE_0, ORDINAL2,
-      NUMBERS, ARYTM_3;
+      NUMBERS, ARYTM_3, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems AXIOMS, BINOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSOP_1,
       FUNCT_1, FUNCT_2, GROUP_1, GROUP_2, GROUP_3, INT_1, LATTICES, NAT_1,
       ORDERS_1, REAL_1, RLSUB_2, RLVECT_1, SETFAM_1, SUBSET_1, TARSKI,
-      ZFMISC_1, VECTSP_1, RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+      ZFMISC_1, VECTSP_1, RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1,
+      ORDINAL2;
  schemes BINOP_1, DOMAIN_1, FINSEQ_1, FINSEQ_2, NAT_1, ORDERS_2, XBOOLE_0;
 
 begin
@@ -1776,9 +1777,10 @@ Lm4: for n being natural number holds n mod 2 = 0 or n mod 2 = 1
  end;
 
 Lm5:
- for k, n being Nat holds (k * n) mod k = 0
+ for k, n being natural number holds (k * n) mod k = 0
  proof
-  let k, n be Nat;
+  let k, n be natural number;
+  reconsider k,n as Nat by ORDINAL2:def 21;
     now per cases;
     suppose k = 0;
      hence thesis by NAT_1:def 2;
@@ -1825,15 +1827,21 @@ A3:    k = n * t + 0 and A4: 0 < n by A1,NAT_1:def 2;
   hence thesis;
  end;
 
-Lm8: n <> 0 & k mod n = 0 & l < n implies k + l mod n = l
- proof assume that A1: n <> 0 and A2: k mod n = 0 and A3: l < n;
-   consider t being Nat such that A4: k = n * t + 0 and 0 < n
-                                                       by A1,A2,NAT_1:def 2;
-  thus thesis by A3,A4,NAT_1:def 2;
+Lm8: for k,l,n being natural number holds n <> 0 & k mod n = 0 & l < n
+implies k + l mod n = l
+ proof
+   let k,l,n be natural number;
+a1: l is Nat by ORDINAL2:def 21;
+   assume that A1: n <> 0 and A2: k mod n = 0 and A3: l < n;
+   ex t being Nat st k = n * t + 0 & 0 < n by A1,A2,NAT_1:def 2;
+  hence thesis by a1,A3,NAT_1:def 2;
  end;
 
-Lm9: k mod n = 0 implies k + l mod n = l mod n
- proof assume that A1: k mod n = 0;
+Lm9: for k,l,n being natural number holds k mod n = 0 implies
+k + l mod n = l mod n
+ proof
+   let k,l,n be natural number;
+   assume that A1: k mod n = 0;
      now per cases;
     suppose
 A2:     n = 0;
@@ -1852,15 +1860,19 @@ A5:    l = n * t + (l mod n) & l mod n < n by A3,NAT_1:def 2;
   hence thesis;
  end;
 
-Lm10: k <> 0 implies (k * n) div k = n
- proof assume k <> 0;
+Lm10: for k,n being natural number holds k <> 0 implies (k * n) div k = n
+ proof let k,n be natural number;
+a1: n is Nat by ORDINAL2:def 21;
+  assume k <> 0;
    then k * n = k * n + 0 & 0 < k by NAT_1:18;
-  hence thesis by NAT_1:def 1;
+  hence thesis by a1,NAT_1:def 1;
  end;
 
-Lm11: n <> 0 & k mod n = 0 implies
+Lm11: for k,n,l being natural number holds k mod n = 0 implies
   (k + l) div n = (k div n) + (l div n)
- proof assume that A1:n <> 0 and A2: k mod n = 0;
+ proof let k,n,l be natural number; assume A2: k mod n = 0;
+   per cases;
+   suppose A1: n <> 0;
     A3: 0 <= n by NAT_1:18;
    then A4: k = n * (k div n) + 0 by A1,A2,NAT_1:47;
 A5: ex t being Nat st l = n * t + (l mod n) & l mod n < n by A1,NAT_1:def 2;
@@ -1868,6 +1880,11 @@ A5: ex t being Nat st l = n * t + (l mod n) & l mod n < n by A1,NAT_1:def 2;
    then k + l = n * (k div n) + n * (l div n) + (l mod n) by A4,XCMPLX_1:1
         .= n * ((k div n) + (l div n)) + (l mod n) by XCMPLX_1:8;
   hence thesis by A5,NAT_1:def 1;
+  end;
+  suppose n = 0;
+  then (k + l) div n = 0 & k div n = 0 & l div n = 0 by NAT_1:def 1;
+  hence thesis;
+  end;
  end;
 
 theorem
@@ -2793,15 +2810,13 @@ theorem
    n mod 2 = 0 or n mod 2 = 1 by Lm4;
 
 theorem
-  for k, n being Nat holds (k * n) mod k = 0 by Lm5;
+   (k * n) mod k = 0 by Lm5;
 
 theorem
    k > 1 implies 1 mod k = 1 by Lm6;
 
 theorem
    k mod n = 0 & l = k - m * n implies l mod n = 0 by Lm7;
-
- reserve k, n, l, m for Nat;
 
 theorem
     n <> 0 & k mod n = 0 & l < n implies k + l mod n = l by Lm8;
@@ -2810,7 +2825,7 @@ theorem
    k mod n = 0 implies k + l mod n = l mod n by Lm9;
 
 theorem
-   n <> 0 & k mod n = 0 implies
+   k mod n = 0 implies
   (k + l) div n = (k div n) + (l div n) by Lm11;
 
 theorem

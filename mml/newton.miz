@@ -148,7 +148,7 @@ registration
   cluster x|^n -> real;
 coherence
  proof
-     x|^n = Product(n |-> x) by Def1;
+   x|^n = Product(n |-> x) by Def1;
    hence thesis;
  end;
 end;
@@ -162,17 +162,15 @@ end;
 canceled;
 
 theorem
-Th9: for x holds x|^0 = 1
+Th9: x|^0 = 1
  proof
-  let x;
      0 |-> x = <*> REAL by FINSEQ_2:72;
   hence thesis by Def1,RVSUM_1:124;
  end;
 
 theorem
-Th10: for x holds x|^1 = x
+Th10: x|^1 = x
  proof
-  let x;
   reconsider x as Real by XREAL_0:def 1;
     x|^1 = Product(1 |-> x) by Def1 .= Product(<*x*>) by FINSEQ_2:73
     .= x by RVSUM_1:125;
@@ -180,7 +178,7 @@ Th10: for x holds x|^1 = x
  end;
 
 theorem
-Th11: for s holds x|^(s+1) = x|^s*x
+Th11: x|^(s+1) = x|^s*x
  proof
    defpred P[natural number] means x|^($1+1) = x|^$1*x;
   A1: P[0] proof
@@ -198,11 +196,34 @@ Th11: for s holds x|^(s+1) = x|^s*x
         by A3,FINSEQ_2:74 .= Product((s+1) |-> x)*x by RVSUM_1:126;
        hence thesis by Def1;
    end;
-  thus for s holds P[s] from NAT_1:sch 2(A1,A2);
+  for s holds P[s] from NAT_1:sch 2(A1,A2);
+  hence thesis;
  end;
 
+registration
+  let x, n be natural number;
+  cluster x|^n -> natural;
+coherence
+ proof
+   x|^n = Product(n |-> x) by Def1;
+   defpred P[natural number] means x|^$1 is natural;
+a1: P[0] by Th9;
+a2: for a being natural number st P[a] holds P[a+1]
+  proof
+    let a be natural number;
+    assume P[a];
+    then reconsider b = x|^a as natural number;
+    x|^(a+1) = b*x by Th11;
+    hence thesis;
+  end;
+   for a being natural number holds P[a]
+     from NAT_1:sch 2(a1,a2);
+   hence thesis;
+ end;
+end;
+
 theorem
-   (x*y)|^s = x|^s*y|^s
+   (x*y)|^s = x|^s * y|^s
  proof
   reconsider x, y as Real by XREAL_0:def 1;
 A1: s is Nat by ORDINAL2:def 21;
@@ -213,7 +234,7 @@ A1: s is Nat by ORDINAL2:def 21;
  end;
 
 theorem
-   x|^(s+t) = x|^s*x|^t
+   x|^(s+t) = x|^s * x|^t
  proof
   reconsider x as Real by XREAL_0:def 1;
   reconsider s,t as Nat by ORDINAL2:def 21;
@@ -235,7 +256,7 @@ theorem
  end;
 
 theorem
-Th15: for s holds 1|^s = 1
+Th15: 1|^s = 1
  proof
    defpred P[natural number] means 1|^$1 = 1;
   A1: P[0] by Th9;
@@ -245,13 +266,13 @@ Th15: for s holds 1|^s = 1
     then 1|^(s+1) = 1 * 1 by Th11;
     hence P[s+1];
    end;
-  thus for s holds P[s] from NAT_1:sch 2(A1,A2);
+   for s holds P[s] from NAT_1:sch 2(A1,A2);
+   hence thesis;
  end;
 
 theorem
-   for s st s >=1 holds 0|^s = 0
+  s >= 1 implies 0|^s = 0
  proof
-  let s;
   A1: s is Nat by ORDINAL2:def 21;
   defpred P[Nat] means 0|^$1 = 0;
   A2: P[1] by Th10;

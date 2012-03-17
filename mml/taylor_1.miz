@@ -1,0 +1,3112 @@
+:: The {T}aylor Expansions
+::  by Yasunari Shidama
+:: 
+:: Received February 24, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, BOOLE, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
+      RELAT_1, ABSVALUE, SUBSET_1, ORDINAL2, QC_LANG1, PARTFUN1, LIMFUNC1,
+      FCONT_1, INT_1, RAT_1, SEQ_1, SEQ_2, SEQM_3, RCOMP_1, SEQFUNC, SIN_COS,
+      FDIFF_1, PREPOWER, POWER, SERIES_1, GROUP_1, FINSEQ_4, SUPINF_2,
+      TAYLOR_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, PARTFUN2,
+      FUNCT_2, RFUNCT_2, LIMFUNC1, RCOMP_1, FCONT_1, ORDINAL2, XCMPLX_0,
+      XREAL_0, RAT_1, ORDINAL1, NUMBERS, REAL_1, NAT_1, INT_1, ABSVALUE,
+      FINSEQ_4, NEWTON, SEQ_1, SEQ_2, SEQM_3, SERIES_1, FDIFF_1, SEQFUNC,
+      PREPOWER, POWER, SIN_COS;
+ constructors ARYTM_0, REAL_1, NAT_1, PARTFUN1, PARTFUN2, LIMFUNC1, FCONT_1,
+      RFUNCT_2, RCOMP_1, MEMBERED, SEQ_2, COMPLEX1, GROUP_1, SERIES_1,
+      PREPOWER, COMSEQ_3, FDIFF_1, FINSEQ_4, SIN_COS, SEQFUNC;
+ clusters RELSET_1, XREAL_0, MEMBERED, NEWTON, NAT_1, RAT_1, RCOMP_1, INT_1,
+      SEQ_1, SIN_COS, PREPOWER;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ theorems AXIOMS, XBOOLE_1, ABSVALUE, REAL_1, REAL_2, RLVECT_1, TARSKI,
+      XBOOLE_0, PARTFUN1, PARTFUN2, SUBSET_1, XCMPLX_1, RELAT_1, CARD_4,
+      RCOMP_1, SEQ_1, SEQ_2, SEQM_3, SIN_COS, SERIES_1, FUNCT_1, RFUNCT_2,
+      NAT_1, INT_1, NEWTON, FINSEQ_4, RAT_1, IRRAT_1, POWER, LIMFUNC1, FCONT_1,
+      FCONT_3, FDIFF_1, FDIFF_2, ROLLE, SQUARE_1, SEQ_4, SEQFUNC, PREPOWER,
+      RELSET_1, FUNCT_2, XREAL_0, ORDINAL2;
+ schemes SEQ_1, RECDEF_1, NAT_1, INT_1, PARTFUN2, FUNCT_2;
+
+begin :: The Logarithmic differentiation method
+
+reserve
+  n for natural number,
+  i for Integer,
+  p, x, x0, y for real number,
+  q for Rational,
+  f for PartFunc of REAL,REAL;
+
+definition
+let q be Integer;
+func #Z q -> Function of REAL, REAL means :DefZn:
+for x be real number holds it.x = x #Z q;
+existence
+proof
+   defpred X[set] means $1 in REAL;
+   deffunc U(Real) = $1 #Z q;
+  consider f being Function of REAL,REAL such that
+  A2:   for d be Element of REAL holds f.d = U(d) from FUNCT_2:sch 4;
+  take f;
+  let d be real number;
+  d is Real by XREAL_0:def 1;
+  hence f.d = d #Z q by A2;
+ end;
+  uniqueness
+   proof
+     let f1,f2 be Function of REAL, REAL;
+     assume
+     A7: for d be real number holds f1.d=d #Z q;
+     assume
+     A8: for d be real number holds f2.d=d #Z q;
+    for d being Element of REAL holds f1.d = f2.d
+     proof
+      let d be Element of REAL;
+        thus f1.d=d #Z q by A7 .=f2.d by A8;
+     end;
+    hence f1=f2 by FUNCT_2:113;
+ end;
+end;
+
+theorem LMZN1:
+for m,n be natural number holds x #Z (n+m) = (x #Z n) * (x #Z m)
+  proof
+  let  m,n be natural number;
+  per cases;
+  suppose  x <> 0;
+  hence x #Z (n+m) =(x #Z n) *(x #Z m) by PREPOWER:54;
+  end;
+  suppose CAS1:  x = 0;
+  thus thesis
+  proof
+    N:0 <= n+m by NAT_1:18;
+     LL: 0 #Z (n+m) = 0|^abs(n+m) by N,PREPOWER:def 4
+      .= 0|^(n+m) by N,ABSVALUE:def 1
+      .= 0|^n*0|^m  by NEWTON:13;
+  per cases;
+  suppose
+a1: n = 0 & m = 0;
+  x #Z (0+0) = 1 * (x #Z 0)
+   .= (x #Z 0) * (x #Z 0) by PREPOWER:44;
+  hence thesis by a1;
+  end;
+  suppose n <> 0;
+  then
+a3: 0 < n by NAT_1:19;
+  then
+a2: 0+1 <= n by NAT_1:38;
+     L: 0 #Z (n+m) = 0*0|^m  by a2,LL,NEWTON:16;
+     (0 #Z n) *(0 #Z m) = (0 |^ abs(n)) * (0 #Z m) by a3,PREPOWER:def 4
+      .= (0 |^ n) * (0 #Z m) by a3,ABSVALUE:def 1
+      .= 0 * (0 #Z m) by a2,NEWTON:16;
+    hence  x #Z (n+m)  =(x #Z n) *(x #Z m) by L,CAS1;
+  end;
+  suppose m <> 0;
+  then
+a3: 0 < m by NAT_1:19;
+  then
+a2: 0+1 <= m by NAT_1:38;
+     L: 0 #Z (n+m) = 0*0|^n  by a2,LL,NEWTON:16;
+     (0 #Z n) *(0 #Z m) = (0 |^ abs(m)) * (0 #Z n) by a3,PREPOWER:def 4
+      .= (0 |^ m) * (0 #Z n) by a3,ABSVALUE:def 1
+      .= 0 * (0 #Z n) by a2,NEWTON:16;
+    hence  x #Z (n+m)  =(x #Z n) *(x #Z m) by L,CAS1;
+  end;
+  end;
+ end;
+ end;
+
+theorem LM0001:
+  #Z n is_differentiable_in x & diff(( #Zn),x) = n * x #Z (n-1)
+proof
+defpred P[Nat] means for x be real number holds
+     #Z $1 is_differentiable_in x &
+     diff( ( #Z $1),x) = $1 * x #Z ($1 -1);
+I0:P[0]
+proof
+  set f= #Z 0;
+  AS1: dom(f)=REAL by FUNCT_2:def 1
+          .=[#]REAL by SUBSET_1:def 4;
+  now let y be set such that L: y in {1};
+      dom(f)=REAL by FUNCT_2:def 1; then
+      consider x be set such that
+      L1:  x in dom(f);
+      dom (f) c= REAL by RELSET_1:12; then
+      reconsider x1=x  as Real by L1;
+      f.x=x1 #Z 0 by DefZn
+         .=1 by PREPOWER:44
+         .=y by TARSKI:def 1,L;
+      hence y in rng (f) by L1,FUNCT_1:def 5;
+    end; then
+   K1:  {1} c= rng (f) by TARSKI:def 3;
+    now let y be set such that
+      L: y in rng(f);
+     consider x be set such that
+      L1:  x in dom(f) and
+      L2:  y=f.x by FUNCT_1:def 5,L;
+      reconsider x as Real by L1,FUNCT_2:def 1;
+      reconsider y1=y as Real by L2;
+      f.x =x #Z 0 by DefZn .=1 by PREPOWER:44;
+      hence y in {1} by L2,TARSKI:def 1;
+    end; then
+  rng(f) c= {1} by TARSKI:def 3; then
+  L3: rng(f)  =  {1} by K1,XBOOLE_0:def 10;
+  let x be real number;
+  aa: x is Real by XREAL_0:def 1;
+    L41: dom(f)=REAL by FUNCT_2:def 1; then
+     f is_differentiable_on dom(f) & (f`|dom(f)) .x = 0
+        by aa,AS1,L3,FCONT_3:4,FDIFF_1:19;
+      hence f is_differentiable_in x & diff(f,x)= 0  * x #Z (0-1)
+       by aa,AS1,FCONT_3:4,FDIFF_1:16,def 8,L41;
+end;
+Ik:for k be natural number st P[k] holds P[k+1]
+proof
+  let k be natural number such that
+  KS1: P[k];
+  KS2: REAL c= dom ( #Z 1) &
+       REAL is open Subset of REAL &
+       (for x be Real st x in REAL holds ( #Z 1).x = 1*x + 0)
+ proof
+ thus REAL c= dom ( #Z 1) by FUNCT_2:def 1;
+ thus REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
+ now let x be Real such that x in REAL;
+    thus ( #Z 1).x=x  #Z 1 by DefZn
+                .=1*x + 0 by PREPOWER:45;
+    end;
+ hence thesis;
+ end;
+KS3:  ( #Z 1) is_differentiable_on REAL
+       & for x be Real st x in REAL holds ( ( #Z 1)`|REAL).x = 1
+   by KS2,FDIFF_1:31;
+KS4: for x be real number holds ( #Z 1) is_differentiable_in x &
+         diff(( #Z 1),  x)=1
+proof
+let x be real number;
+  aa: x is Real by XREAL_0:def 1;
+  hence ( #Z 1) is_differentiable_in  x by KS3,KS2,FDIFF_1:16;
+  thus diff(( #Z 1),  x)=( ( #Z 1)`|REAL).x by aa,KS3,FDIFF_1:def 8
+                        .=1 by aa,KS2,FDIFF_1:31;
+end;
+now per cases;
+case CAS1: k = 0;
+thus P[k+1]
+proof
+let x be real number;
+thus #Z (k+1) is_differentiable_in x by KS4,CAS1;
+thus diff(( #Z (k+1)), x)=1 by CAS1,KS4
+        .=(k+1)*x #Z ((k+1)-1) by CAS1,PREPOWER:44;
+end;
+end;
+case CAS2: k<> 0;
+ 1 <= k by RLVECT_1:99,CAS2; then
+1-1 <=k-1 by REAL_1:92; then
+reconsider k1=k-1 as Nat by INT_1:16;
+KS5: dom(( #Z k))  /\ dom(( #Z 1))
+      =REAL /\ dom(( #Z 1)) by FUNCT_2:def 1
+      .=REAL /\ REAL by FUNCT_2:def 1
+      .=dom( #Z (k+1)) by FUNCT_2:def 1;
+KS6: for x be Real st x in dom( #Z (k+1))
+          holds ( #Z (k+1)).x=( #Z k).x * ( #Z 1).x
+ proof
+ let x be Real such that x in dom( #Z (k+1));
+    thus ( #Z (k+1)).x = x #Z (k+1) by DefZn
+                       .=(x #Z k) * (x #Z 1) by LMZN1
+                       .=( #Z k).x * x #Z (1) by DefZn
+                       .=( #Z k).x *( #Z 1).x by DefZn;
+ end;
+ KS7:   ( #Z (k+1)) = ( #Z k) (#) ( #Z 1)
+           by KS5,KS6,SEQ_1:def 5;
+ let x be real number;
+  aa: x is Real by XREAL_0:def 1;
+   KS8: ( #Z k) is_differentiable_in x by KS1;
+   KS9: ( #Z 1) is_differentiable_in x by KS4;
+    hence #Z (k+1) is_differentiable_in x by aa,KS7,KS8,FDIFF_1:24;
+    thus diff(( #Z (k+1)), x)
+            = diff( ( #Z k) (#) ( #Z 1),x) by KS5,KS6,SEQ_1:def 5
+             .= ( #Z k).x *diff(( #Z 1),x)+diff(( #Z k),x)*( #Z 1).x
+                by aa,FDIFF_1:24,KS8,KS9
+              .= ( #Z k).x*1 + diff( #Z k,x)*( #Z 1).x by KS4
+              .= (x #Z k)*1 + diff( #Z k,x)*( #Z 1).x by DefZn
+              .= (x #Z k)*1 + diff( #Z k,x)*(x #Z 1) by DefZn
+             .= (x #Z k)+k*(x #Z k1)*(x #Z 1) by KS1
+             .= (x #Z k)+k*((x #Z k1)*(x #Z 1))
+             .= (x #Z k)+k*(x #Z (k1+1)) by LMZN1
+             .= (x #Z k)+k*(x #Z k)
+             .= (k+1) * (x #Z k)
+             .= (k+1) * x #Z ((k+1)-1);
+ end;
+end;
+hence thesis;
+end;
+for n be natural number holds P[n] from NAT_1:sch 2(I0,Ik);
+hence thesis;
+end;
+
+theorem
+ f is_differentiable_in x0 implies
+   ( #Z n) *f is_differentiable_in x0 &
+   diff( ( #Z n) *f,x0) = n * (f.x0) #Z (n-1) *diff(f,x0)
+proof
+  assume
+AS1:      f is_differentiable_in x0;
+P2: ( #Z n)  is_differentiable_in f.x0 by LM0001;
+aa: x0 is Real by XREAL_0:def 1;
+hence ( #Z n)*f is_differentiable_in x0 by AS1,P2,FDIFF_2:13;
+thus diff(( #Z n)*f,x0)
+               = diff(( #Z n),f.x0)*diff(f,x0) by aa,AS1,P2,FDIFF_2:13
+              .=n * (f.x0) #Z (n-1) *diff(f,x0) by LM0001;
+end;
+
+LM0010:
+(exp(x)) #R n = exp(n*x)
+  proof
+   reconsider x as Real by XREAL_0:def 1;
+    EX:  exp(x) > 0 by SIN_COS:60;
+   defpred P[natural number] means (exp(x)) #R $1 =exp( $1 * x);
+  I0:P[0] by SIN_COS:56,PREPOWER:85,EX;
+  Ik: for k be natural number st P[k] holds  P[k+1]
+    proof
+    let k be natural number such that
+    AS1: P[k];
+    reconsider k1 = k as Nat by ORDINAL2:def 21;
+    thus
+    (exp(x)) #R (k+1) = (exp(x)) #R k  * (exp(x)) #R 1
+                             by PREPOWER:89,EX
+                        .= (exp(x)) #R k  * exp(x) by PREPOWER:86,EX
+                        .=exp(k1*x+x) by SIN_COS:55,AS1
+                        .=exp((k+1)*x);
+    end;
+   for n be natural number holds P[n] from NAT_1:sch 2(I0,Ik);
+   hence thesis;
+   end;
+
+theorem LM0014:
+  exp(-x) = 1/exp(x)
+proof
+  reconsider x as Real by XREAL_0:def 1;
+  exp(-x)*exp(x)=exp((-x) +x ) by SIN_COS:55
+                      .=1 by SIN_COS:56;
+  hence thesis by XCMPLX_1:74;
+end;
+
+LM0015: (exp(x)) #R i =exp(i*x)
+   proof
+     x is Real by XREAL_0:def 1; then
+   EX:  exp(x) > 0 by SIN_COS:60;
+    consider  n be Nat  such that
+    CAS0:  i = n or i = - n by INT_1:8;
+    now per cases by CAS0;
+    case  CAS1:  i = n;
+    thus (exp(x)) #R i =exp(i*x) by CAS1,LM0010;
+    end;
+    case CAS2:  i = -n;
+    thus exp(i*x) =exp(-(n*x)) by CAS2
+                        .=1/(exp(n*x)) by LM0014
+                        .=1/( (exp(x)) #R n ) by LM0010
+                        .=(exp(x)) #R i by CAS2,PREPOWER:90,EX;
+     end;
+    end;
+ hence thesis;
+end;
+
+theorem LM0020:
+(exp(x)) #R (1/i) = exp(x/i)
+  proof set n = i;
+    per cases;
+    suppose
+    AS1:  n <> 0;
+    R1:  x/n is Real by XREAL_0:def 1;
+    EXN:  exp(x/n) > 0 by R1,SIN_COS:60;
+     exp(x) =exp((x/n)*n) by AS1,XCMPLX_1:88
+                   .=(exp(x/n)) #R n by LM0015;
+   hence (exp(x))  #R (1/n)
+           =(exp(x/n)) #R (n* (1/n) ) by PREPOWER:105,EXN
+           .=(exp(x/n)) #R 1 by XCMPLX_1:107,AS1
+           .=exp(x/n) by PREPOWER:86,EXN;
+    end;
+     suppose
+a1:    n = 0;
+     x is Real by XREAL_0:def 1; then
+     EXN:  exp(x) > 0 by SIN_COS:60;
+     (exp(x)) #R (1/0) = (exp(x)) #R 0 by XCMPLX_1:49
+       .= exp(0) by SIN_COS:56,EXN,PREPOWER:85
+       .= exp(x/0) by XCMPLX_1:49; 
+     hence thesis by a1;
+    end;
+  end;
+
+theorem LM0030:
+for m,n be Integer holds (exp(x)) #R (m/n) = exp(m/n*x)
+  proof
+    let m,n be Integer;
+    x is Real by XREAL_0:def 1; then
+    EX:  exp(x) > 0 by SIN_COS:60;
+  thus exp(m/n*x)
+    = exp(x/n*m) by XCMPLX_1:76
+    .=(exp(x/n)) #R m by LM0015
+    .=((exp(x)) #R (1/n)) #R m by LM0020
+    .=(exp(x)) #R ((1/n)*m) by PREPOWER:105,EX
+    .=(exp(x)) #R ((m/n)*1) by XCMPLX_1:76
+    .=(exp(x)) #R (m/n);
+  end;
+
+LM0040: (exp(x)) #R q = exp(q*x)
+  proof
+  consider m be Integer,n be Nat such that
+     n <> 0 and
+    AS2: q=m/n by RAT_1:24;
+     thus exp(q*x) =(exp(x)) #R q by AS2,LM0030;
+  end;
+
+theorem LM0050:
+(exp(x)) #Q q = exp(q*x)
+proof
+  x is Real by XREAL_0:def 1; then
+  EX:  exp(x) > 0 by SIN_COS:60;
+  thus (exp(x)) #Q q = (exp(x)) #R q by EX,PREPOWER:88
+                      .=exp(q*x) by LM0040;
+end;
+
+theorem LM0060:
+(exp(x)) #R p = exp(p*x)
+  proof
+  x is Real by XREAL_0:def 1; then
+  EX:  exp(x) > 0 by SIN_COS:60;
+    consider  s being Rational_Sequence such that
+  AS1: s is convergent and
+  AS2: lim s = p and
+   (exp(x)) #Q s is convergent and
+  AS4: lim (exp(x))  #Q s = (exp(x)) #R p
+ by EX,PREPOWER:def 8;
+LO5: now let ii be set such that
+   F1: ii in NAT;
+  reconsider i=ii as Nat by F1;
+  F2: rng (x(#)s) c= dom (exp) by SIN_COS:51;
+  thus
+    ( (exp(x)) #Q s ).ii =(exp(x)) #Q (s.i) by PREPOWER:def 7
+    .=exp((s.i)*x) by LM0050
+    .=exp((x(#)s).i) by SEQ_1:13
+    .=exp.((x(#)s).i) by SIN_COS:def 27
+    .=(exp*((x(#)s))).ii by F2,RFUNCT_2:21;
+  end;
+ LO10:  x(#)s is convergent by AS1, SEQ_2:21;
+ LO20:  lim (x(#)s) = x*p by AS2,AS1,SEQ_2:22;
+  x*p is Real by XREAL_0:def 1; then
+  exp is_differentiable_in x*p by SIN_COS:70; then
+  LO2:exp  is_continuous_in x*p by FDIFF_1:32;
+  LO3: rng (x(#)s) c= dom (exp) by SIN_COS:51;
+  lim((exp*(x(#)s)) )
+         = exp.(x*p) by FCONT_1:def 1,LO3,LO2,LO10,LO20
+        .= exp(p*x) by SIN_COS:def 27;
+  hence thesis by AS4,LO5,SEQ_1:8;
+ end;
+
+theorem LM0070:
+  (exp(1)) #R x =exp(x) & (exp(1)) to_power x =exp(x) &
+   number_e to_power x =exp(x) & number_e  #R x =exp(x)
+proof
+EX:exp(1) > 0 by SIN_COS:60;
+   thus exp(x) =exp(x*1) .= (exp(1)) #R x by LM0060;
+   hence thesis by EX,POWER:def 2,IRRAT_1:def 7;
+end;
+
+theorem
+(exp.1) #R x =exp.x & (exp.1) to_power x =exp.x &
+   number_e to_power x =exp.x & number_e #R x =exp.x 
+proof
+thus (exp.1) #R x =(exp(1)) #R x by SIN_COS:def 27
+                 .=exp(x) by LM0070
+                 .=exp.x by SIN_COS:def 27;
+thus (exp.1) to_power x=(exp(1) ) to_power x
+                     by SIN_COS:def 27
+                         .=exp(x) by LM0070
+                         .=exp.x by SIN_COS:def 27;
+thus number_e to_power x = exp(x) by LM0070
+                         .=exp.x by SIN_COS:def 27;
+thus number_e #R x =exp(x) by LM0070
+                         .=exp.x by SIN_COS:def 27;
+end;
+
+theorem LM0076:
+number_e >= 2
+proof
+exp.1 >=2
+proof
+Lm12: for th,th1,th2,th3 be real number
+         for n be Nat holds th |^ 0=1
+    & th |^ (2*n)=(th |^ n)|^ 2 & th |^ 1=th & th |^ 2=th * th
+    & (-1)|^(2*n)=1 &(-1)|^ (2*n+1)=-1
+ proof
+   let th,th1,th2,th3 be real number;
+   let n be Nat;
+   thus th |^ 0=th GeoSeq.0 by PREPOWER:def 1
+          .=1 by PREPOWER:4;
+   thus th |^ (2*n)=(th |^ n)|^ 2 by NEWTON:14;
+   thus A1:  th |^ 1=th GeoSeq.(0+1)by PREPOWER:def 1
+       .=th GeoSeq.0 * th by PREPOWER:4
+       .=1* th by PREPOWER:4
+       .=th;
+    thus th |^ 2=th |^ (1+1)
+         .= th*th by A1,NEWTON:13;
+    thus A2: (-1)|^(2*n)=(1)|^(2*n) by POWER:1
+            .=1 by NEWTON:15;
+    thus (-1)|^ (2*n+1)=(-1)|^ (2*n)*(-1) by NEWTON:11
+             .=-1 by A2;
+ end;
+
+ A2:for n be Nat st 1<= n holds Partial_Sums(1 ExpSeq).n>=2
+ proof
+   defpred X[Integer] means Partial_Sums(1 ExpSeq).$1>=2;
+   Partial_Sums(1 ExpSeq).1
+      =Partial_Sums(1 ExpSeq).0+(1 ExpSeq).(0+1) by SERIES_1:def 1
+     .=(1 ExpSeq).0+(1 ExpSeq).1 by SERIES_1:def 1
+     .=(1 ExpSeq).0 + (1 |^ 1 /(1!)) by SIN_COS:def 9
+      .=1 |^ 0 /(0!) + (1 |^ 1 /(1!)) by SIN_COS:def 9
+      .=1 + (1 |^ 1 /(1!)) by Lm12,NEWTON:18
+      .=1 + 1/1 by Lm12,NEWTON:19
+      .=2;
+  then A3: X[1];
+  A4: for ni be Integer st 1 <=ni  holds X[ni] implies X[ni+1]
+      proof
+        let ni be Integer such that
+        AA: 1 <=ni;
+        assume
+        A5: Partial_Sums(1 ExpSeq).ni>=2;
+        0 <=ni by AA,AXIOMS:22; then
+       reconsider n=ni as Nat by INT_1:16;
+        A6: Partial_Sums(1 ExpSeq).(n+1)
+        =Partial_Sums(1 ExpSeq).n+(1 ExpSeq).(n+1) by SERIES_1:def 1
+        .=Partial_Sums(1 ExpSeq).n+1 |^(n+1)/((n+1)!) by SIN_COS:def 9;
+       A7: 1 |^(n+1) >0 by PREPOWER:13;
+         (n+1)!>0 by SIN_COS:42;
+       then 1 |^(n+1)/((n+1)!)>0 by A7,REAL_2:127;
+       then Partial_Sums(1 ExpSeq).n+1 |^(n+1)/((n+1)!)>
+       Partial_Sums(1 ExpSeq).n by REAL_1:69;
+       hence thesis by A5,A6,AXIOMS:22;
+      end;
+      for n be Integer st 1<=n holds X[n] from INT_1:sch 2(A3,A4);
+    hence thesis;
+ end;
+
+ AA2:for n be Nat holds (Partial_Sums(1 ExpSeq)^\1).n>=2
+   proof
+   let n be Nat;
+    K1:  (Partial_Sums(1 ExpSeq)^\1).n
+      = Partial_Sums(1 ExpSeq).(n+1) by SEQM_3:def 9;
+     1<=n+1 by NAT_1:29;
+    hence (Partial_Sums(1 ExpSeq)^\1).n >=2 by K1,A2;
+   end;
+   (1 ExpSeq) is summable by SIN_COS:49; then
+  Partial_Sums(1 ExpSeq) is convergent &
+   lim(Partial_Sums(1 ExpSeq))=Sum(1 ExpSeq) by SERIES_1:def 2,def 3; then
+   Partial_Sums(1 ExpSeq)^\1 is convergent &
+          lim(Partial_Sums(1 ExpSeq)^\1)=Sum(1 ExpSeq) by SEQ_4:33;
+ then Sum(1 ExpSeq)>=2 by AA2,SIN_COS:41;
+ hence thesis by SIN_COS:def 26;
+end;
+ hence number_e >= 2 by IRRAT_1:def 7,SIN_COS:def 27;
+end;
+
+LM: number_e > 1 & number_e > 0 by LM0076,AXIOMS:22;
+
+theorem LM0080:
+log(number_e,exp(x)) = x
+ proof
+   x is Real by XREAL_0:def 1; then
+ EX3:exp(x) > 0 by SIN_COS:60;
+  number_e to_power x =exp(x) by LM0070;
+  hence thesis by POWER:def 3,EX3,LM;
+ end;
+
+theorem LM0085:
+log(number_e,exp.x) = x
+proof
+   thus log(number_e,exp.x) =log(number_e,exp(x)) by SIN_COS:def 27
+    .=x by LM0080;
+ end;
+
+theorem LM0086:
+y > 0 implies exp( log(number_e,y)) = y
+proof
+   assume y > 0; then
+   number_e to_power log(number_e,y) = y by POWER:def 3,LM;
+   hence thesis by LM0070;
+end;
+
+theorem LM0087:
+y > 0 implies exp. ( log(number_e,y)) = y
+ proof
+   assume
+  AS1: y > 0;
+  thus exp. ( log(number_e,y))
+  =exp( log(number_e,y)) by SIN_COS:def 27
+  .= y by LM0086,AS1;
+ end;
+
+theorem LM0090:
+  exp is one-to-one &
+  exp is_differentiable_on REAL &
+  exp is_differentiable_on [#](REAL) &
+  (for x be Real holds  diff(exp,x)=exp.x ) &
+  (for x be Real holds 0 < diff(exp,x) ) &
+  dom(exp)=REAL & dom(exp)=[#](REAL) &
+  rng(exp)=right_open_halfline(0)
+  proof
+  now let x1,x2 be set such that
+   A1:  x1 in dom exp and
+   A2:  x2 in dom exp and
+   A3:  exp.x1=exp.x2;
+   reconsider p1=x1 as Real by A1,SIN_COS:51;
+   reconsider p2=x2 as Real by A2,SIN_COS:51;
+    thus x1=log(number_e,exp.p1) by LM0085
+        .=log(number_e,exp.p2) by A3
+        .=x2 by LM0085;
+    end;
+hence exp is one-to-one by FUNCT_1:def 8;
+thus exp is_differentiable_on REAL &
+     exp is_differentiable_on [#](REAL)
+     by SIN_COS:71,SUBSET_1:def 4;
+ thus for x be Real holds diff(exp,x)=exp.x by SIN_COS:71;
+hereby let x be Real;
+  diff(exp,x)=exp.x by SIN_COS:71;
+   hence diff(exp,x) > 0 by SIN_COS:59;
+end;
+thus dom(exp)=REAL & dom(exp)=[#](REAL)
+ by SUBSET_1:def 4,SIN_COS:51;
+thus rng(exp)=right_open_halfline(0)
+proof
+now   let y be set such that
+ L: y in rng(exp);
+   consider x be set such that
+    L1:  x in dom(exp) and
+    L2:  y=exp.x by FUNCT_1:def 5,L;
+    reconsider x as Real by L1,SIN_COS:51;
+    reconsider y1=y as Real by L2;
+    exp.x > 0 by SIN_COS:59; then
+    y1 in {g where g is Real : 0<g} by L2;
+    hence y in right_open_halfline(0) by LIMFUNC1:def 3;
+end;
+then
+L0: rng(exp)  c=  right_open_halfline(0) by TARSKI:def 3;
+now   let y be set such that
+ L: y in right_open_halfline(0);
+    y in {g where g is Real : 0<g} by L,LIMFUNC1:def 3;
+   then
+   consider g be Real such that
+    L1: y=g & 0 < g;
+   reconsider y1=y as Real by L1;
+    y1=exp.( log(number_e,y1) ) by L1, LM0087;
+   hence  y in rng(exp) by SIN_COS:51,FUNCT_1:def 5;
+end;
+then right_open_halfline(0) c= rng(exp) by TARSKI:def 3;
+ hence rng(exp)=right_open_halfline(0) by L0,XBOOLE_0:def 10;
+end;
+end;
+
+registration
+  cluster exp -> one-to-one;
+  coherence by LM0090;
+end;
+
+theorem LM0100:
+exp"  is_differentiable_on dom (exp") &
+ for x be real number st x in dom (exp") holds diff(((exp)"),x) = 1/x
+proof
+thus
+ exp"  is_differentiable_on dom (exp") by LM0090,FDIFF_2:45;
+   let x be real number such that
+      AS1: x in dom ((exp)");
+      AS11: x in rng (exp) by AS1,FUNCT_1:55;
+      diff(exp, ((exp)").x)=exp.( ((exp)").x) by LM0090
+                                .=x by AS11,FUNCT_1:57;
+      hence diff(((exp)"),x) = 1/x by AS1,LM0090,FDIFF_2:45;
+end;
+
+registration
+  cluster right_open_halfline(0) -> non empty;
+coherence
+proof
+  1 in {g where g is Real : 0<g};
+  hence thesis by LIMFUNC1:def 3;
+end;
+end;
+
+definition
+let a be real number;
+func log_ a -> PartFunc of REAL,REAL means :Deflog:
+ dom it= right_open_halfline(0) & for d be Element of
+ right_open_halfline(0)  holds it.d= log(a,d);
+ existence
+ proof
+   reconsider a as Real by XREAL_0:def 1;
+   defpred X[set] means $1 in right_open_halfline(0);
+   deffunc U(Real) = log(a,$1);
+  consider f being PartFunc of REAL,  REAL such that
+  A1:   for d be Element of REAL
+              holds d in dom f iff X[d] and
+  A2:   for d be Element of REAL
+             st d in dom f holds f/.d = U(d)
+       from PARTFUN2:sch 2;
+  take f;
+     A4:  dom(f) c=REAL  by RELSET_1:12;
+     for x be set st x in dom f
+                 holds x in right_open_halfline(0) by A1,A4;
+       then
+       L5: dom(f) c= right_open_halfline(0) by TARSKI:def 3;
+    for x be set st x in right_open_halfline(0)
+                holds x in dom f by A1;
+       then right_open_halfline(0)  c=dom(f) by TARSKI:def 3;
+ hence A3: dom(f)=right_open_halfline(0) by L5,XBOOLE_0:def 10;
+     let d be Element of right_open_halfline(0);
+     f/.d = log(a,d) by A2,A3;
+      hence thesis by A3,FINSEQ_4:def 4;
+ end;
+ uniqueness
+ proof
+   let f1,f2 be PartFunc of REAL, REAL;
+   assume
+   A7: dom f1= right_open_halfline(0) & for d
+      being Element of right_open_halfline(0) holds f1.d=log(a,d);
+   assume
+   A8: dom f2= right_open_halfline(0) & for d
+      being Element of right_open_halfline(0) holds f2.d=log(a,d);
+     for d being Element of REAL
+     st d in right_open_halfline(0) holds f1.d = f2.d
+   proof
+    let d be Element of REAL such that
+   AA:   d in  right_open_halfline(0);
+      thus f1.d=log(a,d) by A7,AA
+       .=f2.d by A8,AA;
+   end;
+  hence f1=f2 by A7,A8,PARTFUN1:34;
+ end;
+ end;
+
+theorem LM0120:
+  log_ number_e=(exp)" &
+  log_ number_e is one-to-one &
+  dom(log_ number_e) =right_open_halfline(0) &
+  rng(log_ number_e)  =REAL &
+  log_ number_e  is_differentiable_on right_open_halfline(0) &
+  (for x be Real st x > 0 holds log_ number_e  is_differentiable_in x) &
+  (for x be Element of right_open_halfline(0)
+     holds diff((log_ number_e),x)=1/x) &
+  (for x  be Element of right_open_halfline(0)
+     holds 0 < diff((log_ number_e),x))
+proof
+P1:  dom  ((exp)") =  right_open_halfline(0) by LM0090,FUNCT_1:55;
+  then
+P2:   dom  ((exp)") = dom log_ number_e
+ by Deflog;
+ for d being Element of REAL
+     st d in right_open_halfline(0) holds
+     ((exp)").d = (log_ number_e).d
+   proof
+    let d  be  Element of REAL  such that
+   AA:   d in  right_open_halfline(0);
+   ((exp)").d=log(number_e,d)
+   proof
+     d in {g where g is Real : 0<g} by AA,
+     LIMFUNC1:def 3;
+     then
+     consider g be Real such that
+     PP:   g=d & g > 0;
+     d=exp.(log(number_e,d)) by LM0087,PP;
+     hence
+      ((exp)").d=log(number_e,d)
+    by FUNCT_1:54,LM0090;
+   end;
+   hence ((exp)").d=(log_ number_e).d by Deflog,AA;
+ end;
+ hence
+C1: log_ number_e=(exp)" by P1,P2,PARTFUN1:34;
+ thus
+ log_ number_e is one-to-one by C1,FUNCT_1:62;
+C3: dom(log_ number_e) = right_open_halfline(0)
+   by Deflog;
+C8:  for x be Real st x > 0
+     holds log_ number_e  is_differentiable_in x
+  proof
+     let x be Real such that
+     L1: x > 0;
+     LAS3:x in right_open_halfline(0)
+       proof
+         x in {g where g is Real : 0<g} by L1;
+          hence thesis by LIMFUNC1:def 3;
+       end;
+    LP3:  right_open_halfline(0) is open Subset of REAL
+         &
+          right_open_halfline(0) c= dom  (log_ number_e)
+        by Deflog,P1,LM0100,FDIFF_1:17;
+    thus
+     (log_ number_e)   is_differentiable_in x
+ by P1,LM0100,C1,LP3,LAS3,FDIFF_1:16;
+ end;
+
+ for x be Element of right_open_halfline(0)
+       holds  0 < diff((log_ number_e),x)
+proof
+    let x be Element of right_open_halfline(0);
+      x in right_open_halfline(0);
+      then
+     x in {g where g is Real : 0<g}
+   by LIMFUNC1:def 3;
+    then
+    consider g be Real such that
+      F1: x=g & 0 < g;
+    D3: x"> 0 by F1,REAL_1:72;
+     1/x = x" by XCMPLX_1:217;
+    hence 0 < diff((log_ number_e),x) by D3,P1,C1,LM0100;
+end;
+hence thesis by C3,LM0100,C1,C8,LM0090,FUNCT_1:55;
+end;
+
+theorem
+f is_differentiable_in x0 implies
+ exp*f is_differentiable_in x0 & diff(exp*f,x0) = exp.(f.x0)*diff(f,x0)
+proof
+  aa: x0 is Real by XREAL_0:def 1;
+assume
+ AS1:      f is_differentiable_in x0;
+ P4: exp  is_differentiable_in f.x0 by FCONT_3:4,LM0090,FDIFF_1:16;
+hence exp*f is_differentiable_in x0 by aa,AS1,FDIFF_2:13;
+thus diff(exp*f,x0) = diff(exp,f.x0)*diff(f,x0) by aa,AS1,P4,FDIFF_2:13
+              .=exp.(f.(x0)) *diff(f,x0) by LM0090;
+end;
+
+theorem
+ f is_differentiable_in x0 & f.x0 > 0 implies
+  (log_ number_e) *f is_differentiable_in x0 &
+   diff( (log_ number_e) *f,x0) = diff(f,x0)/(f.x0)
+proof
+assume that
+ AS1:      f is_differentiable_in x0
+    and
+ AS2:      f.x0 > 0;
+ AS3:      f.x0 in right_open_halfline(0)
+ proof
+    f.x0 in {g where g is Real : 0<g} by AS2;
+  hence thesis by LIMFUNC1:def 3;
+ end;
+  P3:  right_open_halfline(0)
+        is open Subset of REAL
+       &
+        right_open_halfline(0)
+        c= dom  (log_ number_e)
+      by LM0120,FDIFF_1:17;
+  P4: (log_ number_e) is_differentiable_in f.x0 by LM0120,P3,AS3,FDIFF_1:16;
+aa:  x0 is Real by XREAL_0:def 1;
+hence (log_ number_e) *f is_differentiable_in x0 by AS1,P4,FDIFF_2:13;
+thus diff((log_ number_e) *f,x0)
+               = diff((log_ number_e),f.x0)*diff(f,x0)
+             by aa,AS1,P4,FDIFF_2:13
+              .=(1/(f.(x0)))   *diff(f,x0)
+             by LM0120,AS3
+              .=diff(f,x0)/(f.(x0)) *1 by XCMPLX_1:76
+              .=diff(f,x0)/(f.(x0));
+end;
+
+definition
+let p be real number;
+func #R p -> PartFunc of REAL,REAL means :DefRp:
+ dom it= right_open_halfline(0) & for d be Element of
+ right_open_halfline(0) holds it.d= d #R p;
+ existence
+ proof
+   reconsider p as Real by XREAL_0:def 1;
+   defpred X[set] means $1 in right_open_halfline(0);
+   deffunc U(Real) = $1 #R p;
+  consider f being PartFunc of REAL,  REAL such that
+  A1:   for d be Element of REAL
+              holds d in dom f iff X[d] and
+  A2:   for d be Element of REAL
+             st d in dom f holds f/.d = U(d)
+       from PARTFUN2:sch 2;
+  take f;
+     A4:  dom(f) c=REAL
+                 by RELSET_1:12;
+     for x be set st x in dom f
+                 holds x in right_open_halfline(0) by A1,A4;
+       then
+       L5: dom(f) c= right_open_halfline(0) by TARSKI:def 3;
+    for x be set st x in right_open_halfline(0)
+                holds x in dom f by A1;
+       then right_open_halfline(0)  c=dom(f) by TARSKI:def 3;
+ hence A3: dom(f)=right_open_halfline(0)  by L5,XBOOLE_0:def 10;
+     let d be Element of right_open_halfline(0);
+      f/.d = d #R p by A2,A3;
+      hence thesis by A3,FINSEQ_4:def 4;
+ end;
+ uniqueness
+ proof
+   let f1,f2 be PartFunc of REAL,  REAL;
+   assume
+   A7: dom f1= right_open_halfline(0) & for d
+      being Element of right_open_halfline(0) holds f1.d=d #R p;
+   assume
+   A8: dom f2= right_open_halfline(0) & for d
+      being Element of right_open_halfline(0) holds f2.d=d #R p;
+     for d being Element of REAL
+     st d in right_open_halfline(0) holds f1.d = f2.d
+   proof
+    let d  be  Element of REAL  such that
+   AA:   d in  right_open_halfline(0);
+      thus f1.d=d #R p by A7,AA
+                    .=f2.d by A8,AA;
+   end;
+  hence f1=f2 by A7,A8,PARTFUN1:34;
+ end;
+ end;
+
+theorem LM0150:
+x > 0  implies ( #R p) is_differentiable_in x & diff(( #R p),x)=p*(x #R (p-1))
+proof
+aa:  x is Real & p is Real by XREAL_0:def 1;
+set f= #R p;
+AS01: dom(f)=right_open_halfline(0) by DefRp;
+L1: for x be Real st 0 < x holds
+     exp*(p(#)(log_ number_e)) is_differentiable_in x &
+     diff(exp*(p(#)(log_ number_e)),x) =p*(x #R (p-1))
+proof
+ let x be Real such that
+  AS2: x > 0;
+  ASX: 0 < x to_power p by POWER:39,AS2;
+  AS3: x in right_open_halfline(0)
+  proof
+    x in {g where g is Real : 0<g} by AS2;
+  hence thesis by LIMFUNC1:def 3;
+  end; then
+ AS6: x in dom (p(#)(log_ number_e)) by LM0120,SEQ_1:def 6;
+
+ AS7: (log_ number_e) is_differentiable_in x by LM0120,AS2; then
+  BS1: p(#)(log_ number_e) is_differentiable_in x by aa,FDIFF_1:23;
+  P1: exp  is_differentiable_in (p(#)(log_ number_e)).x by SIN_COS:70;
+   hence  exp*(p(#)(log_ number_e))
+   is_differentiable_in x by BS1,FDIFF_2:13;
+  P4:diff(exp,(p(#)(log_ number_e)).x)
+      = exp.((p(#)(log_ number_e)).x) by LM0090
+      .=exp.(p*(log_ number_e).x ) by AS6,SEQ_1:def 6
+      .=exp.(p*log(number_e,x)) by AS3,Deflog
+      .=exp.(log(number_e,x to_power p)) by POWER:63,AS2,LM
+      .=x to_power p by LM0087,ASX;
+  diff((p(#)(log_ number_e)),x)
+    =p*diff((log_ number_e),x) by aa,AS7,FDIFF_1:23
+    .=p*(1/x) by LM0120,AS3;
+  hence
+    diff(exp*(p(#)(log_ number_e)),x)
+        =(x to_power p) *(p*(1/x) ) by BS1,P1,FDIFF_2:13,P4
+       .=p*((x to_power p) *(1/x) )
+       .=p*((x to_power p) *(1/(x to_power 1) ) ) by POWER:30
+       .=p*(  (x to_power p) *(x to_power (-1) ) ) by AS2,POWER:33
+       .=p*( x to_power (p+(-1))) by AS2,POWER:32
+       .=p*(x #R (p-1)) by AS2,POWER:def 2;
+end;
+exp*(p(#)(log_ number_e)) = f
+proof
+  A7: dom (exp*(p(#)(log_ number_e)))
+        = right_open_halfline(0)
+    proof
+     rng (p(#)(log_ number_e)) c=dom (exp) by LM0090,RELSET_1:12;
+    hence
+     dom (exp*(p(#)(log_ number_e)))
+     = dom (p(#)(log_ number_e)) by RELAT_1:46
+     .=right_open_halfline(0) by LM0120,SEQ_1:def 6;
+   end;
+
+  for d being Element of REAL
+      st d in right_open_halfline(0) holds (exp*(p(#)(log_ number_e))).d = f.d
+   proof
+    let d  be  Element of REAL  such that
+   AA:   d in  right_open_halfline(0);
+   AS6: d in dom (p(#)(log_ number_e)) by AA,LM0120,SEQ_1:def 6;
+   d in {g where g is Real : 0<g} by AA,LIMFUNC1:def 3; then
+        consider g be Real such that
+        PP:   g=d & g > 0;
+   ASX: 0 < d to_power p by PP,POWER:39;
+   thus
+      (exp*(p(#)(log_ number_e))).d = (exp*(p(#)(log_ number_e)))/.d
+     by A7,AA,FINSEQ_4:def 4
+       .= exp/.((p(#)(log_ number_e))/.d) by A7,AA,PARTFUN2:6
+      .= exp/.((p(#)(log_ number_e)).d) by AS6,FINSEQ_4:def 4
+     .= exp.((p(#)(log_ number_e)).d) by LM0090,FINSEQ_4:def 4
+       .=exp.(p*(log_ number_e).d ) by AS6,SEQ_1:def 6
+      .=exp.(p*log(number_e,d)) by AA,Deflog
+      .=exp.(log(number_e,d to_power p)) by POWER:63,PP,LM
+      .=d to_power p by LM0087,ASX
+       .=(d #R p) by PP,POWER:def 2
+       .=f.d by AA,DefRp;
+     end;
+  hence exp*(p(#)(log_ number_e)) = f by A7,AS01,PARTFUN1:34;
+ end;
+hence thesis by aa,L1;
+end;
+
+theorem
+  f is_differentiable_in x0 & f.x0 > 0 implies
+    ( #R p) *f is_differentiable_in x0 &
+     diff(  ( #R p) *f,x0) = p*( (f.x0) #R (p-1)) * diff(f,x0)
+proof
+ assume that
+ AS1:      f is_differentiable_in x0
+    and
+ AS2:      f.x0 > 0;
+  P4:  ( #R p)   is_differentiable_in f.x0 by LM0150,AS2;
+aa: x0 is Real by XREAL_0:def 1;  
+hence ( #R p) *f is_differentiable_in x0 by AS1,P4,FDIFF_2:13;
+thus diff( ( #R p) *f,x0)
+               = diff( ( #R p),f.x0)*diff(f,x0) by aa,AS1,P4,FDIFF_2:13
+              .=p*( (f.x0) #R (p-1))*diff(f,x0) by LM0150,AS2;
+end;
+
+begin ::The Taylor expansions
+
+definition
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL;
+func diff(f,Z) -> Functional_Sequence of REAL,REAL means :Defdiffseq:
+   it.0 = f|Z & for i be natural number holds it.(i+1) = (it.i) `| Z;
+existence
+proof
+      deffunc G(Nat,PartFunc of REAL,REAL)= ( $2 )`|Z;
+      consider g be Function
+      such that
+      AS2:   dom g = NAT & g.0 = f|Z
+      & for n being Element of  NAT holds g.(n+1) = G(n,g.n)
+      from RECDEF_1:sch 3;
+      defpred P[Nat]  means g.$1 is PartFunc of REAL,REAL;
+       A0: P[0] by AS2;
+       A1:  for k be Nat st P[k] holds P[k+1]
+       proof
+       let k be Nat such that
+         BS1: P[k];
+         reconsider gk=g.k as PartFunc of REAL,REAL by BS1;
+         g.(k+1)=( gk )`|Z by AS2;
+         hence thesis;
+       end;
+         for n be Nat  holds P[n]  from NAT_1:sch 1(A0,A1);
+       then
+        reconsider g as Functional_Sequence of REAL,REAL by AS2,SEQFUNC:1;
+        take g;
+        thus g.0 = f|Z by AS2;
+        let i be natural number;
+        i is Nat by ORDINAL2:def 21;
+       hence  thesis by AS2;
+end;
+uniqueness
+proof
+ let seq1,seq2 be Functional_Sequence of REAL,REAL;
+ assume that A2: seq1.0=f|Z
+            & for n be natural number holds
+                seq1.(n+1)=( seq1.n )`|Z  and
+                   A3: seq2.0=f|Z
+            & for n be natural number holds
+                seq2.(n+1)=( seq2.n )`|Z;
+   defpred P[Nat] means seq1.$1 = seq2.$1;
+ A4: P[0] by A2,A3;
+ A5: for k be Nat st P[k] holds P[k+1]
+     proof let k be Nat;
+      assume
+ A6:     P[k];
+      thus seq1.(k+1) = ( seq1.k )`|Z by A2
+                               .= seq2.(k+1) by A3,A6;
+      end;
+   for n be Nat  holds P[n] from NAT_1:sch 1(A4,A5);
+ hence seq1 = seq2 by SEQFUNC:2;
+end;
+end;
+
+definition
+let f be PartFunc of REAL,REAL;
+let n be natural number;
+let Z be Subset of REAL;
+pred f is_differentiable_on n, Z means :Defnth:
+     for i be Nat st i <= n-1
+             holds diff(f,Z).i is_differentiable_on Z;
+ end;
+
+theorem LM0170:
+for f be PartFunc of REAL,REAL, Z be Subset of REAL, n be natural number
+ st f is_differentiable_on n,Z
+   for m be natural number st m <= n holds f is_differentiable_on m, Z
+proof
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL;
+let n be natural number such that
+AS0:    f is_differentiable_on n, Z;
+let m be natural number such that
+ BS0: m <=n;
+now let i be Nat such that
+   CS1: i <=m-1;
+   m-1 <=n-1  by BS0,REAL_1:92;
+   then
+   i <=n-1 by CS1,AXIOMS:22;
+   hence
+     diff(f,Z).i
+     is_differentiable_on Z by AS0,Defnth;
+end;
+hence thesis by Defnth;
+end;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  let Z be Subset of REAL;
+  let a,b be real number;
+  func Taylor(f,Z,a,b) -> Real_Sequence means :Deftaylor:
+  for n be natural number holds it.n = (diff(f,Z).n).a * (b-a) |^ n / (n!);
+existence
+proof
+deffunc F(Nat)=(diff(f,Z).$1).a * (b-a) |^ $1 /($1!);
+consider seq be Real_Sequence such that
+ A:   for n be Nat holds seq.n=F(n)
+       from SEQ_1:sch 1;
+take seq;
+let n be natural number;
+n is Nat by ORDINAL2:def 21;
+hence thesis by A;
+end;
+uniqueness
+proof
+deffunc F(Nat)=(diff(f,Z).$1).a * (b-a) |^ $1 /($1!);
+let s1,s2 be Real_Sequence such that
+ A:   for n be natural number holds s1.n=F(n)
+        and
+ B:   for n be natural number holds s2.n=F(n);
+ now let x be set such that
+ C: x in NAT;
+ reconsider n=x as Nat by C;
+ thus s1.x = F(n) by A
+        .=s2.x by B;
+ end;
+ hence thesis by SEQ_1:8;
+ end;
+ end;
+
+LM01870:
+for b be Real holds
+   ex g be PartFunc of REAL,REAL st (dom(g)=REAL &
+            for x be Real holds
+            g.x=(b-x) &
+            for x be Real holds
+                g is_differentiable_in x & diff(g,x)=-1 )
+proof
+let b  be Real;
+defpred X[set] means $1 in REAL;
+deffunc U(Real) = (b-$1);
+consider g being PartFunc of REAL,REAL such that
+  A1:   for d be Element of REAL
+              holds d in dom g iff X[d] and
+  A2:   for d be Element of REAL
+             st d in dom g holds g/.d = U(d) from PARTFUN2:sch 2;
+  take g;
+     A3: dom(g)=REAL
+         proof
+          L5: dom(g) c= REAL by RELSET_1:12;
+          for x be set st x in REAL
+                  holds x in dom g by A1;
+          then REAL  c=dom(g) by TARSKI:def 3;
+          hence dom (g) =REAL by L5,XBOOLE_0:def 10;
+        end;
+   A4: for d be Element of REAL holds g.d = b-d
+      proof
+        let d be Element of REAL;
+                   g/.d =  b - d by A2,A3;
+        hence g.d = (b-d) by A3,FINSEQ_4:def 4;
+      end;
+    A7: for d be Real st d in  REAL
+             holds g.d = (-1)*d + b
+      proof
+        let d be Real such that d in REAL;
+        thus g.d=b-d by A4
+           .= (-1)*d + b;
+      end;
+
+  A8: dom(g) is open Subset of REAL by A3,SUBSET_1:def 4,FCONT_3:4; then
+
+ A9: g is_differentiable_on dom(g)
+   & for x be Real st x in dom(g)  holds (g`|dom(g)).x = -1
+  by A7,FDIFF_1:31,A3;
+  for x be Real holds
+                g  is_differentiable_in x & diff(g,x)=-1
+      proof
+        let d be Real;
+        thus g is_differentiable_in d
+        by FDIFF_1:16,A3,A8,A9;
+        thus diff(g,d)=(g`|dom(g)).d
+                 by FDIFF_1:def 8,A9,A3
+                      .= -1 by A8,A7,FDIFF_1:31,A3;
+      end;
+ hence thesis by A3,A4;
+ end;
+
+LM01871:
+for n be Nat
+for l,b be Real holds
+   ex g be PartFunc of REAL,REAL
+     st ( dom(g)=REAL &
+            for x be Real holds
+            g.x=l*(b-x) |^ (n+1)  /((n+1)!) &
+            for x be Real holds
+            g is_differentiable_in x
+              & diff(g,x)=-l* (b-x) |^ (n) /((n)!) )
+proof
+let n be Nat;
+let l be Real;
+let b  be Real;
+defpred X[set] means $1 in REAL;
+deffunc U(Real)
+= l*(b-$1) |^ (n+1)  /((n+1)!);
+consider g being PartFunc of REAL,  REAL such that
+  A1:   for d be Element of REAL
+              holds d in dom g iff X[d] and
+  A2:   for d be Element of REAL
+             st d in dom g holds g/.d = U(d)
+       from PARTFUN2:sch 2;
+  take g;
+     A3: dom(g)=REAL
+         proof
+          L5: dom(g) c= REAL by RELSET_1:12;
+          for x be set st x in REAL
+                  holds x in dom g by A1;
+          then REAL  c=dom(g) by TARSKI:def 3;
+          hence dom (g) =REAL by L5,XBOOLE_0:def 10;
+        end;
+    AD:   for d be Element of REAL
+             holds g.d = l*(b-d) |^ (n+1)  /((n+1)!)
+      proof
+        let d be Element of REAL;
+         g/.d = l*(b-d) |^ (n+1)  /((n+1)!) by A2,A3;
+        hence g.d = l*(b-d) |^ (n+1)  /((n+1)!)
+                            by A3,FINSEQ_4:def 4;
+      end;
+
+   consider f be PartFunc of REAL,REAL such that
+      A7:  dom(f)=REAL and
+      A8: for x be Real holds f.x=(b-x) and
+      A9:  for x be Real holds
+                f is_differentiable_in x
+               &   diff(f,x)=-1 by LM01870;
+     A10: for x be Real holds
+              ( #Z (n+1)) *f is_differentiable_in x
+                &
+              diff(( #Z (n+1)) *f,x) =- (n+1) *(b-x) #Z n
+      proof
+      let x be Real;
+       A11: f is_differentiable_in x by A9;
+       A12: #Z (n+1)  is_differentiable_in f.x  &
+              diff(( #Z(n+1)),f.x) = (n+1) * (f.x) #Z ((n+1)-1) by LM0001;
+       thus ( #Z (n+1)) *f is_differentiable_in x by FDIFF_2:13, A11,A12;
+       thus diff(( #Z (n+1)) *f,x)
+              = (n+1) *(f.x) #Z ((n+1)-1)*diff(f,x)
+             by FDIFF_2:13,A12,A11
+             .= (n+1) *(f.x) #Z ((n+1)-1)  *(-1) by A9
+             .= (n+1) *(b-x) #Z ((n+1)-1)  *(-1) by A8
+             .= -(n+1) *(b-x) #Z ((n+1)-1)
+             .=-(n+1)*(b-x) #Z n;
+      end;
+      A13:( l/((n+1)!)) (#)  ( #Z (n+1) *f) =g
+      proof
+      K1: dom( #Z (n+1)) = REAL by FUNCT_2:def 1;
+       rng (f) c= REAL by RELSET_1:12; then
+         A130A: dom ( #Z (n+1)  *f ) = dom(f) by K1,RELAT_1:46; then
+          A131: dom (( l/((n+1)!)) (#) ( #Z (n+1)  *f ))
+                           = dom(g) by A3,A7,SEQ_1:def 6;
+      now let x be Element of REAL such that
+        A132:  x in dom (  l/((n+1)!) (#) ( #Z (n+1) *f ) );
+        thus (( l/((n+1)!)) (#) ( #Z (n+1) *f ) ).x
+             = (l/((n+1)!))*(  #Z (n+1) *f ).x by A132,SEQ_1:def 6
+             .= (l/((n+1)!))*(  #Z (n+1) *f )/.x by A130A,A7,FINSEQ_4:def 4
+             .= (l/((n+1)!))*  #Z (n+1)/.(f/.x) by A130A,A7,PARTFUN2:6
+             .= (l/((n+1)!))*  #Z (n+1)/.(f.x) by A7,FINSEQ_4:def 4
+             .=l/((n+1)!)*(  #Z (n+1).(f.x) ) by K1,FINSEQ_4:def 4
+            .=l/((n+1)!)*( (f.x) #Z (n+1)  ) by DefZn
+            .=l/((n+1)!)*( (f.x) |^ (n+1)  ) by PREPOWER:46
+            .=l/((n+1)!)*( (b-x) |^ (n+1)  ) by A8
+            .=l*(b-x) |^ (n+1)/((n+1)!) by XCMPLX_1:75
+            .=g.x by AD;
+      end;
+      hence thesis by PARTFUN1:34,A131;
+     end;
+
+     now let x be Real;
+     L1:   ( #Z (n+1) *f) is_differentiable_in x by A10;
+     hence  ( l/((n+1)!) ) (#)  ( #Z (n+1) *f)
+                   is_differentiable_in x by FDIFF_1:23;
+     L3:   (n+1) /  ((n+1)!) = (1*(n+1))/ (n! * (n+1)) by NEWTON:21
+            .=1/(n!) by XCMPLX_1:92;
+     thus diff((l/((n+1)!)) (#)  ( #Z (n+1) *f),x)
+            = (l/((n+1)!)) *diff( #Z (n+1) *f,x) by L1,FDIFF_1:23
+            .= diff( #Z (n+1) *f,x)/((n+1)!)*l by XCMPLX_1:76
+            .=l *( (- (n+1) *(b-x) #Z n )/  ((n+1)!)) by A10
+            .=l *( (- (n+1) *(b-x) |^ n )/  ((n+1)!)) by PREPOWER:46
+            .=l * (- (n+1) *(b-x) |^ n )/  ((n+1)!) by XCMPLX_1:75
+            .=(-l) *((n+1) * (b-x) |^ n)/((n+1)!)
+            .=(-l) *(((n+1) *(b-x) |^ n )/  ((n+1)!)) by XCMPLX_1:75
+            .=(-l) *( (b-x) |^ n * ( (n+1) /  ((n+1)!)) ) by XCMPLX_1:75
+            .=(-l) *( (b-x) |^ n /  (n!)  ) by XCMPLX_1:100,L3
+            .=-(l*( (b-x) |^ n /  (n!))  )
+            .=-(l*(b-x) |^ n /  (n!)  ) by XCMPLX_1:75;
+     end;
+    hence thesis by A3,AD,A13;
+ end;
+
+LM01872:
+for n be Nat
+for f be PartFunc of REAL,REAL
+for Z be Subset of REAL
+for b be Real holds
+   ex g be PartFunc of REAL,REAL
+     st ( dom(g)=Z & for x be Real st x in Z holds
+            g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).n )
+proof
+let n be Nat;
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL;
+let b be Real;
+defpred X[set] means $1 in Z;
+deffunc U(Real) = f.b-Partial_Sums(Taylor(f,Z,$1,b)).n;
+consider g being PartFunc of REAL,  REAL such that
+  A1:   for d be Element of REAL
+              holds d in dom g iff X[d] and
+  A2:   for d be Element of REAL
+             st d in dom g holds g/.d = U(d)
+       from PARTFUN2:sch 2;
+  take g;
+     A3: dom(g)=Z
+         proof
+          A4:  dom(g) c=REAL by RELSET_1:12;
+          for x be set st x in dom g
+                   holds x in Z by A1,A4; then
+          L5: dom(g) c= Z by TARSKI:def 3;
+          for x be set st x in Z
+                  holds x in dom g by A1;
+          then Z  c=dom(g) by TARSKI:def 3;
+          hence dom (g) =Z by L5,XBOOLE_0:def 10;
+        end;
+    for d be Real st d in Z
+             holds g.d =f.b-Partial_Sums(Taylor(f,Z,d,b)).n
+      proof
+        let d be Real such that
+         AA: d in Z;
+           g/.d = f.b-Partial_Sums(Taylor(f,Z,d,b)).n by AA,A2,A3;
+        hence g.d =f.b-Partial_Sums(Taylor(f,Z,d,b)).n
+                            by A3,AA,FINSEQ_4:def 4;
+      end;
+    hence thesis by A3;
+ end;
+
+theorem LMDF:
+for f be PartFunc of REAL,REAL
+for Z be Subset of REAL
+for n be Nat
+      st  f is_differentiable_on n,  Z
+for a,b be Real st ( a < b & ].a,b.[ c= Z )
+holds
+    diff(f,Z).n | ].a,b.[ = diff(f,].a,b.[).n
+proof
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL;
+defpred P[Nat] means f is_differentiable_on $1,  Z implies
+  for a,b be Real st
+     ( a < b & ].a,b.[ c=Z ) holds
+    diff(f,Z).$1  | ].a,b.[ = diff(f,].a,b.[).$1;
+ I0: P[0]
+    proof
+    assume
+    f is_differentiable_on 0,  Z;
+    let a,b be Real such that
+       AS1: ( a < b & ].a,b.[ c=Z );
+     thus (diff(f,Z).0) |].a,b.[
+     =(f|Z)|].a,b.[ by Defdiffseq
+     .=f|].a,b.[ by FUNCT_1:82,AS1
+     .=diff(f,].a,b.[).0 by Defdiffseq;
+    end;
+Ik: for k be Nat st P[k] holds P[k+1]
+   proof
+   let k be Nat such that
+     AS: P[k];
+    assume
+    FA:   f is_differentiable_on (k+1),  Z;
+    let a,b be Real such that
+     AS1: ( a < b   & ].a,b.[ c=Z );
+    FFB: k <= k+1 by NAT_1:29;
+    k <= (k+1)-1; then
+    CC1:(diff(f,Z).k) is_differentiable_on Z by FA,Defnth; then
+    CCC: (diff(f,Z).k) is_differentiable_on  ].a,b.[
+      by AS1,FDIFF_1:34;
+     J1: dom(((diff(f,Z).k)`|Z)| ].a,b.[)
+     =dom((diff(f,Z).k)`|Z) /\ ].a,b.[ by FUNCT_1:68
+     .=Z /\ ].a,b.[ by CC1,FDIFF_1:def 8
+     .=].a,b.[ by AS1,XBOOLE_1:28;
+     J2: dom((diff(f,Z).k)`| ].a,b.[) = ].a,b.[
+     by CCC,FDIFF_1:def 8;
+     J3: now
+       let x be Real such that
+       J31: x in dom(((diff(f,Z).k)`|Z)| ].a,b.[);
+      thus (((diff(f,Z).k)`|Z)| ].a,b.[).x
+       =((diff(f,Z).k)`|Z).x by J1,J31,FUNCT_1:72
+      .=diff((diff(f,Z).k),x) by CC1,AS1,J31,J1,FDIFF_1:def 8
+      .=((diff(f,Z).k)`|].a,b.[).x
+      by J31,J1,CCC,FDIFF_1:def 8;
+     end;
+     thus diff(f,Z).(k+1) | ].a,b.[
+       =((diff(f,Z).k)`|Z)| ].a,b.[ by Defdiffseq
+      .=(diff(f,Z).k)`| ].a,b.[ by J1,J2,J3,PARTFUN1:34
+      .= ((diff(f,Z).k)|].a,b.[) `| ].a,b.[ by FDIFF_2:16,CCC
+      .=(diff(f,].a,b.[).k)`| ].a,b.[ by FFB,AS1,AS,FA,LM0170
+      .=diff(f,].a,b.[).(k+1) by Defdiffseq;
+   end;
+  thus for k be Nat holds P[k] from NAT_1: sch 1(I0,Ik);
+ end;
+
+LM01873:
+for f be PartFunc of REAL,REAL
+for Z be Subset of REAL
+for n be Nat
+      st f is_differentiable_on n,  Z
+for a,b be Real
+     st
+     ( a < b
+  & [.a,b.] c= Z
+  &  (diff(f,Z).n) is_continuous_on [.a,b.]
+  &  f is_differentiable_on (n+1), ].a,b.[  )
+  for g be PartFunc of REAL,REAL st (
+            dom(g)=Z
+            &
+            for x be Real st x in Z holds
+            g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).n
+        )
+     holds g.b=0
+           &
+           g is_continuous_on [.a,b.]
+           &
+           g is_differentiable_on  ].a,b.[
+           &
+           for x be Real st x in ].a,b.[ holds
+             diff(g,x)=-(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /(n!)
+proof
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL;
+defpred P[Nat] means f is_differentiable_on $1,  Z implies
+  for a,b be Real st
+     ( a < b
+  & [.a,b.] c=Z
+  &  (diff(f,Z).$1) is_continuous_on [.a,b.]
+  &  f is_differentiable_on ($1+1), ].a,b.[ )
+  for g be PartFunc of REAL,REAL
+     st (
+            dom(g)=Z
+            &
+            for x be Real st x in Z holds
+            g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).$1
+        )
+     holds
+           g.b=0
+           &
+           g is_continuous_on [.a,b.]
+           &
+           g is_differentiable_on  ].a,b.[
+           &
+           for x be Real st x in ].a,b.[  holds
+            diff(g,x)=-(diff(f,].a,b.[).($1+1)).x
+            * (b-x) |^ ($1) / ( ($1)!);
+
+I0:P[0]
+proof
+assume f is_differentiable_on 0,  Z;
+let a,b be Real such that
+ UAB1: a < b and
+ UAB2: [.a,b.] c= Z
+    and
+ UAB3:  (diff(f,Z).0) is_continuous_on [.a,b.]
+    and
+ UAB4: f is_differentiable_on (0+1), ].a,b.[;
+ let g be PartFunc of REAL,REAL such that
+ K1: dom(g)=Z and
+ K2:
+    for x be Real st x in Z holds
+            g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).0;
+  LKL: ].a,b.[ c=[.a,b.] by RCOMP_1:15; then
+  K41: ].a,b.[ c= Z by UAB2,XBOOLE_1:1;
+  FBZ: b in [.a,b.] by UAB1,RCOMP_1:15;
+  hence g.b=f.b-Partial_Sums(Taylor(f,Z,b,b)).(0) by K2,UAB2
+      .=f.b-Taylor(f,Z,b,b).0 by SERIES_1:def 1
+      .=f.b  - (diff(f,Z).(0)).b * (b-b) |^ (0) /((0)!) by Deftaylor
+      .=f.b  - (f|Z).b * (b-b) |^ (0) /((0)!) by Defdiffseq
+      .=f.b  - f.b * (b-b) |^ (0) /((0)!) by FBZ,UAB2,FUNCT_1:72
+      .=f.b  - f.b * 1 by NEWTON:9,18
+      .=0;
+  consider y be PartFunc of REAL,REAL such that
+      AT7:  dom(y)=REAL
+          and
+      AT8: for x be Real holds y.x=(f.b-x)
+          and
+      AT9:  for x be Real holds
+                y is_differentiable_in x
+               &   diff(y,x)=-1 by LM01870;
+f|Z is_continuous_on [.a,b.] by UAB3,Defdiffseq;
+then
+(f|Z)| [.a,b.]   is_continuous_on [.a,b.] by
+FCONT_1:16;
+then
+(f|[.a,b.])    is_continuous_on [.a,b.] by
+FUNCT_1:82,UAB2;
+then
+BT9:f is_continuous_on [.a,b.] by FCONT_1:16;
+then
+BQ1: [.a,b.] c= dom(f) by FCONT_1:def 2;
+BQ2: rng(f) c= REAL by RELSET_1:12;
+then
+BQ4: dom(y*f) = dom(f) by AT7,RELAT_1:46;
+BQ5: dom((y*f)|[.a,b.])=dom(y*f) /\ [.a,b.] by FUNCT_1:68
+                      .=[.a,b.] by XBOOLE_1:28,BQ1,BQ4
+                      .=Z /\ [.a,b.] by XBOOLE_1:28,UAB2
+                      .=dom(g|[.a,b.]) by K1,FUNCT_1:68;
+BT14: g|[.a,b.]=(y*f)|[.a,b.]
+proof
+ now let xx be set
+   such that
+   BQ61: xx in dom(g|[.a,b.]);
+   dom(g|[.a,b.])=dom(g) /\ [.a,b.] by FUNCT_1:68;
+   then
+   BFF2: dom(g|[.a,b.]) c= [.a,b.]
+ by XBOOLE_1:17;
+    dom(g|[.a,b.]) c= REAL
+ by XBOOLE_1:1, BFF2;
+   then reconsider x=xx as Real by BQ61;
+        BK4:  (b-x) |^ (0) /((0)!)=1 by NEWTON:9,18;
+    BSS1: x in [.a,b.] by BQ61,BFF2;
+     thus
+      (g|[.a,b.]).xx
+       =g.x by FUNCT_1:70,BQ61
+      .=f.b-Partial_Sums(Taylor(f,Z,x,b)).(0) by BSS1,UAB2,K2
+      .=f.b-Taylor(f,Z,x,b).0 by SERIES_1:def 1
+      .=f.b  - (diff(f,Z).(0)).x * (b-x) |^ (0) /((0)!) by Deftaylor
+       .=f.b  - (f|Z).x * (b-x) |^ (0) /((0)!) by Defdiffseq
+       .=f.b  - f.x * (b-x) |^ (0) /((0)!) by BSS1,UAB2,FUNCT_1:72
+      .=f.b  - f.x * ((b-x) |^ (0) /((0)!)) by XCMPLX_1:75
+      .=y.(f.x) by AT8,BK4
+      .=(y*f).x by BQ1,BSS1,FUNCT_1:23
+      .=((y*f)|[.a,b.]).xx by BQ5,BQ61,FUNCT_1:70;
+  end;
+hence thesis by BQ5,FUNCT_1:9;
+end;
+
+f.:[.a,b.] c= rng(f) by RELAT_1:144;
+then
+BQ7: f.:[.a,b.] c= REAL by BQ2,XBOOLE_1:1;
+BQ9: REAL  is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
+
+for x be Real st x in REAL
+   holds y is_differentiable_in x by AT9;
+then
+ y is_differentiable_on REAL
+     by AT7,FDIFF_1:16,BQ9;
+then
+BQ9: y is_continuous_on REAL
+     by FDIFF_1:33;
+y is_continuous_on (f.:[.a,b.]) by FCONT_1:17,BQ7,BQ9;
+then
+(y*f) is_continuous_on [.a,b.] by BT9,FCONT_1:26;
+then
+(y*f)|[.a,b.]  is_continuous_on [.a,b.] by FCONT_1:16;
+hence
+ g is_continuous_on [.a,b.] by BT14,FCONT_1:16;
+
+0 <= (0+1)-1; then
+diff(f,].a,b.[).0  is_differentiable_on ].a,b.[ by Defnth,UAB4;then
+ f|].a,b.[  is_differentiable_on ].a,b.[ by Defdiffseq;then
+Z2: ].a,b.[ c= dom(f)&
+   for x be Real st x in ].a,b.[ holds
+    f|].a,b.[  is_differentiable_in x by BQ1,LKL,XBOOLE_1:1,FDIFF_1:16; then
+K3: f is_differentiable_on ].a,b.[ by FDIFF_1:def 7;
+ AT10: for x be Real st x in ].a,b.[ holds
+          y *f is_differentiable_in x &
+              diff( y*f,x) =-diff(f,].a,b.[).(0+1).x * (b-x) |^ (0) / ( (0)!)
+      proof
+      let x be Real
+        such that
+       ASS: x in ].a,b.[;
+       K4:  (b-x) |^ (0) /((0)!)=1 by NEWTON:9,18;
+       AT11: y is_differentiable_in  f.x by AT9;
+       AT12:  diff(f,].a,b.[).(0+1)=( diff(f,].a,b.[).0)`|].a,b.[ by Defdiffseq
+                                  .= (f|].a,b.[)`|].a,b.[ by Defdiffseq
+                                  .= f`|].a,b.[ by FDIFF_2:16,K3;
+       AT13: f is_differentiable_in  x by K3,ASS,FDIFF_1:16;
+       thus y*f is_differentiable_in x by FDIFF_2:13, AT11,AT13;
+       thus diff( y*f,x)
+              =diff(y, f.x)*diff(f,x) by FDIFF_2:13,AT13,AT11
+             .= diff(y,f.x)*(f`|].a,b.[).x by K3,ASS,FDIFF_1:def 8
+             .= (-1)*diff(f,].a,b.[).(0+1).x by AT9,AT12
+             .=-diff(f,].a,b.[).(0+1).x*((b-x) |^ (0) /((0)!)) by K4
+             .=-diff(f,].a,b.[).(0+1).x*(b-x) |^ (0) /((0)!) by XCMPLX_1:75;
+      end;
+ rng(f) c= dom(y) by AT7,RELSET_1:12; then
+Q4: dom(y*f) = dom(f) by RELAT_1:46;
+Q5: dom((y*f)|].a,b.[) = dom(y*f) /\ ].a,b.[ by FUNCT_1:68
+                      .= ].a,b.[ by XBOOLE_1:28,Z2,Q4
+                      .= Z /\ ].a,b.[ by XBOOLE_1:28,K41
+                      .= dom(g|].a,b.[) by K1,FUNCT_1:68;
+
+AT14: g|].a,b.[=(y*f)|].a,b.[
+proof
+ now let xx be set
+   such that
+   Q61: xx in dom(g|].a,b.[);
+   dom(g|].a,b.[)=dom(g) /\ ].a,b.[ by FUNCT_1:68; then
+   FF2: dom(g|].a,b.[) c= ].a,b.[ by XBOOLE_1:17;
+    dom(g|].a,b.[) c= REAL by XBOOLE_1:1,FF2; then
+   reconsider x=xx as Real by Q61;
+        K4:  (b-x) |^ (0) /((0)!) =1 by NEWTON:9,18;
+    SS1: x in ].a,b.[ by Q61,FF2;
+     thus
+      (g|].a,b.[).xx =g.x by FUNCT_1:70,Q61
+      .=f.b-Partial_Sums(Taylor(f,Z,x,b)).(0) by SS1,K41,K2
+      .=f.b-Taylor(f,Z,x,b).0 by SERIES_1:def 1
+      .=f.b  - (diff(f,Z).(0)).x * (b-x) |^ (0) /((0)!) by Deftaylor
+      .=f.b  - (f|Z).x * (b-x) |^ (0) /((0)!) by Defdiffseq
+      .=f.b  - f.x * (b-x) |^ (0) /((0)!) by SS1,K41,FUNCT_1:72
+      .=f.b  - f.x * ((b-x) |^ (0) /((0)!)) by XCMPLX_1:75
+      .=y.(f.x) by AT8,K4
+      .=(y*f).x by Z2,SS1,FUNCT_1:23
+      .=((y*f)|].a,b.[).xx by Q5,Q61,FUNCT_1:70;
+  end;
+hence thesis by Q5,FUNCT_1:9;
+end;
+
+for x be Real st x in ].a,b.[ holds y *f is_differentiable_in x by AT10; then
+Q8: y*f is_differentiable_on ].a,b.[ by Z2,Q4,FDIFF_1:16; then
+  g|].a,b.[  is_differentiable_on ].a,b.[
+     & (y*f)`|].a,b.[=(g|].a,b.[)`|].a,b.[ by AT14,FDIFF_2:16; then
+for x be Real st x in ].a,b.[ holds g|].a,b.[ is_differentiable_in x
+by FDIFF_1:16;
+hence Q11:g is_differentiable_on ].a,b.[ by K41,K1,FDIFF_1:def 7;
+now let x be Real such that
+  AA:  x in ].a,b.[;
+  thus g is_differentiable_in x by AA,Q11,FDIFF_1:16;
+  thus diff(g,x)
+            =(g`|].a,b.[).x by AA,Q11,FDIFF_1:def 8
+          .=((g|].a,b.[)`|].a,b.[).x by Q11,FDIFF_2:16
+          .= ((y*f)`|].a,b.[).x by Q8,AT14,FDIFF_2:16
+          .=diff( y*f,x) by AA,Q8,FDIFF_1:def 8
+          .=-diff(f,].a,b.[).(0+1).x * (b-x) |^ (0) / ( (0)!)
+        by AA,AT10;
+end;
+hence thesis;
+end;
+Ik:for k be Nat st P[k] holds P[k+1]
+proof
+let k be Nat such that
+ASK:   P[k];
+assume
+ASK1: f is_differentiable_on k+1, Z;
+let a,b be Real such that
+ UAB1: a < b and
+ UAB2: [.a,b.] c=Z and
+ UAB3:  (diff(f,Z).(k+1)) is_continuous_on [.a,b.] and
+ UAB4: f is_differentiable_on ((k+1)+1), ].a,b.[;
+  ].a,b.[ c=[.a,b.] by RCOMP_1:15; then
+ K41: ].a,b.[ c= Z by UAB2,XBOOLE_1:1;
+ASKZ: k <=k+1 by NAT_1:29;
+k <=(k+1)-1; then
+diff(f,Z).k is_differentiable_on Z by Defnth,ASK1; then
+diff(f,Z).k  is_continuous_on Z by FDIFF_1:33; then
+UAB3K:  diff(f,Z).k is_continuous_on [.a,b.] by UAB2,FCONT_1:17;
+(k+1) <= (k+1)+1 by NAT_1:29; then
+UAB4K: f is_differentiable_on (k+1), ].a,b.[ by LM0170,UAB4;
+ consider gk  be PartFunc of REAL,REAL such that
+ASGK1: dom(gk)=Z  and
+ASGK2: for x be Real st x in Z holds
+            gk.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).k by LM01872;
+PGK: gk.b=0 & gk is_continuous_on [.a,b.] &
+           gk is_differentiable_on  ].a,b.[ &
+           for x be Real st x in ].a,b.[ holds
+            diff(gk,x)=-(diff(f,].a,b.[).(k+1)).x * (b-x) |^ (k) /((k)!)
+ by ASGK1,ASGK2,ASK,ASKZ,UAB1,UAB2,UAB3K,UAB4K,ASK1,LM0170;
+
+now let gk1 be PartFunc of REAL,REAL such that
+   BSGK1: dom(gk1)=Z and
+   BSGK2: for x be Real st x in Z  holds
+    gk1.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).(k+1);
+
+consider h be PartFunc of REAL,REAL such that
+PH1:  dom(h)=REAL and
+PH2: for x be Real holds
+      h.x=1*(b-x) |^ (k+1)  /((k+1)!) and
+PH3:for x be Real holds
+            h is_differentiable_in x
+              & diff(h,x)=-1* (b-x) |^ (k) /((k)!)
+         by LM01871;
+thus gk1.b=0
+proof
+  K0: b in [.a,b.] by UAB1,RCOMP_1:15;
+  hence gk1.b=f.b-Partial_Sums(Taylor(f,Z,b,b)).(k+1) by BSGK2,UAB2
+      .=f.b-(Partial_Sums(Taylor(f,Z,b,b)).k+Taylor(f,Z,b,b).(k+1))
+            by SERIES_1:def 1
+     .=(f.b-Partial_Sums(Taylor(f,Z,b,b)).k)-Taylor(f,Z,b,b).(k+1)
+     .=gk.b -Taylor(f,Z,b,b).(k+1) by ASGK2,K0,UAB2
+     .=0 -Taylor(f,Z,b,b).(k+1)
+        by ASGK1,ASGK2,ASK,ASKZ,UAB1,UAB2,UAB3K,UAB4K,ASK1,LM0170
+     .=0  - (diff(f,Z).(k+1)).b * (b-b) |^ (k+1) /((k+1)!) by Deftaylor
+     .=0  - (diff(f,Z).(k+1)).b * (0|^k*0) /((k+1)!) by NEWTON:11
+     .=0;
+  end;
+L1: diff(f,Z).(k+1)=( diff(f,Z).k)`|Z by Defdiffseq;
+k <=(k+1)-1; then
+L2:diff(f,Z).k is_differentiable_on Z by ASK1,Defnth;
+L4: dom(diff(f,Z).(k+1) (#)h)
+            = dom (diff(f,Z).(k+1))  /\ dom(h) by SEQ_1:def 5
+                            .=  Z /\  REAL by L2,PH1,L1,FDIFF_1:def 8
+                            .=  Z by XBOOLE_1:28;
+L5:dom(gk-diff(f,Z).(k+1) (#)h)
+    =dom(gk) /\ dom(diff(f,Z).(k+1) (#)h) by SEQ_1:def 4
+    .=Z by L4,ASGK1;
+thus gk1 is_continuous_on [.a,b.]
+proof
+set  ghk=gk-((diff(f,Z).(k+1)) (#) h);
+ now let x be Real such that
+  K0:       x in  Z;
+  thus
+  gk1.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).(k+1) by K0,BSGK2
+      .=f.b-(Partial_Sums(Taylor(f,Z,x,b)).k+Taylor(f,Z,x,b).(k+1))
+            by SERIES_1:def 1
+     .=f.b-Partial_Sums(Taylor(f,Z,x,b)).k-Taylor(f,Z,x,b).(k+1)
+     .=gk.x -Taylor(f,Z,x,b).(k+1) by ASGK2,K0
+     .=gk.x  - (diff(f,Z).(k+1)).x * (b-x) |^ (k+1) /((k+1)!) by Deftaylor
+     .=gk.x  - (diff(f,Z).(k+1)).x * (1*(b-x) |^ (k+1) /((k+1)!))
+     by XCMPLX_1:75
+     .=gk.x  - (diff(f,Z).(k+1)).x * h.x by PH2
+     .=gk.x  - ((diff(f,Z).(k+1)) (#) h).x by SEQ_1:def 5,K0,L4
+     .=(gk-((diff(f,Z).(k+1)) (#) h)).x by K0,L5,SEQ_1:def 4;
+end;
+then
+P2: gk1= ghk by L5,BSGK1,PARTFUN1:34;
+BQ9: REAL  is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
+for x be Real st x in REAL
+   holds h is_differentiable_in x by PH3; then
+   h is_differentiable_on REAL by PH1,FDIFF_1:16,BQ9; then
+BQ9: h is_continuous_on REAL by FDIFF_1:33;
+h is_continuous_on  [.a,b.] by FCONT_1:17,BQ9; then
+ (diff(f,Z).(k+1)) (#) h  is_continuous_on [.a,b.] /\  [.a,b.]
+   by FCONT_1:20,UAB3;
+ hence thesis by FCONT_1:20,PGK,P2;
+end;
+LL1: diff(f,].a,b.[).(k+1)=( diff(f,].a,b.[).k)`|].a,b.[ by Defdiffseq;
+k <=(k+1)+1-1 by NAT_1:29; then
+LL2:diff(f,].a,b.[).k is_differentiable_on ].a,b.[ by UAB4,Defnth;
+LL4: dom(diff(f,].a,b.[).(k+1) (#)h)
+            = dom (diff(f,].a,b.[).(k+1))  /\ dom(h) by SEQ_1:def 5
+                            .=  ].a,b.[ /\  REAL by LL2,PH1,LL1,FDIFF_1:def 8
+                            .=  ].a,b.[ by XBOOLE_1:28;
+
+LL5:dom(gk-diff(f, ].a,b.[).(k+1) (#)h)=Z /\  ].a,b.[ by LL4,ASGK1,SEQ_1:def 4
+    .= ].a,b.[ by XBOOLE_1:28,K41;
+k+1 <=(k+1)+1-1; then
+M1: diff(f,].a,b.[).(k+1)  is_differentiable_on ].a,b.[ by UAB4,Defnth;
+set gfh=gk-diff(f,].a,b.[).(k+1) (#)h;
+LLL5: dom(gfh)=dom(gk1)/\  ].a,b.[ by BSGK1,LL5,K41,XBOOLE_1:28;
+HHH:for x be Real st x in ].a,b.[
+   holds
+ (gk-diff(f,Z).(k+1) (#)h).x =(gk-diff(f,].a,b.[).(k+1) (#)h).x
+ proof
+ let x be Real
+    such that
+    AS: x in ].a,b.[;
+     thus
+      (gk-diff(f,].a,b.[).(k+1) (#)h).x
+      =gk.x - (diff(f,].a,b.[).(k+1) (#)h).x by AS,LL5,SEQ_1:def 4
+     .=gk.x - (diff(f,].a,b.[).(k+1)).x * h.x by LL4,AS,SEQ_1:def 5
+     .=gk.x - ((diff(f,Z).(k+1))|].a,b.[).x * h.x by UAB1,ASK1,K41,LMDF
+     .=gk.x - (diff(f,Z).(k+1)).x * h.x by AS,FUNCT_1:72
+     .=gk.x - ((diff(f,Z).(k+1)) (#)h).x by L4,K41,AS,SEQ_1:def 5
+     .=(gk - ((diff(f,Z).(k+1)) (#)h)).x by L5,K41,AS,SEQ_1:def 4;
+ end;
+L6: now let xx be set
+   such that
+   L60: xx in dom(gfh);
+   reconsider x=xx as Real by LL5,L60;
+    thus
+      gk1.xx
+       =f.b-Partial_Sums(Taylor(f,Z,x,b)).(k+1) by LL5,L60,K41,BSGK2
+      .=f.b-(Partial_Sums(Taylor(f,Z,x,b)).k + Taylor(f,Z,x,b).(k+1))
+            by SERIES_1:def 1
+     .=f.b-Partial_Sums(Taylor(f,Z,x,b)).k -Taylor(f,Z,x,b).(k+1)
+      .=gk.x - Taylor(f,Z,x,b).(k+1) by LL5,L60,K41,ASGK2
+      .=gk.x - (diff(f,Z).(k+1)).x * (b-x) |^ (k+1) /((k+1)!) by Deftaylor
+      .=gk.x - (diff(f,Z).(k+1)).x * (1*(b-x) |^ (k+1) /((k+1)!))
+    by XCMPLX_1:75
+      .=gk.x - (diff(f,Z).(k+1)).x * h.x by PH2
+      .=gk.x - (diff(f,Z).(k+1) (#)h).x by L4,LL5,L60,K41,SEQ_1:def 5
+      .=(gk- (diff(f,Z).(k+1) (#)h)).x by L5,LL5,L60,K41,SEQ_1:def 4
+      .=gfh.xx by HHH,LL5,L60;
+end;
+Z3:  (gk1|].a,b.[)|].a,b.[= gfh|].a,b.[ by L6,LLL5,FUNCT_1:68; then
+L77: gfh|].a,b.[=gk1|].a,b.[ by FUNCT_1:82;
+
+for x be Real st x in ].a,b.[ holds h is_differentiable_in x by PH3; then
+M2: h is_differentiable_on ].a,b.[ by PH1,FDIFF_1:16;
+M3: diff(f,].a,b.[).(k+1) (#)h is_differentiable_on ].a,b.[ &
+     for x be Real st x in ].a,b.[ holds
+      ((diff(f,].a,b.[).(k+1) (#)h)`|].a,b.[).x
+        = (h.x)*diff(diff(f,].a,b.[).(k+1),x)
+        + (diff(f,].a,b.[).(k+1).x)*diff(h,x)
+    by M1,M2,LL4,FDIFF_1:29; then
+M5: gfh  is_differentiable_on ].a,b.[
+      &
+     for x be Real
+          st x in ].a,b.[  holds (gfh`|].a,b.[).x
+       = diff(gk,x) - diff(diff(f,].a,b.[).(k+1) (#)h,x)
+   by PGK,LL5,FDIFF_1:27;
+ for x be Real st x in ].a,b.[ holds
+         gk1|].a,b.[ is_differentiable_in x by L77,M5,FDIFF_1:def 7;
+hence
+N3: gk1 is_differentiable_on ].a,b.[ by K41,BSGK1,FDIFF_1:def 7;
+N4: now let x be Real
+   such  that
+ N41:   x in ].a,b.[;
+ thus diff(gk1,x)=(gk1`|].a,b.[).x by N41,N3,FDIFF_1:def 8
+                    .=((gk1|].a,b.[)`|].a,b.[).x by N3,FDIFF_2:16
+                    .=((gfh|].a,b.[)`|].a,b.[).x by Z3, FUNCT_1:82
+                    .=(gfh`|].a,b.[).x by M5,FDIFF_2:16
+                    .=diff(gk,x) - diff(diff(f,].a,b.[).(k+1) (#)h,x)
+                           by N41,M3,PGK,LL5,FDIFF_1:27
+                    .=-(diff(f,].a,b.[).(k+1)).x * (b-x) |^ (k) /((k)!)
+                        -diff(diff(f,].a,b.[).(k+1) (#)h,x)
+                           by N41,ASGK1,ASGK2,ASK,ASKZ,UAB1,UAB2,
+                                UAB3K,UAB4K,ASK1,LM0170
+                    .=-(diff(f,].a,b.[).(k+1)).x * (b-x) |^ (k) /((k)!)
+                        - ((diff(f,].a,b.[).(k+1) (#)h)`|].a,b.[).x
+                        by FDIFF_1:def 8,N41,M3
+                    .= -(diff(f,].a,b.[).(k+1)).x * (b-x) |^ (k) /((k)!)
+                        - ((h.x)*diff(diff(f,].a,b.[).(k+1),x)
+                        + (diff(f,].a,b.[).(k+1).x)*diff(h,x))
+                        by N41,M1,M2,LL4,FDIFF_1:29
+                    .= -(diff(f,].a,b.[).(k+1)).x * (b-x) |^ (k) /((k)!)
+                        - (h.x)*diff(diff(f,].a,b.[).(k+1),x)
+                        -(diff(f,].a,b.[).(k+1).x)*diff(h,x)
+                    .= -(diff(f,].a,b.[).(k+1)).x * (b-x) |^ (k) /((k)!)
+                        - (1*(b-x) |^ (k+1)  /((k+1)!) )
+                        *diff(diff(f,].a,b.[).(k+1),x)
+                        -(diff(f,].a,b.[).(k+1).x)*diff(h,x) by PH2
+                    .= -(diff(f,].a,b.[).(k+1)).x * (b-x) |^ (k) /((k)!)
+                        - (b-x) |^ (k+1)  /((k+1)!)
+                        *diff(diff(f,].a,b.[).(k+1),x)
+                        -(diff(f,].a,b.[).(k+1).x)
+                        *(-1* (b-x) |^ (k) /((k)!)) by PH3
+                    .= -(diff(f,].a,b.[).(k+1)).x * (b-x) |^ (k) /((k)!)
+                        +(diff(f,].a,b.[).(k+1).x)*(1* (b-x) |^ (k) /((k)!))
+                        - (b-x) |^ (k+1)  /((k+1)!)
+                        *diff(diff(f,].a,b.[).(k+1),x)
+                     .= -(diff(f,].a,b.[).(k+1)).x * (b-x) |^ (k) /((k)!)
+                        +(diff(f,].a,b.[).(k+1)).x*  (b-x) |^ (k) /((k)!)
+                        - (b-x) |^ (k+1)  /((k+1)!)
+                        *diff(diff(f,].a,b.[).(k+1),x)
+                              by XCMPLX_1:75
+                     .=  - (b-x) |^ (k+1)  /((k+1)!)
+                        *diff(diff(f,].a,b.[).(k+1),x)
+                     .=  - (b-x) |^ (k+1)  /((k+1)!)
+                     *(diff(f,].a,b.[).(k+1)`|].a,b.[).x
+                        by M1,FDIFF_1:def 8,N41
+                     .=    - (b-x) |^ (k+1)  /((k+1)!)
+                                 * (diff(f,].a,b.[).((k+1)+1)).x
+                           by Defdiffseq
+                    .=    - (diff(f,].a,b.[).((k+1)+1)).x
+                    * (b-x) |^ (k+1)  /((k+1)!)
+                           by XCMPLX_1:75;
+end;
+thus for x be Real st x in ].a,b.[ holds
+            diff(gk1,x) =-(diff(f,].a,b.[).((k+1)+1)).x
+            * (b-x) |^ ((k+1)) /((k+1)!) by N4;
+end;
+hence thesis;
+end;
+for k be Nat holds P[k] from NAT_1:sch 1(I0,Ik);
+hence thesis;
+end;
+
+LM01874:
+for n be Nat
+for f be PartFunc of REAL,REAL
+for Z be Subset of REAL
+     st  f is_differentiable_on n,  Z
+for a,b be Real st
+     ( a < b
+  & [.a,b.] c= Z
+  &  (diff(f,Z).n) is_continuous_on [.a,b.]
+  &  f is_differentiable_on (n+1), ].a,b.[  )
+ ex g be PartFunc of REAL,REAL
+     st (
+          dom(g)=Z
+          &
+          (for x be Real st x in Z holds
+           g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).n)
+           &
+           g.b=0
+           &
+           g is_continuous_on [.a,b.]
+           &
+           g is_differentiable_on  ].a,b.[
+           &
+           for x be Real st x in ].a,b.[ holds
+             diff(g,x)=-(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /(n!)
+       )
+proof
+let n be Nat;
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL such that
+AS1:     f is_differentiable_on n,  Z;
+let a,b be Real such that
+AS2: ( a < b
+  & [.a,b.] c= Z
+  &  (diff(f,Z).n) is_continuous_on [.a,b.]
+  &  f is_differentiable_on (n+1), ].a,b.[  );
+
+consider g be PartFunc of REAL,REAL such that
+     A1: dom(g)=Z and
+     A2: for x be Real st x in Z holds
+            g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).n by LM01872;
+     take g;
+  thus thesis by LM01873,A1,A2,AS1,AS2;
+ end;
+
+theorem LM0188:
+for n be Nat, f be PartFunc of REAL,REAL, Z be Subset of REAL st
+ f is_differentiable_on n,Z
+  for a,b be Real st
+     ( a < b & [.a,b.] c=Z &
+       (diff(f,Z).n) is_continuous_on [.a,b.] &
+       f is_differentiable_on (n+1), ].a,b.[ )
+   holds
+   for l be Real, g be PartFunc of REAL,REAL st
+    dom(g)=REAL &
+    ( for x be Real holds
+       g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).n
+              -l*(b-x) |^ (n+1)  /((n+1)!)  ) &
+    f.b-Partial_Sums(Taylor(f,Z,a,b)).n
+              -l*(b-a) |^ (n+1)  /((n+1)!) =0
+    holds
+      g is_differentiable_on ].a,b.[ &
+      g.a=0 & g.b=0 &
+      g is_continuous_on [.a,b.] &
+      for x be Real st x in  ].a,b.[ holds
+        diff(g,x) = -(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /((n)!)
+                    +l* (b-x) |^ (n) /((n)!)
+proof
+let n be Nat;
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL
+     such that
+     FZ:  f is_differentiable_on n,  Z;
+let a,b be Real such that
+    AB:  a < b and
+    ABCZ:  [.a,b.] c=Z and
+    CNT:  (diff(f,Z).n) is_continuous_on [.a,b.] and
+    DIF:  f is_differentiable_on (n+1), ].a,b.[;
+ let l be Real;
+ let g be PartFunc of REAL,REAL such that
+     GX:dom(g)=REAL
+     &
+     for x be Real holds
+            g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).n
+                   -l*(b-x) |^ (n+1)  /((n+1)!)
+            and
+     FB: f.b-Partial_Sums(Taylor(f,Z,a,b)).n
+                        -l*(b-a) |^ (n+1)  /((n+1)!) =0;
+
+consider h be PartFunc of REAL,REAL such that
+       PH1: dom(h)=Z
+       &(for x be Real st x in Z holds
+                h.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).n )
+       & h.b=0
+       & h is_continuous_on [.a,b.]
+       & h is_differentiable_on  ].a,b.[
+       &  for x be Real st x in ].a,b.[ holds
+             diff(h,x)=-(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /(n!)
+        by LM01874,AB,ABCZ,CNT,DIF,FZ;
+ consider p be PartFunc of REAL,REAL such that
+        PP1:
+           dom(p)=REAL
+           &
+            (for x be Real holds
+            p.x=l*(b-x) |^ (n+1)  /((n+1)!))
+           &
+            for x be Real holds
+            p is_differentiable_in x
+              & diff(p,x)=-l* (b-x) |^ (n) /((n)!)
+         by LM01871;
+
+set hp=h-p;
+L1: dom(hp)=dom(h) /\ dom(p) by SEQ_1:def 4
+                .=Z by XBOOLE_1:28,PH1,PP1;
+  ].a,b.[ c=[.a,b.] by RCOMP_1:15; then
+L3: ].a,b.[ c= Z by ABCZ,XBOOLE_1:1;
+
+L10: dom(hp)=dom(g) /\  Z by GX,XBOOLE_1:28,L1;
+L11: for x be set st x in dom(hp)  holds hp.x=g.x
+  proof
+  let x be set such that
+   L111:   x in dom(hp);
+   reconsider xx=x as Real by L111,L1;
+   thus hp.x=h.xx-p.xx by SEQ_1:def 4,L111
+               .=(f.b-Partial_Sums(Taylor(f,Z,xx,b)).n)
+                  -p.xx by L111,L1,PH1
+               .=(f.b-Partial_Sums(Taylor(f,Z,xx,b)).n)
+                  -(l*(b-xx) |^ (n+1)/((n+1)!)) by PP1
+               .=g.x by GX;
+  end; then
+L13: hp|[.a,b.] = (g|Z)|[.a,b.] by L10,FUNCT_1:68
+                   .= g|[.a,b.]     by FUNCT_1:82,ABCZ;
+L14: hp|].a,b.[ = (g|Z)|].a,b.[ by L11,L10,FUNCT_1:68
+                   .= g|].a,b.[     by FUNCT_1:82,L3;
+
+L15:for x be Real st x in ].a,b.[ holds
+      hp is_differentiable_in x
+      &
+      diff(hp,x)=-(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /(n!)
+                  +l* (b-x) |^ (n) /((n)!)
+     proof
+       let x be Real such that
+          ASL: x in ].a,b.[;
+          L151: h is_differentiable_in x
+                      by PH1,FDIFF_1:16,ASL;
+          L153: p is_differentiable_in x by PP1;
+     hence hp is_differentiable_in x by L151,FDIFF_1:22;
+     thus diff(hp,x)=diff(h,x)-diff(p,x) by L151,L153,FDIFF_1:22
+                     .=-(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /(n!)
+                       -diff(p,x) by PH1,ASL
+                     .=-(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /(n!)
+                       -(-l* (b-x) |^ (n) /((n)!)) by PP1
+                     .=-(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /(n!)
+                       +l* (b-x) |^ (n) /((n)!);
+      end;
+
+KK:for x be Real st x in ].a,b.[ holds
+      hp is_differentiable_in x by L15;
+L16: hp is_differentiable_on ].a,b.[ by L3,L1,KK,FDIFF_1:16; then
+   ].a,b.[ c=dom hp & for x be Real st x in ].a,b.[ holds
+    hp|].a,b.[ is_differentiable_in x by FDIFF_1:def 7;
+hence
+L19: g is_differentiable_on ].a,b.[ by L14,GX,FDIFF_1:def 7;
+thus g.a=0 by FB,GX;
+
+ thus g.b=0
+ proof
+ F1: b in [.a,b.] by RCOMP_1:15,AB;
+ hence g.b=hp.b by L11,L1, ABCZ
+                .=h.b-p.b by SEQ_1:def 4,F1,L1, ABCZ
+               .=0-(l*(b-b) |^ (n+1)/((n+1)!)) by PP1,PH1
+               .=0-(l*(0|^ n*0)/((n+1)!)) by NEWTON:11
+               .=0;
+ end;
+
+BQ9: REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
+
+for x be Real st x in REAL
+   holds p is_differentiable_in x by PP1;
+then
+   p is_differentiable_on REAL
+     by PP1,FDIFF_1:16,BQ9; then
+ p is_continuous_on REAL by FDIFF_1:33; then
+p is_continuous_on  [.a,b.] by FCONT_1:17; then
+hp is_continuous_on [.a,b.] by PH1,FCONT_1:19; then
+hp|[.a,b.]  is_continuous_on [.a,b.] by FCONT_1:16;
+hence g is_continuous_on [.a,b.] by L13,FCONT_1:16;
+ thus for x be Real st x in  ].a,b.[
+            holds diff(g,x)
+              =-(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /((n)!)
+              +l* (b-x) |^ (n) /((n)!)
+ proof
+   let x be Real such that
+   AA:   x in ].a,b.[;
+   thus diff(g,x) = (g`|].a,b.[).x
+                  by AA,L19,FDIFF_1:def 8
+               .=((g|].a,b.[)`|].a,b.[).x by L19,FDIFF_2:16
+               .=(hp`|].a,b.[).x by L16,FDIFF_2:16,L14
+               .=diff(hp,x) by AA,L16,FDIFF_1:def 8
+               .=-(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /(n!)
+                  +l* (b-x) |^ (n) /((n)!) by AA,L15;
+ end;
+ thus thesis;
+end;
+
+theorem LM0189:
+for n be Nat
+for f be PartFunc of REAL,REAL
+for Z be Subset of REAL
+for b,l be Real holds
+   ex g be Function of REAL,REAL st
+            ( for x be Real holds
+            g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).n
+                   -l*(b-x) |^ (n+1)  /((n+1)!)  )
+proof
+let n be Nat;
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL;
+let b,l be Real;
+defpred X[set] means $1 in REAL;
+deffunc U(Real) = f.b-Partial_Sums(Taylor(f,Z,$1,b)).n
+-l*(b-$1) |^ (n+1) /((n+1)!);
+consider g being Function of REAL, REAL such that
+  A2:   for d be Element of REAL holds g.d = U(d) from FUNCT_2:sch 4;
+  take g;
+    for d be Element of REAL
+             holds g.d = f.b-Partial_Sums(Taylor(f,Z,d,b)).n
+                              -l*(b-d) |^ (n+1)  /((n+1)!) by A2;
+  hence thesis;
+  end;
+
+theorem LM0190:
+for n be Nat, f be PartFunc of REAL,REAL, Z be Subset of REAL st
+  f is_differentiable_on n,Z
+    for a,b be Real st
+     ( a < b & [.a,b.] c=Z &
+       (diff(f,Z).n) is_continuous_on [.a,b.] &
+       f is_differentiable_on (n+1), ].a,b.[ )
+    holds
+     ex c be Real st
+       c in ].a, b.[ &
+       f.b = Partial_Sums(Taylor(f,Z,a,b)).n
+           + (diff(f,].a,b.[).(n+1)).c * (b-a) |^ (n+1)  /((n+1)!)
+proof
+let n be Nat;
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL such that
+ASZ:     f is_differentiable_on n,  Z;
+let a,b be Real such that
+AB1:a < b and
+AB2: [.a,b.] c=Z and
+AB3: (diff(f,Z).n) is_continuous_on [.a,b.] and
+AB4: f is_differentiable_on (n+1), ].a,b.[;
+deffunc F(Real)
+=f.b-Partial_Sums(Taylor(f,Z,$1,b)).n;
+reconsider
+  l=F(a)/(((b-a) |^ (n+1))/((n+1)!)) as Real;
+consider g be Function of REAL,REAL such that
+AB5: for x be Real holds
+       g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).n
+          -l*(b-x) |^ (n+1) /((n+1)!) by LM0189;
+b-a <> 0 by AB1,XCMPLX_1:15; then
+SS: (b-a) |^ (n+1) <> 0 by CARD_4:51;
+    (n+1)! <> 0 by NEWTON:23; then
+T6: (b-a) |^ (n+1)/((n+1)!) <> 0 by SS,XCMPLX_1:50;
+AB6: f.b-Partial_Sums(Taylor(f,Z,a,b)).n
+       -l*(b-a) |^ (n+1)  /((n+1)!)
+        =F(a)-(F(a)/(((b-a) |^ (n+1))/((n+1)!)))
+                *((b-a) |^ (n+1)/((n+1)!))
+              by XCMPLX_1:75
+       .=F(a)-F(a) by T6,XCMPLX_1:88
+       .=0;
+    dom g = REAL by FUNCT_2:def 1; then
+P1: g is_differentiable_on ].a,b.[ & g.a=0 & g.b=0 &
+        g is_continuous_on [.a,b.] &
+        for x be Real st x in ].a,b.[
+            holds diff(g,x)
+              =-(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /((n)!)
+              +l* (b-x) |^ (n) /((n)!)
+            by ASZ,AB1,AB2,AB3,AB4,AB5,AB6,LM0188;
+consider c be Real such that
+P2: c in ].a,b.[ and
+P3: diff(g,c)=0 by AB1,P1,ROLLE:1;
+dom g = REAL by FUNCT_2:def 1; then
+-(diff(f,].a,b.[).(n+1)).c * (b-c) |^ (n) /((n)!)
+              +l* (b-c) |^ (n) /((n)!) =0
+            by P3,P2,ASZ,AB1,AB2,AB3,AB4,AB5,AB6,LM0188;then
+P4:-(-(diff(f,].a,b.[).(n+1)).c * (b-c) |^ (n) /((n)!)
+              +l* (b-c) |^ (n) /((n)!)) =0;
+P5: (n)! <> 0 by NEWTON:23;
+c in  {r where r is Real : a<r & r<b } by P2,RCOMP_1:def 2; then
+consider r be Real such that
+PP: c = r  & (a < r & r < b);
+b-c <> 0 by PP,XCMPLX_1:15; then
+P6: (b-c) |^ (n) <> 0 by CARD_4:51;
+((diff(f,].a,b.[).(n+1)).c * (b-c) |^ (n) /((n)!)
+              -l* (b-c) |^ (n) /((n)!))*((n)!)
+              =0*((n)!) by P4; then
+(diff(f,].a,b.[).(n+1)).c * (b-c) |^ (n) /((n)!)*((n)!)
+       -l* (b-c) |^ (n) /((n)!)*((n)!)  =0 by XCMPLX_1:40; then
+(diff(f,].a,b.[).(n+1)).c * (b-c) |^ (n)
+       -l* (b-c) |^ (n) /((n)!)*((n)!)  =0 by P5,XCMPLX_1:88; then
+((diff(f,].a,b.[).(n+1)).c * (b-c) |^ (n)
+       -l* (b-c) |^ (n))/((b-c) |^ (n))
+       =0/((b-c) |^ (n)) by P5,XCMPLX_1:88; then
+(diff(f,].a,b.[).(n+1)).c * (b-c) |^ (n)/((b-c) |^ (n))
+       -l* (b-c) |^ (n)/((b-c) |^ (n))   =0 by XCMPLX_1:121; then
+(diff(f,].a,b.[).(n+1)).c
+       -l* (b-c) |^ (n)/((b-c) |^ (n))   =0
+by P6,XCMPLX_1:90; then
+(diff(f,].a,b.[).(n+1)).c  -l   =0 by P6,XCMPLX_1:90; then
+f.b-Partial_Sums(Taylor(f,Z,a,b)).n
+       -((diff(f,].a,b.[).(n+1)).c)*(b-a) |^ (n+1)  /((n+1)!)
+ =0 by AB6,XCMPLX_1:15; then
+f.b-Partial_Sums(Taylor(f,Z,a,b)).n
+       =((diff(f,].a,b.[).(n+1)).c)*(b-a) |^ (n+1)  /((n+1)!)
+by XCMPLX_1:15; then
+f.b =((diff(f,].a,b.[).(n+1)).c)*(b-a) |^ (n+1)  /((n+1)!)
+        +Partial_Sums(Taylor(f,Z,a,b)).n by XCMPLX_1:27;
+hence thesis by P2;
+end;
+
+LM02873:
+for f be PartFunc of REAL,REAL
+for Z be Subset of REAL
+for n be Nat st f is_differentiable_on n,  Z
+for a,b be Real st ( a < b
+  & [.a,b.] c= Z
+  &  (diff(f,Z).n) is_continuous_on [.a,b.]
+  &  f is_differentiable_on (n+1), ].a,b.[  )
+  for g be PartFunc of REAL,REAL
+     st ( dom(g)=Z &
+            for x be Real st x in Z holds
+            g.x=f.a-Partial_Sums(Taylor(f,Z,x,a)).n ) holds
+           g.a=0 &
+           g is_continuous_on [.a,b.] &
+           g is_differentiable_on ].a,b.[ &
+           for x be Real st x in ].a,b.[ holds
+             diff(g,x)=-(diff(f,].a,b.[).(n+1)).x * (a-x) |^ (n) /(n!)
+proof
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL;
+defpred P[Nat] means
+  f is_differentiable_on $1,  Z implies
+  for a,b be Real st
+     ( a < b
+  & [.a,b.] c=Z
+  &  (diff(f,Z).$1) is_continuous_on [.a,b.]
+  &  f is_differentiable_on ($1+1), ].a,b.[ )
+  for g be PartFunc of REAL,REAL
+     st (
+            dom(g)=Z
+            &
+            for x be Real st x in Z holds
+            g.x=f.a-Partial_Sums(Taylor(f,Z,x,a)).$1
+        )
+     holds g.a=0 &
+           g is_continuous_on [.a,b.] &
+           g is_differentiable_on ].a,b.[ &
+           for x be Real st x in ].a,b.[  holds
+            diff(g,x)=-(diff(f,].a,b.[).($1+1)).x
+            * (a-x) |^ ($1) / ( ($1)!);
+
+I0:P[0]
+proof
+assume f is_differentiable_on 0,  Z;
+let a,b be Real
+     such that
+ UAB1: a < b
+    and
+ UAB2: [.a,b.] c= Z
+    and
+ UAB3:  (diff(f,Z).0) is_continuous_on [.a,b.]
+    and
+ UAB4: f is_differentiable_on (0+1), ].a,b.[;
+
+ let g be PartFunc of REAL,REAL such that
+ K1: dom(g)=Z and
+ K2: for x be Real st x in Z holds
+            g.x=f.a-Partial_Sums(Taylor(f,Z,x,a)).0;
+  LKL: ].a,b.[ c=[.a,b.] by RCOMP_1:15; then
+  K41: ].a,b.[ c= Z by UAB2,XBOOLE_1:1;
+  FBZ: a in [.a,b.] by UAB1,RCOMP_1:15;
+  hence g.a=f.a-Partial_Sums(Taylor(f,Z,a,a)).(0) by K2,UAB2
+      .=f.a-Taylor(f,Z,a,a).0
+            by SERIES_1:def 1
+      .=f.a  - (diff(f,Z).(0)).a * (a-a) |^ (0) /((0)!) by Deftaylor
+      .=f.a  - (f|Z).a * (a-a) |^ (0) /((0)!) by Defdiffseq
+      .=f.a  - f.a * (a-a) |^ (0) /((0)!) by FBZ,UAB2,FUNCT_1:72
+      .=f.a  - f.a * 1 by NEWTON:9,18
+      .=0;
+
+  consider y be PartFunc of REAL,REAL such that
+      AT7:  dom(y)=REAL and
+      AT8: for x be Real holds y.x=(f.a-x) and
+      AT9: for x be Real holds y is_differentiable_in x &
+           diff(y,x)=-1 by LM01870;
+f|Z is_continuous_on [.a,b.] by UAB3,Defdiffseq; then
+(f|Z)| [.a,b.]   is_continuous_on [.a,b.] by FCONT_1:16; then
+(f|[.a,b.])    is_continuous_on [.a,b.] by FUNCT_1:82,UAB2; then
+BT9:f is_continuous_on [.a,b.] by FCONT_1:16; then
+BQ1: [.a,b.] c= dom(f) by FCONT_1:def 2;
+BQ2: rng(f) c= REAL by RELSET_1:12; then
+BQ4: dom(y*f) = dom(f) by AT7,RELAT_1:46;
+BQ5: dom((y*f)|[.a,b.])=dom(y*f) /\ [.a,b.] by FUNCT_1:68
+                      .=[.a,b.] by XBOOLE_1:28,BQ1,BQ4
+                      .=Z /\ [.a,b.] by XBOOLE_1:28,UAB2
+                      .=dom(g|[.a,b.]) by K1,FUNCT_1:68;
+BT14: g|[.a,b.]=(y*f)|[.a,b.]
+proof
+ now let xx be set such that
+   BQ61: xx in dom(g|[.a,b.]);
+   dom(g|[.a,b.])=dom(g) /\ [.a,b.] by FUNCT_1:68; then
+   BFF2: dom(g|[.a,b.]) c= [.a,b.] by XBOOLE_1:17;
+    dom(g|[.a,b.]) c= REAL by XBOOLE_1:1,BFF2; then
+    reconsider x=xx as Real by BQ61;
+    BSS1: x in [.a,b.] by BQ61,BFF2;
+    thus (g|[.a,b.]).xx
+           =g.x by FUNCT_1:70,BQ61
+          .=f.a-Partial_Sums(Taylor(f,Z,x,a)).(0) by BSS1,UAB2,K2
+          .=f.a-Taylor(f,Z,x,a).0 by SERIES_1:def 1
+          .=f.a - (diff(f,Z).(0)).x * (a-x) |^ (0) /((0)!) by Deftaylor
+          .=f.a - (f|Z).x * (a-x) |^ (0) /((0)!) by Defdiffseq
+          .=f.a - f.x * (a-x) |^ (0) /((0)!) by BSS1,UAB2,FUNCT_1:72
+          .=f.a  - f.x * 1 by NEWTON:9,18
+          .=y.(f.x) by AT8
+          .=(y*f).x by BQ1,BSS1,FUNCT_1:23
+          .=((y*f)|[.a,b.]).xx by BQ5,BQ61,FUNCT_1:70;
+  end;
+hence thesis by BQ5,FUNCT_1:9;
+end;
+
+f.:[.a,b.] c= rng(f) by RELAT_1:144; then
+BQ7: f.:[.a,b.] c= REAL by BQ2,XBOOLE_1:1;
+BQ9: REAL is open Subset of REAL by SUBSET_1:def 4,FCONT_3:4;
+for x be Real st x in REAL
+   holds y is_differentiable_in x by AT9; then
+ y is_differentiable_on REAL by AT7,FDIFF_1:16,BQ9; then
+ y is_continuous_on REAL by FDIFF_1:33; then
+    y is_continuous_on (f.:[.a,b.]) by FCONT_1:17,BQ7; then
+(y*f) is_continuous_on [.a,b.] by BT9,FCONT_1:26; then
+(y*f)|[.a,b.]  is_continuous_on [.a,b.] by FCONT_1:16;
+hence g is_continuous_on [.a,b.] by BT14,FCONT_1:16;
+
+0 <= (0+1)-1; then
+diff(f,].a,b.[).0  is_differentiable_on ].a,b.[ by Defnth,UAB4; then
+ f|].a,b.[  is_differentiable_on ].a,b.[ by Defdiffseq; then
+
+Z6: ].a,b.[ c= dom(f)&
+for x be Real st x in ].a,b.[ holds
+ f|].a,b.[ is_differentiable_in x by BQ1,LKL,XBOOLE_1:1,FDIFF_1:16; then
+K3: f is_differentiable_on ].a,b.[ by FDIFF_1:def 7;
+ AT10: for x be Real st x in ].a,b.[ holds
+                y *f is_differentiable_in x  &
+              diff( y*f,x) =-diff(f,].a,b.[).(0+1).x * (a-x) |^ (0) / ( (0)!)
+      proof
+      let x be Real such that
+      ASS: x in ].a,b.[;
+      K4: (a-x) |^ (0) /((0)!) = 1 by NEWTON:9,18;
+      AT11: y is_differentiable_in f.x by AT9;
+      AT12: diff(f,].a,b.[).(0+1) = ( diff(f,].a,b.[).0)`|].a,b.[ by Defdiffseq
+                                  .= (f|].a,b.[)`|].a,b.[ by Defdiffseq
+                                  .= f`|].a,b.[ by FDIFF_2:16,K3;
+      AT13: f is_differentiable_in x by K3,ASS,FDIFF_1:16;
+      hence y*f is_differentiable_in x by FDIFF_2:13, AT11;
+      thus diff( y*f,x)
+             = diff(y, f.x)*diff(f,x) by FDIFF_2:13,AT13,AT11
+            .= diff(y,f.x)*(f`|].a,b.[).x by K3,ASS,FDIFF_1:def 8
+            .= (-1)*diff(f,].a,b.[).(0+1).x by AT9,AT12
+            .=-diff(f,].a,b.[).(0+1).x *((a-x) |^ (0) /((0)!)) by K4
+            .=-diff(f,].a,b.[).(0+1).x *(a-x) |^ (0) /((0)!) by XCMPLX_1:75;
+      end;
+ rng(f) c= dom(y) by AT7,RELSET_1:12; then
+Q4: dom(y*f) = dom(f) by RELAT_1:46;
+Q5: dom((y*f)|].a,b.[)=dom(y*f) /\ ].a,b.[ by FUNCT_1:68
+                      .=].a,b.[ by XBOOLE_1:28,Z6,Q4
+                      .=Z /\ ].a,b.[ by XBOOLE_1:28,K41
+                      .=dom(g|].a,b.[) by K1,FUNCT_1:68;
+
+AT14: g|].a,b.[=(y*f)|].a,b.[
+proof
+ now let xx be set such that
+   Q61: xx in dom(g|].a,b.[);
+   dom(g|].a,b.[)=dom(g) /\ ].a,b.[ by FUNCT_1:68; then
+   FF2: dom(g|].a,b.[) c= ].a,b.[ by XBOOLE_1:17; then
+    dom(g|].a,b.[) c= REAL by XBOOLE_1:1; then
+    reconsider x=xx as Real by Q61;
+   K4:  (a-x) |^ (0) /((0)!)=1 by NEWTON:9,18;
+  SS1: x in ].a,b.[ by Q61,FF2;
+  thus (g|].a,b.[).xx = g.x by FUNCT_1:70,Q61
+       .=f.a-Partial_Sums(Taylor(f,Z,x,a)).(0) by SS1,K41,K2
+       .=f.a- Taylor(f,Z,x,a).0 by SERIES_1:def 1
+       .=f.a  - (diff(f,Z).(0)).x * (a-x) |^ (0) /((0)!) by Deftaylor
+       .=f.a  - (f|Z).x * (a-x) |^ (0) /((0)!) by Defdiffseq
+       .=f.a  - f.x * (a-x) |^ (0) /((0)!) by SS1,K41,FUNCT_1:72
+       .=f.a  - f.x * ((a-x) |^ (0) /((0)!)) by XCMPLX_1:75
+       .=y.(f.x) by AT8,K4
+       .=(y*f).x by Z6,SS1,FUNCT_1:23
+       .=((y*f)|].a,b.[).xx by Q5,Q61,FUNCT_1:70;
+  end;
+  hence thesis by Q5,FUNCT_1:9;
+end;
+
+for x be Real st x in ].a,b.[ holds y *f is_differentiable_in x by AT10; then
+Q8: y*f is_differentiable_on ].a,b.[ by Z6,Q4,FDIFF_1:16;then
+    g|].a,b.[  is_differentiable_on ].a,b.[ &
+     (y*f)`|].a,b.[=(g|].a,b.[)`|].a,b.[ by AT14,FDIFF_2:16; then
+    for x be Real st x in ].a,b.[ holds g|].a,b.[ is_differentiable_in x
+    by FDIFF_1:16;
+    hence
+Q11:  g  is_differentiable_on ].a,b.[ by K41,K1,FDIFF_1:def 7;
+
+now let x be Real such that
+  AA: x in ].a,b.[;
+  thus g is_differentiable_in x by AA,Q11,FDIFF_1:16;
+  thus diff(g,x)
+            =(g`|].a,b.[).x by AA,Q11,FDIFF_1:def 8
+          .=((g|].a,b.[)`|].a,b.[).x by Q11,FDIFF_2:16
+          .= ((y*f)`|].a,b.[).x by Q8,AT14,FDIFF_2:16
+          .=diff( y*f,x) by AA,Q8,FDIFF_1:def 8
+          .=-diff(f,].a,b.[).(0+1).x * (a-x) |^ (0) / ( (0)!) by AA,AT10;
+end;
+hence thesis;
+end;
+Ik:for k be Nat st P[k] holds P[k+1]
+proof
+let k be Nat such that
+ASK:P[k];
+assume
+ASK1:
+    f is_differentiable_on k+1, Z;
+let a,b be Real such that
+ UAB1: a < b and
+ UAB2: [.a,b.] c=Z and
+ UAB3:  (diff(f,Z).(k+1)) is_continuous_on [.a,b.] and
+ UAB4: f is_differentiable_on ((k+1)+1), ].a,b.[;
+     ].a,b.[ c=[.a,b.] by RCOMP_1:15; then
+K41: ].a,b.[ c= Z by UAB2,XBOOLE_1:1;
+Z4:  k <=k+1 by NAT_1:29;
+     k <=(k+1)-1; then
+     diff(f,Z).k  is_differentiable_on Z by Defnth,ASK1; then
+     diff(f,Z).k  is_continuous_on Z by FDIFF_1:33; then
+UAB3K:  diff(f,Z).k is_continuous_on [.a,b.] by UAB2,FCONT_1:17;
+     (k+1) <= (k+1)+1 by NAT_1:29; then
+UAB4K: f is_differentiable_on (k+1), ].a,b.[ by LM0170,UAB4;
+ consider gk  be PartFunc of REAL,REAL such that
+ASGK1: dom(gk)=Z and
+ASGK2: for x be Real st x in Z holds
+            gk.x=f.a-Partial_Sums(Taylor(f,Z,x,a)).k by LM01872;
+PGK: gk.a=0 &
+     gk is_continuous_on [.a,b.] &
+     gk is_differentiable_on  ].a,b.[ &
+     for x be Real st x in ].a,b.[ holds
+       diff(gk,x)=-(diff(f,].a,b.[).(k+1)).x * (a-x) |^ (k) /((k)!)
+   by ASGK1,ASGK2,ASK,Z4,UAB1,UAB2,UAB3K,UAB4K,ASK1,LM0170;
+now let gk1 be PartFunc of REAL,REAL such that
+   BSGK1: dom(gk1)=Z and
+   BSGK2: for x be Real st x in Z  holds
+    gk1.x=f.a-Partial_Sums(Taylor(f,Z,x,a)).(k+1);
+consider h be PartFunc of REAL,REAL such that
+PH1:  dom(h)=REAL and
+PH2: for x be Real holds
+      h.x=1*(a-x) |^ (k+1)  /((k+1)!) and
+PH3:for x be Real holds h is_differentiable_in x &
+      diff(h,x)=-1* (a-x) |^ (k) /((k)!) by LM01871;
+    thus gk1.a=0
+    proof
+  K0: a in [.a,b.] by UAB1,RCOMP_1:15;
+  hence gk1.a=f.a- Partial_Sums(Taylor(f,Z,a,a)).(k+1) by BSGK2,UAB2
+      .=f.a- (Partial_Sums(Taylor(f,Z,a,a)).k+Taylor(f,Z,a,a).(k+1))
+            by SERIES_1:def 1
+     .=f.a- Partial_Sums(Taylor(f,Z,a,a)).k-Taylor(f,Z,a,a).(k+1)
+     .=gk.a -Taylor(f,Z,a,a).(k+1) by ASGK2,K0,UAB2
+     .=0 -Taylor(f,Z,a,a).(k+1)
+        by ASGK1,ASGK2,ASK,Z4,UAB1,UAB2,UAB3K,UAB4K,ASK1,LM0170
+     .=0  - (diff(f,Z).(k+1)).a * (a-a) |^ (k+1) /((k+1)!) by Deftaylor
+     .=0  - (diff(f,Z).(k+1)).a * (0|^k*0) /((k+1)!) by NEWTON:11
+     .=0;
+  end;
+L1: diff(f,Z).(k+1)=( diff(f,Z).k)`|Z by Defdiffseq;
+k <=(k+1)-1; then
+L2:diff(f,Z).k is_differentiable_on Z by ASK1,Defnth;
+L4: dom(diff(f,Z).(k+1) (#)h)
+            = dom (diff(f,Z).(k+1))  /\ dom(h) by SEQ_1:def 5
+                            .=  Z /\  REAL by L2,PH1,L1,FDIFF_1:def 8
+                            .=  Z by XBOOLE_1:28;
+L5:dom(gk-diff(f,Z).(k+1) (#)h)
+    =dom(gk) /\ dom(diff(f,Z).(k+1) (#)h) by SEQ_1:def 4
+    .=Z by L4,ASGK1;
+thus gk1 is_continuous_on [.a,b.]
+proof
+set  ghk=gk-((diff(f,Z).(k+1)) (#) h);
+ now let x be Real such that
+  K0:       x in  Z;
+  thus
+  gk1.x=f.a-Partial_Sums(Taylor(f,Z,x,a)).(k+1) by K0,BSGK2
+      .=f.a- (Partial_Sums(Taylor(f,Z,x,a)).k+Taylor(f,Z,x,a).(k+1))
+            by SERIES_1:def 1
+     .=f.a-Partial_Sums(Taylor(f,Z,x,a)).k-Taylor(f,Z,x,a).(k+1)
+     .=gk.x -Taylor(f,Z,x,a).(k+1) by ASGK2,K0
+     .=gk.x  - (diff(f,Z).(k+1)).x * (a-x) |^ (k+1) /((k+1)!) by Deftaylor
+     .=gk.x  - (diff(f,Z).(k+1)).x * (1*(a-x) |^ (k+1) /((k+1)!))
+      by XCMPLX_1:75
+     .=gk.x  - (diff(f,Z).(k+1)).x * h.x by PH2
+     .=gk.x  - ((diff(f,Z).(k+1)) (#) h).x by SEQ_1:def 5,K0,L4
+     .=(gk-((diff(f,Z).(k+1)) (#) h)).x by K0,L5,SEQ_1:def 4;
+end; then
+P2: gk1= ghk by L5,BSGK1,PARTFUN1:34;
+
+BQ9: REAL is open Subset of REAL by SUBSET_1:def 4,FCONT_3:4;
+for x be Real st x in REAL
+   holds h is_differentiable_in x by PH3; then
+   h is_differentiable_on REAL by PH1,FDIFF_1:16,BQ9; then
+ h is_continuous_on REAL by FDIFF_1:33; then
+h is_continuous_on  [.a,b.] by FCONT_1:17; then
+ (diff(f,Z).(k+1)) (#) h  is_continuous_on
+   [.a,b.] /\  [.a,b.] by FCONT_1:20,UAB3;
+ hence thesis by P2,FCONT_1:20,PGK;
+end;
+LL1: diff(f,].a,b.[).(k+1)=( diff(f,].a,b.[).k)`|].a,b.[ by Defdiffseq;
+    k <=(k+1)+1-1 by NAT_1:29; then
+LL2:diff(f,].a,b.[).k is_differentiable_on ].a,b.[ by UAB4,Defnth;
+LL4: dom(diff(f,].a,b.[).(k+1) (#)h)
+            = dom (diff(f,].a,b.[).(k+1))  /\ dom(h) by SEQ_1:def 5
+                            .=  ].a,b.[ /\  REAL by LL2,PH1,LL1,FDIFF_1:def 8
+                            .=  ].a,b.[ by XBOOLE_1:28;
+
+LL5:dom(gk-diff(f, ].a,b.[).(k+1) (#)h)=
+      Z /\ dom(diff(f, ].a,b.[).(k+1) (#)h) by ASGK1,SEQ_1:def 4
+    .= ].a,b.[ by XBOOLE_1:28,K41,LL4;
+k+1 <=(k+1)+1-1; then
+M1: diff(f,].a,b.[).(k+1)  is_differentiable_on ].a,b.[ by UAB4,Defnth;
+set gfh=gk-diff(f,].a,b.[).(k+1) (#)h;
+LLL5: dom(gfh)=dom(gk1)/\  ].a,b.[ by BSGK1,LL5,K41,XBOOLE_1:28;
+HHH:for x be Real st x in ].a,b.[  holds
+ (gk-diff(f,Z).(k+1) (#)h).x =(gk-diff(f,].a,b.[).(k+1) (#)h).x
+ proof
+   let x be Real such that
+    AS: x in ].a,b.[;
+     thus
+      (gk-diff(f,].a,b.[).(k+1) (#)h).x
+      =gk.x - (diff(f,].a,b.[).(k+1) (#)h).x
+             by AS,LL5,SEQ_1:def 4
+     .=gk.x - (diff(f,].a,b.[).(k+1)).x * h.x by LL4,AS,SEQ_1:def 5
+     .=gk.x - ((diff(f,Z).(k+1))|].a,b.[).x * h.x by UAB1,ASK1,K41,LMDF
+     .=gk.x - (diff(f,Z).(k+1)).x * h.x by AS,FUNCT_1:72
+     .=gk.x - ((diff(f,Z).(k+1)) (#)h).x by L4,K41,AS,SEQ_1:def 5
+     .=(gk - ((diff(f,Z).(k+1)) (#)h)).x by L5,K41,AS,SEQ_1:def 4;
+ end;
+ now let xx be set such that
+   L60: xx in dom(gfh);
+   reconsider x=xx as Real by LL5,L60;
+    thus gk1.xx
+       =f.a-Partial_Sums(Taylor(f,Z,x,a)).(k+1) by LL5,L60,K41,BSGK2
+      .=f.a- (Partial_Sums(Taylor(f,Z,x,a)).k + Taylor(f,Z,x,a).(k+1))
+            by SERIES_1:def 1
+      .=f.a-Partial_Sums(Taylor(f,Z,x,a)).k -Taylor(f,Z,x,a).(k+1)
+      .=gk.x - Taylor(f,Z,x,a).(k+1) by LL5,L60,K41,ASGK2
+      .=gk.x - (diff(f,Z).(k+1)).x * (a-x) |^ (k+1) /((k+1)!) by Deftaylor
+      .=gk.x - (diff(f,Z).(k+1)).x * (1*(a-x) |^ (k+1) /((k+1)!))
+    by XCMPLX_1:75
+      .=gk.x - (diff(f,Z).(k+1)).x * h.x by PH2
+      .=gk.x - (diff(f,Z).(k+1) (#)h).x by L4,LL5,L60,K41,SEQ_1:def 5
+      .=(gk- (diff(f,Z).(k+1) (#)h)).x by L5,LL5,L60,K41,SEQ_1:def 4
+      .=gfh.xx by HHH,LL5,L60;
+end; then
+Z5: (gk1|].a,b.[)|].a,b.[= gfh|].a,b.[ by LLL5,FUNCT_1:68; then
+L77: gfh|].a,b.[=gk1|].a,b.[ by FUNCT_1:82;
+for x be Real st x in ].a,b.[ holds h is_differentiable_in x by PH3;then
+M2: h is_differentiable_on ].a,b.[ by PH1,FDIFF_1:16;
+M3: diff(f,].a,b.[).(k+1) (#)h is_differentiable_on ].a,b.[
+      &
+      for x be Real
+         st x in ].a,b.[ holds ((diff(f,].a,b.[).(k+1) (#)h)`|].a,b.[).x
+      = (h.x)*diff(diff(f,].a,b.[).(k+1),x)
+      + (diff(f,].a,b.[).(k+1).x)*diff(h,x)
+    by M1,M2,LL4,FDIFF_1:29;
+M5: gfh  is_differentiable_on ].a,b.[ &
+     for x be Real
+          st x in ].a,b.[  holds (gfh`|].a,b.[).x
+       = diff(gk,x) - diff(diff(f,].a,b.[).(k+1) (#)h,x)
+   by M3,PGK,LL5,FDIFF_1:27; then
+     for x be Real st x in ].a,b.[ holds
+         gk1|].a,b.[ is_differentiable_in x by FDIFF_1:def 7,L77;
+hence
+N3: gk1 is_differentiable_on ].a,b.[ by K41,BSGK1,FDIFF_1:def 7;
+N4: now let x be Real such that
+ N41:   x in ].a,b.[;
+ thus diff(gk1,x)=(gk1`|].a,b.[).x by N41,N3,FDIFF_1:def 8
+                          .=((gk1|].a,b.[)`|].a,b.[).x by N3,FDIFF_2:16
+                          .=((gfh|].a,b.[)`|].a,b.[).x by Z5,FUNCT_1:82
+                          .=(gfh`|].a,b.[).x by M5,FDIFF_2:16
+                     .=diff(gk,x) - diff(diff(f,].a,b.[).(k+1) (#)h,x)
+                   by N41,M3,PGK,LL5,FDIFF_1:27
+                     .=-(diff(f,].a,b.[).(k+1)).x * (a-x) |^ (k) /((k)!)
+                             -diff(diff(f,].a,b.[).(k+1) (#)h,x)
+                           by N41,ASGK1,ASGK2,ASK,Z4,UAB1,UAB2,
+                                UAB3K,UAB4K,ASK1,LM0170
+                     .=-(diff(f,].a,b.[).(k+1)).x * (a-x) |^ (k) /((k)!)
+                             - ((diff(f,].a,b.[).(k+1) (#)h)`|].a,b.[).x
+                        by FDIFF_1:def 8,N41,M3
+                     .= -(diff(f,].a,b.[).(k+1)).x * (a-x) |^ (k) /((k)!)
+                        - ((h.x)*diff(diff(f,].a,b.[).(k+1),x)
+                        + (diff(f,].a,b.[).(k+1).x)*diff(h,x))
+                        by N41,M1,M2,LL4,FDIFF_1:29
+                     .= -(diff(f,].a,b.[).(k+1)).x * (a-x) |^ (k) /((k)!)
+                        - (h.x)*diff(diff(f,].a,b.[).(k+1),x)
+                        -(diff(f,].a,b.[).(k+1).x)*diff(h,x)
+                     .= -(diff(f,].a,b.[).(k+1)).x * (a-x) |^ (k) /((k)!)
+                        - (1*(a-x) |^ (k+1)  /((k+1)!) )
+                        *diff(diff(f,].a,b.[).(k+1),x)
+                        -(diff(f,].a,b.[).(k+1).x)*diff(h,x) by PH2
+                     .= -(diff(f,].a,b.[).(k+1)).x * (a-x) |^ (k) /((k)!)
+                        - (a-x) |^ (k+1)  /((k+1)!)
+                        *diff(diff(f,].a,b.[).(k+1),x)
+                        -(diff(f,].a,b.[).(k+1).x)
+                        *(-1* (a-x) |^ (k) /((k)!)) by PH3
+                     .= -(diff(f,].a,b.[).(k+1)).x * (a-x) |^ (k) /((k)!)
+                        +(diff(f,].a,b.[).(k+1).x)*(1* (a-x) |^ (k) /((k)!))
+                        - (a-x) |^ (k+1)  /((k+1)!)
+                        *diff(diff(f,].a,b.[).(k+1),x)
+                     .= -(diff(f,].a,b.[).(k+1)).x * (a-x) |^ (k) /((k)!)
+                        +(diff(f,].a,b.[).(k+1)).x*  (a-x) |^ (k) /((k)!)
+                        - (a-x) |^ (k+1)  /((k+1)!)
+                        *diff(diff(f,].a,b.[).(k+1),x)
+                              by XCMPLX_1:75
+                     .=  - (a-x) |^ (k+1)  /((k+1)!)
+                        *diff(diff(f,].a,b.[).(k+1),x)
+                     .=  - (a-x) |^ (k+1)  /((k+1)!)
+                     *(diff(f,].a,b.[).(k+1)`|].a,b.[).x
+                        by M1,FDIFF_1:def 8,N41
+                     .=    - (a-x) |^ (k+1)  /((k+1)!)
+                                 * (diff(f,].a,b.[).((k+1)+1)).x
+                           by Defdiffseq
+                    .=    - (diff(f,].a,b.[).((k+1)+1)).x
+                    * (a-x) |^ (k+1)  /((k+1)!)
+                           by XCMPLX_1:75;
+end;
+thus
+for x be Real st x in ].a,b.[ holds
+            diff(gk1,x)
+            =-(diff(f,].a,b.[).((k+1)+1)).x
+            * (a-x) |^ ((k+1)) /((k+1)!) by N4;
+end;
+hence thesis;
+end;
+for k be Nat holds P[k] from NAT_1:sch 1(I0,Ik);
+hence thesis;
+end;
+
+LM02874:
+for n be Nat
+for f be PartFunc of REAL,REAL
+for Z be Subset of REAL
+     st  f is_differentiable_on n,  Z
+for a,b be Real
+     st
+     ( a < b
+  & [.a,b.] c= Z
+  &  (diff(f,Z).n) is_continuous_on [.a,b.]
+  &  f is_differentiable_on (n+1), ].a,b.[  )
+ ex g be PartFunc of REAL,REAL
+     st (
+          dom(g)=Z
+          &
+          (for x be Real st x in Z holds
+           g.x=f.a-Partial_Sums(Taylor(f,Z,x,a)).n)
+           &
+           g.a=0
+           &
+           g is_continuous_on [.a,b.]
+           &
+           g is_differentiable_on  ].a,b.[
+           &
+           for x be Real st x in ].a,b.[ holds
+             diff(g,x)=-(diff(f,].a,b.[).(n+1)).x * (a-x) |^ (n) /(n!)
+       )
+proof
+let n be Nat;
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL such that
+AS1:     f is_differentiable_on n,  Z;
+let a,b be Real such that
+AS2: ( a < b
+  & [.a,b.] c= Z
+  &  (diff(f,Z).n) is_continuous_on [.a,b.]
+  &  f is_differentiable_on (n+1), ].a,b.[  );
+
+consider g be PartFunc of REAL,REAL such that
+     A1: dom(g)=Z and
+     A2: for x be Real st x in Z holds
+            g.x=f.a-Partial_Sums(Taylor(f,Z,x,a)).n by LM01872;
+     take g;
+  thus thesis by LM02873,A1,A2,AS1,AS2;
+ end;
+
+theorem LM0288:
+for n be Nat, f be PartFunc of REAL,REAL, Z be Subset of REAL st
+  f is_differentiable_on n,Z
+   for a,b be Real st
+     ( a < b & [.a,b.] c=Z & (diff(f,Z).n) is_continuous_on [.a,b.] &
+       f is_differentiable_on (n+1), ].a,b.[ )
+   holds
+     for l be Real, g be PartFunc of REAL,REAL st
+       dom(g)=REAL &
+       ( for x be Real holds
+           g.x = f.a-Partial_Sums(Taylor(f,Z,x,a)).n
+                    -l*(a-x) |^ (n+1)  /((n+1)!) ) &
+       f.a-Partial_Sums(Taylor(f,Z,b,a)).n-l*(a-b) |^ (n+1)/((n+1)!) =0
+     holds
+       g is_differentiable_on ].a,b.[ &
+        g.b=0 & g.a=0 &
+        g is_continuous_on [.a,b.] &
+        for x be Real st x in  ].a,b.[ holds
+         diff(g,x) = -(diff(f,].a,b.[).(n+1)).x * (a-x) |^ (n) /((n)!)
+                       +l* (a-x) |^ (n) /((n)!)
+proof
+let n be Nat;
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL such that
+     FZ:  f is_differentiable_on n,  Z;
+let a,b be Real such that
+    AB:  a < b and
+    ABCZ:  [.a,b.] c=Z
+          and
+    CNT:  (diff(f,Z).n) is_continuous_on [.a,b.]
+         and
+    DIF:  f is_differentiable_on (n+1), ].a,b.[;
+ let l be Real;
+ let g be PartFunc of REAL,REAL such that
+     GX:dom(g)=REAL &
+     for x be Real holds
+            g.x=f.a-Partial_Sums(Taylor(f,Z,x,a)).n
+                   -l*(a-x) |^ (n+1)  /((n+1)!) and
+     FB: f.a-Partial_Sums(Taylor(f,Z,b,a)).n
+                        -l*(a-b) |^ (n+1)  /((n+1)!) =0;
+
+consider h  be PartFunc of REAL,REAL such that
+       PH1: dom(h)=Z
+       &(for x be Real st x in Z holds
+                h.x=f.a-Partial_Sums(Taylor(f,Z,x,a)).n )
+       & h.a=0
+       & h is_continuous_on [.a,b.]
+       & h is_differentiable_on  ].a,b.[
+       &  for x be Real st x in ].a,b.[ holds
+             diff(h,x)=-(diff(f,].a,b.[).(n+1)).x * (a-x) |^ (n) /(n!)
+        by LM02874,AB,ABCZ,CNT,DIF,FZ;
+
+ consider p be PartFunc of REAL,REAL such that
+        PP1: dom(p)=REAL &
+            (for x be Real holds
+            p.x=l*(a-x) |^ (n+1)  /((n+1)!)) &
+            for x be Real holds
+            p is_differentiable_in x
+              & diff(p,x)=-l* (a-x) |^ (n) /((n)!) by LM01871;
+set hp=h-p;
+L1: dom(hp)=dom(h) /\ dom(p) by SEQ_1:def 4
+                .=Z by XBOOLE_1:28,PH1,PP1;
+  ].a,b.[ c=[.a,b.] by RCOMP_1:15; then
+L3: ].a,b.[ c= Z by ABCZ,XBOOLE_1:1;
+
+L10: dom(hp)=dom(g) /\ Z by GX,XBOOLE_1:28,L1;
+L11: for x be set st x in dom(hp) holds hp.x=g.x
+  proof
+  let x be set such that
+   L111:   x in dom(hp);
+   reconsider xx=x as Real by L111,L1;
+   thus hp.x=h.xx-p.xx by SEQ_1:def 4,L111
+               .=(f.a-Partial_Sums(Taylor(f,Z,xx,a)).n)
+                  -p.xx by L111,L1,PH1
+               .=(f.a-Partial_Sums(Taylor(f,Z,xx,a)).n)
+                  -(l*(a-xx) |^ (n+1)/((n+1)!)) by PP1
+               .=g.x by GX;
+  end; then
+L13: hp|[.a,b.] = (g|Z)|[.a,b.] by L10,FUNCT_1:68
+                   .= g|[.a,b.] by FUNCT_1:82,ABCZ;
+L14: hp|].a,b.[ = (g|Z)|].a,b.[ by L11,L10,FUNCT_1:68
+                   .= g|].a,b.[ by FUNCT_1:82,L3;
+
+L15:for x be Real st x in ].a,b.[ holds
+      hp is_differentiable_in x
+      &
+      diff(hp,x)=-(diff(f,].a,b.[).(n+1)).x * (a-x) |^ (n) /(n!)
+                  +l* (a-x) |^ (n) /((n)!)
+     proof
+       let x be Real such that
+          ASL: x in ].a,b.[;
+          L151: h is_differentiable_in x
+                      by PH1,FDIFF_1:16,ASL;
+
+          L153: p is_differentiable_in x by PP1;
+     hence hp is_differentiable_in x by L151,FDIFF_1:22;
+     thus diff(hp,x)=diff(h,x)-diff(p,x) by L151,L153,FDIFF_1:22
+                     .=-(diff(f,].a,b.[).(n+1)).x * (a-x) |^ (n) /(n!)
+                       -diff(p,x) by PH1,ASL
+                     .=-(diff(f,].a,b.[).(n+1)).x * (a-x) |^ (n) /(n!)
+                       -(-l* (a-x) |^ (n) /((n)!)) by PP1
+                     .=-(diff(f,].a,b.[).(n+1)).x * (a-x) |^ (n) /(n!)
+                       +l* (a-x) |^ (n) /((n)!);
+      end;
+
+for x be Real st x in ].a,b.[ holds
+      hp is_differentiable_in x by L15; then
+L16: hp is_differentiable_on ].a,b.[ by L3,L1,FDIFF_1:16; then
+ ].a,b.[ c=dom hp & for x be Real st x in ].a,b.[
+   holds hp|].a,b.[ is_differentiable_in x by FDIFF_1:def 7;
+hence
+L19: g is_differentiable_on ].a,b.[ by GX,L14,FDIFF_1:def 7;
+thus g.b=0 by FB,GX;
+
+ thus g.a=0
+ proof
+ F1: a in [.a,b.] by RCOMP_1:15,AB;
+ hence   g.a=hp.a by L11,L1,ABCZ
+                .=h.a-p.a by SEQ_1:def 4,F1,L1,ABCZ
+               .=0-(l*(a-a) |^ (n+1)/((n+1)!)) by PP1,PH1
+               .=0-(l*(0|^ n*0)/((n+1)!)) by NEWTON:11
+               .=0;
+ end;
+BQ9: REAL is open Subset of REAL by SUBSET_1:def 4,FCONT_3:4;
+for x be Real st x in REAL holds p is_differentiable_in x by PP1; then
+   p is_differentiable_on REAL by PP1,FDIFF_1:16,BQ9; then
+ p is_continuous_on REAL by FDIFF_1:33; then
+p is_continuous_on  [.a,b.] by FCONT_1:17; then
+hp is_continuous_on [.a,b.] by PH1,FCONT_1:19; then
+hp|[.a,b.] is_continuous_on [.a,b.] by FCONT_1:16;
+hence g is_continuous_on [.a,b.] by L13,FCONT_1:16;
+thus for x be Real st x in ].a,b.[ holds
+       diff(g,x)
+        = -(diff(f,].a,b.[).(n+1)).x
+          * (a-x) |^ (n) /((n)!)+l* (a-x) |^ (n) /((n)!)
+ proof
+   let x be Real such that
+   AA:   x in ].a,b.[;
+   thus diff(g,x) = (g`|].a,b.[).x
+                  by AA,L19,FDIFF_1:def 8
+               .=((g|].a,b.[)`|].a,b.[).x by L19,FDIFF_2:16
+               .=(hp`|].a,b.[).x by L16,FDIFF_2:16,L14
+               .=diff(hp,x) by AA,L16,FDIFF_1:def 8
+               .=-(diff(f,].a,b.[).(n+1)).x * (a-x) |^ (n) /(n!)
+                  +l* (a-x) |^ (n) /((n)!) by AA,L15;
+ end;
+ thus thesis;
+end;
+
+theorem LM0290:
+for n be Nat, f be PartFunc of REAL,REAL, Z be Subset of REAL st
+ f is_differentiable_on n,Z
+   for a,b be Real st
+     ( a < b & [.a,b.] c=Z & (diff(f,Z).n) is_continuous_on [.a,b.] &
+       f is_differentiable_on (n+1), ].a,b.[ )
+   holds
+     ex c be Real st
+       c in ].a, b.[ &
+       f.a = Partial_Sums(Taylor(f,Z,b,a)).n
+            + (diff(f,].a,b.[).(n+1)).c * (a-b) |^ (n+1)  /((n+1)!)
+proof
+let n be Nat;
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL such that
+ASZ:     f is_differentiable_on n,  Z;
+let a,b be Real such that
+AB1:a < b and
+AB2: [.a,b.] c=Z and
+AB3: (diff(f,Z).n) is_continuous_on [.a,b.] and
+AB4: f is_differentiable_on (n+1), ].a,b.[;
+deffunc F(Real) =f.a-Partial_Sums(Taylor(f,Z,$1,a)).n;
+reconsider l=F(b)/(((a-b) |^ (n+1))/((n+1)!)) as Real;
+consider g be Function of REAL,REAL such that
+AB5: for x be Real holds
+       g.x=f.a-Partial_Sums(Taylor(f,Z,x,a)).n
+          -l*(a-x) |^ (n+1)  /((n+1)!) by LM0189;
+a-b <> 0 by AB1,XCMPLX_1:15; then
+SS: (a-b) |^ (n+1) <> 0 by CARD_4:51;
+(n+1)! <> 0 by NEWTON:23; then
+T6: (a-b) |^ (n+1)/((n+1)!) <> 0 by SS,XCMPLX_1:50;
+AB6: f.a-Partial_Sums(Taylor(f,Z,b,a)).n
+       -l*(a-b) |^ (n+1)  /((n+1)!)
+        =F(b)-(F(b)/(((a-b) |^ (n+1))/((n+1)!)))
+                *((a-b) |^ (n+1)/((n+1)!))
+              by XCMPLX_1:75
+       .=F(b)-F(b) by T6,XCMPLX_1:88
+       .=0;
+ dom g = REAL by FUNCT_2:def 1; then
+ g is_differentiable_on ].a,b.[ &
+        g.b=0 & g.a=0 &
+        g is_continuous_on [.a,b.] &
+        for x be Real st x in  ].a,b.[
+            holds diff(g,x)
+              =-(diff(f,].a,b.[).(n+1)).x * (a-x) |^ (n) /((n)!)
+              +l* (a-x) |^ (n) /((n)!)
+            by ASZ,AB1,AB2,AB3,AB4,AB5,AB6,LM0288; then
+consider c be Real such that
+P2: c in ].a,b.[ and
+P3: diff(g,c)=0 by AB1,ROLLE:1;
+dom g = REAL by FUNCT_2:def 1; then
+-(diff(f,].a,b.[).(n+1)).c * (a-c) |^ (n) /((n)!)
+              +l* (a-c) |^ (n) /((n)!) =0
+            by P3,P2,ASZ,AB1,AB2,AB3,AB4,AB5,AB6,LM0288; then
+P4:-(-(diff(f,].a,b.[).(n+1)).c * (a-c) |^ (n) /((n)!)
+              +l* (a-c) |^ (n) /((n)!)) =0;
+P5: (n)! <> 0 by NEWTON:23;
+c in  {r where r is Real : a<r & r<b } by P2,RCOMP_1:def 2; then
+consider r be Real such that
+PP: c = r  & (a < r & r < b);
+a-c <> 0 by PP,XCMPLX_1:15;
+then
+P6: (a-c) |^ (n) <> 0 by CARD_4:51;
+
+((diff(f,].a,b.[).(n+1)).c * (a-c) |^ (n) /((n)!)
+              -l* (a-c) |^ (n) /((n)!))*((n)!)
+              =0*((n)!) by P4; then
+(diff(f,].a,b.[).(n+1)).c * (a-c) |^ (n) /((n)!)*((n)!)
+       -l* (a-c) |^ (n) /((n)!)*((n)!)  =0 by XCMPLX_1:40; then
+(diff(f,].a,b.[).(n+1)).c * (a-c) |^ (n)
+       -l* (a-c) |^ (n) /((n)!)*((n)!)  =0 by P5,XCMPLX_1:88; then
+((diff(f,].a,b.[).(n+1)).c * (a-c) |^ (n)
+       -l* (a-c) |^ (n))/((a-c) |^ (n))
+       =0/((a-c) |^ (n)) by P5,XCMPLX_1:88; then
+(diff(f,].a,b.[).(n+1)).c * (a-c) |^ (n)/((a-c) |^ (n))
+       -l* (a-c) |^ (n)/((a-c) |^ (n))   =0 by XCMPLX_1:121; then
+(diff(f,].a,b.[).(n+1)).c
+       -l* (a-c) |^ (n)/((a-c) |^ (n))   =0 by P6,XCMPLX_1:90; then
+(diff(f,].a,b.[).(n+1)).c  -l   =0 by P6,XCMPLX_1:90; then
+ (diff(f,].a,b.[).(n+1)).c = l by XCMPLX_1:15; then
+f.a-Partial_Sums(Taylor(f,Z,b,a)).n
+       =((diff(f,].a,b.[).(n+1)).c)*(a-b) |^ (n+1)  /((n+1)!)
+by XCMPLX_1:15,AB6; then
+f.a =((diff(f,].a,b.[).(n+1)).c)*(a-b) |^ (n+1)  /((n+1)!)
+        +Partial_Sums(Taylor(f,Z,b,a)).n by XCMPLX_1:27;
+hence thesis by P2;
+end;
+
+theorem LMDFZ1:
+for f be PartFunc of REAL,REAL, Z be Subset of REAL, Z1 be open Subset of REAL
+ st Z1 c= Z
+  for n be Nat st f is_differentiable_on n,Z holds
+    diff(f,Z).n | Z1 = diff(f,Z1).n
+proof
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL;
+let Z1 be open Subset of REAL such that
+  AS1:  Z1 c= Z;
+defpred P[Nat] means f is_differentiable_on $1,Z implies
+    diff(f,Z).$1  | Z1 = diff(f,Z1).$1;
+ I0: P[0]
+    proof
+    assume f is_differentiable_on 0,  Z;
+   thus (diff(f,Z).0) |Z1
+     =(f|Z)|Z1 by Defdiffseq
+     .=f|Z1 by FUNCT_1:82,AS1
+     .=diff(f,Z1).0 by Defdiffseq;
+    end;
+Ik: for k be Nat st P[k] holds P[k+1]
+   proof
+   let k be Nat such that
+     AS: P[k];
+    assume
+    FA:   f is_differentiable_on (k+1),  Z;
+    Z7: k <= k+1 by NAT_1:29;
+    k <= (k+1)-1; then
+    CC1:(diff(f,Z).k) is_differentiable_on Z
+      by FA,Defnth;
+    then
+    CCC: (diff(f,Z).k) is_differentiable_on  Z1
+      by AS1,FDIFF_1:34;
+     J1: dom(((diff(f,Z).k)`|Z)| Z1)
+     =dom((diff(f,Z).k)`|Z) /\ Z1 by FUNCT_1:68
+     .=Z /\ Z1 by CC1,FDIFF_1:def 8
+     .=Z1 by AS1,XBOOLE_1:28;
+     J2: dom((diff(f,Z).k)`| Z1) = Z1
+     by CCC,FDIFF_1:def 8;
+     J3: now let x be Real such that
+       J31: x in dom(((diff(f,Z).k)`|Z)| Z1);
+      thus (((diff(f,Z).k)`|Z)| Z1).x
+       =((diff(f,Z).k)`|Z).x by J31,J1,FUNCT_1:72
+      .=diff((diff(f,Z).k),x) by CC1,J31,J1,AS1,FDIFF_1:def 8
+      .=((diff(f,Z).k)`|Z1).x
+      by J31,J1,CCC,FDIFF_1:def 8;
+     end;
+     thus diff(f,Z).(k+1)  | Z1
+       =((diff(f,Z).k)`|Z)| Z1 by Defdiffseq
+      .=(diff(f,Z).k)`| Z1 by J1,J2,J3,PARTFUN1:34
+      .=(diff(f,Z1).k)`| Z1 by Z7,AS,FA,LM0170,FDIFF_2:16,CCC
+      .=diff(f,Z1).(k+1) by Defdiffseq;
+   end;
+ thus for k be Nat holds P[k] from NAT_1: sch 1(I0,Ik);
+ end;
+
+theorem LMDFZ2:
+for f be PartFunc of REAL,REAL, Z be Subset of REAL, Z1 be open Subset of REAL
+ st Z1 c= Z
+ for n be natural number st f is_differentiable_on n+1,Z holds
+   f is_differentiable_on n+1,  Z1
+proof
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL;
+let Z1 be open Subset of REAL such that
+  AS1:  Z1 c= Z;
+let n be natural number  such that
+  AS2: f is_differentiable_on n+1,  Z;
+  now let k be Nat such that
+  AS3:   k <= (n+1)-1;
+  n <= n+1 by NAT_1:29; then
+      k <= n+1 by AXIOMS:22,AS3;
+    then
+  AS5:  f is_differentiable_on k,  Z
+  by AS2,LM0170;
+  (diff(f,Z).k) is_differentiable_on Z
+      by AS3,AS2,Defnth;
+    then
+    (diff(f,Z).k) is_differentiable_on Z1
+      by AS1,FDIFF_1:34;
+    then
+     (diff(f,Z).k)|Z1  is_differentiable_on Z1 by FDIFF_2:16;
+     hence (diff(f,Z1).k)  is_differentiable_on Z1 by AS1,AS5,LMDFZ1;
+ end;
+  hence f is_differentiable_on n+1,Z1 by Defnth;
+end;
+
+theorem LM0299:
+for f be PartFunc of REAL,REAL
+for Z be Subset of REAL
+for x be Real st x in Z
+for n be Nat holds
+     f.x = Partial_Sums(Taylor(f,Z,x,x)).n
+proof
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL;
+let x be Real such that
+  AS: x in Z;
+let c be Real;
+defpred P[Nat] means f.x=Partial_Sums(Taylor(f, Z,x,x)).$1;
+I0:P[0]
+  proof
+ thus
+   Partial_Sums(Taylor(f, Z,x,x)).0
+   =Taylor(f, Z,x,x).0 by SERIES_1:def 1
+   .=(diff(f,Z).0).x * (x-x) |^ 0 /(0!) by Deftaylor
+   .=(f|Z).x * (x-x) |^ 0 /(0!) by Defdiffseq
+    .=(f|Z).x * 1/1 by NEWTON:9,18
+    .=f.x by FUNCT_1:72,AS;
+  end;
+
+Ik:for k be Nat st P[k] holds P[k+1]
+  proof
+  let k be Nat such that
+    AS1: P[k];
+    thus Partial_Sums(Taylor(f, Z,x,x)).(k+1)
+     =Partial_Sums(Taylor(f, Z,x,x)).k
+    +Taylor(f, Z,x,x).(k+1)
+    by SERIES_1:def 1
+   .=f.x  +(diff(f,Z).(k+1)).x * (x-x) |^ (k+1) /((k+1)!)
+       by AS1,Deftaylor
+  .=f.x  + (diff(f,Z).(k+1)).x
+                 * (0|^k*0)  /((k+1)!) by NEWTON:11
+  .=f.x;
+  end;
+for k be Nat holds P[k] from NAT_1: sch 1(I0,Ik);
+hence thesis;
+end;
+
+theorem
+for n be Nat, f be PartFunc of REAL,REAL, x0,r be Real st
+  ( 0 < r & f is_differentiable_on n+1,  ].x0-r,x0+r.[ )
+    for x be Real st x in ].x0-r, x0+r.[ holds
+      ex s be Real st 0 < s &  s < 1 &
+        f.x=Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n
+               + (diff(f,].x0-r,x0+r.[).(n+1)).(x0+s*(x-x0))
+               * (x-x0) |^ (n+1)  /((n+1)!)
+ proof
+let n be Nat;
+let f be PartFunc of REAL,REAL;
+let x0,r be Real such that
+ AS1: 0 < r and
+ AS2: f is_differentiable_on n+1, ].x0-r,x0+r.[;
+let x be Real such that
+ AS3: x in ].x0-r, x0+r.[;
+  now per cases by REAL_1:def 5;
+     case CAS1: x < x0;
+  abs(x0-x0)=0 by ABSVALUE:7; then
+  x0 in  ].x0-r, x0+r.[ by AS1,RCOMP_1:8; then
+   P1:   [.x,x0.] c=  ].x0-r,x0+r.[ by AS3,RCOMP_1:17;
+   ].x,x0.[ c=  [.x,x0.] by RCOMP_1:15; then
+   P2:   ].x,x0.[ c=  ].x0-r,x0+r.[ by XBOOLE_1:1,P1;
+   n <= n+1 by NAT_1:29; then
+   P3:  f is_differentiable_on n,  ].x0-r,x0+r.[ by AS2,LM0170;
+   n <=(n+1)-1;  then
+   diff(f,].x0-r,x0+r.[).n is_differentiable_on ].x0-r,x0+r.[
+     by AS2,Defnth; then
+   diff(f,].x0-r,x0+r.[).n is_continuous_on ].x0-r,x0+r.[
+     by FDIFF_1:33; then
+   P4:  diff(f,].x0-r,x0+r.[).n is_continuous_on [.x,x0.]
+     by FCONT_1:17,P1;
+     f is_differentiable_on n+1, ].x,x0.[ by LMDFZ2,P2,AS2; then
+    consider  c be Real such that
+    P6: c in ].x,x0.[ and
+    P7: f.x=Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n
+         + (diff(f,].x,x0.[).(n+1)).c * (x-x0) |^ (n+1)  /((n+1)!)
+        by CAS1,P1,P3,P4,LM0290;
+    P9: diff(f,].x,x0.[).(n+1).c
+         = (diff(f,].x0-r,x0+r.[).(n+1) |].x,x0.[).c by AS2,P2, LMDFZ1
+                                     .= (diff(f,].x0-r,x0+r.[).(n+1)).c
+                                   by FUNCT_1:72,P6;
+    set      t= x0-x;
+    A1:       t > 0 by CAS1,SQUARE_1:11;
+    take s=(x0-c)/t;
+    c in {p where p is Real : x0-t<p & p<x0} by P6,RCOMP_1:def 2; then
+   A6: ex g be Real  st g=c & x0-t<g & g<x0; then
+   0<x0-c by SQUARE_1:11; then
+   0/t < (x0-c)/t by A1,REAL_1:73;
+   hence 0<s;
+   x0-t+t < c+t by A6,REAL_1:67; then
+   x0-c < t by REAL_1:84; then
+   (x0-c)/t<t/t by A1,REAL_1:73;
+   hence s<1 by A1,XCMPLX_1:60;
+   x0+s*(x-x0) =x0-((x0-c)/t)*t
+   .=x0-(x0-c) by XCMPLX_1:88,A1
+   .=c;
+  hence f.x=Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n
+               + (diff(f,].x0-r,x0+r.[).(n+1)).(x0+s*(x-x0))
+               * (x-x0) |^ (n+1)  /((n+1)!) by P9,P7;
+   end;
+   case CAS2: x = x0;
+       set s=1/2;
+       take s;
+       thus 0 < s &  s < 1;
+       set c = x0+s*(x-x0);
+      thus Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n
+               + (diff(f,].x0-r,x0+r.[).(n+1)).(x0+s*(x-x0))
+               * (x-x0) |^ (n+1)  /((n+1)!)
+       =f.x + (diff(f,].x0-r,x0+r.[).(n+1)).c
+               * (x-x) |^ (n+1)  /((n+1)!) by CAS2,LM0299,AS3
+      .=f.x  + (diff(f,].x0-r,x0+r.[).(n+1)).c
+                 * (0|^n*0)  /((n+1)!) by NEWTON:11
+      .=f.x;
+      end;
+     case  CAS3:  x > x0;
+    abs(x0-x0)=0 by ABSVALUE:7; then
+    x0 in  ].x0-r, x0+r.[ by AS1,RCOMP_1:8; then
+    P1:   [.x0,x.] c=  ].x0-r,x0+r.[ by AS3,RCOMP_1:17;
+           ].x0,x.[ c=  [.x0,x.] by RCOMP_1:15; then
+   P2:   ].x0,x.[ c=  ].x0-r,x0+r.[ by XBOOLE_1:1,P1;
+    n <= n+1 by NAT_1:29; then
+    P3:  f is_differentiable_on n,  ].x0-r,x0+r.[ by AS2,LM0170;
+    n <=(n+1)-1; then
+    diff(f,].x0-r,x0+r.[).n is_differentiable_on  ].x0-r,x0+r.[
+     by AS2,Defnth; then
+    diff(f,].x0-r,x0+r.[).n is_continuous_on ].x0-r,x0+r.[
+     by FDIFF_1:33; then
+    P4:  diff(f,].x0-r,x0+r.[).n is_continuous_on  [.x0,x.]
+     by FCONT_1:17,P1;
+      f is_differentiable_on n+1,  ].x0,x.[
+      by LMDFZ2,P2,AS2; then
+     consider  c be Real such that
+     P6: c in ].x0,x.[ and
+     P7: f.x=Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n
+         + (diff(f,].x0,x.[).(n+1)).c * (x-x0) |^ (n+1)  /((n+1)!)
+        by CAS3,P1,P3,P4,LM0190;
+    P9: diff(f,].x0,x.[).(n+1).c
+          = (diff(f,].x0-r,x0+r.[).(n+1) |].x0,x.[).c by AS2,P2, LMDFZ1
+                                     .= (diff(f,].x0-r,x0+r.[).(n+1)).c
+                                   by FUNCT_1:72,P6;
+      set t=  x-x0;
+    A1: t > 0 by CAS3,SQUARE_1:11;
+    take s=(c-x0)/t;
+    c in {p where p is Real : x0<p & p<x0+t}
+      by P6,RCOMP_1:def 2; then
+   A6: ex g be Real  st g=c & x0<g & g<x0+t; then
+   0<c-x0 by SQUARE_1:11; then
+   0/t < (c-x0)/t by A1,REAL_1:73;
+   hence 0<s;
+   c-x0<t by A6,REAL_1:84;
+   then (c-x0)/t<t/t by A1,REAL_1:73;
+   hence s<1 by A1,XCMPLX_1:60;
+   x0+s*(x-x0)
+    =x0+(c-x0) by XCMPLX_1:88,A1
+   .=c;
+  hence f.x=Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n
+               + (diff(f,].x0-r,x0+r.[).(n+1)).(x0+s*(x-x0))
+               * (x-x0) |^ (n+1)  /((n+1)!) by P9,P7;
+  end;
+end;
+hence thesis;
+end;

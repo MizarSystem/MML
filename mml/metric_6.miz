@@ -15,7 +15,7 @@ environ
  constructors ABSVALUE, REAL_1, SEQ_2, PCOMPS_1, NAT_1, TBSP_1, BHSP_3,
       MEMBERED, XBOOLE_0;
  clusters METRIC_1, STRUCT_0, XREAL_0, RELSET_1, SEQM_3, ARYTM_3, SEQ_1,
-      MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+      MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2, TBSP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TBSP_1, TARSKI;
  theorems ABSVALUE, TARSKI, REAL_1, AXIOMS, BINOP_1, METRIC_1, FUNCT_1,
@@ -361,7 +361,8 @@ proof
   thus thesis by A1;
 end;
 
-definition let X; let S; let x;
+definition let X be non empty MetrStruct; let S be sequence of X;
+           let x be Element of X;
  canceled 3;
 
   pred S is_convergent_in_metrspace_to x means
@@ -369,11 +370,12 @@ definition let X; let S; let x;
             dist(S.n,x) < r;
 end;
 
-definition let X; let V be Subset of X;
-  redefine canceled;
+definition let X be symmetric triangle (non empty MetrStruct);
+           let V be Subset of X;
+  canceled;
 
-attr V is bounded means
-      ex r,x st 0 < r & V c= Ball(x,r);
+  redefine attr V is bounded means
+      ex r being Real, x being Element of X st 0 < r & V c= Ball(x,r);
   compatibility
    proof
     hereby assume
@@ -385,7 +387,7 @@ A2:     V <> {};
 A3:    0<r and
 A4:    for x,y being Element of X st x in V & y in V
           holds dist(x,y)<=r by A1,TBSP_1:def 9;
-      consider x such that
+      consider x being Element of X such that
 A5:    x in V by A2,SUBSET_1:10;
      take s=2*r,x;
      thus 0 < s by A3,REAL_2:129;
@@ -402,31 +404,31 @@ A7:      dist(x,v) <= r by A4,A5,A6;
      end;
      suppose
 A8:     V = {};
-       consider x;
+       consider x be Element of X;
       take r=1/2,x;
      thus 0 < r & V c= Ball(x,r) by A8,XBOOLE_1:2;
     end;
     end;
-    given r,x such that
+    given r be Real,x be Element of X such that
 A9:  0 < r and
 A10:  V c= Ball(x,r);
      take 2*r;
      thus 2*r > 0 by A9,REAL_2:129;
-     let z,y be Element of X;
+     let z, y be Element of X;
      assume z in V;
       then A11: dist(x,z) < r by A10,METRIC_1:12;
      assume y in V;
       then dist(x,y) < r by A10,METRIC_1:12;
       then A12:     dist(z,x)+dist(x,y) <= r+r by A11,REAL_1:55;
-        dist(z,y)<= dist(z,x)+dist(x,y) by METRIC_1:4;
+      dist(z,y)<= dist(z,x)+dist(x,y) by METRIC_1:4;
       then dist(z,y)<=r+r by A12,AXIOMS:22;
      hence dist(z,y)<=2*r by XCMPLX_1:11;
  end;
 end;
 
-definition let X; let S;
+definition let X be non empty MetrStruct; let S be sequence of X;
   attr S is bounded means :Def11:
-    ex r,x st 0 < r & rng S c= Ball(x,r);
+    ex r being Real, x being Element of X st 0 < r & rng S c= Ball(x,r);
 end;
 
 definition let X; let V; let S;
@@ -445,7 +447,7 @@ proof
   proof
     assume S is bounded;
     then consider r,x such that A1: 0 < r and
-                        A2: rng S c= Ball(x,r) by Def11;
+A2: rng S c= Ball(x,r) by Def11;
     take q = r;
     take y = x;
       now let n;
@@ -544,56 +546,6 @@ uniqueness
   end;
 end;
 
-definition let X; let S;
-  assume A1: S is convergent;
-  func lim S -> Element of X means
-   :Def16: for r st 0 < r ex m st for n st m <= n holds dist(S.n,it) < r;
-existence by A1,TBSP_1:def 3;
-uniqueness
-  proof
-      for x,y st (for r st 0 < r ex m st for n st m <= n holds
-                dist(S.n,x) < r) &
-               (for r st 0 < r ex m st for n st m <= n holds
-                dist(S.n,y) < r) holds x = y
-    proof
-      given x,y such that
-      A2: (for r st 0 < r ex m st for n st m <= n holds
-           dist(S.n,x) < r) and
-      A3: (for r st 0 < r ex m st for n st m <= n holds
-           dist(S.n,y) < r) and
-      A4: x <> y;
-      A5: 0 < dist(x,y) by A4,SUB_METR:2;
-      then A6: 0/4 < dist(x,y)/4 by REAL_1:73;
-      then consider m1 such that
-           A7: for n st m1 <= n holds dist(S.n,x) < dist(x,y)/4 by A2;
-      consider m2 such that
-      A8: for n st m2 <= n holds dist(S.n,y) < dist(x,y)/4 by A3,A6;
-      A9: now assume m1 <= m2;
-        then A10: dist(S.m2,x) < dist(x,y)/4 by A7;
-          dist(S.m2,y) < dist(x,y)/4 by A8;
-        then dist(S.m2,x) + dist(S.m2,y) < dist(x,y)/4 + dist(x,y)/4
-        by A10,REAL_1:67;
-        then A11: dist(S.m2,x) + dist(S.m2,y) <= dist(x,y)/2 by XCMPLX_1:72;
-          dist(x,y) <= dist(x,S.m2) + dist(S.m2,y) by METRIC_1:4;
-        then not dist(x,y)/2 < dist(x,y) by A11,AXIOMS:22;
-        hence contradiction by A5,SEQ_2:4;
-      end;
-        now assume m2 <= m1;
-        then A12: dist(S.m1,y) < dist(x,y)/4 by A8;
-          dist(S.m1,x) < dist(x,y)/4 by A7;
-        then dist(S.m1,x) + dist(S.m1,y) < dist(x,y)/4 + dist(x,y)/4
-        by A12,REAL_1:67;
-        then A13: dist(S.m1,x) + dist(S.m1,y) <= dist(x,y)/2 by XCMPLX_1:72;
-          dist(x,y) <= dist(x,S.m1) + dist(S.m1,y) by METRIC_1:4;
-        then not dist(x,y)/2 < dist(x,y) by A13,AXIOMS:22;
-        hence contradiction by A5,SEQ_2:4;
-      end;
-      hence contradiction by A9;
-    end;
-  hence thesis;
-  end;
-end;
-
 canceled 3;
 
 theorem
@@ -601,9 +553,9 @@ theorem
 proof
     assume A1: S is_convergent_in_metrspace_to x;
     then A2: S is convergent by Th21;
-      for r st 0 < r ex m st for n st m <= n holds
-        dist(S.n,x) < r by A1,Def8;
-    hence thesis by A2,Def16;
+    for r st 0 < r ex m st for n st m <= n holds
+      dist(S.n,x) < r by A1,Def8;
+    hence thesis by A2,TBSP_1:def 4;
 end;
 
 theorem
@@ -614,7 +566,7 @@ proof
   proof
     assume S is convergent & lim S = x;
     then for r st 0 < r ex m st for n st m <= n holds
-         dist(S.n,x) < r by Def16;
+         dist(S.n,x) < r by TBSP_1:def 4;
     hence thesis by Def8;
   end;
   hence thesis by Th21,Th26;
@@ -707,9 +659,9 @@ end;
 theorem
   Th31: (for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S)
            implies
-        (for V st (x in V & V in Family_open_set X) holds
+        (for V st x in V & V in Family_open_set X holds
         V contains_almost_all_sequence S)
-proof
+  proof
   assume A1: for r st 0 < r holds
                   Ball(x,r) contains_almost_all_sequence S;
   A2: for r st 0 < r ex m st for n st m <= n holds S.n in Ball(x,r)
@@ -736,7 +688,7 @@ proof
 end;
 
 theorem
-  Th32: (for V st (x in V & V in Family_open_set X) holds
+  Th32: (for V st x in V & V in Family_open_set X holds
         V contains_almost_all_sequence S) implies
         S is_convergent_in_metrspace_to x
 proof
@@ -906,9 +858,6 @@ proof
   assume S is constant;
   then consider x such that A1: for n holds S.n =x by NORMSP_1:def 4;
   take x;
-    for r st 0 < r ex m st for n st m <= n holds
-          dist(S.n,x) < r
-  proof
     let r such that A2: 0 < r;
     take k = 0;
       now let n such that k <= n;
@@ -917,8 +866,6 @@ proof
     hence dist(S.n,x) < r by A2;
     end;
     hence for n st k <= n holds dist(S.n,x) < r;
-  end;
-  hence thesis;
 end;
 
 theorem
@@ -957,14 +904,14 @@ proof
   assume that A1: S is Cauchy and
               A2: S1 is_subsequence_of S;
   consider Nseq such that A3: S1 = S*Nseq by A2,BHSP_3:def 4;
-    for r st 0 < r ex m st for n,k st (m <= n & m <= k) holds
+    for r st 0 < r ex m st for n,k st m <= n & m <= k holds
             dist(S1.n,S1.k) < r
   proof
     let r; assume 0 < r;
-    then consider m1 such that A4: for n,k st (m1 <= n & m1 <= k) holds
+    then consider m1 such that A4: for n,k st m1 <= n & m1 <= k holds
        dist(S.n,S.k) < r by A1,TBSP_1:def 5;
     take m = m1;
-      for n,k st (m <= n & m <= k) holds dist(S1.n,S1.k) < r
+    for n,k st m <= n & m <= k holds dist(S1.n,S1.k) < r
     proof
       let n,k such that A5: m <= n and
                         A6: m <= k;
@@ -992,7 +939,7 @@ end;
 canceled;
 
 theorem
-    S is constant implies S is Cauchy
+  S is constant implies S is Cauchy
 proof
   assume S is constant;
   then S is convergent by Th38;
@@ -1000,7 +947,7 @@ proof
 end;
 
 theorem
-    S is convergent implies S is bounded
+  S is convergent implies S is bounded
 proof
   assume S is convergent;
   then consider x such that A1:
@@ -1029,13 +976,13 @@ proof
      now take r = 1;
         thus 0 < r;
         consider m1 such that A2:
-        for n,k st (m1 <= n & m1 <= k) holds dist(S.n,S.k) < r
+        for n,k st m1 <= n & m1 <= k holds dist(S.n,S.k) < r
           by A1,TBSP_1:def 5;
         take m = m1;
-        thus for n,k st (m <= n & m <= k) holds dist(S.n,S.k) < r by A2;
+        thus for n,k st m <= n & m <= k holds dist(S.n,S.k) < r by A2;
       end;
   then consider r2 being Real, m1 such that A3: 0 < r2 and
-    A4: for n,k st (m1 <= n & m1 <= k) holds dist(S.n,S.k) < r2;
+    A4: for n,k st m1 <= n & m1 <= k holds dist(S.n,S.k) < r2;
   consider r1 being real number such that A5: 0 < r1 and
 A6: for m2 st m2 <= m1 holds abs(dist_to_point(S,S.m1).m2) < r1 by SEQ_2:16;
   A7: for m st m <= m1 holds dist(S.m,S.m1) < r1
@@ -1046,7 +993,7 @@ A6: for m2 st m2 <= m1 holds abs(dist_to_point(S,S.m1).m2) < r1 by SEQ_2:16;
     then abs(dist_to_point(S,S.m1).m) = dist(S.m,S.m1) by A9,ABSVALUE:def 1;
     hence thesis by A6,A8;
   end;
-    ex r,x st (0 < r & for n holds S.n in Ball(x,r))
+    ex r,x st 0 < r & for n holds S.n in Ball(x,r)
   proof
     reconsider r = r1 + r2 as Real by XREAL_0:def 1;
     take r;
@@ -1058,13 +1005,13 @@ A10:    0 + 0 < r1 + r2 by A3,A5,REAL_1:67;
         now per cases;
         suppose n <= m1;
         then A11: dist(S.n,S.m1) < r1 by A7;
-          r1 < r by A3,REAL_1:69;
+        r1 < r by A3,REAL_1:69;
         then dist(S.n,x) < r by A11,AXIOMS:22;
         hence thesis by METRIC_1:12;
         end;
         suppose m1 <= n;
         then A12: dist(S.n,S.m1) < r2 by A4;
-          r2 < r by A5,REAL_1:69;
+        r2 < r by A5,REAL_1:69;
         then dist(S.n,x) < r by A12,AXIOMS:22;
         hence thesis by METRIC_1:12;
       end;
@@ -1079,8 +1026,6 @@ end;
 registration let M be non empty MetrSpace;
   cluster constant -> convergent sequence of M;
   coherence by Th38;
-  cluster convergent -> Cauchy sequence of M;
-  coherence by TBSP_1:7;
   cluster Cauchy -> bounded sequence of M;
   coherence by Th44;
 end;

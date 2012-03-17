@@ -12,8 +12,10 @@ environ
       MATRIX_2, TOPREAL2, SEQM_3, GOBOARD5, TOPREAL1, MCART_1, PSCOMP_1,
       JORDAN2C, SUBSET_1, JORDAN6, FUNCT_5, FUNCT_1, RCOMP_1, LATTICES,
       METRIC_1, SQUARE_1, ABSVALUE, JORDAN1, TREES_1, MATRIX_1, FINSEQ_4,
-      TOPS_1, COMPLEX1, JORDAN8, INT_1, JORDAN9, GOBOARD9, JORDAN1A;
- notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      TOPS_1, COMPLEX1, JORDAN8, INT_1, JORDAN9, GOBOARD9, JORDAN1A,
+      ORDINAL2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2,
+      NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, INT_1, NAT_1, SQUARE_1, ABSVALUE, FUNCT_1, FUNCT_2, STRUCT_0,
       FINSEQ_1, FINSEQ_4, BINARITH, NEWTON, PRE_TOPC, TOPS_1, CONNSP_1,
       COMPTS_1, GOBOARD1, MATRIX_1, RCOMP_1, SEQ_4, METRIC_1, EUCLID, WSIERP_1,
@@ -25,7 +27,7 @@ environ
       REALSET1, TOPRNS_1, INT_1;
  clusters XREAL_0, EUCLID, PSCOMP_1, RELSET_1, STRUCT_0, TOPREAL6, JORDAN8,
       JORDAN10, INT_1, GOBOARD5, PRE_TOPC, SPRECT_3, BORSUK_2, NEWTON,
-      SPRECT_4, SPRECT_1, MEMBERED, ORDINAL2, NUMBERS;
+      SPRECT_4, SPRECT_1, MEMBERED, ORDINAL2, NUMBERS, ARYTM_3, NAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, ABIAN, JORDAN1, XBOOLE_0;
  theorems AXIOMS, EUCLID, GOBOARD7, JORDAN8, JORDAN9, JORDAN10, PSCOMP_1,
@@ -36,7 +38,7 @@ environ
       TOPS_2, TOPREAL6, AMI_5, FINSEQ_6, SPRECT_2, FINSEQ_4, INT_1, TOPS_1,
       JORDAN4, RLVECT_1, JGRAPH_1, JORDAN6, FUNCT_2, JORDAN5A, PRE_TOPC,
       METRIC_6, RELAT_1, UNIFORM1, RCOMP_1, TOPREAL5, SCMFSA_7, PCOMPS_2,
-      XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+      XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, PEPIN, ORDINAL2;
  schemes NAT_1, XBOOLE_0;
 
 begin  :: Preliminaries
@@ -87,23 +89,14 @@ theorem Th2:
    end;
 
 theorem Th3:
- n > 0 implies m |^ n mod m = 0
-  proof
-    defpred P[Nat] means $1 > 0 implies m|^$1 mod m = 0;
-A1: P[0];
-A2: P[i] implies P[i+1]
-    proof
-      assume P[i] & i+1 > 0;
-      thus m|^(i+1) mod m = (m|^i * m) mod m by NEWTON:11
-        .= 0 by GROUP_4:101;
-    end;
-       P[i] from NAT_1:sch 1(A1,A2);
-    hence thesis;
-  end;
+  for m,n being natural number holds
+  n > 0 implies m |^ n mod m = 0 by PEPIN:37;
 
 theorem Th4:
- j > 0 & i mod j = 0 implies i div j = i / j
+  for i,j being natural number holds
+  j > 0 & i mod j = 0 implies i div j = i / j
   proof
+    let i,j be natural number;
     assume
 A1:   j > 0;
     assume i mod j = 0;
@@ -115,8 +108,10 @@ A3:   0 < j by A1,NAT_1:def 2;
   end;
 
 theorem Th5:
- n > 0 implies i |^ n div i = i |^ n / i
+  for i,n being natural number holds
+  n > 0 implies i |^ n div i = i |^ n / i
   proof
+    let i,n be natural number;
     assume
 A1:   n > 0;
     per cases by NAT_1:19;
@@ -134,15 +129,18 @@ A3:   i = 0;
   end;
 
 theorem Th6:
+ for n being natural number holds
  0 < n & 1 < r implies 1 < r|^n
   proof
+    let n be natural number;
     assume that
 A1:   0 < n and
 A2:   r > 1;
-    defpred P[Nat] means 0 < $1 implies 1 < r|^$1;
+    defpred P[natural number] means 0 < $1 implies 1 < r|^$1;
 A3: P[0];
-A4: P[k] implies P[k+1]
+A4: for k being natural number holds P[k] implies P[k+1]
     proof
+      let k be natural number;
       assume that
 A5:     P[k] and 0 < k+1;
       per cases by NAT_1:19;
@@ -157,16 +155,19 @@ A7:   r|^(k+1) = (r|^k)*r by NEWTON:11;
       hence thesis by A2,NEWTON:10;
    end;
    end;
-      P[k] from NAT_1:sch 1(A3,A4);
+    for k being natural number holds P[k] from NAT_1:sch 2(A3,A4);
    hence thesis by A1;
 end;
 
 theorem Th7:
+ for m,n being natural number holds
  r > 1 & m > n implies r|^m > r|^n
   proof
+    let m,n be natural number;
     assume that
 A1:   r > 1 and
 A2:   m > n;
+reconsider m,n as Nat by ORDINAL2:def 21;
 A3: r > 0 by A1,AXIOMS:22;
        (m-'n)+n = m by A2,AMI_5:4;
 then A4:  r|^m = r|^(m-'n)*r|^n by NEWTON:13;

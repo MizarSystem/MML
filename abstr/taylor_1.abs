@@ -1,0 +1,306 @@
+:: The {T}aylor Expansions
+::  by Yasunari Shidama
+:: 
+:: Received February 24, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, BOOLE, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
+      RELAT_1, ABSVALUE, SUBSET_1, ORDINAL2, QC_LANG1, PARTFUN1, LIMFUNC1,
+      FCONT_1, INT_1, RAT_1, SEQ_1, SEQ_2, SEQM_3, RCOMP_1, SEQFUNC, SIN_COS,
+      FDIFF_1, PREPOWER, POWER, SERIES_1, GROUP_1, FINSEQ_4, SUPINF_2,
+      TAYLOR_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, PARTFUN2,
+      FUNCT_2, RFUNCT_2, LIMFUNC1, RCOMP_1, FCONT_1, ORDINAL2, XCMPLX_0,
+      XREAL_0, RAT_1, ORDINAL1, NUMBERS, REAL_1, NAT_1, INT_1, ABSVALUE,
+      FINSEQ_4, NEWTON, SEQ_1, SEQ_2, SEQM_3, SERIES_1, FDIFF_1, SEQFUNC,
+      PREPOWER, POWER, SIN_COS;
+ constructors ARYTM_0, REAL_1, NAT_1, PARTFUN1, PARTFUN2, LIMFUNC1, FCONT_1,
+      RFUNCT_2, RCOMP_1, MEMBERED, SEQ_2, COMPLEX1, GROUP_1, SERIES_1,
+      PREPOWER, COMSEQ_3, FDIFF_1, FINSEQ_4, SIN_COS, SEQFUNC;
+ clusters RELSET_1, XREAL_0, MEMBERED, NEWTON, NAT_1, RAT_1, RCOMP_1, INT_1,
+      SEQ_1, SIN_COS, PREPOWER;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: The Logarithmic differentiation method
+
+reserve
+  n for natural number,
+  i for Integer,
+  p, x, x0, y for real number,
+  q for Rational,
+  f for PartFunc of REAL,REAL;
+
+definition
+let q be Integer;
+func #Z q -> Function of REAL, REAL means
+:: TAYLOR_1:def 1
+for x be real number holds it.x = x #Z q;
+end;
+
+theorem :: TAYLOR_1:1
+for m,n be natural number holds x #Z (n+m) = (x #Z n) * (x #Z m);
+
+theorem :: TAYLOR_1:2
+  #Z n is_differentiable_in x & diff(( #Zn),x) = n * x #Z (n-1);
+
+theorem :: TAYLOR_1:3
+ f is_differentiable_in x0 implies
+   ( #Z n) *f is_differentiable_in x0 &
+   diff( ( #Z n) *f,x0) = n * (f.x0) #Z (n-1) *diff(f,x0);
+
+theorem :: TAYLOR_1:4
+  exp(-x) = 1/exp(x);
+
+theorem :: TAYLOR_1:5
+(exp(x)) #R (1/i) = exp(x/i);
+
+theorem :: TAYLOR_1:6
+for m,n be Integer holds (exp(x)) #R (m/n) = exp(m/n*x);
+
+theorem :: TAYLOR_1:7
+(exp(x)) #Q q = exp(q*x);
+
+theorem :: TAYLOR_1:8
+(exp(x)) #R p = exp(p*x);
+
+theorem :: TAYLOR_1:9
+  (exp(1)) #R x =exp(x) & (exp(1)) to_power x =exp(x) &
+   number_e to_power x =exp(x) & number_e  #R x =exp(x);
+
+theorem :: TAYLOR_1:10
+(exp.1) #R x =exp.x & (exp.1) to_power x =exp.x &
+   number_e to_power x =exp.x & number_e #R x =exp.x;
+
+theorem :: TAYLOR_1:11
+number_e >= 2;
+
+theorem :: TAYLOR_1:12
+log(number_e,exp(x)) = x;
+
+theorem :: TAYLOR_1:13
+log(number_e,exp.x) = x;
+
+theorem :: TAYLOR_1:14
+y > 0 implies exp( log(number_e,y)) = y;
+
+theorem :: TAYLOR_1:15
+y > 0 implies exp. ( log(number_e,y)) = y;
+
+theorem :: TAYLOR_1:16
+  exp is one-to-one &
+  exp is_differentiable_on REAL &
+  exp is_differentiable_on [#](REAL) &
+  (for x be Real holds  diff(exp,x)=exp.x ) &
+  (for x be Real holds 0 < diff(exp,x) ) &
+  dom(exp)=REAL & dom(exp)=[#](REAL) &
+  rng(exp)=right_open_halfline(0);
+
+registration
+  cluster exp -> one-to-one;
+end;
+
+theorem :: TAYLOR_1:17
+exp"  is_differentiable_on dom (exp") &
+ for x be real number st x in dom (exp") holds diff(((exp)"),x) = 1/x;
+
+registration
+  cluster right_open_halfline(0) -> non empty;
+end;
+
+definition
+let a be real number;
+func log_ a -> PartFunc of REAL,REAL means
+:: TAYLOR_1:def 2
+ dom it= right_open_halfline(0) & for d be Element of
+ right_open_halfline(0)  holds it.d= log(a,d);
+ end;
+
+theorem :: TAYLOR_1:18
+  log_ number_e=(exp)" &
+  log_ number_e is one-to-one &
+  dom(log_ number_e) =right_open_halfline(0) &
+  rng(log_ number_e)  =REAL &
+  log_ number_e  is_differentiable_on right_open_halfline(0) &
+  (for x be Real st x > 0 holds log_ number_e  is_differentiable_in x) &
+  (for x be Element of right_open_halfline(0)
+     holds diff((log_ number_e),x)=1/x) &
+  (for x  be Element of right_open_halfline(0)
+     holds 0 < diff((log_ number_e),x));
+
+theorem :: TAYLOR_1:19
+f is_differentiable_in x0 implies
+ exp*f is_differentiable_in x0 & diff(exp*f,x0) = exp.(f.x0)*diff(f,x0);
+
+theorem :: TAYLOR_1:20
+ f is_differentiable_in x0 & f.x0 > 0 implies
+  (log_ number_e) *f is_differentiable_in x0 &
+   diff( (log_ number_e) *f,x0) = diff(f,x0)/(f.x0);
+
+definition
+let p be real number;
+func #R p -> PartFunc of REAL,REAL means
+:: TAYLOR_1:def 3
+ dom it= right_open_halfline(0) & for d be Element of
+ right_open_halfline(0) holds it.d= d #R p;
+ end;
+
+theorem :: TAYLOR_1:21
+x > 0  implies ( #R p) is_differentiable_in x & diff(( #R p),x)=p*(x #R (p-1));
+
+theorem :: TAYLOR_1:22
+  f is_differentiable_in x0 & f.x0 > 0 implies
+    ( #R p) *f is_differentiable_in x0 &
+     diff(  ( #R p) *f,x0) = p*( (f.x0) #R (p-1)) * diff(f,x0);
+
+begin ::The Taylor expansions
+
+definition
+let f be PartFunc of REAL,REAL;
+let Z be Subset of REAL;
+func diff(f,Z) -> Functional_Sequence of REAL,REAL means
+:: TAYLOR_1:def 4
+   it.0 = f|Z & for i be natural number holds it.(i+1) = (it.i) `| Z;
+end;
+
+definition
+let f be PartFunc of REAL,REAL;
+let n be natural number;
+let Z be Subset of REAL;
+pred f is_differentiable_on n, Z means
+:: TAYLOR_1:def 5
+     for i be Nat st i <= n-1
+             holds diff(f,Z).i is_differentiable_on Z;
+ end;
+
+theorem :: TAYLOR_1:23
+for f be PartFunc of REAL,REAL, Z be Subset of REAL, n be natural number
+ st f is_differentiable_on n,Z
+   for m be natural number st m <= n holds f is_differentiable_on m, Z;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  let Z be Subset of REAL;
+  let a,b be real number;
+  func Taylor(f,Z,a,b) -> Real_Sequence means
+:: TAYLOR_1:def 6
+  for n be natural number holds it.n = (diff(f,Z).n).a * (b-a) |^ n / (n!);
+ end;
+
+theorem :: TAYLOR_1:24
+for f be PartFunc of REAL,REAL
+for Z be Subset of REAL
+for n be Nat
+      st  f is_differentiable_on n,  Z
+for a,b be Real st ( a < b & ].a,b.[ c= Z )
+holds
+    diff(f,Z).n | ].a,b.[ = diff(f,].a,b.[).n;
+
+theorem :: TAYLOR_1:25
+for n be Nat, f be PartFunc of REAL,REAL, Z be Subset of REAL st
+ f is_differentiable_on n,Z
+  for a,b be Real st
+     ( a < b & [.a,b.] c=Z &
+       (diff(f,Z).n) is_continuous_on [.a,b.] &
+       f is_differentiable_on (n+1), ].a,b.[ )
+   holds
+   for l be Real, g be PartFunc of REAL,REAL st
+    dom(g)=REAL &
+    ( for x be Real holds
+       g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).n
+              -l*(b-x) |^ (n+1)  /((n+1)!)  ) &
+    f.b-Partial_Sums(Taylor(f,Z,a,b)).n
+              -l*(b-a) |^ (n+1)  /((n+1)!) =0
+    holds
+      g is_differentiable_on ].a,b.[ &
+      g.a=0 & g.b=0 &
+      g is_continuous_on [.a,b.] &
+      for x be Real st x in  ].a,b.[ holds
+        diff(g,x) = -(diff(f,].a,b.[).(n+1)).x * (b-x) |^ (n) /((n)!)
+                    +l* (b-x) |^ (n) /((n)!);
+
+theorem :: TAYLOR_1:26
+for n be Nat
+for f be PartFunc of REAL,REAL
+for Z be Subset of REAL
+for b,l be Real holds
+   ex g be Function of REAL,REAL st
+            ( for x be Real holds
+            g.x=f.b-Partial_Sums(Taylor(f,Z,x,b)).n
+                   -l*(b-x) |^ (n+1)  /((n+1)!)  );
+
+theorem :: TAYLOR_1:27
+for n be Nat, f be PartFunc of REAL,REAL, Z be Subset of REAL st
+  f is_differentiable_on n,Z
+    for a,b be Real st
+     ( a < b & [.a,b.] c=Z &
+       (diff(f,Z).n) is_continuous_on [.a,b.] &
+       f is_differentiable_on (n+1), ].a,b.[ )
+    holds
+     ex c be Real st
+       c in ].a, b.[ &
+       f.b = Partial_Sums(Taylor(f,Z,a,b)).n
+           + (diff(f,].a,b.[).(n+1)).c * (b-a) |^ (n+1)  /((n+1)!);
+
+theorem :: TAYLOR_1:28
+for n be Nat, f be PartFunc of REAL,REAL, Z be Subset of REAL st
+  f is_differentiable_on n,Z
+   for a,b be Real st
+     ( a < b & [.a,b.] c=Z & (diff(f,Z).n) is_continuous_on [.a,b.] &
+       f is_differentiable_on (n+1), ].a,b.[ )
+   holds
+     for l be Real, g be PartFunc of REAL,REAL st
+       dom(g)=REAL &
+       ( for x be Real holds
+           g.x = f.a-Partial_Sums(Taylor(f,Z,x,a)).n
+                    -l*(a-x) |^ (n+1)  /((n+1)!) ) &
+       f.a-Partial_Sums(Taylor(f,Z,b,a)).n-l*(a-b) |^ (n+1)/((n+1)!) =0
+     holds
+       g is_differentiable_on ].a,b.[ &
+        g.b=0 & g.a=0 &
+        g is_continuous_on [.a,b.] &
+        for x be Real st x in  ].a,b.[ holds
+         diff(g,x) = -(diff(f,].a,b.[).(n+1)).x * (a-x) |^ (n) /((n)!)
+                       +l* (a-x) |^ (n) /((n)!);
+
+theorem :: TAYLOR_1:29
+for n be Nat, f be PartFunc of REAL,REAL, Z be Subset of REAL st
+ f is_differentiable_on n,Z
+   for a,b be Real st
+     ( a < b & [.a,b.] c=Z & (diff(f,Z).n) is_continuous_on [.a,b.] &
+       f is_differentiable_on (n+1), ].a,b.[ )
+   holds
+     ex c be Real st
+       c in ].a, b.[ &
+       f.a = Partial_Sums(Taylor(f,Z,b,a)).n
+            + (diff(f,].a,b.[).(n+1)).c * (a-b) |^ (n+1)  /((n+1)!);
+
+theorem :: TAYLOR_1:30
+for f be PartFunc of REAL,REAL, Z be Subset of REAL, Z1 be open Subset of REAL
+ st Z1 c= Z
+  for n be Nat st f is_differentiable_on n,Z holds
+    diff(f,Z).n | Z1 = diff(f,Z1).n;
+
+theorem :: TAYLOR_1:31
+for f be PartFunc of REAL,REAL, Z be Subset of REAL, Z1 be open Subset of REAL
+ st Z1 c= Z
+ for n be natural number st f is_differentiable_on n+1,Z holds
+   f is_differentiable_on n+1,  Z1;
+
+theorem :: TAYLOR_1:32
+for f be PartFunc of REAL,REAL
+for Z be Subset of REAL
+for x be Real st x in Z
+for n be Nat holds
+     f.x = Partial_Sums(Taylor(f,Z,x,x)).n;
+
+theorem :: TAYLOR_1:33
+for n be Nat, f be PartFunc of REAL,REAL, x0,r be Real st
+  ( 0 < r & f is_differentiable_on n+1,  ].x0-r,x0+r.[ )
+    for x be Real st x in ].x0-r, x0+r.[ holds
+      ex s be Real st 0 < s &  s < 1 &
+        f.x=Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n
+               + (diff(f,].x0-r,x0+r.[).(n+1)).(x0+s*(x-x0))
+               * (x-x0) |^ (n+1)  /((n+1)!);

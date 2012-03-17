@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.68 $
+;; $Revision: 1.76 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -120,12 +120,20 @@ Valid values are 'gnuemacs,'Xemacs and 'winemacs.")
   "Running the Mizar utilities"
   :group 'mizar)
 
+(defgroup mizar-indenting nil
+  "Indenting in the Mizar mode"
+  :group 'mizar)
+
 (defgroup mizar-files nil
   "Files and paths settings in the Mizar mode"
   :group 'mizar)
 
 (defgroup mizar-grep nil
   "Grepping in the Mizar mode"
+  :group 'mizar)
+
+(defgroup mizar-faces nil
+  "Faces for Mizar keywords"
   :group 'mizar)
 
 (defgroup mizar-constructor-explanations nil
@@ -151,14 +159,19 @@ Valid values are 'gnuemacs,'Xemacs and 'winemacs.")
 (defcustom mizar-indent-width 2 
 "*Indentation width for Mizar articles."
 :type 'integer
-:group 'mizar)
+:group 'mizar-indenting)
+
+(defcustom mizar-align-labels nil
+"*Indenting puts labels at the beginning of lines."
+:type 'boolean
+:group 'mizar-indenting)
 
 (defcustom mizar-abstracts-use-view t
 "*View-mode is used for Mizar abstracts."
 :type 'boolean
 :group 'mizar)
 
-(defcustom mizar-launch-speedbar t
+(defcustom mizar-launch-speedbar nil
 "*Launch speedbar upon entering mizar-mode for the first time.
 Speedbar can be (de)activated later by running the command `speedbar'."
 :type 'boolean
@@ -235,6 +248,10 @@ Possible values are now
 
 'sorted for sorted list of constructors in absolute notation.
 'constructors for list of constructors in absolute notation,
+'mmlquery behaves as 'sorted, but constructors are inserted
+          directly into the *mmlquery* input buffer.
+          The mmlquery interpreter has to be installed for this,
+          see `mmlquery-program-name'.
 'translate for expanded formula in absolute notation,
 'raw for the internal Mizar representation,
 'expanded for expansion of clusters,
@@ -243,6 +260,7 @@ The values 'raw and 'expanded are for debugging only, do
 not use them to get constructor explanatios."
 :type '(choice (const :tag "sorted list of constructors" sorted)
 	       (const :tag "unsorted list of constructors" constructor)
+	       (const :tag "mmlquery input" mmlquery)
 	       (const :tag "translated formula" translate)
 	       (const :tag "nontranslated (raw) formula" raw)
 	       (const :tag "raw formula with expanded clusters" expanded))
@@ -317,8 +335,84 @@ MoMM should be installed for this."
 :type 'string
 :group 'mizar-files)
 
+(defvar mizar-mode-abbrev-table nil
+  "Abbrev table in use in Mizar-mode buffers.")
+(define-abbrev-table 'mizar-mode-abbrev-table ())
 
+(defcustom mizar-main-color (face-foreground font-lock-function-name-face)
+"*Color used for `mizar-main-keywords'."
+:type 'color
+:group 'mizar-faces)
 
+(defcustom mizar-block-color (face-foreground font-lock-keyword-face)
+"*Color used for `mizar-block-keywords'."
+:type 'color
+:group 'mizar-faces)
+
+(defcustom mizar-normal-color
+  (face-foreground font-lock-variable-name-face)
+"*Color used for `mizar-normal-keywords'."
+:type 'color
+:group 'mizar-faces)
+
+(defcustom mizar-skeleton-color mizar-normal-color
+"*Color used for `mizar-skeleton-keywords'."
+:type 'color
+:group 'mizar-faces)
+
+(defcustom mizar-formula-color
+  (if (and (boundp 'font-lock-background-mode)
+	   (eq font-lock-background-mode 'dark))
+      "LightSkyBlue" "Orchid")
+"*Color used for `mizar-formula-keywords'."
+:type 'color
+:group 'mizar-faces)
+
+(defcustom mizar-main-keywords 
+(list "theorem" "scheme" "definition" "registration" 
+      "notation" "schemes" "constructors" "definitions" 
+      "theorems" "vocabulary" "clusters" "signature"
+      "requirements" )
+"*Keywords starting main mizar text items. 
+Now also the environmental declarations."
+:type '(repeat string)
+:group 'mizar-faces)
+
+(defcustom mizar-block-keywords
+(list "proof" "now" "end" "hereby" "case" "suppose")
+"*Keywords for Mizar block starts and ends."
+:type '(repeat string)
+:group 'mizar-faces)
+
+(defcustom mizar-formula-keywords
+(list "for" "ex" "not" "&" "or" "implies" "iff" "st" "holds" "being")
+"*Keywords for logical symbols in Mizar formulas."
+:type '(repeat string)
+:group 'mizar-faces)
+
+(defcustom mizar-skeleton-keywords
+(list "assume" "cases"  "given" "hence" "let" "per" "take" "thus")
+"*Keywords denoting skeleton proof steps." 
+:type '(repeat string)
+:group 'mizar-faces)
+
+(defcustom mizar-normal-keywords 
+(list
+ "and" "antonym" "attr" "as" "be" "begin" "canceled" "cluster" 
+ "coherence" "compatibility" "consider" "consistency"  
+ "contradiction" "correctness" "def" "deffunc" 
+ "defpred" "environ" "equals" "existence"
+ "func" "if" "irreflexivity" 
+ "it" "means" "mode" "of"  "otherwise" "over" 
+ "pred" "provided" "qua" "reconsider" "redefine" "reflexivity" 
+ "reserve" "struct" "such" "synonym" 
+ "that" "then" "thesis" "where" 
+ "associativity" "commutativity" "connectedness" "irreflexivity" 
+ "reflexivity" "symmetry" "uniqueness" "transitivity" "idempotence" 
+ "asymmetry" "projectivity" "involutiveness")
+"*Mizar keywords not mentioned in other place."
+:type '(repeat string)
+:group 'mizar-faces)
 
 (defvar mizar-mode-syntax-table nil)
 (defvar mizar-mode-abbrev-table nil)
@@ -493,6 +587,9 @@ Used for exact completion.")
 
 ;;;;;;;;;;;;  indentation (pretty poor) ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defvar mizar-label-regexp "\\b[a-zA-Z_'0-9]+:"
+  "*Regexp denoting mizar labels*")
+
 (defun mizar-indent-line ()
   "Indent current line as Mizar code."
   (interactive)
@@ -501,19 +598,26 @@ Used for exact completion.")
     (beginning-of-line)
     (setq beg (point))
     (skip-chars-forward " \t")
-    (if (zerop (- indent (current-column)))
-	nil
-      (delete-region beg (point))
-      (mizar-indent-to indent))
+    (if (and mizar-align-labels (looking-at mizar-label-regexp))
+	(let ((lab (match-string 0)))
+	  (goto-char (match-end 0))
+	  (skip-chars-forward " \t")
+	  (delete-region beg (point))
+	  (insert lab)
+	  (if  ( > indent (length lab))
+	      (mizar-indent-to (- indent (length lab)))
+	    (insert " ")))
+      (if (zerop (- indent (current-column)))
+	  nil
+	(delete-region beg (point))
+	(mizar-indent-to indent)))
 					;      (indent-to (+ 3 indent)))
     (if (> (- (point-max) pos) (point))
 	(goto-char (- (point-max) pos)))
     ))
 
-
 (defun mizar-indent-to (indent)
   (insert-char 32 indent) )             ; 32 is space...cannot use tabs
-
 
 
 
@@ -525,31 +629,39 @@ Used for exact completion.")
     (cond
      ((looking-at "::::::") 0)		;Large comment starts
      ((looking-at "::") (current-column)) ;Small comment starts
-     ((looking-at "\\(theorem\\|scheme\\|definition\\|registration\\|environ\\|vocabulary\\|constructors\\|requirements\\|notation\\|clusters\\)") 0)
+     ((looking-at "\\b\\(theorem\\|scheme\\|definition\\|registration\\|environ\\|vocabulary\\|constructors\\|requirements\\|notation\\|clusters\\)\\b") 0)
      ((bobp) 0)				;Beginning of buffer
      (t
       (let ((empty t) ind more less res)
 	;; See previous indentation
 	(cond ((looking-at "end;") (setq less t))
-	      ((looking-at "\\(proof\\|now\\|hereby\\)") (setq more t)))
+	      ((looking-at 
+		"\\b\\(proof\\|now\\|hereby\\|case\\|suppose\\)\\b") 
+	       (setq more (match-string 0))))
+	;; Find previous noncommented line
 	(while empty
 	  (forward-line -1)
 	  (beginning-of-line)
- 	  (if (bobp)
- 	      (setq empty nil)
- 	    (skip-chars-forward " \t")
+ 	  (cond 
+	   ((bobp) (setq empty nil))
+	   ((and mizar-align-labels (looking-at mizar-label-regexp))
+	    (goto-char (match-end 0))
+	    (skip-chars-forward " \t")
+	    (setq empty nil))
+	   (t 
+	    (skip-chars-forward " \t")
 	    (if (not (looking-at "\\(::\\|\n\\)"))
- 		(setq empty nil))))
+ 		(setq empty nil)))))
  	(if (bobp)
  	    (setq ind 0)		;Beginning of buffer
 	  (setq ind (current-column)))	;Beginning of clause
 	;; See its beginning
-	(if (and more (= ind 2))
+	(if (and more (= ind 2) (string-equal more "proof"))
 	    0                           ;proof begins inside theorem
 	  ;; Real mizar code
-	  (cond ((looking-at "\\(proof\\|now\\|hereby\\)")
+	  (cond ((looking-at "\\b\\(proof\\|now\\|hereby\\|case\\|suppose\\)\\b")
 		 (setq res (+ ind mizar-indent-width)))
-		((looking-at "\\(definition\\|scheme\\|theorem\\|registration\\|vocabulary\\|constructors\\|requirements\\|notation\\|clusters\\)")
+		((looking-at "\\b\\(definition\\|scheme\\|theorem\\|registration\\|vocabulary\\|constructors\\|requirements\\|notation\\|clusters\\)\\b")
 		 (setq res (+ ind 2)))
  		(t (setq res ind)))
 	  (if less (max (- ind mizar-indent-width) 0)
@@ -1253,11 +1365,9 @@ INDENT is the current indentation level."
 
 (put 'mizar-mode 'find-tag-default-function 'mizar-ref-at-point)
 
-(defvar mizsymbtags
-  (substitute-in-file-name "$MIZFILES/abstr/symbtags")
+(defvar mizsymbtags (concat mizfiles "abstr/symbtags")
   "Symbol tags file created with stag.pl (now in Mizar distro).")
-(defvar mizreftags
-  (substitute-in-file-name "$MIZFILES/abstr/reftags")
+(defvar mizreftags (concat mizfiles "abstr/reftags")
   "References tags file created with stag.pl (now in Mizar distro).")
 
 ;; nasty to redefine these two, but working; I could not get the local vars machinery right
@@ -1530,7 +1640,7 @@ If TABLE is not given, get it with `mizar-get-errors'."
 	      )))))
 
 
-(defvar mizar-err-msgs (substitute-in-file-name "$MIZFILES/mizar.msg")
+(defvar mizar-err-msgs (concat mizfiles "mizar.msg")
   "File with explanations of Mizar error messages.")
 (defun mizar-getmsgs (errors &optional cformat)
 "Return string of error messages for ERRORS.
@@ -2008,21 +2118,21 @@ Underlines and mouse-highlites the places."
     (setq after-change-functions oldhook)
     nil))))
 	
-(defvar cstrregexp "\\([A-Z0-9_]+\\):\\([a-z]+\\)[.]\\([0-9]+\\)"
-"Description of the constr format we use, see idxrepr.")
+(defvar res-regexp "\\([A-Z0-9_]+\\):\\([a-z]+\\)[.]\\([0-9]+\\)"
+"Description of the mmlquery resource format we use, see idxrepr.")
 
 (defvar mizar-cstr-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "\C-m" 'mizar-kbd-cstr-mmlquery)
+    (define-key map "\C-m" 'mizar-kbd-res-mmlquery)
     (define-key map "\C-\M-m" 'mizar-kbd-ask-query)
     (define-key map "\M-." 'mizar-kbd-cstr-tag)
     (define-key map "\C-c\C-c" 'mizar-ask-advisor)
     (if (eq mizar-emacs 'xemacs)
 	(progn
-	  (define-key map [button2] ' mizar-mouse-cstr-mmlquery)
+	  (define-key map [button2] ' mizar-mouse-res-mmlquery)
 	  (define-key map [(shift button2)] 'mizar-mouse-ask-query)
 	  (define-key map [button3] 'mizar-mouse-cstr-tag))
-      (define-key map [mouse-2] 'mizar-mouse-cstr-mmlquery)
+      (define-key map [mouse-2] 'mizar-mouse-res-mmlquery)
       (define-key map [(shift mouse-2)] 'mizar-mouse-ask-query)
       (define-key map [mouse-3] 'mizar-mouse-cstr-tag))
     map)
@@ -2049,91 +2159,148 @@ Commands:
 (interactive "s")
 (mizar-ask-query (concat query-url "emacs_search?entry=" cstr)))
 
-(defun mizar-cstr-at-point (pos &optional agg2str)
-"Get the constructor around POS, if AGG2STR, replace aggr by struct."
+(defun mizar-res-at-point (pos &optional agg2str)
+"Get the mmlquery resource around POS, if AGG2STR, 
+replace aggr by struct."
 (save-excursion
   (goto-char pos)
   (skip-chars-backward ":.a-zA-Z_0-9")
-  (if (looking-at cstrregexp)
+  (if (looking-at res-regexp)
       (let ((res (match-string 0)))
 	(if (and agg2str (equal "aggr" (match-string 2)))
 	    (concat (match-string 1) ":struct." (match-string 3))
 	  res)))))
 
 (defun mizar-mouse-ask-query (event)
-"Ask MML Query about the constructor we clicked on."
+"Ask MML Query about the mmlquery resource we clicked on."
   (interactive "e")
   (select-window (event-window event))
-  (let ((cstr (mizar-cstr-at-point (event-point event))))
+  (let ((cstr (mizar-res-at-point (event-point event))))
     (if cstr (mizar-ask-meaning-query cstr)
-      (message "No constructor at point"))))
+      (message "No mmlquery resource at point"))))
 
 (defun mizar-kbd-ask-query (pos)
-"Ask MML Query about the constructor at position POS."
+"Ask MML Query about the mmlquery resource at position POS."
   (interactive "d")
-  (let ((cstr (mizar-cstr-at-point pos)))
+  (let ((cstr (mizar-res-at-point pos)))
     (if cstr (mizar-ask-meaning-query cstr)
-      (message "No constructor at point"))))
+      (message "No mmlquery resource at point"))))
 
 
-(defun mizar-mouse-cstr-mmlquery (event)
-"Find the definition of the constructor we clicked on in its
+(defun mizar-mouse-res-mmlquery (event)
+"Find the definition of the mmlquery resource we clicked on in its
 MMLQuery abstract."
   (interactive "e")
   (select-window (event-window event))
-  (let ((cstr (mizar-cstr-at-point (event-point event))))
-    (if cstr (mmlquery-goto-symdef (intern cstr) t)
-      (message "No constructor at point"))))
+  (let ((cstr (mizar-res-at-point (event-point event))))
+    (if cstr (mmlquery-goto-resdef (intern cstr) t)
+      (message "No mmlquery resource at point"))))
 
-(defun mizar-kbd-cstr-mmlquery (pos)
-"Find the definition of the constructor at position POS in its
+(defun mizar-kbd-res-mmlquery (pos)
+"Find the definition of the mmlquery resource at position POS in its
 MMLQuery abstract."
   (interactive "d")
-  (let ((cstr (mizar-cstr-at-point pos)))
-    (if cstr (mmlquery-goto-symdef (intern cstr) t)
-      (message "No constructor at point"))))
+  (let ((cstr (mizar-res-at-point pos)))
+    (if cstr (mmlquery-goto-resdef (intern cstr) t)
+      (message "No mmlquery resource at point"))))
 
 
 
 (defun mizar-kbd-cstr-tag (pos)
-"Find the definition of the constructor at position POS."
+"Find the definition of the mmlquery resource at position POS."
   (interactive "d")
-  (let ((cstr (mizar-cstr-at-point pos t)))
+  (let ((cstr (mizar-res-at-point pos t)))
     (if cstr (mizar-symbol-def t cstr t)
-      (message "No constructor at point"))))
+      (message "No mmlquery resource at point"))))
 
 (defun mizar-mouse-cstr-tag (event)
-"Find the definition of the constructor we clicked on."
+"Find the definition of the mmlquery resource we clicked on."
   (interactive "e")
   (select-window (event-window event))
-  (let ((cstr (mizar-cstr-at-point (event-point event) t)))
+  (let ((cstr (mizar-res-at-point (event-point event) t)))
     (if cstr (mizar-symbol-def t cstr t)
-      (message "No constructor at point"))))
+      (message "No mmlquery resource at point"))))
 
 
 (defun mizar-highlight-constrs ()
 (save-excursion
   (goto-char (point-min))
   (let ((props (list 'mouse-face 'highlight 'face 'underline)))
-  (while (re-search-forward cstrregexp (point-max) t)
+  (while (re-search-forward res-regexp (point-max) t)
     (add-text-properties (match-beginning 0) (match-end 0) props)))))
 
+(defun mizar-set-mmlquery-properties (res)
+"Set up the text property for mmlquery resource RES, in the same way
+as used by the mmlquery browsing format.
+Strings not matching `res-regexp' are just returned, while dot 
+is replaced by space in matching."
+(if (not (string-match res-regexp res))
+    res
+  (let ((map mmlquery-anchor-map)
+	(res1 (replace-regexp-in-string "[.]" " " res)))
+    (add-text-properties 0 (length res1)
+			 (list 'mouse-face 'highlight 'face 'underline 
+			       'fontified t local-map-kword map
+			       'help-echo res
+			       'anchor (intern res))
+			   res1)
+    res1)))
+
 (defun mizar-intern-constrs-other-window (res)
-"Display the constructors RES in buffer *Constructors list* in other window and highlight."
-(let ((cbuf (get-buffer-create "*Constructors list*")))
-  (set-buffer cbuf)
-  (erase-buffer)
-  (insert res)
-  (mizar-highlight-constrs)
-  (use-local-map mizar-cstr-map)
-  (goto-char (point-min))
+"Display the constructors RES in buffer *Constructors list*  
+or *mmlquery* if `mizar-expl-kind' is 'mmlquery
+in other window and highlight."
+(let (cbuf)
+  (cond 
+   ((eq mizar-expl-kind 'mmlquery)
+    (setq cbuf (get-buffer "*mmlquery*"))
+    (unless (and cbuf (get-buffer-process cbuf))
+      (mizar-run-mmlquery))
+    (setq cbuf (get-buffer "*mmlquery*"))
+    (set-buffer cbuf)
+    (comint-kill-input)
+    (insert res))
+   (t
+    (setq cbuf (get-buffer-create "*Constructors list*"))
+    (set-buffer cbuf)
+    (erase-buffer)
+    (insert res)
+    (mizar-highlight-constrs)
+    (use-local-map mizar-cstr-map)
+    (goto-char (point-min))))
   (switch-to-buffer-other-window cbuf)))
 
+(defvar mmlquery-default-list-query-kw "atleast"
+"The mmlquery keyword used as a default for creating a query for
+a list of resources.")
+
+(defun mizar-default-query-for-list (syms)
+"Create the default query from a list of mmlquery resources SYMS."
+ (concat mmlquery-default-list-query-kw "("
+	 (mapconcat 'identity syms ",") ");"))
+
+(defun mizar-transl-frm (frm)
+"Translate FRM according to `mizar-expl-kind'."
+(cond 
+ ((eq mizar-expl-kind 'raw) frm)
+ ((eq mizar-expl-kind 'expanded) (fix-pre-type frm))
+ ((eq mizar-expl-kind 'translate) (expfrmrepr frm))
+ ((eq mizar-expl-kind 'constructors)
+  (prin1-to-string (expfrmrepr frm t)))
+ ((eq mizar-expl-kind 'sorted)
+  (prin1-to-string (sort (unique (expfrmrepr frm t)) 'string<)))
+ ((eq mizar-expl-kind 'mmlquery)
+  (mizar-default-query-for-list
+;;   (mapcar 'mizar-set-mmlquery-properties
+   (mapcar '(lambda (x) (replace-regexp-in-string "[.]" " " x))
+	   (sort (unique (expfrmrepr frm t)) 'string<))))
+ (t "")))
 
 (defun mizar-show-constrs-kbd (&optional pos)
   "Show constructors of the inference at point.
 The constructors are translated according to the variable 
-`mizar-expl-kind', and shown in the buffer *Constructors list*.
+`mizar-expl-kind', and shown in the buffer *Constructors list*
+or *mmlquery* if `mizar-expl-kind' is 'mmlquery.
 The variable `mizar-do-expl' should be non-nil."
   (interactive)
   (let ((pos (or pos (point))))
@@ -2141,39 +2308,22 @@ The variable `mizar-do-expl' should be non-nil."
     (save-excursion
     (let ((frm (get-text-property pos 'expl)))
       (if frm
-	  (let ((res
-		 (cond ((eq mizar-expl-kind 'raw) frm)
-		       ((eq mizar-expl-kind 'expanded) (fix-pre-type frm))
-		       ((eq mizar-expl-kind 'translate) (expfrmrepr frm))
-		       ((eq mizar-expl-kind 'constructors)
-			(prin1-to-string (expfrmrepr frm t)))
-		       ((eq mizar-expl-kind 'sorted)
-			(prin1-to-string (sort (unique (expfrmrepr frm t)) 'string<)))
-		       (t ""))))
+	  (let ((res (mizar-transl-frm frm)))
 	    (goto-char pos)
 	    (mizar-intern-constrs-other-window res)))))))
-
-
 
 (defun mizar-show-constrs-other-window (event)
   "Show constructors of the inference you click on.
 The constructors are translated according to the variable 
-`mizar-expl-kind', and shown in the buffer *Constructors list*.
+`mizar-expl-kind', and shown in the buffer *Constructors list*
+or *mmlquery* if `mizar-expl-kind' is 'mmlquery.
 The variable `mizar-do-expl' should be non-nil."
   (interactive "e")
   (select-window (event-window event))
   (save-excursion
     (let ((frm (get-text-property (event-point event) 'expl)))
       (if frm
-	  (let ((res
-		 (cond ((eq mizar-expl-kind 'raw) frm)
-		       ((eq mizar-expl-kind 'expanded) (fix-pre-type frm))
-		       ((eq mizar-expl-kind 'translate) (expfrmrepr frm))
-		       ((eq mizar-expl-kind 'constructors)
-			(prin1-to-string (expfrmrepr frm t)))
-		       ((eq mizar-expl-kind 'sorted)
-			(prin1-to-string (sort (unique (expfrmrepr frm t)) 'string<)))
-		       (t ""))))
+	  (let ((res (mizar-transl-frm frm)))		
 	    (goto-char (event-point event))
 	    (mizar-intern-constrs-other-window res))))))
 
@@ -2251,6 +2401,7 @@ keyboard bindings can be used to view the suggested references.
     (define-key map "\M-r" 'query-squery-search-reverse)
     (define-key map "\M-s" 'query-squery-search-forward)
     (define-key map "\C-c\C-c" 'query-send-entry)
+    (define-key map "\C-c\C-m" 'query-send-to-mmlquery)
     map)
 "Keymap in the *MML Query Input* buffer.
 Used for sending queries to MML Query server and browsing and searching
@@ -2335,6 +2486,20 @@ the value of query-entry-mode-hook."
       (setq query (concat query "&text=1")))
   (mizar-ask-query query)))
 
+(defun query-send-to-mmlquery ()
+  "Send the contents of the current buffer to the local mmlquery
+server, start it if not running."
+  (interactive)
+  (let ((query (buffer-string)))
+    (ring-insert query-squery-ring query)
+    (unless (get-buffer "*mmlquery*")
+      (mizar-run-mmlquery)
+      (sleep-for 0.5))
+    (let ((mbuf (get-buffer "*mmlquery*")))
+      (process-send-string (get-process "mmlquery") 
+			   (concat query "\n"))
+      (pop-to-buffer mbuf))))
+
 (defun query-previous-squery (arg)
   "Cycle backwards through query-squery history.
 With a numeric prefix ARG, go back ARG queries."
@@ -2395,6 +2560,101 @@ With a numeric prefix ARG, go forward ARG queries."
 	   (query-next-squery (- n query-squery-ring-index)))
 	  (t (error "Not found")))))
 
+;;;;;;;;;; Inferior mmlquery mode ;;;;;;;;;;
+
+(defcustom mmlquery-program-name "/nfs/megrez/bin/mmlquery"
+  "Path to the mmlquery prgram."
+  :type 'string
+  :group 'mizar-mml-query)
+
+(defvar mmlquery-prompt-regexp "^mmlquery> *")
+(defvar inferior-mmlquery-mode-map nil)
+(defvar inferior-mmlquery-mode-syntax-table nil)
+(defvar mmlquery-output-buffer "*MMLQuery Output*")
+
+
+(if inferior-mmlquery-mode-syntax-table
+    ()
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?_ "w" table)
+    (setq inferior-mmlquery-mode-syntax-table table)))
+
+(defvar mmlquery-pending-output "")
+
+(defun inferior-mmlquery-mode-variables ()
+  (set-syntax-table inferior-mmlquery-mode-syntax-table)
+  (setq mmlquery-pending-output "")
+)
+
+(defun mmlquery-finished (str)
+(string-match mmlquery-prompt-regexp str))
+
+(defun mmlquery-handle-output (str)
+  (cond 
+   ((mmlquery-finished str)
+    (save-excursion
+      (set-buffer (get-buffer-create mmlquery-output-buffer))
+      (erase-buffer)
+      (insert mmlquery-pending-output)
+      (setq mmlquery-pending-output "")
+      (insert str)
+      (kill-line -1)  ;; remove the prompt
+      (mmlquery-decode (point-min) (point-max))
+      (display-buffer mmlquery-output-buffer))
+    "mmlquery> ")
+   (t
+    (setq mmlquery-pending-output (concat mmlquery-pending-output str))
+    "")))
+
+;; reserved for mmlquery-specific bindings
+(defun inferior-mmlquery-mode-commands (map) 
+;(define-key map "\t" 'mmlquery-indent-line)
+)
+
+(defun inferior-mmlquery-mode ()
+  "Major mode for interacting with an inferior Mmlquery process.
+
+The following commands are available:
+\\{inferior-mmlquery-mode-map}
+
+Entry to this mode calls the value of `inferior-mmlquery-mode-hook' with no arguments,
+if that value is non-nil.  Likewise with the value of `comint-mode-hook'.
+`inferior-mmlquery-mode-hook' is called after `comint-mode-hook'.
+
+You can send text to the inferior Mmlquery from other buffers
+using the commands `send-region', `send-string' and \\[mmlquery-consult-region].
+
+Commands:
+
+Return at end of buffer sends line as input.
+Return not at end copies rest of line to end and sends it.
+\\[comint-kill-input] and \\[backward-kill-word] are kill commands, imitating normal Unix input editing.
+\\[comint-interrupt-subjob] interrupts the shell or its current subjob if any.
+\\[comint-stop-subjob] stops. \\[comint-quit-subjob] sends quit signal."
+  (interactive)
+  (require 'comint)
+  (comint-mode)
+  (setq major-mode 'inferior-mmlquery-mode
+	mode-name "Inferior Mmlquery"
+	comint-prompt-regexp mmlquery-prompt-regexp)
+  (inferior-mmlquery-mode-variables)
+  (if inferior-mmlquery-mode-map nil
+    (setq inferior-mmlquery-mode-map (copy-keymap comint-mode-map))
+    (inferior-mmlquery-mode-commands inferior-mmlquery-mode-map))
+  (use-local-map inferior-mmlquery-mode-map)
+  (run-hooks 'inferior-mmlquery-mode-hook))
+
+(defun mizar-run-mmlquery ()
+  "Run an inferior Mmlquery process, I/O via buffer *mmlquery*."
+  (interactive)
+  (require 'comint)
+  (or (executable-find mmlquery-program-name)
+      (error "Mmlquery is not executable: %s" mmlquery-program-name))
+  (switch-to-buffer 
+   (make-comint "mmlquery" mmlquery-program-name 
+		nil "--present=emacs" ))
+  (add-hook 'comint-preoutput-filter-functions 'mmlquery-handle-output)
+  (inferior-mmlquery-mode))
 
 ;;;;;;;;;;; MMLQuery browsing
 
@@ -2470,7 +2730,8 @@ With a numeric prefix ARG, go forward ARG queries."
 
 
 (defvar mmlquery-tool-bar-map
-  (if (display-graphic-p)
+  (if (and (functionp 'display-graphic-p)
+	   (display-graphic-p))
       (let ((tool-bar-map (make-sparse-keymap)))
 ;	(tool-bar-add-item-from-menu 'Info-exit "close" Info-mode-map)
 	(tool-bar-add-item-from-menu 'mmlquery-previous "left_arrow" mmlquery-mode-map)
@@ -2526,7 +2787,6 @@ Commands:
 	     (mmlquery-underline-highlited 0)
 	     (mmlquery-default-invisibility)
 	     (easy-menu-add mmlquery-mode-menu) ; for xemacs only
-
 	     (run-hooks 'mmlquery-mode-hook)))
     (set-buffer-modified-p mod)
     (force-mode-line-update)))
@@ -2561,6 +2821,7 @@ Commands:
 		   (mmlquery-decode-definition "l")
 		   (mmlquery-decode-constructor "c")
 		   (mmlquery-decode-property     "r")
+		   (mmlquery-decode-query "q")
 		   (mmlquery-decode-hidden "h")) ; generic hidden
     (read-only     (t           "x-read-only"))
     (unknown       (nil         format-annotate-value))
@@ -2652,11 +2913,11 @@ the range of text to assign text property SYMBOL with value VALUE "
 ))
 
 
-(defun get-mmlquery-symbol-article (sym)
-"Extract the article name from a symbol, append '.gab'."
+(defun get-mmlquery-resource-article (sym)
+"Extract the article name from a mmlquery resource SYM, append '.gab'."
   (let ((sname (symbol-name sym)))
     (unless (string-match "\\([A-Z_0-9]+\\):.*" sname)
-      (error "Bad article name %s in symbol %S" sname sym))
+      (error "Bad article name %s in mmlquery resource %S" sname sym))
     (concat (downcase (match-string 1 sname)) ".gab")))
 
 
@@ -2668,14 +2929,21 @@ the range of text to assign text property SYMBOL with value VALUE "
 (let ((sym (intern param)))
 ;; The first def in its article is the 'true' original for us 
   (if (and (not (get sym 'constructor))
-	   (equal (get-mmlquery-symbol-article sym)
+	   (equal (get-mmlquery-resource-article sym)
 		  (file-name-nondirectory (buffer-file-name (current-buffer)))))      	   
       (put sym 'constructor start)
-;; otherwise it is stored among redefinitions
+;; otherwise it is stored among redefinitions - this is unused now
     (put sym 'constructor-redef (cons start (get sym 'constructor-redef))))
   (list start end 'definition sym)))
 
 
+(defun mmlquery-decode-query (start end &optional param)
+  "Decode a query property for text between START and END.
+PARAM is a `<p>' found for the property.
+Value is a list `(START END SYMBOL VALUE)' with START and END denoting
+the range of text to assign text property SYMBOL with value VALUE "
+(let ((query param))
+  (list start end 'query query)))
 
 (defun mmlquery-next-annotation ()
   "Find and return next text/mmlquery annotation.
@@ -2718,6 +2986,13 @@ Return value is \(begin end name positive-p), or nil if none was found."
 				'mmlquery-next-annotation)
       (point-max))))
 
+
+(defun mmlquery-abstract-p (x)
+"Non nil if buffer X is mmlquery abstract."
+(let ((name  (buffer-file-name x)))
+  (and (stringp name)
+       (string-match "\.gab$" name))))
+
 ;;;; The browsing functions
 
 (defvar mmlquery-history-size 512
@@ -2753,35 +3028,42 @@ return the new RING length."
 
 
 (defun mmlquery-goto-def (&optional pos)
-"Goto the definition of the constructor at point or POS if given."
+"Goto the definition of the mmlquery resource at point or POS if given."
   (interactive "d")
   (let* ((anch (get-text-property (or pos (point)) 'anchor)))
     (unless anch (error "No mmlquery reference at point!"))
-    (mmlquery-goto-symdef anch t)))
+    (mmlquery-goto-resdef anch t)))
 
 (defun mmlquery-goto-def-mouse (event)
-"Goto to the definition of the constructor we clicked on."
+"Goto to the definition of the mmlquery resource we clicked on."
   (interactive "e")
   (select-window (event-window event))
   (let* ((anch (get-text-property (event-point event) 'anchor)))
     (unless anch (error "No mmlquery reference at point!"))
-    (mmlquery-goto-symdef anch t)))
+    (mmlquery-goto-resdef anch t)))
 
 
-(defun mmlquery-goto-symdef (anch &optional push)
+(defun mmlquery-goto-resdef (anch &optional push)
 "Go to the definition of ANCH. 
 If PUSH, push positions onto the mmlquery-history."
-  (let ((afile (concat mmlquery-abstracts 
-		       (get-mmlquery-symbol-article anch)))
-	(defpos (get anch 'constructor))
-	(oldbuf (current-buffer))
-	(oldfile (buffer-file-name (current-buffer)))
-	(oldpos (point)))
+  (let*
+      ((aname (get-mmlquery-resource-article anch))
+       (afile (concat mmlquery-abstracts aname))
+       (defpos (or (get anch 'constructor) 
+		   (get anch 'mmlquery-definition)))
+       (oldbuf (current-buffer))
+       (oldfile (buffer-file-name (current-buffer)))
+       (oldpos (point)))
 ;; Load the article if not yet
     (unless defpos
+      (message "Loading abstract %s ..." aname)
       (find-file-noselect afile)
-      (setq defpos (get anch 'constructor)))
-    (unless defpos (error "No mmlquery definition for symbol %S" anch))
+      (setq defpos (or (get anch 'constructor)
+		       (get anch 'mmlquery-definition))))
+    (unless defpos (error "No mmlquery definition for resource %S" anch))
+;; The abstract may have been killed
+    (unless (get-file-buffer afile)
+      (message "Loading abstract %s ..." aname))
     (find-file afile)
     (goto-char defpos)
     (if push
@@ -3621,14 +3903,7 @@ Files .thl and .eth are used, RELOAD does it unconditionally."
     (get-sgl-table aname)           ;; ensure up-to-date
 ;    (parse-cluster-table aname)     ;; ensure up-to-date
     (setq res (copy-sequence (aref arr (- nr 1))))
-    (cond ((eq mizar-expl-kind 'raw) res)
-	  ((eq mizar-expl-kind 'expanded) (fix-pre-type res))
-	  ((eq mizar-expl-kind 'translate) (expfrmrepr res))
-	  ((eq mizar-expl-kind 'constructors)
-	   (prin1-to-string (expfrmrepr res t)))
-	  ((eq mizar-expl-kind 'sorted)
-	   (prin1-to-string (sort (unique (expfrmrepr res t)) 'string<)))
-	  (t ""))))
+    (mizar-transl-frm res)))
 
 (defun mizar-show-ref-constrs (&optional ref)
 "Get the constructors for reference REF (possibly reading from minibuffer).
@@ -3871,7 +4146,7 @@ If FORCEACC, run makeenv with the -a option."
 		  (name (file-name-sans-extension (buffer-file-name)))
 		  (fname (file-name-nondirectory name))
 		  (old-dir (file-name-directory name)))
-	     (cd (concat old-dir "/.."))
+	     (cd (concat old-dir ".."))
 	     (if mizar-noqr-data (kill-process (cdr mizar-noqr-data)))
 	     ;; now mizar-noqr-data is nil, it was cleared by the handler
 	     (if mizar-noqr-data (error "Previous process unkillable"))
@@ -3920,7 +4195,7 @@ If FORCEACC, run makeenv with the -a option."
 	   (let* ((name (file-name-sans-extension (buffer-file-name)))
 		  (fname (file-name-nondirectory name))
 		  (old-dir (file-name-directory name)))
-	     (cd (concat old-dir "/.."))
+	     (cd (concat old-dir ".."))
 ;;	     (if mizar-launch-dir (cd mizar-launch-dir))
 	     (unless silent (mizar-strip-errors))
 	     (save-buffer)
@@ -4266,10 +4541,9 @@ This is a flamewar-resolving hack."
 ;; Abbrevs
 (setq dabbrev-abbrev-skip-leading-regexp "\\(\\sw+\\.\\)+" )
 
-(defvar mizar-mode-abbrev-table nil
-  "Abbrev table in use in Mizar-mode buffers.")
-(define-abbrev-table 'mizar-mode-abbrev-table ())
-
+(defun mizar-fnt-regexp (words)
+"Create the regexp for font-lock from list of words."
+(concat "\\<\\b\\(" (mapconcat 'identity words "\\|") "\\)\\b"))
 
 ;; Font lock
 (defvar mizar-symbol-color nil "The color for the optional symbol fontification, white is suggested for the light-bg, nil (default) means no symbol fontification is done.")
@@ -4292,30 +4566,24 @@ This is a flamewar-resolving hack."
   (let* ((dark-bg (eq font-lock-background-mode 'dark))
 	 (faces
 	  (cond
-	   ((memq font-lock-display-type '(mono monochrome))
-	    '(
-	      (mizar-builtin-face nil nil nil nil t)
-	      (mizar-exit-face nil nil nil nil t)
+	   ((memq font-lock-display-type 
+		  '(mono monochrome grayscale greyscale grayshade 
+			 greyshade))
+	    `((mizar-main-face  nil nil nil nil t)
+	      (mizar-block-face nil nil nil nil t)
+	      (mizar-normal-face nil nil nil nil t)
+	      (mizar-formula-face nil nil nil nil t)
+	      (mizar-skeleton-face  nil nil nil nil t)
 	      ;;		    (mizar-symbol-face nil nil nil nil t)
-	      ))
-	   ((memq font-lock-display-type '(grayscale greyscale
-						     grayshade greyshade))
-	    '(
-	      (mizar-builtin-face nil nil nil nil t)
-	      (mizar-exit-face nil nil nil nil t)
-	      ;;		    (mizar-symbol-face nil nil nil nil t)
-	      ))
-	   (dark-bg			; dark colour background
-	    '(
-	      (mizar-builtin-face "LightSkyBlue" nil nil nil nil)
-	      (mizar-exit-face "green" nil nil nil nil)
-	      ;;		    (mizar-symbol-face mizar-symbol-color nil nil nil nil)
 	      ))
 	   (t				; light colour background
-	    '(
-	      (mizar-builtin-face "Orchid" nil nil nil nil)
-	      (mizar-exit-face "ForestGreen" nil nil nil nil)
-	      ;;		    (mizar-symbol-face mizar-symbol-color nil nil nil nil)
+	    `(
+	      (mizar-main-face ,mizar-main-color  nil nil nil nil)
+	      (mizar-block-face ,mizar-block-color nil nil nil nil)
+	      (mizar-normal-face ,mizar-normal-color nil nil nil nil)
+	      (mizar-formula-face ,mizar-formula-color nil nil nil nil)
+	      (mizar-skeleton-face ,mizar-skeleton-color nil nil nil nil)
+;;            (mizar-symbol-face mizar-symbol-color nil nil nil nil)
 	      )))))
     ;; mizar-symbol-color fontification
     (if mizar-symbol-color
@@ -4347,24 +4615,26 @@ This is a flamewar-resolving hack."
   ;; Font Lock Patterns
   (let (
 	;; "Native" Mizar patterns
-	(head-predicates
-	 '("\\<\\(theorem\\|scheme\\|definition\\|registration\\)\\>"
-	   0 font-lock-function-name-face))
+	(head-predicates 
+	 (list (mizar-fnt-regexp mizar-main-keywords)
+	       0 'mizar-main-face))
 	(connectives
-	 '("\\<\\(for\\|ex\\|not\\|&\\|or\\|implies\\|iff\\|st\\|holds\\|being\\)\\>"
+	 (list (mizar-fnt-regexp mizar-formula-keywords)
 	   ;;		 1 font-lock-variable-name-face
-	   1 'mizar-builtin-face))
+	   1 'mizar-formula-face))
 	(proofs
-	 '("\\<\\(proof\\|now\\|end\\|hereby\\)"
-	   0 'font-lock-keyword-face ))
+	 (list (mizar-fnt-regexp mizar-block-keywords)
+	   0 'mizar-block-face ))
 	(comments '("::[^\n]*"  0 'font-lock-comment-face ))
-	(refs '("[ \n\t]\\(by\\|from\\)[^;.]*" 0 'font-lock-type-face))
-	(extra '("&"  0  'mizar-builtin-face))
+	(refs '("[ \n\t]\\(by\\|from\\)[^;.]*" 0 'font-lock-type-face))	
+	(extra '("&"  0  'mizar-formula-face))
 	(keywords			; directives (queries)
-	 (list
-	  "\\<\\(and\\|antonym\\|attr\\|as\\|assume\\|be\\|begin\\|being\\|canceled\\|case\\|cases\\|cluster\\|coherence\\|compatibility\\|consider\\|consistency\\|constructors\\|contradiction\\|correctness\\|clusters\\|def\\|deffunc\\|definition\\|definitions\\|defpred\\|environ\\|equals\\|ex\\|existence\\|for\\|func\\|given\\|hence\\|\\|requirements\\|holds\\|if\\|iff\\|implies\\|irreflexivity\\|it\\|let\\|means\\|mode\\|not\\|notation\\|of\\|or\\|otherwise\\|\\|over\\|per\\|pred\\|provided\\|qua\\|reconsider\\|redefine\\|reflexivity\\|reserve\\|scheme\\|schemes\\|signature\\|struct\\|such\\|suppose\\|synonym\\|take\\|that\\|thus\\|then\\|theorems\\|vocabulary\\|where\\|associativity\\|commutativity\\|connectedness\\|irreflexivity\\|reflexivity\\|symmetry\\|uniqueness\\|transitivity\\|idempotence\\|asymmetry\\|projectivity\\|involutiveness\\)\\>"
-	  ;;		1 'mizar-builtin-face
-	  1 font-lock-variable-name-face))
+	 (list (mizar-fnt-regexp mizar-normal-keywords)
+	  ;;		1 'mizar-formula-face
+	  1 'mizar-normal-face))
+	(skeletons 
+	 (list (mizar-fnt-regexp mizar-skeleton-keywords)
+	       0  'mizar-skeleton-face))
 	(syms
 	 (if mizar-symbol-color
 	     (list (mizar-get-dct (file-name-sans-extension (buffer-file-name)))
@@ -4383,17 +4653,11 @@ This is a flamewar-resolving hack."
 	connectives
 	proofs
 	keywords
+	skeletons
 	;; only if mizar-symbol-color defined and article has .dct
 	(if (and syms (not (equal "" (car syms)))) syms)
 	))
-      ((eq major-mode 'mizar-inferior-mode)
-       (list
-	     
-	keywords))
-      ((eq major-mode 'compilation-mode)
-       (list
-	      
-	keywords))))
+))
     ))
 
 
@@ -4421,7 +4685,7 @@ if that value is non-nil."
   (setq buffer-offer-save t)
   (mizar-setup-imenu-sb)
   (if (and mizar-abstracts-use-view
-	   (buffer-abstract-p (current-buffer)))
+	       (buffer-abstract-p (current-buffer)))
       (view-mode))
   (run-hooks  'mizar-mode-hook)
   )
@@ -4504,6 +4768,9 @@ if that value is non-nil."
 	    ["constructors list" (mizar-toggle-cstr-expl 'constructors)
 	     :style radio :selected
 	     (and mizar-do-expl (eq mizar-expl-kind 'constructors)) :active t]
+	    ["mmlquery input" (mizar-toggle-cstr-expl 'mmlquery)
+	     :style radio :selected
+	     (and mizar-do-expl (eq mizar-expl-kind 'mmlquery)) :active t]
 	    ["translated formula" (mizar-toggle-cstr-expl 'translate)
 	     :style radio :selected
 	     (and mizar-do-expl (eq mizar-expl-kind 'translate)) :active t]
@@ -4670,7 +4937,7 @@ move backward across N balanced expressions."
   (point)))
 
 
-(let ((mizar-mode-hs-info '(mizar-mode ".*\\b\\(proof\\|now\\|hereby\\)[ \n\r]" "end;" "::+" mizar-hs-forward-sexp mizar-hs-adjust-block-beginning)))
+(let ((mizar-mode-hs-info '(mizar-mode ".*\\b\\(proof\\|now\\|hereby\\|case\\|suppose\\)[ \n\r]" "end;" "::+" mizar-hs-forward-sexp mizar-hs-adjust-block-beginning)))
     (if (not (member mizar-mode-hs-info hs-special-modes-alist))
             (setq hs-special-modes-alist
 	                  (cons mizar-mode-hs-info hs-special-modes-alist))))

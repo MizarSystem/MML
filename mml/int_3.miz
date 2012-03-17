@@ -8,15 +8,15 @@ environ
 
  vocabulary BINOP_1, INT_1, FUNCT_1, VECTSP_1, RELAT_1, ARYTM_1, GR_CY_1,
       FUNCT_7, RLVECT_1, VECTSP_2, LATTICES, ABSVALUE, EUCLID, NAT_1, FUNCSDOM,
-      GCD_1, ARYTM_3, INT_2, MCART_1, ORDINAL2, NAT_LAT, INT_3;
- notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0,
-      RLVECT_1, MCART_1, RELAT_1, FUNCT_1, STRUCT_0, FUNCT_2, GCD_1, VECTSP_1,
-      VECTSP_2, FUNCSDOM, BINOP_1, REAL_1, EUCLID, GR_CY_1, INT_1, FUNCT_7,
-      NAT_LAT, INT_2, NAT_1, GROUP_1;
+      GCD_1, ARYTM_3, INT_2, MCART_1, ORDINAL2, NAT_LAT, INT_3, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
+      XREAL_0, RLVECT_1, MCART_1, RELAT_1, FUNCT_1, STRUCT_0, FUNCT_2, GCD_1,
+      VECTSP_1, VECTSP_2, FUNCSDOM, BINOP_1, REAL_1, EUCLID, GR_CY_1, INT_1,
+      FUNCT_7, NAT_LAT, INT_2, NAT_1, GROUP_1;
  constructors DOMAIN_1, GROUP_2, REAL_1, GCD_1, NAT_1, EUCLID, GR_CY_1,
       FUNCT_7, NAT_LAT, ALGSTR_2, SEQ_1, MEMBERED;
  clusters STRUCT_0, FUNCT_1, VECTSP_2, XREAL_0, INT_1, RELSET_1, GCD_1, SEQ_1,
-      MEMBERED, NUMBERS, ORDINAL2;
+      MEMBERED, NUMBERS, ORDINAL2, ARYTM_3, NAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, STRUCT_0, VECTSP_1, VECTSP_2;
  theorems TARSKI, BINOP_1, FUNCT_1, FUNCT_2, VECTSP_1, INT_1, VECTSP_2,
@@ -418,8 +418,7 @@ uniqueness
 end;
 
 theorem
-Th1:for a being Element of INT.Ring holds
-absint.a = abs(a)
+Th1:for a being Element of INT.Ring holds absint.a = abs(a)
 proof
 let a be Element of INT.Ring;
 reconsider a' = a as Integer by Def3,INT_1:12;
@@ -1412,32 +1411,40 @@ begin
 canceled;
 
 theorem
-Th8:for n being Nat st n > 0
-for a,k being Integer holds
-(a + n * k) div n = (a div n) + k & (a + n * k) mod n = a mod n
+Th8:for n,a,k being Integer holds
+(n <> 0 implies (a + n * k) div n = (a div n) + k) &
+(a + n * k) mod n = a mod n
 proof
-let n be Nat; assume A1: n > 0;
-let a,k be Integer;
-A2: (a + n * k) div n = [\ (a + n * k)/n /] by INT_1:def 7
-                     .= [\ (a + n * k) * n" /] by XCMPLX_0:def 9
-                     .= [\ a * n" + (n * k) * n" /] by XCMPLX_1:8
-                     .= [\ a * n" + (n * n") * k /] by XCMPLX_1:4
-                     .= [\ a * n" + 1 * k /] by A1,XCMPLX_0:def 7
-                     .= [\ a * n" /] + k by INT_1:51
-                     .= [\ a/n /] + k by XCMPLX_0:def 9
-                     .= (a div n) + k by INT_1:def 7;
-then (a + n * k) mod n = (a + n * k) - ((a div n) + k) * n by A1,INT_1:def 8
-                 .= (a + k * n) - ((a div n) * n + k * n) by XCMPLX_1:8
-                 .= a - (a div n) * n by XCMPLX_1:32
-                 .= a mod n by A1,INT_1:def 8;
-hence thesis by A2;
+let n,a,k be Integer;
+thus
+A0: now
+  assume A1: n <> 0;
+  thus (a + n * k) div n = [\ (a + n * k)/n /] by INT_1:def 7
+    .= [\ (a + n * k) * n" /] by XCMPLX_0:def 9
+    .= [\ a * n" + (n * k) * n" /] by XCMPLX_1:8
+    .= [\ a * n" + (n * n") * k /] by XCMPLX_1:4
+    .= [\ a * n" + 1 * k /] by A1,XCMPLX_0:def 7
+    .= [\ a * n" /] + k by INT_1:51
+    .= [\ a/n /] + k by XCMPLX_0:def 9
+    .= (a div n) + k by INT_1:def 7;
+end;
+per cases;
+suppose A1: n <> 0;
+hence (a + n * k) mod n = (a + n * k) - ((a div n) + k) * n by A0,INT_1:def 8
+   .= (a + k * n) - ((a div n) * n + k * n) by XCMPLX_1:8
+   .= a - (a div n) * n by XCMPLX_1:32
+   .= a mod n by A1,INT_1:def 8;
+end;
+suppose n = 0;
+hence thesis;
+end;
 end;
 
 theorem
-Th9:for n being Nat st n > 0
+Th9:for n being natural number st n > 0
 for a being Integer holds a mod n >= 0 & a mod n < n
 proof
-let n be Nat; assume A1: n > 0;
+let n be natural number; assume A1: n > 0;
 let a be Integer;
   now
     a div n = [\ a/n /] by INT_1:def 7;
@@ -1471,37 +1478,42 @@ hence thesis;
 end;
 
 theorem
-Th10:for n being Nat st n > 0
-for a being Integer holds
-((0 <= a & a < n) implies a mod n = a) &
-((0 > a & a >= -n) implies a mod n = n + a)
+Th10:for n,a being Integer holds
+(0 <= a & a < n implies a mod n = a) &
+(0 > a & a >= -n implies a mod n = n + a)
 proof
-let n be Nat; assume A1: n > 0;
-let a be Integer;
-A2: (0 <= a & a < n) implies a mod n = a
-   proof
+let n,a be Integer;
+per cases;
+suppose n = 0;
+hence thesis;
+end;
+suppose A1: n <> 0;
+hereby
    assume A3: 0 <= a & a < n;
-   then reconsider a as Nat by INT_1:16;
+   then reconsider aa = a as Nat by INT_1:16;
+ww: n >= 0 by A3,AXIOMS:22;
+   then reconsider nn = n as Nat by INT_1:16;
    consider t being Nat such that
-   A4: a = n * t + (a mod n) & (a mod n) < n by A1,NAT_1:def 2;
+   A4: aa = nn * t + (aa mod nn) & (aa mod nn) < nn by A1,NAT_1:def 2;
      t = 0
      proof
      assume A5: t <> 0;
-       t >= 0 by NAT_1:18;
+     t >= 0 by NAT_1:18;
      then t >= 1 + 0 by A5,INT_1:20;
-     then A6: t * n >= 1 * n by A1,AXIOMS:25;
-       n * t + (a mod n) >= n * t by NAT_1:29;
+     then A6: t * n >= 1 * n by ww,AXIOMS:25;
+     nn * t + (aa mod nn) >= nn * t by NAT_1:29;
      hence thesis by A3,A4,A6,AXIOMS:22;
      end;
-   hence thesis by A4,SCMFSA9A:5;
+   hence a mod n = a by A4,SCMFSA9A:5;
    end;
-  (0 > a & a >= -n) implies a mod n = n + a
-   proof
    assume A7: 0 > a & a >= -n;
+   then -n <= 0 by AXIOMS:22;
+   then
+ww: n >= 0 by REAL_1:66;
    A8: a mod n = a - (a div n) * n by A1,INT_1:def 8;
    A9: -1 <= a/n
-       proof
-         n" > 0 by A1,REAL_1:72;
+   proof
+       n" > 0 by ww,A1,REAL_1:72;
        then a * n" >= (-n) * n" by A7,AXIOMS:25;
        then a/n >= (-n) * n" by XCMPLX_0:def 9;
        then a /n >= -(n * n") by XCMPLX_1:175;
@@ -1514,7 +1526,7 @@ A2: (0 <= a & a < n) implies a mod n = a
        then (a/n + -1) + 1 >= 0 by XCMPLX_0:def 8;
        then a/n + (-1 + 1) >= 0 by XCMPLX_1:1;
        then a * n" >= 0 by XCMPLX_0:def 9;
-       then (a * n") * n >= 0 * n by A1,AXIOMS:25;
+       then (a * n") * n >= 0 * n by ww,AXIOMS:25;
        then a * (n" * n) >= 0 by XCMPLX_1:4;
        then a * 1 >= 0 by A1,XCMPLX_0:def 7;
        hence thesis by A7;
@@ -1522,24 +1534,21 @@ A2: (0 <= a & a < n) implies a mod n = a
    then [\ a/n /] = -1 by A9,INT_1:def 4;
    then a div n = -1 by INT_1:def 7;
    then a mod n = a - -(1 * n) by A8,XCMPLX_1:175
-               .= a + -(-n) by XCMPLX_0:def 8
-               .= a + n;
+               .= a + -(-n) by XCMPLX_0:def 8;
    hence thesis;
-   end;
-hence thesis by A2;
+end;
 end;
 
 theorem
-Th11:for n being Nat st n > 0
+Th11:for n being natural number st n > 0
 for a being Integer holds a mod n = 0 iff n divides a
 proof
-let n be Nat; assume A1: n > 0;
+let n be natural number; assume A1: n > 0;
 let a be Integer;
 A2: now assume a mod n = 0;
    then 0 = a - (a div n) * n by A1,INT_1:def 8;
    then (a div n) * n = (a - (a div n) * n) + (a div n) * n;
-   then (a div n) * n = (a + -(a div n) * n) + (a div n) * n by XCMPLX_0:def 8
-;
+   then (a div n) * n = (a + -(a div n) * n) + (a div n) * n by XCMPLX_0:def 8;
    then (a div n) * n = a + (-(a div n) * n + (a div n) * n) by XCMPLX_1:1;
    then (a div n) * n = a + 0 by XCMPLX_0:def 6;
    hence n divides a by INT_1:def 9;
@@ -1584,62 +1593,77 @@ hence thesis by A2;
 end;
 
 theorem
-Th12:for n being Nat st n > 0
-for a,b being Integer holds
-a mod n = b mod n iff a,b are_congruent_mod n
+Th12:for n,a,b being Integer holds
+(n <> 0 & a mod n = b mod n implies a,b are_congruent_mod n) &
+(a,b are_congruent_mod n implies a mod n = b mod n)
 proof
-let n be Nat;
-assume A1: n > 0;
-let a,b be Integer;
-A2: now assume a mod n = b mod n;
-   then a - (a div n) * n = b mod n by A1,INT_1:def 8;
-   then a - (a div n) * n = b - (b div n) * n by A1,INT_1:def 8;
-   then (a - (a div n) * n) - b = (b - (b div n) * n) + -b by XCMPLX_0:def 8;
-   then (a - (a div n) * n) - b = (b + -(b div n) * n) + -b by XCMPLX_0:def 8;
-   then (a - (a div n) * n) - b = -(b div n) * n + (b + -b) by XCMPLX_1:1;
-   then (a - (a div n) * n) - b = -(b div n) * n + 0 by XCMPLX_0:def 6;
-   then ((a + -(a div n) * n) - b) + (a div n) * n =
-        -(b div n) * n + (a div n) * n by XCMPLX_0:def 8;
-   then ((a + -(a div n) * n) + -b) + (a div n) * n =
-        -(b div n) * n + (a div n) * n by XCMPLX_0:def 8;
-   then ((a + -(a div n) * n) + (a div n) * n) + -b =
+let n,a,b be Integer;
+hereby
+  assume A1: n <> 0;
+  assume a mod n = b mod n;
+  then a - (a div n) * n = b mod n by A1,INT_1:def 8;
+  then a - (a div n) * n = b - (b div n) * n by A1,INT_1:def 8;
+  then (a - (a div n) * n) - b = (b - (b div n) * n) + -b by XCMPLX_0:def 8;
+  then (a - (a div n) * n) - b = (b + -(b div n) * n) + -b by XCMPLX_0:def 8;
+  then (a - (a div n) * n) - b = -(b div n) * n + (b + -b) by XCMPLX_1:1;
+  then (a - (a div n) * n) - b = -(b div n) * n + 0 by XCMPLX_0:def 6;
+  then ((a + -(a div n) * n) - b) + (a div n) * n =
+  -(b div n) * n + (a div n) * n by XCMPLX_0:def 8;
+  then ((a + -(a div n) * n) + -b) + (a div n) * n =
+  -(b div n) * n + (a div n) * n by XCMPLX_0:def 8;
+  then ((a + -(a div n) * n) + (a div n) * n) + -b =
         -(b div n) * n + (a div n) * n by XCMPLX_1:1;
-   then (a + (-(a div n) * n + (a div n) * n)) + -b =
+  then (a + (-(a div n) * n + (a div n) * n)) + -b =
         -(b div n) * n + (a div n) * n by XCMPLX_1:1;
-   then a + 0 + -b = -(b div n) * n + (a div n) * n by XCMPLX_0:def 6;
-   then a - b = -(b div n) * n + (a div n) * n by XCMPLX_0:def 8;
-   then a - b = (-(b div n)) * n + (a div n) * n by XCMPLX_1:175;
-   then a - b = (-(b div n) + (a div n)) * n by XCMPLX_1:8;
-   then n divides (a-b) by INT_1:def 9;
-   hence a,b are_congruent_mod n by INT_2:19;
-   end;
-  now assume a,b are_congruent_mod n;
-   then n divides (a-b) by INT_2:19;
-   then consider k being Integer such that A3: n * k = a - b by INT_1:def 9;
+  then a + 0 + -b = -(b div n) * n + (a div n) * n by XCMPLX_0:def 6;
+  then a - b = -(b div n) * n + (a div n) * n by XCMPLX_0:def 8;
+  then a - b = (-(b div n)) * n + (a div n) * n by XCMPLX_1:175;
+  then a - b = (-(b div n) + (a div n)) * n by XCMPLX_1:8;
+  then n divides (a-b) by INT_1:def 9;
+  hence a,b are_congruent_mod n by INT_2:19;
+end;
+  assume a,b are_congruent_mod n;
+  then n divides (a-b) by INT_2:19;
+  then consider k being Integer such that A3: n * k = a - b by INT_1:def 9;
      (a + -b) + b = n * k + b by A3,XCMPLX_0:def 8;
-   then a = n * k + b by XCMPLX_1:139;
-   hence a mod n = b mod n by A1,Th8;
-   end;
-hence thesis by A2;
+  then a = n * k + b by XCMPLX_1:139;
+  hence a mod n = b mod n by Th8;
 end;
 
 theorem
-Th13:for n being Nat st n > 0
+Th13:for n being natural number
 for a being Integer holds (a mod n) mod n = a mod n
 proof
-let n be Nat; assume A1: n > 0;
+let n be natural number;
 let a be Integer;
-A2: a mod n >= 0 by A1,Th9;
+per cases;
+suppose
+A0: n = 0;
+hence (a mod n) mod n = 0 by INT_1:def 8
+    .= a mod n by A0,INT_1:def 8;
+end;
+suppose n <> 0;
+then
+A1: n > 0 by NAT_1:19;
+then
+A2: a mod n >= 0 by Th9;
   a mod n < n by A1,Th9;
 hence thesis by A2,Th10;
 end;
+end;
 
 theorem
-Th14:for n being Nat st n > 0
-for a,b being Integer holds (a + b) mod n = ((a mod n) + (b mod n)) mod n
+Th14:for n,a,b being Integer holds
+(a + b) mod n = ((a mod n) + (b mod n)) mod n
 proof
-let n be Nat; assume A1: n > 0;
-let a,b be Integer;
+let n,a,b be Integer;
+per cases;
+suppose
+A0: n = 0;
+hence (a + b) mod n = 0 by INT_1:def 8
+   .= ((a mod n) + (b mod n)) mod n by A0,INT_1:def 8;
+end;
+suppose A1: n <> 0;
   a mod n + (a div n) * n = (a - (a div n) * n) + (a div n) * n
   by A1,INT_1:def 8;
 then a mod n + (a div n) * n = (a + -(a div n) * n) + (a div n) * n
@@ -1667,17 +1691,24 @@ then (b mod n) + (b div n) * n = b + 0 by XCMPLX_0:def 6;
    ((a mod n + (b mod n)) + -((a mod n) + (b mod n))) by XCMPLX_1:1
 .= ((a div n) * n + (b div n) * n) + 0 by XCMPLX_0:def 6
 .= ((a div n) + (b div n)) * n by XCMPLX_1:8;
-then n divides ((a + b) - ((a mod n) + (b mod n))) by INT_1:def 9;
-then (a+b),((a mod n)+(b mod n)) are_congruent_mod n by INT_2:19;
-hence thesis by A1,Th12;
+then n divides (a + b) - ((a mod n) + (b mod n)) by INT_1:def 9;
+then a+b,(a mod n)+(b mod n) are_congruent_mod n by INT_2:19;
+hence thesis by Th12;
+end;
 end;
 
 theorem
-Th15:for n being Nat st n > 0
-for a,b being Integer holds (a * b) mod n = ((a mod n) * (b mod n)) mod n
+Th15:for n,a,b being Integer holds
+(a * b) mod n = ((a mod n) * (b mod n)) mod n
 proof
-let n be Nat; assume A1: n > 0;
-let a,b be Integer;
+let n,a,b be Integer;
+per cases;
+suppose
+A0: n = 0;
+hence (a * b) mod n = 0 by INT_1:def 8
+   .= ((a mod n) * (b mod n)) mod n by A0,INT_1:def 8;
+end;
+suppose A1: n <> 0;
   a mod n + (a div n) * n = (a - (a div n) * n) + (a div n) * n
   by A1,INT_1:def 8;
 then a mod n + (a div n) * n = (a + -(a div n) * n) + (a div n) * n
@@ -1722,7 +1753,8 @@ then (b mod n) + (b div n) * n = b + 0 by XCMPLX_0:def 6;
       (((a div n) * n) * (b div n)))) * n by XCMPLX_1:8;
 then n divides ((a * b) - ((a mod n) * (b mod n))) by INT_1:def 9;
 then (a*b),((a mod n)*(b mod n)) are_congruent_mod n by INT_2:19;
-hence thesis by A1,Th12;
+hence thesis by Th12;
+end;
 end;
 
 theorem
@@ -1929,7 +1961,7 @@ end;
 begin
 
 definition
-let n be Nat such that A1:n > 0;
+let n be natural number such that A1:n > 0;
 func multint(n) -> BinOp of Segm(n) means :Def11:
  for k,l being Element of Segm(n) holds
  it.(k,l) = (k * l) mod n;
@@ -1962,7 +1994,7 @@ uniqueness
 end;
 
 definition
-let n be Nat such that A1:n > 0;
+let n be natural number such that A1:n > 0;
 func compint(n) -> UnOp of Segm(n) means :Def12:
  for k being Element of Segm(n) holds
  it.k = (n - k) mod n;
@@ -2052,7 +2084,7 @@ existence
                           .= n - ([\ 1 /]) * n by A1,XCMPLX_1:60
                           .= n - 1 * n by INT_1:47
                           .= 0 by XCMPLX_1:14;
-          reconsider n as Nat;
+          reconsider n as Nat by ORDINAL2:def 21;
           consider a being Nat such that A20: a = z mod n;
           consider t being Nat such that
           A21: (z = n * t + a & a < n) or (a = 0 & n = 0) by A20,NAT_1:def 2;
@@ -2127,7 +2159,7 @@ existence
              hence thesis by XCMPLX_0:def 9;
              end;
           then A35: [\ (n-k)/n /] = 0 by A33,INT_1:def 4;
-          reconsider n as Nat;
+          reconsider n as Nat by ORDINAL2:def 21;
           consider a being Nat such that A36: a = z mod n;
           consider t being Nat such that
           A37: (z = n * t + a & a < n) or (a = 0 & n = 0) by A36,NAT_1:def 2;
@@ -2177,13 +2209,13 @@ uniqueness
  end;
 end;
 
-Lm11:for n being Nat st n > 0
-for a being Nat st a < n
-for b being Nat st b = n - a holds (n-a) mod n = b mod n
+Lm11:for n being natural number st n > 0
+for a being natural number st a < n
+for b being natural number st b = n - a holds (n-a) mod n = b mod n
 proof
-let n be Nat; assume A1: n > 0;
-let a be Nat; assume A2: a < n;
-let b be Nat;
+let n be natural number; assume A1: n > 0;
+let a be natural number; assume A2: a < n;
+let b be natural number;
 assume A3: b = n - a;
   now per cases;
 case A4: a = 0;
@@ -2193,7 +2225,7 @@ A5: (n-a) mod n = n - (n div n) * n by A1,A4,INT_1:def 8
                .= n - ([\ 1 /]) * n by A1,XCMPLX_1:60
                .= n - 1 * n by INT_1:47
                .= 0 by XCMPLX_1:14;
-reconsider n as Nat;
+reconsider n as Nat by ORDINAL2:def 21;
 consider a' being Nat such that A6: a' = b mod n;
 consider t being Nat such that
 A7: (b = n * t + a' & a' < n) or (a' = 0 & n = 0)
@@ -2269,7 +2301,7 @@ then A19: (n-a)/n - 1 < 1 - 1 by REAL_1:54;
     hence thesis by XCMPLX_0:def 9;
     end;
 then A21: [\ (n-a)/n /] = 0 by A19,INT_1:def 4;
-reconsider n as Nat;
+reconsider n as Nat by ORDINAL2:def 21;
 consider a' being Nat such that A22: a' = b mod n;
 consider t being Nat such that
 A23: (b = n * t + a' & a' < n) or (a' = 0 & n = 0)
@@ -2296,12 +2328,12 @@ hence thesis;
 end;
 
 theorem
-Th17:for n being Nat st n > 0
+Th17:for n being natural number st n > 0
 for a,b being Element of Segm(n) holds
 (a + b < n iff (addint(n)).(a,b) = a + b) &
 (a + b >= n iff (addint(n)).(a,b) = (a + b) - n)
 proof
-let n be Nat;
+let n be natural number;
 assume A1: n > 0;
 let a,b be Element of Segm(n);
 consider c being Nat such that A2: c = (a + b) mod n;
@@ -2390,10 +2422,10 @@ A9: (addint(n)).(a,b) = (a + b) - n implies a + b >= n
 hence thesis by A4,A8,A9;
 end;
 
-Lm12:for a,b being Nat st b <> 0 holds
+Lm12:for a,b being natural number st b <> 0 holds
 ex k being Nat st k * b <= a & a < (k + 1) * b
 proof
-let a,b be Nat;
+let a,b be natural number;
 assume A1: b <> 0;
 set k' = a div b;
 consider t being Nat such that
@@ -2406,17 +2438,17 @@ hence thesis by A2,A3;
 end;
 
 theorem
-Th18:for n being Nat st n > 0
+Th18:for n being natural number st n > 0
 for a,b being Element of Segm(n)
-for k being Nat holds
+for k being natural number holds
 (k * n <= a * b & a * b < (k + 1) * n)
 iff (multint(n)).(a,b) = a * b - k * n
 proof
-let n be Nat;
+let n be natural number;
 assume A1: n > 0;
 let a,b be Element of Segm(n);
 reconsider a, b as Nat;
-let k be Nat;
+let k be natural number;
 A2: now assume (multint(n)).(a,b) = a * b - k * n;
    then A3: (a * b) mod n = a * b - k * n by A1,Def11;
    then a * b - k * n >= 0 by NAT_1:18;
@@ -2504,12 +2536,12 @@ hence thesis by A2;
 end;
 
 theorem
-  for n being Nat st n > 0
+  for n being natural number st n > 0
 for a being Element of Segm(n) holds
 (a = 0 iff (compint(n)).(a) = 0) &
 (a <> 0 iff (compint(n)).(a) = n - a)
 proof
-let n be Nat;
+let n be natural number;
 assume A1: n > 0;
 let a be Element of Segm(n);
 reconsider a as Nat;
@@ -2623,7 +2655,7 @@ A26: (compint(n)).(a) = n - a implies a <> 0
     assume (compint(n)).(a) = n - a;
     then A27: (n - a) mod n = n - a by A1,Def12;
     assume A28: a = 0;
-    then reconsider a' = n - a as Nat;
+    then reconsider a' = n - a as Nat by ORDINAL2:def 21;
       a' mod n < n by A1,NAT_1:46;
     hence thesis by A1,A27,A28,Lm11;
     end;
@@ -2653,13 +2685,13 @@ end;
 hence thesis by A7,A15,A26;
 end;
 
-definition let n be Nat;
+definition let n be natural number;
 func INT.Ring(n) -> doubleLoopStr equals :Def13:
  doubleLoopStr(#Segm(n),addint(n),multint(n),In (1,Segm(n)),In (0,Segm(n))#);
 coherence;
 end;
 
-registration let n be Nat;
+registration let n be natural number;
  cluster INT.Ring(n) -> strict non empty;
 coherence
   proof
@@ -2781,7 +2813,7 @@ end;
 
 Lm13:
 now
-  let a, n be Nat;
+  let a, n be natural number;
   assume
 A1:  n > 0;
   assume a in Segm n;
@@ -2793,11 +2825,11 @@ then A2: n-a is Nat by INT_1:18;
 end;
 
 theorem Th21:
-for n being Nat st n > 1 holds
+for n being natural number st n > 1 holds
  INT.Ring(n) is non degenerated &
  INT.Ring(n) is well-unital distributive commutative Ring
  proof
- let n be Nat;
+ let n be natural number;
  assume A1: n > 1;
  then 1 < n + 1 by NAT_1:38;
  then 1 - 1 < (n + 1) - 1 by REAL_1:54;
@@ -2879,9 +2911,9 @@ for n being Nat st n > 1 holds
           (a' + ((b' + c') mod n)) mod n
       = (aa + (bb + cc mod n)) mod n by A20,SCMFSA9A:5
      .= ((aa mod n) + (bb + cc mod n)) mod n by A17,Th10
-     .= (aa + (bb + cc)) mod n by A2,Th14
+     .= (aa + (bb + cc)) mod n by Th14
      .= ((aa + bb) + cc) mod n by XCMPLX_1:1
-     .= (((aa + bb) mod n) + (cc mod n)) mod n by A2,Th14
+     .= (((aa + bb) mod n) + (cc mod n)) mod n by Th14
      .= (((a' + b') mod n) + cc) mod n by A17,A18,Th10
      .= (((a' + b') mod n) + c') mod n by SCMFSA9A:5;
      hence thesis by A22,A23;
@@ -2915,9 +2947,9 @@ for n being Nat st n > 1 holds
           (a' * ((b' * c') mod n)) mod n
       = (aa * (bb * cc mod n)) mod n by A28,SCMFSA9A:5
      .= ((aa mod n) * (bb * cc mod n)) mod n by A25,Th10
-     .= (aa * (bb * cc)) mod n by A2,Th15
+     .= (aa * (bb * cc)) mod n by Th15
      .= ((aa * bb) * cc) mod n by XCMPLX_1:4
-     .= (((aa * bb) mod n) * (cc mod n)) mod n by A2,Th15
+     .= (((aa * bb) mod n) * (cc mod n)) mod n by Th15
      .= (((a' * b') mod n) * cc) mod n by A25,A26,Th10
      .= (((a' * b') mod n) * c') mod n by SCMFSA9A:5;
      hence thesis by A30,A31;
@@ -2982,9 +3014,9 @@ for n being Nat st n > 1 holds
  by A2,A44,A46,GR_CY_1:def 5;
           (((b' * a') mod n) + ((c' * a') mod n)) mod n
       = (((bb * aa) mod n) + ((cc * aa) mod n)) mod n by A43,A45,SCMFSA9A:5
-     .= (bb * aa + cc * aa) mod n by A2,Th14
+     .= (bb * aa + cc * aa) mod n by Th14
      .= ((bb + cc) * aa) mod n by XCMPLX_1:8
-     .= (((bb + cc) mod n) * (aa mod n)) mod n by A2,Th15
+     .= (((bb + cc) mod n) * (aa mod n)) mod n by Th15
      .= (((b' + c') mod n) * aa) mod n by A40,A41,Th10
      .= (((b' + c') mod n) * a') mod n by SCMFSA9A:5;
      hence thesis by A47,A48;
@@ -3040,9 +3072,9 @@ RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 16,def 17,def 18;
  hence thesis;
 end;
 
-Lm14: for p being Nat st p > 0 holds 0.(INT.Ring(p)) = 0
+Lm14: for p being natural number st p > 0 holds 0.(INT.Ring(p)) = 0
 proof
-let p be Nat; assume A1: p > 0;
+let p be natural number; assume A1: p > 0;
 A2: INT.Ring(p) = doubleLoopStr(#Segm(p),addint(p),multint(p),
            In (1,Segm(p)),In (0,Segm(p))#) by Def13;
 A3: 0 in Segm(p) by A1,GR_CY_1:12;
@@ -3051,25 +3083,26 @@ thus 0.(INT.Ring(p)) = In (0,Segm(p)) by A2,RLVECT_1:def 2
 end;
 
 theorem
-Th22:for p being Nat st p > 1 holds
+Th22:for p being natural number st p > 1 holds
  INT.Ring(p) is add-associative right_zeroed right_complementable
     Abelian commutative associative left_unital distributive
       Field-like non degenerated (non empty doubleLoopStr)
   iff p is Prime
 proof
-let p be Nat; assume A1: p > 1;
+let p be natural number; assume A1: p > 1;
 then p > 1 + 0;
 then A2: p >= 0 & p <> 0 & p > 0 by NAT_1:38;
 A3: INT.Ring(p) = doubleLoopStr(#Segm(p),addint(p),multint(p),
            In (1,Segm(p)),In (0,Segm(p))#) by Def13;
 reconsider P = INT.Ring(p) as Ring by A1,Th21;
+    reconsider p as Nat by ORDINAL2:def 21;
 A4: now assume A5: p is Prime;
      for a being Element of P st a <> 0.P
    ex b be Element of P st a * b = 1_ P
     proof
     let a be Element of P; assume A6: a <> 0.P;
     reconsider a' = a as Element of Segm(p) by A3;
-    reconsider a' as Nat; reconsider p as Nat;
+    reconsider a' as Nat;
       a' >= 0 & p >= 0 by NAT_1:18;
     then A7: abs(a') = a & abs(p) = p by ABSVALUE:def 1;
       1 * a' = a' & 1 * p = p;
@@ -3112,11 +3145,11 @@ A4: now assume A5: p is Prime;
       a * b = (multint(p)).(a',b') by A3,VECTSP_1:def 10
          .= (a' * b') mod p by A2,Def11
          .= (a2 * b2) mod p by SCMFSA9A:5
-         .= ((a2 mod p) * ((s mod p) mod p)) mod p by A2,Th15
-         .= ((a2 mod p) * (s mod p)) mod p by A2,Th13
-         .= (a2 * s) mod p by A2,Th15
-         .= e mod p by A2,A15,Th8
-         .= e by A1,A2,Th10
+         .= ((a2 mod p) * ((s mod p) mod p)) mod p by Th15
+         .= ((a2 mod p) * (s mod p)) mod p by Th13
+         .= (a2 * s) mod p by Th15
+         .= e mod p by A15,Th8
+         .= e by A1,Th10
          .= the unity of P by A3,A17,FUNCT_7:def 1
          .= 1_ P by VECTSP_1:def 9;
     hence thesis;

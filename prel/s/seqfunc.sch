@@ -12,7 +12,7 @@ RELSET_1
 FUNCT_2
 SEQFUNC
 #
-M1 W1 ;;M1 W1 ;;M6 V4 ;F1 ;F2 ;;;
+M1 ;M1 ;M6 V4 ;F1 ;F2 ;;;
 ™ùM7 F1 ;F2 ;;™ùM4 K52 ;K56 ;;R1 K76 F1 ;F2 ;B1 B2 ;F3 B2 ;;;
 #
 !
