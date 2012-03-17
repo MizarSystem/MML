@@ -22,8 +22,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="6" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="7" value="false"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -36,8 +36,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="6" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="7" value="false"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 <Not>

@@ -96,7 +96,7 @@ A2:i < j & 1 <= i & j <= len f & f/.j c= f/.i;
   hence thesis by A12,XBOOLE_0:def 10;
 end;
 
- Th5:
+ Lm1:
   for f being Function st
     (for i being Nat holds f.i c= f.(i+1))
     for i, j being Nat st
@@ -161,10 +161,10 @@ proof
       reconsider j as Nat by A18;
          now per cases;
         case i <= j;
-          hence B c= C by A14,A17,A18,Th5;
+          hence B c= C by A14,A17,A18,Lm1;
         end;
         case j <= i;
-          hence C c= B by A14,A17,A18,Th5;
+          hence C c= B by A14,A17,A18,Lm1;
       end;
       end;
       hence B c= C or C c= B;
@@ -182,109 +182,109 @@ proof
 A24:  k+1 in Seg(k+1) by FINSEQ_1:6;
   deffunc G(Nat) = f.(abs($1-1));
   consider z being FinSequence of bool X() such that
-A26:  len z = k+1 and
-A27:  for j being Nat st j in Seg(k+1) holds
+A25:  len z = k+1 and
+A26:  for j being Nat st j in Seg(k+1) holds
         z.j = G(j) from FINSEQ_2:sch 1;
   take z;
-  thus 0 < len z by A26;
-  then A28: 0+1 <= len z by NAT_1:38;
-  then A29:1 in Seg(k+1) by A26,FINSEQ_1:3;
-  thus z/.1 = z.1 by A28,FINSEQ_4:24
-               .= f.(abs(1-1)) by A27,A29
+  thus 0 < len z by A25;
+  then A27: 0+1 <= len z by NAT_1:38;
+  then A28:1 in Seg(k+1) by A25,FINSEQ_1:3;
+  thus z/.1 = z.1 by A27,FINSEQ_4:24
+               .= f.(abs(1-1)) by A26,A28
                .= B() by A4,ABSVALUE:7;
-  thus A30:for i being Nat st i > 0 & i < len z holds z/.(i+1)=F(z/.i)
+  thus A29:for i being Nat st i > 0 & i < len z holds z/.(i+1)=F(z/.i)
     proof
       let i be Nat; assume
-      A31:i > 0 & i < len z;
-      then A32: 0+1 <= i & i <= k+1 by A26,NAT_1:38;
-      then A33:i in Seg(k+1) by FINSEQ_1:3;
-      then A34:z.i = f.(abs(i-1)) by A27;
-         0+1 < i+1 by A31,XREAL_1:8;
-      then A35:1 <= i+1 & i+1 <= k+1 by A26,A31,NAT_1:38;
-      then A36:i+1 in Seg(k+1) by FINSEQ_1:3;
-         1-1 <= i-1 by A32,XREAL_1:11;
-      then A37:0 <= (i-1)*1;
-A38:   i in dom z by A26,A33,FINSEQ_1:def 3;
-      thus z/.(i+1) = z.(i+1) by A26,A35,FINSEQ_4:24
-                   .= f.(abs(i+1-1)) by A27,A36
+      A30:i > 0 & i < len z;
+      then A31: 0+1 <= i & i <= k+1 by A25,NAT_1:38;
+      then A32:i in Seg(k+1) by FINSEQ_1:3;
+      then A33:z.i = f.(abs(i-1)) by A26;
+         0+1 < i+1 by A30,XREAL_1:8;
+      then A34:1 <= i+1 & i+1 <= k+1 by A25,A30,NAT_1:38;
+      then A35:i+1 in Seg(k+1) by FINSEQ_1:3;
+         1-1 <= i-1 by A31,XREAL_1:11;
+      then A36:0 <= (i-1)*1;
+A37:   i in dom z by A25,A32,FINSEQ_1:def 3;
+      thus z/.(i+1) = z.(i+1) by A25,A34,FINSEQ_4:24
+                   .= f.(abs(i+1-1)) by A26,A35
                    .= f.(abs(i-1+1))
-                   .= f.(abs(i-1)+abs(1)) by A37,ABSVALUE:24
+                   .= f.(abs(i-1)+abs(1)) by A36,ABSVALUE:24
                    .= f.(abs(i-1)+1) by ABSVALUE:def 1
                    .= F(f.(abs(i-1))) by A5
-                   .= F(z/.i) by A34,A38,FINSEQ_4:def 4;
+                   .= F(z/.i) by A33,A37,FINSEQ_4:def 4;
     end;
   thus F(z/.len z)=z/.len z
     proof
-      A39:f.k c= f.(k+1) by A14;
+      A38:f.k c= f.(k+1) by A14;
          k+1 in NAT;
       then k+1 in dom f by FUNCT_2:def 1;
       then f.(k+1) in rng f by FUNCT_1:def 5;
-      then A40: f.(k+1) c= f.k by A20,A22;
-A41:   len z = 0 or len z in Seg(len z) by FINSEQ_1:5;
-then A42:   len z in dom z by A26,FINSEQ_1:def 3;
-      A43:z.len z = f.(abs(k+1-1)) by A26,A27,A41
+      then A39: f.(k+1) c= f.k by A20,A22;
+A40:   len z = 0 or len z in Seg(len z) by FINSEQ_1:5;
+then A41:   len z in dom z by A25,FINSEQ_1:def 3;
+      A42:z.len z = f.(abs(k+1-1)) by A25,A26,A40
                         .= f.k by ABSVALUE:def 1;
-      hence F(z/.len z) = F(f.k) by A42,FINSEQ_4:def 4
+      hence F(z/.len z) = F(f.k) by A41,FINSEQ_4:def 4
                          .= f.(k+1) by A5
-                         .= z.len z by A39,A40,A43,XBOOLE_0:def 10
-                         .= z/.len z by A42,FINSEQ_4:def 4;
+                         .= z.len z by A38,A39,A42,XBOOLE_0:def 10
+                         .= z/.len z by A41,FINSEQ_4:def 4;
     end;
-  let i, j be Nat; assume A44:0 < i & i < j & j <= len z;
-  then A45: 0+1 <= i by NAT_1:38;
-  A46:i <= len z by A44,XREAL_1:2;
-  A47:i < len z by A44,XREAL_1:2;
-  reconsider l = i-1 as Nat by A45,INT_1:18;
-  A48:i in Seg(k+1) by A26,A45,A46,FINSEQ_1:3;
-  A50:z/.i = z.i by A45,A46,FINSEQ_4:24
-            .= f.(abs(i-1)) by A27,A48
+  let i, j be Nat; assume A43:0 < i & i < j & j <= len z;
+  then A44: 0+1 <= i by NAT_1:38;
+  A45:i <= len z by A43,XREAL_1:2;
+  A46:i < len z by A43,XREAL_1:2;
+  reconsider l = i-1 as Nat by A44,INT_1:18;
+  A47:i in Seg(k+1) by A25,A44,A45,FINSEQ_1:3;
+  A48:z/.i = z.i by A44,A45,FINSEQ_4:24
+            .= f.(abs(i-1)) by A26,A47
             .= f.l by ABSVALUE:def 1;
   hence z/.i c= A() by A9;
-  A51:for i being Nat st 1 <= i & i < len z holds z/.i c= z/.(i+1)
+  A49:for i being Nat st 1 <= i & i < len z holds z/.i c= z/.(i+1)
     proof
       let i be Nat; assume
-      A52:1 <= i & i < len z;
-      then A53:i in Seg(k+1) by A26,FINSEQ_1:3;
-A54:  1-1 <= i-1 by A52,XREAL_1:11;
-      A55:z/.i = z.i by A52,FINSEQ_4:24
-                  .= f.(abs(i-1)) by A27,A53
-                  .= f.(i-1) by A54,ABSVALUE:def 1;
-      A56:1 <= i+1 & i+1 <= len z by A52,NAT_1:38;
-      then A57:i+1 in Seg(k+1) by A26,FINSEQ_1:3;
-      A59:z/.(i+1) = z.(i+1) by A56,FINSEQ_4:24
-                    .= f.(abs(i+1-1)) by A27,A57
+      A50:1 <= i & i < len z;
+      then A51:i in Seg(k+1) by A25,FINSEQ_1:3;
+A52:  1-1 <= i-1 by A50,XREAL_1:11;
+      A53:z/.i = z.i by A50,FINSEQ_4:24
+                  .= f.(abs(i-1)) by A26,A51
+                  .= f.(i-1) by A52,ABSVALUE:def 1;
+      A54:1 <= i+1 & i+1 <= len z by A50,NAT_1:38;
+      then A55:i+1 in Seg(k+1) by A25,FINSEQ_1:3;
+      A56:z/.(i+1) = z.(i+1) by A54,FINSEQ_4:24
+                    .= f.(abs(i+1-1)) by A26,A55
                     .= f.(i-1+1) by ABSVALUE:def 1;
-         i-1 is Nat by A54,INT_1:16;
-      hence z/.i c= z/.(i+1) by A14,A55,A59;
+         i-1 is Nat by A52,INT_1:16;
+      hence z/.i c= z/.(i+1) by A14,A53,A56;
     end;
-  hence z/.i c= z/.j by A44,A45,Th1;
-  assume A60: z/.i = z/.j;
-     i <= i+1 & i+1 <= j by A44,NAT_1:38;
-  then A61:z/.i = z/.(i+1) by A44,A45,A51,A60,Th2
-             .= F(z/.i) by A30,A44,A47;
+  hence z/.i c= z/.j by A43,A44,Th1;
+  assume A57: z/.i = z/.j;
+     i <= i+1 & i+1 <= j by A43,NAT_1:38;
+  then A58:z/.i = z/.(i+1) by A43,A44,A49,A57,Th2
+             .= F(z/.i) by A29,A43,A46;
   defpred P[Nat] means i+$1 <= len z implies z/.i = z/.(i+$1);
-  A62:P[0];
-  A63:now
-      let n be Nat such that A64:P[n];
+  A59:P[0];
+  A60:now
+      let n be Nat such that A61:P[n];
       thus P[n+1]
       proof
-      A65:i+n > 0 by A44,NAT_1:29;
+      A62:i+n > 0 by A43,NAT_1:29;
       assume i+(n+1) <= len z;
       then i+n+1 <= len z;
       then i+n < len z by NAT_1:38;
-      hence z/.i = z/.(i+n+1) by A30,A61,A64,A65
+      hence z/.i = z/.(i+n+1) by A29,A58,A61,A62
                    .= z/.(i+(n+1));
       end;
   end;
-  A66:for n being Nat holds P[n] from NAT_1:sch 1(A62,A63);
-  consider n0 being Nat such that A67:i+n0 = len z by A46,NAT_1:28;
-A68:  k+1 in dom z by A24,A26,FINSEQ_1:def 3;
-     f.l = z/.(k+1) by A26,A50,A66,A67
-           .= z.(k+1) by A68,FINSEQ_4:def 4
-           .= f.(abs(k+1-1)) by A24,A27
+  A63:for n being Nat holds P[n] from NAT_1:sch 1(A59,A60);
+  consider n0 being Nat such that A64:i+n0 = len z by A45,NAT_1:28;
+A65:  k+1 in dom z by A24,A25,FINSEQ_1:def 3;
+     f.l = z/.(k+1) by A25,A48,A63,A64
+           .= z.(k+1) by A65,FINSEQ_4:def 4
+           .= f.(abs(k+1-1)) by A24,A26
            .= m by A22,ABSVALUE:def 1;
   then k <= l by A23;
-  then len z <= l + 1 by A26,XREAL_1:8;
-  hence contradiction by A44,XREAL_1:2;
+  then len z <= l + 1 by A25,XREAL_1:8;
+  hence contradiction by A43,XREAL_1:2;
 end;
 
 definition
@@ -795,28 +795,28 @@ thus A is connected implies for x being Element of FT st x in A
          thus P[i+1]
          proof
          assume A18:i + 1 < len S;
-         A20:i+1 < i+1+1 by NAT_1:38;
+         A19:i+1 < i+1+1 by NAT_1:38;
             i+1+1 <= len S by A18,NAT_1:38;
-         then S/.(i+1) c< S/.(i+1+1) by A11,A20;
+         then S/.(i+1) c< S/.(i+1+1) by A11,A19;
          then S/.(i+1) c= S/.(i+1+1) by XBOOLE_0:def 8;
          hence S/.(i+1+1) <> {} by A17,A18,NAT_1:38,XBOOLE_1:3;
          end;
        end;
-    A21:for i being Nat holds P[i] from NAT_1:sch 1(A15,A16);
+    A20:for i being Nat holds P[i] from NAT_1:sch 1(A15,A16);
     consider k being Nat such that
-      A22:len S = k+1 by A7,NAT_1:22;
-       k < len S by A22,NAT_1:38;
-    then A23:B <> {} by A21,A22;
-    A24:B misses C by XBOOLE_1:79;
-A25:  B misses ( A \ B ) by XBOOLE_1:79;
+      A21:len S = k+1 by A7,NAT_1:22;
+       k < len S by A21,NAT_1:38;
+    then A22:B <> {} by A20,A21;
+    A23:B misses C by XBOOLE_1:79;
+A24:  B misses ( A \ B ) by XBOOLE_1:79;
        A \ B c= A by XBOOLE_1:36;
     then B^b /\ C = B^b /\ ( A /\ ( A \ B ) ) by XBOOLE_1:28
             .= B /\ ( A \ B ) by A10,XBOOLE_1:16
-            .= {} by A25,XBOOLE_0:def 7;
+            .= {} by A24,XBOOLE_0:def 7;
     then B^b misses C by XBOOLE_0:def 7;
-    hence contradiction by A1,A13,A14,A23,A24,Def17;
+    hence contradiction by A1,A13,A14,A22,A23,Def17;
   end;
-  assume A26:for x being Element of FT st x in A
+  assume A25:for x being Element of FT st x in A
             ex S being FinSequence of bool the carrier of FT st
               len S > 0 &
               S/.1 = {x} &
@@ -824,46 +824,46 @@ A25:  B misses ( A \ B ) by XBOOLE_1:79;
                 S/.(i+1) = S/.i^b /\ A) &
               A c= S/.len S;
   given B, C being Subset of FT such that
-    A27:A = B \/ C and
-    A28:B <> {} and
-    A29:C <> {} and
-    A30:B misses C and
-    A31:B^b misses C;
-  A32: B c= B^b by Th18;
-A33:B^b /\ C = {} by A31,XBOOLE_0:def 7;
-A34:B /\ C = {} by A30,XBOOLE_0:def 7;
-  A35: B^b /\ A = B^b /\ B \/ {} by A27,A33,XBOOLE_1:23
-             .= B by A32,XBOOLE_1:28;
+    A26:A = B \/ C and
+    A27:B <> {} and
+    A28:C <> {} and
+    A29:B misses C and
+    A30:B^b misses C;
+  A31: B c= B^b by Th18;
+A32:B^b /\ C = {} by A30,XBOOLE_0:def 7;
+A33:B /\ C = {} by A29,XBOOLE_0:def 7;
+  A34: B^b /\ A = B^b /\ B \/ {} by A26,A32,XBOOLE_1:23
+             .= B by A31,XBOOLE_1:28;
   consider x being Element of B;
-     x in A by A27,A28,XBOOLE_0:def 2;
+     x in A by A26,A27,XBOOLE_0:def 2;
   then consider S being FinSequence of bool the carrier of FT such that
-    A36:len S > 0 and
-    A37:S/.1 = {x} and
-    A38:for i being Nat st i > 0 & i < len S holds S/.(i+1) =
+    A35:len S > 0 and
+    A36:S/.1 = {x} and
+    A37:for i being Nat st i > 0 & i < len S holds S/.(i+1) =
 (S/.i)^b /\ A and
-    A39:A c= S/.len S by A26;
-  A40:B c= A by A27,XBOOLE_1:7;
+    A38:A c= S/.len S by A25;
+  A39:B c= A by A26,XBOOLE_1:7;
   defpred P[Nat] means $1 < len S implies S/.($1+1) c= B;
-  A41:P[0] by A28,A37,ZFMISC_1:37;
-  A42:now let i be Nat;
-      assume A43:P[i];
+  A40:P[0] by A27,A36,ZFMISC_1:37;
+  A41:now let i be Nat;
+      assume A42:P[i];
       thus P[i+1]
       proof
-      assume A44:i+1 < len S;
-      then S/.(i+1)^b c= B^b by A43,Th19,NAT_1:38;
+      assume A43:i+1 < len S;
+      then S/.(i+1)^b c= B^b by A42,Th19,NAT_1:38;
       then S/.(i+1)^b /\ A c= B^b /\ A by XBOOLE_1:26;
-      hence S/.(i+1+1) c= B by A35,A38,A44;
+      hence S/.(i+1+1) c= B by A34,A37,A43;
       end;
     end;
-  A46:for i being Nat holds P[i] from NAT_1:sch 1(A41,A42);
-  consider k being Nat such that A47:len S = k + 1 by A36,NAT_1:22;
-     k < len S by A47,NAT_1:38;
-  then A48:S/.len S c= B by A46,A47;
-  then S/.len S c= A by A40,XBOOLE_1:1;
-  then S/.len S = A by A39,XBOOLE_0:def 10;
-  then A = B by A40,A48,XBOOLE_0:def 10;
-  then C c= B by A27,XBOOLE_1:7;
-  hence contradiction by A29,A34,XBOOLE_1:28;
+  A44:for i being Nat holds P[i] from NAT_1:sch 1(A40,A41);
+  consider k being Nat such that A45:len S = k + 1 by A35,NAT_1:22;
+     k < len S by A45,NAT_1:38;
+  then A46:S/.len S c= B by A44,A45;
+  then S/.len S c= A by A39,XBOOLE_1:1;
+  then S/.len S = A by A38,XBOOLE_0:def 10;
+  then A = B by A39,A46,XBOOLE_0:def 10;
+  then C c= B by A26,XBOOLE_1:7;
+  hence contradiction by A28,A33,XBOOLE_1:28;
 end;
 
 theorem

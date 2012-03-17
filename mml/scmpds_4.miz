@@ -15,7 +15,7 @@ environ
       AMI_1, AMI_2, AMI_3, AMI_5, FUNCT_7, SCMPDS_1, SCMPDS_2, SCMFSA_4,
       SCMPDS_3, CARD_1, INT_2;
  constructors DOMAIN_1, NAT_1, AMI_5, FUNCT_7, SCMPDS_1, SCMFSA_4, SCMPDS_3,
-      WELLORD2, MEMBERED, INT_2;
+      WELLORD2, MEMBERED, INT_2, CAT_3;
  registrations AMI_1, INT_1, FUNCT_1, RELSET_1, XBOOLE_0, SCMPDS_2, FUNCT_7,
       TREES_2, SCMFSA_4, SCMPDS_3, FRAENKEL, XREAL_0, MEMBERED, ORDINAL2,
       SETFAM_1, STRUCT_0;
@@ -66,11 +66,7 @@ end;
 
 registration let i;
  cluster Load i -> non empty;
- coherence
-  proof
-       Load i = (inspos 0) .--> i;
-   hence Load i is non empty;
-  end;
+ coherence;
 end;
 
 theorem Th1:  ::SCMFSA6A=SCMPDS_4,Th15
@@ -318,9 +314,9 @@ theorem Th9:   :: Th26
  I c= Initialized I
 proof set A = the Instruction-Locations of SCMPDS;
    dom I c= A by AMI_3:def 13;
-then A2: not IC SCMPDS in dom I by AMI_1:48;
+then A1: not IC SCMPDS in dom I by AMI_1:48;
        dom Start-At(inspos 0) = { IC SCMPDS } by AMI_3:34;
-    then dom I misses dom (Start-At (inspos 0)) by A2,ZFMISC_1:56;
+    then dom I misses dom (Start-At (inspos 0)) by A1,ZFMISC_1:56;
  hence thesis by FUNCT_4:33;
 end;
 
@@ -783,13 +779,13 @@ end;
 theorem
     (Initialized I)|the Instruction-Locations of SCMPDS = I
 proof
-A2: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
-A3: not IC SCMPDS in the Instruction-Locations of SCMPDS by AMI_1:48;
+A1: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+A2: not IC SCMPDS in the Instruction-Locations of SCMPDS by AMI_1:48;
       dom Start-At(inspos 0) = { IC SCMPDS } by AMI_3:34;
  then dom Start-At(inspos 0) misses the Instruction-Locations of SCMPDS
-       by A3,ZFMISC_1:56;
+       by A2,ZFMISC_1:56;
  hence (Initialized I)|the Instruction-Locations of SCMPDS = I
-      by A2,FUNCT_4:82;
+      by A1,FUNCT_4:82;
 end;
 
 theorem Th17:   :: SF2_16
@@ -1130,14 +1126,7 @@ end;
 
 theorem Th33:  :: Th50
  for I being Program-block, x being set st x in dom I holds
-     I.x = (Initialized I).x
-proof
-   let I be Program-block, x be set;
-   assume A1: x in dom I;
-   thus (Initialized I).x
-    = (I +* Start-At(inspos 0)).x
-   .= I.x by A1,Th32;
-end;
+     I.x = (Initialized I).x by Th32;
 
 theorem Th34:   :: Th51
  for I,J being Program-block
@@ -1317,8 +1306,7 @@ theorem Th39:   :: Th56
      dom I c= dom (I ';' J)
 proof
    let I,J be Program-block;
-    I ';' J = I +* Shift(J,card I);
-    then dom (I ';' J) = dom I \/ dom Shift(J,card I)
+    dom (I ';' J) = dom I \/ dom Shift(J,card I)
        by FUNCT_4:def 1;
    hence dom I c= dom (I ';' J) by XBOOLE_1:7;
 end;
@@ -1328,14 +1316,14 @@ theorem
      I c= I ';' J
 proof
    let I,J be Program-block;
-A2: dom I c= dom (I ';' J) by Th39;
+A1: dom I c= dom (I ';' J) by Th39;
       now let x be set;
-      assume A3: x in dom I;
+      assume A2: x in dom I;
          dom I misses dom Shift(J,card I) by Th2;
-      then not x in dom Shift(J,card I) by A3,XBOOLE_0:3;
+      then not x in dom Shift(J,card I) by A2,XBOOLE_0:3;
       hence I.x = (I ';' J).x by FUNCT_4:12;
     end;
-    hence I c= I ';' J by A2,GRFUNC_1:8;
+    hence I c= I ';' J by A1,GRFUNC_1:8;
 end;
 
 theorem
@@ -1407,18 +1395,10 @@ definition let i,j;
 end;
 
 theorem   :: Th59
- i ';' j = Load i ';' j
-proof
- thus i ';' j = Load i ';' Load j
-   .= Load i ';' j;
-end;
+ i ';' j = Load i ';' j;
 
 theorem    :: Th60
-  i ';' j = i ';' Load j
- proof
-  thus i ';' j = Load i ';' Load j
-      .= i ';' Load j;
- end;
+  i ';' j = i ';' Load j;
 
 theorem Th45:   :: Th61
  card(I ';' J) = card I + card J
@@ -1452,20 +1432,10 @@ A1: Shift(J ';' K, card I)
 end;
 
 theorem Th47:  :: Th63
- I ';' J ';' k = I ';' (J ';' k)
-proof
- thus I ';' J ';' k = I ';' J ';' Load k
-       .= I ';' (J ';' Load k) by Th46
-       .= I ';' (J ';' k);
-end;
+ I ';' J ';' k = I ';' (J ';' k) by Th46;
 
 theorem
-    I ';' j ';' K = I ';' (j ';' K)
-proof
- thus I ';' j ';' K = I ';' Load j ';' K
-       .= I ';' (Load j ';' K) by Th46
-       .= I ';' (j ';' K);
-end;
+    I ';' j ';' K = I ';' (j ';' K) by Th46;
 
 theorem
     I ';' j ';' k = I ';' (j ';' k)
@@ -1476,20 +1446,10 @@ proof
 end;
 
 theorem Th50:  :: Th66
- i ';' J ';' K = i ';' (J ';' K)
-proof
- thus i ';' J ';' K = Load i ';' J ';' K
-       .= Load i ';' (J ';' K) by Th46
-       .= i ';' (J ';' K);
-end;
+ i ';' J ';' K = i ';' (J ';' K) by Th46;
 
 theorem
-    i ';' J ';' k = i ';' (J ';' k)
-proof
- thus i ';' J ';' k = Load i ';' J ';' k
-       .= Load i ';' (J ';' k) by Th47
-       .= i ';' (J ';' k);
-end;
+    i ';' J ';' k = i ';' (J ';' k) by Th47;
 
 theorem Th52:   :: Th68
  i ';' j ';' K = i ';' (j ';' K)
@@ -1521,11 +1481,7 @@ A2: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
 end;
 
 theorem   :: TN55
-    Start-At inspos 0 c= Initialized I
-proof
-    Initialized I = I +* Start-At(inspos 0);
- hence thesis by FUNCT_4:26;
-end;
+    Start-At inspos 0 c= Initialized I by FUNCT_4:26;
 
 theorem Th56:  ::TN56
  I +* Start-At inspos n c= s implies I c= s
@@ -1537,12 +1493,7 @@ A1: I +* Start-At inspos n c= s;
 end;
 
 theorem    ::S6B_5
-    Initialized I c= s implies I c= s
-proof assume
-       Initialized I c= s;
-    then I +* Start-At inspos 0 c= s;
-    hence thesis by Th56;
-end;
+    Initialized I c= s implies I c= s by Th56;
 
 theorem Th58:  ::TN58
  (I +* Start-At inspos n)|the Instruction-Locations of SCMPDS = I
@@ -1666,26 +1617,25 @@ proof
   assume
 A1: m1 c= s;
     dom(Start-At inspos 0) = {IC SCMPDS} by AMI_3:34;
-then A3: IC SCMPDS in dom (Start-At inspos 0) by TARSKI:def 1;
-then A4: IC SCMPDS in dom m1 by FUNCT_4:13;
- m = (inspos 0).--> halt SCMPDS;
-then A6: m.inspos 0 = halt SCMPDS by CQC_LANG:6;
+then A2: IC SCMPDS in dom (Start-At inspos 0) by TARSKI:def 1;
+then A3: IC SCMPDS in dom m1 by FUNCT_4:13;
+A4: m.inspos 0 = halt SCMPDS by CQC_LANG:6;
     dom m={inspos 0} by CQC_LANG:5;
-then A7: inspos 0 in dom m by TARSKI:def 1;
+then A5: inspos 0 in dom m by TARSKI:def 1;
        dom m0 misses dom (Start-At inspos 0) by Th54;
-then A10: m0 c= m1 by FUNCT_4:33;
-A11: inspos 0 in dom m0 by A7,FUNCT_4:13;
-then A12: inspos 0 in dom m1 by FUNCT_4:13;
-A13: IC m1 = m1.IC SCMPDS by A4,AMI_3:def 16
-        .= (Start-At inspos 0).IC SCMPDS by A3,FUNCT_4:14
+then A6: m0 c= m1 by FUNCT_4:33;
+A7: inspos 0 in dom m0 by A5,FUNCT_4:13;
+then A8: inspos 0 in dom m1 by FUNCT_4:13;
+A9: IC m1 = m1.IC SCMPDS by A3,AMI_3:def 16
+        .= (Start-At inspos 0).IC SCMPDS by A2,FUNCT_4:14
         .= inspos 0 by AMI_3:50;
   take 0;
   thus CurInstr((Computation s).0) = CurInstr s by AMI_1:def 19
      .= s.IC s
-     .= s.IC m1 by A1,A4,AMI_5:60
-     .= m1.inspos 0 by A1,A12,A13,GRFUNC_1:8
-     .= m0.inspos 0 by A10,A11,GRFUNC_1:8
-     .= halt SCMPDS by A6,A7,Th37;
+     .= s.IC m1 by A1,A3,AMI_5:60
+     .= m1.inspos 0 by A1,A8,A9,GRFUNC_1:8
+     .= m0.inspos 0 by A6,A7,GRFUNC_1:8
+     .= halt SCMPDS by A4,A5,Th37;
 end;
 
 registration
@@ -1794,10 +1744,10 @@ A16:     j=2*i+2+2 by A11,A13,A14,A15,AMI_2:def 15
            .=IC s1 by A15,ABSVALUE:def 1;
    end;
    end;
-then A18: for n st X[n] holds X[n+1];
-A19: for n holds X[n] from NAT_1:sch 1(A6,A18);
+then A17: for n st X[n] holds X[n+1];
+A18: for n holds X[n] from NAT_1:sch 1(A6,A17);
  let n;
-   per cases by A19;
+   per cases by A18;
    suppose IC((Computation s1).n) = IC s1;
        then CurInstr((Computation s1).n)
           = ((Computation s1).n).IC s1
@@ -1889,9 +1839,9 @@ theorem Th70:
  Next inspos n = inspos(n+1)
  proof
     consider l be Element of SCM-Instr-Loc such that
-A2: l = inspos n and
-A3: Next l = Next inspos n by SCMPDS_2:def 19;
-    thus Next inspos n=Next il.n by A2,A3,AMI_3:6
+A1: l = inspos n and
+A2: Next l = Next inspos n by SCMPDS_2:def 19;
+    thus Next inspos n=Next il.n by A1,A2,AMI_3:6
     .=inspos(n+1) by AMI_3:54;
 end;
 
@@ -1936,39 +1886,39 @@ A6: not Next IC (Computation s).n in dom stop(I) by A4,Th71;
       dom stop(I) misses dom Start-At inspos 0 by Th54;
 then A7: stop I c= IAt by FUNCT_4:33;
  Initialized stop(I) = IAt;
-then A9: IAt is halting by A1,Def10;
+then A8: IAt is halting by A1,Def10;
       (IAt) | IL = stop I by Th58;
-then A10:  dom stop (I) = dom(IAt) /\ IL
+then A9:  dom stop (I) = dom(IAt) /\ IL
         by RELAT_1:90;
-then A11: not IC s2 in dom IAt by A4,XBOOLE_0:def 3;
-A12: not Next IC s2 in dom IAt by A6,A10,XBOOLE_0:def 3;
-       IAt c= t1 by A2,A11,SCMFSA6A:1;
-    then IAt c= t2 by A12,SCMFSA6A:1;
-then A13: IAt c= s0 by Th69;
-then A14: s0 is halting by A9,AMI_1:def 26;
-A15: s,t1 equal_outside IL by SCMFSA6A:3;
+then A10: not IC s2 in dom IAt by A4,XBOOLE_0:def 3;
+A11: not Next IC s2 in dom IAt by A6,A9,XBOOLE_0:def 3;
+       IAt c= t1 by A2,A10,SCMFSA6A:1;
+    then IAt c= t2 by A11,SCMFSA6A:1;
+then A12: IAt c= s0 by Th69;
+then A13: s0 is halting by A8,AMI_1:def 26;
+A14: s,t1 equal_outside IL by SCMFSA6A:3;
      t1,t2 equal_outside IL by SCMFSA6A:3;
-  then s,t2 equal_outside IL by A15,FUNCT_7:29;
+  then s,t2 equal_outside IL by A14,FUNCT_7:29;
   then s,s0 equal_outside IL by Th69;
-then A16: s0,s equal_outside IL by FUNCT_7:28;
-A17: stop I c= s0 by A7,A13,XBOOLE_1:1;
-A18: stop I c= s by A2,A7,XBOOLE_1:1;
+then A15: s0,s equal_outside IL by FUNCT_7:28;
+A16: stop I c= s0 by A7,A12,XBOOLE_1:1;
+A17: stop I c= s by A2,A7,XBOOLE_1:1;
     for m st m < n holds IC((Computation s).m) in dom stop I by A5;
-then A19: (Computation s0).n,s2 equal_outside IL by A16,A17,A18,Th67;
-A20: s2,t3 equal_outside IL by SCMFSA6A:3;
+then A18: (Computation s0).n,s2 equal_outside IL by A15,A16,A17,Th67;
+A19: s2,t3 equal_outside IL by SCMFSA6A:3;
       t3,t4 equal_outside IL by SCMFSA6A:3;
-   then s2,t4 equal_outside IL by A20,FUNCT_7:29;
+   then s2,t4 equal_outside IL by A19,FUNCT_7:29;
    then s2,s1 equal_outside IL by Th69;
-then A21: (Computation s0).n, s1 equal_outside IL by A19,FUNCT_7:29;
+then A20: (Computation s0).n, s1 equal_outside IL by A18,FUNCT_7:29;
          s| IL = s2 | IL by SCMFSA6B:17;
       then t1 | IL = t3 | IL by SCMFSA6A:5;
       then t2 | IL = t4 | IL by SCMFSA6A:5;
       then s0 | IL = t4 | IL by Th69;
   then s0 | IL = s1 | IL by Th69;
     then (Computation s0).n | IL = s1 | IL by SCMFSA6B:17;
-then A22: (Computation s0).n = s1 by A21,SCMFSA6A:2;
+then A21: (Computation s0).n = s1 by A20,SCMFSA6A:2;
      s1 is not halting by Th66;
- hence contradiction by A14,A22,SCM_1:27;
+ hence contradiction by A13,A21,SCM_1:27;
  end;
 end;
 
@@ -2074,22 +2024,21 @@ Lm2:
   Load halt SCMPDS is shiftable
 proof
   set m = Load halt SCMPDS;
- m = (inspos 0).--> halt SCMPDS;
-then A2: m.inspos 0 = halt SCMPDS by CQC_LANG:6;
-A3: dom m={inspos 0} by CQC_LANG:5;
+A1: m.inspos 0 = halt SCMPDS by CQC_LANG:6;
+A2: dom m={inspos 0} by CQC_LANG:5;
        now let n,i;
-       assume A4:inspos n in dom m & i=m.(inspos n);
-       then A5: inspos n= inspos 0 by A3,TARSKI:def 1;
-then A6:    InsCode i =0 by A2,A4,SCMPDS_2:21,93;
-       thus InsCode i <> 1 by A2,A4,A5,SCMPDS_2:21,93;
-       thus InsCode i <> 3 by A2,A4,A5,SCMPDS_2:21,93;
+       assume A3:inspos n in dom m & i=m.(inspos n);
+       then A4: inspos n= inspos 0 by A2,TARSKI:def 1;
+then A5:    InsCode i =0 by A1,A3,SCMPDS_2:21,93;
+       thus InsCode i <> 1 by A1,A3,A4,SCMPDS_2:21,93;
+       thus InsCode i <> 3 by A1,A3,A4,SCMPDS_2:21,93;
           ex k1 st i = goto k1 & n+k1 >= 0
        proof
           take 0;
-          thus i=goto 0 by A4,A5,CQC_LANG:6,SCMPDS_2:93;
+          thus i=goto 0 by A3,A4,CQC_LANG:6,SCMPDS_2:93;
           thus n+0>=0;
        end;
-       hence i valid_at n by A6,Def11;
+       hence i valid_at n by A5,Def11;
     end;
     hence thesis by Def12;
 end;
@@ -2189,27 +2138,27 @@ registration
  proof
      set IJ=I ';' J;
       now let n,i such that
-A2:    inspos n in dom IJ and
-A3:    i=IJ.(inspos n);
+A1:    inspos n in dom IJ and
+A2:    i=IJ.(inspos n);
        set D = {inspos(l+card I): inspos l in dom J };
           dom Shift(J,card I) = D by SCMPDS_3:def 7;
-then A4:    dom IJ = dom I \/ D by FUNCT_4:def 1;
-      per cases by A2,A4,XBOOLE_0:def 2;
-       suppose A5:inspos n in dom I;
-           then I.inspos n=i by A3,Th37;
-         hence InsCode i <> 1 & InsCode i <> 3 & i valid_at n by A5,Def12;
+then A3:    dom IJ = dom I \/ D by FUNCT_4:def 1;
+      per cases by A1,A3,XBOOLE_0:def 2;
+       suppose A4:inspos n in dom I;
+           then I.inspos n=i by A2,Th37;
+         hence InsCode i <> 1 & InsCode i <> 3 & i valid_at n by A4,Def12;
        end;
        suppose inspos n in D;
         then consider l such that
-A6:      inspos n = inspos(l+card I) and
-A7:      inspos l in dom J;
-A8:      J.inspos l=IJ.(inspos l+card I) by A7,Th38
-         .=i by A3,A6,SCMPDS_3:def 3;
-         hence InsCode i <> 1 & InsCode i <> 3 by A7,Def12;
+A5:      inspos n = inspos(l+card I) and
+A6:      inspos l in dom J;
+A7:      J.inspos l=IJ.(inspos l+card I) by A6,Th38
+         .=i by A2,A5,SCMPDS_3:def 3;
+         hence InsCode i <> 1 & InsCode i <> 3 by A6,Def12;
             l <= l+card I by NAT_1:29;
-then A9:      l <= n by A6,SCMPDS_3:31;
-            i valid_at l by A7,A8,Def12;
-         hence i valid_at n by A9,Th77;
+then A8:      l <= n by A5,SCMPDS_3:31;
+            i valid_at l by A6,A7,Def12;
+         hence i valid_at n by A8,Th77;
    end;
    end;
    hence thesis by Def12;
@@ -2225,16 +2174,15 @@ registration
       now let n,j such that
 A1:    inspos n in dom p and
 A2:    j=p.inspos n;
-    p=inspos 0 .--> i;
-       then dom p = { inspos 0 } by CQC_LANG:5;
+       dom p = { inspos 0 } by CQC_LANG:5;
        then inspos n = inspos 0 by A1,TARSKI:def 1;
-       then A4: j=i by A2,CQC_LANG:6;
-then A5:    InsCode j=2 or InsCode j > 6 by Def13;
-       thus InsCode j <> 1 by A4,Def13;
-       thus InsCode j <> 3 by A4,Def13;
-A6:    InsCode j <> 4 by A4,Def13;
-      InsCode j <> 0 & InsCode j <> 5 by A4,Def13;
-       hence j valid_at n by A5,A6,Def11;
+       then A3: j=i by A2,CQC_LANG:6;
+then A4:    InsCode j=2 or InsCode j > 6 by Def13;
+       thus InsCode j <> 1 by A3,Def13;
+       thus InsCode j <> 3 by A3,Def13;
+A5:    InsCode j <> 4 by A3,Def13;
+      InsCode j <> 0 & InsCode j <> 5 by A3,Def13;
+       hence j valid_at n by A4,A5,Def11;
      end;
      hence thesis by Def12;
   end;
@@ -2244,32 +2192,20 @@ registration
   let i be shiftable Instruction of SCMPDS,
       J be shiftable Program-block;
  cluster i ';' J -> shiftable;
- coherence
- proof
-        i ';' J=Load i ';' J;
-     hence thesis;
- end;
+ coherence;
 end;
 
 registration
  let I be shiftable Program-block,
      j be shiftable Instruction of SCMPDS;
  cluster I ';' j -> shiftable;
- coherence
- proof
-        I ';' j=I ';' Load j;
-     hence thesis;
- end;
+ coherence;
 end;
 
 registration
  let i,j be shiftable Instruction of SCMPDS;
  cluster i ';' j -> shiftable;
- coherence
- proof
-        i ';' j=Load i ';' Load j;
-     hence thesis;
- end;
+ coherence;
 end;
 
 registration
@@ -2280,11 +2216,7 @@ end;
 registration
  let I be shiftable Program-block;
  cluster stop I -> shiftable;
- coherence
- proof
-       stop I= I ';' SCMPDS-Stop;
-    hence thesis;
- end;
+ coherence;
 end;
 
 theorem
@@ -2296,31 +2228,30 @@ proof
    set J= Load goto k1;
    set Ig=I ';' goto k1;
       now let n,i such that
-A4:    inspos n in dom Ig and
-A5:    i=Ig.(inspos n);
+A2:    inspos n in dom Ig and
+A3:    i=Ig.(inspos n);
        set D = {inspos(l+card I): inspos l in dom J };
           dom Shift(J,card I) = D by SCMPDS_3:def 7;
-then A6:    dom Ig = dom I \/ D by FUNCT_4:def 1;
-      per cases by A4,A6,XBOOLE_0:def 2;
-       suppose A7:inspos n in dom I;
-           then I.inspos n=i by A5,Th37;
-         hence InsCode i <> 1 & InsCode i <> 3 & i valid_at n by A7,Def12;
+then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
+      per cases by A2,A4,XBOOLE_0:def 2;
+       suppose A5:inspos n in dom I;
+           then I.inspos n=i by A3,Th37;
+         hence InsCode i <> 1 & InsCode i <> 3 & i valid_at n by A5,Def12;
        end;
        suppose inspos n in D;
         then consider l such that
-A8:      inspos n = inspos(l+card I) and
-A9:      inspos l in dom J;
-    J=inspos 0 .--> goto k1;
-       then dom J = { inspos 0 } by CQC_LANG:5;
-then A11:    inspos l = inspos 0 by A9,TARSKI:def 1;
-then A12:    goto k1 =J.inspos l by CQC_LANG:6
-       .=Ig.(inspos l+card I) by A9,Th38
-       .=i by A5,A8,SCMPDS_3:def 3;
+A6:      inspos n = inspos(l+card I) and
+A7:      inspos l in dom J;
+       dom J = { inspos 0 } by CQC_LANG:5;
+then A8:    inspos l = inspos 0 by A7,TARSKI:def 1;
+then A9:    goto k1 =J.inspos l by CQC_LANG:6
+       .=Ig.(inspos l+card I) by A7,Th38
+       .=i by A3,A6,SCMPDS_3:def 3;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:21;
-          inspos n= inspos(0+card I) by A8,A11,SCMPDS_3:31;
-then A13:    n+k1 >=0 by A1,SCMPDS_3:31;
-      InsCode i <> 4 & InsCode i <> 5 & InsCode i <> 6 by A12,SCMPDS_2:21;
-       hence i valid_at n by A12,A13,Def11;
+          inspos n= inspos(0+card I) by A6,A8,SCMPDS_3:31;
+then A10:    n+k1 >=0 by A1,SCMPDS_3:31;
+      InsCode i <> 4 & InsCode i <> 5 & InsCode i <> 6 by A9,SCMPDS_2:21;
+       hence i valid_at n by A9,A10,Def11;
     end;
     end;
    hence thesis by Def12;
@@ -2336,14 +2267,13 @@ registration
       now let n,i such that
 A1:    inspos n in dom J and
 A2:    i=J.inspos n;
-    J=inspos 0 .--> goto k1;
-       then dom J = { inspos 0 } by CQC_LANG:5;
+       dom J = { inspos 0 } by CQC_LANG:5;
 then inspos n = inspos 0 by A1,TARSKI:def 1;
-then A4:    goto k1 =i by A2,CQC_LANG:6;
+then A3:    goto k1 =i by A2,CQC_LANG:6;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:21;
-A5:    n+k1 >=0;
-      InsCode i <> 4 & InsCode i <> 5 & InsCode i <> 6 by A4,SCMPDS_2:21;
-       hence i valid_at n by A4,A5,Def11;
+A4:    n+k1 >=0;
+      InsCode i <> 4 & InsCode i <> 5 & InsCode i <> 6 by A3,SCMPDS_2:21;
+       hence i valid_at n by A3,A4,Def11;
     end;
    hence thesis by Def12;
   end;
@@ -2359,31 +2289,30 @@ proof
        J= Load ii;
    set Ig=I ';' ii;
       now let n,i such that
-A4:    inspos n in dom Ig and
-A5:    i=Ig.(inspos n);
+A2:    inspos n in dom Ig and
+A3:    i=Ig.(inspos n);
        set D = {inspos(l+card I): inspos l in dom J };
           dom Shift(J,card I) = D by SCMPDS_3:def 7;
-then A6:    dom Ig = dom I \/ D by FUNCT_4:def 1;
-      per cases by A4,A6,XBOOLE_0:def 2;
-       suppose A7:inspos n in dom I;
-           then I.inspos n=i by A5,Th37;
-         hence InsCode i <> 1 & InsCode i <> 3 & i valid_at n by A7,Def12;
+then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
+      per cases by A2,A4,XBOOLE_0:def 2;
+       suppose A5:inspos n in dom I;
+           then I.inspos n=i by A3,Th37;
+         hence InsCode i <> 1 & InsCode i <> 3 & i valid_at n by A5,Def12;
        end;
        suppose inspos n in D;
         then consider l such that
-A8:      inspos n = inspos(l+card I) and
-A9:      inspos l in dom J;
-    J=inspos 0 .--> ii;
-       then dom J = { inspos 0 } by CQC_LANG:5;
-then A11:    inspos l = inspos 0 by A9,TARSKI:def 1;
-then A12:    ii=J.inspos l by CQC_LANG:6
-       .=Ig.(inspos l+card I) by A9,Th38
-       .=i by A5,A8,SCMPDS_3:def 3;
+A6:      inspos n = inspos(l+card I) and
+A7:      inspos l in dom J;
+       dom J = { inspos 0 } by CQC_LANG:5;
+then A8:    inspos l = inspos 0 by A7,TARSKI:def 1;
+then A9:    ii=J.inspos l by CQC_LANG:6
+       .=Ig.(inspos l+card I) by A7,Th38
+       .=i by A3,A6,SCMPDS_3:def 3;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:25;
-          inspos n= inspos(0+card I) by A8,A11,SCMPDS_3:31;
-then A13:    n+k2 >=0 by A1,SCMPDS_3:31;
-      InsCode i <> 0 & InsCode i <> 5 & InsCode i <> 6 by A12,SCMPDS_2:25;
-       hence i valid_at n by A12,A13,Def11;
+          inspos n= inspos(0+card I) by A6,A8,SCMPDS_3:31;
+then A10:    n+k2 >=0 by A1,SCMPDS_3:31;
+      InsCode i <> 0 & InsCode i <> 5 & InsCode i <> 6 by A9,SCMPDS_2:25;
+       hence i valid_at n by A9,A10,Def11;
     end;
     end;
    hence thesis by Def12;
@@ -2400,14 +2329,13 @@ registration
       now let n,i such that
 A1:    inspos n in dom J and
 A2:    i=J.inspos n;
-    J=inspos 0 .--> ii;
-       then dom J = { inspos 0 } by CQC_LANG:5;
+       dom J = { inspos 0 } by CQC_LANG:5;
 then inspos n = inspos 0 by A1,TARSKI:def 1;
-then A4:    ii =i by A2,CQC_LANG:6;
+then A3:    ii =i by A2,CQC_LANG:6;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:25;
-A5:    n+k2 >=0;
-      InsCode i <> 0 & InsCode i <> 5 & InsCode i <> 6 by A4,SCMPDS_2:25;
-       hence i valid_at n by A4,A5,Def11;
+A4:    n+k2 >=0;
+      InsCode i <> 0 & InsCode i <> 5 & InsCode i <> 6 by A3,SCMPDS_2:25;
+       hence i valid_at n by A3,A4,Def11;
     end;
    hence thesis by Def12;
    end;
@@ -2423,31 +2351,30 @@ proof
        J= Load ii;
    set Ig=I ';' ii;
       now let n,i such that
-A4:    inspos n in dom Ig and
-A5:    i=Ig.(inspos n);
+A2:    inspos n in dom Ig and
+A3:    i=Ig.(inspos n);
        set D = {inspos(l+card I): inspos l in dom J };
           dom Shift(J,card I) = D by SCMPDS_3:def 7;
-then A6:    dom Ig = dom I \/ D by FUNCT_4:def 1;
-      per cases by A4,A6,XBOOLE_0:def 2;
-       suppose A7:inspos n in dom I;
-           then I.inspos n=i by A5,Th37;
-         hence InsCode i <> 1 & InsCode i <> 3 & i valid_at n by A7,Def12;
+then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
+      per cases by A2,A4,XBOOLE_0:def 2;
+       suppose A5:inspos n in dom I;
+           then I.inspos n=i by A3,Th37;
+         hence InsCode i <> 1 & InsCode i <> 3 & i valid_at n by A5,Def12;
        end;
        suppose inspos n in D;
         then consider l such that
-A8:      inspos n = inspos(l+card I) and
-A9:      inspos l in dom J;
-    J=inspos 0 .--> ii;
-       then dom J = { inspos 0 } by CQC_LANG:5;
-then A11:    inspos l = inspos 0 by A9,TARSKI:def 1;
-then A12:    ii =J.inspos l by CQC_LANG:6
-       .=Ig.(inspos l+card I) by A9,Th38
-       .=i by A5,A8,SCMPDS_3:def 3;
+A6:      inspos n = inspos(l+card I) and
+A7:      inspos l in dom J;
+       dom J = { inspos 0 } by CQC_LANG:5;
+then A8:    inspos l = inspos 0 by A7,TARSKI:def 1;
+then A9:    ii =J.inspos l by CQC_LANG:6
+       .=Ig.(inspos l+card I) by A7,Th38
+       .=i by A3,A6,SCMPDS_3:def 3;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:26;
-          inspos n= inspos(0+card I) by A8,A11,SCMPDS_3:31;
-then A13:    n+k2 >=0 by A1,SCMPDS_3:31;
-      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 6 by A12,SCMPDS_2:26;
-       hence i valid_at n by A12,A13,Def11;
+          inspos n= inspos(0+card I) by A6,A8,SCMPDS_3:31;
+then A10:    n+k2 >=0 by A1,SCMPDS_3:31;
+      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 6 by A9,SCMPDS_2:26;
+       hence i valid_at n by A9,A10,Def11;
     end;
     end;
    hence thesis by Def12;
@@ -2464,14 +2391,13 @@ registration
       now let n,i such that
 A1:    inspos n in dom J and
 A2:    i=J.inspos n;
-    J=inspos 0 .--> ii;
-       then dom J = { inspos 0 } by CQC_LANG:5;
+       dom J = { inspos 0 } by CQC_LANG:5;
 then inspos n = inspos 0 by A1,TARSKI:def 1;
-then A4:    ii =i by A2,CQC_LANG:6;
+then A3:    ii =i by A2,CQC_LANG:6;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:26;
-A5:    n+k2 >=0;
-      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 6 by A4,SCMPDS_2:26;
-       hence i valid_at n by A4,A5,Def11;
+A4:    n+k2 >=0;
+      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 6 by A3,SCMPDS_2:26;
+       hence i valid_at n by A3,A4,Def11;
     end;
    hence thesis by Def12;
    end;
@@ -2487,31 +2413,30 @@ proof
        J= Load ii;
    set Ig=I ';' ii;
       now let n,i such that
-A4:    inspos n in dom Ig and
-A5:    i=Ig.(inspos n);
+A2:    inspos n in dom Ig and
+A3:    i=Ig.(inspos n);
        set D = {inspos(l+card I): inspos l in dom J };
           dom Shift(J,card I) = D by SCMPDS_3:def 7;
-then A6:    dom Ig = dom I \/ D by FUNCT_4:def 1;
-      per cases by A4,A6,XBOOLE_0:def 2;
-       suppose A7:inspos n in dom I;
-           then I.inspos n=i by A5,Th37;
-         hence InsCode i <> 1 & InsCode i <> 3 & i valid_at n by A7,Def12;
+then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
+      per cases by A2,A4,XBOOLE_0:def 2;
+       suppose A5:inspos n in dom I;
+           then I.inspos n=i by A3,Th37;
+         hence InsCode i <> 1 & InsCode i <> 3 & i valid_at n by A5,Def12;
        end;
        suppose inspos n in D;
         then consider l such that
-A8:      inspos n = inspos(l+card I) and
-A9:      inspos l in dom J;
-    J=inspos 0 .--> ii;
-       then dom J = { inspos 0 } by CQC_LANG:5;
-then A11:    inspos l = inspos 0 by A9,TARSKI:def 1;
-then A12:    ii =J.inspos l by CQC_LANG:6
-       .=Ig.(inspos l+card I) by A9,Th38
-       .=i by A5,A8,SCMPDS_3:def 3;
+A6:      inspos n = inspos(l+card I) and
+A7:      inspos l in dom J;
+       dom J = { inspos 0 } by CQC_LANG:5;
+then A8:    inspos l = inspos 0 by A7,TARSKI:def 1;
+then A9:    ii =J.inspos l by CQC_LANG:6
+       .=Ig.(inspos l+card I) by A7,Th38
+       .=i by A3,A6,SCMPDS_3:def 3;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:27;
-          inspos n= inspos(0+card I) by A8,A11,SCMPDS_3:31;
-then A13:    n+k2 >=0 by A1,SCMPDS_3:31;
-      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 5 by A12,SCMPDS_2:27;
-       hence i valid_at n by A12,A13,Def11;
+          inspos n= inspos(0+card I) by A6,A8,SCMPDS_3:31;
+then A10:    n+k2 >=0 by A1,SCMPDS_3:31;
+      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 5 by A9,SCMPDS_2:27;
+       hence i valid_at n by A9,A10,Def11;
     end;
     end;
    hence thesis by Def12;
@@ -2528,14 +2453,13 @@ registration
       now let n,i such that
 A1:    inspos n in dom J and
 A2:    i=J.inspos n;
-    J=inspos 0 .--> ii;
-       then dom J = { inspos 0 } by CQC_LANG:5;
+       dom J = { inspos 0 } by CQC_LANG:5;
 then inspos n = inspos 0 by A1,TARSKI:def 1;
-then A4:    ii =i by A2,CQC_LANG:6;
+then A3:    ii =i by A2,CQC_LANG:6;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:27;
-A5:    n+k2 >=0;
-      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 5 by A4,SCMPDS_2:27;
-       hence i valid_at n by A4,A5,Def11;
+A4:    n+k2 >=0;
+      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 5 by A3,SCMPDS_2:27;
+       hence i valid_at n by A3,A4,Def11;
     end;
    hence thesis by Def12;
    end;
@@ -2556,22 +2480,22 @@ A4: n1 = IC s1 & ICplusConst(s1,k1) = abs(n1-2+2*k1)+2 by SCMPDS_2:def 20;
     consider n2 be Nat such that
 A5: n2 = IC s2 & ICplusConst(s2,k1) = abs(n2-2+2*k1)+2 by SCMPDS_2:def 20;
     reconsider mk=m+k1 as Nat by A2,INT_1:16;
-A8: n2=inspos ( m + n) by A1,A3,A5,SCMPDS_3:def 3
+A6: n2=inspos ( m + n) by A1,A3,A5,SCMPDS_3:def 3
     .=il.(m+n)
     .=2*(m+n)+2;
     consider nk be Nat such that
-A9: inspos nk=ICplusConst(s1,k1) by SCMPDS_3:32;
-A10: n1=il.m by A1,A4
+A7: inspos nk=ICplusConst(s1,k1) by SCMPDS_3:32;
+A8: n1=il.m by A1,A4
     .=2*m+2;
        2*nk+2=il.nk
-    .=abs(n1-2+2*k1)+2 by A4,A9;
-then A11: 2*nk=abs(2*m+2*k1) by A10
+    .=abs(n1-2+2*k1)+2 by A4,A7;
+then A9: 2*nk=abs(2*m+2*k1) by A8
     .=2*mk by ABSVALUE:def 1;
-    thus ICplusConst(s1,k1) +n=inspos(nk +n) by A9,SCMPDS_3:def 3
+    thus ICplusConst(s1,k1) +n=inspos(nk +n) by A7,SCMPDS_3:def 3
     .=il.(nk+n)
     .=2*(nk+n)+2
-    .=2*mk+2*n+2 by A11
-    .=ICplusConst(s2,k1) by A5,A8,ABSVALUE:def 1;
+    .=2*mk+2*n+2 by A9
+    .=ICplusConst(s2,k1) by A5,A6,ABSVALUE:def 1;
 end;
 
 theorem Th83:  ::S6A_41
@@ -2946,73 +2870,73 @@ A4: s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
        CurInstr (C1.$1) = CurInstr (C2.$1) &
        C1.$1 | SCM-Data-Loc = C2.$1 | SCM-Data-Loc;
         dom SI misses dom Start-At inspos 0 by Th54;
-then A6:  SI c= II by FUNCT_4:33;
-then A7: dom SI c= dom II by GRFUNC_1:8;
-A8: inspos 0 in dom SI by Th75;
-A9: P[0]
+then A5:  SI c= II by FUNCT_4:33;
+then A6: dom SI c= dom II by GRFUNC_1:8;
+A7: inspos 0 in dom SI by Th75;
+A8: P[0]
     proof
-A10:  IC SCMPDS in dom II by Th7;
-        inspos 0 + n in dom Shift(SI,n) by A8,Th76;
-then A11:  inspos (0 + n) in dom Shift(SI,n) by SCMPDS_3:def 3;
+A9:  IC SCMPDS in dom II by Th7;
+        inspos 0 + n in dom Shift(SI,n) by A7,Th76;
+then A10:  inspos (0 + n) in dom Shift(SI,n) by SCMPDS_3:def 3;
         IC C1.0 = IC s1 by AMI_1:def 19
     .= s1.IC SCMPDS
-    .= II.IC SCMPDS by A1,A10,GRFUNC_1:8
+    .= II.IC SCMPDS by A1,A9,GRFUNC_1:8
     .= inspos 0 by Th29;
    hence IC C1.0 + n = inspos (0 + n) by SCMPDS_3:def 3
       .= IC C2.0 by A3,AMI_1:def 19;
-A12: s1.IC s1 = s1.(s1.IC SCMPDS)
-      .= s1.((II).IC SCMPDS) by A1,A10,GRFUNC_1:8
+A11: s1.IC s1 = s1.(s1.IC SCMPDS)
+      .= s1.((II).IC SCMPDS) by A1,A9,GRFUNC_1:8
       .= s1.inspos 0 by Th29
-      .= II.inspos 0 by A1,A7,A8,GRFUNC_1:8
-      .= SI.inspos 0 by A6,A8,GRFUNC_1:8;
+      .= II.inspos 0 by A1,A6,A7,GRFUNC_1:8
+      .= SI.inspos 0 by A5,A7,GRFUNC_1:8;
     thus CurInstr (C1.0)
        = CurInstr s1 by AMI_1:def 19
       .= s1.IC s1
-      .= Shift(SI,n).(inspos 0 + n) by A8,A12,SCMPDS_3:37
+      .= Shift(SI,n).(inspos 0 + n) by A7,A11,SCMPDS_3:37
       .= Shift(SI,n).inspos (0 + n) by SCMPDS_3:def 3
-      .= s2.IC s2 by A2,A3,A11,GRFUNC_1:8
+      .= s2.IC s2 by A2,A3,A10,GRFUNC_1:8
       .= CurInstr s2
       .= CurInstr (C2.0) by AMI_1:def 19;
   thus C1.0 | SCM-Data-Loc
        = s2 | SCM-Data-Loc by A4,AMI_1:def 19
       .= C2.0 | SCM-Data-Loc by AMI_1:def 19;
      end;
-A13: for k being Nat st P[k] holds P[k + 1]
+A12: for k being Nat st P[k] holds P[k + 1]
      proof
        let k be Nat;
-       assume A14: P[k];
+       assume A13: P[k];
       set i = CurInstr C1.k;
-  A15: C1.(k + 1) = Following C1.k by AMI_1:def 19
+  A14: C1.(k + 1) = Following C1.k by AMI_1:def 19
       .= Exec(CurInstr C1.k,C1.k);
-  A16: C2.(k + 1) = Following C2.k by AMI_1:def 19
+  A15: C2.(k + 1) = Following C2.k by AMI_1:def 19
       .= Exec(CurInstr C2.k,C2.k);
 
-   A17: IC C1.k in dom SI by A1,Def9;
-   A18: i = C1.k.(IC C1.k)
+   A16: IC C1.k in dom SI by A1,Def9;
+   A17: i = C1.k.(IC C1.k)
       .= s1.IC C1.k by AMI_1:54
-      .= II.IC C1.k by A1,A7,A17,GRFUNC_1:8
-      .= SI.IC C1.k by A6,A17,GRFUNC_1:8;
+      .= II.IC C1.k by A1,A6,A16,GRFUNC_1:8
+      .= SI.IC C1.k by A5,A16,GRFUNC_1:8;
        consider m such that
-   A19: IC C1.k =inspos m by SCMPDS_3:32;
-   A20: InsCode i <> 1 & InsCode i <> 3 & i valid_at m by A17,A18,A19,Def12;
-  hence A21: IC C1.(k + 1) + n
-       = IC C2.(k + 1) by A14,A15,A16,A19,Th83;
+   A18: IC C1.k =inspos m by SCMPDS_3:32;
+   A19: InsCode i <> 1 & InsCode i <> 3 & i valid_at m by A16,A17,A18,Def12;
+  hence A20: IC C1.(k + 1) + n
+       = IC C2.(k + 1) by A13,A14,A15,A18,Th83;
       set l = IC C1.(k + 1);
-   A22: IC C1.(k + 1) in dom SI by A1,Def9;
-   A23: CurInstr C1.(k + 1) = C1.(k + 1).l
+   A21: IC C1.(k + 1) in dom SI by A1,Def9;
+   A22: CurInstr C1.(k + 1) = C1.(k + 1).l
       .= s1.l by AMI_1:54
-      .= II.l by A1,A7,A22,GRFUNC_1:8
-      .= SI.l by A6,A22,GRFUNC_1:8;
-   A24: IC C2.(k + 1) in dom Shift(SI,n) by A21,A22,Th76;
+      .= II.l by A1,A6,A21,GRFUNC_1:8
+      .= SI.l by A5,A21,GRFUNC_1:8;
+   A23: IC C2.(k + 1) in dom Shift(SI,n) by A20,A21,Th76;
       thus CurInstr C1.(k + 1)
-       = Shift(SI,n).(IC C2.(k + 1)) by A21,A22,A23,SCMPDS_3:37
-      .= s2.IC C2.(k + 1) by A2,A24,GRFUNC_1:8
+       = Shift(SI,n).(IC C2.(k + 1)) by A20,A21,A22,SCMPDS_3:37
+      .= s2.IC C2.(k + 1) by A2,A23,GRFUNC_1:8
       .= C2.(k + 1).IC C2.(k + 1) by AMI_1:54
       .= CurInstr C2.(k + 1);
       thus C1.(k + 1) | SCM-Data-Loc
-       = C2.(k + 1) | SCM-Data-Loc by A14,A15,A16,A19,A20,Th83;
+       = C2.(k + 1) | SCM-Data-Loc by A13,A14,A15,A18,A19,Th83;
      end;
-      for k being Nat holds P[k] from NAT_1:sch 1(A9,A13);
+      for k being Nat holds P[k] from NAT_1:sch 1(A8,A12);
    hence thesis;
 end;
 

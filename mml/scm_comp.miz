@@ -682,7 +682,7 @@ consider f being Function of TS SCM-AE,
  (f.term' qua Element of Funcs(NAT, ((the Instructions of SCM) qua set)*
 )).aux'
        and
-Lm5: (for t being Terminal of SCM-AE
+Lm4: (for t being Terminal of SCM-AE
         ex g being Function of NAT, ((the Instructions of SCM) qua set)*
         st g = f.(root-tree t) &
         for n being Nat holds g.n = <*dl.n:=@t*>) &
@@ -700,9 +700,9 @@ theorem Th9:
 proof let t be Terminal of SCM-AE, n be Nat;
  consider g being Function of NAT, ((the Instructions of SCM) qua set)*
   such that
-A1:  g = f.root-tree t & for n being Nat holds g.n = <*dl.n:=@t*> by Lm5;
+A1:  g = f.root-tree t & for n being Nat holds g.n = <*dl.n:=@t*> by Lm4;
         g.n = <*dl.n:=@t*> by A1;
- hence thesis by A1,Def11,Lm5;
+ hence thesis by A1,Def11,Lm4;
 end;
 
 theorem Th10:
@@ -718,13 +718,13 @@ proof let nt be NonTerminal of SCM-AE, t1, t2 be bin-term, n be Nat,
 set)*
    such that
 A1: g = f.(nt-tree (t1, t2)) & f1 = f.t1 & f2 = f.t2 &
-    for n being Nat holds g.n = (f1.n)^(f2.(n+1))^Selfwork(nt, n) by Lm5;
+    for n being Nat holds g.n = (f1.n)^(f2.(n+1))^Selfwork(nt, n) by Lm4;
  reconsider f1n = f1.n, f2n = f2.(n+1) as
               Element of ((the Instructions of SCM) qua set)*;
        SCM-Compile(t1, n) = f1n & SCM-Compile(t2, n+1) = f2n
-                     by A1,Def11,Lm5;
+                     by A1,Def11,Lm4;
   then g.n = SCM-Compile(t1, n)^SCM-Compile(t2, n+1)^Selfwork(nt, n) by A1;
- hence thesis by A1,Def11,Lm5;
+ hence thesis by A1,Def11,Lm4;
 end;
 
 definition
@@ -794,7 +794,7 @@ end;
 consider Term being bin-term;
 consider f being Function of TS SCM-AE, NAT such that
          max_Data-Loc_in Term = f.Term and
-Lm6: (for t being Terminal of SCM-AE holds f.(root-tree t) = d".t) &
+Lm5: (for t being Terminal of SCM-AE holds f.(root-tree t) = d".t) &
     (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
        rtl, rtr being Symbol of SCM-AE
      st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
@@ -804,11 +804,11 @@ Lm6: (for t being Terminal of SCM-AE holds f.(root-tree t) = d".t) &
 theorem Th11:
  for t being Terminal of SCM-AE holds max_Data-Loc_in root-tree t = d".t
 proof let t be Terminal of SCM-AE;
-      max_Data-Loc_in (root-tree t) = f.(root-tree t) qua Nat by Def13,Lm6;
- hence thesis by Lm6;
+      max_Data-Loc_in (root-tree t) = f.(root-tree t) qua Nat by Def13,Lm5;
+ hence thesis by Lm5;
 end;
 
-Lm7:  NonTerminals SCM-AE = [:1, 5:] by Def1;
+Lm6:  NonTerminals SCM-AE = [:1, 5:] by Def1;
 
 theorem Th12:
  for nt being NonTerminal of SCM-AE, tl, tr being bin-term holds
@@ -818,9 +818,9 @@ theorem Th12:
        max_Data-Loc_in tl = f.tl &
   max_Data-Loc_in tr = f.tr & nt ==> <*root-label tl, root-label tr*> &
   max_Data-Loc_in(nt-tree(tl, tr)) = f.(nt-tree(tl, tr))
-                                 by Def1,Def13,Lm6,Lm7;
+                                 by Def1,Def13,Lm5,Lm6;
   hence max_Data-Loc_in(nt-tree(tl, tr)) =
-       max(max_Data-Loc_in tl, max_Data-Loc_in tr) by Lm6;
+       max(max_Data-Loc_in tl, max_Data-Loc_in tr) by Lm5;
 end;
 
 defpred X[bin-term] means
@@ -828,7 +828,7 @@ defpred X[bin-term] means
    st for dn being Nat st dn <= max_Data-Loc_in $1 holds s1.dl.dn = s2.dl.dn
      holds $1 @ s1 = $1 @ s2;
 
-Lm8: now let s be Terminal of SCM-AE;
+Lm7: now let s be Terminal of SCM-AE;
  thus X[root-tree s]
   proof let s1, s2 be State of SCM; assume
 A1: for dn being Nat st dn <= max_Data-Loc_in root-tree s
@@ -842,7 +842,7 @@ Def12
  end;
 end;
 
-Lm9: now let nt be NonTerminal of SCM-AE,
+Lm8: now let nt be NonTerminal of SCM-AE,
             tl, tr be Element of TS SCM-AE; assume
 A1: nt ==> <* root-label tl, root-label tr *> & X[tl] & X[tr];
   thus X[nt-tree(tl, tr)]
@@ -878,7 +878,7 @@ for term being bin-term,
  st for dn being Nat st dn <= max_Data-Loc_in term holds s1.dl.dn = s2.dl.dn
   holds term @ s1 = term @ s2
   proof thus for t being bin-term holds X[t]
-         from BINTREE1:sch 2 (Lm8, Lm9);
+         from BINTREE1:sch 2 (Lm7, Lm8);
   end;
 
  set D = <*>INT;
@@ -1153,8 +1153,7 @@ then A3: s.il.(n+(i+1))=(SCM-Compile(term, aux)^<*halt SCM*>).(i+1+1)
                                                            by SCM_1:def 1
                .= halt SCM by A2,FINSEQ_1:59;
   hence s is halting by A2,SCM_1:3;
-  thus (Result s).dl.aux = term@s by A2,A3,SCM_1:4;
-        i <> i+1; then n+i <> n+(i+1);
+  thus (Result s).dl.aux = term@s by A2,A3,SCM_1:4; n+i <> n+(i+1);
    then il.(n+i) <> il.(n+(i+1)) & n+i+1 = n+(i+1) by AMI_3:53;
   hence Complexity s = len SCM-Compile(term, aux) by A2,A3,SCM_1:17;
 end;

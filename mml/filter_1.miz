@@ -14,7 +14,7 @@ environ
       FUNCT_2, BINOP_1, EQREL_1, DOMAIN_1, WELLORD1, FUNCT_3, FUNCT_4,
       STRUCT_0, LATTICES, FILTER_0, LATTICE2;
  constructors BINOP_1, DOMAIN_1, WELLORD1, FUNCT_3, FUNCT_4, FILTER_0,
-      LATTICE2, EQREL_1;
+      LATTICE2, EQREL_1, REALSET1;
  registrations LATTICES, FILTER_0, LATTICE2, RELSET_1, STRUCT_0, SUBSET_1,
       XBOOLE_0, PARTFUN1, FUNCT_2;
  requirements SUBSET, BOOLE;
@@ -100,10 +100,10 @@ theorem
     proof
      deffunc F(Element of D,Element of D) = $1;
      consider f being BinOp of D such that
-A2:    for x,y being Element of D holds f.(x,y) = F(x,y)
-         from BINOP_1:sch 2;
+A1:    for x,y being Element of D holds f.(x,y) = F(x,y)
+         from BINOP_1:sch 4;
      take f; let x1,y1, x2,y2 be Element of D;
-         f.(x1,x2) = x1 & f.(y1,y2) = y1 by A2;
+         f.(x1,x2) = x1 & f.(y1,y2) = y1 by A1;
      hence thesis;
     end;
  end;
@@ -218,7 +218,7 @@ A5:      y in dom g & x = g.y by FUNCT_1:def 5;
      deffunc F(Element of Class R,Element of Class R) = f.(b.(g.$1,g.$2));
      consider bR being BinOp of Class R such that
 A6:    for x,y being Element of Class R
-       holds bR.(x,y) = F(x,y) from BINOP_1:sch 2;
+       holds bR.(x,y) = F(x,y) from BINOP_1:sch 4;
      take bR; let x,y, x1,y1;
      assume
 A7:    x in Class R & y in Class R & x1 in x & y1 in y;
@@ -1250,12 +1250,7 @@ A4:  for a,b being Element of [:D1,D2:]
 
 registration let L1,L2 be non empty LattStr;
  cluster [:L1,L2:] -> non empty;
- coherence
-  proof [:L1,L2:] = LattStr (#[:the carrier of L1, the carrier of L2:],
-                 |:the L_join of L1, the L_join of L2:|,
-                 |:the L_meet of L1, the L_meet of L2:|#);
-   hence the carrier of [:L1,L2:] is non empty;
-  end;
+ coherence;
 end;
 
  definition let L be Lattice;
@@ -1279,9 +1274,9 @@ theorem
    thus [p,q] in LattRel L implies p [= q
      proof assume [p,q] in LattRel L;
       then consider r,s such that
-A2:     [p,q] = [r,s] & r [= s;
-          p = r & q = s by A2,ZFMISC_1:33;
-      hence thesis by A2;
+A1:     [p,q] = [r,s] & r [= s;
+          p = r & q = s by A1,ZFMISC_1:33;
+      hence thesis by A1;
      end;
    thus thesis;
   end;
@@ -1298,14 +1293,14 @@ theorem
         hence thesis;
        end;
      given y such that
-A2:   [x,y] in LattRel L;
+A1:   [x,y] in LattRel L;
      consider p,q such that
-A3:   [x,y] = [p,q] & p [= q by A2;
-         x = p by A3,ZFMISC_1:33;
+A2:   [x,y] = [p,q] & p [= q by A1;
+         x = p by A2,ZFMISC_1:33;
      hence x in the carrier of L;
     end;
    hence
-A4:  dom LattRel L = the carrier of L by RELAT_1:def 4;
+A3:  dom LattRel L = the carrier of L by RELAT_1:def 4;
        now let x;
      thus x in the carrier of L implies ex y st [y,x] in LattRel L
        proof assume x in the carrier of L;
@@ -1314,15 +1309,15 @@ A4:  dom LattRel L = the carrier of L by RELAT_1:def 4;
         hence thesis;
        end;
      given y such that
-A5:   [y,x] in LattRel L;
+A4:   [y,x] in LattRel L;
      consider p,q such that
-A6:   [y,x] = [p,q] & p [= q by A5;
-         x = q by A6,ZFMISC_1:33;
+A5:   [y,x] = [p,q] & p [= q by A4;
+         x = q by A5,ZFMISC_1:33;
      hence x in the carrier of L;
     end;
    hence rng LattRel L = the carrier of L by RELAT_1:def 5;
    hence field LattRel L = (the carrier of L) \/ the carrier of L
-      by A4,RELAT_1:def 6 .= the carrier of L;
+      by A3,RELAT_1:def 6 .= the carrier of L;
   end;
 
  definition let L1,L2 be Lattice;
@@ -1372,8 +1367,7 @@ A1:  [:L1,L2:] is Lattice;
    reconsider LL = LattStr (#[:the carrier of L1, the carrier of L2:],
            |:join(L1), join(L2):|, |:meet(L1),meet(L2):|#)
       as non empty LattStr;
-       [:L1,L2:] = LL;
-    then join(LL) is commutative & join(LL) is associative &
+    join(LL) is commutative & join(LL) is associative &
     meet(LL) is commutative & meet(LL) is associative &
     join(LL) absorbs meet(LL) & meet(LL) absorbs join(LL)
        by A1,LATTICE2:27,29,31,32,40,41;
@@ -1402,19 +1396,7 @@ A1:  [:L1,L2:] is Lattice;
 
 theorem
  Th36: [p1,p2] "\/" [q1,q2] = [p1"\/"q1,p2"\/"q2] &
-   [p1,p2] "/\" [q1,q2] = [p1"/\"q1,p2"/\"q2]
-  proof
-   thus [p1,p2] "\/" [q1,q2]
-       = join([:L1,L2:]).([p1,p2],[q1,q2])
-      .= [join(L1).(p1,q1),join(L2).(p2,q2)] by Th22
-      .= [p1"\/"q1,join(L2).(p2,q2)]
-      .= [p1"\/"q1,p2"\/"q2];
-   thus [p1,p2] "/\" [q1,q2]
-       = meet([:L1,L2:]).([p1,p2],[q1,q2])
-      .= [meet(L1).(p1,q1),meet(L2).(p2,q2)] by Th22
-      .= [p1"/\"q1,meet(L2).(p2,q2)]
-      .= [p1"/\"q1,p2"/\"q2];
-  end;
+   [p1,p2] "/\" [q1,q2] = [p1"/\"q1,p2"/\"q2] by Th22;
 
 theorem
  Th37: [p1,p2] [= [q1,q2] iff p1 [= q1 & p2 [= q2
@@ -1439,49 +1421,47 @@ A1:     for p1,q1,r1 st p1 [= r1 holds p1"\/"(q1"/\"r1) = (p1"\/"q1)"/\"r1;
 A2:     for p2,q2,r2 st p2 [= r2 holds p2"\/"(q2"/\"r2) = (p2"\/"q2)"/\"r2;
       let a,b,c be Element of [:L1,L2:] such that
 A3:     a [= c;
-     [:L1,L2:] = LattStr (#[:the carrier of L1, the carrier of L2:],
-                |:join(L1), join(L2):|, |:meet(L1), meet(L2):|#);
-      then consider p1,p2 such that
-A5:    a = [p1,p2] by DOMAIN_1:9;
+      consider p1,p2 such that
+A4:    a = [p1,p2] by DOMAIN_1:9;
       consider q1,q2 such that
-A6:    b = [q1,q2] by DOMAIN_1:9;
+A5:    b = [q1,q2] by DOMAIN_1:9;
       consider r1,r2 such that
-A7:    c = [r1,r2] by DOMAIN_1:9;
-A8:    p1 [= r1 & p2 [= r2 by A3,A5,A7,Th37;
-      thus a"\/"(b"/\"c) = a"\/"([q1"/\"r1,q2"/\"r2]) by A6,A7,Th36
-        .= [p1"\/"(q1"/\"r1),p2"\/"(q2"/\"r2)] by A5,Th36
-        .= [(p1"\/"q1)"/\"r1,p2"\/"(q2"/\"r2)] by A1,A8
-        .= [(p1"\/"q1)"/\"r1,(p2"\/"q2)"/\"r2] by A2,A8
-        .= [p1"\/"q1,p2"\/"q2]"/\"c by A7,Th36
-        .= (a"\/"b)"/\"c by A5,A6,Th36;
+A6:    c = [r1,r2] by DOMAIN_1:9;
+A7:    p1 [= r1 & p2 [= r2 by A3,A4,A6,Th37;
+      thus a"\/"(b"/\"c) = a"\/"([q1"/\"r1,q2"/\"r2]) by A5,A6,Th36
+        .= [p1"\/"(q1"/\"r1),p2"\/"(q2"/\"r2)] by A4,Th36
+        .= [(p1"\/"q1)"/\"r1,p2"\/"(q2"/\"r2)] by A1,A7
+        .= [(p1"\/"q1)"/\"r1,(p2"\/"q2)"/\"r2] by A2,A7
+        .= [p1"\/"q1,p2"\/"q2]"/\"c by A6,Th36
+        .= (a"\/"b)"/\"c by A4,A5,Th36;
      end;
    assume
-A9:  for a,b,c be Element of [:L1,L2:] st a [= c
+A8:  for a,b,c be Element of [:L1,L2:] st a [= c
       holds a"\/"(b"/\"c) = (a"\/"b)"/\"c;
    thus L1 is modular
      proof let p1,q1,r1 such that
-A10:     p1 [= r1;
+A9:     p1 [= r1;
       consider p2,q2;
-          [p1,p2] [= [r1,p2] by A10,Th37;
+          [p1,p2] [= [r1,p2] by A9,Th37;
        then [p1,p2]"\/"([q1,q2]"/\"[r1,p2]) = ([p1,p2]"\/"[q1,q2])"/\"[r1,p2]
 &
        [q1,q2]"/\"[r1,p2] = [q1"/\"r1,q2"/\"p2] &
        [p1,p2]"\/"[q1,q2] = [p1"\/"q1,p2"\/"q2] &
        [p1,p2]"\/"[q1"/\"r1,q2"/\"p2] = [p1"\/"(q1"/\"r1),p2"\/"(q2"/\"p2)] &
        [p1"\/"q1,p2"\/"q2]"/\"[r1,p2] = [(p1"\/"q1)"/\"r1,(p2"\/"q2)"/\"
-p2] by A9,Th36;
+p2] by A8,Th36;
       hence thesis by ZFMISC_1:33;
      end;
    let p2,q2,r2 such that
-A11:  p2 [= r2;
+A10:  p2 [= r2;
    consider p1,q1;
-       [p1,p2] [= [p1,r2] by A11,Th37;
+       [p1,p2] [= [p1,r2] by A10,Th37;
     then [p1,p2]"\/"([q1,q2]"/\"[p1,r2]) = ([p1,p2]"\/"[q1,q2])"/\"[p1,r2] &
     [q1,q2]"/\"[p1,r2] = [q1"/\"p1,q2"/\"r2] &
     [p1,p2]"\/"[q1,q2] = [p1"\/"q1,p2"\/"q2] &
     [p1,p2]"\/"[q1"/\"p1,q2"/\"r2] = [p1"\/"(q1"/\"p1),p2"\/"(q2"/\"r2)] &
     [p1"\/"q1,p2"\/"q2]"/\"[p1,r2] = [(p1"\/"q1)"/\"p1,(p2"\/"q2)"/\"
-r2] by A9,Th36;
+r2] by A8,Th36;
    hence thesis by ZFMISC_1:33;
   end;
 
@@ -1510,29 +1490,29 @@ theorem
    thus L1 is lower-bounded & L2 is lower-bounded
       implies [:L1,L2:] is lower-bounded
      proof given p1 such that
-A2:     p1"/\"q1 = p1 & q1"/\"p1 = p1;
+A1:     p1"/\"q1 = p1 & q1"/\"p1 = p1;
       given p2 such that
-A3:     p2"/\"q2 = p2 & q2"/\"p2 = p2;
+A2:     p2"/\"q2 = p2 & q2"/\"p2 = p2;
       take a = [p1,p2]; let b be Element of [:L1,L2:];
       consider q1,q2 such that
-A4:     b = [q1,q2] by DOMAIN_1:9;
-      thus a"/\"b = [p1"/\"q1,p2"/\"q2] by A4,Th36 .= [p1,p2"/\"
-q2] by A2 .= a by A3;
+A3:     b = [q1,q2] by DOMAIN_1:9;
+      thus a"/\"b = [p1"/\"q1,p2"/\"q2] by A3,Th36 .= [p1,p2"/\"
+q2] by A1 .= a by A2;
       hence b"/\"a = a;
      end;
    given a being Element of [:L1,L2:] such that
-A5:  for b being Element of [:L1,L2:] holds
+A4:  for b being Element of [:L1,L2:] holds
       a"/\"b = a & b"/\"a = a;
    consider p1,p2 such that
-A6:  a = [p1,p2] by DOMAIN_1:9;
+A5:  a = [p1,p2] by DOMAIN_1:9;
    thus L1 is lower-bounded
      proof take p1; let q1; consider q2;
-          a = a"/\"[q1,q2] by A5 .= [p1"/\"q1,p2"/\"q2] by A6,Th36;
-      hence thesis by A6,ZFMISC_1:33;
+          a = a"/\"[q1,q2] by A4 .= [p1"/\"q1,p2"/\"q2] by A5,Th36;
+      hence thesis by A5,ZFMISC_1:33;
      end;
    take p2; let q2; consider q1;
-       a = a"/\"[q1,q2] by A5 .= [p1"/\"q1,p2"/\"q2] by A6,Th36;
-   hence thesis by A6,ZFMISC_1:33;
+       a = a"/\"[q1,q2] by A4 .= [p1"/\"q1,p2"/\"q2] by A5,Th36;
+   hence thesis by A5,ZFMISC_1:33;
   end;
 
 theorem
@@ -1542,29 +1522,29 @@ theorem
    thus L1 is upper-bounded & L2 is upper-bounded
       implies [:L1,L2:] is upper-bounded
      proof given p1 such that
-A2:     p1"\/"q1 = p1 & q1"\/"p1 = p1;
+A1:     p1"\/"q1 = p1 & q1"\/"p1 = p1;
       given p2 such that
-A3:     p2"\/"q2 = p2 & q2"\/"p2 = p2;
+A2:     p2"\/"q2 = p2 & q2"\/"p2 = p2;
       take a = [p1,p2]; let b be Element of [:L1,L2:];
       consider q1,q2 such that
-A4:     b = [q1,q2] by DOMAIN_1:9;
-      thus a"\/"b = [p1"\/"q1,p2"\/"q2] by A4,Th36 .= [p1,p2"\/"
-q2] by A2 .= a by A3;
+A3:     b = [q1,q2] by DOMAIN_1:9;
+      thus a"\/"b = [p1"\/"q1,p2"\/"q2] by A3,Th36 .= [p1,p2"\/"
+q2] by A1 .= a by A2;
       hence b"\/"a = a;
      end;
    given a being Element of [:L1,L2:] such that
-A5:  for b being Element of [:L1,L2:] holds
+A4:  for b being Element of [:L1,L2:] holds
        a"\/"b = a & b"\/"a = a;
    consider p1,p2 such that
-A6:  a = [p1,p2] by DOMAIN_1:9;
+A5:  a = [p1,p2] by DOMAIN_1:9;
    thus L1 is upper-bounded
      proof take p1; let q1; consider q2;
-          a = a"\/"[q1,q2] by A5 .= [p1"\/"q1,p2"\/"q2] by A6,Th36;
-      hence thesis by A6,ZFMISC_1:33;
+          a = a"\/"[q1,q2] by A4 .= [p1"\/"q1,p2"\/"q2] by A5,Th36;
+      hence thesis by A5,ZFMISC_1:33;
      end;
    take p2; let q2; consider q1;
-       a = a"\/"[q1,q2] by A5 .= [p1"\/"q1,p2"\/"q2] by A6,Th36;
-   hence thesis by A6,ZFMISC_1:33;
+       a = a"\/"[q1,q2] by A4 .= [p1"\/"q1,p2"\/"q2] by A5,Th36;
+   hence thesis by A5,ZFMISC_1:33;
   end;
 
 theorem
@@ -1590,9 +1570,7 @@ Bottom L2]
   proof assume
 A1:    L1 is 0_Lattice & L2 is 0_Lattice;
 A2: now let a be Element of [:L1,L2:];
-         [:L1,L2:] = LattStr (#[:the carrier of L1, the carrier of L2:],
-           |:join(L1), join(L2):|, |:meet(L1),meet(L2):|#);
-     then consider p1,p2 such that
+     consider p1,p2 such that
 A3:    a = [p1,p2] by DOMAIN_1:9;
      thus [Bottom L1,Bottom L2]"/\"a = [Bottom L1"/\"p1,Bottom
 L2"/\"p2] by A3,Th36 .= [Bottom L1,Bottom L2"/\"
@@ -1611,9 +1589,7 @@ L2]
 A1:    L1 is 1_Lattice & L2 is 1_Lattice;
 then A2:  [:L1,L2:] is upper-bounded by Th41;
        now let a be Element of [:L1,L2:];
-         [:L1,L2:] = LattStr (#[:the carrier of L1, the carrier of L2:],
-           |:join(L1), join(L2):|, |:meet(L1),meet(L2):|#);
-     then consider p1,p2 such that
+     consider p1,p2 such that
 A3:    a = [p1,p2] by DOMAIN_1:9;
      thus [Top L1,Top L2]"\/"a = [Top L1"\/"p1,Top L2"\/"p2] by A3,Th36 .= [
 Top L1,Top L2"\/"
@@ -1666,23 +1642,23 @@ theorem
   proof
    thus L1 is C_Lattice & L2 is C_Lattice implies [:L1,L2:] is C_Lattice
      proof assume
-A2:     L1 is C_Lattice & L2 is C_Lattice;
+A1:     L1 is C_Lattice & L2 is C_Lattice;
       then reconsider L = [:L1,L2:] as 01_Lattice by Th42;
           L is complemented
         proof let a be Element of L;
          consider p1,p2 such that
-A3:        a = [p1,p2] by DOMAIN_1:9;
+A2:        a = [p1,p2] by DOMAIN_1:9;
          consider q1 such that
-A4:        q1 is_a_complement_of p1 by A2,LATTICES:def 19;
+A3:        q1 is_a_complement_of p1 by A1,LATTICES:def 19;
          consider q2 such that
-A5:        q2 is_a_complement_of p2 by A2,LATTICES:def 19;
+A4:        q2 is_a_complement_of p2 by A1,LATTICES:def 19;
          reconsider b = [q1,q2] as Element of L;
-         take b; thus thesis by A2,A3,A4,A5,Th45;
+         take b; thus thesis by A1,A2,A3,A4,Th45;
         end;
       hence thesis;
      end;
    assume
-A6:  [:L1,L2:] is C_Lattice;
+A5:  [:L1,L2:] is C_Lattice;
    then reconsider C1 = L1, C2 = L2 as 01_Lattice by Th42;
        C1 is complemented
      proof let p1' be Element of C1;
@@ -1690,12 +1666,12 @@ A6:  [:L1,L2:] is C_Lattice;
       reconsider p1 = p1' as Element of L1;
       reconsider p2 = p2' as Element of L2;
       consider b being Element of [:L1,L2:] such that
-A7:     b is_a_complement_of [p1,p2] by A6,LATTICES:def 19;
+A6:     b is_a_complement_of [p1,p2] by A5,LATTICES:def 19;
       consider q1,q2 such that
-A8:     b = [q1,q2] by DOMAIN_1:9;
+A7:     b = [q1,q2] by DOMAIN_1:9;
       reconsider q1' = q1 as Element of C1;
       take q1';
-      thus thesis by A7,A8,Th45;
+      thus thesis by A6,A7,Th45;
      end;
    hence L1 is C_Lattice;
        C2 is complemented
@@ -1704,12 +1680,12 @@ A8:     b = [q1,q2] by DOMAIN_1:9;
       reconsider p1 = p1' as Element of L1;
       reconsider p2 = p2' as Element of L2;
       consider b being Element of [:L1,L2:] such that
-A9:     b is_a_complement_of [p1,p2] by A6,LATTICES:def 19;
+A8:     b is_a_complement_of [p1,p2] by A5,LATTICES:def 19;
       consider q1,q2 such that
-A10:     b = [q1,q2] by DOMAIN_1:9;
+A9:     b = [q1,q2] by DOMAIN_1:9;
       reconsider q2' = q2 as Element of C2;
       take q2';
-      thus thesis by A9,A10,Th45;
+      thus thesis by A8,A9,Th45;
      end;
    hence L2 is C_Lattice;
   end;
@@ -1734,32 +1710,32 @@ theorem
    thus L1 is implicative & L2 is implicative
       implies [:L1,L2:] is implicative
      proof assume
-A2:    for p1,q1 ex r1 st p1"/\"r1 [= q1 &
+A1:    for p1,q1 ex r1 st p1"/\"r1 [= q1 &
         for s1 st p1"/\"s1 [= q1 holds s1 [= r1;
       assume
-A3:    for p2,q2 ex r2 st p2"/\"r2 [= q2 &
+A2:    for p2,q2 ex r2 st p2"/\"r2 [= q2 &
         for s2 st p2"/\"s2 [= q2 holds s2 [= r2;
       let a,b be Element of [:L1,L2:];
       consider p1,p2 such that
-A4:     a = [p1,p2] by DOMAIN_1:9;
+A3:     a = [p1,p2] by DOMAIN_1:9;
       consider q1,q2 such that
-A5:     b = [q1,q2] by DOMAIN_1:9;
+A4:     b = [q1,q2] by DOMAIN_1:9;
       consider r1 such that
-A6:    p1"/\"r1 [= q1 & for s1 st p1"/\"s1 [= q1 holds s1 [= r1 by A2;
+A5:    p1"/\"r1 [= q1 & for s1 st p1"/\"s1 [= q1 holds s1 [= r1 by A1;
       consider r2 such that
-A7:    p2"/\"r2 [= q2 & for s2 st p2"/\"s2 [= q2 holds s2 [= r2 by A3;
-      take [r1,r2];  a"/\"[r1,r2] = [p1"/\"r1,p2"/\"r2] by A4,Th36;
-      hence a"/\"[r1,r2] [= b by A5,A6,A7,Th37;
+A6:    p2"/\"r2 [= q2 & for s2 st p2"/\"s2 [= q2 holds s2 [= r2 by A2;
+      take [r1,r2];  a"/\"[r1,r2] = [p1"/\"r1,p2"/\"r2] by A3,Th36;
+      hence a"/\"[r1,r2] [= b by A4,A5,A6,Th37;
       let d be Element of [:L1,L2:];
       consider s1,s2 such that
-A8:     d = [s1,s2] by DOMAIN_1:9;
-      assume a"/\"d [= b; then [p1"/\"s1,p2"/\"s2] [= b by A4,A8,Th36;
-       then p1"/\"s1 [= q1 & p2"/\"s2 [= q2 by A5,Th37;
-       then s1 [= r1 & s2 [= r2 by A6,A7;
-      hence d [= [r1,r2] by A8,Th37;
+A7:     d = [s1,s2] by DOMAIN_1:9;
+      assume a"/\"d [= b; then [p1"/\"s1,p2"/\"s2] [= b by A3,A7,Th36;
+       then p1"/\"s1 [= q1 & p2"/\"s2 [= q2 by A4,Th37;
+       then s1 [= r1 & s2 [= r2 by A5,A6;
+      hence d [= [r1,r2] by A7,Th37;
      end;
    assume
-A9:  for a,b being Element of [:L1,L2:]
+A8:  for a,b being Element of [:L1,L2:]
        ex c being Element of [:L1,L2:] st
      a"/\"c [= b & for d being Element of [:L1,L2:] st a"/\"
 d [= b
@@ -1768,50 +1744,39 @@ d [= b
       for s1 st p1"/\"s1 [= q1 holds s1 [= r1
      proof let p1,q1; consider p2,q2;
       consider c being Element of [:L1,L2:] such that
-A10:     [p1,p2]"/\"c [= [q1,q2] &
+A9:     [p1,p2]"/\"c [= [q1,q2] &
         for d being Element of [:L1,L2:] st
-        [p1,p2]"/\"d [= [q1,q2] holds d [= c by A9;
+        [p1,p2]"/\"d [= [q1,q2] holds d [= c by A8;
       consider r1,r2 such that
-A11:     c = [r1,r2] by DOMAIN_1:9;
-      take r1; A12: [p1,p2]"/\"c = [p1"/\"r1,p2"/\"r2] by A11,Th36;
-then A13:     p1"/\"r1 [= q1 & p2"/\"r2 [= q2 by A10,Th37;
-      thus p1"/\"r1 [= q1 by A10,A12,Th37;
+A10:     c = [r1,r2] by DOMAIN_1:9;
+      take r1; A11: [p1,p2]"/\"c = [p1"/\"r1,p2"/\"r2] by A10,Th36;
+then A12:     p1"/\"r1 [= q1 & p2"/\"r2 [= q2 by A9,Th37;
+      thus p1"/\"r1 [= q1 by A9,A11,Th37;
       let s1; assume p1"/\"s1 [= q1;
-       then [p1"/\"s1,p2"/\"r2] [= [q1,q2] by A13,Th37;
+       then [p1"/\"s1,p2"/\"r2] [= [q1,q2] by A12,Th37;
        then [p1,p2]"/\"[s1,r2] [= [q1,q2] by Th36;
-       then [s1,r2] [= c by A10;
-      hence s1 [= r1 by A11,Th37;
+       then [s1,r2] [= c by A9;
+      hence s1 [= r1 by A10,Th37;
      end;
    let p2,q2; consider p1,q1;
    consider c being Element of [:L1,L2:] such that
-A14:  [p1,p2]"/\"c [= [q1,q2] & for d being Element of [:L1,L2:]
+A13:  [p1,p2]"/\"c [= [q1,q2] & for d being Element of [:L1,L2:]
 st
-     [p1,p2]"/\"d [= [q1,q2] holds d [= c by A9;
+     [p1,p2]"/\"d [= [q1,q2] holds d [= c by A8;
    consider r1,r2 such that
-A15:  c = [r1,r2] by DOMAIN_1:9;
-   take r2; A16: [p1,p2]"/\"c = [p1"/\"r1,p2"/\"r2] by A15,Th36;
-then A17:  p1"/\"r1 [= q1 & p2"/\"r2 [= q2 by A14,Th37;
-   thus p2"/\"r2 [= q2 by A14,A16,Th37;
+A14:  c = [r1,r2] by DOMAIN_1:9;
+   take r2; A15: [p1,p2]"/\"c = [p1"/\"r1,p2"/\"r2] by A14,Th36;
+then A16:  p1"/\"r1 [= q1 & p2"/\"r2 [= q2 by A13,Th37;
+   thus p2"/\"r2 [= q2 by A13,A15,Th37;
    let s2; assume p2"/\"s2 [= q2;
-    then [p1"/\"r1,p2"/\"s2] [= [q1,q2] by A17,Th37;
+    then [p1"/\"r1,p2"/\"s2] [= [q1,q2] by A16,Th37;
     then [p1,p2]"/\"[r1,s2] [= [q1,q2] by Th36;
-    then [r1,s2] [= c by A14;
-   hence s2 [= r2 by A15,Th37;
+    then [r1,s2] [= c by A13;
+   hence s2 [= r2 by A14,Th37;
   end;
 
 theorem
-    [:L1,L2:].: = [:L1.:,L2.: :]
-  proof
-       [:L1,L2:] = LattStr (#[:the carrier of L1, the carrier of L2:],
-                |:join(L1), join(L2):|, |:meet(L1), meet(L2):|#) &
-    [:L1.:,L2.: :] = LattStr (#[:the carrier of L1.:, the carrier of L2.: :],
-           |:join(L1.:), join(L2.:):|, |:meet(L1.:), meet(L2.:):| #) &
-    L1.: = LattStr(#the carrier of L1, meet(L1), join(L1)#) &
-    L2.: = LattStr(#the carrier of L2, meet(L2), join(L2)#) &
-    [:L1,L2:].: = LattStr(#the carrier of [:L1,L2:],
-                 meet([:L1,L2:]), join([:L1,L2:])#);
-   hence thesis;
-  end;
+    [:L1,L2:].: = [:L1.:,L2.: :];
 
 theorem
     [:L1,L2:], [:L2,L1:] are_isomorphic
@@ -1858,35 +1823,35 @@ A7:    y = [q1,q2] by A1,A2,DOMAIN_1:9;
      proof assume [x,y] in R;
       then consider a,b being Element of [:L1,L2:]
       such that
-A9:    [x,y] = [a,b] & a [= b;
+A8:    [x,y] = [a,b] & a [= b;
       consider r1,r2 such that
-A10:    a = [r1,r2] by DOMAIN_1:9;
+A9:    a = [r1,r2] by DOMAIN_1:9;
       consider q1,q2 such that
-A11:    b = [q1,q2] by DOMAIN_1:9;
-A12:    r1 [= q1 & r2 [= q2 by A9,A10,A11,Th37;
-A13:    x = a & y = b by A9,ZFMISC_1:33;
+A10:    b = [q1,q2] by DOMAIN_1:9;
+A11:    r1 [= q1 & r2 [= q2 by A8,A9,A10,Th37;
+A12:    x = a & y = b by A8,ZFMISC_1:33;
       hence x in field R & y in field R by A1;
           [r2,r1] [= [q2,q1] & p1.x = r1 & p2.x = r2 & p1.y = q1 & p2.y = q2 &
        f.x = [p2.x,p1.x] & f.y = [p2.y,p1.y]
-        by A1,A2,A10,A11,A12,A13,Th37,FUNCT_3:def 5,def 6,def 8;
+        by A1,A2,A9,A10,A11,A12,Th37,FUNCT_3:def 5,def 6,def 8;
       hence thesis;
      end;
    assume
-A14: x in field R & y in field R;
+A13: x in field R & y in field R;
    then consider r1,r2 such that
-A15: x = [r1,r2] by A1,DOMAIN_1:9;
+A14: x = [r1,r2] by A1,DOMAIN_1:9;
    consider q1,q2 such that
-A16: y = [q1,q2] by A1,A14,DOMAIN_1:9;
+A15: y = [q1,q2] by A1,A13,DOMAIN_1:9;
    assume
-A17: [f.x,f.y] in S;
+A16: [f.x,f.y] in S;
        f.[r1,r2] = [p2.[r1,r2],p1.[r1,r2]] & p1.[r1,r2] = r1 & p2.[r1,r2] = r2
 &
     f.[q1,q2] = [p2.[q1,q2],p1.[q1,q2]] & p1.[q1,q2] = q1 & p2.[q1,q2] = q2
      by A1,A2,FUNCT_3:def 5,def 6,def 8;
-    then [r2,r1] [= [q2,q1] by A15,A16,A17,Th32;
+    then [r2,r1] [= [q2,q1] by A14,A15,A16,Th32;
     then r2 [= q2 & r1 [= q1 by Th37;
     then [r1,r2] [= [q1,q2] by Th37;
-   hence [x,y] in R by A15,A16;
+   hence [x,y] in R by A14,A15;
   end;
 
  reserve B for B_Lattice,
@@ -2125,8 +2090,7 @@ theorem
    (i1"\/"j1) <=> (i2"\/"j2) in FI & (i1"/\"j1) <=> (i2"/\"j2) in FI
   proof assume
 A1:  i1 <=> i2 in FI & j1 <=> j2 in FI;
-       i1 <=> i2 = (i1=>i2)"/\"(i2=>i1) & j1 <=> j2 = (j1=>j2)"/\"(j2=>j1);
-    then i1=>i2 in FI & i2=>i1 in FI & j1=>j2 in FI & j2=>j1 in FI
+    i1=>i2 in FI & i2=>i1 in FI & j1=>j2 in FI & j2=>j1 in FI
      by A1,FILTER_0:def 1;
     then (i1"/\"j1)=>i2 in FI & (i1"/\"j1)=>j2 in FI &
     (i2"/\"j2)=>i1 in FI & (i2"/\"j2)=>j1 in FI &
@@ -2256,82 +2220,82 @@ A10: h.b is Element of latt F
    thus rng f c= field S
      proof let x; assume x in rng f;
       then consider y such that
-A12:    y in dom f & x = f.y by FUNCT_1:def 5;
-      reconsider y as Element of B by A2,A7,A12,FUNCT_3:70;
+A11:    y in dom f & x = f.y by FUNCT_1:def 5;
+      reconsider y as Element of B by A2,A7,A11,FUNCT_3:70;
           g.y = Class(E,y) by A2;
       then reconsider z1 = g.y as Element of B/\/F by A9;
       reconsider z2 = h.y as Element of latt F by A10;
-          x = [z1,z2] by A12,FUNCT_3:def 8;
+          x = [z1,z2] by A11,FUNCT_3:def 8;
       hence thesis by A6;
      end;
    thus field S c= rng f
      proof let x; assume x in field S;
       then consider y being Element of Class E,
                z being Element of F such that
-A13:    x = [y,z] by A6,A9,DOMAIN_1:9;
+A12:    x = [y,z] by A6,A9,DOMAIN_1:9;
       consider b such that
-A14:    y = Class(E,b) by EQREL_1:45;
+A13:    y = Class(E,b) by EQREL_1:45;
       set ty = b"\/"(b<=>a);
-A15:    ty in y by A14,Th61;
-then A16:    y = Class(E,ty) by A14,EQREL_1:31;
+A14:    ty in y by A13,Th61;
+then A15:    y = Class(E,ty) by A13,EQREL_1:31;
           ty <=> (ty <=> z) = z by Th54;
        then (ty <=> z) <=> ty = z;
        then [ty <=> z,ty] in E by FILTER_0:def 12;
-then A17:       ty <=> z in y by A16,EQREL_1:27;
-then A18:    y = Class(E,ty<=>z) by A14,EQREL_1:31;
+then A16:       ty <=> z in y by A15,EQREL_1:27;
+then A17:    y = Class(E,ty<=>z) by A13,EQREL_1:31;
        then (ty<=>z)"\/"((ty<=>z)<=>a) in y by Th61;
        then (ty<=>z)"\/"((ty<=>z)<=>a) [= ty & ty [= (ty<=>z)"\/"((ty<=>z)<=>a
 )
-        by A14,A15,A18,Th61;
+        by A13,A14,A17,Th61;
        then h.(ty<=>z) = ((ty<=>z)"\/"((ty<=>z)<=>a)) <=> (ty<=>z) &
        (ty<=>z)"\/"((ty<=>z)<=>a) = ty &
-       y = Class(E,ty<=>z) by A5,A14,A17,EQREL_1:31,LATTICES:26;
+       y = Class(E,ty<=>z) by A5,A13,A16,EQREL_1:31,LATTICES:26;
        then g.(ty <=> z) = y & h.(ty <=> z) = z by A2,Th54;
-       then x = f.(ty <=> z) by A6,A8,A13,FUNCT_3:def 8;
+       then x = f.(ty <=> z) by A6,A8,A12,FUNCT_3:def 8;
       hence thesis by A6,A8,FUNCT_1:def 5;
      end;
    thus f is one-to-one
      proof let x,y; assume x in dom f & y in dom f;
       then reconsider x' = x, y' = y as Element of B by A2,A7,FUNCT_3:70;
-A19:    f.x = [g.x',h.x'] & f.y = [g.y',h.y'] & g.x' = Class(E,x') &
+A18:    f.x = [g.x',h.x'] & f.y = [g.y',h.y'] & g.x' = Class(E,x') &
        g.y' = Class(E,y') & h.x' = (x'"\/"(x'<=>a)) <=> x' &
        x'"\/"(x'<=>a) in Class(E,x') & y'"\/"(y'<=>a) in Class(E,y') &
        h.y' = (y'"\/"(y'<=>a)) <=> y' by A2,A5,A6,A8,Th61,FUNCT_3:def 8;
       assume f.x = f.y;
-then A20:    g.x = g.y & h.x = h.y by A19,ZFMISC_1:33;
+then A19:    g.x = g.y & h.x = h.y by A18,ZFMISC_1:33;
        then x'"\/"(x'<=>a) [= y'"\/"(y'<=>a) & y'"\/"(y'<=>a) [= x'"\/"(x'<=>a
 )
-        by A19,Th61;
+        by A18,Th61;
        then y'"\/"(y'<=>a) = x'"\/"(x'<=>a) by LATTICES:26;
-      hence x = y by A19,A20,Th53;
+      hence x = y by A18,A19,Th53;
      end;
    let x,y;
    thus [x,y] in R implies x in field R & y in field R & [f.x,f.y] in S
      proof assume
-A21:    [x,y] in R;
+A20:    [x,y] in R;
       hence x in field R & y in field R by RELAT_1:30;
       reconsider x' = x, y' = y as Element of B
-        by A6,A21,RELAT_1:30;
-A22:    x' [= y' & x'"/\"Top B = x' by A21,Th32,LATTICES:43;
+        by A6,A20,RELAT_1:30;
+A21:    x' [= y' & x'"/\"Top B = x' by A20,Th32,LATTICES:43;
        then Top B [= x' => y' & Top B in F by A1,FILTER_0:12,def 8;
        then x' => y' in F by FILTER_0:9;
-then A23:    x'/\/F [= y'/\/F & x'/\/F = Class(E,x') & Class(E,x') = g.x' &
+then A22:    x'/\/F [= y'/\/F & x'/\/F = Class(E,x') & Class(E,x') = g.x' &
        y'/\/F = Class(E,y') & Class(E,y') = g.y' by A1,A2,Def6,Th16;
-A24:    h.x' = (x'"\/"(x'<=>a)) <=> x' & h.y' = (y'"\/"(y'<=>a)) <=> y' &
+A23:    h.x' = (x'"\/"(x'<=>a)) <=> x' & h.y' = (y'"\/"(y'<=>a)) <=> y' &
        f.x' = [g.x',h.x'] & f.y' = [g.y',h.y'] & x'"\/"a [= y'"\/"a &
        (x'"\/"(x'<=>a)) <=> x' = x'"\/"a & (y'"\/"(y'<=>a)) <=> y' = y'"\/"a
-         by A3,A5,A6,A8,A22,FILTER_0:1,FUNCT_3:def 8;
+         by A3,A5,A6,A8,A21,FILTER_0:1,FUNCT_3:def 8;
           x'"\/"(x'<=>a) in Class(E,x') & y'"\/"
 (y'<=>a) in Class(E,y') by Th61;
       then reconsider hx = h.x, hy = h.y as Element of latt F
-         by A1,A4,A24,Lm4;
-          hx [= hy by A24,FILTER_0:65;
-       then [x'/\/F,hx] [= [y'/\/F,hy] by A23,Th37;
-      hence thesis by A23,A24;
+         by A1,A4,A23,Lm4;
+          hx [= hy by A23,FILTER_0:65;
+       then [x'/\/F,hx] [= [y'/\/F,hy] by A22,Th37;
+      hence thesis by A22,A23;
      end;
    assume x in field R & y in field R;
    then reconsider x' = x, y' = y as Element of B by Th33;
-A25: x'/\/F = Class(E,x') & y'/\/F = Class(E,y') &
+A24: x'/\/F = Class(E,x') & y'/\/F = Class(E,y') &
     Class(E,x') = g.x' & Class(E,y') = g.y' &
     h.x' = (x'"\/"(x'<=>a)) <=> x' & h.y' = (y'"\/"(y'<=>a)) <=> y' &
     f.x' = [g.x',h.x'] & f.y' = [g.y',h.y'] &
@@ -2339,24 +2303,24 @@ A25: x'/\/F = Class(E,x') & y'/\/F = Class(E,y') &
       by A1,A2,A3,A5,A6,A8,Def6,FUNCT_3:def 8;
        x'"\/"(x'<=>a) in Class(E,x') & y'"\/"(y'<=>a) in Class(E,y') by Th61;
    then reconsider hx = h.x, hy = h.y as Element of latt F
-      by A1,A4,A25,Lm4;
+      by A1,A4,A24,Lm4;
    assume [f.x,f.y] in S;
-    then [x'/\/F,hx] [= [y'/\/F,hy] by A25,Th32;
+    then [x'/\/F,hx] [= [y'/\/F,hy] by A24,Th32;
     then x'/\/F [= y'/\/F & hx [= hy by Th37;
     then x' => y' in F & x' => y' = x'`"\/"y' & x'"\/"a [= y'"\/"a & x' [= x'
 "\/"a
-      by A1,A25,Th16,FILTER_0:55,65,LATTICES:22;
+      by A1,A24,Th16,FILTER_0:55,65,LATTICES:22;
     then a [= x'`"\/"y' & x'"/\"(x'"\/"a) [= x'"/\"(y'"\/"a) & x'"/\"(x'"\/"a)
 = x'
      by FILTER_0:18,LATTICES:21,27;
-then A26: x'"/\"a [= x'"/\"(x'`"\/"y') & x'"/\"(x'`"\/"y') = x'"/\"x'`"\/"(x'
+then A25: x'"/\"a [= x'"/\"(x'`"\/"y') & x'"/\"(x'`"\/"y') = x'"/\"x'`"\/"(x'
 "/\"
 y') & x'"/\"x'` = Bottom B &
     Bottom B"\/"(x'"/\"y') = x'"/\"y' & x' [= (x'"/\"y')"\/"(x'"/\"a) & y'"/\"
 x' [= y' &
     y'"/\"x' = x'"/\"y' by LATTICES:23,27,39,47,def 11;
     then x'"/\"a [= y' by LATTICES:25;
-    then (x'"/\"y')"\/"(x'"/\"a) [= y' by A26,FILTER_0:6;
-    then x' [= y' by A26,LATTICES:25;
+    then (x'"/\"y')"\/"(x'"/\"a) [= y' by A25,FILTER_0:6;
+    then x' [= y' by A25,LATTICES:25;
    hence [x,y] in R;
   end;

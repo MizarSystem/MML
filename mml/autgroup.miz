@@ -15,7 +15,7 @@ environ
  registrations FUNCT_1, FRAENKEL, GROUP_1, GROUP_2, GROUP_3, GROUP_6, STRUCT_0,
       GR_CY_2, RELSET_1, PARTFUN1, FUNCT_2, XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions FRAENKEL, FUNCT_1, GROUP_1, GROUP_6, TARSKI;
+ definitions FRAENKEL, FUNCT_1, GROUP_1, GROUP_6, TARSKI, BINOP_1, REALSET1;
  theorems BINOP_1, FUNCT_1, FUNCT_2, FRAENKEL, GROUP_1, GROUP_2, GROUP_3,
       GROUP_5, GROUP_6, REALSET1, RLVECT_1, RELAT_1, ZFMISC_1, TARSKI,
       XBOOLE_0;
@@ -220,7 +220,7 @@ then A2:   h is_epimorphism by Def1;
     end;
     hereby
       assume h is_isomorphism;
-then A3:   (h is_epimorphism) & (h is_monomorphism)
+then A3:   h is_epimorphism & h is_monomorphism
          by GROUP_6:def 14;
       then h is one-to-one by GROUP_6:def 12;
       hence h in Aut G by A3,Def1;
@@ -232,8 +232,8 @@ Lm3: for f being Element of Aut G holds dom f = rng f &
   proof
     let f be Element of Aut G;
     reconsider f as Homomorphism of G, G by Def1;
-       f is_isomorphism by Th5;
-    then (dom f = the carrier of G) & (rng f = the carrier of G) by GROUP_6:71
+    f is_isomorphism by Th5;
+    then dom f = the carrier of G & rng f = the carrier of G by GROUP_6:71
 ;
     hence thesis;
   end;
@@ -256,7 +256,7 @@ for f being Element of Aut G
 A1: f is_isomorphism by Th5;
     reconsider A = f" as Homomorphism of G, G by Th6;
        A is_isomorphism by A1,GROUP_6:73;
-then A2: (A is_epimorphism) & (A is_monomorphism)
+then A2: A is_epimorphism & A is_monomorphism
        by GROUP_6:def 14;
     then A is one-to-one by GROUP_6:def 12;
     hence thesis by A2,Def1;
@@ -290,7 +290,7 @@ A1: for x, y being Element of Aut G ex m being Element of Aut G st P[x,y,m]
      thus thesis;
    end;
    thus ex M being BinOp of Aut G st
-     for x, y being Element of Aut G holds P[x,y,M.(x,y)] from BINOP_1:sch 1
+     for x, y being Element of Aut G holds P[x,y,M.(x,y)] from BINOP_1:sch 3
 (A1);
  end;
 uniqueness
@@ -317,13 +317,9 @@ coherence
   set H = HGrStr (# Aut G, AutComp G #);
      H is associative Group-like
   proof
-A1: now
-     let f, g be Element of H,
-         A, B be Element of Aut G;
-     assume f = A & g = B;
-     hence f * g = (AutComp G).(A,B)
-                .= A * B by Def2;
-   end;
+A1: for f, g be Element of H, A, B be Element of Aut G
+     st f = A & g = B
+     holds f * g = A * B by Def2;
    thus for f, g, h being Element of H
    holds (f * g) * h = f * (g * h)
    proof
@@ -335,8 +331,7 @@ A3:  g * h = B * C by A1;
                      .= A * (B * C) by RELAT_1:55
                      .= f * (g * h) by A1,A3;
    end;
-   thus
-        ex e being Element of H st
+   thus ex e being Element of H st
        for h being Element of H holds
          h * e = h & e * h = h &
          ex g being Element of H st h * g = e & g * h = e
@@ -370,33 +365,24 @@ end;
 theorem Th9:
 for x, y being Element of AutGroup G
   for f, g being Element of Aut G st x = f & y = g
-  holds x * y = f * g
-  proof
-    let x, y be Element of AutGroup G;
-    let f, g be Element of Aut G;
-    assume A1: x = f & y = g;
-   AutGroup G = HGrStr (# Aut G, AutComp G #);
-    hence x * y = (AutComp G).(f,g) by A1
-              .= f * g by Def2;
-  end;
+  holds x * y = f * g by Def2;
 
 theorem Th10:
 id the carrier of G = 1.AutGroup G
   proof
-     AutGroup G = HGrStr (# Aut G, AutComp G #);
-    then reconsider g = id the carrier of G as Element of
+    reconsider g = id the carrier of G as Element of
 AutGroup G
      by Th4;
     consider g1 be Function of the carrier of G, the carrier of G such that
-A2:    g1 = g;
+A1:    g1 = g;
     consider f be Element of AutGroup G;
        f is Homomorphism of G, G by Def1;
     then consider f1 be Function of the carrier of G, the carrier of G such
 that
-A3:    f1 = f;
-A4: f1 * g1 = f1 by A2,FUNCT_2:74;
+A2:    f1 = f;
+A3: f1 * g1 = f1 by A1,FUNCT_2:74;
          f1 = f & g1 = g implies f1 * g1 = f * g by Th9;
-    hence thesis by A2,A3,A4,GROUP_1:15;
+    hence thesis by A1,A2,A3,GROUP_1:15;
   end;
 
 theorem Th11:
@@ -406,8 +392,7 @@ for f being Element of Aut G
     let f be Element of Aut G;
     let g be Element of AutGroup G;
     assume A1: f = g;
-       AutGroup G = HGrStr (# Aut G, AutComp G #);
-    then consider g1 be Element of Aut G such that
+    consider g1 be Element of Aut G such that
 A2:   g1 = g";
 A3: rng f = dom f by Lm3
          .= the carrier of G by Lm3;
@@ -756,12 +741,12 @@ existence
 A1:   x in K2 & y in K2 & q = [x, y] by ZFMISC_1:def 2;
     reconsider x, y as Element of InnAut G by A1;
 A2: x * y is Element of InnAut G by Th18;
-       (AutComp G).q = (AutComp G).(x, y) by A1,BINOP_1:def 1
+       (AutComp G).q = (AutComp G).(x, y) by A1
       .= x * y by Th15;
     hence thesis by A2;
   end;
   then AutComp G is Presv of K1, K2 by REALSET1:def 6;
-  then reconsider op = (AutComp G)|[:InnAut G, InnAut G:] as BinOp of InnAut G
+  then reconsider op = (AutComp G)||InnAut G as BinOp of InnAut G
     by REALSET1:9;
   set IG = HGrStr (# InnAut G, op #);
      IG is associative Group-like
@@ -771,9 +756,9 @@ A3:  now let x,y be Element of IG,
       assume A4: x = f & y = g;
 A5:   [f, g] in [:InnAut G, InnAut G:] by ZFMISC_1:def 2;
       thus x * y = (op).(f,g) by A4
-                .= (op).[f,g] by BINOP_1:def 1
+                .= (op).[f,g]
                 .= (AutComp G).[f,g] by A5,FUNCT_1:72
-                .= (AutComp G).(f,g) by BINOP_1:def 1
+                .= (AutComp G).(f,g)
                 .= f * g by Th15;
     end;
     thus for f,g,h being Element of IG
@@ -820,16 +805,8 @@ then A10:  rng A = the carrier of G by GROUP_6:def 13;
   then reconsider IG as Group;
      IG is Subgroup of AutGroup G
   proof
-       AutGroup G = HGrStr (# Aut G, AutComp G #);
-then A11: the carrier of IG c= the carrier of AutGroup G by Th14;
-       the mult of IG =
-      (the mult of AutGroup G) | [:the carrier of IG,the carrier of IG:]
-    proof
-         AutGroup G = HGrStr (# Aut G, AutComp G #);
-      hence the mult of IG =
- (the mult of AutGroup G) | [:the carrier of IG,the carrier of IG:];
-    end;
-    hence thesis by A11,GROUP_2:def 5;
+A11: the carrier of IG c= the carrier of AutGroup G by Th14;
+    thus thesis by A11,GROUP_2:def 5;
   end;
   then reconsider IG as strict Subgroup of AutGroup G;
      for f, k being Element of AutGroup G
@@ -837,8 +814,7 @@ then A11: the carrier of IG c= the carrier of AutGroup G by Th14;
   proof
     let f, k be Element of AutGroup G;
     assume A12: k is Element of IG;
-       AutGroup G = HGrStr (# Aut G, AutComp G #);
-    then consider f1 be Element of Aut G such that
+    consider f1 be Element of Aut G such that
 A13:   f1 = f;
     consider g be Element of InnAut G such that
 A14:   g = k by A12;
@@ -1150,52 +1126,52 @@ A3:   f.(a * b) = Conjugate (a * b)" by A2
     end;
     then reconsider f1 = f as Homomorphism of G, InnAutGroup G
       by GROUP_6:def 7;
-A6: Ker f1 = center G
+A5: Ker f1 = center G
     proof
       set KER = the carrier of Ker f1;
       set C = { a : for b holds a * b = b * a };
-A7:   KER = { a : f1.a = 1.InnAutGroup G } by GROUP_6:def 10;
-A8:   KER c= C
+A6:   KER = { a : f1.a = 1.InnAutGroup G } by GROUP_6:def 10;
+A7:   KER c= C
       proof
        let q;
-       assume A9: q in KER;
+       assume A8: q in KER;
           1.InnAutGroup G = id the carrier of G by Th21;
        then consider x such that
-A10:      q = x & f1.x = id the carrier of G by A7,A9;
-A11:    for b holds (Conjugate x").b = b
+A9:      q = x & f1.x = id the carrier of G by A6,A8;
+A10:    for b holds (Conjugate x").b = b
        proof
          let b;
          (id the carrier of G).b = b by FUNCT_1:35;
-         hence thesis by A2,A10;
+         hence thesis by A2,A9;
        end;
-A12:    for b holds b |^ x" = b
+A11:    for b holds b |^ x" = b
        proof
          let b;
          (Conjugate x").b = b |^ x" by Def6;
-         hence thesis by A11;
+         hence thesis by A10;
        end;
        for b holds x * b = b * x
        proof
          let b;
             b |^ x" = x"" * b * x" by GROUP_3:20
            .= x * b * x" by GROUP_1:19;
-         then x * b * x" * x = b * x by A12;
+         then x * b * x" * x = b * x by A11;
          then x * b * (x" * x) = b * x by GROUP_1:def 4;
          then x * b * 1.G = b * x by GROUP_1:def 6;
          hence thesis by GROUP_1:def 5;
        end;
-       hence q in C by A10;
+       hence q in C by A9;
       end;
          C c= KER
       proof
        let q;
        assume q in C;
        then consider x such that
-A13:      x = q & for b holds x * b = b * x;
-A14:    for b holds b = (Conjugate x").b
+A12:      x = q & for b holds x * b = b * x;
+A13:    for b holds b = (Conjugate x").b
        proof
          let b;
-            x * b * x" = b * x * x" by A13;
+            x * b * x" = b * x * x" by A12;
          then x * b * x" = b * (x * x") by GROUP_1:def 4;
          then x * b * x" = b * 1.G by GROUP_1:def 6;
          then b = x * b * x" by GROUP_1:def 5;
@@ -1204,19 +1180,19 @@ A14:    for b holds b = (Conjugate x").b
          hence thesis by Def6;
        end;
        consider g be Function of the carrier of G, the carrier of G such that
-A15:      g = Conjugate x";
+A14:      g = Conjugate x";
           for b holds (id the carrier of G).b = g.b
        proof
          let b;
-            b = g.b & b = (id the carrier of G).b by A14,A15,FUNCT_1:35;
+            b = g.b & b = (id the carrier of G).b by A13,A14,FUNCT_1:35;
          hence thesis;
        end;
        then g = id the carrier of G by FUNCT_2:113;
-       then Conjugate x" = 1.InnAutGroup G by A15,Th21;
+       then Conjugate x" = 1.InnAutGroup G by A14,Th21;
        then f1.x = 1.InnAutGroup G by A2;
-       hence thesis by A7,A13;
+       hence thesis by A6,A12;
       end;
-      then KER = C by A8,XBOOLE_0:def 10;
+      then KER = C by A7,XBOOLE_0:def 10;
       hence thesis by GROUP_5:def 10;
     end;
        f1 is_epimorphism
@@ -1225,26 +1201,26 @@ A15:      g = Conjugate x";
         ex q1 st q1 in the carrier of G & q = f1.q1
       proof
         let q;
-        assume A16: q in the carrier of InnAutGroup G;
-then A17:     q is Element of InnAut G by Def5;
+        assume A15: q in the carrier of InnAutGroup G;
+then A16:     q is Element of InnAut G by Def5;
         then consider y1 be Function of the carrier of G, the carrier of G
         such that
-A18:       y1 = q;
+A17:       y1 = q;
            y1 is Element of Funcs (the carrier of G, the carrier of G)
           by FUNCT_2:12;
         then consider b such that
-A19:       for a holds y1.a = a |^ b by A1,A16,A18,Def4;
+A18:       for a holds y1.a = a |^ b by A1,A15,A17,Def4;
         take q1 = b";
         thus q1 in the carrier of G;
            f1.q1 = Conjugate b"" by A2
              .= Conjugate b by GROUP_1:19;
-        hence thesis by A17,A18,A19,Def6;
+        hence thesis by A16,A17,A18,Def6;
       end;
       then rng f1 = the carrier of InnAutGroup G by FUNCT_2:16;
       hence thesis by GROUP_6:def 13;
     end;
     then InnAutGroup G = Image f1 by GROUP_6:67;
-    hence thesis by A6,GROUP_6:90;
+    hence thesis by A5,GROUP_6:90;
   end;
 
 theorem

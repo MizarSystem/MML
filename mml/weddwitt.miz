@@ -14,6 +14,7 @@ environ
       SETFAM_1, VECTSP_9, RLVECT_3, MATRLIN, SUBSET_1, EQREL_1, GROUP_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, STRUCT_0, NUMBERS, XREAL_0,
       ZFMISC_1, REAL_1, INT_1, INT_2, NAT_1, FINSET_1, BINOP_1, RELAT_1,
+      REALSET1,
       FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, BINARITH, RVSUM_1,
       COMPLFLD, POLYNOM4, CARD_1, RLVECT_1, GROUP_1, VECTSP_1, VECTSP_2,
       GROUP_2, PREPOWER, FUNCT_4, CQC_LANG, WSIERP_1, UNIROOTS, VECTSP_6,
@@ -28,7 +29,7 @@ environ
       NUMBERS, SUBSET_1, ORDINAL2, CQC_LANG, UNIROOTS, GROUP_2, REAL_1,
       FUNCOP_1, EQREL_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
- definitions TARSKI, VECTSP_1, FUNCT_1, RLVECT_1, GROUP_1;
+ definitions TARSKI, VECTSP_1, FUNCT_1, RLVECT_1, GROUP_1, BINOP_1, REALSET1;
  theorems GROUP_1, CARD_1, FINSEQ_1, ZFMISC_1, NAT_1, FUNCT_1, FUNCT_2,
       RELAT_1, TARSKI, XBOOLE_0, XBOOLE_1, VECTSP_1, PREPOWER, RELSET_1,
       COMPLFLD, BINOP_1, REAL_1, XCMPLX_1, REAL_2, INT_1, AMI_5, RVSUM_1,
@@ -63,7 +64,7 @@ A1: 1 < x and
 A2: 0 < k;
 A3: 0 <> x by A1;
     set xNak = x |^ (a*k + r);
-       0+1 <= k by A2,NAT_1:38; then k = k-'1+1 by AMI_5:4;
+       0+1 <= k by A2,NAT_1:38; then k = k-'1+1 by BINARITH:53;
     then xNak = (x #Z (a + (a*(k-'1)+r))) by PREPOWER:46;
     then xNak = (x #Z a)*(x #Z (a*(k-'1)+r)) by A3,PREPOWER:54;
     then xNak = (x |^ a)*(x #Z (a*(k-'1)+r)) by PREPOWER:46;
@@ -140,7 +141,7 @@ BINARITH:50;
                0 < qNak1 by A5,PREPOWER:13; then 0+1<= qNak1 by NAT_1:38;
         then A38: (qNak-'1)-(qNa-'1)= qNa*(qNak1-'1) by A37,BINARITH:50;
                0 < qNa by A5,PREPOWER:13; then 0+1 <= qNa by NAT_1:38;
-            then qNa-'1+1 = qNa by AMI_5:4;
+            then qNa-'1+1 = qNa by BINARITH:53;
             then qNa-'1,qNa are_relative_prime by PEPIN:1;
             then (qNa-'1 qua Integer),qNa are_relative_prime by EULER_2:1;
             then (qNa-'1 qua Integer) divides qNak1-'1 by A32,A38,INT_2:40
@@ -1055,8 +1056,8 @@ proof let G be Group, x be set;
    hence ex a being Element of G st con_class a = x;
   end;
   given a being Element of G such that
-A2: con_class a = x;
-  thus x in conjugate_Classes G by A2;
+A1: con_class a = x;
+  thus x in conjugate_Classes G by A1;
 end;
 
 theorem  Th15: :: :: ClassFormula Class formula for finite groups
@@ -1343,8 +1344,8 @@ definition
   func center R -> strict Field means :Def4:
    the carrier of it = {x where x is Element of R:
                     for s being Element of R holds x*s = s*x} &
-   the add of it =  (the add of R) | [:the carrier of it,the carrier of it:] &
-   the mult of it =  (the mult of R) | [:the carrier of it,the carrier of it:]&
+   the add of it =  (the add of R)||the carrier of it &
+   the mult of it =  (the mult of R)||the carrier of it &
    the Zero of it = the Zero of R &
    the unity of it = 1.R;
   existence proof
@@ -1361,8 +1362,8 @@ A2: ccs c= cR proof let x be set; assume x in ccs;
     x'=x & for s being Element of R holds x'*s = s*x';
     hence thesis;
    end;
-   set acs = (the add of R) | [:ccs,ccs:];
-   set mcs = (the mult of R) | [:ccs,ccs:];
+   set acs = (the add of R)||ccs;
+   set mcs = (the mult of R)||ccs;
    set Zs = the Zero of R;  set Us = 1.R;
 A3: [:ccs,ccs:] c= [:cR,cR:] proof let x be set; assume x in [:ccs,ccs:];
      then consider a,b being set such that
@@ -1410,7 +1411,7 @@ A3: [:ccs,ccs:] c= [:cR,cR:] proof let x be set; assume x in [:ccs,ccs:];
          for s being Element of R holds b'*s = s*b' by A16;
    A20: [a,b] in [:ccs,ccs:] by A16,ZFMISC_1:def 2;
    A21: a*b = (the mult of R).(a,b)
-       .= (the mult of R).[a,b] by BINOP_1:def 1
+       .= (the mult of R).[a,b]
        .= mcs.x by A17,A20,FUNCT_1:72;
         now let s be Element of cR;
       thus (a*b)*s=a*(b*s) by GROUP_1:def 4
@@ -1429,136 +1430,132 @@ A22: Zs = 0.R;
    then reconsider Us as Element of ccs;
    reconsider cs = doubleLoopStr (# ccs, acs, mcs, Us, Zs #)
                    as non empty doubleLoopStr;
-A24: 0.cs = Zs;
+A23: 0.cs = Zs;
    set ccs1 = the carrier of cs;
-A26: now let x,s be Element of cR; assume x in ccs;
+A24: now let x,s be Element of cR; assume x in ccs;
     then ex x' being Element of cR st x'=x &
      for s being Element of R holds x'*s = s*x';
     hence x*s=s*x;
    end;
-A27: now let a,b be Element of cR, c,d be Element of ccs1 such that
-   A28: a=c & b=d;
-   A29: [c,d] in [:ccs,ccs:] by ZFMISC_1:def 2;
+A25: now let a,b be Element of cR, c,d be Element of ccs1 such that
+   A26: a=c & b=d;
+   A27: [c,d] in [:ccs,ccs:] by ZFMISC_1:def 2;
     thus a*b=(the mult of R).(a,b)
-     .= (the mult of R).[a,b] by BINOP_1:def 1
-     .= mcs.[c,d] by A28,A29,FUNCT_1:72 .= mcs.(c,d) by BINOP_1:def 1
+     .= (the mult of R).[a,b]
+     .= mcs.[c,d] by A26,A27,FUNCT_1:72 .= mcs.(c,d)
      .= c*d;
    end;
-A30: now let a,b being Element of cR, c,d be Element of ccs1 such that
-   A31: a=c & b=d;
-   A32: [c,d] in [:ccs,ccs:] by ZFMISC_1:def 2;
-   thus a+b= (the add of R).[a,b]
-    .= acs.[c,d] by A31,A32,FUNCT_1:72 .= c+d;
-   end;
-A33: cs is Abelian proof let x,y be Element of ccs1;
+A28: for a,b being Element of cR, c,d be Element of ccs1 st a=c & b=d
+    holds a+b= c+d by FUNCT_1:72;
+A29: cs is Abelian proof let x,y be Element of ccs1;
       x in ccs1 & y in ccs1;
     then reconsider x'=x,y'=y as Element of cR by A2;
-    thus x+y = y'+x' by A30 .= y+x by A30;
+    thus x+y = y'+x' by A28 .= y+x by A28;
    end;
-A34: cs is add-associative proof let x,y,z be Element of ccs1;
+A30: cs is add-associative proof let x,y,z be Element of ccs1;
       x in ccs1 & y in ccs1 & z in ccs1;
     then reconsider x'=x,y'=y,z'=z as Element of cR by A2;
-    A35: x'+y'=x+y by A30;   A36: y'+z'=y+z by A30;
-    thus (x+y)+z = (x'+y')+z' by A30,A35 .= x'+(y'+z') by RLVECT_1:def 6
-    .= x+(y+z) by A30,A36;
+    A31: x'+y'=x+y by A28;   A32: y'+z'=y+z by A28;
+    thus (x+y)+z = (x'+y')+z' by A28,A31 .= x'+(y'+z') by RLVECT_1:def 6
+    .= x+(y+z) by A28,A32;
    end;
-A37: cs is right_zeroed proof let x be Element of ccs1;
+A33: cs is right_zeroed proof let x be Element of ccs1;
        x in ccs1; then reconsider x'=x as Element of cR by A2;
-    thus x + 0.cs = x'+0.R by A30 .= x by RLVECT_1:def 7;
+    thus x + 0.cs = x'+0.R by A28 .= x by RLVECT_1:def 7;
    end;
-A38: cs is right_complementable proof let x be Element of ccs1;
+A34: cs is right_complementable proof let x be Element of ccs1;
        x in ccs1; then reconsider x'=x as Element of cR by A2;
     consider y' being Element of cR such that
-   A39: x' + y' = 0.R by RLVECT_1:def 8;
+   A35: x' + y' = 0.R by RLVECT_1:def 8;
         now let s be Element of cR;
-   A40: s*x'=x'*s by A26;
+   A36: s*x'=x'*s by A24;
          0.R*s=0.R by VECTSP_1:39 .= s*0.R by VECTSP_1:36;
-        then x'*s+y'*s=s*(x'+y') by A39,VECTSP_1:def 12;
+        then x'*s+y'*s=s*(x'+y') by A35,VECTSP_1:def 12;
        then x'*s+y'*s=s*x'+s*y' by VECTSP_1:def 11;
-       then (-(x'*s)+x'*s)+y'*s=-(s*x')+(s*x'+s*y') by A40,RLVECT_1:def 6;
+       then (-(x'*s)+x'*s)+y'*s=-(s*x')+(s*x'+s*y') by A36,RLVECT_1:def 6;
        then 0.R+y'*s=-(s*x')+(s*x'+s*y') by RLVECT_1:16;
        then y'*s=-(s*x')+(s*x'+s*y') by RLVECT_1:10;
        then y'*s=(-(s*x')+s*x')+s*y' by RLVECT_1:def 6;
        then y'*s=0.R+s*y' by RLVECT_1:16;
       hence y'*s=s*y' by RLVECT_1:10;
       end; then y' in ccs1; then reconsider y=y' as Element of ccs1;
-          x'+y'=x+y by A30;
-    hence ex y being Element of ccs1 st x + y = 0.cs by A39;
+          x'+y'=x+y by A28;
+    hence ex y being Element of ccs1 st x + y = 0.cs by A35;
    end;
-A41: cs is associative proof let x,y,z be Element of ccs1;
+A37: cs is associative proof let x,y,z be Element of ccs1;
       x in ccs1 & y in ccs1 & z in ccs1;
     then reconsider x'=x,y'=y,z'=z as Element of cR by A2;
-    A42: x'*y'=x*y by A27;   A43: y'*z'=y*z by A27;
-    thus (x*y)*z = (x'*y')*z' by A27,A42 .= x'*(y'*z') by GROUP_1:def 4
-    .= x*(y*z) by A27,A43;
+    A38: x'*y'=x*y by A25;   A39: y'*z'=y*z by A25;
+    thus (x*y)*z = (x'*y')*z' by A25,A38 .= x'*(y'*z') by GROUP_1:def 4
+    .= x*(y*z) by A25,A39;
    end;
-A54: cs is commutative proof let x,y be Element of ccs1;
+A40: cs is commutative proof let x,y be Element of ccs1;
          x in ccs1 & y in ccs1;
     then reconsider x'=x,y'=y as Element of cR by A2;
-    thus x*y = x'*y' by A27 .= y'*x' by A26 .= y*x by A27;
+    thus x*y = x'*y' by A25 .= y'*x' by A24 .= y*x by A25;
    end;
-A90: now
+A41: now
      let x, e be Element of cs;
      assume
-A92:   e = 1.R;
-A91: [x,e] in [:ccs,ccs:] by ZFMISC_1:106;
+A42:   e = 1.R;
+A43: [x,e] in [:ccs,ccs:] by ZFMISC_1:106;
      x in ccs;
      then reconsider y=x as Element of R by A2;
      thus x*e = mcs.(x,e)
-     .= mcs.[x,e] by BINOP_1:def 1
-     .= (the mult of R).[x,e] by A91,FUNCT_1:72
-     .= (the mult of R).(x,1.R) by A92,BINOP_1:def 1
+     .= mcs.[x,e]
+     .= (the mult of R).[x,e] by A43,FUNCT_1:72
+     .= (the mult of R).(x,1.R) by A42
      .= y*1.R
      .= x by GROUP_1:def 5;
-     hence e*x=x by A54,GROUP_1:def 16;
+     hence e*x=x by A40,GROUP_1:def 16;
    end;
    reconsider e = 1.R as Element of cs;
-A93: cs is unital
+A44: cs is unital
    proof
      take e;
-     thus thesis by A90;
+     thus thesis by A41;
    end;
-   for x being Element of cs holds x*e=x & e*x=x by A90;
+   for x being Element of cs holds x*e=x & e*x=x by A41;
    then
-A25: 1.cs = 1.R by A93,GROUP_1:def 5;
-A44: cs is left_unital proof let x be Element of ccs1;
+A45: 1.cs = 1.R by A44,GROUP_1:def 5;
+A46: cs is left_unital proof let x be Element of ccs1;
        x in ccs1; then reconsider x'=x as Element of cR by A2;
-    thus (1.cs) * x = (1.R)*x' by A25,A27 .= x by VECTSP_1:def 19;
+    thus (1.cs) * x = (1.R)*x' by A45,A25 .= x by VECTSP_1:def 19;
    end;
-A45: cs is distributive proof let x,y,z be Element of ccs1;
+A47: cs is distributive proof let x,y,z be Element of ccs1;
       x in ccs1 & y in ccs1 & z in ccs1;
     then reconsider x'=x,y'=y,z'=z as Element of cR by A2;
-   A46: y+z=y'+z' by A30;   A47: x'*y'=x*y by A27;   A48: x'*z'=x*z by A27;
-   A49: y'*x'=y*x by A27;   A50: z'*x'=z*x by A27;
-    thus x*(y+z) = x'*(y'+z') by A27,A46 .= x'*y'+x'*z' by VECTSP_1:def 18
-    .= x*y+x*z by A30,A47,A48;
-    thus (y+z)*x = (y'+z')*x' by A27,A46 .= y'*x'+z'*x' by VECTSP_1:def 18
-    .= y*x+z*x by A30,A49,A50;
+   A48: y+z=y'+z' by A28;   A49: x'*y'=x*y by A25;   A50: x'*z'=x*z by A25;
+   A51: y'*x'=y*x by A25;   A52: z'*x'=z*x by A25;
+    thus x*(y+z) = x'*(y'+z') by A25,A48 .= x'*y'+x'*z' by VECTSP_1:def 18
+    .= x*y+x*z by A28,A49,A50;
+    thus (y+z)*x = (y'+z')*x' by A25,A48 .= y'*x'+z'*x' by VECTSP_1:def 18
+    .= y*x+z*x by A28,A51,A52;
    end;
-A51: cs is Field-like proof let x be Element of ccs1 such that
-   A52: x <> 0.cs;
+A53: cs is Field-like proof let x be Element of ccs1 such that
+   A54: x <> 0.cs;
          x in ccs1; then reconsider x'=x as Element of cR by A2;
        consider y' being Element of cR such that
-   A53: x'*y'=1.R by A22,A52,VECTSP_1:def 20;
+   A55: x'*y'=1.R by A22,A54,VECTSP_1:def 20;
         now let s be Element of cR;
           (1.R)*s = s by VECTSP_1:def 19 .= s*(1.R) by VECTSP_1:def 13;
-       then x'*y'*s = (s*x')*y' by A53,GROUP_1:def 4;
-       then x'*y'*s = x'*s*y' by A26;
+       then x'*y'*s = (s*x')*y' by A55,GROUP_1:def 4;
+       then x'*y'*s = x'*s*y' by A24;
        then x'"*(x'*y')*s = x'"*(x'*s*y') by GROUP_1:def 4;
        then x'"*(x'*y')*s = x'"*(x'*s)*y' by GROUP_1:def 4;
        then x'"*x'*y'*s = x'"*(x'*s)*y' by GROUP_1:def 4;
        then x'"*x'*y'*s = x'"*x'*s*y' by GROUP_1:def 4;
-       then (1.R)*y'*s = x'"*x'*s*y' by A22,A52,VECTSP_2:43;
-       then (1.R)*y'*s = (1.R)*s*y' by A22,A52,VECTSP_2:43;
+       then (1.R)*y'*s = x'"*x'*s*y' by A22,A54,VECTSP_2:43;
+       then (1.R)*y'*s = (1.R)*s*y' by A22,A54,VECTSP_2:43;
        then y'*s = (1.R)*s*y' by VECTSP_1:def 19;
       hence y'*s=s*y' by VECTSP_1:def 19;
      end; then y' in ccs1; then reconsider y=y' as Element of ccs1;
        take y;
-       thus x*y= 1.cs by A25,A27,A53;
+       thus x*y= 1.cs by A45,A25,A55;
    end;
    0.R <> 1.R by VECTSP_1:def 21;
-   then cs is non degenerated by A24,A25,VECTSP_1:def 21;
-   hence thesis by A33,A34,A37,A38,A41,A44,A45,A51,A54;
+   then cs is non degenerated by A23,A45,VECTSP_1:def 21;
+   hence thesis by A29,A30,A33,A34,A37,A46,A47,A53,A40;
   end;
   uniqueness;
 end;
@@ -1580,31 +1577,31 @@ s*x}
   hence thesis by TARSKI:def 3;
 end;
 
-Lm21: now let R be Skew-Field;
+Lm1: now let R be Skew-Field;
    set F = center R;
    let x, e be Element of F;
    assume
-A92:   e = 1.R;
-A91: [x,e] in [:the carrier of F,the carrier of F:] by ZFMISC_1:106;
-A1:  the carrier of F c= the carrier of R by Th17;
+A1:   e = 1.R;
+A2: [x,e] in [:the carrier of F,the carrier of F:] by ZFMISC_1:106;
+A3:  the carrier of F c= the carrier of R by Th17;
    x in the carrier of F;
-   then reconsider y=x as Element of R by A1;
-A2: the mult of F =
-       (the mult of R) | [:the carrier of F,the carrier of F:] by Def4;
+   then reconsider y=x as Element of R by A3;
+A4: the mult of F =
+       (the mult of R)||the carrier of F by Def4;
   thus x*e = (the mult of F).(x,e)
-  .= (the mult of F).[x,e] by BINOP_1:def 1
-  .= (the mult of R).[x,e] by A2,A91,FUNCT_1:72
-  .= (the mult of R).(x,1.R) by A92,BINOP_1:def 1
+  .= (the mult of F).[x,e]
+  .= (the mult of R).[x,e] by A4,A2,FUNCT_1:72
+  .= (the mult of R).(x,1.R) by A1
   .= y*1.R
   .= x by GROUP_1:def 5;
   hence e*x=x;
 end;
 
-Lm20: for R being Skew-Field holds 1.center R = 1.R
+Lm2: for R being Skew-Field holds 1.center R = 1.R
 proof
   let R be Skew-Field;
   reconsider e = 1.R as Element of center R by Def4;
-  for x being Element of center R holds x*e=x & e*x=x by Lm21;
+  for x being Element of center R holds x*e=x & e*x=x by Lm1;
   hence thesis by GROUP_1:def 5;
 end;
 
@@ -1789,8 +1786,8 @@ definition
   let R be Skew-Field, s be Element of R;
   func centralizer s -> strict Skew-Field means :Def5:
    the carrier of it = {x where x is Element of R: x*s = s*x} &
-   the add of it =  (the add of R) | [:the carrier of it,the carrier of it:] &
-   the mult of it =  (the mult of R) | [:the carrier of it,the carrier of it:]&
+   the add of it =  (the add of R)||the carrier of it &
+   the mult of it =  (the mult of R)||the carrier of it &
    the Zero of it = the Zero of R &
    the unity of it = 1.R;
   existence proof
@@ -1803,8 +1800,8 @@ A1: ccs c= cR proof let x be set; assume x in ccs;
     then ex x' being Element of cR st x'=x & x'*s=s*x';
     hence thesis;
    end;
-   set acs = (the add of R) | [:ccs,ccs:];
-   set mcs = (the mult of R) | [:ccs,ccs:];
+   set acs = (the add of R)||ccs;
+   set mcs = (the mult of R)||ccs;
    set Zs = the Zero of R;  set Us = 1.R;
 A2: [:ccs,ccs:] c= [:cR,cR:] proof let x be set; assume x in [:ccs,ccs:];
      then consider a,b being set such that
@@ -1846,7 +1843,7 @@ A2: [:ccs,ccs:] c= [:cR,cR:] proof let x be set; assume x in [:ccs,ccs:];
    A18: ex b' being Element of cR st b'=b & b'*s=s*b' by A15;
    A19: [a,b] in [:ccs,ccs:] by A15,ZFMISC_1:def 2;
    A20: a*b = (the mult of R).(a,b)
-       .= (the mult of R).[a,b] by BINOP_1:def 1
+       .= (the mult of R).[a,b]
        .= mcs.x by A16,A19,FUNCT_1:72;
           (a*b)*s=a*(s*b) by A18,GROUP_1:def 4 .= (a*s)*b by GROUP_1:def 4
        .= s*(a*b) by A17,GROUP_1:def 4;
@@ -1862,137 +1859,133 @@ A21: Zs = 0.R;
    then reconsider Us as Element of ccs;
    reconsider cs = doubleLoopStr (# ccs, acs, mcs, Us, Zs #)
                    as non empty doubleLoopStr;
-A23: 0.cs = Zs;
-A90: now
+A22: 0.cs = Zs;
+A23: now
      let x, e be Element of cs;
      assume
-A92:   e = 1.R;
-A91: [x,e] in [:ccs,ccs:] by ZFMISC_1:106;
-A93: [e,x] in [:ccs,ccs:] by ZFMISC_1:106;
+A24:   e = 1.R;
+A25: [x,e] in [:ccs,ccs:] by ZFMISC_1:106;
+A26: [e,x] in [:ccs,ccs:] by ZFMISC_1:106;
      x in ccs;
      then reconsider y=x as Element of R by A1;
      thus x*e = mcs.(x,e)
-     .= mcs.[x,e] by BINOP_1:def 1
-     .= (the mult of R).[x,e] by A91,FUNCT_1:72
-     .= (the mult of R).(x,1.R) by A92,BINOP_1:def 1
+     .= mcs.[x,e]
+     .= (the mult of R).[x,e] by A25,FUNCT_1:72
+     .= (the mult of R).(x,1.R) by A24
      .= y*1.R
      .= x by GROUP_1:def 5;
      thus e*x = mcs.(e,x)
-     .= mcs.[e,x] by BINOP_1:def 1
-     .= (the mult of R).[e,x] by A93,FUNCT_1:72
-     .= (the mult of R).(1.R,x) by A92,BINOP_1:def 1
+     .= mcs.[e,x]
+     .= (the mult of R).[e,x] by A26,FUNCT_1:72
+     .= (the mult of R).(1.R,x) by A24
      .= 1.R*y
      .= x by GROUP_1:def 5;
    end;
    reconsider e = 1.R as Element of cs;
-A93: cs is unital
+A27: cs is unital
    proof
      take e;
-     thus thesis by A90;
+     thus thesis by A23;
    end;
-   for x being Element of cs holds x*e=x & e*x=x by A90;
+   for x being Element of cs holds x*e=x & e*x=x by A23;
    then
-A24: 1.cs = 1.R by A93,GROUP_1:def 5;
+A28: 1.cs = 1.R by A27,GROUP_1:def 5;
    set ccs1 = the carrier of cs;
-A25: now let x be Element of cR; assume x in ccs;
+A29: now let x be Element of cR; assume x in ccs;
     then ex x' being Element of cR st x'=x & x'*s = s*x';
     hence x*s=s*x;
    end;
-A26: now let a,b be Element of cR, c,d be Element of ccs1 such that
-   A27: a=c & b=d;
-   A28: [c,d] in [:ccs,ccs:] by ZFMISC_1:def 2;
+A30: now let a,b be Element of cR, c,d be Element of ccs1 such that
+   A31: a=c & b=d;
+   A32: [c,d] in [:ccs,ccs:] by ZFMISC_1:def 2;
     thus a*b=(the mult of R).(a,b)
-     .= (the mult of R).[a,b] by BINOP_1:def 1
-     .= mcs.[c,d] by A27,A28,FUNCT_1:72 .= mcs.(c,d) by BINOP_1:def 1
+     .= (the mult of R).[a,b]
+     .= mcs.[c,d] by A31,A32,FUNCT_1:72 .= mcs.(c,d)
      .= c*d;
    end;
-A29: now let a,b being Element of cR, c,d be Element of ccs1 such that
-   A30: a=c & b=d;
-   A31: [c,d] in [:ccs,ccs:] by ZFMISC_1:def 2;
-   thus a+b= (the add of R).[a,b]
-    .= acs.[c,d] by A30,A31,FUNCT_1:72 .= c+d;
-   end;
-A32: cs is Abelian proof let x,y be Element of ccs1;
+A33: for a,b being Element of cR, c,d be Element of ccs1 st a=c & b=d
+     holds a+b = c+d by FUNCT_1:72;
+A34: cs is Abelian proof let x,y be Element of ccs1;
       x in ccs1 & y in ccs1;
     then reconsider x'=x,y'=y as Element of cR by A1;
-    thus x+y = y'+x' by A29 .= y+x by A29;
+    thus x+y = y'+x' by A33 .= y+x by A33;
    end;
-A33: cs is add-associative proof let x,y,z be Element of ccs1;
+A35: cs is add-associative proof let x,y,z be Element of ccs1;
       x in ccs1 & y in ccs1 & z in ccs1;
     then reconsider x'=x,y'=y,z'=z as Element of cR by A1;
-    A34: x'+y'=x+y by A29;   A35: y'+z'=y+z by A29;
-    thus (x+y)+z = (x'+y')+z' by A29,A34 .= x'+(y'+z') by RLVECT_1:def 6
-    .= x+(y+z) by A29,A35;
+    A36: x'+y'=x+y by A33;   A37: y'+z'=y+z by A33;
+    thus (x+y)+z = (x'+y')+z' by A33,A36 .= x'+(y'+z') by RLVECT_1:def 6
+    .= x+(y+z) by A33,A37;
    end;
-A36: cs is right_zeroed proof let x be Element of ccs1;
+A38: cs is right_zeroed proof let x be Element of ccs1;
        x in ccs1; then reconsider x'=x as Element of cR by A1;
-    thus x + 0.cs = x'+0.R by A29 .= x by RLVECT_1:def 7;
+    thus x + 0.cs = x'+0.R by A33 .= x by RLVECT_1:def 7;
    end;
-A37: cs is right_complementable proof let x be Element of ccs1;
+A39: cs is right_complementable proof let x be Element of ccs1;
        x in ccs1; then reconsider x'=x as Element of cR by A1;
     consider y' being Element of cR such that
-   A38: x' + y' = 0.R by RLVECT_1:def 8;
-   A39: s*x'=x'*s by A25;
+   A40: x' + y' = 0.R by RLVECT_1:def 8;
+   A41: s*x'=x'*s by A29;
        0.R*s=0.R by VECTSP_1:39 .= s*0.R by VECTSP_1:36;
-       then x'*s+y'*s=s*(x'+y') by A38,VECTSP_1:def 12;
+       then x'*s+y'*s=s*(x'+y') by A40,VECTSP_1:def 12;
        then x'*s+y'*s=s*x'+s*y' by VECTSP_1:def 11;
-       then (-(x'*s)+x'*s)+y'*s=-(s*x')+(s*x'+s*y') by A39,RLVECT_1:def 6;
+       then (-(x'*s)+x'*s)+y'*s=-(s*x')+(s*x'+s*y') by A41,RLVECT_1:def 6;
        then 0.R+y'*s=-(s*x')+(s*x'+s*y') by RLVECT_1:16;
        then y'*s=-(s*x')+(s*x'+s*y') by RLVECT_1:10;
        then y'*s=(-(s*x')+s*x')+s*y' by RLVECT_1:def 6;
        then y'*s=0.R+s*y' by RLVECT_1:16; then y'*s=s*y' by RLVECT_1:10;
        then y' in ccs1; then reconsider y=y' as Element of ccs1;
-          x'+y'=x+y by A29;
-    hence ex y being Element of ccs1 st x + y = 0.cs by A38;
+          x'+y'=x+y by A33;
+    hence ex y being Element of ccs1 st x + y = 0.cs by A40;
    end;
-A40: cs is associative proof let x,y,z be Element of ccs1;
+A42: cs is associative proof let x,y,z be Element of ccs1;
       x in ccs1 & y in ccs1 & z in ccs1;
     then reconsider x'=x,y'=y,z'=z as Element of cR by A1;
-    A41: x'*y'=x*y by A26;   A42: y'*z'=y*z by A26;
-    thus (x*y)*z = (x'*y')*z' by A26,A41 .= x'*(y'*z') by GROUP_1:def 4
-    .= x*(y*z) by A26,A42;
+    A43: x'*y'=x*y by A30;   A44: y'*z'=y*z by A30;
+    thus (x*y)*z = (x'*y')*z' by A30,A43 .= x'*(y'*z') by GROUP_1:def 4
+    .= x*(y*z) by A30,A44;
    end;
-A43: cs is right_unital proof let x be Element of ccs1;
+A45: cs is right_unital proof let x be Element of ccs1;
        x in ccs1; then reconsider x'=x as Element of cR by A1;
-    thus x*(1.cs) = x'*(1.R) by A24,A26 .= x by VECTSP_1:def 13;
+    thus x*(1.cs) = x'*(1.R) by A28,A30 .= x by VECTSP_1:def 13;
    end;
-A44: cs is left_unital proof let x be Element of ccs1;
+A46: cs is left_unital proof let x be Element of ccs1;
        x in ccs1; then reconsider x'=x as Element of cR by A1;
-    thus (1.cs) * x = (1.R)*x' by A24,A26 .= x by VECTSP_1:def 19;
+    thus (1.cs) * x = (1.R)*x' by A28,A30 .= x by VECTSP_1:def 19;
    end;
-A45: cs is distributive proof let x,y,z be Element of ccs1;
+A47: cs is distributive proof let x,y,z be Element of ccs1;
       x in ccs1 & y in ccs1 & z in ccs1;
     then reconsider x'=x,y'=y,z'=z as Element of cR by A1;
-   A46: y+z=y'+z' by A29;   A47: x'*y'=x*y by A26;   A48: x'*z'=x*z by A26;
-   A49: y'*x'=y*x by A26;   A50: z'*x'=z*x by A26;
-    thus x*(y+z) = x'*(y'+z') by A26,A46 .= x'*y'+x'*z' by VECTSP_1:def 18
-    .= x*y+x*z by A29,A47,A48;
-    thus (y+z)*x = (y'+z')*x' by A26,A46 .= y'*x'+z'*x' by VECTSP_1:def 18
-    .= y*x+z*x by A29,A49,A50;
+   A48: y+z=y'+z' by A33;   A49: x'*y'=x*y by A30;   A50: x'*z'=x*z by A30;
+   A51: y'*x'=y*x by A30;   A52: z'*x'=z*x by A30;
+    thus x*(y+z) = x'*(y'+z') by A30,A48 .= x'*y'+x'*z' by VECTSP_1:def 18
+    .= x*y+x*z by A33,A49,A50;
+    thus (y+z)*x = (y'+z')*x' by A30,A48 .= y'*x'+z'*x' by VECTSP_1:def 18
+    .= y*x+z*x by A33,A51,A52;
    end;
-A51: cs is Field-like proof let x be Element of ccs1 such that
-   A52: x <> 0.cs;
+A53: cs is Field-like proof let x be Element of ccs1 such that
+   A54: x <> 0.cs;
          x in ccs1; then reconsider x'=x as Element of cR by A1;
        consider y' being Element of cR such that
-   A53: x'*y'=1.R by A21,A52,VECTSP_1:def 20;
+   A55: x'*y'=1.R by A21,A54,VECTSP_1:def 20;
           (1.R)*s = s by VECTSP_1:def 19 .= s*(1.R) by VECTSP_1:def 13;
-       then x'*y'*s = (s*x')*y' by A53,GROUP_1:def 4;
-       then x'*y'*s = x'*s*y' by A25;
+       then x'*y'*s = (s*x')*y' by A55,GROUP_1:def 4;
+       then x'*y'*s = x'*s*y' by A29;
         then x'"*(x'*y')*s = x'"*(x'*s*y') by GROUP_1:def 4;
        then x'"*(x'*y')*s = x'"*(x'*s)*y' by GROUP_1:def 4;
        then x'"*x'*y'*s = x'"*(x'*s)*y' by GROUP_1:def 4;
        then x'"*x'*y'*s = x'"*x'*s*y' by GROUP_1:def 4;
-       then (1.R)*y'*s = x'"*x'*s*y' by A21,A52,VECTSP_2:43;
-       then (1.R)*y'*s = (1.R)*s*y' by A21,A52,VECTSP_2:43;
+       then (1.R)*y'*s = x'"*x'*s*y' by A21,A54,VECTSP_2:43;
+       then (1.R)*y'*s = (1.R)*s*y' by A21,A54,VECTSP_2:43;
        then y'*s = (1.R)*s*y' by VECTSP_1:def 19;
        then y'*s=s*y' by VECTSP_1:def 19; then y' in ccs1;
        then reconsider y=y' as Element of ccs1;
        take y;
-       thus x*y= 1.cs by A24,A26,A53;
+       thus x*y= 1.cs by A28,A30,A55;
    end;
    0.R <> 1.R by VECTSP_1:def 21;
-   then cs is non degenerated by A23,A24,VECTSP_1:def 21;
-   hence thesis by A32,A33,A36,A37,A40,A43,A44,A45,A51;
+   then cs is non degenerated by A22,A28,VECTSP_1:def 21;
+   hence thesis by A34,A35,A38,A39,A42,A45,A46,A47,A53;
   end;
   uniqueness;
 end;
@@ -2057,11 +2050,7 @@ end;
 theorem  Th28: :: Central0:
 for R be Skew-Field, s be Element of R
   holds 0.R is Element of centralizer s & 1.R is Element of centralizer s
-proof let R be Skew-Field, s be Element of R;
-  0.R*s = 0.R by VECTSP_1:39 .= s*0.R by VECTSP_1:36;
-  then 0.R in {x where x is Element of R: x*s = s*x};
-  hence thesis by Def5;
-end;
+   by  Def5;
 
 registration let R be finite Skew-Field;
   let s be Element of R;
@@ -2186,7 +2175,7 @@ definition
      reconsider x1 as Element of R by A1,A8;
      reconsider x2 as Element of R by A9;
         lm.x = (the mult of R).x by A7,FUNCT_1:72
-     .= (the mult of R).(x1,x2) by A10,BINOP_1:def 1
+     .= (the mult of R).(x1,x2) by A10
      .= x1*x2;
     hence lm.x in ccs;
    end;
@@ -2202,8 +2191,8 @@ A11: Vos is VectSp-like proof
     x in ccR & y in ccR;
      then reconsider xx=x, yy=y as Element of R by A1;
      reconsider vv=v, ww=w as Element of R;
-   A12: the mult of cR =  (the mult of R) | [:ccR,ccR:] by Def4;
-   A13: the add of cR = (the add of R) | [:ccR,ccR:] by Def4;
+   A12: the mult of cR =  (the mult of R)||ccR by Def4;
+   A13: the add of cR = (the add of R)||ccR by Def4;
    A14: [x,w] in [:ccR,ccs:] by ZFMISC_1:def 2;
    A15: [x,v+w] in [:ccR,ccs:] by ZFMISC_1:def 2;
    A16: [y,v] in [:ccR,ccs:] by ZFMISC_1:def 2;
@@ -2214,105 +2203,105 @@ A11: Vos is VectSp-like proof
    A21: [x*y,v] in [:ccR,ccs:] by ZFMISC_1:def 2;
    A22: [x,y] in [:ccR,ccR:] by ZFMISC_1:def 2;
      thus x*(v+w) = lm.(x,v+w)
-     .= lm.[x,v+w] by BINOP_1:def 1
+     .= lm.[x,v+w]
      .= (the mult of R).[x,v+w] by A15,FUNCT_1:72
      .= (the mult of R).[x,(the add of R).[vv,ww]]
      .= (the mult of R).[x,vv+ww]
-     .= (the mult of R).(xx,vv+ww) by BINOP_1:def 1
+     .= (the mult of R).(xx,vv+ww)
      .= xx*(vv+ww)
      .= xx*vv+xx*ww by VECTSP_1:def 11
      .= (the add of R).[xx*vv,xx*ww]
      .= (the add of R).[(the mult of R).(xx,vv),xx*ww]
-     .= (the add of R).[(the mult of R).[xx,vv],xx*ww] by BINOP_1:def 1
+     .= (the add of R).[(the mult of R).[xx,vv],xx*ww]
      .= (the add of R).[lm.[x,v],xx*ww] by A17,FUNCT_1:72
-     .= (the add of R).[lm.(x,v),xx*ww] by BINOP_1:def 1
+     .= (the add of R).[lm.(x,v),xx*ww]
      .= (the add of R).[x*v,xx*ww]
      .= (the add of R).[x*v,(the mult of R).(xx,ww)]
-     .= (the add of R).[x*v,(the mult of R).[xx,ww]] by BINOP_1:def 1
+     .= (the add of R).[x*v,(the mult of R).[xx,ww]]
      .= (the add of R).[x*v,lm.[x,w]] by A14,FUNCT_1:72
-     .= (the add of R).[x*v,lm.(x,w)] by BINOP_1:def 1
+     .= (the add of R).[x*v,lm.(x,w)]
      .= aV.[x*v,x*w]
      .= x*v+x*w;
      thus (x+y)*v = lm.(x+y,v)
-     .= lm.[x+y,v] by BINOP_1:def 1
+     .= lm.[x+y,v]
      .= (the mult of R).[x+y,vv] by A18,FUNCT_1:72
      .= (the mult of R).[(the add of cR).[x,y],vv]
      .= (the mult of R).[(the add of R).[xx,yy],vv] by A13,A22,FUNCT_1:72
      .= (the mult of R).[xx+yy,vv]
-     .= (the mult of R).(xx+yy,vv) by BINOP_1:def 1
+     .= (the mult of R).(xx+yy,vv)
      .= (xx+yy)*vv
      .= xx*vv+yy*vv by VECTSP_1:def 12
      .= (the add of R).[xx*vv,yy*vv]
      .= (the add of R).[(the mult of R).(xx,vv),yy*vv]
-     .= (the add of R).[(the mult of R).[xx,vv],yy*vv] by BINOP_1:def 1
+     .= (the add of R).[(the mult of R).[xx,vv],yy*vv]
      .= (the add of R).[lm.[x,v],yy*vv] by A17,FUNCT_1:72
-     .= (the add of R).[lm.(x,v),yy*vv] by BINOP_1:def 1
+     .= (the add of R).[lm.(x,v),yy*vv]
      .= (the add of R).[x*v,yy*vv]
      .= (the add of R).[x*v,(the mult of R).(yy,vv)]
-     .= (the add of R).[x*v,(the mult of R).[yy,vv]] by BINOP_1:def 1
+     .= (the add of R).[x*v,(the mult of R).[yy,vv]]
      .= (the add of R).[x*v,lm.[y,v]] by A16,FUNCT_1:72
-     .= (the add of R).[x*v,lm.(y,v)] by BINOP_1:def 1
+     .= (the add of R).[x*v,lm.(y,v)]
      .= aV.[x*v,y*v]
      .= x*v+y*v;
      thus (x*y)*v = lm.(x*y,v)
-     .= lm.[x*y,v] by BINOP_1:def 1
+     .= lm.[x*y,v]
      .= (the mult of R).[x*y,vv] by A21,FUNCT_1:72
      .= (the mult of R).[(the mult of cR).(x,y),vv]
-     .= (the mult of R).[(the mult of cR).[x,y],vv] by BINOP_1:def 1
+     .= (the mult of R).[(the mult of cR).[x,y],vv]
      .= (the mult of R).[(the mult of R).[xx,yy],vv] by A12,A22,FUNCT_1:72
-     .= (the mult of R).[(the mult of R).(xx,yy),vv] by BINOP_1:def 1
+     .= (the mult of R).[(the mult of R).(xx,yy),vv]
      .= (the mult of R).[xx*yy,vv]
-     .= (the mult of R).(xx*yy,vv) by BINOP_1:def 1
+     .= (the mult of R).(xx*yy,vv)
      .= xx*yy*vv
      .= xx*(yy*vv) by GROUP_1:def 4
      .= (the mult of R).(xx,yy*vv)
-     .= (the mult of R).[xx,yy*vv] by BINOP_1:def 1
+     .= (the mult of R).[xx,yy*vv]
      .= (the mult of R).[xx,(the mult of R).(yy,vv)]
-     .= (the mult of R).[xx,(the mult of R).[y,v]] by BINOP_1:def 1
+     .= (the mult of R).[xx,(the mult of R).[y,v]]
      .= (the mult of R).[xx,lm.[y,v]] by A20,FUNCT_1:72
-     .= (the mult of R).[xx,lm.(y,v)] by BINOP_1:def 1
+     .= (the mult of R).[xx,lm.(y,v)]
      .= (the mult of R).[x,y*v]
      .= lm.[x,y*v] by A19,FUNCT_1:72
-     .= lm.(x,y*v) by BINOP_1:def 1
+     .= lm.(x,y*v)
      .= x*(y*v);
         1.R in center R by Th20; then 1.R in ccR by RLVECT_1:def 1;
      then 1.R in ccR;
    then A23: [1. R,vv] in [:ccR, ccs:] by ZFMISC_1:def 2;
      thus (1.cR)*v = lm.(1.cR,v)
-     .= lm.(1.R,vv) by Lm20
-     .= lm.[1.R,vv] by BINOP_1:def 1
+     .= lm.(1.R,vv) by Lm2
+     .= lm.[1.R,vv]
      .= (the mult of R).[1.R,vv] by A23,FUNCT_1:72
-     .= (the mult of R).(1.R,vv) by BINOP_1:def 1
+     .= (the mult of R).(1.R,vv)
      .= (1.R)*vv
      .= v by VECTSP_1:def 19;
    end;
 A24: Vos is add-associative proof let u,v,w be Element of cV;
      reconsider uu=u,vv=v, ww=w as Element of ccs;
-    thus (u + v) + w = aV.(u+v,w) by RLVECT_1:5
-        .= ac.(ac.(uu,vv),ww) by RLVECT_1:5     .= ac.(uu+vv,ww) by RLVECT_1:5
-        .= uu+vv+ww by RLVECT_1:5         .= uu+(vv+ww) by RLVECT_1:def 6
-        .= ac.(uu,vv+ww) by RLVECT_1:5        .= aV.(u,aV.(v,w)) by RLVECT_1:5
-        .= aV.(u,v+w) by RLVECT_1:5        .= u + (v + w) by RLVECT_1:5;
+    thus (u + v) + w = aV.(u+v,w)
+        .= ac.(ac.(uu,vv),ww)     .= ac.(uu+vv,ww)
+        .= uu+vv+ww         .= uu+(vv+ww) by RLVECT_1:def 6
+        .= ac.(uu,vv+ww)        .= aV.(u,aV.(v,w))
+        .= aV.(u,v+w)        .= u + (v + w);
    end;
 A25: Vos is right_zeroed proof let v be Element of cV;
      reconsider vv = v as Element of ccs;
-    thus v + 0.Vos = aV.(v,0.Vos) by RLVECT_1:5
+    thus v + 0.Vos = aV.(v,0.Vos)
      .= ac.(vv,Zc) .= ac.(vv,0.R)
-     .= vv+0.R by RLVECT_1:5 .= v by RLVECT_1:def 7;
+     .= vv+0.R .= v by RLVECT_1:def 7;
    end;
 A26: Vos is right_complementable proof let v be Element of cV;
      reconsider vv = v as Element of ccs;
      consider ww being Element of ccs such that
    A27: vv + ww = 0.R by RLVECT_1:def 8;
      reconsider w = ww as Element of cV;
-        v+w = ac.(vv,ww) by RLVECT_1:5 .= 0.R by A27,RLVECT_1:5
+        v+w = ac.(vv,ww) .= 0.R by A27
         .= Zc   .= 0.Vos;
      hence ex w being Element of cV st v + w = 0.Vos;
    end;
    Vos is Abelian proof let v,w be Element of cV;
      reconsider vv = v, ww = w as Element of ccs;
-    thus v+w = ac.(vv,ww) by RLVECT_1:5 .= ww + vv by RLVECT_1:5
-            .= aV.(w,v) by RLVECT_1:5 .= w+v by RLVECT_1:5;
+    thus v+w = ac.(vv,ww) .= ww + vv by RLVECT_1:5
+            .= aV.(w,v) .= w+v;
    end;
    hence thesis by A11,A24,A25,A26;
   end;
@@ -2379,7 +2368,7 @@ definition let R be Skew-Field, s be Element of R;
      reconsider x1 as Element of R by A1,A9;
      reconsider x2 as Element of R by A2,A10;
         lm.x = (the mult of R).x by A8,FUNCT_1:72
-     .= (the mult of R).(x1,x2) by A11,BINOP_1:def 1
+     .= (the mult of R).(x1,x2) by A11
      .= x1*x2;
     hence lm.x in ccs by A9,A10,Th27;
    end;
@@ -2396,9 +2385,9 @@ A12: Vos is VectSp-like proof
      then reconsider xx=x, yy=y as Element of R by A1;
      v in ccs & w in ccs;
      then reconsider vv=v, ww=w as Element of R by A2;
-   A13: the mult of cR =  (the mult of R) | [:ccR,ccR:] by Def4;
-   A14: the add of cR = (the add of R) | [:ccR,ccR:] by Def4;
-   A15: the add of cs = (the add of R) | [:ccs,ccs:] by Def5;
+   A13: the mult of cR =  (the mult of R)||ccR by Def4;
+   A14: the add of cR = (the add of R)||ccR by Def4;
+   A15: the add of cs = (the add of R)||ccs by Def5;
    A16: [x*v,x*w] in [:ccs,ccs:] by ZFMISC_1:def 2;
    A17: [x,w] in [:ccR,ccs:] by ZFMISC_1:def 2;
    A18: [x,v+w] in [:ccR,ccs:] by ZFMISC_1:def 2;
@@ -2412,107 +2401,107 @@ A12: Vos is VectSp-like proof
    A26: [x*y,v] in [:ccR,ccs:] by ZFMISC_1:def 2;
    A27: [x,y] in [:ccR,ccR:] by ZFMISC_1:def 2;
      thus x*(v+w) = lm.(x,v+w)
-     .= lm.[x,v+w] by BINOP_1:def 1
+     .= lm.[x,v+w]
      .= (the mult of R).[x,v+w] by A18,FUNCT_1:72
      .= (the mult of R).[x,aV.[v,w]]
      .= (the mult of R).[x,(the add of R).[vv,ww]] by A15,A19,FUNCT_1:72
      .= (the mult of R).[x,vv+ww]
-     .= (the mult of R).(xx,vv+ww) by BINOP_1:def 1
+     .= (the mult of R).(xx,vv+ww)
      .= xx*(vv+ww)
      .= xx*vv+xx*ww by VECTSP_1:def 11
      .= (the add of R).[xx*vv,xx*ww]
      .= (the add of R).[(the mult of R).(xx,vv),xx*ww]
-     .= (the add of R).[(the mult of R).[xx,vv],xx*ww] by BINOP_1:def 1
+     .= (the add of R).[(the mult of R).[xx,vv],xx*ww]
      .= (the add of R).[lm.[x,v],xx*ww] by A22,FUNCT_1:72
-     .= (the add of R).[lm.(x,v),xx*ww] by BINOP_1:def 1
+     .= (the add of R).[lm.(x,v),xx*ww]
      .= (the add of R).[x*v,xx*ww]
      .= (the add of R).[x*v,(the mult of R).(xx,ww)]
-     .= (the add of R).[x*v,(the mult of R).[xx,ww]] by BINOP_1:def 1
+     .= (the add of R).[x*v,(the mult of R).[xx,ww]]
      .= (the add of R).[x*v,lm.[x,w]] by A17,FUNCT_1:72
-     .= (the add of R).[x*v,lm.(x,w)] by BINOP_1:def 1
+     .= (the add of R).[x*v,lm.(x,w)]
      .= (the add of R).[x*v,x*w]
      .= ac.[x*v,x*w] by A15,A16,FUNCT_1:72
      .= x*v+x*w;
      thus (x+y)*v = lm.(x+y,v)
-     .= lm.[x+y,v] by BINOP_1:def 1
+     .= lm.[x+y,v]
      .= (the mult of R).[x+y,vv] by A23,FUNCT_1:72
      .= (the mult of R).[(the add of cR).[x,y],vv]
      .= (the mult of R).[(the add of R).[xx,yy],vv] by A14,A27,FUNCT_1:72
      .= (the mult of R).[xx+yy,vv]
-     .= (the mult of R).(xx+yy,vv) by BINOP_1:def 1
+     .= (the mult of R).(xx+yy,vv)
      .= (xx+yy)*vv
      .= xx*vv+yy*vv by VECTSP_1:def 12
      .= (the add of R).[xx*vv,yy*vv]
      .= (the add of R).[(the mult of R).(xx,vv),yy*vv]
-     .= (the add of R).[(the mult of R).[xx,vv],yy*vv] by BINOP_1:def 1
+     .= (the add of R).[(the mult of R).[xx,vv],yy*vv]
      .= (the add of R).[lm.[x,v],yy*vv] by A22,FUNCT_1:72
-     .= (the add of R).[lm.(x,v),yy*vv] by BINOP_1:def 1
+     .= (the add of R).[lm.(x,v),yy*vv]
      .= (the add of R).[x*v,yy*vv]
      .= (the add of R).[x*v,(the mult of R).(yy,vv)]
-     .= (the add of R).[x*v,(the mult of R).[yy,vv]] by BINOP_1:def 1
+     .= (the add of R).[x*v,(the mult of R).[yy,vv]]
      .= (the add of R).[x*v,lm.[y,v]] by A21,FUNCT_1:72
-     .= (the add of R).[x*v,lm.(y,v)] by BINOP_1:def 1
+     .= (the add of R).[x*v,lm.(y,v)]
      .= (the add of R).[x*v,y*v]
      .= ac.[x*v,y*v] by A15,A20,FUNCT_1:72
      .= x*v+y*v;
      thus (x*y)*v = lm.(x*y,v)
-     .= lm.[x*y,v] by BINOP_1:def 1
+     .= lm.[x*y,v]
      .= (the mult of R).[x*y,vv] by A26,FUNCT_1:72
      .= (the mult of R).[(the mult of cR).(x,y),vv]
-     .= (the mult of R).[(the mult of cR).[x,y],vv] by BINOP_1:def 1
+     .= (the mult of R).[(the mult of cR).[x,y],vv]
      .= (the mult of R).[(the mult of R).[xx,yy],vv] by A13,A27,FUNCT_1:72
-     .= (the mult of R).[(the mult of R).(xx,yy),vv] by BINOP_1:def 1
+     .= (the mult of R).[(the mult of R).(xx,yy),vv]
      .= (the mult of R).[xx*yy,vv]
-     .= (the mult of R).(xx*yy,vv) by BINOP_1:def 1
+     .= (the mult of R).(xx*yy,vv)
      .= xx*yy*vv
      .= xx*(yy*vv) by GROUP_1:def 4
      .= (the mult of R).(xx,yy*vv)
-     .= (the mult of R).[xx,yy*vv] by BINOP_1:def 1
+     .= (the mult of R).[xx,yy*vv]
      .= (the mult of R).[xx,(the mult of R).(yy,vv)]
-     .= (the mult of R).[xx,(the mult of R).[y,v]] by BINOP_1:def 1
+     .= (the mult of R).[xx,(the mult of R).[y,v]]
      .= (the mult of R).[xx,lm.[y,v]] by A25,FUNCT_1:72
-     .= (the mult of R).[xx,lm.(y,v)] by BINOP_1:def 1
+     .= (the mult of R).[xx,lm.(y,v)]
      .= (the mult of R).[x,y*v]
      .= lm.[x,y*v] by A24,FUNCT_1:72
-     .= lm.(x,y*v) by BINOP_1:def 1
+     .= lm.(x,y*v)
      .= x*(y*v);
         1.R in center R by Th20; then 1.R in ccR by RLVECT_1:def 1;
      then A28: [1.R,vv] in [:ccR, ccs:] by ZFMISC_1:def 2;
      thus (1.cR)*v = lm.(1.cR,v)
-     .= lm.(1.R,vv) by Lm20
-     .= lm.[1.R,vv] by BINOP_1:def 1
+     .= lm.(1.R,vv) by Lm2
+     .= lm.[1.R,vv]
      .= (the mult of R).[1.R,vv] by A28,FUNCT_1:72
-     .= (the mult of R).(1.R,vv) by BINOP_1:def 1
+     .= (the mult of R).(1.R,vv)
      .= (1.R)*vv
      .= v by VECTSP_1:def 19;
    end;
 A29: Vos is add-associative proof let u,v,w be Element of cV;
      reconsider uu=u,vv=v, ww=w as Element of ccs;
-    thus (u + v) + w = aV.(u+v,w) by RLVECT_1:5
-        .= ac.(ac.(uu,vv),ww) by RLVECT_1:5     .= ac.(uu+vv,ww) by RLVECT_1:5
-        .= uu+vv+ww by RLVECT_1:5         .= uu+(vv+ww) by RLVECT_1:def 6
-        .= ac.(uu,vv+ww) by RLVECT_1:5        .= aV.(u,aV.(v,w)) by RLVECT_1:5
-        .= aV.(u,v+w) by RLVECT_1:5        .= u + (v + w) by RLVECT_1:5;
+    thus (u + v) + w = aV.(u+v,w)
+        .= ac.(ac.(uu,vv),ww)     .= ac.(uu+vv,ww)
+        .= uu+vv+ww         .= uu+(vv+ww) by RLVECT_1:def 6
+        .= ac.(uu,vv+ww)        .= aV.(u,aV.(v,w))
+        .= aV.(u,v+w)        .= u + (v + w);
    end;
 A30: Vos is right_zeroed proof let v be Element of cV;
      reconsider vv = v as Element of ccs;
-    thus v + 0.Vos = aV.(v,0.Vos) by RLVECT_1:5
+    thus v + 0.Vos = aV.(v,0.Vos)
      .= ac.(vv,Zc) .= ac.(vv,0.cs)
-     .= vv+0.cs by RLVECT_1:5 .= v by RLVECT_1:def 7;
+     .= vv+0.cs .= v by RLVECT_1:def 7;
    end;
 A31: Vos is right_complementable proof let v be Element of cV;
      reconsider vv = v as Element of ccs;
      consider ww being Element of ccs such that
    A32: vv + ww = 0.cs by RLVECT_1:def 8;
      reconsider w = ww as Element of cV;
-        v+w = ac.(vv,ww) by RLVECT_1:5 .= 0.cs by A32,RLVECT_1:5
+        v+w = ac.(vv,ww) .= 0.cs by A32
         .= Zc   .= 0.Vos;
      hence ex w being Element of cV st v + w = 0.Vos;
    end;
    Vos is Abelian proof let v,w be Element of cV;
      reconsider vv = v, ww = w as Element of ccs;
-    thus v+w = ac.(vv,ww) by RLVECT_1:5 .= ww + vv by RLVECT_1:5
-            .= aV.(w,v) by RLVECT_1:5 .= w+v by RLVECT_1:5;
+    thus v+w = ac.(vv,ww) .= ww + vv by RLVECT_1:5
+            .= aV.(w,v) .= w+v;
    end;
    hence thesis by A12,A29,A30,A31;
   end;
@@ -2815,85 +2804,81 @@ then A65: (q |^ n) - 1 = Sum c2 + (q - 1) by A3,A51,A64,RVSUM_1:105;
     reconsider nataq1 = abs(q-1) as Nat;
        (q |^ n) <> 0 by PREPOWER:12; then (q |^ n) > 0 by NAT_1:19;
     then (q |^ n)+1 > 0+1 by XREAL_1:10; then (q |^ n) >= 1 by NAT_1:38;
-    then A67: (q |^ n) +- 1 >= 1 +- 1 by XREAL_1:9;
+    then A66: (q |^ n) +- 1 >= 1 +- 1 by XREAL_1:9;
     then reconsider qn1=((q |^ n) - 1) as Nat by INT_1:16;
        pnq divides (q |^ n) - 1 by UNIROOTS:62;
     then abspnq divides abs((q |^ n) - 1) by INT_2:21;
-then A68: abspnq divides qn1 by A67,ABSVALUE:def 1;
+then A67: abspnq divides qn1 by A66,ABSVALUE:def 1;
        for i being Nat st i in dom c2 holds abspnq divides c2/.i proof
-     let i be Nat such that A69: i in dom c2;
-            c2.i = Card (f2.i) by A52,A53,A69;
-    then A70: c2/.i = Card (f2.i) by A69,FINSEQ_4:def 4;
-    A71: i in dom f2 by A52,A69,FINSEQ_3:31;
+     let i be Nat such that A68: i in dom c2;
+            c2.i = Card (f2.i) by A52,A53,A68;
+    then A69: c2/.i = Card (f2.i) by A68,FINSEQ_4:def 4;
+    A70: i in dom f2 by A52,A68,FINSEQ_3:31;
          then f2.i in conjugate_Classes Rs \ A by A33,FUNCT_1:12;
          then f2.i in conjugate_Classes Rs & not f2.i in A by XBOOLE_0:def 4;
          then consider a being Element of cRs such that
-    A72: con_class a = f2.i by Th14;
+    A71: con_class a = f2.i by Th14;
         reconsider a as Element of Rs;
         reconsider s=a as Element of R by UNIROOTS:22;
         set ns = dim VectSp_over_center s; set ca = card con_class a;
         set oa = ord Centralizer a;
-    A73: ord Rs = ca * oa + 0 by Th13;
-           oa <> 0 by GROUP_1:90; then A74: 0 < oa by NAT_1:19;
-        then A75: (ord Rs) div oa = ca by A73,NAT_1:def 1;
-    A76: qn1 div oa = ca by A3,A73,A74,NAT_1:def 1;
+    A72: ord Rs = ca * oa + 0 by Th13;
+           oa <> 0 by GROUP_1:90; then A73: 0 < oa by NAT_1:19;
+        then A74: (ord Rs) div oa = ca by A72,NAT_1:def 1;
+    A75: qn1 div oa = ca by A3,A72,A73,NAT_1:def 1;
            (q |^ ns) <> 0 by PREPOWER:12; then (q |^ ns) > 0 by NAT_1:19;
         then (q |^ ns)+1 > 0+1 by XREAL_1:10; then (q |^ ns) >= 1 by NAT_1:38;
         then (q |^ ns) +- 1 >= 1 +- 1 by XREAL_1:9;
         then reconsider qns1=(q |^ ns - 1) as Nat by INT_1:16;
-        A77: oa = (card the carrier of (centralizer s)) - 1 by Th31
+        A76: oa = (card the carrier of (centralizer s)) - 1 by Th31
           .= qns1 by Th34;
-    A78: (qn1 qua Integer) div qns1 = qn1 div qns1 by SCMFSA9A:5;
-    A79: qn1 div qns1 >= 0 by NAT_1:18;
+    A77: (qn1 qua Integer) div qns1 = qn1 div qns1 by NEWTON:101;
+    A78: qn1 div qns1 >= 0 by NAT_1:18;
         reconsider ns as non empty Nat by Th35;
-    A80: ns divides n by Th37;
-    then A81: ns <= n by A7,NAT_1:54;
-           now assume A82: ns = n;
-             now assume qn1 = 0; then q |^ n - 1 + 1 = 0+1;
-            then q |^ n = 1;
-           hence contradiction by A4,A7,PEPIN:26;
-          end;
-        then A83: Card (f2.i) = 1 by A3,A72,A75,A77,A82,NAT_2:5;
-               f2.i in B by A33,A71,FUNCT_1:12;
+    A79: ns divides n by Th37;
+    then A80: ns <= n by A7,NAT_1:54;
+           now assume A81: ns = n;
+        qn1 <> 0 by A4,A7,PEPIN:26;
+        then A82: Card (f2.i) = 1 by A3,A71,A74,A76,A81,NAT_2:5;
+               f2.i in B by A33,A70,FUNCT_1:12;
         then f2.i in conjugate_Classes Rs & not f2.i in A by XBOOLE_0:def 4;
-         hence contradiction by A83;
+         hence contradiction by A82;
         end;
-        then ns < n by A81,REAL_1:def 5;
-        then pnq divides ((qn1 qua Integer) div qns1) by A80,UNIROOTS:63;
-        then abspnq divides abs(qn1 div qns1) by A78,INT_2:21;
-     hence thesis by A70,A72,A76,A77,A79,ABSVALUE:def 1;
+        then ns < n by A80,REAL_1:def 5;
+        then pnq divides ((qn1 qua Integer) div qns1) by A79,UNIROOTS:63;
+        then abspnq divides abs(qn1 div qns1) by A77,INT_2:21;
+     hence thesis by A69,A71,A75,A76,A78,ABSVALUE:def 1;
     end;
     then abspnq divides Sum c2 by Th5;
-then A84: abspnq divides natq1 by A65,A68,NAT_1:57;
+then A83: abspnq divides natq1 by A65,A67,NAT_1:57;
        abspnq > q - 1 by A4,A10,UNIROOTS:64;
- hence contradiction by A6,A84,NAT_1:54;
+ hence contradiction by A6,A83,NAT_1:54;
 end;
 
 theorem
-  for R being Skew-Field holds 1.center R = 1.R by Lm20;
+  for R being Skew-Field holds 1.center R = 1.R by Lm2;
 
-Lm22: now let R be Skew-Field; let s be Element of R;
+Lm3: now let R be Skew-Field; let s be Element of R;
    set F = centralizer s;
    let x, e be Element of F;
    assume
-A92:   e = 1.R;
-A91: [x,e] in [:the carrier of F,the carrier of F:] by ZFMISC_1:106;
-A93: [e,x] in [:the carrier of F,the carrier of F:] by ZFMISC_1:106;
-A1:  the carrier of F c= the carrier of R by Th24;
+A1:   e = 1.R;
+A2: [x,e] in [:the carrier of F,the carrier of F:] by ZFMISC_1:106;
+A3: [e,x] in [:the carrier of F,the carrier of F:] by ZFMISC_1:106;
+A4:  the carrier of F c= the carrier of R by Th24;
    x in the carrier of F;
-   then reconsider y=x as Element of R by A1;
-A2: the mult of F =
-       (the mult of R) | [:the carrier of F,the carrier of F:] by Def5;
+   then reconsider y=x as Element of R by A4;
+A5: the mult of F = (the mult of R)||the carrier of F by Def5;
   thus x*e = (the mult of F).(x,e)
-  .= (the mult of F).[x,e] by BINOP_1:def 1
-  .= (the mult of R).[x,e] by A2,A91,FUNCT_1:72
-  .= (the mult of R).(x,1.R) by A92,BINOP_1:def 1
+  .= (the mult of F).[x,e]
+  .= (the mult of R).[x,e] by A5,A2,FUNCT_1:72
+  .= (the mult of R).(x,1.R) by A1
   .= y*1.R
   .= x by GROUP_1:def 5;
   thus e*x = (the mult of F).(e,x)
-  .= (the mult of F).[e,x] by BINOP_1:def 1
-  .= (the mult of R).[e,x] by A2,A93,FUNCT_1:72
-  .= (the mult of R).(1.R,x) by A92,BINOP_1:def 1
+  .= (the mult of F).[e,x]
+  .= (the mult of R).[e,x] by A5,A3,FUNCT_1:72
+  .= (the mult of R).(1.R,x) by A1
   .= 1.R*y
   .= x by GROUP_1:def 5;
 end;
@@ -2904,6 +2889,6 @@ proof
   let R be Skew-Field;
   let s be Element of R;
   reconsider e = 1.R as Element of centralizer s by Def5;
-  for x being Element of centralizer s holds x*e=x & e*x=x by Lm22;
+  for x being Element of centralizer s holds x*e=x & e*x=x by Lm3;
   hence thesis by GROUP_1:def 5;
 end;

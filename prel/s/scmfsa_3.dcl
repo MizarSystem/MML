@@ -37,32 +37,32 @@
 <Cluster/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="55"/>
-<Func kind="K" nr="240">
+<Func kind="K" nr="241">
 <Func kind="K" nr="55"/>
 </Func>
 </Func>
-<Func kind="K" nr="242"/>
+<Func kind="K" nr="243"/>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="56">
+<Adjective nr="57">
 <Func kind="K" nr="2">
 <Func kind="K" nr="55"/>
-<Func kind="K" nr="240">
+<Func kind="K" nr="241">
 <Func kind="K" nr="55"/>
 </Func>
 </Func>
-<Func kind="K" nr="242"/>
+<Func kind="K" nr="243"/>
 </Adjective>
-<Adjective nr="60" value="false">
+<Adjective nr="61" value="false">
 <Func kind="K" nr="2">
 <Func kind="K" nr="55"/>
-<Func kind="K" nr="240">
+<Func kind="K" nr="241">
 <Func kind="K" nr="55"/>
 </Func>
 </Func>
-<Func kind="K" nr="242"/>
+<Func kind="K" nr="243"/>
 </Adjective>
 </Cluster>
 </RCluster>

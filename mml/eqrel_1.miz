@@ -31,7 +31,7 @@ begin
 :: Equivalence Relation and its properties
 
 definition let X;
-  func nabla X -> Relation of X equals  :Def1:
+  func nabla X -> Relation of X equals
     [:X,X:];
   coherence by RELSET_1:def 1;
 end;
@@ -45,14 +45,14 @@ registration let X;
     proof let x be set;
      assume x in X;
       then [x,x] in [:X,X:] by ZFMISC_1:106;
-      then [x,x] in nabla X by Def1;
+      then [x,x] in nabla X;
      hence x in dom nabla X by RELAT_1:def 4;
     end;
    let x;
    assume x in field nabla X;
     then x in dom nabla X \/ rng nabla X by RELAT_1:def 6;
     then [x,x] in [:X,X:] by ZFMISC_1:106;
-   hence [x,x] in nabla X by Def1;
+   hence [x,x] in nabla X;
  end;
 end;
 
@@ -71,7 +71,7 @@ coherence
  end;
 end;
 
-Th1: i < j implies j - i is Nat by NAT_1:61;
+Lm1: i < j implies j - i is Nat by NAT_1:61;
 
 canceled 3;
 
@@ -81,12 +81,7 @@ id X is_transitive_in X
   proof
     thus for x st x in X holds [x,x] in id X by RELAT_1:def 10;
     thus for x,y st x in X & y in X & [x,y] in id X holds
-    [y,x] in id X
-    proof let x,y;
-      assume x in X & y in X & [x,y] in id X;
-      then y in X & x in X & y = x by RELAT_1:def 10;
-      hence thesis by RELAT_1:def 10;
-   end;
+    [y,x] in id X by RELAT_1:def 10;
    thus for x,y,z st x in X & y in X & z in X & [x,y] in id X &
    [y,z] in id X holds [x,z] in id X by RELAT_1:def 10;
   end;
@@ -104,21 +99,20 @@ theorem
 theorem Th7:
   nabla X is Equivalence_Relation of X
  proof
-A1: nabla X = [:X,X:] by Def1;
-A2: nabla X is_symmetric_in X
+A1: nabla X is_symmetric_in X
    proof
     for x,y holds x in X & y in X & [x,y] in nabla X implies
-      [y,x] in nabla X by A1,ZFMISC_1:107;
+      [y,x] in nabla X by ZFMISC_1:107;
     hence thesis by RELAT_2:def 3;
    end;
-A3: nabla X is_transitive_in X
+A2: nabla X is_transitive_in X
    proof
        for x,y,z st x in X & y in X & z in X & [x,y] in nabla X &
-    [y,z] in nabla X holds [x,z] in nabla X by A1,ZFMISC_1:106;
+    [y,z] in nabla X holds [x,z] in nabla X by ZFMISC_1:106;
     hence thesis by RELAT_2:def 8;
    end;
      field nabla X = X by ORDERS_1:97;
-   hence thesis by A2,A3,RELAT_2:def 11,def 16;
+   hence thesis by A1,A2,RELAT_2:def 11,def 16;
  end;
 
 registration let X;
@@ -128,7 +122,7 @@ end;
 
  reserve EqR,EqR1,EqR2,EqR3 for Equivalence_Relation of X;
 
-Lm1: [x,y] in R implies x in X & y in X
+Lm2: [x,y] in R implies x in X & y in X
   proof
    assume [x,y] in R;
     then x in dom R & y in rng R by RELAT_1:20;
@@ -154,7 +148,7 @@ theorem Th12:
     let R be total symmetric Relation of X;
 A1: field R = X by ORDERS_1:97;
    assume [x,y] in R;
-   then A2: x in X & y in X & [x,y] in R by Lm1;
+   then A2: x in X & y in X & [x,y] in R by Lm2;
     R is_symmetric_in X by A1,RELAT_2:def 11;
    hence thesis by A2,RELAT_2:def 3;
   end;
@@ -166,7 +160,7 @@ theorem Th13:
     let R be total transitive Relation of X;
 A1: field R = X by ORDERS_1:97;
    assume [x,y] in R & [y,z] in R;
-   then A2: x in X & y in X & z in X & [x,y] in R & [y,z] in R by Lm1;
+   then A2: x in X & y in X & z in X & [x,y] in R & [y,z] in R by Lm2;
     R is_transitive_in X by A1,RELAT_2:def 16;
    hence thesis by A2,RELAT_2:def 8;
   end;
@@ -221,11 +215,8 @@ proof
  hence thesis by XBOOLE_1:28;
 end;
 
-theorem Th18:
-  nabla X /\ R = R
-proof
-  [:X,X:] = nabla X by Def1; hence thesis by XBOOLE_1:28;
-end;
+theorem
+  nabla X /\ R = R by XBOOLE_1:28;
 
 theorem Th19:
   for SFXX st (SFXX <> {} & for Y st Y in SFXX
@@ -275,8 +266,7 @@ theorem Th20:
   defpred P[set] means $1 is Equivalence_Relation of X & R c= $1;
   consider F being Subset-Family of [:X,X:] such that
 A1: for AX holds AX in F iff P[AX] from SUBSET_1:sch 3;
-  nabla X /\ R = R by Th18;
-  then R c= nabla X by XBOOLE_1:17;
+  R c= nabla X;
   then A2: F <> {} by A1;
   for Y st Y in F holds Y is Equivalence_Relation of X by A1;
   then reconsider EqR = meet F as Equivalence_Relation of X by A2,Th19;
@@ -376,7 +366,7 @@ end;
 definition let X be set,
                R be Tolerance of X,
                x be set;
-  func Class(R,x) -> Subset of X equals :Def4:
+  func Class(R,x) -> Subset of X equals
     R.:{x};
   correctness;
 end;
@@ -391,7 +381,7 @@ theorem Th27:
   thus y in Class(R,x) implies [y,x] in R
   proof
     assume y in Class(R,x);
-    then y in R.:{x} by Def4;
+    then y in R.:{x};
      then ex z being set st [z,y] in R & z in {x} by RELAT_1:def 13;
     then [x,y] in R by TARSKI:def 1;
     hence [y,x] in R by Th12;
@@ -400,7 +390,7 @@ theorem Th27:
   then A1: [x,y] in R by Th12;
    x in {x} by TARSKI:def 1;
   then y in R.:{x} by A1,RELAT_1:def 13;
-  hence thesis by Def4;
+  hence thesis;
  end;
 
 theorem Th28:
@@ -522,7 +512,7 @@ for x st x in X holds Class(nabla X,x) = X
 proof let x such that A1: x in X;
     now let y; assume y in X;
   then [y,x] in [:X,X:] by A1,ZFMISC_1:106;
-  then [y,x] in nabla X by Def1;
+  then [y,x] in nabla X;
   hence y in Class(nabla X,x) by Th27;
  end;
  then for y holds y in X iff y in Class(nabla X,x);
@@ -541,7 +531,7 @@ proof
  end;
  then [:X,X:] c= EqR by ZFMISC_1:109;
  then [:X,X:] = EqR by XBOOLE_0:def 10;
- hence thesis by Def1;
+ hence thesis;
 end;
 
 theorem
@@ -602,7 +592,7 @@ FINSEQ_1:57;
      then (j + 1) in Seg(len f) by A19,FINSEQ_1:3;
     then A20: g.(j + 1) = f.((len f) + 1 - (1 + j)) by A12
                  .= f.((len f) - j);
-    reconsider k = (len f) - j as Nat by A13,A17,Th1;
+    reconsider k = (len f) - j as Nat by A13,A17,Lm1;
        j - (len f) < (len f) - (len f) by A13,A17,XREAL_1:11;
     then - ((len f) - j) < - 0;
     then 0 < k by XREAL_1:26;
@@ -671,7 +661,7 @@ A23:    Y is_transitive_in X
       then A40: h.(i + 1) = g.(1 + i - len f) by FINSEQ_1:36
                    .= g.((i - len f) + 1);
         1 <= len f & len f < i by A25,A39,NAT_1:38;
-     then reconsider k = i - len f as Nat by Th1;
+     then reconsider k = i - len f as Nat by Lm1;
    (1 + len f - len f <= i - len f & i < len f + len g) by A39,FINSEQ_1:35
 ,XREAL_1:11;
      then (1 <= i - len f & i - len f < len g) by XREAL_1:21;
@@ -689,7 +679,7 @@ A23:    Y is_transitive_in X
      for x,y holds [x,y] in EqR1 \/ EqR2 implies [x,y] in R1
   proof let x,y;
    assume A41: [x,y] in EqR1 \/ EqR2;
-   then A42: x in X & y in X by Lm1;
+   then A42: x in X & y in X by Lm2;
    set g = <*x,y*>;
    A43: len g = 2 by FINSEQ_1:61;
    A44:len g = 1 + 1 by FINSEQ_1:61;
@@ -727,7 +717,7 @@ given f being FinSequence such that A48: 1 <= len f &
       assume A52: 1 <= i + 1 & i + 1 <= len f;
       then A53: i < len f by NAT_1:38;
          1 <= i or 1 = i + 1 by A52,NAT_1:26;
-then A54:      1 <= i or 1 - 1 = i by XCMPLX_1:26;
+then A54:      1 <= i or 1 - 1 = i;
       A55: EqR1 \/ EqR2 c= EqR1 "\/" EqR2 by Def3;
           now per cases by A54;
         suppose A56: 1 <= i;
@@ -805,7 +795,7 @@ proof
  assume A1: EqR1 \/ EqR2 = nabla X;
  A2: now assume X = {};
      then [:X,X:] = {} by ZFMISC_1:113;
-      then nabla X = {} by Def1;
+      then nabla X = {};
      hence EqR1 = nabla X or EqR2 = nabla X by A1,XBOOLE_1:15;
     end;
     (not X = {}) implies EqR1 = nabla X or EqR2 = nabla X

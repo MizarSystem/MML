@@ -63,12 +63,10 @@ theorem :: FINSEQ_1:8
   Seg a = Seg b implies a = b;
 
 theorem :: FINSEQ_1:9
-   c <= a implies
-    Seg c = Seg c /\ Seg a & Seg c = Seg a /\ Seg c;
+   c <= a implies Seg c = Seg a /\ Seg c;
 
 theorem :: FINSEQ_1:10
-     (Seg c = Seg c /\ Seg a or Seg c = Seg a /\ Seg c )
-    implies c <= a;
+ Seg c = Seg c /\ Seg a implies c <= a;
 
 theorem :: FINSEQ_1:11
     Seg a \/ { a+1 } = Seg (a+1);
@@ -326,18 +324,14 @@ end;
 
 registration let x,y;
   cluster <*x,y*> -> Function-like Relation-like;
-
   let z;
   cluster <*x,y,z*> -> Function-like Relation-like;
-
 end;
 
 registration let x,y;
   cluster <*x,y*> -> FinSequence-like;
-
   let z;
   cluster <*x,y,z*> -> FinSequence-like;
-
 end;
 
 canceled;
@@ -544,10 +538,15 @@ scheme :: FINSEQ_1:sch 5
 reserve D for set, p for FinSequence of D,
         m for natural number;
 
-definition let D, p, m;
- func p|m -> FinSequence of D equals
+definition let p be FinSequence; let m;
+ func p|m -> FinSequence equals
 :: FINSEQ_1:def 15
    p|Seg m;
+end;
+
+definition let D,p,m;
+ redefine
+ func p|m -> FinSequence of D;
 end;
 
 registration let D be set, f be FinSequence of D;
@@ -555,10 +554,10 @@ registration let D be set, f be FinSequence of D;
 end;
 
 theorem :: FINSEQ_1:79
-    len p <= m implies p|m = p;
+    len q <= i implies q|i = q;
 
 theorem :: FINSEQ_1:80
- m <= len p implies len(p|m) = m;
+ i <= len q implies len(q|i) = i;
 
 :: from FSM_1
 
@@ -597,3 +596,17 @@ registration
   let f be finite Function, x be set;
   cluster f"x -> finite;
 end;
+
+:: from SCMFSA_7, 2005.11.21, A.T.
+
+theorem :: FINSEQ_1:84
+ for p,q being FinSequence st
+     p c= q holds len p <= len q;
+
+theorem :: FINSEQ_1:85
+ for p,q being FinSequence, i being Nat st
+     1 <= i & i <= len p holds (p ^ q).i = p.i;
+
+theorem :: FINSEQ_1:86
+ for p,q being FinSequence, i being Nat st
+     1 <= i & i <= len q holds (p ^ q).(len p + i) = q.i;

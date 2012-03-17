@@ -278,8 +278,7 @@ theorem Th13:
  proof assume
 A1:  p in L~f;
   set X = { LSeg(f,i) : 1 <= i & i+1 <= len f};
-     L~f = union X;
-  then consider Y being set such that
+  consider Y being set such that
 A2:  p in Y and
 A3:  Y in X by A1,TARSKI:def 4;
      ex i st Y = LSeg(f,i) & 1 <= i & i+1 <= len f by A3;
@@ -765,7 +764,7 @@ then A10: 1 <= n+i by A3,XREAL_1:2;
  end;
 
 registration let f be unfolded FinSequence of TOP-REAL 2, n;
- cluster f|n -> unfolded;
+ cluster f|n -> unfolded FinSequence of TOP-REAL 2;
   coherence by Lm3;
  cluster f/^n -> unfolded;
   coherence by Lm4;
@@ -1202,7 +1201,7 @@ then A10: LSeg(f,n+i) misses LSeg(f,n+j) by A1,TOPREAL1:def 9;
  end;
 
 registration let f be s.n.c. FinSequence of TOP-REAL 2, n;
-  cluster f|n -> s.n.c.;
+  cluster f|n -> s.n.c. FinSequence of TOP-REAL 2;
    coherence by Lm7;
   cluster f/^n -> s.n.c.;
    coherence by Lm8;
@@ -1762,7 +1761,7 @@ then A8: 1 <= n+i by A3,XREAL_1:2;
  end;
 
 registration let f be special FinSequence of TOP-REAL 2, n;
- cluster f|n -> special;
+ cluster f|n -> special FinSequence of TOP-REAL 2;
   coherence by Lm11;
  cluster f/^n -> special;
   coherence by Lm12;
@@ -2328,8 +2327,7 @@ A66:     len f2' > 1 by A12,A29,A64,REAL_1:def 5;
        then consider k such that
 A67:     k+1 = len f2' by NAT_1:22;
 A68:     1 <= k by A66,A67,NAT_1:38;
-          l+1 <= len f2;
-then A69:     k+(1+1) <= len f2 by A12,A67;
+A69:     k+(1+1) <= len f2 by A12,A67;
           LSeg(f2',k) = LSeg(f2,k) by A67,Th3;
 then A70:     LSeg(f2',k) /\ LSeg(f2'/.len f2',f1'/.1) = {f2'/.len f2'}
          by A12,A37,A55,A67,A68,A69,TOPREAL1:def 8;
@@ -2350,8 +2348,7 @@ A75:     len f2' > 1 by A12,A29,A73,REAL_1:def 5;
        then consider k such that
 A76:     k+1 = len f2' by NAT_1:22;
 A77:     1 <= k by A75,A76,NAT_1:38;
-          l+1 <= len f2;
-then A78:     k+(1+1) <= len f2 by A12,A76;
+A78:     k+(1+1) <= len f2 by A12,A76;
           LSeg(f2',k) = LSeg(f2,k) by A76,Th3;
      then LSeg(f2',k) /\ LSeg(f2'/.len f2',f1'/.1) = {f2'/.len f2'}
          by A12,A37,A55,A76,A77,A78,TOPREAL1:def 8;
@@ -2782,15 +2779,12 @@ registration let r1,r2,r1',r2';
  cluster [.r1,r2,r1',r2'.] -> non empty compact;
  coherence
   proof
- [.r1,r2,r1',r2'.] =
-    ( LSeg(|[r1,r1']|,|[r1,r2']|) \/ LSeg(|[r1,r2']|,|[r2,r2']|) ) \/
-    ( LSeg(|[r2,r2']|,|[r2,r1']|) \/ LSeg(|[r2,r1']|,|[r1,r1']|) );
-   hence [.r1,r2,r1',r2'.] is non empty;
-B:  LSeg(|[r1,r1']|,|[r1,r2']|) \/ LSeg(|[r1,r2']|,|[r2,r2']|) is compact
+   thus [.r1,r2,r1',r2'.] is non empty;
+A1:  LSeg(|[r1,r1']|,|[r1,r2']|) \/ LSeg(|[r1,r2']|,|[r2,r2']|) is compact
                                         by COMPTS_1:19;
     LSeg(|[r2,r2']|,|[r2,r1']|) \/ LSeg(|[r2,r1']|,|[r1,r1']|) is compact
                                         by COMPTS_1:19;
-   hence [.r1,r2,r1',r2'.] is compact by B,COMPTS_1:19;
+   hence [.r1,r2,r1',r2'.] is compact by A1,COMPTS_1:19;
   end;
 end;
 
@@ -2812,24 +2806,24 @@ A2: r1'<=r2';
   set P3 = { p: p`1 = r2 & r1'<= p`2 & p`2 <= r2'};
   set P4 = { p: p`2 = r1'& r1 <= p`1 & p`1 <= r2 };
   set p1 = |[r1,r1']|, p2 = |[r1,r2']| , p3 = |[r2,r2']|, p4 = |[r2,r1']|;
-X: P = P1 \/ P2 \/ (P3 \/ P4)
+A3: P = P1 \/ P2 \/ (P3 \/ P4)
    proof
     hereby let x be set;
      assume x in P;
      then consider p such that
-A3:    x = p and
-A4:    p`1 = r1 & p`2 <= r2' & p`2 >= r1' or
+A4:    x = p and
+A5:    p`1 = r1 & p`2 <= r2' & p`2 >= r1' or
        p`1 <= r2 & p`1 >= r1 & p`2 = r2' or
        p`1 <= r2 & p`1 >= r1 & p`2 = r1' or
        p`1 = r2 & p`2 <= r2' & p`2 >= r1';
-        x in P1 or x in P2 or x in P3 or x in P4 by A3,A4;
+        x in P1 or x in P2 or x in P3 or x in P4 by A4,A5;
      then x in P1 \/ P2 or x in P3 \/ P4 by XBOOLE_0:def 2;
      hence x in P1 \/ P2 \/ (P3 \/ P4) by XBOOLE_0:def 2;
     end;
     let x be set;
     assume x in P1 \/ P2 \/ (P3 \/ P4);
-    then A5: x in P1 \/ P2 or x in P3 \/ P4 by XBOOLE_0:def 2;
-    per cases by A5,XBOOLE_0:def 2;
+    then A6: x in P1 \/ P2 or x in P3 \/ P4 by XBOOLE_0:def 2;
+    per cases by A6,XBOOLE_0:def 2;
      suppose x in P1;
       then ex p st x = p & p`1 = r1 & r1'<= p`2 & p`2 <= r2';
       hence x in P;
@@ -2852,7 +2846,7 @@ A4:    p`1 = r1 & p`2 <= r2' & p`2 >= r1' or
      .= P1 \/ LSeg(p2,p3) \/ (LSeg(p3,p4) \/ LSeg(p4,p1)) by A2,TOPREAL3:15
      .= P1 \/ P2 \/ (LSeg(p3,p4) \/ LSeg(p4,p1)) by A1,TOPREAL3:16
      .= P1 \/ P2 \/ (P3 \/ LSeg(p4,p1)) by A2,TOPREAL3:15
-     .= P by A1,TOPREAL3:16,X;
+     .= P by A1,TOPREAL3:16,A3;
  end;
 
 theorem Th59:

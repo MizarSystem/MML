@@ -1,0 +1,264 @@
+:: Quotient Rings
+::  by Artur Korni{\l}owicz
+:: 
+:: Received December 7, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies RING_1, EQREL_1, RELAT_2, SETWISEO, INT_1, VECTSP_1, FUNCT_1,
+      ARYTM_3, RELAT_1, RLVECT_1, ARYTM_1, BINOP_1, FUNCSDOM, LATTICES,
+      GROUP_1, FILTER_2, IDEAL_1, FILTER_0, SUBSET_1, VECTSP_2, GROUP_4, RAT_1,
+      COLLSP, WAYBEL20, PARTFUN1, ORDERS_2, WELLORD2, WELLORD1, TARSKI;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1, SUPINF_1,
+      SUPINF_2, EXTREAL1, XCMPLX_0, XREAL_0, REAL_1, INT_1, NAT_1, COMPLEX1,
+      PREPOWER, MESFUNC1, RAT_1, SETWISEO, RELAT_1, RELSET_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FUNCOP_1, ALG_1, RELAT_2, EQREL_1, WELLORD1, WELLORD2,
+      ORDERS_1, FINSEQ_1, REALSET1, BINOP_1, STRUCT_0, PRE_TOPC, GROUP_1,
+      BINOM, ALGSTR_1, RLVECT_1, VECTSP_1, VECTSP_2, FUNCSDOM, RMOD_2, IDEAL_1;
+ constructors XBOOLE_0, INT_1, SUPINF_1, FUNCT_2, STRUCT_0, VECTSP_1, BINOP_1,
+      SUPINF_2, EXTREAL1, VECTSP_2, INT_3, ALGSTR_1, GCD_1, INT_2, XCMPLX_0,
+      XREAL_0, REAL_1, FUNCOP_1, MEASURE6, GROUP_1, NAT_1, ABSVALUE, PREPOWER,
+      MESFUNC1, DOMAIN_1, REALSET1, EXTREAL2, IDEAL_1, FINSEQ_4, PRE_TOPC,
+      RMOD_2, YELLOW_9, MEMBERED, PARTFUN1, EQREL_1, SETWISEO, WELLORD2,
+      RELAT_2, YELLOW_1, WELLORD1;
+ registrations SUPINF_1, RELSET_1, VECTSP_1, INT_1, INT_3, XREAL_0, REAL_1,
+      FUNCOP_1, ALGSTR_1, VECTSP_2, GCD_1, STRUCT_0, ORDINAL2, NAT_1, FUNCT_1,
+      SUBSET_1, WAYBEL_2, XBOOLE_0, RMOD_2, XCMPLX_0, RAT_1, IDEAL_1, ZFMISC_1,
+      PRE_TOPC, BORSUK_1, BORSUK_2, PARTFUN1, FILTER_1, TEX_2, TOPS_1, NUMBERS,
+      GROUP_1, FINSET_1, FINSEQ_1, POLYNOM1, BINOM, MEMBERED, RELAT_1, FUNCT_2,
+      PRE_CIRC, FINSUB_1, ORDINAL1, QUOFIELD;
+ requirements NUMERALS, ARITHM, REAL, BOOLE, SUBSET;
+
+
+begin :: Preliminaries
+
+registration
+  let S be non empty 1-sorted;
+  cluster [#]S -> non proper;
+end;
+
+theorem :: RING_1:1
+  for L being add-associative right_zeroed right_complementable
+  (non empty LoopStr),
+  a, b being Element of L
+  holds a - b + b = a;
+
+theorem :: RING_1:2
+  for L being add-associative right_zeroed right_complementable
+  Abelian (non empty LoopStr),
+      b, c being Element of L holds
+  c = b - (b - c);
+
+theorem :: RING_1:3
+  for L being add-associative right_zeroed right_complementable
+  Abelian (non empty LoopStr),
+  a, b, c being Element of L holds
+  a - b - (c - b) = a - c;
+
+begin :: Ideals
+
+definition
+  let K be non empty HGrStr, S be Subset of K;
+  attr S is quasi-prime means
+:: RING_1:def 1
+
+  for a, b being Element of K st a*b in S holds a in S or b in S;
+end;
+
+definition
+  let K be non empty multLoopStr, S be Subset of K;
+  attr S is prime means
+:: RING_1:def 2
+
+  S is proper quasi-prime;
+end;
+
+definition
+  let R be non empty doubleLoopStr;
+  let I be Subset of R;
+  attr I is quasi-maximal means
+:: RING_1:def 3
+
+  for J being Ideal of R st I c= J
+  holds J = I or J is non proper;
+end;
+
+definition
+  let R be non empty doubleLoopStr;
+  let I be Subset of R;
+  attr I is maximal means
+:: RING_1:def 4
+
+  I is proper quasi-maximal;
+end;
+
+registration
+  let K be non empty multLoopStr;
+  cluster prime -> proper quasi-prime Subset of K;
+  cluster proper quasi-prime -> prime Subset of K;
+end;
+
+registration
+  let R be non empty doubleLoopStr;
+  cluster maximal -> proper quasi-maximal Subset of R;
+  cluster proper quasi-maximal -> maximal Subset of R;
+end;
+
+registration
+  let R be non empty LoopStr;
+  cluster [#]R -> add-closed;
+end;
+
+registration
+  let R be non empty HGrStr;
+  cluster [#]R -> left-ideal right-ideal;
+end;
+
+theorem :: RING_1:4
+  for R being domRing holds {0.R} is prime;
+
+begin :: Equivalence Relation
+
+reserve
+  R for Ring,
+  I for Ideal of R,
+  a, b for Element of R;
+
+definition
+  let R be Ring, I be Ideal of R;
+  func EqRel(R,I) -> Relation of R means
+:: RING_1:def 5
+
+  for a, b being Element of R holds [a,b] in it iff a-b in I;
+end;
+
+registration
+  let R be Ring, I be Ideal of R;
+  cluster EqRel(R,I) -> non empty total symmetric transitive;
+end;
+
+theorem :: RING_1:5
+  a in Class(EqRel(R,I),b) iff a-b in I;
+
+theorem :: RING_1:6
+  Class(EqRel(R,I),a) = Class(EqRel(R,I),b) iff a-b in I;
+
+theorem :: RING_1:7
+  Class(EqRel(R,[#]R),a) = the carrier of R;
+
+theorem :: RING_1:8
+  Class EqRel(R,[#]R) = {the carrier of R};
+
+theorem :: RING_1:9
+  Class(EqRel(R,{0.R}),a) = {a};
+
+theorem :: RING_1:10
+  Class EqRel(R,{0.R}) = rng singleton the carrier of R;
+
+begin :: Quotient Ring
+
+definition
+  let R be Ring, I be Ideal of R;
+  func QuotientRing(R,I) -> strict doubleLoopStr means
+:: RING_1:def 6
+
+  the carrier of it = Class EqRel(R,I) &
+  the unity of it = Class(EqRel(R,I),1.R) &
+  the Zero of it = Class(EqRel(R,I),0.R) &
+
+  (for x, y being Element of it ex a, b being Element of R st
+  x = Class(EqRel(R,I),a) & y = Class(EqRel(R,I),b) &
+  (the add of it).(x,y) = Class(EqRel(R,I),a+b)) &
+
+  (for x, y being Element of it ex a, b being Element of R st
+  x = Class(EqRel(R,I),a) & y = Class(EqRel(R,I),b) &
+  (the mult of it).(x,y) = Class(EqRel(R,I),a*b));
+end;
+
+notation
+  let R be Ring, I be Ideal of R;
+  synonym R/I for QuotientRing(R,I);
+end;
+
+registration
+  let R be Ring, I be Ideal of R;
+  cluster R/I -> non empty;
+end;
+
+reserve
+  x, y for Element of R/I;
+
+theorem :: RING_1:11
+  ex a being Element of R st x = Class(EqRel(R,I),a);
+
+theorem :: RING_1:12
+  Class(EqRel(R,I),a) is Element of R/I;
+
+theorem :: RING_1:13
+  x = Class(EqRel(R,I),a) & y = Class(EqRel(R,I),b) implies
+  x+y = Class(EqRel(R,I),a+b);
+
+theorem :: RING_1:14
+  x = Class(EqRel(R,I),a) & y = Class(EqRel(R,I),b) implies
+  x*y = Class(EqRel(R,I),a*b);
+
+theorem :: RING_1:15
+  Class(EqRel(R,I),1.R) = 1.(R/I);
+
+registration
+  let R be Ring, I be Ideal of R;
+  cluster R/I -> Abelian add-associative right_zeroed right_complementable
+  associative left_unital right_unital distributive;
+end;
+
+registration
+  let R be commutative Ring, I be Ideal of R;
+  cluster R/I -> commutative;
+end;
+
+theorem :: RING_1:16
+  I is proper iff R/I is non degenerated;
+
+theorem :: RING_1:17
+  I is quasi-prime iff R/I is domRing-like;
+
+theorem :: RING_1:18
+  for R being commutative Ring, I being Ideal of R holds
+  I is prime iff R/I is domRing;
+
+theorem :: RING_1:19
+  R is commutative & I is quasi-maximal implies R/I is Field-like;
+
+theorem :: RING_1:20
+  R/I is Field-like implies I is quasi-maximal;
+
+theorem :: RING_1:21
+  for R being commutative Ring, I being Ideal of R holds
+  I is maximal iff R/I is Skew-Field;
+
+registration
+  let R be non degenerated commutative Ring;
+  cluster maximal -> prime Ideal of R;
+end;
+
+registration
+  let R be non degenerated Ring;
+  cluster maximal Ideal of R;
+end;
+
+registration
+  :: to round up conditional clusters
+  let R be non degenerated commutative Ring;
+  cluster maximal Ideal of R;
+end;
+
+registration
+  let R be non degenerated commutative Ring, I be quasi-prime Ideal of R;
+  cluster R/I -> domRing-like;
+end;
+
+registration
+  let R be non degenerated commutative Ring, I be quasi-maximal Ideal of R;
+  cluster R/I -> Field-like;
+end;

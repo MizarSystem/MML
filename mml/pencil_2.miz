@@ -94,8 +94,7 @@ then A3: i - 1 >= 1-1 by XREAL_1:11;
        i -' 1 <= i by BINARITH:52;
 then A4: i -' 1 <= len p by A2,XREAL_1:2;
 A5: j <= len p by A1,FINSEQ_3:27;
-      Del(p,i,j) = (p|(i -' 1))^(p/^j);
-  hence len Del(p,i,j) = len (p|(i -' 1)) + len (p/^j) by FINSEQ_1:35
+  thus len Del(p,i,j) = len (p|(i -' 1)) + len (p/^j) by FINSEQ_1:35
   .= i -' 1 + len (p/^j) by A4,FINSEQ_1:80
   .= i -' 1 + (len p - j) by A5,RFINSEQ:def 2
   .= (i - 1) + (len p - j) by A3,BINARITH:def 3
@@ -161,11 +160,11 @@ len p + 1 <= k implies (p^q).k=q.(k-len p)
   suppose A2: not k <= len p + len q;
   then not k <= len (p^q) by FINSEQ_1:35;
 then A3: not k in dom (p^q) by FINSEQ_3:27;
-A5: for n being Nat holds n in dom q iff 1<=n & n<=len q by FINSEQ_3:27;
+A4: for n being Nat holds n in dom q iff 1<=n & n<=len q by FINSEQ_3:27;
       k-len p > len q by A2,XREAL_1:22;
-then A4: not k-len p in dom q by A5;
+then A5: not k-len p in dom q by A4;
   thus (p^q).k= {} by A3,FUNCT_1:def 4
-  .= q.(k-len p) by A4,FUNCT_1:def 4;
+  .= q.(k-len p) by A5,FUNCT_1:def 4;
  end;
  end;
 
@@ -183,7 +182,7 @@ then A2: 1 <=i & i <= len p by FINSEQ_3:27;
        i -' 1 <= i by BINARITH:52;
 then i -' 1 <= len p by A2,XREAL_1:2;
 then A3: len (p|(i -' 1)) = i -' 1 by FINSEQ_1:80;
-A4: i -' 1 + 1 <= k by A1,A2,AMI_5:4;
+A4: i -' 1 + 1 <= k by A1,A2,BINARITH:53;
       i -' 1 <= i by BINARITH:52;
   then k >= i -' 1 by A1,XREAL_1:2;
   then k - (i -' 1) >= (i -' 1) - (i -' 1) by XREAL_1:11;
@@ -309,7 +308,7 @@ then A31:   0 < len g - y by XREAL_1:52;
       then (i+1) + 0 <= (i+1) + ((len g - y) - 1) by XREAL_1:9;
       then (i+1) + 0 <= (i+1) + (len g - y) - 1;
 then d.(i+1) = g.(y -'(x+1) + (i+1) + 1) by A6,A8,A13,A28,Th6
-             .= g.(y+1) by A8,A28,AMI_5:4;
+             .= g.(y+1) by A8,A28,BINARITH:53;
       hence P[d.i,d.(i+1)] by A5,A11,A29,A30;
       end;
       suppose i > x;
@@ -420,7 +419,7 @@ then A64:   0 < len g - x by XREAL_1:52;
       then (i+1) + 0 <= (i+1) + ((len g - x) - 1) by XREAL_1:9;
       then (i+1) + 0 <= (i+1) + (len g - x) - 1;
 then d.(i+1) = g.(x -'(y+1) + (i+1) + 1) by A6,A41,A46,A61,Th6
-             .= g.(x+1) by A41,A61,AMI_5:4;
+             .= g.(x+1) by A41,A61,BINARITH:53;
       hence P[d.i,d.(i+1)] by A5,A44,A62,A63;
       end;
       suppose i > y;
@@ -511,20 +510,20 @@ existence
   then A.indx(L) in rng A by FUNCT_1:12;
   then A.indx(L) is non trivial by PENCIL_1:def 17;
   then the carrier of A.indx(L) is non trivial by REALSET2:def 5;
-then A2: [#]((A.indx(L))) is non trivial by PRE_TOPC:12;
+then A1: [#]((A.indx(L))) is non trivial by PRE_TOPC:12;
   then reconsider C as Segre-like non trivial-yielding
   ManySortedSubset of Carrier A by PENCIL_1:27;
-A3: dom C = I & dom Carrier A = I by PBOOLE:def 3;
+A2: dom C = I & dom Carrier A = I by PBOOLE:def 3;
       C c= Carrier A by PBOOLE:def 23;
   then for a being set st a in I holds C.a c= (Carrier A).a by PBOOLE:def 5
 ;
-  then reconsider P = product C as Subset of Segre_Product A by A3,CARD_3:38
+  then reconsider P = product C as Subset of Segre_Product A by A2,CARD_3:38
 ;
   take P;
       dom L = I by PBOOLE:def 3;
-then A4: C.indx(L) = [#](A.indx(L)) by FUNCT_7:33;
-  then indx(C) = indx(L) by A2,PENCIL_1:def 21;
-  hence thesis by A4;
+then A3: C.indx(L) = [#](A.indx(L)) by FUNCT_7:33;
+  then indx(C) = indx(L) by A1,PENCIL_1:def 21;
+  hence thesis by A3;
  end;
 end;
 
@@ -1093,17 +1092,17 @@ A2: W is non trivial strong closed_under_lines;
              Y is non trivial strong closed_under_lines & W,Y are_joinable};
   consider K being Segre-like non trivial-yielding
   ManySortedSubset of Carrier A such that
-A4: W = product K & for S being Subset of A.indx(K)
+A3: W = product K & for S being Subset of A.indx(K)
   st S=K.indx(K) holds S is strong closed_under_lines by A2,PENCIL_1:29;
       B c= the carrier of Segre_Product A
    proof
     let a be set; assume a in B; then consider y being set such that
-A5:  a in y & y in {Y where Y is Subset of Segre_Product A :
+A4:  a in y & y in {Y where Y is Subset of Segre_Product A :
     Y is non trivial strong closed_under_lines & W,Y are_joinable}
     by TARSKI:def 4;
     consider Y being Subset of Segre_Product A such that
-A6:  y=Y & Y is non trivial strong closed_under_lines & W,Y are_joinable by A5;
-    thus thesis by A5,A6;
+A5:  y=Y & Y is non trivial strong closed_under_lines & W,Y are_joinable by A4;
+    thus thesis by A4,A5;
    end;
   then reconsider C = B as Subset of Segre_Product A;
   set O = [#](A.indx(K));
@@ -1111,338 +1110,338 @@ A6:  y=Y & Y is non trivial strong closed_under_lines & W,Y are_joinable by A5;
   then A.indx(K) in rng A by FUNCT_1:12;
   then A.indx(K) is non trivial by PENCIL_1:def 17;
   then the carrier of A.indx(K) is non trivial by REALSET2:def 5;
-then A7: O is non trivial by PRE_TOPC:12;
+then A6: O is non trivial by PRE_TOPC:12;
   then reconsider L = K+*(indx(K),O) as
   Segre-like non trivial-yielding ManySortedSubset of Carrier A by Th7,
 PENCIL_1:27;
-A8: C = product L
+A7: C = product L
     proof
      thus C c= product L
       proof
        let c be set; assume c in C; then consider y being set such that
-A9:     c in y & y in {Y where Y is Subset of Segre_Product A :
+A8:     c in y & y in {Y where Y is Subset of Segre_Product A :
        Y is non trivial strong closed_under_lines & W,Y are_joinable}
        by TARSKI:def 4;
        consider Y being Subset of Segre_Product A such that
-A10:    y=Y & Y is non trivial strong closed_under_lines & W,Y are_joinable by
-A9;
+A9:    y=Y & Y is non trivial strong closed_under_lines & W,Y are_joinable by
+A8;
        consider M being Segre-like non trivial-yielding
        ManySortedSubset of Carrier A such that
-A11:     Y = product M & for S being Subset of A.indx(M)
-       st S=M.indx(M) holds S is strong closed_under_lines by A10,PENCIL_1:29;
-       reconsider c1 = c as ManySortedSet of I by A9,A10,PENCIL_1:14;
-A12:     dom c1 = I by PBOOLE:def 3 .= dom L by PBOOLE:def 3;
-A13:    dom M = I by PBOOLE:def 3 .= dom L by PBOOLE:def 3;
-A14:    dom K = I by PBOOLE:def 3 .= dom L by PBOOLE:def 3;
+A10:     Y = product M & for S being Subset of A.indx(M)
+       st S=M.indx(M) holds S is strong closed_under_lines by A9,PENCIL_1:29;
+       reconsider c1 = c as ManySortedSet of I by A8,A9,PENCIL_1:14;
+A11:     dom c1 = I by PBOOLE:def 3 .= dom L by PBOOLE:def 3;
+A12:    dom M = I by PBOOLE:def 3 .= dom L by PBOOLE:def 3;
+A13:    dom K = I by PBOOLE:def 3 .= dom L by PBOOLE:def 3;
            for a being set st a in dom L holds c1.a in L.a
         proof
-         let a be set; assume A15: a in dom L;
+         let a be set; assume A14: a in dom L;
          then reconsider a1=a as Element of I by PBOOLE:def 3;
-         per cases; suppose A16: a = indx(K);
-A17:      c1.a in M.a by A9,A10,A11,A13,A15,CARD_3:18;
+         per cases; suppose A15: a = indx(K);
+A16:      c1.a in M.a by A8,A9,A10,A12,A14,CARD_3:18;
              M c= Carrier A by PBOOLE:def 23;
          then M.a1 c= (Carrier A).a1 by PBOOLE:def 5;
          then M.a1 c= the carrier of (A.a1) by YELLOW_6:9;
-         then M.a c= O by A16,PRE_TOPC:12;
-         then c1.a in O by A17;
-         hence c1.a in L.a by A14,A15,A16,FUNCT_7:33;
+         then M.a c= O by A15,PRE_TOPC:12;
+         then c1.a in O by A16;
+         hence c1.a in L.a by A13,A14,A15,FUNCT_7:33;
          end;
-         suppose A18: a <> indx(K);
-             c1.a in M.a by A9,A10,A11,A13,A15,CARD_3:18;
-         then c1.a in K.a by A2,A4,A10,A11,A18,Th11;
-         hence c1.a in L.a by A18,FUNCT_7:34;
+         suppose A17: a <> indx(K);
+             c1.a in M.a by A8,A9,A10,A12,A14,CARD_3:18;
+         then c1.a in K.a by A2,A3,A9,A10,A17,Th11;
+         hence c1.a in L.a by A17,FUNCT_7:34;
         end;
         end;
-       hence c in product L by A12,CARD_3:18;
+       hence c in product L by A11,CARD_3:18;
       end;
      thus product L c= C
       proof
        let y be set; assume y in product L;
        then consider z being Function such that
-A19:     z=y & dom z = dom L & for a being set st a in dom L holds
+A18:     z=y & dom z = dom L & for a being set st a in dom L holds
        z.a in L.a by CARD_3:def 5;
-A20:    dom L = I & dom K = I by PBOOLE:def 3;
-       then reconsider z as ManySortedSet of I by A19,PBOOLE:def 3;
-           z.indx(K) in L.indx(K) by A19,A20;
-       then z.indx(K) in O by A20,FUNCT_7:33;
+A19:    dom L = I & dom K = I by PBOOLE:def 3;
+       then reconsider z as ManySortedSet of I by A18,PBOOLE:def 3;
+           z.indx(K) in L.indx(K) by A18,A19;
+       then z.indx(K) in O by A19,FUNCT_7:33;
        then reconsider zi = z.indx(K) as Point of A.indx(K);
            K c= Carrier A by PBOOLE:def 23;
        then K.indx(K) c= (Carrier A).indx(K) by PBOOLE:def 5;
        then reconsider S=K.indx(K) as Subset of A.indx(K)
        by YELLOW_6:9;
-A21:    S is non trivial strong closed_under_lines by A4,PENCIL_1:def 21;
+A20:    S is non trivial strong closed_under_lines by A3,PENCIL_1:def 21;
            A.indx(K) is strongly_connected by A1; then consider
        f being FinSequence of bool the carrier of (A.indx(K)) such that
-A22:     S = f.1 & zi in f.(len f) &
+A21:     S = f.1 & zi in f.(len f) &
        (for Z being Subset of (A.indx(K)) st Z in rng f holds
        Z is closed_under_lines strong) &
        for i being Nat st 1 <= i & i < len f holds
-       2 c= Card((f.i) /\ (f.(i+1))) by A21,PENCIL_1:def 11;
-A23:    len f in dom f by A22,FUNCT_1:def 4;
+       2 c= Card((f.i) /\ (f.(i+1))) by A20,PENCIL_1:def 11;
+A22:    len f in dom f by A21,FUNCT_1:def 4;
        then f <> {} by RELAT_1:60;
        then
-A24:    1 in dom f by FINSEQ_5:6;
+A23:    1 in dom f by FINSEQ_5:6;
        deffunc F(set) = product (L+*(indx(K),f.$1));
        consider g being FinSequence such that
-A25:     len g = len f & for k being Nat st k in Seg (len f) holds g.k = F(k)
+A24:     len g = len f & for k being Nat st k in Seg (len f) holds g.k = F(k)
           from FINSEQ_1:sch 2;
            rng g c= bool the carrier of Segre_Product A
         proof
          let a be set; assume a in rng g;
          then consider k being set such that
-A26:       k in dom g & a=g.k by FUNCT_1:def 5;
-         reconsider k as Nat by A26;
-A27:      k in Seg (len f) by A25,A26,FINSEQ_1:def 3;
-A28:      dom (L+*(indx(K),f.k)) = I & dom Carrier A = I by PBOOLE:def 3;
+A25:       k in dom g & a=g.k by FUNCT_1:def 5;
+         reconsider k as Nat by A25;
+A26:      k in Seg (len f) by A24,A25,FINSEQ_1:def 3;
+A27:      dom (L+*(indx(K),f.k)) = I & dom Carrier A = I by PBOOLE:def 3;
              now let o be set;
-         assume A29: o in I;
-A30:      k in dom f by A27,FINSEQ_1:def 3;
-         per cases; suppose A31: o <> indx(K);
+         assume A28: o in I;
+A29:      k in dom f by A26,FINSEQ_1:def 3;
+         per cases; suppose A30: o <> indx(K);
          then L+*(indx(K),f.k).o = L.o by FUNCT_7:34;
-then A32:      L+*(indx(K),f.k).o = K.o by A31,FUNCT_7:34;
+then A31:      L+*(indx(K),f.k).o = K.o by A30,FUNCT_7:34;
              K c= Carrier A by PBOOLE:def 23;
-         hence L+*(indx(K),f.k).o c= (Carrier A).o by A29,A32,PBOOLE:def 5;
+         hence L+*(indx(K),f.k).o c= (Carrier A).o by A28,A31,PBOOLE:def 5;
          end;
-         suppose A33: o = indx(K);
-         then L+*(indx(K),f.k).o = f.k by A20,FUNCT_7:33;
-then A34:      L+*(indx(K),f.k).o in rng f by A30,FUNCT_1:12;
+         suppose A32: o = indx(K);
+         then L+*(indx(K),f.k).o = f.k by A19,FUNCT_7:33;
+then A33:      L+*(indx(K),f.k).o in rng f by A29,FUNCT_1:12;
              rng f c= bool the carrier of (A.indx(K)) by FINSEQ_1:def 4;
-         then L+*(indx(K),f.k).o c= the carrier of (A.indx(K)) by A34;
-         hence L+*(indx(K),f.k).o c= (Carrier A).o by A33,YELLOW_6:9;
+         then L+*(indx(K),f.k).o c= the carrier of (A.indx(K)) by A33;
+         hence L+*(indx(K),f.k).o c= (Carrier A).o by A32,YELLOW_6:9;
          end;
          end;
-         then product (L+*(indx(K),f.k)) c= product Carrier A by A28,CARD_3:38
+         then product (L+*(indx(K),f.k)) c= product Carrier A by A27,CARD_3:38
 ;
-         then a c= product Carrier A by A25,A26,A27;
+         then a c= product Carrier A by A24,A25,A26;
          hence a in bool the carrier of Segre_Product A;
         end;
        then reconsider g as FinSequence of bool the carrier of Segre_Product A
        by FINSEQ_1:def 4;
-           len f in dom g by A23,A25,FINSEQ_3:31;
-then A35:    g.(len f) in rng g by FUNCT_1:12;
+           len f in dom g by A22,A24,FINSEQ_3:31;
+then A34:    g.(len f) in rng g by FUNCT_1:12;
            rng g c= bool the carrier of Segre_Product A by FINSEQ_1:def 4;
        then reconsider Yb = g.(len f) as Subset of Segre_Product
 A
-         by A35;
-       A36: len f in Seg len f by A23,FINSEQ_1:def 3;
-then A37:    Yb = product (L+*(indx(K),f.(len f))) by A25;
-A38:    dom z = dom (L+*(indx(K),f.(len f))) by A19,FUNCT_7:32;
+         by A34;
+       A35: len f in Seg len f by A22,FINSEQ_1:def 3;
+then A36:    Yb = product (L+*(indx(K),f.(len f))) by A24;
+A37:    dom z = dom (L+*(indx(K),f.(len f))) by A18,FUNCT_7:32;
            now let o be set;
        assume o in dom (L+*(indx(K),f.(len f)));
-       then A39: o in I by PBOOLE:def 3;
+       then A38: o in I by PBOOLE:def 3;
        per cases; suppose o = indx(K);
-       hence z.o in (L+*(indx(K),f.(len f))).o by A20,A22,FUNCT_7:33;
+       hence z.o in (L+*(indx(K),f.(len f))).o by A19,A21,FUNCT_7:33;
        end;
-       suppose A40: o <> indx(K);
-           z.o in L.o by A19,A20,A39;
-       hence z.o in (L+*(indx(K),f.(len f))).o by A40,FUNCT_7:34;
+       suppose A39: o <> indx(K);
+           z.o in L.o by A18,A19,A38;
+       hence z.o in (L+*(indx(K),f.(len f))).o by A39,FUNCT_7:34;
        end;
        end;
-then A41:     y in Yb by A19,A37,A38,CARD_3:18;
-A42:    dom (L+*(indx(K),f.1)) = I & dom Carrier A = I by PBOOLE:def 3;
+then A40:     y in Yb by A18,A36,A37,CARD_3:18;
+A41:    dom (L+*(indx(K),f.1)) = I & dom Carrier A = I by PBOOLE:def 3;
            now let o be set; assume o in I;
-       per cases; suppose A43: o <> indx(K);
+       per cases; suppose A42: o <> indx(K);
        then L+*(indx(K),f.1).o = L.o by FUNCT_7:34;
-       hence L+*(indx(K),f.1).o = K.o by A43,FUNCT_7:34;
+       hence L+*(indx(K),f.1).o = K.o by A42,FUNCT_7:34;
        end;
        suppose o = indx(K);
-       hence L+*(indx(K),f.1).o = K.o by A20,A22,FUNCT_7:33;
+       hence L+*(indx(K),f.1).o = K.o by A19,A21,FUNCT_7:33;
        end;
        end;
-then A44:    L+*(indx(K),f.1) = K by A20,A42,FUNCT_1:9;
-           1 in Seg len f by A24,FINSEQ_1:def 3;
-then A45:    W = g.1 by A4,A25,A44;
-A46:    f.len f is non trivial
+then A43:    L+*(indx(K),f.1) = K by A19,A41,FUNCT_1:9;
+           1 in Seg len f by A23,FINSEQ_1:def 3;
+then A44:    W = g.1 by A3,A24,A43;
+A45:    f.len f is non trivial
         proof
-         A47: 1 <= len f by A23,FINSEQ_3:27;
-         reconsider l1 = (len f) - 1 as Nat by A23,FINSEQ_3:28;
-         per cases by A47,XREAL_1:1; suppose len f = 1; hence thesis by A22,
+         A46: 1 <= len f by A22,FINSEQ_3:27;
+         reconsider l1 = (len f) - 1 as Nat by A22,FINSEQ_3:28;
+         per cases by A46,XREAL_1:1; suppose len f = 1; hence thesis by A21,
 PENCIL_1:def 21;
          end;
          suppose len f > 1;
          then 1+1 <= len f by NAT_1:38;
-then A48:      2-1 <= l1 by XREAL_1:11;
+then A47:      2-1 <= l1 by XREAL_1:11;
              l1 < len f - 0 by REAL_1:92;
-then A49:     2 c= Card((f.l1) /\ (f.(l1+1))) by A22,A48;
+then A48:     2 c= Card((f.l1) /\ (f.(l1+1))) by A21,A47;
              (f.l1) /\ (f.(l1+1)) c= f.(l1+1) by XBOOLE_1:17;
          then Card((f.l1) /\ (f.(l1+1))) c= Card (f.(l1+1)) by CARD_1:27;
-         then 2 c= Card (f.(l1+1)) by A49,XBOOLE_1:1;
+         then 2 c= Card (f.(l1+1)) by A48,XBOOLE_1:1;
          hence thesis by PENCIL_1:4;
         end;
         end;
        then reconsider ff=f.len f as non trivial set;
-           L.indx(K) = O by A20,FUNCT_7:33;
-       then indx K = indx L by A7,PENCIL_1:def 21;
+           L.indx(K) = O by A19,FUNCT_7:33;
+       then indx K = indx L by A6,PENCIL_1:def 21;
        then reconsider EL=L+*(indx(K),ff) as
        Segre-like non trivial-yielding ManySortedSet of I by PENCIL_1:27;
-       A50: Yb = product EL by A25,A36;
-A51:    for V being Subset of Segre_Product A st V in rng g
+       A49: Yb = product EL by A24,A35;
+A50:    for V being Subset of Segre_Product A st V in rng g
 holds
        V is closed_under_lines strong
         proof
          let V be Subset of Segre_Product A;
          assume V in rng g; then consider n1 being set such that
-A52:       n1 in dom g & V=g.n1 by FUNCT_1:def 5;
-         reconsider n=n1 as Nat by A52;
-A53:      n in Seg len f by A25,A52,FINSEQ_1:def 3;
-then A54:      g.n = product (L+*(indx(K),f.n)) by A25;
-A55:      n in dom f by A53,FINSEQ_1:def 3;
+A51:       n1 in dom g & V=g.n1 by FUNCT_1:def 5;
+         reconsider n=n1 as Nat by A51;
+A52:      n in Seg len f by A24,A51,FINSEQ_1:def 3;
+then A53:      g.n = product (L+*(indx(K),f.n)) by A24;
+A54:      n in dom f by A52,FINSEQ_1:def 3;
              f.n is non trivial
           proof
-           A56: 1 <= n & n <= len f by A55,FINSEQ_3:27;
-           per cases by A56,XREAL_1:1;
-           suppose 1<=n & n=len f; hence thesis by A46;
+           A55: 1 <= n & n <= len f by A54,FINSEQ_3:27;
+           per cases by A55,XREAL_1:1;
+           suppose 1<=n & n=len f; hence thesis by A45;
            end;
            suppose 1 <= n & n < len f;
-then A57:       2 c= Card((f.n) /\ (f.(n+1))) by A22;
+then A56:       2 c= Card((f.n) /\ (f.(n+1))) by A21;
                (f.n) /\ (f.(n+1)) c= f.n by XBOOLE_1:17;
            then Card((f.n) /\ (f.(n+1))) c= Card (f.n) by CARD_1:27;
-           then 2 c= Card (f.n) by A57,XBOOLE_1:1;
+           then 2 c= Card (f.n) by A56,XBOOLE_1:1;
            hence thesis by PENCIL_1:4;
           end;
           end;
          then reconsider fn=f.n as non trivial set;
-             L.indx(K) = O by A20,FUNCT_7:33;
-then A58:      indx K = indx L by A7,PENCIL_1:def 21;
+             L.indx(K) = O by A19,FUNCT_7:33;
+then A57:      indx K = indx L by A6,PENCIL_1:def 21;
              L+*(indx(K),f.n) c= Carrier A
           proof
-           let o be set; assume A59: o in I;
+           let o be set; assume A58: o in I;
            per cases; suppose o <> indx(K);
-then A60:        L+*(indx(K),f.n).o = L.o by FUNCT_7:34;
+then A59:        L+*(indx(K),f.n).o = L.o by FUNCT_7:34;
                L c= Carrier A by PBOOLE:def 23;
-           hence L+*(indx(K),f.n).o c= (Carrier A).o by A59,A60,PBOOLE:def 5;
+           hence L+*(indx(K),f.n).o c= (Carrier A).o by A58,A59,PBOOLE:def 5;
            end;
-           suppose A61: o=indx(K);
-           then L+*(indx(K),f.n).o = f.n by A20,FUNCT_7:33;
-then A62:        L+*(indx(K),f.n).o in rng f by A55,FUNCT_1:12;
+           suppose A60: o=indx(K);
+           then L+*(indx(K),f.n).o = f.n by A19,FUNCT_7:33;
+then A61:        L+*(indx(K),f.n).o in rng f by A54,FUNCT_1:12;
                rng f c= bool the carrier of (A.indx(K)) by FINSEQ_1:def 4;
-           then L+*(indx(K),f.n).o c= the carrier of (A.indx(K)) by A62;
-           hence L+*(indx(K),f.n).o c= (Carrier A).o by A61,YELLOW_6:9;
+           then L+*(indx(K),f.n).o c= the carrier of (A.indx(K)) by A61;
+           hence L+*(indx(K),f.n).o c= (Carrier A).o by A60,YELLOW_6:9;
           end;
           end;
          then reconsider LI = L+*(indx(K),fn) as Segre-like non
 trivial-yielding
-         ManySortedSubset of Carrier A by A58,PBOOLE:def 23,PENCIL_1:27;
+         ManySortedSubset of Carrier A by A57,PBOOLE:def 23,PENCIL_1:27;
          reconsider LI as Segre-like non trivial-yielding
                   ManySortedSubset of Carrier A;
-A63:      LI.indx(K) = fn by A20,FUNCT_7:33;
-then A64:      indx(LI) = indx(K) by PENCIL_1:def 21;
+A62:      LI.indx(K) = fn by A19,FUNCT_7:33;
+then A63:      indx(LI) = indx(K) by PENCIL_1:def 21;
              now let D be Subset of A.indx(LI);
          assume D=LI.indx(LI);
-         then D in rng f by A55,A63,A64,FUNCT_1:12;
-         hence D is strong closed_under_lines by A22,A64;
+         then D in rng f by A54,A62,A63,FUNCT_1:12;
+         hence D is strong closed_under_lines by A21,A63;
          end;
-         hence V is closed_under_lines strong by A52,A54,PENCIL_1:29;
+         hence V is closed_under_lines strong by A51,A53,PENCIL_1:29;
         end;
-then A65:    Yb is non trivial strong closed_under_lines by A35,A50;
+then A64:    Yb is non trivial strong closed_under_lines by A34,A49;
            for i being Nat st 1 <= i & i < len g holds
        2 c= Card((g.i) /\ (g.(i+1)))
         proof
-         let i be Nat; assume A66: 1 <= i & i < len g;
-         then i in Seg (len f) by A25,FINSEQ_1:3;
-then A67:      g.i = product (L+*(indx(K),f.i)) by A25;
-             1 <= i+1 & i+1 <= len g by A66,NAT_1:38;
-         then i+1 in Seg (len f) by A25,FINSEQ_1:3;
-then A68:     g.(i+1) = product (L+*(indx(K),f.(i+1))) by A25;
-             2 c= Card ((f.i) /\ (f.(i+1))) by A22,A25,A66; then consider
+         let i be Nat; assume A65: 1 <= i & i < len g;
+         then i in Seg (len f) by A24,FINSEQ_1:3;
+then A66:      g.i = product (L+*(indx(K),f.i)) by A24;
+             1 <= i+1 & i+1 <= len g by A65,NAT_1:38;
+         then i+1 in Seg (len f) by A24,FINSEQ_1:3;
+then A67:     g.(i+1) = product (L+*(indx(K),f.(i+1))) by A24;
+             2 c= Card ((f.i) /\ (f.(i+1))) by A21,A24,A65; then consider
          a,b being set such that
-A69:      a in (f.i) /\ (f.(i+1)) & b in (f.i) /\ (f.(i+1)) & a <> b
+A68:      a in (f.i) /\ (f.(i+1)) & b in (f.i) /\ (f.(i+1)) & a <> b
          by PENCIL_1:2;
          consider l1 being set such that
-A70:      l1 in product L by XBOOLE_0:def 1;
+A69:      l1 in product L by XBOOLE_0:def 1;
          consider l being Function such that
-A71:       l = l1 & dom l = dom L &
-         for o being set st o in dom L holds l.o in L.o by A70,CARD_3:def 5;
-         reconsider l as ManySortedSet of I by A20,A71,PBOOLE:def 3;
+A70:       l = l1 & dom l = dom L &
+         for o being set st o in dom L holds l.o in L.o by A69,CARD_3:def 5;
+         reconsider l as ManySortedSet of I by A19,A70,PBOOLE:def 3;
          set l1=l+*(indx(K),a),l2=l+*(indx(K),b);
-         l1.indx(K) = a by A20,A71,FUNCT_7:33;
-then A72:      l1 <> l2 by A20,A69,A71,FUNCT_7:33;
-A73:      dom l1 = I by PBOOLE:def 3 .= dom(L+*(indx(K),f.i)) by PBOOLE:def 3;
+         l1.indx(K) = a by A19,A70,FUNCT_7:33;
+then A71:      l1 <> l2 by A19,A68,A70,FUNCT_7:33;
+A72:      dom l1 = I by PBOOLE:def 3 .= dom(L+*(indx(K),f.i)) by PBOOLE:def 3;
              now let o be set; assume o in dom (L+*(indx(K),f.i));
-then A74:      o in I by PBOOLE:def 3;
-then A75:      o in dom l by PBOOLE:def 3;
+then A73:      o in I by PBOOLE:def 3;
+then A74:      o in dom l by PBOOLE:def 3;
          per cases;
-         suppose A76: o = indx(K);
-         then l1.o = a by A75,FUNCT_7:33;
-         then l1.o in f.i by A69,XBOOLE_0:def 3;
-         hence l1.o in L+*(indx(K),f.i).o by A20,A76,FUNCT_7:33;
+         suppose A75: o = indx(K);
+         then l1.o = a by A74,FUNCT_7:33;
+         then l1.o in f.i by A68,XBOOLE_0:def 3;
+         hence l1.o in L+*(indx(K),f.i).o by A19,A75,FUNCT_7:33;
          end;
-         suppose A77: o <> indx(K);
-then A78:      l1.o = l.o by FUNCT_7:34;
-             l.o in L.o by A20,A71,A74;
-         hence l1.o in L+*(indx(K),f.i).o by A77,A78,FUNCT_7:34;
+         suppose A76: o <> indx(K);
+then A77:      l1.o = l.o by FUNCT_7:34;
+             l.o in L.o by A19,A70,A73;
+         hence l1.o in L+*(indx(K),f.i).o by A76,A77,FUNCT_7:34;
          end;
          end;
-then A79:     l1 in product (L+*(indx(K),f.i)) by A73,CARD_3:18;
-A80:      dom l1 = I by PBOOLE:def 3
+then A78:     l1 in product (L+*(indx(K),f.i)) by A72,CARD_3:18;
+A79:      dom l1 = I by PBOOLE:def 3
          .= dom(L+*(indx(K),f.(i+1))) by PBOOLE:def 3;
              now let o be set; assume o in dom (L+*(indx(K),f.(i+1)));
-then A81:      o in I by PBOOLE:def 3;
-then A82:      o in dom l by PBOOLE:def 3;
+then A80:      o in I by PBOOLE:def 3;
+then A81:      o in dom l by PBOOLE:def 3;
          per cases;
-         suppose A83: o = indx(K);
-         then l1.o = a by A82,FUNCT_7:33;
-         then l1.o in f.(i+1) by A69,XBOOLE_0:def 3;
-         hence l1.o in L+*(indx(K),f.(i+1)).o by A20,A83,FUNCT_7:33;
+         suppose A82: o = indx(K);
+         then l1.o = a by A81,FUNCT_7:33;
+         then l1.o in f.(i+1) by A68,XBOOLE_0:def 3;
+         hence l1.o in L+*(indx(K),f.(i+1)).o by A19,A82,FUNCT_7:33;
          end;
-         suppose A84: o <> indx(K);
-then A85:      l1.o = l.o by FUNCT_7:34;
-             l.o in L.o by A20,A71,A81;
-         hence l1.o in L+*(indx(K),f.(i+1)).o by A84,A85,FUNCT_7:34;
+         suppose A83: o <> indx(K);
+then A84:      l1.o = l.o by FUNCT_7:34;
+             l.o in L.o by A19,A70,A80;
+         hence l1.o in L+*(indx(K),f.(i+1)).o by A83,A84,FUNCT_7:34;
          end;
          end;
-         then l1 in product (L+*(indx(K),f.(i+1))) by A80,CARD_3:18;
-then A86:      l1 in (g.i) /\ (g.(i+1)) by A67,A68,A79,XBOOLE_0:def 3;
-A87:      dom l2 = I by PBOOLE:def 3 .= dom(L+*(indx(K),f.i)) by PBOOLE:def 3;
+         then l1 in product (L+*(indx(K),f.(i+1))) by A79,CARD_3:18;
+then A85:      l1 in (g.i) /\ (g.(i+1)) by A66,A67,A78,XBOOLE_0:def 3;
+A86:      dom l2 = I by PBOOLE:def 3 .= dom(L+*(indx(K),f.i)) by PBOOLE:def 3;
              now let o be set; assume o in dom (L+*(indx(K),f.i));
-then A88:      o in I by PBOOLE:def 3;
-then A89:      o in dom l by PBOOLE:def 3;
+then A87:      o in I by PBOOLE:def 3;
+then A88:      o in dom l by PBOOLE:def 3;
          per cases;
-         suppose A90: o = indx(K);
-         then l2.o = b by A89,FUNCT_7:33;
-         then l2.o in f.i by A69,XBOOLE_0:def 3;
-         hence l2.o in L+*(indx(K),f.i).o by A20,A90,FUNCT_7:33;
+         suppose A89: o = indx(K);
+         then l2.o = b by A88,FUNCT_7:33;
+         then l2.o in f.i by A68,XBOOLE_0:def 3;
+         hence l2.o in L+*(indx(K),f.i).o by A19,A89,FUNCT_7:33;
          end;
-         suppose A91: o <> indx(K);
-then A92:      l2.o = l.o by FUNCT_7:34;
-             l.o in L.o by A20,A71,A88;
-         hence l2.o in L+*(indx(K),f.i).o by A91,A92,FUNCT_7:34;
+         suppose A90: o <> indx(K);
+then A91:      l2.o = l.o by FUNCT_7:34;
+             l.o in L.o by A19,A70,A87;
+         hence l2.o in L+*(indx(K),f.i).o by A90,A91,FUNCT_7:34;
          end;
          end;
-then A93:     l2 in product (L+*(indx(K),f.i)) by A87,CARD_3:18;
-A94:      dom l2 = I by PBOOLE:def 3
+then A92:     l2 in product (L+*(indx(K),f.i)) by A86,CARD_3:18;
+A93:      dom l2 = I by PBOOLE:def 3
          .= dom(L+*(indx(K),f.(i+1))) by PBOOLE:def 3;
              now let o be set; assume o in dom (L+*(indx(K),f.(i+1)));
-then A95:      o in I by PBOOLE:def 3;
-then A96:      o in dom l by PBOOLE:def 3;
+then A94:      o in I by PBOOLE:def 3;
+then A95:      o in dom l by PBOOLE:def 3;
          per cases;
-         suppose A97: o = indx(K);
-         then l2.o = b by A96,FUNCT_7:33;
-         then l2.o in f.(i+1) by A69,XBOOLE_0:def 3;
-         hence l2.o in L+*(indx(K),f.(i+1)).o by A20,A97,FUNCT_7:33;
+         suppose A96: o = indx(K);
+         then l2.o = b by A95,FUNCT_7:33;
+         then l2.o in f.(i+1) by A68,XBOOLE_0:def 3;
+         hence l2.o in L+*(indx(K),f.(i+1)).o by A19,A96,FUNCT_7:33;
          end;
-         suppose A98: o <> indx(K);
-then A99:      l2.o = l.o by FUNCT_7:34;
-             l.o in L.o by A20,A71,A95;
-         hence l2.o in L+*(indx(K),f.(i+1)).o by A98,A99,FUNCT_7:34;
+         suppose A97: o <> indx(K);
+then A98:      l2.o = l.o by FUNCT_7:34;
+             l.o in L.o by A19,A70,A94;
+         hence l2.o in L+*(indx(K),f.(i+1)).o by A97,A98,FUNCT_7:34;
          end;
          end;
-         then l2 in product (L+*(indx(K),f.(i+1))) by A94,CARD_3:18;
-         then l2 in (g.i) /\ (g.(i+1)) by A67,A68,A93,XBOOLE_0:def 3;
-         hence 2 c= Card((g.i) /\ (g.(i+1))) by A72,A86,PENCIL_1:2;
+         then l2 in product (L+*(indx(K),f.(i+1))) by A93,CARD_3:18;
+         then l2 in (g.i) /\ (g.(i+1)) by A66,A67,A92,XBOOLE_0:def 3;
+         hence 2 c= Card((g.i) /\ (g.(i+1))) by A71,A85,PENCIL_1:2;
         end;
-       then W,Yb are_joinable by A25,A45,A51,Def3;
+       then W,Yb are_joinable by A24,A44,A50,Def3;
        then Yb in {Y where Y is Subset of Segre_Product A :
-       Y is non trivial strong closed_under_lines & W,Y are_joinable} by A65;
-       hence y in C by A41,TARSKI:def 4;
+       Y is non trivial strong closed_under_lines & W,Y are_joinable} by A64;
+       hence y in C by A40,TARSKI:def 4;
       end;
     end;
       dom K = I by PBOOLE:def 3;
   then L.indx(K) = O by FUNCT_7:33;
-then A100: indx(K)=indx(L) by A7,PENCIL_1:def 21;
+then A99: indx(K)=indx(L) by A6,PENCIL_1:def 21;
       dom K = I by PBOOLE:def 3;
-  then L.indx(L) = [#](A.indx(L)) by A100,FUNCT_7:33;
-  hence B is Segre-Coset of A by A8,Def2;
+  then L.indx(L) = [#](A.indx(L)) by A99,FUNCT_7:33;
+  hence B is Segre-Coset of A by A7,Def2;
  end;
 
 theorem Th23:

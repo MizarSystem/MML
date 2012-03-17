@@ -9,17 +9,19 @@ environ
  vocabularies ARYTM, PRE_TOPC, SETFAM_1, TARSKI, SUBSET_1, COMPTS_1, BOOLE,
       RELAT_1, CONNSP_2, TOPS_1, ORDINAL2, FUNCT_1, METRIC_1, RCOMP_1,
       ABSVALUE, ARYTM_1, PCOMPS_1, EUCLID, FINSET_1, BORSUK_1, ARYTM_3,
-      TOPMETR, PARTFUN1;
+      TOPMETR, PARTFUN1, REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS,
-      XCMPLX_0, XREAL_0, NAT_1, REAL_1, DOMAIN_1, RELAT_1, FUNCT_1, PARTFUN1,
+      XCMPLX_0, XREAL_0, NAT_1, REAL_1, DOMAIN_1, RELAT_1, REALSET1,
+      FUNCT_1, PARTFUN1,
       FUNCT_2, FINSET_1, BINOP_1, STRUCT_0, METRIC_1, PRE_TOPC, TOPS_1, TOPS_2,
       COMPTS_1, PCOMPS_1, CONNSP_2, RCOMP_1, BORSUK_1, EUCLID, COMPLEX1;
  constructors REAL_1, DOMAIN_1, TOPS_1, TOPS_2, COMPTS_1, RCOMP_1, BORSUK_1,
-      EUCLID, MEMBERED, COMPLEX1, SETFAM_1;
+      EUCLID, MEMBERED, COMPLEX1, SETFAM_1, REALSET1;
  registrations SUBSET_1, PRE_TOPC, PCOMPS_1, STRUCT_0, METRIC_3, METRIC_1,
-      RELSET_1, EUCLID, TOPS_1, XREAL_0, MEMBERED;
+      RELSET_1, EUCLID, TOPS_1, XREAL_0, MEMBERED, REALSET1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions STRUCT_0, PRE_TOPC, TARSKI, TOPS_2, XREAL_0;
+ definitions EUCLID, BINOP_1, REALSET1;
  theorems ABSVALUE, BINOP_1, BORSUK_1, COMPTS_1, CONNSP_2, EUCLID, FINSET_1,
       FUNCT_1, FUNCT_2, METRIC_1, PCOMPS_1, PRE_TOPC, RCOMP_1, REAL_2, TARSKI,
       TOPS_1, TOPS_2, ZFMISC_1, TBSP_1, RELAT_1, RELSET_1, XREAL_0, XBOOLE_0,
@@ -83,8 +85,7 @@ A4:   W /\ V = {} by A3,XBOOLE_0:def 7;
          W in the topology of T & V in the topology of T by A3,PRE_TOPC:def 5;
      then W' in the topology of A & V' in the topology of A by PRE_TOPC:def 9;
      hence W' is open & V' is open by PRE_TOPC:def 5;
-         the carrier of A = [#] A;
-     hence p in W' & q in V' by A3,XBOOLE_0:def 3;
+     thus p in W' & q in V' by A3,XBOOLE_0:def 3;
          W' /\ V' = W /\ (V /\ [#] A) /\ [#] A by XBOOLE_1:16
             .= {} /\ [#] A by A4,XBOOLE_1:16
             .= {};
@@ -432,7 +433,8 @@ definition let M be non empty MetrSpace,
 :Def2: the carrier of it = A;
  existence
   proof
-   set d = (the distance of M) | [:A,A:];
+   set d = (the distance of M)||A;
+X:  d = (the distance of M)| [:A,A:];
    reconsider B=A as non empty set;
   A1: dom d = dom (the distance of M) /\ [:A,A:] by FUNCT_1:68
         .= [:the carrier of M,the carrier of M:] /\ [:A,A:] by FUNCT_2:def 1
@@ -440,14 +442,14 @@ definition let M be non empty MetrSpace,
  A:] by ZFMISC_1:123
         .= [: (the carrier of M) /\ A, A:] by XBOOLE_1:28
         .= [: A, A :] by XBOOLE_1:28;
-      then dom d = [: A,A :] & rng d c= REAL by RELSET_1:12;
+      then dom d = [: A,A :] & rng d c= REAL by RELSET_1:12,X;
    then reconsider d as Function of [:B,B:],REAL by FUNCT_2:def 1,RELSET_1:11;
    set MM = MetrStruct (# B, d #);
  A2: now let a,b be Element of MM;
      thus dist(a,b) = (the distance of MM).(a,b) by METRIC_1:def 1
-                   .= (the distance of MM) . [a,b] by BINOP_1:def 1
+                   .= (the distance of MM) . [a,b]
                    .= (the distance of M) . [a,b] by A1,FUNCT_1:70
-                   .= (the distance of M).(a,b) by BINOP_1:def 1;
+                   .= (the distance of M).(a,b);
     end;
         now let a,b,c be Element of MM;
       reconsider a'=a, b'=b, c'=c as Point of M by TARSKI:def 3;
@@ -581,8 +583,7 @@ canceled 2;
 theorem Th19: TopSpaceMetr(A) is SubSpace of TopSpaceMetr(M)
  proof
    set T = TopSpaceMetr M, R = TopSpaceMetr A;
-       [#] R = the carrier of R & [#] T = the carrier of T;
-   then A1: [#] R = the carrier of A & [#] T = the carrier of M by Th16;
+   A1: [#] R = the carrier of A & [#] T = the carrier of M by Th16;
    hence [#](R) c= [#](T) by Def1;
     let P be Subset of R;
    thus P in the topology of R implies ex Q being Subset of T
@@ -683,8 +684,7 @@ theorem
 proof
  let P be Subset of (TOP-REAL n),
  Q be non empty Subset of Euclid n;
-     TOP-REAL n = TopSpaceMetr(Euclid n) by EUCLID:def 8;
- then reconsider M = TopSpaceMetr((Euclid n)|Q) as SubSpace of TOP-REAL n by
+ reconsider M = TopSpaceMetr((Euclid n)|Q) as SubSpace of TOP-REAL n by
 Th19;
  assume A1: P = Q;
      the carrier of M = the carrier of (Euclid n)|Q & the carrier of (Euclid n)
@@ -989,8 +989,7 @@ theorem
      suppose A5: a = 0;
 
       set H = [#](R^1);
-          the carrier of R^1 = [#](R^1);
-      then H is open & W in H;
+      H is open & W in H;
       then W in Int H by TOPS_1:55;
       then reconsider H as a_neighborhood of W by CONNSP_2:def 1;
           for y being set holds y in {b} iff

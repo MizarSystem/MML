@@ -480,25 +480,25 @@ A2:    b = s & not ex n being FinSequence st s ==> n;
 theorem Th11:
   Lang EmptyGrammar a = {{}}
   proof set E = EmptyGrammar a;
-A2:  Terminals E = {} by Th10;
+A1:  Terminals E = {} by Th10;
    thus Lang E c= {{}}
      proof let b; assume b in Lang E;
       then consider p being String of E such that
-A3:     b = p & rng p c= Terminals E &
+A2:     b = p & rng p c= Terminals E &
        p is_derivable_from <*the InitialSym of E*>;
-          rng p = {} by A2,A3,XBOOLE_1:3;
-       then b = {} by A3,FINSEQ_1:27;
+          rng p = {} by A1,A2,XBOOLE_1:3;
+       then b = {} by A2,FINSEQ_1:27;
       hence thesis by TARSKI:def 1;
      end;
-A4:  the carrier of E = {a} & the Rules of E = {[a,{}]} by Def7;
+A3:  the carrier of E = {a} & the Rules of E = {[a,{}]} by Def7;
    let b; assume b in {{}};
-then A5:  [a,{}] in the Rules of E & b = {} & {} = {} the carrier of E &
-    a = the InitialSym of E & rng {} = {} by A4,TARSKI:def 1;
+then A4:  [a,{}] in the Rules of E & b = {} & {} = {} the carrier of E &
+    a = the InitialSym of E & rng {} = {} by A3,TARSKI:def 1;
     then the InitialSym of E ==> <*> the carrier of E by Def1;
     then <*the InitialSym of E*> ==> <*> the carrier of E by Th3;
     then <*> the carrier of E is_derivable_from <*the InitialSym of E*> by Th7
 ;
-   hence thesis by A2,A5;
+   hence thesis by A1,A4;
   end;
 
 theorem Th12:
@@ -536,199 +536,95 @@ theorem
   proof assume
 A1:  a <> b;
    set E = SingleGrammar(a,b);
-A3:  Terminals E = {b} by A1,Th12;
-A4:  the carrier of E = {a,b} & the InitialSym of E = a &
+A2:  Terminals E = {b} by A1,Th12;
+A3:  the carrier of E = {a,b} & the InitialSym of E = a &
     the Rules of E = {[a,<*b*>]} by Def8;
    then reconsider x = a, y = b as Symbol of E by TARSKI:def 2;
    thus Lang E c= {<*b*>}
      proof let c; assume c in Lang E;
       then consider p being String of E such that
-A5:     c = p & rng p c= Terminals E &
+A4:     c = p & rng p c= Terminals E &
        p is_derivable_from <*the InitialSym of E*>;
       consider q being FinSequence such that
-A6:     len q >= 1 & q.1 = <*the InitialSym of E*> & q.(len q) = p &
+A5:     len q >= 1 & q.1 = <*the InitialSym of E*> & q.(len q) = p &
        for i being Nat st i >= 1 & i < len q
-       ex a,b being String of E st q.i = a & q.(i+1) = b & a ==> b by A5,Def5;
+       ex a,b being String of E st q.i = a & q.(i+1) = b & a ==> b by A4,Def5;
        now assume p = <*x*>;
          then rng p = {x} by FINSEQ_1:55;
-         then x in rng p by TARSKI:def 1; hence contradiction by A1,A3,A5,
+         then x in rng p by TARSKI:def 1; hence contradiction by A1,A2,A4,
 TARSKI:def 1;
        end;
-then A7:    len q > 1 by A4,A6,REAL_1:def 5;
+then A6:    len q > 1 by A3,A5,REAL_1:def 5;
       then consider n, m being String of E such that
-A8:    q.1 = n & q.(1+1) = m & n ==> m by A6;
-          x ==> m by A4,A6,A8,Th4;
-       then [x,m] in {[a,<*b*>]} by A4,Def1;
+A7:    q.1 = n & q.(1+1) = m & n ==> m by A5;
+          x ==> m by A3,A5,A7,Th4;
+       then [x,m] in {[a,<*b*>]} by A3,Def1;
        then [x,m] = [a,<*b*>] by TARSKI:def 1;
-then A9:    m = <*b*> & 1 <= 2 by ZFMISC_1:33;
+then A8:    m = <*b*> & 1 <= 2 by ZFMISC_1:33;
           now assume 2 < len q;
         then consider k, l being String of E such that
-A10:      q.2 = k & q.(2+1) = l & k ==> l by A6;
-            y ==> l by A8,A9,A10,Th4;
-         then [y,l] in {[a,<*b*>]} by A4,Def1;
+A9:      q.2 = k & q.(2+1) = l & k ==> l by A5;
+            y ==> l by A7,A8,A9,Th4;
+         then [y,l] in {[a,<*b*>]} by A3,Def1;
          then [y,l] = [a,<*b*>] by TARSKI:def 1;
         hence contradiction by A1,ZFMISC_1:33;
        end;
-       then 2 >= len q & len q >= 1+1 by A7,NAT_1:38;
-       then c = <*b*> by A5,A6,A8,A9,XREAL_1:1;
+       then 2 >= len q & len q >= 1+1 by A6,NAT_1:38;
+       then c = <*b*> by A4,A5,A7,A8,XREAL_1:1;
       hence thesis by TARSKI:def 1;
      end;
    let c; assume c in {<*b*>};
-then A11:  [a,<*b*>] in the Rules of E & c = <*b*> & rng <*b*> = {b}
-     by A4,FINSEQ_1:55,TARSKI:def 1;
-    then the InitialSym of E ==> <*y*> by A4,Def1;
+then A10:  [a,<*b*>] in the Rules of E & c = <*b*> & rng <*b*> = {b}
+     by A3,FINSEQ_1:55,TARSKI:def 1;
+    then the InitialSym of E ==> <*y*> by A3,Def1;
     then <*the InitialSym of E*> ==> <*y*> by Th3;
     then <*y*> is_derivable_from <*the InitialSym of E*> by Th7;
-   hence thesis by A3,A11;
+   hence thesis by A2,A10;
   end;
 
 theorem Th14:
   a <> b implies Terminals IterGrammar(a,b) = {b}
   proof set T = IterGrammar(a,b); assume
 A1:  a <> b;
-A3:  the carrier of T = {a,b} & the InitialSym of T = a &
+A2:  the carrier of T = {a,b} & the InitialSym of T = a &
     the Rules of T = {[a,<*b,a*>],[a,{}]} by Def9;
    then reconsider x = a, y = b as Symbol of T by TARSKI:def 2;
    thus Terminals T c= {b}
      proof let c; assume c in Terminals T;
       then consider s being Symbol of T such that
-A4:     c = s & not ex n being FinSequence st s ==> n;
-          [a,<*b,a*>] in the Rules of T by A3,TARSKI:def 2;
+A3:     c = s & not ex n being FinSequence st s ==> n;
+          [a,<*b,a*>] in the Rules of T by A2,TARSKI:def 2;
        then x ==> <*y,x*> by Def1;
-       then s <> x by A4; then c = b by A3,A4,TARSKI:def 2;
+       then s <> x by A3; then c = b by A2,A3,TARSKI:def 2;
       hence thesis by TARSKI:def 1;
      end;
    let c; assume c in {b};
-then A5:  b = c by TARSKI:def 1;
+then A4:  b = c by TARSKI:def 1;
    assume not thesis;
    then consider n being FinSequence such that
-A6:  y ==> n by A5;
+A5:  y ==> n by A4;
        [a,<*b,a*>] <> [b,n] & [a,{}] <> [b,n] by A1,ZFMISC_1:33;
     then not [b,n] in {[a,<*b,a*>],[a,{}]} by TARSKI:def 2;
-   hence thesis by A3,A6,Def1;
+   hence thesis by A2,A5,Def1;
   end;
 
 theorem
   a <> b implies Lang IterGrammar(a,b) = {b}*
   proof set T = IterGrammar(a,b); assume
 A1:  a <> b;
-A3:  Terminals T = {b} by A1,Th14;
+A2:  Terminals T = {b} by A1,Th14;
    thus Lang T c= {b}*
-     proof let a; assume a in Lang T;
-      then consider p being String of T such that
-A4:     a = p & rng p c= Terminals T &
-       p is_derivable_from <*the InitialSym of T*>;
-          p is FinSequence of {b} by A3,A4,FINSEQ_1:def 4;
-      hence thesis by A4,FINSEQ_1:def 11;
-     end;
-A5:  the carrier of T = {a,b} & the InitialSym of T = a &
-    the Rules of T = {[a,<*b,a*>],[a,{}]} by Def9;
-   set I = <*the InitialSym of T*>;
-   defpred X[Nat] means for p being String of T st len p = $1 & p in {b}* holds
-      p^I is_derivable_from I;
-A6: X[0]
-     proof let p be String of T; assume len p = 0;
-       then p = {} by FINSEQ_1:25; then p^I = I by FINSEQ_1:47;
-      hence thesis by Th6;
-     end;
-A7:  for k being Nat st X[k] holds X[k+1]
-    proof let k be Nat such that
-A8:   for p being String of T st len p = k & p in {b}* holds
-        p^I is_derivable_from I;
-     let p be String of T; assume
-A9:   len p = k+1 & p in {b}*;
-     then consider q being FinSequence, c such that
-A10:   p = q^<*c*> & len q = k by TREES_2:4;
-         p is FinSequence of {b} by A9,FINSEQ_1:def 11;
-then A11:   q is FinSequence of the carrier of T & q is FinSequence of {b} &
-      <*c*> is FinSequence of the carrier of T & <*c*> is FinSequence of {b} &
-      rng <*c*> = {c} by A10,FINSEQ_1:50,55;
-     then reconsider q as String of T by FINSEQ_1:def 11;
-         q in {b}* by A11,FINSEQ_1:def 11;
-then A12:   q^I is_derivable_from I by A8,A10;
-A13:   {c} c= {b} & {c} c= the carrier of T by A11,FINSEQ_1:def 4;
-     then reconsider c as Element of {b} by ZFMISC_1:37;
-     reconsider x = c as Symbol of T by A13,ZFMISC_1:37;
-         [a,<*b,a*>] in the Rules of T & c = b by A5,TARSKI:def 1,def 2;
-      then the InitialSym of T ==> <*x,the InitialSym of T*> by A5,Def1;
-      then I ==> <*x,the InitialSym of T*> by Th3;
-      then q^I ==>
- q^<*x,the InitialSym of T*> & <*x,the InitialSym of T*> = <*x*>^I
-       by Th5,FINSEQ_1:def 9;
-      then q^I ==> p^I by A10,FINSEQ_1:45;
-      then p^I is_derivable_from q^I by Th7;
-     hence p^I is_derivable_from I by A12,Th8;
-    end;
-A14:  for k being Nat holds X[k] from NAT_1:sch 1(A6,A7);
-   let c; assume
-A15:  c in {b}*;
-   then reconsider c as FinSequence of {b} by FINSEQ_1:def 11;
-A16:  rng c c= {b} & {b} c= {a,b} by FINSEQ_1:def 4,ZFMISC_1:12;
-    then rng c c= {a,b} by XBOOLE_1:1;
-    then c is FinSequence of the carrier of T by A5,FINSEQ_1:def 4;
-   then reconsider n = c as String of T by FINSEQ_1:def 11;
-       len n = len n;
-then A17:  n^I is_derivable_from I by A14,A15;
-A18:  {} = {} the carrier of T & n^{} = n by FINSEQ_1:47;
-       [a,{}] in the Rules of T by A5,TARSKI:def 2;
-    then the InitialSym of T ==> <*> the carrier of T by A5,Def1;
-    then I ==> <*> the carrier of T by Th3;
-    then n^I ==> n by A18,Th5;
-    then n is_derivable_from n^I by Th7;
-    then n is_derivable_from I by A17,Th8;
-   hence thesis by A3,A16;
-  end;
-
-theorem Th16:
-  Terminals TotalGrammar D = D
-  proof set T = TotalGrammar D;
-A2:  the carrier of T = D \/ {D} & the InitialSym of T = D &
-    the Rules of T = {[D,<*d,D*>] where d is Element of D: d = d} \/ {[D,{}]}
-      by Def10;
-   thus Terminals T c= D
-     proof let a; assume a in Terminals T;
-      then consider s being Symbol of T such that
-A3:     a = s & not ex n being FinSequence st s ==> n;
-          [D,{}] in {[D,{}]} & D in {D} by TARSKI:def 1;
-then A4:     [D,{}] in the Rules of T & D in D \/ {D} by A2,XBOOLE_0:def 2;
-      reconsider b = D as Symbol of T by Def10;
-          b ==> <*> the carrier of T by A4,Def1;
-       then s <> D by A3; then not s in {D} by TARSKI:def 1;
-      hence thesis by A2,A3,XBOOLE_0:def 2;
-     end;
-   let a; assume a in D; then reconsider a as Element of D;
-   reconsider x = a as Symbol of T by A2,XBOOLE_0:def 2;
-   assume not thesis;
-   then consider n being FinSequence such that
-A5:  x ==> n;
-A6:  not a in a;
-    then a <> D;
-    then [a,n] <> [D,{}] by ZFMISC_1:33;
-    then [a,n] in the Rules of T & not [a,n] in {[D,{}]} by A5,Def1,
-TARSKI:def 1;
-    then [a,n] in {[D,<*d,D*>]: d = d} by A2,XBOOLE_0:def 2;
-   then ex d st [a,n] = [D,<*d,D*>] & d = d;
-    then a = D by ZFMISC_1:33;
-   hence thesis by A6;
-  end;
-
-theorem
-  Lang TotalGrammar D = D*
-  proof set T = TotalGrammar D;
-A2:  Terminals T = D by Th16;
-   thus Lang T c= D*
      proof let a; assume a in Lang T;
       then consider p being String of T such that
 A3:     a = p & rng p c= Terminals T &
        p is_derivable_from <*the InitialSym of T*>;
-          p is FinSequence of D by A2,A3,FINSEQ_1:def 4;
+          p is FinSequence of {b} by A2,A3,FINSEQ_1:def 4;
       hence thesis by A3,FINSEQ_1:def 11;
      end;
-A4:  the carrier of T = D \/ {D} & the InitialSym of T = D &
-    the Rules of T = {[D,<*d,D*>] where d is Element of D: d = d} \/ {[D,{}]}
-      by Def10;
+A4:  the carrier of T = {a,b} & the InitialSym of T = a &
+    the Rules of T = {[a,<*b,a*>],[a,{}]} by Def9;
    set I = <*the InitialSym of T*>;
-   defpred X[Nat] means for p being String of T st len p = $1 & p in D* holds
+   defpred X[Nat] means for p being String of T st len p = $1 & p in {b}* holds
       p^I is_derivable_from I;
 A5: X[0]
      proof let p be String of T; assume len p = 0;
@@ -737,24 +633,23 @@ A5: X[0]
      end;
 A6:  for k being Nat st X[k] holds X[k+1]
     proof let k be Nat such that
-A7:   for p being String of T st len p = k & p in D* holds
+A7:   for p being String of T st len p = k & p in {b}* holds
         p^I is_derivable_from I;
      let p be String of T; assume
-A8:   len p = k+1 & p in D*;
-     then consider q being FinSequence, a such that
-A9:   p = q^<*a*> & len q = k by TREES_2:4;
-         p is FinSequence of D by A8,FINSEQ_1:def 11;
-then A10:   q is FinSequence of the carrier of T & q is FinSequence of D &
-      <*a*> is FinSequence of the carrier of T & <*a*> is FinSequence of D&
-      rng <*a*> = {a} by A9,FINSEQ_1:50,55;
+A8:   len p = k+1 & p in {b}*;
+     then consider q being FinSequence, c such that
+A9:   p = q^<*c*> & len q = k by TREES_2:4;
+         p is FinSequence of {b} by A8,FINSEQ_1:def 11;
+then A10:   q is FinSequence of the carrier of T & q is FinSequence of {b} &
+      <*c*> is FinSequence of the carrier of T & <*c*> is FinSequence of {b} &
+      rng <*c*> = {c} by A9,FINSEQ_1:50,55;
      then reconsider q as String of T by FINSEQ_1:def 11;
-         q in D* by A10,FINSEQ_1:def 11;
+         q in {b}* by A10,FINSEQ_1:def 11;
 then A11:   q^I is_derivable_from I by A7,A9;
-A12:   {a} c= D & {a} c= the carrier of T by A10,FINSEQ_1:def 4;
-     then reconsider a as Element of D by ZFMISC_1:37;
-     reconsider x = a as Symbol of T by A12,ZFMISC_1:37;
-         [D,<*a,D*>] in {[D,<*d,D*>]: d = d};
-      then [D,<*a,D*>] in the Rules of T by A4,XBOOLE_0:def 2;
+A12:   {c} c= {b} & {c} c= the carrier of T by A10,FINSEQ_1:def 4;
+     then reconsider c as Element of {b} by ZFMISC_1:37;
+     reconsider x = c as Symbol of T by A12,ZFMISC_1:37;
+         [a,<*b,a*>] in the Rules of T & c = b by A4,TARSKI:def 1,def 2;
       then the InitialSym of T ==> <*x,the InitialSym of T*> by A4,Def1;
       then I ==> <*x,the InitialSym of T*> by Th3;
       then q^I ==>
@@ -765,24 +660,129 @@ A12:   {a} c= D & {a} c= the carrier of T by A10,FINSEQ_1:def 4;
      hence p^I is_derivable_from I by A11,Th8;
     end;
 A13:  for k being Nat holds X[k] from NAT_1:sch 1(A5,A6);
-   let a; assume
-A14:  a in D*;
-   then reconsider a as FinSequence of D by FINSEQ_1:def 11;
-A15:  rng a c= D & D c= D \/ {D} by FINSEQ_1:def 4,XBOOLE_1:7;
-    then rng a c= the carrier of T by A4,XBOOLE_1:1;
-    then a is FinSequence of the carrier of T by FINSEQ_1:def 4;
-   then reconsider n = a as String of T by FINSEQ_1:def 11;
+   let c; assume
+A14:  c in {b}*;
+   then reconsider c as FinSequence of {b} by FINSEQ_1:def 11;
+A15:  rng c c= {b} & {b} c= {a,b} by FINSEQ_1:def 4,ZFMISC_1:12;
+    then rng c c= {a,b} by XBOOLE_1:1;
+    then c is FinSequence of the carrier of T by A4,FINSEQ_1:def 4;
+   then reconsider n = c as String of T by FINSEQ_1:def 11;
        len n = len n;
 then A16:  n^I is_derivable_from I by A13,A14;
 A17:  {} = {} the carrier of T & n^{} = n by FINSEQ_1:47;
-       [D,{}] in {[D,{}]} by TARSKI:def 1;
-    then [D,{}] in the Rules of T by A4,XBOOLE_0:def 2;
+       [a,{}] in the Rules of T by A4,TARSKI:def 2;
     then the InitialSym of T ==> <*> the carrier of T by A4,Def1;
     then I ==> <*> the carrier of T by Th3;
     then n^I ==> n by A17,Th5;
     then n is_derivable_from n^I by Th7;
     then n is_derivable_from I by A16,Th8;
    hence thesis by A2,A15;
+  end;
+
+theorem Th16:
+  Terminals TotalGrammar D = D
+  proof set T = TotalGrammar D;
+A1:  the carrier of T = D \/ {D} & the InitialSym of T = D &
+    the Rules of T = {[D,<*d,D*>] where d is Element of D: d = d} \/ {[D,{}]}
+      by Def10;
+   thus Terminals T c= D
+     proof let a; assume a in Terminals T;
+      then consider s being Symbol of T such that
+A2:     a = s & not ex n being FinSequence st s ==> n;
+          [D,{}] in {[D,{}]} & D in {D} by TARSKI:def 1;
+then A3:     [D,{}] in the Rules of T & D in D \/ {D} by A1,XBOOLE_0:def 2;
+      reconsider b = D as Symbol of T by Def10;
+          b ==> <*> the carrier of T by A3,Def1;
+       then s <> D by A2; then not s in {D} by TARSKI:def 1;
+      hence thesis by A1,A2,XBOOLE_0:def 2;
+     end;
+   let a; assume a in D; then reconsider a as Element of D;
+   reconsider x = a as Symbol of T by A1,XBOOLE_0:def 2;
+   assume not thesis;
+   then consider n being FinSequence such that
+A4:  x ==> n;
+A5:  not a in a;
+    then a <> D;
+    then [a,n] <> [D,{}] by ZFMISC_1:33;
+    then [a,n] in the Rules of T & not [a,n] in {[D,{}]} by A4,Def1,
+TARSKI:def 1;
+    then [a,n] in {[D,<*d,D*>]: d = d} by A1,XBOOLE_0:def 2;
+   then ex d st [a,n] = [D,<*d,D*>] & d = d;
+    then a = D by ZFMISC_1:33;
+   hence thesis by A5;
+  end;
+
+theorem
+  Lang TotalGrammar D = D*
+  proof set T = TotalGrammar D;
+A1:  Terminals T = D by Th16;
+   thus Lang T c= D*
+     proof let a; assume a in Lang T;
+      then consider p being String of T such that
+A2:     a = p & rng p c= Terminals T &
+       p is_derivable_from <*the InitialSym of T*>;
+          p is FinSequence of D by A1,A2,FINSEQ_1:def 4;
+      hence thesis by A2,FINSEQ_1:def 11;
+     end;
+A3:  the carrier of T = D \/ {D} & the InitialSym of T = D &
+    the Rules of T = {[D,<*d,D*>] where d is Element of D: d = d} \/ {[D,{}]}
+      by Def10;
+   set I = <*the InitialSym of T*>;
+   defpred X[Nat] means for p being String of T st len p = $1 & p in D* holds
+      p^I is_derivable_from I;
+A4: X[0]
+     proof let p be String of T; assume len p = 0;
+       then p = {} by FINSEQ_1:25; then p^I = I by FINSEQ_1:47;
+      hence thesis by Th6;
+     end;
+A5:  for k being Nat st X[k] holds X[k+1]
+    proof let k be Nat such that
+A6:   for p being String of T st len p = k & p in D* holds
+        p^I is_derivable_from I;
+     let p be String of T; assume
+A7:   len p = k+1 & p in D*;
+     then consider q being FinSequence, a such that
+A8:   p = q^<*a*> & len q = k by TREES_2:4;
+         p is FinSequence of D by A7,FINSEQ_1:def 11;
+then A9:   q is FinSequence of the carrier of T & q is FinSequence of D &
+      <*a*> is FinSequence of the carrier of T & <*a*> is FinSequence of D&
+      rng <*a*> = {a} by A8,FINSEQ_1:50,55;
+     then reconsider q as String of T by FINSEQ_1:def 11;
+         q in D* by A9,FINSEQ_1:def 11;
+then A10:   q^I is_derivable_from I by A6,A8;
+A11:   {a} c= D & {a} c= the carrier of T by A9,FINSEQ_1:def 4;
+     then reconsider a as Element of D by ZFMISC_1:37;
+     reconsider x = a as Symbol of T by A11,ZFMISC_1:37;
+         [D,<*a,D*>] in {[D,<*d,D*>]: d = d};
+      then [D,<*a,D*>] in the Rules of T by A3,XBOOLE_0:def 2;
+      then the InitialSym of T ==> <*x,the InitialSym of T*> by A3,Def1;
+      then I ==> <*x,the InitialSym of T*> by Th3;
+      then q^I ==>
+ q^<*x,the InitialSym of T*> & <*x,the InitialSym of T*> = <*x*>^I
+       by Th5,FINSEQ_1:def 9;
+      then q^I ==> p^I by A8,FINSEQ_1:45;
+      then p^I is_derivable_from q^I by Th7;
+     hence p^I is_derivable_from I by A10,Th8;
+    end;
+A12:  for k being Nat holds X[k] from NAT_1:sch 1(A4,A5);
+   let a; assume
+A13:  a in D*;
+   then reconsider a as FinSequence of D by FINSEQ_1:def 11;
+A14:  rng a c= D & D c= D \/ {D} by FINSEQ_1:def 4,XBOOLE_1:7;
+    then rng a c= the carrier of T by A3,XBOOLE_1:1;
+    then a is FinSequence of the carrier of T by FINSEQ_1:def 4;
+   then reconsider n = a as String of T by FINSEQ_1:def 11;
+       len n = len n;
+then A15:  n^I is_derivable_from I by A12,A13;
+A16:  {} = {} the carrier of T & n^{} = n by FINSEQ_1:47;
+       [D,{}] in {[D,{}]} by TARSKI:def 1;
+    then [D,{}] in the Rules of T by A3,XBOOLE_0:def 2;
+    then the InitialSym of T ==> <*> the carrier of T by A3,Def1;
+    then I ==> <*> the carrier of T by Th3;
+    then n^I ==> n by A16,Th5;
+    then n is_derivable_from n^I by Th7;
+    then n is_derivable_from I by A15,Th8;
+   hence thesis by A1,A14;
   end;
 
 definition let IT be non empty GrammarStr;

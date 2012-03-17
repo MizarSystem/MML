@@ -54,13 +54,13 @@ A1:  FreeMSA V = MSAlgebra(#FreeSort V, FreeOper V#) by MSAFREE:def 16;
        rng x c= TS DTConMSA V
      proof let y be set; assume y in rng x;
       then consider z being set such that
-A3:     z in dom x & y = x.z by FUNCT_1:def 5;
-      reconsider z as Nat by A3;
+A2:     z in dom x & y = x.z by FUNCT_1:def 5;
+      reconsider z as Nat by A2;
           dom x = dom the_arity_of o by MSUALG_6:2;
        then y in (FreeSort V).((the_arity_of o)/.z) &
        (FreeSort V).((the_arity_of o)/.z) = FreeSort(V,(the_arity_of o)/.z) &
        FreeSort(V, (the_arity_of o)/.z) c= S-Terms V
-        by A1,A3,MSAFREE:def 13,MSATERM:12,MSUALG_6:2;
+        by A1,A2,MSAFREE:def 13,MSATERM:12,MSUALG_6:2;
       hence thesis;
      end;
    then reconsider x as FinSequence of TS DTConMSA V by FINSEQ_1:def 4;
@@ -128,14 +128,7 @@ end;
 theorem
  for S being non empty non void ManySortedSign
  for A,B being MSAlgebra over S st the MSAlgebra of A = the MSAlgebra of B
- for o being OperSymbol of S holds Den(o,A) = Den(o,B)
-  proof let S be non empty non void ManySortedSign;
-   let A,B be MSAlgebra over S such that
-A1:  the MSAlgebra of A = the MSAlgebra of B;
-   let o be OperSymbol of S;
-   thus Den(o,A) = (the Charact of A).o
-        .= Den(o,B) by A1;
-  end;
+ for o being OperSymbol of S holds Den(o,A) = Den(o,B);
 
 theorem Th6:
  for S being non empty non void ManySortedSign
@@ -185,16 +178,13 @@ A4:  h is_homomorphism A1,A2;
    let o be OperSymbol of S; assume
 A5:  Args(o,B1) <> {};
    let x be Element of Args(o,B1);
-  Args(o,A1) = product ((the Sorts of A1)*(the_arity_of o)) &
-    Args(o,B1) = product ((the Sorts of B1)*(the_arity_of o))
-     by PRALG_2:10;
-   then reconsider y = x as Element of Args(o,A1) by A1;
-A7: Args(o,B2) <> {} by A1,A2,A3,A5,Th3;
+   reconsider y = x as Element of Args(o,A1) by A1;
+A6: Args(o,B2) <> {} by A1,A2,A3,A5,Th3;
    thus (h'.(the_result_sort_of o)).(Den(o,B1).x)
        = (h.(the_result_sort_of o)).(Den(o,A1).y) by A1
       .= Den(o,A2).(h#y) by A1,A4,A5,MSUALG_3:def 9
       .= Den(o,B2).(h#y) by A2
-      .= Den(o,B2).(h'#x) by A1,A2,A5,A7,Th6;
+      .= Den(o,B2).(h'#x) by A1,A2,A5,A6,Th6;
   end;
 
 definition
@@ -704,16 +694,16 @@ A2:  o2 = g.o1;
      .= product ((the Sorts of A)*f*the_arity_of o1) by RELAT_1:55
      .= product ((the Sorts of A|(S1,f,g))*the_arity_of o1) by A1,Def3
      .= Args(o1,A|(S1,f,g)) by PRALG_2:10;
-A4:  dom g = the OperSymbols of S1 & dom f = the carrier of S1
+A3:  dom g = the OperSymbols of S1 & dom f = the carrier of S1
      by A1,PUA2MSS1:def 13;
      the_result_sort_of o2 = (the ResultSort of S2).o2
-     .= ((the ResultSort of S2)*g).o1 by A2,A4,FUNCT_1:23
+     .= ((the ResultSort of S2)*g).o1 by A2,A3,FUNCT_1:23
      .= (f*the ResultSort of S1).o1 by A1,PUA2MSS1:def 13
      .= f.((the ResultSort of S1).o1) by FUNCT_2:21
      .= f.the_result_sort_of o1;
    hence Result(o2,A) = (the Sorts of A).(f.the_result_sort_of o1)
       by PRALG_2:10
-     .= ((the Sorts of A)*f).the_result_sort_of o1 by A4,FUNCT_1:23
+     .= ((the Sorts of A)*f).the_result_sort_of o1 by A3,FUNCT_1:23
      .= (the Sorts of A|(S1,f,g)).the_result_sort_of o1 by A1,Def3
      .= Result(o1,A|(S1,f,g)) by PRALG_2:10;
   end;
@@ -735,13 +725,7 @@ A1:  f,g form_morphism_between S,S by Th9;
 
 theorem
     for S being non empty ManySortedSign
- for A being MSAlgebra over S holds A|S = the MSAlgebra of A
-  proof let S be non empty ManySortedSign;
-   let A be MSAlgebra over S;
-       A|(S, id the carrier of S, id the OperSymbols of S) = the MSAlgebra of A
-     by Th26;
-   hence thesis;
-  end;
+ for A being MSAlgebra over S holds A|S = the MSAlgebra of A by Th26;
 
 theorem Th28:
  for S1,S2,S3 being non empty ManySortedSign
@@ -983,8 +967,7 @@ A3:  f,g form_morphism_between S',S by Def2;
 ;
    consider h' being ManySortedFunction of A1|(S',f,g), A2|(S',f,g) such that
 A4:  h' = h*f & h' is_homomorphism A1|(S',f,g), A2|(S',f,g) by A1,A2,A3,Th35;
-     A1|S' = A1|(S',f,g) & A2|S' = A2|(S',f,g);
-   then consider k being ManySortedFunction of A1|S', A2|S' such that
+   consider k being ManySortedFunction of A1|S', A2|S' such that
 A5:  k = h' & k is_homomorphism A1|S', A2|S' by A4;
    take k; thus thesis by A4,A5,RELAT_1:94;
   end;
@@ -1026,9 +1009,7 @@ A5:  i in dom the_arity_of o & (the_arity_of o)/.i = s1 &
       .= f.((the ResultSort of S').o) by FUNCT_2:21
       .= f.s2 by A3;
    take i;
-       the_arity_of (g.o) = (the Arity of S).(g.o) &
-    the_arity_of o = (the Arity of S').o;
-then A6:  f*the_arity_of o = the_arity_of (g.o) by A1,PUA2MSS1:def 13;
+A6:  f*the_arity_of o = the_arity_of (g.o) by A1,PUA2MSS1:def 13;
        rng the_arity_of o c= the carrier of S' & dom f = the carrier of S'
      by FINSEQ_1:def 4,FUNCT_2:def 1;
    hence i in dom the_arity_of (g.o) by A5,A6,RELAT_1:46;

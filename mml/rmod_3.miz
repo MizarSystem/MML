@@ -14,7 +14,7 @@ environ
  registrations LATTICES, VECTSP_2, RMOD_2, STRUCT_0, RELSET_1, SUBSET_1,
       XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, RMOD_2, XBOOLE_0;
+ definitions TARSKI, RMOD_2, XBOOLE_0, RLVECT_1, BINOP_1;
  theorems BINOP_1, FUNCT_1, FUNCT_2, LATTICES, MCART_1, RLSUB_2, TARSKI,
       VECTSP_1, ZFMISC_1, RMOD_2, RLVECT_1, RELAT_1, XBOOLE_0, XBOOLE_1;
  schemes BINOP_1, FUNCT_1, XBOOLE_0;
@@ -329,26 +329,14 @@ A8:  v2 in W';
 
 Lm5: for W being Submodule of V holds W is Submodule of (Omega).V
  proof let W be Submodule of V;
-  the RightModStr of V = (Omega).V;
-  hence the carrier of W c= the carrier of (Omega).V
+  thus the carrier of W c= the carrier of (Omega).V
     by RMOD_2:def 2;
   thus thesis by RMOD_2:def 2;
  end;
 
-theorem Th14:
+theorem
  for V being strict RightMod of R
- holds (0).V + (Omega).V = V & (Omega).V + (0).V = V
-  proof let V be strict RightMod of R;
-    consider W' being strict Submodule of V such that
-A1:
-     the carrier of W' = the carrier of (Omega).V;
-A2:  the carrier of W' = the carrier of V
-       by A1;
-   thus (0).V + (Omega).V = (0).V + W' by A1,Lm4
-                     .= W' by Th13
-                     .= V by A2,RMOD_2:39;
-   hence thesis by Lm1;
-  end;
+ holds (0).V + (Omega).V = V & (Omega).V + (0).V = V by Th13;
 
 theorem Th15:
  for V being RightMod of R, W being Submodule of V
@@ -357,13 +345,12 @@ V = the RightModStr of V
   proof let V be RightMod of R, W be Submodule of V;
     consider W' being strict Submodule of V such that
 A1: the carrier of W' = the carrier of (Omega).V;
-  the RightModStr of V = (Omega).V;
-then A3: the carrier of W c=
+A2: the carrier of W c=
          the carrier of W' by A1,RMOD_2:def 2;
-A4:   W' is Submodule of (Omega).V by Lm5;
+A3:   W' is Submodule of (Omega).V by Lm5;
        W + (Omega).V = W + W' by A1,Lm4
-                  .= W' by A3,Lm3
-                  .= the RightModStr of V by A1,A4,RMOD_2:39;
+                  .= W' by A2,Lm3
+                  .= the RightModStr of V by A1,A3,RMOD_2:39;
    hence thesis by Lm1;
   end;
 
@@ -495,46 +482,21 @@ theorem Th27:
  for W being strict Submodule of V
  holds (Omega).V /\ W = W & W /\ (Omega).V = W
   proof let W be strict Submodule of V;
-    A2: the carrier of (Omega).V /\ W =
+    A1: the carrier of (Omega).V /\ W =
      (the carrier of (Omega).V) /\ (the carrier of W) by Def2
   .= (the carrier of V) /\ (the carrier of W);
        the carrier of W c= the carrier of V by RMOD_2:def 2;
     then the carrier of (Omega).V /\ W =
-         the carrier of W by A2,XBOOLE_1:28;
+         the carrier of W by A1,XBOOLE_1:28;
    hence (Omega).V /\ W = W by RMOD_2:37;
    hence thesis by Th18;
   end;
 
-Lm7:
- for W,W',W1 being Submodule of V st
-  the carrier of W = the carrier of W'
- holds W1 /\ W = W1 /\ W' & W /\ W1 = W' /\ W1
- proof
-  let W,W',W1 be Submodule of V such that
-A1: the carrier of W = the carrier of W';
-  A2: now
-   thus the carrier of W1 /\ W
-     = (the carrier of W1) /\ (the carrier of W')
-        by A1,Def2
-    .= the carrier of W1 /\ W' by Def2;
-  end;
-  hence
-    W1 /\ W = W1 /\ W' by RMOD_2:37;
-     W1 /\ W = W /\ W1 & W1 /\ W' = W' /\ W1 by Th18;
-  hence thesis by A2,RMOD_2:37;
- end;
-
 theorem
     for V being strict RightMod of R holds (Omega).V /\ (Omega).V = V
-  proof let V be strict RightMod of R;
-    consider W' being strict Submodule of V such that
-A1: the carrier of W' = the carrier of (Omega).V;
-   thus (Omega).V /\ (Omega).V = (Omega).V /\ W' by A1,Lm7
-                     .= W' by Th27
-                     .= V by A1,RMOD_2:39;
-  end;
+      by Th27;
 
-Lm8: the carrier of W1 /\ W2 c= the carrier of W1 + W2
+Lm7: the carrier of W1 /\ W2 c= the carrier of W1 + W2
  proof the carrier of W1 /\ W2 c=
        the carrier of W1 &
        the carrier of W1 c=
@@ -545,11 +507,11 @@ Lm8: the carrier of W1 /\ W2 c= the carrier of W1 + W2
 theorem
     W1 /\ W2 is Submodule of W1 + W2
   proof the carrier of W1 /\ W2 c=
-        the carrier of W1 + W2 by Lm8;
+        the carrier of W1 + W2 by Lm7;
    hence thesis by RMOD_2:35;
   end;
 
-Lm9: the carrier of (W1 /\ W2) + W2 =
+Lm8: the carrier of (W1 /\ W2) + W2 =
      the carrier of W2
  proof
   thus the carrier of (W1 /\ W2) + W2 c=
@@ -576,11 +538,11 @@ theorem Th30:
  for W2 being strict Submodule of V holds (W1 /\ W2) + W2 = W2
   proof let W2 be strict Submodule of V;
       the carrier of (W1 /\ W2) + W2 =
-        the carrier of W2 by Lm9;
+        the carrier of W2 by Lm8;
    hence thesis by RMOD_2:37;
   end;
 
-Lm10: the carrier of W1 /\ (W1 + W2) = the carrier of W1
+Lm9: the carrier of W1 /\ (W1 + W2) = the carrier of W1
  proof
   thus the carrier of W1 /\ (W1 + W2) c=
        the carrier of W1
@@ -608,11 +570,11 @@ theorem Th31:
  for W1 being strict Submodule of V holds W1 /\ (W1 + W2) = W1
   proof let W1 be strict Submodule of V;
       the carrier of W1 /\ (W1 + W2) =
-        the carrier of W1 by Lm10;
+        the carrier of W1 by Lm9;
    hence thesis by RMOD_2:37;
   end;
 
-Lm11: the carrier of (W1 /\ W2) + (W2 /\ W3) c=
+Lm10: the carrier of (W1 /\ W2) + (W2 /\ W3) c=
      the carrier of W2 /\ (W1 + W3)
  proof
   let x be set;
@@ -630,11 +592,11 @@ theorem
     (W1 /\ W2) + (W2 /\ W3) is Submodule of W2 /\ (W1 + W3)
   proof
        the carrier of (W1 /\ W2) + (W2 /\ W3) c=
-    the carrier of W2 /\ (W1 + W3) by Lm11;
+    the carrier of W2 /\ (W1 + W3) by Lm10;
    hence thesis by RMOD_2:35;
   end;
 
-Lm12: W1 is Submodule of W2 implies
+Lm11: W1 is Submodule of W2 implies
       the carrier of W2 /\ (W1 + W3) =
       the carrier of (W1 /\ W2) + (W2 /\ W3)
  proof assume A1: W1 is Submodule of W2;
@@ -653,14 +615,14 @@ Lm12: W1 is Submodule of W2 implies
          x in the carrier of W2 by A2,XBOOLE_0:def 3;
       then u1 + v1 in W2 by A3,RLVECT_1:def 1;
       then (v1 + u1) - u1 in W2 by A6,RMOD_2:31;
-      then v1 + (u1 - u1) in W2 by RLVECT_1:42;
+      then v1 + (u1 - u1) in W2 by RLVECT_1:def 6;
       then v1 + 0.V in W2 by VECTSP_1:66;
       then v1 in W2 by VECTSP_1:7;
       then v1 in W2 /\ W3 by A5,Th7;
       then x in (W1 /\ W2) + (W2 /\ W3) by A3,A7,Th5;
     hence thesis by RLVECT_1:def 1;
    end;
- thus thesis by Lm11;
+ thus thesis by Lm10;
 end;
 
 theorem Th33:
@@ -668,11 +630,11 @@ theorem Th33:
   proof
    assume W1 is Submodule of W2;
     then the carrier of W2 /\ (W1 + W3) =
-         the carrier of (W1 /\ W2) + (W2 /\ W3) by Lm12;
+         the carrier of (W1 /\ W2) + (W2 /\ W3) by Lm11;
    hence thesis by RMOD_2:37;
   end;
 
-Lm13: the carrier of W2 + (W1 /\ W3) c=
+Lm12: the carrier of W2 + (W1 /\ W3) c=
         the carrier of (W1 + W2) /\ (W2 + W3)
    proof let x be set;
      assume x in the carrier of W2 + (W1 /\ W3);
@@ -692,18 +654,18 @@ Lm13: the carrier of W2 + (W1 /\ W3) c=
 theorem
     W2 + (W1 /\ W3) is Submodule of (W1 + W2) /\ (W2 + W3)
   proof the carrier of W2 + (W1 /\ W3) c=
-        the carrier of (W1 + W2) /\ (W2 + W3) by Lm13;
+        the carrier of (W1 + W2) /\ (W2 + W3) by Lm12;
    hence thesis by RMOD_2:35;
   end;
 
-Lm14: W1 is Submodule of W2 implies
+Lm13: W1 is Submodule of W2 implies
         the carrier of W2 + (W1 /\ W3) =
          the carrier of (W1 + W2) /\ (W2 + W3)
  proof assume A1: W1 is Submodule of W2;
    reconsider V2 = the carrier of W2 as Subset of V
          by RMOD_2:def 2;
   thus the carrier of W2 + (W1 /\ W3) c=
-       the carrier of (W1 + W2) /\ (W2 + W3) by Lm13;
+       the carrier of (W1 + W2) /\ (W2 + W3) by Lm12;
   let x be set;
    assume x in the carrier of (W1 + W2) /\ (W2 + W3);
      then x in (the carrier of W1 + W2) /\
@@ -729,7 +691,7 @@ theorem
   proof
    assume W1 is Submodule of W2;
     then the carrier of W2 + (W1 /\ W3) =
-         the carrier of (W1 + W2) /\ (W2 + W3) by Lm14;
+         the carrier of (W1 + W2) /\ (W2 + W3) by Lm13;
    hence thesis by RMOD_2:37;
   end;
 
@@ -823,7 +785,7 @@ TARSKI:def 3;
            reconsider A2 = VW1 as Subset of V by RMOD_2:def 2;
                A2 is lineary-closed by RMOD_2:41;
             then (y + x) - x in VW1 by A9,RMOD_2:6;
-            then y + (x - x) in VW1 by RLVECT_1:42;
+            then y + (x - x) in VW1 by RLVECT_1:def 6;
             then y + 0.V in VW1 by VECTSP_1:66;
           hence contradiction by A6,VECTSP_1:7;
          end;
@@ -831,7 +793,7 @@ TARSKI:def 3;
            reconsider A2 = VW2 as Subset of V by RMOD_2:def 2;
                A2 is lineary-closed by RMOD_2:41;
             then (x + y) - y in VW2 by A10,RMOD_2:6;
-            then x + (y - y) in VW2 by RLVECT_1:42;
+            then x + (y - y) in VW2 by RLVECT_1:def 6;
             then x + 0.V in VW2 by VECTSP_1:66;
           hence contradiction by A4,VECTSP_1:7;
          end;
@@ -938,12 +900,9 @@ theorem
  holds V in Submodules(V)
   proof let V be strict RightMod of R;
     consider W' being strict Submodule of V such that
-A1:
-     the carrier of (Omega).V = the carrier of W';
-A2:  the carrier of V = the carrier of W'
-       by A1;
+A1:  the carrier of (Omega).V = the carrier of W';
        W' in Submodules(V) by Def3;
-   hence thesis by A2,RMOD_2:39;
+   hence thesis by A1,RMOD_2:39;
   end;
 
 definition let R; let V; let W1,W2;
@@ -951,7 +910,7 @@ definition let R; let V; let W1,W2;
   :Def4: the RightModStr of V = W1 + W2 & W1 /\ W2 = (0).V;
 end;
 
-Lm15:
+Lm14:
  for V being RightMod of R, W1,W2 being Submodule of V holds
  W1 + W2 = the RightModStr of V iff
  for v being Vector of V
@@ -960,25 +919,25 @@ Lm15:
    thus W1 + W2 = the RightModStr of V implies
     for v being Vector of V
      ex v1,v2 being Vector of V st v1 in W1 & v2 in W2 & v = v1 + v2
-    proof assume A2: W1 + W2 = the RightModStr of V;
+    proof assume A1: W1 + W2 = the RightModStr of V;
      let v be Vector of V;
          v in (Omega).V by RLVECT_1:3;
-     hence thesis by A2,Th5;
+     hence thesis by A1,Th5;
     end;
-    assume A3: for v being Vector of V
+    assume A2: for v being Vector of V
       ex v1,v2 being Vector of V st v1 in W1 & v2 in W2 & v = v1 + v2;
         now
       thus W1 + W2 is Submodule of (Omega).V by Lm5;
       let u be Vector of V;
            ex v1,v2 being Vector of V st v1 in W1 & v2 in W2 & u = v1 + v2 by
-A3
+A2
 ;
       hence u in W1 + W2 by Th5;
      end;
    hence thesis by RMOD_2:40;
   end;
 
-Lm16: v = v1 + v2 iff v1 = v - v2
+Lm15: v = v1 + v2 iff v1 = v - v2
  proof
   thus v = v1 + v2 implies v1 = v - v2
    proof assume A1: v = v1 + v2;
@@ -989,7 +948,7 @@ Lm16: v = v1 + v2 iff v1 = v - v2
            .= (v + (- v2)) + ((- v1) + v1) by RLVECT_1:def 6
            .= v + (- v2) + 0.V by RLVECT_1:16
            .= v + (- v2) by VECTSP_1:7
-           .= v - v2 by RLVECT_1:def 11;
+           .= v - v2;
    end;
    assume A2: v1 = v - v2;
   thus v = v + 0.V by VECTSP_1:7
@@ -1017,7 +976,7 @@ theorem
  holds V is_the_direct_sum_of (0).V,(Omega).V &
   V is_the_direct_sum_of (Omega).V,(0).V
    proof let V be strict RightMod of R;
-        (0).V + (Omega).V = V & (0).V = (0).V /\ (Omega).V by Th14,Th25;
+        (0).V + (Omega).V = V & (0).V = (0).V /\ (Omega).V by Th13,Th25;
     hence V is_the_direct_sum_of (0).V,(Omega).V by Def4;
     hence thesis by Th46;
    end;
@@ -1049,16 +1008,14 @@ theorem Th48:
                                                             by A3,RMOD_2:57;
                u1 = u2 by A6,A8,RLVECT_1:21;
             then u1 in W1 /\ W2 by A5,A7,Th7;
-            then x in {v + u : u in W1 /\ W2} by A6;
-          hence thesis;
+          hence thesis by A6;
          end;
         let x;
          assume x in v + (W1 /\ W2);
           then consider u such that A9: u in W1 /\ W2 and A10: x = v + u
                                                            by RMOD_2:57;
               u in W1 & u in W2 by A9,Th7;
-           then x in {v + u1 : u1 in W1} & x in {v + u2 : u2 in W2} by A10;
-           then x in C1 & x in C2 by A2,A3;
+           then x in C1 & x in C2 by A2,A3,A10;
         hence thesis by XBOOLE_0:def 3;
        end;
     hence thesis;
@@ -1079,49 +1036,49 @@ theorem Th49:
       ex v being Vector of V st C1 /\ C2 = {v}
      proof assume A2: V is_the_direct_sum_of W1,W2;
       let C1 be Coset of W1, C2 be Coset of W2;
-       consider v1 being Vector of V such that A4: C1 = v1 + W1 by RMOD_2:def 6
+       consider v1 being Vector of V such that A3: C1 = v1 + W1 by RMOD_2:def 6
 ;
-       consider v2 being Vector of V such that A5: C2 = v2 + W2 by RMOD_2:def 6
+       consider v2 being Vector of V such that A4: C2 = v2 + W2 by RMOD_2:def 6
 ;
-        A6: the RightModStr of V = W1 + W2 by A2,Def4;
+        A5: the RightModStr of V = W1 + W2 by A2,Def4;
            v1 in (Omega).V by RLVECT_1:3;
-       then consider v11,v12 being Vector of V such that A7: v11 in W1 and
-        A8: v12 in W2 and A9: v1 = v11 + v12 by A6,Th5;
+       then consider v11,v12 being Vector of V such that A6: v11 in W1 and
+        A7: v12 in W2 and A8: v1 = v11 + v12 by A5,Th5;
            v2 in (Omega).V by RLVECT_1:3;
-       then consider v21,v22 being Vector of V such that A10: v21 in W1 and
-        A11: v22 in W2 and A12: v2 = v21 + v22 by A6,Th5;
+       then consider v21,v22 being Vector of V such that A9: v21 in W1 and
+        A10: v22 in W2 and A11: v2 = v21 + v22 by A5,Th5;
       take v = v12 + v21;
           {v} = C1 /\ C2
         proof
-         thus A13: {v} c= C1 /\ C2
+         thus A12: {v} c= C1 /\ C2
           proof let x;
             assume x in {v};
-             then A14: x = v by TARSKI:def 1;
-                v12 = v1 - v11 by A9,Lm16;
-             then v12 in C1 by A4,A7,RMOD_2:75;
+             then A13: x = v by TARSKI:def 1;
+                v12 = v1 - v11 by A8,Lm15;
+             then v12 in C1 by A3,A6,RMOD_2:75;
              then C1 = v12 + W1 by RMOD_2:90;
-             then A15: x in C1 by A10,A14;
-                v21 = v2 - v22 by A12,Lm16;
-             then v21 in C2 by A5,A11,RMOD_2:75;
+             then A14: x in C1 by A9,A13;
+                v21 = v2 - v22 by A11,Lm15;
+             then v21 in C2 by A4,A10,RMOD_2:75;
              then C2 = v21 + W2 & v = v21 + v12 by RMOD_2:90;
-             then x in C2 by A8,A14;
-           hence thesis by A15,XBOOLE_0:def 3;
+             then x in C2 by A7,A13;
+           hence thesis by A14,XBOOLE_0:def 3;
           end;
          let x;
-          assume A16: x in C1 /\ C2;
+          assume A15: x in C1 /\ C2;
            then C1 meets C2 by XBOOLE_0:4;
            then reconsider C = C1 /\ C2 as Coset of W1 /\ W2 by Th48;
                W1 /\ W2 = (0).V by A2,Def4;
-           then A17: ex u being Vector of V st C = {u} by RMOD_2:85;
+           then A16: ex u being Vector of V st C = {u} by RMOD_2:85;
                v in {v} by TARSKI:def 1;
-            hence thesis by A13,A16,A17,TARSKI:def 1;
+            hence thesis by A12,A15,A16,TARSKI:def 1;
          thus thesis;
         end;
        hence C1 /\ C2 = {v};
       end;
-     assume A18: for C1 being Coset of W1, C2 being Coset of W2
+     assume A17: for C1 being Coset of W1, C2 being Coset of W2
       ex v being Vector of V st C1 /\ C2 = {v};
-A19:   W1 + W2 is Submodule of (Omega).V & the RightModStr of V = (Omega).V
+A18:   W1 + W2 is Submodule of (Omega).V & the RightModStr of V = (Omega).V
         by Lm5;
           the carrier of V = the carrier of W1 + W2
         proof
@@ -1131,28 +1088,28 @@ A19:   W1 + W2 is Submodule of (Omega).V & the RightModStr of V = (Omega).V
             assume x in the carrier of V;
              then reconsider u = x as Vector of V;
              consider C1 being Coset of W1 such that
-             A20: u in C1 by RMOD_2:81;
-             consider v being Vector of V such that A21: C1 /\
-              VW2 = {v} by A1,A18;
-              A22: v in {v} by TARSKI:def 1;
-              then v in VW2 by A21,XBOOLE_0:def 3;
-              then A23: v in W2 by RLVECT_1:def 1;
-                 v in C1 by A21,A22,XBOOLE_0:def 3;
-             then consider v1 being Vector of V such that A24: v1 in W1 and
-              A25: u - v1 = v by A20,RMOD_2:92;
-                 u = v1 + v by A25,Lm16;
-              then x in W1 + W2 by A23,A24,Th5;
+             A19: u in C1 by RMOD_2:81;
+             consider v being Vector of V such that A20: C1 /\
+              VW2 = {v} by A1,A17;
+              A21: v in {v} by TARSKI:def 1;
+              then v in VW2 by A20,XBOOLE_0:def 3;
+              then A22: v in W2 by RLVECT_1:def 1;
+                 v in C1 by A20,A21,XBOOLE_0:def 3;
+             then consider v1 being Vector of V such that A23: v1 in W1 and
+              A24: u - v1 = v by A19,RMOD_2:92;
+                 u = v1 + v by A24,Lm15;
+              then x in W1 + W2 by A22,A23,Th5;
            hence thesis by RLVECT_1:def 1;
           end;
          thus thesis by RMOD_2:def 2;
         end;
-    hence the RightModStr of V = W1 + W2 by A19,RMOD_2:39;
-      consider v being Vector of V such that A26: VW1 /\ VW2 = {v} by A1,A18;
+    hence the RightModStr of V = W1 + W2 by A18,RMOD_2:39;
+      consider v being Vector of V such that A25: VW1 /\ VW2 = {v} by A1,A17;
           0.V in W1 & 0.V in W2 by RMOD_2:25;
        then 0.V in VW1 & 0.V in VW2 by RLVECT_1:def 1;
-       then A27: 0.V in {v} by A26,XBOOLE_0:def 3;
+       then A26: 0.V in {v} by A25,XBOOLE_0:def 3;
           the carrier of (0).V = {0.V} by RMOD_2:def 3
-                           .= VW1 /\ VW2 by A26,A27,TARSKI:def 1
+                           .= VW1 /\ VW2 by A25,A26,TARSKI:def 1
                            .= the carrier of W1 /\ W2 by Def2;
     hence thesis by RMOD_2:37;
    end;
@@ -1161,7 +1118,7 @@ theorem
     for V being strict RightMod of R, W1,W2 being Submodule of V
  holds W1 + W2 = V iff
   for v being Vector of V
-   ex v1,v2 being Vector of V st v1 in W1 & v2 in W2 & v = v1 + v2 by Lm15;
+   ex v1,v2 being Vector of V st v1 in W1 & v2 in W2 & v = v1 + v2 by Lm14;
 
 theorem Th51:
  for V being RightMod of R, W1,W2 being Submodule of V,
@@ -1176,8 +1133,8 @@ theorem Th51:
                    A4: v2 in W2 & u2 in W2;
         reconsider C2 = v1 + W2 as Coset of W2 by RMOD_2:def 6;
         reconsider C1 = the carrier of W1 as Coset of W1 by RMOD_2:86;
-         A5: u1 = (v1 + v2) - u2 by A2,Lm16
-              .= v1 + (v2 - u2) by RLVECT_1:42;
+         A5: u1 = (v1 + v2) - u2 by A2,Lm15
+              .= v1 + (v2 - u2) by RLVECT_1:def 6;
             v2 - u2 in W2 by A4,RMOD_2:31;
          then v1 in C1 & v1 in C2 & u1 in C1 & u1 in C2 by A3,A5,RLVECT_1:def 1
 ,RMOD_2:59;
@@ -1213,15 +1170,14 @@ A6:      x in W1 /\ W2 by A4,RLVECT_1:def 1;
          x in V by A6,RMOD_2:17;
      then reconsider u = x as Vector of V by RLVECT_1:def 1;
      consider v1,v2 such that A9: v1 in W1 & v2 in W2 and A10: v = v1 + v2
-                                                                by A1,Lm15;
+                                                                by A1,Lm14;
       A11: v = v1 + v2 + 0.V by A10,VECTSP_1:7
           .= (v1 + v2) + (u - u) by VECTSP_1:66
-          .= ((v1 + v2) + u) - u by RLVECT_1:42
+          .= ((v1 + v2) + u) - u by RLVECT_1:def 6
           .= ((v1 + u) + v2) - u by RLVECT_1:def 6
-          .= (v1 + u) + (v2 - u) by RLVECT_1:42;
+          .= (v1 + u) + (v2 - u) by RLVECT_1:def 6;
          v1 + u in W1 & v2 - u in W2 by A7,A9,RMOD_2:28,31;
-      then v2 - u = v2 by A2,A9,A10,A11;
-      then v2 + (- u) = v2 by RLVECT_1:def 11
+      then v2 + (- u) = v2 by A2,A9,A10,A11
                      .= v2 + 0.V by VECTSP_1:7;
       then - u = 0.V by RLVECT_1:21;
       then u = - 0.V by RLVECT_1:30;
@@ -1238,7 +1194,7 @@ definition let R; let V be RightMod of R;
   proof
      W1 + W2 = the RightModStr of V by A1,Def4;
     then consider v1,v2 being Vector of V such that
-    A2: v1 in W1 & v2 in W2 & v = v1 + v2 by Lm15;
+    A2: v1 in W1 & v2 in W2 & v = v1 + v2 by Lm14;
    take [v1,v2];
        [v1,v2]`1 = v1 & [v1,v2]`2 = v2 by MCART_1:7;
    hence thesis by A2;
@@ -1304,7 +1260,7 @@ A3:       W2 = A2 by Def3;
       end;
      ex o being BinOp of Submodules(V) st
        for a,b being Element of Submodules(V) holds P[a,b,o.(a,b)]
-               from BINOP_1:sch 1(A1);
+               from BINOP_1:sch 3(A1);
      hence thesis;
    end;
   uniqueness
@@ -1321,11 +1277,9 @@ A7:       W1 = x by A6,Def3;
          consider W2 being strict Submodule of V such that
 A8:       W2 = y by A6,Def3;
              o1.(A,B) = W1 + W2 & o2.(A,B) = W1 + W2 by A4,A5,A7,A8;
-          then o1.(x,y) = o2.(x,y) & o1.[x,y] = o1.(x,y) & o2.[x,y] = o2.(x,y)
-                                                       by BINOP_1:def 1;
-       hence o1.[x,y] = o2.[x,y];
+       hence o1.(x,y) = o2.(x,y);
       end;
-    hence thesis by FUNCT_2:118;
+    hence thesis by BINOP_1:1;
    end;
  end;
 
@@ -1349,7 +1303,7 @@ A3:       W2 = A2 by Def3;
       end;
      ex o being BinOp of Submodules(V) st
        for a,b being Element of Submodules(V) holds P[a,b,o.(a,b)]
-               from BINOP_1:sch 1(A1);
+               from BINOP_1:sch 3(A1);
      hence thesis;
    end;
   uniqueness
@@ -1366,11 +1320,9 @@ A7:       W1 = x by A6,Def3;
          consider W2 being strict Submodule of V such that
 A8:       W2 = y by A6,Def3;
              o1.(A,B) = W1 /\ W2 & o2.(A,B) = W1 /\ W2 by A4,A5,A7,A8;
-          then o1.(x,y) = o2.(x,y) & o1.[x,y] = o1.(x,y) & o2.[x,y] = o2.(x,y)
-                                                  by BINOP_1:def 1;
-       hence o1.[x,y] = o2.[x,y];
+       hence o1.(x,y) = o2.(x,y);
       end;
-    hence thesis by FUNCT_2:118;
+    hence thesis by BINOP_1:1;
    end;
  end;
 

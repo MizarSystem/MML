@@ -846,7 +846,7 @@ A10: w1 = |[r1,s1]| & G*(len G,1)`1 <= r1 by A2;
  hence x in v_strip(G,i) by A5,A9;
  end;
  suppose 1 <= i & i < len G;
-then A11:v_strip(G,i) = { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 }
+  then A11:v_strip(G,i) = { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 }
           by GOBRD11:20;
  then consider r1,s1 be Real such that
 A12: w1 = |[r1,s1]| & G*(i,1)`1 <= r1 & r1 <= G*(i+1,1)`1 by A2;
@@ -957,7 +957,7 @@ A1: 1<=k & k+1<=len f;
 hence left_cell(f,k,GoB f) is convex by A1,Th22;
 A2: len f = len Rev f by FINSEQ_5:def 3;
        k <= len f by A1,NAT_1:38;
-then A3: len f-'k+k = len f by AMI_5:4;
+then A3: len f-'k+k = len f by BINARITH:53;
 then A4: len f-'k+1 <= len f by A1,XREAL_1:8;
 A5: len f-'k >= 1 by A1,A3,XREAL_1:8;
 then A6: left_cell(Rev f,len f-'k) is convex by A2,A4,Th22;
@@ -1702,15 +1702,12 @@ then (f/.k)`1 < (f/.(k+1))`1 by A15,A16,A28,A31,A34,A35,A49,GOBOARD5:4;
   hence G*(i1,1)`1 < p`1 & p`1 < G*(i1+1,1)`1
         by A15,A16,A28,A29,A30,A31,A33,A35,A49,GOBOARD5:3;
 end;
-A50: now
-  assume A51:j1 = j2 & i2 = i1+1;
-  hence Int left_cell(f,k,G)= Int cell(G,i1,j1)
-           by A8,A10,A15,A16,GOBRD13:24;
-  thus Int right_cell(f,k,G)= Int cell(G,i1,j1-'1)
-           by A8,A10,A15,A16,A51,GOBRD13:25;
-end;
-A52: i2=i1+1 implies i1 < len G by A28,NAT_1:38;
-A53: now
+A50: j1 = j2 & i2 = i1+1 implies
+   Int left_cell(f,k,G)= Int cell(G,i1,j1) &
+   Int right_cell(f,k,G)= Int cell(G,i1,j1-'1)
+           by A8,A10,A15,A16,GOBRD13:24,25;
+A51: i2=i1+1 implies i1 < len G by A28,NAT_1:38;
+A52: now
   assume 1 < j1 & i2 = i1+1;
   then 1 <= i1 & i1 < len G & 1 <= j1-'1 & j1-'1 < width G
            by A15,A28,A33,A36,XREAL_1:2,GOBOARD5:1,JORDAN3:12,NAT_1:38;
@@ -1718,57 +1715,51 @@ A53: now
     { |[r,s]| : G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
                 G*(1,j1-'1)`2 < s & s < G*(1,j1-'1+1)`2 } by GOBOARD6:29;
 end;
-A54: now
-  assume A55: 1 = j1 & i2 = i1+1;
+A53: now
+  assume A54: 1 = j1 & i2 = i1+1;
   then Int cell(G,i1,0) = Int cell(G,i1,j1-'1) by NAT_2:10;
   hence Int cell(G,i1,j1-'1) =
    { |[r,s]| : G*(i1,1)`1 < r & r < G*(i1+1,1)`1 & s < G*(1,1)`2 }
-              by A31,A52,A55,GOBOARD6:27;
+              by A31,A51,A54,GOBOARD6:27;
 end;
-A56: j1 < width G & i2 = i1+1 implies
+A55: j1 < width G & i2 = i1+1 implies
   Int cell(G,i1,j1) =
     { |[r,s]| : G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
-                G*(1,j1)`2 < s & s < G*(1,j1+1)`2 } by A31,A32,A52,GOBOARD6:29;
-A57: j1 = width G & i2 = i1+1 implies
+                G*(1,j1)`2 < s & s < G*(1,j1+1)`2 } by A31,A32,A51,GOBOARD6:29;
+A56: j1 = width G & i2 = i1+1 implies
   Int cell(G,i1,j1) =
   { |[r,s]| : G*(i1,1)`1 < r & r < G*(i1+1,1)`1 & G*(1,width G)`2 < s }
-     by A31,A52,GOBOARD6:28;
-A58: i1=i2+1 implies i2 < len G by A30,NAT_1:38;
-A59: now
-  assume A60: j1 = j2 & i1 = i2+1;
-  hence Int left_cell(f,k,G)= Int cell(G,i2,j1-'1)
-        by A8,A10,A15,A16,GOBRD13:26;
-  thus Int right_cell(f,k,G)= Int cell(G,i2,j1)
-        by A8,A10,A15,A16,A60,GOBRD13:27;
-end;
-A61: now assume 1 < j1 & i1 = i2+1;
+     by A31,A51,GOBOARD6:28;
+A57: i1=i2+1 implies i2 < len G by A30,NAT_1:38;
+A58: j1 = j2 & i1 = i2+1 implies
+      Int left_cell(f,k,G)= Int cell(G,i2,j1-'1) &
+      Int right_cell(f,k,G)= Int cell(G,i2,j1)
+        by A8,A10,A15,A16,GOBRD13:26,27;
+A59: now assume 1 < j1 & i1 = i2+1;
   then 1 <= i2 & i2 < len G & 1 <= j1-'1 & j1-'1 < width G
             by A16,A30,A33,A36,XREAL_1:2,GOBOARD5:1,JORDAN3:12,NAT_1:38;
   hence Int cell(G,i2,j1-'1) =
     { |[r,s]| : G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
                 G*(1,j1-'1)`2 < s & s < G*(1,j1-'1+1)`2 } by GOBOARD6:29;
 end;
-A62: now assume A63: 1 = j1 & i1 = i2+1;
+A60: now assume A61: 1 = j1 & i1 = i2+1;
   then Int cell(G,i2,0) = Int cell(G,i2,j1-'1) by NAT_2:10;
   hence Int cell(G,i2,j1-'1) =
      { |[r,s]| : G*(i2,1)`1 < r & r < G*(i2+1,1)`1 & s < G*(1,1)`2 }
-        by A29,A58,A63,GOBOARD6:27;
+        by A29,A57,A61,GOBOARD6:27;
 end;
-A64: j1 < width G & i1 = i2+1 implies Int cell(G,i2,j1) =
+A62: j1 < width G & i1 = i2+1 implies Int cell(G,i2,j1) =
     { |[r,s]| : G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
-                G*(1,j1)`2 < s & s < G*(1,j1+1)`2 } by A29,A32,A58,GOBOARD6:29;
-A65: j1 = width G & i1 = i2+1 implies Int cell(G,i2,j1) =
+                G*(1,j1)`2 < s & s < G*(1,j1+1)`2 } by A29,A32,A57,GOBOARD6:29;
+A63: j1 = width G & i1 = i2+1 implies Int cell(G,i2,j1) =
   { |[r,s]| : G*(i2,1)`1 < r & r < G*(i2+1,1)`1 & G*(1,width G)`2 < s }
-       by A29,A58,GOBOARD6:28;
-A66: j2=j1+1 implies j1 < width G by A34,NAT_1:38;
-A67: now
-  assume A68: i1 = i2 & j2 = j1+1;
-  hence Int left_cell(f,k,G)= Int cell(G,i1-'1,j1)
-           by A8,A10,A15,A16,GOBRD13:22;
-  thus Int right_cell(f,k,G)= Int cell(G,i1,j1) by A8,A10,A15,A16,A68,
-GOBRD13:23;
-end;
-A69: now
+       by A29,A57,GOBOARD6:28;
+A64: j2=j1+1 implies j1 < width G by A34,NAT_1:38;
+A65: i1 = i2 & j2 = j1+1 implies
+      Int left_cell(f,k,G)= Int cell(G,i1-'1,j1) &
+      Int right_cell(f,k,G)= Int cell(G,i1,j1)
+        by A8,A10,A15,A16,GOBRD13:22,23;
+A66: now
   assume 1 < i1 & j2 = j1+1;
   then 1 <= i1-'1 & i1-'1 < len G & 1 <= j1 & j1 < width G
              by A15,A30,A34,A37,XREAL_1:2,GOBOARD5:1,JORDAN3:12,NAT_1:38;
@@ -1776,28 +1767,25 @@ A69: now
     { |[r,s]| : G*(i1-'1,1)`1 < r & r < G*(i1-'1+1,1)`1 &
                 G*(1,j1)`2 < s & s < G*(1,j1+1)`2 } by GOBOARD6:29;
 end;
-A70: now
-  assume A71: 1 = i1 & j2 = j1+1;
+A67: now
+  assume A68: 1 = i1 & j2 = j1+1;
   then Int cell(G,i1-'1,j1) = Int cell(G,0,j1) by NAT_2:10;
   hence Int cell(G,i1-'1,j1) =
      { |[r,s]| : r < G*(1,1)`1 & G*(1,j1)`2 < s & s < G*(1,j1+1)`2 }
-        by A32,A66,A71,GOBOARD6:23;
+        by A32,A64,A68,GOBOARD6:23;
 end;
-A72: i1 < len G & j2 = j1+1 implies Int cell(G,i1,j1) =
+A69: i1 < len G & j2 = j1+1 implies Int cell(G,i1,j1) =
     { |[r,s]| : G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
-                G*(1,j1)`2 < s & s < G*(1,j1+1)`2 } by A31,A32,A66,GOBOARD6:29;
-A73: i1 = len G & j2 = j1+1 implies Int cell(G,i1,j1) =
+                G*(1,j1)`2 < s & s < G*(1,j1+1)`2 } by A31,A32,A64,GOBOARD6:29;
+A70: i1 = len G & j2 = j1+1 implies Int cell(G,i1,j1) =
    { |[r,s]| : G*(len G,1)`1 < r & G*(1,j1)`2 < s & s < G*(1,j1+1)`2 }
-        by A32,A66,GOBOARD6:26;
-A74: j1=j2+1 implies j2 < width G by A33,NAT_1:38;
-A75: now
-  assume A76: i1 = i2 & j1 = j2+1;
-  hence Int right_cell(f,k,G)= Int cell(G,i2-'1,j2)
-           by A8,A10,A15,A16,GOBRD13:29;
-  thus Int left_cell(f,k,G)= Int cell(G,i2,j2) by A8,A10,A15,A16,A76,GOBRD13:28
-;
-end;
-A77: now
+        by A32,A64,GOBOARD6:26;
+A71: j1=j2+1 implies j2 < width G by A33,NAT_1:38;
+A72: i1 = i2 & j1 = j2+1 implies
+      Int right_cell(f,k,G)= Int cell(G,i2-'1,j2) &
+      Int left_cell(f,k,G)= Int cell(G,i2,j2)
+         by A8,A10,A15,A16,GOBRD13:28,29;
+A73: now
   assume 1 < i2 & j1 = j2+1;
   then 1 <= i2-'1 & i2-'1 < len G & 1 <= j2 & j2 < width G
              by A16,A28,A33,A38,XREAL_1:2,GOBOARD5:1,JORDAN3:12,NAT_1:38;
@@ -1805,319 +1793,319 @@ A77: now
     { |[r,s]| : G*(i2-'1,1)`1 < r & r < G*(i2-'1+1,1)`1 &
                 G*(1,j2)`2 < s & s < G*(1,j2+1)`2 } by GOBOARD6:29;
 end;
-A78: now
-  assume A79: 1 = i2 & j1 = j2+1;
+A74: now
+  assume A75: 1 = i2 & j1 = j2+1;
   then Int cell(G,i2-'1,j2) = Int cell(G,0,j2) by NAT_2:10;
   hence Int cell(G,i2-'1,j2) =
      { |[r,s]| : r < G*(1,1)`1 & G*(1,j2)`2 < s & s < G*(1,j2+1)`2 }
-       by A35,A74,A79,GOBOARD6:23;
+       by A35,A71,A75,GOBOARD6:23;
 end;
-A80: i2 < len G & j1 = j2+1 implies Int cell(G,i2,j2) =
+A76: i2 < len G & j1 = j2+1 implies Int cell(G,i2,j2) =
     { |[r,s]| : G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
-                G*(1,j2)`2 < s & s < G*(1,j2+1)`2 } by A29,A35,A74,GOBOARD6:29;
-A81: i2 = len G & j1 = j2+1 implies
+                G*(1,j2)`2 < s & s < G*(1,j2+1)`2 } by A29,A35,A71,GOBOARD6:29;
+A77: i2 = len G & j1 = j2+1 implies
   Int cell(G,i2,j2) =
    { |[r,s]| : G*(len G,1)`1 < r & G*(1,j2)`2 < s & s < G*(1,j2+1)`2 }
-            by A35,A74,GOBOARD6:26;
+            by A35,A71,GOBOARD6:26;
 per cases by A2;
-suppose A82:p1`2=p2`2;
-then A83: p`2 = p1`2 by A7,GOBOARD7:6;
+suppose A78:p1`2=p2`2;
+then A79: p`2 = p1`2 by A7,GOBOARD7:6;
    Int left_cell(f,k,G) <> {} by A8,A10,JORDAN9:11;
 then consider rl' be set such that
-A84:   rl' in Int left_cell(f,k,G) by XBOOLE_0:def 1;
-  reconsider rl' as Point of TOP-REAL 2 by A84;
+A80:   rl' in Int left_cell(f,k,G) by XBOOLE_0:def 1;
+  reconsider rl' as Point of TOP-REAL 2 by A80;
   reconsider rl = |[rl'`1,p`2]| as Point of TOP-REAL 2;
-A85: rl`2=p`2 & rl`1=rl'`1 by EUCLID:56;
+A81: rl`2=p`2 & rl`1=rl'`1 by EUCLID:56;
    Int right_cell(f,k,G) <> {} by A8,A10,JORDAN9:11;
 then consider rp' be set such that
-A86:   rp' in Int right_cell(f,k,G) by XBOOLE_0:def 1;
-reconsider rp' as Point of TOP-REAL 2 by A86;
+A82:   rp' in Int right_cell(f,k,G) by XBOOLE_0:def 1;
+reconsider rp' as Point of TOP-REAL 2 by A82;
 reconsider rp = |[rp'`1,p`2]| as Point of TOP-REAL 2;
-A87: rp`2=p`2 & rp`1=rp'`1 by EUCLID:56;
-A88: now
-  assume A89: j1=j2+1 & i2 < len G;
+A83: rp`2=p`2 & rp`1=rp'`1 by EUCLID:56;
+A84: now
+  assume A85: j1=j2+1 & i2 < len G;
   then ex r,s st rl' = |[r,s]| & G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
-                G*(1,j2)`2 < s & s < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A75
-,A80,A82,A84,Th30,JORDAN1G:7;
+                G*(1,j2)`2 < s & s < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A72
+,A76,A78,A80,Th30,JORDAN1G:7;
   then G*(i2,1)`1 < rl`1 & rl`1 < G*(i2+1,1)`1
-     & G*(1,j2)`2 < p`2 & p`2 < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A41,A82,A85
-,A89,Th30,EUCLID:56,JORDAN1G:7;
-  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A75,A80,A82,A85,A89,
+     & G*(1,j2)`2 < p`2 & p`2 < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A41,A78,A81
+,A85,Th30,EUCLID:56,JORDAN1G:7;
+  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A72,A76,A78,A81,A85,
+Th30,JORDAN1G:7;
+end;
+A86: now
+  assume A87: j1=j2+1 & i2 = len G;
+ then ex r,s st rl' = |[r,s]| & G*(len G,1)`1 < r & G*(1,j2)`2 < s &
+                   s < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A72,A77,A78,A80,Th30
+,JORDAN1G:7;
+  then G*(len G,1)`1 < rl`1
+     & G*(1,j2)`2 < p`2 & p`2 < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A41,A78,A81
+,A87,Th30,EUCLID:56,JORDAN1G:7;
+  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A72,A77,A78,A81,A87,
+Th30,JORDAN1G:7;
+end;
+A88: now
+  assume A89: j1=j2+1 & 1 = i2;
+  then ex r,s st rp' = |[r,s]| & r < G*(1,1)`1 & G*(1,j2)`2 < s & s < G*(1,j2+
+1)`2
+           by A15,A16,A23,A24,A25,A72,A74,A78,A82,Th30,JORDAN1G:7;
+  then rp'`1 < G*(1,1)`1 by EUCLID:56;
+  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A41,A72,A74,A78,A89,
 Th30,JORDAN1G:7;
 end;
 A90: now
-  assume A91: j1=j2+1 & i2 = len G;
- then ex r,s st rl' = |[r,s]| & G*(len G,1)`1 < r & G*(1,j2)`2 < s &
-                   s < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A75,A81,A82,A84,Th30
-,JORDAN1G:7;
-  then G*(len G,1)`1 < rl`1
-     & G*(1,j2)`2 < p`2 & p`2 < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A41,A82,A85
-,A91,Th30,EUCLID:56,JORDAN1G:7;
-  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A75,A81,A82,A85,A91,
+  assume A91: j1=j2+1 & 1 < i2;
+  then ex r,s st rp' = |[r,s]| & G*(i2-'1,1)`1 < r & r < G*(i2-'1+1,1)`1 &
+                G*(1,j2)`2 < s & s < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A72
+,A73,A78,A82,Th30,JORDAN1G:7;
+  then G*(i2-'1,1)`1 < rp'`1 & rp'`1 < G*(i2-'1+1,1)`1 by EUCLID:56;
+  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A41,A72,A73,A78,A91,
 Th30,JORDAN1G:7;
 end;
 A92: now
-  assume A93: j1=j2+1 & 1 = i2;
-  then ex r,s st rp' = |[r,s]| & r < G*(1,1)`1 & G*(1,j2)`2 < s & s < G*(1,j2+
-1)`2
-           by A15,A16,A23,A24,A25,A75,A78,A82,A86,Th30,JORDAN1G:7;
-  then rp'`1 < G*(1,1)`1 by EUCLID:56;
-  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A41,A75,A78,A82,A93,
+  assume A93: j2=j1+1 & i1 < len G;
+  then ex r,s st rp' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
+                G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A65
+,A69,A78,A82,Th30,JORDAN1G:7;
+  then G*(i1,1)`1 < rp'`1 & rp'`1 < G*(i1+1,1)`1 by EUCLID:56;
+  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A69,A78,A93,
 Th30,JORDAN1G:7;
 end;
 A94: now
-  assume A95: j1=j2+1 & 1 < i2;
-  then ex r,s st rp' = |[r,s]| & G*(i2-'1,1)`1 < r & r < G*(i2-'1+1,1)`1 &
-                G*(1,j2)`2 < s & s < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A75
-,A77,A82,A86,Th30,JORDAN1G:7;
-  then G*(i2-'1,1)`1 < rp'`1 & rp'`1 < G*(i2-'1+1,1)`1 by EUCLID:56;
-  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A41,A75,A77,A82,A95,
+  assume A95: j2=j1+1 & i1 = len G;
+  then ex r,s st rp' = |[r,s]| & G*(len G,1)`1 < r & G*(1,j1)`2 < s &
+                   s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A65,A70,A78,A82,Th30
+,JORDAN1G:7;
+  then G*(len G,1)`1 < rp'`1 by EUCLID:56;
+  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A70,A78,A95,
 Th30,JORDAN1G:7;
 end;
 A96: now
-  assume A97: j2=j1+1 & i1 < len G;
-  then ex r,s st rp' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
-                G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A67
-,A72,A82,A86,Th30,JORDAN1G:7;
-  then G*(i1,1)`1 < rp'`1 & rp'`1 < G*(i1+1,1)`1 by EUCLID:56;
-  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A67,A72,A82,A97,
+  assume A97: j2=j1+1 & 1 = i1;
+  then ex r,s st rl' = |[r,s]| & r < G*(1,1)`1 & G*(1,j1)`2 < s & s < G*(1,j1+
+1)`2
+           by A15,A16,A23,A24,A25,A65,A67,A78,A80,Th30,JORDAN1G:7;
+  then rl'`1 < G*(1,1)`1 by EUCLID:56;
+  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A67,A78,A97,
 Th30,JORDAN1G:7;
 end;
 A98: now
-  assume A99: j2=j1+1 & i1 = len G;
-  then ex r,s st rp' = |[r,s]| & G*(len G,1)`1 < r & G*(1,j1)`2 < s &
-                   s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A67,A73,A82,A86,Th30
-,JORDAN1G:7;
-  then G*(len G,1)`1 < rp'`1 by EUCLID:56;
-  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A67,A73,A82,A99,
-Th30,JORDAN1G:7;
-end;
-A100: now
-  assume A101: j2=j1+1 & 1 = i1;
-  then ex r,s st rl' = |[r,s]| & r < G*(1,1)`1 & G*(1,j1)`2 < s & s < G*(1,j1+
-1)`2
-           by A15,A16,A23,A24,A25,A67,A70,A82,A84,Th30,JORDAN1G:7;
-  then rl'`1 < G*(1,1)`1 by EUCLID:56;
-  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A67,A70,A82,A101,
-Th30,JORDAN1G:7;
-end;
-A102: now
-  assume A103: j2=j1+1 & 1 < i1;
+  assume A99: j2=j1+1 & 1 < i1;
   then ex r,s st rl' = |[r,s]| & G*(i1-'1,1)`1 < r & r < G*(i1-'1+1,1)`1 &
-                G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A67
-,A69,A82,A84,Th30,JORDAN1G:7;
+                G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A65
+,A66,A78,A80,Th30,JORDAN1G:7;
   then G*(i1-'1,1)`1 < rl'`1 & rl'`1 < G*(i1-'1+1,1)`1 by EUCLID:56;
-  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A67,A69,A82,A103,
+  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A66,A78,A99,
 Th30,JORDAN1G:7;
 end;
-   now per cases by A17,A26,A82;
-suppose A104: j1=j2+1;
-A105: rl in Int left_cell(f,k,G)
+   now per cases by A17,A26,A78;
+suppose A100: j1=j2+1;
+A101: rl in Int left_cell(f,k,G)
 proof
   per cases by A28,REAL_1:def 5;
   suppose i2 < len G;
-  hence thesis by A88,A104;
+  hence thesis by A84,A100;
   end;
   suppose i2 = len G;
-  hence thesis by A90,A104;
+  hence thesis by A86,A100;
 end;
 end;
-A106: rp in Int right_cell(f,k,GoB f)
+A102: rp in Int right_cell(f,k,GoB f)
 proof
   per cases by A29,REAL_1:def 5;
   suppose 1 < i2;
-  hence thesis by A94,A104;
+  hence thesis by A90,A100;
   end;
   suppose 1 = i2;
-  hence thesis by A92,A104;
+  hence thesis by A88,A100;
 end;
 end;
-A107: rl in left_cell(f,k,GoB f) by A13,A105;
-A108: rp in right_cell(f,k,GoB f) by A11,A106;
-A109: not rl in L~f by A13,A105;
-   not rp in L~f by A11,A106;
+A103: rl in left_cell(f,k,GoB f) by A13,A101;
+A104: rp in right_cell(f,k,GoB f) by A11,A102;
+A105: not rl in L~f by A13,A101;
+   not rp in L~f by A11,A102;
 hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
               & p1 in C & p2 in C)
-       by A1,A3,A9,A10,A82,A83,A85,A87,A107,A108,A109,Th32;
+       by A1,A3,A9,A10,A78,A79,A81,A83,A103,A104,A105,Th32;
 end;
-suppose A110: j2=j1+1;
-A111: rl in Int left_cell(f,k,G)
+suppose A106: j2=j1+1;
+A107: rl in Int left_cell(f,k,G)
 proof
   per cases by A31,REAL_1:def 5;
   suppose 1 < i1;
-  hence thesis by A102,A110;
+  hence thesis by A98,A106;
   end;
   suppose 1 = i1;
-  hence thesis by A100,A110;
+  hence thesis by A96,A106;
 end;
 end;
-A112: rp in Int right_cell(f,k,GoB f)
+A108: rp in Int right_cell(f,k,GoB f)
 proof
   per cases by A30,REAL_1:def 5;
   suppose i1 < len G;
-  hence thesis by A96,A110;
+  hence thesis by A92,A106;
   end;
   suppose i1 = len G;
-  hence thesis by A98,A110;
+  hence thesis by A94,A106;
 end;
 end;
-A113: rl in left_cell(f,k,GoB f) by A13,A111;
-A114: rp in right_cell(f,k,GoB f) by A11,A112;
-A115: not rl in L~f by A13,A111;
-        not rp in L~f by A11,A112;
+A109: rl in left_cell(f,k,GoB f) by A13,A107;
+A110: rp in right_cell(f,k,GoB f) by A11,A108;
+A111: not rl in L~f by A13,A107;
+        not rp in L~f by A11,A108;
    hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & p1 in C & p2 in C) by A1,A3,A9,A10,A82,A83,A85,A87,A113,A114,A115,
+        & p1 in C & p2 in C) by A1,A3,A9,A10,A78,A79,A81,A83,A109,A110,A111,
 Th32;
 end;
 end;
 hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
               & p1 in C & p2 in C);
 end;
-suppose A116: p1`1=p2`1;
-then A117: p`1 = p1`1 by A7,GOBOARD7:5;
+suppose A112: p1`1=p2`1;
+then A113: p`1 = p1`1 by A7,GOBOARD7:5;
    Int left_cell(f,k,G) <> {} by A8,A10,JORDAN9:11;
 then consider rl' be set such that
-A118:   rl' in Int left_cell(f,k,G) by XBOOLE_0:def 1;
-reconsider rl' as Point of TOP-REAL 2 by A118;
+A114:   rl' in Int left_cell(f,k,G) by XBOOLE_0:def 1;
+reconsider rl' as Point of TOP-REAL 2 by A114;
 reconsider rl = |[p`1,rl'`2]| as Point of TOP-REAL 2;
-A119: rl`1=p`1 & rl`2=rl'`2 by EUCLID:56;
+A115: rl`1=p`1 & rl`2=rl'`2 by EUCLID:56;
    Int right_cell(f,k,G) <> {} by A8,A10,JORDAN9:11;
 then consider rp' be set such that
-A120:   rp' in Int right_cell(f,k,G) by XBOOLE_0:def 1;
-  reconsider rp' as Point of TOP-REAL 2 by A120;
+A116:   rp' in Int right_cell(f,k,G) by XBOOLE_0:def 1;
+  reconsider rp' as Point of TOP-REAL 2 by A116;
   reconsider rp = |[p`1,rp'`2]| as Point of TOP-REAL 2;
-A121: rp`1=p`1 & rp`2=rp'`2 by EUCLID:56;
-A122: now
-  assume A123: i1=i2+1 & j1 < width G;
+A117: rp`1=p`1 & rp`2=rp'`2 by EUCLID:56;
+A118: now
+  assume A119: i1=i2+1 & j1 < width G;
   then ex r,s st rp' = |[r,s]| & G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
-        G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A59,A64,A116
-,A120,Th30,JORDAN1G:6;
-  then G*(1,j1)`2 < rp`2 & rp`2 < G*(1,j1+1)`2 by A121,EUCLID:56;
-  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A46,A59,A64,A116
-,A121,A123,Th30,JORDAN1G:6;
+        G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A58,A62,A112
+,A116,Th30,JORDAN1G:6;
+  then G*(1,j1)`2 < rp`2 & rp`2 < G*(1,j1+1)`2 by A117,EUCLID:56;
+  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A46,A58,A62,A112
+,A117,A119,Th30,JORDAN1G:6;
 end;
-A124: now
-  assume A125: i1=i2+1 & j1 = width G;
+A120: now
+  assume A121: i1=i2+1 & j1 = width G;
  then ex r,s st rp' = |[r,s]| & G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
-         G*(1,width G)`2 < s by A15,A16,A23,A24,A25,A59,A65,A116,A120,Th30,
+         G*(1,width G)`2 < s by A15,A16,A23,A24,A25,A58,A63,A112,A116,Th30,
 JORDAN1G:6;
   then G*(i2,1)`1 < p`1 & p`1 < G*(i2+1,1)`1 & G*(1,width G)`2 < rp`2
-          by A15,A16,A23,A24,A25,A46,A116,A121,A125,Th30,EUCLID:56,JORDAN1G:6;
-  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A59,A65,A116,A121
-,A125,Th30,JORDAN1G:6;
+          by A15,A16,A23,A24,A25,A46,A112,A117,A121,Th30,EUCLID:56,JORDAN1G:6;
+  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A58,A63,A112,A117
+,A121,Th30,JORDAN1G:6;
 end;
-A126: now
-  assume A127: i1=i2+1 & 1 = j1;
+A122: now
+  assume A123: i1=i2+1 & 1 = j1;
  then ex r,s st rl' = |[r,s]| & G*(i2,1)`1 < r & r < G*(i2+1,1)`1 & s < G*(1,
 1)`2
-              by A15,A16,A23,A24,A25,A59,A62,A116,A118,Th30,JORDAN1G:6;
-  then rl`2 < G*(1,1)`2 by A119,EUCLID:56;
-  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A46,A59,A62,A116,A119
+              by A15,A16,A23,A24,A25,A58,A60,A112,A114,Th30,JORDAN1G:6;
+  then rl`2 < G*(1,1)`2 by A115,EUCLID:56;
+  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A46,A58,A60,A112,A115
+,A123,Th30,JORDAN1G:6;
+end;
+A124: now
+  assume A125: i1=i2+1 & 1 < j1;
+  then ex r,s st rl' = |[r,s]| & G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
+    G*(1,j1-'1)`2 < s & s < G*(1,j1-'1+1)`2 by A15,A16,A23,A24,A25,A58,A59,A112
+,A114,Th30,JORDAN1G:6;
+  then G*(1,j1-'1)`2 < rl'`2 & rl'`2 < G*(1,j1-'1+1)`2 by EUCLID:56;
+  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A46,A58,A59,A112,A125
+,Th30,JORDAN1G:6;
+end;
+A126: now
+  assume A127: i2=i1+1 & j1 < width G;
+  then ex r,s st rl' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
+     G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A50,A55,A112,A114
+,Th30,JORDAN1G:6;
+  then G*(1,j1)`2 < rl`2 & rl`2 < G*(1,j1+1)`2 by A115,EUCLID:56;
+  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A55,A112,A115
 ,A127,Th30,JORDAN1G:6;
 end;
 A128: now
-  assume A129: i1=i2+1 & 1 < j1;
-  then ex r,s st rl' = |[r,s]| & G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
-    G*(1,j1-'1)`2 < s & s < G*(1,j1-'1+1)`2 by A15,A16,A23,A24,A25,A59,A61,A116
-,A118,Th30,JORDAN1G:6;
-  then G*(1,j1-'1)`2 < rl'`2 & rl'`2 < G*(1,j1-'1+1)`2 by EUCLID:56;
-  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A46,A59,A61,A116,A129
+  assume A129: i2=i1+1 & j1 = width G;
+ then ex r,s st rl' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
+         G*(1,width G)`2 < s by A15,A16,A23,A24,A25,A50,A56,A112,A114,Th30,
+JORDAN1G:6;
+  then G*(1,width G)`2 < rl'`2 by EUCLID:56;
+  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A56,A112,A129
 ,Th30,JORDAN1G:6;
 end;
 A130: now
-  assume A131: i2=i1+1 & j1 < width G;
-  then ex r,s st rl' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
-     G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A50,A56,A116,A118
-,Th30,JORDAN1G:6;
-  then G*(1,j1)`2 < rl`2 & rl`2 < G*(1,j1+1)`2 by A119,EUCLID:56;
-  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A56,A116,A119
-,A131,Th30,JORDAN1G:6;
-end;
-A132: now
-  assume A133: i2=i1+1 & j1 = width G;
- then ex r,s st rl' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
-         G*(1,width G)`2 < s by A15,A16,A23,A24,A25,A50,A57,A116,A118,Th30,
-JORDAN1G:6;
-  then G*(1,width G)`2 < rl'`2 by EUCLID:56;
-  hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A57,A116,A133
-,Th30,JORDAN1G:6;
-end;
-A134: now
-  assume A135: i2=i1+1 & 1 = j1;
+  assume A131: i2=i1+1 & 1 = j1;
  then ex r,s st rp' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 & s < G*(1,
 1)`2
-              by A15,A16,A23,A24,A25,A50,A54,A116,A120,Th30,JORDAN1G:6;
+              by A15,A16,A23,A24,A25,A50,A53,A112,A116,Th30,JORDAN1G:6;
   then rp'`2 < G*(1,1)`2 by EUCLID:56;
-hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A54,A116,A135,
+hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A53,A112,A131,
 Th30,JORDAN1G:6;
 end;
-A136: now
-  assume A137: i2=i1+1 & 1 < j1;
+A132: now
+  assume A133: i2=i1+1 & 1 < j1;
   then ex r,s st rp' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
-   G*(1,j1-'1)`2 < s & s < G*(1,j1-'1+1)`2 by A15,A16,A23,A24,A25,A50,A53,A116
-,A120,Th30,JORDAN1G:6;
+   G*(1,j1-'1)`2 < s & s < G*(1,j1-'1+1)`2 by A15,A16,A23,A24,A25,A50,A52,A112
+,A116,Th30,JORDAN1G:6;
   then G*(1,j1-'1)`2 < rp'`2 & rp'`2 < G*(1,j1-'1+1)`2 by EUCLID:56;
-  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A53,A116
-,A137,Th30,JORDAN1G:6;
+  hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A52,A112
+,A133,Th30,JORDAN1G:6;
 end;
-   now per cases by A17,A27,A116;
-suppose A138: i1=i2+1;
-A139: rl in Int left_cell(f,k,G)
+   now per cases by A17,A27,A112;
+suppose A134: i1=i2+1;
+A135: rl in Int left_cell(f,k,G)
 proof
   per cases by A32,REAL_1:def 5;
   suppose 1 < j1;
-  hence thesis by A128,A138;
+  hence thesis by A124,A134;
   end;
   suppose 1 = j1;
-  hence thesis by A126,A138;
+  hence thesis by A122,A134;
 end;
 end;
-A140: rp in Int right_cell(f,k,GoB f)
+A136: rp in Int right_cell(f,k,GoB f)
 proof
   per cases by A33,REAL_1:def 5;
   suppose j1 < width G;
-  hence thesis by A122,A138;
+  hence thesis by A118,A134;
   end;
   suppose j1 = width G;
-  hence thesis by A124,A138;
+  hence thesis by A120,A134;
 end;
 end;
-A141: rl in left_cell(f,k,GoB f) by A13,A139;
-A142: rp in right_cell(f,k,GoB f) by A11,A140;
-A143: not rl in L~f by A13,A139;
-    not rp in L~f by A11,A140;
+A137: rl in left_cell(f,k,GoB f) by A13,A135;
+A138: rp in right_cell(f,k,GoB f) by A11,A136;
+A139: not rl in L~f by A13,A135;
+    not rp in L~f by A11,A136;
  hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
               & p1 in C & p2 in C)
-       by A1,A3,A9,A10,A116,A117,A119,A121,A141,A142,A143,Th32;
+       by A1,A3,A9,A10,A112,A113,A115,A117,A137,A138,A139,Th32;
 end;
-suppose A144: i2=i1+1;
-A145: rp in Int right_cell(f,k,G)
+suppose A140: i2=i1+1;
+A141: rp in Int right_cell(f,k,G)
 proof
   per cases by A32,REAL_1:def 5;
   suppose 1 < j1;
-  hence thesis by A136,A144;
+  hence thesis by A132,A140;
   end;
   suppose 1 = j1;
-  hence thesis by A134,A144;
+  hence thesis by A130,A140;
 end;
 end;
-A146: rl in Int left_cell(f,k,GoB f)
+A142: rl in Int left_cell(f,k,GoB f)
 proof
   per cases by A33,REAL_1:def 5;
   suppose j1 < width G;
-  hence thesis by A130,A144;
+  hence thesis by A126,A140;
   end;
   suppose j1 = width G;
-  hence thesis by A132,A144;
+  hence thesis by A128,A140;
 end;
 end;
-then A147: rl in left_cell(f,k,GoB f) by A13;
-A148: rp in right_cell(f,k,GoB f) by A11,A145;
-A149: not rl in L~f by A13,A146;
-      not rp in L~f by A11,A145;
+then A143: rl in left_cell(f,k,GoB f) by A13;
+A144: rp in right_cell(f,k,GoB f) by A11,A141;
+A145: not rl in L~f by A13,A142;
+      not rp in L~f by A11,A141;
    hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
               & p1 in C & p2 in C)
-       by A1,A3,A9,A10,A116,A117,A119,A121,A147,A148,A149,Th32;
+       by A1,A3,A9,A10,A112,A113,A115,A117,A143,A144,A145,Th32;
 end;
 end;
 hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`

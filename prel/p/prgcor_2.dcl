@@ -25,8 +25,8 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="11"/>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
+<Adjective nr="14"/>
 </Cluster>
 </RCluster>
 </Registrations>

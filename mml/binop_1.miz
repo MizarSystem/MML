@@ -6,11 +6,12 @@
 
 environ
 
- vocabularies FUNCT_1, BOOLE, RELAT_1, BINOP_1;
+ vocabularies FUNCT_1, BOOLE, RELAT_1, BINOP_1, SEQM_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2;
  constructors TARSKI, FUNCT_2, XBOOLE_0;
- registrations RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1;
+ registrations RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1, FUNCT_1, FUNCT_2;
  requirements SUBSET, BOOLE;
+ definitions FUNCT_1;
  theorems RELAT_1, FUNCT_1, FUNCT_2, ZFMISC_1, RELSET_1, XBOOLE_1;
  schemes FUNCT_2;
 
@@ -26,35 +27,46 @@ reserve A for set;
 
 definition let A,B be non empty set, C be set, f be Function of [:A,B:],C;
   let a be Element of A; let b be Element of B;
-redefine func f.(a,b) -> Element of C;
+  redefine func f.(a,b) -> Element of C;
  coherence
   proof
    reconsider ab = [a,b] as Element of [:A,B:] by ZFMISC_1:def 2;
-      f.ab is Element of C;
+   f.ab is Element of C;
    hence thesis;
   end;
 end;
 
-canceled;
+reserve X,Y,Z,T,x,x',x1,x2,y,y1,y2,z for set;
+
+theorem Th118:
+  for X,Y,Z being set
+  for f1,f2 being Function of [:X,Y:],Z
+     st for x,y being set st x in X & y in Y holds f1.(x,y) = f2.(x,y)
+    holds f1 = f2
+ proof let X,Y,Z be set;
+  let f1,f2 be Function of [:X,Y:],Z such that
+A1:   for x,y being set st x in X & y in Y holds f1.(x,y) = f2.(x,y);
+   for z being set st z in [:X,Y:] holds f1.z = f2.z
+    proof let z be set;
+     assume z in [:X,Y:];
+     then consider x,y being set such that
+W1:   x in X & y in Y and
+W2:   z = [x,y] by ZFMISC_1:def 2;
+      f1.(x,y) = f1.z & f2.(x,y) = f2.z by W2;
+     hence thesis by A1,W1;
+    end;
+   hence thesis by FUNCT_2:18;
+ end;
 
 theorem
-    for A,B,C be non empty set
-  for f1,f2 being Function of [:A,B:],C st
-    for a being Element of A for b being Element of B holds f1.(a,b) = f2.(a,b)
+  for f1,f2 being Function of [:X,Y:],Z st
+    for a being Element of X for b being Element of Y holds f1.(a,b) = f2.(a,b)
    holds f1 = f2
- proof let A,B,C be non empty set;
-   let f1,f2 be Function of [:A,B:],C such that
-A1:   for a being Element of A for b being Element of B
+ proof let f1,f2 be Function of [:X,Y:],Z;
+  assume for a being Element of X for b being Element of Y
         holds f1.(a,b) = f2.(a,b);
-       for a being Element of A for b being Element of B holds f1.[a,b] = f2.[a
-,
-b
-]
-     proof let a be Element of A; let b be Element of B;
-          f1.(a,b) = f1.[a,b] & f2.(a,b) = f2.[a,b];
-       hence thesis by A1;
-     end;
-    hence f1 = f2 by FUNCT_2:120;
+   then for x,y being set st x in X & y in Y holds f1.(x,y) = f2.(x,y);
+  hence f1 = f2 by Th118;
  end;
 
 definition let A be set;
@@ -66,42 +78,105 @@ reserve u for UnOp of A,
         o,o' for BinOp of A,
         a,b,c,e,e1,e2 for Element of A;
 
-scheme BinOpEx{A()->non empty set,
-               P[Element of A(),Element of A(),Element of A()]}:
- ex o being BinOp of A() st
-    for a,b being Element of A() holds P[a,b,o.(a,b)]
+scheme FuncEx2{X, Y, Z() -> set, P[set,set,set]}:
+ ex f being Function of [:X(),Y():],Z() st
+   for x,y st x in X() & y in Y() holds P[x,y,f.(x,y)]
 provided
-A1: for x,y being Element of A() ex z being Element of A() st P[x,y,z]
+A1: for x,y st x in X() & y in Y() ex z st z in Z() & P[x,y,z]
 proof
-    defpred P1[Element of A(), Element of A(),set] means
-    for r being Element of A() st r = $3 holds P[$1,$2,r];
-A2: for x,y being Element of A() ex z being Element of A() st P1[x,y,z]
-     proof let x,y be Element of A();
-       consider z being Element of A() such that
-A3:      P[x,y,z] by A1;
-       take z;
-       thus thesis by A3;
+   defpred R[set,set] means
+   for x1,y1 st $1 = [x1,y1] holds P[x1,y1,$2];
+A2: for x st x in [:X(),Y():] ex z st z in Z() & R[x,z]
+     proof let x;
+      assume x in [:X(),Y():];
+      then consider x1,y1 such that
+A3:     x1 in X() & y1 in Y() and
+A4:     x = [x1,y1] by ZFMISC_1:def 2;
+      consider z such that
+A5:     z in Z() and
+A6:     P[x1,y1,z] by A1,A3;
+      take z;
+      thus z in Z() by A5;
+      let x2,y2;
+      assume x = [x2,y2];
+      then x1 = x2 & y1 = y2 by A4,ZFMISC_1:33;
+      hence thesis by A6;
      end;
-  consider f being Function of [:A(),A():],A() such that
-A4:  for a,b being Element of A() holds P1[a,b,f.[a,b]] from FUNCT_2:sch 7(A2);
- take o = f;
- let a,b be Element of A();
-    o.(a,b) = o.[a,b];
- hence thesis by A4;
-end;
-
-scheme BinOpLambda{A()->non empty set,
-                   O(Element of A(),Element of A())->Element of A()}:
- ex o being BinOp of A() st
-    for a,b being Element of A() holds o.(a,b) = O(a,b)
-proof
-    consider f being Function of [:A(),A():],A() such that
-A1: for a,b being Element of A() holds f.[a,b] = O(a,b) from FUNCT_2:sch 8;
-  take f;
-  let a,b be Element of A();
-     f.(a,b) = f.[a,b];
-  hence thesis by A1;
+   consider f being Function of [:X(),Y():],Z() such that
+A7:  for x st x in [:X(),Y():] holds R[x,f.x] from FUNCT_2:sch 1(A2);
+   take f;
+   let x,y;
+   assume x in X() & y in Y();
+   then [x,y] in [:X(),Y():] by ZFMISC_1:def 2;
+   hence thesis by A7;
  end;
+
+scheme Lambda2{X, Y, Z() -> set, F(set,set)->set}:
+ ex f being Function of [:X(),Y():],Z()
+  st for x,y st x in X() & y in Y() holds f.(x,y) = F(x,y)
+provided
+A1: for x,y st x in X() & y in Y() holds F(x,y) in Z()
+proof
+    defpred P[set,set,set] means $3 = F($1,$2);
+A2: for x,y st x in X() & y in Y() ex z st z in Z() & P[x,y,z]
+     proof let x,y such that
+A3:     x in X() & y in Y();
+      take F(x,y);
+      thus thesis by A1,A3;
+     end;
+   thus ex f being Function of [:X(),Y():],Z() st
+   for x,y st x in X() & y in Y() holds P[x,y,f.(x,y)] from FuncEx2(A2);
+  end;
+
+scheme FuncEx2D{X, Y, Z() -> non empty set, P[set,set,set]}:
+ ex f being Function of [:X(),Y():],Z() st
+   for x being Element of X() for y being Element of Y() holds P[x,y,f.(x,y)]
+provided
+A1: for x being Element of X() for y being Element of Y()
+      ex z being Element of Z() st P[x,y,z]
+proof
+  defpred R[set,set] means
+    for x being (Element of X()),y being Element of Y()
+       st $1 = [x,y] holds P[x,y,$2];
+A2: for p being Element of [:X(),Y():]
+      ex z being Element of Z() st R[p,z]
+     proof let p be Element of [:X(),Y():];
+      consider x1 ,y1 such that
+A3:     x1 in X() and
+A4:     y1 in Y() and
+A5:     p = [x1,y1] by ZFMISC_1:def 2;
+      reconsider x1 as Element of X() by A3;
+      reconsider y1 as Element of Y() by A4;
+      consider z being Element of Z() such that
+A6:   P[x1,y1,z] by A1;
+      take z;
+      let x be Element of X(),y be Element of Y();
+      assume p = [x,y];
+      then x1 = x & y1 = y by A5,ZFMISC_1:33;
+      hence P[x,y,z] by A6;
+     end;
+  consider f being Function of [:X(),Y():],Z() such that
+A7:  for p being Element of [:X(),Y():] holds R[p,f.p] from FUNCT_2:sch 3(A2);
+  take f;
+  let x be Element of X(); let y be Element of Y();
+  reconsider xy = [x,y] as Element of [:X(),Y():] by ZFMISC_1:def 2;
+     P[x,y,f.xy] by A7;
+  hence thesis;
+ end;
+
+scheme Lambda2D{X, Y, Z() -> non empty set,
+                F(Element of X(),Element of Y()) -> Element of Z()}:
+ ex f being Function of [:X(),Y():],Z()
+  st for x being Element of X() for y being Element of Y() holds f.(x,y)=F(x,y)
+
+proof
+   defpred P[Element of X(),Element of Y(),set] means $3 = F($1,$2);
+A1: for x being Element of X() for y being Element of Y()
+      ex z being Element of Z() st P[x,y,z];
+   thus ex f being Function of [:X(),Y():],Z()
+  st for x being Element of X() for y being Element of Y() holds
+    P[x,y,f.(x,y)] from FuncEx2D(A1);
+  end;
 
 definition let A,o;
   attr o is commutative means
@@ -125,14 +200,12 @@ then A2:  f c= [:dom f, rng f:] & dom f = {} & rng f c= {}
      by FUNCT_2:def 1,RELAT_1:21,RELSET_1:12;
    thus f is empty by A1,XBOOLE_1:3;
    hereby let a,b,c be Element of {};
-    thus f.(a,f.(b,c)) = f.[a,f.(b,c)] .= {} by A2,FUNCT_1:def 4
-                      .= f.[f.(a,b),c] by A2,FUNCT_1:def 4
-                      .= f.(f.(a,b),c);
+    thus f.(a,f.(b,c)) = {} by A2,FUNCT_1:def 4
+                      .= f.(f.(a,b),c) by A2,FUNCT_1:def 4;
    end;
    let a,b be Element of {};
-   thus f.(a,b) = f.[a,b] .= {} by A2,FUNCT_1:def 4
-               .= f.[b,a] by A2,FUNCT_1:def 4
-               .= f.(b,a);
+   thus f.(a,b) = {} by A2,FUNCT_1:def 4
+               .= f.(b,a) by A2,FUNCT_1:def 4;
   end;
 end;
 
@@ -381,52 +454,99 @@ A1:   o' is commutative;
  end;
 
 definition let A,u,o;
-  pred u is_distributive_wrt o means
-:Def12:
+  pred u is_distributive_wrt o means :Def12:
     for a,b holds u.(o.(a,b)) = o.((u.a),(u.b));
 end;
 
 definition let A be non empty set, o be BinOp of A;
- redefine
-  attr o is commutative means
-      for a,b being Element of A holds o.(a,b) = o.(b,a);
+  redefine attr o is commutative means
+    for a,b being Element of A holds o.(a,b) = o.(b,a);
   correctness by Def2;
   attr o is associative means
-      for a,b,c being Element of A holds o.(a,o.(b,c)) = o.(o.(a,b),c);
+    for a,b,c being Element of A holds o.(a,o.(b,c)) = o.(o.(a,b),c);
   correctness by Def3;
   attr o is idempotent means
-      for a being Element of A holds o.(a,a) = a;
+    for a being Element of A holds o.(a,a) = a;
   correctness by Def4;
 end;
 
 definition let A be non empty set, e be Element of A, o be BinOp of A;
- redefine
-  pred e is_a_left_unity_wrt o means
-      for a being Element of A holds o.(e,a) = a;
+  redefine pred e is_a_left_unity_wrt o means
+    for a being Element of A holds o.(e,a) = a;
   correctness by Def5;
   pred e is_a_right_unity_wrt o means
-      for a being Element of A holds o.(a,e) = a;
+    for a being Element of A holds o.(a,e) = a;
   correctness by Def6;
 end;
 
 definition let A be non empty set, o',o be BinOp of A;
- redefine
-  pred o' is_left_distributive_wrt o means
-       for a,b,c being Element of A holds o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)
-)
-;
+  redefine pred o' is_left_distributive_wrt o means
+    for a,b,c being Element of A holds o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c));
   correctness by Def9;
   pred o' is_right_distributive_wrt o means
-       for a,b,c being Element of A holds o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c)
-)
-;
+    for a,b,c being Element of A holds o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c));
   correctness by Def10;
 end;
 
 definition let A be non empty set, u be UnOp of A, o be BinOp of A;
- redefine
-  pred u is_distributive_wrt o means
-       for a,b being Element of A holds u.(o.(a,b)) = o.((u.a),(u.b));
+  redefine pred u is_distributive_wrt o means
+    for a,b being Element of A holds u.(o.(a,b)) = o.((u.a),(u.b));
   correctness by Def12;
+end;
+
+:: FUNCT_2, 2005.12.13, A.T.
+
+theorem
+  for f being Function of [:X,Y:],Z st x in X & y in Y & Z <> {}
+    holds f.(x,y) in Z
+ proof let f be Function of [:X,Y:],Z;
+   assume x in X & y in Y;
+   then [x,y] in [:X,Y:] by ZFMISC_1:106;
+   hence thesis by FUNCT_2:7;
+ end;
+
+:: from TOPALG_3, 2005.12.14, A.T.
+
+theorem
+  for x, y, X, Y, Z being set, f being Function of [:X,Y:],Z, g being Function
+    st Z <> {} & x in X & y in Y holds (g*f).(x,y) = g.(f.(x,y))
+proof
+  let x, y, X, Y, Z be set,
+      f be Function of [:X,Y:],Z,
+      g be Function such that
+A1: Z <> {};
+  assume x in X & y in Y;
+   then [x,y] in [:X,Y:] by ZFMISC_1:106;
+  hence (g*f).(x,y) = g.(f.(x,y)) by A1,FUNCT_2:21;
+end;
+
+:: missing, 2005.12.17, A.T.
+
+theorem
+ for f being Function st dom f = [:X,Y:] holds
+  f is constant iff
+   for x1,x2,y1,y2 st x1 in X & x2 in X & y1 in Y & y2 in Y
+     holds f.(x1,y1)=f.(x2,y2)
+proof let f be Function such that
+Z: dom f = [:X,Y:];
+ hereby assume
+Z1:  f is constant;
+  let x1,x2,y1,y2;
+  assume x1 in X & x2 in X & y1 in Y & y2 in Y;
+   then [x1,y1] in [:X,Y:] & [x2,y2] in [:X,Y:]by ZFMISC_1:106;
+  hence f.(x1,y1)=f.(x2,y2) by Z,Z1,FUNCT_1:def 16;
+ end;
+ assume
+Z1: for x1,x2,y1,y2 st x1 in X & x2 in X & y1 in Y & y2 in Y
+     holds f.(x1,y1)=f.(x2,y2);
+ let x,y;
+ assume x in dom f;
+  then consider x1,y1 such that
+W1:x1 in X & y1 in Y & x = [x1,y1] by Z,ZFMISC_1:103;
+ assume y in dom f;
+  then consider x2,y2 such that
+W2:x2 in X & y2 in Y & y = [x2,y2] by Z,ZFMISC_1:103;
+ thus f.x = f.(x1,y1) by W1 .= f.(x2,y2) by W1,W2,Z1
+   .= f.y by W1,W2,Z1;
 end;
 

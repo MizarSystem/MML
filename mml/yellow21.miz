@@ -26,7 +26,8 @@ environ
       YELLOW18, SETFAM_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, RELAT_2, WELLORD1, WELLORD2, ORDERS_2, LATTICE3, ORDERS_3,
-      ALTCAT_1, ALTCAT_3, YELLOW_0, WAYBEL_0, WAYBEL_3, YELLOW18, XBOOLE_0;
+      ALTCAT_1, ALTCAT_3, YELLOW_0, WAYBEL_0, WAYBEL_3, YELLOW18, XBOOLE_0,
+      BINOP_1;
  theorems ZFMISC_1, RELAT_1, FUNCT_1, PBOOLE, SETWISEO, STRUCT_0, WELLORD1,
       WELLORD2, ORDERS_2, ORDERS_1, FUNCT_2, GRCAT_1, BINOP_1, ALTCAT_1,
       ALTCAT_2, ORDERS_3, ALTCAT_3, ORDINAL1, CARD_1, CARD_5, WAYBEL_0,
@@ -308,23 +309,22 @@ A21:   A = a & B = b;
     end;
    thus the carrier of C = A() by A19;
    let a,b be LATTICE, f be monotone Function of a,b;
-A22:  (the Arrows of C).[a,b] = (the Arrows of C).(a,b) by BINOP_1:def 1;
    hereby assume
-A23:   f in (the Arrows of C).(a,b);
-     then [a,b] in dom the Arrows of C by A22,FUNCT_1:def 4;
-     then A24: [a,b] in [:A,A:] by A19,PBOOLE:def 3;
+A22:   f in (the Arrows of C).(a,b);
+     then [a,b] in dom the Arrows of C by FUNCT_1:def 4;
+     then A23: [a,b] in [:A,A:] by A19,PBOOLE:def 3;
     hence a in A & b in A by ZFMISC_1:106;
-    reconsider x = a, y = b as object of C by A19,A24,ZFMISC_1:106;
-          (the Arrows of C).[a,b] = <^x,y^> by A22
+    reconsider x = a, y = b as object of C by A19,A23,ZFMISC_1:106;
+          (the Arrows of C).[a,b] = <^x,y^>
         .= F.[x,y] by A20;
-    hence P[a,b,f] by A8,A19,A22,A23;
+    hence P[a,b,f] by A8,A19,A22;
    end;
    assume
-A25:  a in A() & b in A();
+A24:  a in A() & b in A();
    then reconsider x = a, y = b as object of C by A19;
-         (the Arrows of C).[a,b] = <^x,y^> by A22
+         (the Arrows of C).[a,b] = <^x,y^>
        .= F.[x,y] by A20;
-   hence thesis by A8,A22,A25;
+   hence thesis by A8,A24;
   end;
 
 registration
@@ -402,10 +402,7 @@ definition
  let C be with_complete_lattices category;
  let a be object of C;
  redefine func latt a -> complete LATTICE;
- coherence
-  proof a is complete LATTICE by Def5;
-   hence thesis;
-  end;
+ coherence by Def5;
  end;
 
 definition
@@ -418,8 +415,7 @@ Def7:
   f;
  coherence
   proof
-         latt a = a & latt b = b;
-    then f in <^a,b^> & <^a,b^> c= MonFuncs(latt a, latt b) by A1,Def4;
+    f in <^a,b^> & <^a,b^> c= MonFuncs(latt a, latt b) by A1,Def4;
     then ex g being Function of latt a, latt b st f = g &
        g in Funcs (the carrier of latt a, the carrier of latt b) &
        g is monotone by ORDERS_3:def 6;
@@ -468,8 +464,7 @@ A8: for a,b being LATTICE, f being monotone Function of a,b
    reconsider C as lattice-wise strict category by A6;
    take C; thus the carrier of C = A() by A7;
    let a,b be object of C;
-         latt a = a & latt b = b & <^a,b^> = (the Arrows of C).(a,b);
-   hence thesis by A7,A8;
+   thus thesis by A7,A8;
   end;
 
 scheme CLCatEx2
@@ -551,22 +546,22 @@ A5: for a,b being object of A2, f being monotone Function of latt a, latt b
 A6: for a,b being object of A1 holds <^a,b^> = (the Arrows of A1).(a,b);
          now let a,b be object of A2;
      reconsider a' = a, b' = b as object of A1 by A2,A4;
-A8:   <^a',b'^> = (the Arrows of A1).(a',b');
+A7:   <^a',b'^> = (the Arrows of A1).(a',b');
      thus <^a,b^> = (the Arrows of A1).(a,b)
        proof
         hereby let x; assume
-A9:       x in <^a,b^>;
+A8:       x in <^a,b^>;
          then reconsider f = x as Morphism of a,b;
-A10:       @f = f by A9,Def7;
+A9:       @f = f by A8,Def7;
           then P[latt a',latt b',@f] & @f is Function of latt a',latt b'
-           by A5,A9;
-         hence x in (the Arrows of A1).(a,b) by A3,A8,A10;
+           by A5,A8;
+         hence x in (the Arrows of A1).(a,b) by A3,A7,A9;
         end;
         let x; assume
-A11:      x in (the Arrows of A1).(a,b);
+A10:      x in (the Arrows of A1).(a,b);
         then reconsider f = x as Morphism of a',b';
-              @f = f by A11,Def7;
-         then P[latt a,latt b,@f] & f = @f by A3,A11;
+              @f = f by A10,Def7;
+         then P[latt a,latt b,@f] & f = @f by A3,A10;
         hence x in <^a,b^> by A5;
        end;
     end;
@@ -664,8 +659,7 @@ A8: for a,b being object of A() st <^a,b^> <> {}
 A9:    <^a,b^> <> {};
       let f be Morphism of a,b;
 A10:    f = @f & a = latt a & b = latt b by A9,Def7;
-            <^a,b^> = (the Arrows of A()).(a,b);
-       then a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+       a in the carrier of A() & b in the carrier of A() & P[a,b,f]
         by A1,A9,A10;
        then O(a) in the carrier of B() & O(b) in the carrier of B() &
        F(a,b,f) is Function of O(a),O(b) & Q[O(a),O(b),F(a,b,f)] by A3,A4,A10;
@@ -678,38 +672,34 @@ A12:   <^a,b^> <> {} & <^b,c^> <> {};
 A13:   a' = O(a) & b' = O(b) & c' = O(c);
      let f' be Morphism of a',b', g' be Morphism of b',c' such that
 A14:   f' = F(a,b,f) & g' = F(b,c,g);
-A16:   @f = f & @g = g by A12,Def7;
+A15:   @f = f & @g = g by A12,Def7;
            latt a' = a' & latt b' = b' & latt c' = c' &
       F(a,b,f) in (the Arrows of B()).(O(a), O(b)) &
       F(b,c,g) in (the Arrows of B()).(O(b), O(c)) by A8,A12;
-then A17:   F(a,b,f) in <^a',b'^> & F(b,c,g) in <^b',c'^> by A13;
-then A18:   @f' = f' & @g' = g' by Def7;
-           <^a,b^> = (the Arrows of A()).(a,b) &
-      <^b,c^> = (the Arrows of A()).(b,c);
-      then P[a,b,f] & P[b,c,g] by A1,A12,A16;
-      then F(a,c,@g*@f) = F(b,c,g)*F(a,b,f) by A6,A16 .= g'*f' by A14,A17
-,A18,Th3;
+then A16:   F(a,b,f) in <^a',b'^> & F(b,c,g) in <^b',c'^> by A13;
+then A17:   @f' = f' & @g' = g' by Def7;
+      P[a,b,f] & P[b,c,g] by A1,A12,A15;
+      then F(a,c,@g*@f) = F(b,c,g)*F(a,b,f) by A6,A15 .= g'*f' by A14,A16
+,A17,Th3;
      hence F(a,c,g*f) = g'*f' by A12,Th3;
     end;
-A19: now let a be object of A(), a' be object of B(); assume a' = O(a);
+A18: now let a be object of A(), a' be object of B(); assume a' = O(a);
       then a in the carrier of A() &
       latt a' = O(a) & latt a = a & idm a = id latt a by Th2;
      hence F(a,a,idm a) = id latt a' by A5 .= idm a' by Th2;
     end;
    consider F being covariant strict Functor of A(),B() such that
-A20: for a being object of A() holds F.a = O(a) and
-A21: for a,b being object of A() st <^a,b^> <> {}
+A19: for a being object of A() holds F.a = O(a) and
+A20: for a,b being object of A() st <^a,b^> <> {}
      for f being Morphism of a,b holds F.f = F(a, b, f)
-      from YELLOW18:sch 8(A7,A8,A11,A19);
+      from YELLOW18:sch 8(A7,A8,A11,A18);
    take F;
-   hereby let a be object of A();    a = latt a;
-    hence F.a = O(latt a) by A20;
-   end;
+   thus for a be object of A() holds F.a = O(latt a) by A19;
    let a,b be object of A() such that
-A22: <^a, b^> <> {};
+A21: <^a, b^> <> {};
    let f be Morphism of a,b;
-         a = latt a & b = latt b & f = @f by A22,Def7;
-   hence thesis by A21,A22;
+         a = latt a & b = latt b & f = @f by A21,Def7;
+   hence thesis by A20,A21;
   end;
 
 scheme CLContravariantFunctorEx
@@ -754,8 +744,7 @@ A8: for a,b being object of A() st <^a,b^> <> {}
 A9:    <^a,b^> <> {};
       let f be Morphism of a,b;
 A10:    f = @f & a = latt a & b = latt b by A9,Def7;
-            <^a,b^> = (the Arrows of A()).(a,b);
-       then a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+       a in the carrier of A() & b in the carrier of A() & P[a,b,f]
         by A1,A9,A10;
        then O(a) in the carrier of B() & O(b) in the carrier of B() &
        F(a,b,f) is Function of O(b),O(a) & Q[O(b),O(a),F(a,b,f)] by A3,A4,A10;
@@ -768,38 +757,34 @@ A12:   <^a,b^> <> {} & <^b,c^> <> {};
 A13:   a' = O(a) & b' = O(b) & c' = O(c);
      let f' be Morphism of b',a', g' be Morphism of c',b' such that
 A14:   f' = F(a,b,f) & g' = F(b,c,g);
-A16:   @f = f & @g = g by A12,Def7;
+A15:   @f = f & @g = g by A12,Def7;
            latt a' = a' & latt b' = b' & latt c' = c' &
       F(a,b,f) in (the Arrows of B()).(O(b), O(a)) &
       F(b,c,g) in (the Arrows of B()).(O(c), O(b)) by A8,A12;
-then A17:   F(a,b,f) in <^b',a'^> & F(b,c,g) in <^c',b'^> by A13;
-then A18:   @f' = f' & @g' = g' by Def7;
-           <^a,b^> = (the Arrows of A()).(a,b) &
-      <^b,c^> = (the Arrows of A()).(b,c);
-      then P[a,b,f] & P[b,c,g] by A1,A12,A16;
-      then F(a,c,@g*@f) = F(a,b,f)*F(b,c,g) by A6,A16 .= f'*g' by A14,A17
-,A18,Th3;
+then A16:   F(a,b,f) in <^b',a'^> & F(b,c,g) in <^c',b'^> by A13;
+then A17:   @f' = f' & @g' = g' by Def7;
+      P[a,b,f] & P[b,c,g] by A1,A12,A15;
+      then F(a,c,@g*@f) = F(a,b,f)*F(b,c,g) by A6,A15 .= f'*g' by A14,A16
+,A17,Th3;
      hence F(a,c,g*f) = f'*g' by A12,Th3;
     end;
-A19: now let a be object of A(), a' be object of B(); assume a' = O(a);
+A18: now let a be object of A(), a' be object of B(); assume a' = O(a);
       then a in the carrier of A() &
       latt a' = O(a) & latt a = a & idm a = id latt a by Th2;
      hence F(a,a,idm a) = id latt a' by A5 .= idm a' by Th2;
     end;
    consider F being contravariant strict Functor of A(),B() such that
-A20: for a being object of A() holds F.a = O(a) and
-A21: for a,b being object of A() st <^a,b^> <> {}
+A19: for a being object of A() holds F.a = O(a) and
+A20: for a,b being object of A() st <^a,b^> <> {}
      for f being Morphism of a,b holds F.f = F(a, b, f)
-      from YELLOW18:sch 9(A7,A8,A11,A19);
+      from YELLOW18:sch 9(A7,A8,A11,A18);
    take F;
-   hereby let a be object of A();    a = latt a;
-    hence F.a = O(latt a) by A20;
-   end;
+   thus for a be object of A() holds F.a = O(latt a) by A19;
    let a,b be object of A() such that
-A22: <^a, b^> <> {};
+A21: <^a, b^> <> {};
    let f be Morphism of a,b;
-         a = latt a & b = latt b & f = @f by A22,Def7;
-   hence thesis by A21,A22;
+         a = latt a & b = latt b & f = @f by A21,Def7;
+   hence thesis by A20,A21;
   end;
 
 scheme CLCatIsomorphism
@@ -850,22 +835,19 @@ A9: for a,b being object of A() st <^a,b^> <> {}
 A10:    <^a,b^> <> {};
       let f,g be Morphism of a,b;
 A11:    latt a = a & latt b = b & @f = f & @g = g by A10,Def7;
-            <^a,b^> = (the Arrows of A()).(a,b);
-       then P[latt a, latt b, @f] & P[latt a, latt b, @g] by A1,A10,A11;
+       P[latt a, latt b, @f] & P[latt a, latt b, @g] by A1,A10,A11;
       hence thesis by A5,A11;
      end;
 A12: now let a,b be object of B() such that
 A13:   <^a,b^> <> {};
      let f be Morphism of a,b;
 A14:   latt a = a & latt b = b & @f = f by A13,Def7;
-           <^a,b^> = (the Arrows of B()).(a,b);
-      then Q[latt a, latt b, @f] by A2,A13,A14;
+      Q[latt a, latt b, @f] by A2,A13,A14;
      then consider c,d being LATTICE, g being Function of c,d such that
 A15:   c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
       latt a = O(c) & latt b = O(d) & @f = F(c,d,g) by A6;
      reconsider c' = c, d' = d as object of A() by A15;
-           <^c',d'^> = (the Arrows of A()).(c,d);
-     then g in <^c',d'^> by A1,A15;
+     g in <^c',d'^> by A1,A15;
      hence ex c,d being object of A(), g being Morphism of c,d
         st a = O(c) & b = O(d) & <^c,d^> <> {} & f = F(c,d,g) by A14,A15;
     end;
@@ -925,14 +907,12 @@ A11: now let a,b be object of B() such that
 A12:   <^a,b^> <> {};
      let f be Morphism of a,b;
 A13:   latt a = a & latt b = b & @f = f by A12,Def7;
-           <^a,b^> = (the Arrows of B()).(a,b);
-      then Q[latt a, latt b, @f] by A2,A12,A13;
+      Q[latt a, latt b, @f] by A2,A12,A13;
      then consider c,d being LATTICE, g being Function of c,d such that
 A14:   c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
       latt b = O(c) & latt a = O(d) & @f = F(c,d,g) by A6;
      reconsider c' = c, d' = d as object of A() by A14;
-           <^c',d'^> = (the Arrows of A()).(c,d);
-     then g in <^c',d'^> by A1,A14;
+     g in <^c',d'^> by A1,A14;
      hence ex c,d being object of A(), g being Morphism of c,d
         st b = O(c) & a = O(d) & <^c,d^> <> {} & f = F(c,d,g) by A13,A14;
     end;
@@ -968,8 +948,7 @@ A6: for a,b being LATTICE, f being monotone Function of a,b
       from localCLCatEx(A1,A2,A3);
    reconsider C as strict lattice-wise category by A4;
    take C; let a,b be object of C, f be Function of latt a, latt b;
- latt a = a & latt b = b;
-    then (f is isomorphic implies f is monotone) &
+    (f is isomorphic implies f is monotone) &
     (the Arrows of C).(latt a, latt b) = <^a,b^>
      by YELLOW16:17;
    hence thesis by A5,A6;
@@ -1068,7 +1047,7 @@ A11: for a, b being object of A() st a = O2(O1(b))
      proof let a, b be object of A() such that
 A12:    a = O2(O1(b));
 A13:    latt a = a & latt b = b;
-      then consider f being monotone Function of O2(O1(b)), latt b such that
+      consider f being monotone Function of O2(O1(b)), latt b such that
 A14:    f = A(b) & f is isomorphic & P[O2(O1(b)), latt b, f] &
        P[latt b, O2(O1(b)), f"] by A5;
       thus A(b) in <^a, b^> by A1,A12,A13,A14;
@@ -1082,7 +1061,7 @@ A15: for a, b being object of B() st b = O1(O2(a))
      proof let a, b be object of B() such that
 A16:    b = O1(O2(a));
 A17:    latt a = a & latt b = b;
-      then consider f being monotone Function of latt a, O1(O2(a)) such that
+      consider f being monotone Function of latt a, O1(O2(a)) such that
 A18:    f = B(a) & f is isomorphic & Q[latt a, O1(O2(a)), f] &
        Q[O1(O2(a)), latt a, f"] by A6;
       thus B(a) in <^a, b^> by A2,A16,A17,A18;
@@ -1602,8 +1581,7 @@ A1: ex w being non empty set st w in W by SETFAM_1:def 11;
     end;
    let a,b be object of C, f be Function of latt a, latt b; assume
 A2: f is isomorphic;
-         a = latt a & b = latt b;
-   then reconsider S = latt a, T = latt b as complete LATTICE by A1,Def10;
+   reconsider S = latt a, T = latt b as complete LATTICE by A1,Def10;
          f is sups-preserving Function of S, T by A2,WAYBEL13:20;
    hence f in <^a,b^> by A1,Def10;
   end;
@@ -1690,13 +1668,7 @@ begin :: Lattice-wise subcategories
 theorem Th16:
  for A being category, B being non empty subcategory of A
  for a being object of A, b being object of B st b = a
-  holds the_carrier_of b = the_carrier_of a
-  proof let A be category, B be non empty subcategory of A;
-   let a be object of A, b be object of B such that
-A1: b = a;
-   thus the_carrier_of b = proj1 idm b
-     .= proj1 idm a by A1,ALTCAT_2:35 .= the_carrier_of a;
-  end;
+  holds the_carrier_of b = the_carrier_of a by ALTCAT_2:35;
 
 registration
  let A be set-id-inheriting category;

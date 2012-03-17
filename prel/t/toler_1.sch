@@ -22,9 +22,9 @@
 <For>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="6"/>
-<Adjective nr="8"/>
-<Adjective nr="15">
+<Adjective nr="7"/>
+<Adjective nr="9"/>
+<Adjective nr="16">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Adjective>

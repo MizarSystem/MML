@@ -19,6 +19,7 @@ environ
  registrations RELSET_1, XREAL_0, INT_1, NEWTON, MEMBERED, ORDINAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions SEQ_2;
+ definitions SQUARE_1;
  theorems SEQ_1, REAL_2, POWER, NEWTON, NAT_1, SEQ_2, SEQ_4, ABSVALUE, SEQM_3,
       RVSUM_1, FINSEQ_2, SERIES_1, RFINSEQ, FINSEQ_3, FINSEQ_4, FINSEQ_5,
       FINSEQ_1, SIN_COS, SQUARE_1, INT_1, RAT_1, INT_2, FUNCT_2, XCMPLX_0,
@@ -55,19 +56,19 @@ proof
      sqrt p>=0 & n>=0 by SQUARE_1:def 4;
  then i>=0 by A5,REAL_2:121;
  then reconsider m = i as Nat by INT_1:16;
- A6: m^2 = (sqrt p)^2*n^2 by A5,SQUARE_1:68
+ A6: m^2 = (sqrt p)^2*n^2 by A5
   .= p*n^2 by SQUARE_1:def 4;
  then p divides m^2 by NAT_1:def 3;
- then p divides m*m by SQUARE_1:def 3;
+ then p divides m*m;
  then p divides m by A1,NEWTON:98;
  then consider m1 being Nat such that A7: m=p*m1 by NAT_1:def 3;
      n^2 = m^2/p by A3,A6,XCMPLX_1:90
-  .= p^2*m1^2/p by A7,SQUARE_1:68
-  .= p*p*m1^2/p by SQUARE_1:def 3
+  .= p^2*m1^2/p by A7
+  .= p*p*m1^2/p
   .= p*(p*m1^2)/p
   .= p*m1^2 by A3,XCMPLX_1:90;
  then p divides n^2 by NAT_1:def 3;
- then p divides n*n by SQUARE_1:def 3;
+ then p divides n*n;
  then p divides n by A1,NEWTON:98;
  then consider n1 being Nat such that A8: n=p*n1 by NAT_1:def 3;
  A9: n1<>0 by A4,A8;
@@ -83,7 +84,7 @@ proof
  set w = sqrt 2;
      w>0 by SQUARE_1:84;
  then A1: (w.^.w).^.w = w.^.(w*w) by POWER:38
-  .= w.^.(w^2) by SQUARE_1:def 3
+  .= w.^.(w^2)
   .= w.^.2 by SQUARE_1:def 4
   .= w^2 by POWER:53
   .= 2 by SQUARE_1:def 4;
@@ -211,7 +212,7 @@ proof
   .= (n.^.(-k))/n by POWER:30;
 end;
 
- Th5:
+ Lm1:
  for x, y, z, v, w being real number holds
   x/(y*z*(v/w))=(w/z)*(x/(y*v)) by XCMPLX_1:235;
 
@@ -230,7 +231,7 @@ proof
    .= n!/((k!*(k+1))*(l!)) by NEWTON:21
    .= n!/((k!*(k+1))*((l!)*(l+1)/(l+1))) by XCMPLX_1:90
    .= n!/((k!*(k+1))*((l+1)!/(l+1))) by NEWTON:21
-   .= (l1/(k+1))*(n!/((k!)*(l1!))) by Th5
+   .= (l1/(k+1))*(n!/((k!)*(l1!))) by Lm1
    .= ((n-k)/(k+1))*(n choose k) by A2,NEWTON:def 3;
  end;
  suppose A3: k+1>n & k<=n;
@@ -283,14 +284,14 @@ proof
   let n;
   assume A5: n>=N;
   then A6: n>0 by A2,A3,A4,REAL_2:177;
-  A8: abs(aseq(k).n-1) = abs((1-(k/n))-1) by A6,Th8
+  A7: abs(aseq(k).n-1) = abs((1-(k/n))-1) by A6,Th8
    .= abs(-(k/n))
    .= abs(k/n) by COMPLEX1:138
    .= k/n by ABSVALUE:def 1;
       n>(k/eps) by A3,A5,XREAL_1:2;
   then (k/eps)*eps<n*eps by A2,XREAL_1:70;
   then k<n*eps by A2,XCMPLX_1:88;
-  hence thesis by A6,A8,REAL_2:178;
+  hence thesis by A6,A7,REAL_2:178;
  end;
  thus aseq(k) is convergent
  proof
@@ -396,9 +397,9 @@ theorem Th14:
  k<n implies 0<aseq(k).n & aseq(k).n<=1
 proof
  assume A1: k<n;
- A3: aseq(k).n=(n-k)/n by Def1;
+ A2: aseq(k).n=(n-k)/n by Def1;
      n-k>0 by A1,XREAL_1:52;
- hence aseq(k).n>0 by A1,A3,REAL_2:127;
+ hence aseq(k).n>0 by A1,A2,REAL_2:127;
  1-(k/n)<=1-0 by REAL_2:106;
  hence aseq(k).n<=1 by A1,Th8;
 end;
@@ -421,30 +422,30 @@ proof
   thus P[k+1]
   proof
    per cases;
-   suppose A10: k<n;
-    A11: bseq(k+1).n=(1/(k+1))*(bseq(k).n)*(aseq(k).n) by A1,Th7;
+   suppose A8: k<n;
+    A9: bseq(k+1).n=(1/(k+1))*(bseq(k).n)*(aseq(k).n) by A1,Th7;
     (1/(k+1))*(bseq(k).n)<=(1/(k+1))*(1/(k!)) by A7,XREAL_1:66;
-    then A12: (1/(k+1))*(bseq(k).n)<=1/((k+1)!) by Th12;
-        aseq(k).n>=0 by A10,Th14;
-    then A13: (1/(k+1))*(bseq(k).n)*(aseq(k).n)<=(1/((k+1)!))*(aseq(k).n)
-      by A12,XREAL_1:66;
-        aseq(k).n<=1 by A10,Th14;
+    then A10: (1/(k+1))*(bseq(k).n)<=1/((k+1)!) by Th12;
+        aseq(k).n>=0 by A8,Th14;
+    then A11: (1/(k+1))*(bseq(k).n)*(aseq(k).n)<=(1/((k+1)!))*(aseq(k).n)
+      by A10,XREAL_1:66;
+        aseq(k).n<=1 by A8,Th14;
     then 1/((k+1)!)*(aseq(k).n)<=1/((k+1)!) by REAL_2:147;
-    hence thesis by A11,A13,XREAL_1:2;
+    hence thesis by A9,A11,XREAL_1:2;
    end;
    suppose k>=n;
-    then A14: k+1>n by NAT_1:38;
+    then A12: k+1>n by NAT_1:38;
         bseq(k+1).n = (n choose (k+1))*(n.^.(-(k+1))) by Def2
-     .= 0*(n.^.(-(k+1))) by A14,NEWTON:def 3
+     .= 0*(n.^.(-(k+1))) by A12,NEWTON:def 3
      .= 0;
     hence thesis;
   end;
   end;
  end;
      for k holds P[k] from NAT_1:sch 1(A5,A6);
- hence A15: bseq(k).n<=1/(k!);
+ hence A13: bseq(k).n<=1/(k!);
  hence bseq(k).n<=eseq.k by Def5;
- hence 0<=cseq(n).k & cseq(n).k<=1/(k!) & cseq(n).k<=eseq.k by A4,A15,Th3;
+ hence 0<=cseq(n).k & cseq(n).k<=1/(k!) & cseq(n).k<=eseq.k by A4,A13,Th3;
 end;
 
 :: n>0 implies (1+(1/n)).^.n = Sum (\k:(n choose k)*(n.^.(-k)))
@@ -537,29 +538,29 @@ defpred P[Nat] means
    (for k st k<n+1 holds seq.k=sq.(k+1)) &
    (for k st k>=n+1 holds seq.k=0);
       n+1>=0+1 by XREAL_1:8;
-  then A13: len(sq/^1) = len(sq)-1 by A10,RFINSEQ:def 2
+  then A11: len(sq/^1) = len(sq)-1 by A10,RFINSEQ:def 2
    .= n by A10;
-  A14: now let k;
+  A12: now let k;
    assume k<n;
-   then A15: k+1<n+1 by XREAL_1:8;
-   A16: k+1>=0+1 by XREAL_1:8;
+   then A13: k+1<n+1 by XREAL_1:8;
+   A14: k+1>=0+1 by XREAL_1:8;
    thus (seq^\1).k = seq.(k+1) by SEQM_3:def 9
-    .= sq.((k+1)+1) by A10,A15
-    .= (sq/^1).(k+1) by A10,A15,A16,Th17;
+    .= sq.((k+1)+1) by A10,A13
+    .= (sq/^1).(k+1) by A10,A13,A14,Th17;
   end;
       now let k;
    assume k>=n;
-   then A17: k+1>=n+1 by XREAL_1:8;
+   then A15: k+1>=n+1 by XREAL_1:8;
    thus (seq^\1).k = seq.(k+1) by SEQM_3:def 9
-    .= 0 by A10,A17;
+    .= 0 by A10,A15;
   end;
-  then A18: seq^\1 is summable & Sum(seq^\1)=Sum(sq/^1) by A9,A13,A14;
+  then A16: seq^\1 is summable & Sum(seq^\1)=Sum(sq/^1) by A9,A11,A12;
   hence seq is summable by Th16;
-  thus Sum(seq) = (seq.0)+Sum(seq^\1) by A18,Th16
+  thus Sum(seq) = (seq.0)+Sum(seq^\1) by A16,Th16
    .= (sq.(0+1))+Sum(seq^\1) by A10
-   .= Sum(sq) by A10,A18,Th18;
- end; then A19: P[k] implies P[k+1];
- thus P[n] from NAT_1:sch 1(A8,A19);
+   .= Sum(sq) by A10,A16,Th18;
+ end; then A17: P[k] implies P[k+1];
+ thus P[n] from NAT_1:sch 1(A8,A17);
 end;
 
 theorem Th20:
@@ -596,23 +597,23 @@ theorem Th22:
   cseq(n) is summable & Sum(cseq(n))=(1+(1/n)).^.n & Sum(cseq(n))=dseq.n
 proof
  assume A1: n>0;
- A3: len((1,1/n) In_Power n)=n+1 by NEWTON:def 4;
- A4: now let k;
+ A2: len((1,1/n) In_Power n)=n+1 by NEWTON:def 4;
+ A3: now let k;
   assume k<n+1;
   then k<=n by NAT_1:38;
   hence cseq(n).k=((1,1/n) In_Power n).(k+1) by A1,Th21;
  end;
- A5: now let k;
+ A4: now let k;
   assume k>=n+1;
-  then A6: k>n by NAT_1:38;
+  then A5: k>n by NAT_1:38;
   thus cseq(n).k = (n choose k)*(n.^.(-k)) by Def3
-   .= 0*(n.^.(-k)) by A6,NEWTON:def 3
+   .= 0*(n.^.(-k)) by A5,NEWTON:def 3
    .= 0;
  end;
- hence cseq(n) is summable by A3,A4,Th19;
+ hence cseq(n) is summable by A2,A3,Th19;
  thus (1+(1/n)).^.n = (1+(1/n))|^n by POWER:48
   .= Sum((1,1/n) In_Power n) by NEWTON:41
-  .= Sum(cseq(n)) by A3,A4,A5,Th19;
+  .= Sum(cseq(n)) by A2,A3,A4,Th19;
  hence dseq.n = Sum(cseq(n)) by Def4;
 end;
 
@@ -954,21 +955,21 @@ proof
        n!*Partial_Sums(eseq).0 = n!*eseq.0 by SERIES_1:def 1
     .= (n!)/(0!) by Th33;
    hence n!*Partial_Sums(eseq).0 is integer by Th37;
-  end; then A2: P[0];
+  end; then A1: P[0];
     now let k;
-   assume A3: k<=n implies n!*Partial_Sums(eseq).k is integer;
-   assume A4: k+1<=n;
+   assume A2: k<=n implies n!*Partial_Sums(eseq).k is integer;
+   assume A3: k+1<=n;
        k+0<=k+1 by XREAL_1:8;
-   then reconsider i = n!*Partial_Sums(eseq).k as Integer by A3,A4,XREAL_1:2;
+   then reconsider i = n!*Partial_Sums(eseq).k as Integer by A2,A3,XREAL_1:2;
        n!*eseq.(k+1) = (n!)/((k+1)!) by Th33;
-   then reconsider j = n!*eseq.(k+1) as Integer by A4,Th37;
-   A5: n!*Partial_Sums(eseq).(k+1)
+   then reconsider j = n!*eseq.(k+1) as Integer by A3,Th37;
+   A4: n!*Partial_Sums(eseq).(k+1)
     = n!*(Partial_Sums(eseq).k+eseq.(k+1)) by SERIES_1:def 1
     .= n!*Partial_Sums(eseq).k+n!*eseq.(k+1);
        i+j is Integer;
-   hence n!*Partial_Sums(eseq).(k+1) is integer by A5;
-  end; then A6: P[k] implies P[k+1];
-    for k holds P[k] from NAT_1:sch 1(A2,A6); hence thesis;
+   hence n!*Partial_Sums(eseq).(k+1) is integer by A4;
+  end; then A5: P[k] implies P[k+1];
+    for k holds P[k] from NAT_1:sch 1(A1,A5); hence thesis;
  end;
  hence thesis;
 end;
@@ -992,19 +993,19 @@ proof
   end;
   A4: now let k;
    assume A5: P[k];
-   A7: 1/(n+1)>0 by REAL_2:127;
+   A6: 1/(n+1)>0 by REAL_2:127;
    n+(k+1)>=n+0 by XREAL_1:8;
    then n+(k+1)+1>=n+1 by XREAL_1:8;
    then 1/(n+(k+1)+1)<=1/(n+1) by REAL_2:152;
-   then A8: (n+(k+1)+1)"<=1/(n+1) by XCMPLX_1:217;
-   A11: x.^.(k+1)*x = x.^.(k+1)*x.^.1 by POWER:30
-    .= x.^.((k+1)+1) by A1,A7,POWER:32;
+   then A7: (n+(k+1)+1)"<=1/(n+1) by XCMPLX_1:217;
+   A8: x.^.(k+1)*x = x.^.(k+1)*x.^.1 by POWER:30
+    .= x.^.((k+1)+1) by A1,A6,POWER:32;
        (n!)/((n+(k+1)+1)!) = (n!)*((n+(k+1)+1)!)" by XCMPLX_0:def 9
     .= (n!)*((n+(k+1)+1)*((n+k+1)!))" by NEWTON:21
     .= (n!)*((n+(k+1)+1)"*((n+k+1)!)") by XCMPLX_1:205
     .= (n!)*((n+k+1)!)"*(n+(k+1)+1)"
     .= (n!)/((n+k+1)!)*(n+(k+1)+1)" by XCMPLX_0:def 9;
-   hence P[k+1] by A1,A5,A8,A11,XREAL_1:68;
+   hence P[k+1] by A1,A5,A7,A8,XREAL_1:68;
   end;
   thus for n holds P[n] from NAT_1:sch 1(A2,A4);
  end;

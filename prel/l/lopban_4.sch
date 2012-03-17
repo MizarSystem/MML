@@ -20,7 +20,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
@@ -35,16 +34,16 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="43"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+<Adjective nr="41"/>
 <Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
 <Adjective nr="50"/>
-<Adjective nr="56"/>
-<Adjective nr="77"/>
-<Adjective nr="86"/>
+<Adjective nr="71"/>
+<Adjective nr="80"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -65,7 +64,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="56"/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
@@ -93,7 +92,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="131">
+<Func kind="K" nr="128">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -116,12 +115,12 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="131">
+<Func kind="K" nr="128">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="121">
+<Func kind="K" nr="118">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

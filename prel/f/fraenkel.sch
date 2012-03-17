@@ -654,7 +654,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="12">
+<Adjective nr="13">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>
@@ -665,7 +665,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="12">
+<Adjective nr="13">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>
@@ -1956,7 +1956,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="12">
+<Adjective nr="13">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>

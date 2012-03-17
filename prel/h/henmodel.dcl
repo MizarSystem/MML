@@ -31,11 +31,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="164"/>
+<Func kind="K" nr="165"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="41"/>
+<Adjective nr="42"/>
 </Cluster>
 </RCluster>
 </Registrations>

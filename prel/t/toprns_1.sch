@@ -24,7 +24,6 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 </Signature>
@@ -38,7 +37,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -49,10 +48,10 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="56"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -60,7 +59,7 @@
 </Cluster>
 <Func kind="K" nr="56"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -73,8 +72,8 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="177">
-<Func kind="K" nr="154">
+<Func kind="K" nr="174">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>

@@ -26,8 +26,8 @@
 <For>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="16"/>
+<Adjective nr="13" value="false"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Not>

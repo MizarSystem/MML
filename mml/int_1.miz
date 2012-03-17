@@ -387,11 +387,7 @@ theorem Th16:
    proof
     assume A1: 0 <= i0;
     consider k such that A2: i0 = k or i0 = - k by Th8;
-    now
-     assume A3: i0 = - k;
-     then k <= -0 by A1,XREAL_1:26;
-     hence i0 is Element of NAT by A3,XREAL_1:1;
-    end;
+    i0 = - k implies i0 is Element of NAT by A1,XREAL_1:1;
     hence thesis by A2;
    end;
 
@@ -496,12 +492,7 @@ theorem
       (- i1) * i2 = - (i1 * i2)
              .= 1 by A1;
       then A2: (- (- i1) = - 1 & i2 = 1) or (- i1 = - 1 & i2 = - 1) by Th22;
-      now
-       assume - i1 = - 1;
-       hence 1 = - (- i1)
-              .= i1;
-      end;
-      hence thesis by A2;
+      thus thesis by A2;
      end;
     assume (i1 = - 1 & i2 = 1) or (i1 = 1 & i2 = - 1);
     hence thesis;
@@ -523,7 +514,7 @@ Lm7: i0 <= i1 implies ex k st i1 - k = i0
   hence thesis;
  end;
 
- Th26:
+ Lm8:
   r - 1 < r by XREAL_1:148;
 
 scheme SepInt { P[Integer] } :
@@ -566,14 +557,7 @@ proof
   assume A3: F() <= i0;
   defpred Q[natural number] means
    for i2 st $1 = i2 - F() holds P[i2];
-A4: Q[0]
-    proof
-     let i2;
-     assume 0 = i2 - F();
-     then F() = i2 - F() + F()
-             .= i2;
-     hence thesis by A1;
-    end;
+A4: Q[0] by A1;
 A5: for k st Q[k] holds Q[k + 1]
     proof
      let k;
@@ -608,13 +592,7 @@ proof
   assume A3: i0 <= F();
   defpred Q[Integer] means
    for i2 st $1 = - i2 holds P[i2];
-A4: Q[- F()]
-    proof
-     let i2;
-     assume - F() = - i2;
-     then - (- F()) = i2;
-     hence thesis by A1;
-    end;
+A4: Q[- F()] by A1;
 A5: for i2 st - F() <= i2 holds Q[i2] implies Q[i2 + 1]
     proof
      let i2;
@@ -931,7 +909,7 @@ A4:  now
 reserve r1,p,p1,g,g1,g2 for real number,
         X,Y for Subset of REAL;
 
-Lm8:for r ex n st r<n
+Lm9:for r ex n st r<n
   proof
    let r;
    defpred P[Real] means for r st r in NAT holds not $1<r;
@@ -973,7 +951,7 @@ definition
   it <= r & r - 1 < it;
    existence
     proof
-    consider n such that A1: - r < n by Lm8;
+    consider n such that A1: - r < n by Lm9;
 A2: - n < -- r by A1,XREAL_1:26;
     defpred P[Integer] means r < $1;
 A3:   for i1 st P[i1] holds -n <= i1
@@ -983,7 +961,7 @@ A3:   for i1 st P[i1] holds -n <= i1
         then r + -n < i1 + r by A2,XREAL_1:10;
         hence -n <= i1 by XREAL_1:8;
        end;
-    consider n such that A4: r < n by Lm8;
+    consider n such that A4: r < n by Lm9;
     reconsider i0 = n as Integer;
        r < i0 by A4;
     then A5: ex i0 st P[i0];
@@ -991,7 +969,7 @@ A3:   for i1 st P[i1] holds -n <= i1
 A6:    P[i1] & for i2 st P[i2] holds i1 <= i2 from IntMin(A3,A5);
 A7:   r < i1 - 1 implies i1 <= i1-1 by A6;
      r - 1 < i1 - 1 by A6,XREAL_1:11;
-     hence thesis by A7,Th26;
+     hence thesis by A7,Lm8;
     end;
    uniqueness by Th44;
 end;
@@ -1177,13 +1155,13 @@ A1:  now
      assume  not r is Integer;
      then [\ r /] < [/ r \] by Th60;
      then [\ r /] + (- [\ r /]) < Diff by XREAL_1:8;
-     then A3: 1 <= Diff by Lm5;
-A4:   [/ r \] < r + 1 by Def5;
+     then A2: 1 <= Diff by Lm5;
+A3:   [/ r \] < r + 1 by Def5;
      r - 1 < [\ r /] by Def4;
      then - [\ r /] < - (r - 1) by XREAL_1:26;
-     then Diff < r + 1 + (- (r - 1)) by A4,XREAL_1:10;
+     then Diff < r + 1 + (- (r - 1)) by A3,XREAL_1:10;
      then Diff + 1 + (- 1) <= 1 + 1 + (- 1) by Th20;
-     then [\ r /] + 1 = [\ r /] + Diff by A3,XREAL_1:1;
+     then [\ r /] + 1 = [\ r /] + Diff by A2,XREAL_1:1;
      hence [\ r /] + 1 = [/ r \] & [\ r /] <> [/ r \];
     end;
     hence thesis by A1;
@@ -1199,11 +1177,7 @@ end;
 registration
   let r be real number;
   cluster frac r -> real;
-  coherence
-  proof
-    frac r = r - [\ r /];
-    hence thesis;
-  end;
+  coherence;
 end;
 
 definition
@@ -1215,22 +1189,18 @@ end;
 canceled;
 
 theorem
-  r = [\ r /] + frac r
-   proof
-    thus [\ r /] + frac r = [\ r /] + (r - [\ r /])
-                   .= r;
-   end;
+  r = [\ r /] + frac r;
 
 theorem Th69:
   frac r < 1 & 0 <= frac r
    proof
-A2: r - 1 < [\ r /] & [\ r /] <= r by Def4;
+A1: r - 1 < [\ r /] & [\ r /] <= r by Def4;
     then frac r + (r - 1) < r - [\ r /] + [\ r /] by XREAL_1:8;
     then frac r + (- 1) + r - r < r - r by XREAL_1:11;
-    then A3: frac r - 1 + 1 < 0 + 1 by XREAL_1:8;
-    [\ r /] + (r - [\ r /]) <= r + frac r by A2,XREAL_1:8;
+    then A2: frac r - 1 + 1 < 0 + 1 by XREAL_1:8;
+    [\ r /] + (r - [\ r /]) <= r + frac r by A1,XREAL_1:8;
     then r - r <= r + frac r - r by XREAL_1:11;
-    hence thesis by A3;
+    hence thesis by A2;
    end;
 
 theorem
@@ -1249,18 +1219,9 @@ theorem Th71:
 A1:   now
       assume r is Integer;
       then A2: r = [\ r /] by Th47;
-      frac r = r - [\ r /];
-      hence frac r = 0 by A2;
+      thus frac r = 0 by A2;
      end;
-     now
-      assume not r is Integer;
-      then [\ r /] < r by Th48;
-      then [\ r /] - r < r - r by XREAL_1:11;
-      then 0 < - ([\ r /] - r) by XREAL_1:60;
-      then 0 < r - [\ r /];
-      hence 0 <> frac r;
-     end;
-     hence thesis by A1;
+     thus thesis by A1;
     end;
 
 theorem
@@ -1279,7 +1240,7 @@ theorem
 definition
   let i1,i2 be Integer;
   func i1 div i2 -> Integer equals
-      [\ i1 / i2 /];
+:Def7: [\ i1 / i2 /];
   correctness;
 end;
 
@@ -1329,13 +1290,7 @@ A1: 0 - 1 < 0;
   end;
 
 theorem Th76:
-  for i being Integer st i <> 0 holds i div i = 1
-  proof
-    let i be Integer;
-    assume i <> 0;
-    then 1 = [\ i / i /] by Th74;
-    hence thesis;
-  end;
+  for i being Integer st i <> 0 holds i div i = 1 by Th74;
 
 theorem
   for i being Integer holds i mod i = 0
@@ -1389,5 +1344,26 @@ proof let r be real number;assume A1:r>=0;
   then A2:[\ r /]>=0 by Th21;
       r<=[/ r \] by Def5;
  hence thesis by A1,A2,Th16;
+end;
+
+:: from SCMFSA9A, 2005.11.16, A.T.
+
+theorem Th2:
+  for i being Integer, r being real number st i <= r holds i <= [\ r /]
+proof
+  let i be Integer; let r be real number;
+  assume
+A1: i <= r;
+A2: r-1 < [\ r /] by Def4;
+    i-1 <= r-1 by A1,XREAL_1:11;
+   then i-1 < [\ r /] by A2,XREAL_1:2;
+   then i-1+1 <= [\ r /] by Th20;
+ hence i <= [\ r /];
+end;
+
+theorem
+ for m,n being natural number holds 0 <= m qua Integer div n
+proof let m,n be natural number;
+ thus 0 <= m qua Integer div n by Th2;
 end;
 

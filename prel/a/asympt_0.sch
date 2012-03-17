@@ -60,7 +60,7 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="F" nr="3"/>
@@ -107,7 +107,7 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="F" nr="2"/>
@@ -152,7 +152,7 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="F" nr="2"/>

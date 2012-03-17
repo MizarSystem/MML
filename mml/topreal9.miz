@@ -23,6 +23,7 @@ environ
       QUIN_1, SQUARE_1, METRIC_1, NAT_1, TOPALG_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, JORDAN1;
+ definitions SQUARE_1, EUCLID;
  theorems JGRAPH_6, TOPRNS_1, XREAL_0, TARSKI, SUBSET_1, FUNCT_2, EUCLID,
       JGRAPH_2, XBOOLE_1, XBOOLE_0, BORSUK_1, FUNCOP_1, JORDAN2C, JORDAN1,
       TOPREAL1, SQUARE_1, REAL_1, XCMPLX_1, ABSVALUE, REAL_2, JGRAPH_1, QUIN_1,
@@ -135,7 +136,7 @@ theorem Th5:
 proof
   let f be FinSequence of REAL;
 A1: Sum sqr f >= 0 by RVSUM_1:116;
-  thus |.f.|^2 = (sqrt Sum sqr f)^2 by EUCLID:def 5
+  thus |.f.|^2 = (sqrt Sum sqr f)^2
     .= Sum sqr f by A1,SQUARE_1:def 4;
 end;
 
@@ -631,17 +632,9 @@ end;
 registration
   let n, x, r;
   cluster Ball(x,r) -> convex;
-coherence
-proof
-  Ball(x,r) = {p where p is Point of TOP-REAL n: |. p-x .| < r};
-  hence thesis by Lm2;
-end;
+coherence by Lm2;
   cluster cl_Ball(x,r) -> convex;
-coherence
-proof
-  cl_Ball(x,r) = {p where p is Point of TOP-REAL n: |. p-x .| <= r};
-  hence thesis by Lm1;
-end;
+coherence by Lm1;
 end;
 
 definition
@@ -779,9 +772,9 @@ proof
     hence ex l being real number st x = (1-l)*p + l*q & 0 <= l;
   end;
   given l being real number such that
-A2: x = (1-l)*p + l*q & 0 <= l;
+A1: x = (1-l)*p + l*q & 0 <= l;
   l is Real by XREAL_0:def 1;
-  hence thesis by A2;
+  hence thesis by A1;
 end;
 
 registration
@@ -1023,8 +1016,7 @@ A8: R = (1-l)*y + l*z by JGRAPH_1:52;
   set X = |(y-x,z-x)|;
 A9: the carrier of TOP-REAL n = REAL n by EUCLID:25;
   then
-  reconsider xf = x, yf = y, zf = z as Element of n-tuples_on REAL
-    by EUCLID:def 1;
+  reconsider xf = x, yf = y, zf = z as Element of n-tuples_on REAL;
   reconsider y1 = y-x, z1 = z-x as FinSequence of REAL by EUCLID:27;
   consider Rf being FinSequence of REAL such that
 A10: R-x = Rf and
@@ -1033,14 +1025,14 @@ A12: Sum sqr Rf >= 0 by RVSUM_1:116;
 A13: |. y-x .|^2 = r^2 by A1,Th9;
 A14: |. z-x .|^2 = r^2 by A2,Th9;
   reconsider W1 = l1*(y-x), W2 = l*(z-x) as Element of n-tuples_on REAL
-    by A9,EUCLID:def 1;
-A15: y-x = yf-xf by A9,EUCLID:def 13;
+    by A9;
+A15: y-x = yf-xf by EUCLID:def 13;
   then
-A16: l1*(y-x) = l1*(yf-xf) by A9,EUCLID:def 11;
-A17: z-x = zf-xf by A9,EUCLID:def 13;
+A16: l1*(y-x) = l1*(yf-xf) by EUCLID:def 11;
+A17: z-x = zf-xf by EUCLID:def 13;
   then
-A18: l*(z-x) = l*(zf-xf) by A9,EUCLID:def 11;
-A19: W1 + W2 = l1*(y-x) + l*(z-x) by A9,EUCLID:def 10
+A18: l*(z-x) = l*(zf-xf) by EUCLID:def 11;
+A19: W1 + W2 = l1*(y-x) + l*(z-x) by EUCLID:def 10
       .= l1*y-l1*x+l*(z-x) by EUCLID:53
       .= l1*y-l1*x+(l*z-l*x) by EUCLID:53
       .= l1*y-l1*x+l*z-l*x by EUCLID:49
@@ -1049,7 +1041,7 @@ A19: W1 + W2 = l1*(y-x) + l*(z-x) by A9,EUCLID:def 10
       .= l1*y+l*z-(1 *x-l*x+l*x) by EUCLID:54
       .= l1*y+l*z-1 *x by EUCLID:52
       .= Rf by A8,A10,EUCLID:33;
-  |. R-x .|^2 = (sqrt Sum sqr Rf)^2 by A11,EUCLID:def 5
+  |. R-x .|^2 = (sqrt Sum sqr Rf)^2 by A11
     .= Sum sqr Rf by A12,SQUARE_1:def 4
     .= Sum (sqr W1 + 2*mlt(W1,W2) + sqr W2) by A19,RVSUM_1:98
     .= Sum (sqr W1 + 2*mlt(W1,W2)) + Sum sqr W2 by RVSUM_1:119
@@ -1076,11 +1068,11 @@ RVSUM_1:94
     .= l1^2*r^2 + 2*l1*l*|(y1,z1)| + l^2*r^2 by A15,A17,EUCLID_2:def 1
     .= l1^2*r^2 + 2*l1*l*X + l^2*r^2 by EUCLID_2:def 2
     .= (l1^2+l^2)*r^2 + 2*l*l1*X
-    .= (1^2-2*1 *l+l^2+l^2)*r^2 + 2*l*l1*X by SQUARE_1:64
-    .= (1-2*l+l^2+l^2)*r^2 + 2*l*l1*X by SQUARE_1:59;
+    .= (1^2-2*1 *l+l^2+l^2)*r^2 + 2*l*l1*X
+    .= (1-2*l+l^2+l^2)*r^2 + 2*l*l1*X;
   then
 A20: |. R-x .|^2 - r^2 = (-2*l+2*l^2)*r^2+2*l*l1*X
-    .= (-2*1 *l+2*(l*l))*r^2+2*l*l1*X by SQUARE_1:def 3
+    .= (-2*1 *l+2*(l*l))*r^2+2*l*l1*X
     .= 2*l*l1*(-r^2+X);
   Sphere(x,r) c= cl_Ball(x,r) by Th17;
   then LSeg(y,z) c= cl_Ball(x,r) by A1,A2,JORDAN1:def 1;
@@ -1105,11 +1097,11 @@ A23: 1-1 <= l1 by A7,REAL_1:92;
   end;
   then
 A24: 2*l*l1 > 0 by A22,A23,XREAL_1:131;
-  now
 A25: Sum sqr (yf-zf) >= 0 by RVSUM_1:116;
-A26: y-z = yf-zf by A9,EUCLID:def 13;
+A26: y-z = yf-zf by EUCLID:def 13;
+  now
     assume |. R-x .| = r;
-    then 2*l*l1*(-r^2+X) = 0 by A20,XCMPLX_1:14;
+    then 2*l*l1*(-r^2+X) = 0 by A20;
     then X-r^2 = 0 by A24,XCMPLX_1:6;
     then X = r^2;
     then 0 = |. y-x .|^2 - 2*X + |. z-x .|^2 by A13,A14
@@ -1118,7 +1110,7 @@ A26: y-z = yf-zf by A9,EUCLID:def 13;
       .= |. y-x+x-z .|^2 by JORDAN2C:9
       .= |.y-z.|^2 by EUCLID:52
       .= |.yf-zf.|^2 by A26,TOPRNS_1:def 6
-      .= (sqrt Sum sqr (yf-zf))^2 by EUCLID:def 5
+      .= (sqrt Sum sqr (yf-zf))^2
       .= Sum sqr (yf-zf) by A25,SQUARE_1:def 4;
     then yf-zf = n |-> 0 by RVSUM_1:121;
     hence contradiction by A3,RVSUM_1:59;
@@ -1221,8 +1213,8 @@ A16: w in LSeg(y,z) by A10,A12,A14;
 A17:   R > 1;
     then
 A18: 1/R < 1 by SQUARE_1:2;
-A20: 1/R > 0 by A17,REAL_2:127;
-A21: (1-1/R)*y + 1/R*w = (1-1/R)*y + (1/R*((1-R)*y) + 1/R*(R*z)) by A10,
+A19: 1/R > 0 by A17,REAL_2:127;
+A20: (1-1/R)*y + 1/R*w = (1-1/R)*y + (1/R*((1-R)*y) + 1/R*(R*z)) by A10,
 EUCLID:36
       .= (1-1/R)*y + (1/R*((1-R)*y) + 1/R*R*z) by EUCLID:34
       .= (1-1/R)*y + (1/R*((1-R)*y) + 1 * z) by A17,XCMPLX_1:88
@@ -1235,25 +1227,25 @@ EUCLID:36
       .= 0.REAL n + z by EUCLID:33
       .= z by EUCLID:31;
     then
-A22: z in LSeg(y,w) by A13,A18,A20;
+A21: z in LSeg(y,w) by A13,A18,A19;
     now
       assume z in {y,w};
       then z = y or z = w by TARSKI:def 2;
-      hence contradiction by A7,A18,A21,Th4;
+      hence contradiction by A7,A18,A20,Th4;
     end;
     then
-A23: z in LSeg(y,w) \ {y,w} by A22,XBOOLE_0:def 4;
+A22: z in LSeg(y,w) \ {y,w} by A21,XBOOLE_0:def 4;
     LSeg(y,w) \ {y,w} c= Ball(x,r) by A1,A9,Th34;
-    then |. z-x .| < r by A23,Th7;
+    then |. z-x .| < r by A22,Th7;
     hence m in {y,z} by A2,Th9;
     end;
   end;
   let m be set;
   assume m in {y,z};
   then
-A24: m = y or m = z by TARSKI:def 2;
+A23: m = y or m = z by TARSKI:def 2;
   y in halfline(y,z) & z in halfline(y,z) by Th27,Th28;
-  hence thesis by A1,A2,A24,XBOOLE_0:def 3;
+  hence thesis by A1,A2,A23,XBOOLE_0:def 3;
   end;
 end;
 
@@ -1267,81 +1259,79 @@ theorem Th37:
   e = (1-a)*y + a*z
 proof
   let S, T, X be Element of REAL n such that
-T1: S = y & T = z & X = x;
+A1: S = y & T = z & X = x;
   set s = y, t = z;
   assume that
-A1: s <> t and
-A2: s in Ball(x,r) and
-T2: a = (-(2*|(z-y,y-x)|) + sqrt delta
+A2: s <> t and
+A3: s in Ball(x,r) and
+A4: a = (-(2*|(z-y,y-x)|) + sqrt delta
      (Sum sqr (T-S), 2 * |(z-y,y-x)|, Sum sqr (S-X) - r^2)) /
      (2 * Sum sqr (T-S));
-A3: Ball(x,r) c= cl_Ball(x,r) by Th16;
+A5: Ball(x,r) c= cl_Ball(x,r) by Th16;
   reconsider G = x as Point of Euclid n by TOPREAL3:13;
   cl_Ball(G,r) = cl_Ball(x,r) by Th14;
   then
-A4: 0 <= --r by A2,A3,TOPREAL6:63;
+A6: 0 <= --r by A3,A5,TOPREAL6:63;
   set A = Sum sqr (T-S);
   set B = 2 * |(t-s,s-x)|;
   set C = Sum sqr (S-X) - r^2;
   set l1 = (- B - sqrt delta(A,B,C)) / (2 * A);
   set l2 = (- B + sqrt delta(A,B,C)) / (2 * A);
-A5: |. T-S .| <> 0 by T1,A1,EUCLID:19;
-A6:now
+A7: |. T-S .| <> 0 by A1,A2,EUCLID:19;
+A8:now
     assume A <= 0;
     then A = 0 by RVSUM_1:116;
-    hence contradiction by A5,EUCLID:def 5,SQUARE_1:82;
+    hence contradiction by A7,SQUARE_1:82;
   end;
-A7: |. s-x .| < r by A2,Th7;
-A8: |. S-X .| = sqrt Sum sqr (S-X) by EUCLID:def 5;
-A9: |. S-X .| >= 0 by EUCLID:12;
-  t-s = T-S by T1,EUCLID:def 13;
+A9: |. s-x .| < r by A3,Th7;
+A10: |. S-X .| >= 0 by EUCLID:12;
+  t-s = T-S by A1,EUCLID:def 13;
   then
-A10: |. t-s .| = |. T-S .| by TOPRNS_1:def 6;
-A11: |. T-S .| = sqrt Sum sqr (T-S) by EUCLID:def 5;
+A11: |. t-s .| = |. T-S .| by TOPRNS_1:def 6;
   Sum sqr (T-S) >= 0 by RVSUM_1:116;
   then
-A12: |. T-S .|^2 = Sum sqr (T-S) by A11,SQUARE_1:def 4;
+A12: |. T-S .|^2 = Sum sqr (T-S) by SQUARE_1:def 4;
   Sum sqr (S-X) >= 0 by RVSUM_1:116;
   then
-A13: |. S-X .|^2 = Sum sqr (S-X) by A8,SQUARE_1:def 4;
-  s-x = S-X by T1,EUCLID:def 13;
+A13: |. S-X .|^2 = Sum sqr (S-X) by SQUARE_1:def 4;
+  s-x = S-X by A1,EUCLID:def 13;
   then
 A14: |. s-x .| = |. S-X .| by TOPRNS_1:def 6;
-  then (sqrt Sum sqr (S-X))^2 < r^2 by A7,A8,A9,SQUARE_1:78;
+  then (sqrt Sum sqr (S-X))^2 < r^2 by A9,A10,SQUARE_1:78;
   then
-A15: C < 0 by A8,A13,REAL_2:105;
+A15: C < 0 by A13,REAL_2:105;
   then
-A16: C/A < 0 by A6,REAL_2:128;
+A16: C/A < 0 by A8,REAL_2:128;
 A17: delta(A,B,C) = B^2 - 4*A*C by QUIN_1:def 1;
-  4*A > 0 by A6,XREAL_1:131;
+  4*A > 0 by A8,XREAL_1:131;
   then
 A18: 4*A*C < 0 by A15,XREAL_1:134;
   B^2 >= 0 by SQUARE_1:72;
   then
 A19: B^2 - 4*A*C > 0 by A18,REAL_2:173;
-A21: for x being real number holds Poly2(A,B,C,x) = Quard(A,l1,l2,x)
+A20: for x being real number holds Poly2(A,B,C,x) = Quard(A,l1,l2,x)
   proof
     let x be real number;
     thus Poly2(A,B,C,x) = A*x^2+B*x+C by POLYEQ_1:def 2
-      .= A*(x-l1)*(x-l2) by A6,A17,A19,QUIN_1:16
+      .= A*(x-l1)*(x-l2) by A8,A17,A19,QUIN_1:16
       .= A*((x-l1)*(x-l2))
       .= Quard(A,l1,l2,x) by POLYEQ_1:def 3;
   end;
-  then C/A = l1*l2 by A6,POLYEQ_1:11;
+  then C/A = l1*l2 by A8,POLYEQ_1:11;
   then
-A22: l1 < 0 & l2 > 0 or l1 > 0 & l2 < 0 by A16,XREAL_1:135;
+A21: l1 < 0 & l2 > 0 or l1 > 0 & l2 < 0 by A16,XREAL_1:135;
   take e1 = (1-l2)*s+l2*t;
   A*l2^2+B*l2--C = A*l2^2+B*l2+C
     .= Poly2(A,B,C,l2) by POLYEQ_1:def 2
-    .= Quard(A,l1,l2,l2) by A21
+    .= Quard(A,l1,l2,l2) by A20
     .= A*((l2-l1)*(l2-l2)) by POLYEQ_1:def 3
     .= 0;
   then -C = A*l2^2+B*l2;
   then
-A23: C = -(A*l2^2+B*l2);
-A24: e1 in halfline(s,t) by A19,A22,Th26,A6,A17,QUIN_1:27;
-A25: |. e1 - x .| >= 0 by TOPRNS_1:26;
-A26: l2 is Real by XREAL_0:def 1;
+A22: C = -(A*l2^2+B*l2);
+A23: e1 in halfline(s,t) by A19,A21,Th26,A8,A17,QUIN_1:27;
+A24: |. e1 - x .| >= 0 by TOPRNS_1:26;
+A25: l2 is Real by XREAL_0:def 1;
   |. e1 - x .|^2 = |. 1 * s - l2*s + l2*t - x .|^2 by EUCLID:54
    .= |. s - l2*s + l2*t - x .|^2 by EUCLID:33
    .= |. s + l2*t - l2*s - x .|^2 by JORDAN2C:9
@@ -1352,36 +1342,35 @@ A26: l2 is Real by XREAL_0:def 1;
    .= Sum sqr (S-X) + 2*(l2*|(t-s,s-x)|) + |. l2*(t-s) .|^2
       by A13,A14,EUCLID_2:41
    .= Sum sqr (S-X) + 2*l2*|(t-s,s-x)| + (abs(l2)*|. t-s .|)^2
-      by A26,TOPRNS_1:8
+      by A25,TOPRNS_1:8
    .= Sum sqr (S-X) + 2*l2*|(t-s,s-x)| + (abs(l2))^2*|. t-s .|^2
-      by SQUARE_1:68
-   .= C + r^2 + l2*B + l2^2*A by A10,A12,COMPLEX1:161
-   .= r^2 by A23;
+   .= C + r^2 + l2*B + l2^2*A by A11,A12,COMPLEX1:161
+   .= r^2 by A22;
   then
-A27:  |. e1 - x .| = r or |. e1 - x .| = -r by JGRAPH_3:1;
+A26:  |. e1 - x .| = r or |. e1 - x .| = -r by JGRAPH_3:1;
   r = 0 or r <> 0;
   then
-A28: e1 in Sphere(x,r) by A4,A25,A27,Th9,XREAL_1:60;
+A27: e1 in Sphere(x,r) by A6,A24,A26,XREAL_1:60;
   hereby
     let d be set;
     assume d in {e1};
     then d = e1 by TARSKI:def 1;
-    hence d in halfline(s,t) /\ Sphere(x,r) by A24,A28,XBOOLE_0:def 3;
+    hence d in halfline(s,t) /\ Sphere(x,r) by A23,A27,XBOOLE_0:def 3;
   end;
   hereby
   let d be set;
   assume
-A29: d in halfline(s,t) /\ Sphere(x,r);
+A28: d in halfline(s,t) /\ Sphere(x,r);
   then d in halfline(s,t) by XBOOLE_0:def 3;
   then consider l being real number such that
-A30:  d = (1-l)*s+l*t and
-A31:  0 <= l by Th26;
+A29:  d = (1-l)*s+l*t and
+A30:  0 <= l by Th26;
    l is Real by XREAL_0:def 1;then
-A32: |. l*(t-s) .|^2 = (abs(l)*|. t-s .|)^2 by TOPRNS_1:8
-   .= (abs l)^2 * |. t-s .|^2 by SQUARE_1:68
+A31: |. l*(t-s) .|^2 = (abs(l)*|. t-s .|)^2 by TOPRNS_1:8
+   .= (abs l)^2 * |. t-s .|^2
    .= l^2 * |. t-s .|^2 by COMPLEX1:161;
-  d in Sphere(x,r) by A29,XBOOLE_0:def 3;
-  then r = |. (1-l)*s+l*t - x .| by A30,Th9
+  d in Sphere(x,r) by A28,XBOOLE_0:def 3;
+  then r = |. (1-l)*s+l*t - x .| by A29,Th9
     .= |. 1 * s - l*s + l*t - x .| by EUCLID:54
     .= |. s - l*s + l*t - x .| by EUCLID:33
     .= |. s - (l*s - l*t) - x .| by EUCLID:51
@@ -1390,13 +1379,13 @@ A32: |. l*(t-s) .|^2 = (abs(l)*|. t-s .|)^2 by TOPRNS_1:8
     .= |. s-x +- l*(s-t) .| by EUCLID:45
     .= |. s-x + l*(-(s-t)) .| by EUCLID:44
     .= |. s-x + l*(t-s) .| by EUCLID:48;then
-Z:r^2 = |. s-x .|^2 + 2*|(l*(t-s),s-x)| + |. l*(t-s) .|^2 by EUCLID_2:67
+A32:r^2 = |. s-x .|^2 + 2*|(l*(t-s),s-x)| + |. l*(t-s) .|^2 by EUCLID_2:67
      .= |. s-x .|^2 + 2*(l*|(t-s,s-x)|) + |. l*(t-s) .|^2 by EUCLID_2:41;
   set f = 2*(|(t-s,s-x)|*l)+|. S-X .|^2;
   A*l^2+B*l+C =
     (Sum sqr (T-S))*l^2+(2*|(t-s,s-x)|)*l+Sum sqr (S-X) - r^2
     .= (|. T-S .|^2)*l^2+(2*|(t-s,s-x)|)*l+Sum sqr (S-X) -
-      (|. s-x .|^2 + 2*(l*|(t-s,s-x)|) + |. l*(t-s) .|^2) by Z,A12
+      (|. s-x .|^2 + 2*(l*|(t-s,s-x)|) + |. l*(t-s) .|^2) by A32,A12
     .= (|. T-S .|^2)*l^2+(2*|(t-s,s-x)|)*l+|. S-X .|^2 -
       (|. S-X .|^2 + 2*(l*|(t-s,s-x)|) + |. l*(t-s) .|^2) by A14,A13
     .= (|. T-S .|^2)*l^2+(2*|(t-s,s-x)|)*l+|. S-X .|^2 -
@@ -1405,14 +1394,14 @@ Z:r^2 = |. s-x .|^2 + 2*|(l*(t-s),s-x)| + |. l*(t-s) .|^2 by EUCLID_2:67
       (|. S-X .|^2 + 2*(l*|(t-s,s-x)|) + |. l*(t-s) .|^2)
     .= ((|. T-S .|^2)*l^2 + f) - (f + |. l*(t-s) .|^2)
     .= (|. T-S .|^2)*l^2 - |. l*(t-s) .|^2
-    .= (|. T-S .|^2)*l^2 - (l^2)*(|. t-s .|)^2 by A32
-    .= (|. T-S .|^2)*l^2 - (l^2)*(|. T-S .|)^2 by A10
+    .= (|. T-S .|^2)*l^2 - (l^2)*(|. t-s .|)^2 by A31
+    .= (|. T-S .|^2)*l^2 - (l^2)*(|. T-S .|)^2 by A11
     .= 0;
   then Poly2(A,B,C,l) = 0 by POLYEQ_1:def 2;
-  then l = l1 or l = l2 by A6,A17,A19,POLYEQ_1:5;
-  hence d in {e1} by A22,A30,A31,TARSKI:def 1,A19,A6,A17,QUIN_1:27;
+  then l = l1 or l = l2 by A8,A17,A19,POLYEQ_1:5;
+  hence d in {e1} by A21,A29,A30,TARSKI:def 1,A19,A8,A17,QUIN_1:27;
   end;
-  thus thesis by T2;
+  thus thesis by A4;
 end;
 
 theorem Th38:
@@ -1428,32 +1417,32 @@ theorem Th38:
       implies e = (1-a)*(1/2*y + 1/2*z) + a*z)
 proof
   let S, T, Y be Element of REAL n such that
-T1: S = 1/2*y + 1/2*z & T = z & Y = x;
+A1: S = 1/2*y + 1/2*z & T = z & Y = x;
   set s = y, t = z;
   set X = 1/2 * s + 1/2 * t;
   assume that
-A1: s <> t and
-A2: s in Sphere(x,r) and
-A3: t in cl_Ball(x,r);
+A2: s <> t and
+A3: s in Sphere(x,r) and
+A4: t in cl_Ball(x,r);
   reconsider G = x as Point of Euclid n by TOPREAL3:13;
-A4: Ball(G,r) = Ball(x,r) by Th13;
-A5: Sphere(x,r) c= cl_Ball(x,r) by Th17;
+A5: Ball(G,r) = Ball(x,r) by Th13;
+A6: Sphere(x,r) c= cl_Ball(x,r) by Th17;
   per cases;
   suppose
-A6:  t in Sphere(x,r);
+A7:  t in Sphere(x,r);
   take e1 = t;
-  thus thesis by A1,A2,A6,Th36;
+  thus thesis by A2,A3,A7,Th36;
   end;
   suppose
-A7:  not t in Sphere(x,r);
-A8: 1/2 + 1/2 = 1;
-A9: abs(1/2) = 1/2 by ABSVALUE:def 1;
-A10: Ball(G,r) = Ball(x,r) by Th13;
+A8:  not t in Sphere(x,r);
+A9: 1/2 + 1/2 = 1;
+A10: abs(1/2) = 1/2 by ABSVALUE:def 1;
+A11: Ball(G,r) = Ball(x,r) by Th13;
   Ball(x,r) \/ Sphere(x,r) = cl_Ball(x,r) by Th18;
-  then t in Ball(G,r) by A3,A4,A7,XBOOLE_0:def 2;
+  then t in Ball(G,r) by A4,A5,A8,XBOOLE_0:def 2;
   then
-A11: X in Ball(G,r) by A2,A5,A8,A9,A10,Th24;
-A12: now
+A12: X in Ball(G,r) by A3,A6,A9,A10,A11,Th24;
+A13: now
      assume X = t;
      then t - 1/2 * s - 1/2 * t = t - t by EUCLID:50
        .= 0.REAL n by EUCLID:46;
@@ -1462,23 +1451,23 @@ A12: now
        .= (1-1/2) * t - 1/2 * s by EUCLID:54
        .= 1/2 * (t-s) by EUCLID:53;
      then t-s = 0.REAL n by EUCLID:35;
-     hence contradiction by A1,EUCLID:47;
+     hence contradiction by A2,EUCLID:47;
     end;
   set a = (-(2*|(t-X,X-x)|) + sqrt delta
      (Sum sqr (T-S), 2 * |(t-X,X-x)|, Sum sqr (S-Y) - r^2)) /
      (2 * Sum sqr (T-S));
   consider e1 being Point of TOP-REAL n such that
-A13: {e1} = halfline(X,t) /\ Sphere(x,r) and
-T3:  e1 = (1-a)*X + a*t by A4,A11,A12,T1,Th37;
+A14: {e1} = halfline(X,t) /\ Sphere(x,r) and
+A15:  e1 = (1-a)*X + a*t by A5,A12,A13,A1,Th37;
   take e1;
-A14: e1 in {e1} by TARSKI:def 1;
-   then e1 in halfline(X,t) by A13,XBOOLE_0:def 3;
+A16: e1 in {e1} by TARSKI:def 1;
+   then e1 in halfline(X,t) by A14,XBOOLE_0:def 3;
    then consider l being real number such that
-A15:  e1 = (1-l)*X + l*t and
-A16:  0 <= l by Th26;
+A17:  e1 = (1-l)*X + l*t and
+A18:  0 <= l by Th26;
   hereby
     assume e1 = s;
-    then 0.REAL n = (1-l)*X + l*t - s by A15,EUCLID:46
+    then 0.REAL n = (1-l)*X + l*t - s by A17,EUCLID:46
       .= (1-l)*(1/2*s) + (1-l)*(1/2*t) + l*t - s by EUCLID:36
       .= (1-l)*(1/2*s) + ((1-l)*(1/2*t) + l*t) - s by EUCLID:30
       .= (1-l)*(1/2*s) - s + ((1-l)*(1/2*t) + l*t) by JORDAN2C:9
@@ -1493,78 +1482,78 @@ A16:  0 <= l by Th26;
       .= (1/2 + l*(1/2)) * t - (1/2 + l*(1/2)) * s by EUCLID:45
       .= (1/2 + l*(1/2)) * (t - s) by EUCLID:53;
     then 1/2 + l*(1/2) = 0 or t - s = 0.REAL n by EUCLID:35;
-    then (1+l)*(1/2) = 0 by A1,EUCLID:47;
+    then (1+l)*(1/2) = 0 by A2,EUCLID:47;
     then 1+l-1 = 0-1;
-    hence contradiction by A16;
+    hence contradiction by A18;
   end;
-A17: s in halfline(s,t) by Th27;
+A19: s in halfline(s,t) by Th27;
   hereby
     let m be set;
     assume m in {s,e1};
     then
-A18: m = s or m = e1 by TARSKI:def 2;
+A20: m = s or m = e1 by TARSKI:def 2;
     set o = (1+l)/2;
-A19: e1 = (1-l)*(1/2*s) + (1-l)*(1/2*t) + l*t by A15,EUCLID:36
+A21: e1 = (1-l)*(1/2*s) + (1-l)*(1/2*t) + l*t by A17,EUCLID:36
       .= (1-l)*(1/2)*s + (1-l)*(1/2*t) + l*t by EUCLID:34
       .= (1-l)*(1/2)*s + (1-l)*(1/2)*t + l*t by EUCLID:34
       .= (1-l)*(1/2)*s + ((1-l)*(1/2)*t + l*t) by EUCLID:30
       .= (1-l)*(1/2)*s + ((1-l)*(1/2) + l)*t by EUCLID:37
       .= (1-o)*s + o*t;
-    1+0 <= 1+l by A16,XREAL_1:8;
+    1+0 <= 1+l by A18,XREAL_1:8;
     then 0 <= o by XREAL_1:138;
     then
-A20: e1 in halfline(s,t) by A19,Th26;
-    e1 in Sphere(x,r) by A13,A14,XBOOLE_0:def 3;
-    hence m in halfline(s,t) /\ Sphere(x,r) by A2,A17,A18,A20,XBOOLE_0:def 3;
+A22: e1 in halfline(s,t) by A21,Th26;
+    e1 in Sphere(x,r) by A14,A16,XBOOLE_0:def 3;
+    hence m in halfline(s,t) /\ Sphere(x,r) by A3,A19,A20,A22,XBOOLE_0:def 3;
   end;
   hereby
   let m be set;
   assume
-A21: m in halfline(s,t) /\ Sphere(x,r);
+A23: m in halfline(s,t) /\ Sphere(x,r);
   then
-A22: m in halfline(s,t) & m in Sphere(x,r) by XBOOLE_0:def 3;
-  reconsider m1 = m as Point of TOP-REAL n by A21;
+A24: m in halfline(s,t) & m in Sphere(x,r) by XBOOLE_0:def 3;
+  reconsider m1 = m as Point of TOP-REAL n by A23;
   per cases;
   suppose m in halfline(X,t);
-  then m in halfline(X,t) /\ Sphere(x,r) by A22,XBOOLE_0:def 3;
-  then m = e1 by A13,TARSKI:def 1;
+  then m in halfline(X,t) /\ Sphere(x,r) by A24,XBOOLE_0:def 3;
+  then m = e1 by A14,TARSKI:def 1;
   hence m in {s,e1} by TARSKI:def 2;
   end;
   suppose
-A23: not m in halfline(X,t);
+A25: not m in halfline(X,t);
   consider M being real number such that
-A24: m = (1-M)*s + M*t and
-A25: 0 <= M by A22,Th26;
-A26:now
+A26: m = (1-M)*s + M*t and
+A27: 0 <= M by A24,Th26;
+A28:now
     set o = 2*M-1;
     assume M > 1;
     then 2*M > 2*1 by XREAL_1:70;
     then
-A27: 2*M-1 > 2*1-1 by REAL_1:92;
+A29: 2*M-1 > 2*1-1 by REAL_1:92;
     (1-o)*X + o*t = (1-o)*(1/2 * s) + (1-o)*(1/2 * t) + o*t by EUCLID:36
       .= (1-o)*(1/2) * s + (1-o)*(1/2 * t) + o*t by EUCLID:34
       .= (1-o)*(1/2) * s + (1-o)*(1/2) * t + o*t by EUCLID:34
       .= (1-o)*(1/2) * s + ((1-o)*(1/2) * t + o*t) by EUCLID:30
       .= (1-o)*(1/2) * s + ((1-o)*(1/2)+o) * t by EUCLID:37
-      .= m by A24;
-    hence contradiction by A23,A27,Th26;
+      .= m by A26;
+    hence contradiction by A25,A29,Th26;
   end;
-A28: |. t-x .| <= r by A3,Th8;
-  |. t-x .| <> r by A7;
-  then |. t-x .| < r by A28,REAL_1:def 5;
+A30: |. t-x .| <= r by A4,Th8;
+  |. t-x .| <> r by A8;
+  then |. t-x .| < r by A30,REAL_1:def 5;
   then t in Ball(x,r);
   then
-A29: LSeg(s,t) /\ Sphere(x,r) = {s} by A2,Th33;
-A30: M is Real by XREAL_0:def 1;
+A31: LSeg(s,t) /\ Sphere(x,r) = {s} by A3,Th33;
+A32: M is Real by XREAL_0:def 1;
   LSeg(s,t) = { (1-d)*s + d*t where d is Real: 0 <= d & d <= 1 }
     by TOPREAL1:def 3;
-  then m in LSeg(s,t) by A24,A25,A26,A30;
-  then m in {s} by A22,A29,XBOOLE_0:def 3;
+  then m in LSeg(s,t) by A26,A27,A28,A32;
+  then m in {s} by A24,A31,XBOOLE_0:def 3;
   then m = s by TARSKI:def 1;
   hence m in {s,e1} by TARSKI:def 2;
   end;
   end;
-  thus thesis by A7,T3;
+  thus thesis by A8,A15;
   end;
 end;
 
@@ -1895,15 +1884,15 @@ theorem
    e = (1-w)*s + w*t
 proof
   let S, T, X be Element of REAL 2 such that
-T1: S = s & T = t & X = |[a,b]| and
-T2: w = (-(2*|(t-s,s-|[a,b]|)|) + sqrt delta
+A1: S = s & T = t & X = |[a,b]| and
+A2: w = (-(2*|(t-s,s-|[a,b]|)|) + sqrt delta
      (Sum sqr (T-S), 2 * |(t-s,s-|[a,b]|)|, Sum sqr (S-X) - r^2)) /
      (2 * Sum sqr (T-S)) and
-A1: s <> t and
-A2: s in inside_of_circle(a,b,r);
-A3: Ball(|[a,b]|,r) = inside_of_circle(a,b,r) by Th50;
+A3: s <> t and
+A4: s in inside_of_circle(a,b,r);
+A5: Ball(|[a,b]|,r) = inside_of_circle(a,b,r) by Th50;
   Sphere(|[a,b]|,r) = circle(a,b,r) by Th52;
-  hence thesis by A1,A2,A3,T1,T2,Th37;
+  hence thesis by A3,A4,A5,A1,A2,Th37;
 end;
 
 theorem
@@ -1975,16 +1964,16 @@ theorem
      implies e = (1-w)*(1/2*s + 1/2*t) + w*t)
 proof
   let S, T, Y be Element of REAL 2 such that
-T1: S = 1/2*s + 1/2*t & T = t & Y = |[a,b]| and
-A1: s <> t and
-A2: s in circle(a,b,r) and
-A3: t in closed_inside_of_circle(a,b,r);
+A1: S = 1/2*s + 1/2*t & T = t & Y = |[a,b]| and
+A2: s <> t and
+A3: s in circle(a,b,r) and
+A4: t in closed_inside_of_circle(a,b,r);
   reconsider G = |[a,b]| as Point of Euclid 2 by TOPREAL3:13;
-A4: cl_Ball(G,r) = closed_inside_of_circle(a,b,r) by Th47;
-A5: cl_Ball(G,r) = cl_Ball(|[a,b]|,r) by Th14;
+A5: cl_Ball(G,r) = closed_inside_of_circle(a,b,r) by Th47;
+A6: cl_Ball(G,r) = cl_Ball(|[a,b]|,r) by Th14;
   Sphere(G,r) = circle(a,b,r) by Th49;
   then Sphere(|[a,b]|,r) = circle(a,b,r) by Th15;
-  hence thesis by A1,A2,A3,A4,A5,T1,Th38;
+  hence thesis by A2,A3,A4,A5,A6,A1,Th38;
 end;
 
 registration

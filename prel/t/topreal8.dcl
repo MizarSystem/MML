@@ -25,7 +25,6 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="REALSET1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="TOPREAL1"/>
 </Signature>
 <RCluster>
@@ -36,8 +35,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="48"/>
-<Adjective nr="53"/>
+<Adjective nr="7"/>
+<Adjective nr="49"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -49,10 +48,10 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="31"/>
-<Adjective nr="34"/>
-<Adjective nr="48" value="false"/>
-<Adjective nr="53" value="false"/>
+<Adjective nr="7" value="false"/>
+<Adjective nr="32"/>
+<Adjective nr="35"/>
+<Adjective nr="49" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -60,7 +59,7 @@
 <Typ kind="M" nr="9">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -70,11 +69,11 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="6"/>
-<Adjective nr="31"/>
-<Adjective nr="34"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
+<Adjective nr="32"/>
+<Adjective nr="35"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 </Registrations>

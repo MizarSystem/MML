@@ -137,16 +137,11 @@ end;
 
 reserve s for State of SCMPDS;
 
-theorem Th6:
+theorem
  IC SCMPDS = 0;
 
 theorem Th7:
- for S being SCMPDS-State st S = s holds IC s = IC S
- proof let S be SCMPDS-State;
-  assume S = s;
-  hence IC s = S.0
-       .= IC S by SCMPDS_1:def 5;
- end;
+ for S being SCMPDS-State st S = s holds IC s = IC S by SCMPDS_1:def 5;
 
 begin :: The Memory Structure
 
@@ -223,7 +218,7 @@ Lm1: I in SCMPDS-Instr implies I in S1 or I in S2 or I in S3 or
       I in S4 or I in S5
 proof
     assume I in SCMPDS-Instr;
-    then I in S1 \/ S2 \/ S3 \/ S4 or I in S5 by SCMPDS_1:def 3,XBOOLE_0:def 2
+    I in S1 \/ S2 \/ S3 \/ S4 or I in S5 by SCMPDS_1:def 3,XBOOLE_0:def 2
 ;
     then I in S1 \/ S2 \/ S3 or I in S4 or I in S5 by XBOOLE_0:def 2;
     then I in S1 \/ S2 or I in S3 or I in S4 or I in S5 by XBOOLE_0:def 2;
@@ -1102,26 +1097,12 @@ end;
 theorem Th55:
  for loc being Instruction-Location of SCMPDS,
      mj being Element of SCM-Instr-Loc st mj = loc
- holds Next mj = Next loc
- proof let loc be Instruction-Location of SCMPDS,
-   mj be Element of SCM-Instr-Loc;
-       ex mj being Element of SCM-Instr-Loc st mj = loc & Next loc= Next mj
-    by Def19;
-  hence thesis;
- end;
+ holds Next mj = Next loc by Def19;
 
 theorem Th56:
 for i being Element of SCMPDS-Instr st i = I
   for S being SCMPDS-State st S = s holds Exec(I,s) = SCM-Exec-Res(i,S)
- proof let i be Element of SCMPDS-Instr such that
-A1: i = I;
-  let S be SCMPDS-State;
-  assume S = s;
-  hence Exec(I,s) =
-(SCMPDS-Exec.i qua Element of Funcs(product SCMPDS-OK, product SCMPDS-OK)).S
-           by A1
-   .= SCM-Exec-Res(i,S) by SCMPDS_1:def 25;
-end;
+    by SCMPDS_1:def 25;
 
 begin :: Execution semantics of the SCMPDS instructions
 
@@ -1236,15 +1217,14 @@ A4: I P31address = mk & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
   thus Exec(AddTo(a,k1,k2), s).IC SCMPDS = Next IC S by A3,SCMPDS_1:26
     .= Next IC s by A2,Th55;
 A5: A2=A1 by A4,SCMPDS_1:def 8;
- A1=DataLoc(s.a,k1);
-  hence Exec(AddTo(a,k1,k2), s).DataLoc(s.a,k1)
+  thus Exec(AddTo(a,k1,k2), s).DataLoc(s.a,k1)
        = S1.A2 by A3,A5,SCMPDS_1:27
        .= s.DataLoc(s.a,k1)+k2 by A4,A5,SCMPDS_1:30;
   let c;
   reconsider mn = c as Element of SCM-Data-Loc by Def2;
-  assume A7: c <> DataLoc(s.a,k1);
+  assume A6: c <> DataLoc(s.a,k1);
   thus Exec(AddTo(a,k1,k2), s).c = S1.mn by A3,SCMPDS_1:27
-    .= s.c by A5,A7,SCMPDS_1:31;
+    .= s.c by A5,A6,SCMPDS_1:31;
 end;
 
 theorem Th61:
@@ -1277,9 +1257,9 @@ A6: A4=A3 by A4,SCMPDS_1:def 8;
        .= s.DataLoc(s.a,k1) + s.DataLoc(s.b,k2) by A5,A6,SCMPDS_1:30;
   let c;
   reconsider mn = c as Element of SCM-Data-Loc by Def2;
-  assume A9: c <> DataLoc(s.a,k1);
+  assume A7: c <> DataLoc(s.a,k1);
   thus Exec(AddTo(a,k1,b,k2), s).c = S1.mn by A3,SCMPDS_1:27
-    .= s.c by A5,A9,SCMPDS_1:31;
+    .= s.c by A5,A7,SCMPDS_1:31;
 end;
 
 theorem Th62:
@@ -1312,9 +1292,9 @@ A6: A4=A3 by A4,SCMPDS_1:def 8;
        .= s.DataLoc(s.a,k1) - s.DataLoc(s.b,k2) by A5,A6,SCMPDS_1:30;
   let c;
   reconsider mn = c as Element of SCM-Data-Loc by Def2;
-  assume A9: c <> DataLoc(s.a,k1);
+  assume A7: c <> DataLoc(s.a,k1);
   thus Exec(SubFrom(a,k1,b,k2), s).c = S1.mn by A3,SCMPDS_1:27
-    .= s.c by A5,A9,SCMPDS_1:31;
+    .= s.c by A5,A7,SCMPDS_1:31;
 end;
 
 theorem Th63:
@@ -1347,9 +1327,9 @@ A6: A4=A3 by A4,SCMPDS_1:def 8;
        .= s.DataLoc(s.a,k1) * s.DataLoc(s.b,k2) by A5,A6,SCMPDS_1:30;
   let c;
   reconsider mn = c as Element of SCM-Data-Loc by Def2;
-  assume A9: c <> DataLoc(s.a,k1);
+  assume A7: c <> DataLoc(s.a,k1);
   thus Exec(MultBy(a,k1,b,k2), s).c = S1.mn by A3,SCMPDS_1:27
-    .= s.c by A5,A9,SCMPDS_1:31;
+    .= s.c by A5,A7,SCMPDS_1:31;
 end;
 
 theorem Th64:
@@ -1385,10 +1365,10 @@ A6: A4=A3 by A4,SCMPDS_1:def 8;
     set Da=DataLoc(s.a,k1),
         Db=DataLoc(s.b,k2);
     hereby
-      assume A9: Da <> DataLoc(s.b,k2);
+      assume A7: Da <> DataLoc(s.b,k2);
      reconsider mn = Da as Element of SCM-Data-Loc by Def2;
      thus Exec(Divide(a,k1,b,k2), s).Da = S2.mn by A3,SCMPDS_1:27
-    .= S1.A2 by A5,A6,A9,SCMPDS_1:31
+    .= S1.A2 by A5,A6,A7,SCMPDS_1:31
     .= s.Da div s.Db by A5,A6,SCMPDS_1:30;
   end;
   thus Exec(Divide(a,k1,b,k2), s).DataLoc(s.b,k2)
@@ -1396,10 +1376,10 @@ A6: A4=A3 by A4,SCMPDS_1:def 8;
        .= s.Da mod s.Db by A5,A6,SCMPDS_1:30;
   let c;
   reconsider mn = c as Element of SCM-Data-Loc by Def2;
-  assume A10:c <> Da & c <> Db;
+  assume A8:c <> Da & c <> Db;
   thus Exec(Divide(a,k1,b,k2), s).c = S2.mn by A3,SCMPDS_1:27
-    .= S1.mn by A6,A10,SCMPDS_1:31
-    .= s.c by A5,A10,SCMPDS_1:31;
+    .= S1.mn by A6,A8,SCMPDS_1:31
+    .= s.c by A5,A8,SCMPDS_1:31;
 end;
 
 theorem
@@ -1831,14 +1811,14 @@ A1:   Exec(I, s).IC SCMPDS = Next IC s;
     assume
 A2:   I is halting;
     reconsider t = s as SCMPDS-State;
-A4: IC t = t.0 by SCMPDS_1:def 5;
-A5: Exec(I,s).IC SCMPDS = s.IC SCMPDS by A2,AMI_1:def 8
+A3: IC t = t.0 by SCMPDS_1:def 5;
+A4: Exec(I,s).IC SCMPDS = s.IC SCMPDS by A2,AMI_1:def 8
        .= t.0;
-    reconsider w = t.0 as Instruction-Location of SCMPDS by A4;
+    reconsider w = t.0 as Instruction-Location of SCMPDS by A3;
     consider mj being Element of SCM-Instr-Loc such that
-A6:   mj = w & Next w = Next mj by Def19;
-        Next w = mj + 2 by A6,AMI_2:def 15; hence contradiction by A1,A5
-,A6;
+A5:   mj = w & Next w = Next mj by Def19;
+        Next w = mj + 2 by A5,AMI_2:def 15; hence contradiction by A1,A4
+,A5;
   end;
 
 theorem Th77:
@@ -1972,7 +1952,7 @@ proof
 A1: s.0=loc & for d being Int_position holds s.d = 0 by Th74;
     consider mj being Element of SCM-Instr-Loc such that
 A2:   mj = loc & Next loc = Next mj by Def19;
-A3:  loc=IC s by A1,Th6,AMI_1:def 15;     
+A3:  loc=IC s by A1;
    Exec(return a, s).IC SCMPDS
     = 2*(abs(s.DataLoc(s.a,RetIC)) div 2)+4 by Th70
    .=2*(abs(0) div 2)+4 by A1

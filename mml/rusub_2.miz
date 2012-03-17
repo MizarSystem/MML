@@ -11,11 +11,12 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, STRUCT_0, FUNCT_1,
       BINOP_1, LATTICES, RELSET_1, REAL_1, DOMAIN_1, RLVECT_1, RLSUB_1, BHSP_1,
       RUSUB_1;
- constructors REAL_1, DOMAIN_1, RUSUB_1, BINOP_1, LATTICES, RLSUB_2, MEMBERED;
+ constructors REAL_1, DOMAIN_1, RUSUB_1, BINOP_1, LATTICES, RLSUB_2, MEMBERED,
+  REALSET1;
  registrations SUBSET_1, STRUCT_0, RELSET_1, BHSP_1, RUSUB_1, LATTICES,
       MEMBERED;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, RLVECT_1, BINOP_1;
  theorems RLVECT_1, FUNCT_1, TARSKI, FUNCT_2, ZFMISC_1, XBOOLE_0, RELAT_1,
       RLSUB_1, XBOOLE_1, RUSUB_1, RLSUB_2, MCART_1, BINOP_1, LATTICES,
       XCMPLX_0, ORDERS_1;
@@ -668,7 +669,7 @@ then A7:  u1 in W1 /\ W2 by A4,Th3;
         x in the carrier of W2 by A2,XBOOLE_0:def 3;
      then u1 + v1 in W2 by A3,RLVECT_1:def 1;
      then (v1 + u1) - u1 in W2 by A6,RUSUB_1:17;
-     then v1 + (u1 - u1) in W2 by RLVECT_1:42;
+     then v1 + (u1 - u1) in W2 by RLVECT_1:def 6;
      then v1 + 0.V in W2 by RLVECT_1:28;
      then v1 in W2 by RLVECT_1:10;
      then v1 in W2 /\ W3 by A5,Th3;
@@ -864,7 +865,7 @@ A9:      x + y in VW1;
          reconsider A2 = VW1 as Subset of V by RUSUB_1:def 1;
             A2 is lineary-closed by RUSUB_1:28;
          then (y + x) - x in VW1 by A9,RLSUB_1:6;
-         then y + (x - x) in VW1 by RLVECT_1:42;
+         then y + (x - x) in VW1 by RLVECT_1:def 6;
          then y + 0.V in VW1 by RLVECT_1:28;
          hence contradiction by A6,RLVECT_1:10;
        end;
@@ -874,7 +875,7 @@ A10:     x + y in VW2;
          reconsider A2 = VW2 as Subset of V by RUSUB_1:def 1;
             A2 is lineary-closed by RUSUB_1:28;
          then (x + y) - y in VW2 by A10,RLSUB_1:6;
-         then x + (y - y) in VW2 by RLVECT_1:42;
+         then x + (y - y) in VW2 by RLVECT_1:def 6;
          then x + 0.V in VW2 by RLVECT_1:28;
          hence contradiction by A4,RLVECT_1:10;
        end;
@@ -1751,7 +1752,7 @@ A4:v2 in W2 & u2 in W2;
    reconsider C2 = v1 + W2 as Coset of W2 by RUSUB_1:def 5;
    reconsider C1 = the carrier of W1 as Coset of W1 by RUSUB_1:68;
 A5:u1 = (v1 + v2) - u2 by A2,RLSUB_2:78
-     .= v1 + (v2 - u2) by RLVECT_1:42;
+     .= v1 + (v2 - u2) by RLVECT_1:def 6;
       v2 - u2 in W2 by A4,RUSUB_1:17;
    then v1 in C1 & v1 in C2 & u1 in C1 & u1 in C2
          by A3,A5,Lm16,RLVECT_1:def 1,RUSUB_1:37;
@@ -1799,9 +1800,9 @@ A9:v1 in W1 & v2 in W2 and
 A10:v = v1 + v2 by A1,Lm13;
 A11:v = v1 + v2 + 0.V by A10,RLVECT_1:10
      .= (v1 + v2) + (u - u) by RLVECT_1:28
-     .= ((v1 + v2) + u) - u by RLVECT_1:42
+     .= ((v1 + v2) + u) - u by RLVECT_1:def 6
      .= ((v1 + u) + v2) - u by RLVECT_1:def 6
-     .= (v1 + u) + (v2 - u) by RLVECT_1:42;
+     .= (v1 + u) + (v2 - u) by RLVECT_1:def 6;
       v1 + u in W1 & v2 - u in W2 by A7,A9,RUSUB_1:14,17;
    then v2 - u = v2 by A2,A9,A10,A11
          .= v2 - 0.V by RLVECT_1:26;
@@ -1953,7 +1954,7 @@ A1:for A1,A2 being Element of Subspaces(V)
    end;
    consider o being BinOp of Subspaces(V) such that
 A2:     for a,b being Element of Subspaces(V) holds P[a,b,o.(a,b)]
-      from  BINOP_1:sch 1(A1);
+      from  BINOP_1:sch 3(A1);
    thus thesis by A2;
 end;
 
@@ -1973,11 +1974,10 @@ A5:  x in Subspaces(V) & y in Subspaces(V);
      then reconsider A = x, B = y as Element of Subspaces(V);
      reconsider W1 = x, W2 = y as Subspace of V by A5,Def3;
         o1.(A,B) = W1 + W2 & o2.(A,B) = W1 + W2 by A3,A4;
-     then o1.(x,y) = o2.(x,y) & o1.[x,y] = o1.(x,y) & o2.[x,y] = o2.(x,y)
-         by BINOP_1:def 1;
-     hence o1.[x,y] = o2.[x,y];
+     then o1.(x,y) = o2.(x,y) & o1.[x,y] = o1.(x,y) & o2.[x,y] = o2.(x,y);
+     hence o1.(x,y) = o2.(x,y);
    end;
-   hence thesis by FUNCT_2:118;
+   hence thesis by BINOP_1:1;
 end;
 end;
 
@@ -2005,7 +2005,7 @@ A1:for A1,A2 being Element of Subspaces(V)
    end;
    consider o being BinOp of Subspaces(V) such that
 A2:     for a,b being Element of Subspaces(V) holds P[a,b,o.(a,b)]
-      from  BINOP_1:sch 1(A1);
+      from  BINOP_1:sch 3(A1);
    thus thesis by A2;
 end;
 
@@ -2027,11 +2027,10 @@ A5:  x in Subspaces(V) & y in Subspaces(V);
      then reconsider A = x, B = y as Element of Subspaces(V);
      reconsider W1 = x, W2 = y as Subspace of V by A5,Def3;
         o1.(A,B) = W1 /\ W2 & o2.(A,B) = W1 /\ W2 by A3,A4;
-     then o1.(x,y) = o2.(x,y) & o1.[x,y] = o1.(x,y) & o2.[x,y] = o2.(x,y)
-         by BINOP_1:def 1;
-     hence o1.[x,y] = o2.[x,y];
+     then o1.(x,y) = o2.(x,y) & o1.[x,y] = o1.(x,y) & o2.[x,y] = o2.(x,y);
+     hence o1.(x,y) = o2.(x,y);
    end;
-   hence thesis by FUNCT_2:118;
+   hence thesis by BINOP_1:1;
 end;
 end;
 

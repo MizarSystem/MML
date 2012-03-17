@@ -20,7 +20,7 @@ environ
  registrations VECTSP_1, VECTSP_4, STRUCT_0, VECTSP_5, RELSET_1, SUBSET_1,
       LATTICES, LATTICE2, XBOOLE_0;
  requirements BOOLE, SUBSET;
- definitions RLVECT_1, STRUCT_0, XBOOLE_0;
+ definitions RLVECT_1, STRUCT_0, XBOOLE_0, BINOP_1;
  theorems BINOP_1, FUNCT_2, RLVECT_1, LMOD_5, LMOD_6, MOD_3, MULTOP_1,
       SETWISEO, SUBSET_1, TARSKI, VECTSP_1, VECTSP_4, VECTSP_5, VECTSP_6,
       ZFMISC_1, ANPROJ_1, XBOOLE_0, XBOOLE_1;
@@ -670,11 +670,7 @@ theorem Th19:
   end;
 
 theorem Th20:
- a1..W = a2..W iff a1 - a2 in W
-  proof
-       a1..W = a1 + W & a2..W = a2 + W;
-   hence thesis by Th18;
-  end;
+ a1..W = a2..W iff a1 - a2 in W by Th18;
 
 reserve S1,S2 for Element of V..W;
 
@@ -718,7 +714,7 @@ definition let K,V,W,S1;
         A11: a1 - b1 in W by A6,A9,Th20;
             a2 - b2 in W by A7,A10,Th20;
         then A12: (a1 - b1) + (a2 - b2) in W by A11,VECTSP_4:28;
-            (a1-b1) + (a2-b2) = a1-b1+a2-b2 by RLVECT_1:42
+            (a1-b1) + (a2-b2) = a1-b1+a2-b2 by RLVECT_1:def 6
                          .= a1+a2-b1-b2 by Lm1
                          .= (a1+a2) - (b1 + b2) by VECTSP_1:64;
         hence (a1 + a2)..W = (b1 + b2)..W by A12,Th20;end;
@@ -759,7 +755,7 @@ definition let K,V,W;
    existence
     proof
      thus ex B being BinOp of V..W st
-      for S1,S2 holds B.(S1,S2) = U(S1,S2) from BINOP_1:sch 2;
+      for S1,S2 holds B.(S1,S2) = U(S1,S2) from BINOP_1:sch 4;
     end;
    uniqueness
     proof
@@ -780,17 +776,12 @@ registration let K,V,W;
  cluster V.W -> non empty;
  coherence
   proof
-        V.W = LoopStr(#V..W,ADD W,(0.V)..W#);
-   hence the carrier of V.W is non empty;
+   thus the carrier of V.W is non empty;
   end;
 end;
 
 theorem
- a..W is Element of V.W
-  proof
-        V.W = LoopStr(#V..W,ADD W,(0.V)..W#);
-    hence thesis;
-  end;
+ a..W is Element of V.W;
 
 definition let K,V,W,a;
   func a.W -> Element of V.W equals
@@ -802,25 +793,19 @@ theorem Th22:
  for x being Element of V.W ex a st x = a.W
   proof
     let x be Element of V.W;
-        V.W = LoopStr(#V..W,ADD W,(0.V)..W#);
-    then consider a such that
+    consider a such that
     A1: x = a..W by Th19;
     take a;
     thus thesis by A1;
   end;
 
 theorem Th23:
- a1.W = a2.W iff a1 - a2 in W
-  proof
-        a1.W = a1..W & a2.W = a2..W;
-    hence thesis by Th20;
-  end;
+ a1.W = a2.W iff a1 - a2 in W by Th20;
 
 theorem Th24:
  a.W + b.W = (a+b).W & 0.(V.W) = (0.V).W
   proof
-     a.W = a..W & b.W = b..W & (-a).W = (-a)..W & (0.V).W = (0.V)..W;
-    hence a.W + b.W = (ADD W).(a..W,b..W) by RLVECT_1:5
+    thus a.W + b.W = (ADD W).(a..W,b..W)
                   .= a..W + b..W by Def17
                   .= (a+b)..W by Def15
                   .= (a+b).W;
@@ -906,11 +891,9 @@ definition let K,V,W;
       deffunc U(Scalar of K,Element of V.W) = $1 * $2;
       consider F being Function of [:the carrier of K,the carrier of V.W:],
        the carrier of V.W such that
-      A1: F.[r,S] = U(r,S) from FUNCT_2:sch 8;
+      A1: F.(r,S) = U(r,S) from BINOP_1:sch 4;
       take F;
-          now let r,S; thus F.(r,S) = F.[r,S] by BINOP_1:def 1 .= r*S by A1;
-end
-;
+       for r,S holds F.(r,S) = r*S by A1;
       hence thesis;
     end;
    uniqueness
@@ -935,32 +918,16 @@ end;
 
 registration let K,V,W;
  cluster V/W -> non empty;
- coherence
-  proof
-        V/W = VectSpStr(#the carrier of V.W,the add of V.W,
-                     the Zero of V.W,LMULT W#);
-   hence the carrier of V/W is non empty;
-  end;
+ coherence;
 end;
 
 canceled;
 
 theorem
- a.W is Vector of V/W
-  proof
-        V/W = VectSpStr(#the carrier of V.W,the add of V.W,
-   the Zero of V.W,LMULT W#);
-    hence thesis;
-  end;
+ a.W is Vector of V/W;
 
 theorem
- for x being Vector of V/W holds x is Element of V.W
-  proof
-    let x be Vector of V/W;
-        V/W = VectSpStr(#the carrier of V.W,the add of V.W,
-   the Zero of V.W,LMULT W#);
-    hence thesis;
-  end;
+ for x being Vector of V/W holds x is Element of V.W;
 
 definition let K,V,W,a;
   func a/W -> Vector of V/W equals
@@ -972,20 +939,14 @@ theorem Th28:
  for x being Vector of V/W ex a st x = a/W
   proof
     let x be Vector of V/W;
-        V/W = VectSpStr(#the carrier of V.W,the add of V.W,
-   the Zero of V.W,LMULT W#);
-    then consider a such that
+    consider a such that
     A1: x = a.W by Th22;
     take a;
     thus thesis by A1;
   end;
 
 theorem
-     a1/W = a2/W iff a1 - a2 in W
-  proof
-        a1.W = a1/W & a2.W = a2/W;
-    hence thesis by Th23;
-  end;
+     a1/W = a2/W iff a1 - a2 in W by Th23;
 
 theorem Th30:
  a/W + b/W = (a+b)/W & r*(a/W) = (r*a)/W
@@ -997,20 +958,16 @@ theorem Th30:
                 .= (r*a)/W by Def20;
   end;
 
-Lm3:
+Lm2:
   V/W is Abelian add-associative right_zeroed right_complementable
   proof
-A2:now
-     let x,y,z be Element of V.W;
-     let x',y',z' be Vector of V/W;
-     assume A3: x = x' & y = y' & z = z';
-     thus x + y = (the add of V.W).(x,y) by RLVECT_1:5 .=
-     x'+ y' by A3,RLVECT_1:5;
-    end;
+A1: for x,y,z be Element of V.W, x',y',z' be Vector of V/W
+      st x = x' & y = y' & z = z'
+     holds x + y = x'+ y';
     thus V/W is Abelian
      proof let x,y be Vector of V/W;
       reconsider x'= x, y'= y as Element of V.W;
-      thus x+y = x'+ y' .= y + x by A2;
+      thus x+y = x'+ y' .= y + x by A1;
      end;
      hereby let x,y,z be Vector of V/W;
       reconsider x'= x, y'= y, z'= z as Element of V.W;
@@ -1025,10 +982,10 @@ A2:now
      let x be Vector of V/W;
       reconsider x'= x as Element of V.W;
       consider b being Element of V.W such that
-A7:    x' + b = 0.(V.W) by RLVECT_1:def 8;
+A2:    x' + b = 0.(V.W) by RLVECT_1:def 8;
       reconsider b' = b as Vector of V/W;
       take b';
-      thus x+b' = 0.(V/W) by A7;
+      thus x+b' = 0.(V/W) by A2;
   end;
 
 theorem Th31:
@@ -1054,7 +1011,7 @@ theorem Th31:
                   .= x*(y*v) by A1,Th30;
       thus 1.K*v = (1.K*a)/W by A1,Th30
                 .= v by A1,VECTSP_1:def 26;end;
-    hence thesis by Lm3,VECTSP_1:def 26;
+    hence thesis by Lm2,VECTSP_1:def 26;
   end;
 
 registration let K,V,W;

@@ -21,11 +21,12 @@ environ
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, STRUCT_0, METRIC_1, PRE_TOPC, TOPS_2, T_0TOPSP,
       XBOOLE_0;
+ definitions EUCLID, BINOP_1;
  theorems BINOP_1, BORSUK_1, EUCLID, FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCT_1,
       FUNCT_2, INT_1, MCART_1, METRIC_1, NAT_1, PCOMPS_1, PRE_TOPC, REAL_1,
       REAL_2, RFUNCT_3, RVSUM_1, SQUARE_1, SPPOL_1, TARSKI, TBSP_1, TOPMETR,
       TOPREAL3, TOPREAL6, TOPS_2, ZFMISC_1, RELSET_1, XBOOLE_1, XREAL_1;
- schemes FUNCT_2;
+ schemes FUNCT_2, BINOP_1;
 
 begin
 
@@ -154,7 +155,7 @@ theorem Th10:
   proof
         rng f c= REAL & dom absreal = REAL by FINSEQ_1:def 4,FUNCT_2:def 1;
     hence len f = len (absreal*f) by FINSEQ_2:33
-       .= len abs f by EUCLID:def 3;
+       .= len abs f;
     hence thesis by FINSEQ_3:31;
   end;
 
@@ -220,7 +221,7 @@ then A7:   i in dom (f^g) by A4,FINSEQ_3:27;
       suppose
 A8:     i in dom f;
 then A9:   i in dom abs f by Th10;
-      thus (abs (f^g)).i = (absreal*(f^g)).i by EUCLID:def 3
+      thus (abs (f^g)).i = (absreal*(f^g)).i
         .= absreal.((f^g).i) by A7,FUNCT_1:23
         .= absreal.(f.i) by A8,FINSEQ_1:def 7
         .= abs(f.i) by EUCLID:def 2
@@ -232,7 +233,7 @@ then A10:   len f < i & i <= len(f^g) by A6,Th10,FINSEQ_3:27;
       then reconsider j = i - len f as Nat by INT_1:18;
 A11:   j in dom abs g by A2,A3,A10,Th5;
 A12:   i <= len(abs f ^ abs g) by A1,A2,A3,A4,A6,FINSEQ_1:35;
-      thus (abs (f^g)).i = (absreal*(f^g)).i by EUCLID:def 3
+      thus (abs (f^g)).i = (absreal*(f^g)).i
         .= absreal.((f^g).i) by A7,FUNCT_1:23
         .= absreal.(g.j) by A10,FINSEQ_1:37
         .= abs(g.j) by EUCLID:def 2
@@ -511,8 +512,8 @@ A2: f in REAL* by FINSEQ_1:def 11;
         n-tuples_on REAL = { s where s is Element of REAL*: len s = n }
       by FINSEQ_2:def 4;
     then f in n-tuples_on REAL by A1,A2;
-    then f in REAL n by EUCLID:def 1;
-    then f is Point of Euclid n by SPPOL_1:19;
+    then f in REAL n;
+    then f is Point of Euclid n;
     hence thesis;
   end;
 
@@ -526,14 +527,7 @@ theorem
 
 theorem Th19:
  for f being FinSequence st f in the carrier of Euclid n holds len f = n
-  proof
-    let f be FinSequence;
-    assume
-A1:   f in the carrier of Euclid n;
-        Euclid n = MetrStruct(#REAL n,Pitag_dist n#) by EUCLID:def 7;
-    then f is Element of n-tuples_on REAL by A1,EUCLID:def 1;
-    hence len f = n by FINSEQ_2:109;
-  end;
+  by FINSEQ_2:109;
 
 definition let M, N be non empty MetrStruct;
  func max-Prod2(M,N) -> strict MetrStruct means :Def1:
@@ -559,17 +553,17 @@ A1: for x, y being Element of C ex u being Element of REAL st P[x,y,u]
       thus thesis by MCART_1:23;
     end;
     consider f being Function of [:C,C:], REAL such that
-A2:   for x, y being Element of C holds P[x,y,f. [x,y]] from FUNCT_2:sch 7(A1);
+A2:   for x, y being Element of C holds P[x,y,f.(x,y)] from BINOP_1:sch 3(A1);
     take E = MetrStruct(#C,f#);
     thus the carrier of E = [:the carrier of M,the carrier of N:];
     let x, y be Point of E;
     consider x1, y1 being Point of M,
              x2, y2 being Point of N such that
 A3:   x = [x1,x2] & y = [y1,y2] &
-      f. [x,y] = max ((the distance of M).(x1,y1),(the distance of N).(x2,y2))
+      f.(x,y) = max ((the distance of M).(x1,y1),(the distance of N).(x2,y2))
        by A2;
     take x1, y1, x2, y2;
-    thus thesis by A3,BINOP_1:def 1;
+    thus thesis by A3;
   end;
 uniqueness
   proof
@@ -589,7 +583,7 @@ A7:  for x, y being Point of B
     set f = the distance of A,
         g = the distance of B;
         for a, b being set st a in the carrier of A & b in the carrier of A
-      holds f. [a,b] = g. [a,b]
+      holds f.(a,b) = g.(a,b)
     proof
       let a, b be set;
       assume
@@ -605,12 +599,12 @@ A11:    a = [m1,m2] & b = [n1,n2] and
 A12:    g.(a,b) = max ((the distance of M).(m1,n1),(the distance of N).(m2,n2))
          by A4,A6,A7,A8;
 A13:   x1 = m1 & x2 = m2 & y1 = n1 & y2 = n2 by A9,A11,ZFMISC_1:33;
-      thus f. [a,b]
+      thus f.(a,b)
         = max ((the distance of M).(x1,y1),(the distance of N).(x2,y2))
-          by A10,BINOP_1:def 1
-       .= g. [a,b] by A12,A13,BINOP_1:def 1;
+          by A10
+       .= g.(a,b) by A12,A13;
     end;
-    hence thesis by A4,A6,FUNCT_2:118;
+    hence thesis by A4,A6,BINOP_1:1;
   end;
 end;
 
@@ -668,15 +662,8 @@ theorem Th20:
 A1:   [m1,n1] = [x1,x2] & [m2,n2] = [y1,y2] and
 A2:   (the distance of max-Prod2(M,N)).([m1,n1],[m2,n2]) =
        max ((the distance of M).(x1,y1),(the distance of N).(x2,y2)) by Def1;
-A3: m1 = x1 & n1 = x2 & m2 = y1 & n2 = y2 by A1,ZFMISC_1:33;
-        (the distance of max-Prod2(M,N)).([m1,n1],[m2,n2]) = dist([m1,n1],[m2,
-n2
-]
-)
-&
-     (the distance of M).(m1,m2) = dist(m1,m2) &
-      (the distance of N).(n1,n2) = dist(n1,n2);
-    hence dist([m1,n1],[m2,n2]) = max (dist(m1,m2),dist(n1,n2)) by A2,A3;
+    m1 = x1 & n1 = x2 & m2 = y1 & n2 = y2 by A1,ZFMISC_1:33;
+   hence dist([m1,n1],[m2,n2]) = max (dist(m1,m2),dist(n1,n2)) by A2;
   end;
 
 theorem
@@ -691,11 +678,8 @@ theorem
 A1:   m = [x1,x2] & n = [y1,y2] and
 A2:   (the distance of max-Prod2(M,N)).(m,n) =
        max ((the distance of M).(x1,y1),(the distance of N).(x2,y2)) by Def1;
-A3: m`1 = x1 & n`1 = y1 & m`2 = x2 & n`2 = y2 by A1,MCART_1:7;
-        (the distance of max-Prod2(M,N)).(m,n) = dist(m,n) &
-     (the distance of M).(m`1,n`1) = dist(m`1,n`1) &
-      (the distance of N).(m`2,n`2) = dist(m`2,n`2);
-    hence dist(m,n) = max (dist(m`1,n`1),dist(m`2,n`2)) by A2,A3;
+    m`1 = x1 & n`1 = y1 & m`2 = x2 & n`2 = y2 by A1,MCART_1:7;
+   hence dist(m,n) = max (dist(m`1,n`1),dist(m`2,n`2)) by A2;
   end;
 
 theorem Th22:
@@ -1062,9 +1046,7 @@ A14:       r1 > 0 & Ball(m,r1) c= Ball(n,r) by A3,A12;
 theorem
      [:TOP-REAL i,TOP-REAL j:], TOP-REAL (i+j) are_homeomorphic
   proof
-        TOP-REAL i = TopSpaceMetr Euclid i & TOP-REAL j = TopSpaceMetr Euclid j
-      by EUCLID:def 8;
-then A1: [:TOP-REAL i,TOP-REAL j:] = TopSpaceMetr max-Prod2(Euclid i,Euclid j)
+A1: [:TOP-REAL i,TOP-REAL j:] = TopSpaceMetr max-Prod2(Euclid i,Euclid j)
       by Th25;
         TopSpaceMetr max-Prod2(Euclid i,Euclid j), TopSpaceMetr Euclid (i+j)
      are_homeomorphic
@@ -1072,83 +1054,77 @@ then A1: [:TOP-REAL i,TOP-REAL j:] = TopSpaceMetr max-Prod2(Euclid i,Euclid j)
       set ci = the carrier of Euclid i,
           cj = the carrier of Euclid j,
           cij = the carrier of Euclid (i+j);
-A2:   Euclid (i+j) = MetrStruct(#REAL (i+j),Pitag_dist (i+j)#)
-        by EUCLID:def 7;
-A3:   Euclid i = MetrStruct(#REAL i,Pitag_dist i#) by EUCLID:def 7;
-A4:   Euclid j = MetrStruct(#REAL j,Pitag_dist j#) by EUCLID:def 7;
 defpred P[Element of ci,Element of cj,set] means
  ex fi, fj being FinSequence of REAL st fi = $1 & fj = $2 & $3 = fi ^ fj;
-A5:   for x being Element of ci, y being Element of cj
+A2:   for x being Element of ci, y being Element of cj
        ex u being Element of cij st P[x,y,u]
       proof
         let x be Element of ci,
             y be Element of cj;
-A6:     x is Element of REAL i & y is Element of REAL j by SPPOL_1:18;
+        x is Element of REAL i & y is Element of REAL j;
         then reconsider fi = x, fj = y as FinSequence of REAL;
-            fi is Element of i-tuples_on REAL &
-         fj is Element of j-tuples_on REAL by A6,EUCLID:def 1;
-        then fi ^ fj is Element of (i+j)-tuples_on REAL by FINSEQ_2:127;
-        then reconsider u = fi ^ fj as Element of cij by A2,EUCLID:def 1;
+        fi ^ fj is Element of (i+j)-tuples_on REAL by FINSEQ_2:127;
+        then reconsider u = fi ^ fj as Element of cij;
         take u;
         thus P[x,y,u];
       end;
       consider f being Function of [:ci,cj:], cij such that
-A7:     for x being Element of ci,
-            y being Element of cj holds P[x,y,f. [x,y]] from FUNCT_2:sch 7(A5);
-A8:   [:ci,cj:] = the carrier of max-Prod2(Euclid i,Euclid j) by Def1;
-A9:   the carrier of TopSpaceMetr Euclid (i+j) = cij by TOPMETR:16;
-A10:   the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j) =
+A3:     for x being Element of ci,
+            y being Element of cj holds P[x,y,f.(x,y)] from BINOP_1:sch 3(A2);
+A4:   [:ci,cj:] = the carrier of max-Prod2(Euclid i,Euclid j) by Def1;
+A5:   the carrier of TopSpaceMetr Euclid (i+j) = cij by TOPMETR:16;
+A6:   the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j) =
        the carrier of max-Prod2(Euclid i,Euclid j) by TOPMETR:16;
       then reconsider f as Function
  of TopSpaceMetr max-Prod2(Euclid i,Euclid j),
-       TopSpaceMetr Euclid (i+j) by A8,A9;
+       TopSpaceMetr Euclid (i+j) by A4,A5;
       take f;
-A11:   dom f = the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j)
+A7:   dom f = the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j)
         by FUNCT_2:def 1;
       hence dom f = [#]
 TopSpaceMetr max-Prod2(Euclid i,Euclid j);
       thus
-A12:     rng f = [#]TopSpaceMetr Euclid (i+j)
+A8:     rng f = [#]TopSpaceMetr Euclid (i+j)
       proof
             rng f c= the carrier of TopSpaceMetr Euclid (i+j)
         by RELSET_1:12;
         hence rng f c= [#]TopSpaceMetr Euclid (i+j);
         let y be set;
         assume
-A13:       y in [#]TopSpaceMetr Euclid (i+j);
-        then reconsider k = y as Element of REAL (i+j) by A2,TOPMETR:16;
-            len k = i + j by A9,A13,Th19;
+A9:       y in [#]TopSpaceMetr Euclid (i+j);
+        then reconsider k = y as Element of REAL (i+j) by TOPMETR:16;
+            len k = i + j by A9,Th19;
         then consider g, h being FinSequence of REAL such that
-A14:       len g = i & len h = j and
-A15:       k = g^h by FINSEQ_2:26;
-A16:     g in ci & h in cj by A14,Th17;
-then A17:     ex fi, fj being FinSequence of REAL st fi = g & fj = h &
-         f. [g,h] = fi ^ fj by A7;
-            [g,h] in [:ci,cj:] by A16,ZFMISC_1:106;
+A10:       len g = i & len h = j and
+A11:       k = g^h by FINSEQ_2:26;
+A12:     g in ci & h in cj by A10,Th17;
+then A13:     ex fi, fj being FinSequence of REAL st fi = g & fj = h &
+         f.(g,h) = fi ^ fj by A3;
+            [g,h] in [:ci,cj:] by A12,ZFMISC_1:106;
         then [g,h] in dom f by FUNCT_2:def 1;
-        hence thesis by A15,A17,FUNCT_1:def 5;
+        hence thesis by A11,A13,FUNCT_1:def 5;
       end;
       thus
-A18:     f is one-to-one
+A14:     f is one-to-one
       proof
         let x1, x2 be set;
         assume x1 in dom f;
         then consider x1a, x1b being set such that
-A19:       x1a in ci & x1b in cj and
-A20:       x1 = [x1a,x1b] by A8,A10,A11,ZFMISC_1:def 2;
+A15:       x1a in ci & x1b in cj and
+A16:       x1 = [x1a,x1b] by A4,A6,A7,ZFMISC_1:def 2;
         assume x2 in dom f;
         then consider x2a, x2b being set such that
-A21:       x2a in ci & x2b in cj and
-A22:       x2 = [x2a,x2b] by A8,A10,A11,ZFMISC_1:def 2;
+A17:       x2a in ci & x2b in cj and
+A18:       x2 = [x2a,x2b] by A4,A6,A7,ZFMISC_1:def 2;
         consider fi1, fj1 being FinSequence of REAL such that
-A23:       fi1 = x1a & fj1 = x1b & f. [x1a,x1b] = fi1 ^ fj1 by A7,A19;
+A19:       fi1 = x1a & fj1 = x1b & f.(x1a,x1b) = fi1 ^ fj1 by A3,A15;
         consider fi2, fj2 being FinSequence of REAL such that
-A24:       fi2 = x2a & fj2 = x2b & f. [x2a,x2b] = fi2 ^ fj2 by A7,A21;
-            len fi1 = i & len fj1 = j by A19,A23,Th19;
-then A25:     len fi1 = len fi2 & len fj1 = len fj2 by A21,A24,Th19;
+A20:       fi2 = x2a & fj2 = x2b & f.(x2a,x2b) = fi2 ^ fj2 by A3,A17;
+            len fi1 = i & len fj1 = j by A15,A19,Th19;
+then A21:     len fi1 = len fi2 & len fj1 = len fj2 by A17,A20,Th19;
         assume f.x1 = f.x2;
-        then fi1 = fi2 & fj1 = fj2 by A20,A22,A23,A24,A25,Th6;
-        hence x1 = x2 by A20,A22,A23,A24;
+        then fi1 = fi2 & fj1 = fj2 by A16,A18,A19,A20,A21,Th6;
+        hence x1 = x2 by A16,A18,A19,A20;
       end;
           for P being Subset of TopSpaceMetr Euclid (i+j) st P is open
         holds f"P is open
@@ -1156,59 +1132,58 @@ then A25:     len fi1 = len fi2 & len fj1 = len fj2 by A21,A24,Th19;
         let P be Subset of TopSpaceMetr Euclid (i+j);
         assume P is open;
         then P in the topology of TopSpaceMetr Euclid (i+j) by PRE_TOPC:def 5;
-then A26:     P in Family_open_set Euclid (i+j) by TOPMETR:16;
-A27:     f"P is Subset of max-Prod2(Euclid i,Euclid j)
+then A22:     P in Family_open_set Euclid (i+j) by TOPMETR:16;
+A23:     f"P is Subset of max-Prod2(Euclid i,Euclid j)
           by TOPMETR:16;
             for x being Point of max-Prod2(Euclid i,Euclid j) st x in f"P
           ex r being Real st r > 0 & Ball(x,r) c= f"P
         proof
           let x be Point of max-Prod2(Euclid i,Euclid j);
           assume
-A28:         x in f"P;
+A24:         x in f"P;
           then f.x in the carrier of TopSpaceMetr Euclid (i+j) by FUNCT_2:7;
           then reconsider fx = f.x as Point of Euclid (i+j) by TOPMETR:16;
-              f.x in P by A28,FUNCT_2:46;
+              f.x in P by A24,FUNCT_2:46;
           then consider r being Real such that
-A29:         r > 0 and
-A30:         Ball(fx,r) c= P by A26,PCOMPS_1:def 5;
+A25:         r > 0 and
+A26:         Ball(fx,r) c= P by A22,PCOMPS_1:def 5;
           take r1 = r/2;
-          thus r1 > 0 by A29,REAL_2:127;
+          thus r1 > 0 by A25,REAL_2:127;
           let b be set;
           assume
-A31:         b in Ball(x,r1);
+A27:         b in Ball(x,r1);
           then reconsider bb = b as Point of max-Prod2(Euclid i,Euclid j);
           consider b1, x1 being Point of Euclid i,
                    b2, x2 being Point of Euclid j such that
-A32:         bb = [b1,b2] & x = [x1,x2] and
+A28:         bb = [b1,b2] & x = [x1,x2] and
                 (the distance of max-Prod2(Euclid i,Euclid j)).(bb,x) =
               max ((the distance of Euclid i).(b1,x1),(
                     the distance of Euclid j).(b2,x2)) by Def1;
           consider b1f, b2f being FinSequence of REAL such that
-A33:         b1f = b1 & b2f = b2 & f. [b1,b2] = b1f ^ b2f by A7;
+A29:         b1f = b1 & b2f = b2 & f.(b1,b2) = b1f ^ b2f by A3;
           consider x1f, x2f being FinSequence of REAL such that
-A34:         x1f = x1 & x2f = x2 & f. [x1,x2] = x1f ^ x2f by A7;
-A35:       dist([b1,b2],[x1,x2]) = max (dist(b1,x1),dist(b2,x2)) by Th20;
-A36:       dist(bb,x) < r1 by A31,METRIC_1:12;
+A30:         x1f = x1 & x2f = x2 & f.(x1,x2) = x1f ^ x2f by A3;
+A31:       dist([b1,b2],[x1,x2]) = max (dist(b1,x1),dist(b2,x2)) by Th20;
+A32:       dist(bb,x) < r1 by A27,METRIC_1:12;
               bb in the carrier of max-Prod2(Euclid i,Euclid j);
-then A37:       bb in the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j)
+then A33:       bb in the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j)
             by TOPMETR:16;
           then f.bb in the carrier of TopSpaceMetr Euclid (i+j) by FUNCT_2:7;
           then reconsider fb = f.b as Point of Euclid (i+j) by TOPMETR:16;
-          reconsider fbb = fb, fxx = fx as Element of REAL (i+j) by A2;
-          reconsider b1i = b1, x1i = x1 as Element of REAL i by A3;
-          reconsider x2i = x2, b2i = b2 as Element of REAL j by A4;
+          reconsider fbb = fb, fxx = fx as Element of REAL (i+j);
+          reconsider b1i = b1, x1i = x1 as Element of REAL i;
+          reconsider x2i = x2, b2i = b2 as Element of REAL j;
               dist(b1,x1) <= max (dist(b1,x1),dist(b2,x2)) &
           dist(b2,x2) <= max (dist(b1,x1),dist(b2,x2)) by SQUARE_1:46;
-          then dist(b1,x1) < r1 & dist(b2,x2) < r1 by A32,A35,A36,XREAL_1:2;
-then A38:       (Pitag_dist i).(b1i,x1i) < r1 & (Pitag_dist j).(b2i,x2i) < r1
-            by A3,A4;
-A39:       len b1f = i & len x1f = i & len b2f = j & len x2f = j by A33,A34,
+          then dist(b1,x1) < r1 & dist(b2,x2) < r1 by A28,A31,A32,XREAL_1:2;
+then A34:       (Pitag_dist i).(b1i,x1i) < r1 & (Pitag_dist j).(b2i,x2i) < r1;
+A35:       len b1f = i & len x1f = i & len b2f = j & len x2f = j by A29,A30,
 Th19;
-A40:       (Pitag_dist (i+j)).(fbb,fxx) = |.fbb - fxx.| by EUCLID:def 6
-            .= sqrt Sum sqr (fbb - fxx) by EUCLID:def 5
+A36:       (Pitag_dist (i+j)).(fbb,fxx) = |.fbb - fxx.| by EUCLID:def 6
+            .= sqrt Sum sqr (fbb - fxx)
             .= sqrt Sum sqr abs (fbb - fxx) by EUCLID:29
             .= sqrt Sum sqr (abs (b1i - x1i) ^ abs (b2i - x2i))
-               by A32,A33,A34,A39,Th16
+               by A28,A29,A30,A35,Th16
             .= sqrt Sum (sqr abs (b1i - x1i) ^ sqr abs (b2i - x2i)) by Th11
             .= sqrt (Sum sqr abs (b1i - x1i) + Sum sqr abs (b2i - x2i))
                by RVSUM_1:105
@@ -1222,23 +1197,23 @@ A40:       (Pitag_dist (i+j)).(fbb,fxx) = |.fbb - fxx.| by EUCLID:def 6
             <= sqrt Sum sqr (b1i - x1i) + sqrt Sum sqr (b2i - x2i)
               by TOPREAL6:6;
           then sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
-            <= |.b1i - x1i.| + sqrt Sum sqr (b2i - x2i) by EUCLID:def 5;
+            <= |.b1i - x1i.| + sqrt Sum sqr (b2i - x2i);
           then sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
-            <= |.b1i - x1i.| + |.b2i - x2i.| by EUCLID:def 5;
+            <= |.b1i - x1i.| + |.b2i - x2i.|;
           then sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
             <= (Pitag_dist i).(b1i,x1i) + |.b2i - x2i.| by EUCLID:def 6;
-then A41:       sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
+then A37:       sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
             <= (Pitag_dist i).(b1i,x1i) + (Pitag_dist j).(b2i,x2i)
                by EUCLID:def 6;
               (Pitag_dist i).(b1i,x1i) + (Pitag_dist j).(b2i,x2i) < r1 + r1
-            by A38,XREAL_1:10;
-          then (Pitag_dist (i+j)).(fbb,fxx) < r1 + r1 by A40,A41,XREAL_1:2;
-          then dist(fb,fx) < r by A2;
+            by A34,XREAL_1:10;
+          then (Pitag_dist (i+j)).(fbb,fxx) < r1 + r1 by A36,A37,XREAL_1:2;
+          then dist(fb,fx) < r;
           then f.b in Ball(fx,r) by METRIC_1:12;
-          hence b in f"P by A30,A37,FUNCT_2:46;
+          hence b in f"P by A26,A33,FUNCT_2:46;
         end;
         then f"P in Family_open_set max-Prod2(Euclid i,Euclid j)
-          by A27,PCOMPS_1:def 5;
+          by A23,PCOMPS_1:def 5;
         hence f"P in the topology of TopSpaceMetr max-Prod2(Euclid i,Euclid j)
           by TOPMETR:16;
       end;
@@ -1250,97 +1225,97 @@ then A41:       sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
         assume P is open;
         then P in the topology of TopSpaceMetr max-Prod2(Euclid i,Euclid j)
           by PRE_TOPC:def 5;
-then A42:     P in Family_open_set max-Prod2(Euclid i,Euclid j) by TOPMETR:16;
-A43:     f.:P is Subset of Euclid (i+j) by TOPMETR:16;
+then A38:     P in Family_open_set max-Prod2(Euclid i,Euclid j) by TOPMETR:16;
+A39:     f.:P is Subset of Euclid (i+j) by TOPMETR:16;
             for x being Point of Euclid (i+j) st x in f.:P
           ex r being Real st r > 0 & Ball(x,r) c= f.:P
         proof
           let x be Point of Euclid (i+j);
           assume x in f.:P;
           then consider a being set such that
-A44:         a in the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j) and
-A45:         a in P and
-A46:         x = f.a by FUNCT_2:115;
+A40:         a in the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j) and
+A41:         a in P and
+A42:         x = f.a by FUNCT_2:115;
           reconsider a as Point of max-Prod2(Euclid i,Euclid j)
-            by A44,TOPMETR:16;
+            by A40,TOPMETR:16;
           consider r being Real such that
-A47:         r > 0 and
-A48:         Ball(a,r) c= P by A42,A45,PCOMPS_1:def 5;
+A43:         r > 0 and
+A44:         Ball(a,r) c= P by A38,A41,PCOMPS_1:def 5;
           take r;
-          thus r > 0 by A47;
+          thus r > 0 by A43;
           let b be set;
           assume
-A49:         b in Ball(x,r);
+A45:         b in Ball(x,r);
           then reconsider bb = b as Point of Euclid (i+j);
-          reconsider bb2 = bb, xx2 = x as Element of REAL (i+j) by SPPOL_1:18;
-              dist(bb,x) < r by A49,METRIC_1:12;
-then A50:       (the distance of Euclid (i+j)).(bb,x) < r;
-          reconsider k = bb as Element of REAL (i+j) by A2;
+          reconsider bb2 = bb, xx2 = x as Element of REAL (i+j);
+              dist(bb,x) < r by A45,METRIC_1:12;
+then A46:       (the distance of Euclid (i+j)).(bb,x) < r;
+          reconsider k = bb as Element of REAL (i+j);
               len k = i + j by Th19;
           then consider g, h being FinSequence of REAL such that
-A51:         len g = i and
-A52:         len h = j and
-A53:         k = g^h by FINSEQ_2:26;
+A47:         len g = i and
+A48:         len h = j and
+A49:         k = g^h by FINSEQ_2:26;
           consider p, q being set such that
-A54:         p in ci and
-A55:         q in cj and
-A56:         a = [p,q] by A8,ZFMISC_1:def 2;
-          reconsider p as Element of ci by A54;
-          reconsider q as Element of cj by A55;
+A50:         p in ci and
+A51:         q in cj and
+A52:         a = [p,q] by A4,ZFMISC_1:def 2;
+          reconsider p as Element of ci by A50;
+          reconsider q as Element of cj by A51;
           consider fi, fj being FinSequence of REAL such that
-A57:         fi = p & fj = q and
-A58:         f. [p,q] = fi ^ fj by A7;
-          reconsider gg = g as Point of Euclid i by A51,Th17;
-          reconsider hh = h as Point of Euclid j by A52,Th17;
+A53:         fi = p & fj = q and
+A54:         f.(p,q) = fi ^ fj by A3;
+          reconsider gg = g as Point of Euclid i by A47,Th17;
+          reconsider hh = h as Point of Euclid j by A48,Th17;
           consider g, h being FinSequence of REAL such that
-A59:         g = gg & h = hh and
-A60:         f. [gg,hh] = g ^ h by A7;
-          reconsider gg2 = gg, a12 = a`1 as Element of REAL i by SPPOL_1:18;
-          reconsider hh2 = hh, a22 = a`2 as Element of REAL j by SPPOL_1:18;
-A61:       len g = i & len fi = i & len h = j & len fj = j by A57,A59,Th19;
-              |.bb2-xx2.| < r by A2,A50,EUCLID:def 6;
-          then sqrt Sum sqr (bb2-xx2) < r by EUCLID:def 5;
+A55:         g = gg & h = hh and
+A56:         f.(gg,hh) = g ^ h by A3;
+          reconsider gg2 = gg, a12 = a`1 as Element of REAL i;
+          reconsider hh2 = hh, a22 = a`2 as Element of REAL j;
+A57:       len g = i & len fi = i & len h = j & len fj = j by A53,A55,Th19;
+              |.bb2-xx2.| < r by A46,EUCLID:def 6;
+          then sqrt Sum sqr (bb2-xx2) < r;
           then sqrt Sum sqr abs (bb2-xx2) < r by EUCLID:29;
           then sqrt Sum sqr (abs(g-fi) ^ abs(h-fj)) < r
-            by A46,A53,A56,A58,A59,A61,Th16;
+            by A42,A49,A52,A54,A55,A57,Th16;
           then sqrt Sum (sqr abs (g-fi) ^ sqr abs (h-fj)) < r by Th11;
-then A62:      sqrt (Sum sqr abs (g-fi) + Sum sqr abs (h-fj)) < r by
+then A58:      sqrt (Sum sqr abs (g-fi) + Sum sqr abs (h-fj)) < r by
 RVSUM_1:105;
-A63:       dist([gg,hh],[a`1,a`2]) = max (dist(gg,a`1),dist(hh,a`2)) by Th20;
-A64:       a12 = p & a22 = q by A56,MCART_1:7;
-A65:       0 <= Sum sqr abs (gg2-a12) & 0 <= Sum
+A59:       dist([gg,hh],[a`1,a`2]) = max (dist(gg,a`1),dist(hh,a`2)) by Th20;
+A60:       a12 = p & a22 = q by A52,MCART_1:7;
+A61:       0 <= Sum sqr abs (gg2-a12) & 0 <= Sum
  sqr abs (hh2-a22) by RVSUM_1:116;
               0 <= Sum sqr abs (g-fi) & 0 <= Sum
  sqr abs (h-fj) by RVSUM_1:116;
           then Sum sqr abs (gg2-a12) + 0 <= Sum sqr abs (g-fi) + Sum
  sqr abs (h-fj) &
            Sum sqr abs (hh2-a22) + 0 <= Sum sqr abs (g-fi) + Sum sqr abs (h-fj)
-            by A57,A59,A64,XREAL_1:9;
+            by A53,A55,A60,XREAL_1:9;
           then sqrt Sum sqr abs (gg2-a12) <= sqrt (Sum sqr abs (g-fi) +
             Sum sqr abs (h-fj)) &
           sqrt Sum sqr abs (hh2-a22) <= sqrt (Sum sqr abs (g-fi) +
-            Sum sqr abs (h-fj)) by A65,SQUARE_1:94;
+            Sum sqr abs (h-fj)) by A61,SQUARE_1:94;
           then sqrt Sum sqr abs (gg2-a12) < r & sqrt Sum sqr abs (hh2-a22) < r
-           by A62,XREAL_1:2;
+           by A58,XREAL_1:2;
           then sqrt Sum sqr (gg2-a12) < r & sqrt Sum sqr (hh2-a22) < r
            by EUCLID:29;
-          then |.gg2-a12.| < r & |.hh2-a22.| < r by EUCLID:def 5;
+          then |.gg2-a12.| < r & |.hh2-a22.| < r;
           then (Pitag_dist i).(gg2,a12) < r &
            (Pitag_dist j).(hh2,a22) < r by EUCLID:def 6;
-then A66:       dist(gg,a`1) < r & dist(hh,a`2) < r by A3,A4;
+then A62:       dist(gg,a`1) < r & dist(hh,a`2) < r;
               max (dist(gg,a`1),dist(hh,a`2)) = dist(gg,a`1) or
           max (dist(gg,a`1),dist(hh,a`2)) = dist(hh,a`2) by SQUARE_1:49;
-          then dist([gg,hh],a) < r by A8,A63,A66,MCART_1:23;
-          then [g,h] in Ball(a,r) by A59,METRIC_1:12;
-          then [g,h] in P by A48;
-          hence b in f.:P by A53,A59,A60,FUNCT_2:43;
+          then dist([gg,hh],a) < r by A4,A59,A62,MCART_1:23;
+          then [g,h] in Ball(a,r) by A55,METRIC_1:12;
+          then [g,h] in P by A44;
+          hence b in f.:P by A49,A55,A56,FUNCT_2:43;
         end;
-        then f.:P in Family_open_set Euclid (i+j) by A43,PCOMPS_1:def 5;
+        then f.:P in Family_open_set Euclid (i+j) by A39,PCOMPS_1:def 5;
         then f.:P in the topology of TopSpaceMetr Euclid (i+j) by TOPMETR:16;
         hence f""P in the topology of TopSpaceMetr Euclid (i+j)
-          by A12,A18,TOPS_2:67;
+          by A8,A14,TOPS_2:67;
       end;
       hence f" is continuous by TOPS_2:55;
     end;
-    hence thesis by A1,EUCLID:def 8;
+    hence thesis by A1;
   end;

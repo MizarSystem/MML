@@ -22,7 +22,7 @@ environ
       BORSUK_3, RLVECT_1, CONVEX1, FINSEQ_1, PARTFUN1;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, STRUCT_0, RLVECT_1, PRE_TOPC, COMPTS_1,
-      CONNSP_2, TOPS_2, YELLOW13, CONVEX1;
+      CONNSP_2, TOPS_2, YELLOW13, CONVEX1, BINOP_1;
  theorems TARSKI, XBOOLE_0, XBOOLE_1, ZFMISC_1, SUBSET_1, SETFAM_1, XCMPLX_1,
       XREAL_0, XCMPLX_0, RELSET_1, BINOP_1, RELAT_1, FUNCT_2, FUNCT_1,
       ABSVALUE, FINSET_1, EQREL_1, WELLORD2, STRUCT_0, PRE_TOPC, COMPTS_1,
@@ -40,17 +40,7 @@ begin :: Preliminaries
 
 theorem
   for X being non empty RLSStruct, M being Subset of X,
-      x being Point of X, r being Real st x in M holds r*x in r*M
-proof
-  let X be non empty RLSStruct, M be Subset of X,
-      x be Point of X, r be Real;
-  r*M = {r * v where v is Point of X: v in M};
-  hence thesis;
-end;
-
-Th1:
-  for l,r,r1,r2 being real number st r1<=r & r2<=r & 0 <= l & l <= 1
-    holds (1-l)*r1+l*r2 <= r by XREAL_1:176;
+      x being Point of X, r being Real st x in M holds r*x in r*M;
 
 registration
   cluster non zero Real;
@@ -84,7 +74,7 @@ A4: W in FX by A2,TARSKI:def 4;
   thus thesis by A3,A4;
  end;
 
-theorem Lm2:
+theorem Th3:
   for X being non empty LoopStr, M,N being Subset of X, x,y being Point of X
    st x in M & y in N holds x+y in M+N
 proof
@@ -93,12 +83,12 @@ proof
   hence thesis;
 end;
 
-Th3:
+Lm1:
   for T being non empty TopSpace, X being open Subset of T,
       Y being Subset of T st X misses Y
   holds X misses Cl Y by TSEP_1:40;
 
-Lm1:
+Lm2:
   for X being non empty LoopStr, M being Subset of X, x,y being Point of X
       st y in M
      holds x+y in x+M
@@ -279,7 +269,7 @@ A2:  z in x+M;
 A3: x+u = z and
 A4: u in M by A2;
   u in N by A1,A4;
-  hence thesis by A3,Lm1;
+  hence thesis by A3,Lm2;
  end;
 
 theorem Th9:
@@ -293,7 +283,7 @@ theorem Th9:
      (non empty LoopStr), M be Subset of X,
        x be Point of X;
   assume x in M;
-  then -x+x in -x+M by Lm1;
+  then -x+x in -x+M by Lm2;
   hence thesis by RLVECT_1:16;
  end;
 
@@ -378,14 +368,14 @@ theorem Th13:
    thus r*{0.X} c= {0.X}
     proof let x be set;
       assume
-A2:   x in r*{0.X};
+A1:   x in r*{0.X};
       then reconsider x as Point of X;
       consider v being Point of X such that
-A3:   x = r*v and
-A4:   v in {0.X} by A2;
-      v = 0.X by A4,TARSKI:def 1;
+A2:   x = r*v and
+A3:   v in {0.X} by A1;
+      v = 0.X by A3,TARSKI:def 1;
       then r*v = 0.X by RLVECT_1:23;
-      hence thesis by A3,TARSKI:def 1;
+      hence thesis by A2,TARSKI:def 1;
     end;
    0.X in {0.X} by TARSKI:def 1;
    then r*0.X in r*{0.X};
@@ -401,11 +391,11 @@ proof
   let X be RealLinearSpace, M be Subset of X, r be non zero Real such that
 A1:  0.X in r*M;
   consider v being Point of X such that
-A3: r*v = 0.X and
-A4: v in M by A1;
+A2: r*v = 0.X and
+A3: v in M by A1;
   r * 0.X = 0.X by RLVECT_1:23;
-  then v = 0.X by A3,RLVECT_1:50;
-  then 0.X in M by A4;
+  then v = 0.X by A2,RLVECT_1:50;
+  then 0.X in M by A3;
   hence thesis;
 end;
 
@@ -418,34 +408,34 @@ proof
   thus for x being set st x in (r * M) /\ (r * N) holds x in r * (M /\ N)
    proof let x be set;
      assume
-A3:     x in (r * M) /\ (r * N);
+A1:     x in (r * M) /\ (r * N);
      then x in r * M by XBOOLE_0:def 3;
      then consider v1 being Point of X such that
-A4:  r*v1 = x and
-A5:  v1 in M;
-     x in (r * N) by A3,XBOOLE_0:def 3;
+A2:  r*v1 = x and
+A3:  v1 in M;
+     x in (r * N) by A1,XBOOLE_0:def 3;
      then consider v2 being Point of X such that
-A6:  r*v2 = x and
-A7:  v2 in N;
-     v1 = v2 by A4,A6,RLVECT_1:50;
-     then v1 in M /\ N by A5,A7,XBOOLE_0:def 3;
-     then x in {r * v where v is Point of X: v in M /\ N} by A4;
+A4:  r*v2 = x and
+A5:  v2 in N;
+     v1 = v2 by A2,A4,RLVECT_1:50;
+     then v1 in M /\ N by A3,A5,XBOOLE_0:def 3;
+     then x in {r * v where v is Point of X: v in M /\ N} by A2;
     hence thesis;
    end;
   let x be set;
   assume x in r * (M /\ N);
   then x in {r * v where v is Point of X: v in M /\ N};
   then consider v being Point of X such that
-A8:  r*v = x and
-A9:  v in M /\ N;
-  v in  M by A9,XBOOLE_0:def 3;
-  then x in {r * w where w is Point of X: w in M} by A8;
+A6:  r*v = x and
+A7:  v in M /\ N;
+  v in  M by A7,XBOOLE_0:def 3;
+  then x in {r * w where w is Point of X: w in M} by A6;
   then
-A10: x in r*M;
-  v in  N by A9,XBOOLE_0:def 3;
-  then x in {r * w where w is Point of X: w in N} by A8;
+A8: x in r*M;
+  v in  N by A7,XBOOLE_0:def 3;
+  then x in {r * w where w is Point of X: w in N} by A6;
   then x in r*N;
-  hence thesis by A10,XBOOLE_0:def 3;
+  hence thesis by A8,XBOOLE_0:def 3;
 end;
 
 theorem
@@ -508,14 +498,13 @@ A10:for u,v being Point of V, r being Real
   end;
 end;
 
-Lm6:
+Lm5:
   for X being RealLinearSpace holds conv({}X) = {}
 proof
  let X be RealLinearSpace;
  {}X is convex by CONVEX1:10; then
 A1: {}X in Convex-Family {}X by CONVEX1:def 4;
- conv({}X) = meet Convex-Family {}X;
- hence thesis by A1,SETFAM_1:5;
+ thus thesis by A1,SETFAM_1:5;
 end;
 
 registration let X be RealLinearSpace, M be empty Subset of X;
@@ -523,7 +512,7 @@ registration let X be RealLinearSpace, M be empty Subset of X;
   coherence
  proof
    M = {}X;
-   hence thesis by Lm6;
+   hence thesis by Lm5;
  end;
 end;
 
@@ -551,7 +540,7 @@ A1:  r = 0;
      per cases;
      suppose M = {};
        then M = {}X;
-       then conv(M) = {} by Lm6;
+       then conv(M) = {} by Lm5;
        then r*conv(M) = {} by CONVEX1:33;
        hence thesis;
      end;
@@ -570,45 +559,45 @@ A3:    r*conv(M) = {0.X} by A1,CONVEX1:34;
 A4:  r <> 0;
      assume x in r*conv(M);
      then consider v being Point of X such that
-A6:    x = r*v and
-A7:    v in conv(M);
+A5:    x = r*v and
+A6:    v in conv(M);
        Convex-Family M <> {} by CONVEX2:7;
      then consider Y being set such that
-A8:    Y in Convex-Family M by XBOOLE_0:def 1;
-     reconsider Y as Subset of X by A8;
-A9:    v in meet Convex-Family M by A7;
-A10:    for V being set st V in Convex-Family(r*M) holds r*v in V
+A7:    Y in Convex-Family M by XBOOLE_0:def 1;
+     reconsider Y as Subset of X by A7;
+A8:    v in meet Convex-Family M by A6;
+A9:    for V being set st V in Convex-Family(r*M) holds r*v in V
       proof let V be set;
        assume
-A11:     V in Convex-Family(r*M);
+A10:     V in Convex-Family(r*M);
        then reconsider V as Subset of X;
-A12:     V is convex by A11,CONVEX1:def 4;
-       r*M c= V by A11,CONVEX1:def 4;
+A11:     V is convex by A10,CONVEX1:def 4;
+       r*M c= V by A10,CONVEX1:def 4;
        then r"*(r*M) c= r"*V by CONVEX1:39;
        then (r"*r)*M c= r"*V by CONVEX1:37;
        then 1*M c= r"*V by A4,XCMPLX_0:def 7;
        then
-A13:     M c= r"*V by CONVEX1:32;
-       r"*V is convex by A12,CONVEX1:1;
-       then r"*V in Convex-Family M by A13,CONVEX1:def 4;
-       then v in r"*V by A9,SETFAM_1:def 1;
+A12:     M c= r"*V by CONVEX1:32;
+       r"*V is convex by A11,CONVEX1:1;
+       then r"*V in Convex-Family M by A12,CONVEX1:def 4;
+       then v in r"*V by A8,SETFAM_1:def 1;
        then consider w being Point of X such that
-A15:   v = r"*w and
-A16:   w in V;
-       r*v = (r*r")*w by A15,RLVECT_1:def 9
+A13:   v = r"*w and
+A14:   w in V;
+       r*v = (r*r")*w by A13,RLVECT_1:def 9
           .= 1*w by A4,XCMPLX_0:def 7
           .= w by RLVECT_1:def 9;
-       hence thesis by A16;
+       hence thesis by A14;
       end;
       Convex-Family(r*M) <> {} by CONVEX2:7;
-      then r*v in meet Convex-Family(r*M) by A10,SETFAM_1:def 1;
-      hence thesis by A6;
+      then r*v in meet Convex-Family(r*M) by A9,SETFAM_1:def 1;
+      hence thesis by A5;
     end;
    end;
   M c= conv(M) by CONVEX2:8; then
-A17:  r*M c= r*conv(M) by CONVEX1:39;
+A15:  r*M c= r*conv(M) by CONVEX1:39;
   r*conv(M) is convex by CONVEX1:1;
-  hence conv(r*M) c= r*conv(M) by A17,CONVEX1:30;
+  hence conv(r*M) c= r*conv(M) by A15,CONVEX1:30;
 end;
 
 theorem Th20:
@@ -659,11 +648,11 @@ A3: 0.X in M;
   let x be set;
   assume x in r*M;
   then consider v being Point of X such that
-A5: r*v = x and
-A6: v in M;
-  r*v + (1-r)*0.X in M by A1,A2,A3,A6,Def1;
+A4: r*v = x and
+A5: v in M;
+  r*v + (1-r)*0.X in M by A1,A2,A3,A5,Def1;
   then r*v + 0.X in M by RLVECT_1:23;
-  hence thesis by A5,RLVECT_1:def 7;
+  hence thesis by A4,RLVECT_1:def 7;
  end;
 
 definition
@@ -692,39 +681,36 @@ registration let X be RealLinearSpace, v,w be Point of X;
    hence LSeg(v,w) is non empty;
    let u,u' be Point of X,  r be Real;
    assume
-A2:   0 <= r & r <= 1;
+A1:   0 <= r & r <= 1;
    assume u in LSeg(v,w);
    then consider s being Real such that
-A3:   u = (1-s)*v + s*w and
-A4:   0 <= s and
-A5:   s <= 1;
+A2:   u = (1-s)*v + s*w and
+A3:   0 <= s and
+A4:   s <= 1;
    assume u' in LSeg(v,w);
    then consider t being Real such that
-A6:   u' = (1-t)*v + t*w and
-A7:   0 <= t and
-A8:   t <= 1;
-A9:   r*u = r*((1-s)*v) + r*(s*w) by A3,RLVECT_1:def 9
+A5:   u' = (1-t)*v + t*w and
+A6:   0 <= t and
+A7:   t <= 1;
+A8:   r*u = r*((1-s)*v) + r*(s*w) by A2,RLVECT_1:def 9
          .= r*(1-s)*v + r*(s*w) by RLVECT_1:def 9
          .= r*(1-s)*v + r*s*w by RLVECT_1:def 9;
-    (1-r)*u' = (1-r)*((1-t)*v) + (1-r)*(t*w) by A6,RLVECT_1:def 9
+    (1-r)*u' = (1-r)*((1-t)*v) + (1-r)*(t*w) by A5,RLVECT_1:def 9
             .= (1-r)*(1-t)*v + (1-r)*(t*w) by RLVECT_1:def 9
             .= (1-r)*(1-t)*v + (1-r)*t*w by RLVECT_1:def 9;
     then
-A10:  r*u + (1-r)*u'
-       = r*(1-s)*v + (r*s*w + ((1-r)*(1-t)*v + (1-r)*t*w)) by A9,RLVECT_1:def 6
-      .= r*(1-s)*v + (r*s*w + (1-r)*(1-t)*v + (1-r)*t*w) by RLVECT_1:def 6
-      .= r*(1-s)*v + ((1-r)*(1-t)*v + r*s*w + (1-r)*t*w)
+A9:  r*u + (1-r)*u'
+       = r*(1-s)*v + (r*s*w + ((1-r)*(1-t)*v + (1-r)*t*w)) by A8,RLVECT_1:def 6
       .= r*(1-s)*v + ((1-r)*(1-t)*v + (r*s*w + (1-r)*t*w)) by RLVECT_1:def 6
       .= r*(1-s)*v + (1-r)*(1-t)*v + (r*s*w + (1-r)*t*w) by RLVECT_1:def 6
       .= (r*(1-s) + (1-r)*(1-t))*v + (r*s*w + (1-r)*t*w) by RLVECT_1:def 9
-      .= (r*(1-s) + (1-r)*(1-t))*v + (r*s + (1-r)*t)*w by RLVECT_1:def 9
-      .= (1 - ((r*s + (1-r)*t)))*v + (r*s + (1-r)*t)*w;
-    0 <= 1-r by A2,XREAL_1:50;
-    then 0 <= r*s & 0 <= (1-r)*t by A2,A4,A7,REAL_2:121;
+      .= (1 - ((r*s + (1-r)*t)))*v + (r*s + (1-r)*t)*w by RLVECT_1:def 9;
+    0 <= 1-r by A1,XREAL_1:50;
+    then 0 <= r*s & 0 <= (1-r)*t by A1,A3,A6,REAL_2:121;
     then
-A11:  0+0 <= r*s + (1-r)*t by XREAL_1:9;
-   (1-r)*t + r*s <= 1 by A2,A5,A8,Th1;
-   hence r*u + (1-r)*u' in LSeg(v,w) by A10,A11;
+A10:  0+0 <= r*s + (1-r)*t by XREAL_1:9;
+   (1-r)*t + r*s <= 1 by A1,A4,A7,XREAL_1:176;
+   hence r*u + (1-r)*u' in LSeg(v,w) by A9,A10;
   end;
 end;
 
@@ -747,16 +733,14 @@ A3:  w in M;
    hence LSeg(u,w) c= M by TARSKI:def 3;
   end;
   assume
-A5:  for w,u being Point of X st w in M & u in M holds LSeg(w,u) c= M;
+A4:  for w,u being Point of X st w in M & u in M holds LSeg(w,u) c= M;
   let u,w be Point of X, r be Real such that
-A6:  0 <= r & r <= 1 and
-A7:  u in M and
-A8:  w in M;
-  LSeg(w,u) = {(1-s)*w + s*u: 0 <= s & s <= 1 };
-  then
-A9:  r*u + (1-r)*w in LSeg(w,u) by A6;
-  LSeg(w,u) c= M by A5,A7,A8;
-  hence r*u + (1-r)*w in M by A9;
+A5:  0 <= r & r <= 1 and
+A6:  u in M and
+A7:  w in M;
+A8:  r*u + (1-r)*w in LSeg(w,u) by A5;
+  LSeg(w,u) c= M by A4,A6,A7;
+  hence r*u + (1-r)*w in M by A8;
 end;
 
 definition let V be non empty RLSStruct, P be Subset-Family of V;
@@ -813,7 +797,7 @@ A5:     z + (-1)*u  = v + (u + (-1)*u) by A3,RLVECT_1:def 6
                .= v+ 0.X by RLVECT_1:16
                .= v by RLVECT_1:10;
       (-1)*u in (-1)*M by A4;
-     then v in N+(-1)*M by A2,A5,Lm2;
+     then v in N+(-1)*M by A2,A5,Th3;
      hence v in N+-M;
    end;
 A6: N+(-1)*M = {u + w where u,w is Point of X: u in N & w in (-1)*M}
@@ -821,21 +805,20 @@ A6: N+(-1)*M = {u + w where u,w is Point of X: u in N & w in (-1)*M}
   assume v in N+(-M);
   then v in N+(-1)*M;
   then consider u,w being Point of X such that
-A8: v = u+w and
-A9: u in N and
-A10: w in (-1)*M by A6;
+A7: v = u+w and
+A8: u in N and
+A9: w in (-1)*M by A6;
   consider w' being Point of X such that
-A11:  w = (-1)*w' and
-A12:  w' in M by A10;
-A13:  (-1)*w = (-1)*(-1)*w' by A11,RLVECT_1:def 9
-           .= 1*w'
+A10:  w = (-1)*w' and
+A11:  w' in M by A9;
+A12:  (-1)*w = (-1)*(-1)*w' by A10,RLVECT_1:def 9
            .= w' by RLVECT_1:def 9;
-  v+w' = u + (w+w') by A8,RLVECT_1:def 6
-      .= u + (w+-w) by A13,RLVECT_1:29
+  v+w' = u + (w+w') by A7,RLVECT_1:def 6
+      .= u + (w+-w) by A12,RLVECT_1:29
       .= u + 0.X by RLVECT_1:16
       .= u by RLVECT_1:10;
-  then u in v+M by A12,Lm1;
-  hence v+M meets N by A9,XBOOLE_0:3;
+  then u in v+M by A11,Lm2;
+  hence v+M meets N by A8,XBOOLE_0:3;
  end;
 
 definition let X be non empty RLSStruct, A be Subset of X;
@@ -849,8 +832,7 @@ registration let X be RealLinearSpace;
   proof
    take V = {0.X};
    thus V is non empty;
-   thus V = (-1)*V by Th13
-         .= -V;
+   thus V = -V by Th13;
   end;
 end;
 
@@ -864,12 +846,10 @@ theorem Th26:
 A1:   x in A;
 A2:   A = -A by Def5
        .= (-1)*A;
- (-1)*A = {(-1)*v where v is Point of X: v in A};
-  then consider v being Point of X such that
+  consider v being Point of X such that
 A3:   x = (-1)*v and
 A4:   v in A by A1,A2;
   (-1)*x = (-1)*(-1)*v by A3,RLVECT_1:def 9
-        .= 1*v
         .= v by RLVECT_1:def 9;
   hence thesis by A4,RLVECT_1:29;
  end;
@@ -879,7 +859,7 @@ definition let X be non empty RLSStruct, A be Subset of X;
   for r being Real st abs(r) <= 1 holds r*A c= A;
 end;
 
-Lm7:
+Lm6:
   for X being non empty RLSStruct holds {}X is circled
  proof let X be non empty RLSStruct;
   let r be Real such that abs(r) <= 1;
@@ -889,7 +869,7 @@ Lm7:
 
 registration let X be non empty RLSStruct;
   cluster {}X -> circled;
-  coherence by Lm7;
+  coherence by Lm6;
 end;
 
 theorem Th27:
@@ -923,34 +903,34 @@ A1:  {0.X} c= B by CONVEX1:34;
   hence thesis by A1;
 end;
 
-Lm8:
+Lm7:
   for X being RealLinearSpace,A,B being circled Subset of X
    holds A+B is circled
  proof let X be non empty RealLinearSpace,A,B be circled Subset of X;
   let r be Real such that
 A1:  abs(r) <= 1;
-A3:  A+B = {u + v where u,v is Point of X: u in A & v in B} by RUSUB_4:def 10;
+A2:  A+B = {u + v where u,v is Point of X: u in A & v in B} by RUSUB_4:def 10;
    let x be set;
   assume x in r*(A+B);
   then consider x' being Point of X such that
-A4:  x = r*x' and
-A5:  x' in A+B;
+A3:  x = r*x' and
+A4:  x' in A+B;
   consider u,v being Point of X such that
-A6:  x' = u+v and
-A7:  u in A and
-A8: v in B by A3,A5;
-A9:  r*A c= A & r*B c= B by A1,Def6;
-   r*u in r*A & r*v in r*B by A7,A8;
+A5:  x' = u+v and
+A6:  u in A and
+A7: v in B by A2,A4;
+A8:  r*A c= A & r*B c= B by A1,Def6;
+   r*u in r*A & r*v in r*B by A6,A7;
    then
-A10:  r*u in A & r*v in B by A9;
-  x = r*u+r*v by A4,A6,RLVECT_1:def 9;
-  hence x in A+B by A10,Lm2;
+A9:  r*u in A & r*v in B by A8;
+  x = r*u+r*v by A3,A5,RLVECT_1:def 9;
+  hence x in A+B by A9,Th3;
  end;
 
 registration
   let X be RealLinearSpace, A,B be circled Subset of X;
   cluster A+B -> circled;
-  coherence by Lm8;
+  coherence by Lm7;
 end;
 
 theorem Th29:
@@ -985,22 +965,21 @@ A4:  r*x in A by A2;
   end;
  end;
 
-Lm9:
+Lm8:
   for X being RealLinearSpace, A being circled Subset of X
     holds A is symmetric
  proof let X be RealLinearSpace, A be circled Subset of X;
   abs(-1) = --1 by ABSVALUE:def 1
          .= 1;
-  hence A = (-1)*A by Th29
-         .= -A;
+  hence A = -A by Th29;
  end;
 
 registration let X be RealLinearSpace;
   cluster circled -> symmetric Subset of X;
-  coherence by Lm9;
+  coherence by Lm8;
 end;
 
-Lm10:
+Lm9:
   for X being RealLinearSpace, M being circled Subset of X
    holds conv(M) is circled
 proof
@@ -1014,7 +993,7 @@ end;
 
 registration let X be RealLinearSpace, M be circled Subset of X;
   cluster conv(M) -> circled;
- coherence by Lm10;
+ coherence by Lm9;
 end;
 
 definition let X be non empty RLSStruct, F be Subset-Family of X;
@@ -1047,18 +1026,18 @@ A1:  abs(r) <= 1;
   let x be set;
   assume x in r*(union F);
   then consider x' being Point of X such that
-A3:  x = r*x' and
-A4:  x' in union F;
+A2:  x = r*x' and
+A3:  x' in union F;
   consider Y being set such that
-A5: x' in Y and
-A6: Y in F by A4,TARSKI:def 4;
-  Y is Subset of X by A6;
+A4: x' in Y and
+A5: Y in F by A3,TARSKI:def 4;
+  Y is Subset of X by A5;
   then reconsider Y as Subset of X;
-  Y is circled by A6,Def7; then
-A7:  r*Y c= Y by A1,Def6;
-  r*x' in r*Y by A5;
-  then x in Y by A3,A7;
-  hence x in union F by A6,TARSKI:def 4;
+  Y is circled by A5,Def7; then
+A6:  r*Y c= Y by A1,Def6;
+  r*x' in r*Y by A4;
+  then x in Y by A2,A6;
+  hence x in union F by A5,TARSKI:def 4;
  end;
 
 theorem
@@ -1073,23 +1052,23 @@ A1:  abs(r) <= 1;
   let x be set;
   assume x in r*(meet F);
   then consider x' being Point of X such that
-A3:  x = r*x' and
-A4:  x' in meet F;
-A5: F <> {} by A4,SETFAM_1:def 1;
+A2:  x = r*x' and
+A3:  x' in meet F;
+A4: F <> {} by A3,SETFAM_1:def 1;
   now let Y be set;
    assume
-A6:  Y in F;
+A5:  Y in F;
    then
-A7:  x' in Y by A4,SETFAM_1:def 1;
-   Y is Subset of X by A6;
+A6:  x' in Y by A3,SETFAM_1:def 1;
+   Y is Subset of X by A5;
    then reconsider Y' = Y as Subset of X;
-   Y' is circled by A6,Def7;
+   Y' is circled by A5,Def7;
    then
-A8:  r*Y' c= Y' by A1,Def6;
-    r*x' in r*Y' by A7;
-   hence x in Y by A3,A8;
+A7:  r*Y' c= Y' by A1,Def6;
+    r*x' in r*Y' by A6;
+   hence x in Y by A2,A7;
   end;
-  hence x in meet F by A5,SETFAM_1:def 1;
+  hence x in meet F by A4,SETFAM_1:def 1;
  end;
 
 begin
@@ -1148,11 +1127,11 @@ registration
    reconsider O = 0 as Element of ZS by TARSKI:def 1;
    deffunc A((Element of ZS), Element of ZS) = O;
    consider F being BinOp of ZS such that
-A1: for x,y being Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 2;
+A1: for x,y being Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 4;
    deffunc M((Element of REAL), Element of ZS) = O;
    consider G being Function of [:REAL,ZS:],ZS such that
 A2: for a being Element of REAL for x being Element of ZS
-         holds G.[a,x qua set] = M(a,x) from FUNCT_2:sch 8;
+         holds G.(a,x) = M(a,x) from BINOP_1:sch 4;
    set T = {{},ZS};
   T c= bool ZS
    proof
@@ -1217,18 +1196,14 @@ A8:  b in the topology of W;
    end;
   thus for x,y being Point of W holds x + y = y + x
    proof let x,y be Point of W;
-    x + y = F.[x,y] & y + x = F.[y,x];
-    then
-A9:   x + y = F.(x,y) & y + x = F.(y,x) by BINOP_1:def 1;
+A9:   x + y = F.(x,y) & y + x = F.(y,x);
     reconsider X = x, Y = y as Element of ZS;
      x + y = A(X,Y) & y + x = A(Y,X) by A1,A9;
     hence thesis;
    end;
   thus for x,y,z being Point of W holds (x + y) + z = x + (y + z)
    proof let x,y,z be Point of W;
-     (x + y) + z = F.[x + y,z] & x + (y + z) = F.[x,y + z];
-    then
-A10:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z) by BINOP_1:def 1;
+A10:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
     reconsider X = x, Y = y, Z = z as Element of ZS;
      (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1,A10;
     hence thesis;
@@ -1236,8 +1211,7 @@ A10:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z) by BINOP_1:def 1;
   thus for x being Point of W holds x + 0.W = x
    proof let x be Point of W;
      reconsider X = x as Element of ZS;
-      x + 0.W = F.[x,0.W]
-             .= F.(x,0.W) by BINOP_1:def 1
+      x + 0.W = F.(x,0.W)
              .= A(X,O) by A1;
     hence thesis by TARSKI:def 1;
    end;
@@ -1245,48 +1219,47 @@ A10:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z) by BINOP_1:def 1;
    proof let x be Point of W;
      reconsider y = O as Point of W;
     take y;
-    thus x + y = F.[x,y]
-              .= F.(x,y) by BINOP_1:def 1
-              .= the Zero of W by A1
-              .= 0.W;
+    thus x + y = F.(x,y)
+              .= 0.W by A1;
    end;
   thus for a being Real, x,y being Point of W
         holds a * (x + y) = a * x + a * y
    proof let a; let x,y be Point of W;
      reconsider X = x, Y = y as Element of ZS;
-      a * x + a * y = F.[a * x,a * y]
-                   .= F.(a * x,a * y) by BINOP_1:def 1
-                   .= A(M(a,X),M(a,Y)) by A1;
-    hence thesis by A2;
+F:   M(a,X) = G.(a,x) &  M(a,Y) = G.(a,y) by A2;
+      a * x + a * y = F.(a * x,a * y)
+                   .= M(a,A(X,Y)) by A1
+                   .= G.(a,A(X,Y)) by A2
+                   .= G.(a,F.(x,y)) by A1;
+    hence thesis;
    end;
   thus for a,b being Real for x being Point of W
            holds (a + b) * x = a * x + b * x
    proof let a,b be Real, x be Point of W;
       set c = a + b;
      reconsider X = x as Element of ZS;
-A12:   c * x = G.[c,x]
+A11:   c * x = G.(c,x)
            .= M(c,X) by A2;
-      a * x + b * x = F.[a * x,b * x]
-                   .= F.(a * x,b * x) by BINOP_1:def 1
+      a * x + b * x = F.(a * x,b * x)
                    .= A(M(a,X),M(b,X)) by A1;
-    hence thesis by A12;
+    hence thesis by A11;
    end;
   thus for a,b being Real, x being Point of W
          holds (a * b) * x = a * (b * x)
     proof let a,b be Real, x be Point of W;
        set c = a * b;
       reconsider X = x as Element of ZS;
-A13:    c * x = G.[c,x]
+A12:    c * x = G.(c,x)
             .= M(c,X) by A2;
-       a * (b * x) = G.[a,b * x]
+       a * (b * x) = G.(a,b * x)
                   .= M(a,M(b,X)) by A2;
-     hence thesis by A13;
+     hence thesis by A12;
     end;
   thus for x being Point of W holds 1 * x = x
    proof let x be Point of W;
      reconsider X = x as Element of ZS;
      reconsider A' = 1 as Element of REAL;
-         1 * x = G.[1,x]
+         1 * x = G.(1,x)
               .= M(A',X) by A2;
     hence thesis by TARSKI:def 1;
    end;
@@ -1384,7 +1357,7 @@ proof
 A1:     c in V and
 A2:     y = transl(a,X).c by FUNCT_2:116;
     y = a+c by A2,Def10;
-    hence y in a+V by A1,Lm1;
+    hence y in a+V by A1,Lm2;
    end;
   let x be set;
   assume x in a+V;
@@ -1413,7 +1386,7 @@ theorem Th35:
    hence thesis by FUNCT_2:6;
  end;
 
-Lm11:
+Lm10:
  for X being LinearTopSpace, a being Point of X
   holds transl(a,X) is one-to-one
  proof let X be LinearTopSpace, a be Point of X;
@@ -1434,26 +1407,26 @@ theorem Th36:
   holds transl(a,X)" = transl(-a,X)
  proof let X be LinearTopSpace, a be Point of X;
 A1: rng transl(a,X) = [#]X by Th35;
-A3: transl(a,X) is one-to-one by Lm11;
+A2: transl(a,X) is one-to-one by Lm10;
    now let x be Point of X;
     consider u being set such that
-A4:  u in dom transl(a,X) and
-A5:  x = transl(a,X).u by A1,FUNCT_1:def 5;
+A3:  u in dom transl(a,X) and
+A4:  x = transl(a,X).u by A1,FUNCT_1:def 5;
     dom transl(a,X) = the carrier of X by FUNCT_2:def 1;
-    then reconsider u as Point of X by A4;
-A6:    x = a+u by A5,Def10;
+    then reconsider u as Point of X by A3;
+A5:    x = a+u by A4,Def10;
     thus transl(a,X)".x
-             = (transl(a,X) qua Function)".x by A1,A3,TOPS_2:def 4
-            .= u by A3,A5,FUNCT_2:32
+             = (transl(a,X) qua Function)".x by A1,A2,TOPS_2:def 4
+            .= u by A2,A4,FUNCT_2:32
             .= 0.X+u by RLVECT_1:10
             .= (-a+a)+u by RLVECT_1:16
-            .= -a+x by A6,RLVECT_1:def 6
+            .= -a+x by A5,RLVECT_1:def 6
             .= transl(-a,X).x by Def10;
    end;
    hence thesis by FUNCT_2:113;
  end;
 
-Lm12:
+Lm11:
  for X being LinearTopSpace, a being Point of X
   holds transl(a,X) is continuous
  proof let X be LinearTopSpace, a be Point of X;
@@ -1462,8 +1435,7 @@ Lm12:
 A1:   P is open;
     per cases;
     suppose P = {};
-     then transl(a,X)"P = {} by RELAT_1:171
-                       .= {}X;
+     then transl(a,X)"P = {}X by RELAT_1:171;
      hence transl(a,X)"P is open;
      end;
     suppose P <> {};
@@ -1533,14 +1505,14 @@ registration let X be LinearTopSpace, a be Point of X;
 A1:  dom transl(a,X) = the carrier of X by FUNCT_2:def 1;
     thus dom transl(a,X) = [#]X by A1;
    thus rng transl(a,X) = [#]X by Th35;
-   thus transl(a,X) is one-to-one by Lm11;
-   thus transl(a,X) is continuous by Lm12;
+   thus transl(a,X) is one-to-one by Lm10;
+   thus transl(a,X) is continuous by Lm11;
    transl(a,X)" = transl(-a,X) by Th36;
-   hence transl(a,X)" is continuous by Lm12;
+   hence transl(a,X)" is continuous by Lm11;
   end;
 end;
 
-Lm13:
+Lm12:
   for X being LinearTopSpace, E being Subset of X,
       x being Point of X
     st E is open
@@ -1556,10 +1528,10 @@ A1:  E is open;
 registration
   let X be LinearTopSpace, E be open Subset of X, x be Point of X;
   cluster x+E -> open;
-   coherence by Lm13;
+   coherence by Lm12;
 end;
 
-Lm14:
+Lm13:
   for X being LinearTopSpace, E being open Subset of X,
       K being Subset of X
    holds K+E is open
@@ -1581,10 +1553,10 @@ A1: F is open
 registration
   let X be LinearTopSpace, E be open Subset of X, K be Subset of X;
   cluster K+E -> open;
-   coherence by Lm14;
+   coherence by Lm13;
 end;
 
-Lm15:
+Lm14:
   for X being LinearTopSpace, D being closed Subset of X,
       x being Point of X
    holds x+D is closed
@@ -1597,7 +1569,7 @@ Lm15:
 registration
   let X be LinearTopSpace, D be closed Subset of X, x be Point of X;
   cluster x+D -> closed;
-   coherence by Lm15;
+   coherence by Lm14;
 end;
 
 theorem Th37:
@@ -1628,14 +1600,14 @@ A1:  v in Int(x+V);
 A2:  Q is open and
 A3:  Q c= x+V and
 A4:  v in Q by A1,TOPS_1:54;
-A5:  -x+v in -x+Q by A4,Lm1;
+A5:  -x+v in -x+Q by A4,Lm2;
   -x+Q c= -x+(x+V) by A3,Th8;
   then -x+Q c= -x+x+V by Th6;
   then -x+Q c= 0.X+V by RLVECT_1:16;
   then
 A6:  -x+Q c= V by Th5;
 A7:  x+Int(V) = {x + u where u is Point of X: u in Int V} by RUSUB_4:def 9;
-  -x+Q is open by A2,Lm13;
+  -x+Q is open by A2,Lm12;
   then -x+Q c=Int(V) by A6,TOPS_1:56;
   then -x+v in Int(V) by A5;
   then x+(-x+v) in x+Int(V) by A7;
@@ -1663,7 +1635,7 @@ A5:      x+V = {x + u where u is Point of X: u in V} by RUSUB_4:def 9;
 A6:       v = x+u and
 A7:       u in Cl V by A1;
 A8:       -x+v in -x+G by A3,A4;
-A9:       -x+G is open by A2,Lm13;
+A9:       -x+G is open by A2,Lm12;
         -x+v = -x+x+u by A6,RLVECT_1:def 6
              .= 0.X+u by RLVECT_1:16
              .= u by RLVECT_1:10;
@@ -1888,7 +1860,7 @@ A5:  V c= -p+Int(A) by YELLOW13:def 2;
    take U = p+V;
 A6:  p+Int(V) c= Int(U) by Th38;
     0.X in Int(V) by CONNSP_2:def 1;
-    then p+0.X in p+Int(V) by Lm1;
+    then p+0.X in p+Int(V) by Lm2;
     then p in p+Int(V) by RLVECT_1:10;
     then p in Int(U) by A6;
    hence U is a_neighborhood of p by CONNSP_2:def 1;
@@ -1968,7 +1940,7 @@ theorem Th48:
    hence thesis by FUNCT_2:6;
  end;
 
-Lm16:
+Lm15:
  for X being LinearTopSpace, r being non zero Real
   holds mlt(r,X) is one-to-one
  proof let X be LinearTopSpace, r be non zero Real;
@@ -1989,26 +1961,26 @@ theorem Th49:
   holds mlt(r,X)" = mlt(r",X)
  proof let X be LinearTopSpace, r be non zero Real;
 A1: rng mlt(r,X) = [#]X by Th48;
-A3:  mlt(r,X) is one-to-one by Lm16;
+A2:  mlt(r,X) is one-to-one by Lm15;
    now let x be Point of X;
     consider u being set such that
-A4:  u in dom mlt(r,X) and
-A5:  x = mlt(r,X).u by A1,FUNCT_1:def 5;
+A3:  u in dom mlt(r,X) and
+A4:  x = mlt(r,X).u by A1,FUNCT_1:def 5;
     dom mlt(r,X) = the carrier of X by FUNCT_2:def 1;
-    then reconsider u as Point of X by A4;
-A6:    x = r*u by A5,Def13;
+    then reconsider u as Point of X by A3;
+A5:    x = r*u by A4,Def13;
     thus mlt(r,X)".x
-             = (mlt(r,X) qua Function)".x by A1,A3,TOPS_2:def 4
-            .= u by A3,A5,FUNCT_2:32
+             = (mlt(r,X) qua Function)".x by A1,A2,TOPS_2:def 4
+            .= u by A2,A4,FUNCT_2:32
             .= 1*u by RLVECT_1:def 9
             .= (r*r")*u by XCMPLX_0:def 7
-            .= r"*x by A6,RLVECT_1:def 9
+            .= r"*x by A5,RLVECT_1:def 9
             .= mlt(r",X).x by Def13;
    end;
    hence thesis by FUNCT_2:113;
  end;
 
-Lm17:
+Lm16:
  for X being LinearTopSpace, r being non zero Real
    holds mlt(r,X) is continuous
  proof let X be LinearTopSpace, r be non zero Real;
@@ -2039,8 +2011,7 @@ A5:      A in F by TARSKI:def 4;
 A6:      r*A c= P by A2,A5;
          A is Subset of X;
          then reconsider x as Point of X by A4;
-         r*A = {r*u where u is Point of X: u in A};
-         then r*x in r*A by A4;
+         r*x in r*A by A4;
          then
 A7:      r*x in P by A6;
          mlt(r,X).x = r*x by Def13;
@@ -2073,10 +2044,10 @@ registration let X be LinearTopSpace, r be non zero Real;
 A1:  dom mlt(r,X) = the carrier of X by FUNCT_2:def 1;
     thus dom mlt(r,X) = [#]X by A1;
    thus rng mlt(r,X) = [#]X by Th48;
-   thus mlt(r,X) is one-to-one by Lm16;
-   thus mlt(r,X) is continuous by Lm17;
+   thus mlt(r,X) is one-to-one by Lm15;
+   thus mlt(r,X) is continuous by Lm16;
    mlt(r,X)" = mlt(r",X) by Th49;
-   hence mlt(r,X)" is continuous by Lm17;
+   hence mlt(r,X)" is continuous by Lm16;
   end;
 end;
 
@@ -2146,39 +2117,34 @@ A1:       z in r*Cl(A);
        now let G be Subset of X such that
 A2:      G is open and
 A3:      z in G;
-        r*Cl(A) = {r*v where v is Point of X: v in Cl A};
-        then consider v being Point of X such that
+        consider v being Point of X such that
 A4:      z = r*v and
 A5:      v in Cl A by A1;
-      r"*G = {r"*u where u is Point of X: u in G};
-        then
-A7:       r"*z in r"*G by A3;
-A8:       r"*G is open by A2,Th50;
+A6:       r"*z in r"*G by A3;
+A7:       r"*G is open by A2,Th50;
         r"*z = r"*r*v by A4,RLVECT_1:def 9
              .= 1*v by XCMPLX_0:def 7
              .= v by RLVECT_1:def 9;
-        then A meets r"*G by A5,A7,A8,PRE_TOPC:54;
+        then A meets r"*G by A5,A6,A7,PRE_TOPC:54;
         then consider x being set such that
-A9:        x in A and
-A10:        x in r"*G by XBOOLE_0:3;
-        reconsider x as Point of X by A9;
+A8:        x in A and
+A9:        x in r"*G by XBOOLE_0:3;
+        reconsider x as Point of X by A8;
         consider u being Point of X such that
-A11:     x = r"*u and
-A12:     u in G by A10;
-        r*A = {r*v' where v' is Point of X: v' in A};
-        then
-A13:     r*x in r*A by A9;
-        r*x = r*r"*u by A11,RLVECT_1:def 9
+A10:     x = r"*u and
+A11:     u in G by A9;
+A12:     r*x in r*A by A8;
+        r*x = r*r"*u by A10,RLVECT_1:def 9
              .= 1*u by XCMPLX_0:def 7
              .= u by RLVECT_1:def 9;
-        hence r*A meets G by A12,A13,XBOOLE_0:3;
+        hence r*A meets G by A11,A12,XBOOLE_0:3;
        end;
        hence thesis by PRE_TOPC:54;
      end;
-A14:  r*Cl(A) is closed by Th51;
+A13:  r*Cl(A) is closed by Th51;
     A c= Cl(A) by PRE_TOPC:48;
     then r*A c= r*Cl(A) by CONVEX1:39;
-    hence Cl(r*A) c= r*Cl(A) by A14,TOPS_1:31;
+    hence Cl(r*A) c= r*Cl(A) by A13,TOPS_1:31;
  end;
 
 theorem
@@ -2229,7 +2195,7 @@ theorem Th56:
   hence thesis by RLVECT_1:23;
  end;
 
-Lm18:
+Lm17:
   for X being LinearTopSpace, V being bounded Subset of X,
       r being Real
    holds r*V is bounded
@@ -2290,7 +2256,7 @@ end;
 registration
   let X be LinearTopSpace, V be bounded Subset of X, r be Real;
   cluster r*V -> bounded;
-  coherence by Lm18;
+  coherence by Lm17;
 end;
 
 theorem Th57:
@@ -2331,14 +2297,12 @@ A6: (-1)*((-1)*Int(V1)) = Int(V1) & (-1)*((-1)*Int(V2)) = Int(V2)
  by CONVEX1:37;
   thus U = Int(V1) /\ Int(V2) /\ (((-1)*Int(V1)) /\ ((-1)*Int(V2)))
            by XBOOLE_1:16
-        .= ((-1)*(Int(V1)) /\ ((-1)*Int(V2))) /\ (Int(V1) /\ Int(V2))
         .= (-1)*(Int(V1) /\ Int(V2)) /\ (Int(V1) /\ Int(V2)) by Th15
         .= (-1)*(Int(V1) /\ Int(V2)) /\ ((-1)*((-1)*Int(V1) /\ ((-1)*Int(V2))))
            by A6,Th15
         .= (-1)*(Int(V1) /\ Int(V2) /\ ((-1)*Int(V1) /\ ((-1)*Int(V2))))
           by Th15
-        .= (-1)*U by XBOOLE_1:16
-        .= -U;
+        .= -U by XBOOLE_1:16;
   let x be set;
   assume x in U + U;
   then x in {u + v where u,v is Point of X: u in U & v in U}
@@ -2400,7 +2364,7 @@ A9:   Vx+Vx c= V' by Th57;
 A10:       z in Vx;
         then reconsider z as Point of X;
         0.X in Vx by CONNSP_2:6;
-        then z+0.X in Vx+Vx by A10,Lm2;
+        then z+0.X in Vx+Vx by A10,Th3;
         then z in Vx+Vx by RLVECT_1:10;
         hence thesis by A9;
       end;
@@ -2496,7 +2460,7 @@ A29:  x in K;
 A30:  Vx is symmetric and
 A31:  x+Vx+Vx+Vx misses C by A4,A29;
   0.X in Vx by CONNSP_2:6;
-  then x+0.X in x+Vx by Lm1;
+  then x+0.X in x+Vx by Lm2;
   then
 A32:  x in x+Vx by RLVECT_1:10;
   [x,Vx] in xV by A29,A30,A31;
@@ -2709,7 +2673,7 @@ A100:   Vu in G by A40,A97,Th2;
     consider x being Point of X, Vx being open a_neighborhood of 0.X
      such that
 A101:   Vu = x+Vx & [x,Vx] in xVV by A42,A100;
-A102:   z in x+Vx+V by A96,A98,A99,A101,Lm2;
+A102:   z in x+Vx+V by A96,A98,A99,A101,Th3;
     x+Vx+V in FxVxV by A100,A101;
     hence z in union FxVxV by A102,TARSKI:def 4;
    end;
@@ -2732,7 +2696,7 @@ A109:   v in V by A103,A105;
     Vx in FVx by A106;
     then v in Vx by A109,SETFAM_1:def 1;
     then
-A110:    u+v in x+Vx+Vx by A108,Lm2;
+A110:    u+v in x+Vx+Vx by A108,Th3;
     x+Vx+Vx in FxVxVx by A106;
     hence z in union FxVxVx by A107,A110,TARSKI:def 4;
    end;
@@ -2773,7 +2737,7 @@ A122:      v in V by A118;
        then v in Vx by A122,SETFAM_1:def 1;
        then -v in Vx by A116,Th26;
        then
-A123:    z+-v in x+Vx+Vx+Vx by A119,Lm2;
+A123:    z+-v in x+Vx+Vx+Vx by A119,Th3;
        z+-v = u+(v+-v) by A120,RLVECT_1:def 6
             .= u+0.X by RLVECT_1:16
             .= u by RLVECT_1:10;
@@ -2807,7 +2771,7 @@ A136:    v in V by A127,A132;
      then v in Vx by A136,SETFAM_1:def 1;
      then -v in Vx by A130,Th26;
      then
-A137:    z+-v in x+Vx+Vx+Vx by A128,A133,Lm2;
+A137:    z+-v in x+Vx+Vx+Vx by A128,A133,Th3;
      z+-v = u+(v+-v) by A134,RLVECT_1:def 6
          .= u+0.X by RLVECT_1:16
          .= u by RLVECT_1:10;
@@ -2845,7 +2809,7 @@ A3:  0.X in Int P by CONNSP_2:def 1;
   then
 A4:  K+P' misses C+P' by A2,XBOOLE_1:64;
 A5:  C c= C+P' by A3,Th12;
-  Cl(K+P') misses C+P' by A4,Th3;
+  Cl(K+P') misses C+P' by A4,Lm1;
   then Cl(K+P') misses C by A5,XBOOLE_1:63;
   then Cl P' misses C by CONVEX1:35;
   then
@@ -2900,7 +2864,7 @@ A5:   {p}+V = p+V & {q}+V = q+V by RUSUB_4:36;
     take p+Int(V),q+Int(V);
     thus p+Int(V) is open & q+Int(V) is open;
     0.X in Int(V) by CONNSP_2:def 1;
-    then p+0.X in p+Int(V) & q+0.X in q+Int(V) by Lm1;
+    then p+0.X in p+Int(V) & q+0.X in q+Int(V) by Lm2;
     hence p in p+Int(V) & q in q+Int(V) by RLVECT_1:10;
     Int V c= V by TOPS_1:44;
     then p+Int(V) c= p+V & q+Int(V) c= q+V by Th8;
@@ -2920,7 +2884,7 @@ A1:   for x being Point of X holds x in Cl A
 A2:    x in Cl A;
        let V be a_neighborhood of 0.X;
        0.X in Int(V) by CONNSP_2:def 1;
-        then x+0.X in x+Int(V) by Lm1;
+        then x+0.X in x+Int(V) by Lm2;
         then x in x+Int(V) by RLVECT_1:10;
         hence A meets x+Int(V) by A2,TOPS_1:39;
       end;
@@ -2929,9 +2893,9 @@ A3:  for V being a_neighborhood of 0.X holds A meets x+Int(V);
     now let V be Subset of X such that
 A4:    V is open and
 A5:    x in V;
-     -x+V is open by A4,Lm13; then
+     -x+V is open by A4,Lm12; then
 A6:    Int(-x+V) = -x+V by TOPS_1:55;
-     -x+x in -x+V by A5,Lm1;
+     -x+x in -x+V by A5,Lm2;
      then 0.X in -x+V by RLVECT_1:16;
      then -x+V is a_neighborhood of 0.X by A6,CONNSP_2:def 1;
      then A meets x+(-x+V) by A3,A6;
@@ -2958,13 +2922,11 @@ A10:   A+(-1)*Int(V) = {a+v where a,v is Point of X: a in A & v in (-1)*Int(V)}
 A11:    x = a+v and
 A12:    a in A and
 A13:    v in (-1)*Int(V) by A10;
-    (-1)*Int(V) = {(-1)*v' where v' is Point of X: v' in Int(V)};
-    then consider v' being Point of X such that
+    consider v' being Point of X such that
 A14: v = (-1)*v' and
 A15: v' in Int(V) by A13;
      -v = (-1)*v by RLVECT_1:29
        .= (-1)*(-1)*v' by A14,RLVECT_1:def 9
-       .= 1*v'
        .= v' by RLVECT_1:def 9; then
 A16:  x+v' = a + (v + (-v)) by A11,RLVECT_1:def 6
           .= a+0.X by RLVECT_1:16
@@ -2989,32 +2951,31 @@ A20:    A+(-1)*Int((-1)*V) =
          by RUSUB_4:def 10;
 A21:     A+V = {a+v where a,v is Point of X: a in A & v in V}
          by RUSUB_4:def 10;
-A24:      (-1)*V is a_neighborhood of 0.X by Th56;
+A22:      (-1)*V is a_neighborhood of 0.X by Th56;
         then A meets x+Int((-1)*V) by A1,A18;
-        then x in A+(-1)*Int(((-1)*V)) by A7,A24;
+        then x in A+(-1)*Int(((-1)*V)) by A7,A22;
         then consider a,v being Point of X such that
-A25:    x = a+v and
-A26:    a in A and
-A27:    v in (-1)*Int((-1)*V) by A20;
+A23:    x = a+v and
+A24:    a in A and
+A25:    v in (-1)*Int((-1)*V) by A20;
         consider v' being Point of X such that
-A28:    v=(-1)*v' and
-A29:    v' in Int((-1)*V) by A27;
+A26:    v=(-1)*v' and
+A27:    v' in Int((-1)*V) by A25;
         Int((-1)*V) c= (-1)*V by TOPS_1:44;
-        then v' in (-1)*V by A29;
+        then v' in (-1)*V by A27;
         then consider v'' being Point of X such that
-A30:    v' = (-1)*v'' and
-A31:    v'' in V;
-        v = (-1)*(-1)*v'' by A28,A30,RLVECT_1:def 9
-         .= 1*v''
+A28:    v' = (-1)*v'' and
+A29:    v'' in V;
+        v = (-1)*(-1)*v'' by A26,A28,RLVECT_1:def 9
          .= v'' by RLVECT_1:def 9;
-        then v in V by A31;
-        hence x in Y by A19,A21,A25,A26;
+        then v in V by A29;
+        hence x in Y by A19,A21,A23,A24;
       end;
      hence thesis by A17,SETFAM_1:def 1;
     end;
    let x be set;
    assume
-A32:   x in meet AV;
+A30:   x in meet AV;
   AV c= bool the carrier of X
    proof
      let x be set;
@@ -3024,14 +2985,14 @@ A32:   x in meet AV;
    end;
   then reconsider AV' = AV as Subset-Family of X;
   meet AV' c= the carrier of X;
-  then reconsider x as Point of X by A32;
+  then reconsider x as Point of X by A30;
   now let V be a_neighborhood of 0.X;
      0.X in Int(V) by CONNSP_2:def 1;
      then
-A33:   Int(V) is a_neighborhood of 0.X by CONNSP_2:5;
-    (-1)*Int(V) is a_neighborhood of 0.X by A33,Th56;
+A31:   Int(V) is a_neighborhood of 0.X by CONNSP_2:5;
+    (-1)*Int(V) is a_neighborhood of 0.X by A31,Th56;
     then A+(-1)*Int(V) in AV;
-    then x in A+(-1)*Int(V) by A32,SETFAM_1:def 1;
+    then x in A+(-1)*Int(V) by A30,SETFAM_1:def 1;
    hence A meets x+Int(V) by A7;
   end;
   hence thesis by A1;
@@ -3079,9 +3040,9 @@ A10:  x in Int W1 by XBOOLE_0:3;
 A11:  y in B and
 A12:  y in Int W2 by XBOOLE_0:3;
    reconsider y as Point of X by A11;
-A13:  x+y in A+B by A9,A11,Lm2;
+A13:  x+y in A+B by A9,A11,Th3;
 A14:  Int W1 + Int W2 c= Int W by A8,Th37;
-   x+y in Int W1 + Int W2 by A10,A12,Lm2;
+   x+y in Int W1 + Int W2 by A10,A12,Th3;
    then x+y in Int W by A14;
    then A+B meets Int W by A13,XBOOLE_0:3;
    hence A+B meets W by A6,TOPS_1:55;
@@ -3089,7 +3050,7 @@ A14:  Int W1 + Int W2 c= Int W by A8,Th37;
  hence thesis by TOPS_1:39;
 end;
 
-Lm19:
+Lm18:
  for X being LinearTopSpace, C being convex Subset of X
   holds Cl C is convex
 proof let X be LinearTopSpace, C be convex Subset of X;
@@ -3112,10 +3073,10 @@ end;
 registration
   let X be LinearTopSpace, C be convex Subset of X;
   cluster Cl C -> convex;
-  coherence by Lm19;
+  coherence by Lm18;
 end;
 
-Lm20:
+Lm19:
  for X being LinearTopSpace, C being convex Subset of X
   holds Int C is convex
 proof let X be LinearTopSpace, C be convex Subset of X;
@@ -3139,10 +3100,10 @@ end;
 registration
   let X be LinearTopSpace, C be convex Subset of X;
   cluster Int C -> convex;
-  coherence by Lm20;
+  coherence by Lm19;
 end;
 
-Lm21:
+Lm20:
  for X being LinearTopSpace, B being circled Subset of X
   holds Cl B is circled
  proof
@@ -3180,7 +3141,7 @@ end;
 registration
  let X be LinearTopSpace, B be circled Subset of X;
  cluster Cl B -> circled;
- coherence by Lm21;
+ coherence by Lm20;
 end;
 
 theorem
@@ -3205,7 +3166,7 @@ A3:  Int(r*B) c= Int(B) by TOPS_1:48;
   end;
  end;
 
-Lm22:
+Lm21:
  for X being LinearTopSpace, E being bounded Subset of X
   holds Cl E is bounded
  proof let X be LinearTopSpace, E be bounded Subset of X;
@@ -3233,10 +3194,10 @@ A6:  Cl(t*W) = t*Cl(W) by Th53;
 registration
  let X be LinearTopSpace, E be bounded Subset of X;
  cluster Cl E -> bounded;
- coherence by Lm22;
+ coherence by Lm21;
 end;
 
-Lm23:
+Lm22:
   for X being LinearTopSpace, U,V being a_neighborhood of 0.X,
       F being Subset-Family of X, r being positive Real
     st (for s being Real st abs(s) < r holds s*V c= U) &
@@ -3290,16 +3251,14 @@ A11:        P in F' by TARSKI:def 4;
         consider a being non zero Real such that
 A12:        P = a*Int(V) and
 A13:        abs(a) < r by A11;
-          a*Int(V) = {a*v where v is Point of X: v in Int(V)};
-         then consider v being Point of X such that
+         consider v being Point of X such that
 A14:        x = a*v and
 A15:        v in Int(V) by A10,A12;
          Int V c= V by TOPS_1:44;
          then
 A16:        v in V by A15;
 A17:        a*V in F by A2,A13;
-         a*V = {a*v' where v' is Point of X: v' in V};
-         then x in a*V by A14,A16;
+         x in a*V by A14,A16;
          hence x in W by A17,TARSKI:def 4;
        end;
       then Int union F' c= Int W by TOPS_1:48;
@@ -3312,31 +3271,30 @@ A18:    abs(s) <= 1;
       let z be set;
       assume z in s*W;
       then consider u being Point of X such that
-A20:    z = s*u and
-A21:    u in W;
+A19:    z = s*u and
+A20:    u in W;
       consider Y being set such that
-A22:    u in Y and
-A23:    Y in F by A21,TARSKI:def 4;
+A21:    u in Y and
+A22:    Y in F by A20,TARSKI:def 4;
       consider a being Real such that
-A24:    Y = a*V and
-A25:    abs(a) < r by A2,A23;
-      a*V = {a*v where v is Point of X: v in V};
-      then consider v being Point of X such that
-A26:    u = a*v and
-A27:   v in V by A22,A24;
-       z = s*a*v by A20,A26,RLVECT_1:def 9;
+A23:    Y = a*V and
+A24:    abs(a) < r by A2,A22;
+      consider v being Point of X such that
+A25:    u = a*v and
+A26:   v in V by A21,A23;
+       z = s*a*v by A19,A25,RLVECT_1:def 9;
        then
-A28:     z in s*a*V by A27;
-A29:      abs(s)*r <= r by A18,REAL_2:147;
+A27:     z in s*a*V by A26;
+A28:      abs(s)*r <= r by A18,REAL_2:147;
       per cases;
        suppose 0 <> abs(s);
         then s <> 0 by ABSVALUE:7;
         then 0 < abs(s) by COMPLEX1:133;
-        then abs(s)*abs(a) < abs(s) * r by A25,XREAL_1:70;
-        then abs(s)*abs(a) < r by A29,XREAL_1:2;
+        then abs(s)*abs(a) < abs(s) * r by A24,XREAL_1:70;
+        then abs(s)*abs(a) < r by A28,XREAL_1:2;
         then abs(s*a) < r by COMPLEX1:151;
         then s*a*V in F by A2;
-        hence z in W by A28,TARSKI:def 4;
+        hence z in W by A27,TARSKI:def 4;
        end;
        suppose abs(s) = 0;
          then s = 0 by ABSVALUE:7;
@@ -3344,21 +3302,21 @@ A29:      abs(s)*r <= r by A18,REAL_2:147;
          then abs(s*a) = 0 by ABSVALUE:def 1;
          then abs(s*a) < r;
          then s*a*V in F by A2;
-         hence z in W by A28,TARSKI:def 4;
+         hence z in W by A27,TARSKI:def 4;
        end;
      end;
     let z be set;
     assume
-A30:    z in W;
+A29:    z in W;
     then reconsider z as Point of X;
     consider Y being set such that
-A31:    z in Y and
-A32:    Y in F by A30,TARSKI:def 4;
+A30:    z in Y and
+A31:    Y in F by A29,TARSKI:def 4;
     consider a being Real such that
-A33:    Y = a*V and
-A34:    abs(a) < r by A2,A32;
-    a*V c= U by A1,A34;
-    hence thesis by A31,A33;
+A32:    Y = a*V and
+A33:    abs(a) < r by A2,A31;
+    a*V c= U by A1,A33;
+    hence thesis by A30,A32;
  end;
 
 theorem Th65:
@@ -3385,7 +3343,7 @@ A1: for s being Real st abs(s-0) < r holds s*V c= U by Th33;
       then abs(s-0) < r;
       hence s*V c= U by A1;
     end;
-    hence thesis by Lm23;
+    hence thesis by Lm22;
  end;
 
 theorem Th66:
@@ -3395,66 +3353,63 @@ theorem Th66:
  proof let X be LinearTopSpace, U be a_neighborhood of 0.X such that
 A1:  U is convex;
    set V = U /\ -U;
-   -U = (-1)*U;
-   then -U is a_neighborhood of 0.X by Th56;
+   -U is a_neighborhood of 0.X by Th56;
    then reconsider V as a_neighborhood of 0.X by CONNSP_2:4;
    take V;
-A3:   -U is convex by A1,CONVEX1:1;
+A2:   -U is convex by A1,CONVEX1:1;
    thus V is circled
     proof
      let r be Real such that
-A4:     abs(r) <= 1;
+A3:     abs(r) <= 1;
       let u be set;
       assume
-A5:    u in r*V;
-       r*V = {r*v where v is Point of X: v in V};
-      then consider v being Point of X such that
-A6:    u = r*v and
-A7:    v in V by A5;
-A8:    v in -U by A7,XBOOLE_0:def 3;
-A9:    v in U by A7,XBOOLE_0:def 3;
+A4:    u in r*V;
+      consider v being Point of X such that
+A5:    u = r*v and
+A6:    v in V by A4;
+A7:    v in -U by A6,XBOOLE_0:def 3;
+A8:    v in U by A6,XBOOLE_0:def 3;
      0.X in V by CONNSP_2:6;
      then
-A11:   0.X in -U by XBOOLE_0:def 3;
-A12:   0.X in U by CONNSP_2:6;
+A9:   0.X in -U by XBOOLE_0:def 3;
+A10:   0.X in U by CONNSP_2:6;
     per cases;
      suppose
-A13:    r < 0;
-A14:    -r <= 1 by A4,A13,ABSVALUE:def 1;
-A15:    -0 <= -r by A13,XREAL_1:26;
-      then (-r)*v + (1--r)*0.X in -U by A3,A8,A11,A14,Def1;
+A11:    r < 0;
+A12:    -r <= 1 by A3,A11,ABSVALUE:def 1;
+A13:    -0 <= -r by A11,XREAL_1:26;
+      then (-r)*v + (1--r)*0.X in -U by A2,A7,A9,A12,Def1;
       then (-r)*v + 0.X in -U by RLVECT_1:23;
       then (-r)*v in -U by RLVECT_1:def 7;
       then consider u' being Point of X such that
-A16:    (-r)*v = (-1)*u' and
-A17:    u' in U;
-A18:    u' = 1*u' by RLVECT_1:def 9
-          .= ((-1)*(-1))*u'
+A14:    (-r)*v = (-1)*u' and
+A15:    u' in U;
+A16:    u' = ((-1)*(-1))*u' by RLVECT_1:def 9
           .= (-1)*((-1)*u') by RLVECT_1:def 9
-          .= ((-r)*(-1))*v by A16,RLVECT_1:def 9
+          .= ((-r)*(-1))*v by A14,RLVECT_1:def 9
           .= r*v;
-       (-r)*v + (1--r)*0.X in U by A1,A9,A12,A14,A15,Def1;
+       (-r)*v + (1--r)*0.X in U by A1,A8,A10,A12,A13,Def1;
        then (-r)*v + 0.X in U by RLVECT_1:23;
        then (-r)*v in U by RLVECT_1:def 7;
        then ((-1)*r)*v in U;
        then (-1)*(((-1)*r)*v) in (-1)*U;
        then ((-1)*((-1)*r))*v in (-1)*U by RLVECT_1:def 9;
-      hence u in V by A6,A17,A18,XBOOLE_0:def 3;
+      hence u in V by A5,A15,A16,XBOOLE_0:def 3;
      end;
      suppose
-A19:    r >= 0;
-A20:    r <= 1 by A4,ABSVALUE:def 1;
-      then r*v + (1-r)*0.X in U by A1,A9,A12,A19,Def1;
+A17:    r >= 0;
+A18:    r <= 1 by A3,ABSVALUE:def 1;
+      then r*v + (1-r)*0.X in U by A1,A8,A10,A17,Def1;
       then r*v + 0.X in U by RLVECT_1:23;
       then
-A21:    r*v in U by RLVECT_1:def 7;
-      r*v + (1-r)*0.X in -U by A3,A8,A11,A19,A20,Def1;
+A19:    r*v in U by RLVECT_1:def 7;
+      r*v + (1-r)*0.X in -U by A2,A7,A9,A17,A18,Def1;
       then r*v + 0.X in -U by RLVECT_1:23;
       then r*v in -U by RLVECT_1:def 7;
-      hence u in V by A6,A21,XBOOLE_0:def 3;
+      hence u in V by A5,A19,XBOOLE_0:def 3;
      end;
     end;
-   thus V is convex by A1,A3,CONVEX2:1;
+   thus V is convex by A1,A2,CONVEX2:1;
    thus V c= U by XBOOLE_1:17;
  end;
 
@@ -3486,7 +3441,7 @@ A3:      W c= V by Th65;
 theorem
   for X being LinearTopSpace
     st X is locally-convex
-   ex P being local_base of X st P is convex-membered
+   ex P being local_base of X st P is convex-membered circled-membered
  proof let X be LinearTopSpace such that
 A1:   X is locally-convex;
    defpred P[Subset of X] means $1 is circled convex;
@@ -3511,7 +3466,13 @@ A7:      W c= U by Th66;
       thus W in P by A2,A6;
       thus W c= V by A5,A7,XBOOLE_1:1;
     end;
-  let V be Subset of X;
-  assume V in P;
-  hence V is convex by A2;
- end;
+T1:now let V be Subset of X;
+    assume V in P;
+    hence V is circled by A2;
+  end;
+  now let V be Subset of X;
+    assume V in P;
+    hence V is convex by A2;
+  end;
+  hence thesis by T1,Def3,Def7; 
+end;

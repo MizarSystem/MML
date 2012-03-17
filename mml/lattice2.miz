@@ -159,26 +159,9 @@ A4:  the L_meet of L is associative and
 A5:  the L_join of L absorbs the L_meet of L and
 A6:  the L_meet of L absorbs the L_join of L;
  thus
-A7: a"\/"b = b"\/"a
-  proof
-   thus a"\/"b = (the L_join of L).(a,b)
-            .= (the L_join of L).(b,a) by A1,BINOP_1:def 2
-            .= b"\/"a;
-  end;
-A8: a"/\"b = b"/\"a
-  proof
-   thus a"/\"b = (the L_meet of L).(a,b)
-            .= (the L_meet of L).(b,a) by A3,BINOP_1:def 2
-            .= b"/\"a;
-  end;
- thus a"\/"(b"\/"c) = (a"\/"b)"\/"c
-  proof
-       (the L_join of L).(b,c) = b"\/"c;
-   hence a"\/"(b"\/"c) = (the L_join of L).(a,(the L_join of L).(b,c))
-            .= (the L_join of L).((the L_join of L).(a,b),c) by A2,
-BINOP_1:def 3
-            .= (a"\/"b)"\/"c;
-  end;
+A7: a"\/"b = b"\/"a by A1,BINOP_1:def 2;
+A8: a"/\"b = b"/\"a by A3,BINOP_1:def 2;
+ thus a"\/"(b"\/"c) = (a"\/"b)"\/"c by A2,BINOP_1:def 3;
  thus (a"/\"b)"\/"b = b
   proof
    thus (a"/\"b)"\/"b = b "\/" (a "/\" b) by A7
@@ -187,17 +170,9 @@ BINOP_1:def 3
            .= b by A5,Def1;
   end;
  thus a"/\"b = b"/\"a by A8;
- thus a"/\"(b"/\"c) = (a"/\"b)"/\"c
-  proof
-       (the L_meet of L).(b,c) = b"/\"c;
-   hence a"/\"(b"/\"c) = (the L_meet of L).(a,(the L_meet of L).(b,c))
-            .= (the L_meet of L).((the L_meet of L).(a,b),c) by A4,
-BINOP_1:def 3
-            .= (a"/\"b)"/\"c;
-  end;
+ thus a"/\"(b"/\"c) = (a"/\"b)"/\"c by A4,BINOP_1:def 3;
  let a,b;
-     (the L_join of L).(a,b) = a"\/"b;
- hence a"/\"(a"\/"
+ thus a"/\"(a"\/"
 b) = (the L_meet of L).(a,(the L_join of L).(a,b))
                .= a by A6,Def1;
 end;
@@ -210,31 +185,16 @@ end;
 
 registration let L be non empty LattStr;
  cluster L.: -> non empty;
- coherence
-  proof
-       L.:
- = LattStr(#the carrier of L, the L_meet of L, the L_join of L#);
-   hence the carrier of L.: is non empty;
-  end;
+ coherence;
 end;
 
 theorem
  the carrier of L = the carrier of L.: &
  the L_join of L = the L_meet of L.: &
- the L_meet of L = the L_join of L.:
-  proof
-      L.: = LattStr(#the carrier of L, the L_meet of L, the L_join of L#);
-   hence thesis;
-  end;
+ the L_meet of L = the L_join of L.:;
 
 theorem
-    for L being strict non empty LattStr holds L.:.: = L
-  proof let L be strict non empty LattStr;
-    the carrier of L = the carrier of L.: &
-   the L_join of L = the L_meet of L.: &
-   the L_meet of L = the L_join of L.:;
-   hence L.:.: =L;
-  end;
+    for L being strict non empty LattStr holds L.:.: = L;
 
 :: General Lattices
 
@@ -256,10 +216,8 @@ A1:  u "\/" v = v;
 theorem Th22:
  (for v holds (the L_join of L).(u,v) = v) implies u = Bottom L
   proof assume
-A1:  for v holds (the L_join of L).(u,v) = v;
-       now let v;
-     thus u "\/" v = (the L_join of L).(u,v) .= v by A1;
-    end;
+  for v holds (the L_join of L).(u,v) = v;
+    then for v holds u "\/" v = v;
    hence u = Bottom L by Th21;
   end;
 
@@ -279,10 +237,8 @@ A1:  u "/\" v = v;
 theorem Th25:
  (for v holds (the L_meet of L).(u,v) = v) implies u = Top L
   proof assume
-A1:  for v holds (the L_meet of L).(u,v) = v;
-       now let v;
-     thus u "/\" v = (the L_meet of L).(u,v) .= v by A1;
-    end;
+  for v holds (the L_meet of L).(u,v) = v;
+     then for v holds u "/\" v = v;
    hence u = Top L by Th24;
   end;
 
@@ -431,16 +387,8 @@ theorem Th36:
  implies L is distributive
  proof assume
 A1: the L_join of L is_distributive_wrt the L_meet of L;
-A2: now let a,b,c;
-    thus a "\/" (b "/\" c) = (the L_join of L).(a, b "/\" c)
-      .= (the L_join of L).(a,(the L_meet of L).(b,c))
-      .= (the L_meet of L).((the L_join of L).(a,b),(the L_join of L).(a,c))
-                                                       by A1,BINOP_1:24
-      .= (the L_meet of L).((the L_join of L).(a,b), a "\/"
- c)
-      .= (the L_meet of L).(a "\/" b, a "\/" c)
-      .= (a "\/" b) "/\" (a "\/" c);
-   end;
+A2: for a,b,c holds
+     a "\/" (b "/\" c) = (a "\/" b) "/\" (a "\/" c)by A1,BINOP_1:24;
   let a,b,c;
   thus a"/\"(b"\/"c) = a"/\"(c"\/"a)"/\"(c"\/"b) by LATTICES:def 9
                 .= a"/\"((c"\/"a)"/\"(c"\/"b)) by LATTICES:def 7
@@ -504,16 +452,14 @@ theorem Th39:
 theorem Th40:
   the L_join of L absorbs the L_meet of L
  proof let x,y be Element of L;
-      (the L_meet of L).(x,y) = x "/\" y;
-  hence (the L_join of L).(x,(the L_meet of L).(x,y)) = x "\/"(x "/\" y)
+  thus (the L_join of L).(x,(the L_meet of L).(x,y)) = x "\/"(x "/\" y)
      .= x by LATTICES:def 8;
  end;
 
 theorem Th41:
  the L_meet of L absorbs the L_join of L
  proof let x,y be Element of L;
-      (the L_join of L).(x,y) = x "\/" y;
-  hence (the L_meet of L).(x,(the L_join of L).(x,y)) = x "/\"(x "\/" y)
+  thus (the L_meet of L).(x,(the L_join of L).(x,y)) = x "/\"(x "\/" y)
      .= x by LATTICES:def 9;
  end;
 
@@ -646,10 +592,7 @@ registration let L be Lattice;
  cluster L.: -> Lattice-like;
  coherence
   proof
-    the carrier of L = the carrier of L.: &
-    the L_join of L = the L_meet of L.: &
-    the L_meet of L = the L_join of L.:;
-   then the L_join of L.: is commutative &
+   the L_join of L.: is commutative &
    the L_join of L.: is associative &
    the L_meet of L.: is commutative &
    the L_meet of L.: is associative &
@@ -665,33 +608,11 @@ theorem
  for f being Function of A, the carrier of L,
      f' being Function of A, the carrier of L.: st f = f'
    holds FinJoin(B,f) = FinMeet(B,f') &
-         FinMeet(B,f) = FinJoin(B,f')
- proof
-  let L be Lattice, B be Finite_Subset of A;
-  let f be Function of A, the carrier of L,
-      f' be Function of A, the carrier of L.: such that
-A1: f = f';
- the carrier of L = the carrier of L.: &
-    the L_join of L = the L_meet of L.: &
-    the L_meet of L = the L_join of L.:;
-   hence FinJoin(B,f) = (the L_meet of L.:)$$(B,f') by A1
-     .= FinMeet(B,f');
-   thus FinMeet(B,f) = (the L_join of L.:)$$(B,f') by A1
-     .= FinJoin(B,f');
- end;
+         FinMeet(B,f) = FinJoin(B,f');
 
 theorem Th52:
  for a',b' being Element of L.: st a = a' & b = b' holds
-  a "/\" b = a'"\/" b' & a "\/" b = a'"/\" b'
- proof let a',b' be Element of L.: such that
-A1: a = a' & b = b';
-  thus a "/\" b = (the L_meet of L).(a,b)
-             .= (the L_join of L.:).(a',b') by A1
-             .= a'"\/" b';
-  thus a "\/" b = (the L_join of L).(a,b)
-             .= (the L_meet of L.:).(a',b') by A1
-             .= a'"/\" b';
- end;
+  a "/\" b = a'"\/" b' & a "\/" b = a'"/\" b';
 
 theorem Th53:
  a [= b implies
@@ -725,8 +646,7 @@ theorem Th55:
   x in B implies FinMeet(B,f) [= f.x
 proof assume
 A1: x in B;
-     the carrier of L = the carrier of L.:;
-  then reconsider f' = f as Function of A, the carrier of L.:;
+  reconsider f' = f as Function of A, the carrier of L.:;
      f'.x [= FinJoin(B,f') by A1,Th43;
  hence FinMeet(B,f) [= f.x by Th54;
 end;
@@ -737,8 +657,7 @@ theorem Th56:
     given x such that
 A1:   x in B and
 A2:  f.x [= u;
-        the carrier of L = the carrier of L.:;
-     then reconsider f' = f as Function of A, the carrier of L.:;
+     reconsider f' = f as Function of A, the carrier of L.:;
      reconsider u' = u as Element of L.:;
          u' [= f'.x by A2,Th53;
      then u' [= FinJoin(B,f') by A1,Th44;
@@ -750,8 +669,7 @@ theorem
 proof assume that
 A1: (for x st x in B holds f.x = u) and
 A2: B <> {};
-     the carrier of L = the carrier of L.:;
-  then reconsider f' = f as Function of A, the carrier of L.:;
+  reconsider f' = f as Function of A, the carrier of L.:;
   reconsider u' = u as Element of L.:;
 A3:  FinJoin(B,f') = FinMeet(B,f);
      for x holds x in B implies u' = f'.x by A1;
@@ -786,8 +704,7 @@ theorem
     B <> {} & f|B = g|B implies FinMeet(B,f) = FinMeet(B,g)
  proof assume
 A1: B <> {} & f|B = g|B;
-      the carrier of L = the carrier of L.:;
-   then reconsider f' = f, g' = g as Function of A, the carrier of L.:;
+   reconsider f' = f, g' = g as Function of A, the carrier of L.:;
       FinMeet(B,f) = FinJoin(B,f') & FinMeet(B,g) = FinJoin(B,g');
   hence FinMeet(B,f) = FinMeet(B,g) by A1,Th49;
  end;
@@ -797,8 +714,7 @@ theorem Th61:
  proof assume that
 A1:  B <> {} and
 A2:  for x st x in B holds u [= f.x;
-      the carrier of L = the carrier of L.:;
-   then reconsider f' = f as Function of A, the carrier of L.:;
+   reconsider f' = f as Function of A, the carrier of L.:;
    reconsider u' = u as Element of L.:;
       now let x;
     assume x in B; then u [= f.x by A2;
@@ -1008,8 +924,7 @@ theorem
     f|B = g|B implies FinMeet(B,f) = FinMeet(B,g)
  proof assume
 A1: f|B = g|B;
-      the carrier of L = the carrier of L.:;
-   then reconsider f' = f, g' = g as Function of A, the carrier of L.:;
+   reconsider f' = f, g' = g as Function of A, the carrier of L.:;
 A2: L.: is 0_Lattice by Th64;
       FinMeet(B,f) = FinJoin(B,f') & FinMeet(B,g) = FinJoin(B,g');
   hence FinMeet(B,f) = FinMeet(B,g) by A1,A2,Th69;
@@ -1019,15 +934,14 @@ theorem Th76:
   (for x st x in B holds u [= f.x) implies u [= FinMeet(B,f)
  proof assume
 A1:  for x st x in B holds u [= f.x;
-      the carrier of L = the carrier of L.:;
-   then reconsider f' = f as Function of A, the carrier of L.:;
+   reconsider f' = f as Function of A, the carrier of L.:;
    reconsider u' = u as Element of L.:;
-A3: L.: is 0_Lattice by Th64;
+A2: L.: is 0_Lattice by Th64;
       now let x;
     assume x in B; then u [= f.x by A1;
     hence f'.x [= u' by Th53;
    end;
-   then FinJoin(B,f') [= u' by A3,Th70;
+   then FinJoin(B,f') [= u' by A2,Th70;
   hence u [= FinMeet(B,f) by Th54;
  end;
 
@@ -1120,11 +1034,7 @@ then A3: G = (the L_meet of L)[;](u,f) by Th14;
  end;
 
 theorem Th83:
-  u "/\" FinJoin(B,f) = FinJoin(B, (the L_meet of L)[;](u, f))
- proof
-  thus u "/\" FinJoin(B,f) = (the L_meet of L).(u, FinJoin(B, f))
-        .= FinJoin(B, (the L_meet of L)[;](u, f)) by Th81;
- end;
+  u "/\" FinJoin(B,f) = FinJoin(B, (the L_meet of L)[;](u, f)) by Th81;
 
 :: Heyting Lattices
 

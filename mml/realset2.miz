@@ -9,87 +9,79 @@ environ
  vocabularies BOOLE, REALSET1, FUNCT_1, RELAT_1, BINOP_1, RLVECT_1, QC_LANG1,
       VECTSP_1, REALSET2;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, REALSET1;
+ REALSET1,
+      FUNCT_2, BINOP_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1;
  constructors ENUMSET1, REALSET1, BINOP_1, VECTSP_1;
  registrations REALSET1, RELSET_1, SUBSET_1, XBOOLE_0, RLVECT_1, GROUP_1;
  requirements SUBSET, BOOLE;
- definitions RLVECT_1, TARSKI, XBOOLE_0, REALSET1;
+ definitions RLVECT_1, TARSKI, XBOOLE_0, REALSET1, BINOP_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, ZFMISC_1, ENUMSET1, REALSET1, RELAT_1,
       VECTSP_1, RELSET_1, XBOOLE_0, BINOP_1, RLVECT_1, SUBSET_1;
  schemes FUNCT_2;
 
 begin
 
-Lm1:
- for L being non empty LoopStr
- for a,b being Element of L
-  holds (the add of L).[a,b] = a + b
-proof let L be non empty LoopStr, a,b be Element of L;
- thus (the add of L).[a,b] = (the add of L).(a,b) by BINOP_1:def 1
-      .= a + b by RLVECT_1:5;
-end;
-
 definition
   let IT be LoopStr;
   attr IT is zeroed means :Def1:
                  for a being Element of IT holds
-                      (the add of IT).[a,the Zero of IT] = a &
-                      (the add of IT).[the Zero of IT,a] = a;
+                      (the add of IT).(a,the Zero of IT) = a &
+                      (the add of IT).(the Zero of IT,a) = a;
   attr IT is complementable means :Def2:
                  for a being Element of IT
                   ex b being Element of IT st
-                      (the add of IT).[a,b] = the Zero of IT &
-                      (the add of IT).[b,a] = the Zero of IT;
+                      (the add of IT).(a,b) = the Zero of IT &
+                      (the add of IT).(b,a) = the Zero of IT;
 end;
 
 definition let L be non empty LoopStr;
  redefine attr L is add-associative means :Def3:
         for a,b,c being Element of L holds
-                      (the add of L).[(the add of L).[a,b],c] =
-                       (the add of L).[a,(the add of L).[b,c]];
+                      (the add of L).((the add of L).(a,b),c) =
+                       (the add of L).(a,(the add of L).(b,c));
    compatibility
     proof
      hereby assume
 A1:    L is add-associative;
       let a,b,c be Element of L;
-A2:    a + b = (the add of L).[a,b] by Lm1;
-A3:    b + c = (the add of L).[b,c] by Lm1;
-       thus (the add of L).[(the add of L).[a,b],c]
-          = a + b + c by A2,Lm1
+A2:    a + b = (the add of L).(a,b) by RLVECT_1:5;
+A3:    b + c = (the add of L).(b,c) by RLVECT_1:5;
+       thus (the add of L).((the add of L).(a,b),c)
+          = a + b + c by A2,RLVECT_1:5
          .= a + (b + c) by A1,RLVECT_1:def 6
-         .= (the add of L).[a,(the add of L).[b,c]] by A3,Lm1;
+         .= (the add of L).(a,(the add of L).(b,c)) by A3,RLVECT_1:5;
      end;
      assume that
 A4:   for a,b,c being Element of L holds
-        (the add of L).[(the add of L).[a,b],c] =
-        (the add of L).[a,(the add of L).[b,c]];
+        (the add of L).((the add of L).(a,b),c) =
+        (the add of L).(a,(the add of L).(b,c));
      let u,v,w be Element of L;
-A5:    u + v = (the add of L).[u,v] by Lm1;
-A6:    v + w = (the add of L).[v,w] by Lm1;
+A5:    u + v = (the add of L).(u,v) by RLVECT_1:5;
+A6:    v + w = (the add of L).(v,w) by RLVECT_1:5;
      thus (u + v) + w
-               = (the add of L).[(the add of L).[u,v],w] by A5,Lm1
-              .= (the add of L).[u,(the add of L).[v,w]] by A4
-              .= u + (v + w) by A6,Lm1;
+               = (the add of L).((the add of L).(u,v),w) by A5,RLVECT_1:5
+              .= (the add of L).(u,(the add of L).(v,w)) by A4
+              .= u + (v + w) by A6,RLVECT_1:5;
     end;
   redefine attr L is Abelian means :Def4:
      for a,b being Element of L holds
-        (the add of L).[a,b] = (the add of L).[b,a];
+        (the add of L).(a,b) = (the add of L).(b,a);
    compatibility
     proof
      hereby assume
 A7:    L is Abelian;
       let a,b be Element of L;
-      thus (the add of L).[a,b] = a + b by Lm1
+      thus (the add of L).(a,b) = a + b by RLVECT_1:5
               .= b + a by A7,RLVECT_1:def 5
-              .= (the add of L).[b,a] by Lm1;
+              .= (the add of L).(b,a) by RLVECT_1:5;
      end;
      assume
 A8:    for a,b being Element of L holds
-        (the add of L).[a,b] = (the add of L).[b,a];
+        (the add of L).(a,b) = (the add of L).(b,a);
       let a,b be Element of L;
-      thus a + b = (the add of L).[a,b] by Lm1
-                .= (the add of L).[b,a] by A8
-                .= b + a by Lm1;
+      thus a + b = (the add of L).(a,b) by RLVECT_1:5
+                .= (the add of L).(b,a) by A8
+                .= b + a by RLVECT_1:5;
     end;
 end;
 
@@ -106,26 +98,26 @@ A2:  og.[x,x] = x
         hence thesis by A3,TARSKI:def 1;
      end;
      reconsider ng = x as Element of B by TARSKI:def 1;
-A4:  for a,b,c being Element of B holds og.[og.[a,b],c] = og.[a,og.[b,c]]
+A4:  for a,b,c being Element of B holds og.(og.(a,b),c) = og.(a,og.(b,c))
      proof
          let a,b,c be Element of B;
          a = x & b = x & c = x by TARSKI:def 1;
          hence thesis by A2;
      end;
-A5:  for a being Element of B holds og.[a,ng] = a & og.[ng,a] = a
+A5:  for a being Element of B holds og.(a,ng) = a & og.(ng,a) = a
      proof
          let a be Element of B;
          a = x by TARSKI:def 1;
          hence thesis by A2;
      end;
 A6: for a being Element of B ex b being Element of B st
-     og.[a,b] = ng & og.[b,a] = ng
+     og.(a,b) = ng & og.(b,a) = ng
      proof
          let a be Element of B;
          take ng;
-         thus thesis by A2,TARSKI:def 1;
+         thus thesis by TARSKI:def 1;
      end;
-        for a,b being Element of B holds og.[a,b] = og.[b,a]
+        for a,b being Element of B holds og.(a,b) = og.(b,a)
      proof
          let a,b be Element of B;
          a = x & b = x by TARSKI:def 1;
@@ -135,13 +127,13 @@ A6: for a being Element of B ex b being Element of B st
               ex og being BinOp of A st
               ex ng being Element of A st
                  (for a,b,c being Element of A holds
-                      og.[og.[a,b],c] = og.[a,og.[b,c]]) &
+                      og.(og.(a,b),c) = og.(a,og.(b,c))) &
                  (for a being Element of A holds
-                      og.[a,ng] = a & og.[ng,a] = a) &
+                      og.(a,ng) = a & og.(ng,a) = a) &
                  (for a being Element of A ex b being Element of A st
-                      og.[a,b] = ng & og.[b,a] = ng) &
-                 (for a,b being Element of A holds
-                      og.[a,b] = og.[b,a]) by A4,A5,A6;
+                      og.(a,b) = ng & og.(b,a) = ng) &
+                  for a,b being Element of A holds
+                      og.(a,b) = og.(b,a) by A4,A5,A6;
 end;
 
 registration
@@ -152,13 +144,13 @@ registration
      consider A being non empty set, og being BinOp of A, ng being Element of A
       such that
 A1:       (for a,b,c being Element of A holds
-                 og.[og.[a,b],c] = og.[a,og.[b,c]]) &
+                 og.(og.(a,b),c) = og.(a,og.(b,c))) &
             (for a being Element of A holds
-                 og.[a,ng] = a & og.[ng,a] = a) &
+                 og.(a,ng) = a & og.(ng,a) = a) &
             (for a being Element of A ex b being Element of A st
-                 og.[a,b] = ng & og.[b,a] = ng) &
-            (for a,b being Element of A holds
-                 og.[a,b] = og.[b,a]) by Lm2;
+                 og.(a,b) = ng & og.(b,a) = ng) &
+             for a,b being Element of A holds
+                 og.(a,b) = og.(b,a) by Lm2;
         LoopStr(#A,og,ng#) is Abelian add-associative zeroed complementable
       by A1,Def1,Def2,Def3,Def4;
     hence thesis;
@@ -350,7 +342,7 @@ Lm8:  for t being set holds t in [:A,A:] iff
      end;
      for t being set holds t in [:A,A:] iff t in {[x,x],[x,y],[y,x],[y,y]}
        by Lm8,ENUMSET1:def 2;
-then Lm9: [:A,A:] = {[x,x],[x,y],[y,x],[y,y]} by TARSKI:2;
+Lm9: [:A,A:] = {[x,x],[x,y],[y,x],[y,y]} by Lm8,ENUMSET1:def 2;
      set x1=[[x,x],x], x2=[[x,y],y], x3=[[y,x],y], x4=[[y,y],x];
      set F={x1,x2,x3,x4};
 Lm10: for p being set st p in F ex q,r being set st [q,r] = p
@@ -412,7 +404,7 @@ A2:          t in [:A,A:];
 then Lm11:[:A,A:] = dom od by RELAT_1:def 4;
  then Lm12: [x,x] in dom od by Lm8;
      Lm13: [[x,x],x] in od by ENUMSET1:def 2;
-then Lm14: od.[x,x]=x by Lm12,FUNCT_1:def 4;
+then Lm14: od.(x,x)=x by Lm12,FUNCT_1:def 4;
  Lm15: [x,y] in dom od by Lm8,Lm11;
      Lm16: [[x,y],y] in od by ENUMSET1:def 2;
 then Lm17:od.[x,y]=y by Lm15,FUNCT_1:def 4;
@@ -421,7 +413,7 @@ then Lm17:od.[x,y]=y by Lm15,FUNCT_1:def 4;
 then Lm20:od.[y,x]=y by Lm18,FUNCT_1:def 4;
  Lm21: [y,y] in dom od by Lm8,Lm11;
         [[y,y],x] in od by ENUMSET1:def 2;
-then Lm22:od.[y,y]=x by Lm21,FUNCT_1:def 4;
+then Lm22:od.(y,y)=x by Lm21,FUNCT_1:def 4;
 then Lm23:for t being set st t in [:A,A:] holds od.t in A
      by Lm6,Lm7,Lm8,Lm14,Lm17,Lm20;
      set s2=[[x,y],x], s3=[[y,x],x], s4=[[y,y],y];
@@ -512,28 +504,28 @@ Lm38: for t being set holds t in [:A\{x},A\{x}:] implies om.t in A\{x}
      reconsider od0=od as BinOp of A by Lm11,Lm23,FUNCT_2:5;
      reconsider om0=om as BinOp of A by Lm25,Lm34,FUNCT_2:5;
 Lm39: for a,b,d being Element of A holds
-     od0.[od0.[a,b],d] = od0.[a,od0.[b,d]]
+     od0.(od0.(a,b),d) = od0.(a,od0.(b,d))
      proof
        let a,b,d be Element of A;
           (a=x & b=x & d=x) or (a=x & b=x & d=y) or (a=x & b=y & d=x) or
        (a=x & b=y & d=y) or (a=y & b=x & d=x) or (a=y & b=x & d=y) or
        (a=y & b=y & d=x) or (a=y & b=y & d=y) by TARSKI:def 2;
-       hence thesis by Lm14,Lm17,Lm20,Lm22;
+       hence thesis by Lm13,Lm17,Lm20,Lm22,Lm12,FUNCT_1:def 4;
      end;
-Lm40: for a being Element of A holds od0.[a,nd] = a & od0.[nd,a] = a
+Lm40: for a being Element of A holds od0.(a,nd) = a & od0.(nd,a) = a
      proof
        let a be Element of A;
           a=x or a=y by TARSKI:def 2;
        hence thesis by Lm12,Lm13,Lm15,Lm16,Lm18,Lm19,FUNCT_1:def 4;
      end;
 Lm41: for a being Element of A ex b being Element of A st
-     od0.[a,b] = nd & od0.[b,a] = nd
+     od0.(a,b) = nd & od0.(b,a) = nd
      proof
        let a be Element of A;
           a=x or a=y by TARSKI:def 2;
        hence thesis by Lm14,Lm22;
      end;
-        for a,b being Element of A holds od0.[a,b] = od0.[b,a]
+        for a,b being Element of A holds od0.(a,b) = od0.(b,a)
      proof
        let a,b be Element of A;
           (a=x & b=x) or (a=x & b=y) or (a=y & b=x) or (a=y & b=y)
@@ -554,28 +546,28 @@ Lm43:for B being non empty set, P being BinOp of B,
     A1: B = A\{nd} & e = nm & P = om1!(A,nd);
     A2: dom P = [:B,B:] & rng P c= B by FUNCT_2:def 1,RELSET_1:12;
            [y,y] in [:B,B:] by A1,ZFMISC_1:def 2;
-        then A3: P.[y,y] in rng P by A2,FUNCT_1:def 5;
-    then A4: P.[y,y] = y by A1,A2,Lm36,TARSKI:def 1;
-    A5: for a,b,c being Element of B holds P.[P.[a,b],c] = P.[a,P.[b,c]]
+        then  P.[y,y] in rng P by A2,FUNCT_1:def 5;
+    then A4: P.(y,y) = y by A1,A2,Lm36,TARSKI:def 1;
+    A5: for a,b,c being Element of B holds P.(P.(a,b),c) = P.(a,P.(b,c))
         proof
           let a,b,c be Element of B;
           a = y & b = y & c = y by A1,Lm36,TARSKI:def 1;
           hence thesis by A4;
         end;
-    A6: for a being Element of B holds P.[a,e] = a & P.[e,a] = a
+    A6: for a being Element of B holds P.(a,e) = a & P.(e,a) = a
         proof
           let a be Element of B;
           a = y by A1,Lm36,TARSKI:def 1;
-          hence thesis by A1,A2,A3,Lm36,TARSKI:def 1;
+          hence thesis by A1,Lm36,TARSKI:def 1;
         end;
     A7: for a being Element of B ex b being Element of B st
-        P.[a,b] = e & P.[b,a] = e
+        P.(a,b) = e & P.(b,a) = e
         proof
           let a be Element of B;
           take e;
-          thus thesis by A1,A4,Lm36,TARSKI:def 1;
+          thus thesis by A1,Lm36,TARSKI:def 1;
         end;
-           for a,b being Element of B holds P.[a,b] = P.[b,a]
+           for a,b being Element of B holds P.(a,b) = P.(b,a)
         proof
           let a,b be Element of B;
              a = y & b = y by A1,Lm36,TARSKI:def 1;
@@ -880,7 +872,7 @@ end;
 theorem Th4:
    for F being Field,
        a,b,c being Element of suppf(F) holds
-   odf(F).[odf(F).[a,b],c] = odf(F).[a,odf(F).[b,c]]
+   odf(F).(odf(F).(a,b),c) = odf(F).(a,odf(F).(b,c))
 proof
    let F be Field, a,b,c be Element of suppf(F);
       LoopStr(#suppf(F),odf(F),ndf(F)#) is Group by Th1;
@@ -892,7 +884,7 @@ end;
 theorem Th5:
    for F being Field,
        a,b being Element of suppf(F) holds
-   odf(F).[a,b] = odf(F).[b,a]
+   odf(F).(a,b) = odf(F).(b,a)
 proof
    let F be Field, a,b be Element of suppf(F);
       LoopStr(#suppf(F),odf(F),ndf(F)#) is Group by Th1;
@@ -904,7 +896,7 @@ end;
 theorem Th6:
    for F being Field,
        a being Element of suppf(F) holds
-   odf(F).[a,ndf(F)] = a & odf(F).[ndf(F),a] = a
+   odf(F).(a,ndf(F)) = a & odf(F).(ndf(F),a) = a
 proof
    let F be Field, a be Element of suppf(F);
       LoopStr(#suppf(F),odf(F),ndf(F)#) is Group by Th1;
@@ -916,7 +908,7 @@ end;
 theorem Th7:
    for F being Field,
        a being Element of suppf(F) ex b being Element of suppf(F) st
-   odf(F).[a,b] = ndf(F) & odf(F).[b,a] = ndf(F)
+   odf(F).(a,b) = ndf(F) & odf(F).(b,a) = ndf(F)
 proof
    let F be Field,
        a be Element of suppf(F);
@@ -938,46 +930,46 @@ proof
    set e = nmf(F);
    reconsider D = LoopStr(#B,P,e#) as strict Group by Th2;
    reconsider a,b,c as Element of D;
-A2:omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]
+A1:omf(F)||(suppf(F)\{ndf(F)})
     is Function of [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:],
     (suppf(F)\{ndf(F)}) by REALSET1:11;
-then A3:dom(omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]) =
+then A2:dom(omf(F)||(suppf(F)\{ndf(F)})) =
     [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by FUNCT_2:def 1;
-A4:for s,t being Element of (suppf(F)\{ndf(F)}) holds
+A3:for s,t being Element of (suppf(F)\{ndf(F)}) holds
     (the add of D).[s,t] is Element of (suppf(F)\{ndf(F)}) &
     omf(F).[s,t] is Element of (suppf(F)\{ndf(F)})
     proof
         let s,t be Element of (suppf(F)\{ndf(F)});
-     A5:[s,t] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by ZFMISC_1:def 2;
+     A4:[s,t] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by ZFMISC_1:def 2;
         consider W being Function of
         [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:],
         (suppf(F)\{ndf(F)}) such that
-    A6: W = omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by A2;
-           W.[s,t] is Element of (suppf(F)\{ndf(F)}) by A5,FUNCT_2:7;
-        hence thesis by A3,A5,A6,FUNCT_1:70;
+    A5: W = omf(F)||(suppf(F)\{ndf(F)}) by A1;
+           W.[s,t] is Element of (suppf(F)\{ndf(F)}) by A4,FUNCT_2:7;
+        hence thesis by A2,A4,A5,FUNCT_1:70;
     end;
-A7:for x,y being Element of suppf(F)\{ndf(F)} holds
+A6:for x,y being Element of suppf(F)\{ndf(F)} holds
     omf(F).[x,y] = (the add of D).[x,y]
     proof
       let x,y be Element of suppf(F)\{ndf(F)};
          [x,y] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by ZFMISC_1:def 2;
-      hence thesis by A3,FUNCT_1:70;
+      hence thesis by A2,FUNCT_1:70;
     end;
-A8:for x,y,z being Element of suppf(F)\{ndf(F)} holds
+A7:for x,y,z being Element of suppf(F)\{ndf(F)} holds
   omf(F).[(the add of D).[x,y],z] = (the add of D).[(the add of D).[x,y],z] &
     (the add of D).[x,omf(F).[y,z]] = omf(F).[x,omf(F).[y,z]]
     proof
         let x,y,z be Element of suppf(F)\{ndf(F)};
-    A9:(the add of D).[x,y] is Element of suppf(F)\{ndf(F)} by A4;
-           omf(F).[y,z] is Element of suppf(F)\{ndf(F)} by A4;
-        hence thesis by A7,A9;
+    A8:(the add of D).[x,y] is Element of suppf(F)\{ndf(F)} by A3;
+           omf(F).[y,z] is Element of suppf(F)\{ndf(F)} by A3;
+        hence thesis by A6,A8;
     end;
-       omf(F).[omf(F).[a,b],c] = omf(F).[(the add of D).[a,b],c] by A7
-                           .= (the add of D).[(the add of D).[a,b],c] by A8
-                           .= (the add of D).[a,(the add of D).[b,c]]
+       omf(F).[omf(F).[a,b],c] = omf(F).[(the add of D).[a,b],c] by A6
+                           .= (the add of D).((the add of D).(a,b),c) by A7
+                           .= (the add of D).(a,(the add of D).(b,c))
                             by Def3
-                           .= (the add of D).[a,omf(F).[b,c]] by A7
-                           .= omf(F).[a,omf(F).[b,c]] by A8;
+                           .= (the add of D).[a,omf(F).[b,c]] by A6
+                           .= omf(F).[a,omf(F).[b,c]] by A7;
    hence thesis;
 end;
 
@@ -993,21 +985,21 @@ proof
    set e = nmf(F);
    reconsider D = LoopStr(#B,P,e#) as strict Group by Th2;
    reconsider a,b as Element of D;
-      omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]
+      omf(F)||(suppf(F)\{ndf(F)})
     is Function of [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:],
     (suppf(F)\{ndf(F)}) by REALSET1:11;
-then A2: dom(omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]) =
+then A1: dom(omf(F)||(suppf(F)\{ndf(F)})) =
     [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by FUNCT_2:def 1;
-A3:for x,y being Element of suppf(F)\{ndf(F)} holds
+A2:for x,y being Element of suppf(F)\{ndf(F)} holds
     omf(F).[x,y] = (the add of D).[x,y]
     proof
         let x,y be Element of suppf(F)\{ndf(F)};
            [x,y] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by ZFMISC_1:def 2;
-        hence thesis by A2,FUNCT_1:70;
+        hence thesis by A1,FUNCT_1:70;
     end;
-    then omf(F).[a,b] = (the add of D).[a,b]
-                .= (the add of D).[b,a] by Def4
-                .= omf(F).[b,a] by A3;
+    then omf(F).[a,b] = (the add of D).(a,b)
+                .= (the add of D).(b,a) by Def4
+                .= omf(F).[b,a] by A2;
    hence thesis;
 end;
 
@@ -1023,24 +1015,24 @@ proof
    set e = nmf(F);
    reconsider D = LoopStr(#B,P,e#) as strict Group by Th2;
    reconsider a as Element of D;
-   omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]
+   omf(F)||(suppf(F)\{ndf(F)})
     is Function of [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:],
     (suppf(F)\{ndf(F)}) by REALSET1:11;
-then A2: dom(omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]) =
+then A1: dom(omf(F)||(suppf(F)\{ndf(F)})) =
     [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by FUNCT_2:def 1;
-A3:for x,y being Element of suppf(F)\{ndf(F)} holds
+A2:for x,y being Element of suppf(F)\{ndf(F)} holds
     omf(F).[x,y] = (the add of D).[x,y]
     proof
         let x,y be Element of suppf(F)\{ndf(F)};
        [x,y] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by ZFMISC_1:def 2;
-        hence thesis by A2,FUNCT_1:70;
+        hence thesis by A1,FUNCT_1:70;
     end;
     reconsider a as Element of suppf(F)\{ndf(F)};
-A4:omf(F).[a,nmf(F)] = (the add of D).[a,the Zero of D] by A3
+A3:omf(F).[a,nmf(F)] = (the add of D).(a,the Zero of D) by A2
                      .= a by Def1;
-      omf(F).[nmf(F),a] = (the add of D).[the Zero of D,a] by A3
+      omf(F).[nmf(F),a] = (the add of D).(the Zero of D,a) by A2
                      .= a by Def1;
-   hence thesis by A4;
+   hence thesis by A3;
 end;
 
 theorem Th11:
@@ -1059,24 +1051,24 @@ proof
 A1:D = LoopStr(#B,P,e#);
    reconsider a as Element of D by A1;
    consider b being Element of D such that
-A2:(the add of D).[a,b] = the Zero of D & (the add of D).[b,a] = the Zero of D
+A2:(the add of D).(a,b) = the Zero of D & (the add of D).(b,a) = the Zero of D
     by Def2;
-   omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]
+   omf(F)||(suppf(F)\{ndf(F)})
     is Function of [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:],
     (suppf(F)\{ndf(F)}) by REALSET1:11;
-then A4: dom(omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]) =
+then A3: dom(omf(F)||(suppf(F)\{ndf(F)})) =
     [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by FUNCT_2:def 1;
-A5:for x,y being Element of suppf(F)\{ndf(F)} holds
+A4:for x,y being Element of suppf(F)\{ndf(F)} holds
     omf(F).[x,y] = (the add of D).[x,y]
     proof
         let x,y be Element of suppf(F)\{ndf(F)};
        [x,y] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]
         by ZFMISC_1:def 2;
-        hence thesis by A1,A4,FUNCT_1:70;
+        hence thesis by A1,A3,FUNCT_1:70;
     end;
     reconsider b as Element of suppf(F)\{ndf(F)} by A1;
    take b;
-   thus thesis by A1,A2,A5;
+   thus thesis by A1,A2,A4;
 end;
 
 definition
@@ -1092,7 +1084,7 @@ proof
          let x be set;
          assume x in suppf(F);
          then consider y being Element of suppf(F) such that
-      A2:odf(F).[x,y] = ndf(F) & odf(F).[y,x] = ndf(F) by Th7;
+      A2:odf(F).(x,y) = ndf(F) & odf(F).(y,x) = ndf(F) by Th7;
          take y;
          thus thesis by A2;
       end;
@@ -1115,11 +1107,11 @@ A5:for x being Element of suppf(F) holds odf(F).[x,C2.x] = ndf(F);
  A6:x in suppf(F);
  then A7:C1.x is Element of suppf(F) by FUNCT_2:7;
  A8:C2.x is Element of suppf(F) by A6,FUNCT_2:7;
-     thus C1.x = odf(F).[C1.x,ndf(F)] by A7,Th6
-             .= odf(F).[C1.x,odf(F).[x,C2.x]] by A5,A6
-             .= odf(F).[odf(F).[C1.x,x],C2.x] by A6,A7,A8,Th4
-             .= odf(F).[odf(F).[x,C1.x],C2.x] by A6,A7,Th5
-             .= odf(F).[ndf(F),C2.x] by A4,A6
+     thus C1.x = odf(F).(C1.x,ndf(F)) by A7,Th6
+             .= odf(F).(C1.x,odf(F).(x,C2.x)) by A5,A6
+             .= odf(F).(odf(F).(C1.x,x),C2.x) by A6,A7,A8,Th4
+             .= odf(F).(odf(F).(x,C1.x),C2.x) by A6,A7,Th5
+             .= odf(F).(ndf(F),C2.x) by A4,A6
              .= C2.x by A8,Th6;
       end;
       hence thesis by FUNCT_2:18;
@@ -1129,16 +1121,16 @@ end;
 theorem Th12:
    for F being Field,
        x,y being Element of suppf(F) holds
-   odf(F).[x,y] = ndf(F) implies y = compf(F).x
+   odf(F).(x,y) = ndf(F) implies y = compf(F).x
 proof
    let F be Field,
        x,y be Element of suppf(F);
    assume
-A1:odf(F).[x,y] = ndf(F);
-      y = odf(F).[y,ndf(F)] by Th6
-         .= odf(F).[y,odf(F).[x,compf(F).x]] by Def14
-         .= odf(F).[odf(F).[y,x],compf(F).x] by Th4
-         .= odf(F).[ndf(F),compf(F).x] by A1,Th5
+A1:odf(F).(x,y) = ndf(F);
+      y = odf(F).(y,ndf(F)) by Th6
+         .= odf(F).(y,odf(F).(x,compf(F).x)) by Def14
+         .= odf(F).(odf(F).(y,x),compf(F).x) by Th4
+         .= odf(F).(ndf(F),compf(F).x) by A1,Th5
          .= compf(F).x by Th6;
    hence thesis;
 end;
@@ -1150,10 +1142,10 @@ theorem
 proof
    let F be Field,
        x be Element of suppf(F);
-      x = odf(F).[x,ndf(F)] by Th6
-         .= odf(F).[x,odf(F).[compf(F).x,compf(F).(compf(F).x)]] by Def14
-         .= odf(F).[odf(F).[x,compf(F).x],compf(F).(compf(F).x)] by Th4
-         .= odf(F).[ndf(F),compf(F).(compf(F).x)] by Def14
+      x = odf(F).(x,ndf F) by Th6
+         .= odf(F).(x,odf(F).(compf(F).x,compf(F).(compf(F).x))) by Def14
+         .= odf(F).(odf(F).(x,compf(F).x),compf(F).(compf(F).x)) by Th4
+         .= odf(F).(ndf(F),compf(F).(compf(F).x)) by Def14
          .= compf(F).(compf(F).x) by Th6;
    hence thesis;
 end;
@@ -1181,21 +1173,17 @@ proof
        a,b,c be Element of suppf(F);
    omf(F).[a,c] is Element of suppf(F) by Th14;
 then A1:odf(F).[omf(F).[a,c],compf(F).(omf(F).[a,c])] = ndf(F) by Def14;
-A2:odf(F).[b,compf(F).c] is Element of suppf(F) by Th14;
-then A3:omf(F).[a,odf(F).[b,compf(F).c]] is Element of suppf(F) by Th14;
-A4:omf(F).[a,c] is Element of suppf(F) by Th14;
-then A5:compf(F).(omf(F).[a,c]) is Element of suppf(F) by Th14;
-A6:odf(F).[odf(F).[b,compf(F).c],c] =
-   odf(F).[b,odf(F).[compf(F).c,c]] by Th4
-   .= odf(F).[b,odf(F).[c,compf(F).c]] by Th5
-   .= odf(F).[b,ndf(F)] by Def14
+A6:odf(F).(odf(F).(b,compf(F).c),c) =
+   odf(F).(b,odf(F).(compf(F).c,c)) by Th4
+   .= odf(F).(b,odf(F).(c,compf(F).c)) by Th5
+   .= odf(F).(b,ndf(F)) by Def14
    .= b by Th6;
-      omf(F).[a,odf(F).[b,compf(F).c]] =odf(F).[omf(F).[a,odf(F).[b,compf(F).c]
-],
-      odf(F).[omf(F).[a,c],compf(F).(omf(F).[a,c])]] by A1,A3,Th6
-   .= odf(F).[odf(F).[omf(F).[a,odf(F).[b,compf(F).c]],
-      omf(F).[a,c]],compf(F).(omf(F).[a,c])] by A3,A4,A5,Th4
-   .= odf(F).[omf(F).[a,b],compf(F).(omf(F).[a,c])] by A2,A6,Th3;
+      omf(F).(a,odf(F).(b,compf(F).c))
+       =odf(F).(omf(F).(a,odf(F).(b,compf(F).c)),
+      odf(F).(omf(F).(a,c),compf(F).(omf(F).(a,c)))) by A1,Th6
+   .= odf(F).(odf(F).(omf(F).(a,odf(F).(b,compf(F).c)),
+      omf(F).(a,c)),compf(F).(omf(F).(a,c))) by Th4
+   .= odf(F).[omf(F).[a,b],compf(F).(omf(F).[a,c])] by A6,Th3;
    hence thesis;
 end;
 
@@ -1209,21 +1197,17 @@ proof
    let a,b,c be Element of suppf(F);
       omf(F).[b,c] is Element of suppf(F) by Th14;
 then A1:odf(F).[omf(F).[b,c],compf(F).(omf(F).[b,c])] = ndf(F) by Def14;
-A2:odf(F).[a,compf(F).b] is Element of suppf(F) by Th14;
-then A3:omf(F).[odf(F).[a,compf(F).b],c] is Element of suppf(F) by Th14;
-A4:omf(F).[b,c] is Element of suppf(F) by Th14;
-then A5:compf(F).(omf(F).[b,c]) is Element of suppf(F) by Th14;
-A6:odf(F).[odf(F).[a,compf(F).b],b] =
-   odf(F).[a,odf(F).[compf(F).b,b]] by Th4
-   .= odf(F).[a,odf(F).[b,compf(F).b]] by Th5
-   .= odf(F).[a,ndf(F)] by Def14
+A6:odf(F).(odf(F).(a,compf(F).b),b) =
+   odf(F).(a,odf(F).(compf(F).b,b)) by Th4
+   .= odf(F).(a,odf(F).(b,compf(F).b)) by Th5
+   .= odf(F).(a,ndf(F)) by Def14
    .= a by Th6;
-      omf(F).[odf(F).[a,compf(F).b],c] =odf(F).[omf(F).[odf(F).[a,compf(F).b],c
-],
-      odf(F).[omf(F).[b,c],compf(F).(omf(F).[b,c])]] by A1,A3,Th6
-   .= odf(F).[odf(F).[omf(F).[odf(F).[a,compf(F).b],c],
-      omf(F).[b,c]],compf(F).(omf(F).[b,c])] by A3,A4,A5,Th4
-   .= odf(F).[omf(F).[a,c],compf(F).(omf(F).[b,c])] by A2,A6,Th3;
+      omf(F).[odf(F).[a,compf(F).b],c]
+        =odf(F).(omf(F).(odf(F).(a,compf(F).b),c),
+      odf(F).(omf(F).(b,c),compf(F).(omf(F).(b,c)))) by A1,Th6
+   .= odf(F).(odf(F).(omf(F).(odf(F).(a,compf(F).b),c),
+      omf(F).(b,c)),compf(F).(omf(F).(b,c))) by Th4
+   .= odf(F).[omf(F).[a,c],compf(F).(omf(F).[b,c])] by A6,Th3;
    hence thesis;
 end;
 
@@ -1264,13 +1248,11 @@ theorem
    proof
       let F be Field,
           a,b be Element of suppf(F);
-   A1:omf(F).[a,b] is Element of suppf(F) by Th14;
-   A2:omf(F).[a,compf(F).b] is Element of suppf(F) by Th14;
-         odf(F).[omf(F).[a,b],omf(F).[a,compf(F).b]]
+         odf(F).(omf(F).(a,b),omf(F).(a,compf(F).b))
          = omf(F).[a,odf(F).[b,compf(F).b]] by Th3
         .= omf(F).[a,ndf(F)] by Def14
         .= ndf(F) by Th17;
-      hence thesis by A1,A2,Th12;
+      hence thesis by Th12;
    end;
 
 theorem Th20:
@@ -1476,19 +1458,19 @@ end;
 theorem
   for F being Field,
       a,b,c being Element of suppf(F) holds
-   odf(F).[a,b] = odf(F).[a,c] implies b = c
+   odf(F).(a,b) = odf(F).(a,c) implies b = c
 proof
    let F be Field,
        a,b,c be Element of suppf(F);
    assume
-A1:odf(F).[a,b] = odf(F).[a,c];
-      b = odf(F).[ndf(F),b] by Th6
-    .= odf(F).[odf(F).[a,compf(F).a],b] by Def14
-    .= odf(F).[odf(F).[compf(F).a,a],b] by Th5
-    .= odf(F).[compf(F).a,odf(F).[a,c]] by A1,Th4
-    .= odf(F).[odf(F).[compf(F).a,a],c] by Th4
-    .= odf(F).[odf(F).[a,compf(F).a],c] by Th5
-    .= odf(F).[ndf(F),c] by Def14
+A1:odf(F).(a,b) = odf(F).(a,c);
+      b = odf(F).(ndf(F),b) by Th6
+    .= odf(F).(odf(F).(a,compf(F).a),b) by Def14
+    .= odf(F).(odf(F).(compf(F).a,a),b) by Th5
+    .= odf(F).(compf(F).a,odf(F).(a,c)) by A1,Th4
+    .= odf(F).(odf(F).(compf(F).a,a),c) by Th4
+    .= odf(F).(odf(F).(a,compf(F).a),c) by Th5
+    .= odf(F).(ndf(F),c) by Def14
     .= c by Th6;
    hence thesis;
 end;

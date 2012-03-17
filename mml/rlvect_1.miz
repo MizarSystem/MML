@@ -16,7 +16,7 @@ environ
  registrations RELSET_1, STRUCT_0, XREAL_0, SUBSET_1, NAT_1, XBOOLE_0,
       ORDINAL2, NUMBERS, XCMPLX_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions FUNCT_1, TARSKI, STRUCT_0;
+ definitions FUNCT_1, TARSKI, STRUCT_0, BINOP_1;
  theorems BINOP_1, FUNCT_1, NAT_1, REAL_1, TARSKI, RELAT_1, STRUCT_0, XBOOLE_0,
       XBOOLE_1, FINSEQ_1, XCMPLX_0, XCMPLX_1, FUNCOP_1, XREAL_1;
  schemes BINOP_1, FINSEQ_1, FUNCT_2, NAT_1;
@@ -114,11 +114,7 @@ canceled;
 
 theorem
     for V being non empty LoopStr, v,w being Element of V
-   holds v + w = (the add of V).(v,w)
-  proof let V be non empty LoopStr, v,w be Element of V;
-   thus v + w = (the add of V).[v,w]
-             .= (the add of V).(v,w) by BINOP_1:def 1;
-  end;
+   holds v + w = (the add of V).(v,w);
 
 registration let ZS be non empty set, O be Element of ZS,
       F be BinOp of ZS, G be Function of [:REAL,ZS:],ZS;
@@ -132,19 +128,18 @@ Lm1: now
   take O;
    deffunc A((Element of ZS), Element of ZS) = O;
    consider F being BinOp of ZS such that
-     A1: for x,y being Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 2;
+     A1: for x,y being Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 4;
    deffunc M((Element of REAL), Element of ZS) = O;
    consider G being Function of [:REAL,ZS:],ZS such that
      A2: for a being Element of REAL for x being Element of ZS
-         holds G.[a,x qua set] = M(a,x) from FUNCT_2:sch 8;
+         holds G.(a,x) = M(a,x) from BINOP_1:sch 4;
   take F,G;
 
   set W = RLSStruct (# ZS,O,F,G #);
 
   thus for x,y being VECTOR of W holds x + y = y + x
    proof let x,y be VECTOR of W;
-         x + y = F.[x,y] & y + x = F.[y,x];
-      then A3: x + y = F.(x,y) & y + x = F.(y,x) by BINOP_1:def 1;
+      A3: x + y = F.(x,y) & y + x = F.(y,x);
      reconsider X = x, Y = y as Element of ZS;
          x + y = A(X,Y) & y + x = A(Y,X) by A1,A3;
     hence thesis;
@@ -152,9 +147,7 @@ Lm1: now
 
   thus for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
    proof let x,y,z be VECTOR of W;
-         (x + y) + z = F.[x + y,z] & x + (y + z) = F.[x,y + z];
-      then A4: (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z)
-                                                            by BINOP_1:def 1;
+      A4: (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
      reconsider X = x, Y = y, Z = z as Element of ZS;
          (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1,A4;
     hence thesis;
@@ -163,8 +156,7 @@ Lm1: now
   thus for x being VECTOR of W holds x + 0.W = x
    proof let x be VECTOR of W;
      reconsider X = x as Element of ZS;
-          x + 0.W = F.[x,0.W]
-                .= F.(x,0.W) by BINOP_1:def 1
+          x + 0.W = F.(x,0.W)
                 .= A(X,O) by A1;
     hence thesis by TARSKI:def 1;
    end;
@@ -173,50 +165,46 @@ Lm1: now
    proof let x be VECTOR of W;
      reconsider y = O as VECTOR of W;
     take y;
-    thus x + y = F.[x,y]
-              .= F.(x,y) by BINOP_1:def 1
-              .= the Zero of W by A1
-              .= 0.W;
+    thus x + y = F.(x,y)
+              .= 0.W by A1;
    end;
 
   thus for a for x,y being VECTOR of W holds a * (x + y) = a * x + a * y
    proof let a; let x,y be VECTOR of W;
      reconsider X = x, Y = y as Element of ZS;
-
-         a * x + a * y = F.[a * x,a * y]
-                   .= F.(a * x,a * y) by BINOP_1:def 1
-                   .= A(M(a,X),M(a,Y)) by A1;
-    hence thesis by A2;
+         a * x + a * y = F.(a * x,a * y)
+                   .= O by A1
+                   .= G.(a,F.(X,Y)) by A2;
+    hence thesis;
    end;
 
   thus for a,b for x being VECTOR of W holds (a + b) * x = a * x + b * x
    proof let a,b; let x be VECTOR of W;
       set c = a + b;
      reconsider X = x as Element of ZS;
-      A6: c * x = G.[c,x]
+      A5: c * x = G.(c,x)
               .= M(c,X) by A2;
-         a * x + b * x = F.[a * x,b * x]
-                   .= F.(a * x,b * x) by BINOP_1:def 1
+         a * x + b * x = F.(a * x,b * x)
                    .= A(M(a,X),M(b,X)) by A1;
-    hence thesis by A6;
+    hence thesis by A5;
    end;
 
   thus for a,b for x being VECTOR of W holds (a * b) * x = a * (b * x)
     proof let a,b; let x be VECTOR of W;
        set c = a * b;
       reconsider X = x as Element of ZS;
-       A7: c * x = G.[c,x]
+       A6: c * x = G.(c,x)
                .= M(c,X) by A2;
-          a * (b * x) = G.[a,b * x]
+          a * (b * x) = G.(a,b * x)
                   .= M(a,M(b,X)) by A2;
-     hence thesis by A7;
+     hence thesis by A6;
     end;
 
   thus for x being VECTOR of W holds 1 * x = x
    proof let x be VECTOR of W;
      reconsider X = x as Element of ZS;
      reconsider A' = 1 as Element of REAL;
-          1 * x = G.[1,x]
+          1 * x = G.(1,x)
               .= M(A',X) by A2;
     hence thesis by TARSKI:def 1;
    end;
@@ -253,14 +241,13 @@ registration
    deffunc A((Element of ZS), Element of ZS) = O;
    consider F being BinOp of ZS such that
 A1: for x,y being Element of ZS holds F.(x,y) = A(x,y)
-        from BINOP_1:sch 2;
+        from BINOP_1:sch 4;
    reconsider W = LoopStr (# ZS,F,O #) as non empty LoopStr by STRUCT_0:def 1;
   take W;
   thus W is strict;
   thus for x,y being Element of W holds x + y = y + x
    proof let x,y be Element of W;
-         x + y = F.[x,y] & y + x = F.[y,x];
-      then A2: x + y = F.(x,y) & y + x = F.(y,x) by BINOP_1:def 1;
+      A2: x + y = F.(x,y) & y + x = F.(y,x);
      reconsider X = x, Y = y as Element of ZS;
          x + y = A(X,Y) & y + x = A(Y,X) by A1,A2;
     hence thesis;
@@ -268,9 +255,7 @@ A1: for x,y being Element of ZS holds F.(x,y) = A(x,y)
   thus for x,y,z being Element of W
      holds (x + y) + z = x + (y + z)
    proof let x,y,z be Element of W;
-         (x + y) + z = F.[x + y,z] & x + (y + z) = F.[x,y + z];
-      then A3: (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z)
-                                                            by BINOP_1:def 1;
+      A3: (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
      reconsider X = x, Y = y, Z = z as Element of ZS;
          (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1,A3;
     hence thesis;
@@ -278,18 +263,15 @@ A1: for x,y being Element of ZS holds F.(x,y) = A(x,y)
   thus for x being Element of W holds x + 0.W = x
    proof let x be Element of W;
      reconsider X = x as Element of ZS;
-          x + 0.W = F.[x,0.W]
-                .= F.(x,0.W) by BINOP_1:def 1
+          x + 0.W = F.(x,0.W)
                 .= A(X,O) by A1;
     hence thesis by TARSKI:def 1;
    end;
   let x be Element of W;
      reconsider y = O as Element of W;
    take y;
-   thus x + y = F.[x,y]
-             .= F.(x,y) by BINOP_1:def 1
-             .= the Zero of W by A1
-             .= 0.W;
+   thus x + y = F.(x,y)
+             .= 0.W by A1;
  end;
 end;
 
@@ -564,8 +546,7 @@ theorem
   proof let V be add-associative right_zeroed
      right_complementable (non empty LoopStr);
    let v be Element of V;
-   thus v - 0.V = v + (- 0.V)
-               .= v + 0.V by Th25
+   thus v - 0.V = v + 0.V by Th25
                .= v by Th10;
   end;
 
@@ -573,25 +554,13 @@ theorem Th27:
  for V being add-associative right_zeroed
        right_complementable (non empty LoopStr),
      v being Element of V
-   holds 0.V - v = - v
-  proof let V be add-associative right_zeroed
-     right_complementable (non empty LoopStr);
-   let v be Element of V;
-   thus 0.V - v = 0.V + (- v)
-               .= - v by Th10;
-  end;
+   holds 0.V - v = - v by Th10;
 
 theorem Th28:
  for V being add-associative right_zeroed
       right_complementable (non empty LoopStr),
      v being Element of V
-   holds v - v = 0.V
-  proof let V be add-associative right_zeroed
-     right_complementable (non empty LoopStr);
-   let v be Element of V;
-   thus v - v = v + (- v)
-             .= 0.V by Def10;
-  end;
+   holds v - v = 0.V by Def10;
 
 theorem Th29:
  - v = (- 1) * v
@@ -635,7 +604,6 @@ theorem Th33:
  v = - v implies v = 0.V
   proof assume v = - v;
     then 0.V = v - (- v) by Th28
-               .= v + (- (- v))
                .= v + v by Th30
                .= 1 * v + v by Def9
                .= 1 * v + 1 * v by Def9
@@ -677,8 +645,7 @@ theorem
    consider w being Element of V such that
 A1: v + w = u by Lm3;
    take z = - w;
-   thus v - z = v + (- (- w))
-             .= u by A1,Th30;
+   thus v - z = u by A1,Th30;
   end;
 
 theorem
@@ -691,8 +658,7 @@ theorem
    let w,v1,v2 be Element of V;
    assume
 A1:   w - v1 = w - v2;
-        w + (- v1) = w - v1 & w + (- v2) = w - v2;
-    then - v1 = - v2 by A1,Th21;
+    - v1 = - v2 by A1,Th21;
    hence thesis by Th31;
   end;
 
@@ -746,23 +712,14 @@ theorem Th41:
   proof let V be add-associative right_zeroed
      right_complementable (non empty LoopStr);
    let v,u,w be Element of V;
-   thus v - (u + w) = v + - (u + w)
-                   .= v + (-w + -u) by Lm4
-                   .= (v + (- w)) + (- u) by Def6
-                   .= (v - w) + (- u)
-                   .= (v - w) - u;
+   thus v - (u + w) = v + (-w + -u) by Lm4
+                   .= (v - w) - u by Def6;
   end;
 
 theorem
     for V being add-associative (non empty LoopStr),
      v,u,w being Element of V
-   holds (v + u) - w = v + (u - w)
-  proof let V be add-associative (non empty LoopStr);
-   let v,u,w be Element of V;
-   thus (v + u) - w = (v + u) + - w
-                   .= v + (u + - w) by Def6
-                   .= v + (u - w);
-  end;
+   holds (v + u) - w = v + (u - w) by Def6;
 
 theorem
     for V being Abelian add-associative right_zeroed
@@ -775,7 +732,6 @@ theorem
    let v,u,w be Element of V;
    thus v - (u - w) = v - (u + - w)
                    .= (v - u) - - w by Th41
-                   .= (v - u) + (- - w)
                    .= (v - u) + w by Th30;
   end;
 
@@ -819,18 +775,15 @@ theorem
   proof let V be add-associative right_zeroed
       right_complementable (non empty LoopStr);
    let v,w be Element of V;
-   thus - (v - w) = - (v + (- w))
-                 .= --w + -v by Lm4
+   thus - (v - w) = --w + -v by Lm4
                  .= w + -v by Th30;
   end;
 
 theorem Th48:
  a * (v - w) = a * v - a * w
   proof
-   thus a * (v - w) = a * (v + (- w))
-                   .= a * v + a * (- w) by Def9
-                   .= a * v + (- (a * w)) by Th39
-                   .= a * v - a * w;
+   thus a * (v - w) = a * v + a * (- w) by Def9
+                   .= a * v - a * w by Th39;
   end;
 
 theorem Th49:
@@ -839,8 +792,7 @@ theorem Th49:
    thus (a - b) * v = (a + (- b)) * v
                    .= a * v + (- b) * v by Def9
                    .= a * v + b * (- v) by Th38
-                   .= a * v + (- (b * v)) by Th39
-                   .= a * v - b * v;
+                   .= a * v - b * v by Th39;
   end;
 
 theorem
@@ -1361,7 +1313,7 @@ A25:      dom p = Seg len p by FINSEQ_1:def 3;
  reserve i,j,k,n for Nat;
  reserve p,q for FinSequence;
 
-Lm9:
+Lm8:
 for V being add-associative right_zeroed
       right_complementable (non empty LoopStr),
     v being Element of V
@@ -1658,7 +1610,7 @@ theorem
    for V being add-associative right_zeroed
        right_complementable (non empty LoopStr),
     v being Element of V
-holds Sum<* v *> = v by Lm9;
+holds Sum<* v *> = v by Lm8;
 
 theorem Th62:
 for V being add-associative right_zeroed
@@ -1670,8 +1622,8 @@ holds Sum<* v,u *> = v + u
     v,u be Element of V;
        <* v,u *> = <* v *> ^ <* u *> by FINSEQ_1:def 9;
    hence Sum<* v,u *> = Sum<* v *> + Sum<* u *> by Th58
-                   .= v + Sum<* u *> by Lm9
-                   .= v + u by Lm9;
+                   .= v + Sum<* u *> by Lm8
+                   .= v + u by Lm8;
   end;
 
 theorem Th63:
@@ -1684,7 +1636,7 @@ holds Sum<* v,u,w *> = v + u + w
     v,u,w be Element of V;
        <* v,u,w *> = <* v,u *> ^ <* w *> by FINSEQ_1:60;
    hence Sum<* v,u,w *> = Sum<* v,u *> + Sum<* w *> by Th58
-                     .= Sum<* v,u *> + w by Lm9
+                     .= Sum<* v,u *> + w by Lm8
                      .= v + u + w by Th62;
   end;
 
@@ -1729,7 +1681,7 @@ theorem
   end;
 
 theorem
-    - Sum<* v *> = - v by Lm9;
+    - Sum<* v *> = - v by Lm8;
 
 theorem
     for V being Abelian add-associative right_zeroed
@@ -1775,8 +1727,8 @@ theorem
     Sum<* v,w *> = Sum<* v *> + Sum<* w *>
   proof
    thus Sum<* v,w *> = v + w by Th62
-                  .= Sum<* v *> + w by Lm9
-                  .= Sum<* v *> + Sum<* w *> by Lm9;
+                  .= Sum<* v *> + w by Lm8
+                  .= Sum<* v *> + Sum<* w *> by Lm8;
   end;
 
 theorem
@@ -1805,11 +1757,7 @@ A1:   v + - v = 0.V by Def10;
   end;
 
 theorem
-    Sum<* v,- w *> = v - w
-  proof
-   thus Sum<* v,- w *> = v + (- w) by Th62
-                    .= v - w;
-  end;
+    Sum<* v,- w *> = v - w by Th62;
 
 theorem Th78:
  Sum<* - v,- w *> = - (w + v)
@@ -1845,9 +1793,9 @@ theorem
     Sum<* u,v,w *> = Sum<* u *> + Sum<* v *> + Sum<* w *>
   proof
    thus Sum<* u,v,w *> = u + v + w by Th63
-                    .= Sum<* u *> + v + w by Lm9
-                    .= Sum<* u *> + v + Sum<* w *> by Lm9
-                    .= Sum<* u *> + Sum<* v *> + Sum<* w *> by Lm9;
+                    .= Sum<* u *> + v + w by Lm8
+                    .= Sum<* u *> + v + Sum<* w *> by Lm8
+                    .= Sum<* u *> + Sum<* v *> + Sum<* w *> by Lm8;
   end;
 
 theorem
@@ -1998,7 +1946,7 @@ theorem
  rng F & rng F c= the carrier of V by FINSEQ_1:def 4,FUNCT_1:def 5;
     then reconsider v = F.1 as Element of V;
         F = <* v *> by A1,FINSEQ_1:57;
-   hence thesis by Lm9;
+   hence thesis by Lm8;
   end;
 
 theorem

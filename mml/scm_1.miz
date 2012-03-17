@@ -33,23 +33,12 @@ definition
 end;
 
 theorem Th1: for s being State of SCM
-     holds IC s = s.0 & CurInstr s = s.(s.0)
- proof let s be State of SCM;
-  thus IC s = s.0 by AMI_3:4;
-  hence CurInstr s = s.(s.0);
- end;
+     holds IC s = s.0 & CurInstr s = s.(s.0) by AMI_3:4;
 
 theorem Th2: for s being State of SCM, k being Nat
      holds CurInstr (Computation s).k = s.(IC (Computation s).k) &
        CurInstr (Computation s).k = s.((Computation s).k.0)
- proof let s be State of SCM, k be Nat;
-  thus CurInstr (Computation s).k
-           = (Computation s).k.((Computation s).k.0) by Th1
-          .= (Computation s).k.(IC (Computation s).k)
-            by AMI_3:4
-          .= s.(IC (Computation s).k) by AMI_1:54;
-  hence thesis by AMI_3:4;
- end;
+          by  AMI_3:4, AMI_1:54;
 
 theorem Th3:
 for s being State of SCM
@@ -655,10 +644,10 @@ A1: IC (Computation s).k = il.n & s.il.n = goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
    set csk = (Computation s).k;
    set csk1 = (Computation s).(k+1);
- A4: csk1 = Exec(CurInstr csk, csk) by Lm10
+ A3: csk1 = Exec(CurInstr csk, csk) by Lm10
            .= Exec(goto il, csk) by A1,A2;
- thus IC csk1 = csk1.IC SCM .= il by A4,AMI_3:13;
- thus thesis by A4,AMI_3:13;
+ thus IC csk1 = csk1.IC SCM .= il by A3,AMI_3:13;
+ thus thesis by A3,AMI_3:13;
 end;
 
 theorem Th24:
@@ -676,16 +665,15 @@ A1: IC (Computation s).k = il.n & s.il.n = a =0_goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
    set csk = (Computation s).k;
    set csk1 = (Computation s).(k+1);
- A4: csk1 = Exec(CurInstr csk, csk) by Lm10
+ A3: csk1 = Exec(CurInstr csk, csk) by Lm10
            .= Exec(a =0_goto il, csk) by A1,A2;
-  IC csk1 = csk1.IC SCM;
- hence csk.a = 0 implies IC csk1 = il by A4,AMI_3:14;
+ thus csk.a = 0 implies IC csk1 = il by A3,AMI_3:14;
  hereby assume
        csk.a <> 0;
-  hence IC csk1 = Next il.n by A1,A4,AMI_3:14
+  hence IC csk1 = Next il.n by A1,A3,AMI_3:14
                .= il.(n+1) by Lm9;
  end;
- thus thesis by A4,AMI_3:14;
+ thus thesis by A3,AMI_3:14;
 end;
 
 theorem Th25:
@@ -703,16 +691,15 @@ A1: IC (Computation s).k = il.n & s.il.n = a >0_goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
    set csk = (Computation s).k;
    set csk1 = (Computation s).(k+1);
- A4: csk1 = Exec(CurInstr csk, csk) by Lm10
+ A3: csk1 = Exec(CurInstr csk, csk) by Lm10
            .= Exec(a >0_goto il, csk) by A1,A2;
-  IC csk1 = csk1.IC SCM;
- hence csk.a > 0 implies IC csk1 = il by A4,AMI_3:15;
+ thus csk.a > 0 implies IC csk1 = il by A3,AMI_3:15;
  hereby assume
        csk.a <= 0;
-  hence IC csk1 = Next il.n by A1,A4,AMI_3:15
+  hence IC csk1 = Next il.n by A1,A3,AMI_3:15
                .= il.(n+1) by Lm9;
  end;
- thus thesis by A4,AMI_3:15;
+ thus thesis by A3,AMI_3:15;
 end;
 
 theorem Th26:

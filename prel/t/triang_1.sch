@@ -91,7 +91,7 @@
 <Pred kind="P" nr="1">
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="V" nr="21">
+<Pred kind="V" nr="22">
 <Func kind="F" nr="2"/>
 </Pred>
 <Pred kind="P" nr="1">

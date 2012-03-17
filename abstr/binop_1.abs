@@ -6,10 +6,10 @@
 
 environ
 
- vocabularies FUNCT_1, BOOLE, RELAT_1, BINOP_1;
+ vocabularies FUNCT_1, BOOLE, RELAT_1, BINOP_1, SEQM_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2;
  constructors TARSKI, FUNCT_2, XBOOLE_0;
- registrations RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1;
+ registrations RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1, FUNCT_1, FUNCT_2;
  requirements SUBSET, BOOLE;
 
 
@@ -25,15 +25,20 @@ reserve A for set;
 
 definition let A,B be non empty set, C be set, f be Function of [:A,B:],C;
   let a be Element of A; let b be Element of B;
-redefine func f.(a,b) -> Element of C;
+  redefine func f.(a,b) -> Element of C;
 end;
 
-canceled;
+reserve X,Y,Z,T,x,x',x1,x2,y,y1,y2,z for set;
+
+theorem :: BINOP_1:1
+  for X,Y,Z being set
+  for f1,f2 being Function of [:X,Y:],Z
+     st for x,y being set st x in X & y in Y holds f1.(x,y) = f2.(x,y)
+    holds f1 = f2;
 
 theorem :: BINOP_1:2
-    for A,B,C be non empty set
-  for f1,f2 being Function of [:A,B:],C st
-    for a being Element of A for b being Element of B holds f1.(a,b) = f2.(a,b)
+  for f1,f2 being Function of [:X,Y:],Z st
+    for a being Element of X for b being Element of Y holds f1.(a,b) = f2.(a,b)
    holds f1 = f2;
 
 definition let A be set;
@@ -46,18 +51,33 @@ reserve u for UnOp of A,
         a,b,c,e,e1,e2 for Element of A;
 
 scheme :: BINOP_1:sch 1
- BinOpEx{A()->non empty set,
-               P[Element of A(),Element of A(),Element of A()]}:
- ex o being BinOp of A() st
-    for a,b being Element of A() holds P[a,b,o.(a,b)]
+ FuncEx2{X, Y, Z() -> set, P[set,set,set]}:
+ ex f being Function of [:X(),Y():],Z() st
+   for x,y st x in X() & y in Y() holds P[x,y,f.(x,y)]
 provided
- for x,y being Element of A() ex z being Element of A() st P[x,y,z];
+ for x,y st x in X() & y in Y() ex z st z in Z() & P[x,y,z];
 
 scheme :: BINOP_1:sch 2
- BinOpLambda{A()->non empty set,
-                   O(Element of A(),Element of A())->Element of A()}:
- ex o being BinOp of A() st
-    for a,b being Element of A() holds o.(a,b) = O(a,b);
+ Lambda2{X, Y, Z() -> set, F(set,set)->set}:
+ ex f being Function of [:X(),Y():],Z()
+  st for x,y st x in X() & y in Y() holds f.(x,y) = F(x,y)
+provided
+ for x,y st x in X() & y in Y() holds F(x,y) in Z();
+
+scheme :: BINOP_1:sch 3
+ FuncEx2D{X, Y, Z() -> non empty set, P[set,set,set]}:
+ ex f being Function of [:X(),Y():],Z() st
+   for x being Element of X() for y being Element of Y() holds P[x,y,f.(x,y)]
+provided
+ for x being Element of X() for y being Element of Y()
+      ex z being Element of Z() st P[x,y,z];
+
+scheme :: BINOP_1:sch 4
+ Lambda2D{X, Y, Z() -> non empty set,
+                F(Element of X(),Element of Y()) -> Element of Z()}:
+ ex f being Function of [:X(),Y():],Z()
+  st for x being Element of X() for y being Element of Y() holds f.(x,y)=F(x,y)
+;
 
 definition let A,o;
   attr o is commutative means
@@ -192,51 +212,62 @@ theorem :: BINOP_1:28
 definition let A,u,o;
   pred u is_distributive_wrt o means
 :: BINOP_1:def 12
-
     for a,b holds u.(o.(a,b)) = o.((u.a),(u.b));
 end;
 
 definition let A be non empty set, o be BinOp of A;
- redefine
-  attr o is commutative means
+  redefine attr o is commutative means
 :: BINOP_1:def 13
-      for a,b being Element of A holds o.(a,b) = o.(b,a);
+    for a,b being Element of A holds o.(a,b) = o.(b,a);
   attr o is associative means
 :: BINOP_1:def 14
-      for a,b,c being Element of A holds o.(a,o.(b,c)) = o.(o.(a,b),c);
+    for a,b,c being Element of A holds o.(a,o.(b,c)) = o.(o.(a,b),c);
   attr o is idempotent means
 :: BINOP_1:def 15
-      for a being Element of A holds o.(a,a) = a;
+    for a being Element of A holds o.(a,a) = a;
 end;
 
 definition let A be non empty set, e be Element of A, o be BinOp of A;
- redefine
-  pred e is_a_left_unity_wrt o means
+  redefine pred e is_a_left_unity_wrt o means
 :: BINOP_1:def 16
-      for a being Element of A holds o.(e,a) = a;
+    for a being Element of A holds o.(e,a) = a;
   pred e is_a_right_unity_wrt o means
 :: BINOP_1:def 17
-      for a being Element of A holds o.(a,e) = a;
+    for a being Element of A holds o.(a,e) = a;
 end;
 
 definition let A be non empty set, o',o be BinOp of A;
- redefine
-  pred o' is_left_distributive_wrt o means
+  redefine pred o' is_left_distributive_wrt o means
 :: BINOP_1:def 18
-       for a,b,c being Element of A holds o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)
-)
-;
+    for a,b,c being Element of A holds o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c));
   pred o' is_right_distributive_wrt o means
 :: BINOP_1:def 19
-       for a,b,c being Element of A holds o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c)
-)
-;
+    for a,b,c being Element of A holds o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c));
 end;
 
 definition let A be non empty set, u be UnOp of A, o be BinOp of A;
- redefine
-  pred u is_distributive_wrt o means
+  redefine pred u is_distributive_wrt o means
 :: BINOP_1:def 20
-       for a,b being Element of A holds u.(o.(a,b)) = o.((u.a),(u.b));
+    for a,b being Element of A holds u.(o.(a,b)) = o.((u.a),(u.b));
 end;
+
+:: FUNCT_2, 2005.12.13, A.T.
+
+theorem :: BINOP_1:29
+  for f being Function of [:X,Y:],Z st x in X & y in Y & Z <> {}
+    holds f.(x,y) in Z;
+
+:: from TOPALG_3, 2005.12.14, A.T.
+
+theorem :: BINOP_1:30
+  for x, y, X, Y, Z being set, f being Function of [:X,Y:],Z, g being Function
+    st Z <> {} & x in X & y in Y holds (g*f).(x,y) = g.(f.(x,y));
+
+:: missing, 2005.12.17, A.T.
+
+theorem :: BINOP_1:31
+ for f being Function st dom f = [:X,Y:] holds
+  f is constant iff
+   for x1,x2,y1,y2 st x1 in X & x2 in X & y1 in Y & y2 in Y
+     holds f.(x1,y1)=f.(x2,y2);
 

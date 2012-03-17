@@ -7,13 +7,14 @@
 environ
 
  vocabularies BINOP_1, RELAT_1, FUNCT_1, LATTICE2, LATTICES, SUBSET_1,
-      LATTICE4, FILTER_0, BOOLE, NAT_LAT, ZF_LANG, FILTER_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, FUNCT_1, DOMAIN_1,
-      BINOP_1, LATTICES, NAT_LAT, FILTER_0, LATTICE2, MCART_1, RELSET_1,
-      LATTICE4;
- constructors DOMAIN_1, BINOP_1, NAT_LAT, FILTER_0, LATTICE2, LATTICE4;
+      LATTICE4, FILTER_0, BOOLE, NAT_LAT, ZF_LANG, FILTER_2, REALSET1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1,
+      DOMAIN_1, BINOP_1, REALSET1, LATTICES, NAT_LAT, FILTER_0, LATTICE2,
+      MCART_1, RELSET_1, LATTICE4;
+ constructors DOMAIN_1, BINOP_1, NAT_LAT, FILTER_0, LATTICE2, LATTICE4,
+      REALSET1;
  registrations LATTICES, FILTER_0, NAT_LAT, LATTICE2, FUNCT_1, STRUCT_0,
-      RELSET_1, LATTICE4, SUBSET_1, XBOOLE_0;
+      RELSET_1, LATTICE4, SUBSET_1, XBOOLE_0, REALSET1;
  requirements SUBSET, BOOLE;
 
 
@@ -21,7 +22,7 @@ begin :: Some Properties of the Restriction of Binary Operations
 
 theorem :: FILTER_2:1
  for D being non empty set, S being non empty Subset of D,
-  f being BinOp of D, g being BinOp of S st g = f|[:S,S:] holds
+  f being BinOp of D, g being BinOp of S st g = f||S holds
    (f is commutative implies g is commutative) &
    (f is idempotent implies g is idempotent) &
    (f is associative implies g is associative);
@@ -30,7 +31,7 @@ theorem :: FILTER_2:2
     for D being non empty set, S being non empty Subset of D,
    f being BinOp of D, g being BinOp of S
   for d being Element of D, d' being Element of S st
-   g = f|[:S,S:] & d' = d holds
+   g = f||S & d' = d holds
     (d is_a_left_unity_wrt f implies d' is_a_left_unity_wrt g) &
     (d is_a_right_unity_wrt f implies d' is_a_right_unity_wrt g) &
     (d is_a_unity_wrt f implies d' is_a_unity_wrt g);
@@ -38,20 +39,20 @@ theorem :: FILTER_2:2
 theorem :: FILTER_2:3
  for D being non empty set, S being non empty Subset of D,
   f1,f2 being BinOp of D, g1,g2 being BinOp of S st
-   g1 = f1|[:S,S:] & g2 = f2|[:S,S:] holds
+   g1 = f1||S & g2 = f2||S holds
     (f1 is_left_distributive_wrt f2 implies g1 is_left_distributive_wrt g2) &
     (f1 is_right_distributive_wrt f2 implies g1 is_right_distributive_wrt g2);
 
 theorem :: FILTER_2:4
     for D being non empty set, S being non empty Subset of D,
   f1,f2 being BinOp of D, g1,g2 being BinOp of S st
-   g1 = f1|[:S,S:] & g2 = f2|[:S,S:] holds
+   g1 = f1||S & g2 = f2||S holds
     f1 is_distributive_wrt f2 implies g1 is_distributive_wrt g2;
 
 theorem :: FILTER_2:5
  for D being non empty set, S being non empty Subset of D,
   f1,f2 being BinOp of D, g1,g2 being BinOp of S st
-   g1 = f1|[:S,S:] & g2 = f2|[:S,S:] holds
+   g1 = f1||S & g2 = f2||S holds
     f1 absorbs f2 implies g1 absorbs g2;
 
 begin :: Closed Subsets of a Lattice
@@ -421,11 +422,11 @@ theorem :: FILTER_2:60
   o1,o2 for BinOp of P;
 
 theorem :: FILTER_2:61
-  (the L_join of L)|[:P,P:] is BinOp of P &
-  (the L_meet of L)|[:P,P:] is BinOp of P;
+  (the L_join of L)||P is BinOp of P &
+  (the L_meet of L)||P is BinOp of P;
 
 theorem :: FILTER_2:62
- o1 = (the L_join of L)|[:P,P:] & o2 = (the L_meet of L)|[:P,P:] implies
+ o1 = (the L_join of L)||P & o2 = (the L_meet of L)||P implies
   o1 is commutative & o1 is associative &
    o2 is commutative & o2 is associative &
     o1 absorbs o2 & o2 absorbs o1;
@@ -466,8 +467,8 @@ end;
 definition let L;
  redefine mode Sublattice of L means
 :: FILTER_2:def 15
-   ex P,o1,o2 st o1 = (the L_join of L)|[:P,P:] &
-    o2 = (the L_meet of L)|[:P,P:] & the LattStr of it = LattStr (#P, o1, o2#);
+   ex P,o1,o2 st o1 = (the L_join of L)||P &
+    o2 = (the L_meet of L)||P & the LattStr of it = LattStr (#P, o1, o2#);
  end;
 
 theorem :: FILTER_2:69
@@ -477,8 +478,8 @@ theorem :: FILTER_2:69
  definition let L,P;
   func latt (L,P) -> Sublattice of L means
 :: FILTER_2:def 16
-   ex o1,o2 st o1 = (the L_join of L)|[:P,P:] &
-    o2 = (the L_meet of L)|[:P,P:] & it = LattStr (#P, o1, o2#);
+   ex o1,o2 st o1 = (the L_join of L)||P &
+    o2 = (the L_meet of L)||P & it = LattStr (#P, o1, o2#);
  end;
 
  registration let L,P;
@@ -500,8 +501,8 @@ theorem :: FILTER_2:72
 
 theorem :: FILTER_2:73
  the carrier of latt (L,P) = P &
- the L_join of latt (L,P) = (the L_join of L)|[:P,P:] &
- the L_meet of latt (L,P) = (the L_meet of L)|[:P,P:];
+ the L_join of latt (L,P) = (the L_join of L)||P &
+ the L_meet of latt (L,P) = (the L_meet of L)||P;
 
 theorem :: FILTER_2:74
  for p,q for p',q' being Element of latt (L,P) st

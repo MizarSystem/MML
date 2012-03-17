@@ -29,7 +29,6 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="FINSEQ_6"/>
 <ArticleID name="GOBOARD5"/>
@@ -39,21 +38,21 @@
 <Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="82" value="false"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="90">
+<Adjective nr="7" value="false"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="84">
 <Func kind="U" nr="1">
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -61,11 +60,11 @@
 </ArgTypes>
 <Func kind="K" nr="46">
 <Func kind="U" nr="1">
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="217">
+<Func kind="K" nr="214">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

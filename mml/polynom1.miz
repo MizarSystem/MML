@@ -31,7 +31,7 @@ environ
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, RLVECT_1, FUNCT_1, VECTSP_1, MATRLIN, CARD_3,
       RELAT_2, PBOOLE, RELSET_1, WELLORD2, FRAENKEL, RELAT_1, SEQM_3, GROUP_1,
-      ANPROJ_1, SEQ_1;
+      ANPROJ_1, SEQ_1, BINOP_1;
  theorems FUNCT_1, FINSET_1, FINSEQ_3, FINSEQ_4, ZFMISC_1, FINSEQ_1, FUNCT_2,
       RLVECT_1, VECTSP_1, FUNCOP_1, STRUCT_0, TARSKI, FUNCT_7, BINOP_1,
       RELAT_1, MATRLIN, FINSEQ_2, CARD_3, RFINSEQ, VECTSP_9, SCMFSA_7,
@@ -43,11 +43,11 @@ environ
       ANPROJ_1, PARTFUN2, XBOOLE_0, XBOOLE_1, RLVECT_2, XCMPLX_1, PARTFUN1,
       BINOP_2, SEQ_1, XREAL_1;
  schemes FRAENKEL, SETWISEO, FUNCT_2, FINSEQ_2, FINSEQ_5, GOBOARD2, PBOOLE,
-      RELSET_1, GOBOARD1, ORDINAL1, FUNCT_7, SUBSET_1, XBOOLE_0;
+      RELSET_1, GOBOARD1, ORDINAL1, FUNCT_7, SUBSET_1, XBOOLE_0, BINOP_1;
 
 begin :: Basics ---------------------------------------------------------------
 
- Th1:
+ Lm1:
  for i, j being Nat holds multnat.(i,j) = i*j by BINOP_2:def 24;
 
 canceled;
@@ -82,18 +82,18 @@ proof let a, b, c be Nat;
   thus a-'b-'c = 0-'c by A1,NAT_2:10 .= 0 by NAT_2:10
      .= a-'(b+c) by A2,NAT_2:10;
  end;
- suppose A4: b <= a & a-b <= c;
- then A5: a <= b+c by XREAL_1:22;
-      a-'b = a-b by A4,BINARITH:50;
-  hence a-'b-'c = 0 by A4,NAT_2:10
-    .= a-'(b+c) by A5,NAT_2:10;
+ suppose A3: b <= a & a-b <= c;
+ then A4: a <= b+c by XREAL_1:22;
+      a-'b = a-b by A3,BINARITH:50;
+  hence a-'b-'c = 0 by A3,NAT_2:10
+    .= a-'(b+c) by A4,NAT_2:10;
  end;
- suppose A6: b <= a & c <= a-b;
- then A7: c+b <= a by XREAL_1:21;
-      a-'b = a-b by A6,BINARITH:50;
-  hence a-'b-'c = a-b-c by A6,BINARITH:50
+ suppose A5: b <= a & c <= a-b;
+ then A6: c+b <= a by XREAL_1:21;
+      a-'b = a-b by A5,BINARITH:50;
+  hence a-'b-'c = a-b-c by A5,BINARITH:50
     .= a-(b+c)
-    .= a-'(b+c) by A7,BINARITH:50;
+    .= a-'(b+c) by A6,BINARITH:50;
 end;
 end;
 
@@ -993,7 +993,7 @@ proof
           then j <= len p by A9,SPRECT_3:6;
      hence
     A14: j in dom ((F^<*p*>).i) by A12,A13,FINSEQ_3:27;
-     thus k = (Sum Card ((F^<*p*>)|(i-'1))) + j by A9,A10,AMI_5:4;
+     thus k = (Sum Card ((F^<*p*>)|(i-'1))) + j by A9,A10,BINARITH:53;
      hence ((F^<*p*>).i).j = (FlattenSeq (F^<*p*>)).k
             by A5,A9,A12,A14,FINSEQ_1:def 7;
     end;
@@ -1377,27 +1377,27 @@ definition
  existence proof
   deffunc F(set) = b1.$1 -' b2.$1;
   consider f being ManySortedSet of X such that
-A10: for i being set st i in X holds f.i = F(i) from PBOOLE:sch 4;
+A1: for i being set st i in X holds f.i = F(i) from PBOOLE:sch 4;
   take f;
   let x be set;
   per cases;
   suppose x in X;
-   hence thesis by A10;
+   hence thesis by A1;
   end;
-  suppose A11: not x in X;
-   A12: dom f = X by PBOOLE:def 3;
-   A13: dom b1 = X by PBOOLE:def 3;
-   A14: dom b2 = X by PBOOLE:def 3;
-   thus f.x = 0 by A11,A12,FUNCT_1:def 4 .= 0-'0 by BINARITH:51
-           .= 0-'b2.x by A11,A14,FUNCT_1:def 4
-           .= b1.x-'b2.x by A11,A13,FUNCT_1:def 4;
+  suppose A2: not x in X;
+   A3: dom f = X by PBOOLE:def 3;
+   A4: dom b1 = X by PBOOLE:def 3;
+   A5: dom b2 = X by PBOOLE:def 3;
+   thus f.x = 0 by A2,A3,FUNCT_1:def 4 .= 0-'0 by BINARITH:51
+           .= 0-'b2.x by A2,A5,FUNCT_1:def 4
+           .= b1.x-'b2.x by A2,A4,FUNCT_1:def 4;
  end;
  end;
  uniqueness proof let it1, it2 be ManySortedSet of X such that
-A15:  for x being set holds it1.x = b1.x-'b2.x and
-A16:  for x being set holds it2.x = b1.x-'b2.x;
+A6:  for x being set holds it1.x = b1.x-'b2.x and
+A7:  for x being set holds it2.x = b1.x-'b2.x;
        now let x be set; assume x in X;
-    thus it1.x = b1.x-'b2.x by A15 .= it2.x by A16;
+    thus it1.x = b1.x-'b2.x by A6 .= it2.x by A7;
    end;
   hence it1 = it2 by PBOOLE:3;
  end;
@@ -2108,13 +2108,13 @@ end;
 theorem Th56:
  for X, x being set holds (EmptyBag X).x = 0
 proof let X, x be set;
-A2: dom (X --> 0) = X by FUNCOP_1:19;
+A1: dom (X --> 0) = X by FUNCOP_1:19;
  per cases;
  suppose x in X;
   hence (EmptyBag X).x = 0 by FUNCOP_1:13;
  end;
  suppose not x in X;
-  hence (EmptyBag X).x = 0 by A2,FUNCT_1:def 4;
+  hence (EmptyBag X).x = 0 by A1,FUNCT_1:def 4;
 end;
 end;
 
@@ -2279,7 +2279,7 @@ A14: for p, q being bag of n holds [p, q] in B2 iff p <=' q;
  end;
 end;
 
-Lm1:
+Lm2:
  for n being Ordinal holds BagOrder n is_reflexive_in Bags n
 proof let n be Ordinal;
  let x be set; assume
@@ -2289,7 +2289,7 @@ proof let n be Ordinal;
     hence thesis by Def16;
 end;
 
-Lm2:
+Lm3:
  for n being Ordinal holds BagOrder n is_antisymmetric_in Bags n
 proof let n be Ordinal; set BO = BagOrder n;
  let x, y be set; assume
@@ -2302,7 +2302,7 @@ proof let n be Ordinal; set BO = BagOrder n;
      hence x = y;
 end;
 
-Lm3:
+Lm4:
  for n being Ordinal holds BagOrder n is_transitive_in Bags n
 proof let n be Ordinal; set BO = BagOrder n;
   let x, y, z be set such that
@@ -2317,12 +2317,12 @@ proof let n be Ordinal; set BO = BagOrder n;
     hence [x,z] in BO by Def16;
 end;
 
-Lm4:
+Lm5:
  for n being Ordinal holds BagOrder n linearly_orders Bags n
 proof let n be Ordinal; set BO = BagOrder n;
-A1: BO is_reflexive_in Bags n by Lm1;
-A2: BO is_antisymmetric_in Bags n by Lm2;
-A3: BO is_transitive_in Bags n by Lm3;
+A1: BO is_reflexive_in Bags n by Lm2;
+A2: BO is_antisymmetric_in Bags n by Lm3;
+A3: BO is_transitive_in Bags n by Lm4;
       BO is_connected_in Bags n proof let x, y be set; assume
   A4: x in Bags n & y in Bags n & x <> y & not [x,y] in BO;
       then reconsider p = x, q = y as bag of n by Def14;
@@ -2339,7 +2339,7 @@ registration
  coherence
   proof set BO = BagOrder n;
 A1: field BO = Bags n by ORDERS_1:100;
-       BO linearly_orders Bags n by Lm4;
+       BO linearly_orders Bags n by Lm5;
    then BO is_connected_in Bags n by ORDERS_1:def 8;
    then BO is connected by A1,RELAT_2:def 14;
   hence thesis by ORDERS_1:def 5;
@@ -2614,34 +2614,34 @@ then A41:        e is ManySortedSet of X by PBOOLE:def 3;
              then eb0.x = 0 by A40,FUNCT_7:33;
              hence eb0.x <= g.x;
             end;
-            suppose A44: x <> b;
-            then A45: eb0.x = e.x by FUNCT_7:34;
+            suppose A43: x <> b;
+            then A44: eb0.x = e.x by FUNCT_7:34;
                  e.x <= f.x by A41,A42,Def17;
-             hence eb0.x <= g.x by A44,A45,FUNCT_7:34;
+             hence eb0.x <= g.x by A43,A44,FUNCT_7:34;
            end;
            end;
            then reconsider eb0 as Element of NatMinor g by Def17;
                e.b <= f.b by A41,Def17;
            then e.b < fb1 by A15,XREAL_1:2;
-        then A46: e.b in fb1 by EULER_1:1;
-        then A47: [eb0,e.b] in dom r by A39,ZFMISC_1:106;
+        then A45: e.b in fb1 by EULER_1:1;
+        then A46: [eb0,e.b] in dom r by A39,ZFMISC_1:106;
                 e = e+*(b,e.b) by FUNCT_7:37
              .= eb0+*(b,e.b) by FUNCT_7:36;
-            then e = r.[eb0,e.b] by A24,A46;
-        hence x in rng r by A47,FUNCT_1:def 5;
+            then e = r.[eb0,e.b] by A24,A45;
+        hence x in rng r by A46,FUNCT_1:def 5;
       end;
      end;
    hence Card NatMinor f = card [:ng,f.b+1 :] by CARD_1:21
      .= cng * card(f.b+1) by CARD_2:65
      .= cng * (f.b+1) by CARD_1:def 5
-     .= multnat.(multnat $$ (B, addnat[:](f,1)), f.b+1) by A13,A14,Th1
+     .= multnat.(multnat $$ (B, addnat[:](f,1)), f.b+1) by A13,A14,Lm1
      .= multnat $$ (B \/ {b}, addnat[:](f,1)) by A6,A8,SETWOP_2:4;
   end;
-A48: for B being Element of Fin X holds P[B] from SETWISEO:sch 2(A1,A5);
+A47: for B being Element of Fin X holds P[B] from SETWISEO:sch 2(A1,A5);
  let f be finite-support Function of X, NAT;
       for x being Element of X holds not x in support f implies f.x = 0
     by Def7;
- hence Card NatMinor f = multnat $$ (support f, addnat[:](f,1)) by A48;
+ hence Card NatMinor f = multnat $$ (support f, addnat[:](f,1)) by A47;
 end;
 
 registration
@@ -2727,7 +2727,7 @@ A1: i in dom divisors b;
    consider S being non empty finite Subset of Bags n such that
 A2: divisors b = SgmX(BagOrder n, S) and
 A3: (for p being bag of n holds p in S iff p divides b) by Def18;
-       BagOrder n linearly_orders Bags n by Lm4;
+       BagOrder n linearly_orders Bags n by Lm5;
 then A4: BagOrder n linearly_orders S by ORDERS_1:134;
 A5: (divisors b)/.i = (divisors b).i by A1,FINSEQ_4:def 4;
        (divisors b)/.i is Element of Bags n;
@@ -2747,7 +2747,7 @@ A1: divisors b = SgmX(BagOrder n, S) and
 A2: (for p being bag of n holds p in S iff p divides b) by Def18;
        EmptyBag n divides b by Th63;
 then A3: EmptyBag n in S by A2;
-       BagOrder n linearly_orders Bags n by Lm4;
+       BagOrder n linearly_orders Bags n by Lm5;
 then A4: BagOrder n linearly_orders S by ORDERS_1:134;
        now let y be Element of Bags n; assume y in S;
           EmptyBag n <=' y by Th64;
@@ -2782,7 +2782,7 @@ proof let n be Ordinal;
   consider S being non empty finite Subset of Bags n such that
 A1: divisors EmptyBag n = SgmX(BagOrder n, S) and
 A2: for p being bag of n holds p in S iff p divides EmptyBag n by Def18;
-       BagOrder n linearly_orders Bags n by Lm4;
+       BagOrder n linearly_orders Bags n by Lm5;
 then A3: BagOrder n linearly_orders S by ORDERS_1:134;
        EmptyBag n in S by A2;
    then A4:  { EmptyBag n } c= S by ZFMISC_1:37;
@@ -2880,7 +2880,7 @@ proof let n be Ordinal, b, b1, b2 be bag of n;
  consider S being non empty finite Subset of Bags n such that
 A1: divisors b = SgmX(BagOrder n, S) and
 A2: for p being bag of n holds p in S iff p divides b by Def18;
-       BagOrder n linearly_orders Bags n by Lm4;
+       BagOrder n linearly_orders Bags n by Lm5;
    then A3: BagOrder n linearly_orders S by ORDERS_1:134;
  assume
 A4: b = b1+b2;
@@ -3501,14 +3501,12 @@ theorem Th84:
    for b being bag of n st b <> EmptyBag n holds (1_(n,L)).b = 0.L
 proof let n be set, L be unital (non empty multLoopStr_0);
        set Z = 0_(n,L);
- Z = (Bags n --> 0.L);
-then A2: dom Z = Bags n by FUNCOP_1:19;
- Z+*(EmptyBag n,1.L) = 1_(n,L);
- hence (1_(n,L)).EmptyBag n = 1.L by A2,FUNCT_7:33;
+A1: dom Z = Bags n by FUNCOP_1:19;
+ thus (1_(n,L)).EmptyBag n = 1.L by A1,FUNCT_7:33;
  let b be bag of n; assume
-A4: b <> EmptyBag n;
-A5: b in Bags n by Def14;
- thus (1_(n,L)).b = Z.b by A4,FUNCT_7:34 .= 0.L by A5,FUNCOP_1:13;
+A2: b <> EmptyBag n;
+A3: b in Bags n by Def14;
+ thus (1_(n,L)).b = Z.b by A2,FUNCT_7:34 .= 0.L by A3,FUNCOP_1:13;
 end;
 
 definition
@@ -4367,9 +4365,7 @@ registration
                  (non empty LoopStr),
      p, q be Polynomial of n, L;
  cluster p-q -> finite-Support;
- coherence proof p-q = p+-q;
-  hence thesis;
- end;
+ coherence;
 end;
 
 registration
@@ -4379,8 +4375,7 @@ registration
     set Z = 0_(n, S);
         now given x being set such that
     A1: x in Support Z; reconsider x as Element of Bags n by A1;
-            Z = (Bags n) --> 0.S;
-        then Z.x = 0.S by FUNCOP_1:13;
+        Z.x = 0.S by FUNCOP_1:13;
       hence contradiction by A1,Def9;
     end;
     then Support Z = {} by XBOOLE_0:def 1;
@@ -4402,16 +4397,16 @@ registration
     reconsider O' as Series of n, L;
         now let x be set;
      hereby assume
-     A3: x in Support O'; then reconsider x' = x as Element of Bags n;
+     A1: x in Support O'; then reconsider x' = x as Element of Bags n;
          assume x <> EmptyBag n;
          then O'.x = 0_(n,L).x' by FUNCT_7:34 .= 0.L by FUNCOP_1:13;
-      hence contradiction by A3,Def9;
+      hence contradiction by A1,Def9;
      end; assume
-     A4: x = EmptyBag n;
+     A2: x = EmptyBag n;
              dom 0_(n,L) = Bags n by FUNCOP_1:19;
-         then O'.x = 1.L by A4,FUNCT_7:33;
+         then O'.x = 1.L by A2,FUNCT_7:33;
          then O'.x <> 0.L by Th27;
-      hence x in Support O' by A4,Def9;
+      hence x in Support O' by A2,Def9;
     end;
     then Support O' = {EmptyBag n} by TARSKI:def 1;
   hence thesis by Def10;
@@ -4502,8 +4497,8 @@ A2: now let x be Element of P, y be Element of P;
      thus A[x,y,u] by A3,A4;
     end;
    consider fadd being Function of [:P,P:],P such that
- A5: for x being Element of P, y being Element of P holds A[x,y,fadd.[x,y]]
-      from FUNCT_2:sch 7(A2);
+ A5: for x being Element of P, y being Element of P holds A[x,y,fadd.(x,y)]
+      from BINOP_1:sch 3(A2);
     defpred M[set, set, set] means
       ex p, q, r being Polynomial of n, L st p = $1 & q = $2 & r = $3 & p*'q=r;
 A6: now let x be Element of P, y be Element of P;
@@ -4520,8 +4515,8 @@ A6: now let x be Element of P, y be Element of P;
      thus M[x,y,u] by A7,A8;
     end;
    consider fmult being Function of [:P,P:],P such that
- A9: for x being Element of P, y being Element of P holds M[x,y,fmult.[x,y]]
-      from FUNCT_2:sch 7(A6);
+ A9: for x being Element of P, y being Element of P holds M[x,y,fmult.(x,y)]
+      from BINOP_1:sch 3(A6);
     reconsider Z = (Bags n) --> 0.L
       as Function of Bags n, the carrier of L by FUNCOP_1:57;
     reconsider Z' = Z as Function of Bags n, L;
@@ -4579,16 +4574,16 @@ A13:    x in the carrier of R;
   hereby let x, y be Element of R, p, q be Polynomial of n, L such that
   A16: x = p & y = q;
       consider p', q', r' being Polynomial of n, L such that
-  A17: p' = x & q' = y & r' = fadd.[x,y] and
+  A17: p' = x & q' = y & r' = fadd.(x,y) and
   A18: p'+q'= r' by A5;
     thus x+y = p+q by A16,A17,A18;
   end;
   hereby let x, y be Element of R, p, q be Polynomial of n, L such that
   A19: x = p & y = q;
       consider p', q', r' being Polynomial of n, L such that
-  A20: p' = x & q' = y & r' = fmult.[x,y] and
+  A20: p' = x & q' = y & r' = fmult.(x,y) and
   A21: p'*'q'= r' by A9;
-  thus x*y = fmult.(x,y) .= p*'q by A19,A20,A21,BINOP_1:def 1;
+  thus x*y = fmult.(x,y) .= p*'q by A19,A20,A21;
   end;
   thus 0.R = (Bags n) --> 0.L
           .= 0_(n,L);
@@ -4630,12 +4625,12 @@ then A33: the carrier of it1 = the carrier of it2 by TARSKI:2;
       reconsider a' = a, b' = b as Element of it2 by A32;
       reconsider a1' = a', b1' = b' as Element of it2;
      thus (the add of it1).(a, b)
-        = (the add of it1).[a, b] by BINOP_1:def 1
+        = (the add of it1).[a, b]
        .= a1+b1
        .= p+q by A23
        .= a1'+b1' by A28
        .= (the add of it2).[a', b']
-       .= (the add of it2).(a, b) by BINOP_1:def 1;
+       .= (the add of it2).(a, b);
     end;
 then A34: the add of it1 = the add of it2 by A33,BINOP_1:2;
 A35: now let a, b be Element of it1;
@@ -4741,7 +4736,7 @@ A1: y*z = q*'r by Def27;
  end;
 end;
 
-Lm20: now
+Lm6: now
  let n be Ordinal,
      L be right_zeroed Abelian add-associative right_complementable
           unital distributive associative
@@ -4749,12 +4744,12 @@ Lm20: now
    set Pm = Polynom-Ring (n, L);
  let x, e be Element of Pm;
  assume
-A2: e = 1_ Pm;
+A1: e = 1_ Pm;
  reconsider p = x as Polynomial of n, L by Def27;
-A1:  1_ Pm = 1_(n,L) by Def27;
- hence x*e = p*'1_(n,L) by A2,Def27
+A2:  1_ Pm = 1_(n,L) by Def27;
+ hence x*e = p*'1_(n,L) by A1,Def27
           .= x by Th88;
- thus e*x = 1_(n,L)*'p by A1,A2,Def27
+ thus e*x = 1_(n,L)*'p by A2,A1,Def27
          .= x by Th89;
 end;
 
@@ -4769,15 +4764,15 @@ registration
    thus Pm is unital
    proof
     take e = 1_ Pm;
-    thus thesis by Lm20;
+    thus thesis by Lm6;
    end;
   let x, y, z be Element of Pm;
   reconsider p = x, q = y, r = z as Polynomial of n, L by Def27;
-A2: x*y = p*'q by Def27;
-A3: x*z = p*'r by Def27;
+A1: x*y = p*'q by Def27;
+A2: x*z = p*'r by Def27;
        y+z = q+r by Def27;
   hence x*(y+z) = p*'(q+r) by Def27 .= p*'q+p*'r by Th85
-        .= x*y + x*z by A2,A3,Def27;
+        .= x*y + x*z by A1,A2,Def27;
  end;
 end;
 
@@ -4793,9 +4788,9 @@ proof
           unital distributive associative
           non trivial (non empty doubleLoopStr);
   set Pm = Polynom-Ring (n, L);
-a1: 1_ Pm = 1_(n,L) by Def27;
+A1: 1_ Pm = 1_(n,L) by Def27;
   then reconsider e = 1_(n,L) as Element of Pm;
-  for x be Element of Pm holds x*e = x & e*x = x by a1,Lm20;
+  for x be Element of Pm holds x*e = x & e*x = x by A1,Lm6;
   hence 1.Polynom-Ring (n, L) = 1_(n,L) by GROUP_1:def 5;
 end;
 

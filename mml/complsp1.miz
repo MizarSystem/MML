@@ -35,7 +35,7 @@ canceled 2;
 theorem Th3:
    0c is_a_unity_wrt addcomplex by BINOP_2:1,SETWISEO:22;
 
- Th4:
+ Lm1:
    the_unity_wrt addcomplex = 0c by BINOP_2:1;
 
 canceled 2;
@@ -75,7 +75,7 @@ func diffcomplex equals
    end;
 end;
 
- Th9:
+ Lm2:
  diffcomplex.(c1,c2) = c1 - c2 by BINOP_2:def 4;
 
 canceled 3;
@@ -123,7 +123,7 @@ definition let c be complex number;
  end;
 end;
 
-Lm1:
+Lm3:
    (multcomplex[;](c,id COMPLEX)).c' = c*c'
  proof
   thus (multcomplex[;](c,id COMPLEX)).c'
@@ -133,17 +133,10 @@ Lm1:
  end;
 
 theorem Th16:
-  (c multcomplex).c' = c*c'
- proof
-  c multcomplex = multcomplex[;](c,id COMPLEX);
-  hence thesis by Lm1;
- end;
+  (c multcomplex).c' = c*c' by Lm3;
 
 theorem Th17:
-   c multcomplex is_distributive_wrt addcomplex
- proof c multcomplex = multcomplex[;](c,id COMPLEX);
-  hence thesis by Th15,FINSEQOP:55;
- end;
+   c multcomplex is_distributive_wrt addcomplex by Th15,FINSEQOP:55;
 
 definition
  func abscomplex -> Function of COMPLEX,REAL means
@@ -196,26 +189,16 @@ reserve x,z,z1,z2,z3 for Element of COMPLEX n,
         A,B for Subset of COMPLEX n;
 
 theorem Th18:
-   len z = n
- proof n-tuples_on COMPLEX = COMPLEX n;
-  hence thesis by FINSEQ_2:109;
- end;
+   len z = n by FINSEQ_2:109;
 
-Lm3: dom z = Seg n
+Lm4: dom z = Seg n
  proof len z = n by Th18; hence thesis by FINSEQ_1:def 3; end;
 
 theorem
-  for z being Element of COMPLEX 0 holds z = <*>COMPLEX
- proof let z be Element of COMPLEX 0;
-      0-tuples_on COMPLEX = COMPLEX 0;
-  hence thesis by FINSEQ_2:113;
- end;
+  for z being Element of COMPLEX 0 holds z = <*>COMPLEX by FINSEQ_2:113;
 
 theorem
-  <*>COMPLEX is Element of COMPLEX 0
- proof 0-tuples_on COMPLEX = COMPLEX 0;
-  hence thesis by FINSEQ_2:114;
- end;
+  <*>COMPLEX is Element of COMPLEX 0 by FINSEQ_2:114;
 
 theorem Th21:
   k in Seg n implies z.k in COMPLEX
@@ -227,17 +210,11 @@ theorem Th21:
 canceled;
 
 theorem Th23:
-  (for k st k in Seg n holds z1.k = z2.k) implies z1 = z2
- proof n-tuples_on COMPLEX = COMPLEX n;
-  hence thesis by FINSEQ_2:139;
- end;
+  (for k st k in Seg n holds z1.k = z2.k) implies z1 = z2 by FINSEQ_2:139;
 
 definition let n,z1,z2;
   redefine func z1 + z2 -> Element of COMPLEX n;
-  coherence
- proof z1 + z2 = addcomplex.:(z1,z2) & n-tuples_on COMPLEX = COMPLEX n;
-  hence thesis by FINSEQ_2:140;
- end;
+  coherence by FINSEQ_2:140;
 end;
 
 theorem Th24:
@@ -245,29 +222,16 @@ theorem Th24:
  proof assume that
 A1:   k in Seg n and
 A2:   c1 = z1.k & c2 = z2.k;
-      z1 + z2 = addcomplex.:(z1,z2) & k in dom(z1+z2) by A1,Lm3;
+      z1 + z2 = addcomplex.:(z1,z2) & k in dom(z1+z2) by A1,Lm4;
   hence (z1 + z2).k = addcomplex.(c1,c2) by A2,FUNCOP_1:28
                    .= c1 + c2 by BINOP_2:def 3;
  end;
 
 theorem Th25:
-  z1 + z2 = z2 + z1
- proof
-   thus z1 + z2 = addcomplex.:(z1,z2)
-               .= addcomplex.:(z2,z1) by FINSEQOP:34
-               .= z2 + z1;
- end;
+  z1 + z2 = z2 + z1 by FINSEQOP:34;
 
 theorem Th26:
-  z1 + (z2 + z3) = z1 + z2 + z3
- proof
-   thus z1 + (z2 + z3)
-      = addcomplex.:(z1,z2+z3)
-     .= addcomplex.:(z1,addcomplex.:(z2,z3))
-     .= addcomplex.:(addcomplex.:(z1,z2),z3) by FINSEQOP:29
-     .= addcomplex.:(z1+z2,z3)
-     .= z1 + z2 + z3;
- end;
+  z1 + (z2 + z3) = z1 + z2 + z3 by FINSEQOP:29;
 
 definition let n;
   func 0c n -> FinSequence of COMPLEX equals
@@ -277,35 +241,21 @@ end;
 
 definition let n;
   redefine func 0c n -> Element of COMPLEX n;
-  coherence
- proof 0c n = n |-> 0c & n-tuples_on COMPLEX = COMPLEX n;
-  hence thesis;
- end;
+  coherence;
 end;
 
 theorem
-  k in Seg n implies (0c n).k = 0c
- proof 0c n = n |-> 0c;
-  hence thesis by FINSEQ_2:70;
- end;
+  k in Seg n implies (0c n).k = 0c by FINSEQ_2:70;
 
-Lm4: z + 0c n = z
- proof
-  thus z + 0c n = z + (n|->0c)
-               .= addcomplex.:(z,n|->0c)
-               .= z by Th4,FINSEQOP:57;
- end;
+Lm5: z + 0c n = z by Lm1,FINSEQOP:57;
 
 theorem Th28:
   z + 0c n = z & z = 0c n + z
- proof thus z + 0c n = z by Lm4; hence thesis by Th25; end;
+ proof thus z + 0c n = z by Lm5; hence thesis by Th25; end;
 
 definition let n,z;
   redefine func -z -> Element of COMPLEX n;
-  coherence
- proof -z = compcomplex*z & n-tuples_on COMPLEX = COMPLEX n;
-  hence thesis by FINSEQ_2:133;
- end;
+  coherence by FINSEQ_2:133;
 end;
 
 theorem Th29:
@@ -313,19 +263,13 @@ theorem Th29:
  proof assume that
 A1:   k in Seg n and
 A2:   c = z.k;
-      -z = compcomplex*z & k in dom(-z) by A1,Lm3;
+      -z = compcomplex*z & k in dom(-z) by A1,Lm4;
   hence (-z).k = compcomplex.c by A2,FUNCT_1:22 .= -c by BINOP_2:def 1;
  end;
 
-Lm5: z + -z = 0c n
- proof
-  thus z + -z = addcomplex.:(z,-z)
-             .= addcomplex.:(z,compcomplex*z)
-             .= n|->0c by Th4,Th7,Th8,FINSEQOP:77
-             .= 0c n;
- end;
+Lm6: z + -z = 0c n by Lm1,Th7,Th8,FINSEQOP:77;
 
-Lm6: -0c n = 0c n
+Lm7: -0c n = 0c n
  proof
    thus -0c n = -(n|->0c)
              .= compcomplex*(n|->0c)
@@ -336,36 +280,31 @@ Lm6: -0c n = 0c n
 
 theorem Th30:
   z + -z = 0c n & -z + z = 0c n
- proof thus z + -z = 0c n by Lm5; hence -z + z = 0c n by Th25; end;
+ proof thus z + -z = 0c n by Lm6; hence -z + z = 0c n by Th25; end;
 
 theorem Th31:
-  z1 + z2 = 0c n implies z1 = -z2 & z2 = -z1
- proof
-   n-tuples_on COMPLEX = COMPLEX n & 0c n = n |-> 0c &
-   z1 + z2 = addcomplex.:(z1,z2) & -z1 = compcomplex*z1 & -z2 = compcomplex*z2;
-   hence thesis by Th4,Th7,Th8,FINSEQOP:78;
- end;
+  z1 + z2 = 0c n implies z1 = -z2 & z2 = -z1 by Lm1,Th7,Th8,FINSEQOP:78;
 
 theorem Th32:
   --z = z
- proof z + -z = 0c n by Lm5; hence thesis by Th31; end;
+ proof z + -z = 0c n by Lm6; hence thesis by Th31; end;
 
 theorem
   -z1 = -z2 implies z1 = z2
  proof assume -z1 = -z2; hence z1 = --z2 by Th32 .= z2 by Th32; end;
 
-Lm7: z1 + z = z2 + z implies z1 = z2
+Lm8: z1 + z = z2 + z implies z1 = z2
  proof assume z1 + z = z2 + z;
   then z1 + (z + -z)= (z2 + z) + -z by Th26;
-  then z1 + (z + -z)= z2 + (z + -z) & z + -z = 0c n by Lm5,Th26;
-  then z1 = z2 + 0c n by Lm4;
-  hence z1 = z2 by Lm4;
+  then z1 + (z + -z)= z2 + (z + -z) & z + -z = 0c n by Lm6,Th26;
+  then z1 = z2 + 0c n by Lm5;
+  hence z1 = z2 by Lm5;
  end;
 
 theorem
   z1 + z = z2 + z or z1 + z = z + z2 implies z1 = z2
  proof z1 + z = z2 + z iff z1 + z = z + z2 by Th25;
-  hence thesis by Lm7;
+  hence thesis by Lm8;
  end;
 
 theorem Th35:
@@ -374,18 +313,15 @@ theorem Th35:
        (z1 + z2) + (-z1 + -z2) = z1 + z2 + -z1 + -z2 by Th26
                           .= z2 + z1 + -z1 + -z2 by Th25
                           .= z2 + (z1 + -z1) + -z2 by Th26
-                          .= z2 + 0c n + -z2 by Lm5
-                          .= z2 + -z2 by Lm4
-                          .= 0c n by Lm5;
+                          .= z2 + 0c n + -z2 by Lm6
+                          .= z2 + -z2 by Lm5
+                          .= 0c n by Lm6;
    hence thesis by Th31;
  end;
 
 definition let n,z1,z2;
   redefine func z1 - z2 -> Element of COMPLEX n;
-  coherence
- proof n-tuples_on COMPLEX = COMPLEX n & z1 - z2 = diffcomplex.:(z1,z2);
-  hence thesis by FINSEQ_2:140;
- end;
+  coherence by FINSEQ_2:140;
 end;
 
 theorem
@@ -393,24 +329,18 @@ theorem
  proof assume that
 A1:   k in Seg n and
 A2:   c1 = z1.k & c2 = z2.k;
-      z1 - z2 = diffcomplex.:(z1,z2) & k in dom(z1 - z2) by A1,Lm3;
+      z1 - z2 = diffcomplex.:(z1,z2) & k in dom(z1 - z2) by A1,Lm4;
   hence (z1 - z2).k = diffcomplex.(c1,c2) by A2,FUNCOP_1:28
-                   .= c1 - c2 by Th9;
+                   .= c1 - c2 by Lm2;
  end;
 
 theorem Th37:
-  z1 - z2 = z1 + - z2
- proof
-  thus z1 - z2 = diffcomplex.:(z1,z2)
-              .= addcomplex.:(z1,compcomplex*z2) by Def3,FINSEQOP:89
-              .= addcomplex.:(z1,-z2)
-              .= z1 + -z2;
- end;
+  z1 - z2 = z1 + - z2 by Def3,FINSEQOP:89;
 
 theorem
   z - 0c n = z
  proof
-  thus z - 0c n = z + -0c n by Th37 .= z + 0c n by Lm6 .= z by Lm4;
+  thus z - 0c n = z + -0c n by Th37 .= z + 0c n by Lm7 .= z by Lm5;
  end;
 
 theorem
@@ -441,7 +371,7 @@ theorem Th42:
 
 theorem Th43:
   z - z = 0c n
- proof thus z - z = z + -z by Th37 .= 0c n by Lm5; end;
+ proof thus z - z = z + -z by Th37 .= 0c n by Lm6; end;
 
 theorem Th44:
   z1 - z2 = 0c n implies z1 = z2
@@ -490,7 +420,7 @@ theorem Th48:
 theorem Th49:
   z1 = z1 + z - z
  proof
-  thus z1 = z1 + 0c n by Lm4
+  thus z1 = z1 + 0c n by Lm5
          .= z1 + (z - z) by Th43
          .= z1 + z - z by Th46;
  end;
@@ -508,7 +438,7 @@ end;
 theorem Th51:
   z1 = z1 - z + z
  proof
-  thus z1 = z1 + 0c n by Lm4
+  thus z1 = z1 + 0c n by Lm5
          .= z1 + (-z + z) by Th30
          .= z1 + -z + z by Th26
          .= z1 - z + z by Th37;
@@ -516,11 +446,7 @@ theorem Th51:
 
 definition let n,c,z;
   redefine func c*z -> Element of COMPLEX n;
-  coherence
- proof
- n-tuples_on COMPLEX = COMPLEX n & c*z = (multcomplex[;](c,id COMPLEX))*z;
-  hence thesis by FINSEQ_2:133;
- end;
+  coherence by FINSEQ_2:133;
 end;
 
 theorem Th52:
@@ -528,7 +454,7 @@ theorem Th52:
  proof assume that
 A1:  k in Seg n and
 A2:  c' = z.k;
-      c*z = (c multcomplex)*z & k in dom(c*z) by A1,Lm3;
+      c*z = (c multcomplex)*z & k in dom(c*z) by A1,Lm4;
   hence (c*z).k = (c multcomplex).c' by A2,FUNCT_1:22 .= c*c' by Th16;
  end;
 
@@ -590,7 +516,7 @@ A1:  rng z c= COMPLEX by FINSEQ_1:def 4;
   thus 0c*z = multcomplex[;](0c,id COMPLEX)*z
            .= multcomplex[;](0c,(id COMPLEX)*z) by FUNCOP_1:44
            .= multcomplex[;](0c,z) by A1,RELAT_1:79
-           .= n|->0c by Th4,Th7,Th15,FINSEQOP:80
+           .= n|->0c by Lm1,Th7,Th15,FINSEQOP:80
            .= 0c n;
  end;
 
@@ -606,10 +532,7 @@ A1:   compcomplex.1r = -1r by BINOP_2:def 1;
 
 definition let n,z;
   redefine func abs z -> Element of n-tuples_on REAL;
-  correctness
- proof n-tuples_on COMPLEX = COMPLEX n & abs z = abscomplex*z;
-  hence thesis by FINSEQ_2:133;
- end;
+  correctness by FINSEQ_2:133;
 end;
 
 theorem Th59:
@@ -684,15 +607,15 @@ theorem Th64:
  proof assume
 A1:  |.z.| = 0;
       now let j; assume
-A3:  j in Seg n;
+A2:  j in Seg n;
    then reconsider c = z.j as Element of COMPLEX by Th21;
    0 <= Sum sqr abs z & sqrt Sum sqr abs z = 0 by A1,RVSUM_1:116;
    then Sum sqr abs z = 0 by SQUARE_1:92;
    then (abs z).j = (n|->0).j by RVSUM_1:121;
-   then |.c.| = (n|-> 0).j by A3,Th59;
-   then |.c.| = 0 by A3,FINSEQ_2:70;
+   then |.c.| = (n|-> 0).j by A2,Th59;
+   then |.c.| = 0 by A2,FINSEQ_2:70;
    then c = 0c by COMPLEX1:131;
-   hence z.j = (n|->0c).j by A3,FINSEQ_2:70;
+   hence z.j = (n|->0c).j by A2,FINSEQ_2:70;
   end;
   then z = n|->0c by Th23;
   hence thesis;
@@ -705,12 +628,7 @@ theorem Th65:
  end;
 
 theorem Th66:
-  |.-z.| = |.z.|
- proof
-   thus |.-z.| = sqrt Sum sqr abs -z
-              .= sqrt Sum sqr abs z by Th61
-              .= |.z.|;
- end;
+  |.-z.| = |.z.| by Th61;
 
 theorem
   |.c*z.| = |.c.|*|.z.|
@@ -726,7 +644,7 @@ A2:   0 <= |.c.| by COMPLEX1:132;
                .= |.c.|*|.z.|;
  end;
 
-Lm8: for t being Element of i-tuples_on REAL st j in Seg i holds t.j is Real
+Lm9: for t being Element of i-tuples_on REAL st j in Seg i holds t.j is Real
  proof let t be Element of i-tuples_on REAL;
   assume
 A1:  j in Seg i;
@@ -755,9 +673,9 @@ A4:    k in Seg n;
      set r2 = (sqr (abs z1 + abs z2)).k;
      reconsider c1 = z1.k, c2 = z2.k as Element of COMPLEX by A4,Th21;
      reconsider c12 = (z1 + z2).k as Element of COMPLEX by A4,Th21;
-     reconsider abs1 = (abs z1).k, abs2 = (abs z2).k as Real by A4,Lm8;
-     reconsider abs12 = (abs z1 + abs z2).k as Real by A4,Lm8;
-     reconsider abs'12 = (abs (z1 + z2)).k as Real by A4,Lm8;
+     reconsider abs1 = (abs z1).k, abs2 = (abs z2).k as Real by A4,Lm9;
+     reconsider abs12 = (abs z1 + abs z2).k as Real by A4,Lm9;
+     reconsider abs'12 = (abs (z1 + z2)).k as Real by A4,Lm9;
          |.c1 + c2.| <= |.c1.| + |.c2.| by COMPLEX1:142;
      then |.c12.| <= |.c1.| + |.c2.| by A4,Th24;
      then |.c12.| <= |.c1.| + abs2 by A4,Th59;
@@ -1081,7 +999,7 @@ definition let n,A,r;
   end;
 end;
 
- Th83:
+ Lm10:
   (for r' being real number st r' > 0 holds r + r' >= r1) implies r >= r1
    by XREAL_1:43;
 
@@ -1103,7 +1021,7 @@ A5:  r1 < lower_bound X + r' by A1,A3,SEQ_4:def 5;
     r <= r1 by A2,A4;
     hence lower_bound X + r' >= r by A5,XREAL_1:2;
    end;
-  hence lower_bound X >= r by Th83;
+  hence lower_bound X >= r by Lm10;
  end;
 
 theorem Th85:
@@ -1314,8 +1232,7 @@ theorem Th94:
 A1: x in X by SUBSET_1:10;
   assume Y <> {}; then consider y being Real such that
 A2: y in Y by SUBSET_1:10;
-   X + Y = { r + r1 : r in X & r1 in Y};
-   then x + y in X + Y by A1,A2;
+   x + y in X + Y by A1,A2;
   hence X + Y <> {};
  end;
 
@@ -1325,14 +1242,14 @@ theorem Th95:
       X+Y is bounded_below
  proof let X,Y be Subset of REAL;
   assume X is bounded_below; then consider r1 be real number such that
-A2: for r be real number st r in X holds r1<=r by SEQ_4:def 2;
+A1: for r be real number st r in X holds r1<=r by SEQ_4:def 2;
   assume Y is bounded_below; then consider r2 be real number such that
-A3: for r be real number st r in Y holds r2<=r by SEQ_4:def 2;
+A2: for r be real number st r in Y holds r2<=r by SEQ_4:def 2;
   take r1 + r2; let r be real number;
   assume r in X+Y; then consider r',r'' being Real such that
-A4: r = r' + r'' & r' in X & r'' in Y;
-   r1 <= r' & r2 <= r'' by A2,A3,A4;
-  hence r1+r2<=r by A4,XREAL_1:9;
+A3: r = r' + r'' & r' in X & r'' in Y;
+   r1 <= r' & r2 <= r'' by A1,A2,A3;
+  hence r1+r2<=r by A3,XREAL_1:9;
  end;
 
 theorem Th96:
@@ -1344,27 +1261,27 @@ A1: X <> {} and
 A2: X is bounded_below and
 A3: Y <> {} and
 A4: Y is bounded_below;
-A6: X + Y <> {} by A1,A3,Th94;
-A7: X+Y is bounded_below by A2,A4,Th95;
-A8:now let r be real number; assume r in X+Y; then consider r1,r2 such that
-A9:  r = r1 + r2 & r1 in X & r2 in Y;
-A10: r1 >= lower_bound X by A2,A9,SEQ_4:def 5;
-     r2 >= lower_bound Y by A4,A9,SEQ_4:def 5;
-    hence lower_bound X + lower_bound Y<=r by A9,A10,XREAL_1:9;
+A5: X + Y <> {} by A1,A3,Th94;
+A6: X+Y is bounded_below by A2,A4,Th95;
+A7:now let r be real number; assume r in X+Y; then consider r1,r2 such that
+A8:  r = r1 + r2 & r1 in X & r2 in Y;
+A9: r1 >= lower_bound X by A2,A8,SEQ_4:def 5;
+     r2 >= lower_bound Y by A4,A8,SEQ_4:def 5;
+    hence lower_bound X + lower_bound Y<=r by A8,A9,XREAL_1:9;
    end;
    now let r' be real number; assume 0<r';
-then A11:  r'/2 > 0 by XREAL_1:217;
+then A10:  r'/2 > 0 by XREAL_1:217;
      then consider r1 be real number such that
-A12:r1 in X & r1<lower_bound X+r'/2 by A1,A2,SEQ_4:def 5;
+A11:r1 in X & r1<lower_bound X+r'/2 by A1,A2,SEQ_4:def 5;
     consider r2 be real number such that
-A13:r2 in Y & r2<lower_bound Y+r'/2 by A3,A4,A11,SEQ_4:def 5;
+A12:r2 in Y & r2<lower_bound Y+r'/2 by A3,A4,A10,SEQ_4:def 5;
     take r = r1 + r2;
-    thus r in X+Y by A12,A13;
+    thus r in X+Y by A11,A12;
     lower_bound X + r'/2 + (lower_bound Y + r'/2)
       = lower_bound X + lower_bound Y + r';
-    hence r<lower_bound X + lower_bound Y+r' by A12,A13,XREAL_1:10;
+    hence r<lower_bound X + lower_bound Y+r' by A11,A12,XREAL_1:10;
    end;
-  hence thesis by A6,A7,A8,SEQ_4:def 5;
+  hence thesis by A5,A6,A7,SEQ_4:def 5;
  end;
 
 theorem Th97:
@@ -1442,26 +1359,26 @@ A1: A <> {} & B <> {};
    reconsider Y = {g(z) : Y[z]} as Subset of REAL from SubsetFD;
    reconsider Z = {f(z1,z) : P[z1,z]} as Subset of REAL from SubsetFD2;
    consider z1 such that
-A3: z1 in A by A1,SUBSET_1:10;
+A2: z1 in A by A1,SUBSET_1:10;
    consider z2 such that
-A4: z2 in B by A1,SUBSET_1:10;
-    |.x - z1.| in X & |.x - z2 .| in Y by A3,A4;then
-A5: |.x - z1.| + |.x - z2 .| in X + Y;
-A6: Z is bounded_below
+A3: z2 in B by A1,SUBSET_1:10;
+    |.x - z1.| in X & |.x - z2 .| in Y by A2,A3;then
+A4: |.x - z1.| + |.x - z2 .| in X + Y;
+A5: Z is bounded_below
     proof
      take 0; let r be real number;
      assume r in Z; then ex z1,z st r = |.z1 - z .| & z1 in A & z in B;
      hence thesis by Th65;
     end;
-A7: X <> {} & X is bounded_below
-    proof |.x - z1.| in X by A3;
+A6: X <> {} & X is bounded_below
+    proof |.x - z1.| in X by A2;
      hence X <> {};
      take 0; let r be real number;
      assume r in X; then ex z st r = |.x - z .| & z in A;
      hence thesis by Th65;
     end;
-A8: Y <> {} & Y is bounded_below
-    proof |.x - z2.| in Y by A4;
+A7: Y <> {} & Y is bounded_below
+    proof |.x - z2.| in Y by A3;
      hence Y <> {};
      take 0; let r be real number;
      assume r in Y; then ex z1 st r = |.x - z1 .| & z1 in B;
@@ -1470,21 +1387,21 @@ A8: Y <> {} & Y is bounded_below
     now let r; assume r in X + Y;
      then r in { r2 + r1 : r2 in X & r1 in Y};
      then consider r2,r1 such that
-A9:  r = r2 + r1 and
-A10: r2 in X & r1 in Y;
+A8:  r = r2 + r1 and
+A9: r2 in X & r1 in Y;
      consider z1 such that
-A11: r2 = |.x - z1.| and
-A12: z1 in A by A10;
+A10: r2 = |.x - z1.| and
+A11: z1 in A by A9;
      consider z2 such that
-A13: r1 = |.x - z2.| & z2 in B by A10;
+A12: r1 = |.x - z2.| & z2 in B by A9;
     take r3 = |.z1 - z2.|;
-    r2 = |.z1 - x.| by A11,Th74;
-    hence r3 in Z & r3 <= r by A9,A12,A13,Th75;
+    r2 = |.z1 - x.| by A10,Th74;
+    hence r3 in Z & r3 <= r by A8,A11,A12,Th75;
    end;
-   then A14: lower_bound (X + Y) >= lower_bound Z by A5,A6,Th97;
+   then A13: lower_bound (X + Y) >= lower_bound Z by A4,A5,Th97;
    lower_bound X = dist(x,A) & lower_bound Y = dist(x,B) &
    lower_bound Z = dist(A,B) by Def18,Def20;
-  hence dist(x,A) + dist(x,B) >= dist(A,B) by A7,A8,A14,Th96;
+  hence dist(x,A) + dist(x,B) >= dist(A,B) by A6,A7,A13,Th96;
  end;
 
 theorem
@@ -1565,26 +1482,14 @@ end;
 
 registration let n;
   cluster the_Complex_Space n -> non empty;
-  coherence
-  proof
-    the_Complex_Space n = TopStruct(#COMPLEX n,ComplexOpenSets(n)#);
-    hence the carrier of the_Complex_Space n is non empty;
-  end;
+  coherence;
 end;
 
 theorem
-  the topology of the_Complex_Space n = ComplexOpenSets n
- proof
-  the_Complex_Space n = TopStruct(#COMPLEX n,ComplexOpenSets(n)#);
-  hence thesis;
- end;
+  the topology of the_Complex_Space n = ComplexOpenSets n;
 
 theorem
-  the carrier of the_Complex_Space n = COMPLEX n
- proof
-  the_Complex_Space n = TopStruct(#COMPLEX n,ComplexOpenSets(n)#);
-  hence thesis;
- end;
+  the carrier of the_Complex_Space n = COMPLEX n;
 
  reserve p,q for Point of the_Complex_Space n,
          V for Subset of the_Complex_Space n;
@@ -1638,9 +1543,7 @@ theorem Th110:
     A is closed iff V is closed
  proof let A be Subset of COMPLEX n such that
 A1: A = V;
-    [#] the_Complex_Space n = the carrier of the_Complex_Space n
-                        .= COMPLEX n;
-   then [#](the_Complex_Space n) \ V = A` by A1,SUBSET_1:def 5;
+   [#](the_Complex_Space n) \ V = A` by A1,SUBSET_1:def 5;
    then [#](the_Complex_Space n) \ V is open iff A` is open by Th108;
   hence thesis by Th109,PRE_TOPC:def 6;
  end;

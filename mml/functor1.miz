@@ -8,15 +8,17 @@ environ
 
  vocabularies RELAT_2, ALTCAT_1, ALTCAT_2, MSUALG_6, FUNCTOR0, RELAT_1,
       FUNCT_3, FUNCT_1, SGRAPH1, BOOLE, MSUALG_3, CAT_1, ENS_1, PRALG_1,
-      PBOOLE, NATTRA_1;
+      PBOOLE, NATTRA_1, REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, BINOP_1, PZFMISC1, STRUCT_0, PBOOLE, MSUALG_3, ALTCAT_1,
+      FUNCT_2, BINOP_1, REALSET1,
+      PZFMISC1, STRUCT_0, PBOOLE, MSUALG_3, ALTCAT_1,
       ALTCAT_2, FUNCT_3, FUNCTOR0;
  constructors FUNCTOR0, PRALG_1, MSUALG_3, PZFMISC1;
  registrations RELAT_1, FUNCT_1, ALTCAT_2, STRUCT_0, FUNCTOR0, RELSET_1,
       SUBSET_1, FUNCT_2, FUNCOP_1, PBOOLE;
  requirements SUBSET, BOOLE;
- definitions TARSKI, PBOOLE, MSUALG_3, ALTCAT_2, FUNCTOR0, PZFMISC1;
+ definitions TARSKI, PBOOLE, MSUALG_3, ALTCAT_2, FUNCTOR0, PZFMISC1, BINOP_1,
+ REALSET1;
  theorems ALTCAT_1, ALTCAT_2, FUNCTOR0, FUNCT_1, FUNCT_2, ZFMISC_1, PBOOLE,
       RELAT_1, MSUALG_3, BINOP_1, RELSET_1, XBOOLE_1, PZFMISC1;
 
@@ -49,11 +51,7 @@ registration let C1,C2 be non empty reflexive AltCatStr;
  let F be feasible FunctorStr over C1,C2,
      A be non empty reflexive SubCatStr of C1;
  cluster F|A -> feasible;
- coherence
-  proof
-    F|A = F * incl A;
-    hence thesis;
-  end;
+ coherence;
 end;
 
 begin
@@ -451,16 +449,7 @@ theorem
      F being feasible FunctorStr over C1,C2,
      G being FunctorStr over C2,C3
  for A being non empty reflexive SubCatStr of C1 holds
-  (G*F)|A = G*(F|A)
-  proof
-  let C1,C2,C3 be non empty reflexive AltCatStr,
-      F be feasible FunctorStr over C1,C2,
-      G be FunctorStr over C2,C3;
-  let A be non empty reflexive SubCatStr of C1;
-    thus (G*F)|A = (G*F)*incl A
-                .= G*(F*incl A) by FUNCTOR0:33
-                .= G*(F|A);
-  end;
+  (G*F)|A = G*(F|A) by FUNCTOR0:33;
 
 canceled;
 
@@ -497,8 +486,7 @@ A5:      (the Arrows of A) = B' &
 A6:         i in I;
 A7:           (the Arrows of B).i = (the Arrows of A).i
             proof
-              (the Arrows of B) =
-              (the Arrows of A)|[:the carrier of B, the carrier of B:]
+              (the Arrows of B) = (the Arrows of A)||the carrier of B
                                                  by A1,ALTCAT_2:def 13;
               hence thesis by A6,FUNCT_1:72;
             end;
@@ -522,7 +510,7 @@ A9:     the carrier of B c= the carrier of A by ALTCAT_2:def 11;
     then A11: dom(the Arrows of A) /\ I = I by A10,XBOOLE_1:28;
     then dom((the Arrows of A)|I) = I by RELAT_1:90;
     then reconsider
-         XX = ((the Arrows of A)|[:the carrier of B, the carrier of B:])
+         XX = ((the Arrows of A)||the carrier of B)
                as ManySortedSet of I by PBOOLE:def 3;
     the Arrows of B = XX
     proof
@@ -538,17 +526,17 @@ A14:       y in the carrier of B &
            z in the carrier of B by A12,A13,ZFMISC_1:106;
            let x be set;
            assume x in (the Arrows of B).i;
-           then A15: x in (the Arrows of B).(y,z) by A13,BINOP_1:def 1;
+           then A15: x in (the Arrows of B).(y,z) by A13;
            the Arrows of B cc= the Arrows of A by ALTCAT_2:def 11;
            then (the Arrows of B).i c= (the Arrows of A).i
                  by A12,ALTCAT_2:def 2;
            then (the Arrows of B).(y,z) c= (the Arrows of A).i
-                 by A13,BINOP_1:def 1;
+                 by A13;
            then (the Arrows of B).(y,z) c= (the Arrows of A).(y,z)
-                 by A13,BINOP_1:def 1;
+                 by A13;
            then A16:              x in (the Arrows of A).(y,z) by A15;
            XX.(y,z) = (the Arrows of A).(y,z) by A9,A14,ALTCAT_1:7;
-           hence x in XX.i by A13,A16,BINOP_1:def 1;
+           hence x in XX.i by A13,A16;
         end;
     thus XX c= the Arrows of B
         proof
@@ -583,18 +571,17 @@ A23:             rng ((id the Arrows of B).i)
 A24:        (the Arrows of A).(y,z) = (the Arrows of B).(y,z)
             proof
                  (the Arrows of A).(y,z) = (the Arrows of B).i
-                                     by A19,A22,A23,BINOP_1:def 1;
+                                     by A19,A22,A23;
             hence (the Arrows of A).(y,z) = (the Arrows of B).(y,z)
-                                                       by A19,BINOP_1:def 1;
+                                                       by A19;
             end;
-            x in (the Arrows of A).(y,z) by A18,A19,A20,BINOP_1:def 1;
-            hence x in (the Arrows of B).i by A19,A24,BINOP_1:def 1;
+            x in (the Arrows of A).(y,z) by A18,A19,A20;
+            hence x in (the Arrows of B).i by A19,A24;
           end;
           hence thesis;
         end;
     end;
-    hence the Arrows of B =
-          ((the Arrows of A)|[:the carrier of B, the carrier of B:]);
+    hence the Arrows of B = (the Arrows of A)||the carrier of B;
   end;
 
 begin :: Theorems about 'full' and 'faithful' of Functor Structures
@@ -615,59 +602,55 @@ A1:  F is full;
                       (the Arrows of C2)*the ObjectMap of F such that
 A2:     f = the MorphMap of F & f is "onto" by A1,FUNCTOR0:def 33;
 A3: [o1,o2] in I by ZFMISC_1:106;
-A4: (the MorphMap of F).[o1,o2] = (the MorphMap of F).(o1,o2)
-                                                       by BINOP_1:def 1;
-A5: [o1,o2] in dom(the ObjectMap of F)
+A4: [o1,o2] in dom(the ObjectMap of F)
                         by A3,FUNCT_2:def 1;
         rng(f.[o1,o2]) = ((the Arrows of C2)*the ObjectMap of F).[o1,o2]
                        by A2,A3,MSUALG_3:def 3;
      then rng(Morph-Map(F,o1,o2)) =
          ((the Arrows of C2)*the ObjectMap of F).[o1,o2]
-                                           by A2,A4
+                                           by A2
      .= (the Arrows of C2).((the ObjectMap of F).[o1,o2])
-                                       by A5,FUNCT_1:23
-     .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by BINOP_1:def 1
+                                       by A4,FUNCT_1:23
+     .= (the Arrows of C2).((the ObjectMap of F).(o1,o2))
      .= (the Arrows of C2).[F.o1,F.o2] by FUNCTOR0:23
-     .= (the Arrows of C2).(F.o1,F.o2) by BINOP_1:def 1
+     .= (the Arrows of C2).(F.o1,F.o2)
      .= <^F.o1,F.o2^> by ALTCAT_1:def 2;
     hence Morph-Map(F,o1,o2) is onto by FUNCT_2:def 3;
   end;
   assume
-A6:  for o1,o2 being object of C1 holds
+A5:  for o1,o2 being object of C1 holds
        Morph-Map(F,o1,o2) is onto;
     consider I2' being non empty set, B' being ManySortedSet of I2',
              f' being Function of I,I2' such that
-A7: the ObjectMap of F = f' and
-A8: (the Arrows of C2) = B' &
+A6: the ObjectMap of F = f' and
+A7: (the Arrows of C2) = B' &
     the MorphMap of F is ManySortedFunction of (the Arrows of C1),
     B'*f' by FUNCTOR0:def 4;
     reconsider f = the MorphMap of F as
                    ManySortedFunction of (the Arrows of C1),
-                       (the Arrows of C2)*the ObjectMap of F by A7,A8;
+                       (the Arrows of C2)*the ObjectMap of F by A6,A7;
     f is "onto"
     proof
      let i be set; assume i in I;
       then consider o1,o2 being set such that
-A9:          o1 in the carrier of C1 &
+A8:          o1 in the carrier of C1 &
              o2 in the carrier of C1 &
              i = [o1,o2] by ZFMISC_1:103;
-      reconsider o1, o2 as object of C1 by A9;
-A10:   Morph-Map(F,o1,o2) is onto by A6;
-A11:   [o1,o2] in I by ZFMISC_1:106;
-A12:   (the MorphMap of F).[o1,o2] = (the MorphMap of F).(o1,o2)
-                                                       by BINOP_1:def 1;
-A13: [o1,o2] in dom(the ObjectMap of F) by A11,FUNCT_2:def 1;
-     rng(Morph-Map(F,o1,o2)) = <^F.o1,F.o2^> by A10,FUNCT_2:def 3
+      reconsider o1, o2 as object of C1 by A8;
+A9:   Morph-Map(F,o1,o2) is onto by A5;
+A10:   [o1,o2] in I by ZFMISC_1:106;
+A11: [o1,o2] in dom(the ObjectMap of F) by A10,FUNCT_2:def 1;
+     rng(Morph-Map(F,o1,o2)) = <^F.o1,F.o2^> by A9,FUNCT_2:def 3
      .= (the Arrows of C2).(F.o1,F.o2) by ALTCAT_1:def 2
-     .= (the Arrows of C2).[F.o1,F.o2] by BINOP_1:def 1
+     .= (the Arrows of C2).[F.o1,F.o2]
      .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by FUNCTOR0:23
-     .= (the Arrows of C2).((the ObjectMap of F).[o1,o2]) by BINOP_1:def 1
-     .= ((the Arrows of C2)*the ObjectMap of F).[o1,o2] by A13,FUNCT_1:23
-     .= ((the Arrows of C2)*the ObjectMap of F).(o1,o2) by BINOP_1:def 1;
+     .= (the Arrows of C2).((the ObjectMap of F).[o1,o2])
+     .= ((the Arrows of C2)*the ObjectMap of F).[o1,o2] by A11,FUNCT_1:23
+     .= ((the Arrows of C2)*the ObjectMap of F).(o1,o2);
      then rng(Morph-Map(F,o1,o2)) =
-         ((the Arrows of C2)*the ObjectMap of F).[o1,o2] by BINOP_1:def 1;
+         ((the Arrows of C2)*the ObjectMap of F).[o1,o2];
      hence rng(f.i) = ((the Arrows of C2)*the ObjectMap of F).i
-                                  by A9,A12;
+                                  by A8;
     end;
     hence ex f being ManySortedFunction of (the Arrows of C1),
                                (the Arrows of C2)*the ObjectMap of F st
@@ -688,30 +671,26 @@ A1: F is faithful;
     let o1,o2 be object of C1;
 A2: (the MorphMap of F) is "1-1" by A1,FUNCTOR0:def 31;
 A3: [o1,o2] in I by ZFMISC_1:106;
-A4: (the MorphMap of F).[o1,o2] = (the MorphMap of F).(o1,o2)
-                                                      by BINOP_1:def 1;
       reconsider g = (the MorphMap of F).[o1,o2] as Function;
       dom(the MorphMap of F) = I by PBOOLE:def 3;
     then g is one-to-one by A2,A3,MSUALG_3:def 2;
-    hence Morph-Map(F,o1,o2) is one-to-one by A4;
+    hence Morph-Map(F,o1,o2) is one-to-one;
   end;
   assume
-A5: for o1,o2 being object of C1 holds
+A4: for o1,o2 being object of C1 holds
         Morph-Map(F,o1,o2) is one-to-one;
     let i be set,
         f be Function such that
-A6:     i in dom(the MorphMap of F) &
+A5:     i in dom(the MorphMap of F) &
         (the MorphMap of F).i = f;
        dom(the MorphMap of F) = I by PBOOLE:def 3;
     then consider o1,o2 being set such that
-A7:          o1 in the carrier of C1 &
+A6:          o1 in the carrier of C1 &
              o2 in the carrier of C1 &
-             i = [o1,o2] by A6,ZFMISC_1:103;
-    reconsider o1, o2 as object of C1 by A7;
-A8: (the MorphMap of F).(o1,o2) = Morph-Map(F,o1,o2);
-    (the MorphMap of F).[o1,o2] = (the MorphMap of F).(o1,o2)
-                                                      by BINOP_1:def 1;
-    hence f is one-to-one by A5,A6,A7,A8;
+             i = [o1,o2] by A5,ZFMISC_1:103;
+    reconsider o1, o2 as object of C1 by A6;
+A7: (the MorphMap of F).(o1,o2) = Morph-Map(F,o1,o2);
+    thus f is one-to-one by A4,A5,A6,A7;
 end;
 
 begin :: Theorems about the inversion of Functor Structures
@@ -967,12 +946,11 @@ A3:  i in I1;
 A4:  o1 in the carrier of A & o2 in the carrier of A & i = [o1,o2]
         by ZFMISC_1:103;
      reconsider o1, o2 as object of A by A4;
-A5:  (the Arrows of A).i = (the Arrows of A).(o1,o2) by A4,BINOP_1:def 1
+A5:  (the Arrows of A).i = (the Arrows of A).(o1,o2) by A4
                         .= <^o1,o2^> by ALTCAT_1:def 2;
      assume ((the Arrows of B)*the ObjectMap of F).i = {};
      then (the Arrows of B).((the ObjectMap of F).i) = {} by A3,FUNCT_2:21;
-     then (the Arrows of B).((the ObjectMap of F).(o1,o2)) = {} by A4,
-BINOP_1:def 1;
+     then (the Arrows of B).((the ObjectMap of F).(o1,o2)) = {} by A4;
     hence thesis by A5,FUNCTOR0:def 12;
     end;
      the ObjectMap of F"*F = (the ObjectMap of F")*the ObjectMap of F

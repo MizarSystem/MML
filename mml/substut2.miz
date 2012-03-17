@@ -356,8 +356,7 @@ theorem
   proof
     set S = [VERUM,Sbst(x,y)];
 A1: S is Sub_VERUM by SUBSTUT1:def 19;
-    VERUM.(x,y) = CQC_Sub(S);
-    hence thesis by A1,SUBLEMMA:3;
+    thus thesis by A1,SUBLEMMA:3;
   end;
 
 theorem
@@ -409,14 +408,14 @@ theorem
   proof
     set S = ['not' p,Sbst(x,y)];
 A1: S = Sub_not [p,Sbst(x,y)] by Th16;
-A2: 'not' p.(x,y) = CQC_Sub(S)
+A2: ('not' p).(x,y) = CQC_Sub(S)
                  .= 'not' CQC_Sub([p,Sbst(x,y)]) by A1,SUBSTUT1:29; then
-A3: 'not' p.(x,y) = 'not' (p.(x,y));
+A3: ('not' p).(x,y) = 'not' (p.(x,y));
     QuantNbr(p) = QuantNbr(p.(x,y)) implies
-                  QuantNbr('not' p) = QuantNbr('not' p.(x,y))
+                  QuantNbr('not' p) = QuantNbr(('not' p).(x,y))
     proof
       assume A4: QuantNbr(p) = QuantNbr(p.(x,y));
-      QuantNbr('not' p.(x,y)) = QuantNbr(p.(x,y)) by A3,CQC_SIM1:16;
+      QuantNbr(('not' p).(x,y)) = QuantNbr(p.(x,y)) by A3,CQC_SIM1:16;
       hence thesis by A4,CQC_SIM1:16;
     end;
     hence thesis by A2;
@@ -447,10 +446,10 @@ A1: S1`2 = Sub & S2`2 = Sub & S1`1 = p & S2`1 = q by MCART_1:7; then
   end;
 
 theorem
-  p '&' q.(x,y) = (p.(x,y)) '&' (q.(x,y)) &
+  (p '&' q).(x,y) = (p.(x,y)) '&' (q.(x,y)) &
       ((QuantNbr(p) = QuantNbr(p.(x,y)) &
                   QuantNbr(q) = QuantNbr(q.(x,y))) implies
-                             QuantNbr(p '&'q) = QuantNbr(p '&' q.(x,y)))
+                             QuantNbr(p '&'q) = QuantNbr((p '&' q).(x,y)))
   proof
     set S = [p '&' q,Sbst(x,y)];
     set S1 = [p,Sbst(x,y)];
@@ -458,16 +457,16 @@ theorem
 A1: S = CQCSub_&(S1,S2) by Th19;
 A2: S1`2 = Sbst(x,y) & S2`2 = Sbst(x,y) by MCART_1:7; then
 A3: S = Sub_&(S1,S2) by A1,SUBLEMMA:def 4;
-    p '&' q.(x,y) = CQC_Sub(S)
+    (p '&' q).(x,y) = CQC_Sub(S)
                  .= (CQC_Sub(S1)) '&' (CQC_Sub(S2)) by A2,A3,SUBSTUT1:31; then
-A4: p '&' q.(x,y) = (p.(x,y)) '&' (CQC_Sub(S2))
+A4: (p '&' q).(x,y) = (p.(x,y)) '&' (CQC_Sub(S2))
                  .= (p.(x,y)) '&'  (q.(x,y));
     (QuantNbr(p) = QuantNbr(p.(x,y)) & QuantNbr(q) = QuantNbr(q.(x,y))) implies
-                  QuantNbr(p '&' q) = QuantNbr(p '&' q.(x,y))
+                  QuantNbr(p '&' q) = QuantNbr((p '&' q).(x,y))
     proof
       assume A5: QuantNbr(p) = QuantNbr(p.(x,y)) &
                  QuantNbr(q) = QuantNbr(q.(x,y));
-      QuantNbr(p '&' q.(x,y)) = QuantNbr(p.(x,y)) + QuantNbr(q.(x,y))
+      QuantNbr((p '&' q).(x,y)) = QuantNbr(p.(x,y)) + QuantNbr(q.(x,y))
                                                              by A4,CQC_SIM1:17;
       hence thesis by A5,CQC_SIM1:17;
     end;
@@ -565,7 +564,6 @@ definition let p,x,Sub;
    Sub;
   coherence
   proof
-    QScope(p,x,Sub) = [[p,CFQ.[All(x,p),Sub]],x]; then
 A1: QScope(p,x,Sub)`1 = [p,CFQ.[All(x,p),Sub]] &
     QScope(p,x,Sub)`2 = x by MCART_1:7; then
 A2: (QScope(p,x,Sub)`1)`2 = CFQ.[All(x,p),Sub] &
@@ -590,7 +588,6 @@ A2: (B`1)`2 = CFQ.[All(x,p),Sub] & (B`1)`1 = p by MCART_1:7;
     [All(x,p),Sub] in dom CFQ by FUNCT_2:def 1; then
     (B`1)`2 = QSub.[All(B`2,(B`1)`1),Sub] by A1,A2,FUNCT_1:70; then
 A3: B is quantifiable by SUBSTUT1:def 22;
- B = QScope(p,x,Sub); then
     CQCSub_All(QScope(p,x,Sub),Qsc(p,x,Sub)) =
                Sub_All(QScope(p,x,Sub),Qsc(p,x,Sub)) by A3,SUBLEMMA:def 6; then
     [All(x,p),Qsc(p,x,Sub)] = CQCSub_All(QScope(p,x,Sub),Qsc(p,x,Sub))
@@ -807,24 +804,20 @@ A10:  j1+1 = j;
 A11:  L.j1 = G1 & q = H1 & G1 is_immediate_constituent_of H1
                                                             by A1,A9,A10,Def6;
 A12:  q = 'not' G1 implies thesis by A11,CQC_LANG:18;
-A13:  now given F being Element of QC-WFF such that A14: q = G1 '&' F;
-       thus thesis by A11,A14,CQC_LANG:19;
-      end;
-A15:  now given F being Element of QC-WFF such that A16: q = F '&' G1;
-        thus thesis by A11,A16,CQC_LANG:19;
-      end;
-      now given x such that A17: q = All(x,G1);
-        thus thesis by A11,A17,CQC_LANG:23;
-      end;
-      hence thesis by A11,A12,A13,A15,QC_LANG2:def 20;
+A13: (ex F being Element of QC-WFF st q = G1 '&' F) implies thesis
+              by A11,CQC_LANG:19;
+A14:  (ex F being Element of QC-WFF st q = F '&' G1) implies thesis
+            by A11,CQC_LANG:19;
+      (ex x st q = All(x,G1)) implies thesis by A11,CQC_LANG:23;
+      hence thesis by A11,A12,A13,A14,QC_LANG2:def 20;
     end;
-A18: for k holds P[k] from NAT_1:sch 1(A2,A3);
+A15: for k holds P[k] from NAT_1:sch 1(A2,A3);
     n+1 <= n+i by A1,XREAL_1:8; then
     n+1+(-1) <= n+i+(-1) by XREAL_1:8; then
-A19: n+(-i) <= n-1+i+(-i) by XREAL_1:8;
+A16: n+(-i) <= n-1+i+(-i) by XREAL_1:8;
     i+(-i) <= n+(-i) by A1,XREAL_1:8; then
     reconsider l = n-i as Nat by INT_1:16;
-    L.(n-l) is Element of CQC-WFF by A18,A19;
+    L.(n-l) is Element of CQC-WFF by A15,A16;
     hence thesis;
   end;
 
@@ -1007,12 +1000,7 @@ A6:   for r,s st P[r] & P[s] holds P[r '&' s]
         QuantNbr(r '&' s) = 0+0 by A7,CQC_SIM1:17,QC_LANG2:def 22;
         hence thesis;
       end;
-A9:  for x, r st P[r] holds P[All(x, r)]
-       proof
-         let x,r such that P[r];
-         not All(x, r) is_subformula_of p by A1;
-         hence thesis;
-       end;
+A9:  for x, r st P[r] holds P[All(x, r)] by A1;
 A10:   for r,s,x,k for l being CQC-variable_list of k
      for P being QC-pred_symbol of k holds
       P[VERUM] &
@@ -1077,9 +1065,4 @@ A12:   for r,s,x,k for l being CQC-variable_list of k
 
 theorem
   1 <= QuantNbr(p) implies ex q st q is_subformula_of p & QuantNbr(q)=1
-  proof
-    assume 1 <= QuantNbr(p); then
-    1+0 <= QuantNbr(p); then
-    0 < QuantNbr(p);
-    hence thesis by Th33;
-  end;
+         by Th33;

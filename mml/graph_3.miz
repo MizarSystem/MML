@@ -19,7 +19,7 @@ environ
  registrations SUBSET_1, GRAPH_2, RELSET_1, FINSET_1, CARD_1, MSSCYC_1, INT_1,
       ABIAN, CQC_LANG, FINSEQ_1, XREAL_0, MEMBERED, ORDINAL2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, PARTFUN1, GRAPH_1, GRAPH_2, MSSCYC_1, XBOOLE_0;
+ definitions TARSKI, PARTFUN1, GRAPH_1, GRAPH_2, MSSCYC_1, XBOOLE_0, CQC_LANG;
  theorems TARSKI, REAL_1, ZFMISC_1, RELAT_1, FINSET_1, FUNCT_1, FUNCT_2, NAT_1,
       FSM_1, FUNCOP_1, CQC_LANG, FUNCT_4, PARTFUN1, CARD_1, CARD_2, CARD_5,
       RLSUB_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQ_5, GRAPH_1,
@@ -89,6 +89,35 @@ A2: (i-j) is even;
 end;
 end;
 
+HAHA:
+ for p be FinSequence, m, n be Nat
+  st 1<=m & m<=n+1 & n<=len p
+ holds len (m, n)-cut p +m = n+1 &
+ for i being Nat st i<len (m, n)-cut p holds ((m, n)-cut p).(i+1)=p.(m+i)
+ proof let p be FinSequence, m, n be Nat such that
+Z: 1<=m & m<=n+1 & n<=len p;
+   n <= n+1 by NAT_1:29;
+   then
+A:  m <= n+1 by Z,XREAL_1:2;
+   then m = n+1 or m < n+1 by XREAL_1:1;
+   then
+B:  m = n+1 or m <= n by NAT_1:38;
+  per cases by B;
+  suppose
+B: m = n+1;
+   then n < m by XREAL_1:31;
+   then not(1<=m & m<=n & n<=len p);
+   then (m, n)-cut p = {} by Z,GRAPH_2:def 1,B;
+   then
+X:  len (m, n)-cut p = 0 by CARD_1:47;
+  hence len (m, n)-cut p +m = n+1 by Z,GRAPH_2:def 1,B;
+  thus thesis by A,Z,GRAPH_2:def 1,B,X;
+  end;
+  suppose m<=n;
+   hence thesis by Z,A,GRAPH_2:def 1;
+  end;
+ end;
+
 theorem Th2:
  for p being FinSequence, m, n, a being Nat
   st a in dom (m, n)-cut p
@@ -99,22 +128,22 @@ A1: a in dom (m, n)-cut p;
    set cp = (m,n)-cut p;
 A2: 1 <= a & a <= len cp by A1,FINSEQ_3:27;
   per cases;
-  suppose A3: 1<=m & m<=n+1 & n<=len p;
+  suppose A3: 1<=m & m<=n & n<=len p;
         0+1<= a by A1,FINSEQ_3:27; then consider i1 being Nat such that
   A4: 0<=i1 & i1<len cp & a=i1+1 by A2,GRAPH_2:1;
    take k = m+i1;
-  A5: len cp +m = n+1 by A3,GRAPH_2:def 1;
+  A5: len cp +m = n+1 by A3,GRAPH_2:def 1,HAHA;
      A6: m+i1 < m + len cp by A4,XREAL_1:8;
   then A7: m+i1 <= n by A5,NAT_1:38;
        m <= k by NAT_1:29;
     then 1 <= k & k <= len p by A3,A7,XREAL_1:2;
    hence k in dom p by FINSEQ_3:27;
-   thus p.k = cp.a by A3,A4,GRAPH_2:def 1;
+   thus p.k = cp.a by A3,A4,GRAPH_2:def 1,HAHA;
    thus k+1 = m+a by A4;
    thus m <= k & k <= n by A5,A6,NAT_1:29,38;
   end;
-  suppose not (1<=m & m<=n+1 & n<=len p);
-   hence thesis by A1,GRAPH_2:def 1,RELAT_1:60;
+  suppose not (1<=m & m<=n & n<=len p);
+   hence thesis by A1,GRAPH_2:def 1,RELAT_1:60,HAHA;
 end;
 end;
 
@@ -164,23 +193,9 @@ theorem Th8:
  (m,n)-cut p is Path of G
 proof
  per cases;
- suppose not 1<=m or not n<=len p;
+ suppose not 1<=m or not n<=len p or m > n;
    then (m,n)-cut p = {} by GRAPH_2:def 1;
   hence thesis by GRAPH_1:14;
- end;
- suppose A1: 1<=m & not m<=n & n<=len p;
-  thus thesis proof
-   A2: n+1 <= m by A1,NAT_1:38;
-   per cases by A2,REAL_1:def 5;
-   suppose A3: m = n+1; then len (m,n)-cut p +m = n+1 by A1,GRAPH_2:def 1;
-     then len (m,n)-cut p = 0 by A3;
-     then (m,n)-cut p = {} by FINSEQ_1:25;
-    hence thesis by GRAPH_1:14;
-   end;
-   suppose m > n+1; then (m,n)-cut p = {} by GRAPH_2:def 1;
-    hence thesis by GRAPH_1:14;
-  end;
-  end;
  end;
  suppose A4: 1<=m & m<=n & n<=len p;
  assume
@@ -276,34 +291,31 @@ theorem Th13:
  for p being cyclic Path of G
   holds ((m+1,len p)-cut p)^(1,m)-cut p is cyclic Path of G
 proof let p be cyclic Path of G;
- per cases by NAT_1:39;
+ per cases by NAT_1:39,XREAL_1:1;
  suppose A1: m = 0;
  then A2: (m+1,len p)-cut p = p by GRAPH_2:7;
        0 <= len p;
-    then len (1,m)-cut p +1 = 0+1 by A1,GRAPH_2:def 1;
+    then len (1,m)-cut p +1 = 0+1 by A1,GRAPH_2:def 1,HAHA;
     then len (1,m)-cut p = 0;
     then (1,m)-cut p = {} by FINSEQ_1:25;
   hence ((m+1,len p)-cut p)^(1,m)-cut p is cyclic Path of G by A2,FINSEQ_1:47;
  end;
- suppose A3: 1 <= m & len p <= m;
-  thus ((m+1,len p)-cut p)^(1,m)-cut p is cyclic Path of G proof
-   per cases by A3,REAL_1:def 5;
-   suppose A4: len p = m;
+ suppose A3: 1 <= m & len p = m;
         1 <= m+1 by NAT_1:37;
-     then len (m+1,len p)-cut p +(m+1) = len p +1 by A4,GRAPH_2:def 1;
-     then len (m+1,len p)-cut p = 0 by A4;
+     then len (m+1,len p)-cut p +(m+1) = len p +1 by A3,GRAPH_2:def 1,HAHA;
+     then len (m+1,len p)-cut p = 0 by A3;
      then (m+1,len p)-cut p = {} by FINSEQ_1:25;
      then ((m+1,len p)-cut p)^(1,m)-cut p = (1,m)-cut p by FINSEQ_1:47
-       .= p by A4,GRAPH_2:7;
+       .= p by A3,GRAPH_2:7;
     hence thesis;
    end;
-   suppose A5: len p < m; then len p +1 < m+1 by XREAL_1:8;
-     then (m+1,len p)-cut p = {} & (1,m)-cut p = {} by A5,GRAPH_2:def 1;
+  suppose A5: 1 <= m & len p < m;
+     m <= m+1 by NAT_1:29;
+     then len p < m+1 by A5,XREAL_1:2;
+     then (m+1,len p)-cut p = {} & (1,m)-cut p = {} by A5,GRAPH_2:def 1,HAHA;
      then ((m+1,len p)-cut p)^(1,m)-cut p = {} by FINSEQ_1:47;
     hence thesis by Th12,GRAPH_1:14;
   end;
-  end;
- end;
  suppose A6: 1 <= m & m < len p;
    set n1 = m, n = m+1;
 A7: 1 <= n & n <= len p by A6,NAT_1:38;
@@ -321,7 +333,7 @@ A12: vs2 is_vertex_seq_of r2 by A7,A8,A9,GRAPH_2:45;
 then A13: 1 <= n & n <= len vs by A7,A9,XREAL_1:2;
        len vs <= len vs +1 by NAT_1:29;
  then n <= len vs +1 by A13,XREAL_1:2;
-then A14: len vs2 +n = len vs +1 by A7,GRAPH_2:def 1;
+then A14: len vs2 +n = len vs +1 by A7,GRAPH_2:def 1,HAHA;
     1 <= n+1 by NAT_1:29;
 then A15: len vs1 +1 = n +1 by A13,GRAPH_2:def 1;
 A16: vs1.1 = vs.1 by A13,GRAPH_2:12;
@@ -535,12 +547,9 @@ A1: vs is_vertex_seq_of c & e in rng c;
    reconsider t = (the Target of G).e, s = (the Source of G).e
     as Vertex of G by A1,A2,FUNCT_2:7;
 A3: e' in rng c by A1;
- G-VSet rng c = { v where v is Vertex of G:
-        ex e being Element of the Edges of G st e in rng c &
-        (v = (the Source of G).e or v = (the Target of G).e)};
-then A5: t in G-VSet rng c by A3;
+A4: t in G-VSet rng c by A3;
    s in G-VSet rng c by A3;
- hence thesis by A1,A5,GRAPH_2:34,RELAT_1:60;
+ hence thesis by A1,A4,GRAPH_2:34,RELAT_1:60;
 end;
 
 definition let G be Graph, X be set;
@@ -559,13 +568,13 @@ theorem Th21:
 G-VSet {} = {}
 proof
  assume not thesis; then consider x being set such that
-A2: x in G-VSet {} by XBOOLE_0:def 1;
+A1: x in G-VSet {} by XBOOLE_0:def 1;
  consider v being Vertex of G such that
-A3: x = v & ex e being Element of the Edges of G st e in {} &
-           (v = (the Source of G).e or v = (the Target of G).e) by A2;
+A2: x = v & ex e being Element of the Edges of G st e in {} &
+           (v = (the Source of G).e or v = (the Target of G).e) by A1;
  consider e being Element of the Edges of G such that
-A4: e in {} & (v = (the Source of G).e or v = (the Target of G).e) by A3;
- thus contradiction by A4;
+A3: e in {} & (v = (the Source of G).e or v = (the Target of G).e) by A2;
+ thus contradiction by A3;
 end;
 
 theorem Th22:
@@ -1018,10 +1027,7 @@ registration let G be finite Graph, v be Vertex of G, X be set;
   hence thesis by FINSET_1:13;
  end;
  cluster Edges_At(v, X) -> finite;
- correctness proof
-      the Edges of G is finite by GRAPH_1:def 8;
-  hence thesis;
- end;
+ correctness;
 end;
 
 registration let G be Graph, v be Vertex of G, X be empty set;
@@ -1038,13 +1044,7 @@ A2: x in Edges_Out(v, X) by XBOOLE_0:def 1;
   thus contradiction by A2,Def2;
  end;
  cluster Edges_At(v, X) -> empty;
- correctness proof assume Edges_At(v, X) is non empty;
-   then consider x being set such that
-A3: x in Edges_At(v, X);
-      x in Edges_In(v, X) \/ Edges_Out(v, X) by A3;
-   then x in Edges_In(v, X) or x in Edges_Out(v, X);
-  hence contradiction;
- end;
+ correctness;
 end;
 
 definition let G be Graph, v be Vertex of G;
@@ -1075,13 +1075,9 @@ end;
 
 registration let G be finite Graph, v be Vertex of G;
  cluster Edges_In v -> finite;
- correctness proof Edges_In v = Edges_In (v, the Edges of G);
-  hence thesis;
- end;
+ correctness;
  cluster Edges_Out v -> finite;
- correctness proof Edges_Out v = Edges_Out (v, the Edges of G);
-  hence thesis;
- end;
+ correctness;
 end;
 
   reserve G for finite Graph,
@@ -1154,25 +1150,25 @@ proof
  A1: e in E & not e in X & (v = T.e or v = S.e);
  A2: Degree v = Degree(v, E) by Th29;
         Edges_In v = Edges_In(v, E);
- then A5: Edges_In(v, X) c= Edges_In(v, E) by Th25;
+ then A3: Edges_In(v, X) c= Edges_In(v, E) by Th25;
         Edges_Out v = Edges_Out(v, E);
- then A6: Edges_Out(v, X) c= Edges_Out(v, E) by Th26;
- A7: card Edges_In(v, X) <= card Edges_In(v, E) by A5,CARD_1:80;
- A8: card Edges_Out(v, X) <= card Edges_Out(v, E) by A6,CARD_1:80;
+ then A4: Edges_Out(v, X) c= Edges_Out(v, E) by Th26;
+ A5: card Edges_In(v, X) <= card Edges_In(v, E) by A3,CARD_1:80;
+ A6: card Edges_Out(v, X) <= card Edges_Out(v, E) by A4,CARD_1:80;
   per cases by A1;
   suppose v = T.e;
-  then A9: e in Edges_In(v, E) by A1,Def1;
+  then A7: e in Edges_In(v, E) by A1,Def1;
          not e in Edges_In(v, X) by A1,Def1;
-      then Edges_In(v, X) c< Edges_In(v, E) by A5,A9,XBOOLE_0:def 8;
+      then Edges_In(v, X) c< Edges_In(v, E) by A3,A7,XBOOLE_0:def 8;
       then card Edges_In(v, X) < card Edges_In(v, E) by CARD_2:67;
-   hence Degree v <> Degree(v, X) by A2,A8,XREAL_1:10;
+   hence Degree v <> Degree(v, X) by A2,A6,XREAL_1:10;
   end;
   suppose v = S.e;
-  then A10: e in Edges_Out(v, E) by A1,Def2;
+  then A8: e in Edges_Out(v, E) by A1,Def2;
          not e in Edges_Out(v, X) by A1,Def2;
-      then Edges_Out(v, X) c< Edges_Out(v, E) by A6,A10,XBOOLE_0:def 8;
+      then Edges_Out(v, X) c< Edges_Out(v, E) by A4,A8,XBOOLE_0:def 8;
       then card Edges_Out(v, X) < card Edges_Out(v, E) by CARD_2:67;
-   hence thesis by A2,A7,XREAL_1:10;
+   hence thesis by A2,A5,XREAL_1:10;
  end;
  end;
 
@@ -1251,11 +1247,11 @@ A1: X2 c= X1;
    set n2I = card Edges_In(v, X2);
    set n1O = card Edges_Out(v, X1);
    set n2O = card Edges_Out(v, X2);
-A4: card Edges_In(v, X1\X2) = card Edges_In(v, X1) - card Edges_In(v, X2)
+A2: card Edges_In(v, X1\X2) = card Edges_In(v, X1) - card Edges_In(v, X2)
           by A1,Th32;
     card Edges_Out(v, X1\X2) = card Edges_Out(v, X1) - card Edges_Out(v, X2)
           by A1,Th33;
-   then n12I + n12O = (n1I+n1O) - (n2I+n2O) by A4;
+   then n12I + n12O = (n1I+n1O) - (n2I+n2O) by A2;
  hence thesis;
 end;
 
@@ -1305,72 +1301,72 @@ proof assume that
 A1: c is non empty and
 A2: vs is_vertex_seq_of c;
   hereby assume that
-A4: v in rng vs and
-A5: Degree(v, rng c) = 0;
+A3: v in rng vs and
+A4: Degree(v, rng c) = 0;
       card Edges_In(v, rng c) = 0 & card Edges_Out(v, rng c) = 0
-            by A5,NAT_1:23;
-then A6: Edges_In(v, rng c) = {} & Edges_Out(v, rng c) = {} by CARD_2:59;
+            by A4,NAT_1:23;
+then A5: Edges_In(v, rng c) = {} & Edges_Out(v, rng c) = {} by CARD_2:59;
    consider i being Nat such that
-A7: i in dom vs & vs.i = v by A4,FINSEQ_2:11;
-A8: 1 <= i & i <= len vs by A7,FINSEQ_3:27;
-A9: len vs = len c + 1 by A2,GRAPH_2:def 7;
+A6: i in dom vs & vs.i = v by A3,FINSEQ_2:11;
+A7: 1 <= i & i <= len vs by A6,FINSEQ_3:27;
+A8: len vs = len c + 1 by A2,GRAPH_2:def 7;
       len c <> 0 by A1,FINSEQ_1:25; then 0 < len c;
-   then A10: 0+1 <= len c by NAT_1:38;
+   then A9: 0+1 <= len c by NAT_1:38;
       c is FinSequence of the Edges of G by MSSCYC_1:def 1;
-then A11: rng c c= the Edges of G by FINSEQ_1:def 4;
-  per cases by A8,REAL_1:def 5;
-  suppose A12: i = len vs;
+then A10: rng c c= the Edges of G by FINSEQ_1:def 4;
+  per cases by A7,REAL_1:def 5;
+  suppose A11: i = len vs;
     set ic = len c;
-       ic in dom c by A10,FINSEQ_3:27;
-  then A13: c.ic in rng c by FUNCT_1:def 5;
+       ic in dom c by A9,FINSEQ_3:27;
+  then A12: c.ic in rng c by FUNCT_1:def 5;
        vs.len vs = (the Target of G).(c.len c) or
-    vs.len vs = (the Source of G).(c.len c) by A2,A9,A10,Lm2;
-   hence contradiction by A6,A7,A11,A12,A13,Def1,Def2;
+    vs.len vs = (the Source of G).(c.len c) by A2,A8,A9,Lm2;
+   hence contradiction by A5,A6,A10,A11,A12,Def1,Def2;
   end;
   suppose i < len vs;
-  then A14: i <= len c by A9,NAT_1:38;
-      then i in dom c by A8,FINSEQ_3:27;
-  then A15: c.i in rng c by FUNCT_1:def 5;
+  then A13: i <= len c by A8,NAT_1:38;
+      then i in dom c by A7,FINSEQ_3:27;
+  then A14: c.i in rng c by FUNCT_1:def 5;
        vs.i = (the Target of G).(c.i) or
-    vs.i = (the Source of G).(c.i) by A2,A8,A14,Lm2;
-   hence contradiction by A6,A7,A11,A15,Def1,Def2;
+    vs.i = (the Source of G).(c.i) by A2,A7,A13,Lm2;
+   hence contradiction by A5,A6,A10,A14,Def1,Def2;
  end;
  end;
  assume that
-A16: Degree(v, rng c) <> 0 and
-A17: not v in rng vs;
- per cases by A16;
+A15: Degree(v, rng c) <> 0 and
+A16: not v in rng vs;
+ per cases by A15;
  suppose card Edges_In(v, rng c) <> 0;
     then consider e being set such that
-A18: e in Edges_In(v, rng c) by CARD_1:47,XBOOLE_0:def 1;
-A19: e in the Edges of G & e in rng c & (the Target of G).e = v
-                by A18,Def1;
+A17: e in Edges_In(v, rng c) by CARD_1:47,XBOOLE_0:def 1;
+A18: e in the Edges of G & e in rng c & (the Target of G).e = v
+                by A17,Def1;
    then consider i being Nat such that
-A20: i in dom c & c.i = e by FINSEQ_2:11;
-A21: 1 <= i & i <= len c by A20,FINSEQ_3:27;
-then A22:(vs.i = (the Target of G).(c.i) & vs.(i+1) = (the Source of G).(c.i)
+A19: i in dom c & c.i = e by FINSEQ_2:11;
+A20: 1 <= i & i <= len c by A19,FINSEQ_3:27;
+then A21:(vs.i = (the Target of G).(c.i) & vs.(i+1) = (the Source of G).(c.i)
 or
     vs.i = (the Source of G).(c.i) & vs.(i+1) = (the Target of G).(c.i))
        by A2,Lm2;
-      1 <= i & i <= len vs & 1 <= i+1 & i+1 <= len vs by A2,A21,Lm2;
+      1 <= i & i <= len vs & 1 <= i+1 & i+1 <= len vs by A2,A20,Lm2;
    then i in dom vs & i+1 in dom vs by FINSEQ_3:27;
-  hence contradiction by A17,A19,A20,A22,FUNCT_1:def 5;
+  hence contradiction by A16,A18,A19,A21,FUNCT_1:def 5;
  end;
  suppose card Edges_Out(v, rng c) <> 0;
     then consider e being set such that
-A23: e in Edges_Out(v, rng c) by CARD_1:47,XBOOLE_0:def 1;
-A24: e in the Edges of G & e in rng c & (the Source of G).e = v
-                by A23,Def2;
+A22: e in Edges_Out(v, rng c) by CARD_1:47,XBOOLE_0:def 1;
+A23: e in the Edges of G & e in rng c & (the Source of G).e = v
+                by A22,Def2;
    then consider i being Nat such that
-A25: i in dom c & c.i = e by FINSEQ_2:11;
-A26: 1 <= i & i <= len c by A25,FINSEQ_3:27;
-then A27:(vs.i = (the Target of G).(c.i) & vs.(i+1) = (the Source of G).(c.i)
+A24: i in dom c & c.i = e by FINSEQ_2:11;
+A25: 1 <= i & i <= len c by A24,FINSEQ_3:27;
+then A26:(vs.i = (the Target of G).(c.i) & vs.(i+1) = (the Source of G).(c.i)
 or
     vs.i = (the Source of G).(c.i) & vs.(i+1) = (the Target of G).(c.i))
        by A2,Lm2;
-      1 <= i & i <= len vs & 1 <= i+1 & i+1 <= len vs by A2,A26,Lm2;
+      1 <= i & i <= len vs & 1 <= i+1 & i+1 <= len vs by A2,A25,Lm2;
    then i in dom vs & i+1 in dom vs by FINSEQ_3:27;
-  hence contradiction by A17,A24,A25,A27,FUNCT_1:def 5;
+  hence contradiction by A16,A23,A24,A26,FUNCT_1:def 5;
 end;
 end;
 
@@ -1421,8 +1417,7 @@ definition let G be Graph, v1, v2 be Vertex of G;
    set V = the Vertices of G; set E = the Edges of G;
    set S = the Source of G; set T = the Target of G;
    set Eit = E \/ {E}; set s = E .--> v1; set t = E .--> v2;
-      s = {E} --> v1 by CQC_LANG:def 2;
-then A1: dom s = {E} & rng s = {v1} by FUNCOP_1:14,19;
+A1: dom s = {E} & rng s = {v1} by FUNCOP_1:14,19;
    set Sit = S +* (E .--> v1);
 A2:   dom Sit = dom S \/ dom s by FUNCT_4:def 1
              .= Eit by A1,FUNCT_2:def 1;
@@ -1432,8 +1427,7 @@ A5:   rng Sit c= rng S \/ rng s by FUNCT_4:18;
          rng S \/ rng s c= V by A1,A3,A4,XBOOLE_1:8;
    then rng Sit c= V by A5,XBOOLE_1:1;
    then reconsider Sit as Function of Eit, V by A2,FUNCT_2:def 1,RELSET_1:11;
-       t = {E} --> v2 by CQC_LANG:def 2;
-then A6: dom t = {E} & rng t = {v2} by FUNCOP_1:14,19;
+A6: dom t = {E} & rng t = {v2} by FUNCOP_1:14,19;
    set Tit = T +* (E .--> v2);
 A7:   dom Tit = dom T \/ dom t by FUNCT_4:def 1
              .= Eit by A6,FUNCT_2:def 1;
@@ -2650,10 +2644,6 @@ theorem Th57:
      is non empty Subset of G-CycleSet
 proof let c be Element of G-CycleSet; assume
 A1: v in G-VSet rng c;
-       G-VSet rng c =
-       { vv where vv is Vertex of G:
-            ex e being Element of the Edges of G st e in rng c &
-            (vv = (the Source of G).e or vv = (the Target of G).e) }; then
 consider vv being Vertex of G such that
     A2: vv = v & ex e being Element of the Edges of G st e in rng c &
             (vv = (the Source of G).e or vv = (the Target of G).e) by A1;
@@ -2697,7 +2687,7 @@ A6: len vs = len c +1 by A4,GRAPH_2:def 7;
      reconsider c1 = (1,m)-cut c', c2 = (n,len c)-cut c' as Path of G by Th8;
      set vs1 = (1, m+1)-cut vs;
    A13: 1 <= m+1+1 & m+1 <= len vs by A9,A10,NAT_1:38;
-   then A14: len vs1 + 1 = m+1+1 by GRAPH_2:def 1;
+   then A14: len vs1 + 1 = m+1+1 by GRAPH_2:def 1,HAHA;
    A15: vs1 is_vertex_seq_of c1 by A4,A10,A12,GRAPH_2:45;
      set vs2 = (n, len vs)-cut vs;
        A16: n <= len vs +1 by A9,NAT_1:37;
@@ -2714,11 +2704,10 @@ A6: len vs = len c +1 by A4,GRAPH_2:def 7;
              .= vs.(n+0) by A9,A16,A19,GRAPH_2:def 1;
        consider lv2 being Nat such that
    A22: 0<=lv2 & lv2<len vs2 & len vs2=lv2+1 by A20,GRAPH_2:1;
-          lv2 +1 +n = n + lv2 +1;
-   then A23: n+lv2 = len vs by A17,A22;
+   A23: n+lv2 = len vs by A17,A22;
           len vs1 <> 0 by A14;
    then 0 < len vs1;
-   then A24: vs1.1 = vs.(1+0) by A13,GRAPH_2:def 1;
+   then A24: vs1.1 = vs.(1+0) by A13,GRAPH_2:def 1,HAHA;
    A25: vs2.len vs2 = vs.(n+lv2) by A9,A16,A22,GRAPH_2:def 1 .= vs1.1 by A4,A23
 ,A24,MSSCYC_1:6;
       now given y being set such that
@@ -2918,9 +2907,9 @@ set IT = { c where c is Element of X* :
              ex vs being FinSequence of the Vertices of G
               st vs is_vertex_seq_of c & vs.1 = v };
   set e = choose Edges_At(v, X);
-  A3: Edges_At(v, X) is not empty by A1,Th30;
+  A2: Edges_At(v, X) is not empty by A1,Th30;
       now
-    per cases by A3,XBOOLE_0:def 2;
+    per cases by A2,XBOOLE_0:def 2;
      suppose e in Edges_In(v, X);
        then e in the Edges of G & e in X & (the Target of G).e = v by Def1;
       hence ex e' being Element of X st
@@ -2935,37 +2924,37 @@ set IT = { c where c is Element of X* :
    end;
    end;
   then consider e' being Element of X such that
-A4: e = e' & e' in X & e' in the Edges of G &
+A3: e = e' & e' in X & e' in the Edges of G &
          (v = (the Target of G).e' or v = (the Source of G).e');
-  reconsider X' = X as non empty set by A4;
+  reconsider X' = X as non empty set by A3;
   reconsider e' as Element of X';
   reconsider c = <*e'*> as Element of X* by FINSEQ_1:def 11;
-A5:  c is Path of G by A4,Th7;
+A4:  c is Path of G by A3,Th7;
     ex vs being FinSequence of the Vertices of G
      st vs is_vertex_seq_of c & vs.1 = v proof
     set t = (the Target of G).e';
-    reconsider t as Vertex of G by A4,FUNCT_2:7;
+    reconsider t as Vertex of G by A3,FUNCT_2:7;
     set s = (the Source of G).e';
-    reconsider s as Vertex of G by A4,FUNCT_2:7;
-    per cases by A4;
-    suppose A6: v = (the Target of G).e';
+    reconsider s as Vertex of G by A3,FUNCT_2:7;
+    per cases by A3;
+    suppose A5: v = (the Target of G).e';
       take <*t, s*>;
-      thus thesis by A6,Th16,FINSEQ_1:61;
+      thus thesis by A5,Th16,FINSEQ_1:61;
     end;
-    suppose A7: v = (the Source of G).e';
+    suppose A6: v = (the Source of G).e';
       take <*s, t*>;
-      thus thesis by A7,FINSEQ_1:61,MSSCYC_1:4;
+      thus thesis by A6,FINSEQ_1:61,MSSCYC_1:4;
     end;
     end;
-  then A8: c in IT by A5;
+  then A7: c in IT by A4;
       now let x be set; assume x in IT;
      then consider c being Element of X* such that
-   A9: x = c & c is Path of G & c is non empty &
+   A8: x = c & c is Path of G & c is non empty &
              ex vs being FinSequence of the Vertices of G
               st vs is_vertex_seq_of c & vs.1 = v;
-    thus x is FinSequence of the Edges of G by A9;
+    thus x is FinSequence of the Edges of G by A8;
    end;
-  hence thesis by A8,FINSEQ_2:def 3;
+  hence thesis by A7,FINSEQ_2:def 3;
  end;
 end;
 
@@ -3060,8 +3049,8 @@ A12: rng c c= X by FINSEQ_1:def 4;
            Degree(v1, X) <> Degree(v1, rng p) by A1,A16;
    then A20: Degree(v1, Xp) <> 0 by A19;
   set e = choose Edges_At(v1, Xp);
-  A22: Edges_At(v1, Xp) is not empty by A20,Th30;
-      now per cases by A22,XBOOLE_0:def 2;
+  A21: Edges_At(v1, Xp) is not empty by A20,Th30;
+      now per cases by A21,XBOOLE_0:def 2;
      suppose e in Edges_In(v1, Xp);
        then e in the Edges of G & e in Xp & (the Target of G).e = v1 by Def1;
       hence ex e' being Element of Xp st
@@ -3076,73 +3065,73 @@ A12: rng c c= X by FINSEQ_1:def 4;
    end;
    end;
   then consider e' being Element of Xp such that
-A23: e = e' & e' in Xp & e' in the Edges of G &
+A22: e = e' & e' in Xp & e' in the Edges of G &
          (v1 = (the Target of G).e' or v1 = (the Source of G).e');
-     reconsider ep = <*e*> as Path of G by A23,Th7;
+     reconsider ep = <*e*> as Path of G by A22,Th7;
           now given x being set such that
-       A24: x in rng ep & x in rng p;
-              rng ep = {e} by FINSEQ_1:55; then x in Xp by A23,A24,TARSKI:def 1
+       A23: x in rng ep & x in rng p;
+              rng ep = {e} by FINSEQ_1:55; then x in Xp by A22,A23,TARSKI:def 1
 ;
-        hence contradiction by A24,XBOOLE_0:def 4;
+        hence contradiction by A23,XBOOLE_0:def 4;
        end;
-   then A25: rng ep misses rng p by XBOOLE_0:3;
-     reconsider t = T.e,s = S.e as Vertex of G by A23,FUNCT_2:7;
-   per cases by A23;
-   suppose A26: v1 = T.e;
+   then A24: rng ep misses rng p by XBOOLE_0:3;
+     reconsider t = T.e,s = S.e as Vertex of G by A22,FUNCT_2:7;
+   per cases by A22;
+   suppose A25: v1 = T.e;
      reconsider ts = <*t,s*> as FinSequence of the Vertices of G;
-   A27: ts is_vertex_seq_of ep by Th16;
-   A28: vs.len vs = ts.1 by A26,FINSEQ_1:61;
-     then reconsider p1 = p^ep as Path of G by A14,A25,A27,Th9;
-   A29: len p1 = len p + len ep by FINSEQ_1:35
+   A26: ts is_vertex_seq_of ep by Th16;
+   A27: vs.len vs = ts.1 by A25,FINSEQ_1:61;
+     then reconsider p1 = p^ep as Path of G by A14,A24,A26,Th9;
+   A28: len p1 = len p + len ep by FINSEQ_1:35
              .= len p +1 by FINSEQ_1:56;
      reconsider vs1 = vs^'ts as FinSequence of the Vertices of G;
-   A30: vs1 is_vertex_seq_of p1 by A14,A27,A28,GRAPH_2:47;
-      reconsider X' = X as non empty set by A23;
-      reconsider e' = e as Element of X' by A23,XBOOLE_0:def 4;
+   A29: vs1 is_vertex_seq_of p1 by A14,A26,A27,GRAPH_2:47;
+      reconsider X' = X as non empty set by A22;
+      reconsider e' = e as Element of X' by A22,XBOOLE_0:def 4;
       reconsider ep = <*e'*> as FinSequence of X;
       reconsider p as FinSequence of X by A11;
      reconsider xp1 = p^ep as Element of X* by FINSEQ_1:def 11;
-   A31: xp1 is non empty by A29,FINSEQ_1:25;
+   A30: xp1 is non empty by A28,FINSEQ_1:25;
           vs1.1 = v by A14,A15,GRAPH_2:14;
-    then xp1 in X-PathSet v by A3,A30,A31;
+    then xp1 in X-PathSet v by A3,A29,A30;
     then reconsider xp1 as Element of X-PathSet v;
        len xp1 in XL;
-     then len p +1 <= len p +0 by A10,A29,PRE_CIRC:def 1;
+     then len p +1 <= len p +0 by A10,A28,PRE_CIRC:def 1;
     hence contradiction by XREAL_1:8;
    end;
-   suppose A32: v1 = S.e;
+   suppose A31: v1 = S.e;
      reconsider ts = <*s,t*> as FinSequence of the Vertices of G;
-   A33: ts is_vertex_seq_of ep by MSSCYC_1:4;
-   A34: vs.len vs = ts.1 by A32,FINSEQ_1:61;
-     then reconsider p1 = p^ep as Path of G by A14,A25,A33,Th9;
-   A35: len p1 = len p + len ep by FINSEQ_1:35
+   A32: ts is_vertex_seq_of ep by MSSCYC_1:4;
+   A33: vs.len vs = ts.1 by A31,FINSEQ_1:61;
+     then reconsider p1 = p^ep as Path of G by A14,A24,A32,Th9;
+   A34: len p1 = len p + len ep by FINSEQ_1:35
              .= len p +1 by FINSEQ_1:56;
      reconsider vs1 = vs^'ts as FinSequence of the Vertices of G;
-   A36: vs1 is_vertex_seq_of p1 by A14,A33,A34,GRAPH_2:47;
-      reconsider X' = X as non empty set by A23;
-      reconsider e' = e as Element of X' by A23,XBOOLE_0:def 4;
+   A35: vs1 is_vertex_seq_of p1 by A14,A32,A33,GRAPH_2:47;
+      reconsider X' = X as non empty set by A22;
+      reconsider e' = e as Element of X' by A22,XBOOLE_0:def 4;
       reconsider ep = <*e'*> as FinSequence of X;
       reconsider p as FinSequence of X by A11;
      reconsider xp1 = p^ep as Element of X* by FINSEQ_1:def 11;
-   A37: xp1 is non empty by A35,FINSEQ_1:25;
+   A36: xp1 is non empty by A34,FINSEQ_1:25;
           vs1.1 = v by A14,A15,GRAPH_2:14;
-    then xp1 in X-PathSet v by A3,A36,A37;
+    then xp1 in X-PathSet v by A3,A35,A36;
     then reconsider xp1 as Element of X-PathSet v;
        len xp1 in XL;
-     then len p +1 <= len p +0 by A10,A35,PRE_CIRC:def 1;
+     then len p +1 <= len p +0 by A10,A34,PRE_CIRC:def 1;
     hence contradiction by XREAL_1:8;
    end;
    end;
    then reconsider c as Element of G-CycleSet by A11,Def8;
-   A38: c in IT by A11,A12;
+   A37: c in IT by A11,A12;
       now let c be set; assume c in IT;
         then consider c' being Element of G-CycleSet such that
-   A39: c = c' & rng c' c= X & c' is non empty &
+   A38: c = c' & rng c' c= X & c' is non empty &
              ex vs being FinSequence of the Vertices of G
               st vs is_vertex_seq_of c' & vs.1 = v;
-    thus c in G-CycleSet by A39;
+    thus c in G-CycleSet by A38;
    end;
-  hence thesis by A38,TARSKI:def 3;
+  hence thesis by A37,TARSKI:def 3;
  end;
 end;
 
@@ -3560,20 +3549,20 @@ A28: len vs' = len p' +1 by A27,GRAPH_2:def 7;
      A34: vs.1 = vs.len vs;
             1+1<=len p' +1 by A25,A26,NAT_1:37;
      then A35: 1<=1+1 & 1+1<=len vs' +1 by A28,NAT_1:37;
-         then len vs +(1+1) = len p' +(1+1) by A28,GRAPH_2:def 1;
+         then len vs +(1+1) = len p' +(1+1) by A28,GRAPH_2:def 1,HAHA;
          then A36: 0 < 1+1 & len vs = len p';
      then 0 < len vs by A17,A26;
-     then A37: vs.(0+1) = vs'.(1+1+0) by A35,GRAPH_2:def 1;
+     then A37: vs.(0+1) = vs'.(1+1+0) by A35,GRAPH_2:def 1,HAHA;
             0+1 <= len vs by A17,A26,A36,XREAL_1:2;
          then consider i being Nat such that
      A38: 0<=i & i<len vs & len vs = i+1 by GRAPH_2:1;
             (len vs +1)+1 = len vs +(1+1)
-                      .= len vs' +1 by A35,GRAPH_2:def 1;
+                      .= len vs' +1 by A35,GRAPH_2:def 1,HAHA;
          then A39: len vs' = i+(1+1) by A38;
      A40: vs'.1 = vs'.len vs' by A27,MSSCYC_1:6;
             vs'.1 = v1 & vs'.(1+1) = v2 or vs'.1 = v2 & vs'.(1+1) = v1
            by A7,A16,A18,A26,A27,Lm2;
-      hence contradiction by A3,A34,A35,A37,A38,A39,A40,GRAPH_2:def 1;
+      hence contradiction by A3,A34,A35,A37,A38,A39,A40,GRAPH_2:def 1,HAHA;
      end;
   hence p is non cyclic by A33,MSSCYC_1:6;
   A41: rng <*E*> = {E} by FINSEQ_1:56;

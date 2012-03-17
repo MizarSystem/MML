@@ -17,17 +17,16 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="SEQ_2"/>
-<ArticleID name="SEQM_3"/>
 </Signature>
 <CCluster>
 <ArgTypes/>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="20">
+<Adjective nr="7"/>
+<Adjective nr="21">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="37"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -36,12 +35,12 @@
 </Typ>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="28"/>
-<Adjective nr="32"/>
+<Adjective nr="29"/>
+<Adjective nr="33"/>
 </Cluster>
 </CCluster>
 </Registrations>

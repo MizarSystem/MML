@@ -16,11 +16,11 @@ environ
       FRAENKEL, COMPLEX1, RLSUB_1, NORMSP_1, RSSPACE, RSSPACE3, SEQ_1, SEQ_2,
       SEQM_3, SEQ_4, FUNCSDOM;
  constructors FUNCT_3, REAL_1, NAT_1, DOMAIN_1, PSCOMP_1, FUNCSDOM, PREPOWER,
-      RLSUB_1, RSSPACE3, MONOID_0;
+      RLSUB_1, RSSPACE3, MONOID_0, SEQM_3;
  registrations SUBSET_1, RELSET_1, STRUCT_0, ORDINAL2, RLVECT_1, NORMSP_1,
       XREAL_0, MEMBERED, RSSPACE3, SEQM_3, MONOID_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions RLVECT_1, SEQ_4, FRAENKEL;
+ definitions RLVECT_1, SEQ_4, FRAENKEL, BINOP_1;
  theorems XBOOLE_0, REAL_2, TARSKI, ABSVALUE, RLVECT_1, BINOP_1, FUNCOP_1,
       FUNCSDOM, XREAL_0, XCMPLX_0, SEQ_1, SEQ_2, SEQM_3, FUNCT_1, NAT_1,
       FUNCT_2, RLSUB_1, NORMSP_1, SEQ_4, FUNCT_3, RSSPACE, RSSPACE3, MONOID_0,
@@ -59,7 +59,7 @@ deffunc F(Element of Funcs(X,the carrier of Y),
  Element of Funcs(X,the carrier of Y)) = (the add of Y).:($1,$2);
 consider ADD being BinOp of Funcs(X,the carrier of Y) such that
 A1:  for f,g being Element of Funcs(X,the carrier of Y) holds
-    ADD.(f,g) = F(f,g) from BINOP_1:sch 2;
+    ADD.(f,g) = F(f,g) from BINOP_1:sch 4;
  take ADD;
 thus thesis by A1;
 end;
@@ -78,15 +78,15 @@ proof
    consider F being Function of
     [:REAL,Funcs(X,the carrier of Y):], Funcs(X,the carrier of Y) such that
 A1:for a be Real, f being Element of Funcs(X,the carrier of Y)
-    holds F.[a,f] = F(a,f) from FUNCT_2:sch 8;
+    holds F.(a,f) = F(a,f) from BINOP_1:sch 4;
    take F;
    let a be Real,f be Element of Funcs(X,the carrier of Y),
        x be Element of X;
 A2:dom (F.[a,f]) = X by FUNCT_2:169;
-     F.[a,f] = @((the Mult of Y)[;](a,f)) by A1
+     F.(a,f) = @((the Mult of Y)[;](a,f)) by A1
           .= (the Mult of Y) [;](a,f) by FUNCSDOM:def 1;
    hence (F.[a,f]).x = (the Mult of Y).(a,f.x) by A2,FUNCOP_1:42
-                    .= (the Mult of Y).[a,f.x] by BINOP_1:def 1
+                    .= (the Mult of Y).[a,f.x]
                     .= a*(f.x);
 end;
 
@@ -132,9 +132,9 @@ definition
       now let x be Element of X;
      thus (it1.[a,f]).x = a*(f.x) by A1 .= (it2.[a,f]).x by A2;
     end;
-    hence it1.[a,f] = it2.[a,f] by FUNCT_2:113;
+    hence it1.(a,f) = it2.(a,f) by FUNCT_2:113;
    end;
-   hence thesis by FUNCT_2:120;
+   hence thesis by BINOP_1:2;
  end;
 end;
 
@@ -174,25 +174,21 @@ A1: now assume A2: h = (FuncAdd(X,Y)).(f,g);
      let x be Element of X; A3: x in dom ((the add of Y).:(f,g)) by Lm1;
      thus h.x = ((the add of Y).:(f,g)).x by A2,Def1
              .= (the add of Y).(f.x,g.x) by A3,FUNCOP_1:28
-             .= (the add of Y).[f.x,g.x] by BINOP_1:def 1
+             .= (the add of Y).[f.x,g.x]
              .= f.x + g.x;
     end;
     now assume A4: for x being Element of X holds h.x=f.x + g.x;
     now let x be Element of X; A5: x in dom ((the add of Y).:(f,g)) by Lm1;
    thus ((FuncAdd(X,Y)).(f,g)).x = ((the add of Y).:(f,g)).x by Def1
                               .= (the add of Y).(f.x,g.x) by A5,FUNCOP_1:28
-                              .= (the add of Y).[f.x,g.x] by BINOP_1:def 1
+                              .= (the add of Y).[f.x,g.x]
                               .= f.x + g.x
                               .= h.x by A4; end;
   hence h = (FuncAdd(X,Y)).(f,g) by FUNCT_2:113;  end;
  hence thesis by A1; end;
 
 theorem
-   Th4: for x being Element of X holds (FuncZero(X,Y)).x = 0.Y
- proof let x be Element of X;
-  thus (FuncZero(X,Y)).x = (X --> 0.Y).x
-                          .= 0.Y by FUNCOP_1:13;
- end;
+   Th4: for x being Element of X holds (FuncZero(X,Y)).x = 0.Y by FUNCOP_1:13;
 
 reserve a,b for Real;
 
@@ -335,27 +331,27 @@ Th13: RLSStruct(#Funcs(X,the carrier of Y),
   thus u+v = v+u proof
    reconsider v' = v, u' = u as Element of Funcs(X,the carrier of Y);
    thus u+v = (FuncAdd(X,Y)).[u',v']
-           .= (FuncAdd(X,Y)).(u',v') by BINOP_1:def 1
+           .= (FuncAdd(X,Y)).(u',v')
            .= (FuncAdd(X,Y)).(v',u') by Th6
-           .= (FuncAdd(X,Y)).[v',u'] by BINOP_1:def 1
+           .= (FuncAdd(X,Y)).[v',u']
            .= v+u;
    end;
   thus (u+v)+w = u+(v+w) proof
     reconsider v'=v, u'=u, w'=w as Element of Funcs(X,the carrier of Y);
     thus (u+v)+w = (FuncAdd(X,Y)).[u+v,w']
-            .= (FuncAdd(X,Y)).(u+v,w') by BINOP_1:def 1
+            .= (FuncAdd(X,Y)).(u+v,w')
             .= (FuncAdd(X,Y)).((FuncAdd(X,Y)).[u',v'],w')
-            .= (FuncAdd(X,Y)).((FuncAdd(X,Y)).(u',v'),w') by BINOP_1:def 1
+            .= (FuncAdd(X,Y)).((FuncAdd(X,Y)).(u',v'),w')
             .= (FuncAdd(X,Y)).(u',(FuncAdd(X,Y)).(v',w')) by Th7
-            .= (FuncAdd(X,Y)).(u',(FuncAdd(X,Y)).[v',w']) by BINOP_1:def 1
-            .= (FuncAdd(X,Y)).[u',(FuncAdd(X,Y)).[v',w']] by BINOP_1:def 1
+            .= (FuncAdd(X,Y)).(u',(FuncAdd(X,Y)).[v',w'])
+            .= (FuncAdd(X,Y)).[u',(FuncAdd(X,Y)).[v',w']]
             .= (FuncAdd(X,Y)).[u',v+w]
             .= u+(v+w); end;
   thus u+0.IT = u proof
     reconsider u'=u as Element of Funcs(X,the carrier of Y);
    thus u+0.IT = (FuncAdd(X,Y)).[u',0.IT]
               .= (FuncAdd(X,Y)).[u',FuncZero(X,Y)]
-              .= (FuncAdd(X,Y)).(u',FuncZero(X,Y)) by BINOP_1:def 1
+              .= (FuncAdd(X,Y)).(u',FuncZero(X,Y))
               .= (FuncAdd(X,Y)).(FuncZero(X,Y),u') by Th6
               .= u by Th8;
   end;
@@ -366,7 +362,6 @@ Th13: RLSStruct(#Funcs(X,the carrier of Y),
     take w;
     thus u+w = (FuncAdd(X,Y)).[u',(FuncExtMult(X,Y)).[-1,u']]
             .= (FuncAdd(X,Y)).(u',(FuncExtMult(X,Y)).[-1,u'])
-                                                  by BINOP_1:def 1
             .= FuncZero(X,Y) by Th9
             .= 0.IT;
    end;
@@ -378,9 +373,8 @@ Th13: RLSStruct(#Funcs(X,the carrier of Y),
     thus a*(u+v) = (FuncExtMult(X,Y)).[a,u+v]
                 .=(FuncExtMult(X,Y)).[a,(FuncAdd(X,Y)).[u',v']]
                 .= (FuncExtMult(X,Y)).[a,(FuncAdd(X,Y)).(u',v')]
-                                                   by BINOP_1:def 1
                 .=(FuncAdd(X,Y)).(w,w') by Lm2
-                .= (FuncAdd(X,Y)).[w,w'] by BINOP_1:def 1
+                .= (FuncAdd(X,Y)).[w,w']
                 .= w + w'
                 .= w + (a*v)
                 .= (a*u) + (a*v);
@@ -392,25 +386,13 @@ Th13: RLSStruct(#Funcs(X,the carrier of Y),
  as VECTOR of IT;
     thus (a+b)*v = (FuncExtMult(X,Y)).[a+b,v']
                 .= (FuncAdd(X,Y)).(w,w') by Th12
-                .= (FuncAdd(X,Y)).[w,w'] by BINOP_1:def 1
+                .= (FuncAdd(X,Y)).[w,w']
                 .= w + w'
                 .= w + (b*v)
                 .= (a*v) + (b*v);
    end;
-  thus (a*b)*v = a*(b*v)
-   proof
-    reconsider v'=v as Element of Funcs(X,the carrier of Y);
-    thus (a*b)*v = (FuncExtMult(X,Y)).[a*b,v']
-                .= (FuncExtMult(X,Y)).[a,(FuncExtMult(X,Y)).[b,v']] by Th11
-                .= (FuncExtMult(X,Y)).[a,b*v]
-                .= a*(b*v);
-   end;
-  thus 1*v = v
-   proof
-     reconsider v'=v as Element of Funcs(X,the carrier of Y);
-     thus 1*v = (FuncExtMult(X,Y)).[1,v']
-              .= v by Th10;
-   end;
+  thus (a*b)*v = a*(b*v) by Th11;
+  thus 1*v = v by Th10;
  end;
 hence thesis;
 end;
@@ -428,26 +410,14 @@ registration
   let X be non empty set;
   let Y be RealLinearSpace;
   cluster RealVectSpace(X,Y) -> strict;
-  coherence
-proof
-    RealVectSpace(X,Y) =
-   RLSStruct(#Funcs(X,the carrier of Y),
-              (FuncZero(X,Y)),FuncAdd(X,Y),FuncExtMult(X,Y)#);
-   hence thesis;
- end;
+  coherence;
 end;
 
 registration
   let X be non empty set;
   let Y be RealLinearSpace;
   cluster RealVectSpace(X,Y) -> constituted-Functions;
-  coherence
-   proof
-     RealVectSpace(X,Y) =
-      RLSStruct(#Funcs(X,the carrier of Y),
-              (FuncZero(X,Y)),FuncAdd(X,Y),FuncExtMult(X,Y)#);
-    hence thesis by MONOID_0:89;
-   end;
+  coherence by MONOID_0:89;
 end;
 
 definition
@@ -458,10 +428,7 @@ definition
  redefine func f.x -> VECTOR of Y;
 coherence
 proof
-    RealVectSpace(X,Y) =
-   RLSStruct(#Funcs(X,the carrier of Y),
-              (FuncZero(X,Y)),FuncAdd(X,Y),FuncExtMult(X,Y)#);
-  then consider g being Function such that
+  consider g being Function such that
 A1: f = g and
 A2: dom g = X and
 A3: rng g c= the carrier of Y by FUNCT_2:def 2;
@@ -479,24 +446,19 @@ theorem Th14:
      let X be non empty set;
      let Y be RealLinearSpace;
      let f,g,h be VECTOR of RealVectSpace(X,Y);
-        RealVectSpace(X, Y) =
-          RLSStruct(#Funcs(X,the carrier of Y),
-                     FuncZero(X,Y),
-                     FuncAdd(X,Y),
-                     FuncExtMult(X,Y)#);
-     then reconsider f'=f,g'=g,h'=h as Element of Funcs(X, the carrier of Y);
+     reconsider f'=f,g'=g,h'=h as Element of Funcs(X, the carrier of Y);
 hereby assume
-     A2: h = f+g;
+     A1: h = f+g;
      let x be Element of X;
-        h = (FuncAdd(X,Y)).[f',g'] by A2
-       .= (FuncAdd(X,Y)).(f',g') by BINOP_1:def 1;
+        h = (FuncAdd(X,Y)).[f',g'] by A1
+       .= (FuncAdd(X,Y)).(f',g');
      hence h.x = f.x+g.x by Th3;
     end;
     assume for x be Element of X holds h.x=f.x+g.x;
-    then A3:  for x be Element of X holds h'.x=f'.x+g'.x;
+    then A2:  for x be Element of X holds h'.x=f'.x+g'.x;
     f+g = (FuncAdd(X,Y)).[f',g']
-    .= (FuncAdd(X,Y)).(f',g') by BINOP_1:def 1;
-    hence h = f+g by A3,Th3;
+    .= (FuncAdd(X,Y)).(f',g');
+    hence h = f+g by A2,Th3;
  end;
 
 theorem Th15:
@@ -504,41 +466,11 @@ theorem Th15:
   for Y be RealLinearSpace
   for f,h be VECTOR of RealVectSpace(X,Y)
   for a be Real holds
-      h = a*f iff for x be Element of X holds h.x = a * f.x
-      proof
-      let X be non empty set;
-      let Y be RealLinearSpace;
-      let f,h be VECTOR of RealVectSpace(X,Y);
-      let a be Real;
-         RealVectSpace(X , Y) =
-           RLSStruct(#Funcs(X,the carrier of Y),
-                      FuncZero(X,Y),
-                      FuncAdd(X,Y),
-                      FuncExtMult(X,Y)#);
-      then reconsider f'=f,h'=h as Element of Funcs(X, the carrier of Y);
-hereby assume
-       A2: h = a*f;
-       let x be Element of X;
-         h= (FuncExtMult(X, Y)).[a,f'] by A2;
-       hence h.x = a*f.x by Th5;
-     end;
-  assume for x be Element of X holds h.x=a*f.x;
-  then h'=(FuncExtMult(X, Y)).[a,f'] by Th5;
-  hence h =a*f;
- end;
+      h = a*f iff for x be Element of X holds h.x = a * f.x by Th5;
 
 theorem
   for X be non empty set
-  for Y be RealLinearSpace holds  0.RealVectSpace(X,Y) = X --> 0.Y
-    proof
-    let X be non empty set;
-    let Y be RealLinearSpace;
-    set z = X -->0.Y;
-      RealVectSpace(X,Y) = RLSStruct(#Funcs(X,the carrier of Y),
-              FuncZero(X,Y),FuncAdd(X,Y),FuncExtMult(X,Y)#);
-    then 0.RealVectSpace(X,Y) = FuncZero(X,Y);
-    hence thesis;
-    end;
+  for Y be RealLinearSpace holds  0.RealVectSpace(X,Y) = X --> 0.Y;
 
 begin :: Real Vector Space of Linear Operators
 
@@ -610,35 +542,35 @@ A2:  IT is Subset of Funcs(the carrier of X,the carrier of Y)
   let x be set;
   thus x in IT implies x is LinearOperator of X,Y by A1;
  assume
-A4:  x is LinearOperator of X,Y;
+A3:  x is LinearOperator of X,Y;
   then x in Funcs(the carrier of X,the carrier of Y) by FUNCT_2:11;
-  hence thesis by A1,A4;
+  hence thesis by A1,A3;
 end;
 uniqueness
 proof
    let X1,X2 be Subset of RealVectSpace(the carrier of X, Y);
  assume that
-A5: for x being set holds x in X1 iff
+A4: for x being set holds x in X1 iff
      x is LinearOperator of X,Y and
-A6: for x being set holds x in X2 iff
+A5: for x being set holds x in X2 iff
      x is LinearOperator of X,Y;
       for x being set st x in X1 holds x in X2
     proof
       let x be set;
     assume x in X1;
-      then x is LinearOperator of X,Y by A5;
-      hence thesis by A6;
+      then x is LinearOperator of X,Y by A4;
+      hence thesis by A5;
     end;
-then A7: X1 c= X2 by TARSKI:def 3;
+then A6: X1 c= X2 by TARSKI:def 3;
       for x being set st x in X2 holds x in X1
     proof
       let x be set;
       assume x in X2;
-      then x is LinearOperator of X,Y by A6;
-      hence thesis by A5;
+      then x is LinearOperator of X,Y by A5;
+      hence thesis by A4;
     end;
     then X2 c= X1 by TARSKI:def 3;
-    hence thesis by A7,XBOOLE_0:def 10;
+    hence thesis by A6,XBOOLE_0:def 10;
   end;
 end;
 
@@ -676,54 +608,54 @@ theorem Th17:
 proof
   let X, Y be RealLinearSpace;
   set W = LinearOperators(X,Y);
-A2:for v,u be VECTOR of RealVectSpace(the carrier of X, Y) st
+A1:for v,u be VECTOR of RealVectSpace(the carrier of X, Y) st
     v in LinearOperators(X,Y) &
     u in LinearOperators(X,Y)
     holds v + u in LinearOperators(X,Y)
    proof
      let v,u be VECTOR of RealVectSpace(the carrier of X ,Y) such that
-A3: v in W & u in W;
+A2: v in W & u in W;
     v+u is LinearOperator of X,Y
       proof
          reconsider f=v+u as Function of X,Y by FUNCT_2:121;
            f is LinearOperator of X,Y
           proof
-            A4:  f is additive
+            A3:  f is additive
              proof
                 let x,y be VECTOR of X;
                 reconsider v' = v, u' = u as Element of
                 Funcs(the carrier of X,the carrier of Y);
-                A5: f=
+                A4: f=
                 (FuncAdd(the carrier of X,Y)).[u',v'] by RLVECT_1:def 3
-                 .= (FuncAdd(the carrier of X,Y)).(u',v') by BINOP_1:def 1;
-                A6: u' is LinearOperator of X,Y by A3,Def7;
-                A7: v' is LinearOperator of X,Y by A3,Def7;
-                thus f.(x+y) =u'.(x+y)+v'.(x+y) by A5,Th3
-               .=(u'.x+u'.y)+v'.(x+y) by A6,Def5
-               .=u'.x+u'.y+(v'.x+v'.y) by A7,Def5
+                 .= (FuncAdd(the carrier of X,Y)).(u',v');
+                A5: u' is LinearOperator of X,Y by A2,Def7;
+                A6: v' is LinearOperator of X,Y by A2,Def7;
+                thus f.(x+y) =u'.(x+y)+v'.(x+y) by A4,Th3
+               .=(u'.x+u'.y)+v'.(x+y) by A5,Def5
+               .=u'.x+u'.y+(v'.x+v'.y) by A6,Def5
                .=u'.x+u'.y+v'.x+v'.y by RLVECT_1:def 6
                .=u'.x+v'.x+u'.y+v'.y by RLVECT_1:def 6
-              .= f.x+ u'.y+v'.y by A5,Th3
+              .= f.x+ u'.y+v'.y by A4,Th3
                .= f.x+ (u'.y+v'.y) by RLVECT_1:def 6
-               .= f.x+f.y by A5,Th3;
+               .= f.x+f.y by A4,Th3;
               end;
                f is homogeneous
                proof
                  let x be VECTOR of X, s be Real;
                 reconsider v' = v, u' = u as Element of
                 Funcs(the carrier of X,the carrier of Y);
-                A8: f=
+                A7: f=
                  (FuncAdd(the carrier of X,Y)).[u',v'] by RLVECT_1:def 3
-                 .= (FuncAdd(the carrier of X,Y)).(u',v') by BINOP_1:def 1;
-                A9: u' is LinearOperator of X,Y by A3,Def7;
-                A10: v' is LinearOperator of X,Y by A3,Def7;
-                thus f.(s*x) =u'.(s*x)+v'.(s*x) by A8,Th3
-               .=(s*(u'.x))+v'.(s*x) by A9,Def6
-               .=s*u'.x+s*v'.x by A10,Def6
+                 .= (FuncAdd(the carrier of X,Y)).(u',v');
+                A8: u' is LinearOperator of X,Y by A2,Def7;
+                A9: v' is LinearOperator of X,Y by A2,Def7;
+                thus f.(s*x) =u'.(s*x)+v'.(s*x) by A7,Th3
+               .=(s*(u'.x))+v'.(s*x) by A8,Def6
+               .=s*u'.x+s*v'.x by A9,Def6
                .=s*(u'.x+v'.x) by RLVECT_1:def 9
-               .= s*f.x by A8,Th3;
+               .= s*f.x by A7,Th3;
                end;
-          hence thesis by A4;
+          hence thesis by A3;
      end;
       hence thesis;
      end;
@@ -735,20 +667,20 @@ A3: v in W & u in W;
     proof
      let a be Real;
      let v be VECTOR of RealVectSpace(the carrier of X,Y) such that
-    A11: v in W;
+    A10: v in W;
          a*v is LinearOperator of X,Y
          proof
          reconsider f=a*v as Function of X,Y by FUNCT_2:121;
            f is LinearOperator of X,Y
           proof
-            A12:  f is additive
+            A11:  f is additive
              proof
                 let x,y be VECTOR of X;
                 reconsider v' = v as Element of
                 Funcs(the carrier of X,the carrier of Y);
-                A14: v' is LinearOperator of X,Y by A11,Def7;
+                A12: v' is LinearOperator of X,Y by A10,Def7;
                 thus f.(x+y) = a*(v'.(x+y)) by Th5
-               .=a*(v'.x+v'.y) by A14,Def5
+               .=a*(v'.x+v'.y) by A12,Def5
                .=a*v'.x+a*v'.y by RLVECT_1:def 9
                .=f.x+a*v'.y by Th5
                .=f.x+ f.y by Th5;
@@ -758,20 +690,20 @@ A3: v in W & u in W;
                 let x be VECTOR of X, s be Real;
                 reconsider v' = v as Element of
                 Funcs(the carrier of X,the carrier of Y);
-                A16: v' is LinearOperator of X,Y by A11,Def7;
+                A13: v' is LinearOperator of X,Y by A10,Def7;
                 thus f.(s*x) =a*v'.(s*x) by Th5
-               .=a*(s*(v'.x)) by A16,Def6
+               .=a*(s*(v'.x)) by A13,Def6
                .=a*s*v'.x by RLVECT_1:def 9
                .=s*(a*v'.x) by RLVECT_1:def 9
                .=s*f.x by Th5;
                end;
-       hence thesis by A12;
+       hence thesis by A11;
      end;
    hence thesis;
   end;
   hence thesis by Def7;
  end;
- hence thesis by A2,RLSUB_1:def 1;
+ hence thesis by A1,RLSUB_1:def 1;
 end;
 
 theorem Th18:
@@ -811,29 +743,13 @@ end;
 registration
   let X, Y be RealLinearSpace;
   cluster R_VectorSpace_of_LinearOperators(X,Y) -> strict;
-  coherence
-proof
-    R_VectorSpace_of_LinearOperators(X,Y) =
-  RLSStruct (# LinearOperators(X,Y),
-             Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
-           Add_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)),
-           Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #);
-   hence thesis;
- end;
+  coherence;
 end;
 
 registration
  let X,Y be RealLinearSpace;
  cluster R_VectorSpace_of_LinearOperators(X,Y) -> constituted-Functions;
- coherence
-  proof
-    R_VectorSpace_of_LinearOperators(X,Y) =
-  RLSStruct (# LinearOperators(X,Y),
-             Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
-           Add_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)),
-           Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #);
-   hence thesis by MONOID_0:89;
-  end;
+ coherence by MONOID_0:89;
 end;
 
 definition
@@ -843,12 +759,7 @@ definition
  redefine func f.v -> VECTOR of Y;
 coherence
 proof
-    R_VectorSpace_of_LinearOperators(X,Y) =
-  RLSStruct (# LinearOperators(X,Y),
-             Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
-           Add_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)),
-           Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #);
-  then reconsider f as LinearOperator of X,Y by Def7;
+  reconsider f as LinearOperator of X,Y by Def7;
     f.v is VECTOR of Y;
   hence thesis;
 end;
@@ -863,38 +774,33 @@ theorem Th20:
 proof
      let X, Y be RealLinearSpace;
      let f,g,h be VECTOR of R_VectorSpace_of_LinearOperators(X,Y);
-      R_VectorSpace_of_LinearOperators(X,Y) =
-      RLSStruct (# LinearOperators(X,Y),
-             Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
-           Add_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)),
-           Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #);
-       then reconsider f'=f,g'=g,h'=h as LinearOperator of X,Y by Def7;
-      A2:R_VectorSpace_of_LinearOperators(X,Y) is
+       reconsider f'=f,g'=g,h'=h as LinearOperator of X,Y by Def7;
+      A1:R_VectorSpace_of_LinearOperators(X,Y) is
            Subspace of RealVectSpace(the carrier of X,Y) by Th18;
         then reconsider f1=f as VECTOR
                          of RealVectSpace(the carrier of X,Y) by RLSUB_1:18;
        reconsider g1=g as VECTOR
-                  of RealVectSpace(the carrier of X,Y) by A2,RLSUB_1:18;
+                  of RealVectSpace(the carrier of X,Y) by A1,RLSUB_1:18;
        reconsider h1=h as VECTOR
-                   of RealVectSpace(the carrier of X,Y) by A2,RLSUB_1:18;
+                   of RealVectSpace(the carrier of X,Y) by A1,RLSUB_1:18;
        reconsider f1'=f' as Element
             of Funcs(the carrier of X, the carrier of Y) by FUNCT_2:11;
        reconsider g1'=g' as Element
             of Funcs(the carrier of X, the carrier of Y) by FUNCT_2:11;
        reconsider h1'=h' as Element
             of Funcs(the carrier of X, the carrier of Y) by FUNCT_2:11;
-      A3: now assume
-            A4: h = f+g;
+      A2: now assume
+            A3: h = f+g;
              let x be Element of X;
-               h1=f1+g1 by A2,A4,RLSUB_1:21;
+               h1=f1+g1 by A1,A3,RLSUB_1:21;
              hence h'.x=f'.x+g'.x by Th14;
     end;
        now assume
               for x be Element of X holds h'.x=f'.x+g'.x;
            then h1=f1+g1 by Th14;
-           hence h =f+g by A2,RLSUB_1:21;
+           hence h =f+g by A1,RLSUB_1:21;
      end;
-     hence thesis by A3;
+     hence thesis by A2;
  end;
 
 theorem Th21:
@@ -906,35 +812,30 @@ theorem Th21:
      let X, Y be RealLinearSpace;
      let f,h be VECTOR of R_VectorSpace_of_LinearOperators(X,Y);
      let a be Real;
-    R_VectorSpace_of_LinearOperators(X,Y) =
-      RLSStruct (# LinearOperators(X,Y),
-             Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
-           Add_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)),
-           Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #);
-       then reconsider f'=f,h'=h as LinearOperator of X,Y by Def7;
-      A2:R_VectorSpace_of_LinearOperators(X,Y) is
+       reconsider f'=f,h'=h as LinearOperator of X,Y by Def7;
+      A1:R_VectorSpace_of_LinearOperators(X,Y) is
            Subspace of RealVectSpace(the carrier of X,Y)
         by Th18;
         then reconsider f1=f as VECTOR
                          of RealVectSpace(the carrier of X,Y) by RLSUB_1:18;
        reconsider h1=h as VECTOR
-                  of RealVectSpace(the carrier of X,Y) by A2,RLSUB_1:18;
+                  of RealVectSpace(the carrier of X,Y) by A1,RLSUB_1:18;
        reconsider f1'=f' as Element
             of Funcs(the carrier of X, the carrier of Y) by FUNCT_2:11;
        reconsider h1'=h' as Element
             of Funcs(the carrier of X, the carrier of Y) by FUNCT_2:11;
-      A3: now assume
-            A4: h = a*f;
+      A2: now assume
+            A3: h = a*f;
              let x be Element of X;
-               h1=a*f1 by A2,A4,RLSUB_1:22;
+               h1=a*f1 by A1,A3,RLSUB_1:22;
              hence h'.x=a*f'.x by Th15;
     end;
        now assume
               for x be Element of X holds h'.x=a*f'.x;
            then h1=a*f1 by Th15;
-           hence h =a*f by A2,RLSUB_1:22;
+           hence h =a*f by A1,RLSUB_1:22;
      end;
-     hence thesis by A3;
+     hence thesis by A2;
  end;
 
 theorem Th22:
@@ -942,12 +843,7 @@ theorem Th22:
   0.R_VectorSpace_of_LinearOperators(X,Y) = (the carrier of X) -->0.Y
      proof
      let X, Y be RealLinearSpace;
-        R_VectorSpace_of_LinearOperators(X,Y) =
-      RLSStruct (# LinearOperators(X,Y),
-             Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
-           Add_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)),
-           Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #);
-      then A1:R_VectorSpace_of_LinearOperators(X,Y) is
+      A1:R_VectorSpace_of_LinearOperators(X,Y) is
            Subspace of RealVectSpace(the carrier of X,Y) by Th18;
        0.RealVectSpace(the carrier of X,Y)
           =((the carrier of X) -->0.Y);
@@ -1079,35 +975,35 @@ A2:  IT is Subset of LinearOperators(X,Y)
   let x be set;
   thus x in IT implies x is bounded LinearOperator of X,Y by A1;
  assume
-A4:  x is bounded LinearOperator of X,Y;
+A3:  x is bounded LinearOperator of X,Y;
   then x in LinearOperators(X,Y) by Def7;
-  hence thesis by A1,A4;
+  hence thesis by A1,A3;
 end;
 uniqueness
 proof
    let X1,X2 be Subset of R_VectorSpace_of_LinearOperators(X,Y);
  assume that
-A5: for x being set holds x in X1 iff
+A4: for x being set holds x in X1 iff
      x is bounded LinearOperator of X,Y and
-A6: for x being set holds x in X2 iff
+A5: for x being set holds x in X2 iff
      x is bounded LinearOperator of X,Y;
       for x being set st x in X1 holds x in X2
     proof
       let x be set;
     assume x in X1;
-      then x is bounded LinearOperator of X,Y by A5;
-      hence thesis by A6;
+      then x is bounded LinearOperator of X,Y by A4;
+      hence thesis by A5;
     end;
-then A7: X1 c= X2 by TARSKI:def 3;
+then A6: X1 c= X2 by TARSKI:def 3;
       for x being set st x in X2 holds x in X1
     proof
       let x be set;
       assume x in X2;
-      then x is bounded LinearOperator of X,Y by A6;
-      hence thesis by A5;
+      then x is bounded LinearOperator of X,Y by A5;
+      hence thesis by A4;
     end;
     then X2 c= X1 by TARSKI:def 3;
-    hence thesis by A7,XBOOLE_0:def 10;
+    hence thesis by A6,XBOOLE_0:def 10;
   end;
 end;
 
@@ -1133,35 +1029,35 @@ theorem Th26:
 proof
   let X, Y be RealNormSpace;
   set W = BoundedLinearOperators(X,Y);
-A2:for v,u be VECTOR of R_VectorSpace_of_LinearOperators(X, Y) st
+A1:for v,u be VECTOR of R_VectorSpace_of_LinearOperators(X, Y) st
     v in W & u in W
     holds v + u in W
    proof
      let v,u be VECTOR of R_VectorSpace_of_LinearOperators(X, Y) such that
-     A3: v in W & u in W;
+     A2: v in W & u in W;
      reconsider f=v+u as LinearOperator of X,Y by Def7;
         f is bounded
      proof
-     reconsider u1=u as bounded LinearOperator of X,Y by A3,Def10;
-     reconsider v1=v as bounded LinearOperator of X,Y by A3,Def10;
+     reconsider u1=u as bounded LinearOperator of X,Y by A2,Def10;
+     reconsider v1=v as bounded LinearOperator of X,Y by A2,Def10;
      consider K1 be Real such that
-       A4: 0 <= K1 &
+       A3: 0 <= K1 &
      for x be VECTOR of X holds ||. u1.x .|| <= K1*||. x .|| by Def9;
      consider K2 be Real such that
-       A5: 0 <= K2 &
+       A4: 0 <= K2 &
      for x be VECTOR of X holds ||. v1.x .|| <= K2*||. x .|| by Def9;
      take K3=K1+K2;
-A6:         0 + 0 <= K1+K2 by A4,A5,XREAL_1:9;
+A5:         0 + 0 <= K1+K2 by A3,A4,XREAL_1:9;
          now let x be VECTOR of X;
-        A7: ||. f.x .|| =||. u1.x+v1.x .|| by Th20;
-        A8: ||. u1.x+v1.x .|| <= ||. u1.x .||+ ||. v1.x .|| by NORMSP_1:def 2;
-        A9:||. u1.x .|| <= K1*||. x .|| by A4;
-         ||. v1.x .|| <= K2*||. x .|| by A5;
+        A6: ||. f.x .|| =||. u1.x+v1.x .|| by Th20;
+        A7: ||. u1.x+v1.x .|| <= ||. u1.x .||+ ||. v1.x .|| by NORMSP_1:def 2;
+        A8:||. u1.x .|| <= K1*||. x .|| by A3;
+         ||. v1.x .|| <= K2*||. x .|| by A4;
         then ||. u1.x .|| + ||. v1.x .|| <= K1*||. x .|| +K2*||. x .||
-      by A9,XREAL_1:9;
-       hence ||. f.x .|| <= K3*||. x .|| by A7,A8,XREAL_1:2;
+      by A8,XREAL_1:9;
+       hence ||. f.x .|| <= K3*||. x .|| by A6,A7,XREAL_1:2;
         end;
-     hence thesis by A6;
+     hence thesis by A5;
      end;
      hence thesis by Def10;
   end;
@@ -1171,28 +1067,28 @@ A6:         0 + 0 <= K1+K2 by A4,A5,XREAL_1:9;
     proof
      let a be Real;
      let v be VECTOR of R_VectorSpace_of_LinearOperators(X,Y) such that
-           A10: v in W;
+           A9: v in W;
           reconsider f=a*v as LinearOperator of X,Y by Def7;
             f is bounded
           proof
-     reconsider v1=v as bounded LinearOperator of X,Y by A10,Def10;
+     reconsider v1=v as bounded LinearOperator of X,Y by A9,Def10;
      consider K be Real such that
-A11: 0 <= K &
+A10: 0 <= K &
         for x be VECTOR of X holds ||. v1.x .|| <= K*||. x .|| by Def9;
       take K1=abs(a)*K;
-A12:      0 <= K & 0 <=abs(a) by A11,COMPLEX1:132;
+A11:      0 <= K & 0 <=abs(a) by A10,COMPLEX1:132;
         now let x be VECTOR of X;
-        A13: ||. a*v1.x .|| = abs(a)* ||. v1.x .|| by NORMSP_1:def 2;
-        A14:||. v1.x .|| <= K*||. x .|| by A11;
+        A12: ||. a*v1.x .|| = abs(a)* ||. v1.x .|| by NORMSP_1:def 2;
+        A13:||. v1.x .|| <= K*||. x .|| by A10;
          0 <=abs(a) by COMPLEX1:132;
-         then abs(a)* ||. v1.x .|| <= abs(a)* (K*||. x .||) by A14,XREAL_1:66;
-       hence ||. f.x .|| <= abs(a)* K*||. x .|| by A13,Th21;
+         then abs(a)* ||. v1.x .|| <= abs(a)* (K*||. x .||) by A13,XREAL_1:66;
+       hence ||. f.x .|| <= abs(a)* K*||. x .|| by A12,Th21;
      end;
-     hence thesis by A12,REAL_2:121;
+     hence thesis by A11,REAL_2:121;
      end;
      hence thesis by Def10;
      end;
- hence thesis by A2,RLSUB_1:def 1;
+ hence thesis by A1,RLSUB_1:def 1;
 end;
 
 theorem Th27:
@@ -1242,36 +1138,14 @@ end;
 registration
   let X, Y be RealNormSpace;
   cluster R_VectorSpace_of_BoundedLinearOperators(X,Y) -> strict;
-  coherence
-proof
-    R_VectorSpace_of_BoundedLinearOperators(X,Y) =
-  RLSStruct (# BoundedLinearOperators(X,Y),
-        Zero_(BoundedLinearOperators(X,Y),
-        R_VectorSpace_of_LinearOperators(X,Y)),
-         Add_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Mult_(BoundedLinearOperators(X,Y),
-          R_VectorSpace_of_LinearOperators(X,Y)) #);
-   hence thesis;
- end;
+  coherence;
 end;
 
 registration
  let X,Y be RealNormSpace;
  cluster -> Function-like Relation-like Element of
             R_VectorSpace_of_BoundedLinearOperators(X,Y);
- coherence
-proof
-    R_VectorSpace_of_BoundedLinearOperators(X,Y) =
-  RLSStruct (# BoundedLinearOperators(X,Y),
-        Zero_(BoundedLinearOperators(X,Y),
-        R_VectorSpace_of_LinearOperators(X,Y)),
-         Add_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Mult_(BoundedLinearOperators(X,Y),
-          R_VectorSpace_of_LinearOperators(X,Y)) #);
-  hence thesis by Def10;
-end;
+ coherence by Def10;
 end;
 
 definition
@@ -1281,15 +1155,7 @@ definition
  redefine func f.v -> VECTOR of Y;
 coherence
 proof
-    R_VectorSpace_of_BoundedLinearOperators(X,Y) =
-  RLSStruct (# BoundedLinearOperators(X,Y),
-        Zero_(BoundedLinearOperators(X,Y),
-        R_VectorSpace_of_LinearOperators(X,Y)),
-         Add_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Mult_(BoundedLinearOperators(X,Y),
-          R_VectorSpace_of_LinearOperators(X,Y)) #);
-  then reconsider f as LinearOperator of X,Y by Def10;
+  reconsider f as LinearOperator of X,Y by Def10;
     f.v is VECTOR of Y;
   hence thesis;
 end;
@@ -1304,23 +1170,15 @@ theorem Th29:
 proof
      let X, Y be RealNormSpace;
      let f,g,h be VECTOR of R_VectorSpace_of_BoundedLinearOperators(X,Y);
-  R_VectorSpace_of_BoundedLinearOperators(X,Y) =
-  RLSStruct (# BoundedLinearOperators(X,Y),
-        Zero_(BoundedLinearOperators(X,Y),
-        R_VectorSpace_of_LinearOperators(X,Y)),
-         Add_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Mult_(BoundedLinearOperators(X,Y),
-          R_VectorSpace_of_LinearOperators(X,Y)) #);
-      then reconsider f'=f,g'=g,h'=h as bounded LinearOperator of X,Y by Def10;
-      A2:R_VectorSpace_of_BoundedLinearOperators(X,Y) is
+      reconsider f'=f,g'=g,h'=h as bounded LinearOperator of X,Y by Def10;
+      A1:R_VectorSpace_of_BoundedLinearOperators(X,Y) is
            Subspace of R_VectorSpace_of_LinearOperators(X,Y) by Th27;
         then reconsider f1=f as VECTOR
            of R_VectorSpace_of_LinearOperators(X,Y) by RLSUB_1:18;
        reconsider g1=g as VECTOR
-          of R_VectorSpace_of_LinearOperators(X,Y) by A2,RLSUB_1:18;
+          of R_VectorSpace_of_LinearOperators(X,Y) by A1,RLSUB_1:18;
        reconsider h1=h as VECTOR
-         of R_VectorSpace_of_LinearOperators(X,Y) by A2,RLSUB_1:18;
+         of R_VectorSpace_of_LinearOperators(X,Y) by A1,RLSUB_1:18;
        reconsider f1'=f' as Element
             of Funcs(the carrier of X, the carrier of Y) by FUNCT_2:11;
        reconsider g1'=g' as Element
@@ -1328,15 +1186,15 @@ proof
        reconsider h1'=h' as Element
             of Funcs(the carrier of X, the carrier of Y) by FUNCT_2:11;
       hereby assume
-            A3: h = f+g;
+            A2: h = f+g;
              let x be Element of X;
-                    h1=f1+g1 by A2,A3,RLSUB_1:21;
+                    h1=f1+g1 by A1,A2,RLSUB_1:21;
                        hence h.x=f.x+g.x by Th20;
     end;
     assume
               for x be Element of X holds h.x=f.x+g.x;
            then h1=f1+g1 by Th20;
-           hence h =f+g by A2,RLSUB_1:21;
+           hence h =f+g by A1,RLSUB_1:21;
  end;
 
 theorem Th30:
@@ -1348,36 +1206,28 @@ theorem Th30:
      let X, Y be RealNormSpace;
      let f,h be VECTOR of R_VectorSpace_of_BoundedLinearOperators(X,Y);
      let a be Real;
-  R_VectorSpace_of_BoundedLinearOperators(X,Y) =
-  RLSStruct (# BoundedLinearOperators(X,Y),
-        Zero_(BoundedLinearOperators(X,Y),
-        R_VectorSpace_of_LinearOperators(X,Y)),
-         Add_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Mult_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)) #);
-     then reconsider f'=f,h'=h as bounded LinearOperator of X,Y by Def10;
-      A2:R_VectorSpace_of_BoundedLinearOperators(X,Y) is
+     reconsider f'=f,h'=h as bounded LinearOperator of X,Y by Def10;
+      A1:R_VectorSpace_of_BoundedLinearOperators(X,Y) is
            Subspace of R_VectorSpace_of_LinearOperators(X,Y)
         by Th27;
         then reconsider f1=f as VECTOR
                    of R_VectorSpace_of_LinearOperators(X,Y) by RLSUB_1:18;
        reconsider h1=h as VECTOR
-                of R_VectorSpace_of_LinearOperators(X,Y) by A2,RLSUB_1:18;
+                of R_VectorSpace_of_LinearOperators(X,Y) by A1,RLSUB_1:18;
        reconsider f1'=f' as Element
             of Funcs(the carrier of X, the carrier of Y) by FUNCT_2:11;
        reconsider h1'=h' as Element
             of Funcs(the carrier of X, the carrier of Y) by FUNCT_2:11;
       hereby assume
-            A3: h = a*f;
+            A2: h = a*f;
              let x be Element of X;
-               h1=a*f1 by A2,A3,RLSUB_1:22;
+               h1=a*f1 by A1,A2,RLSUB_1:22;
              hence h.x=a*f.x by Th21;
     end;
     assume
               for x be Element of X holds h.x=a*f.x;
            then h1=a*f1 by Th21;
-           hence h =a*f by A2,RLSUB_1:22;
+           hence h =a*f by A1,RLSUB_1:22;
  end;
 
 theorem Th31:
@@ -1386,15 +1236,7 @@ theorem Th31:
           = (the carrier of X) --> 0.Y
      proof
      let X, Y be RealNormSpace;
-       R_VectorSpace_of_BoundedLinearOperators(X,Y) =
-    RLSStruct (# BoundedLinearOperators(X,Y),
-        Zero_(BoundedLinearOperators(X,Y),
-        R_VectorSpace_of_LinearOperators(X,Y)),
-         Add_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Mult_(BoundedLinearOperators(X,Y),
-          R_VectorSpace_of_LinearOperators(X,Y)) #);
-      then A1:R_VectorSpace_of_BoundedLinearOperators(X,Y) is
+      A1:R_VectorSpace_of_BoundedLinearOperators(X,Y) is
            Subspace of R_VectorSpace_of_LinearOperators(X,Y) by Th27;
        0.R_VectorSpace_of_LinearOperators(X,Y)
           =((the carrier of X) -->0.Y) by Th22;
@@ -1641,46 +1483,46 @@ theorem Th38:
           R_NormSpace_of_BoundedLinearOperators(X,Y);
       let g be bounded LinearOperator of X,Y such that
      A1:g=f;
- A3: PreNorms(g) is non empty bounded_above by Th32;
+ A2: PreNorms(g) is non empty bounded_above by Th32;
       now let t be VECTOR of X;
          now per cases;
-         case A4: t  = 0.X;
-             then A5: g.t  =g.(0*0.X) by RLVECT_1:23
+         case A3: t  = 0.X;
+             then A4: g.t  =g.(0*0.X) by RLVECT_1:23
                    .=0*g.(0.X) by Def6
                    .=0.Y by RLVECT_1:23;
-                    ||.t.|| = 0 by A4,NORMSP_1:def 2;
-            hence ||.g.t.|| <= ||.f.||*||.t.|| by A5,NORMSP_1:def 2;
+                    ||.t.|| = 0 by A3,NORMSP_1:def 2;
+            hence ||.g.t.|| <= ||.f.||*||.t.|| by A4,NORMSP_1:def 2;
        end;
        case t <> 0.X;
-          then A6:||.t.|| <> 0 by NORMSP_1:def 2;
-          then A7: ||.t.|| > 0 by NORMSP_1:8;
-          A8:abs( ||.t.||")
+          then A5:||.t.|| <> 0 by NORMSP_1:def 2;
+          then A6: ||.t.|| > 0 by NORMSP_1:8;
+          A7:abs( ||.t.||")
           =abs( 1*||.t.||")
           .=abs( 1/||.t.||) by XCMPLX_0:def 9
           .=1/abs( ||.t.||) by ABSVALUE:15
-          .=1/||.t.|| by A7,ABSVALUE:def 1
+          .=1/||.t.|| by A6,ABSVALUE:def 1
           .=1*||.t.||" by XCMPLX_0:def 9
           .=||.t.||";
           reconsider t1= ( ||.t.||")*t as VECTOR of X;
-          A9: ||.t1.|| =abs( ||.t.||")*||.t.|| by NORMSP_1:def 2
-                      .=1 by A6,A8,XCMPLX_0:def 7;
+          A8: ||.t1.|| =abs( ||.t.||")*||.t.|| by NORMSP_1:def 2
+                      .=1 by A5,A7,XCMPLX_0:def 7;
            ||.g.t.||/||.t.|| = ||.g.t.||*||.t.||" by XCMPLX_0:def 9
-                          .=||. ||.t.||"*g.t.|| by A8,NORMSP_1:def 2
+                          .=||. ||.t.||"*g.t.|| by A7,NORMSP_1:def 2
                           .=||.g.t1.|| by Def6;
         then ||.g.t.||/||.t.|| in
-              {||.g.s.|| where s is VECTOR of X : ||.s.|| <= 1 } by A9;
+              {||.g.s.|| where s is VECTOR of X : ||.s.|| <= 1 } by A8;
           then ||.g.t.||/||.t.|| in PreNorms(g);
           then ||.g.t.||/||.t.||
-              <= sup PreNorms(g) by A3,SEQ_4:def 4;
+              <= sup PreNorms(g) by A2,SEQ_4:def 4;
           then ||.g.t.||/||.t.||
               <= BoundedLinearOperatorsNorm(X,Y).g by Th36;
-           then A10: ||.g.t.||/||.t.|| <= ||.f.|| by A1,NORMSP_1:def 1;
+           then A9: ||.g.t.||/||.t.|| <= ||.f.|| by A1,NORMSP_1:def 1;
               ||.g.t.||/||.t.||*||.t.||
              = ||.g.t.||*||.t.||"*||.t.|| by XCMPLX_0:def 9
             .=||.g.t.||*(||.t.||"*||.t.||)
-            .=||.g.t.||*1 by A6,XCMPLX_0:def 7
+            .=||.g.t.||*1 by A5,XCMPLX_0:def 7
             .=||.g.t.||;
-           hence ||.g.t.|| <= ||.f.||*||.t.|| by A7,A10,XREAL_1:66;
+           hence ||.g.t.|| <= ||.f.||*||.t.|| by A6,A9,XREAL_1:66;
         end;
         end;
      hence ||.g.t.|| <= ||.f.||*||.t.||;
@@ -1697,33 +1539,23 @@ proof
        let X, Y be RealNormSpace;
        let f being Point of
           R_NormSpace_of_BoundedLinearOperators(X,Y);
- R_NormSpace_of_BoundedLinearOperators(X,Y)
-  = NORMSTR (# BoundedLinearOperators(X,Y),
-         Zero_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Add_(BoundedLinearOperators(X,Y),
-          R_VectorSpace_of_LinearOperators(X,Y)),
-           Mult_(BoundedLinearOperators(X,Y),
-           R_VectorSpace_of_LinearOperators(X,Y)),
-           BoundedLinearOperatorsNorm(X,Y)
-      #);
-    then reconsider g=f as bounded LinearOperator of X,Y by Def10;
- A2: now let r be Real such that
-        A3:  r in PreNorms(g);
+    reconsider g=f as bounded LinearOperator of X,Y by Def10;
+ A1: now let r be Real such that
+        A2:  r in PreNorms(g);
            r in {||.g.t.|| where t is VECTOR of X : ||.t.|| <= 1 }
-    by A3;
+    by A2;
         then consider t be VECTOR of X such that
-          A4: r=||.g.t.|| & ||.t.|| <= 1;
-          thus 0 <= r by A4,NORMSP_1:8;
+          A3: r=||.g.t.|| & ||.t.|| <= 1;
+          thus 0 <= r by A3,NORMSP_1:8;
  end;
-A5:PreNorms(g) is non empty bounded_above by Th32;
+A4:PreNorms(g) is non empty bounded_above by Th32;
  consider r0 be set such that
-  A6: r0 in PreNorms(g) by XBOOLE_0:def 1;
-  reconsider r0 as Real by A6;
-    0 <= r0 by A2,A6;
-  then A7:  0 <=sup PreNorms(g) by A5,A6,SEQ_4:def 4;
+  A5: r0 in PreNorms(g) by XBOOLE_0:def 1;
+  reconsider r0 as Real by A5;
+    0 <= r0 by A1,A5;
+  then A6:  0 <=sup PreNorms(g) by A4,A5,SEQ_4:def 4;
     BoundedLinearOperatorsNorm(X,Y).f = sup PreNorms(g) by Th36;
-    hence thesis by A7,NORMSP_1:def 1;
+    hence thesis by A6,NORMSP_1:def 1;
   end;
 
 theorem Th40:
@@ -1743,26 +1575,26 @@ A1:       f = 0.R_NormSpace_of_BoundedLinearOperators(X,Y);
         reconsider z as Function of the carrier of X, the carrier of Y
     by FUNCOP_1:58;
         reconsider g=f as bounded LinearOperator of X,Y by Def10;
-       A3: z=g by A1,Th37;
-       A4:
+       A2: z=g by A1,Th37;
+       A3:
       now let r be Real such that
-        A5:  r in PreNorms(g);
+        A4:  r in PreNorms(g);
            r in {||.g.t.|| where t is VECTOR of X : ||.t.|| <= 1 }
-    by A5;
+    by A4;
         then consider t be VECTOR of X such that
-          A6:   r=||.g.t.|| & ||.t.|| <= 1;
-            ||.g.t.|| = ||.0.Y.|| by A3,FUNCOP_1:13
+          A5:   r=||.g.t.|| & ||.t.|| <= 1;
+            ||.g.t.|| = ||.0.Y.|| by A2,FUNCOP_1:13
                   .= 0 by NORMSP_1:def 2;
-          hence 0 <= r & r <=0 by A6;
+          hence 0 <= r & r <=0 by A5;
       end;
-     A7:PreNorms(g) is non empty bounded_above by Th32;
+     A6:PreNorms(g) is non empty bounded_above by Th32;
      consider r0 be set such that
-      A8: r0 in PreNorms(g) by XBOOLE_0:def 1;
-     reconsider r0 as Real by A8;
-     A9: 0 <= r0 & r0<=0 by A4,A8;
+      A7: r0 in PreNorms(g) by XBOOLE_0:def 1;
+     reconsider r0 as Real by A7;
+     A8: 0 <= r0 & r0<=0 by A3,A7;
        (for s be real number st s in PreNorms(g) holds s <= 0)
          implies sup PreNorms(g) <= 0 by SEQ_4:62;
-      then sup PreNorms(g) = 0 by A4,A7,A8,A9,SEQ_4:def 4;
+      then sup PreNorms(g) = 0 by A3,A6,A7,A8,SEQ_4:def 4;
        then BoundedLinearOperatorsNorm(X,Y).f=0 by Th36;
       hence thesis by NORMSP_1:def 1;
       end;
@@ -1772,19 +1604,7 @@ registration
  let X,Y be RealNormSpace;
  cluster -> Function-like Relation-like
    Element of R_NormSpace_of_BoundedLinearOperators(X,Y);
-coherence
-proof
-    R_NormSpace_of_BoundedLinearOperators(X,Y) =
-  NORMSTR (# BoundedLinearOperators(X,Y),
-    Zero_(BoundedLinearOperators(X,Y),
-    R_VectorSpace_of_LinearOperators(X,Y)),
-    Add_(BoundedLinearOperators(X,Y),
-    R_VectorSpace_of_LinearOperators(X,Y)),
-    Mult_(BoundedLinearOperators(X,Y),
-    R_VectorSpace_of_LinearOperators(X,Y)),
-    BoundedLinearOperatorsNorm(X,Y) #);
-  hence thesis by Def10;
-end;
+coherence by Def10;
 end;
 
 definition
@@ -1794,16 +1614,7 @@ definition
  redefine func f.v -> VECTOR of Y;
 coherence
 proof
-    R_NormSpace_of_BoundedLinearOperators(X,Y) =
-  NORMSTR (# BoundedLinearOperators(X,Y),
-    Zero_(BoundedLinearOperators(X,Y),
-    R_VectorSpace_of_LinearOperators(X,Y)),
-    Add_(BoundedLinearOperators(X,Y),
-    R_VectorSpace_of_LinearOperators(X,Y)),
-    Mult_(BoundedLinearOperators(X,Y),
-    R_VectorSpace_of_LinearOperators(X,Y)),
-    BoundedLinearOperatorsNorm(X,Y) #);
-  then reconsider f as LinearOperator of X,Y by Def10;
+  reconsider f as LinearOperator of X,Y by Def10;
     f.v is VECTOR of Y;
   hence thesis;
 end;
@@ -1816,37 +1627,10 @@ theorem Th41:
 proof
      let X, Y be RealNormSpace;
      let f,g,h be Point of R_NormSpace_of_BoundedLinearOperators(X,Y);
- R_NormSpace_of_BoundedLinearOperators(X,Y)
-  = NORMSTR (# BoundedLinearOperators(X,Y),
-         Zero_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Add_(BoundedLinearOperators(X,Y),
-          R_VectorSpace_of_LinearOperators(X,Y)),
-           Mult_(BoundedLinearOperators(X,Y),
-           R_VectorSpace_of_LinearOperators(X,Y)),
-           BoundedLinearOperatorsNorm(X,Y) #);
-    then reconsider f'=f,g'=g,h'=h as bounded LinearOperator of X,Y by Def10;
- R_VectorSpace_of_BoundedLinearOperators(X,Y) =
-    RLSStruct (# BoundedLinearOperators(X,Y),
-        Zero_(BoundedLinearOperators(X,Y),
-        R_VectorSpace_of_LinearOperators(X,Y)),
-         Add_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Mult_(BoundedLinearOperators(X,Y),
-          R_VectorSpace_of_LinearOperators(X,Y)) #);
- then reconsider f1=f, g1=g, h1=h as VECTOR of
+    reconsider f'=f,g'=g,h'=h as bounded LinearOperator of X,Y by Def10;
+ reconsider f1=f, g1=g, h1=h as VECTOR of
  R_VectorSpace_of_BoundedLinearOperators(X,Y);
-   h=f+g iff h1=f1+g1
-proof
-  now
-assume h1=f1+g1;
-hence h=Add_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y))
-         .[f1,g1]
-      .=f+g;
-end;
-hence thesis;
-end;
+   h=f+g iff h1=f1+g1;
 hence thesis by Th29;
 end;
 
@@ -1860,40 +1644,12 @@ proof
      let f,h be Point of
      R_NormSpace_of_BoundedLinearOperators(X,Y);
      let a be Real;
- R_NormSpace_of_BoundedLinearOperators(X,Y)
-  = NORMSTR (# BoundedLinearOperators(X,Y),
-         Zero_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Add_(BoundedLinearOperators(X,Y),
-          R_VectorSpace_of_LinearOperators(X,Y)),
-           Mult_(BoundedLinearOperators(X,Y),
-           R_VectorSpace_of_LinearOperators(X,Y)),
-           BoundedLinearOperatorsNorm(X,Y) #);
-    then reconsider f'=f,h'=h as bounded LinearOperator of X,Y by Def10;
- R_VectorSpace_of_BoundedLinearOperators(X,Y) =
-    RLSStruct (# BoundedLinearOperators(X,Y),
-        Zero_(BoundedLinearOperators(X,Y),
-        R_VectorSpace_of_LinearOperators(X,Y)),
-         Add_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Mult_(BoundedLinearOperators(X,Y),
-          R_VectorSpace_of_LinearOperators(X,Y)) #);
- then reconsider f1=f as VECTOR of
+    reconsider f'=f,h'=h as bounded LinearOperator of X,Y by Def10;
+ reconsider f1=f as VECTOR of
  R_VectorSpace_of_BoundedLinearOperators(X,Y);
  reconsider h1=h as VECTOR of
  R_VectorSpace_of_BoundedLinearOperators(X,Y);
-  h=a*f iff h1=a*f1
-proof
-  now
-assume h1=a*f1;
-hence
-       h=Mult_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y))
-         .[a,f1]
-      .=a*f;
-end;
-hence thesis;
-end;
+  h=a*f iff h1=a*f1;
 hence thesis by Th30;
 end;
 
@@ -1912,16 +1668,16 @@ proof
     let Y be RealNormSpace;
     let f, g being Point of R_NormSpace_of_BoundedLinearOperators(X,Y);
     let a be Real;
-A3:
+A1:
 now assume
-   A4: ||.f.|| = 0;
+   A2: ||.f.|| = 0;
    reconsider g=f as bounded LinearOperator of X,Y by Def10;
    set z = (the carrier of X) --> 0.Y;
    reconsider z as Function of the carrier of X, the carrier of Y
   by FUNCOP_1:58;
     now let t be VECTOR of X;
                ||.g.t.|| <= ||.f.|| *||.t.|| by Th38;
-              then ||.g.t.|| = 0 by A4,NORMSP_1:8;
+              then ||.g.t.|| = 0 by A2,NORMSP_1:8;
            hence g.t =0.Y by NORMSP_1:def 2
                  .=z.t by FUNCOP_1:13;
        end;
@@ -1929,167 +1685,167 @@ now assume
    hence f=0.R_NormSpace_of_BoundedLinearOperators(X,Y) by Th37;
 end;
 
-A5:
+A3:
 now assume
-   A6: f = 0.R_NormSpace_of_BoundedLinearOperators(X,Y);
+   A4: f = 0.R_NormSpace_of_BoundedLinearOperators(X,Y);
   thus ||.f.|| = 0
   proof
      set z = (the carrier of X) --> 0.Y;
      reconsider z as Function of the carrier of X, the carrier of Y
     by FUNCOP_1:58;
     reconsider g=f as bounded LinearOperator of X,Y by Def10;
-      A7: z=g by A6,Th37;
-      A8:
+      A5: z=g by A4,Th37;
+      A6:
       now let r be Real such that
-        A9:  r in PreNorms(g);
+        A7:  r in PreNorms(g);
            r in {||.g.t.|| where t is VECTOR of X : ||.t.|| <= 1 }
-    by A9;
+    by A7;
         then consider t be VECTOR of X such that
-          A10:   r=||.g.t.|| & ||.t.|| <= 1;
-            ||.g.t.|| = ||.0.Y.|| by A7,FUNCOP_1:13
+          A8:   r=||.g.t.|| & ||.t.|| <= 1;
+            ||.g.t.|| = ||.0.Y.|| by A5,FUNCOP_1:13
                   .= 0 by NORMSP_1:def 2;
-          hence 0 <= r & r <=0 by A10;
+          hence 0 <= r & r <=0 by A8;
     end;
-A11:PreNorms(g) is non empty bounded_above by Th32;
+A9:PreNorms(g) is non empty bounded_above by Th32;
  consider r0 be set such that
-  A12: r0 in PreNorms(g) by XBOOLE_0:def 1;
-  reconsider r0 as Real by A12;
-  A13: 0<=r0 by A8,A12;
+  A10: r0 in PreNorms(g) by XBOOLE_0:def 1;
+  reconsider r0 as Real by A10;
+  A11: 0<=r0 by A6,A10;
   (for s be real number st s in PreNorms(g) holds s <= 0)
 implies sup PreNorms(g) <= 0 by SEQ_4:62;
-    then sup PreNorms(g) = 0 by A8,A11,A12,A13,SEQ_4:def 4;
+    then sup PreNorms(g) = 0 by A6,A9,A10,A11,SEQ_4:def 4;
     then BoundedLinearOperatorsNorm(X,Y).f =0 by Th36;
     hence thesis by NORMSP_1:def 1;
   end;
 end;
 
-A14:  ||.a*f.|| = abs(a) * ||.f.||
+A12:  ||.a*f.|| = abs(a) * ||.f.||
 proof
 reconsider f1=f, h1=a*f as bounded LinearOperator of X,Y by Def10;
-A15:
+A13:
 now let t be VECTOR of X such that
-  A16: ||.t.|| <= 1;
- A17:  ||.h1.t.||= ||.a*f1.t.|| by Th42;
- A18:  ||.a*f1.t.|| =abs(a)*||.f1.t.|| by NORMSP_1:def 2;
- A19:   ||.f1.t.||<= ||.f.||*||.t.|| by Th38;
+  A14: ||.t.|| <= 1;
+ A15:  ||.h1.t.||= ||.a*f1.t.|| by Th42;
+ A16:  ||.a*f1.t.|| =abs(a)*||.f1.t.|| by NORMSP_1:def 2;
+ A17:   ||.f1.t.||<= ||.f.||*||.t.|| by Th38;
      0 <= ||.f.|| by Th39;
-   then ||.f.||*||.t.|| <= ||.f.||*1 by A16,XREAL_1:66;
- then A20: ||.f1.t.||  <= ||.f.|| by A19,XREAL_1:2;
+   then ||.f.||*||.t.|| <= ||.f.||*1 by A14,XREAL_1:66;
+ then A18: ||.f1.t.||  <= ||.f.|| by A17,XREAL_1:2;
    0<= abs(a) by COMPLEX1:132;
-    hence ||.h1.t.|| <= abs(a)*||.f.|| by A17,A18,A20,XREAL_1:66;
+    hence ||.h1.t.|| <= abs(a)*||.f.|| by A15,A16,A18,XREAL_1:66;
 end;
-A21:
+A19:
      now let r be Real such that
-        A22:  r in PreNorms(h1);
+        A20:  r in PreNorms(h1);
            r in {||.h1.t.|| where t is VECTOR of X : ||.t.|| <= 1 }
-    by A22;
+    by A20;
         then consider t be VECTOR of X such that
-          A23: r=||.h1.t.|| & ||.t.|| <= 1;
-          thus r <= abs(a)*||.f.|| by A15,A23;
+          A21: r=||.h1.t.|| & ||.t.|| <= 1;
+          thus r <= abs(a)*||.f.|| by A13,A21;
   end;
 
-A24:
+A22:
 (for s be real number st s in PreNorms(h1) holds s <= abs(a)*||.f.|| )
 implies sup PreNorms(h1) <=  abs(a)*||.f.|| by SEQ_4:62;
   BoundedLinearOperatorsNorm(X,Y).(a*f)
     = sup PreNorms(h1) by Th36;
-then A25:     ||.a*f.|| <= abs(a)*||.f.|| by A21,A24,NORMSP_1:def 1;
+then A23:     ||.a*f.|| <= abs(a)*||.f.|| by A19,A22,NORMSP_1:def 1;
   now per cases;
-case A26: a <> 0;
- A27: now let t be VECTOR of X such that
-  A28: ||.t.|| <= 1;
+case A24: a <> 0;
+ A25: now let t be VECTOR of X such that
+  A26: ||.t.|| <= 1;
     h1.t=a*f1.t by Th42;
-  then A29: a"*h1.t =( a"* a)*f1.t by RLVECT_1:def 9
-             .=1*f1.t by A26,XCMPLX_0:def 7
+  then A27: a"*h1.t =( a"* a)*f1.t by RLVECT_1:def 9
+             .=1*f1.t by A24,XCMPLX_0:def 7
              .=f1.t by RLVECT_1:def 9;
- A30:  ||.a"*h1.t.|| =abs(a")*||.h1.t.|| by NORMSP_1:def 2;
- A31:   ||.h1.t.||<= ||.a*f.||*||.t.|| by Th38;
+ A28:  ||.a"*h1.t.|| =abs(a")*||.h1.t.|| by NORMSP_1:def 2;
+ A29:   ||.h1.t.||<= ||.a*f.||*||.t.|| by Th38;
      0 <= ||.a*f.|| by Th39;
-   then ||.a*f.||*||.t.|| <= ||.a*f.||*1 by A28,XREAL_1:66;
-   then A32: ||.h1.t.|| <= ||.a*f.|| by A31,XREAL_1:2;
- A33: 0<= abs(a") by COMPLEX1:132;
+   then ||.a*f.||*||.t.|| <= ||.a*f.||*1 by A26,XREAL_1:66;
+   then A30: ||.h1.t.|| <= ||.a*f.|| by A29,XREAL_1:2;
+ A31: 0<= abs(a") by COMPLEX1:132;
      abs(a") =abs(1*a") .=abs( 1/a) by XCMPLX_0:def 9
                  .=1/abs(a) by ABSVALUE:15
                  .=1*abs(a)" by XCMPLX_0:def 9
                  .=abs(a)";
-  hence ||.f1.t.|| <= abs(a)"*||.a*f.|| by A29,A30,A32,A33,XREAL_1:66;
+  hence ||.f1.t.|| <= abs(a)"*||.a*f.|| by A27,A28,A30,A31,XREAL_1:66;
 end;
-A34:
+A32:
      now let r be Real such that
-        A35:  r in PreNorms(f1);
+        A33:  r in PreNorms(f1);
            r in {||.f1.t.|| where t is VECTOR of X : ||.t.|| <= 1 }
-    by A35;
+    by A33;
         then consider t be VECTOR of X such that
-          A36:  r=||.f1.t.|| & ||.t.|| <= 1;
-          thus r <= abs(a)"*||.a*f.|| by A27,A36;
+          A34:  r=||.f1.t.|| & ||.t.|| <= 1;
+          thus r <= abs(a)"*||.a*f.|| by A25,A34;
   end;
-A37: abs(a) <>0 by A26,COMPLEX1:133;
- A38:
+A35: abs(a) <>0 by A24,COMPLEX1:133;
+ A36:
 (for s be real number st s in PreNorms(f1) holds s <= abs(a)"*||.a*f.|| )
 implies sup PreNorms(f1) <= abs(a)"*||.a*f.|| by SEQ_4:62;
    BoundedLinearOperatorsNorm(X,Y).(f)
     = sup PreNorms(f1) by Th36;
- then A39: ||.f.|| <=abs(a)"*||.a*f.|| by A34,A38,NORMSP_1:def 1;
+ then A37: ||.f.|| <=abs(a)"*||.a*f.|| by A32,A36,NORMSP_1:def 1;
    0 <= abs(a) by COMPLEX1:132;
- then abs(a)*||.f.|| <=abs(a)*(abs(a)"*||.a*f.||) by A39,XREAL_1:66;
+ then abs(a)*||.f.|| <=abs(a)*(abs(a)"*||.a*f.||) by A37,XREAL_1:66;
  then abs(a)*||.f.|| <=(abs(a)*abs(a)")*||.a*f.||;
- then abs(a)*||.f.|| <=1*||.a*f.|| by A37,XCMPLX_0:def 7;
+ then abs(a)*||.f.|| <=1*||.a*f.|| by A35,XCMPLX_0:def 7;
  hence abs(a)* ||.f.|| <=||.a*f.||;
  end;
- case A40: a=0;
+ case A38: a=0;
   reconsider fz=f as VECTOR
      of R_VectorSpace_of_BoundedLinearOperators(X,Y);
-     A41: a*f =Mult_(BoundedLinearOperators(X,Y),
+     A39: a*f =Mult_(BoundedLinearOperators(X,Y),
             R_VectorSpace_of_LinearOperators(X,Y)).[a,f]
         .=a*fz
         .=0.R_VectorSpace_of_BoundedLinearOperators(X,Y)
- by A40,RLVECT_1:23
+ by A38,RLVECT_1:23
         .=Zero_(BoundedLinearOperators(X,Y),
           R_VectorSpace_of_LinearOperators(X,Y))
         .=0.R_NormSpace_of_BoundedLinearOperators(X,Y);
-  thus abs(a)* ||.f.|| =0 * ||.f.|| by A40,ABSVALUE:7
-                           .=||.a*f.|| by A41,Th40;
+  thus abs(a)* ||.f.|| =0 * ||.f.|| by A38,ABSVALUE:7
+                           .=||.a*f.|| by A39,Th40;
 end;
 end;
-hence thesis by A25,XREAL_1:1;
+hence thesis by A23,XREAL_1:1;
 end;
     ||.f+g.|| <= ||.f.|| +  ||.g.||
 proof
 reconsider f1=f, g1=g, h1=f+g as bounded LinearOperator of X,Y by Def10;
-A42:
+A40:
 now let t be VECTOR of X such that
-  A43: ||.t.|| <= 1;
- A44:  ||.h1.t.||= ||.f1.t+g1.t.|| by Th41;
- A45:  ||.f1.t+g1.t.|| <=||.f1.t.||+||.g1.t.|| by NORMSP_1:def 2;
- A46:   ||.f1.t.||<= ||.f.||*||.t.|| by Th38;
+  A41: ||.t.|| <= 1;
+ A42:  ||.h1.t.||= ||.f1.t+g1.t.|| by Th41;
+ A43:  ||.f1.t+g1.t.|| <=||.f1.t.||+||.g1.t.|| by NORMSP_1:def 2;
+ A44:   ||.f1.t.||<= ||.f.||*||.t.|| by Th38;
      ||.g1.t.||<= ||.g.||*||.t.|| by Th38;
- then A47:  ||.f1.t.||+||.g1.t.|| <= ||.f.||*||.t.|| +  ||.g.||*||.t.||
- by A46,XREAL_1:9;
+ then A45:  ||.f1.t.||+||.g1.t.|| <= ||.f.||*||.t.|| +  ||.g.||*||.t.||
+ by A44,XREAL_1:9;
      0 <= ||.f.|| by Th39;
- then A48:  ||.f.||*||.t.|| <= ||.f.||*1 by A43,XREAL_1:66;
+ then A46:  ||.f.||*||.t.|| <= ||.f.||*1 by A41,XREAL_1:66;
      0 <= ||.g.|| by Th39;
- then ||.g.||*||.t.|| <= ||.g.||*1 by A43,XREAL_1:66;
+ then ||.g.||*||.t.|| <= ||.g.||*1 by A41,XREAL_1:66;
     then ||.f.||*||.t.|| + ||.g.||*||.t.|| <= ||.f.||*1 + ||.g.||*1
- by A48,XREAL_1:9;
-   then ||.f1.t.||+||.g1.t.|| <= ||.f.|| + ||.g.|| by A47,XREAL_1:2;
-    hence ||.h1.t.|| <= ||.f.|| + ||.g.|| by A44,A45,XREAL_1:2;
+ by A46,XREAL_1:9;
+   then ||.f1.t.||+||.g1.t.|| <= ||.f.|| + ||.g.|| by A45,XREAL_1:2;
+    hence ||.h1.t.|| <= ||.f.|| + ||.g.|| by A42,A43,XREAL_1:2;
 end;
-A49:
+A47:
      now let r be Real such that
-        A50:  r in PreNorms(h1);
+        A48:  r in PreNorms(h1);
            r in {||.h1.t.|| where t is VECTOR of X : ||.t.|| <= 1 }
-    by A50;
+    by A48;
         then consider t be VECTOR of X such that
-          A51:   r=||.h1.t.|| & ||.t.|| <= 1;
-          thus r <= ||.f.|| + ||.g.|| by A42,A51;
+          A49:   r=||.h1.t.|| & ||.t.|| <= 1;
+          thus r <= ||.f.|| + ||.g.|| by A40,A49;
   end;
-A52:
+A50:
 (for s be real number st s in PreNorms(h1) holds s <= ||.f.|| + ||.g.||)
 implies sup PreNorms(h1) <= ||.f.|| + ||.g.|| by SEQ_4:62;
   BoundedLinearOperatorsNorm(X,Y).(f+g) = sup PreNorms(h1) by Th36;
-hence ||.f+g.|| <=||.f.|| + ||.g.|| by A49,A52,NORMSP_1:def 1;
+hence ||.f+g.|| <=||.f.|| + ||.g.|| by A47,A50,NORMSP_1:def 1;
 end;
-hence thesis by A3,A5,A14;
+hence thesis by A1,A3,A12;
 end;
 
 theorem Th44:
@@ -2136,23 +1892,14 @@ theorem Th46:
 proof
      let X, Y be RealNormSpace;
      let f,g,h be Point of R_NormSpace_of_BoundedLinearOperators(X,Y);
-   R_NormSpace_of_BoundedLinearOperators(X,Y)
-  = NORMSTR (# BoundedLinearOperators(X,Y),
-         Zero_(BoundedLinearOperators(X,Y),
-         R_VectorSpace_of_LinearOperators(X,Y)),
-          Add_(BoundedLinearOperators(X,Y),
-          R_VectorSpace_of_LinearOperators(X,Y)),
-           Mult_(BoundedLinearOperators(X,Y),
-           R_VectorSpace_of_LinearOperators(X,Y)),
-           BoundedLinearOperatorsNorm(X,Y) #);
-      then reconsider f'=f,g'=g,h'=h as bounded LinearOperator of X,Y by Def10;
+      reconsider f'=f,g'=g,h'=h as bounded LinearOperator of X,Y by Def10;
 hereby assume h=f-g;
      then h+g=f-(g-g) by RLVECT_1:43;
      then h+g=f-0.R_NormSpace_of_BoundedLinearOperators(X,Y) by RLVECT_1:28;
      then A1: h+g=f by RLVECT_1:26;
        now let x be VECTOR of X;
          f'.x=h'.x +  g'.x by A1,Th41;
-       then f'.x-g'.x=h'.x + (g'.x-g'.x) by RLVECT_1:42;
+       then f'.x-g'.x=h'.x + (g'.x-g'.x) by RLVECT_1:def 6;
        then f'.x-g'.x=h'.x + 0.Y by RLVECT_1:28;
        hence f'.x-g'.x=h'.x by RLVECT_1:10;
      end;
@@ -2167,7 +1914,7 @@ assume
        hence h'.x + g'.x= f'.x by RLVECT_1:26;
      end;
      then f=h+g by Th41;
-     then f-g=h+(g-g) by RLVECT_1:42;
+     then f-g=h+(g-g) by RLVECT_1:def 6;
      then f-g=h+0.R_NormSpace_of_BoundedLinearOperators(X,Y) by RLVECT_1:28;
      hence f-g=h by RLVECT_1:10;
 end;
@@ -2205,19 +1952,19 @@ A2:ex k be Nat st (for i be Nat st k <= i holds seq.i <=e );
    reconsider cseq = NAT --> e as Real_Sequence by FUNCOP_1:57;
 A3:for n be Nat holds cseq.n=e by FUNCOP_1:13;
    reconsider e1=e as real number;
-A5:cseq is convergent by SEQ_4:39;
+A4:cseq is convergent by SEQ_4:39;
    consider k be Nat such that
-A6:for i be Nat st k <= i holds seq.i <=e by A2;
-A7:(seq ^\k) is convergent by A1,SEQ_4:33;
-A8:lim (seq ^\k)=lim seq by A1,SEQ_4:33;
-A9:now let i be Nat;
-A10: (seq ^\k).i = seq.(k+i) by SEQM_3:def 9;
+A5:for i be Nat st k <= i holds seq.i <=e by A2;
+A6:(seq ^\k) is convergent by A1,SEQ_4:33;
+A7:lim (seq ^\k)=lim seq by A1,SEQ_4:33;
+A8:now let i be Nat;
+A9: (seq ^\k).i = seq.(k+i) by SEQM_3:def 9;
        k <= k+i by NAT_1:29;
-     then seq.(k+i) <=e by A6;
-     hence (seq ^\k) .i <= cseq.i by A3,A10;
+     then seq.(k+i) <=e by A5;
+     hence (seq ^\k) .i <= cseq.i by A3,A9;
   end;
     lim cseq = cseq.0 by SEQ_4:41 .= e by A3;
-  hence thesis by A5,A7,A8,A9,SEQ_2:32;
+  hence thesis by A4,A6,A7,A8,SEQ_2:32;
 end;
 
 theorem Th47:
@@ -2293,62 +2040,62 @@ end;
     defpred P[set, set] means ex xseq be sequence of Y st
     (for n be Nat holds xseq.n=modetrans((vseq.n),X,Y).$1)
     & xseq is convergent & $2= lim xseq;
-A12: for x be Element of X ex y be Element of Y st  P[x,y]
+A11: for x be Element of X ex y be Element of Y st  P[x,y]
    proof
        let x be Element of X;
        deffunc F(Nat) = modetrans((vseq.$1),X,Y).x;
        consider xseq be sequence of Y such that
-A13:  for n be Nat holds xseq.n = F(n) from FUNCT_2:sch 4;
-A14: for m,k be Nat holds
+A12:  for n be Nat holds xseq.n = F(n) from FUNCT_2:sch 4;
+A13: for m,k be Nat holds
              ||.xseq.m-xseq.k.|| <= ||.vseq.m - vseq.k.|| * ||.x.||
       proof
       let m,k be Nat;
            vseq.m is bounded LinearOperator of X,Y by Def10;
-then A15:         modetrans((vseq.m),X,Y)=vseq.m by Th35;
+then A14:         modetrans((vseq.m),X,Y)=vseq.m by Th35;
             vseq.k is bounded LinearOperator of X,Y by Def10;
-then A16:         modetrans((vseq.k),X,Y)=vseq.k by Th35;
+then A15:         modetrans((vseq.k),X,Y)=vseq.k by Th35;
          reconsider h1=vseq.m-vseq.k as bounded LinearOperator of X,Y by
 Def10;
-           A17:  xseq.m =modetrans((vseq.m),X,Y).x by A13;
-              xseq.k =modetrans((vseq.k),X,Y).x by A13;
-           then xseq.m - xseq.k = h1.x by A15,A16,A17,Th46;
+           A16:  xseq.m =modetrans((vseq.m),X,Y).x by A12;
+              xseq.k =modetrans((vseq.k),X,Y).x by A12;
+           then xseq.m - xseq.k = h1.x by A14,A15,A16,Th46;
           hence thesis by Th38;
          end;
-A18: xseq is convergent
+A17: xseq is convergent
      proof
           now
             let e be Real such that
-A19:          e > 0;
+A18:          e > 0;
                thus ex k be Nat st
                 for n, m be Nat st ( n >= k & m >= k )
                 holds ||.xseq.n -xseq.m.|| < e
                 proof
                    now per cases;
-                   case A20:x=0.X;
+                   case A19:x=0.X;
                    take k=0;
                    thus for n, m be Nat st ( n >= k & m >= k ) holds
                    ||.xseq.n -xseq.m.|| < e
                    proof
                      let n, m be Nat such that n >= k & m >= k;
-                     A21: xseq.n=modetrans((vseq.n),X,Y).x by A13
-                        .=modetrans((vseq.n),X,Y).(0*x) by A20,RLVECT_1:23
+                     A20: xseq.n=modetrans((vseq.n),X,Y).x by A12
+                        .=modetrans((vseq.n),X,Y).(0*x) by A19,RLVECT_1:23
                         .=0*modetrans((vseq.n),X,Y).x by Def6
                         .=0.Y by RLVECT_1:23;
-                       xseq.m=modetrans((vseq.m),X,Y).x by A13
-                        .=modetrans((vseq.m),X,Y).(0*x) by A20,RLVECT_1:23
+                       xseq.m=modetrans((vseq.m),X,Y).x by A12
+                        .=modetrans((vseq.m),X,Y).(0*x) by A19,RLVECT_1:23
                         .=0*modetrans((vseq.m),X,Y).x by Def6
                         .=0.Y by RLVECT_1:23;
-                     then ||.xseq.n -xseq.m.|| = ||.0.Y.|| by A21,RLVECT_1:26
+                     then ||.xseq.n -xseq.m.|| = ||.0.Y.|| by A20,RLVECT_1:26
                         .=0 by NORMSP_1:def 2;
-                     hence ||.xseq.n -xseq.m.|| < e by A19;
+                     hence ||.xseq.n -xseq.m.|| < e by A18;
                    end;
                    end;
                    case x <>0.X;
-                   then A22:  ||.x.|| <> 0 by NORMSP_1:def 2;
-                   then A23:  ||.x.|| > 0 by NORMSP_1:8;
-                   then e/||.x.||>0 by A19,XREAL_1:141;
+                   then A21:  ||.x.|| <> 0 by NORMSP_1:def 2;
+                   then A22:  ||.x.|| > 0 by NORMSP_1:8;
+                   then e/||.x.||>0 by A18,XREAL_1:141;
                    then consider k be Nat such that
-A24:                for n, m be Nat st n >= k & m >= k holds
+A23:                for n, m be Nat st n >= k & m >= k holds
                      ||.(vseq.n) - (vseq.m).|| < e/||.x.||
                         by A2,RSSPACE3:10;
                    take k;
@@ -2356,18 +2103,18 @@ A24:                for n, m be Nat st n >= k & m >= k holds
                      holds ||.xseq.n-xseq.m.|| < e
                    proof
                      let n,m be Nat such that
-A25:                  n >=k & m >= k;
-A26:                 ||.xseq.n-xseq.m.||  <=
-                     ||.(vseq.n) - (vseq.m).|| * ||.x.|| by A14;
-                       ||.(vseq.n) - (vseq.m).|| < e/||.x.|| by A24,A25;
-then A27:                 ||.(vseq.n) - (vseq.m).|| * ||.x.||
-                       < e/||.x.|| * ||.x.|| by A23,XREAL_1:70;
+A24:                  n >=k & m >= k;
+A25:                 ||.xseq.n-xseq.m.||  <=
+                     ||.(vseq.n) - (vseq.m).|| * ||.x.|| by A13;
+                       ||.(vseq.n) - (vseq.m).|| < e/||.x.|| by A23,A24;
+then A26:                 ||.(vseq.n) - (vseq.m).|| * ||.x.||
+                       < e/||.x.|| * ||.x.|| by A22,XREAL_1:70;
                        e/||.x.|| * ||.x.|| = e*||.x.||"* ||.x.||
                             by XCMPLX_0:def 9
                          .= e*(||.x.||"* ||.x.||)
-                         .= e*1 by A22,XCMPLX_0:def 7
+                         .= e*1 by A21,XCMPLX_0:def 7
                          .=e;
-                     hence ||.xseq.n-xseq.m.|| < e by A26,A27,XREAL_1:2;
+                     hence ||.xseq.n-xseq.m.|| < e by A25,A26,XREAL_1:2;
                    end;
                  end;
                  end;
@@ -2378,96 +2125,96 @@ then A27:                 ||.(vseq.n) - (vseq.m).|| * ||.x.||
          hence thesis by A1,Def16;
          end;
   take y = lim xseq;
-  thus thesis by A13,A18;
+  thus thesis by A12,A17;
   end;
    consider f be Function of the carrier of X,the carrier of Y such that
-A28:for x be Element of X holds P[x,f.x] from FUNCT_2:sch 3(A12);
+A27:for x be Element of X holds P[x,f.x] from FUNCT_2:sch 3(A11);
    reconsider tseq=f as Function of X,Y;
   tseq is LinearOperator of X,Y
 proof
-A29: now let x,y be VECTOR of X;
+A28: now let x,y be VECTOR of X;
   consider xseq be sequence of Y such that
-  A30: (for n be Nat holds xseq.n=modetrans((vseq.n),X,Y).x)
+  A29: (for n be Nat holds xseq.n=modetrans((vseq.n),X,Y).x)
        & xseq is convergent
-       & tseq.x = lim xseq by A28;
+       & tseq.x = lim xseq by A27;
   consider yseq be sequence of Y such that
-  A31: (for n be Nat holds yseq.n=modetrans((vseq.n),X,Y).y)
+  A30: (for n be Nat holds yseq.n=modetrans((vseq.n),X,Y).y)
        & yseq is convergent
-       & tseq.y = lim yseq by A28;
+       & tseq.y = lim yseq by A27;
   consider zseq be sequence of Y such that
-  A32: (for n be Nat holds zseq.n=modetrans((vseq.n),X,Y).(x+y))
+  A31: (for n be Nat holds zseq.n=modetrans((vseq.n),X,Y).(x+y))
        & zseq is convergent
-       & tseq.(x+y) = lim zseq by A28;
+       & tseq.(x+y) = lim zseq by A27;
     zseq=xseq+yseq
   proof
        now let n be Nat;
-     thus zseq.n=modetrans((vseq.n),X,Y).(x+y) by A32
+     thus zseq.n=modetrans((vseq.n),X,Y).(x+y) by A31
          .= modetrans((vseq.n),X,Y).x+modetrans((vseq.n),X,Y).y
           by Def5
-         .= xseq.n + modetrans((vseq.n),X,Y).y by A30
-         .= xseq.n +yseq.n by A31;
+         .= xseq.n + modetrans((vseq.n),X,Y).y by A29
+         .= xseq.n +yseq.n by A30;
       end;
     hence thesis by NORMSP_1:def 5;
   end;
- hence tseq.(x+y)=tseq.x+tseq.y by A30,A31,A32,NORMSP_1:42;
+ hence tseq.(x+y)=tseq.x+tseq.y by A29,A30,A31,NORMSP_1:42;
 end;
   now
        let x be VECTOR of X;
        let a be Real;
   consider xseq be sequence of Y such that
-  A33: (for n be Nat holds xseq.n=modetrans((vseq.n),X,Y).x)
+  A32: (for n be Nat holds xseq.n=modetrans((vseq.n),X,Y).x)
        & xseq is convergent
-       & tseq.x = lim xseq by A28;
+       & tseq.x = lim xseq by A27;
   consider zseq be sequence of Y such that
-  A34: (for n be Nat holds zseq.n=modetrans((vseq.n),X,Y).(a*x))
+  A33: (for n be Nat holds zseq.n=modetrans((vseq.n),X,Y).(a*x))
        & zseq is convergent
-       & tseq.(a*x) = lim zseq by A28;
+       & tseq.(a*x) = lim zseq by A27;
     zseq=a*xseq
   proof
        now let n be Nat;
-     thus zseq.n=modetrans((vseq.n),X,Y).(a*x) by A34
+     thus zseq.n=modetrans((vseq.n),X,Y).(a*x) by A33
          .= a*modetrans((vseq.n),X,Y).x by Def6
-         .= a*xseq.n by A33;
+         .= a*xseq.n by A32;
       end;
     hence thesis by NORMSP_1:def 8;
   end;
- hence tseq.(a*x)=a*tseq.x by A33,A34,NORMSP_1:45;
+ hence tseq.(a*x)=a*tseq.x by A32,A33,NORMSP_1:45;
 end;
-hence thesis by A29,Def5,Def6;
+hence thesis by A28,Def5,Def6;
 end;
 then reconsider tseq as LinearOperator of X,Y;
-A35: tseq is bounded
+A34: tseq is bounded
 proof
-A36: now
+A35: now
        let x be VECTOR of X;
        consider xseq be sequence of Y such that
-  A37: (for n be Nat holds  xseq.n=modetrans((vseq.n),X,Y).x)
+  A36: (for n be Nat holds  xseq.n=modetrans((vseq.n),X,Y).x)
        & xseq is convergent
-       & tseq.x = lim xseq by A28;
-A38: for m be Nat holds
+       & tseq.x = lim xseq by A27;
+A37: for m be Nat holds
              ||.xseq.m.|| <= ||.vseq.m.|| * ||.x.||
       proof
       let m be Nat;
       vseq.m is bounded LinearOperator of X,Y by Def10;
-then A39:         modetrans((vseq.m),X,Y)=vseq.m by Th35;
+then A38:         modetrans((vseq.m),X,Y)=vseq.m by Th35;
          reconsider h1=vseq.m as bounded LinearOperator of X,Y by Def10;
-            xseq.m =modetrans((vseq.m),X,Y).x by A37;
-          hence thesis by A39,Th38;
+            xseq.m =modetrans((vseq.m),X,Y).x by A36;
+          hence thesis by A38,Th38;
          end;
-  A40:     ||.xseq.|| is convergent by A37,Th24;
-  A41:     ||.tseq.x.|| = lim ||.xseq.|| by A37,Th24;
-  A42:    for n be Nat holds ||.xseq.||.n  <=( ||.x.||(#)||.vseq.||).n
+  A39:     ||.xseq.|| is convergent by A36,Th24;
+  A40:     ||.tseq.x.|| = lim ||.xseq.|| by A36,Th24;
+  A41:    for n be Nat holds ||.xseq.||.n  <=( ||.x.||(#)||.vseq.||).n
             proof
             let n be Nat;
-             A43: ||.xseq.||.n = ||.(xseq.n).|| by NORMSP_1:def 10;
-             A44: ||.(xseq.n).|| <= ||.vseq.n.|| * ||.x.|| by A38;
+             A42: ||.xseq.||.n = ||.(xseq.n).|| by NORMSP_1:def 10;
+             A43: ||.(xseq.n).|| <= ||.vseq.n.|| * ||.x.|| by A37;
                ||.vseq.n.|| = ||.vseq.||.n by NORMSP_1:def 10;
-             hence thesis by A43,A44,SEQ_1:13;
+             hence thesis by A42,A43,SEQ_1:13;
             end;
-   A45:  ||.x.||(#)||.vseq.|| is convergent by A3,SEQ_2:21;
+   A44:  ||.x.||(#)||.vseq.|| is convergent by A3,SEQ_2:21;
       lim ( ||.x.||(#)||.vseq.|| ) = lim (||.vseq.|| )* ||.x.||
  by A3,SEQ_2:22;
-   hence ||.tseq.x.|| <= lim (||.vseq.|| )* ||.x.|| by A40,A41,A42,A45,SEQ_2:32
+   hence ||.tseq.x.|| <= lim (||.vseq.|| )* ||.x.|| by A39,A40,A41,A44,SEQ_2:32
 ;
     end;
    take K= lim (||.vseq.|| );
@@ -2479,10 +2226,10 @@ then A39:         modetrans((vseq.m),X,Y)=vseq.m by Th35;
       end;
      hence thesis by A3,SEQ_2:31;
     end;
-    hence thesis by A36;
+    hence thesis by A35;
 end;
 
-A46:
+A45:
    for e be Real st
     e > 0 ex k be Nat st for n be Nat st
      n >= k holds
@@ -2490,135 +2237,135 @@ A46:
             ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e* ||.x.||
    proof
      let e be Real such that
-      A47:e > 0;
+      A46:e > 0;
       consider k be Nat such that
-      A48:  for n, m be Nat st ( n >= k & m >= k ) holds
+      A47:  for n, m be Nat st ( n >= k & m >= k ) holds
              ||.(vseq.n) - (vseq.m).|| < e
-                        by A2,A47,RSSPACE3:10;
-      A49: now let n be Nat such that
-         A50: n >= k;
+                        by A2,A46,RSSPACE3:10;
+      A48: now let n be Nat such that
+         A49: n >= k;
              now let x be VECTOR of X;
               consider xseq be sequence of Y such that
-              A51:
+              A50:
               (for n be Nat holds  xseq.n=modetrans((vseq.n),X,Y).x)
                 & xseq is convergent
-                & tseq.x = lim xseq by A28;
-               A52:
+                & tseq.x = lim xseq by A27;
+               A51:
                 for m,k be Nat holds
                  ||.xseq.m-xseq.k.|| <= ||.vseq.m - vseq.k.|| * ||.x.||
                 proof
                 let m,k be Nat;
                   vseq.m is bounded LinearOperator of X,Y by Def10;
-                 then A53:           modetrans((vseq.m),X,Y)=vseq.m by Th35;
+                 then A52:           modetrans((vseq.m),X,Y)=vseq.m by Th35;
                   vseq.k is bounded LinearOperator of X,Y by Def10;
-                then A54:            modetrans((vseq.k),X,Y)=vseq.k by Th35;
+                then A53:            modetrans((vseq.k),X,Y)=vseq.k by Th35;
                 reconsider h1=vseq.m-vseq.k
               as bounded LinearOperator of X,Y by Def10;
-                A55:  xseq.m =modetrans((vseq.m),X,Y).x by A51;
-                   xseq.k =modetrans((vseq.k),X,Y).x by A51;
-                 then xseq.m - xseq.k =h1.x by A53,A54,A55,Th46;
+                A54:  xseq.m =modetrans((vseq.m),X,Y).x by A50;
+                   xseq.k =modetrans((vseq.k),X,Y).x by A50;
+                 then xseq.m - xseq.k =h1.x by A52,A53,A54,Th46;
                  hence thesis by Th38;
                  end;
-           A56:  for m be Nat st m >=k holds
+           A55:  for m be Nat st m >=k holds
                     ||.xseq.n-xseq.m.|| <= e * ||.x.||
                     proof
                       let m be Nat such that
-                      A57:  m >=k;
-                      A58:  ||.xseq.n-xseq.m.||
-                      <=  ||.vseq.n - vseq.m.|| * ||.x.|| by A52;
-                      A59:  ||.vseq.n - vseq.m.|| <e by A48,A50,A57;
+                      A56:  m >=k;
+                      A57:  ||.xseq.n-xseq.m.||
+                      <=  ||.vseq.n - vseq.m.|| * ||.x.|| by A51;
+                      A58:  ||.vseq.n - vseq.m.|| <e by A47,A49,A56;
                          0 <= ||.x.|| by NORMSP_1:8;
                       then ||.vseq.n - vseq.m.|| * ||.x.|| <= e* ||.x.||
-                  by A59,XREAL_1:66;
-                      hence thesis by A58,XREAL_1:2;
+                  by A58,XREAL_1:66;
+                      hence thesis by A57,XREAL_1:2;
                     end;
                     ||.xseq.n-tseq.x.|| <= e * ||.x.||
                   proof
                     deffunc F(Nat) = ||.xseq.$1 - xseq.n.||;
                     consider rseq be Real_Sequence such that
-  A60:              for m be Nat holds rseq.m = F(m) from SEQ_1:sch 1;
-  A61:            rseq is convergent & lim rseq = ||.tseq.x-xseq.n.||
+  A59:              for m be Nat holds rseq.m = F(m) from SEQ_1:sch 1;
+  A60:            rseq is convergent & lim rseq = ||.tseq.x-xseq.n.||
                     proof
-                        A62: xseq - xseq.n is convergent by A51,NORMSP_1:36;
-                        A63: lim (xseq-xseq.n)= tseq.x - xseq.n
-                    by A51,NORMSP_1:44;
+                        A61: xseq - xseq.n is convergent by A50,NORMSP_1:36;
+                        A62: lim (xseq-xseq.n)= tseq.x - xseq.n
+                    by A50,NORMSP_1:44;
                             rseq = ||.xseq - xseq.n.||
                          proof
                             now let x be set such that
-                           A64:  x in NAT;
-                           reconsider k=x as Nat by A64;
-                           thus rseq.x = ||.xseq.k - xseq.n.|| by A60
+                           A63:  x in NAT;
+                           reconsider k=x as Nat by A63;
+                           thus rseq.x = ||.xseq.k - xseq.n.|| by A59
                              .= ||.(xseq - xseq.n).k.|| by NORMSP_1:def 7
                              .= ||.(xseq - xseq.n).||.x by NORMSP_1:def 10;
                          end;
                          hence thesis by SEQ_1:8;
                          end;
-                         hence thesis by A62,A63,Th47;
+                         hence thesis by A61,A62,Th47;
                      end;
               for m be Nat st m >= k holds rseq.m <= e * ||.x.||
                     proof
                       let m be Nat such that
-                      A65:  m >=k;
-                        rseq.m = ||.xseq.m-xseq.n.|| by A60
+                      A64:  m >=k;
+                        rseq.m = ||.xseq.m-xseq.n.|| by A59
                                      .= ||.xseq.n-xseq.m.|| by NORMSP_1:11;
-                      hence thesis by A56,A65;
+                      hence thesis by A55,A64;
                     end;
-                   then lim rseq <= e * ||.x.|| by A61,Lm3;
-                   hence thesis by A61,NORMSP_1:11;
+                   then lim rseq <= e * ||.x.|| by A60,Lm3;
+                   hence thesis by A60,NORMSP_1:11;
                   end;
                  hence ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e* ||.x.||
-                      by A51;
+                      by A50;
            end;
          hence for x be VECTOR of X holds
           ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e* ||.x.||;
      end;
      take k;
-     thus thesis by A49;
+     thus thesis by A48;
    end;
-  reconsider tseq as bounded LinearOperator of X,Y by A35;
+  reconsider tseq as bounded LinearOperator of X,Y by A34;
   reconsider tv=tseq as Point of
    R_NormSpace_of_BoundedLinearOperators(X,Y) by Def10;
 
-A66:
+A65:
    for e be Real st
     e > 0 ex k be Nat st for n be Nat st
      n >= k holds ||.vseq.n - tv.|| <= e
    proof
    let e be Real such that
-      A67: e > 0;
+      A66: e > 0;
       consider k be Nat such that
-      A68: for n be Nat st n >= k holds
+      A67: for n be Nat st n >= k holds
           for x be VECTOR of X holds
-  ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e* ||.x.|| by A46,A67;
+  ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e* ||.x.|| by A45,A66;
         now let n be Nat such that
-        A69: n >= k;
+        A68: n >= k;
         set f1=modetrans((vseq.n),X,Y);
         set g1=tseq;
         reconsider h1=vseq.n-tv as bounded LinearOperator of X,Y by Def10;
-       A70: now let t be VECTOR of X such that
-       A71: ||.t.|| <= 1;
+       A69: now let t be VECTOR of X such that
+       A70: ||.t.|| <= 1;
            vseq.n is bounded LinearOperator of X,Y by Def10;
          then modetrans((vseq.n),X,Y)=vseq.n by Th35;
-       then A72:  ||.h1.t.||= ||.f1.t-g1.t.|| by Th46;
-       A73:  ||.f1.t-g1.t.|| <=e* ||.t.|| by A68,A69;
-         e*||.t.|| <= e*1 by A67,A71,XREAL_1:66;
-       hence ||.h1.t.|| <=e by A72,A73,XREAL_1:2;
+       then A71:  ||.h1.t.||= ||.f1.t-g1.t.|| by Th46;
+       A72:  ||.f1.t-g1.t.|| <=e* ||.t.|| by A67,A68;
+         e*||.t.|| <= e*1 by A66,A70,XREAL_1:66;
+       hence ||.h1.t.|| <=e by A71,A72,XREAL_1:2;
       end;
-     A74:
+     A73:
        now let r be Real such that
-        A75:  r in PreNorms(h1);
+        A74:  r in PreNorms(h1);
            r in {||.h1.t.|| where t is VECTOR of X : ||.t.|| <= 1 }
-    by A75;
+    by A74;
         then consider t be VECTOR of X such that
-          A76: r=||.h1.t.|| & ||.t.|| <= 1;
-          thus r <=e by A70,A76;
+          A75: r=||.h1.t.|| & ||.t.|| <= 1;
+          thus r <=e by A69,A75;
       end;
-     A77:
+     A76:
      (for s be real number st s in PreNorms(h1) holds s <= e)
       implies sup PreNorms(h1) <=e by SEQ_4:62;
        BoundedLinearOperatorsNorm(X,Y).(vseq.n-tv)
       = sup PreNorms(h1) by Th36;
-     hence ||.vseq.n-tv.|| <=e by A74,A77,NORMSP_1:def 1;
+     hence ||.vseq.n-tv.|| <=e by A73,A76,NORMSP_1:def 1;
       end;
      hence thesis;
 end;
@@ -2627,16 +2374,16 @@ end;
      n >= m holds ||.(vseq.n) - tv.|| < e
    proof
     let e be Real such that
-      A78: e > 0;
-      A79: e/2 > 0 by A78,SEQ_2:3;
-      A80: e/2<e by A78,XREAL_1:218;
+      A77: e > 0;
+      A78: e/2 > 0 by A77,SEQ_2:3;
+      A79: e/2<e by A77,XREAL_1:218;
       consider m be Nat such that
-          A81: for n be Nat st
-          n >= m holds ||.(vseq.n) - tv.|| <= e/2 by A66,A79;
+          A80: for n be Nat st
+          n >= m holds ||.(vseq.n) - tv.|| <= e/2 by A65,A78;
             now let n be Nat such that
-        A82: n >= m;
-              ||.(vseq.n) - tv.|| <= e/2 by A81,A82;
-            hence ||.(vseq.n) - tv.|| < e by A80,XREAL_1:2;
+        A81: n >= m;
+              ||.(vseq.n) - tv.|| <= e/2 by A80,A81;
+            hence ||.(vseq.n) - tv.|| < e by A79,XREAL_1:2;
           end;
     hence thesis;
    end;

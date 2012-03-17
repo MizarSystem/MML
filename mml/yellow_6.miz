@@ -27,7 +27,7 @@ environ
       SEQM_3, PCOMPS_1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, STRUCT_0, WAYBEL_0, PRALG_1, YELLOW_1, COMPTS_1, YELLOW_0,
-      RELAT_1, PRE_TOPC, WAYBEL_3, CONNSP_2;
+      RELAT_1, PRE_TOPC, WAYBEL_3, CONNSP_2, BINOP_1;
  theorems STRUCT_0, CONNSP_2, TOPS_1, FUNCOP_1, WAYBEL_0, PRE_TOPC, ORDERS_2,
       TMAP_1, RELAT_1, FUNCT_2, SEQM_3, ZFMISC_1, FUNCT_1, TARSKI, PBOOLE,
       YELLOW_1, CARD_3, PRALG_1, YELLOW_3, RELSET_1, BINOP_1, DOMAIN_1,
@@ -52,7 +52,7 @@ A2:   x in dom f by XBOOLE_0:def 1;
    take f.x;
    thus thesis by A2;
   end;
- uniqueness by A1,SEQM_3:def 5;
+ uniqueness by A1,FUNCT_1:def 16;
 end;
 
 registration
@@ -98,21 +98,12 @@ end;
 
 registration let X;
  cluster the_universe_of X -> epsilon-transitive being_Tarski-Class;
- coherence
-  proof
-   Tarski-Class the_transitive-closure_of X
-       is epsilon-transitive being_Tarski-Class;
-   hence thesis;
-  end;
+ coherence;
 end;
 
 registration let X;
  cluster the_universe_of X -> universal non empty;
- coherence
-  proof
-       the_universe_of X = Tarski-Class the_transitive-closure_of X;
-   hence thesis;
-  end;
+ coherence;
 end;
 
 canceled 2;
@@ -329,9 +320,7 @@ definition
    hereby assume N is directed;
 then A1:   [#]N is directed by WAYBEL_0:def 6;
     let x,y be Element of N;
-         x in the carrier of N & y in the carrier of N;
-     then x in [#]N & y in [#]N;
-     then ex z being Element of N st z in [#]N & x <= z & y <= z
+     ex z being Element of N st z in [#]N & x <= z & y <= z
              by A1,WAYBEL_0:def 1;
     hence ex z being Element of N st x <= z & y <= z;
    end;
@@ -341,8 +330,7 @@ A2:  for x,y being Element of N ex z being Element of N st x <= z & y <= z;
    consider z being Element of N such that
 A3:  x <= z & y <= z by A2;
    take z;
-        z in the carrier of N;
-   hence z in [#]N;
+   thus z in [#]N;
    thus x <= z & y <= z by A3;
   end;
 end;
@@ -467,11 +455,7 @@ end;
 
 theorem Th11:
  for R1,R2 being RelStr holds
-  [#][:R1,R2:] = [:[#]R1,[#]R2:]
-proof let R1,R2 be RelStr;
- thus [#][:R1,R2:] = the carrier of [:R1,R2:]
-   .= [:[#]R1,[#]R2:] by YELLOW_3:def 2;
-end;
+  [#][:R1,R2:] = [:[#]R1,[#]R2:] by YELLOW_3:def 2;
 
 registration let Y1,Y2 be directed RelStr;
  cluster [:Y1,Y2:] -> directed;
@@ -1429,7 +1413,7 @@ A2:   for i being Element of Y,
       f be Function such that
           i in the carrier of Y and
 A3: f in the carrier of product J;
-   thus (the mapping of N).(i,f) = F. [i,f] by BINOP_1:def 1
+   thus (the mapping of N).(i,f) = F. [i,f]
       .=(the mapping of J.i).(f.i) by A2,A3;
   end;
  uniqueness
@@ -1455,10 +1439,10 @@ A7: for i being Element of Y,
                c2 being Element of product J such that
 A8:     c = [c1,c2] by DOMAIN_1:9;
        reconsider d = c2 as Element of product Carrier J by YELLOW_1:def 4;
-     thus m1.c = m1.(c1,d) by A8,BINOP_1:def 1
+     thus m1.c = m1.(c1,d) by A8
       .= (the mapping of J.c1).(d.c1) by A5
       .= m2.(c1,d) by A7
-      .= m2.c by A8,BINOP_1:def 1;
+      .= m2.c by A8;
     end;
    hence IT1 = IT2 by A4,A6,FUNCT_2:113;
   end;
@@ -1529,7 +1513,7 @@ proof
      x be Element of Iterated J; assume
      x = [i,f];
  hence (Iterated J).x = (the mapping of Iterated J). [i,f]
-           .= (the mapping of Iterated J).(i,f) by BINOP_1:def 1
+           .= (the mapping of Iterated J).(i,f)
            .= (the mapping of J.i).(f.i) by Def16;
 end;
 
@@ -1561,7 +1545,7 @@ then A5: y2 in the carrier of product J by YELLOW_1:def 4;
     then y2.y1 in (Carrier J).y1 by CARD_3:18;
     then y2.y1 in the carrier of J.y1 by Th9;
 then A6: y2.y1 in dom the mapping of J.y1 by FUNCT_2:def 1;
-      x = (the mapping of Iterated J).(y1,y2) by A2,A3,BINOP_1:def 1
+      x = (the mapping of Iterated J).(y1,y2) by A2,A3
    .= (the mapping of J.y1).(y2.y1) by A5,Def16;
   then A7: x in rng the mapping of J.y1 by A6,FUNCT_1:def 5;
   reconsider y1 as Element of Y;
@@ -1597,8 +1581,7 @@ proof
  let T be non empty TopSpace, p be Point of T,
      x be Element of OpenNeighborhoods p;
   set X = { V where V is Subset of T: p in V & V is open };
-       x in the carrier of OpenNeighborhoods p;
-   then x in the carrier of (InclPoset X)~;
+   x in the carrier of (InclPoset X)~;
    then x in the carrier of InclPoset X by Th12;
    then x in X;
   hence thesis;
@@ -1640,29 +1623,28 @@ proof let T be non empty TopSpace, p be Point of T;
      RelStr(#the carrier of InclPoset X, (the InternalRel of InclPoset X)~#)
                              by LATTICE3:def 5;
   then reconsider a = x, b = y as Element of InclPoset X;
-A2: x = a~ & y = b~ by LATTICE3:def 6;
+A1: x = a~ & y = b~ by LATTICE3:def 6;
       b <= a iff y c= x by YELLOW_1:3;
- hence x <= y iff y c= x by A2,LATTICE3:9;
+ hence x <= y iff y c= x by A1,LATTICE3:9;
 end;
 
 registration let T be non empty TopSpace, p be Point of T;
  cluster OpenNeighborhoods p -> transitive directed;
  coherence
   proof set X = { V where V is Subset of T: p in V & V is open };
-   OpenNeighborhoods p = (InclPoset X)~;
-   hence OpenNeighborhoods p is transitive;
+   thus OpenNeighborhoods p is transitive;
    let x,y be Element of OpenNeighborhoods p;
    consider V being Subset of T such that
-A2:  x = V & p in V & V is open by Th38;
+A1:  x = V & p in V & V is open by Th38;
    consider W being Subset of T such that
-A3:  y = W & p in W & W is open by Th38;
+A2:  y = W & p in W & W is open by Th38;
    set z = V /\ W;
-       p in z & z is open by A2,A3,TOPS_1:38,XBOOLE_0:def 3;
+       p in z & z is open by A1,A2,TOPS_1:38,XBOOLE_0:def 3;
    then z in X;
    then z in the carrier of InclPoset X;
    then reconsider z as Element of OpenNeighborhoods p by Th12;
    take z;
-        z c= x & z c= y by A2,A3,XBOOLE_1:17;
+        z c= x & z c= y by A1,A2,XBOOLE_1:17;
    hence x <= z & y <= z by Th40;
   end;
 end;
@@ -3108,7 +3090,7 @@ A83:       dom Carrier J = the carrier of X' by PBOOLE:def 3;
               the carrier of J.x' = (Carrier J).x1 by Th9;
           then x2.x1 in the carrier of J.x' by A83,A84,CARD_3:18;
           then reconsider j = x2.x1 as Element of M.x' by A59;
-         thus h.x = h.(x1,x2) by A82,BINOP_1:def 1
+         thus h.x = h.(x1,x2) by A82
                 .= (the mapping of J.x').(x2.x1) by Def16
                 .= g.(u.x'.j) by A71
                 .= g.(f.x) by A79,A82;

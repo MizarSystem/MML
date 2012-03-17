@@ -12,23 +12,25 @@ environ
       AMISTD_2, FRECHET, FINSEQ_2, CAT_1, FUNCOP_1, MEMBERED;
  notations TARSKI, XBOOLE_0, SETFAM_1, ZFMISC_1, SUBSET_1, FINSET_1, CARD_1,
       NUMBERS, ORDINAL1, ORDINAL2, MEMBERED, XREAL_0, CQC_SIM1, NAT_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, WELLORD1, WELLORD2, FUNCOP_1, CQC_LANG,
+      FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1,
+      WELLORD1, WELLORD2, FUNCOP_1, CQC_LANG,
       FINSEQ_1, FINSEQ_2, TREES_1, TREES_2, STRUCT_0, AMI_1, AMI_3, AMI_5,
       AMISTD_1, AMISTD_2;
  constructors AMISTD_2, CQC_SIM1, WELLORD1, ORDERS_1, AMI_5, POLYNOM1,
-      WELLORD2;
+      WELLORD2, BINOP_1;
  registrations AMI_1, AMISTD_1, FINSET_1, RELSET_1, TREES_2, ARYTM_3, FINSEQ_6,
       HEYTING2, NECKLACE, CARD_5, RELAT_1, FUNCOP_1, SCMFSA_4, XREAL_0, CARD_1,
       ORDINAL1, MEMBERED, FINSEQ_1, CARD_4;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
- definitions TARSKI, XBOOLE_0, ORDINAL1, WELLORD1, WELLORD2, FUNCT_1, TREES_1;
+ definitions TARSKI, XBOOLE_0, ORDINAL1, WELLORD1, WELLORD2, FUNCT_1, TREES_1,
+  BINOP_1;
  theorems ORDINAL2, AMI_3, CQC_SIM1, AMISTD_1, GRFUNC_1, NAT_1, ORDINAL1,
       CARD_1, TREES_2, SUBSET_1, FUNCT_2, TREES_1, FINSEQ_1, FUNCT_1, PARTFUN1,
       XBOOLE_1, RELAT_1, FINSEQ_3, FINSEQ_5, TARSKI, QC_LANG4, CARD_5,
       FINSEQ_2, XBOOLE_0, AMI_5, AMISTD_2, CQC_LANG, CARD_2, WELLORD2,
       ENUMSET1, WELLORD1, ZFMISC_1, AMI_1, TOLER_1, CARD_4, FINSET_1, FUNCOP_1,
       RELSET_1, MEMBERED, ORDERS_1, XREAL_1;
- schemes FRAENKEL, TREES_2, FUNCT_2, NAT_1, HILBERT2, ORDINAL2;
+ schemes FRAENKEL, TREES_2, FUNCT_2, NAT_1, HILBERT2, ORDINAL2, BINOP_1;
 
 begin
 
@@ -798,8 +800,8 @@ coherence
 proof
   assume LocNums F is non empty;
   then consider x being set such that
-A2:  x in LocNums F by XBOOLE_0:def 1;
-   ex l being Instruction-Location of S st x = locnum l & l in F by A2;
+A1:  x in LocNums F by XBOOLE_0:def 1;
+   ex l being Instruction-Location of S st x = locnum l & l in F by A1;
   hence thesis;
 end;
 end;
@@ -828,10 +830,10 @@ A3: locnum il.(S,n) = n by AMISTD_1:def 13;
     let x be set;
     assume x in LocNums F;
     then consider l being Instruction-Location of S such that
-A5:   x = locnum l and
-A6:   l in F;
-     l = il.(S,n) by A1,A6,TARSKI:def 1;
-    then x = n by A5,AMISTD_1:def 13;
+A4:   x = locnum l and
+A5:   l in F;
+     l = il.(S,n) by A1,A5,TARSKI:def 1;
+    then x = n by A4,AMISTD_1:def 13;
     hence x in {n} by TARSKI:def 1;
   end;
   let x be set;
@@ -850,46 +852,46 @@ proof
   hence thesis;
   end;
   suppose
-A2: F is non empty;
+A1: F is non empty;
    LocNums F,F are_equipotent
   proof
     defpred P[set,set] means ex n being Nat st n = $1 & $2 = il.(S,n);
-A3: for x being set st x in LocNums F ex y being set st y in F & P[x,y]
+A2: for x being set st x in LocNums F ex y being set st y in F & P[x,y]
   proof
     let x be set;
     assume x in LocNums F;
     then consider l being Instruction-Location of S such that
-A4:    x = locnum l & l in F;
+A3:    x = locnum l & l in F;
     take l;
-    thus l in F by A4;
+    thus l in F by A3;
     take locnum l;
-    thus thesis by A4,AMISTD_1:def 13;
+    thus thesis by A3,AMISTD_1:def 13;
   end;
   consider f being Function of LocNums F,F such that
-A5:   for x being set st x in LocNums F holds P[x,f.x] from FUNCT_2:sch 1(A3);
+A4:   for x being set st x in LocNums F holds P[x,f.x] from FUNCT_2:sch 1(A2);
   take f;
   thus f is one-to-one
   proof
     let x,y be set;
     assume that
-A6:   x in dom f and
-A7:   y in dom f and
-A8:   f.x = f.y;
-A9: dom f = LocNums F by A2,FUNCT_2:def 1;
-     P[x,f.x] & P[y,f.y] by A5,A6,A7,A9;
-    hence thesis by A8,AMISTD_1:25;
+A5:   x in dom f and
+A6:   y in dom f and
+A7:   f.x = f.y;
+A8: dom f = LocNums F by A1,FUNCT_2:def 1;
+     P[x,f.x] & P[y,f.y] by A4,A5,A6,A8;
+    hence thesis by A7,AMISTD_1:25;
   end;
   thus
-A10: dom f = LocNums F by A2,FUNCT_2:def 1;
+A9: dom f = LocNums F by A1,FUNCT_2:def 1;
   thus rng f c= F by RELSET_1:12;
   let a be set;
   assume
-A11: a in F;
+A10: a in F;
   then reconsider l = a as Instruction-Location of S;
-A12:locnum l in dom f by A10,A11;
-  then P[locnum l,f.locnum l] by A5,A10;
+A11:locnum l in dom f by A9,A10;
+  then P[locnum l,f.locnum l] by A4,A9;
   then f.locnum l = a by AMISTD_1:def 13;
-  hence thesis by A12,FUNCT_1:def 5;
+  hence thesis by A11,FUNCT_1:def 5;
   end;
   hence thesis;
 end;
@@ -1090,7 +1092,7 @@ A4:     not y in dom LocSeq NIC(pi(M,x),x);
     end;
   consider f be Function of [:D,NAT:],D such that
 A5: for l being Instruction-Location of S, n being Nat holds
-     P[l,n,f.[l,n]] from FUNCT_2:sch 7(A1);
+     P[l,n,f.(l,n)] from BINOP_1:sch 3(A1);
   deffunc F(Instruction-Location of S) = Card NIC(pi(M,$1),$1);
 A6: for d being Element of D,
         k1, k2 being Nat st k1 <= k2 & k2 in F(d) holds k1 in F(d)
@@ -1118,7 +1120,7 @@ A10:for t being Element of dom T holds
   assume
 A11: m in Card NIC(pi(M,T.t),T.t);
 A12: dom LocSeq NIC(pi(M,T.t),T.t) = Card NIC(pi(M,T.t),T.t) by Def4;
-  thus T.(t^<*m*>) = f.[T.t,m] by A10,A11
+  thus T.(t^<*m*>) = f.(T.t,m) by A10,A11
     .= (LocSeq NIC(pi(M,T.t),T.t)).m by A5,A11,A12;
 end;
 uniqueness

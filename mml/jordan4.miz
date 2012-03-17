@@ -23,7 +23,7 @@ environ
  theorems TARSKI, JORDAN3, TOPREAL4, EUCLID, TOPREAL1, TOPREAL2, FUNCT_1,
       SPPOL_1, GOBOARD5, FINSEQ_1, GOBOARD7, NAT_1, SPPOL_2, REAL_1, BINARITH,
       REAL_2, FINSEQ_3, GR_CY_1, FINSEQ_2, FINSEQ_4, FINSEQ_5, RFINSEQ,
-      FINSEQ_6, ENUMSET1, SCMFSA_7, ZFMISC_1, TOPREAL3, AMI_5, XBOOLE_0,
+      FINSEQ_6, ENUMSET1, ZFMISC_1, TOPREAL3, AMI_5, XBOOLE_0,
       XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1;
 
 begin :: Preliminaries
@@ -52,7 +52,7 @@ end;
 theorem Th4:i1<>0 & i2=i3*i1 implies i3<=i2
 proof assume A1:i1<>0 & i2=i3*i1; then i1>0 by NAT_1:19;
   then i1>=0+1 by NAT_1:38;
-  then i1-'1+1=i1 by AMI_5:4;
+  then i1-'1+1=i1 by BINARITH:53;
   then i2=i3*(i1-'1)+i3*1 by A1;
  hence i3<=i2 by NAT_1:29;
 end;
@@ -83,11 +83,11 @@ proof assume A1:0<j & j<i & i<j+j;
   A3:i-j=i-'j by A1,BINARITH:50;
      i=i-j+j;
   then A4:i mod j=(i-'j+j) mod j by A1,BINARITH:50
-  .=((i-'j)+ (j mod j)) mod j by GR_CY_1:3
-  .=(i-'j+0)mod j by GR_CY_1:5
+  .=((i-'j)+ (j mod j)) mod j by NAT_1:75
+  .=(i-'j+0)mod j by NAT_1:77
   .=(i-'j)mod j;
      i-j<j+j-j by A1,XREAL_1:11;
-  then (i-'j) mod j=i-'j by A3,GR_CY_1:4;
+  then (i-'j) mod j=i-'j by A3,NAT_1:76;
  hence contradiction by A1,A2,A4,Th1;
 end;
 
@@ -96,10 +96,10 @@ proof assume A1:0<j & j<=i & i<j+j;
   then A2:i-j=i-'j by BINARITH:50;
      i=i-j+j;
   then A3:i mod j=(i-'j+j) mod j by A1,BINARITH:50
-    .=((i-'j)+(j mod j))mod j by GR_CY_1:3
-  .=((i-'j)+0)mod j by GR_CY_1:5 .=(i-'j)mod j;
+    .=((i-'j)+(j mod j))mod j by NAT_1:75
+  .=((i-'j)+0)mod j by NAT_1:77 .=(i-'j)mod j;
      i-j<j+j-j by A1,XREAL_1:11;
- hence thesis by A2,A3,GR_CY_1:4;
+ hence thesis by A2,A3,NAT_1:76;
 end;
 
 theorem Th8: (j+j)mod j=0
@@ -109,7 +109,7 @@ end;
 
 theorem Th9: 0<k & k<=j & k mod j=0 implies k=j
 proof assume A1:0<k & k<=j & k mod j=0;
- then k >= j by GR_CY_1:4;
+ then k >= j by NAT_1:76;
  hence k=j by A1,REAL_1:def 5;
 end;
 
@@ -127,29 +127,7 @@ proof let f1;assume A1:f1 is circular & 1<=len f1;
  hence thesis by A1,A2,FINSEQ_4:24;
 end;
 
-theorem  for f1,i1,i2 st i1<=i2 holds
-  (f1|i1)|i2=f1|i1 & (f1|i2)|i1=f1|i1
-proof let f1,i1,i2;assume A1:i1<=i2;
-    len (f1|i1)<=i1 by FINSEQ_5:19;
- then len (f1|i1)<=i2 by A1,XREAL_1:2;
- hence (f1|i1)|i2=f1|i1 by FINSEQ_1:79;
-  A2:f1|i2=f1|(Seg i2) by FINSEQ_1:def 15;
-  A3:f1|i1=f1|(Seg i1) by FINSEQ_1:def 15;
-  A4:(f1|i2)|i1=(f1|i2)|Seg i1 by FINSEQ_1:def 15;
-     Seg i1 c= Seg i2 by A1,FINSEQ_1:7;
- hence thesis by A2,A3,A4,FUNCT_1:82;
-end;
-
-theorem Th16: (<*>D)|i=<*>D
-proof len (<*>D)=0 by FINSEQ_1:32;
-  then len (<*>D)<=i by NAT_1:18;
- hence thesis by FINSEQ_1:79;
-end;
-
-theorem Th17: Rev (<*>D)=<*>D
-proof len (Rev(<*>D))=len (<*>D) by FINSEQ_5:def 3 .=0 by FINSEQ_1:32;
- hence thesis by FINSEQ_1:32;
-end;
+canceled 3;
 
 theorem Th18: for f1,k st k<len f1 holds
    (f1/^k).len (f1/^k)=f1.len f1 & (f1/^k)/.len (f1/^k)=f1/.len f1
@@ -322,10 +300,10 @@ theorem Th27: for f1,k st 1<=k & k<=len f1
   holds mid(f1,k,k)=<*f1/.k*> & len mid(f1,k,k)=1
 proof let f1,k;assume A1:1<=k & k<=len f1;
    A2:len (f1/^(k-'1))=len f1-'(k-'1) by JORDAN3:19;
-      k-'1+1=k by A1,AMI_5:4;
+      k-'1+1=k by A1,BINARITH:53;
    then A3:(f1/^(k-'1)).1=f1.k by A1,JORDAN3:23;
    A4:f1/.k=f1.k by A1,FINSEQ_4:24;
-      k-'1+1<=len f1 by A1,AMI_5:4;
+      k-'1+1<=len f1 by A1,BINARITH:53;
    then k-'1+1-(k-'1)<=len f1-(k-'1) by XREAL_1:11;
    then A5:1<=1 & 1<=len (f1/^(k-'1)) by A2,JORDAN3:1;
   then 0<len (f1/^(k-'1));
@@ -355,7 +333,7 @@ then A2: 0+1<=k by A1,NAT_1:38;
   then len f1+1-1<=k-1 by XREAL_1:11;
   then len f1<=k-'1 by A2,BINARITH:50;
   then f1/^(k-'1)=<*>D by FINSEQ_5:35;
- hence thesis by A3,Th16;
+ hence thesis by A3,FINSEQ_5:81;
 end;
 
 theorem Th30: for f1,i1,i2 holds mid(f1,i1,i2)=Rev mid(f1,i2,i1)
@@ -377,8 +355,8 @@ then A4:    k1=0 or 0+1<=k1 by NAT_1:38;
         then A5:mid(f1,k1,k2)=f1|1 by A3,Th28;
            now per cases;
         case len f1=0; then f1=<*>D by FINSEQ_1:32;
-          then f1|1=<*>D by Th16;
-         hence mid(f1,k1,k2)=Rev mid(f1,k2,k1) by A3,A5,Th17;
+          then f1|1=<*>D by FINSEQ_5:81;
+         hence mid(f1,k1,k2)=Rev mid(f1,k2,k1) by A3,A5,FINSEQ_5:82;
         end;
         case len f1<>0;
           then f1 <> <*>D by FINSEQ_1:32;
@@ -394,7 +372,7 @@ then A4:    k1=0 or 0+1<=k1 by NAT_1:38;
        hence mid(f1,k1,k2)=Rev mid(f1,k2,k1) by A3,FINSEQ_5:63;
       end;
       case len f1<k1; then mid(f1,k1,k1)=<*>D by Th29;
-       hence mid(f1,k1,k2)=Rev mid(f1,k2,k1) by A3,Th17;
+       hence mid(f1,k1,k2)=Rev mid(f1,k2,k1) by A3,FINSEQ_5:82;
       end;
       end;
      hence mid(f1,k1,k2)=Rev mid(f1,k2,k1);
@@ -449,7 +427,7 @@ proof let f be FinSequence of TOP-REAL 2,i1,i2,i;
    then A2:len mid(f,i2,i1)=i2-'i1+1 by Th21;
    A3:i<len mid(f,i2,i1) by A1,Th21;
    A4:i+(len mid(f,i2,i1)-'i)
-   =len mid(f,i2,i1) by A1,A2,AMI_5:4;
+   =len mid(f,i2,i1) by A1,A2,BINARITH:53;
       i+1<=len mid(f,i2,i1) by A3,NAT_1:38;
    then A5: i+1-i<=len mid(f,i2,i1)-i by XREAL_1:11;
       len mid(f,i2,i1)+1<=len mid(f,i2,i1)+i by A1,XREAL_1:8;
@@ -488,7 +466,7 @@ end;
 
 theorem Th33: for f being FinSequence holds S_Drop(len f-'1,f)=len f-'1
 proof let f be FinSequence;
-     (len f-'1) mod (len f-'1)=0 by GR_CY_1:5;
+     (len f-'1) mod (len f-'1)=0 by NAT_1:77;
  hence thesis by Def1;
 end;
 
@@ -499,7 +477,7 @@ proof let n be Nat,f be FinSequence;
   then A2:n<>0;
   per cases by A1,REAL_1:def 5;
   suppose n<len f-'1;
-    then n mod (len f-'1)=n by GR_CY_1:4;
+    then n mod (len f-'1)=n by NAT_1:76;
    hence thesis by A2,Def1;
   end;
   suppose n=len f-'1;
@@ -513,7 +491,7 @@ theorem Th35: for n being Nat,f being FinSequence holds
 proof let n be Nat,f be FinSequence;
    A1:(n+(len f-'1))mod (len f-'1)
     = (n+(len f-'1)*1)mod (len f-'1)
-    .=n mod (len f-'1) by GR_CY_1:1;
+    .=n mod (len f-'1) by NAT_1:73;
   per cases;
   suppose A2:n mod (len f-'1)<>0;
     then S_Drop(n,f)=n mod (len f-'1) by Def1;
@@ -675,13 +653,13 @@ A30:       i2-i1+1=len g by A27,A28;
              then A36:i1+j<=len f by A2,XREAL_1:2;
                 now per cases;
              case A37:i1+j=len f;
-               then (i1+j-'1) mod (len f-'1)=0 by GR_CY_1:5;
+               then (i1+j-'1) mod (len f-'1)=0 by NAT_1:77;
               hence S_Drop(i1+j-'1,f)=i1+j-'1 by A37,Def1;
              end;
              case i1+j<>len f; then i1+j<len f by A36,REAL_1:def 5;
                then i1+j-1<len f-1 by XREAL_1:11;
                then i1+j-'1<len f-'1 by A2,A4,Th2;
-               then (i1+j-'1)mod (len f-'1)=i1+j-'1 by GR_CY_1:4;
+               then (i1+j-'1)mod (len f-'1)=i1+j-'1 by NAT_1:76;
              hence S_Drop((i1+j)-'1,f)=i1+j-'1 by A35,Def1;
              end;
              end;
@@ -751,16 +729,16 @@ A51:     i2-i1=i2-'i1 by A1,BINARITH:50;
              then A58:i1+j<=len f by A2,XREAL_1:2;
                 now per cases;
              case A59:i1+j=len f;
-               then (i1+j-'1) mod (len f-'1)=0 by GR_CY_1:5;
+               then (i1+j-'1) mod (len f-'1)=0 by NAT_1:77;
               hence S_Drop(i1+j-'1,f)=i1+j-'1 by A59,Def1;
 
              end;
              case i1+j<>len f; then i1+j<len f by A58,REAL_1:def 5;
                then i1+j-1<len f-1 by XREAL_1:11;
                then A60:i1+j-'1<len f-'1 by A2,A4,Th2;
-              then (i1+j-'1) mod (len f-'1)<>0 by A57,GR_CY_1:4;
+              then (i1+j-'1) mod (len f-'1)<>0 by A57,NAT_1:76;
               then S_Drop((i1+j)-'1,f)=(i1+j-'1) mod (len f-'1) by Def1;
-              hence S_Drop((i1+j)-'1,f)=i1+j-'1 by A60,GR_CY_1:4;
+              hence S_Drop((i1+j)-'1,f)=i1+j-'1 by A60,NAT_1:76;
              end;
              end;
            hence g.j = mid(f,i1,i2).j by A1,A2,A7,A52,A54,A55,JORDAN3:31;
@@ -914,15 +892,15 @@ len f-'1-i1+1
                 then A51: i1+j<=len f-1+1 by A7;
                   now per cases;
                case A52:i1+j=len f;
-                 then (i1+j-'1) mod (len f-'1)=0 by GR_CY_1:5;
+                 then (i1+j-'1) mod (len f-'1)=0 by NAT_1:77;
                 hence S_Drop(i1+j-'1,f)=i1+j-'1 by A52,Def1;
                end;
                case i1+j<>len f; then i1+j<len f by A51,REAL_1:def 5;
                  then i1+j-1<len f-1 by XREAL_1:11;
                  then A53:i1+j-'1<len f-'1 by A2,A7,Th2;
-                then (i1+j-'1) mod (len f-'1)<>0 by A47,GR_CY_1:4;
+                then (i1+j-'1) mod (len f-'1)<>0 by A47,NAT_1:76;
                 then S_Drop((i1+j)-'1,f)=(i1+j-'1) mod (len f-'1) by Def1;
-                hence S_Drop((i1+j)-'1,f)=i1+j-'1 by A53,GR_CY_1:4;
+                hence S_Drop((i1+j)-'1,f)=i1+j-'1 by A53,NAT_1:76;
                end;
                end;
                hence g.j = (mid(f,i1,len f-'1)^(f|i2)).j
@@ -941,7 +919,7 @@ len f-'1-i1+1
                 then j+i1<=len f+i2-i1+i1 by XREAL_1:8;
                 then j+i1-len f<=len f+i2-len f by XREAL_1:11;
                 then A59:(f|i2).(j-len mid(f,i1,len f-'1))
-                =f.(i1+j-'len f) by A56,A58,JORDAN3:20;
+                =f.(i1+j-'len f) by A56,A58,FINSEQ_3:121;
                    len mid(f,i1,len f-'1)+1<=j by A54,NAT_1:38;
                 then A60: len mid(f,i1,len f-'1)+1-len mid(f,i1,len f-'1)
                      <=j -len mid(f,i1,len f-'1) by XREAL_1:11;
@@ -969,9 +947,9 @@ len f-'1-i1+1
                   .=i1+j-'1 by A44,Th2;
                   then A67:(i1+j-'1) mod (len f-'1)
                    =(i1+j-'len f+((len f-'1)mod (len f-'1)))
-                      mod (len f-'1) by GR_CY_1:3
+                      mod (len f-'1) by NAT_1:75
                   .=(i1+j-'len f+0)
-                      mod (len f-'1) by GR_CY_1:5
+                      mod (len f-'1) by NAT_1:77
                   .=(i1+j-'len f) mod (len f-'1);
                      i1+j-(len f-'1)<=(len f-'1)+(len f-'1)-(len f-'1)
                         by A64,XREAL_1:11;
@@ -979,7 +957,7 @@ len f-'1-i1+1
                   then i1+j-'len f+1<=(len f-'1) by A56;
                   then i1+j-'len f<(len f-'1) by NAT_1:38;
                  hence g.j = (mid(f,i1,len f-'1)^(f|i2)).j
-                   by A45,A57,A59,A66,A67,GR_CY_1:4;
+                   by A45,A57,A59,A66,A67,NAT_1:76;
                 end;
                 end;
                hence g.j = (mid(f,i1,len f-'1)^(f|i2)).j;
@@ -1185,19 +1163,19 @@ A44:              len f=len f-1+1 .=len f-'1+1 by A4,JORDAN3:1;
                   .=len f-'1+(1+(i1-'j)) by A37,BINARITH:50;
                   then (len f+i1-'j)mod (len f-'1)
                    =(((len f-'1)mod (len f-'1))+(1+(i1-'j)))mod (len f-'1)
-                                by A44,GR_CY_1:2
-                  .=(0+(1+(i1-'j)))mod (len f-'1) by GR_CY_1:5
-                  .=(i1-'j+1) by A43,GR_CY_1:4;
+                                by A44,NAT_1:74
+                  .=(0+(1+(i1-'j)))mod (len f-'1) by NAT_1:77
+                  .=(i1-'j+1) by A43,NAT_1:76;
                   then A45:S_Drop(len f+i1-'j,f)=(len f+i1-'j)mod (len f-'1)
                                      by A39,Def1;
                    len f-1+1+i1-j=(len f-1)+(i1-j+1);
                   then A46:len f+i1-'j=i1-'j+1+(len f-'1) by A4,A38,A40,
 JORDAN3:1;
-                     (len f-'1)mod(len f-'1)=0 by GR_CY_1:5;
+                     (len f-'1)mod(len f-'1)=0 by NAT_1:77;
                   then S_Drop(len f+i1-'j,f)=(i1-'j+1+0)mod (len f-'1)
-                                by A45,A46,GR_CY_1:2
+                                by A45,A46,NAT_1:74
                                .=(i1-'j+1)mod (len f-'1);
-                hence S_Drop(len f+i1-'j,f)=i1-'j+1 by A43,GR_CY_1:4;
+                hence S_Drop(len f+i1-'j,f)=i1-'j+1 by A43,NAT_1:76;
                 end;
                 end;
                 hence S_Drop(len f+i1-'j,f)=i1-'j+1;
@@ -1329,19 +1307,19 @@ A76:              len f=len f-1+1 .=len f-'1+1 by A4,JORDAN3:1;
                   .=len f-'1+(1+(i1-'j)) by A69,BINARITH:50;
                   then (len f+i1-'j)mod (len f-'1)
                   =(((len f-'1)mod (len f-'1))+(1+(i1-'j)))mod (len f-'1)
-                                by A76,GR_CY_1:2
-                  .=(0+(1+(i1-'j)))mod (len f-'1) by GR_CY_1:5
-                  .=(i1-'j+1) by A75,GR_CY_1:4;
+                                by A76,NAT_1:74
+                  .=(0+(1+(i1-'j)))mod (len f-'1) by NAT_1:77
+                  .=(i1-'j+1) by A75,NAT_1:76;
                   then A77:S_Drop(len f+i1-'j,f)=(len f+i1-'j)mod (len f-'1)
                                      by A71,Def1;
                    len f-1+1+i1-j=(len f-1)+(i1-j+1);
                   then A78:len f+i1-'j=i1-'j+1+(len f-'1) by A4,A70,A72,
 JORDAN3:1;
-                     (len f-'1)mod(len f-'1)=0 by GR_CY_1:5;
+                     (len f-'1)mod(len f-'1)=0 by NAT_1:77;
                   then S_Drop(len f+i1-'j,f)=(i1-'j+1+0)mod (len f-'1)
-                                by A77,A78,GR_CY_1:2
+                                by A77,A78,NAT_1:74
                                .=(i1-'j+1)mod (len f-'1);
-                hence S_Drop(len f+i1-'j,f)=i1-'j+1 by A75,GR_CY_1:4;
+                hence S_Drop(len f+i1-'j,f)=i1-'j+1 by A75,NAT_1:76;
                 end;
                 end;
                 hence S_Drop(len f+i1-'j,f)=i1-'j+1;
@@ -1453,7 +1431,7 @@ A2,Th2
                        = len (mid(f,i1,1))+ len(mid(f,len f-'1,i2))
                                    by FINSEQ_1:35;
             A35:len (mid(f,i1,1))=i1-'1+1 by A2,A3,Th21
-                                .=i1 by A2,AMI_5:4;
+                                .=i1 by A2,BINARITH:53;
                len (mid(f,len f-'1,i2))=len f-'1-'i2+1
               by A2,A6,A9,A10,Th21;
             then len (mid(f,len f-'1,i2))=len f-'1-i2+1 by A6,A9,BINARITH:50;
@@ -1614,10 +1592,10 @@ A75:j-len mid(f,i1,1)<=len f-'1-'i2+1 by A35,A71,A73;
                   then len f+i1+1-j<=len f+j-j by XREAL_1:11;
                   then A83: len f+i1+1-j-1<=len f-1 by XREAL_1:11;
                      len f+i1-j=len f-'1 implies
-                  contradiction by A77,A81,GR_CY_1:5;
+                  contradiction by A77,A81,NAT_1:77;
                   then len f+i1-'j<(len f-'1) by A6,A77,A83,REAL_1:def 5;
                  hence g.j = (mid(f,i1,1)^mid(f,len f-'1,i2)).j
-                                 by A39,A76,A82,GR_CY_1:4;
+                                 by A39,A76,A82,NAT_1:76;
                 end;
                 end;
                hence g.j = (mid(f,i1,1)^mid(f,len f-'1,i2)).j;
@@ -1696,7 +1674,7 @@ then A95:    n>=0+1 by NAT_1:38;
 then A97:    len f+i1-len g=i2 by A2,A93,Th2;
         then A98:len f+i1-i2=len g;
             A99:len (mid(f,i1,1))=i1-'1+1 by A2,A3,Th21
-                                .=i1 by A2,AMI_5:4;
+                                .=i1 by A2,BINARITH:53;
                len (mid(f,len f-'1,i2))=len f-'1-'i2+1
               by A2,A6,A9,A10,Th21;
             then len (mid(f,len f-'1,i2))=len f-1-i2+1 by A6,A9,BINARITH:50;
@@ -1861,10 +1839,10 @@ A140:         j-len mid(f,i1,1)<=len f-'1-'i2+1
                   then len f+i1+1-j<=len f+j-j by XREAL_1:11;
                   then A148: len f+i1+1-j-1<=len f-1 by XREAL_1:11;
                      len f+i1-j=len f-'1 implies
-                    contradiction by A142,A146,GR_CY_1:5;
+                    contradiction by A142,A146,NAT_1:77;
                   then len f+i1-'j<(len f-'1) by A6,A142,A148,REAL_1:def 5;
                  hence g.j = (mid(f,i1,1)^mid(f,len f-'1,i2)).j
-                                 by A103,A141,A147,GR_CY_1:4;
+                                 by A103,A141,A147,NAT_1:76;
                 end;
                 end;
                hence g.j = (mid(f,i1,1)^mid(f,len f-'1,i2)).j;
@@ -1905,9 +1883,9 @@ proof let f be non constant standard special_circular_sequence,
   A9:now per cases;
   case A10:i1 mod (len f-'1)<>0;
     then A11:S_Drop(i1,f)=i1 mod (len f-'1) by Def1;
-       i1 <> len f-'1 by A10,GR_CY_1:5;
+       i1 <> len f-'1 by A10,NAT_1:77;
     then i1<len f-'1 by A8,REAL_1:def 5;
-   hence (Rev g).len (Rev g)=f.i1 by A6,A11,GR_CY_1:4;
+   hence (Rev g).len (Rev g)=f.i1 by A6,A11,NAT_1:76;
   end;
   case A12:i1 mod (len f-'1)=0;
     then S_Drop(i1,f)=len f-'1 by Def1;
@@ -1978,9 +1956,9 @@ proof let f be non constant standard special_circular_sequence,
   A10:now per cases;
   case A11:i1 mod (len f-'1)<>0;
     then A12:S_Drop(i1,f)=i1 mod (len f-'1) by Def1;
-       i1 <> len f-'1 by A11,GR_CY_1:5;
+       i1 <> len f-'1 by A11,NAT_1:77;
     then i1<len f-'1 by A8,REAL_1:def 5;
-   hence (Rev g).len (Rev g)=f.i1 by A6,A9,A12,GR_CY_1:4;
+   hence (Rev g).len (Rev g)=f.i1 by A6,A9,A12,NAT_1:76;
   end;
   case A13:i1 mod (len f-'1)=0;
     then S_Drop(i1,f)=len f-'1 by Def1;
@@ -2009,7 +1987,7 @@ proof let f be non constant standard special_circular_sequence,
      case i1<i2;
        then len g=len f+i1-'i2 by A1,Th40;
        then A19:len g=len f+i1-i2 by A4,Th2;
-          len f=len f-'1+1 by A3,AMI_5:4;
+          len f=len f-'1+1 by A3,BINARITH:53;
        then -len f+i2+i=i2+i-1-(len f-'1);
        then i1-len g+i=i2+i-'1-(len f-'1) by A2,A19,Th2;
        then i1-(len g-i)=i2+i-'1-(len f-'1);
@@ -2021,7 +1999,7 @@ proof let f be non constant standard special_circular_sequence,
        then len f-'1+1+(i1-(len g-'i+1))=len f-'1+(i2+i-'1)-(len f-'1);
        then len f-'1+1+i1-(len g-'i+1)=len f-'1+(i2+i-'1)-(len f-'1);
        then len f+i1-(len g-'i+1)=len f-'1+(i2+i-'1)-(len f-'1)
-                                  by A3,AMI_5:4;
+                                  by A3,BINARITH:53;
       hence (Rev g).i=f.S_Drop((i2+i)-'1,f) by A16,A18,Th2;
      end;
      case A20:i1>=i2;
@@ -2155,7 +2133,7 @@ then A25:     1+0<=i1+(i-1) by A2,XREAL_1:9;
            i1+i<=i1+(len f-'1-'i1+1) by A18,A22,XREAL_1:8;
         then i1+i<=(len f-'1-i1+1)+i1 by A7,BINARITH:50;
         then i1+i<=len f-'1+1;
-        then i1+i<=len f by A3,AMI_5:4;
+        then i1+i<=len f by A3,BINARITH:53;
         then i1+i-'1<=len f-1 by A21,XREAL_1:11;
         then 1<=i1+i-'1 & i1+i-'1<=len f-'1
            by A3,A21,A25,BINARITH:50;
@@ -2549,12 +2527,12 @@ then A3: i2-'i1>=0+1 by NAT_1:38;
     1+1<=i1 by A1,NAT_1:38;
  then 1+1-1<=i1-1 by XREAL_1:11;
  then A4:1<=i1-'1 by JORDAN3:1;
- A5:i1-'1+1<len f by A1,A2,AMI_5:4;
+ A5:i1-'1+1<len f by A1,A2,BINARITH:53;
     i1<i1+1 by NAT_1:38; then i1-1<i1+1-1 by XREAL_1:11; then i1-1<i2 by A1,
 XREAL_1:2;
  then A6:i1-'1<i2 by A1,BINARITH:50;
  A7: mid(f,i1,i2)=(f/^(i1-'1))|(i2-'i1+1) by A1,JORDAN3:def 1;
- A8:i1-'1+1<len f by A1,A2,AMI_5:4;
+ A8:i1-'1+1<len f by A1,A2,BINARITH:53;
  A9:f/^(i1-'1) is_S-Seq by A4,A5,Th50;
    A10: i1-'1<len f by A1,A6,XREAL_1:2;
  then A11:len (f/^(i1-'1))=len f-(i1-'1) by RFINSEQ:def 2;
@@ -2734,57 +2712,57 @@ A8:  1+1-1<=len f-1 by A2,XREAL_1:11;
   A9:len f-1+1=len f;
   A10:1<=len f-'1 & len f-'1+1<= len f by A7,A8;
   A11:f/.len f in LSeg(f,len f-'1) by A7,A8,A9,TOPREAL1:27;
-  A13:f.1=f/.1 by A6,FINSEQ_4:24;
+  A12:f.1=f/.1 by A6,FINSEQ_4:24;
      f/.1=f/.len f by FINSEQ_6:def 1;
   then f.1 in LSeg(f,1)/\ LSeg(f,len f-'1)
-    by A5,A11,A13,XBOOLE_0:def 3;
-  then A14:{f.1} c= LSeg(f,1)/\ LSeg(f,len f-'1) by ZFMISC_1:37;
+    by A5,A11,A12,XBOOLE_0:def 3;
+  then A13:{f.1} c= LSeg(f,1)/\ LSeg(f,len f-'1) by ZFMISC_1:37;
       LSeg(f,1)/\ LSeg(f,len f-'1) c={f.1}
-    proof let x be set;assume A15: x in LSeg(f,1)/\ LSeg(f,len f-'1);
-      then A16:x in LSeg(f,1) & x in LSeg(f,len f-'1) by XBOOLE_0:def 3;
-      reconsider p=x as Point of TOP-REAL 2 by A15;
-      A17:1+1<=len f by A1,XREAL_1:2;
-      A18:LSeg(f/.1,f/.(1+1))=LSeg(f,1) by A2,TOPREAL1:def 5;
-      A19:LSeg(f/.(1+1),f/.(1+1+1))=LSeg(f,1+1) by A3,TOPREAL1:def 5;
-      A20:p in LSeg(f/.1,f/.(1+1)) by A16,A17,TOPREAL1:def 5;
+    proof let x be set;assume A14: x in LSeg(f,1)/\ LSeg(f,len f-'1);
+      then A15:x in LSeg(f,1) & x in LSeg(f,len f-'1) by XBOOLE_0:def 3;
+      reconsider p=x as Point of TOP-REAL 2 by A14;
+      A16:1+1<=len f by A1,XREAL_1:2;
+      A17:LSeg(f/.1,f/.(1+1))=LSeg(f,1) by A2,TOPREAL1:def 5;
+      A18:LSeg(f/.(1+1),f/.(1+1+1))=LSeg(f,1+1) by A3,TOPREAL1:def 5;
+      A19:p in LSeg(f/.1,f/.(1+1)) by A15,A16,TOPREAL1:def 5;
          len f-'1+1=len f-1+1 by A6,BINARITH:50 .=len f;
       then f/.(len f-'1+1)=f/.1 by FINSEQ_6:def 1;
-      then A21:p in LSeg(f/.1,f/.(len f-'1)) by A7,A8,A16,TOPREAL1:def 5;
+      then A20:p in LSeg(f/.1,f/.(len f-'1)) by A7,A8,A15,TOPREAL1:def 5;
          2+1-1<=len f-1 by A3,XREAL_1:11;
-      then A22: 1+1-1<=len f-'1 -1 by A7,XREAL_1:11;
+      then A21: 1+1-1<=len f-'1 -1 by A7,XREAL_1:11;
          len f<len f+1 by NAT_1:38;
-      then A23: len f-1<len f+1-1 by XREAL_1:11;
-A24:   len f-'1-'1+1=len f-'1-1+1 by A7,A8,BINARITH:50
+      then A22: len f-1<len f+1-1 by XREAL_1:11;
+A23:   len f-'1-'1+1=len f-'1-1+1 by A7,A8,BINARITH:50
       .=len f-'1;
-      A25:LSeg(f/.(len f-'1-'1),f/.(len f-'1))=LSeg(f,len f-'1-'1)
-                            by A7,A22,A23,A24,TOPREAL1:def 5;
-      A26:LSeg(f/.(len f-'1),f/.(len f-'1+1))=LSeg(f,len f-'1)
+      A24:LSeg(f/.(len f-'1-'1),f/.(len f-'1))=LSeg(f,len f-'1-'1)
+                            by A7,A21,A22,A23,TOPREAL1:def 5;
+      A25:LSeg(f/.(len f-'1),f/.(len f-'1+1))=LSeg(f,len f-'1)
                             by A10,TOPREAL1:def 5;
          now per cases;
-      case A27: p<>f/.1;
-           now per cases by A20,A21,A27,Th53;
-        case A28: f/.(1+1) in LSeg(f/.1,f/.(len f-'1));
+      case A26: p<>f/.1;
+           now per cases by A19,A20,A26,Th53;
+        case A27: f/.(1+1) in LSeg(f/.1,f/.(len f-'1));
              len f-'1+1=len f-1+1 by A6,BINARITH:50
                .=len f;
-then A29:       f/.(len f-'1+1)=f/.1 by FINSEQ_6:def 1;
+then A28:       f/.(len f-'1+1)=f/.1 by FINSEQ_6:def 1;
             f/.(1+1) in LSeg(f/.(1+1),f/.(1+1+1)) by TOPREAL1:6;
          then LSeg(f/.(1+1),f/.(1+1+1))/\ LSeg(f/.(len f-'1),f/.(len f-'1+1))
-         <>{} by A28,A29,XBOOLE_0:def 3;
+         <>{} by A27,A28,XBOOLE_0:def 3;
          then LSeg(f/.(1+1),f/.(1+1+1)) meets
            LSeg(f/.(len f-'1),f/.(len f-'1+1)) by XBOOLE_0:def 7;
-         hence contradiction by A4,A7,A19,A23,A26,GOBOARD5:def 4;
+         hence contradiction by A4,A7,A18,A22,A25,GOBOARD5:def 4;
         end;
-        case A30:f/.(len f-'1) in LSeg(f/.1,f/.(1+1));
+        case A29:f/.(len f-'1) in LSeg(f/.1,f/.(1+1));
             f/.(len f-'1) in LSeg(f/.(len f-'1-'1),f/.(len f-'1))
                        by TOPREAL1:6;
-         then LSeg(f,1)/\ LSeg(f,len f-'1-'1)<>{} by A18,A25,A30,XBOOLE_0:def 3
+         then LSeg(f,1)/\ LSeg(f,len f-'1-'1)<>{} by A17,A24,A29,XBOOLE_0:def 3
 ;
-         then A31:LSeg(f,1) meets LSeg(f,len f-'1-'1) by XBOOLE_0:def 7;
+         then A30:LSeg(f,1) meets LSeg(f,len f-'1-'1) by XBOOLE_0:def 7;
             3+1-1<len f-1 by A1,XREAL_1:11;
-         then A32: 2+1-1<len f-1-1 by XREAL_1:11;
-            len f-1-1+1<len f by A23;
-         then 1+1<len f-'1-'1 & len f-'1-'1+1<len f by A7,A8,A32,BINARITH:50;
-        hence contradiction by A31,GOBOARD5:def 4;
+         then A31: 2+1-1<len f-1-1 by XREAL_1:11;
+            len f-1-1+1<len f by A22;
+         then 1+1<len f-'1-'1 & len f-'1-'1+1<len f by A7,A8,A31,BINARITH:50;
+        hence contradiction by A30,GOBOARD5:def 4;
         end;
         end;
        hence contradiction;
@@ -2796,7 +2774,7 @@ then A29:       f/.(len f-'1+1)=f/.1 by FINSEQ_6:def 1;
       end;
      hence x in {f.1};
     end;
- hence thesis by A14,XBOOLE_0:def 10;
+ hence thesis by A13,XBOOLE_0:def 10;
 end;
 
 theorem Th55:for f being non constant standard special_circular_sequence,
@@ -2818,9 +2796,9 @@ proof let f be non constant standard special_circular_sequence,
    then A9:1<len f-'1 by A2,XREAL_1:2;
       i2+1-i2<=len f-i2 by A6,XREAL_1:11;
    then A10:1<=len f-'i2 by JORDAN3:1;
-   A11:len f-'1+1=len f by A4,AMI_5:4;
+   A11:len f-'1+1=len f by A4,BINARITH:53;
 A12:   len f-'1<len f-'1+1 by NAT_1:38;
-   then A13:len f-'1<len f by A4,AMI_5:4;
+   then A13:len f-'1<len f by A4,BINARITH:53;
    A14:len mid(f,i1,i2)=i2-'i1+1 by A1,A2,A3,JORDAN3:27;
    A15:0<i2-i1 by A1,XREAL_1:52;
    then 0<i2-'i1 by A1,BINARITH:50;
@@ -2828,7 +2806,7 @@ A12:   len f-'1<len f-'1+1 by NAT_1:38;
    then 1<len g1 by A1,A14,NAT_1:38;
    then A16:1+1<=len g1 by NAT_1:38;
    A17:len mid(f,i1,1)=i1-'1+1 by A1,A3,Th21;
-   then A18:len mid(f,i1,1)=i1 by A1,AMI_5:4;
+   then A18:len mid(f,i1,1)=i1 by A1,BINARITH:53;
       0<=i1-'1 by NAT_1:18;
    then A19:0<i1-'1+1 by NAT_1:38;
 then A20: mid(f,i1,1)<><*>(TOP-REAL 2) by A17,FINSEQ_1:32;
@@ -2842,7 +2820,7 @@ then A25:  mid(f,len f-'1,i2)<><*>(TOP-REAL 2) by A22,FINSEQ_1:32;
 A26:   0+1<=len f-'1-'i2+1 by A24,NAT_1:38;
    A27:len g2 =len mid(f,i1,1) + len mid(f,len f-'1,i2) by A1,FINSEQ_1:35
         .=i1-'1+1+(len f-'1-'i2+1) by A1,A3,A22,Th21
-        .=i1+(len f-'1-'i2+1) by A1,AMI_5:4;
+        .=i1+(len f-'1-'i2+1) by A1,BINARITH:53;
    then A28:1+1<=len g2 by A1,A26,XREAL_1:9;
   A29:L~(mid(f,i1,1)^mid(f,len f-'1,i2))
   = L~mid(f,i1,1)
@@ -2872,7 +2850,7 @@ A38:    x in L~mid(f,i1,1)
           then A40:1<=1 & 1<i1 & i1<=len f & 1<=k & k<i1-'1+1
              by A1,A17,A39,XREAL_1:2,NAT_1:38,REAL_1:def 5;
           then A41:LSeg(mid(f,i1,1),k)=LSeg(f,i1-'k) by Th32;
-             i1-'1+1=i1 by A1,AMI_5:4;
+             i1-'1+1=i1 by A1,BINARITH:53;
           then A42:i1-'k=i1-k by A40,BINARITH:50;
           A43:i+i1-'1=i+i1-1 by A1,Th2;
           set k3=i1-'k,i3=i+i1-'1;
@@ -2915,7 +2893,7 @@ A51:        now assume A52: not(i=1 & k=1);
           then 1+1-1<=i1-1 by XREAL_1:11;
           then A54:1<=i1-'1 by JORDAN3:1;
              k3+2=i1-'1+(1+1) by A51 .=i1-'1+1+1
-          .=i1+1 by A1,AMI_5:4;
+          .=i1+1 by A1,BINARITH:53;
           then x in {f/.(k3+1)} by A5,A44,A47,A51,A54,TOPREAL1:def 8;
           then A55:x=f/.i1 by A47,A53,TARSKI:def 1;
              f/.i1=f.i1 by A1,A3,FINSEQ_4:24;
@@ -2954,9 +2932,9 @@ then A61:      LSeg(f,i+i1-'1) meets LSeg(f,len f-'1) by XBOOLE_0:4;
 A64:      now assume A65:i+i1-'1+1<len f-'1;
             A66:1+1<i+i1 by A1,A34,A62,XREAL_1:10;
             then 1<i+i1 by XREAL_1:2;
-            then 1+1<i+i1-'1+1 by A66,AMI_5:4;
+            then 1+1<i+i1-'1+1 by A66,BINARITH:53;
             then 1+1-1<i+i1-'1+1-1 by XREAL_1:11;
-            then i+i1-'1>1 & len f-'1<len f by A4,A12,AMI_5:4;
+            then i+i1-'1>1 & len f-'1<len f by A4,A12,BINARITH:53;
            hence contradiction by A61,A65,GOBOARD5:def 4;
           end;
           then A67:i+i1-'1+1=len f-'1 by A63,REAL_1:def 5;
@@ -3020,8 +2998,7 @@ A86:      0<len f-k by A2,A83;
            now per cases;
         case i2<>len f-'1;
           then 1<=i2 & i2<len f-'1 & len f-'1<=len f & 1<=k & k<len f-'1-'i2+1
-                by A1,A4,A8,A12,A22,A78,AMI_5:4,XREAL_1:2,NAT_1:38,REAL_1:def 5
-;
+           by A1,A4,A8,A12,A22,A78,BINARITH:53,XREAL_1:2,NAT_1:38,REAL_1:def 5;
           then A89:LSeg(mid(f,len f-'1,i2),k)=LSeg(f,len f-'1-'k) by Th32;
              k+(i2-1)<len f-i2+(i2-1) by A80,XREAL_1:8;
           then A90:k+(i2-'1)<len f-1 by A2,BINARITH:50;
@@ -3040,7 +3017,7 @@ A86:      0<len f-k by A2,A83;
           set k3=len f-'1-'k,i3=i+i1-'1;
           A97:x in LSeg(f,i3)/\ LSeg(f,k3) by A34,A36,A78,A89,XBOOLE_0:def 3;
 A98:        LSeg(f,i3) meets LSeg(f,k3) by A34,A36,A78,A89,XBOOLE_0:3;
-             i2+(len f-'1-i2)<len f by A4,A12,AMI_5:4;
+             i2+(len f-'1-i2)<len f by A4,A12,BINARITH:53;
           then i2-i1+i1+(len f-'1-'i2)<len f by A8,BINARITH:50;
           then A99:(i2-'i1)+i1+(len f-'1-'i2)<len f by A1,BINARITH:50;
              i+i1<=(i2-'i1)+i1 by A37,XREAL_1:8;
@@ -3086,7 +3063,7 @@ A105:       now assume A106: not(i=i2-'i1 & k=len f-'1-'i2);
           end;
           A107:len f-'1=len f-1 by A4,BINARITH:50;
              len f<=len f+i2 by NAT_1:29;
-          then len f-'1+1<=len f+i2 by A4,AMI_5:4;
+          then len f-'1+1<=len f+i2 by A4,BINARITH:53;
           then len f-'1+1-i2<=len f+i2-i2 by XREAL_1:11;
           then len f-'1+1-i2-1<=len f-1 by XREAL_1:11;
           then len f-'1-i2<=len f-1;
@@ -3097,18 +3074,18 @@ A105:       now assume A106: not(i=i2-'i1 & k=len f-'1-'i2);
           i3 =i2-'i1+i1-1 by A1,A105,Th2
           .=i2-i1+i1-1 by A1,BINARITH:50
           .=i2-1;
-          then A110:i3+2=i2+1;
+          then A109:i3+2=i2+1;
              1+1<=i2 by A2,NAT_1:38;
           then 1+1-1<=i2-1 by XREAL_1:11;
-          then x in {f/.(i3+1)} by A6,A97,A102,A110,TOPREAL1:def 8;
+          then x in {f/.(i3+1)} by A6,A97,A102,A109,TOPREAL1:def 8;
           then x=f/.i2 by A102,A108,TARSKI:def 1;
           then x=f.i2 by A1,A2,FINSEQ_4:24;
          hence x in {f.i1,f.i2} by TARSKI:def 2;
         end;
-        case A111:i2=len f-'1;
-          A112:len mid(f,len f-'1,len f-'1)=1 by A9,A13,Th27;
+        case A110:i2=len f-'1;
+          A111:len mid(f,len f-'1,len f-'1)=1 by A9,A13,Th27;
              1+1<=k+1 by A78,XREAL_1:8;
-         hence contradiction by A78,A111,A112,XREAL_1:2;
+         hence contradiction by A78,A110,A111,XREAL_1:2;
         end;
         end;
        hence x in {f.i1,f.i2};
@@ -3116,99 +3093,99 @@ A105:       now assume A106: not(i=i2-'i1 & k=len f-'1-'i2);
       end;
      hence x in {f.i1,f.i2};
     end;
-  A113:{f.i1} c= L~g1
+  A112:{f.i1} c= L~g1
    proof let x be set;assume x in {f.i1};
-     then A114:x=f.i1 by TARSKI:def 1;
+     then A113:x=f.i1 by TARSKI:def 1;
         g1.1 =f.i1 by A1,A2,A3,JORDAN3:27;
-    hence x in L~g1 by A16,A114,JORDAN3:34;
+    hence x in L~g1 by A16,A113,JORDAN3:34;
    end;
      {f.i2} c= L~g1
    proof let x be set;assume x in {f.i2};
-     then A115:x=f.i2 by TARSKI:def 1;
+     then A114:x=f.i2 by TARSKI:def 1;
         g1.len g1=f.i2 by A1,A2,A3,Th23;
-    hence x in L~g1 by A16,A115,JORDAN3:34;
+    hence x in L~g1 by A16,A114,JORDAN3:34;
    end;
-  then {f.i1} \/ {f.i2} c= L~g1 by A113,XBOOLE_1:8;
-  then A116:{f.i1,f.i2} c= L~g1 by ENUMSET1:41;
-  A117:{f.i1} c= L~g2
+  then {f.i1} \/ {f.i2} c= L~g1 by A112,XBOOLE_1:8;
+  then A115:{f.i1,f.i2} c= L~g1 by ENUMSET1:41;
+  A116:{f.i1} c= L~g2
    proof let x be set;assume x in {f.i1};
-     then A118:x=f.i1 by TARSKI:def 1;
-        g2.1 =mid(f,i1,1).1 by A1,A21,SCMFSA_7:9
+     then A117:x=f.i1 by TARSKI:def 1;
+        g2.1 =mid(f,i1,1).1 by A1,A21,FINSEQ_1:85
      .=f.i1 by A1,A3,A4,JORDAN3:27;
-    hence x in L~g2 by A28,A118,JORDAN3:34;
+    hence x in L~g2 by A28,A117,JORDAN3:34;
    end;
      {f.i2} c= L~g2
    proof let x be set;assume x in {f.i2};
-     then A119:x=f.i2 by TARSKI:def 1;
+     then A118:x=f.i2 by TARSKI:def 1;
         g2.len g2
-      =mid(f,len f-'1,i2).(len f-'1-'i2+1) by A1,A18,A22,A26,A27,SCMFSA_7:10
+      =mid(f,len f-'1,i2).(len f-'1-'i2+1) by A1,A18,A22,A26,A27,FINSEQ_1:86
      .=f.i2 by A1,A2,A9,A13,A22,Th23;
-    hence x in L~g2 by A28,A119,JORDAN3:34;
+    hence x in L~g2 by A28,A118,JORDAN3:34;
    end;
-  then {f.i1} \/ {f.i2} c= L~g2 by A117,XBOOLE_1:8;
+  then {f.i1} \/ {f.i2} c= L~g2 by A116,XBOOLE_1:8;
   then {f.i1,f.i2} c= L~g2 by ENUMSET1:41;
-then A120:  {f.i1,f.i2} c= (L~g1)/\(L~g2) by A116,XBOOLE_1:19;
-  A121:L~g1 c= L~f by A1,A2,A3,Th47;
-  A122:L~mid(f,i1,1) c= L~f by A1,A3,A4,Th47;
-  A123:L~mid(f,len f-'1,i2) c= L~f by A1,A2,A9,A13,Th47;
-     len f-'1+1=len f by A4,AMI_5:4;
-  then A124:LSeg(f,len f-'1) =LSeg(f/.(len f-'1+1),f/.(len f-'1))
+then A119:  {f.i1,f.i2} c= (L~g1)/\(L~g2) by A115,XBOOLE_1:19;
+  A120:L~g1 c= L~f by A1,A2,A3,Th47;
+  A121:L~mid(f,i1,1) c= L~f by A1,A3,A4,Th47;
+  A122:L~mid(f,len f-'1,i2) c= L~f by A1,A2,A9,A13,Th47;
+     len f-'1+1=len f by A4,BINARITH:53;
+  then A123:LSeg(f,len f-'1) =LSeg(f/.(len f-'1+1),f/.(len f-'1))
               by A9,TOPREAL1:def 5;
-  A125:f/.(len f-'1+1)
-  =f/.len f by A4,AMI_5:4
+  A124:f/.(len f-'1+1)
+  =f/.len f by A4,BINARITH:53
   .=f/.1 by FINSEQ_6:def 1
   .=f.1 by A4,FINSEQ_4:24
   .=mid(f,i1,1).len mid(f,i1,1) by A1,A3,A4,Th23
   .=mid(f,i1,1)/.len mid(f,i1,1) by A21,FINSEQ_4:24;
-  A126:1<=len mid(f,len f-'1,i2) by A22,NAT_1:29;
-  A127:f/.(len f-'1)
+  A125:1<=len mid(f,len f-'1,i2) by A22,NAT_1:29;
+  A126:f/.(len f-'1)
   =f.(len f-'1) by A9,A13,FINSEQ_4:24
   .=mid(f,len f-'1,i2).1 by A1,A2,A9,A13,JORDAN3:27
-  .=mid(f,len f-'1,i2)/.1 by A126,FINSEQ_4:24;
+  .=mid(f,len f-'1,i2)/.1 by A125,FINSEQ_4:24;
   then LSeg(mid(f,i1,1)/.len mid(f,i1,1),mid(f,len f-'1,i2)/.1)
-   c= L~f by A124,A125,TOPREAL3:26;
+   c= L~f by A123,A124,TOPREAL3:26;
    then L~mid(f,i1,1)
    \/ LSeg(mid(f,i1,1)/.len mid(f,i1,1),mid(f,len f-'1,i2)/.1)
-   c= L~f by A122,XBOOLE_1:8;
-  then L~g2 c= L~f by A1,A29,A123,XBOOLE_1:8;
-  then A128:(L~g1) \/ (L~g2) c= L~f by A121,XBOOLE_1:8;
+   c= L~f by A121,XBOOLE_1:8;
+  then L~g2 c= L~f by A1,A29,A122,XBOOLE_1:8;
+  then A127:(L~g1) \/ (L~g2) c= L~f by A120,XBOOLE_1:8;
      L~f c= (L~g1) \/ (L~g2)
-   proof let x be set;assume A129:x in L~f;
+   proof let x be set;assume A128:x in L~f;
      then reconsider p=x as Point of TOP-REAL 2;
-     consider i such that A130:1 <= i & i+1 <= len f & p in LSeg(f,i)
-        by A129,SPPOL_2:13;
+     consider i such that A129:1 <= i & i+1 <= len f & p in LSeg(f,i)
+        by A128,SPPOL_2:13;
         now per cases;
-     case A131:i1<=i & i<i2;
+     case A130:i1<=i & i<i2;
         then 0<=i-i1 by XREAL_1:50;
-then A132:    0+1<=i-i1+1 by XREAL_1:8;
-           i-i1<i2-i1 by A131,XREAL_1:11;
+then A131:    0+1<=i-i1+1 by XREAL_1:8;
+           i-i1<i2-i1 by A130,XREAL_1:11;
         then i-i1+1<i2-i1+1 by XREAL_1:8;
-        then i-'i1+1<i2-i1+1 by A131,BINARITH:50;
-        then A133:1<=i-'i1+1 & i-'i1+1<i2-'i1+1
-           by A1,A131,A132,BINARITH:50;
+        then i-'i1+1<i2-i1+1 by A130,BINARITH:50;
+        then A132:1<=i-'i1+1 & i-'i1+1<i2-'i1+1
+           by A1,A130,A131,BINARITH:50;
            i-'i1+1+i1-'1=i-'i1+1+i1-1 by A1,Th2
           .=i-'i1+i1
-        .=i by A131,AMI_5:4;
-       then x in LSeg(mid(f,i1,i2),i-'i1+1) by A1,A130,A133,Th31;
+        .=i by A130,BINARITH:53;
+       then x in LSeg(mid(f,i1,i2),i-'i1+1) by A1,A129,A132,Th31;
        then x in L~mid(f,i1,i2) by SPPOL_2:17;
       hence x in (L~g1) \/ (L~g2) by A1,XBOOLE_0:def 2;
      end;
-     case A134:i<i1;
-       then A135:1<i1 by A130,XREAL_1:2;
-          i1+1<=i1+i by A130,XREAL_1:8;
+     case A133:i<i1;
+       then A134:1<i1 by A129,XREAL_1:2;
+          i1+1<=i1+i by A129,XREAL_1:8;
        then i1<i1+i by NAT_1:38;
        then i1-i<i1+i-i by XREAL_1:11;
-       then i1-'i<i1-1+1 by A134,BINARITH:50;
-       then A136:i1-'i<i1-'1+1 by A1,BINARITH:50;
-          i+1<=i1 by A134,NAT_1:38;
+       then i1-'i<i1-1+1 by A133,BINARITH:50;
+       then A135:i1-'i<i1-'1+1 by A1,BINARITH:50;
+          i+1<=i1 by A133,NAT_1:38;
        then i+1-i<=i1-i by XREAL_1:11;
-       then A137:1<=i1-'i by JORDAN3:1;
+       then A136:1<=i1-'i by JORDAN3:1;
           i1<=i1+i by NAT_1:29; then i1-i<=i1+i-i by XREAL_1:11; then i1-'i<=
-i1 by A134,BINARITH:50;
+i1 by A133,BINARITH:50;
        then i1-'(i1-'i)=i1-(i1-'i) by BINARITH:50
-       .=i1-(i1-i) by A134,BINARITH:50
+       .=i1-(i1-i) by A133,BINARITH:50
        .=i;
-       then x in LSeg(mid(f,i1,1),i1-'i) by A3,A130,A135,A136,A137,Th32;
+       then x in LSeg(mid(f,i1,1),i1-'i) by A3,A129,A134,A135,A136,Th32;
        then x in L~mid(f,i1,1) by SPPOL_2:17;
        then x in L~mid(f,i1,1)
        \/ LSeg(mid(f,i1,1)/.len mid(f,i1,1),mid(f,len f-'1,i2)/.1)
@@ -3216,37 +3193,37 @@ i1 by A134,BINARITH:50;
        then x in L~(mid(f,i1,1)^mid(f,len f-'1,i2)) by A29,XBOOLE_0:def 2;
       hence x in (L~g1) \/ (L~g2) by A1,XBOOLE_0:def 2;
      end;
-     case A138:i2<=i;
-          now per cases by A130,REAL_1:def 5;
+     case A137:i2<=i;
+          now per cases by A129,REAL_1:def 5;
        case i+1=len f;
          then i=len f-1;
          then i=len f-'1 by A4,BINARITH:50;
         hence x in LSeg(mid(f,i1,1)/.len mid(f,i1,1),
 mid(f,len f-'1,i2)/.1)
-          \/ L~mid(f,len f-'1,i2) by A124,A125,A127,A130,XBOOLE_0:def 2;
+          \/ L~mid(f,len f-'1,i2) by A123,A124,A126,A129,XBOOLE_0:def 2;
        end;
        case i+1<len f;
          then i+1+1<=len f by NAT_1:38;
          then i+1+1-1<=len f-1 by XREAL_1:11;
-         then A139:i+1<=len f-'1 by A4,BINARITH:50;
-         then A140:i<len f-'1 by NAT_1:38;
-         then A141:i2<len f-'1 by A138,XREAL_1:2;
-            i+1-i<=len f-'1-i by A139,XREAL_1:11;
-         then A142:1<=len f-'1-'i by JORDAN3:1;
-            i2<i+1 by A138,NAT_1:38;
+         then A138:i+1<=len f-'1 by A4,BINARITH:50;
+         then A139:i<len f-'1 by NAT_1:38;
+         then A140:i2<len f-'1 by A137,XREAL_1:2;
+            i+1-i<=len f-'1-i by A138,XREAL_1:11;
+         then A141:1<=len f-'1-'i by JORDAN3:1;
+            i2<i+1 by A137,NAT_1:38;
          then len f-'1+i2<len f-'1+(i+1) by XREAL_1:8;
          then len f-'1+i2-i2<len f-'1+(i+1)-i2 by XREAL_1:11;
          then len f-'1-i<len f-'1+1+i-i2-i by XREAL_1:11;
          then len f-'1-i<len f-'1-i2+1;
-         then len f-'1-i<len f-'1-'i2+1 by A141,BINARITH:50;
-         then A143:len f-'1-'i<len f-'1-'i2+1 by A140,BINARITH:50;
-         A144:len f-'1-(len f-'1-'i)
-         =len f-'1-(len f-'1-i) by A140,BINARITH:50
+         then len f-'1-i<len f-'1-'i2+1 by A140,BINARITH:50;
+         then A142:len f-'1-'i<len f-'1-'i2+1 by A139,BINARITH:50;
+         A143:len f-'1-(len f-'1-'i)
+         =len f-'1-(len f-'1-i) by A139,BINARITH:50
          .=i;
-         then 0<=len f-'1-(len f-'1-'i) by A130;
-         then len f-'1-'(len f-'1-'i)=i by A144,BINARITH:def 3;
+         then 0<=len f-'1-(len f-'1-'i) by A129;
+         then len f-'1-'(len f-'1-'i)=i by A143,BINARITH:def 3;
          then x in LSeg(mid(f,len f-'1,i2),len f-'1-'i)
-                         by A2,A13,A130,A141,A142,A143,Th32;
+                         by A2,A13,A129,A140,A141,A142,Th32;
          then x in L~mid(f,len f-'1,i2) by SPPOL_2:17;
         hence x in LSeg(mid(f,i1,1)/.len mid(f,i1,1),
            mid(f,len f-'1,i2)/.1)
@@ -3262,7 +3239,7 @@ mid(f,len f-'1,i2)/.1)
      end;
     hence x in (L~g1) \/ (L~g2);
    end;
- hence thesis by A30,A120,A128,XBOOLE_0:def 10;
+ hence thesis by A30,A119,A127,XBOOLE_0:def 10;
 end;
 
 theorem Th56:for f being non constant standard special_circular_sequence,
@@ -3406,17 +3383,17 @@ f/.len f)
             ,(f|2)/.(len (f|2)-'1+1)) by A51,TOPREAL1:def 5;
        A53:len (f|2)-'1=1+1-'1 by A8,FINSEQ_1:80 .=1 by BINARITH:39;
        A54:(f|2)/.1=(f|2).1 by A51,FINSEQ_4:24;
-       A55:(f|2).1=f.1 by JORDAN3:20;
-       A56:(f|i2).1=f.1 by A3,JORDAN3:20;
+       A55:(f|2).1=f.1 by FINSEQ_3:121;
+       A56:(f|i2).1=f.1 by A3,FINSEQ_3:121;
        A57:len (f|i2)=i2 by A11,FINSEQ_1:80;
        then A58:(f|2)/.1=(f|i2)/.1 by A3,A54,A55,A56,FINSEQ_4:24;
        A59:1+1<=len (f|i2) by A36,A57,NAT_1:38;
-       A60:(f|2).(1+1)=f.(1+1) by JORDAN3:20;
+       A60:(f|2).(1+1)=f.(1+1) by FINSEQ_3:121;
        A61:(f|2)/.(1+1)=(f|2).(1+1) by A51,FINSEQ_4:24;
-          (f|i2).(1+1)=f.(1+1) by A57,A59,JORDAN3:20;
+          (f|i2).(1+1)=f.(1+1) by A57,A59,FINSEQ_3:121;
        then A62:(f|2)/.(1+1)=(f|i2)/.(1+1) by A59,A60,A61,FINSEQ_4:24;
        A63:LSeg(f|i2,1)=LSeg((f|i2)/.1,(f|i2)/.(1+1)) by A59,TOPREAL1:def 5;
-       A64:(f|2)/.(len (f|2)-'1)=f/.1 by A49,A53,A54,JORDAN3:20;
+       A64:(f|2)/.(len (f|2)-'1)=f/.1 by A49,A53,A54,FINSEQ_3:121;
           1<=1 & 1+1<=len (f|i2) by A36,A57,NAT_1:38;
        then f.1 in LSeg((f|2),len (f|2)-'1) & LSeg((f|2),len (f|2)-'1)
           in { LSeg((f|i2),i) : 1<=i & i+1 <= len (f|i2)}
@@ -3456,7 +3433,7 @@ f/.len f)
        then A72:0+1<=(i1-'1)+j1 by A68,XREAL_1:9;
        A73:j1+1<=len f-'(i1-'1) by A68,JORDAN3:19;
           j1+1+(i1-'1)<=len f-'(i1-'1)+(i1-'1) by A37,A68,XREAL_1:8;
-       then A74: j1+1+(i1-'1)<=len f by A45,AMI_5:4;
+       then A74: j1+1+(i1-'1)<=len f by A45,BINARITH:53;
        then A75:LSeg(f,(i1-'1)+j1)=LSeg(f/.((i1-'1)+j1),f/.((i1-'1)+j1+1))
                                   by A72,TOPREAL1:def 5;
           j1 <= len (f/^(i1-'1)) by A68,NAT_1:38;
@@ -3467,7 +3444,7 @@ f/.len f)
        then A78:(f/^(i1-'1))/.j1=f/.((i1-'1)+j1) by A72,A76,A77,FINSEQ_4:24;
        A79:1<=1+j1 by NAT_1:29;
           j1+1+(i1-'1)<=len f-'(i1-'1)+(i1-'1) by A73,XREAL_1:8;
-       then j1+1+(i1-'1)<=len f by A45,AMI_5:4;
+       then j1+1+(i1-'1)<=len f by A45,BINARITH:53;
        then A80:(f/^(i1-'1)).(j1+1)=f.((i1-'1)+j1+1) by A79,JORDAN3:23;
           1<=1+j1 by NAT_1:29;
        then A81:(f/^(i1-'1))/.(j1+1)=(f/^(i1-'1)).(j1+1) by A68,FINSEQ_4:24;
@@ -3480,10 +3457,10 @@ f/.len f)
        A86:j2<len (f|i2) by A70,NAT_1:38;
        then A87:j2<len f by A84,XREAL_1:2;
        A88:(f|i2)/.j2=(f|i2).j2 by A70,A86,FINSEQ_4:24
-          .= f.j2 by A57,A86,JORDAN3:20
+          .= f.j2 by A57,A86,FINSEQ_3:121
           .= f/.j2 by A70,A87,FINSEQ_4:24;
        A89:(f|i2)/.(j2+1)=(f|i2).(j2+1) by A83,FINSEQ_4:24
-       .=f.(j2+1) by A57,A70,JORDAN3:20
+       .=f.(j2+1) by A57,A70,FINSEQ_3:121
        .=f/.(j2+1) by A83,A85,FINSEQ_4:24;
        A90:LSeg(f|i2,j2)=LSeg((f|i2)/.j2,
 (f|i2)/.(j2+1)) by A70,TOPREAL1:def 5;
@@ -3496,7 +3473,7 @@ A92:   now assume A93: not (j2=1 & i1-'1+j1=len f-'1);
         A96: (i1-'1)+j1+1-1 <= len f-1 by A94,XREAL_1:11;
         A97:j2+1<i2+1 by A57,A70,NAT_1:38;
         A98:i2+1<=i1 by A1,NAT_1:38;
-           i1-'1+1=i1 by A3,AMI_5:4;
+           i1-'1+1=i1 by A3,BINARITH:53;
         then A99:j2+1<i1-'1+1 by A97,A98,XREAL_1:2;
            i1-'1+1<=i1-'1+j1 by A68,XREAL_1:8;
         then A100:j2+1<(i1-'1)+j1 & (i1-'1)+j1<len f by A95,A99,XREAL_1:2
@@ -3545,7 +3522,7 @@ A110:   len f-'1-'(i1-'1)+1+(i1-'1)=
        .=f.(len f-'1-'(i1-'1)+1+(i1-'1)) by A110,A111,JORDAN3:23
        .=f.(1+((len f-'1-'(i1-'1))+(i1-'1)))
        .=f.(len f-'1-(i1-'1)+(i1-'1)+1) by A47,BINARITH:50
-       .=f.len f by A4,AMI_5:4
+       .=f.len f by A4,BINARITH:53
        .=f/.len f by A4,FINSEQ_4:24;
        A114:LSeg(f/^(i1-'1),j1)
         =LSeg((f/^(i1-'1))/.(len f-'1-'(i1-'1)),
@@ -3701,7 +3678,7 @@ proof let f be non constant standard special_circular_sequence,
      then A10:i1<=len f-'1 by A9,BINARITH:50;
         now assume A11: i1=i2;
           g.1=f.S_Drop(len f+i1-'1,f) by A8
-       .=f.S_Drop(len f-'1+1+i1-'1,f) by A9,AMI_5:4
+       .=f.S_Drop(len f-'1+1+i1-'1,f) by A9,BINARITH:53
        .=f.S_Drop(len f-'1+i1+1-'1,f)
        .=f.S_Drop(len f-'1+i1,f) by BINARITH:39
        .=f.S_Drop(i1,f) by Th35
@@ -3914,7 +3891,7 @@ proof let f be non constant standard special_circular_sequence,
          1+1<=i1-1+1 by A15,NAT_1:38;
         then A17:2<=len mid(f,i1,1) by A2,A14,BINARITH:50;
         A18:g2.2=(mid(f,i1,1)^mid(f,len f-'1,i2)).2 by A1,A11,Th40
-        .=mid(f,i1,1).2 by A17,SCMFSA_7:9
+        .=mid(f,i1,1).2 by A17,FINSEQ_1:85
         .=f.(i1-'2+1) by A4,A9,A15,A17,JORDAN3:27
         .=f.(i1-(1+1)+1) by A16,BINARITH:50
         .=f.(i1-1)
@@ -3938,7 +3915,7 @@ A23:     now assume A24:1=i1-'1 & i1+1=len f; then 1=i1-1 by JORDAN3:1;
            now per cases by A23;
         case A25: 1<>i1-'1;
              i1-'1<i1-'1+1 by NAT_1:38;
-          then i1-'1<i1 by A2,AMI_5:4;
+          then i1-'1<i1 by A2,BINARITH:53;
           then A26:1<i1-'1 & i1-'1<i1+1 & i1+1<=len f
              by A1,A22,A25,Def2,NAT_1:38,REAL_1:def 5;
           then A27:f/.(i1-'1)<>f/.(i1+1) by GOBOARD7:39;
@@ -3949,7 +3926,7 @@ A23:     now assume A24:1=i1-'1 & i1+1=len f; then 1=i1-1 by JORDAN3:1;
         end;
         case A29: i1+1<>len f;
              i1-'1<i1-'1+1 by NAT_1:38;
-          then i1-'1<i1 by A2,AMI_5:4;
+          then i1-'1<i1 by A2,BINARITH:53;
           then A30:1<=i1-'1 & i1-'1<i1+1 & i1+1<len f
              by A2,A21,A29,JORDAN3:1,NAT_1:38,REAL_1:def 5;
           then A31:f/.(i1-'1)<>f/.(i1+1) by GOBOARD7:38;
@@ -4014,7 +3991,7 @@ A49: now per cases by A46,REAL_1:def 5;
   then 1+1<=1+((len f-'1)-i1);
       then A52:2<=len mid(f,i1,len f-'1) by A5,A47,A48,BINARITH:50;
      thus g1.2=(mid(f,i1,len f-'1)^mid(f,1,i2)).2 by A1,A43,Th38
-      .=mid(f,i1,len f-'1).2 by A52,SCMFSA_7:9
+      .=mid(f,i1,len f-'1).2 by A52,FINSEQ_1:85
       .=f.(1+1+i1-1) by A2,A5,A6,A48,A51,JORDAN3:31
       .=f.(i1+1);
     end;
@@ -4055,7 +4032,7 @@ A62: now assume A63:1=i1-'1 & i1+1=len f; then 1=i1-1 by JORDAN3:1;
        now per cases by A62;
     case A64: 1<>i1-'1;
          i1-'1<i1-'1+1 by NAT_1:38;
-      then i1-'1<i1 by A2,AMI_5:4;
+      then i1-'1<i1 by A2,BINARITH:53;
       then A65:1<i1-'1 & i1-'1<i1+1 & i1+1<=len f
         by A1,A61,A64,Def2,NAT_1:38,REAL_1:def 5;
       then A66:f/.(i1-'1)<>f/.(i1+1) by GOBOARD7:39;
@@ -4066,7 +4043,7 @@ A62: now assume A63:1=i1-'1 & i1+1=len f; then 1=i1-1 by JORDAN3:1;
     end;
     case A68: i1+1<>len f;
          i1-'1<i1-'1+1 by NAT_1:38;
-      then i1-'1<i1 by A2,AMI_5:4;
+      then i1-'1<i1 by A2,BINARITH:53;
       then A69:1<=i1-'1 & i1-'1<i1+1 & i1+1<len f
          by A2,A60,A68,JORDAN3:1,NAT_1:38,REAL_1:def 5;
       then A70:f/.(i1-'1)<>f/.(i1+1) by GOBOARD7:38;
@@ -4168,7 +4145,7 @@ A18:    g is_a_part<_of f,i1,i2 by A1,A6,A13,Th46;
          .=f.(i1-1) .=f.(i1-'1) by A1,BINARITH:50;
             1+1<=i1-1+1 by A20,NAT_1:38;
          then A23:2<=len mid(f,i1,1) by A1,A19,BINARITH:50;
-         A24:g.2 =mid(f,i1,1).2 by A7,A19,A21,SCMFSA_7:9
+         A24:g.2 =mid(f,i1,1).2 by A7,A19,A21,FINSEQ_1:85
          .=f.(i1-'(1+1)+1) by A2,A3,A20,A23,JORDAN3:27;
             1+1-1<=i1-1 by A21,XREAL_1:11;
          then 1<=i1-'1 & i1-'1<=len f-'1 by A2,A7,A8,XREAL_1:11;
@@ -4195,7 +4172,7 @@ then A29:      1+1<=len mid(f,i1,1)+len mid(f,len f-'1,i2)
          .=mid(f,len f-'1,i2).(1+1-(1-'1+1)) by A1,A25,XREAL_1:1
          .=mid(f,len f-'1,i2).(1+1-(0+1)) by BINARITH:51
          .=f.(len f-'1-'1+1) by A1,A8,A9,A11,A30,Th24
-         .=f.(len f-'1) by A5,AMI_5:4;
+         .=f.(len f-'1) by A5,BINARITH:53;
             S_Drop(i1-'1,f)=S_Drop(i1-'1+(len f-'1),f) by Th35
                         .=len f-'1 by A5,A26,Th34;
         hence g is_a_part_of f,i1,i2 &
@@ -4252,7 +4229,7 @@ A40:    g is_a_part>_of f,i1,i2 by A1,A2,A32,Th45;
        case i1+1<len f;
          then i1+1+1<=len f by NAT_1:38;
          then A42: i1+2-i1<=len f-i1 by XREAL_1:11;
-         then g.2 =mid(f,i1,len f-'1).2 by A41,SCMFSA_7:9
+         then g.2 =mid(f,i1,len f-'1).2 by A41,FINSEQ_1:85
          .=f.(2+i1-'1) by A1,A2,A4,A8,A10,A11,A41,A42,JORDAN3:27
          .=f.(1+1+i1-1) by Th2
          .=f.(i1+1);
@@ -4356,7 +4333,7 @@ A61:    g is_a_part<_of f,i1,i2 by A1,A49,A56,Th46;
          .=f.(i1-1) .=f.(i1-'1) by A1,BINARITH:50;
             1+1<=i1-1+1 by A63,NAT_1:38;
          then A66:2<=len mid(f,i1,1) by A1,A62,BINARITH:50;
-         A67:g.2 =mid(f,i1,1).2 by A50,A62,A64,SCMFSA_7:9
+         A67:g.2 =mid(f,i1,1).2 by A50,A62,A64,FINSEQ_1:85
          .=f.(i1-'(1+1)+1) by A45,A46,A63,A66,JORDAN3:27;
             1+1-1<=i1-1 by A64,XREAL_1:11;
          then 1<=i1-'1 & i1-'1<=len f-'1 by A45,A50,A51,XREAL_1:11;
@@ -4384,7 +4361,7 @@ then A72:      1+1<=len mid(f,i1,1)+len mid(f,len f-'1,i2)
          .=mid(f,len f-'1,i2).(1+1-(1-'1+1)) by A1,A68,XREAL_1:1
          .=mid(f,len f-'1,i2).(1+1-(0+1)) by BINARITH:51
          .=f.(len f-'1-'1+1) by A1,A51,A54,A73,A74,Th24
-         .=f.(len f-'1) by A48,AMI_5:4;
+         .=f.(len f-'1) by A48,BINARITH:53;
             S_Drop(i1-'1,f)=S_Drop(i1-'1+(len f-'1),f) by Th35
                         .=len f-'1 by A48,A69,Th34;
         hence g is_a_part_of f,i1,i2 &
@@ -4441,7 +4418,7 @@ A84:    g is_a_part>_of f,i1,i2 by A1,A45,A76,Th45;
        case i1+1<len f;
          then i1+1+1<=len f by NAT_1:38;
          then A86: i1+2-i1<=len f-i1 by XREAL_1:11;
-         then g.2 =mid(f,i1,len f-'1).2 by A85,SCMFSA_7:9
+         then g.2 =mid(f,i1,len f-'1).2 by A85,FINSEQ_1:85
          .=f.(2+i1-'1) by A1,A45,A47,A51,A53,A54,A85,A86,JORDAN3:27
          .=f.(1+1+i1-1) by Th2
          .=f.(1+i1);

@@ -18,7 +18,7 @@ environ
  registrations STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, RLVECT_1, SEQ_1, RUSUB_4,
       MEMBERED, SUBSET_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions XBOOLE_0;
+ definitions XBOOLE_0, RLVECT_1;
  theorems BHSP_1, SUBSET_1, RLVECT_1, RVSUM_1, FUNCT_1, FINSEQ_1, TARSKI,
       ZFMISC_1, XBOOLE_0, REAL_2, SETFAM_1, RLSUB_1, RUSUB_4, RUSUB_5,
       XBOOLE_1, RLVECT_2, CARD_1, FINSEQ_3, FINSEQ_4, CARD_2, ENUMSET1,
@@ -156,14 +156,14 @@ A6:  r*x1 + (1-r)*x2 in M by A1,A3,A4,A5,Def2;
 A7:  r*y1 + (1-r)*y2 in N by A2,A3,A4,A5,Def2;
          r*u + (1-r)*v = r*x1 - r*y1 + (1-r)*(x2-y2) by A4,A5,RLVECT_1:48
       .= r*x1 - r*y1 + ((1-r)*x2 - (1-r)*y2) by RLVECT_1:48
-      .= r*x1 - r*y1 + (1-r)*x2 - (1-r)*y2 by RLVECT_1:42
+      .= r*x1 - r*y1 + (1-r)*x2 - (1-r)*y2 by RLVECT_1:def 6
       .= r*x1 - (r*y1 - (1-r)*x2) - (1-r)*y2 by RLVECT_1:43
-      .= r*x1 + (- (r*y1 - (1-r)*x2)) - (1-r)*y2 by RLVECT_1:def 11
+      .= r*x1 + (- (r*y1 - (1-r)*x2)) - (1-r)*y2
       .= r*x1 + ((1-r)*x2 + (- r*y1)) - (1-r)*y2 by RLVECT_1:47
       .= r*x1 + (1-r)*x2 + (- r*y1) - (1-r)*y2 by RLVECT_1:def 6
-      .= r*x1 + (1-r)*x2 + ((- r*y1) - (1-r)*y2) by RLVECT_1:42
+      .= r*x1 + (1-r)*x2 + ((- r*y1) - (1-r)*y2) by RLVECT_1:def 6
       .= r*x1 + (1-r)*x2 + - (r*y1 + (1-r)*y2) by RLVECT_1:44
-      .= (r*x1 + (1-r)*x2) - (r*y1 + (1-r)*y2) by RLVECT_1:def 11;
+      .= (r*x1 + (1-r)*x2) - (r*y1 + (1-r)*y2);
      then r*u + (1-r)*v in {x - y where x,y is Element of V
            : x in M & y in N} by A6,A7;
      hence thesis by RUSUB_5:def 2;
@@ -775,8 +775,8 @@ proof
      let x be VECTOR of V;
      assume x in r * M;
      then consider v be VECTOR of V such that
-A2:  x = r * v & v in {};
-     thus thesis by A2;
+A1:  x = r * v & v in {};
+     thus thesis by A1;
    end;
    then r * M c= {} by SUBSET_1:7;
    hence thesis by XBOOLE_1:3;
@@ -836,7 +836,7 @@ A4:  x = x + 0.V by RLVECT_1:def 7;
    hence thesis by A2,XBOOLE_0:def 10;
 end;
 
-Th13:
+Lm10:
   for V being RealLinearSpace,
       M being Subset of V, r1,r2 being Real st
   r1 >= 0 & r2 >= 0 & M is convex holds r1*M + r2*M c= (r1 + r2)*M
@@ -892,7 +892,7 @@ proof
       M be Subset of V,
       r1,r2 be Real;
   assume r1 >= 0 & r2 >= 0 & M is convex;
-  hence r1*M + r2*M c= (r1 + r2)*M by Th13;
+  hence r1*M + r2*M c= (r1 + r2)*M by Lm10;
   thus thesis by Th12;
 end;
 
@@ -1207,7 +1207,7 @@ A2:L = ZeroLC(V);
    hence contradiction by A2,RLVECT_2:def 7;
 end;
 
-Lm10:
+Lm11:
 for V being RealLinearSpace, v being VECTOR of V,
  L being Linear_Combination of V st L is convex & Carrier(L) = {v} holds
   L.v = 1 & Sum(L) = L.v * v
@@ -1240,7 +1240,7 @@ then A9:Sum f = r by RVSUM_1:103;
    hence thesis by A4,A7,A8,A9,FINSEQ_1:def 8,RLVECT_2:50;
 end;
 
-Lm11:
+Lm12:
 for V being RealLinearSpace, v1,v2 being VECTOR of V,
  L being Linear_Combination of V st
   L is convex & Carrier(L) = {v1,v2} & v1 <> v2 holds
@@ -1288,7 +1288,7 @@ A10: f = <*r1,r2*> by A6,A8,A9,FINSEQ_1:61;
    hence thesis by A3,RLVECT_2:51;
 end;
 
-Lm12:
+Lm13:
 for p being FinSequence, x,y,z being set st
  p is one-to-one & rng p = {x,y,z} & x <> y & y <> z & z <> x holds
   p = <* x,y,z *> or p = <* x,z,y *> or p = <* y,x,z *> or
@@ -1323,7 +1323,7 @@ then A5:1 in dom p & 2 in dom p & 3 in dom p by ENUMSET1:def 1;
     hence thesis by A4,FINSEQ_1:62;
 end;
 
-Lm13:
+Lm14:
 for V being RealLinearSpace, v1,v2,v3 being VECTOR of V,
  L being Linear_Combination of {v1,v2,v3} st
   v1 <> v2 & v2 <> v3 & v3 <> v1 holds
@@ -1418,7 +1418,7 @@ A16:    F is one-to-one & rng F = {v1,v2,v3} and
 A17:    Sum(L) = Sum(L (#) F) by RLVECT_2:def 10;
        F = <* v1,v2,v3 *> or F = <* v1,v3,v2 *> or F = <* v2,v1,v3 *> or
        F = <* v2,v3,v1 *> or F = <* v3,v1,v2 *> or F = <* v3,v2,v1 *>
-         by A1,A16,Lm12;
+         by A1,A16,Lm13;
        then L (#) F = <* L.v1 * v1, L.v2 * v2, L.v3 * v3 *> or
        L (#) F = <* L.v1 * v1, L.v3 * v3, L.v2 * v2 *> or
        L (#) F = <* L.v2 * v2, L.v1 * v1, L.v3 * v3 *> or
@@ -1433,7 +1433,7 @@ A17:    Sum(L) = Sum(L (#) F) by RLVECT_2:def 10;
      end;
 end;
 
-Lm14:
+Lm15:
 for V being RealLinearSpace, v1,v2,v3 being VECTOR of V,
  L being Linear_Combination of V st
   L is convex & Carrier(L) = {v1,v2,v3} &
@@ -1472,7 +1472,7 @@ A10:f.3 = L.(F.3) & f.3 >= 0 by A5,A7;
    then reconsider r3 = L.(F.3) as Element of REAL;
 A11: f = <*r1,r2,r3*> by A6,A8,A9,A10,FINSEQ_1:62;
 then A12:L.(F.1) + L.(F.2) + L.(F.3) = 1 by A5,RVSUM_1:108;
-       now per cases by A2,A3,A4,Lm12;
+       now per cases by A2,A3,A4,Lm13;
      suppose F = <*v1,v2,v3*>;
      then F.1 = v1 & F.2 = v2 & F.3 = v3 by FINSEQ_1:62;
      hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
@@ -1504,7 +1504,7 @@ then A12:L.(F.1) + L.(F.2) + L.(F.3) = 1 by A5,RVSUM_1:108;
        by A8,A9,A10,A12;
    end;
    end;
-   hence thesis by A3,Lm13;
+   hence thesis by A3,Lm14;
 end;
 
 theorem
@@ -1519,7 +1519,7 @@ proof
 A1:L is convex;
    Carrier(L) c= {v} by RLVECT_2:def 8;
    then Carrier(L) = {} or Carrier(L) = {v} by ZFMISC_1:39;
-   hence thesis by A1,Lm10,Th21;
+   hence thesis by A1,Lm11,Th21;
 end;
 
 theorem
@@ -1538,7 +1538,7 @@ A4:Carrier(L) <> {} by A2,Th21;
    now per cases by A3,A4,ZFMISC_1:42;
      suppose
 A5:  Carrier(L) = {v1};
-then A6:  L.v1 = 1 & Sum(L) = L.v1 * v1 by A2,Lm10;
+then A6:  L.v1 = 1 & Sum(L) = L.v1 * v1 by A2,Lm11;
      not v2 in Carrier(L) by A1,A5,TARSKI:def 1;
      then not v2 in {v where v is Element of V : L.v <> 0}
        by RLVECT_2:def 6;
@@ -1547,7 +1547,7 @@ then A6:  L.v1 = 1 & Sum(L) = L.v1 * v1 by A2,Lm10;
      end;
      suppose
 A7:  Carrier(L) = {v2};
-then A8: L.v2 = 1 & Sum(L) = L.v2 * v2 by A2,Lm10;
+then A8: L.v2 = 1 & Sum(L) = L.v2 * v2 by A2,Lm11;
      not v1 in Carrier(L) by A1,A7,TARSKI:def 1;
      then not v1 in {v where v is Element of V : L.v <> 0}
        by RLVECT_2:def 6;
@@ -1555,7 +1555,7 @@ then A8: L.v2 = 1 & Sum(L) = L.v2 * v2 by A2,Lm10;
      hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A8;
      end;
      suppose Carrier(L) = {v1,v2};
-     hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A1,A2,Lm11;
+     hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A1,A2,Lm12;
    end;
    end;
    hence thesis by A1,RLVECT_2:51;
@@ -1579,7 +1579,7 @@ A4:Carrier(L) <> {} by A2,Th21;
    now per cases by A3,A4,WAYBEL18:1;
      suppose
 A5:  Carrier(L) = {v1};
-then A6:  L.v1 = 1 by A2,Lm10;
+then A6:  L.v1 = 1 by A2,Lm11;
      not v2 in Carrier(L) & not v3 in Carrier(L) by A1,A5,TARSKI:def 1;
      then not v2 in {v where v is Element of V : L.v <> 0} &
      not v3 in {v where v is Element of V : L.v <> 0}
@@ -1589,7 +1589,7 @@ then A6:  L.v1 = 1 by A2,Lm10;
      end;
      suppose
 A7:  Carrier(L) = {v2};
-then A8: L.v2 = 1 by A2,Lm10;
+then A8: L.v2 = 1 by A2,Lm11;
      not v1 in Carrier(L) & not v3 in Carrier(L) by A1,A7,TARSKI:def 1;
      then not v1 in {v where v is Element of V : L.v <> 0} &
      not v3 in {v where v is Element of V : L.v <> 0}
@@ -1599,7 +1599,7 @@ then A8: L.v2 = 1 by A2,Lm10;
      end;
      suppose
 A9: Carrier(L) = {v3};
-then A10: L.v3 = 1 by A2,Lm10;
+then A10: L.v3 = 1 by A2,Lm11;
      not v1 in Carrier(L) & not v2 in Carrier(L) by A1,A9,TARSKI:def 1;
      then not v1 in {v where v is Element of V : L.v <> 0} &
      not v2 in {v where v is Element of V : L.v <> 0}
@@ -1614,7 +1614,7 @@ A11: Carrier(L) = {v1,v2};
        by RLVECT_2:def 6;
      then L.v3 = 0;
      hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
-      by A1,A2,A11,Lm11;
+      by A1,A2,A11,Lm12;
      end;
      suppose
 A12: Carrier(L) = {v2,v3};
@@ -1623,7 +1623,7 @@ A12: Carrier(L) = {v2,v3};
        by RLVECT_2:def 6;
      then L.v1 = 0;
      hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
-       by A1,A2,A12,Lm11;
+       by A1,A2,A12,Lm12;
      end;
      suppose
 A13: Carrier(L) = {v1,v3};
@@ -1632,26 +1632,26 @@ A13: Carrier(L) = {v1,v3};
        by RLVECT_2:def 6;
      then L.v2 = 0;
      hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
-       by A1,A2,A13,Lm11;
+       by A1,A2,A13,Lm12;
      end;
      suppose Carrier(L) = {v1,v2,v3};
      hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
-       by A1,A2,Lm14;
+       by A1,A2,Lm15;
    end;
    end;
-   hence thesis by A1,Lm13;
+   hence thesis by A1,Lm14;
 end;
 
 theorem
   for V being RealLinearSpace, v being VECTOR of V,
       L being Linear_Combination of V st
-  L is convex & Carrier(L) = {v} holds L.v = 1 by Lm10;
+  L is convex & Carrier(L) = {v} holds L.v = 1 by Lm11;
 
 theorem
   for V being RealLinearSpace, v1,v2 being VECTOR of V,
       L being Linear_Combination of V st
   L is convex & Carrier(L) = {v1,v2} & v1 <> v2 holds
-   L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by Lm11;
+   L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by Lm12;
 
 theorem
   for V being RealLinearSpace, v1,v2,v3 being VECTOR of V,
@@ -1659,7 +1659,7 @@ theorem
   L is convex & Carrier(L) = {v1,v2,v3} &
    v1 <> v2 & v2 <> v3 & v3 <> v1 holds
     L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0 &
-     Sum(L) = L.v1 * v1 + L.v2 * v2 + L.v3 * v3 by Lm14;
+     Sum(L) = L.v1 * v1 + L.v2 * v2 + L.v3 * v3 by Lm15;
 
 begin  :: Convex Hull
 
@@ -1723,7 +1723,7 @@ theorem
   for p being FinSequence, x,y,z being set st
  p is one-to-one & rng p = {x,y,z} & x <> y & y <> z & z <> x holds
   p = <* x,y,z *> or p = <* x,z,y *> or p = <* y,x,z *> or
-  p = <* y,z,x *> or p = <* z,x,y *> or p = <* z,y,x *> by Lm12;
+  p = <* y,z,x *> or p = <* z,x,y *> or p = <* z,y,x *> by Lm13;
 
 theorem
   for V being RealLinearSpace-like (non empty RLSStruct),

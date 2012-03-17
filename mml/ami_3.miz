@@ -18,7 +18,7 @@ environ
  registrations INT_1, AMI_1, RELSET_1, AMI_2, CQC_LANG, NAT_1, FINSET_1,
       XBOOLE_0, FRAENKEL, MEMBERED, ORDINAL2, SETFAM_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions AMI_1, TARSKI, INT_1;
+ definitions AMI_1, TARSKI, INT_1, CQC_LANG;
  theorems NAT_1, PARTFUN1, FUNCT_1, SUBSET_1, GRFUNC_1, TARSKI, ZFMISC_1,
       ENUMSET1, AMI_2, CQC_LANG, FUNCT_4, AMI_1, FUNCOP_1, CARD_3, FUNCT_2,
       MCART_1, FINSEQ_3, TREES_1, INT_1, RELAT_1, RELSET_1, GR_CY_1, STRUCT_0,
@@ -188,10 +188,7 @@ theorem
  IC SCM = 0;
 
 theorem Th5:
- for S being SCM-State st S = s holds IC s = IC S
- proof let S be SCM-State; assume S = s;
-  hence IC s = S.0 .= IC S by AMI_2:def 6;
- end;
+ for S being SCM-State st S = s holds IC s = IC S by AMI_2:def 6;
 
 definition let loc be Instruction-Location of SCM;
  func Next loc -> Instruction-Location of SCM means
@@ -207,27 +204,12 @@ end;
 theorem Th6:
  for loc being Instruction-Location of SCM,
      mj being Element of SCM-Instr-Loc st mj = loc
- holds Next mj = Next loc
- proof let loc be Instruction-Location of SCM,
-   mj be Element of SCM-Instr-Loc;
-      ex mj being Element of SCM-Instr-Loc st mj = loc & Next loc= Next mj
-    by Def11;
-  hence thesis;
- end;
+ holds Next mj = Next loc by Def11;
 
 theorem Th7:
 for i being Element of SCM-Instr st i = I
 for S being SCM-State st S = s holds
- Exec(I,s) = SCM-Exec-Res(i,S)
- proof let i be Element of SCM-Instr such that
-A1: i = I;
-  let S be SCM-State; assume
-    S = s;
-  hence Exec(I,s) =
-(SCM-Exec.i qua Element of Funcs(product SCM-OK, product SCM-OK)).S
-           by A1
-        .= SCM-Exec-Res(i,S) by AMI_2:def 17;
- end;
+ Exec(I,s) = SCM-Exec-Res(i,S) by AMI_2:def 17;
 
 begin :: Users guide
 
@@ -479,15 +461,15 @@ A1:   Exec(I, s).IC SCM = Next IC s;
     assume
 A2:   I is halting;
     reconsider t = s as SCM-State;
-A4: IC t = t.0 by AMI_2:def 6;
-A5: Exec(I,s).IC SCM = s.IC SCM by A2,AMI_1:def 8
+A3: IC t = t.0 by AMI_2:def 6;
+A4: Exec(I,s).IC SCM = s.IC SCM by A2,AMI_1:def 8
        .= t.0;
-    reconsider w = t.0 as Instruction-Location of SCM by A4;
+    reconsider w = t.0 as Instruction-Location of SCM by A3;
     consider mj being Element of SCM-Instr-Loc such that
-A6:   mj = w & Next w = Next mj by Def11;
-A7: Exec(I,s).IC SCM = Next w by A1;
-       Next w = mj + 2 by A6,AMI_2:def 15;
-    hence contradiction by A5,A6,A7,XCMPLX_1:3;
+A5:   mj = w & Next w = Next mj by Def11;
+A6: Exec(I,s).IC SCM = Next w by A1;
+       Next w = mj + 2 by A5,AMI_2:def 15;
+    hence contradiction by A4,A5,A6,XCMPLX_1:3;
   end;
 
 Lm2:
@@ -580,58 +562,6 @@ A1:   goto loc is halting;
     consider s being SCM-State;
     set t = s +* (0.--> Next a3);
     set f = the Object-Kind of SCM;
-A3: dom(0 .--> Next a3) = {0} by CQC_LANG:5;
-    then 0 in dom (0.--> Next a3) by TARSKI:def 1;
-then A4: t.0 = (0.--> Next a3).0 by FUNCT_4:14
-       .= Next a3 by CQC_LANG:6;
-then A5: t.0 = a3 + 2 by AMI_2:def 15;
-A6: {0} c= NAT by ZFMISC_1:37;
-A7: dom s = dom SCM-OK by CARD_3:18;
-A8: dom t = dom s \/ dom (0.--> Next a3) by FUNCT_4:def 1
-         .= NAT \/ dom (0.--> Next a3) by A7,FUNCT_2:def 1
-         .= NAT \/ {0} by CQC_LANG:5
-         .= NAT by A6,XBOOLE_1:12;
-A9: dom f = NAT by FUNCT_2:def 1;
-       for x being set st x in dom f holds t.x in f.x
-    proof
-      let x be set such that
-A10:     x in dom f;
-      per cases;
-      suppose
-A11:     x = 0;
-      then f.x = SCM-Instr-Loc by AMI_2:7;
-      hence t.x in f.x by A4,A11;
-      end;
-      suppose x <> 0;
-      then not x in dom (0.--> Next a3) by A3,TARSKI:def 1;
-then t.x = s.x by FUNCT_4:12;
-      hence t.x in f.x by A10,CARD_3:18;
-    end;
-    end;
-    then reconsider t as State of SCM by A8,A9,CARD_3:18;
-    reconsider w = t as SCM-State;
-       dom(0 .--> loc) = {0} by CQC_LANG:5;
-    then 0 in dom (0 .--> loc) by TARSKI:def 1;
-then A12: (w +* (0 .--> loc)).0 = (0 .--> loc).0 by FUNCT_4:14
-       .= loc by CQC_LANG:6;
-A13: 6 is Element of Segm 9 by GR_CY_1:10;
-       w +* (0 .--> loc)
-      = SCM-Chg(w,a3) by AMI_2:def 7
-     .= SCM-Chg(w,V jump_address) by A13,AMI_2:24
-     .= SCM-Exec-Res(V,w) by AMI_2:def 16
-     .= Exec(goto loc,t) by Th7
-     .= t by A1,AMI_1:def 8;
-    hence contradiction by A5,A12,XCMPLX_1:3;
-  end;
-
-Lm9:
- a=0_goto loc is non halting
-  proof
-    reconsider V = a=0_goto loc as Element of SCM-Instr;
-    reconsider a3 = loc as Element of SCM-Instr-Loc;
-    consider s being SCM-State;
-    set t = s +* (0.--> Next a3);
-    set f = the Object-Kind of SCM;
 A2: dom(0 .--> Next a3) = {0} by CQC_LANG:5;
     then 0 in dom (0.--> Next a3) by TARSKI:def 1;
 then A3: t.0 = (0.--> Next a3).0 by FUNCT_4:14
@@ -666,37 +596,89 @@ then t.x = s.x by FUNCT_4:12;
     then 0 in dom (0 .--> loc) by TARSKI:def 1;
 then A11: (w +* (0 .--> loc)).0 = (0 .--> loc).0 by FUNCT_4:14
        .= loc by CQC_LANG:6;
-A12: 7 is Element of Segm 9 by GR_CY_1:10;
-A13: a is Element of SCM-Data-Loc by Def2;
+A12: 6 is Element of Segm 9 by GR_CY_1:10;
+       w +* (0 .--> loc)
+      = SCM-Chg(w,a3) by AMI_2:def 7
+     .= SCM-Chg(w,V jump_address) by A12,AMI_2:24
+     .= SCM-Exec-Res(V,w) by AMI_2:def 16
+     .= Exec(goto loc,t) by Th7
+     .= t by A1,AMI_1:def 8;
+    hence contradiction by A4,A11,XCMPLX_1:3;
+  end;
+
+Lm9:
+ a=0_goto loc is non halting
+  proof
+    reconsider V = a=0_goto loc as Element of SCM-Instr;
+    reconsider a3 = loc as Element of SCM-Instr-Loc;
+    consider s being SCM-State;
+    set t = s +* (0.--> Next a3);
+    set f = the Object-Kind of SCM;
+A1: dom(0 .--> Next a3) = {0} by CQC_LANG:5;
+    then 0 in dom (0.--> Next a3) by TARSKI:def 1;
+then A2: t.0 = (0.--> Next a3).0 by FUNCT_4:14
+       .= Next a3 by CQC_LANG:6;
+then A3: t.0 = a3 + 2 by AMI_2:def 15;
+A4: {0} c= NAT by ZFMISC_1:37;
+A5: dom s = dom SCM-OK by CARD_3:18;
+A6: dom t = dom s \/ dom (0.--> Next a3) by FUNCT_4:def 1
+         .= NAT \/ dom (0.--> Next a3) by A5,FUNCT_2:def 1
+         .= NAT \/ {0} by CQC_LANG:5
+         .= NAT by A4,XBOOLE_1:12;
+A7: dom f = NAT by FUNCT_2:def 1;
+       for x being set st x in dom f holds t.x in f.x
+    proof
+      let x be set such that
+A8:     x in dom f;
+      per cases;
+      suppose
+A9:     x = 0;
+      then f.x = SCM-Instr-Loc by AMI_2:7;
+      hence t.x in f.x by A2,A9;
+      end;
+      suppose x <> 0;
+      then not x in dom (0.--> Next a3) by A1,TARSKI:def 1;
+then t.x = s.x by FUNCT_4:12;
+      hence t.x in f.x by A8,CARD_3:18;
+    end;
+    end;
+    then reconsider t as State of SCM by A6,A7,CARD_3:18;
+    reconsider w = t as SCM-State;
+       dom(0 .--> loc) = {0} by CQC_LANG:5;
+    then 0 in dom (0 .--> loc) by TARSKI:def 1;
+then A10: (w +* (0 .--> loc)).0 = (0 .--> loc).0 by FUNCT_4:14
+       .= loc by CQC_LANG:6;
+A11: 7 is Element of Segm 9 by GR_CY_1:10;
+A12: a is Element of SCM-Data-Loc by Def2;
     assume
-A14:   a=0_goto loc is halting;
+A13:   a=0_goto loc is halting;
     per cases;
     suppose
-A15:   w.(V cond_address) <> 0;
-A16: IC t = IC w by Th5;
-A17: IC w = w.0 by AMI_2:def 6;
-A18: Exec(a=0_goto loc,t).IC SCM = t.IC SCM by A14,AMI_1:def 8
+A14:   w.(V cond_address) <> 0;
+A15: IC t = IC w by Th5;
+A16: IC w = w.0 by AMI_2:def 6;
+A17: Exec(a=0_goto loc,t).IC SCM = t.IC SCM by A13,AMI_1:def 8
        .= w.0;
-    reconsider e = w.0 as Instruction-Location of SCM by A17;
-       t.a <> 0 by A12,A13,A15,AMI_2:25;
-then A19: Exec(a=0_goto loc,t).IC SCM = Next e by A16,Th14;
+    reconsider e = w.0 as Instruction-Location of SCM by A16;
+       t.a <> 0 by A11,A12,A14,AMI_2:25;
+then A18: Exec(a=0_goto loc,t).IC SCM = Next e by A15,Th14;
     consider mj being Element of SCM-Instr-Loc such that
-A20:   mj = e & Next e = Next mj by Def11;
-       Next e = mj + 2 by A20,AMI_2:def 15;
-    hence contradiction by A18,A19,A20,XCMPLX_1:3;
+A19:   mj = e & Next e = Next mj by Def11;
+       Next e = mj + 2 by A19,AMI_2:def 15;
+    hence contradiction by A17,A18,A19,XCMPLX_1:3;
     end;
     suppose w.(V cond_address) = 0;
-then A21: IFEQ(w.(V cond_address),0,V cjump_address,Next IC w) = V
+then A20: IFEQ(w.(V cond_address),0,V cjump_address,Next IC w) = V
 cjump_address
       by CQC_LANG:def 1;
        w +* (0 .--> loc)
       = SCM-Chg(w,a3) by AMI_2:def 7
-     .= SCM-Chg(w,IFEQ(w.(V cond_address),0,V cjump_address,Next IC w)) by A12,
-A13,A21,AMI_2:25
-     .= SCM-Exec-Res(V,w) by A13,AMI_2:def 16
+     .= SCM-Chg(w,IFEQ(w.(V cond_address),0,V cjump_address,Next IC w)) by A11,
+A12,A20,AMI_2:25
+     .= SCM-Exec-Res(V,w) by A12,AMI_2:def 16
      .= Exec(a=0_goto loc,t) by Th7
-     .= t by A14,AMI_1:def 8;
-    hence contradiction by A4,A11,XCMPLX_1:3;
+     .= t by A13,AMI_1:def 8;
+    hence contradiction by A3,A10,XCMPLX_1:3;
   end;
   end;
 
@@ -708,71 +690,71 @@ Lm10:
     consider s being SCM-State;
     set t = s +* (0.--> Next a3);
     set f = the Object-Kind of SCM;
-A2: dom(0 .--> Next a3) = {0} by CQC_LANG:5;
+A1: dom(0 .--> Next a3) = {0} by CQC_LANG:5;
     then 0 in dom (0.--> Next a3) by TARSKI:def 1;
-then A3: t.0 = (0.--> Next a3).0 by FUNCT_4:14
+then A2: t.0 = (0.--> Next a3).0 by FUNCT_4:14
        .= Next a3 by CQC_LANG:6;
-then A4: t.0 = a3 + 2 by AMI_2:def 15;
-A5: {0} c= NAT by ZFMISC_1:37;
-A6: dom s = dom SCM-OK by CARD_3:18;
-A7: dom t = dom s \/ dom (0.--> Next a3) by FUNCT_4:def 1
-         .= NAT \/ dom (0.--> Next a3) by A6,FUNCT_2:def 1
+then A3: t.0 = a3 + 2 by AMI_2:def 15;
+A4: {0} c= NAT by ZFMISC_1:37;
+A5: dom s = dom SCM-OK by CARD_3:18;
+A6: dom t = dom s \/ dom (0.--> Next a3) by FUNCT_4:def 1
+         .= NAT \/ dom (0.--> Next a3) by A5,FUNCT_2:def 1
          .= NAT \/ {0} by CQC_LANG:5
-         .= NAT by A5,XBOOLE_1:12;
-A8: dom f = NAT by FUNCT_2:def 1;
+         .= NAT by A4,XBOOLE_1:12;
+A7: dom f = NAT by FUNCT_2:def 1;
        for x being set st x in dom f holds t.x in f.x
     proof
       let x be set such that
-A9:     x in dom f;
+A8:     x in dom f;
       per cases;
       suppose
-A10:     x = 0;
+A9:     x = 0;
       then f.x = SCM-Instr-Loc by AMI_2:7;
-      hence t.x in f.x by A3,A10;
+      hence t.x in f.x by A2,A9;
       end;
       suppose x <> 0;
-      then not x in dom (0.--> Next a3) by A2,TARSKI:def 1;
+      then not x in dom (0.--> Next a3) by A1,TARSKI:def 1;
 then t.x = s.x by FUNCT_4:12;
-      hence t.x in f.x by A9,CARD_3:18;
+      hence t.x in f.x by A8,CARD_3:18;
     end;
     end;
-    then reconsider t as State of SCM by A7,A8,CARD_3:18;
+    then reconsider t as State of SCM by A6,A7,CARD_3:18;
     reconsider w = t as SCM-State;
        dom(0 .--> loc) = {0} by CQC_LANG:5;
     then 0 in dom (0 .--> loc) by TARSKI:def 1;
-then A11: (w +* (0 .--> loc)).0 = (0 .--> loc).0 by FUNCT_4:14
+then A10: (w +* (0 .--> loc)).0 = (0 .--> loc).0 by FUNCT_4:14
        .= loc by CQC_LANG:6;
-A12: 8 is Element of Segm 9 by GR_CY_1:10;
-A13: a is Element of SCM-Data-Loc by Def2;
+A11: 8 is Element of Segm 9 by GR_CY_1:10;
+A12: a is Element of SCM-Data-Loc by Def2;
     assume
-A14:   a>0_goto loc is halting;
+A13:   a>0_goto loc is halting;
     per cases;
     suppose
-A15:   w.(V cond_address) <= 0;
-A16: IC t = IC w by Th5;
-A17: IC w = w.0 by AMI_2:def 6;
-A18: Exec(a>0_goto loc,t).IC SCM = t.IC SCM by A14,AMI_1:def 8
+A14:   w.(V cond_address) <= 0;
+A15: IC t = IC w by Th5;
+A16: IC w = w.0 by AMI_2:def 6;
+A17: Exec(a>0_goto loc,t).IC SCM = t.IC SCM by A13,AMI_1:def 8
        .= w.0;
-    reconsider e = w.0 as Instruction-Location of SCM by A17;
-       t.a <= 0 by A12,A13,A15,AMI_2:25;
-then A19: Exec(a>0_goto loc,t).IC SCM = Next e by A16,Th15;
+    reconsider e = w.0 as Instruction-Location of SCM by A16;
+       t.a <= 0 by A11,A12,A14,AMI_2:25;
+then A18: Exec(a>0_goto loc,t).IC SCM = Next e by A15,Th15;
     consider mj being Element of SCM-Instr-Loc such that
-A20:   mj = e & Next e = Next mj by Def11;
-       Next e = mj + 2 by A20,AMI_2:def 15;
-    hence contradiction by A18,A19,A20,XCMPLX_1:3;
+A19:   mj = e & Next e = Next mj by Def11;
+       Next e = mj + 2 by A19,AMI_2:def 15;
+    hence contradiction by A17,A18,A19,XCMPLX_1:3;
     end;
     suppose w.(V cond_address) > 0;
-then A21: IFGT(w.(V cond_address),0,V cjump_address,Next IC w) = V
+then A20: IFGT(w.(V cond_address),0,V cjump_address,Next IC w) = V
 cjump_address
       by AMI_2:def 14;
        w +* (0 .--> loc)
       = SCM-Chg(w,a3) by AMI_2:def 7
-     .= SCM-Chg(w,IFGT(w.(V cond_address),0,V cjump_address,Next IC w)) by A12,
-A13,A21,AMI_2:25
-     .= SCM-Exec-Res(V,w) by A13,AMI_2:def 16
+     .= SCM-Chg(w,IFGT(w.(V cond_address),0,V cjump_address,Next IC w)) by A11,
+A12,A20,AMI_2:25
+     .= SCM-Exec-Res(V,w) by A12,AMI_2:def 16
      .= Exec(a>0_goto loc,t) by Th7
-     .= t by A14,AMI_1:def 8;
-    hence contradiction by A4,A11,XCMPLX_1:3;
+     .= t by A13,AMI_1:def 8;
+    hence contradiction by A3,A10,XCMPLX_1:3;
   end;
   end;
 
@@ -980,16 +962,16 @@ then A2: df = dg by SUBSET_1:8;
   hence f = g by A2,PARTFUN1:34;
  end;
 
- Th20:
+ Lm14:
  for f,g being Function, A,B being set st
   f|A = g|A & f|B = g|B holds f|(A \/ B) = g|(A \/ B)
     by RELAT_1:185;
 
- Th22:
+ Lm15:
  for f being Function, x being set st x in dom f
  holds f|{x} = {[x,f.x]} by GRFUNC_1:89;
 
- Th23:
+ Lm16:
  for f being Function, X being set st X misses dom f
   holds f|X = {} by RELAT_1:95;
 
@@ -1005,11 +987,11 @@ A2: f.x = g.x;
    per cases;
    suppose
 A3:  x in dom f;
-   hence f|{x} = {[x,g.x]} by A2,Th22 .= g|{x} by A1,A3,Th22;
+   hence f|{x} = {[x,g.x]} by A2,Lm15 .= g|{x} by A1,A3,Lm15;
    end;
    suppose not x in dom f;
 then A4: {x} misses dom f by ZFMISC_1:56;
-   hence f|{x} = {} by Th23 .= g|{x} by A1,A4,Th23;
+   hence f|{x} = {} by Lm16 .= g|{x} by A1,A4,Lm16;
  end;
  end;
 
@@ -1024,7 +1006,7 @@ A3: f.y = g.y;
 A4: f|{x} = g|{x} by A1,A2,Th24;
 A5: f|{y} = g|{y} by A1,A3,Th24;
       {x,y} = {x} \/ {y} by ENUMSET1:41;
-  hence f|{x,y} = g|{x,y} by A4,A5,Th20;
+  hence f|{x,y} = g|{x,y} by A4,A5,Lm14;
  end;
 
 theorem
@@ -1038,7 +1020,7 @@ A3: f.z = g.z;
 A4: f|{x,y} = g|{x,y} by A1,A2,Th25;
 A5: f|{z} = g|{z} by A1,A3,Th24;
       {x,y,z} = {x,y} \/ {z} by ENUMSET1:43;
-  hence f|{x,y,z} = g|{x,y,z} by A4,A5,Th20;
+  hence f|{x,y,z} = g|{x,y,z} by A4,A5,Lm14;
  end;
 
 theorem Th27:
@@ -1160,9 +1142,7 @@ theorem
 proof
  let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
  let l be Instruction-Location of S;
-     Start-At l = IC S .--> l
-    .= {IC S} --> l by CQC_LANG:def 2;
- hence thesis by FUNCOP_1:19;
+ thus thesis by FUNCOP_1:19;
 end;
 
 definition let N be set; let S be AMI-Struct over N;
@@ -1496,13 +1476,7 @@ theorem
  for S being IC-Ins-separated definite (non empty non void AMI-Struct over N
 ),
      l being Instruction-Location of S
-  holds (Start-At l).IC S = l
- proof
-  let S be IC-Ins-separated definite (non empty non void AMI-Struct over N),
-      l be Instruction-Location of S;
-  thus (Start-At l).IC S = (IC S .--> l).IC S
-          .= l by CQC_LANG:6;
- end;
+  holds (Start-At l).IC S = l by CQC_LANG:6;
 
 definition let N;
  let S be definite IC-Ins-separated (non empty non void AMI-Struct over N);
@@ -1519,7 +1493,7 @@ end;
 
 begin :: Small concrete model
 
-Lm14:
+Lm17:
  for s being State of SCM, i being Instruction of SCM,
       l being Instruction-Location of SCM
    holds Exec(i,s).l = s.l
@@ -1662,7 +1636,7 @@ registration
         SCM is steady-programmed
      proof let s be State of SCM, i be Instruction of SCM,
       l be Instruction-Location of SCM;
-      thus Exec(i,s).l = s.l by Lm14;
+      thus Exec(i,s).l = s.l by Lm17;
      end;
    hence thesis by AMI_1:def 21,AMI_2:6;
   end;
@@ -1756,28 +1730,18 @@ theorem
       now assume 2*j + 2, 2*i + 1 are_congruent_mod 2;
      then 2*j, 1 + 2*i are_congruent_mod 2 by INT_1:42;
      then 1 + 2*i, 2*j are_congruent_mod 2 by INT_1:35;
-     then A2: 1, 2*j - 2*i are_congruent_mod 2 by INT_1:40;
+     then A1: 1, 2*j - 2*i are_congruent_mod 2 by INT_1:40;
          2*(j - i), 0 are_congruent_mod 2 by Th18;
-     then 1, 0 are_congruent_mod 2 by A2,INT_1:36;
+     then 1, 0 are_congruent_mod 2 by A1,INT_1:36;
      then consider k being Integer such that
-A3:    2*k = 1 - 0 by INT_1:def 3;
-    thus contradiction by A3,INT_1:22;
+A2:    2*k = 1 - 0 by INT_1:def 3;
+    thus contradiction by A2,INT_1:22;
    end;
   hence dl.i <> il.j by INT_1:32;
  end;
 
 theorem
-    IC SCM <> dl.i & IC SCM <> il.i
- proof
-  hereby assume IC SCM = dl.i;
-    then 0 = 2*i + 1;
-   hence contradiction;
-  end;
-  assume IC SCM = il.i;
-    then 0 = 2*i + (1 + 1)
-      .= 2*i + 1 + 1;
-  hence contradiction;
- end;
+    IC SCM <> dl.i & IC SCM <> il.i;
 
 begin  :: Halt Instruction
 

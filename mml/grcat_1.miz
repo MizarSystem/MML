@@ -8,15 +8,17 @@ environ
 
  vocabularies CLASSES2, PARTFUN1, RELAT_1, FUNCT_1, MIDSP_1, BOOLE, VECTSP_2,
       FUNCT_2, VECTSP_1, MIDSP_2, RLVECT_1, ARYTM_1, CAT_1, TARSKI, CAT_2,
-      ORDINAL4, FUNCOP_1, MOD_1, ENS_1, GRCAT_1, ALGSTR_1;
+      ORDINAL4, FUNCOP_1, MOD_1, ENS_1, GRCAT_1, ALGSTR_1, REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MOD_1, RELAT_1, FUNCT_1,
-      MCART_1, BINOP_1, PARTFUN1, CLASSES2, FUNCT_2, STRUCT_0,
+      MCART_1, BINOP_1, REALSET1,
+      PARTFUN1, CLASSES2, FUNCT_2, STRUCT_0,
       CAT_1, RLVECT_1, VECTSP_1, VECTSP_2,
       FUNCOP_1, CAT_2, ALGSTR_1, MIDSP_1, MIDSP_2;
  constructors BINOP_1, VECTSP_2, CLASSES2, CAT_2, MIDSP_2, ALGSTR_1, CLASSES1,
-      PARTFUN1, RELAT_2, FUNCOP_1;
+      PARTFUN1, RELAT_2, FUNCOP_1, REALSET1;
  registrations RELSET_1, GROUP_1, STRUCT_0, SUBSET_1, CLASSES2, ALGSTR_1,
       MIDSP_2, FUNCT_2, PARTFUN1, XBOOLE_0, FUNCOP_1;
+ definitions BINOP_1;
  requirements SUBSET, BOOLE;
  theorems BINOP_1, CAT_1, CAT_2, CLASSES2, FUNCOP_1, FUNCT_1, FUNCT_2, MIDSP_2,
       MCART_1, PARTFUN1, VECTSP_1, TARSKI, ZFMISC_1, RLVECT_1, RELAT_1,
@@ -113,7 +115,7 @@ Th5: op2.({},{}) = {} & op1.{} = {} & op0 = {}
    A1: {} in {{}} by TARSKI:def 1;
         [{},{}] in [:{{}},{{}}:] by ZFMISC_1:34;
    then op2.[{},{}] = {} by FUNCT_2:65;
-   hence op2.({},{}) = {} by BINOP_1:def 1;
+   hence op2.({},{}) = {};
    thus op1.{} = {} by A1,FUNCT_2:65;
    thus op0 = {} by TARSKI:def 1;
  end;
@@ -182,66 +184,27 @@ end;
 
 registration let C,O;
  cluster Morphs(O) -> non empty;
- coherence
-   proof
-      union{Hom(a,b) where a is Object of C,b is Object of C : a in O & b in O}
-  = Morphs O;
-    hence thesis by CAT_2:28;
-   end;
+ coherence by CAT_2:28;
 end;
 
 definition let C,O;
  func dom(O) -> Function of Morphs(O),O equals
    (the Dom of C)|Morphs(O);
- coherence
-  proof
-    set M = Morphs(O);
-        M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b
-in
- O};
-    hence (the Dom of C)|M is Function of M,O by CAT_2:29;
-   end;
+ coherence by CAT_2:29;
  func cod(O) -> Function of Morphs(O),O equals
    (the Cod of C)|Morphs(O);
- coherence
-  proof
-    set M = Morphs(O);
-        M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b
-in
- O};
-    hence (the Cod of C)|M is Function of M,O by CAT_2:29;
-   end;
+ coherence by CAT_2:29;
  func comp(O) -> PartFunc of [:Morphs(O),(Morphs(O)):],Morphs(O) equals
-   (the Comp of C)|([:Morphs(O),Morphs(O):] qua set);
- coherence
-  proof
-    set M = Morphs(O);
-        M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b
-in
- O};
-    hence (the Comp of C)|([:M,M:] qua set)
-            is PartFunc of [:M,M:],M by CAT_2:29;
-   end;
+   (the Comp of C)||Morphs(O);
+ coherence by CAT_2:29;
  func ID(O) -> Function of O,Morphs(O) equals
    (the Id of C)|O;
- coherence
-  proof
-    set M = Morphs(O);
-        M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b
-in
- O};
-    hence (the Id of C)|O is Function of O,M by CAT_2:29;
-   end;
+ coherence by CAT_2:29;
 end;
 
 theorem
 Th9: CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#)
-  is_full_subcategory_of C
- proof
-   set M = Morphs(O);
-       ID(O) = (the Id of C)|O;
-   hence thesis by CAT_2:30;
- end;
+  is_full_subcategory_of C by CAT_2:30;
 
 definition let C,O;
  func cat(O) -> Subcategory of C equals
@@ -256,19 +219,11 @@ end;
 
 registration let C,O;
  cluster cat(O) -> strict;
- coherence
-  proof
-        CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#) = cat O;
-    hence thesis;
-  end;
+ coherence;
 end;
 
 theorem
- the Objects of cat(O) = O
- proof
-       cat(O) = CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#);
-   hence thesis;
- end;
+ the Objects of cat(O) = O;
 
 ::  1a. Maps of the carriers of groups
 
@@ -280,13 +235,7 @@ end;
 
 theorem Th11:
  for G being non empty 1-sorted,
-     x being Element of G holds (id G).x = x
- proof
-   let G be non empty 1-sorted;
-   let x be Element of G;
-        id G = id the carrier of G;
-   hence thesis by FUNCT_1:35;
- end;
+     x being Element of G holds (id G).x = x by FUNCT_1:35;
 
 theorem Th12:
  for G being 1-sorted, H being non empty 1-sorted,
@@ -295,9 +244,9 @@ theorem Th12:
    let G be 1-sorted, H be non empty 1-sorted;
    let f be Function of G,H;
    set u = id G, v = id H, X = the carrier of G, Y = the carrier of H;
-   A2: dom f = X by FUNCT_2:def 1;
+   A1: dom f = X by FUNCT_2:def 1;
        rng f c= Y by RELSET_1:12;
-   hence f*u = f & v*f = f by A2,RELAT_1:77,79;
+   hence f*u = f & v*f = f by A1,RELAT_1:77,79;
  end;
 
 definition let G,H be non empty ZeroStr;
@@ -353,14 +302,7 @@ Th14: for G1,G2,G3 being non empty LoopStr,
 theorem Th15:
   for G being non empty ZeroStr,
       H being non empty LoopStr,
-      x being Element of G holds ZeroMap(G,H).x = 0.H
- proof
-   let G be non empty ZeroStr,
-       H be non empty LoopStr;
-   let x be Element of G;
-       (ZeroMap(G,H)) = (the carrier of G) --> 0.H;
-   hence thesis by FUNCOP_1:13;
- end;
+      x being Element of G holds ZeroMap(G,H).x = 0.H by FUNCOP_1:13;
 
 theorem Th16:
   for G being non empty LoopStr,
@@ -398,11 +340,7 @@ end;
 definition let f be GroupMorphismStr;
  func fun(f) -> Function of dom(f),cod(f) equals
    the Fun of f;
- coherence
-  proof
-       dom(f) = the Dom of f & cod(f) = the Cod of f;
-   hence the Fun of f is Function of dom(f),cod(f);
-  end;
+ coherence;
 end;
 
 theorem
@@ -419,11 +357,7 @@ end;
 
 registration let G,H;
  cluster ZERO(G,H) -> strict;
-  coherence
-  proof
-        ZERO(G,H) = GroupMorphismStr(# G,H,ZeroMap(G,H)#);
-    hence thesis;
-  end;
+  coherence;
 end;
 
 definition let IT be GroupMorphismStr;
@@ -437,8 +371,7 @@ registration
   proof
     consider G,H;
     set z = ZERO(G,H);
-        dom(z) = G & cod(z) = H & fun(z) = ZeroMap(G,H);
-    then fun(z) is additive by Th16;
+    fun(z) is additive by Th16;
     then z is GroupMorphism-like by Def18;
    hence thesis;
   end;
@@ -453,8 +386,7 @@ Th18: for F being GroupMorphism holds the Fun of F is additive
  proof
    let F be GroupMorphism;
    A1: the Fun of F = fun(F);
-       the Dom of F = dom(F) & the Cod of F = cod(F);
-   hence thesis by A1,Def18;
+   thus thesis by A1,Def18;
  end;
 
 registration let G,H;
@@ -462,8 +394,7 @@ registration let G,H;
  coherence
   proof
     set z = ZERO(G,H);
-        dom(z) = G & cod(z) = H & fun(z) = ZeroMap(G,H);
-    then fun(z) is additive by Th16;
+    fun(z) is additive by Th16;
     hence thesis by Def18;
   end;
 end;
@@ -539,11 +470,7 @@ end;
 
 registration let G;
  cluster ID G -> strict;
-  coherence
-   proof
-         ID G = GroupMorphismStr(# G,G,id G#);
-     hence thesis;
-   end;
+  coherence;
 end;
 
 definition let G,H;
@@ -821,21 +748,21 @@ end;
       reconsider f' = f as Morphism of H,G by A1,Def19;
       A2: dom(i) = G;
       consider m being Function of H,G such that
-      A4: f' = GroupMorphismStr(# H,G,m#) by Th23;
+      A3: f' = GroupMorphismStr(# H,G,m#) by Th23;
            (id G)*m = m by Th12;
-      hence i*f = f by A1,A2,A4,Def21;
+      hence i*f = f by A1,A2,A3,Def21;
     end;
    thus for g being strict GroupMorphism st dom g = G holds g*(ID G) = g
     proof
       let f be strict GroupMorphism such that
-      A5: dom f = G;
+      A4: dom f = G;
       set H = cod(f);
-      reconsider f' = f as Morphism of G,H by A5,Def19;
-      A6: cod(i) = G;
+      reconsider f' = f as Morphism of G,H by A4,Def19;
+      A5: cod(i) = G;
       consider m being Function of G,H such that
-      A8: f' = GroupMorphismStr(# G,H,m#) by Th23;
+      A6: f' = GroupMorphismStr(# G,H,m#) by Th23;
            m*(id G) = m by Th12;
-      hence f*i = f by A5,A6,A8,Def21;
+      hence f*i = f by A4,A5,A6,Def21;
     end;
  end;
 
@@ -985,10 +912,7 @@ end;
 
 registration let G be 1-sorted, H be non empty 1-sorted;
  cluster Maps(G,H) -> non empty;
- coherence
-  proof Maps(G,H) = Funcs(the carrier of G, the carrier of H);
-   hence thesis;
-  end;
+ coherence;
 end;
 
 registration let G be 1-sorted, H be non empty 1-sorted;
@@ -1489,13 +1413,7 @@ end;
 
 registration let UN;
  cluster GroupCat(UN) -> strict;
- coherence
- proof
-      GroupCat UN = CatStr(# GroupObjects(UN),Morphs(GroupObjects(UN)),
-   dom(GroupObjects(UN)),cod(GroupObjects(UN)),
-   comp(GroupObjects(UN)),ID(GroupObjects(UN))#);
-  hence thesis;
- end;
+ coherence;
 end;
 
 theorem
@@ -1506,11 +1424,11 @@ theorem
     let f,g be Morphism of C;
     reconsider f' = f as Element of Morphs(V);
     reconsider g' = g as Element of Morphs(V);
-    A2: dom g = dom(V).g' by CAT_1:def 2
+    A1: dom g = dom(V).g' by CAT_1:def 2
              .= dom(g') by Def32;
          cod f = cod(V).f' by CAT_1:def 3
              .= cod(f') by Def33;
-    hence thesis by A2,Def35;
+    hence thesis by A1,Def35;
   end;
 
 theorem
@@ -1533,7 +1451,7 @@ theorem
   hence f is strict Element of X;
   thus f' is Morphism of C;
    consider x such that
-A2: x in UN & GO x,b by Def29;
+A1: x in UN & GO x,b by Def29;
        ex x1,x2,x3,x4 being set st
     x = [x1,x2,x3,x4] &
     ex G being strict AddGroup
@@ -1541,7 +1459,7 @@ A2: x in UN & GO x,b by Def29;
     & x1 = the carrier of G
     & x2 = the add of G
     & x3 = comp G
-    & x4 = the Zero of G by A2,Def28;
+    & x4 = the Zero of G by A1,Def28;
   hence b is strict Element of V;
   thus b' is Object of C;
  end;
@@ -1567,10 +1485,10 @@ theorem
  proof
    set C = GroupCat(UN), V = GroupObjects(UN); set X = Morphs(V);
   let f be (Morphism of C), f' be Element of X; assume
-  A2: f = f';
+  A1: f = f';
   hence dom f = dom(V).f' by CAT_1:def 2
             .= dom f' by Def32;
-  thus cod f = cod(V).f' by A2,CAT_1:def 3
+  thus cod f = cod(V).f' by A1,CAT_1:def 3
             .= cod f' by Def33;
  end;
 
@@ -1587,25 +1505,25 @@ theorem
    set C = GroupCat(UN), V = GroupObjects(UN); set X = Morphs(V);
   let f,g be Morphism of C;
   let f',g' be Element of X; assume
-  A2: f = f' & g = g';
-  then A3: dom g = dom g' by Th49;
-  A4: cod f = cod f' by A2,Th49;
-  A5: dom f = dom f' by A2,Th49;
-  A6: cod g = cod g' by A2,Th49;
-  thus dom g = cod f iff dom g' = cod f' by A2,A4,Th49;
-  thus A7: dom g = cod f iff [g',f'] in dom comp(V) by A3,A4,Def35;
+  A1: f = f' & g = g';
+  then A2: dom g = dom g' by Th49;
+  A3: cod f = cod f' by A1,Th49;
+  A4: dom f = dom f' by A1,Th49;
+  A5: cod g = cod g' by A1,Th49;
+  thus dom g = cod f iff dom g' = cod f' by A1,A3,Th49;
+  thus A6: dom g = cod f iff [g',f'] in dom comp(V) by A2,A3,Def35;
   thus dom g = cod f implies g*f = g'*f'
    proof
-     assume A8: dom g = cod f;
+     assume A7: dom g = cod f;
      then [g,f] in dom (the Comp of C) by Th46;
-     hence g*f = (comp(V)).[g',f'] by A2,CAT_1:def 4
-              .= g'*f' by A7,A8,Def35;
+     hence g*f = (comp(V)).[g',f'] by A1,CAT_1:def 4
+              .= g'*f' by A6,A7,Def35;
    end;
-  thus dom f = dom g iff dom f' = dom g' by A2,A5,Th49;
-  thus cod f = cod g iff cod f' = cod g' by A2,A6,Th49;
+  thus dom f = dom g iff dom f' = dom g' by A1,A4,Th49;
+  thus cod f = cod g iff cod f' = cod g' by A1,A5,Th49;
  end;
 
- Lm2: for f,g being Morphism of GroupCat(UN) st dom g = cod f holds
+ Lm1: for f,g being Morphism of GroupCat(UN) st dom g = cod f holds
      dom(g*f) = dom f
    & cod (g*f) = cod g
   proof set X = Morphs(GroupObjects(UN));
@@ -1621,7 +1539,7 @@ theorem
     hence thesis by A3,Th50;
  end;
 
- Lm3: for f,g,h being Morphism of GroupCat(UN)
+ Lm2: for f,g,h being Morphism of GroupCat(UN)
         st dom h = cod g & dom g = cod f holds h*(g*f) = (h*g)*f
   proof set X = Morphs(
 (GroupObjects(UN)));
@@ -1631,15 +1549,15 @@ theorem
     A2: dom h' = cod g' & dom g' = cod f' by A1,Th50;
     A3: g'*f' = g*f & h'*g' = h*g by A1,Th50;
     reconsider gf = g'*f', hg = h'*g' as Element of X by A2,Th45;
-    A4: dom(h) = cod(g*f) by A1,Lm2;
-    A5: dom(h*g) = cod(f) by A1,Lm2;
+    A4: dom(h) = cod(g*f) by A1,Lm1;
+    A5: dom(h*g) = cod(f) by A1,Lm1;
         h*(g*f) = h'*gf by A3,A4,Th50
            .= hg*f' by A2,Th33
            .= (h*g)*f by A3,A5,Th50;
     hence thesis;
   end;
 
- Lm4: for b being Object of GroupCat(UN) holds
+ Lm3: for b being Object of GroupCat(UN) holds
     dom id b = b
   & cod id b = b
   & (for f being Morphism of GroupCat(UN)
@@ -1697,7 +1615,7 @@ registration let UN;
            (for f being Morphism of GroupCat(UN)
              st cod f = b holds (id b)*f = f) &
            (for g being Morphism of GroupCat(UN)
-             st dom g = b holds g*(id b) = g) ) by Lm2,Lm3,Lm4,Th46;
+             st dom g = b holds g*(id b) = g) ) by Lm1,Lm2,Lm3,Th46;
    hence thesis by CAT_1:29;
   end;
 end;
@@ -1723,10 +1641,7 @@ Th51: L_Trivial in AbGroupObjects(UN)
  proof
     set D2 = the Objects of GroupCat(UN);
     set T = L_Trivial;
-        GroupCat(UN) = CatStr(# GroupObjects(UN),Morphs(GroupObjects(UN)),
-                   dom(GroupObjects(UN)),cod(GroupObjects(UN)),
-                   comp(GroupObjects(UN)),ID(GroupObjects(UN))#);
-    then T in D2 by Th42;
+    T in D2 by Th42;
     then T in {G where G is Element of D2 : ex H being AbGroup st G = H};
     hence thesis;
  end;
@@ -1744,19 +1659,11 @@ end;
 
 registration let UN;
  cluster AbGroupCat(UN) -> strict;
- coherence
- proof
-      AbGroupCat(UN) = cat(AbGroupObjects(UN));
-  hence thesis;
- end;
+ coherence;
 end;
 
 theorem
- the Objects of AbGroupCat(UN) = AbGroupObjects(UN)
- proof
-       AbGroupCat(UN) = cat(AbGroupObjects(UN));
-   hence thesis;
- end;
+ the Objects of AbGroupCat(UN) = AbGroupObjects(UN);
 
 ::  6. Subcategory of groups with the operator of 1/2
 
@@ -1786,8 +1693,7 @@ registration let UN;
     set D1 = {G where G is Element of D2
                : ex H being midpoint_operator AbGroup st G = H};
     set T = L_Trivial;
-        D2 = AbGroupObjects(UN);
-    then T in D2 by Th51;
+    T in D2 by Th51;
     then T in D1;
     then reconsider D1 as non empty set;
         now
@@ -1808,27 +1714,18 @@ end;
 
 registration let UN;
  cluster MidOpGroupCat(UN) -> strict;
- coherence
- proof
-       MidOpGroupCat(UN) = cat(MidOpGroupObjects(UN));
-   hence thesis;
- end;
+ coherence;
 end;
 
 theorem
-    the Objects of MidOpGroupCat(UN) = MidOpGroupObjects(UN)
- proof
-       MidOpGroupCat(UN) = cat(MidOpGroupObjects(UN));
-   hence thesis;
- end;
+    the Objects of MidOpGroupCat(UN) = MidOpGroupObjects(UN);
 
 theorem
     L_Trivial in MidOpGroupObjects(UN)
  proof
     set D2 = the Objects of AbGroupCat(UN);
     set T = L_Trivial;
-        D2 = AbGroupObjects(UN);
-    then T in D2 by Th51;
+    T in D2 by Th51;
     then T in {G where G is Element of D2
                : ex H being midpoint_operator AbGroup st G = H};
     hence thesis;

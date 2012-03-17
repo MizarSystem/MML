@@ -10,19 +10,20 @@ environ
       NAT_1, CARD_3, AMI_1, FUNCT_4, CAT_1, ABSVALUE, ARYTM_1, MCART_1,
       CQC_LANG, FUNCT_2, FUNCT_5, SCMPDS_1, FINSEQ_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      FUNCT_2, GR_CY_1, MCART_1, NUMBERS, XCMPLX_0, XREAL_0, CARD_3, INT_1,
+      FUNCT_2, BINOP_1,
+      GR_CY_1, MCART_1, NUMBERS, XCMPLX_0, XREAL_0, CARD_3, INT_1,
       NAT_1, FINSEQ_1, FRAENKEL, FINSEQ_4, CQC_LANG, FUNCT_4, CAT_2, AMI_2,
       INT_2;
  constructors AMI_1, AMI_2, CAT_2, DOMAIN_1, FINSEQ_4, NAT_1, MEMBERED, INT_2,
-      REAL_1;
+      REAL_1, BINOP_1;
  registrations AMI_1, AMI_2, CQC_LANG, INT_1, FINSEQ_1, RELSET_1, XBOOLE_0,
       NAT_1, FRAENKEL, MEMBERED, ORDINAL2, SETFAM_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FINSEQ_1;
+ definitions TARSKI, FINSEQ_1, BINOP_1;
  theorems AMI_1, AMI_2, CAT_2, CARD_3, CQC_LANG, ENUMSET1, FINSEQ_1, FINSEQ_3,
       FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, GR_CY_1, MCART_1, NAT_1, SCHEME1,
       TARSKI, ZFMISC_1, INT_1, ABSVALUE, XBOOLE_0, XBOOLE_1, COMPLEX1;
- schemes FUNCT_2;
+ schemes FUNCT_2, BINOP_1;
 
 begin :: Preliminaries
 
@@ -46,36 +47,18 @@ end;
 
 registration let x1,x2,x3,x4 be set;
   cluster <*x1,x2,x3,x4*> -> Function-like Relation-like;
-  coherence
-  proof
-       <*x1,x2,x3*>^<*x4*> = <*x1,x2,x3,x4*>;
-    hence thesis;
-  end;
-
+  coherence;
   let x5 be set;
   cluster <*x1,x2,x3,x4,x5*> -> Function-like Relation-like;
-  coherence
-  proof
-       <*x1,x2,x3*>^<*x4,x5*> = <*x1,x2,x3,x4,x5*>;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration let x1,x2,x3,x4 be set;
   cluster <*x1,x2,x3,x4*> -> FinSequence-like;
-  coherence
-  proof
-       <*x1,x2,x3*>^<*x4*> = <*x1,x2,x3,x4*>;
-    hence thesis;
-  end;
-
+  coherence;
   let x5 be set;
   cluster <*x1,x2,x3,x4,x5*> -> FinSequence-like;
-  coherence
-  proof
-       <*x1,x2,x3*>^<*x4,x5*> = <*x1,x2,x3,x4,x5*>;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 definition let D be non empty set,x1,x2,x3,x4 be Element of D;
@@ -103,7 +86,7 @@ theorem Th1:
   <*x1,x2,x3,x4*>=<*x1*>^<*x2*>^<*x3*>^<*x4*>
 proof
   thus <*x1,x2,x3,x4*>=<*x1,x2,x3*>^<*x4*>;
-  hence <*x1,x2,x3,x4*>=<*x1,x2*>^<*x3*>^<*x4*>
+  thus <*x1,x2,x3,x4*>=<*x1,x2*>^<*x3*>^<*x4*>
        .=<*x1,x2*>^(<*x3*>^<*x4*>) by FINSEQ_1:45
        .=<*x1,x2*>^<*x3,x4*>;
   hence <*x1,x2,x3,x4*>=<*x1*>^<*x2*>^<*x3,x4*>
@@ -120,7 +103,7 @@ theorem Th2:
   <*x1,x2,x3,x4,x5*>=<*x1*>^<*x2,x3,x4,x5*>
 proof
  thus <*x1,x2,x3,x4,x5*>=<*x1,x2,x3*>^<*x4,x5*>;
- hence <*x1,x2,x3,x4,x5*>=<*x1,x2,x3*>^(<*x4*>^<*x5*>)
+ thus <*x1,x2,x3,x4,x5*>=<*x1,x2,x3*>^(<*x4*>^<*x5*>)
       .=<*x1,x2,x3*>^<*x4*>^<*x5*> by FINSEQ_1:45
       .=<*x1,x2,x3,x4*>^<*x5*>;
  hence <*x1,x2,x3,x4,x5*>=<*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>;
@@ -1378,10 +1361,10 @@ definition
     Function of [:SCMPDS-Instr,product SCMPDS-OK:], product SCMPDS-OK
      such that
  A1:   for x being Element of SCMPDS-Instr, y being SCMPDS-State holds
-    f.[x,y] = SCM-Exec-Res(x,y) from FUNCT_2:sch 8;
+    f.(x,y) = SCM-Exec-Res(x,y) from BINOP_1:sch 4;
    take curry f;
    let x be Element of SCMPDS-Instr, y be SCMPDS-State;
-   thus (curry f).x.y = f.[x,y] by CAT_2:3
+   thus (curry f).x.y = f.(x,y) by CAT_2:3
      .= SCM-Exec-Res(x,y) by A1;
   end;
 uniqueness

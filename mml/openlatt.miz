@@ -72,20 +72,12 @@ end;
 
 registration let T;
  cluster Topology_of T -> non empty;
- coherence
- proof
-   Topology_of T = the topology of T;
-   hence thesis by PRE_TOPC:5;
- end;
+ coherence by PRE_TOPC:5;
 end;
 
 theorem Th3:
  for A being Subset of T holds A is open iff A in Topology_of T
-  proof
-   let A be Subset of T;
-        A is open iff A in the topology of T by PRE_TOPC:def 5;
-    hence thesis;
-  end;
+     by PRE_TOPC:def 5;
 
 definition let T be non empty TopSpace,
                P, Q be Element of Topology_of T;
@@ -119,7 +111,7 @@ definition let T;
    deffunc F(Element of Topology_of T, Element of Topology_of T) = $1 \/ $2;
    thus ex F being BinOp of Topology_of T st
    for P,Q being Element of Topology_of T holds
-   F.(P,Q) = F(P,Q) from BINOP_1:sch 2;
+   F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
  end;
  uniqueness
   proof
@@ -138,7 +130,7 @@ definition let T;
    deffunc F(Element of Topology_of T, Element of Topology_of T) = $1 /\ $2;
    thus ex F being BinOp of Topology_of T st
    for P,Q being Element of Topology_of T holds
-   F.(P,Q) = F(P,Q) from BINOP_1:sch 2;
+   F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
  end;
  uniqueness
   proof
@@ -153,23 +145,11 @@ end;
 
   Lm1:  for p,q be Element of
          LattStr(#Topology_of T,Top_Union T,Top_Meet T#)
-           holds p"\/"q = p \/ q
- proof
-   let p,q be Element of
-     LattStr(#Topology_of T,Top_Union T,Top_Meet T#);
-     thus p"\/"q =(Top_Union T).(p,q)
-                    .= p \/ q by Def2;
-     end;
+           holds p"\/"q = p \/ q by Def2;
 
    Lm2:  for p,q be Element of
     LattStr(#Topology_of T,Top_Union T,Top_Meet T#)
-     holds p "/\" q = p /\ q
-       proof
-         let p,q be Element of
-         LattStr(#Topology_of T,Top_Union T,Top_Meet T#);
-          thus p"/\"q =(Top_Meet T).(p,q)
-                   .= p /\ q by Def3;
-     end;
+     holds p "/\" q = p /\ q by Def3;
 
 theorem
 Th4:   for T being non empty TopSpace holds
@@ -221,24 +201,12 @@ definition let T;
 end;
 
 theorem
-  the carrier of Open_setLatt(T) = Topology_of T
-  proof
-        Open_setLatt(T) = LattStr(#Topology_of T,Top_Union T,Top_Meet T#);
-    hence thesis;
-  end;
+  the carrier of Open_setLatt(T) = Topology_of T;
 
 reserve p,q for Element of Open_setLatt(T);
 
 theorem
-Th6:  p "\/" q = p \/ q & p "/\" q = p /\ q
-  proof
-    Open_setLatt(T) =LattStr(#Topology_of T,Top_Union T,Top_Meet T#);
-    then reconsider p' = p,q' = q as Element of Topology_of T;
-    thus p "\/" q =(Top_Union T).(p',q')
-               .=p \/ q by Def2;
-    thus p "/\" q =(Top_Meet T).(p',q')
-               .=p /\ q by Def3;
-  end;
+Th6:  p "\/" q = p \/ q & p "/\" q = p /\ q by Def2,Def3;
 
 theorem
 Th7:  p [= q iff p c= q
@@ -253,16 +221,16 @@ Th8:   for p',q' being Element of Topology_of T st p=p' & q=q'
   proof
     let p',q' be Element of Topology_of T such that
     A1:      p=p' & q=q';
-    hereby assume A3: p [= q;
+    hereby assume A2: p [= q;
            p' \/ q' = (Top_Union T).(p',q') by Def2
               .= p"\/"q by A1
-              .= q' by A1,A3,LATTICES:def 3;
+              .= q' by A1,A2,LATTICES:def 3;
       hence p' c= q' by XBOOLE_1:7;
     end;
-    assume A4:p' c= q';
+    assume A3:p' c= q';
         p "\/" q = (Top_Union T).(p,q)
           .= p' \/ q' by A1,Def2
-          .=q by A1,A4,XBOOLE_1:12;
+          .=q by A1,A3,XBOOLE_1:12;
     hence p [= q by LATTICES:def 3;
   end;
 
@@ -276,17 +244,17 @@ Th9:  Open_setLatt(T) is implicative
     then reconsider r'= Int(p'` \/ q') as Element of Topology_of T by Th3;
     reconsider r=r' as Element of OL;
     take r;
-    A2:    p' /\ r c= q' by Th1;
+    A1:    p' /\ r c= q' by Th1;
         p "/\" r = p' /\ r' by Th6;
-    hence p "/\" r [= q by A2,Th8;
+    hence p "/\" r [= q by A1,Th8;
     let r1 be Element of OL;
     reconsider r2 = r1 as Element of Topology_of T;
     reconsider r1'= r2 as Subset of T;
-    A3:    r1' is open by Th3;
-    assume A4:   p "/\" r1 [= q;
+    A2:    r1' is open by Th3;
+    assume A3:   p "/\" r1 [= q;
         p "/\" r1 = p' /\ r1' by Lm2;
-    then p' /\ r2 c= q' by A4,Th8;
-    then r1' c= r' by A3,Th2;
+    then p' /\ r2 c= q' by A3,Th8;
+    then r1' c= r' by A2,Th2;
     hence r1 [= r by Th8;
   end;
 
@@ -350,9 +318,7 @@ end;
 theorem
 Th12:  F in F_primeSet(L) iff F <> the carrier of L & F is prime
   proof
-        F_primeSet(L) = { F0 where F0 is Filter of L:
-                        F0 <> the carrier of L & F0 is prime};
-    then F in F_primeSet(L) iff
+    F in F_primeSet(L) iff
       ex F0 being Filter of L st F0=F & F0 <> the carrier of L & F0 is prime;
     hence thesis;
   end;
@@ -529,8 +495,7 @@ end;
 theorem
 Th18:  x in SF_have a iff x is Filter of L & a in x
   proof
-        SF_have a = { F: a in F };
-    then x in SF_have a iff ex F st F=x & a in F;
+    x in SF_have a iff ex F st F=x & a in F;
     hence thesis;
   end;
 
@@ -740,7 +705,7 @@ definition let L;
    deffunc F(Element of StoneS(L), Element of StoneS(L)) = $1 \/ $2;
    thus ex F being BinOp of StoneS(L) st
    for P,Q being Element of StoneS(L) holds
-   F.(P,Q) = F(P,Q) from BINOP_1:sch 2;
+   F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
  end;
  uniqueness
   proof
@@ -759,7 +724,7 @@ definition let L;
    deffunc F(Element of StoneS(L), Element of StoneS(L)) = $1 /\ $2;
    thus ex F being BinOp of StoneS(L) st
    for P,Q being Element of StoneS(L) holds
-   F.(P,Q) = F(P,Q) from BINOP_1:sch 2;
+   F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
  end;
  uniqueness
   proof
@@ -774,23 +739,11 @@ end;
 
 Lm4:  for x,y be Element of
     LattStr(#StoneS(L),Set_Union L,Set_Meet L#) holds x"\/"y = x \/ y
-    proof
-      let x,y be Element of
-      LattStr(#StoneS(L),Set_Union L,Set_Meet L#);
-      reconsider x'=x,y'=y as Element of StoneS(L);
-      thus x"\/"y = (Set_Union L).(x',y')
-               .= x \/ y by Def9;
-     end;
+      by Def9;
 
    Lm5:  for x,y be Element of
     LattStr(#StoneS(L),Set_Union L,Set_Meet L#) holds x"/\"y = x /\ y
-    proof
-      let x,y be Element of
-      LattStr(#StoneS(L),Set_Union L,Set_Meet L#);
-      reconsider x'=x,y'=y as Element of StoneS(L);
-      thus x"/\"y = (Set_Meet L).(x',y')
-               .= x /\ y by Def10;
-    end;
+      by Def10;
 
 theorem
 Th26:  LattStr(#StoneS(L),Set_Union L,Set_Meet L#) is Lattice
@@ -843,20 +796,10 @@ end;
 reserve p,q for Element of StoneLatt(L);
 
 theorem
-  for L holds the carrier of StoneLatt(L) = StoneS(L)
-  proof
-   let L;
-        StoneLatt(L)=LattStr(#StoneS(L),Set_Union L,Set_Meet L#);
-   hence thesis;
- end;
+  for L holds the carrier of StoneLatt(L) = StoneS(L);
 
 theorem
-Th28:  p "\/" q = p \/ q & p "/\" q = p /\ q
-  proof
-        StoneLatt(L)=LattStr(#StoneS(L),Set_Union L,Set_Meet L#);
-    hence p "\/" q = p \/ q by Lm4;
-    thus p "/\" q = p /\ q by Lm5;
-  end;
+Th28:  p "\/" q = p \/ q & p "/\" q = p /\ q by Lm4, Lm5;
 
 theorem
     p [= q iff p c= q
@@ -870,9 +813,7 @@ definition let L;
  coherence
  proof
    A1:   dom StoneH(L) = the carrier of L by Def6;
-       rng StoneH(L) = StoneS(L)
-                .= the carrier of StoneLatt(L);
-   then reconsider f=StoneH(L) as Function of the carrier of L ,
+   reconsider f=StoneH(L) as Function of the carrier of L ,
                                 the carrier of StoneLatt L by A1,FUNCT_2:3;
        now let a,b;
      thus f.(a "\/" b) = f.(a) \/ f.(b) by Th16
@@ -935,9 +876,7 @@ Th33:  StoneH(H).(Top H) = F_primeSet(H)
     end;
     let x;
     assume A2:x in F_primeSet(H);
-        F_primeSet(H)={F0 where F0 is Filter of H:
-      F0 <> the carrier of H & F0 is prime};
-    then consider F being Filter of H such that
+    consider F being Filter of H such that
     A3:     F=x & F <> the carrier of H & F is prime by A2;
         Top H in F by FILTER_0:12;
     hence x in StoneH(H).(Top H) by A3,Th14;
@@ -1026,8 +965,7 @@ A2: the topology of TS ={union A where A is Subset of StoneS(H):not
    proof
      thus the carrier of HTopSpace H is non empty by A1;
    end;
-       StoneH(H).(Top H) in StoneS(H);
-   then reconsider A1={StoneH(H).(Top
+   reconsider A1={StoneH(H).(Top
 H)} as Subset of StoneS(H);
        F_primeSet(H) = StoneH(H).(Top H) by Th33;
    then F_primeSet(H)=union A1 by ZFMISC_1:31;
@@ -1086,13 +1024,7 @@ end;
 theorem
 Th36:   the carrier of Open_setLatt(HTopSpace H) =
            {union A where A is Subset of StoneS(H):not contradiction}
-  proof
-    set HT=HTopSpace H;
-         Open_setLatt(HT)=
-         LattStr(#Topology_of HT,Top_Union HT,Top_Meet HT#);
-    hence the carrier of Open_setLatt(HT) = the topology of HT
-       .= {union A where A is Subset of StoneS(H):not contradiction} by Def12;
-  end;
+             by Def12;
 
 theorem
 Th37:  StoneS(H) c= the carrier of Open_setLatt(HTopSpace H)

@@ -26,7 +26,7 @@ environ
       INT_1, ALGSTR_1, POLYNOM1, ARYTM_3, MONOID_0, VECTSP_1, XREAL_0,
       MEMBERED, ORDINAL2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
- definitions QUOFIELD, ENDALG;
+ definitions QUOFIELD, ENDALG, BINOP_1;
  theorems TARSKI, RELSET_1, FINSEQ_1, FUNCT_1, FUNCT_2, ORDINAL1, RELAT_1,
       ZFMISC_1, VECTSP_1, POLYNOM1, PBOOLE, RELAT_2, WELLORD2, FUNCT_7,
       FUNCT_4, CQC_LANG, ORDERS_1, SEQM_3, FINSET_1, NAT_1, FINSEQ_4,
@@ -274,16 +274,11 @@ proof
   reconsider k' = k - 1 as Nat by A5,INT_1:16;
   A6: (k - 1) + 1 = k + 0;
   A7: k' <= k' + 1 by NAT_1:29;
-      k' <> k' + 1
-       proof
-       assume A8: k' = k' + 1;
-           (k' + 1) - k' = 1 + 0;
-       hence thesis by A8;
-       end;
-  then A9: k' < k by A7,REAL_1:def 5;
-  then A10: not(Q[k']) by A4;
-      k' < N() by A4,A9,XREAL_1:2;
-  hence thesis by A2,A4,A5,A6,A10;
+      k' <> k' + 1;
+  then A8: k' < k by A7,REAL_1:def 5;
+  then A9: not(Q[k']) by A4;
+      k' < N() by A4,A8,XREAL_1:2;
+  hence thesis by A2,A4,A5,A6,A9;
 end;
 end;
 
@@ -344,18 +339,13 @@ A4: Q[k] & for k' being Nat st Q[k'] holds k <= k' from NAT_1:sch 5(A3);
   then reconsider k' = k - 1 as Nat by INT_1:16;
   A6: (k - 1) + 1 = k + 0;
   A7: k' <= k' + 1 by NAT_1:29;
-      k' <> k' + 1
-    proof
-    assume A8: k' = k' + 1;
-        (k' + 1) - k' = 1 + 0;
-    hence thesis by A8;
-    end;
-  then A9: k' < k by A7,REAL_1:def 5;
-  then A10: not(Q[k']) by A4;
+      k' <> k' + 1;
+  then A8: k' < k by A7,REAL_1:def 5;
+  then A9: not(Q[k']) by A4;
       1 < k by A4,A5,REAL_1:def 5;
-  then A11: 1 <= k' by A6,NAT_1:38;
-      k' < len F() by A4,A9,XREAL_1:2;
-  hence thesis by A2,A4,A6,A10,A11;
+  then A10: 1 <= k' by A6,NAT_1:38;
+      k' < len F() by A4,A8,XREAL_1:2;
+  hence thesis by A2,A4,A6,A9,A10;
 end;
 end;
 
@@ -1734,7 +1724,7 @@ then A20: (b * sg)/.1 = (b * sg).1 by FINSEQ_4:def 4
 A21: x.u in rng x by A2,A19,FUNCT_1:def 5;
     rng x c= the carrier of L by RELSET_1:12;
 then reconsider xu = x.u as Element of L by A21;
-A22: power(L).(xu,b.u) = power(L).[xu,b.u] by BINOP_1:def 1;
+A22: power(L).(xu,b.u) = power(L).[xu,b.u];
     1 in dom (x * sg) by A2,A6,A18,A19,FUNCT_1:21;
 then (x * sg)/.1 = (x * sg).1 by FINSEQ_4:def 4
                 .= x.(sg.1) by A6,FUNCT_1:23
@@ -3205,22 +3195,22 @@ A11: Support(p+q) c= Support p \/ Support q by POLYNOM1:79;
          hence thesis by A31,A32,A33,A34,A49,A51,A53,A54,FUNCT_1:def 8;
          end;
            spq/.i' = spq.i' by A51,FINSEQ_4:def 4;
-       then A56: i' in dom((p+q) * spq) by A44,A51,FUNCT_1:21;
-       then A57: ((p+q) * spq)/.i'
+       then A55: i' in dom((p+q) * spq) by A44,A51,FUNCT_1:21;
+       then A56: ((p+q) * spq)/.i'
                = ((p+q) * spq).i' by FINSEQ_4:def 4
-              .= (p+q).(spq.i') by A56,FUNCT_1:22
+              .= (p+q).(spq.i') by A55,FUNCT_1:22
               .= (p+q).(spq/.i') by A51,FINSEQ_4:def 4;
-       A58: i' in dom sq by A9,A37,A38,A49,FINSEQ_1:def 3;
+       A57: i' in dom sq by A9,A37,A38,A49,FINSEQ_1:def 3;
            sq/.i' = sq.i' by A32,A33,A34,A51,FINSEQ_4:def 4;
-       then A59: i' in dom(q * sq) by A42,A58,FUNCT_1:21;
-       then A60: (q * sq)/.i'
+       then A58: i' in dom(q * sq) by A42,A57,FUNCT_1:21;
+       then A59: (q * sq)/.i'
              = (q * sq).i' by FINSEQ_4:def 4
-            .= q.(sq.i') by A59,FUNCT_1:22
-            .= q.(sq/.i') by A58,FINSEQ_4:def 4;
+            .= q.(sq.i') by A58,FUNCT_1:22
+            .= q.(sq/.i') by A57,FINSEQ_4:def 4;
        thus ypq/.i'
           = ((p+q) * spq)/.i' * eval((spq/.i')@,x) by A8,A30,A50
-         .= q.(sq/.i') * eval((sq/.i')@,x) by A5,A29,A52,A57
-         .= yq/.i' by A9,A50,A60;
+         .= q.(sq/.i') * eval((sq/.i')@,x) by A5,A29,A52,A56
+         .= yq/.i' by A9,A50,A59;
      end;
     hence eval(p+q,x) = p.b * eval(b,x) + Sum yq by A8,A30,A40,A48,Th7
                     .= eval(p,x) + eval(q,x) by A2,A9,Th21;
@@ -3228,32 +3218,32 @@ A11: Support(p+q) c= Support p \/ Support q by POLYNOM1:79;
   end;
   hence thesis;
 end;
-case A61: not(b in Support q);
-  A62: (p+q).b = p.b + q.b by POLYNOM1:def 21
-             .= p.b + 0.L by A3,A61,POLYNOM1:def 9
+case A60: not(b in Support q);
+  A61: (p+q).b = p.b + q.b by POLYNOM1:def 21
+             .= p.b + 0.L by A3,A60,POLYNOM1:def 9
              .= p.b by RLVECT_1:def 7;
-  A63: for u being set holds
+  A62: for u being set holds
       u in Support(p+q) implies u in Support p \/ Support q by A11;
       for u being set holds
   u in Support p \/ Support q implies u in Support(p+q)
     proof
     let u be set;
-    assume A64: u in Support p \/ Support q;
-    per cases by A64,XBOOLE_0:def 2;
+    assume A63: u in Support p \/ Support q;
+    per cases by A63,XBOOLE_0:def 2;
     suppose u in Support p;
       then u = b by A2,TARSKI:def 1;
-      hence thesis by A3,A4,A62,POLYNOM1:def 9;
+      hence thesis by A3,A4,A61,POLYNOM1:def 9;
     end;
-    suppose A65: u in Support q;
+    suppose A64: u in Support q;
       then reconsider u as bag of n by POLYNOM1:def 14;
-      A66: q.u <> 0.L by A65,POLYNOM1:def 9;
-          (p+q).u = q.u by A5,A61,A65;
-      hence thesis by A65,A66,POLYNOM1:def 9;
+      A65: q.u <> 0.L by A64,POLYNOM1:def 9;
+          (p+q).u = q.u by A5,A60,A64;
+      hence thesis by A64,A65,POLYNOM1:def 9;
     end;
     end;
-  then Support(p+q) = {b} \/ Support q by A2,A63,TARSKI:2;
-  hence eval(p+q,x) = eval(q,x) + (p+q).b * eval(b,x) by A5,A61,Lm10
-                   .= eval(q,x) + eval(p,x) by A2,A62,Th21;
+  then Support(p+q) = {b} \/ Support q by A2,A62,TARSKI:2;
+  hence eval(p+q,x) = eval(q,x) + (p+q).b * eval(b,x) by A5,A60,Lm10
+                   .= eval(q,x) + eval(p,x) by A2,A61,Th21;
 end;
 end;
 hence thesis;

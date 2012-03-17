@@ -22,8 +22,8 @@
 <Func kind="K" nr="52"/>
 </Typ>
 <Cluster>
-<Adjective nr="17"/>
-<Adjective nr="20"/>
+<Adjective nr="18"/>
+<Adjective nr="21"/>
 </Cluster>
 </CCluster>
 </Registrations>

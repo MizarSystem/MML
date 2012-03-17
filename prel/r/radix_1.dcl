@@ -24,20 +24,14 @@
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
-<ArticleID name="MATRIX_1"/>
-<ArticleID name="FINSUB_1"/>
-<ArticleID name="MATRIX_2"/>
+<ArticleID name="RVSUM_1"/>
+<ArticleID name="FINSEQ_3"/>
 <ArticleID name="WSIERP_1"/>
 <ArticleID name="RADIX_1"/>
 </Signature>
@@ -48,7 +42,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="324">
+<Func kind="K" nr="265">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

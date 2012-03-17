@@ -340,19 +340,22 @@ definition let p be FinSequence, m, n be Nat;
  func (m, n)-cut p -> FinSequence means
 :Def1:
   len it +m = n+1 & for i being Nat st i<len it holds it.(i+1)=p.(m+i)
-     if 1<=m & m<=n+1 & n<=len p
+     if 1<=m & m<=n & n<=len p
   otherwise it ={};
  consistency;
  existence proof
   hereby
   assume that 1<=m and
-A1: m<=n+1 and n<=len p;
+A1: m<=n and n<=len p;
     deffunc F(Nat) = p.(m+($1-1));
     consider s being FinSequence such that
 A2: len s = n+1-'m & for k being Nat st k in Seg (n+1-'m) holds s.k=F(k)
                                                   from FINSEQ_1:sch 2;
-  take s;  m-m<=n+1-m by A1,XREAL_1:11;
-then len s +m = (n+1)-m+m by A2,BINARITH:def 3;
+  take s;
+   n <= n+1 by XREAL_1:31;
+   then m <= n+1 by A1, XREAL_1:2;
+   then m-m <= n+1-m by XREAL_1:11;
+   then len s +m = n+1-m+m by A2,BINARITH:def 3;
   hence len s +m = n+1; let k be Nat; assume
 A3: k<len s;  0+1<=k+1 by XREAL_1:9;
     then 1<=k+1 & k+1<=len s by A3,NAT_1:38;
@@ -363,7 +366,7 @@ A3: k<len s;  0+1<=k+1 by XREAL_1:9;
  end;
  uniqueness proof let s1, s2 be FinSequence;
   hereby
-   assume 1<=m & m<=n+1 & n<=len p;
+   assume 1<=m & m<=n & n<=len p;
    assume that
 A4: len s1 +m = n+1 and
 A5: for i being Nat st i<len s1 holds s1.(i+1) = p.(m+i);
@@ -382,6 +385,35 @@ A9:   0<=k & k<len s1 & i=k+1 by Th1;
  end;
 end;
 
+HAHA:
+ for p be FinSequence, m, n be Nat
+  st 1<=m & m<=n+1 & n<=len p
+ holds len (m, n)-cut p +m = n+1 &
+ for i being Nat st i<len (m, n)-cut p holds ((m, n)-cut p).(i+1)=p.(m+i)
+ proof let p be FinSequence, m, n be Nat such that
+Z: 1<=m & m<=n+1 & n<=len p;
+   n <= n+1 by NAT_1:29;
+   then
+A:  m <= n+1 by Z,XREAL_1:2;
+   then m = n+1 or m < n+1 by XREAL_1:1;
+   then
+B:  m = n+1 or m <= n by NAT_1:38;
+  per cases by B;
+  suppose
+B: m = n+1;
+   then n < m by XREAL_1:31;
+   then not(1<=m & m<=n & n<=len p);
+   then (m, n)-cut p = {} by Z,Def1,B;
+   then
+X:  len (m, n)-cut p = 0 by CARD_1:47;
+  hence len (m, n)-cut p +m = n+1 by Z,Def1,B;
+  thus thesis by A,Z,Def1,B,X;
+  end;
+  suppose m<=n;
+   hence thesis by Z,A,Def1;
+  end;
+ end;
+
 theorem Th6:
   1<=m & m<=len p implies (m,m)-cut p = <*p.m*> proof
   assume that
@@ -395,11 +427,11 @@ end;
 
 theorem Th7: (1, len p)-cut p = p proof set cp = (1, len p)-cut p;
     now
-A1: 1<=len p +1 by NAT_1:29; then len cp + 1 = len p + 1 by Def1; hence
+A1: 1<=len p +1 by NAT_1:29; then len cp + 1 = len p + 1 by HAHA; hence
 A2: len cp = len p; thus len p = len p;
   let i; assume i in Seg len p; then 0+1<=i & i<=len p by FINSEQ_1:3;
    then consider k being Nat such that A3: 0<=k & k<len cp & i=k+1 by A2,Th1;
-  thus cp.i = p.i by A1,A3,Def1;
+  thus cp.i = p.i by A1,A3,HAHA;
  end; hence thesis by FINSEQ_2:10;
 end;
 
@@ -414,11 +446,11 @@ A3: r<=len p;
      now
 A4: 1<=m+1 & m+1<=n+1 & n<=len p by A1,A2,A3,XREAL_1:2,XREAL_1:8
 ,NAT_1:29;
-  then len p1 +(m+1) = n+1 by Def1; then len p1+m+1 = n+1;
+  then len p1 +(m+1) = n+1 by HAHA; then len p1+m+1 = n+1;
     then A5: len p1 +m-m = n-m;
 then A6: len p1 = n-m;
 A7: 1<=n+1 & n+1<=r+1 by A2,XREAL_1:8,NAT_1:29;
-     then len p2 +(n+1) = r+1 by A3,Def1;
+     then len p2 +(n+1) = r+1 by A3,HAHA;
      then len p2 +n+1 = r+1;
      then len p2 +n-n = r-n;
 then A8: len p2 = r-n;  m<=r by A1,A2,XREAL_1:2;
@@ -426,7 +458,7 @@ then A8: len p2 = r-n;  m<=r by A1,A2,XREAL_1:2;
    thus len p12 = len p12;
 A10:  len p12=len p1 +len p2 by FINSEQ_1:35 .= n-m+(r+ -n) by A5,A8
           .= r-m;
-       m+1<=r+1 by A4,A7,XREAL_1:2; then len p3 +(m+1)=r+1 by A3,A4,Def1;
+       m+1<=r+1 by A4,A7,XREAL_1:2; then len p3 +(m+1)=r+1 by A3,A4,HAHA;
     then len p3 +m+1 = r+1; then A11: len p3 +m-m = r-m;
    hence
 A12: len p3 = len p12 by A10;
@@ -440,8 +472,8 @@ A14:   i<=nm;  0+1=1; then consider k being Nat such that
 A15:   0<=k & k<nm & i=k+1 by A13,A14,Th1;  nm<=r-m by A2,XREAL_1:11;
 then A16:   k<len p3 by A11,A15,XREAL_1:2;
         i in dom p1 by A6,A13,A14,FINSEQ_3:27;
-    hence p12.i = p1.i by FINSEQ_1:def 7 .= p.((m+1)+k) by A4,A6,A15,Def1
-               .= p3.i by A3,A4,A9,A15,A16,Def1;
+    hence p12.i = p1.i by FINSEQ_1:def 7 .= p.((m+1)+k) by A4,A6,A15,HAHA
+               .= p3.i by A3,A4,A9,A15,A16,HAHA;
     end;
     suppose nm+1<=i; then consider k such that
 A17:   nm<=k & k<len p12 & i=k+1 by A13,Th1;
@@ -455,8 +487,8 @@ A18:   i = nm+(k'+1) by A17;
 then A20:   k'+1 in dom p2 by FINSEQ_3:27;
 A21:   n+1+k' = m+1+k;
     thus p12.i = p2.(k'+1) by A6,A18,A20,FINSEQ_1:def 7
-             .= p.(n+1+k') by A3,A7,A19,Def1
-             .= p3.i by A3,A4,A9,A12,A17,A21,Def1;
+             .= p.(n+1+k') by A3,A7,A19,HAHA
+             .= p3.i by A3,A4,A9,A12,A17,A21,HAHA;
   end;
   end;
  hence (m+1, n)-cut p ^ (n+1, r)-cut p = (m+1, r)-cut p by FINSEQ_2:10;
@@ -478,32 +510,35 @@ theorem
 A1: m<=n and
 A2: n<=len p;
 set cp1 = (1, m)-cut p; set cp2 = (m+1, n)-cut p; set cp3 = (n+1, len p)-cut p;
-A4: 0+1=1;
+A3: 0+1=1;
  hence cp1^cp2^cp3 = (1, n)-cut p ^cp3 by A1,A2,Th8
-                  .= (1, len p)-cut p by A2,A4,Th8 .= p by Th7;
+                  .= (1, len p)-cut p by A2,A3,Th8 .= p by Th7;
 end;
 
 theorem Th11: rng ((m,n)-cut p) c= rng p proof set c = ((m,n)-cut p);
 A1: now assume that
 A2: 1<=m and
-A3: m<=n+1 and
+A3: m<=n and
 A4: n<=len p;
+  n <= n+1 by NAT_1:29;
+  then
+X: m <= n+1 by A3,XREAL_1:2;
  thus thesis proof let x be set; assume x in rng c;
    then consider z being set such that
 A5: z in dom c & x = c.z by FUNCT_1:def 5;
    reconsider z as Nat by A5;
       0+1<=z & z<=len c by A5,FINSEQ_3:27; then consider i such that
 A6: 0<=i & i<len c & z=i+1 by Th1;
-A7: c.z = p.(m+i) by A2,A3,A4,A6,Def1;
-      m+i<len c +m by A6,XREAL_1:8; then m+i<n+1 by A2,A3,A4,Def1;
+A7: c.z = p.(m+i) by A2,A3,A4,A6,HAHA,X;
+      m+i<len c +m by A6,XREAL_1:8; then m+i<n+1 by A2,A3,A4,HAHA,X;
    then m+i<=n by NAT_1:38; then 1<=m+i & m+i<=len p
     by A2,A4,XREAL_1:2,NAT_1:37;
    then m+i in dom p by FINSEQ_3:27;
   hence x in rng p by A5,A7,FUNCT_1:def 5;
  end;
  end;
-    now assume not (1<=m & m<=n+1 & n<=len p);
-  then c = {} by Def1; then rng c = {} by FINSEQ_1:27;
+    now assume not (1<=m & m<=n & n<=len p);
+  then c = {} by HAHA,Def1; then rng c = {} by FINSEQ_1:27;
   hence thesis by XBOOLE_1:2;
  end;
  hence thesis by A1;
@@ -526,17 +561,17 @@ A1: 1<=m and
 A2: m<=n and
 A3: n<=len p;
 A4: m<=n+1 by A2,NAT_1:37;
-then A5: len c +m = n+1 by A1,A3,Def1;
+then A5: len c +m = n+1 by A1,A3,HAHA;
 A6: now assume len c = 0;
         then n+1<=n+0 by A2,A5; hence contradiction by XREAL_1:8
 ;
     end; A7: 0<=len c;
   0<len c & 0+1=1 by A6;
- hence c.1 = p.(m+0) by A1,A3,A4,Def1 .= p.m;
+ hence c.1 = p.(m+0) by A1,A3,A4,HAHA .= p.m;
      0+1<=len c by A6,A7,NAT_1:38; then consider i being Nat such that
 A8: 0<=i & i<len c & len c =i+1 by Th1;
    m+i = m+(len c -1) by A8 .= n+1-1 by A5 .= n;
- hence c.(len c) = p.n by A1,A3,A4,A8,Def1;
+ hence c.(len c) = p.n by A1,A3,A4,A8,HAHA;
 end;
 
 begin  :: The glueing catenation
@@ -552,19 +587,19 @@ proof set r = (p^'q); set qc = (2,len q)-cut q; assume
      q<>{};
      then len q <> 0 by FINSEQ_1:25; then 0<len q;
 then 0+1<=len q by NAT_1:38; then 1+1<=len q +1 by XREAL_1:9;
-then len qc +(1+1) = len q + 1 by Def1;
+then len qc +(1+1) = len q + 1 by HAHA;
      then len qc +1+1 = len q + 1;
-then A2: len qc +1 = len q;
+then A1: len qc +1 = len q;
  thus len r +1 = len p + len qc + 1 by FINSEQ_1:35
-              .= len p + len q by A2;
+              .= len p + len q by A1;
 end;
 
 theorem Th14:
   1<=k & k<=len p implies (p^'q).k=p.k
 proof
    assume that
-A2: 1<=k and
-A3: k<=len p;  k in dom p by A2,A3,FINSEQ_3:27;
+A1: 1<=k and
+A2: k<=len p;  k in dom p by A1,A2,FINSEQ_3:27;
   hence (p^'q).k=p.k by FINSEQ_1:def 7;
 end;
 
@@ -572,25 +607,25 @@ theorem Th15:
   1<=k & k<len q implies (p^'q).(len p +k) = q.(k+1)
 proof set qc = (2,len q)-cut q;
    assume that
-A2: 1<=k and
-A3: k<len q;
+A1: 1<=k and
+A2: k<len q;
     per cases;
     suppose q={}; then len q = 0 by FINSEQ_1:25;
-     hence thesis by A3;
+     hence thesis by A2;
     end;
     suppose
         q<>{}; then len q <> 0 by FINSEQ_1:25; then 0<len q;
      then 0+1<=len q by NAT_1:38;
-then A4:  1+1<=len q +1 by XREAL_1:9;
-     then len qc +(1+1) = len q + 1 by Def1;
+then A3:  1+1<=len q +1 by XREAL_1:9;
+     then len qc +(1+1) = len q + 1 by HAHA;
      then len qc +1+1 = len q + 1;
- then len qc +1 = len q; then A5:   k<=len qc by A3,NAT_1:38;
- then A6: k in dom qc by A2,FINSEQ_3:27;
-      0+1<=k by A2; then consider i being Nat such that
-A7: 0<=i & i<len qc & k=i+1 by A5,Th1;
-   thus (p^'q).(len p +k) = qc.k by A6,FINSEQ_1:def 7
-             .= q.(1+1+i) by A4,A7,Def1
-             .= q.(k+1) by A7;
+ then len qc +1 = len q; then A4:   k<=len qc by A2,NAT_1:38;
+ then A5: k in dom qc by A1,FINSEQ_3:27;
+      0+1<=k by A1; then consider i being Nat such that
+A6: 0<=i & i<len qc & k=i+1 by A4,Th1;
+   thus (p^'q).(len p +k) = qc.k by A5,FINSEQ_1:def 7
+             .= q.(1+1+i) by A3,A6,HAHA
+             .= q.(k+1) by A6;
 end;
 end;
 
@@ -600,23 +635,23 @@ proof set r = p^'q; set qc = (2,len q)-cut q; assume
 A1: 1<len q; then len q <>0; then q<>{} by FINSEQ_1:25;
     then len r +1-1=len p +len q -1 by Th13;
 then A2:  len r = len p +(len q -1);
-       1+1<=len q +1 by A1,XREAL_1:9; then len qc +(1+1) = len q + 1 by Def1
+       1+1<=len q +1 by A1,XREAL_1:9; then len qc +(1+1) = len q + 1 by HAHA
 ;
      then A3: len qc +1+1 = len q + 1;
 then A4:   len qc +1 = len q;
         1+1<=len q by A1,NAT_1:38;
-then A6:  1+1-1<=len q -1 by XREAL_1:11;
+then A5:  1+1-1<=len q -1 by XREAL_1:11;
     len qc < len q by A4,NAT_1:38;
- hence r.len r = q.len q by A2,A3,A6,Th15;
+ hence r.len r = q.len q by A2,A3,A5,Th15;
 end;
 
 theorem Th17: rng (p^'q) c= rng p \/ rng q
 proof set r = p^'q; set qc = (2,len q)-cut q;
  let x be set; assume x in rng r;
-then A2: x in rng p \/ rng qc by FINSEQ_1:44;
-A3: rng qc c= rng q by Th11;
-      x in rng p or x in rng qc by A2,XBOOLE_0:def 2;
-hence x in rng p \/ rng q by A3,XBOOLE_0:def 2;
+then A1: x in rng p \/ rng qc by FINSEQ_1:44;
+A2: rng qc c= rng q by Th11;
+      x in rng p or x in rng qc by A1,XBOOLE_0:def 2;
+hence x in rng p \/ rng q by A2,XBOOLE_0:def 2;
 end;
 
 definition let D be set, p, q be FinSequence of D;
@@ -634,45 +669,45 @@ theorem
        p<>{} & q<>{} & p.len p = q.1 implies rng (p^'q) = rng p \/ rng q
 proof set r = p^'q; set qc = (2,len q)-cut q;
  assume that
-A2: p<>{} and
-A3: q<>{} and
-A4: p.len p = q.1;
-        len q <> 0 by A3,FINSEQ_1:25; then 0<len q;
+A1: p<>{} and
+A2: q<>{} and
+A3: p.len p = q.1;
+        len q <> 0 by A2,FINSEQ_1:25; then 0<len q;
      then 0+1<=len q by NAT_1:38;
-then A5:  1+1<=len q +1 by XREAL_1:9;
-     then len qc +(1+1) = len q + 1 by Def1;
+then A4:  1+1<=len q +1 by XREAL_1:9;
+     then len qc +(1+1) = len q + 1 by HAHA;
      then len qc +1+1 = len q + 1;
-then A6:   len qc +1 = len q;
+then A5:   len qc +1 = len q;
     now let x be set;
   hereby assume x in rng r;
-then A7: x in rng p \/ rng qc by FINSEQ_1:44;
-A8: rng qc c= rng q by Th11;
-      x in rng p or x in rng qc by A7,XBOOLE_0:def 2;
-hence x in rng p \/ rng q by A8,XBOOLE_0:def 2;
+then A6: x in rng p \/ rng qc by FINSEQ_1:44;
+A7: rng qc c= rng q by Th11;
+      x in rng p or x in rng qc by A6,XBOOLE_0:def 2;
+hence x in rng p \/ rng q by A7,XBOOLE_0:def 2;
   end;
   assume x in rng p \/ rng q;
-then A9: x in rng p or x in rng q by XBOOLE_0:def 2;
+then A8: x in rng p or x in rng q by XBOOLE_0:def 2;
   assume
-      not x in rng r; then A10: not x in rng p \/ rng qc by FINSEQ_1:44;
-then A11: not x in rng p & not x in rng qc by XBOOLE_0:def 2;
+      not x in rng r; then A9: not x in rng p \/ rng qc by FINSEQ_1:44;
+then A10: not x in rng p & not x in rng qc by XBOOLE_0:def 2;
    consider y being set such that
-A12: y in dom q & x=q.y by A9,A10,FUNCT_1:def 5,XBOOLE_0:def 2;
-   reconsider y as Nat by A12;
-A13: 1<=y & y<=len q by A12,FINSEQ_3:27;
-   per cases by A13,REAL_1:def 5;
-   suppose A14: y=1;  len p <>0 by A2,FINSEQ_1:25;
+A11: y in dom q & x=q.y by A8,A9,FUNCT_1:def 5,XBOOLE_0:def 2;
+   reconsider y as Nat by A11;
+A12: 1<=y & y<=len q by A11,FINSEQ_3:27;
+   per cases by A12,REAL_1:def 5;
+   suppose A13: y=1;  len p <>0 by A1,FINSEQ_1:25;
    then 0<len p;
      then 0+1<=len p by NAT_1:38; then len p in dom p by FINSEQ_3:27;
-hence contradiction by A4,A11,A12,A14,FUNCT_1:def 5;
+hence contradiction by A3,A10,A11,A13,FUNCT_1:def 5;
    end;
    suppose 1<y; then 1+1<=y by NAT_1:38; then consider i such that
-A15:   1<=i & i<len q & y=i+1 by A13,Th1;
-     A16:  0+1<=i & i<=len qc by A6,A15,NAT_1:38
+A14:   1<=i & i<len q & y=i+1 by A12,Th1;
+     A15:  0+1<=i & i<=len qc by A5,A14,NAT_1:38
 ; then consider j such that
-A17:   0<=j & j<len qc & i=j+1 by Th1;
-A18:   qc.(j+1) = q.(1+1+j) by A5,A17,Def1
-             .= q.y by A15,A17;
-        i in dom qc by A16,FINSEQ_3:27; hence contradiction by A11,A12,A17,A18,
+A16:   0<=j & j<len qc & i=j+1 by Th1;
+A17:   qc.(j+1) = q.(1+1+j) by A4,A16,HAHA
+             .= q.y by A14,A16;
+        i in dom qc by A15,FINSEQ_3:27; hence contradiction by A10,A11,A16,A17,
 FUNCT_1:def 5;
  end;
  end;
@@ -1190,58 +1225,58 @@ A2: vs is_vertex_seq_of c;
   hereby assume
     y in G-VSet rng c;
    then consider v being Element of the Vertices of G such that
-A5: v=y & ex e being Element of the Edges of G st e in rng c &
+A4: v=y & ex e being Element of the Edges of G st e in rng c &
         (v = (the Source of G).e or v = (the Target of G).e);
    consider e being Element of the Edges of G such that
-A6: e in rng c & (v = (the Source of G).e or v = (the Target of G).e) by A5;
+A5: e in rng c & (v = (the Source of G).e or v = (the Target of G).e) by A4;
    consider x being set such that
-A7: x in dom c & e = c.x by A6,FUNCT_1:def 5;
-   reconsider x as Nat by A7;
-A8: 1<=x & x<=len c by A7,FINSEQ_3:27;
-then A9: 1<=x+1 & x+1<=len vs & x<=len vs by A3,NAT_1:37,XREAL_1:9;
+A6: x in dom c & e = c.x by A5,FUNCT_1:def 5;
+   reconsider x as Nat by A6;
+A7: 1<=x & x<=len c by A6,FINSEQ_3:27;
+then A8: 1<=x+1 & x+1<=len vs & x<=len vs by A3,NAT_1:37,XREAL_1:9;
    set v1 = vs/.x; set v2 = vs/.(x+1);
-A10: v1 = vs.x & v2 = vs.(x+1) by A8,A9,FINSEQ_4:24;
-      c.x joins v1, v2 by A2,A8,Def7;
-then A11: v = v1 or v = v2 by A6,A7,GRAPH_1:def 9;
-      x in dom vs & x+1 in dom vs by A8,A9,FINSEQ_3:27;
-   hence y in rng vs by A5,A10,A11,FUNCT_1:def 5;
+A9: v1 = vs.x & v2 = vs.(x+1) by A7,A8,FINSEQ_4:24;
+      c.x joins v1, v2 by A2,A7,Def7;
+then A10: v = v1 or v = v2 by A5,A6,GRAPH_1:def 9;
+      x in dom vs & x+1 in dom vs by A7,A8,FINSEQ_3:27;
+   hence y in rng vs by A4,A9,A10,FUNCT_1:def 5;
   end; assume y in rng vs; then consider x being set such that
-A12:  x in dom vs & y = vs.x by FUNCT_1:def 5;
-   reconsider x as Nat by A12;
-A13: 1<=x & x<=len vs by A12,FINSEQ_3:27;
-   per cases by A3,A13,NAT_1:26;
+A11:  x in dom vs & y = vs.x by FUNCT_1:def 5;
+   reconsider x as Nat by A11;
+A12: 1<=x & x<=len vs by A11,FINSEQ_3:27;
+   per cases by A3,A12,NAT_1:26;
    suppose
-A14:  x<=len c;
-then A15: 1<=x+1 & x+1<=len vs & x<=len vs by A3,NAT_1:37,XREAL_1:9;
-       x in dom c by A13,A14,FINSEQ_3:27;
+A13:  x<=len c;
+then A14: 1<=x+1 & x+1<=len vs & x<=len vs by A3,NAT_1:37,XREAL_1:9;
+       x in dom c by A12,A13,FINSEQ_3:27;
     then c.x in rng c & rng c c= the Edges of G by FINSEQ_1:def 4,FUNCT_1:def 5
 ;
     then reconsider e = c.x as Element of the Edges of G;
    set v1 = vs/.x; set v2 = vs/.(x+1);
-A16: v1 = vs.x & v2 = vs.(x+1) by A13,A15,FINSEQ_4:24;
-      c.x joins v1, v2 by A2,A13,A14,Def7;
-then A17: v1 = (the Source of G).e & v2 = (the Target of G).e or
+A15: v1 = vs.x & v2 = vs.(x+1) by A12,A14,FINSEQ_4:24;
+      c.x joins v1, v2 by A2,A12,A13,Def7;
+then A16: v1 = (the Source of G).e & v2 = (the Target of G).e or
    v2 = (the Source of G).e & v1 = (the Target of G).e by GRAPH_1:def 9;
-      x in dom c by A13,A14,FINSEQ_3:27;
+      x in dom c by A12,A13,FINSEQ_3:27;
 then e in rng c by FUNCT_1:def 5;
-   hence y in G-VSet rng c by A12,A16,A17;
+   hence y in G-VSet rng c by A11,A15,A16;
    end;
    suppose
-A18:  x=len c+1; set l = len c;
+A17:  x=len c+1; set l = len c;
        l <> 0 by A1,FINSEQ_1:25; then 0<l & 0+1=1;
-then A19:  1<=l & l<=l+1 by NAT_1:38;
+then A18:  1<=l & l<=l+1 by NAT_1:38;
     then l in dom c by FINSEQ_3:27;
     then c.l in rng c & rng c c= the Edges of G by FINSEQ_1:def 4,FUNCT_1:def 5
 ;
     then reconsider e = c.l as Element of the Edges of G;
    set v1 = vs/.l; set v2 = vs/.(l+1);
-A20: v1 = vs.l & v2 = vs.(l+1) by A3,A13,A18,A19,FINSEQ_4:24;
-      c.l joins v1, v2 by A2,A19,Def7;
-then A21: v1 = (the Source of G).e & v2 = (the Target of G).e or
+A19: v1 = vs.l & v2 = vs.(l+1) by A3,A12,A17,A18,FINSEQ_4:24;
+      c.l joins v1, v2 by A2,A18,Def7;
+then A20: v1 = (the Source of G).e & v2 = (the Target of G).e or
    v2 = (the Source of G).e & v1 = (the Target of G).e by GRAPH_1:def 9;
-      l in dom c by A19,FINSEQ_3:27;
+      l in dom c by A18,FINSEQ_3:27;
      then e in rng c by FUNCT_1:def 5;
-   hence y in G-VSet rng c by A12,A18,A20,A21;
+   hence y in G-VSet rng c by A11,A17,A19,A20;
  end;
  end;
  hence G-VSet rng c = rng vs by TARSKI:2;
@@ -1658,27 +1693,27 @@ A38: now let n;  n in dom c implies
    end;
       now let x be set;
     hereby assume x in G-VSet rng c; then consider v such that
-A40:  x=v & ex e being Element of the Edges of G st e in rng c &
+A39:  x=v & ex e being Element of the Edges of G st e in rng c &
              (v = (the Source of G).e or v = (the Target of G).e);
      consider e such that
-A41: e in rng c & (v = SG.e or v = TG.e) by A40;
+A40: e in rng c & (v = SG.e or v = TG.e) by A39;
      consider d being set such that
-A42:  d in dom c & e=c.d by A41,FUNCT_1:def 5;
-     reconsider d as Nat by A42;
+A41:  d in dom c & e=c.d by A40,FUNCT_1:def 5;
+     reconsider d as Nat by A41;
               TG.(c.d)=TG.(c.1) & SG.(c.d)=SG.(c.1) or
-            TG.(c.d)=SG.(c.1) & SG.(c.d)=TG.(c.1) by A37,A42;
-hence x in {SG.(c.1), TG.(c.1)} by A40,A41,A42,TARSKI:def 2;
-    end; assume A43: x in {SG.(c.1), TG.(c.1)};
+            TG.(c.d)=SG.(c.1) & SG.(c.d)=TG.(c.1) by A37,A41;
+hence x in {SG.(c.1), TG.(c.1)} by A39,A40,A41,TARSKI:def 2;
+    end; assume A42: x in {SG.(c.1), TG.(c.1)};
         len c <> 0 by A11,FINSEQ_1:25; then 0< len c;
      then 0+1<=len c by NAT_1:38;
-then A44:  1 in dom c & 1 in dom c by FINSEQ_3:27;
-   then A45: c.1 in rng c & rng c c= the Edges of G
+then A43:  1 in dom c & 1 in dom c by FINSEQ_3:27;
+   then A44: c.1 in rng c & rng c c= the Edges of G
    by FINSEQ_1:def 4,FUNCT_1:def 5;
      then reconsider e=c.1 as Element of the Edges of G;
-     reconsider s = SG.e as Element of the Vertices of G by A45,FUNCT_2:7;
-     reconsider t = TG.e as Element of the Vertices of G by A45,FUNCT_2:7;
-A46:  e in rng c by A44,FUNCT_1:def 5;
-        x=s or x =t by A43,TARSKI:def 2; hence x in G-VSet rng c by A46;
+     reconsider s = SG.e as Element of the Vertices of G by A44,FUNCT_2:7;
+     reconsider t = TG.e as Element of the Vertices of G by A44,FUNCT_2:7;
+A45:  e in rng c by A43,FUNCT_1:def 5;
+        x=s or x =t by A42,TARSKI:def 2; hence x in G-VSet rng c by A45;
    end;
  then G-VSet rng c = {SG.(c.1), TG.(c.1)} by TARSKI:2;
    then Card (G-VSet rng c) = 2 by A17,A20,A23,A25,CARD_2:76;
@@ -1687,44 +1722,44 @@ A46:  e in rng c by A44,FUNCT_1:def 5;
    end;
    end;
    suppose 1<k; then 1+1<=k by NAT_1:38; then consider k1 being Nat such that
-A47: 1<=k1 & k1<k & k=k1+1 by Th1;
-A48: k<=len vs1 by A17,FINSEQ_3:27;
-then A49: k1<=len c by A14,A47,XREAL_1:8;
-A50: k1<=len vs1 by A47,A48,XREAL_1:2;
-then A51: k1 in dom vs1 by A47,FINSEQ_3:27;
-A52: vs1/.k1=vs1.k1 & vs1/.k=vs1.k &
+A46: 1<=k1 & k1<k & k=k1+1 by Th1;
+A47: k<=len vs1 by A17,FINSEQ_3:27;
+then A48: k1<=len c by A14,A46,XREAL_1:8;
+A49: k1<=len vs1 by A46,A47,XREAL_1:2;
+then A50: k1 in dom vs1 by A46,FINSEQ_3:27;
+A51: vs1/.k1=vs1.k1 & vs1/.k=vs1.k &
     vs/.k1=vs.k1 & vs/.k=vs.k
-            by A14,A15,A17,A47,A50,FINSEQ_4:24,def 4;
-A53: c.k1 joins vs1/.k1, vs1/.(k1+1) by A12,A47,A49,Def7;
-   c.k1 joins vs/.k1, vs/.(k1+1) by A1,A47,A49,Def7;
+            by A14,A15,A17,A46,A49,FINSEQ_4:24,def 4;
+A52: c.k1 joins vs1/.k1, vs1/.(k1+1) by A12,A46,A48,Def7;
+   c.k1 joins vs/.k1, vs/.(k1+1) by A1,A46,A48,Def7;
     then (SG.(c.k1)=vs1/.k1 & TG.(c.k1)=vs1/.k or
      SG.(c.k1)=vs1/.k & TG.(c.k1)=vs1/.k1) &
     (SG.(c.k1)=vs/.k1 & TG.(c.k1)=vs/.k or
-     SG.(c.k1)=vs/.k & TG.(c.k1)=vs/.k1) by A47,A53,GRAPH_1:def 9;
-hence contradiction by A17,A18,A47,A51,A52;
+     SG.(c.k1)=vs/.k & TG.(c.k1)=vs/.k1) by A46,A52,GRAPH_1:def 9;
+hence contradiction by A17,A18,A46,A50,A51;
   end;
   end;
  end;
  end; assume
-A54: for vs1 st vs1 is_vertex_seq_of c holds vs1 = vs; assume
-A55: Card the Vertices of G <> 1; assume
-A56: c ={} or c alternates_vertices_in G;
+A53: for vs1 st vs1 is_vertex_seq_of c holds vs1 = vs; assume
+A54: Card the Vertices of G <> 1; assume
+A55: c ={} or c alternates_vertices_in G;
    consider x, y such that
-A57: x in the Vertices of G & y in the Vertices of G & x<>y by A55,Lm6;
-   reconsider x as Element of the Vertices of G by A57;
-   reconsider y as Element of the Vertices of G by A57;
- thus contradiction proof per cases by A56;
+A56: x in the Vertices of G & y in the Vertices of G & x<>y by A54,Lm6;
+   reconsider x as Element of the Vertices of G by A56;
+   reconsider y as Element of the Vertices of G by A56;
+ thus contradiction proof per cases by A55;
  suppose c ={};
   then <*x*> is_vertex_seq_of c & <*y*> is_vertex_seq_of c by Th35;
-   then <*x*> = vs & <*y*> = vs by A54;
+   then <*x*> = vs & <*y*> = vs by A53;
    then vs.1 = x & vs.1 = y by FINSEQ_1:57;
-  hence contradiction by A57;
+  hence contradiction by A56;
  end;
  suppose c alternates_vertices_in G; then consider vs1,vs2 such that
-A58: vs1<>vs2 & vs1 is_vertex_seq_of c & vs2 is_vertex_seq_of c &
+A57: vs1<>vs2 & vs1 is_vertex_seq_of c & vs2 is_vertex_seq_of c &
      for vs st vs is_vertex_seq_of c holds vs=vs1 or vs=vs2 by Th41;
-      vs1 = vs & vs2 = vs by A54,A58;
-  hence contradiction by A58;
+      vs1 = vs & vs2 = vs by A53,A57;
+  hence contradiction by A57;
  end;
  end;
 end;
@@ -1790,7 +1825,7 @@ A5: vs is_vertex_seq_of c by Th36; set p' = (m,n+1)-cut vs;
 A6:  len vs = len c + 1 by A5,Def7;
 then A7: m<=n+1 & n+1<=len vs by A2,A3,XREAL_1:8,NAT_1:37;
 then A8: m<=n+1+1 by NAT_1:37;
-       A9: len q +m-m=n+1-m by A1,A3,A4,A7,Def1;
+       A9: len q +m-m=n+1-m by A1,A3,A4,A7,HAHA;
 then A10: len q = n-m+1;
         len p'+m-m=(n+1)+1-m by A1,A7,A8,Def1;
 then A11: len p' = n-m+1+1;
@@ -1825,7 +1860,7 @@ A26:  i+1 = m+(j+1) by A20;
 then A27:  p'.k = vs.i & p'.(k+1) = vs.(i+1) by A1,A7,A8,A21,A26,Def1;
     take v1, v2;
     thus v1 = p'.k & v2 = p'.(k+1) & q.k joins v1, v2 by A1,A3,A4,A7,A20,A21
-,A22,A24,A25,A27,Def1,FINSEQ_4:24;
+,A22,A24,A25,A27,HAHA,FINSEQ_4:24;
    end;
  thus q is Chain of G proof
   hereby let k be Nat;
@@ -1858,7 +1893,7 @@ A6: vs1 = (m,n+1)-cut vs;
 A7: len vs = len c + 1 by A5,Def7;
 then A8: m<=n+1 & n+1<=len vs by A2,A3,XREAL_1:8,NAT_1:37;
 then A9: m<=n+1+1 by NAT_1:37;
-A10: len c1 +m= n+1 by A1,A3,A4,A8,Def1;
+A10: len c1 +m= n+1 by A1,A3,A4,A8,Def1,HAHA;
     len vs1 +m = n+1+1 by A1,A6,A8,A9,Def1;
 hence A11: len vs1 = n+1+1-m .= n+1-m+1 .= len c1 + 1 by A10;
     let k be Nat;
@@ -1882,7 +1917,7 @@ then A20:  vs/.i=vs.i & vs/.(i+1)=vs.(i+1) by A15,FINSEQ_4:24;
 then A21:   1<=k & k<=len c1 by A14,NAT_1:38;
    then k<=len vs1 & 1<=k+1 & k+1<=len vs1 by A11,NAT_1:37,XREAL_1:9;
 then vs1/.k=vs1.k & vs1/.(k+1)=vs1.(k+1) by A21,FINSEQ_4:24;
-    hence c1.k joins vs1/.k, vs1/.(k+1) by A1,A3,A4,A8,A14,A16,A17,A19,A20,Def1
+    hence c1.k joins vs1/.k, vs1/.(k+1) by A1,A3,A4,A8,A14,A16,A17,A19,A20,HAHA
 ;
    end;
 
@@ -2064,13 +2099,8 @@ begin :: Simple chains, paths and oriented chains
  Lm7: <*v*> is_vertex_seq_of {} proof
     set p = <*v*>, ec = {};
 A1:  len p = 0 + 1 by FINSEQ_1:56 .= len ec + 1 by FINSEQ_1:25;
-        now let n;
-      assume that
-A2:    1<=n and
-A3:    n<=len ec;
-           1<=len ec by A2,A3,XREAL_1:2; then 1<=0 by FINSEQ_1:25;
-      hence ec.n joins p/.n,p/.(n+1);
-     end;
+    for n st 1<=n & n<=len ec
+      holds ec.n joins p/.n,p/.(n+1) by FINSEQ_1:25;
    hence p is_vertex_seq_of ec by A1,Def7;
 end;
 
@@ -2157,8 +2187,7 @@ then A15:  sc.1 joins v11,v12 & sc.1 joins v21,v22 &
 A17:  vs is_vertex_seq_of sc &
     for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs
                                                 by Def10;
-       sc <>{} proof assume not thesis; then len sc =0 by FINSEQ_1:25;
-                hence contradiction by A1; end;
+       sc <>{} by A1,FINSEQ_1:25;
 then A18:  vs = vs1 or vs = vs2 by A2,A3,A4,A17,Th37;
 then A19:  1+1+1 = len vs by A5,A12,A14,A16,A17;
        1+1+1<=
@@ -2323,7 +2352,7 @@ A29: p2 = (0+1, len p2)-cut p2 by Th7
 then A30: p2 = (m1+1, m)-cut vs ^ (m+1, len c +1)-cut vs by A3,A4,Th8;
 A31:  m<=len c +1+1 by A3,A4,NAT_1:37;
         (1,1)-cut p2 = <*p2.(0+1)*> by A28,Th6
-                 .= <*vs.(m+0)*> by A4,A15,A27,A31,Def1
+                 .= <*vs.(m+0)*> by A4,A15,A27,A31,HAHA
                  .= (m,m)-cut vs by A3,A15,Th6;
 then A32: p2' = (2, len p2)-cut p2 by A29,A30,FINSEQ_1:46;
   set domfc = {k: 1<=k & k<=n1 or m<=k & k<= len c};
@@ -2380,7 +2409,7 @@ hence p in vs by A47,A49,A50,FUNCT_1:8;
   take c';
   take p1=pp^'p2;
 A52: p1 = pp^p2' by A32;
-     A53: len c1 +1 = n1+1 by A7,A11,A12,Def1;
+     A53: len c1 +1 = n1+1 by A7,A11,A12,HAHA;
 then A54: len c1 = n - 1 by A7;
         -(-(m-n)) = m-n; then A55: -(m-n) < 0 by A5,XREAL_1:60;
     len c' = (n+-1)+(len c +(-m +1)) by A24,A54,FINSEQ_1:35 .= len c + (n+ -m )
@@ -2463,7 +2492,7 @@ FINSEQ_3:27;
 A83:   0<=i & i<n1 & k=i+1 by A7,A54,A78,Th1;
          (fc*SL).x = fc.k by A80,A82,FUNCT_1:22 .= c.(1+i) by A33,A36,A81,A83,
 GRFUNC_1:8
-        .= y by A7,A11,A12,A54,A77,A83,Def1;
+        .= y by A7,A11,A12,A54,A77,A83,HAHA;
       hence p in fc*(Sgm DL) by A76,A82,FUNCT_1:8;
      end; assume
 A84:  p in fc*(Sgm DL); then consider x,y being set such that
@@ -2479,7 +2508,7 @@ A91:   k=SL.k by A71,A72,A88,A89,FINSEQ_2:56;
 A92: k in dom c1 by A7,A54,A89,FINSEQ_3:27;  0+1<=k by A89;
      then consider i being Nat such that
 A93: 0<=i & i<n1 & k=i+1 by A89,Th1;
-       c1.k = c.k by A7,A11,A12,A54,A93,Def1
+       c1.k = c.k by A7,A11,A12,A54,A93,HAHA
          .= y by A36,A86,A87,A89,A90,A91,GRFUNC_1:8;
      hence p in c1 by A85,A89,A92,FUNCT_1:8;
     end;
@@ -2571,8 +2600,8 @@ then A124: Sgm (DL \/ DR) = (Sgm DL)^(Sgm DR) by A118,FINSEQ_3:48;
             .= len c +1;
 then A126:  card DR = lp21 -1+1 by A4,Th4 .= lp21;
 A127:  1<=m+1 & m+1<=len c +1+1 by A3,A4,XREAL_1:8,NAT_1:37;
-         len p2 +m = len c +1+1 by A4,A15,A31,Def1
-     .= len p2' +(m+1) by A4,A127,Def1 .= (len p2'+1)+m;
+         len p2 +m = len c +1+1 by A4,A15,A31,HAHA
+     .= len p2' +(m+1) by A4,A127,HAHA .= (len p2'+1)+m;
 then A128: len p2 -1 = len p2'+1-1;
 A129:  len Sgm DL = card DL & len Sgm DR = card DR by A118,FINSEQ_3:44;
 A130:  len pp = n by A7,A21,A53;  DL = Seg n by FINSEQ_1:def 1;
@@ -2637,7 +2666,7 @@ FINSEQ_3:27;
 A165:   0<=i & i<len p2' & k=i+1 by A160,Th1;
          (fvs*SR).x = fvs.(m+k) by A162,A164,FUNCT_1:22 .= vs.(m+k) by A45,A134
 ,A162,A163,GRFUNC_1:8
-      .= vs.(m+1+i) by A165 .= y by A4,A156,A159,A165,Def1;
+      .= vs.(m+1+i) by A165 .= y by A4,A156,A159,A165,HAHA;
       hence p in fvs*(Sgm DR) by A158,A164,FUNCT_1:8;
      end; assume
 A166:  p in fvs*(Sgm DR); then consider x,y being set such that
@@ -2650,7 +2679,7 @@ A171:   1<=k & k<=len p2' by A126,A128,A129,A169,FINSEQ_3:27;
 then A172:   m+k=SR.k by A4,A125,A128,A155,Th5;  0+1<=k by A169,FINSEQ_3:27;
      then consider i being Nat such that
 A173:   0<=i & i<len p2' & k=i+1 by A171,Th1;
-        p2'.k = vs.(m+1+i) by A4,A156,A173,Def1
+        p2'.k = vs.(m+1+i) by A4,A156,A173,HAHA
          .= vs.(m+k) by A173 .= fvs.(SR.k) by A45,A169,A172,GRFUNC_1:8 .= y by
 A168,A169,FUNCT_1:23;
      hence p in p2' by A167,A170,FUNCT_1:8;
@@ -2718,7 +2747,7 @@ then A198:  x in dom vs by A197,FINSEQ_3:27;
   end;
   then reconsider fvs as FinSubsequence of vs by Def5;
   take fvs; take c1 = c2; take p1 = p2;
-        len c2 +m = len c +1 by A3,A4,A175,Def1;
+        len c2 +m = len c +1 by A3,A4,A175,HAHA;
 then A199: len c2 = len c +1-m .=len c - m + 1;
        A200: m-m<=len c -m by A177,XREAL_1:11;
         1-1<=m-1 by A178,XREAL_1:11;
@@ -2728,7 +2757,7 @@ A201:  m = m1 +1;
      then reconsider lc21 = len c2 -1 as Nat;
 A202:  m+lc21 = m1+len c2;
 A203: 1<=m & m<=len c +1+1 & len c +1<=len vs by A3,A4,A175,NAT_1:37;
-     then len p2 +m = len c +1 +1 by Def1;
+     then len p2 +m = len c +1 +1 by HAHA;
 then A204: len p2 = len c +1 +1 -m .= len c -m +1+1;
 then A205: 1<=len p2 by A199,NAT_1:37;
 A206: len c2 = len c +(-m+1) by A199;
@@ -2773,7 +2802,7 @@ A221:   0<=i & i<len c2 & k=i+1 by A216,Th1;
          (fc*SR).x = fc.(m1+k) by A218,A220,FUNCT_1:22 .= c.(m1+k) by A184,A212
 ,A218,A219,GRFUNC_1:8
         .= c.(m+i) by A221
-        .= y by A3,A4,A175,A215,A221,Def1;
+        .= y by A3,A4,A175,A215,A221,HAHA;
       hence p in fc*(Sgm domfc) by A214,A220,FUNCT_1:8;
      end; assume
 A222:  p in fc*(Sgm domfc); then consider x,y being set such that
@@ -2786,7 +2815,7 @@ A227:   1<=k & k<=len c2 by A210,A211,A225,FINSEQ_3:27;
 then A228:   m1+k=SR.k by A199,A201,A202,Th5;  0+1<=k by A225,FINSEQ_3:27;
      then consider i being Nat such that
 A229:   0<=i & i<len c2 & k=i+1 by A227,Th1;
-        c2.k = c.(m1+1+i) by A3,A4,A175,A229,Def1
+        c2.k = c.(m1+1+i) by A3,A4,A175,A229,HAHA
          .= c.(m1+k) by A229 .= fc.(SR.k) by A184,A225,A228,GRFUNC_1:8 .= y by
 A224,A225,FUNCT_1:23;
      hence p in c2 by A223,A226,FUNCT_1:8;
@@ -2827,7 +2856,7 @@ A245:   0<=i & i<len p2 & k=i+1 by A240,Th1;
          (fvs*SR).x = fvs.(m1+k) by A242,A244,FUNCT_1:22 .= vs.(m1+k) by A193
 ,A236,A242,A243,GRFUNC_1:8
         .= vs.(m+i) by A245
-        .= y by A203,A239,A245,Def1;
+        .= y by A203,A239,A245,HAHA;
       hence p in fvs*(Sgm domfvs) by A238,A244,FUNCT_1:8;
      end; assume
 A246:  p in fvs*(Sgm domfvs); then consider x,y being set such that
@@ -2840,7 +2869,7 @@ A251:   1<=k & k<=len p2 by A234,A235,A249,FINSEQ_3:27;
 then A252:   m1+k=SR.k by A4,A201,A204,A233,Th5;  0+1<=k by A249,FINSEQ_3:27;
      then consider i being Nat such that
 A253:   0<=i & i<len p2 & k=i+1 by A251,Th1;
-        p2.k = vs.(m1+1+i) by A203,A253,Def1
+        p2.k = vs.(m1+1+i) by A203,A253,HAHA
         .= vs.(m1+k) by A253 .= fvs.(SR.k) by A193,A249,A252,GRFUNC_1:8 .= y
 by A248,A249,FUNCT_1:23
 ;
@@ -2910,7 +2939,7 @@ hence p in vs by A276,A278,A279,FUNCT_1:8;
   end;
   then reconsider fvs as FinSubsequence of vs by Def5;
   take fvs; take c' = c1; take p1 = pp;
-        len c1+1=n1+1 by A7,A256,A257,Def1;
+        len c1+1=n1+1 by A7,A256,A257,HAHA;
 then A280: len c1 = n1+1-1 .= n - 1 by A6,BINARITH:def 3;
   hence
    len c' < len c by A256;
@@ -2945,7 +2974,7 @@ FINSEQ_3:27;
 A292:   0<=i & i<n1 & k=i+1 by A7,A280,A287,Th1;
          (fc*SL).x = fc.k by A289,A291,FUNCT_1:22 .= c.(1+i) by A262,A265,A290
 ,A292,GRFUNC_1:8
-        .= y by A7,A256,A257,A280,A286,A292,Def1;
+        .= y by A7,A256,A257,A280,A286,A292,HAHA;
       hence p in fc*(Sgm domfc) by A285,A291,FUNCT_1:8;
      end; assume
 A293:  p in fc*(Sgm domfc); then consider x,y being set such that
@@ -2961,7 +2990,7 @@ A300:   k=SL.k by A282,A283,A297,A298,FINSEQ_2:56;
 A301: k in dom c1 by A7,A280,A298,FINSEQ_3:27;  0+1<=k by A298;
      then consider i being Nat such that
 A302: 0<=i & i<n1 & k=i+1 by A298,Th1;
-       c1.k = c.k by A7,A256,A257,A280,A302,Def1
+       c1.k = c.k by A7,A256,A257,A280,A302,HAHA
          .= y by A265,A295,A296,A298,A299,A300,GRFUNC_1:8;
      hence p in c1 by A294,A298,A301,FUNCT_1:8;
     end; then c1 = fc*(Sgm domfc) by TARSKI:2;
@@ -3134,9 +3163,8 @@ then A12: v1=vs.m & v2=vs.(m+1) & v1'=vs.n & v2'=vs.(n+1)
  end;
  suppose
 A14: v1=v2' & v2=v1';
-then A15: m=1 & n+1=len vs by A3,A9,A12;  m+1<=n by A2,NAT_1:38;
-     then m+1 < n or m+1=n by REAL_1:def 5;
- hence contradiction by A1,A3,A4,A7,A12,A14,A15;
+then A15: m=1 & n+1=len vs by A3,A9,A12;
+ thus contradiction by A1,A3,A4,A7,A12,A14,A15;
 end;
 end;
 
@@ -3213,11 +3241,8 @@ registration let G;
  cluster empty -> oriented Chain of G;
  correctness proof let p be Chain of G; assume A1: p is empty;
        for n st 1<=n & n < len p holds
-       (the Source of G).(p.(n+1)) = (the Target of G).(p.n) proof
-    let n; assume 1<=n & n<=len p;
-     then 1<=len p by XREAL_1:2; then 1<=0 by A1,FINSEQ_1:25;
-    hence thesis;
-   end;
+       (the Source of G).(p.(n+1)) = (the Target of G).(p.n)
+         by A1,FINSEQ_1:25;
    hence thesis by GRAPH_1:def 12;
   end;
 end;

@@ -28,31 +28,31 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="32"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
-<Adjective nr="39"/>
+<Adjective nr="36"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="34"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="35"/>
-<Adjective nr="39"/>
+<Adjective nr="36"/>
+<Adjective nr="40"/>
 </Cluster>
 <Typ kind="G" nr="3">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
-<Adjective nr="38"/>
+<Adjective nr="36"/>
+<Adjective nr="39"/>
 </Cluster>
 </CCluster>
 </Registrations>

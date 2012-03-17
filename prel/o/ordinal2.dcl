@@ -20,10 +20,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="6"/>
 <Adjective nr="7"/>
 <Adjective nr="8"/>
 <Adjective nr="9"/>
+<Adjective nr="10"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -34,18 +34,18 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="10"/>
-<Adjective nr="17"/>
+<Adjective nr="11"/>
+<Adjective nr="18"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="70"/>
 <Cluster>
-<Adjective nr="6"/>
 <Adjective nr="7"/>
 <Adjective nr="8"/>
-<Adjective nr="12" value="false"/>
+<Adjective nr="9"/>
+<Adjective nr="13" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -54,13 +54,13 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="10"/>
-<Adjective nr="17"/>
+<Adjective nr="11"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="8"/>
+<Adjective nr="9"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -71,7 +71,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="17"/>
+<Adjective nr="18"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -80,13 +80,13 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="10"/>
-<Adjective nr="17"/>
+<Adjective nr="11"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="8"/>
+<Adjective nr="9"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -95,9 +95,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="6"/>
 <Adjective nr="7"/>
 <Adjective nr="8"/>
+<Adjective nr="9"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -107,7 +107,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="8"/>
+<Adjective nr="9"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -118,14 +118,14 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="17"/>
+<Adjective nr="18"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="8"/>
+<Adjective nr="9"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -135,7 +135,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="18"/>
 </Cluster>
 </CCluster>
 </Registrations>

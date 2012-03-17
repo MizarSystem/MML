@@ -505,7 +505,7 @@ A6:   dom g = Y & dom h = Y;
   hence thesis by A2,FUNCT_1:33;
  end;
 
-theorem Th33:
+theorem Th23:
   for f being Relation of X,Y holds
     (id X)*f = f & f*(id Y) = f
  proof let f be Relation of X,Y;
@@ -990,7 +990,7 @@ theorem Th73:
  end;
 
 theorem
-  for f being Relation of X,X holds f*(id X) = f & (id X)*f = f by Th33;
+  for f being Relation of X,X holds f*(id X) = f & (id X)*f = f by Th23;
 
 theorem
   for f,g being Function of X,X st g*f = f & rng f = X holds g = id X
@@ -1275,143 +1275,7 @@ A3:   y = f.x by Th115;
     thus thesis by A2,A3;
  end;
 
-canceled;
-
-theorem Th118:
-  for f1,f2 being Function of [:X,Y:],Z
-     st for x,y st x in X & y in Y holds f1.[x,y] = f2.[x,y]
-    holds f1 = f2
- proof let f1,f2 be Function of [:X,Y:],Z such that
-A1:   for x,y st x in X & y in Y holds f1.[x,y] = f2.[x,y];
-      for z st z in [:X,Y:] holds f1.z = f2.z
-    proof let z;
-     assume z in [:X,Y:];
-     then ex x,y st x in X & y in Y & z = [x,y] by ZFMISC_1:def 2;
-     hence thesis by A1;
-    end;
-   hence thesis by Th18;
- end;
-
-theorem
-  for f being Function of [:X,Y:],Z st x in X & y in Y & Z <> {}
-    holds f.[x,y] in Z
- proof let f be Function of [:X,Y:],Z;
-   assume x in X & y in Y;
-   then [x,y] in [:X,Y:] by ZFMISC_1:106;
-   hence thesis by Th7;
- end;
-
-scheme FuncEx2{X, Y, Z() -> set, P[set,set,set]}:
- ex f being Function of [:X(),Y():],Z() st
-   for x,y st x in X() & y in Y() holds P[x,y,f.[x,y]]
-provided
-A1: for x,y st x in X() & y in Y() ex z st z in Z() & P[x,y,z]
-proof
-   defpred R[set,set] means
-   for x1,y1 st $1 = [x1,y1] holds P[x1,y1,$2];
-A2: for x st x in [:X(),Y():] ex z st z in Z() & R[x,z]
-     proof let x;
-      assume x in [:X(),Y():];
-      then consider x1,y1 such that
-A3:     x1 in X() & y1 in Y() and
-A4:     x = [x1,y1] by ZFMISC_1:def 2;
-      consider z such that
-A5:     z in Z() and
-A6:     P[x1,y1,z] by A1,A3;
-      take z;
-      thus z in Z() by A5;
-      let x2,y2;
-      assume x = [x2,y2];
-      then x1 = x2 & y1 = y2 by A4,ZFMISC_1:33;
-      hence thesis by A6;
-     end;
-   consider f being Function of [:X(),Y():],Z() such that
-A7:  for x st x in [:X(),Y():] holds R[x,f.x] from FuncEx1(A2);
-   take f;
-   let x,y;
-   assume x in X() & y in Y();
-   then [x,y] in [:X(),Y():] by ZFMISC_1:def 2;
-   hence thesis by A7;
- end;
-
-scheme Lambda2{X, Y, Z() -> set, F(set,set)->set}:
- ex f being Function of [:X(),Y():],Z()
-  st for x,y st x in X() & y in Y() holds f.[x,y] = F(x,y)
-provided
-A1: for x,y st x in X() & y in Y() holds F(x,y) in Z()
-proof
-    defpred P[set,set,set] means $3 = F($1,$2);
-A2: for x,y st x in X() & y in Y() ex z st z in Z() & P[x,y,z]
-     proof let x,y such that
-A3:     x in X() & y in Y();
-      take F(x,y);
-      thus thesis by A1,A3;
-     end;
-   thus ex f being Function of [:X(),Y():],Z() st
-   for x,y st x in X() & y in Y() holds P[x,y,f.[x,y]] from FuncEx2(A2);
-  end;
-
-theorem
-  for f1,f2 being Function of [:X,Y:],Z
-     st for x being Element of X, y being Element of Y
-       holds f1.[x,y] = f2.[x,y]
-    holds f1 = f2
- proof let f1,f2 be Function of [:X,Y:],Z; assume
-     for x being Element of X, y being Element of Y
-      holds f1.[x,y] = f2.[x,y];
-   then for x,y st x in X & y in Y holds f1.[x,y] = f2.[x,y];
-   hence thesis by Th118;
- end;
-
-scheme FuncEx2D{X, Y, Z() -> non empty set, P[set,set,set]}:
- ex f being Function of [:X(),Y():],Z() st
-   for x being Element of X() for y being Element of Y() holds P[x,y,f.[x,y]]
-provided
-A1: for x being Element of X() for y being Element of Y()
-      ex z being Element of Z() st P[x,y,z]
-proof
-  defpred R[set,set] means
-    for x being (Element of X()),y being Element of Y()
-       st $1 = [x,y] holds P[x,y,$2];
-A2: for p being Element of [:X(),Y():]
-      ex z being Element of Z() st R[p,z]
-     proof let p be Element of [:X(),Y():];
-      consider x1 ,y1 such that
-A3:     x1 in X() and
-A4:     y1 in Y() and
-A5:     p = [x1,y1] by ZFMISC_1:def 2;
-      reconsider x1 as Element of X() by A3;
-      reconsider y1 as Element of Y() by A4;
-      consider z being Element of Z() such that
-A6:   P[x1,y1,z] by A1;
-      take z;
-      let x be Element of X(),y be Element of Y();
-      assume p = [x,y];
-      then x1 = x & y1 = y by A5,ZFMISC_1:33;
-      hence P[x,y,z] by A6;
-     end;
-  consider f being Function of [:X(),Y():],Z() such that
-A7:   for p being Element of [:X(),Y():] holds R[p,f.p] from FuncExD(A2);
-  take f;
-  let x be Element of X(); let y be Element of Y();
-  reconsider xy = [x,y] as Element of [:X(),Y():] by ZFMISC_1:def 2;
-     P[x,y,f.xy] by A7;
-  hence thesis;
- end;
-
-scheme Lambda2D{X, Y, Z() -> non empty set,
-                F(Element of X(),Element of Y()) -> Element of Z()}:
- ex f being Function of [:X(),Y():],Z()
-  st for x being Element of X() for y being Element of Y() holds f.[x,y]=F(x,y)
-
-proof
-   defpred P[Element of X(),Element of Y(),set] means $3 = F($1,$2);
-A1: for x being Element of X() for y being Element of Y()
-      ex z being Element of Z() st P[x,y,z];
-   thus ex f being Function of [:X(),Y():],Z()
-  st for x being Element of X() for y being Element of Y() holds
-    P[x,y,f.[x,y]] from FuncEx2D(A1);
-  end;
+canceled 4;
 
 begin :: PARTFUN1
 

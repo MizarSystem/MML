@@ -65,10 +65,32 @@ definition
 existence by Th2;
 end;
 
+definition
+   let R be Relation;
+   let A be set;
+   func R||A equals
+    R | [:A,A:];
+ coherence;
+end;
+
+registration
+   let R be Relation;
+   let A be set;
+ cluster R||A -> Relation-like;
+ coherence;
+end;
+
+registration
+   let R be Function;
+   let A be set;
+ cluster R||A -> Function-like;
+ coherence;
+end;
+
 theorem Th3:
    for X being set,
        F being BinOp of X,
-       A being Preserv of F holds F|([:A,A:]) is BinOp of A
+       A being Preserv of F holds F||A is BinOp of A
 proof
    let X be set,
        F be BinOp of X,
@@ -76,13 +98,13 @@ proof
        X={} implies [:X,X:]={} by ZFMISC_1:113;
    then A1: dom F = [:X,X:] & rng F c= X by FUNCT_2:def 1,RELSET_1:12;
        [:A,A:] c= [:X,X:] by ZFMISC_1:119;
-   then A2: dom (F|([:A,A:])) = [:A,A:] by A1,RELAT_1:91;
-      for x being set holds x in [:A,A:] implies F|([:A,A:]).x in A
+   then A2: dom (F||A) = [:A,A:] by A1,RELAT_1:91;
+      for x being set holds x in [:A,A:] implies F||A.x in A
        proof
            let x be set;
            assume
        A3:x in [:A,A:];
-       then F|([:A,A:]).x=F.x by A2,FUNCT_1:70;
+       then F||A.x=F.x by A2,FUNCT_1:70;
            hence thesis by A3,Def2;
        end;
        hence thesis by A2,FUNCT_2:5;
@@ -92,9 +114,9 @@ definition
    let X be set;
    let F be BinOp of X;
    let A be Preserv of F;
-   func F||A -> BinOp of A equals
-    F | [:A,A:];
-coherence by Th3;
+  redefine
+   func F||A -> BinOp of A;
+ coherence by Th3;
 end;
 
 definition
@@ -197,7 +219,7 @@ definition
    let x be Element of X;
    pred F is_Bin_Op_Preserv x means
         (X\{x} is Preserv of F) &
-          F|[:X\{x},X\{x}:] is BinOp of X\{x};
+          F||X\{x} is BinOp of X\{x};
 correctness;
 end;
 
@@ -234,7 +256,7 @@ theorem Th9:
    for X being set,
        A being Subset of X,
        F being Presv of X,A holds
-   F|([:A,A:]) is BinOp of A
+   F||A is BinOp of A
 proof
    let X be set;
    let A be Subset of X;
@@ -242,13 +264,13 @@ proof
        X={} implies [:X,X:]={} by ZFMISC_1:113;
    then A1: dom F = [:X,X:] & rng F c= X by FUNCT_2:def 1,RELSET_1:12;
        [:A,A:] c= [:X,X:] by ZFMISC_1:119;
-   then A2: dom (F|([:A,A:])) = [:A,A:] by A1,RELAT_1:91;
-      for x being set holds x in [:A,A:] implies F|([:A,A:]).x in A
+   then A2: dom (F||A) = [:A,A:] by A1,RELAT_1:91;
+      for x being set holds x in [:A,A:] implies F||A.x in A
    proof
        let x be set;
        assume
     A3:x in [:A,A:];
-       then F|([:A,A:]).x=F.x by A2,FUNCT_1:70;
+       then F||A.x=F.x by A2,FUNCT_1:70;
        hence thesis by A3,Def6;
    end;
    hence thesis by A2,FUNCT_2:5;
@@ -259,7 +281,7 @@ definition
    let A be Subset of X;
    let F be Presv of X,A;
    func F|||A -> BinOp of A equals
-     F | [:A,A:];
+    F||A;
 coherence by Th9;
 end;
 
@@ -291,7 +313,7 @@ theorem Th11:
    for A being non trivial set holds
    for x being Element of A holds
    for F being DnT of x,A holds
-   F|[:A\{x},A\{x}:] is BinOp of A\{x}
+   F||(A\{x}) is BinOp of A\{x}
 proof
    let A be non trivial set;
    let x be Element of A;
@@ -299,15 +321,15 @@ proof
    A1: dom F = [:A,A:] & rng F c= A by FUNCT_2:def 1,RELSET_1:12;
       A\{x} is Subset of A by XBOOLE_1:36;
    then [:A\{x},A\{x}:] c= [:A,A:] by ZFMISC_1:119;
-   then A2: dom(F|[:A\{x},A\{x}:]) = [:A\{x},A\{x}:]
+   then A2: dom(F||(A\{x})) = [:A\{x},A\{x}:]
         by A1,RELAT_1:91;
       for y being set holds y in [:A\{x},A\{x}:] implies
-       F|[:A\{x},A\{x}:].y in A\{x}
+       F||(A\{x}).y in A\{x}
        proof
            let y be set;
            assume
        A3:y in [:A\{x},A\{x}:];
-       then F|[:A\{x},A\{x}:].y=F.y by A2,FUNCT_1:70;
+       then F||(A\{x}).y=F.y by A2,FUNCT_1:70;
            hence thesis by A3,Def8;
        end;
        hence thesis by A2,FUNCT_2:5;
@@ -318,7 +340,7 @@ definition
    let x be Element of A;
    let F be DnT of x,A;
 func F!(A,x) -> BinOp of A\{x} equals
-    F | [:A\{x},A\{x}:];
+    F||(A\{x});
 coherence by Th11;
 end;
 

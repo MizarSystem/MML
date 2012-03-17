@@ -38,8 +38,8 @@ proof
   then k - 1 >= 0 by XREAL_1:50;
   then reconsider K = k - 1 as Nat by INT_1:16;
     K + 1 = k - 0;
-  then (n+1) mod k = k mod k by A2,GR_CY_1:2;
-  hence thesis by GR_CY_1:5;
+  then (n+1) mod k = k mod k by A2,NAT_1:74;
+  hence thesis by NAT_1:77;
   end;
   suppose k=0;
   hence thesis by NAT_1:def 2;
@@ -51,8 +51,8 @@ theorem Th3:
 proof
   assume k <> 0 & n mod k < k - 1;
   then A1:(n mod k) + 1 < k by XREAL_1:22;
-     (n+1) mod k = ((n mod k)+1) mod k by GR_CY_1:2;
-  hence thesis by A1,GR_CY_1:4;
+     (n+1) mod k = ((n mod k)+1) mod k by NAT_1:74;
+  hence thesis by A1,NAT_1:76;
 end;
 
 theorem Th4:
@@ -63,12 +63,12 @@ proof
   suppose A2: n <> 0;
   reconsider k' = k, m' = m, n' = n as Integer;
 A3:m'*n' <> 0 by A1,A2,XCMPLX_1:6;
-     k mod (m*n) = k' mod (m'*n') by SCMFSA9A:5;
-  hence (k mod (m*n)) mod n = (k' mod (m'*n')) mod n' by SCMFSA9A:5
+     k mod (m*n) = k' mod (m'*n') by NEWTON:101;
+  hence (k mod (m*n)) mod n = (k' mod (m'*n')) mod n' by NEWTON:101
             .= (k' - (k' div (m'*n'))*(m'*n')) mod n' by A3,INT_1:def 8
             .= (k' + (-(m'*(k' div m'*n')))*n') mod n'
             .= k' mod n' by EULER_1:13
-            .= k mod n by SCMFSA9A:5;
+            .= k mod n by NEWTON:101;
   end;
   suppose A4: n = 0;
   hence (k mod (m*n)) mod n = 0 by NAT_1:def 2
@@ -119,7 +119,7 @@ proof
   then (T div I1) + n/I1 - (n div I1) < i*I1/I1 by A5,XCMPLX_1:90;
   then A6:(T div I1) + n/I1 - (n div I1) < i by A5,XCMPLX_1:90;
   reconsider n' = n , I'1 = I1 as Integer;
-  A7:n div I1 = n' div I'1 by SCMFSA9A:5
+  A7:n div I1 = n' div I'1 by NEWTON:101
                .= [\n/I1/] by INT_1:def 7;
      [\n/I1/] <= n/I1 by INT_1:def 4;
   then (T div I1) + [\n/I1/] <= (T div I1) + n/I1 by XREAL_1:8;
@@ -188,11 +188,7 @@ definition let k;
 end;
 
 theorem Th9:
-  Radix(n) <> 0
-proof
-     Radix(n) = 2 to_power n;
-  hence thesis by POWER:39;
-end;
+  Radix(n) <> 0 by POWER:39;
 
 Lm1:
   for k be Nat st k >= 2 holds Radix(k) >= 2 + 2
@@ -248,28 +244,26 @@ theorem Th12:
 proof
   let e be set;
   assume A1:e in k-SD;
-     k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1};
-  then consider g being Element of INT such that
-    A3:e = g and
-    A4:g <= Radix(k)-1 and
-    A5:g >= -Radix(k)+1 by A1;
+  consider g being Element of INT such that
+    A2:e = g and
+    A3:g <= Radix(k)-1 and
+    A4:g >= -Radix(k)+1 by A1;
      k < k+1 by NAT_1:38;
   then 2 to_power k < 2 to_power (k+1) by POWER:44;
-  then A7:Radix(k) < Radix(k+1);
+  then A5:Radix(k) < Radix(k+1);
   then Radix(k)-1 < Radix(k+1)-1 by XREAL_1:11;
-  then A8:g <= Radix(k+1)-1 by A4,XREAL_1:2;
-     -Radix(k) > -Radix(k+1) by A7,XREAL_1:26;
+  then A6:g <= Radix(k+1)-1 by A3,XREAL_1:2;
+     -Radix(k) > -Radix(k+1) by A5,XREAL_1:26;
   then -Radix(k)+1 > -Radix(k+1)+1 by XREAL_1:8;
-  then g >= -Radix(k+1)+1 by A5,XREAL_1:2;
-  hence thesis by A3,A8;
+  then g >= -Radix(k+1)+1 by A4,XREAL_1:2;
+  hence thesis by A2,A6;
 end;
 
 theorem Th13:
   e in k-SD implies e is Integer
 proof
   assume A1:e in k-SD;
-     k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1};
-  then consider t be Element of INT such that
+  consider t be Element of INT such that
     A2:e = t and
        t <= Radix(k)-1 & t >= -Radix(k)+1 by A1;
   thus thesis by A2;
@@ -288,8 +282,7 @@ theorem Th15:
   i1 in k-SD implies i1 <= Radix(k)-1 & i1 >= -Radix(k)+1
 proof
   assume A1:i1 in k-SD;
-     k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1};
-  then consider i be Element of INT such that
+  consider i be Element of INT such that
     A2:i = i1 and
     A3:i <= Radix(k)-1 & i >= -Radix(k)+1 by A1;
   thus thesis by A2,A3;
@@ -450,7 +443,7 @@ coherence
     then A5:0 div S = 0 by JORDAN4:5;
     defpred P[Nat] means ($1 mod T) div S is Element of k-SD;
        0 in k-SD by Th16;
-    then A6: P[0] by A3,A5,GR_CY_1:4;
+    then A6: P[0] by A3,A5,NAT_1:76;
     A7:for x being Nat st P[x] holds P[(x+1)]
     proof
       let xx be Nat;
@@ -459,9 +452,9 @@ coherence
       Radix(k)-1 >= 0 by A2,XREAL_1:50;
       then reconsider R = Radix(k)-1 as Nat by INT_1:16;
         per cases;
-        suppose A9:i = 0;
+        suppose A8:i = 0;
           Radix(k) |^ i = Radix(k) to_power i by A1,POWER:46
-                       .= 1 by A9,POWER:29;
+                       .= 1 by A8,POWER:29;
           then ((xx+1) mod T) = (((xx+1)*1) mod 1)
                              .= 0 by NAT_1:63;
           then X = 0 by A4,JORDAN4:5;
@@ -469,11 +462,11 @@ coherence
         end;
         suppose i > 0;
           then X < Radix(k) - 1 + 1 by A1,Th6;
-          then A10:X <= R by NAT_1:38;
- A11:  X is Element of INT by INT_1:def 2;
+          then A9:X <= R by NAT_1:38;
+ A10:  X is Element of INT by INT_1:def 2;
              -1 >= -Radix(k) by A2,XREAL_1:26;
           then 0 >= -Radix(k)+1 by REAL_2:109;
-          then X in k-SD by A10,A11;
+          then X in k-SD by A9,A10;
           hence thesis;
       end;
     end;
@@ -558,12 +551,7 @@ definition let x be Integer, k be Nat;
 end;
 
 theorem
-     SD_Add_Data(0,k) = 0
-proof
-     SD_Add_Data(0,k) = 0 - 0*Radix(k) by Th21
-                  .= 0;
-  hence thesis;
-end;
+     SD_Add_Data(0,k) = 0 by Th21;
 
 theorem Th23:
   k >= 2 & i1 in k-SD & i2 in k-SD implies
@@ -627,7 +615,7 @@ proof
          .= (m mod (Radix(k) |^ 1)) div (Radix(k) |^ 0) by BINARITH:51
          .= (m mod (Radix(k) |^ 1)) div 1 by NEWTON:9
          .= m mod (Radix(k) |^ 1) by NAT_2:6
-         .= m by A1,GR_CY_1:4;
+         .= m by A1,NAT_1:76;
 end;
 
 theorem
@@ -681,7 +669,7 @@ proof
       A12:I -' 1 = u by BINARITH:39;
       then A13:p div R
                  = (p mod (Radix(k) |^ I)) div (Radix(k) |^ (I -'1))
-                                                 by A7,GR_CY_1:4
+                                                 by A7,NAT_1:76
                 .= DigitDC(p,(u+1),k);
 A14:1 <= u+1 & u+1 <= u+1 by NAT_1:37;
       then A15:u+1 in Seg (u+1) by FINSEQ_1:3;
@@ -806,7 +794,7 @@ proof
      DigA(DecSD(m,(n+1),k),n+1)
     = DigitDC(m,n+1,k) by A2,Def9
    .= (m mod (Radix(k) |^ (n+1))) div (Radix(k) |^ ((n+1) -'1))
-   .= m div (Radix(k) |^ ((n+1) -'1)) by A3,GR_CY_1:4
+   .= m div (Radix(k) |^ ((n+1) -'1)) by A3,NAT_1:76
    .= m div (Radix(k) |^ n) by BINARITH:39;
   hence thesis;
 end;
@@ -824,14 +812,14 @@ coherence
   proof
     set SDD = SD_Add_Data(DigA(x,i)+DigA(y,i),k);
     set SDC = SD_Add_Carry(DigA(x,i -'1)+DigA(y,i -'1));
-    A3:DigA(x,i) is Element of k-SD by A1,Th19;
+    A2:DigA(x,i) is Element of k-SD by A1,Th19;
        DigA(y,i) is Element of k-SD by A1,Th19;
-    then A4:-Radix(k)+2 <= SDD & SDD <= Radix(k)-2 by A1,A3,Th23;
-A5: SDD + SDC is Element of INT by INT_1:def 2;
+    then A3:-Radix(k)+2 <= SDD & SDD <= Radix(k)-2 by A1,A2,Th23;
+A4: SDD + SDC is Element of INT by INT_1:def 2;
        -1 <= SDC & SDC <= 1 by Lm2;
     then -Radix(k)+2 +(-1) <= SDD + SDC & SDD + SDC <= Radix(k)-2 + 1
-                                                            by A4,XREAL_1:9;
-    then SDD + SDC in k-SD by A5;
+                                                            by A3,XREAL_1:9;
+    then SDD + SDC in k-SD by A4;
     hence thesis;
   end;
 end;
@@ -931,8 +919,7 @@ A1:P[1]
          = SD_Add_Data(x + y,k) by Th28;
     A4:SD_Add_Carry(DigA(DecSD(x,1,k),1)+DigA(DecSD(y,1,k),1))
          = SD_Add_Carry(x+y) by A2,Th26;
-       SD_Add_Data(x + y,k) = x + y - SD_Add_Carry(x+y)*Radix(k);
-    then SD_Add_Data(x + y,k) + SD_Add_Carry(x+y)*Radix(k)
+    SD_Add_Data(x + y,k) + SD_Add_Carry(x+y)*Radix(k)
            = x + y - 0;
     hence thesis by A3,A4,NEWTON:10;
   end;
@@ -964,67 +951,67 @@ A1:P[1]
 
        xn < Radix(k) |^ n & yn < Radix(k) |^ n by A11,NAT_1:46;
     then A13:xn is_represented_by n,k & yn is_represented_by n,k by Def12;
-    A15:DigitSD(z) = DigitSD(zn)^<*SubDigit(z,n+1,k)*>
+    A14:DigitSD(z) = DigitSD(zn)^<*SubDigit(z,n+1,k)*>
     proof
-      A16:len DigitSD(z) = n+1 by FINSEQ_2:109;
-      A17:len DigitSD(zn) = n by FINSEQ_2:109;
-      A18:len <*SubDigit(z,n+1,k)*> = 1 by FINSEQ_1:56;
+      A15:len DigitSD(z) = n+1 by FINSEQ_2:109;
+      A16:len DigitSD(zn) = n by FINSEQ_2:109;
+      A17:len <*SubDigit(z,n+1,k)*> = 1 by FINSEQ_1:56;
          len (DigitSD(zn)^<*SubDigit(z,n+1,k)*>)
          = len DigitSD(zn) + len <*SubDigit(z,n+1,k)*> by FINSEQ_1:35
-        .= n+1 by A18,FINSEQ_2:109;
-      then A19:len DigitSD(z) = len (DigitSD(zn)^<*SubDigit(z,n+1,k)*>)
+        .= n+1 by A17,FINSEQ_2:109;
+      then A18:len DigitSD(z) = len (DigitSD(zn)^<*SubDigit(z,n+1,k)*>)
                                                             by FINSEQ_2:109;
 
          for i st 1 <= i & i <= len DigitSD(z) holds
          (DigitSD(z)).i = ((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).i
       proof
         let i;
-        assume A20:1 <= i & i <= len DigitSD(z);
-        then A21:i <= n+1 by FINSEQ_2:109;
-        then A22:i in Seg (n+1) by A20,FINSEQ_1:3;
-then A23:      i in dom DigitSD(z) by A16,FINSEQ_1:def 3;
-        A24:i -'1 = i - 1 by A20,BINARITH:50;
-        per cases by A22,FINSEQ_2:8;
-        suppose A25:i in Seg n;
-          then A26:i in dom DigitSD(zn) by A17,FINSEQ_1:def 3;
-          then A27:((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).i
+        assume A19:1 <= i & i <= len DigitSD(z);
+        then A20:i <= n+1 by FINSEQ_2:109;
+        then A21:i in Seg (n+1) by A19,FINSEQ_1:3;
+then A22:      i in dom DigitSD(z) by A15,FINSEQ_1:def 3;
+        A23:i -'1 = i - 1 by A19,BINARITH:50;
+        per cases by A21,FINSEQ_2:8;
+        suppose A24:i in Seg n;
+          then A25:i in dom DigitSD(zn) by A16,FINSEQ_1:def 3;
+          then A26:((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).i
              = DigitSD(zn).i by FINSEQ_1:def 7
-            .= (DigitSD(zn))/.i by A26,FINSEQ_4:def 4
-            .= SubDigit(zn,i,k) by A25,Def6
+            .= (DigitSD(zn))/.i by A25,FINSEQ_4:def 4
+            .= SubDigit(zn,i,k) by A24,Def6
             .= (Radix(k) |^ (i -'1))*DigB(zn,i)
             .= (Radix(k) |^ (i -'1))*DigA(zn,i)
             .= (Radix(k) |^ (i -'1))
-                *Add(DecSD(xn,n,k),DecSD(yn,n,k),i,k) by A25,Def14
+                *Add(DecSD(xn,n,k),DecSD(yn,n,k),i,k) by A24,Def14
             .= (Radix(k) |^ (i -'1))
                *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
                + DigA(DecSD(yn,n,k),i),k)
                + SD_Add_Carry(DigA(DecSD(xn,n,k),i -'1)
-               + DigA(DecSD(yn,n,k),i -'1))) by A9,A25,Def13;
-          A28:DigitSD(z).i
-             = (DigitSD(z))/.i by A23,FINSEQ_4:def 4
-            .= SubDigit(z,i,k) by A22,Def6
+               + DigA(DecSD(yn,n,k),i -'1))) by A9,A24,Def13;
+          A27:DigitSD(z).i
+             = (DigitSD(z))/.i by A22,FINSEQ_4:def 4
+            .= SubDigit(z,i,k) by A21,Def6
             .= (Radix(k) |^ (i -'1))*DigB(z,i)
             .= (Radix(k) |^ (i -'1))*DigA(z,i)
             .= (Radix(k) |^ (i -'1))
-                *Add(DecSD(x,(n+1),k),DecSD(y,(n+1),k),i,k) by A22,Def14
+                *Add(DecSD(x,(n+1),k),DecSD(y,(n+1),k),i,k) by A21,Def14
             .= (Radix(k) |^ (i -'1))
                *(SD_Add_Data(DigA(DecSD(x,(n+1),k),i)
                + DigA(DecSD(y,(n+1),k),i),k)
                + SD_Add_Carry(DigA(DecSD(x,(n+1),k),i -'1)
-               + DigA(DecSD(y,(n+1),k),i -'1))) by A9,A22,Def13;
-             now per cases by A20,XREAL_1:1;
-            suppose A29:i = 1;
-              then A30:((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).i
+               + DigA(DecSD(y,(n+1),k),i -'1))) by A9,A21,Def13;
+             now per cases by A19,XREAL_1:1;
+            suppose A28:i = 1;
+              then A29:((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).i
                 = (Radix(k) |^ (i -'1))
                   *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
                   + DigA(DecSD(yn,n,k),i),k)
                   + SD_Add_Carry(DigA(DecSD(xn,n,k),i -'1)
-                  + DigA(DecSD(yn,n,k),0))) by A27,BINARITH:51
+                  + DigA(DecSD(yn,n,k),0))) by A26,BINARITH:51
                .= (Radix(k) |^ (i -'1))
                   *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
                   + DigA(DecSD(yn,n,k),i),k)
                   + SD_Add_Carry(DigA(DecSD(xn,n,k),0)
-                  + DigA(DecSD(yn,n,k),0))) by A29,BINARITH:51
+                  + DigA(DecSD(yn,n,k),0))) by A28,BINARITH:51
                .= (Radix(k) |^ (i -'1))
                   *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
                   + DigA(DecSD(yn,n,k),i),k)
@@ -1038,12 +1025,12 @@ then A23:      i in dom DigitSD(z) by A16,FINSEQ_1:def 3;
                   *(SD_Add_Data(DigA(DecSD(x,(n+1),k),i)
                   + DigA(DecSD(y,(n+1),k),i),k)
                   + SD_Add_Carry(DigA(DecSD(x,(n+1),k),i -'1)
-                  + DigA(DecSD(y,(n+1),k),0))) by A28,A29,BINARITH:51
+                  + DigA(DecSD(y,(n+1),k),0))) by A27,A28,BINARITH:51
                .= (Radix(k) |^ (i -'1))
                   *(SD_Add_Data(DigA(DecSD(x,(n+1),k),i)
                   + DigA(DecSD(y,(n+1),k),i),k)
                   + SD_Add_Carry(DigA(DecSD(x,(n+1),k),0)
-                  + DigA(DecSD(y,(n+1),k),0))) by A29,BINARITH:51
+                  + DigA(DecSD(y,(n+1),k),0))) by A28,BINARITH:51
                .= (Radix(k) |^ (i -'1))
                   *(SD_Add_Data(DigA(DecSD(x,(n+1),k),i)
                   + DigA(DecSD(y,(n+1),k),i),k)
@@ -1054,62 +1041,62 @@ then A23:      i in dom DigitSD(z) by A16,FINSEQ_1:def 3;
                   + DigA(DecSD(y,(n+1),k),i),k)+0) by Def3,Th21
                .= (Radix(k) |^ (i -'1))
                   *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
-                  + DigA(DecSD(y,(n+1),k),i),k)) by A25,Lm3
+                  + DigA(DecSD(y,(n+1),k),i),k)) by A24,Lm3
                .= (Radix(k) |^ (i -'1))
                   *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
-                  + DigA(DecSD(yn,n,k),i),k)) by A25,Lm3;
-            hence thesis by A30;
+                  + DigA(DecSD(yn,n,k),i),k)) by A24,Lm3;
+            hence thesis by A29;
             end;
             suppose i > 1;
-              then A31:i -'1 >= 1 by JORDAN3:12;
-                 i - 1 <= n by A21,XREAL_1:22;
-              then A32:i -'1 in Seg n by A24,A31,FINSEQ_1:3;
+              then A30:i -'1 >= 1 by JORDAN3:12;
+                 i - 1 <= n by A20,XREAL_1:22;
+              then A31:i -'1 in Seg n by A23,A30,FINSEQ_1:3;
                  DigitSD(z).i
                = (Radix(k) |^ (i -'1))
                   *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
                   + DigA(DecSD(y,(n+1),k),i),k)
                   + SD_Add_Carry(DigA(DecSD(x,(n+1),k),i -'1)
-                  + DigA(DecSD(y,(n+1),k),i -'1))) by A25,A28,Lm3
+                  + DigA(DecSD(y,(n+1),k),i -'1))) by A24,A27,Lm3
                .= (Radix(k) |^ (i -'1))
                   *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
                   + DigA(DecSD(yn,n,k),i),k)
                   + SD_Add_Carry(DigA(DecSD(x,(n+1),k),i -'1)
-                  + DigA(DecSD(y,(n+1),k),i -'1))) by A25,Lm3
+                  + DigA(DecSD(y,(n+1),k),i -'1))) by A24,Lm3
                .= (Radix(k) |^ (i -'1))
                   *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
                   + DigA(DecSD(yn,n,k),i),k)
                   + SD_Add_Carry(DigA(DecSD(xn,n,k),i -'1)
-                  + DigA(DecSD(y,(n+1),k),i -'1))) by A32,Lm3
+                  + DigA(DecSD(y,(n+1),k),i -'1))) by A31,Lm3
                .= (Radix(k) |^ (i -'1))
                   *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
                   + DigA(DecSD(yn,n,k),i),k)
                   + SD_Add_Carry(DigA(DecSD(xn,n,k),i -'1)
-                  + DigA(DecSD(yn,n,k),i -'1))) by A32,Lm3;
-            hence thesis by A27;
+                  + DigA(DecSD(yn,n,k),i -'1))) by A31,Lm3;
+            hence thesis by A26;
           end;
           end;
         hence thesis;
         end;
-        suppose A33:i = n+1;
+        suppose A32:i = n+1;
           then ((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).i
          = ((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).((len (DigitSD(zn)))+1)
                                                      by FINSEQ_2:109
         .= SubDigit(z,n+1,k) by FINSEQ_1:59
         .= (DigitSD(z))/.(n+1) by A8,Def6
-        .= DigitSD(z).(n+1) by A23,A33,FINSEQ_4:def 4;
-        hence thesis by A33;
+        .= DigitSD(z).(n+1) by A22,A32,FINSEQ_4:def 4;
+        hence thesis by A32;
       end;
       end;
-      hence thesis by A19,FINSEQ_1:18;
+      hence thesis by A18,FINSEQ_1:18;
     end;
 
-    A34:DigitSD(zn) is FinSequence of INT;
-    A35:SubDigit(z,n+1,k) = (Radix(k) |^ ((n+1)-'1))*DigB(z,(n+1))
+    A33:DigitSD(zn) is FinSequence of INT;
+    A34:SubDigit(z,n+1,k) = (Radix(k) |^ ((n+1)-'1))*DigB(z,(n+1))
                         .= (Radix(k) |^ n)*DigB(z,(n+1)) by BINARITH:39;
 
        SDDec(z)
-      = Sum(DigitSD(zn)^<*SubDigit(z,n+1,k)*>) by A15
-  .= (Radix(k) |^ n)*DigB(z,(n+1)) + Sum DigitSD(zn) by A34,A35,RVSUM_1:104
+      = Sum(DigitSD(zn)^<*SubDigit(z,n+1,k)*>) by A14
+  .= (Radix(k) |^ n)*DigB(z,(n+1)) + Sum DigitSD(zn) by A33,A34,RVSUM_1:104
      .= DigA(z,(n+1))*(Radix(k) |^ n) + Sum DigitSD(zn)
      .= Add(DecSD(x,(n+1),k),DecSD(y,(n+1),k),(n+1),k)*(Radix(k) |^ n)
         + Sum DigitSD(zn) by A8,Def14

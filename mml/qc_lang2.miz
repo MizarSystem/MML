@@ -25,12 +25,7 @@ begin
          p,q,p1,p2,q1 for Element of QC-WFF;
 
 theorem
- Th1: 'not' p = 'not' q implies p = q
-  proof assume
-A1:  'not' p = 'not' q;
-       'not' p = <*[1,0]*>^@p & 'not' q = <*[1,0]*>^@q & p = @p & q = @q;
-   hence thesis by A1,FINSEQ_1:46;
-  end;
+ Th1: 'not' p = 'not' q implies p = q by FINSEQ_1:46;
 
 theorem
  Th2: the_argument_of 'not' p = p
@@ -47,12 +42,12 @@ A1:  p '&' q = p1 '&' q1;
      <*[2,0]*>^@p^@q = <*[2,0]*>^(@p^@q) &
       <*[2,0]*>^@p1^@q1 = <*[2,0]*>^(@p1^@q1) by FINSEQ_1:45;
   then @p^@q = @p1^@q1 by A1,FINSEQ_1:46;
-then A4:  (len @p <= len @p1 or len @p1 <= len @p) &
+then A2:  (len @p <= len @p1 or len @p1 <= len @p) &
      (len @p1 <= len @p implies ex sq st @p = @p1^sq) &
       (len @p <= len @p1 implies ex sq st @p1 = @p^sq) by FINSEQ_1:64;
-A5:  (ex sq st @p1 = @p^sq) implies p1 = p by QC_LANG1:37;
-   thus p = p1 by A4,QC_LANG1:37;
-   thus q = q1 by A1,A4,A5,FINSEQ_1:46,QC_LANG1:37;
+A3:  (ex sq st @p1 = @p^sq) implies p1 = p by QC_LANG1:37;
+   thus p = p1 by A2,QC_LANG1:37;
+   thus q = q1 by A1,A2,A3,FINSEQ_1:46,QC_LANG1:37;
   end;
 
 theorem
@@ -78,12 +73,12 @@ theorem
  Th6: All(x,p) = All(y,q) implies x = y & p = q
   proof assume
 A1:  All(x,p) = All(y,q);
-A3:    <*[3,0]*>^<*x*>^@p = <*[3,0]*>^(<*x*>^@p) &
+A2:    <*[3,0]*>^<*x*>^@p = <*[3,0]*>^(<*x*>^@p) &
      <*[3,0]*>^<*y*>^@q = <*[3,0]*>^(<*y*>^@q) by FINSEQ_1:45;
-then A4:  <*x*>^@p = <*y*>^@q by A1,FINSEQ_1:46;
-A6:    (<*x*>^@p).1 = x & (<*y*>^@q).1 = y by FINSEQ_1:58;
-   hence x = y by A1,A3,FINSEQ_1:46;
-   thus p = q by A4,A6,FINSEQ_1:46;
+then A3:  <*x*>^@p = <*y*>^@q by A1,FINSEQ_1:46;
+A4:    (<*x*>^@p).1 = x & (<*y*>^@q).1 = y by FINSEQ_1:58;
+   hence x = y by A1,A2,FINSEQ_1:46;
+   thus p = q by A3,A4,FINSEQ_1:46;
   end;
 
 theorem
@@ -132,11 +127,7 @@ theorem
  by Th2,QC_LANG1:def 18;
 
 theorem
-  p 'or' q = 'not' p => q
-  proof
-       'not' p => q = 'not' ('not' p '&' 'not' q);
-   hence thesis;
-  end;
+  p 'or' q = 'not' p => q;
 
 canceled;
 
@@ -144,9 +135,7 @@ theorem
      p 'or' q = p1 'or' q1 implies p = p1 & q = q1
   proof assume
 A1:  p 'or' q = p1 'or' q1;
-       p 'or' q = 'not'('not' p '&' 'not' q) & p1 'or' q1 = 'not'('not' p1 '&'
-'not' q1);
-    then 'not' p '&' 'not' q = 'not' p1 '&' 'not' q1 by A1,Th1;
+    'not' p '&' 'not' q = 'not' p1 '&' 'not' q1 by A1,Th1;
     then 'not' p = 'not' p1 & 'not' q = 'not' q1 by Th3;
    hence thesis by Th1;
   end;
@@ -155,9 +144,7 @@ theorem
  Th17: p => q = p1 => q1 implies p = p1 & q = q1
   proof assume
 A1:  p => q = p1 => q1;
-       p => q = 'not' (p '&' 'not' q) & p1 => q1 = 'not' (p1 '&' 'not'
- q1);
-then A2:  p '&' 'not' q = p1 '&' 'not' q1 by A1,Th1;
+A2:  p '&' 'not' q = p1 '&' 'not' q1 by A1,Th1;
    hence p = p1 by Th3;
        'not' q = 'not' q1 by A2,Th3;
    hence thesis by Th1;
@@ -167,9 +154,7 @@ theorem
      p <=> q = p1 <=> q1 implies p = p1 & q = q1
   proof assume
 A1:  p <=> q = p1 <=> q1;
-       p <=> q = (p => q) '&' (q => p) &
-     p1 <=> q1 = (p1 => q1) '&' (q1 => p1);
-    then p => q = p1 => q1 by A1,Th3;
+    p => q = p1 => q1 by A1,Th3;
    hence thesis by Th17;
   end;
 
@@ -177,9 +162,7 @@ theorem
  Th19: Ex(x,p) = Ex(y,q) implies x = y & p = q
   proof assume
 A1:  Ex(x,p) = Ex(y,q);
-       Ex(x,p) = 'not' All(x,'not' p) & Ex(y,q) = 'not' All(y,'not'
- q);
-    then All(x,'not' p) = All(y,'not' q) by A1,Th1;
+    All(x,'not' p) = All(y,'not' q) by A1,Th1;
     then x = y & 'not' p = 'not' q by Th6;
    hence thesis by Th1;
   end;
@@ -199,46 +182,33 @@ theorem
    All(x1,y1,p1) = All(x2,y2,p2) holds x1 = x2 & y1 = y2 & p1 = p2
   proof let x1,x2,y1,y2 be bound_QC-variable such that
 A1:  All(x1,y1,p1) = All(x2,y2,p2);
-       All(x1,y1,p1) = All(x1,All(y1,p1));
-then A2:  All(x1,All(y1,p1)) = All(x2,All(y2,p2)) by A1;
+A2:  All(x1,All(y1,p1)) = All(x2,All(y2,p2)) by A1;
    hence x1 = x2 by Th6;
        All(y1,p1) = All(y2,p2) by A2,Th6;
    hence thesis by Th6;
   end;
 
 theorem
- Th22: All(x,y,p) = All(z,q) implies x = z & All(y,p) = q
-  proof
-       All(x,y,p) = All(x,All(y,p));
-   hence thesis by Th6;
-  end;
+ Th22: All(x,y,p) = All(z,q) implies x = z & All(y,p) = q by Th6;
 
 theorem
  Th23: for x1,x2,y1,y2 being bound_QC-variable st
    Ex(x1,y1,p1) = Ex(x2,y2,p2) holds x1 = x2 & y1 = y2 & p1 = p2
   proof let x1,x2,y1,y2 be bound_QC-variable such that
 A1:  Ex(x1,y1,p1) = Ex(x2,y2,p2);
-       Ex(x1,y1,p1) = Ex(x1,Ex(y1,p1));
-then A2:  Ex(x1,Ex(y1,p1)) = Ex(x2,Ex(y2,p2)) by A1;
+A2:  Ex(x1,Ex(y1,p1)) = Ex(x2,Ex(y2,p2)) by A1;
    hence x1 = x2 by Th19;
        Ex(y1,p1) = Ex(y2,p2) by A2,Th19;
    hence thesis by Th19;
   end;
 
 theorem
- Th24: Ex(x,y,p) = Ex(z,q) implies x = z & Ex(y,p) = q
-  proof
-       Ex(x,y,p) = Ex(x,Ex(y,p));
-   hence thesis by Th19;
-  end;
+ Th24: Ex(x,y,p) = Ex(z,q) implies x = z & Ex(y,p) = q by Th19;
 
 theorem
     All(x,y,p) is universal &
    bound_in All(x,y,p) = x & the_scope_of All(x,y,p) = All(y,p)
-  proof
-       All(x,y,p) = All(x,All(y,p));
-   hence thesis by Th8,QC_LANG1:def 20;
-  end;
+    by Th8,QC_LANG1:def 20;
 
  definition let x,y,z be bound_QC-variable, p be Element of QC-WFF;
   func All(x,y,z,p) -> QC-formula equals  All(x,All(y,z,p));
@@ -266,19 +236,15 @@ A2:  All(x1,All(y1,z1,p1)) = All(x1,y1,z1,p1)
  reserve s,t for bound_QC-variable;
 
 theorem
-    All(x,y,z,p) = All(t,q) implies x = t & All(y,z,p) = q
-  proof
-       All(x,y,z,p) = All(x,All(y,z,p));
-   hence thesis by Th6;
-  end;
+    All(x,y,z,p) = All(t,q) implies x = t & All(y,z,p) = q by Th6;
 
 theorem
     All(x,y,z,p) = All(t,s,q) implies x = t & y = s & All(z,p) = q
   proof
    assume
-A2:  All(x,y,z,p) = All(t,s,q);
+A1:  All(x,y,z,p) = All(t,s,q);
    hence x = t by Th6;
-       All(y,z,p) = All(s,q) by A2,Th6;
+       All(y,z,p) = All(s,q) by A1,Th6;
    hence thesis by Th22;
   end;
 
@@ -296,29 +262,22 @@ A2:  Ex(x1,Ex(y1,z1,p1)) = Ex(x1,y1,z1,p1)
   end;
 
 theorem
-    Ex(x,y,z,p) = Ex(t,q) implies x = t & Ex(y,z,p) = q
-  proof
-       Ex(x,y,z,p) = Ex(x,Ex(y,z,p));
-   hence thesis by Th19;
-  end;
+    Ex(x,y,z,p) = Ex(t,q) implies x = t & Ex(y,z,p) = q by Th19;
 
 theorem
     Ex(x,y,z,p) = Ex(t,s,q) implies x = t & y = s & Ex(z,p) = q
   proof
    assume
-A2:  Ex(x,y,z,p) = Ex(t,s,q);
+A1:  Ex(x,y,z,p) = Ex(t,s,q);
    hence x = t by Th19;
-       Ex(y,z,p) = Ex(s,q) by A2,Th19;
+       Ex(y,z,p) = Ex(s,q) by A1,Th19;
    hence thesis by Th24;
   end;
 
 theorem
     All(x,y,z,p) is universal &
    bound_in All(x,y,z,p) = x & the_scope_of All(x,y,z,p) = All(y,z,p)
-  proof
-       All(x,y,z,p) = All(x,All(y,z,p));
-   hence thesis by Th8,QC_LANG1:def 20;
-  end;
+    by Th8,QC_LANG1:def 20;
 
  definition let H be Element of QC-WFF;
   attr H is disjunctive
@@ -334,11 +293,7 @@ Def13:  ex x being bound_QC-variable, p being Element of QC-WFF st H = Ex(x,p);
 canceled 4;
 
 theorem
-    Ex(x,y,p) is existential & Ex(x,y,z,p) is existential
-  proof
-       Ex(x,y,p) = Ex(x,Ex(y,p)) & Ex(x,y,z,p) = Ex(x,Ex(y,z,p));
-   hence thesis by Def13;
-  end;
+    Ex(x,y,p) is existential & Ex(x,y,z,p) is existential by Def13;
 
  definition let H be Element of QC-WFF;
   func the_left_disjunct_of H -> QC-formula equals  the_argument_of
@@ -375,8 +330,7 @@ theorem Th45:
  the_left_disjunct_of(F 'or' G) = F & the_right_disjunct_of(F 'or' G) = G &
    the_argument_of F 'or' G = 'not' F '&' 'not' G
   proof
-  F 'or' G = 'not'('not' F '&' 'not' G);
-   hence the_left_disjunct_of(F 'or' G)
+   thus the_left_disjunct_of(F 'or' G)
      = the_argument_of the_left_argument_of the_argument_of
      'not'('not' F '&' 'not' G)
     .= the_argument_of the_left_argument_of ('not' F '&' 'not' G) by Th2
@@ -395,8 +349,7 @@ theorem
  Th46: the_antecedent_of(F => G) = F & the_consequent_of(F => G) = G &
    the_argument_of F => G = F '&' 'not' G
   proof
-  F => G = 'not'(F '&' 'not' G);
-   hence the_antecedent_of(F => G)
+   thus the_antecedent_of(F => G)
      = the_left_argument_of the_argument_of 'not'(F '&' 'not' G)
     .= the_left_argument_of (F '&' 'not' G) by Th2
     .= F by Th5;
@@ -422,10 +375,7 @@ theorem
   end;
 
 theorem
-    the_argument_of Ex(x,H) = All(x,'not' H)
-  proof Ex(x,H) = 'not' All(x,'not' H);
-   hence thesis by Th2;
-  end;
+    the_argument_of Ex(x,H) = All(x,'not' H) by Th2;
 
 theorem
     H is disjunctive implies H is conditional &
@@ -436,12 +386,11 @@ theorem
 A1:  H = F 'or' G;
        F 'or' G = 'not' F => G;
    hence H is conditional by A1,Def11;
-  F 'or' G = 'not'('not' F '&' 'not' G);
-   hence H is negative by A1,QC_LANG1:def 18;
-A3:  the_argument_of H = 'not' F '&' 'not' G by A1,Th2;
+   thus H is negative by A1,QC_LANG1:def 18;
+A2:  the_argument_of H = 'not' F '&' 'not' G by A1,Th2;
    hence the_argument_of H is conjunctive by QC_LANG1:def 19;
        the_left_argument_of the_argument_of H = 'not' F &
-     the_right_argument_of the_argument_of H = 'not' G by A3,Th5;
+     the_right_argument_of the_argument_of H = 'not' G by A2,Th5;
    hence thesis by QC_LANG1:def 18;
   end;
 
@@ -1183,9 +1132,8 @@ theorem
   F is_proper_subformula_of F => G &
    'not' G is_proper_subformula_of F => G &
     G is_proper_subformula_of F => G
-  proof F => G = 'not'(F '&' 'not' G) & F '&' 'not' G is_subformula_of F '&'
-'not' G;
-   hence
+  proof
+   thus
 A1:  F '&' 'not' G is_proper_subformula_of F => G by Th86;
        F is_proper_subformula_of F '&' 'not' G &
      'not' G is_proper_subformula_of F '&' 'not' G by Th89;
@@ -1203,10 +1151,7 @@ theorem
     F is_proper_subformula_of F 'or' G &
      G is_proper_subformula_of F 'or' G
   proof
-      F 'or' G = 'not'('not' F '&' 'not' G) & 'not' F '&' 'not' G
-is_subformula_of
-'not' F '&' 'not' G;
-   hence
+   thus
 A1:  'not' F '&' 'not' G is_proper_subformula_of F 'or' G by Th86;
        'not' F is_proper_subformula_of 'not' F '&' 'not' G &
      'not' G is_proper_subformula_of 'not' F '&' 'not' G by Th89;
@@ -1510,8 +1455,8 @@ A4:    F = a & F is_subformula_of H by Def23;
 theorem Th113:
  Subformulae (F => G) =
    Subformulae F \/ Subformulae G \/ { 'not' G, F '&' 'not' G, F => G }
-  proof F => G = 'not'(F '&' 'not' G);
-   hence Subformulae (F => G)
+  proof
+   thus Subformulae (F => G)
          = Subformulae (F '&' 'not' G) \/ { F => G } by Th110
         .= Subformulae F \/ Subformulae 'not' G \/ {F '&' 'not'
 G} \/ {F => G} by Th111
@@ -1538,8 +1483,8 @@ theorem
     Subformulae (F 'or' G) =
    Subformulae F \/ Subformulae G \/ {'not' G, 'not' F, 'not' F '&' 'not'
 G, F 'or' G}
-  proof F 'or' G = 'not'('not' F '&' 'not' G);
-   hence Subformulae (F 'or' G)
+  proof
+   thus Subformulae (F 'or' G)
          = Subformulae ('not' F '&' 'not' G) \/ { F 'or' G } by Th110
         .= Subformulae 'not' F \/ Subformulae 'not' G \/ {'not' F '&' 'not'
 G} \/ {F 'or' G} by Th111
@@ -1577,8 +1522,7 @@ theorem
   Subformulae F \/ Subformulae G \/
    { 'not' G, F '&' 'not' G, F => G, 'not' F, G '&' 'not' F, G => F, F <=> G }
   proof
-     F <=> G = (F => G) '&' (G => F);
-   hence Subformulae (F <=> G)
+   thus Subformulae (F <=> G)
         = Subformulae(F => G) \/ Subformulae(G => F) \/ {F <=> G} by Th111
        .= Subformulae F \/ Subformulae G \/ { 'not' G, F '&' 'not' G, F => G }
 \/

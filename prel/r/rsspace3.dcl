@@ -19,7 +19,6 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLSUB_1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 <ArticleID name="RSSPACE"/>
@@ -27,46 +26,46 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="145"/>
+<Func kind="K" nr="142"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="145"/>
+<Func kind="K" nr="142"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="36">
-<Func kind="K" nr="138"/>
+<Adjective nr="37">
+<Func kind="K" nr="135"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
 <Func kind="G" nr="4">
-<Func kind="K" nr="145"/>
-<Func kind="K" nr="141">
-<Func kind="K" nr="138"/>
-<Func kind="K" nr="145"/>
+<Func kind="K" nr="142"/>
+<Func kind="K" nr="138">
+<Func kind="K" nr="135"/>
+<Func kind="K" nr="142"/>
 </Func>
-<Func kind="K" nr="139">
-<Func kind="K" nr="138"/>
-<Func kind="K" nr="145"/>
+<Func kind="K" nr="136">
+<Func kind="K" nr="135"/>
+<Func kind="K" nr="142"/>
 </Func>
-<Func kind="K" nr="140">
-<Func kind="K" nr="138"/>
-<Func kind="K" nr="145"/>
+<Func kind="K" nr="137">
+<Func kind="K" nr="135"/>
+<Func kind="K" nr="142"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="30"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -83,7 +82,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="41">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
@@ -100,7 +99,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="41">
 <Func kind="K" nr="52"/>
 <LocusVar nr="1"/>
@@ -117,7 +116,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <LocusVar nr="1"/>
 <Func kind="K" nr="52"/>
 </Adjective>
@@ -134,21 +133,21 @@
 <LocusVar nr="5"/>
 </Func>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="38"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="147"/>
+<Func kind="K" nr="144"/>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="45"/>
+<Adjective nr="35"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 </Registrations>

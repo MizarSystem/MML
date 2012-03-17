@@ -17,7 +17,7 @@ environ
       FINSEQ_1, FUNCOP_1, FUNCT_4, CQC_LANG, STRUCT_0, XBOOLE_0, FUNCT_2,
       ORDINAL2, SETFAM_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FRAENKEL, STRUCT_0, XBOOLE_0;
+ definitions TARSKI, FRAENKEL, STRUCT_0, XBOOLE_0, CQC_LANG;
  theorems ZFMISC_1, FUNCT_2, TARSKI, NAT_1, CQC_LANG, CARD_3, CARD_5, FINSEQ_1,
       FUNCT_4, FUNCOP_1, FRAENKEL, FINSET_1, PARTFUN1, FUNCT_1, GRFUNC_1,
       RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, SETFAM_1;
@@ -30,20 +30,10 @@ begin :: Preliminaries
 canceled;
 
 theorem Th2:
- for a,b being set holds 1 <> [a,b]
- proof let a,b be set;
-A1: 1 = { {} } & [a,b] = {{a,b},{a}} by CARD_5:1;
-  assume 1 = [a,b];
-  hence contradiction by A1,ZFMISC_1:8;
- end;
+ for a,b being set holds 1 <> [a,b] by ZFMISC_1:8, CARD_5:1;
 
 theorem
-    for a,b being set holds 2 <> [a,b]
- proof let a,b be set;
-A1: 2 = { {}, {{}} } & [a,b] = {{a,b},{a}} by CARD_5:1;
-  assume 2 = [a,b];
-  hence contradiction by A1,ZFMISC_1:10;
- end;
+    for a,b being set holds 2 <> [a,b] by ZFMISC_1:10, CARD_5:1;
 
 canceled;
 
@@ -112,7 +102,7 @@ definition let N be set;
   the Instruction-Codes of it = {0} &
   the Instructions of it = {[0,{}]} &
   the Object-Kind of it = (0,1) --> ({1},{[0,{}]}) &
-  the Execution of it = {[0,{}]} --> id product (0,1) --> ({1},{[0,{}]});
+  the Execution of it = [0,{}] .--> id product (0,1) --> ({1},{[0,{}]});
  existence
   proof
     reconsider y = 0 as Element of {0,1}by TARSKI:def 2;
@@ -313,10 +303,10 @@ uniqueness
 A2:  I1 is halting Instruction of S and
 A3:  I2 is halting Instruction of S;
     consider I being Instruction of S such that
-A6:   I is halting &
+A4:   I is halting &
       for J being Instruction of S st J is halting holds I = J by Def9;
-       I = I1 by A2,A6;
-    hence thesis by A3,A6;
+       I = I1 by A2,A4;
+    hence thesis by A3,A4;
    end;
 end;
 
@@ -525,29 +515,22 @@ canceled 2;
 
 theorem Th18:
  for x1,x2,y1,y2 being set holds
-   (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2)
-proof let x1,x2,y1,y2 be set;
-      (x1 .--> y1) = {x1} --> y1 & (x2 .--> y2) = {x2} --> y2 by CQC_LANG:def 2
-;
- hence (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2) by FUNCT_4:def 4;
-end;
+   (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2) by FUNCT_4:def 4;
 
 theorem Th19:
  for x,y holds x .--> y = {[x,y]}
   proof let x,y;
-   thus x .--> y = ({x} --> y) by CQC_LANG:def 2
-     .= [:{x},{y}:] by FUNCOP_1:def 2
+   thus x .--> y = [:{x},{y}:] by FUNCOP_1:def 2
      .= {[x,y]} by ZFMISC_1:35;
   end;
 
 theorem Th20:
  for a,b,c being set holds (a,a) --> (b,c) = a .--> c
  proof let a,b,c be set;
-A1: dom({a} -->c) = {a} by FUNCOP_1:19
+A1: dom(a .-->c) = {a} by FUNCOP_1:19
         .= dom({a} -->b) by FUNCOP_1:19;
-  thus (a,a) --> (b,c) = ({a} --> b) +* ({a} -->c) by FUNCT_4:def 4
-     .= {a} -->c by A1,FUNCT_4:20
-     .= a .--> c by CQC_LANG:def 2;
+  thus (a,a) --> (b,c) = (a .--> b) +* (a .-->c) by FUNCT_4:def 4
+     .= a .--> c by A1,FUNCT_4:20;
  end;
 
 canceled;
@@ -1288,14 +1271,7 @@ theorem
     for S being steady-programmed
   IC-Ins-separated definite (non empty non void AMI-Struct over N)
  for s being State of S, i be Instruction-Location of S
-  holds s.i = (Following s).i
- proof
-  let S be steady-programmed
-   IC-Ins-separated definite (non empty non void AMI-Struct over N);
-  let s be State of S, i be Instruction-Location of S;
-  thus s.i = Exec(CurInstr s,s).i by Def13
-  .= (Following s).i;
- end;
+  holds s.i = (Following s).i by Def13;
 
 definition let N; let S be definite (non empty non void AMI-Struct over N);
  let s be State of S, l be Instruction-Location of S;
@@ -1566,8 +1542,7 @@ proof
     .= {1} by FUNCT_4:66;
   then reconsider a = 1 as Element of ObjectKind la by TARSKI:def 1;
  take la .--> a;
-     0 .--> 1 = ({0} --> 1) by CQC_LANG:def 2
-          .= [:{0},{1}:] by FUNCOP_1:def 2;
+     0 .--> 1 = [:{0},{1}:] by FUNCOP_1:def 2;
  hence la .--> a is non empty;
  let s1,s2 be State of Trivial-AMI N such that
      la .--> a c= s1 & la .--> a c= s2;

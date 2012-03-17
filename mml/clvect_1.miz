@@ -8,17 +8,19 @@ environ
 
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
       ORDINAL2, ARYTM, CLVECT_1, ARYTM_3, SQUARE_1, ABSVALUE, COMPLEX1, SEQ_1,
-      CFUNCT_1, RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2, XCMPLX_0, FUNCOP_1;
+      CFUNCT_1, RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2, XCMPLX_0, FUNCOP_1,
+      REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
       XCMPLX_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
-      BINOP_1, FINSEQ_1, NAT_1, STRUCT_0, PRE_TOPC, RLVECT_1, SQUARE_1,
+      BINOP_1, REALSET1,
+      FINSEQ_1, NAT_1, STRUCT_0, PRE_TOPC, RLVECT_1, SQUARE_1,
       PARTFUN1, SEQ_1, SEQ_2, COMPLEX1, CFUNCT_1, NORMSP_1;
  constructors DOMAIN_1, BINOP_1, REAL_1, NAT_1, SQUARE_1, ARYTM_0, PARTFUN1,
-      COMPLEX1, NORMSP_1, SEQ_2, FUNCOP_1;
+      COMPLEX1, NORMSP_1, SEQ_2, FUNCOP_1, REALSET1;
  registrations RELSET_1, STRUCT_0, XREAL_0, SUBSET_1, NAT_1, MEMBERED,
-      ORDINAL2, RLVECT_1, COMPLEX1, XCMPLX_0;
+      ORDINAL2, RLVECT_1, COMPLEX1, XCMPLX_0, REALSET1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions STRUCT_0, RLVECT_1, TARSKI, XBOOLE_0;
+ definitions STRUCT_0, RLVECT_1, TARSKI, XBOOLE_0,BINOP_1, REALSET1;
  theorems STRUCT_0, TARSKI, RLVECT_1, BINOP_1, COMPLEX1, XCMPLX_0, SQUARE_1,
       FINSEQ_1, NAT_1, FUNCT_1, XBOOLE_0, FUNCT_2, RELAT_1, XBOOLE_1, ZFMISC_1,
       RELSET_1, REAL_1, ABSVALUE, SEQ_2, XREAL_0, FUNCOP_1, XREAL_1;
@@ -68,7 +70,7 @@ Lm1:
    take O;
    deffunc A((Element of ZS), Element of ZS) = O;
    consider F being BinOp of ZS such that
-A1:for x,y being Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 2;
+A1:for x,y being Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 4;
    reconsider G = [:COMPLEX,ZS:] --> O as Function of [:COMPLEX,ZS:],ZS
            by FUNCOP_1:57;
 A2:for a being Element of COMPLEX for x being Element of ZS holds
@@ -82,8 +84,7 @@ A2:for a being Element of COMPLEX for x being Element of ZS holds
    thus for x,y being VECTOR of W holds x + y = y + x
    proof
      let x,y be VECTOR of W;
-       x + y = F.[x,y] & y + x = F.[y,x];
-then A3:  x + y = F.(x,y) & y + x = F.(y,x) by BINOP_1:def 1;
+A3:  x + y = F.(x,y) & y + x = F.(y,x);
      reconsider X = x, Y = y as Element of ZS;
        x + y = A(X,Y) & y + x = A(Y,X) by A1,A3;
      hence thesis;
@@ -92,9 +93,7 @@ then A3:  x + y = F.(x,y) & y + x = F.(y,x) by BINOP_1:def 1;
    thus for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
    proof
      let x,y,z be VECTOR of W;
-       (x + y) + z=F.[x + y,z] & x + (y + z)=F.[x,y + z];
-then A4:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z) by
-BINOP_1:def 1;
+A4:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
      reconsider X = x, Y = y, Z = z as Element of ZS;
        (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1,A4;
      hence thesis;
@@ -105,7 +104,7 @@ BINOP_1:def 1;
      let x be VECTOR of W;
      reconsider X = x as Element of ZS;
        x + 0.W = F.[x,0.W]
-            .= F.(x,0.W) by BINOP_1:def 1
+            .= F.(x,0.W)
             .= A(X,O) by A1;
      hence thesis by TARSKI:def 1;
    end;
@@ -116,7 +115,7 @@ BINOP_1:def 1;
      reconsider y = O as VECTOR of W;
      take y;
      thus x + y = F.[x,y]
-               .= F.(x,y) by BINOP_1:def 1
+               .= F.(x,y)
                .= the Zero of W by A1
                .= 0.W;
    end;
@@ -127,7 +126,7 @@ BINOP_1:def 1;
      let z be Complex; let x,y be VECTOR of W;
      reconsider X = x, Y = y as Element of ZS;
        z * x + z * y = F.[z * x,z * y]
-                  .= F.(z * x,z * y) by BINOP_1:def 1
+                  .= F.(z * x,z * y)
                   .= A(O,O) by A1;
      hence thesis by A2;
    end;
@@ -139,12 +138,12 @@ BINOP_1:def 1;
      let x be VECTOR of W;
      set c = z1 + z2;
      reconsider X = x as Element of ZS;
-A6:  c * x = G.[c,x]
+A5:  c * x = G.[c,x]
           .= O by A2;
        z1 * x + z2 * x = F.[z1 * x,z2 * x]
-                   .= F.(z1 * x,z2 * x) by BINOP_1:def 1
+                   .= F.(z1 * x,z2 * x)
                    .= A(O,O) by A1;
-     hence thesis by A6;
+     hence thesis by A5;
    end;
 
    thus for z1,z2 being Complex for x being VECTOR of W holds
@@ -154,11 +153,11 @@ A6:  c * x = G.[c,x]
      let x be VECTOR of W;
      set c = z1 * z2;
      reconsider X = x as Element of ZS;
-A7:  c * x = G.[c,x]
+A6:  c * x = G.[c,x]
           .= O by A2;
        z1 * (z2 * x) = G.[z1,z2 * x]
                   .= O by A2;
-     hence thesis by A7;
+     hence thesis by A6;
    end;
 
    thus for x being VECTOR of W holds 1r * x = x
@@ -543,13 +542,13 @@ theorem
     Sum<* v,v,v *> = [* 3,0 *] * v
 proof
    reconsider 2r = 2+0*<i> as Element of COMPLEX by XCMPLX_0:def 2;
-C: 2r + 1r = 3+0*<i> by COMPLEX1:def 7;
+A1: 2r + 1r = 3+0*<i> by COMPLEX1:def 7;
    thus Sum<* v,v,v *> = Sum<* v,v *> + v by RLVECT_1:84
                     .= [* 2,0 *] * v + v by Th18
                     .= [* 2,0 *] * v + 1r * v by Def2
                     .= ([* 2,0 *] + 1r) * v by Def2
                     .= (2r + 1r) * v by COMPLEX1:27
-                    .= [* 3,0 *] * v by C,COMPLEX1:27;
+                    .= [* 3,0 *] * v by A1,COMPLEX1:27;
 end;
 
 begin :: Subspace and Cosets of Subspaces in Complex Linear Space
@@ -691,13 +690,13 @@ definition let V;
   mode Subspace of V -> ComplexLinearSpace means :Def4:
     the carrier of it c= the carrier of V &
     the Zero of it = the Zero of V &
-    the add of it = (the add of V) | [:the carrier of it,the carrier of it:] &
+    the add of it = (the add of V)||the carrier of it &
     the Mult of it = (the Mult of V) | [:COMPLEX, the carrier of it:];
 existence
 proof
      the carrier of V c= the carrier of V &
    the Zero of V = the Zero of V &
-   the add of V = (the add of V) | [:the carrier of V,the carrier of V:] &
+   the add of V = (the add of V)||the carrier of V &
    the Mult of V = (the Mult of V) | [:COMPLEX, the carrier of V:]
      by FUNCT_2:40;
    hence thesis;
@@ -737,12 +736,7 @@ proof
 end;
 
 theorem Th31:
-0.W = 0.V
-proof
-   thus 0.W = the Zero of W
-           .= the Zero of V by Def4
-           .= 0.V;
-end;
+0.W = 0.V by Def4;
 
 theorem
   0.W1 = 0.W2
@@ -759,8 +753,7 @@ A1:v = w1 & u = w2;
    reconsider ww1 = w1, ww2 = w2 as VECTOR of V by Th30;
 A2:v + u = (the add of V).[ww1,ww2] by A1;
      w1 + w2 = (the add of W).[w1,w2]
-          .= ((the add of V) | [:the carrier of W, the carrier of W:]).[w1,w2]
-             by Def4;
+          .= ((the add of V)||the carrier of W).[w1,w2] by Def4;
    hence thesis by A2,FUNCT_1:72;
 end;
 
@@ -792,8 +785,7 @@ proof
 A1:w1 = v and
 A2:w2 = u;
 A3:- w2 = - u by A2,Th35;
-     w1 - w2 = w1 + (- w2) & v - u = v + (- u);
-   hence thesis by A1,A3,Th33;
+   thus thesis by A1,A3,Th33;
 end;
 
 Lm5:
@@ -890,32 +882,21 @@ reserve M for Function of [:COMPLEX,D:],D;
 theorem Th44:
 V1 = D &
 d1 = 0.V &
-A = (the add of V) | [:V1,V1:] &
+A = (the add of V)||V1 &
 M = (the Mult of V) | [:COMPLEX,V1:] implies
     CLSStruct (# D,d1,A,M #) is Subspace of V
 proof
    assume that
 A1:V1 = D and
 A2:d1 = 0.V and
-A3:A = (the add of V) | [:V1,V1:] and
+A3:A = (the add of V)||V1 and
 A4:M = (the Mult of V) | [:COMPLEX,V1:];
    set W = CLSStruct (# D,d1,A,M #);
 A5:the Zero of W = the Zero of V by A2;
 A6:for x,y being VECTOR of W holds x + y = (the add of V).[x,y]
-   proof
-     let x,y be VECTOR of W;
-       x + y = ((the add of V) | [:the carrier of W, the carrier of W:]).[x,y]
-       by A1,A3;
-     hence thesis by FUNCT_1:72;
-   end;
+       by A1,A3,FUNCT_1:72;
 A7:for z for x being VECTOR of W holds z * x = (the Mult of V).[z,x]
-   proof
-     let z;
-     let x be VECTOR of W;
-       z * x = ((the Mult of V) | [:COMPLEX, the carrier of W:]).[z,x]
-        by A1,A4;
-     hence thesis by FUNCT_1:72;
-   end;
+        by A1,A4,FUNCT_1:72;
      W is Abelian add-associative right_zeroed right_complementable
         ComplexLinearSpace-like
    proof
@@ -956,15 +937,15 @@ A7:for z for x being VECTOR of W holds z * x = (the Mult of V).[z,x]
      proof
        let x be VECTOR of W;
        reconsider x1 = x as VECTOR of V by A1,TARSKI:def 3;
-       consider v such that A9: x1 + v = 0.V by RLVECT_1:def 8;
-         v = - x1 by A9,RLVECT_1:def 10
+       consider v such that A8: x1 + v = 0.V by RLVECT_1:def 8;
+         v = - x1 by A8,RLVECT_1:def 10
         .= (- 1r) * x1 by Th4
         .= MV.[- 1r,x1]
         .= (- 1r) * x by A7;
        then reconsider y = v as VECTOR of W;
        take y;
        thus x + y = AV.[x1,v] by A6
-                 .= 0.W by A2,A9;
+                 .= 0.W by A2,A8;
      end;
      thus for z for x,y being VECTOR of W holds
             z * (x + y) = z * x + z * y
@@ -1041,7 +1022,7 @@ A1:V is Subspace of X & X is Subspace of V;
      VV c= VX & VX c= VV by A1,Def4;
 then A2:VV = VX by XBOOLE_0:def 10;
 A3:the Zero of V = the Zero of X by A1,Def4;
-     AV = AX | [:VV,VV:] & AX = AV | [:VX,VX:] by A1,Def4;
+     AV = AX||VV & AX = AV||VX by A1,Def4;
 then A4:AV = AX by A2,RELAT_1:101;
      MV = MX | [:COMPLEX,VV:] & MX = MV | [:COMPLEX,VX:] by A1,Def4;
    hence thesis by A2,A3,A4,RELAT_1:101;
@@ -1064,14 +1045,13 @@ A1:V is Subspace of X & X is Subspace of Y;
 ;
      hence thesis;
    end;
-   thus the add of V = (the add of Y) | [:the carrier of V, the carrier of V:]
+   thus the add of V = (the add of Y)||the carrier of V
    proof
      set AV = the add of V; set VV = the carrier of V;
      set AX = the add of X; set VX = the carrier of X;
      set AY = the add of Y;
-       AV = AX | [:VV,VV:] & AX = AY | [:VX,VX:] & VV c= VX by A1,Def4;
-     then AV =(AY | [:VX,VX:]) | [:VV,VV:] & [:VV,VV:] c= [:VX,VX:] by
-ZFMISC_1:119;
+       AV = AX||VV & AX = AY||VX & VV c= VX by A1,Def4;
+     then AV = AY||VX||VV & [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
      hence thesis by FUNCT_1:82;
    end;
    set MV = the Mult of V; set VV = the carrier of V;
@@ -1093,10 +1073,9 @@ proof
      the Zero of W1 = the Zero of V & the Zero of W2 = the Zero of V by Def4;
    hence the carrier of W1 c= the carrier of W2 &
          the Zero of W1 = the Zero of W2 by A1;
-   thus the add of W1 =
-        (the add of W2) | [:the carrier of W1,the carrier of W1:]
+   thus the add of W1 = (the add of W2)||the carrier of W1
    proof
-       the add of W1 = AV | [:VW1,VW1:] & the add of W2 = AV | [:VW2,VW2:] &
+       the add of W1 = AV||VW1 & the add of W2 = AV||VW2 &
      [:VW1,VW1:] c= [:VW2,VW2:] by A1,Def4,ZFMISC_1:119;
      hence thesis by FUNCT_1:82;
    end;
@@ -1133,7 +1112,7 @@ proof
    the carrier of V c= the carrier of V;
    then reconsider V1 = the carrier of V as Subset of V;
      the Zero of V = 0.V &
-    the add of V = (the add of V) | [:V1,V1:] &
+    the add of V = (the add of V)||V1 &
      the Mult of V = (the Mult of V) | [:COMPLEX,V1:]
       by FUNCT_2:40;
    then CLSStruct(#the carrier of V,the Zero of V,the add of V,the Mult of V
@@ -1218,7 +1197,7 @@ A1:V1 <> {} and
 A2:V1 is lineary-closed;
    reconsider D = V1 as non empty set by A1;
    reconsider d1 = 0.V as Element of D by A2,Th21;
-   set A = (the add of V) | [:V1,V1:];
+   set A = (the add of V)||V1;
    set M = (the Mult of V) | [:COMPLEX,V1:];
    set VV = the carrier of V;
      dom(the add of V) = [:VV,VV:] by FUNCT_2:def 1;
@@ -1322,23 +1301,17 @@ proof
      W is Abelian add-associative right_zeroed right_complementable
         ComplexLinearSpace-like
    proof
-A2:  now let z; let v,w be VECTOR of W, v',w' be VECTOR of V such that
-A3:    v=v' & w=w';
-       thus v+w = (the add of W).[v,w]
-               .= v'+w' by A3;
-       thus z*v = (the Mult of W).[z,v]
-               .= z*v' by A3;
-     end;
+A1:  for z for v,w be VECTOR of W, v',w' be VECTOR of V st v=v' & w=w'
+       holds v+w = v'+w' & z*v = z*v';
      thus for v,w being VECTOR of W holds v + w = w + v
      proof let v,w be VECTOR of W;
        reconsider v'=v,w'=w as VECTOR of V;
-       thus v + w = w' + v' by A2 .= w + v;
+       thus v + w = w' + v' by A1 .= w + v;
      end;
      thus for u,v,w being VECTOR of W holds (u + v) + w = u + (v + w)
      proof let u,v,w be VECTOR of W;
        reconsider u'=u,v'=v,w'=w as VECTOR of V;
-    v + w = v' + w' & u + v = u' + v';
-       hence (u + v) + w = (u' + v') + w'
+       thus (u + v) + w = (u' + v') + w'
                         .= u' + (v' + w') by RLVECT_1:def 6
                         .= u + (v + w);
      end;
@@ -1351,16 +1324,15 @@ A3:    v=v' & w=w';
      proof let v be VECTOR of W;
        reconsider v'=v as VECTOR of V;
        consider w' being VECTOR of V such that
-A5:    v' + w' = 0.V by RLVECT_1:def 8;
+A2:    v' + w' = 0.V by RLVECT_1:def 8;
        reconsider w=w' as VECTOR of W;
        take w;
-       thus v + w = 0.W by A5;
+       thus v + w = 0.W by A2;
      end;
      thus for z for v,w being VECTOR of W holds z * (v + w) = z * v + z * w
      proof let z; let v,w be VECTOR of W;
        reconsider v'=v,w'=w as VECTOR of V;
-    v + w = v' + w' & z * v = z * v' & z * w = z * w';
-       hence z * (v + w) = z * (v' + w')
+       thus z * (v + w) = z * (v' + w')
                         .= z * v' + z * w' by Def2
                         .= z * v + z * w;
      end;
@@ -1435,12 +1407,7 @@ proof
 end;
 
 theorem
-  for V being strict ComplexLinearSpace holds V is Subspace of (Omega).V
-proof
-   let V be strict ComplexLinearSpace;
-     V is Subspace of V by Th45;
-   hence thesis;
-end;
+  for V being strict ComplexLinearSpace holds V is Subspace of (Omega).V;
 
 :: Introduction of the cosets of subspace.
 
@@ -1484,23 +1451,23 @@ end;
 Lm6: 0.V + W = the carrier of W
 proof
    set A = {0.V + u : u in W};
-A2:A c= the carrier of W
+A1:A c= the carrier of W
    proof let x be set;
      assume x in A;
-     then consider u such that A3: x = 0.V + u and A4: u in W;
-       x = u by A3,RLVECT_1:10;
-     hence thesis by A4,RLVECT_1:def 1;
+     then consider u such that A2: x = 0.V + u and A3: u in W;
+       x = u by A2,RLVECT_1:10;
+     hence thesis by A3,RLVECT_1:def 1;
    end;
      the carrier of W c= A
    proof let x be set;
      assume x in the carrier of W;
-then A5:  x in W by RLVECT_1:def 1;
+then A4:  x in W by RLVECT_1:def 1;
      then x in V by Th29;
      then reconsider y = x as Element of V by RLVECT_1:def 1;
        0.V + y = x by RLVECT_1:10;
-     hence thesis by A5;
+     hence thesis by A4;
    end;
-   hence thesis by A2,XBOOLE_0:def 10;
+   hence thesis by A1,XBOOLE_0:def 10;
 end;
 
 definition let V; let W;
@@ -1600,8 +1567,8 @@ A3:    u in W;
      then reconsider y = x, z = v as Element of W by A1,RLVECT_1:def 1;
      reconsider y1 = y, z1 = z as VECTOR of V by Th30;
 A4:  y - z in W by RLVECT_1:def 1;
-A5:  z + (y - z) = (y + z) - z by RLVECT_1:42
-                .= y + (z - z) by RLVECT_1:42
+A5:  z + (y - z) = (y + z) - z by RLVECT_1:def 6
+                .= y + (z - z) by RLVECT_1:def 6
                 .= y + 0.W by RLVECT_1:28
                 .= x by RLVECT_1:10;
 A6:  y - z = y1 - z1 by Th36;
@@ -1623,9 +1590,7 @@ end;
 theorem Th66:
 v + (Omega).V = the carrier of V
 proof
-the carrier of (Omega).V = the carrier of the CLSStruct of V
-                           .= the carrier of V;
-   then v in (Omega).V by RLVECT_1:def 1;
+   v in (Omega).V by RLVECT_1:def 1;
    hence thesis by Lm7;
 end;
 
@@ -1664,8 +1629,8 @@ A4:x in the carrier of W;
    then reconsider y = x as Element of V by A4;
      z * v in W & x in W by A1,A4,Th41,RLVECT_1:def 1;
 then A5:y - z * v in W by Th43;
-     z * v + (y - z * v) = (y + z * v) - z * v by RLVECT_1:42
-                      .= y + (z * v - z * v) by RLVECT_1:42
+     z * v + (y - z * v) = (y + z * v) - z * v by RLVECT_1:def 6
+                      .= y + (z * v - z * v) by RLVECT_1:def 6
                       .= y + 0.V by RLVECT_1:28
                       .= x by RLVECT_1:10;
    then x in A by A5;
@@ -1714,8 +1679,8 @@ A2:    x = v + v1 and
 A3:    v1 in W;
 A4:    v1 - u in W by A1,A3,Th43;
          (v + u) + (v1 - u) = v + (u + (v1 - u)) by RLVECT_1:def 6
-                         .= v + ((v1 + u) - u) by RLVECT_1:42
-                         .= v + (v1 + (u - u)) by RLVECT_1:42
+                         .= v + ((v1 + u) - u) by RLVECT_1:def 6
+                         .= v + (v1 + (u - u)) by RLVECT_1:def 6
                          .= v + (v1 + 0.V) by RLVECT_1:28
                          .= x by A2,RLVECT_1:10;
        then x in B by A4;
@@ -1779,7 +1744,7 @@ A2:  z in W;
 A3:    x = u + v1 and
 A4:    v1 in W;
 A5:    v1 - z in W by A2,A4,Th43;
-         v - z = u + (z - z) by A1,RLVECT_1:42
+         v - z = u + (z - z) by A1,RLVECT_1:def 6
             .= u + 0.V by RLVECT_1:28
             .= u by RLVECT_1:10;
        then x = (v + (- z)) + v1 by A3
@@ -1822,9 +1787,9 @@ A2:  u in W;
         .= [* 2,0 *] * v - u by Def2,Lm4;
      then [* 2,0 *]" * ([* 2,0 *] * v) = [* 2,0 *]" * u by RLVECT_1:35;
      then
-B:   ([* 2,0 *]" * [* 2,0 *]) * v = [* 2,0 *]" * u by Def2;
+A3:   ([* 2,0 *]" * [* 2,0 *]) * v = [* 2,0 *]" * u by Def2;
      [* 2,0 *] = 2+0*<i> by COMPLEX1:27;
-     then v = [* 2,0 *]" * u by Def2,COMPLEX1:def 7,B;
+     then v = [* 2,0 *]" * u by Def2,COMPLEX1:def 7,A3;
      hence thesis by A2,Th41;
    end;
    assume v in W;
@@ -1855,10 +1820,10 @@ A6:x2 in W;
      then consider u1 such that
 A7:  x = v1 + u1 and
 A8:  u1 in W;
-       u - x1 = v1 + (x1 - x1) by A3,RLVECT_1:42
+       u - x1 = v1 + (x1 - x1) by A3,RLVECT_1:def 6
            .= v1 + 0.V by RLVECT_1:28
            .= v1 by RLVECT_1:10;
-then A9:  x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:42
+then A9:  x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:def 6
       .= v2 + ((x2 - x1) + u1) by RLVECT_1:def 6;
        x2 - x1 in W by A4,A6,Th43;
      then (x2 - x1) + u1 in W by A8,Th40;
@@ -1871,10 +1836,10 @@ then A9:  x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:42
    then consider u1 such that
 A10: x = v2 + u1 and
 A11: u1 in W;
-     u - x2 = v2 + (x2 - x2) by A5,RLVECT_1:42
+     u - x2 = v2 + (x2 - x2) by A5,RLVECT_1:def 6
          .= v2 + 0.V by RLVECT_1:28
          .= v2 by RLVECT_1:10;
-then A12: x = (v1 + (x1 - x2)) + u1 by A3,A10,RLVECT_1:42
+then A12: x = (v1 + (x1 - x2)) + u1 by A3,A10,RLVECT_1:def 6
       .= v1 + ((x1 - x2) + u1) by RLVECT_1:def 6;
      x1 - x2 in W by A4,A6,Th43;
    then (x1 - x2) + u1 in W by A11,Th40;
@@ -1896,18 +1861,14 @@ proof
    assume that
 A1:z <> 1r and
 A2:z * v in v + W;
-A3:now assume z - 1r = 0;
-     then (- 1r) + z = 0;
-     then z = - (- 1r);
-     hence contradiction by A1;
-   end;
+A3: z - 1r <> 0 by A1;
      z * v in {v + u : u in W} by A2;
    then consider u such that
 A4: z * v = v + u and
 A5: u in W;
      u = u + 0.V by RLVECT_1:10
     .= u + (v - v) by RLVECT_1:28
-    .= z * v - v by A4,RLVECT_1:42
+    .= z * v - v by A4,RLVECT_1:def 6
     .= z * v - 1r * v by Def2
     .= (z - 1r) * v by Th11;
    then (z - 1r)" * u = ((z - 1r)" * (z - 1r)) * v & z - 1r <> 0 by A3,Def2;
@@ -2011,7 +1972,7 @@ theorem Th85:
       consider u2 such that A5: u2 in W and A6: v2 = v + u2 by A2,Th83;
            v1 - v2 = (u1 + v) + (- (v + u2)) by A4,A6
               .= (u1 + v) + ((- v) - u2) by RLVECT_1:44
-              .= ((u1 + v) + (- v)) - u2 by RLVECT_1:42
+              .= ((u1 + v) + (- v)) - u2 by RLVECT_1:def 6
               .= (u1 + (v + (- v))) - u2 by RLVECT_1:def 6
               .= (u1 + 0.V) - u2 by RLVECT_1:16
               .= u1 - u2 by RLVECT_1:10;
@@ -2038,14 +1999,14 @@ theorem Th86:
        then v in {u + u2 : u2 in W};
       then consider u1 such that A2: v = u + u1 and A3: u1 in W;
            0.V = (u + u1) - v by A2,RLVECT_1:28
-               .= u + (u1 - v) by RLVECT_1:42
+               .= u + (u1 - v) by RLVECT_1:def 6
                .= u + ((- v) + u1)
                .= (u + (- v)) + u1 by RLVECT_1:def 6
                .= u1 + (u - v);
         then v1 = - u1 by RLVECT_1:def 10;
     hence v1 in W by A3,Th42;
-    thus v + v1 = (u + v) - v by RLVECT_1:42
-               .= u + (v - v) by RLVECT_1:42
+    thus v + v1 = (u + v) - v by RLVECT_1:def 6
+               .= u + (v - v) by RLVECT_1:def 6
                .= u + 0.V by RLVECT_1:28
                .= u by RLVECT_1:10;
    end;
@@ -2060,7 +2021,7 @@ theorem Th87:
        then u in {v + u2 : u2 in W};
       then consider u1 such that A2: u = v + u1 and A3: u1 in W;
            0.V = (v + u1) - u by A2,RLVECT_1:28
-               .= v + (u1 - u) by RLVECT_1:42
+               .= v + (u1 - u) by RLVECT_1:def 6
                .= v + ((- u) + u1)
                .= (v + (- u)) + u1 by RLVECT_1:def 6
                .= u1 + (v - u);
@@ -2327,38 +2288,38 @@ definition let X, x;
 coherence;
 end;
      consider V being ComplexLinearSpace;
-Lm9:   the carrier of (0).V = {0.V} by Def5;
+Lm8:   the carrier of (0).V = {0.V} by Def5;
   reconsider niltonil = (the carrier of (0).V) --> 0
       as Function of the carrier of (0).V , REAL by FUNCOP_1:57;
 
-  0.V is VECTOR of (0).V by Lm9,TARSKI:def 1;
+  0.V is VECTOR of (0).V by Lm8,TARSKI:def 1;
   then
-Lm11: niltonil.(0.V) = 0 by FUNCOP_1:13;
+Lm9: niltonil.(0.V) = 0 by FUNCOP_1:13;
 
-Lm12:
+Lm10:
 for u being VECTOR of (0).V , z holds
 niltonil.(z * u) = |.z.| * niltonil.u
 proof
 let u be VECTOR of (0).V;
 let z;
-    niltonil.u = 0 by Lm9,Lm11,TARSKI:def 1;
-hence thesis by Lm9,Lm11,TARSKI:def 1;
+    niltonil.u = 0 by Lm8,Lm9,TARSKI:def 1;
+hence thesis by Lm8,Lm9,TARSKI:def 1;
 end;
 
-Lm13:
+Lm11:
 for u , v being VECTOR of (0).V holds
 niltonil.(u + v) <= niltonil.u + niltonil.v
 proof
 let u, v be VECTOR of (0).V;
-       u = 0.V & v = 0.V by Lm9,TARSKI:def 1;
-hence thesis by Lm9,Lm11,TARSKI:def 1;
+       u = 0.V & v = 0.V by Lm8,TARSKI:def 1;
+hence thesis by Lm8,Lm9,TARSKI:def 1;
 end;
 reconsider X =
  CNORMSTR (# the carrier of (0).V, the Zero of (0).V, the add of (0).V,
            the Mult of (0).V, niltonil #)
             as non empty CNORMSTR by STRUCT_0:def 1;
 
-Lm14:
+Lm12:
 now
 let x, y be Point of X;
 let z;
@@ -2370,15 +2331,15 @@ proof
     0'(X) = the Zero of X
      .= 0.(0).V
      .= 0.V by Th31;
-hence thesis by Lm9,Lm11,TARSKI:def 1;
+hence thesis by Lm8,Lm9,TARSKI:def 1;
 end;
 
      z * x = (the Mult of X).[z,u]
          .= z * u;
-hence ||.z * x.|| = |.z.| * ||.x.|| by Lm12;
+hence ||.z * x.|| = |.z.| * ||.x.|| by Lm10;
      x + y = (the add of X).[x,y]
       .= u + w;
-hence ||.x + y.|| <= ||.x.|| + ||.y.|| by Lm13;
+hence ||.x + y.|| <= ||.x.|| + ||.y.|| by Lm11;
 end;
 
 definition let IT be non empty CNORMSTR;
@@ -2396,17 +2357,11 @@ registration
   existence
    proof
     take X;
-    thus X is ComplexNormSpace-like by Def10,Lm14;
-A1: now
-      let x,y be VECTOR of X;
-      let x',y' be VECTOR of (0).V;
-      assume A2: x = x' & y = y';
-      hence x + y= (the add of X).[x',y'] .=
-      x' + y';
-      let z;
-      thus z * x = (the Mult of X).[z,x'] by A2 .=
-      z * x';
-     end;
+    thus X is ComplexNormSpace-like by Def10,Lm12;
+A1:  for x,y be VECTOR of X for x',y' be VECTOR of (0).V
+      st x = x' & y = y'
+      holds x + y= x' + y' &
+      for z holds z * x = z * x';
     thus X is ComplexLinearSpace-like
     proof
      thus for z for v,w being VECTOR of X holds z * (v + w) = z * v + z * w
@@ -2414,8 +2369,7 @@ A1: now
       let z;
       let v,w be VECTOR of X;
       reconsider v'= v, w' = w as VECTOR of (0).V;
-      v + w = v'+ w';
-      hence z * (v + w) = z *( v' + w') .=
+      thus z * (v + w) = z *( v' + w') .=
       z * v' + z * w' by Def2 .= z * v + z * w;
      end;
      thus for z1,z2 for v being VECTOR of X holds (z1+z2) * v = z1 * v + z2 *
@@ -2466,10 +2420,10 @@ v
         let v be VECTOR of X;
         reconsider v'= v as VECTOR of (0).V;
         consider w' be VECTOR of (0).V such that
-        A11: v' + w' = 0.(0).V by RLVECT_1:def 8;
+        A2: v' + w' = 0.(0).V by RLVECT_1:def 8;
         reconsider w = w' as VECTOR of X;
         take w;
-        thus v + w = 0.X by A11;
+        thus v + w = 0.X by A2;
        end;
     thus thesis;
    end;
@@ -2499,8 +2453,7 @@ end;
 theorem Th105:
  ||.x - y.|| <= ||.x.|| + ||.y.||
 proof
-         x - y = x + (-y);
-     then ||.x - y.|| <= ||.x.|| + ||.(-y).|| by Def10;
+     ||.x - y.|| <= ||.x.|| + ||.(-y).|| by Def10;
      hence thesis by Th104;
 end;
 
@@ -2731,7 +2684,7 @@ proof
       then A10: ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
       by A9,XREAL_1:10;
   A11:  ||.(S1 + S2).n - g.|| = ||.(S1.n) + (S2.n) - (g1+g2).|| by Def11
-      .= ||.(S1.n) + ((S2.n) - (g1+g2)).|| by RLVECT_1:42
+      .= ||.(S1.n) + ((S2.n) - (g1+g2)).|| by RLVECT_1:def 6
       .= ||.(S1.n) + (-(g1+g2) + (S2.n)).||
       .= ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by RLVECT_1:def 6
       .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:45
@@ -2802,7 +2755,7 @@ proof
                ||.(S.n) - g.|| = ||.((S.n) - 0'(CNS)) - g.|| by RLVECT_1:26
                         .= ||.((S.n) - (x - x)) - g.|| by RLVECT_1:28
                         .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:43
-                        .= ||.((S.n) - x) + (x - g).|| by RLVECT_1:42
+                        .= ||.((S.n) - x) + (x - g).|| by RLVECT_1:def 6
                         .= ||.((S.n) - x) + ((-g) + x).||
                         .= ||.((S.n) - x) + -h.|| by RLVECT_1:47
                         .= ||.((S.n) - x) - h.||;
@@ -3024,7 +2977,7 @@ proof
       then A9: ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
       by A8,XREAL_1:10;
   A10:  ||.(S1 + S2).n - g.|| = ||.(S1.n) + (S2.n) - (g1+g2).|| by Def11
-      .= ||.(S1.n) + ((S2.n) - (g1+g2)).|| by RLVECT_1:42
+      .= ||.(S1.n) + ((S2.n) - (g1+g2)).|| by RLVECT_1:def 6
       .= ||.(S1.n) + (-(g1+g2) + (S2.n)).||
       .= ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by RLVECT_1:def 6
       .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:45
@@ -3097,7 +3050,7 @@ proof
           ||.(S.n) - g.|| = ||.((S.n) - 0'(CNS)) - g.|| by RLVECT_1:26
                    .= ||.((S.n) - (x - x)) - g.|| by RLVECT_1:28
                    .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:43
-                   .= ||.((S.n) - x) + (x - g).|| by RLVECT_1:42
+                   .= ||.((S.n) - x) + (x - g).|| by RLVECT_1:def 6
                    .= ||.((S.n) - x) + ((-g) + x).||
                    .= ||.((S.n) - x) + -h.|| by RLVECT_1:47
                    .= ||.((S.n) - x) - h.||;

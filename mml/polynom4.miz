@@ -32,7 +32,7 @@ environ
 
 begin  :: Preliminaries
 
- Th1:
+ Lm1:
    for n be Nat holds 0-'n = 0 by NAT_2:10;
 
 canceled 2;
@@ -49,15 +49,15 @@ canceled 2;
     assume that
      A1: 1 <= n and
      A2: n <= len p;
-        len p >= n-'1+1 by A1,A2,AMI_5:4;
+        len p >= n-'1+1 by A1,A2,BINARITH:53;
     then A3: len p > n-'1 by NAT_1:38;
-        p|n = p|(n-'1+1) by A1,AMI_5:4
+        p|n = p|(n-'1+1) by A1,BINARITH:53
        .= p|(n-'1)^<*p.(n-'1+1)*> by A3,POLYNOM3:19
-       .= p|(n-'1)^<*p.n*> by A1,AMI_5:4;
+       .= p|(n-'1)^<*p.n*> by A1,BINARITH:53;
     hence p = (p|(n-'1))^<*p.n*>^(p/^n) by RFINSEQ:21;
    end;
 
-Lm1:
+Lm2:
 for R being left_zeroed add-right-cancelable
             right-distributive (non empty doubleLoopStr),
     a being Element of R
@@ -90,7 +90,7 @@ coherence
      A3: x * z = 1.L by A1,VECTSP_1:def 20;
          z * 0.L = 1.L * y by A2,A3,GROUP_1:def 4
             .= y by VECTSP_1:def 19;
-     hence y = 0.L by Lm1;
+     hence y = 0.L by Lm2;
      end;
    end;
  hence thesis by VECTSP_2:def 5;
@@ -225,12 +225,12 @@ canceled;
       A4: len q >= 0+1 by A2,NAT_1:38;
           len q >= len p+1 by A2,NAT_1:38;
       then len q-1 >= len p by XREAL_1:21;
-      then A6: len q-'1 >= len p by BINARITH:def 3;
-      A7: (p+q).(len q-'1) = p.(len q-'1) + q.(len q-'1) by POLYNOM3:def 6
-         .= 0.L + q.(len q-'1) by A6,ALGSEQ_1:22
+      then A5: len q-'1 >= len p by BINARITH:def 3;
+      A6: (p+q).(len q-'1) = p.(len q-'1) + q.(len q-'1) by POLYNOM3:def 6
+         .= 0.L + q.(len q-'1) by A5,ALGSEQ_1:22
          .= q.(len q-'1) by RLVECT_1:10;
-      A8: len q = len q-'1+1 by A4,AMI_5:4;
-      A9: len (p+q) <= len q by A2,Th9;
+      A7: len q = len q-'1+1 by A4,BINARITH:53;
+      A8: len (p+q) <= len q by A2,Th9;
           len (p+q) >= len q
       proof
        assume len (p+q) < len q;
@@ -238,21 +238,21 @@ canceled;
        then len (p+q) <= len q - 1 by XREAL_1:21;
        then len (p+q) <= len q-'1 by BINARITH:def 3;
        then (p+q).(len q-'1) = 0.L by ALGSEQ_1:22;
-       hence contradiction by A7,A8,ALGSEQ_1:25;
+       hence contradiction by A6,A7,ALGSEQ_1:25;
       end;
-      hence thesis by A3,A9,XREAL_1:1;
+      hence thesis by A3,A8,XREAL_1:1;
      end;
-     suppose A10: len p > len q;
-      then A11: max(len p,len q) = len p by SQUARE_1:def 2;
-      A12: len p >= 0+1 by A10,NAT_1:38;
-          len p >= len q+1 by A10,NAT_1:38;
+     suppose A9: len p > len q;
+      then A10: max(len p,len q) = len p by SQUARE_1:def 2;
+      A11: len p >= 0+1 by A9,NAT_1:38;
+          len p >= len q+1 by A9,NAT_1:38;
       then len p-1 >= len q by XREAL_1:21;
-      then A14: len p-'1 >= len q by BINARITH:def 3;
-      A15: (p+q).(len p-'1) = p.(len p-'1) + q.(len p-'1) by POLYNOM3:def 6
-         .= p.(len p-'1) + 0.L by A14,ALGSEQ_1:22
+      then A12: len p-'1 >= len q by BINARITH:def 3;
+      A13: (p+q).(len p-'1) = p.(len p-'1) + q.(len p-'1) by POLYNOM3:def 6
+         .= p.(len p-'1) + 0.L by A12,ALGSEQ_1:22
          .= p.(len p-'1) by RLVECT_1:10;
-      A16: len p = len p-'1+1 by A12,AMI_5:4;
-      A17: len (p+q) <= len p by A10,Th9;
+      A14: len p = len p-'1+1 by A11,BINARITH:53;
+      A15: len (p+q) <= len p by A9,Th9;
           len (p+q) >= len p
       proof
        assume len (p+q) < len p;
@@ -260,9 +260,9 @@ canceled;
        then len (p+q) <= len p - 1 by XREAL_1:21;
        then len (p+q) <= len p-'1 by BINARITH:def 3;
        then (p+q).(len p-'1) = 0.L by ALGSEQ_1:22;
-       hence contradiction by A15,A16,ALGSEQ_1:25;
+       hence contradiction by A13,A14,ALGSEQ_1:25;
       end;
-      hence thesis by A11,A17,XREAL_1:1;
+      hence thesis by A10,A15,XREAL_1:1;
    end;
    end;
 
@@ -359,7 +359,7 @@ A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
       then A11: r.k = p.(k-'1) * q.(i+1-'k) by A8;
           k in Seg len r by A10,FINSEQ_1:def 3;
       then  1 <= k & k <= i+1 by A6,FINSEQ_1:3;
-      then A13: i+1-k >= 0 by XREAL_1:50;
+      then A12: i+1-k >= 0 by XREAL_1:50;
       per cases;
        suppose k-'1 < len p;
         then k-1 < len p by BINARITH:def 3;
@@ -367,7 +367,7 @@ A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
         then 1-k > len q - (i+1) by A9,XREAL_1:2;
         then i+1+(1-k) > len q by XREAL_1:21;
         then i+1-k+1 > len q;
-        then i+1-'k+1 > len q by A13,BINARITH:def 3;
+        then i+1-'k+1 > len q by A12,BINARITH:def 3;
         then i+1-'k >= len q by NAT_1:38;
         then q.(i+1-'k) = 0.L by ALGSEQ_1:22;
         hence r.k = 0.L by A11,VECTSP_1:36;
@@ -381,91 +381,91 @@ A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
     end;
         now let n be Nat;
      assume that
-      A15: n is_at_least_length_of p*'q and
-      A16: len p + len q -' 1 > n;
+      A13: n is_at_least_length_of p*'q and
+      A14: len p + len q -' 1 > n;
      consider r be FinSequence of the carrier of L such that
-      A17: len r = len p + len q-'2+1 and
-      A18: (p*'q).(len p + len q-'2) = Sum r and
-      A19: for k be Nat st k in dom r holds r.k =
+      A15: len r = len p + len q-'2+1 and
+      A16: (p*'q).(len p + len q-'2) = Sum r and
+      A17: for k be Nat st k in dom r holds r.k =
                     p.(k-'1) * q.(len p + len q-'2+1-'k) by POLYNOM3:def 11;
-     A20: len p + len q -' 1 - 1 = len p + len q - 1 - 1 by A4,BINARITH:def 3;
-     A21: len q >= 0+1 by A3,NAT_1:38;
+     A18: len p + len q -' 1 - 1 = len p + len q - 1 - 1 by A4,BINARITH:def 3;
+     A19: len q >= 0+1 by A3,NAT_1:38;
      then len p + len q > 0+1 by A2,XREAL_1:10;
      then len p + len q >= 1+1 by NAT_1:38;
-     then A22: len p + len q - 2 >= 2-2 by XREAL_1:11;
-     then A23: len p + len q -' 2 = len p + len q - (1+1) by BINARITH:def 3;
-         len p + len q -' 1 >= n+1 by A16,NAT_1:38;
-     then A24: len p + len q -' 1 - 1 >= n by XREAL_1:21;
-     A25: len q - 1 >= 0 by A21,XREAL_1:21;
-     A26: len r = len p + len q - 1 +- 1 + 1 by A17,A22,BINARITH:def 3
+     then A20: len p + len q - 2 >= 2-2 by XREAL_1:11;
+     then A21: len p + len q -' 2 = len p + len q - (1+1) by BINARITH:def 3;
+         len p + len q -' 1 >= n+1 by A14,NAT_1:38;
+     then A22: len p + len q -' 1 - 1 >= n by XREAL_1:21;
+     A23: len q - 1 >= 0 by A19,XREAL_1:21;
+     A24: len r = len p + len q - 1 +- 1 + 1 by A15,A20,BINARITH:def 3
         .= len p + (len q - 1);
      then len r - (len p) = len q - 1;
-     then A27: len p + 0 <= len r by A25,XREAL_1:21;
-     A28: len p >= 0+1 by A2,NAT_1:38;
-     then r = (r|((len p)-'1))^<*r.(len p)*>^(r/^len p) by A27,Th3;
-     then r = (r|((len p)-'1))^<*r/.(len p)*>^(r/^len p) by A27,A28,FINSEQ_4:24
+     then A25: len p + 0 <= len r by A23,XREAL_1:21;
+     A26: len p >= 0+1 by A2,NAT_1:38;
+     then r = (r|((len p)-'1))^<*r.(len p)*>^(r/^len p) by A25,Th3;
+     then r = (r|((len p)-'1))^<*r/.(len p)*>^(r/^len p) by A25,A26,FINSEQ_4:24
 ;
-     then A29: Sum r =
+     then A27: Sum r =
            Sum((r|((len p)-'1))^<*r/.(len p)*>) + Sum (r/^len p) by RLVECT_1:58
         .= Sum(r|((len p)-'1)) + Sum<*r/.(len p)*> + Sum
  (r/^len p) by RLVECT_1:58;
          now let i be Nat;
-      assume A30: i in dom (r|((len p)-'1));
-      A31: dom (r|((len p)-'1)) c= dom r by FINSEQ_5:20;
-      A32: len p - 1 >= 1-1 by A28,XREAL_1:11;
-          len p < len r + 1 by A27,NAT_1:38;
+      assume A28: i in dom (r|((len p)-'1));
+      A29: dom (r|((len p)-'1)) c= dom r by FINSEQ_5:20;
+      A30: len p - 1 >= 1-1 by A26,XREAL_1:11;
+          len p < len r + 1 by A25,NAT_1:38;
       then len p - 1 < len r + 1 - 1 by XREAL_1:11;
-      then (len p)-'1 < len r by A32,BINARITH:def 3;
+      then (len p)-'1 < len r by A30,BINARITH:def 3;
       then len (r|((len p)-'1)) = (len p)-'1 by FINSEQ_1:80;
-      then i in Seg ((len p)-'1) by A30,FINSEQ_1:def 3;
+      then i in Seg ((len p)-'1) by A28,FINSEQ_1:def 3;
       then 1 <= i & i <= (len p)-'1 by FINSEQ_1:3;
-      then A33: i + len q <= (len p)-'1 + len q by XREAL_1:8;
-      len p + len q-'2+1 = len p - 1 + len q by A17,A26
-         .= len p -' 1 + len q by A32,BINARITH:def 3;
-      then A35: len q <= len p + len q-'2+1-i by A33,XREAL_1:21;
-      A36: len q <= len p + len q-'2+1-'i by A35,BINARITH:def 3;
-      thus (r|((len p)-'1)).i = (r|((len p)-'1))/.i by A30,FINSEQ_4:def 4
-         .= r/.i by A30,FINSEQ_4:85
-         .= r.i by A30,A31,FINSEQ_4:def 4
-         .= p.(i-'1) * q.(len p + len q-'2+1-'i) by A19,A30,A31
-         .= p.(i-'1) * 0.L by A36,ALGSEQ_1:22
+      then A31: i + len q <= (len p)-'1 + len q by XREAL_1:8;
+      len p + len q-'2+1 = len p - 1 + len q by A15,A24
+         .= len p -' 1 + len q by A30,BINARITH:def 3;
+      then A32: len q <= len p + len q-'2+1-i by A31,XREAL_1:21;
+      A33: len q <= len p + len q-'2+1-'i by A32,BINARITH:def 3;
+      thus (r|((len p)-'1)).i = (r|((len p)-'1))/.i by A28,FINSEQ_4:def 4
+         .= r/.i by A28,FINSEQ_4:85
+         .= r.i by A28,A29,FINSEQ_4:def 4
+         .= p.(i-'1) * q.(len p + len q-'2+1-'i) by A17,A28,A29
+         .= p.(i-'1) * 0.L by A33,ALGSEQ_1:22
          .= 0.L by VECTSP_1:39;
      end;
-     then A37: Sum(r|((len p)-'1)) = 0.L by POLYNOM3:1;
-         len p in Seg len r by A27,A28,FINSEQ_1:3;
-     then A38: len p in dom r by FINSEQ_1:def 3;
-     A39: len p+len q-'2+1-'(len p) = len p+len q-'2+1-(len p)
-                                                           by A17,A25,A26,
+     then A34: Sum(r|((len p)-'1)) = 0.L by POLYNOM3:1;
+         len p in Seg len r by A25,A26,FINSEQ_1:3;
+     then A35: len p in dom r by FINSEQ_1:def 3;
+     A36: len p+len q-'2+1-'(len p) = len p+len q-'2+1-(len p)
+                                                           by A15,A23,A24,
 BINARITH:def 3
-        .= len q-'1 by A17,A25,A26,BINARITH:def 3;
+        .= len q-'1 by A15,A23,A24,BINARITH:def 3;
          now let i be Nat;
-      assume A40: i in dom (r/^len p);
+      assume A37: i in dom (r/^len p);
       then i in Seg len (r/^len p) by FINSEQ_1:def 3;
-      then A41: 1 <= i & i <= len (r/^len p) by FINSEQ_1:3;
-      then A42: 0+1 <= i & i <= len r-len p by A27,RFINSEQ:def 2;
+      then A38: 1 <= i & i <= len (r/^len p) by FINSEQ_1:3;
+      then A39: 0+1 <= i & i <= len r-len p by A25,RFINSEQ:def 2;
           i+len p >= i by NAT_1:29;
-      then A43: i+len p >= 1 by A41,XREAL_1:2;
-          i+len p <= len r by A42,XREAL_1:21;
-      then i+len p in Seg len r by A43,FINSEQ_1:3;
-      then A44: i+len p in dom r by FINSEQ_1:def 3;
-      A45: i-1 >= 0 by A42,XREAL_1:21;
+      then A40: i+len p >= 1 by A38,XREAL_1:2;
+          i+len p <= len r by A39,XREAL_1:21;
+      then i+len p in Seg len r by A40,FINSEQ_1:3;
+      then A41: i+len p in dom r by FINSEQ_1:def 3;
+      A42: i-1 >= 0 by A39,XREAL_1:21;
           i+len p >= i by NAT_1:29;
-      then i+len p >= 0+1 by A41,XREAL_1:2;
+      then i+len p >= 0+1 by A38,XREAL_1:2;
       then i+len p-1 >= 0 by XREAL_1:21;
       then i+len p-'1 = len p+(i-1) by BINARITH:def 3;
-      then A46: i+len p-'1 >= len p+0 by A45,XREAL_1:8;
-      thus (r/^len p).i = r.(i+len p) by A27,A40,RFINSEQ:def 2
-         .= p.(i+len p-'1) * q.(len p + len q-'2+1-'(i+len p)) by A19,A44
-         .= 0.L * q.(len p + len q-'2+1-'(i+len p)) by A46,ALGSEQ_1:22
+      then A43: i+len p-'1 >= len p+0 by A42,XREAL_1:8;
+      thus (r/^len p).i = r.(i+len p) by A25,A37,RFINSEQ:def 2
+         .= p.(i+len p-'1) * q.(len p + len q-'2+1-'(i+len p)) by A17,A41
+         .= 0.L * q.(len p + len q-'2+1-'(i+len p)) by A43,ALGSEQ_1:22
          .= 0.L by VECTSP_1:39;
      end;
      then Sum (r/^len p) = 0.L by POLYNOM3:1;
-     then Sum r = Sum<*r/.(len p)*> + 0.L by A29,A37,RLVECT_1:10
+     then Sum r = Sum<*r/.(len p)*> + 0.L by A27,A34,RLVECT_1:10
         .= Sum<*r/.(len p)*> by RLVECT_1:10
         .= r/.(len p) by RLVECT_1:61
-        .= r.(len p) by A38,FINSEQ_4:def 4
-        .= p.(len p-'1) * q.(len q-'1) by A19,A38,A39;
-     hence contradiction by A1,A15,A18,A20,A23,A24,ALGSEQ_1:def 3;
+        .= r.(len p) by A35,FINSEQ_4:def 4
+        .= p.(len p-'1) * q.(len q-'1) by A17,A35,A36;
+     hence contradiction by A1,A13,A16,A18,A21,A22,ALGSEQ_1:def 3;
     end;
     then len (p*'q) = len p + len q -' 1 by A5,ALGSEQ_1:def 4;
     hence thesis by A4,BINARITH:def 3;
@@ -552,7 +552,7 @@ begin  :: Leading Monomials
          .= 0.L by POLYNOM3:28;
      end;
      suppose A3: len p = 0;
-      then A4: len p-'1 = 0 by Th1;
+      then A4: len p-'1 = 0 by Lm1;
           0 in NAT;
       then A5: 0 in dom 0_.(L) by NORMSP_1:17;
           now per cases;
@@ -635,7 +635,7 @@ begin  :: Leading Monomials
       then A5: len p-'1 in dom 0_.(L) by NORMSP_1:17;
           now let m be Nat;
        assume A6: m is_at_least_length_of r;
-       A7: len p = len p-'1+1 by A2,AMI_5:4;
+       A7: len p = len p-'1+1 by A2,BINARITH:53;
        assume len p > m;
        then len p >= m+1 by NAT_1:38;
        then len p-1 >= m+1-1 by XREAL_1:11;
@@ -672,34 +672,34 @@ begin  :: Leading Monomials
         len p > 0 by A1;
     then A4: len p >= 0+1 by NAT_1:38;
         len q < len p-'1+1 by A2,NAT_1:38;
-    hence A6: len q < len p by A4,AMI_5:4;
-    A7: len Leading-Monomial(p) = len p by Th18;
-    then A8: len (q+Leading-Monomial(p)) = max(len q,len Leading-Monomial(p))
-                                                                   by A6,Th10
-       .= len p by A6,A7,SQUARE_1:def 2;
+    hence A5: len q < len p by A4,BINARITH:53;
+    A6: len Leading-Monomial(p) = len p by Th18;
+    then A7: len (q+Leading-Monomial(p)) = max(len q,len Leading-Monomial(p))
+                                                                   by A5,Th10
+       .= len p by A5,A6,SQUARE_1:def 2;
         now let k be Nat;
      assume k < len p;
      then k+1 <= len p by NAT_1:38;
-     then A9: k+1-1 <= len p-1 by XREAL_1:11;
-     per cases by A9,REAL_1:def 5;
+     then A8: k+1-1 <= len p-1 by XREAL_1:11;
+     per cases by A8,REAL_1:def 5;
       suppose k < len p-1;
-       then A10: k < len p-'1 by BINARITH:def 3;
+       then A9: k < len p-'1 by BINARITH:def 3;
        thus (q+Leading-Monomial(p)).k = q.k + (Leading-Monomial(p)).k
                                                            by POLYNOM3:def 6
-          .= p.k + (Leading-Monomial(p)).k by A3,A10
-          .= p.k + 0.L by A10,Def1
+          .= p.k + (Leading-Monomial(p)).k by A3,A9
+          .= p.k + 0.L by A9,Def1
           .= p.k by RLVECT_1:def 7;
       end;
       suppose k = len p-1;
-       then A11: k = len p-'1 by BINARITH:def 3;
+       then A10: k = len p-'1 by BINARITH:def 3;
        thus (q+Leading-Monomial(p)).k = q.k + (Leading-Monomial(p)).k
                                                            by POLYNOM3:def 6
-          .= 0.L + (Leading-Monomial(p)).k by A2,A11,ALGSEQ_1:22
+          .= 0.L + (Leading-Monomial(p)).k by A2,A10,ALGSEQ_1:22
           .= (Leading-Monomial(p)).k by RLVECT_1:10
-          .= p.k by A11,Def1;
+          .= p.k by A10,Def1;
     end;
     end;
-    hence p = q+Leading-Monomial(p) by A8,ALGSEQ_1:28;
+    hence p = q+Leading-Monomial(p) by A7,ALGSEQ_1:28;
     let n be Nat;
     assume n < len p-1;
     then n < len p-'1 by BINARITH:def 3;
@@ -796,7 +796,7 @@ begin  :: Evaluation of Polynomials
     hence thesis by A1,RLVECT_1:61;
    end;
 
-  Lm2:
+  Lm3:
    for F be add-associative right_zeroed right_complementable
             left-distributive (non empty doubleLoopStr)
    for x be Element of F holds (0.F)*x = 0.F
@@ -873,168 +873,168 @@ begin  :: Evaluation of Polynomials
      assume A17: n in Seg k;
      then A18: 0+1 <= n & n <= k by FINSEQ_1:3;
      per cases by REAL_1:def 5;
-      suppose A20: len p > len q;
-       then A21: k = len p by SQUARE_1:def 2;
-       then A22: len(p+q) = len p by A20,Th10;
-       A23: n in dom F1 by A2,A17,A21,FINSEQ_1:def 3;
-       A24: n in dom F3 by A8,A17,A21,A22,FINSEQ_1:def 3;
-       A25: F1.n = p.(n-'1)*(power L).(x,n-'1) by A3,A23;
-       A26: len G1 = k & len G2 = k by FINSEQ_2:109;
-       then A27: n in dom G1 & n in dom G2 by A17,FINSEQ_1:def 3;
-       then A28: G1/.n = G1.n & G2/.n = G2.n by FINSEQ_4:def 4;
-       A29: G1/.n = G1.n by A27,FINSEQ_4:def 4
-          .= F1.n by A23,FINSEQ_1:def 7
-          .= F1/.n by A23,FINSEQ_4:def 4;
+      suppose A19: len p > len q;
+       then A20: k = len p by SQUARE_1:def 2;
+       then A21: len(p+q) = len p by A19,Th10;
+       A22: n in dom F1 by A2,A17,A20,FINSEQ_1:def 3;
+       A23: n in dom F3 by A8,A17,A20,A21,FINSEQ_1:def 3;
+       A24: F1.n = p.(n-'1)*(power L).(x,n-'1) by A3,A22;
+       A25: len G1 = k & len G2 = k by FINSEQ_2:109;
+       then A26: n in dom G1 & n in dom G2 by A17,FINSEQ_1:def 3;
+       then A27: G1/.n = G1.n & G2/.n = G2.n by FINSEQ_4:def 4;
+       A28: G1/.n = G1.n by A26,FINSEQ_4:def 4
+          .= F1.n by A22,FINSEQ_1:def 7
+          .= F1/.n by A22,FINSEQ_4:def 4;
            now per cases;
         suppose n <= len q;
          then n in Seg len q by A18,FINSEQ_1:3;
-         then A30: n in dom F2 by A5,FINSEQ_1:def 3;
-         then A31: F2.n = q.(n-'1)*(power L).(x,n-'1) by A6;
-         A32: G2/.n = G2.n by A27,FINSEQ_4:def 4
-            .= F2.n by A30,FINSEQ_1:def 7
-            .= F2/.n by A30,FINSEQ_4:def 4;
-         thus G3.n = F3.n by A24,FINSEQ_1:def 7
-            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A24
+         then A29: n in dom F2 by A5,FINSEQ_1:def 3;
+         then A30: F2.n = q.(n-'1)*(power L).(x,n-'1) by A6;
+         A31: G2/.n = G2.n by A26,FINSEQ_4:def 4
+            .= F2.n by A29,FINSEQ_1:def 7
+            .= F2/.n by A29,FINSEQ_4:def 4;
+         thus G3.n = F3.n by A23,FINSEQ_1:def 7
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A23
             .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
             .= p.(n-'1)*(power L).(x,n-'1) + q.(n-'1)*(power L).(x,n-'1)
                                                           by VECTSP_1:def 12
-            .= p.(n-'1)*(power L).(x,n-'1) + F2/.n by A30,A31,FINSEQ_4:def 4
-            .= F1/.n + F2/.n by A23,A25,FINSEQ_4:def 4
-            .= (G1 + G2).n by A17,A28,A29,A32,FVSUM_1:22;
+            .= p.(n-'1)*(power L).(x,n-'1) + F2/.n by A29,A30,FINSEQ_4:def 4
+            .= F1/.n + F2/.n by A22,A24,FINSEQ_4:def 4
+            .= (G1 + G2).n by A17,A27,A28,A31,FVSUM_1:22;
         end;
-        suppose A33: n > len q;
-         then A34: n >= len q+1 by NAT_1:38;
+        suppose A32: n > len q;
+         then A33: n >= len q+1 by NAT_1:38;
          then n-1 >= len q by XREAL_1:21;
-         then A35: n-'1 >= len q by BINARITH:def 3;
-         A36: n-len F2 >= 1 by A5,A34,XREAL_1:21;
+         then A34: n-'1 >= len q by BINARITH:def 3;
+         A35: n-len F2 >= 1 by A5,A33,XREAL_1:21;
          then n-len F2 >= 0;
-         then A37: n-len F2 = n-'len F2 by BINARITH:def 3;
+         then A36: n-len F2 = n-'len F2 by BINARITH:def 3;
              n-len F2 <= k-len F2 by A18,XREAL_1:11;
          then n-len F2 <= k-'len F2 by BINARITH:def 3;
-         then A38: n-len F2 in Seg (k-'len F2) by A36,A37,FINSEQ_1:3;
-             n <= len G2 by A17,A26,FINSEQ_1:3;
-         then A39: G2/.n = ((k-'(len F2))|->0.L).(n-len F2)
-                                                    by A5,A28,A33,FINSEQ_1:37
-            .= 0.L by A38,FINSEQ_2:70;
-         thus G3.n = F3.n by A24,FINSEQ_1:def 7
-            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A24
+         then A37: n-len F2 in Seg (k-'len F2) by A35,A36,FINSEQ_1:3;
+             n <= len G2 by A17,A25,FINSEQ_1:3;
+         then A38: G2/.n = ((k-'(len F2))|->0.L).(n-len F2)
+                                                    by A5,A27,A32,FINSEQ_1:37
+            .= 0.L by A37,FINSEQ_2:70;
+         thus G3.n = F3.n by A23,FINSEQ_1:def 7
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A23
             .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
-            .= (p.(n-'1) + 0.L) * (power L).(x,n-'1) by A35,ALGSEQ_1:22
+            .= (p.(n-'1) + 0.L) * (power L).(x,n-'1) by A34,ALGSEQ_1:22
             .= (p.(n-'1)) * (power L).(x,n-'1) by RLVECT_1:10
-            .= F1.n by A3,A23
-            .= G1/.n by A23,A29,FINSEQ_4:def 4
+            .= F1.n by A3,A22
+            .= G1/.n by A22,A28,FINSEQ_4:def 4
             .= G1/.n + 0.L by RLVECT_1:10
-            .= (G1 + G2).n by A17,A28,A39,FVSUM_1:22;
+            .= (G1 + G2).n by A17,A27,A38,FVSUM_1:22;
        end;
        end;
        hence G3.n = (G1 + G2).n;
       end;
-      suppose A40: len p < len q;
-       then A41: k = len q by SQUARE_1:def 2;
-       then A42: len(p+q) = len q by A40,Th10;
-       A43: n in dom F2 by A5,A17,A41,FINSEQ_1:def 3;
-       A44: n in dom F3 by A8,A17,A41,A42,FINSEQ_1:def 3;
-       A45: F2.n = q.(n-'1)*(power L).(x,n-'1) by A6,A43;
-       A46: len G1 = k & len G2 = k by FINSEQ_2:109;
-       then A47: n in dom G1 & n in dom G2 by A17,FINSEQ_1:def 3;
-       then A48: G1/.n = G1.n & G2/.n = G2.n by FINSEQ_4:def 4;
-       A49: G2/.n = G2.n by A47,FINSEQ_4:def 4
-          .= F2.n by A43,FINSEQ_1:def 7
-          .= F2/.n by A43,FINSEQ_4:def 4;
+      suppose A39: len p < len q;
+       then A40: k = len q by SQUARE_1:def 2;
+       then A41: len(p+q) = len q by A39,Th10;
+       A42: n in dom F2 by A5,A17,A40,FINSEQ_1:def 3;
+       A43: n in dom F3 by A8,A17,A40,A41,FINSEQ_1:def 3;
+       A44: F2.n = q.(n-'1)*(power L).(x,n-'1) by A6,A42;
+       A45: len G1 = k & len G2 = k by FINSEQ_2:109;
+       then A46: n in dom G1 & n in dom G2 by A17,FINSEQ_1:def 3;
+       then A47: G1/.n = G1.n & G2/.n = G2.n by FINSEQ_4:def 4;
+       A48: G2/.n = G2.n by A46,FINSEQ_4:def 4
+          .= F2.n by A42,FINSEQ_1:def 7
+          .= F2/.n by A42,FINSEQ_4:def 4;
            now per cases;
         suppose n <= len p;
          then n in Seg len p by A18,FINSEQ_1:3;
-         then A50: n in dom F1 by A2,FINSEQ_1:def 3;
-         then A51: F1.n = p.(n-'1)*(power L).(x,n-'1) by A3;
-         A52: G1/.n = G1.n by A47,FINSEQ_4:def 4
-            .= F1.n by A50,FINSEQ_1:def 7
-            .= F1/.n by A50,FINSEQ_4:def 4;
-         thus G3.n = F3.n by A44,FINSEQ_1:def 7
-            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A44
+         then A49: n in dom F1 by A2,FINSEQ_1:def 3;
+         then A50: F1.n = p.(n-'1)*(power L).(x,n-'1) by A3;
+         A51: G1/.n = G1.n by A46,FINSEQ_4:def 4
+            .= F1.n by A49,FINSEQ_1:def 7
+            .= F1/.n by A49,FINSEQ_4:def 4;
+         thus G3.n = F3.n by A43,FINSEQ_1:def 7
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A43
             .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
             .= p.(n-'1)*(power L).(x,n-'1) + q.(n-'1)*(power L).(x,n-'1)
                                                           by VECTSP_1:def 12
-            .= F1/.n + q.(n-'1)*(power L).(x,n-'1) by A50,A51,FINSEQ_4:def 4
-            .= F1/.n + F2/.n by A43,A45,FINSEQ_4:def 4
-            .= (G1 + G2).n by A17,A48,A49,A52,FVSUM_1:22;
+            .= F1/.n + q.(n-'1)*(power L).(x,n-'1) by A49,A50,FINSEQ_4:def 4
+            .= F1/.n + F2/.n by A42,A44,FINSEQ_4:def 4
+            .= (G1 + G2).n by A17,A47,A48,A51,FVSUM_1:22;
         end;
-        suppose A53: n > len p;
-         then A54: n >= len p+1 by NAT_1:38;
+        suppose A52: n > len p;
+         then A53: n >= len p+1 by NAT_1:38;
          then n-1 >= len p by XREAL_1:21;
-         then A55: n-'1 >= len p by BINARITH:def 3;
-         A56: n-len F1 >= 1 by A2,A54,XREAL_1:21;
+         then A54: n-'1 >= len p by BINARITH:def 3;
+         A55: n-len F1 >= 1 by A2,A53,XREAL_1:21;
          then n-len F1 >= 0;
-         then A57: n-len F1 = n-'len F1 by BINARITH:def 3;
+         then A56: n-len F1 = n-'len F1 by BINARITH:def 3;
              n-len F1 <= k-len F1 by A18,XREAL_1:11;
          then n-len F1 <= k-'len F1 by BINARITH:def 3;
-         then A58: n-len F1 in Seg (k-'len F1) by A56,A57,FINSEQ_1:3;
-             n <= len G1 by A17,A46,FINSEQ_1:3;
-         then A59: G1/.n = ((k-'(len F1))|->0.L).(n-len F1)
-                                                    by A2,A48,A53,FINSEQ_1:37
-            .= 0.L by A58,FINSEQ_2:70;
-         thus G3.n = F3.n by A44,FINSEQ_1:def 7
-            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A44
+         then A57: n-len F1 in Seg (k-'len F1) by A55,A56,FINSEQ_1:3;
+             n <= len G1 by A17,A45,FINSEQ_1:3;
+         then A58: G1/.n = ((k-'(len F1))|->0.L).(n-len F1)
+                                                    by A2,A47,A52,FINSEQ_1:37
+            .= 0.L by A57,FINSEQ_2:70;
+         thus G3.n = F3.n by A43,FINSEQ_1:def 7
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A43
             .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
-            .= (0.L + q.(n-'1)) * (power L).(x,n-'1) by A55,ALGSEQ_1:22
+            .= (0.L + q.(n-'1)) * (power L).(x,n-'1) by A54,ALGSEQ_1:22
             .= (q.(n-'1)) * (power L).(x,n-'1) by RLVECT_1:10
-            .= F2.n by A6,A43
-            .= G2/.n by A43,A49,FINSEQ_4:def 4
+            .= F2.n by A6,A42
+            .= G2/.n by A42,A48,FINSEQ_4:def 4
             .= 0.L + G2/.n by RLVECT_1:10
-            .= (G1 + G2).n by A17,A48,A59,FVSUM_1:22;
+            .= (G1 + G2).n by A17,A47,A58,FVSUM_1:22;
        end;
        end;
        hence G3.n = (G1 + G2).n;
       end;
-      suppose A60: len p = len q;
-       then A61: n in dom F1 & n in dom F2 by A2,A5,A17,FINSEQ_1:def 3;
-       then A62: F1.n = p.(n-'1)*(power L).(x,n-'1) by A3;
-       A63: len G1 = k & len G2 = k & len G3 = k by FINSEQ_2:109;
-       then A64: n in dom G1 & n in dom G2 & n in dom G3 by A17,FINSEQ_1:def 3;
-       then A65: G1/.n = G1.n & G2/.n = G2.n & G3/.n = G3.n by FINSEQ_4:def 4;
-       A66: G1/.n = G1.n by A64,FINSEQ_4:def 4
-          .= F1.n by A61,FINSEQ_1:def 7
-          .= F1/.n by A61,FINSEQ_4:def 4;
+      suppose A59: len p = len q;
+       then A60: n in dom F1 & n in dom F2 by A2,A5,A17,FINSEQ_1:def 3;
+       then A61: F1.n = p.(n-'1)*(power L).(x,n-'1) by A3;
+       A62: len G1 = k & len G2 = k & len G3 = k by FINSEQ_2:109;
+       then A63: n in dom G1 & n in dom G2 & n in dom G3 by A17,FINSEQ_1:def 3;
+       then A64: G1/.n = G1.n & G2/.n = G2.n & G3/.n = G3.n by FINSEQ_4:def 4;
+       A65: G1/.n = G1.n by A63,FINSEQ_4:def 4
+          .= F1.n by A60,FINSEQ_1:def 7
+          .= F1/.n by A60,FINSEQ_4:def 4;
            now per cases;
-        suppose A67: n <= len (p+q);
-         A68: n in dom F2 by A5,A17,A60,FINSEQ_1:def 3;
-         then A69: F2.n = q.(n-'1)*(power L).(x,n-'1) by A6;
-             n in Seg len (p+q) by A18,A67,FINSEQ_1:3;
-         then A70: n in dom F3 by A8,FINSEQ_1:def 3;
-         A71: G2/.n = G2.n by A64,FINSEQ_4:def 4
-            .= F2.n by A68,FINSEQ_1:def 7
-            .= F2/.n by A68,FINSEQ_4:def 4;
-         thus G3.n = F3.n by A70,FINSEQ_1:def 7
-            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A70
+        suppose A66: n <= len (p+q);
+         A67: n in dom F2 by A5,A17,A59,FINSEQ_1:def 3;
+         then A68: F2.n = q.(n-'1)*(power L).(x,n-'1) by A6;
+             n in Seg len (p+q) by A18,A66,FINSEQ_1:3;
+         then A69: n in dom F3 by A8,FINSEQ_1:def 3;
+         A70: G2/.n = G2.n by A63,FINSEQ_4:def 4
+            .= F2.n by A67,FINSEQ_1:def 7
+            .= F2/.n by A67,FINSEQ_4:def 4;
+         thus G3.n = F3.n by A69,FINSEQ_1:def 7
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A69
             .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
             .= p.(n-'1)*(power L).(x,n-'1) + q.(n-'1)*(power L).(x,n-'1)
                                                           by VECTSP_1:def 12
-            .= p.(n-'1)*(power L).(x,n-'1) + F2/.n by A68,A69,FINSEQ_4:def 4
-            .= F1/.n + F2/.n by A61,A62,FINSEQ_4:def 4
-            .= (G1 + G2).n by A17,A65,A66,A71,FVSUM_1:22;
+            .= p.(n-'1)*(power L).(x,n-'1) + F2/.n by A67,A68,FINSEQ_4:def 4
+            .= F1/.n + F2/.n by A60,A61,FINSEQ_4:def 4
+            .= (G1 + G2).n by A17,A64,A65,A70,FVSUM_1:22;
         end;
-        suppose A72: n > len (p+q);
-         then A73: n >= len (p+q)+1 by NAT_1:38;
-         then A74: n-len F3 >= 1 by A8,XREAL_1:21;
+        suppose A71: n > len (p+q);
+         then A72: n >= len (p+q)+1 by NAT_1:38;
+         then A73: n-len F3 >= 1 by A8,XREAL_1:21;
          then n-len F3 >= 0;
-         then A75: n-len F3 = n-'len F3 by BINARITH:def 3;
-             n-1 >= len (p+q)+1-1 by A73,XREAL_1:11;
-         then A76: n-'1 >= len (p+q) by BINARITH:def 3;
+         then A74: n-len F3 = n-'len F3 by BINARITH:def 3;
+             n-1 >= len (p+q)+1-1 by A72,XREAL_1:11;
+         then A75: n-'1 >= len (p+q) by BINARITH:def 3;
              n-len F3 <= k-len F3 by A18,XREAL_1:11;
          then n-len F3 <= k-'len F3 by BINARITH:def 3;
-         then A77: n-len F3 in Seg (k-'len F3) by A74,A75,FINSEQ_1:3;
-         A78: G1.n = F1.n by A61,FINSEQ_1:def 7
-            .= (p.(n-'1))*(power L).(x,n-'1) by A3,A61;
-         A79: G2.n = F2.n by A61,FINSEQ_1:def 7
-            .= (q.(n-'1))*(power L).(x,n-'1) by A6,A61;
-             n <= len G3 by A17,A63,FINSEQ_1:3;
-         hence G3.n = ((k-'(len F3))|->0.L).(n-len F3) by A8,A72,FINSEQ_1:37
-            .= 0.L by A77,FINSEQ_2:70
-            .= 0.L * (power L).(x,n-'1) by Lm2
-            .= (p+q).(n-'1) * (power L).(x,n-'1) by A76,ALGSEQ_1:22
+         then A76: n-len F3 in Seg (k-'len F3) by A73,A74,FINSEQ_1:3;
+         A77: G1.n = F1.n by A60,FINSEQ_1:def 7
+            .= (p.(n-'1))*(power L).(x,n-'1) by A3,A60;
+         A78: G2.n = F2.n by A60,FINSEQ_1:def 7
+            .= (q.(n-'1))*(power L).(x,n-'1) by A6,A60;
+             n <= len G3 by A17,A62,FINSEQ_1:3;
+         hence G3.n = ((k-'(len F3))|->0.L).(n-len F3) by A8,A71,FINSEQ_1:37
+            .= 0.L by A76,FINSEQ_2:70
+            .= 0.L * (power L).(x,n-'1) by Lm3
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A75,ALGSEQ_1:22
             .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
             .= (p.(n-'1))*(power L).(x,n-'1) + (q.(n-'1))*(power L).(x,n-'1)
                                                           by VECTSP_1:def 12
-            .= (G1 + G2).n by A17,A78,A79,FVSUM_1:22;
+            .= (G1 + G2).n by A17,A77,A78,FVSUM_1:22;
        end;
        end;
        hence G3.n = (G1 + G2).n;
@@ -1150,7 +1150,7 @@ unital
    end;
    end;
 
-  Lm3:
+  Lm4:
    for L be add-associative right_zeroed right_complementable unital
     distributive associative (non empty doubleLoopStr)
    for p,q be Polynomial of L st len p > 0 & len q > 0
@@ -1176,7 +1176,7 @@ unital
     then A9: len p + len q - 1 >= 1 by XREAL_1:21;
     then len p + len q - 1 >= 0;
     then reconsider i1=len p + len q - 1 as Nat by INT_1:16;
-    A10: i1-'1+1 = i1 by A9,AMI_5:4;
+    A10: i1-'1+1 = i1 by A9,BINARITH:53;
     consider r be FinSequence of the carrier of L such that
      A11: len r = i1-'1+1 and
      A12: (LMp*'LMq).(i1-'1) = Sum r and
@@ -1222,7 +1222,7 @@ unital
                                                          by POLYNOM3:def 11;
          i in Seg len F by A24,FINSEQ_1:def 3;
      then i >= 1 by FINSEQ_1:3;
-     then A29: i-'1+1 = i by AMI_5:4;
+     then A29: i-'1+1 = i by BINARITH:53;
      A30: now let j be Nat;
       assume A31: j in dom r1;
       then j in Seg len r1 by FINSEQ_1:def 3;
@@ -1241,12 +1241,7 @@ unital
         then i >= 0+j by A26,A29,FINSEQ_1:3;
         then i-j >= 0 by XREAL_1:21;
         then A35: i-'len p = i-len p by A34,BINARITH:def 3;
-        A36: i-'len p <> len q-'1
-        proof
-         assume i-'len p = len q-'1;
-         then i = len q-1+len p by A7,A35;
-         hence contradiction by A25;
-        end;
+        A36: i-'len p <> len q-'1 by A25,A7,A35;
         thus r1.j = LMp.(j-'1)*LMq.(i-'len p) by A28,A29,A31,A34
            .= LMp.(j-'1)*0.L by A36,Def1
            .= 0.L by VECTSP_1:36;
@@ -1324,7 +1319,7 @@ VECTSP_1:39;
    end;
    end;
 
-  Lm4:
+  Lm5:
    for L be add-associative right_zeroed right_complementable left_unital
     distributive commutative associative non trivial (non empty doubleLoopStr)
    for p,q be Polynomial of L
@@ -1348,7 +1343,7 @@ VECTSP_1:39;
       then A4: len p+len q-'2 = len p+len q-2 by BINARITH:def 3;
       A5: len p+len q-(1+1) = len p-1+(len q-1);
       thus eval((Leading-Monomial(p))*'(Leading-Monomial(q)),x) =
-            p.(len p-'1)*q.(len q-'1)*(power L).(x,len p+len q-'2) by A1,Lm3
+            p.(len p-'1)*q.(len q-'1)*(power L).(x,len p+len q-'2) by A1,Lm4
          .= p.(len p-'1)*q.(len q-'1)*((power L).(x,len p-'1)*
             (power L).(x,len q-'1)) by A3,A4,A5,POLYNOM2:2
          .= p.(len p-'1)*(q.(len q-'1)*((power L).(x,len p-'1)*
@@ -1416,7 +1411,7 @@ VECTSP_1:39;
        thus eval(p*'q,x) = eval(p*'r+p*'LMq,x) by A5,POLYNOM3:32
           .= eval(p*'r,x) + eval(p*'LMq,x) by Th22
           .= eval(p,x)*eval(r,x) + eval(p*'LMq,x) by A2,A3,A4
-          .= eval(p,x)*eval(r,x) + eval(p,x)*eval(LMq,x) by Lm4
+          .= eval(p,x)*eval(r,x) + eval(p,x)*eval(LMq,x) by Lm5
           .= eval(p,x)*(eval(r,x) + eval(LMq,x)) by VECTSP_1:def 18
           .= eval(p,x) * eval(q,x) by A5,Th22;
       end;

@@ -131,7 +131,7 @@ begin  :: Preliminaries
     then n - 1 + p..f <= len f by XREAL_1:21;
     then n-'1+p..f <= len f by A8,BINARITH:def 3;
     then A9: n-'1+p..f in dom f by A7,FINSEQ_3:27;
-       n-'1+1 = n by A5,AMI_5:4;
+       n-'1+1 = n by A5,BINARITH:53;
     then (f:-p)/.n = f/.(n-'1+p..f) by A2,A3,FINSEQ_5:55;
     hence thesis by A1,A9,SPRECT_2:def 1;
    end;
@@ -166,13 +166,13 @@ begin  :: Preliminaries
    proof
     let f be FinSequence of TOP-REAL 2;
     let p be Point of TOP-REAL 2;
-    assume A0: p in L~f; then
-B1: len f <> 0 by TOPREAL1:28;
-    len f > 0 by B1,NAT_1:19;
+    assume A1: p in L~f; then
+A2: len f <> 0 by TOPREAL1:28;
+    len f > 0 by A2,NAT_1:19;
     then 0+1 <= len f by NAT_1:38;
-    then A2: R_Cut(f,p).1 = f.1 by A0,JORDAN1B:4;
+    then A3: R_Cut(f,p).1 = f.1 by A1,JORDAN1B:4;
     assume 2 <= len R_Cut(f,p);
-    hence f.1 in L~R_Cut(f,p) by A2,JORDAN3:34;
+    hence f.1 in L~R_Cut(f,p) by A3,JORDAN3:34;
    end;
 
   theorem Th9:
@@ -186,13 +186,13 @@ A1: f is_S-Seq;
 A2: p in L~f and
 A3: f.1 in L~mid(f,Index(p,f)+1,len f);
     len f <> 0 by A2,TOPREAL1:28; then
-B2: f <> {} by FINSEQ_1:25;
-    A4: 1 <= Index(p,f)+1 by NAT_1:29;
+A4: f <> {} by FINSEQ_1:25;
+    A5: 1 <= Index(p,f)+1 by NAT_1:29;
     Index(p,f) < len f by A2,JORDAN3:41;
-    then A5: Index(p,f)+1 <= len f by NAT_1:38;
-    1 in dom f by B2,FINSEQ_5:6;
+    then A6: Index(p,f)+1 <= len f by NAT_1:38;
+    1 in dom f by A4,FINSEQ_5:6;
     then f/.1 in L~mid(f,Index(p,f)+1,len f) by A3,FINSEQ_4:def 4;
-    then Index(p,f)+1 = 0+1 by A1,A4,A5,JORDAN5B:16;
+    then Index(p,f)+1 = 0+1 by A1,A5,A6,JORDAN5B:16;
     then Index(p,f) = 0;
     hence contradiction by A2,JORDAN3:41;
    end;
@@ -226,44 +226,44 @@ A5: n = j + l by A3,NAT_1:28;
      A1: f is_S-Seq;
     then A2:f is one-to-one unfolded s.n.c. & len f >= 2 by TOPREAL1:def 10;
     then len f <> 0; then
-X1: f <> {} by FINSEQ_1:25;
+A3: f <> {} by FINSEQ_1:25;
     let p be Point of TOP-REAL 2 such that
-     A3: p in L~f and
-     A4: f.1 in L~L_Cut(f,p) and
-     A5: f.1 <> p;
+     A4: p in L~f and
+     A5: f.1 in L~L_Cut(f,p) and
+     A6: f.1 <> p;
     set g = mid(f,Index(p,f)+1,len f);
-    A6: len f in dom f by X1,FINSEQ_5:6;
-    1 in dom f by X1,FINSEQ_5:6;
-    then A7: f/.1 = f.1 by FINSEQ_4:def 4;
-    A8: not f.1 in L~g by A1,A3,Th9;
-    then p<>f.(Index(p,f)+1) by A4,JORDAN3:def 4;
-    then A9: L_Cut(f,p) = <*p*>^g by JORDAN3:def 4;
+    A7: len f in dom f by A3,FINSEQ_5:6;
+    1 in dom f by A3,FINSEQ_5:6;
+    then A8: f/.1 = f.1 by FINSEQ_4:def 4;
+    A9: not f.1 in L~g by A1,A4,Th9;
+    then p<>f.(Index(p,f)+1) by A5,JORDAN3:def 4;
+    then A10: L_Cut(f,p) = <*p*>^g by JORDAN3:def 4;
     per cases;
      suppose g is empty;
-      then L_Cut(f,p) = <*p*> by A9,FINSEQ_1:47;
+      then L_Cut(f,p) = <*p*> by A10,FINSEQ_1:47;
       then len L_Cut(f,p) = 1 by FINSEQ_1:56;
-      hence contradiction by A4,TOPREAL1:28;
+      hence contradiction by A5,TOPREAL1:28;
      end;
      suppose g is non empty;
-      then L~L_Cut(f,p) = LSeg(p,g/.1) \/ L~g by A9,SPPOL_2:20;
-      then A10: f.1 in LSeg(p,g/.1) by A4,A8,XBOOLE_0:def 2;
+      then L~L_Cut(f,p) = LSeg(p,g/.1) \/ L~g by A10,SPPOL_2:20;
+      then A11: f.1 in LSeg(p,g/.1) by A5,A9,XBOOLE_0:def 2;
       consider i being Nat such that
-       A11: 1 <= i & i+1 <= len(<*p*>^g) and
-       A12: f/.1 in LSeg(<*p*>^g,i) by A4,A7,A9,SPPOL_2:13;
-      A13: 1 <= Index(p,f) by A3,JORDAN3:41;
-      LSeg(<*p*>^g,i) c= LSeg(f,Index(p,f)+i-'1) by A3,A11,JORDAN3:49;
-      then A14: Index(p,f)+i-'1 = 1 by A2,A12,JORDAN5B:33;
-         1+1 <= Index(p,f)+i by A11,A13,XREAL_1:9;
+       A12: 1 <= i & i+1 <= len(<*p*>^g) and
+       A13: f/.1 in LSeg(<*p*>^g,i) by A5,A8,A10,SPPOL_2:13;
+      A14: 1 <= Index(p,f) by A4,JORDAN3:41;
+      LSeg(<*p*>^g,i) c= LSeg(f,Index(p,f)+i-'1) by A4,A12,JORDAN3:49;
+      then A15: Index(p,f)+i-'1 = 1 by A2,A13,JORDAN5B:33;
+         1+1 <= Index(p,f)+i by A12,A14,XREAL_1:9;
       then 1 <= Index(p,f)+i by XREAL_1:2;
-      then A15: Index(p,f)+i = 1+1 by A14,AMI_5:4;
-      then Index(p,f) = 1 by A11,A13,Th10;
-      then A16: p in LSeg(f,1) by A3,JORDAN3:42;
-      A17: i = 1 by A11,A13,A15,Th10;
-      A18: 1+1 <= len f by A1,TOPREAL1:def 10;
-      then A19: p in LSeg(f/.1,f/.(1+1)) by A16,TOPREAL1:def 5;
-         2 in dom f by A18,FINSEQ_3:27;
-      then g/.1 = f/.(1+1) by A6,A15,A17,SPRECT_2:12;
-      hence contradiction by A5,A7,A10,A19,SPRECT_3:16;
+      then A16: Index(p,f)+i = 1+1 by A15,BINARITH:53;
+      then Index(p,f) = 1 by A12,A14,Th10;
+      then A17: p in LSeg(f,1) by A4,JORDAN3:42;
+      A18: i = 1 by A12,A14,A16,Th10;
+      A19: 1+1 <= len f by A1,TOPREAL1:def 10;
+      then A20: p in LSeg(f/.1,f/.(1+1)) by A17,TOPREAL1:def 5;
+         2 in dom f by A19,FINSEQ_3:27;
+      then g/.1 = f/.(1+1) by A7,A16,A18,SPRECT_2:12;
+      hence contradiction by A6,A8,A11,A20,SPRECT_3:16;
    end;
    end;
 
@@ -364,70 +364,70 @@ A1: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
    coherence
    proof
     set f = Rotate(Cage(C,n),W-min L~Cage(C,n));
-    A2: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
+    A1: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
        E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
-    then A3: E-max L~Cage(C,n) in rng f by A2,FINSEQ_6:96;
-    A4: len Upper_Seq(C,n) = (E-max L~Cage(C,n))..f by Th12;
+    then A2: E-max L~Cage(C,n) in rng f by A1,FINSEQ_6:96;
+    A3: len Upper_Seq(C,n) = (E-max L~Cage(C,n))..f by Th12;
        now let i1,j1 be set;
      assume that
-      A5: i1 in dom Upper_Seq(C,n) and
-      A6: j1 in dom Upper_Seq(C,n) and
-      A7: Upper_Seq(C,n).i1 = Upper_Seq(C,n).j1 and
-      A8: i1 <> j1;
-     A9: L~Cage(C,n) = L~f by REVROT_1:33;
-     reconsider i2 = i1, j2 = j1 as Nat by A5,A6;
-     A10: i2 in Seg((E-max L~Cage(C,n))..f) & j2 in Seg((E-max L~Cage(C,n))..f)
-                                              by A4,A5,A6,FINSEQ_1:def 3;
-     A11: Upper_Seq(C,n).i1 = Upper_Seq(C,n)/.i2 by A5,FINSEQ_4:def 4
-        .= f/.i2 by A3,A10,FINSEQ_5:46;
-     A12: Upper_Seq(C,n).j1 = Upper_Seq(C,n)/.j2 by A6,FINSEQ_4:def 4
-        .= f/.j2 by A3,A10,FINSEQ_5:46;
-     A13: 1 <= i2 & 1 <= j2 by A10,FINSEQ_1:3;
-     A14: j2 <= (E-max L~Cage(C,n))..f & i2 <= (E-max L~Cage(C,n))..f
-                                                           by A10,FINSEQ_1:3;
+      A4: i1 in dom Upper_Seq(C,n) and
+      A5: j1 in dom Upper_Seq(C,n) and
+      A6: Upper_Seq(C,n).i1 = Upper_Seq(C,n).j1 and
+      A7: i1 <> j1;
+     A8: L~Cage(C,n) = L~f by REVROT_1:33;
+     reconsider i2 = i1, j2 = j1 as Nat by A4,A5;
+     A9: i2 in Seg((E-max L~Cage(C,n))..f) & j2 in Seg((E-max L~Cage(C,n))..f)
+                                              by A3,A4,A5,FINSEQ_1:def 3;
+     A10: Upper_Seq(C,n).i1 = Upper_Seq(C,n)/.i2 by A4,FINSEQ_4:def 4
+        .= f/.i2 by A2,A9,FINSEQ_5:46;
+     A11: Upper_Seq(C,n).j1 = Upper_Seq(C,n)/.j2 by A5,FINSEQ_4:def 4
+        .= f/.j2 by A2,A9,FINSEQ_5:46;
+     A12: 1 <= i2 & 1 <= j2 by A9,FINSEQ_1:3;
+     A13: j2 <= (E-max L~Cage(C,n))..f & i2 <= (E-max L~Cage(C,n))..f
+                                                           by A9,FINSEQ_1:3;
      (E-max L~f)..f < len f by SPRECT_5:17;
-     then A15: j2 < len f & i2 < len f by A9,A14,XREAL_1:2;
-     per cases by A8,XREAL_1:1;
+     then A14: j2 < len f & i2 < len f by A8,A13,XREAL_1:2;
+     per cases by A7,XREAL_1:1;
       suppose i2 < j2;
-       hence contradiction by A7,A11,A12,A13,A15,GOBOARD7:38;
+       hence contradiction by A6,A10,A11,A12,A14,GOBOARD7:38;
       end;
       suppose j2 < i2;
-       hence contradiction by A7,A11,A12,A13,A15,GOBOARD7:38;
+       hence contradiction by A6,A10,A11,A12,A14,GOBOARD7:38;
     end;
     end;
     hence Upper_Seq(C,n) is one-to-one by FUNCT_1:def 8;
     thus Upper_Seq(C,n) is special;
     thus Upper_Seq(C,n) is unfolded;
     let i,j be Nat;
-    assume A16: i+1 < j;
+    assume A15: i+1 < j;
     len f <> 0 by FINSEQ_1:25;
     then len f > 0 by NAT_1:19;
     then 0+1 <= len f by NAT_1:38;
-    then A17: len f in dom f by FINSEQ_3:27;
+    then A16: len f in dom f by FINSEQ_3:27;
     now per cases;
-     suppose A18: j+1 <= len Upper_Seq(C,n);
-      then A19: LSeg(Upper_Seq(C,n),j) = LSeg(f,j) by SPPOL_2:9;
-         j < len Upper_Seq(C,n) by A18,NAT_1:38;
-      then i+1 <= len Upper_Seq(C,n) by A16,XREAL_1:2;
-      then A20: LSeg(Upper_Seq(C,n),i) = LSeg(f,i) by SPPOL_2:9;
-      A21: j+1 <= (E-max L~Cage(C,n))..f by A3,A18,FINSEQ_5:45;
-      A22: (E-max L~Cage(C,n))..f <= len f by A3,FINSEQ_4:31;
-         now per cases by A21,REAL_1:def 5;
+     suppose A17: j+1 <= len Upper_Seq(C,n);
+      then A18: LSeg(Upper_Seq(C,n),j) = LSeg(f,j) by SPPOL_2:9;
+         j < len Upper_Seq(C,n) by A17,NAT_1:38;
+      then i+1 <= len Upper_Seq(C,n) by A15,XREAL_1:2;
+      then A19: LSeg(Upper_Seq(C,n),i) = LSeg(f,i) by SPPOL_2:9;
+      A20: j+1 <= (E-max L~Cage(C,n))..f by A2,A17,FINSEQ_5:45;
+      A21: (E-max L~Cage(C,n))..f <= len f by A2,FINSEQ_4:31;
+         now per cases by A20,REAL_1:def 5;
        suppose j+1 < (E-max L~Cage(C,n))..f;
-        hence j+1 < len f by A22,XREAL_1:2;
+        hence j+1 < len f by A21,XREAL_1:2;
        end;
-       suppose A23: j+1 = (E-max L~Cage(C,n))..f;
+       suppose A22: j+1 = (E-max L~Cage(C,n))..f;
         assume j+1 >= len f;
-        then (E-max L~Cage(C,n))..f = len f by A22,A23,XREAL_1:1;
-        then E-max L~Cage(C,n) = f.(len f) by A3,FINSEQ_4:29
-           .= f/.(len f) by A17,FINSEQ_4:def 4
+        then (E-max L~Cage(C,n))..f = len f by A21,A22,XREAL_1:1;
+        then E-max L~Cage(C,n) = f.(len f) by A2,FINSEQ_4:29
+           .= f/.(len f) by A16,FINSEQ_4:def 4
            .= f/.1 by FINSEQ_6:def 1
-           .= W-min L~Cage(C,n) by A2,FINSEQ_6:98;
+           .= W-min L~Cage(C,n) by A1,FINSEQ_6:98;
         hence contradiction by TOPREAL5:25;
       end;
       end;
       hence LSeg(Upper_Seq(C,n),i) misses LSeg(Upper_Seq(C,n),j)
-                                           by A16,A19,A20,GOBOARD5:def 4;
+                                           by A15,A18,A19,GOBOARD5:def 4;
      end;
      suppose j+1 > len Upper_Seq(C,n);
       then LSeg(Upper_Seq(C,n),j) = {} by TOPREAL1:def 5;
@@ -441,110 +441,110 @@ A1: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
    cluster Lower_Seq(C,n) -> one-to-one special unfolded s.n.c.;
    coherence
    proof
-    A24: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
+    A23: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
        E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
-    then A25: E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
-                                                           by A24,FINSEQ_6:96;
+    then A24: E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
+                                                           by A23,FINSEQ_6:96;
     set f = Rotate(Cage(C,n),W-min L~Cage(C,n));
-    A27: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
+    A25: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
        E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
-    then A28: E-max L~Cage(C,n) in rng f by A27,FINSEQ_6:96;
-    A29: len Lower_Seq(C,n) = len f-(E-max L~Cage(C,n))..f+1 by Th13;
-    A30: L~Cage(C,n) = L~f by REVROT_1:33;
-    then A31: f/.1 = W-min L~f by A27,FINSEQ_6:98;
-    then A32: (W-max L~Cage(C,n))..f <= (N-min L~Cage(C,n))..f
-                                                      by A30,SPRECT_5:24;
-    A33: (N-min L~Cage(C,n))..f < (N-max L~Cage(C,n))..f
-                                                      by A30,A31,SPRECT_5:25;
-    A34: (N-max L~Cage(C,n))..f <= (E-max L~Cage(C,n))..f
-                                                      by A30,A31,SPRECT_5:26;
-    (W-max L~Cage(C,n))..f > 1 by A30,A31,SPRECT_5:23;
-    then (N-min L~Cage(C,n))..f > 1 by A32,XREAL_1:2;
-    then (N-max L~Cage(C,n))..f > 1 by A33,XREAL_1:2;
-    then A35: (E-max L~Cage(C,n))..f > 1 by A34,XREAL_1:2;
+    then A26: E-max L~Cage(C,n) in rng f by A25,FINSEQ_6:96;
+    A27: len Lower_Seq(C,n) = len f-(E-max L~Cage(C,n))..f+1 by Th13;
+    A28: L~Cage(C,n) = L~f by REVROT_1:33;
+    then A29: f/.1 = W-min L~f by A25,FINSEQ_6:98;
+    then A30: (W-max L~Cage(C,n))..f <= (N-min L~Cage(C,n))..f
+                                                      by A28,SPRECT_5:24;
+    A31: (N-min L~Cage(C,n))..f < (N-max L~Cage(C,n))..f
+                                                      by A28,A29,SPRECT_5:25;
+    A32: (N-max L~Cage(C,n))..f <= (E-max L~Cage(C,n))..f
+                                                      by A28,A29,SPRECT_5:26;
+    (W-max L~Cage(C,n))..f > 1 by A28,A29,SPRECT_5:23;
+    then (N-min L~Cage(C,n))..f > 1 by A30,XREAL_1:2;
+    then (N-max L~Cage(C,n))..f > 1 by A31,XREAL_1:2;
+    then A33: (E-max L~Cage(C,n))..f > 1 by A32,XREAL_1:2;
     now let i1,j1 be set;
      assume that
-      A36: i1 in dom Lower_Seq(C,n) and
-      A37: j1 in dom Lower_Seq(C,n) and
-      A38: Lower_Seq(C,n).i1 = Lower_Seq(C,n).j1 and
-      A39: i1 <> j1;
-     reconsider i2 = i1, j2 = j1 as Nat by A36,A37;
-     A40: i2 in Seg len Lower_Seq(C,n) & j2 in Seg len Lower_Seq(C,n)
-                                                  by A36,A37,FINSEQ_1:def 3;
+      A34: i1 in dom Lower_Seq(C,n) and
+      A35: j1 in dom Lower_Seq(C,n) and
+      A36: Lower_Seq(C,n).i1 = Lower_Seq(C,n).j1 and
+      A37: i1 <> j1;
+     reconsider i2 = i1, j2 = j1 as Nat by A34,A35;
+     A38: i2 in Seg len Lower_Seq(C,n) & j2 in Seg len Lower_Seq(C,n)
+                                                  by A34,A35,FINSEQ_1:def 3;
      then i2 >= 1 & j2 >= 1 by FINSEQ_1:3;
-     then A41: i2 = i2-'1+1 & j2 = j2-'1+1 by AMI_5:4;
-     A42: Lower_Seq(C,n).i1 = Lower_Seq(C,n)/.i2 by A36,FINSEQ_4:def 4
-        .= f/.(i2-'1+(E-max L~Cage(C,n))..f) by A28,A36,A41,FINSEQ_5:55;
-     A43: Lower_Seq(C,n).j1 = Lower_Seq(C,n)/.j2 by A37,FINSEQ_4:def 4
-        .= f/.(j2-'1+(E-max L~Cage(C,n))..f) by A28,A37,A41,FINSEQ_5:55;
-     0+1 <= i2 & 0+1 <= j2 by A40,FINSEQ_1:3;
-     then A44: i2-1 >= 0 & j2-1 >= 0 by XREAL_1:21;
+     then A39: i2 = i2-'1+1 & j2 = j2-'1+1 by BINARITH:53;
+     A40: Lower_Seq(C,n).i1 = Lower_Seq(C,n)/.i2 by A34,FINSEQ_4:def 4
+        .= f/.(i2-'1+(E-max L~Cage(C,n))..f) by A26,A34,A39,FINSEQ_5:55;
+     A41: Lower_Seq(C,n).j1 = Lower_Seq(C,n)/.j2 by A35,FINSEQ_4:def 4
+        .= f/.(j2-'1+(E-max L~Cage(C,n))..f) by A26,A35,A39,FINSEQ_5:55;
+     0+1 <= i2 & 0+1 <= j2 by A38,FINSEQ_1:3;
+     then A42: i2-1 >= 0 & j2-1 >= 0 by XREAL_1:21;
      j2 <= len f-(E-max L~Cage(C,n))..f+1 &
-     i2 <= len f-(E-max L~Cage(C,n))..f+1 by A29,A40,FINSEQ_1:3;
+     i2 <= len f-(E-max L~Cage(C,n))..f+1 by A27,A38,FINSEQ_1:3;
      then j2-1 <= len f-(E-max L~Cage(C,n))..f &
      i2-1 <= len f-(E-max L~Cage(C,n))..f by XREAL_1:22;
      then j2-1+(E-max L~Cage(C,n))..f <= len f &
      i2-1+(E-max L~Cage(C,n))..f <= len f by XREAL_1:21;
-     then A45: j2-'1+(E-max L~Cage(C,n))..f <= len f &
-     i2-'1+(E-max L~Cage(C,n))..f <= len f by A44,BINARITH:def 3;
+     then A43: j2-'1+(E-max L~Cage(C,n))..f <= len f &
+     i2-'1+(E-max L~Cage(C,n))..f <= len f by A42,BINARITH:def 3;
      i2-'1+(E-max L~Cage(C,n))..f >= (E-max L~Cage(C,n))..f &
       j2-'1+(E-max L~Cage(C,n))..f >= (E-max L~Cage(C,n))..f by NAT_1:29;
-     then A46: 1 < i2-'1+(E-max L~Cage(C,n))..f &
-     1 < j2-'1+(E-max L~Cage(C,n))..f by A35,XREAL_1:2;
-     per cases by A39,XREAL_1:1;
+     then A44: 1 < i2-'1+(E-max L~Cage(C,n))..f &
+     1 < j2-'1+(E-max L~Cage(C,n))..f by A33,XREAL_1:2;
+     per cases by A37,XREAL_1:1;
       suppose i2 < j2;
        then i2-1 < j2-1 by XREAL_1:11;
-       then i2-1 < j2-'1 by A44,BINARITH:def 3;
-       then i2-'1 < j2-'1 by A44,BINARITH:def 3;
+       then i2-1 < j2-'1 by A42,BINARITH:def 3;
+       then i2-'1 < j2-'1 by A42,BINARITH:def 3;
        then i2-'1+(E-max L~Cage(C,n))..f < j2-'1+(E-max L~Cage(C,n))..f
                                                                 by XREAL_1:8;
-       hence contradiction by A38,A42,A43,A45,A46,GOBOARD7:39;
+       hence contradiction by A36,A40,A41,A43,A44,GOBOARD7:39;
       end;
       suppose j2 < i2;
        then j2-1 < i2-1 by XREAL_1:11;
-       then j2-1 < i2-'1 by A44,BINARITH:def 3;
-       then j2-'1 < i2-'1 by A44,BINARITH:def 3;
+       then j2-1 < i2-'1 by A42,BINARITH:def 3;
+       then j2-'1 < i2-'1 by A42,BINARITH:def 3;
        then j2-'1+(E-max L~Cage(C,n))..f < i2-'1+(E-max L~Cage(C,n))..f
                                                                 by XREAL_1:8;
-       hence contradiction by A38,A42,A43,A45,A46,GOBOARD7:39;
+       hence contradiction by A36,A40,A41,A43,A44,GOBOARD7:39;
     end;
     end;
     hence Lower_Seq(C,n) is one-to-one by FUNCT_1:def 8;
-    thus Lower_Seq(C,n) is special by A25,SPPOL_2:41;
-    thus Lower_Seq(C,n) is unfolded by A25,SPPOL_2:28;
+    thus Lower_Seq(C,n) is special by A24,SPPOL_2:41;
+    thus Lower_Seq(C,n) is unfolded by A24,SPPOL_2:28;
     let i,j be Nat;
-    assume A47: i+1 < j;
+    assume A45: i+1 < j;
     i+1 >= 1 by NAT_1:29;
-    then A48: j > 0+1 by A47,XREAL_1:2;
-    then j = j-'1+1 by AMI_5:4;
-    then A49: LSeg(Lower_Seq(C,n),j) = LSeg(f,j-'1+(E-max L~Cage(C,n))..f)
-                                                         by A25,SPPOL_2:10;
+    then A46: j > 0+1 by A45,XREAL_1:2;
+    then j = j-'1+1 by BINARITH:53;
+    then A47: LSeg(Lower_Seq(C,n),j) = LSeg(f,j-'1+(E-max L~Cage(C,n))..f)
+                                                         by A24,SPPOL_2:10;
     now per cases by NAT_1:18;
      suppose i > 0;
-      then A50: i >= 0+1 by NAT_1:38;
-      then i = i-'1+1 by AMI_5:4;
-      then A51: LSeg(Lower_Seq(C,n),i) = LSeg(f,i-'1+(E-max L~Cage(C,n))..f)
-                                                         by A28,SPPOL_2:10;
-      A52: j-1 > 0 by A48,XREAL_1:22;
-      A53: i-1 >= 0 by A50,XREAL_1:21;
-         i+1-1 < j-1 by A47,XREAL_1:11;
-      then i-1+1 < j-'1 by A52,BINARITH:def 3;
-      then i-'1+1 < j-'1 by A53,BINARITH:def 3;
+      then A48: i >= 0+1 by NAT_1:38;
+      then i = i-'1+1 by BINARITH:53;
+      then A49: LSeg(Lower_Seq(C,n),i) = LSeg(f,i-'1+(E-max L~Cage(C,n))..f)
+                                                         by A26,SPPOL_2:10;
+      A50: j-1 > 0 by A46,XREAL_1:22;
+      A51: i-1 >= 0 by A48,XREAL_1:21;
+         i+1-1 < j-1 by A45,XREAL_1:11;
+      then i-1+1 < j-'1 by A50,BINARITH:def 3;
+      then i-'1+1 < j-'1 by A51,BINARITH:def 3;
       then i-'1+1+(E-max L~Cage(C,n))..f < j-'1+(E-max L~Cage(C,n))..f
                                                                 by XREAL_1:8;
-      then A54: i-'1+(E-max L~Cage(C,n))..f+1 < j-'1+(E-max L~Cage(C,n))..f;
+      then A52: i-'1+(E-max L~Cage(C,n))..f+1 < j-'1+(E-max L~Cage(C,n))..f;
          i-'1 >= 0 by NAT_1:18;
-      then A55: i-'1+(E-max L~Cage(C,n))..f > 0+1 by A35,XREAL_1:10;
+      then A53: i-'1+(E-max L~Cage(C,n))..f > 0+1 by A33,XREAL_1:10;
          now per cases;
        suppose j-'1+(E-max L~Cage(C,n))..f+1 <= len f;
         then j-'1+(E-max L~Cage(C,n))..f < len f by NAT_1:38;
         then LSeg(Lower_Seq(C,n),i) misses LSeg(Lower_Seq(C,n),j)
-                                      by A49,A51,A54,A55,GOBOARD5:def 4;
+                                      by A47,A49,A52,A53,GOBOARD5:def 4;
         hence LSeg(Lower_Seq(C,n),i) /\ LSeg(Lower_Seq(C,n),j) = {}
                                       by XBOOLE_0:def 7;
        end;
        suppose j-'1+(E-max L~Cage(C,n))..f+1 > len f;
-        then LSeg(Lower_Seq(C,n),j) = {} by A49,TOPREAL1:def 5;
+        then LSeg(Lower_Seq(C,n),j) = {} by A47,TOPREAL1:def 5;
         hence LSeg(Lower_Seq(C,n),i) /\ LSeg(Lower_Seq(C,n),j) = {};
       end;
       end;
@@ -680,10 +680,10 @@ A1: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
     let C be compact non vertical non horizontal non empty
      Subset of TOP-REAL 2;
     let n be Nat;
-A3: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
+A1: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
     E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
     then E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
-                                                           by A3,FINSEQ_6:96;
+                                                           by A1,FINSEQ_6:96;
     then L~Rotate(Cage(C,n),W-min L~Cage(C,n)) =
       L~Upper_Seq(C,n) \/ L~Lower_Seq(C,n) by SPPOL_2:25;
     hence thesis by REVROT_1:33;
@@ -717,67 +717,67 @@ A3: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
     A2: pWa <> pEa by JORDAN1B:6;
     pWi <> pEa by TOPREAL5:25;
     then A3: Card {pWi,pWa,pEa} = 3 by A1,A2,CARD_2:77;
-    A6: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
+    A4: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
        E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
-    then A7: E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
-                                                           by A6,FINSEQ_6:96;
+    then A5: E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
+                                                           by A4,FINSEQ_6:96;
        (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) <=
      (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n));
-    then A8: pEa in rng Upper_Seq(C,n) by A7,FINSEQ_5:49;
-    A9: Upper_Seq(C,n)/.1 = Rotate(Cage(C,n),W-min L~Cage(C,n))/.1
-                                                       by A7,FINSEQ_5:47;
-    then A10: Upper_Seq(C,n)/.1 = W-min L~Cage(C,n) by A6,FINSEQ_6:98;
-    then A11: pWi in rng Upper_Seq(C,n) by FINSEQ_6:46;
+    then A6: pEa in rng Upper_Seq(C,n) by A5,FINSEQ_5:49;
+    A7: Upper_Seq(C,n)/.1 = Rotate(Cage(C,n),W-min L~Cage(C,n))/.1
+                                                       by A5,FINSEQ_5:47;
+    then A8: Upper_Seq(C,n)/.1 = W-min L~Cage(C,n) by A4,FINSEQ_6:98;
+    then A9: pWi in rng Upper_Seq(C,n) by FINSEQ_6:46;
        pWa in rng Cage(C,n) by SPRECT_2:48;
-    then A12: pWa in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
-                                                          by A6,FINSEQ_6:96;
+    then A10: pWa in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
+                                                          by A4,FINSEQ_6:96;
     set f=Rotate(Cage(C,n),W-min L~Cage(C,n));
-    A13: L~Cage(C,n) = L~f by REVROT_1:33;
-    then A14: (W-max L~f)..f <= (N-min L~f)..f by A9,A10,SPRECT_5:24;
-    (N-min L~f)..f < (N-max L~f)..f by A9,A10,A13,SPRECT_5:25;
-    then A15: (W-max L~f)..f < (N-max L~f)..f by A14,XREAL_1:2;
-    (N-max L~f)..f <= (E-max L~f)..f by A9,A10,A13,SPRECT_5:26;
+    A11: L~Cage(C,n) = L~f by REVROT_1:33;
+    then A12: (W-max L~f)..f <= (N-min L~f)..f by A7,A8,SPRECT_5:24;
+    (N-min L~f)..f < (N-max L~f)..f by A7,A8,A11,SPRECT_5:25;
+    then A13: (W-max L~f)..f < (N-max L~f)..f by A12,XREAL_1:2;
+    (N-max L~f)..f <= (E-max L~f)..f by A7,A8,A11,SPRECT_5:26;
     then pWa..Rotate(Cage(C,n),W-min L~Cage(C,n)) <
-     pEa..Rotate(Cage(C,n),W-min L~Cage(C,n)) by A13,A15,XREAL_1:2;
-    then A16: pWa in rng Upper_Seq(C,n) by A7,A12,FINSEQ_5:49;
+     pEa..Rotate(Cage(C,n),W-min L~Cage(C,n)) by A11,A13,XREAL_1:2;
+    then A14: pWa in rng Upper_Seq(C,n) by A5,A10,FINSEQ_5:49;
     {pWi,pWa,pEa} c= rng Upper_Seq(C,n)
     proof
      let x be set;
      assume x in {pWi,pWa,pEa};
-     hence x in rng Upper_Seq(C,n) by A8,A11,A16,ENUMSET1:def 1;
+     hence x in rng Upper_Seq(C,n) by A6,A9,A14,ENUMSET1:def 1;
     end;
-    then A17: Card {pWi,pWa,pEa} c= Card rng Upper_Seq(C,n) by CARD_1:27;
+    then A15: Card {pWi,pWa,pEa} c= Card rng Upper_Seq(C,n) by CARD_1:27;
        Card rng Upper_Seq(C,n) c= Card dom Upper_Seq(C,n) by CARD_2:80;
     then Card rng Upper_Seq(C,n) c= len Upper_Seq(C,n) by PRE_CIRC:21;
-    then 3 c= len Upper_Seq(C,n) by A3,A17,XBOOLE_1:1;
+    then 3 c= len Upper_Seq(C,n) by A3,A15,XBOOLE_1:1;
     hence len Upper_Seq(C,n) >= 3 by CARD_1:56;
-    A18: pWi <> pEi by Th18;
-    A19: pEi <> pEa by SPRECT_2:58;
+    A16: pWi <> pEi by Th18;
+    A17: pEi <> pEa by SPRECT_2:58;
        pWi <> pEa by TOPREAL5:25;
-    then A20: Card {pWi,pEi,pEa} = 3 by A18,A19,CARD_2:77;
-    A21: pEa in rng Lower_Seq(C,n) by FINSEQ_6:66;
+    then A18: Card {pWi,pEi,pEa} = 3 by A16,A17,CARD_2:77;
+    A19: pEa in rng Lower_Seq(C,n) by FINSEQ_6:66;
        Lower_Seq(C,n)/.(len Lower_Seq(C,n)) =
           Rotate(Cage(C,n),W-min L~Cage(C,n))/.
-              (len Rotate(Cage(C,n),W-min L~Cage(C,n))) by A7,FINSEQ_5:57
+              (len Rotate(Cage(C,n),W-min L~Cage(C,n))) by A5,FINSEQ_5:57
        .= Rotate(Cage(C,n),W-min L~Cage(C,n))/.1 by FINSEQ_6:def 1
-       .= W-min L~Cage(C,n) by A6,FINSEQ_6:98;
-    then A22: pWi in rng Lower_Seq(C,n) by REVROT_1:3;
+       .= W-min L~Cage(C,n) by A4,FINSEQ_6:98;
+    then A20: pWi in rng Lower_Seq(C,n) by REVROT_1:3;
        pEi in rng Cage(C,n) by SPRECT_2:49;
-    then A23: pEi in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
-                                                          by A6,FINSEQ_6:96;
+    then A21: pEi in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
+                                                          by A4,FINSEQ_6:96;
        pEi..Rotate(Cage(C,n),W-min L~Cage(C,n)) >
-     pEa..Rotate(Cage(C,n),W-min L~Cage(C,n)) by A9,A10,A13,SPRECT_5:27;
-    then A24: pEi in rng Lower_Seq(C,n) by A7,A23,FINSEQ_6:67;
+     pEa..Rotate(Cage(C,n),W-min L~Cage(C,n)) by A7,A8,A11,SPRECT_5:27;
+    then A22: pEi in rng Lower_Seq(C,n) by A5,A21,FINSEQ_6:67;
        {pWi,pEi,pEa} c= rng Lower_Seq(C,n)
     proof
      let x be set;
      assume x in {pWi,pEi,pEa};
-     hence x in rng Lower_Seq(C,n) by A21,A22,A24,ENUMSET1:def 1;
+     hence x in rng Lower_Seq(C,n) by A19,A20,A22,ENUMSET1:def 1;
     end;
-    then A25: Card {pWi,pEi,pEa} c= Card rng Lower_Seq(C,n) by CARD_1:27;
+    then A23: Card {pWi,pEi,pEa} c= Card rng Lower_Seq(C,n) by CARD_1:27;
     Card rng Lower_Seq(C,n) c= Card dom Lower_Seq(C,n) by CARD_2:80;
     then Card rng Lower_Seq(C,n) c= len Lower_Seq(C,n) by PRE_CIRC:21;
-    then 3 c= len Lower_Seq(C,n) by A20,A25,XBOOLE_1:1;
+    then 3 c= len Lower_Seq(C,n) by A18,A23,XBOOLE_1:1;
     hence len Lower_Seq(C,n) >= 3 by CARD_1:56;
    end;
 
@@ -808,113 +808,113 @@ A3: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
    proof
     let C be compact non vertical non horizontal Subset of TOP-REAL 2;
     let n be Nat;
-    A3: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
+    A1: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
        E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
-    then A4: E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
-                                                           by A3,FINSEQ_6:96;
-    A5: (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) <=
+    then A2: E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
+                                                           by A1,FINSEQ_6:96;
+    A3: (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) <=
         (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n));
        len Lower_Seq(C,n) >= 3 by Th19;
     then len Lower_Seq(C,n) >= 2 by XREAL_1:2;
-    then A6: rng Lower_Seq(C,n) c= L~Lower_Seq(C,n) by SPPOL_2:18;
-    A7: E-max L~Cage(C,n) in rng Lower_Seq(C,n) by FINSEQ_6:66;
-    A8: len Upper_Seq(C,n) >= 3 by Th19;
+    then A4: rng Lower_Seq(C,n) c= L~Lower_Seq(C,n) by SPPOL_2:18;
+    A5: E-max L~Cage(C,n) in rng Lower_Seq(C,n) by FINSEQ_6:66;
+    A6: len Upper_Seq(C,n) >= 3 by Th19;
     then len Upper_Seq(C,n) >= 2 by XREAL_1:2;
-    then A9: rng Upper_Seq(C,n) c= L~Upper_Seq(C,n) by SPPOL_2:18;
-    A10: E-max L~Cage(C,n) in rng Upper_Seq(C,n) by A4,A5,FINSEQ_5:49;
+    then A7: rng Upper_Seq(C,n) c= L~Upper_Seq(C,n) by SPPOL_2:18;
+    A8: E-max L~Cage(C,n) in rng Upper_Seq(C,n) by A2,A3,FINSEQ_5:49;
        Upper_Seq(C,n)/.1 = Rotate(Cage(C,n),W-min L~Cage(C,n))/.1
-                                                         by A4,FINSEQ_5:47
-       .= W-min L~Cage(C,n) by A3,FINSEQ_6:98;
-    then A11: W-min L~Cage(C,n) in rng Upper_Seq(C,n) by FINSEQ_6:46;
+                                                         by A2,FINSEQ_5:47
+       .= W-min L~Cage(C,n) by A1,FINSEQ_6:98;
+    then A9: W-min L~Cage(C,n) in rng Upper_Seq(C,n) by FINSEQ_6:46;
        Lower_Seq(C,n)/.(len Lower_Seq(C,n)) =
           Rotate(Cage(C,n),W-min L~Cage(C,n))/.
-           (len Rotate(Cage(C,n),W-min L~Cage(C,n))) by A4,FINSEQ_5:57
+           (len Rotate(Cage(C,n),W-min L~Cage(C,n))) by A2,FINSEQ_5:57
        .= Rotate(Cage(C,n),W-min L~Cage(C,n))/.1 by FINSEQ_6:def 1
-       .= W-min L~Cage(C,n) by A3,FINSEQ_6:98;
-    then A12: W-min L~Cage(C,n) in rng Lower_Seq(C,n) by REVROT_1:3;
+       .= W-min L~Cage(C,n) by A1,FINSEQ_6:98;
+    then A10: W-min L~Cage(C,n) in rng Lower_Seq(C,n) by REVROT_1:3;
     thus L~Upper_Seq(C,n) /\ L~Lower_Seq(C,n) c=
      {W-min L~Cage(C,n),E-max L~Cage(C,n)}
     proof
      let x be set;
-     assume A13: x in L~Upper_Seq(C,n) /\ L~Lower_Seq(C,n);
-     then A14: x in L~Upper_Seq(C,n) & x in L~Lower_Seq(C,n) by XBOOLE_0:def 3;
-     reconsider x1=x as Point of TOP-REAL 2 by A13;
+     assume A11: x in L~Upper_Seq(C,n) /\ L~Lower_Seq(C,n);
+     then A12: x in L~Upper_Seq(C,n) & x in L~Lower_Seq(C,n) by XBOOLE_0:def 3;
+     reconsider x1=x as Point of TOP-REAL 2 by A11;
      consider i1 be Nat such that
-      A15: 1 <= i1 & i1+1 <= len Upper_Seq(C,n) and
-      A16: x1 in LSeg(Upper_Seq(C,n),i1) by A14,SPPOL_2:13;
+      A13: 1 <= i1 & i1+1 <= len Upper_Seq(C,n) and
+      A14: x1 in LSeg(Upper_Seq(C,n),i1) by A12,SPPOL_2:13;
      consider i2 be Nat such that
-      A17: 1 <= i2 & i2+1 <= len Lower_Seq(C,n) and
-      A18: x1 in LSeg(Lower_Seq(C,n),i2) by A14,SPPOL_2:13;
+      A15: 1 <= i2 & i2+1 <= len Lower_Seq(C,n) and
+      A16: x1 in LSeg(Lower_Seq(C,n),i2) by A12,SPPOL_2:13;
      set f=Rotate(Cage(C,n),W-min L~Cage(C,n));
      set pE=E-max L~Cage(C,n);
      set pW=W-min L~Cage(C,n);
-     A19: LSeg(Upper_Seq(C,n),i1) = LSeg(f,i1) by A15,SPPOL_2:9;
+     A17: LSeg(Upper_Seq(C,n),i1) = LSeg(f,i1) by A13,SPPOL_2:9;
      set i3=i2-'1;
-     A20: i3+1 = i2 by A17,AMI_5:4;
-     then A21: LSeg(Lower_Seq(C,n),i2) = LSeg(f,i3+pE..f) by A4,SPPOL_2:10;
-     A22: len Upper_Seq(C,n) = pE..f by Th12;
-     A23: len Lower_Seq(C,n) = len f-pE..f+1 by Th13;
-     A24: i2-1 >= 1-1 by A17,XREAL_1:11;
-        i2 < len f-pE..f+1 by A17,A23,NAT_1:38;
+     A18: i3+1 = i2 by A15,BINARITH:53;
+     then A19: LSeg(Lower_Seq(C,n),i2) = LSeg(f,i3+pE..f) by A2,SPPOL_2:10;
+     A20: len Upper_Seq(C,n) = pE..f by Th12;
+     A21: len Lower_Seq(C,n) = len f-pE..f+1 by Th13;
+     A22: i2-1 >= 1-1 by A15,XREAL_1:11;
+        i2 < len f-pE..f+1 by A15,A21,NAT_1:38;
      then i2-1 < len f-pE..f by XREAL_1:21;
      then i2-1+pE..f < len f by XREAL_1:22;
-     then A25: i3+pE..f < len f by A24,BINARITH:def 3;
-     A26: i3 >= 0 by NAT_1:18;
-     A27: pE..f >= 1 by A4,FINSEQ_4:31;
-        i3+1 < len f-pE..f+1 by A17,A20,A23,NAT_1:38;
+     then A23: i3+pE..f < len f by A22,BINARITH:def 3;
+     A24: i3 >= 0 by NAT_1:18;
+     A25: pE..f >= 1 by A2,FINSEQ_4:31;
+        i3+1 < len f-pE..f+1 by A15,A18,A21,NAT_1:38;
      then i3 < len f-pE..f by XREAL_1:9;
-     then A28: i3+pE..f < len f by XREAL_1:22;
-     A29: i1+1 < pE..f+1 by A15,A22,NAT_1:38;
-        1+pE..f <= i3+1+pE..f by A17,A20,XREAL_1:9;
-     then i1+1 < i3+pE..f+1 by A29,XREAL_1:2;
-     then A30: i1+1 <= i3+pE..f by NAT_1:38;
-     A31: i3+pE..f+1 <= len f by A28,NAT_1:38;
-     A32: len f > 4 by GOBOARD7:36;
-     A33: i3+pE..f >= 0 & i1 >= 0 by NAT_1:18;
-     A34: pE..f-'1+1 = pE..f by A27,AMI_5:4;
-     assume A35: not x in {W-min L~Cage(C,n),E-max L~Cage(C,n)};
-        now per cases by A15,A30,REAL_1:def 5;
+     then A26: i3+pE..f < len f by XREAL_1:22;
+     A27: i1+1 < pE..f+1 by A13,A20,NAT_1:38;
+        1+pE..f <= i3+1+pE..f by A15,A18,XREAL_1:9;
+     then i1+1 < i3+pE..f+1 by A27,XREAL_1:2;
+     then A28: i1+1 <= i3+pE..f by NAT_1:38;
+     A29: i3+pE..f+1 <= len f by A26,NAT_1:38;
+     A30: len f > 4 by GOBOARD7:36;
+     A31: i3+pE..f >= 0 & i1 >= 0 by NAT_1:18;
+     A32: pE..f-'1+1 = pE..f by A25,BINARITH:53;
+     assume A33: not x in {W-min L~Cage(C,n),E-max L~Cage(C,n)};
+        now per cases by A13,A28,REAL_1:def 5;
       suppose i1+1 < i3+pE..f & i1 > 1;
-       then LSeg(f,i1) misses LSeg(f,i3+pE..f) by A28,GOBOARD5:def 4;
+       then LSeg(f,i1) misses LSeg(f,i3+pE..f) by A26,GOBOARD5:def 4;
        then LSeg(f,i1) /\ LSeg(f,i3+pE..f) = {} by XBOOLE_0:def 7;
-       hence contradiction by A16,A18,A19,A21,XBOOLE_0:def 3;
+       hence contradiction by A14,A16,A17,A19,XBOOLE_0:def 3;
       end;
-      suppose A36: i1 = 1;
-          i3+pE..f >= 0+3 by A8,A22,A26,XREAL_1:9;
-       then A37: i1+1 < i3+pE..f by A36,XREAL_1:2;
-          now per cases by A31,REAL_1:def 5;
+      suppose A34: i1 = 1;
+          i3+pE..f >= 0+3 by A6,A20,A24,XREAL_1:9;
+       then A35: i1+1 < i3+pE..f by A34,XREAL_1:2;
+          now per cases by A29,REAL_1:def 5;
         suppose i3+pE..f+1 < len f;
-         then LSeg(f,i1) misses LSeg(f,i3+pE..f) by A37,GOBOARD5:def 4;
+         then LSeg(f,i1) misses LSeg(f,i3+pE..f) by A35,GOBOARD5:def 4;
          then LSeg(f,i1) /\ LSeg(f,i3+pE..f) = {} by XBOOLE_0:def 7;
-         hence contradiction by A16,A18,A19,A21,XBOOLE_0:def 3;
+         hence contradiction by A14,A16,A17,A19,XBOOLE_0:def 3;
         end;
         suppose i3+pE..f+1 = len f;
          then i3+pE..f = len f-1;
-         then i3+pE..f = len f-'1 by A33,BINARITH:def 3;
-         then LSeg(f,i1) /\ LSeg(f,i3+pE..f) = {f/.1} by A32,A36,REVROT_1:30;
-         then x1 in {f/.1} by A16,A18,A19,A21,XBOOLE_0:def 3;
+         then i3+pE..f = len f-'1 by A31,BINARITH:def 3;
+         then LSeg(f,i1) /\ LSeg(f,i3+pE..f) = {f/.1} by A30,A34,REVROT_1:30;
+         then x1 in {f/.1} by A14,A16,A17,A19,XBOOLE_0:def 3;
          then x1 = f/.1 by TARSKI:def 1
-            .= pW by A3,FINSEQ_6:98;
-         hence contradiction by A35,TARSKI:def 2;
+            .= pW by A1,FINSEQ_6:98;
+         hence contradiction by A33,TARSKI:def 2;
        end;
        end;
        hence contradiction;
       end;
-      suppose A38: i1+1 = i3+pE..f;
-          0+pE..f <= i3+pE..f by A26,XREAL_1:9;
-       then pE..f = i1+1 by A15,A22,A38,XREAL_1:1;
+      suppose A36: i1+1 = i3+pE..f;
+          0+pE..f <= i3+pE..f by A24,XREAL_1:9;
+       then pE..f = i1+1 by A13,A20,A36,XREAL_1:1;
        then i1 = pE..f-1;
-       then A39: i1 = pE..f-'1 by A33,BINARITH:def 3;
+       then A37: i1 = pE..f-'1 by A31,BINARITH:def 3;
           i3+pE..f >= pE..f by NAT_1:29;
-       then pE..f < len f by A25,XREAL_1:2;
+       then pE..f < len f by A23,XREAL_1:2;
        then pE..f+1 <= len f by NAT_1:38;
-       then pE..f-'1 + (1+1) <= len f by A34;
+       then pE..f-'1 + (1+1) <= len f by A32;
        then LSeg(f,i1) /\ LSeg(f,i3+(pE..f)) = {f/.(pE..f)}
-                                          by A15,A34,A38,A39,TOPREAL1:def 8;
-       then x1 in {f/.(pE..f)} by A16,A18,A19,A21,XBOOLE_0:def 3;
+                                          by A13,A32,A36,A37,TOPREAL1:def 8;
+       then x1 in {f/.(pE..f)} by A14,A16,A17,A19,XBOOLE_0:def 3;
        then x1 = f/.(pE..f) by TARSKI:def 1
-          .= pE by A4,FINSEQ_5:41;
-       hence contradiction by A35,TARSKI:def 2;
+          .= pE by A2,FINSEQ_5:41;
+       hence contradiction by A33,TARSKI:def 2;
      end;
      end;
      hence contradiction;
@@ -923,15 +923,15 @@ A3: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
      L~Upper_Seq(C,n) /\ L~Lower_Seq(C,n)
     proof
      let x be set;
-     assume A40: x in {W-min L~Cage(C,n),E-max L~Cage(C,n)};
-     per cases by A40,TARSKI:def 2;
+     assume A38: x in {W-min L~Cage(C,n),E-max L~Cage(C,n)};
+     per cases by A38,TARSKI:def 2;
       suppose x = W-min L~Cage(C,n);
        hence x in L~Upper_Seq(C,n) /\ L~Lower_Seq(C,n)
-                                               by A6,A9,A11,A12,XBOOLE_0:def 3;
+                                               by A4,A7,A9,A10,XBOOLE_0:def 3;
       end;
       suppose x = E-max L~Cage(C,n);
        hence x in L~Upper_Seq(C,n) /\ L~Lower_Seq(C,n)
-                                                by A6,A7,A9,A10,XBOOLE_0:def 3;
+                                                by A4,A5,A7,A8,XBOOLE_0:def 3;
     end;
     end;
    end;
@@ -941,13 +941,13 @@ A3: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
     Upper_Seq(C,n) is_in_the_area_of Cage(C,n)
    proof
     let C be compact non vertical non horizontal Subset of TOP-REAL 2;
-    A2: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
+    A1: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
        E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
-    then A3: E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
-                                                           by A2,FINSEQ_6:96;
+    then A2: E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
+                                                           by A1,FINSEQ_6:96;
        Rotate(Cage(C,n),W-min L~Cage(C,n)) is_in_the_area_of Cage(C,n)
                                                               by JORDAN1B:11;
-    hence Upper_Seq(C,n) is_in_the_area_of Cage(C,n) by A3,Th5;
+    hence Upper_Seq(C,n) is_in_the_area_of Cage(C,n) by A2,Th5;
    end;
 
   theorem
@@ -955,13 +955,13 @@ A3: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
     Lower_Seq(C,n) is_in_the_area_of Cage(C,n)
    proof
     let C be compact non vertical non horizontal Subset of TOP-REAL 2;
-    A2: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
+    A1: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
        E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
-    then A3: E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
-                                                           by A2,FINSEQ_6:96;
+    then A2: E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
+                                                           by A1,FINSEQ_6:96;
        Rotate(Cage(C,n),W-min L~Cage(C,n)) is_in_the_area_of Cage(C,n)
                                                               by JORDAN1B:11;
-    hence thesis by A3,Th6;
+    hence thesis by A2,Th6;
    end;
 
   theorem

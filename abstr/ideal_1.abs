@@ -11,9 +11,9 @@ environ
       RELAT_1, FUNCT_1, FUNCT_7, ARYTM_3, FINSEQ_4, PRELAMB, MCART_1, SETFAM_1,
       RLVECT_3, SUBSET_1, GCD_1, LATTICE3, SQUARE_1, NEWTON, FINSET_1, INT_3,
       WAYBEL_0, TARSKI, NORMSP_1, GR_CY_1, IDEAL_1, YELLOW_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CQC_SIM1, FINSET_1, FUNCT_1,
-      FINSEQ_1, REALSET1, REALSET2, VECTSP_1, INT_3, NORMSP_1, NUMBERS,
-      XCMPLX_0, XREAL_0, NAT_1, RELSET_1, RLVECT_1, PARTFUN1, FUNCT_2,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CQC_SIM1, FINSET_1, RELAT_1,
+      FUNCT_1, FINSEQ_1, REALSET1, REALSET2, VECTSP_1, INT_3, NORMSP_1,
+      NUMBERS, XCMPLX_0, XREAL_0, NAT_1, RELSET_1, RLVECT_1, PARTFUN1, FUNCT_2,
       ALGSTR_1, PRE_TOPC, GR_CY_1, PRE_CIRC, MCART_1, DOMAIN_1, FINSEQ_4,
       POLYNOM1, SETFAM_1, STRUCT_0, GROUP_1, BINOP_1, VECTSP_2, FUNCT_7, GCD_1,
       BINOM;
@@ -21,7 +21,7 @@ environ
       DOMAIN_1, POLYNOM1, BINOP_1, PRE_TOPC, SETFAM_1;
  registrations INT_3, RELSET_1, FINSET_1, SUBSET_1, STRUCT_0, PRE_TOPC,
       FINSEQ_1, XBOOLE_0, POLYNOM1, INT_1, BINOM, VECTSP_1, XREAL_0, MEMBERED,
-      RELAT_1, FUNCT_2, PRE_CIRC, ORDINAL2, ALGSTR_1, GROUP_1;
+      RELAT_1, FUNCT_2, PRE_CIRC, ORDINAL2, ALGSTR_1, GROUP_1, REALSET1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -48,8 +48,7 @@ definition
  let L be non empty LoopStr, F being Subset of L;
  attr F is add-closed means
 :: IDEAL_1:def 1
-  for x, y being Element of L st x in F & y in F holds x+y in
- F;
+  for x, y being Element of L st x in F & y in F holds x+y in F;
 end;
 
 definition
@@ -114,7 +113,7 @@ for R being left_zeroed add-right-cancelable
  holds 0.R in I;
 
 theorem :: IDEAL_1:4
-for L being right_zeroed (non empty doubleLoopStr) holds {0.L} is add-closed;
+for L being right_zeroed (non empty LoopStr) holds {0.L} is add-closed;
 
 theorem :: IDEAL_1:5
 for L being left_zeroed add-right-cancelable
@@ -125,6 +124,20 @@ theorem :: IDEAL_1:6
 for L being right_zeroed add-left-cancelable
             left-distributive (non empty doubleLoopStr)
   holds {0.L} is right-ideal;
+
+registration let L be right_zeroed (non empty LoopStr);
+  cluster {0.L} -> add-closed Subset of L;
+end;
+
+registration let L be left_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr);
+  cluster {0.L} -> left-ideal Subset of L;
+end;
+
+registration let L be right_zeroed add-left-cancelable
+            left-distributive (non empty doubleLoopStr);
+  cluster {0.L} -> right-ideal Subset of L;
+end;
 
 theorem :: IDEAL_1:7
 for L being add-associative right_zeroed right_complementable
@@ -223,7 +236,7 @@ let R be non empty LoopStr,
     I be add-closed (non empty Subset of R);
 func add|(I,R) -> BinOp of I equals
 :: IDEAL_1:def 6
-  (the add of R)|[:I,I:];
+  (the add of R)||I;
 end;
 
 definition
@@ -231,7 +244,7 @@ let R be non empty HGrStr,
     I be right-ideal (non empty Subset of R);
 func mult|(I,R) -> BinOp of I equals
 :: IDEAL_1:def 7
-      (the mult of R)|[:I,I:];
+      (the mult of R)||I;
 end;
 
 definition

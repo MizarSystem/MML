@@ -43,18 +43,18 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="208">
+<Func kind="K" nr="209">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="39">
+<Adjective nr="40">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="46">
+<Adjective nr="44"/>
+<Adjective nr="47">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

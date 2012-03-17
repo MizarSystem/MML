@@ -14,7 +14,7 @@ environ
       STRUCT_0, AMI_1, AMI_3, SCM_1, AMI_5, FUNCT_7, SCMFSA_2, SCMFSA_4,
       SCMFSA_5, SCMFSA6A, SF_MASTR;
  constructors SCM_1, SCMFSA6A, SF_MASTR, FUNCT_7, SCMFSA_5, AMI_5, NAT_1,
-      MEMBERED;
+      MEMBERED, CAT_3;
  registrations AMI_1, SCMFSA_2, FUNCT_1, SCMFSA_4, INT_1, SCMFSA6A, SF_MASTR,
       CQC_LANG, RELSET_1, FRAENKEL, XREAL_0, MEMBERED, ORDINAL2, SETFAM_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -598,18 +598,18 @@ proof let I be parahalting Macro-Instruction,
 A1: not a in UsedIntLoc I;
         not a in the Instruction-Locations of SCM+FSA by SCMFSA_2:84;
     then not a in dom (s|the Instruction-Locations of SCM+FSA) by RELAT_1:86;
-then A3: (IExec(I, s)).a = (Result(s+*Initialized I)).a by FUNCT_4:12;
-A4: Initialized I c= s+*Initialized I by FUNCT_4:26;
+then A2: (IExec(I, s)).a = (Result(s+*Initialized I)).a by FUNCT_4:12;
+A3: Initialized I c= s+*Initialized I by FUNCT_4:26;
    then s+*Initialized I is halting by Th19;
   then consider n such that
-A5: Result(s+*Initialized I) = (Computation (s+*Initialized I)).n
+A4: Result(s+*Initialized I) = (Computation (s+*Initialized I)).n
      & CurInstr(Result(s+*Initialized I)) = halt SCM+FSA by AMI_1:def 22;
-A6: I+*Start-At insloc 0 c= s+*Initialized I by A4,Th8;
-then A7: (for m st m < n holds IC (Computation (s+*Initialized I)).m in dom I)
+A5: I+*Start-At insloc 0 c= s+*Initialized I by A3,Th8;
+then A6: (for m st m < n holds IC (Computation (s+*Initialized I)).m in dom I)
           by Def2;
-A8: not a in dom Initialized I & a in dom s by SCMFSA6A:48,SCMFSA_2:66;
-thus (IExec(I, s)).a = (s+*Initialized I).a by A1,A3,A5,A6,A7,SF_MASTR:69
-                    .= s.a by A8,FUNCT_4:12;
+A7: not a in dom Initialized I & a in dom s by SCMFSA6A:48,SCMFSA_2:66;
+thus (IExec(I, s)).a = (s+*Initialized I).a by A1,A2,A4,A5,A6,SF_MASTR:69
+                    .= s.a by A7,FUNCT_4:12;
 end;
 
 theorem
@@ -619,18 +619,18 @@ proof let I be parahalting Macro-Instruction; assume
 A1: not f in UsedInt*Loc I;
         not f in the Instruction-Locations of SCM+FSA by SCMFSA_2:85;
     then not f in dom (s|the Instruction-Locations of SCM+FSA) by RELAT_1:86;
-then A3: (IExec(I, s)).f = (Result(s+*Initialized I)).f by FUNCT_4:12;
-A4: Initialized I c= s+*Initialized I by FUNCT_4:26;
+then A2: (IExec(I, s)).f = (Result(s+*Initialized I)).f by FUNCT_4:12;
+A3: Initialized I c= s+*Initialized I by FUNCT_4:26;
    then s+*Initialized I is halting by Th19;
   then consider n such that
-A5: Result(s+*Initialized I) = (Computation (s+*Initialized I)).n
+A4: Result(s+*Initialized I) = (Computation (s+*Initialized I)).n
      & CurInstr(Result(s+*Initialized I)) = halt SCM+FSA by AMI_1:def 22;
-A6: I+*Start-At insloc 0 c= s+*Initialized I by A4,Th8;
-then A7: (for m st m < n holds IC (Computation (s+*Initialized I)).m in dom I)
+A5: I+*Start-At insloc 0 c= s+*Initialized I by A3,Th8;
+then A6: (for m st m < n holds IC (Computation (s+*Initialized I)).m in dom I)
           by Def2;
-A8: not f in dom Initialized I & f in dom s by SCMFSA6A:49,SCMFSA_2:67;
-thus (IExec(I, s)).f = (s+*Initialized I).f by A1,A3,A5,A6,A7,SF_MASTR:71
-                    .= s.f by A8,FUNCT_4:12;
+A7: not f in dom Initialized I & f in dom s by SCMFSA6A:49,SCMFSA_2:67;
+thus (IExec(I, s)).f = (s+*Initialized I).f by A1,A2,A4,A5,A6,SF_MASTR:71
+                    .= s.f by A7,FUNCT_4:12;
 end;
 
 theorem Th24:
@@ -950,10 +950,10 @@ A1: dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
        dom (s | the Instruction-Locations of SCM+FSA)
     = dom s /\ the Instruction-Locations of SCM+FSA by RELAT_1:90
    .= the Instruction-Locations of SCM+FSA by A1,XBOOLE_1:21;
-then A3: not IC SCM+FSA in dom (s | the Instruction-Locations of SCM+FSA)
+then A2: not IC SCM+FSA in dom (s | the Instruction-Locations of SCM+FSA)
        by AMI_1:48;
    thus IC IExec(I,s) = IExec(I,s).IC SCM+FSA
-   .= (Result (s +* Initialized I)).IC SCM+FSA by A3,FUNCT_4:12
+   .= (Result (s +* Initialized I)).IC SCM+FSA by A2,FUNCT_4:12
    .= IC Result (s +* Initialized I);
  end;
 
@@ -1184,11 +1184,7 @@ Th36;
 XREAL_1:2,SCMFSA6A:29;
              then A21: IC (Computation s2).n in dom Directed I by A19,
 SCMFSA6A:14;
-           now thus
-             CurInstr (Computation s1).n
-          = ((Computation s1).n).IC (Computation s1).n
-         .= s1.IC (Computation s1).n by AMI_1:54;
-       end;
+     CurInstr (Computation s1).n = s1.IC (Computation s1).n by AMI_1:54;
          then CurInstr (Computation s1).n
           = (I ';' I).IC (Computation s1).n by A14,A19,FUNCT_4:14;
      then A22: CurInstr (Computation s1).n
@@ -2299,70 +2295,70 @@ A26: IExec(I ';' J,s) | D = IExec(J,IExec(I,s)) | D
       .= C3.m3 | D by A22,AMI_1:51
       .= IExec(J,IExec(I,s)) | D by A17,A27,FUNCT_4:76;
      end;
-   A29: Result s1 = C1.m1 by A2,Th16;
+   A28: Result s1 = C1.m1 by A2,Th16;
         Initialized J c= Result s1 +* Initialized J by FUNCT_4:26;
-then A30: J +* SA0 c= Result s1 +* Initialized J by Th8;
+then A29: J +* SA0 c= Result s1 +* Initialized J by Th8;
        Initialized J c= IExec(I,s) +* Initialized J by FUNCT_4:26;
    then J +* SA0 c= IExec(I,s) +* Initialized J by Th8;
    then Result (Result s1 +* Initialized J), Result (IExec(I,s) +* Initialized
 J)
-       equal_outside A by A9,A10,A29,A30,Th29;
-then A31: IC Result (Result s1 +* Initialized J)
+       equal_outside A by A9,A10,A28,A29,Th29;
+then A30: IC Result (Result s1 +* Initialized J)
    = IC Result (IExec(I,s) +* Initialized J) by SCMFSA6A:29;
-A32: IC IExec(I ';' J,s) = IC Result (s +* Initialized (I ';' J)) by Th30
+A31: IC IExec(I ';' J,s) = IC Result (s +* Initialized (I ';' J)) by Th30
    .= IC C2.LifeSpan s2 by A5,Th16
    .= IC C2.(m1 + 1 + m3) by A15,Th43
    .= IC C3.m3 + card I by A22,AMI_1:51
    .= IC Result s3 + card I by A8,Th16
    .= IC Result (Result s1 +* Initialized J) + card I by A2,Th16
-   .= IC IExec(J,IExec(I,s)) + card I by A31,Th30;
+   .= IC IExec(J,IExec(I,s)) + card I by A30,Th30;
    hereby
-A33:   dom IExec(I ';' J,s) = the carrier of SCM+FSA by AMI_3:36
+A32:   dom IExec(I ';' J,s) = the carrier of SCM+FSA by AMI_3:36
   .= dom (IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I))
           by AMI_3:36;
       reconsider l = IC IExec(J,IExec(I,s)) + card I
           as Instruction-Location of SCM+FSA;
-A34:   dom Start-At l = {IC SCM+FSA} by AMI_3:34;
+A33:   dom Start-At l = {IC SCM+FSA} by AMI_3:34;
           now let x be set;
-      assume A35: x in dom IExec(I ';' J,s);
-      per cases by A35,SCMFSA6A:35;
-      suppose A36: x is Int-Location;
-  then A37:  IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A26,SCMFSA6A:38;
-           x <> IC SCM+FSA by A36,SCMFSA_2:81;
-       then not x in dom Start-At l by A34,TARSKI:def 1;
+      assume A34: x in dom IExec(I ';' J,s);
+      per cases by A34,SCMFSA6A:35;
+      suppose A35: x is Int-Location;
+  then A36:  IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A26,SCMFSA6A:38;
+           x <> IC SCM+FSA by A35,SCMFSA_2:81;
+       then not x in dom Start-At l by A33,TARSKI:def 1;
        hence IExec(I ';' J,s).x
        = (IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I)).x
-           by A37,FUNCT_4:12;
+           by A36,FUNCT_4:12;
       end;
-      suppose A38: x is FinSeq-Location;
-  then A39:  IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A26,SCMFSA6A:38;
-           x <> IC SCM+FSA by A38,SCMFSA_2:82;
-       then not x in dom Start-At l by A34,TARSKI:def 1;
+      suppose A37: x is FinSeq-Location;
+  then A38:  IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A26,SCMFSA6A:38;
+           x <> IC SCM+FSA by A37,SCMFSA_2:82;
+       then not x in dom Start-At l by A33,TARSKI:def 1;
        hence IExec(I ';' J,s).x
        = (IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I)).x
-           by A39,FUNCT_4:12;
+           by A38,FUNCT_4:12;
       end;
-      suppose A40: x = IC SCM+FSA;
+      suppose A39: x = IC SCM+FSA;
        then x in {IC SCM+FSA} by TARSKI:def 1;
-    then A41: x in dom Start-At l by AMI_3:34;
+    then A40: x in dom Start-At l by AMI_3:34;
        thus IExec(I ';' J,s).x
-        = l by A32,A40
+        = l by A31,A39
        .= (Start-At l).IC SCM+FSA by AMI_3:50
        .= (IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I)).x
-           by A40,A41,FUNCT_4:14;
+           by A39,A40,FUNCT_4:14;
       end;
-      suppose A42: x is Instruction-Location of SCM+FSA;
+      suppose A41: x is Instruction-Location of SCM+FSA;
            IExec(I ';' J,s) | A = ps by SCMFSA6A:40
        .= IExec(J,IExec(I,s)) | A by A17,SCMFSA6A:40;
-  then A43:  IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A42,SCMFSA6A:36;
-           x <> IC SCM+FSA by A42,AMI_1:48;
-       then not x in dom Start-At l by A34,TARSKI:def 1;
+  then A42:  IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A41,SCMFSA6A:36;
+           x <> IC SCM+FSA by A41,AMI_1:48;
+       then not x in dom Start-At l by A33,TARSKI:def 1;
        hence IExec(I ';' J,s).x
        = (IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I)).x
-           by A43,FUNCT_4:12;
+           by A42,FUNCT_4:12;
       end;
       end;
-      hence thesis by A33,FUNCT_1:9;
+      hence thesis by A32,FUNCT_1:9;
      end;
  end;
 

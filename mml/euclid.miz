@@ -18,11 +18,11 @@ environ
  registrations METRIC_1, FINSEQ_2, PCOMPS_1, RELSET_1, XREAL_0, FINSEQ_1,
       ARYTM_3, SEQ_1, MEMBERED;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions STRUCT_0, PCOMPS_1;
+ definitions STRUCT_0, PCOMPS_1, BINOP_1;
  theorems ABSVALUE, BINOP_1, FINSEQ_1, FINSEQ_2, FINSEQOP, FUNCT_1, FUNCT_2,
       PCOMPS_1, RVSUM_1, SQUARE_1, TARSKI, XREAL_0, XCMPLX_1, COMPLEX1,
       XREAL_1;
- schemes FUNCT_2;
+ schemes FUNCT_2, BINOP_1;
 
 begin
 
@@ -75,11 +75,7 @@ A3:    for r holds g.r = abs r;
 
  definition let n;
   redefine func 0*n -> Element of REAL n;
-  coherence
-  proof
-    n-tuples_on REAL = REAL n & 0*n = n |-> (0 qua Real);
-    hence thesis;
-  end;
+  coherence;
  end;
 
 reserve x,x1,x2,y,z for Element of REAL n;
@@ -123,11 +119,7 @@ reserve x,x1,x2,y,z for Element of REAL n;
 
  definition let n,x;
   redefine func abs x -> Element of n-tuples_on REAL;
-   coherence
-    proof
-     n-tuples_on REAL = REAL n & abs x = absreal*x;
-     hence thesis by FINSEQ_2:133;
-    end;
+   coherence by FINSEQ_2:133;
  end;
 
  definition let n,x;
@@ -147,11 +139,7 @@ reserve x,x1,x2,y,z for Element of REAL n;
 
 canceled;
 
-theorem Th2: len x = n
- proof
-  n-tuples_on REAL = REAL n;
-  hence thesis by FINSEQ_2:109;
- end;
+theorem Th2: len x = n by FINSEQ_2:109;
 
 theorem Th3:
   dom x = Seg n
@@ -176,10 +164,7 @@ theorem Th4:
  end;
 
 theorem Th5:
-  (for k st k in Seg n holds x1.k = x2.k) implies x1 = x2
-proof n-tuples_on REAL = REAL n;
-  hence thesis by FINSEQ_2:139;
-end;
+  (for k st k in Seg n holds x1.k = x2.k) implies x1 = x2 by FINSEQ_2:139;
 
 Lm1: dom abs x = dom x
 proof
@@ -273,16 +258,16 @@ theorem Th11: |.x.| = 0 implies x = 0*n
  proof assume
 A1:  |.x.| = 0;
      now let j; assume
-A3:  j in Seg n;
+A2:  j in Seg n;
    reconsider r = x.j as Element of REAL by Th4;
       0 <= Sum sqr x & sqrt Sum sqr x = 0 by A1,RVSUM_1:116;
    then Sum sqr x = 0 by SQUARE_1:92;
    then Sum sqr abs x = 0 by Lm2;
    then (abs x).j = (n|->0).j by RVSUM_1:121;
    then abs r = (n|-> 0).j by Th6;
-   then abs r = 0 by A3,FINSEQ_2:70;
+   then abs r = 0 by A2,FINSEQ_2:70;
    then r = 0 by ABSVALUE:7;
-   hence x.j = (n|->(0 qua Real)).j by A3,FINSEQ_2:70;
+   hence x.j = (n|->(0 qua Real)).j by A2,FINSEQ_2:70;
   end;
   then x = n|->(0 qua Real) by Th5;
   hence thesis;
@@ -493,11 +478,11 @@ theorem Th22: |.x1 - x2.| <= |.x1 - x.| + |.x - x2.|
    proof
     deffunc F(Element of REAL n, Element of REAL n) = |.$1-$2.|;
     consider f being Function of [:REAL n, REAL n:], REAL such that
-A1:   for x,y being Element of REAL n holds f.[x,y] = F(x,y) from FUNCT_2:sch 8
-;
+A1:   for x,y being Element of REAL n holds f.(x,y) = F(x,y)
+              from BINOP_1:sch 4;
     take f;
      let x,y be Element of REAL n;
-     thus f.(x,y) = f.[x,y] by BINOP_1:def 1 .= |.x-y.| by A1;
+     thus f.(x,y) = |.x-y.| by A1;
    end;
   uniqueness
    proof
@@ -557,8 +542,7 @@ theorem Th24: Pitag_dist n is_metric_of REAL n
   cluster Euclid n -> non empty;
  coherence
  proof
-      Euclid n = MetrStruct(#REAL n,Pitag_dist n#);
-   hence the carrier of Euclid n is non empty;
+   thus the carrier of Euclid n is non empty;
  end;
  end;
 
@@ -570,24 +554,13 @@ theorem Th24: Pitag_dist n is_metric_of REAL n
 
 registration let n;
  cluster TOP-REAL n -> non empty;
- coherence
-  proof TOP-REAL n = TopSpaceMetr Euclid n;
-   hence thesis;
-  end;
+ coherence;
 end;
 
 reserve p,p1,p2,p3 for Point of TOP-REAL n,
         x,x1,x2,y,y1,y2 for real number;
 
-theorem  the carrier of TOP-REAL n = REAL n
- proof
-  thus the carrier of TOP-REAL n
-     = the carrier of TopSpaceMetr (Euclid n)
-    .= the carrier of TopStruct (#the carrier of Euclid n,
-        Family_open_set Euclid n#)
-    .= the carrier of MetrStruct(#REAL n,Pitag_dist n#)
-    .= REAL n;
-   end;
+theorem  the carrier of TOP-REAL n = REAL n;
 
 theorem Th26: p is Function of Seg n, REAL
  proof
@@ -662,8 +635,7 @@ theorem
   proof
    reconsider r1=p as Element of REAL n;
    reconsider r1'=r1 as Element of n-tuples_on REAL;
-    0.REAL n = 0*n & 0*n = n|->(0 qua Real);
-   hence 0.REAL n + p = 0*n + r1 by Def10
+   thus 0.REAL n + p = 0*n + r1 by Def10
                     .= r1' by RVSUM_1:33 .= p;
    thus p + 0.REAL n = r1 + 0*n by Def10
                     .= r1' by RVSUM_1:33 .= p;
@@ -930,13 +902,7 @@ theorem  (x-y)*p = x*p - y*p
 
 reserve p,p1,p2 for Point of TOP-REAL 2;
 
-theorem Th55: ex x,y being Real st p=<*x,y*>
-  proof
-      the carrier of TOP-REAL 2 = REAL 2 & REAL 2 = 2-tuples_on REAL;
-   then reconsider p'=p as Element of 2-tuples_on REAL;
-      ex x,y be Real st p'=<*x,y*> by FINSEQ_2:120;
-   hence thesis;
-  end;
+theorem Th55: ex x,y being Real st p=<*x,y*> by FINSEQ_2:120;
 
  definition let p;
    func p`1 -> Real means
@@ -990,8 +956,7 @@ theorem Th55: ex x,y being Real st p=<*x,y*>
 
 theorem Th56: |[x,y]|`1 = x & |[x,y]|`2 = y
  proof
-  |[x,y]| = <*x,y*>;
-  hence |[x,y]|`1 = <*x,y*>.1 by Def14 .= x by FINSEQ_1:61;
+  thus |[x,y]|`1 = <*x,y*>.1 by Def14 .= x by FINSEQ_1:61;
   thus |[x,y]|`2 = <*x,y*>.2 by Def15 .= y by FINSEQ_1:61;
  end;
 
@@ -1004,20 +969,13 @@ theorem Th57: p = |[p`1, p`2]|
   hence thesis by A1,A2;
  end;
 
-theorem  0.REAL 2 = |[0,0]|
- proof
-  A1: 0.REAL 2 = 0*2 .= 2 |-> 0
-   .= <* 0,0 *> by FINSEQ_2:75;
-  then A2: (0.REAL 2)`1 = <* 0,0 *>.1 by Def14 .= 0 by FINSEQ_1:61;
-     (0.REAL 2)`2 = <* 0,0 *>.2 by A1,Def15 .= 0 by FINSEQ_1:61;
-  hence |[0,0]| = 0.REAL 2 by A2,Th57;
- end;
+theorem  0.REAL 2 = |[0,0]| by FINSEQ_2:75;
 
 theorem Th59: p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2]|
  proof
   reconsider p1'=p1, p2'=p2 as Element of REAL 2;
   A1: p1 + p2 = p1' + p2' by Def10;
-   then len(p1'+p2') = 2 by Th28;
+   len(p1'+p2') = 2 by Th28;
 then A2:  dom(p1'+p2') = Seg 2 & 2 in {1,2} & 1 in {1,2}
     by FINSEQ_1:def 3,TARSKI:def 2;
 

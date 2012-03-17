@@ -127,9 +127,7 @@ Lm1:
    [x,y] in R implies x in union(union R) & y in union(union R)
  proof assume
 A1: [x,y] in R;
-  set xy=[x,y];
-     [x,y] = { {x,y} , {x} };
-  then {x,y} in xy & { x } in xy by TARSKI:def 2;
+   {x,y} in [x,y] & { x } in [x,y] by TARSKI:def 2;
 then A2: {x,y} in union R & {x} in union R by A1,TARSKI:def 4;
        y in {x,y} & x in {x} by TARSKI:def 1,def 2;
     hence thesis by A2,TARSKI:def 4;
@@ -546,11 +544,7 @@ correctness;
 end;
 
 theorem
-   dom R c= field R & rng R c= field R
-  proof
-     field R = dom R \/ rng R;
-    hence thesis by XBOOLE_1:7;
-  end;
+   dom R c= field R & rng R c= field R by XBOOLE_1:7;
 
 theorem
      [a,b] in R implies a in field R & b in field R
@@ -1482,7 +1476,7 @@ theorem Th97:
 theorem
      R|dom R = R by Th97;
 
-theorem
+theorem Th99:
      rng(R|X) c= rng R
  proof (R|X) c= R by Th88; hence thesis by Th25; end;
 
@@ -2630,7 +2624,7 @@ A3: A = B /\ A by A1,XBOOLE_1:28;
              .= g|A by A2,A3,Th100;
   end;
 
-:: missing, 2005.07.11
+:: missing, 2005.07.11, A.T.
 
 theorem
   R|dom S = R|dom(S|dom R)
@@ -2639,3 +2633,44 @@ proof
     .= R|(dom S /\ dom R) by Th100
     .= R|dom(S|dom R) by Th90;
 end;
+
+:: missing, 2005.11.13, A.T.
+
+registration
+ cluster {} -> empty-yielding;
+ coherence
+  proof
+   thus rng {} c= {{}} by XBOOLE_1:2;
+  end;
+end;
+
+registration
+ cluster empty-yielding Relation;
+ existence
+  proof
+   take {};
+   thus thesis;
+  end;
+end;
+
+registration let R be empty-yielding Relation; let X be set;
+ cluster R|X -> empty-yielding;
+ coherence
+  proof
+A1: rng R c= {{}} by Def15;
+   rng(R|X) c= rng R by Th99;
+   hence rng(R|X) c= {{}} by A1,XBOOLE_1:1;
+  end;
+end;
+
+theorem
+ R|X is non empty-yielding implies R is non empty-yielding
+ proof assume
+A1: R|X is non empty-yielding;
+A2: rng(R|X) c= rng R by Th99;
+  assume R is empty-yielding;
+   then rng R c= {{}} by Def15;
+   then rng(R|X) c= {{}} by A2,XBOOLE_1:1;
+  hence contradiction by A1,Def15;
+ end;
+

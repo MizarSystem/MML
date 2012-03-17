@@ -18,7 +18,7 @@ environ
  registrations NAT_1, RELSET_1, CQC_LANG, SUBSET_1, QC_LANG1, FUNCT_1, RELAT_1,
       ORDINAL2, SUBSTUT1, FRAENKEL;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, CQC_LANG;
  theorems TARSKI, FINSEQ_1, FUNCT_1, MCART_1, VALUAT_1, XBOOLE_0, XBOOLE_1,
       FINSEQ_2, CQC_LANG, QC_LANG1, ZFMISC_1, RELAT_1, QC_LANG3, FUNCOP_1,
       FUNCT_2, RELSET_1, QC_LANG2, SUBSTUT1, FUNCT_4, FUNCT_7, CQC_SIM1, AMI_1;
@@ -483,15 +483,7 @@ theorem Th22:
 
 theorem Th23:
   S1`2 = S2`2 implies Val_S(v,S1) = Val_S(v,CQCSub_&(S1,S2)) &
-    Val_S(v,S2) = Val_S(v,CQCSub_&(S1,S2))
-   proof
-     assume A1: S1`2 = S2`2; then
-     @CQCSub_&(S1,S2)`2 = @S1`2 by Th22; then
-     Val_S(v,CQCSub_&(S1,S2)) = (@S1`2)*v; then
-A2:  Val_S(v,S1) = Val_S(v,CQCSub_&(S1,S2));
-     Val_S(v,S1) = (@S2`2)*v by A1;
-     hence thesis by A2;
-   end;
+    Val_S(v,S2) = Val_S(v,CQCSub_&(S1,S2)) by Th22;
 
 theorem Th24:
   S1`2 = S2`2 implies
@@ -981,7 +973,7 @@ theorem Th49:
    proof
      assume x <> b; then
      not b in dom ({x} --> a) by TARSKI:def 1; then
-     not b in dom (x .--> a) by CQC_LANG:def 2; then
+     not b in dom (x .--> a); then
      not b in dom (x|a); then
      (v +* (x|a)).b = v.b by FUNCT_4:12;
      hence thesis;
@@ -993,7 +985,7 @@ theorem Th50:
      assume A1: x = y;
      then y in {x} by TARSKI:def 1; then
      y in dom ({x} --> a) by FUNCOP_1:19; then
-     y in dom (x .--> a) by CQC_LANG:def 2; then
+     y in dom (x .--> a); then
      y in dom (x|a); then
  A2: (v +* (x|a)).y = (x|a).y by FUNCT_4:14;
      (x .--> a).y = a by A1,CQC_LANG:6; then
@@ -1152,41 +1144,40 @@ A9:            y = b & y in still_not-bound_in q &
                                            by A11,A12,FUNCT_7:10;
            S`2 = finSub \/ F by A2,A4,SUBSTUT1:def 13; then
            @S`2 = finSub \/ F by SUBSTUT1:def 2; then
-  A16:     @S`2*v.(z|a) = (@finSub*v.(z|a)) +* (F*v.(z|a))
+  A15:     @S`2*v.(z|a) = (@finSub*v.(z|a)) +* (F*v.(z|a))
                                            by A10,A14,SUBSTUT1:def 2;
            (x|a) = (F*v.(z|a))
            proof
-         (x|a) = x .--> a; then
-   A18:      dom (x|a) = {x} by CQC_LANG:5;
+   A16:      dom (x|a) = {x} by CQC_LANG:5;
              dom (F*v.(z|a)) = dom F by A11,A13,RELAT_1:46; then
-   A19:      dom (F*v.(z|a)) = {x} by RELAT_1:23;
+   A17:      dom (F*v.(z|a)) = {x} by RELAT_1:23;
              for b st b in dom (x|a) holds (x|a).b = (F*v.(z|a)).b
              proof
-               let b such that A20: b in dom (x|a);
-   A21:        b = x by A18,A20,TARSKI:def 1; then
-   A22:        (x|a).b = a by CQC_LANG:6;
-               b in dom (F*v.(z|a)) by A19,A20,CQC_LANG:5; then
-   A23:        (F*v.(z|a)).b = (v.(z|a)).(F.b) by FUNCT_1:22;
-               F.b = x.upVar(finSub,S`1) by A6,A21,CQC_LANG:6; then
+               let b such that A18: b in dom (x|a);
+   A19:        b = x by A16,A18,TARSKI:def 1; then
+   A20:        (x|a).b = a by CQC_LANG:6;
+               b in dom (F*v.(z|a)) by A17,A18,CQC_LANG:5; then
+   A21:        (F*v.(z|a)).b = (v.(z|a)).(F.b) by FUNCT_1:22;
+               F.b = x.upVar(finSub,S`1) by A6,A19,CQC_LANG:6; then
                F.b = z by A1,A4,Th52;
-               hence thesis by A22,A23,Th50;
+               hence thesis by A20,A21,Th50;
              end;
-             hence thesis by A18,A19,FUNCT_1:9;
+             hence thesis by A16,A17,FUNCT_1:9;
            end;
            hence Val_S(v.(z|a),S) = NEx_Val(v.(z|a),S,x,xSQ) +* (x|a)
-                                                         by A16;
+                                                         by A15;
          end;
-         now assume A24: not x in rng finSub;
- A25:       dom {[x,x]} = {x} by RELAT_1:23;
- A26:      {[x,x]} =  x .--> x by AMI_1:19; then
+         now assume A22: not x in rng finSub;
+ A23:       dom {[x,x]} = {x} by RELAT_1:23;
+ A24:      {[x,x]} =  x .--> x by AMI_1:19; then
            reconsider F = {[x,x]} as Function;
            thus dom finSub misses {x}
            proof
              now assume not dom finSub misses {x};
                then dom finSub /\ {x} <> {} by XBOOLE_0:def 7;
-               then consider b such that A27: b in dom finSub /\ {x}
+               then consider b such that A25: b in dom finSub /\ {x}
                                                        by XBOOLE_0:def 1;
- A28:          b in dom finSub & b in {x} by A27,XBOOLE_0:def 3;
+ A26:          b in dom finSub & b in {x} by A25,XBOOLE_0:def 3;
                set q = All(x,S`1);
                set X = {y1 : y1 in still_not-bound_in q &
                          y1 is Element of dom xSQ & y1 <> x & y1 <> xSQ.y1};
@@ -1194,51 +1185,50 @@ A9:            y = b & y in still_not-bound_in q &
                finSub = (@xSQ)|X by SUBSTUT1:def 2; then
                @finSub = (@xSQ)|X by SUBSTUT1:def 2; then
                dom @finSub = dom @xSQ /\ X by RELAT_1:90; then
- A29:          dom @finSub c= X by XBOOLE_1:17;
-               b in dom @finSub by A28,SUBSTUT1:def 2; then
-               b in X by A29;
-               then consider y such that A30:
+ A27:          dom @finSub c= X by XBOOLE_1:17;
+               b in dom @finSub by A26,SUBSTUT1:def 2; then
+               b in X by A27;
+               then consider y such that A28:
                     y = b & y in still_not-bound_in q &
                     y is Element of dom xSQ & y <> x & y <> xSQ.y;
-               thus contradiction by A28,A30,TARSKI:def 1;
+               thus contradiction by A26,A28,TARSKI:def 1;
              end;
              hence thesis;
            end; then
-           dom @finSub misses dom F by A25,SUBSTUT1:def 2; then
- A31:      @finSub \/ F = (@finSub +* F) by FUNCT_4:32;
+           dom @finSub misses dom F by A23,SUBSTUT1:def 2; then
+ A29:      @finSub \/ F = (@finSub +* F) by FUNCT_4:32;
            v.(z|a) is Element of Funcs(bound_QC-variables,A)
                                                         by VALUAT_1:def 1; then
-           consider f such that A32: v.(z|a) = f & dom f = bound_QC-variables &
+           consider f such that A30: v.(z|a) = f & dom f = bound_QC-variables &
                                                    rng f c= A by FUNCT_2:def 2;
-  A33:     rng @finSub c= dom (v.(z|a)) by A32;
-  A34:     rng F = {x} by RELAT_1:23;
-  A35:     (@finSub +* F)* v.(z|a) = (@finSub*v.(z|a)) +* (F*v.(z|a))
-                                                     by A32,A33,A34,FUNCT_7:10;
-           S`2 = finSub \/ F by A2,A24,SUBSTUT1:def 13; then
+  A31:     rng @finSub c= dom (v.(z|a)) by A30;
+  A32:     rng F = {x} by RELAT_1:23;
+  A33:     (@finSub +* F)* v.(z|a) = (@finSub*v.(z|a)) +* (F*v.(z|a))
+                                                     by A30,A31,A32,FUNCT_7:10;
+           S`2 = finSub \/ F by A2,A22,SUBSTUT1:def 13; then
            @S`2 = finSub \/ F by SUBSTUT1:def 2; then
-  A37:     @S`2*v.(z|a) = (@finSub*v.(z|a)) +* (F*v.(z|a))
-                                                     by A31,A35,SUBSTUT1:def 2;
+  A34:     @S`2*v.(z|a) = (@finSub*v.(z|a)) +* (F*v.(z|a))
+                                                     by A29,A33,SUBSTUT1:def 2;
            (x|a) = (F*v.(z|a))
            proof
-         (x|a) = x .--> a; then
-   A39:      dom (x|a) = {x} by CQC_LANG:5;
-             dom (F*v.(z|a)) = dom F by A32,A34,RELAT_1:46; then
-   A40:      dom (F*v.(z|a)) = {x} by RELAT_1:23;
+   A35:      dom (x|a) = {x} by CQC_LANG:5;
+             dom (F*v.(z|a)) = dom F by A30,A32,RELAT_1:46; then
+   A36:      dom (F*v.(z|a)) = {x} by RELAT_1:23;
              for b st b in dom (x|a) holds (x|a).b = (F*v.(z|a)).b
              proof
-               let b such that A41: b in dom (x|a);
-   A42:        b = x by A39,A41,TARSKI:def 1; then
-   A43:        (x|a).b = a by CQC_LANG:6;
-               b in dom (F*v.(z|a)) by A40,A41,CQC_LANG:5; then
-   A44:       (F*v.(z|a)).b = v.(z|a).(F.b) by FUNCT_1:22;
-               F.b = x by A26,A42,CQC_LANG:6; then
-               F.b = z by A1,A24,Th53;
-               hence thesis by A43,A44,Th50;
+               let b such that A37: b in dom (x|a);
+   A38:        b = x by A35,A37,TARSKI:def 1; then
+   A39:        (x|a).b = a by CQC_LANG:6;
+               b in dom (F*v.(z|a)) by A36,A37,CQC_LANG:5; then
+   A40:       (F*v.(z|a)).b = v.(z|a).(F.b) by FUNCT_1:22;
+               F.b = x by A24,A38,CQC_LANG:6; then
+               F.b = z by A1,A22,Th53;
+               hence thesis by A39,A40,Th50;
              end;
-             hence thesis by A39,A40,FUNCT_1:9;
+             hence thesis by A35,A36,FUNCT_1:9;
            end;
            hence Val_S(v.(z|a),S) = NEx_Val(v.(z|a),S,x,xSQ) +* (x|a)
-                                                               by A37;
+                                                               by A34;
          end;
          hence thesis by A3;
       end;
@@ -1285,27 +1275,27 @@ theorem Th56:
      set NF1 = NEx_Val(v,S,x,xSQ);
      set finSub = RestrictSub(x,All(x,S`1),xSQ);
      v.(z|a) is Element of Funcs(bound_QC-variables,A) by VALUAT_1:def 1; then
-     consider f such that A3: v.(z|a) = f & dom f = bound_QC-variables &
+     consider f such that A2: v.(z|a) = f & dom f = bound_QC-variables &
                                                    rng f c= A by FUNCT_2:def 2;
-     rng @finSub c= dom (v.(z|a)) by A3; then
-A4:  dom NF = dom @finSub by RELAT_1:46;
+     rng @finSub c= dom (v.(z|a)) by A2; then
+A3:  dom NF = dom @finSub by RELAT_1:46;
      v is Element of Funcs(bound_QC-variables,A) by VALUAT_1:def 1; then
-     consider f such that A6: v = f & dom f = bound_QC-variables &
+     consider f such that A4: v = f & dom f = bound_QC-variables &
                                                    rng f c= A by FUNCT_2:def 2;
-     rng @finSub c= dom v by A6; then
-A7:  dom NF1 = dom @finSub by RELAT_1:46;
+     rng @finSub c= dom v by A4; then
+A5:  dom NF1 = dom @finSub by RELAT_1:46;
       for b st b in dom NF holds NF.b = NF1.b
      proof
-       let b such that A8: b in dom NF;
-A9:   @finSub.b in rng @finSub by A4,A8,FUNCT_1:12; then
+       let b such that A6: b in dom NF;
+A7:   @finSub.b in rng @finSub by A3,A6,FUNCT_1:12; then
        reconsider x = @finSub.b as bound_QC-variable;
        not z in rng finSub by A1,Th41; then
-       z <> x by A9,SUBSTUT1:def 2; then
-A10:   v.(z|a).x = v.x by Th49;
-       NF.b = (v.(z|a)).x by A8,FUNCT_1:22;
-       hence thesis by A4,A7,A8,A10,FUNCT_1:22;
+       z <> x by A7,SUBSTUT1:def 2; then
+A8:   v.(z|a).x = v.x by Th49;
+       NF.b = (v.(z|a)).x by A6,FUNCT_1:22;
+       hence thesis by A3,A5,A6,A8,FUNCT_1:22;
      end;
-     hence thesis by A4,A7,FUNCT_1:9;
+     hence thesis by A3,A5,FUNCT_1:9;
    end;
 
 theorem Th57:
@@ -1378,8 +1368,7 @@ theorem Th59:
      consider f such that A1: v = f & dom f = bound_QC-variables &
                                                    rng f c= A by FUNCT_2:def 2;
      thus dom v = bound_QC-variables by A1;
-     (x|a) = x .--> a;
-     hence thesis by CQC_LANG:5;
+     thus thesis by CQC_LANG:5;
    end;
 
 theorem Th60:
@@ -1494,7 +1483,7 @@ theorem
 then A2: dom (v.(x|a)|still_not-bound_in p) =
                                  dom (w.(x|a)|still_not-bound_in p) by A1,Th64;
    for b st b in dom (v.(x|a)|still_not-bound_in p) holds
-         v.(x|a)|still_not-bound_in p.b = w.(x|a)|still_not-bound_in p.b
+         (v.(x|a)|still_not-bound_in p).b = (w.(x|a)|still_not-bound_in p).b
    proof
      let b such that A3: b in dom (v.(x|a)|still_not-bound_in p);
 A4:  (v.(x|a)|still_not-bound_in p).b = v.(x|a).b by A3,FUNCT_1:70;
@@ -1535,7 +1524,7 @@ A1:  v|(still_not-bound_in p \ {x}) = w|(still_not-bound_in p \ {x});
 A2:  dom (v.(x|a)|still_not-bound_in p) = dom (w.(x|a)|still_not-bound_in p)
                                                                        by Th64;
    for b st b in dom (v.(x|a)|still_not-bound_in p) holds
-         v.(x|a)|still_not-bound_in p.b = w.(x|a)|still_not-bound_in p.b
+         (v.(x|a)|still_not-bound_in p).b = (w.(x|a)|still_not-bound_in p).b
    proof
      let b such that A3: b in dom (v.(x|a)|still_not-bound_in p);
 A4:  (v.(x|a)|still_not-bound_in p).b = v.(x|a).b by A3,FUNCT_1:70;
@@ -1634,91 +1623,89 @@ theorem Th71:
      set V1 = (v.(z|a)).(NEx_Val(v,S,x,xSQ)+*(x|a));
      set V2 = v.(NEx_Val(v,S,x,xSQ)+*(x|a));
      set X = still_not-bound_in S`1;
-  V1 = (v.(z|a)) +* (NEx_Val(v,S,x,xSQ)+*(x|a)); then
- A3: dom V1 = dom (v.(z|a)) \/ dom (NEx_Val(v,S,x,xSQ)+*(x|a))
+ A2: dom V1 = dom (v.(z|a)) \/ dom (NEx_Val(v,S,x,xSQ)+*(x|a))
                                                         by FUNCT_4:def 1;
      dom (v.(z|a)) = bound_QC-variables by Th59; then
-A4:  dom (v.(z|a)) = dom v by Th59;
-  V2 = v +* (NEx_Val(v,S,x,xSQ)+*(x|a)); then
-A6: dom V1 = dom V2 by A3,A4,FUNCT_4:def 1;
-A7:  now assume not x in rng finSub;
-       then A8: z = x by A1,Th53;
+A3:  dom (v.(z|a)) = dom v by Th59;
+A4: dom V1 = dom V2 by A2,A3,FUNCT_4:def 1;
+A5:  now assume not x in rng finSub;
+       then A6: z = x by A1,Th53;
        for b st b in dom V1 holds V1.b = V2.b
        proof
-         let b such that A9: b in dom V1;
-  A10:   now assume A11: b <> z;
-  A12:     now assume A13: not b in dom NEx_Val(v,S,x,xSQ);
-             not b in {x} by A8,A11,TARSKI:def 1; then
+         let b such that A7: b in dom V1;
+  A8:   now assume A9: b <> z;
+  A10:     now assume A11: not b in dom NEx_Val(v,S,x,xSQ);
+             not b in {x} by A6,A9,TARSKI:def 1; then
              not b in dom (x|a) by Th59; then
              not b in dom NEx_Val(v,S,x,xSQ) \/ dom (x|a)
-                                                    by A13,XBOOLE_0:def 2; then
-  A14:       not b in dom (NEx_Val(v,S,x,xSQ)+*(x|a)) by FUNCT_4:def 1; then
-  A15:       V1.b = (v.(z|a)).b by FUNCT_4:12;
-             reconsider x = b as bound_QC-variable by A9;
-             V1.b = v.x by A11,A15,Th49;
-             hence V1.b = V2.b by A14,FUNCT_4:12;
+                                                    by A11,XBOOLE_0:def 2; then
+  A12:       not b in dom (NEx_Val(v,S,x,xSQ)+*(x|a)) by FUNCT_4:def 1; then
+  A13:       V1.b = (v.(z|a)).b by FUNCT_4:12;
+             reconsider x = b as bound_QC-variable by A7;
+             V1.b = v.x by A9,A13,Th49;
+             hence V1.b = V2.b by A12,FUNCT_4:12;
            end;
-           now assume A16: b in dom NEx_Val(v,S,x,xSQ);
+           now assume A14: b in dom NEx_Val(v,S,x,xSQ);
              dom (NEx_Val(v,S,x,xSQ)+*(x|a)) =
                  dom NEx_Val(v,S,x,xSQ) \/ dom (x|a) by FUNCT_4:def 1; then
-      A17:   dom NEx_Val(v,S,x,xSQ) c= dom (NEx_Val(v,S,x,xSQ)+*(x|a))
+      A15:   dom NEx_Val(v,S,x,xSQ) c= dom (NEx_Val(v,S,x,xSQ)+*(x|a))
                                                                  by XBOOLE_1:7;
-             V1.b = (NEx_Val(v,S,x,xSQ)+*(x|a)).b by A16,A17,FUNCT_4:14;
-             hence V1.b = V2.b by A16,A17,FUNCT_4:14;
+             V1.b = (NEx_Val(v,S,x,xSQ)+*(x|a)).b by A14,A15,FUNCT_4:14;
+             hence V1.b = V2.b by A14,A15,FUNCT_4:14;
            end;
-           hence V1.b = V2.b by A12;
+           hence V1.b = V2.b by A10;
          end;
          now assume b = z; then
-           b in {x} by A8,TARSKI:def 1; then
-     A18:  b in dom (x|a) by Th59;
+           b in {x} by A6,TARSKI:def 1; then
+     A16:  b in dom (x|a) by Th59;
            dom (NEx_Val(v,S,x,xSQ)+*(x|a)) =
                        dom NEx_Val(v,S,x,xSQ) \/ dom (x|a) by FUNCT_4:def 1;
-           then A19: dom (x|a) c= dom (NEx_Val(v,S,x,xSQ)+*(x|a))
+           then A17: dom (x|a) c= dom (NEx_Val(v,S,x,xSQ)+*(x|a))
                                                                  by XBOOLE_1:7;
-           V1.b = (NEx_Val(v,S,x,xSQ)+*(x|a)).b by A18,A19,FUNCT_4:14;
-           hence V1.b = V2.b by A18,A19,FUNCT_4:14;
+           V1.b = (NEx_Val(v,S,x,xSQ)+*(x|a)).b by A16,A17,FUNCT_4:14;
+           hence V1.b = V2.b by A16,A17,FUNCT_4:14;
          end;
-         hence thesis by A10;
+         hence thesis by A8;
        end;
-       hence V1|X = V2|X by A6,FUNCT_1:9;
+       hence V1|X = V2|X by A4,FUNCT_1:9;
      end;
-     now assume A20: x in rng finSub;
-A21:   dom (V1|X) = (dom (v.(z|a)) \/ dom (NEx_Val(v,S,x,xSQ)+*(x|a))) /\ X
-                                                              by A3,RELAT_1:90;
-       dom (V2|X) = dom (V1) /\ X by A6,RELAT_1:90; then
-A22:   dom (V2|X) = dom (V1|X) by RELAT_1:90;
+     now assume A18: x in rng finSub;
+A19:   dom (V1|X) = (dom (v.(z|a)) \/ dom (NEx_Val(v,S,x,xSQ)+*(x|a))) /\ X
+                                                              by A2,RELAT_1:90;
+       dom (V2|X) = dom (V1) /\ X by A4,RELAT_1:90; then
+A20:   dom (V2|X) = dom (V1|X) by RELAT_1:90;
        for b st b in dom (V1|X) holds V1|X.b = V2|X.b
        proof
-         let b such that A23: b in dom (V1|X);
-A24:     b in (dom (v.(z|a)) \/ dom (NEx_Val(v,S,x,xSQ)+*(x|a))) & b in X
-                                                     by A21,A23,XBOOLE_0:def 3;
+         let b such that A21: b in dom (V1|X);
+A22:     b in (dom (v.(z|a)) \/ dom (NEx_Val(v,S,x,xSQ)+*(x|a))) & b in X
+                                                     by A19,A21,XBOOLE_0:def 3;
          X c= Bound_Vars(S`1) by Th48; then
-A25:     b <> z by A1,A20,A24,Th39;
-A26:     V1|X = (v.(z|a))|X +* (NEx_Val(v,S,x,xSQ)+*(x|a))|X by FUNCT_4:75;
-A27:     V2|X = v|X +* (NEx_Val(v,S,x,xSQ)+*(x|a))|X by FUNCT_4:75;
-A28:     dom (V1|X) = dom (v.(z|a)|X) \/ dom ((NEx_Val(v,S,x,xSQ)+*(x|a))|X)
-                                                          by A26,FUNCT_4:def 1;
-A29:     now assume A30: not b in dom ((NEx_Val(v,S,x,xSQ)+*(x|a))|X); then
-A31:       V1|X.b = (v.(z|a))|X.b by A26,FUNCT_4:12;
-A32:       b in dom (v.(z|a)|X) by A23,A28,A30,XBOOLE_0:def 2; then
-           V1|X.b = v.(z|a).b by A31,FUNCT_1:70; then
-A33:       V1|X.b = v.b by A25,Th49;
-A34:       V2|X.b = v|X.b by A27,A30,FUNCT_4:12;
-           b in dom (v.(z|a)) /\ X by A32,RELAT_1:90; then
+A23:     b <> z by A1,A18,A22,Th39;
+A24:     V1|X = (v.(z|a))|X +* (NEx_Val(v,S,x,xSQ)+*(x|a))|X by FUNCT_4:75;
+A25:     V2|X = v|X +* (NEx_Val(v,S,x,xSQ)+*(x|a))|X by FUNCT_4:75;
+A26:     dom (V1|X) = dom (v.(z|a)|X) \/ dom ((NEx_Val(v,S,x,xSQ)+*(x|a))|X)
+                                                          by A24,FUNCT_4:def 1;
+A27:     now assume A28: not b in dom ((NEx_Val(v,S,x,xSQ)+*(x|a))|X); then
+A29:       V1|X.b = (v.(z|a))|X.b by A24,FUNCT_4:12;
+A30:       b in dom (v.(z|a)|X) by A21,A26,A28,XBOOLE_0:def 2; then
+           V1|X.b = v.(z|a).b by A29,FUNCT_1:70; then
+A31:       V1|X.b = v.b by A23,Th49;
+A32:       V2|X.b = v|X.b by A25,A28,FUNCT_4:12;
+           b in dom (v.(z|a)) /\ X by A30,RELAT_1:90; then
            b in bound_QC-variables & b in X by XBOOLE_0:def 3; then
            b in dom v & b in X by Th59; then
            b in dom v /\ X by XBOOLE_0:def 3;
-           hence V1|X.b = V2|X.b by A33,A34,FUNCT_1:71;
+           hence V1|X.b = V2|X.b by A31,A32,FUNCT_1:71;
          end;
-         now assume A35: b in dom ((NEx_Val(v,S,x,xSQ)+*(x|a))|X); then
-           V1|X.b = (NEx_Val(v,S,x,xSQ)+*(x|a))|X.b by A26,FUNCT_4:14;
-           hence V1|X.b = V2|X.b by A27,A35,FUNCT_4:14;
+         now assume A33: b in dom ((NEx_Val(v,S,x,xSQ)+*(x|a))|X); then
+           V1|X.b = (NEx_Val(v,S,x,xSQ)+*(x|a))|X.b by A24,FUNCT_4:14;
+           hence V1|X.b = V2|X.b by A25,A33,FUNCT_4:14;
          end;
-         hence thesis by A29;
+         hence thesis by A27;
        end;
-       hence V1|X = V2|X by A22,FUNCT_1:9;
+       hence V1|X = V2|X by A20,FUNCT_1:9;
      end;
-     hence thesis by A7;
+     hence thesis by A5;
    end;
 
 theorem Th72:
@@ -1764,21 +1751,14 @@ theorem Th73:
    proof
      rng (@RestrictSub(x,All(x,S`1),xSQ)) c= bound_QC-variables; then
 A1:  rng (@RestrictSub(x,All(x,S`1),xSQ)) c= dom v by Th59;
-     NEx_Val(v,S,x,xSQ) = (@RestrictSub(x,All(x,S`1),xSQ))*v;
-     then dom NEx_Val(v,S,x,xSQ) =
+     dom NEx_Val(v,S,x,xSQ) =
               dom (@RestrictSub(x,All(x,S`1),xSQ)) by A1,RELAT_1:46;
      hence thesis by SUBSTUT1:def 2;
    end;
 
 theorem Th74:
   [S,x] is quantifiable implies
-    v.(NEx_Val(v,S,x,xSQ)+*(x|a)) = (v.NEx_Val(v,S,x,xSQ)).(x|a)
-   proof
-     assume [S,x] is quantifiable;
-     (v.NEx_Val(v,S,x,xSQ)).(x|a) = (v.NEx_Val(v,S,x,xSQ))+*(x|a); then
-     (v.NEx_Val(v,S,x,xSQ)).(x|a) = (v+*NEx_Val(v,S,x,xSQ))+*(x|a);
-     hence thesis by FUNCT_4:15;
-   end;
+    v.(NEx_Val(v,S,x,xSQ)+*(x|a)) = (v.NEx_Val(v,S,x,xSQ)).(x|a) by FUNCT_4:15;
 
 theorem Th75:
   [S,x] is quantifiable implies
@@ -2119,59 +2099,59 @@ A10: for a holds (v.vS).((x|a)+*vS1'+*vS2') = v.(vS+*vS1+*vS2).(x|a)
        dom vS1' misses dom (x|a) by A4,Th59; then
        (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*(vS1'+*(x|a)+*vS2')
                                                         by FUNCT_4:36; then
-A13:   (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*(vS1'+*((x|a)+*vS2'))
+A11:   (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*(vS1'+*((x|a)+*vS2'))
                                                                  by FUNCT_4:15;
        dom vS2' misses dom (x|a) by A4,Th59; then
        (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*(vS1'+*(vS2'+*(x|a)))
-                                                        by A13,FUNCT_4:36; then
-A14:   (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*((vS1'+*vS2')+*(x|a))
+                                                        by A11,FUNCT_4:36; then
+A12:   (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*((vS1'+*vS2')+*(x|a))
                                                                  by FUNCT_4:15;
-A15:   now assume x in dom vS1; then
-A16:     vS1' +* (x .--> vS1.x) = vS1 by Th2;
-A17:     now assume x in dom vS2; then
-A18:       vS2' +* (x .--> vS2.x) = vS2 by Th2;
+A13:   now assume x in dom vS1; then
+A14:     vS1' +* (x .--> vS1.x) = vS1 by Th2;
+A15:     now assume x in dom vS2; then
+A16:       vS2' +* (x .--> vS2.x) = vS2 by Th2;
            dom (x .--> vS1.x) = {x} &
            dom (x .--> vS2.x) = {x} by CQC_LANG:5; then
            dom (x .--> vS1.x) = dom (x|a) &
            dom (x .--> vS2.x) = dom (x|a) by Th59;
            hence (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*((vS1+*vS2)+*(x|a))
-                                                           by A14,A16,A18,Th1;
+                                                           by A12,A14,A16,Th1;
          end;
          now assume not x in dom vS2; then
            vS2' = vS2|(dom vS2) by ZFMISC_1:65; then
            vS2' = vS2 by RELAT_1:97; then
-A19:       vS2' +* {} = vS2 by FUNCT_4:22;
-A20:       dom {} c= dom (x|a) by XBOOLE_1:2;
+A17:       vS2' +* {} = vS2 by FUNCT_4:22;
+A18:       dom {} c= dom (x|a) by XBOOLE_1:2;
            dom (x .--> vS1.x) = {x} by CQC_LANG:5; then
            dom (x .--> vS1.x) = dom (x|a) by Th59;
            hence (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*((vS1+*vS2)+*(x|a))
-                                                       by A14,A16,A19,A20,Th1;
+                                                       by A12,A14,A17,A18,Th1;
          end;
          hence (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*((vS1+*vS2)+*(x|a))
-                                                                       by A17;
+                                                                       by A15;
        end;
        now assume not x in dom vS1; then
          vS1' = vS1|(dom vS1) by ZFMISC_1:65; then
-A21:     vS1' = vS1 by RELAT_1:97; then
-A22:     vS1' +* {} = vS1 by FUNCT_4:22;
-A23:     dom {} c= dom (x|a) by XBOOLE_1:2;
-A24:     now assume x in dom vS2; then
-A25:       vS2' +* (x .--> vS2.x) = vS2 by Th2;
+A19:     vS1' = vS1 by RELAT_1:97; then
+A20:     vS1' +* {} = vS1 by FUNCT_4:22;
+A21:     dom {} c= dom (x|a) by XBOOLE_1:2;
+A22:     now assume x in dom vS2; then
+A23:       vS2' +* (x .--> vS2.x) = vS2 by Th2;
            dom (x .--> vS2.x) = {x} by CQC_LANG:5; then
            dom (x .--> vS2.x) = dom (x|a) by Th59;
            hence (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*((vS1+*vS2)+*(x|a))
-                                                       by A14,A22,A23,A25,Th1;
+                                                       by A12,A20,A21,A23,Th1;
          end;
          now assume not x in dom vS2; then
            vS2' = vS2|(dom vS2) by ZFMISC_1:65;
            hence (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*((vS1+*vS2)+*(x|a))
-                                                         by A14,A21,RELAT_1:97;
+                                                         by A12,A19,RELAT_1:97;
          end;
          hence (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*((vS1+*vS2)+*(x|a))
-                                                                        by A24;
+                                                                        by A22;
        end;
        then (v.vS).((x|a)+*vS1'+*vS2') = (v+*vS)+*(vS1+*vS2)+*(x|a)
-                                                             by A15,FUNCT_4:15;
+                                                             by A13,FUNCT_4:15;
        then (v.vS).((x|a)+*vS1'+*vS2') = ((v+*vS)+*vS1+*vS2)+*(x|a)
                                                                  by FUNCT_4:15;
        then (v.vS).((x|a)+*vS1'+*vS2') = (v+*(vS+*vS1)+*vS2)+*(x|a)
@@ -2187,18 +2167,18 @@ A25:       vS2' +* (x .--> vS2.x) = vS2 by Th2;
        thus (for a holds J,(v.vS).((x|a)+*vS1'+*vS2') |= p) implies
                (for a holds J,v.(vS+*vS1+*vS2).(x|a) |= p)
        proof
-         assume A26: for a holds J,(v.vS).((x|a)+*vS1'+*vS2') |= p;
+         assume A24: for a holds J,(v.vS).((x|a)+*vS1'+*vS2') |= p;
          let a;
          (v.vS).((x|a)+*vS1'+*vS2') = v.(vS+*vS1+*vS2).(x|a) by A10;
-         hence thesis by A26;
+         hence thesis by A24;
        end;
        thus (for a holds J,v.(vS+*vS1+*vS2).(x|a) |= p) implies
               (for a holds J,(v.vS).((x|a)+*vS1'+*vS2') |= p)
        proof
-         assume A27: for a holds J,v.(vS+*vS1+*vS2).(x|a) |= p;
+         assume A25: for a holds J,v.(vS+*vS1+*vS2).(x|a) |= p;
          let a;
          (v.vS).((x|a)+*vS1'+*vS2') = v.(vS+*vS1+*vS2).(x|a) by A10;
-         hence thesis by A27;
+         hence thesis by A25;
        end;
      end;
      hence thesis by A7,Th51;
@@ -2483,7 +2463,6 @@ theorem Th90:
 proof
   set S1 = CQCSub_All([S,x],xSQ);
   assume A1: [S,x] is quantifiable;
-  Val_S(v,S1) = (@S1`2)*v; then
 A2: Val_S(v,S1) = ((@RestrictSub(x,All(x,S`1),xSQ) +*
       (@xSQ)|RSub1(All(x,S`1))) +* (@xSQ)|RSub2(All(x,S`1),xSQ))*v by A1,Th89;
   rng (@RestrictSub(x,All(x,S`1),xSQ)) c= bound_QC-variables; then

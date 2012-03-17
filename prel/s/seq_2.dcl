@@ -23,8 +23,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="28"/>
-<Adjective nr="31"/>
+<Adjective nr="29"/>
+<Adjective nr="32"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -32,9 +32,9 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -42,9 +42,9 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -52,8 +52,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="28"/>
-<Adjective nr="31"/>
+<Adjective nr="29"/>
+<Adjective nr="32"/>
 </Cluster>
 </CCluster>
 </Registrations>

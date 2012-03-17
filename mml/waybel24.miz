@@ -12,17 +12,19 @@ environ
       FUNCT_5, MCART_1, QUANTAL1, CAT_1, MONOID_0, WAYBEL_3, PBOOLE, CARD_3,
       FUNCT_4, WAYBEL24;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      FUNCT_2, STRUCT_0, FUNCT_5, SEQM_3, MONOID_0, CARD_3, PBOOLE, BORSUK_1,
+      FUNCT_2, BINOP_1,
+      STRUCT_0, FUNCT_5, SEQM_3, MONOID_0, CARD_3, PBOOLE, BORSUK_1,
       PRE_TOPC,
       ORDERS_2, LATTICE3, FUNCT_7, YELLOW_0, ORDERS_3, WAYBEL_0, YELLOW_1,
       YELLOW_2, WAYBEL_3, WAYBEL_9, WAYBEL11, WAYBEL17, YELLOW_3;
  constructors FUNCT_7, SEQM_3, ORDERS_3, WAYBEL_3, WAYBEL_5, WAYBEL_1,
-      WAYBEL17, MONOID_0, BORSUK_1, PRALG_1, REALSET2;
+      WAYBEL17, MONOID_0, BORSUK_1, PRALG_1, REALSET2, BINOP_1;
  registrations STRUCT_0, WAYBEL_0, WAYBEL_3, RELSET_1, YELLOW_1, LATTICE3,
       BORSUK_2, WAYBEL10, WAYBEL11, WAYBEL17, YELLOW_3, YELLOW_0, MONOID_0,
       SUBSET_1, FUNCT_2, XBOOLE_0, BORSUK_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, WAYBEL_0, LATTICE3, ORDERS_2, MONOID_0, XBOOLE_0;
+ definitions TARSKI, WAYBEL_0, LATTICE3, ORDERS_2, MONOID_0, XBOOLE_0,
+  BINOP_1;
  theorems WAYBEL_0, TARSKI, FUNCT_1, FUNCT_2, YELLOW_0, STRUCT_0, YELLOW_2,
       WAYBEL_1, ZFMISC_1, LATTICE3, WAYBEL10, CAT_2, WAYBEL17, YELLOW_3,
       MCART_1, FUNCT_5, YELLOW_5, YELLOW10, WAYBEL_9, FUNCOP_1, BORSUK_1,
@@ -59,7 +61,7 @@ registration let S be non empty RelStr,
       assume x <= y;
           x in the carrier of S & y in the carrier of S;
       then x in dom f & y in dom f by FUNCT_2:def 1;
-      hence thesis by A1,SEQM_3:def 5;
+      hence thesis by A1,FUNCT_1:def 16;
     end;
     hence f is monotone by WAYBEL_1:def 2;
   end;
@@ -309,7 +311,7 @@ reserve X1, X2, Y for non empty RelStr,
 
 theorem Th7:
   for y being Element of X2 holds
-    (Proj (f, x)). y = f. [x, y]
+    (Proj (f, x)). y = f.(x, y)
 proof
   let y be Element of X2;
     dom f = the carrier of [:X1, X2:] by FUNCT_2:def 1
@@ -337,7 +339,7 @@ end;
 
 theorem Th8:
   for x being Element of X1 holds
-    (Proj (f, y)). x = f. [x, y]
+    (Proj (f, y)). x = f.(x, y)
 proof
   let x be Element of X1;
     dom f = the carrier of [:X1, X2:] by FUNCT_2:def 1
@@ -357,7 +359,7 @@ proof
       f be Function of [:R,S:], T,
       a be Element of R,
       b be Element of S;
-      Proj (f, a). b = f. [a, b] by Th7
+      Proj (f, a). b = f.(a, b) by Th7
                  .= Proj (f, b). a by Th8;
   hence thesis;
 end;
@@ -395,16 +397,16 @@ proof
   assume A1: f is monotone;
 A2:now let x, y be Element of S;
     assume A3: x <= y;
-A4: h. x = f. [a, x] by Th7;
-A5: h. y = f. [a, y] by Th7;
+A4: h. x = f.(a, x) by Th7;
+A5: h. y = f.(a, y) by Th7;
         a <= a;
     then [a, x] <= [a, y] by A3,YELLOW_3:11;
     hence h.x <= h.y by A1,A4,A5,WAYBEL_1:def 2;
   end;
       now let x, y be Element of R;
     assume A6: x <= y;
-A7: g. x = f. [x, b] by Th8;
-A8: g. y = f. [y, b] by Th8;
+A7: g. x = f.(x, b) by Th8;
+A8: g. y = f.(y, b) by Th8;
         b <= b;
     then [x, b] <= [y, b] by A6,YELLOW_3:11;
     hence g.x <= g.y by A1,A7,A8,WAYBEL_1:def 2;
@@ -428,16 +430,16 @@ proof
   assume A1: f is antitone;
 A2:now let x, y be Element of S;
     assume A3: x <= y;
-A4: h. x = f. [a, x] by Th7;
-A5: h. y = f. [a, y] by Th7;
+A4: h. x = f.(a, x) by Th7;
+A5: h. y = f.(a, y) by Th7;
         a' <= a';
     then [a', x] <= [a', y] by A3,YELLOW_3:11;
     hence h.x >= h.y by A1,A4,A5,WAYBEL_0:def 5;
   end;
       now let x, y be Element of R;
     assume A6: x <= y;
-A7: g. x = f. [x, b] by Th8;
-A8: g. y = f. [y, b] by Th8;
+A7: g. x = f.(x, b) by Th8;
+A8: g. y = f.(y, b) by Th8;
     reconsider b' = b as Element of S;
         b' <= b';
     then [x, b'] <= [y, b'] by A6,YELLOW_3:11;
@@ -491,12 +493,12 @@ A1: for a being Element of R,
     assume x <= y;
 then A2: x`1 <= y`1 & x`2 <= y`2 by YELLOW_3:12;
 A3: Proj (f, y`2) is monotone by A1;
-A4: f. [x`1, y`2] = Proj (f, y`2). x`1 by Th8;
-     f. [y`1, y`2] = Proj (f, y`2). y`1 by Th8;
+A4: f.(x`1, y`2) = Proj (f, y`2). x`1 by Th8;
+     f.(y`1, y`2) = Proj (f, y`2). y`1 by Th8;
 then A5: f. [x`1, y`2] <= f. [y`1, y`2] by A2,A3,A4,WAYBEL_1:def 2;
 A6: Proj (f, x`1) is monotone by A1;
-A7: f. [x`1, x`2] = Proj (f, x`1). x`2 by Th7;
-     f. [x`1, y`2] = Proj (f, x`1). y`2 by Th7;
+A7: f.(x`1, x`2) = Proj (f, x`1). x`2 by Th7;
+     f.(x`1, y`2) = Proj (f, x`1). y`2 by Th7;
     then f. [x`1, x`2] <= f. [x`1, y`2] by A2,A6,A7,WAYBEL_1:def 2;
 then A8: f. [x`1, x`2] <= f. [y`1, y`2] by A5,YELLOW_0:def 2;
 A9: [:the carrier of R, the carrier of S:] = the carrier of [:R, S:]
@@ -524,12 +526,12 @@ A1: for a being Element of R,
     assume x <= y;
 then A2: x`1 <= y`1 & x`2 <= y`2 by YELLOW_3:12;
 A3: Proj (f, y`2) is antitone by A1;
-A4: f. [x`1, y`2] = Proj (f, y`2). x`1 by Th8;
-     f. [y`1, y`2] = Proj (f, y`2). y`1 by Th8;
+A4: f.(x`1, y`2) = Proj (f, y`2). x`1 by Th8;
+     f.(y`1, y`2) = Proj (f, y`2). y`1 by Th8;
 then A5: f. [x`1, y`2] >= f. [y`1, y`2] by A2,A3,A4,WAYBEL_9:def 1;
 A6: Proj (f, x`1) is antitone by A1;
-A7: f. [x`1, x`2] = Proj (f, x`1). x`2 by Th7;
-     f. [x`1, y`2] = Proj (f, x`1). y`2 by Th7;
+A7: f.(x`1, x`2) = Proj (f, x`1). x`2 by Th7;
+     f.(x`1, y`2) = Proj (f, x`1). y`2 by Th7;
     then f. [x`1, x`2] >= f. [x`1, y`2] by A2,A6,A7,WAYBEL_9:def 1;
 then A8: f. [x`1, x`2] >= f. [y`1, y`2] by A5,YELLOW_0:def 2;
 A9: [:the carrier of R, the carrier of S:] = the carrier of [:R, S:]
@@ -559,7 +561,7 @@ proof
       assume c in Proj (f, b).:X;
       then consider k be set such that
 A1:     k in dom Proj (f, b) & k in X & c = Proj (f, b).k by FUNCT_1:def 12;
-A2:   c = f. [k, b] by A1,Th8;
+A2:   c = f.(k, b) by A1,Th8;
           b in {b} by TARSKI:def 1;
 then A3:   [k, b] in [:X, {b}:] by A1,ZFMISC_1:106;
           [:the carrier of R, the carrier of S:] = the carrier of [:R, S:]
@@ -578,8 +580,9 @@ A4:     k in dom f & k in [:X, {b}:] & c = f.k by FUNCT_1:def 12;
       consider k1, k2 be set such that
 A5:     k1 in X & k2 in {b} & k = [k1, k2] by A4,ZFMISC_1:def 2;
 A6:   dom Proj (f, b) = the carrier of R by FUNCT_2:def 1;
+X:    c = f.(k1,k2) by A4,A5;
           k2 = b by A5,TARSKI:def 1;
-      then c = Proj (f, b). k1 by A4,A5,Th8;
+      then c = Proj (f, b). k1 by A4,A5,Th8,X;
       hence thesis by A5,A6,FUNCT_1:def 12;
     end;
   end;
@@ -605,7 +608,7 @@ proof
       assume c in Proj (f, b).:X;
       then consider k be set such that
 A1:     k in dom Proj (f, b) & k in X & c = Proj (f, b).k by FUNCT_1:def 12;
-A2:   c = f. [b, k] by A1,Th7;
+A2:   c = f.(b, k) by A1,Th7;
           b in {b} by TARSKI:def 1;
 then A3:   [b, k] in [:{b}, X:] by A1,ZFMISC_1:106;
           [:the carrier of R, the carrier of S:] = the carrier of [:R, S:]
@@ -624,8 +627,9 @@ A4:     k in dom f & k in [:{b}, X:] & c = f.k by FUNCT_1:def 12;
       consider k1, k2 be set such that
 A5:     k1 in {b} & k2 in X & k = [k1, k2] by A4,ZFMISC_1:def 2;
 A6:    dom Proj (f, b) = the carrier of S by FUNCT_2:def 1;
+X:    c = f.(k1,k2) by A4,A5;
           k1 = b by A5,TARSKI:def 1;
-      then c = Proj (f, b). k2 by A4,A5,Th7;
+      then c = Proj (f, b). k2 by A4,A5,Th7,X;
       hence thesis by A5,A6,FUNCT_1:def 12;
     end;
   end;
@@ -663,7 +667,7 @@ A7:   Proj (f, b).:X = f.:[:X', Y':] by Th14;
 A8:   sup Y' = b by YELLOW_0:39;
           sup (Proj (f, b).:X) = sup (f.:[:X', Y':]) by Th14
                           .= f.(sup [:X', Y':]) by A5,A6,WAYBEL_0:def 31
-                          .= f. [sup X', sup Y'] by A3,A4,YELLOW_3:43
+                          .= f.(sup X', sup Y') by A3,A4,YELLOW_3:43
                           .= Proj (f, b).sup X by A8,Th8;
       hence thesis by A5,A6,A7,WAYBEL_0:def 31;
     end;
@@ -686,7 +690,7 @@ A13:   Proj (f, a).:X = f.:[:Y', X':] by Th15;
 A14:   sup Y' = a by YELLOW_0:39;
           sup (Proj (f, a).:X) = sup (f.:[:Y', X':]) by Th15
                           .= f.(sup [:Y', X':]) by A11,A12,WAYBEL_0:def 31
-                          .= f. [sup Y', sup X'] by A9,A10,YELLOW_3:43
+                          .= f.(sup Y', sup X') by A9,A10,YELLOW_3:43
                           .= Proj (f, a).sup X by A14,Th7;
       hence thesis by A11,A12,A13,WAYBEL_0:def 31;
     end;
@@ -773,7 +777,7 @@ A7:  ex_sup_of proj2 X, S by A3,YELLOW_3:41;
           Proj (f, "\/"(proj2 X, S)) is directed-sups-preserving by A1;
 then A8:    Proj (f, "\/"(proj2 X, S)) preserves_sup_of proj1 X
         by A5,WAYBEL_0:def 37;
-A9:   f.sup X = f. [sup proj1 X, sup proj2 X] by YELLOW_3:46
+A9:   f.sup X = f.(sup proj1 X, sup proj2 X) by YELLOW_3:46
              .= Proj (f, sup proj2 X). sup proj1 X by Th8
              .= sup (Proj (f, sup proj2 X).:proj1 X)
                by A6,A8,WAYBEL_0:def 31;
@@ -803,7 +807,7 @@ A14:       ex_sup_of (Proj (f, b1).:proj2 X), T by YELLOW_0:17;
 A15:           k1 in dom Proj (f, b1) & k1 in proj2 X &
                k = (Proj (f, b1)).k1 by FUNCT_1:def 12;
             reconsider k1 as Element of S by A15;
-            k = f. [b1, k1] by A15,Th7;
+            k = f.(b1, k1) by A15,Th7;
             hence thesis by A2,A4,A10,A15,Th17;
           end;
           hence thesis by A13,A14,YELLOW_0:def 9;

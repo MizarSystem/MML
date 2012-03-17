@@ -13,7 +13,7 @@ environ
  constructors DOMAIN_1, BINOP_1, VECTSP_1;
  registrations STRUCT_0, RELSET_1, SUBSET_1, VECTSP_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, STRUCT_0;
+ definitions TARSKI, STRUCT_0, BINOP_1;
  theorems BINOP_1, VECTSP_1, TARSKI, RELSET_1, ZFMISC_1, RLVECT_1, GROUP_1;
  schemes BINOP_1, FUNCT_2, XBOOLE_0;
 
@@ -55,7 +55,7 @@ set X = {0};
 reconsider o = 0 as Element of {0} by TARSKI:def 1;
 deffunc F(Element of {0},Element of {0}) = o;
 consider md being BinOp of {0} such that
-Lm1: for x,y being Element of {0} holds md.(x,y) = F(x,y) from BINOP_1:sch 2;
+Lm1: for x,y being Element of {0} holds md.(x,y) = F(x,y) from BINOP_1:sch 4;
 
 Lm2:
 now let F;
@@ -151,7 +151,7 @@ Lm4:
 now let F;
  let mF be Function of [:the carrier of F,X:],X such that
 A1: for a being Element of F
-      for x being Element of X holds mF.[a,x] = o;
+      for x being Element of X holds mF.(a,x) = o;
  let mo be Relation of X;
 let MPS be Abelian add-associative right_zeroed right_complementable
  (non empty SymStr over F) such that
@@ -174,13 +174,10 @@ A2: MPS = SymStr (# X,md,o,mF,mo #);
      A5: md.(v,w) = o by Lm1;
      reconsider v,w as Element of MPS;
      A6: x*(v+w) = mF.(x,o) by A2,A4,A5,VECTSP_1:def 24;
-         mF.(x,o) = mF.[x,o] by BINOP_1:def 1;
-     then A7: x*(v+w) = o by A1,A6;
-         mF.(x,v) = mF.[x,v] by BINOP_1:def 1;
-     then mF.(x,v) = o by A1;
+     A7: x*(v+w) = o by A1,A6;
+     mF.(x,v) = o by A1;
      then A8: x*v = o by A2,VECTSP_1:def 24;
-         mF.(x,w) = mF.[x,w] by BINOP_1:def 1;
-     then mF.(x,w) = o by A1;
+     mF.(x,w) = o by A1;
      then A9: x*w = o by A2,VECTSP_1:def 24;
          o = 0.MPS by A2,RLVECT_1:def 2;
      hence thesis by A7,A8,A9,RLVECT_1:10;
@@ -190,49 +187,42 @@ A2: MPS = SymStr (# X,md,o,mF,mo #);
      set z = x+y;
      A11: z*v = mF.(z,v) by A2,VECTSP_1:def 24;
      reconsider v as Element of MPS;
-A12:      mF.(z,v) = mF.[z,v] by BINOP_1:def 1;
      reconsider v as Element of MPS;
-     A13: (x+y)*v = o by A1,A2,A11,A12;
+     A12: (x+y)*v = o by A1,A2,A11;
      reconsider v as Element of MPS;
-         mF.(x,v) = mF.[x,v] by BINOP_1:def 1;
-     then A14: mF.(x,v) = o by A1,A2;
+     A13: mF.(x,v) = o by A1,A2;
      reconsider v as Element of MPS;
-     A15: x*v = o by A2,A14,VECTSP_1:def 24;
+     A14: x*v = o by A2,A13,VECTSP_1:def 24;
      reconsider v as Element of MPS;
-         mF.(y,v) = mF.[y,v] by BINOP_1:def 1;
-     then A16: mF.(y,v) = o by A1,A2;
+     A15: mF.(y,v) = o by A1,A2;
      reconsider v as Element of MPS;
-     A17: y*v = o by A2,A16,VECTSP_1:def 24;
+     A16: y*v = o by A2,A15,VECTSP_1:def 24;
          o = 0.MPS by A2,RLVECT_1:def 2;
-     hence thesis by A13,A15,A17,RLVECT_1:10;
+     hence thesis by A12,A14,A16,RLVECT_1:10;
     end;
-   A18: (x*y)*v = x*(y*v)
+   A17: (x*y)*v = x*(y*v)
     proof
      set z = x*y;
-     A19: z*v = mF.(z,v) by A2,VECTSP_1:def 24;
+     A18: z*v = mF.(z,v) by A2,VECTSP_1:def 24;
      reconsider v as Element of MPS;
-A20:      mF.(z,v) = mF.[z,v] by BINOP_1:def 1;
      reconsider v as Element of MPS;
-     A21: (x*y)*v = o by A1,A2,A19,A20;
+     A19: (x*y)*v = o by A1,A2,A18;
      reconsider v as Element of MPS;
-         mF.(y,v) = mF.[y,v] by BINOP_1:def 1;
-     then A22: mF.(y,v) = o by A1,A2;
+     A20: mF.(y,v) = o by A1,A2;
      reconsider v as Element of MPS;
-         y*v = o by A2,A22,VECTSP_1:def 24;
-     then A23: x*(y*v) = mF.(x,o) by A2,VECTSP_1:def 24;
-         mF.(x,o) = mF.[x,o] by BINOP_1:def 1;
-     hence thesis by A1,A21,A23;
+         y*v = o by A2,A20,VECTSP_1:def 24;
+     then A21: x*(y*v) = mF.(x,o) by A2,VECTSP_1:def 24;
+     thus thesis by A1,A19,A21;
     end;
        (1.F)*v = v
     proof
      set one = 1.F;
-     A24: one*v = mF.(one,v) by A2,VECTSP_1:def 24;
-     A25: mF.(one,v) = mF.[one,v] by BINOP_1:def 1;
+     A22: one*v = mF.(one,v) by A2,VECTSP_1:def 24;
      reconsider v as Element of MPS;
-         mF.(one,v) = o by A1,A2,A25;
-     hence thesis by A2,A24,TARSKI:def 1;
+         mF.(one,v) = o by A1,A2;
+     hence thesis by A2,A22,TARSKI:def 1;
     end;
-   hence thesis by A3,A10,A18;
+   hence thesis by A3,A10,A17;
   end;
   hence thesis by VECTSP_1:def 26;
  end;
@@ -243,7 +233,7 @@ now let F;
  let mF be Function of [:the carrier of F,X:],X such that
     for a being Element of F
       for x being Element of X holds
-      mF.[a,x] = o;
+      mF.(a,x) = o;
 set CV = [:X,X:];
  let mo be Relation of X such that A1:
 for x being set holds x in mo iff
@@ -355,7 +345,7 @@ registration let F;
       such that
 A1: for a being Element of F
       for x being Element of X holds
-      mF.[a,x] = F(a,x) from FUNCT_2:sch 8;
+      mF.(a,x) = F(a,x) from BINOP_1:sch 4;
      consider mo being Relation of X such that
 A2:   for x being set holds x in mo iff
        x in [:X,X:] & ex a,b being Element of X

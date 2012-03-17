@@ -9,18 +9,21 @@ environ
  vocabularies RLVECT_1, FUNCT_1, ARYTM_1, RELAT_1, ABSVALUE, ORDINAL2, BINOP_1,
       SQUARE_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SERIES_1, BHSP_1, SUPINF_2,
       RSSPACE, CLVECT_1, COMSEQ_1, COMPLEX1, PROB_2, ARYTM_3, CSSPACE,
-      CFUNCT_1, PRE_TOPC, NORMSP_1, METRIC_1, SEQM_3, XCMPLX_0, FUNCOP_1;
+      CFUNCT_1, PRE_TOPC, NORMSP_1, METRIC_1, SEQM_3, XCMPLX_0, FUNCOP_1,
+      REALSET1;
  notations TARSKI, XBOOLE_0, SUBSET_1, PRE_TOPC, RELAT_1, DOMAIN_1, FUNCT_1,
-      FUNCT_2, FUNCOP_1, SEQ_1, BINOP_1, STRUCT_0, ZFMISC_1, NUMBERS, XCMPLX_0,
+      FUNCT_2, FUNCOP_1, SEQ_1, BINOP_1, REALSET1,
+      STRUCT_0, ZFMISC_1, NUMBERS, XCMPLX_0,
       XREAL_0, REAL_1, SQUARE_1, COMPLEX1, COMSEQ_1, CFUNCT_1, COMSEQ_2,
       COMSEQ_3, SERIES_1, NAT_1, RLVECT_1, NORMSP_1, CLVECT_1;
  constructors REAL_1, NAT_1, DOMAIN_1, SQUARE_1, SEQ_2, SERIES_1, PARTFUN1,
       BINOP_1, CLVECT_1, COMSEQ_1, COMSEQ_3, COMSEQ_2, COMPLEX2, NORMSP_1,
-      FUNCOP_1;
+      FUNCOP_1, REALSET1;
  registrations RELSET_1, STRUCT_0, XREAL_0, MEMBERED, CLVECT_1, FUNCT_1,
-      COMPLEX1, ORDINAL2, COMSEQ_1, COMSEQ_2, SUBSET_1, XCMPLX_0;
+      COMPLEX1, ORDINAL2, COMSEQ_1, COMSEQ_2, SUBSET_1, XCMPLX_0, REALSET1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions TARSKI, RLVECT_1, CLVECT_1, STRUCT_0, NORMSP_1;
+ definitions TARSKI, RLVECT_1, CLVECT_1, STRUCT_0, NORMSP_1, REALSET1;
+ definitions SQUARE_1, BINOP_1;
  theorems XBOOLE_0, STRUCT_0, RELAT_1, SQUARE_1, TARSKI, ABSVALUE, ZFMISC_1,
       SEQ_1, SERIES_1, COMSEQ_3, FUNCT_1, FUNCT_2, RLVECT_1, BINOP_1, XCMPLX_0,
       COMSEQ_1, CLVECT_1, COMPLEX1, COMSEQ_2, NORMSP_1, FUNCOP_1, XREAL_1;
@@ -111,7 +114,7 @@ A1:for x,y being Element of the_set_of_ComplexSequences
    end;
      ex ADD be BinOp of the_set_of_ComplexSequences st
      for a,b being Element of the_set_of_ComplexSequences holds
-       P[a,b,ADD.(a,b)] from BINOP_1:sch 1(A1);
+       P[a,b,ADD.(a,b)] from BINOP_1:sch 3(A1);
    then consider ADD be BinOp of the_set_of_ComplexSequences such that
 A2:for a,b being Element of the_set_of_ComplexSequences holds
      ADD.(a,b) = seq_id(a)+seq_id(b);
@@ -145,7 +148,7 @@ theorem Th2:
 ex f be Function of [: COMPLEX, the_set_of_ComplexSequences :],
   the_set_of_ComplexSequences st
    for r,x be set st r in COMPLEX & x in the_set_of_ComplexSequences
-      holds f.[r,x] = C_id(r) (#) seq_id(x)
+      holds f.(r,x) = C_id(r) (#) seq_id(x)
 proof
    deffunc F(set,set) = C_id($1) (#) seq_id($2);
 A1:for r,x be set st r in COMPLEX & x in the_set_of_ComplexSequences holds
@@ -153,7 +156,7 @@ A1:for r,x be set st r in COMPLEX & x in the_set_of_ComplexSequences holds
      ex f be Function of
      [:COMPLEX, the_set_of_ComplexSequences:], the_set_of_ComplexSequences st
        for r,x be set st r in COMPLEX & x in the_set_of_ComplexSequences holds
-         f.[r,x] = F(r,x) from FUNCT_2:sch 6(A1);
+         f.(r,x) = F(r,x) from BINOP_1:sch 2(A1);
    hence thesis;
 end;
 
@@ -180,27 +183,25 @@ definition
  func l_mult -> Function of [:COMPLEX,the_set_of_ComplexSequences:],
   the_set_of_ComplexSequences means :Def5:
    for z,x be set st z in COMPLEX & x in the_set_of_ComplexSequences
-      holds it.[z,x] = C_id(z)(#)seq_id(x);
+      holds it.(z,x) = C_id(z)(#)seq_id(x);
 existence by Th2;
 uniqueness
 proof
    let mult1,mult2 be Function of [:COMPLEX,the_set_of_ComplexSequences:],
    the_set_of_ComplexSequences such that
 A1:for z,x be set st z in COMPLEX & x in the_set_of_ComplexSequences
-    holds mult1.[z,x] = C_id(z)(#)seq_id(x)
+    holds mult1.(z,x) = C_id(z)(#)seq_id(x)
    and
 A2:for z,x be set st z in COMPLEX & x in the_set_of_ComplexSequences
-    holds mult2.[z,x] = C_id(z)(#)seq_id(x);
+    holds mult2.(z,x) = C_id(z)(#)seq_id(x);
      for z being Element of COMPLEX
     for x being Element of the_set_of_ComplexSequences holds
      mult1.(z,x) = mult2.(z,x)
    proof
      let z being Element of COMPLEX;
      let x being Element of the_set_of_ComplexSequences;
-     thus mult1.(z,x) = mult1.[z,x] by BINOP_1:def 1
-                     .= C_id(z)(#)seq_id(x) by A1
-                     .= mult2.[z,x] by A2
-                     .= mult2.(z,x) by BINOP_1:def 1;
+     thus mult1.(z,x) = C_id(z)(#)seq_id(x) by A1
+                     .= mult2.(z,x) by A2;
    end;
    hence thesis by BINOP_1:2;
 end;
@@ -249,7 +250,7 @@ proof
    let v,w being VECTOR of
    CLSStruct (# the_set_of_ComplexSequences,CZeroseq, l_add,l_mult #);
    thus v + w = l_add.[v,w]
-      .=l_add.(v,w) by BINOP_1:def 1
+      .=l_add.(v,w)
       .=seq_id(v)+seq_id(w) by Def4;
 end;
 
@@ -262,7 +263,7 @@ proof
    let z be Complex;
    let v be VECTOR of
    CLSStruct(# the_set_of_ComplexSequences,CZeroseq, l_add,l_mult #);
-   thus z*v = l_mult.[z,v]
+   thus z*v = l_mult.(z,v)
            .= C_id(z)(#)seq_id(v) by Def5
            .= z(#)seq_id(v) by Def3;
 end;
@@ -335,7 +336,7 @@ proof
    reconsider w=-seq_id(v) as VECTOR of V by Def1;
      v+w=CZeroseq
    proof
-A2:  v+w = seq_id(v)+seq_id(w) by Th4
+A1:  v+w = seq_id(v)+seq_id(w) by Th4
         .= seq_id(v)+(-seq_id(v)) by Th3;
        for s being Nat holds
        (seq_id(v)+(-seq_id(v)) ).s=(seq_id(CZeroseq)).s
@@ -350,7 +351,7 @@ A2:  v+w = seq_id(v)+seq_id(w) by Th4
      end;
      then seq_id(v)+(-seq_id(v)) = seq_id(CZeroseq) by COMSEQ_1:6
       .=CZeroseq by Def2;
-     hence thesis by A2;
+     hence thesis by A1;
    end;
    hence thesis;
 end;
@@ -442,22 +443,22 @@ let X be ComplexLinearSpace;
 let X1 be Subset of X such that
 A1:X1 is lineary-closed & X1 is non empty;
 func Add_(X1,X) -> BinOp of X1 equals :Def8:
-  (the add of X) | [:X1,X1:];
+  (the add of X)||X1;
 correctness
 proof
 A2:[:X1,X1:] c= [:the carrier of X,the carrier of X:] by ZFMISC_1:119;
 A3:dom (the add of X)
      = [:the carrier of X,the carrier of X:] by FUNCT_2:def 1;
-then A4:dom ((the add of X) | [:X1,X1:]) =[:X1,X1:] by A2,RELAT_1:91;
-     for z be set st z in [:X1,X1:] holds ((the add of X) | [:X1,X1:]).z in X1
+then A4:dom ((the add of X)||X1) =[:X1,X1:] by A2,RELAT_1:91;
+     for z be set st z in [:X1,X1:] holds ((the add of X)||X1).z in X1
    proof
      let z be set such that
 A5:  z in [:X1,X1:];
      consider r,x  be set such that
 A6:  r in X1 & x in X1 & z=[r,x] by A5,ZFMISC_1:def 2;
      reconsider y=x,r1=r as VECTOR of X by A6;
-       [r,x] in dom ((the add of X) | [:X1,X1:]) by A2,A3,A5,A6,RELAT_1:91;
-     then ((the add of X) | [:X1,X1:]).z
+       [r,x] in dom ((the add of X)||X1) by A2,A3,A5,A6,RELAT_1:91;
+     then ((the add of X)||X1).z
         = (the add of X).[r,x] by A6,FUNCT_1:70
        .= r1+y;
      hence thesis by A1,A6,CLVECT_1:def 3;
@@ -521,7 +522,7 @@ proof
    let V1 be Subset of V such that
 A1:V1 is lineary-closed & V1 is non empty;
 A2:Zero_(V1,V) = 0.V by A1,Def10;
-A3:Add_(V1,V)= (the add of V) | [:V1,V1:] by A1,Def8;
+A3:Add_(V1,V)= (the add of V)||V1 by A1,Def8;
        Mult_(V1,V) = (the Mult of V) | [:COMPLEX,V1:] by A1,Def9;
    hence thesis by A1,A2,A3,CLVECT_1:44;
 end;
@@ -646,18 +647,18 @@ then A9:      (|.seq_id(v+u).|).n <= s.n + t.n by COMSEQ_1:def 14;
          then 0 <= (|.seq_id(v+u).|).n by COMSEQ_1:def 14;
 then A10:     ((|.seq_id(v+u).|).n)^2 <= (s.n + t.n)^2 by A9,SQUARE_1:77;
            r.n = (|.seq_id(v+u).|).n * (|.seq_id(v+u).|).n by SEQ_1:12
-            .= ((|.seq_id(v+u).|).n)^2 by SQUARE_1:def 3;
-then A11:     r.n <= sn^2 + 2*sn*tn + tn^2 by A10,SQUARE_1:63;
+            .= ((|.seq_id(v+u).|).n)^2;
+then A11:     r.n <= sn^2 + 2*sn*tn + tn^2 by A10;
            (2(#)p+2(#)q).n=(2(#)p).n +(2(#)q).n by SEQ_1:11
                        .= 2*p.n + (2(#)q).n by SEQ_1:13
                        .= 2*p.n + 2*q.n by SEQ_1:13
                        .= 2*(s.n*s.n) + 2*q.n by SEQ_1:12
                        .= 2*(s.n*s.n) + 2*(t.n*t.n) by SEQ_1:12
-                       .= 2*sn^2 + 2*(t.n*t.n) by SQUARE_1:def 3
-                       .= 2*sn^2 + 2*tn^2 by SQUARE_1:def 3;
+                       .= 2*sn^2 + 2*(t.n*t.n)
+                       .= 2*sn^2 + 2*tn^2;
 then A12:     (2(#)p+2(#)q).n - (sn^2 + 2*sn*tn + tn^2)
           = sn^2 - 2*sn*tn + (tn^2 + tn^2 - tn^2)
-         .= (sn-tn)^2 by SQUARE_1:64;
+         .= (sn-tn)^2;
            0 <= (sn-tn)^2 by SQUARE_1:72;
          then 0 + (sn^2 + 2*sn*tn + tn^2) <= (2(#)p+2(#)q).n by A12,XREAL_1:21;
          hence thesis by A11,XREAL_1:2;
@@ -824,25 +825,12 @@ Lm9:now
            .= 0.V0 by CLVECT_1:31;
      hence thesis by Lm2,Lm4,TARSKI:def 1;
    end;
-   thus 0 <= Re(x .|. x) & 0 = Im(x .|. x)
-   proof
-     reconsider u = x as VECTOR of (0).V0;
-       x .|. x = nilfunc.[u,u];
-     hence thesis by Lm5;
-   end;
-   thus x .|. y = (y .|. x)*'
-   proof
-     reconsider u = x , v = y as VECTOR of (0).V0;
-       x .|. y = nilfunc.[u,v] &
-     y .|. x = nilfunc.[v,u];
-     hence thesis by Lm6;
-   end;
+   thus 0 <= Re(x .|. x) & 0 = Im(x .|. x) by Lm5;
+   thus x .|. y = (y .|. x)*' by Lm6;
    thus (x+y) .|. z = x .|. z + y .|. z
    proof
      reconsider u = x , v = y , w = z as VECTOR of (0).V0;
-       x + y = (the add of X0).[x,y]
-          .= u + v;
-     then (x+y) .|. z = nilfunc.[u+v,w] &
+     (x+y) .|. z = nilfunc.[u+v,w] &
      x .|. z = nilfunc.[u,w] &
      y .|. z = nilfunc.[v,w];
      hence thesis by Lm7;
@@ -850,9 +838,7 @@ Lm9:now
    thus (a*x) .|. y = a * ( x .|. y )
    proof
      reconsider u = x , v = y as VECTOR of (0).V0;
-       a * x = (the Mult of X0).[a,u]
-          .= a * u;
-     then (a*x) .|. y = nilfunc.[a*u,v] &
+     (a*x) .|. y = nilfunc.[a*u,v] &
      x .|. y = nilfunc.[u,v];
      hence thesis by Lm8;
    end;
@@ -876,17 +862,9 @@ existence
 proof
    take X0;
    thus X0 is ComplexUnitarySpace-like by Def13,Lm9;
-A1:now
-     let x,y be VECTOR of X0;
-     let x',y' be VECTOR of (0).V0;
-     assume
-A2:  x = x' & y = y';
-     hence x + y = (the add of X0).[x',y']
-                .= x' + y';
-     let a;
-     thus a * x = (the Mult of X0).[a,x'] by A2
-               .= a * x';
-   end;
+A1: for x,y be VECTOR of X0 for x',y' be VECTOR of (0).V0
+     st x = x' & y = y' holds x + y = x' + y' &
+     for a holds a * x = a * x';
    thus X0 is ComplexLinearSpace-like
    proof
      thus for a for v,w being VECTOR of X0 holds a * (v + w) = a * v + a * w
@@ -894,8 +872,7 @@ A2:  x = x' & y = y';
        let a;
        let v,w be VECTOR of X0;
        reconsider v'= v, w' = w as VECTOR of (0).V0;
-         v + w = v'+ w';
-       hence a * (v + w) = a *( v' + w')
+       thus a * (v + w) = a *( v' + w')
                         .= a * v' + a * w' by CLVECT_1:def 2
                         .= a * v + a * w;
      end;
@@ -947,10 +924,10 @@ A2:  x = x' & y = y';
      let v be VECTOR of X0;
      reconsider v'= v as VECTOR of (0).V0;
      consider w' be VECTOR of (0).V0 such that
-A11: v' + w' = 0.(0).V0 by RLVECT_1:def 8;
+A2: v' + w' = 0.(0).V0 by RLVECT_1:def 8;
      reconsider w = w' as VECTOR of X0;
      take w;
-     thus v + w = 0.X0 by A11;
+     thus v + w = 0.X0 by A2;
    end;
    thus thesis;
 end;
@@ -1209,7 +1186,7 @@ then A15: Im(c1*(x.|.x)) = 0 & Im((x.|.y) * (x.|.y)*') = 0 by COMPLEX1:126;
      then |.(x.|.x).|*|.(y.|.y).| >= |.(x.|.y).|*|.(x.|.y)*'.| by COMPLEX1:151
 ;
      then |.(x.|.x).|*|.(y.|.y).| >= |.(x.|.y).|*|.(x.|.y).| by COMPLEX1:139;
-then A16: |.(x.|.x).|*|.(y.|.y).| >= |.(x.|.y).|^2 by SQUARE_1:def 3;
+then A16: |.(x.|.x).|*|.(y.|.y).| >= |.(x.|.y).|^2;
        |.(x.|.y).|^2 >= 0 by SQUARE_1:72;
 then A17: sqrt(|.(x.|.x).|*|.(y.|.y).|) >= sqrt(|.(x.|.y).|^2)
        by A16,SQUARE_1:94;
@@ -1322,7 +1299,7 @@ A3:0 <= |.a.| by COMPLEX1:132;
             .= sqrt (|.a*a.| * |.(x.|.x).|) by COMPLEX1:155
             .= sqrt |.a*a.| * sqrt |.(x.|.x).| by A1,A2,SQUARE_1:97
             .= sqrt (|.a.|*|.a.|) * sqrt |.(x.|.x).| by COMPLEX1:151
-            .= sqrt (|.a.|^2) * sqrt |.(x.|.x).| by SQUARE_1:def 3
+            .= sqrt (|.a.|^2) * sqrt |.(x.|.x).|
             .= |.a.| * sqrt |.(x.|.x).| by A3,SQUARE_1:89;
    hence thesis;
 end;
@@ -1337,64 +1314,59 @@ proof
 end;
 
 theorem Th47:
-|.(x.|.y).| <= ||.x.|| * ||.y.||
-proof
-     |.(x.|.y).| <= sqrt |.(x.|.x).| * sqrt |.(y.|.y).| by Th37;
-   then |.(x.|.y).| <= ||.x.|| * sqrt |.(y.|.y).|;
-   hence thesis;
-end;
+|.(x.|.y).| <= ||.x.|| * ||.y.|| by Th37;
 
 theorem Th48:
 ||.x + y.|| <= ||.x.|| + ||.y.||
 proof
-A2:||.x + y.|| >= 0 by Th46;
+A1:||.x + y.|| >= 0 by Th46;
      Re ((x+y).|.(x+y)) >= 0 by Def13;
-then A3:|.((x + y).|.(x + y)).| >= 0 by Th36;
-A4:||.x + y.||^2 >= 0 by SQUARE_1:72;
-     sqrt ||.x + y.||^2 = sqrt |.((x + y).|.(x + y)).| by A2,SQUARE_1:89;
-   then A5: ||.x + y.||^2 = |.((x + y).|.(x + y)).| by A3,A4,SQUARE_1:96;
-A6:Re(x.|.x + x.|.y + y.|.x + y.|.y)
+then A2:|.((x + y).|.(x + y)).| >= 0 by Th36;
+A3:||.x + y.||^2 >= 0 by SQUARE_1:72;
+     sqrt ||.x + y.||^2 = sqrt |.((x + y).|.(x + y)).| by A1,SQUARE_1:89;
+   then A4: ||.x + y.||^2 = |.((x + y).|.(x + y)).| by A2,A3,SQUARE_1:96;
+A5:Re(x.|.x + x.|.y + y.|.x + y.|.y)
     = Re(x.|.x + x.|.y + y.|.x) + Re(y.|.y) by COMPLEX1:19
    .= Re(x.|.x + x.|.y) + Re(y.|.x) + Re(y.|.y) by COMPLEX1:19
    .= Re(x.|.x) + Re(x.|.y) + Re(y.|.x) + Re(y.|.y) by COMPLEX1:19
    .= |.(x.|.x).| + Re(x.|.y) + Re(y.|.x) + Re(y.|.y) by Th36
    .= |.(x.|.x).| + Re(x.|.y) + Re(y.|.x) + |.(y.|.y).| by Th36;
-    A7: Re(x.|.y) = Re((x.|.y)*') by COMPLEX1:112 .= Re(y.|.x) by Def13;
-A8:Im(x.|.x + x.|.y + y.|.x + y.|.y)
+    A6: Re(x.|.y) = Re((x.|.y)*') by COMPLEX1:112 .= Re(y.|.x) by Def13;
+A7:Im(x.|.x + x.|.y + y.|.x + y.|.y)
     = Im(x.|.x + x.|.y + y.|.x) + Im(y.|.y) by COMPLEX1:19
    .= Im(x.|.x + x.|.y) + Im(y.|.x) + Im(y.|.y) by COMPLEX1:19
    .= Im(x.|.x) + Im(x.|.y) + Im(y.|.x) + Im(y.|.y) by COMPLEX1:19
    .= 0 + Im(x.|.y) + Im(y.|.x) + Im(y.|.y) by Def13
    .= Im(x.|.y) + Im(y.|.x) + 0 by Def13;
      -Im(x.|.y) = Im((x.|.y)*') by COMPLEX1:112 .= Im(y.|.x) by Def13;
-then A9:Im(x.|.x + x.|.y + y.|.x + y.|.y)
-    = 0 by A8;
+then A8:Im(x.|.x + x.|.y + y.|.x + y.|.y)
+    = 0 by A7;
      Re(x.|.x + x.|.y + y.|.x + y.|.y)
     = Re((x + y).|.(x + y)) by Th33;
-then A10:Re(x.|.x + x.|.y + y.|.x + y.|.y) >= 0 by Def13;
+then A9:Re(x.|.x + x.|.y + y.|.x + y.|.y) >= 0 by Def13;
      (x.|.x + x.|.y + y.|.x + y.|.y)
-    = Re(x.|.x + x.|.y + y.|.x + y.|.y)+0*<i> by A9,COMPLEX1:29;
+    = Re(x.|.x + x.|.y + y.|.x + y.|.y)+0*<i> by A8,COMPLEX1:29;
    then |.(x.|.x + x.|.y + y.|.x + y.|.y).|
-    = |.(x.|.x).| + 2*Re(x.|.y) + |.(y.|.y).| by A6,A7,A10,ABSVALUE:def 1;
-then A11:||.x + y.||^2 = 2*Re(x.|.y) + (|.(x.|.x).| + |.(y.|.y).|) by A5,Th33;
+    = |.(x.|.x).| + 2*Re(x.|.y) + |.(y.|.y).| by A5,A6,A9,ABSVALUE:def 1;
+then A10:||.x + y.||^2 = 2*Re(x.|.y) + (|.(x.|.x).| + |.(y.|.y).|) by A4,Th33;
      |.(x.|.x).| >= 0 by COMPLEX1:132;
    then (sqrt |.(x.|.x).|)^2 = |.(x.|.x).| by SQUARE_1:def 4;
-then A12:|.(x.|.x).| = ||.x.||^2;
+then A11:|.(x.|.x).| = ||.x.||^2;
      |.(y.|.y).| >= 0 by COMPLEX1:132;
    then (sqrt |.(y.|.y).|)^2 = |.(y.|.y).| by SQUARE_1:def 4;
-then A13:|.(y.|.y).| = ||.y.||^2;
+then A12:|.(y.|.y).| = ||.y.||^2;
      Re(x.|.y) <= |.(x.|.y).| & |.(x.|.y).| <= ||.x.||*||.y.||
      by Th47,COMPLEX1:140;
    then Re(x.|.y) <= ||.x.||*||.y.|| by XREAL_1:2;
    then 2*Re(x.|.y) <= 2*(||.x.||*||.y.||) by XREAL_1:66;
    then ||.x + y.||^2 <= 2*(||.x.||*||.y.||) + (||.x.||^2 + |.(y.|.y).|)
-     by A11,A12,XREAL_1:8;
+     by A10,A11,XREAL_1:8;
    then ||.x + y.||^2 <= ||.x.||^2 + 2*||.x.||*||.y.|| + ||.y.||^2
-     by A13;
-then A14:||.x + y.||^2 <= (||.x.|| + ||.y.||)^2 by SQUARE_1:63;
+     by A12;
+then A13:||.x + y.||^2 <= (||.x.|| + ||.y.||)^2;
      ||.x.|| >= 0 & ||.y.|| >= 0 by Th46;
    then ||.x.|| + ||.y.|| >= 0 + 0 by XREAL_1:9;
-   hence thesis by A14,SQUARE_1:78;
+   hence thesis by A13,SQUARE_1:78;
 end;
 
 theorem Th49:
@@ -1495,11 +1467,7 @@ proof
 end;
 
 theorem Th56:
-  dist(x,y) >= 0
-proof
-    dist(x,y) = ||.x-y.||;
-  hence thesis by Th46;
-end;
+  dist(x,y) >= 0 by Th46;
 
 theorem
     x <> y iff dist(x,y) > 0
@@ -1514,17 +1482,13 @@ proof
 end;
 
 theorem
-  dist(x,y) = sqrt |.((x-y) .|. (x-y)).|
-proof
-      dist(x,y) = ||.x-y.||;
-     hence thesis;
-end;
+  dist(x,y) = sqrt |.((x-y) .|. (x-y)).|;
 
 theorem
   dist(x + y,u + v) <= dist(x,u) + dist(y,v)
 proof
          dist(x + y,u + v) = ||.(x + y) - (u + v).||
-  .= ||.x + (y - (u + v)).|| by RLVECT_1:42
+  .= ||.x + (y - (u + v)).|| by RLVECT_1:def 6
   .= ||.x + (-(u + v) + y).||
   .= ||.-(u + v) + (x + y).|| by RLVECT_1:def 6
   .= ||.((-u) + (-v)) + (x + y).|| by RLVECT_1:45
@@ -1910,7 +1874,7 @@ proof
      thus
          ((seq1 + seq2) - seq3).n = (seq1 + seq2).n - seq3.n by CLVECT_1:def 12
                              .= (seq1.n + seq2.n) - seq3.n by CLVECT_1:def 11
-                             .= seq1.n + (seq2.n - seq3.n) by RLVECT_1:42
+                             .= seq1.n + (seq2.n - seq3.n) by RLVECT_1:def 6
                              .= seq1.n + (seq2 - seq3).n by CLVECT_1:def 12
                              .= (seq1 + (seq2 - seq3)).n by CLVECT_1:def 11;
      end;
@@ -1953,14 +1917,14 @@ ex f be Function of
  [: the_set_of_l2ComplexSequences, the_set_of_l2ComplexSequences :], COMPLEX st
  (for x,y be set st
   x in the_set_of_l2ComplexSequences & y in the_set_of_l2ComplexSequences
-   holds f.[x,y] = Sum(seq_id(x)(#)(seq_id(y))*') )
+   holds f.(x,y) = Sum(seq_id(x)(#)(seq_id(y))*') )
 proof
    set X = the_set_of_l2ComplexSequences;
    deffunc F(set,set) = Sum(seq_id($1)(#)(seq_id($2))*');
 A1:for x,y being set st x in X & y in X holds F(x,y) in COMPLEX;
      ex f being Function of [:X,X:],COMPLEX st
     for x,y being set st x in X & y in X holds
-     f.[x,y] = F(x,y) from FUNCT_2:sch 6(A1);
+     f.(x,y) = F(x,y) from BINOP_1:sch 2(A1);
   hence thesis;
 end;
 
@@ -1970,24 +1934,24 @@ func cl_scalar -> Function of
 means
    (for x,y be set st
   x in the_set_of_l2ComplexSequences & y in the_set_of_l2ComplexSequences
-   holds it.[x,y] = Sum(seq_id(x)(#)(seq_id(y))*'));
+   holds it.(x,y) = Sum(seq_id(x)(#)(seq_id(y))*'));
 existence by Th86;
 uniqueness
 proof
    set X = the_set_of_l2ComplexSequences;
    let scalar1, scalar2 be Function of [: X, X :], COMPLEX such that
 A1:(for x,y be set st x in X & y in X holds
-     scalar1.[x,y] = Sum(seq_id(x)(#)(seq_id(y))*')) and
+     scalar1.(x,y) = Sum(seq_id(x)(#)(seq_id(y))*')) and
 A2:(for x,y be set st x in X & y in X holds
-     scalar2.[x,y] = Sum(seq_id(x)(#)(seq_id(y))*'));
-     for x, y be set st x in X & y in X holds scalar1.[x,y] = scalar2.[x,y]
+     scalar2.(x,y) = Sum(seq_id(x)(#)(seq_id(y))*'));
+     for x, y be set st x in X & y in X holds scalar1.(x,y) = scalar2.(x,y)
    proof
      let x,y be set such that
 A3:  x in X & y in X;
-     thus scalar1.[x,y] = Sum(seq_id(x)(#)(seq_id(y))*') by A1,A3
-                       .= scalar2.[x,y] by A2,A3;
+     thus scalar1.(x,y) = Sum(seq_id(x)(#)(seq_id(y))*') by A1,A3
+                       .= scalar2.(x,y) by A2,A3;
    end;
-   hence thesis by FUNCT_2:118;
+   hence thesis by BINOP_1:1;
 end;
 end;
 
@@ -2062,20 +2026,20 @@ A4:for v being VECTOR of l holds v + 0.l = v
               .= v by RLVECT_1:def 7;
    end;
 
-A6:for v being VECTOR of l ex w being VECTOR of l st v + w = 0.l
+A5:for v being VECTOR of l ex w being VECTOR of l st v + w = 0.l
    proof
      let v be VECTOR of l;
      reconsider v1=v as VECTOR of l0;
      consider w1 being VECTOR of l0 such that
-A8:  v1 + w1 = 0.l0 by RLVECT_1:def 8;
+A6:  v1 + w1 = 0.l0 by RLVECT_1:def 8;
      reconsider w = w1 as VECTOR of l;
-A9:  v+w = (the add of l).[v,w]
-        .= 0.l by A8;
+A7:  v+w = (the add of l).[v,w]
+        .= 0.l by A6;
      take w;
-     thus thesis by A9;
+     thus thesis by A7;
    end;
 
-A10:for z being Complex for v,w being VECTOR of l holds
+A8:for z being Complex for v,w being VECTOR of l holds
          z * (v + w) = z * v + z * w
    proof
      let z be Complex;
@@ -2095,7 +2059,7 @@ A10:for z being Complex for v,w being VECTOR of l holds
        .= z*v +z*w;
    end;
 
-A11:for z1,z2 be Complex for v being VECTOR of l holds
+A9:for z1,z2 be Complex for v being VECTOR of l holds
      (z1 + z2) * v = z1 * v + z2 * v
    proof
      let z1,z2 be Complex;
@@ -2113,7 +2077,7 @@ A11:for z1,z2 be Complex for v being VECTOR of l holds
        .= z1*v +z2*v;
    end;
 
-A12:for z1,z2 be Complex, v being VECTOR of l holds
+A10:for z1,z2 be Complex, v being VECTOR of l holds
      (z1 * z2) * v = z1 * (z2 * v)
    proof
      let z1,z2 be Complex;
@@ -2135,7 +2099,7 @@ A12:for z1,z2 be Complex, v being VECTOR of l holds
             .= 1r*v1
             .= v by CLVECT_1:def 2;
    end;
-   hence thesis by A2,A3,A4,A6,A10,A11,A12,CLVECT_1:1;
+   hence thesis by A2,A3,A4,A5,A8,A9,A10,CLVECT_1:1;
 end;
 
 theorem

@@ -24,11 +24,10 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
-<ArticleID name="FINSUB_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MATRIX_1"/>
-<ArticleID name="MATRIX_2"/>
+<ArticleID name="FINSEQ_3"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRLIN"/>
 </Signature>
@@ -40,24 +39,24 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="70"/>
+<Adjective nr="64"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="29" value="false"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="44"/>
-<Adjective nr="47"/>
-<Adjective nr="54"/>
+<Adjective nr="35"/>
+<Adjective nr="45"/>
+<Adjective nr="48"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="57" value="false"/>
+<Adjective nr="57"/>
+<Adjective nr="58" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -66,18 +65,18 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="29" value="false"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="58">
-<LocusVar nr="1"/>
-</Adjective>
+<Adjective nr="35"/>
 <Adjective nr="59">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="71">
+<Adjective nr="60">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="65">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -91,17 +90,17 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="66"/>
+<Adjective nr="63"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="162">
+<Func kind="K" nr="158">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="66"/>
-<Adjective nr="70"/>
+<Adjective nr="63"/>
+<Adjective nr="64"/>
 </Cluster>
 </CCluster>
 </Registrations>

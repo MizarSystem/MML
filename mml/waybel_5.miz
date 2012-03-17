@@ -13,25 +13,27 @@ environ
       FUNCT_2, FINSUB_1, FINSET_1, REALSET1, RELAT_2, LATTICE2, CAT_1, SGRAPH1,
       MSUALG_3, SEQM_3, WAYBEL_5;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FINSET_1, FINSUB_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCT_5, FUNCT_6, FUNCOP_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1,
+      FUNCT_4, FUNCT_5, FUNCT_6, FUNCOP_1,
       ORDERS_1, STRUCT_0, ORDERS_2, LATTICE3, CARD_3, REALSET2, PBOOLE,
       PRALG_1, PRALG_2, MSUALG_3, PRE_TOPC, PRE_CIRC, BORSUK_1, CLASSES1,
       CLASSES2, GRCAT_1, YELLOW_0, YELLOW_1, YELLOW_2, WAYBEL_1, WAYBEL_0,
       WAYBEL_3, YELLOW_6;
  constructors FINSUB_1, LATTICE3, PRE_CIRC, BORSUK_1, PRALG_2, MSUALG_3,
-      ORDERS_3, WAYBEL_1, WAYBEL_3, YELLOW_6, CLASSES1, GRCAT_1, PRALG_1;
+      ORDERS_3, WAYBEL_1, WAYBEL_3, YELLOW_6, CLASSES1, GRCAT_1, PRALG_1,
+      BINOP_1;
  registrations STRUCT_0, FINSET_1, LATTICE3, ORDERS_2, PBOOLE, CIRCCOMB,
       PRVECT_1, FRAENKEL, YELLOW_0, YELLOW_2, WAYBEL_0, WAYBEL_3, CLASSES2,
       YELLOW_6, CANTOR_1, FUNCT_2, FUNCOP_1, RELSET_1, SUBSET_1, FUNCT_4,
       PARTFUN1, XBOOLE_0, CARD_3;
  requirements SUBSET, BOOLE;
- definitions TARSKI, LATTICE3;
+ definitions TARSKI, LATTICE3, BINOP_1;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_5, CARD_3, ORDERS_2,
       LATTICE3, FUNCT_6, FUNCOP_1, FINSET_1, PBOOLE, PRALG_1, PRALG_2,
       MSUALG_3, AUTALG_1, RELAT_1, REALSET2, FINSUB_1, YELLOW_0, YELLOW_1,
       YELLOW_2, WAYBEL_1, WAYBEL_0, WAYBEL_3, CLASSES2, YELLOW_6, CLASSES1,
       GRCAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, FUNCT_4, ORDERS_1;
- schemes FUNCT_1, FUNCT_2, MSSUBFAM, WELLORD2, DOMAIN_1;
+ schemes FUNCT_1, FUNCT_2, MSSUBFAM, WELLORD2, DOMAIN_1, BINOP_1;
 
 begin  :: The Continuity of Lattices
 
@@ -1365,7 +1367,7 @@ definition
     A4: (curry F').j = g and
     A5: dom g = K and
     A6: rng g c= rng F' and
-            for k being set st k in K holds g.k = F'.[j, k]
+            for k being set st k in K holds g.k = F'.(j, k)
         by A1,A2,FUNCT_5:36;
 
           rng F c= D by RELSET_1:12;
@@ -1385,7 +1387,7 @@ reserve J, K, D for non empty set,
 theorem Th20:
   for F being Function of [:J, K:], D
     holds
-   dom curry F = J & dom((curry F).j) = K & F.[j, k] = ((curry F).j).k
+   dom curry F = J & dom((curry F).j) = K & F.(j, k) = ((curry F).j).k
 proof
   let F be Function of [:J, K:], D;
 
@@ -1395,13 +1397,13 @@ proof
 
       [:J, K:] <> {} & dom F = [:J, K:] & j in J by FUNCT_2:def 1;
   then ex g being Function st (curry F).j = g & dom g = K &
-    rng g c= rng F & for i being set st i in K holds g.i = F.[j, i]
+    rng g c= rng F & for i being set st i in K holds g.i = F.(j, i)
       by FUNCT_5:36;
   hence dom((curry F).j) = K;
 
       [j, k] in [:J, K:] by ZFMISC_1:106;
   then [j, k] in dom F by FUNCT_2:def 1;
-  hence F.[j, k] = ((curry F).j).k by FUNCT_5:27;
+  hence F.(j, k) = ((curry F).j).k by FUNCT_5:27;
 end;
 
 Lm10:    ::Theorem 2.3 (2') implies (1)
@@ -1461,10 +1463,10 @@ Bottom L));
 
         ex G being Function of [:J, K':], the carrier of L st
       for j being Element of J
-      for k being Element of K' holds P[j, k, G.[j, k]] from FUNCT_2:sch 7(A3);
+      for k being Element of K' holds P[j, k, G.(j, k)] from BINOP_1:sch 3(A3);
     then consider G being Function of [:J, K':], the carrier of L such that
   A5: for j being Element of J for k being Element of K' holds
-      P[j, k, G.[j, k]];
+      P[j, k, G.(j, k)];
   A6: for j being Element of J holds K.j c= K'
     proof
       let j be Element of J;
@@ -1495,7 +1497,7 @@ Bottom L));
       then A12: [j, k] in dom G by FUNCT_2:def 1;
             k in K' & dom((curry G).j) = (J --> K').j by FUNCT_2:def 1;
       then A13: k in dom((curry G).j) by FUNCOP_1:13;
-            y = G.[j, k] by A5,A10,A11
+            y = G.(j, k) by A5,A10,A11
          .= ((curry G).j).k by A12,FUNCT_5:27;
         hence y in rng((curry G).j) by A13,FUNCT_1:def 5;
       end;
@@ -1523,7 +1525,7 @@ Bottom L));
       A20: ((curry G).j).b = y by A16,FUNCT_1:def 5;
         reconsider a'= a, b'= b as Element of K' by A17,A19,Th20;
 
-      A21: x = G.[j, a'] & y = G.[j, b'] by A18,A20,Th20;
+      A21: x = G.(j, a') & y = G.(j, b') by A18,A20,Th20;
 
         per cases;
         suppose
@@ -1628,7 +1630,7 @@ j
         then reconsider fj = f.j as Element of K';
 
             ((Frege F).f).j = (F.j).fj by A44,Lm5
-                       .= G.[j, fj] by A5,A47
+                       .= G.(j, fj) by A5,A47
                        .= ((curry G).j).(f.j) by Th20
                        .= ((Frege curry G).f).j by A42,A44,Lm5;
         hence thesis;
@@ -1713,7 +1715,7 @@ j
         then f.j in dom((curry G).j) by A54,Th9;
         then reconsider k = f.j as Element of K' by Th20;
 
-            Bottom L = G.[j, k] by A5,A59
+            Bottom L = G.(j, k) by A5,A59
           .= ((curry G).j).(f.j) by Th20;
         then Bottom L in rng((Frege curry G).f) by A54,Lm5;
         then Bottom L >= "/\"(rng((Frege curry G).f), L) by YELLOW_2:24;
@@ -1759,7 +1761,7 @@ A61:   rng Infs(Frege F) \/ {Bottom L} c= rng Infs(Frege curry G)
         end;
         then f in product doms curry G by A67,CARD_3:18;
       then A69: f in dom Frege curry G by PBOOLE:def 3;
-           x = G.[j, k] by A5,A52,A66
+           x = G.(j, k) by A5,A52,A66
             .= ((curry G).j).k by Th20
             .= ((curry G).j).(f.j) by FUNCOP_1:13;
         then x in rng((Frege curry G).f) by A69,Lm5;
@@ -1810,7 +1812,7 @@ XBOOLE_0:def 10
         per cases;
         suppose
       A76: k in K.j;
-      then A77: (F.j).k = G.[j, k] by A5
+      then A77: (F.j).k = G.(j, k) by A5
                  .= H.k by Th20;
             k in dom(F.j) by A76,FUNCT_2:def 1;
         then H.k in rng(F.j) by A77,FUNCT_1:def 5;
@@ -1819,7 +1821,7 @@ XBOOLE_0:def 10
 
         end;
         suppose not k in K.j;
-        then Bottom L = G.[j, k] by A5
+        then Bottom L = G.(j, k) by A5
           .= H.k by Th20;
         hence H.k <= Sup(F.j) by YELLOW_0:44;
       end;
@@ -1889,7 +1891,7 @@ A4:
   then A8: k in K by A3;
     reconsider k as Element of K by A3,A7;
   A9: k in dom((curry F).j) by A8,Th20;
-        y = F.[j, k] by A2,A6,A7
+        y = F.(j, k) by A2,A6,A7
      .= ((curry F).j).k by Th20;
     hence y in rng((curry F).j) by A9,FUNCT_1:def 5;
   end;
@@ -2040,10 +2042,10 @@ A1: L is continuous;
     deffunc F(Element of J, Element of N) = sup(((curry F).$1).:($2.$1));
         ex H being Function of [:J, N:], the carrier of L st
       for j being Element of J for g being Element of N holds
-      H.[j, g] = F(j,g) from FUNCT_2:sch 8;
+      H.(j, g) = F(j,g) from BINOP_1:sch 4;
     then consider H being Function of [:J, N:], the carrier of L such that
   A5: for j for g being Element of N holds
-      H.[j, g] = sup(((curry F).j).:(g.j));
+      H.(j, g) = sup(((curry F).j).:(g.j));
 
      set cF = curry F, cH = curry H;
 
@@ -2069,7 +2071,7 @@ A1: L is continuous;
       A7: g in dom Hj and
       A8: Hj.g = x by FUNCT_1:def 5;
         reconsider g as Element of N by A7,Th20;
-      A9: x = H.[j, g] by A8,Th20
+      A9: x = H.(j, g) by A8,Th20
            .= sup(Fj.:(g.j)) by A5;
         consider g' being Function such that
       A10: g' = g and
@@ -2104,7 +2106,7 @@ A1: L is continuous;
             g in N;
       then A21: g in dom Hj by Th20;
       A22: g.j = Z by FUNCOP_1:13;
-            Hj.g = H.[j, g] by Th20
+            Hj.g = H.(j, g) by Th20
             .= "\/"(Y, L) by A5,A17,A22;
         hence "\/"(Y, L) in D by A21,FUNCT_1:def 5;
       end;
@@ -2309,7 +2311,7 @@ A1: L is continuous;
         A60: x in f.j and
         A61: y = ((curry F).j).x by FUNCT_1:def 12;
           reconsider k = x as Element of K by A59,Th20;
-        A62: y = F.[j, k] by A61,Th20
+        A62: y = F.(j, k) by A61,Th20
               .= (G.j).k by A53,A60;
               k in dom(G.j) by A60,FUNCT_2:def 1;
           hence y in rng(G.j) by A62,FUNCT_1:def 5;
@@ -2323,7 +2325,7 @@ A1: L is continuous;
         then reconsider hj = h.j as Element of N by FUNCOP_1:13;
 
         A65: sup((curry F.j).:(f.j)) = sup((curry F.j).:(hj.j)) by A27
-                              .= H.[j, hj] by A5
+                              .= H.(j, hj) by A5
                               .= ((curry H).j).(h.j) by Th20
                               .= ((Frege curry H).h).j by A47,A64,Th9;
             Inf((Frege curry H).h) <= ((Frege curry H).h).j by YELLOW_2:55;

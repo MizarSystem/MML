@@ -10,14 +10,15 @@ environ
       GROUP_1, FUNCT_1, RLSUB_1, CARD_1, TARSKI, SETFAM_1, FINSUB_1, SETWISEO,
       ARYTM_3, GROUP_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, SETFAM_1, FINSUB_1,
-      FINSET_1, STRUCT_0, RLVECT_1, GROUP_1, WELLORD2, CARD_1, BINOP_1,
+      FINSET_1, REALSET1,
+      STRUCT_0, RLVECT_1, GROUP_1, WELLORD2, CARD_1, BINOP_1,
       SETWISEO, DOMAIN_1, RELAT_1, FUNCT_1, RELSET_1, NAT_1, MCART_1;
  constructors WELLORD2, BINOP_1, SETWISEO, DOMAIN_1, NAT_1, PARTFUN1, MEMBERED,
-      VECTSP_1, SETFAM_1;
+      VECTSP_1, SETFAM_1, REALSET1;
  registrations SUBSET_1, FINSET_1, FINSUB_1, GROUP_1, FUNCT_1, STRUCT_0,
-      RELSET_1, ARYTM_3, MEMBERED;
+      RELSET_1, ARYTM_3, MEMBERED, REALSET1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions FUNCT_1, GROUP_1, TARSKI, XBOOLE_0;
+ definitions FUNCT_1, GROUP_1, TARSKI, XBOOLE_0, BINOP_1, REALSET1;
  theorems BINOP_1, CARD_1, CARD_2, ENUMSET1, FINSET_1, FINSUB_1, FUNCT_1,
       FUNCT_2, GROUP_1, NAT_1, SUBSET_1, TARSKI, WELLORD2, ZFMISC_1, RLVECT_1,
       RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
@@ -66,17 +67,7 @@ end;
 canceled;
 
 theorem Th5:
- x in A" iff ex g st x = g" & g in A
-  proof
-   thus x in A" implies ex g st x = g" & g in A
-    proof assume x in A";
-       then x in {g" : g in A};
-     hence thesis;
-    end;
-    given g such that A1: x = g" & g in A;
-        x in {h" : h in A} by A1;
-   hence thesis;
-  end;
+ x in A" iff ex g st x = g" & g in A;
 
 theorem
     {g}" = {g"}
@@ -175,17 +166,7 @@ end;
 canceled;
 
 theorem Th12:
- x in A * B iff ex g,h st x = g * h & g in A & h in B
-  proof
-   thus x in A * B implies ex g,h st x = g * h & g in A & h in B
-    proof assume x in A * B;
-       then x in {g * h : g in A & h in B};
-     hence thesis;
-    end;
-    given g,h such that A1: x = g * h & g in A & h in B;
-        x in {g1* g2 : g1 in A & g2 in B} by A1;
-   hence thesis;
-  end;
+ x in A * B iff ex g,h st x = g * h & g in A & h in B;
 
 theorem Th13:
  A <> {} & B <> {} iff A * B <> {}
@@ -622,28 +603,13 @@ theorem Th34:
   end;
 
 theorem
-    G is associative implies g * A * B = g * (A * B)
-  proof assume A1: G is associative;
-   thus g * A * B = {g} * A * B
-                 .= {g} * (A * B) by A1,Th14
-                 .= g * (A * B);
-  end;
+    G is associative implies g * A * B = g * (A * B) by Th14;
 
 theorem
-    G is associative implies A * g * B = A * (g * B)
-  proof assume A1: G is associative;
-   thus A * g * B = A * {g} * B
-                 .= A *({g} * B) by A1,Th14
-                 .= A * (g * B);
-  end;
+    G is associative implies A * g * B = A * (g * B) by Th14;
 
 theorem
-    G is associative implies A * B * g = A * (B * g)
-  proof assume A1: G is associative;
-   thus A * B * g = A * B * {g}
-                 .= A * (B * {g}) by A1,Th14
-                 .= A * (B * g);
-  end;
+    G is associative implies A * B * g = A * (B * g) by Th14;
 
 theorem Th38:
  G is associative implies g * h * A = g * (h * A)
@@ -656,14 +622,7 @@ theorem Th38:
   end;
 
 theorem Th39:
- G is associative implies g * A * h = g * (A * h)
-  proof assume A1: G is associative;
-   thus g * A * h = g * A * {h}
-                 .= {g} * A * {h}
-                 .= {g} * (A * {h}) by A1,Th14
-                 .= g * (A * {h})
-                 .= g * (A * h);
-  end;
+ G is associative implies g * A * h = g * (A * h) by Th14;
 
 theorem Th40:
  G is associative implies A * g * h = A * (g * h)
@@ -676,11 +635,7 @@ theorem Th40:
   end;
 
 theorem
-    {}(the carrier of G) * a = {} & a * {}(the carrier of G) = {}
-  proof {}(the carrier of G) * a = {}(the carrier of G) * {a} &
-        a * {}(the carrier of G) = {a} * {}(the carrier of G);
-   hence thesis by Th20;
-  end;
+    {}(the carrier of G) * a = {} & a * {}(the carrier of G) = {} by Th20;
 
 reserve G for Group-like (non empty HGrStr);
 reserve h,g,g1,g2 for Element of G;
@@ -689,14 +644,7 @@ reserve A for Subset of G;
 theorem Th42:
 for G being Group, a being Element of G holds
  [#](the carrier of G) * a = the carrier of G &
-  a * [#](the carrier of G) = the carrier of G
-   proof
-   let G be Group, a be Element of G;
-      [#](the carrier of G) * a = [#](the carrier of G) * {a} &
-         a * [#](the carrier of G) = {a} * [#](the carrier of G) &
-         {a} <> {};
-   hence thesis by Th21;
-   end;
+  a * [#](the carrier of G) = the carrier of G by Th21;
 
 theorem Th43:
  1.G * A = A & A * 1.G = A
@@ -729,18 +677,12 @@ theorem Th43:
   end;
 
 theorem Th44:
- G is commutative Group implies g * A = A * g
-  proof assume A1: G is commutative Group;
-   thus g * A = {g} * A
-             .= A * {g} by A1,Th29
-             .= A * g;
-  end;
+ G is commutative Group implies g * A = A * g by Th29;
 
 definition let G be Group-like (non empty HGrStr);
  mode Subgroup of G -> Group-like (non empty HGrStr) means
   :Def5: the carrier of it c= the carrier of G &
-        the mult of it =
-         (the mult of G) | [:the carrier of it,the carrier of it:];
+        the mult of it = (the mult of G)||the carrier of it;
  existence
   proof take G;
        dom(the mult of G) = [:the carrier of G,the carrier of G:]
@@ -785,13 +727,10 @@ theorem Th51:
 theorem Th52:
  h1 = g1 & h2 = g2 implies h1 * h2 = g1 * g2
   proof assume A1: h1 = g1 & h2 = g2;
-    set A = [:the carrier of H,the carrier of H:];
-     A2: h1 * h2 = (the mult of H).(h1,h2)
-               .= ((the mult of G) | A).(h1,h2) by Def5
-               .= ((the mult of G) | A).[h1,h2] by BINOP_1:def 1;
-         g1 * g2 = (the mult of G).(g1,g2)
-            .= (the mult of G).[g1,g2] by BINOP_1:def 1;
-   hence thesis by A1,A2,FUNCT_1:72;
+A2: h1 * h2 = (the mult of H).(h1,h2)
+           .= ((the mult of G)||the carrier of H).(h1,h2) by Def5
+           .= ((the mult of G)||the carrier of H).[h1,h2];
+   thus thesis by A1,A2,FUNCT_1:72;
   end;
 
 registration let G be Group;
@@ -918,8 +857,7 @@ registration let G;
       end;
       then reconsider H as Group-like (non empty HGrStr);
          the mult of H =
-       (the mult of G) | [:the carrier of H,the carrier of H:]
-                                                 by FUNCT_2:40;
+       (the mult of G)||the carrier of H by FUNCT_2:40;
      then H is Subgroup of G by Def5;
     hence thesis;
    end;
@@ -933,7 +871,7 @@ theorem Th61:
       A2: for g1,g2 st g1 in A & g2 in A holds g1 * g2 in A and
       A3: for g st g in A holds g" in A;
      reconsider D = A as non empty set by A1;
-     set o = (the mult of G) | [:A,A:];
+     set o = (the mult of G)||A;
          dom o = dom(the mult of G) /\ [:A,A:] &
            dom(the mult of G) = [:the carrier of G,the carrier of G:] &
            [:A,A:] c= [:the carrier of G,the carrier of G:]
@@ -944,12 +882,11 @@ theorem Th61:
          assume x in rng o;
           then consider y such that A5: y in dom o and A6: o.y = x
                                                            by FUNCT_1:def 5;
-          consider y1,y2 such that A7: [y1,y2] = y by A5,ZFMISC_1:102;
+          consider y1,y2 such that A7: [y1,y2] = y by A4,A5,ZFMISC_1:102;
            A8: y1 in A & y2 in A by A4,A5,A7,ZFMISC_1:106;
-          reconsider y1,y2 as Element of G by A5,A7,ZFMISC_1:106
-;
+          reconsider y1,y2 as Element of G by A4,A5,A7,ZFMISC_1:106;
               x = (the mult of G).y by A5,A6,FUNCT_1:70
-            .= (the mult of G).(y1,y2) by A7,BINOP_1:def 1
+            .= (the mult of G).(y1,y2) by A7
             .= y1 * y2;
         hence thesis by A2,A8;
        end;
@@ -957,11 +894,9 @@ theorem Th61:
      set H = HGrStr (# D,o #);
      A9: now let g1,g2; let h1,h2 be Element of H;
        assume A10: g1 = h1 & g2 = h2;
-        A11: h1 * h2 = ((the mult of G) | [:A,A:]).(h1,h2)
-                  .= ((the mult of G) | [:A,A:]).[h1,h2] by BINOP_1:def 1;
-            g1 * g2 = (the mult of G).(g1,g2)
-                  .= (the mult of G).[g1,g2] by BINOP_1:def 1;
-      hence g1 * g2 = h1 * h2 by A10,A11,FUNCT_1:72;
+        A11: h1 * h2 = ((the mult of G)||A).(h1,h2)
+                  .= ((the mult of G)||A).[h1,h2];
+      thus g1 * g2 = h1 * h2 by A10,A11,FUNCT_1:72;
      end;
          H is Group-like
        proof
@@ -1014,8 +949,7 @@ theorem Th63:
                                                           by FUNCT_2:def 1;
    hence the carrier of G c= the carrier of G &
          the mult of G =
-          (the mult of G) | [:the carrier of G,the carrier of G:]
-                                                                 by RELAT_1:97;
+          (the mult of G)||the carrier of G by RELAT_1:97;
   end;
 
 theorem Th64:
@@ -1026,9 +960,9 @@ theorem Th64:
     set f = the mult of G1; set g = the mult of G2;
 A3:     A c= B & B c= A by A1,A2,Def5;
      then A4: A = B by XBOOLE_0:def 10;
-        f = g | [:A,A:] by A1,Def5
-      .= (f | [:B,B:]) | [:A,A:] by A2,Def5
-      .= f | [:B,B:] by A4,RELAT_1:101
+        f = g||A by A1,Def5
+      .= (f||B)||A by A2,Def5
+      .= f||B by A4,RELAT_1:101
       .= g by A2,Def5;
    hence thesis by A3,XBOOLE_0:def 10;
   end;
@@ -1042,9 +976,9 @@ theorem Th65:
      A3: A c= B & B c= C by A1,A2,Def5;
      then A4: A c= C by XBOOLE_1:1;
      A5: [:A,A:] c= [:B,B:] by A3,ZFMISC_1:119;
-        the mult of G1 = (the mult of G2) | [:A,A:] by A1,Def5
-      .= (h | [:B,B:]) | [:A,A:] by A2,Def5
-      .= h | [:A,A:] by A5,FUNCT_1:82;
+        the mult of G1 = (the mult of G2)||A by A1,Def5
+      .= (h||B)||A by A2,Def5
+      .= h||A by A5,FUNCT_1:82;
    hence thesis by A4,Def5;
   end;
 
@@ -1055,8 +989,9 @@ theorem Th66:
         set h = the mult of G;
     assume A1:the carrier of H1 c= the carrier of H2;
    hence the carrier of H1 c= the carrier of H2;
-        the mult of H1 = h | [:A,A:] & the mult of H2
- = h | [:B,B:] & [:A,A:] c= [:B,B:] by A1,Def5,ZFMISC_1:119;
+        the mult of H1 = h||A &
+        the mult of H2 = h||B &
+        [:A,A:] c= [:B,B:] by A1,Def5,ZFMISC_1:119;
    hence thesis by FUNCT_1:82;
   end;
 
@@ -1147,20 +1082,20 @@ definition let G;
       H is Group-like
     proof
       consider e' being Element of G such that
-A3:     for h being Element of G holds h * e' = h & e' * h = h &
+A1:     for h being Element of G holds h * e' = h & e' * h = h &
          ex g being Element of G st h * g = e' & g * h = e'
            by GROUP_1:def 3;
       reconsider e = e' as Element of H;
       take e;
       let h be Element of H;
       reconsider h' = h as Element of G;
-         h' * e' = h' & e' * h' = h' by A3;
+         h' * e' = h' & e' * h' = h' by A1;
       hence h * e = h & e * h = h;
       consider g' being Element of G such that
-A4:     h' * g' = e' & g' * h' = e' by A3;
+A2:     h' * g' = e' & g' * h' = e' by A1;
       reconsider g = g' as Element of H;
       take g;
-      thus h * g = e & g * h = e by A4;
+      thus h * g = e & g * h = e by A2;
     end;
    then reconsider H as Group-like (non empty HGrStr);
       H is Subgroup of G
@@ -1169,8 +1104,7 @@ A4:     h' * g' = e' & g' * h' = e' by A3;
         dom(the mult of G) = [:the carrier of G,the carrier of G:]
       by FUNCT_2:def 1;
      hence the mult of H =
-         (the mult of G) | [:the carrier of H,the carrier of H:]
-       by RELAT_1:97;
+         (the mult of G)||the carrier of H by RELAT_1:97;
     end;
    hence thesis;
   end;
@@ -1203,11 +1137,7 @@ theorem
  H is Subgroup of (Omega).G;
 
 theorem
-    for G being strict Group holds G is Subgroup of (Omega).G
-  proof let G be strict Group;
-      G is Subgroup of G by Th63;
-   hence thesis;
-  end;
+    for G being strict Group holds G is Subgroup of (Omega).G;
 
 theorem Th80:
  (1).G is finite
@@ -1288,18 +1218,10 @@ end;
 canceled;
 
 theorem
- carr(H) <> {}
-  proof the carrier of H <> {};
-   hence thesis;
-  end;
+ carr(H) <> {};
 
 theorem Th88:
- x in carr(H) iff x in H
-  proof
-       (x in carr(H) iff x in the carrier of H) &
-     (x in H iff x in the carrier of H) by RLVECT_1:def 1;
-   hence thesis;
-  end;
+ x in carr(H) iff x in H by RLVECT_1:def 1;
 
 theorem Th89:
  g1 in carr(H) & g2 in carr(H) implies g1 * g2 in carr(H)
@@ -1340,8 +1262,7 @@ theorem Th93:
           ex H being strict Subgroup of G st
            the carrier of H = carr(H1) * carr(H2)
      proof assume A1: carr H1 * carr H2 = carr H2 * carr H1;
-          carr H1 <> {} & carr H2 <> {};
-       then A2: carr H1 * carr H2 <> {} by Th13;
+       A2: carr H1 * carr H2 <> {} by Th13;
        A3: now let g1,g2;
          assume that A4: g1 in carr(H1) * carr(H2) and
                      A5: g2 in carr(H1) * carr(H2);
@@ -1465,11 +1386,7 @@ theorem Th97:
   end;
 
 theorem Th98:
- carr(H1 /\ H2) = carr(H1) /\ carr(H2)
-  proof
-   thus carr(H1 /\ H2) = the carrier of H1 /\ H2
-                        .= carr(H1) /\ carr(H2) by Def10;
-  end;
+ carr(H1 /\ H2) = carr(H1) /\ carr(H2) by Def10;
 
 theorem Th99:
  x in H1 /\ H2 iff x in H1 & x in H2
@@ -1552,19 +1469,10 @@ theorem
 
 theorem Th104:
  for G being strict Group, H being strict Subgroup of G holds
- H /\ (Omega).G = H & (Omega).G /\ H = H
-  proof let G be strict Group,H be strict Subgroup of G;
-     H is Subgroup of (Omega).G;
-   hence H /\ (Omega).G = H by Lm3;
-   thus thesis by Lm3;
-  end;
+ H /\ (Omega).G = H & (Omega).G /\ H = H by Lm3;
 
 theorem
-    for G being strict Group holds (Omega).G /\ (Omega).G = G
-  proof let G be strict Group;
-   thus (Omega).G /\ (Omega).G = (Omega).G by Th104
-                     .= G;
-  end;
+    for G being strict Group holds (Omega).G /\ (Omega).G = G by Th104;
 
 Lm4: H1 /\ H2 is Subgroup of H1
  proof the carrier of H1 /\ H2 = (the carrier of H1) /\ (the carrier of H2) &
@@ -1663,58 +1571,25 @@ theorem
   end;
 
 theorem Th116:
- A * B * H = A * (B * H)
-  proof
-   thus A * B * H = A * B * carr H
-                 .= A * (B * carr H) by Th14
-                 .= A * (B * H);
-  end;
+ A * B * H = A * (B * H) by Th14;
 
-theorem Th117:
- A * H * B = A * (H * B)
-  proof
-   thus A * H * B = A * carr H * B
-                 .= A * (carr H * B) by Th14
-                 .= A * (H * B);
-  end;
+theorem
+ A * H * B = A * (H * B) by Th14;
 
 theorem Th118:
- H * A * B = H * (A * B)
-  proof
-   thus H * A * B = carr H * A * B
-                 .= carr H * (A * B) by Th14
-                 .= H * (A * B);
-  end;
+ H * A * B = H * (A * B) by Th14;
 
 theorem
-    A * H1 * H2 = A * (H1 * carr H2)
-  proof
-   thus A * H1 * H2 = A * H1 * carr H2
-                   .= A * (H1 * carr H2) by Th117;
-  end;
+    A * H1 * H2 = A * (H1 * carr H2) by Th14;
 
 theorem
-    H1 * A * H2 = H1 * (A * H2)
-  proof
-   thus H1 * A * H2 = carr H1 * A * H2
-                   .= carr H1 * (A * H2) by Th116
-                   .= H1 * (A * H2);
-  end;
+    H1 * A * H2 = H1 * (A * H2) by Th116;
 
 theorem
-    H1 * carr(H2) * A = H1 * (H2 * A)
-  proof
-    thus H1 * carr(H2) * A = H1 * (carr H2 * A) by Th118
-                             .= H1 * (H2 * A);
-  end;
+    H1 * carr(H2) * A = H1 * (H2 * A) by Th118;
 
 theorem
-    G is commutative Group implies A * H = H * A
-  proof assume A1: G is commutative Group;
-   thus A * H = A * carr H
-             .= carr H * A by A1,Th29
-             .= H * A;
-  end;
+    G is commutative Group implies A * H = H * A by Th29;
 
 definition let G,H,a;
  func a * H -> Subset of G equals
@@ -1760,28 +1635,13 @@ theorem Th126:
   end;
 
 theorem Th127:
- a * b * H = a * (b * H)
-  proof
-   thus a * b * H = a * b * carr(H)
-                 .= a * (b * carr(H)) by Th38
-                 .= a * (b * H);
-  end;
+ a * b * H = a * (b * H) by Th38;
 
 theorem Th128:
- a * H * b = a * (H * b)
-  proof
-   thus a * H * b = a * carr(H) * b
-                 .= a * (carr(H) * b) by Th39
-                 .= a * (H * b);
-  end;
+ a * H * b = a * (H * b) by Th39;
 
 theorem Th129:
- H * a * b = H * (a * b)
-  proof
-   thus H * a * b = carr(H) * a * b
-                 .= carr(H) * (a * b) by Th40
-                 .= H * (a * b);
-  end;
+ H * a * b = H * (a * b) by Th40;
 
 theorem Th130:
  a in a * H & a in H * a
@@ -1792,13 +1652,7 @@ theorem Th130:
 canceled;
 
 theorem Th132:
- 1.G * H = carr(H) & H * 1.G = carr(H)
-  proof
-   thus 1.G * H = 1.G * carr(H)
-               .= carr(H) by Th43;
-   thus H * 1.G = carr(H) * 1.G
-               .= carr(H) by Th43;
-  end;
+ 1.G * H = carr(H) & H * 1.G = carr(H) by Th43;
 
 theorem Th133:
  (1).G * a = {a} & a * (1).G = {a}
@@ -1829,12 +1683,7 @@ G * a by Th42,SUBSET_1:def 4;
   end;
 
 theorem
-    G is commutative Group implies a * H = H * a
-  proof assume A1: G is commutative Group;
-   thus a * H = a * carr(H)
-             .= carr(H) * a by A1,Th44
-             .= H * a;
-  end;
+    G is commutative Group implies a * H = H * a by Th44;
 
 theorem Th136:
  a in H iff a * H = carr(H)
@@ -2864,12 +2713,12 @@ theorem
      Index H = Card Left_Cosets H & Ord G = Card(the carrier of G) &
     Ord G <=` Index H by A2;
     then the carrier of G is finite by A1,CARD_2:68;
-   hence A4: G is finite by GROUP_1:def 14;
+   hence A3: G is finite by GROUP_1:def 14;
     then consider C being finite set such that
-A5:  C = the carrier of G & ord G = card C by GROUP_1:def 15;
+A4:  C = the carrier of G & ord G = card C by GROUP_1:def 15;
     consider B being finite set such that
-A6:   B = Left_Cosets H & index H = card B by A1,Def18;
-   thus thesis by A2,A4,A5,A6,Th184;
+A5:   B = Left_Cosets H & index H = card B by A1,Def18;
+   thus thesis by A2,A3,A4,A5,Th184;
   end;
 
 ::

@@ -17,6 +17,7 @@ environ
  registrations RELSET_1, FINSEQ_2, NAT_1, MEMBERED, FUNCT_1, FUNCT_2, BINOP_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions BINOP_1, FINSEQOP;
+ definitions SQUARE_1;
  theorems SQUARE_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FUNCOP_1, FINSEQ_2,
       FINSEQOP, SETWOP_2, RELAT_1, FINSOP_1, XREAL_0, ZFMISC_1, XCMPLX_0,
       XCMPLX_1, BINOP_2, SETWISEO, XREAL_1;
@@ -54,7 +55,7 @@ definition
   correctness;
 end;
 
- Th9:
+ Lm1:
    diffreal.(r1,r2) = r1 - r2 by BINOP_2:def 10;
 
 definition
@@ -112,7 +113,7 @@ theorem Th17:
    thus sqrreal.(multreal.(x1,x2))
       = sqrreal.(x1*x2) by BINOP_2:def 11
      .= (x1*x2)^2 by Def2
-     .= x1^2*x2^2 by SQUARE_1:68
+     .= x1^2*x2^2
      .= multreal.(x1^2,x2^2) by BINOP_2:def 11
      .= multreal.(sqrreal.x1,x2^2) by Def2
      .= multreal.(sqrreal.x1,sqrreal.x2) by Def2;
@@ -129,7 +130,7 @@ definition let x be real number;
    end;
 end;
 
-Lm1:
+Lm2:
    (multreal[;](r,id REAL)).x = r*x
  proof
   thus (multreal[;](r,id REAL)).x = multreal.(r,(id REAL).x) by FUNCOP_1:66
@@ -140,16 +141,10 @@ Lm1:
 canceled;
 
 theorem
-      (r multreal).x = r*x
- proof r multreal = multreal[;](r,id REAL);
-  hence thesis by Lm1;
- end;
+      (r multreal).x = r*x by Lm2;
 
 theorem Th20:
-   r multreal is_distributive_wrt addreal
- proof r multreal = multreal[;](r,id REAL);
-  hence thesis by Th16,FINSEQOP:55;
- end;
+   r multreal is_distributive_wrt addreal by Th16,FINSEQOP:55;
 
 theorem Th21:
    compreal is_an_inverseOp_wrt addreal
@@ -215,8 +210,7 @@ A1: i in dom (F1+F2);
 
 definition let i,R1,R2;
   redefine func R1 + R2 -> Element of i-tuples_on REAL;
-   coherence
- proof R1 + R2 = addreal.:(R1,R2); hence thesis by FINSEQ_2:140; end;
+   coherence by FINSEQ_2:140;
 end;
 
 theorem Th27:
@@ -238,11 +232,7 @@ A3:  not j in dom R2 by A1,FINSEQ_2:144;
  end;
 
 theorem
-      <*>REAL + F = <*>REAL
- proof
-      <*>REAL + F = addreal.:(<*>REAL,F);
-  hence thesis by FINSEQ_2:87;
- end;
+      <*>REAL + F = <*>REAL by FINSEQ_2:87;
 
 theorem
       <*r1*> + <*r2*> = <*r1+r2*>
@@ -263,21 +253,10 @@ theorem
 canceled;
 
 theorem Th32:
-   R1 + (R2 + R3) = R1 + R2 + R3
- proof
-   thus R1 + (R2 + R3) = addreal.:(R1,R2+R3)
-                      .= addreal.:(R1,addreal.:(R2,R3))
-                      .= addreal.:(addreal.:(R1,R2),R3) by FINSEQOP:29
-                      .= addreal.:(R1+R2,R3)
-                      .= R1 + R2 + R3;
- end;
+   R1 + (R2 + R3) = R1 + R2 + R3 by FINSEQOP:29;
 
 theorem Th33:
-   R + (i|->(0 qua Real)) = R
- proof
-  thus R + (i|->(0 qua Real)) = addreal.:(R,i|->0)
-  .= R by BINOP_2:2,FINSEQOP:57;
- end;
+   R + (i|->(0 qua Real)) = R by BINOP_2:2,FINSEQOP:57;
 
 definition let F;
   func -F -> FinSequence of REAL equals
@@ -328,26 +307,21 @@ A1:  not i in dom -F;
   suppose
 A3:  i in dom -F;
   set r = F.i;
-      -F = compreal*F;
-  then (-F).i = compreal.r by A3,FUNCT_1:22;
+  (-F).i = compreal.r by A3,FUNCT_1:22;
   hence thesis by BINOP_2:def 7;
  end;
  end;
 
 definition let i,R;
  redefine func -R -> Element of i-tuples_on REAL;
-  coherence
- proof -R = compreal*R; hence thesis by FINSEQ_2:133; end;
+  coherence by FINSEQ_2:133;
 end;
 
 theorem
       r = R.j implies (-R).j = -r by Th35;
 
 theorem
-      -(<*>REAL) = <*>REAL
- proof -(<*>REAL) = compreal*(<*>REAL);
-  hence thesis by FINSEQ_2:38;
- end;
+      -(<*>REAL) = <*>REAL by FINSEQ_2:38;
 
 theorem
       -<*r*> = <*-r*>
@@ -366,19 +340,10 @@ theorem Th39:
  end;
 
 theorem Th40:
-   R + -R = (i|->0)
- proof
-  thus R + -R = addreal.:(R,-R)
-             .= addreal.:(R,compreal*R)
-             .= i|->0 by Th22,Th23,BINOP_2:2,FINSEQOP:77;
- end;
+   R + -R = (i|->0) by Th22,Th23,BINOP_2:2,FINSEQOP:77;
 
 theorem Th41:
-   R1 + R2 = (i|->0) implies R1 = -R2
- proof
-      R1 + R2 = addreal.:(R1,R2) & -R2 = compreal*R2;
-  hence thesis by Th22,Th23,BINOP_2:2,FINSEQOP:78;
- end;
+   R1 + R2 = (i|->0) implies R1 = -R2 by Th22,Th23,BINOP_2:2,FINSEQOP:78;
 
 canceled;
 
@@ -421,15 +386,12 @@ A1: i in dom (F1-F2);
    set r1 = F1.i, r2 = F2.i;
      F1 - F2 = diffreal.:(F1,F2) & i in dom(F1-F2) by A1;
   then (F1 - F2).i = diffreal.(r1,r2) by FUNCOP_1:28;
-  hence thesis by Th9;
+  hence thesis by Lm1;
  end;
 
 definition let i,R1,R2;
  redefine func R1 - R2 -> Element of i-tuples_on REAL;
-  coherence
- proof R1 - R2 = diffreal.:(R1,R2);
-  hence thesis by FINSEQ_2:140;
- end;
+  coherence by FINSEQ_2:140;
 end;
 
 theorem
@@ -451,18 +413,14 @@ A3:  not j in dom R2 by A1,FINSEQ_2:144;
  end;
 
 theorem
-      <*>REAL - F = <*>REAL & F - <*>REAL = <*>REAL
- proof
-     <*>REAL - F = diffreal.:(<*>REAL,F) & F - <*>REAL = diffreal.:(F,<*>REAL);
-  hence thesis by FINSEQ_2:87;
- end;
+      <*>REAL - F = <*>REAL & F - <*>REAL = <*>REAL by FINSEQ_2:87;
 
 theorem
       <*r1*> - <*r2*> = <*r1-r2*>
  proof
    thus <*r1*> - <*r2*> = diffreal.:(<*r1*>,<*r2*>)
                        .= <*diffreal.(r1,r2)*> by FINSEQ_2:88
-                       .= <*r1-r2*> by Th9;
+                       .= <*r1-r2*> by Lm1;
  end;
 
 theorem
@@ -470,17 +428,11 @@ theorem
  proof
    thus (i|->r1) - (i|->r2) = diffreal.:((i|->r1),(i|->r2))
                            .= i|->(diffreal.(r1,r2)) by FINSEQOP:18
-                           .= i|->(r1-r2) by Th9;
+                           .= i|->(r1-r2) by Lm1;
  end;
 
 theorem Th52:
-   R1 - R2 = R1 + - R2
- proof
-  thus R1 - R2 = diffreal.:(R1,R2)
-              .= addreal.:(R1,compreal*R2) by Def1,FINSEQOP:89
-              .= addreal.:(R1,-R2)
-              .= R1 + -R2;
- end;
+   R1 - R2 = R1 + - R2 by Def1,FINSEQOP:89;
 
 theorem
       R - (i|->(0 qua Real)) = R
@@ -608,29 +560,21 @@ then A5:  r' in dom(multreal[;](r,id REAL)) by FUNCT_1:21;
 
 definition let i; let r be real number; let R;
  redefine func r*R -> Element of i-tuples_on REAL;
-  coherence
- proof
-  reconsider q = r as Real by XREAL_0:def 1;
-     q*R = (multreal[;](q,id REAL))*R;
-  hence thesis by FINSEQ_2:133;
- end;
+  coherence by FINSEQ_2:133;
 end;
 
 theorem
       (r*R).j = r*(R.j) by Th66;
 
 theorem
-      r*(<*>REAL) = <*>REAL
- proof r*(<*>REAL) = (multreal[;](r,id REAL))*(<*>REAL);
-  hence thesis by FINSEQ_2:38;
- end;
+      r*(<*>REAL) = <*>REAL by FINSEQ_2:38;
 
 theorem
       r*<*r1*> = <*r*r1*>
  proof
    thus r*<*r1*> = (multreal[;](r,id REAL))*<*r1*>
                 .= <*(multreal[;](r,id REAL)).r1*> by FINSEQ_2:39
-                .= <*r*r1*> by Lm1;
+                .= <*r*r1*> by Lm2;
  end;
 
 theorem Th70:
@@ -638,7 +582,7 @@ theorem Th70:
  proof
    thus r1*(i|->r2) = (multreal[;](r1,id REAL))*(i|->r2)
                    .= i|->((multreal[;](r1,id REAL)).r2) by FINSEQOP:17
-                   .= i|->(r1*r2) by Lm1;
+                   .= i|->(r1*r2) by Lm2;
  end;
 
 theorem Th71:
@@ -733,7 +677,7 @@ theorem Th78:
   suppose
 A1:  not i in dom sqr F;
     then A2:  not i in dom F by Th77;
-   thus (sqr F).i = 0^2 by A1,FUNCT_1:def 4,SQUARE_1:60
+   thus (sqr F).i = 0^2 by A1,FUNCT_1:def 4
       .= (F.i)^2 by A2,FUNCT_1:def 4;
   end;
   suppose
@@ -747,20 +691,14 @@ A3:  i in dom sqr F;
 
 definition let i,R;
  redefine func sqr R -> Element of i-tuples_on REAL;
-  coherence
- proof sqr R = sqrreal*R;
-  hence thesis by FINSEQ_2:133;
- end;
+  coherence by FINSEQ_2:133;
 end;
 
 theorem
     (sqr R).j = (R.j)^2 by Th78;
 
 theorem
-      sqr (<*>REAL) = <*>REAL
- proof sqr (<*>REAL) = sqrreal*(<*>REAL);
-  hence thesis by FINSEQ_2:38;
- end;
+      sqr (<*>REAL) = <*>REAL by FINSEQ_2:38;
 
 theorem
       sqr <*r*> = <*r^2*>
@@ -785,7 +723,7 @@ theorem Th83:
    set r = R.j, r' = (-R).j;
    thus (sqr -R).j = (r')^2 by Th78
                   .= (-r)^2 by Th35
-                  .= r^2 by SQUARE_1:61
+                  .= r^2
                   .= (sqr R).j by Th78;
   end;
   hence thesis by FINSEQ_2:139;
@@ -851,10 +789,7 @@ A1: i in dom mlt(F1,F2);
 
 definition let i,R1,R2;
  redefine func mlt(R1,R2) -> Element of i-tuples_on REAL;
-  coherence
- proof mlt(R1,R2) = multreal.:(R1,R2);
-  hence thesis by FINSEQ_2:140;
- end;
+  coherence by FINSEQ_2:140;
 end;
 
 theorem Th87:
@@ -874,11 +809,7 @@ then A2:  not j in dom R2 by FINSEQ_2:144;
  end;
 
 theorem
-      mlt(<*>REAL,F) = <*>REAL
- proof
-      mlt(<*>REAL,F) = multreal.:(<*>REAL,F);
-  hence thesis by FINSEQ_2:87;
- end;
+      mlt(<*>REAL,F) = <*>REAL by FINSEQ_2:87;
 
 theorem
       mlt(<*r1*>,<*r2*>) = <*r1*r2*>
@@ -891,15 +822,7 @@ theorem
 canceled;
 
 theorem
-      mlt(R1,mlt(R2,R3)) = mlt(mlt(R1,R2),R3)
- proof
-  thus mlt(R1,mlt(R2,R3)) = multreal.:(R1,mlt(R2,R3))
-                         .= multreal.:(R1,multreal.:(R2,R3))
-                         .= multreal.:(multreal.:
-(R1,R2),R3) by FINSEQOP:29
-                         .= multreal.:(mlt(R1,R2),R3)
-                         .= mlt(mlt(R1,R2),R3);
- end;
+      mlt(R1,mlt(R2,R3)) = mlt(mlt(R1,R2),R3) by FINSEQOP:29;
 
 theorem Th92:
    mlt(i|->r,R) = r*R
@@ -918,15 +841,7 @@ theorem
  end;
 
 theorem Th94:
-   r*mlt(R1,R2) = mlt(r*R1,R2)
- proof
-   thus r*mlt(R1,R2)
-      = (multreal[;](r,id REAL))*(mlt(R1,R2))
-     .= (multreal[;](r,id REAL))*(multreal.:(R1,R2))
-     .= multreal.:((multreal[;](r,id REAL))*R1,R2) by FINSEQOP:27
-     .= multreal.:(r*R1,R2)
-     .= mlt(r*R1,R2);
- end;
+   r*mlt(R1,R2) = mlt(r*R1,R2) by FINSEQOP:27;
 
 canceled;
 
@@ -947,7 +862,7 @@ A7:    j in dom(multreal.:(R,R)) by A3,A5,FINSEQ_1:def 3;
     set r = R.j;
     thus (sqrreal*R).j = sqrreal.r by A6,FUNCT_1:22
                       .= r^2 by Def2
-                      .= r*r by SQUARE_1:def 3
+                      .= r*r
                       .= multreal.(r,r) by BINOP_2:def 11
                       .= (multreal.:(R,R)).j by A7,FUNCOP_1:28;
    end;
@@ -966,7 +881,7 @@ theorem Th98:
               r1'22r1r2 = (sqr R1 + 2*mlt(R1,R2)).j;
    thus (sqr(R1 + R2)).j = r1r2^2 by Th78
                         .= (r1 + r2)^2 by Th27
-                        .= r1^2+2*r1*r2+r2^2 by SQUARE_1:63
+                        .= r1^2+2*r1*r2+r2^2
                         .= r1'2+2*(r1*r2)+r2^2 by Th78
                         .= r1'2+2*(r1*r2)+r2'2 by Th78
                         .= r1'2+2*(r1r2a)+r2'2 by Th87
@@ -992,15 +907,7 @@ theorem Th99:
  end;
 
 theorem
-      sqr mlt(R1,R2) = mlt(sqr R1,sqr R2)
- proof
-  thus sqr mlt(R1,R2) = sqrreal*(mlt(R1,R2))
-                     .= sqrreal*(multreal.:(R1,R2))
-                     .= multreal.:(sqrreal*R1,sqrreal*R2) by Th17,FINSEQOP:52
-                     .= mlt(sqrreal*R1,sqrreal*R2)
-                     .= mlt(sqr R1,sqrreal*R2)
-                     .= mlt(sqr R1,sqr R2);
- end;
+      sqr mlt(R1,R2) = mlt(sqr R1,sqr R2) by Th17,FINSEQOP:52;
 
 :: Finite sum of Finite Sequence of Real Numbers
 
@@ -1013,16 +920,10 @@ end;
 canceled;
 
 theorem Th102:
-   Sum(<*> REAL) = 0
- proof set F = <*> REAL;
-   thus Sum F = addreal $$ F .= 0 by BINOP_2:2,FINSOP_1:11;
- end;
+   Sum(<*> REAL) = 0 by BINOP_2:2,FINSOP_1:11;
 
 theorem Th103:
-   Sum <*r*> = r
- proof set F = <*r*>;
-  thus Sum F = addreal $$ F .= r by FINSOP_1:12;
- end;
+   Sum <*r*> = r by FINSOP_1:12;
 
 theorem Th104:
    Sum(F^<*r*>) = Sum F + r
@@ -1253,7 +1154,7 @@ theorem Th117:
     .= addreal $$(rM*F)
     .= rM.(addreal $$F) by Th16,Th22,SETWOP_2:41
     .= rM.(Sum F)
-    .= r*(Sum F) by Lm1;
+    .= r*(Sum F) by Lm2;
  end;
 
 theorem
@@ -1288,7 +1189,7 @@ theorem Th120:
          by Def1,Th22,Th23,SETWOP_2:48
     .= diffreal.(Sum R1,addreal$$R2)
     .= diffreal.(Sum R1,Sum R2)
-    .= Sum R1 - Sum R2 by Th9;
+    .= Sum R1 - Sum R2 by Lm1;
  end;
 
 theorem
@@ -1302,19 +1203,19 @@ then A4:   Seg i = dom R & Seg i = dom(i |-> 0) by A2,FINSEQ_1:def 3;
   then consider j such that
 A5:   j in dom R and
 A6:   R.j <> (i |-> 0).j by A2,A3,A4,FINSEQ_2:10;
-A8:   dom sqr R = Seg len sqr R & dom R = Seg len R by FINSEQ_1:def 3;
-A9: now let k such that
+A7:   dom sqr R = Seg len sqr R & dom R = Seg len R by FINSEQ_1:def 3;
+A8: now let k such that
       k in dom sqr R;
      set r = (sqr R).k;
      set x = R.k;
         0 <= x^2 by SQUARE_1:72; hence 0 <= r by Th78;
     end;
-A10:  j in dom sqr R by A5,A8,FINSEQ_2:37;
+A9:  j in dom sqr R by A5,A7,FINSEQ_2:37;
   set x = R.j,x' = (sqr R).j;
-     x <> 0 by A2,A5,A6,A8,FINSEQ_2:70;
+     x <> 0 by A2,A5,A6,A7,FINSEQ_2:70;
   then 0 < x^2 by SQUARE_1:74;
   then 0 < x' by Th78;
-  hence thesis by A1,A9,A10,Th115;
+  hence thesis by A1,A8,A9,Th115;
  end;
 
 theorem
@@ -1326,7 +1227,7 @@ theorem
 A1: P[0]
       proof let R1,R2 be Element of 0-tuples_on REAL;
           sqr R1 = <*>REAL & mlt(R1,R2) = <*>REAL by FINSEQ_2:113;
-       hence thesis by Th102,SQUARE_1:60;
+       hence thesis by Th102;
       end;
 A2: for i st P[i] holds P[i+1]
    proof let i such that
@@ -1365,10 +1266,10 @@ A9:   2*(x1*x2)*Sum mlt(R1',R2')
        .= 2*Sum(mlt(x1*R2',x2*R1')) by Th94;
 A10:  -(Sum mlt(R1',R2')+x1*x2)^2
         = -((x1*x2)^2+2*(x1*x2)*Sum mlt(R1',R2')+(Sum mlt(R1',R2'))^2
-) by SQUARE_1:63
+)
        .= -(x1*x2)^2+-(2*(x1*x2)*Sum mlt(R1',R2')+(Sum mlt(R1',R2'))^2)
        .= -x1^2*x2^2+(-(Sum mlt(R1',R2'))^2+ -2*Sum(mlt(x1*R2',x2*R1')))
-              by A9,SQUARE_1:68;
+              by A9;
 A11:  Sum sqr(x1*R2')+Sum sqr(x2*R1') + -2*Sum(mlt(x1*R2',x2*R1'))
        = Sum sqr(x1*R2')-2*Sum(mlt(x1*R2',x2*R1'))+Sum
  sqr(x2*R1')
@@ -1387,7 +1288,7 @@ A11:  Sum sqr(x1*R2')+Sum sqr(x2*R1') + -2*Sum(mlt(x1*R2',x2*R1'))
     (Sum sqr R2' + x2^2) = Sum sqr R2 by A4,A5;
     then A12:  (Sum sqr R1)*(Sum sqr R2) - (Sum mlt(R1,R2))^2
        = (Sum sqr R1' + x1^2)*(Sum sqr R2' + x2^2)
-           + -(Sum mlt(R1',R2')+x1*x2)^2 by A4,A5,A8,XCMPLX_0:def 8
+           + -(Sum mlt(R1',R2')+x1*x2)^2 by A4,A5,A8
       .= (Sum sqr R1')*(Sum sqr R2')+-(Sum mlt(R1',R2'))^2 +
          ((Sum sqr(x1*R2')+Sum sqr(x2*R1')) +- 2*Sum(mlt(x1*R2',x2*R1'))) by A7
 ,A10
@@ -1415,16 +1316,10 @@ end;
 canceled;
 
 theorem Th124:
-   Product (<*> REAL) = 1
- proof set F = <*> REAL;
-   thus Product F = multreal $$ F .= 1 by BINOP_2:7,FINSOP_1:11;
- end;
+   Product (<*> REAL) = 1 by BINOP_2:7,FINSOP_1:11;
 
 theorem Th125:
-   Product <*r*> = r
- proof set F = <*r*>;
-  thus Product F = multreal $$ F .= r by FINSOP_1:12;
- end;
+   Product <*r*> = r by FINSOP_1:12;
 
 theorem Th126:
    Product (F^<*r*>) = Product F * r
@@ -1472,11 +1367,7 @@ theorem
      by Th124,FINSEQ_2:113;
 
 theorem
-      Product (i|->(1 qua Real)) = 1
- proof
-  thus Product (i|->(1 qua Real)) = multreal$$(i|->(1 qua Real))
-               .= 1 by BINOP_2:7,SETWOP_2:35;
- end;
+      Product (i|->(1 qua Real)) = 1 by BINOP_2:7,SETWOP_2:35;
 
 theorem
       (ex k st k in dom F & F.k = 0) iff Product F = 0
@@ -1548,14 +1439,7 @@ theorem
  end;
 
 theorem
-      Product ((i*j)|->r) = Product (j|->(Product (i|->r)))
- proof
-   thus Product ((i*j)|->r)
-      = multreal$$((i*j)|->r)
-     .= multreal$$(j|->multreal$$(i|->r)) by SETWOP_2:38
-     .= multreal$$(j|->(Product (i|->r)))
-     .= Product (j|->(Product (i|->r)));
- end;
+      Product ((i*j)|->r) = Product (j|->(Product (i|->r))) by SETWOP_2:38;
 
 theorem
       Product (i|->(r1*r2)) = (Product (i|->r1))*(Product (i|->r2))
@@ -1593,5 +1477,5 @@ theorem
  proof
    thus Product sqr R = Product (mlt(R,R)) by Th97
                .= Product R * Product R by Th137
-               .= (Product R)^2 by SQUARE_1:def 3;
+               .= (Product R)^2;
  end;

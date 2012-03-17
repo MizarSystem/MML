@@ -39,7 +39,7 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
-<ArticleID name="MATRIX_2"/>
+<ArticleID name="FINSEQ_3"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="REALSET1"/>
@@ -81,7 +81,7 @@
 <For>
 <Typ kind="M" nr="9">
 <Cluster/>
-<Func kind="K" nr="126">
+<Func kind="K" nr="127">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -111,10 +111,10 @@
 <And>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="109">
-<Func kind="K" nr="393">
+<Func kind="K" nr="380">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="56"/>
-<Func kind="K" nr="126">
+<Func kind="K" nr="127">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
@@ -135,11 +135,11 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="3"/>
-<Func kind="K" nr="162">
-<Func kind="K" nr="393">
+<Func kind="K" nr="163">
+<Func kind="K" nr="380">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="56"/>
-<Func kind="K" nr="126">
+<Func kind="K" nr="127">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
@@ -150,10 +150,10 @@
 <Not>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="20">
-<Func kind="K" nr="393">
+<Func kind="K" nr="380">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="56"/>
-<Func kind="K" nr="126">
+<Func kind="K" nr="127">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
@@ -184,7 +184,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="39" value="false"/>
+<Adjective nr="40" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="4">
@@ -204,13 +204,13 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="21">
+<Adjective nr="22">
 <Func kind="K" nr="56"/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="49">
+<Adjective nr="50">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -222,7 +222,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="12">
-<Func kind="K" nr="165">
+<Func kind="K" nr="166">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -244,7 +244,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="422">
+<Func kind="K" nr="409">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>

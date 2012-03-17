@@ -140,11 +140,7 @@ registration
     hence contradiction by Def2;
    end;
  cluster Y /\ X -> without_pairs;
-  coherence
-   proof let a be pair set; assume a in Y /\ X;
-     then a in X by XBOOLE_0:def 3;
-    hence contradiction by Def2;
-   end;
+  coherence;
 end;
 
 registration
@@ -289,26 +285,26 @@ theorem Th4:
    assume that
 A1:  S1 tolerates S2 and
 A2:  InnerVertices S2 misses InputVertices S1;
-A4:  InnerVertices S1 = rng R1 & InnerVertices S2 = rng R2 &
+A3:  InnerVertices S1 = rng R1 & InnerVertices S2 = rng R2 &
     InnerVertices S = rng R;
-A5:  the carrier of S = (the carrier of S1) \/ the carrier of S2 &
+A4:  the carrier of S = (the carrier of S1) \/ the carrier of S2 &
     R = R1+*R2 by CIRCCOMB:def 2;
-A6:  rng R = (rng R1) \/ rng R2 by A1,A4,CIRCCOMB:15;
+A5:  rng R = (rng R1) \/ rng R2 by A1,A3,CIRCCOMB:15;
    hereby let x be set; assume x in InputVertices S1;
      then x in the carrier of S1 & not x in rng R1 & not x in rng R2
       by A2,XBOOLE_0:3,def 4;
-     then x in the carrier of S & not x in rng R by A5,A6,XBOOLE_0:def 2;
+     then x in the carrier of S & not x in rng R by A4,A5,XBOOLE_0:def 2;
     hence x in InputVertices S by XBOOLE_0:def 4;
    end;
-A7:  InputVertices S c= (InputVertices S1) \/
+A6:  InputVertices S c= (InputVertices S1) \/
  InputVertices S2 by A1,CIRCCOMB:15
 ;
    hereby let x be set; assume x in InputVertices (S1+*S2);
      then x in (InputVertices S1) \/ InputVertices S2 & not x in rng R
-      by A7,XBOOLE_0:def 4;
+      by A6,XBOOLE_0:def 4;
      then x in InputVertices S1 or x in InputVertices S2 & not x in
 InnerVertices S1
-      by A6,XBOOLE_0:def 2;
+      by A5,XBOOLE_0:def 2;
      then x in InputVertices S1 or x in InputVertices S2 \ InnerVertices S1
       by XBOOLE_0:def 4;
     hence x in (InputVertices S1) \/ (InputVertices S2 \ InnerVertices S1)
@@ -325,7 +321,7 @@ XBOOLE_0:def 2
     then (x in the carrier of S1 or x in the carrier of S2) & not x in rng R1
 &
     not x in rng R2 by XBOOLE_0:def 4;
-    then x in the carrier of S & not x in rng R by A5,A6,XBOOLE_0:def 2;
+    then x in the carrier of S & not x in rng R by A4,A5,XBOOLE_0:def 2;
    hence x in InputVertices (S1+*S2) by XBOOLE_0:def 4;
   end;
 
@@ -850,8 +846,7 @@ theorem
    set R1 = the ResultSort of S1, R2 = the ResultSort of S2;
 A1:  InnerVertices (S1+*S2) = rng the ResultSort of S1+*S2
                           .= rng (R1+*R2) by CIRCCOMB:def 2;
-       InnerVertices S2 = rng R2;
-    then InnerVertices S2 c= InnerVertices (S1+*S2) by A1,FUNCT_4:19;
+    InnerVertices S2 c= InnerVertices (S1+*S2) by A1,FUNCT_4:19;
    hence thesis;
   end;
 
@@ -1349,18 +1344,11 @@ then A3:    a = x or a = y or a = [p,f] by TARSKI:def 1,def 2;
 theorem Th50:
  for s being State of 1GateCircuit(x,y,f) holds
   (Following s).[<*x,y*>, f] = f.<*s.x, s.y*> &
-  (Following s).x = s.x & (Following s).y = s.y
-  proof let s be State of 1GateCircuit(x,y,f);
-       1GateCircuit(x,y,f) = 1GateCircuit(<*x,y*>, f);
-   hence thesis by Th48;
-  end;
+  (Following s).x = s.x & (Following s).y = s.y by Th48;
 
 theorem
     for s being State of 1GateCircuit(x,y,f) holds Following s is stable
-  proof let s be State of 1GateCircuit(x,y,f);
-       1GateCircuit(x,y,f) = 1GateCircuit(<*x,y*>, f);
-   hence thesis by Th49;
-  end;
+      by Th49;
 
 definition
  let x,y,z be set;
@@ -1424,20 +1412,12 @@ theorem
   for s being State of 1GateCircuit(x,y,z,f) holds
    (Following s).[<*x,y,z*>, f] = f.<*s.x, s.y, s.z*> &
    (Following s).x = s.x & (Following s).y = s.y & (Following s).z = s.z
-  proof let f be Function of 3-tuples_on BOOLEAN, BOOLEAN;
-   let s be State of 1GateCircuit(x,y,z,f);
-       1GateCircuit(x,y,z,f) = 1GateCircuit(<*x,y,z*>, f);
-   hence thesis by Th52;
-  end;
+   by Th52;
 
 theorem
     for f being Function of 3-tuples_on BOOLEAN, BOOLEAN
   for s being State of 1GateCircuit(x,y,z,f) holds Following s is stable
-  proof let f be Function of 3-tuples_on BOOLEAN, BOOLEAN;
-   let s be State of 1GateCircuit(x,y,z,f);
-       1GateCircuit(x,y,z,f) = 1GateCircuit(<*x,y,z*>, f);
-   hence thesis by Th53;
-  end;
+   by Th53;
 
 begin :: Two Gates Circuit
 
@@ -1469,10 +1449,7 @@ end;
 registration let x,y,c be set;
  let f be Function of 2-tuples_on BOOLEAN, BOOLEAN;
  cluster 2GatesCircOutput(x,y,c,f) -> pair;
- coherence
-  proof 2GatesCircOutput(x,y,c,f) = [<*[<*x,y*>, f], c*>, f];
-   hence thesis;
-  end;
+ coherence;
 end;
 
 theorem Th56:
@@ -1500,42 +1477,41 @@ A1:  c <> [<*x,y*>, f];
    set S2 = 1GateCircStr(p, f);
    set S = 2GatesCircStr(x,y,c,f);
    set R = the ResultSort of S;
-       S = S1+*S2;
-then A2:  the carrier of S = (the carrier of S1) \/ the carrier of S2
+A2:  the carrier of S = (the carrier of S1) \/ the carrier of S2
      by CIRCCOMB:def 2;
-A4:  rng R = InnerVertices S
+A3:  rng R = InnerVertices S
          .= {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)} by Th56
          .= {[<*x,y*>, f], [p,f]};
-A5:  rng <*x,y*> = {x,y} by FINSEQ_2:147;
-then A6:  the carrier of S1 = {x,y} \/ {[<*x,y*>,f]} by CIRCCOMB:def 6;
-A7:  rng p = {[<*x,y*>, f], c} by FINSEQ_2:147;
-then A8:  the carrier of S2 = {[<*x,y*>, f], c} \/ {[p,f]} by CIRCCOMB:def 6;
+A4:  rng <*x,y*> = {x,y} by FINSEQ_2:147;
+then A5:  the carrier of S1 = {x,y} \/ {[<*x,y*>,f]} by CIRCCOMB:def 6;
+A6:  rng p = {[<*x,y*>, f], c} by FINSEQ_2:147;
+then A7:  the carrier of S2 = {[<*x,y*>, f], c} \/ {[p,f]} by CIRCCOMB:def 6;
    thus InputVertices S c= {x,y,c}
-     proof let z be set; assume A9: z in InputVertices S;
-then A10:     z in the carrier of S & not z in rng R by XBOOLE_0:def 4;
-          z in the carrier of S1 or z in the carrier of S2 by A2,A9,
+     proof let z be set; assume A8: z in InputVertices S;
+then A9:     z in the carrier of S & not z in rng R by XBOOLE_0:def 4;
+          z in the carrier of S1 or z in the carrier of S2 by A2,A8,
 XBOOLE_0:def 2;
        then z in {x,y} or z in {[<*x,y*>,f]} or z in {[<*x,y*>, f], c} or
-       z in {[p,f]} by A6,A8,XBOOLE_0:def 2;
+       z in {[p,f]} by A5,A7,XBOOLE_0:def 2;
 then z = x or z = y or z = [<*x,y*>,f] or z = c or z = [p,f] by TARSKI:def 1
 ,def 2;
-       hence thesis by A4,A10,ENUMSET1:def 1,TARSKI:def 2;
+       hence thesis by A3,A9,ENUMSET1:def 1,TARSKI:def 2;
      end;
    let z be set;
     assume z in {x,y,c};
-    then A11: z = x or z = y or z = c by ENUMSET1:def 1;
-then z in {x,y} & [<*x,y*>, f] in rng p or z in {c} by A7,TARSKI:def 1,def 2;
+    then A10: z = x or z = y or z = c by ENUMSET1:def 1;
+then z in {x,y} & [<*x,y*>, f] in rng p or z in {c} by A6,TARSKI:def 1,def 2;
     then the_rank_of z in the_rank_of [<*x,y*>, f] &
     the_rank_of [<*x,y*>, f] in the_rank_of [p,f] or
-    z = c & c in rng p by A5,A7,CIRCCOMB:50,TARSKI:def 1,def 2;
-then A12:  the_rank_of z in the_rank_of [p,f] & z <> [<*x,y*>, f]
+    z = c & c in rng p by A4,A6,CIRCCOMB:50,TARSKI:def 1,def 2;
+then A11:  the_rank_of z in the_rank_of [p,f] & z <> [<*x,y*>, f]
      by A1,CIRCCOMB:50,ORDINAL1:19;
     then z <> [p,f];
-then A13:  not z in rng R by A4,A12,TARSKI:def 2;
-       z in {x,y} or z in rng p by A7,A11,TARSKI:def 2;
-    then z in InputVertices S1 or z in InputVertices S2 by A5,CIRCCOMB:49;
+then A12:  not z in rng R by A3,A11,TARSKI:def 2;
+       z in {x,y} or z in rng p by A6,A10,TARSKI:def 2;
+    then z in InputVertices S1 or z in InputVertices S2 by A4,CIRCCOMB:49;
     then z in the carrier of S by A2,XBOOLE_0:def 2;
-   hence thesis by A13,XBOOLE_0:def 4;
+   hence thesis by A12,XBOOLE_0:def 4;
   end;
 
 definition
@@ -1559,8 +1535,7 @@ theorem Th59:
  for x,y,c being non pair set holds
    InputVertices 2GatesCircStr(x,y,c,f) is without_pairs
   proof let x,y,c be non pair set;
-       c <> [<*x,y*>, f];
-    then InputVertices 2GatesCircStr(x,y,c,f) = {x,y,c} by Th57;
+    InputVertices 2GatesCircStr(x,y,c,f) = {x,y,c} by Th57;
    hence thesis;
   end;
 
@@ -1610,33 +1585,33 @@ Lm2: c <> [<*x,y*>, f] implies
    set S2 = 1GateCircStr(p, f), A2 = 1GateCircuit(xyf,c, f);
    set S = 2GatesCircStr(x,y,c,f);
    assume c <> [<*x,y*>, f];
-then A2: InputVertices S = {x,y,c} by Th57;
-A3: InnerVertices S = {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)} by Th56;
-A5: x in InputVertices S & y in InputVertices S & c in InputVertices S
-     by A2,ENUMSET1:def 1;
-   reconsider xyf as Element of InnerVertices S by A3,TARSKI:def 2;
+then A1: InputVertices S = {x,y,c} by Th57;
+A2: InnerVertices S = {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)} by Th56;
+A3: x in InputVertices S & y in InputVertices S & c in InputVertices S
+     by A1,ENUMSET1:def 1;
+   reconsider xyf as Element of InnerVertices S by A2,TARSKI:def 2;
        rng p = {xyf,c} by FINSEQ_2:147;
     then xyf in rng p & c in rng p by TARSKI:def 2;
-then A6: xyf in InputVertices S2 & c in InputVertices S2 by CIRCCOMB:49;
+then A4: xyf in InputVertices S2 & c in InputVertices S2 by CIRCCOMB:49;
    reconsider s1 = s|the carrier of S1 as State of A1 by Th26;
    reconsider s2 = s|the carrier of S2 as State of A2 by Th26;
-A7: dom s2 = the carrier of S2 by CIRCUIT1:4;
-A8: dom s1 = the carrier of S1 by CIRCUIT1:4;
+A5: dom s2 = the carrier of S2 by CIRCUIT1:4;
+A6: dom s1 = the carrier of S1 by CIRCUIT1:4;
    reconsider vx = x, vy = y as Vertex of S1 by Th43;
  reconsider xyf1 = xyf as Element of InnerVertices S1 by Th47;
-   reconsider xyf' = xyf, c' = c as Vertex of S2 by A6;
+   reconsider xyf' = xyf, c' = c as Vertex of S2 by A4;
    reconsider v2 = [p,f] as Element of InnerVertices S2 by Th47;
    thus (Following s).2GatesCircOutput(x,y,c,f)
       = (Following s2).v2 by CIRCCOMB:72
      .= f.<*s2.xyf', s2.c'*> by Th50
-     .= f.<*s.[<*x,y*>,f], s2.c'*> by A7,FUNCT_1:70
-     .= f.<*s.[<*x,y*>,f], s.c*> by A7,FUNCT_1:70;
+     .= f.<*s.[<*x,y*>,f], s2.c'*> by A5,FUNCT_1:70
+     .= f.<*s.[<*x,y*>,f], s.c*> by A5,FUNCT_1:70;
    thus (Following s).[<*x,y*>,f]
       = (Following s1).xyf1 by CIRCCOMB:72
      .= f.<*s1.vx, s1.vy*> by Th50
-     .= f.<*s.x, s1.vy*> by A8,FUNCT_1:70
-     .= f.<*s.x, s.y*> by A8,FUNCT_1:70;
-   thus thesis by A5,CIRCUIT2:def 5;
+     .= f.<*s.x, s1.vy*> by A6,FUNCT_1:70
+     .= f.<*s.x, s.y*> by A6,FUNCT_1:70;
+   thus thesis by A3,CIRCUIT2:def 5;
   end;
 
 theorem Th62:
@@ -1651,52 +1626,52 @@ theorem Th62:
    set S2 = 1GateCircStr(p, f), A2 = 1GateCircuit(xyf,c, f);
    set S = 2GatesCircStr(x,y,c,f);
    assume c <> [<*x,y*>, f];
-then A2: InputVertices S = {x,y,c} by Th57;
-A3: InnerVertices S = {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)} by Th56;
-A5: x in {x,y} & y in {x,y} & c in {c} & c in {[<*x,y*>,f], c} by TARSKI:def 1
+then A1: InputVertices S = {x,y,c} by Th57;
+A2: InnerVertices S = {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)} by Th56;
+A3: x in {x,y} & y in {x,y} & c in {c} & c in {[<*x,y*>,f], c} by TARSKI:def 1
 ,def 2;
-A6: x in InputVertices S & y in InputVertices S & c in InputVertices S
-     by A2,ENUMSET1:def 1;
+A4: x in InputVertices S & y in InputVertices S & c in InputVertices S
+     by A1,ENUMSET1:def 1;
    reconsider xx = x, yy = y, cc = c as Vertex of S by Th60;
-A7: (Following s).xx = s.x & (Following s).yy = s.y &
-    (Following s).cc = s.c by A6,CIRCUIT2:def 5;
-then A8: (Following Following s).xx = s.x & (Following Following s).yy = s.y &
-    (Following Following s).cc = s.c by A6,CIRCUIT2:def 5;
-   reconsider xyf as Element of InnerVertices S by A3,TARSKI:def 2;
+A5: (Following s).xx = s.x & (Following s).yy = s.y &
+    (Following s).cc = s.c by A4,CIRCUIT2:def 5;
+then A6: (Following Following s).xx = s.x & (Following Following s).yy = s.y &
+    (Following Following s).cc = s.c by A4,CIRCUIT2:def 5;
+   reconsider xyf as Element of InnerVertices S by A2,TARSKI:def 2;
        rng p = {xyf,c} by FINSEQ_2:147;
     then xyf in rng p & c in rng p by TARSKI:def 2;
-then A9: xyf in InputVertices S2 & c in InputVertices S2 by CIRCCOMB:49;
+then A7: xyf in InputVertices S2 & c in InputVertices S2 by CIRCCOMB:49;
    reconsider s1 = s|the carrier of S1 as State of A1 by Th26;
    set fs = Following s;
    reconsider fs2 = fs|the carrier of S2 as State of A2 by Th26;
    reconsider fs1 = fs|the carrier of S1 as State of A1 by Th26;
-A10: dom fs2 = the carrier of S2 by CIRCUIT1:4;
-A11: dom fs1 = the carrier of S1 by CIRCUIT1:4;
+A8: dom fs2 = the carrier of S2 by CIRCUIT1:4;
+A9: dom fs1 = the carrier of S1 by CIRCUIT1:4;
    reconsider vx = x, vy = y as Vertex of S1 by Th43;
-A12: xyf in InnerVertices S1 by Th47;
+A10: xyf in InnerVertices S1 by Th47;
    reconsider xyf1 = xyf as Element of InnerVertices S1 by Th47;
-    A13: dom s1 = the carrier of S1 & InputVertices S1 = rng <*x,y*> &
+    A11: dom s1 = the carrier of S1 & InputVertices S1 = rng <*x,y*> &
     rng <*x,y*> = {x,y} & InputVertices S1 c= the carrier of S1
       by CIRCCOMB:49,CIRCUIT1:4,FINSEQ_2:147;
-   reconsider xyf' = xyf, c' = c as Vertex of S2 by A9;
+   reconsider xyf' = xyf, c' = c as Vertex of S2 by A7;
    reconsider v2 = [p,f] as Element of InnerVertices S2 by Th47;
-A14:  Following(s,1+1) = Following Following s by Th15;
+A12:  Following(s,1+1) = Following Following s by Th15;
    hence (Following(s,2)).2GatesCircOutput(x,y,c,f)
       = (Following fs2).v2 by CIRCCOMB:72
      .= f.<*fs2.xyf', fs2.c'*> by Th50
-     .= f.<*(Following s).xyf, fs2.c*> by A10,FUNCT_1:70
-     .= f.<*(Following s).xyf, (Following s).c'*> by A10,FUNCT_1:70
-     .= f.<*(Following s).xyf, s.cc*> by A6,CIRCUIT2:def 5
-     .= f.<*(Following s1).xyf, s.cc*> by A12,CIRCCOMB:72
+     .= f.<*(Following s).xyf, fs2.c*> by A8,FUNCT_1:70
+     .= f.<*(Following s).xyf, (Following s).c'*> by A8,FUNCT_1:70
+     .= f.<*(Following s).xyf, s.cc*> by A4,CIRCUIT2:def 5
+     .= f.<*(Following s1).xyf, s.cc*> by A10,CIRCCOMB:72
      .= f.<*f.<*s1.x, s1.y*>, s.cc*> by Th50
-     .= f.<*f.<*s.x,s1.y*>, s.cc*> by A5,A13,FUNCT_1:70
-     .= f.<*f.<*s.x,s.y*>, s.c*> by A5,A13,FUNCT_1:70;
+     .= f.<*f.<*s.x,s1.y*>, s.cc*> by A3,A11,FUNCT_1:70
+     .= f.<*f.<*s.x,s.y*>, s.c*> by A3,A11,FUNCT_1:70;
    thus (Following(s,2)).[<*x,y*>,f]
-      = (Following fs1).xyf1 by A14,CIRCCOMB:72
+      = (Following fs1).xyf1 by A12,CIRCCOMB:72
      .= f.<*fs1.vx, fs1.vy*> by Th50
-     .= f.<*s.x, fs1.vy*> by A7,A11,FUNCT_1:70
-     .= f.<*s.x, s.y*> by A7,A11,FUNCT_1:70;
-   thus thesis by A8,Th15;
+     .= f.<*s.x, fs1.vy*> by A5,A9,FUNCT_1:70
+     .= f.<*s.x, s.y*> by A5,A9,FUNCT_1:70;
+   thus thesis by A6,Th15;
   end;
 
 theorem Th63:
@@ -1829,14 +1804,14 @@ end;
 theorem Th67:
  InnerVertices MajorityStr(x,y,c) is Relation
   proof
-A3:  InnerVertices 1GateCircStr(<*x,y*>,'&') is Relation &
+A1:  InnerVertices 1GateCircStr(<*x,y*>,'&') is Relation &
     InnerVertices 1GateCircStr(<*c,x*>,'&') is Relation &
     InnerVertices 1GateCircStr(<*y,c*>,'&') is Relation by Th38;
     then InnerVertices (1GateCircStr(<*x,y*>,'&')+*1GateCircStr(<*y,c*>,'&'))
      is Relation by Th3;
     then InnerVertices 1GateCircStr(<*[<*x,y*>, '&'], [<*y,c*>, '&'],
                    [<*c,x*>, '&']*>, or3) is Relation &
-    InnerVertices MajorityIStr(x,y,c) is Relation by A3,Th3,Th38;
+    InnerVertices MajorityIStr(x,y,c) is Relation by A1,Th3,Th38;
    hence thesis by Th3;
   end;
 
@@ -1847,38 +1822,38 @@ theorem Th68:
    set M = MajorityStr(x,y,c), MI = MajorityIStr(x,y,c);
    set S = 1GateCircStr(<*[<*x,y*>, '&'], [<*y,c*>, '&'],
                           [<*c,x*>, '&']*>, or3);
-A3:  InputVertices 1GateCircStr(<*x,y*>,'&') is without_pairs &
+A1:  InputVertices 1GateCircStr(<*x,y*>,'&') is without_pairs &
     InputVertices 1GateCircStr(<*c,x*>,'&') is without_pairs &
     InputVertices 1GateCircStr(<*y,c*>,'&') is without_pairs by Th41;
     then InputVertices (1GateCircStr(<*x,y*>,'&')+*1GateCircStr(<*y,c*>,'&'))
      is without_pairs by Th9;
-then A4:  InputVertices MI is without_pairs by A3,Th9;
+then A2:  InputVertices MI is without_pairs by A1,Th9;
        InnerVertices S is Relation by Th38;
-then A5:  InputVertices M =
+then A3:  InputVertices M =
         (InputVertices MI) \/
- (InputVertices S \ InnerVertices MI) by A4,Th6;
+ (InputVertices S \ InnerVertices MI) by A2,Th6;
    given xx being pair set such that
-A6:  xx in InputVertices M;
-A7:  InputVertices S = {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} by Th42;
-A8:  InnerVertices 1GateCircStr(<*x,y*>, '&') = {[<*x,y*>, '&']} &
+A4:  xx in InputVertices M;
+A5:  InputVertices S = {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} by Th42;
+A6:  InnerVertices 1GateCircStr(<*x,y*>, '&') = {[<*x,y*>, '&']} &
     InnerVertices 1GateCircStr(<*y,c*>, '&') = {[<*y,c*>, '&']} &
     InnerVertices 1GateCircStr(<*c,x*>, '&') = {[<*c,x*>, '&']} by CIRCCOMB:49;
-A9:  1GateCircStr(<*x,y*>, '&') tolerates 1GateCircStr(<*y,c*>, '&') &
+A7:  1GateCircStr(<*x,y*>, '&') tolerates 1GateCircStr(<*y,c*>, '&') &
     1GateCircStr(<*x,y*>, '&') tolerates 1GateCircStr(<*c,x*>, '&') &
     1GateCircStr(<*y,c*>, '&') tolerates 1GateCircStr(<*c,x*>, '&')
      by CIRCCOMB:51;
-then A10:  InnerVertices (1GateCircStr(<*x,y*>, '&') +* 1GateCircStr(<*y,c*>,
+then A8:  InnerVertices (1GateCircStr(<*x,y*>, '&') +* 1GateCircStr(<*y,c*>,
 '&')) =
-     {[<*x,y*>, '&']} \/ {[<*y,c*>, '&']} by A8,CIRCCOMB:15;
+     {[<*x,y*>, '&']} \/ {[<*y,c*>, '&']} by A6,CIRCCOMB:15;
        1GateCircStr(<*x,y*>, '&') +* 1GateCircStr(<*y,c*>, '&')
-       tolerates 1GateCircStr(<*c,x*>, '&') by A9,CIRCCOMB:7;
+       tolerates 1GateCircStr(<*c,x*>, '&') by A7,CIRCCOMB:7;
     then InnerVertices MI = {[<*x,y*>,'&']} \/ {[<*y,c*>,'&']} \/ {[<*c,x*>,
 '&']}
-       by A8,A10,CIRCCOMB:15
+       by A6,A8,CIRCCOMB:15
      .= {[<*x,y*>,'&'], [<*y,c*>,'&']} \/ {[<*c,x*>,'&']} by ENUMSET1:41
      .= {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} by ENUMSET1:43;
-    then InputVertices S \ InnerVertices MI = {} by A7,XBOOLE_1:37;
-hence thesis by A4,A5,A6,Def2;
+    then InputVertices S \ InnerVertices MI = {} by A5,XBOOLE_1:37;
+hence thesis by A2,A3,A4,Def2;
   end;
 
 theorem
@@ -1892,11 +1867,9 @@ theorem
    let s be State of A; let a,b be Element of BOOLEAN such that
 A1:  a = s.x & b = s.y;
    reconsider v1 = [xy, '&'] as Element of InnerVertices S1 by Th47;
-       S = S1+*S2+*S3;
-then A2:  S = S1+*(S2+*S3) by CIRCCOMB:10;
+A2:  S = S1+*(S2+*S3) by CIRCCOMB:10;
    then reconsider v = v1 as Element of InnerVertices S by Th21;
-       A = A1+*A2+*A3;
-then A3:  A = A1+*(A2+*A3) by Th25;
+A3:  A = A1+*(A2+*A3) by Th25;
    then reconsider s1 = s|the carrier of S1 as State of A1 by Th26;
 A4:  dom s1 = the carrier of S1 by CIRCUIT1:4;
    reconsider xx = x, yy = y as Vertex of S1 by Th43;
@@ -1946,17 +1919,15 @@ theorem
    let s be State of A; let a,b be Element of BOOLEAN such that
 A1:  a = s.c & b = s.x;
    reconsider v3 = [cx, '&'] as Element of InnerVertices S3 by Th47;
-  S = S1+*S2+*S3;
-   then reconsider v = v3 as Element of InnerVertices S by Th21;
-  A = A1+*A2+*A3;
-   then reconsider s3 = s|the carrier of S3 as State of A3 by Th26;
-A4:  dom s3 = the carrier of S3 by CIRCUIT1:4;
+   reconsider v = v3 as Element of InnerVertices S by Th21;
+   reconsider s3 = s|the carrier of S3 as State of A3 by Th26;
+A2:  dom s3 = the carrier of S3 by CIRCUIT1:4;
    reconsider cc = c, xx = x as Vertex of S3 by Th43;
    reconsider cc, xx as Vertex of S by Th20;
    thus (Following s).[cx, '&'] = (Following s3).v by CIRCCOMB:72
       .= '&'.<*s3.cc,s3.xx*> by Th50
-      .= '&'.<*s.cc,s3.xx*> by A4,FUNCT_1:70
-      .= '&'.<*s.cc,s.xx*> by A4,FUNCT_1:70
+      .= '&'.<*s.cc,s3.xx*> by A2,FUNCT_1:70
+      .= '&'.<*s.cc,s.xx*> by A2,FUNCT_1:70
       .= a '&' b by A1,Def6;
   end;
 
@@ -1990,7 +1961,7 @@ theorem Th72:
  c in the carrier of MajorityStr(x,y,c)
   proof
        y in the carrier of 1GateCircStr(<*x,y*>, '&') by Th43;
-then A3:  y in the carrier of 1GateCircStr(<*x,y*>, '&')+*1GateCircStr(<*y,c*>,
+then A1:  y in the carrier of 1GateCircStr(<*x,y*>, '&')+*1GateCircStr(<*y,c*>,
 '&')
      by Th20;
        x in the carrier of 1GateCircStr(<*c,x*>, '&') &
@@ -1998,7 +1969,7 @@ then A3:  y in the carrier of 1GateCircStr(<*x,y*>, '&')+*1GateCircStr(<*y,c*>,
     then x in the carrier of MajorityIStr(x,y,c) &
     y in the carrier of MajorityIStr(x,y,c) &
     c in the carrier of MajorityIStr(x,y,c)
-     by A3,Th20;
+     by A1,Th20;
    hence thesis by Th20;
   end;
 
@@ -2027,17 +1998,17 @@ theorem Th74:
   y in InputVertices MajorityStr(x,y,c) &
   c in InputVertices MajorityStr(x,y,c)
   proof let x,y,c be non pair set;
-A2:  x in the carrier of MajorityStr(x,y,c) &
+A1:  x in the carrier of MajorityStr(x,y,c) &
     y in the carrier of MajorityStr(x,y,c) &
     c in the carrier of MajorityStr(x,y,c) by Th72;
-A3:  InnerVertices MajorityStr(x,y,c) is Relation by Th67;
+A2:  InnerVertices MajorityStr(x,y,c) is Relation by Th67;
    assume not thesis;
     then x in InnerVertices MajorityStr(x,y,c) or
     y in InnerVertices MajorityStr(x,y,c) or
-    c in InnerVertices MajorityStr(x,y,c) by A2,XBOOLE_0:def 4;
+    c in InnerVertices MajorityStr(x,y,c) by A1,XBOOLE_0:def 4;
     then (ex a,b being set st x = [a,b]) or
     (ex a,b being set st y = [a,b]) or
-    (ex a,b being set st c = [a,b]) by A3,RELAT_1:def 1;
+    (ex a,b being set st c = [a,b]) by A2,RELAT_1:def 1;
    hence contradiction;
   end;
 
@@ -2050,45 +2021,45 @@ theorem Th75:
    set xy =[<*x,y*>,'&'], yc = [<*y,c*>,'&'], cx = [<*c,x*>,'&'];
    set MI = MajorityIStr(x,y,c), S = 1GateCircStr(<*xy, yc, cx*>, or3);
    set M = MajorityStr(x,y,c);
-A3:  InputVertices 1GateCircStr(<*x,y*>,'&') is without_pairs &
+A1:  InputVertices 1GateCircStr(<*x,y*>,'&') is without_pairs &
     InputVertices 1GateCircStr(<*c,x*>,'&') is without_pairs &
     InputVertices 1GateCircStr(<*y,c*>,'&') is without_pairs by Th41;
-then A4: InputVertices (1GateCircStr(<*x,y*>,'&')+*1GateCircStr(<*y,c*>,'&'))
+then A2: InputVertices (1GateCircStr(<*x,y*>,'&')+*1GateCircStr(<*y,c*>,'&'))
      is without_pairs by Th9;
-then A5:  InputVertices MI is without_pairs by A3,Th9;
-A6: InputVertices 1GateCircStr(<*x,y*>,'&') = {x,y} &
+then A3:  InputVertices MI is without_pairs by A1,Th9;
+A4: InputVertices 1GateCircStr(<*x,y*>,'&') = {x,y} &
     InputVertices 1GateCircStr(<*c,x*>,'&') = {c,x} &
     InputVertices 1GateCircStr(<*y,c*>,'&') = {y,c} by Th40;
        InnerVertices S is Relation by Th38;
-then A7:  InputVertices M =
+then A5:  InputVertices M =
         (InputVertices MI) \/
- (InputVertices S \ InnerVertices MI) by A5,Th6;
-A8:  InputVertices S = {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} by Th42;
-A9:  InnerVertices 1GateCircStr(<*x,y*>, '&') = {[<*x,y*>, '&']} &
+ (InputVertices S \ InnerVertices MI) by A3,Th6;
+A6:  InputVertices S = {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} by Th42;
+A7:  InnerVertices 1GateCircStr(<*x,y*>, '&') = {[<*x,y*>, '&']} &
     InnerVertices 1GateCircStr(<*y,c*>, '&') = {[<*y,c*>, '&']} &
     InnerVertices 1GateCircStr(<*c,x*>, '&') = {[<*c,x*>, '&']} by CIRCCOMB:49;
-A10:  1GateCircStr(<*x,y*>, '&') tolerates 1GateCircStr(<*y,c*>, '&') &
+A8:  1GateCircStr(<*x,y*>, '&') tolerates 1GateCircStr(<*y,c*>, '&') &
     1GateCircStr(<*x,y*>, '&') tolerates 1GateCircStr(<*c,x*>, '&') &
     1GateCircStr(<*y,c*>, '&') tolerates 1GateCircStr(<*c,x*>, '&')
      by CIRCCOMB:51;
-then A11:  InnerVertices (1GateCircStr(<*x,y*>, '&') +* 1GateCircStr(<*y,c*>,
+then A9:  InnerVertices (1GateCircStr(<*x,y*>, '&') +* 1GateCircStr(<*y,c*>,
 '&')) =
-     {[<*x,y*>, '&']} \/ {[<*y,c*>, '&']} by A9,CIRCCOMB:15;
+     {[<*x,y*>, '&']} \/ {[<*y,c*>, '&']} by A7,CIRCCOMB:15;
        1GateCircStr(<*x,y*>, '&') +* 1GateCircStr(<*y,c*>, '&')
-       tolerates 1GateCircStr(<*c,x*>, '&') by A10,CIRCCOMB:7;
-then A12:  InnerVertices MI = {[<*x,y*>,'&']} \/ {[<*y,c*>,'&']} \/ {[<*c,x*>,
+       tolerates 1GateCircStr(<*c,x*>, '&') by A8,CIRCCOMB:7;
+then A10:  InnerVertices MI = {[<*x,y*>,'&']} \/ {[<*y,c*>,'&']} \/ {[<*c,x*>,
 '&']}
-       by A9,A11,CIRCCOMB:15
+       by A7,A9,CIRCCOMB:15
      .= {[<*x,y*>,'&'], [<*y,c*>,'&']} \/ {[<*c,x*>,'&']} by ENUMSET1:41
      .= {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} by ENUMSET1:43;
-    then InputVertices S \ InnerVertices MI = {} by A8,XBOOLE_1:37;
+    then InputVertices S \ InnerVertices MI = {} by A6,XBOOLE_1:37;
    hence InputVertices M =
  (InputVertices(1GateCircStr(<*x,y*>,'&')+*1GateCircStr(<*y,c*>,'&')))
-         \/ InputVertices 1GateCircStr(<*c,x*>,'&') by A3,A4,A7,A9,A11,Th7
+         \/ InputVertices 1GateCircStr(<*c,x*>,'&') by A1,A2,A5,A7,A9,Th7
       .= (InputVertices 1GateCircStr(<*x,y*>,'&')) \/
          (InputVertices 1GateCircStr(<*y,c*>,'&')) \/
-         (InputVertices 1GateCircStr(<*c,x*>,'&')) by A3,A9,Th7
-      .= {x,y,y,c} \/ {c,x} by A6,ENUMSET1:45
+         (InputVertices 1GateCircStr(<*c,x*>,'&')) by A1,A7,Th7
+      .= {x,y,y,c} \/ {c,x} by A4,ENUMSET1:45
       .= {y,y,x,c} \/ {c,x} by ENUMSET1:110
       .= {y,x,c} \/ {c,x} by ENUMSET1:71
       .= {x,y,c} \/ {c,x} by ENUMSET1:99
@@ -2104,7 +2075,7 @@ then A12:  InnerVertices MI = {[<*x,y*>,'&']} \/ {[<*y,c*>,'&']} \/ {[<*c,x*>,
    hence InnerVertices M = (InnerVertices MI) \/ (InnerVertices S)
       by CIRCCOMB:15
     .= {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/
-       {[<*xy, yc, cx*>, or3]} by A12,CIRCCOMB:49
+       {[<*xy, yc, cx*>, or3]} by A10,CIRCCOMB:49
     .= {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/
        {MajorityOutput(x,y,c)};
   end;
@@ -2186,8 +2157,7 @@ A1:  a1 = s.[<*x,y*>,'&'] & a2 = s.[<*y,c*>,'&'] & a3 = s.[<*c,x*>,'&'];
 A2:  InnerVertices S = the OperSymbols of S by Th37;
 A3:  dom s = the carrier of S by CIRCUIT1:4;
    reconsider xy, yc, cx as Element of InnerVertices S by Th73;
-       MajorityOutput(x,y,c) = [<*xy, yc, cx*>, or3];
-   hence (Following s).MajorityOutput(x,y,c)
+   thus (Following s).MajorityOutput(x,y,c)
       = or3.(s*<*xy, yc, cx*>) by A2,Th35
      .= or3.<*a1,a2,a3*> by A1,A3,FINSEQ_2:146
      .= a1 'or' a2 'or' a3 by Def7;
@@ -2319,13 +2289,12 @@ theorem Th85:
   proof let x,y,c be non pair set;
    set S = BitAdderWithOverflowStr(x,y,c);
    set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = MajorityStr(x,y,c);
-A2:  InputVertices S1 is without_pairs & InnerVertices S1 is Relation
+A1:  InputVertices S1 is without_pairs & InnerVertices S1 is Relation
       by Th58,Th59;
-A3:  InputVertices S2 is without_pairs & InnerVertices S2 is Relation
+A2:  InputVertices S2 is without_pairs & InnerVertices S2 is Relation
       by Th67,Th68;
-       c <> [<*x,y*>, 'xor'];
-    then InputVertices S1 = {x,y,c} & InputVertices S2 = {x,y,c} by Th57,Th75;
-   hence InputVertices S = {x,y,c} \/ {x,y,c} by A2,A3,Th7
+    InputVertices S1 = {x,y,c} & InputVertices S2 = {x,y,c} by Th57,Th75;
+   hence InputVertices S = {x,y,c} \/ {x,y,c} by A1,A2,Th7
                         .= {x,y,c};
   end;
 
@@ -2336,7 +2305,7 @@ theorem
      {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)}
   proof let x,y,c be non pair set;
    set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = MajorityStr(x,y,c);
-A2:  {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
+A1:  {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
     {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)}
     = {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
     ({[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)})
@@ -2344,7 +2313,7 @@ A2:  {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
        InnerVertices S1 = {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} &
     InnerVertices S2 = {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/
       {MajorityOutput(x,y,c)} by Th56,Th75;
-   hence thesis by A2,Th27;
+   hence thesis by A1,Th27;
   end;
 
 theorem
@@ -2386,11 +2355,7 @@ theorem
 theorem
     BitAdderOutput(x,y,c) in InnerVertices BitAdderWithOverflowStr(x,y,c) &
  MajorityOutput(x,y,c) in InnerVertices BitAdderWithOverflowStr(x,y,c)
-  proof
-       BitAdderWithOverflowStr(x,y,c)
-     = 2GatesCircStr(x,y,c, 'xor') +* MajorityStr(x,y,c);
-   hence thesis by Th21;
-  end;
+   by Th21;
 
 theorem
     for x,y,c being non pair set
@@ -2412,29 +2377,27 @@ A2: x in the carrier of S1 & y in the carrier of S1 & c in the carrier of S1
      by Th60;
 A3: x in the carrier of S2 & y in the carrier of S2 & c in the carrier of S2
      by Th72;
-  A = A1 +* A2 & S = S1+*S2;
-   then reconsider s1 = s|the carrier of S1 as State of A1 by Th26;
+   reconsider s1 = s|the carrier of S1 as State of A1 by Th26;
    reconsider s2 = s|the carrier of S2 as State of A2 by Th26;
    reconsider t = s as State of A1+*A2;
        InputVertices S1 is without_pairs & InnerVertices S1 is Relation &
     InputVertices S2 is without_pairs & InnerVertices S2 is Relation
       by Th58,Th59,Th67,Th68;
-then A5:  InnerVertices S1 misses InputVertices S2 &
+then A4:  InnerVertices S1 misses InputVertices S2 &
     InnerVertices S2 misses InputVertices S1 by Th5;
        dom s1 = the carrier of S1 by CIRCUIT1:4;
-then A7:  a1 = s1.x & a2 = s1.y & a3 = s1.c by A1,A2,FUNCT_1:70;
-       c <> [<*x,y*>, f];
-    then (Following(t,2)).2GatesCircOutput(x,y,c, f)
+then A5:  a1 = s1.x & a2 = s1.y & a3 = s1.c by A1,A2,FUNCT_1:70;
+    (Following(t,2)).2GatesCircOutput(x,y,c, f)
       = (Following(s1,2)).2GatesCircOutput(x,y,c, f) &
     (Following(s1,2)).2GatesCircOutput(x,y,c,f) = a1 'xor' a2 'xor' a3
-     by A5,A7,Th32,Th64;
+     by A4,A5,Th32,Th64;
    hence (Following(s,2)).BitAdderOutput(x,y,c) = a1 'xor' a2 'xor' a3;
        dom s2 = the carrier of S2 by CIRCUIT1:4;
   then a1 = s2.x & a2 = s2.y & a3 = s2.c by A1,A3,FUNCT_1:70;
     then (Following(t,2)).MajorityOutput(x,y,c)
       = (Following(s2,2)).MajorityOutput(x,y,c) &
     (Following(s2,2)).MajorityOutput(x,y,c)
-      = a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1 by A5,Lm4,Th33;
+      = a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1 by A4,Lm4,Th33;
    hence (Following(s,2)).MajorityOutput(x,y,c)
            = a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1;
   end;
@@ -2450,8 +2413,7 @@ theorem
    set A = BitAdderWithOverflowCirc(x,y,c);
    set A1 = BitAdderCirc(x,y,c), A2 = MajorityCirc(x,y,c);
    let s be State of A;
-  A = A1 +* A2 & S = S1+*S2;
-   then reconsider s1 = s|the carrier of S1 as State of A1 by Th26;
+   reconsider s1 = s|the carrier of S1 as State of A1 by Th26;
    reconsider s2 = s|the carrier of S2 as State of A2 by Th26;
    reconsider t = s as State of A1+*A2;
        InputVertices S1 is without_pairs & InnerVertices S1 is Relation &
@@ -2459,34 +2421,32 @@ theorem
       by Th58,Th59,Th67,Th68;
     then InnerVertices S1 misses InputVertices S2 &
     InnerVertices S2 misses InputVertices S1 by Th5;
-then A2:  Following(s1,2) = Following(t,2)|the carrier of S1 &
+then A1:  Following(s1,2) = Following(t,2)|the carrier of S1 &
     Following(s1,3) = Following(t,3)|the carrier of S1 &
     Following(s2,2) = Following(t,2)|the carrier of S2 &
     Following(s2,3) = Following(t,3)|the carrier of S2 by Th30,Th31;
-       c <> [<*x,y*>, f] & A1 = 2GatesCircuit(x,y,c, f);
-    then Following(s1,2) is stable by Th63;
-then A3:  Following(s1,2) = Following Following(s1,2) by CIRCUIT2:def 6
+    Following(s1,2) is stable by Th63;
+then A2:  Following(s1,2) = Following Following(s1,2) by CIRCUIT2:def 6
                    .= Following(s1,2+1) by Th12;
        Following(s2,2) is stable by Th84;
-then A4:  Following(s2,2) = Following Following(s2,2) by CIRCUIT2:def 6
+then A3:  Following(s2,2) = Following Following(s2,2) by CIRCUIT2:def 6
                    .= Following(s2,2+1) by Th12;
-A5:  Following(s,2+1) = Following Following(s,2) by Th12;
-A6:  dom Following(s,2) = the carrier of S &
+A4:  Following(s,2+1) = Following Following(s,2) by Th12;
+A5:  dom Following(s,2) = the carrier of S &
     dom Following(s,3) = the carrier of S &
     dom Following(s1,2) = the carrier of S1 &
     dom Following(s2,2) = the carrier of S2 by CIRCUIT1:4;
-       S = S1+*S2;
-then A7:  the carrier of S = (the carrier of S1) \/ the carrier of S2
+A6:  the carrier of S = (the carrier of S1) \/ the carrier of S2
      by CIRCCOMB:def 2;
        now let a be set; assume a in the carrier of S;
-      then a in the carrier of S1 or a in the carrier of S2 by A7,
+      then a in the carrier of S1 or a in the carrier of S2 by A6,
 XBOOLE_0:def 2;
       then (Following(s,2)).a = (Following(s1,2)).a &
       (Following(s,3)).a = (Following(s1,3)).a or
       (Following(s,2)).a = (Following(s2,2)).a &
-      (Following(s,3)).a = (Following(s2,3)).a by A2,A3,A4,A6,FUNCT_1:70;
-     hence (Following(s,2)).a = (Following Following(s,2)).a by A3,A4,Th12;
+      (Following(s,3)).a = (Following(s2,3)).a by A1,A2,A3,A5,FUNCT_1:70;
+     hence (Following(s,2)).a = (Following Following(s,2)).a by A2,A3,Th12;
     end;
-   hence Following(s,2) = Following Following(s,2) by A5,A6,FUNCT_1:9;
+   hence Following(s,2) = Following Following(s,2) by A4,A5,FUNCT_1:9;
   end;
 

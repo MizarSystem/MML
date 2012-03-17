@@ -8,14 +8,16 @@ environ
 
  vocabularies LATTICES, BOOLE, ZFMISC_1, TARSKI, SETFAM_1, SUBSET_1, ZF_LANG,
       BINOP_1, RELAT_1, FUNCT_1, MCART_1, RELAT_2, EQREL_1, FILTER_0, HAHNBAN,
-      PARTFUN1;
+      PARTFUN1, REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, FUNCT_1, MCART_1,
-      ORDINAL1, RELAT_2, PARTFUN1, FUNCT_2, BINOP_1, STRUCT_0, LATTICES,
+      ORDINAL1, RELAT_2, PARTFUN1, FUNCT_2, BINOP_1, REALSET1,
+      STRUCT_0, LATTICES,
       DOMAIN_1, RELAT_1, RELSET_1, EQREL_1;
- constructors BINOP_1, LATTICES, DOMAIN_1, EQREL_1, ORDINAL1, SETFAM_1;
+ constructors BINOP_1, LATTICES, DOMAIN_1, EQREL_1, ORDINAL1, SETFAM_1,
+  REALSET1;
  registrations LATTICES, RELSET_1, STRUCT_0, SUBSET_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0, LATTICES, RELAT_1, RELAT_2;
+ definitions TARSKI, XBOOLE_0, LATTICES, RELAT_1, RELAT_2, BINOP_1, REALSET1;
  theorems TARSKI, ZFMISC_1, SETFAM_1, FUNCT_1, MCART_1, FUNCT_2, BINOP_1,
       LATTICES, RELAT_1, ORDERS_1, RLSUB_2, WELLSET1, RELSET_1, ORDINAL1,
       XBOOLE_0, XBOOLE_1, PARTFUN1, RELAT_2;
@@ -234,8 +236,7 @@ canceled 2;
 theorem
  Th18: q in <.p.) iff p [= q
   proof
-       <.p.) = { r : p [= r };
-    then q in <.p.) iff ex r st q = r & p [= r;
+    q in <.p.) iff ex r st q = r & p [= r;
    hence thesis;
   end;
 
@@ -425,7 +426,7 @@ A1:    Z in X iff Z in bool the carrier of L & P[Z] from XBOOLE_0:sch 1;
 A2:    D c= the carrier of L & <.L.) = the carrier of L &
        the carrier of L in bool the carrier of L
         by ZFMISC_1:def 1;
-then A3:    <.L.) in X by A1;
+A3:    <.L.) in X by A1;
 A4:    X <> {} by A1,A2;
          now let Z; assume Z in X; then D c= Z by A1;
        hence x in Z by TARSKI:def 3;
@@ -734,18 +735,10 @@ theorem
 canceled;
 
 theorem
-  p in D1 & q in D2 implies p"/\"q in D1 "/\" D2 & q"/\"p in D1 "/\" D2
-  proof
-       D1 "/\" D2 = { p1"/\"q1 : p1 in D1 & q1 in D2 };
-   hence thesis;
-  end;
+  p in D1 & q in D2 implies p"/\"q in D1 "/\" D2 & q"/\"p in D1 "/\" D2;
 
 theorem
-  x in D1 "/\" D2 implies ex p,q st x = p"/\"q & p in D1 & q in D2
-  proof
-       D1 "/\" D2 = { p"/\"q : p in D1 & q in D2 };
-   hence thesis;
-  end;
+  x in D1 "/\" D2 implies ex p,q st x = p"/\"q & p in D1 & q in D2;
 
 theorem
  Th46: D1 "/\" D2 = D2 "/\" D1
@@ -1061,31 +1054,31 @@ theorem
   proof
    thus FB <> <.B.) & FB is prime implies FB is_ultrafilter
      proof assume that
-A2:     FB <> <.B.) and
-A3:     for a,b holds a"\/"b in FB iff a in FB or b in FB;
+A1:     FB <> <.B.) and
+A2:     for a,b holds a"\/"b in FB iff a in FB or b in FB;
           now let a such that
-A4:       not a in FB;
+A3:       not a in FB;
             a"\/"a` = Top B & B is 1_Lattice by LATTICES:48;
          then a"\/"a` in FB by Th12;
-        hence a` in FB by A3,A4;
+        hence a` in FB by A2,A3;
        end;
-      hence thesis by A2,Th57;
+      hence thesis by A1,Th57;
      end;
-   assume A5:FB is_ultrafilter;
-then A6:  FB <> the carrier of B & for a holds a in FB or a` in FB by Th57;
-   thus FB <> <.B.) by A5,Th57;
+   assume A4:FB is_ultrafilter;
+then A5:  FB <> the carrier of B & for a holds a in FB or a` in FB by Th57;
+   thus FB <> <.B.) by A4,Th57;
    let a,b;
    thus a"\/"b in FB implies a in FB or b in FB
      proof assume
-A7:     a"\/"b in FB & not a in FB & not b in FB;
-       then a` in FB & b` in FB by A5,Th57;
+A6:     a"\/"b in FB & not a in FB & not b in FB;
+       then a` in FB & b` in FB by A4,Th57;
        then a`"/\"b` in FB by Def1;
        then (a"\/"b)` in FB by LATTICES:51;
-       then a"\/"b"/\"(a"\/"b)` in FB by A7,Def1;
-then A8:     Bottom B in FB by LATTICES:47;
+       then a"\/"b"/\"(a"\/"b)` in FB by A6,Def1;
+then A7:     Bottom B in FB by LATTICES:47;
           the carrier of B = <.B.) & <.B.) = <.Bottom B.) & B is 0_Lattice &
         FB = <.FB.) by Th20,Th26;
-      hence contradiction by A6,A8,Th31;
+      hence contradiction by A5,A7,Th31;
      end;
    thus thesis by Th10;
   end;
@@ -1124,13 +1117,12 @@ A1:  FB is_ultrafilter & (a"/\"b` in FB or b"/\"a` in FB);
 
  definition let L,F;
   func latt F -> Lattice means:
-Def10:   ex o1,o2 st o1 = (the L_join of L)|([:F,F:] qua set) &
-   o2 = (the L_meet of L)|([:F,F:] qua set) & it = LattStr (#F, o1, o2#);
+Def10:   ex o1,o2 st o1 = (the L_join of L)||F &
+   o2 = (the L_meet of L)||F & it = LattStr (#F, o1, o2#);
     uniqueness;
     existence
      proof
-      reconsider o1 = (the L_join of L)|([:F,F:] qua set),
-                 o2 = (the L_meet of L)|([:F,F:] qua set)
+      reconsider o1 = (the L_join of L)||F, o2 = (the L_meet of L)||F
         as Function of [:F,F:],the carrier of L by FUNCT_2:38;
 A1:     dom o1 = [:F,F:] & dom o2 = [:F,F:] by FUNCT_2:def 1;
           rng o1 c= F
@@ -1141,7 +1133,7 @@ A3:        x = [x`1,x`2] & x`1 in F & x`2 in F
            by A2,MCART_1:10,23;
          reconsider p = x`1, q = x`2 as Element of F by A2,MCART_1:10;
              o1.x = (the L_join of L).x by A2,FUNCT_1:70
-              .= (the L_join of L).(p,q) by A3,BINOP_1:def 1
+              .= (the L_join of L).(p,q) by A3
               .= p"\/"q;
          hence thesis by A2,Th10;
         end;
@@ -1154,7 +1146,7 @@ A4:        x in dom o2 & y = o2.x by FUNCT_1:def 5;
 A5:        x = [x`1,x`2] & x`1 in F & x`2 in F by A4,MCART_1:10,23;
          reconsider p = x`1, q = x`2 as Element of F by A4,MCART_1:10;
              o2.x = (the L_meet of L).x by A4,FUNCT_1:70
-              .= (the L_meet of L).(p,q) by A5,BINOP_1:def 1
+              .= (the L_meet of L).(p,q) by A5
               .= p"/\"q;
          hence thesis by A4,Def1;
         end;
@@ -1169,7 +1161,7 @@ A6:    for a,b being Element of K holds
           (the L_meet of K).(a,b) = (the L_meet of K).[a,b] &
           (the L_join of L).(a,b) = (the L_join of L).[a,b] &
           (the L_meet of L).(a,b) = (the L_meet of L).[a,b] &
-           [a,b] in [:F,F:] by BINOP_1:def 1;
+           [a,b] in [:F,F:];
          hence thesis by A1,FUNCT_1:70;
         end;
 A7:    for a,b being Element of K holds a"\/"b = b"\/"a
@@ -1263,8 +1255,8 @@ A11:    for a,b,c being Element of K holds
  coherence
  proof
    consider o1,o2 such that
-       o1 = (the L_join of L)|([:F,F:] qua set) &
-    o2 = (the L_meet of L)|([:F,F:] qua set) and
+       o1 = (the L_join of L)||F &
+    o2 = (the L_meet of L)||F and
 A1: latt F = LattStr (#F, o1, o2#) by Def10;
    thus thesis by A1;
  end;
@@ -1279,20 +1271,19 @@ theorem
      dom the L_meet of L = [:the carrier of L, the carrier of L:]
       by FUNCT_2:def 1;
     then <.L.) = the carrier of L & the L_join of L =
-     (the L_join of L)|([:the carrier of L, the carrier of L:] qua set)&
-      the L_meet of L =
-       (the L_meet of L)|([:the carrier of L, the carrier of L:] qua set)
+     (the L_join of L)||the carrier of L &
+      the L_meet of L = (the L_meet of L)||the carrier of L
         by RELAT_1:97;
    hence thesis by Def10;
   end;
 
 theorem Th63:
  the carrier of latt F = F &
- the L_join of latt F = (the L_join of L)|([:F,F:] qua set) &
- the L_meet of latt F = (the L_meet of L)|([:F,F:] qua set)
+ the L_join of latt F = (the L_join of L)||F &
+ the L_meet of latt F = (the L_meet of L)||F
   proof
-       ex o1,o2 st o1 = (the L_join of L)|([:F,F:] qua set) &
-     o2 = (the L_meet of L)|([:F,F:] qua set) &
+       ex o1,o2 st o1 = (the L_join of L)||F &
+     o2 = (the L_meet of L)||F &
      latt F = LattStr (#F, o1, o2#) by Def10;
    hence thesis;
   end;
@@ -1303,21 +1294,21 @@ theorem
   proof let p',q' be Element of latt F such that
 A1:  p = p' & q = q';
    consider o1,o2 such that
-A2:  o1 = (the L_join of L)|([:F,F:] qua set) &
-    o2 = (the L_meet of L)|([:F,F:] qua set) &
+A2:  o1 = (the L_join of L)||F &
+    o2 = (the L_meet of L)||F &
      latt F = LattStr (#F, o1, o2#) by Def10;
        p' in F & q' in F & dom o1 = [:F,F:] & dom o2 = [:F,F:]
      by A2,FUNCT_2:def 1;
 then A3:  [p,q] in dom o1 & [p,q] in dom o2 by A1,ZFMISC_1:106;
    thus p"\/"q = (the L_join of L).(p,q)
-            .= (the L_join of L).[p,q] by BINOP_1:def 1
+            .= (the L_join of L).[p,q]
             .= o1.[p,q] by A2,A3,FUNCT_1:70
-            .= (the L_join of latt F).(p',q') by A1,A2,BINOP_1:def 1
+            .= (the L_join of latt F).(p',q') by A1,A2
             .= p'"\/"q';
    thus p"/\"q = (the L_meet of L).(p,q)
-            .= (the L_meet of L).[p,q] by BINOP_1:def 1
+            .= (the L_meet of L).[p,q]
             .= o2.[p,q] by A2,A3,FUNCT_1:70
-            .= (the L_meet of latt F).(p',q') by A1,A2,BINOP_1:def 1
+            .= (the L_meet of latt F).(p',q') by A1,A2
             .= p'"/\"q';
   end;
 
@@ -1338,8 +1329,8 @@ A1:  p"\/"q = p & q"\/"p = p;
    consider q such that
 A2:  q in F by Th11;
  A3:   ex o1,o2 st
-        o1 = (the L_join of L)|([:F,F:] qua set) &
-        o2 = (the L_meet of L)|([:F,F:] qua set) &
+        o1 = (the L_join of L)||F &
+        o2 = (the L_meet of L)||F &
     latt F = LattStr (#F, o1, o2#) by Def10;
        p"\/"q = p & p"\/"q in F by A1,A2,Th10;
    then reconsider p' = p as Element of latt F by A3;
@@ -1498,19 +1489,13 @@ theorem
 canceled;
 
 theorem
-  p <=> q = q <=> p
-  proof
-       p <=> q = (p => q)"/\"(q => p) & q <=> p = (q => p)"/\"(p => q);
-   hence thesis;
-  end;
+  p <=> q = q <=> p;
 
 theorem
  Th78: i <=> j in FI & j <=> k in FI implies i <=> k in FI
   proof assume
 A1:  i <=> j in FI & j <=> k in FI;
-       i <=> j = (i => j)"/\"(j => i) & j <=> k = (j => k)"/\"
-(k => j);
-    then i => j in FI & j => i in FI & j => k in FI & k => j in FI by A1,Def1;
+    i => j in FI & j => i in FI & j => k in FI & k => j in FI by A1,Def1;
     then i => k in FI & k => i in FI & i <=> k = (i => k)"/\"(k => i) by
 Th54;
    hence thesis by Def1;

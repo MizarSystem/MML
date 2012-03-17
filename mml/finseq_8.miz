@@ -12,43 +12,22 @@ environ
  notations XREAL_0, TARSKI, XBOOLE_0, REAL_1, NAT_1, BINARITH, RELAT_1,
       RFINSEQ, FINSEQ_1, FUNCT_1, JORDAN3, SQUARE_1, FINSEQ_5;
  constructors BINARITH, NAT_1, REAL_1, RFINSEQ, JORDAN3, SQUARE_1, FINSEQ_5;
- registrations ARYTM_3, XREAL_0, RELSET_1;
+ registrations ARYTM_3, XREAL_0, RELSET_1, FINSEQ_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions FINSEQ_1;
  theorems REAL_1, REAL_2, NAT_1, NAT_2, JORDAN3, JORDAN4, FINSEQ_1, FINSEQ_3,
       FINSEQ_5, FINSEQ_6, BINARITH, SQUARE_1, RFINSEQ, XCMPLX_1, RELAT_1,
-      XREAL_1;
+      XREAL_1, XBOOLE_1;
  schemes NAT_1;
 
 begin
-
-theorem Th1: for D being set,f being FinSequence of D
-holds f|0={}
-proof let D be set,f be FinSequence of D;
- thus f|0=f|{} by FINSEQ_1:4,def 15 .={} by RELAT_1:110;
-end;
-
-theorem Th2: for D  being set,f being FinSequence of D holds
-f/^0=f
-proof let D be set,f be FinSequence of D;
-  A1: 0<=len f by NAT_1:18;
-  then len (f/^0)=len f -0 by RFINSEQ:def 2 .=len f;
-  then Seg len (f/^0)=dom f by FINSEQ_1:def 3;
-  then A2: dom (f/^0)=dom f by FINSEQ_1:def 3;
-   for m being Nat st m in dom (f/^0) holds (f/^0).m=f.m
-  proof let m be Nat;assume
-     m in dom (f/^0);
-    then (f/^0).m=f.(m+0) by A1,RFINSEQ:def 2;
-   hence (f/^0).m=f.m;
-  end;
-hence f/^0=f by A2,FINSEQ_1:17;
-end;
 
 definition let D be set,f,g be FinSequence of D;
 redefine func f^g -> FinSequence of D;
 correctness
 proof
-   rng (f^g) c= rng f \/ rng g by FINSEQ_1:44;
-hence thesis;
+  rng (f^g) c= rng f \/ rng g by FINSEQ_1:44;
+  hence thesis;
 end;
 end;
 
@@ -63,43 +42,39 @@ assume A1: len f>=1;
    1-1=0;
   then A3: 1-'1=0 by BINARITH:def 3;
    (f^g)|len f=f by FINSEQ_5:26;
-  then ((f^g)/^0)|len f=f by Th2;
+  then ((f^g)/^0)|len f=f by FINSEQ_5:31;
 hence mid(f^g,1,len f)=f by A1,A2,A3,JORDAN3:def 1;
 end;
 
-theorem Th4: for D  being set,f being FinSequence of D,i being Nat
-st i>=len f  holds  f/^i=<*>D
+theorem Th4: for D being set,f being FinSequence of D,i being Nat
+st i>=len f holds f/^i=<*>D
 proof let D be set,f be FinSequence of D,i be Nat;
 assume A1: i>=len f;
-   now per cases by A1,REAL_1:def 5;
-  case i>len f;
-   hence  f/^i=<*>D by RFINSEQ:def 2;
+  per cases by A1,REAL_1:def 5;
+  suppose i>len f;
+   hence f/^i=<*>D by RFINSEQ:def 2;
   end;
-  case A2: i=len f;
+  suppose A2: i=len f;
     then len (f/^i)=len f -i by RFINSEQ:def 2.=0 by A2;
-   hence  f/^i=<*>D by FINSEQ_1:32;
+   hence f/^i=<*>D by FINSEQ_1:32;
   end;
-  end;
-hence  f/^i=<*>D;
 end;
 
 theorem  for D being non empty set,k1,k2 being Nat holds
   mid(<*>D,k1,k2)=<*>D
 proof let D be non empty set,k1,k2 be Nat;
-   now per cases;
-  case k1<=k2;
+  per cases;
+  suppose k1<=k2;
     hence mid(<*>D,k1,k2)=((<*>D)/^(k1-'1))|(k2-'k1+1) by JORDAN3:def 1
                   .= (<*>D)|(k2-'k1+1) by FINSEQ_6:86
-                  .=<*>D by JORDAN4:16;
+                  .=<*>D by FINSEQ_5:81;
   end;
-  case k1>k2;
+  suppose k1>k2;
    hence mid(<*>D,k1,k2)=Rev (((<*>D)/^(k2-'1))|(k1-'k2+1)) by JORDAN3:def 1
                   .= Rev((<*>D)|(k1-'k2+1)) by FINSEQ_6:86
-                  .= Rev(<*>D) by JORDAN4:16
-                  .=<*>D by JORDAN4:17;
+                  .= Rev(<*>D) by FINSEQ_5:81
+                  .=<*>D by FINSEQ_5:82;
   end;
-  end;
- hence mid(<*>D,k1,k2)=<*>D;
 end;
 
 definition let D be set,f be FinSequence of D,k1,k2 be Nat;
@@ -111,50 +86,43 @@ end;
 theorem Th6: for D being non empty set,
  f being FinSequence of D,k1,k2 being Nat st k1<=k2 holds
  smid(f,k1,k2)=mid(f,k1,k2)
-proof let D be non empty set,
- f be FinSequence of D,k1,k2 be Nat;
+proof let D be non empty set,f be FinSequence of D,k1,k2 be Nat;
  assume A1: k1<=k2;
-  A3: k1<=k2+1 by A1,NAT_1:37;
+  A2: k1<=k2+1 by A1,NAT_1:37;
    k2-'k1+1=k2-k1+1 by A1,BINARITH:50
          .=k2+1-k1
-         .=k2+1-'k1 by A3,BINARITH:50;
+         .=k2+1-'k1 by A2,BINARITH:50;
  hence smid(f,k1,k2)=mid(f,k1,k2) by A1,JORDAN3:def 1;
 end;
 
 theorem Th7: for D being non empty set,
  f being FinSequence of D,k2 being Nat holds
  smid(f,1,k2)=f|k2
-proof let D be non empty set,
- f be FinSequence of D,k2 be Nat;
- thus smid(f,1,k2)
-     = (f/^(1-'1))|(k2+1-'1)
+proof let D be non empty set,f be FinSequence of D,k2 be Nat;
+ thus smid(f,1,k2) = (f/^(1-'1))|(k2+1-'1)
     .= (f/^0)|(k2+1-'1) by NAT_2:10
-    .= f|(k2+1-'1) by Th2
+    .= f|(k2+1-'1) by FINSEQ_5:31
     .=f|k2 by BINARITH:39;
 end;
 
 theorem Th8: for D being non empty set,
  f being FinSequence of D,k2 being Nat st len f<=k2 holds
  smid(f,1,k2)=f
-proof let D be non empty set,
- f be FinSequence of D,k2 be Nat;
+proof let D be non empty set,f be FinSequence of D,k2 be Nat;
  assume A1: len f<=k2;
-  thus smid(f,1,k2)
-             =f|k2 by Th7
+  thus smid(f,1,k2)=f|k2 by Th7
             .=f by A1,FINSEQ_1:79;
 end;
 
 theorem Th9: for D being set,
  f being FinSequence of D,k1,k2 being Nat st k1>k2 holds
- smid(f,k1,k2)={} & smid(f,k1,k2)=<*>D
-proof let D be set,
- f be FinSequence of D,k1,k2 be Nat;
+ smid(f,k1,k2)={} 
+proof let D be set,f be FinSequence of D,k1,k2 be Nat;
  assume A1: k1>k2;
   reconsider g=(f/^(k1-'1)) as FinSequence of D;
    k2+1<=k1 by A1,NAT_1:38;
-  then A3: smid(f,k1,k2)=g|0 by NAT_2:10;
- hence smid(f,k1,k2)={} by Th1;
- thus thesis by A3,Th1;
+  then A2: smid(f,k1,k2)=g|0 by NAT_2:10;
+ hence smid(f,k1,k2)={};
 end;
 
 theorem  for D being set,
@@ -164,10 +132,10 @@ proof let D be set,
  f be FinSequence of D,k2 be Nat;
  thus smid(f,0,k2)=(f/^(0-'1))|(k2+1-'0)
                  .=(f/^0)|(k2+1-'0) by NAT_2:10
-                 .= f|(k2+1-'0) by Th2
+                 .= f|(k2+1-'0) by FINSEQ_5:31
                  .= f|(k2+1) by JORDAN3:2
                  .= f|(k2+1+1-'1) by BINARITH:39
-                 .= (f/^0)|(k2+1+1-'1) by Th2
+                 .= (f/^0)|(k2+1+1-'1) by FINSEQ_5:31
                  .= (f/^(1-'1))|(k2+1+1-'1) by NAT_2:10
                  .= smid(f,1,k2+1);
 end;
@@ -187,7 +155,7 @@ end;
 
 :: Overlapping Part
 definition let D be non empty set,f,g be FinSequence of D;
-func ovlpart(f,g) -> FinSequence of D  means
+func ovlpart(f,g) -> FinSequence of D means
 :Def2: len it <=len g &
  it=smid(g,1,len it) & it=smid(f,len f-'len it+1,len f)
 & for j being Nat st j<=len g & smid(g,1,j)=smid(f,len f-'j+1,len f)
@@ -207,8 +175,7 @@ proof
    ex k being Nat st P[k] & for n being Nat
         st P[n] holds n <= k from NAT_1:sch 6(A5,A4);
   then consider k being Nat such that
-  A6: P[k] & for n being Nat
-        st P[n] holds n <= k;
+  A6: P[k] & for n being Nat st P[n] holds n <= k;
   set b = smid(g,1,k);
    now per cases;
   case A7: k>0;
@@ -240,8 +207,7 @@ end;
 uniqueness
 proof let a,b be FinSequence of D;
  assume
-  A11:
-  (len a<=len g & a=smid(g,1,len a) & a=smid(f,len f-'len a+1,len f)
+A11:(len a<=len g & a=smid(g,1,len a) & a=smid(f,len f-'len a+1,len f)
   & for j being Nat st j<=len g & smid(g,1,j)=smid(f,len f-'j+1,len f)
  holds j<=len a)&
   (len b<=len g & b=smid(g,1,len b) & b=smid(f,len f-'len b+1,len f)
@@ -268,8 +234,7 @@ end;
 
 ::Concatination Reducing Overlapping Part
 definition let D be non empty set,f,g be FinSequence of D;
-func ovlcon(f,g) -> FinSequence of D  equals
-
+func ovlcon(f,g) -> FinSequence of D equals
  f^(g/^(len ovlpart(f,g)));
 correctness;
 end;
@@ -301,8 +266,7 @@ proof let D be non empty set,f,g be FinSequence of D;
              .=(g/^(1-'1))|(len ovlpart(f,g)+1-'1)
              .=(g/^(0+1-'1))|(len ovlpart(f,g)) by BINARITH:39
              .=(g/^(0))|(len ovlpart(f,g)) by BINARITH:39
-             .= g|(len ovlpart(f,g)) by Th2;
-
+             .= g|(len ovlpart(f,g)) by FINSEQ_5:31;
  thus ovlcon(f,g)=f^(g/^(len ovlpart(f,g)))
                  .= (f|(len f-'len ovlpart(f,g)))^
                    (g|(len ovlpart(f,g)))^(g/^(len ovlpart(f,g))) by A4,A5,
@@ -317,14 +281,14 @@ end;
 definition let D be non empty set,f,g be FinSequence of D;
 func ovlldiff(f,g) -> FinSequence of D equals
  (f|(len f-'len ovlpart(f,g)));
-correctness;
+coherence;
 end;
 
 ::Overlapping Right Difference
 definition let D be non empty set,f,g be FinSequence of D;
 func ovlrdiff(f,g) -> FinSequence of D equals
  (g/^(len ovlpart(f,g)));
-correctness;
+coherence;
 end;
 
 theorem   for D being non empty set,f,g being FinSequence of D
@@ -332,9 +296,7 @@ holds ovlcon(f,g)
   =ovlldiff(f,g)^ovlpart(f,g)^ovlrdiff(f,g) &
  ovlcon(f,g)
   =ovlldiff(f,g)^(ovlpart(f,g)^ovlrdiff(f,g))
-
 proof let D be non empty set,f,g be FinSequence of D;
-
    ovlpart(f,g)^(g/^(len ovlpart(f,g)))
      = smid(g,1,len ovlpart(f,g))^(g/^(len ovlpart(f,g))) by Def2
     .= g|(len ovlpart(f,g))^(g/^(len ovlpart(f,g))) by Th7
@@ -364,7 +326,7 @@ proof let D be non empty set,f be FinSequence of D;
   A4: ovlldiff(f,f)= (f|(len f-'len ovlpart(f,f)))
               .= f|(len f-'len f) by A1,A2,Th8
               .= f|(0) by BINARITH:51
-              .= {} by Th1;
+              .= {};
    ovlrdiff(f,f)= (f/^(len ovlpart(f,f)))
               .= <*>D by A2,Th4
               .= {};
@@ -393,12 +355,11 @@ proof let D be non empty set,f,g be FinSequence of D;
    =(f/^(0+1-'1))|(len (f)+1-'1)
   .= (f/^(0+1-'1))|(len (f)) by BINARITH:39
   .= (f/^(0))|(len (f)) by BINARITH:39
-  .= f|(len (f)) by Th2
+  .= f|(len (f)) by FINSEQ_5:31
   .= f by FINSEQ_1:79;
    len f<=len f+len g by NAT_1:37;
   then A7: len f<=len (f^g) by FINSEQ_1:35;
-   smid(f^g,1,len f)
-   = (f^g)|len f by Th7
+   smid(f^g,1,len f) = (f^g)|len f by Th7
   .= f by FINSEQ_5:26;
   then len f<=len ovlpart(f,f^g) by A6,A7,Def2;
   then A8: len f= len ovlpart(f,f^g) by A5,XREAL_1:1;
@@ -414,8 +375,7 @@ holds len ovlcon(f,g)=len f+len g -len ovlpart(f,g) &
       len ovlcon(f,g)=len f+(len g -'len ovlpart(f,g))
 proof let D be non empty set,f,g be FinSequence of D;
   A1: len ovlpart(f,g) <= len g by Def2;
-   ovlcon(f,g)= f^(g/^(len ovlpart(f,g)));
-  then A2: len ovlcon(f,g)=len f +len (g/^(len ovlpart(f,g))) by FINSEQ_1:35
+  A2: len ovlcon(f,g)=len f +len (g/^(len ovlpart(f,g))) by FINSEQ_1:35
   .=len f+(len g-'len ovlpart(f,g)) by JORDAN3:19
   .=len f+(len g -len ovlpart(f,g)) by A1,BINARITH:50;
  hence A3: len ovlcon(f,g)=len f+len g -len ovlpart(f,g);
@@ -431,8 +391,7 @@ theorem Th18: for D being non empty set,f,g being FinSequence of D holds
 proof let D be non empty set,f,g be FinSequence of D;
    now assume A1: len ovlpart(f,g)>len f;
     set m= len ovlpart(f,g);
-     ovlpart(f,g)
-     =smid(f,len f-'len ovlpart(f,g) +1,len f) by Def2
+     ovlpart(f,g)=smid(f,len f-'len ovlpart(f,g) +1,len f) by Def2
     .=smid(f,0+1,len f) by A1,NAT_2:10
     .=f by Th8;
    hence contradiction by A1;
@@ -497,7 +456,7 @@ proof let D be non empty set,CR be FinSequence of D;
     A18: smid(f,1,1+len CR-'1)=smid(f,1,len CR) by BINARITH:39
                          .=(f/^(0+1-'1))|(len CR+1-'1)
                          .=(f/^0)|len CR by A9,BINARITH:39
-                         .=f|len CR by Th2
+                         .=f|len CR by FINSEQ_5:31
                          .=CR by A5,FINSEQ_5:26;
      1<=j+len CR by A17,NAT_1:37;
     then A19: j+len CR-'1+1
@@ -678,7 +637,7 @@ BINARITH:def 3
          A87: 1<=jj+k by A79,NAT_1:37;
          then jj+k-'1<=len CR -1 by A81,BINARITH:50;
          then jj+k-'1<=len CR -'1 by A34,BINARITH:50;
-         then jj+k-'1 in Seg len (CR/^1) by A76,A85,A86,FINSEQ_1:3;
+         then jj+k-'1 in Seg len (CR/^1) by A76,A85,A86;
          then A88: jj+k-'1 in dom (CR/^1) by FINSEQ_1:def 3;
          A89: smid(f,j,j+len CR-'1)
                   =mid(f,j,j+len CR-'1) by A65,A69,Th6;
@@ -720,9 +679,6 @@ pred g is_substring_of f,n means
       ex i being Nat st n<=i & i<=len f  & mid(f,i,(i-'1)+len g)=g;
 correctness;
 end;
-
-theorem  for D being non empty set,f,g being FinSequence of D,n being Nat
-st len g=0 holds g is_substring_of f,n by Def7;
 
 theorem  for D being non empty set,f,g being FinSequence of D,
 n,m being Nat
@@ -767,14 +723,14 @@ assume A1: g is_substring_of f,0;
      then A6: i-'1=0 by A5,BINARITH:def 3;
      then A7: (f/^(0-'1))|(len g-'0+1)=g by A2,A3,A5,JORDAN3:def 1;
       len g -'0=len g -0 by A2,BINARITH:def 3 .=len g;
-     then A8: f|(len g+1)=g by A5,A6,A7,Th2;
+     then A8: f|(len g+1)=g by A5,A6,A7,FINSEQ_5:31;
       now per cases;
      case len g+1>=len f;
        then f=g by A8,FINSEQ_1:79;
       hence g is_substring_of f,1 by A4,Th22;
      end;
      case A9: len g+1<len f;
-      A10: f|Seg(len g +1)=g by A8,FINSEQ_1:def 15;
+      A10: f|Seg(len g +1)=g by A8;
        dom ( f|Seg(len g +1))=dom f /\ Seg(len g+1) by RELAT_1:90
       .= Seg(len f) /\ Seg(len g+1) by FINSEQ_1:def 3
       .=Seg (len g+1) by A9,FINSEQ_1:9;
@@ -797,47 +753,44 @@ assume A1: g is_substring_of f,0;
 hence g is_substring_of f,1;
 end;
 
-definition let D be non empty set,f,g be FinSequence of D;
-pred g is_preposition_of f means
+notation let D be non empty set,g,f be FinSequence of D;
+ synonym g is_preposition_of f for g c= f;
+end;
+
+definition let D be non empty set,g,f be FinSequence of D;
+redefine pred g c= f means
 :Def8: len g>0 implies 1<=len f & mid(f,1,len g)=g;
-correctness;
-end;
-
-theorem  for D being non empty set,f,g being FinSequence of D
-st len g=0 holds g is_preposition_of f by Def8;
-
-theorem Th25: for D being non empty set,f being FinSequence of D
-holds f is_preposition_of f
-proof let D be non empty set,f be FinSequence of D;
-   now per cases;
-  case len f>0; then 0+1<=len f by NAT_1:38;
-    then 1<=len f & mid(f,1,len f)=f by JORDAN3:29;
-   hence f is_preposition_of f by Def8;
+compatibility
+ proof
+  thus g c= f implies (len g>0 implies 1<=len f & mid(f,1,len g)=g)
+   proof assume that
+Z1: g c= f and
+Z2: len g>0;
+A:   0+1 <= len g by Z2,NAT_1:38;
+   len g <= len f by Z1,FINSEQ_1:84;
+    hence 1<=len f by A,XREAL_1:2;
+    thus mid(f,1,len g) = (f/^(1-'1))|(len g-'1+1) by A,JORDAN3:def 1
+       .= (f/^(1-'1))|len g by A,BINARITH:53
+       .= (f/^0)|len g by BINARITH:51
+       .= f|len g by FINSEQ_5:31
+       .= g by Z1,FINSEQ_3:122;
+   end;
+  assume
+Z:  len g>0 implies 1<=len f & mid(f,1,len g)=g;
+  per cases by Z;
+  suppose len g <= 0;
+   then len g = 0 by NAT_1:19;
+   then g = {} by FINSEQ_1:25;
+  hence g c= f by XBOOLE_1:2;
   end;
-  case len f<=0;
-   hence f is_preposition_of f by Def8;
+  suppose that
+S0: len g > 0 and
+S2: mid(f,1,len g)=g;
+    0+1 <= len g by S0,NAT_1:38;
+    then g = f|len g by S2,JORDAN3:25;
+   hence g c= f by RELAT_1:88;
   end;
-  end;
-hence f is_preposition_of f;
-end;
-
-theorem Th26: for D being non empty set,f,g being FinSequence of D
-st g is_preposition_of f holds len g <=len f
-proof let D be non empty set,f,g be FinSequence of D;
-assume A1: g is_preposition_of f;
-   now per cases;
-  case A2: len g>0;
-    then A3: 1<=len f & mid(f,1,len g)=g by A1,Def8;
-     0+1<=len g by A2,NAT_1:38;
-    then g=f|(len g) by A3,JORDAN3:25;
-    then g=f|(Seg len g) by FINSEQ_1:def 15;
-   hence len g <= len f by FINSEQ_3:55;
-  end;
-  case len g<=0;
-   hence len g <=len f by NAT_1:18;
-  end;
-  end;
-hence len g <=len f;
+ end;
 end;
 
 theorem  for D being non empty set,f,g
@@ -846,14 +799,13 @@ g.1=f.1
 proof let D be non empty set,f,g be FinSequence of D;
 assume A1: len g>0 & g is_preposition_of f;
   then A2: 1<=len f & mid(f,1,len g)=g by Def8;
-  A3: len g <=len f by A1,Th26;
+  A3: len g <=len f by A1,FINSEQ_1:84;
    0+1<=len g by A1,NAT_1:38;
 hence g.1=f.1 by A2,A3,JORDAN3:32;
 end;
 
 definition let D be non empty set,f,g be FinSequence of D;
-pred g is_postposition_of f means
-:Def9:
+pred g is_postposition_of f means :Def9:
   Rev g is_preposition_of Rev f;
 correctness;
 end;
@@ -874,7 +826,7 @@ assume g is_postposition_of f;
    then A1: Rev g is_preposition_of Rev f by Def9;
    A2: len (Rev g)=len g by FINSEQ_5:def 3;
     len (Rev f)=len f by FINSEQ_5:def 3;
-hence len g <=len f by A1,A2,Th26;
+hence len g <=len f by A1,A2,FINSEQ_1:84;
 end;
 
 theorem  for D being non empty set,f,g being FinSequence of D
@@ -953,9 +905,6 @@ BINARITH:def 3
   end;
 hence g is_postposition_of f;
 end;
-
-theorem  for D being non empty set,f,g being FinSequence of D
-st len g=0 holds g is_preposition_of f by Def8;
 
 theorem  for D being non empty set,f,g being FinSequence of D
 st 1<=len f & g is_preposition_of f holds g is_substring_of f,1
@@ -1083,7 +1032,7 @@ proof
 1 by A15,BINARITH:def 3;
      mid(f/^(k0-'1),1,len g)=((f/^(k0-'1))/^(1-'1))|(len g-'1+1)
                            by A5,JORDAN3:def 1
-      .=(f/^(k0-'1))|(((k0-'1)+len g)-'k0+1) by A12,A16,Th2
+      .=(f/^(k0-'1))|(((k0-'1)+len g)-'k0+1) by A12,A16,FINSEQ_5:31
       .=mid(f,k0,(k0-'1)+len g) by A9,A14,JORDAN3:def 1;
     then A17: g is_preposition_of f/^(k0-'1) by A8,A9,A10,A11,Def8;
      for j being Nat st j >= n & j > 0 &
@@ -1104,7 +1053,7 @@ proof
           A23: j-'1+1<=j-'1 + len g by A13,XREAL_1:9;
           mid(f/^(j-'1),1,len g)=((f/^(j-'1))/^(1-'1))|(len g-'1+1)
                            by A5,JORDAN3:def 1
-          .=(f/^(j-'1))|(((j-'1)+len g)-'j+1) by A12,A22,Th2
+          .=(f/^(j-'1))|(((j-'1)+len g)-'j+1) by A12,A22,FINSEQ_5:31
           .=mid(f,j,(j-'1)+len g) by A21,A23,JORDAN3:def 1;
          hence j>=k0 by A8,A18,A19,A20;
          end;
@@ -1153,7 +1102,7 @@ proof
 +1 by A34,BINARITH:def 3;
      mid(f/^(k0-'1),1,len g)=((f/^(k0-'1))/^(1-'1))|(len g-'1+1)
                            by A5,JORDAN3:def 1
-      .=(f/^(k0-'1))|(((k0-'1)+len g)-'k0+1) by A1,A35,Th2
+      .=(f/^(k0-'1))|(((k0-'1)+len g)-'k0+1) by A1,A35,FINSEQ_5:31
       .=mid(f,k0,(k0-'1)+len g) by A29,A33,JORDAN3:def 1;
     then A36: g is_preposition_of f/^(k0-'1) by A28,A29,A30,A31,Def8;
     A37: for j being Nat st j >= n2 & j > 0 &
@@ -1173,7 +1122,7 @@ proof
           A43: j-'1+1<=j-'1 + len g by A32,XREAL_1:9;
           mid(f/^(j-'1),1,len g)=((f/^(j-'1))/^(1-'1))|(len g-'1+1)
                            by A5,JORDAN3:def 1
-          .=(f/^(j-'1))|(((j-'1)+len g)-'j+1) by A1,A42,Th2
+          .=(f/^(j-'1))|(((j-'1)+len g)-'j+1) by A1,A42,FINSEQ_5:31
           .=mid(f,j,(j-'1)+len g) by A41,A43,JORDAN3:def 1;
          hence j>=k0 by A28,A38,A39,A40;
          end;
@@ -1185,17 +1134,14 @@ proof
     end;
     A44: n<=k0 by A24,A28;
     A45: for j being Nat st j >= n & j > 0 &
-         (g is_preposition_of f/^(j-'1))
-         holds j >= k0
+         (g is_preposition_of f/^(j-'1)) holds j >= k0
     proof let j be Nat;
-     assume A46: j >= n & j > 0 &
-         (g is_preposition_of f/^(j-'1));
+     assume A46: j >= n & j > 0 & (g is_preposition_of f/^(j-'1));
       then j>=0+n2 by NAT_1:38;
      hence j >= k0 by A37,A46;
     end;
       k0 <> 0 by A28;
-    hence ex k being Nat st
-    (k <>0
+    hence ex k being Nat st (k <>0
         implies n<=k & g is_preposition_of f/^(k-'1) &
            for j being Nat st j >= n & j > 0 &
             (g is_preposition_of f/^(j-'1))
@@ -1260,8 +1206,7 @@ end;
 uniqueness
 proof
     A52: 1-'1=1-1 by BINARITH:def 3;
-  thus
-   for k1,k2 being Nat st
+  thus for k1,k2 being Nat st
       ((k1 <> 0 implies n <= k1 & g is_preposition_of f/^(k1-'1) &
   for j being Nat st j >= n & j > 0 & (g is_preposition_of f/^(j-'1))
       holds j>=k1)
@@ -1304,14 +1249,12 @@ proof
           A65: i-'1+1<=i-'1 + len g by A54,XREAL_1:9;
           mid(f/^(i-'1),1,len g)=((f/^(i-'1))/^(1-'1))|(len g-'1+1)
                            by A54,JORDAN3:def 1
-          .=(f/^(i-'1))|(((i-'1)+len g)-'i+1) by A52,A64,Th2
+          .=(f/^(i-'1))|(((i-'1)+len g)-'i+1) by A52,A64,FINSEQ_5:31
           .=mid(f,i,(i-'1)+len g) by A63,A65,JORDAN3:def 1;
 
          then not(1<=len (f/^(i-'1)) & mid(f/^(i-'1),1,len g)=g) by A53,A59,A62
 ,Th34;
-         hence not g is_preposition_of f/^(i-'1)
-
-                  by A60,Def8;
+         hence not g is_preposition_of f/^(i-'1) by A60,Def8;
         end;
       k1 > 0 by A59,NAT_1:19;
      hence contradiction by A53,A61;
@@ -1331,14 +1274,11 @@ proof
           A72: i-'1+1<=i-'1 + len g by A54,XREAL_1:9;
           mid(f/^(i-'1),1,len g)=((f/^(i-'1))/^(1-'1))|(len g-'1+1)
                            by A54,JORDAN3:def 1
-          .=(f/^(i-'1))|(((i-'1)+len g)-'i+1) by A52,A71,Th2
+          .=(f/^(i-'1))|(((i-'1)+len g)-'i+1) by A52,A71,FINSEQ_5:31
           .=mid(f,i,(i-'1)+len g) by A70,A72,JORDAN3:def 1;
-
          then not(1<=len (f/^(i-'1)) & mid(f/^(i-'1),1,len g)=g) by A53,A66,A69
 ,Th34;
-         hence not g is_preposition_of f/^(i-'1)
-
-                  by A67,Def8;
+         hence not g is_preposition_of f/^(i-'1) by A67,Def8;
         end;
       k2 > 0 by A66,NAT_1:19;
      hence contradiction by A53,A68;
@@ -1381,8 +1321,7 @@ correctness;
 end;
 
 definition let D be non empty set, r,CR be FinSequence of D;
-pred r is_terminated_by CR means
-:Def12:
+pred r is_terminated_by CR means :Def12:
 (len CR >0 implies len r>=len CR & instr(1,r,CR) = len r + 1 -'len CR);
 correctness;
 end;
@@ -1392,8 +1331,8 @@ f is_terminated_by f
 proof let D be non empty set,f be FinSequence of D;
   A1: len f + 1 -'len f=len f+1-len f by BINARITH:def 3;
    1-'1=0+1-'1 .=0 by BINARITH:39;
-  then f/^(1-'1)=f by Th2;
-  then A2: 1 <= 1 & f is_preposition_of f/^(1-'1) by Th25;
+  then f/^(1-'1)=f by FINSEQ_5:31;
+  then A2: 1 <= 1 & f is_preposition_of f/^(1-'1);
    for j being Nat st j >= 1 & j > 0
     & (f is_preposition_of f/^(j-'1)) holds j >= 1;
   then instr(1,f,f) = len f + 1 -'len f by A1,A2,Def10;

@@ -16,7 +16,7 @@ environ
       SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA7B, BINARITH,
       SCMFSA_3, SCMFSA6C;
  constructors SCM_1, AMI_5, SCMFSA_3, SCMFSA_5, SF_MASTR, SCMFSA6A, SCMFSA6B,
-      SCMFSA6C, SETWISEO, SCMFSA8A, SCMFSA8B, SCMFSA8C, BINARITH, NAT_1;
+      SCMFSA6C, SETWISEO, SCMFSA8A, SCMFSA8B, SCMFSA8C, BINARITH, NAT_1, CAT_3;
  registrations FUNCT_1, TREES_2, AMI_1, SCMFSA_2, SCMFSA_4, INT_1, SCMFSA6A,
       SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8C, SCMFSA6B, SCMFSA_9,
       CQC_LANG, FRAENKEL, XREAL_0, XBOOLE_0, NUMBERS, SETFAM_1;
@@ -863,11 +863,7 @@ A6: s2 = s +*Directed I by A3,Th20
 XREAL_1:2,SCMFSA6A:29;
              then A20: IC (Computation s2).n in dom Directed I by A18,
 SCMFSA6A:14;
-          now thus
-            CurInstr (Computation s1).n
-          = ((Computation s1).n).IC (Computation s1).n
-         .= s1.IC (Computation s1).n by AMI_1:54;
-       end;
+         CurInstr (Computation s1).n = s1.IC (Computation s1).n by AMI_1:54;
          then CurInstr (Computation s1).n
           = (I ';' I).IC (Computation s1).n by A13,A18,FUNCT_4:14;
      then A21: CurInstr (Computation s1).n
@@ -3263,11 +3259,7 @@ A5: for k being Nat holds P[k] implies P[k + 1]
          P.insloc 0 = (Macro i).insloc 0 by A12,SCMFSA6A:54
          .= i by SCMFSA6B:33;
          hence P.insloc 0 <> halt SCM+FSA by SCMFSA_2:48,124;
-         hereby
-               0 < 2 & 2 <= card P by A11,NAT_1:29;
-            then 0 < card P;
-            hence insloc 0 in dom P by SCMFSA6A:15;
-           end;
+         thus insloc 0 in dom P by SCMFSA6A:15,A11;
             card ProgramPart loop P = card I1 + (3 + 2) by A11,AMI_5:72;
          hence
         P.insloc (card I1 + 3) = goto insloc card ProgramPart loop P by
@@ -3288,10 +3280,7 @@ SCMFSA8C:116;
          hence
     A15: C2.(LifeSpan s1 + 1) = Exec(goto insloc 0,C2.LifeSpan s1)
     by A14,Th71;
-          hereby thus IC C2.(LifeSpan s1 + 1)
-           = Exec(goto insloc 0,C2.LifeSpan s1).IC SCM+FSA by A15
-          .= insloc 0 by SCMFSA_2:95;
-          end;
+         thus IC C2.(LifeSpan s1 + 1)= insloc 0 by A15,SCMFSA_2:95;
         end;
  A16: now
      A17: now thus card loop P = card dom loop P by PRE_CIRC:21
@@ -3366,10 +3355,8 @@ A18,A20,SCMFSA6A:30;
 AMI_1:def 19
        .= Exec(i,C2.(LifeSpan s1 + 1)) by A31;
        end;
-   A33: now thus IC C2.(LifeSpan s1 + 1 + 1)
-        = C2.(LifeSpan s1 + 1 + 1).IC SCM+FSA
-       .= insloc (card I1 + 3) by A8,A16,A29,A32,SCMFSA_2:96;
-       end;
+   A33: IC C2.(LifeSpan s1 + 1 + 1)
+        = insloc (card I1 + 3) by A8,A16,A29,A32,SCMFSA_2:96;
     A34: now thus CurInstr C2.(LifeSpan s1 + 1 + 1)
         = C2.(LifeSpan s1 + 1 + 1).insloc (card I1 + 3) by A33
        .= s2.insloc (card I1 + 3) by AMI_1:54
@@ -3444,7 +3431,7 @@ AMI_1:def 19
           suppose A50: LifeSpan s1 + 1 <= n;
            consider mm being Nat such that
        A51: mm = n -' (LifeSpan s1 + 1);
-              mm + (LifeSpan s1 + 1) = n by A50,A51,AMI_5:4;
+              mm + (LifeSpan s1 + 1) = n by A50,A51,BINARITH:53;
        then A52: IC C2.n = IC (Computation s3).mm by AMI_1:51;
               n - (LifeSpan s1 + 1) >= 0 by A50,XREAL_1:50;
            then mm = n - (LifeSpan s1 + 1) & m0 = m - (LifeSpan s1 + 1)
@@ -3609,10 +3596,8 @@ then A3: P is_closed_onInit s & P is_halting_onInit s by A2,Th45;
    .= Exec(CurInstr C2.LifeSpan s1,C2.LifeSpan s1);
 then A4: C2.(LifeSpan s1 + 1) = Exec(goto insloc 0,C2.LifeSpan s1)
    by A3,Th71;
-A5: now thus IC C2.(LifeSpan s1 + 1)
-       = Exec(goto insloc 0,C2.LifeSpan s1).IC SCM+FSA by A4
-      .= insloc 0 by SCMFSA_2:95;
-     end;
+A5:  IC C2.(LifeSpan s1 + 1)
+       = insloc 0 by A4,SCMFSA_2:95;
 A6: Initialize s +* Initialized P = s +* Initialized P by SCMFSA8A:8;
     set Is = Initialize s +* Initialized P;
 A7: now let b be Int-Location;

@@ -12,15 +12,16 @@ environ
       MONOID_0, FRAENKEL;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       PARTFUN1, XREAL_0, NAT_1, FINSEQ_1, FUNCT_2, FUNCT_4, FINSET_1, BINOP_1,
+      REALSET1,
       PBOOLE, PRE_CIRC, FRAENKEL, STRUCT_0, MONOID_0, GROUP_1, GROUP_2,
       GROUP_6, CARD_3, PRALG_1, PRALG_2;
  constructors BINOP_1, GROUP_6, PRALG_2, ENUMSET1, XCMPLX_0, PRALG_1, PRE_CIRC,
       MONOID_0;
  registrations STRUCT_0, PRALG_2, GROUP_1, FINSET_1, RELAT_1, GROUP_2,
-      FINSEQ_1, MOD_2, RELSET_1, ARYTM_3, MEMBERED, MONOID_0;
+      FINSEQ_1, MOD_2, RELSET_1, ARYTM_3, MEMBERED, MONOID_0, REALSET1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions STRUCT_0, GROUP_1, TARSKI, GROUP_2, GROUP_6, FINSEQ_1, XBOOLE_0,
-      PRALG_1, FUNCT_1, PBOOLE;
+      PRALG_1, FUNCT_1, PBOOLE, BINOP_1, REALSET1;
  theorems PRALG_1, FUNCT_1, PBOOLE, STRUCT_0, CARD_3, FUNCT_2, BINOP_1, TARSKI,
       ZFMISC_1, GROUP_1, GROUP_2, GROUP_6, FUNCT_4, FINSEQ_1, FINSEQ_3,
       ENUMSET1, RELSET_1, XBOOLE_0, XBOOLE_1, RELAT_1, FUNCOP_1, MONOID_0;
@@ -188,9 +189,9 @@ A5:     ex R being 1-sorted st R = F.i1 & (Carrier F1).i1 = the carrier of R
           by PRALG_1:def 13;
         then x.i1 in the carrier of (F1.i1) & y.i1 in the carrier of (F1.i1)
           by A1,CARD_3:18;
-        then (the mult of (F1.i1)).[x.i1,y.i1] in the carrier of (F1.i1)
-          by FUNCT_2:119;
-then A6:     w in the carrier of (F1.i1) by BINOP_1:def 1;
+        then (the mult of (F1.i1)).(x.i1,y.i1) in the carrier of (F1.i1)
+          by BINOP_1:29;
+then A6:     w in the carrier of (F1.i1);
             (Carrier F).i1 in rng Carrier F by A1,FUNCT_1:def 5;
         hence w in union rng Carrier F by A5,A6,TARSKI:def 4;
         thus R[i,w];
@@ -213,9 +214,9 @@ A11:    ex R being 1-sorted st R = F.i & (Carrier F).i = the carrier of R
         reconsider F1 = F as HGrStr-Family of I1;
             x.i1 in the carrier of (F1.i1) & y.i1 in the carrier of (F1.i1)
           by A1,A11,CARD_3:18;
-        then (the mult of (F1.i1)).[x.i1,y.i1] in the carrier of (F1.i1)
-          by FUNCT_2:119;
-        hence z.i in (Carrier F).i by A10,A11,BINOP_1:def 1;
+        then (the mult of (F1.i1)).(x.i1,y.i1) in the carrier of (F1.i1)
+          by BINOP_1:29;
+        hence z.i in (Carrier F).i by A10,A11;
       end;
       then reconsider z as Element of A by A8,CARD_3:18;
       take z;
@@ -228,7 +229,7 @@ A12:    Fi = F.i & z.i = (the mult of Fi).(x.i,y.i) by A7;
     end;
     consider B being BinOp of A such that
 A13:  for a, b being Element of A holds P[a,b,B.(a,b)]
-       from BINOP_1:sch 1(A2);
+       from BINOP_1:sch 3(A2);
     take HGrStr (#A,B#);
     thus the carrier of HGrStr (#A,B#) = product Carrier F;
     let f, g be Element of product Carrier F,
@@ -249,7 +250,7 @@ A17:  for f, g being Element of product Carrier F, i being set st i in I
       ex Fi being non empty HGrStr, h being Function st
        Fi = F.i & h = (the mult of B).(f,g) & h.i = (the mult of Fi).(f.i,g.i);
         for x, y being set st x in the carrier of A & y in the carrier of A
-     holds (the mult of A).[x,y] = (the mult of B).[x,y]
+     holds (the mult of A).(x,y) = (the mult of B).(x,y)
     proof
       let x, y be set such that
 A18:     x in the carrier of A & y in the carrier of A;
@@ -276,12 +277,12 @@ A21:      Fi = F.i & h1 = (the mult of A).(x1,y1) &
 A22:    ex Gi being non empty HGrStr, h2 being Function st
          Gi = F.i & h2 = (the mult of B).(x1,y1) &
           h2.i = (the mult of Gi).(x1.i,y1.i) by A17,A20;
-        thus f.i = h1.i by A21,BINOP_1:def 1
-                .= g.i by A21,A22,BINOP_1:def 1;
+        thus f.i = h1.i by A21
+                .= g.i by A21,A22;
       end;
-      hence (the mult of A).[x,y] = (the mult of B).[x,y] by A19,FUNCT_1:9;
+      hence (the mult of A).(x,y) = (the mult of B).(x,y) by A19,FUNCT_1:9;
     end;
-    hence thesis by A14,A16,FUNCT_2:118;
+    hence thesis by A14,A16,BINOP_1:1;
   end;
 end;
 
@@ -289,9 +290,9 @@ registration let I be set, F be HGrStr-Family of I;
  cluster product F -> non empty constituted-Functions;
 coherence
   proof
-A:   the carrier of product F = product Carrier F by Def2;
+A1:   the carrier of product F = product Carrier F by Def2;
     hence the carrier of product F is non empty;
-      the carrier of product F is functional by A;
+      the carrier of product F is functional by A1;
     hence thesis by MONOID_0:89;
   end;
 end;
@@ -1343,7 +1344,7 @@ A5: P[g]
         G = F.j & f.j in the carrier of G & f.j <> 1.G;
     end;
     then reconsider A as non empty set by A3;
-    set b = (the mult of GP)|[:A,A:];
+    set b = (the mult of GP)||A;
         dom b = [:A,A:] & rng b c= A
     proof
           dom the mult of GP = [:the carrier of GP,the carrier of GP:] by
@@ -1437,7 +1438,7 @@ A27:  now
       end;
           [x1,x2] in [:A,A:] by A8,ZFMISC_1:106;
 then A28:  y = (the mult of GP).[x1,x2] by A7,A8,FUNCT_1:72
-       .= (the mult of GP).(x1,x2) by BINOP_1:def 1
+       .= (the mult of GP).(x1,x2)
        .= X1*X2;
       then reconsider y1 = y as Element of product CF by Def2;
         P[y]
@@ -1568,15 +1569,15 @@ A54:    ex G2 being Group-like (non empty HGrStr) st
       then reconsider h1 = h as Element of GP by A4;
 A55:  [h,e] in [:A,A:] & [e,h] in [:A,A:] by ZFMISC_1:106;
       thus h * e = b.(h,e)
-                .= b.[h,e] by BINOP_1:def 1
+                .= b.[h,e]
                 .= (the mult of GP).[h,e] by A55,FUNCT_1:72
-                .= (the mult of GP).(h1,g) by BINOP_1:def 1
+                .= (the mult of GP).(h1,g)
                 .= h1 * 1.GP
                 .= h by GROUP_1:def 5;
       thus e * h = b.(e,h)
-                .= b.[e,h] by BINOP_1:def 1
+                .= b.[e,h]
                 .= (the mult of GP).[e,h] by A55,FUNCT_1:72
-                .= (the mult of GP).(g,h1) by BINOP_1:def 1
+                .= (the mult of GP).(g,h1)
                 .= 1.GP * h1
                 .= h by GROUP_1:def 5;
       reconsider h2 = h1, hh = h1" as Element of product Carrier F by Def2;
@@ -1663,15 +1664,15 @@ A76:      G = F.j & m = f.j & f'.j = m" by A62;
       take h';
 A77:  [h,h'] in [:A,A:] & [h',h] in [:A,A:] by ZFMISC_1:106;
       thus h * h' = b.(h,h')
-        .= b.[h,h'] by BINOP_1:def 1
+        .= b.[h,h']
         .= (the mult of GP).[h,h'] by A77,FUNCT_1:72
-        .= (the mult of GP).(h,h') by BINOP_1:def 1
+        .= (the mult of GP).(h,h')
         .= h1 * h1"
         .= e by GROUP_1:def 6;
       thus h' * h = b.(h',h)
-        .= b.[h',h] by BINOP_1:def 1
+        .= b.[h',h]
         .= (the mult of GP).[h',h] by A77,FUNCT_1:72
-        .= (the mult of GP).(h',h) by BINOP_1:def 1
+        .= (the mult of GP).(h',h)
         .= h1" * h1
         .= e by GROUP_1:def 6;
     end;

@@ -45,10 +45,10 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="20"/>
-<Adjective nr="23"/>
-<Adjective nr="93"/>
+<Adjective nr="21"/>
+<Adjective nr="24"/>
 <Adjective nr="94"/>
+<Adjective nr="95"/>
 </Cluster>
 </RCluster>
 </Registrations>

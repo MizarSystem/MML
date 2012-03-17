@@ -7,12 +7,13 @@
 environ
 
  vocabularies FRAENKEL, FUNCT_1, FUNCT_5, FUNCT_2, RELAT_1, BOOLE, CAT_1,
-      FUNCOP_1, FUNCT_3, TARSKI, PARTFUN1, FUNCT_4, MCART_1, CAT_2;
+      FUNCOP_1, FUNCT_3, TARSKI, PARTFUN1, FUNCT_4, MCART_1, CAT_2, REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
-      FUNCT_2, PARTFUN1, FUNCT_3, FUNCT_4, FUNCT_5, FRAENKEL, PBOOLE, CAT_1;
+      FUNCT_2, BINOP_1, PARTFUN1, FUNCT_3, FUNCT_4, FUNCT_5, FRAENKEL,
+      REALSET1, PBOOLE, CQC_LANG, CAT_1;
  constructors DOMAIN_1, FUNCT_3, FUNCT_4, FUNCT_5, FRAENKEL, CAT_1, PARTFUN1,
-      PBOOLE;
- registrations RELSET_1, SUBSET_1, XBOOLE_0;
+      PBOOLE, REALSET1, CQC_LANG, BINOP_1;
+ registrations RELSET_1, SUBSET_1, XBOOLE_0, REALSET1, CQC_LANG;
  requirements SUBSET, BOOLE;
 
 
@@ -43,10 +44,10 @@ definition let C,D,E,f;
 end;
 
 theorem :: CAT_2:3
-   f.[c,d] = ((curry f).c).d;
+   f.(c,d) = ((curry f).c).d;
 
 theorem :: CAT_2:4
-   f.[c,d] = ((curry' f).d).c;
+   f.(c,d) = ((curry' f).d).c;
 
 reserve B,C,D,C',D' for Category;
 
@@ -193,7 +194,7 @@ theorem :: CAT_2:29
    M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in O}
     holds (the Dom of C)|M is Function of M,O &
       (the Cod of C)|M is Function of M,O &
-      (the Comp of C)|[:M,M:] is PartFunc of [:M,M:],M &
+      (the Comp of C)||M is PartFunc of [:M,M:],M &
       (the Id of C)|O is Function of O,M;
 
 theorem :: CAT_2:30
@@ -203,7 +204,7 @@ theorem :: CAT_2:30
   st M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in
  O}
      & d = (the Dom of C)|M & c = (the Cod of C)|M
-     & p = (the Comp of C)|[:M,M:] & i = (the Id of C)|O
+     & p = (the Comp of C)||M & i = (the Id of C)|O
    holds CatStr(#O,M,d,c,p,i#) is_full_subcategory_of C;
 
 theorem :: CAT_2:31
@@ -215,7 +216,7 @@ theorem :: CAT_2:31
      M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in
  O}
       & d = (the Dom of C)|M & c = (the Cod of C)|M
-       & p = (the Comp of C)|[:M,M:] & i = (the Id of C)|O;
+       & p = (the Comp of C)||M & i = (the Id of C)|O;
 
 :: Product of Categories
 
@@ -307,6 +308,12 @@ theorem :: CAT_2:43
 
 :: Bifunctors
 
+definition let C,C',D; let S being Functor of [:C,C':],D;
+ let m be Morphism of C; let m' be Morphism of C';
+ redefine
+  func S.(m,m') -> Morphism of D;
+end;
+
 theorem :: CAT_2:44
    for S being Functor of [:C,C':],D, c being Object of C
      holds (curry S).(id c) is Functor of C',D;
@@ -327,7 +334,7 @@ canceled;
 
 theorem :: CAT_2:47
    for S being Functor of [:C,C':],D, c being Object of C,
-       f being Morphism of C' holds (S?-c).f = S.[id c,f];
+       f being Morphism of C' holds (S?-c).f = S.(id c,f);
 
 theorem :: CAT_2:48
       for S being Functor of [:C,C':],D,
@@ -344,7 +351,7 @@ canceled;
 
 theorem :: CAT_2:50
    for S being Functor of [:C,C':],D, c' being Object of C',
-       f being Morphism of C holds (S-?c').f = S.[f,id c'];
+       f being Morphism of C holds (S-?c').f = S.(f,id c');
 
 theorem :: CAT_2:51
       for S being Functor of [:C,C':],D,
@@ -360,7 +367,7 @@ theorem :: CAT_2:52
       holds ((M.(cod f)).g)*((L.(dom g)).f) = ((L.(cod g)).f)*((M.(dom f)).g) )
     ex S being Functor of [:B,C:],D st
      for f being Morphism of B for g being Morphism of C
-      holds S.[f,g] = ((L.(cod g)).f)*((M.(dom f)).g);
+      holds S.(f,g) = ((L.(cod g)).f)*((M.(dom f)).g);
 
 theorem :: CAT_2:53
       for L being Function of the Objects of C,Funct(B,D),

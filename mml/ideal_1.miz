@@ -11,7 +11,8 @@ environ
       RELAT_1, FUNCT_1, FUNCT_7, ARYTM_3, FINSEQ_4, PRELAMB, MCART_1, SETFAM_1,
       RLVECT_3, SUBSET_1, GCD_1, LATTICE3, SQUARE_1, NEWTON, FINSET_1, INT_3,
       WAYBEL_0, TARSKI, NORMSP_1, GR_CY_1, IDEAL_1, YELLOW_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CQC_SIM1, FINSET_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CQC_SIM1, FINSET_1,
+      RELAT_1, FUNCT_1,
       FINSEQ_1, REALSET1, REALSET2, VECTSP_1, INT_3, NORMSP_1, NUMBERS,
       XCMPLX_0, XREAL_0, NAT_1, RELSET_1, RLVECT_1, PARTFUN1, FUNCT_2,
       ALGSTR_1, PRE_TOPC, GR_CY_1, PRE_CIRC, MCART_1, DOMAIN_1, FINSEQ_4,
@@ -21,14 +22,14 @@ environ
       DOMAIN_1, POLYNOM1, BINOP_1, PRE_TOPC, SETFAM_1;
  registrations INT_3, RELSET_1, FINSET_1, SUBSET_1, STRUCT_0, PRE_TOPC,
       FINSEQ_1, XBOOLE_0, POLYNOM1, INT_1, BINOM, VECTSP_1, XREAL_0, MEMBERED,
-      RELAT_1, FUNCT_2, PRE_CIRC, ORDINAL2, ALGSTR_1, GROUP_1;
+      RELAT_1, FUNCT_2, PRE_CIRC, ORDINAL2, ALGSTR_1, GROUP_1, REALSET1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, BINOP_1, REALSET1;
  theorems INT_3, CQC_SIM1, TARSKI, ZFMISC_1, RLVECT_1, REALSET2, VECTSP_1,
       GCD_1, FUNCT_1, FUNCT_2, POLYNOM1, PRE_TOPC, RELAT_1, FINSET_1, PRE_CIRC,
       NAT_1, GR_CY_1, ALGSTR_1, REAL_1, MCART_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
-      JORDAN3, SETFAM_1, BINOP_1, INT_1, FUNCT_7, FINSEQ_4, FINSEQ_5, POLYNOM2,
-      BINOM, XBOOLE_0, XBOOLE_1, XCMPLX_1, ORDINAL2, REALSET1, GROUP_1,
+      SETFAM_1, BINOP_1, INT_1, FUNCT_7, FINSEQ_4, FINSEQ_5, POLYNOM2,
+      BINOM, XBOOLE_0, XBOOLE_1, ORDINAL2, REALSET1, GROUP_1,
       XREAL_1, DOMAIN_1;
  schemes NAT_1, RECDEF_1, FUNCT_2, POLYNOM2, BINOM, FINSEQ_2, DOMAIN_1;
 
@@ -66,8 +67,7 @@ begin :: Ideals
 definition
  let L be non empty LoopStr, F being Subset of L;
  attr F is add-closed means :Def1:
-  for x, y being Element of L st x in F & y in F holds x+y in
- F;
+  for x, y being Element of L st x in F & y in F holds x+y in F;
 end;
 
 definition
@@ -86,8 +86,7 @@ existence proof set M = the carrier of L;
  then reconsider M as Subset of L by TARSKI:def 3;
  reconsider M as non empty Subset of L;
  take M;
-     for x, y being Element of L st x in M & y in M holds x+y in M
-;
+ for x, y being Element of L st x in M & y in M holds x+y in M;
  hence thesis by Def1;
 end;
 end;
@@ -208,8 +207,8 @@ hence thesis by BINOM:2;
 end;
 
 theorem Th4:
-for L being right_zeroed (non empty doubleLoopStr) holds {0.L} is add-closed
- proof let L be right_zeroed (non empty doubleLoopStr);
+for L being right_zeroed (non empty LoopStr) holds {0.L} is add-closed
+ proof let L be right_zeroed (non empty LoopStr);
   let x,y be Element of L;
   assume x in {0.L} & y in {0.L}; then x = 0.L & y= 0.L by TARSKI:def 1;
     then x + y = 0.L by RLVECT_1:def 7;
@@ -240,6 +239,23 @@ proof let L be right_zeroed add-left-cancelable
     reconsider p' = p as Element of L;
         x*p' = 0.L by A1,BINOM:1;
  hence x*p in {0.L} by TARSKI:def 1;
+end;
+
+registration let L be right_zeroed (non empty LoopStr);
+  cluster {0.L} -> add-closed Subset of L;
+  coherence by Th4; 
+end;
+
+registration let L be left_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr);
+  cluster {0.L} -> left-ideal Subset of L;
+  coherence by Th5; 
+end;
+
+registration let L be right_zeroed add-left-cancelable
+            left-distributive (non empty doubleLoopStr);
+  cluster {0.L} -> right-ideal Subset of L;
+  coherence by Th6; 
 end;
 
 theorem Th7:
@@ -355,7 +371,7 @@ compatibility proof
       0.R in {x} by A1,Th3;
   hence I = {0.R} by A1,TARSKI:def 1;
   end;
-hence thesis by REALSET1:def 4;
+hence thesis;
 end;
 end;
 
@@ -392,7 +408,7 @@ existence proof
       end;
    then A3: the carrier of R = {0.R} by A2,TARSKI:2;
        the carrier of R is non trivial by REALSET2:def 5;
-   hence thesis by A3,REALSET1:def 4;
+   hence thesis by A3;
    end;
  then {0.R} <> the carrier of R by TARSKI:def 1; then M is proper by Def5;
  hence thesis;
@@ -511,9 +527,9 @@ end;
 definition
 let R be non empty LoopStr,
     I be add-closed (non empty Subset of R);
-func add|(I,R) -> BinOp of I equals :Def6:
-  (the add of R)|[:I,I:];
-coherence proof reconsider f = (the add of R)|[:I,I:] as
+func add|(I,R) -> BinOp of I equals
+  (the add of R)||I;
+coherence proof reconsider f = (the add of R)||I as
          Function of [:I,I:],the carrier of R by FUNCT_2:38;
  A1: dom f = [:I,I:] by FUNCT_2:def 1;
      for x being set st x in [:I,I:] holds f.x in I proof
@@ -534,8 +550,8 @@ definition
 let R be non empty HGrStr,
     I be right-ideal (non empty Subset of R);
 func mult|(I,R) -> BinOp of I equals
-      (the mult of R)|[:I,I:];
-coherence proof reconsider f = (the mult of R)|[:I,I:] as
+      (the mult of R)||I;
+coherence proof reconsider f = (the mult of R)||I as
          Function of [:I,I:],the carrier of R by FUNCT_2:38;
  A1: dom f = [:I,I:] by FUNCT_2:def 1;
      for x being set st x in [:I,I:] holds f.x in I proof
@@ -544,7 +560,7 @@ coherence proof reconsider f = (the mult of R)|[:I,I:] as
    A2: u in I & v in I & x = [u,v] by ZFMISC_1:def 2;
    reconsider u,v as Element of I by A2;
        f.x = (the mult of R).[u,v] by A1,A2,FUNCT_1:70
-      .= (the mult of R).(u,v) by BINOP_1:def 1
+      .= (the mult of R).(u,v)
       .= u*v by GROUP_1:def 1;
    hence thesis by Def3;
    end;
@@ -555,7 +571,7 @@ end;
 definition
 let R be non empty LoopStr,
     I be add-closed (non empty Subset of R);
-func Gr(I,R) -> non empty LoopStr equals :Def8:
+func Gr(I,R) -> non empty LoopStr equals
   LoopStr (#I,add|(I,R),In (0.R,I)#);
 coherence;
 end;
@@ -566,45 +582,44 @@ let R be left_zeroed right_zeroed add-cancelable
     I be add-closed (non empty Subset of R);
 cluster Gr(I,R) -> add-associative;
 coherence proof set M = LoopStr (#I,add|(I,R),In (0.R,I)#);
- A1: M = Gr(I,R) by Def8;
  reconsider M as non empty LoopStr;
      now let u be set;
-   assume A2: u in [:I,I:];
+   assume A1: u in [:I,I:];
        dom(the add of R) = [:the carrier of R,the carrier of R:] by
 FUNCT_2:def 1
 ;
-   hence u in dom(the add of R) by A2;
+   hence u in dom(the add of R) by A1;
    end;
  then [:I,I:] c= dom(the add of R) by TARSKI:def 3;
- then A3: dom((the add of R)|[:I,I:]) = [:I,I:] by RELAT_1:91;
- A4: for a,b being Element of M, a',b' being Element of I
+ then A2: dom((the add of R)||I) = [:I,I:] by RELAT_1:91;
+ A3: for a,b being Element of M, a',b' being Element of I
      st a' = a & b' = b holds a + b = a' + b' proof
      let a,b be Element of M, a',b' be Element of I;
      assume a' = a & b' = b;
      hence a + b = (add|(I,R)).[a',b'] by RLVECT_1:def 3
-               .= ((the add of R)|[:I,I:]).[a',b'] by Def6
-               .= (the add of R).[a',b'] by A3,FUNCT_1:70
+               .= ((the add of R)||I).[a',b']
+               .= (the add of R).[a',b'] by A2,FUNCT_1:70
                .= a' + b' by RLVECT_1:def 3;
      end;
      now let a,b,c be Element of M;
      reconsider a' = a, b' = b, c' = c as Element of I;
          a' + b' in I by Def1;
-     then A5: [a'+b',c'] in dom((the add of R)|[:I,I:]) by A3,ZFMISC_1:def 2;
+     then A4: [a'+b',c'] in dom((the add of R)||I) by A2,ZFMISC_1:def 2;
          b' + c' in I by Def1;
-     then A6: [a',b'+c'] in dom((the add of R)|[:I,I:]) by A3,ZFMISC_1:def 2;
+     then A5: [a',b'+c'] in dom((the add of R)||I) by A2,ZFMISC_1:def 2;
      thus (a + b) + c = (the add of M).[a+b,c] by RLVECT_1:def 3
-                     .= (add|(I,R)).[a'+b',c'] by A4
-                     .= ((the add of R)|[:I,I:]).[a'+b',c'] by Def6
-                     .= (the add of R).[a'+b',c'] by A5,FUNCT_1:70
+                     .= (add|(I,R)).[a'+b',c'] by A3
+                     .= ((the add of R)||I).[a'+b',c']
+                     .= (the add of R).[a'+b',c'] by A4,FUNCT_1:70
                      .= (a'+b') + c' by RLVECT_1:def 3
                      .= a' + (b' + c') by RLVECT_1:def 6
                      .= (the add of R).[a',b'+c'] by RLVECT_1:def 3
-                     .= ((the add of R)|[:I,I:]).[a',b'+c'] by A6,FUNCT_1:70
-                     .= (add|(I,R)).[a',b'+c'] by Def6
-                     .= (the add of M).[a,b+c] by A4
+                     .= ((the add of R)||I).[a',b'+c'] by A5,FUNCT_1:70
+                     .= (add|(I,R)).[a',b'+c']
+                     .= (the add of M).[a,b+c] by A3
                      .= a + (b + c) by RLVECT_1:def 3;
      end;
- hence thesis by A1,RLVECT_1:def 6;
+ hence thesis by RLVECT_1:def 6;
  end;
 end;
 
@@ -614,30 +629,29 @@ let R be left_zeroed right_zeroed add-cancelable
     I be add-closed right-ideal (non empty Subset of R);
 cluster Gr(I,R) -> right_zeroed;
 coherence proof set M = LoopStr (#I,add|(I,R),In (0.R,I)#);
- A1: M = Gr(I,R) by Def8;
  reconsider M as non empty LoopStr;
      now let u be set;
-   assume A2: u in [:I,I:];
+   assume A1: u in [:I,I:];
        dom(the add of R) = [:the carrier of R,the carrier of R:] by
 FUNCT_2:def 1
 ;
-   hence u in dom(the add of R) by A2;
+   hence u in dom(the add of R) by A1;
    end;
  then [:I,I:] c= dom(the add of R) by TARSKI:def 3;
- then A3: dom((the add of R)|[:I,I:]) = [:I,I:] by RELAT_1:91;
+ then A2: dom((the add of R)||I) = [:I,I:] by RELAT_1:91;
      now let a be Element of M;
      reconsider a' = a as Element of I;
-     A4: 0.R in I by Th3;
-     then A5: [a',0.R] in dom((the add of R)|[:I,I:]) by A3,ZFMISC_1:def 2;
+     A3: 0.R in I by Th3;
+     then A4: [a',0.R] in dom((the add of R)||I) by A2,ZFMISC_1:def 2;
      thus a + 0.M = a + (the Zero of M) by RLVECT_1:def 2
                  .= (the add of M).[a,(In (0.R,I))] by RLVECT_1:def 3
-                 .= (the add of M).[a,0.R] by A4,FUNCT_7:def 1
-                 .= ((the add of R)|[:I,I:]).[a',0.R] by Def6
-                 .= (the add of R).[a',0.R] by A5,FUNCT_1:70
+                 .= (the add of M).[a,0.R] by A3,FUNCT_7:def 1
+                 .= ((the add of R)||I).[a',0.R]
+                 .= (the add of R).[a',0.R] by A4,FUNCT_1:70
                  .= a' + 0.R by RLVECT_1:def 3
                  .= a by RLVECT_1:def 7;
      end;
- hence thesis by A1,RLVECT_1:def 7;
+ hence thesis by RLVECT_1:def 7;
  end;
 end;
 
@@ -646,31 +660,30 @@ let R be Abelian (non empty doubleLoopStr),
     I be add-closed (non empty Subset of R);
 cluster Gr(I,R) -> Abelian;
 coherence proof set M = LoopStr (#I,add|(I,R),In (0.R,I)#);
- A1: M = Gr(I,R) by Def8;
  reconsider M as non empty LoopStr;
      now let u be set;
-   assume A2: u in [:I,I:];
+   assume A1: u in [:I,I:];
        dom(the add of R) = [:the carrier of R,the carrier of R:] by
 FUNCT_2:def 1
 ;
-   hence u in dom(the add of R) by A2;
+   hence u in dom(the add of R) by A1;
    end;
  then [:I,I:] c= dom(the add of R) by TARSKI:def 3;
- then A3: dom((the add of R)|[:I,I:]) = [:I,I:] by RELAT_1:91;
- A4: for a,b being Element of M, a',b' being Element of I
+ then A2: dom((the add of R)||I) = [:I,I:] by RELAT_1:91;
+ A3: for a,b being Element of M, a',b' being Element of I
      st a' = a & b' = b holds a + b = a' + b' proof
      let a,b be Element of M, a',b' be Element of I;
      assume a' = a & b' = b;
      hence a + b = (add|(I,R)).[a',b'] by RLVECT_1:def 3
-               .= ((the add of R)|[:I,I:]).[a',b'] by Def6
-               .= (the add of R).[a',b'] by A3,FUNCT_1:70
+               .= ((the add of R)||I).[a',b']
+               .= (the add of R).[a',b'] by A2,FUNCT_1:70
                .= a' + b' by RLVECT_1:def 3;
      end;
      now let a,b be Element of M;
    reconsider a' = a, b' = b as Element of I;
-   thus a + b = a' + b' by A4 .= b + a by A4;
+   thus a + b = a' + b' by A3 .= b + a by A3;
    end;
- hence thesis by A1,RLVECT_1:def 5;
+ hence thesis by RLVECT_1:def 5;
  end;
 end;
 
@@ -680,37 +693,36 @@ let R be Abelian right_unital left_zeroed right_zeroed right_complementable
     I be add-closed right-ideal (non empty Subset of R);
 cluster Gr(I,R) -> right_complementable;
 coherence proof set M = LoopStr (#I,add|(I,R),In (0.R,I)#);
- A1: M = Gr(I,R) by Def8;
  reconsider M as non empty LoopStr;
      now let u be set;
-   assume A2: u in [:I,I:];
+   assume A1: u in [:I,I:];
        dom(the add of R) = [:the carrier of R,the carrier of R:] by
 FUNCT_2:def 1
 ;
-   hence u in dom(the add of R) by A2;
+   hence u in dom(the add of R) by A1;
    end;
  then [:I,I:] c= dom(the add of R) by TARSKI:def 3;
- then A3: dom((the add of R)|[:I,I:]) = [:I,I:] by RELAT_1:91;
- A4: for a,b being Element of M, a',b' being Element of I
+ then A2: dom((the add of R)||I) = [:I,I:] by RELAT_1:91;
+ A3: for a,b being Element of M, a',b' being Element of I
      st a' = a & b' = b holds a + b = a' + b' proof
      let a,b be Element of M, a',b' be Element of I;
      assume a' = a & b' = b;
      hence a + b = (add|(I,R)).[a',b'] by RLVECT_1:def 3
-               .= ((the add of R)|[:I,I:]).[a',b'] by Def6
-               .= (the add of R).[a',b'] by A3,FUNCT_1:70
+               .= ((the add of R)||I).[a',b']
+               .= (the add of R).[a',b'] by A2,FUNCT_1:70
                .= a' + b' by RLVECT_1:def 3;
      end;
  reconsider I as RightIdeal of R;
      now let a be Element of M;
-     A5: 0.R in I by Th3;
+     A4: 0.R in I by Th3;
      reconsider a' = a as Element of I;
      reconsider b = -a' as Element of M by Th14;
-         a + b = a' + -a' by A4 .= 0.R by RLVECT_1:16
-      .= the Zero of M by A5,FUNCT_7:def 1
+         a + b = a' + -a' by A3 .= 0.R by RLVECT_1:16
+      .= the Zero of M by A4,FUNCT_7:def 1
       .= 0.M by RLVECT_1:def 2;
      hence ex b being Element of M st a + b = 0.M;
      end;
- hence thesis by A1,RLVECT_1:def 8;
+ hence thesis by RLVECT_1:def 8;
  end;
 end;
 
@@ -1269,7 +1281,7 @@ A9: i in dom <*e*>;
 then A10: i = 1 by A9,TARSKI:def 1;
  take u, v, a;
  thus <*e*>/.i = <*e*>.i by A9,FINSEQ_4:def 4 .= e by A10,FINSEQ_1:57
-   .= u*a*v by A1,A5,A7,A8,JORDAN3:16;
+   .= u*a*v by A1,A5,A7,A8,FINSEQ_1:59;
 end;
 
 theorem Th33:
@@ -1308,7 +1320,7 @@ A9: i in dom <*e*>;
 then A10: i = 1 by A9,TARSKI:def 1;
  take u, a;
  thus <*e*>/.i = <*e*>.i by A9,FINSEQ_4:def 4 .= e by A10,FINSEQ_1:57
-   .= u*a by A1,A5,A7,A8,JORDAN3:16;
+   .= u*a by A1,A5,A7,A8,FINSEQ_1:59;
 end;
 
 theorem Th34:
@@ -1348,7 +1360,7 @@ A9: i in dom <*e*>;
 then A10: i = 1 by A9,TARSKI:def 1;
  take u, a;
  thus <*e*>/.i = <*e*>.i by A9,FINSEQ_4:def 4 .= e by A10,FINSEQ_1:57
-   .= a*u by A1,A5,A7,A8,JORDAN3:16;
+   .= a*u by A1,A5,A7,A8,FINSEQ_1:59;
 end;
 
 definition
@@ -2083,7 +2095,7 @@ A1: I c= F-Ideal proof let x be set;
                A9: lc=q^<*r*> & <*r*> is LinearCombination of F by Th32;
                         k+1 = len q + len <*r*> by A8,A9,FINSEQ_1:35
                        .= len q + 1 by FINSEQ_1:56;
-                    then len q = k by XCMPLX_1:2;
+                    then len q = k;
                then A10: Sum q in F-Ideal by A6;
                         dom <*r*> = {1} by FINSEQ_1:4,55;
                then A11:  1 in dom <*r*> by TARSKI:def 1;
@@ -2221,7 +2233,7 @@ of F;
                A9: lc=q^<*r*> & <*r*> is LeftLinearCombination of F by Th33;
                         k+1 = len q + len <*r*> by A8,A9,FINSEQ_1:35
                        .= len q + 1 by FINSEQ_1:56;
-                    then len q = k by XCMPLX_1:2;
+                    then len q = k;
                then A10: Sum q in F-LeftIdeal by A6;
                         dom <*r*> = {1} by FINSEQ_1:4,55;
                then A11:  1 in dom <*r*> by TARSKI:def 1;
@@ -2347,7 +2359,7 @@ assume
                A9: lc=q^<*r*> & <*r*> is RightLinearCombination of F by Th34;
                         k+1 = len q + len <*r*> by A8,A9,FINSEQ_1:35
                        .= len q + 1 by FINSEQ_1:56;
-                    then len q = k by XCMPLX_1:2;
+                    then len q = k;
                then A10: Sum q in F-RightIdeal by A6;
                         dom <*r*> = {1} by FINSEQ_1:4,55;
                then A11:  1 in dom <*r*> by TARSKI:def 1;
@@ -2482,67 +2494,67 @@ A1: for u being set holds u in M implies u in N
    proof let u be set; assume u in M;
    then consider s being LinearCombination of A such that A2: u = Sum s;
    consider f being Function of NAT,the carrier of R such that
-   A4: Sum s = f.(len s) and
-   A5: f.0 = 0.R and
-   A6: for j being Nat,v being Element of R
+   A3: Sum s = f.(len s) and
+   A4: f.0 = 0.R and
+   A5: for j being Nat,v being Element of R
        st j < len s & v = s.(j + 1) holds f.(j + 1) = f.j + v
       by RLVECT_1:def 12;
    defpred P[Nat] means ex r being Element of R st f.($1) = a*r;
-       f.0 = a*0.R by A5,BINOM:2;
-   then A7: P[0];
-   A8: now let j be Nat;
-       assume A9: 0 <= j & j < len s;
+       f.0 = a*0.R by A4,BINOM:2;
+   then A6: P[0];
+   A7: now let j be Nat;
+       assume A8: 0 <= j & j < len s;
        thus P[j] implies P[j+1]
          proof assume ex r being Element of R st f.j = a*r;
-         then consider r1 being Element of R such that A10: f.j = a*r1;
-         A11: 0 + 1 <= j + 1 by XREAL_1:8;
-             j + 1 <= len s by A9,NAT_1:38;
-         then j + 1 in Seg(len s) by A11,FINSEQ_1:3;
-         then A12: j + 1 in dom s by FINSEQ_1:def 3;
+         then consider r1 being Element of R such that A9: f.j = a*r1;
+         A10: 0 + 1 <= j + 1 by XREAL_1:8;
+             j + 1 <= len s by A8,NAT_1:38;
+         then j + 1 in Seg(len s) by A10,FINSEQ_1:3;
+         then A11: j + 1 in dom s by FINSEQ_1:def 3;
          then s.(j+1) = s/.(j+1) by FINSEQ_4:def 4;
-         then A13: f.(j+1) = f.j + s/.(j+1) by A6,A9;
+         then A12: f.(j+1) = f.j + s/.(j+1) by A5,A8;
          consider r2,r3 being Element of R, a' being Element of A such that
-         A14: s/.(j+1) = r2*a'*r3 by A12,Def9;
-             f.(j+1) = a*r1 + r2*a*r3 by A10,A13,A14,TARSKI:def 1
+         A13: s/.(j+1) = r2*a'*r3 by A11,Def9;
+             f.(j+1) = a*r1 + r2*a*r3 by A9,A12,A13,TARSKI:def 1
            .= a*r1 + a*(r2*r3) by GROUP_1:def 4
            .= a*(r1 + r2*r3) by VECTSP_1:def 18;
          hence thesis;
          end;
        end;
        for k being Nat st 0 <= k & k <= len s holds P[k] from POLYNOM2:sch 4
-(A7,A8);
-   then ex r being Element of R st Sum s = a*r by A4;
+(A6,A7);
+   then ex r being Element of R st Sum s = a*r by A3;
    hence thesis by A2;
    end;
     for u being set holds u in N implies u in M
    proof let u be set; assume u in N;
       then consider r being Element of R such that
-   A15: u = a*r;
+   A14: u = a*r;
    set s = <* a*r *>;
        for i being set st i in dom s
    ex r,t being Element of R, a being Element of A st s/.i = r*a*t
      proof let i be set; assume
-     A16: i in dom s;
-         len s = 1 by FINSEQ_1:57; then i in {1} by A16,FINSEQ_1:4,def 3;
+     A15: i in dom s;
+         len s = 1 by FINSEQ_1:57; then i in {1} by A15,FINSEQ_1:4,def 3;
      then i = 1 by TARSKI:def 1;
      then s/.i = a*r by FINSEQ_4:25 .= (r*a)*1.R by VECTSP_1:def 13;
      hence thesis;
      end; then reconsider s as LinearCombination of A by Def9;
        Sum s = a*r by BINOM:3;
-   hence u in M by A15;
+   hence u in M by A14;
    end;
-then A17: M = N by A1,TARSKI:2;
+then A16: M = N by A1,TARSKI:2;
        now let x be set;
      hereby assume x in {a}-Ideal; then x in {a}-RightIdeal by Th63;
          then consider f being RightLinearCombination of A such that
-     A18: x = Sum f by Th62;   f is LinearCombination of A by Th28;
-      hence x in M by A18;
+     A17: x = Sum f by Th62;   f is LinearCombination of A by Th28;
+      hence x in M by A17;
      end;
     assume x in M; then consider s being LinearCombination of A such that
-    A19: x = Sum s;
-    thus x in {a}-Ideal by A19,Th60;
+    A18: x = Sum s;
+    thus x in {a}-Ideal by A18,Th60;
    end;
-hence thesis by A17,TARSKI:2;
+hence thesis by A16,TARSKI:2;
 end;
 
 theorem Th65:
@@ -2562,39 +2574,39 @@ A1: for u being set holds u in M implies u in N
    proof let u be set; assume u in M;
    then consider s being LinearCombination of A such that A2: u = Sum s;
    consider f being Function of NAT,the carrier of R such that
-   A4: Sum s = f.(len s) and
-   A5: f.0 = 0.R and
-   A6: for j being Nat,v being Element of R
+   A3: Sum s = f.(len s) and
+   A4: f.0 = 0.R and
+   A5: for j being Nat,v being Element of R
        st j < len s & v = s.(j + 1) holds f.(j + 1) = f.j + v
       by RLVECT_1:def 12;
    defpred P[Nat] means
    ex r,s being Element of R st f.($1) = a*r + b*s;
-       f.0 = a*0.R by A5,BINOM:2
+       f.0 = a*0.R by A4,BINOM:2
       .= a*0.R + 0.R by RLVECT_1:def 7 .= a*0.R + b*0.R by BINOM:2;
-   then A7: P[0];
-   A8: now let j be Nat; assume A9: 0 <= j & j < len s;
+   then A6: P[0];
+   A7: now let j be Nat; assume A8: 0 <= j & j < len s;
        thus P[j] implies P[j+1]
          proof assume ex r,s being Element of R st f.j = a*r + b*s;
          then consider r1,s1 being Element of R such that
-         A10: f.j = a*r1 + b*s1;
-         A11: 0 + 1 <= j + 1 by XREAL_1:8;
-             j + 1 <= len s by A9,NAT_1:38;
-         then j + 1 in Seg(len s) by A11,FINSEQ_1:3;
-         then A12: j + 1 in dom s by FINSEQ_1:def 3;
+         A9: f.j = a*r1 + b*s1;
+         A10: 0 + 1 <= j + 1 by XREAL_1:8;
+             j + 1 <= len s by A8,NAT_1:38;
+         then j + 1 in Seg(len s) by A10,FINSEQ_1:3;
+         then A11: j + 1 in dom s by FINSEQ_1:def 3;
          then consider r2,r3 being Element of R, a' being Element of A such
 that
-         A13: s/.(j+1) = r2*a'*r3 by Def9;
-         A14: s/.(j+1) = s.(j+1) by A12,FINSEQ_4:def 4;
+         A12: s/.(j+1) = r2*a'*r3 by Def9;
+         A13: s/.(j+1) = s.(j+1) by A11,FINSEQ_4:def 4;
          per cases by TARSKI:def 2;
          suppose a' = a;
-           then f.(j+1) = (a*r1 + b*s1) + r2*a*r3 by A6,A9,A10,A13,A14
+           then f.(j+1) = (a*r1 + b*s1) + r2*a*r3 by A5,A8,A9,A12,A13
                        .= (a*r1 + a*r2*r3) + b*s1 by RLVECT_1:def 6
                        .= (a*r1 + a*(r2*r3)) + b*s1 by GROUP_1:def 4
                        .= a*(r1 + r2*r3) + b*s1 by VECTSP_1:def 18;
            hence thesis;
          end;
          suppose a' = b;
-           then f.(j+1) = (a*r1 + b*s1) + r2*b*r3 by A6,A9,A10,A13,A14
+           then f.(j+1) = (a*r1 + b*s1) + r2*b*r3 by A5,A8,A9,A12,A13
                        .= a*r1 + (b*s1 + b*r2*r3) by RLVECT_1:def 6
                        .= a*r1 + (b*s1 + b*(r2*r3)) by GROUP_1:def 4
                        .= a*r1 + b*(s1 + r2*r3) by VECTSP_1:def 18;
@@ -2603,48 +2615,48 @@ that
          end;
        end;
        for k being Nat st 0 <= k & k <= len s holds P[k] from POLYNOM2:sch 4
-(A7,A8);
-   then ex r,t being Element of R st Sum s = a*r + b*t by A4;
+(A6,A7);
+   then ex r,t being Element of R st Sum s = a*r + b*t by A3;
    hence thesis by A2;
    end;
     for u being set holds u in N implies u in M proof
    let u be set; assume u in N; then consider r,t being Element of R such that
-   A15: u = a*r + b*t;
+   A14: u = a*r + b*t;
    set s = <* a*r, b*t *>;
        for i being set st i in dom s
    ex r,t being Element of R, a being Element of A st s/.i = r*a*t
      proof let i be set; assume
-     A16: i in dom s; then i in Seg(len s) by FINSEQ_1:def 3;
-     then A17: i in {1,2} by FINSEQ_1:4,61;
-     per cases by A17,TARSKI:def 2;
+     A15: i in dom s; then i in Seg(len s) by FINSEQ_1:def 3;
+     then A16: i in {1,2} by FINSEQ_1:4,61;
+     per cases by A16,TARSKI:def 2;
      suppose i = 1;
-        then s/.i = s.1 by A16,FINSEQ_4:def 4 .= a*r by FINSEQ_1:61
+        then s/.i = s.1 by A15,FINSEQ_4:def 4 .= a*r by FINSEQ_1:61
                  .= 1.R*a*r by VECTSP_1:def 19;
         hence thesis;
      end;
      suppose i = 2;
-        then s/.i = s.2 by A16,FINSEQ_4:def 4 .= b*t by FINSEQ_1:61
+        then s/.i = s.2 by A15,FINSEQ_4:def 4 .= b*t by FINSEQ_1:61
                  .= 1.R*b*t by VECTSP_1:def 19;
         hence thesis;
         end;
         end;
    then reconsider s as LinearCombination of A by Def9;
        Sum s = a*r + b*t by Th1;
-   hence u in M by A15;
+   hence u in M by A14;
    end;
-then A18: M = N by A1,TARSKI:2;
+then A17: M = N by A1,TARSKI:2;
        now let x be set;
      hereby assume x in {a,b}-Ideal; then x in {a,b}-RightIdeal by Th63;
          then consider f being RightLinearCombination of A such that
-     A19: x = Sum f by Th62;
+     A18: x = Sum f by Th62;
              f is LinearCombination of A by Th28;
-      hence x in M by A19;
+      hence x in M by A18;
      end;
     assume x in M; then consider s being LinearCombination of A such that
-    A20: x = Sum s;
-    thus x in {a,b}-Ideal by A20,Th60;
+    A19: x = Sum s;
+    thus x in {a,b}-Ideal by A19,Th60;
    end;
-hence thesis by A18,TARSKI:2;
+hence thesis by A17,TARSKI:2;
 end;
 
 theorem Th66:
@@ -2721,7 +2733,7 @@ begin :: Some Operations on Ideals
 
 definition
 let R be non empty HGrStr, I be Subset of R, a be Element of R;
-func a*I -> Subset of R equals :Def19:
+func a*I -> Subset of R equals
   {a*i where i is Element of R : i in I};
 coherence proof set M = {a*i where i is Element of R : i in I};
      M is Subset of R proof
@@ -2762,7 +2774,7 @@ cluster a*I -> non empty;
 coherence proof
  consider j being Element of I;   a*j in {a*i where i is Element of R : i in I}
 ;
- hence thesis by Def19;
+ hence thesis;
  end;
 end;
 
@@ -2771,18 +2783,17 @@ let R be distributive (non empty doubleLoopStr),
     I be add-closed Subset of R, a be Element of R;
 cluster a*I -> add-closed;
 coherence proof set M = {a*i where i is Element of R : i in I};
- A1: M = a*I by Def19;
      for x,y being Element of R st x in M & y in M holds x+y in
  M proof
-     let x,y be Element of R; assume A2: x in M & y in M;
-     then consider i being Element of R such that A3: x = a*i & i in I;
-     consider j being Element of R such that A4: y = a*j & j in I by A2;
+     let x,y be Element of R; assume A1: x in M & y in M;
+     then consider i being Element of R such that A2: x = a*i & i in I;
+     consider j being Element of R such that A3: y = a*j & j in I by A1;
      reconsider k = i + j as Element of R;
-     A5: k in I by A3,A4,Def1;
-         x + y = a*k by A3,A4,VECTSP_1:def 18;
-     hence thesis by A5;
+     A4: k in I by A2,A3,Def1;
+         x + y = a*k by A2,A3,VECTSP_1:def 18;
+     hence thesis by A4;
      end;
- hence thesis by A1,Def1;
+ hence thesis by Def1;
  end;
 end;
 
@@ -2791,15 +2802,14 @@ let R be associative (non empty doubleLoopStr),
     I be right-ideal Subset of R, a be Element of R;
 cluster a*I -> right-ideal;
 coherence proof set M = {a*i where i is Element of R : i in I};
- A1: M = a*I by Def19;
      for y,x being Element of R st x in M holds x*y in M proof
      let y,x be Element of R; assume x in M;
-     then consider i being Element of R such that A2: x = a*i & i in I;
-     A3: x*y = a*(i*y) by A2,GROUP_1:def 4;   i*y in
- I by A2,Def3;
-     hence thesis by A3;
+     then consider i being Element of R such that A1: x = a*i & i in I;
+     A2: x*y = a*(i*y) by A1,GROUP_1:def 4;   i*y in
+ I by A1,Def3;
+     hence thesis by A2;
      end;
- hence thesis by A1,Def3;
+ hence thesis by Def3;
  end;
 end;
 
@@ -2815,10 +2825,10 @@ A1: now let u be set; assume u in {0.R}; then A2: u = 0.R by TARSKI:def 1;
        0.R*j = 0.R by BINOM:1; then 0.R in {0.R*i where i is Element of R : i
 in
  I};
-   hence u in 0.R*I by A2,Def19;
+   hence u in 0.R*I by A2;
    end;
     now let u be set; assume u in 0.R*I;
-   then u in {0.R*i where i is Element of R : i in I} by Def19;
+   then u in {0.R*i where i is Element of R : i in I};
    then consider i being Element of R such that A3: u = 0.R*i & i in I;
        u = 0.R by A3,BINOM:1;
    hence u in {0.R} by TARSKI:def 1;
@@ -2834,10 +2844,10 @@ A1: now let u be set; assume A2: u in I;
    then reconsider u' = u as Element of R;
        1.R*u' = u' by VECTSP_1:def 19;
    then u' in {1.R*i where i is Element of R : i in I} by A2;
-   hence u in 1.R*I by Def19;
+   hence u in 1.R*I;
    end;
     now let u be set; assume u in 1.R*I;
-   then u in {1.R*i where i is Element of R : i in I } by Def19;
+   then u in {1.R*i where i is Element of R : i in I };
    then ex i being Element of R st u = 1.R*i & i in I;
    hence u in I by VECTSP_1:def 19;
    end;
@@ -2846,7 +2856,7 @@ end;
 
 definition
 let R be non empty LoopStr, I,J be Subset of R;
-func I + J -> Subset of R equals :Def20:
+func I + J -> Subset of R equals
  {a + b where a,b is Element of R : a in I & b in J};
 coherence proof set M = {a + b where a,b is Element of R : a in I & b in J};
      M is Subset of R proof
@@ -2912,7 +2922,7 @@ coherence proof
          x+y in {a + b where a,b is Element of R : a in I & b in J};
      hence thesis;
      end;
- hence thesis by Def20;
+ hence thesis;
  end;
 end;
 
@@ -2921,19 +2931,17 @@ let R be Abelian (non empty LoopStr), I,J be Subset of R;
 redefine func I + J;
 commutativity proof
      now let I,J be Subset of R;
-   A1: I+J = {a + b where a,b is Element of R : a in I & b in J} by Def20;
-   A2: J+I = {a + b where a,b is Element of R : a in J & b in I} by Def20;
-   A3: now let u be set; assume u in I+J;
+   A1: now let u be set; assume u in I+J;
       then consider a,b being Element of R such that
-      A4: u = a + b & a in I & b in J by A1;
-      thus u in J+I by A2,A4;
+      A2: u = a + b & a in I & b in J;
+      thus u in J+I by A2;
       end;
        now let u be set; assume u in J+I;
       then consider a,b being Element of R such that
-      A5: u = a + b & a in J & b in I by A2;
-      thus u in I+J by A1,A5;
+      A3: u = a + b & a in J & b in I;
+      thus u in I+J by A3;
       end;
-   hence I + J = J + I by A3,TARSKI:2;
+   hence I + J = J + I by A1,TARSKI:2;
    end;
  hence thesis;
  end;
@@ -2944,22 +2952,21 @@ let R be Abelian add-associative (non empty LoopStr),
     I,J be add-closed Subset of R;
 cluster I + J -> add-closed;
 coherence proof set M = {a + b where a,b is Element of R : a in I & b in J};
- A1: M = I + J by Def20;
      for x,y being Element of R st x in M & y in M holds x+y in
  M proof
      let x,y be Element of R;
-     assume A2: x in M & y in M; then consider a',b' being Element of R such
+     assume A1: x in M & y in M; then consider a',b' being Element of R such
 that
-     A3: x = a' + b' & a' in I & b' in J;
+     A2: x = a' + b' & a' in I & b' in J;
      consider c,d being Element of R such that
-     A4: y = c + d & c in I & d in J by A2;
-     A5: a' + c in I & b' + d in J by A3,A4,Def1;
+     A3: y = c + d & c in I & d in J by A1;
+     A4: a' + c in I & b' + d in J by A2,A3,Def1;
          (a' + c) + (b' + d) = ((a' + c) + b') + d by RLVECT_1:def 6
-      .= (c + x) + d by A3,RLVECT_1:def 6
-      .= x + y by A4,RLVECT_1:def 6;
-     hence thesis by A5;
+      .= (c + x) + d by A2,RLVECT_1:def 6
+      .= x + y by A3,RLVECT_1:def 6;
+     hence thesis by A4;
      end;
- hence thesis by A1,Def1;
+ hence thesis by Def1;
  end;
 end;
 
@@ -2968,16 +2975,15 @@ let R be left-distributive (non empty doubleLoopStr),
     I,J be right-ideal Subset of R;
 cluster I + J -> right-ideal;
 coherence proof set M = {a + b where a,b is Element of R : a in I & b in J};
- A1: M = I + J by Def20;
      for y,x being Element of R st x in M holds x*y in M proof
      let y,x be Element of R; assume x in M;
      then consider a',b' being Element of R such that
-     A2: x = a' + b' & a' in I & b' in J;
-     A3: a'*y in I & b'*y in J by A2,Def3;
-         (a'*y) + (b'*y) = x*y by A2,VECTSP_1:def 12;
-     hence thesis by A3;
+     A1: x = a' + b' & a' in I & b' in J;
+     A2: a'*y in I & b'*y in J by A1,Def3;
+         (a'*y) + (b'*y) = x*y by A1,VECTSP_1:def 12;
+     hence thesis by A2;
      end;
- hence thesis by A1,Def3;
+ hence thesis by Def3;
  end;
 end;
 
@@ -2986,16 +2992,15 @@ let R be right-distributive (non empty doubleLoopStr),
     I,J be left-ideal Subset of R;
 cluster I + J -> left-ideal;
 coherence proof set M = {a + b where a,b is Element of R : a in I & b in J};
- A1: M = I + J by Def20;
      for y,x being Element of R st x in M holds y*x in M proof
      let y,x be Element of R; assume x in M;
      then consider a',b' being Element of R such that
-     A2: x = a' + b' & a' in I & b' in J;
-     A3: y*a' in I & y*b' in J by A2,Def2;
-         (y*a') + (y*b') = y*x by A2,VECTSP_1:def 11;
-     hence thesis by A3;
+     A1: x = a' + b' & a' in I & b' in J;
+     A2: y*a' in I & y*b' in J by A1,Def2;
+         (y*a') + (y*b') = y*x by A1,VECTSP_1:def 11;
+     hence thesis by A2;
      end;
- hence thesis by A1,Def2;
+ hence thesis by Def2;
  end;
 end;
 
@@ -3004,39 +3009,35 @@ theorem
  holds I + (J + K) = (I + J) + K
 proof let R be add-associative (non empty LoopStr), I,J,K be Subset of R;
 A1: now let u be set; assume u in I + (J + K);
-   then u in {a + b where a,b is Element of R : a in I & b in J+K} by Def20;
+   then u in {a + b where a,b is Element of R : a in I & b in J+K};
    then consider a,b being Element of R such that
    A2: u = a + b & a in I & b in J+K;
-       b in {a' + b' where a',b' is Element of R : a' in J & b' in K} by A2,
-Def20
-;
+       b in {a' + b' where a',b' is Element of R : a' in J & b' in K} by A2;
    then consider c,d being Element of R such that
    A3: b = c + d & c in J & d in K;
        a + c in {a' + b' where a',b' is Element of R : a' in I & b' in J} by A2
 ,A3
 ;
-   then a + c in I + J by Def20;
+   then a + c in I + J;
    then (a+ c) + d in {a' + b' where a',b' is Element of R : a' in I+J & b' in
  K}by A3;
-   then (a + c) + d in (I + J) + K by Def20;
+   then (a + c) + d in (I + J) + K;
    hence u in (I + J) + K by A2,A3,RLVECT_1:def 6;
    end;
     now let u be set; assume u in (I + J) + K;
-   then u in {a + b where a,b is Element of R : a in I+J & b in K} by Def20;
+   then u in {a + b where a,b is Element of R : a in I+J & b in K};
    then consider a,b being Element of R such that
    A4: u = a + b & a in I+J & b in K;
-       a in {a' + b' where a',b' is Element of R : a' in I & b' in J} by A4,
-Def20
-;
+       a in {a' + b' where a',b' is Element of R : a' in I & b' in J} by A4;
    then consider c,d being Element of R such that
    A5: a = c + d & c in I & d in J;
        d + b in {a' + b' where a',b' is Element of R : a' in J & b' in K} by A4
 ,A5
 ;
-   then d + b in J + K by Def20;
+   then d + b in J + K;
    then c+(d + b) in {a' + b' where a',b' is Element of R : a' in I & b' in
  J+K} by A5;
-   then c + (d + b) in I + (J + K) by Def20;
+   then c + (d + b) in I + (J + K);
    hence u in I + (J + K) by A4,A5,RLVECT_1:def 6;
    end;
 hence thesis by A1,TARSKI:2;
@@ -3054,7 +3055,7 @@ proof let R be left_zeroed add-right-cancelable right_zeroed
        0.R is Element of J by Th3; then A1: u' + 0.R in
       {a + b where a,b is Element of R : a in I & b in J};
        u' + 0.R = u' by RLVECT_1:def 7;
-   hence u in I + J by A1,Def20;
+   hence u in I + J by A1;
    end;
 hence I c= I + J by TARSKI:def 3;
 end;
@@ -3071,7 +3072,7 @@ proof let R be left_zeroed add-right-cancelable
        0.R is Element of I by Th3;
    then A1: 0.R + u' in {a + b where a,b is Element of R : a in I & b in J};
        0.R + u' = u' by ALGSTR_1:def 5;
-   hence u in I + J by A1,Def20;
+   hence u in I + J by A1;
    end;
 hence thesis by TARSKI:def 3;
 end;
@@ -3084,7 +3085,7 @@ proof let R be (non empty LoopStr), I,J be Subset of R,
           K being add-closed ( Subset of R);
 assume A1: I c= K & J c= K;
     now let u be set; assume u in I + J;
-  then u in {x + y where x,y is Element of R : x in I & y in J} by Def20;
+  then u in {x + y where x,y is Element of R : x in I & y in J};
   then consider i,j being Element of R such that
   A2: u = i + j & i in I & j in J;
   thus u in K by A1,A2,Def1;
@@ -3114,11 +3115,11 @@ A1: now let u be set; assume u in {a,b}-Ideal;
    then reconsider b' = b*s as Element of {b}-Ideal by Th64;
        a' + b' in {x + y where x,y is Element of R : x in {a}-Ideal & y in
  {b}-Ideal};
-   hence u in {a}-Ideal + {b}-Ideal by A2,Def20;
+   hence u in {a}-Ideal + {b}-Ideal by A2;
    end;
     now let u be set; assume u in {a}-Ideal + {b}-Ideal;
    then u in {x + y where x,y is Element of R :
-                      x in {a}-Ideal & y in {b}-Ideal} by Def20;
+                      x in {a}-Ideal & y in {b}-Ideal};
    then consider x,y being Element of R such that
    A3: u = x + y & x in {a}-Ideal & y in {b}-Ideal;
        x in {a*v where v is Element of R : not contradiction} by A3,Th64;
@@ -3137,7 +3138,7 @@ end;
 definition
 let R be non empty 1-sorted, I,J be Subset of R;
  redefine
-  func I /\ J -> Subset of R equals :Def21:
+  func I /\ J -> Subset of R equals
   { x where x is Element of R : x in I & x in J };
  coherence
   proof
@@ -3151,9 +3152,9 @@ let R be non empty 1-sorted, I,J be Subset of R;
    set X =   { x where x is Element of R : P[x] & Q[x] },
        Y =   { x where x is Element of R : P[x] },
        Z =   { x where x is Element of R : Q[x] };
-A:  X = Y /\ Z from DOMAIN_1:sch 10;
+A1:  X = Y /\ Z from DOMAIN_1:sch 10;
     Y = I & Z = J by DOMAIN_1:52;
-   hence thesis by A;
+   hence thesis by A1;
   end;
 end;
 
@@ -3164,7 +3165,7 @@ let R be right_zeroed add-left-cancelable
 cluster I /\ J -> non empty;
 coherence proof 0.R in I & 0.R in J by Th2;
  then 0.R in { x where x is Element of R : x in I & x in J };
- hence thesis by Def21;
+ hence thesis;
  end;
 end;
 
@@ -3172,17 +3173,17 @@ registration
 let R be non empty LoopStr, I,J be add-closed Subset of R;
 cluster I /\ J -> add-closed Subset of R;
 coherence proof set M = { x where x is Element of R : x in I & x in J };
- A1: M = I /\ J by Def21;
+  M = I /\ J;
  then reconsider M as Subset of R;
      for x,y being Element of R st x in M & y in M holds x+y in
  M proof
-     let x,y be Element of R; assume A2: x in M & y in M;
-     then consider a being Element of R such that A3: x = a & a in I & a in J;
-     consider c being Element of R such that A4: c = y & c in I & c in J by A2;
-          a + c in I & a + c in J by A3,A4,Def1;
-     hence thesis by A3,A4;
+     let x,y be Element of R; assume A1: x in M & y in M;
+     then consider a being Element of R such that A2: x = a & a in I & a in J;
+     consider c being Element of R such that A3: c = y & c in I & c in J by A1;
+          a + c in I & a + c in J by A2,A3,Def1;
+     hence thesis by A2,A3;
      end;
- hence thesis by A1,Def1;
+ hence thesis by Def1;
  end;
 end;
 
@@ -3190,15 +3191,15 @@ registration
 let R be non empty multLoopStr, I,J be left-ideal Subset of R;
 cluster I /\ J -> left-ideal Subset of R;
 coherence proof set M = { x where x is Element of R : x in I & x in J };
- A1: M = I /\ J by Def21;
+  M = I /\ J;
  then reconsider M as Subset of R;
      for y,x being Element of R st x in M holds y*x in M proof
      let y,x be Element of R; assume x in M;
      then consider a being Element of R such that
-     A2: x = a & a in I & a in J;   y*a in I & y*a in J by A2,Def2;
-     hence thesis by A2;
+     A1: x = a & a in I & a in J;   y*a in I & y*a in J by A1,Def2;
+     hence thesis by A1;
      end;
- hence thesis by A1,Def2;
+ hence thesis by Def2;
  end;
 end;
 
@@ -3206,14 +3207,14 @@ registration
 let R be non empty multLoopStr, I,J be right-ideal Subset of R;
 cluster I /\ J -> right-ideal Subset of R;
 coherence proof set M = { x where x is Element of R : x in I & x in J };
- A1: M = I /\ J by Def21; then reconsider M as Subset of R;
+  M = I /\ J; then reconsider M as Subset of R;
      for y,x being Element of R st x in M holds x*y in M proof
      let y,x be Element of R; assume x in M;
      then consider a being Element of R such that
-     A2: x = a & a in I & a in J;   a*y in I & a*y in J by A2,Def3;
-     hence thesis by A2;
+     A1: x = a & a in I & a in J;   a*y in I & a*y in J by A1,Def3;
+     hence thesis by A1;
      end;
- hence thesis by A1,Def3;
+ hence thesis by Def3;
  end;
 end;
 
@@ -3243,10 +3244,10 @@ proof
     J be Subset of R, K be non empty Subset of R;
 assume A1: J c= I;
 A2: now let u be set; assume u in I /\ (J + K);
-   then u in {x where x is Element of R : x in I & x in J+K} by Def21;
+   then u in {x where x is Element of R : x in I & x in J+K};
    then consider v being Element of R such that
    A3: u = v & v in I & v in J + K;
-       v in {x + y where x,y is Element of R : x in J & y in K} by A3,Def20;
+       v in {x + y where x,y is Element of R : x in J & y in K} by A3;
    then consider j,k being Element of R such that
    A4: v = j + k & j in J & k in K; reconsider j' = j as Element of I by A1,A4;
        -j' in I by Th13; then (j' + k) + -j' in I by A3,A4,Def1;
@@ -3254,33 +3255,33 @@ A2: now let u be set; assume u in I /\ (J + K);
  I by RLVECT_1:16;
    then k in I by ALGSTR_1:def 5;
    then k in {x where x is Element of R : x in I & x in K} by A4;
-   then k in (I /\ K) by Def21;
+   then k in (I /\ K);
    then u in {x+y where x,y is Element of R : x in J & y in (I /\ K)} by A3,A4
 ;
-   hence u in J + (I /\ K) by Def20;
+   hence u in J + (I /\ K);
    end;
     now let u be set; assume u in J + (I /\ K);
    then u in {x + y where x,y is Element of R: x in J & y in (I /\
- K)} by Def20;
+ K)};
    then consider j,ik being Element of R
    such that A5: u = j + ik & j in J & ik in (I /\ K);
-       ik in {x where x is Element of R : x in I & x in K} by A5,Def21;
+       ik in {x where x is Element of R : x in I & x in K} by A5;
    then consider z being Element of R such that A6: z = ik & z in I & z in K;
    reconsider i' = ik as Element of I by A6;
    reconsider k' = ik as Element of K by A6;
    reconsider j' = j as Element of I by A1,A5;   u = j' + i' by A5;
    then A7: u in I by Def1;   u = j + k' by A5;
    then u in {x + y where x,y is Element of R: x in J & y in K} by A5;
-   then u in J + K by Def20;
+   then u in J + K;
    then u in {x where x is Element of R : x in I & x in J+K} by A7;
-   hence u in I /\ (J + K) by Def21;
+   hence u in I /\ (J + K);
    end;
 hence thesis by A2,TARSKI:2;
 end;
 
 definition
 let R be non empty doubleLoopStr, I,J be Subset of R;
-func I *' J -> Subset of R equals :Def22:
+func I *' J -> Subset of R equals
   { Sum s where s is FinSequence of the carrier of R :
        for i being Nat st 1 <= i & i <= len s
        ex a,b being Element of R st s.i = a*b & a in I & b in J};
@@ -3313,7 +3314,7 @@ coherence proof set M = {Sum s where s is FinSequence of the carrier of R :
    then Sum p in M;
    hence thesis;
    end;
- hence thesis by Def22;
+ hence thesis;
  end;
 end;
 
@@ -3322,40 +3323,34 @@ let R be commutative (non empty doubleLoopStr), I,J be Subset of R;
 redefine func I *' J;
 commutativity proof
     now let I,J be Subset of R;
-   A1: I*'J = {Sum s where s is FinSequence of the carrier of R :
-       for i being Nat st 1 <= i & i <= len s
-       ex a,b being Element of R st s.i = a*b & a in I & b in J} by Def22;
-   A2: J*'I = {Sum s where s is FinSequence of the carrier of R :
-       for i being Nat st 1 <= i & i <= len s
-       ex a,b being Element of R st s.i = a*b & a in J & b in I} by Def22;
-   A3: now let u be set; assume u in I*'J;
+   A1: now let u be set; assume u in I*'J;
       then consider s being FinSequence of the carrier of R such that
-      A4: u = Sum s &
+      A2: u = Sum s &
          for i being Nat st 1 <= i & i <= len s
-         ex a,b being Element of R st s.i = a*b & a in I & b in J by A1;
+         ex a,b being Element of R st s.i = a*b & a in I & b in J;
           for i being Nat st 1 <= i & i <= len s
          ex a,b being Element of R st s.i = a*b & a in J & b in I proof
         let i be Nat; assume 1 <= i & i <= len s;
         then consider a,b being Element of R such that
-        A5: s.i = a*b & a in I & b in J by A4;
-        thus thesis by A5;
+        A3: s.i = a*b & a in I & b in J by A2;
+        thus thesis by A3;
         end;
-      hence u in J*'I by A2,A4;
+      hence u in J*'I by A2;
       end;
        now let u be set; assume u in J*'I;
       then consider s being FinSequence of the carrier of R such that
-      A6: u = Sum s & for i being Nat st 1 <= i & i <= len s
-         ex a,b being Element of R st s.i = a*b & a in J & b in I by A2;
+      A4: u = Sum s & for i being Nat st 1 <= i & i <= len s
+         ex a,b being Element of R st s.i = a*b & a in J & b in I;
           for i being Nat st 1 <= i & i <= len s
          ex a,b being Element of R st s.i = a*b & a in I & b in J proof
         let i be Nat; assume 1 <= i & i <= len s;
         then consider a,b being Element of R such that
-        A7: s.i = a*b & a in J & b in I by A6;
-        thus thesis by A7;
+        A5: s.i = a*b & a in J & b in I by A4;
+        thus thesis by A5;
         end;
-      hence u in I*'J by A1,A6;
+      hence u in I*'J by A4;
       end;
-   hence I *' J = J *' I by A3,TARSKI:2;
+   hence I *' J = J *' I by A1,TARSKI:2;
    end;
  hence thesis;
  end;
@@ -3368,43 +3363,43 @@ cluster I *' J -> add-closed;
 coherence proof set M = {Sum s where s is FinSequence of the carrier of R :
           for i being Nat st 1 <= i & i <= len s
           ex a,b being Element of R st s.i = a*b & a in I & b in J};
- A1: M = I *' J by Def22;
+  M = I *' J;
  then reconsider M as non empty Subset of R;
     for x,y being Element of R st x in M & y in M holds x+y in
  M proof
-     let x,y be Element of R; assume A2: x in M & y in M;
+     let x,y be Element of R; assume A1: x in M & y in M;
      then consider s being FinSequence of the carrier of R such that
-     A3: x = Sum s & for i being Nat st 1 <= i & i <= len s
+     A2: x = Sum s & for i being Nat st 1 <= i & i <= len s
         ex a,b being Element of R st s.i = a*b & a in I & b in J;
      consider t being FinSequence of the carrier of R such that
-     A4: y = Sum t & for i being Nat st 1 <= i & i <= len t
-        ex a,b being Element of R st t.i = a*b & a in I & b in J by A2;
+     A3: y = Sum t & for i being Nat st 1 <= i & i <= len t
+        ex a,b being Element of R st t.i = a*b & a in I & b in J by A1;
      set q = s^t;
-     A5: Sum q = x + y by A3,A4,RLVECT_1:58;
-          now let i be Nat; assume A6: 1 <= i & i <= len q;
+     A4: Sum q = x + y by A2,A3,RLVECT_1:58;
+          now let i be Nat; assume A5: 1 <= i & i <= len q;
          thus ex a,r being Element of R st q.i = a*r & a in I & r in J proof
            per cases;
-           suppose A7: i <= len s;
-             then i in Seg(len s) by A6,FINSEQ_1:3;
+           suppose A6: i <= len s;
+             then i in Seg(len s) by A5,FINSEQ_1:3;
              then i in dom s by FINSEQ_1:def 3;
              then q.i = s.i by FINSEQ_1:def 7;
-             hence thesis by A3,A6,A7;
+             hence thesis by A2,A5,A6;
            end;
-           suppose A8: len s < i;
+           suppose A7: len s < i;
              then reconsider j = i - len s as Nat by INT_1:18;
-                 len s - len s < j by A8,XREAL_1:11
+                 len s - len s < j by A7,XREAL_1:11
 ;
-             then A9: 1 <= j by NAT_1:39;
-                 i <= len s + len t by A6,FINSEQ_1:35;
-             then A10: j <= (len s + len t) - len s by XREAL_1:11;
-                 t.j = q.i by A6,A8,FINSEQ_1:37;
-             hence thesis by A4,A9,A10;
+             then A8: 1 <= j by NAT_1:39;
+                 i <= len s + len t by A5,FINSEQ_1:35;
+             then A9: j <= (len s + len t) - len s by XREAL_1:11;
+                 t.j = q.i by A5,A7,FINSEQ_1:37;
+             hence thesis by A3,A8,A9;
            end;
            end;
          end;
-     hence thesis by A5;
+     hence thesis by A4;
      end;
- hence thesis by A1,Def1;
+ hence thesis by Def1;
  end;
 end;
 
@@ -3416,33 +3411,33 @@ cluster I *' J -> right-ideal;
 coherence proof set M = {Sum s where s is FinSequence of the carrier of R :
           for i being Nat st 1 <= i & i <= len s
           ex a,b being Element of R st s.i = a*b & a in I & b in J};
- A1: M = I *' J by Def22; then reconsider M as non empty Subset of R;
+  M = I *' J; then reconsider M as non empty Subset of R;
      for y,x being Element of R st x in M holds x*y in M proof
      let y,x be Element of R; assume x in M;
      then consider s being FinSequence of the carrier of R such that
-     A2: x = Sum s & for i being Nat st 1 <= i & i <= len s
+     A1: x = Sum s & for i being Nat st 1 <= i & i <= len s
         ex a,b being Element of R st s.i = a*b & a in I & b in J;
      set q = s*y;
-     A3: Sum q = Sum s*y by BINOM:5;
-     A4: Seg(len q) = dom q by FINSEQ_1:def 3 .= dom s by POLYNOM1:def 3
+     A2: Sum q = Sum s*y by BINOM:5;
+     A3: Seg(len q) = dom q by FINSEQ_1:def 3 .= dom s by POLYNOM1:def 3
                .= Seg(len s) by FINSEQ_1:def 3;
-     then A5: len q = len s by FINSEQ_1:8;
-          now let i be Nat; assume A6: 1 <= i & i <= len q;
+     then A4: len q = len s by FINSEQ_1:8;
+          now let i be Nat; assume A5: 1 <= i & i <= len q;
          then consider c,r' being Element of R such that
-         A7: s.i = c*r' & c in I & r' in J by A2,A5;
-             i in Seg(len s) & i in Seg(len q) by A4,A6,FINSEQ_1:3;
-         then A8: i in dom s & i in dom q by FINSEQ_1:def 3;
-         then A9: s/.i = c*r' by A7,FINSEQ_4:def 4;
-         A10: q.i = q/.i by A8,FINSEQ_4:def 4 .= (c*r')*y by A8,A9,
+         A6: s.i = c*r' & c in I & r' in J by A1,A4;
+             i in Seg(len s) & i in Seg(len q) by A3,A5,FINSEQ_1:3;
+         then A7: i in dom s & i in dom q by FINSEQ_1:def 3;
+         then A8: s/.i = c*r' by A6,FINSEQ_4:def 4;
+         A9: q.i = q/.i by A7,FINSEQ_4:def 4 .= (c*r')*y by A7,A8,
 POLYNOM1:def 3 .= c*(r'*y) by GROUP_1:def 4;
          thus ex b,r being Element of R st q.i = b*r & b in I & r in J proof
             take c,r'*y;
-            thus thesis by A7,A10,Def3;
+            thus thesis by A6,A9,Def3;
             end;
           end;
-     hence thesis by A2,A3;
+     hence thesis by A1,A2;
      end;
- hence thesis by A1,Def3;
+ hence thesis by Def3;
  end;
 end;
 
@@ -3454,34 +3449,34 @@ cluster I *' J -> left-ideal;
 coherence proof set M = {Sum s where s is FinSequence of the carrier of R :
           for i being Nat st 1 <= i & i <= len s
           ex a,b being Element of R st s.i = a*b & a in I & b in J};
- A1: M = I *' J by Def22;
+  M = I *' J;
  then reconsider M as non empty Subset of R;
      for y,x being Element of R st x in M holds y*x in M proof
      let y,x be Element of R; assume x in M;
      then consider s being FinSequence of the carrier of R such that
-     A2: x = Sum s & for i being Nat st 1 <= i & i <= len s
+     A1: x = Sum s & for i being Nat st 1 <= i & i <= len s
         ex a,b being Element of R st s.i = a*b & a in I & b in J;
      set q = y*s;
-     A3: Sum q = y*Sum s by BINOM:4;
-     A4: Seg(len q) = dom q by FINSEQ_1:def 3 .= dom s by POLYNOM1:def 2
+     A2: Sum q = y*Sum s by BINOM:4;
+     A3: Seg(len q) = dom q by FINSEQ_1:def 3 .= dom s by POLYNOM1:def 2
                .= Seg(len s) by FINSEQ_1:def 3;
-     then A5: len q = len s by FINSEQ_1:8;
-          now let i be Nat; assume A6: 1 <= i & i <= len q;
+     then A4: len q = len s by FINSEQ_1:8;
+          now let i be Nat; assume A5: 1 <= i & i <= len q;
          then consider c,r' being Element of R such that
-         A7: s.i = c*r' & c in I & r' in J by A2,A5;
-             i in Seg(len s) & i in Seg(len q) by A4,A6,FINSEQ_1:3;
-         then A8: i in dom s & i in dom q by FINSEQ_1:def 3;
-         then A9: s/.i = c*r' by A7,FINSEQ_4:def 4;
-         A10: q.i = q/.i by A8,FINSEQ_4:def 4 .= y*(c*r') by A8,A9,
+         A6: s.i = c*r' & c in I & r' in J by A1,A4;
+             i in Seg(len s) & i in Seg(len q) by A3,A5,FINSEQ_1:3;
+         then A7: i in dom s & i in dom q by FINSEQ_1:def 3;
+         then A8: s/.i = c*r' by A6,FINSEQ_4:def 4;
+         A9: q.i = q/.i by A7,FINSEQ_4:def 4 .= y*(c*r') by A7,A8,
 POLYNOM1:def 2 .= (y*c)*r' by GROUP_1:def 4;
          thus ex b,r being Element of R st q.i = b*r & b in I & r in J proof
             take y*c,r';
-            thus thesis by A7,A10,Def2;
+            thus thesis by A6,A9,Def2;
             end;
           end;
-     hence thesis by A2,A3;
+     hence thesis by A1,A2;
      end;
- hence thesis by A1,Def2;
+ hence thesis by Def2;
  end;
 end;
 
@@ -3506,13 +3501,13 @@ A1: now let u be set; assume A2: u in {0.R}; consider a being Element of I;
    then u in {Sum t where t is FinSequence of the carrier of R :
         for i being Nat st 1 <= i & i <= len t
         ex a,b being Element of R st t.i = a*b & a in {0.R} & b in I} by A3;
-   hence u in {0.R} *' I by Def22;
+   hence u in {0.R} *' I;
    end;
     now let u be set; assume u in ({0.R}) *' I;
    then u in {Sum t where t is FinSequence of the carrier of R :
         for i being Nat st 1 <= i & i <= len t
         ex a,b being Element of R st t.i = a*b & a in {0.R} & b in
- I} by Def22;
+ I};
    then consider s being FinSequence of the carrier of R such that
    A5: Sum s = u & for i being Nat st 1 <= i & i <= len s
         ex a,b being Element of R st s.i = a*b & a in {0.R} & b in I;
@@ -3555,7 +3550,7 @@ proof let R be left_zeroed right_zeroed add-cancelable
     now let u be set; assume u in I *' J;
   then u in {Sum t where t is FinSequence of the carrier of R :
             for i being Nat st 1 <= i & i <= len t
-            ex a,b being Element of R st t.i = a*b & a in I & b in J} by Def22;
+            ex a,b being Element of R st t.i = a*b & a in I & b in J};
   then consider s being FinSequence of the carrier of R such that
   A1: Sum s = u & for i being Nat st 1 <= i & i <= len s
        ex a,b being Element of R st s.i = a*b & a in I & b in J;
@@ -3584,7 +3579,7 @@ proof let R be left_zeroed right_zeroed add-cancelable
           from POLYNOM2:sch 4(A3,A4);
   Sum s in I & Sum s in J by A2,A12;
   then Sum s in {z where z is Element of R : z in I & z in J};
-  hence u in I /\ J by A1,Def21;
+  hence u in I /\ J by A1;
   end;
 hence thesis by TARSKI:def 3;
 end;
@@ -3601,7 +3596,7 @@ A1: now let u be set; assume u in I *' (J + K);
    then u in {Sum t where t is FinSequence of the carrier of R :
             for i being Nat st 1 <= i & i <= len t
             ex a,b being Element of R st t.i = a*b & a in I & b in
- J+K} by Def22;
+ J+K};
    then consider s being FinSequence of the carrier of R such that
    A2: Sum s = u & for i being Nat st 1 <= i & i <= len s
        ex a,b being Element of R st s.i = a*b & a in I & b in J+K;
@@ -3624,15 +3619,13 @@ ex x,y being Element of R st f.$1=x+y & x in I*'J & y in I*'K;
             x in {Sum t where t is FinSequence of the carrier of R :
             for i being Nat st 1 <= i & i <= len t
             ex a,b being Element of R st t.i = a*b & a in I & b in
- J} by A7,Def22
-;
+ J} by A7;
         then consider q being FinSequence of the carrier of R such that
         A8: Sum q = x & for i being Nat st 1 <= i & i <= len q
         ex a,b being Element of R st q.i = a*b & a in I & b in J;
             y in {Sum t where t is FinSequence of the carrier of R :
              for i being Nat st 1 <= i & i <= len t
-             ex a,b being Element of R st t.i = a*b & a in I & b in K} by A7,
-Def22;
+             ex a,b being Element of R st t.i = a*b & a in I & b in K} by A7;
         then consider p being FinSequence of the carrier of R such that
         A9: Sum p = y & for i being Nat st 1 <= i & i <= len p
         ex a,b being Element of R st p.i = a*b & a in I & b in K;
@@ -3644,7 +3637,7 @@ Def22;
         consider a,b being Element of R such that
         A14: s.(n+1) = a*b & a in I & b in J+K by A2,A10,A11;
             b in {a'+b' where a',b' is Element of R : a' in J & b' in
- K} by A14,Def20;
+ K} by A14;
         then consider c,d being Element of R such that
         A15: b = c + d & c in J & d in K;
         A16: s/.(n+1) = a*(c + d) by A12,A14,A15,FINSEQ_4:def 4 .= a*c + a*d
@@ -3672,7 +3665,7 @@ by VECTSP_1:def 18;
         then Sum q1 in {Sum t where t is FinSequence of the carrier of R :
             for i being Nat st 1 <= i & i <= len t
             ex a,b being Element of R st t.i = a*b & a in I & b in J};
-        then A22: Sum q1 in I *' J by Def22;
+        then A22: Sum q1 in I *' J;
         A23: len p1 = len p + len(<*a*d*>) by FINSEQ_1:35
                    .= len p + 1 by FINSEQ_1:57;
              for i being Nat st 1 <= i & i <= len p1
@@ -3695,7 +3688,7 @@ by VECTSP_1:def 18;
         then Sum p1 in {Sum t where t is FinSequence of the carrier of R :
             for i being Nat st 1 <= i & i <= len t
             ex a,b being Element of R st t.i = a*b & a in I & b in K};
-        then A28: Sum p1 in I *' K by Def22;
+        then A28: Sum p1 in I *' K;
             Sum q1 + Sum p1 = (Sum q + Sum <*a*c*>) + Sum p1 by RLVECT_1:58
                .= (Sum q + a*c) + Sum p1 by BINOM:3
                .= (Sum q + a*c) + (Sum p + Sum <*a*d*>) by RLVECT_1:58
@@ -3711,68 +3704,68 @@ by VECTSP_1:def 18;
       from POLYNOM2:sch 4(A4,A5); then
    ex x,y being Element of R st Sum s = x+y & x in I*'J & y in I*'K by A3;
    then u in {a+b where a,b is Element of R : a in I*'J & b in I*'K} by A2;
-   hence u in (I *' J) + (I *' K) by Def20;
+   hence u in (I *' J) + (I *' K);
    end;
     now let u be set; assume u in (I *' J) + (I *' K);
-  then u in {a+b where a,b is Element of R: a in I*'J & b in I*'K} by Def20;
+  then u in {a+b where a,b is Element of R: a in I*'J & b in I*'K};
   then consider a,b being Element of R such that
-  A30: u = a + b & a in I*'J & b in I*'K;
+  A29: u = a + b & a in I*'J & b in I*'K;
       a in {Sum t where t is FinSequence of the carrier of R :
             for i being Nat st 1 <= i & i <= len t
-        ex a,b being Element of R st t.i = a*b & a in I & b in J} by A30,Def22;
+        ex a,b being Element of R st t.i = a*b & a in I & b in J} by A29;
   then consider q being FinSequence of the carrier of R such that
-  A31: a = Sum q & for i being Nat st 1 <= i & i <= len q
+  A30: a = Sum q & for i being Nat st 1 <= i & i <= len q
             ex a,b being Element of R st q.i = a*b & a in I & b in J;
       b in {Sum t where t is FinSequence of the carrier of R :
             for i being Nat st 1 <= i & i <= len t
-        ex a,b being Element of R st t.i = a*b & a in I & b in K} by A30,Def22;
+        ex a,b being Element of R st t.i = a*b & a in I & b in K} by A29;
   then consider p being FinSequence of the carrier of R such that
-  A32: b = Sum p & for i being Nat st 1 <= i & i <= len p
+  A31: b = Sum p & for i being Nat st 1 <= i & i <= len p
             ex a,b being Element of R st p.i = a*b & a in I & b in K;
   set s = p^q;
-  A33: for i being Nat st 1 <= i & i <= len s
+  A32: for i being Nat st 1 <= i & i <= len s
   ex a,b being Element of R st s.i = a*b & a in I & b in J+K proof
-    let i be Nat; assume A34: 1 <= i & i <= len s;
-    then i in Seg(len s) by FINSEQ_1:3; then A35: i in dom s by FINSEQ_1:def 3
+    let i be Nat; assume A33: 1 <= i & i <= len s;
+    then i in Seg(len s) by FINSEQ_1:3; then A34: i in dom s by FINSEQ_1:def 3
 ;
         now per cases;
-    case A36: i <= len p; then i in Seg(len p) by A34,FINSEQ_1:3;
-      then A37: i in dom p by FINSEQ_1:def 3;
+    case A35: i <= len p; then i in Seg(len p) by A33,FINSEQ_1:3;
+      then A36: i in dom p by FINSEQ_1:def 3;
       consider a,b being Element of R such that
-      A38: p.i = a*b & a in I & b in K by A32,A34,A36;
+      A37: p.i = a*b & a in I & b in K by A31,A33,A35;
           0.R in J by Th3;
       then 0.R + b in {a'+b' where a',b' is Element of R:a' in J & b' in
- K} by A38
+ K} by A37
 ;
-      then A39: 0.R + b in J + K by Def20;
-          s.i=a*b by A37,A38,FINSEQ_1:def 7
+      then A38: 0.R + b in J + K;
+          s.i=a*b by A36,A37,FINSEQ_1:def 7
  .=a*(0.R + b) by ALGSTR_1:def 5;
-      hence thesis by A38,A39;
+      hence thesis by A37,A38;
     end;
     case i > len p; then not(i in Seg(len p)) by FINSEQ_1:3;
       then not(i in dom p) by FINSEQ_1:def 3;
       then consider n being Nat such that
-      A40: n in dom q & i = len p + n by A35,FINSEQ_1:38;
-          n in Seg(len q) by A40,FINSEQ_1:def 3;
+      A39: n in dom q & i = len p + n by A34,FINSEQ_1:38;
+          n in Seg(len q) by A39,FINSEQ_1:def 3;
       then 1 <= n & n <= len q by FINSEQ_1:3;
       then consider a,b being Element of R such that
-      A41: q.n = a*b & a in I & b in J by A31;
+      A40: q.n = a*b & a in I & b in J by A30;
           0.R in K by Th3;
       then b + 0.R in {a'+b' where a',b' is Element of R:a' in J & b' in
- K} by A41
+ K} by A40
 ;
-      then A42: b + 0.R in J + K by Def20;
-          s.i = q.n by A40,FINSEQ_1:def 7 .= a*(b + 0.R) by A41,RLVECT_1:def 7;
-      hence thesis by A41,A42;
+      then A41: b + 0.R in J + K;
+          s.i = q.n by A39,FINSEQ_1:def 7 .= a*(b + 0.R) by A40,RLVECT_1:def 7;
+      hence thesis by A40,A41;
     end;
     end;
     hence thesis;
     end;
-      Sum s = u by A30,A31,A32,RLVECT_1:58;
+      Sum s = u by A29,A30,A31,RLVECT_1:58;
   then u in {Sum t where t is FinSequence of the carrier of R :
             for i being Nat st 1 <= i & i <= len t
-        ex a,b being Element of R st t.i = a*b & a in I & b in J+K} by A33;
-  hence u in I *' (J + K) by Def22;
+        ex a,b being Element of R st t.i = a*b & a in I & b in J+K} by A32;
+  hence u in I *' (J + K);
   end;
 hence thesis by A1,TARSKI:2;
 end;
@@ -3788,13 +3781,12 @@ proof let R be Abelian left_zeroed right_zeroed add-cancelable add-associative
 A1: (I + J) *' (I /\ J) = (I *' (I /\ J)) + (J *' (I /\ J)) by Th83;
     now let u be set; assume u in (I *' (I /\ J)) + (J *' (I /\ J));
   then u in {a + b where a,b is Element of R :
-                    a in (I *' (I /\ J)) & b in (J *' (I /\ J))} by Def20;
+                    a in (I *' (I /\ J)) & b in (J *' (I /\ J))};
   then consider a,b being Element of R such that
   A2: u = a + b & a in (I *' (I /\ J)) & b in (J *' (I /\ J));
       a in {Sum t where t is FinSequence of the carrier of R :
        for i being Nat st 1 <= i & i <= len t
-       ex a,b being Element of R st t.i = a*b & a in I & b in (I /\ J)} by A2,
-Def22;
+       ex a,b being Element of R st t.i = a*b & a in I & b in (I /\ J)} by A2;
   then consider q being FinSequence of the carrier of R such that
   A3: a = Sum q & for i being Nat st 1 <= i & i <= len q
               ex a,b being Element of R st q.i = a*b & a in I & b in (I /\ J);
@@ -3811,8 +3803,7 @@ Def22;
                   st t.i = a*b & a in I & b in J};
       b in {Sum t where t is FinSequence of the carrier of R :
        for i being Nat st 1 <= i & i <= len t
-       ex a,b being Element of R st t.i = a*b & a in J & b in (I /\ J)} by A2,
-Def22;
+       ex a,b being Element of R st t.i = a*b & a in J & b in (I /\ J)} by A2;
   then consider s being FinSequence of the carrier of R such that
   A6: b = Sum s & for i being Nat st 1 <= i & i <= len s
                 ex a,b being Element of R st s.i = a*b & a in J & b in (I /\
@@ -3827,7 +3818,7 @@ Def22;
   then Sum s in {Sum t where t is FinSequence of the carrier of R :
               for i being Nat st 1 <= i & i <= len t
               ex a,b being Element of R st t.i = a*b & a in I & b in J};
-  then a in I *' J & b in I *' J by A3,A5,A6,Def22;
+  then a in I *' J & b in I *' J by A3,A5,A6;
   hence u in I *' J by A2,Def1;
   end;
 hence thesis by A1,TARSKI:def 3;
@@ -3844,7 +3835,7 @@ proof let R be right_zeroed add-left-cancelable
     now let u be set; assume u in (I + J) *' (I /\ J);
   then u in {Sum t where t is FinSequence of the carrier of R :
     for i being Nat st 1 <= i & i <= len t
-    ex a,b being Element of R st t.i = a*b & a in I+J & b in I/\J} by Def22;
+    ex a,b being Element of R st t.i = a*b & a in I+J & b in I/\J};
   then consider s being FinSequence of the carrier of R such that
   A1: u = Sum s & for i being Nat st 1 <= i & i <= len s
       ex a,b being Element of R st s.i = a*b & a in I+J & b in I/\J;
@@ -3854,7 +3845,7 @@ proof let R be right_zeroed add-left-cancelable
      st j < len s & v = s.(j + 1) holds f.(j + 1) = f.j + v by RLVECT_1:def 12;
 defpred P[Nat] means f.$1 in I/\J;   f.0 in I & f.0 in J by A2,Th2;
   then f.0 in {t where t is Element of R : t in I & t in J};
-  then A3: P[0] by Def21;
+  then A3: P[0];
   A4: now let n be Nat; assume A5: 0 <= n & n < len s;
       thus P[n] implies P[n+1] proof
         assume A6: f.n in I /\ J;
@@ -3891,7 +3882,7 @@ proof let R be left_zeroed left_unital (non empty doubleLoopStr),
     I,J be non empty Subset of R;
 assume I,J are_co-prime; then A1: I + J = the carrier of R by Def23;
       now let u be set; assume A2: u in I /\ J;
-   then u in {g where g is Element of R : g in I & g in J} by Def21;
+   then u in {g where g is Element of R : g in I & g in J};
    then consider g being Element of R such that
    A3: u = g & g in I & g in J;
        reconsider u' = u as Element of R by A3; set q = <*1.R*u'*>;
@@ -3908,7 +3899,7 @@ assume I,J are_co-prime; then A1: I + J = the carrier of R by Def23;
    then u' in {Sum t where t is FinSequence of the carrier of R :
         for i being Nat st 1 <= i & i <= len t
         ex a,b being Element of R st t.i = a*b & a in I+J & b in I/\J} by A5;
-   hence u in (I + J) *' (I /\ J) by Def22;
+   hence u in (I + J) *' (I /\ J);
    end;
 hence thesis by TARSKI:def 3;
 end;
@@ -3934,7 +3925,7 @@ end;
 
 definition
 let R be non empty HGrStr, I,J be Subset of R;
-func I % J -> Subset of R equals :Def24:
+func I % J -> Subset of R equals
   {a where a is Element of R: a*J c= I};
 coherence proof set M = {a where a is Element of R: a*J c= I};
      M is Subset of R proof
@@ -3966,7 +3957,7 @@ coherence proof set M = {a where a is Element of R: a*J c= I};
        end;
      hence thesis by A2,TARSKI:def 3;
      end;
- hence thesis by Def24;
+ hence thesis;
  end;
 end;
 
@@ -3976,29 +3967,29 @@ let R be right_zeroed add-left-cancelable left-distributive
     I,J be add-closed left-ideal (non empty Subset of R);
 cluster I % J -> add-closed;
 coherence proof set M = {a where a is Element of R: a*J c= I};
- A1: M = I % J by Def24;
+  M = I % J;
  then reconsider M as non empty Subset of R;
      for x,y being Element of R st x in M & y in M holds x+y in
  M proof
      let x,y be Element of R;
-     assume A2: x in M & y in M;
-     then consider a being Element of R such that A3: x = a & a*J c= I;
-     consider b being Element of R such that A4: y = b & b*J c= I by A2;
+     assume A1: x in M & y in M;
+     then consider a being Element of R such that A2: x = a & a*J c= I;
+     consider b being Element of R such that A3: y = b & b*J c= I by A1;
          now let u be set; assume u in (a+b)*J;
-       then u in {(a+b)*i where i is Element of R : i in J} by Def19;
+       then u in {(a+b)*i where i is Element of R : i in J};
        then consider c being Element of R such that
-       A5: u = (a + b)*c & c in J;
-       A6: u = a*c + b*c by A5,VECTSP_1:def 12;
-           a*c in {a*i where i is Element of R : i in J} by A5;
-       then A7: a*c in a*J by Def19;
-           b*c in {b*i where i is Element of R : i in J} by A5;
-       then b*c in b*J by Def19;
-       hence u in I by A3,A4,A6,A7,Def1;
+       A4: u = (a + b)*c & c in J;
+       A5: u = a*c + b*c by A4,VECTSP_1:def 12;
+           a*c in {a*i where i is Element of R : i in J} by A4;
+       then A6: a*c in a*J;
+           b*c in {b*i where i is Element of R : i in J} by A4;
+       then b*c in b*J;
+       hence u in I by A2,A3,A5,A6,Def1;
        end;
      then (a+b)*J c= I by TARSKI:def 3;
-     hence thesis by A3,A4;
+     hence thesis by A2,A3;
      end;
- hence thesis by A1,Def1;
+ hence thesis by Def1;
  end;
 end;
 
@@ -4008,24 +3999,24 @@ let R be right_zeroed add-left-cancelable left-distributive
     I,J be left-ideal (non empty Subset of R);
 cluster I % J -> left-ideal;
 coherence proof set M = {a where a is Element of R: a*J c= I};
- A1: M = I % J by Def24; then reconsider M as non empty Subset of R;
+  M = I % J; then reconsider M as non empty Subset of R;
      for y,x being Element of R st x in M holds y*x in M proof
      let y,x be Element of R;
      assume x in M;
-     then consider a being Element of R such that A2: x = a & a*J c= I;
+     then consider a being Element of R such that A1: x = a & a*J c= I;
          now let u be set; assume u in (y*a)*J;
-       then u in {(y*a)*i where i is Element of R : i in J} by Def19;
+       then u in {(y*a)*i where i is Element of R : i in J};
        then consider c being Element of R such that
-       A3: u = (y*a)*c & c in J;
-       A4: u = a*(y*c) by A3,GROUP_1:def 4;
-           y*c in J by A3,Def2
+       A2: u = (y*a)*c & c in J;
+       A3: u = a*(y*c) by A2,GROUP_1:def 4;
+           y*c in J by A2,Def2
 ; then a*(y*c) in {a*i where i is Element of R : i in J};
-       then u in a*J by A4,Def19;
-       hence u in I by A2;
+       then u in a*J by A3;
+       hence u in I by A1;
        end; then (y*a)*J c= I by TARSKI:def 3;
-     hence thesis by A2;
+     hence thesis by A1;
      end;
- hence thesis by A1,Def2;
+ hence thesis by Def2;
  end;
 cluster I % J -> right-ideal;
 coherence;
@@ -4041,13 +4032,13 @@ proof let R be (non empty multLoopStr),
      now let u be set; assume A1: u in I;
   then reconsider u' = u as Element of R;
       now let v be set; assume v in u'*J;
-    then v in {u'*j where j is Element of R : j in J} by Def19;
+    then v in {u'*j where j is Element of R : j in J};
     then consider j being Element of R such that
     A2: v = u'*j & j in J;
     thus v in I by A1,A2,Def3;
     end; then u'*J c= I by TARSKI:def 3;
   then u' in {a where a is Element of R: a*J c= I};
-  hence u in (I % J) by Def24;
+  hence u in (I % J);
   end;
 hence thesis by TARSKI:def 3;
 end;
@@ -4065,7 +4056,7 @@ proof let R be right_zeroed add-left-cancelable
    then u in {Sum t where t is FinSequence of the carrier of R :
             for i being Nat st 1 <= i & i <= len t
             ex a,b being Element of R st t.i = a*b & a in I%J & b in
- J} by Def22;
+ J};
    then consider s being FinSequence of the carrier of R such that
    A1: Sum s = u & for i being Nat st 1 <= i & i <= len s
        ex a,b being Element of R st s.i = a*b & a in I%J & b in J;
@@ -4087,11 +4078,11 @@ proof let R be right_zeroed add-left-cancelable
         then A10: f.(j+1) = f.j + s/.(j+1) by A2,A5;
         consider a,b being Element of R such that
         A11: s.(j+1) = a*b & a in I%J & b in J by A1,A7,A8;
-            a in {d where d is Element of R: d*J c= I} by A11,Def24;
+            a in {d where d is Element of R: d*J c= I} by A11;
         then consider d being Element of R such that
         A12: a = d & d*J c= I;
             a*b in {d*i where i is Element of R : i in J} by A11,A12;
-        then s.(j+1) in d*J by A11,Def19;
+        then s.(j+1) in d*J by A11;
         hence thesis by A6,A9,A10,A12,Def1;
         end;
       end;
@@ -4115,7 +4106,7 @@ proof let R be left_zeroed add-right-cancelable
    then u in {Sum t where t is FinSequence of the carrier of R :
             for i being Nat st 1 <= i & i <= len t
             ex a,b being Element of R st t.i = a*b & a in I%J & b in
- J} by Def22;
+ J};
    then consider s being FinSequence of the carrier of R such that
    A1: Sum s = u & for i being Nat st 1 <= i & i <= len s
        ex a,b being Element of R st s.i = a*b & a in I%J & b in J;
@@ -4137,11 +4128,11 @@ proof let R be left_zeroed add-right-cancelable
         then A10: f.(j+1) = f.j + s/.(j+1) by A2,A5;
         consider a,b being Element of R such that
         A11: s.(j+1) = a*b & a in I%J & b in J by A1,A7,A8;
-            a in {d where d is Element of R: d*J c= I} by A11,Def24;
+            a in {d where d is Element of R: d*J c= I} by A11;
         then consider d being Element of R such that
         A12: a = d & d*J c= I;
             a*b in {d*i where i is Element of R : i in J} by A11,A12;
-        then s.(j+1) in d*J by A11,Def19;
+        then s.(j+1) in d*J by A11;
         hence thesis by A6,A9,A10,A12,Def1;
         end;
       end;
@@ -4162,17 +4153,17 @@ proof let R be left_zeroed add-right-cancelable right-distributive
          commutative associative (non empty doubleLoopStr),
     I be add-closed right-ideal (non empty Subset of R), J,K be Subset of R;
 A1: now let u be set; assume u in (I % J) % K;
-   then u in {a where a is Element of R: a*K c= I%J} by Def24;
+   then u in {a where a is Element of R: a*K c= I%J};
    then consider a being Element of R such that
    A2: u = a & a*K c= I % J;
        now let v be set; assume v in a*(J *' K);
-     then v in {a*b where b is Element of R : b in J*'K} by Def19;
+     then v in {a*b where b is Element of R : b in J*'K};
      then consider b being Element of R such that
      A3: v = a*b & b in J *' K;
          b in {Sum t where t is FinSequence of the carrier of R :
           for i being Nat st 1 <= i & i <= len t
           ex a,b being Element of R st t.i = a*b & a in J & b in
- K} by A3,Def22;
+ K} by A3;
      then consider s being FinSequence of the carrier of R such that
      A4: Sum s = b & for i being Nat st 1 <= i & i <= len s
          ex a,b being Element of R st s.i = a*b & a in J & b in K;
@@ -4194,29 +4185,29 @@ A1: now let u be set; assume u in (I % J) % K;
                 .= a*(c*d) by A11,A12,POLYNOM1:def 2
                 .= (a*d)*c by GROUP_1:def 4;
              a*d in {a*b' where b' is Element of R : b' in K} by A10;
-         then a*d in a*K by Def19;
+         then a*d in a*K;
          hence thesis by A2,A10,A13;
          end;
      A14: Sum q = v by A3,A4,BINOM:4;
          Sum q in {Sum t where t is FinSequence of the carrier of R :
          for i being Nat st 1 <= i & i <= len t
          ex a,b being Element of R st t.i = a*b & a in I%J & b in J} by A8;
-     then A15: v in (I % J) *' J by A14,Def22;   (I % J) *' J c= I by Th90;
+     then A15: v in (I % J) *' J by A14;   (I % J) *' J c= I by Th90;
      hence v in I by A15;
      end;
    then a*(J*'K) c= I by TARSKI:def 3;
    then u in {f where f is Element of R: f*(J*'K) c= I} by A2;
-   hence u in I % (J *' K) by Def24;
+   hence u in I % (J *' K);
    end;
     now let u be set; assume u in I % (J *' K);
-  then u in {f where f is Element of R: f*(J*'K) c= I} by Def24;
+  then u in {f where f is Element of R: f*(J*'K) c= I};
   then consider a being Element of R such that
   A16: u = a & a*(J *' K) c= I;
       now let v be set; assume v in a*K;
-    then v in {a*b where b is Element of R : b in K} by Def19;
+    then v in {a*b where b is Element of R : b in K};
     then consider b being Element of R such that A17: v = a*b & b in K;
         now let z be set; assume z in (a*b)*J;
-      then z in {(a*b)*c where c is Element of R : c in J} by Def19;
+      then z in {(a*b)*c where c is Element of R : c in J};
       then consider c being Element of R such that
       A18: z = (a*b)*c & c in J;
       A19: z = a*(c*b) by A18,GROUP_1:def 4; set q = <*c*b*>;
@@ -4232,16 +4223,16 @@ A1: now let u be set; assume u in (I % J) % K;
       then c*b in {Sum t where t is FinSequence of the carrier of R :
          for i being Nat st 1 <= i & i <= len t
          ex a,b being Element of R st t.i = a*b & a in J & b in K} by A21;
-      then c*b in J *' K by Def22;
+      then c*b in J *' K;
       then z in {a*f where f is Element of R : f in J*'K} by A19;
-      then z in a*(J *' K) by Def19;
+      then z in a*(J *' K);
       hence z in I by A16;
       end; then (a*b)*J c= I by TARSKI:def 3;
     then v in {f where f is Element of R: f*J c= I} by A17;
-    hence v in I % J by Def24;
+    hence v in I % J;
     end; then a*K c= I % J by TARSKI:def 3;
   then u in {f where f is Element of R: f*K c= I % J} by A16;
-  hence u in (I % J) % K by Def24;
+  hence u in (I % J) % K;
   end;
 hence thesis by A1,TARSKI:2;
 end;
@@ -4251,47 +4242,43 @@ theorem
 holds (J /\ K) % I = (J % I) /\ (K % I)
 proof let R be (non empty multLoopStr), I,J,K be Subset of R;
 A1: now let u be set; assume u in (J /\ K) % I;
-   then u in {a where a is Element of R: a*I c= (J /\ K)} by Def24;
+   then u in {a where a is Element of R: a*I c= (J /\ K)};
    then consider a being Element of R such that
    A2: u = a & a*I c= (J /\ K);
        now let v be set; assume v in a*I; then v in J /\ K by A2;
-     then v in { x where x is Element of R : x in J & x in K} by Def21;
+     then v in { x where x is Element of R : x in J & x in K};
      then consider x being Element of R such that
      A3: v = x & x in J & x in K;
      thus v in J by A3;
      end; then a*I c= J by TARSKI:def 3;
    then u in {a' where a' is Element of R: a'*I c= J} by A2;
-   then A4: u in (J % I) by Def24;
+   then A4: u in (J % I);
        now let v be set; assume v in a*I; then v in J /\ K by A2;
-     then v in { x where x is Element of R : x in J & x in K} by Def21;
+     then v in { x where x is Element of R : x in J & x in K};
      then consider x being Element of R such that
      A5: v = x & x in J & x in K;
      thus v in K by A5;
      end;
    then a*I c= K by TARSKI:def 3;
    then u in {a' where a' is Element of R: a'*I c= K} by A2;
-   then u in (K % I) by Def24;
+   then u in (K % I);
    then u in { x where x is Element of R : x in J%I & x in K%I } by A4;
-   hence u in (J % I) /\ (K % I) by Def21;
+   hence u in (J % I) /\ (K % I);
    end;
     now let u be set; assume u in (J % I) /\ (K % I);
-  then u in { x where x is Element of R : x in J%I & x in K%I} by Def21;
+  then u in { x where x is Element of R : x in J%I & x in K%I};
   then consider x being Element of R such that
   A6: x = u & x in (J % I) & x in (K % I);
   A7: u in {a' where a' is Element of R: a'*I c= J} &
-      u in {a' where a' is Element of R: a'*I c= K} by A6,Def24;
+      u in {a' where a' is Element of R: a'*I c= K} by A6;
   then consider a being Element of R such that
   A8: u = a & a*I c= J;
   consider b being Element of R such that
   A9: u = b & b*I c= K by A7;
-      now let v be set; assume v in a*I;
-        then v in { x' where x' is Element of R : x' in J & x' in K}
-             by A8,A9;
-     hence v in J /\ K by Def21;
-     end;
+  for v be set st v in a*I holds v in J /\ K by A8,A9;
   then a*I c= J /\ K by TARSKI:def 3;
   then u in {a' where a' is Element of R: a'*I c= (J /\ K)} by A8;
-  hence u in (J /\ K) % I by Def24;
+  hence u in (J /\ K) % I;
   end;
 hence thesis by A1,TARSKI:2;
 end;
@@ -4306,64 +4293,62 @@ proof let R be left_zeroed right_zeroed add-right-cancelable
          right-distributive (non empty doubleLoopStr),
     I be add-closed Subset of R, J,K be right-ideal (non empty Subset of R);
 A1: now let u be set; assume u in I % (J + K);
-   then u in {a' where a' is Element of R: a'*(J+K) c= I} by Def24;
+   then u in {a' where a' is Element of R: a'*(J+K) c= I};
    then consider a being Element of R such that
    A2: u = a & a*(J+K) c= I;
        now let u be set; assume u in a*K;
-     then u in {a*j where j is Element of R : j in K} by Def19;
+     then u in {a*j where j is Element of R : j in K};
      then consider j being Element of R such that
      A3: u = a*j & j in K;   K c= J+K by Th74;
      then u in {a*j' where j' is Element of R : j' in J+K} by A3;
-     then u in a*(J+K) by Def19;
+     then u in a*(J+K);
      hence u in I by A2;
      end;
    then a*K c= I by TARSKI:def 3;
    then u in {a' where a' is Element of R: a'*K c= I} by A2;
-   then A4: u in (I % K) by Def24;
+   then A4: u in (I % K);
        now let u be set; assume u in a*J;
-     then u in {a*j where j is Element of R : j in J} by Def19;
+     then u in {a*j where j is Element of R : j in J};
      then consider j being Element of R such that
      A5: u = a*j & j in J;
          J c= J+K by Th73;
      then u in {a*j' where j' is Element of R : j' in J+K} by A5;
-     then u in a*(J+K) by Def19;
+     then u in a*(J+K);
      hence u in I by A2;
      end; then a*J c= I by TARSKI:def 3;
    then u in {a' where a' is Element of R: a'*J c= I} by A2;
-   then u in (I % J) by Def24;
+   then u in (I % J);
    then u in {x where x is Element of R: x in (I % J) & x in (I % K)} by A4
 ;
-   hence u in (I % J) /\ (I % K) by Def21;
+   hence u in (I % J) /\ (I % K);
    end;
     now let u be set; assume u in (I % J) /\ (I % K);
-   then u in {x where x is Element of R: x in (I % J) & x in (I % K)} by Def21
-;
+   then u in {x where x is Element of R: x in (I % J) & x in (I % K)};
    then consider x being Element of R such that
    A6: u = x & x in (I % J) & x in (I % K);
    A7: u in {a where a is Element of R: a*J c= I} &
-       u in {a where a is Element of R: a*K c= I} by A6,Def24;
+       u in {a where a is Element of R: a*K c= I} by A6;
    then consider a being Element of R such that
    A8: u = a & a*J c= I;
    consider b being Element of R such that
    A9: u = b & b*K c= I by A7;
        now let v be set; assume v in a*(J+K);
-     then v in {a*j where j is Element of R : j in J+K} by Def19;
+     then v in {a*j where j is Element of R : j in J+K};
      then consider j being Element of R such that
      A10: v = a*j & j in J+K;
-         j in {x'+y where x',y is Element of R : x' in J & y in K} by A10,Def20
-;
+         j in {x'+y where x',y is Element of R : x' in J & y in K} by A10;
      then consider x',y being Element of R such that
      A11: j = x' + y & x' in J & y in K;
      A12: v = a*x' + b*y by A8,A9,A10,A11,VECTSP_1:def 11;
          a*x' in {a*j' where j' is Element of R : j' in J} by A11;
-     then A13: a*x' in a*J by Def19;
+     then A13: a*x' in a*J;
          b*y in {b*j' where j' is Element of R : j' in K} by A11;
-     then b*y in b*K by Def19;
+     then b*y in b*K;
      hence v in I by A8,A9,A12,A13,Def1;
      end;
    then a*(J+K) c= I by TARSKI:def 3;
    then u in {a' where a' is Element of R: a'*(J+K) c= I} by A8;
-   hence u in I % (J + K) by Def24;
+   hence u in I % (J + K);
    end;
 hence thesis by A1,TARSKI:2;
 end;
@@ -4371,7 +4356,7 @@ end;
 definition
 let R be unital (non empty doubleLoopStr),
     I be Subset of R;
-func sqrt I -> Subset of R equals :Def25:
+func sqrt I -> Subset of R equals
   {a where a is Element of R: ex n being Nat st a|^n in I};
 coherence proof set M = {a where a is Element of R:ex n being Nat st a|^n in
  I};
@@ -4397,7 +4382,7 @@ coherence proof set M ={a where a is Element of R: ex n being Nat st a|^n in
      then a in M;
      hence thesis;
      end;
- hence thesis by Def25;
+ hence thesis;
  end;
 end;
 
@@ -4409,77 +4394,77 @@ let R be Abelian add-associative left_zeroed right_zeroed
 cluster sqrt I -> add-closed;
 coherence proof set M ={a where a is Element of R: ex n being Nat st a|^n in
  I};
- A1: M = sqrt I by Def25;
+  M = sqrt I;
  then reconsider M as non empty Subset of R;
      for x,y being Element of R st x in M & y in M holds x+y in
  M proof
      let x,y be Element of R;
-     assume A2: x in M & y in M; then consider a being Element of R such
+     assume A1: x in M & y in M; then consider a being Element of R such
 that
-     A3: x = a & ex n being Nat st a|^n in I;
-     consider n being Nat such that A4: a|^n in I by A3;
+     A2: x = a & ex n being Nat st a|^n in I;
+     consider n being Nat such that A3: a|^n in I by A2;
      consider b being Element of R such that
-     A5: y = b & ex m being Nat st b|^m in I by A2;
-     consider m being Nat such that A6: b|^m in I by A5;
-     A7: (a+b)|^(n+m) = Sum((a,b) In_Power (n+m)) by BINOM:26;
+     A4: y = b & ex m being Nat st b|^m in I by A1;
+     consider m being Nat such that A5: b|^m in I by A4;
+     A6: (a+b)|^(n+m) = Sum((a,b) In_Power (n+m)) by BINOM:26;
      set p = ((a,b) In_Power (n+m));
      consider f being Function of NAT,the carrier of R such that
-     A8: Sum p = f.(len p) & f.0 = 0.R &
+     A7: Sum p = f.(len p) & f.0 = 0.R &
         for j being Nat, v being Element of R
      st j < len p & v = p.(j + 1) holds f.(j + 1) = f.j + v by RLVECT_1:def 12;
-     A10: for i being Nat st 1 <= i & i <= len p holds p.i in I proof
+     A8: for i being Nat st 1 <= i & i <= len p holds p.i in I proof
         let i be Nat;
-        assume A11: 1 <= i & i <= len p; then i in Seg(len p) by FINSEQ_1:3;
-        then A12: i in dom p by FINSEQ_1:def 3;
+        assume A9: 1 <= i & i <= len p; then i in Seg(len p) by FINSEQ_1:3;
+        then A10: i in dom p by FINSEQ_1:def 3;
         set r = i - 1; set l = (n+m) - r;
-            1 - 1 <= i - 1 by A11,XREAL_1:11;
+            1 - 1 <= i - 1 by A9,XREAL_1:11;
         then reconsider r as Nat by INT_1:16;
-            i <= (n+m) + 1 by A11,BINOM:def 10;
+            i <= (n+m) + 1 by A9,BINOM:def 10;
         then r <= ((n+m) + 1) - 1 by XREAL_1:11;
         then r - r <= (n+m) - r by XREAL_1:11;
         then reconsider l as Nat by INT_1:16;
-        A13: p.i = p/.i by A12,FINSEQ_4:def 4
-              .= ((n+m) choose r)*a|^l*b|^r by A12,BINOM:def 10;
+        A11: p.i = p/.i by A10,FINSEQ_4:def 4
+              .= ((n+m) choose r)*a|^l*b|^r by A10,BINOM:def 10;
         per cases;
         suppose n <= l;
           then consider k being Nat such that
-          A14: l = n + k by NAT_1:28;
-              a|^l = (a|^n)*(a|^k) by A14,BINOM:11;
-          then a|^l in I by A4,Def3; then ((n+m) choose r)*a|^l in I by Th17;
-          hence thesis by A13,Def3;
+          A12: l = n + k by NAT_1:28;
+              a|^l = (a|^n)*(a|^k) by A12,BINOM:11;
+          then a|^l in I by A3,Def3; then ((n+m) choose r)*a|^l in I by Th17;
+          hence thesis by A11,Def3;
         end;
         suppose l < n;
           then ((n+m) + -r) + r < n + r by XREAL_1:8;
           then -n + (n+m) < -n + (n + r) by XREAL_1:8; then consider k being
 Nat such that
-          A15: r = m + k by NAT_1:28;
-              b|^r = (b|^m)*(b|^k) by A15,BINOM:11;
-          then b|^r in I by A6,Def3;
-          hence thesis by A13,Def3;
+          A13: r = m + k by NAT_1:28;
+              b|^r = (b|^m)*(b|^k) by A13,BINOM:11;
+          then b|^r in I by A5,Def3;
+          hence thesis by A11,Def3;
         end;
         end;
         defpred P[Nat] means f.$1 in I;
-     A16: P[0] by A8,Th2;
-     A17: now let j be Nat;
-         assume A18: 0 <= j & j < len p;
+     A14: P[0] by A7,Th2;
+     A15: now let j be Nat;
+         assume A16: 0 <= j & j < len p;
          thus P[j] implies P[j+1] proof
-           assume A19: f.j in I;
-           A20: 1 <= j + 1 by NAT_1:29;
-           A21: j + 1 <= len p by A18,NAT_1:38;
-           then j + 1 in Seg(len p) by A20,FINSEQ_1:3;
+           assume A17: f.j in I;
+           A18: 1 <= j + 1 by NAT_1:29;
+           A19: j + 1 <= len p by A16,NAT_1:38;
+           then j + 1 in Seg(len p) by A18,FINSEQ_1:3;
            then j + 1 in dom p by FINSEQ_1:def 3;
-           then A22: p/.(j+1) = p.(j+1) by FINSEQ_4:def 4;
-           then A23: f.(j + 1) = f.j + p/.(j+1) by A8,A18;
-               p/.(j+1) in I by A10,A20,A21,A22;
-           hence thesis by A19,A23,Def1;
+           then A20: p/.(j+1) = p.(j+1) by FINSEQ_4:def 4;
+           then A21: f.(j + 1) = f.j + p/.(j+1) by A7,A16;
+               p/.(j+1) in I by A8,A18,A19,A20;
+           hence thesis by A17,A21,Def1;
            end;
          end;
          for i being Nat st 0 <= i & i <= len p holds P[i]
-       from POLYNOM2:sch 4(A16,A17);
-     then (a+b)|^(n+m) in I by A7,A8;
-     hence thesis by A3,A5;
+       from POLYNOM2:sch 4(A14,A15);
+     then (a+b)|^(n+m) in I by A6,A7;
+     hence thesis by A2,A4;
      end;
- hence thesis by A1,Def1;
+ hence thesis by Def1;
  end;
 end;
 
@@ -4489,20 +4474,20 @@ let R be unital commutative associative (non empty doubleLoopStr),
 cluster sqrt I -> left-ideal;
 coherence proof set M ={a where a is Element of R: ex n being Nat st a|^n in
  I};
- A1: M = sqrt I by Def25;
+  M = sqrt I;
  then reconsider M as non empty Subset of R;
      for y,x being Element of R st x in M holds y*x in M proof
      let y',x' be Element of R;
-     assume A2: x' in M;
+     assume A1: x' in M;
      reconsider x = x',y = y' as Element of R;
      consider a being Element of R such that
-     A3: x = a & ex n being Nat st a|^n in I by A2;
-     consider n being Nat such that A4: a|^n in I by A3;
-     A5: (y|^n)*(a|^n) in I by A4,Def2;   (y*a)|^n = (y|^n)*(a|^n) by BINOM:10
+     A2: x = a & ex n being Nat st a|^n in I by A1;
+     consider n being Nat such that A3: a|^n in I by A2;
+     A4: (y|^n)*(a|^n) in I by A3,Def2;   (y*a)|^n = (y|^n)*(a|^n) by BINOM:10
 ;
-     hence thesis by A3,A5;
+     hence thesis by A2,A4;
      end;
- hence thesis by A1,Def2;
+ hence thesis by Def2;
  end;
 cluster sqrt I -> right-ideal;
 coherence;
@@ -4520,13 +4505,13 @@ A1: now assume A2: a in sqrt I;   a|^1 = a by BINOM:8;
     now assume ex n being Nat st a|^n in sqrt I;
    then consider n being Nat such that A3: a|^n in sqrt I;
        a|^n in {d where d is Element of R: ex m being Nat st d|^m in
- I} by A3,Def25;
+ I} by A3;
    then consider d being Element of R such that
    A4: a|^n = d & ex m being Nat st d|^m in I;
    consider m being Nat such that A5: d|^m in I by A4;
        a|^(n*m) = d|^m by A4,BINOM:12;
    then a in {g where g is Element of R: ex l being Nat st g|^l in I} by A5;
-   hence a in sqrt I by Def25;
+   hence a in sqrt I;
    end;
 hence thesis by A1;
 end;
@@ -4542,14 +4527,13 @@ proof let R be left_zeroed right_zeroed associative
     I be add-closed right-ideal (non empty Subset of R),
     J be add-closed left-ideal(non empty Subset of R);
 A1: now let u be set; assume u in sqrt (I *' J);
-   then u in {d where d is Element of R: ex m being Nat st d|^m in I*'J} by
-Def25;
+   then u in {d where d is Element of R: ex m being Nat st d|^m in I*'J};
    then consider d being Element of R such that
    A2: u = d & ex m being Nat st d|^m in I *' J;
    consider m being Nat such that A3: d|^m in I *' J by A2;
        d|^m in {Sum s where s is FinSequence of the carrier of R :
         for i being Nat st 1 <= i & i <= len s
-        ex a,b being Element of R st s.i = a*b & a in I & b in J} by A3,Def22;
+        ex a,b being Element of R st s.i = a*b & a in I & b in J} by A3;
    then consider s being FinSequence of the carrier of R such that
    A4: d|^m = Sum s & for i being Nat st 1 <= i & i <= len s
        ex a,b being Element of R st s.i = a*b & a in I & b in J;
@@ -4560,12 +4544,12 @@ Def25;
    defpred P[Nat] means f.$1 in I /\ J;
        f.0 in I & f.0 in J by A5,Th2,Th3;
    then f.0 in {g where g is Element of R: g in I & g in J};
-   then A6: P[0] by Def21;
+   then A6: P[0];
    A7: now let j be Nat;
        assume A8: 0 <= j & j < len s;
        thus P[j] implies P[j+1] proof
         assume f.j in I /\ J;
-        then f.j in {g where g is Element of R: g in I & g in J} by Def21;
+        then f.j in {g where g is Element of R: g in I & g in J};
         then consider g being Element of R such that
         A9: g = f.j & g in I & g in J;
         A10: j + 1 <= len s by A8,NAT_1:38;
@@ -4580,7 +4564,7 @@ Def25;
         then f.(j+1) in I & f.(j+1) in J by A9,A13,Def1;
         then f.(j+1) in {g' where g' is Element of R: g' in I & g' in
  J};
-        hence thesis by Def21;
+        hence thesis;
         end;
       end;
    A15: for j being Nat st 0 <= j&j<=len s holds P[j]
@@ -4588,15 +4572,14 @@ Def25;
    Sum s in I /\ J by A5,A15;
    then u in {d' where d' is Element of R: ex m being Nat st d'|^m in
  I /\ J} by A2,A4;
-   hence u in sqrt (I /\ J) by Def25;
+   hence u in sqrt (I /\ J);
    end;
     now let u be set; assume u in sqrt (I /\ J);
-   then u in {d where d is Element of R: ex m being Nat st d|^m in I/\J} by
-Def25;
+   then u in {d where d is Element of R: ex m being Nat st d|^m in I/\J};
    then consider d being Element of R such that
    A16: u = d & ex m being Nat st d|^m in I /\ J;
    consider m being Nat such that A17: d|^m in I /\ J by A16;
-       d|^m in {g where g is Element of R: g in I & g in J} by A17,Def21;
+       d|^m in {g where g is Element of R: g in I & g in J} by A17;
    then consider g being Element of R such that
    A18: d|^m = g & g in I & g in J;
         set q = <*d|^m*d|^m*>;
@@ -4614,10 +4597,10 @@ then A22:    q.i = q/.i by FINSEQ_4:def 4;
    then d|^(m+m) in {Sum s where s is FinSequence of the carrier of R :
         for i being Nat st 1 <= i & i <= len s
         ex a,b being Element of R st s.i = a*b & a in I & b in J} by A20;
-   then d|^(m+m) in I *' J by Def22;
+   then d|^(m+m) in I *' J;
    then u in {d' where d' is Element of R: ex m being Nat st d'|^m in I *'
  J} by A16;
-   hence u in sqrt (I *' J) by Def25;
+   hence u in sqrt (I *' J);
    end;
 hence thesis by A1,TARSKI:2;
 end;
@@ -5106,7 +5089,7 @@ A35:  n > 0 implies ex k being Nat st n = k+1 & f.(m+1) in F.n \ F.k by A10;
 A36:  n = k+1 and
 A37:  f.(m+1) in F.n \ F.k by A34,A35;
     not f.(m+1) in F.k by A37,XBOOLE_0:def 4;
-  hence contradiction by A33,A34,A36,XCMPLX_1:2;
+  hence contradiction by A33,A34,A36;
 end;
 
 theorem :: Lemma_4_5_iv_i:

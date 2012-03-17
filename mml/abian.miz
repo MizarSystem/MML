@@ -182,12 +182,7 @@ A1: i = 2*k by Def1;
   hence thesis;
  end;
  cluster j*i -> even;
- coherence proof
-  consider k being Integer such that
-A2: i = 2*k by Def1;
-      i*j = 2*(k*j) by A2;
-  hence thesis;
- end;
+ coherence;
 end;
 
 registration
@@ -228,14 +223,7 @@ A2: j = 2*l+1 by Th1;
  hence thesis;
  end;
  cluster j+i -> odd;
- coherence proof
-  consider k being Integer such that
-A3: i = 2*k by Def1;
-  consider l being Integer such that
-A4: j = 2*l+1 by Th1;
-     j+i = 2*(k+l)+1 by A3,A4;
- hence thesis;
- end;
+ coherence;
 end;
 
 registration
@@ -318,15 +306,15 @@ end;
 definition
   let x be set, f be Function;
  pred x is_a_fixpoint_of f means
-:XDef1: x in dom f & x = f.x;
+:Def3: x in dom f & x = f.x;
 end;
 
 definition
   let A be non empty set, a be Element of A, f be Function of A, A;
  redefine pred a is_a_fixpoint_of f means
-:XDef2: a = f.a;
+:Def4: a = f.a;
  compatibility proof
-  thus a is_a_fixpoint_of f implies a = f.a by XDef1;
+  thus a is_a_fixpoint_of f implies a = f.a by Def3;
   assume
 A1: a = f.a;
   a in A;
@@ -338,7 +326,7 @@ end;
 definition
  let f be Function;
  pred f has_a_fixpoint means
-:Def3: ex x st x is_a_fixpoint_of f;
+:Def5: ex x st x is_a_fixpoint_of f;
 end;
 
 notation
@@ -349,14 +337,14 @@ end;
 definition
  let X be set, x be Element of X;
  attr x is covering means
-:Def4: union x = union union X;
+:Def6: union x = union union X;
 end;
 
 theorem Th4:
  sE is covering iff union sE = E
 proof
      union union bool bool E = union bool E by ZFMISC_1:99 .= E by ZFMISC_1:99;
- hence sE is covering iff union sE = E by Def4;
+ hence sE is covering iff union sE = E by Def6;
 end;
 
 registration
@@ -382,7 +370,7 @@ proof let E be set, f be Function of E, E,
 A1: for X being Element of sE holds X misses f.:X;
  given x being set such that
 A2: x is_a_fixpoint_of f;
-A3: x in dom f & f.x = x by A2,XDef1;
+A3: x in dom f & f.x = x by A2,Def3;
       dom f = E by FUNCT_2:67;
    then x in union sE by A3,Th4; then consider X being set such that
 A4: x in X & X in sE by TARSKI:def 4;
@@ -394,7 +382,7 @@ end;
 definition
  let E, f;
  func =_f -> Equivalence_Relation of E means
-:Def5:
+:Def7:
   for x, y st x in E & y in E
    holds [x,y] in it iff ex k, l st iter(f,k).x = iter(f,l).y;
  existence proof
@@ -466,7 +454,7 @@ A3: c = Class(=_f, e) by A2,EQREL_1:31;
        iter(f, 1).e = f.e by FUNCT_7:72
                  .= id(dom f \/ rng f).(f.e) by A1,FUNCT_1:34
                  .= iter(f, 0).(f.e) by FUNCT_7:70;
-    then [f.e,e] in =_f by Def5;
+    then [f.e,e] in =_f by Def7;
  hence f.e in c by A3,EQREL_1:27;
 end;
 
@@ -484,7 +472,7 @@ A2: x' in E & c = Class(=_f, x') by EQREL_1:def 5;
 A3: c = Class(=_f, e) by A2,EQREL_1:31;
        iter(f, n).e = id(dom f \/ rng f).(iter(f,n).e) by A1,FUNCT_1:34
                  .= iter(f, 0).(iter(f,n).e) by FUNCT_7:70;
-    then [iter(f,n).e,e] in =_f by Def5;
+    then [iter(f,n).e,e] in =_f by Def7;
  hence iter(f,n).e in c by A3,EQREL_1:27;
 end;
 
@@ -493,20 +481,20 @@ registration
  coherence
   proof let E;
    assume
-Z:  E is empty-membered;
+A1:  E is empty-membered;
    assume E is non empty;
     then consider x such that
-W:   x in E by XBOOLE_0:def 1;
-A:  x is empty by W,SETFAM_1:def 11,Z;
+A2:   x in E by XBOOLE_0:def 1;
+A3:  x is empty by A2,SETFAM_1:def 11,A1;
    take x;
    thus E c= {x}
     proof let y;
      assume y in E;
-      then y is empty by Z,SETFAM_1:def 11;
-      then x = y by A;
+      then y is empty by A1,SETFAM_1:def 11;
+      then x = y by A3;
      hence thesis by TARSKI:def 1;
     end;
-   thus {x} c= E by W,ZFMISC_1:37;
+   thus {x} c= E by A2,ZFMISC_1:37;
   end;
 end;
 
@@ -598,7 +586,7 @@ A5: b`1 = c1 & b`2 = c2 & b`3 = c3 by MCART_1:47;
     let x; assume x in c; then reconsider xc = x as Element of c;
          [xc,x0] in =_f by A3,EQREL_1:27;
       then consider k, l such that
-    A9: i(k).xc = i(l).x0 by Def5;
+    A9: i(k).xc = i(l).x0 by Def7;
     A10: dom i(k) = E & dom i(l) = E by FUNCT_2:def 1;
     per cases;
     suppose A11: k is even; then reconsider k as even Nat;
@@ -762,7 +750,7 @@ A35: for x being Element of c holds F(x) in bool NAT proof
        hence thesis;
     end;
    consider Odl being Function of c, bool NAT such that
-A36: for x being Element of c holds Odl.x = F(x) from FUNCT_2:sch 12(A35);
+A36: for x being Element of c holds Odl.x = F(x) from FUNCT_2:sch 8(A35);
       now let n be set; assume
       n in dom Odl;
        then reconsider nc = n as Element of c by FUNCT_2:def 1;
@@ -771,7 +759,7 @@ A36: for x being Element of c holds Odl.x = F(x) from FUNCT_2:sch 12(A35);
    A38: x' in E & c = Class(=_f, x') by EQREL_1:def 5;
          [nc, r] in =_f by A38,EQREL_1:30;
       then consider kn, ln being Nat such that
-   A39:  iter(f,kn).nc = iter(f,ln).r by Def5;
+   A39:  iter(f,kn).nc = iter(f,ln).r by Def7;
         defpred P[Nat] means i(k*$1).r = r;
    A40: P[0] by Th3;
    A41: now let i be Nat; assume
@@ -927,8 +915,8 @@ A61: for x being Element of c st x <> r holds odl.(f.x) = (odl.x qua Nat)-1
         consider x such that
     A76: x in dom f & x in {r} & y = f.x by A51,A74,FUNCT_1:def 12;
            x = r by A76,TARSKI:def 1;
-        then r is_a_fixpoint_of f by A75,A76,XDef2;
-     hence contradiction by A1,Def3;
+        then r is_a_fixpoint_of f by A75,A76,Def4;
+     hence contradiction by A1,Def5;
     end;
   end;
   end;
@@ -1016,7 +1004,7 @@ then A103: x in dom f \/ rng f by A92,A93,XBOOLE_0:def 2;
        iter(f, 1).xx = x by A94,FUNCT_7:72
                  .= id(dom f \/ rng f).x by A103,FUNCT_1:34
                  .= iter(f, 0).x by FUNCT_7:70;
-    then [x,xx] in =_f by A92,A93,A95,A96,Def5;
+    then [x,xx] in =_f by A92,A93,A95,A96,Def7;
     then A104: Class(=_f, x) = Class(=_f, xx) by A92,A93,EQREL_1:44;
 A105: f.xx in f.:YY by A94,A95,FUNCT_1:def 12;
        f.:YY misses YY by A77,A96;
@@ -1051,7 +1039,7 @@ then A118: x in dom f \/ rng f by A107,A108,XBOOLE_0:def 2;
        iter(f, 1).xx = x by A109,FUNCT_7:72
                  .= id(dom f \/ rng f).x by A118,FUNCT_1:34
                  .= iter(f, 0).x by FUNCT_7:70;
-    then [x,xx] in =_f by A107,A108,A110,A111,Def5;
+    then [x,xx] in =_f by A107,A108,A110,A111,Def7;
     then A119: Class(=_f, x) = Class(=_f, xx) by A107,A108,EQREL_1:44;
 A120: f.xx in f.:YY by A109,A110,FUNCT_1:def 12;
        f.:YY misses YY by A77,A111;
@@ -1085,7 +1073,7 @@ then A133: x in dom f \/ rng f by A122,A123,XBOOLE_0:def 2;
        iter(f, 1).xx = x by A124,FUNCT_7:72
                  .= id(dom f \/ rng f).x by A133,FUNCT_1:34
                  .= iter(f, 0).x by FUNCT_7:70;
-    then [x,xx] in =_f by A122,A123,A125,A126,Def5;
+    then [x,xx] in =_f by A122,A123,A125,A126,Def7;
     then A134: Class(=_f, x) = Class(=_f, xx) by A122,A123,EQREL_1:44;
 A135: f.xx in f.:YY by A124,A125,FUNCT_1:def 12;
        f.:YY misses YY by A77,A126;

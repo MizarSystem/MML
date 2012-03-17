@@ -8,15 +8,17 @@ environ
 
  vocabularies PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
       RELAT_1, ABSVALUE, ORDINAL2, SQUARE_1, PROB_1, SEQ_1, SEQ_2, SEQM_3,
-      SERIES_1, PROB_2, BHSP_1, BHSP_3, SUPINF_2, RSSPACE, FUNCOP_1;
- notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, XCMPLX_0, STRUCT_0,
+      SERIES_1, PROB_2, BHSP_1, BHSP_3, SUPINF_2, RSSPACE, FUNCOP_1, REALSET1;
+ notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1,
+      BINOP_1, REALSET1, NUMBERS, XCMPLX_0, STRUCT_0,
       XREAL_0, REAL_1, NAT_1, RELAT_1, PARTFUN1, FUNCT_1, FUNCT_2, FUNCOP_1,
       PRE_TOPC, COMPLEX1, RLVECT_1, NORMSP_1, BHSP_1, BHSP_2, BHSP_3, SQUARE_1,
       SEQ_1, SEQ_2, SEQM_3, SERIES_1, RSSPACE;
  constructors REAL_1, NAT_1, DOMAIN_1, SQUARE_1, SEQ_2, SERIES_1, PREPOWER,
-      PARTFUN1, RLSUB_1, BHSP_2, BHSP_3, RSSPACE, FUNCOP_1;
+      PARTFUN1, RLSUB_1, BHSP_2, BHSP_3, RSSPACE, FUNCOP_1, REALSET1, BINOP_1;
  registrations RELSET_1, XREAL_0, STRUCT_0, RSSPACE, MEMBERED, ORDINAL2,
-      SEQM_3;
+      SEQM_3, REALSET1;
+ definitions SQUARE_1, BINOP_1, REALSET1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  theorems RELAT_1, SQUARE_1, ZFMISC_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, INT_1,
       FUNCT_1, NAT_1, FUNCT_2, RLVECT_1, RLSUB_1, BHSP_1, BHSP_2, BHSP_3,
@@ -62,12 +64,12 @@ A3:for u,v be VECTOR of l2_Space holds u+v =seq_id(u)+seq_id(v)
 A4: [:W,W:] c= [:the carrier of L1,the carrier of L1:] by ZFMISC_1:119;
         dom (the add of L1)
        = [:the carrier of L1,the carrier of L1:] by FUNCT_2:def 1;
-     then dom ((the add of Linear_Space_of_RealSequences) | [:W,W:])
+     then dom ((the add of Linear_Space_of_RealSequences)||W)
        =[:W,W:] by A4,RELAT_1:91;
-then A5:  [u,v] in dom ((the add of Linear_Space_of_RealSequences)|[:W,W:])
+then A5:  [u,v] in dom ((the add of Linear_Space_of_RealSequences)||W)
        by RSSPACE:def 13,ZFMISC_1:106;
-        u+v =(the add of l2_Space).[u,v] by RLVECT_1:def 3
-       .=((the add of Linear_Space_of_RealSequences)|[:W,W:]).[u,v]
+        u+v =(the add of l2_Space).(u,v) by RLVECT_1:def 3
+       .=((the add of Linear_Space_of_RealSequences)||W).[u,v]
          by RSSPACE:def 8,def 13
        .=(the add of Linear_Space_of_RealSequences).[u,v]
          by A5,FUNCT_1:70
@@ -153,13 +155,13 @@ A18:    (2(#)r).n =2*r.n by SEQ_1:13
       (p+q).n = p.n +q.n by SEQ_1:11
               .= (s.n*s.n) + q.n by SEQ_1:12
               .= (s.n*s.n) + (t.n*t.n) by SEQ_1:12
-              .= sn^2 + (t.n*t.n) by SQUARE_1:def 3
-              .= sn^2 + tn^2 by SQUARE_1:def 3
+              .= sn^2 + (t.n*t.n)
+              .= sn^2 + tn^2
               .=(abs(sn))^2 + tn^2 by COMPLEX1:161
               .=(abs(sn))^2 + (abs(tn))^2 by COMPLEX1:161;
 then A19:    (p+q).n - (2(#)r).n
          = (abs(sn))^2 - 2*abs(sn)*abs(tn) + (abs(tn))^2 by A18
-         .= (abs(sn)-abs(tn))^2 by SQUARE_1:64;
+         .= (abs(sn)-abs(tn))^2;
           0 <= (abs(sn)-abs(tn))^2 by SQUARE_1:72;
        then 0 + (2(#)r).n <= (p+q).n - (2(#)r).n + (2(#)r).n by A19,XREAL_1:9
 ;
@@ -175,7 +177,7 @@ then A20:  2(#)r is summable by A15,A16,SERIES_1:24;
      for v,w be VECTOR of l2_Space holds v.|.w = Sum(seq_id(v)(#)seq_id(w))
   proof
     let v,w be VECTOR of l2_Space;
-    thus v.|.w = (the scalar of l2_Space).[v,w] by BHSP_1:def 1
+    thus v.|.w = (the scalar of l2_Space).(v,w) by BHSP_1:def 1
              .= Sum(seq_id(v)(#)seq_id(w)) by RSSPACE:def 12,def 13;
     end;
   hence thesis by A1,A2,A3,A6,A9,A10,A11,A12,RSSPACE:def 13;
@@ -320,15 +322,9 @@ Lm2:
 proof
 A1:now
      let x,y be Real;
-    2*x*x+2*y*y = 2*(x*x) + 2*(y*y)
-                .= 2*x^2 + 2*(y*y) by SQUARE_1:def 3
-                .= 2*x^2 + 2*y^2 by SQUARE_1:def 3;
-then A3:  2*x*x+2*y*y - (x+y)*(x+y)
-        = x^2 - 2*x*y + (y^2 + y^2 - y^2)
-       .= (x-y)^2 by SQUARE_1:64;
         0 <= (x-y)^2 by SQUARE_1:72;
      then 0 + (x+y)*(x+y) <= 2*x*x+2*y*y - (x+y)*(x+y)
-        + (x+y)*(x+y) by A3,XREAL_1:9;
+        + (x+y)*(x+y) by XREAL_1:9;
      hence (x+y)*(x+y) <=2*x*x+2*y*y;
    end;
       now
@@ -353,19 +349,19 @@ A1: seq is convergent
 A2:ex k be Nat st (for i be Nat st k <= i holds seq.i <=e );
    reconsider cseq = NAT --> e as Real_Sequence by FUNCOP_1:57;
 A3:for n be Nat holds cseq.n=e by FUNCOP_1:13;
-A5:cseq is convergent by SEQ_4:39;
+A4:cseq is convergent by SEQ_4:39;
    consider k be Nat such that
-A6:for i be Nat st k <= i holds seq.i <=e by A2;
-A7:(seq ^\k) is convergent by A1,SEQ_4:33;
-A8:lim (seq ^\k)=lim seq by A1,SEQ_4:33;
-A9:now let i be Nat;
-A10: (seq ^\k).i = seq.(k+i) by SEQM_3:def 9;
+A5:for i be Nat st k <= i holds seq.i <=e by A2;
+A6:(seq ^\k) is convergent by A1,SEQ_4:33;
+A7:lim (seq ^\k)=lim seq by A1,SEQ_4:33;
+A8:now let i be Nat;
+A9: (seq ^\k).i = seq.(k+i) by SEQM_3:def 9;
         k <= k+i by NAT_1:29;
-     then seq.(k+i) <=e by A6;
-     hence (seq ^\k) .i <= cseq.i by A3,A10;
+     then seq.(k+i) <=e by A5;
+     hence (seq ^\k) .i <= cseq.i by A3,A9;
   end;
      lim cseq = cseq.0 by SEQ_4:41 .= e by A3;
-  hence thesis by A5,A7,A8,A9,SEQ_2:32;
+  hence thesis by A4,A6,A7,A8,SEQ_2:32;
 end;
 
 Lm4:
@@ -395,18 +391,18 @@ A3:for n be Nat holds cseq.n=c by FUNCOP_1:13;
    end;
 then A4:for x be set st x in NAT holds
      rseq.x =((seq -cseq) (#) (seq -cseq)).x;
- A6:cseq is convergent by SEQ_4:39;
-then A7:seq -cseq is convergent by A1,SEQ_2:25;
-then A8:(seq -cseq)(#)(seq -cseq) is convergent by SEQ_2:28;
+ A5:cseq is convergent by SEQ_4:39;
+then A6:seq -cseq is convergent by A1,SEQ_2:25;
+then A7:(seq -cseq)(#)(seq -cseq) is convergent by SEQ_2:28;
       lim ((seq -cseq)(#)(seq -cseq))
-     = (lim ((seq -cseq)))*(lim ((seq -cseq))) by A7,SEQ_2:29
-    .= ((lim seq) - (lim cseq))*(lim ((seq -cseq))) by A1,A6,SEQ_2:26
-    .= ((lim seq) - (lim cseq))*((lim seq) - (lim cseq)) by A1,A6,SEQ_2:26
+     = (lim ((seq -cseq)))*(lim ((seq -cseq))) by A6,SEQ_2:29
+    .= ((lim seq) - (lim cseq))*(lim ((seq -cseq))) by A1,A5,SEQ_2:26
+    .= ((lim seq) - (lim cseq))*((lim seq) - (lim cseq)) by A1,A5,SEQ_2:26
     .= ((lim seq) - (cseq.0))*((lim seq) - (lim cseq)) by SEQ_4:41
     .= ((lim seq) - (cseq.0))*((lim seq) - (cseq.0)) by SEQ_4:41
     .= ((lim seq) - c)*((lim seq) - (cseq.0)) by A3
     .= ((lim seq) - c)*((lim seq) - c) by A3;
-   hence thesis by A4,A8,SEQ_1:8;
+   hence thesis by A4,A7,SEQ_1:8;
 end;
 
 Lm5:
@@ -440,18 +436,18 @@ A4:for n be Nat holds cseq.n=c by FUNCOP_1:13;
    then for x be set st x in NAT holds
     rseq.x =((seq -cseq) (#) (seq -cseq)+seq1).x;
 then A5:rseq = ((seq -cseq) (#) (seq -cseq)+seq1) by SEQ_1:8;
- A7:cseq is convergent by SEQ_4:39;
-then A8:seq -cseq is convergent by A1,SEQ_2:25;
-then A9:(seq -cseq)(#)(seq -cseq) is convergent by SEQ_2:28;
+ A6:cseq is convergent by SEQ_4:39;
+then A7:seq -cseq is convergent by A1,SEQ_2:25;
+then A8:(seq -cseq)(#)(seq -cseq) is convergent by SEQ_2:28;
       lim ((seq -cseq)(#)(seq -cseq))
-     = (lim ((seq -cseq)))*(lim ((seq -cseq))) by A8,SEQ_2:29
-    .= ((lim seq) - (lim cseq))*(lim ((seq -cseq))) by A1,A7,SEQ_2:26
-    .= ((lim seq) - (lim cseq))*((lim seq) - (lim cseq)) by A1,A7,SEQ_2:26
+     = (lim ((seq -cseq)))*(lim ((seq -cseq))) by A7,SEQ_2:29
+    .= ((lim seq) - (lim cseq))*(lim ((seq -cseq))) by A1,A6,SEQ_2:26
+    .= ((lim seq) - (lim cseq))*((lim seq) - (lim cseq)) by A1,A6,SEQ_2:26
     .= ((lim seq) - (cseq.0))*((lim seq) - (lim cseq)) by SEQ_4:41
     .= ((lim seq) - (cseq.0))*((lim seq) - (cseq.0)) by SEQ_4:41
     .= ((lim seq) - c)*((lim seq) - (cseq.0)) by A4
     .= ((lim seq) - c)*((lim seq) - c) by A4;
-   hence thesis by A2,A5,A9,SEQ_2:19,20;
+   hence thesis by A2,A5,A8,SEQ_2:19,20;
 end;
 
 theorem
@@ -516,8 +512,7 @@ then A13:       0 <= sqrt ( Sum(seq_id(((vseq.m) - (vseq.k)))
                 (#)seq_id(((vseq.m) - (vseq.k)))) ) )^2 < e1^2
               by A13,SQUARE_1:78;
            then (sqrt ( Sum(seq_id(((vseq.m) - (vseq.k)))
-                (#)seq_id(((vseq.m) - (vseq.k)))) ) )^2 < e*e
-              by SQUARE_1:def 3;
+                (#)seq_id(((vseq.m) - (vseq.k)))) ) )^2 < e*e;
 then A14:       Sum(seq_id(((vseq.m) - (vseq.k)))
                (#)seq_id(((vseq.m) - (vseq.k)))) < e*e by A12,SQUARE_1:def 4;
 A15:      abs(rseqi.m-rseqi.k)*abs(rseqi.m-rseqi.k)
@@ -536,10 +531,9 @@ A15:      abs(rseqi.m-rseqi.k)*abs(rseqi.m-rseqi.k)
               .=rseqi.m - rseqi.k by A4;
              then ((seq_id((vseq.m) - (vseq.k))).i)
                *((seq_id((vseq.m) - (vseq.k))).i)
-               =((rseqi.m - rseqi.k))^2 by SQUARE_1:def 3
+               =((rseqi.m - rseqi.k))^2
               .= (abs((rseqi.m - rseqi.k)))^2 by COMPLEX1:161
-              .=abs((rseqi.m - rseqi.k))*abs((rseqi.m - rseqi.k))
-                by SQUARE_1:def 3;
+              .=abs((rseqi.m - rseqi.k))*abs((rseqi.m - rseqi.k));
              hence thesis by SEQ_1:12;
            end;
 A16:      (seq_id(((vseq.m) - (vseq.k)))
@@ -551,9 +545,9 @@ then A18:      0 <= abs(rseqi.m-rseqi.k)*abs(rseqi.m-rseqi.k) by XREAL_1:129;
 A19:       abs(rseqi.m-rseqi.k)*abs(rseqi.m-rseqi.k)
              < e*e by A14,A15,A16,XREAL_1:2;
 A20:       sqrt (abs(rseqi.m-rseqi.k)*abs(rseqi.m-rseqi.k))
-             =sqrt ((abs(rseqi.m-rseqi.k))^2) by SQUARE_1:def 3
+             =sqrt ((abs(rseqi.m-rseqi.k))^2)
             .=abs(rseqi.m-rseqi.k) by A17,SQUARE_1:89;
-              sqrt (e*e)=sqrt (e1^2) by SQUARE_1:def 3
+              sqrt (e*e)=sqrt (e1^2)
             .=e by A6,SQUARE_1:89;
            hence abs(rseqi.m-rseqi.k) < e by A18,A19,A20,SQUARE_1:95;
          end;
@@ -630,8 +624,7 @@ then A26:e*e < e1*e1 by A25,XREAL_1:99;
               (#)seq_id(((vseq.n) - (vseq.m)))) ) )^2 < e^2
           by A34,SQUARE_1:78;
          then (sqrt ( Sum(seq_id(((vseq.n) - (vseq.m)))
-         (#)seq_id(((vseq.n) - (vseq.m)))) ) )^2 < e*e
-         by SQUARE_1:def 3;
+         (#)seq_id(((vseq.n) - (vseq.m)))) ) )^2 < e*e;
           hence thesis by A32,A33,RSSPACE:def 11,def 13,SQUARE_1:def 4;
         end;
   A35: for n be Nat
@@ -1011,7 +1004,7 @@ then seq_id(u-v)=seq_id tseq-seq_id(vseq.n) by Th1;
 then A75:(u-v).|.(u-v) < e*e by A74,Th1;
   0 <= (u-v).|.(u-v) by BHSP_1:def 2;
 then sqrt ((u-v).|.(u-v)) < sqrt (e*e) by A75,SQUARE_1:95;
-then A76: sqrt ((u-v).|.(u-v)) < sqrt (e^2) by SQUARE_1:def 3;
+then A76: sqrt ((u-v).|.(u-v)) < sqrt (e^2);
        ||.(vseq.n) - tv.||
      =||.(vseq.n) + -tv.|| by RLVECT_1:def 11
     .=||.-(tv-(vseq.n)).|| by RLVECT_1:47

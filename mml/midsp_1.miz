@@ -13,7 +13,7 @@ environ
  constructors BINOP_1, VECTSP_1, MCART_1;
  registrations STRUCT_0, RELSET_1, SUBSET_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions STRUCT_0, RLVECT_1;
+ definitions STRUCT_0, RLVECT_1, BINOP_1;
  theorems ZFMISC_1, FUNCT_2, TARSKI, MCART_1, BINOP_1, RLVECT_1;
  schemes FUNCT_2, BINOP_1;
 
@@ -353,11 +353,7 @@ end;
 
 registration let M,p;
   cluster p~ -> non empty;
-   coherence
-    proof
-        p~ = { q : q ## p};
-     hence thesis by Th39;
-    end;
+   coherence by Th39;
 end;
 
 canceled;
@@ -373,12 +369,7 @@ Th41: for p holds r in p~ iff r ## p
     then ex q st r = q & q ## p;
     hence thesis;
    end;
-  thus r ## p implies r in p~
-   proof
-    assume r ## p;
-    then r in { q : q ## p};
-    hence thesis;
-   end;
+  thus r ## p implies r in p~;
  end;
 
 theorem
@@ -599,30 +590,13 @@ Th55: ex b st u = vect(a,b)
  end;
 
 theorem
-Th56: [a,b] ## [c,d] implies vect(a,b) = vect(c,d)
- proof
-  assume [a,b] ## [c,d];
-  then A1: [a,b]~ = [c,d]~ by Th42;
-     vect(a,b) = [a,b]~;
-  hence thesis by A1;
- end;
+Th56: [a,b] ## [c,d] implies vect(a,b) = vect(c,d) by Th42;
 
 theorem
-Th57: vect(a,b) = vect(c,d) implies a@d = b@c
- proof
-  assume A1: vect(a,b) = vect(c,d);
-     vect(a,b) = [a,b]~;
-  then [a,b]~ = [c,d]~ by A1;
-  hence thesis by Th44;
- end;
+Th57: vect(a,b) = vect(c,d) implies a@d = b@c by Th44;
 
 theorem
-Th58: ID(M) = vect(b,b)
- proof
-     ID(M) = [b,b]~ by Th50
-      .= vect(b,b);
-  hence thesis;
- end;
+Th58: ID(M) = vect(b,b) by Th50;
 
 theorem
     vect(a,b) = vect(a,c) implies b = c
@@ -644,8 +618,7 @@ Th60: vect(a,b) + vect(b,c) = vect(a,c)
        p`2 = b by MCART_1:7
         .= q`1 by MCART_1:7;
     then A3: u + v = [p`1,q`2]~ by Def10;
-        v = vect(b,c);
-    hence thesis by A1,A2,A3;
+    thus thesis by A1,A2,A3;
   end;
 
 :: F. VECTOR GROUPS
@@ -820,7 +793,7 @@ definition let M;
    Element of setvect(M)] means $3 = $1 + $2;
    A1: for u1,v1 ex W st P[u1,v1,W];
    consider o being BinOp of setvect(M) such that
-   A2: for u1,v1 holds P[u1,v1,o.(u1,v1)] from BINOP_1:sch 1 (A1);
+   A2: for u1,v1 holds P[u1,v1,o.(u1,v1)] from BINOP_1:sch 3(A1);
    take o;
    thus thesis by A2;
   end;
@@ -829,14 +802,14 @@ definition let M;
    let f,g be BinOp of setvect(M) such that
    A3: for u1,v1 holds f.(u1,v1) = u1 + v1 and
    A4: for u1,v1 holds g.(u1,v1) = u1 + v1;
-      for u1,v1 holds f.[u1,v1] = g.[u1,v1]
+      for u1,v1 holds f.(u1,v1) = g.(u1,v1)
     proof
      let u1,v1;
 A5:      f.(u1,v1) = u1 + v1 by A3;
-        f.[u1,v1] = f.(u1,v1) by BINOP_1:def 1 .= g.(u1,v1) by A4,A5;
-     hence thesis by BINOP_1:def 1;
+        f.[u1,v1] = f.(u1,v1) .= g.(u1,v1) by A4,A5;
+     hence thesis;
     end;
-   hence thesis by FUNCT_2:120;
+   hence thesis by BINOP_1:2;
   end;
 end;
 
@@ -907,38 +880,22 @@ registration let M;
  cluster vectgroup M -> strict non empty;
  coherence
   proof
-       vectgroup M = LoopStr (# setvect(M),addvect(M), zerovect(M) #);
-   hence vectgroup M is strict & the carrier of vectgroup M is non empty;
+   thus vectgroup M is strict & the carrier of vectgroup M is non empty;
   end;
 end;
 
 canceled 3;
 
 theorem
-the carrier of vectgroup(M) = setvect(M)
- proof
-      the carrier of LoopStr(#setvect(M), addvect(M), zerovect(M)#)
-     = setvect(M);
-  hence thesis;
- end;
+the carrier of vectgroup(M) = setvect(M);
 
 theorem
-the add of vectgroup(M) = addvect(M)
- proof
-     the add of LoopStr(#setvect(M), addvect(M), zerovect(M)#)
-     = addvect(M);
-  hence thesis;
- end;
+the add of vectgroup(M) = addvect(M);
 
 canceled;
 
 theorem
-the Zero of vectgroup(M) = zerovect(M)
- proof
-     the Zero of LoopStr(#setvect(M), addvect(M), zerovect(M)#)
-     = zerovect(M);
-  hence thesis;
- end;
+the Zero of vectgroup(M) = zerovect(M);
 
 theorem
     vectgroup(M) is add-associative right_zeroed right_complementable Abelian
@@ -969,13 +926,12 @@ theorem
     thus x+0.GS = x
      proof
       reconsider xxx = xx as Vector of M by Th71;
-      A2: x+(0.GS) = (the add of GS).(xx,(zerovect(M))) by RLVECT_1:5
+      A1: x+(0.GS) = (the add of GS).(xx,(zerovect(M))) by RLVECT_1:5
               .= (addvect(M)).(xx,(zerovect(M)))
               .= xx+(zerovect(M)) by Def15;
-         xx = xxx & zerovect(M) = ID(M);
-      then xx+(zerovect(M)) = xxx+ID(M) by Def14
+      xx+(zerovect(M)) = xxx+ID(M) by Def14
               .= x by Th64;
-      hence thesis by A2;
+      hence thesis by A1;
      end;
   end;
   thus GS is right_complementable

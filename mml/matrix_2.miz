@@ -12,7 +12,7 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, RELAT_1, FUNCT_1,
       PARTFUN1, FUNCT_2, STRUCT_0, NAT_1, GROUP_1, GROUP_4, BINOP_1, RLVECT_1,
       VECTSP_1, FINSEQ_1, CARD_1, MATRIX_1, FINSET_1, FINSUB_1, FINSEQ_2,
-      FINSEQ_4, FINSEQOP;
+      FINSEQ_3, FINSEQ_4, FINSEQOP;
  constructors NAT_1, GROUP_4, BINOP_1, MATRIX_1, FINSEQOP, FINSEQ_4, PARTFUN1,
       RELAT_2;
  registrations FUNCT_1, GROUP_1, MATRIX_1, FINSET_1, RELSET_1, STRUCT_0,
@@ -44,11 +44,7 @@ end;
 definition
   let D,n,m;let d;
   redefine func (n,m) --> d ->Matrix of n,m,D;
-  coherence
-  proof
-    (n,m) --> d =n |->(m |-> d);
-    hence thesis by MATRIX_1:10;
-  end;
+  coherence by MATRIX_1:10;
 end;
 
 theorem Th1:
@@ -62,8 +58,7 @@ theorem Th1:
     then A3: i in Seg n by MATRIX_1:def 3;
     then n > 0 by FINSEQ_1:4,NAT_1:19;
     then A4: j in Seg m by A2,MATRIX_1:24;
-    M=n |->(m|->a);
-    then M.i=m|->a & (m|->a).j = a by A3,A4,FINSEQ_2:70;
+    M.i=m|->a & (m|->a).j = a by A3,A4,FINSEQ_2:70;
     hence M*(i,j)=a by A1,MATRIX_1:def 6;
   end;
 
@@ -96,15 +91,14 @@ theorem Th3:
   len (x1,x2)][(y1,y2)=2 & width (x1,x2)][(y1,y2)=2 &
     Indices (x1,x2)][(y1,y2)=[:Seg 2,Seg 2:]
   proof set M = (x1,x2)][(y1,y2);
- (x1,x2)][(y1,y2) = <*<*x1,x2*>,<*y1,y2*>*>;
-    hence A2:len M=2 by FINSEQ_1:61;
+    thus A1:len M=2 by FINSEQ_1:61;
     rng M = { <*x1,x2*>,<*y1,y2*>} by FINSEQ_2:147;
     then <*x1,x2*> in rng M & len <*x1,x2*>=2 & 0<2
       by FINSEQ_1:61,TARSKI:def 2;
     hence
-A3: width M=2 by A2,MATRIX_1:def 4;
-    dom M = Seg 2 by A2,FINSEQ_1:def 3;
-    hence thesis by A3,MATRIX_1:def 5;
+A2: width M=2 by A1,MATRIX_1:def 4;
+    dom M = Seg 2 by A1,FINSEQ_1:def 3;
+    hence thesis by A2,MATRIX_1:def 5;
   end;
 
 theorem Th4:
@@ -144,11 +138,7 @@ theorem
 
 definition let D;let a,b,c,d be Element of D;
   redefine func (a,b)][(c,d) -> Matrix of 2,D;
-  coherence
-  proof
-    (a,b)][(c,d) = <*<*a,b*>,<*c,d*>*>;
-    hence thesis by MATRIX_1:19;
-  end;
+  coherence by MATRIX_1:19;
 end;
 
 theorem
@@ -156,8 +146,7 @@ theorem
   (a,b)][(c,d)*(2,1)=c & (a,b)][(c,d)*(2,2)=d
   proof
     set M=(a,b)][(c,d);
-    (a,b)][(c,d) = <*<*a,b*>,<*c,d*>*>;
-    then M.1= <*a,b*> & M.2=<*c,d*> & <*a,b*>.1=a & <*a,b*>.2=b
+    M.1= <*a,b*> & M.2=<*c,d*> & <*a,b*>.1=a & <*a,b*>.2=b
     & <*c,d*>.1=c & <*c,d*>.2=d & [1,1] in Indices M &
     [1,2] in Indices M & [2,1] in Indices M & [2,2] in Indices M
       by Th4,FINSEQ_1:61;
@@ -238,103 +227,7 @@ A6: ex q st x = q & len q = k by A3,A5;
 
 begin :: Deleting of Rows and Columns in a Matrix
 
-definition let i; let p be FinSequence;
-  func Del(p,i) -> FinSequence equals
-    p * Sgm ((dom p) \ {i});
-  coherence
-  proof set q = Sgm((dom p) \ {i});
-A1: dom q = Seg len q by FINSEQ_1:def 3;
-A2: dom p = Seg len p by FINSEQ_1:def 3;
-   (Seg len p) \ {i} c= Seg len p by XBOOLE_1:36;
-   then rng q c= dom p by A2,FINSEQ_1:def 13;
-   then dom (p*q) = dom q by RELAT_1:46;
-  hence p*q is FinSequence by A1,FINSEQ_1:def 2;
- end;
-end;
-
-theorem Th8:
-  for p being FinSequence holds
-  (i in dom p implies ex m st len p = m + 1 & len Del(p,i) = m) &
-  (not i in dom p implies Del(p,i) = p)
-  proof
-   let p be FinSequence;
-   hereby assume A1: i in dom p;
-   then p <> {} by FINSEQ_1:26;
-   then A2: len p <> 0 by FINSEQ_1:25;
-   A3: i in Seg len p by A1,FINSEQ_1:def 3;
-   consider m such that A4: len p = m+1 by A2,NAT_1:22;
-   A5:(Seg(len p) \ {i}) c= Seg len p
-    proof
-      for x holds x in (Seg(len p) \ {i}) implies x in Seg(len p)
-        by XBOOLE_0:def 4;
-      hence thesis by TARSKI:def 3;
-    end;
-    then A6:rng Sgm(Seg(len p) \ {i}) c= Seg len p by FINSEQ_1:def 13;
-    reconsider D' = dom p as non empty set by A1;
-    dom p = Seg len p by FINSEQ_1:def 3;
-    then reconsider q = Sgm((dom p) \ {i}) as FinSequence of D'
-      by A6,FINSEQ_1:def 4;
-    reconsider D = rng p as non empty set by A1,FUNCT_1:12;
-    reconsider r = p as Function of D',D by FUNCT_2:3;
-A7:    len(r*q) = len q by FINSEQ_2:37;
-A8:    len (Sgm(Seg(len p) \ {i}))=m
-      proof
-     A9:len Sgm(Seg(len p) \ {i})= card (Seg(len p) \ {i}) by A5,FINSEQ_3:44;
-        not i in (Seg(len p) \ {i})
-        proof
-          assume i in (Seg(len p) \ {i});
-          then i in Seg(len p) & not i in {i} by XBOOLE_0:def 4;
-          hence thesis by TARSKI:def 1;
-        end;
-        then A10:card ((Seg(len p) \ {i}) \/ {i})=card (Seg(len p) \ {i}) +1
-          by CARD_2:54;
-        {i} c= Seg len p
-        proof
-          for x holds x in {i} implies x in Seg(len p) by A3,TARSKI:def 1;
-          hence thesis by TARSKI:def 3;
-        end;
-        then card Seg(len p)=card (Seg(len p) \ {i}) +1 by A10,XBOOLE_1:45;
-        then card (Seg(len p) \ {i}) +1 = m+1 by A4,FINSEQ_1:78;
-        hence thesis by A9;
-      end;
-     take m;
-     dom p = Seg len p by FINSEQ_1:def 3;
-     hence len p=m + 1 & len Del(p,i) = m by A4,A7,A8;
-    end;
-    assume A11: not i in dom p;
-    for x st x in {i} holds not x in dom p by A11,TARSKI:def 1;
-    then {i} misses dom p by XBOOLE_0:3;
-    hence Del(p,i) = p * Sgm(dom p) by XBOOLE_1:83
-                 .= p * Sgm(Seg len p) by FINSEQ_1:def 3
-                 .= p * (idseq len p) by FINSEQ_3:54
-                 .= p|(Seg len p) by FINSEQ_2:63
-                 .= p|(dom p) by FINSEQ_1:def 3
-                 .= p by RELAT_1:97;
-  end;
-
-theorem Th9:
-  for p being FinSequence of D holds Del(p,i) is FinSequence of D
-  proof let p be FinSequence of D;
-    per cases;
-   suppose A1:i in dom p;
-    Seg(len p) \ {i} c= Seg(len p)
-    proof
-      for x holds x in (Seg(len p) \ {i}) implies x in Seg(len p)
-       by XBOOLE_0:def 4;
-     hence thesis by TARSKI:def 3;
-    end;
-    then A2:rng Sgm(Seg(len p) \ {i}) c= Seg(len p) by FINSEQ_1:def 13;
-    reconsider D'=Seg(len p) as non empty set by A1,FINSEQ_1:def 3;
-    reconsider q=Sgm(Seg(len p) \ {i}) as FinSequence of D'
-     by A2,FINSEQ_1:def 4;
-       dom p = Seg len p by FINSEQ_1:def 3;
-    then p * q = Del(p,i);
-    hence thesis by FINSEQ_2:35;
-    end;
-    suppose not i in dom p;
-    hence thesis by Th8;
-   end;
-   end;
+canceled 2;
 
 theorem Th10:
   for M be Matrix of n,m,K holds
@@ -375,6 +268,7 @@ j
 
 definition let i; let K;
            let M be Matrix of K;
+ canceled;
   assume A1:i in Seg width M;
   func DelCol(M,i) -> Matrix of K means
     len it=len M & for k st k in dom M holds it.k=Del(Line(M,k),i);
@@ -400,7 +294,8 @@ definition let i; let K;
       assume k in dom M;
        A5:len (Line(M,k))= n1 by MATRIX_1:def 8;
        then i in dom (Line(M,k)) by A1,FINSEQ_1:def 3;
-       then ex l st len (Line(M,k))=l+1 & len Del(Line(M,k),i)=l by Th8;
+       then ex l st len (Line(M,k))=l+1 & len Del(Line(M,k),i)=l
+          by FINSEQ_3:113;
         hence thesis by A3,A5;
       end;
    A6:for k,l st [k,l] in [:Seg len M, Seg m:]
@@ -414,7 +309,7 @@ definition let i; let K;
          dom M = Seg len M by FINSEQ_1:def 3;
          then A9: k in dom M & l in Seg m by A8,ZFMISC_1:106;
          reconsider p=Del(Line(M,k),i) as FinSequence of
-                                              the carrier of K by Th9;
+                                              the carrier of K by FINSEQ_3:114;
      A10:len p = m by A4,A9;
          dom p = Seg len p by FINSEQ_1:def 3;
          then reconsider x=p.l as Element of (the carrier of K)
@@ -733,7 +628,8 @@ definition let i; let K;let M be Matrix of K;
          A6:len Col(M,k) = len M by MATRIX_1:def 9;
             dom Col(M,k) = Seg len Col(M,k) by FINSEQ_1:def 3;
             then i in dom (Col(M,k)) by A1,A6,FINSEQ_1:def 3;
-            then ex l st len Col(M,k)=l+1 & len Del(Col(M,k),i)=l by Th8;
+            then ex l st len Col(M,k)=l+1 & len Del(Col(M,k),i)=l
+                    by FINSEQ_3:113;
             hence thesis by A4,A6;
           end;
        A7:for k,l st [k,l] in [:Seg m, Seg width M:]
@@ -745,7 +641,7 @@ definition let i; let K;let M be Matrix of K;
             assume [k,l] in [:Seg m, Seg width M:];then
 A9:         k in Seg m & l in Seg width M by ZFMISC_1:106;
             reconsider p = Del(Col(M,l),i) as FinSequence of the carrier of K
-              by Th9;
+              by FINSEQ_3:114;
 A10:        len p= m by A5,A9;
             dom p = Seg len p by FINSEQ_1:def 3;
             then reconsider x=p.k as Element of (the carrier of K)
@@ -1102,7 +998,7 @@ definition let n;
       end;
     consider o being BinOp of Permutations(n) such that
     A2:for q,p being Element of Permutations(n)
-      holds P[q,p,o.(q,p)] from BINOP_1:sch 1(A1);
+      holds P[q,p,o.(q,p)] from BINOP_1:sch 3(A1);
    take HGrStr(# Permutations(n),o#);
    thus thesis by A2;
 end;

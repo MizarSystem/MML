@@ -574,21 +574,21 @@ A1:  now let i be Element of N;
         from HoldsEventually;
     end;
    hereby assume
-A3:   N is eventually-directed;
+A2:   N is eventually-directed;
     let i be Element of N;
          N is_eventually_in
-      {N.j where j is Element of N: N.i <= N.j} by A3,Def13;
+      {N.j where j is Element of N: N.i <= N.j} by A2,Def13;
     hence ex j being Element of N st
      for k being Element of N st j <= k holds N.i <= N.k
        by A1;
    end;
    assume
-A4:  for i being Element of N ex j being Element of N st
+A3:  for i being Element of N ex j being Element of N st
      for k being Element of N st j <= k holds N.i <= N.k;
    let i be Element of N;
         ex j being Element of N st
      for k being Element of N st j <= k holds N.i <= N.k
-      by A4;
+      by A3;
    hence thesis by A1;
   end;
 
@@ -608,19 +608,19 @@ A1:  now let i be Element of N;
         from HoldsEventually;
     end;
    hereby assume
-A3:   N is eventually-filtered;
+A2:   N is eventually-filtered;
     let i be Element of N;
-         N is_eventually_in {N.j where j is Element of N: N.i >= N.j} by A3,
+         N is_eventually_in {N.j where j is Element of N: N.i >= N.j} by A2,
 Def14;
     hence ex j being Element of N st
       for k being Element of N st j <= k holds N.i >= N.k by A1;
    end;
    assume
-A4:  for i being Element of N ex j being Element of N st
+A3:  for i being Element of N ex j being Element of N st
      for k being Element of N st j <= k holds N.i >= N.k;
    let i be Element of N;
         ex j being Element of N st
-     for k being Element of N st j <= k holds N.i >= N.k by A4;
+     for k being Element of N st j <= k holds N.i >= N.k by A3;
    hence thesis by A1;
   end;
 
@@ -643,12 +643,12 @@ A1:  for i,j being Element of N st i <= j
  cluster antitone -> eventually-filtered prenet of L;
  coherence
   proof let N be prenet of L; assume
-A3:  for i,j being Element of N st i <= j
+A2:  for i,j being Element of N st i <= j
      for a,b being Element of L st a = netmap(N,L).i & b = netmap(N,L).j
       holds a >= b;
         now let i be Element of N; take j = i;
      let k be Element of N; assume j <= k;
-      then netmap(N,L).i >= netmap(N,L).k by A3;
+      then netmap(N,L).i >= netmap(N,L).k by A2;
       then N.i >= netmap(N,L).k;
      hence N.i >= N.k;
     end;
@@ -923,8 +923,7 @@ theorem Th17:
  for L being non empty RelStr, x,y being Element of L
   holds y in downarrow x iff y <= x
   proof let L be non empty RelStr, x,y be Element of L;
-        downarrow x = downarrow {x};
-then A1:     downarrow x = {z where z is Element of L:
+A1:     downarrow x = {z where z is Element of L:
   ex v being Element of L st z <= v & v in {x}} by Th14;
     then y in downarrow x iff ex z being Element of L st y = z &
      ex v being Element of L st z <= v & v in {x};
@@ -937,8 +936,7 @@ theorem Th18:
  for L being non empty RelStr, x,y being Element of L
   holds y in uparrow x iff x <= y
   proof let L be non empty RelStr, x,y be Element of L;
-        uparrow x = uparrow {x};
-then A1:  uparrow x = {z where z is Element of L:
+A1:  uparrow x = {z where z is Element of L:
      ex v being Element of L st z >= v & v in {x}} by Th15;
     then y in uparrow x iff ex z being Element of L st y = z &
      ex v being Element of L st z >= v & v in {x};
@@ -1013,8 +1011,7 @@ registration
  cluster downarrow x -> non empty directed;
  coherence
   proof reconsider x' = x as Element of L;
-        x' <= x';
-   hence downarrow x is non empty;
+   thus downarrow x is non empty;
    let z,y be Element of L; assume
 A1:  z in downarrow x & y in downarrow x;
    take x';   x' <= x';
@@ -1023,8 +1020,7 @@ A1:  z in downarrow x & y in downarrow x;
  cluster uparrow x -> non empty filtered;
  coherence
   proof reconsider x' = x as Element of L;
-        x' <= x';
-   hence uparrow x is non empty;
+   thus uparrow x is non empty;
    let z,y be Element of L; assume
 A2:  z in uparrow x & y in uparrow x;
    take x';   x' <= x';
@@ -1219,15 +1215,9 @@ registration
  let L be non empty transitive RelStr;
  let x be Element of L;
  cluster downarrow x -> lower;
- coherence
-  proof downarrow x = downarrow {x};
-   hence thesis;
-  end;
+ coherence;
  cluster uparrow x -> upper;
- coherence
-  proof uparrow x = uparrow {x};
-   hence thesis;
-  end;
+ coherence;
 end;
 
 registration
@@ -1902,16 +1892,16 @@ theorem Th50:
   proof let L be non empty reflexive antisymmetric RelStr;
    let X be Subset of L;
    hereby let x be set; assume
-A2:   x in X;
+A1:   x in X;
     then reconsider y = x as Element of L;
-    reconsider Y = {x} as finite Subset of X by A2,ZFMISC_1:37;
+    reconsider Y = {x} as finite Subset of X by A1,ZFMISC_1:37;
          y = "\/"(Y,L) & ex_sup_of {y},L by YELLOW_0:38,39;
     hence x in finsups X;
    end;
    hereby let x be set; assume
-A4:   x in X;
+A2:   x in X;
     then reconsider y = x as Element of L;
-    reconsider Y = {x} as finite Subset of X by A4,ZFMISC_1:37;
+    reconsider Y = {x} as finite Subset of X by A2,ZFMISC_1:37;
          y = "/\"(Y,L) & ex_inf_of {y},L by YELLOW_0:38,39;
     hence x in fininfs X;
    end;
@@ -1956,7 +1946,7 @@ A1:  now let Y be finite Subset of X;
           Y c= the carrier of L by XBOOLE_1:1;
      hence Y <> {} implies ex_sup_of Y,L by YELLOW_0:54;
     end;
-A3:  now let x be Element of L; assume x in finsups X;
+A2:  now let x be Element of L; assume x in finsups X;
       then ex Y being finite Subset of X st x = "\/"(Y,L) & ex_sup_of Y,L;
      hence ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L);
     end;
@@ -1967,7 +1957,7 @@ A3:  now let x be Element of L; assume x in finsups X;
       then ex_sup_of Z,L by YELLOW_0:54;
      hence "\/"(Y,L) in finsups X;
     end;
-   hence thesis by A1,A3,Th51;
+   hence thesis by A1,A2,Th51;
   end;
 end;
 
@@ -2053,7 +2043,7 @@ A2:  now let Y be finite Subset of X;
           Y c= the carrier of L by XBOOLE_1:1;
      hence Y <> {} implies ex_sup_of Y,L by YELLOW_0:54;
     end;
-A4:  now let x be Element of L; assume x in finsups X;
+A3:  now let x be Element of L; assume x in finsups X;
       then ex Y being finite Subset of X st x = "\/"(Y,L) & ex_sup_of Y,L;
      hence ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L);
     end;
@@ -2064,7 +2054,7 @@ A4:  now let x be Element of L; assume x in finsups X;
       then ex_sup_of Z,L by YELLOW_0:54;
      hence "\/"(Y,L) in finsups X;
     end;
-   hence thesis by A1,A2,A4,Th54;
+   hence thesis by A1,A2,A3,Th54;
   end;
 
 theorem Th56:
@@ -2102,11 +2092,11 @@ registration
  cluster fininfs X -> filtered;
  coherence
   proof reconsider X as Subset of L;
-A2:  now let Y be finite Subset of X;
+A1:  now let Y be finite Subset of X;
           Y c= the carrier of L by XBOOLE_1:1;
      hence Y <> {} implies ex_inf_of Y,L by YELLOW_0:55;
     end;
-A3:  now let x be Element of L; assume x in fininfs X;
+A2:  now let x be Element of L; assume x in fininfs X;
       then ex Y being finite Subset of X st x = "/\"(Y,L) & ex_inf_of Y,L;
      hence ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L);
     end;
@@ -2117,7 +2107,7 @@ A3:  now let x be Element of L; assume x in fininfs X;
       then ex_inf_of Z,L by YELLOW_0:55;
      hence "/\"(Y,L) in fininfs X;
     end;
-   hence thesis by A2,A3,Th56;
+   hence thesis by A1,A2,Th56;
   end;
 end;
 
@@ -2203,7 +2193,7 @@ A2:  now let Y be finite Subset of X;
           Y c= the carrier of L by XBOOLE_1:1;
      hence Y <> {} implies ex_inf_of Y,L by YELLOW_0:55;
     end;
-A4:  now let x be Element of L; assume x in fininfs X;
+A3:  now let x be Element of L; assume x in fininfs X;
       then ex Y being finite Subset of X st x = "/\"(Y,L) & ex_inf_of Y,L;
      hence ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L);
     end;
@@ -2214,7 +2204,7 @@ A4:  now let x be Element of L; assume x in fininfs X;
       then ex_inf_of Z,L by YELLOW_0:55;
      hence "/\"(Y,L) in fininfs X;
     end;
-   hence thesis by A1,A2,A4,Th59;
+   hence thesis by A1,A2,A3,Th59;
   end;
 
 theorem
@@ -2231,8 +2221,7 @@ A2:  x in downarrow finsups X;
    then reconsider x as Element of L;
    consider y being Element of L such that
 A3:  x <= y & y in finsups X by A2,Def15;
-        finsups X = {"\/"(Y,L) where Y is finite Subset of X: ex_sup_of Y,L};
-   then consider Y being finite Subset of X such that
+   consider Y being finite Subset of X such that
 A4:  y = "\/"(Y,L) & ex_sup_of Y,L by A3;
    consider i being Element of I;
    reconsider i as Element of L;
@@ -2260,8 +2249,7 @@ A2:  x in uparrow fininfs X;
    then reconsider x as Element of L;
    consider y being Element of L such that
 A3:  x >= y & y in fininfs X by A2,Def16;
-        fininfs X = {"/\"(Y,L) where Y is finite Subset of X: ex_inf_of Y,L};
-   then consider Y being finite Subset of X such that
+   consider Y being finite Subset of X such that
 A4:  y = "/\"(Y,L) & ex_inf_of Y,L by A3;
    consider i being Element of I;
    reconsider i as Element of L;
@@ -2579,19 +2567,19 @@ theorem Th69:
   proof let S,T be non empty Poset, f be Function of S,T; assume
 A1:  for X being Filter of S holds f preserves_inf_of X;
    let x,y be Element of S;
-A3:  ex_inf_of {x}, S & ex_inf_of {y}, S by YELLOW_0:38;
+A2:  ex_inf_of {x}, S & ex_inf_of {y}, S by YELLOW_0:38;
     then f preserves_inf_of uparrow x & f preserves_inf_of uparrow y &
     ex_inf_of uparrow x, S & ex_inf_of uparrow y, S by A1,Th37;
-then A4:  ex_inf_of f.:uparrow x, T & ex_inf_of f.:uparrow y, T &
+then A3:  ex_inf_of f.:uparrow x, T & ex_inf_of f.:uparrow y, T &
     inf (f.:uparrow x) = f.inf uparrow x & inf (f.:uparrow y) = f.inf uparrow y
      by Def30;
    assume x <= y;
     then uparrow y c= uparrow x by Th22;
-then A5:  f.:uparrow y c= f.:uparrow x by RELAT_1:156;
+then A4:  f.:uparrow y c= f.:uparrow x by RELAT_1:156;
         inf (f.:uparrow x) = f.inf {x} & inf (f.:uparrow y) = f.inf {y}
-     by A3,A4,Th38;
+     by A2,A3,Th38;
     then inf (f.:uparrow x) = f.x & inf (f.:uparrow y) = f.y by YELLOW_0:39;
-   hence thesis by A4,A5,YELLOW_0:35;
+   hence thesis by A3,A4,YELLOW_0:35;
   end;
 
 theorem
@@ -2716,20 +2704,20 @@ theorem Th72:
   proof let S,T be non empty Poset, f be Function of S,T; assume
 A1:  for X being Ideal of S holds f preserves_sup_of X;
    let x,y be Element of S;
-A3:  ex_sup_of {x}, S & ex_sup_of {y}, S by YELLOW_0:38;
+A2:  ex_sup_of {x}, S & ex_sup_of {y}, S by YELLOW_0:38;
     then f preserves_sup_of downarrow x & f preserves_sup_of downarrow y &
     ex_sup_of downarrow x, S & ex_sup_of downarrow y, S by A1,Th32;
-then A4:  ex_sup_of f.:downarrow x, T & ex_sup_of f.:downarrow y, T &
+then A3:  ex_sup_of f.:downarrow x, T & ex_sup_of f.:downarrow y, T &
     sup (f.:downarrow x) = f.sup downarrow x &
     sup (f.:downarrow y) = f.sup downarrow y by Def31;
    assume x <= y;
     then downarrow x c= downarrow y by Th21;
-then A5:  f.:downarrow x c= f.:downarrow y by RELAT_1:156;
+then A4:  f.:downarrow x c= f.:downarrow y by RELAT_1:156;
         sup (f.:downarrow x) = f.sup {x} & sup (f.:downarrow y) = f.sup {y}
-     by A3,A4,Th33;
+     by A2,A3,Th33;
     then sup (f.:downarrow x) = f.x & sup (f.:downarrow y) = f.y by YELLOW_0:39
 ;
-   hence thesis by A4,A5,YELLOW_0:34;
+   hence thesis by A3,A4,YELLOW_0:34;
   end;
 
 theorem
@@ -3003,11 +2991,11 @@ A6:  now let Y be finite Subset of X';
           Y c= the carrier of L by XBOOLE_1:1;
      hence Y <> {} implies ex_sup_of Y,L by A5,YELLOW_0:54;
     end;
-A8:  now let x be Element of L; assume x in finsups X';
+A7:  now let x be Element of L; assume x in finsups X';
       then ex Y being finite Subset of X' st x = "\/"(Y,L) & ex_sup_of Y,L;
      hence ex Y being finite Subset of X' st ex_sup_of Y,L & x = "\/"(Y,L);
     end;
-A9:  now let Y be finite Subset of X';
+A8:  now let Y be finite Subset of X';
      reconsider Z = Y as Subset of L by XBOOLE_1:1;
      assume
           Y <> {};
@@ -3016,16 +3004,16 @@ A9:  now let Y be finite Subset of X';
     end;
    reconsider fX = finsups A as non empty directed Subset of L;
    consider x being Element of L such that
-A10:  fX is_<=_than x and
-A11:  for y being Element of L st fX is_<=_than y holds x <= y by A5,Def39;
+A9:  fX is_<=_than x and
+A10:  for y being Element of L st fX is_<=_than y holds x <= y by A5,Def39;
    take x;
-        X' is_<=_than x by A6,A8,A9,A10,Th52;
+        X' is_<=_than x by A6,A7,A8,A9,Th52;
    hence X is_<=_than x by YELLOW_0:5;
    let y be Element of L;
    assume y is_>=_than X;
     then y is_>=_than X' by YELLOW_0:5;
-    then y is_>=_than fX by A6,A8,A9,Th52;
-   hence y >= x by A11;
+    then y is_>=_than fX by A6,A7,A8,Th52;
+   hence y >= x by A10;
   end;
 :: cluster up-complete /\-complete upper-bounded -> complete (non empty Poset);
 ::        to appear in YELLOW_2

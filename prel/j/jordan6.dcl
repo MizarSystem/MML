@@ -38,8 +38,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="17"/>
-<Adjective nr="43"/>
+<Adjective nr="18"/>
+<Adjective nr="44"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -13,7 +13,6 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
@@ -34,7 +33,7 @@
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="9">
 <Cluster/>
 <Func kind="K" nr="52"/>
 </Typ>
@@ -42,9 +41,9 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="38"/>
-<Adjective nr="41"/>
-<Adjective nr="85"/>
+<Adjective nr="32"/>
+<Adjective nr="35"/>
+<Adjective nr="79"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -55,7 +54,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="9">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -63,31 +62,31 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="38"/>
-<Adjective nr="41"/>
+<Adjective nr="32"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="9">
 <Cluster/>
 <Func kind="K" nr="52"/>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="24"/>
-<Adjective nr="38"/>
-<Adjective nr="41"/>
+<Adjective nr="7"/>
+<Adjective nr="32"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="9">
 <Cluster/>
-<Func kind="K" nr="112">
+<Func kind="K" nr="109">
 <Func kind="U" nr="1">
-<Func kind="K" nr="158">
+<Func kind="K" nr="155">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -97,13 +96,13 @@
 <Adjective nr="2"/>
 <Adjective nr="4" value="false"/>
 <Adjective nr="5"/>
-<Adjective nr="38"/>
-<Adjective nr="41"/>
+<Adjective nr="32"/>
+<Adjective nr="35"/>
+<Adjective nr="78"/>
+<Adjective nr="81"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
 <Adjective nr="84"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
 </Cluster>
 </RCluster>
 </Registrations>

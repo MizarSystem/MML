@@ -17,8 +17,8 @@ environ
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions REALSET1;
  theorems AXIOMS, REAL_1, REAL_2, INT_1, NAT_1, ABIAN, POWER, FINSEQ_1,
-      FINSEQ_4, BINARITH, AMI_5, CQC_THE1, XREAL_1, ORDINAL2, REALSET1, TARSKI,
-      XCMPLX_1;
+      FINSEQ_4, BINARITH, CQC_THE1, XREAL_1, ORDINAL2, REALSET1,
+      TARSKI, XCMPLX_1;
  schemes BINARITH, RECDEF_1;
 
 begin :: Preliminaries
@@ -178,8 +178,7 @@ canceled;
     let i,j be non empty natural number;
     per cases;
      suppose A1: j <= i;
-          j >= 0;
-      then i - j < i - 0 by REAL_1:92;
+      i - j < i - 0 by REAL_1:92;
       hence i -' j < i by A1,BINARITH:50;
      end;
      suppose j > i;
@@ -194,7 +193,7 @@ canceled;
    proof
     let n,k be natural number;
     assume k <= n;
-    then n = k + (n -' k) by AMI_5:4;
+    then n = k + (n -' k) by BINARITH:53;
     hence 2 to_power n
         = (2 to_power k) * (2 to_power (n-'k)) by POWER:32;
    end;
@@ -337,7 +336,7 @@ A1: 2 to_power k > 0 by POWER:39;
      A5: n -' 1 = 2 * t + 1 and
          1 < 2 by NAT_1:def 2;
         n >= 0 + 1 by A1,NAT_1:38;
-    then n = 2 * t + 1 + 1 by A5,AMI_5:4
+    then n = 2 * t + 1 + 1 by A5,BINARITH:53
           .= 2 * (t + 1) + 0;
     hence n mod 2 = 0 by NAT_1:def 2;
    end;
@@ -465,26 +464,26 @@ A1: 2 to_power k > 0 by POWER:39;
      A1: n <= m and
      A2: n div k > m div k;
     set r = (n div k) -' (m div k);
-    A4: r = (n div k) - (m div k) by A2,BINARITH:50;
+    A3: r = (n div k) - (m div k) by A2,BINARITH:50;
     then r > (m div k) - (m div k) by A2,XREAL_1:11;
     then r >= 0 + 1 by NAT_1:38;
     then k * r >= k * 1 by XREAL_1:66;
-    then A5: k * r + k * (m div k) >= k + k * (m div k) by XREAL_1:8;
+    then A4: k * r + k * (m div k) >= k + k * (m div k) by XREAL_1:8;
     per cases;
-     suppose A6: k <> 0;
+     suppose A5: k <> 0;
       then consider t1 be Nat such that
-       A7: n = k * (n div k) + t1 and
+       A6: n = k * (n div k) + t1 and
            t1 < k by NAT_1:def 1;
       consider t2 be Nat such that
-       A8: m = k * (m div k) + t2 and
-       A9: t2 < k by A6,NAT_1:def 1;
-      A10: m < k + k * (m div k) by A8,A9,XREAL_1:8;
-      A11: k * (n div k) <= n by A7,NAT_1:29;
+       A7: m = k * (m div k) + t2 and
+       A8: t2 < k by A5,NAT_1:def 1;
+      A9: m < k + k * (m div k) by A7,A8,XREAL_1:8;
+      A10: k * (n div k) <= n by A6,NAT_1:29;
        m - (k * (n div k)) < (k + k * (m div k)) - (k + k * (m div k))
-                                                         by A4,A5,A10,REAL_1:92
+                                                         by A3,A4,A9,REAL_1:92
 ;
       then m - (k * (n div k)) < 0;
-      then m - n < (k * (n div k)) - (k * (n div k)) by A11,REAL_1:92;
+      then m - n < (k * (n div k)) - (k * (n div k)) by A10,REAL_1:92;
       then m < 0 + n by XREAL_1:21;
       hence contradiction by A1;
      end;
@@ -540,10 +539,10 @@ A1: 2 to_power k > 0 by POWER:39;
          A7: t2 < i by A2,NAT_1:def 1;
         A8: n = k * i * ((n div k) div i) + (k * t2 + t1) by A4,A6;
             t2 + 1 <= i by A7,NAT_1:38;
-        then A10: k * (t2 + 1) <= k * i by XREAL_1:66;
+        then A9: k * (t2 + 1) <= k * i by XREAL_1:66;
             k * t2 + t1 < k * t2 + k * 1 by A5,XREAL_1:8;
         then (k * t2 + t1) - (k * i) < (k * (t2 + 1)) - (k * (t2 + 1))
-                                                             by A10,REAL_1:92;
+                                                             by A9,REAL_1:92;
         then k * t2 + t1 < 0 + k * i by XREAL_1:21;
         hence (n div k) div i = n div (k*i) by A8,NAT_1:def 1;
       end;

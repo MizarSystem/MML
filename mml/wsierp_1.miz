@@ -8,23 +8,41 @@ environ
 
  vocabularies ARYTM, INT_1, RAT_1, ARYTM_3, GROUP_1, ARYTM_1, PREPOWER,
       SQUARE_1, ABSVALUE, NAT_1, INT_2, FINSEQ_1, FUNCT_1, RELAT_1, BOOLE,
-      RLVECT_1, MATRIX_2, CARD_3;
+      RLVECT_1, MATRIX_2, CARD_3, FINSEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      INT_1, NAT_1, RAT_1, INT_2, NEWTON, PREPOWER, SQUARE_1, RELAT_1, FUNCT_1,
-      FINSEQ_1, RVSUM_1, FINSEQ_4, MATRIX_2, TREES_4, GOBOARD1;
- constructors REAL_1, NAT_1, PREPOWER, SQUARE_1, FINSEQ_4, GOBOARD1, TREES_4,
-      MATRIX_2, MEMBERED, BINOP_2;
+      INT_1, REAL_1, NAT_1, RAT_1, INT_2, NEWTON,
+      PREPOWER, SQUARE_1, RELAT_1, FUNCT_1,
+      FINSEQ_1, FINSEQ_3,
+      RVSUM_1, FINSEQ_4, TREES_4;
+ constructors REAL_1, NAT_1, PREPOWER, SQUARE_1, FINSEQ_4,
+ TREES_4, MEMBERED, BINOP_2, FINSEQ_3, RVSUM_1;
  registrations SUBSET_1, INT_1, FINSEQ_1, RELSET_1, XREAL_0, NEWTON, RAT_1,
       SQUARE_1, MEMBERED, ORDINAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FINSEQ_1, TARSKI;
+ definitions SQUARE_1;
  theorems TARSKI, ABSVALUE, INT_1, NAT_1, INT_2, RAT_1, REAL_1, REAL_2, NEWTON,
       PREPOWER, SQUARE_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCT_1, RVSUM_1,
-      PRE_FF, CARD_4, FINSEQ_3, MATRIX_2, GOBOARD1, MATRLIN, FINSEQ_5,
-      XBOOLE_1, XCMPLX_0, XCMPLX_1, NUMBERS, XREAL_1;
+      PRE_FF, CARD_4, FINSEQ_3, FINSEQ_5,
+      XBOOLE_1, XCMPLX_0, XCMPLX_1, NUMBERS, XREAL_1, CARD_1;
  schemes NAT_1, FINSEQ_1, FINSEQ_2;
 
 begin :: PRELIMINARIES
+
+definition let f be FinSequence of REAL, k be Nat;
+ redefine func f.k -> Real;
+ coherence
+  proof
+   per cases;
+   suppose k in dom f;
+    then f.k = f/.k by FINSEQ_4:def 4;
+   hence thesis;
+   end;
+   suppose not k in dom f;
+   hence thesis by CARD_1:51,FUNCT_1:def 4;
+  end;
+  end;
+end;
 
  reserve x,y,z for real number,
          a,b,c,d,e,f,g,h for Nat,
@@ -134,14 +152,14 @@ proof
  end;
     (a qua Integer) divides b implies a divides b
   proof assume A3: not thesis;
-   consider k such that A7: a*k=b by A3,INT_1:def 9;
-      now assume A8: k<0;
+   consider k such that A4: a*k=b by A3,INT_1:def 9;
+      now assume A5: k<0;
       b>=0;
-    then b=0 by A7,A8,XREAL_1:133;
+    then b=0 by A4,A5,XREAL_1:133;
     hence contradiction by A3,NAT_1:53;
    end;
    then reconsider k as Nat by INT_1:16;
-      a*k=b by A7;
+      a*k=b by A4;
    hence contradiction by A3,NAT_1:def 3;
   end;
  hence thesis by A1;
@@ -622,18 +640,18 @@ definition let a,fs;
   proof
     let IT be FinSequence;
     thus not a in dom fs implies (IT = Del(fs,a) iff IT = fs)
-      by MATRIX_2:8;
+      by FINSEQ_3:113;
     assume A1: a in dom fs;
     hereby assume A2:IT = Del(fs,a);
      then consider m be Nat such that
-A3:  len fs = m + 1 & len IT = m by A1,MATRIX_2:8;
+A3:  len fs = m + 1 & len IT = m by A1,FINSEQ_3:113;
      thus len IT + 1 = len fs by A3;
      let b;
-     thus b<a implies IT.b=fs.b by A2,A3,GOBOARD1:8;
+     thus b<a implies IT.b=fs.b by A2,A3,FINSEQ_3:119;
      assume A4:b>=a;
      per cases;
      suppose b<=len IT;
-     hence IT.b=fs.(b+1) by A1,A2,A3,A4,GOBOARD1:9;
+     hence IT.b=fs.(b+1) by A1,A2,A3,A4,FINSEQ_3:120;
      end;
      suppose A5:b > len IT;
      then not b in dom IT by FINSEQ_3:27;
@@ -646,7 +664,7 @@ then A6:   IT.b = {} by FUNCT_1:def 4;
     assume A7: len IT + 1 = len fs &
     for b holds (b<a implies IT.b=fs.b) & (b>=a implies IT.b=fs.(b+1));
     consider m be Nat such that
-A8: len fs = m + 1 & len Del(fs,a) = m by A1,MATRIX_2:8;
+A8: len fs = m + 1 & len Del(fs,a) = m by A1,FINSEQ_3:113;
 A9: len IT = len Del (fs,a) by A7,A8;
     for k be Nat st 1 <= k & k <= len IT holds IT.k=(Del(fs,a)).k
     proof
@@ -654,10 +672,10 @@ A9: len IT = len Del (fs,a) by A7,A8;
       assume A10:1 <= k & k <= len IT;
       per cases;
       suppose A11:k < a; then IT.k=fs.k by A7;
-      hence thesis by A7,A11,GOBOARD1:8;
+      hence thesis by A7,A11,FINSEQ_3:119;
       end;
       suppose A12:k >= a; then IT.k=fs.(k+1) by A7;
-      hence thesis by A1,A7,A10,A12,GOBOARD1:9;
+      hence thesis by A1,A7,A10,A12,FINSEQ_3:120;
     end;
     end;
     hence thesis by A9,FINSEQ_1:18;
@@ -731,7 +749,7 @@ redefine func Del(fs,a) -> FinSequence of D;
  coherence
   proof
    A1: rng fs c= D by FINSEQ_1:def 4;
-      rng Del(fs,a) c= rng fs by MATRLIN:2;
+      rng Del(fs,a) c= rng fs by FINSEQ_3:115;
    hence rng Del(fs,a) c= D by A1,XBOOLE_1:1;
   end;
 end;
@@ -846,8 +864,7 @@ theorem
 proof
  thus Del(<*v1*>,1)=Del(<*v1*>^{},1) by FINSEQ_1:47
              .={} by Lm23;
-    <*v1,v2*>=(<*v1*>^<*v2*>);
- hence Del(<*v1,v2*>,1)=<*v2*> by Lm23;
+ thus Del(<*v1,v2*>,1)=<*v2*> by Lm23;
     len <*v1*> =1 by FINSEQ_1:56;
  hence A1: Del(<*v1,v2*>,2)=Del(<*v1*>^<*v2*>,len <*v1*> +1)
                  .=<*v1*> by Lm23;
@@ -1621,7 +1638,7 @@ A39:         b in dom fp by A37,FINSEQ_1:def 3;
                       .=(fp1.1)*(fr3.1)+(fr2.1) by A32,A37,A38;
          end;
          suppose A40: b=k+1;
-          then A41: fr2.b-((fp.1)*(fr1.1)+fr2.1)
+          A41: fr2.b-((fp.1)*(fr1.1)+fr2.1)
                 =fr2.b-(fp.1)*(fr1.1)-fr2.1
                .=d*n1+Product(fp)*m1 by A40,A28;
              1<=k by A14,XREAL_1:2;
@@ -1769,7 +1786,7 @@ A11: d+1>=1 & 1>0 by Lm1;
    A12: d1>0 by A10,Lm1;
    reconsider d1 as Nat by A11;
    set e1=d1^2;
-      e1=d1*d1 by SQUARE_1:def 3;
+      e1=d1*d1;
    then reconsider e1 as Nat;
       sqrt a<d1 by A8,XREAL_1:21;
    then (sqrt a)^2<e1 by A7,SQUARE_1:78;
@@ -1829,7 +1846,7 @@ A11: d+1>=1 & 1>0 by Lm1;
      then A31: x1<=(v1-1)/d1 & x2<=(v2-1)/d1 by INT_1:def 4;
         v1-1<=e1-1 & v2-1<=e1-1 by A22,XREAL_1:11;
      then A32: (v1-1)/d1<=(e1-1)/d1 & (v2-1)/d1<=(e1-1)/d1 by A12,REAL_1:73;
-     A33: (e1-1)/d1=(d1*d1-1)/d1 by SQUARE_1:def 3
+     A33: (e1-1)/d1=(d1*d1-1)/d1
            .=d1-1/d1 by A11,XCMPLX_1:128;
         1/d1>0 by A12,REAL_2:127;
      then (e1-1)/d1<d1 by A33,Lm1;

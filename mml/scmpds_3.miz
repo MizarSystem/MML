@@ -19,7 +19,7 @@ environ
       SCMFSA_4, ARYTM_3, AMI_3, XBOOLE_0, FRAENKEL, NUMBERS, ORDINAL2,
       SETFAM_1, STRUCT_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions AMI_1, AMI_5, AMI_3, TARSKI, XBOOLE_0;
+ definitions AMI_1, AMI_5, AMI_3, TARSKI, XBOOLE_0, CQC_LANG;
  theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, CQC_LANG, TARSKI, FUNCT_4, FUNCT_1,
       FINSET_1, ZFMISC_1, INT_1, RELAT_1, AMI_5, ABSVALUE, SCMPDS_2, SCMFSA_3,
       SCMBSORT, AMI_2, BINARITH, FUNCT_2, SCMFSA_4, XBOOLE_0, XBOOLE_1,
@@ -754,13 +754,7 @@ end;
 
 theorem
     for p being FinPartState of SCMPDS
-  holds dom ProgramPart p c= the Instruction-Locations of SCMPDS
-proof
-   let p be FinPartState of SCMPDS;
-      ProgramPart p = p | the Instruction-Locations of SCMPDS;
-   hence dom ProgramPart p c= the Instruction-Locations of SCMPDS
-        by RELAT_1:87;
-end;
+  holds dom ProgramPart p c= the Instruction-Locations of SCMPDS by RELAT_1:87;
 
 theorem
      for i being Instruction of SCMPDS, s being State of SCMPDS ,
@@ -996,21 +990,19 @@ registration
       2 = 2*0+2;
    then reconsider il=2 as Instruction-Location of SCMPDS by SCMPDS_2:1,def 1;
    set P = (IC SCMPDS, il)-->(il, halt SCMPDS);
-A1: {IC SCMPDS}-->il = IC SCMPDS .--> il by CQC_LANG:def 2
-             .= Start-At il;
       P = ({IC SCMPDS}-->il) +* ({il}-->halt SCMPDS) by FUNCT_4:def 4
-    .= Start-At il +* (il .--> halt SCMPDS) by A1,CQC_LANG:def 2;
+    .= Start-At il +* (il .--> halt SCMPDS);
    then reconsider P as FinPartState of SCMPDS;
    take P;
-   A2: ObjectKind il = the Instructions of SCMPDS by AMI_1:def 14;
+   A1: ObjectKind il = the Instructions of SCMPDS by AMI_1:def 14;
        ObjectKind IC SCMPDS = the Instruction-Locations of SCMPDS
               by AMI_1:def 11;
-   hence P is autonomic by A2,AMI_1:67;
+   hence P is autonomic by A1,AMI_1:67;
        now
         dom P = { IC SCMPDS, il } by FUNCT_4:65;
-then A3:  IC SCMPDS in dom P by TARSKI:def 2;
+then A2:  IC SCMPDS in dom P by TARSKI:def 2;
      assume dom P c= the Instruction-Locations of SCMPDS;
-     hence contradiction by A3,AMI_1:48;
+     hence contradiction by A2,AMI_1:48;
     end;
    hence P is non programmed by AMI_3:def 13;
   end;
@@ -1171,84 +1163,82 @@ A1:  p c= s;
    set Csi = (Computation s).i;
    set loc = IC Csi;
   assume
-A3: not IC (Computation s).i in dom ProgramPart(p);
-       ProgramPart p = p|the Instruction-Locations of SCMPDS;
-    then loc in dom ProgramPart p iff
+A2: not IC (Computation s).i in dom ProgramPart(p);
+    loc in dom ProgramPart p iff
          loc in dom p /\ the Instruction-Locations of SCMPDS by FUNCT_1:68;
- then A4:not loc in dom p by A3,XBOOLE_0:def 3;
+ then A3:not loc in dom p by A2,XBOOLE_0:def 3;
     set p1 = p +* (loc .--> goto 0 );
     set p2 = p +* (loc .--> goto 1 );
 
-A5:  dom p1 = dom p \/ dom (loc .--> goto 0 ) &
+A4:  dom p1 = dom p \/ dom (loc .--> goto 0 ) &
          dom p2 = dom p \/ dom (loc .--> goto 1 ) by FUNCT_4:def 1;
-A6:  dom (loc .--> goto 0 ) = {loc} &
+A5:  dom (loc .--> goto 0 ) = {loc} &
          dom (loc .--> goto 1 ) = {loc} by CQC_LANG:5;
-then A7:  loc in dom (loc .--> goto 0 ) &
+then A6:  loc in dom (loc .--> goto 0 ) &
          loc in dom (loc .--> goto 1) by TARSKI:def 1;
-then A8:   loc in dom p1 & loc in dom p2 by A5,XBOOLE_0:def 2;
+then A7:   loc in dom p1 & loc in dom p2 by A4,XBOOLE_0:def 2;
 
     consider s1 being State of SCMPDS such that
-A9: p1 c= s1 by AMI_3:39;
+A8: p1 c= s1 by AMI_3:39;
     consider s2 being State of SCMPDS such that
-A10: p2 c= s2 by AMI_3:39;
+A9: p2 c= s2 by AMI_3:39;
 
  set Cs1i = (Computation s1).i;
  set Cs2i = (Computation s2).i;
 
-A11:  IC SCMPDS in dom p by Th17;
+A10:  IC SCMPDS in dom p by Th17;
      p is not autonomic
    proof
      take s1, s2;
         dom s1 = the carrier of SCMPDS & dom s2 = the carrier of SCMPDS
                                                     by AMI_3:36;
-then A12: dom p c= dom s1 & dom p c= dom s2 by AMI_3:37;
+then A11: dom p c= dom s1 & dom p c= dom s2 by AMI_3:37;
         now let x be set; assume
-A13:    x in dom p;
+A12:    x in dom p;
        then dom p misses dom (loc .--> goto 0 ) &
-       x in dom p1 by A4,A5,A6,XBOOLE_0:def 2,ZFMISC_1:56;
-       then p.x = p1.x & p1.x = s1.x by A9,A13,FUNCT_4:17,GRFUNC_1:8;
+       x in dom p1 by A3,A4,A5,XBOOLE_0:def 2,ZFMISC_1:56;
+       then p.x = p1.x & p1.x = s1.x by A8,A12,FUNCT_4:17,GRFUNC_1:8;
       hence p.x = s1.x;
      end;
     hence
-A14: p c= s1 by A12,GRFUNC_1:8;
+A13: p c= s1 by A11,GRFUNC_1:8;
        now let x be set; assume
-A15:   x in dom p;
+A14:   x in dom p;
       then dom p misses dom (loc .--> goto 1 ) &
-      x in dom p2 by A4,A5,A6,XBOOLE_0:def 2,ZFMISC_1:56;
-      then p.x = p2.x & p2.x = s2.x by A10,A15,FUNCT_4:17,GRFUNC_1:8;
+      x in dom p2 by A3,A4,A5,XBOOLE_0:def 2,ZFMISC_1:56;
+      then p.x = p2.x & p2.x = s2.x by A9,A14,FUNCT_4:17,GRFUNC_1:8;
      hence p.x = s2.x;
     end;
    hence
-A16: p c= s2 by A12,GRFUNC_1:8;
+A15: p c= s2 by A11,GRFUNC_1:8;
           (loc .--> goto 0 ).loc = goto 0 &
        (loc .--> goto 1 ).loc = goto 1 by CQC_LANG:6;
-       then p1.loc = goto 0 & p2.loc = goto 1 by A7,FUNCT_4:14;
-then A17:  s1.loc = goto 0 & s2.loc = goto 1 by A8,A9,A10,GRFUNC_1:8;
+       then p1.loc = goto 0 & p2.loc = goto 1 by A6,FUNCT_4:14;
+then A16:  s1.loc = goto 0 & s2.loc = goto 1 by A7,A8,A9,GRFUNC_1:8;
 
   take k = i+1;
 
   set Cs1k = (Computation s1).k;
   set Cs2k = (Computation s2).k;
-A18: Cs1k = Following Cs1i by AMI_1:def 19
+A17: Cs1k = Following Cs1i by AMI_1:def 19
           .= Exec (CurInstr Cs1i, Cs1i);
-A19: Cs2k = Following Cs2i by AMI_1:def 19
+A18: Cs2k = Following Cs2i by AMI_1:def 19
           .= Exec (CurInstr Cs2i, Cs2i);
-      A20:   Cs1i.loc = goto 0 & Cs2i.loc = goto 1 by A17,AMI_1:54;
-A21:  (Cs1i|dom p) = (Csi|dom p) by A1,A14,AMI_1:def 25;
-A22: Cs1i.IC SCMPDS = (Cs1i|dom p).IC SCMPDS &
-     Csi.IC SCMPDS = (Csi|dom p).IC SCMPDS by A11,FUNCT_1:72;
-     A23: (Cs1i|dom p) = (Cs2i|dom p) by A14,A16,AMI_1:def 25;
-then A24: Cs1i.IC SCMPDS = loc & Cs2i.IC SCMPDS = loc
-           by A11,A21,A22,FUNCT_1:72;
- IC Cs1i = Cs1i.IC SCMPDS & IC Cs2i = Cs2i.IC SCMPDS;
-   then CurInstr Cs1i = goto 0 & CurInstr Cs2i = goto 1
-   by A20,A24;
-then A26: Cs1k.IC SCMPDS = ICplusConst(Cs1i,0) &
-     Cs2k.IC SCMPDS = ICplusConst(Cs2i,1) by A18,A19,SCMPDS_2:66;
-     A27: IC Cs1i = IC Cs2i by A11,A22,A23,FUNCT_1:72;
+      A19:   Cs1i.loc = goto 0 & Cs2i.loc = goto 1 by A16,AMI_1:54;
+A20:  (Cs1i|dom p) = (Csi|dom p) by A1,A13,AMI_1:def 25;
+A21: Cs1i.IC SCMPDS = (Cs1i|dom p).IC SCMPDS &
+     Csi.IC SCMPDS = (Csi|dom p).IC SCMPDS by A10,FUNCT_1:72;
+     A22: (Cs1i|dom p) = (Cs2i|dom p) by A13,A15,AMI_1:def 25;
+then A23: Cs1i.IC SCMPDS = loc & Cs2i.IC SCMPDS = loc
+           by A10,A20,A21,FUNCT_1:72;
+   CurInstr Cs1i = goto 0 & CurInstr Cs2i = goto 1
+   by A19,A23;
+then A24: Cs1k.IC SCMPDS = ICplusConst(Cs1i,0) &
+     Cs2k.IC SCMPDS = ICplusConst(Cs2i,1) by A17,A18,SCMPDS_2:66;
+     A25: IC Cs1i = IC Cs2i by A10,A21,A22,FUNCT_1:72;
         (Cs1k|dom p).IC SCMPDS = Cs1k.IC SCMPDS &
-     (Cs2k|dom p).IC SCMPDS = Cs2k.IC SCMPDS by A11,FUNCT_1:72;
-   hence Cs1k|dom p <> Cs2k|dom p by A26,A27,Th19;
+     (Cs2k|dom p).IC SCMPDS = Cs2k.IC SCMPDS by A10,FUNCT_1:72;
+   hence Cs1k|dom p <> Cs2k|dom p by A24,A25,Th19;
   end;
  hence contradiction;
 end;
@@ -1279,14 +1269,14 @@ A4:  IC (Computation s1).i <> IC (Computation s2).i;
   end;
  thus I = CurInstr ((Computation s2).i)
    proof assume
-A6:  I <> CurInstr ((Computation s2).i);
-A8:  IC Cs1i in dom ProgramPart p & IC Cs2i in dom ProgramPart p by A1,Th22;
+A5:  I <> CurInstr ((Computation s2).i);
+A6:  IC Cs1i in dom ProgramPart p & IC Cs2i in dom ProgramPart p by A1,Th22;
        ProgramPart p c= p by AMI_5:63;
     then dom ProgramPart p c= dom p by GRFUNC_1:8;
   then (Cs1i|dom p).IC Cs1i = Cs1i.IC Cs1i & (Cs2i|dom p).IC Cs2i = Cs2i.IC
 Cs2i
-   by A8,FUNCT_1:72;
-   hence contradiction by A1,A3,A6,AMI_1:def 25;
+   by A6,FUNCT_1:72;
+   hence contradiction by A1,A3,A5,AMI_1:def 25;
   end;
 end;
 
@@ -1632,11 +1622,7 @@ definition let k;
 end;
 
 theorem Th31:  ::SF2_18
- for k1,k2 be Nat st k1 <> k2 holds inspos k1 <> inspos k2
-proof let k1,k2 be Nat;
-     inspos k2 = il.k2 & inspos k1 = il.k1;
-  hence thesis by AMI_3:53;
-end;
+ for k1,k2 be Nat st k1 <> k2 holds inspos k1 <> inspos k2 by AMI_3:53;
 
 theorem Th32:  ::SF2_21
  for il being Instruction-Location of SCMPDS ex i being Nat
@@ -1711,7 +1697,7 @@ proof
 A1: Start-At(l1 + k) = Start-At(l2 + k);
 A2: Start-At(l1 + k) = IC SCMPDS .--> (l1 + k) &
     Start-At(l2 + k) = IC SCMPDS .--> (l2 + k);
-    then {[IC SCMPDS, l1 + k]} = IC SCMPDS .--> (l2 + k) by A1,AMI_5:35;
+    {[IC SCMPDS, l1 + k]} = IC SCMPDS .--> (l2 + k) by A1,AMI_5:35;
     then {[IC SCMPDS, l1 + k]} = {[IC SCMPDS, l2 + k]} by A2,AMI_5:35;
     then [IC SCMPDS, l1 + k] = [IC SCMPDS, l2 + k] by ZFMISC_1:6;
     then l1 + k = l2 + k by ZFMISC_1:33;

@@ -23,8 +23,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="17"/>
-<Adjective nr="22"/>
+<Adjective nr="18"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -35,8 +35,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="17"/>
-<Adjective nr="22"/>
+<Adjective nr="18"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -58,7 +58,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="92">
+<Func kind="K" nr="93">
 <Var nr="1"/>
 <Func kind="K" nr="83">
 <Func kind="K" nr="56"/>

@@ -7,14 +7,17 @@
 environ
 
  vocabularies RLVECT_1, BINOP_1, FUNCT_1, PROB_2, ARYTM_1, RELAT_1, BHSP_1,
-      BOOLE, RLSUB_1;
+      BOOLE, RLSUB_1, REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, NUMBERS, XCMPLX_0,
-      XREAL_0, MCART_1, FUNCT_1, RELSET_1, REAL_1, FUNCT_2, DOMAIN_1, BINOP_1,
+      XREAL_0, MCART_1,
+      RELAT_1, FUNCT_1, RELSET_1, REAL_1, FUNCT_2, DOMAIN_1, BINOP_1,
+      REALSET1,
       RLVECT_1, RLSUB_1, BHSP_1;
- constructors REAL_1, DOMAIN_1, RLSUB_1, PARTFUN1, SEQ_1, BHSP_1;
- registrations SUBSET_1, STRUCT_0, RELSET_1, BHSP_1, SEQ_1, FUNCT_1, MEMBERED;
+ constructors REAL_1, DOMAIN_1, RLSUB_1, PARTFUN1, SEQ_1, BHSP_1, REALSET1;
+ registrations SUBSET_1, STRUCT_0, RELSET_1, BHSP_1, SEQ_1, FUNCT_1, MEMBERED,
+ REALSET1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions RLVECT_1, TARSKI, XBOOLE_0;
+ definitions RLVECT_1, TARSKI, XBOOLE_0, REALSET1;
  theorems BHSP_1, RLVECT_1, FUNCT_1, TARSKI, FUNCT_2, ZFMISC_1, XBOOLE_0,
       RELAT_1, RELSET_1, RLSUB_1, XBOOLE_1, XCMPLX_0;
  schemes XBOOLE_0;
@@ -27,10 +30,9 @@ mode Subspace of V -> RealUnitarySpace means
 :Def1:
   the carrier of it c= the carrier of V &
   the Zero of it = the Zero of V &
-  the add of it = (the add of V)|([:the carrier of it, the carrier of it:]) &
+  the add of it = (the add of V)||the carrier of it &
   the Mult of it = (the Mult of V)|([:REAL, the carrier of it:]) &
-  the scalar of it
-     = (the scalar of V)|([:the carrier of it, the carrier of it:]);
+  the scalar of it = (the scalar of V)||the carrier of it;
 existence
 proof
    take V;
@@ -83,14 +85,7 @@ proof
 end;
 
 theorem Th4:
-for V being RealUnitarySpace, W being Subspace of V holds 0.W = 0.V
-proof
-   let V be RealUnitarySpace;
-   let W be Subspace of V;
-      0.W = the Zero of W
-      .= the Zero of V by Def1;
-   hence thesis;
-end;
+for V being RealUnitarySpace, W being Subspace of V holds 0.W = 0.V by Def1;
 
 theorem
    for V being RealUnitarySpace, W1,W2 being Subspace of V holds 0.W1 = 0.W2
@@ -115,7 +110,7 @@ A1:v = w1 & u = w2;
    reconsider ww1 = w1, ww2 = w2 as VECTOR of V by Th3;
 A2:v + u = (the add of V).[ww1,ww2] by A1;
       w1 + w2 = (the add of W).[w1,w2]
-          .= ((the add of V) | [:the carrier of W, the carrier of W:]).[w1,w2]
+          .= ((the add of V)||the carrier of W).[w1,w2]
           by Def1;
    hence thesis by A2,FUNCT_1:72;
 end;
@@ -152,7 +147,7 @@ A1:w1 = v1 & w2 = v2;
    reconsider ww1 = w1, ww2 = w2 as VECTOR of V by Th3;
 A2:v1 .|. v2 = (the scalar of V).[ww1,ww2] by A1,BHSP_1:def 1;
       w1 .|. w2 = (the scalar of W).[w1,w2] by BHSP_1:def 1
-    .= ((the scalar of V) | [:the carrier of W, the carrier of W:]).[w1,w2]
+    .= ((the scalar of V)||the carrier of W).[w1,w2]
     by Def1;
    hence thesis by A2,FUNCT_1:72;
 end;
@@ -184,8 +179,7 @@ proof
 A1:w1 = v and
 A2:w2 = u;
 A3:- w2 = - u by A2,Th9;
-      w1 - w2 = w1 + (- w2) & v - u = v + (- u);
-   hence thesis by A1,A3,Th6;
+   thus thesis by A1,A3,Th6;
 end;
 
 theorem Th11:
@@ -313,10 +307,9 @@ D being non empty set, d1 being Element of D, A being BinOp of D,
 M being Function of [:REAL, D:], D, S being Function of [:D,D:],REAL st
  V1 = D &
  d1 = 0.V &
- A = (the add of V) | [:V1,V1:] &
+ A = (the add of V)||V1 &
  M = (the Mult of V) | [:REAL,V1:] &
- S = (the scalar of V) | [:V1,V1:] holds
-           UNITSTR (# D,d1,A,M,S #) is Subspace of V
+ S = (the scalar of V)||V1 holds UNITSTR (# D,d1,A,M,S #) is Subspace of V
 proof
    let V be RealUnitarySpace;
    let V1 be Subset of V;
@@ -328,34 +321,22 @@ proof
    assume that
 A1:V1 = D and
 A2:d1 = 0.V and
-A3:A = (the add of V) | [:V1,V1:] and
+A3:A = (the add of V)||V1 and
 A4:M = (the Mult of V) | [:REAL,V1:] and
-A5:S = (the scalar of V) | [:V1,V1:];
+A5:S = (the scalar of V)||V1;
       UNITSTR (# D,d1,A,M,S #) is Subspace of V
    proof
      set W = UNITSTR (# D,d1,A,M,S #);
 A6:  the Zero of W = the Zero of V by A2;
 A7:  for x,y being VECTOR of W holds x + y = (the add of V).[x,y]
-     proof
-       let x,y be VECTOR of W;
-          x + y = ((the add of V) | [:the carrier of W, the carrier of W:]
-       ).[x,y] by A1,A3;
-       hence thesis by FUNCT_1:72;
-     end;
+           by A1,A3,FUNCT_1:72;
 A8:  for a being Real, x being VECTOR of W holds a * x = (the Mult of V).[a,x]
-     proof
-       let a be Real;
-       let x be VECTOR of W;
-          a * x = ((the Mult of V) | [:REAL, the carrier of W:]).[a,x]
-       by A1,A4;
-       hence thesis by FUNCT_1:72;
-     end;
-A10: for x,y being VECTOR of W holds x .|. y = (the scalar of V).[x,y]
+           by A1,A4,FUNCT_1:72;
+A9: for x,y being VECTOR of W holds x .|. y = (the scalar of V).[x,y]
      proof
        let x,y be VECTOR of W;
           x .|. y
-        = ((the scalar of V) | [:the carrier of W, the carrier of W:]).[x,y]
-        by A1,A5,BHSP_1:def 1;
+        = ((the scalar of V)||the carrier of W).[x,y] by A1,A5,BHSP_1:def 1;
         hence thesis by FUNCT_1:72;
      end;
         W is RealUnitarySpace-like RealLinearSpace-like
@@ -364,7 +345,7 @@ A10: for x,y being VECTOR of W holds x .|. y = (the scalar of V).[x,y]
        set AV = the add of V;
        set MV = the Mult of V;
        set SV = the scalar of V;
-       A11: for x,y being Element of W holds x + y = y + x
+       A10: for x,y being Element of W holds x + y = y + x
        proof
          let x,y be Element of W;
          reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
@@ -373,7 +354,7 @@ A10: for x,y being VECTOR of W holds x .|. y = (the scalar of V).[x,y]
                 .= AV.[y1,x1]
                 .= y + x by A7;
        end;
-       A12: for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
+       A11: for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
        proof
          let x,y,z be VECTOR of W;
          reconsider x1 = x, y1 = y, z1 = z as VECTOR of V by A1,TARSKI:def 3;
@@ -387,7 +368,7 @@ A10: for x,y being VECTOR of W holds x .|. y = (the scalar of V).[x,y]
                           .= AV.[x1,y + z] by A7
                           .= x + (y + z) by A7;
        end;
-       A13: for x being VECTOR of W holds x + 0.W = x
+       A12: for x being VECTOR of W holds x + 0.W = x
        proof
          let x be VECTOR of W;
          reconsider y = x, z = 0.W as VECTOR of V by A1,TARSKI:def 3;
@@ -395,22 +376,22 @@ A10: for x,y being VECTOR of W holds x .|. y = (the scalar of V).[x,y]
                       .= y + 0.V by A2
                       .= x by RLVECT_1:10;
        end;
-       A14: for x being VECTOR of W
+       A13: for x being VECTOR of W
         ex y being VECTOR of W st x + y = 0.W
        proof let x be VECTOR of W;
          reconsider x1 = x as VECTOR of V by A1,TARSKI:def 3;
          consider v being VECTOR of V such that
-A15:     x1 + v = 0.V by RLVECT_1:def 8;
-          v = - x1 by A15,RLVECT_1:def 10
+A14:     x1 + v = 0.V by RLVECT_1:def 8;
+          v = - x1 by A14,RLVECT_1:def 10
           .= (- 1) * x1 by RLVECT_1:29
           .= MV.[- 1,x1]
           .= (- 1) * x by A8;
          then reconsider y = v as VECTOR of W;
          take y;
          thus x + y = AV.[x1,v] by A7
-                   .= 0.W by A2,A15;
+                   .= 0.W by A2,A14;
        end;
-A16:    for a being Real, x,y being VECTOR of W holds
+A15:    for a being Real, x,y being VECTOR of W holds
        a * (x + y) = a * x + a * y
        proof
          let a be Real;
@@ -429,7 +410,7 @@ A16:    for a being Real, x,y being VECTOR of W holds
                          .= a * x + a * y by A7;
        end;
 
-A17:    for a,b being Real, x being VECTOR of W holds
+A16:    for a,b being Real, x being VECTOR of W holds
        (a + b) * x = a * x + b * x
        proof
          let a,b be Real;
@@ -445,7 +426,7 @@ A17:    for a,b being Real, x being VECTOR of W holds
                          .= AV.[a * x,b * x] by A8
                          .= a * x + b * x by A7;
        end;
-A18:    for a,b being Real, x being VECTOR of W holds
+A17:    for a,b being Real, x being VECTOR of W holds
        (a * b) * x = a * (b * x)
        proof
          let a,b be Real;
@@ -459,7 +440,7 @@ A18:    for a,b being Real, x being VECTOR of W holds
                          .= MV.[a,b * x] by A8
                          .= a * (b * x) by A8;
        end;
-       A19: for x being VECTOR of W holds 1 * x = x
+       A18: for x being VECTOR of W holds 1 * x = x
        proof
          let x be VECTOR of W;
          reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
@@ -479,10 +460,10 @@ A18:    for a,b being Real, x being VECTOR of W holds
          reconsider x1 = x as VECTOR of V by A1,TARSKI:def 3;
          reconsider y1 = y as VECTOR of V by A1,TARSKI:def 3;
          reconsider z1 = z as VECTOR of V by A1,TARSKI:def 3;
-A20:      x .|. x = 0 implies x = 0.W
+A19:      x .|. x = 0 implies x = 0.W
          proof
            assume x .|. x = 0;
-           then SV.[x1,x1] = 0 by A10;
+           then SV.[x1,x1] = 0 by A9;
            then x1 .|. x1 = 0 by BHSP_1:def 1;
            then x1 = 0.V by BHSP_1:def 2;
            hence thesis by A2;
@@ -493,48 +474,48 @@ A20:      x .|. x = 0 implies x = 0.W
            then x1 = 0.V by A2;
            then x1 .|. x1 = 0 by BHSP_1:def 2;
            then SV.[x1,x1] = 0 by BHSP_1:def 1;
-           hence thesis by A10;
+           hence thesis by A9;
          end;
-         hence x .|. x = 0 iff x = 0.W by A20;
+         hence x .|. x = 0 iff x = 0.W by A19;
          thus 0 <= x .|. x
          proof
               0 <= x1 .|. x1 by BHSP_1:def 2;
            then 0 <= SV.[x1,x1] by BHSP_1:def 1;
-           hence thesis by A10;
+           hence thesis by A9;
          end;
          thus x .|. y = y .|. x
          proof
               SV.[x1,y1] = y1 .|. x1 by BHSP_1:def 1;
            then SV.[x1,y1] = SV.[y1,x1] by BHSP_1:def 1;
-           then x .|. y = SV.[y1,x1] by A10;
-           hence thesis by A10;
+           then x .|. y = SV.[y1,x1] by A9;
+           hence thesis by A9;
          end;
          thus (x+y) .|. z = x .|. z + y .|. z
          proof
-A21:        SV.[y1,z1] = y1 .|. z1 by BHSP_1:def 1;
-A22:        (x + y) .|. z = SV.[x+y, z] by A10
+A20:        SV.[y1,z1] = y1 .|. z1 by BHSP_1:def 1;
+A21:        (x + y) .|. z = SV.[x+y, z] by A9
                         .= SV.[AV.[x1,y1], z] by A7
                         .= SV.[x1+y1, z]
                         .= (x1 + y1) .|. z1 by BHSP_1:def 1
                         .= x1 .|. z1 + y1 .|. z1 by BHSP_1:def 2;
-              x .|. z + y .|. z = (SV.[x, z]) + (y .|. z) by A10
-                            .= (SV.[x, z]) + (SV.[y, z]) by A10
-                            .= x1 .|. z1 + y1 .|. z1 by A21,BHSP_1:def 1;
-           hence thesis by A22;
+              x .|. z + y .|. z = (SV.[x, z]) + (y .|. z) by A9
+                            .= (SV.[x, z]) + (SV.[y, z]) by A9
+                            .= x1 .|. z1 + y1 .|. z1 by A20,BHSP_1:def 1;
+           hence thesis by A21;
          end;
          thus thesis
          proof
-A23:        (a*x) .|. y = SV.[(a*x), y] by A10
+A22:        (a*x) .|. y = SV.[(a*x), y] by A9
                       .= SV.[MV.[a,x1], y] by A8
                       .= SV.[(a*x1), y]
                       .= (a*x1) .|. y1 by BHSP_1:def 1
                       .= a * ( x1 .|. y1 ) by BHSP_1:def 2;
-               a * ( x .|. y ) = a * SV.[x,y] by A10
+               a * ( x .|. y ) = a * SV.[x,y] by A9
                            .= a * (x1 .|. y1) by BHSP_1:def 1;
-            hence thesis by A23;
+            hence thesis by A22;
          end;
        end;
-       hence thesis by A11,A12,A13,A14,A16,A17,A18,A19,BHSP_1:def 2
+       hence thesis by A10,A11,A12,A13,A15,A16,A17,A18,BHSP_1:def 2
 ,RLVECT_1:def 5,def 6,def 7,def 8,def 9;
      end;
      hence thesis by A1,A3,A4,A5,A6,Def1;
@@ -565,11 +546,11 @@ A1:V is Subspace of X & X is Subspace of V;
       VV c= VX & VX c= VV by A1,Def1;
 then A2:VV = VX by XBOOLE_0:def 10;
 A3:the Zero of V = the Zero of X by A1,Def1;
-      AV = AX | [:VV,VV:] & AX = AV | [:VX,VX:] by A1,Def1;
+      AV = AX||VV & AX = AV||VX by A1,Def1;
 then A4:AV = AX by A2,RELAT_1:101;
       MV = MX | [:REAL,VV:] & MX = MV | [:REAL,VX:] by A1,Def1;
 then A5:MV = MX by A2,RELAT_1:101;
-      SV = SX | [:VV,VV:] & SX = SV | [:VX,VX:] by A1,Def1;
+      SV = SX||VV & SX = SV||VX by A1,Def1;
    hence thesis by A2,A3,A4,A5,RELAT_1:101;
 end;
 
@@ -593,14 +574,13 @@ Def1
 ;
      hence thesis;
    end;
-   thus the add of V = (the add of Y) | [:the carrier of V, the carrier of V:]
+   thus the add of V = (the add of Y)||the carrier of V
    proof
      set AV = the add of V; set VV = the carrier of V;
      set AX = the add of X; set VX = the carrier of X;
      set AY = the add of Y;
-        AV = AX | [:VV,VV:] & AX = AY | [:VX,VX:] & VV c= VX by A1,Def1;
-     then AV = (AY | [:VX,VX:]) | [:VV,VV:] & [:VV,VV:] c= [:VX,VX:]
-                                                           by ZFMISC_1:119;
+        AV = AX||VV & AX = AY||VX & VV c= VX by A1,Def1;
+     then AV = (AY||VX)||VV & [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
      hence thesis by FUNCT_1:82;
    end;
    thus the Mult of V = (the Mult of Y) | [:REAL, the carrier of V:]
@@ -616,9 +596,8 @@ Def1
      set SV = the scalar of V; set VV = the carrier of V;
      set SX = the scalar of X; set VX = the carrier of X;
      set SY = the scalar of Y;
-        SV = SX | [:VV,VV:] & SX = SY | [:VX,VX:] & VV c= VX by A1,Def1;
-     then SV = (SY | [:VX,VX:]) | [:VV,VV:] & [:VV,VV:] c= [:VX,VX:]
-                                                              by ZFMISC_1:119;
+        SV = SX||VV & SX = SY||VX & VV c= VX by A1,Def1;
+     then SV = SY||VX||VV & [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
    hence thesis by FUNCT_1:82;
 end;
 
@@ -637,9 +616,9 @@ A1:the carrier of W1 c= the carrier of W2;
    hence the carrier of W1 c= the carrier of W2 &
          the Zero of W1 = the Zero of W2 by A1;
    thus the add of W1 =
-        (the add of W2) | [:the carrier of W1,the carrier of W1:]
+        (the add of W2)||the carrier of W1
    proof
-        the add of W1 = AV | [:VW1,VW1:] & the add of W2 = AV | [:VW2,VW2:] &
+        the add of W1 = AV||VW1 & the add of W2 = AV||VW2 &
      [:VW1,VW1:] c= [:VW2,VW2:] by A1,Def1,ZFMISC_1:119;
      hence thesis by FUNCT_1:82;
    end;
@@ -651,7 +630,7 @@ A1:the carrier of W1 c= the carrier of W2;
      [:REAL,VW1:] c= [:REAL,VW2:] by A1,Def1,ZFMISC_1:118;
      hence thesis by FUNCT_1:82;
    end;
-      the scalar of W1 = SV | [:VW1,VW1:] & the scalar of W2 = SV | [:VW2,VW2:]
+      the scalar of W1 = SV||VW1 & the scalar of W2 = SV||VW2
 &
    [:VW1,VW1:] c= [:VW2,VW2:] by A1,Def1,ZFMISC_1:119;
    hence thesis by FUNCT_1:82;
@@ -688,9 +667,9 @@ proof
      the carrier of V c= the carrier of V;
    then reconsider V1 = the carrier of V as Subset of V;
       the Zero of V = 0.V &
-   the add of V = (the add of V) | [:V1,V1:] &
+   the add of V = (the add of V)||V1 &
    the Mult of V = (the Mult of V) | [:REAL,V1:] &
-   the scalar of V = (the scalar of V) | [:V1, V1:]
+   the scalar of V = (the scalar of V)||V1
    by FUNCT_2:40;
    then UNITSTR(#the carrier of V,the Zero of V,the add of V,the Mult of V,
    the scalar of V #) is Subspace of V by Th18;
@@ -785,12 +764,13 @@ A1:V1 <> {} and
 A2:V1 is lineary-closed;
    reconsider D = V1 as non empty set by A1;
    reconsider d1 = 0.V as Element of D by A2,RLSUB_1:4;
-   set A = (the add of V) | [:V1,V1:];
+   set A = (the add of V)||V1;
    set M = (the Mult of V) | [:REAL,V1:];
-   set S = (the scalar of V) | [:V1,V1:];
+   set S = (the scalar of V)||V1;
    set VV = the carrier of V;
       dom(the add of V) = [:VV,VV:] by FUNCT_2:def 1;
-   then dom A = [:VV,VV:] /\ [:V1,V1:] & [:V1,V1:] c= [:VV,VV:] by RELAT_1:90;
+   then
+X:  dom A = [:VV,VV:] /\ [:V1,V1:] & [:V1,V1:] c= [:VV,VV:] by RELAT_1:90;
 then A3:dom A = [:D,D:] by XBOOLE_1:28;
       dom(the Mult of V) = [:REAL,VV:] by FUNCT_2:def 1;
    then dom M = [:REAL,VV:] /\ [:REAL,V1:] & [:REAL,V1:] c= [:REAL,VV:]
@@ -861,7 +841,7 @@ A21:   [x1,x2] in [:REAL,VV:] & [x1,x2] in [:REAL,V1:] by A18,A19,ZFMISC_1:106;
    reconsider A as Function of [:D,D:],D by A3,A5,FUNCT_2:def 1,RELSET_1:11;
    reconsider M as Function of [:REAL,D:],D
                                            by A4,A13,FUNCT_2:def 1,RELSET_1:11;
-   reconsider S as Function of [:D,D:],REAL by FUNCT_2:38;
+   reconsider S as Function of [:D,D:],REAL by FUNCT_2:38,X;
    set W = UNITSTR (# D,d1,A,M,S #);
           W is Subspace of V & the carrier of W = D by Th18;
    hence thesis;
@@ -915,8 +895,7 @@ A3:    v=v' & w=w';
      proof
        let u,v,w be VECTOR of W;
         reconsider u'=u,v'=v,w'=w as VECTOR of V;
-     v + w = v' + w' & u + v = u' + v';
-        hence (u + v) + w = (u' + v') + w'
+        thus (u + v) + w = (u' + v') + w'
                          .= u' + (v' + w') by RLVECT_1:def 6
                          .= u + (v + w);
      end;
@@ -931,18 +910,17 @@ A3:    v=v' & w=w';
        let v be VECTOR of W;
        reconsider v'=v as VECTOR of V;
        consider w' being VECTOR of V such that
-A5:    v' + w' = 0.V by RLVECT_1:def 8;
+A4:    v' + w' = 0.V by RLVECT_1:def 8;
        reconsider w=w' as VECTOR of W;
        take w;
-       thus v + w = 0.W by A5;
+       thus v + w = 0.W by A4;
      end;
      thus for a be Real ,v,w being VECTOR of W holds
            a * (v + w) = a * v + a * w
      proof
        let a be Real; let v,w be VECTOR of W;
        reconsider v'=v,w'=w as VECTOR of V;
-    v + w = v' + w' & a * v = a * v' & a * w = a * w';
-       hence a * (v + w) = a * (v' + w')
+       thus a * (v + w) = a * (v' + w')
                         .= a * v' + a * w' by RLVECT_1:def 9
                         .= a * v + a * w;
      end;
@@ -1003,15 +981,14 @@ A5:    v' + w' = 0.V by RLVECT_1:def 8;
           end;
           thus (x+y) .|. z = x .|. z + y .|. z
           proof
-A9:        x'+y' = x+y & x' .|. z' = x .|. z & y' .|. z' = y .|. z by A2;
-            then (x+y) .|. z = (x'+y') .|. z' by A2
+A5:        x'+y' = x+y & x' .|. z' = x .|. z & y' .|. z' = y .|. z by A2;
+            (x+y) .|. z = (x'+y') .|. z' by A2
                        .= x' .|. z' + y' .|. z' by BHSP_1:def 2;
-            hence thesis by A9;
+            hence thesis by A5;
           end;
           thus (a*x) .|. y = a * ( x .|. y )
           proof
-            a*x' = a*x & x' .|. y' = x .|. y by A2;
-            then (a*x) .|. y = (a*x') .|. y' by A2
+            (a*x) .|. y = (a*x') .|. y' by A2
                        .= a * (x' .|. y') by BHSP_1:def 2;
             hence thesis by A2;
           end;
@@ -1082,12 +1059,7 @@ proof
 end;
 
 theorem
-   for V being strict RealUnitarySpace holds V is Subspace of (Omega).V
-proof
-   let V be strict RealUnitarySpace;
-      V is Subspace of V by Th19;
-   hence thesis;
-end;
+ for V being strict RealUnitarySpace holds V is Subspace of (Omega).V;
 
 begin :: The Cosets of Subspace of Real Unitary Space
 
@@ -1138,28 +1110,28 @@ proof
    let V be RealUnitarySpace;
    let W be Subspace of V;
    set A = {0.V + u where u is VECTOR of V : u in W};
-A2:A c= the carrier of W
+A1:A c= the carrier of W
    proof
      let x be set;
      assume x in A;
      then consider u being VECTOR of V such that
-A3:  x = 0.V + u and
-A4:  u in W;
-        x = u by A3,RLVECT_1:10;
-     hence thesis by A4,RLVECT_1:def 1;
+A2:  x = 0.V + u and
+A3:  u in W;
+        x = u by A2,RLVECT_1:10;
+     hence thesis by A3,RLVECT_1:def 1;
    end;
       the carrier of W c= A
    proof
      let x be set;
      assume x in the carrier of W;
-then A5:  x in W by RLVECT_1:def 1;
+then A4:  x in W by RLVECT_1:def 1;
      then x in V by Th2;
      then reconsider y = x as Element of V by RLVECT_1:def 1;
 
         0.V + y = x by RLVECT_1:10;
-     hence thesis by A5;
+     hence thesis by A4;
    end;
-   hence thesis by A2,XBOOLE_0:def 10;
+   hence thesis by A1,XBOOLE_0:def 10;
 end;
 
 definition
@@ -1277,8 +1249,8 @@ A3:    u in W;
 
      reconsider y1 = y, z1 = z as VECTOR of V by Th3;
 A4:  y - z in W by RLVECT_1:def 1;
-A5:  z + (y - z) = (y + z) - z by RLVECT_1:42
-                .= y + (z - z) by RLVECT_1:42
+A5:  z + (y - z) = (y + z) - z by RLVECT_1:def 6
+                .= y + (z - z) by RLVECT_1:def 6
                 .= y + 0.W by RLVECT_1:28
                 .= x by RLVECT_1:10;
 A6:  y - z = y1 - z1 by Th10;
@@ -1303,9 +1275,7 @@ for V being RealUnitarySpace, v being VECTOR of V holds
 proof
    let V be RealUnitarySpace;
    let v be VECTOR of V;
-the carrier of (Omega).V = the carrier of the UNITSTR of V
-     .= the carrier of V;
-   then v in (Omega).V by RLVECT_1:def 1;
+   v in (Omega).V by RLVECT_1:def 1;
    hence thesis by Lm3;
 end;
 
@@ -1357,8 +1327,8 @@ A4:x in the carrier of W;
 
       a * v in W & x in W by A1,A4,Th15,RLVECT_1:def 1;
 then A5:y - a * v in W by Th17;
-      a * v + (y - a * v) = (y + a * v) - a * v by RLVECT_1:42
-                      .= y + (a * v - a * v) by RLVECT_1:42
+      a * v + (y - a * v) = (y + a * v) - a * v by RLVECT_1:def 6
+                      .= y + (a * v - a * v) by RLVECT_1:def 6
                       .= y + 0.V by RLVECT_1:28
                       .= x by RLVECT_1:10;
    then x in A by A5;
@@ -1422,8 +1392,8 @@ A2:    x = v + v1 and
 A3:    v1 in W;
 A4:    v1 - u in W by A1,A3,Th17;
           (v + u) + (v1 - u) = v + (u + (v1 - u)) by RLVECT_1:def 6
-                         .= v + ((v1 + u) - u) by RLVECT_1:42
-                         .= v + (v1 + (u - u)) by RLVECT_1:42
+                         .= v + ((v1 + u) - u) by RLVECT_1:def 6
+                         .= v + (v1 + (u - u)) by RLVECT_1:def 6
                          .= v + (v1 + 0.V) by RLVECT_1:28
                          .= x by A2,RLVECT_1:10;
        then x in B by A4;
@@ -1498,7 +1468,7 @@ A2:  z in W;
 A3:    x = u + v1 and
 A4:    v1 in W;
 A5:    v1 - z in W by A2,A4,Th17;
-          v - z = u + (z - z) by A1,RLVECT_1:42
+          v - z = u + (z - z) by A1,RLVECT_1:def 6
             .= u + 0.V by RLVECT_1:28
             .= u by RLVECT_1:10;
        then x = (v + (- z)) + v1 by A3
@@ -1583,10 +1553,10 @@ A6:x2 in W;
      then consider u1 being VECTOR of V such that
 A7:  x = v1 + u1 and
 A8:  u1 in W;
-        u - x1 = v1 + (x1 - x1) by A3,RLVECT_1:42
+        u - x1 = v1 + (x1 - x1) by A3,RLVECT_1:def 6
            .= v1 + 0.V by RLVECT_1:28
            .= v1 by RLVECT_1:10;
-then A9:  x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:42
+then A9:  x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:def 6
       .= v2 + ((x2 - x1) + u1) by RLVECT_1:def 6;
         x2 - x1 in W by A4,A6,Th17;
      then (x2 - x1) + u1 in W by A8,Th14;
@@ -1599,10 +1569,10 @@ then A9:  x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:42
    then consider u1 being VECTOR of V such that
 A10:x = v2 + u1 and
 A11:u1 in W;
-      u - x2 = v2 + (x2 - x2) by A5,RLVECT_1:42
+      u - x2 = v2 + (x2 - x2) by A5,RLVECT_1:def 6
          .= v2 + 0.V by RLVECT_1:28
          .= v2 by RLVECT_1:10;
-then A12:x = (v1 + (x1 - x2)) + u1 by A3,A10,RLVECT_1:42
+then A12:x = (v1 + (x1 - x2)) + u1 by A3,A10,RLVECT_1:def 6
      .= v1 + ((x1 - x2) + u1) by RLVECT_1:def 6;
       x1 - x2 in W by A4,A6,Th17;
    then (x1 - x2) + u1 in W by A11,Th14;
@@ -1633,18 +1603,14 @@ proof
    assume that
 A1:a <> 1 and
 A2:a * v in v + W;
-A3:now assume a - 1 = 0;
-     then (- 1) + a = 0;
-     then a = - (- 1);
-     hence contradiction by A1;
-   end;
+A3:  a - 1 <> 0 by A1;
       a * v in {v + u where u is VECTOR of V : u in W} by A2;
    then consider u being VECTOR of V such that
 A4:a * v = v + u and
 A5:u in W;
       u = u + 0.V by RLVECT_1:10
     .= u + (v - v) by RLVECT_1:28
-    .= a * v - v by A4,RLVECT_1:42
+    .= a * v - v by A4,RLVECT_1:def 6
     .= a * v - 1 * v by RLVECT_1:def 9
     .= (a - 1) * v by RLVECT_1:49;
    then (a - 1)" * u = ((a - 1)" * (a - 1)) * v & a - 1 <> 0
@@ -1792,7 +1758,7 @@ A5:  u2 in W and
 A6:  v2 = v + u2 by A2,Th57;
         v1 - v2 = (u1 + v) + (- (v + u2)) by A4,A6
             .= (u1 + v) + ((- v) - u2) by RLVECT_1:44
-            .= ((u1 + v) + (- v)) - u2 by RLVECT_1:42
+            .= ((u1 + v) + (- v)) - u2 by RLVECT_1:def 6
             .= (u1 + (v + (- v))) - u2 by RLVECT_1:def 6
             .= (u1 + 0.V) - u2 by RLVECT_1:16
             .= u1 - u2 by RLVECT_1:10;
@@ -1826,14 +1792,14 @@ A1:v + W = u + W;
 A2:v = u + u1 and
 A3:u1 in W;
       0.V = (u + u1) - v by A2,RLVECT_1:28
-      .= u + (u1 - v) by RLVECT_1:42
+      .= u + (u1 - v) by RLVECT_1:def 6
       .= u + ((- v) + u1)
       .= (u + (- v)) + u1 by RLVECT_1:def 6
       .= u1 + (u - v);
    then v1 = - u1 by RLVECT_1:def 10;
    hence v1 in W by A3,Th16;
-   thus v + v1 = (u + v) - v by RLVECT_1:42
-              .= u + (v - v) by RLVECT_1:42
+   thus v + v1 = (u + v) - v by RLVECT_1:def 6
+              .= u + (v - v) by RLVECT_1:def 6
               .= u + 0.V by RLVECT_1:28
               .= u by RLVECT_1:10;
 end;
@@ -1854,7 +1820,7 @@ A1:v + W = u + W;
    then consider u1 being VECTOR of V such that
 A2:u = v + u1 and A3: u1 in W;
       0.V = (v + u1) - u by A2,RLVECT_1:28
-      .= v + (u1 - u) by RLVECT_1:42
+      .= v + (u1 - u) by RLVECT_1:def 6
       .= v + ((- u) + u1)
       .= (v + (- u)) + u1 by RLVECT_1:def 6
       .= u1 + (v - u);

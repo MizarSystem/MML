@@ -10,15 +10,16 @@ environ
       CAT_1, PARTFUN1, QC_LANG1, CLASSES2, FUNCOP_1, FUNCT_4, CAT_2, OPPCAT_1,
       FUNCT_5, ENS_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, DOMAIN_1, RELAT_1,
-      FUNCT_1, FUNCT_2, PARTFUN1, FUNCT_4, FUNCT_5, FRAENKEL, CLASSES2,
+      FUNCT_1, FUNCT_2, BINOP_1,
+      PARTFUN1, FUNCT_4, FUNCT_5, FRAENKEL, CLASSES2,
       FUNCOP_1, CAT_1, CAT_2, OPPCAT_1;
- constructors DOMAIN_1, CLASSES2, CAT_2, OPPCAT_1, PARTFUN1, FUNCOP_1;
+ constructors DOMAIN_1, CLASSES2, CAT_2, OPPCAT_1, PARTFUN1, FUNCOP_1, BINOP_1;
  registrations RELAT_1, FUNCT_1, RELSET_1, SUBSET_1, FUNCT_2, FUNCOP_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, FUNCT_1, CAT_1, CAT_2;
+ definitions TARSKI, FUNCT_1, CAT_1, CAT_2, BINOP_1;
  theorems TARSKI, ENUMSET1, ZFMISC_1, MCART_1, DOMAIN_1, FUNCT_1, FUNCT_2,
       PARTFUN1, FUNCOP_1, FUNCT_4, FRAENKEL, CLASSES2, CAT_1, CAT_2, OPPCAT_1,
-      GRFUNC_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
+      GRFUNC_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, BINOP_1;
  schemes FUNCT_2, PARTFUN1, WELLORD2;
 
 begin :: Mappings
@@ -41,10 +42,10 @@ registration let V;
      now let f be set;
    assume f in UF;
    then consider C being set such that
-A2:  f in C and
-A3:  C in F by TARSKI:def 4;
-      ex A,B st C = Funcs(A,B) by A3;
-   hence f is Function by A2,FUNCT_2:121;
+A1:  f in C and
+A2:  C in F by TARSKI:def 4;
+      ex A,B st C = Funcs(A,B) by A2;
+   hence f is Function by A1,FUNCT_2:121;
   end;
   hence thesis by FRAENKEL:def 1;
  end;
@@ -59,16 +60,16 @@ theorem Th1:
     ex A,B st (B={} implies A={}) & f is Function of A,B
    proof assume f in Funcs(V);
     then consider C being set such that
-A2:  f in C and
-A3:  C in F by TARSKI:def 4;
+A1:  f in C and
+A2:  C in F by TARSKI:def 4;
     consider A,B such that
-A4:  C = Funcs(A,B) by A3;
+A3:  C = Funcs(A,B) by A2;
     take A,B;
-    thus thesis by A2,A4,FUNCT_2:14,121;
+    thus thesis by A1,A3,FUNCT_2:14,121;
    end;
   given A,B such that
-A5:  (B={} implies A={}) & f is Function of A,B;
-     f in Funcs(A,B) & Funcs(A,B) in F by A5,FUNCT_2:11;
+A4:  (B={} implies A={}) & f is Function of A,B;
+     f in Funcs(A,B) & Funcs(A,B) in F by A4,FUNCT_2:11;
   hence thesis by TARSKI:def 4;
  end;
 
@@ -120,8 +121,8 @@ reserve m,m1,m2,m3,m' for Element of Maps V;
 
 theorem Th4:
    ex f,A,B st m = [[A,B],f] & (B = {} implies A = {}) & f is Function of A,B
- proof m in Maps V;
-  then m in { [[A,B],f]: (B={} implies A={}) & f is Function of A,B};
+ proof
+  m in { [[A,B],f]: (B={} implies A={}) & f is Function of A,B};
   then ex A,B,f st m = [[A,B],f] & (B={} implies A={}) & f is Function of A,B;
   hence thesis;
  end;
@@ -342,10 +343,10 @@ theorem Th16:
    m in Maps(A,B) implies m = [[A,B],m`2]
  proof
   assume m in Maps(A,B);
-  then A2: ex f being Element of Funcs(V) st m = [[A,B],f] &
+  then A1: ex f being Element of Funcs(V) st m = [[A,B],f] &
  [[A,B],f] in Maps(V);
      m = [[dom m,cod m],m`2] by Th8;
-  hence thesis by A2,ZFMISC_1:33;
+  hence thesis by A1,ZFMISC_1:33;
  end;
 
 theorem Th17:
@@ -381,9 +382,7 @@ A2:  z in C and
 A3:  C in M by TARSKI:def 4;
    consider A,B such that
 A4:  C = Maps(A,B) by A3;
-       Maps(A,B) = { [[A,B],f] where f is Element of Funcs V: [[A,B],f] in
- Maps V };
-   then ex f being Element of Funcs(V) st z = [[A,B],f] & [[A,B],f] in Maps(V)
+   ex f being Element of Funcs(V) st z = [[A,B],f] & [[A,B],f] in Maps(V)
      by A2,A4;
    hence z in Maps(V);
   end;
@@ -655,19 +654,13 @@ A10:    dom g = d.g by Def10;
 
 registration let V;
  cluster Ens(V) -> strict Category-like;
-  coherence
- proof Ens(V) = CatStr(# V,Maps V,fDom V,fCod V,fComp V,fId V #);
-  hence thesis by Th21;
- end;
+  coherence by Th21;
 end;
 
 reserve a,b for Object of Ens(V);
 
 theorem
-   A is Object of Ens(V)
- proof Ens(V) = CatStr(# V,Maps V,fDom V,fCod V,fComp V,fId V #);
-  hence thesis;
- end;
+   A is Object of Ens(V);
 
 definition let V,A;
  func @A -> Object of Ens(V) equals
@@ -676,10 +669,7 @@ definition let V,A;
 end;
 
 theorem
-   a is Element of V
- proof Ens(V) = CatStr(# V,Maps V,fDom V,fCod V,fComp V,fId V #);
-  hence thesis;
- end;
+   a is Element of V;
 
 definition let V,a;
  func @a -> Element of V equals
@@ -690,10 +680,7 @@ end;
 reserve f,g,f1,f2 for Morphism of Ens(V);
 
 theorem
-   m is Morphism of Ens(V)
- proof Ens(V) = CatStr(# V,Maps V,fDom V,fCod V,fComp V,fId V #);
-  hence thesis;
- end;
+   m is Morphism of Ens(V);
 
 definition let V,m;
  func @m -> Morphism of Ens(V) equals
@@ -702,10 +689,7 @@ definition let V,m;
 end;
 
 theorem
-   f is Element of Maps(V)
- proof Ens(V) = CatStr(# V,Maps V,fDom V,fCod V,fComp V,fId V #);
-  hence thesis;
- end;
+   f is Element of Maps(V);
 
 definition let V,f;
  func @f -> Element of Maps(V) equals
@@ -714,16 +698,7 @@ definition let V,f;
 end;
 
 theorem Th26:
-   dom f = dom(@f) & cod f = cod(@f)
- proof
-  Ens(V) = CatStr(# V,Maps V,fDom V,fCod V,fComp V,fId V #);
-  hence dom(@f) = (the Dom of Ens(V)).@f by Def10
-             .= (the Dom of Ens(V)).f
-             .= dom f;
-  thus cod(@f) = (the Cod of Ens(V)).@f by Def11
-             .= (the Cod of Ens(V)).f
-             .= cod f;
- end;
+   dom f = dom(@f) & cod f = cod(@f) by Def10,Def11;
 
 theorem Th27:
    Hom(a,b) = Maps(@a,@b)
@@ -753,7 +728,7 @@ A2:   x in Maps(@a,@b);
   hence thesis by TARSKI:2;
  end;
 
-Lm8: Hom(a,b) <> {} implies Funcs(@a,@b) <> {}
+Lm6: Hom(a,b) <> {} implies Funcs(@a,@b) <> {}
  proof assume Hom(a,b) <> {};
   then A1: Maps(@a,@b) <> {} by Th27;
   consider m being Element of Maps(@a,@b);
@@ -768,20 +743,15 @@ theorem Th28:
  proof assume
 A1:  dom g = cod f;
      dom(@g) = cod f by A1,Th26;
-then A3:  dom(@g) = cod(@f) by Th26;
+then A2:  dom(@g) = cod(@f) by Th26;
   thus g*f = (the Comp of Ens(V)).[g,f] by A1,CAT_1:41
           .= (the Comp of Ens(V)).[@g,f]
           .= (fComp V).[@g,@f]
-          .= (@g)*(@f) by A3,Def12;
+          .= (@g)*(@f) by A2,Def12;
  end;
 
 theorem Th29:
-   id a = id$(@a)
- proof
-  thus id a = (the Id of Ens(V)).a
-           .= (fId V).(@a)
-           .= id$(@a) by Def13;
- end;
+   id a = id$(@a) by Def13;
 
 theorem
       a = {} implies a is initial
@@ -815,7 +785,7 @@ theorem Th31:
   set b = @B;
   assume a is initial;
   then Hom(a,b) <> {} & b = {} by CAT_1:def 16;
-  then Funcs(@a,@b) <> {} & @b = {} by Lm8;
+  then Funcs(@a,@b) <> {} & @b = {} by Lm6;
   then @a = {} by FUNCT_2:14;
   hence thesis;
  end;
@@ -867,7 +837,7 @@ A6:    C <> {} by A1,ZFMISC_1:41;
      reconsider C as Element of V by A5;
      set b = @C;
         Hom(b,a) <> {} & b <> {} by A2,A6,CAT_1:def 15;
-     then Funcs(@b,@a) <> {} & @b <> {} by Lm8;
+     then Funcs(@b,@a) <> {} & @b <> {} by Lm6;
      hence contradiction by A4,FUNCT_2:14;
    end;
    hence contradiction;
@@ -880,23 +850,23 @@ A7:   y in @a and
 A8:   y <> x by A3,ZFMISC_1:41;
     x in @a by A7;
     then reconsider fx = @a --> x as Function of @a,@a by FUNCOP_1:57;
-A10:   for z being set st z in @a holds fx.z = x by FUNCOP_1:13;
+A9:   for z being set st z in @a holds fx.z = x by FUNCOP_1:13;
     reconsider fy = @a --> y as Function of @a,@a by A7,FUNCOP_1:57;
-A12:   for z being set st z in @a holds fy.z = y by FUNCOP_1:13;
+A10:   for z being set st z in @a holds fy.z = y by FUNCOP_1:13;
       @a = {} implies @a = {};
-then A13:    ([[@a,@a],fx]) in Maps(@a,@a) & ([[@a,@a],fy]) in Maps(@a,@a) by
+then A11:    ([[@a,@a],fx]) in Maps(@a,@a) & ([[@a,@a],fy]) in Maps(@a,@a) by
 Th15;
       Maps(@a,@a) c= Maps V by Th17;
    then reconsider m1 = [[@a,@a],fx],m2 = [[@a,@a],fy] as Element of Maps(V)
-by A13;
-      m1 in Hom(a,a) & m2 in Hom(a,a) by A13,Th27;
+by A11;
+      m1 in Hom(a,a) & m2 in Hom(a,a) by A11,Th27;
    then (@m1) in Hom(a,a) & (@m2) in Hom(a,a);
    then reconsider f = @m1,g = @m2 as Morphism of a,a by CAT_1:def 7;
    consider h being Morphism of a,a such that
-A14:   for h' being Morphism of a,a holds h = h' by A2,CAT_1:def 15;
-      now thus f = h by A14 .= g by A14;
+A12:   for h' being Morphism of a,a holds h = h' by A2,CAT_1:def 15;
+      now thus f = h by A12 .= g by A12;
     thus f = [[@a,@a],fx] & g = [[@a,@a],fy];
-       fx.y = x & fy.y = y by A7,A10,A12;
+       fx.y = x & fy.y = y by A7,A9,A10;
     hence fx <> fy by A8;
    end;
    hence contradiction by ZFMISC_1:33;
@@ -1013,39 +983,39 @@ then A9:   dom g2 = A \/ {x} by FUNCT_4:def 1 .= A by A5,ZFMISC_1:46;
     reconsider m1 = [[A,B],g1], m2 = [[A,B],g2]
  as Element of Maps(V) by A2,Th5;
     set f1 = @m1, f2 = @m2;
-A11:   m1 = [[dom m1,cod m1],m1`2] & m2 = [[dom m2,cod m2],m2`2] by Th8;
+A10:   m1 = [[dom m1,cod m1],m1`2] & m2 = [[dom m2,cod m2],m2`2] by Th8;
     then dom m1 = A & dom m2 = A & cod m1 = B & cod m2 = B by Lm1;
-then A12:    dom(@f1) = A & dom(@f2) = A & cod(@f1) = B & cod(@f2) = B;
-then A13:    dom f1 = A & dom f2 = A & cod f1 = B & cod f2 = B & cod f = A
+then A11:    dom(@f1) = A & dom(@f2) = A & cod(@f1) = B & cod(@f2) = B;
+then A12:    dom f1 = A & dom f2 = A & cod f1 = B & cod f2 = B & cod f = A
      by Th26;
-A14:  g1 = m1`2 & g2 = m2`2 by A11,ZFMISC_1:33;
+A13:  g1 = m1`2 & g2 = m2`2 by A10,ZFMISC_1:33;
     set h1 = (@f1)`2*(@f)`2, h2 = (@f2)`2*(@f)`2;
     set f1f = (@f1)*(@f), f2f = (@f2)*(@f);
         now
-A15:   (f1f)`2 = h1 & dom(f1f) = dom(@f) & cod(f1f) = cod(@f1) &
-       (f2f)`2 = h2 & dom(f2f) = dom(@f) & cod(f2f) = cod(@f2) by A12,Th12;
+A14:   (f1f)`2 = h1 & dom(f1f) = dom(@f) & cod(f1f) = cod(@f1) &
+       (f2f)`2 = h2 & dom(f2f) = dom(@f) & cod(f2f) = cod(@f2) by A11,Th12;
       hence f1f=[[dom(@f),cod(@f1)],h1] & f2f=[[dom(@f),cod(@f2)],h2] by Th8;
          now
        thus
-A16:      dom(h1) = dom(@f) & dom(h2) = dom(@f) by A15,Lm3;
+A15:      dom(h1) = dom(@f) & dom(h2) = dom(@f) by A14,Lm3;
        let z be set;
        set y = (@f)`2.z;
        assume
-A17:      z in dom(@f);
+A16:      z in dom(@f);
        then z in dom (@f)`2 by Lm3;
        then y in rng (@f)`2 by FUNCT_1:def 5;
        then g1 = (@f1)`2 & g2 =(@f2)`2 & y in A & not y in {x}
-        by A4,A6,A14,TARSKI:def 1;
+        by A4,A6,A13,TARSKI:def 1;
        then h1.z = g1.y & h2.z = g2.y & not y in {x} & g1.y = x1
-         by A16,A17,FUNCOP_1:13,FUNCT_1:22;
+         by A15,A16,FUNCOP_1:13,FUNCT_1:22;
        hence h1.z = h2.z by A8,FUNCT_4:12;
       end;
       hence h1 = h2 by FUNCT_1:9;
      end;
     then f1f = f2f & f1*f = f1f & f2*f = f2f & h.x = x2
-      by A7,A12,A13,Th28,FUNCOP_1:13;
+      by A7,A11,A12,Th28,FUNCOP_1:13;
     then f1 = f2 & g1.x = x1 & g2.x = x2
-      by A1,A5,A7,A8,A13,CAT_1:def 11,FUNCOP_1:13,FUNCT_4:14;
+      by A1,A5,A7,A8,A12,CAT_1:def 11,FUNCOP_1:13,FUNCT_4:14;
     hence contradiction by A3,ZFMISC_1:33;
    end;
   hence rng (@f)`2 = cod(@f) by A4,XBOOLE_0:def 10;
@@ -1089,7 +1059,7 @@ theorem
 V
 )
  proof let W be non empty Subset of V;
-A2:  for a,b being Object of Ens(W), a',b' being Object of Ens(V)
+A1:  for a,b being Object of Ens(W), a',b' being Object of Ens(V)
       st a = a' & b = b' holds Hom(a,b) = Hom(a',b')
   proof let a,b be Object of Ens(W), a',b' be Object of Ens(V);
    assume a = a' & b = b';
@@ -1101,39 +1071,34 @@ A2:  for a,b being Object of Ens(W), a',b' being Object of Ens(V)
   proof
    thus the Objects of Ens(W) c= the Objects of Ens(V);
    thus for a,b being Object of Ens(W), a',b' being Object of Ens(V)
-      st a = a' & b = b' holds Hom(a,b) c= Hom(a',b') by A2;
+      st a = a' & b = b' holds Hom(a,b) c= Hom(a',b') by A1;
    set w = the Comp of Ens(W), v = the Comp of Ens(V);
       now
-A3:   dom w c= [:Maps W,Maps W:] & dom v c= [:Maps V,Maps V:]
+A2:   dom w c= [:Maps W,Maps W:] & dom v c= [:Maps V,Maps V:]
        by RELSET_1:12;
-A4:    Maps W c= Maps V by Th7;
+A3:    Maps W c= Maps V by Th7;
     thus
-A5:   dom w c= dom v
+A4:   dom w c= dom v
      proof let x be set; assume
-A6:    x in dom w;
+A5:    x in dom w;
       then consider m2,m1 being Element of Maps W such that
-A7:    x = [m2,m1] by A3,DOMAIN_1:9;
-      reconsider m1' = m1, m2' = m2 as Element of Maps V by A4,TARSKI:def 3;
-         m1 = [[dom m1,cod m1],m1`2] & m2 = [[dom m2,cod m2],m2`2] &
-       m1' = [[dom m1',cod m1'],m1'`2] & m2' = [[dom m2',cod m2'],m2'`2]
-       by Th8;
-      then dom m2' = dom m2 & cod m1' = cod m1 & dom m2 = cod m1
-       by A6,A7,Def12;
-      hence x in dom v by A7,Def12;
+A6:    x = [m2,m1] by A2,DOMAIN_1:9;
+      reconsider m1' = m1, m2' = m2 as Element of Maps V by A3,TARSKI:def 3;
+      dom m2' = dom m2 & cod m1' = cod m1 & dom m2 = cod m1
+       by A5,A6,Def12;
+      hence x in dom v by A6,Def12;
      end;
     let x be set; assume
-A8:   x in dom w;
+A7:   x in dom w;
     then consider m2,m1 being Element of Maps W such that
-A9:   x = [m2,m1] by A3,DOMAIN_1:9;
-    reconsider m1' = m1, m2' = m2 as Element of Maps V by A4,TARSKI:def 3;
-    A10:   dom m2' = cod m1' & dom m2 = cod m1 by A5,A8,A9,Def12;
-       m1 = [[dom m1,cod m1],m1`2] & m2 = [[dom m2,cod m2],m2`2] &
-     m1' = [[dom m1',cod m1'],m1'`2] & m2' = [[dom m2',cod m2'],m2'`2] by Th8;
-    then m1`2 = m1'`2 & m2`2 = m2'`2 & dom m1 = dom m1' & cod m2 = cod m2';
+A8:   x = [m2,m1] by A2,DOMAIN_1:9;
+    reconsider m1' = m1, m2' = m2 as Element of Maps V by A3,TARSKI:def 3;
+    A9:   dom m2' = cod m1' & dom m2 = cod m1 by A4,A7,A8,Def12;
+    m1`2 = m1'`2 & m2`2 = m2'`2 & dom m1 = dom m1' & cod m2 = cod m2';
     then m2*m1=[[dom m1,cod m2],m2`2*m1`2] & m2'*m1'=[[dom m1,cod m2],
       m2`2*m1`2]
-      by A10,Def7;
-    hence w.x = m2'*m1' by A9,A10,Def12 .= v.x by A9,A10,Def12;
+      by A9,Def7;
+    hence w.x = m2'*m1' by A8,A9,Def12 .= v.x by A8,A9,Def12;
    end;
    hence the Comp of Ens(W) <= the Comp of Ens(V) by GRFUNC_1:8;
    let a be Object of Ens(W), a' be Object of Ens(V);
@@ -1142,7 +1107,7 @@ A9:   x = [m2,m1] by A3,DOMAIN_1:9;
    then id$(@a) = [[@a,@a],id(@a)] & id$(@a') = [[@a,@a],id(@a)];
    hence id a = id$(@a') by Th29 .= id a' by Th29;
   end;
-  thus thesis by A2;
+  thus thesis by A1;
  end;
 
 begin :: Representable Functors
@@ -1166,9 +1131,7 @@ registration let C;
 end;
 
 theorem
-   Hom(a,b) in Hom(C)
- proof Hom(C) = { Hom(a',b'): not contradiction }; hence thesis; end
-;
+   Hom(a,b) in Hom(C);
 
 :: hom-functors
 
@@ -1434,7 +1397,7 @@ A10:  for f holds h2.f = [[Hom(cod f,a),Hom(dom f,a)],hom(f,a)];
  end;
 end;
 
-Lm9: for T being Function of the Morphisms of C, Maps(Hom(C)) st Hom(C) c= V
+Lm7: for T being Function of the Morphisms of C, Maps(Hom(C)) st Hom(C) c= V
    holds T is Function of the Morphisms of C, the Morphisms of Ens V
  proof let T be Function of the Morphisms of C, Maps(Hom(C));
   assume Hom(C) c= V;
@@ -1445,7 +1408,7 @@ Lm9: for T being Function of the Morphisms of C, Maps(Hom(C)) st Hom(C) c= V
   hence thesis by FUNCT_2:9;
  end;
 
-Lm10:
+Lm8:
   Hom(C) c= V implies
    for d being Object of Ens(V) st d = Hom(a,c) holds (hom?-(a)).(id c) = id d
  proof
@@ -1464,7 +1427,7 @@ A2:  d = Hom(a,c);
      .= id d by Th29;
  end;
 
-Lm11:
+Lm9:
   Hom(C) c= V implies
    for d being Object of Ens(V) st d = Hom(c,a) holds (hom-?(a)).(id c) = id d
  proof
@@ -1488,15 +1451,14 @@ theorem Th49:
  proof assume
 A1:  Hom(C) c= V;
   then reconsider T = hom?-(a) as
-    Function of the Morphisms of C, the Morphisms of Ens V by Lm9;
+    Function of the Morphisms of C, the Morphisms of Ens V by Lm7;
      now
    thus for c being Object of C ex d being Object of Ens V st T.(id c) = id d
     proof let c be Object of C;
          Hom(a,c) in Hom(C);
       then reconsider A = Hom(a,c) as Element of V by A1;
       take d = @A;
-         d = A;
-      hence thesis by A1,Lm10;
+      thus thesis by A1,Lm8;
     end;
    thus for f being Morphism of C
      holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f)
@@ -1511,26 +1473,24 @@ A2:    [[Hom(a,b),Hom(a,c)],hom(a,f)]
       .= [[dom(@g), cod(@g)],(@g)`2] by Th8
       .= [[dom g, cod(@g)],(@g)`2] by Th26
       .= [[dom g, cod g],(@g)`2] by Th26;
-   A = @A;
-     hence T.(id b)
-         = id @A by A1,Lm10
+     thus T.(id b)
+         = id @A by A1,Lm8
         .= id dom (T.f) by A2,Lm1;
-   B = @B;
-     hence T.(id c)
-         = id @B by A1,Lm10
+     thus T.(id c)
+         = id @B by A1,Lm8
         .= id cod (T.f) by A2,Lm1;
     end;
    let f,g be Morphism of C such that
-A5:   dom g = cod f;
+A3:   dom g = cod f;
         [[Hom(a,dom f),Hom(a,cod f)],hom(a,f)]
     = T.f by Def22
    .= @(T.f)
    .= [[dom(@(T.f)),cod(@(T.f))],(@(T.f))`2] by Th8
    .= [[dom(T.f),cod(@(T.f))],(@(T.f))`2] by Th26
    .= [[dom(T.f),cod(T.f)],(@(T.f))`2] by Th26;
-then A6:  (@(T.f))`2=hom(a,f) & dom(T.f)=Hom(a,dom f) & cod(T.f)=Hom(a,cod f)
+then A4:  (@(T.f))`2=hom(a,f) & dom(T.f)=Hom(a,dom f) & cod(T.f)=Hom(a,cod f)
      by Lm1,ZFMISC_1:33;
-then A7:   dom(@(T.f))=Hom(a,dom f) & cod(@(T.f))=Hom(a,cod f)
+then A5:   dom(@(T.f))=Hom(a,dom f) & cod(@(T.f))=Hom(a,cod f)
        by Th26;
         [[Hom(a,dom g),Hom(a,cod g)],hom(a,g)]
     = T.g by Def22
@@ -1538,14 +1498,14 @@ then A7:   dom(@(T.f))=Hom(a,dom f) & cod(@(T.f))=Hom(a,cod f)
    .= [[dom(@(T.g)),cod(@(T.g))],(@(T.g))`2] by Th8
    .= [[dom(T.g),cod(@(T.g))],(@(T.g))`2] by Th26
    .= [[dom(T.g),cod(T.g)],(@(T.g))`2] by Th26;
-then A8:  (@(T.g))`2=hom(a,g) & dom(T.g)=Hom(a,dom g) & cod(T.g)=Hom(a,cod g)
+then A6:  (@(T.g))`2=hom(a,g) & dom(T.g)=Hom(a,dom g) & cod(T.g)=Hom(a,cod g)
     by Lm1,ZFMISC_1:33;
-then A9:  dom(@(T.g))=Hom(a,dom g) & cod(@(T.g))=Hom(a,cod g) by Th26;
-      dom(g*f) = dom f & cod(g*f) = cod g by A5,CAT_1:42;
+then A7:  dom(@(T.g))=Hom(a,dom g) & cod(@(T.g))=Hom(a,cod g) by Th26;
+      dom(g*f) = dom f & cod(g*f) = cod g by A3,CAT_1:42;
    hence T.(g*f) = [[Hom(a,dom(f)),Hom(a,cod(g))],hom(a,g*f)] by Def22
-                .= [[Hom(a,dom(f)),Hom(a,cod(g))],hom(a,g)*hom(a,f)] by A5,Th45
-                .= (@(T.g))*(@(T.f)) by A5,A6,A7,A8,A9,Def7
-                .= (T.g)*(T.f) by A5,A6,A8,Th28;
+                .= [[Hom(a,dom(f)),Hom(a,cod(g))],hom(a,g)*hom(a,f)] by A3,Th45
+                .= (@(T.g))*(@(T.f)) by A3,A4,A5,A6,A7,Def7
+                .= (T.g)*(T.f) by A3,A4,A6,Th28;
   end;
   hence thesis by CAT_1:96;
  end;
@@ -1555,15 +1515,14 @@ theorem Th50:
  proof assume
 A1:  Hom(C) c= V;
   then reconsider T = hom-?(a) as
-    Function of the Morphisms of C, the Morphisms of Ens V by Lm9;
+    Function of the Morphisms of C, the Morphisms of Ens V by Lm7;
      now
    thus for c being Object of C ex d being Object of Ens V st T.(id c) = id d
     proof let c be Object of C;
          Hom(c,a) in Hom(C);
       then reconsider A = Hom(c,a) as Element of V by A1;
       take d = @A;
-         d = A;
-      hence thesis by A1,Lm11;
+      thus thesis by A1,Lm9;
     end;
    thus for f being Morphism of C
      holds T.(id dom f) = id cod (T.f) & T.(id cod f) = id dom (T.f)
@@ -1578,26 +1537,24 @@ A2:    [[Hom(b,a),Hom(c,a)],hom(f,a)]
       .= [[dom(@g), cod(@g)],(@g)`2] by Th8
       .= [[dom g, cod(@g)],(@g)`2] by Th26
       .= [[dom g, cod g],(@g)`2] by Th26;
-   B = @B;
-     hence T.(id c)
-         = id @B by A1,Lm11
+     thus T.(id c)
+         = id @B by A1,Lm9
         .= id cod (T.f) by A2,Lm1;
-   A = @A;
-     hence T.(id b)
-         = id @A by A1,Lm11
+     thus T.(id b)
+         = id @A by A1,Lm9
         .= id dom (T.f) by A2,Lm1;
     end;
    let f,g be Morphism of C such that
-A5:   dom g = cod f;
+A3:   dom g = cod f;
         [[Hom(cod f,a),Hom(dom f,a)],hom(f,a)]
     = T.f by Def23
    .= @(T.f)
    .= [[dom(@(T.f)),cod(@(T.f))],(@(T.f))`2] by Th8
    .= [[dom(T.f),cod(@(T.f))],(@(T.f))`2] by Th26
    .= [[dom(T.f),cod(T.f)],(@(T.f))`2] by Th26;
-then A6:  (@(T.f))`2=hom(f,a) & dom(T.f)=Hom(cod f,a) & cod(T.f)=Hom(dom f,a)
+then A4:  (@(T.f))`2=hom(f,a) & dom(T.f)=Hom(cod f,a) & cod(T.f)=Hom(dom f,a)
      by Lm1,ZFMISC_1:33;
-then A7:   dom(@(T.f))=Hom(cod f,a) & cod(@(T.f))=Hom(dom f,a)
+then A5:   dom(@(T.f))=Hom(cod f,a) & cod(@(T.f))=Hom(dom f,a)
        by Th26;
         [[Hom(cod g,a),Hom(dom g,a)],hom(g,a)]
     = T.g by Def23
@@ -1605,15 +1562,15 @@ then A7:   dom(@(T.f))=Hom(cod f,a) & cod(@(T.f))=Hom(dom f,a)
    .= [[dom(@(T.g)),cod(@(T.g))],(@(T.g))`2] by Th8
    .= [[dom(T.g),cod(@(T.g))],(@(T.g))`2] by Th26
    .= [[dom(T.g),cod(T.g)],(@(T.g))`2] by Th26;
-then A8:  (@(T.g))`2=hom(g,a) & dom(T.g)=Hom(cod g,a) & cod(T.g)=Hom(dom g,a)
+then A6:  (@(T.g))`2=hom(g,a) & dom(T.g)=Hom(cod g,a) & cod(T.g)=Hom(dom g,a)
     by Lm1,ZFMISC_1:33;
-then A9:  dom(@(T.g))=Hom(cod g,a) & cod(@(T.g))=Hom(dom g,a)
+then A7:  dom(@(T.g))=Hom(cod g,a) & cod(@(T.g))=Hom(dom g,a)
       by Th26;
-      dom(g*f) = dom f & cod(g*f) = cod g by A5,CAT_1:42;
+      dom(g*f) = dom f & cod(g*f) = cod g by A3,CAT_1:42;
    hence T.(g*f) = [[Hom(cod(g),a),Hom(dom(f),a)],hom(g*f,a)] by Def23
-                .= [[Hom(cod(g),a),Hom(dom(f),a)],hom(f,a)*hom(g,a)] by A5,Th46
-                .= (@(T.f))*(@(T.g)) by A5,A6,A7,A8,A9,Def7
-                .= (T.f)*(T.g) by A5,A6,A8,Th28;
+                .= [[Hom(cod(g),a),Hom(dom(f),a)],hom(f,a)*hom(g,a)] by A3,Th46
+                .= (@(T.f))*(@(T.g)) by A3,A4,A5,A6,A7,Def7
+                .= (T.f)*(T.g) by A3,A4,A6,Th28;
   end;
   hence thesis by OPPCAT_1:def 7;
  end;
@@ -1828,22 +1785,21 @@ A6: for f,g holds h2.[f,g] = [[Hom(cod f,dom g),Hom(dom f,cod g)],hom(f,g)];
       now
     thus the Morphisms of [:C,C:] = [:the Morphisms of C,the Morphisms of C:];
     let f,g;
-    thus h1.[f,g] = [[Hom(cod f,dom g),Hom(dom f,cod g)],hom(f,g)] by A5
-                 .= h2.[f,g] by A6;
+    thus h1.(f,g) = [[Hom(cod f,dom g),Hom(dom f,cod g)],hom(f,g)] by A5
+                 .= h2.(f,g) by A6;
    end;
-  hence thesis by FUNCT_2:120;
+  hence thesis by BINOP_1:2;
  end;
 end;
 
 theorem Th57:
    hom?-(a) = (curry (hom??(C))).(id a) & hom-?(a) = (curry' (hom??(C))).(id a)
  proof
-     [:the Morphisms of C,the Morphisms of C:] = the Morphisms of [:C, C:];
-  then reconsider T = hom??(C)
+  reconsider T = hom??(C)
      as Function of [:the Morphisms of C,the Morphisms of C:],Maps(Hom(C));
       now let f;
     thus ((curry T).(id a)).f
-       = T.[id a,f] by CAT_2:3
+       = T.(id a,f) by CAT_2:3
       .= [[Hom(cod id a,dom f),Hom(dom id a,cod f)],hom(id a,f)] by Def25
       .= [[Hom(cod id a,dom f),Hom(dom id a,cod f)],hom(a,f)] by Th53
       .= [[Hom(a,dom f),Hom(dom id a,cod f)],hom(a,f)] by CAT_1:44
@@ -1853,7 +1809,7 @@ theorem Th57:
   hence hom?-(a) = (curry (hom??(C))).(id a) by FUNCT_2:113;
       now let f;
     thus ((curry' T).(id a)).f
-       = T.[f,id a] by CAT_2:4
+       = T.(f,id a) by CAT_2:4
       .= [[Hom(cod f,dom id a),Hom(dom f,cod id a)],hom(f,id a)] by Def25
       .= [[Hom(cod f,dom id a),Hom(dom f,cod id a)],hom(f,a)] by Th53
       .= [[Hom(cod f,a),Hom(dom f,cod id a)],hom(f,a)] by CAT_1:44
@@ -1863,7 +1819,7 @@ theorem Th57:
   hence hom-?(a) = (curry' (hom??(C))).(id a) by FUNCT_2:113;
  end;
 
-Lm12:
+Lm10:
   Hom(C) c= V implies
    for d being Object of Ens(V) st d = Hom(a,b)
     holds (hom??(C)).[id a,id b] = id d
@@ -1924,7 +1880,7 @@ A4:     c = [a,b] by CAT_2:35;
             .= [id(opp a),id b] by OPPCAT_1:22;
         thus d = A;
       end;
-      hence thesis by A1,Lm12;
+      hence thesis by A1,Lm10;
     end;
    thus for fg being Morphism of [:C opp,C:]
      holds T.(id dom fg) = id dom (T.fg) & T.(id cod fg) = id cod (T.fg)
@@ -1949,7 +1905,7 @@ then A6:    [[Hom(cod opp f,dom g),Hom(dom opp f,cod g)],hom(opp f,g)]
         .= T.[opp (id dom f),id dom g] by A2
         .= T.[id opp(dom f),id dom g] by OPPCAT_1:22
         .= T.[id cod opp f,id dom g] by OPPCAT_1:12
-        .= id @A by A1,Lm12
+        .= id @A by A1,Lm10
         .= id dom (T.fg) by A6,Lm1;
      thus T.(id cod fg)
          = T.(id [cod f,cod g]) by A5,CAT_2:38
@@ -1957,64 +1913,64 @@ then A6:    [[Hom(cod opp f,dom g),Hom(dom opp f,cod g)],hom(opp f,g)]
         .= T.[opp(id cod f),id cod g] by A2
         .= T.[id opp(cod f),id cod g] by OPPCAT_1:22
         .= T.[id dom opp f,id cod g] by OPPCAT_1:12
-        .= id @B by A1,Lm12
+        .= id @B by A1,Lm10
         .= id cod (T.fg) by A6,Lm1;
     end;
    let ff,gg be Morphism of [:C opp,C:] such that
-A9:   dom gg = cod ff;
+A7:   dom gg = cod ff;
     consider f being (Morphism of C opp), f' such that
-A10:   ff = [f,f'] by CAT_2:37;
+A8:   ff = [f,f'] by CAT_2:37;
     consider g being (Morphism of C opp), g' such that
-A11:   gg = [g,g'] by CAT_2:37;
+A9:   gg = [g,g'] by CAT_2:37;
        opp f = f by A2;
      then [[Hom(cod opp f,dom f'),Hom(dom opp f,cod f')],hom(opp f,f')]
-    = T.ff by A10,Def25
+    = T.ff by A8,Def25
    .= @(T.ff)
    .= [[dom(@(T.ff)),cod(@(T.ff))],(@(T.ff))`2] by Th8
    .= [[dom(T.ff),cod(@(T.ff))],(@(T.ff))`2] by Th26
    .= [[dom(T.ff),cod(T.ff)],(@(T.ff))`2] by Th26;
-then A12:  (@(T.ff))`2=hom(opp f,f') &
+then A10:  (@(T.ff))`2=hom(opp f,f') &
        dom(T.ff)=Hom(cod opp f,dom f') & cod(T.ff)=Hom(dom opp f,cod f')
      by Lm1,ZFMISC_1:33;
-then A13:   dom(@(T.ff))=Hom(cod opp f,dom f') & cod(@(T.ff))=Hom(dom opp f,cod
+then A11:   dom(@(T.ff))=Hom(cod opp f,dom f') & cod(@(T.ff))=Hom(dom opp f,cod
 f')
        by Th26;
        opp g = g by A2;
      then [[Hom(cod opp g,dom g'),Hom(dom opp g,cod g')],hom(opp g,g')]
-    = T.gg by A11,Def25
+    = T.gg by A9,Def25
    .= @(T.gg)
    .= [[dom(@(T.gg)),cod(@(T.gg))],(@(T.gg))`2] by Th8
    .= [[dom(T.gg),cod(@(T.gg))],(@(T.gg))`2] by Th26
    .= [[dom(T.gg),cod(T.gg)],(@(T.gg))`2] by Th26;
-then A14:  (@(T.gg))`2=hom(opp g,g') &
+then A12:  (@(T.gg))`2=hom(opp g,g') &
        dom(T.gg)=Hom(cod opp g,dom g') & cod(T.gg)=Hom(dom opp g,cod g')
     by Lm1,ZFMISC_1:33;
-then A15:  dom(@(T.gg))=Hom(cod opp g,dom g') & cod(@(T.gg))=Hom(dom opp g,cod
+then A13:  dom(@(T.gg))=Hom(cod opp g,dom g') & cod(@(T.gg))=Hom(dom opp g,cod
 g')
       by Th26;
-A16:  dom gg = [dom g,dom g'] & cod ff = [cod f,cod f'] by A10,A11,CAT_2:38;
-then A17:  dom g = cod f by A9,ZFMISC_1:33;
+A14:  dom gg = [dom g,dom g'] & cod ff = [cod f,cod f'] by A8,A9,CAT_2:38;
+then A15:  dom g = cod f by A7,ZFMISC_1:33;
         now
-      thus dom gg = [opp dom g,dom g'] by A3,A16
+      thus dom gg = [opp dom g,dom g'] by A3,A14
                  .= [cod opp g,dom g'] by OPPCAT_1:12;
-      thus cod ff = [opp cod f,cod f'] by A3,A16
+      thus cod ff = [opp cod f,cod f'] by A3,A14
                  .= [dom opp f,cod f'] by OPPCAT_1:12;
      end;
-then A18:  cod opp g = dom opp f & dom g' = cod f' by A9,ZFMISC_1:33;
-then A19:   dom(g'*f') = dom f' & cod(g'*f') = cod g' &
+then A16:  cod opp g = dom opp f & dom g' = cod f' by A7,ZFMISC_1:33;
+then A17:   dom(g'*f') = dom f' & cod(g'*f') = cod g' &
        dom((opp f)*(opp g)) = dom opp g & cod((opp f)*(opp g)) = cod opp f
         by CAT_1:42;
    thus T.(gg*ff)
-    = T.([g*f,g'*f']) by A9,A10,A11,CAT_2:40
+    = T.([g*f,g'*f']) by A7,A8,A9,CAT_2:40
    .= T.([opp (g*f),g'*f']) by A2
-   .= T.([(opp f)*(opp g),g'*f']) by A17,OPPCAT_1:19
+   .= T.([(opp f)*(opp g),g'*f']) by A15,OPPCAT_1:19
    .= [[Hom(cod((opp f)*(opp g)),dom(g'*f')),
         Hom(dom((opp f)*(opp g)),cod(g'*f'))],
        hom((opp f)*(opp g),g'*f')] by Def25
    .= [[Hom(cod opp f,dom f'),Hom(dom opp g,cod g')],
-       hom(opp g,g')*hom(opp f,f')] by A18,A19,Th56
-   .= (@(T.gg))*(@(T.ff)) by A12,A13,A14,A15,A18,Def7
-   .= (T.gg)*(T.ff) by A12,A14,A18,Th28;
+       hom(opp g,g')*hom(opp f,f')] by A16,A17,Th56
+   .= (@(T.gg))*(@(T.ff)) by A10,A11,A12,A13,A16,Def7
+   .= (T.gg)*(T.ff) by A10,A12,A16,Th28;
   end;
   hence thesis by CAT_1:96;
  end;
@@ -2052,7 +2008,7 @@ A1:  Hom(C) c= V;
    then reconsider A = Hom(a,b) as Element of V by A1;
    set d = @A;
       (hom?-(V,a)).(id b) = (hom?-(a)).(id b) by A1,Def26
-                      .= id d by A1,Lm10;
+                      .= id d by A1,Lm8;
    hence thesis by CAT_1:103;
 end;
 
@@ -2072,7 +2028,7 @@ A1:  Hom(C) c= V;
    then reconsider A = Hom(b,a) as Element of V by A1;
    set d = @A;
       (hom-?(V,a)).(id b) = (hom-?(a)).(id b) by A1,Def27
-                      .= id d by A1,Lm11;
+                      .= id d by A1,Lm9;
    hence thesis by OPPCAT_1:31;
 end;
 
@@ -2098,7 +2054,7 @@ A1:  Hom(C) c= V;
                              .= (hom??(V,C)).[(id a) opp,id b] by OPPCAT_1:21
                              .= (hom??(V,C)).[id a,id b] by OPPCAT_1:def 4
                              .= (hom??(C)).[id a,id b] by A1,Def28
-                             .= id d by A1,Lm12;
+                             .= id d by A1,Lm10;
    hence thesis by CAT_1:103;
  end;
 

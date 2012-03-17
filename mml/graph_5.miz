@@ -21,7 +21,7 @@ environ
  theorems FUNCT_2, XBOOLE_1, GRAPH_1, FINSEQ_1, GRAPH_4, FUNCT_1, FINSEQ_3,
       REAL_1, FINSEQ_4, NAT_1, CARD_1, TARSKI, YELLOW15, CARD_4, CARD_5,
       FINSEQ_2, FINSET_1, XBOOLE_0, CARD_2, RVSUM_1, AMISTD_2, SUBSET_1, AMI_5,
-      ZFMISC_1, SCMFSA_7, XCMPLX_1, XREAL_1;
+      ZFMISC_1, SCMFSA_7, XCMPLX_1, XREAL_1, BINARITH;
  schemes FUNCT_1, NAT_1;
 
 begin :: Preliminaries
@@ -1302,13 +1302,7 @@ reserve v,v1,v2,v3 for Element of the Vertices of G;
 theorem Th27:
   for e being Element of the Edges of G st
   v=(the Source of G).e or v=(the Target of G).e holds v in vertices(e)
-proof
-    set FS=the Source of G, FT=the Target of G;
-    let e be Element of the Edges of G;
-    assume v=FS.e or v=FT.e;
-    then v in {FS.e,FT.e} by TARSKI:def 2;
-    hence v in vertices(e);
-end;
+    by TARSKI:def 2;
 
 theorem Th28:
   i in dom pe & (v=(the Source of G).(pe.i) or
@@ -1521,19 +1515,7 @@ then A1:  p <> {} & (the Source of G).(p.1) = v1 &
 end;
 
 theorem
-     x in OrientedPaths(v1,v2) iff ex p st p=x & p is_orientedpath_of v1,v2
-proof
-  hereby assume x in OrientedPaths(v1,v2);
-     then x in {q where q is oriented Chain of G: q is_orientedpath_of v1,v2};
-    then consider p such that
-A1: x = p & p is_orientedpath_of v1,v2;
-    take p;
-    thus x=p & p is_orientedpath_of v1,v2 by A1;
-  end;
-  assume ex p st (x=p & p is_orientedpath_of v1,v2);
-   then x in {q where q is oriented Chain of G: q is_orientedpath_of v1,v2};
-   hence x in OrientedPaths(v1,v2);
-end;
+     x in OrientedPaths(v1,v2) iff ex p st p=x & p is_orientedpath_of v1,v2;
 
 theorem Th35:
   p is_orientedpath_of v1,v2,V & v1 <> v2 implies v1 in V
@@ -1941,7 +1923,7 @@ A4: for k st P[k] holds P[k+1]
      A37: for k holds P[k] from NAT_1:sch 1(A2,A4);
        p <> {} by A1,Def3;
     then len p >=1 by Th8;
-    then len p -' 1 + 1= len p by AMI_5:4;
+    then len p -' 1 + 1= len p by BINARITH:53;
     hence AcyclicPaths(p) <> {} by A1,A37;
     then consider x being set such that
 A38: x in AcyclicPaths(p) by XBOOLE_0:def 1;
@@ -2184,7 +2166,7 @@ that
         p is_orientedpath_of v1,v2 by A1,Def4;
      then p <> {} by Def3;
      then len p >=1 by Th8;
-     then len p -' 1 + 1= len p by AMI_5:4;
+     then len p -' 1 + 1= len p by BINARITH:53;
      hence AcyclicPaths(p) <> {} by A1,A68;
      then consider x being set such that
 A69:  x in AcyclicPaths(p) by XBOOLE_0:def 1;
@@ -2403,20 +2385,20 @@ then A10:  g = <*g.1*> by A1,FINSEQ_1:57;
 A11:  cost(qe,W) = Sum g
      .= g.1 by A10,RVSUM_1:103;
      consider h being FinSequence of REAL,d being Real such that
-A13:  f1= h^<*d*> by A7,A9,FINSEQ_2:22;
-A14:  j = len h +1 by A7,A13,FINSEQ_2:19;
+A12:  f1= h^<*d*> by A7,A9,FINSEQ_2:22;
+A13:  j = len h +1 by A7,A12,FINSEQ_2:19;
         j in dom f1 by A5,A7,FINSEQ_3:27;
 then f1.j = g.1 by A4,A7,FINSEQ_1:def 7;
-then A15:  d=g.1 by A13,A14,FINSEQ_1:59;
-A16:  Sum f2 >= 0 by A8,RVSUM_1:114;
-     A17: Sum f= Sum f1 + Sum f2 by A7,RVSUM_1:105;
+then A14:  d=g.1 by A12,A13,FINSEQ_1:59;
+A15:  Sum f2 >= 0 by A8,RVSUM_1:114;
+     A16: Sum f= Sum f1 + Sum f2 by A7,RVSUM_1:105;
         for y being Real st y in rng f1 holds y >= 0 by A8,Lm3;
-     then for i st i in dom h holds h.i >= 0 by A13,Lm4;
-then A18:  Sum h >= 0 by RVSUM_1:114;
-        Sum f1 = Sum h + Sum <*d*> by A13,RVSUM_1:105
-    .=Sum h + g.1 by A15,RVSUM_1:103;
-     then Sum f1 >= 0 + g.1 by A18,XREAL_1:9;
-     hence thesis by A11,A16,A17,XREAL_1:9;
+     then for i st i in dom h holds h.i >= 0 by A12,Lm4;
+then A17:  Sum h >= 0 by RVSUM_1:114;
+        Sum f1 = Sum h + Sum <*d*> by A12,RVSUM_1:105
+    .=Sum h + g.1 by A14,RVSUM_1:103;
+     then Sum f1 >= 0 + g.1 by A17,XREAL_1:9;
+     hence thesis by A11,A15,A16,XREAL_1:9;
 end;
 
 theorem Th54:
@@ -2683,18 +2665,18 @@ proof
         D = the Edges of G,
         A = {x where x is Element of D* : len x <= n };
         D is finite by GRAPH_1:def 8;
-then A2:  A is finite by Th4;
+then A1:  A is finite by Th4;
         AcyclicPaths(G) c= A
      proof
          let x;
          assume x in AcyclicPaths(G);
          then consider p being Simple (oriented Chain of G) such that
-    A3:  x=p;
-    A4:  p is Element of D* by FINSEQ_1:def 11;
+    A2:  x=p;
+    A3:  p is Element of D* by FINSEQ_1:def 11;
             len p <= n by Th62;
-         hence x in A by A3,A4;
+         hence x in A by A2,A3;
      end;
-     hence thesis by A2,FINSET_1:13;
+     hence thesis by A1,FINSET_1:13;
 end;
 
 registration let G;

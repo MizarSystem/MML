@@ -6,18 +6,17 @@
 
 environ
 
- vocabularies FUNCT_2, MARGREL1, ZF_LANG, PARTIT1, BVFUNC_1;
- notations XBOOLE_0, SUBSET_1, MARGREL1, VALUAT_1, FRAENKEL, BINARITH,
+ vocabularies FUNCT_2, MARGREL1, ZF_LANG, PARTIT1, BVFUNC_1, FUNCT_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, MARGREL1,
+      VALUAT_1, RELAT_1, FUNCT_1, FUNCT_2, FRAENKEL, BINARITH, SEQM_3,
       BVFUNC_1;
- constructors BINARITH, BVFUNC_1;
+ constructors BINARITH, BVFUNC_1, SEQM_3, XREAL_0;
  registrations MARGREL1, VALUAT_1, BINARITH, FRAENKEL;
  definitions BVFUNC_1;
  theorems MARGREL1, BINARITH, BVFUNC_1, BVFUNC_4, BVFUNC_5, BVFUNC_6, BVFUNC_7,
       VALUAT_1;
 
-begin
-
-::Chap. 1  Propositional Calculus
+begin :: Chap. 1  Propositional Calculus
 
 reserve Y for non empty set,
         a,b,c,d,e,f,g for Element of Funcs(Y,BOOLEAN);
@@ -25,18 +24,18 @@ reserve Y for non empty set,
 Lm1: a '&' b '<' a
 proof
   let x be Element of Y;
-  assume Pj(a '&' b,x) = TRUE;
-  then Pj(a,x) '&' Pj(b,x) = TRUE by VALUAT_1:def 6;
+  assume (a '&' b).x = TRUE;
+  then a.x '&' b.x = TRUE by VALUAT_1:def 6;
   hence thesis by MARGREL1:45;
 end;
 
 Lm2: a '&' b '&' c '<' a & a '&' b '&' c '<' b
 proof
-  A1:a '&' b '&' c = c '&' b '&' a by BVFUNC_1:7;
-        c '&' b '&' a 'imp' a = I_el(Y) by BVFUNC_6:39;
+A1:a '&' b '&' c = c '&' b '&' a by BVFUNC_1:7;
+  c '&' b '&' a 'imp' a = I_el(Y) by BVFUNC_6:39;
   hence a '&' b '&' c '<' a by A1,BVFUNC_1:19;
-    A2:a '&' b '&' c = a '&' c '&' b by BVFUNC_1:7;
-       a '&' c '&' b 'imp' b = I_el(Y) by BVFUNC_6:39;
+A2:a '&' b '&' c = a '&' c '&' b by BVFUNC_1:7;
+  a '&' c '&' b 'imp' b = I_el(Y) by BVFUNC_6:39;
   hence thesis by A2,BVFUNC_1:19;
 end;
 
@@ -150,23 +149,22 @@ theorem Th1:
   (a 'or' b) '&' (b 'imp' c) '<' a 'or' c
 proof
     let z be Element of Y;
-    assume A1:Pj((a 'or' b) '&' (b 'imp' c),z)=TRUE;
-A2:Pj((a 'or' b) '&' (b 'imp' c),z)
-   =Pj(a 'or' b,z) '&' Pj(b 'imp' c,z) by VALUAT_1:def 6
-  .=Pj(a 'or' b,z) '&' Pj('not' b 'or' c,z) by BVFUNC_4:8
-  .=Pj(a 'or' b,z) '&' (Pj('not' b,z) 'or' Pj(c,z)) by BVFUNC_1:def 7
-  .=(Pj(a,z) 'or' Pj(b,z)) '&' (Pj('not' b,z) 'or' Pj(c,z)) by BVFUNC_1:def 7;
-       now assume Pj(a 'or' c,z)<>TRUE;
-      then Pj(a 'or' c,z)=FALSE by MARGREL1:43;
-      then A3:Pj(a,z) 'or' Pj(c,z)=FALSE by BVFUNC_1:def 7;
-      A4:Pj(a,z)=TRUE or Pj(a,z)=FALSE by MARGREL1:39;
-         Pj(c,z)=TRUE or Pj(c,z)=FALSE by MARGREL1:39;
-      then Pj(a,z)=FALSE & Pj(c,z)=FALSE
-      by A3,A4,BINARITH:19;
-      then (Pj(a,z) 'or' Pj(b,z)) '&' (Pj('not' b,z) 'or' Pj(c,z))
-     =Pj(b,z) '&' (Pj('not' b,z) 'or' FALSE) by BINARITH:7
-    .=Pj(b,z) '&' Pj('not' b,z) by BINARITH:7
-    .=Pj(b,z) '&' 'not' Pj(b,z) by VALUAT_1:def 5
+    assume A1:((a 'or' b) '&' (b 'imp' c)).z=TRUE;
+A2:((a 'or' b) '&' (b 'imp' c)).z
+   =(a 'or' b).z '&' (b 'imp' c).z by VALUAT_1:def 6
+  .=(a 'or' b).z '&' ('not' b 'or' c).z by BVFUNC_4:8
+  .=(a 'or' b).z '&' (('not' b).z 'or' c.z) by BVFUNC_1:def 7
+  .=(a.z 'or' b.z) '&' (('not' b).z 'or' c.z) by BVFUNC_1:def 7;
+    now assume (a 'or' c).z<>TRUE;
+      then (a 'or' c).z=FALSE by MARGREL1:43;
+      then A3:a.z 'or' c.z=FALSE by BVFUNC_1:def 7;
+      A4:a.z=TRUE or a.z=FALSE by MARGREL1:39;
+         c.z=TRUE or c.z=FALSE by MARGREL1:39;
+      then a.z=FALSE & c.z=FALSE by A3,A4,BINARITH:19;
+      then (a.z 'or' b.z) '&' (('not' b).z 'or' c.z)
+     =b.z '&' (('not' b).z 'or' FALSE) by BINARITH:7
+    .=b.z '&' ('not' b).z by BINARITH:7
+    .=b.z '&' 'not' b.z by VALUAT_1:def 5
     .=FALSE by MARGREL1:46;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -177,18 +175,18 @@ theorem Th2:
   a '&' (a 'imp' b) '<' b
 proof
     let z be Element of Y;
-    assume A1:Pj(a '&' (a 'imp' b),z)=TRUE;
-    A2: Pj(a '&' (a 'imp' b),z)
-   =Pj(a,z) '&' Pj(a 'imp' b,z) by VALUAT_1:def 6
-  .=Pj(a,z) '&' Pj('not' a 'or' b,z) by BVFUNC_4:8
-  .=Pj(a,z) '&' (Pj('not' a,z) 'or' Pj(b,z)) by BVFUNC_1:def 7
-  .=Pj(a,z) '&' Pj('not' a,z) 'or' Pj(a,z) '&' Pj(b,z) by BINARITH:22
-  .=Pj(a,z) '&' 'not' Pj(a,z) 'or' Pj(a,z) '&' Pj(b,z) by VALUAT_1:def 5
-  .=FALSE 'or' Pj(a,z) '&' Pj(b,z) by MARGREL1:46
-  .=Pj(a,z) '&' Pj(b,z) by BINARITH:7;
-       now assume Pj(b,z)<>TRUE;
-      then Pj(a,z) '&' Pj(b,z)
-     =FALSE '&' Pj(a,z) by MARGREL1:43
+    assume A1:(a '&' (a 'imp' b)).z=TRUE;
+    A2: (a '&' (a 'imp' b)).z
+   =a.z '&' (a 'imp' b).z by VALUAT_1:def 6
+  .=a.z '&' ('not' a 'or' b).z by BVFUNC_4:8
+  .=a.z '&' (('not' a).z 'or' b.z) by BVFUNC_1:def 7
+  .=a.z '&' ('not' a).z 'or' a.z '&' b.z by BINARITH:22
+  .=a.z '&' 'not' a.z 'or' a.z '&' b.z by VALUAT_1:def 5
+  .=FALSE 'or' a.z '&' b.z by MARGREL1:46
+  .=a.z '&' b.z by BINARITH:7;
+       now assume b.z<>TRUE;
+      then a.z '&' b.z
+     =FALSE '&' a.z by MARGREL1:43
     .=FALSE by MARGREL1:49;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -196,23 +194,23 @@ proof
 end;
 
 theorem
-     (a 'imp' b) '&' 'not' b '<' 'not' a
+  (a 'imp' b) '&' 'not' b '<' 'not' a
 proof
     let z be Element of Y;
-    assume A1:Pj((a 'imp' b) '&' 'not' b,z)=TRUE;
-    A2: Pj((a 'imp' b) '&' 'not' b,z)
-   =Pj(a 'imp' b,z) '&' Pj('not' b,z) by VALUAT_1:def 6
-  .=Pj('not' a 'or' b,z) '&' Pj('not' b,z) by BVFUNC_4:8
-  .=Pj('not' b,z) '&' (Pj('not' a,z) 'or' Pj(b,z)) by BVFUNC_1:def 7
-  .=Pj('not' b,z) '&' Pj('not' a,z) 'or' Pj('not' b,z) '&' Pj(b,z)
+    assume A1:((a 'imp' b) '&' 'not' b).z=TRUE;
+    A2: ((a 'imp' b) '&' 'not' b).z
+   =(a 'imp' b).z '&' ('not' b).z by VALUAT_1:def 6
+  .=('not' a 'or' b).z '&' ('not' b).z by BVFUNC_4:8
+  .=('not' b).z '&' (('not' a).z 'or' b.z) by BVFUNC_1:def 7
+  .=('not' b).z '&' ('not' a).z 'or' ('not' b).z '&' b.z
   by BINARITH:22
-  .=Pj('not' b,z) '&' Pj('not' a,z) 'or' 'not'
-Pj(b,z) '&' Pj(b,z) by VALUAT_1:def 5
-  .=Pj('not' b,z) '&' Pj('not' a,z) 'or' FALSE by MARGREL1:46
-  .=Pj('not' b,z) '&' Pj('not' a,z) by BINARITH:7;
-       now assume Pj('not' a,z)<>TRUE;
-      then Pj('not' b,z) '&' Pj('not' a,z)
-     =FALSE '&' Pj('not' b,z) by MARGREL1:43
+  .=('not' b).z '&' ('not' a).z 'or' 'not'
+b.z '&' b.z by VALUAT_1:def 5
+  .=('not' b).z '&' ('not' a).z 'or' FALSE by MARGREL1:46
+  .=('not' b).z '&' ('not' a).z by BINARITH:7;
+       now assume ('not' a).z<>TRUE;
+      then ('not' b).z '&' ('not' a).z
+     =FALSE '&' ('not' b).z by MARGREL1:43
     .=FALSE by MARGREL1:49;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -223,17 +221,17 @@ theorem
      (a 'or' b) '&' 'not' a '<' b
 proof
     let z be Element of Y;
-    assume A1:Pj((a 'or' b) '&' 'not' a,z)=TRUE;
-    A2: Pj((a 'or' b) '&' 'not' a,z)
-   =Pj(a 'or' b,z) '&' Pj('not' a,z) by VALUAT_1:def 6
-  .=Pj('not' a,z) '&' (Pj(a,z) 'or' Pj(b,z)) by BVFUNC_1:def 7
-  .=Pj('not' a,z) '&' Pj(a,z) 'or' Pj('not' a,z) '&' Pj(b,z) by BINARITH:22
-  .='not' Pj(a,z) '&' Pj(a,z) 'or' Pj('not' a,z) '&' Pj(b,z) by VALUAT_1:def 5
-  .=FALSE 'or' Pj('not' a,z) '&' Pj(b,z) by MARGREL1:46
-  .=Pj('not' a,z) '&' Pj(b,z) by BINARITH:7;
-       now assume Pj(b,z)<>TRUE;
-      then Pj('not' a,z) '&' Pj(b,z)
-     =FALSE '&' Pj('not' a,z) by MARGREL1:43
+    assume A1:((a 'or' b) '&' 'not' a).z=TRUE;
+    A2: ((a 'or' b) '&' 'not' a).z
+   =(a 'or' b).z '&' ('not' a).z by VALUAT_1:def 6
+  .=('not' a).z '&' (a.z 'or' b.z) by BVFUNC_1:def 7
+  .=('not' a).z '&' a.z 'or' ('not' a).z '&' b.z by BINARITH:22
+  .='not' a.z '&' a.z 'or' ('not' a).z '&' b.z by VALUAT_1:def 5
+  .=FALSE 'or' ('not' a).z '&' b.z by MARGREL1:46
+  .=('not' a).z '&' b.z by BINARITH:7;
+       now assume b.z<>TRUE;
+      then ('not' a).z '&' b.z
+     =FALSE '&' ('not' a).z by MARGREL1:43
     .=FALSE by MARGREL1:49;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -241,24 +239,24 @@ proof
 end;
 
 theorem
-     (a 'imp' b) '&' ('not' a 'imp' b) '<' b
+  (a 'imp' b) '&' ('not' a 'imp' b) '<' b
 proof
-    let z be Element of Y;
-    assume A1:Pj((a 'imp' b) '&' ('not' a 'imp' b),z)=TRUE;
-    A2: Pj((a 'imp' b) '&' ('not' a 'imp' b),z)
-   =Pj(a 'imp' b,z) '&' Pj('not' a 'imp' b,z) by VALUAT_1:def 6
-  .=Pj('not' a 'or' b,z) '&' Pj('not' a 'imp' b,z) by BVFUNC_4:8
-  .=Pj('not' a 'or' b,z) '&' Pj('not' 'not' a 'or' b,z) by BVFUNC_4:8
-  .=Pj('not' a 'or' b,z) '&' Pj(a 'or' b,z) by BVFUNC_1:4
-  .=(Pj('not' a,z) 'or' Pj(b,z)) '&' Pj(a 'or' b,z) by BVFUNC_1:def 7
-  .=(Pj('not'
-a,z) 'or' Pj(b,z)) '&' (Pj(a,z) 'or' Pj(b,z)) by BVFUNC_1:def 7;
-       now assume Pj(b,z)<>TRUE;
-      then Pj(b,z)=FALSE by MARGREL1:43;
-      then (Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj(a,z) 'or' Pj(b,z))
-     =Pj('not' a,z) '&' (Pj(a,z) 'or' FALSE) by BINARITH:7
-    .=Pj('not' a,z) '&' Pj(a,z) by BINARITH:7
-    .='not' Pj(a,z) '&' Pj(a,z) by VALUAT_1:def 5
+  let z be Element of Y;
+    assume A1:((a 'imp' b) '&' ('not' a 'imp' b)).z=TRUE;
+    A2: ((a 'imp' b) '&' ('not' a 'imp' b)).z
+   =(a 'imp' b).z '&' ('not' a 'imp' b).z by VALUAT_1:def 6
+  .=('not' a 'or' b).z '&' ('not' a 'imp' b).z by BVFUNC_4:8
+  .=('not' a 'or' b).z '&' ('not' 'not' a 'or' b).z by BVFUNC_4:8
+  .=('not' a 'or' b).z '&' (a 'or' b).z by BVFUNC_1:4
+  .=(('not' a).z 'or' b.z) '&' (a 'or' b).z by BVFUNC_1:def 7
+  .=(('not'
+a).z 'or' b.z) '&' (a.z 'or' b.z) by BVFUNC_1:def 7;
+       now assume b.z<>TRUE;
+      then b.z=FALSE by MARGREL1:43;
+      then (('not' a).z 'or' b.z) '&' (a.z 'or' b.z)
+     =('not' a).z '&' (a.z 'or' FALSE) by BINARITH:7
+    .=('not' a).z '&' a.z by BINARITH:7
+    .='not' a.z '&' a.z by VALUAT_1:def 5
     .=FALSE by MARGREL1:46;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -269,21 +267,21 @@ theorem
      (a 'imp' b) '&' (a 'imp' 'not' b) '<' 'not' a
 proof
     let z be Element of Y;
-    assume A1:Pj((a 'imp' b) '&' (a 'imp' 'not' b),z)=TRUE;
-    A2: Pj((a 'imp' b) '&' (a 'imp' 'not' b),z)
-   =Pj(a 'imp' b,z) '&' Pj(a 'imp' 'not' b,z) by VALUAT_1:def 6
-  .=Pj('not' a 'or' b,z) '&' Pj(a 'imp' 'not' b,z) by BVFUNC_4:8
-  .=Pj('not' a 'or' b,z) '&' Pj('not' a 'or' 'not' b,z) by BVFUNC_4:8
-  .=(Pj('not' a,z) 'or' Pj(b,z)) '&' Pj('not' a 'or' 'not' b,z)
+    assume A1:((a 'imp' b) '&' (a 'imp' 'not' b)).z=TRUE;
+    A2: ((a 'imp' b) '&' (a 'imp' 'not' b)).z
+   =(a 'imp' b).z '&' (a 'imp' 'not' b).z by VALUAT_1:def 6
+  .=('not' a 'or' b).z '&' (a 'imp' 'not' b).z by BVFUNC_4:8
+  .=('not' a 'or' b).z '&' ('not' a 'or' 'not' b).z by BVFUNC_4:8
+  .=(('not' a).z 'or' b.z) '&' ('not' a 'or' 'not' b).z
   by BVFUNC_1:def 7
-  .=(Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj('not' a,z) 'or' Pj('not'
-b,z)) by BVFUNC_1:def 7;
-       now assume Pj('not' a,z)<>TRUE;
-      then Pj('not' a,z)=FALSE by MARGREL1:43;
-      then (Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj('not' a,z) 'or' Pj('not' b,z))
-     =Pj(b,z) '&' (FALSE 'or' Pj('not' b,z)) by BINARITH:7
-    .=Pj(b,z) '&' Pj('not' b,z) by BINARITH:7
-    .=Pj(b,z) '&' 'not' Pj(b,z) by VALUAT_1:def 5
+  .=(('not' a).z 'or' b.z) '&' (('not' a).z 'or' ('not'
+b).z) by BVFUNC_1:def 7;
+       now assume ('not' a).z<>TRUE;
+      then ('not' a).z=FALSE by MARGREL1:43;
+      then (('not' a).z 'or' b.z) '&' (('not' a).z 'or' ('not' b).z)
+     =b.z '&' (FALSE 'or' ('not' b).z) by BINARITH:7
+    .=b.z '&' ('not' b).z by BINARITH:7
+    .=b.z '&' 'not' b.z by VALUAT_1:def 5
     .=FALSE by MARGREL1:46;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -294,18 +292,18 @@ theorem
      a 'imp' (b '&' c) '<' a 'imp' b
 proof
     let z be Element of Y;
-    assume A1:Pj(a 'imp' (b '&' c),z)=TRUE;
-    A2: Pj(a 'imp' (b '&' c),z)
-   =Pj('not' a 'or' (b '&' c),z) by BVFUNC_4:8
-  .=Pj('not' a,z) 'or' Pj(b '&' c,z) by BVFUNC_1:def 7
-  .=Pj('not' a,z) 'or' (Pj(b,z) '&' Pj(c,z)) by VALUAT_1:def 6;
-       now assume Pj(a 'imp' b,z)<>TRUE;
-      then Pj(a 'imp' b,z)=FALSE by MARGREL1:43;
-      then Pj('not' a 'or' b,z)=FALSE by BVFUNC_4:8;
-      then A3:Pj('not' a,z) 'or' Pj(b,z)=FALSE by BVFUNC_1:def 7;
-         Pj('not' a,z) 'or' (Pj(b,z) '&' Pj(c,z))
-     =(Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj('not'
-a,z) 'or' Pj(c,z)) by BINARITH:23
+    assume A1:(a 'imp' (b '&' c)).z=TRUE;
+    A2: (a 'imp' (b '&' c)).z
+   =('not' a 'or' (b '&' c)).z by BVFUNC_4:8
+  .=('not' a).z 'or' (b '&' c).z by BVFUNC_1:def 7
+  .=('not' a).z 'or' (b.z '&' c.z) by VALUAT_1:def 6;
+       now assume (a 'imp' b).z<>TRUE;
+      then (a 'imp' b).z=FALSE by MARGREL1:43;
+      then ('not' a 'or' b).z=FALSE by BVFUNC_4:8;
+      then A3:('not' a).z 'or' b.z=FALSE by BVFUNC_1:def 7;
+         ('not' a).z 'or' (b.z '&' c.z)
+     =(('not' a).z 'or' b.z) '&' (('not'
+a).z 'or' c.z) by BINARITH:23
     .=FALSE by A3,MARGREL1:49;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -316,19 +314,19 @@ theorem
      (a 'or' b) 'imp' c '<' a 'imp' c
 proof
     let z be Element of Y;
-    assume A1:Pj((a 'or' b) 'imp' c,z)=TRUE;
-    A2: Pj((a 'or' b) 'imp' c,z)
-   =Pj('not'( a 'or' b) 'or' c,z) by BVFUNC_4:8
-  .=Pj(('not' a '&' 'not' b) 'or' c,z) by BVFUNC_1:16
-  .=Pj('not' a '&' 'not' b,z) 'or' Pj(c,z) by BVFUNC_1:def 7
-  .=(Pj('not' a,z) '&' Pj('not' b,z)) 'or' Pj(c,z) by VALUAT_1:def 6;
-       now assume Pj(a 'imp' c,z)<>TRUE;
-      then Pj(a 'imp' c,z)=FALSE by MARGREL1:43;
-      then Pj('not' a 'or' c,z)=FALSE by BVFUNC_4:8;
-      then A3:Pj('not' a,z) 'or' Pj(c,z)=FALSE by BVFUNC_1:def 7;
-         (Pj('not' a,z) '&' Pj('not' b,z)) 'or' Pj(c,z)
-     =(Pj(c,z) 'or' Pj('not' a,z)) '&' (Pj(c,z) 'or' Pj('not'
-b,z)) by BINARITH:23
+    assume A1:((a 'or' b) 'imp' c).z=TRUE;
+    A2: ((a 'or' b) 'imp' c).z
+   =('not'( a 'or' b) 'or' c).z by BVFUNC_4:8
+  .=(('not' a '&' 'not' b) 'or' c).z by BVFUNC_1:16
+  .=('not' a '&' 'not' b).z 'or' c.z by BVFUNC_1:def 7
+  .=(('not' a).z '&' ('not' b).z) 'or' c.z by VALUAT_1:def 6;
+       now assume (a 'imp' c).z<>TRUE;
+      then (a 'imp' c).z=FALSE by MARGREL1:43;
+      then ('not' a 'or' c).z=FALSE by BVFUNC_4:8;
+      then A3:('not' a).z 'or' c.z=FALSE by BVFUNC_1:def 7;
+         (('not' a).z '&' ('not' b).z) 'or' c.z
+     =(c.z 'or' ('not' a).z) '&' (c.z 'or' ('not'
+b).z) by BINARITH:23
     .=FALSE by A3,MARGREL1:49;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -339,21 +337,21 @@ theorem
      a 'imp' b '<' (a '&' c) 'imp' b
 proof
     let z be Element of Y;
-    assume A1:Pj(a 'imp' b,z)=TRUE;
-    A2: Pj(a 'imp' b,z)
-   =Pj('not' a 'or' b,z) by BVFUNC_4:8
-  .=Pj('not' a,z) 'or' Pj(b,z) by BVFUNC_1:def 7;
-       now assume Pj((a '&' c) 'imp' b,z)<>TRUE;
-      then Pj((a '&' c) 'imp' b,z)=FALSE by MARGREL1:43;
-      then Pj('not'( a '&' c) 'or' b,z)=FALSE by BVFUNC_4:8;
-      then Pj('not'( a '&' c),z) 'or' Pj(b,z)=FALSE by BVFUNC_1:def 7;
-      then Pj(('not' a 'or' 'not' c),z) 'or' Pj(b,z)=FALSE by BVFUNC_1:17;
-      then (Pj('not' c,z) 'or' Pj('not' a,z)) 'or' Pj(b,z)=FALSE by
+    assume A1:(a 'imp' b).z=TRUE;
+    A2: (a 'imp' b).z
+   =('not' a 'or' b).z by BVFUNC_4:8
+  .=('not' a).z 'or' b.z by BVFUNC_1:def 7;
+       now assume ((a '&' c) 'imp' b).z<>TRUE;
+      then ((a '&' c) 'imp' b).z=FALSE by MARGREL1:43;
+      then ('not'( a '&' c) 'or' b).z=FALSE by BVFUNC_4:8;
+      then ('not'( a '&' c)).z 'or' b.z=FALSE by BVFUNC_1:def 7;
+      then (('not' a 'or' 'not' c)).z 'or' b.z=FALSE by BVFUNC_1:17;
+      then (('not' c).z 'or' ('not' a).z) 'or' b.z=FALSE by
 BVFUNC_1:def 7
 ;
-      then A3:Pj('not' c,z) 'or' (Pj('not' a,z) 'or' Pj(b,z))=FALSE by
+      then A3:('not' c).z 'or' (('not' a).z 'or' b.z)=FALSE by
 BINARITH:20;
-         Pj('not' c,z) 'or' (Pj('not' a,z) 'or' Pj(b,z)) =TRUE by A1,A2,
+         ('not' c).z 'or' (('not' a).z 'or' b.z) =TRUE by A1,A2,
 BINARITH:19;
       hence contradiction by A3,MARGREL1:43;
     end;
@@ -364,31 +362,31 @@ theorem
      a 'imp' b '<' (a '&' c) 'imp' (b '&' c)
 proof
     let z be Element of Y;
-    assume A1:Pj(a 'imp' b,z)=TRUE;
-    A2: Pj(a 'imp' b,z)
-   =Pj('not' a 'or' b,z) by BVFUNC_4:8
-  .=Pj('not' a,z) 'or' Pj(b,z) by BVFUNC_1:def 7;
-       now assume Pj((a '&' c) 'imp' (b '&' c),z)<>TRUE;
-      then Pj((a '&' c) 'imp' (b '&' c),z)=FALSE by MARGREL1:43;
-      then Pj('not'( a '&' c) 'or' (b '&' c),z)=FALSE by BVFUNC_4:8;
-      then Pj('not'( a '&' c),z) 'or' Pj(b '&' c,z)=FALSE by BVFUNC_1:def 7;
-      then Pj(('not' a 'or' 'not' c),z) 'or' Pj(b '&' c,z)=FALSE
+    assume A1:(a 'imp' b).z=TRUE;
+    A2: (a 'imp' b).z
+   =('not' a 'or' b).z by BVFUNC_4:8
+  .=('not' a).z 'or' b.z by BVFUNC_1:def 7;
+       now assume ((a '&' c) 'imp' (b '&' c)).z<>TRUE;
+      then ((a '&' c) 'imp' (b '&' c)).z=FALSE by MARGREL1:43;
+      then ('not'( a '&' c) 'or' (b '&' c)).z=FALSE by BVFUNC_4:8;
+      then ('not'( a '&' c)).z 'or' (b '&' c).z=FALSE by BVFUNC_1:def 7;
+      then (('not' a 'or' 'not' c)).z 'or' (b '&' c).z=FALSE
       by BVFUNC_1:17;
-      then (Pj('not' c,z) 'or' Pj('not' a,z)) 'or' Pj(b '&' c,z)=FALSE by
+      then (('not' c).z 'or' ('not' a).z) 'or' (b '&' c).z=FALSE by
 BVFUNC_1:def 7;
-      then Pj('not' c,z) 'or' (Pj('not'
-a,z) 'or' Pj(b '&' c,z))=FALSE by BINARITH:20;
-      then Pj('not' c,z) 'or' (Pj('not' a,z) 'or' (Pj(b,z) '&' Pj(c,z)))=FALSE
+      then ('not' c).z 'or' (('not'
+a).z 'or' (b '&' c).z)=FALSE by BINARITH:20;
+      then ('not' c).z 'or' (('not' a).z 'or' (b.z '&' c.z))=FALSE
       by VALUAT_1:def 6;
-then A3:  Pj('not' c,z) 'or' ((Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj('not'
-a,z) 'or' Pj(c,z)))=FALSE
+then A3:  ('not' c).z 'or' ((('not' a).z 'or' b.z) '&' (('not'
+a).z 'or' c.z))=FALSE
       by BINARITH:23;
-         Pj('not' c,z) 'or' ((Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj('not'
-a,z) 'or' Pj(c,z)))
-     =Pj('not' c,z) 'or' (Pj(c,z) 'or' Pj('not' a,z)) by A1,A2,MARGREL1:50
-    .=Pj('not' c,z) 'or' Pj(c,z) 'or' Pj('not' a,z) by BINARITH:20
-    .='not' Pj(c,z) 'or' Pj(c,z) 'or' Pj('not' a,z) by VALUAT_1:def 5
-    .=TRUE 'or' Pj('not' a,z) by BINARITH:18
+         ('not' c).z 'or' ((('not' a).z 'or' b.z) '&' (('not'
+a).z 'or' c.z))
+     =('not' c).z 'or' (c.z 'or' ('not' a).z) by A1,A2,MARGREL1:50
+    .=('not' c).z 'or' c.z 'or' ('not' a).z by BINARITH:20
+    .='not' c.z 'or' c.z 'or' ('not' a).z by VALUAT_1:def 5
+    .=TRUE 'or' ('not' a).z by BINARITH:18
     .=TRUE by BINARITH:19;
       hence contradiction by A3,MARGREL1:43;
     end;
@@ -399,16 +397,16 @@ theorem
      a 'imp' b '<' a 'imp' (b 'or' c)
 proof
     let z be Element of Y;
-    assume A1:Pj(a 'imp' b,z)=TRUE;
-    A2: Pj(a 'imp' b,z)
-   =Pj('not' a 'or' b,z) by BVFUNC_4:8
-  .=Pj('not' a,z) 'or' Pj(b,z) by BVFUNC_1:def 7;
-       now assume A3: Pj(a 'imp' (b 'or' c),z)<>TRUE;
-         Pj(a 'imp' (b 'or' c),z)
-     =Pj('not' a 'or' (b 'or' c),z) by BVFUNC_4:8
-    .=Pj('not' a,z) 'or' Pj(b 'or' c,z) by BVFUNC_1:def 7
-    .=Pj('not' a,z) 'or' (Pj(b,z) 'or' Pj(c,z)) by BVFUNC_1:def 7
-    .=(Pj('not' a,z) 'or' Pj(b,z)) 'or' Pj(c,z) by BINARITH:20
+    assume A1:(a 'imp' b).z=TRUE;
+    A2: (a 'imp' b).z
+   =('not' a 'or' b).z by BVFUNC_4:8
+  .=('not' a).z 'or' b.z by BVFUNC_1:def 7;
+       now assume A3: (a 'imp' (b 'or' c)).z<>TRUE;
+         (a 'imp' (b 'or' c)).z
+     =('not' a 'or' (b 'or' c)).z by BVFUNC_4:8
+    .=('not' a).z 'or' (b 'or' c).z by BVFUNC_1:def 7
+    .=('not' a).z 'or' (b.z 'or' c.z) by BVFUNC_1:def 7
+    .=(('not' a).z 'or' b.z) 'or' c.z by BINARITH:20
     .=TRUE by A1,A2,BINARITH:19;
       hence contradiction by A3;
     end;
@@ -419,25 +417,25 @@ theorem
      a 'imp' b '<' (a 'or' c) 'imp' (b 'or' c)
 proof
     let z be Element of Y;
-    assume A1:Pj(a 'imp' b,z)=TRUE;
-    A2: Pj(a 'imp' b,z)
-   =Pj('not' a 'or' b,z) by BVFUNC_4:8
-  .=Pj('not' a,z) 'or' Pj(b,z) by BVFUNC_1:def 7;
-       now assume A3: Pj((a 'or' c) 'imp' (b 'or' c),z)<>TRUE;
-         Pj((a 'or' c) 'imp' (b 'or' c),z)
-     =Pj('not'( a 'or' c) 'or' (b 'or' c),z) by BVFUNC_4:8
-    .=Pj('not'( a 'or' c),z) 'or' Pj(b 'or' c,z) by BVFUNC_1:def 7
-    .=Pj('not'( a 'or' c),z) 'or' (Pj(b,z) 'or' Pj(c,z)) by BVFUNC_1:def 7
-    .=(Pj('not'( a 'or' c),z) 'or' Pj(b,z)) 'or' Pj(c,z) by BINARITH:20
-    .=(Pj(('not' a '&' 'not' c),z) 'or' Pj(b,z)) 'or' Pj(c,z) by BVFUNC_1:16
-    .=(Pj(b,z) 'or' (Pj('not' a,z) '&' Pj('not'
-c,z))) 'or' Pj(c,z) by VALUAT_1:def 6
-    .=((Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj(b,z) 'or' Pj('not'
-c,z))) 'or' Pj(c,z) by BINARITH:23
-    .=(Pj(b,z) 'or' Pj('not' c,z)) 'or' Pj(c,z) by A1,A2,MARGREL1:50
-    .=Pj(b,z) 'or' (Pj('not' c,z) 'or' Pj(c,z)) by BINARITH:20
-    .=Pj(b,z) 'or' ('not' Pj(c,z) 'or' Pj(c,z)) by VALUAT_1:def 5
-    .=Pj(b,z) 'or' TRUE by BINARITH:18
+    assume A1:(a 'imp' b).z=TRUE;
+    A2: (a 'imp' b).z
+   =('not' a 'or' b).z by BVFUNC_4:8
+  .=('not' a).z 'or' b.z by BVFUNC_1:def 7;
+       now assume A3: ((a 'or' c) 'imp' (b 'or' c)).z<>TRUE;
+         ((a 'or' c) 'imp' (b 'or' c)).z
+     =('not'( a 'or' c) 'or' (b 'or' c)).z by BVFUNC_4:8
+    .=('not'( a 'or' c)).z 'or' (b 'or' c).z by BVFUNC_1:def 7
+    .=('not'( a 'or' c)).z 'or' (b.z 'or' c.z) by BVFUNC_1:def 7
+    .=(('not'( a 'or' c)).z 'or' b.z) 'or' c.z by BINARITH:20
+    .=((('not' a '&' 'not' c)).z 'or' b.z) 'or' c.z by BVFUNC_1:16
+    .=(b.z 'or' (('not' a).z '&' ('not'
+c).z)) 'or' c.z by VALUAT_1:def 6
+    .=((('not' a).z 'or' b.z) '&' (b.z 'or' ('not'
+c).z)) 'or' c.z by BINARITH:23
+    .=(b.z 'or' ('not' c).z) 'or' c.z by A1,A2,MARGREL1:50
+    .=b.z 'or' (('not' c).z 'or' c.z) by BINARITH:20
+    .=b.z 'or' ('not' c.z 'or' c.z) by VALUAT_1:def 5
+    .=b.z 'or' TRUE by BINARITH:18
     .=TRUE by BINARITH:19;
       hence contradiction by A3;
     end;
@@ -448,15 +446,15 @@ theorem
      a '&' b 'or' c '<' a 'or' c
 proof
     let z be Element of Y;
-    assume A1:Pj(a '&' b 'or' c,z)=TRUE;
-    A2: Pj(a '&' b 'or' c,z)
-   =Pj(a '&' b,z) 'or' Pj(c,z) by BVFUNC_1:def 7
-  .=(Pj(a,z) '&' Pj(b,z)) 'or' Pj(c,z) by VALUAT_1:def 6;
-       now assume Pj(a 'or' c,z)<>TRUE;
-      then Pj(a 'or' c,z)=FALSE by MARGREL1:43;
-      then A3:Pj(a,z) 'or' Pj(c,z)=FALSE by BVFUNC_1:def 7;
-         (Pj(a,z) '&' Pj(b,z)) 'or' Pj(c,z)
-     =(Pj(c,z) 'or' Pj(a,z)) '&' (Pj(c,z) 'or' Pj(b,z)) by BINARITH:23
+    assume A1:(a '&' b 'or' c).z=TRUE;
+    A2: (a '&' b 'or' c).z
+   =(a '&' b).z 'or' c.z by BVFUNC_1:def 7
+  .=(a.z '&' b.z) 'or' c.z by VALUAT_1:def 6;
+       now assume (a 'or' c).z<>TRUE;
+      then (a 'or' c).z=FALSE by MARGREL1:43;
+      then A3:a.z 'or' c.z=FALSE by BVFUNC_1:def 7;
+         (a.z '&' b.z) 'or' c.z
+     =(c.z 'or' a.z) '&' (c.z 'or' b.z) by BINARITH:23
     .=FALSE by A3,MARGREL1:49;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -467,22 +465,21 @@ theorem
      (a '&' b) 'or' (c '&' d) '<' a 'or' c
 proof
     let z be Element of Y;
-    assume A1:Pj((a '&' b) 'or' (c '&' d),z)=TRUE;
-    A2: Pj((a '&' b) 'or' (c '&' d),z)
-   =Pj(a '&' b,z) 'or' Pj(c '&' d,z) by BVFUNC_1:def 7
-  .=(Pj(a,z) '&' Pj(b,z)) 'or' Pj(c '&' d,z) by VALUAT_1:def 6
-  .=(Pj(a,z) '&' Pj(b,z)) 'or' (Pj(c,z) '&' Pj(d,z))
+    assume A1:((a '&' b) 'or' (c '&' d)).z=TRUE;
+    A2: ((a '&' b) 'or' (c '&' d)).z
+   =(a '&' b).z 'or' (c '&' d).z by BVFUNC_1:def 7
+  .=(a.z '&' b.z) 'or' (c '&' d).z by VALUAT_1:def 6
+  .=(a.z '&' b.z) 'or' (c.z '&' (d).z)
    by VALUAT_1:def 6;
-       now assume Pj(a 'or' c,z)<>TRUE;
-      then Pj(a 'or' c,z)=FALSE by MARGREL1:43;
-      then A3:Pj(a,z) 'or' Pj(c,z)=FALSE by BVFUNC_1:def 7;
-         (Pj(a,z) '&' Pj(b,z)) 'or' (Pj(c,z) '&' Pj(d,z))
-     =(Pj(c,z) 'or' (Pj(a,z) '&' Pj(b,z))) '&'
-      ((Pj(a,z) '&' Pj(b,z)) 'or' Pj(d,z)) by BINARITH:23
-    .=((Pj(a,z) 'or' Pj(c,z)) '&' (Pj(c,z) 'or' Pj(b,z))) '&'
-      ((Pj(a,z) '&' Pj(b,z)) 'or' Pj(d,z)) by BINARITH:23
-    .=FALSE '&'
-      ((Pj(a,z) '&' Pj(b,z)) 'or' Pj(d,z)) by A3,MARGREL1:49
+       now assume (a 'or' c).z<>TRUE;
+      then (a 'or' c).z=FALSE by MARGREL1:43;
+      then A3:a.z 'or' c.z=FALSE by BVFUNC_1:def 7;
+         (a.z '&' b.z) 'or' (c.z '&' (d).z)
+     =(c.z 'or' (a.z '&' b.z)) '&'
+      ((a.z '&' b.z) 'or' (d).z) by BINARITH:23
+    .=((a.z 'or' c.z) '&' (c.z 'or' b.z)) '&'
+      ((a.z '&' b.z) 'or' (d).z) by BINARITH:23
+    .=FALSE '&' ((a.z '&' b.z) 'or' (d).z) by A3,MARGREL1:49
     .=FALSE by MARGREL1:49;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -493,39 +490,37 @@ theorem
      (a 'or' b) '&' (b 'imp' c) '<' a 'or' c
 proof
     let z be Element of Y;
-    assume A1:Pj((a 'or' b) '&' (b 'imp' c),z)=TRUE;
-    A2: Pj((a 'or' b) '&' (b 'imp' c),z)
-   =Pj((a 'or' b) '&' ('not' b 'or' c),z) by BVFUNC_4:8
-  .=Pj(a 'or' b,z) '&' Pj('not' b 'or' c,z) by VALUAT_1:def 6
-  .=(Pj(a,z) 'or' Pj(b,z)) '&' Pj('not' b 'or' c,z) by BVFUNC_1:def 7
-  .=(Pj(a,z) 'or' Pj(b,z)) '&' (Pj('not' b,z) 'or' Pj(c,z))
+    assume A1:((a 'or' b) '&' (b 'imp' c)).z=TRUE;
+    A2: ((a 'or' b) '&' (b 'imp' c)).z
+   =((a 'or' b) '&' ('not' b 'or' c)).z by BVFUNC_4:8
+  .=(a 'or' b).z '&' ('not' b 'or' c).z by VALUAT_1:def 6
+  .=(a.z 'or' b.z) '&' ('not' b 'or' c).z by BVFUNC_1:def 7
+  .=(a.z 'or' b.z) '&' (('not' b).z 'or' c.z)
    by BVFUNC_1:def 7;
-       now assume Pj(a 'or' c,z)<>TRUE;
-      then Pj(a 'or' c,z)=FALSE by MARGREL1:43;
-      then A3:Pj(a,z) 'or' Pj(c,z)=FALSE by BVFUNC_1:def 7;
-      A4:Pj(a,z)=TRUE or Pj(a,z)=FALSE by MARGREL1:39;
-         Pj(c,z)=TRUE or Pj(c,z)=FALSE by MARGREL1:39;
-      then A5:Pj(a,z)=FALSE & Pj(c,z)=FALSE
-      by A3,A4,BINARITH:19;
-         (Pj(a,z) 'or' Pj(b,z)) '&' (Pj('not' b,z) 'or' Pj(c,z))
-     =(Pj(a,z) 'or' Pj(b,z)) '&' Pj('not' b,z) 'or'
-      Pj(c,z) '&' (Pj(a,z) 'or' Pj(b,z)) by BINARITH:22
-    .=(Pj(a,z) 'or' Pj(b,z)) '&' Pj('not' b,z) 'or'
-      ((Pj(a,z) '&' Pj(c,z)) 'or' (Pj(c,z) '&' Pj(b,z))) by BINARITH:22
-    .=(Pj('not' b,z) '&' Pj(a,z) 'or' Pj('not' b,z) '&' Pj(b,z)) 'or'
-      ((Pj(a,z) '&' Pj(c,z)) 'or' (Pj(c,z) '&' Pj(b,z)))
-      by BINARITH:22
-    .=(Pj('not' b,z) '&' Pj(a,z) 'or' 'not' Pj(b,z) '&' Pj(b,z)) 'or'
-      ((Pj(a,z) '&' Pj(c,z)) 'or' (Pj(c,z) '&' Pj(b,z))) by VALUAT_1:def 5
-    .=(Pj('not' b,z) '&' Pj(a,z) 'or' FALSE) 'or'
-      ((Pj(a,z) '&' Pj(c,z)) 'or' (Pj(c,z) '&' Pj(b,z))) by MARGREL1:46
-    .=(FALSE '&' Pj('not' b,z)) 'or'
-      ((FALSE '&' FALSE) 'or' (FALSE '&' Pj(b,z))) by A5,BINARITH:7
+       now assume (a 'or' c).z<>TRUE;
+      then (a 'or' c).z=FALSE by MARGREL1:43;
+      then A3:a.z 'or' c.z=FALSE by BVFUNC_1:def 7;
+      A4:a.z=TRUE or a.z=FALSE by MARGREL1:39;
+         c.z=TRUE or c.z=FALSE by MARGREL1:39;
+      then A5:a.z=FALSE & c.z=FALSE by A3,A4,BINARITH:19;
+         (a.z 'or' b.z) '&' (('not' b).z 'or' c.z)
+     =(a.z 'or' b.z) '&' ('not' b).z 'or'
+      c.z '&' (a.z 'or' b.z) by BINARITH:22
+    .=(a.z 'or' b.z) '&' ('not' b).z 'or'
+      ((a.z '&' c.z) 'or' (c.z '&' b.z)) by BINARITH:22
+    .=(('not' b).z '&' a.z 'or' ('not' b).z '&' b.z) 'or'
+      ((a.z '&' c.z) 'or' (c.z '&' b.z)) by BINARITH:22
+    .=(('not' b).z '&' a.z 'or' 'not' b.z '&' b.z) 'or'
+      ((a.z '&' c.z) 'or' (c.z '&' b.z)) by VALUAT_1:def 5
+    .=(('not' b).z '&' a.z 'or' FALSE) 'or'
+      ((a.z '&' c.z) 'or' (c.z '&' b.z)) by MARGREL1:46
+    .=(FALSE '&' ('not' b).z) 'or'
+      ((FALSE '&' FALSE) 'or' (FALSE '&' b.z)) by A5,BINARITH:7
     .=FALSE 'or'
-      ((FALSE '&' FALSE) 'or' (FALSE '&' Pj(b,z))) by MARGREL1:49
-    .=(FALSE '&' FALSE) 'or' (FALSE '&' Pj(b,z)) by BINARITH:7
-    .=FALSE 'or' (FALSE '&' Pj(b,z)) by MARGREL1:49
-    .=FALSE '&' Pj(b,z) by BINARITH:7
+      ((FALSE '&' FALSE) 'or' (FALSE '&' b.z)) by MARGREL1:49
+    .=(FALSE '&' FALSE) 'or' (FALSE '&' b.z) by BINARITH:7
+    .=FALSE 'or' (FALSE '&' b.z) by MARGREL1:49
+    .=FALSE '&' b.z by BINARITH:7
     .=FALSE by MARGREL1:49;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -533,29 +528,29 @@ proof
 end;
 
 theorem
-     (a 'imp' b) '&' ('not' a 'imp' c) '<' b 'or' c
+  (a 'imp' b) '&' ('not' a 'imp' c) '<' b 'or' c
 proof
     let z be Element of Y;
-    assume A1:Pj((a 'imp' b) '&' ('not' a 'imp' c),z)=TRUE;
-    A2: Pj((a 'imp' b) '&' ('not' a 'imp' c),z)
-   =Pj(('not' a 'or' b) '&' ('not' a 'imp' c),z) by BVFUNC_4:8
-  .=Pj(('not' a 'or' b) '&' ('not' 'not' a 'or' c),z) by BVFUNC_4:8
-  .=Pj(('not' a 'or' b) '&' (a 'or' c),z) by BVFUNC_1:4
-  .=Pj('not' a 'or' b,z) '&' Pj(a 'or' c,z) by VALUAT_1:def 6
-  .=(Pj('not' a,z) 'or' Pj(b,z)) '&' Pj(a 'or' c,z) by BVFUNC_1:def 7
-  .=(Pj('not'
-a,z) 'or' Pj(b,z)) '&' (Pj(a,z) 'or' Pj(c,z)) by BVFUNC_1:def 7;
-       now assume Pj(b 'or' c,z)<>TRUE;
-      then Pj(b 'or' c,z)=FALSE by MARGREL1:43;
-      then A3:Pj(b,z) 'or' Pj(c,z)=FALSE by BVFUNC_1:def 7;
-      A4:Pj(b,z)=TRUE or Pj(b,z)=FALSE by MARGREL1:39;
-         Pj(c,z)=TRUE or Pj(c,z)=FALSE by MARGREL1:39;
-      then Pj(b,z)=FALSE & Pj(c,z)=FALSE
+    assume A1:((a 'imp' b) '&' ('not' a 'imp' c)).z=TRUE;
+A2: ((a 'imp' b) '&' ('not' a 'imp' c)).z
+   =(('not' a 'or' b) '&' ('not' a 'imp' c)).z by BVFUNC_4:8
+  .=(('not' a 'or' b) '&' ('not' 'not' a 'or' c)).z by BVFUNC_4:8
+  .=(('not' a 'or' b) '&' (a 'or' c)).z by BVFUNC_1:4
+  .=('not' a 'or' b).z '&' (a 'or' c).z by VALUAT_1:def 6
+  .=(('not' a).z 'or' b.z) '&' (a 'or' c).z by BVFUNC_1:def 7
+  .=(('not'
+a).z 'or' b.z) '&' (a.z 'or' c.z) by BVFUNC_1:def 7;
+       now assume (b 'or' c).z<>TRUE;
+      then (b 'or' c).z=FALSE by MARGREL1:43;
+      then A3:b.z 'or' c.z=FALSE by BVFUNC_1:def 7;
+      A4:b.z=TRUE or b.z=FALSE by MARGREL1:39;
+         c.z=TRUE or c.z=FALSE by MARGREL1:39;
+      then b.z=FALSE & c.z=FALSE
       by A3,A4,BINARITH:19;
-      then (Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj(a,z) 'or' Pj(c,z))
-     =Pj('not' a,z) '&' (Pj(a,z) 'or' FALSE) by BINARITH:7
-    .=Pj('not' a,z) '&' Pj(a,z) by BINARITH:7
-    .='not' Pj(a,z) '&' Pj(a,z) by VALUAT_1:def 5
+      then (('not' a).z 'or' b.z) '&' (a.z 'or' c.z)
+     =('not' a).z '&' (a.z 'or' FALSE) by BINARITH:7
+    .=('not' a).z '&' a.z by BINARITH:7
+    .='not' a.z '&' a.z by VALUAT_1:def 5
     .=FALSE by MARGREL1:46;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -563,29 +558,29 @@ a,z) 'or' Pj(b,z)) '&' (Pj(a,z) 'or' Pj(c,z)) by BVFUNC_1:def 7;
 end;
 
 theorem
-     (a 'imp' c) '&' (b 'imp' 'not' c) '<' 'not' a 'or' 'not' b
+  (a 'imp' c) '&' (b 'imp' 'not' c) '<' 'not' a 'or' 'not' b
 proof
     let z be Element of Y;
-    assume A1:Pj((a 'imp' c) '&' (b 'imp' 'not' c),z)=TRUE;
-    A2: Pj((a 'imp' c) '&' (b 'imp' 'not' c),z)
-   =Pj(a 'imp' c,z) '&' Pj(b 'imp' 'not' c,z) by VALUAT_1:def 6
-  .=Pj('not' a 'or' c,z) '&' Pj(b 'imp' 'not' c,z) by BVFUNC_4:8
-  .=Pj('not' a 'or' c,z) '&' Pj('not' b 'or' 'not' c,z) by BVFUNC_4:8
-  .=(Pj('not' a,z) 'or' Pj(c,z)) '&' Pj('not' b 'or' 'not' c,z)
+    assume A1:((a 'imp' c) '&' (b 'imp' 'not' c)).z=TRUE;
+    A2: ((a 'imp' c) '&' (b 'imp' 'not' c)).z
+   =(a 'imp' c).z '&' (b 'imp' 'not' c).z by VALUAT_1:def 6
+  .=('not' a 'or' c).z '&' (b 'imp' 'not' c).z by BVFUNC_4:8
+  .=('not' a 'or' c).z '&' ('not' b 'or' 'not' c).z by BVFUNC_4:8
+  .=(('not' a).z 'or' c.z) '&' ('not' b 'or' 'not' c).z
   by BVFUNC_1:def 7
-  .=(Pj('not' a,z) 'or' Pj(c,z)) '&' (Pj('not' b,z) 'or' Pj('not' c,z))
+  .=(('not' a).z 'or' c.z) '&' (('not' b).z 'or' ('not' c).z)
    by BVFUNC_1:def 7;
-       now assume Pj('not' a 'or' 'not' b,z)<>TRUE;
-      then Pj('not' a 'or' 'not' b,z)=FALSE by MARGREL1:43;
-      then A3:Pj('not' a,z) 'or' Pj('not' b,z)=FALSE by BVFUNC_1:def 7;
-      A4:Pj('not' a,z)=TRUE or Pj('not' a,z)=FALSE by MARGREL1:39;
-         Pj('not' b,z)=TRUE or Pj('not' b,z)=FALSE by MARGREL1:39;
-      then Pj('not' a,z)=FALSE & Pj('not' b,z)=FALSE
+       now assume ('not' a 'or' 'not' b).z<>TRUE;
+      then ('not' a 'or' 'not' b).z=FALSE by MARGREL1:43;
+      then A3:('not' a).z 'or' ('not' b).z=FALSE by BVFUNC_1:def 7;
+      A4:('not' a).z=TRUE or ('not' a).z=FALSE by MARGREL1:39;
+         ('not' b).z=TRUE or ('not' b).z=FALSE by MARGREL1:39;
+      then ('not' a).z=FALSE & ('not' b).z=FALSE
       by A3,A4,BINARITH:19;
-      then (Pj('not' a,z) 'or' Pj(c,z)) '&' (Pj('not' b,z) 'or' Pj('not' c,z))
-     =Pj(c,z) '&' (FALSE 'or' Pj('not' c,z)) by BINARITH:7
-    .=Pj(c,z) '&' Pj('not' c,z) by BINARITH:7
-    .=Pj(c,z) '&' 'not' Pj(c,z) by VALUAT_1:def 5
+      then (('not' a).z 'or' c.z) '&' (('not' b).z 'or' ('not' c).z)
+     =c.z '&' (FALSE 'or' ('not' c).z) by BINARITH:7
+    .=c.z '&' ('not' c).z by BINARITH:7
+    .=c.z '&' 'not' c.z by VALUAT_1:def 5
     .=FALSE by MARGREL1:46;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -593,26 +588,25 @@ proof
 end;
 
 theorem
-     (a 'or' b) '&' ('not' a 'or' c) '<' b 'or' c
+  (a 'or' b) '&' ('not' a 'or' c) '<' b 'or' c
 proof
     let z be Element of Y;
-    assume A1:Pj((a 'or' b) '&' ('not' a 'or' c),z)=TRUE;
-    A2: Pj((a 'or' b) '&' ('not' a 'or' c),z)
-   =Pj(a 'or' b,z) '&' Pj('not' a 'or' c,z) by VALUAT_1:def 6
-  .=(Pj(a,z) 'or' Pj(b,z)) '&' Pj('not' a 'or' c,z) by BVFUNC_1:def 7
-  .=(Pj(a,z) 'or' Pj(b,z)) '&' (Pj('not' a,z) 'or' Pj(c,z))
-     by BVFUNC_1:def 7;
-       now assume Pj(b 'or' c,z)<>TRUE;
-      then Pj(b 'or' c,z)=FALSE by MARGREL1:43;
-      then A3:Pj(b,z) 'or' Pj(c,z)=FALSE by BVFUNC_1:def 7;
-      A4:Pj(b,z)=TRUE or Pj(b,z)=FALSE by MARGREL1:39;
-         Pj(c,z)=TRUE or Pj(c,z)=FALSE by MARGREL1:39;
-      then Pj(b,z)=FALSE & Pj(c,z)=FALSE
+    assume A1:((a 'or' b) '&' ('not' a 'or' c)).z=TRUE;
+    A2: ((a 'or' b) '&' ('not' a 'or' c)).z
+   =(a 'or' b).z '&' ('not' a 'or' c).z by VALUAT_1:def 6
+  .=(a.z 'or' b.z) '&' ('not' a 'or' c).z by BVFUNC_1:def 7
+  .=(a.z 'or' b.z) '&' (('not' a).z 'or' c.z) by BVFUNC_1:def 7;
+    now assume (b 'or' c).z<>TRUE;
+      then (b 'or' c).z=FALSE by MARGREL1:43;
+      then A3:b.z 'or' c.z=FALSE by BVFUNC_1:def 7;
+      A4:b.z=TRUE or b.z=FALSE by MARGREL1:39;
+         c.z=TRUE or c.z=FALSE by MARGREL1:39;
+      then b.z=FALSE & c.z=FALSE
       by A3,A4,BINARITH:19;
-      then (Pj(a,z) 'or' Pj(b,z)) '&' (Pj('not' a,z) 'or' Pj(c,z))
-     =Pj(a,z) '&' (Pj('not' a,z) 'or' FALSE) by BINARITH:7
-    .=Pj(a,z) '&' Pj('not' a,z) by BINARITH:7
-    .=Pj(a,z) '&' 'not' Pj(a,z) by VALUAT_1:def 5
+      then (a.z 'or' b.z) '&' (('not' a).z 'or' c.z)
+     =a.z '&' (('not' a).z 'or' FALSE) by BINARITH:7
+    .=a.z '&' ('not' a).z by BINARITH:7
+    .=a.z '&' 'not' a.z by VALUAT_1:def 5
     .=FALSE by MARGREL1:46;
       hence contradiction by A1,A2,MARGREL1:43;
     end;
@@ -623,39 +617,39 @@ theorem Th19:
   (a 'imp' b) '&' (c 'imp' d) '<' (a '&' c) 'imp' (b '&' d)
 proof
     let z be Element of Y;
-    assume A1:Pj((a 'imp' b) '&' (c 'imp' d),z)=TRUE;
-    A2: Pj((a 'imp' b) '&' (c 'imp' d),z)
-   =Pj(a 'imp' b,z) '&' Pj(c 'imp' d,z) by VALUAT_1:def 6
-  .=Pj('not' a 'or' b,z) '&' Pj(c 'imp' d,z) by BVFUNC_4:8
-  .=Pj('not' a 'or' b,z) '&' Pj('not' c 'or' d,z) by BVFUNC_4:8
-  .=(Pj('not' a,z) 'or' Pj(b,z)) '&' Pj('not' c 'or' d,z) by BVFUNC_1:def 7
-  .=(Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj('not' c,z) 'or' Pj(d,z))
+    assume A1:((a 'imp' b) '&' (c 'imp' d)).z=TRUE;
+    A2: ((a 'imp' b) '&' (c 'imp' d)).z
+   =(a 'imp' b).z '&' (c 'imp' d).z by VALUAT_1:def 6
+  .=('not' a 'or' b).z '&' (c 'imp' d).z by BVFUNC_4:8
+  .=('not' a 'or' b).z '&' ('not' c 'or' d).z by BVFUNC_4:8
+  .=(('not' a).z 'or' b.z) '&' ('not' c 'or' d).z by BVFUNC_1:def 7
+  .=(('not' a).z 'or' b.z) '&' (('not' c).z 'or' (d).z)
    by BVFUNC_1:def 7;
-       now assume A3: Pj((a '&' c) 'imp' (b '&' d),z)<>TRUE;
-      A4: Pj((a '&' c) 'imp' (b '&' d),z)
-     =Pj('not'( a '&' c) 'or' (b '&' d),z) by BVFUNC_4:8
-    .=Pj('not'( a '&' c),z) 'or' Pj(b '&' d,z) by BVFUNC_1:def 7
-    .=Pj('not' a 'or' 'not' c,z) 'or' Pj(b '&' d,z) by BVFUNC_1:17
-    .=(Pj('not' a,z) 'or' Pj('not' c,z)) 'or' Pj(b '&' d,z) by BVFUNC_1:def 7
-    .=(Pj('not' a,z) 'or' Pj('not' c,z)) 'or' (Pj(b,z) '&' Pj(d,z))
+       now assume A3: ((a '&' c) 'imp' (b '&' d)).z<>TRUE;
+      A4: ((a '&' c) 'imp' (b '&' d)).z
+     =('not'( a '&' c) 'or' (b '&' d)).z by BVFUNC_4:8
+    .=('not'( a '&' c)).z 'or' (b '&' d).z by BVFUNC_1:def 7
+    .=('not' a 'or' 'not' c).z 'or' (b '&' d).z by BVFUNC_1:17
+    .=(('not' a).z 'or' ('not' c).z) 'or' (b '&' d).z by BVFUNC_1:def 7
+    .=(('not' a).z 'or' ('not' c).z) 'or' (b.z '&' (d).z)
      by VALUAT_1:def 6;
-      A5:(Pj('not' a,z) 'or' Pj('not' c,z))=TRUE or
-      (Pj('not' a,z) 'or' Pj('not' c,z))=FALSE by MARGREL1:39;
-      A6: (Pj(b,z) '&' Pj(d,z))=TRUE or (Pj(b,z) '&' Pj(d,z))=FALSE
+      A5:(('not' a).z 'or' ('not' c).z)=TRUE or
+      (('not' a).z 'or' ('not' c).z)=FALSE by MARGREL1:39;
+      A6: (b.z '&' (d).z)=TRUE or (b.z '&' (d).z)=FALSE
        by MARGREL1:39;
-      A7:Pj('not' a,z)=TRUE or Pj('not' a,z)=FALSE by MARGREL1:39;
-         Pj('not' c,z)=TRUE or Pj('not' c,z)=FALSE by MARGREL1:39;
-then A8:  Pj('not' a,z)=FALSE & Pj('not' c,z)=FALSE by A3,A4,A5,A7,BINARITH:19;
+      A7:('not' a).z=TRUE or ('not' a).z=FALSE by MARGREL1:39;
+         ('not' c).z=TRUE or ('not' c).z=FALSE by MARGREL1:39;
+then A8:  ('not' a).z=FALSE & ('not' c).z=FALSE by A3,A4,A5,A7,BINARITH:19;
          now per cases by A3,A4,A6,BINARITH:19,MARGREL1:45;
-      case Pj(b,z)=FALSE;
-      then (Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj('not' c,z) 'or' Pj(d,z))
-     =FALSE '&' (FALSE 'or' Pj(d,z)) by A8,BINARITH:7
+      case b.z=FALSE;
+      then (('not' a).z 'or' b.z) '&' (('not' c).z 'or' (d).z)
+     =FALSE '&' (FALSE 'or' (d).z) by A8,BINARITH:7
     .=FALSE by MARGREL1:49; hence thesis by A1,A2,MARGREL1:43;
       end;
-      case Pj(d,z)=FALSE;
-      then (Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj('not' c,z) 'or' Pj(d,z))
-     =Pj(b,z) '&' (FALSE 'or' FALSE) by A8,BINARITH:7
-    .=FALSE '&' Pj(b,z) by BINARITH:7
+      case (d).z=FALSE;
+      then (('not' a).z 'or' b.z) '&' (('not' c).z 'or' (d).z)
+     =b.z '&' (FALSE 'or' FALSE) by A8,BINARITH:7
+    .=FALSE '&' b.z by BINARITH:7
     .=FALSE by MARGREL1:49;
       hence thesis by A1,A2,MARGREL1:43;
       end;
@@ -666,16 +660,16 @@ then A8:  Pj('not' a,z)=FALSE & Pj('not' c,z)=FALSE by A3,A4,A5,A7,BINARITH:19;
 end;
 
 theorem
-     (a 'imp' b) '&' (a 'imp' c) '<' a 'imp' (b '&' c)
+  (a 'imp' b) '&' (a 'imp' c) '<' a 'imp' (b '&' c)
 proof
-     (a 'imp' b) '&' (a 'imp' c) '<' (a '&' a) 'imp' (b '&' c) by Th19;
+  (a 'imp' b) '&' (a 'imp' c) '<' (a '&' a) 'imp' (b '&' c) by Th19;
   hence thesis by BVFUNC_1:6;
 end;
 
 theorem Th21:
   ((a 'imp' c) '&' (b 'imp' c)) '<' (a 'or' b) 'imp' c
 proof
-     ((a 'imp' c) '&' (b 'imp' c)) 'imp' ((a 'or' b) 'imp' c) = I_el Y
+  ((a 'imp' c) '&' (b 'imp' c)) 'imp' ((a 'or' b) 'imp' c) = I_el Y
     by BVFUNC_6:9;
   hence thesis by BVFUNC_1:19;
 end;
@@ -684,38 +678,38 @@ theorem Th22:
   (a 'imp' b) '&' (c 'imp' d) '<' (a 'or' c) 'imp' (b 'or' d)
 proof
     let z be Element of Y;
-    assume A1:Pj((a 'imp' b) '&' (c 'imp' d),z)=TRUE;
-    A2: Pj((a 'imp' b) '&' (c 'imp' d),z)
-   =Pj(('not' a 'or' b) '&' (c 'imp' d),z) by BVFUNC_4:8
-  .=Pj(('not' a 'or' b) '&' ('not' c 'or' d),z) by BVFUNC_4:8
-  .=Pj('not' a 'or' b,z) '&' Pj('not' c 'or' d,z) by VALUAT_1:def 6
-  .=(Pj('not' a,z) 'or' Pj(b,z)) '&' Pj('not' c 'or' d,z) by BVFUNC_1:def 7
-  .=(Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj('not'
-c,z) 'or' Pj(d,z)) by BVFUNC_1:def 7;
-       now assume A3: Pj((a 'or' c) 'imp' (b 'or' d),z)<>TRUE;
-      A4: Pj((a 'or' c) 'imp' (b 'or' d),z)
-     =Pj('not'( a 'or' c) 'or' (b 'or' d),z) by BVFUNC_4:8
-    .=Pj(('not' a '&' 'not' c) 'or' (b 'or' d),z) by BVFUNC_1:16
-    .=Pj('not' a '&' 'not' c,z) 'or' Pj(b 'or' d,z) by BVFUNC_1:def 7
-    .=(Pj('not' a,z) '&' Pj('not' c,z)) 'or' Pj(b 'or' d,z) by VALUAT_1:def 6
-    .=(Pj('not' a,z) '&' Pj('not' c,z)) 'or' (Pj(b,z) 'or' Pj(d,z))
+    assume A1:((a 'imp' b) '&' (c 'imp' d)).z=TRUE;
+    A2: ((a 'imp' b) '&' (c 'imp' d)).z
+   =(('not' a 'or' b) '&' (c 'imp' d)).z by BVFUNC_4:8
+  .=(('not' a 'or' b) '&' ('not' c 'or' d)).z by BVFUNC_4:8
+  .=('not' a 'or' b).z '&' ('not' c 'or' d).z by VALUAT_1:def 6
+  .=(('not' a).z 'or' b.z) '&' ('not' c 'or' d).z by BVFUNC_1:def 7
+  .=(('not' a).z 'or' b.z) '&' (('not'
+c).z 'or' (d).z) by BVFUNC_1:def 7;
+   now assume A3: ((a 'or' c) 'imp' (b 'or' d)).z<>TRUE;
+      A4: ((a 'or' c) 'imp' (b 'or' d)).z
+     =('not'( a 'or' c) 'or' (b 'or' d)).z by BVFUNC_4:8
+    .=(('not' a '&' 'not' c) 'or' (b 'or' d)).z by BVFUNC_1:16
+    .=('not' a '&' 'not' c).z 'or' (b 'or' d).z by BVFUNC_1:def 7
+    .=(('not' a).z '&' ('not' c).z) 'or' (b 'or' d).z by VALUAT_1:def 6
+    .=(('not' a).z '&' ('not' c).z) 'or' (b.z 'or' (d).z)
      by BVFUNC_1:def 7;
-      A5:(Pj('not' a,z) '&' Pj('not' c,z))=TRUE or
-      (Pj('not' a,z) '&' Pj('not' c,z))=FALSE by MARGREL1:39;
-      A6: (Pj(b,z) 'or' Pj(d,z))=TRUE or (Pj(b,z) 'or' Pj(d,z))=FALSE
+      A5:(('not' a).z '&' ('not' c).z)=TRUE or
+      (('not' a).z '&' ('not' c).z)=FALSE by MARGREL1:39;
+      A6: (b.z 'or' (d).z)=TRUE or (b.z 'or' (d).z)=FALSE
       by MARGREL1:39;
-      A7:Pj(b,z)=TRUE or Pj(b,z)=FALSE by MARGREL1:39;
-         Pj(d,z)=TRUE or Pj(d,z)=FALSE by MARGREL1:39;
-then A8:  Pj(b,z)=FALSE & Pj(d,z)=FALSE by A3,A4,A6,A7,BINARITH:19;
+      A7:b.z=TRUE or b.z=FALSE by MARGREL1:39;
+         (d).z=TRUE or (d).z=FALSE by MARGREL1:39;
+then A8:  b.z=FALSE & (d).z=FALSE by A3,A4,A6,A7,BINARITH:19;
          now per cases by A3,A4,A5,BINARITH:19,MARGREL1:45;
-      case Pj('not' a,z)=FALSE;
-      then (Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj('not' c,z) 'or' Pj(d,z))
-     =FALSE '&' (Pj('not' c,z) 'or' FALSE) by A8,BINARITH:7
+      case ('not' a).z=FALSE;
+      then (('not' a).z 'or' b.z) '&' (('not' c).z 'or' (d).z)
+     =FALSE '&' (('not' c).z 'or' FALSE) by A8,BINARITH:7
     .=FALSE by MARGREL1:45; hence thesis by A1,A2,MARGREL1:43;
       end;
-      case Pj('not' c,z)=FALSE;
-      then (Pj('not' a,z) 'or' Pj(b,z)) '&' (Pj('not' c,z) 'or' Pj(d,z))
-     =FALSE '&' (Pj('not' a,z) 'or' FALSE) by A8,BINARITH:7
+      case ('not' c).z=FALSE;
+      then (('not' a).z 'or' b.z) '&' (('not' c).z 'or' (d).z)
+     =FALSE '&' (('not' a).z 'or' FALSE) by A8,BINARITH:7
     .=FALSE by MARGREL1:49; hence thesis by A1,A2,MARGREL1:43;
       end;
       end;
@@ -725,9 +719,9 @@ then A8:  Pj(b,z)=FALSE & Pj(d,z)=FALSE by A3,A4,A6,A7,BINARITH:19;
 end;
 
 theorem
-     (a 'imp' b) '&' (a 'imp' c) '<' a 'imp' (b 'or' c)
+  (a 'imp' b) '&' (a 'imp' c) '<' a 'imp' (b 'or' c)
 proof
-     (a 'imp' b) '&' (a 'imp' c) '<' (a 'or' a) 'imp' (b 'or' c) by Th22;
+  (a 'imp' b) '&' (a 'imp' c) '<' (a 'or' a) 'imp' (b 'or' c) by Th22;
   hence thesis by BVFUNC_1:10;
 end;
 
@@ -1098,55 +1092,55 @@ theorem Th26: for a1,b1,a2,b2 being Element of Funcs(Y,BOOLEAN) holds
 proof
   let a1,b1,a2,b2 be Element of Funcs(Y,BOOLEAN);
      for z being Element of Y
-   st Pj((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2),z)=TRUE
-   holds Pj('not'( a1 '&' b1),z)=TRUE
+   st ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)).z=TRUE
+   holds ('not'( a1 '&' b1)).z=TRUE
   proof
     let z be Element of Y;
     assume A1:
-    Pj((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2),z)=TRUE;
-    A2:Pj((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2),z)
-   =Pj((a1 'imp' a2) '&' (b1 'imp' b2),z) '&' Pj('not'( a2 '&' b2),z)
+    ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)).z=TRUE;
+    A2:((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)).z
+   =((a1 'imp' a2) '&' (b1 'imp' b2)).z '&' ('not'( a2 '&' b2)).z
     by VALUAT_1:def 6
-  .=(Pj(a1 'imp' a2,z) '&' Pj(b1 'imp' b2,z)) '&' Pj('not'( a2 '&' b2),z)
+  .=((a1 'imp' a2).z '&' (b1 'imp' b2).z) '&' ('not'( a2 '&' b2)).z
     by VALUAT_1:def 6
-  .=(Pj('not' a1 'or' a2,z) '&' Pj(b1 'imp' b2,z)) '&' Pj('not'( a2 '&' b2),z)
+  .=(('not' a1 'or' a2).z '&' (b1 'imp' b2).z) '&' ('not'( a2 '&' b2)).z
     by BVFUNC_4:8
-  .=(Pj('not' a1 'or' a2,z) '&' Pj('not' b1 'or' b2,z)) '&' Pj('not'
-   (a2 '&' b2),z) by BVFUNC_4:8
-  .=((Pj('not' a1,z) 'or' Pj(a2,z)) '&' Pj('not' b1 'or' b2,z)) '&'
-    Pj('not'( a2 '&' b2),z) by BVFUNC_1:def 7
-  .=((Pj('not' a1,z) 'or' Pj(a2,z)) '&' (Pj('not' b1,z) 'or' Pj(b2,z))) '&'
-    Pj('not'( a2 '&' b2),z) by BVFUNC_1:def 7
-  .=((Pj('not' a1,z) 'or' Pj(a2,z)) '&' (Pj('not' b1,z) 'or' Pj(b2,z))) '&'
-    (Pj('not' a2 'or' 'not' b2,z)) by BVFUNC_1:17
-  .=((Pj('not' a1,z) 'or' Pj(a2,z)) '&' (Pj('not' b1,z) 'or' Pj(b2,z))) '&'
-    (Pj('not' a2,z) 'or' Pj('not' b2,z))
+  .=(('not' a1 'or' a2).z '&' ('not' b1 'or' b2).z) '&' ('not'
+   (a2 '&' b2)).z by BVFUNC_4:8
+  .=((('not' a1).z 'or' (a2).z) '&' ('not' b1 'or' b2).z) '&'
+    ('not'( a2 '&' b2)).z by BVFUNC_1:def 7
+  .=((('not' a1).z 'or' (a2).z) '&' (('not' b1).z 'or' (b2).z)) '&'
+    ('not'( a2 '&' b2)).z by BVFUNC_1:def 7
+  .=((('not' a1).z 'or' (a2).z) '&' (('not' b1).z 'or' (b2).z)) '&'
+    (('not' a2 'or' 'not' b2).z) by BVFUNC_1:17
+  .=((('not' a1).z 'or' (a2).z) '&' (('not' b1).z 'or' (b2).z)) '&'
+    (('not' a2).z 'or' ('not' b2).z)
     by BVFUNC_1:def 7;
-       now assume A3: Pj('not'( a1 '&' b1),z)<>TRUE;
-      A4: Pj('not'( a1 '&' b1),z)
-     =Pj('not' a1 'or' 'not' b1,z) by BVFUNC_1:17
-    .=Pj('not' a1,z) 'or' Pj('not' b1,z) by BVFUNC_1:def 7;
-      A5:Pj('not' a1,z)=TRUE or Pj('not' a1,z)=FALSE by MARGREL1:39;
-         Pj('not' b1,z)=TRUE or Pj('not' b1,z)=FALSE by MARGREL1:39;
-      then Pj((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2),z)
-     =(Pj(a2,z) '&' (FALSE 'or' Pj(b2,z))) '&'
-      (Pj('not' a2,z) 'or' Pj('not' b2,z)) by A2,A3,A4,A5,BINARITH:7,19
-    .=(Pj(a2,z) '&' Pj(b2,z)) '&'
-      (Pj('not' a2,z) 'or' Pj('not' b2,z)) by BINARITH:7
-    .=(Pj(b2,z) '&' Pj(a2,z)) '&' Pj('not' a2,z) 'or'
-      (Pj(a2,z) '&' Pj(b2,z)) '&' Pj('not' b2,z) by BINARITH:22
-    .=Pj(b2,z) '&' (Pj(a2,z) '&' Pj('not' a2,z)) 'or'
-      (Pj(a2,z) '&' Pj(b2,z)) '&' Pj('not' b2,z) by MARGREL1:52
-    .=Pj(b2,z) '&' (Pj(a2,z) '&' Pj('not' a2,z)) 'or'
-      Pj(a2,z) '&' (Pj(b2,z) '&' Pj('not' b2,z)) by MARGREL1:52
-    .=Pj(b2,z) '&' (Pj(a2,z) '&' 'not' Pj(a2,z)) 'or'
-      Pj(a2,z) '&' (Pj(b2,z) '&' Pj('not' b2,z)) by VALUAT_1:def 5
-    .=Pj(b2,z) '&' (Pj(a2,z) '&' 'not' Pj(a2,z)) 'or'
-      Pj(a2,z) '&' (Pj(b2,z) '&' 'not' Pj(b2,z)) by VALUAT_1:def 5
-    .=Pj(b2,z) '&' FALSE 'or'
-      Pj(a2,z) '&' (Pj(b2,z) '&' 'not' Pj(b2,z)) by MARGREL1:46
-    .=FALSE '&' Pj(b2,z) 'or' Pj(a2,z) '&' FALSE by MARGREL1:46
-    .=FALSE 'or' FALSE '&' Pj(a2,z) by MARGREL1:49
+       now assume A3: ('not'( a1 '&' b1)).z<>TRUE;
+      A4: ('not'( a1 '&' b1)).z
+     =('not' a1 'or' 'not' b1).z by BVFUNC_1:17
+    .=('not' a1).z 'or' ('not' b1).z by BVFUNC_1:def 7;
+      A5:('not' a1).z=TRUE or ('not' a1).z=FALSE by MARGREL1:39;
+         ('not' b1).z=TRUE or ('not' b1).z=FALSE by MARGREL1:39;
+      then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)).z
+     =((a2).z '&' (FALSE 'or' (b2).z)) '&'
+      (('not' a2).z 'or' ('not' b2).z) by A2,A3,A4,A5,BINARITH:7,19
+    .=((a2).z '&' (b2).z) '&'
+      (('not' a2).z 'or' ('not' b2).z) by BINARITH:7
+    .=((b2).z '&' (a2).z) '&' ('not' a2).z 'or'
+      ((a2).z '&' (b2).z) '&' ('not' b2).z by BINARITH:22
+    .=(b2).z '&' ((a2).z '&' ('not' a2).z) 'or'
+      ((a2).z '&' (b2).z) '&' ('not' b2).z by MARGREL1:52
+    .=(b2).z '&' ((a2).z '&' ('not' a2).z) 'or'
+      (a2).z '&' ((b2).z '&' ('not' b2).z) by MARGREL1:52
+    .=(b2).z '&' ((a2).z '&' 'not' (a2).z) 'or'
+      (a2).z '&' ((b2).z '&' ('not' b2).z) by VALUAT_1:def 5
+    .=(b2).z '&' ((a2).z '&' 'not' (a2).z) 'or'
+      (a2).z '&' ((b2).z '&' 'not' (b2).z) by VALUAT_1:def 5
+    .=(b2).z '&' FALSE 'or'
+      (a2).z '&' ((b2).z '&' 'not' (b2).z) by MARGREL1:46
+    .=FALSE '&' (b2).z 'or' (a2).z '&' FALSE by MARGREL1:46
+    .=FALSE 'or' FALSE '&' (a2).z by MARGREL1:49
     .=FALSE 'or' FALSE by MARGREL1:49
     .=FALSE by BINARITH:7;
       hence contradiction by A1,MARGREL1:43;
@@ -1159,7 +1153,7 @@ proof
 end;
 
 theorem
-     for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds
+  for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds
 (a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) '<'
 'not'( a1 '&' b1) '&' 'not'( a1 '&' c1) '&' 'not'( b1 '&' c1)
@@ -1298,26 +1292,26 @@ A13:((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
 end;
 
 theorem
-     a '&' b '<' a by Lm1;
+  a '&' b '<' a by Lm1;
 
 theorem
-     a '&' b '&' c '<' a &
+  a '&' b '&' c '<' a &
   a '&' b '&' c '<' b by Lm2;
 
 theorem
-     a '&' b '&' c '&' d '<' a &
+  a '&' b '&' c '&' d '<' a &
   a '&' b '&' c '&' d '<' b by Lm3;
 
 theorem
-     a '&' b '&' c '&' d '&' e '<' a &
+  a '&' b '&' c '&' d '&' e '<' a &
   a '&' b '&' c '&' d '&' e '<' b by Lm4;
 
 theorem
-     a '&' b '&' c '&' d '&' e '&' f '<' a &
+  a '&' b '&' c '&' d '&' e '&' f '<' a &
   a '&' b '&' c '&' d '&' e '&' f '<' b by Lm5;
 
 theorem
-     a '&' b '&' c '&' d '&' e '&' f '&' g '<' a &
+  a '&' b '&' c '&' d '&' e '&' f '&' g '<' a &
   a '&' b '&' c '&' d '&' e '&' f '&' g '<' b by Lm6;
 
 theorem Th34:
@@ -1330,7 +1324,7 @@ proof
 end;
 
 theorem
-     a '&' b '<' c implies a '&' 'not' c '<' 'not' b
+  a '&' b '<' c implies a '&' 'not' c '<' 'not' b
 proof
   assume a '&' b '<' c;
   then I_el Y = a '&' b 'imp' c by BVFUNC_1:19
@@ -1344,7 +1338,7 @@ proof
 end;
 
 theorem
-     (a 'imp' c) '&' (b 'imp' c) '&' (a 'or' b) '<' c
+  (a 'imp' c) '&' (b 'imp' c) '&' (a 'or' b) '<' c
 proof
   set K1 = (a 'imp' c) '&' (b 'imp' c);
      K1 '<' (a 'or' b) 'imp' c by Th21;
@@ -1354,14 +1348,14 @@ then A1:K1 '&' (a 'or' b) '<' ((a 'or' b) 'imp' c) '&' (a 'or' b) by Th34;
 end;
 
 theorem
-     ((a 'imp' c) 'or' (b 'imp' c)) '&' (a '&' b) '<' c
+  ((a 'imp' c) 'or' (b 'imp' c)) '&' (a '&' b) '<' c
 proof
-     (a 'imp' c) 'or' (b 'imp' c) = (a '&' b) 'imp' c by BVFUNC_7:6;
+  (a 'imp' c) 'or' (b 'imp' c) = (a '&' b) 'imp' c by BVFUNC_7:6;
   hence thesis by Th2;
 end;
 
 theorem
-     a '<' b & c '<' d implies a 'or' c '<' b 'or' d
+  a '<' b & c '<' d implies a 'or' c '<' b 'or' d
 proof
   assume a '<' b & c '<' d;
   then a 'imp' b = I_el(Y) & c 'imp' d = I_el(Y) by BVFUNC_1:19;
@@ -1372,14 +1366,14 @@ end;
 theorem Th39:
   a '<' a 'or' b
 proof
-     a 'imp' (a 'or' b) = I_el Y by BVFUNC_6:27;
+  a 'imp' (a 'or' b) = I_el Y by BVFUNC_6:27;
   hence thesis by BVFUNC_1:19;
 end;
 
 theorem
-     a '&' b '<' a 'or' b
+  a '&' b '<' a 'or' b
 proof
 A1:a '&' b '<' a by Lm1;
-     a '<' a 'or' b by Th39;
+  a '<' a 'or' b by Th39;
   hence thesis by A1,BVFUNC_1:18;
 end;

@@ -483,11 +483,7 @@ coherence
 end;
 
 theorem Th9:
- IC SCM R = 0
- proof
-  thus IC SCM R = the Instruction-Counter of SCM R
-    .= 0 by Def1;
- end;
+ IC SCM R = 0 by Def1;
 
 theorem Th10:
  for S being SCM-State of R st S = s holds IC s = IC S
@@ -839,61 +835,6 @@ A1:   goto i1 is halting;
     consider s being SCM-State of R;
     set t = s +* (0 .--> Next i1);
     set f = the Object-Kind of SCM R;
-A3: f = SCM-OK R by Def1;
-A4: dom(0 .--> Next i1) = {0} by CQC_LANG:5;
-    then 0 in dom (0 .--> Next i1) by TARSKI:def 1;
-then A5: t.0 = (0 .--> Next i1).0 by FUNCT_4:14
-       .= Next i1 by CQC_LANG:6
-       .= Next i5 by Th11;
-then A6: t.0 = i5 + 2 by AMI_2:def 15;
-A7: {0} c= NAT by ZFMISC_1:37;
-A8: dom s = dom (SCM-OK R) by CARD_3:18;
-A9: dom t = dom s \/ dom (0 .--> Next i1) by FUNCT_4:def 1
-         .= NAT \/ dom (0 .--> Next i1) by A8,FUNCT_2:def 1
-         .= NAT \/ {0} by CQC_LANG:5
-         .= NAT by A7,XBOOLE_1:12;
-A10: dom f = NAT by A3,FUNCT_2:def 1;
-        for x being set st x in dom f holds t.x in f.x
-    proof
-      let x be set such that
-A11:     x in dom f;
-      per cases;
-      suppose
-A12:     x = 0;
-      then f.x = SCM-Instr-Loc by A3,SCMRING1:2;
-      hence t.x in f.x by A5,A12;
-      end;
-      suppose x <> 0;
-      then not x in dom (0 .--> Next i1) by A4,TARSKI:def 1;
-      then t.x = s.x by FUNCT_4:12;
-      hence t.x in f.x by A3,A11,CARD_3:18;
-    end;
-    end;
-    then reconsider t as State of SCM R by A9,A10,CARD_3:18;
-    reconsider w = t as SCM-State of R by Def1;
-        dom(0 .--> i1) = {0} by CQC_LANG:5;
-    then 0 in dom (0 .--> i1) by TARSKI:def 1;
-then A13: (w +* (0 .--> i1)).0 = (0 .--> i1).0 by FUNCT_4:14
-       .= i1 by CQC_LANG:6;
-A14: 6 is Element of Segm 8 by GR_CY_1:10;
-A15: the Instruction-Locations of SCM R = SCM-Instr-Loc by Def1;
-        w +* (0 .--> i1)
-      = SCM-Chg(w,i5) by SCMRING1:def 5
-     .= SCM-Chg(w,V jump_address) by A14,SCMRING1:18
-     .= SCM-Exec-Res(V,w) by A15,SCMRING1:def 14
-     .= Exec(goto i1,t) by Th12
-     .= t by A1,AMI_1:def 8;
-    hence contradiction by A6,A13;
-  end;
-
-Lm6:
- a =0_goto i1 is non halting
-  proof
-    reconsider V = a =0_goto i1 as Element of SCM-Instr R by Def1;
-    reconsider i5 = i1 as Element of SCM-Instr-Loc by Def1;
-    consider s being SCM-State of R;
-    set t = s +* (0 .--> Next i1);
-    set f = the Object-Kind of SCM R;
 A2: f = SCM-OK R by Def1;
 A3: dom(0 .--> Next i1) = {0} by CQC_LANG:5;
     then 0 in dom (0 .--> Next i1) by TARSKI:def 1;
@@ -930,40 +871,95 @@ A11:     x = 0;
     then 0 in dom (0 .--> i1) by TARSKI:def 1;
 then A12: (w +* (0 .--> i1)).0 = (0 .--> i1).0 by FUNCT_4:14
        .= i1 by CQC_LANG:6;
-A13: 7 is Element of Segm 8 by GR_CY_1:10;
-A14: a is Element of SCM-Data-Loc by Th1;
-A15: the Instruction-Locations of SCM R = SCM-Instr-Loc by Def1;
-    assume
-A16:   a =0_goto i1 is halting;
-    per cases;
-    suppose
-A17:   w.(V cond_address) <> 0.R;
-A18: IC t = IC w by Th10;
-A19: IC w = w.0 by SCMRING1:def 4;
-A20: Exec(a =0_goto i1,t).IC SCM R = t.IC SCM R by A16,AMI_1:def 8
-       .= IC t
-       .= w.0 by A18,SCMRING1:def 4;
-    reconsider e = w.0 as Instruction-Location of SCM R by A19,Def1;
-        a is Element of SCM-Data-Loc by Th1;
-    then t.a <> 0.R by A13,A15,A17,SCMRING1:19;
-    then Exec(a =0_goto i1, t).IC SCM R = Next IC t by Th18;
-then A21: Exec(a =0_goto i1,t).IC SCM R = Next e by A18,SCMRING1:def 4;
-    consider mj being Element of SCM-Instr-Loc such that
-A22:   mj = e & Next e = Next mj by Def10;
-        Next e = mj + 2 by A22,AMI_2:def 15;
-    hence contradiction by A20,A21,A22;
-    end;
-    suppose
-A23:   w.(V cond_address) = 0.R;
+A13: 6 is Element of Segm 8 by GR_CY_1:10;
+A14: the Instruction-Locations of SCM R = SCM-Instr-Loc by Def1;
         w +* (0 .--> i1)
       = SCM-Chg(w,i5) by SCMRING1:def 5
-     .= SCM-Chg(w,V cjump_address) by A13,A14,SCMRING1:19
-     .= SCM-Chg(w,IFEQ(w.(V cond_address),0.R,V cjump_address,Next IC w))
-        by A23,CQC_LANG:def 1
-     .= SCM-Exec-Res(V,w) by A14,A15,SCMRING1:def 14
-     .= Exec(a =0_goto i1,t) by Th12
-     .= t by A16,AMI_1:def 8;
+     .= SCM-Chg(w,V jump_address) by A13,SCMRING1:18
+     .= SCM-Exec-Res(V,w) by A14,SCMRING1:def 14
+     .= Exec(goto i1,t) by Th12
+     .= t by A1,AMI_1:def 8;
     hence contradiction by A5,A12;
+  end;
+
+Lm6:
+ a =0_goto i1 is non halting
+  proof
+    reconsider V = a =0_goto i1 as Element of SCM-Instr R by Def1;
+    reconsider i5 = i1 as Element of SCM-Instr-Loc by Def1;
+    consider s being SCM-State of R;
+    set t = s +* (0 .--> Next i1);
+    set f = the Object-Kind of SCM R;
+A1: f = SCM-OK R by Def1;
+A2: dom(0 .--> Next i1) = {0} by CQC_LANG:5;
+    then 0 in dom (0 .--> Next i1) by TARSKI:def 1;
+then A3: t.0 = (0 .--> Next i1).0 by FUNCT_4:14
+       .= Next i1 by CQC_LANG:6
+       .= Next i5 by Th11;
+then A4: t.0 = i5 + 2 by AMI_2:def 15;
+A5: {0} c= NAT by ZFMISC_1:37;
+A6: dom s = dom (SCM-OK R) by CARD_3:18;
+A7: dom t = dom s \/ dom (0 .--> Next i1) by FUNCT_4:def 1
+         .= NAT \/ dom (0 .--> Next i1) by A6,FUNCT_2:def 1
+         .= NAT \/ {0} by CQC_LANG:5
+         .= NAT by A5,XBOOLE_1:12;
+A8: dom f = NAT by A1,FUNCT_2:def 1;
+        for x being set st x in dom f holds t.x in f.x
+    proof
+      let x be set such that
+A9:     x in dom f;
+      per cases;
+      suppose
+A10:     x = 0;
+      then f.x = SCM-Instr-Loc by A1,SCMRING1:2;
+      hence t.x in f.x by A3,A10;
+      end;
+      suppose x <> 0;
+      then not x in dom (0 .--> Next i1) by A2,TARSKI:def 1;
+      then t.x = s.x by FUNCT_4:12;
+      hence t.x in f.x by A1,A9,CARD_3:18;
+    end;
+    end;
+    then reconsider t as State of SCM R by A7,A8,CARD_3:18;
+    reconsider w = t as SCM-State of R by Def1;
+        dom(0 .--> i1) = {0} by CQC_LANG:5;
+    then 0 in dom (0 .--> i1) by TARSKI:def 1;
+then A11: (w +* (0 .--> i1)).0 = (0 .--> i1).0 by FUNCT_4:14
+       .= i1 by CQC_LANG:6;
+A12: 7 is Element of Segm 8 by GR_CY_1:10;
+A13: a is Element of SCM-Data-Loc by Th1;
+A14: the Instruction-Locations of SCM R = SCM-Instr-Loc by Def1;
+    assume
+A15:   a =0_goto i1 is halting;
+    per cases;
+    suppose
+A16:   w.(V cond_address) <> 0.R;
+A17: IC t = IC w by Th10;
+A18: IC w = w.0 by SCMRING1:def 4;
+A19: Exec(a =0_goto i1,t).IC SCM R = t.IC SCM R by A15,AMI_1:def 8
+       .= IC t
+       .= w.0 by A17,SCMRING1:def 4;
+    reconsider e = w.0 as Instruction-Location of SCM R by A18,Def1;
+        a is Element of SCM-Data-Loc by Th1;
+    then t.a <> 0.R by A12,A14,A16,SCMRING1:19;
+    then Exec(a =0_goto i1, t).IC SCM R = Next IC t by Th18;
+then A20: Exec(a =0_goto i1,t).IC SCM R = Next e by A17,SCMRING1:def 4;
+    consider mj being Element of SCM-Instr-Loc such that
+A21:   mj = e & Next e = Next mj by Def10;
+        Next e = mj + 2 by A21,AMI_2:def 15;
+    hence contradiction by A19,A20,A21;
+    end;
+    suppose
+A22:   w.(V cond_address) = 0.R;
+        w +* (0 .--> i1)
+      = SCM-Chg(w,i5) by SCMRING1:def 5
+     .= SCM-Chg(w,V cjump_address) by A12,A13,SCMRING1:19
+     .= SCM-Chg(w,IFEQ(w.(V cond_address),0.R,V cjump_address,Next IC w))
+        by A22,CQC_LANG:def 1
+     .= SCM-Exec-Res(V,w) by A13,A14,SCMRING1:def 14
+     .= Exec(a =0_goto i1,t) by Th12
+     .= t by A15,AMI_1:def 8;
+    hence contradiction by A4,A11;
   end;
   end;
 

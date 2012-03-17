@@ -19,6 +19,7 @@ environ
       RFUNCT_3, MESFUNC1, FINSEQ_4, BINARITH, NAT_1, RVSUM_1, BINOP_1;
  registrations STRUCT_0, RLVECT_1, FUNCT_2, SUPINF_1, XREAL_0, RELSET_1,
       SUBSET_1, FINSET_1, FINSEQ_1, INT_1, FUNCT_1, ORDINAL2, MEMBERED, NAT_1;
+ definitions BINOP_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  theorems ZFMISC_1, BINOP_1, FUNCT_2, CONVEX1, SUPINF_1, SUPINF_2, SQUARE_1,
       MEASURE6, EXTREAL1, EXTREAL2, RLVECT_1, RFUNCT_3, REAL_1, RVSUM_1,
@@ -72,7 +73,7 @@ definition let X,Y be non empty RLSStruct;
      hence thesis;
     end;
     thus ex o being BinOp of A st
-    for a,b being Element of A holds P[a,b,o.(a,b)] from BINOP_1:sch 1(A1);
+    for a,b being Element of A holds P[a,b,o.(a,b)] from BINOP_1:sch 3(A1);
   end;
  uniqueness
  proof
@@ -128,7 +129,7 @@ definition let X,Y be non empty RLSStruct;
   st
    z = [x,y]
   holds
-   it.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]];
+   it.(a,z) = [(the Mult of X).[a,x],(the Mult of Y).[a,y]];
  existence
   proof
     defpred P[set,set,set] means
@@ -164,7 +165,7 @@ definition let X,Y be non empty RLSStruct;
        [:the carrier of X, the carrier of Y:] such that
    A3: for a being Element of REAL,
        z being Element of [:the carrier of X, the carrier of Y:] holds
-       P[a,z,g.[a,z]] from FUNCT_2:sch 7(A1);
+       P[a,z,g.(a,z)] from BINOP_1:sch 3(A1);
    take g;
    let a being Real,
        z being Element of [:the carrier of X, the carrier of Y:];
@@ -179,15 +180,15 @@ definition let X,Y be non empty RLSStruct;
      z being Element of [:the carrier of X, the carrier of Y:],
      x being VECTOR of X, y being VECTOR of Y
     st z = [x,y] holds
-    g1.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]];
+    g1.(a,z) = [(the Mult of X).[a,x],(the Mult of Y).[a,y]];
    assume A5: for a being Real,
      z being Element of [:the carrier of X, the carrier of Y:],
      x being VECTOR of X, y being VECTOR of Y
     st z = [x,y] holds
-    g2.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]];
+    g2.(a,z) = [(the Mult of X).[a,x],(the Mult of Y).[a,y]];
      for a being Real,
      z being Element of [:the carrier of X, the carrier of Y:] holds
-    g1.[a,z] = g2.[a,z]
+    g1.(a,z) = g2.(a,z)
     proof
      let a be Real, z be  Element of [:the carrier of X, the carrier of Y:];
      consider x being set, y being set such that
@@ -196,12 +197,12 @@ definition let X,Y be non empty RLSStruct;
       z = [x,y] by ZFMISC_1:def 2;
      reconsider x as VECTOR of X by A6;
      reconsider y as VECTOR of Y by A6;
-       g1.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]] &
-     g2.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]]
+       g1.(a,z) = [(the Mult of X).[a,x],(the Mult of Y).[a,y]] &
+     g2.(a,z) = [(the Mult of X).[a,x],(the Mult of Y).[a,y]]
       by A4,A5,A6;
      hence thesis;
     end;
-  hence thesis by FUNCT_2:120;
+  hence thesis by BINOP_1:2;
   end;
 end;
 
@@ -216,13 +217,7 @@ end;
 
 registration let X,Y be non empty RLSStruct;
  cluster Prod_of_RLS(X,Y) -> non empty;
- coherence
- proof
-    Prod_of_RLS(X,Y) =  RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-  hence thesis;
- end;
+ coherence;
 end;
 
 theorem Th1:
@@ -243,9 +238,9 @@ theorem Th1:
           [0.X,0.Y],
           Add_in_Prod_of_RLS(X,Y),
           Mult_in_Prod_of_RLS(X,Y) #)).[p,u]
-      .= Mult_in_Prod_of_RLS(X,Y).[p,u];
+      .= Mult_in_Prod_of_RLS(X,Y).(p,u);
   A2:
-  (the Mult of X).[p,x] = p*x & (the Mult of Y).[p,y] = p*y by RLVECT_1:def 4;
+  (the Mult of X).(p,x) = p*x & (the Mult of Y).(p,y) = p*y by RLVECT_1:def 4;
   assume u = [x,y];
   hence thesis by A1,A2,Def2;
  end;
@@ -280,7 +275,7 @@ theorem Th2:
     [:the carrier of X, the carrier of Y:];
      Add_in_Prod_of_RLS(X,Y).(u1,u2) =
     [(the add of X).[x1,x2],(the add of Y).[y1,y2]] by A1,Def1;
-   hence thesis by A2,BINOP_1:def 1;
+   hence thesis by A2;
   end;
     (the add of X).[x1,x2] = x1+x2 & (the add of Y).[y1,y2] = y1+y2
    by RLVECT_1:def 3;
@@ -289,15 +284,7 @@ theorem Th2:
 
 Lm1:
 for X,Y being non empty RLSStruct holds
- 0.Prod_of_RLS(X,Y) = [0.X,0.Y]
- proof
-  let X,Y be non empty RLSStruct;
-    0.Prod_of_RLS(X,Y) =
-    0.RLSStruct(# [:the carrier of X, the carrier of Y:],
-                  [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                  Mult_in_Prod_of_RLS(X,Y) #);
-  hence thesis by RLVECT_1:def 2;
- end;
+ 0.Prod_of_RLS(X,Y) = [0.X,0.Y] by RLVECT_1:def 2;
 
 registration
  let X,Y be Abelian (non empty RLSStruct);
@@ -308,20 +295,12 @@ registration
     u1+u2 = u2+u1
     proof
      let u1,u2 be Element of Prod_of_RLS(X,Y);
-       u1 is Element of
-      RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-     then consider x1,y1 being set such that
+     consider x1,y1 being set such that
      A1: x1 in the carrier of X & y1 in the carrier of Y and
      A2: u1=[x1,y1] by ZFMISC_1:def 2;
      reconsider x1 as VECTOR of X by A1;
      reconsider y1 as VECTOR of Y by A1;
-       u2 is Element of
-      RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-     then consider x2,y2 being set such that
+     consider x2,y2 being set such that
      A3: x2 in the carrier of X & y2 in the carrier of Y and
      A4: u2=[x2,y2] by ZFMISC_1:def 2;
      reconsider x2 as VECTOR of X by A3;
@@ -342,29 +321,17 @@ registration
     holds (u1+u2)+u3 = u1+(u2+u3)
     proof
      let u1,u2,u3 be Element of Prod_of_RLS(X,Y);
-       u1 is Element of
-      RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-     then consider x1,y1 being set such that
+     consider x1,y1 being set such that
      A1: x1 in the carrier of X & y1 in the carrier of Y and
      A2: u1=[x1,y1] by ZFMISC_1:def 2;
      reconsider x1 as VECTOR of X by A1;
      reconsider y1 as VECTOR of Y by A1;
-       u2 is Element of
-      RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-     then consider x2,y2 being set such that
+     consider x2,y2 being set such that
      A3: x2 in the carrier of X & y2 in the carrier of Y and
      A4: u2=[x2,y2] by ZFMISC_1:def 2;
      reconsider x2 as VECTOR of X by A3;
      reconsider y2 as VECTOR of Y by A3;
-       u3 is Element of
-      RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-     then consider x3,y3 being set such that
+     consider x3,y3 being set such that
      A5: x3 in the carrier of X & y3 in the carrier of Y and
      A6: u3=[x3,y3] by ZFMISC_1:def 2;
      reconsider x3 as VECTOR of X by A5;
@@ -388,11 +355,7 @@ registration
     u+0.Prod_of_RLS(X,Y) = u
     proof
      let u be Element of Prod_of_RLS(X,Y);
-       u is Element of
-      RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-     then consider x,y being set such that
+     consider x,y being set such that
      A1: x in the carrier of X & y in the carrier of Y and
      A2: u=[x,y] by ZFMISC_1:def 2;
      reconsider x as VECTOR of X by A1;
@@ -415,11 +378,7 @@ registration
     u+u1 = 0.Prod_of_RLS(X,Y)
     proof
      let u be Element of Prod_of_RLS(X,Y);
-       u is Element of
-      RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-     then consider x,y being set such that
+     consider x,y being set such that
      A1: x in the carrier of X & y in the carrier of Y and
      A2: u=[x,y] by ZFMISC_1:def 2;
      reconsider x as VECTOR of X by A1;
@@ -429,11 +388,7 @@ registration
      consider y1 being VECTOR of Y such that
      A4: y+y1=0.Y by RLVECT_1:def 8;
      set u1=[x1,y1];
-       u1 is Element of
-      RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-     then reconsider u1 as Element of Prod_of_RLS(X,Y);
+     reconsider u1 as Element of Prod_of_RLS(X,Y);
      take u1;
        u+u1 = [x+x1,y+y1] by A2,Th2;
      hence thesis by A3,A4,Lm1;
@@ -452,20 +407,12 @@ registration
    proof
     let a be Real;
     let u1,u2 be VECTOR of Prod_of_RLS(X,Y);
-      u1 is Element of
-     RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-    then consider x1,y1 being set such that
+    consider x1,y1 being set such that
     A2: x1 in the carrier of X & y1 in the carrier of Y and
     A3: u1=[x1,y1] by ZFMISC_1:def 2;
     reconsider x1 as VECTOR of X by A2;
     reconsider y1 as VECTOR of Y by A2;
-      u2 is Element of
-     RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-    then consider x2,y2 being set such that
+    consider x2,y2 being set such that
     A4: x2 in the carrier of X & y2 in the carrier of Y and
     A5: u2=[x2,y2] by ZFMISC_1:def 2;
     reconsider x2 as VECTOR of X by A4;
@@ -481,11 +428,7 @@ registration
    proof
     let a,b be Real;
     let u be VECTOR of Prod_of_RLS(X,Y);
-      u is Element of
-     RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-    then consider x,y being set such that
+    consider x,y being set such that
     A9: x in the carrier of X & y in the carrier of Y and
     A10: u=[x,y] by ZFMISC_1:def 2;
     reconsider x as VECTOR of X by A9;
@@ -500,11 +443,7 @@ registration
    proof
     let a,b be Real;
     let u be VECTOR of Prod_of_RLS(X,Y);
-      u is Element of
-     RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-    then consider x,y being set such that
+    consider x,y being set such that
     A13: x in the carrier of X & y in the carrier of Y and
     A14: u=[x,y] by ZFMISC_1:def 2;
     reconsider x as VECTOR of X by A13;
@@ -517,11 +456,7 @@ registration
     for u being VECTOR of Prod_of_RLS(X,Y) holds 1*u = u
    proof
     let u be VECTOR of Prod_of_RLS(X,Y);
-      u is Element of
-     RLSStruct(# [:the carrier of X, the carrier of Y:],
-                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
-                       Mult_in_Prod_of_RLS(X,Y) #);
-    then consider x,y being set such that
+    consider x,y being set such that
     A16: x in the carrier of X & y in the carrier of Y and
     A17: u=[x,y] by ZFMISC_1:def 2;
     reconsider x as VECTOR of X by A16;
@@ -596,7 +531,7 @@ for X,Y being RealLinearSpace, n being Nat,
         let i be Nat; assume
         A13: i in Seg n;
         then i <= n by FINSEQ_1:3;
-        then (x|n).i = x.i & (y|n).i = y.i & (z|n).i = z.i by JORDAN3:20;
+        then (x|n).i = x.i & (y|n).i = y.i & (z|n).i = z.i by FINSEQ_3:121;
         hence thesis by A6,A12,A13;
        end;
       then A14: Sum(z|n) = [Sum(x|n), Sum(y|n)] by A4,A11;
@@ -637,7 +572,7 @@ proof
  assume A1: v=x;
  thus
    p*v = (the Mult of RLS_Real).[p,v] by RLVECT_1:def 4
-     .= multreal.(p,v) by BINOP_1:def 1
+     .= multreal.(p,v)
      .= p*x by A1,BINOP_2:def 11;
 end;
 
@@ -754,7 +689,7 @@ Lm4:
   reconsider y=w as VECTOR of RLS_Real;
   A1:
   p*y = (the Mult of RLS_Real).[p,w] by RLVECT_1:def 4
-      .= multreal.(p,w) by BINOP_1:def 1
+      .= multreal.(p,w)
       .= p*w by BINOP_2:def 11;
   assume u = [x,w];
   hence thesis by A1,Th1;
@@ -834,7 +769,7 @@ Lm6:
         assume i in dom(a|n);
         then A13: i in Seg n by A11,FINSEQ_1:def 3;
         then i <= n by FINSEQ_1:3;
-        then (a|n).i = a.i & (b|n).i = b.i by JORDAN3:20;
+        then (a|n).i = a.i & (b|n).i = b.i by FINSEQ_3:121;
         hence thesis by A5,A6,A12,A13;
        end;
       then A14: Sum(a|n) = Sum(b|n) by A3,A11;
@@ -1146,7 +1081,7 @@ Lm10:
         assume i in dom(a|n);
         then A11: i in Seg n by A9,FINSEQ_1:def 3;
         then i <= n by FINSEQ_1:3;
-        then (a|n).i = a.i & (b|n).i = b.i by JORDAN3:20;
+        then (a|n).i = a.i & (b|n).i = b.i by FINSEQ_3:121;
         hence thesis by A5,A6,A10,A11;
        end;
       then A12: Sum(a|n) = Sum(b|n) by A3,A9;
@@ -1461,7 +1396,7 @@ Lm13:
        A13: r.j = i by A9,FUNCT_1:def 5;
        reconsider j as Nat by A12;
        A14: j <= n by A12,FINSEQ_1:3;
-       then (s'|n).j = s.j by A1,JORDAN3:20;
+       then (s'|n).j = s.j by A1,FINSEQ_3:121;
        then A15: i = p.(s.j) by A9,A12,A13,FUNCT_1:22;
        A16: j < n+1 by A14,NAT_1:38;
        A17: j in dom s & n+1 in dom s by A5,A10,A12,FINSEQ_1:6;
@@ -1500,7 +1435,7 @@ Lm13:
          j <= n+1 by A25,FINSEQ_1:3;
        then j < n+1 by A2,A23,A26,XREAL_1:1;
        then A27: 1 <= j & j <= n by A25,FINSEQ_1:3,NAT_1:38;
-       then A28: (s'|n).j = s.j by A1,JORDAN3:20;
+       then A28: (s'|n).j = s.j by A1,FINSEQ_3:121;
        A29: j in dom r by A9,A27,FINSEQ_1:3;
        then r.j = i by A24,A26,A28,FUNCT_1:22;
        hence thesis by A29,FUNCT_1:12;
@@ -1523,7 +1458,7 @@ Lm13:
        then j < n+1 by A36,XREAL_1:1;
        then A37: 1 <= j & j <= n by A33,FINSEQ_1:3,NAT_1:38;
        then A38: j in Seg n by FINSEQ_1:3;
-         (s'|n).j = s.j by A1,A37,JORDAN3:20;
+         (s'|n).j = s.j by A1,A37,FINSEQ_3:121;
        then r.j = p.(s.j) by A9,A38,FUNCT_1:22;
        hence thesis by A9,A34,A35,A38,FUNCT_1:12;
      thus thesis;
@@ -1577,9 +1512,9 @@ Lm14:
     proof
      let i be Nat; assume
      A21: 1 <= i & i <= q-'1;
-     then A22: (F|(q-'1)).i = F.i & (H1|(q-'1)).i = H1.i by JORDAN3:20;
+     then A22: (F|(q-'1)).i = F.i & (H1|(q-'1)).i = H1.i by FINSEQ_3:121;
      A23: i <= n by A8,A21,XREAL_1:2;
-     then A24: H1.i = H.i by JORDAN3:20;
+     then A24: H1.i = H.i by FINSEQ_3:121;
        i <= n+1 by A10,A23,XREAL_1:2;
      then A25: i in Seg(n+1) by A21,FINSEQ_1:3;
      then A26: F.i = H.(p.i) by A1,A17,FUNCT_1:22;
@@ -1593,53 +1528,53 @@ Lm14:
      for i being Nat st 1 <= i & i <= n+1-q holds (F/^q).i=(H1/^(q-'1)).i
     proof
      let i be Nat; assume
-     A31: 1 <= i & i <= n+1-q;
+     A30: 1 <= i & i <= n+1-q;
      reconsider n1 = n+1-q as Nat by A6,INT_1:18;
-     A32: i in Seg n1 by A31,FINSEQ_1:3;
+     A31: i in Seg n1 by A30,FINSEQ_1:3;
        dom(F/^q) = Seg n1 by A28,FINSEQ_1:def 3;
-     then A33: (F/^q).i = F.(i+q) by A6,A16,A32,RFINSEQ:def 2;
-       i in dom(H1/^(q-'1)) by A29,A32,FINSEQ_1:def 3;
-     then A34: (H1/^(q-'1)).i = H1.(i+(q-'1)) by A8,A18,RFINSEQ:def 2;
-     A35: i+(q-'1) = i+q-1 by A7;
-     A36: i+q <= n+1 by A31,XREAL_1:21;
-     then i+(q-'1) <= n by A35,XREAL_1:22;
-     then A37: (H1/^(q-'1)).i = H.(i+q-1) by A7,A34,JORDAN3:20;
-       1 <= i+q by A31,NAT_1:37;
-     then A38: i+q in Seg(n+1) & i+q in dom F by A17,A36,FINSEQ_1:3;
-     then A39: F.(i+q) = H.(p.(i+q)) by A1,FUNCT_1:22;
-       i+q >= 1+q by A31,XREAL_1:8;
+     then A32: (F/^q).i = F.(i+q) by A6,A16,A31,RFINSEQ:def 2;
+       i in dom(H1/^(q-'1)) by A29,A31,FINSEQ_1:def 3;
+     then A33: (H1/^(q-'1)).i = H1.(i+(q-'1)) by A8,A18,RFINSEQ:def 2;
+     A34: i+(q-'1) = i+q-1 by A7;
+     A35: i+q <= n+1 by A30,XREAL_1:21;
+     then i+(q-'1) <= n by A34,XREAL_1:22;
+     then A36: (H1/^(q-'1)).i = H.(i+q-1) by A7,A33,FINSEQ_3:121;
+       1 <= i+q by A30,NAT_1:37;
+     then A37: i+q in Seg(n+1) & i+q in dom F by A17,A35,FINSEQ_1:3;
+     then A38: F.(i+q) = H.(p.(i+q)) by A1,FUNCT_1:22;
+       i+q >= 1+q by A30,XREAL_1:8;
      then i+q>q by NAT_1:38;
-     hence thesis by A5,A33,A37,A38,A39;
+     hence thesis by A5,A32,A36,A37,A38;
     end;
-   then A40: F/^q = H1/^(q-'1) by A28,A29,FINSEQ_1:18;
-   A41: not -infty in rng F by A1,A4,FUNCT_1:25;
-   A42: F = (F|(q-'1))^<*F.q*>^(F/^q) by A6,A16,POLYNOM4:3;
+   then A39: F/^q = H1/^(q-'1) by A28,A29,FINSEQ_1:18;
+   A40: not -infty in rng F by A1,A4,FUNCT_1:25;
+   A41: F = (F|(q-'1))^<*F.q*>^(F/^q) by A6,A16,POLYNOM4:3;
    then rng F = rng((F|(q-'1))^<*F.q*>) \/ rng(F/^q) by FINSEQ_1:44;
-   then A43: not -infty in rng((F|(q-'1))^<*F.q*>) &
-       not -infty in rng(F/^q) by A41,XBOOLE_0:def 2;
+   then A42: not -infty in rng((F|(q-'1))^<*F.q*>) &
+       not -infty in rng(F/^q) by A40,XBOOLE_0:def 2;
    then not -infty in rng(F|(q-'1)) \/ rng<*F.q*> by FINSEQ_1:44;
-   then A44: not -infty in rng(F|(q-'1)) & not -infty in rng<*F.q*>
+   then A43: not -infty in rng(F|(q-'1)) & not -infty in rng<*F.q*>
     by XBOOLE_0:def 2;
    then not -infty in {F.q} by FINSEQ_1:56;
-   then A45: -infty <> F.q by TARSKI:def 1;
-   A46: Sum(F|(q-'1)) <> -infty & Sum(F/^q) <> -infty by A43,A44,Lm8;
-   A47: H1 = H | Seg n by FINSEQ_1:def 15;
+   then A44: -infty <> F.q by TARSKI:def 1;
+   A45: Sum(F|(q-'1)) <> -infty & Sum(F/^q) <> -infty by A42,A43,Lm8;
+   A46: H1 = H | Seg n by FINSEQ_1:def 15;
    then rng H1 c= rng H by FUNCT_1:76;
-   then A48: not -infty in rng H1 by A4;
-   A49: H1 = (H1|(q-'1))^(H1/^(q-'1)) by RFINSEQ:21;
-   then not -infty in rng(H1|(q-'1)) \/ rng(H1/^(q-'1)) by A48,FINSEQ_1:44;
-   then A50: not -infty in rng(H1|(q-'1)) & not -infty in rng(H1/^(q-'1))
+   then A47: not -infty in rng H1 by A4;
+   A48: H1 = (H1|(q-'1))^(H1/^(q-'1)) by RFINSEQ:21;
+   then not -infty in rng(H1|(q-'1)) \/ rng(H1/^(q-'1)) by A47,FINSEQ_1:44;
+   then A49: not -infty in rng(H1|(q-'1)) & not -infty in rng(H1/^(q-'1))
     by XBOOLE_0:def 2;
-   A51: n+1 in dom H by A15,FINSEQ_1:6;
+   A50: n+1 in dom H by A15,FINSEQ_1:6;
      H|(n+1) = H & H|(n+1) = H | Seg(n+1) by A3,FINSEQ_1:79,def 15;
-   then A52: H = H1^<*H.(n+1)*> by A47,A51,FINSEQ_5:11;
-   thus Sum F = Sum((F|(q-'1))^<*F.q*>) + Sum(F/^q) by A42,A43,Th7
+   then A51: H = H1^<*H.(n+1)*> by A46,A50,FINSEQ_5:11;
+   thus Sum F = Sum((F|(q-'1))^<*F.q*>) + Sum(F/^q) by A41,A42,Th7
              .= Sum(F|(q-'1)) + F.q + Sum(F/^q) by Lm7
-             .= Sum(F|(q-'1)) + Sum(F/^q) + F.q by A45,A46,EXTREAL1:8
+             .= Sum(F|(q-'1)) + Sum(F/^q) + F.q by A44,A45,EXTREAL1:8
              .= Sum(H1|(q-'1)) + Sum(H1/^(q-'1)) + H.(n+1)
-                 by A19,A20,A27,A40,FINSEQ_1:18
-             .= Sum H1 + H.(n+1) by A49,A50,Th7
-             .= Sum H by A52,Lm7;
+                 by A19,A20,A27,A39,FINSEQ_1:18
+             .= Sum H1 + H.(n+1) by A48,A49,Th7
+             .= Sum H by A51,Lm7;
   end;
 
 theorem Th8:
@@ -1727,17 +1662,17 @@ FINSEQ_2:36;
           proof
            let i be Nat; assume
            A36: 1 <= i & i <= n;
-           then A37: (G|n).i = G.i by JORDAN3:20;
+           then A37: (G|n).i = G.i by FINSEQ_3:121;
            A38: i in Seg n by A36,FINSEQ_1:3;
            then i in dom H1 by A35,FINSEQ_1:def 3;
            then A39: ((H|n)*p1).i = (H|n).(p1.i) by FUNCT_1:22;
-             (s'|n).i = s.i by A36,JORDAN3:20;
+             (s'|n).i = s.i by A36,FINSEQ_3:121;
            then A40: p1.i = p.(s.i) by A28,A38,FUNCT_1:22;
              rng p1 = Seg n by FUNCT_2:def 3;
            then A41: p1.i in Seg n by A28,A38,FUNCT_1:12;
            then reconsider a = p1.i as Nat;
              a <= n by A41,FINSEQ_1:3;
-           then A42: ((H|n)*p1).i = H.(p1.i) by A39,JORDAN3:20;
+           then A42: ((H|n)*p1).i = H.(p1.i) by A39,FINSEQ_3:121;
            A43: H.(p1.i) = F.(p2.(p1.i)) by A26,A30,A41,FUNCT_1:22;
              s.i in rng s by A17,A30,A38,FUNCT_1:12;
            then ((H|n)*p1).i = F.(s.i) by A24,A40,A42,A43,FUNCT_1:56;
@@ -1967,7 +1902,7 @@ for X being non empty RLSStruct,
        f.x <=' R_EAL(y)};
       hence thesis;
      end;
-     then reconsider u1=[x1,w1] as VECTOR of Prod_of_RLS(X,RLS_Real);
+     reconsider u1=[x1,w1] as VECTOR of Prod_of_RLS(X,RLS_Real);
      A12: [x2,w2] in epigraph f
      proof
         f.x2 <=' R_EAL(w2) by MEASURE6:def 1;
@@ -1976,7 +1911,7 @@ for X being non empty RLSStruct,
        f.x <=' R_EAL(y)};
       hence thesis;
      end;
-     then reconsider u2=[x2,w2] as VECTOR of Prod_of_RLS(X,RLS_Real);
+     reconsider u2=[x2,w2] as VECTOR of Prod_of_RLS(X,RLS_Real);
      A13: p*u1 + (1-p)*u2 in epigraph f by A2,A3,A11,A12,CONVEX1:def 2;
      A14: p*u1 = [p*x1,p*w1] by Lm4;
        (1-p)*u2 = [(1-p)*x2,(1-p)*w2] by Lm4;
@@ -2409,12 +2344,12 @@ for X being RealLinearSpace,
           A21: i in dom (p|n);
           then A22: i <= n by A18,FINSEQ_1:3;
             p.i > 0 by A12,A18,A19,A21;
-          hence thesis by A22,JORDAN3:20;
+          hence thesis by A22,FINSEQ_3:121;
          end;
         A23: 1<=n & 1<=n+1 by NAT_1:39;
         then A24: 1 in Seg n & 1 in Seg(n+1) by FINSEQ_1:3;
         then p.1 > 0 by A12;
-        then (p|n).1 > 0 by A23,JORDAN3:20;
+        then (p|n).1 > 0 by A23,FINSEQ_3:121;
         then A25: q>0 by A15,A18,A20,A24,RVSUM_1:115;
         set p' = (1/q)*(p|n);
         set y' = y|n;
@@ -2442,7 +2377,7 @@ for X being RealLinearSpace,
             q" > 0 by A25,XREAL_1:124;
           then A35: 1/q > 0 by XCMPLX_1:217;
             p'.i = (1/q)*(p|n).i by RVSUM_1:66
-              .= (1/q)*p.i by A33,JORDAN3:20;
+              .= (1/q)*p.i by A33,FINSEQ_3:121;
           hence p'.i>0 by A34,A35,REAL_2:122;
           thus z'.i = p'.i*y'/.i by A27,A32;
           thus thesis by A30,A32,A34,FINSEQ_4:85;
@@ -2462,11 +2397,11 @@ for X being RealLinearSpace,
           A40: v = (z|n).i;
           A41: i in Seg n by A26,A39,FINSEQ_1:def 3;
           then A42: i <= n by FINSEQ_1:3;
-          then A43: (z|n).i = z.i by JORDAN3:20;
+          then A43: (z|n).i = z.i by FINSEQ_3:121;
           A44: y'/.i = y/.i by A30,A41,FINSEQ_4:85;
             z'.i = p'.i*y'/.i by A27,A41
               .= ((1/q)*(p|n).i)*y'/.i by RVSUM_1:66
-              .= ((1/q)*p.i)*y'/.i by A42,JORDAN3:20
+              .= ((1/q)*p.i)*y'/.i by A42,FINSEQ_3:121
               .= (1/q)*(p.i*y'/.i) by RLVECT_1:def 9
               .= (1/q)*v by A12,A19,A40,A41,A43,A44;
           hence thesis;
@@ -2649,11 +2584,7 @@ for X being RealLinearSpace,
       assume i in Seg n;
       then reconsider w = f.(y/.i) as Real by A10;
       set v = [y/.i, w];
-        v in the carrier of
-         RLSStruct(# [:the carrier of X, the carrier of RLS_Real:],
-                     [0.X,0.RLS_Real], Add_in_Prod_of_RLS(X,RLS_Real),
-                     Mult_in_Prod_of_RLS(X,RLS_Real) #);
-      then reconsider v as Element of V;
+      reconsider v as Element of V;
       take v;
       thus thesis;
      end;

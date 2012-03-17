@@ -12,14 +12,15 @@ environ
       ARYTM_3, FILTER_0, RLSUB_1, GRAPH_1, GR_CY_1, CARD_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS,
       XCMPLX_0, XREAL_0, RELAT_1, FUNCT_1, REAL_1, FUNCT_2, CARD_1, FINSET_1,
-      BINOP_1, DOMAIN_1, INT_1, BINOP_2, INT_2, NAT_1, RLVECT_1, GROUP_2,
+      BINOP_1, DOMAIN_1, INT_1, BINOP_2, REALSET1,
+      INT_2, NAT_1, RLVECT_1, GROUP_2,
       STRUCT_0, GROUP_1, GROUP_4, FUNCOP_1, FINSOP_1, SETWOP_2, FINSEQ_1;
  constructors WELLORD2, REAL_1, SETWISEO, DOMAIN_1, NAT_1, FUNCSDOM, GROUP_4,
-      FINSOP_1, MEMBERED, BINOP_2, INT_2;
+      FINSOP_1, MEMBERED, BINOP_2, INT_2, REALSET1;
  registrations SUBSET_1, FUNCT_1, INT_1, GROUP_1, GROUP_2, RELSET_1, STRUCT_0,
-      FINSEQ_1, XREAL_0, MEMBERED, ORDINAL2, NAT_1, BINOP_2;
+      FINSEQ_1, XREAL_0, MEMBERED, ORDINAL2, NAT_1, BINOP_2, REALSET1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions GROUP_1, FUNCT_1, TARSKI;
+ definitions GROUP_1, FUNCT_1, TARSKI, BINOP_1, REALSET1;
  theorems BINOP_1, INT_1, INT_2, NAT_1, REAL_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
       ZFMISC_1, FUNCT_2, FUNCOP_1, GROUP_1, GROUP_2, GROUP_4, TARSKI, FUNCT_1,
       CARD_1, WELLORD2, RLVECT_1, FINSOP_1, RELSET_1, ORDINAL2, XBOOLE_0,
@@ -37,97 +38,6 @@ begin
  reserve a,b for Element of G;
  reserve F for FinSequence of the carrier of G;
  reserve I for FinSequence of INT;
-
-     :::::::::::::::::::::::::::::::::::::::::::::::::::::::
-     ::    Some properties of modulo function             ::
-     :::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-theorem Th1:
- for m,n,k being natural number holds m mod n = (n*k + m) mod n
- proof
-   let m,n,k be natural number;
-  per cases;
-  suppose A1: n > 0;
-       m mod n = t implies (n*k + m) mod n = t
-   proof
-    assume m mod n = t;
-    then consider q such that A2: m = n * q + t & t < n by A1,NAT_1:def 2;
-        ex g st n*k + m = n*g + t & t < n
-      proof
-        reconsider g = k+q as Nat by ORDINAL2:def 21;
-        take g;
-       thus thesis by A2;
-      end;
-    hence thesis by NAT_1:def 2;
-   end;
- hence thesis;
- end;
- suppose n = 0;
- hence thesis;
-end;
-end;
-
-theorem Th2:
- for p,s,n being natural number holds (p+s) mod n = ((p mod n)+s) mod n
- proof
-   let p,s,n be natural number;
-  per cases;
-  suppose n > 0;
-  then (p + s) mod n = (n*(p div n) + (p mod n) + s) mod n by NAT_1:47
-                .=(n*(p div n) + ((p mod n) + s)) mod n
-                .=((p mod n) + s) mod n by Th1;
-   hence thesis;
-   end;
-   suppose
-A1:  n = 0;
-   hence (p+s) mod n = 0 by NAT_1:def 2
-     .= ((p mod n)+s) mod n by A1,NAT_1:def 2;
- end;
- end;
-
-theorem
-   for p,s,n being natural number holds  (p+s) mod n = (p + ( s mod n)) mod n
-   by Th2;
-
-theorem Th4:
- for n,k being natural number holds k < n implies k mod n = k
- proof
-   let n,k be natural number;
-   assume A1:k<n;
-A2: k is Nat by ORDINAL2:def 21;
-    ex p st k=n*p + k & k<n
-   proof
-      k=n*0 + k;
-     hence thesis by A1;
-   end;
-  hence thesis by A2,NAT_1:def 2;
- end;
-
-theorem Th5:
- for n being natural number holds n mod n = 0
- proof
-   let n be natural number;
-  per cases;
-  suppose A1:n>0;
-      ex p st n=n*p +0 & 0<n
-   proof
-        n=n*1+0;
-    hence thesis by A1;
-   end;
-  hence thesis by NAT_1:def 2;
-  end;
-  suppose n = 0;
-  hence thesis by NAT_1:def 2;
- end;
- end;
-
-theorem Th6:
- for n being natural number holds 0 = 0 mod n
-  proof
-    let n be natural number;
-        n = 0 or n > 0;
-    hence thesis by Th4,NAT_1:def 2;
-  end;
 
 definition let n be natural number such that A1:n > 0;
  func Segm (n) -> non empty Subset of NAT equals
@@ -155,7 +65,7 @@ end;
 Lm1:
  for n st n > 0 holds x in Segm (n) implies x is Nat;
 
-canceled 3;
+canceled 9;
 
 theorem Th10:
  for n,s being natural number st n > 0 holds s in Segm (n) iff s < n
@@ -258,17 +168,10 @@ theorem Th20:
    end;
 
 theorem
-     Sum <*i1*> = i1
- proof set F = <*i1*>;
-  thus Sum F = addint $$ F .= i1 by FINSOP_1:12;
- end;
+     Sum <*i1*> = i1 by FINSOP_1:12;
 
 theorem Th22:
- Sum (<*> INT) = 0
- proof set F = <*> INT;
-   thus Sum F = addint $$ F
-          .= 0 by BINOP_2:4,FINSOP_1:11;
- end;
+ Sum (<*> INT) = 0 by BINOP_2:4,FINSOP_1:11;
 
 Lm2: Product(((len(<*> INT)) |->a)|^(<*> INT))=a|^Sum(<*> INT)
  proof
@@ -521,12 +424,12 @@ A14: rng F c= the carrier of gr {a}
      then A17: car c= the carrier of G by A14,XBOOLE_1:1;
      then [:car,car:] c= [:the carrier of G,the carrier of G:] by ZFMISC_1:119
 ;
- then A18:dom((the mult of G)|[:car,car:])=[:car,car:] by A16,RELAT_1:91;
-         rng((the mult of G)|[:car,car:]) c= car
+ then A18:dom((the mult of G)||car)=[:car,car:] by A16,RELAT_1:91;
+         rng((the mult of G)||car) c= car
        proof
-             for y st y in rng((the mult of G)|[:car,car:]) holds y in car
+             for y st y in rng((the mult of G)||car) holds y in car
             proof
-              set f=(the mult of G)|[:car,car:];
+              set f=(the mult of G)||car;
               let y;
               assume y in rng(f);
               then consider x such that A19:x in dom(f) and
@@ -539,7 +442,7 @@ A14: rng F c= the carrier of gr {a}
               then consider s such that A23:  yp = a|^s by A11;
               A24:  y = (the mult of G).[a|^p,a|^s]
                         by A19,A20,A21,A22,A23,FUNCT_1:70
-                      .= (the mult of G).(a|^p,a|^s) by BINOP_1:def 1
+                      .= (the mult of G).(a|^p,a|^s)
                       .= a|^p*(a|^s)
                       .= a|^(p+s) by GROUP_1:48;
                   a|^(p+s) in car
@@ -583,7 +486,7 @@ NAT_1:47
    end;
 hence thesis by TARSKI:def 3;
   end;
- then reconsider op=(the mult of G)|[:car,car:] as BinOp of car by A18,
+ then reconsider op=(the mult of G)||car as BinOp of car by A18,
 FUNCT_2:def 1,RELSET_1:11;
  set H=HGrStr(#car,op#);
      H is Group
@@ -596,11 +499,9 @@ A31: for f,g being Element of H ,
   let f' ,g' be Element of G;
   assume A32: f = f' & g =g';
   set A = [:car,car:];
-  A33:f*g = ((the mult of G) | A).(f,g)
-       .= ((the mult of G) | A).[f,g] by BINOP_1:def 1;
-      f'*g' = (the mult of G).(f',g')
-         .= (the mult of G).[f',g'] by BINOP_1:def 1;
-  hence thesis by A32,A33,FUNCT_1:72;
+  A33:f*g = ((the mult of G)||car).(f,g)
+       .= ((the mult of G)||car).[f,g];
+  thus thesis by A32,A33,FUNCT_1:72;
   end;
 
  A34:for f,g,h being Element of H holds (f * g) * h = f * (g * h
@@ -876,10 +777,9 @@ theorem Th33:
  HGrStr(#INT,addint#) is associative Group-like
   proof
    set G = HGrStr (# INT, addint #);
-   A1: now let h,g be Element of G, A,B be Integer;
-   assume h = A & g = B;
-   hence h * g = addint.(A,B) .= A + B by Th14;
- end;
+   A1: for h,g be Element of G, A,B be Integer
+     st h = A & g = B
+   holds h * g = A + B by Th14;
  thus for h,g,f being Element of G
   holds (h * g) * f = h * (g * f)
    proof let h,g,f be Element of G;
@@ -931,7 +831,7 @@ definition let n be natural number such that A1:n > 0;
        end;
          ex o being BinOp of Segm n st
          for a,b being Element of Segm n holds
-           P[a,b,o.(a,b)] from BINOP_1:sch 1(A2);
+           P[a,b,o.(a,b)] from BINOP_1:sch 3(A2);
        hence thesis;
          end;
  uniqueness
@@ -957,11 +857,9 @@ theorem Th34:
    let n be natural number;
    assume A1:n>0;
    set G = HGrStr (# Segm(n), addint(n) #);
-   A2: now let h,g be Element of G, A,B be Element of Segm(n);
-   assume h = A & g = B;
-   hence h * g = (addint(n)).(A,B)
-              .= (A + B) mod n by A1,Def5;
-   end;
+   A2: for h,g be Element of G, A,B be Element of Segm(n)
+   st h = A & g = B
+   holds h * g = (A + B) mod n by A1,Def5;
    thus for h,g,f being Element of G
     holds (h * g) * f = h * (g * f)
     proof let h,g,f be Element of G;
@@ -970,9 +868,9 @@ A3:   A is Nat & B is Nat & C is Nat;
      A4: h * g = (A + B) mod n by A2;
      A5: g * f = (B + C) mod n by A2;
      thus (h * g) * f = (((A + B) mod n) + C) mod n by A2,A4
-                     .= ((A + B) + C) mod n by A3,Th2
+                     .= ((A + B) + C) mod n by A3,NAT_1:74
                      .=(A + (B + C)) mod n
-                     .=(A + ((B + C) mod n)) mod n by A3,Th2
+                     .=(A + ((B + C) mod n)) mod n by A3,NAT_1:74
                      .= h * (g * f) by A2,A5;
      end;
     reconsider e=0 as Element of G by A1,Th10;
@@ -982,9 +880,9 @@ A3:   A is Nat & B is Nat & C is Nat;
 reconsider A as Nat;
     A6:A < n by A1,Th10;
   thus h * e = (A + 0) mod n by A2
-            .= h by A6,Th4;
+            .= h by A6,NAT_1:76;
   thus e * h = (0 + A) mod n by A2
-              .= h by A6,Th4;
+              .= h by A6,NAT_1:76;
 consider p such that A7: n=A+p by A6,NAT_1:28;
 A8:     p <= n by A7,NAT_1:37;
          (p mod n) < n by A1,NAT_1:46;
@@ -998,14 +896,14 @@ A8:     p <= n by A7,NAT_1:37;
              then n + 0 =A + n by A7;
              then A10:A = 0;
                  h * g = (A +B) mod n by A2
-                  .= (0 * n) mod n by A9,A10,Th5
+                  .= (0 * n) mod n by A9,A10,NAT_1:77
                   .= e by NAT_1:63;
                 hence thesis;
        end;
        suppose A11:p < n;
                 h * g = (A +B) mod n by A2
-                 .= n mod n by A7,A11,Th4
-                 .= e by Th5;
+                 .= n mod n by A7,A11,NAT_1:76
+                 .= e by NAT_1:77;
              hence thesis;
            end;
            end;
@@ -1018,14 +916,14 @@ thus g * h = e
             then n + 0 =A + n by A7;
             then A = 0;
             then g * h = (n mod n + 0) mod n by A2,A12
-                  .= (0 * n) mod n by Th5
+                  .= (0 * n) mod n by NAT_1:77
                   .= e by NAT_1:63;
                   hence thesis;
       end;
       suppose A13:p < n;
                     g * h = (A + B) mod n by A2
-                     .=n mod n by A7,A13,Th4
-                     .= e by Th5;
+                     .=n mod n by A7,A13,NAT_1:76
+                     .= e by NAT_1:77;
                 hence thesis;
              end;
              end;
@@ -1042,11 +940,9 @@ end;
 theorem Th35:
  1.INT.Group = 0
   proof
-  A1: now let h,g be Element of INT.Group, A,B be Integer;
-  assume h = A & g = B;
-  hence h * g = addint.(A,B)
-             .= A + B by Th14;
-  end;
+  A1: for h,g be Element of INT.Group, A,B be Integer
+   st h = A & g = B
+  holds h * g = A + B by Th14;
   reconsider e = 0 as Element of INT by INT_1:def 2;
   reconsider e as Element of INT.Group;
        for h being Element of INT.Group holds h * e = h & e * h =
@@ -1070,12 +966,9 @@ theorem Th36:
    assume A1: n>0;
    then A2: INT.Group(n) = HGrStr(#Segm(n),addint(n)#) by Def6;
 
-   A3: now let h,g be Element of INT.Group(n),
-              A,B be Element of Segm(n);
-   assume h = A & g = B;
-   hence h * g = (addint(n)).(A,B) by A2
-              .= (A + B) mod n by A1,Def5;
-   end;
+   A3: for h,g be Element of INT.Group(n),
+              A,B be Element of Segm(n) st h = A & g = B
+    holds h * g = (A + B) mod n by A1,A2,Def5;
    reconsider e = 0 as Element of Segm(n) by A1,Th10;
    reconsider e as Element of INT.Group(n) by A2;
        for h being Element of INT.Group(n)
@@ -1086,9 +979,9 @@ theorem Th36:
     reconsider A as Nat;
     A4:A < n by A1,Th10;
     A5: h * e = (A + 0) mod n by A3
-             .= h by A4,Th4;
+             .= h by A4,NAT_1:76;
          e * h = (0 + A) mod n by A3
-             .= h by A4,Th4;
+             .= h by A4,NAT_1:76;
   hence thesis by A5;
  end;
 hence thesis by GROUP_1:10;
@@ -1110,11 +1003,9 @@ end;
 theorem Th37:
  for h being Element of INT.Group holds h" = -@'h
   proof
-   A1: now let h,g be Element of INT.Group, A,B be Integer;
-   assume h = A & g = B;
-   hence h * g = addint.(A,B)
-              .= A + B by Th14;
-   end;
+   A1: for h,g be Element of INT.Group, A,B be Integer
+     st h = A & g = B
+   holds h * g = A + B by Th14;
   let h be Element of INT.Group;
    reconsider g=-@'h as Element of INT.Group by INT_1:def 2;
        h *g =@'h + -@'h by A1 .=1.INT.Group by Th35;
@@ -1123,11 +1014,9 @@ theorem Th37:
 
  reserve G1 for Subgroup of INT.Group,
          h for Element of INT.Group;
-Lm4:now let h,g be Element of INT.Group, A,B be Integer;
-     assume h = A & g = B;
-     hence h * g = addint.(A,B)
-           .= A + B by Th14;
-end;
+Lm4: for h,g be Element of INT.Group, A,B be Integer
+     st h = A & g = B
+     holds h * g = A + B by Th14;
 
 theorem Th38:
  for h st h=1 holds for k holds h|^k = k
@@ -1485,12 +1374,9 @@ theorem Th46:
    assume A1:n>0;
    then A2: INT.Group(n) = HGrStr(#Segm(n),addint(n)#) by Def6;
 
-A3: now let h,g be Element of INT.Group(n),
-            A,B be Element of Segm(n);
-      assume h = A & g = B;
-      hence h * g = (addint(n)).(A,B) by A2
-                 .= (A + B) mod n by A1,Def5;
-    end;
+A3: for h,g be Element of INT.Group(n),
+            A,B be Element of Segm(n) st h = A & g = B
+      holds h * g = (A + B) mod n by A1,A2,Def5;
            0 +1 < n+1 by A1,XREAL_1:8;
        then A4:n >=1 by NAT_1:38;
           now per cases by A4,REAL_1:def 5;
@@ -1510,7 +1396,7 @@ suppose n>1;
        reconsider b'=b as Nat by A1,A2,Lm1;
        defpred P[Nat] means g|^$1 = $1 mod n;
          g|^0 = 1.INT.Group(n) by GROUP_1:43 .= 0 by A1,Th36
-             .= 0 mod n by Th6;
+             .= 0 mod n by NAT_1:78;
        then A5:P[0];
        A6: for k st P[k] holds P[k+1]
        proof
@@ -1519,12 +1405,12 @@ suppose n>1;
         then reconsider e=(k mod n) as Element of Segm(n) by Th10;
         assume A7: g|^k = k mod n;
             g|^(k+1) =g|^k*(g|^1) by GROUP_1:48 .=g|^k*g by GROUP_1:44
-               .= (e +g') mod n by A3,A7 .=(k+1) mod n by Th2;
+               .= (e +g') mod n by A3,A7 .=(k+1) mod n by NAT_1:74;
          hence thesis;
          end;
   A8:  for k holds P[k] from NAT_1:sch 1(A5,A6);
   A9:  b'<n by A1,A2,Th10;
-A10:   g|^b'=b' mod n by A8 .= b by A9,Th4;
+A10:   g|^b'=b' mod n by A8 .= b by A9,NAT_1:76;
         reconsider b' as Integer;
         take b';
         thus thesis by A10;
@@ -1637,9 +1523,9 @@ proof assume
 A1: 0 < m & m <= n;
  let x;
  assume
-A3: x in Segm m;
+A2: x in Segm m;
   then reconsider x as Nat;
-      x < m by A1,A3,Th10;
+      x < m by A1,A2,Th10;
  then x < n by A1,XREAL_1:2;
  hence thesis by Th10;
 end;

@@ -73,23 +73,11 @@ end;
 reserve Y for non empty set;
 reserve B for Subset of Y;
 
-notation let a be boolean-valued Function, x be set;
- synonym Pj(a,x) for a.x;
- end;
-
 scheme :: BVFUNC_1:sch 1
- BVFUniq {Y() -> non empty set, a,b() -> Element of Funcs(Y(),BOOLEAN),
-  F(set, Element of Funcs(Y(),BOOLEAN), Element of Funcs(Y(),BOOLEAN)) -> set}:
-for f1,f2 being Element of Funcs(Y(),BOOLEAN) st
-(for x being Element of Y() holds Pj(f1,x) = F(x,a(),b())) &
-(for x being Element of Y() holds Pj(f2,x) = F(x,a(),b())) holds
-  f1 = f2;
-
-scheme :: BVFUNC_1:sch 2
  BVFUniq1 {Y() -> non empty set, F(set) -> set}:
 for f1,f2 being Element of Funcs(Y(),BOOLEAN) st
-(for x being Element of Y() holds Pj(f1,x) = F(x)) &
-(for x being Element of Y() holds Pj(f2,x) = F(x)) holds
+(for x being Element of Y() holds f1.x = F(x)) &
+(for x being Element of Y() holds f2.x = F(x)) holds
   f1 = f2;
 
 definition let Y;let a be Element of BVF(Y);
@@ -160,10 +148,10 @@ definition let A be non empty set;
  let p,q be Element of Funcs(A,BOOLEAN);
   func p 'imp' q -> Element of Funcs(A,BOOLEAN) means
 :: BVFUNC_1:def 11
- for x being Element of A holds it.x = ('not' Pj(p,x)) 'or' Pj(q,x);
+ for x being Element of A holds it.x = 'not' p.x 'or' q.x;
   func p 'eqv' q -> Element of Funcs(A,BOOLEAN) means
 :: BVFUNC_1:def 12
- for x being Element of A holds it.x = 'not' (Pj(p,x) 'xor' Pj(q,x));
+ for x being Element of A holds it.x = 'not' (p.x 'xor' q.x);
 end;
 
 definition let Y;let a,b be Element of BVF(Y);
@@ -175,13 +163,13 @@ end;
 definition let Y;
  func O_el(Y) ->Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 13
- for x being Element of Y holds Pj(it,x)= FALSE;
+ for x being Element of Y holds it.x= FALSE;
 end;
 
 definition let Y;
  func I_el(Y) ->Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 14
- for x being Element of Y holds Pj(it,x)= TRUE;
+ for x being Element of Y holds it.x= TRUE;
 end;
 
 canceled 3;
@@ -244,7 +232,7 @@ theorem :: BVFUNC_1:17  ::De'Morgan
 definition let Y;let a,b be Element of Funcs(Y,BOOLEAN);
  pred a '<' b means
 :: BVFUNC_1:def 15
- for x being Element of Y st Pj(a,x)= TRUE holds Pj(b,x)=TRUE;
+ for x being Element of Y st a.x= TRUE holds b.x=TRUE;
 reflexivity;
 end;
 
@@ -270,12 +258,12 @@ begin :: Chap. 3  Infimum and Supremum
 definition let Y;let a be Element of Funcs(Y,BOOLEAN);
  func B_INF(a) ->Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 16
-  it = I_el(Y) if (for x being Element of Y holds Pj(a,x)=TRUE)
+  it = I_el(Y) if (for x being Element of Y holds a.x=TRUE)
    otherwise it = O_el(Y);
 
  func B_SUP(a) ->Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 17
-  it = O_el(Y) if (for x being Element of Y holds Pj(a,x)=FALSE)
+  it = O_el(Y) if (for x being Element of Y holds a.x=FALSE)
    otherwise it = I_el(Y);
 end;
 
@@ -328,11 +316,11 @@ for a being Element of Funcs(Y,BOOLEAN),
 
 theorem :: BVFUNC_1:29
 for a being Element of Funcs(Y,BOOLEAN),x being Element of Y holds
-     Pj(B_INF(a),x) '<' Pj(a,x);
+     (B_INF a).x '<' a.x;
 
 theorem :: BVFUNC_1:30
 for a being Element of Funcs(Y,BOOLEAN),x being Element of Y holds
-     Pj(a,x) '<' Pj(B_SUP(a),x);
+     a.x '<' (B_SUP a).x;
 
 begin :: Chap. 4  Boolean Valued Functions and Partitions
 
@@ -363,20 +351,20 @@ definition let Y;let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
  func B_INF(a,PA) -> Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 19
   for y being Element of Y holds
-   ( (for x being Element of Y st x in EqClass(y,PA) holds Pj(a,x)=TRUE)
-         implies Pj(it,y) = TRUE ) &
-   (not (for x being Element of Y st x in EqClass(y,PA) holds Pj(a,x)=TRUE)
-         implies Pj(it,y) = FALSE);
+   ( (for x being Element of Y st x in EqClass(y,PA) holds a.x=TRUE)
+         implies it.y = TRUE ) &
+   (not (for x being Element of Y st x in EqClass(y,PA) holds a.x=TRUE)
+         implies it.y = FALSE);
 end;
 
 definition let Y;let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
  func B_SUP(a,PA) -> Element of Funcs(Y,BOOLEAN) means
 :: BVFUNC_1:def 20
   for y being Element of Y holds
-   ( (ex x being Element of Y st x in EqClass(y,PA) & Pj(a,x)=TRUE)
-         implies Pj(it,y) = TRUE ) &
-   (not (ex x being Element of Y st x in EqClass(y,PA) & Pj(a,x)=TRUE)
-         implies Pj(it,y) = FALSE);
+   ( (ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE)
+         implies it.y = TRUE ) &
+   (not (ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE)
+         implies it.y = FALSE);
 end;
 
 theorem :: BVFUNC_1:33

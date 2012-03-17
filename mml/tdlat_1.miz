@@ -7,13 +7,15 @@
 environ
 
  vocabularies PRE_TOPC, BOOLE, SUBSET_1, TOPS_1, SETFAM_1, BINOP_1, FUNCT_1,
-      MCART_1, LATTICES, RELAT_1, NAT_LAT, TDLAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, PRE_TOPC, LATTICES,
+      MCART_1, LATTICES, RELAT_1, NAT_LAT, TDLAT_1, REALSET1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REALSET1,
+ STRUCT_0, PRE_TOPC, LATTICES,
       BINOP_1, TOPS_1, RELAT_1, FUNCT_1, DOMAIN_1, FUNCT_2, NAT_LAT;
- constructors BINOP_1, TOPS_1, DOMAIN_1, NAT_LAT, PARTFUN1, MEMBERED;
- registrations FUNCT_1, RELSET_1, SUBSET_1, TOPS_1, LATTICES, MEMBERED;
+ constructors BINOP_1, TOPS_1, DOMAIN_1, NAT_LAT, PARTFUN1, MEMBERED, REALSET1;
+ registrations FUNCT_1, RELSET_1, SUBSET_1, TOPS_1, LATTICES, MEMBERED,
+  REALSET1;
  requirements BOOLE, SUBSET;
- definitions TARSKI, LATTICES, NAT_LAT, XBOOLE_0;
+ definitions TARSKI, LATTICES, NAT_LAT, XBOOLE_0, BINOP_1, REALSET1;
  theorems TOPS_1, PRE_TOPC, LATTICES, LATTICE2, BINOP_1, ZFMISC_1, FUNCT_2,
       SUBSET_1, MCART_1, TARSKI, FUNCT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
  schemes FUNCT_2, BINOP_2;
@@ -713,8 +715,7 @@ proof
      proof
       let a be Element of D;
       reconsider G = a`1, F = a`2 as Element of Domains_of T;
-           G in Domains_of T & F in Domains_of T;
-      then G in { E where E is Subset of T : E is condensed } &
+      G in { E where E is Subset of T : E is condensed } &
            F in { H where H is Subset of T : H is condensed };
       then (ex E being Subset of T st E = G & E is condensed) &
            (ex H being Subset of T st H = F & H is condensed);
@@ -736,7 +737,7 @@ proof
                               from FUNCT_2:sch 3(A1);
    take h;
    let A,B be Element of Domains_of T;
-   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+   thus h.(A,B) = h . [A,B]
                .= Int(Cl(A \/ B)) \/ (A \/ B) by A2;
  end;
  uniqueness
@@ -769,8 +770,7 @@ definition let T be TopSpace;
      proof
       let a be Element of D;
       reconsider G = a`1, F = a`2 as Element of Domains_of T;
-           G in Domains_of T & F in Domains_of T;
-      then G in { E where E is Subset of T : E is condensed } &
+      G in { E where E is Subset of T : E is condensed } &
            F in { H where H is Subset of T : H is condensed };
       then (ex E being Subset of T st E = G & E is condensed) &
            (ex H being Subset of T st H = F & H is condensed);
@@ -792,7 +792,7 @@ definition let T be TopSpace;
              from FUNCT_2:sch 3(A1);
    take h;
    let A,B be Element of Domains_of T;
-   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+   thus h.(A,B) = h . [A,B]
                .= Cl(Int(A /\ B)) /\ (A /\ B) by A2;
  end;
  uniqueness
@@ -818,24 +818,10 @@ theorem Th30:
  A1:
   for a,b being Element of L,
       A,B being Element of Domains_of T
-   st a = A & b = B holds a"\/"b = Int(Cl(A \/ B)) \/ (A \/ B)
-  proof
-    let a,b be Element of L,
-        A,B be Element of Domains_of T;
-    assume a = A & b = B;
-    hence a"\/"b = (D-Union T).(A,B)
-             .= Int(Cl(A \/ B)) \/ (A \/ B) by Def2;
-  end;
+   st a = A & b = B holds a"\/"b = Int(Cl(A \/ B)) \/ (A \/ B) by Def2;
  A2: for a,b being Element of L,
       A,B being Element of Domains_of T
-   st a = A & b = B holds a"/\"b = Cl(Int(A /\ B)) /\ (A /\ B)
-  proof
-    let a,b be Element of L,
-        A,B be Element of Domains_of T;
-    assume a = A & b = B;
-    hence a"/\"b = (D-Meet T).(A,B)
-             .= Cl(Int(A /\ B)) /\ (A /\ B) by Def3;
-  end;
+   st a = A & b = B holds a"/\"b = Cl(Int(A /\ B)) /\ (A /\ B) by Def3;
       L is Lattice-like
  proof
   thus for a,b being Element of L holds a"\/"b = b"\/"a
@@ -871,8 +857,7 @@ theorem Th30:
     then Cl(Int(A /\ B)) /\ (A /\ B) c= Cl(B) by A6,XBOOLE_1:1;
     then Cl(Cl(Int(A /\ B)) /\ (A /\ B)) c= Cl(Cl(B)) by PRE_TOPC:49;
     then A7: Cl(Cl(Int(A /\ B)) /\ (A /\ B)) c= Cl(B) by TOPS_1:26;
-         B in Domains_of T;
-    then B in { D where D is Subset of T : D is condensed };
+    B in { D where D is Subset of T : D is condensed };
     then ex D being Subset of T st D = B & D is condensed;
     then A8: Int(Cl(B)) c= B by TOPS_1:def 6;
    thus (a"/\"b)"\/"b = Int(Cl((Cl(Int(A /\ B)) /\ (A /\ B)) \/ B)) \/
@@ -917,8 +902,7 @@ theorem Th30:
     then Int(A) c= Int(Cl(A \/ B)) \/ (A \/ B) by A12,XBOOLE_1:1;
     then Int(Int(A)) c= Int(Int(Cl(A \/ B)) \/ (A \/ B)) by TOPS_1:48;
     then A13: Int(A) c= Int(Int(Cl(A \/ B)) \/ (A \/ B)) by TOPS_1:45;
-         A in Domains_of T;
-    then A in { D where D is Subset of T : D is condensed };
+    A in { D where D is Subset of T : D is condensed };
     then ex D being Subset of T st D = A & D is condensed;
     then A14: A c= Cl(Int(A)) by TOPS_1:def 6;
    thus a"/\"(a"\/"b) = Cl(Int(A /\ (Int(Cl(A \/ B)) \/ (A \/ B)))) /\
@@ -967,8 +951,7 @@ A15:   [#] T is condensed by Th15;
  proof
    let b be Element of L;
    reconsider B = b as Element of Domains_of T;
-        B in Domains_of T;
-   then B in { D where D is Subset of T : D is condensed};
+   B in { D where D is Subset of T : D is condensed};
    then ex D being Subset of T st D = B & D is condensed;
    then B` is condensed by Th16;
    then B` in { D where D is Subset of T : D is condensed};
@@ -982,8 +965,7 @@ A15:   [#] T is condensed by Th15;
    proof
     let v be Element of L;
     reconsider V = v as Element of Domains_of T;
-         V in Domains_of T;
-    then V in { D where D is Subset of T : D is condensed};
+    V in { D where D is Subset of T : D is condensed};
     then ex D being Subset of T st D = V & D is condensed;
     then A19: V c= Cl(Int V) by TOPS_1:def 6;
     thus (the L_meet of L).(c,v) = c"/\"v
@@ -1004,8 +986,7 @@ A20: for v being Element of L holds (the L_join of L).(c,v) = v
    proof
     let v be Element of L;
     reconsider V = v as Element of Domains_of T;
-         V in Domains_of T;
-    then V in { D where D is Subset of T : D is condensed};
+    V in { D where D is Subset of T : D is condensed};
     then ex D being Subset of T st D = V & D is condensed;
     then A21: Int(Cl V) c= V by TOPS_1:def 6;
     thus (the L_join of L).(c,v) = c"\/"v
@@ -1066,19 +1047,7 @@ registration let T be TopSpace;
 end;
 
 theorem
- for T being TopSpace holds Closed_Domains_of T c= Domains_of T
-proof let T be TopSpace;
-      now let A be set;
- assume A in Closed_Domains_of T;
- then A in { D where D is Subset of T : D is closed_condensed };
- then A1: ex D being Subset of T st D = A & D is closed_condensed;
- then reconsider F = A as Subset of T;
-      F is condensed by A1,TOPS_1:106;
- then F in { E where E is Subset of T : E is condensed };
- hence A in Domains_of T;
- end;
- hence thesis;
-end;
+ for T being TopSpace holds Closed_Domains_of T c= Domains_of T;
 
 definition let T be TopSpace;
  func Closed_Domains_Union T -> BinOp of Closed_Domains_of T means
@@ -1095,8 +1064,7 @@ definition let T be TopSpace;
             proof
       let a be Element of D;
       reconsider G = a`1, F = a`2 as Element of Closed_Domains_of T;
-           G in Closed_Domains_of T & F in Closed_Domains_of T;
-      then A2:   G in { E where E is Subset of T : E is closed_condensed } &
+      A2:   G in { E where E is Subset of T : E is closed_condensed } &
       F in { H where H is Subset of T : H is closed_condensed };
       then consider E being Subset of T such that
 A3:     E = G & E is closed_condensed;
@@ -1119,7 +1087,7 @@ A4:     H = F & H is closed_condensed by A2;
       A5: for a being Element of D holds X[a,h.a] from FUNCT_2:sch 3(A1);
    take h;
    let A,B be Element of Closed_Domains_of T;
-   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+   thus h.(A,B) = h . [A,B]
                .= A \/ B by A5;
  end;
  uniqueness
@@ -1142,8 +1110,7 @@ theorem Th32:
   (CLD-Union T).(A,B) = (D-Union T).(A,B)
  proof
    let A,B be Element of Closed_Domains_of T;
-        A in Closed_Domains_of T & B in Closed_Domains_of T;
-   then A1: A in { D where D is Subset of T : D is closed_condensed } &
+   A1: A in { D where D is Subset of T : D is closed_condensed } &
     B in { E where E is Subset of T : E is closed_condensed };
     then consider D being Subset of T such that
 A2:   D = A & D is closed_condensed;
@@ -1152,10 +1119,7 @@ A3:   E = B & E is closed_condensed by A1;
         D \/ E is closed_condensed by A2,A3,TOPS_1:108;
    then D \/ E is condensed by TOPS_1:106;
    then A4: Int Cl(A \/ B) c= A \/ B by A2,A3,TOPS_1:def 6;
-         D is condensed & E is condensed by A2,A3,TOPS_1:106;
-   then A in { P where P is Subset of T : P is condensed } &
-         B in { S where S is Subset of T : S is condensed };
-   then reconsider A0 = A, B0 = B as Element of Domains_of T;
+   reconsider A0 = A, B0 = B as Element of Domains_of T;
    thus (CLD-Union T).(A,B) = A \/ B by Def6
                           .= Int(Cl(A0 \/ B0)) \/ (A0 \/ B0) by A4,XBOOLE_1:12
                           .= (D-Union T).(A,B) by Def2;
@@ -1193,7 +1157,7 @@ definition let T be TopSpace;
         from FUNCT_2:sch 3(A1);
    take h;
    let A,B be Element of Closed_Domains_of T;
-   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+   thus h.(A,B) = h . [A,B]
                .= Cl(Int(A /\ B)) by A2;
  end;
  uniqueness
@@ -1216,8 +1180,7 @@ theorem Th33:
   (CLD-Meet T).(A,B) = (D-Meet T).(A,B)
  proof
    let A,B be Element of Closed_Domains_of T;
-        A in Closed_Domains_of T & B in Closed_Domains_of T;
-   then A1: A in { D where D is Subset of T : D is closed_condensed } &
+   A1: A in { D where D is Subset of T : D is closed_condensed } &
     B in { E where E is Subset of T : E is closed_condensed };
     then consider D being Subset of T such that
 A2:   D = A & D is closed_condensed;
@@ -1228,10 +1191,7 @@ A3:   E = B & E is closed_condensed by A1;
    then A4: Cl(D /\ E) = D /\ E by PRE_TOPC:52;
         Int(A /\ B) c= A /\ B by TOPS_1:44;
    then A5: Cl(Int(A /\ B)) c= A /\ B by A2,A3,A4,PRE_TOPC:49;
-         D is condensed & E is condensed by A2,A3,TOPS_1:106;
-   then A in { P where P is Subset of T : P is condensed } &
-         B in { S where S is Subset of T : S is condensed };
-   then reconsider A0 = A, B0 = B as Element of Domains_of T;
+   reconsider A0 = A, B0 = B as Element of Domains_of T;
    thus (CLD-Meet T).(A,B) = Cl(Int(A /\ B)) by Def7
                                 .= Cl(Int(A0 /\ B0)) /\ (A0 /\
  B0) by A5,XBOOLE_1:28
@@ -1246,25 +1206,11 @@ theorem Th34:
  A1:
   for a,b being Element of L,
       A,B being Element of Closed_Domains_of T st
-       a = A & b = B holds a"\/"b = A \/ B
-  proof
-    let a,b be Element of L,
-        A,B be Element of Closed_Domains_of T;
-    assume a = A & b = B;
-    hence a"\/"b = (CLD-Union T).(A,B)
-             .= A \/ B by Def6;
-  end;
+       a = A & b = B holds a"\/"b = A \/ B by Def6;
  A2:
   for a,b being Element of L,
       A,B being Element of Closed_Domains_of T
-  st a = A & b = B holds a"/\"b = Cl(Int(A /\ B))
-  proof
-    let a,b be Element of L,
-        A,B be Element of Closed_Domains_of T;
-    assume a = A & b = B;
-    hence a"/\"b = (CLD-Meet T).(A,B)
-             .= Cl(Int(A /\ B)) by Def7;
-  end;
+  st a = A & b = B holds a"/\"b = Cl(Int(A /\ B)) by Def7;
       L is Lattice-like
  proof
   thus for a,b being Element of L holds a"\/"b = b"\/"a
@@ -1290,8 +1236,7 @@ theorem Th34:
    let a,b be Element of L;
    reconsider A = a, B = b as Element of Closed_Domains_of T;
    A5:a"/\"b = Cl(Int(A /\ B)) by A2;
-         B in Closed_Domains_of T;
-    then B in { D where D is Subset of T : D is closed_condensed };
+    B in { D where D is Subset of T : D is closed_condensed };
      then ex D being Subset of T st D = B & D is closed_condensed;
     then A6: B = Cl Int B by TOPS_1:def 7;
         Cl(Int(A /\ B)) = Cl(Int A /\ Int B) by TOPS_1:46;
@@ -1313,9 +1258,7 @@ theorem Th34:
    let a,b,c be Element of L;
    reconsider A = a, B = b, C = c
    as Element of Closed_Domains_of T;
-        A in Closed_Domains_of T & B in Closed_Domains_of T &
-                                C in Closed_Domains_of T;
-   then A in { D where D is Subset of T : D is closed_condensed } &
+   A in { D where D is Subset of T : D is closed_condensed } &
     B in { E where E is Subset of T : E is closed_condensed } &
     C in { F where F is Subset of T : F is closed_condensed };
 then A8:
@@ -1333,8 +1276,7 @@ then A8:
    let a,b be Element of L;
    reconsider A = a, B = b as Element of Closed_Domains_of T;
    A11:a"\/"b = A \/ B by A1;
-         A in Closed_Domains_of T;
-     then A in { D where D is Subset of T : D is closed_condensed };
+     A in { D where D is Subset of T : D is closed_condensed };
     then A12:
      ex D being Subset of T st D = A & D is closed_condensed;
    thus a"/\"(a"\/"b) = Cl(Int(A /\ (A \/ B))) by A2,A11
@@ -1374,8 +1316,7 @@ A14:   C = [#] T & A c= [#] T by PRE_TOPC:14;
  proof
    let b be Element of L;
    reconsider B = b as Element of Closed_Domains_of T;
-        B in Closed_Domains_of T;
-   then B in { D where D is Subset of T : D is closed_condensed};
+   B in { D where D is Subset of T : D is closed_condensed};
    then consider D being Subset of T such that
 A15:   D = B & D is closed_condensed;
    A16: D is condensed & D is closed by A15,TOPS_1:106;
@@ -1390,8 +1331,7 @@ A17: for v being Element of L holds (the L_meet of L).(c,v) = v
    proof
     let v be Element of L;
     reconsider V = v as Element of Closed_Domains_of T;
-         V in Closed_Domains_of T;
-     then V in { K where K is Subset of T : K is closed_condensed};
+     V in { K where K is Subset of T : K is closed_condensed};
 then A18:  ex D being Subset of T st D = V & D is closed_condensed;
     thus (the L_meet of L).(c,v) = c"/\"v
              .= Cl(Int([#] T /\ V)) by A2
@@ -1430,9 +1370,7 @@ A19: for v being Element of L holds (the L_join of L).(c,v) = v
    let a,b,c be Element of L;
    reconsider A = a, B = b, C = c
    as Element of Closed_Domains_of T;
-        A in Closed_Domains_of T & B in Closed_Domains_of T &
-                                C in Closed_Domains_of T;
-   then A20: A in { D where D is Subset of T : D is closed_condensed } &
+   A20: A in { D where D is Subset of T : D is closed_condensed } &
     B in { E where E is Subset of T : E is closed_condensed } &
     C in { F where F is Subset of T : F is closed_condensed };
     then consider D being Subset of T such that
@@ -1492,19 +1430,7 @@ registration let T be TopSpace;
 end;
 
 theorem
- for T being TopSpace holds Open_Domains_of T c= Domains_of T
-proof let T be TopSpace;
-      now let A be set;
- assume A in Open_Domains_of T;
- then A in { D where D is Subset of T : D is open_condensed };
- then A1: ex D being Subset of T st D = A & D is open_condensed;
- then reconsider F = A as Subset of T;
-      F is condensed by A1,TOPS_1:107;
- then F in { E where E is Subset of T : E is condensed };
- hence A in Domains_of T;
- end;
- hence thesis;
-end;
+ for T being TopSpace holds Open_Domains_of T c= Domains_of T;
 
 definition let T be TopSpace;
   func Open_Domains_Union T -> BinOp of Open_Domains_of T means
@@ -1538,7 +1464,7 @@ definition let T be TopSpace;
         from FUNCT_2:sch 3(A1);
    take h;
    let A,B be Element of Open_Domains_of T;
-   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+   thus h.(A,B) = h . [A,B]
                .= Int(Cl(A \/ B)) by A2;
  end;
  uniqueness
@@ -1561,8 +1487,7 @@ theorem Th36:
     (OPD-Union T).(A,B) = (D-Union T).(A,B)
  proof
    let A,B be Element of Open_Domains_of T;
-        A in Open_Domains_of T & B in Open_Domains_of T;
-then A1:  A in { D where D is Subset of T : D is open_condensed } &
+A1:  A in { D where D is Subset of T : D is open_condensed } &
      B in { E where E is Subset of T : E is open_condensed };
    then consider D being Subset of T such that
 A2:   D = A & D is open_condensed;
@@ -1573,10 +1498,7 @@ A3:  E = B & E is open_condensed by A1;
    then A4: Int(D \/ E) = D \/ E by TOPS_1:55;
         A \/ B c= Cl(A \/ B) by PRE_TOPC:48;
    then A5: A \/ B c= Int(Cl(A \/ B)) by A2,A3,A4,TOPS_1:48;
-         D is condensed & E is condensed by A2,A3,TOPS_1:107;
-   then A in { P where P is Subset of T : P is condensed } &
-         B in { S where S is Subset of T : S is condensed };
-   then reconsider A0 = A, B0 = B as Element of Domains_of T;
+   reconsider A0 = A, B0 = B as Element of Domains_of T;
    thus (OPD-Union T).(A,B) = Int(Cl(A \/ B)) by Def10
                            .= Int(Cl(A0 \/ B0)) \/ (A0 \/ B0) by A5,XBOOLE_1:12
                            .= (D-Union T).(A,B) by Def2;
@@ -1598,8 +1520,7 @@ definition let T be TopSpace;
       let a be Element of D;
       reconsider G = a`1, F = a`2
       as Element of Open_Domains_of T;
-           G in Open_Domains_of T & F in Open_Domains_of T;
-      then A2:    G in { E where E is Subset of T : E is open_condensed } &
+      A2:    G in { E where E is Subset of T : E is open_condensed } &
        F in { H where H is Subset of T : H is open_condensed };
        then consider E being Subset of T such that
 A3:       E = G & E is open_condensed;
@@ -1623,7 +1544,7 @@ A4:       H = F & H is open_condensed by A2;
         from FUNCT_2:sch 3(A1);
    take h;
    let A,B be Element of Open_Domains_of T;
-   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+   thus h.(A,B) = h . [A,B]
                .= A /\ B by A5;
  end;
  uniqueness
@@ -1646,8 +1567,7 @@ theorem Th37:
     (OPD-Meet T).(A,B) = (D-Meet T).(A,B)
  proof
    let A,B be Element of Open_Domains_of T;
-        A in Open_Domains_of T & B in Open_Domains_of T;
-   then A1: A in { D where D is Subset of T : D is open_condensed } &
+   A1: A in { D where D is Subset of T : D is open_condensed } &
     B in { E where E is Subset of T : E is open_condensed };
    then consider D being Subset of T such that
 A2:  D = A & D is open_condensed;
@@ -1656,10 +1576,7 @@ A3:   E = B & E is open_condensed by A1;
         D /\ E is open_condensed by A2,A3,TOPS_1:109;
    then A /\ B is condensed by A2,A3,TOPS_1:107;
    then A4: A /\ B c= Cl Int(A /\ B) by TOPS_1:def 6;
-         D is condensed & E is condensed by A2,A3,TOPS_1:107;
-   then A in { P where P is Subset of T : P is condensed } &
-         B in { S where S is Subset of T : S is condensed };
-   then reconsider A0 = A, B0 = B as Element of Domains_of T;
+   reconsider A0 = A, B0 = B as Element of Domains_of T;
    thus (OPD-Meet T).(A,B) = A /\ B by Def11
      .= Cl(Int(A0 /\ B0)) /\ (A0 /\ B0) by A4,XBOOLE_1:28
      .= (D-Meet T).(A,B) by Def3;
@@ -1672,24 +1589,10 @@ theorem Th38:
   set L = LattStr(#Open_Domains_of T,OPD-Union T,OPD-Meet T#);
 A1:for a,b being Element of L,
       A,B being Element of Open_Domains_of T
-    st a = A & b = B holds a"\/"b = Int(Cl(A \/ B))
-  proof
-    let a,b be Element of L,
-        A,B be Element of Open_Domains_of T;
-    assume a = A & b = B;
-    hence a"\/"b = (OPD-Union T).(A,B)
-             .= Int(Cl(A \/ B)) by Def10;
-  end;
+    st a = A & b = B holds a"\/"b = Int(Cl(A \/ B)) by Def10;
  A2:for a,b being Element of L,
       A,B being Element of Open_Domains_of T st
-   a = A & b = B holds a"/\"b = A /\ B
-  proof
-    let a,b be Element of L,
-        A,B be Element of Open_Domains_of T;
-    assume a = A & b = B;
-    hence a"/\"b = (OPD-Meet T).(A,B)
-             .= A /\ B by Def11;
-  end;
+   a = A & b = B holds a"/\"b = A /\ B by Def11;
       L is Lattice-like
  proof
   thus for a,b being Element of L holds a"\/"b = b"\/"a
@@ -1704,8 +1607,7 @@ A1:for a,b being Element of L,
    let a,b,c be Element of L;
    reconsider A = a, B = b, C = c
    as Element of Open_Domains_of T;
-    A in Open_Domains_of T & B in Open_Domains_of T & C in Open_Domains_of T;
-   then A in { D where D is Subset of T : D is open_condensed } &
+   A in { D where D is Subset of T : D is open_condensed } &
         B in { E where E is Subset of T : E is open_condensed } &
         C in { F where F is Subset of T : F is open_condensed };
    then A3:
@@ -1723,8 +1625,7 @@ A1:for a,b being Element of L,
    let a,b be Element of L;
    reconsider A = a, B = b as Element of Open_Domains_of T;
    A6:a"/\"b = A /\ B by A2;
-         B in Open_Domains_of T;
-     then B in { D where D is Subset of T : D is open_condensed };
+     B in { D where D is Subset of T : D is open_condensed };
 then A7:  ex D being Subset of T st D = B & D is open_condensed;
    thus (a"/\"b)"\/"b = Int(Cl((A /\ B) \/ B)) by A1,A6
               .= Int(Cl(B))by XBOOLE_1:22
@@ -1753,8 +1654,7 @@ then A7:  ex D being Subset of T st D = B & D is open_condensed;
    let a,b be Element of L;
    reconsider A = a, B = b as Element of Open_Domains_of T;
    A10:a"\/"b = Int(Cl(A \/ B)) by A1;
-         A in Open_Domains_of T;
-     then A in { D where D is Subset of T : D is open_condensed };
+     A in { D where D is Subset of T : D is open_condensed };
      then ex D being Subset of T st D = A & D is open_condensed;
     then A11: A = Int Cl A by TOPS_1:def 8;
         Int(Cl A \/ Cl B) = Int(Cl(A \/ B)) by PRE_TOPC:50;
@@ -1797,8 +1697,7 @@ A14:   C = [#] T & A c= [#] T by PRE_TOPC:14;
  proof
    let b be Element of L;
    reconsider B = b as Element of Open_Domains_of T;
-        B in Open_Domains_of T;
-    then B in { D where D is Subset of T : D is open_condensed};
+    B in { D where D is Subset of T : D is open_condensed};
    then consider D being Subset of T such that
 A15:  D = B & D is open_condensed;
    A16: D is condensed & D is open by A15,TOPS_1:107;
@@ -1829,8 +1728,7 @@ A18: for v being Element of L holds (the L_join of L).(c,v) = v
    proof
     let v be Element of L;
     reconsider V = v as Element of Open_Domains_of T;
-         V in Open_Domains_of T;
-     then V in { K where K is Subset of T : K is open_condensed};
+     V in { K where K is Subset of T : K is open_condensed};
 then A19: ex D being Subset of T st D = V & D is open_condensed;
     thus (the L_join of L).(c,v) = c"\/"v
              .= Int(Cl({} T \/ V)) by A1
@@ -1853,9 +1751,7 @@ A20:  (B`) misses B by SUBSET_1:26;
    let a,b,c be Element of L;
    reconsider A = a, B = b, C = c
      as Element of Open_Domains_of T;
-        A in Open_Domains_of T & B in Open_Domains_of T &
-                                C in Open_Domains_of T;
-   then A21: A in { D where D is Subset of T : D is open_condensed } &
+   A21: A in { D where D is Subset of T : D is open_condensed } &
     B in { E where E is Subset of T : E is open_condensed } &
     C in { F where F is Subset of T : F is open_condensed };
     then consider D being Subset of T such that
@@ -1887,19 +1783,12 @@ end;
 begin
 :: 6. Connections between Lattices of Domains.
 theorem Th39:
-  CLD-Union T = (D-Union T)|[:Closed_Domains_of T,Closed_Domains_of T:]
-proof
-   Closed_Domains_of T c= Domains_of T &
-   rng (CLD-Union T) c= Closed_Domains_of T by RELSET_1:12;
- then dom (CLD-Union T) = [:Closed_Domains_of T,Closed_Domains_of T:] &
-   rng (CLD-Union T) c= Domains_of T by FUNCT_2:def 1;
- then reconsider F = CLD-Union T as Function of
+  CLD-Union T = (D-Union T)||Closed_Domains_of T
+ proof
+ reconsider F = CLD-Union T as Function of
      [:Closed_Domains_of T,Closed_Domains_of T:],Domains_of T;
-       [:Closed_Domains_of T,Closed_Domains_of T:] c=
-        [:Domains_of T,Domains_of T:]
-   & Domains_of T <> {};
- then reconsider
-   G = (D-Union T)|[:Closed_Domains_of T,Closed_Domains_of T:]
+ reconsider
+   G = (D-Union T)||Closed_Domains_of T
     as Function of
      [:Closed_Domains_of T,Closed_Domains_of T:],Domains_of T
        by FUNCT_2:38;
@@ -1910,28 +1799,20 @@ proof
     let A be Element of Closed_Domains_of T,
         B be Element of Closed_Domains_of T;
     thus F.(A,B) = (D-Union T).(A,B) by Th32
-                .= (D-Union T) . [A,B] by BINOP_1:def 1
-                .= ((D-Union T)|[:Closed_Domains_of T,
-                     Closed_Domains_of T:]) . [A,B] by FUNCT_1:72
-                .= G.(A,B) by BINOP_1:def 1;
+                .= (D-Union T) . [A,B] 
+                .= ((D-Union T)||Closed_Domains_of T). [A,B] by FUNCT_1:72
+                .= G.(A,B);
   end;
  hence thesis by BINOP_1:2;
 end;
 
 theorem Th40:
- CLD-Meet T = (D-Meet T)|[:Closed_Domains_of T,Closed_Domains_of T:]
+ CLD-Meet T = (D-Meet T)||Closed_Domains_of T
 proof
-   Closed_Domains_of T c= Domains_of T &
-   rng (CLD-Meet T) c= Closed_Domains_of T by RELSET_1:12;
- then dom (CLD-Meet T) = [:Closed_Domains_of T,Closed_Domains_of T:] &
-   rng (CLD-Meet T) c= Domains_of T by FUNCT_2:def 1;
- then reconsider F = CLD-Meet T as Function of
+ reconsider F = CLD-Meet T as Function of
      [:Closed_Domains_of T,Closed_Domains_of T:],Domains_of T;
-       [:Closed_Domains_of T,Closed_Domains_of T:] c=
-        [:Domains_of T,Domains_of T:]
-   & Domains_of T <> {};
- then reconsider
-   G = (D-Meet T)|[:Closed_Domains_of T,Closed_Domains_of T:]
+ reconsider
+   G = (D-Meet T)||Closed_Domains_of T
     as Function of
      [:Closed_Domains_of T,Closed_Domains_of T:],Domains_of T by FUNCT_2:38;
       for A being Element of Closed_Domains_of T,
@@ -1941,10 +1822,9 @@ proof
     let A be Element of Closed_Domains_of T,
         B be Element of Closed_Domains_of T;
     thus F.(A,B) = (D-Meet T).(A,B) by Th33
-                .= (D-Meet T) . [A,B] by BINOP_1:def 1
-                .= ((D-Meet T)|[:Closed_Domains_of T,
-                     Closed_Domains_of T:]) . [A,B] by FUNCT_1:72
-                .= G.(A,B) by BINOP_1:def 1;
+                .= (D-Meet T) . [A,B]
+                .= ((D-Meet T)||Closed_Domains_of T) . [A,B] by FUNCT_1:72
+                .= G.(A,B);
   end;
  hence thesis by BINOP_1:2;
 end;
@@ -1953,29 +1833,18 @@ theorem
   Closed_Domains_Lattice T is SubLattice of Domains_Lattice T
 proof
  set L = Domains_Lattice T, CL = Closed_Domains_Lattice T;
-  CL =
-   LattStr(#Closed_Domains_of T,CLD-Union T,CLD-Meet T#);
- hence the carrier of CL c= the carrier of L;
- thus the L_join of CL = (the L_join of L) | [:the carrier of CL,
-   the carrier of CL:] by Th39;
- thus the L_meet of CL = (the L_meet of L) | [:the carrier of CL,
-   the carrier of CL:] by Th40;
+ thus the carrier of CL c= the carrier of L;
+ thus the L_join of CL = (the L_join of L)||the carrier of CL by Th39;
+ thus the L_meet of CL = (the L_meet of L)||the carrier of CL by Th40;
 end;
 
 theorem Th42:
- OPD-Union T = (D-Union T)|[:Open_Domains_of T,Open_Domains_of T:]
+ OPD-Union T = (D-Union T)||Open_Domains_of T
  proof
-   Open_Domains_of T c= Domains_of T &
-   rng (OPD-Union T) c= Open_Domains_of T by RELSET_1:12;
- then dom (OPD-Union T) = [:Open_Domains_of T,Open_Domains_of T:] &
-   rng (OPD-Union T) c= Domains_of T by FUNCT_2:def 1;
- then reconsider F = OPD-Union T as Function of
+ reconsider F = OPD-Union T as Function of
      [:Open_Domains_of T,Open_Domains_of T:],Domains_of T;
-       [:Open_Domains_of T,Open_Domains_of T:] c=
-        [:Domains_of T,Domains_of T:]
-   & Domains_of T <> {};
- then reconsider
-   G = (D-Union T)|[:Open_Domains_of T,Open_Domains_of T:]
+ reconsider
+   G = (D-Union T)||Open_Domains_of T
     as Function of
      [:Open_Domains_of T,Open_Domains_of T:],Domains_of T by FUNCT_2:38;
       for A being Element of Open_Domains_of T,
@@ -1985,28 +1854,20 @@ theorem Th42:
     let A be Element of Open_Domains_of T,
         B be Element of Open_Domains_of T;
     thus F.(A,B) = (D-Union T).(A,B) by Th36
-                .= (D-Union T) . [A,B] by BINOP_1:def 1
-                .= ((D-Union T)|[:Open_Domains_of T,
-                     Open_Domains_of T:]) . [A,B] by FUNCT_1:72
-                .= G.(A,B) by BINOP_1:def 1;
+                .= (D-Union T) . [A,B]
+                .= ((D-Union T)||Open_Domains_of T) . [A,B] by FUNCT_1:72
+                .= G.(A,B);
   end;
  hence thesis by BINOP_1:2;
  end;
 
 theorem Th43:
- OPD-Meet T = (D-Meet T)|[:Open_Domains_of T,Open_Domains_of T:]
+ OPD-Meet T = (D-Meet T)||Open_Domains_of T
  proof
-   Open_Domains_of T c= Domains_of T &
-   rng (OPD-Meet T) c= Open_Domains_of T by RELSET_1:12;
- then dom (OPD-Meet T) = [:Open_Domains_of T,Open_Domains_of T:] &
-   rng (OPD-Meet T) c= Domains_of T by FUNCT_2:def 1;
- then reconsider F = OPD-Meet T as Function of
+ reconsider F = OPD-Meet T as Function of
      [:Open_Domains_of T,Open_Domains_of T:],Domains_of T;
-       [:Open_Domains_of T,Open_Domains_of T:] c=
-        [:Domains_of T,Domains_of T:]
-   & Domains_of T <> {};
- then reconsider
-   G = (D-Meet T)|[:Open_Domains_of T,Open_Domains_of T:]
+ reconsider
+   G = (D-Meet T)||Open_Domains_of T
     as Function of
      [:Open_Domains_of T,Open_Domains_of T:],Domains_of T by FUNCT_2:38;
       for A being Element of Open_Domains_of T,
@@ -2016,10 +1877,9 @@ theorem Th43:
     let A be Element of Open_Domains_of T,
         B be Element of Open_Domains_of T;
     thus F.(A,B) = (D-Meet T).(A,B) by Th37
-                .= (D-Meet T) . [A,B] by BINOP_1:def 1
-                .= ((D-Meet T)|[:Open_Domains_of T,
-                     Open_Domains_of T:]) . [A,B] by FUNCT_1:72
-                .= G.(A,B) by BINOP_1:def 1;
+                .= (D-Meet T) . [A,B]
+                .= ((D-Meet T)||Open_Domains_of T) . [A,B] by FUNCT_1:72
+                .= G.(A,B);
   end;
  hence thesis by BINOP_1:2;
  end;
@@ -2028,11 +1888,8 @@ theorem
   Open_Domains_Lattice T is SubLattice of Domains_Lattice T
 proof
  set L = Domains_Lattice T, OL = Open_Domains_Lattice T;
-  OL = LattStr(#Open_Domains_of T,OPD-Union T,OPD-Meet T#);
- hence the carrier of OL c= the carrier of L;
- thus the L_join of OL = (the L_join of L) | [:the carrier of OL,
-   the carrier of OL:] by Th42;
- thus the L_meet of OL = (the L_meet of L) | [:the carrier of OL,
-   the carrier of OL:] by Th43;
+ thus the carrier of OL c= the carrier of L;
+ thus the L_join of OL = (the L_join of L)||the carrier of OL by Th42;
+ thus the L_meet of OL = (the L_meet of L)||the carrier of OL by Th43;
 end;
 

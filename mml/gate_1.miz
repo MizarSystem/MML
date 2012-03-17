@@ -7,26 +7,20 @@
 environ
 
  vocabularies BOOLE, GATE_1;
- notations XBOOLE_0;
- constructors XBOOLE_0;
- registrations XBOOLE_0;
+ notations TARSKI, XBOOLE_0;
+ constructors TARSKI, XBOOLE_0;
+ registrations XBOOLE_0, SUBSET_1;
  requirements BOOLE;
+ theorems TARSKI;
 
 begin :: Definition of Logical Values and Logic Gates
 
-notation let a be set;
+ notation let a be set;
   antonym $a for a is empty;
-  end;
-
-theorem Th1: for a being set st a={{}:not contradiction} holds $a
-proof let a be set;
- assume A1:a={{}:not contradiction};
-     now assume A2:a={};
-       {} in a by A1;
-  hence contradiction by A2;
  end;
- hence $a;
-end;
+
+ theorem Th1:
+  for a being set st a={{}} holds $a;
 
 theorem   ex a being set st $a
 proof
@@ -40,24 +34,14 @@ end;
 definition let a be set;
   func NOT1 a equals
   :Def1: {} if $a
-   otherwise {{}:not contradiction};
+   otherwise {{}};
  correctness;
 end;
 
 canceled;
 
 theorem Th4:
-  for a being set holds $NOT1 a iff not($a)
-proof let a be set;
- per cases;
- suppose $a;
-  hence $(NOT1 a) iff not($a) by Def1;
- end;
- suppose A1:not $a;
-  then NOT1 a= {{}:not contradiction} by Def1;
-  hence $(NOT1 a) iff not($a) by A1,Th1;
-end;
-end;
+  for a being set holds $NOT1 a iff not($a) by Def1;
 
  reserve a,b,c,d,e,f,g,h for set;
 
@@ -429,37 +413,52 @@ theorem
      for c1,x1,x2,x3,x4,y1,y2,y3,y4,c2,c3,c4,c5,n1,n2,n3,n4,n,c5b being set
 holds
         ::Specification of Normal 4 Bit Adder
-        ($c2 iff $MAJ3(x1,y1,c1)) &
-        ($c3 iff $MAJ3(x2,y2,c2)) &
-        ($c4 iff $MAJ3(x3,y3,c3)) &
-        ($c5 iff $MAJ3(x4,y4,c4)) &
+        ($MAJ3(x1,y1,c1) implies $c2) &
+        ($MAJ3(x2,y2,c2) implies $c3) &
+        ($MAJ3(x3,y3,c3) implies $c4) &
+        ($MAJ3(x4,y4,c4) implies $c5) &
         ::Specification of Carry Skip Adder
-        ($n1 iff $OR2(x1,y1))&
-        ($n2 iff $OR2(x2,y2))&
-        ($n3 iff $OR2(x3,y3))&
-        ($n4 iff $OR2(x4,y4))&
-        ($n iff $AND5(c1,n1,n2,n3,n4))&
+        ($n1 implies $OR2(x1,y1))&
+        ($n2 implies $OR2(x2,y2))&
+        ($n3 implies $OR2(x3,y3))&
+        ($n4 implies $OR2(x4,y4))&
+        ($n implies $AND5(c1,n1,n2,n3,n4))&
         ($c5b iff $OR2(c5,n))
         implies ($c5 iff $c5b)
  proof let c1,x1,x2,x3,x4,y1,y2,y3,y4,c2,c3,c4,c5,n1,n2,n3,n4,n,c5b be set;
-       assume that A1:($c2 iff $MAJ3(x1,y1,c1)) &
-        ($c3 iff $MAJ3(x2,y2,c2)) &
-        ($c4 iff $MAJ3(x3,y3,c3)) &
-        ($c5 iff $MAJ3(x4,y4,c4)) &
-        ($n1 iff $OR2(x1,y1)) &
-        ($n2 iff $OR2(x2,y2)) &
-        ($n3 iff $OR2(x3,y3)) &
-        ($n4 iff $OR2(x4,y4)) and
-A2:     ($n iff $AND5(c1,n1,n2,n3,n4)) and
-A3:     ($c5b implies $OR2(c5,n)) and
-A4:     ($OR2(c5,n) implies $c5b);
-    A5: $MAJ3(x1,y1,c1) iff $x1 & $y1 or $y1 & $c1 or $c1 & $x1 by Def11,Th5;
-    A6: $MAJ3(x2,y2,c2) iff $x2 & $y2 or $y2 & $c2 or $c2 & $x2 by Def11,Th5;
-    A7: $MAJ3(x3,y3,c3) iff $x3 & $y3 or $y3 & $c3 or $c3 & $x3 by Def11,Th5;
-    A8: $MAJ3(x4,y4,c4) iff $x4 & $y4 or $y4 & $c4 or $c4 & $x4 by Def11,Th5;
-    A9: $AND5(c1,n1,n2,n3,n4) iff $c1 & $n1 & $n2 & $n3 & $n4 by Def18,Th5;
+       assume that
+A1:     $MAJ3(x1,y1,c1) implies $c2 and
+X1:     $MAJ3(x2,y2,c2) implies $c3 and
+X2:     $MAJ3(x3,y3,c3) implies $c4 and
+X3:     $MAJ3(x4,y4,c4) implies $c5 and
+X4:     $n1 implies $OR2(x1,y1) and
+X5:     $n2 implies $OR2(x2,y2) and
+X6:     $n3 implies $OR2(x3,y3) and
+X7:     $n4 implies $OR2(x4,y4) and
+A2:     $n implies $AND5(c1,n1,n2,n3,n4) and
+A3:     $c5b implies $OR2(c5,n) and
+A4:     $OR2(c5,n) implies $c5b;
     thus $c5 implies $c5b by A4,Def3,Th5;
-    thus thesis by A1,A2,A3,A5,A6,A7,A8,A9,Th7;
+  assume $c5b;
+   then $OR2(c5,n) by A3;
+   then
+A:    $c5 or $n by Th7;
+   now assume $n;
+    then $AND5(c1,n1,n2,n3,n4) by A2;
+    then $c1 & $n1 & $n2 & $n3 & $n4 by Def18;
+    then $c1 & ($x1 or $y1) & $n2 & $n3 & $n4 by X4,Th7;
+    then $MAJ3(x1,y1,c1) & $n2 & $n3 & $n4 by Def11,Th5;
+    then $c2 & $n2 & $n3 & $n4 by A1;
+    then $c2 & ($x2 or $y2) & $n3 & $n4 by X5,Th7;
+    then $MAJ3(x2,y2,c2) & $n3 & $n4 by Def11,Th5;
+    then $c3 & $n3 & $n4 by X1;
+    then $c3 & ($x3 or $y3) & $n4 by X6,Th7;
+    then $c3 & $MAJ3(x3,y3,c3) & $n4 by Def11,Th5;
+    then $c4 & $n4 by X2;
+    then $c4 & ($x4 or $y4) by X7,Th7;
+    hence $MAJ3(x4,y4,c4) by Def11,Th5;
+   end;
+  hence $c5 by X3,A;
  end;
 
 ::Definition of mod 2 adder used in 'Carry Look Ahead Adder'

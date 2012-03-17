@@ -28,7 +28,7 @@ environ
       CQC_LANG;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, FUNCT_1, FUNCT_2, GROUP_6, PRE_TOPC, TOPS_2,
-      T_0TOPSP, BORSUK_2, BORSUK_6, CONNSP_1;
+      T_0TOPSP, BORSUK_2, BORSUK_6, CONNSP_1, BINOP_1;
  theorems GROUP_6, PRE_TOPC, FUNCT_2, BORSUK_1, TOPALG_1, TOPS_2, GRCAT_1,
       BORSUK_3, FUNCT_1, TOPMETR, RELAT_1, FUNCOP_1, TOPREAL6, BORSUK_6,
       BORSUK_2, BINOP_1, TARSKI, PCOMPS_1, ZFMISC_1, FUNCT_4, TSEP_1, XBOOLE_1,
@@ -88,21 +88,7 @@ A5: a in X by A3,XBOOLE_0:def 3;
     .= x by A4,A5,FUNCT_1:72;
 end;
 
-theorem Th3:
-  for x, y, X, Y, Z being set, f being Function of [:X,Y:],Z, g being Function
-    st Z <> {} & x in X & y in Y holds (g*f).(x,y) = g.(f.(x,y))
-proof
-  let x, y, X, Y, Z be set,
-      f be Function of [:X,Y:],Z,
-      g be Function such that
-A1: Z <> {};
-  assume x in X & y in Y;
-  then
-A2: [x,y] in [:X,Y:] by ZFMISC_1:106;
-  thus (g*f).(x,y) = (g*f). [x,y] by BINOP_1:def 1
-    .= g.(f. [x,y]) by A1,A2,FUNCT_2:21
-    .= g.(f.(x,y)) by BINOP_1:def 1;
-end;
+canceled;
 
 theorem Th4:
   for X, a, b being set, f being Function of X,{a,b} holds X = f"{a} \/ f"{b}
@@ -170,119 +156,119 @@ proof
   let T be non empty TopSpace;
   set J = 1TopSp{0,1};
   set X = {0}, Y = {1};
-A2: the carrier of J = {0,1} by PCOMPS_1:8;
+A1: the carrier of J = {0,1} by PCOMPS_1:8;
   then reconsider X, Y as non empty open Subset of J by TDLAT_3:17,ZFMISC_1:12;
-A3: [#]T = the carrier of T;
-A4: X misses Y by ZFMISC_1:17;
+A2: [#]T = the carrier of T;
+A3: X misses Y by ZFMISC_1:17;
   thus T is connected implies
   not ex f being Function of T,J st f is continuous onto
   proof
     assume
-A5:   T is connected;
+A4:   T is connected;
     given f being Function of T,J such that
-A6:   f is continuous and
-A7:   f is onto;
+A5:   f is continuous and
+A6:   f is onto;
     set A = f"X, B = f"Y;
-A8: the carrier of T = A \/ B by A2,Th4;
-A9: A is open & B is open by A6,TOPS_2:55;
-    rng f = the carrier of J by A7,FUNCT_2:def 3;
+A7: the carrier of T = A \/ B by A1,Th4;
+A8: A is open & B is open by A5,TOPS_2:55;
+    rng f = the carrier of J by A6,FUNCT_2:def 3;
     then
-A10: A <> {}T & B <> {}T by RELAT_1:174;
-    A misses B by A4,JCT_MISC:4;
-    hence contradiction by A3,A5,A8,A9,A10,CONNSP_1:12;
+A9: A <> {}T & B <> {}T by RELAT_1:174;
+    A misses B by A3,JCT_MISC:4;
+    hence contradiction by A2,A4,A7,A8,A9,CONNSP_1:12;
   end;
   assume
-A11:  not ex f being Function of T,J st f is continuous onto;
+A10:  not ex f being Function of T,J st f is continuous onto;
   assume not thesis;
   then consider A, B being Subset of T such that
-A12:  [#]T = A \/ B and
-A13:  A <> {}T and
-A14:  B <> {}T and
-A15:  A is open and
-A16:  B is open and
-A17:  A misses B by CONNSP_1:12;
+A11:  [#]T = A \/ B and
+A12:  A <> {}T and
+A13:  B <> {}T and
+A14:  A is open and
+A15:  B is open and
+A16:  A misses B by CONNSP_1:12;
   defpred C[set] means $1 in A;
-  reconsider j0 = 0, j1 = 1 as Element of J by A2,TARSKI:def 2;
+  reconsider j0 = 0, j1 = 1 as Element of J by A1,TARSKI:def 2;
   deffunc F(set) = j0;
   deffunc G(set) = j1;
-A18: for x being set st x in the carrier of T holds
+A17: for x being set st x in the carrier of T holds
      (C[x] implies F(x) in the carrier of J) &
      (not C[x] implies G(x) in the carrier of J);
   consider f being Function of the carrier of T, the carrier of J
     such that
-A19:  for x being set st x in the carrier of T holds
+A18:  for x being set st x in the carrier of T holds
       (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
-      from FUNCT_2:sch 9(A18);
+      from FUNCT_2:sch 5(A17);
   reconsider f as Function of T,J;
-A20: dom f = the carrier of T by FUNCT_2:def 1;
-A21: f"X = A
+A19: dom f = the carrier of T by FUNCT_2:def 1;
+A20: f"X = A
    proof
      hereby
        let x be set;
        assume
-A22:      x in f"X;
+A21:      x in f"X;
        then x in dom f & f.x in X by FUNCT_1:def 13;
        then f.x = 0 by TARSKI:def 1;
-       hence x in A by A19,A22;
+       hence x in A by A18,A21;
      end;
      let x be set;
      assume
-A23:    x in A;
-     f.x = 0 by A19,A23;
+A22:    x in A;
+     f.x = 0 by A18,A22;
      then f.x in X by TARSKI:def 1;
-     hence x in f"X by A20,A23,FUNCT_1:def 13;
+     hence x in f"X by A19,A22,FUNCT_1:def 13;
    end;
-A24: f"Y = B
+A23: f"Y = B
    proof
      hereby
        let x be set;
        assume
-A25:      x in f"Y;
+A24:      x in f"Y;
        then x in dom f & f.x in Y by FUNCT_1:def 13;
        then f.x = 1 by TARSKI:def 1;
-       then not C[x] by A19;
-       hence x in B by A12,A25,XBOOLE_0:def 2;
+       then not C[x] by A18;
+       hence x in B by A11,A24,XBOOLE_0:def 2;
      end;
      let x be set;
      assume
-A26:    x in B;
-     not x in A by A17,A26,XBOOLE_0:3;
-     then f.x = 1 by A19,A26;
+A25:    x in B;
+     not x in A by A16,A25,XBOOLE_0:3;
+     then f.x = 1 by A18,A25;
      then f.x in Y by TARSKI:def 1;
-     hence x in f"Y by A20,A26,FUNCT_1:def 13;
+     hence x in f"Y by A19,A25,FUNCT_1:def 13;
    end;
-A27: rng f = the carrier of J
+A26: rng f = the carrier of J
    proof
      thus rng f c= the carrier of J;
      let y be set;
      assume
-A28:    y in the carrier of J;
-     per cases by A2,A28,TARSKI:def 2;
+A27:    y in the carrier of J;
+     per cases by A1,A27,TARSKI:def 2;
      suppose
-A29:    y = 0;
+A28:    y = 0;
      consider x being set such that
-A30:    x in f"X by A13,A21,XBOOLE_0:def 1;
-A31:  x in dom f & f.x in X by A30,FUNCT_1:def 13;
+A29:    x in f"X by A12,A20,XBOOLE_0:def 1;
+A30:  x in dom f & f.x in X by A29,FUNCT_1:def 13;
      then f.x = 0 by TARSKI:def 1;
-     hence y in rng f by A29,A31,FUNCT_1:def 5;
+     hence y in rng f by A28,A30,FUNCT_1:def 5;
      end;
      suppose
-A32:    y = 1;
+A31:    y = 1;
      consider x being set such that
-A33:    x in f"Y by A14,A24,XBOOLE_0:def 1;
-A34:  x in dom f & f.x in Y by A33,FUNCT_1:def 13;
+A32:    x in f"Y by A13,A23,XBOOLE_0:def 1;
+A33:  x in dom f & f.x in Y by A32,FUNCT_1:def 13;
      then f.x = 1 by TARSKI:def 1;
-     hence y in rng f by A32,A34,FUNCT_1:def 5;
+     hence y in rng f by A31,A33,FUNCT_1:def 5;
      end;
    end;
    then
-A35: f is onto by FUNCT_2:def 3;
-A36: f"{}J = {}T by RELAT_1:171;
-A37: f"[#]J = [#]T by A20,A27,RELAT_1:169;
+A34: f is onto by FUNCT_2:def 3;
+A35: f"{}J = {}T by RELAT_1:171;
+A36: f"[#]J = [#]T by A19,A26,RELAT_1:169;
   for P being Subset of J st P is open holds f"P is open
-    by A2,A15,A16,A21,A24,A36,A37,ZFMISC_1:42;
+    by A1,A14,A15,A20,A23,A35,A36,ZFMISC_1:42;
   then f is continuous by TOPS_2:55;
-  hence thesis by A11,A35;
+  hence thesis by A10,A34;
 end;
 
 registration
@@ -706,8 +692,6 @@ A3:   p = [p1,p2] by BORSUK_1:50;
       let G be Subset of S1 such that
 A4:     G is open and
 A5:     p1 in G;
-      [#]T1 = the carrier of T1;
-      then
 A6:   [p1,p2] in [:G,[#]T1:] by A5,ZFMISC_1:106;
       [:G,[#]T1:] is open by A4,BORSUK_1:46;
       then consider V being Subset of [:S1,T1:] such that
@@ -729,8 +713,6 @@ A10: p1 in Cl A by PRE_TOPC:def 13;
       let G be Subset of T1 such that
 A11:     G is open and
 A12:     p2 in G;
-      [#]S1 = the carrier of S1;
-      then
 A13:   [p1,p2] in [:[#]S1,G:] by A12,ZFMISC_1:106;
       [:[#]S1,G:] is open by A11,BORSUK_1:46;
       then consider V being Subset of [:S1,T1:] such that
@@ -868,99 +850,99 @@ A20: [:T|Y1,S:] is connected by TOPREAL6:25;
     then
 A21: [:S,T|Y1:] is connected by A20,TOPREAL6:25;
     set g = f | [:X0,[#]T:];
-A24: dom g = [:X0,[#]T:] by A6,RELAT_1:91;
-A25: the carrier of [:S|X0,T:] = [:the carrier of S|X0,the carrier of T:]
+A22: dom g = [:X0,[#]T:] by A6,RELAT_1:91;
+A23: the carrier of [:S|X0,T:] = [:the carrier of S|X0,the carrier of T:]
       by BORSUK_1:def 5;
-A26: dom g = the carrier of [:S|X0,T:] by A24,A25,JORDAN1:1;
+A24: dom g = the carrier of [:S|X0,T:] by A22,A23,JORDAN1:1;
     rng g c= the carrier of J;
-    then reconsider g as Function of [:S|X0,T:],J by A26,FUNCT_2:4;
+    then reconsider g as Function of [:S|X0,T:],J by A24,FUNCT_2:4;
     [:S|X0,T:] = [:S|X0,T| [#]T:] by TSEP_1:3
        .= [:S,T:] | [:X0,[#]T:] by BORSUK_3:26;
     then
-A27: g is continuous by A3,TOPMETR:10;
+A25: g is continuous by A3,TOPMETR:10;
     set h = f | [:[#]S,Y1:];
-A28: dom h = [:[#]S,Y1:] by A6,RELAT_1:91;
-A29: the carrier of [:S,T|Y1:] = [:the carrier of S,the carrier of T|Y1:]
+A26: dom h = [:[#]S,Y1:] by A6,RELAT_1:91;
+A27: the carrier of [:S,T|Y1:] = [:the carrier of S,the carrier of T|Y1:]
       by BORSUK_1:def 5;
-A30: dom h = the carrier of [:S,T|Y1:] by A28,A29,JORDAN1:1;
+A28: dom h = the carrier of [:S,T|Y1:] by A26,A27,JORDAN1:1;
     rng h c= the carrier of J;
-    then reconsider h as Function of [:S,T|Y1:],J by A30,FUNCT_2:4;
+    then reconsider h as Function of [:S,T|Y1:],J by A28,FUNCT_2:4;
     [:S,T|Y1:] = [:S| [#]S,T|Y1:] by TSEP_1:3
        .= [:S,T:] | [:[#]S,Y1:] by BORSUK_3:26;
     then
-A31: h is continuous by A3,TOPMETR:10;
-A32: now
+A29: h is continuous by A3,TOPMETR:10;
+A30: now
       assume
-A33:     f. [x0,y1] <> 0;
+A31:     f. [x0,y1] <> 0;
       g is onto
       proof
         thus rng g c= the carrier of J;
         let y be set;
         assume
-A34:       y in the carrier of J;
-A35:     x0 in X0 by TARSKI:def 1;
-        per cases by A5,A34,TARSKI:def 2;
+A32:       y in the carrier of J;
+A33:     x0 in X0 by TARSKI:def 1;
+        per cases by A5,A32,TARSKI:def 2;
         suppose
-A36:       y = 0;
-A37:     [x0,y0] in dom g by A24,A35,ZFMISC_1:106;
+A34:       y = 0;
+A35:     [x0,y0] in dom g by A22,A33,ZFMISC_1:106;
         then
-        g. [x0,y0] = y by A10,A13,A24,A36,FUNCT_1:72;
-        hence y in rng g by A37,FUNCT_1:def 5;
+        g. [x0,y0] = y by A10,A13,A22,A34,FUNCT_1:72;
+        hence y in rng g by A35,FUNCT_1:def 5;
         end;
         suppose
-A38:       y = 1;
+A36:       y = 1;
         [x0,y1] in dom f by A6,A7,A11,A17,ZFMISC_1:106;
         then
-A39:     f. [x0,y1] in rng f by FUNCT_1:def 5;
-A40:     [x0,y1] in dom g by A24,A35,ZFMISC_1:106;
+A37:     f. [x0,y1] in rng f by FUNCT_1:def 5;
+A38:     [x0,y1] in dom g by A22,A33,ZFMISC_1:106;
         then
-        g. [x0,y1] = f. [x0,y1] by A24,FUNCT_1:72
-          .= y by A5,A33,A38,A39,TARSKI:def 2;
-        hence y in rng g by A40,FUNCT_1:def 5;
+        g. [x0,y1] = f. [x0,y1] by A22,FUNCT_1:72
+          .= y by A5,A31,A36,A37,TARSKI:def 2;
+        hence y in rng g by A38,FUNCT_1:def 5;
         end;
       end;
-      hence contradiction by A19,A27,Th8;
+      hence contradiction by A19,A25,Th8;
     end;
     now
       assume
-A41:     f. [x0,y1] <> 1;
+A39:     f. [x0,y1] <> 1;
       h is onto
       proof
         thus rng h c= the carrier of J;
         let y be set;
         assume
-A42:       y in the carrier of J;
-A43:     y1 in Y1 by TARSKI:def 1;
-        per cases by A5,A42,TARSKI:def 2;
+A40:       y in the carrier of J;
+A41:     y1 in Y1 by TARSKI:def 1;
+        per cases by A5,A40,TARSKI:def 2;
         suppose
-A44:       y = 1;
-A45:     [x1,y1] in dom h by A28,A43,ZFMISC_1:106;
+A42:       y = 1;
+A43:     [x1,y1] in dom h by A26,A41,ZFMISC_1:106;
         then
-        h. [x1,y1] = y by A15,A18,A28,A44,FUNCT_1:72;
-        hence y in rng h by A45,FUNCT_1:def 5;
+        h. [x1,y1] = y by A15,A18,A26,A42,FUNCT_1:72;
+        hence y in rng h by A43,FUNCT_1:def 5;
         end;
         suppose
-A46:       y = 0;
+A44:       y = 0;
         [x0,y1] in dom f by A6,A7,A11,A17,ZFMISC_1:106;
         then
-A47:     f. [x0,y1] in rng f by FUNCT_1:def 5;
-A48:     [x0,y1] in dom h by A28,A43,ZFMISC_1:106;
+A45:     f. [x0,y1] in rng f by FUNCT_1:def 5;
+A46:     [x0,y1] in dom h by A26,A41,ZFMISC_1:106;
         then
-        h. [x0,y1] = f. [x0,y1] by A28,FUNCT_1:72
-          .= y by A5,A41,A46,A47,TARSKI:def 2;
-        hence y in rng h by A48,FUNCT_1:def 5;
+        h. [x0,y1] = f. [x0,y1] by A26,FUNCT_1:72
+          .= y by A5,A39,A44,A45,TARSKI:def 2;
+        hence y in rng h by A46,FUNCT_1:def 5;
         end;
       end;
-      hence contradiction by A21,A31,Th8;
+      hence contradiction by A21,A29,Th8;
     end;
-    hence contradiction by A32;
+    hence contradiction by A30;
   end;
   hence [:A,B:] is connected by A1,A2,Th8;
   end;
   suppose
-A49:  [:S,T:] is empty;
+A47:  [:S,T:] is empty;
   for T being empty TopStruct holds T is connected;
-  hence [:A,B:] is connected by A1,A49;
+  hence [:A,B:] is connected by A1,A47;
   end;
 end;
 end;
@@ -1074,45 +1056,45 @@ A8: for p being set st p in ([#][:Y,T1:]) /\ ([#][:Y,T2:]) holds f.p = g.p;
 A9: [:Y,T1:] is SubSpace of [:Y,T:] & [:Y,T2:] is SubSpace of [:Y,T:]
       by A1,A2,BORSUK_3:17;
     set h = f+*g;
-A16: the carrier of [:Y,T:] = [:the carrier of Y,the carrier of T:]
+A10: the carrier of [:Y,T:] = [:the carrier of Y,the carrier of T:]
       by BORSUK_1:def 5;
-A17: the carrier of [:Y,T1:] = [:the carrier of Y,the carrier of T1:]
+A11: the carrier of [:Y,T1:] = [:the carrier of Y,the carrier of T1:]
       by BORSUK_1:def 5;
-A18: the carrier of [:Y,T2:] = [:the carrier of Y,the carrier of T2:]
+A12: the carrier of [:Y,T2:] = [:the carrier of Y,the carrier of T2:]
       by BORSUK_1:def 5;
-A19: dom f = the carrier of [:Y,T1:] by FUNCT_2:def 1;
-A20: dom g = the carrier of [:Y,T2:] by FUNCT_2:def 1;
-A21: dom h = dom f \/ dom g by FUNCT_4:def 1;
+A13: dom f = the carrier of [:Y,T1:] by FUNCT_2:def 1;
+A14: dom g = the carrier of [:Y,T2:] by FUNCT_2:def 1;
+A15: dom h = dom f \/ dom g by FUNCT_4:def 1;
     then
-A22: dom h = [:the carrier of Y,the carrier of T:]
-        by A5,A17,A18,A19,A20,ZFMISC_1:120;
+A16: dom h = [:the carrier of Y,the carrier of T:]
+        by A5,A11,A12,A13,A14,ZFMISC_1:120;
     rng f \/ rng g c= the carrier of S & rng h c= rng f \/ rng g
      by FUNCT_4:18;  then
     rng h c= the carrier of S by XBOOLE_1:1;
-    then reconsider h as Function of [:Y,T:],S by A16,A22,FUNCT_2:4;
+    then reconsider h as Function of [:Y,T:],S by A10,A16,FUNCT_2:4;
     take h;
     thus h = f+*g;
     for P being Subset of S st P is closed holds h"P is closed
     proof
     let P be Subset of S;
     assume
-A23:  P is closed;
-A24: h"P = h"P /\ ([#][:Y,T1:] \/ [#][:Y,T2:])
-       by A16,A19,A20,A21,A22,XBOOLE_1:28
+A17:  P is closed;
+A18: h"P = h"P /\ ([#][:Y,T1:] \/ [#][:Y,T2:])
+       by A10,A13,A14,A15,A16,XBOOLE_1:28
         .= (h"P /\ [#][:Y,T1:]) \/ (h"P /\ [#][:Y,T2:]) by XBOOLE_1:23;
-A25: for x being set st x in [#][:Y,T1:] holds h.x = f.x
+A19: for x being set st x in [#][:Y,T1:] holds h.x = f.x
       proof
        let x be set such that
-A26:     x in [#][:Y,T1:];
+A20:     x in [#][:Y,T1:];
        now per cases;
         suppose
-A27:      x in [#][:Y,T2:];
-        then x in [#][:Y,T1:] /\ [#][:Y,T2:] by A26,XBOOLE_0:def 3;
+A21:      x in [#][:Y,T2:];
+        then x in [#][:Y,T1:] /\ [#][:Y,T2:] by A20,XBOOLE_0:def 3;
         then f.x = g.x by A8;
-        hence thesis by A20,A27,FUNCT_4:14;
+        hence thesis by A14,A21,FUNCT_4:14;
         end;
         suppose not x in [#][:Y,T2:];
-        hence h.x = f.x by A20,FUNCT_4:12;
+        hence h.x = f.x by A14,FUNCT_4:12;
         end;
        end;
        hence thesis;
@@ -1122,63 +1104,63 @@ A27:      x in [#][:Y,T2:];
        proof
         assume x in h"P /\ [#][:Y,T1:];
         then x in h"P & x in [#][:Y,T1:] by XBOOLE_0:def 3;
-        then h.x in P & x in dom f & f.x = h.x by A19,A25,FUNCT_1:def 13;
+        then h.x in P & x in dom f & f.x = h.x by A13,A19,FUNCT_1:def 13;
         hence x in f"P by FUNCT_1:def 13;
        end;
       assume x in f"P;
       then x in dom f & f.x in P by FUNCT_1:def 13;
       then x in dom h & x in [#][:Y,T1:] & h.x in P
-        by A21,A25,XBOOLE_0:def 2;
+        by A15,A19,XBOOLE_0:def 2;
       then x in h"P & x in [#][:Y,T1:] by FUNCT_1:def 13;
       hence x in h"P /\ [#][:Y,T1:] by XBOOLE_0:def 3;
      end;
      then
-A28:  h"P /\ [#][:Y,T1:] = f"P by TARSKI:2;
+A22:  h"P /\ [#][:Y,T1:] = f"P by TARSKI:2;
      now let x be set;
       thus x in h"P /\ [#][:Y,T2:] implies x in g"P
        proof
         assume x in h"P /\ [#][:Y,T2:];
         then x in h"P & x in [#][:Y,T2:] by XBOOLE_0:def 3;
         then h.x in P & x in dom g & g.x = h.x
-          by A20,FUNCT_1:def 13,FUNCT_4:14;
+          by A14,FUNCT_1:def 13,FUNCT_4:14;
         hence x in g"P by FUNCT_1:def 13;
        end;
       assume x in g"P;
       then x in dom g & g.x in P by FUNCT_1:def 13;
       then x in dom h & x in [#][:Y,T2:] & h.x in P
-        by A21,FUNCT_4:14,XBOOLE_0:def 2;
+        by A15,FUNCT_4:14,XBOOLE_0:def 2;
       then x in h"P & x in [#][:Y,T2:] by FUNCT_1:def 13;
       hence x in h"P /\ [#][:Y,T2:] by XBOOLE_0:def 3;
      end;
      then
-A29: h"P = f"P \/ g"P by A24,A28,TARSKI:2;
+A23: h"P = f"P \/ g"P by A18,A22,TARSKI:2;
      the carrier of T1 is Subset of T by A1,TSEP_1:1;
      then f"P c= [#][:Y,T1:] & [#][:Y,T1:] c= [#][:Y,T:]
-       by A16,A17,ZFMISC_1:118;
+       by A10,A11,ZFMISC_1:118;
     then f"P c= [#][:Y,T:] by XBOOLE_1:1;
     then reconsider P1 = f"P as Subset of [:Y,T:];
     the carrier of T2 is Subset of T by A2,TSEP_1:1;
     then g"P c= [#][:Y,T2:] & [#][:Y,T2:] c= [#][:Y,T:]
-      by A16,A18,ZFMISC_1:118;
+      by A10,A12,ZFMISC_1:118;
     then g"P c= [#][:Y,T:] by XBOOLE_1:1;
     then reconsider P2 = g"P as Subset of [:Y,T:];
-     f"P is closed by A6,A23,PRE_TOPC:def 12;
+     f"P is closed by A6,A17,PRE_TOPC:def 12;
      then consider F01 being Subset of [:Y,T:] such that
-A30:  F01 is closed & f"P = F01 /\ [#][:Y,T1:] by A9,PRE_TOPC:43;
+A24:  F01 is closed & f"P = F01 /\ [#][:Y,T1:] by A9,PRE_TOPC:43;
     reconsider M = [:[#]Y,F1:] as Subset of [:Y,T:];
-A31: M is closed by Th16;
+A25: M is closed by Th16;
     [#][:Y,T1:] = [:[#]Y,F1:] by A3,BORSUK_3:1;
     then
-A32: P1 is closed by A30,A31,TOPS_1:35;
-    g"P is closed by A7,A23,PRE_TOPC:def 12;
+A26: P1 is closed by A24,A25,TOPS_1:35;
+    g"P is closed by A7,A17,PRE_TOPC:def 12;
     then consider F02 being Subset of [:Y,T:] such that
-A33:  F02 is closed & g"P = F02 /\ [#][:Y,T2:] by A9,PRE_TOPC:43;
+A27:  F02 is closed & g"P = F02 /\ [#][:Y,T2:] by A9,PRE_TOPC:43;
     reconsider M = [:[#]Y,F2:] as Subset of [:Y,T:];
-A34: M is closed by Th16;
+A28: M is closed by Th16;
     [#][:Y,T2:] = [:[#]Y,F2:] by A4,BORSUK_3:1;
     then
-    P2 is closed by A33,A34,TOPS_1:35;
-    hence h"P is closed by A29,A32,TOPS_1:36;
+    P2 is closed by A27,A28,TOPS_1:35;
+    hence h"P is closed by A23,A26,TOPS_1:36;
   end;
   hence thesis by PRE_TOPC:def 12;
 end;
@@ -1212,45 +1194,45 @@ A8: for p being set st p in ([#][:T1,Y:]) /\ ([#][:T2,Y:]) holds f.p = g.p;
 A9: [:T1,Y:] is SubSpace of [:T,Y:] & [:T2,Y:] is SubSpace of [:T,Y:]
       by A1,A2,BORSUK_3:25;
     set h = f+*g;
-A16: the carrier of [:T,Y:] = [:the carrier of T,the carrier of Y:]
+A10: the carrier of [:T,Y:] = [:the carrier of T,the carrier of Y:]
       by BORSUK_1:def 5;
-A17: the carrier of [:T1,Y:] = [:the carrier of T1,the carrier of Y:]
+A11: the carrier of [:T1,Y:] = [:the carrier of T1,the carrier of Y:]
       by BORSUK_1:def 5;
-A18: the carrier of [:T2,Y:] = [:the carrier of T2,the carrier of Y:]
+A12: the carrier of [:T2,Y:] = [:the carrier of T2,the carrier of Y:]
       by BORSUK_1:def 5;
-A19: dom f = the carrier of [:T1,Y:] by FUNCT_2:def 1;
-A20: dom g = the carrier of [:T2,Y:] by FUNCT_2:def 1;
-A21: dom h = dom f \/ dom g by FUNCT_4:def 1;
+A13: dom f = the carrier of [:T1,Y:] by FUNCT_2:def 1;
+A14: dom g = the carrier of [:T2,Y:] by FUNCT_2:def 1;
+A15: dom h = dom f \/ dom g by FUNCT_4:def 1;
     then
-A22: dom h = [:the carrier of T,the carrier of Y:]
-        by A5,A17,A18,A19,A20,ZFMISC_1:120;
+A16: dom h = [:the carrier of T,the carrier of Y:]
+        by A5,A11,A12,A13,A14,ZFMISC_1:120;
     rng f \/ rng g c= the carrier of S & rng h c= rng f \/ rng g
      by FUNCT_4:18;  then
     rng h c= the carrier of S by XBOOLE_1:1;
-    then reconsider h as Function of [:T,Y:],S by A16,A22,FUNCT_2:4;
+    then reconsider h as Function of [:T,Y:],S by A10,A16,FUNCT_2:4;
     take h;
     thus h = f+*g;
     for P being Subset of S st P is closed holds h"P is closed
     proof
     let P be Subset of S;
     assume
-A23:  P is closed;
-A24: h"P = h"P /\ ([#][:T1,Y:] \/ [#][:T2,Y:])
-       by A16,A19,A20,A21,A22,XBOOLE_1:28
+A17:  P is closed;
+A18: h"P = h"P /\ ([#][:T1,Y:] \/ [#][:T2,Y:])
+       by A10,A13,A14,A15,A16,XBOOLE_1:28
         .= (h"P /\ [#][:T1,Y:]) \/ (h"P /\ [#][:T2,Y:]) by XBOOLE_1:23;
-A25: for x being set st x in [#][:T1,Y:] holds h.x = f.x
+A19: for x being set st x in [#][:T1,Y:] holds h.x = f.x
       proof
        let x be set such that
-A26:     x in [#][:T1,Y:];
+A20:     x in [#][:T1,Y:];
        now per cases;
         suppose
-A27:      x in [#][:T2,Y:];
-        then x in [#][:T1,Y:] /\ [#][:T2,Y:] by A26,XBOOLE_0:def 3;
+A21:      x in [#][:T2,Y:];
+        then x in [#][:T1,Y:] /\ [#][:T2,Y:] by A20,XBOOLE_0:def 3;
         then f.x = g.x by A8;
-        hence thesis by A20,A27,FUNCT_4:14;
+        hence thesis by A14,A21,FUNCT_4:14;
         end;
         suppose not x in [#][:T2,Y:];
-        hence h.x = f.x by A20,FUNCT_4:12;
+        hence h.x = f.x by A14,FUNCT_4:12;
         end;
        end;
        hence thesis;
@@ -1260,63 +1242,63 @@ A27:      x in [#][:T2,Y:];
        proof
         assume x in h"P /\ [#][:T1,Y:];
         then x in h"P & x in [#][:T1,Y:] by XBOOLE_0:def 3;
-        then h.x in P & x in dom f & f.x = h.x by A19,A25,FUNCT_1:def 13;
+        then h.x in P & x in dom f & f.x = h.x by A13,A19,FUNCT_1:def 13;
         hence x in f"P by FUNCT_1:def 13;
        end;
       assume x in f"P;
       then x in dom f & f.x in P by FUNCT_1:def 13;
       then x in dom h & x in [#][:T1,Y:] & h.x in P
-        by A21,A25,XBOOLE_0:def 2;
+        by A15,A19,XBOOLE_0:def 2;
       then x in h"P & x in [#][:T1,Y:] by FUNCT_1:def 13;
       hence x in h"P /\ [#][:T1,Y:] by XBOOLE_0:def 3;
      end;
      then
-A28:  h"P /\ [#][:T1,Y:] = f"P by TARSKI:2;
+A22:  h"P /\ [#][:T1,Y:] = f"P by TARSKI:2;
      now let x be set;
       thus x in h"P /\ [#][:T2,Y:] implies x in g"P
        proof
         assume x in h"P /\ [#][:T2,Y:];
         then x in h"P & x in [#][:T2,Y:] by XBOOLE_0:def 3;
         then h.x in P & x in dom g & g.x = h.x
-          by A20,FUNCT_1:def 13,FUNCT_4:14;
+          by A14,FUNCT_1:def 13,FUNCT_4:14;
         hence x in g"P by FUNCT_1:def 13;
        end;
       assume x in g"P;
       then x in dom g & g.x in P by FUNCT_1:def 13;
       then x in dom h & x in [#][:T2,Y:] & h.x in P
-        by A21,FUNCT_4:14,XBOOLE_0:def 2;
+        by A15,FUNCT_4:14,XBOOLE_0:def 2;
       then x in h"P & x in [#][:T2,Y:] by FUNCT_1:def 13;
       hence x in h"P /\ [#][:T2,Y:] by XBOOLE_0:def 3;
      end;
      then
-A29: h"P = f"P \/ g"P by A24,A28,TARSKI:2;
+A23: h"P = f"P \/ g"P by A18,A22,TARSKI:2;
      the carrier of T1 is Subset of T by A1,TSEP_1:1;
      then f"P c= [#][:T1,Y:] & [#][:T1,Y:] c= [#][:T,Y:]
-       by A16,A17,ZFMISC_1:118;
+       by A10,A11,ZFMISC_1:118;
     then f"P c= [#][:T,Y:] by XBOOLE_1:1;
     then reconsider P1 = f"P as Subset of [:T,Y:];
     the carrier of T2 is Subset of T by A2,TSEP_1:1;
     then g"P c= [#][:T2,Y:] & [#][:T2,Y:] c= [#][:T,Y:]
-      by A16,A18,ZFMISC_1:118;
+      by A10,A12,ZFMISC_1:118;
     then g"P c= [#][:T,Y:] by XBOOLE_1:1;
     then reconsider P2 = g"P as Subset of [:T,Y:];
-     f"P is closed by A6,A23,PRE_TOPC:def 12;
+     f"P is closed by A6,A17,PRE_TOPC:def 12;
      then consider F01 being Subset of [:T,Y:] such that
-A30:  F01 is closed & f"P = F01 /\ [#][:T1,Y:] by A9,PRE_TOPC:43;
+A24:  F01 is closed & f"P = F01 /\ [#][:T1,Y:] by A9,PRE_TOPC:43;
     reconsider M = [:F1,[#]Y:] as Subset of [:T,Y:];
-A31: M is closed by Th16;
+A25: M is closed by Th16;
     [#][:T1,Y:] = [:F1,[#]Y:] by A3,BORSUK_3:1;
     then
-A32: P1 is closed by A30,A31,TOPS_1:35;
-    g"P is closed by A7,A23,PRE_TOPC:def 12;
+A26: P1 is closed by A24,A25,TOPS_1:35;
+    g"P is closed by A7,A17,PRE_TOPC:def 12;
     then consider F02 being Subset of [:T,Y:] such that
-A33:  F02 is closed & g"P = F02 /\ [#][:T2,Y:] by A9,PRE_TOPC:43;
+A27:  F02 is closed & g"P = F02 /\ [#][:T2,Y:] by A9,PRE_TOPC:43;
     reconsider M = [:F2,[#]Y:] as Subset of [:T,Y:];
-A34: M is closed by Th16;
+A28: M is closed by Th16;
     [#][:T2,Y:] = [:F2,[#]Y:] by A4,BORSUK_3:1;
     then
-    P2 is closed by A33,A34,TOPS_1:35;
-    hence h"P is closed by A29,A32,TOPS_1:36;
+    P2 is closed by A27,A28,TOPS_1:35;
+    hence h"P is closed by A23,A26,TOPS_1:36;
   end;
   hence thesis by PRE_TOPC:def 12;
 end;
@@ -1465,16 +1447,16 @@ A3: Q1 = f*Q;
   F is continuous by A1,BORSUK_6:def 13;
   hence G is continuous by TOPS_2:58;
   let s be Point of I[01];
-  thus G.(s,0) = f.(F.(s,j0)) by Lm1,Th3
+  thus G.(s,0) = f.(F.(s,j0)) by Lm1,BINOP_1:30
     .= f.(P.s) by A1,BORSUK_6:def 13
     .= P1.s by A2,FUNCT_2:21;
-  thus G.(s,1) = f.(F.(s,j1)) by Lm1,Th3
+  thus G.(s,1) = f.(F.(s,j1)) by Lm1,BINOP_1:30
     .= f.(Q.s) by A1,BORSUK_6:def 13
     .= Q1.s by A3,FUNCT_2:21;
   let t be Point of I[01];
-  thus G.(0,t) = f.(F.(j0,t)) by Lm1,Th3
+  thus G.(0,t) = f.(F.(j0,t)) by Lm1,BINOP_1:30
     .= f.a by A1,BORSUK_6:def 13;
-  thus G.(1,t) = f.(F.(j1,t)) by Lm1,Th3
+  thus G.(1,t) = f.(F.(j1,t)) by Lm1,BINOP_1:30
     .= f.b by A1,BORSUK_6:def 13;
 end;
 
@@ -1502,16 +1484,16 @@ A3: Q1 = f*Q;
   F is continuous by A1,BORSUK_6:def 13;
   hence G is continuous by TOPS_2:58;
   let s be Point of I[01];
-  thus G.(s,0) = f.(F.(s,j0)) by Lm1,Th3
+  thus G.(s,0) = f.(F.(s,j0)) by Lm1,BINOP_1:30
     .= f.(P.s) by A1,BORSUK_6:def 13
     .= P1.s by A2,FUNCT_2:21;
-  thus G.(s,1) = f.(F.(s,j1)) by Lm1,Th3
+  thus G.(s,1) = f.(F.(s,j1)) by Lm1,BINOP_1:30
     .= f.(Q.s) by A1,BORSUK_6:def 13
     .= Q1.s by A3,FUNCT_2:21;
   let t be Point of I[01];
-  thus G.(0,t) = f.(F.(j0,t)) by Lm1,Th3
+  thus G.(0,t) = f.(F.(j0,t)) by Lm1,BINOP_1:30
     .= f.a by A1,BORSUK_6:def 13;
-  thus G.(1,t) = f.(F.(j1,t)) by Lm1,Th3
+  thus G.(1,t) = f.(F.(j1,t)) by Lm1,BINOP_1:30
     .= f.b by A1,BORSUK_6:def 13;
 end;
 
@@ -1722,57 +1704,57 @@ A2: f" is continuous by A1,TOPS_2:def 5;
 A3: dom h = the carrier of pS by FUNCT_2:def 1;
 A4: dom f = [#]S by A1,TOPS_2:def 5;
 A5: rng f = [#]T by A1,TOPS_2:def 5;
-A8: f is one-to-one by A1,TOPS_2:def 5;
+A6: f is one-to-one by A1,TOPS_2:def 5;
     then
-A9: f qua Function".(f.s) = s by FUNCT_2:32;
-A10: f qua Function" = f" by A5,A8,TOPS_2:def 4;
-A11: rng h = the carrier of pT
+A7: f qua Function".(f.s) = s by FUNCT_2:32;
+A8: f qua Function" = f" by A5,A6,TOPS_2:def 4;
+A9: rng h = the carrier of pT
   proof
     thus rng h c= the carrier of pT;
     let y be set;
     assume y in the carrier of pT;
     then consider lt being Loop of f.s such that
-A12:   y = Class(EqRel(T,f.s),lt) by TOPALG_1:48;
-    reconsider ls = f"*lt as Loop of s by A2,A9,A10,Th27;
+A10:   y = Class(EqRel(T,f.s),lt) by TOPALG_1:48;
+    reconsider ls = f"*lt as Loop of s by A2,A7,A8,Th27;
     set x = Class(EqRel(S,s),ls);
-A13: x in the carrier of pS by TOPALG_1:48;
+A11: x in the carrier of pS by TOPALG_1:48;
     then consider ls1 being Loop of s, lt1 being Loop of f.s such that
-A14:   x = Class(EqRel(S,s),ls1) and
-A15:   lt1 = f*ls1 and
-A16:   h.x = Class(EqRel(T,f.s),lt1) by Def1;
-A17: f*ls = (f*f")*lt by RELAT_1:55
-        .= id rng f * lt by A5,A8,TOPS_2:65
+A12:   x = Class(EqRel(S,s),ls1) and
+A13:   lt1 = f*ls1 and
+A14:   h.x = Class(EqRel(T,f.s),lt1) by Def1;
+A15: f*ls = (f*f")*lt by RELAT_1:55
+        .= id rng f * lt by A5,A6,TOPS_2:65
         .= lt by A5,FUNCT_2:23;
-    ls,ls1 are_homotopic by A14,TOPALG_1:47;
-    then lt,lt1 are_homotopic by A15,A17,Th28;
-    then h.x = y by A12,A16,TOPALG_1:47;
-    hence thesis by A3,A13,FUNCT_1:def 5;
+    ls,ls1 are_homotopic by A12,TOPALG_1:47;
+    then lt,lt1 are_homotopic by A13,A15,Th28;
+    then h.x = y by A10,A14,TOPALG_1:47;
+    hence thesis by A3,A11,FUNCT_1:def 5;
   end;
   h is one-to-one
   proof
     let x1, x2 be set;
     assume x1 in dom h;
     then consider ls1 being Loop of s, lt1 being Loop of f.s such that
-A18:   x1 = Class(EqRel(S,s),ls1) and
-A19:   lt1 = f*ls1 and
-A20:   h.x1 = Class(EqRel(T,f.s),lt1) by Def1;
+A16:   x1 = Class(EqRel(S,s),ls1) and
+A17:   lt1 = f*ls1 and
+A18:   h.x1 = Class(EqRel(T,f.s),lt1) by Def1;
     assume x2 in dom h;
     then consider ls2 being Loop of s, lt2 being Loop of f.s such that
-A21:   x2 = Class(EqRel(S,s),ls2) and
-A22:   lt2 = f*ls2 and
-A23:   h.x2 = Class(EqRel(T,f.s),lt2) by Def1;
-    reconsider a1 = f"*lt1, a2 = f"*lt2 as Loop of s by A2,A9,A10,Th27;
-A24: f"*f = id dom f by A5,A8,TOPS_2:65;
-A25: f"*lt1 = (f"*f)*ls1 by A19,RELAT_1:55
-        .= ls1 by A4,A24,FUNCT_2:23;
-A26: f"*lt2 = (f"*f)*ls2 by A22,RELAT_1:55
-          .= ls2 by A4,A24,FUNCT_2:23;
+A19:   x2 = Class(EqRel(S,s),ls2) and
+A20:   lt2 = f*ls2 and
+A21:   h.x2 = Class(EqRel(T,f.s),lt2) by Def1;
+    reconsider a1 = f"*lt1, a2 = f"*lt2 as Loop of s by A2,A7,A8,Th27;
+A22: f"*f = id dom f by A5,A6,TOPS_2:65;
+A23: f"*lt1 = (f"*f)*ls1 by A17,RELAT_1:55
+        .= ls1 by A4,A22,FUNCT_2:23;
+A24: f"*lt2 = (f"*f)*ls2 by A20,RELAT_1:55
+          .= ls2 by A4,A22,FUNCT_2:23;
     assume h.x1 = h.x2;
-    then lt1,lt2 are_homotopic by A20,A23,TOPALG_1:47;
-    then a1,a2 are_homotopic by A2,A9,A10,Th28;
-    hence x1 = x2 by A18,A21,A25,A26,TOPALG_1:47;
+    then lt1,lt2 are_homotopic by A18,A21,TOPALG_1:47;
+    then a1,a2 are_homotopic by A2,A7,A8,Th28;
+    hence x1 = x2 by A16,A19,A23,A24,TOPALG_1:47;
   end;
-  hence h is_isomorphism by A11,GROUP_6:70;
+  hence h is_isomorphism by A9,GROUP_6:70;
 end;
 
 theorem

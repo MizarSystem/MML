@@ -21,11 +21,11 @@ environ
       RVSUM_1, RLVECT_1, GROUP_1, GROUP_2, TOPS_2, GRCAT_1, METRIC_1, EUCLID;
  constructors REAL_1, ABIAN, SERIES_1, DOMAIN_1, TOPS_2, TREES_9, FINSEQ_4,
       FINSEQOP, BINARITH, BINTREE2, GRCAT_1, EUCLID, GROUP_2, MEMBERED,
-      COMPLEX1, NAT_1;
+      COMPLEX1, NAT_1, REALSET1;
  registrations SUBSET_1, STRUCT_0, RELSET_1, FUNCT_1, BINTREE1, BINTREE2,
       GROUP_1, GROUP_2, METRIC_1, TREES_2, MARGREL1, NAT_1, MEMBERED, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions STRUCT_0, TARSKI, XBOOLE_0;
+ definitions STRUCT_0, TARSKI, XBOOLE_0, BINOP_1;
  theorems STRUCT_0, TARSKI, MCART_1, REAL_1, REAL_2, NAT_1, NAT_2, MARGREL1,
       ZFMISC_1, BINOP_1, RELAT_1, FUNCT_1, FUNCT_2, POWER, FINSEQ_1, FINSEQ_2,
       FINSEQ_4, FINSEQ_5, BINARITH, AMI_5, BINARI_2, BINARI_3, ABSVALUE,
@@ -367,7 +367,7 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
            then A92: d = d' by A84,A86,ZFMISC_1:33;
            thus (D.(FinSeqLevel(n+1,dD).(i+1)))`1 = (D.(FF^<*(2*1+i) mod 2*>))
 `1 by A72,BINTREE2:24
-              .= (D.(FF^<* 1 *>))`1 by A91,GR_CY_1:1
+              .= (D.(FF^<* 1 *>))`1 by A91,NAT_1:73
               .= d by A87,A92,MCART_1:7
               .= (D.(F^<* 0 *>))`2 by A84,MCART_1:7
               .= (D.(F^<*(i+1) mod 2*>))`2 by A88,A90,A91,NAT_2:20
@@ -376,15 +376,15 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
           suppose i is even;
            then A93: i mod 2 = 0 by NAT_2:23;
            then A94: 1 = (i -' 1) mod 2 by A69,NAT_2:20
-              .= (i -' 1 + 2 * 1) mod 2 by GR_CY_1:1
+              .= (i -' 1 + 2 * 1) mod 2 by NAT_1:73
               .= (i -' 1 + 1 + 1) mod 2
-              .= (i + 1) mod 2 by A67,AMI_5:4;
+              .= (i + 1) mod 2 by A67,BINARITH:53;
               A95: 1 + (1 + i) >= 1 by NAT_1:29;
            then 1 + 1 + i >= 0 + 1;
            then A96: 1 + 1 + i > 0 by NAT_1:38;
            A97: 1 + 1 + (i -' 1) = 1 + 1 + (i - 1) by A67,BINARITH:50
               .= 1 + 1 + i - 1;
-               1 = (i -' 1 + 1 + 1) mod 2 by A67,A94,AMI_5:4
+               1 = (i -' 1 + 1 + 1) mod 2 by A67,A94,BINARITH:53
             .= (1 + 1 + (i -' 1)) mod 2
             .= (1 + 1 + i -' 1) mod 2 by A95,A97,BINARITH:50;
            then (1 + 1 + i) mod 2 = 0 by A96,NAT_2:20;
@@ -402,7 +402,7 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
               .= b by A80,MCART_1:7;
            thus (D.(FinSeqLevel(n+1,dD).(i+1)))`1 = (D.(FF^<*(2*1+i) mod 2*>))
 `1 by A72,BINTREE2:24
-              .= (D.(FF^<* 0 *>))`1 by A93,GR_CY_1:1
+              .= (D.(FF^<* 0 *>))`1 by A93,NAT_1:73
               .= a1' by A86,MCART_1:7
               .= (D.(F^<* 1 *>))`2 by A85,A101,MCART_1:7
               .= (D.(FinSeqLevel(n+1,dD).i))`2 by A69,A71,A94,BINTREE2:24;
@@ -681,7 +681,7 @@ FINSEQ_4:24
     reconsider ZS = {0} as non empty set;
     deffunc T((Element of ZS), Element of ZS) = 0;
     consider F be Function of [:ZS,ZS:],REAL such that
-     A1: for x,y be Element of ZS holds F.[x,y] = T(x,y) from FUNCT_2:sch 8;
+     A1: for x,y be Element of ZS holds F.(x,y) = T(x,y) from BINOP_1:sch 4;
    reconsider V = MetrStruct (# ZS,F #) as non empty MetrStruct
                                                           by STRUCT_0:def 1;
    A2: now let a,b be Element of V;
@@ -691,15 +691,12 @@ FINSEQ_4:24
    end;
    A3: now let a be Element of V;
     thus dist(a,a) = F.(a,a) by METRIC_1:def 1
-                .= F.[a,a] by BINOP_1:def 1
                 .= 0 by A1;
    end;
    A4: now let a,b be Element of V;
     thus dist(a,b) = F.(a,b) by METRIC_1:def 1
-                .= F.[a,b] by BINOP_1:def 1
                 .= 0 by A1
-                .= F.[b,a] by A1
-                .= F.(b,a) by BINOP_1:def 1
+                .= F.(b,a) by A1
                 .= dist(b,a) by METRIC_1:def 1;
    end;
        now let a,b,c be Element of V;
@@ -716,10 +713,8 @@ FINSEQ_4:24
         r <= 1;
    take z = x;
    A5: dist(x,z) = F.(x,z) by METRIC_1:def 1
-                .= F.[x,z] by BINOP_1:def 1
                 .= 0 by A1;
        dist(z,y) = F.(z,y) by METRIC_1:def 1
-            .= F.[z,y] by BINOP_1:def 1
             .= 0 by A1;
    hence dist(x,z) = r * dist(x,y) & dist(z,y) = (1 - r) * dist(x,y) by A5;
    end;
@@ -971,20 +966,20 @@ end;
     reconsider O = 0 as Element of ZS by TARSKI:def 1;
     deffunc T((Element of ZS), Element of ZS) = 0;
     consider FF be Function of [:ZS,ZS:],REAL such that
-     A1: for x,y be Element of ZS holds FF.[x,y] = T(x,y) from FUNCT_2:sch 8;
+     A1: for x,y be Element of ZS holds FF.(x,y) = T(x,y) from BINOP_1:sch 4;
     deffunc A((Element of ZS), Element of ZS) = O;
     consider F be BinOp of ZS such that
-     A2: for x,y be Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 2;
+     A2: for x,y be Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 4;
     deffunc M((Element of REAL), Element of ZS) = O;
     consider G be Function of [:REAL,ZS:],ZS such that
      A3: for a be Element of REAL for x be Element of ZS holds
-            G.[a,x qua set] = M(a,x) from FUNCT_2:sch 8;
+            G.(a,x) = M(a,x) from BINOP_1:sch 4;
     set W = RLSMetrStruct (# ZS,FF,O,F,G #);
     A4: for x,y be VECTOR of W holds x + y = y + x
     proof
      let x,y be VECTOR of W;
          x + y = F.[x,y] & y + x = F.[y,x] by RLVECT_1:def 3;
-     then A5: x + y = F.(x,y) & y + x = F.(y,x) by BINOP_1:def 1;
+     then A5: x + y = F.(x,y) & y + x = F.(y,x);
      reconsider X = x, Y = y as Element of ZS;
          x + y = A(X,Y) & y + x = A(Y,X) by A2,A5;
      hence thesis;
@@ -995,9 +990,7 @@ end;
          (x + y) + z = F.[x + y,z] & x + (y + z) = F.[x,y + z] by
 RLVECT_1:def 3
 ;
-     then A7: (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z)
-                                                                by
-BINOP_1:def 1;
+     then A7: (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
      reconsider X = x, Y = y, Z = z as Element of ZS;
          (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A2,A7;
      hence thesis;
@@ -1007,7 +1000,7 @@ BINOP_1:def 1;
      let x be VECTOR of W;
      reconsider X = x as Element of ZS;
          x + 0.W = F.[x,0.W] by RLVECT_1:def 3
-            .= F.(x,0.W) by BINOP_1:def 1
+            .= F.(x,0.W)
             .= A(X,O) by A2;
      hence thesis by TARSKI:def 1;
     end;
@@ -1017,7 +1010,7 @@ BINOP_1:def 1;
      reconsider y = O as VECTOR of W;
      take y;
      thus x + y = F.[x,y] by RLVECT_1:def 3
-               .= F.(x,y) by BINOP_1:def 1
+               .= F.(x,y)
                .= the Zero of W by A2
                .= 0.W by RLVECT_1:def 2;
     end;
@@ -1027,9 +1020,9 @@ BINOP_1:def 1;
      let a be Element of REAL;
      let x,y be VECTOR of W;
      reconsider X = x, Y = y as Element of ZS;
-     A11: a * (x + y) = G.[a,x + y] by RLVECT_1:def 4;
+     A11: a * (x + y) = G.(a,x + y) by RLVECT_1:def 4;
          a * x + a * y = F.[a * x,a * y] by RLVECT_1:def 3
-                  .= F.(a * x,a * y) by BINOP_1:def 1
+                  .= F.(a * x,a * y)
                   .= A(M(a,X),M(a,Y)) by A2;
      hence thesis by A3,A11;
     end;
@@ -1040,10 +1033,10 @@ BINOP_1:def 1;
      let x be VECTOR of W;
      set c = a + b;
      reconsider X = x as Element of ZS;
-     A13: c * x = G.[c,x] by RLVECT_1:def 4
+     A13: c * x = G.(c,x) by RLVECT_1:def 4
              .= M(c,X) by A3;
          a * x + b * x = F.[a * x,b * x] by RLVECT_1:def 3
-                  .= F.(a * x,b * x) by BINOP_1:def 1
+                  .= F.(a * x,b * x)
                   .= A(M(a,X),M(b,X)) by A2;
      hence thesis by A13;
     end;
@@ -1054,9 +1047,9 @@ BINOP_1:def 1;
      let x be VECTOR of W;
      set c = a * b;
      reconsider X = x as Element of ZS;
-     A15: c * x = G.[c,x] by RLVECT_1:def 4
+     A15: c * x = G.(c,x) by RLVECT_1:def 4
              .= M(c,X) by A3;
-         a * (b * x) = G.[a,b * x] by RLVECT_1:def 4
+         a * (b * x) = G.(a,b * x) by RLVECT_1:def 4
                 .= M(a,M(b,X)) by A3;
      hence thesis by A15;
     end;
@@ -1065,7 +1058,7 @@ BINOP_1:def 1;
      let x be VECTOR of W;
      reconsider X = x as Element of ZS;
      reconsider A' = 1 as Element of REAL;
-         1 * x = G.[1,x] by RLVECT_1:def 4
+         1 * x = G.(1,x) by RLVECT_1:def 4
           .= M(A',X) by A3;
      hence thesis by TARSKI:def 1;
     end;
@@ -1080,7 +1073,6 @@ BINOP_1:def 1;
      thus A19: dist(a,a) = 0
      proof
       thus dist(a,a) = FF.(a,a) by METRIC_1:def 1
-                    .= FF.[a,a] by BINOP_1:def 1
                     .= 0 by A1;
      end;
      thus dist(a,b) = 0 implies a = b by A18;
@@ -1095,10 +1087,8 @@ BINOP_1:def 1;
      let v,w be VECTOR of W;
      reconsider v1 = v, w1 = w as Element of ZS;
      thus dist(r*v,r*w) = FF.(r*v,r*w) by METRIC_1:def 1
-                       .= FF.[r*v,r*w] by BINOP_1:def 1
                        .= abs(r) * 0 by A1
-                       .= abs(r) * FF.[v1,w1] by A1
-                       .= abs(r) * FF.(v1,w1) by BINOP_1:def 1
+                       .= abs(r) * FF.(v1,w1) by A1
                        .= abs(r) * dist(v,w) by METRIC_1:def 1;
     end;
     A21: for u,w,v be VECTOR of W holds
@@ -1106,10 +1096,8 @@ BINOP_1:def 1;
     proof
      let u,w,v be VECTOR of W;
      thus dist(v + u,w + u) = FF.(v + u,w + u) by METRIC_1:def 1
-                   .= FF.[v + u,w + u] by BINOP_1:def 1
                    .= 0 by A1
-                   .= FF.[v,w] by A1
-                   .= FF.(v,w) by BINOP_1:def 1
+                   .= FF.(v,w) by A1
                    .= dist(v,w) by METRIC_1:def 1;
     end;
     take W;
@@ -1161,8 +1149,7 @@ BINOP_1:def 1;
     let V be translatible Abelian add-associative right_zeroed
              right_complementable triangle (non empty RLSMetrStruct);
     let v,w be Element of V;
-        Norm (v + w) = dist(0.V,v + w);
-    then Norm (v + w) <= dist(0.V,v) + dist(v,v + w) by METRIC_1:4;
+    Norm (v + w) <= dist(0.V,v) + dist(v,v + w) by METRIC_1:4;
     then Norm (v + w) <= Norm v + dist(v,v + w);
     then Norm (v + w) <= Norm v + dist(v + -v,v + w + -v) by Def6;
     then Norm (v + w) <= Norm v + dist(0.V,v + w + -v) by RLVECT_1:16;
@@ -1200,25 +1187,24 @@ BINOP_1:def 1;
    proof
      deffunc F(Element of REAL n, Element of REAL n) = $1+$2;
     consider f be BinOp of REAL n such that
-     A1: for x,y be Element of REAL n holds f.(x,y) = F(x,y) from BINOP_1:sch 2
+     A1: for x,y be Element of REAL n holds f.(x,y) = F(x,y) from BINOP_1:sch 4
 ;
      deffunc G(Element of REAL, Element of REAL n) = $1*$2;
     consider g be Function of [:REAL, REAL n:],REAL n such that
      A2: for r be Element of REAL,
-             x be Element of REAL n holds g.[r,x] = G(r,x) from FUNCT_2:sch 8;
+             x be Element of REAL n holds g.(r,x) = G(r,x) from BINOP_1:sch 4;
     A3: now let r be Element of REAL,
             x be Element of REAL n;
-     thus g.(r,x) = g.[r,x] by BINOP_1:def 1
-                 .= r * x by A2;
+     thus g.(r,x) = r * x by A2;
     end;
     set RLSMS = RLSMetrStruct (# REAL n, Pitag_dist n, 0*n, f, g #);
     A4: now let v,w be Element of RLSMS;
      reconsider v1 = v, w1 = w as Element of REAL n;
      thus v + w = f.[v,w] by RLVECT_1:def 3
-               .= f.(v,w) by BINOP_1:def 1
+               .= f.(v,w)
                .= v1 + w1 by A1
                .= f.(w,v) by A1
-               .= f.[w,v] by BINOP_1:def 1
+               .= f.[w,v]
                .= w + v by RLVECT_1:def 3;
     end;
     A5: now let u,v,w be Element of RLSMS;
@@ -1228,15 +1214,15 @@ BINOP_1:def 1;
         w1 is Element of n-tuples_on REAL by EUCLID:def 1;
      thus (u + v) + w = f.[u + v,w] by RLVECT_1:def 3
                      .= f.[f.[u,v],w] by RLVECT_1:def 3
-                     .= f.(f.[u,v],w) by BINOP_1:def 1
-                     .= f.(f.(u,v),w) by BINOP_1:def 1
+                     .= f.(f.[u,v],w)
+                     .= f.(f.(u,v),w)
                      .= f.(u1 + v1,w) by A1
                      .= (u1 + v1) + w1 by A1
                      .= u1 + (v1 + w1) by A6,RVSUM_1:32
                      .= f.(u,v1 + w1) by A1
                      .= f.(u,f.(v,w)) by A1
-                     .= f.(u,f.[v,w]) by BINOP_1:def 1
-                     .= f.[u,f.[v,w]] by BINOP_1:def 1
+                     .= f.(u,f.[v,w])
+                     .= f.[u,f.[v,w]]
                      .= f.[u,v + w] by RLVECT_1:def 3
                      .= u + (v + w) by RLVECT_1:def 3;
     end;
@@ -1245,7 +1231,7 @@ BINOP_1:def 1;
      A8: the Zero of RLSMS = n |-> (0 qua Real) by EUCLID:def 4;
      thus v + 0.RLSMS = v + (the Zero of RLSMS) by RLVECT_1:def 2
                      .= f.[v,the Zero of RLSMS] by RLVECT_1:def 3
-                     .= f.(v,the Zero of RLSMS) by BINOP_1:def 1
+                     .= f.(v,the Zero of RLSMS)
                      .= v1 + (n |-> (0 qua Real)) by A1,A8
                      .= v by RVSUM_1:33;
     end;
@@ -1254,7 +1240,7 @@ BINOP_1:def 1;
      reconsider w = -v1 as Element of RLSMS by EUCLID:def 1;
      take w;
      thus v + w = f.[v,w] by RLVECT_1:def 3
-               .= f.(v,w) by BINOP_1:def 1
+               .= f.(v,w)
                .= v1 + - v1 by A1
                .= v1 - v1 by RVSUM_1:52
                .= n |-> 0 by RVSUM_1:58
@@ -1268,46 +1254,46 @@ BINOP_1:def 1;
                                                             by EUCLID:def 1;
       thus a * (v + w) = g.[a,v + w] by RLVECT_1:def 4
                       .= g.[a,f.[v,w]] by RLVECT_1:def 3
-                      .= g.[a,f.(v,w)] by BINOP_1:def 1
-                      .= g.[a,v1 + w1] by A1
+                      .= g.[a,f.(v,w)]
+                      .= g.(a,v1 + w1) by A1
                       .= a * (v2 + w2) by A2
                       .= a * v1 + a * w1 by RVSUM_1:73
                       .= f.(a * v1,a * w1) by A1
-                      .= f.[a * v1,a * w1] by BINOP_1:def 1
-                      .= f.[g.[a,v],a * w1] by A2
-                      .= f.[g.[a,v],g.[a,w]] by A2
-                      .= f.[a * v,g.[a,w]] by RLVECT_1:def 4
+                      .= f.(a * v1,a * w1)
+                      .= f.(g.(a,v),a * w1) by A2
+                      .= f.[g.(a,v),g.(a,w)] by A2
+                      .= f.[a * v,g.(a,w)] by RLVECT_1:def 4
                       .= f.[a * v,a * w] by RLVECT_1:def 4
                       .= a * v + a * w by RLVECT_1:def 3;
      end;
      hereby let a,b be Real, v be VECTOR of RLSMS;
       reconsider v1 = v as Element of REAL n;
       reconsider v2 = v1 as Element of n-tuples_on REAL by EUCLID:def 1;
-      thus (a + b) * v = g.[a + b,v] by RLVECT_1:def 4
+      thus (a + b) * v = g.(a + b,v) by RLVECT_1:def 4
                       .= (a + b) * v2 by A2
                       .= a * v1 + b * v1 by RVSUM_1:72
                       .= f.(a * v1,b * v1) by A1
-                      .= f.[a * v1,b * v1] by BINOP_1:def 1
-                      .= f.[g.[a,v],b * v1] by A2
-                      .= f.[g.[a,v],g.[b,v]] by A2
-                      .= f.[a * v,g.[b,v]] by RLVECT_1:def 4
+                      .= f.(a * v1,b * v1)
+                      .= f.(g.(a,v),b * v1) by A2
+                      .= f.[g.(a,v),g.(b,v)] by A2
+                      .= f.(a * v,g.(b,v)) by RLVECT_1:def 4
                       .= f.[a * v,b * v] by RLVECT_1:def 4
                       .= a * v + b * v by RLVECT_1:def 3;
      end;
      hereby let a,b be Real, v be VECTOR of RLSMS;
       reconsider v1 = v as Element of REAL n;
       reconsider v2 = v1 as Element of n-tuples_on REAL by EUCLID:def 1;
-      thus (a * b) * v = g.[a * b,v] by RLVECT_1:def 4
+      thus (a * b) * v = g.(a * b,v) by RLVECT_1:def 4
                       .= (a * b) * v2 by A2
                       .= a * (b * v1) by RVSUM_1:71
-                      .= g.[a,b * v1] by A2
-                      .= g.[a,g.[b,v]] by A2
+                      .= g.(a,b * v1) by A2
+                      .= g.(a,g.(b,v)) by A2
                       .= g.[a,b * v] by RLVECT_1:def 4
                       .= a * (b * v) by RLVECT_1:def 4;
      end;
      hereby let v be VECTOR of RLSMS;
       reconsider v1 = v as Element of n-tuples_on REAL by EUCLID:def 1;
-      thus 1 * v = g.[1,v] by RLVECT_1:def 4
+      thus 1 * v = g.(1,v) by RLVECT_1:def 4
                 .= 1 * v1 by A2
                 .= v by RVSUM_1:74;
      end;
@@ -1346,9 +1332,9 @@ BINOP_1:def 1;
                                                             by EUCLID:def 1;
      A15: dist(v,w) = (Pitag_dist n).(v,w) by METRIC_1:def 1
                    .= |.v1 - w1.| by EUCLID:def 6;
-     A16: r * v = g.[r,v] by RLVECT_1:def 4
+     A16: r * v = g.(r,v) by RLVECT_1:def 4
              .= r * v1 by A2;
-     A17: r * w = g.[r,w] by RLVECT_1:def 4
+     A17: r * w = g.(r,w) by RLVECT_1:def 4
               .= r * w1 by A2;
      thus dist(r*v,r*w) = (Pitag_dist n).(r*v,r*w) by METRIC_1:def 1
                        .= |.r*v2 - r*w2.| by A16,A17,EUCLID:def 6
@@ -1366,10 +1352,10 @@ BINOP_1:def 1;
      reconsider u2 = u1, w2 = w1, v2 = v1 as Element of n-tuples_on REAL
                                                             by EUCLID:def 1;
      A19: v + u = f.[v,u] by RLVECT_1:def 3
-                .= f.(v,u) by BINOP_1:def 1
+                .= f.(v,u)
                 .= v1 + u1 by A1;
      A20: w + u = f.[w,u] by RLVECT_1:def 3
-                .= f.(w,u) by BINOP_1:def 1
+                .= f.(w,u)
                 .= w1 + u1 by A1;
      thus dist(v,w) = (Pitag_dist n).(v,w) by METRIC_1:def 1
                    .= |.v1 - w1.| by EUCLID:def 6
@@ -1458,7 +1444,7 @@ begin  :: Groups of Isometric Functions
     end;
     consider o be BinOp of ISOM RLMSpace n such that
      A6: for a,b be Element of ISOM RLMSpace n holds P[a,b, o.(a,b)]
-       from BINOP_1:sch 1(A1);
+       from BINOP_1:sch 3(A1);
     take G = HGrStr(#ISOM RLMSpace n,o#);
         for f,g be Function st f in ISOM RLMSpace n &
      g in ISOM RLMSpace n holds (the mult of G).(f,g) = f*g

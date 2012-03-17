@@ -22,9 +22,9 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="YELLOW_0"/>
@@ -47,12 +47,12 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="82"/>
-<Adjective nr="124"/>
+<Adjective nr="20"/>
+<Adjective nr="83"/>
 <Adjective nr="125"/>
+<Adjective nr="126"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -67,7 +67,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="V" nr="83">
+<Pred kind="V" nr="84">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
@@ -150,7 +150,7 @@
 </For>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="294">
+<Func kind="K" nr="295">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -203,7 +203,7 @@
 </For>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="189">
+<Func kind="K" nr="190">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

@@ -9,18 +9,19 @@ environ
  vocabularies ORDERS_1, FUNCT_1, MATRIX_2, FINSET_1, SQUARE_1, FINSEQ_1, BOOLE,
       FUNCT_5, MCART_1, LATTICES, LATTICE3, RELAT_2, FINSUB_1, PARTFUN1,
       HEYTING1, TARSKI, RELAT_1, SUBSTLAT, NORMFORM, BINOP_1, FILTER_1, CAT_1,
-      YELLOW_0, WELLORD1, HEYTING2, BHSP_3, HEYTING3;
+      YELLOW_0, WELLORD1, HEYTING2, BHSP_3, HEYTING3, REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
       RELAT_1, FUNCT_1, ORDERS_2, NAT_1, FINSEQ_1, BINOP_1, FINSET_1, FINSUB_1,
-      PARTFUN1, LATTICES, DOMAIN_1, STRUCT_0, SUBSTLAT, MCART_1, FUNCT_5,
+      PARTFUN1, LATTICES, DOMAIN_1, REALSET1,
+      STRUCT_0, SUBSTLAT, MCART_1, FUNCT_5,
       WELLORD1, YELLOW_0, ABIAN, PRE_CIRC, LATTICE3, HEYTING2;
  constructors NAT_1, SETWISEO, DOMAIN_1, ABIAN, INT_1, TOLER_1, PRE_CIRC,
-      WAYBEL_1, HEYTING1, HEYTING2, YELLOW_4, FUNCT_5;
+      WAYBEL_1, HEYTING1, HEYTING2, YELLOW_4, FUNCT_5, REALSET1;
  registrations RELSET_1, LATTICES, FINSET_1, SUBSET_1, FINSUB_1, SUBSTLAT,
       PARTFUN1, STRUCT_0, LATTICE3, ABIAN, NAT_1, YELLOW_1, YELLOW_3, FINSEQ_1,
-      YELLOW_0, XREAL_0, MEMBERED, PRE_CIRC, ORDINAL2;
+      YELLOW_0, XREAL_0, MEMBERED, PRE_CIRC, ORDINAL2, REALSET1;
  requirements SUBSET, BOOLE, NUMERALS, REAL, ARITHM;
- definitions TARSKI, LATTICE3, FUNCT_1, XBOOLE_0;
+ definitions TARSKI, LATTICE3, FUNCT_1, XBOOLE_0, BINOP_1, REALSET1;
  theorems HEYTING2, ZFMISC_1, PARTFUN1, YELLOW_0, LATTICE3, TARSKI, CQC_THE1,
       ABIAN, NAT_1, LATTICE5, FINSEQ_1, SCMFSA9A, FINSET_1, MCART_1, FUNCT_5,
       WAYBEL26, ORDERS_2, YELLOW_5, PRE_CIRC, SUBSTLAT, FINSUB_1, WAYBEL15,
@@ -356,8 +357,8 @@ end;
 
 theorem
      for V, V', C, C' being set st V c= V' & C c= C' holds
-  the L_join of SubstLatt (V, C) = (the L_join of SubstLatt (V', C'))
-   | [:the carrier of SubstLatt (V, C), the carrier of SubstLatt (V, C):]
+  the L_join of SubstLatt (V, C) =
+   (the L_join of SubstLatt (V', C'))||the carrier of SubstLatt (V, C)
   proof
     let V, V', C, C' be set;
     set K = SubstLatt (V, C), L = SubstLatt (V', C');
@@ -367,7 +368,7 @@ A2: SubstitutionSet (V', C') = the carrier of L by SUBSTLAT:def 4;
 then A4:  SubstitutionSet (V, C) c= SubstitutionSet (V', C') by Th12;
 A5: the carrier of K c= the carrier of L by A1,A2,A3,Th12;
     reconsider B1 = the L_join of K as BinOp of the carrier of K;
-    set B2 = (the L_join of L) | [:the carrier of K, the carrier of K:];
+    set B2 = (the L_join of L)||the carrier of K;
         dom (the L_join of L) = [:the carrier of L, the carrier of L:]
       by FUNCT_2:def 1;
     then [:the carrier of K, the carrier of K:] c= dom (the L_join of L)
@@ -389,7 +390,7 @@ A8:     y1 in the carrier of K & y2 in the carrier of K & y = [y1, y2]
       reconsider y11 = y1, y22 = y2 as Element of SubstitutionSet (V, C)
         by A8,SUBSTLAT:def 4;
           B2.y = (the L_join of L). [y1, y2] by A6,A7,A8,FUNCT_1:72
-          .= (the L_join of L). (y1, y2) by BINOP_1:def 1
+          .= (the L_join of L). (y1, y2)
           .= mi (y1' \/ y2') by SUBSTLAT:def 4
           .= mi (y11 \/ y22) by A3,Th13;
       hence thesis by A1,A7;
@@ -404,9 +405,9 @@ A4;
       thus B1.(a, b) = mi (a' \/ b') by SUBSTLAT:def 4
                     .= mi (a1 \/ b1) by A3,Th13
                     .= (the L_join of L).(a, b) by SUBSTLAT:def 4
-                    .= (the L_join of L).[a, b] by BINOP_1:def 1
+                    .= (the L_join of L).[a, b]
                     .= B2.[a, b] by FUNCT_1:72
-                    .= B2.(a, b) by BINOP_1:def 1;
+                    .= B2.(a, b);
     end;
     hence thesis by BINOP_1:2;
   end;
@@ -419,27 +420,17 @@ end;
 
 registration let V, C be set;
   cluster SubstPoset (V, C) -> with_suprema with_infima;
-  coherence
-  proof
-        SubstPoset (V, C) = LattPOSet SubstLatt (V, C);
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration let V, C be set;
   cluster SubstPoset (V, C) -> reflexive antisymmetric transitive;
-  coherence
-  proof
-        SubstPoset (V, C) = LattPOSet SubstLatt (V, C);
-    hence thesis;
-  end;
+  coherence;
 end;
 
-Lm5:now let V, C be set;
-          SubstPoset (V, C) = LattPOSet SubstLatt (V, C);
-      hence SubstitutionSet (V, C) = the carrier of SubstPoset (V, C)
+Lm5: for V, C be set
+      holds SubstitutionSet (V, C) = the carrier of SubstPoset (V, C)
         by SUBSTLAT:def 4;
-    end;
 
 theorem Th15:
   for V, C being set,
@@ -448,10 +439,7 @@ theorem Th15:
   proof
     let V, C be set;
     let a, b be Element of SubstPoset (V, C);
-    LattPOSet SubstLatt (V, C) =
-    RelStr(#the carrier of SubstLatt (V, C),
-      LattRel SubstLatt (V, C) #);
-    then reconsider a' = a, b' = b
+    reconsider a' = a, b' = b
       as Element of SubstLatt (V, C);
     reconsider a1 = a, b1 = b
       as Element of SubstitutionSet (V, C) by Lm5;
@@ -1226,15 +1214,15 @@ theorem Th32:
     let k be Nat;
     let V, X be set;
     let a be Element of SubstPoset (V, {k});
-A2: SubstitutionSet (V, {k}) = the carrier of SubstLatt (V, {k})
+A1: SubstitutionSet (V, {k}) = the carrier of SubstLatt (V, {k})
          by SUBSTLAT:def 4
       .= the carrier of SubstPoset (V, {k});
     then a in SubstitutionSet (V, {k});
-then A3: a c= PFuncs (V, {k}) & a is finite by FINSUB_1:def 5;
-    assume A4: X in a;
-then A5: X in PFuncs (V, {k}) by A3;
+then A2: a c= PFuncs (V, {k}) & a is finite by FINSUB_1:def 5;
+    assume A3: X in a;
+then A4: X in PFuncs (V, {k}) by A2;
         PFuncs (V, {k}) c= bool [:V, {k}:] by HEYTING2:4;
-    hence thesis by A2,A4,A5,HEYTING2:2;
+    hence thesis by A1,A3,A4,HEYTING2:2;
   end;
 
 theorem Th33:
@@ -1462,9 +1450,9 @@ theorem Th41:
     a <= b & a = {{}} holds b = {{}}
 proof
   let k be Nat, a, b be Element of SubstPoset (NAT, {k});
-A2:Top SubstPoset (NAT, {k}) = {{}} by Th39;
+A1:Top SubstPoset (NAT, {k}) = {{}} by Th39;
   assume a <= b & a = {{}};
-  hence thesis by A2,WAYBEL15:5;
+  hence thesis by A1,WAYBEL15:5;
 end;
 
 theorem Th42:
@@ -1472,9 +1460,9 @@ theorem Th42:
     a <= b & b = {} holds a = {}
 proof
   let k be Nat, a, b be Element of SubstPoset (NAT, {k});
-A2:Bottom SubstPoset (NAT, {k}) = {} by Th40;
+A1:Bottom SubstPoset (NAT, {k}) = {} by Th40;
   assume a <= b & b = {};
-  hence thesis by A2,YELLOW_5:22;
+  hence thesis by A1,YELLOW_5:22;
 end;
 
 theorem Th43:
@@ -1489,9 +1477,9 @@ theorem Th43:
 A3: PFBrt (1,m) in PFDrt m by Def5;
     reconsider P1 = PFBrt (1,m) as Element of SubstPoset (NAT, {m})
       by Th28;
-A5:  Top SubstPoset (NAT, {m}) = {{}} by Th39;
+A4:  Top SubstPoset (NAT, {m}) = {{}} by Th39;
         P1 >= a by A1,A3,LATTICE3:def 8;
-    then P1 = {{}} by A2,A5,WAYBEL15:5;
+    then P1 = {{}} by A2,A4,WAYBEL15:5;
     hence thesis by Th30;
   end;
 
@@ -1544,64 +1532,64 @@ then A6:     d = PFArt (1,m) by TARSKI:def 1;
       let t be Element of SubstPoset (NAT, {m});
       assume t in PFDrt m;
       then consider n being non empty Nat such that
-A8:     t = PFBrt (n,m) by Def5;
+A7:     t = PFBrt (n,m) by Def5;
           for x being set st x in Sum ex y being set st y in t & y c= x
       proof
-        let x be set; assume A9: x in Sum;
-then A10:     x = PFArt (mX,m) by TARSKI:def 1;
+        let x be set; assume A8: x in Sum;
+then A9:     x = PFArt (mX,m) by TARSKI:def 1;
         per cases;
-        suppose A11: n < mX;
+        suppose A10: n < mX;
         take y = PFCrt (n,m);
-        thus y in t by A8,Def4;
-        thus y c= x by A10,A11,Lm9;
+        thus y in t by A7,Def4;
+        thus y c= x by A9,A10,Lm9;
         end;
-        suppose A12: n >= mX;
+        suppose A11: n >= mX;
         take y = PFArt (mX,m);
-        thus y in t by A8,A12,Def4;
-        thus y c= x by A9,TARSKI:def 1;
+        thus y in t by A7,A11,Def4;
+        thus y c= x by A8,TARSKI:def 1;
       end;
       end;
       hence Sum <= t by Th15;
     end;
-then A13: PFDrt m is_>=_than b by A2,Th34;
-A14: a <= b by YELLOW_0:22;
+then A12: PFDrt m is_>=_than b by A2,Th34;
+A13: a <= b by YELLOW_0:22;
         a <> b
     proof
-      assume A15: a = b;
-then A16:   Sum <= a by YELLOW_0:24;
+      assume A14: a = b;
+then A15:   Sum <= a by YELLOW_0:24;
           PFArt (mX,m) in Sum by TARSKI:def 1;
       then consider g being set such that
-A17:     g in a & g c= PFArt (mX,m) by A16,Th15;
+A16:     g in a & g c= PFArt (mX,m) by A15,Th15;
       per cases;
       suppose g is non empty;
       then consider n being Nat such that
-A18:     [n,m] in g & n is even by A2,A17,Th33;
-          now per cases by A17,A18,Def2;
+A17:     [n,m] in g & n is even by A2,A16,Th33;
+          now per cases by A16,A17,Def2;
         suppose ex m' being odd Nat st m' <= 2*mX & [m',m] = [n,m];
         then consider m' being odd Nat such that
-  A19:     m' <= 2*mX & [m',m] = [n,m];
-        thus thesis by A18,A19,ZFMISC_1:33;
+  A18:     m' <= 2*mX & [m',m] = [n,m];
+        thus thesis by A17,A18,ZFMISC_1:33;
         end;
-        suppose A20: [2*mX,m] = [n,m];
+        suppose A19: [2*mX,m] = [n,m];
             2*mX > mX by REAL_2:144;
-        hence thesis by A17,A18,A20,Th38;
+        hence thesis by A16,A17,A19,Th38;
       end;
       end;
       hence thesis;
       end;
       suppose g is empty;
-then A21:    b = {{}} by A15,A17,Th35;
+then A20:    b = {{}} by A14,A16,Th35;
       reconsider P1 = PFBrt (1,m) as Element of SubstPoset (NAT, {m})
         by Th28;
-A22:   PFBrt (1,m) <> {{}} by Th30;
+A21:   PFBrt (1,m) <> {{}} by Th30;
           PFBrt (1,m) in PFDrt m by Def5;
-      then P1 >= b by A13,LATTICE3:def 8;
-      hence thesis by A21,A22,Th41;
+      then P1 >= b by A12,LATTICE3:def 8;
+      hence thesis by A20,A21,Th41;
     end;
     end;
-then A23: a < b by A14,ORDERS_2:def 10;
-        a >= b by A2,A13;
-    hence contradiction by A23,ORDERS_2:30;
+then A22: a < b by A13,ORDERS_2:def 10;
+        a >= b by A2,A12;
+    hence contradiction by A22,ORDERS_2:30;
   end;
 
 registration let m be Nat;

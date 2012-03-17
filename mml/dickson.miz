@@ -26,7 +26,7 @@ environ
       BORSUK_3, WAYBEL18, ORDERS_2, FILTER_1, MEMBERED, FUNCT_2, PRE_CIRC,
       PARTFUN1;
  requirements BOOLE, SUBSET, NUMERALS;
- definitions TARSKI, RELAT_2, ORDERS_2, ORDERS_1;
+ definitions TARSKI, RELAT_2, ORDERS_2, ORDERS_1, CQC_LANG;
  theorems WELLORD1, ORDERS_1, SUBSET_1, TARSKI, RELAT_1, RELAT_2, RELSET_1,
       ZFMISC_1, EQREL_1, STRUCT_0, WAYBEL_0, ORDERS_2, NAT_1, FUNCT_1, FUNCT_2,
       REAL_1, CQC_SIM1, CARD_2, CARD_4, CARD_1, NORMSP_1, SEQM_3, FINSET_1,
@@ -535,10 +535,7 @@ end;
 registration
   let R be non empty RelStr;
   cluster R\~ -> non empty;
-coherence proof set IR = the InternalRel of R, CR = the carrier of R;
-      R\~ = RelStr(# CR, IR\~ #);
- hence R\~ is non empty;
-end;
+coherence;
 end;
 
 registration
@@ -549,17 +546,17 @@ coherence proof
     set IR'= the InternalRel of R\~, CR' = the carrier of R\~;
 A1: IR is_transitive_in CR by ORDERS_2:def 5;
         now let x,y,z be set such that
-    A3: x in CR' & y in CR' & z in CR' and
-    A4: [x,y] in IR' & [y,z] in IR';
-            [x,y] in IR \ IR~ & [y,z] in IR \ IR~ by A4;
-    then A5: [x,y] in IR & not [x,y] in IR~ & [y,z] in IR by XBOOLE_0:def 4;
-    then A6: [x,z] in IR by A1,A3,RELAT_2:def 8;
+    A2: x in CR' & y in CR' & z in CR' and
+    A3: [x,y] in IR' & [y,z] in IR';
+            [x,y] in IR \ IR~ & [y,z] in IR \ IR~ by A3;
+    then A4: [x,y] in IR & not [x,y] in IR~ & [y,z] in IR by XBOOLE_0:def 4;
+    then A5: [x,z] in IR by A1,A2,RELAT_2:def 8;
             now assume [x,z] in IR~;
             then [z, x] in IR by RELAT_1:def 7;
-            then [y, x] in IR by A1,A3,A5,RELAT_2:def 8;
-            hence contradiction by A5,RELAT_1:def 7;
+            then [y, x] in IR by A1,A2,A4,RELAT_2:def 8;
+            hence contradiction by A4,RELAT_1:def 7;
         end;
-        then [x,z] in IR \ IR~ by A6,XBOOLE_0:def 4;
+        then [x,z] in IR \ IR~ by A5,XBOOLE_0:def 4;
         hence [x,z] in IR';
     end;
     then IR' is_transitive_in CR' by RELAT_2:def 8;
@@ -575,8 +572,8 @@ coherence proof
     set IR'= the InternalRel of R\~, CR' = the carrier of R\~;
         now let x, y be set such that
             x in CR' & y in CR' and
-    A2: [x,y] in IR' & [y,x] in IR';
-            [x,y] in IR\ IR~ & [y,x] in IR\IR~ by A2;
+    A1: [x,y] in IR' & [y,x] in IR';
+            [x,y] in IR\ IR~ & [y,x] in IR\IR~ by A1;
         then not [x,y] in IR~ & [y,x] in IR by XBOOLE_0:def 4;
         hence x = y by RELAT_1:def 7;
     end;
@@ -618,11 +615,11 @@ proof
     assume R is asymmetric;
 then A1: R is_asymmetric_in field R by RELAT_2:def 13;
         now let a,b be set;
-        hereby assume A3: [a,b] in R;
+        hereby assume A2: [a,b] in R;
             then a in field R & b in field R by RELAT_1:30;
-            then not [b,a] in R by A1,A3,RELAT_2:def 5;
+            then not [b,a] in R by A1,A2,RELAT_2:def 5;
             then not [a,b] in R~ by RELAT_1:def 7;
-            hence [a,b] in R\~ by A3,XBOOLE_0:def 4;
+            hence [a,b] in R\~ by A2,XBOOLE_0:def 4;
         end;
         assume [a,b] in R\~;
         hence [a,b] in R by XBOOLE_0:def 4;
@@ -634,19 +631,19 @@ theorem :: Exercise 4.29.ii
     for R being Relation st R is transitive holds R\~ is transitive
 proof let R be Relation such that
 A1: R is transitive;
-A3: R is_transitive_in field R by A1,RELAT_2:def 16;
+A2: R is_transitive_in field R by A1,RELAT_2:def 16;
         now let x, y, z be set such that
             x in field (R\~) & y in field (R\~) & z in field (R\~) and
-    A4: [x,y] in R\~ and
-    A5: [y,z] in R\~;
-    A6: [x,y] in R & [y,z] in R by A4,A5,XBOOLE_0:def 4;
-    then A7: x in field R & y in field R & z in field R by RELAT_1:30;
-    then A8: [x,z] in R by A3,A6,RELAT_2:def 8;
-            not [x,y] in R~ by A4,XBOOLE_0:def 4;
+    A3: [x,y] in R\~ and
+    A4: [y,z] in R\~;
+    A5: [x,y] in R & [y,z] in R by A3,A4,XBOOLE_0:def 4;
+    then A6: x in field R & y in field R & z in field R by RELAT_1:30;
+    then A7: [x,z] in R by A2,A5,RELAT_2:def 8;
+            not [x,y] in R~ by A3,XBOOLE_0:def 4;
     then not [y,x] in R by RELAT_1:def 7;
-        then not [z,x] in R by A3,A6,A7,RELAT_2:def 8;
+        then not [z,x] in R by A2,A5,A6,RELAT_2:def 8;
     then not [x,z] in R~ by RELAT_1:def 7;
-        hence [x,z] in R\~ by A8,XBOOLE_0:def 4;
+        hence [x,z] in R\~ by A7,XBOOLE_0:def 4;
     end;
     then R\~ is_transitive_in field (R\~) by RELAT_2:def 8;
     hence R\~ is transitive by RELAT_2:def 16;
@@ -658,20 +655,20 @@ theorem :: Exercise 4.29.iii
 proof let R be Relation, a, b be set such that
 A1: R is antisymmetric;
 A2: R is_antisymmetric_in field R by A1,RELAT_2:def 12;
-A4: R\~ is_asymmetric_in field (R\~) by RELAT_2:def 13;
-    hereby assume A5: [a,b] in R\~;
+A3: R\~ is_asymmetric_in field (R\~) by RELAT_2:def 13;
+    hereby assume A4: [a,b] in R\~;
        hence [a,b] in R by XBOOLE_0:def 4;
-           now assume A6: a = b;
-               a in field (R\~) & b in field (R\~) by A5,RELAT_1:30;
-           hence contradiction by A4,A5,A6,RELAT_2:def 5;
+           now assume A5: a = b;
+               a in field (R\~) & b in field (R\~) by A4,RELAT_1:30;
+           hence contradiction by A3,A4,A5,RELAT_2:def 5;
        end;
        hence a <> b;
     end;
-    assume A7: [a,b] in R & a <> b;
+    assume A6: [a,b] in R & a <> b;
 then a in field R & b in field R by RELAT_1:30;
-    then not [b,a] in R by A2,A7,RELAT_2:def 4;
+    then not [b,a] in R by A2,A6,RELAT_2:def 4;
     then not [a,b] in R~ by RELAT_1:def 7;
-    hence [a,b] in R\~ by A7,XBOOLE_0:def 4;
+    hence [a,b] in R\~ by A6,XBOOLE_0:def 4;
 end;
 
 theorem Th16: :: Exercise 4.29 (addition)
@@ -682,23 +679,23 @@ A1: R is well_founded;
     set IR' = the InternalRel of R\~, CR' = the carrier of R\~;
 A2: IR is_well_founded_in CR by A1,WELLFND1:def 2;
         now let Y be set such that
-       A4: Y c= CR' and
-       A5: Y <> {};
+       A3: Y c= CR' and
+       A4: Y <> {};
            consider a being set such that
-       A6: a in Y and
-       A7: IR-Seg(a) misses Y by A2,A4,A5,WELLORD1:def 3;
-       A8: IR-Seg(a) /\ Y = {} by A7,XBOOLE_0:def 7;
+       A5: a in Y and
+       A6: IR-Seg(a) misses Y by A2,A3,A4,WELLORD1:def 3;
+       A7: IR-Seg(a) /\ Y = {} by A6,XBOOLE_0:def 7;
            take a;
-           thus a in Y by A6;
+           thus a in Y by A5;
                now assume ex z being set st z in IR'-Seg(a) /\ Y;
                then consider z being set such that
-           A9: z in IR'-Seg(a) /\ Y;
-           A10: z in IR'-Seg(a) & z in Y by A9,XBOOLE_0:def 3;
-           then A11: z <> a & [z,a] in IR' by WELLORD1:def 1;
+           A8: z in IR'-Seg(a) /\ Y;
+           A9: z in IR'-Seg(a) & z in Y by A8,XBOOLE_0:def 3;
+           then A10: z <> a & [z,a] in IR' by WELLORD1:def 1;
                then [z,a] in IR \ IR~;
                then [z,a] in IR by XBOOLE_0:def 4;
-               then z in IR-Seg(a) by A11,WELLORD1:def 1;
-               hence contradiction by A8,A10,XBOOLE_0:def 3;
+               then z in IR-Seg(a) by A10,WELLORD1:def 1;
+               hence contradiction by A7,A9,XBOOLE_0:def 3;
            end; then IR'-Seg(a) /\ Y = {} by XBOOLE_0:def 1;
            hence IR'-Seg(a) misses Y by XBOOLE_0:def 7;
     end;
@@ -715,28 +712,27 @@ A2: R is antisymmetric;
     set IR = the InternalRel of R, CR = the carrier of R;
     set IR' = the InternalRel of R\~;
 A3: IR is_antisymmetric_in CR by A2,ORDERS_2:def 6;
- R\~ = RelStr(# CR, (IR)\~ #);
-then A5: IR' is_well_founded_in CR by A1,WELLFND1:def 2;
+A4: IR' is_well_founded_in CR by A1,WELLFND1:def 2;
         now let Y be set such that
-    A6: Y c= CR and
-    A7: Y <> {};
+    A5: Y c= CR and
+    A6: Y <> {};
         consider a being set such that
-    A8: a in Y and
-    A9: IR'-Seg(a) misses Y by A5,A6,A7,WELLORD1:def 3;
-    A10: IR'-Seg(a) /\ Y = {} by A9,XBOOLE_0:def 7;
+    A7: a in Y and
+    A8: IR'-Seg(a) misses Y by A4,A5,A6,WELLORD1:def 3;
+    A9: IR'-Seg(a) /\ Y = {} by A8,XBOOLE_0:def 7;
         take a;
-        thus a in Y by A8;
+        thus a in Y by A7;
             now assume IR-Seg(a) /\ Y <> {};
             then consider z being set such that
-        A11: z in IR-Seg(a) /\ Y by XBOOLE_0:def 1;
-        A12: z in IR-Seg(a) & z in Y by A11,XBOOLE_0:def 3;
-        then A13: z <> a & [z,a] in IR by WELLORD1:def 1;
-            then not [a,z] in IR by A3,A6,A8,A12,RELAT_2:def 4;
+        A10: z in IR-Seg(a) /\ Y by XBOOLE_0:def 1;
+        A11: z in IR-Seg(a) & z in Y by A10,XBOOLE_0:def 3;
+        then A12: z <> a & [z,a] in IR by WELLORD1:def 1;
+            then not [a,z] in IR by A3,A5,A7,A11,RELAT_2:def 4;
             then not [z,a] in IR~ by RELAT_1:def 7;
-            then [z,a] in IR \ IR~ by A13,XBOOLE_0:def 4;
+            then [z,a] in IR \ IR~ by A12,XBOOLE_0:def 4;
             then [z,a] in IR';
-            then z in IR'-Seg(a) by A13,WELLORD1:def 1;
-            hence contradiction by A10,A12,XBOOLE_0:def 3;
+            then z in IR'-Seg(a) by A12,WELLORD1:def 1;
+            hence contradiction by A9,A11,XBOOLE_0:def 3;
         end;
         hence IR-Seg(a) misses Y by XBOOLE_0:def 7;
     end;
@@ -755,39 +751,39 @@ proof
     let L be RelStr, N be set, x be Element of L\~;
     set IR = the InternalRel of L, CR = the carrier of L;
     set IR' = the InternalRel of L\~;
-    hereby assume A2: x is_minimal_wrt N, the InternalRel of (L\~);
+    hereby assume A1: x is_minimal_wrt N, the InternalRel of (L\~);
         hence x in N by WAYBEL_4:def 26;
         let y be Element of L such that
-    A3: y in N;
-        assume A4: [y,x] in IR;
+    A2: y in N;
+        assume A3: [y,x] in IR;
             now per cases;
             suppose x = y;
-               hence [x,y] in IR by A4;
+               hence [x,y] in IR by A3;
             end;
             suppose x <> y;
-               then not [y,x] in IR' by A2,A3,WAYBEL_4:def 26;
+               then not [y,x] in IR' by A1,A2,WAYBEL_4:def 26;
                then not [y,x] in IR \ IR~;
-               then [y,x] in IR~ by A4,XBOOLE_0:def 4;
+               then [y,x] in IR~ by A3,XBOOLE_0:def 4;
                hence [x,y] in IR by RELAT_1:def 7;
         end;
         end;
         hence [x,y] in the InternalRel of L;
     end;
-    assume A5: x in N & for y being Element of L st y in N
+    assume A4: x in N & for y being Element of L st y in N
         holds [y,x] in (the InternalRel of L) implies
               [x,y] in (the InternalRel of L);
         now
-        thus x in N by A5;
+        thus x in N by A4;
             now assume ex y being set st y in N & y <> x & [y,x] in IR';
             then consider y being set such that
-        A6: y in N and
+        A5: y in N and
                 y <> x and
-        A7: [y,x] in IR';
-            reconsider y'=y as Element of L by A7,ZFMISC_1:106;
-                [y,x] in IR \ IR~ by A7;
-        then A8: [y,x] in IR & not [y,x] in IR~ by XBOOLE_0:def 4;
-                [y',x] in IR implies [x,y'] in IR by A5,A6;
-            hence contradiction by A8,RELAT_1:def 7;
+        A6: [y,x] in IR';
+            reconsider y'=y as Element of L by A6,ZFMISC_1:106;
+                [y,x] in IR \ IR~ by A6;
+        then A7: [y,x] in IR & not [y,x] in IR~ by XBOOLE_0:def 4;
+                [y',x] in IR implies [x,y'] in IR by A4,A5;
+            hence contradiction by A7,RELAT_1:def 7;
         end;
         hence not ex y being set st y in N & y <> x & [y,x] in IR';
     end;
@@ -813,37 +809,37 @@ A4: for a,b being Element of R holds
        ((a <= b implies m.a <= m.b) &
        (m.a = m.b implies [a,b] in EqRel R));
     set IR = the InternalRel of R, IS = the InternalRel of S;
-A7: IS is_antisymmetric_in the carrier of S by A2,ORDERS_2:def 6;
+A5: IS is_antisymmetric_in the carrier of S by A2,ORDERS_2:def 6;
         now assume ex f being sequence of R\~ st f is descending;
         then consider f being sequence of R\~ such that
-        A8: f is descending;
+        A6: f is descending;
         reconsider f'=f as sequence of R;
         deffunc F(Nat) = m.(f'.$1);
         consider g' being Function of NAT, the carrier of S such that
-    A9: for k being Element of NAT holds g'.k = F(k) from FUNCT_2:sch 4;
+    A7: for k being Element of NAT holds g'.k = F(k) from FUNCT_2:sch 4;
         reconsider g=g' as sequence of S\~;
             now let n be Nat;
-                [f.(n+1), f.n] in the InternalRel of R\~ by A8,WELLFND1:def 7;
+                [f.(n+1), f.n] in the InternalRel of R\~ by A6,WELLFND1:def 7;
             then [f.(n+1), f.n] in IR \ IR~;
-        then A10: not [f.(n+1), f.n] in IR~ & [f.(n+1), f.n] in IR by
+        then A8: not [f.(n+1), f.n] in IR~ & [f.(n+1), f.n] in IR by
 XBOOLE_0:def 4;
-        A11: g.n = m.(f.n) by A9;
-            A12: now assume g.(n+1) = g.n;
-                then m.(f.(n+1)) = m.(f.n) by A9,A11;
+        A9: g.n = m.(f.n) by A7;
+            A10: now assume g.(n+1) = g.n;
+                then m.(f.(n+1)) = m.(f.n) by A7,A9;
                 then [f'.(n+1), f'.n] in EqRel R by A4;
                 then [f.(n+1), f.n] in (IR /\ IR~) by A1,Def4;
-                hence contradiction by A10,XBOOLE_0:def 3;
+                hence contradiction by A8,XBOOLE_0:def 3;
             end;
             hence g.(n+1) <> g.n;
             reconsider fn1 = f.(n+1) as Element of R;
             reconsider fn = f.n as Element of R;
-        A13: fn1 <= fn by A10,ORDERS_2:def 9;
-                g'.(n+1) = m.fn1 & g'.n = m.fn by A9;
-            then g'.(n+1) <= g'.n by A4,A13;
-        then A14: [g.(n+1), g.n] in IS by ORDERS_2:def 9;
-            then not [g.n, g.(n+1)] in IS by A7,A12,RELAT_2:def 4;
+        A11: fn1 <= fn by A8,ORDERS_2:def 9;
+                g'.(n+1) = m.fn1 & g'.n = m.fn by A7;
+            then g'.(n+1) <= g'.n by A4,A11;
+        then A12: [g.(n+1), g.n] in IS by ORDERS_2:def 9;
+            then not [g.n, g.(n+1)] in IS by A5,A10,RELAT_2:def 4;
             then not [g.(n+1), g.n] in IS~ by RELAT_1:def 7;
-            then [g.(n+1), g.n] in IS \ IS~ by A14,XBOOLE_0:def 4;
+            then [g.(n+1), g.n] in IS \ IS~ by A12,XBOOLE_0:def 4;
             hence [g.(n+1), g.n] in the InternalRel of S\~;
         end;
         then g is descending by WELLFND1:def 7;
@@ -890,8 +886,7 @@ existence proof
     given y being Element of R\~ such that
 A6: y is_minimal_wrt N, IR' and
 A7: x = Class(EqRel R,y) /\ N;
-        R\~=RelStr(#the carrier of R,(the InternalRel of R)\~#);
-    then reconsider y' = y as Element of R;
+    reconsider y' = y as Element of R;
         Class(EqRel R, y') in Class(EqRel R) by EQREL_1:def 5;
     hence x in C by A6,A7;
 end;
@@ -939,28 +934,28 @@ A5: x = Class(EqRel R, b) /\ N by A2,Def8;
         c in Class(EqRel R, b) & c in N by A3,A5,XBOOLE_0:def 3;
     then [c,b] in EqRel R by EQREL_1:27;
     then [c,b] in IR /\ IR~ by A1,Def4;
-then A7: [c,b] in IR & [c,b] in IR~ by XBOOLE_0:def 3;
+then A6: [c,b] in IR & [c,b] in IR~ by XBOOLE_0:def 3;
         now
         thus c in N by A3,A5,XBOOLE_0:def 3;
             now assume ex d being set
                     st d in N & d <> c & [d,c] in IR';
             then consider d being set such that
-        A8: d in N and
+        A7: d in N and
                 d <> c and
-        A9: [d,c] in IR';
-                [d,c] in IR \ IR~ by A9;
-        then A12: [d,c] in IR & not [d,c] in IR~ by XBOOLE_0:def 4;
+        A8: [d,c] in IR';
+                [d,c] in IR \ IR~ by A8;
+        then A9: [d,c] in IR & not [d,c] in IR~ by XBOOLE_0:def 4;
                 R is transitive by A1,Def3;
-        then A13: IR is_transitive_in CR by ORDERS_2:def 5;
-        then A14: [d,b] in IR by A7,A8,A12,RELAT_2:def 8;
+        then A10: IR is_transitive_in CR by ORDERS_2:def 5;
+        then A11: [d,b] in IR by A6,A7,A9,RELAT_2:def 8;
                 now assume [d,b] in IR~;
                 then [b,d] in IR by RELAT_1:def 7;
-                then [c,d] in IR by A7,A8,A13,RELAT_2:def 8;
-                hence contradiction by A12,RELAT_1:def 7;
+                then [c,d] in IR by A6,A7,A10,RELAT_2:def 8;
+                hence contradiction by A9,RELAT_1:def 7;
             end;
-        then A15: [d,b] in IR' by A14,XBOOLE_0:def 4;
-                b <> d by A7,A12,RELAT_1:def 7;
-            hence contradiction by A4,A8,A15,WAYBEL_4:def 26;
+        then A12: [d,b] in IR' by A11,XBOOLE_0:def 4;
+                b <> d by A6,A9,RELAT_1:def 7;
+            hence contradiction by A4,A7,A12,WAYBEL_4:def 26;
         end;
         hence not ex d being set st d in N & d <> c & [d,c] in IR';
     end;
@@ -977,25 +972,25 @@ proof
     set IR = the InternalRel of R, CR = the carrier of R;
     set IR'= the InternalRel of R\~, CR' = the carrier of R\~;
     hereby assume R\~ is well_founded;
-    then A2: IR' is_well_founded_in CR' by WELLFND1:def 2;
+    then A1: IR' is_well_founded_in CR' by WELLFND1:def 2;
         let N be Subset of CR such that
-    A3: N <> {};
+    A2: N <> {};
         reconsider N'=N as Subset of CR';
         consider y being set such that
-    A4: y in N' and
-    A5: IR'-Seg(y) misses N' by A2,A3,WELLORD1:def 3;
-    A6: IR'-Seg(y) /\ N' = {} by A5,XBOOLE_0:def 7;
-        reconsider y as Element of R\~ by A4;
+    A3: y in N' and
+    A4: IR'-Seg(y) misses N' by A1,A2,WELLORD1:def 3;
+    A5: IR'-Seg(y) /\ N' = {} by A4,XBOOLE_0:def 7;
+        reconsider y as Element of R\~ by A3;
         set x = Class(EqRel R, y) /\ N;
             now
-            thus y in N by A4;
+            thus y in N by A3;
                 now assume ex z being set
                         st z in N & z <> y & [z,y] in IR';
                 then consider z being set such that
-            A7: z in N & z <> y and
-            A8: [z,y] in IR';
-                    z in IR'-Seg(y) by A7,A8,WELLORD1:def 1;
-                hence contradiction by A6,A7,XBOOLE_0:def 3;
+            A6: z in N & z <> y and
+            A7: [z,y] in IR';
+                    z in IR'-Seg(y) by A6,A7,WELLORD1:def 1;
+                hence contradiction by A5,A6,XBOOLE_0:def 3;
             end;
             hence not ex z being set st z in N & z<>y &[z,y] in IR';
         end;
@@ -1003,27 +998,27 @@ proof
         then x in min-classes N by Def8;
         hence ex x being set st x in min-classes N;
     end;
-    assume A9: for N being Subset of R st N <> {}
+    assume A8: for N being Subset of R st N <> {}
                 ex x being set st x in min-classes N;
         now let N be set such that
-    A10: N c= CR' and
-    A11: N <> {};
-        reconsider N'=N as Subset of R by A10;
+    A9: N c= CR' and
+    A10: N <> {};
+        reconsider N'=N as Subset of R by A9;
         consider x being set such that
-    A12: x in min-classes N' by A9,A11;
+    A11: x in min-classes N' by A8,A10;
         consider a being Element of R\~ such that
-    A13: a is_minimal_wrt N', IR' and
-            x = Class(EqRel R, a) /\ N' by A12,Def8;
+    A12: a is_minimal_wrt N', IR' and
+            x = Class(EqRel R, a) /\ N' by A11,Def8;
         reconsider a'=a as set;
         take a';
-        thus a' in N by A13,WAYBEL_4:def 26;
+        thus a' in N by A12,WAYBEL_4:def 26;
             now assume IR'-Seg(a') /\ N <> {};
             then consider z being set such that
-        A14: z in IR'-Seg(a') /\ N by XBOOLE_0:def 1;
-        A15: z in IR'-Seg(a') & z in N by A14,XBOOLE_0:def 3;
-            then reconsider z as Element of R\~ by A10;
-                z <> a' & [z,a] in IR' by A15,WELLORD1:def 1;
-            hence contradiction by A13,A15,WAYBEL_4:def 26;
+        A13: z in IR'-Seg(a') /\ N by XBOOLE_0:def 1;
+        A14: z in IR'-Seg(a') & z in N by A13,XBOOLE_0:def 3;
+            then reconsider z as Element of R\~ by A9;
+                z <> a' & [z,a] in IR' by A14,WELLORD1:def 1;
+            hence contradiction by A12,A14,WAYBEL_4:def 26;
         end;
         hence IR'-Seg(a') misses N by XBOOLE_0:def 7;
     end;
@@ -1057,7 +1052,7 @@ A1: x in min-classes N;
 A2: y is_minimal_wrt N, the InternalRel of R\~ and
 A3: x = Class(EqRel R, y) /\ N by A1,Def8;
 A4: y in N by A2,WAYBEL_4:def 26;
-    then y in Class(EqRel R, y) by EQREL_1:28;
+    y in Class(EqRel R, y) by EQREL_1:28;
     hence x is non empty by A3,A4,XBOOLE_0:def 3;
 end;
 
@@ -1071,229 +1066,229 @@ proof
 A1: R is quasi_ordered;
     set IR = the InternalRel of R, CR = the carrier of R;
     set IR' = the InternalRel of R\~;
-    hereby assume A3: R is connected & R\~ is well_founded;
+    hereby assume A2: R is connected & R\~ is well_founded;
         let N be non empty Subset of CR;
         consider x being set such that
-    A4: x in min-classes N by A3,Th21;
+    A3: x in min-classes N by A2,Th21;
         consider a being Element of R\~ such that
-    A5: a is_minimal_wrt N, the InternalRel of (R\~) and
-    A6: x = Class(EqRel R, a) /\ N by A4,Def8;
-    A7: a in N & not ex b being Element of R\~ st b in N &
-         b <> a & [b,a] in IR' by A5,WAYBEL_4:def 26;
+    A4: a is_minimal_wrt N, the InternalRel of (R\~) and
+    A5: x = Class(EqRel R, a) /\ N by A3,Def8;
+    A6: a in N & not ex b being Element of R\~ st b in N &
+         b <> a & [b,a] in IR' by A4,WAYBEL_4:def 26;
             now let y be set;
             hereby assume y in min-classes N;
                 then consider b being Element of R\~ such that
-            A8: b is_minimal_wrt N, IR' and
-            A9: y = Class(EqRel R, b) /\ N by Def8;
-            A10: b in N & not ex a being Element of R\~ st a in N &
-                 a <> b & [a,b] in IR' by A8,WAYBEL_4:def 26;
+            A7: b is_minimal_wrt N, IR' and
+            A8: y = Class(EqRel R, b) /\ N by Def8;
+            A9: b in N & not ex a being Element of R\~ st a in N &
+                 a <> b & [a,b] in IR' by A7,WAYBEL_4:def 26;
                 reconsider a'=a as Element of R;
                 reconsider b'=b as Element of R;
-A11:             now per cases by A3,WAYBEL_0:def 29;
-                    suppose A12: a' <= b';
-                    then A13: [a, b] in IR by ORDERS_2:def 9;
+A10:             now per cases by A2,WAYBEL_0:def 29;
+                    suppose A11: a' <= b';
+                    then A12: [a, b] in IR by ORDERS_2:def 9;
                             now per cases;
                             suppose a = b;
-                                hence [b,a] in IR by A12,ORDERS_2:def 9;
+                                hence [b,a] in IR by A11,ORDERS_2:def 9;
                             end;
-                            suppose A14: a <> b;
+                            suppose A13: a <> b;
                                     now assume not [b,a] in IR;
                                     then not [a,b] in IR~ by RELAT_1:def 7;
-                                    then [a,b] in IR \ IR~ by A13,
+                                    then [a,b] in IR \ IR~ by A12,
 XBOOLE_0:def 4
 ;
                                     then [a,b] in IR';
                                     hence contradiction
-                                     by A7,A8,A14,WAYBEL_4:def 26;
+                                     by A6,A7,A13,WAYBEL_4:def 26;
                                 end;
                                 hence [b,a] in IR;
                         end;
                         end;
-                        hence [a,b] in IR & [b,a] in IR by A12,ORDERS_2:def 9;
+                        hence [a,b] in IR & [b,a] in IR by A11,ORDERS_2:def 9;
                     end;
-                    suppose A15: b' <= a';
-                    then A16: [b, a] in IR by ORDERS_2:def 9;
+                    suppose A14: b' <= a';
+                    then A15: [b, a] in IR by ORDERS_2:def 9;
                             now per cases;
                             suppose a = b;
-                                hence [a,b] in IR by A15,ORDERS_2:def 9;
+                                hence [a,b] in IR by A14,ORDERS_2:def 9;
                             end;
-                            suppose A17: a <> b;
+                            suppose A16: a <> b;
                                     now assume not [a,b] in IR;
                                     then not [b,a] in IR~ by RELAT_1:def 7;
-                                    then [b,a] in IR \ IR~ by A16,
+                                    then [b,a] in IR \ IR~ by A15,
 XBOOLE_0:def 4
 ;
                                     then [b,a] in IR';
-                                    hence contradiction by A5,A10,A17,
+                                    hence contradiction by A4,A9,A16,
 WAYBEL_4:def 26;
                                 end;
                                 hence [a,b] in IR;
                         end;
                         end;
-                        hence [a,b] in IR & [b,a] in IR by A15,ORDERS_2:def 9;
+                        hence [a,b] in IR & [b,a] in IR by A14,ORDERS_2:def 9;
                 end;
                 end;
                 then [b,a] in IR~ by RELAT_1:def 7;
-                then [b,a] in IR /\ IR~ by A11,XBOOLE_0:def 3;
+                then [b,a] in IR /\ IR~ by A10,XBOOLE_0:def 3;
                 then [b,a] in EqRel R by A1,Def4;
                 then b in Class(EqRel R, a) by EQREL_1:27;
                 then Class(EqRel R, b) = Class(EqRel R, a) by EQREL_1:31;
-                hence y in {x} by A6,A9,TARSKI:def 1;
+                hence y in {x} by A5,A8,TARSKI:def 1;
             end;
             assume y in {x};
-              then y = Class(EqRel R, a) /\ N by A6,TARSKI:def 1;
-            hence y in min-classes N by A5,Def8;
+              then y = Class(EqRel R, a) /\ N by A5,TARSKI:def 1;
+            hence y in min-classes N by A4,Def8;
         end;
         then min-classes N = {x} by TARSKI:2;
         hence Card min-classes N = 1 by CARD_1:79;
     end;
     assume
-A18: for N being non empty Subset of R holds
+A17: for N being non empty Subset of R holds
      Card min-classes N = 1;
         now let a,b be Element of R;
-        assume A19: not a <= b & not a >= b;
-    then A20: not [a,b] in IR by ORDERS_2:def 9;
-    then A21: not [b,a] in IR~ by RELAT_1:def 7;
-    A22: not [b,a] in IR by A19,ORDERS_2:def 9;
-    then A23: not [a,b] in IR~ by RELAT_1:def 7;
+        assume A18: not a <= b & not a >= b;
+    then A19: not [a,b] in IR by ORDERS_2:def 9;
+    then A20: not [b,a] in IR~ by RELAT_1:def 7;
+    A21: not [b,a] in IR by A18,ORDERS_2:def 9;
+    then A22: not [a,b] in IR~ by RELAT_1:def 7;
         set N' = {a,b};
         set MCN = {{a},{b}};
             now let x be set;
             hereby assume x in min-classes N';
                then consider y being Element of R\~ such that
-            A24: y is_minimal_wrt N', IR' and
-            A25: x = Class(EqRel R, y) /\ N' by Def8;
-            A26: y in N' &
+            A23: y is_minimal_wrt N', IR' and
+            A24: x = Class(EqRel R, y) /\ N' by Def8;
+            A25: y in N' &
                 not ex z being Element of R\~ st z in N' & z<>y & [z,y] in IR'
-                 by A24,WAYBEL_4:def 26;
-                per cases by A26,TARSKI:def 2;
-                suppose A27: y = a;
+                 by A23,WAYBEL_4:def 26;
+                per cases by A25,TARSKI:def 2;
+                suppose A26: y = a;
                         now let z be set;
                         hereby assume z in x;
-                            then A28: z in Class(EqRel R,a) & z in N'
-                                 by A25,A27,XBOOLE_0:def 3;
-                                now per cases by A28,TARSKI:def 2;
+                            then A27: z in Class(EqRel R,a) & z in N'
+                                 by A24,A26,XBOOLE_0:def 3;
+                                now per cases by A27,TARSKI:def 2;
                                 suppose z = a;
                                     hence z in {a} by TARSKI:def 1;
                                 end;
                                 suppose z = b;
-                                    then [b,a] in EqRel R by A28,EQREL_1:27;
+                                    then [b,a] in EqRel R by A27,EQREL_1:27;
                                     then [b,a] in IR /\ IR~ by A1,Def4;
-                                    hence z in {a} by A21,XBOOLE_0:def 3;
+                                    hence z in {a} by A20,XBOOLE_0:def 3;
                             end;
                             end;
                             hence z in {a};
                         end;
                         assume z in {a};
-                    then A29: z = a by TARSKI:def 1;
-                    then A30: z in N' by TARSKI:def 2;
-                            z in Class(EqRel R, a) by A29,EQREL_1:28;
-                        hence z in x by A25,A27,A30,XBOOLE_0:def 3;
+                    then A28: z = a by TARSKI:def 1;
+                    then A29: z in N' by TARSKI:def 2;
+                            z in Class(EqRel R, a) by A28,EQREL_1:28;
+                        hence z in x by A24,A26,A29,XBOOLE_0:def 3;
                     end;
                     then x = {a} by TARSKI:2;
                     hence x in MCN by TARSKI:def 2;
                 end;
-                suppose A31: y = b;
+                suppose A30: y = b;
                         now let z be set;
                         hereby assume z in x;
-                            then A32: z in Class(EqRel R,b) & z in N'
-                                 by A25,A31,XBOOLE_0:def 3;
-                                now per cases by A32,TARSKI:def 2;
+                            then A31: z in Class(EqRel R,b) & z in N'
+                                 by A24,A30,XBOOLE_0:def 3;
+                                now per cases by A31,TARSKI:def 2;
                                 suppose z = b;
                                     hence z in {b} by TARSKI:def 1;
                                 end;
                                 suppose z = a;
-                                    then [a,b] in EqRel R by A32,EQREL_1:27;
+                                    then [a,b] in EqRel R by A31,EQREL_1:27;
                                     then [a,b] in IR /\ IR~ by A1,Def4;
-                                    hence z in {b} by A20,XBOOLE_0:def 3;
+                                    hence z in {b} by A19,XBOOLE_0:def 3;
                             end;
                             end;
                             hence z in {b};
                         end;
                         assume z in {b};
-                        then A33: z = b by TARSKI:def 1;
-                        then A34: z in N' by TARSKI:def 2;
-                                z in Class(EqRel R, b) by A33,EQREL_1:28;
-                        hence z in x by A25,A31,A34,XBOOLE_0:def 3;
+                        then A32: z = b by TARSKI:def 1;
+                        then A33: z in N' by TARSKI:def 2;
+                                z in Class(EqRel R, b) by A32,EQREL_1:28;
+                        hence z in x by A24,A30,A33,XBOOLE_0:def 3;
                     end;
                     then x = {b} by TARSKI:2;
                     hence x in MCN by TARSKI:def 2;
             end;
             end;
-            assume A35: x in MCN;
-            per cases by A35,TARSKI:def 2;
-            suppose A36: x = {a};
+            assume A34: x in MCN;
+            per cases by A34,TARSKI:def 2;
+            suppose A35: x = {a};
                     now reconsider a'=a as Element of R\~;
                     take a';
-                A37: a' in N' by TARSKI:def 2;
+                A36: a' in N' by TARSKI:def 2;
                         now assume ex y being set
                                st y in N' & y <> a' & [y,a'] in IR';
                         then consider y being set such that
-                    A38: y in N' and
-                    A39: y <> a' & [y,a'] in IR';
-                            y = b by A38,A39,TARSKI:def 2;
-                        then [b,a'] in IR \ IR~ by A39;
-                        hence contradiction by A22,XBOOLE_0:def 4;
+                    A37: y in N' and
+                    A38: y <> a' & [y,a'] in IR';
+                            y = b by A37,A38,TARSKI:def 2;
+                        then [b,a'] in IR \ IR~ by A38;
+                        hence contradiction by A21,XBOOLE_0:def 4;
                     end;
                     hence a' is_minimal_wrt N', the InternalRel of (R\~)
-                     by A37,WAYBEL_4:def 26;
+                     by A36,WAYBEL_4:def 26;
                         now let z be set;
                         hereby assume z in x;
-                        then A40: z = a by A36,TARSKI:def 1;
+                        then A39: z = a by A35,TARSKI:def 1;
                             then z in Class(EqRel R, a) by EQREL_1:28;
                             hence z in Class(EqRel R, a) /\ N'
-                             by A37,A40,XBOOLE_0:def 3;
+                             by A36,A39,XBOOLE_0:def 3;
                         end;
                         assume z in Class(EqRel R, a) /\ N';
-                        then A41: z in Class(EqRel R, a) & z in N' by
+                        then A40: z in Class(EqRel R, a) & z in N' by
 XBOOLE_0:def 3;
-                        per cases by A41,TARSKI:def 2;
+                        per cases by A40,TARSKI:def 2;
                         suppose z = a;
-                            hence z in x by A36,TARSKI:def 1;
+                            hence z in x by A35,TARSKI:def 1;
                         end;
                         suppose z = b;
-                            then [b,a] in EqRel R by A41,EQREL_1:27;
+                            then [b,a] in EqRel R by A40,EQREL_1:27;
                             then [b,a] in IR /\ IR~ by A1,Def4;
-                            hence z in x by A21,XBOOLE_0:def 3;
+                            hence z in x by A20,XBOOLE_0:def 3;
                     end;
                     end;
                     hence x = Class(EqRel R, a') /\ N' by TARSKI:2;
                 end;
                 hence x in min-classes N' by Def8;
             end;
-            suppose A42: x = {b};
+            suppose A41: x = {b};
                 now reconsider b'=b as Element of R\~;
                     take b';
-                A43: b' in N' by TARSKI:def 2;
+                A42: b' in N' by TARSKI:def 2;
                         now assume ex y being set
                                st y in N' & y <> b' & [y,b'] in IR';
                         then consider y being set such that
-                    A44: y in N' and
-                    A45: y <> b' & [y,b'] in IR';
-                            y = a by A44,A45,TARSKI:def 2;
-                        then [a,b'] in IR \ IR~ by A45;
-                        hence contradiction by A20,XBOOLE_0:def 4;
+                    A43: y in N' and
+                    A44: y <> b' & [y,b'] in IR';
+                            y = a by A43,A44,TARSKI:def 2;
+                        then [a,b'] in IR \ IR~ by A44;
+                        hence contradiction by A19,XBOOLE_0:def 4;
                     end;
                     hence b' is_minimal_wrt N', the InternalRel of (R\~)
-                     by A43,WAYBEL_4:def 26;
+                     by A42,WAYBEL_4:def 26;
                         now let z be set;
                         hereby assume z in x;
-                        then A46: z = b by A42,TARSKI:def 1;
+                        then A45: z = b by A41,TARSKI:def 1;
                             then z in Class(EqRel R, b) by EQREL_1:28;
                             hence z in Class(EqRel R, b) /\ N'
-                             by A43,A46,XBOOLE_0:def 3;
+                             by A42,A45,XBOOLE_0:def 3;
                         end;
                         assume z in Class(EqRel R, b) /\ N';
-                        then A47: z in Class(EqRel R, b) & z in N' by
+                        then A46: z in Class(EqRel R, b) & z in N' by
 XBOOLE_0:def 3;
-                        per cases by A47,TARSKI:def 2;
+                        per cases by A46,TARSKI:def 2;
                         suppose z = b;
-                            hence z in x by A42,TARSKI:def 1;
+                            hence z in x by A41,TARSKI:def 1;
                         end;
                         suppose z = a;
-                            then [a,b] in EqRel R by A47,EQREL_1:27;
+                            then [a,b] in EqRel R by A46,EQREL_1:27;
                             then [a,b] in IR /\ IR~ by A1,Def4;
-                            hence z in x by A23,XBOOLE_0:def 3;
+                            hence z in x by A22,XBOOLE_0:def 3;
                     end;
                     end;
                     hence x = Class(EqRel R, b') /\ N' by TARSKI:2;
@@ -1302,19 +1297,19 @@ XBOOLE_0:def 3;
         end;
         end;
     then min-classes N' = MCN by TARSKI:2;
-    then A48: card MCN = 1 by A18;
+    then A47: card MCN = 1 by A17;
             now assume {a} = {b};
-        then A49: a = b by ZFMISC_1:6;
+        then A48: a = b by ZFMISC_1:6;
                 R is reflexive by A1,Def3;
             then IR is_reflexive_in CR by ORDERS_2:def 4;
-            hence contradiction by A20,A49,RELAT_2:def 1;
+            hence contradiction by A19,A48,RELAT_2:def 1;
         end;
-        hence contradiction by A48,CARD_2:76;
+        hence contradiction by A47,CARD_2:76;
     end;
     hence R is connected by WAYBEL_0:def 29;
         now let N be Subset of R such that
-    A50: N <> {};
-            Card min-classes N = 1 by A18,A50;
+    A49: N <> {};
+            Card min-classes N = 1 by A17,A49;
         then min-classes N <> {} by CARD_4:17;
         hence ex x being set st x in min-classes N by XBOOLE_0:def 1;
     end;
@@ -1406,40 +1401,38 @@ A2: R is connected;
     end;
     suppose A4: N <> {} CR;
     A5: IR' is_well_founded_in CR' by A1,WELLFND1:def 2;
-     R\~ = RelStr(# the carrier of R, (the InternalRel of R)\~ #);
-        then consider b being set such that
-    A7: b in N and
-    A8: IR'-Seg(b) misses N by A4,A5,WELLORD1:def 3; :: C3 => CX
-    A9: IR'-Seg(b) /\ N = {} by A8,XBOOLE_0:def 7;
+        consider b being set such that
+    A6: b in N and
+    A7: IR'-Seg(b) misses N by A4,A5,WELLORD1:def 3; :: C3 => CX
+    A8: IR'-Seg(b) /\ N = {} by A7,XBOOLE_0:def 7;
         take B = {b};
-        reconsider b as Element of N by A7;
+        reconsider b as Element of N by A6;
         thus B is_Dickson-basis_of N,R proof
                 {b} is Subset of N by A4,SUBSET_1:55;
             hence B c= N;
             let a be Element of R such that
-        A10: a in N;
-            reconsider b as Element of R by A7;
+        A9: a in N;
+            reconsider b as Element of R by A6;
             take b;
             thus b in B by TARSKI:def 1;
             per cases by A2,WAYBEL_0:def 29;
             suppose b <= a;
                 hence b <= a;
             end;
-            suppose A11: a <= b;
-            then A12: [a,b] in IR by ORDERS_2:def 9;
+            suppose A10: a <= b;
+            then A11: [a,b] in IR by ORDERS_2:def 9;
                     now per cases;
                       suppose a = b;
-                          hence b <= a by A11;
+                          hence b <= a by A10;
                       end;
-                      suppose A13: not a = b;
+                      suppose A12: not a = b;
                               now per cases;
                               suppose [a,b] in IR';
-                                  then a in IR'-Seg(b) by A13,WELLORD1:def 1;
-                                  hence b <= a by A9,A10,XBOOLE_0:def 3;
+                                  then a in IR'-Seg(b) by A12,WELLORD1:def 1;
+                                  hence b <= a by A8,A9,XBOOLE_0:def 3;
                               end;
-                              suppose A14: not [a,b] in IR';
-                                      IR' = IR \ IR~;
-                                  then [a,b] in IR~ by A12,A14,XBOOLE_0:def 4
+                              suppose A13: not [a,b] in IR';
+                                  [a,b] in IR~ by A11,A13,XBOOLE_0:def 4
 ;
                                   then [b,a] in IR by RELAT_1:def 7;
                                   hence b <= a by ORDERS_2:def 9;
@@ -1625,16 +1618,16 @@ A3: ((the InternalRel of R)-Seg(x)) /\ N c= Class(EqRel R,x);
     set IR'= the InternalRel of R\~;
         now assume ex y being set st y in N & y<>x & [y,x] in IR';
         then consider y being set such that
-    A5: y in N and
-    A6: y <> x and
-    A7: [y,x] in IR';
-            [y,x] in IR \ IR~ by A7;
-    then A8: [y,x] in IR & not [y,x] in IR~ by XBOOLE_0:def 4;
-        then y in IR-Seg(x) by A6,WELLORD1:def 1;
-        then y in IR-Seg(x) /\ N by A5,XBOOLE_0:def 3;
+    A4: y in N and
+    A5: y <> x and
+    A6: [y,x] in IR';
+            [y,x] in IR \ IR~ by A6;
+    then A7: [y,x] in IR & not [y,x] in IR~ by XBOOLE_0:def 4;
+        then y in IR-Seg(x) by A5,WELLORD1:def 1;
+        then y in IR-Seg(x) /\ N by A4,XBOOLE_0:def 3;
         then [y,x] in EqRel R by A3,EQREL_1:27;
         then [y,x] in IR /\ IR~ by A1,Def4;
-        hence contradiction by A8,XBOOLE_0:def 3;
+        hence contradiction by A7,XBOOLE_0:def 3;
     end;
     hence x is_minimal_wrt N, IR' by A2,WAYBEL_4:def 26;
 end;
@@ -1652,182 +1645,182 @@ A2: for f being sequence of R
      ex i,j being Nat st i < j & f.i <= f.j;
     set IR = the InternalRel of R, CR = the carrier of R;
     set IR'= the InternalRel of R\~;
-A4: R is transitive by A1,Def3;
+A3: R is transitive by A1,Def3;
     let N be non empty Subset of R such that
-A5: not (min-classes N is finite & min-classes N is non empty);
-    per cases by A5;
-    suppose A6: min-classes N is infinite;
+A4: not (min-classes N is finite & min-classes N is non empty);
+    per cases by A4;
+    suppose A5: min-classes N is infinite;
         then reconsider MCN = min-classes N as infinite set;
         consider f being Function of NAT, min-classes N such that
-    A7: f is one-to-one by A6,Th3;
+    A6: f is one-to-one by A5,Th3;
     deffunc F(set) = choose(f.$1);
-    A8:  now let x be set such that
-        A9: x in NAT;
-            reconsider x' = x as Nat by A9;
+    A7:  now let x be set such that
+        A8: x in NAT;
+            reconsider x' = x as Nat by A8;
                 f.x' is Element of min-classes N;
-        then A10: f.x in MCN;
+        then A9: f.x in MCN;
             then f.x is non empty by A1,Th23;
         then choose(f.x') in f.x;
-            hence F(x) in the carrier of R by A10;
+            hence F(x) in the carrier of R by A9;
         end;
         consider g being Function of NAT,the carrier of R such that
-    A11: for x being set st x in NAT holds g.x = F(x) from FUNCT_2:sch 2(A8);
+    A10: for x being set st x in NAT holds g.x = F(x) from FUNCT_2:sch 2(A7);
         reconsider g as sequence of R;
         consider i,j being Nat such that
-    A12: i < j and
-    A13: g.i <= g.j by A2;
+    A11: i < j and
+    A12: g.i <= g.j by A2;
         reconsider gi = g.i, gj= g.j as Element of R\~;
-    A14: [gi, gj] in IR by A13,ORDERS_2:def 9;
-    A15: f.i in MCN;
-    then A16: f.i is non empty by A1,Th23;
-    A17: f.j in MCN;
-    then A18: f.j is non empty by A1,Th23;
-    A19: g.j = choose f.j by A11;
-    A20: g.i = choose f.i by A11;
-    A21: gj is_minimal_wrt N, the InternalRel of R\~ by A1,A17,A18,A19,Th20;
-            gi is_minimal_wrt N, the InternalRel of R\~ by A1,A15,A16,A20,Th20
+    A13: [gi, gj] in IR by A12,ORDERS_2:def 9;
+    A14: f.i in MCN;
+    then A15: f.i is non empty by A1,Th23;
+    A16: f.j in MCN;
+    then A17: f.j is non empty by A1,Th23;
+    A18: g.j = choose f.j by A10;
+    A19: g.i = choose f.i by A10;
+    A20: gj is_minimal_wrt N, the InternalRel of R\~ by A1,A16,A17,A18,Th20;
+            gi is_minimal_wrt N, the InternalRel of R\~ by A1,A14,A15,A19,Th20
 ;
-    then A22: gi in N by WAYBEL_4:def 26;
-    A23: now per cases;
+    then A21: gi in N by WAYBEL_4:def 26;
+    A22: now per cases;
             suppose gi = gj;
-                hence [gi, gj] in IR~ by A14,RELAT_1:def 7;
+                hence [gi, gj] in IR~ by A13,RELAT_1:def 7;
             end;
-            suppose A24: gi <> gj;
+            suppose A23: gi <> gj;
                     now assume not [gi, gj] in IR~;
-                    then [gi, gj] in IR \ IR~ by A14,XBOOLE_0:def 4;
+                    then [gi, gj] in IR \ IR~ by A13,XBOOLE_0:def 4;
                     then [gi, gj] in IR';
-                    hence contradiction by A21,A22,A24,WAYBEL_4:def 26;
+                    hence contradiction by A20,A21,A23,WAYBEL_4:def 26;
                 end;
                 hence [gi, gj] in IR~;
         end;
         end;
-            [gi,gj] in IR by A13,ORDERS_2:def 9;
-        then [gi,gj] in IR /\ IR~ by A23,XBOOLE_0:def 3;
+            [gi,gj] in IR by A12,ORDERS_2:def 9;
+        then [gi,gj] in IR /\ IR~ by A22,XBOOLE_0:def 3;
         then [gi,gj] in EqRel R by A1,Def4;
         then gi in Class(EqRel R, gj) by EQREL_1:27;
-    then A25: Class(EqRel R, gj) = Class(EqRel R, gi) by EQREL_1:31;
+    then A24: Class(EqRel R, gj) = Class(EqRel R, gi) by EQREL_1:31;
         consider mj being Element of R\~ such that
      mj is_minimal_wrt N, IR' and
-    A27: f.j = Class(EqRel R,mj) /\ N by A17,Def8;
+    A25: f.j = Class(EqRel R,mj) /\ N by A16,Def8;
         consider mi being Element of R\~ such that
      mi is_minimal_wrt N, IR' and
-    A30: f.i = Class(EqRel R,mi) /\ N by A15,Def8;
-            gj in Class(EqRel R, mj) by A18,A19,A27,XBOOLE_0:def 3;
-    then A32: Class(EqRel R, gj) = Class(EqRel R, mj) by EQREL_1:31;
-            gi in Class(EqRel R, mi) by A16,A20,A30,XBOOLE_0:def 3;
-        then f.i = f.j by A25,A27,A30,A32,EQREL_1:31;
-        hence contradiction by A6,A7,A12,FUNCT_2:25;
+    A26: f.i = Class(EqRel R,mi) /\ N by A14,Def8;
+            gj in Class(EqRel R, mj) by A17,A18,A25,XBOOLE_0:def 3;
+    then A27: Class(EqRel R, gj) = Class(EqRel R, mj) by EQREL_1:31;
+            gi in Class(EqRel R, mi) by A15,A19,A26,XBOOLE_0:def 3;
+        then f.i = f.j by A24,A25,A26,A27,EQREL_1:31;
+        hence contradiction by A5,A6,A11,FUNCT_2:25;
     end;
     suppose
-    A33: min-classes N is empty;
+    A28: min-classes N is empty;
         deffunc F(set,set) = choose (IR-Seg($2) /\ N\Class(EqRel R,$2));
         consider f being Function such that
-    A34: dom f = NAT and
-    A35: f.0 = choose N and
-    A36: for n being Element of NAT holds f.(n+1) = F(n,f.n) from
+    A29: dom f = NAT and
+    A30: f.0 = choose N and
+    A31: for n being Element of NAT holds f.(n+1) = F(n,f.n) from
 RECDEF_1:sch 3;
          defpred P[Nat] means f.$1 in N;
-    A37: P[0] by A35;
-    A38: now let i be Nat such that
-        A39: P[i];
-            reconsider fi = f.i as Element of R\~ by A39;
+    A32: P[0] by A30;
+    A33: now let i be Nat such that
+        A34: P[i];
+            reconsider fi = f.i as Element of R\~ by A34;
             set IC = IR-Seg(fi) /\ N\Class(EqRel R,fi);
-        A40: f.(i+1) = choose (IR-Seg(f.i) /\ N\Class(EqRel R,f.i)) by A36;
+        A35: f.(i+1) = choose (IR-Seg(f.i) /\ N\Class(EqRel R,f.i)) by A31;
                 now assume IC is empty;
                 then IR-Seg(fi) /\ N c= Class(EqRel R,fi) by XBOOLE_1:37;
-                then fi is_minimal_wrt N, IR' by A1,A39,Th31;
-                hence contradiction by A33,Th22;
+                then fi is_minimal_wrt N, IR' by A1,A34,Th31;
+                hence contradiction by A28,Th22;
             end;
-            then f.(i+1) in IR-Seg(f.i) /\ N by A40,XBOOLE_0:def 4;
+            then f.(i+1) in IR-Seg(f.i) /\ N by A35,XBOOLE_0:def 4;
             hence P[i+1] by XBOOLE_0:def 3;
         end;
-    A41: for i being Nat holds P[i] from NAT_1:sch 1(A37,A38);
+    A36: for i being Nat holds P[i] from NAT_1:sch 1(A32,A33);
             now let x being set such that
-        A42: x in NAT;
-                f.x in N by A41,A42;
+        A37: x in NAT;
+                f.x in N by A36,A37;
             hence f.x in the carrier of R;
         end;
-        then reconsider f as sequence of R by A34,FUNCT_2:5;
-    A43: now let i be Nat;
+        then reconsider f as sequence of R by A29,FUNCT_2:5;
+    A38: now let i be Nat;
         defpred P[Nat] means i < $1 implies f.i >= f.$1;
-        A44: P[0] by NAT_1:18;
-        A45: for j being Nat st P[j] holds P[j+1]
+        A39: P[0] by NAT_1:18;
+        A40: for j being Nat st P[j] holds P[j+1]
            proof let j be Nat such that
-            A46: i < j implies f.i >= f.j and
-            A47: i < j+1;
-            A48: i <= j by A47,NAT_1:38;
+            A41: i < j implies f.i >= f.j and
+            A42: i < j+1;
+            A43: i <= j by A42,NAT_1:38;
                 reconsider fj = f.j, fj1 = f.(j+1) as Element of R\~;
                 set IC = IR-Seg(fj) /\ N\Class(EqRel R,fj);
-            A49: fj in N by A41;
-            A50: fj1 = choose IC by A36;
+            A44: fj in N by A36;
+            A45: fj1 = choose IC by A31;
                     now assume IC is empty;
                     then IR-Seg(fj) /\ N c= Class(EqRel R,fj) by XBOOLE_1:37;
-                    then fj is_minimal_wrt N, IR' by A1,A49,Th31;
-                    hence contradiction by A33,Th22;
+                    then fj is_minimal_wrt N, IR' by A1,A44,Th31;
+                    hence contradiction by A28,Th22;
                 end;
-                then fj1 in IR-Seg(fj) /\ N by A50,XBOOLE_0:def 4;
+                then fj1 in IR-Seg(fj) /\ N by A45,XBOOLE_0:def 4;
                 then fj1 in IR-Seg(fj) by XBOOLE_0:def 3;
-            then A51: [fj1, fj] in IR by WELLORD1:def 1;
-            then A52: f.j >= f.(j+1) by ORDERS_2:def 9;
-                per cases by A48,REAL_1:def 5;
+            then A46: [fj1, fj] in IR by WELLORD1:def 1;
+            then A47: f.j >= f.(j+1) by ORDERS_2:def 9;
+                per cases by A43,REAL_1:def 5;
                 suppose i < j;
-                    hence f.i >= f.(j+1) by A4,A46,A52,ORDERS_2:26;
+                    hence f.i >= f.(j+1) by A3,A41,A47,ORDERS_2:26;
                 end;
                 suppose i = j;
-                    hence f.i >= f.(j+1) by A51,ORDERS_2:def 9;
+                    hence f.i >= f.(j+1) by A46,ORDERS_2:def 9;
             end;
             end;
-            thus for j being Nat holds P[j] from NAT_1:sch 1(A44,A45);
+            thus for j being Nat holds P[j] from NAT_1:sch 1(A39,A40);
         end;
-    A53: now let i be Nat;
+    A48: now let i be Nat;
       defpred P[Nat] means i < $1 implies not f.i <= f.$1;
-        A54: P[0] by NAT_1:18;
-        A55: for j being Nat st P[j] holds P[j+1]
+        A49: P[0] by NAT_1:18;
+        A50: for j being Nat st P[j] holds P[j+1]
            proof let j be Nat such that
                     i < j implies not f.i <= f.j and
-            A56: i < j+1;
-            A57: i <= j by A56,NAT_1:38;
+            A51: i < j+1;
+            A52: i <= j by A51,NAT_1:38;
                 reconsider fj = f.j, fj1 = f.(j+1) as Element of R\~;
-            A58: fj in N by A41;
-                per cases by A57,REAL_1:def 5;
-                suppose A59: i < j; assume
-                A60: f.i <= f.(j+1);
+            A53: fj in N by A36;
+                per cases by A52,REAL_1:def 5;
+                suppose A54: i < j; assume
+                A55: f.i <= f.(j+1);
                         j < j+1 by NAT_1:38;
-                then A61: f.j >= f.(j+1) by A43;
-                        f.i >= f.j by A43,A59;
-                    then f.j <= f.(j+1) by A4,A60,ORDERS_2:26;
-                then A62: fj1 in Class(EqRel R, fj) by A1,A61,Th9;
+                then A56: f.j >= f.(j+1) by A38;
+                        f.i >= f.j by A38,A54;
+                    then f.j <= f.(j+1) by A3,A55,ORDERS_2:26;
+                then A57: fj1 in Class(EqRel R, fj) by A1,A56,Th9;
                     set IC = IR-Seg(fj) /\ N\Class(EqRel R,fj);
-                A63: fj1 = choose IC by A36;
+                A58: fj1 = choose IC by A31;
                         now assume IC is empty;
                       then IR-Seg(fj) /\ N c= Class(EqRel R,fj) by XBOOLE_1:37
 ;
-                       then fj is_minimal_wrt N, IR' by A1,A58,Th31;
-                       hence contradiction by A33,Th22;
+                       then fj is_minimal_wrt N, IR' by A1,A53,Th31;
+                       hence contradiction by A28,Th22;
                     end;
-                    hence contradiction by A62,A63,XBOOLE_0:def 4;
+                    hence contradiction by A57,A58,XBOOLE_0:def 4;
                     end;
-                    suppose A64: i = j;
-                        assume A65: f.i <= f.(j+1);
+                    suppose A59: i = j;
+                        assume A60: f.i <= f.(j+1);
                             j < j+1 by NAT_1:38;
-                        then f.(j+1) <= f.j by A43;
-                    then A66: fj1 in Class(EqRel R, fj) by A1,A64,A65,Th9;
+                        then f.(j+1) <= f.j by A38;
+                    then A61: fj1 in Class(EqRel R, fj) by A1,A59,A60,Th9;
                         set IC = IR-Seg(fj) /\ N\Class(EqRel R,fj);
-                    A67: fj1 = choose IC by A36;
+                    A62: fj1 = choose IC by A31;
                             now assume IC is empty;
                          then IR-Seg(fj) /\ N c= Class(EqRel R,fj) by
 XBOOLE_1:37;
-                            then fj is_minimal_wrt N, IR' by A1,A58,Th31;
-                            hence contradiction by A33,Th22;
+                            then fj is_minimal_wrt N, IR' by A1,A53,Th31;
+                            hence contradiction by A28,Th22;
                         end;
-                    hence contradiction by A66,A67,XBOOLE_0:def 4;
+                    hence contradiction by A61,A62,XBOOLE_0:def 4;
                  end;
                  end;
-            thus for j being Nat holds P[j] from NAT_1:sch 1(A54,A55);
+            thus for j being Nat holds P[j] from NAT_1:sch 1(A49,A50);
         end;
         consider i,j being Nat such that
-    A68: i < j & f.i <= f.j by A2;
-    thus contradiction by A53,A68;
+    A63: i < j & f.i <= f.j by A2;
+    thus contradiction by A48,A63;
 end;
 end;
 
@@ -1848,9 +1841,9 @@ A4: R is reflexive by A1,Def3;
     set IR' = the InternalRel of R\~;
     let N be Subset of CR;
     per cases;
-    suppose A6: N = {} CR;
+    suppose A5: N = {} CR;
         take B = {};
-        thus B is_Dickson-basis_of N,R by A6,Th26;
+        thus B is_Dickson-basis_of N,R by A5,Th26;
         thus B is finite;
     end;
     suppose not N is empty;
@@ -1861,61 +1854,61 @@ A4: R is reflexive by A1,Def3;
         thus B is_Dickson-basis_of N,R proof
                 now let x be set; assume x in B;
                 then consider y being Element of MCN' such that
-            A7: x = choose(y);
+            A6: x = choose(y);
                 consider z being Element of R\~ such that
                     z is_minimal_wrt N, IR' and
-            A8: y = Class(EqRel R, z) /\ N by Def8;
+            A7: y = Class(EqRel R, z) /\ N by Def8;
                     y is non empty by A1,Th23;
-                hence x in N by A7,A8,XBOOLE_0:def 3;
+                hence x in N by A6,A7,XBOOLE_0:def 3;
             end;
             hence B c= N by TARSKI:def 3;
             let a be Element of R such that
-        A9: a in N;
+        A8: a in N;
             defpred P[Element of R] means $1 <= a;
             set NN' = {d where d is Element of N' : P[d]};
-        A10: NN' is Subset of N' from DOMAIN_1:sch 7;
+        A9: NN' is Subset of N' from DOMAIN_1:sch 7;
                 a <= a by A4,ORDERS_2:24;
-            then a in NN' by A9;
-            then reconsider NN' as non empty Subset of CR by A10,XBOOLE_1:1;
+            then a in NN' by A8;
+            then reconsider NN' as non empty Subset of CR by A9,XBOOLE_1:1;
             consider m being Element of min-classes NN';
-        A11: min-classes NN' is non empty by A2;
+        A10: min-classes NN' is non empty by A2;
             then reconsider m' = m as non empty set by A1,Th23;
             consider c being Element of m';
             consider y being Element of R\~ such that
                 y is_minimal_wrt NN', IR' and
-        A12: m' = Class(EqRel R, y) /\ NN' by A11,Def8;
-        A13: c in Class(EqRel R, y) & c in NN' by A12,XBOOLE_0:def 3;
+        A11: m' = Class(EqRel R, y) /\ NN' by A10,Def8;
+        A12: c in Class(EqRel R, y) & c in NN' by A11,XBOOLE_0:def 3;
             then reconsider c as Element of R\~;
             reconsider c'=c as Element of R;
             consider d being Element of N' such that
-        A14: c = d & d <= a by A13;
-        A15: c is_minimal_wrt NN', IR' by A1,A11,Th20;
+        A13: c = d & d <= a by A12;
+        A14: c is_minimal_wrt NN', IR' by A1,A10,Th20;
                 now assume not c is_minimal_wrt N, IR';
                 then consider w being set such that
-            A16: w in N and
-            A17: w <> c and
-            A18: [w,c] in IR' by A14,WAYBEL_4:def 26;
-                reconsider w' = w as Element of R by A18,ZFMISC_1:106;
-                    [w,c] in IR \ IR~ by A18;
+            A15: w in N and
+            A16: w <> c and
+            A17: [w,c] in IR' by A13,WAYBEL_4:def 26;
+                reconsider w' = w as Element of R by A17,ZFMISC_1:106;
+                    [w,c] in IR \ IR~ by A17;
                 then [w,c] in IR by XBOOLE_0:def 4;
                 then w' <= c' by ORDERS_2:def 9;
-            then w' <= a by A3,A14,ORDERS_2:26;
-                then w' in NN' by A16;
-                hence contradiction by A15,A17,A18,WAYBEL_4:def 26;
+            then w' <= a by A3,A13,ORDERS_2:26;
+                then w' in NN' by A15;
+                hence contradiction by A14,A16,A17,WAYBEL_4:def 26;
             end;
-        then A19: Class(EqRel R, c) /\ N in min-classes N by Def8;
-        then A20: Class(EqRel R, c) /\ N is non empty by A1,Th23;
+        then A18: Class(EqRel R, c) /\ N in min-classes N by Def8;
+        then A19: Class(EqRel R, c) /\ N is non empty by A1,Th23;
             set t = choose( Class(EqRel R, c) /\ N );
-                t in N by A20,XBOOLE_0:def 3;
+                t in N by A19,XBOOLE_0:def 3;
             then reconsider t as Element of R;
             take t;
-            thus t in B by A19;
-                t in Class(EqRel R, c) by A20,XBOOLE_0:def 3;
+            thus t in B by A18;
+                t in Class(EqRel R, c) by A19,XBOOLE_0:def 3;
             then [t,c] in EqRel R by EQREL_1:27;
             then [t,c] in IR /\ IR~ by A1,Def4;
             then [t,c] in IR by XBOOLE_0:def 3;
             then t <= c' by ORDERS_2:def 9;
-            hence t <= a by A3,A14,ORDERS_2:26;
+            hence t <= a by A3,A13,ORDERS_2:26;
         end;
         deffunc F(set) = choose $1;
         defpred P[set] means not contradiction;
@@ -1955,78 +1948,78 @@ A1: R is Dickson;
     set IR=the InternalRel of R, CR = the carrier of R;
     set IR'=the InternalRel of R\~;
     set B = {b where b is Element of R\~ : b is_minimal_wrt N, IR'};
-A3: R is quasi_ordered by Def3;
+A2: R is quasi_ordered by Def3;
     then for f being sequence of R ex i,j being Nat st i < j & f.i <= f.j
      by A1,Th30;
     then min-classes N is finite & min-classes N is non empty
-      by A3,Th32;
+      by A2,Th32;
     then consider x being set such that
-A4: x in min-classes N by XBOOLE_0:def 1;
+A3: x in min-classes N by XBOOLE_0:def 1;
     consider y being Element of R\~ such that
-A5: y is_minimal_wrt N, IR' & x = Class(EqRel R, y) /\ N by A4,Def8;
-        y in B by A5;
+A4: y is_minimal_wrt N, IR' & x = Class(EqRel R, y) /\ N by A3,Def8;
+        y in B by A4;
     then reconsider B as non empty set;
     take B;
-    A6: now let x be set such that
-       A7: x in B;
+    A5: now let x be set such that
+       A6: x in B;
        consider b being Element of R\~ such that
-       A8: x = b and
-       A9: b is_minimal_wrt N, IR' by A7;
-       thus x in N by A8,A9,WAYBEL_4:def 26;
+       A7: x = b and
+       A8: b is_minimal_wrt N, IR' by A6;
+       thus x in N by A7,A8,WAYBEL_4:def 26;
     end;
-then A10: B c= N by TARSKI:def 3;
+then A9: B c= N by TARSKI:def 3;
     thus B is_Dickson-basis_of N, R proof
-        thus B c= N by A6,TARSKI:def 3;
+        thus B c= N by A5,TARSKI:def 3;
         let a be Element of R such that
-    A11: a in N;
+    A10: a in N;
         reconsider a'=a as Element of R\~;
-            now assume A12: not ex b being Element of R st b in B & b <= a;
+            now assume A11: not ex b being Element of R st b in B & b <= a;
                 IR'-Seg(a) /\ N c= N by XBOOLE_1:17;
-        then A13: IR'-Seg(a) /\ N c= CR by XBOOLE_1:1;
+        then A12: IR'-Seg(a) /\ N c= CR by XBOOLE_1:1;
             per cases;
             suppose IR'-Seg(a) /\ N = {};
                     then IR'-Seg(a) misses N by XBOOLE_0:def 7;
-               then a' is_minimal_wrt N, IR' by A11,Th7;
+               then a' is_minimal_wrt N, IR' by A10,Th7;
                then a in B;
-               hence contradiction by A12;
+               hence contradiction by A11;
             end;
-            suppose A14: IR'-Seg(a) /\ N <> {};
-                   R\~ is well_founded by A1,A3,Th34;
+            suppose A13: IR'-Seg(a) /\ N <> {};
+                   R\~ is well_founded by A1,A2,Th34;
                then IR' is_well_founded_in CR by WELLFND1:def 2;
                then consider z being set such that
-            A15: z in IR'-Seg(a) /\ N and
-            A16: IR'-Seg(z) misses (IR'-Seg(a) /\ N) by A13,A14,WELLORD1:def 3;
-                    z in IR'-Seg(a) by A15,XBOOLE_0:def 3;
-            then A17: [z,a] in IR' by WELLORD1:def 1;
+            A14: z in IR'-Seg(a) /\ N and
+            A15: IR'-Seg(z) misses (IR'-Seg(a) /\ N) by A12,A13,WELLORD1:def 3;
+                    z in IR'-Seg(a) by A14,XBOOLE_0:def 3;
+            then A16: [z,a] in IR' by WELLORD1:def 1;
             then z in dom IR' by RELAT_1:def 4;
                 then reconsider z as Element of R\~;
                 reconsider z' = z as Element of R;
-                    z is_minimal_wrt IR'-Seg(a') /\ N, IR' by A15,A16,Th7;
+                    z is_minimal_wrt IR'-Seg(a') /\ N, IR' by A14,A15,Th7;
                 then z is_minimal_wrt N, IR' by Th8;
-            then A18: z in B;
-                    [z,a] in IR \ IR~ by A17;
+            then A17: z in B;
+                    [z,a] in IR \ IR~ by A16;
                 then [z,a] in IR by XBOOLE_0:def 4;
                 then z' <= a by ORDERS_2:def 9;
-                hence contradiction by A12,A18;
+                hence contradiction by A11,A17;
         end;
         end;
         hence ex b being Element of R st b in B & b <= a;
     end;
     let C be set such that
-A19: C is_Dickson-basis_of N, R;
-A20: C c= N by A19,Def9;
+A18: C is_Dickson-basis_of N, R;
+A19: C c= N by A18,Def9;
         now let b be set such that
-    A21: b in B;
-        b in N by A6,A21;
+    A20: b in B;
+        b in N by A5,A20;
         then reconsider b'=b as Element of R;
         consider c being Element of R such that
-    A22: c in C & c <= b' by A10,A19,A21,Def9;
+    A21: c in C & c <= b' by A9,A18,A20,Def9;
         consider b'' being Element of R\~ such that
-    A23: b'' = b & b'' is_minimal_wrt N, IR' by A21;
-    A24: [c,b] in IR by A22,ORDERS_2:def 9;
-    A25: IR is_antisymmetric_in CR by ORDERS_2:def 6;
-            [b,c] in IR by A20,A22,A23,A24,Th18;
-        hence b in C by A22,A24,A25,RELAT_2:def 4;
+    A22: b'' = b & b'' is_minimal_wrt N, IR' by A20;
+    A23: [c,b] in IR by A21,ORDERS_2:def 9;
+    A24: IR is_antisymmetric_in CR by ORDERS_2:def 6;
+            [b,c] in IR by A19,A21,A22,A23,Th18;
+        hence b in C by A21,A23,A24,RELAT_2:def 4;
     end;
     hence B c= C by TARSKI:def 3;
 end;
@@ -2800,10 +2793,10 @@ A4: 0 in 1 by CARD_5:1,TARSKI:def 1;
         A23: x2 in dom f and
         A24: f.x1 = f.x2;
         A25: f.x1 = 0 .--> x1 by A2,A22
-                .= {0} --> x1 by CQC_LANG:def 2
+                .= {0} --> x1
                 .= [:{0}, {x1}:] by FUNCOP_1:def 2;
         A26: f.x2 = 0 .--> x2 by A2,A23
-                .= {0} --> x2 by CQC_LANG:def 2
+                .= {0} --> x2
                 .= [:{0}, {x2}:] by FUNCOP_1:def 2;
         A27: 0 in {0} by TARSKI:def 1;
                 x1 in {x1} by TARSKI:def 1;
@@ -3585,11 +3578,8 @@ FUNCT_4:def 1;
         then A209: [[x,y]`1`2, [x,y]`2`2] in the InternalRel of p.ne
              by A126,A129,A130,A131,A132,A134,A183,A184,A202,A203,A205,A207,
 MCART_1:def 2;
-                now set a = x, b = y, c = xa, d = xb, e = ya, f = yb;
-                thus [x,y] = [a,b];
-                thus [x,y]`1 = [c,d] by A125,MCART_1:def 1;
-                thus [x,y]`2 = [e,f] by A129,MCART_1:def 2;
-            end;
+            [x,y]`1 = [xa,xb] & [x,y]`2 = [ya,yb]
+              by A125,A129,MCART_1:def 1,def 2;
             then [x,y] in ["the InternalRel of product (p|ns),
                        the InternalRel of p.ne"] by A200,A209,YELLOW_3:10;
             then [x,y] in the InternalRel of S by YELLOW_3:def 2;
@@ -3809,34 +3799,34 @@ coherence by Lm2;
 coherence proof
     set IR' = the InternalRel of OrderedNAT\~,CR' =the carrier of OrderedNAT\~;
         now let N be set such that
-    A2: N c= CR' and
-    A3: N <> {};
+    A1: N c= CR' and
+    A2: N <> {};
          consider k being set such that
-    A4: k in N by A3,XBOOLE_0:def 1;
+    A3: k in N by A2,XBOOLE_0:def 1;
         defpred P[Nat] means $1 in N;
-    A5: ex k being Nat st P[k] by A2,A4;
+    A4: ex k being Nat st P[k] by A1,A3;
         consider m being Nat such that
-    A6: P[m] and
-    A7: for n being Nat st P[n] holds m <= n from NAT_1:sch 5(A5);
+    A5: P[m] and
+    A6: for n being Nat st P[n] holds m <= n from NAT_1:sch 5(A4);
         reconsider m as Element of OrderedNAT;
         thus ex m being set st m in N & IR'-Seg(m) misses N proof
             take m;
-            thus m in N by A6;
+            thus m in N by A5;
                 now assume IR'-Seg(m) /\ N <> {};
                 then consider z being set such that
-            A8: z in IR'-Seg(m) /\ N by XBOOLE_0:def 1;
-            A9: z in IR'-Seg(m) & z in N by A8,XBOOLE_0:def 3;
-            then A10: z <> m & [z,m] in IR' by WELLORD1:def 1;
+            A7: z in IR'-Seg(m) /\ N by XBOOLE_0:def 1;
+            A8: z in IR'-Seg(m) & z in N by A7,XBOOLE_0:def 3;
+            then A9: z <> m & [z,m] in IR' by WELLORD1:def 1;
                 then [z,m] in NATOrd \ NATOrd~;
                 then [z,m] in NATOrd by XBOOLE_0:def 4;
                 then consider x,y being Element of NAT such that
-            A11: [z,m] = [x,y] and
-            A12: x <= y;
-            A13: [x,y] in NATOrd by A12;
-            A14: z = x & m = y by A11,ZFMISC_1:33;
-                then y <= x by A7,A9;
+            A10: [z,m] = [x,y] and
+            A11: x <= y;
+            A12: [x,y] in NATOrd by A11;
+            A13: z = x & m = y by A10,ZFMISC_1:33;
+                then y <= x by A6,A8;
                 then [y,x] in NATOrd;
-                hence contradiction by A10,A13,A14,Th45,RELAT_2:def 4;
+                hence contradiction by A9,A12,A13,Th45,RELAT_2:def 4;
             end;
             hence IR'-Seg(m) misses N by XBOOLE_0:def 7;
         end;
@@ -3847,9 +3837,9 @@ coherence proof
   end;
   cluster OrderedNAT -> quasi_ordered;
 coherence proof
-A15: OrderedNAT is reflexive by Th44,ORDERS_2:def 4;
+A14: OrderedNAT is reflexive by Th44,ORDERS_2:def 4;
         OrderedNAT is transitive by Th47,ORDERS_2:def 5;
-    hence OrderedNAT is quasi_ordered by A15,Def3;
+    hence OrderedNAT is quasi_ordered by A14,Def3;
 end;
   cluster OrderedNAT -> antisymmetric;
 coherence by Th45,ORDERS_2:def 6;
@@ -3859,22 +3849,22 @@ coherence by Th47,ORDERS_2:def 5;
 coherence proof
    set ir = the InternalRel of OrderedNAT;
        now given f being sequence of OrderedNAT such that
-   A16: f is descending;
-   A17: dom f = NAT by FUNCT_2:def 1;
+   A15: f is descending;
+   A16: dom f = NAT by FUNCT_2:def 1;
        reconsider rf = rng f as non empty Subset of NAT;
        set m = min rf;
            m in rng f by CQC_SIM1:def 8; then consider d being set such that
-   A18: d in dom f & m = f.d by FUNCT_1:def 5;
-       reconsider d as Nat by A18;
-   A19: f.(d+1) <> f.d & [f.(d+1),f.d] in ir by A16,WELLFND1:def 7;
+   A17: d in dom f & m = f.d by FUNCT_1:def 5;
+       reconsider d as Nat by A17;
+   A18: f.(d+1) <> f.d & [f.(d+1),f.d] in ir by A15,WELLFND1:def 7;
         then consider x, y being Element of NAT such that
-   A20:  [f.(d+1),f.d] = [x,y] and
-   A21:  x <= y;
+   A19:  [f.(d+1),f.d] = [x,y] and
+   A20:  x <= y;
         reconsider fd1 = f.(d+1), fd = f.d as Nat;
-            f.(d+1) = x & f.d = y by A20,ZFMISC_1:33;
-   then A22:  fd1 < fd by A19,A21,REAL_1:def 5;
-            f.(d+1) in rf by A17,FUNCT_1:12;
-    hence contradiction by A18,A22,CQC_SIM1:def 8;
+            f.(d+1) = x & f.d = y by A19,ZFMISC_1:33;
+   then A21:  fd1 < fd by A18,A20,REAL_1:def 5;
+            f.(d+1) in rf by A16,FUNCT_1:12;
+    hence contradiction by A17,A21,CQC_SIM1:def 8;
    end;
  hence thesis by WELLFND1:15;
 end;
@@ -4040,29 +4030,27 @@ RELAT_2:def 8
         then S is transitive by ORDERS_2:def 5;
         then S is quasi_ordered by A11,Def3;
         then A19: S\~ is well_founded by A3,A8;
-     S\~ = RelStr(# CR, QOE\~ #);
-        then reconsider f'=f as sequence of S\~;
+        reconsider f'=f as sequence of S\~;
             now let n be Nat;
-        A21: n < n+1 by NAT_1:38;
+        A20: n < n+1 by NAT_1:38;
             then not f.n <= f.(n+1) by A4;
-        then A22: not [f.n, f.(n+1)] in IR by ORDERS_2:def 9;
+        then A21: not [f.n, f.(n+1)] in IR by ORDERS_2:def 9;
             hence f'.(n+1) <> f'.n by A9,RELAT_2:def 1;
-         f'.(n+1) in CR & f'.n in CR;
-            then A24: [f'.(n+1), f'.(n+1)] in IR & [f'.n, f'.n] in IR
+            A22: [f'.(n+1), f'.(n+1)] in IR & [f'.n, f'.n] in IR
              by A9,RELAT_2:def 1;
                 now assume [f'.n, f'.(n+1)] in QOE;
                 then ex i,j being Element of NAT st i < j &
-                [f'.n, f.j] in IR & [f.i, f'.(n+1)] in IR by A5,A22;
+                [f'.n, f.j] in IR & [f.i, f'.(n+1)] in IR by A5,A21;
                 then consider l,k being Element of NAT such that
-            A25: k < l and
-            A26: [f'.n, f.l] in IR & [f.k, f'.(n+1)] in IR;
-                    f.n <= f.l & f.k <= f.(n+1) by A26,ORDERS_2:def 9;
-            then A27: l <= n & n+1 <= k by A4;
+            A23: k < l and
+            A24: [f'.n, f.l] in IR & [f.k, f'.(n+1)] in IR;
+                    f.n <= f.l & f.k <= f.(n+1) by A24,ORDERS_2:def 9;
+            then A25: l <= n & n+1 <= k by A4;
                 then l < n+1 by NAT_1:38;
-                hence contradiction by A25,A27,XREAL_1:2;
+                hence contradiction by A23,A25,XREAL_1:2;
             end;
             then [f'.(n+1),f'.n] in QOE & not [f'.(n+1),f'.n] in QOE~
-             by A5,A21,A24,RELAT_1:def 7;
+             by A5,A20,A22,RELAT_1:def 7;
             then [f'.(n+1), f'.n] in QOE \ QOE~ by XBOOLE_0:def 4;
             hence [f'.(n+1), f'.n] in the InternalRel of S\~;
         end;

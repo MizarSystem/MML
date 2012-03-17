@@ -149,11 +149,7 @@ end;
 
 registration let G;
  cluster ID G -> strict;
-  coherence
-   proof
-        RingMorphismStr(# G,G,id G#) = ID G;
-     hence thesis;
-   end;
+  coherence;
 end;
 
 reserve F for RingMorphism;
@@ -171,13 +167,13 @@ end;
 
 Lm2: the RingMorphismStr of F is RingMorphism-like
  proof set S = the RingMorphismStr of F;
-A2: fun F is linear by Def6;
+A1: fun F is linear by Def6;
   hence for x,y being Scalar of the Dom of S holds
     (fun S).(x+y) = (fun S).x+(fun S).y by Def2;
   thus for x,y being Scalar of the Dom of S holds
-    (fun S).(x*y) = (fun S).x*(fun S).y by A2,Def2;
+    (fun S).(x*y) = (fun S).x*(fun S).y by A1,Def2;
   thus (fun S).(1.the Dom of S)
-         = 1.the Cod of S by A2,Def2;
+         = 1.the Cod of S by A1,Def2;
  end;
 
 definition let G,H;
@@ -189,8 +185,7 @@ definition let G,H;
      consider F being RingMorphism such that
 A2:    dom(F) = G & cod(F) = H by A1,Def8;
      set S = the RingMorphismStr of F;
-        dom F = the Dom of S & cod F = the Cod of S;
-     then S is RingMorphism & dom S = G & cod S = H by A2,Lm2;
+     S is RingMorphism & dom S = G & cod S = H by A2,Lm2;
     hence thesis;
    end;
 end;
@@ -209,8 +204,7 @@ definition let G;
   coherence
    proof
      set i = ID(G);
-        i = RingMorphismStr(# G,G,id G#);
-      then dom(i) = G & cod(i) = G;
+      dom(i) = G & cod(i) = G;
      hence thesis by Def9;
    end;
 end;
@@ -379,18 +373,18 @@ definition let G,F be RingMorphism;
  by A13;
     consider G1',G2'' being Ring such that
      G1' <= G2'' and
-    A15: dom(F) = G1' & cod(F) = G2'' and
-    A16: the RingMorphismStr of F is Morphism of G1',G2'' by Lm6;
+    A14: dom(F) = G1' & cod(F) = G2'' and
+    A15: the RingMorphismStr of F is Morphism of G1',G2'' by Lm6;
     reconsider F' = the RingMorphismStr of F as Morphism of G1',G2''
- by A16;
-    reconsider F' as Morphism of G1',G2' by A1,A12,A15;
+ by A15;
+    reconsider F' as Morphism of G1',G2' by A1,A12,A14;
     consider g' being Function of G2',G3' such that
-    A17: G' = RingMorphismStr(#G2',G3',g'#) by A11,Lm8;
+    A16: G' = RingMorphismStr(#G2',G3',g'#) by A11,Lm8;
     consider f' being Function of G1',G2' such that
-    A18: F' = RingMorphismStr(#G1',G2',f'#) by A1,A12,A15;
+    A17: F' = RingMorphismStr(#G1',G2',f'#) by A1,A12,A14;
     thus S1 = (RingMorphismStr(#G1',G3',g'*f'#))
- by A9,A17,A18
-           .= S2 by A10,A17,A18;
+ by A9,A16,A17
+           .= S2 by A10,A16,A17;
   end;
 end;
 
@@ -401,22 +395,20 @@ Th8: G1 <= G2 & G2 <= G3 implies G1 <= G3
    then consider F0 being RingMorphism such that
    A2: dom(F0) = G1 & cod(F0) = G2 by Def8;
    reconsider F = the RingMorphismStr of F0 as RingMorphism by Lm2;
-   dom F = the Dom of F0 & cod F = the Cod of F0;
-   then dom(F) = G1 & cod(F) = G2 by A2;
+   dom(F) = G1 & cod(F) = G2 by A2;
    then reconsider F' = F as Morphism of G1,G2 by A1,Def9;
    consider G0 being RingMorphism such that
-   A4: dom(G0) = G2 & cod(G0) = G3 by A1,Def8;
+   A3: dom(G0) = G2 & cod(G0) = G3 by A1,Def8;
    reconsider G = the RingMorphismStr of G0 as RingMorphism by Lm2;
-   dom G = the Dom of G0 & cod G = the Cod of G0;
-   then dom(G) = G2 & cod(G) = G3 by A4;
+   dom(G) = G2 & cod(G) = G3 by A3;
    then reconsider G' = G as Morphism of G2,G3 by A1,Def9;
    consider g being Function of G2,G3 such that
-   A6: G' = RingMorphismStr(#G2,G3,g#) by A1,Lm8;
+   A4: G' = RingMorphismStr(#G2,G3,g#) by A1,Lm8;
    consider f being Function of G1,G2 such that
-   A7: F' = RingMorphismStr(#G1,G2,f#) by A1,Lm8;
-      dom(G) = G2 by A4
+   A5: F' = RingMorphismStr(#G1,G2,f#) by A1,Lm8;
+      dom(G) = G2 by A3
          .= cod(F) by A2;
-   then G*F = RingMorphismStr(#G1,G3,g*f#) by A6,A7,Def10;
+   then G*F = RingMorphismStr(#G1,G3,g*f#) by A4,A5,Def10;
    then dom(G*F) = G1 & cod(G*F) = G3;
    hence thesis by Def8;
  end;
@@ -540,21 +532,21 @@ Th10:for f,g being strict RingMorphism st dom g = cod f holds
       A3: H <= G by A2,Th6;
       reconsider f' = f as Morphism of H,G by A2,Th6;
       consider m being Function of H,G such that
-      A5: f' = RingMorphismStr(#H,G,m#) by A3,Lm8;
+      A4: f' = RingMorphismStr(#H,G,m#) by A3,Lm8;
           (id G)*m = m by GRCAT_1:12;
-      hence i*f = f by A1,A2,A5,Def10;
+      hence i*f = f by A1,A2,A4,Def10;
     end;
    thus for g being strict RingMorphism st dom g = G holds g*(ID G) = g
     proof
       let f be strict RingMorphism such that
-      A6: dom f = G;
+      A5: dom f = G;
       set H = cod(f);
-      A7: G <= H by A6,Th6;
-      reconsider f' = f as Morphism of G,H by A6,Th6;
+      A6: G <= H by A5,Th6;
+      reconsider f' = f as Morphism of G,H by A5,Th6;
       consider m being Function of G,H such that
-      A9: f' = RingMorphismStr(#G,H,m#) by A7,Lm8;
+      A7: f' = RingMorphismStr(#G,H,m#) by A6,Lm8;
           m*(id G) = m by GRCAT_1:12;
-      hence f*i = f by A1,A6,A9,Def10;
+      hence f*i = f by A1,A5,A7,Def10;
     end;
  end;
 
@@ -1209,13 +1201,7 @@ end;
 
 registration let UN;
  cluster RingCat(UN) -> strict;
- coherence
- proof
-      RingCat(UN) = CatStr(#RingObjects(UN),Morphs(RingObjects(UN)),
-    dom(RingObjects(UN)),cod(RingObjects(UN)),
-    comp(RingObjects(UN)),ID(RingObjects(UN))#);
-   hence thesis;
- end;
+ coherence;
 end;
 
 theorem
@@ -1226,11 +1212,11 @@ theorem
     let f,g be Morphism of C;
     reconsider f' = f as Element of Morphs(V);
     reconsider g' = g as Element of Morphs(V);
-    A2: dom g = dom(V).g' by CAT_1:def 2
+    A1: dom g = dom(V).g' by CAT_1:def 2
              .= dom(g') by Def20;
         cod f = cod(V).f' by CAT_1:def 3
              .= cod(f') by Def21;
-    hence thesis by A2,Def23;
+    hence thesis by A1,Def23;
   end;
 
 theorem
@@ -1252,7 +1238,7 @@ theorem
   hence f is strict Element of X;
   thus f' is Morphism of C;
    consider x such that
-A2:    x in UN & GO x,b by Def17;
+A1:    x in UN & GO x,b by Def17;
      ex x1,x2,x3,x4,x5,x6 being set st x = [[x1,x2,x3,x4],x5,x6] &
   ex G being strict Ring
     st b = G
@@ -1261,7 +1247,7 @@ A2:    x in UN & GO x,b by Def17;
     & x3 = comp G
     & x4 = the Zero of G
     & x5 = the mult of G
-    & x6 = the unity of G by A2,Def16;
+    & x6 = the unity of G by A1,Def16;
   hence b is strict Element of V;
   thus b' is Object of C;
  end;
@@ -1287,10 +1273,10 @@ for f' being Element of Morphs(RingObjects(UN))
  proof
    set C = RingCat(UN), V = RingObjects(UN); set X = Morphs(V);
   let f be (Morphism of C), f' be Element of X; assume
-  A2: f = f';
+  A1: f = f';
   hence dom f = dom(V).f' by CAT_1:def 2
             .= dom f' by Def20;
-  thus cod f = cod(V).f' by A2,CAT_1:def 3
+  thus cod f = cod(V).f' by A1,CAT_1:def 3
             .= cod f' by Def21;
  end;
 
@@ -1307,23 +1293,23 @@ for f' being Element of Morphs(RingObjects(UN))
    set C = RingCat(UN), V = RingObjects(UN); set X = Morphs(V);
   let f,g be Morphism of C;
   let f',g' be Element of X; assume
-  A2: f = f' & g = g';
-  then A3: dom g = dom g' by Th29;
-  A4: cod f = cod f' by A2,Th29;
-  A5: dom f = dom f' by A2,Th29;
-  A6: cod g = cod g' by A2,Th29;
-  thus dom g = cod f iff dom g' = cod f' by A2,A4,Th29;
-  thus A7: dom g = cod f iff [g',f'] in dom comp(V)
- by A3,A4,Def23;
+  A1: f = f' & g = g';
+  then A2: dom g = dom g' by Th29;
+  A3: cod f = cod f' by A1,Th29;
+  A4: dom f = dom f' by A1,Th29;
+  A5: cod g = cod g' by A1,Th29;
+  thus dom g = cod f iff dom g' = cod f' by A1,A3,Th29;
+  thus A6: dom g = cod f iff [g',f'] in dom comp(V)
+ by A2,A3,Def23;
   thus dom g = cod f implies g*f = g'*f'
    proof
-     assume A8: dom g = cod f;
+     assume A7: dom g = cod f;
      then [g,f] in dom (the Comp of C) by Th26;
-     hence g*f = (comp(V)).[g',f'] by A2,CAT_1:def 4
-              .= g'*f' by A7,A8,Def23;
+     hence g*f = (comp(V)).[g',f'] by A1,CAT_1:def 4
+              .= g'*f' by A6,A7,Def23;
    end;
-  thus dom f = dom g iff dom f' = dom g' by A2,A5,Th29;
-  thus cod f = cod g iff cod f' = cod g' by A2,A6,Th29;
+  thus dom f = dom g iff dom f' = dom g' by A1,A4,Th29;
+  thus cod f = cod g iff cod f' = cod g' by A1,A5,Th29;
  end;
 
  Lm9:for f,g being Morphism of RingCat(UN) st dom g = cod f holds

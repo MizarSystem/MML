@@ -34,8 +34,8 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="30" value="false"/>
-<Adjective nr="32"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -50,13 +50,13 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -64,19 +64,19 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="49">
-<Func kind="K" nr="154">
+<Adjective nr="50">
+<Func kind="K" nr="155">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="55">
-<Func kind="K" nr="154">
+<Adjective nr="56">
+<Func kind="K" nr="155">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="56" value="false"/>
 <Adjective nr="57" value="false"/>
-<Adjective nr="59"/>
+<Adjective nr="58" value="false"/>
+<Adjective nr="60"/>
 </Cluster>
 </CCluster>
 </Registrations>

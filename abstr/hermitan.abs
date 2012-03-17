@@ -17,7 +17,7 @@ environ
       SQUARE_1, COMPLEX1, SEQM_3, VECTSP_4, COMPLFLD, HAHNBAN1, VECTSP10,
       BILINEAR;
  constructors REAL_1, DOMAIN_1, SQUARE_1, BINOP_1, BILINEAR, MEMBERED, ARYTM_0,
-      BINOP_2, SIN_COS, HAHNBAN1;
+      BINOP_2, SIN_COS, HAHNBAN1, SEQM_3;
  registrations STRUCT_0, XREAL_0, SUBSET_1, RELSET_1, SQUARE_1, COMPLFLD,
       HAHNBAN1, VECTSP10, BILINEAR, COMPLEX1, MEMBERED, XCMPLX_0, NAT_1,
       SIN_COS;
@@ -266,20 +266,20 @@ theorem :: HERMITAN:30
 for V,W be non empty VectSpStr over F_Complex
 for v be Vector of V,w be Vector of W, a be Element of F_Complex
 for f be Form of V,W st f is cmplxhomogeneousFAF holds
- f.[v,a*w] = (a*')*f.[v,w];
+ f.(v,a*w) = (a*')*f.(v,w);
 
 definition
  let V be non empty VectSpStr over F_Complex;
  let f be Form of V,V;
 attr f is hermitan means
 :: HERMITAN:def 5
-  for v,u be Vector of V holds f.[v,u] = (f.[u,v])*';
+  for v,u be Vector of V holds f.(v,u) = (f.(u,v))*';
 attr f is diagRvalued means
 :: HERMITAN:def 6
-  for v be Vector of V holds Im (f.[v,v]) = 0;
+  for v be Vector of V holds Im (f.(v,v)) = 0;
 attr f is diagReR+0valued means
 :: HERMITAN:def 7
-    for v be Vector of V holds 0 <= Re (f.[v,v]);
+    for v be Vector of V holds 0 <= Re (f.(v,v));
 end;
 
 registration
@@ -389,7 +389,7 @@ definition
  let f be Form of V,W;
 func f*' -> Form of V,W means
 :: HERMITAN:def 8
- for v be Vector of V, w be Vector of W holds it.[v,w] = (f.[v,w])*';
+ for v be Vector of V, w be Vector of W holds it.(v,w) = (f.(v,w))*';
 end;
 
 registration
@@ -425,7 +425,7 @@ end;
 theorem :: HERMITAN:31
 for V be non empty VectSpStr over F_Complex, f be Functional of V,
 v be Vector of V
-holds (FormFunctional(f,f*')).[v,v] = [**|. f.v .|^2, 0 **];
+holds (FormFunctional(f,f*')).(v,v) = [**|. f.v .|^2, 0 **];
 
 registration
  let V be non empty VectSpStr over F_Complex;
@@ -466,12 +466,12 @@ theorem :: HERMITAN:37
 theorem :: HERMITAN:38
 for V,W be VectSp of F_Complex, v be Vector of V, w,t be Vector of W
 for f be additiveFAF cmplxhomogeneousFAF Form of V,W holds
- f.[v,w-t] = f.[v,w] - f.[v,t];
+ f.(v,w-t) = f.(v,w) - f.(v,t);
 
 theorem :: HERMITAN:39
 for V,W be VectSp of F_Complex, v,u be Vector of V, w,t be Vector of W
 for f be sesquilinear-Form of V,W holds
- f.[v-u,w-t] = f.[v,w] - f.[v,t] -(f.[u,w] - f.[u,t]);
+ f.(v-u,w-t) = f.(v,w) - f.(v,t) -(f.(u,w) - f.(u,t));
 
 theorem :: HERMITAN:40
 for V,W be add-associative right_zeroed right_complementable
@@ -479,27 +479,27 @@ for V,W be add-associative right_zeroed right_complementable
 for v,u be Vector of V, w,t be Vector of W
 for a,b be Element of F_Complex
  for f be sesquilinear-Form of V,W holds
-   f.[v+a*u,w+b*t] = f.[v,w] + b*' * f.[v,t] + (a*f.[u,w] + a*(b*' *f.[u,t]));
+   f.(v+a*u,w+b*t) = f.(v,w) + b*' * f.(v,t) + (a*f.(u,w) + a*(b*' *f.(u,t)));
 
 theorem :: HERMITAN:41
 for V,W be VectSp of F_Complex, v,u be Vector of V, w,t be Vector of W
 for a,b be Element of F_Complex
  for f be sesquilinear-Form of V,W holds
-   f.[v-a*u,w-b*t] = f.[v,w] - b*'*f.[v,t] - (a*f.[u,w] - a*(b*'*f.[u,t]));
+   f.(v-a*u,w-b*t) = f.(v,w) - b*'*f.(v,t) - (a*f.(u,w) - a*(b*'*f.(u,t)));
 
 theorem :: HERMITAN:42
 for V be add-associative right_zeroed right_complementable
              VectSp-like (non empty VectSpStr over F_Complex)
 for f be cmplxhomogeneousFAF Form of V,V
- for v be Vector of V holds f.[v,0.V] = 0.F_Complex;
+ for v be Vector of V holds f.(v,0.V) = 0.F_Complex;
 
 theorem :: HERMITAN:43
 :: Polarization Formulae
    for V be VectSp of F_Complex, v,w be Vector of V, f be hermitan-Form of V
  holds
-  f.[v,w] + f.[v,w] + f.[v,w] + f.[v,w]
-   = f.[v+w,v+w] - f.[v-w,v-w]
-    +i_FC *f.[v+i_FC*w,v+i_FC*w] -i_FC *f.[v-i_FC*w,v-i_FC*w];
+  f.(v,w) + f.(v,w) + f.(v,w) + f.(v,w)
+   = f.(v+w,v+w) - f.(v-w,v-w)
+    +i_FC *f.(v+i_FC*w,v+i_FC*w) -i_FC *f.(v-i_FC*w,v-i_FC*w);
 
 definition
   let V be non empty VectSpStr over F_Complex;
@@ -507,7 +507,7 @@ definition
   let v be Vector of V;
 func signnorm(f,v) -> real number equals
 :: HERMITAN:def 9
-Re (f.[v,v]);
+Re (f.(v,v));
 end;
 
 theorem :: HERMITAN:44
@@ -515,7 +515,7 @@ for V be add-associative right_zeroed right_complementable
          VectSp-like (non empty VectSpStr over F_Complex)
 for f be diagReR+0valued diagRvalued Form of V,V
 for v be Vector of V holds
-   |. f.[v,v] .| = Re (f.[v,v]) & signnorm (f,v) = |. f.[v,v] .|;
+   |. f.(v,v) .| = Re (f.(v,v)) & signnorm (f,v) = |. f.(v,v) .|;
 
 ::
 :: Lemmas for Schwarz inequality
@@ -525,38 +525,38 @@ theorem :: HERMITAN:45
 for V be VectSp of F_Complex, v,w be Vector of V
 for f be sesquilinear-Form of V,V, r be Real,
 a be Element of F_Complex st
-|.a.| =1 & Re (a * f.[w,v]) = |.f.[w,v].| & Im (a * f.[w,v])= 0
+|.a.| =1 & Re (a * f.(w,v)) = |.f.(w,v).| & Im (a * f.(w,v))= 0
 holds
- f.[v-[**r,0**]*a*w, v-[**r,0**]*a*w]
-      = f.[v,v] - [**r,0**]*(a* f.[w,v])
-       - [**r,0**]*(a*'*f.[v,w]) + [**r^2,0**]*f.[w,w];
+ f.(v-[**r,0**]*a*w, v-[**r,0**]*a*w)
+      = f.(v,v) - [**r,0**]*(a* f.(w,v))
+       - [**r,0**]*(a*'*f.(v,w)) + [**r^2,0**]*f.(w,w);
 
 theorem :: HERMITAN:46
 for V be VectSp of F_Complex, v,w be Vector of V
 for f be diagReR+0valued hermitan-Form of V, r be Real,
 a be Element of F_Complex st
-|.a.| =1 & Re (a * f.[w,v]) = |.f.[w,v].| & Im (a * f.[w,v])= 0
+|.a.| =1 & Re (a * f.(w,v)) = |.f.(w,v).| & Im (a * f.(w,v))= 0
 holds
-Re( f.[v-[**r,0**]*a*w, v-[**r,0**]*a*w])
-      = signnorm(f,v) - 2*|.f.[w,v].|*r + signnorm(f,w) * r^2 &
-0 <= signnorm(f,v) - 2*|.f.[w,v].|*r + signnorm(f,w) * r^2;
+Re( f.(v-[**r,0**]*a*w, v-[**r,0**]*a*w))
+      = signnorm(f,v) - 2*|.f.(w,v).|*r + signnorm(f,w) * r^2 &
+0 <= signnorm(f,v) - 2*|.f.(w,v).|*r + signnorm(f,w) * r^2;
 
 theorem :: HERMITAN:47
 for V be VectSp of F_Complex, v,w be Vector of V
 for f be diagReR+0valued hermitan-Form of V
-st signnorm(f,w)= 0 holds |.f.[w,v].| = 0;
+st signnorm(f,w)= 0 holds |.f.(w,v).| = 0;
 
 theorem :: HERMITAN:48
 :: Schwarz inequality
 for V be VectSp of F_Complex, v,w be Vector of V
 for f be diagReR+0valued hermitan-Form of V
-holds |. f.[v,w] .|^2 <= signnorm(f,v) * signnorm(f,w);
+holds |. f.(v,w) .|^2 <= signnorm(f,v) * signnorm(f,w);
 
 theorem :: HERMITAN:49
 :: Schwarz inequality - second version
 for V be VectSp of F_Complex
 for f be diagReR+0valued hermitan-Form of V
- for v,w be Vector of V holds |. f.[v,w] .|^2 <= |. f.[v,v].| * |. f.[w,w] .|;
+ for v,w be Vector of V holds |. f.(v,w) .|^2 <= |. f.(v,v).| * |. f.(w,w) .|;
 
 theorem :: HERMITAN:50
 ::Minkowski inequality
@@ -570,7 +570,7 @@ theorem :: HERMITAN:51
    for V be VectSp of F_Complex
 for f be diagReR+0valued hermitan-Form of V
  for v,w be Vector of V holds
- |. f.[v+w,v+w] .| <= (sqrt(|. f.[v,v] .|) + sqrt(|. f.[w,w] .|))^2;
+ |. f.(v+w,v+w) .| <= (sqrt(|. f.(v,v) .|) + sqrt(|. f.(w,w) .|))^2;
 
 theorem :: HERMITAN:52
 :: Parallerogram equality
@@ -584,7 +584,7 @@ theorem :: HERMITAN:53
    for V be VectSp of F_Complex
 for f be diagReR+0valued hermitan-Form of V
  for v,w be Element of V holds
- |. f.[v+w,v+w] .| + |. f.[v-w,v-w] .| = 2*|. f.[v,v] .| + 2*|. f.[w,w] .|;
+ |. f.(v+w,v+w) .| + |. f.(v-w,v-w) .| = 2*|. f.(v,v) .| + 2*|. f.(w,w) .|;
 
 definition
   let V be non empty VectSpStr over F_Complex;
@@ -636,12 +636,12 @@ holds LKer f = RKer (f*');
 
 theorem :: HERMITAN:60
 for V be VectSp of F_Complex, f be diagReR+0valued diagRvalued Form of V,V
-for v be Vector of V st Re (f.[v,v])= 0 holds f.[v,v]= 0.F_Complex;
+for v be Vector of V st Re (f.(v,v))= 0 holds f.(v,v)= 0.F_Complex;
 
 theorem :: HERMITAN:61
 for V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V,
 v be Vector of V st
- Re (f.[v,v])= 0 &
+ Re (f.(v,v))= 0 &
 (f is non degenerated-on-left or f is non degenerated-on-right) holds v=0.V;
 
 definition
@@ -657,7 +657,7 @@ theorem :: HERMITAN:62
 for V be non empty VectSpStr over F_Complex, W  be VectSp of F_Complex
 for f be additiveFAF cmplxhomogeneousFAF Form of V,W
 for v be Vector of V, w be Vector of W holds
-(RQ*Form(f)).[v,w+RKer (f*')] = f.[v,w];
+(RQ*Form(f)).(v,w+RKer (f*')) = f.(v,w);
 
 registration
  let V,W be VectSp of F_Complex;
@@ -674,7 +674,7 @@ func Q*Form(f) -> sesquilinear-Form of
 :: HERMITAN:def 12
 for A be Vector of VectQuot(V,LKer f), B be Vector of VectQuot(W, RKer(f*'))
  for v be Vector of V, w be Vector of W
- st A = v + LKer f & B = w + RKer (f*') holds it.[A,B]= f.[v,w];
+ st A = v + LKer f & B = w + RKer (f*') holds it.(A,B)= f.(v,w);
 end;
 
 registration
@@ -735,7 +735,7 @@ definition
  let f be Form of V,V;
 attr f is positivediagvalued means
 :: HERMITAN:def 13
-for v be Vector of V st v <> 0.V holds 0 < Re (f.[v,v]);
+for v be Vector of V st v <> 0.V holds 0 < Re (f.(v,v));
 end;
 
 registration
@@ -760,7 +760,7 @@ end;
 theorem :: HERMITAN:68
 for V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V
  for A,B be Vector of VectQuot(V,LKer(f)), v,w be Vector of V st
-  A = v + LKer f & B = w + LKer f holds (ScalarForm(f)).[A,B] = f.[v,w];
+  A = v + LKer f & B = w + LKer f holds (ScalarForm(f)).(A,B) = f.(v,w);
 
 theorem :: HERMITAN:69
 for V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V

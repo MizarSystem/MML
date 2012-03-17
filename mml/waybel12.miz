@@ -219,11 +219,11 @@ A2:     dom f = NAT & rng f = A by WELLORD2:def 4;
   end;
   end;
 
- Th5:
+ Lm2:
 for S being 1-sorted, X, Y being Subset of S holds (X \/ Y)` = (X`) /\ Y`
   by SUBSET_1:29;
 
- Th6:
+ Lm3:
 for S being 1-sorted, X, Y being Subset of S holds (X /\ Y)` = (X`) \/ Y`
   by SUBSET_1:30;
 
@@ -573,13 +573,13 @@ for L being Semilattice, F being upper filtered Subset of L
       let x be set;
       assume x in F "/\" F;
       then consider y, z being Element of L such that
-A2:     x = y "/\" z and
-A3:     y in F & z in F;
+A1:     x = y "/\" z and
+A2:     y in F & z in F;
       consider t being Element of L such that
-A4:     t in F and
-A5:     t <= y & t <= z by A3,WAYBEL_0:def 2;
-          y "/\" z >= t by A5,YELLOW_0:23;
-      hence x in F by A2,A4,WAYBEL_0:def 20;
+A3:     t in F and
+A4:     t <= y & t <= z by A2,WAYBEL_0:def 2;
+          y "/\" z >= t by A4,YELLOW_0:23;
+      hence x in F by A1,A3,WAYBEL_0:def 20;
     end;
     thus thesis by YELLOW_4:40;
   end;
@@ -595,18 +595,18 @@ theorem
       let x be set;
       assume x in I "\/" I;
       then consider y, z being Element of L such that
-A2:     x = y "\/" z and
-A3:     y in I & z in I;
+A1:     x = y "\/" z and
+A2:     y in I & z in I;
       consider t being Element of L such that
-A4:     t in I and
-A5:     t >= y & t >= z by A3,WAYBEL_0:def 1;
-          y "\/" z <= t by A5,YELLOW_0:22;
-      hence x in I by A2,A4,WAYBEL_0:def 19;
+A3:     t in I and
+A4:     t >= y & t >= z by A2,WAYBEL_0:def 1;
+          y "\/" z <= t by A4,YELLOW_0:22;
+      hence x in I by A1,A3,WAYBEL_0:def 19;
     end;
     thus thesis by YELLOW_4:13;
   end;
 
-Lm2:
+Lm4:
 for L being non empty RelStr, V being Subset of L
  holds {x where x is Element of L : V "/\" {x} c= V} is Subset of L
   proof
@@ -644,7 +644,7 @@ for L being antisymmetric transitive with_infima RelStr, V being Subset of L
     let L be antisymmetric transitive with_infima RelStr,
         V be Subset of L;
     reconsider G1 = {x where x is Element of L : V "/\" {x} c= V}
-      as Subset of L by Lm2;
+      as Subset of L by Lm4;
         G1 is filtered
     proof
       let x, y be Element of L;
@@ -689,7 +689,7 @@ for L being antisymmetric transitive with_infima RelStr
     let L be antisymmetric transitive with_infima RelStr,
         V be upper Subset of L;
     reconsider G1 = {x where x is Element of L : V "/\" {x} c= V}
-      as Subset of L by Lm2;
+      as Subset of L by Lm4;
         G1 is upper
     proof
       let x, y be Element of L;
@@ -841,7 +841,7 @@ A6: for B being Element of Fin C st B <> {} holds P[B]
     hence "\/"(Y,L) in Y by A6;
   end;
 
-Lm3:
+Lm5:
 for L being Semilattice, F being Filter of L
  holds F = uparrow fininfs F
   proof
@@ -858,7 +858,7 @@ definition let L be Semilattice,
 existence
   proof
     take F;
-    thus thesis by Lm3;
+    thus thesis by Lm5;
   end;
 end;
 
@@ -869,7 +869,7 @@ existence
   proof
         F is GeneratorSet of F
     proof
-      thus F = uparrow fininfs F by Lm3;
+      thus F = uparrow fininfs F by Lm5;
     end;
     then reconsider F1 = F as GeneratorSet of F;
     take F1;
@@ -877,7 +877,7 @@ existence
   end;
 end;
 
-Lm4:
+Lm6:
 for L being Semilattice, F being Filter of L
  for G being GeneratorSet of F holds G c= F
   proof
@@ -900,60 +900,59 @@ A1:   for a being Element of L st a in A
        ex b being Element of L st b in B & b <= a;
     let a be Element of L such that
 A2:   a in fininfs A;
-        fininfs A = {"/\"(Y,L) where Y is finite Subset of A: ex_inf_of Y,L};
-    then consider Y being finite Subset of A such that
-A4:   a = "/\"(Y,L) and
-A5:   ex_inf_of Y,L by A2;
+    consider Y being finite Subset of A such that
+A3:   a = "/\"(Y,L) and
+A4:   ex_inf_of Y,L by A2;
 
 defpred P[set,set] means
  ex x, y being Element of L st x = $1 & y = $2 & y <= x;
 
-A6: for e being set st e in Y ex u being set st u in B & P[e,u]
+A5: for e being set st e in Y ex u being set st u in B & P[e,u]
     proof
       let e be set such that
-A7:     e in Y;
+A6:     e in Y;
           Y c= the carrier of L by XBOOLE_1:1;
-      then reconsider e as Element of L by A7;
-          ex b being Element of L st b in B & b <= e by A1,A7;
+      then reconsider e as Element of L by A6;
+          ex b being Element of L st b in B & b <= e by A1,A6;
       hence thesis;
     end;
     consider f being Function of Y, B such that
-A8:   for e being set st e in Y holds P[e,f.e] from FUNCT_2:sch 1(A6);
-      A9: f.:Y c= the carrier of L
+A7:   for e being set st e in Y holds P[e,f.e] from FUNCT_2:sch 1(A5);
+      A8: f.:Y c= the carrier of L
     proof
       let y be set;
       assume y in f.:Y;
       then consider x being set such that
-A10:      x in dom f & x in Y & y = f.x by FUNCT_1:def 12;
-          f.x in B by A10,FUNCT_2:7;
-      hence thesis by A10;
+A9:      x in dom f & x in Y & y = f.x by FUNCT_1:def 12;
+          f.x in B by A9,FUNCT_2:7;
+      hence thesis by A9;
     end;
-A11: now per cases;
+A10: now per cases;
       case Y = {};
-      hence ex_inf_of f.:Y,L by A5,RELAT_1:149;
+      hence ex_inf_of f.:Y,L by A4,RELAT_1:149;
       end;
       case Y <> {};
       then consider e being set such that
-A12:     e in Y by XBOOLE_0:def 1;
+A11:     e in Y by XBOOLE_0:def 1;
           dom f = Y by FUNCT_2:def 1;
-      then f.e in f.:Y by A12,FUNCT_1:def 12;
-      hence ex_inf_of f.:Y,L by A9,YELLOW_0:55;
+      then f.e in f.:Y by A11,FUNCT_1:def 12;
+      hence ex_inf_of f.:Y,L by A8,YELLOW_0:55;
     end;
     end;
-then A13: "/\"(f.:Y,L) in fininfs B;
+then A12: "/\"(f.:Y,L) in fininfs B;
         "/\"(f.:Y,L) is_<=_than Y
     proof
       let e be Element of L; assume
-A14:     e in Y;
+A13:     e in Y;
       then consider x, y being Element of L such that
-A15:     x = e & y = f.e & y <= x by A8;
+A14:     x = e & y = f.e & y <= x by A7;
           dom f = Y by FUNCT_2:def 1;
-      then f.e in f.:Y by A14,FUNCT_1:def 12;
-      then "/\"(f.:Y,L) <= y by A11,A15,YELLOW_4:2;
-      hence "/\"(f.:Y,L) <= e by A15,ORDERS_2:26;
+      then f.e in f.:Y by A13,FUNCT_1:def 12;
+      then "/\"(f.:Y,L) <= y by A10,A14,YELLOW_4:2;
+      hence "/\"(f.:Y,L) <= e by A14,ORDERS_2:26;
     end;
-    then "/\"(f.:Y,L) <= "/\"(Y,L) by A5,YELLOW_0:31;
-    hence ex b being Element of L st b in fininfs B & b <= a by A4,A13;
+    then "/\"(f.:Y,L) <= "/\"(Y,L) by A4,YELLOW_0:31;
+    hence ex b being Element of L st b in fininfs B & b <= a by A3,A12;
   end;
 
 theorem Th34:
@@ -1043,7 +1042,7 @@ A8:       q = f.m and
             dom f = NAT by FUNCT_2:def 1;
         hence q in G by A1,A8,FUNCT_1:def 5;
       end;
-          G c= F by Lm4;
+          G c= F by Lm6;
       then Y c= F by A7,XBOOLE_1:1;
 then A9:   "/\"(Y,L) in F by WAYBEL_0:43;
           g.n = "/\"(Y,L) by A2;
@@ -1139,7 +1138,7 @@ A20:  for n being Nat, x being Element of V1
        let n be Nat,
            x be Element of V1;
 A21:    g.(n+1) in AA by A10,FUNCT_1:def 5;
-           AA c= F by A18,Lm4;
+           AA c= F by A18,Lm6;
        then AA c= G by A4,XBOOLE_1:1;
        then g.(n+1) in G by A21;
        then consider g1 being Element of L such that
@@ -1239,8 +1238,7 @@ A45: R c= O by WAYBEL_0:62;
       then consider y being Element of L such that
 A46:     y <= x and
 A47:     y in fininfs R by WAYBEL_0:def 16;
-          fininfs R = {"/\"(Y,L) where Y is finite Subset of R: ex_inf_of Y,L};
-      then consider Y being finite Subset of R such that
+      consider Y being finite Subset of R such that
 A48:     y = "/\"(Y,L) and
             ex_inf_of Y,L by A47;
 
@@ -1300,8 +1298,7 @@ then A60:   y1 << x1 by A59,WAYBEL_3:2;
       consider y being Element of L such that
 A61:     y <= q and
 A62:     y in fininfs R by WAYBEL_0:def 16;
-          fininfs R = {"/\"(Y,L) where Y is finite Subset of R: ex_inf_of Y,L};
-      then consider Y being finite Subset of R such that
+      consider Y being finite Subset of R such that
 A63:     y = "/\"(Y,L) and
             ex_inf_of Y,L by A62;
       per cases;
@@ -1399,36 +1396,36 @@ then A9: F c= G by A4,WAYBEL_0:62;
       let q be set;
       assume q in V "/\" F;
       then consider d, f being Element of L such that
-A11:     q = d "/\" f and
-A12:     d in V and
-A13:     f in F;
-          f in G by A9,A13;
+A10:     q = d "/\" f and
+A11:     d in V and
+A12:     f in F;
+          f in G by A9,A12;
       then consider x being Element of L such that
-A14:     f = x and
-A15:     V "/\" {x} c= V;
+A13:     f = x and
+A14:     V "/\" {x} c= V;
           x in {x} by TARSKI:def 1;
-      then d "/\" f in V "/\" {x} by A12,A14;
-      hence q in V by A11,A15;
+      then d "/\" f in V "/\" {x} by A11,A13;
+      hence q in V by A10,A14;
     end;
     then consider O being Open Filter of L such that
-A16:   O c= V and
-A17:   v in O and
-A18:   F c= O by A2,A3,Th37;
+A15:   O c= V and
+A16:   v in O and
+A17:   F c= O by A2,A3,Th37;
     take O;
-A19: {v} "/\" N = {v "/\" n where n is Element of L: n in N} by YELLOW_4:42;
+A18: {v} "/\" N = {v "/\" n where n is Element of L: n in N} by YELLOW_4:42;
     thus {v} "/\" N c= O
     proof
       let q be set;
       assume q in {v} "/\" N;
       then consider n being Element of L such that
-A20:     q = v "/\" n and
-A21:     n in N by A19;
-          N c= F by A3,Lm4;
-      then N c= O by A18,XBOOLE_1:1;
-      then v "/\" n in O "/\" O by A17,A21;
-      hence q in O by A20,Th25;
+A19:     q = v "/\" n and
+A20:     n in N by A18;
+          N c= F by A3,Lm6;
+      then N c= O by A17,XBOOLE_1:1;
+      then v "/\" n in O "/\" O by A16,A20;
+      hence q in O by A19,Th25;
     end;
-    thus O c= V & v in O by A16,A17;
+    thus O c= V & v in O by A15,A16;
   end;
 
 :: Proposition 3.43.3
@@ -1484,26 +1481,26 @@ A2:   not y <= x;
     set V = (downarrow x)`;
 A3: V = [#]L \ downarrow x by PRE_TOPC:17
      .= (the carrier of L) \ downarrow x;
-A5: V "/\" N c= V
+A4: V "/\" N c= V
     proof
       let q be set;
       assume q in V "/\" N;
       then consider v, n being Element of L such that
-A6:     q = v "/\" n and
-A7:     v in V and
-A8:     n in N;
-          not v in downarrow x by A3,A7,XBOOLE_0:def 4;
+A5:     q = v "/\" n and
+A6:     v in V and
+A7:     n in N;
+          not v in downarrow x by A3,A6,XBOOLE_0:def 4;
       then not v <= x by WAYBEL_0:17;
-      then not v "/\" n <= x by A1,A8;
+      then not v "/\" n <= x by A1,A7;
       then not v "/\" n in downarrow x by WAYBEL_0:17;
-      hence q in V by A3,A6,XBOOLE_0:def 4;
+      hence q in V by A3,A5,XBOOLE_0:def 4;
     end;
         not y in downarrow x by A2,WAYBEL_0:17;
-then A9: y in V by A3,XBOOLE_0:def 4;
+then A8: y in V by A3,XBOOLE_0:def 4;
         x <= x;
     then x in downarrow x by WAYBEL_0:17;
     then not x in V by A3,XBOOLE_0:def 4;
-    hence thesis by A5,A9,Th39;
+    hence thesis by A4,A8,Th39;
   end;
 
 :: Definition 3.43.5
@@ -1628,7 +1625,7 @@ then A6: x1` is closed & y1` is closed by TOPS_1:30;
         x1 /\ y1 is open by A5,TOPS_1:38;
     then x /\ y in the topology of T by PRE_TOPC:def 5;
     then A = x /\ y by A4,YELLOW_1:9;
-    then B` = (x1`) \/ y1` by A1,Th6;
+    then B` = (x1`) \/ y1` by A1,Lm3;
     then x1` = B` or y1` = B` by A3,A6;
     hence x = A or y = A by A1,TOPS_1:21;
   end;
@@ -1671,7 +1668,7 @@ A8:     S1` is open & S2` is open by A6,TOPS_1:29;
             (S1`) /\ S2` is open by A8,TOPS_1:38;
 then A9:     s1 /\ s2 in the topology of T by PRE_TOPC:def 5;
             B = (S1 \/ S2)` by A7
-         .= (S1`) /\ S2` by Th5;
+         .= (S1`) /\ S2` by Lm2;
         then A = s1 "/\" s2 by A1,A9,YELLOW_1:9;
         then A = s1 or A = s2 by A4,WAYBEL_6:def 2;
         hence S1 = B` or S2 = B` by A1;

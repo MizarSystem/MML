@@ -33,40 +33,40 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
-<Adjective nr="42"/>
+<Adjective nr="26"/>
+<Adjective nr="43"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
+<Func kind="K" nr="110">
 <LocusVar nr="1"/>
 <Num nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="22"/>
-<Adjective nr="25"/>
-<Adjective nr="29"/>
-<Adjective nr="42"/>
+<Adjective nr="23"/>
+<Adjective nr="26"/>
+<Adjective nr="30"/>
+<Adjective nr="43"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
-<Adjective nr="42" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="43" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
+<Func kind="K" nr="110">
 <LocusVar nr="1"/>
 <Num nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="22"/>
-<Adjective nr="25"/>
-<Adjective nr="29"/>
-<Adjective nr="42" value="false"/>
+<Adjective nr="23"/>
+<Adjective nr="26"/>
+<Adjective nr="30"/>
+<Adjective nr="43" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -78,24 +78,24 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="137">
+<Func kind="K" nr="138">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="16"/>
-<Adjective nr="22"/>
-<Adjective nr="24" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="29"/>
-<Adjective nr="42"/>
+<Adjective nr="17"/>
+<Adjective nr="23"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="30"/>
+<Adjective nr="43"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 <Func kind="K" nr="56"/>
 </Typ>
@@ -106,17 +106,17 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="137">
+<Func kind="K" nr="138">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="16"/>
-<Adjective nr="22"/>
-<Adjective nr="24" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="29"/>
-<Adjective nr="42"/>
+<Adjective nr="17"/>
+<Adjective nr="23"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="30"/>
+<Adjective nr="43"/>
 </Cluster>
 </FCluster>
 </Registrations>

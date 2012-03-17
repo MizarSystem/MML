@@ -8,17 +8,18 @@ environ
 
  vocabularies MEASURE5, BOOLE, MEASURE6, SUPINF_1, ARYTM_1, RLVECT_1, ARYTM_3,
       RCOMP_1, RELAT_1, GROUP_1, INT_1, URYSOHN1, PRALG_2, ORDINAL2, ABSVALUE,
-      ARYTM;
+      ARYTM, PROB_1, LIMFUNC1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, XREAL_0, REAL_1,
       COMPLEX1, NUMBERS, NEWTON, INT_1, NAT_1, SUPINF_1, SUPINF_2, MEASURE5,
-      MEASURE6, URYSOHN1, INTEGRA2;
- constructors SUPINF_2, MEASURE6, URYSOHN1, REAL_1, NAT_1, INTEGRA2, MEMBERED;
+      PROB_1, MEASURE6, URYSOHN1, INTEGRA2, LIMFUNC1;
+ constructors SUPINF_2, MEASURE6, URYSOHN1, REAL_1, NAT_1, INTEGRA2, MEMBERED,
+      PROB_1, LIMFUNC1;
  registrations SUBSET_1, INT_1, SUPINF_1, XREAL_0, MEMBERED, ORDINAL2;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, PROB_1, LIMFUNC1;
  theorems TARSKI, NAT_1, REAL_1, REAL_2, SEQ_4, ABSVALUE, URYSOHN1, XREAL_0,
       SUPINF_1, SUPINF_2, MEASURE5, MEASURE6, INT_1, HEINE, INTEGRA2, XBOOLE_0,
-      XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1;
+      XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1, PROB_1, LIMFUNC1;
  schemes REAL_1, NAT_1;
 
 begin
@@ -3264,8 +3265,8 @@ A1:a < b;
          consider c being real number such that
       A4:a < c & c < b by A1,XREAL_1:7;
          reconsider c as Real by XREAL_0:def 1;
-           c in R<0 by A3,A4,URYSOHN1:def 1;
-         then c in R<0 \/ DYADIC by XBOOLE_0:def 2;
+           c in halfline 0 by A3,A4;
+         then c in (halfline 0) \/ DYADIC by XBOOLE_0:def 2;
       then c in DOM by URYSOHN1:def 5,XBOOLE_0:def 2;
          hence thesis by A4;
       end;
@@ -3274,7 +3275,7 @@ A1:a < b;
          set a1 = 0;
          consider c being Real such that
       A6:c in DYADIC & a1 < c & c < b by A2,A5,Th28;
-            c in R<0 \/ DYADIC by A6,XBOOLE_0:def 2;
+            c in (halfline 0) \/ DYADIC by A6,XBOOLE_0:def 2;
       then A7:c in DOM by URYSOHN1:def 5,XBOOLE_0:def 2;
         a < c & c < b by A2,A6;
          hence thesis by A7;
@@ -3288,7 +3289,7 @@ A1:a < b;
    A9:a1 = 0 & b1 = 1;
       consider c being Real such that
    A10:c in DYADIC & a1 < c & c < b1 by A9,Th28;
-      A11: c in R<0 \/ DYADIC by A10,XBOOLE_0:def 2;
+      A11: c in (halfline 0) \/ DYADIC by A10,XBOOLE_0:def 2;
       take c;
       thus thesis by A8,A9,A10,A11,XREAL_1:2,URYSOHN1:def 5,XBOOLE_0:def 2;
    end;
@@ -3296,7 +3297,7 @@ A1:a < b;
      0 <= a & b <= 1;
       then consider c being Real such that
    A12:c in DYADIC & a < c & c < b by A1,Th28;
-      A13: c in R<0 \/ DYADIC by A12,XBOOLE_0:def 2;
+      A13: c in (halfline 0) \/ DYADIC by A12,XBOOLE_0:def 2;
       take c;
       thus thesis by A12,A13,URYSOHN1:def 5,XBOOLE_0:def 2;
    end;
@@ -3309,9 +3310,10 @@ A1:a < b;
       A16:a < c & c < b by A1,XREAL_1:7;
          reconsider c as Real by XREAL_0:def 1;
             1 < c by A15,A16,XREAL_1:2;
-         then c in R>1 by URYSOHN1:def 2;
-         then c in DYADIC \/ R>1 by XBOOLE_0:def 2;
-         then c in R<0 \/ (DYADIC \/ R>1) by XBOOLE_0:def 2;
+         then c in right_open_halfline 1;
+         then c in DYADIC \/ (right_open_halfline 1) by XBOOLE_0:def 2;
+         then c in (halfline 0) \/ (DYADIC \/ right_open_halfline 1) 
+           by XBOOLE_0:def 2;
       then c in DOM by URYSOHN1:def 5,XBOOLE_1:4;
          hence thesis by A16;
       end;
@@ -3320,7 +3322,7 @@ A1:a < b;
          set b1 = 1;
          consider c being Real such that
       A18:c in DYADIC & a < c & c < b1 by A14,A17,Th28;
-            c in R<0 \/ DYADIC by A18,XBOOLE_0:def 2;
+            c in (halfline 0) \/ DYADIC by A18,XBOOLE_0:def 2;
       then A19:c in DOM by URYSOHN1:def 5,XBOOLE_0:def 2;
         a < c & c < b by A14,A18,XREAL_1:2;
          hence thesis by A19;
@@ -3456,10 +3458,12 @@ then A5:abs(d - c) <= b - a by A3,ABSVALUE:12;
 end;
 
 theorem
-      for eps being Real st 0 < eps holds
+   for eps being Real st 0 < eps holds
    for d being Real st 0 < d & d <= 1 holds
-   ex r1,r2 being Real st r1 in DYADIC \/ R>1 & r2 in DYADIC \/ R>1 &
-   0 < r1 & r1 < d & d < r2 & r2 - r1 < eps
+   ex r1,r2 being Real st 
+     r1 in DYADIC \/ (right_open_halfline 1) & 
+     r2 in DYADIC \/ (right_open_halfline 1) &
+     0 < r1 & r1 < d & d < r2 & r2 - r1 < eps
 proof
    let eps be Real;
    assume
@@ -3485,11 +3489,14 @@ A3:0 < eps1 & eps1 < eps by A1,XREAL_1:7;
       take r1,r2;
          0 < d - eps1 by A4,XREAL_1:52;
    then A7:0 < r1 & r1 < d & d < r2 by A5,A6;
-         (r1 in R<0 \/ DYADIC or r1 in R>1) &
-      (r2 in R<0 \/ DYADIC or r2 in R>1) by A5,A6,URYSOHN1:def 5,XBOOLE_0:def 2
-;
-      then A8: (r1 in R<0 or r1 in DYADIC or r1 in R>1) &
-      (r2 in R<0 or r2 in DYADIC or r2 in R>1) by XBOOLE_0:def 2;
+       (r1 in (halfline 0) \/ DYADIC or 
+       r1 in right_open_halfline 1) &
+      (r2 in halfline 0 \/ DYADIC or r2 in right_open_halfline 1) 
+      by A5,A6,URYSOHN1:def 5,XBOOLE_0:def 2;
+      then A8: (r1 in halfline 0 or r1 in DYADIC or 
+      r1 in right_open_halfline 1) &
+      (r2 in halfline 0 or r2 in DYADIC or 
+        r2 in right_open_halfline 1) by XBOOLE_0:def 2;
    A9:r1 < r2 by A5,A6,XREAL_1:2;
    then A10:r1 < d + (eps - eps1) by A6,XREAL_1:2;
    A11:d - eps1 < r2 by A5,A9,XREAL_1:2;
@@ -3497,7 +3504,7 @@ A3:0 < eps1 & eps1 < eps by A1,XREAL_1:7;
            = eps;
    then A12:abs(r2 - r1) < eps by A5,A6,A10,A11,Th34;
          0 <= r2 - r1 by A9,XREAL_1:50;
-      hence thesis by A7,A8,A12,ABSVALUE:def 1,URYSOHN1:def 1,XBOOLE_0:def 2
+      hence thesis by A7,A8,A12,ABSVALUE:def 1,URYSOHN1:1,XBOOLE_0:def 2
 ;
    end;
    suppose
@@ -3509,15 +3516,16 @@ A3:0 < eps1 & eps1 < eps by A1,XREAL_1:7;
       then consider r2 being Real such that
    A15:d < r2 & r2 < r1 + eps1 & r2 in DOM;
       take r1,r2;
-   A16:not r1 in R<0 by A14,URYSOHN1:def 1;
+   A16:not r1 in halfline 0 by A14,URYSOHN1:1;
          0 < r2 by A2,A15;
-   then A17:not r2 in R<0 by URYSOHN1:def 1;
-         (r1 in R<0 \/ DYADIC or r1 in R>1) & (r2 in R<0 \/ DYADIC or r2 in R>1
-)
+   then A17:not r2 in halfline 0 by URYSOHN1:1;
+         (r1 in halfline 0 \/ DYADIC or r1 in right_open_halfline 1) & 
+      (r2 in halfline 0 \/ DYADIC or r2 in right_open_halfline 1)
       by A14,A15,URYSOHN1:def 5,XBOOLE_0:def 2;
-      then A18: (r1 in DYADIC or r1 in R>1) &
-      (r2 in DYADIC or r2 in R>1) by A16,A17,XBOOLE_0:def 2;
-         r2 - r1 < r1 + eps1 - r1 by A15,XREAL_1:11;
+      then A18: (r1 in DYADIC or r1 in right_open_halfline 1) &
+      (r2 in DYADIC or r2 in right_open_halfline 1) 
+        by A16,A17,XBOOLE_0:def 2;
+      r2 - r1 < r1 + eps1 - r1 by A15,XREAL_1:11;
       hence thesis by A3,A14,A15,A18,XREAL_1:2,XBOOLE_0:def 2;
 end;
 end;

@@ -107,11 +107,7 @@ theorem
 
 definition let X be set;
   redefine func bool X -> Subset-Family of X;
-  coherence
-   proof
-     bool X in bool bool X by ZFMISC_1:def 1;
-    hence thesis;
-   end;
+  coherence by ZFMISC_1:def 1;
 end;
 
 definition let D be set;
@@ -125,25 +121,20 @@ registration let D be set;
  coherence
   proof
   set T = TopStruct (# D, bool D #);
-  1TopSp D = T;
-   hence 1TopSp D is strict;
-  A2: the carrier of T in the topology of T by ZFMISC_1:def 1;
-  A3: for X being Subset-Family of T st X c= the topology of T
+   thus 1TopSp D is strict;
+  A1: the carrier of T in the topology of T by ZFMISC_1:def 1;
+  A2: for X being Subset-Family of T st X c= the topology of T
        holds union X in the topology of T;
        for p,q being Subset of T st
       p in the topology of T & q in the topology of T
        holds p /\ q in the topology of T;
-  hence thesis by A2,A3,PRE_TOPC:def 1;
+  hence thesis by A1,A2,PRE_TOPC:def 1;
   end;
 end;
 
 registration let D be non empty set;
   cluster 1TopSp D -> non empty;
-  coherence
-  proof
-   1TopSp D = TopStruct (# D, bool D #);
-   hence 1TopSp D is non empty;
-  end;
+  coherence;
 end;
 
 reserve a for set;
@@ -151,18 +142,10 @@ reserve a for set;
 canceled;
 
 theorem
-  the topology of 1TopSp a = bool a
-  proof
-    1TopSp(a) = TopStruct (# a, bool a #);
-    hence thesis;
-  end;
+  the topology of 1TopSp a = bool a;
 
 theorem
- the carrier of 1TopSp a = a
-      proof
-       1TopSp(a) = TopStruct (# a, bool a #);
-       hence thesis;
-      end;
+ the carrier of 1TopSp a = a;
 
 theorem Th9:
   1TopSp {a} is compact
@@ -1292,20 +1275,12 @@ end;
 
 registration let PM;
  cluster TopSpaceMetr PM -> strict TopSpace-like;
- coherence
-  proof
-       TopSpaceMetr PM=TopStruct (#the carrier of PM,Family_open_set(PM)#);
-   hence thesis by Th37;
-  end;
+ coherence by Th37;
 end;
 
 registration let PM be non empty MetrStruct;
  cluster TopSpaceMetr PM -> non empty;
- coherence
-  proof
-       TopSpaceMetr PM=TopStruct (#the carrier of PM,Family_open_set(PM)#);
-   hence thesis;
-  end;
+ coherence;
 end;
 
 theorem Th38:
@@ -1319,33 +1294,33 @@ theorem Th38:
           x in W & y in V & W misses V
        proof
         let x,y be Element of TPS;
-        assume A2: not x = y;
+        assume A1: not x = y;
         reconsider x,y as Element of PM;
-        A3: dist(x,y) > 0
+        A2: dist(x,y) > 0
          proof
-             dist(x,y) <> 0 by A2,METRIC_1:2;
+             dist(x,y) <> 0 by A1,METRIC_1:2;
           hence thesis by METRIC_1:5;
          end;
         set r = dist(x,y)/2;
-        A4:r > 0 by A3,REAL_2:127;
+        A3:r > 0 by A2,REAL_2:127;
             ex W,V being Subset of TPS st W is open & V is open &
          x in W & y in V & W misses V
          proof
          set W = Ball(x,r);
          set V = Ball(y,r);
-         A5: W in Family_open_set(PM) by Th33;
-         A6: V in Family_open_set(PM) by Th33;
-A7:         dist(x,x) = 0 by METRIC_1:1;
-A8:         dist(y,y) = 0 by METRIC_1:1;
+         A4: W in Family_open_set(PM) by Th33;
+         A5: V in Family_open_set(PM) by Th33;
+A6:         dist(x,x) = 0 by METRIC_1:1;
+A7:         dist(y,y) = 0 by METRIC_1:1;
          reconsider W,V as Subset of TPS;
-         A9:W misses V
+         A8:W misses V
          proof
               for z being set holds not z in W /\ V
            proof
             let z be set;
-            assume A10:z in W /\ V;
+            assume A9:z in W /\ V;
             then reconsider z as Element of PM;
-                z in W & z in V by A10,XBOOLE_0:def 3;
+                z in W & z in V by A9,XBOOLE_0:def 3;
             then dist(x,z) < r & dist(y,z) < r by METRIC_1:12;
             then dist(x,z) + dist(y,z) < r + r by XREAL_1:10;
             hence thesis by METRIC_1:4;
@@ -1353,7 +1328,7 @@ A8:         dist(y,y) = 0 by METRIC_1:1;
           hence thesis by XBOOLE_0:4;
          end;
          take W, V;
-         thus thesis by A4,A5,A6,A7,A8,A9,METRIC_1:12,PRE_TOPC:def 5;
+         thus thesis by A3,A4,A5,A6,A7,A8,METRIC_1:12,PRE_TOPC:def 5;
          end;
          hence thesis;
         end;
@@ -1457,8 +1432,7 @@ registration
   proof
     consider MS being strict non empty MetrSpace;
     take TS = TopSpaceMetr MS;
-     TS = TopStruct (#the carrier of MS,Family_open_set(MS)#);
-    then reconsider f = the distance of MS as
+    reconsider f = the distance of MS as
              Function of [:the carrier of TS,the carrier of TS:],REAL;
     thus TS is strict;
     take f;

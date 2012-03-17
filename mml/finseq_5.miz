@@ -13,7 +13,7 @@ environ
  constructors REAL_1, NAT_1, REALSET1, RFINSEQ, FINSEQ_4, INT_1;
  registrations FUNCT_1, FINSEQ_1, RELSET_1, INT_1, NAT_1, ORDINAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FUNCT_1, XBOOLE_0;
+ definitions TARSKI, FUNCT_1, XBOOLE_0, FINSEQ_1;
  theorems TARSKI, ZFMISC_1, REAL_1, NAT_1, PARTFUN2, FUNCT_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_3, FINSEQ_4, RFINSEQ, REALSET1, RELAT_1, INT_1,
       XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1;
@@ -21,7 +21,7 @@ environ
 
 begin
 
-reserve i,j,k,m,n for Nat;
+reserve i,i1,i2,j,k,m,n for Nat;
 
 theorem Th1:
    i <= n implies n - i + 1 is Nat
@@ -313,31 +313,19 @@ theorem Th19:
  end;
 
 theorem Th20:
- for D being set, f being FinSequence of D holds
+ for f being FinSequence holds
    dom(f|i) c= dom f
- proof let D be set, f be FinSequence of D;
-  let j be set;
-  assume
-A1:  j in dom(f|i);
-  then reconsider j as Nat;
-A2: len(f|i) <= len f by Th18;
-     j <= len (f|i) by A1,FINSEQ_3:27;
-then A3: j <= len f by A2,XREAL_1:2;
-     1 <= j by A1,FINSEQ_3:27;
-  hence thesis by A3,FINSEQ_3:27;
+ proof let f be FinSequence;
+   f|i c= f by RELAT_1:88;
+  hence thesis by RELAT_1:25;
  end;
 
 theorem Th21:
+ for f being FinSequence holds
    rng(f|i) c= rng f
- proof
-  let p be set;
-  assume p in rng(f|i);
-  then consider j being Nat such that
-A1:  j in dom(f|i) and
-A2:  (f|i)/.j = p by PARTFUN2:4;
-     dom(f|i) c= dom f by Th20;
-  then f/.j in rng f by A1,PARTFUN2:4;
-  hence p in rng f by A1,A2,FINSEQ_4:85;
+ proof let f be FinSequence;
+   f|i c= f by RELAT_1:88;
+  hence thesis by RELAT_1:25;
  end;
 
 canceled;
@@ -458,6 +446,8 @@ theorem
  end;
  end;
 
+reserve D for set, f for FinSequence of D;
+
 theorem Th29:
    i in dom(f/^n) implies n+i in dom f
  proof assume
@@ -512,6 +502,8 @@ then A2: len(f/^0) = len f - 0 by RFINSEQ:def 2
   end;
   hence thesis by A2,FINSEQ_1:18;
  end;
+
+reserve D for non empty set, p for Element of D, f,g for FinSequence of D;
 
 theorem
       f is non empty implies f = <*f/.1*>^(f/^1)
@@ -790,8 +782,7 @@ theorem Th45:
      p in rng f;
   then p..f in dom f by FINSEQ_4:30;
 then A1:  p..f <= len f by FINSEQ_3:27;
-     f-:p = f|(p..f);
-  hence thesis by A1,FINSEQ_1:80;
+  thus thesis by A1,FINSEQ_1:80;
  end;
 
 theorem Th46:
@@ -857,17 +848,11 @@ A1: p in rng f;
  end;
 
 theorem
-      rng(f-:p) c= rng f
- proof f-:p = f|(p..f);
-  hence thesis by Th21;
- end;
+      rng(f-:p) c= rng f by Th21;
 
 registration let D,p; let f be one-to-one FinSequence of D;
  cluster f-:p -> one-to-one;
-  coherence
- proof f-:p = f|(p..f);
-  hence thesis;
- end;
+  coherence;
 end;
 
 definition let D, f, p;
@@ -944,10 +929,7 @@ A6:  j+p..f in dom f by A1,A2,Th54;
  end;
 
 theorem
-     (f:-p)/.1 = p
- proof f:-p = <*p*>^(f/^p..f);
-  hence thesis by Th16;
- end;
+     (f:-p)/.1 = p by Th16;
 
 theorem
       p in rng f implies (f:-p)/.(len(f:-p)) = f/.len f
@@ -1292,7 +1274,7 @@ then A2: f/^n is empty by Th35;
                  .= f^<*p*> by A1,FINSEQ_1:79;
  end;
 
-theorem Th72:
+theorem
    len(Ins(f,n,p)) = len f + 1
  proof
   per cases;
@@ -1328,11 +1310,7 @@ theorem Th73:
 
 registration let D,f,n,p;
  cluster Ins(f,n,p) -> non empty;
-  coherence
- proof
-     len(Ins(f,n,p)) = len f + 1 by Th72;
-  hence thesis;
- end;
+  coherence;
 end;
 
 theorem
@@ -1435,3 +1413,29 @@ then A9:  not x in rng(f|n) by A8,XBOOLE_0:3;
   then (f|n) ^ <*p*> ^ (f/^n) is one-to-one by A6,A7,FINSEQ_3:98;
   hence thesis;
  end;
+
+begin :: Addenda
+
+:: from JORDAN4, 2005.11.16, A.T.
+
+theorem  for f,i1,i2 st i1<=i2 holds
+  (f|i1)|i2=f|i1 & (f|i2)|i1=f|i1
+proof let f,i1,i2;assume A1:i1<=i2;
+    len (f|i1)<=i1 by Th19;
+ then len (f|i1)<=i2 by A1,XREAL_1:2;
+ hence (f|i1)|i2=f|i1 by FINSEQ_1:79;
+  A2:f|i2=f|(Seg i2) by FINSEQ_1:def 15;
+  A3:f|i1=f|(Seg i1) by FINSEQ_1:def 15;
+  A4:(f|i2)|i1=(f|i2)|Seg i1 by FINSEQ_1:def 15;
+     Seg i1 c= Seg i2 by A1,FINSEQ_1:7;
+ hence thesis by A2,A3,A4,FUNCT_1:82;
+end;
+
+theorem  (<*>D)|i=<*>D
+proof len (<*>D)=0 by FINSEQ_1:32;
+  then len (<*>D)<=i by NAT_1:18;
+ hence thesis by FINSEQ_1:79;
+end;
+
+theorem  Rev (<*>D)=<*>D;
+

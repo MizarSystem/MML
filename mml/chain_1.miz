@@ -180,13 +180,7 @@ A1: x in X & y in X & x <> y by Def3;
   thus thesis by A1,XBOOLE_0:def 2;
  end;
  cluster Y \/ X -> non trivial;
- coherence
- proof
-  consider x,y such that
-A2: x in X & y in X & x <> y by Def3;
-  take x,y;
-  thus thesis by A2,XBOOLE_0:def 2;
- end;
+ coherence;
 end;
 
 registration
@@ -1675,32 +1669,32 @@ proof
  hereby
   assume A in cells(0,G);
   then consider l,r such that
-A2: A = cell(l,r) &
+A1: A = cell(l,r) &
    ((ex X being Subset of Seg d st card X = 0 &
       for i holds (i in X & l.i < r.i & [l.i,r.i] is Gap of G.i) or
        (not i in X & l.i = r.i & l.i in G.i)) or
     (0 = d & for i holds r.i < l.i & [l.i,r.i] is Gap of G.i)) by Th33;
   consider X being Subset of Seg d such that
-A3: card X = 0 &
+A2: card X = 0 &
     for i holds (i in X & l.i < r.i & [l.i,r.i] is Gap of G.i) or
-     (not i in X & l.i = r.i & l.i in G.i) by A2;
+     (not i in X & l.i = r.i & l.i in G.i) by A1;
   reconsider l' = l, r' = r as Function of Seg d,REAL by Def4;
-     X = {} by A3,CARD_2:59;
-  then A4: for i holds l'.i = r'.i & l.i in G.i by A3;
+     X = {} by A2,CARD_2:59;
+  then A3: for i holds l'.i = r'.i & l.i in G.i by A2;
   then l' = r' by FUNCT_2:113;
-  hence ex x st A = cell(x,x) & for i holds x.i in G.i by A2,A4;
+  hence ex x st A = cell(x,x) & for i holds x.i in G.i by A1,A3;
  end;
  given x such that
-A5: A = cell(x,x) & for i holds x.i in G.i;
+A4: A = cell(x,x) & for i holds x.i in G.i;
     ex X being Subset of Seg d st card X = 0 &
   for i holds (i in X & x.i < x.i & [x.i,x.i] is Gap of G.i) or
    (not i in X & x.i = x.i & x.i in G.i)
  proof
   reconsider X = {} as Subset of Seg d by XBOOLE_1:2;
   take X;
-  thus thesis by A5,CARD_2:19;
+  thus thesis by A4,CARD_2:19;
  end;
- hence thesis by A5,Th33;
+ hence thesis by A4,Th33;
 end;
 
 theorem Th39:
@@ -2101,18 +2095,18 @@ A3: cell(l,r) c= cell(l',r');
 A4: card X = k &
     for i holds (i in X & l.i < r.i & [l.i,r.i] is Gap of G.i) or
      (not i in X & l.i = r.i & l.i in G.i) by A1,A2,Th34;
-AA: d - k > 0 by A2,XREAL_1:22;
+A5: d - k > 0 by A2,XREAL_1:22;
     card(Seg d \ X) = card Seg d - card X by CARD_2:63
   .= d - k by A4,FINSEQ_1:78;
- then Seg d \ X <> {} by AA,CARD_1:78;
+ then Seg d \ X <> {} by A5,CARD_1:78;
  then consider i0 being set such that
-A5: i0 in Seg d \ X by XBOOLE_0:def 1;
- reconsider i0 as Element of Seg d by A5,XBOOLE_0:def 4;
-    not i0 in X by A5,XBOOLE_0:def 4;
- then A6: l.i0 = r.i0 by A4;
+A6: i0 in Seg d \ X by XBOOLE_0:def 1;
+ reconsider i0 as Element of Seg d by A6,XBOOLE_0:def 4;
+    not i0 in X by A6,XBOOLE_0:def 4;
+ then A7: l.i0 = r.i0 by A4;
  per cases by A1,A2,A3,Th46;
  suppose l.i0 = l'.i0 & r.i0 = r'.i0;
-  hence thesis by A6;
+  hence thesis by A7;
  end;
  suppose l.i0 = l'.i0 & r.i0 = l'.i0;
   hence thesis;
@@ -2121,51 +2115,50 @@ A5: i0 in Seg d \ X by XBOOLE_0:def 1;
   hence thesis;
  end;
  suppose
-A7: r'.i0 < l'.i0;
+A8: r'.i0 < l'.i0;
   assume
-A8: for i holds (l.i <> l'.i or r.i <> l'.i) & (l.i <> r'.i or r.i <> r'.i);
+A9: for i holds (l.i <> l'.i or r.i <> l'.i) & (l.i <> r'.i or r.i <> r'.i);
   defpred P[Element of Seg d,Real] means
    l.$1 <= $2 & $2 <= r.$1 & r'.$1 < $2 & $2 < l'.$1;
-A9: for i ex xi st P[i,xi]
+A10: for i ex xi st P[i,xi]
   proof
    let i;
-A10: l.i in G.i & r.i in G.i &
-     r'.i < l'.i & [l'.i,r'.i] is Gap of G.i by A1,A2,A7,Th35,Th36;
+A11: l.i in G.i & r.i in G.i &
+     r'.i < l'.i & [l'.i,r'.i] is Gap of G.i by A1,A2,A8,Th35,Th36;
    per cases;
    suppose
-A11: r'.i < l.i & l.i < l'.i;
+A12: r'.i < l.i & l.i < l'.i;
     take l.i;
-    thus thesis by A4,A11;
+    thus thesis by A4,A12;
    end;
    suppose
-A12: l.i <= r'.i;
-A13: l.i >= r'.i by A10,Th17;
-    then A14: l.i = r'.i by A12,XREAL_1:1;
-    then r.i <> r'.i by A8;
-    then l.i < r.i by A4,A14;
+A13: l.i <= r'.i;
+A14: l.i >= r'.i by A11,Th17;
+    then A15: l.i = r'.i by A13,XREAL_1:1;
+    then r.i <> r'.i by A9;
+    then l.i < r.i by A4,A15;
     then consider xi such that
-A15: l.i < xi & xi < r.i by Th1;
+A16: l.i < xi & xi < r.i by Th1;
     take xi;
-       r.i <= l'.i by A10,Th17;
-    hence thesis by A13,A15,XREAL_1:2;
+       r.i <= l'.i by A11,Th17;
+    hence thesis by A14,A16,XREAL_1:2;
    end;
    suppose
-A16: l'.i <= l.i;
-       l'.i >= l.i by A10,Th17;
-    then A17: l'.i = l.i by A16,XREAL_1:1;
-       l'.i >= r.i by A10,Th17;
-    then l'.i = r.i by A4,A17;
-    hence thesis by A8,A17;
+A17: l'.i <= l.i;
+       l'.i >= l.i by A11,Th17;
+    then A18: l'.i = l.i by A17,XREAL_1:1;
+       l'.i >= r.i by A11,Th17;
+    then l'.i = r.i by A4,A18;
+    hence thesis by A9,A18;
   end;
   end;
   consider x being Function of Seg d,REAL such that
-A18: for i holds P[i,x.i] from FUNCT_2:sch 3(A9);
+A19: for i holds P[i,x.i] from FUNCT_2:sch 3(A10);
   reconsider x as Element of REAL d by Def4;
-     for i holds l.i <= r.i by A4;
-  then A19: x in cell(l,r) by A18;
+  A20: x in cell(l,r) by A19;
      r'.i0 < l'.i0 &
-   for i st r'.i < l'.i holds r'.i < x.i & x.i < l'.i by A7,A18;
-  hence contradiction by A3,A19,Th26;
+   for i st r'.i < l'.i holds r'.i < x.i & x.i < l'.i by A8,A19;
+  hence contradiction by A3,A20,Th26;
 end;
 end;
 
@@ -2939,20 +2932,10 @@ proof
 end;
 
 theorem
- for C being Chain of k,G holds C + 0_(k,G) = C
-proof
- let C be Chain of k,G;
- thus C + 0_(k,G) = C \+\ {}
-  .= C;
-end;
+ for C being Chain of k,G holds C + 0_(k,G) = C;
 
 theorem Th59:
- for C being Chain of k,G holds C + C = 0_(k,G)
-proof
- let C be Chain of k,G;
-    0_(k,G) = {};
- hence thesis by XBOOLE_1:92;
-end;
+ for C being Chain of k,G holds C + C = 0_(k,G) by XBOOLE_1:92;
 
 theorem Th60:
  for C being Chain of d,G holds C` = C + Omega(G)
@@ -2969,8 +2952,7 @@ theorem Th61:
 proof
     now
   let A be Cell of k,G;
-     0_(k + 1,G) = {};
-  then card(star A /\ 0_(k + 1,G)) = 2* 0 by CARD_1:78;
+  card(star A /\ 0_(k + 1,G)) = 2* 0 by CARD_1:78;
   hence A in del 0_(k + 1,G) iff A in 0_(k,G) by Th52;
  end;
  hence thesis by SUBSET_1:8;
@@ -3423,8 +3405,7 @@ proof
   then consider k' such that
 A1: k + 1 = k' + 1 & ex C' being Chain of (k' + 1),G st C' = C &
     del C' = 0_(k',G) by Def15;
-     k = k' by A1;
-  hence del C = 0_(k,G) by A1;
+  thus del C = 0_(k,G) by A1;
  end;
  thus thesis by Def15;
 end;
@@ -3589,7 +3570,7 @@ definition
  proof
    deffunc f(Chain of k,G, Chain of k,G) = $1 + $2;
   consider op being BinOp of bool(cells(k,G)) such that
-A1: for A,B being Chain of k,G holds op.(A,B) = f(A,B) from BINOP_1:sch 2;
+A1: for A,B being Chain of k,G holds op.(A,B) = f(A,B) from BINOP_1:sch 4;
   set ch = LoopStr(#bool(cells(k,G)),op,0_(k,G)#);
 A2: ch is add-associative
   proof
@@ -3660,13 +3641,13 @@ A5: (the carrier of C1 = bool(cells(k,G))) &
      now
    let AB be Element of X;
    consider A',B' being Chain of k,G such that
-A7: AB = [A',B'] by DOMAIN_1:9;
+A6: AB = [A',B'] by DOMAIN_1:9;
    reconsider A1 = A', B1 = B' as Element of C1 by A5;
    reconsider A2 = A', B2 = B' as Element of C2 by A5;
-   thus op1.AB = A1 + B1 by A7
+   thus op1.AB = A1 + B1 by A6
     .= A' + B' by A5
     .= A2 + B2 by A5
-    .= op2.AB by A7;
+    .= op2.AB by A6;
   end;
   hence thesis by A5,FUNCT_2:113;
  end;

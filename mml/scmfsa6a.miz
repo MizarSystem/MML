@@ -14,7 +14,7 @@ environ
       FINSEQ_2, FINSEQ_4, CARD_1, CQC_LANG, FINSET_1, FUNCT_4, STRUCT_0, AMI_1,
       AMI_3, AMI_5, FUNCT_7, SCMFSA_2, SCMFSA_4, SCMFSA_5;
  constructors SCMFSA_4, WELLORD2, SCMFSA_5, NAT_1, AMI_5, ENUMSET1, FUNCT_7,
-      RELOC, FINSEQ_4, INT_2, PARTFUN1;
+      RELOC, FINSEQ_4, INT_2, PARTFUN1, CAT_3;
  registrations XBOOLE_0, AMI_1, SCMFSA_2, FUNCT_1, FINSET_1, TREES_2, FUNCT_7,
       SCMFSA_4, RELSET_1, INT_1, FRAENKEL, NUMBERS, ORDINAL2, SETFAM_1,
       STRUCT_0;
@@ -433,17 +433,17 @@ end;
 theorem Th14:
  dom Directed I = dom I
 proof
-A2:  rng I c= the Instructions of SCM+FSA by SCMFSA_4:1;
-A3:  dom(id the Instructions of SCM+FSA) = the Instructions of SCM+FSA
+A1:  rng I c= the Instructions of SCM+FSA by SCMFSA_4:1;
+A2:  dom(id the Instructions of SCM+FSA) = the Instructions of SCM+FSA
           by RELAT_1:71;
      dom((id the Instructions of SCM+FSA) +*
        (halt SCM+FSA .--> goto insloc card I)) =
   dom(id the Instructions of SCM+FSA) \/
        dom(halt SCM+FSA .--> goto insloc card I) by FUNCT_4:def 1;
   then the Instructions of SCM+FSA c= dom((id the Instructions of SCM+FSA) +*
-       (halt SCM+FSA .--> goto insloc card I)) by A3,XBOOLE_1:7;
+       (halt SCM+FSA .--> goto insloc card I)) by A2,XBOOLE_1:7;
   then rng I c= dom((id the Instructions of SCM+FSA) +*
-       (halt SCM+FSA .--> goto insloc card I)) by A2,XBOOLE_1:1;
+       (halt SCM+FSA .--> goto insloc card I)) by A1,XBOOLE_1:1;
   hence dom Directed I = dom I by RELAT_1:46;
 end;
 
@@ -507,11 +507,7 @@ end;
 
 registration let i;
  cluster Macro i -> non empty;
- coherence
-  proof
-       Macro i = (insloc 0,insloc 1) --> (i,halt SCM+FSA);
-   hence Macro i is non empty;
-  end;
+ coherence;
 end;
 
 theorem Th15:
@@ -661,9 +657,7 @@ theorem Th18:
  not halt SCM+FSA in rng Directed I
  proof
    A1: halt SCM+FSA <> goto insloc card I by SCMFSA_2:47,124;
-      Directed I = ((id the Instructions of SCM+FSA) +*
-         (halt SCM+FSA .--> goto insloc card I))*I;
-   then rng Directed I c= rng((id the Instructions of SCM+FSA) +*
+   rng Directed I c= rng((id the Instructions of SCM+FSA) +*
          (halt SCM+FSA .--> goto insloc card I)) by RELAT_1:45;
   hence not halt SCM+FSA in rng Directed I by A1,FUNCT_7:14;
  end;
@@ -700,9 +694,7 @@ A6:  rng((id the Instructions of SCM+FSA) +*
 A7: IncAddr(goto insloc card I,m) = goto((insloc card I)+m)
                         by SCMFSA_4:14
               .= goto insloc(m + card I) by SCMFSA_4:def 1;
-
-     Directed I = f*I;
-  then ProgramPart Directed I
+  ProgramPart Directed I
      = (f*I)|the Instruction-Locations of SCM+FSA by AMI_5:def 6
     .= f*(I|the Instruction-Locations of SCM+FSA) by RELAT_1:112
     .= f*ProgramPart I by AMI_5:def 6;
@@ -2507,18 +2499,17 @@ theorem  ::T16
      Directed I c= I ';' J
  proof
    let I,J be Macro-Instruction;
- I ';' J = Directed I +* ProgramPart Relocated(J,card I);
-    then dom (I ';' J) = dom Directed I \/ dom ProgramPart Relocated(J,card I)
+    dom (I ';' J) = dom Directed I \/ dom ProgramPart Relocated(J,card I)
        by FUNCT_4:def 1;
-then A2: dom Directed I c= dom (I ';' J) by XBOOLE_1:7;
+then A1: dom Directed I c= dom (I ';' J) by XBOOLE_1:7;
       now let x be set;
       assume x in dom Directed I;
-  then A3: x in dom I by Th14;
+  then A2: x in dom I by Th14;
          dom I misses dom ProgramPart Relocated(J,card I) by Th16;
-      then not x in dom ProgramPart Relocated(J,card I) by A3,XBOOLE_0:3;
+      then not x in dom ProgramPart Relocated(J,card I) by A2,XBOOLE_0:3;
       hence (Directed I).x = (I ';' J).x by FUNCT_4:12;
      end;
-   hence Directed I c= I ';' J by A2,GRFUNC_1:8;
+   hence Directed I c= I ';' J by A1,GRFUNC_1:8;
  end;
 
 theorem Th56: ::T4
@@ -2618,18 +2609,10 @@ definition let i,j;
 end;
 
 theorem
- i ';' j = Macro i ';' j
-proof
- thus i ';' j = Macro i ';' Macro j
-   .= Macro i ';' j;
-end;
+ i ';' j = Macro i ';' j;
 
 theorem
- i ';' j = i ';' Macro j
- proof
-  thus i ';' j = Macro i ';' Macro j
-      .= i ';' Macro j;
- end;
+ i ';' j = i ';' Macro j;
 
 theorem Th61:
  card(I ';' J) = card I + card J
@@ -2680,8 +2663,7 @@ A9: ((id the Instructions of SCM+FSA) +*
           (halt SCM+FSA .--> goto insloc(card I + card J)))*
           ProgramPart Relocated(J, card I)
       = ProgramPart Relocated(Directed J, card I) by Th19;
- I ';' J = Directed I +* ProgramPart Relocated(J, card I);
-then A11: Directed(I ';' J)
+A10: Directed(I ';' J)
         = ((id the Instructions of SCM+FSA) +*
           (halt SCM+FSA .--> goto insloc
              (card(Directed I +* ProgramPart Relocated(J, card I)))))*
@@ -2689,7 +2671,7 @@ then A11: Directed(I ';' J)
        .= Directed I +* ProgramPart Relocated(Directed J, card I) by A1,A2,A5
 ,A6,A8,A9,FUNCT_7:10;
 
-A12: ProgramPart Relocated(J ';' K, card I)
+A11: ProgramPart Relocated(J ';' K, card I)
          = ProgramPart Relocated(Directed J +*
                 ProgramPart Relocated(K, card J), card I)
         .= ProgramPart Relocated(Directed J,card I) +*
@@ -2699,26 +2681,16 @@ A12: ProgramPart Relocated(J ';' K, card I)
              +* ProgramPart Relocated(K, card I + card J) by Th22;
   thus I ';' J ';' K
        = Directed I +* ProgramPart Relocated(Directed J, card I)
-             +* ProgramPart Relocated(K, card I + card J) by A1,A11
-      .= Directed I +* ProgramPart Relocated(J ';' K, card I) by A12,FUNCT_4:15
+             +* ProgramPart Relocated(K, card I + card J) by A1,A10
+      .= Directed I +* ProgramPart Relocated(J ';' K, card I) by A11,FUNCT_4:15
       .= I ';' (J ';' K);
  end;
 
 theorem Th63:
- I ';' J ';' k = I ';' (J ';' k)
-proof
- thus I ';' J ';' k = I ';' J ';' Macro k
-       .= I ';' (J ';' Macro k) by Th62
-       .= I ';' (J ';' k);
-end;
+ I ';' J ';' k = I ';' (J ';' k) by Th62;
 
 theorem
-    I ';' j ';' K = I ';' (j ';' K)
-proof
- thus I ';' j ';' K = I ';' Macro j ';' K
-       .= I ';' (Macro j ';' K) by Th62
-       .= I ';' (j ';' K);
-end;
+    I ';' j ';' K = I ';' (j ';' K) by Th62;
 
 theorem
     I ';' j ';' k = I ';' (j ';' k)
@@ -2729,20 +2701,10 @@ proof
 end;
 
 theorem Th66:
- i ';' J ';' K = i ';' (J ';' K)
-proof
- thus i ';' J ';' K = Macro i ';' J ';' K
-       .= Macro i ';' (J ';' K) by Th62
-       .= i ';' (J ';' K);
-end;
+ i ';' J ';' K = i ';' (J ';' K) by Th62;
 
 theorem
-    i ';' J ';' k = i ';' (J ';' k)
-proof
- thus i ';' J ';' k = Macro i ';' J ';' k
-       .= Macro i ';' (J ';' k) by Th63
-       .= i ';' (J ';' k);
-end;
+    i ';' J ';' k = i ';' (J ';' k) by Th63;
 
 theorem Th68:
  i ';' j ';' K = i ';' (j ';' K)

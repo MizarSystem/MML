@@ -10,7 +10,8 @@ environ
       RELAT_1, GROUP_1, RCOMP_1, SUBSET_1, GROUP_4, GROUP_5, VECTSP_1,
       NATTRA_1, FINSET_1, CARD_1, BINOP_1, QC_LANG1, ABSVALUE, WELLORD1,
       LATTICES, GROUP_6, FUNCOP_1, COHSP_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, RELAT_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REALSET1,
+ XREAL_0, RELAT_1, FUNCT_1,
       PARTFUN1, FUNCT_2, FUNCOP_1, STRUCT_0, CARD_1, FINSET_1, BINOP_1,
       REALSET2, INT_1, RLVECT_1, GROUP_1, GROUP_2, GROUP_3, NAT_1, GROUP_4,
       GROUP_5, INT_2;
@@ -19,7 +20,8 @@ environ
  registrations FINSET_1, GROUP_1, GROUP_2, GROUP_3, STRUCT_0, RELSET_1, INT_1,
       FUNCT_2, PARTFUN1, XBOOLE_0;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions XBOOLE_0, FUNCT_1, GROUP_1, GROUP_2, TARSKI, STRUCT_0;
+ definitions XBOOLE_0, FUNCT_1, GROUP_1, GROUP_2, TARSKI, STRUCT_0, BINOP_1,
+  REALSET1;
  theorems BINOP_1, CARD_1, CARD_2, FINSET_1, FUNCT_1, FUNCT_2, GROUP_1,
       GROUP_2, GROUP_3, GROUP_4, GROUP_5, TARSKI, ZFMISC_1, RLVECT_1, REALSET2,
       RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1;
@@ -366,20 +368,12 @@ end;
 
 registration let G,N;
   cluster Cosets N -> non empty;
-  coherence
-  proof
-   Cosets N = Left_Cosets N;
-   hence thesis by GROUP_2:165;
-  end;
+  coherence by GROUP_2:165;
 end;
 
 theorem Th14:
   for N being normal Subgroup of G holds
-    Cosets N = Left_Cosets N & Cosets N = Right_Cosets N
-  proof let N be normal Subgroup of G;
-   thus Cosets N = Left_Cosets N;
-   hence thesis by GROUP_3:150;
-  end;
+    Cosets N = Left_Cosets N & Cosets N = Right_Cosets N by GROUP_3:150;
 
 theorem Th15:
  for N being normal Subgroup of G holds
@@ -403,12 +397,7 @@ A1: a * N in Left_Cosets N by GROUP_2:def 15;
 
 theorem Th17:
  for N being normal Subgroup of G holds
- x in Cosets N implies x is Subset of G
-  proof let N be normal Subgroup of G;
-   assume x in Cosets N;
-   then ex a st x = a * N & x = N * a by Th15;
-   hence thesis;
-  end;
+ x in Cosets N implies x is Subset of G;
 
 theorem Th18:
  for N being normal Subgroup of G holds
@@ -445,7 +434,7 @@ definition let G; let N be normal Subgroup of G;
      end;
    thus ex B being BinOp of Cosets N st
    for W1,W2 being Element of Cosets N holds
-   P[W1,W2,B.(W1,W2)] from BINOP_1:sch 1(A1);
+   P[W1,W2,B.(W1,W2)] from BINOP_1:sch 3(A1);
   end;
  uniqueness
   proof let o1,o2 be BinOp of Cosets N;
@@ -458,11 +447,10 @@ definition let G; let N be normal Subgroup of G;
         then reconsider W = x, V = y as Element of Cosets N;
         reconsider A1 = x, A2 = y as Subset of G by A4;
             o1.(W,V) = A1 * A2 & o2.(W,V) = A1 * A2 by A2,A3;
-      then o1.(x,y) = o2.(x,y) & o1. [x,y] = o1.(x,y) & o2. [x,y] = o2.(x,y)
-                                                          by BINOP_1:def 1;
-      hence o1. [x,y] = o2. [x,y];
+      then o1.(x,y) = o2.(x,y) & o1. [x,y] = o1.(x,y) & o2. [x,y] = o2.(x,y);
+      hence o1.(x,y) = o2.(x,y);
      end;
-   hence thesis by FUNCT_2:118;
+   hence thesis by BINOP_1:1;
   end;
 end;
 
@@ -474,62 +462,33 @@ end;
 
 registration let G; let N be normal Subgroup of G;
   cluster G./.N -> strict non empty;
-  coherence
-  proof
-   G./.N = HGrStr (# Cosets N, CosOp N #);
-   hence G./.N is strict & the carrier of G./.N is non empty;
-  end;
+  coherence;
 end;
 
 canceled 3;
 
 theorem
   for N being normal Subgroup of G holds
-    the carrier of G./.N = Cosets N
-  proof let N be normal Subgroup of G;
-   G./.N = HGrStr (# Cosets N, CosOp N #);
-   hence thesis;
-  end;
+    the carrier of G./.N = Cosets N;
 
 theorem
   for N being normal Subgroup of G holds
-    the mult of G./.N = CosOp N
-  proof let N be normal Subgroup of G;
-   G./.N = HGrStr (# Cosets N, CosOp N #);
-   hence thesis;
-  end;
+    the mult of G./.N = CosOp N;
 
  reserve N for normal Subgroup of G;
  reserve S,T1,T2 for Element of G./.N;
 
 definition let G,N,S;
   func @S -> Subset of G equals   S;
-  coherence
-  proof
-   S is Element of Cosets N;
-   hence thesis by Th17;
-  end;
+  coherence by Th17;
 end;
 
 theorem Th24:
   for N being normal Subgroup of G, T1,T2 being Element of G./.N
-    holds @T1 * @T2 = T1 * T2
-  proof
-   let N be normal Subgroup of G, T1,T2 be Element of G./.N;
-   reconsider S1 = T1 as Element of Cosets N;
-   reconsider S2 = T2 as Element of Cosets N;
-      S1 = @T1 & S2 = @T2;
-   hence @T1 * @T2 = (CosOp N).(T1,T2) by Def4
-                  .= (the mult of G./.N).(T1,T2)
-                  .= T1 * T2;
-  end;
+    holds @T1 * @T2 = T1 * T2 by Def4;
 
 theorem Th25:
-  @(T1 * T2) = @T1 * @T2
-  proof
-   thus @(T1 * T2) = T1 * T2
-                  .= @T1 * @T2 by Th24;
-  end;
+  @(T1 * T2) = @T1 * @T2 by Th24;
 
 registration let G; let N be normal Subgroup of G;
   cluster G./.N -> associative Group-like;
@@ -540,13 +499,13 @@ registration let G; let N be normal Subgroup of G;
    thus for f,g,h being Element of G./.N
       holds f * (g * h) = f * g * h
     proof let f,g,h be Element of G./.N;
-      consider a such that A2: f = a * N & f = N * a by Th15;
+      consider a such that A1: f = a * N & f = N * a by Th15;
       consider c being Element of G such that
-       A3: h = c * N & h = N * c by Th15;
+       A2: h = c * N & h = N * c by Th15;
      thus f * (g * h) = @f * @(g * h) by Th24
-                     .= (a * N) * (@g * @h) by A2,Th25
-                     .= @f * @g * (c * N) by A2,A3,GROUP_2:14
-                     .= @(f * g) * @h by A3,Th25
+                     .= (a * N) * (@g * @h) by A1,Th25
+                     .= @f * @g * (c * N) by A1,A2,GROUP_2:14
+                     .= @(f * g) * @h by A2,Th25
                      .= f * g * h by Th24;
     end;
  carr N in Left_Cosets N & Cosets N = Left_Cosets N
@@ -554,22 +513,22 @@ registration let G; let N be normal Subgroup of G;
     then reconsider e = carr N as Element of G./.N;
    take e;
    let h be Element of G./.N;
-    consider a such that A6: h = a * N & h = N * a by Th15;
-     A7: @h = h & @e = e;
+    consider a such that A3: h = a * N & h = N * a by Th15;
+     A4: @h = h & @e = e;
    thus h * e = @h * @e by Th24
-             .= (a * N) * N by A6
+             .= (a * N) * N by A3
              .= a * (N * N) by GROUP_4:60
              .= a * carr N by GROUP_4:58
-             .= h by A6;
+             .= h by A3;
    thus e * h = @e * @h by Th24
-             .= N * (N * a) by A6
+             .= N * (N * a) by A3
              .= N * N * a by GROUP_4:61
              .= carr N * a by GROUP_4:58
-             .= h by A6;
+             .= h by A3;
     reconsider g = a" * N as Element of G./.N by GROUP_2:def 15;
-     A8: @g = g;
+     A5: @g = g;
    take g;
-   thus h * g = N * a * (a" * N) by A6,A7,A8,Th24
+   thus h * g = N * a * (a" * N) by A3,A4,A5,Th24
              .= N * a * a" * N by GROUP_3:10
              .= N * (a * a") * N by GROUP_2:129
              .= N * 1.G * N by GROUP_1:def 6
@@ -577,7 +536,7 @@ registration let G; let N be normal Subgroup of G;
              .= carr N * carr N
              .= e by GROUP_2:91;
    thus g * h = @g * @h by Th24
-             .= a" * N * a * N by A6,GROUP_3:10
+             .= a" * N * a * N by A3,GROUP_3:10
              .= a" * (N * a) * N by GROUP_2:128
              .= a" * (a * N) * N by GROUP_3:140
              .= a" * a * N * N by GROUP_2:127
@@ -592,22 +551,12 @@ end;
 
 theorem Th26:
   for N being normal Subgroup of G, S being Element of G./.N
-    ex a st S = a * N & S = N * a
-  proof let N be normal Subgroup of G, S be Element of G./.N;
-       S in the carrier of G./.N & the carrier of G./.N = Cosets N;
-   hence thesis by Th15;
-  end;
+    ex a st S = a * N & S = N * a by Th15;
 
 theorem Th27:
   N * a is Element of G./.N &
     a * N is Element of G./.N &
-  carr N is Element of G./.N
-   proof N * a in Cosets N & a * N in Cosets N &
-     Cosets N = the carrier of G./.N &
-     carr N in Left_Cosets N & Cosets N = Left_Cosets N
-       by Th16,GROUP_2:165;
-    hence thesis;
-   end;
+  carr N is Element of G./.N by Th16,GROUP_2:165;
 
 theorem Th28:
   for N being normal Subgroup of G holds
@@ -629,17 +578,17 @@ theorem Th29:
   proof let N be normal Subgroup of G;
    reconsider e = carr N as Element of G./.N by Th27;
        now let h be Element of G./.N;
-      consider a such that A2: h = a * N & h = N * a by Th15;
+      consider a such that A1: h = a * N & h = N * a by Th15;
      thus h * e = @h * @e by Th24
-               .= (a * N) * N by A2
+               .= (a * N) * N by A1
                .= a * (N * N) by GROUP_4:60
                .= a * carr N by GROUP_4:58
-               .= h by A2;
+               .= h by A1;
      thus e * h = @e * @h by Th24
-               .= N * (N * a) by A2
+               .= N * (N * a) by A1
                .= N * N * a by GROUP_4:61
                .= carr N * a by GROUP_4:58
-               .= h by A2;
+               .= h by A1;
     end;
    hence thesis by GROUP_1:10;
   end;
@@ -650,7 +599,7 @@ theorem Th30:
   proof let N be normal Subgroup of G, S be Element of G./.N;
     assume A1: S = a * N;
     reconsider g = a" * N as Element of G./.N by Th27;
-     A4: S * g = @S * @g by Th24
+     A2: S * g = @S * @g by Th24
               .= N * a * (a" * N) by A1,GROUP_3:140
               .= N * a * a" * N by GROUP_3:10
               .= N * (a * a") * N by GROUP_2:129
@@ -658,7 +607,7 @@ theorem Th30:
               .= carr N * N by GROUP_2:132
               .= carr N * carr N
               .= carr N by GROUP_2:91;
-     A5: g * S = @g * @S by Th24
+     A3: g * S = @g * @S by Th24
               .= a" * N * a * N by A1,GROUP_3:10
               .= a" * (N * a) * N by GROUP_2:128
               .= a" * (a * N) * N by GROUP_3:140
@@ -668,28 +617,16 @@ theorem Th30:
               .= 1.G * carr N by GROUP_4:58
               .= carr N by GROUP_2:43;
    1.(G./.N) = carr N by Th29;
-   hence thesis by A4,A5,GROUP_1:def 6;
+   hence thesis by A2,A3,GROUP_1:def 6;
   end;
 
 theorem Th31:
   for N being normal Subgroup of G holds
-    Left_Cosets N is finite implies G./.N is finite
-  proof let N be normal Subgroup of G;
-   assume Left_Cosets N is finite;
-    then Cosets N is finite;
-    then the carrier of G./.N is finite;
-   hence thesis by GROUP_1:def 14;
-  end;
+    Left_Cosets N is finite implies G./.N is finite by GROUP_1:def 14;
 
 theorem
   for N being normal Subgroup of G holds
-    Ord(G./.N) = Index N
-  proof let N be normal Subgroup of G;
-   thus Ord(G./.N) = Card(the carrier of G./.N)
-                 .= Card Cosets N
-                 .= Card Left_Cosets N
-                 .= Index N;
-  end;
+    Ord(G./.N) = Index N;
 
 theorem
   for N being normal Subgroup of G holds
@@ -697,9 +634,9 @@ theorem
   proof let N be normal Subgroup of G;
    assume A1: Left_Cosets N is finite;
     then reconsider LC = Left_Cosets N as finite set;
-A3: G./.N is finite by A1,Th31;
+A2: G./.N is finite by A1,Th31;
     then reconsider GN = the carrier of G./.N as finite set by GROUP_1:def 14;
-   thus ord(G./.N) = card GN by A3,GROUP_1:def 15
+   thus ord(G./.N) = card GN by A2,GROUP_1:def 15
                   .= card LC
                   .= index N by GROUP_2:def 18;
   end;
@@ -713,8 +650,7 @@ theorem Th34:
      A2: the carrier of I c= the carrier of G./.M
       proof let x;
         assume A3: x in the carrier of I;
-             the carrier of I = Cosets((B,M)`*`);
-         then consider a being Element of B such that
+         consider a being Element of B such that
           A4: x = a * J & x = J * a by A3,Th15;
          reconsider b = a as Element of G by GROUP_2:51;
              J = M by A1,Def1;
@@ -734,14 +670,13 @@ theorem Th34:
         then consider y,z such that A8: [y,z] = x by A5,ZFMISC_1:102;
          A9: y in the carrier of I & z in
  the carrier of I by A5,A7,A8,ZFMISC_1:106;
-          the carrier of I = Cosets((B,M)`*`);
-        then consider a being Element of B such that
-        A11: y = a * J & y = J * a by A9,Th15;
+        consider a being Element of B such that
+        A10: y = a * J & y = J * a by A9,Th15;
         consider b being Element of B such that
-        A12: z = b * J & z = J * b by A9,Th15;
-        reconsider W1 = y, W2 = z as Element of Cosets J by A11,A12,Th16;
-         A14: g.x = g.(W1,W2) by A8,BINOP_1:def 1
-               .= (a * J) * (J * b) by A11,A12,Def4
+        A11: z = b * J & z = J * b by A9,Th15;
+        reconsider W1 = y, W2 = z as Element of Cosets J by A10,A11,Th16;
+         A12: g.x = g.(W1,W2) by A8
+               .= (a * J) * (J * b) by A10,A11,Def4
                .= a * J * J * b by GROUP_3:12
                .= a * (J * J) * b by GROUP_4:60
                .= a * carr J * b by GROUP_4:58
@@ -751,12 +686,12 @@ theorem Th34:
                .= a * b * J by GROUP_2:127;
          reconsider a' = a, b' = b as Element of G
             by GROUP_2:51;
-          A15: J = M by A1,Def1;
-          then A16: y = a' * M & y = M * a' & z = b' * M & z = M * b' by A11
-,A12,Th2;
+          A13: J = M by A1,Def1;
+          then A14: y = a' * M & y = M * a' & z = b' * M & z = M * b' by A10
+,A11,Th2;
          then reconsider V1 = y, V2 = z as Element of Cosets M by Th16;
-          A17: f.x = f.(V1,V2) by A8,BINOP_1:def 1
-                .= (a' * M) * (M * b') by A16,Def4
+          A15: f.x = f.(V1,V2) by A8
+                .= (a' * M) * (M * b') by A14,Def4
                .= a' * M * M * b' by GROUP_3:12
                .= a' * (M * M) * b' by GROUP_4:60
                .= a' * carr M * b' by GROUP_4:58
@@ -765,10 +700,10 @@ theorem Th34:
                .= a' * (b' * M) by GROUP_3:140
                .= a' * b' * M by GROUP_2:127;
              a' * b' = a * b by GROUP_2:52;
-      hence g.x = f.x by A14,A15,A17,Th2;
+      hence g.x = f.x by A12,A13,A15,Th2;
      end;
-     then g = f | X by A6,FUNCT_1:68;
-   hence thesis by A2,GROUP_2:def 5;
+     then g = f||the carrier of I by A6,FUNCT_1:68;
+   hence B./.(B,M)`*` is Subgroup of G./.M by A2,GROUP_2:def 5;
   end;
 
 theorem
@@ -1158,10 +1093,10 @@ A10:  ex c being Element of G
   end;
  uniqueness
   proof let n1,n2 be Homomorphism of G,G./.N such that
-    A12: for a holds n1.a = a * N and
-    A13: for a holds n2.a = a * N;
+    A11: for a holds n1.a = a * N and
+    A12: for a holds n2.a = a * N;
        now let a;
-         n1.a = a * N & n2.a = a * N by A12,A13;
+         n1.a = a * N & n2.a = a * N by A11,A12;
      hence n1.a = n2.a;
     end;
    hence thesis by FUNCT_2:113;
@@ -1839,7 +1774,7 @@ theorem Th84:
    hence thesis by A4,XBOOLE_0:def 10;
   end;
 
-theorem Lm3:
+theorem Th85:
   G,H are_isomorphic & G is finite implies H is finite
   proof
    assume that A1: G,H are_isomorphic and
@@ -1862,7 +1797,7 @@ theorem Th86:
       Ord G = Ord H by A1,Th84;
    then A3: Card (the carrier of G) = Ord H
                                .= Card (the carrier of H);
-A4: H is finite & G is finite by A1,A2,Lm3;
+A4: H is finite & G is finite by A1,A2,Th85;
     then consider cH being finite set such that
 A5: cH = the carrier of H & ord H = card cH by GROUP_1:def 15;
     consider cG being finite set such that
@@ -1878,7 +1813,7 @@ theorem
                A2: G is trivial;
 A3: ord G = 1 & G is finite by A2,Th12;
    then A4: ord H = 1 by A1,Th86;
-   H is finite by A1,A3,Lm3;
+   H is finite by A1,A3,Th85;
    hence thesis by A4,Th12;
   end;
 
@@ -1904,7 +1839,7 @@ A4: h is_epimorphism by A3,Def14;
    hence thesis by GROUP_1:def 16;
   end;
 
-Lm9:
+Lm3:
  G./.Ker g,Image g are_isomorphic &
   ex h being Homomorphism of G./.Ker g,Image g st h is_isomorphism &
    g = h * nat_hom Ker g
@@ -1999,11 +1934,11 @@ A14: dom nat_hom Ker g = the carrier of G & dom g = the carrier of G
   end;
 
 theorem
-  G./.Ker g, Image g are_isomorphic by Lm9;
+  G./.Ker g, Image g are_isomorphic by Lm3;
 
 theorem
   ex h being Homomorphism of G./.Ker g,Image g st h is_isomorphism &
-    g = h * nat_hom Ker g by Lm9;
+    g = h * nat_hom Ker g by Lm3;
 
 theorem
   for M being strict normal Subgroup of G
@@ -2031,9 +1966,9 @@ theorem
           now let x,y be Element of G./.M;
          consider a such that A6: x = a * M and x = M * a by Th26;
          consider b such that A7: y = b * M and y = M * b by Th26;
-          A9: f.x = a * N & f.y = b * N by A5,A6,A7;
-          A10: f.x * f.y = @(f.x) * @(f.y) by Th24
-                      .= a * N * b * N by A9,GROUP_3:10
+          A8: f.x = a * N & f.y = b * N by A5,A6,A7;
+          A9: f.x * f.y = @(f.x) * @(f.y) by Th24
+                      .= a * N * b * N by A8,GROUP_3:10
                       .= a * (N * b) * N by GROUP_2:128
                       .= a * (b * N) * N by GROUP_3:140
                       .= a * ((b * N) * N) by GROUP_3:9
@@ -2046,29 +1981,29 @@ theorem
                .= a * ((b * M) * M) by GROUP_3:9
                .= a * (b * M) by Th6
                .= a * b * M by GROUP_2:127;
-        hence f.(x * y) = f.x * f.y by A5,A10;
+        hence f.(x * y) = f.x * f.y by A5,A9;
        end;
       then reconsider f as Homomorphism of G./.M,G./.N by Def7;
-       A12: Ker f = J
+       A10: Ker f = J
         proof let S be Element of G./.M;
          thus S in Ker f implies S in J
           proof assume S in Ker f;
-             then A13: f.S = 1.(G./.N) by Th50
+             then A11: f.S = 1.(G./.N) by Th50
                         .= carr N by Th29;
-            consider a such that A14: S = a * M & S = M * a by Th26;
-                f.S = a * N by A5,A14;
-             then a in N by A13,GROUP_2:136;
+            consider a such that A12: S = a * M & S = M * a by Th26;
+                f.S = a * N by A5,A12;
+             then a in N by A11,GROUP_2:136;
             then reconsider q = a as Element of N by RLVECT_1:def 1;
                 (N,M)`*` = M by A2,Def1;
-             then S = q * (N,M)`*` & S = (N,M)`*` * q by A14,Th2;
+             then S = q * (N,M)`*` & S = (N,M)`*` * q by A12,Th2;
            hence thesis by A1,Th28;
           end;
           assume S in J;
            then consider a being Element of N such that
-            A15: S = a * (N,M)`*` & S = (N,M)`*` * a by A1,Th28;
+            A13: S = a * (N,M)`*` & S = (N,M)`*` * a by A1,Th28;
            reconsider a' = a as Element of G by GROUP_2:51;
                (N,M)`*` = M by A2,Def1;
-            then S = a' * M by A15,Th2;
+            then S = a' * M by A13,Th2;
             then f.S = a' * N & a in N by A5,RLVECT_1:def 1;
             then f.S = carr N by GROUP_2:136
                     .= 1.(G./.N) by Th29;
@@ -2078,16 +2013,16 @@ theorem
         proof let x;
           assume x in the carrier of G./.N;
            then x in G./.N by RLVECT_1:def 1;
-           then consider a such that A16: x = a * N & x = N * a by Th28;
+           then consider a such that A14: x = a * N & x = N * a by Th28;
            reconsider S = a * M as Element of G./.M by Th27;
            f.S = a * N & S in
  the carrier of G./.M & dom f = the carrier of G./.M by A5,FUNCT_2:def 1;
-         hence thesis by A16,FUNCT_1:def 5;
+         hence thesis by A14,FUNCT_1:def 5;
         end;
        then rng f = the carrier of G./.N by XBOOLE_0:def 10;
        then f is_epimorphism by Def13;
        then Image f = G./.N by Th67;
-    hence thesis by A12,Lm9;
+    hence thesis by A10,Lm3;
    end;
 
 theorem
@@ -2176,5 +2111,5 @@ A17:    a1 in the carrier of B & a1 in the carrier of G by A16,RLVECT_1:def 1;
     then the carrier of I = rng g by XBOOLE_0:def 10;
     then g is_epimorphism by Def13;
     then Image g = (B "\/" N)./.(B "\/" N,N)`*` by Th67;
-   hence thesis by A12,Lm9;
+   hence thesis by A12,Lm3;
   end;

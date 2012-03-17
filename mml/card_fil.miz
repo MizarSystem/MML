@@ -18,12 +18,12 @@ environ
  registrations FUNCT_1, ORDINAL1, CARD_1, CARD_5, RELSET_1, FINSET_1, SUBSET_1,
       FUNCOP_1, ORDINAL2;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, FUNCT_1, CARD_1, XBOOLE_0;
+ definitions TARSKI, FUNCT_1, CARD_1, XBOOLE_0, BINOP_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, FINSET_1, ORDINAL1, ORDINAL2, WELLORD2,
       CARD_1, CARD_2, CARD_4, CARD_5, SETFAM_1, ZFMISC_1, FUNCT_5, RELAT_1,
       SUBSET_1, FUNCOP_1, BINOP_1, SETWISEO, RELSET_1, FRAENKEL, ORDERS_1,
       XBOOLE_0, XBOOLE_1, ORDINAL3;
- schemes WELLORD2, FUNCT_2, DOMAIN_1, FRAENKEL, TREES_2;
+ schemes WELLORD2, FUNCT_2, DOMAIN_1, FRAENKEL, TREES_2, BINOP_1;
 
 begin
 
@@ -684,19 +684,13 @@ proof
       then A1: Y in {Y1: P[Y1]};
       thus P[Y] from ElemProp(A1);
    end;
-   thus Card (X \ Y) <` Card X implies Y in Frechet_Filter(X)
-    proof
-       assume Card (X \ Y) <` Card X;
-       then Y in {Y1: Card (X \ Y1) <` Card X};
-       hence Y in Frechet_Filter(X);
-    end;
+   thus Card (X \ Y) <` Card X implies Y in Frechet_Filter(X);
 end;
 
 theorem Th19:
   Y in Frechet_Ideal(X) iff Card Y <` Card X
 proof
-      Y in Frechet_Ideal(X) iff Y in dual Frechet_Filter(X);
-   then Y in Frechet_Ideal(X) iff Y` in Frechet_Filter(X) by SETFAM_1:def 8;
+   Y in Frechet_Ideal(X) iff Y` in Frechet_Filter(X) by SETFAM_1:def 8;
    then Y in Frechet_Ideal(X) iff Card (X \ Y`) <` Card X by Th18;
    then Y in Frechet_Ideal(X) iff Card Y`` <` Card X by SUBSET_1:def 5;
    hence Y in Frechet_Ideal(X) iff Card Y <` Card X;
@@ -1230,12 +1224,11 @@ proof
       thus thesis by A13;
    end;
    consider T1 being Function of [:predecessor M,M:],bool GT1 such that
-   A14: for N1,K1 holds P[N1,K1,T1.[N1,K1]] from FUNCT_2:sch 7(A12);
+   A14: for N1,K1 holds P[N1,K1,T1.(N1,K1)] from BINOP_1:sch 3(A12);
    A15: for N1,K1 holds T1.(N1,K1) =
-   {K2 where K2 is Element of GT1 :  g(N1,K2)=K1 }
+   {K2 where K2 is Element of GT1 : g(N1,K2)=K1 }
    proof let N1,K1;
-         T1.[N1,K1]=T1.(N1,K1) by BINOP_1:def 1;
-      hence thesis by A14;
+      thus thesis by A14;
    end;
       GT1 c= nextcard N;
    then GT1 c= M by Def17;
@@ -1468,11 +1461,11 @@ FRAENKEL:sch 20;
       {T.X where X is Element of [:N,M:]: X in [:N,{K1}:] }
       proof let Y be set such that A16: Y in {T.(N1,K1) : N1 in N };
          consider N1 such that A17: Y=T.(N1,K1) & N1 in N by A16;
-         A18: T.(N1,K1)=T.[N1,K1] by BINOP_1:def 1;
+         A18: T.(N1,K1)=T.[N1,K1];
             [N1,K1] is Element of [:N,M:] & [N1,K1] in [:N,{K1}:]
          by ZFMISC_1:106,129;
          hence Y in {T.X where X is Element of [:N,M:]: X in [:N,{K1}:] }
-         by A17,A18;
+         by A17;
       end;
       then A19: Card {T.(N1,K1) : N1 in N} <=`
       Card {T.X where X is Element of [:N,M:]: X in [:N,{K1}:]} by CARD_1:27;
@@ -1544,7 +1537,7 @@ CARD_5:38;
       dom T = [:N,M:] by FUNCT_2:def 1;
    then consider G being Function such that (curry T).N2 = G and
    A38: dom G = M & rng G c= rng T and
-   A39: for y being set st y in M holds G.y = T.[N2,y] by FUNCT_5:36;
+   A39: for y being set st y in M holds G.y = T.(N2,y) by FUNCT_5:36;
    A40: dom (G*f) = M by A35,A38,RELAT_1:46;
    A41: dom (G*f) = dom f by A35,A38,RELAT_1:46;
    A42: rng (G*f) = S
@@ -1556,8 +1549,7 @@ CARD_5:38;
          then reconsider K3=f.K1 as Element of M by A35;
          A46: h.K3=N2 by A36,A41,A44;
             X = G.(f.K1) by A44,FUNCT_1:22;
-         then X = T.[N2,f.K1] by A35,A39,A45;
-         then X = T.(N2,K3) by BINOP_1:def 1;
+         then X = T.(N2,K3) by A35,A39,A45;
          hence X in S by A46;
       end;
       thus S c= rng (G*f)
@@ -1569,7 +1561,7 @@ CARD_5:38;
          then K2 in h"{N2} by A49,FUNCT_1:def 13;
          then consider K3 being set such that A50: K3 in dom f & f.K3=K2
          by A35,FUNCT_1:def 5;
-            X = T.[N2,f.K3] by A48,A50,BINOP_1:def 1;
+            X = T.(N2,f.K3) by A48,A50;
          then X = G.(f.K3) by A39,A50;
          then X = (G*f).K3 by A41,A50,FUNCT_1:22;
          hence X in rng (G*f) by A41,A50,FUNCT_1:def 5;
@@ -1585,10 +1577,10 @@ CARD_5:38;
       A55: h.K3 = N2 by A36,A41,A51;
       reconsider K4=f.K2 as Element of M by A35,A53;
       A56: T.(N2,K3) <> T.(N2,K4) by A33,A54,A55;
-      A57: (G*f).K1 = G.(f.K1) by A51,FUNCT_1:22 .= T.[N2,f.K1] by A35,A39,A53
-      .= T.(N2,f.K1) by BINOP_1:def 1;
-         (G*f).K2 = G.(f.K2) by A51,FUNCT_1:22 .= T.[N2,f.K2] by A35,A39,A53
-      .= T.(N2,f.K2) by BINOP_1:def 1;
+      A57: (G*f).K1 = G.(f.K1) by A51,FUNCT_1:22 .= T.(N2,f.K1) by A35,A39,A53
+      .= T.(N2,f.K1);
+         (G*f).K2 = G.(f.K2) by A51,FUNCT_1:22 .= T.(N2,f.K2) by A35,A39,A53
+      .= T.(N2,f.K2);
       hence contradiction by A52,A56,A57;
    end;
    then S,M are_equipotent by A40,A42,WELLORD2:def 4;

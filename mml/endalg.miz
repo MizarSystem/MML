@@ -10,17 +10,18 @@ environ
  vocabularies UNIALG_1, FUNCT_1, FRAENKEL, ALG_1, FUNCT_2, BINOP_1, VECTSP_1,
       AMI_1, MSUALG_1, ZF_REFLE, AUTALG_1, PRALG_1, CARD_3, NATTRA_1, MSUALG_3,
       FUNCOP_1, MSUHOM_1, RELAT_1, COHSP_1, GROUP_6, WELLORD1,
-      ENDALG, GROUP_1;
+      ENDALG, GROUP_1, CAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      CARD_3, BINOP_1, PARTFUN1, FUNCT_2, STRUCT_0, GROUP_1, VECTSP_1,
+      CARD_3, BINOP_1, PARTFUN1, FUNCT_2, CQC_LANG,
+      STRUCT_0, GROUP_1, VECTSP_1,
       FRAENKEL, FINSEQ_1, PZFMISC1, UNIALG_1, PBOOLE, MSUALG_1, ALG_1,
       MSUALG_3, MSUHOM_1, AUTALG_1, GROUP_6;
  constructors BINOP_1, ALG_1, MSUALG_3, MSUHOM_1, AUTALG_1, CARD_3, PRE_CIRC,
-      PZFMISC1, GROUP_6;
+      PZFMISC1, GROUP_6, CQC_LANG;
  registrations FRAENKEL, RELSET_1, MSUALG_1, STRUCT_0, SUBSET_1, MEMBERED,
       FUNCT_2, PARTFUN1, ORDINAL2, PBOOLE, VECTSP_1, MONOID_0;
  requirements SUBSET, BOOLE;
- definitions AUTALG_1, FRAENKEL, TARSKI, VECTSP_1, XBOOLE_0, GROUP_1;
+ definitions AUTALG_1, FRAENKEL, TARSKI, VECTSP_1, XBOOLE_0, GROUP_1, CQC_LANG;
  theorems AUTALG_1, ALG_1, BINOP_1, FUNCOP_1, FUNCT_1, FUNCT_2, GROUP_6,
       MSUALG_1, MSUALG_3, MSUHOM_1, TARSKI, ZFMISC_1, RELAT_1, VECTSP_1,
       RELSET_1, XBOOLE_0, GROUP_1;
@@ -155,7 +156,7 @@ A1:for x, y be Element of UAEnd UA
    end;
    ex B being BinOp of UAEnd UA st
    for x, y be Element of UAEnd UA holds P[x,y,B.(x, y)]
-     from BINOP_1:sch 1(A1);
+     from BINOP_1:sch 3(A1);
    hence thesis;
  end;
 uniqueness
@@ -199,7 +200,7 @@ registration let UA;
   end;
 end;
 
-Lm10: now let UA;
+Lm1: now let UA;
   set F = UAEndMonoid UA;
   let x, e be Element of F;
   assume
@@ -226,26 +227,22 @@ proof
  proof
    reconsider e = i as Element of F by Def3;
    take e;
-   thus thesis by Lm10;
+   thus thesis by Lm1;
  end;
    H is associative
 proof
-A10:now
-      let f, g be Element of H,
-          A, B be Element of UAEnd UA;
-      assume f = A & g = B;
-      hence f * g = (UAEndComp UA).(A, B)
-                 .= B * A by Def2;
-    end;
+A1: for f, g be Element of H, A, B be Element of UAEnd UA
+      st f = A & g = B
+      holds f * g = B * A by Def2;
     thus for f, g, h be Element of H holds (f * g) * h = f * (g * h)
     proof
       let f, g, h be Element of H;
       reconsider A = f, B = g, C = h as Element of UAEnd UA;
-A11:  f * g = B * A by A10;
-A12:  g * h = C * B by A10;
-      thus (f * g) * h = C * (B * A) by A10,A11
+A2:  f * g = B * A by A1;
+A3:  g * h = C * B by A1;
+      thus (f * g) * h = C * (B * A) by A1,A2
                         .= (C * B) * A by RELAT_1:55
-                        .= f * (g * h) by A10,A12;
+                        .= f * (g * h) by A1,A3;
     end;
   end;
  hence thesis by Def3;
@@ -270,7 +267,7 @@ theorem Th6:
 proof
   reconsider i = id the carrier of UA as Element of UAEnd UA by Th3;
   reconsider e = i as Element of UAEndMonoid UA by Def3;
-  for x being Element of UAEndMonoid UA holds x*e=x & e*x=x by Lm10;
+  for x being Element of UAEndMonoid UA holds x*e=x & e*x=x by Lm1;
   hence thesis by GROUP_1:def 5;
 end;
 
@@ -411,7 +408,7 @@ A1:  for x, y be Element of MSAEnd U1 ex m be Element of MSAEnd U1 st
       thus thesis;
     end;
     ex B being BinOp of MSAEnd U1 st
-    for x, y be Element of MSAEnd U1 holds P[x,y,B.(x, y)] from BINOP_1:sch 1
+    for x, y be Element of MSAEnd U1 holds P[x,y,B.(x, y)] from BINOP_1:sch 3
 (A1);
     hence thesis;
   end;
@@ -456,7 +453,7 @@ registration let S, U1;
     end;
 end;
 
-Lm11: now let S,U1;
+Lm2: now let S,U1;
   set F = MSAEndMonoid U1;
   let x, e be Element of F;
   assume
@@ -482,27 +479,23 @@ coherence
   proof
    reconsider e = i as Element of MSAEndMonoid U1 by Def6;
    take e;
-   thus thesis by Lm11;
+   thus thesis by Lm2;
  end;
  H is associative
   proof
-A10:    now
-        let f, g be Element of H,
-            A, B be Element of MSAEnd U1;
-        assume f = A & g = B;
-        hence f * g = (MSAEndComp U1).(A, B)
-                   .= B ** A by Def5;
-      end;
+A1: for f, g be Element of H, A, B be Element of MSAEnd U1
+      st f = A & g = B
+      holds f * g = B ** A by Def5;
      thus for f, g, h be Element of H
       holds (f * g) * h = f * (g * h)
      proof
         let f, g, h be Element of H;
         reconsider A = f, B = g, C = h as Element of MSAEnd U1;
-A11:     f * g = B ** A by A10;
-A12:     g * h = C ** B by A10;
-        thus (f * g) * h = C ** (B ** A) by A10,A11
+A2:     f * g = B ** A by A1;
+A3:     g * h = C ** B by A1;
+        thus (f * g) * h = C ** (B ** A) by A1,A2
                         .= (C ** B) ** A by AUTALG_1:13
-                        .= f * (g * h) by A10,A12;
+                        .= f * (g * h) by A1,A3;
       end;
   end;
  hence thesis by Def6;
@@ -528,7 +521,7 @@ theorem Th14:
   proof
    reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th10;
    reconsider e = i as Element of MSAEndMonoid U1 by Def6;
-   for x being Element of MSAEndMonoid U1 holds x*e=x & e*x=x by Lm11;
+   for x being Element of MSAEndMonoid U1 holds x*e=x & e*x=x by Lm2;
    hence thesis by GROUP_1:def 5;
   end;
 
@@ -543,7 +536,7 @@ theorem Th16:
     hence thesis by MSUHOM_1:def 3;
   end;
 
-Lm1:
+Lm3:
  for h be Function st (dom h = UAEnd UA &
   for x be set st x in UAEnd UA holds h.x = {0} --> x)
    holds rng h = MSAEnd (MSAlg UA)
@@ -586,7 +579,7 @@ A8:   f is_homomorphism MSAlg UA, MSAlg UA by A7,Def4;
       the OperSymbols of MSSign UA = dom signature UA &
       the Arity of MSSign UA = g &
       the ResultSort of MSSign UA = dom signature UA -->0 by MSUALG_1:def 13;
-      then A9:   f = {0} --> f.0 by AUTALG_1:12;
+      then A9:   f = 0 .--> f.0 by AUTALG_1:12;
       ex q be set st q in dom h & x = h.q
       proof
         take q = f.0;
@@ -734,7 +727,7 @@ A1:   dom h = UAEnd UA & for x be set st x in UAEnd UA holds h.x = {0} --> x;
                              as Element of MSAEnd MSAlg UA by Th10;
 A2: H = multLoopStr (# MSAEnd MSAlg UA, MSAEndComp MSAlg UA,i #) by Def6;
 A3: the carrier of G = dom h by A1,Def3;
-        rng h c= the carrier of H by A1,A2,Lm1;
+        rng h c= the carrier of H by A1,A2,Lm3;
     then reconsider h' = h as Function of G,H by A3,FUNCT_2:def 1,RELSET_1:11;
 A4:   for a,b being Element of G holds
         h'.(a * b) = h'.a * h'.b
@@ -790,7 +783,7 @@ A3: H = multLoopStr (# MSAEnd MSAlg UA, MSAEndComp MSAlg UA,e#) by Def6;
       proof
             dom h = UAEnd UA by A2,FUNCT_2:def 1;
         hence
-            rng h = the carrier of MSAEndMonoid (MSAlg UA) by A1,A3,Lm1;
+            rng h = the carrier of MSAEndMonoid (MSAlg UA) by A1,A3,Lm3;
       end;
       thus h is_monomorphism
       proof

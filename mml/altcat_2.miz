@@ -7,15 +7,18 @@
 environ
 
  vocabularies FUNCOP_1, RELAT_1, FUNCT_1, CAT_4, PRALG_1, BOOLE, PBOOLE,
-      NATTRA_1, MSUALG_3, CAT_1, MCART_1, ALTCAT_1, BINOP_1, RELAT_2, ALTCAT_2;
+      NATTRA_1, MSUALG_3, CAT_1, MCART_1, ALTCAT_1, BINOP_1, RELAT_2, ALTCAT_2,
+      REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
-      PZFMISC1, STRUCT_0, FUNCT_2, BINOP_1, MULTOP_1, FUNCT_3, FUNCT_4,
+      PZFMISC1, REALSET1,
+      STRUCT_0, FUNCT_2, BINOP_1, MULTOP_1, FUNCT_3, FUNCT_4,
       CQC_LANG, CAT_1, PBOOLE, FUNCOP_1, PRALG_1, ALTCAT_1;
- constructors ALTCAT_1, CAT_4, CQC_LANG, FUNCT_3, PRALG_1, PZFMISC1;
+ constructors ALTCAT_1, CAT_4, CQC_LANG, FUNCT_3, PRALG_1, PZFMISC1, REALSET1;
  registrations STRUCT_0, ALTCAT_1, FUNCT_1, RELAT_1, RELSET_1, CQC_LANG,
-      SUBSET_1, FUNCOP_1, PBOOLE;
+      SUBSET_1, FUNCOP_1, PBOOLE, REALSET1;
  requirements SUBSET, BOOLE;
- definitions STRUCT_0, ALTCAT_1, FUNCOP_1, FUNCT_1, RELAT_1, TARSKI, PBOOLE;
+ definitions STRUCT_0, ALTCAT_1, FUNCOP_1, FUNCT_1, RELAT_1, TARSKI, PBOOLE,
+  BINOP_1, REALSET1;
  theorems MCART_1, ALTCAT_1, PBOOLE, TARSKI, GRFUNC_1, ZFMISC_1, MULTOP_1,
       BINOP_1, RELAT_1, FUNCT_2, CQC_LANG, STRUCT_0, FUNCOP_1, FUNCT_4,
       FUNCT_1, FUNCT_3, DOMAIN_1, MSSUBFAM, FUNCT_7, CAT_1, RELSET_1, XBOOLE_0,
@@ -243,9 +246,7 @@ proof
   o1 be Element of I1, o2 be Element of I2;
        [o1,o2] in [:I1,I2:] by ZFMISC_1:106;
 then A1: [o1,o2] in dom M by PBOOLE:def 3;
- thus (~M).(o2,o1) = (~M).[o2,o1] by BINOP_1:def 1
-           .= M.[o1,o2] by A1,FUNCT_4:def 2
-           .= M.(o1,o2) by BINOP_1:def 1;
+ thus (~M).(o2,o1) = M.(o1,o2) by A1,FUNCT_4:def 2;
 end;
 
 definition let I1 be set,
@@ -576,9 +577,7 @@ then A7: [g,f] in [:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):]
      by A6,ZFMISC_1:106;
   thus (the_comps_of C).(i,j,k).(g,f)
    = ((the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):])
-          .(g,f) by Def4
-  .= ((the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):])
-          .[g,f] by BINOP_1:def 1
+          .[g,f] by Def4
   .= (the Comp of C).[g,f] by A7,FUNCT_1:72
   .= g*(f qua Morphism of C) by A5,CAT_1:41
   .= g*f by A1,A2,CAT_1:def 13;
@@ -648,32 +647,25 @@ begin :: Transforming an old category into new one
 theorem Th17:
  for C being Category holds Alter C is associative
   proof let C be Category;
-        Alter C = AltCatStr(#the Objects of C,the_hom_sets_of C, the_comps_of C
-#);
-   hence the Comp of Alter C is associative by Th15;
+   thus the Comp of Alter C is associative by Th15;
   end;
 
 theorem Th18:
  for C being Category holds Alter C is with_units
   proof let C be Category;
-        Alter C = AltCatStr(#the Objects of C,the_hom_sets_of C, the_comps_of C
-#);
-   hence the Comp of Alter C is with_left_units with_right_units by Th16;
+   thus the Comp of Alter C is with_left_units with_right_units by Th16;
   end;
 
 theorem Th19:
  for C being Category holds Alter C is transitive
   proof let C be Category;
    let o1,o2,o3 be object of Alter C such that
-A2:  <^o1,o2^> <> {} & <^o2,o3^> <> {};
+A1:  <^o1,o2^> <> {} & <^o2,o3^> <> {};
     reconsider x1 = o1, x2 = o2, x3 = o3 as Object of C;
-A3:  <^o1,o2^> = (the_hom_sets_of C).(x1,x2)
-       .= Hom(x1,x2) by Def3;
-A4:  <^o2,o3^> = (the_hom_sets_of C).(x2,x3)
-       .= Hom(x2,x3) by Def3;
-        <^o1,o3^> = (the_hom_sets_of C).(x1,x3)
-       .= Hom(x1,x3) by Def3;
-   hence <^o1,o3^> <> {} by A2,A3,A4,CAT_1:52;
+A2:  <^o1,o2^> = Hom(x1,x2) by Def3;
+A3:  <^o2,o3^> = Hom(x2,x3) by Def3;
+     <^o1,o3^> = Hom(x1,x3) by Def3;
+   hence <^o1,o3^> <> {} by A1,A2,A3,CAT_1:52;
   end;
 
 registration let C be Category;
@@ -704,19 +696,15 @@ definition let C be non empty AltGraph;
        for o being object of C holds <^o,o^> <> {};
  compatibility
   proof
-   hereby assume
-A1:    C is reflexive;
-    let o be object of C;
-         <^o,o^> = (the Arrows of C).(o,o);
-    hence <^o,o^> <> {} by A1,Def6;
-   end;
+   thus C is reflexive implies
+    for o be object of C holds <^o,o^> <> {} by Def6;
    assume
-A2:  for o being object of C holds <^o,o^> <> {};
+A1:  for o being object of C holds <^o,o^> <> {};
    let x be set;
    assume x in the carrier of C;
     then reconsider o=x as object of C;
         (the Arrows of C).(x,x) = <^o,o^>;
-   hence (the Arrows of C).(x,x) <> {} by A2;
+   hence (the Arrows of C).(x,x) <> {} by A1;
    thus thesis;
   end;
 end;
@@ -756,13 +744,13 @@ then A7: h in <^o3,o4^>;
   reconsider hh = h as Morphism of o3,o4  by A6;
 A8: <^o1,o3^> <> {} by A3,A5,ALTCAT_1:def 4;
 A9: <^o2,o4^> <> {} by A5,A7,ALTCAT_1:def 4;
-A10:(the Comp of C).(j,k,l).(h,g) = hh*gg by A5,A7,ALTCAT_1:def 10;
-      (the Comp of C).(i,j,k).(g,f) = gg*ff by A3,A5,ALTCAT_1:def 10;
+A10:(the Comp of C).(j,k,l).(h,g) = hh*gg by A4,A6,ALTCAT_1:def 10;
+      (the Comp of C).(i,j,k).(g,f) = gg*ff by A2,A4,ALTCAT_1:def 10;
  hence (the Comp of C).(i,k,l).(h,(the Comp of C).(i,j,k).(g,f))
-      = hh*(gg*ff) by A7,A8,ALTCAT_1:def 10
-     .= hh*gg*ff by A1,A3,A5,A7
+      = hh*(gg*ff) by A6,A8,ALTCAT_1:def 10
+     .= hh*gg*ff by A1,A2,A4,A6
      .= (the Comp of C).(i,j,l).((the Comp of C).(j,k,l).(h,g),f)
-                             by A3,A9,A10,ALTCAT_1:def 10;
+                             by A2,A9,A10,ALTCAT_1:def 10;
 end;
 end;
 
@@ -808,15 +796,13 @@ A3:    for o' being object of C,
      reconsider e = m as set;
      take e;
 A4:    <^o,o^> <> {} by A2;
-      then m in <^o,o^>;
      hence e in (the Arrows of C).(j,j);
     let i be Element of C, f be set such that
 A5:  f in (the Arrows of C).(i,j);
      reconsider o' = i as object of C;
-A6:   f in <^o',o^> by A5;
      reconsider m' = f as Morphism of o',o  by A5;
-    thus (the Comp of C).(i,j,j).(e,f) = m*m' by A4,A6,ALTCAT_1:def 10
-       .= f by A3,A6;
+    thus (the Comp of C).(i,j,j).(e,f) = m*m' by A4,A5,ALTCAT_1:def 10
+       .= f by A3,A5;
    end;
     let i be Element of C;
      reconsider o = i as object of C;
@@ -827,15 +813,13 @@ A7:    for o' being object of C,
        (<^o,o'^> <> {} implies m''*m = m'') by A2;
     take e = m;
 A8:   <^o,o^> <> {} by A2;
-     then m in <^o,o^>;
     hence e in (the Arrows of C).(i,i);
     let j be Element of C, f be set such that
 A9:  f in (the Arrows of C).(i,j);
     reconsider o' = j as object of C;
-A10:  f in <^o,o'^> by A9;
     reconsider m' = f as Morphism of o,o'  by A9;
-   thus (the Comp of C).(i,i,j).(f,e) = m'*m by A8,A10,ALTCAT_1:def 10
-        .= f by A7,A10;
+   thus (the Comp of C).(i,i,j).(f,e) = m'*m by A8,A9,ALTCAT_1:def 10
+        .= f by A7,A9;
   end;
 end;
 
@@ -1005,8 +989,7 @@ definition let C be non empty AltCatStr, o be object of C;
         dom m = {[o,o,o]} by CQC_LANG:5
          .= [:{o},{o},{o}:] by MCART_1:39;
     then reconsider m as ManySortedSet of [:{o},{o},{o}:] by PBOOLE:def 3;
-A1:  a.(o,o) = <^o,o^> by ALTCAT_1:12
-           .= (the Arrows of C).(o,o);
+A1:  a.(o,o) = (the Arrows of C).(o,o) by ALTCAT_1:12;
         m is ManySortedFunction of {|a,a|},{|a|}
      proof let i be set;
       assume i in [:{o},{o},{o}:];
@@ -1033,10 +1016,8 @@ A4:     {|a,a|}.i = {|a,a|}.(o,o,o) by A2,MULTOP_1:def 1
         let i be set;
         assume i in [:the carrier of D,the carrier of D:];
          then i in {[o,o]} by ZFMISC_1:35;
-         then A5:        i = [o,o] by TARSKI:def 1;
-         then (the Arrows of D).i = a.(o,o) by BINOP_1:def 1;
-        hence (the Arrows of D).i c= (the Arrows of C).i by A1,A5,BINOP_1:def 1
-;
+         then i = [o,o] by TARSKI:def 1;
+        hence (the Arrows of D).i c= (the Arrows of C).i by A1;
        end;
       thus [:the carrier of D,the carrier of D,the carrier of D:]
               c= [:the carrier of C,the carrier of C,the carrier of C:];
@@ -1126,19 +1107,9 @@ A7: dom c1 = [:<^i2,i3^>,<^i1,i2^>:] by A6,FUNCT_2:def 1;
 ZFMISC_1:113;
    reconsider c2 = (the Comp of D2).(j1,j2,j3)
       as Function of [:<^j2,j3^>,<^j1,j2^>:],<^j1,j3^>;
-A9: (the Arrows of D1).[i1,i2] = (the Arrows of D1).(i1,i2) by BINOP_1:def 1
-           .= <^i1,i2^>;
-A10: (the Arrows of D1).[i2,i3] = (the Arrows of D1).(i2,i3) by BINOP_1:def 1
-           .= <^i2,i3^>;
-A11: (the Arrows of D2).[j1,j2] = (the Arrows of D2).(j1,j2) by BINOP_1:def 1
-           .= <^j1,j2^>;
-A12: (the Arrows of D2).[j2,j3] = (the Arrows of D2).(j2,j3) by BINOP_1:def 1
-           .= <^j2,j3^>;
        [i1,i2] in [:the carrier of D1,the carrier of D1:] &
    [i2,i3] in [:the carrier of D1,the carrier of D1:] by ZFMISC_1:106;
-   then A13: <^i1,i2^> c= <^j1,j2^> & <^i2,i3^> c= <^j2,j3^> by A2,A9,A10,A11
-,A12,Def2
-;
+   then A13: <^i1,i2^> c= <^j1,j2^> & <^i2,i3^> c= <^j2,j3^> by A2,Def2;
        dom c2 = [:<^j2,j3^>,<^j1,j2^>:] by A8,FUNCT_2:def 1;
    then A14: dom c1 c= dom c2 by A7,A13,ZFMISC_1:119;
 A15:
@@ -1167,8 +1138,7 @@ end;
 
 definition let C be AltCatStr, D be SubCatStr of C;
  attr D is full means
-:Def13: the Arrows of D
-    = (the Arrows of C)|[:the carrier of D, the carrier of D:];
+:Def13: the Arrows of D = (the Arrows of C)||the carrier of D;
 end;
 
 definition let C be with_units (non empty AltCatStr), D be SubCatStr of C;
@@ -1194,8 +1164,7 @@ registration let C be AltCatStr;
    take D;
         dom(the Arrows of C) =[:the carrier of D, the carrier of D:]
        by PBOOLE:def 3;
-   hence the Arrows of D
-    = (the Arrows of C)|[:the carrier of D, the carrier of D:] by RELAT_1:98;
+   hence the Arrows of D = (the Arrows of C)||the carrier of D by RELAT_1:98;
    thus thesis;
   end;
 end;
@@ -1215,8 +1184,7 @@ registration let C be non empty AltCatStr;
    take D;
         dom(the Arrows of C) =[:the carrier of D, the carrier of D:]
        by PBOOLE:def 3;
-   hence the Arrows of D
-    = (the Arrows of C)|[:the carrier of D, the carrier of D:] by RELAT_1:98;
+   hence the Arrows of D = (the Arrows of C)||the carrier of D by RELAT_1:98;
    thus the carrier of D is non empty;
    thus thesis;
   end;
@@ -1231,16 +1199,13 @@ A1:  the carrier of ObCat o = {o} by Def12;
     proof
      thus the Arrows of ObCat o
        = (o,o):-> <^o,o^> by Def12
-      .= (o,o):-> ((the Arrows of C).(o,o))
-      .= (the Arrows of C)|[:the carrier of ObCat o, the carrier of ObCat o:]
-              by A1,FUNCT_7:8;
+      .= (the Arrows of C)||the carrier of ObCat o by A1,FUNCT_7:8;
     end;
        now let o1 be object of ObCat o, o2 be object of C;
 A2:  o1 = o by Th24;
    assume
 A3:  o1 = o2;
-        <^o1,o1^> = (the Arrows of ObCat o).(o,o) by A2
-         .= ((o,o):-> <^o,o^>).(o,o) by Def12
+        <^o1,o1^> = ((o,o):-> <^o,o^>).(o,o) by A2,Def12
          .= <^o2,o2^> by A2,A3,ALTCAT_1:12;
    hence idm o2 in <^o1,o1^> by ALTCAT_1:23;
    end;
@@ -1270,12 +1235,9 @@ A3: D is non empty by A1,STRUCT_0:def 1;
 A4: D is transitive
     proof let o1,o2,o3 be object of D;
       reconsider p1 = o1, p2 = o2, p3 = o3 as object of C by A1;
-A5:  <^o1,o2^> = (the Arrows of D).(o1,o2)
-            .= <^p1,p2^> by A2;
-A6:  <^o2,o3^> = (the Arrows of D).(o2,o3)
-            .= <^p2,p3^> by A2;
-A7:  <^o1,o3^> = (the Arrows of D).(o1,o3)
-            .= <^p1,p3^> by A2;
+A5:  <^o1,o2^> = <^p1,p2^> by A2;
+A6:  <^o2,o3^> = <^p2,p3^> by A2;
+A7:  <^o1,o3^> = <^p1,p3^> by A2;
      assume <^o1,o2^> <> {} & <^o2,o3^> <> {};
      hence <^o1,o3^> <> {} by A5,A6,A7,ALTCAT_1:def 4;
     end;
@@ -1303,9 +1265,7 @@ proof let D be full SubCatStr of C such that
 A1: the carrier of D = the carrier of C;
 A2: dom the Arrows of C = [:the carrier of C, the carrier of C:]
                             by PBOOLE:def 3;
-      the Arrows of D = (the Arrows of C)|[:the carrier of D, the carrier of D
-:]
-                            by Def13
+      the Arrows of D = (the Arrows of C)||the carrier of D by Def13
       .= the Arrows of C by A1,A2,RELAT_1:98;
  hence the AltCatStr of D = the AltCatStr of C by A1,Th26;
 end;
@@ -1319,14 +1279,9 @@ proof
      o1,o2 be object of C, p1,p2 be object of D such that
 A1: o1 = p1 & o2 = p2;
 A2: [p1,p2] in [:the carrier of D, the carrier of D:] by ZFMISC_1:106;
- thus <^o1,o2^> = (the Arrows of C).(o1,o2)
-      .= (the Arrows of C).[o1,o2] by BINOP_1:def 1
-      .= ((the Arrows of C)|[:the carrier of D, the carrier of D:]).[p1,p2]
-                             by A1,A2,FUNCT_1:72
-      .= ((the Arrows of C)|[:the carrier of D, the carrier of D:]).(p1,p2)
-                           by BINOP_1:def 1
-      .= (the Arrows of D).(p1,p2) by Def13
-      .= <^p1,p2^>;
+ thus <^o1,o2^>
+       = ((the Arrows of C)||the carrier of D).(p1,p2) by A1,A2,FUNCT_1:72
+      .= <^p1,p2^> by Def13;
 end;
 
 theorem Th30:
@@ -1362,7 +1317,7 @@ proof let D1,D2 be full non empty SubCatStr of C;
  assume
 A1: the carrier of D1 = the carrier of D2;
   then the Arrows of D1
-         =(the Arrows of C)|[:the carrier of D2, the carrier of D2:] by Def13
+         =(the Arrows of C)||the carrier of D2 by Def13
         .= the Arrows of D2 by Def13;
  hence the AltCatStr of D1 = the AltCatStr of D2 by A1,Th27;
 end;
@@ -1376,12 +1331,8 @@ proof
      o1,o2 be object of C, p1,p2 be object of D such that
 A1: o1 = p1 & o2 = p2;
 A2: [p1,p2] in [:the carrier of D, the carrier of D:] by ZFMISC_1:106;
-A3: <^o1,o2^> = (the Arrows of C).(o1,o2)
-      .= (the Arrows of C).[o1,o2] by BINOP_1:def 1;
-A4: <^p1,p2^> = (the Arrows of D).(p1,p2)
-      .= (the Arrows of D).[p1,p2] by BINOP_1:def 1;
       the Arrows of D cc= the Arrows of C by Def11;
- hence thesis by A1,A2,A3,A4,Def2;
+ hence thesis by A1,A2,Def2;
 end;
 
 theorem Th33:
@@ -1403,24 +1354,21 @@ A2: o1 = p1 & o2 = p2 & o3 = p3;
      ff be Morphism of p1,p2, gg be Morphism of p2,p3 such that
 A3: f = ff & g = gg;
      <^p1,p3^> <> {} by A1,ALTCAT_1:def 4;
-   then (the Arrows of D).(p1,p3) <> {};
    then dom((the Comp of D).(p1,p2,p3)) = [:<^p2,p3^>,<^p1,p2^>:]
                              by FUNCT_2:def 1;
-   then A5: [gg,ff] in dom((the Comp of D).(p1,p2,p3)) by A1,ZFMISC_1:106;
-A6: [p1,p2,p3] in [:the carrier of D,the carrier of D,the carrier of D:]
+   then A4: [gg,ff] in dom((the Comp of D).(p1,p2,p3)) by A1,ZFMISC_1:106;
+A5: [p1,p2,p3] in [:the carrier of D,the carrier of D,the carrier of D:]
              by MCART_1:73;
-A7: (the Comp of D).(p1,p2,p3) = (the Comp of D).[p1,p2,p3] &
+A6: (the Comp of D).(p1,p2,p3) = (the Comp of D).[p1,p2,p3] &
    (the Comp of C).(o1,o2,o3) = (the Comp of C).[o1,o2,o3] by MULTOP_1:def 1;
        the Comp of D cc= the Comp of C by Def11;
-   then A8: (the Comp of D).(p1,p2,p3) c= (the Comp of C).(o1,o2,o3) by A2,A6
-,A7,Def2;
+   then A7: (the Comp of D).(p1,p2,p3) c= (the Comp of C).(o1,o2,o3) by A2,A5
+,A6,Def2;
 
        <^p1,p2^> c= <^o1,o2^> & <^p2,p3^> c= <^o2,o3^> by A2,Th32;
 then <^o1,o2^> <> {} & <^o2,o3^> <> {} by A1,XBOOLE_1:3;
  hence g*f = (the Comp of C).(o1,o2,o3).(g,f) by ALTCAT_1:def 10
-    .= (the Comp of C).(o1,o2,o3).[g,f] by BINOP_1:def 1
-    .= (the Comp of D).(p1,p2,p3).[gg,ff] by A3,A5,A8,GRFUNC_1:8
-    .= (the Comp of D).(p1,p2,p3).(gg,ff) by BINOP_1:def 1
+    .= (the Comp of D).(p1,p2,p3).(gg,ff) by A3,A4,A7,GRFUNC_1:8
     .= gg*ff by A1,ALTCAT_1:def 10;
 end;
 

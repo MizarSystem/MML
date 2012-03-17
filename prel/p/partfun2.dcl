@@ -35,6 +35,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="2"/>
+<Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="6"/>
 </Cluster>

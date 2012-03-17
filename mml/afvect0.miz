@@ -13,7 +13,7 @@ environ
  constructors TDGROUP, BINOP_1, DOMAIN_1;
  registrations TDGROUP, RELSET_1, STRUCT_0, SUBSET_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions STRUCT_0, RLVECT_1;
+ definitions STRUCT_0, RLVECT_1, BINOP_1;
  theorems DOMAIN_1, TDGROUP, FUNCT_1, FUNCT_2, BINOP_1, MCART_1, RELAT_1,
       TARSKI, RLVECT_1, REALSET2, ANALOAF, RELSET_1, XBOOLE_0, VECTSP_1;
  schemes BINOP_1, FUNCT_2;
@@ -496,7 +496,7 @@ existence proof
  deffunc F(Element of AFV, Element of AFV) =
    Padd(o,$1,$2);
  consider O being BinOp of the carrier of AFV such that
- A1: for a,b holds O.(a,b) = F(a,b) from BINOP_1:sch 2; take O;
+ A1: for a,b holds O.(a,b) = F(a,b) from BINOP_1:sch 4; take O;
  thus thesis by A1; end;
 uniqueness proof let o1,o2 be BinOp of the carrier of AFV such that
  A2: for a,b holds o1.(a,b) = Padd(o,a,b) and
@@ -506,8 +506,8 @@ uniqueness proof let o1,o2 be BinOp of the carrier of AFV such that
      proof let x be Element of [:X,X:];
      consider x1,x2 being Element of X such that
      A4: x = [x1,x2] by DOMAIN_1:9;
-         o1.x = o1.(x1,x2) by A4,BINOP_1:def 1 .= Padd(o,x1,x2) by A2
-     .= o2.(x1,x2) by A3 .= o2.x by A4,BINOP_1:def 1;
+         o1.x = o1.(x1,x2) by A4 .= Padd(o,x1,x2) by A2
+     .= o2.(x1,x2) by A3 .= o2.x by A4;
      hence thesis; end;
   hence o1 = o2 by FUNCT_2:113; end;
 end;
@@ -540,8 +540,7 @@ registration let AFV,o;
  cluster GroupVect(AFV,o) -> non empty;
  coherence
   proof
-       GroupVect(AFV,o) = LoopStr(#the carrier of AFV,Padd(o),o#);
-   hence the carrier of GroupVect(AFV,o) is non empty;
+   thus the carrier of GroupVect(AFV,o) is non empty;
   end;
 end;
 
@@ -550,11 +549,7 @@ canceled 6;
 theorem
 the carrier of GroupVect(AFV,o) = the carrier of AFV
   & the add of GroupVect(AFV,o) = Padd(o)
-  & the Zero of GroupVect(AFV,o) = o
-proof
-     GroupVect(AFV,o) = LoopStr(#the carrier of AFV,Padd(o),o#);
- hence thesis;
-end;
+  & the Zero of GroupVect(AFV,o) = o;
 
 reserve a,b,c for Element of GroupVect(AFV,o);
 
@@ -563,63 +558,56 @@ canceled;
 theorem Th57:
  for a,b being Element of GroupVect(AFV,o),
      a',b' being Element of AFV st a=a' & b=b' holds
-     a + b = (Padd(o)).(a',b')
-proof let a,b be Element of GroupVect(AFV,o),
-         a',b' be Element of AFV
- such that A1: a=a' & b=b'; set X = GroupVect(AFV,o);
-thus a+b = (the add of X).(a,b) by RLVECT_1:5 .= (the add of X).[a',b'] by A1,
-BINOP_1:def 1 .= (Padd(o)).[a',b']
- .= (Padd(o)).(a',b') by BINOP_1:def 1; end;
+     a + b = (Padd(o)).(a',b');
 
 Lm2: a+b = b+a
  proof reconsider a'=a,b'=b as Element of AFV;
  reconsider c'=(a+b) as Element of AFV;
-     c'= (Padd(o)).(a',b') by Th57 .= Padd(o,a',b') by Def7;
+     c'= (Padd(o)).(a',b') .= Padd(o,a',b') by Def7;
  then o,a' // b',c' by Def5; then o,b' // a',c' by Def1;
  then c' = Padd(o,b',a') by Def5 .= (Padd(o)).(b',a')
- by Def7 .= b + a by Th57; hence thesis; end;
+ by Def7 .= b + a; hence thesis; end;
 
 Lm3: (a+b)+c = a+(b+c)
  proof reconsider a'=a,b'=b,c'=c as Element of AFV;
   set p= b+c,q=a+b; reconsider p'=p,q'=q as Element of AFV; reconsider x'=(a+p)
 ,y'=(q+c)
   as Element of AFV;
-      p'=(Padd(o)).(b',c') by Th57 .= Padd(o,b',c') by Def7;
+      p'=(Padd(o)).(b',c') .= Padd(o,b',c') by Def7;
   then A1: o,b' // c',p' by Def5;
-      q'=(Padd(o)).(a',b') by Th57 .= Padd(o,a',b') by Def7;
+      q'=(Padd(o)).(a',b') .= Padd(o,a',b') by Def7;
   then o,a' // b',q' by Def5; then o,b' // a',q' by Def1;
   then A2: a',q' // o,b' by Th4;   c',p' // o,b' by A1,Th4;
   then A3: a',q' // c',p' by A2,Def1;
   consider x'' such that A4: x',p' // c',x'' by Def1;
   A5: c',x'' // x',p' by A4,Th4;
-      x'=(Padd(o)).(a',p') by Th57 .= Padd(o,a',p') by Def7;
+      x'=(Padd(o)).(a',p') .= Padd(o,a',p') by Def7;
   then o,a' // p',x' by Def5; then a',o // x',p' by Th8;
   then a',o // c',x'' by A5,Def1; then A6: q',o // p',x'' by A3,Def1;
        x',c' // p',x'' by A4,Def1; then q',o // x',c' by A6,Def1;
   then o,q' // c',x' by Th8; then A7: c',x' // o,q' by Th4;
-      y'=(Padd(o)).(q',c') by Th57 .= Padd(o,q',c') by Def7;
+      y'=(Padd(o)).(q',c') .= Padd(o,q',c') by Def7;
   then o,q' // c',y' by Def5; then c',y' // o,q' by Th4;
   then c',y' // c',x' by A7,Def1; hence thesis by Th5; end;
 
-Lm5: a + (0.(GroupVect(AFV,o))) = a
+Lm4: a + (0.(GroupVect(AFV,o))) = a
  proof
   reconsider a'=a as Element of AFV;
   reconsider x'=(a + (0.(GroupVect(AFV,o))))
  as Element of AFV;
-       0.GroupVect(AFV,o) = o;
-  then x'=(Padd(o)).(a',o) by Th57
+  x'=(Padd(o)).(a',o)
   .= Padd(o,a',o) by Def7;
   then o,a' // o,x' by Def5;
   hence thesis by Th5; end;
 
-Lm6:GroupVect(AFV,o) is Abelian add-associative right_zeroed
+Lm5:GroupVect(AFV,o) is Abelian add-associative right_zeroed
  proof
  thus for a,b holds a+b = b+a by Lm2;
  thus for a,b,c holds (a+b)+c = a+(b+c) by Lm3;
- thus for a holds a + 0.GroupVect(AFV,o) = a by Lm5;
+ thus for a holds a + 0.GroupVect(AFV,o) = a by Lm4;
  end;
 
-Lm7:GroupVect(AFV,o) is right_complementable
+Lm6:GroupVect(AFV,o) is right_complementable
  proof
    let s be Element of GroupVect(AFV,o);
    reconsider s' = s as Element of AFV;
@@ -628,7 +616,7 @@ Lm7:GroupVect(AFV,o) is right_complementable
     Pcom(o,o) = o by Th35;
    then o,s' // Pcom(o,s'),o by Th39;
 then A1: Padd(o,s',Pcom(o,s')) = o by Def5;
-   thus s + t = (Padd(o)).(s',(Pcom(o)).s') by Th57
+   thus s + t = (Padd(o)).(s',(Pcom(o)).s')
        .= (Padd(o)).(s',(Pcom(o,s'))) by Def8
        .= o by A1,Def7
        .= the Zero of GroupVect(AFV,o)
@@ -638,7 +626,7 @@ end;
 registration let AFV,o;
  cluster GroupVect(AFV,o) -> Abelian add-associative right_zeroed
    right_complementable;
- coherence by Lm6,Lm7;
+ coherence by Lm5,Lm6;
 end;
 
 theorem Th58:
@@ -651,7 +639,7 @@ proof let a be Element of GroupVect(AFV,o),
 A2: Pcom(o,o) = o by Th35;
        o,a' // Pcom(o,a'),Pcom(o,o) by Th39;
 then A3: Padd(o,a',Pcom(o,a')) = o by A2,Def5;
-      a + aa = (Padd(o)).(a,(Pcom(o)).a) by A1,Th57
+      a + aa = (Padd(o)).(a,(Pcom(o)).a) by A1
        .= (Padd(o)).(a,(Pcom(o,a'))) by A1,Def8
        .= o by A1,A3,Def7
        .= the Zero of GroupVect(AFV,o)
@@ -671,7 +659,7 @@ theorem Th66: for a ex b st b + b = a
   being Element of AFV such that A1: o,b' // b',a'' by Def1;
   reconsider b=b' as Element of GroupVect(AFV,o);
       a'' = Padd(o,b',b') by A1,Def5 .=(Padd(o)).(b',b') by Def7
-  .= b+b by Th57;
+  .= b+b;
   hence thesis; end;
 
 registration let AFV,o;
@@ -692,7 +680,7 @@ theorem Th67: for a being Element of GroupVect(AFV,o)
  A1: a + a = 0.(GroupVect(AFV,o));
  reconsider a''=a as Element of AFV;
  set GV = GroupVect(AFV,o);
-     o = a+a by A1 .= (Padd(o)).(a'',a'') by Th57
+     o = a+a by A1 .= (Padd(o)).(a'',a'')
  .= Padd(o,a'',a'') by Def7;
  then A2: o,a'' // a'',o by Def5;
  A3: o,o // o,o by Th2;
@@ -753,9 +741,7 @@ theorem Th71:
    AFV = AV(GroupVect(AFV,o)))
 proof let AFV be strict AffVect; let o be Element of AFV;
  set X = GroupVect(AFV,o);
-A1: the carrier of AV(X) = the carrier of AFV proof
-     the carrier of AV(X) = the carrier of X by TDGROUP:9 .= the carrier of AFV
-; hence thesis; end;
+A1: the carrier of AV(X) = the carrier of AFV by TDGROUP:9;
      CONGRD(X) = the CONGR of AFV proof
     now let x,y be set; set xy = [x,y];
   A2: now assume A3: xy in CONGRD(X);
@@ -772,7 +758,7 @@ in V
      as Element of AFV;
  set z1' = x1' # y2', z2' = x2' # y1'; A6: z1'=z2' by A3,A5,TDGROUP:def 4;
      reconsider z1=z1',z2=z2' as Element of AFV;
-         z1 = (Padd(o)).(x1,y2) & z2 = (Padd(o)).(x2,y1) by Th57;
+         z1 = (Padd(o)).(x1,y2) & z2 = (Padd(o)).(x2,y1);
      then z1 = Padd(o,x1,y2) & z2 = Padd(o,x2,y1) by Def7;
      then o,x1 // y2,z1 & o,x2 // y1,z1 by A6,Def5;
      then x1,x2 // y1,y2 by Th13;
@@ -791,7 +777,7 @@ V
      A10: x1,x2 // y1,y2 by A7,A9,ANALOAF:def 2;
           x1' # y2' = x2' # y1' proof
     reconsider z1=x1'#y2',z2=x2'#y1' as Element of AFV;
-          z1 = (Padd(o)).(x1,y2) & z2 = (Padd(o)).(x2,y1) by Th57;
+          z1 = (Padd(o)).(x1,y2) & z2 = (Padd(o)).(x2,y1);
 then A11:      z1 = Padd(o,x1,y2) & z2 = Padd(o,x2,y1) by Def7;
        then o,x1 // y2,z1 & o,x2 // y1,z2 by Def5;
       then x1,o // z1,y2 & o,x2 // y1,z2 by Th8; then o,x2 // y1,z1 by A10,Th13
@@ -919,15 +905,13 @@ proof let ADG be Proper_Uniquely_Two_Divisible_Group,
   deffunc F(Element of X) = o'+$1;
 consider g being UnOp of X such that
   A2: for a being Element of X holds g.a = F(a) from FUNCT_2:sch 4;
-      X = T & X = Y & Y = T proof
-      Y = the carrier of ADG by TDGROUP:9;
- hence thesis; end;
+      X = T & X = Y & Y = T by TDGROUP:9;
  then reconsider f = g as Function of X,T;
 A3: f is one-to-one by A2,Th76;
 A4: rng(f) = T by A2,Th77;
      now let a,b be Element of ADG;
   thus f.(a+b) = (Padd(o)).((f.a),(f.b)) by A1,A2,Th75
-   .= (the add of Z).(f.a,f.b) .= (f.a)+(f.b) by RLVECT_1:5;
+   .= (the add of Z).(f.a,f.b) .= (f.a)+(f.b);
   thus f.(0.ADG) = 0.Z by A1,A2,Th75;
   reconsider fa = f.a as Element of AV(ADG);
   thus f.(-a) = (Pcom(o)).fa by A1,A2,Th75

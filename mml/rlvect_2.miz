@@ -18,7 +18,7 @@ environ
  registrations RLVECT_1, RLSUB_1, RELSET_1, STRUCT_0, FINSET_1, PRE_TOPC,
       ARYTM_3, FUNCT_2, MEMBERED, FUNCT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions FUNCT_1, RLSUB_1, STRUCT_0, TARSKI, XBOOLE_0;
+ definitions FUNCT_1, RLSUB_1, STRUCT_0, TARSKI, XBOOLE_0, BINOP_1;
  theorems BINOP_1, CARD_1, CARD_2, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       FINSEQ_4, FINSET_1, FUNCT_1, FUNCT_2, NAT_1, REAL_1, RLSUB_1, RLSUB_2,
       RLVECT_1, SUBSET_1, TARSKI, ZFMISC_1, RELAT_1, RELSET_1, XBOOLE_0,
@@ -1289,7 +1289,7 @@ theorem
          consider f being Function of the carrier of V, REAL such that
           A16: f.v = 0 and
           A17: for u being Element of V st u <> v holds
-               f.u = F(u) from FUNCT_2:sch 10;
+               f.u = F(u) from FUNCT_2:sch 6;
          reconsider f as Element of Funcs(the carrier of V, REAL)
                                                            by FUNCT_2:11;
               now let u;
@@ -1428,7 +1428,7 @@ Th34
        deffunc F(Element of V) = 0;
         consider f such that A51: f.v = a and
          A52: for u being Element of V st u <> v
-              holds f.u = F(u) from FUNCT_2:sch 10;
+              holds f.u = F(u) from FUNCT_2:sch 6;
         reconsider f as Element of Funcs(the carrier of V, REAL)
                                                           by FUNCT_2:11;
              now let u;
@@ -1481,7 +1481,7 @@ Th34
         deffunc F(Element of V)=0;
           consider f such that A61: f.v = 1 and A62: f.u = 1 and
 A63: for w being Element of V st w <> v & w <> u holds
-                f.w = F(w) from FUNCT_2:sch 11(A60);
+                f.w = F(w) from FUNCT_2:sch 7(A60);
           reconsider f as Element of Funcs(the carrier of V, REAL)
                                                           by FUNCT_2:11;
                now let w;
@@ -1777,8 +1777,7 @@ theorem Th65:
          then (a * L).v <> 0 by A1,A6,XCMPLX_1:6;
       hence thesis by A5;
      end;
-        Carrier(a * L) = T & Carrier(L) = S;
-   hence thesis by A2;
+   thus thesis by A2;
   end;
 
 theorem Th66:
@@ -1868,16 +1867,10 @@ theorem
   end;
 
 theorem Th75:
- Carrier(- L) = Carrier(L)
-  proof - 1 <> 0 & - L = (- 1) * L;
-   hence thesis by Th65;
-  end;
+ Carrier(- L) = Carrier(L) by Th65;
 
 theorem Th76:
- L is Linear_Combination of A implies - L is Linear_Combination of A
-  proof - L = (- 1) * L;
-   hence thesis by Th67;
-  end;
+ L is Linear_Combination of A implies - L is Linear_Combination of A by Th67;
 
 theorem
      - (- L) = L
@@ -1908,8 +1901,8 @@ theorem Th79:
 
 theorem
      Carrier(L1 - L2) c= Carrier(L1) \/ Carrier(L2)
-  proof L1 - L2 = L1 + (- L2);
-    then Carrier(L1 - L2) c= Carrier(L1) \/ Carrier(- L2) by Th58;
+  proof
+    Carrier(L1 - L2) c= Carrier(L1) \/ Carrier(- L2) by Th58;
    hence thesis by Th75;
   end;
 
@@ -1919,8 +1912,7 @@ theorem
    proof assume that A1: L1 is Linear_Combination of A and
                      A2: L2 is Linear_Combination of A;
      A3: - L2 is Linear_Combination of A by A2,Th76;
-         L1 - L2 = L1 + (- L2);
-    hence thesis by A1,A3,Th59;
+    thus thesis by A1,A3,Th59;
    end;
 
 theorem Th82:
@@ -1995,7 +1987,7 @@ definition let V;
     deffunc F(Element of LinComb(V),Element of LinComb(V))=@(@$1 + @$2);
     consider o being BinOp of LinComb(V) such that
     A1: for e1,e2 holds o.(e1,e2) = F(e1,e2)
-     from BINOP_1:sch 2;
+     from BINOP_1:sch 4;
    take o;
    let e1,e2;
    thus o.(e1,e2) = @(@e1 + @e2) by A1
@@ -2030,12 +2022,12 @@ definition let V;
        thus thesis;
       end;
     consider g being Function of [:REAL,LinComb(V):], LinComb(V) such that
-     A2: for x being (Element of REAL), e holds P[x,e,g.[x,e]]
-                                                          from FUNCT_2:sch 7
+     A2: for x being (Element of REAL), e holds P[x,e,g.(x,e)]
+                                                          from BINOP_1:sch 3
 (A1);
    take g;
    let a,e;
-         ex b st b = a & g.[a,e] = b * @e by A2;
+         ex b st b = a & g.(a,e) = b * @e by A2;
    hence thesis;
   end;
  uniqueness
@@ -2043,10 +2035,10 @@ definition let V;
     assume A3: for a,e holds g1.[a,e] = a * @e;
     assume A4: for a,e holds g2.[a,e] = a * @e;
          now let x be (Element of REAL), e;
-      thus g1.[x,e] = x * @e by A3
-                   .= g2.[x,e] by A4;
+      thus g1.(x,e) = x * @e by A3
+                   .= g2.(x,e) by A4;
      end;
-   hence thesis by FUNCT_2:120;
+   hence thesis by BINOP_1:2;
   end;
 end;
 
@@ -2067,18 +2059,16 @@ definition let V;
                        aM = a * w, bK = b * v as Linear_Combination of V;
        A2: now let v,u be (VECTOR of S), K,L;
          assume A3: v = K & u = L;
-              @K = K & @L = L;
-          then A4: @@K = K & @@L = L;
+          A4: @@K = K & @@L = L;
         thus v + u = LCAdd(V).[v,u] by RLVECT_1:def 3
-                  .= LCAdd(V).(K,L) by A3,BINOP_1:def 1
+                  .= LCAdd(V).(K,L) by A3
                   .= LCAdd(V).(@K,L)
                   .= LCAdd(V).(@K,@L)
                   .= K + L by A4,Def19;
        end;
        A5: now let v be (VECTOR of S), L,a;
          assume A6: v = L;
-              @L = L;
-          then A7: @@L = L;
+          A7: @@L = L;
         thus a * v = LCMult(V).[a,L] by A6,RLVECT_1:def 4
                   .= LCMult(V).[a,@L]
                   .= a * L by A7,Def20;
@@ -2133,62 +2123,31 @@ end;
 
 registration let V;
  cluster LC_RLSpace(V) -> strict non empty;
-coherence
- proof
-      LC_RLSpace(V) = RLSStruct (# LinComb(V), @ZeroLC(V), LCAdd(V), LCMult(V)
-#);
-  hence LC_RLSpace(V) is strict & the carrier of LC_RLSpace(V) is non empty;
- end;
+coherence;
 end;
 
 canceled 9;
 
 theorem
- the carrier of LC_RLSpace(V) = LinComb(V)
-  proof
-        LC_RLSpace(V) = RLSStruct (# LinComb(V), @ZeroLC(V), LCAdd(V), LCMult(V
-)
-#);
-   hence thesis;
-  end;
+ the carrier of LC_RLSpace(V) = LinComb(V);
 
 theorem
-     the Zero of LC_RLSpace(V) = ZeroLC(V)
-  proof
-        LC_RLSpace(V) = RLSStruct (# LinComb(V), @ZeroLC(V), LCAdd(V), LCMult(V
-)
-#);
-   hence thesis;
-  end;
+     the Zero of LC_RLSpace(V) = ZeroLC(V);
 
 theorem
- the add of LC_RLSpace(V) = LCAdd(V)
-  proof
-        LC_RLSpace(V) = RLSStruct (# LinComb(V), @ZeroLC(V), LCAdd(V), LCMult(V
-)
-#);
-   hence thesis;
-  end;
+ the add of LC_RLSpace(V) = LCAdd(V);
 
 theorem
- the Mult of LC_RLSpace(V) = LCMult(V)
-  proof
-        LC_RLSpace(V) = RLSStruct (# LinComb(V), @ZeroLC(V), LCAdd(V), LCMult(V
-)
-#);
-   hence thesis;
-  end;
+ the Mult of LC_RLSpace(V) = LCMult(V);
 
 theorem Th96:
  vector(LC_RLSpace(V),L1) + vector(LC_RLSpace(V),L2) = L1 + L2
   proof set v1 = vector(LC_RLSpace(V),L1);
         set v2 = vector(LC_RLSpace(V),L2);
-        the carrier of LC_RLSpace(V) = LinComb(V);
-    then L1 in the carrier of LC_RLSpace(V) &
+    L1 in the carrier of LC_RLSpace(V) &
          L2 in the carrier of LC_RLSpace(V) by Def16;
     then A1: L1 in LC_RLSpace(V) & L2 in LC_RLSpace(V) by RLVECT_1:def 1;
-        L1 = @L1 & L2 = @L2;
-    then A2: L1 = @@L1 & L2 = @@L2;
+    A2: L1 = @@L1 & L2 = @@L2;
    thus vector(LC_RLSpace(V),L1) + vector(LC_RLSpace(V),L2) =
             (the add of LC_RLSpace(V)).[v1,v2] by RLVECT_1:def 3
          .= LCAdd(V).[v1,v2]
@@ -2196,20 +2155,17 @@ theorem Th96:
          .= LCAdd(V).[L1,L2] by A1,Def1
          .= LCAdd(V).[@L1,L2]
          .= LCAdd(V).[@L1,@L2]
-         .= LCAdd(V).(@L1,@L2) by BINOP_1:def 1
+         .= LCAdd(V).(@L1,@L2)
          .= L1 + L2 by A2,Def19;
   end;
 
 theorem Th97:
  a * vector(LC_RLSpace(V),L) = a * L
   proof
-        the carrier of LC_RLSpace(V) = LinComb(V);
-    then L in the carrier of LC_RLSpace(V) by Def16;
+    L in the carrier of LC_RLSpace(V) by Def16;
     then A1: L in LC_RLSpace(V) by RLVECT_1:def 1;
-        L = @L;
-    then A2: @@L = L;
-        the Mult of LC_RLSpace(V) = LCMult(V);
-   hence a * vector(LC_RLSpace(V),L) = LCMult(V).[a,vector(LC_RLSpace(V),L)
+    A2: @@L = L;
+   thus a * vector(LC_RLSpace(V),L) = LCMult(V).[a,vector(LC_RLSpace(V),L)
 ] by RLVECT_1:def 4
                                  .= LCMult(V).[a,L] by A1,Def1
                                  .= LCMult(V).[a,@L]

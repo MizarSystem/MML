@@ -22,11 +22,11 @@ environ
       ALGSTR_1, FINSET_1, FINSUB_1, NAT_1, MEMBERED, FUNCT_2, ORDINAL2,
       XREAL_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
- definitions SETWISEO, ALGSTR_1;
+ definitions SETWISEO, ALGSTR_1, BINOP_1, GROUP_4;
  theorems FINSEQ_1, FINSEQ_2, TARSKI, FUNCT_1, FUNCT_2, NAT_1, BINOP_1,
       FINSEQOP, VECTSP_1, FUNCOP_1, SQUARE_1, SETWOP_2, RLVECT_1, RELAT_1,
       SETWISEO, FINSEQ_3, ZFMISC_1, FINSEQ_4, ALGSTR_1, FINSOP_1, GROUP_1,
-      XBOOLE_0, XBOOLE_1, XCMPLX_1, ORDINAL2, XREAL_1;
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, ORDINAL2, XREAL_1, GROUP_4;
  schemes NAT_1, FUNCT_2;
 
 begin :: Auxiliary theorems
@@ -36,20 +36,20 @@ begin :: Auxiliary theorems
 canceled;
 
 theorem Th2:
-for K being Abelian (non empty LoopStr) holds the add of K is commutative
-    proof let K be Abelian (non empty LoopStr);
-        now let a,b be Element of K;
+  for K being Abelian (non empty LoopStr) holds the add of K is commutative
+  proof let K be Abelian (non empty LoopStr);
+    now let a,b be Element of K;
       thus (the add of K).(a,b)=a+b by RLVECT_1:5
                          .=(the add of K).(b,a) by RLVECT_1:5;
-     end;
-     hence the add of K is commutative by BINOP_1:def 2;
+    end;
+    hence the add of K is commutative by BINOP_1:def 2;
  end;
 
 theorem Th3:
 for K being add-associative (non empty LoopStr)
  holds the add of K is associative
    proof let K be add-associative (non empty LoopStr);
-       now let a,b,c be Element of K;
+    now let a,b,c be Element of K;
       thus (the add of K).(a,(the add of K).(b,c))=(the add of K).(a,b+c)
                                             by RLVECT_1:5
                   .=a+(b+c) by RLVECT_1:5
@@ -61,26 +61,41 @@ for K being add-associative (non empty LoopStr)
     end;
 
 theorem Th4:
-for K being commutative (non empty HGrStr) holds
-  the mult of K is commutative
-        proof
-         let K be commutative (non empty HGrStr);
-            now let a,b be Element of K;
-           thus (the mult of K).(a,b)=a*b by GROUP_1:def 1
-                     .=(the mult of K).(b,a) by GROUP_1:def 1;
-         end;
-         hence the mult of K is commutative by BINOP_1:def 2;
-        end;
+  for K being commutative (non empty HGrStr) holds
+    the mult of K is commutative
+  proof
+    let K be commutative (non empty HGrStr);
+    now let a,b be Element of K;
+      thus (the mult of K).(a,b)=a*b by GROUP_1:def 1
+             .=(the mult of K).(b,a) by GROUP_1:def 1;
+    end;
+    hence the mult of K is commutative by BINOP_1:def 2;
+  end;
+
+registration let K be Abelian (non empty LoopStr);
+  cluster the add of K -> commutative;
+  coherence by Th2;
+end;
+
+registration let K be add-associative (non empty LoopStr);
+  cluster the add of K -> associative;
+  coherence by Th3;
+end;
+
+registration let K be commutative (non empty HGrStr);
+  cluster the mult of K -> commutative;
+  coherence by Th4;
+end;
 
 canceled;
 
-theorem Th6:  :::multLoopStr
- for K being commutative left_unital (non empty doubleLoopStr) holds
-  1.K is_a_unity_wrt the mult of K
+theorem Th6:
+  for K being commutative left_unital (non empty multLoopStr) holds
+    1.K is_a_unity_wrt the mult of K
   proof
-  let K be commutative left_unital (non empty doubleLoopStr);
+  let K be commutative left_unital (non empty multLoopStr);
    set o = the mult of K;
-       now let h be Element of K;
+   now let h be Element of K;
      thus o.(1.K,h) = 1.K * h by GROUP_1:def 1
                    .= h by VECTSP_1:def 19;
      thus o.(h,1.K) = h * 1.K by GROUP_1:def 1
@@ -89,19 +104,19 @@ theorem Th6:  :::multLoopStr
    hence thesis by BINOP_1:11;
   end;
 
-theorem Th7:  :::multLoopStr
- for K being commutative left_unital (non empty doubleLoopStr) holds
+theorem Th7:
+  for K being commutative left_unital (non empty multLoopStr) holds
    the_unity_wrt the mult of K = 1.K
     proof
- let K be commutative left_unital (non empty doubleLoopStr);
+     let K be commutative left_unital (non empty multLoopStr);
      reconsider e=1.K as Element of K;
-        e is_a_unity_wrt the mult of K by Th6;
+     e is_a_unity_wrt the mult of K by Th6;
      hence thesis by BINOP_1:def 8;
     end;
 
 theorem Th8:
-for K being left_zeroed right_zeroed (non empty LoopStr)
- holds 0.K is_a_unity_wrt the add of K
+  for K being left_zeroed right_zeroed (non empty LoopStr)
+    holds 0.K is_a_unity_wrt the add of K
  proof let K be left_zeroed right_zeroed (non empty LoopStr);
       now let a be Element of K;
     thus (the add of K).(0.K,a) = 0.K + a by RLVECT_1:5
@@ -113,8 +128,8 @@ for K being left_zeroed right_zeroed (non empty LoopStr)
  end;
 
 theorem Th9:
-for K being left_zeroed right_zeroed (non empty LoopStr) holds
- the_unity_wrt the add of K = 0.K
+  for K being left_zeroed right_zeroed (non empty LoopStr) holds
+    the_unity_wrt the add of K = 0.K
    proof let K be left_zeroed right_zeroed (non empty LoopStr);
     reconsider e=0.K as Element of K;
        e is_a_unity_wrt the add of K by Th8;
@@ -129,11 +144,11 @@ for K being left_zeroed right_zeroed (non empty LoopStr)
   thus thesis by Th8;
  end;
 
-theorem Th11: :::multLoopStr
- for K being commutative left_unital (non empty doubleLoopStr) holds
+theorem Th11:
+ for K being commutative left_unital (non empty multLoopStr) holds
    the mult of K has_a_unity
 proof
-  let K be commutative left_unital (non empty doubleLoopStr);
+  let K be commutative left_unital (non empty multLoopStr);
   take 1.K;
   thus thesis by Th6;
 end;
@@ -214,8 +229,7 @@ theorem Th15:
   let K be distributive (non empty doubleLoopStr),
       a be Element of K;
   A1:the mult of K is_distributive_wrt the add of K by Th12;
-     a multfield =(the mult of K)[;](a,id (the carrier of K));
-  hence thesis by A1,FINSEQOP:55;
+  thus thesis by A1,FINSEQOP:55;
  end;
 
 theorem Th16:
@@ -307,14 +321,12 @@ A2: a1 = p1.i & a2 = p2.i;
 definition let i; let K be non empty LoopStr;
   let R1,R2 be Element of i-tuples_on the carrier of K;
   redefine func R1 + R2 -> Element of i-tuples_on the carrier of K;
-   coherence
- proof R1 + R2 = (the add of K).:(R1,R2); hence thesis by FINSEQ_2:140;
-  end;
+   coherence by FINSEQ_2:140;
 end;
 
 theorem
-     for K being non empty LoopStr,
-   a1,a2 being Element of K,
+  for K being non empty LoopStr,
+      a1,a2 being Element of K,
   R1,R2 being Element of i-tuples_on the carrier of K holds
    j in Seg i & a1 = R1.j & a2 = R2.j implies (R1+R2).j = a1 + a2
  proof
@@ -328,20 +340,13 @@ theorem
  end;
 
 theorem
-    for K being non empty LoopStr,
-  p being FinSequence of the carrier of K holds
+  for K being non empty LoopStr,
+      p being FinSequence of the carrier of K holds
    <*>(the carrier of K) + p = <*>(the carrier of K) & p +
-    <*>(the carrier of K) = <*>(the carrier of K)
- proof
-  let K be non empty LoopStr,
-      p be FinSequence of the carrier of K;
-     <*>(the carrier of K) + p = (the add of K).:(<*>(the carrier of K),p) &
-   p + <*>(the carrier of K) = (the add of K).:(p,<*>(the carrier of K));
-  hence thesis by FINSEQ_2:87;
- end;
+    <*>(the carrier of K) = <*>(the carrier of K) by FINSEQ_2:87;
 
 theorem
-    for K being non empty LoopStr,
+  for K being non empty LoopStr,
     a1,a2 being Element of K holds
   <*a1*> + <*a2*> = <*a1+a2*>
  proof
@@ -353,7 +358,7 @@ theorem
  end;
 
 theorem
-    for K being non empty LoopStr,
+  for K being non empty LoopStr,
     a1,a2 being Element of K holds
    (i|->a1) + (i|->a2) = i|->(a1+a2)
  proof
@@ -441,8 +446,7 @@ A2:  a = p.i;
 definition let i;let K be non empty LoopStr;
   let R be Element of i-tuples_on the carrier of K;
  redefine func -R -> Element of i-tuples_on the carrier of K;
-  coherence
- proof -R = (comp K)*R; hence thesis by FINSEQ_2:133; end;
+  coherence by FINSEQ_2:133;
 end;
 
 theorem
@@ -453,10 +457,7 @@ theorem
  end;
 
 theorem
-      -(<*>(the carrier of K)) = <*>(the carrier of K)
- proof -(<*>(the carrier of K)) = (comp K)*(<*>(the carrier of K));
-  hence thesis by FINSEQ_2:38;
- end;
+      -(<*>(the carrier of K)) = <*>(the carrier of K) by FINSEQ_2:38;
 
 theorem
       -<*a*> = <*-a*>
@@ -518,9 +519,7 @@ theorem Th36:
   A2:the_unity_wrt the add of K = 0.K & the add of K has_a_unity by Th9,Th10;
   A3:the add of K has_an_inverseOp &
    the_inverseOp_wrt the add of K = (comp K) by Th17,Th18;
-      R1 + R2 = (the add of K).:(R1,R2) & -R1 = (comp K)*R1 & -R2 =
-    (comp K)*R2;
-   hence thesis by A1,A2,A3,FINSEQOP:78;
+   thus thesis by A1,A2,A3,FINSEQOP:78;
  end;
 
 theorem Th37:
@@ -597,10 +596,7 @@ A2: a1 = p1.i & a2 = p2.i;
 definition let i;let K be non empty LoopStr;
   let R1,R2 be Element of i-tuples_on the carrier of K;
  redefine func R1 - R2 -> Element of i-tuples_on the carrier of K;
-  coherence
- proof R1 - R2 = (diffield(K)).:(R1,R2);
-  hence thesis by FINSEQ_2:140;
- end;
+  coherence by FINSEQ_2:140;
 end;
 
 theorem
@@ -612,12 +608,7 @@ theorem
 
 theorem
       <*>(the carrier of K) - p1 = <*>(the carrier of K) &
-   p1 - <*>(the carrier of K) = <*>(the carrier of K)
- proof
-     <*>(the carrier of K) - p1 = (diffield(K)).:(<*>(the carrier of K),p1) &
-   p1 - <*>(the carrier of K) = (diffield(K)).:(p1,<*>(the carrier of K));
-  hence thesis by FINSEQ_2:87;
- end;
+   p1 - <*>(the carrier of K) = <*>(the carrier of K) by FINSEQ_2:87;
 
 theorem
       <*a1*> - <*a2*> = <*a1-a2*>
@@ -636,13 +627,7 @@ theorem
  end;
 
 theorem Th47:
-   R1 - R2 = R1 + - R2
- proof
-  thus R1 - R2 = (diffield(K)).:(R1,R2)
-              .= (the add of K).:(R1,(comp K)*R2) by FINSEQOP:89
-              .= (the add of K).:(R1,-R2)
-              .= R1 + -R2;
- end;
+   R1 - R2 = R1 + - R2 by FINSEQOP:89;
 
 theorem
     for K being add-associative right_complementable left_zeroed right_zeroed
@@ -776,12 +761,7 @@ Th60:for a,b being Element of K holds
 
 theorem
    for a,b being Element of K holds
-   (a multfield).b = a*b
- proof
-  let a,b be Element of K;
-     a multfield = (the mult of K)[;](a,id the carrier of K);
-  hence thesis by Th60;
- end;
+   (a multfield).b = a*b by Th60;
 
 definition let K be non empty HGrStr;
    let p be FinSequence of the carrier of K;
@@ -812,10 +792,7 @@ definition let i;let K be non empty HGrStr;
   let R be Element of i-tuples_on the carrier of K;
   let a be Element of K;
  redefine func a*R -> Element of i-tuples_on the carrier of K;
-  coherence
- proof a*R = ((the mult of K)[;](a,id the carrier of K))*R;
-  hence thesis by FINSEQ_2:133;
- end;
+  coherence by FINSEQ_2:133;
 end;
 
 theorem
@@ -826,12 +803,7 @@ theorem
  end;
 
 theorem
-     a*(<*>(the carrier of K)) = <*>(the carrier of K)
-  proof
-       a*(<*>(the carrier of K)) =(the mult of K)[;]
-       (a,id (the carrier of K))*(<*>(the carrier of K));
-   hence thesis by FINSEQ_2:38;
- end;
+     a*(<*>(the carrier of K)) = <*>(the carrier of K) by FINSEQ_2:38;
 
 theorem
       a*<*a1*> = <*a*a1*>
@@ -1000,10 +972,7 @@ A2: a1 = p1.i & a2 = p2.i;
 definition let i;let K be non empty HGrStr;
   let R1,R2 be Element of i-tuples_on the carrier of K;
  redefine func mlt(R1,R2) -> Element of i-tuples_on the carrier of K;
-  coherence
- proof mlt(R1,R2) = (the mult of K).:(R1,R2);
-  hence thesis by FINSEQ_2:140;
- end;
+  coherence by FINSEQ_2:140;
 end;
 
 theorem
@@ -1015,14 +984,7 @@ theorem
 
 theorem
       mlt(<*>(the carrier of K),p) = <*>(the carrier of K) &
-    mlt(p,<*>(the carrier of K)) = <*>(the carrier of K)
- proof
-     mlt(<*>(the carrier of K),p) = (the mult of K).:(<*>(the carrier of K),p)
-&
-   mlt(p,<*>(the carrier of K)) =
-  (the mult of K).:(p,<*>(the carrier of K));
-  hence thesis by FINSEQ_2:87;
- end;
+    mlt(p,<*>(the carrier of K)) = <*>(the carrier of K) by FINSEQ_2:87;
 
 theorem
 Th76:mlt(<*a1*>,<*a2*>) = <*a1*a2*>
@@ -1032,7 +994,7 @@ Th76:mlt(<*a1*>,<*a2*>) = <*a1*a2*>
                          .= <*a1*a2*> by GROUP_1:def 1;
  end;
 
-Lm6: mlt(R1^<*a1*>,R2^<*a2*>) = (mlt(R1,R2))^<*a1*a2*>
+Lm5: mlt(R1^<*a1*>,R2^<*a2*>) = (mlt(R1,R2))^<*a1*a2*>
  proof
   thus mlt(R1^<*a1*>,R2^<*a2*>)
       = (the mult of K).:(R1^<*a1*>,R2^<*a2*>)
@@ -1041,10 +1003,10 @@ Lm6: mlt(R1^<*a1*>,R2^<*a2*>) = (mlt(R1,R2))^<*a1*a2*>
      .= (mlt(R1,R2))^<*a1*a2*>;
  end;
 
-Lm7:mlt(<*a1,a2*>,<*b1,b2*>)=<*a1*b1,a2*b2*>
+Lm6:mlt(<*a1,a2*>,<*b1,b2*>)=<*a1*b1,a2*b2*>
 proof
       <*a1,a2*>=<*a1*>^<*a2*>& <*b1,b2*>=<*b1*>^<*b2*> by FINSEQ_1:def 9;
-   hence mlt(<*a1,a2*>,<*b1,b2*>)=mlt(<*a1*>,<*b1*>)^<*a2*b2*> by Lm6
+   hence mlt(<*a1,a2*>,<*b1,b2*>)=mlt(<*a1*>,<*b1*>)^<*a2*b2*> by Lm5
                         .=<*a1*b1*>^<*a2*b2*> by Th76
                         .=<*a1*b1,a2*b2*> by FINSEQ_1:def 9;
 end;
@@ -1067,24 +1029,23 @@ Th78:mlt(p,q)=mlt(q,p)
  proof
      reconsider r=mlt(p,q) as FinSequence of the carrier of K;
      reconsider s=mlt(q,p) as FinSequence of the carrier of K;
-      s=(the mult of K).:(q,p);
-      then A3:len r =min(len p,len q) & len s=min(len q,len p) by
+      A1:len r =min(len p,len q) & len s=min(len q,len p) by
 FINSEQ_2:85;
      reconsider k=min(len p,len q) as Nat by SQUARE_1:38;
-     A4:dom r=Seg k & dom s=Seg k by A3,FINSEQ_1:def 3;
+     A2:dom r=Seg k & dom s=Seg k by A1,FINSEQ_1:def 3;
         min(len p,len q)<= len p & min(len p,len q)<=len q by SQUARE_1:35;
      then Seg k c= Seg len p & Seg k c= Seg len q by FINSEQ_1:7;
-     then A5:Seg k c= dom p & Seg k c= dom q by FINSEQ_1:def 3;
+     then A3:Seg k c= dom p & Seg k c= dom q by FINSEQ_1:def 3;
         now let i;
-      assume A6:i in Seg k;
+      assume A4:i in Seg k;
       then reconsider d1=(p.i),d2=(q.i) as Element of K
-       by A5,FINSEQ_2:13;
-      thus r.i=(the mult of K).(p.i,q.i) by A4,A6,FUNCOP_1:28
+       by A3,FINSEQ_2:13;
+      thus r.i=(the mult of K).(p.i,q.i) by A2,A4,FUNCOP_1:28
              .=d1*d2 by GROUP_1:def 1
              .=(the mult of K).(q.i,p.i) by GROUP_1:def 1
-             .=s.i by A4,A6,FUNCOP_1:28;
+             .=s.i by A2,A4,FUNCOP_1:28;
     end;
-    hence thesis by A3,FINSEQ_2:10;
+    hence thesis by A1,FINSEQ_2:10;
   end;
 
 theorem
@@ -1336,7 +1297,6 @@ A46:   rng ((Sgm (dom(p|(B' \/ {x}))))|
         .= dom(p|B') \ {x} by A43,XBOOLE_1:40
         .= dom(p|B') by A44,ZFMISC_1:65;
 A47: Y c= Seg len f2 by XBOOLE_1:36;
-:::::::::::::::::::    GRAPH_2'3    :::::::::::::::::::::::::
   set M = f2*(Sgm Y);
 A48: dom Sgm Y = Seg card Y by A47,FINSEQ_3:45;
 A49: rng Sgm Y = Y by A47,FINSEQ_1:def 13;
@@ -1385,7 +1345,6 @@ A65:   K1 < K2 by A47,A60,A64,FINSEQ_1:def 13;
        1<=K1 & K1<=len f2 & 1<=K2 & K2<=len f2 by A63,FINSEQ_3:27;
     hence k1 < k2 by A40,A60,A62,A65,FINSEQ_1:def 13;
    end;
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 then A66: Sgm dom(p|B') = f2*Sgm(Seg(len f2) \ f2 " {x}) by A46,A52,A59,
 FINSEQ_1:def 13
         .= f2*Sgm(dom f2 \ f2 " {x}) by FINSEQ_1:def 3
@@ -1428,7 +1387,7 @@ A73:   q1 = p3^p4 by A29,A66,FINSEQOP:10;
       .= Sum q1 + Sum<*px*> by A73,RLVECT_1:58
       .= Sum q1 + px by RLVECT_1:61
       .= (the add of K).[Sum q1,px] by RLVECT_1:def 3
-      .= (the add of K).(Sum q1,px) by BINOP_1:def 1
+      .= (the add of K).(Sum q1,px)
       .= (the add of K).(G.B',[#](p,the_unity_wrt the add of K).x)
                        by A30,A37,SETWOP_2:22;
     end;
@@ -1591,54 +1550,25 @@ begin
 ::The Product of Finite Number of Elements
 ::
 
-definition let K be non empty HGrStr;let p be FinSequence of the carrier of K;
-  func Product(p) -> Element of K equals
-  (the mult of K) $$ p;
-  coherence;
+definition canceled;
 end;
 
 canceled;
 
-theorem Th98:  :::multLoopStr
-  for K being commutative left_unital (non empty doubleLoopStr) holds
-   Product(<*> (the carrier of K)) = 1.K
- proof
-   let K be commutative left_unital (non empty doubleLoopStr);
-   set p = <*> (the carrier of K);
-   A1:the_unity_wrt the mult of K = 1.K &
-   the mult of K has_a_unity by Th7,Th11;
-   thus Product p = (the mult of K) $$ p
-          .=1.K by A1,FINSOP_1:11;
- end;
+theorem Th98:
+  for K being commutative left_unital (non empty multLoopStr) holds
+   Product(<*> (the carrier of K)) = 1.K by GROUP_4:11;
 
 theorem Th99:
  for K being non empty HGrStr,
      a being Element of K holds
-   Product <*a*> = a
- proof
-  let K be non empty HGrStr,
-     a be Element of K;
-  set p = <*a*>;
-  thus Product p = (the mult of K) $$ p
-         .= a by FINSOP_1:12;
- end;
+   Product <*a*> = a by FINSOP_1:12;
 
 theorem Th100:
  for K being commutative left_unital (non empty doubleLoopStr),
      a being Element of K,
      p being FinSequence of the carrier of K holds
-   Product(p^<*a*>) = Product p * a
- proof
- let K be commutative left_unital (non empty doubleLoopStr),
-     a be Element of K,
-     p be FinSequence of the carrier of K;
-   A1:the mult of K has_a_unity by Th11;
-  thus Product(p^<*a*>) = (the mult of K) $$ (p^<*a*>)
-                 .= (the mult of K).((the mult of K) $$ p,a)
-                     by A1,FINSOP_1:5
-                 .= (the mult of K).(Product p,a)
-                 .= Product p * a by GROUP_1:def 1;
- end;
+   Product(p^<*a*>) = Product p * a by GROUP_4:9;
 
  reserve K for commutative associative left_unital (non empty doubleLoopStr),
          a,a1,a2,a3 for Element of K,
@@ -1646,53 +1576,36 @@ theorem Th100:
          R1,R2 for Element of i-tuples_on the carrier of K;
 
 theorem Th101:
-   Product(p1^p2) = Product p1 * Product p2
- proof
-   A1:the mult of K has_a_unity by Th11;
-   A2:the mult of K is commutative & the mult of K is associative by Th4,
-GROUP_1:31;
-  thus Product(p1^p2)
-     = (the mult of K) $$ (p1^p2)
-    .= (the mult of K).((the mult of K) $$ p1,(the mult of K) $$ p2)
-    by A1,A2,FINSOP_1:6
-    .= (the mult of K).(Product p1,(the mult of K) $$ p2)
-    .= (the mult of K).(Product p1,Product p2)
-    .= Product p1 * Product p2 by GROUP_1:def 1;
- end;
+  Product(p1^p2) = Product p1 * Product p2 by GROUP_4:8;
 
 theorem
-      Product(<*a*>^p1) = a * Product p1
+  Product(<*a*>^p1) = a * Product p1
  proof thus Product(<*a*>^p1) = Product <*a*> * Product p1 by Th101
    .= a * Product p1 by Th99; end;
 
 theorem Th103:
-   Product<*a1,a2*> = a1 * a2
- proof
-   thus Product<*a1,a2*> = Product(<*a1*>^<*a2*>) by FINSEQ_1:def 9
-                  .= Product<*a1*> * a2 by Th100
-                  .= a1 * a2 by Th99;
- end;
+  Product<*a1,a2*> = a1 * a2 by GROUP_4:13;
 
 theorem
-      Product<*a1,a2,a3*> = a1 * a2 * a3
- proof
-   thus Product<*a1,a2,a3*> = Product(<*a1,a2*>^<*a3*>) by FINSEQ_1:60
+  Product<*a1,a2,a3*> = a1 * a2 * a3
+proof
+  thus Product<*a1,a2,a3*> = Product(<*a1,a2*>^<*a3*>) by FINSEQ_1:60
                      .= Product<*a1,a2*> * a3 by Th100
                      .= a1 * a2 * a3 by Th103;
  end;
 
 theorem
-      for R being Element of 0-tuples_on the carrier of K holds Product R =1.K
-    proof
-     let R be Element of 0-tuples_on (the carrier of K);
-        R =<*>(the carrier of K) by FINSEQ_2:113;
-     hence thesis by Th98;
-    end;
+  for R being Element of 0-tuples_on the carrier of K holds Product R =1.K
+  proof
+    let R be Element of 0-tuples_on (the carrier of K);
+    R =<*>(the carrier of K) by FINSEQ_2:113;
+    hence thesis by Th98;
+  end;
 
 theorem
-      Product(i|->(1.K)) = 1.K
+  Product(i|->(1.K)) = 1.K
  proof
-   A1:the_unity_wrt the mult of K = 1.K &
+A1:the_unity_wrt the mult of K = 1.K &
    the mult of K has_a_unity by Th7,Th11;
   thus Product(i|->(1.K)) = (the mult of K)$$(i|->(1.K))
                .= 1.K by A1,SETWOP_2:35;
@@ -1851,8 +1764,8 @@ definition let K be non empty doubleLoopStr;
   let p,q be FinSequence of the carrier of K;
  func p "*" q -> Element of K equals
  Sum(mlt(p,q));
- correctness;
- end;
+ coherence;
+end;
 
 theorem
     for K being commutative associative left_unital Abelian add-associative
@@ -1882,7 +1795,7 @@ theorem
    let a1,a2,b1,b2 be Element of K;
    set p=<*a1,a2*>;
    set q=<*b1,b2*>;
-      (the add of K)$$(mlt(p,q))=(the add of K)$$<*a1*b1,a2*b2*> by Lm7
+      (the add of K)$$(mlt(p,q))=(the add of K)$$<*a1*b1,a2*b2*> by Lm6
                               .=(the add of K).(a1*b1,a2*b2) by FINSOP_1:13
                         .=a1*b1 + a2*b2 by RLVECT_1:5;
   hence thesis;
@@ -1890,10 +1803,4 @@ theorem
 
 theorem
     for p,q be FinSequence of the carrier of K holds
-     p "*" q = q "*" p
-   proof
-      let p,q be FinSequence of the carrier of K;
-   thus p "*" q=Sum(mlt(p,q))
-               .=Sum(mlt(q,p)) by Th78
-               .=q"*"p;
-  end;
+     p "*" q = q "*" p by Th78;

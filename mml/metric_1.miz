@@ -16,11 +16,11 @@ environ
  registrations SUBSET_1, STRUCT_0, XREAL_0, FUNCOP_1, RELSET_1, RELAT_1,
       FUNCT_1, MEMBERED;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
- definitions STRUCT_0, XBOOLE_0;
+ definitions STRUCT_0, XBOOLE_0, BINOP_1;
  theorems TARSKI, REAL_1, BINOP_1, FUNCOP_1, ZFMISC_1, FUNCT_2, RELSET_1,
       RELAT_1, FUNCT_3, ABSVALUE, SUBSET_1, STRUCT_0, PARTFUN1, CARD_1,
       FUNCT_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, COMPLEX1;
- schemes FUNCT_2, FRAENKEL;
+ schemes FUNCT_2, FRAENKEL, BINOP_1;
 
 begin
 
@@ -46,13 +46,12 @@ definition let A,B be set, f be PartFunc of [:A,B:],REAL;
 redefine func f.(a,b) -> Real;
 coherence
   proof
-A1: f.(a,b) = f.[a,b] by BINOP_1:def 1;
     per cases;
     suppose [a,b] in dom f;
-    hence thesis by A1,PARTFUN1:27;
+    hence thesis by PARTFUN1:27;
     end;
     suppose not [a,b] in dom f;
-    hence thesis by A1,CARD_1:51,FUNCT_1:def 4;
+    hence thesis by CARD_1:51,FUNCT_1:def 4;
   end;
   end;
 end;
@@ -78,7 +77,7 @@ end;
 
 Lm1:[{},{}] in [:{{}},{{}}:] by ZFMISC_1:34;
 
-Lm2:  Empty^2-to-zero.({},{}) = Empty^2-to-zero.[{},{}] by BINOP_1:def 1
+Lm2:  Empty^2-to-zero.({},{}) = Empty^2-to-zero.[{},{}]
                           .= 0 by Lm1,FUNCOP_1:13;
 
 Lm3: for x,y be Element of {{}} holds Empty^2-to-zero.(x,y)=0 iff x=y
@@ -190,9 +189,7 @@ theorem Th1:
     end;
     assume M is Reflexive;
 then A2: the distance of M is Reflexive by Def7;
-        now let a be Element of M;
-      thus dist(a,a) = (the distance of M).(a,a) .= 0 by A2,Def3;
-    end;
+     for a be Element of M holds dist(a,a) = 0 by A2,Def3;
     hence thesis;
   end;
 
@@ -215,11 +212,8 @@ theorem
     end;
     assume M is discerning;
 then A2: the distance of M is discerning by Def8;
-        now let a, b be Element of M;
-      assume dist(a,b) = 0;
-      then (the distance of M).(a,b) = 0;
-      hence a = b by A2,Def4;
-    end;
+    for a, b be Element of M st dist(a,b) = 0
+     holds a = b by A2,Def4;
     hence thesis;
   end;
 
@@ -242,11 +236,7 @@ A1:   for a, b being Element of M holds dist(a,b) = dist(b,a);
     end;
     assume M is symmetric;
 then A2: the distance of M is symmetric by Def9;
-        now let a, b be Element of M;
-      thus dist(a,b) = (the distance of M).(a,b)
-                    .= (the distance of M).(b,a) by A2,Def5
-                    .= dist(b,a);
-    end;
+     for a, b be Element of M holds dist(a,b) = dist(b,a) by A2,Def5;
     hence thesis;
   end;
 
@@ -273,8 +263,7 @@ A3:     (the distance of M).(a,c) = dist(a,c);
     assume M is triangle;
 then A4: the distance of M is triangle by Def10;
     let a, b, c be Element of M;
-          dist(b,c) = (the distance of M).(b,c);
-      hence dist(a,c) <= dist(a,b) + dist(b,c) by A4,Def6;
+      thus dist(a,c) <= dist(a,b) + dist(b,c) by A4,Def6;
   end;
 
 definition let M be symmetric MetrStruct;
@@ -361,7 +350,7 @@ A1:      A is empty;
        take f;
        let x, y be Element of A;
 A2:    dom {} = {};
-       thus f.(x,x) = f.[x,x] by BINOP_1:def 1
+       thus f.(x,x) = f.[x,x]
          .= 0 by A2,FUNCT_1:def 4;
            x = {} by A1,SUBSET_1:def 2
         .= y by A1,SUBSET_1:def 2;
@@ -382,12 +371,12 @@ A7:    [x,y] in [:A,A:] by A3,ZFMISC_1:def 2;
            [:A,A:]\([:A,A:]\id A)=[:A,A:]/\id A by XBOOLE_1:48
                                       .=id A by A6,XBOOLE_1:28;
        then A8:[x,x] in [:A,A:]\([:A,A:]\id A) by A3,RELAT_1:def 10;
-       thus char.(x,x)=char.[x,x] by BINOP_1:def 1
+       thus char.(x,x)=char.[x,x]
                      .=0 by A8,FUNCT_3:43;
        assume x<>y;
        then not [x,y] in id A by RELAT_1:def 10;
        then A9:[x,y] in [:A,A:]\id A by A7,XBOOLE_0:def 4;
-       thus char.(x,y)=char.[x,y] by BINOP_1:def 1
+       thus char.(x,y)=char.[x,y]
                      .=1 by A7,A9,FUNCT_3:def 3;
        end;
        end;
@@ -412,22 +401,18 @@ then A12:  [:A,A:] = {} by ZFMISC_1:113;
          now
      let x,y be Element of A;
           now per cases;
-       suppose A14:x=y;
-       thus f.[x,y]=f.(x,y) by BINOP_1:def 1
-                   .=0 by A10,A14
-                   .=f'.(x,y) by A11,A14
-                   .=f'.[x,y] by BINOP_1:def 1;
+       suppose A13:x=y;
+       thus f.(x,y) =0 by A10,A13
+                   .=f'.(x,y) by A11,A13;
        end;
-       suppose A15:x<>y;
-       thus f.[x,y]=f.(x,y) by BINOP_1:def 1
-                   .=1 by A10,A15
-                   .=f'.(x,y) by A11,A15
-                   .=f'.[x,y] by BINOP_1:def 1;
+       suppose A14:x<>y;
+       thus f.(x,y) =1 by A10,A14
+                   .=f'.(x,y) by A11,A14;
       end;
       end;
-     hence f.[x,y]=f'.[x,y];
+     hence f.(x,y)=f'.(x,y);
      end;
-     hence f=f' by FUNCT_2:120;
+     hence f=f' by BINOP_1:2;
      end;
      end;
 end;
@@ -440,11 +425,7 @@ end;
 
 registration let A be non empty set;
   cluster DiscreteSpace A -> non empty;
-   coherence
-  proof
-        MetrStruct (#A,discrete_dist A#) is non empty by STRUCT_0:def 1;
-    hence thesis;
-  end;
+   coherence by STRUCT_0:def 1;
 end;
 
 registration let A be set;
@@ -526,11 +507,10 @@ definition
      deffunc G(Element of REAL,Element of REAL)= abs($1-$2);
      consider F being Function of [:REAL,REAL:],REAL such that
       A1: for x,y being Element of REAL holds
-               F.[x,y] = G(x,y) from FUNCT_2:sch 8;
+               F.(x,y) = G(x,y) from BINOP_1:sch 4;
      take F;
      let x,y be Element of REAL;
-     thus F.(x,y)=F.[x,y] by BINOP_1:def 1
-                .=abs(x-y) by A1;
+     thus F.(x,y) =abs(x-y) by A1;
      end;
    uniqueness
      proof
@@ -613,12 +593,9 @@ registration
       by STRUCT_0:def 1;
       M is MetrSpace
     proof
-          now let a,b,c be Element of M;
-      reconsider a'=a,b'=b,c'=c as Element of REAL;
-      thus dist(a,b)=0 iff a=b by Th9;
-      thus dist(a,b)=dist(b,a) by Th10;
-      thus dist(a,c)<=dist(a,b)+dist(b,c) by Th11;
-     end;
+      for a,b,c be Element of M
+       holds (dist(a,b)=0 iff a=b) & dist(a,b)=dist(b,a) &
+       dist(a,c)<=dist(a,b)+dist(b,c) by Th9,Th10,Th11;
      hence thesis by Th6;
     end;
    hence thesis;

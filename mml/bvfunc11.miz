@@ -14,7 +14,7 @@ environ
  constructors BVFUNC_2, PUA2MSS1, BVFUNC_1, FUNCT_4, SETFAM_1;
  registrations FUNCT_7, SUBSET_1, MARGREL1, VALUAT_1, FRAENKEL, EQREL_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, BVFUNC_1, XBOOLE_0;
+ definitions TARSKI, BVFUNC_1, XBOOLE_0, MARGREL1;
  theorems TARSKI, FUNCT_1, SETFAM_1, EQREL_1, ZFMISC_1, T_1TOPSP, MARGREL1,
       PARTIT1, BVFUNC_1, BVFUNC_2, ENUMSET1, FUNCT_4, CQC_LANG, MSSUBFAM,
       PARTIT_2, BVFUNC_4, XBOOLE_0, XBOOLE_1, VALUAT_1;
@@ -251,7 +251,7 @@ end;
 
 begin
 
-theorem Lm1:
+theorem Th8:
   a '<' b implies All(a,A,G) '<' Ex(b,A,G)
  proof
   assume a '<' b;
@@ -268,7 +268,7 @@ theorem
 proof
   assume G is independent;
   then All(All(a,A,G),B,G) = All(All(a,B,G),A,G) by PARTIT_2:17;
-  hence thesis by Lm1;
+  hence thesis by Th8;
 end;
 
 theorem
@@ -276,7 +276,7 @@ theorem
 proof
 A1:All(All(a,A,G),B,G) '<' All(a,A,G) by BVFUNC_2:11;
      a '<' Ex(a,B,G) by BVFUNC_2:12;
-  then All(a,A,G) '<' Ex(Ex(a,B,G),A,G) by Lm1;
+  then All(a,A,G) '<' Ex(Ex(a,B,G),A,G) by Th8;
   hence thesis by A1,BVFUNC_1:18;
 end;
 
@@ -286,7 +286,7 @@ theorem
 proof
   assume G is independent;
 then A1:All(All(a,A,G),B,G) = All(All(a,B,G),A,G) by PARTIT_2:17;
-     All(a,B,G) '<' Ex(a,B,G) by Lm1;
+     All(a,B,G) '<' Ex(a,B,G) by Th8;
   hence thesis by A1,PARTIT_2:13;
 end;
 
@@ -295,28 +295,28 @@ theorem
  proof
 A1:Ex(a,B,G) = B_SUP(a,CompF(B,G)) by BVFUNC_2:def 10;
     let z be Element of Y;
-    assume A2:Pj(All(Ex(a,A,G),B,G),z)=TRUE;
+    assume A2:(All(Ex(a,A,G),B,G)).z=TRUE;
 A3:z in EqClass(z,CompF(B,G)) &
     EqClass(z,CompF(B,G)) in CompF(B,G) by T_1TOPSP:def 1;
 A4:    now assume
          not (for x being Element of Y st x in EqClass(z,CompF(B,G)) holds
-         Pj(Ex(a,A,G),x)=TRUE);
-      then Pj(B_INF(Ex(a,A,G),CompF(B,G)),z) = FALSE by BVFUNC_1:def 19;
-      then Pj(All(Ex(a,A,G),B,G),z)=FALSE by BVFUNC_2:def 9;
+         (Ex(a,A,G)).x=TRUE);
+      then (B_INF(Ex(a,A,G),CompF(B,G))).z = FALSE by BVFUNC_1:def 19;
+      then (All(Ex(a,A,G),B,G)).z=FALSE by BVFUNC_2:def 9;
       hence contradiction by A2,MARGREL1:43;
     end;
        now assume not (ex x being Element of Y st
-            x in EqClass(z,CompF(A,G)) & Pj(a,x)=TRUE);
-      then Pj(B_SUP(a,CompF(A,G)),z) = FALSE by BVFUNC_1:def 20;
-      then Pj(Ex(a,A,G),z)=FALSE by BVFUNC_2:def 10;
-      then Pj(Ex(a,A,G),z)<>TRUE by MARGREL1:43;
+            x in EqClass(z,CompF(A,G)) & (a).x=TRUE);
+      then (B_SUP(a,CompF(A,G))).z = FALSE by BVFUNC_1:def 20;
+      then (Ex(a,A,G)).z=FALSE by BVFUNC_2:def 10;
+      then (Ex(a,A,G)).z<>TRUE by MARGREL1:43;
       hence contradiction by A3,A4;
     end;
     then consider x1 being Element of Y such that
-A5:  x1 in EqClass(z,CompF(A,G)) & Pj(a,x1)=TRUE;
+A5:  x1 in EqClass(z,CompF(A,G)) & (a).x1=TRUE;
        x1 in EqClass(x1,CompF(B,G)) by T_1TOPSP:def 1;
-    then Pj(Ex(a,B,G),x1)=TRUE by A1,A5,BVFUNC_1:def 20;
-    then Pj(B_SUP(Ex(a,B,G),CompF(A,G)),z) = TRUE by A5,BVFUNC_1:def 20;
+    then (Ex(a,B,G)).x1=TRUE by A1,A5,BVFUNC_1:def 20;
+    then (B_SUP(Ex(a,B,G),CompF(A,G))).z = TRUE by A5,BVFUNC_1:def 20;
     hence thesis by BVFUNC_2:def 10;
  end;
 
@@ -329,22 +329,22 @@ A2:Ex('not' a,B,G) = B_SUP('not' a,CompF(B,G))
 A3:Ex(All(a,A,G),B,G) = B_SUP(All(a,A,G),CompF(B,G))
      by BVFUNC_2:def 10;
     let z be Element of Y;
-    assume Pj('not' Ex(All(a,A,G),B,G),z)=TRUE;
-    then 'not' Pj(Ex(All(a,A,G),B,G),z)=TRUE by VALUAT_1:def 5;
-    then Pj(Ex(All(a,A,G),B,G),z)=FALSE by MARGREL1:41;
-    then A4: Pj(Ex(All(a,A,G),B,G),z)<>TRUE by MARGREL1:43;
+    assume ('not' Ex(All(a,A,G),B,G)).z=TRUE;
+    then 'not' (Ex(All(a,A,G),B,G)).z=TRUE by VALUAT_1:def 5;
+    then (Ex(All(a,A,G),B,G)).z=FALSE by MARGREL1:41;
+    then A4: (Ex(All(a,A,G),B,G)).z<>TRUE by MARGREL1:43;
    z in EqClass(z,CompF(B,G)) &
     EqClass(z,CompF(B,G)) in CompF(B,G) by T_1TOPSP:def 1;
-then Pj(All(a,A,G),z)<>TRUE by A3,A4,BVFUNC_1:def 20;
+then (All(a,A,G)).z<>TRUE by A3,A4,BVFUNC_1:def 20;
     then consider x1 being Element of Y such that
-A5:  x1 in EqClass(z,CompF(A,G)) & Pj(a,x1)<>TRUE by A1,BVFUNC_1:def 19;
+A5:  x1 in EqClass(z,CompF(A,G)) & (a).x1<>TRUE by A1,BVFUNC_1:def 19;
     A6:x1 in EqClass(x1,CompF(B,G)) & EqClass(x1,CompF(B,G)) in CompF(B,G)
       by T_1TOPSP:def 1;
-       Pj(a,x1)=FALSE by A5,MARGREL1:43;
-    then Pj('not' a,x1)='not' FALSE by VALUAT_1:def 5;
-    then Pj('not' a,x1)=TRUE by MARGREL1:41;
-    then Pj(Ex('not' a,B,G),x1)=TRUE by A2,A6,BVFUNC_1:def 20;
-    then Pj(B_SUP(Ex('not' a,B,G),CompF(A,G)),z) = TRUE by A5,BVFUNC_1:def 20;
+       (a).x1=FALSE by A5,MARGREL1:43;
+    then ('not' a).x1='not' FALSE by VALUAT_1:def 5;
+    then ('not' a).x1=TRUE by MARGREL1:41;
+    then (Ex('not' a,B,G)).x1=TRUE by A2,A6,BVFUNC_1:def 20;
+    then (B_SUP(Ex('not' a,B,G),CompF(A,G))).z = TRUE by A5,BVFUNC_1:def 20;
     hence thesis by BVFUNC_2:def 10;
 end;
 
@@ -373,7 +373,7 @@ proof
   assume G is independent;
 then A1:Ex(Ex('not' a,B,G),A,G) = Ex(Ex('not' a,A,G),B,G) by PARTIT_2:18;
      'not' All(a,A,G) = Ex('not' a,A,G) by BVFUNC_2:20;
-  hence thesis by A1,Lm1;
+  hence thesis by A1,Th8;
 end;
 
 theorem
@@ -423,28 +423,28 @@ theorem
 proof
   assume G is independent;
 then A1:Ex(Ex(a,B,G),A,G) = Ex(Ex(a,A,G),B,G) by PARTIT_2:18;
-  All(a,A,G) '<' Ex(a,A,G) by Lm1;
+  All(a,A,G) '<' Ex(a,A,G) by Th8;
   hence thesis by A1,PARTIT_2:15;
 end;
 
 theorem
   All(All(a,A,G),B,G) '<' All(Ex(a,A,G),B,G)
 proof
-  All(a,A,G) '<' Ex(a,A,G) by Lm1;
+  All(a,A,G) '<' Ex(a,A,G) by Th8;
   hence thesis by PARTIT_2:13;
 end;
 
 theorem
   All(All(a,A,G),B,G) '<' Ex(Ex(a,A,G),B,G)
 proof
-  All(a,A,G) '<' Ex(a,A,G) by Lm1;
-  hence thesis by Lm1;
+  All(a,A,G) '<' Ex(a,A,G) by Th8;
+  hence thesis by Th8;
 end;
 
 theorem
   Ex(All(a,A,G),B,G) '<' Ex(Ex(a,A,G),B,G)
 proof
-  All(a,A,G) '<' Ex(a,A,G) by Lm1;
+  All(a,A,G) '<' Ex(a,A,G) by Th8;
   hence thesis by PARTIT_2:15;
 end;
 

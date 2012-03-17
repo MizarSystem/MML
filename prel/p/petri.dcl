@@ -17,7 +17,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="7"/>
+<Adjective nr="8"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -26,7 +26,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="9"/>
+<Adjective nr="10"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -35,7 +35,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </RCluster>
 </Registrations>

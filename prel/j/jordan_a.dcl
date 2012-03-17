@@ -45,8 +45,8 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="30" value="false"/>
-<Adjective nr="32"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -60,7 +60,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="53">
+<Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -72,31 +72,31 @@
 <Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="288">
+<Func kind="K" nr="290">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="25">
+<Adjective nr="26">
 <Func kind="U" nr="1">
-<Func kind="K" nr="269">
-<Func kind="K" nr="154">
+<Func kind="K" nr="271">
+<Func kind="K" nr="155">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Func>
 <Func kind="K" nr="63"/>
 </Adjective>
-<Adjective nr="80">
-<Func kind="K" nr="269">
-<Func kind="K" nr="154">
+<Adjective nr="81">
+<Func kind="K" nr="271">
+<Func kind="K" nr="155">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -107,11 +107,11 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -126,15 +126,15 @@
 <Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="289">
+<Func kind="K" nr="291">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="53">
-<Func kind="K" nr="154">
+<Adjective nr="54">
+<Func kind="K" nr="155">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -144,11 +144,11 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -163,7 +163,7 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
-<Adjective nr="63" value="false"/>
+<Adjective nr="64" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

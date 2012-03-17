@@ -240,17 +240,17 @@ proof assume
 A1: r < s & s < t;
  per cases;
  suppose s<0;
- then A3: -s = abs(s) & -r = abs(r) by A1,ABSVALUE:def 1;
- A4: -s < -r by A1,XREAL_1:26;
+ then A2: -s = abs(s) & -r = abs(r) by A1,ABSVALUE:def 1;
+ A3: -s < -r by A1,XREAL_1:26;
        0 <= abs(t) by COMPLEX1:132;
-    then -s+0 < -r+abs(t) by A4,XREAL_1:10;
-  hence abs(s) < abs(r)+abs(t) by A3;
+    then -s+0 < -r+abs(t) by A3,XREAL_1:10;
+  hence abs(s) < abs(r)+abs(t) by A2;
  end;
  suppose 0<=s;
- then A6: s = abs(s) & t = abs(t) by A1,ABSVALUE:def 1;
+ then A4: s = abs(s) & t = abs(t) by A1,ABSVALUE:def 1;
        0 <= abs(r) by COMPLEX1:132;
     then s+0 < t+abs(r) by A1,XREAL_1:10;
- hence abs(s) < abs(r)+abs(t) by A6;
+ hence abs(s) < abs(r)+abs(t) by A4;
 end;
 end;
 
@@ -286,18 +286,18 @@ A9: now let n be Nat;
        set At = abs(t);
          b<t & t<a by A4,A5;
    then A10: At < aa+ab by Th4;
-   A12: t" = s"" by SEQ_1:def 8;
+   A11: t" = s"" by SEQ_1:def 8;
        then t <> 0 by A2,SEQ_1:7,XCMPLX_1:203;
-   then A13: 0 < At by COMPLEX1:133;
-   t= 1/s by A12,XCMPLX_1:217;
+   then A12: 0 < At by COMPLEX1:133;
+   t= 1/s by A11,XCMPLX_1:217;
    then
-   A14: At = 1/(abs(s)) by ABSVALUE:15;
-          1/At > rab by A10,A13,REAL_2:151;
-    hence abs(seq.n) > rab by A14,XCMPLX_1:56;
+   A13: At = 1/(abs(s)) by ABSVALUE:15;
+          1/At > rab by A10,A12,REAL_2:151;
+    hence abs(seq.n) > rab by A13,XCMPLX_1:56;
    end;
    consider n being Nat such that
-A15: for m being Nat st n<=m holds abs(seq.m-0)<rab by A1,A3,A8,SEQ_2:def 7;
-      abs(seq.n-0)<rab by A15;
+A14: for m being Nat st n<=m holds abs(seq.m-0)<rab by A1,A3,A8,SEQ_2:def 7;
+      abs(seq.n-0)<rab by A14;
  hence contradiction by A9;
 end;
 
@@ -419,12 +419,10 @@ canceled 6;
 theorem Th14:
 r in X iff -r in -X
 proof
- -X = { -p : p in X };
- hence r in X implies -r in -X;
+ thus r in X implies -r in -X;
  assume -r in -X; then consider mr being Real such that
- A2: -r = -mr & mr in X;
-       --r = r & --mr = mr;
- hence r in X by A2;
+ A1: -r = -mr & mr in X;
+ thus r in X by A1;
 end;
 
 registration let X be non empty Subset of REAL;
@@ -554,14 +552,14 @@ definition let X be Subset of REAL, p be Real;
  proof
    let IT be Subset of REAL;
    hereby assume
-A0:  IT = p + X;
-A1:  IT c= { p+r3 : r3 in X }
+A1:  IT = p + X;
+A2:  IT c= { p+r3 : r3 in X }
      proof
        let x be set;
        assume
-B1:    x in IT; then
+A3:    x in IT; then
        reconsider x' = x as Real;
-       ex z being Real st z in X & x' = p + z by B1,A0,MEASURE6:def 6;
+       ex z being Real st z in X & x' = p + z by A3,A1,MEASURE6:def 6;
        hence thesis;
      end;
      { p+r3 : r3 in X } c= IT
@@ -569,21 +567,21 @@ B1:    x in IT; then
        let x be set;
        assume x in { p+r3 : r3 in X }; then
        consider r3 be Real such that
-C1:    x = p + r3 & r3 in X;
-       thus thesis by A0,C1,MEASURE6:def 6;
+A4:    x = p + r3 & r3 in X;
+       thus thesis by A1,A4,MEASURE6:def 6;
      end;
-     hence IT = { p+r3 : r3 in X } by A1,XBOOLE_0:def 10;
+     hence IT = { p+r3 : r3 in X } by A2,XBOOLE_0:def 10;
    end;
-   assume X1: IT = { p+r3 : r3 in X };
+   assume A5: IT = { p+r3 : r3 in X };
    now let y be Real;
      hereby assume y in IT; then
        consider r3 being Real such that
-E1:    y = p+r3 & r3 in X by X1;
-       thus ex z being Real st z in X & y = p + z by E1;
+A6:    y = p+r3 & r3 in X by A5;
+       thus ex z being Real st z in X & y = p + z by A6;
      end;
      given z being Real such that
-F1:  z in X & y = p + z;
-     thus y in IT by X1,F1;
+A7:  z in X & y = p + z;
+     thus y in IT by A5,A7;
    end;
    hence IT = p + X by MEASURE6:def 6;
  end;
@@ -592,8 +590,7 @@ end;
 theorem Th20:
   r in X iff q3+r in q3+X
 proof
- q3+X = { q3+p : p in X };
- hence r in X implies q3+r in q3+X;
+ thus r in X implies q3+r in q3+X;
  assume q3+r in q3+X; then ex mr being Real st q3+r = q3+mr & mr in X;
  hence r in X;
 end;
@@ -610,12 +607,12 @@ theorem Th21:
 proof
      now let x be set;
    hereby assume
-   A2: x in X; then reconsider x' = x as Real;
+   A1: x in X; then reconsider x' = x as Real;
          0+x' = x;
-    hence x in 0+X by A2;
+    hence x in 0+X by A1;
    end; assume x in 0+X; then consider r3 such that
-   A3: x = 0+r3 & r3 in X;
-   thus x in X by A3;
+   A2: x = 0+r3 & r3 in X;
+   thus x in X by A2;
   end;
  hence X = 0+X by TARSKI:2;
 end;
@@ -625,16 +622,16 @@ theorem Th22:
 proof
      now let x be set;
    hereby assume x in q3+(p3+X); then consider r3 such that
-   A4: x = q3+r3 & r3 in p3+X;
+   A1: x = q3+r3 & r3 in p3+X;
       consider q such that
-   A5: r3 = p3+q & q in X by A4;
-         x = (q3+p3)+q by A4,A5;
-    hence x in (q3+p3)+X by A5;
+   A2: r3 = p3+q & q in X by A1;
+         x = (q3+p3)+q by A1,A2;
+    hence x in (q3+p3)+X by A2;
    end; assume x in (q3+p3)+X; then consider r3 such that
-   A6: x = (q3+p3)+r3 & r3 in X;
-         p3+r3 in p3+X by A6;
+   A3: x = (q3+p3)+r3 & r3 in X;
+         p3+r3 in p3+X by A3;
       then q3+(p3+r3) in q3+(p3+X);
-   hence x in q3+(p3+X) by A6;
+   hence x in q3+(p3+X) by A3;
   end;
  hence q3+(p3+X) = (q3+p3)+X by TARSKI:2;
 end;
@@ -684,20 +681,20 @@ theorem
 proof let X be non empty Subset of REAL such that
 A1: X is bounded_below;
    set i = q3+inf X;
-A3: now let s; assume s in q3+X; then consider r3 such that
-   A4: q3+r3 = s & r3 in X;
-          r3 >= inf X by A1,A4,SEQ_4:def 5;
-     hence s >= i by A4,XREAL_1:8;
+A2: now let s; assume s in q3+X; then consider r3 such that
+   A3: q3+r3 = s & r3 in X;
+          r3 >= inf X by A1,A3,SEQ_4:def 5;
+     hence s >= i by A3,XREAL_1:8;
    end;
       now let t; assume
-   A5:  for s st s in q3+X holds s >= t;
+   A4:  for s st s in q3+X holds s >= t;
         now let s; assume s in X; then q3+s in q3+X;
-        then t <= q3+s by A5;
+        then t <= q3+s by A4;
       hence t-q3 <= s by XREAL_1:22;
      end; then inf X >= t-q3 by SEQ_4:60;
     hence t <= i by XREAL_1:22;
    end;
- hence inf (q3+X) = q3+ inf X by A3,SEQ_4:61;
+ hence inf (q3+X) = q3+ inf X by A2,SEQ_4:61;
 end;
 
 theorem
@@ -706,20 +703,20 @@ theorem
 proof let X be non empty Subset of REAL such that
 A1: X is bounded_above;
    set i = q3+sup X;
-A3: now let s; assume s in q3+X; then consider r3 such that
-   A4: q3+r3 = s & r3 in X;
-          r3 <= sup X by A1,A4,SEQ_4:def 4;
-     hence s <= i by A4,XREAL_1:8;
+A2: now let s; assume s in q3+X; then consider r3 such that
+   A3: q3+r3 = s & r3 in X;
+          r3 <= sup X by A1,A3,SEQ_4:def 4;
+     hence s <= i by A3,XREAL_1:8;
    end;
       now let t; assume
-   A5:  for s st s in q3+X holds s <= t;
+   A4:  for s st s in q3+X holds s <= t;
         now let s; assume s in X; then q3+s in q3+X;
-        then q3+s <= t by A5;
+        then q3+s <= t by A4;
       hence s <= t-q3 by XREAL_1:21;
      end; then sup X <= t-q3 by SEQ_4:62;
     hence i <= t by XREAL_1:21;
    end;
- hence sup (q3+X) = q3+ sup X by A3,SEQ_4:63;
+ hence sup (q3+X) = q3+ sup X by A2,SEQ_4:63;
 end;
 
 Lm6:
@@ -774,11 +771,10 @@ end;
 theorem Th28:
   for X being without_zero Subset of REAL holds r in X iff 1/r in Inv X
 proof let X be without_zero Subset of REAL;
- Inv X = { 1/p : p in X };
- hence r in X implies 1/r in Inv X;
+ thus r in X implies 1/r in Inv X;
  assume 1/r in Inv X; then consider mr being Real such that
- A2: 1/r = 1/mr & mr in X;
- thus r in X by A2,XCMPLX_1:59;
+ A1: 1/r = 1/mr & mr in X;
+ thus r in X by A1,XCMPLX_1:59;
 end;
 
 registration let X be non empty without_zero Subset of REAL;
@@ -787,13 +783,12 @@ registration let X be non empty without_zero Subset of REAL;
  A1: x in X by SUBSET_1:10;
   thus Inv X is non empty by A1,Th28;
       now assume
- A3: 0 in Inv X;
-       Inv X = {1/r3 : r3 in X};
-    then consider r3 such that
-W1:  0 = 1/r3 and
-W2:  r3 in X by A3;
-     r3" = 0 by W1,XCMPLX_1:217;
-    hence contradiction by Def1,XCMPLX_1:203,W2;
+ A2: 0 in Inv X;
+    consider r3 such that
+A3:  0 = 1/r3 and
+A4:  r3 in X by A2;
+     r3" = 0 by A3,XCMPLX_1:217;
+    hence contradiction by Def1,XCMPLX_1:203,A4;
    end;
   hence thesis by Def1;
  end;
@@ -803,13 +798,12 @@ registration let X be without_zero Subset of REAL;
  cluster Inv X -> without_zero;
  coherence proof
       now assume
- A2: 0 in Inv X;
-       Inv X = {1/r3 : r3 in X};
-    then consider r3 such that
-W1:  0 = 1/r3 and
-W2:  r3 in X by A2;
-     r3" = 0 by W1,XCMPLX_1:217;
-    hence contradiction by Def1,XCMPLX_1:203,W2;
+ A1: 0 in Inv X;
+    consider r3 such that
+A2:  0 = 1/r3 and
+A3:  r3 in X by A1;
+     r3" = 0 by A2,XCMPLX_1:217;
+    hence contradiction by Def1,XCMPLX_1:203,A3;
    end;
   hence thesis by Def1;
  end;
@@ -994,8 +988,7 @@ A1: Z is closed proof let Y be Subset of REAL; assume Y in Z;
      then ex A being Subset of REAL st Y = A & X c= A & A is closed;
     hence Y is closed;
    end;
-      Cl X = meet Z;
-  hence thesis by A1,Th31;
+  thus thesis by A1,Th31;
  end;
 end;
 
@@ -1014,13 +1007,13 @@ proof let x be set; assume
 A1: x in X;
    set ClX = { A where A is Subset of REAL : X c= A & A is closed };
       REAL = [#]REAL by SUBSET_1:def 4;
-then A3: [#]REAL in ClX by FCONT_3:1;
+then A2: [#]REAL in ClX by FCONT_3:1;
       now let Y be set; assume Y in ClX;
        then consider YY being Subset of REAL such that
-   A4: YY = Y & X c= YY & YY is closed;
-    thus x in Y by A1,A4;
+   A3: YY = Y & X c= YY & YY is closed;
+    thus x in Y by A1,A3;
    end;
- hence x in Cl X by A3,SETFAM_1:def 1;
+ hence x in Cl X by A2,SETFAM_1:def 1;
 end;
 
 theorem Th34:
@@ -1155,13 +1148,13 @@ A10: now let p be real number; assume
          then -1/m1 < s-r3 & s-r3 < 1/m1 by A18,XREAL_1:21,XREAL_1:22;
      then A19: abs(s-r3) < 1/m1 by SEQ_2:9;
             n+1 <= m+1 by A15,XREAL_1:8;
-     then A21: 1/m1 <= 1/(n+1) by REAL_2:152;
+     then A20: 1/m1 <= 1/(n+1) by REAL_2:152;
             n < n+1 by NAT_1:38;
-     then A22: 1/(n+1) < 1/n by A14,REAL_2:151;
+     then A21: 1/(n+1) < 1/n by A14,REAL_2:151;
              1/(1/p) >= 1/cp by A12,A13,REAL_2:152;
           then 1/n <= p by XCMPLX_1:56;
-         then 1/(n+1) < p by A22,XREAL_1:2;
-         then 1/m1 < p by A21,XREAL_1:2;
+         then 1/(n+1) < p by A21,XREAL_1:2;
+         then 1/m1 < p by A20,XREAL_1:2;
     hence abs(seq.m-r3)<p by A18,A19,XREAL_1:2;
    end;
  hence seq is convergent by SEQ_2:def 6;
@@ -1541,11 +1534,11 @@ for T being non empty TopSpace, f being bounded_below RealMap of T
  for p being Point of T holds f.p >= inf f
 proof let T be non empty TopSpace, f be bounded_below RealMap of T;
   set fc = (f.:the carrier of T);
-A2: fc is bounded_below by Def11;
+A1: fc is bounded_below by Def11;
   set r = inf f;
   let p be Point of T;
        f.p in fc by FUNCT_2:43;
-   hence f.p >= r by A2,SEQ_4:def 5;
+   hence f.p >= r by A1,SEQ_4:def 5;
 end;
 
 theorem
@@ -1555,11 +1548,11 @@ proof let T be non empty TopSpace, f be bounded_below RealMap of T;
    set c = the carrier of T; set fc = (f.:the carrier of T);
   set r = inf f;
   let s be Real; assume
-  A2: for t being Point of T holds f.t >= s;
+  A1: for t being Point of T holds f.t >= s;
         now let p1 be real number; assume p1 in fc;
         then consider x being set such that
-     A3: x in c & x in c & p1 = f.x by FUNCT_2:115;
-      thus p1 >= s by A2,A3;
+     A2: x in c & x in c & p1 = f.x by FUNCT_2:115;
+      thus p1 >= s by A1,A2;
      end;
   hence r >= s by SEQ_4:60;
 end;
@@ -1575,20 +1568,20 @@ proof let T be non empty TopSpace, f be RealMap of T;
 A1: for p being Point of T holds f.p >= r and
 A2: for t st for p being Point of T holds f.p >= t
        holds r >= t;
-A4: now let s; assume s in fc;
+A3: now let s; assume s in fc;
         then consider x being set such that
-     A5: x in c & x in c & s = f.x by FUNCT_2:115;
-    thus s >= r by A1,A5;
+     A4: x in c & x in c & s = f.x by FUNCT_2:115;
+    thus s >= r by A1,A4;
    end;
       now let t; assume
-   A6: for s st s in fc holds s >= t;
+   A5: for s st s in fc holds s >= t;
          now let s be Point of T;
            f.s in fc by FUNCT_2:43;
-       hence f.s >= t by A6;
+       hence f.s >= t by A5;
       end;
     hence r >= t by A2;
    end;
- hence r = inf f by A4,SEQ_4:61;
+ hence r = inf f by A3,SEQ_4:61;
 end;
 
 theorem Th50:
@@ -1596,11 +1589,11 @@ for T being non empty TopSpace, f being bounded_above RealMap of T
  for p being Point of T holds f.p <= sup f
 proof let T be non empty TopSpace, f be bounded_above RealMap of T;
    set fc = (f.:the carrier of T);
-A2: fc is bounded_above by Def12;
+A1: fc is bounded_above by Def12;
  set r = sup f;
  let p be Point of T;
        f.p in fc by FUNCT_2:43;
-   hence f.p <= r by A2,SEQ_4:def 4;
+   hence f.p <= r by A1,SEQ_4:def 4;
 end;
 
 theorem
@@ -1611,11 +1604,11 @@ proof let T be non empty TopSpace, f be bounded_above RealMap of T;
    set fc = (f.:the carrier of T);
  set r = sup f;
   let t; assume
-  A2: for p being Point of T holds f.p <= t;
+  A1: for p being Point of T holds f.p <= t;
         now let s; assume s in fc;
         then consider x being set such that
-     A3: x in c & x in c & s = f.x by FUNCT_2:115;
-      thus s <= t by A2,A3;
+     A2: x in c & x in c & s = f.x by FUNCT_2:115;
+      thus s <= t by A1,A2;
      end;
   hence r <= t by SEQ_4:62;
 end;
@@ -1629,22 +1622,22 @@ proof let T be non empty TopSpace, f be RealMap of T;
    set c = the carrier of T;
    set fc = (f.:the carrier of T);
   assume that
-A2: for p being Point of T holds f.p <= r and
-A3: for t st for p being Point of T holds f.p <= t holds r <= t;
-A4: now let s; assume s in fc;
+A1: for p being Point of T holds f.p <= r and
+A2: for t st for p being Point of T holds f.p <= t holds r <= t;
+A3: now let s; assume s in fc;
         then consider x being set such that
-     A5: x in c & x in c & s = f.x by FUNCT_2:115;
-    thus s <= r by A2,A5;
+     A4: x in c & x in c & s = f.x by FUNCT_2:115;
+    thus s <= r by A1,A4;
    end;
       now let t; assume
-   A6: for s st s in fc holds s <= t;
+   A5: for s st s in fc holds s <= t;
          now let s be Point of T;
            f.s in fc by FUNCT_2:43;
-       hence f.s <= t by A6;
+       hence f.s <= t by A5;
       end;
-    hence r <= t by A3;
+    hence r <= t by A2;
    end;
- hence r = sup f by A4,SEQ_4:63;
+ hence r = sup f by A3,SEQ_4:63;
 end;
 
 theorem Th53:
@@ -2272,15 +2265,15 @@ proof let T be non empty TopSpace,
           f be continuous RealMap of T; assume
 A1: X c= Y;
     then reconsider Y1 = Y as non empty compact Subset of T by XBOOLE_1:3;
-A3: (f||Y).:the carrier of (T|Y) = (f||Y).:Y by JORDAN1:1
+A2: (f||Y).:the carrier of (T|Y) = (f||Y).:Y by JORDAN1:1
     .= (f|Y).:Y
     .= f.:Y by RFUNCT_2:5;
-A5: (f||X).:the carrier of (T|X) = (f||X).:X by JORDAN1:1
+A3: (f||X).:the carrier of (T|X) = (f||X).:X by JORDAN1:1
     .= (f|X).:X
     .= f.:X by RFUNCT_2:5;
-A6: (f||Y1).:the carrier of (T|Y1) is bounded_below by Def11;
+A4: (f||Y1).:the carrier of (T|Y1) is bounded_below by Def11;
      f.:X c= f.:Y by A1,RELAT_1:156;
- hence inf (f||Y) <= inf (f||X) by A3,A5,A6,SEQ_4:64;
+ hence inf (f||Y) <= inf (f||X) by A2,A3,A4,SEQ_4:64;
 end;
 
 theorem Th63:
@@ -2292,15 +2285,15 @@ proof let T be non empty TopSpace, X be non empty Subset of T,
           f be continuous RealMap of T; assume
 A1: X c= Y;
     then reconsider Y1 = Y as non empty compact Subset of T by XBOOLE_1:3;
-A3: (f||Y).:the carrier of (T|Y) = (f||Y).:Y by JORDAN1:1
+A2: (f||Y).:the carrier of (T|Y) = (f||Y).:Y by JORDAN1:1
     .= (f|Y).:Y
     .= f.:Y by RFUNCT_2:5;
-A5: (f||X).:the carrier of (T|X) = (f||X).:X by JORDAN1:1
+A3: (f||X).:the carrier of (T|X) = (f||X).:X by JORDAN1:1
     .= (f|X).:X
     .= f.:X by RFUNCT_2:5;
-A6: (f||Y1).:the carrier of (T|Y1) is bounded_above by Def12;
+A4: (f||Y1).:the carrier of (T|Y1) is bounded_above by Def12;
      f.:X c= f.:Y by A1,RELAT_1:156;
- hence sup (f||X) <= sup (f||Y) by A3,A5,A6,SEQ_4:65;
+ hence sup (f||X) <= sup (f||Y) by A2,A3,A4,SEQ_4:65;
 end;
 
 begin :: Bounding boxes of compact sets in TOP-REAL 2
@@ -2358,19 +2351,19 @@ proj1"].r,s.[ = {|[ r1, r2 ]| : r < r1 & r1 < s}
 proof set Q = proj1"].r,s.[; set QQ = {|[ r1,r2 ]|: r < r1 & r1 < s};
      now let z be set;
    hereby assume
-   A2: z in Q;
+   A1: z in Q;
      then reconsider p = z as Point of TOP-REAL 2;
-        proj1.p in ].r,s.[ by A2,FUNCT_2:46;
+        proj1.p in ].r,s.[ by A1,FUNCT_2:46;
      then consider t being Real such that
-   A3: t = proj1.p & r<t & t<s;
+   A2: t = proj1.p & r<t & t<s;
         p`1 = proj1.p & p = |[ p`1,p`2 ]| by Def28,EUCLID:57;
-    hence z in QQ by A3;
+    hence z in QQ by A2;
    end; assume z in QQ; then consider r1, r2 being Real such that
-   A4: z = |[ r1,r2 ]| & r<r1 & r1 <s;
+   A3: z = |[ r1,r2 ]| & r<r1 & r1 <s;
    set p = |[ r1,r2 ]|;
-   A5: proj1.p = p`1 by Def28 .= r1 by EUCLID:56;
-         r1 in ].r,s.[ by A4;
-   hence z in Q by A4,A5,FUNCT_2:46;
+   A4: proj1.p = p`1 by Def28 .= r1 by EUCLID:56;
+         r1 in ].r,s.[ by A3;
+   hence z in Q by A3,A4,FUNCT_2:46;
   end;
  hence proj1"].r,s.[ = {|[ r1, r2 ]| : r < r1 & r1 < s} by TARSKI:2;
 end;
@@ -2415,19 +2408,19 @@ proj2"].r,s.[ = {|[ r1, r2 ]| : r < r2 & r2 < s}
 proof set Q = proj2"].r,s.[; set QQ = {|[ r1,r2 ]|: r < r2 & r2 < s};
      now let z be set;
    hereby assume
-   A2: z in Q;
+   A1: z in Q;
      then reconsider p = z as Point of TOP-REAL 2;
-        proj2.p in ].r,s.[ by A2,FUNCT_2:46;
+        proj2.p in ].r,s.[ by A1,FUNCT_2:46;
      then consider t being Real such that
-   A3: t = proj2.p & r<t & t<s;
+   A2: t = proj2.p & r<t & t<s;
         p`2 = proj2.p & p = |[ p`1,p`2 ]| by Def29,EUCLID:57;
-    hence z in QQ by A3;
+    hence z in QQ by A2;
    end; assume z in QQ; then consider r1, r2 being Real such that
-   A4: z = |[ r1,r2 ]| & r<r2 & r2 <s;
+   A3: z = |[ r1,r2 ]| & r<r2 & r2 <s;
    set p = |[ r1,r2 ]|;
-   A5: proj2.p = p`2 by Def29 .= r2 by EUCLID:56;
-         r2 in ].r,s.[ by A4;
-   hence z in Q by A4,A5,FUNCT_2:46;
+   A4: proj2.p = p`2 by Def29 .= r2 by EUCLID:56;
+         r2 in ].r,s.[ by A3;
+   hence z in Q by A3,A4,FUNCT_2:46;
   end;
  hence proj2"].r,s.[ = {|[ r1, r2 ]| : r < r2 & r2 < s} by TARSKI:2;
 end;
@@ -2484,8 +2477,7 @@ registration
        reconsider g as Real by XREAL_0:def 1;
    A5: p1 < p1+g by A3,XREAL_1:31;
    then A6: p1-g < p1 by XREAL_1:21;
-          ].p1-g,p1+g.[ = {r3 : p1-g<r3 & r3<p1+g};
-   then A7: p1 in ].p1-g,p1+g.[ by A5,A6;
+   A7: p1 in ].p1-g,p1+g.[ by A5,A6;
      reconsider Q = proj1"].p1-g,p1+g.[
                       as Subset of TOP-REAL 2;
      take Q;
@@ -2516,8 +2508,7 @@ registration
        reconsider g as Real by XREAL_0:def 1;
    A12: p1 < p1+g by A10,XREAL_1:31;
    then A13: p1-g < p1 by XREAL_1:21;
-          ].p1-g,p1+g.[ = {r3 : p1-g<r3 & r3<p1+g};
-   then A14: p1 in ].p1-g,p1+g.[ by A12,A13;
+   A14: p1 in ].p1-g,p1+g.[ by A12,A13;
      reconsider Q = proj2"].p1-g,p1+g.[
                       as Subset of TOP-REAL 2;
      take Q;
@@ -2586,12 +2577,7 @@ end;
 
 theorem Th71:
 p in X implies W-bound X <= p`1 & p`1 <= E-bound X &
-                 S-bound X <= p`2 & p`2 <= N-bound X
-proof
-    W-bound X = inf (proj1||X) & N-bound X = sup (proj2||X) &
- E-bound X = sup (proj1||X) & S-bound X = inf (proj2||X);
- hence thesis by Lm9;
-end;
+                 S-bound X <= p`2 & p`2 <= N-bound X by Lm9;
 
 definition let X be Subset of TOP-REAL 2;
  func SW-corner X -> Point of TOP-REAL 2 equals
@@ -2611,58 +2597,28 @@ end;
 :: Corners
 
 theorem Th72:
-(SW-corner P)`1 = W-bound P
-proof SW-corner P = |[W-bound P, S-bound P]|;
- hence thesis by EUCLID:56;
-end;
+(SW-corner P)`1 = W-bound P by EUCLID:56;
 
 theorem Th73:
-(SW-corner P)`2 = S-bound P
-proof
-       SW-corner P = |[W-bound P, S-bound P]|;
- hence (SW-corner P)`2 = S-bound P by EUCLID:56;
-end;
+(SW-corner P)`2 = S-bound P by EUCLID:56;
 
 theorem Th74:
-(NW-corner P)`1 = W-bound P
-proof
-     NW-corner P = |[W-bound P, N-bound P]|;
- hence thesis by EUCLID:56;
-end;
+(NW-corner P)`1 = W-bound P by EUCLID:56;
 
 theorem Th75:
-(NW-corner P)`2 = N-bound P
-proof
-       NW-corner P = |[W-bound P, N-bound P]|;
- hence (NW-corner P)`2 = N-bound P by EUCLID:56;
-end;
+(NW-corner P)`2 = N-bound P by EUCLID:56;
 
 theorem Th76:
-(NE-corner P)`1 = E-bound P
-proof
-       NE-corner P = |[E-bound P, N-bound P]|;
- hence (NE-corner P)`1 = E-bound P by EUCLID:56;
-end;
+(NE-corner P)`1 = E-bound P by EUCLID:56;
 
 theorem Th77:
-(NE-corner P)`2 = N-bound P
-proof
-     NE-corner P = |[E-bound P, N-bound P]|;
- hence thesis by EUCLID:56;
-end;
+(NE-corner P)`2 = N-bound P by EUCLID:56;
 
 theorem Th78:
-(SE-corner P)`1 = E-bound P
-proof SE-corner P = |[E-bound P, S-bound P]|;
- hence thesis by EUCLID:56;
-end;
+(SE-corner P)`1 = E-bound P by EUCLID:56;
 
 theorem Th79:
-(SE-corner P)`2 = S-bound P
-proof
-       SE-corner P = |[E-bound P, S-bound P]|;
- hence (SE-corner P)`2 = S-bound P by EUCLID:56;
-end;
+(SE-corner P)`2 = S-bound P by EUCLID:56;
 
 theorem
    (SW-corner P)`1 = (NW-corner P)`1
@@ -2710,83 +2666,75 @@ end;
 registration let X be non empty compact Subset of TOP-REAL 2;
  cluster W-most X -> non empty compact;
  coherence proof
-     SW-corner X = |[W-bound X, S-bound X]| &
-  NW-corner X = |[W-bound X, N-bound X]|;
-then A2: (SW-corner X)`1 = W-bound X & (NW-corner X)`1 = W-bound X &
+A1: (SW-corner X)`1 = W-bound X & (NW-corner X)`1 = W-bound X &
    (SW-corner X)`2 = S-bound X & (NW-corner X)`2 = N-bound X
           by EUCLID:56;
    set p1X = (proj1||X), c = the carrier of (TOP-REAL 2)|X;
-A4: c = X by JORDAN1:1;
-A5: inf p1X = inf (p1X.:c) by Def20;
+A2: c = X by JORDAN1:1;
+A3: inf p1X = inf (p1X.:c) by Def20;
       p1X.:c is with_min by Def15;
    then inf (p1X.:c) in p1X.:c by Def4;
    then consider p being set such that
-A6: p in c & p in c & inf (p1X.:c) = p1X.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A4,A6;
-A7: p1X.p = p`1 by A4,A6,Th69;
-      S-bound X <= p`2 & p`2 <= N-bound X by A4,A6,Th71;
-   then p in LSeg(SW-corner X, NW-corner X) by A2,A5,A6,A7,GOBOARD7:8;
-  hence thesis by A4,A6,Th64,XBOOLE_0:def 3;
+A4: p in c & p in c & inf (p1X.:c) = p1X.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A2,A4;
+A5: p1X.p = p`1 by A2,A4,Th69;
+      S-bound X <= p`2 & p`2 <= N-bound X by A2,A4,Th71;
+   then p in LSeg(SW-corner X, NW-corner X) by A1,A3,A4,A5,GOBOARD7:8;
+  hence thesis by A2,A4,Th64,XBOOLE_0:def 3;
  end;
  cluster N-most X -> non empty compact;
  coherence proof
-     NW-corner X = |[W-bound X, N-bound X]| &
-  NE-corner X = |[E-bound X, N-bound X]|;
-then A9: (NW-corner X)`1 = W-bound X & (NE-corner X)`1 = E-bound X &
+A6: (NW-corner X)`1 = W-bound X & (NE-corner X)`1 = E-bound X &
    (NW-corner X)`2 = N-bound X & (NE-corner X)`2 = N-bound X
           by EUCLID:56;
    set p2X = (proj2||X), c = the carrier of (TOP-REAL 2)|X;
-A11: c = X by JORDAN1:1;
-A12: sup p2X = sup (p2X.:c) by Def21;
+A7: c = X by JORDAN1:1;
+A8: sup p2X = sup (p2X.:c) by Def21;
       p2X.:c is with_max by Def14;
    then sup (p2X.:c) in p2X.:c by Def3;
    then consider p being set such that
-A13: p in c & p in c & sup (p2X.:c) = p2X.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A11,A13;
-A14: p2X.p = p`2 by A11,A13,Th70;
-      W-bound X <= p`1 & p`1 <= E-bound X by A11,A13,Th71;
-   then p in LSeg(NW-corner X, NE-corner X) by A9,A12,A13,A14,GOBOARD7:9;
-  hence thesis by A11,A13,Th64,XBOOLE_0:def 3;
+A9: p in c & p in c & sup (p2X.:c) = p2X.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A7,A9;
+A10: p2X.p = p`2 by A7,A9,Th70;
+      W-bound X <= p`1 & p`1 <= E-bound X by A7,A9,Th71;
+   then p in LSeg(NW-corner X, NE-corner X) by A6,A8,A9,A10,GOBOARD7:9;
+  hence thesis by A7,A9,Th64,XBOOLE_0:def 3;
  end;
  cluster E-most X -> non empty compact;
  coherence proof
-     SE-corner X = |[E-bound X, S-bound X]| &
-  NE-corner X = |[E-bound X, N-bound X]|;
-then A16: (SE-corner X)`1 = E-bound X & (NE-corner X)`1 = E-bound X &
+A11: (SE-corner X)`1 = E-bound X & (NE-corner X)`1 = E-bound X &
    (SE-corner X)`2 = S-bound X & (NE-corner X)`2 = N-bound X
           by EUCLID:56;
    set p1X = (proj1||X), c = the carrier of (TOP-REAL 2)|X;
-A18: c = X by JORDAN1:1;
-A19: sup p1X = sup (p1X.:c) by Def21;
+A12: c = X by JORDAN1:1;
+A13: sup p1X = sup (p1X.:c) by Def21;
       p1X.:c is with_max by Def14;
    then sup (p1X.:c) in p1X.:c by Def3;
    then consider p being set such that
-A20: p in c & p in c & sup (p1X.:c) = p1X.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A18,A20;
-A21: p1X.p = p`1 by A18,A20,Th69;
-      S-bound X <= p`2 & p`2 <= N-bound X by A18,A20,Th71;
-   then p in LSeg(SE-corner X, NE-corner X) by A16,A19,A20,A21,GOBOARD7:8;
-  hence thesis by A18,A20,Th64,XBOOLE_0:def 3;
+A14: p in c & p in c & sup (p1X.:c) = p1X.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A12,A14;
+A15: p1X.p = p`1 by A12,A14,Th69;
+      S-bound X <= p`2 & p`2 <= N-bound X by A12,A14,Th71;
+   then p in LSeg(SE-corner X, NE-corner X) by A11,A13,A14,A15,GOBOARD7:8;
+  hence thesis by A12,A14,Th64,XBOOLE_0:def 3;
  end;
  cluster S-most X -> non empty compact;
  coherence proof
-     SW-corner X = |[W-bound X, S-bound X]| &
-  SE-corner X = |[E-bound X, S-bound X]|;
-then A23: (SW-corner X)`1 = W-bound X & (SE-corner X)`1 = E-bound X &
+A16: (SW-corner X)`1 = W-bound X & (SE-corner X)`1 = E-bound X &
    (SW-corner X)`2 = S-bound X & (SE-corner X)`2 = S-bound X
           by EUCLID:56;
    set p2X = (proj2||X), c = the carrier of (TOP-REAL 2)|X;
-A25: c = X by JORDAN1:1;
-A26: inf p2X = inf (p2X.:c) by Def20;
+A17: c = X by JORDAN1:1;
+A18: inf p2X = inf (p2X.:c) by Def20;
       p2X.:c is with_min by Def15;
    then inf (p2X.:c) in p2X.:c by Def4;
    then consider p being set such that
-A27: p in c & p in c & inf (p2X.:c) = p2X.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A25,A27;
-A28: p2X.p = p`2 by A25,A27,Th70;
-      W-bound X <= p`1 & p`1 <= E-bound X by A25,A27,Th71;
-   then p in LSeg(SW-corner X, SE-corner X) by A23,A26,A27,A28,GOBOARD7:9;
-  hence thesis by A25,A27,Th64,XBOOLE_0:def 3;
+A19: p in c & p in c & inf (p2X.:c) = p2X.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A17,A19;
+A20: p2X.p = p`2 by A17,A19,Th70;
+      W-bound X <= p`1 & p`1 <= E-bound X by A17,A19,Th71;
+   then p in LSeg(SW-corner X, SE-corner X) by A16,A18,A19,A20,GOBOARD7:9;
+  hence thesis by A17,A19,Th64,XBOOLE_0:def 3;
  end;
 end;
 
@@ -2819,13 +2767,7 @@ end;
 
 theorem Th84:
 (W-min P)`1 = W-bound P &
-(W-max P)`1 = W-bound P
-proof SW-corner P = |[W-bound P, S-bound P]| &
-  NW-corner P = |[W-bound P, N-bound P]| &
-  W-min P = |[W-bound P, inf (proj2||W-most P)]| &
-  W-max P = |[W-bound P, sup (proj2||W-most P)]|;
- hence thesis by EUCLID:56;
-end;
+(W-max P)`1 = W-bound P by EUCLID:56;
 
 theorem Th85:
 (SW-corner P)`1 = (W-min P)`1 &
@@ -2840,12 +2782,7 @@ end;
 
 theorem Th86:
 (W-min P)`2 = inf (proj2||W-most P) &
-(W-max P)`2 = sup (proj2||W-most P)
-proof
-    set LP = W-most P;
- thus (W-min P)`2 = inf (proj2||LP) by EUCLID:56;
- thus (W-max P)`2 = sup (proj2||LP) by EUCLID:56;
-end;
+(W-max P)`2 = sup (proj2||W-most P) by EUCLID:56;
 
 theorem Th87:
 (SW-corner X)`2 <= (W-min X)`2 &
@@ -2860,8 +2797,7 @@ A1: (SW-corner X)`2 = S-bound X by Th73 .= inf (proj2||X);
 A2: (W-min X)`2 = inf (proj2||LX) by Th86;
 A3: (W-max X)`2 = sup (proj2||LX) by Th86;
 A4: (NW-corner X)`2 = N-bound X by Th75 .= sup (proj2||X) by Def31;
-        W-most X = LSeg(SW-corner X, NW-corner X)/\X;
-then A5: W-most X c= X by XBOOLE_1:17;
+A5: W-most X c= X by XBOOLE_1:17;
 then A6: (SW-corner X)`2 <= (W-min X)`2 by A1,A2,Th62;
 A7: (W-min X)`2 <= (W-max X)`2 by A2,A3,Th53;
 A8: (W-max X)`2 <= (NW-corner X)`2 by A3,A4,A5,Th63;
@@ -2919,29 +2855,29 @@ theorem Th91:
 W-min X in W-most X & W-max X in W-most X
 proof
    set p2W = (proj2||W-most X), c = the carrier of (TOP-REAL 2)|W-most X;
-A4: c = W-most X by JORDAN1:1;
+A1: c = W-most X by JORDAN1:1;
       p2W.:c is with_min by Def15;
    then inf (p2W.:c) in p2W.:c by Def4;
    then consider p being set such that
-A6: p in c & p in c & inf (p2W.:c) = p2W.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A4,A6;
-A7: p2W.p = p`2 by A4,A6,Th70;
-A8: p in LSeg(SW-corner X, NW-corner X) by A4,A6,XBOOLE_0:def 3;
+A2: p in c & p in c & inf (p2W.:c) = p2W.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A1,A2;
+A3: p2W.p = p`2 by A1,A2,Th70;
+A4: p in LSeg(SW-corner X, NW-corner X) by A1,A2,XBOOLE_0:def 3;
       (SW-corner X)`1 = W-bound X &
    (NW-corner X)`1 = W-bound X by Th72,Th74;
-    then p`1 = W-bound X by A8,GOBOARD7:5;
- hence W-min X in W-most X by A4,A6,A7,EUCLID:57;
+    then p`1 = W-bound X by A4,GOBOARD7:5;
+ hence W-min X in W-most X by A1,A2,A3,EUCLID:57;
       p2W.:c is with_max by Def14;
    then sup (p2W.:c) in p2W.:c by Def3;
    then consider p being set such that
-A10: p in c & p in c & sup (p2W.:c) = p2W.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A4,A10;
-A11: p2W.p = p`2 by A4,A10,Th70;
-A12: p in LSeg(SW-corner X, NW-corner X) by A4,A10,XBOOLE_0:def 3;
+A5: p in c & p in c & sup (p2W.:c) = p2W.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A1,A5;
+A6: p2W.p = p`2 by A1,A5,Th70;
+A7: p in LSeg(SW-corner X, NW-corner X) by A1,A5,XBOOLE_0:def 3;
       (SW-corner X)`1 = W-bound X &
    (NW-corner X)`1 = W-bound X by Th72,Th74;
-     then p`1 = W-bound X by A12,GOBOARD7:5;
- hence W-max X in W-most X by A4,A10,A11,EUCLID:57;
+     then p`1 = W-bound X by A7,GOBOARD7:5;
+ hence W-max X in W-most X by A1,A5,A6,EUCLID:57;
 end;
 
 theorem
@@ -2950,56 +2886,56 @@ LSeg(W-max X, NW-corner X)/\X = {W-max X}
 proof
     now let x be set;
   hereby
-   assume A2: x in LSeg(SW-corner X, W-min X)/\X;
-  then A3: x in LSeg(SW-corner X, W-min X) & x in X by XBOOLE_0:def 3;
-     reconsider p = x as Point of TOP-REAL 2 by A2;
+   assume A1: x in LSeg(SW-corner X, W-min X)/\X;
+  then A2: x in LSeg(SW-corner X, W-min X) & x in X by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A1;
         (SW-corner X)`1 = (W-min X)`1 by Th85;
-  then A4: p`1 = (W-min X)`1 by A3,GOBOARD7:5;
+  then A3: p`1 = (W-min X)`1 by A2,GOBOARD7:5;
         (SW-corner X)`2 <= (W-min X)`2 by Th87;
-  then A5: p`2 <= (W-min X)`2 by A3,TOPREAL1:10;
-  A6: SW-corner X in LSeg(SW-corner X, NW-corner X) by TOPREAL1:6;
+  then A4: p`2 <= (W-min X)`2 by A2,TOPREAL1:10;
+  A5: SW-corner X in LSeg(SW-corner X, NW-corner X) by TOPREAL1:6;
         W-min X in W-most X by Th91;
      then W-min X in LSeg(SW-corner X, NW-corner X) by XBOOLE_0:def 3;
      then LSeg(SW-corner X, W-min X) c= LSeg(SW-corner X, NW-corner X)
-       by A6,TOPREAL1:12;
-     then p in W-most X by A3,XBOOLE_0:def 3;
+       by A5,TOPREAL1:12;
+     then p in W-most X by A2,XBOOLE_0:def 3;
      then (W-min X)`2 <= p`2 by Th88;
-  then A7: p`2 = (W-min X)`2 by A5,XREAL_1:1;
+  then A6: p`2 = (W-min X)`2 by A4,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
-   hence x = W-min X by A4,A7,EUCLID:57;
+   hence x = W-min X by A3,A6,EUCLID:57;
   end;
-  assume A8: x = W-min X;
+  assume A7: x = W-min X;
         W-min X in W-most X by Th91;
-  then A9: W-min X in X by XBOOLE_0:def 3;
+  then A8: W-min X in X by XBOOLE_0:def 3;
         W-min X in LSeg(SW-corner X, W-min X) by TOPREAL1:6;
-  hence x in LSeg(SW-corner X, W-min X)/\X by A8,A9,XBOOLE_0:def 3;
+  hence x in LSeg(SW-corner X, W-min X)/\X by A7,A8,XBOOLE_0:def 3;
  end;
  hence LSeg(SW-corner X, W-min X)/\X = {W-min X} by TARSKI:def 1;
     now let x be set;
   hereby
-   assume A10: x in LSeg(W-max X, NW-corner X)/\X;
-  then A11: x in LSeg(W-max X, NW-corner X) & x in X by XBOOLE_0:def 3;
-     reconsider p = x as Point of TOP-REAL 2 by A10;
+   assume A9: x in LSeg(W-max X, NW-corner X)/\X;
+  then A10: x in LSeg(W-max X, NW-corner X) & x in X by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A9;
         (NW-corner X)`1 = (W-max X)`1 by Th85;
-  then A12: p`1 = (W-max X)`1 by A11,GOBOARD7:5;
+  then A11: p`1 = (W-max X)`1 by A10,GOBOARD7:5;
         (W-max X)`2 <= (NW-corner X)`2 by Th87;
-  then A13: (W-max X)`2 <= p`2 by A11,TOPREAL1:10;
-  A14: NW-corner X in LSeg(SW-corner X, NW-corner X) by TOPREAL1:6;
+  then A12: (W-max X)`2 <= p`2 by A10,TOPREAL1:10;
+  A13: NW-corner X in LSeg(SW-corner X, NW-corner X) by TOPREAL1:6;
         W-max X in W-most X by Th91;
      then W-max X in LSeg(SW-corner X, NW-corner X) by XBOOLE_0:def 3;
      then LSeg(W-max X, NW-corner X) c= LSeg(SW-corner X, NW-corner X)
-       by A14,TOPREAL1:12;
-     then p in W-most X by A11,XBOOLE_0:def 3;
+       by A13,TOPREAL1:12;
+     then p in W-most X by A10,XBOOLE_0:def 3;
      then p`2 <= (W-max X)`2 by Th88;
-  then A15: p`2 = (W-max X)`2 by A13,XREAL_1:1;
+  then A14: p`2 = (W-max X)`2 by A12,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
-   hence x = W-max X by A12,A15,EUCLID:57;
+   hence x = W-max X by A11,A14,EUCLID:57;
   end;
-  assume A16: x = W-max X;
+  assume A15: x = W-max X;
         W-max X in W-most X by Th91;
-  then A17: W-max X in X by XBOOLE_0:def 3;
+  then A16: W-max X in X by XBOOLE_0:def 3;
         W-max X in LSeg(W-max X, NW-corner X) by TOPREAL1:6;
-  hence x in LSeg(W-max X, NW-corner X)/\X by A16,A17,XBOOLE_0:def 3;
+  hence x in LSeg(W-max X, NW-corner X)/\X by A15,A16,XBOOLE_0:def 3;
  end;
  hence LSeg(W-max X, NW-corner X)/\X = {W-max X} by TARSKI:def 1;
 end;
@@ -3016,13 +2952,7 @@ end;
 
 theorem Th94:
 (N-min P)`2 = N-bound P &
-(N-max P)`2 = N-bound P
-proof NW-corner P = |[W-bound P, N-bound P]| &
-  NE-corner P = |[E-bound P, N-bound P]| &
-  N-min P = |[inf (proj1||N-most P), N-bound P]| &
-  N-max P = |[sup (proj1||N-most P), N-bound P]|;
- hence thesis by EUCLID:56;
-end;
+(N-max P)`2 = N-bound P by EUCLID:56;
 
 theorem Th95:
 (NW-corner P)`2 = (N-min P)`2 &
@@ -3037,12 +2967,7 @@ end;
 
 theorem Th96:
 (N-min P)`1 = inf (proj1||N-most P) &
-(N-max P)`1 = sup (proj1||N-most P)
-proof
-    set LP = N-most P;
- thus (N-min P)`1 = inf (proj1||LP) by EUCLID:56;
- thus (N-max P)`1 = sup (proj1||LP) by EUCLID:56;
-end;
+(N-max P)`1 = sup (proj1||N-most P) by EUCLID:56;
 
 theorem Th97:
 (NW-corner X)`1 <= (N-min X)`1 &
@@ -3057,8 +2982,7 @@ A1: (NW-corner X)`1 = W-bound X by Th74 .= inf (proj1||X);
 A2: (N-min X)`1 = inf (proj1||LX) by Th96;
 A3: (N-max X)`1 = sup (proj1||LX) by Th96;
 A4: (NE-corner X)`1 = E-bound X by Th76 .= sup (proj1||X) by Def32;
-        N-most X = LSeg(NW-corner X, NE-corner X)/\X;
-then A5: N-most X c= X by XBOOLE_1:17;
+A5: N-most X c= X by XBOOLE_1:17;
 then A6: (NW-corner X)`1 <= (N-min X)`1 by A1,A2,Th62;
 A7: (N-min X)`1 <= (N-max X)`1 by A2,A3,Th53;
 A8: (N-max X)`1 <= (NE-corner X)`1 by A3,A4,A5,Th63;
@@ -3116,29 +3040,29 @@ theorem Th101:
 N-min X in N-most X & N-max X in N-most X
 proof
    set p2W = (proj1||N-most X), c = the carrier of (TOP-REAL 2)|N-most X;
-A4: c = N-most X by JORDAN1:1;
+A1: c = N-most X by JORDAN1:1;
       p2W.:c is with_min by Def15;
    then inf (p2W.:c) in p2W.:c by Def4;
    then consider p being set such that
-A6: p in c & p in c & inf (p2W.:c) = p2W.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A4,A6;
-A7: p2W.p = p`1 by A4,A6,Th69;
-A8: p in LSeg(NW-corner X, NE-corner X) by A4,A6,XBOOLE_0:def 3;
+A2: p in c & p in c & inf (p2W.:c) = p2W.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A1,A2;
+A3: p2W.p = p`1 by A1,A2,Th69;
+A4: p in LSeg(NW-corner X, NE-corner X) by A1,A2,XBOOLE_0:def 3;
       (NW-corner X)`2 = N-bound X &
    (NE-corner X)`2 = N-bound X by Th75,Th77;
-    then p`2 = N-bound X by A8,GOBOARD7:6;
- hence N-min X in N-most X by A4,A6,A7,EUCLID:57;
+    then p`2 = N-bound X by A4,GOBOARD7:6;
+ hence N-min X in N-most X by A1,A2,A3,EUCLID:57;
       p2W.:c is with_max by Def14;
    then sup (p2W.:c) in p2W.:c by Def3;
    then consider p being set such that
-A10: p in c & p in c & sup (p2W.:c) = p2W.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A4,A10;
-A11: p2W.p = p`1 by A4,A10,Th69;
-A12: p in LSeg(NW-corner X, NE-corner X) by A4,A10,XBOOLE_0:def 3;
+A5: p in c & p in c & sup (p2W.:c) = p2W.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A1,A5;
+A6: p2W.p = p`1 by A1,A5,Th69;
+A7: p in LSeg(NW-corner X, NE-corner X) by A1,A5,XBOOLE_0:def 3;
       (NW-corner X)`2 = N-bound X &
    (NE-corner X)`2 = N-bound X by Th75,Th77;
-     then p`2 = N-bound X by A12,GOBOARD7:6;
- hence N-max X in N-most X by A4,A10,A11,EUCLID:57;
+     then p`2 = N-bound X by A7,GOBOARD7:6;
+ hence N-max X in N-most X by A1,A5,A6,EUCLID:57;
 end;
 
 theorem
@@ -3147,56 +3071,56 @@ LSeg(N-max X, NE-corner X)/\X = {N-max X}
 proof
     now let x be set;
   hereby
-   assume A2: x in LSeg(NW-corner X, N-min X)/\X;
-  then A3: x in LSeg(NW-corner X, N-min X) & x in X by XBOOLE_0:def 3;
-     reconsider p = x as Point of TOP-REAL 2 by A2;
+   assume A1: x in LSeg(NW-corner X, N-min X)/\X;
+  then A2: x in LSeg(NW-corner X, N-min X) & x in X by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A1;
         (NW-corner X)`2 = (N-min X)`2 by Th95;
-  then A4: p`2 = (N-min X)`2 by A3,GOBOARD7:6;
+  then A3: p`2 = (N-min X)`2 by A2,GOBOARD7:6;
         (NW-corner X)`1 <= (N-min X)`1 by Th97;
-  then A5: p`1 <= (N-min X)`1 by A3,TOPREAL1:9;
-  A6: NW-corner X in LSeg(NW-corner X, NE-corner X) by TOPREAL1:6;
+  then A4: p`1 <= (N-min X)`1 by A2,TOPREAL1:9;
+  A5: NW-corner X in LSeg(NW-corner X, NE-corner X) by TOPREAL1:6;
         N-min X in N-most X by Th101;
      then N-min X in LSeg(NW-corner X, NE-corner X) by XBOOLE_0:def 3;
      then LSeg(NW-corner X, N-min X) c= LSeg(NW-corner X, NE-corner X)
-       by A6,TOPREAL1:12;
-     then p in N-most X by A3,XBOOLE_0:def 3;
+       by A5,TOPREAL1:12;
+     then p in N-most X by A2,XBOOLE_0:def 3;
      then (N-min X)`1 <= p`1 by Th98;
-  then A7: p`1 = (N-min X)`1 by A5,XREAL_1:1;
+  then A6: p`1 = (N-min X)`1 by A4,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
-   hence x = N-min X by A4,A7,EUCLID:57;
+   hence x = N-min X by A3,A6,EUCLID:57;
   end;
-  assume A8: x = N-min X;
+  assume A7: x = N-min X;
         N-min X in N-most X by Th101;
-  then A9: N-min X in X by XBOOLE_0:def 3;
+  then A8: N-min X in X by XBOOLE_0:def 3;
         N-min X in LSeg(NW-corner X, N-min X) by TOPREAL1:6;
-  hence x in LSeg(NW-corner X, N-min X)/\X by A8,A9,XBOOLE_0:def 3;
+  hence x in LSeg(NW-corner X, N-min X)/\X by A7,A8,XBOOLE_0:def 3;
  end;
  hence LSeg(NW-corner X, N-min X)/\X = {N-min X} by TARSKI:def 1;
     now let x be set;
   hereby
-   assume A10: x in LSeg(N-max X, NE-corner X)/\X;
-  then A11: x in LSeg(N-max X, NE-corner X) & x in X by XBOOLE_0:def 3;
-     reconsider p = x as Point of TOP-REAL 2 by A10;
+   assume A9: x in LSeg(N-max X, NE-corner X)/\X;
+  then A10: x in LSeg(N-max X, NE-corner X) & x in X by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A9;
         (NE-corner X)`2 = (N-max X)`2 by Th95;
-  then A12: p`2 = (N-max X)`2 by A11,GOBOARD7:6;
+  then A11: p`2 = (N-max X)`2 by A10,GOBOARD7:6;
         (N-max X)`1 <= (NE-corner X)`1 by Th97;
-  then A13: (N-max X)`1 <= p`1 by A11,TOPREAL1:9;
-  A14: NE-corner X in LSeg(NW-corner X, NE-corner X) by TOPREAL1:6;
+  then A12: (N-max X)`1 <= p`1 by A10,TOPREAL1:9;
+  A13: NE-corner X in LSeg(NW-corner X, NE-corner X) by TOPREAL1:6;
         N-max X in N-most X by Th101;
      then N-max X in LSeg(NW-corner X, NE-corner X) by XBOOLE_0:def 3;
      then LSeg(N-max X, NE-corner X) c= LSeg(NW-corner X, NE-corner X)
-       by A14,TOPREAL1:12;
-     then p in N-most X by A11,XBOOLE_0:def 3;
+       by A13,TOPREAL1:12;
+     then p in N-most X by A10,XBOOLE_0:def 3;
      then p`1 <= (N-max X)`1 by Th98;
-  then A15: p`1 = (N-max X)`1 by A13,XREAL_1:1;
+  then A14: p`1 = (N-max X)`1 by A12,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
-   hence x = N-max X by A12,A15,EUCLID:57;
+   hence x = N-max X by A11,A14,EUCLID:57;
   end;
-  assume A16: x = N-max X;
+  assume A15: x = N-max X;
         N-max X in N-most X by Th101;
-  then A17: N-max X in X by XBOOLE_0:def 3;
+  then A16: N-max X in X by XBOOLE_0:def 3;
         N-max X in LSeg(N-max X, NE-corner X) by TOPREAL1:6;
-  hence x in LSeg(N-max X, NE-corner X)/\X by A16,A17,XBOOLE_0:def 3;
+  hence x in LSeg(N-max X, NE-corner X)/\X by A15,A16,XBOOLE_0:def 3;
  end;
  hence LSeg(N-max X, NE-corner X)/\X = {N-max X} by TARSKI:def 1;
 end;
@@ -3213,13 +3137,7 @@ end;
 
 theorem Th104:
 (E-min P)`1 = E-bound P &
-(E-max P)`1 = E-bound P
-proof SE-corner P = |[E-bound P, S-bound P]| &
-  NE-corner P = |[E-bound P, N-bound P]| &
-  E-min P = |[E-bound P, inf (proj2||E-most P)]| &
-  E-max P = |[E-bound P, sup (proj2||E-most P)]|;
- hence thesis by EUCLID:56;
-end;
+(E-max P)`1 = E-bound P by EUCLID:56;
 
 theorem Th105:
 (SE-corner P)`1 = (E-min P)`1 &
@@ -3234,12 +3152,7 @@ end;
 
 theorem Th106:
 (E-min P)`2 = inf (proj2||E-most P) &
-(E-max P)`2 = sup (proj2||E-most P)
-proof
-    set LP = E-most P;
- thus (E-min P)`2 = inf (proj2||LP) by EUCLID:56;
- thus (E-max P)`2 = sup (proj2||LP) by EUCLID:56;
-end;
+(E-max P)`2 = sup (proj2||E-most P) by EUCLID:56;
 
 theorem Th107:
 (SE-corner X)`2 <= (E-min X)`2 &
@@ -3254,8 +3167,7 @@ A1: (SE-corner X)`2 = S-bound X by Th79 .= inf (proj2||X);
 A2: (E-min X)`2 = inf (proj2||LX) by Th106;
 A3: (E-max X)`2 = sup (proj2||LX) by Th106;
 A4: (NE-corner X)`2 = N-bound X by Th77 .= sup (proj2||X) by Def31;
-        E-most X = LSeg(SE-corner X, NE-corner X)/\X;
-then A5: E-most X c= X by XBOOLE_1:17;
+A5: E-most X c= X by XBOOLE_1:17;
 then A6: (SE-corner X)`2 <= (E-min X)`2 by A1,A2,Th62;
 A7: (E-min X)`2 <= (E-max X)`2 by A2,A3,Th53;
 A8: (E-max X)`2 <= (NE-corner X)`2 by A3,A4,A5,Th63;
@@ -3313,29 +3225,29 @@ theorem Th111:
 E-min X in E-most X & E-max X in E-most X
 proof
    set p2W = (proj2||E-most X), c = the carrier of (TOP-REAL 2)|E-most X;
-A4: c = E-most X by JORDAN1:1;
+A1: c = E-most X by JORDAN1:1;
       p2W.:c is with_min by Def15;
    then inf (p2W.:c) in p2W.:c by Def4;
    then consider p being set such that
-A6: p in c & p in c & inf (p2W.:c) = p2W.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A4,A6;
-A7: p2W.p = p`2 by A4,A6,Th70;
-A8: p in LSeg(SE-corner X, NE-corner X) by A4,A6,XBOOLE_0:def 3;
+A2: p in c & p in c & inf (p2W.:c) = p2W.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A1,A2;
+A3: p2W.p = p`2 by A1,A2,Th70;
+A4: p in LSeg(SE-corner X, NE-corner X) by A1,A2,XBOOLE_0:def 3;
       (SE-corner X)`1 = E-bound X &
    (NE-corner X)`1 = E-bound X by Th76,Th78;
-    then p`1 = E-bound X by A8,GOBOARD7:5;
- hence E-min X in E-most X by A4,A6,A7,EUCLID:57;
+    then p`1 = E-bound X by A4,GOBOARD7:5;
+ hence E-min X in E-most X by A1,A2,A3,EUCLID:57;
       p2W.:c is with_max by Def14;
    then sup (p2W.:c) in p2W.:c by Def3;
    then consider p being set such that
-A10: p in c & p in c & sup (p2W.:c) = p2W.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A4,A10;
-A11: p2W.p = p`2 by A4,A10,Th70;
-A12: p in LSeg(SE-corner X, NE-corner X) by A4,A10,XBOOLE_0:def 3;
+A5: p in c & p in c & sup (p2W.:c) = p2W.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A1,A5;
+A6: p2W.p = p`2 by A1,A5,Th70;
+A7: p in LSeg(SE-corner X, NE-corner X) by A1,A5,XBOOLE_0:def 3;
       (SE-corner X)`1 = E-bound X &
    (NE-corner X)`1 = E-bound X by Th76,Th78;
-     then p`1 = E-bound X by A12,GOBOARD7:5;
- hence E-max X in E-most X by A4,A10,A11,EUCLID:57;
+     then p`1 = E-bound X by A7,GOBOARD7:5;
+ hence E-max X in E-most X by A1,A5,A6,EUCLID:57;
 end;
 
 theorem
@@ -3344,56 +3256,56 @@ LSeg(E-max X, NE-corner X)/\X = {E-max X}
 proof
     now let x be set;
   hereby
-   assume A2: x in LSeg(SE-corner X, E-min X)/\X;
-  then A3: x in LSeg(SE-corner X, E-min X) & x in X by XBOOLE_0:def 3;
-     reconsider p = x as Point of TOP-REAL 2 by A2;
+   assume A1: x in LSeg(SE-corner X, E-min X)/\X;
+  then A2: x in LSeg(SE-corner X, E-min X) & x in X by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A1;
         (SE-corner X)`1 = (E-min X)`1 by Th105;
-  then A4: p`1 = (E-min X)`1 by A3,GOBOARD7:5;
+  then A3: p`1 = (E-min X)`1 by A2,GOBOARD7:5;
         (SE-corner X)`2 <= (E-min X)`2 by Th107;
-  then A5: p`2 <= (E-min X)`2 by A3,TOPREAL1:10;
-  A6: SE-corner X in LSeg(SE-corner X, NE-corner X) by TOPREAL1:6;
+  then A4: p`2 <= (E-min X)`2 by A2,TOPREAL1:10;
+  A5: SE-corner X in LSeg(SE-corner X, NE-corner X) by TOPREAL1:6;
         E-min X in E-most X by Th111;
      then E-min X in LSeg(SE-corner X, NE-corner X) by XBOOLE_0:def 3;
      then LSeg(SE-corner X, E-min X) c= LSeg(SE-corner X, NE-corner X)
-       by A6,TOPREAL1:12;
-     then p in E-most X by A3,XBOOLE_0:def 3;
+       by A5,TOPREAL1:12;
+     then p in E-most X by A2,XBOOLE_0:def 3;
      then (E-min X)`2 <= p`2 by Th108;
-  then A7: p`2 = (E-min X)`2 by A5,XREAL_1:1;
+  then A6: p`2 = (E-min X)`2 by A4,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
-   hence x = E-min X by A4,A7,EUCLID:57;
+   hence x = E-min X by A3,A6,EUCLID:57;
   end;
-  assume A8: x = E-min X;
+  assume A7: x = E-min X;
         E-min X in E-most X by Th111;
-  then A9: E-min X in X by XBOOLE_0:def 3;
+  then A8: E-min X in X by XBOOLE_0:def 3;
         E-min X in LSeg(SE-corner X, E-min X) by TOPREAL1:6;
-  hence x in LSeg(SE-corner X, E-min X)/\X by A8,A9,XBOOLE_0:def 3;
+  hence x in LSeg(SE-corner X, E-min X)/\X by A7,A8,XBOOLE_0:def 3;
  end;
  hence LSeg(SE-corner X, E-min X)/\X = {E-min X} by TARSKI:def 1;
     now let x be set;
   hereby
-   assume A10: x in LSeg(E-max X, NE-corner X)/\X;
-  then A11: x in LSeg(E-max X, NE-corner X) & x in X by XBOOLE_0:def 3;
-     reconsider p = x as Point of TOP-REAL 2 by A10;
+   assume A9: x in LSeg(E-max X, NE-corner X)/\X;
+  then A10: x in LSeg(E-max X, NE-corner X) & x in X by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A9;
         (NE-corner X)`1 = (E-max X)`1 by Th105;
-  then A12: p`1 = (E-max X)`1 by A11,GOBOARD7:5;
+  then A11: p`1 = (E-max X)`1 by A10,GOBOARD7:5;
         (E-max X)`2 <= (NE-corner X)`2 by Th107;
-  then A13: (E-max X)`2 <= p`2 by A11,TOPREAL1:10;
-  A14: NE-corner X in LSeg(SE-corner X, NE-corner X) by TOPREAL1:6;
+  then A12: (E-max X)`2 <= p`2 by A10,TOPREAL1:10;
+  A13: NE-corner X in LSeg(SE-corner X, NE-corner X) by TOPREAL1:6;
         E-max X in E-most X by Th111;
      then E-max X in LSeg(SE-corner X, NE-corner X) by XBOOLE_0:def 3;
      then LSeg(E-max X, NE-corner X) c= LSeg(SE-corner X, NE-corner X)
-       by A14,TOPREAL1:12;
-     then p in E-most X by A11,XBOOLE_0:def 3;
+       by A13,TOPREAL1:12;
+     then p in E-most X by A10,XBOOLE_0:def 3;
      then p`2 <= (E-max X)`2 by Th108;
-  then A15: p`2 = (E-max X)`2 by A13,XREAL_1:1;
+  then A14: p`2 = (E-max X)`2 by A12,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
-   hence x = E-max X by A12,A15,EUCLID:57;
+   hence x = E-max X by A11,A14,EUCLID:57;
   end;
-  assume A16: x = E-max X;
+  assume A15: x = E-max X;
         E-max X in E-most X by Th111;
-  then A17: E-max X in X by XBOOLE_0:def 3;
+  then A16: E-max X in X by XBOOLE_0:def 3;
         E-max X in LSeg(E-max X, NE-corner X) by TOPREAL1:6;
-  hence x in LSeg(E-max X, NE-corner X)/\X by A16,A17,XBOOLE_0:def 3;
+  hence x in LSeg(E-max X, NE-corner X)/\X by A15,A16,XBOOLE_0:def 3;
  end;
  hence LSeg(E-max X, NE-corner X)/\X = {E-max X} by TARSKI:def 1;
 end;
@@ -3410,13 +3322,7 @@ end;
 
 theorem Th114:
 (S-min P)`2 = S-bound P &
-(S-max P)`2 = S-bound P
-proof SW-corner P = |[W-bound P, S-bound P]| &
-  SE-corner P = |[E-bound P, S-bound P]| &
-  S-min P = |[inf (proj1||S-most P), S-bound P]| &
-  S-max P = |[sup (proj1||S-most P), S-bound P]|;
- hence thesis by EUCLID:56;
-end;
+(S-max P)`2 = S-bound P by EUCLID:56;
 
 theorem Th115:
 (SW-corner P)`2 = (S-min P)`2 &
@@ -3431,12 +3337,7 @@ end;
 
 theorem Th116:
 (S-min P)`1 = inf (proj1||S-most P) &
-(S-max P)`1 = sup (proj1||S-most P)
-proof
-    set LP = S-most P;
- thus (S-min P)`1 = inf (proj1||LP) by EUCLID:56;
- thus (S-max P)`1 = sup (proj1||LP) by EUCLID:56;
-end;
+(S-max P)`1 = sup (proj1||S-most P) by EUCLID:56;
 
 theorem Th117:
 (SW-corner X)`1 <= (S-min X)`1 &
@@ -3451,8 +3352,7 @@ A1: (SW-corner X)`1 = W-bound X by Th72 .= inf (proj1||X);
 A2: (S-min X)`1 = inf (proj1||LX) by Th116;
 A3: (S-max X)`1 = sup (proj1||LX) by Th116;
 A4: (SE-corner X)`1 = E-bound X by Th78 .= sup (proj1||X) by Def32;
-        S-most X = LSeg(SW-corner X, SE-corner X)/\X;
-then A5: S-most X c= X by XBOOLE_1:17;
+A5: S-most X c= X by XBOOLE_1:17;
 then A6: (SW-corner X)`1 <= (S-min X)`1 by A1,A2,Th62;
 A7: (S-min X)`1 <= (S-max X)`1 by A2,A3,Th53;
 A8: (S-max X)`1 <= (SE-corner X)`1 by A3,A4,A5,Th63;
@@ -3510,29 +3410,29 @@ theorem Th121:
 S-min X in S-most X & S-max X in S-most X
 proof
    set p2W = (proj1||S-most X), c = the carrier of (TOP-REAL 2)|S-most X;
-A4: c = S-most X by JORDAN1:1;
+A1: c = S-most X by JORDAN1:1;
       p2W.:c is with_min by Def15;
    then inf (p2W.:c) in p2W.:c by Def4;
    then consider p being set such that
-A6: p in c & p in c & inf (p2W.:c) = p2W.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A4,A6;
-A7: p2W.p = p`1 by A4,A6,Th69;
-A8: p in LSeg(SW-corner X, SE-corner X) by A4,A6,XBOOLE_0:def 3;
+A2: p in c & p in c & inf (p2W.:c) = p2W.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A1,A2;
+A3: p2W.p = p`1 by A1,A2,Th69;
+A4: p in LSeg(SW-corner X, SE-corner X) by A1,A2,XBOOLE_0:def 3;
       (SW-corner X)`2 = S-bound X &
    (SE-corner X)`2 = S-bound X by Th73,Th79;
-    then p`2 = S-bound X by A8,GOBOARD7:6;
- hence S-min X in S-most X by A4,A6,A7,EUCLID:57;
+    then p`2 = S-bound X by A4,GOBOARD7:6;
+ hence S-min X in S-most X by A1,A2,A3,EUCLID:57;
       p2W.:c is with_max by Def14;
    then sup (p2W.:c) in p2W.:c by Def3;
    then consider p being set such that
-A10: p in c & p in c & sup (p2W.:c) = p2W.p by FUNCT_2:115;
-   reconsider p as Point of TOP-REAL 2 by A4,A10;
-A11: p2W.p = p`1 by A4,A10,Th69;
-A12: p in LSeg(SW-corner X, SE-corner X) by A4,A10,XBOOLE_0:def 3;
+A5: p in c & p in c & sup (p2W.:c) = p2W.p by FUNCT_2:115;
+   reconsider p as Point of TOP-REAL 2 by A1,A5;
+A6: p2W.p = p`1 by A1,A5,Th69;
+A7: p in LSeg(SW-corner X, SE-corner X) by A1,A5,XBOOLE_0:def 3;
       (SW-corner X)`2 = S-bound X &
    (SE-corner X)`2 = S-bound X by Th73,Th79;
-     then p`2 = S-bound X by A12,GOBOARD7:6;
- hence S-max X in S-most X by A4,A10,A11,EUCLID:57;
+     then p`2 = S-bound X by A7,GOBOARD7:6;
+ hence S-max X in S-most X by A1,A5,A6,EUCLID:57;
 end;
 
 theorem
@@ -3541,56 +3441,56 @@ LSeg(S-max X, SE-corner X)/\X = {S-max X}
 proof
     now let x be set;
   hereby
-   assume A2: x in LSeg(SW-corner X, S-min X)/\X;
-  then A3: x in LSeg(SW-corner X, S-min X) & x in X by XBOOLE_0:def 3;
-     reconsider p = x as Point of TOP-REAL 2 by A2;
+   assume A1: x in LSeg(SW-corner X, S-min X)/\X;
+  then A2: x in LSeg(SW-corner X, S-min X) & x in X by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A1;
         (SW-corner X)`2 = (S-min X)`2 by Th115;
-  then A4: p`2 = (S-min X)`2 by A3,GOBOARD7:6;
+  then A3: p`2 = (S-min X)`2 by A2,GOBOARD7:6;
         (SW-corner X)`1 <= (S-min X)`1 by Th117;
-  then A5: p`1 <= (S-min X)`1 by A3,TOPREAL1:9;
-  A6: SW-corner X in LSeg(SW-corner X, SE-corner X) by TOPREAL1:6;
+  then A4: p`1 <= (S-min X)`1 by A2,TOPREAL1:9;
+  A5: SW-corner X in LSeg(SW-corner X, SE-corner X) by TOPREAL1:6;
         S-min X in S-most X by Th121;
      then S-min X in LSeg(SW-corner X, SE-corner X) by XBOOLE_0:def 3;
      then LSeg(SW-corner X, S-min X) c= LSeg(SW-corner X, SE-corner X)
-       by A6,TOPREAL1:12;
-     then p in S-most X by A3,XBOOLE_0:def 3;
+       by A5,TOPREAL1:12;
+     then p in S-most X by A2,XBOOLE_0:def 3;
      then (S-min X)`1 <= p`1 by Th118;
-  then A7: p`1 = (S-min X)`1 by A5,XREAL_1:1;
+  then A6: p`1 = (S-min X)`1 by A4,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
-   hence x = S-min X by A4,A7,EUCLID:57;
+   hence x = S-min X by A3,A6,EUCLID:57;
   end;
-  assume A8: x = S-min X;
+  assume A7: x = S-min X;
         S-min X in S-most X by Th121;
-  then A9: S-min X in X by XBOOLE_0:def 3;
+  then A8: S-min X in X by XBOOLE_0:def 3;
         S-min X in LSeg(SW-corner X, S-min X) by TOPREAL1:6;
-  hence x in LSeg(SW-corner X, S-min X)/\X by A8,A9,XBOOLE_0:def 3;
+  hence x in LSeg(SW-corner X, S-min X)/\X by A7,A8,XBOOLE_0:def 3;
  end;
  hence LSeg(SW-corner X, S-min X)/\X = {S-min X} by TARSKI:def 1;
     now let x be set;
   hereby
-   assume A10: x in LSeg(S-max X, SE-corner X)/\X;
-  then A11: x in LSeg(S-max X, SE-corner X) & x in X by XBOOLE_0:def 3;
-     reconsider p = x as Point of TOP-REAL 2 by A10;
+   assume A9: x in LSeg(S-max X, SE-corner X)/\X;
+  then A10: x in LSeg(S-max X, SE-corner X) & x in X by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A9;
         (SE-corner X)`2 = (S-max X)`2 by Th115;
-  then A12: p`2 = (S-max X)`2 by A11,GOBOARD7:6;
+  then A11: p`2 = (S-max X)`2 by A10,GOBOARD7:6;
         (S-max X)`1 <= (SE-corner X)`1 by Th117;
-  then A13: (S-max X)`1 <= p`1 by A11,TOPREAL1:9;
-  A14: SE-corner X in LSeg(SW-corner X, SE-corner X) by TOPREAL1:6;
+  then A12: (S-max X)`1 <= p`1 by A10,TOPREAL1:9;
+  A13: SE-corner X in LSeg(SW-corner X, SE-corner X) by TOPREAL1:6;
         S-max X in S-most X by Th121;
      then S-max X in LSeg(SW-corner X, SE-corner X) by XBOOLE_0:def 3;
      then LSeg(S-max X, SE-corner X) c= LSeg(SW-corner X, SE-corner X)
-       by A14,TOPREAL1:12;
-     then p in S-most X by A11,XBOOLE_0:def 3;
+       by A13,TOPREAL1:12;
+     then p in S-most X by A10,XBOOLE_0:def 3;
      then p`1 <= (S-max X)`1 by Th118;
-  then A15: p`1 = (S-max X)`1 by A13,XREAL_1:1;
+  then A14: p`1 = (S-max X)`1 by A12,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
-   hence x = S-max X by A12,A15,EUCLID:57;
+   hence x = S-max X by A11,A14,EUCLID:57;
   end;
-  assume A16: x = S-max X;
+  assume A15: x = S-max X;
         S-max X in S-most X by Th121;
-  then A17: S-max X in X by XBOOLE_0:def 3;
+  then A16: S-max X in X by XBOOLE_0:def 3;
         S-max X in LSeg(S-max X, SE-corner X) by TOPREAL1:6;
-  hence x in LSeg(S-max X, SE-corner X)/\X by A16,A17,XBOOLE_0:def 3;
+  hence x in LSeg(S-max X, SE-corner X)/\X by A15,A16,XBOOLE_0:def 3;
  end;
  hence LSeg(S-max X, SE-corner X)/\X = {S-max X} by TARSKI:def 1;
 end;

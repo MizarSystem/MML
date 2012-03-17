@@ -8,14 +8,15 @@
 environ
 
  vocabularies ARYTM_3, QC_LANG1, BINOP_1, FUNCT_1, LATTICES, ARYTM, RELAT_1,
-      BOOLE, NAT_LAT;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, STRUCT_0,
+      BOOLE, NAT_LAT, REALSET1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0,
+      REALSET1, STRUCT_0,
       NAT_1, LATTICES, BINOP_1, RELAT_1, FUNCT_1;
- constructors NAT_1, LATTICES, BINOP_1, NEWTON, PARTFUN1, MEMBERED;
+ constructors NAT_1, LATTICES, BINOP_1, NEWTON, PARTFUN1, MEMBERED, REALSET1;
  registrations FINSET_1, STRUCT_0, RELSET_1, LATTICES, NAT_1, MEMBERED,
       ORDINAL2;
  requirements REAL, NUMERALS, SUBSET, BOOLE;
- definitions LATTICES;
+ definitions LATTICES, BINOP_1, REALSET1;
  theorems NEWTON, ZFMISC_1, LATTICES, BINOP_1, FUNCT_1, FUNCT_2, XBOOLE_1,
       RELAT_1;
  schemes BINOP_1, BINOP_2, SUBSET_1;
@@ -32,7 +33,7 @@ definition
  existence proof
    deffunc O(Nat,Nat)= $1 hcf $2;
   thus ex o being BinOp of NAT st
-    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 2;
+    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 4;
  end;
  uniqueness proof
     deffunc O(Nat,Nat)= $1 hcf $2;
@@ -47,7 +48,7 @@ definition
  existence proof
    deffunc O(Nat,Nat)= $1 lcm $2;
   thus ex o being BinOp of NAT st
-    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 2;
+    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 4;
  end;
  uniqueness proof
     deffunc O(Nat,Nat)= $1 lcm $2;
@@ -69,18 +70,10 @@ end;
 canceled 47;
 
 theorem
-Th48: p"\/"q =@p lcm @q
- proof
-      p"\/"q = lcmlat.(p,q) & p=@p & q=@q;
-  hence p"\/"q=@p lcm @q by Def4;
- end;
+Th48: p"\/"q =@p lcm @q by Def4;
 
 theorem
-Th49: p"/\"q = @p hcf @q
- proof
-      p"/\"q = hcflat.(p,q) & p=@p & q=@q;
-  hence p"/\"q=@p hcf @q by Def3;
- end;
+Th49: p"/\"q = @p hcf @q by Def3;
 
 Lm1:
  for a,b being Element of LattStr (# NAT, lcmlat, hcflat #)
@@ -400,7 +393,7 @@ definition
   deffunc O(Element of NATPLUS,Element of NATPLUS)= @(@$1 hcf @$2);
   consider f being BinOp of NATPLUS such that
   A1: for m,n being Element of NATPLUS holds
-  f.(m,n)=O(m,n) from BINOP_1:sch 2;
+  f.(m,n)=O(m,n) from BINOP_1:sch 4;
   take f;
   let m,n be Element of NATPLUS;
   A2: n>0 by Def9;
@@ -424,7 +417,7 @@ definition
   deffunc O(Element of NATPLUS,Element of NATPLUS)= @(@$1 lcm @$2);
   consider f being BinOp of NATPLUS such that
   A5: for m,n being Element of NATPLUS holds
-  f.(m,n)=O(m,n) from BINOP_1:sch 2;
+  f.(m,n)=O(m,n) from BINOP_1:sch 4;
   take f;
   let m,n be Element of NATPLUS;
   A6: m>0 by Def9;
@@ -452,18 +445,10 @@ definition let m be Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
 end;
 
 theorem
-Th69: p"\/"q =@p lcm @q
- proof
-  p"\/"q = lcmlatplus.(p,q) & p=@p & q=@q;
-  hence p"\/"q=@p lcm @q by Def13;
- end;
+Th69: p"\/"q =@p lcm @q by Def13;
 
 theorem
-Th70: p"/\"q = @p hcf @q
- proof
-  p"/\"q = hcflatplus.(p,q) & p=@p & q=@q;
-  hence p"/\"q=@p hcf @q by Def12;
- end;
+Th70: p"/\"q = @p hcf @q by Def12;
 
 Lm7:
  for a,b being Element of LattStr (# NATPLUS, lcmlatplus, hcflatplus #)
@@ -557,15 +542,13 @@ registration
 end;
 
 Lm13: now let L be Lattice;
- thus the L_join of L = (the L_join of L) | [:the carrier of L,
- the carrier of L:]
+ thus the L_join of L = (the L_join of L)||the carrier of L
   proof
    [:the carrier of L, the carrier of L:]
      = dom (the L_join of L) by FUNCT_2:def 1;
    hence thesis by RELAT_1:97;
   end;
-  thus the L_meet of L = (the L_meet of L) | [:the carrier of L,
-  the carrier of L:]
+  thus the L_meet of L = (the L_meet of L)||the carrier of L
    proof
     [:the carrier of L, the carrier of L:]
      = dom (the L_meet of L) by FUNCT_2:def 1;
@@ -576,10 +559,8 @@ end;
 definition let L be Lattice;
   mode SubLattice of L -> Lattice means
  :Def16: the carrier of it c= the carrier of L &
-   the L_join of it = (the L_join of L) | [:the carrier of it,
-   the carrier of it:] &
-   the L_meet of it = (the L_meet of L) | [:the carrier of it,
-   the carrier of it:];
+   the L_join of it = (the L_join of L)||the carrier of it &
+   the L_meet of it = (the L_meet of L)||the carrier of it;
  existence proof take L; thus thesis by Lm13; end;
 end;
 
@@ -588,59 +569,47 @@ registration let L be Lattice;
   existence
    proof set S =
      LattStr(#the carrier of L, the L_join of L, the L_meet of L#);
-A1:  now let a,b be Element of S,
-         a',b' be Element of L;
-      assume
-A2:     a = a' & b = b';
-      hence a"\/"b = (the L_join of L).(a',b')
-               .= a'"\/"b';
-      thus a"/\"b = (the L_meet of L).(a',b') by A2
-               .= a'"/\"b';
-     end;
-A3:  now let a,b be Element of S;
+A1:  for a,b be Element of S,
+         a',b' be Element of L st a = a' & b = b'
+      holds a"\/"b = a'"\/"b' & a"/\"b = a'"/\"b';
+A2:  now let a,b be Element of S;
        reconsider a' = a, b' = b as Element of L;
       thus a"\/"b = b'"\/"a' by A1
         .= b"\/"a;
      end;
-A4:  now let a,b,c be Element of S;
+A3:  now let a,b,c be Element of S;
        reconsider a' = a, b' = b, c' = c as Element of L;
-          b"\/"c = b'"\/"c';
-      hence a"\/"(b"\/"c) = a'"\/"(b'"\/"c')
+      thus a"\/"(b"\/"c) = a'"\/"(b'"\/"c')
         .= (a'"\/"b')"\/"c' by LATTICES:def 5
         .= (a"\/"b)"\/"c;
      end;
-A6:  now let a,b be Element of S;
+A4:  now let a,b be Element of S;
        reconsider a' = a, b' = b as Element of L;
-       a"/\"b = a'"/\"b';
-       hence (a"/\"b)"\/"b = (a'"/\"b')"\/"b'
+       thus (a"/\"b)"\/"b = (a'"/\"b')"\/"b'
          .= b by LATTICES:def 8;
      end;
-A7:  now let a,b be Element of S;
+A5:  now let a,b be Element of S;
       reconsider a' = a, b' = b as Element of L;
       thus a"/\"b = b'"/\"a' by A1
           .= b"/\"a;
      end;
-A8:  now let a,b,c be Element of S;
+A6:  now let a,b,c be Element of S;
        reconsider a' = a, b' = b, c' = c as Element of L;
-       b"/\"c = b'"/\"c';
-       hence a"/\"(b"/\"c) = a'"/\"(b'"/\"c')
+       thus a"/\"(b"/\"c) = a'"/\"(b'"/\"c')
           .= (a'"/\"b')"/\"c' by LATTICES:def 7
           .= (a"/\"b)"/\"c;
      end;
      now let a,b be Element of S;
       reconsider a' = a, b' = b as Element of L;
-          a"\/"b = a'"\/"b';
-      hence a"/\"(a"\/"b) = a'"/\"(a'"\/"b')
+      thus a"/\"(a"\/"b) = a'"/\"(a'"\/"b')
           .=a by LATTICES:def 9;
      end;
      then S is join-commutative join-associative meet-absorbing
         meet-commutative meet-associative join-absorbing
-     by A3,A4,A6,A7,A8,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+     by A2,A3,A4,A5,A6,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
      then reconsider S as Lattice by LATTICES:def 10;
-     the L_join of S = (the L_join of L) | [:the carrier of S,
-     the carrier of S:] &
-     the L_meet of S = (the L_meet of L) | [:the carrier of S,
-     the carrier of S:] by FUNCT_2:40;
+     the L_join of S = (the L_join of L)||the carrier of S &
+     the L_meet of S = (the L_meet of L)||the carrier of S by FUNCT_2:40;
      then S is SubLattice of L by Def16;
     hence thesis;
    end;
@@ -658,7 +627,7 @@ end;
 theorem
   NatPlus_Lattice is SubLattice of Nat_Lattice
 proof
-A1: lcmlatplus = lcmlat | [: NATPLUS, NATPLUS :]
+A1: lcmlatplus = lcmlat||NATPLUS
   proof
 A2: dom lcmlatplus = dom lcmlat /\ [:NATPLUS,NATPLUS:]
     proof
@@ -677,12 +646,12 @@ A4:  dom lcmlat = [:NAT,NAT:] by FUNCT_2:def 1;
     A7: lcmlat.(n,k) = n lcm k by Def4;
     reconsider n=y1,k=y2 as NatPlus by A5,A6,ZFMISC_1:106;
     A8: lcmlatplus.(n,k)= lcmlat.(n,k) by A7,Def13;
-    lcmlatplus.(n,k)= lcmlatplus.[n,k] by BINOP_1:def 1;
-    hence thesis by A6,A8,BINOP_1:def 1;
+    lcmlatplus.(n,k)= lcmlatplus.[n,k];
+    hence thesis by A6,A8;
    end;
    hence thesis by A2,FUNCT_1:68;
   end;
-  hcflatplus = hcflat | [:NATPLUS,NATPLUS:]
+  hcflatplus = hcflat||NATPLUS
   proof
    A9: dom hcflatplus = dom hcflat /\ [:NATPLUS,NATPLUS:]
     proof
@@ -701,8 +670,8 @@ A4:  dom lcmlat = [:NAT,NAT:] by FUNCT_2:def 1;
     A14: hcflat.(n,k) = n hcf k by Def3;
     reconsider n=y1,k=y2 as NatPlus by A12,A13,ZFMISC_1:106;
     A15: hcflatplus.(n,k)= hcflat.(n,k) by A14,Def12;
-    hcflatplus.(n,k)= hcflatplus.[n,k] by BINOP_1:def 1;
-    hence thesis by A13,A15,BINOP_1:def 1;
+    hcflatplus.(n,k)= hcflatplus.[n,k];
+    hence thesis by A13,A15;
    end;
    hence thesis by A9,FUNCT_1:68;
   end;

@@ -20,7 +20,7 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="7">
@@ -43,8 +43,8 @@
 </Func>
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="13"/>
 <Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -52,7 +52,7 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -70,8 +70,8 @@
 </Func>
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="13"/>
 <Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -79,7 +79,7 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="7">
@@ -93,8 +93,8 @@
 </Func>
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="13"/>
 <Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 </Registrations>

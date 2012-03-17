@@ -25,7 +25,7 @@ environ
       ORDINAL1, PRALG_1, LATTICE3, ABIAN, FINSEQ_1, ARYTM_3, LATTICES, NUMBERS,
       ORDINAL2, PARTFUN1, FUNCOP_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, LATTICE3, FUNCOP_1, WAYBEL_0, XBOOLE_0;
+ definitions TARSKI, LATTICE3, FUNCOP_1, WAYBEL_0, XBOOLE_0, BINOP_1;
  theorems EQREL_1, CQC_SIM1, CQC_THE1, BINARITH, RELAT_1, RELAT_2, FINSEQ_1,
       FINSEQ_2, MSUALG_5, MSUALG_7, ORDERS_2, TARSKI, ENUMSET1, ORDINAL1,
       ORDINAL2, ORDINAL3, WELLORD2, HAHNBAN, PARTFUN1, GRFUNC_1, FUNCT_6,
@@ -35,7 +35,7 @@ environ
       FINSEQ_3, SCMFSA_7, SETFAM_1, XBOOLE_0, XBOOLE_1, ORDERS_1, FUNCOP_1,
       XREAL_1;
  schemes DOMAIN_1, FUNCT_1, FUNCT_2, RELSET_1, RECDEF_1, ORDINAL1, ORDINAL2,
-      NAT_1, FINSEQ_1, ZFREFLE1;
+      NAT_1, FINSEQ_1, ZFREFLE1, BINOP_1;
 
 begin :: Preliminaries
 
@@ -426,11 +426,7 @@ end;
 
 registration let A be set;
  cluster EqRelLATT A -> with_infima with_suprema;
- coherence
-  proof
-      LattPOSet EqRelLatt A is with_suprema with_infima;
-   hence thesis;
-  end;
+ coherence;
 end;
 
 theorem Th4:
@@ -454,8 +450,7 @@ for A, x being set holds
               r is Equivalence_Relation of A} by MSUALG_5:def 2;
    then x in the carrier of EqRelLatt A by A2;
   then reconsider e = x as Element of EqRelLatt A;
-      e% = e & e% is Element of LattPOSet EqRelLatt A;
-  then reconsider e as Element of EqRelLATT A;
+  reconsider e as Element of EqRelLATT A;
       e in the carrier of EqRelLATT A;
  hence x in the carrier of EqRelLATT A;
 end;
@@ -476,10 +471,8 @@ for A being set, a,b being Element of EqRelLATT A
  holds a <= b iff a c= b
  proof let A be set, a,b be Element of EqRelLATT A;
   set EL = EqRelLATT A, El = EqRelLatt A;
-    a is Equivalence_Relation of A by Th4;
-  then reconsider a' = a as Element of El;
-   b is Equivalence_Relation of A by Th4;
-  then reconsider b' = b as Element of El;
+  reconsider a' = a as Element of El;
+  reconsider b' = b as Element of El;
   thus a <= b implies a c= b
    proof assume
          a <= b;
@@ -500,18 +493,16 @@ theorem Th7:
 for L being Lattice, a,b being Element of LattPOSet L
   holds a "/\" b = %a "/\" %b
 proof let L be Lattice, a,b be Element of LattPOSet L;
-      a = %a & b = %b;
- then reconsider x = a, y = b as Element of L;
+ reconsider x = a, y = b as Element of L;
  set c = x "/\" y;
 A1:c [= x & c [= y by LATTICES:23;
 A2:c% = c & x% = x & y% = y & %(c%) = c% & %(x%) = x% & %(y%) = y%;
- then reconsider c as Element of LattPOSet L;
+ reconsider c as Element of LattPOSet L;
 A3:c <= a & c <= b by A1,A2,LATTICE3:7;
       for d being Element of LattPOSet L st d <= a & d <= b holds d <= c
     proof let d be Element of LattPOSet L; assume
     A4: d <= a & d <= b;
-          d = %d;
-     then reconsider z = d as Element of L;
+     reconsider z = d as Element of L;
    A5: z% = z & %(z%) = z%;
        then z [= x & z [= y by A2,A4,LATTICE3:7;
        then z [= x "/\" y by FILTER_0:7;
@@ -531,11 +522,9 @@ A1: now let x,y be Element of EqRelLatt A;
                 .= x /\ y by MSUALG_5:def 2;
    end;
   reconsider x = a as Element of LattPOSet EqRelLatt A;
-     %x = x & %x is Element of EqRelLatt A;
-  then reconsider x as Element of EqRelLatt A;
+  reconsider x as Element of EqRelLatt A;
   reconsider y = b as Element of LattPOSet EqRelLatt A;
-     %y = y & %y is Element of EqRelLatt A;
-  then reconsider y as Element of EqRelLatt A;
+  reconsider y as Element of EqRelLatt A;
   reconsider a1 = a,b1 = b as Element of LattPOSet EqRelLatt A;
 A2: x% = x & y% = y & %(x%) = x% & %(y%) = y% &
     %a1 = a1 & %b1 = b1 & (%a1)% = %a1 & (%b1)% = %b1;
@@ -548,18 +537,16 @@ theorem Th9:
 for L being Lattice, a,b being Element of LattPOSet L
  holds a "\/" b = %a "\/" %b
  proof let L be Lattice, a,b be Element of LattPOSet L;
-       a = %a & b = %b;
-  then reconsider x = a, y = b as Element of L;
+  reconsider x = a, y = b as Element of L;
   set c = x "\/" y;
 A1: x [= c & y [= c by LATTICES:22;
 A2: c% = c & x% = x & y% = y & %(c%) = c% & %(x%) = x% & %(y%) = y%;
-  then reconsider c as Element of LattPOSet L;
+  reconsider c as Element of LattPOSet L;
 A3: a <= c & b <= c by A1,A2,LATTICE3:7;
        for d being Element of LattPOSet L st a <= d & b <= d holds c <= d
      proof let d be Element of LattPOSet L; assume
      A4: a <= d & b <= d;
-           d = %d;
-      then reconsider z = d as Element of L;
+      reconsider z = d as Element of L;
            x% <= z% & y% <= z% by A4;
         then x [= z & y [= z by LATTICE3:7;
         then x "\/" y [= z by FILTER_0:6;
@@ -578,12 +565,8 @@ for A being set, a,b being Element of EqRelLATT A
 A1: a = E1 and
 A2: b = E2;
   reconsider x = a as Element of LattPOSet EqRelLatt A;
-       %x = x & %x is Element of EqRelLatt A;
-                                                                         then
 reconsider x as Element of EqRelLatt A;
   reconsider y = b as Element of LattPOSet EqRelLatt A;
-       %y = y & %y is Element of EqRelLatt A;
-                                                                         then
 reconsider y as Element of EqRelLatt A;
   reconsider a1 = a,b1 = b as Element of LattPOSet EqRelLatt A;
 A3: x% = x & y% = y & %(x%) = x% & %(y%) = y% &
@@ -1143,7 +1126,7 @@ A6: not [x,y] in id X by RELAT_1:def 3;
  A7: not x in X or x <> y by A6,RELAT_1:def 10;
   consider e1,e2 such that
 A8: e1 = e & e2 = e;
-A9: [x,y] in e1 "\/" e2 by A5,A8,EQREL_1:22;
+A9: [x,y] in e1 "\/" e2 by A5,A8;
   then consider F being non empty FinSequence of X such that
 A10: len F = o and
 A11: x,y are_joint_by F,e1,e2 by A1,A3,A8;
@@ -1306,7 +1289,7 @@ definition let A, L;
   proof
    reconsider xy = [x,y] as Element of [:A,A:];
       f.xy is Element of L;
-   hence thesis by BINOP_1:def 1;
+   hence thesis;
   end;
 end;
 
@@ -1334,7 +1317,7 @@ A2:for x,y being Element of A holds f.(x,y) = Bottom L
     proof
     let x,y be Element of A;
     reconsider x' = x as set; reconsider y' = y as set;
-       Bottom L = f.[x,y] by A1 .= f.(x',y') by BINOP_1:def 1;
+       Bottom L = f.[x,y] by A1 .= f.(x',y');
     hence thesis;
    end;
      for x,y being Element of A holds f.(x,y) = f.(y,x)
@@ -1420,7 +1403,7 @@ then A6:  E is_symmetric_in A by RELAT_2:def 3;
     thus thesis by A2,A10;
    end;
   consider f being Function of L,EqRelLATT A such that A11:
-   for e being Element of L holds X[e,f.e] from FUNCT_2:sch 14(A1);
+   for e being Element of L holds X[e,f.e] from FUNCT_2:sch 10(A1);
  thus thesis by A11;
 end;
 uniqueness
@@ -1544,8 +1527,8 @@ then A1:  rng d = the carrier of L by FUNCT_2:def 3;
       A6:  x2 in A & y2 in A & z2 = [x2,y2] by A5,ZFMISC_1:def 2;
    reconsider x1,y1 as Element of A by A4;
    reconsider x2,y2 as Element of A by A6;
-A7:    d.(x1,y1) = a by A3,A4,BINOP_1:def 1;
-A8:    d.(x2,y2) = b by A5,A6,BINOP_1:def 1;
+A7:    d.(x1,y1) = a by A3,A4;
+A8:    d.(x2,y2) = b by A5,A6;
    consider E1 being Equivalence_Relation of A such that A9:E1 = f.a &
        for x,y be Element of A holds [x,y] in E1 iff d.(x,y) <= a by Def9;
    consider E2 being Equivalence_Relation of A such that A10:E2 = f.b &
@@ -1629,9 +1612,8 @@ A1:{A} in new_set A & {{A}} in new_set A & {{{A}}} in new_set A
 A2:  for p,q being Element of new_set A
        ex r being Element of L st X[p,q,r]
  proof
- let p,q be Element of new_set A;  p in new_set A & q in new_set A;
-  then p in A \/ {{A},{{A}},{{{A}}}} & q in A \/ {{A},{{A}},{{{A}}}};
-then A3: (p in A or p in {{A},{{A}},{{{A}}}}) &
+ let p,q be Element of new_set A;
+A3: (p in A or p in {{A},{{A}},{{{A}}}}) &
     (q in A or q in {{A},{{A}},{{{A}}}}) by XBOOLE_0:def 2;
 A4:{{A}} <> {{{A}}}
   proof
@@ -1701,8 +1683,8 @@ A11:(p = {A} or p = {{A}} or p = {{{A}}}) & p = q iff
 end;
 end;
   consider f being Function of [:new_set A,new_set A:],the carrier of L
-  such that A22: for p,q being Element of new_set A holds X[p,q,f.[p,q]]
-                                                     from FUNCT_2:sch 7(A2);
+  such that A22: for p,q being Element of new_set A holds X[p,q,f.(p,q)]
+                                                     from BINOP_1:sch 3(A2);
  reconsider f as BiFunction of new_set A,L;
  take f;
 A23: for u,v being Element of A holds f.(u,v) = d.(u,v)
@@ -1711,17 +1693,17 @@ A23: for u,v being Element of A holds f.(u,v) = d.(u,v)
          u in A \/ {{A}, {{A}}, {{{A}}}} & v in A \/ {{A}, {{A}}, {{{A}}}}
                                                             by XBOOLE_0:def 2;
       then reconsider u' = u, v' = v as Element of new_set A;
-      thus f.(u,v) = f.[u',v'] by BINOP_1:def 1 .= d.(u,v) by A22;
+      thus f.(u,v) = f.(u',v') .= d.(u,v) by A22;
      end;
-A24: f.({{A}},{{{A}}}) = f.[{{A}},{{{A}}}] by BINOP_1:def 1 .= a by A1,A22;
-A25:f.({{{A}}},{{A}}) = f.[{{{A}}},{{A}}] by BINOP_1:def 1 .= a by A1,A22;
-A26: f.({A},{{A}}) = f.[{A},{{A}}] by BINOP_1:def 1 .= b by A1,A22;
-A27:f.({{A}},{A}) = f.[{{A}},{A}] by BINOP_1:def 1 .= b by A1,A22;
-A28: f.({A},{{{A}}}) = f.[{A},{{{A}}}] by BINOP_1:def 1 .= a"\/"b by A1,A22;
-A29:f.({{{A}}},{A}) = f.[{{{A}}},{A}] by BINOP_1:def 1 .= a"\/"b by A1,A22;
-A30: f.({A},{A}) = f.[{A},{A}] by BINOP_1:def 1 .= Bottom L by A1,A22;
-A31: f.({{A}},{{A}}) = f.[{{A}},{{A}}] by BINOP_1:def 1 .= Bottom L by A1,A22;
-A32: f.({{{A}}},{{{A}}}) = f.[{{{A}}},{{{A}}}] by BINOP_1:def 1 .= Bottom
+A24: f.({{A}},{{{A}}}) = a by A1,A22;
+A25:f.({{{A}}},{{A}}) = a by A1,A22;
+A26: f.({A},{{A}}) = b by A1,A22;
+A27:f.({{A}},{A}) = b by A1,A22;
+A28: f.({A},{{{A}}}) = a"\/"b by A1,A22;
+A29:f.({{{A}}},{A}) = a"\/"b by A1,A22;
+A30: f.({A},{A}) = Bottom L by A1,A22;
+A31: f.({{A}},{{A}}) = Bottom L by A1,A22;
+A32: f.({{{A}}},{{{A}}}) = Bottom
 L by A1,A22
 ;
 A33:for u being Element of A holds (f.(u,{A}) = d.(u,x)"\/"a &
@@ -1731,14 +1713,14 @@ A33:for u being Element of A holds (f.(u,{A}) = d.(u,x)"\/"a &
  A \/ {{A}, {{A}}, {{{A}}}} by XBOOLE_0:def 2;
       then reconsider u' = u as Element of new_set A;
       consider u1 being Element of A such that
-          A34:  u1 = u' & f.[u',{A}] = d.(u1,x)"\/"a by A1,A22;
-      thus f.(u,{A}) = d.(u,x)"\/"a by A34,BINOP_1:def 1;
+          A34:  u1 = u' & f.(u',{A}) = d.(u1,x)"\/"a by A1,A22;
+      thus f.(u,{A}) = d.(u,x)"\/"a by A34;
       consider u2 being Element of A such that
-          A35:  u2 = u' & f.[u',{{A}}] = d.(u2,x)"\/"a"\/"b by A1,A22;
-      thus f.(u,{{A}}) = d.(u,x)"\/"a"\/"b by A35,BINOP_1:def 1;
+          A35:  u2 = u' & f.(u',{{A}}) = d.(u2,x)"\/"a"\/"b by A1,A22;
+      thus f.(u,{{A}}) = d.(u,x)"\/"a"\/"b by A35;
       consider u3 being Element of A such that
-          A36:  u3 = u' & f.[u',{{{A}}}] = d.(u3,y)"\/"b by A1,A22;
-      thus f.(u,{{{A}}}) = d.(u,y)"\/"b by A36,BINOP_1:def 1;
+          A36:  u3 = u' & f.(u',{{{A}}}) = d.(u3,y)"\/"b by A1,A22;
+      thus f.(u,{{{A}}}) = d.(u,y)"\/"b by A36;
      end;
       for u being Element of A holds (f.({A},u) = d.(u,x)"\/"a &
       f.({{A}},u) = d.(u,x)"\/"a"\/"b & f.({{{A}}},u) = d.(u,y)"\/"b)
@@ -1747,14 +1729,14 @@ A33:for u being Element of A holds (f.(u,{A}) = d.(u,x)"\/"a &
  A \/ {{A}, {{A}}, {{{A}}}} by XBOOLE_0:def 2;
       then reconsider u' = u as Element of new_set A;
       consider u1 being Element of A such that
-          A37:  u1 = u' & f.[{A},u'] = d.(u1,x)"\/"a by A1,A22;
-      thus f.({A},u) = d.(u,x)"\/"a by A37,BINOP_1:def 1;
+          A37:  u1 = u' & f.({A},u') = d.(u1,x)"\/"a by A1,A22;
+      thus f.({A},u) = d.(u,x)"\/"a by A37;
       consider u2 being Element of A such that
-          A38:  u2 = u' & f.[{{A}},u'] = d.(u2,x)"\/"a"\/"b by A1,A22;
-      thus f.({{A}},u) = d.(u,x)"\/"a"\/"b by A38,BINOP_1:def 1;
+          A38:  u2 = u' & f.({{A}},u') = d.(u2,x)"\/"a"\/"b by A1,A22;
+      thus f.({{A}},u) = d.(u,x)"\/"a"\/"b by A38;
       consider u3 being Element of A such that
-          A39:  u3 = u' & f.[{{{A}}},u'] = d.(u3,y)"\/"b by A1,A22;
-      thus f.({{{A}}},u) = d.(u,y)"\/"b by A39,BINOP_1:def 1;
+          A39:  u3 = u' & f.({{{A}}},u') = d.(u3,y)"\/"b by A1,A22;
+      thus f.({{{A}}},u) = d.(u,y)"\/"b by A39;
      end;
  hence thesis by A23,A24,A25,A26,A27,A28,A29,A30,A31,A32,A33;
 end;
@@ -1785,9 +1767,7 @@ L & f2.({{{A}}},{{{A}}}) = Bottom L &
   f2.(u,{{{A}}}) = d.(u,y)"\/"b & f2.({{{A}}},u) = d.(u,y)"\/"b);
    now
  let p,q be Element of new_set A;
-    p in new_set A & q in new_set A;
- then p in A \/ {{A},{{A}},{{{A}}}} & q in A \/ {{A},{{A}},{{{A}}}};
-then A42: (p in A or p in {{A},{{A}},{{{A}}}}) &
+A42: (p in A or p in {{A},{{A}},{{{A}}}}) &
     (q in A or q in {{A},{{A}},{{{A}}}}) by XBOOLE_0:def 2;
 per cases by A42,ENUMSET1:def 1;
  suppose A43:p in A & q in A;
@@ -1859,9 +1839,8 @@ A1: d is zeroed;
  set f = new_bi_fun(d,q);
     for u being Element of new_set A holds f.(u,u) = Bottom L
    proof
-   let u be Element of new_set A;  u in new_set A;
-    then u in A \/ {{A},{{A}},{{{A}}}};
- then A2:u in A or u in {{A},{{A}},{{{A}}}} by XBOOLE_0:def 2;
+   let u be Element of new_set A;
+ A2:u in A or u in {{A},{{A}},{{{A}}}} by XBOOLE_0:def 2;
   per cases by A2,ENUMSET1:def 1;
    suppose u in A; then reconsider u' = u as Element of A;
     thus f.(u,u) = d.(u',u') by Def11 .= Bottom L by A1,Def7;
@@ -1882,9 +1861,8 @@ A1: d is symmetric;
   let q be Element of [:A,A,the carrier of L,the carrier of L:];
   set f = new_bi_fun(d,q),
       x = q`1, y = q`2, a = q`3, b = q`4;
-  let p,q be Element of new_set A;  p in new_set A & q in new_set A;
-  then p in A \/ {{A},{{A}},{{{A}}}} & q in A \/ {{A},{{A}},{{{A}}}};
-then A2: (p in A or p in {{A},{{A}},{{{A}}}}) &
+  let p,q be Element of new_set A;
+A2: (p in A or p in {{A},{{A}},{{{A}}}}) &
     (q in A or q in {{A},{{A}},{{{A}}}}) by XBOOLE_0:def 2;
 per cases by A2,ENUMSET1:def 1;
  suppose p in A & q in A; then reconsider p' = p, q' = q as Element of A;
@@ -2570,11 +2548,7 @@ per cases by XBOOLE_0:def 2;
 end;
 
 theorem Th21:
-for A be set holds A c= new_set A
- proof let A be set;
-       A c= A \/ {{A}, {{A}}, {{{A}}}} by XBOOLE_1:7;
-  hence thesis;
- end;
+for A be set holds A c= new_set A by XBOOLE_1:7;
 
 theorem Th22:
 for d be BiFunction of A,L
@@ -2593,8 +2567,8 @@ then A2:   dom d c= dom g by A1,ZFMISC_1:119;
         then consider x,y such that
     A4:  [x,y] = z by ZFMISC_1:102;
         reconsider x' = x, y' = y as Element of A by A3,A4,ZFMISC_1:106;
-          d.[x,y] = d.(x',y') by BINOP_1:def 1 .= g.(x',y') by Def11
-              .= g.[x,y] by BINOP_1:def 1;
+          d.[x,y] = d.(x',y') .= g.(x',y') by Def11
+              .= g.[x,y];
        hence d.z = g.z by A4;
       end;
   hence d c= new_bi_fun(d,q) by A2,GRFUNC_1:8;
@@ -3438,8 +3412,8 @@ A5: for O2 st O2 <> {} & O2 is_limit_ordinal &
             dom h = [:ConsecutiveSet(A,o),ConsecutiveSet(A,o):]
                                                   by FUNCT_2:def 1;
      then A18: [x,x] in dom h by A13,ZFMISC_1:106;
-        thus f.(x,x) = f.[x,x] by BINOP_1:def 1
-                .= h.[x,x] by A17,A18,GRFUNC_1:8 .= h.(x',x') by BINOP_1:def 1
+        thus f.(x,x) = f.[x,x]
+                .= h.[x,x] by A17,A18,GRFUNC_1:8 .= h.(x',x')
                 .= Bottom L by A15,Def7;
        end;
      hence ConsecutiveDelta(q,O2) is zeroed by A6,A7,Th31;
@@ -3540,10 +3514,10 @@ A25: dom h2 = [:ConsecutiveSet(A,o2),ConsecutiveSet(A,o2):] by FUNCT_2:def 1;
 ;
       then A27: h2 c= f by A22,ZFMISC_1:92;
       A28: [x,y] in dom h2 & [y,x] in dom h2 by A16,A17,A25,A26,ZFMISC_1:106;
-         thus f.(x,y) = f.[x,y] by BINOP_1:def 1
-              .= h2.[x,y] by A27,A28,GRFUNC_1:8 .= h2.(x',y') by BINOP_1:def 1
-              .= h2.(y',x') by A23,Def6 .= h2.[y,x] by BINOP_1:def 1
-              .= f.[y,x] by A27,A28,GRFUNC_1:8 .= f.(y,x) by BINOP_1:def 1;
+         thus f.(x,y) = f.[x,y]
+              .= h2.[x,y] by A27,A28,GRFUNC_1:8 .= h2.(x',y')
+              .= h2.(y',x') by A23,Def6 .= h2.[y,x]
+              .= f.[y,x] by A27,A28,GRFUNC_1:8 .= f.(y,x);
          end;
          suppose o2 c= o1;
       then A29: ConsecutiveSet(A,o2) c= ConsecutiveSet(A,o1) by Th32;
@@ -3553,10 +3527,10 @@ A25: dom h2 = [:ConsecutiveSet(A,o2),ConsecutiveSet(A,o2):] by FUNCT_2:def 1;
 ;
       then A30: h1 c= f by A18,ZFMISC_1:92;
       A31: [x,y] in dom h1 & [y,x] in dom h1 by A16,A17,A21,A29,ZFMISC_1:106;
-         thus f.(x,y) = f.[x,y] by BINOP_1:def 1
-              .= h1.[x,y] by A30,A31,GRFUNC_1:8 .= h1.(x',y') by BINOP_1:def 1
-              .= h1.(y',x') by A19,Def6 .= h1.[y,x] by BINOP_1:def 1
-              .= f.[y,x] by A30,A31,GRFUNC_1:8 .= f.(y,x) by BINOP_1:def 1;
+         thus f.(x,y) = f.[x,y]
+              .= h1.[x,y] by A30,A31,GRFUNC_1:8 .= h1.(x',y')
+              .= h1.(y',x') by A19,Def6 .= h1.[y,x]
+              .= f.[y,x] by A30,A31,GRFUNC_1:8 .= f.(y,x);
        end;
        end;
    hence ConsecutiveDelta(q,O2) is symmetric by A7,A8,Th31;
@@ -3614,9 +3588,9 @@ A11: q.O1 = [u,v,a',b'] & d.(u,v) <= a'"\/"b';
   A16: b' = b by A12,MCART_1:def 11;
  A17: dom d = [:A,A:] by FUNCT_2:def 1;
  A18: d c= ConsecutiveDelta(q,O1) by Th34;
-        d.(u,v) = d.[u,v] by BINOP_1:def 1
+        d.(u,v) = d.[u,v]
             .= ConsecutiveDelta(q,O1).[X,Y] by A13,A14,A17,A18,GRFUNC_1:8
-            .= ConsecutiveDelta(q,O1).(X,Y) by BINOP_1:def 1;
+            .= ConsecutiveDelta(q,O1).(X,Y);
  then A19:new_bi_fun(ConsecutiveDelta(q,O1),Quadr(q,O1)) is u.t.i.
                                      by A6,A8,A9,A11,A15,A16,Th20,
 ORDINAL1:def 2;
@@ -3721,13 +3695,13 @@ A21: for O2 st O2 <> {} & O2 is_limit_ordinal &
     A53:  [x,y] in dom h3 by A34,A35,A48,A50,A51,ZFMISC_1:106;
     A54:  [y,z] in dom h3 by A35,A36,A48,A51,ZFMISC_1:106;
     A55:  [x,z] in dom h3 by A34,A36,A48,A50,ZFMISC_1:106;
-    A56:  f.(x,y) = f.[x,y] by BINOP_1:def 1 .= h3.[x,y] by A52,A53,GRFUNC_1:8
-                .= h3.(x',y') by BINOP_1:def 1;
-    A57:  f.(y,z) = f.[y,z] by BINOP_1:def 1 .= h3.[y,z] by A52,A54,GRFUNC_1:8
-                .= h3.(y',z') by BINOP_1:def 1;
-            f.(x,z) = f.[x,z] by BINOP_1:def 1 .= h3.[x,z] by A52,A55,
+    A56:  f.(x,y) = f.[x,y] .= h3.[x,y] by A52,A53,GRFUNC_1:8
+                .= h3.(x',y');
+    A57:  f.(y,z) = f.[y,z] .= h3.[y,z] by A52,A54,GRFUNC_1:8
+                .= h3.(y',z');
+            f.(x,z) = f.[x,z] .= h3.[x,z] by A52,A55,
 GRFUNC_1:8
-                .= h3.(x',z') by BINOP_1:def 1;
+                .= h3.(x',z');
         hence f.(x,y) "\/" f.(y,z) >= f.(x,z) by A46,A56,A57,Def8;
         end;
         suppose o3 c= o2;
@@ -3743,13 +3717,13 @@ GRFUNC_1:8
     A61:  [x,y] in dom h2 by A34,A35,A44,A59,ZFMISC_1:106;
     A62:  [y,z] in dom h2 by A35,A36,A44,A58,ZFMISC_1:106;
     A63:  [x,z] in dom h2 by A34,A36,A44,A58,A59,ZFMISC_1:106;
-    A64:  f.(x,y) = f.[x,y] by BINOP_1:def 1 .= h2.[x,y] by A60,A61,GRFUNC_1:8
-                .= h2.(x',y') by BINOP_1:def 1;
-    A65:  f.(y,z) = f.[y,z] by BINOP_1:def 1 .= h2.[y,z] by A60,A62,GRFUNC_1:8
-                .= h2.(y',z') by BINOP_1:def 1;
-            f.(x,z) = f.[x,z] by BINOP_1:def 1 .= h2.[x,z] by A60,A63,
+    A64:  f.(x,y) = f.[x,y] .= h2.[x,y] by A60,A61,GRFUNC_1:8
+                .= h2.(x',y');
+    A65:  f.(y,z) = f.[y,z] .= h2.[y,z] by A60,A62,GRFUNC_1:8
+                .= h2.(y',z');
+            f.(x,z) = f.[x,z] .= h2.[x,z] by A60,A63,
 GRFUNC_1:8
-                .= h2.(x',z') by BINOP_1:def 1;
+                .= h2.(x',z');
         hence f.(x,y) "\/" f.(y,z) >= f.(x,z) by A42,A64,A65,Def8;
        end;
        end;
@@ -3772,13 +3746,13 @@ GRFUNC_1:8
     A71:  [x,y] in dom h2 by A34,A35,A44,A68,ZFMISC_1:106;
     A72:  [y,z] in dom h2 by A35,A36,A44,A69,ZFMISC_1:106;
     A73:  [x,z] in dom h2 by A34,A36,A44,A68,A69,ZFMISC_1:106;
-    A74:  f.(x,y) = f.[x,y] by BINOP_1:def 1 .= h2.[x,y] by A70,A71,GRFUNC_1:8
-                .= h2.(x',y') by BINOP_1:def 1;
-    A75:  f.(y,z) = f.[y,z] by BINOP_1:def 1 .= h2.[y,z] by A70,A72,GRFUNC_1:8
-                .= h2.(y',z') by BINOP_1:def 1;
-            f.(x,z) = f.[x,z] by BINOP_1:def 1 .= h2.[x,z] by A70,A73,
+    A74:  f.(x,y) = f.[x,y] .= h2.[x,y] by A70,A71,GRFUNC_1:8
+                .= h2.(x',y');
+    A75:  f.(y,z) = f.[y,z] .= h2.[y,z] by A70,A72,GRFUNC_1:8
+                .= h2.(y',z');
+            f.(x,z) = f.[x,z] .= h2.[x,z] by A70,A73,
 GRFUNC_1:8
-                .= h2.(x',z') by BINOP_1:def 1;
+                .= h2.(x',z');
         hence f.(x,y) "\/" f.(y,z) >= f.(x,z) by A42,A74,A75,Def8;
         end;
         suppose o2 c= o1;
@@ -3792,13 +3766,13 @@ GRFUNC_1:8
     A78:  [x,y] in dom h1 by A34,A35,A40,A76,ZFMISC_1:106;
     A79:  [y,z] in dom h1 by A35,A36,A40,A67,A76,ZFMISC_1:106;
     A80:  [x,z] in dom h1 by A34,A36,A40,A67,ZFMISC_1:106;
-    A81:  f.(x,y) = f.[x,y] by BINOP_1:def 1 .= h1.[x,y] by A77,A78,GRFUNC_1:8
-                .= h1.(x',y') by BINOP_1:def 1;
-    A82:  f.(y,z) = f.[y,z] by BINOP_1:def 1 .= h1.[y,z] by A77,A79,GRFUNC_1:8
-                .= h1.(y',z') by BINOP_1:def 1;
-            f.(x,z) = f.[x,z] by BINOP_1:def 1 .= h1.[x,z] by A77,A80,
+    A81:  f.(x,y) = f.[x,y] .= h1.[x,y] by A77,A78,GRFUNC_1:8
+                .= h1.(x',y');
+    A82:  f.(y,z) = f.[y,z] .= h1.[y,z] by A77,A79,GRFUNC_1:8
+                .= h1.(y',z');
+            f.(x,z) = f.[x,z] .= h1.[x,z] by A77,A80,
 GRFUNC_1:8
-                .= h1.(x',z') by BINOP_1:def 1;
+                .= h1.(x',z');
         hence f.(x,y) "\/" f.(y,z) >= f.(x,z) by A38,A81,A82,Def8;
       end;
       end;
@@ -3824,10 +3798,7 @@ end;
 
 registration let A,L; let d be BiFunction of A,L;
  cluster NextSet(d) -> non empty;
- coherence proof
-     ConsecutiveSet(A,DistEsti(d)) is non empty;
-  hence thesis;
- end;
+ coherence;
 end;
 
 definition let A,L; let d be BiFunction of A,L; let q be QuadrSeq of d;
@@ -3838,11 +3809,7 @@ end;
 
 definition let A,L; let d be distance_function of A,L; let q be QuadrSeq of d;
 redefine func NextDelta(q) -> distance_function of NextSet(d),L;
- coherence proof
-        ConsecutiveSet(A,DistEsti(d)) = NextSet(d);
-  hence NextDelta(q) is distance_function of NextSet(d),L
-    by Th36,Th37,Th38;
-  end;
+ coherence by Th36,Th37,Th38;
 end;
 
 definition let A,L; let d be distance_function of A,L;
@@ -3916,20 +3883,20 @@ A22: [{{{B}}},y1] in dom new_bi_fun(cd,Q) by A16,A18,ZFMISC_1:106;
    then reconsider z1={B},z2={{B}},z3={{{B}}} as Element of Aq by A1,A14,A15
 ,A16;
    take z1,z2,z3;
-   thus dq.(x,z1) = dq.[x,z1] by BINOP_1:def 1
+   thus dq.(x,z1) = dq.[x,z1]
      .= new_bi_fun(cd,Q).[x1,{B}] by A13,A19,GRFUNC_1:8
-     .= new_bi_fun(cd,Q).(x1,{B}) by BINOP_1:def 1
+     .= new_bi_fun(cd,Q).(x1,{B})
      .= cd.(xo,xo)"\/"a by A6,A8,Def11 .= Bottom L"\/"
 a by A17,Def7 .= a by WAYBEL_1:4;
-   thus dq.(z2,z3) = dq.[z2,z3] by BINOP_1:def 1
+   thus dq.(z2,z3) = dq.[z2,z3]
      .= new_bi_fun(cd,Q).[{{B}},{{{B}}}] by A13,A20,GRFUNC_1:8
-     .= new_bi_fun(cd,Q).({{B}},{{{B}}}) by BINOP_1:def 1 .= a by A8,Def11;
-   thus dq.(z1,z2) = dq.[z1,z2] by BINOP_1:def 1
+     .= new_bi_fun(cd,Q).({{B}},{{{B}}}) .= a by A8,Def11;
+   thus dq.(z1,z2) = dq.[z1,z2]
      .= new_bi_fun(cd,Q).[{B},{{B}}] by A13,A21,GRFUNC_1:8
-     .= new_bi_fun(cd,Q).({B},{{B}}) by BINOP_1:def 1 .= b by A9,Def11;
-   thus dq.(z3,y) = dq.[z3,y] by BINOP_1:def 1
+     .= new_bi_fun(cd,Q).({B},{{B}}) .= b by A9,Def11;
+   thus dq.(z3,y) = dq.[z3,y]
      .= new_bi_fun(cd,Q).[{{{B}}},y1] by A13,A22,GRFUNC_1:8
-     .= new_bi_fun(cd,Q).({{{B}}},y1) by BINOP_1:def 1
+     .= new_bi_fun(cd,Q).({{{B}}},y1)
      .= cd.(yo,yo)"\/"b by A7,A9,Def11 .= Bottom L"\/"
 b by A17,Def7 .= b by WAYBEL_1:4;
 end;
@@ -4121,8 +4088,7 @@ A1: for x,y being Element of L
      end;
   consider f being Function of
    [:the carrier of L,the carrier of L:],the carrier of L such that
-A4:  for x,y being Element of L holds X[x,y,f.[x,y]]
-                                                       from FUNCT_2:sch 7(A1);
+A4:  for x,y being Element of L holds X[x,y,f.(x,y)] from BINOP_1:sch 3(A1);
 A5:for x,y being Element of L holds
    (x <> y implies f.(x,y) = x"\/"y) & (x = y implies f.(x,y) = Bottom L)
     proof
@@ -4130,12 +4096,12 @@ A5:for x,y being Element of L holds
     thus x <> y implies f.(x,y) = x"\/"y
       proof
       assume A6: x <> y;
-      thus f.(x,y) = f.[x,y] by BINOP_1:def 1 .= x"\/"y by A4,A6;
+      thus f.(x,y) = x"\/"y by A4,A6;
      end;
     thus x = y implies f.(x,y) = Bottom L
       proof
       assume A7: x = y;
-      thus f.(x,y) = f.[x,y] by BINOP_1:def 1 .= Bottom L by A4,A7;
+      thus f.(x,y) = Bottom L by A4,A7;
      end;
    end;
  reconsider f as BiFunction of A,L;
@@ -4226,12 +4192,12 @@ A19:  dom f1 = [:the carrier of L,the carrier of L:] by FUNCT_2:def 1
     reconsider x,y as Element of L by A20,A21,ZFMISC_1:106;
     per cases;
      suppose A22: x = y;
-      thus f1.z = f1.(x,y) by A21,BINOP_1:def 1 .= Bottom L by A17,A22
-         .= f2.(x,y) by A18,A22 .= f2.z by A21,BINOP_1:def 1;
+      thus f1.z = f1.(x,y) by A21 .= Bottom L by A17,A22
+         .= f2.(x,y) by A18,A22 .= f2.z by A21;
      end;
      suppose A23: x <> y;
-      thus f1.z = f1.(x,y) by A21,BINOP_1:def 1 .= x"\/"y by A17,A23
-         .= f2.(x,y) by A18,A23 .= f2.z by A21,BINOP_1:def 1;
+      thus f1.z = f1.(x,y) by A21 .= x"\/"y by A17,A23
+         .= f2.(x,y) by A18,A23 .= f2.z by A21;
    end;
    end;
   hence f1 = f2 by A19,FUNCT_1:9;
@@ -4252,12 +4218,12 @@ BasicDF(L) is onto
     suppose A2: w = Bottom L;
      take z = [w,w];
      thus z in [:X,X:] by A1,ZFMISC_1:106;
-     thus f.z = f.(w',w') by BINOP_1:def 1.= w by A2,Def22;
+     thus f.z = f.(w',w').= w by A2,Def22;
     end;
     suppose A3: w <> Bottom L;
      take z = [Bottom L,w];
      thus z in [:X,X:] by A1,ZFMISC_1:106;
-     thus f.z = f.(Bottom L,w') by BINOP_1:def 1
+     thus f.z = f.(Bottom L,w')
              .= Bottom L "\/" w'' by A3,Def22 .= w by WAYBEL_1:4;
   end;
   end;
@@ -4465,9 +4431,9 @@ A42: FD is zeroed
         d1 in { (S.i)`2 where i is Nat: not contradiction} by A46;
  then A47: d1 c= FD by ZFMISC_1:92;
  A48: dom d1 = [:A1,A1:] by FUNCT_2:def 1;
-   thus FD.(x,x) = FD.[x',x'] by BINOP_1:def 1
+   thus FD.(x,x) = FD.[x',x']
                 .= d1.[x',x'] by A47,A48,GRFUNC_1:8
-                .= d1.(x',x') by BINOP_1:def 1 .=Bottom L by Def7;
+                .= d1.(x',x') .=Bottom L by Def7;
   end;
 A49: FD is symmetric
     proof
@@ -4504,20 +4470,20 @@ A49: FD is symmetric
       then reconsider x'=x,y'=y as Element of A2 by A56,A57,A58,A59,
 MCART_1:def 1;
   A64:  dom d2 = [:A2,A2:] by FUNCT_2:def 1;
-     thus FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
-            .= d2.[x',y'] by A62,A64,GRFUNC_1:8 .= d2.(x',y') by BINOP_1:def 1
-            .= d2.(y',x') by Def6 .= d2.[y',x'] by BINOP_1:def 1
-            .= FD.[y',x'] by A62,A64,GRFUNC_1:8 .= FD.(y,x) by BINOP_1:def 1;
+     thus FD.(x,y) = FD.[x',y']
+            .= d2.[x',y'] by A62,A64,GRFUNC_1:8 .= d2.(x',y')
+            .= d2.(y',x') by Def6 .= d2.[y',x']
+            .= FD.[y',x'] by A62,A64,GRFUNC_1:8 .= FD.(y,x);
      end;
      suppose l <= k;
        then A2 c= A1 by A54,A61,Th41;
       then reconsider x'=x,y'=y as Element of A1 by A50,A51,A52,A63,
 MCART_1:def 1;
   A65:  dom d1 = [:A1,A1:] by FUNCT_2:def 1;
-     thus FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
-            .= d1.[x',y'] by A55,A65,GRFUNC_1:8 .= d1.(x',y') by BINOP_1:def 1
-            .= d1.(y',x') by Def6 .= d1.[y',x'] by BINOP_1:def 1
-            .= FD.[y',x'] by A55,A65,GRFUNC_1:8 .= FD.(y,x) by BINOP_1:def 1;
+     thus FD.(x,y) = FD.[x',y']
+            .= d1.[x',y'] by A55,A65,GRFUNC_1:8 .= d1.(x',y')
+            .= d1.(y',x') by Def6 .= d1.[y',x']
+            .= FD.[y',x'] by A55,A65,GRFUNC_1:8 .= FD.(y,x);
    end;
    end;
     FD is u.t.i.
@@ -4577,30 +4543,30 @@ MCART_1:def 1;
            then reconsider x' = x, y' = y, z' = z as Element of A3
                                          by A72,A80,A82,A83,A84,A91,
 MCART_1:def 1;
-      A92:   FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+      A92:   FD.(x,y) = FD.[x',y']
               .= d3.[x',y'] by A87,A89,GRFUNC_1:8
-              .= d3.(x',y') by BINOP_1:def 1;
-      A93:   FD.(y,z) = FD.[y',z'] by BINOP_1:def 1
+              .= d3.(x',y');
+      A93:   FD.(y,z) = FD.[y',z']
               .= d3.[y',z'] by A87,A89,GRFUNC_1:8
-              .= d3.(y',z') by BINOP_1:def 1;
-               FD.(x,z) = FD.[x',z'] by BINOP_1:def 1
+              .= d3.(y',z');
+               FD.(x,z) = FD.[x',z']
               .= d3.[x',z'] by A87,A89,GRFUNC_1:8
-              .= d3.(x',z') by BINOP_1:def 1;
+              .= d3.(x',z');
           hence FD.(x,y) "\/" FD.(y,z) >= FD.(x,z) by A92,A93,Def8;
           end;
           suppose n <= l;
            then A3 c= A2 by A78,A86,Th41;
            then reconsider x' = x, y' = y, z' = z as Element of A2
                                 by A72,A74,A75,A76,A88,A90,MCART_1:def 1;
-      A94:   FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+      A94:   FD.(x,y) = FD.[x',y']
               .= d2.[x',y'] by A79,A81,GRFUNC_1:8
-              .= d2.(x',y') by BINOP_1:def 1;
-      A95:   FD.(y,z) = FD.[y',z'] by BINOP_1:def 1
+              .= d2.(x',y');
+      A95:   FD.(y,z) = FD.[y',z']
               .= d2.[y',z'] by A79,A81,GRFUNC_1:8
-              .= d2.(y',z') by BINOP_1:def 1;
-               FD.(x,z) = FD.[x',z'] by BINOP_1:def 1
+              .= d2.(y',z');
+               FD.(x,z) = FD.[x',z']
               .= d2.[x',z'] by A79,A81,GRFUNC_1:8
-              .= d2.(x',z') by BINOP_1:def 1;
+              .= d2.(x',z');
           hence FD.(x,y) "\/" FD.(y,z) >= FD.(x,z) by A94,A95,Def8;
         end;
         end;
@@ -4616,30 +4582,30 @@ MCART_1:def 1;
            then reconsider x' = x, y' = y, z' = z as Element of A3
                                         by A72,A80,A82,A83,A84,A97,
 MCART_1:def 1;
-      A98:   FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+      A98:   FD.(x,y) = FD.[x',y']
               .= d3.[x',y'] by A87,A89,GRFUNC_1:8
-              .= d3.(x',y') by BINOP_1:def 1;
-      A99:   FD.(y,z) = FD.[y',z'] by BINOP_1:def 1
+              .= d3.(x',y');
+      A99:   FD.(y,z) = FD.[y',z']
               .= d3.[y',z'] by A87,A89,GRFUNC_1:8
-              .= d3.(y',z') by BINOP_1:def 1;
-               FD.(x,z) = FD.[x',z'] by BINOP_1:def 1
+              .= d3.(y',z');
+               FD.(x,z) = FD.[x',z']
               .= d3.[x',z'] by A87,A89,GRFUNC_1:8
-              .= d3.(x',z') by BINOP_1:def 1;
+              .= d3.(x',z');
           hence FD.(x,y) "\/" FD.(y,z) >= FD.(x,z) by A98,A99,Def8;
           end;
           suppose n <= k;
            then A3 c= A1 by A70,A86,Th41;
            then reconsider x' = x, y' = y, z' = z as Element of A1
                                 by A66,A67,A68,A80,A88,A96,MCART_1:def 1;
-      A100:   FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+      A100:   FD.(x,y) = FD.[x',y']
               .= d1.[x',y'] by A71,A73,GRFUNC_1:8
-              .= d1.(x',y') by BINOP_1:def 1;
-      A101:   FD.(y,z) = FD.[y',z'] by BINOP_1:def 1
+              .= d1.(x',y');
+      A101:   FD.(y,z) = FD.[y',z']
               .= d1.[y',z'] by A71,A73,GRFUNC_1:8
-              .= d1.(y',z') by BINOP_1:def 1;
-               FD.(x,z) = FD.[x',z'] by BINOP_1:def 1
+              .= d1.(y',z');
+               FD.(x,z) = FD.[x',z']
               .= d1.[x',z'] by A71,A73,GRFUNC_1:8
-              .= d1.(x',z') by BINOP_1:def 1;
+              .= d1.(x',z');
           hence FD.(x,y) "\/" FD.(y,z) >= FD.(x,z) by A100,A101,Def8;
         end;
         end;
@@ -4713,9 +4679,9 @@ theorem Th45:
 MCART_1:def 1;
   A27:  x' in A2 & y' in A2;
   A28:  dom d2 = [:A2,A2:] by FUNCT_2:def 1;
-          FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+          FD.(x,y) = FD.[x',y']
                .= d2.[x',y'] by A23,A28,GRFUNC_1:8
-               .= d2.(x',y') by BINOP_1:def 1;
+               .= d2.(x',y');
       then consider z1,z2,z3 being Element of Aq2 such that
   A29:  dq2.(x,z1) = a and
   A30:  dq2.(z2,z3) = a and
@@ -4728,27 +4694,27 @@ MCART_1:def 1;
       then reconsider x'' = x',y'' = y' as Element of Aq2 by A27;
   A33:  dom dq2 = [:Aq2,Aq2:] by FUNCT_2:def 1;
       take z1',z2',z3';
-      thus FD.(x,z1') = FD.[x'',z1] by BINOP_1:def 1
+      thus FD.(x,z1') = FD.[x'',z1]
              .= dq2.[x'',z1] by A24,A33,GRFUNC_1:8
-             .= a by A29,BINOP_1:def 1;
-      thus FD.(z2',z3') = FD.[z2,z3] by BINOP_1:def 1
+             .= a by A29;
+      thus FD.(z2',z3') = FD.[z2,z3]
              .= dq2.[z2,z3] by A24,A33,GRFUNC_1:8
-             .= a by A30,BINOP_1:def 1;
-      thus FD.(z1',z2') = FD.[z1,z2] by BINOP_1:def 1
+             .= a by A30;
+      thus FD.(z1',z2') = FD.[z1,z2]
              .= dq2.[z1,z2] by A24,A33,GRFUNC_1:8
-             .= b by A31,BINOP_1:def 1;
-      thus FD.(z3',y) = FD.[z3,y''] by BINOP_1:def 1
+             .= b by A31;
+      thus FD.(z3',y) = FD.[z3,y'']
              .= dq2.[z3,y''] by A24,A33,GRFUNC_1:8
-             .= b by A32,BINOP_1:def 1;
+             .= b by A32;
      end;
      suppose l <= k;
        then A2 c= A1 by A8,A20,Th41;
       then reconsider x'=x,y'=y as Element of A1 by A3,A4,A6,A26,MCART_1:def 1;
   A34:  x' in A1 & y' in A1;
   A35:  dom d1 = [:A1,A1:] by FUNCT_2:def 1;
-          FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+          FD.(x,y) = FD.[x',y']
                .= d1.[x',y'] by A11,A35,GRFUNC_1:8
-               .= d1.(x',y') by BINOP_1:def 1;
+               .= d1.(x',y');
       then consider z1,z2,z3 being Element of Aq1 such that
   A36:  dq1.(x,z1) = a and
   A37:  dq1.(z2,z3) = a and
@@ -4761,14 +4727,14 @@ MCART_1:def 1;
       then reconsider x'' = x',y'' = y' as Element of Aq1 by A34;
   A40:  dom dq1 = [:Aq1,Aq1:] by FUNCT_2:def 1;
       take z1',z2',z3';
-      thus FD.(x,z1') = FD.[x'',z1] by BINOP_1:def 1 .= dq1.[x'',z1]
-        by A12,A40,GRFUNC_1:8 .= a by A36,BINOP_1:def 1;
-      thus FD.(z2',z3') = FD.[z2,z3] by BINOP_1:def 1 .= dq1.[z2,z3]
-        by A12,A40,GRFUNC_1:8 .= a by A37,BINOP_1:def 1;
-      thus FD.(z1',z2') = FD.[z1,z2] by BINOP_1:def 1 .= dq1.[z1,z2]
-        by A12,A40,GRFUNC_1:8 .= b by A38,BINOP_1:def 1;
-      thus FD.(z3',y) = FD.[z3,y''] by BINOP_1:def 1 .= dq1.[z3,y'']
-        by A12,A40,GRFUNC_1:8 .= b by A39,BINOP_1:def 1;
+      thus FD.(x,z1') = FD.[x'',z1] .= dq1.[x'',z1]
+        by A12,A40,GRFUNC_1:8 .= a by A36;
+      thus FD.(z2',z3') = FD.[z2,z3] .= dq1.[z2,z3]
+        by A12,A40,GRFUNC_1:8 .= a by A37;
+      thus FD.(z1',z2') = FD.[z1,z2] .= dq1.[z1,z2]
+        by A12,A40,GRFUNC_1:8 .= b by A38;
+      thus FD.(z3',y) = FD.[z3,y''] .= dq1.[z3,y'']
+        by A12,A40,GRFUNC_1:8 .= b by A39;
   end;
   end;
 
@@ -5145,35 +5111,34 @@ A59: ex e being Equivalence_Relation of FS st
   hence e in the carrier of Image f by A57,YELLOW_0:def 15;
  A73: new_set A = new_set ConsecutiveSet(A,{}) by Th24
               .= ConsecutiveSet(A,succ {}) by Th25;
- A75: succ {} c= DistEsti(D) by Lm4;
- then A76: new_set A c= NextSet(D) by A73,Th32;
- A77: ConsecutiveSet(A,{}) = A & ConsecutiveDelta(q,{}) = D by Th24,Th29;
- A78: ConsecutiveDelta(q,succ {}) =
+ A74: succ {} c= DistEsti(D) by Lm4;
+ then A75: new_set A c= NextSet(D) by A73,Th32;
+ A76: ConsecutiveSet(A,{}) = A & ConsecutiveDelta(q,{}) = D by Th24,Th29;
+ A77: ConsecutiveDelta(q,succ {}) =
        new_bi_fun(BiFun(ConsecutiveDelta(q,{}),
           ConsecutiveSet(A,{}),L),Quadr(q,{})) by Th30
-      .= new_bi_fun(D,Q) by A77,Def16;
-        ConsecutiveDelta(q,DistEsti(D)) = NextDelta(q);
-     then new_bi_fun(D,Q) c= NextDelta(q) by A75,A78,Th35;
- then A79: new_bi_fun(D,Q) c= FD by A65,XBOOLE_1:1;
- A80: new_set A c= FS by A67,A76,XBOOLE_1:1;
- A81: dom new_bi_fun(D,Q) = [:new_set A,new_set A:] by FUNCT_2:def 1;
+      .= new_bi_fun(D,Q) by A76,Def16;
+     new_bi_fun(D,Q) c= NextDelta(q) by A74,A77,Th35;
+ then A78: new_bi_fun(D,Q) c= FD by A65,XBOOLE_1:1;
+ A79: new_set A c= FS by A67,A75,XBOOLE_1:1;
+ A80: dom new_bi_fun(D,Q) = [:new_set A,new_set A:] by FUNCT_2:def 1;
         {A} in {{A}, {{A}}, {{{A}}} } by ENUMSET1:def 1;
      then {A} in A \/ {{A}, {{A}}, {{{A}}}} by XBOOLE_0:def 2;
- then A82: {A} in new_set A;
+ then A81: {A} in new_set A;
         {{A}} in {{A}, {{A}}, {{{A}}} } by ENUMSET1:def 1;
      then {{A}} in A \/ {{A}, {{A}}, {{{A}}}} by XBOOLE_0:def 2;
- then A83: {{A}} in new_set A;
- then A84: [{A},{{A}}] in dom new_bi_fun(D,Q) by A81,A82,ZFMISC_1:106;
-   reconsider W = {A}, V = {{A}} as Element of FS by A80,A82,A83;
-        FD.(W,V) = FD.[{A},{{A}}] by BINOP_1:def 1
-             .= new_bi_fun(D,Q).[{A},{{A}}] by A79,A84,GRFUNC_1:8
-             .= new_bi_fun(D,Q).({A},{{A}}) by BINOP_1:def 1
+ then A82: {{A}} in new_set A;
+ then A83: [{A},{{A}}] in dom new_bi_fun(D,Q) by A80,A81,ZFMISC_1:106;
+   reconsider W = {A}, V = {{A}} as Element of FS by A79,A81,A82;
+        FD.(W,V) = FD.[{A},{{A}}]
+             .= new_bi_fun(D,Q).[{A},{{A}}] by A78,A83,GRFUNC_1:8
+             .= new_bi_fun(D,Q).({A},{{A}})
              .= Q`4 by Def11 .= b by A70,MCART_1:def 11;
- then A85: [{A},{{A}}] in e by A72;
+ then A84: [{A},{{A}}] in e by A72;
         {A} <> {{A}}
        proof assume {A} = {{A}}; then {A} in {A} by TARSKI:def 1;
        hence contradiction; end;
-  hence e <> id FS by A85,RELAT_1:def 10;
+  hence e <> id FS by A84,RELAT_1:def 10;
  end;
      for e1,e2 being Equivalence_Relation of FS,x,y st
        e1 in the carrier of Image f & e2 in the carrier of Image f &

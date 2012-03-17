@@ -25,6 +25,7 @@ environ
       SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A,
       SCMFSA8B, SCMFSA_9, SFMASTR1, FUNCOP_1, RELSET_1, NAT_1, FRAENKEL,
       MEMBERED, ORDINAL2, SETFAM_1;
+ definitions CQC_LANG;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems TARSKI, ZFMISC_1, REAL_1, REAL_2, ABSVALUE, NAT_1, INT_1, NAT_2,
       FUNCT_1, FUNCT_2, CQC_THE1, CQC_LANG, GRFUNC_1, FUNCOP_1, FUNCT_4,
@@ -90,27 +91,7 @@ proof
  thus thesis;
 end;
 
-theorem Th2:
-  for i being Integer, r being real number st i <= r holds i <= [\ r /]
-proof
-  let i be Integer; let r be real number;
-  assume
-A1: i <= r;
-A2: r-1 < [\ r /] by INT_1:def 4;
-    i-1 <= r-1 by A1,XREAL_1:11;
-   then i-1 < [\ r /] by A2,XREAL_1:2;
-   then i-1+1 <= [\ r /] by INT_1:20;
- hence i <= [\ r /];
-end;
-
-theorem Th3: :: Div0:
- for m,n being natural number holds 0 < n implies 0 <= m qua Integer div n
-proof let m,n be natural number;
-  assume
- 0 < n;
-      m qua Integer div n = [\ m/n /] by INT_1:def 7;
- hence 0 <= m qua Integer div n by Th2;
-end;
+canceled 2;
 
 theorem Th4: :: Div1:
  0 < i & 1 < j implies i div j < i
@@ -134,35 +115,7 @@ A5: i <= i div j;
  hence contradiction by A1,A2,A5,XCMPLX_0:def 7;
 end;
 
-theorem Th5: :: Div2:
- for m,n being natural number holds
- m qua Integer div n = m div n &
- m qua Integer mod n = m mod n
-proof
-  let m,n be natural number;
-   per cases;
-   suppose
-A1: 0 < n;
-  reconsider M = m as Integer;
-A2: m = n * (m div n) + (m mod n) by A1,NAT_1:47;
-A3: M = n * (M div n) + (M mod n) by A1,NEWTON:80;
-      0 <= M mod n by NEWTON:78;
-   then reconsider Mm = M mod n as Nat by INT_1:16;
-      0 <= M div n by A1,Th3;
-   then reconsider Md = M div n as Nat by INT_1:16;
-A4: m mod n < n by A1,NAT_1:46;
-A5: Mm < n by A1,NEWTON:79;
-     Md = M div n;
- hence thesis by A2,A3,A4,A5,NAT_1:43;
- end;
- suppose
-A6: n = 0;
-  hence m qua Integer div n = 0 by INT_1:75
-    .= m div n by A6,NAT_1:def 1;
-  thus m qua Integer mod n = 0 by A6,INT_1:def 8
-    .= m mod n by A6,NAT_1:def 2;
-end;
-end;
+canceled;
 
 begin :: SCM+FSA preliminaries
 
@@ -200,7 +153,7 @@ A2: UsedIntLoc p = Union (UIL * p) by SF_MASTR:def 2;
    A3: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
  thus UsedIntLoc p
     = union rng (UIL * p) by A2,CARD_3:def 4
-   .= union rng (UIL * ({l} --> i)) by CQC_LANG:def 2
+   .= union rng (UIL * ({l} --> i))
    .= union rng ({l} --> UIL.i) by A3,FUNCOP_1:23
    .= union {UIL.i} by FUNCOP_1:14
    .= union {UsedIntLoc i} by A1
@@ -217,7 +170,7 @@ A2: UsedInt*Loc p = Union (UIL * p) by SF_MASTR:def 4;
    A3: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
  thus UsedInt*Loc p
     = union rng (UIL * p) by A2,CARD_3:def 4
-   .= union rng (UIL * ({l} --> i)) by CQC_LANG:def 2
+   .= union rng (UIL * ({l} --> i))
    .= union rng ({l} --> UIL.i) by A3,FUNCOP_1:23
    .= union {UIL.i} by FUNCOP_1:14
    .= union {UsedInt*Loc i} by A1
@@ -2470,22 +2423,22 @@ A1: StepWhile>0(a, I, s).k.a <= 0;
   set SW = StepWhile>0(a, I, s);
   defpred P[Nat] means k <= $1 implies SW.$1 | D = SW.k | D;
 A2: P[0] by XREAL_1:1;
-A4: now let n be Nat such that
-  A5: P[n];
+A3: now let n be Nat such that
+  A4: P[n];
     thus P[n+1]
      proof assume
-  A6: k <= n+1;
-      per cases by A6,NAT_1:26;
-      suppose A7: k <= n;
-           then SW.n.a <= 0 by A1,A5,SCMFSA6A:38;
-       hence SW.(n+1) | D = SW.k | D by A5,A7,Th37;
+  A5: k <= n+1;
+      per cases by A5,NAT_1:26;
+      suppose A6: k <= n;
+           then SW.n.a <= 0 by A1,A4,SCMFSA6A:38;
+       hence SW.(n+1) | D = SW.k | D by A4,A6,Th37;
       end;
       suppose k = n+1;
        hence SW.(n+1) | D = SW.k | D;
      end;
      end;
     end;
- thus for n being Nat holds P[n] from NAT_1:sch 1(A2, A4);
+ thus for n being Nat holds P[n] from NAT_1:sch 1(A2, A3);
 end;
 
 theorem
@@ -2791,21 +2744,21 @@ A1: N <> result;
    set t = IExec(i0 ';' i1 ';' i2, s);
 
  let n be Nat such that
-A3: n = s.N;
+A2: n = s.N;
 
-A4: N in {N, result} by TARSKI:def 2;
-then A5: N <> next by SFMASTR1:21;
-A6: N <> rem2 by A4,SFMASTR1:21;
-A7: N <> aux by A4,SFMASTR1:21;
-A8: aux <> rem2 by SFMASTR1:22;
-A9: aux <> next by SFMASTR1:22;
-A10: next <> rem2 by SFMASTR1:22;
-A11: result in {N, result} by TARSKI:def 2;
-then A12: aux <> result by SFMASTR1:21;
-A13: result <> rem2 by A11,SFMASTR1:21;
-A14: next <> result by A11,SFMASTR1:21;
+A3: N in {N, result} by TARSKI:def 2;
+then A4: N <> next by SFMASTR1:21;
+A5: N <> rem2 by A3,SFMASTR1:21;
+A6: N <> aux by A3,SFMASTR1:21;
+A7: aux <> rem2 by SFMASTR1:22;
+A8: aux <> next by SFMASTR1:22;
+A9: next <> rem2 by SFMASTR1:22;
+A10: result in {N, result} by TARSKI:def 2;
+then A11: aux <> result by SFMASTR1:21;
+A12: result <> rem2 by A10,SFMASTR1:21;
+A13: next <> result by A10,SFMASTR1:21;
 
-A15: for u being State of SCM+FSA
+A14: for u being State of SCM+FSA
       st ex au, ne, re being Nat
           st u.aux = au & u.next = ne & u.result = re & u.N = n &
              Fusc n = ne * Fusc au + re * Fusc (au+1)
@@ -2815,125 +2768,125 @@ A15: for u being State of SCM+FSA
            Fusc n = ne1 * Fusc au1 + re1 * Fusc (au1+1) &
            au1 = u.aux div 2
  proof let u be State of SCM+FSA; given au, ne, re being Nat such that
- A16: u.aux = au and
- A17: u.next = ne and
- A18: u.result = re and
- A19: u.N = n and
- A20: Fusc n = ne * Fusc au + re * Fusc (au+1);
- A21: (Initialize IExec(I3i0 ';' I3i1, u)).aux
+ A15: u.aux = au and
+ A16: u.next = ne and
+ A17: u.result = re and
+ A18: u.N = n and
+ A19: Fusc n = ne * Fusc au + re * Fusc (au+1);
+ A20: (Initialize IExec(I3i0 ';' I3i1, u)).aux
       = IExec(I3i0 ';' I3i1, u).aux by SCMFSA6C:3
      .= Exec(I3i1, IExec(I3i0, u)).aux by SCMFSA6C:7
-     .= IExec(I3i0, u).aux div IExec(I3i0, u).rem2 by A8,SCMFSA_2:93
-     .= u.aux div IExec(I3i0, u).rem2 by A8,SCMFSA7B:9
+     .= IExec(I3i0, u).aux div IExec(I3i0, u).rem2 by A7,SCMFSA_2:93
+     .= u.aux div IExec(I3i0, u).rem2 by A7,SCMFSA7B:9
      .= u.aux div 2 by SCMFSA7B:9;
 
- A22: IExec(I3i0 ';' I3i1, u).rem2
+ A21: IExec(I3i0 ';' I3i1, u).rem2
       = Exec(I3i1, IExec(I3i0, u)).rem2 by SCMFSA6C:7
      .= IExec(I3i0, u).aux mod IExec(I3i0, u).rem2 by SCMFSA_2:93
-     .= u.aux mod IExec(I3i0, u).rem2 by A8,SCMFSA7B:9
+     .= u.aux mod IExec(I3i0, u).rem2 by A7,SCMFSA7B:9
      .= u.aux mod 2 by SCMFSA7B:9;
 
- A23: (Initialize IExec(I3i0 ';' I3i1, u)).N
+ A22: (Initialize IExec(I3i0 ';' I3i1, u)).N
       = IExec(I3i0 ';' I3i1, u).N by SCMFSA6C:3
      .= Exec(I3i1, IExec(I3i0, u)).N by SCMFSA6C:7
-     .= IExec(I3i0, u).N by A6,A7,SCMFSA_2:93
-     .= n by A6,A19,SCMFSA7B:9;
+     .= IExec(I3i0, u).N by A5,A6,SCMFSA_2:93
+     .= n by A5,A18,SCMFSA7B:9;
 
- A24: (Initialize IExec(I3i0 ';' I3i1, u)).next
+ A23: (Initialize IExec(I3i0 ';' I3i1, u)).next
       = IExec(I3i0 ';' I3i1, u).next by SCMFSA6C:3
      .= Exec(I3i1, IExec(I3i0, u)).next by SCMFSA6C:7
-     .= IExec(I3i0, u).next by A9,A10,SCMFSA_2:93
-     .= ne by A10,A17,SCMFSA7B:9;
+     .= IExec(I3i0, u).next by A8,A9,SCMFSA_2:93
+     .= ne by A9,A16,SCMFSA7B:9;
 
- A25: (Initialize IExec(I3i0 ';' I3i1, u)).result
+ A24: (Initialize IExec(I3i0 ';' I3i1, u)).result
       = IExec(I3i0 ';' I3i1, u).result by SCMFSA6C:3
      .= Exec(I3i1, IExec(I3i0, u)).result by SCMFSA6C:7
-     .= IExec(I3i0, u).result by A12,A13,SCMFSA_2:93
-     .= re by A13,A18,SCMFSA7B:9;
+     .= IExec(I3i0, u).result by A11,A12,SCMFSA_2:93
+     .= re by A12,A17,SCMFSA7B:9;
 
   per cases;
   suppose au is even; then consider k being Nat such that
-  A26: au = 2*k by ABIAN:def 2;
+  A25: au = 2*k by ABIAN:def 2;
 
-  A27: u.aux mod 2 = (2*k + 0) mod 2 by A16,A26,Th5
-                 .= 0 mod 2 by GR_CY_1:1
-                 .= 0 by GR_CY_1:6;
-  A28: IExec(I, u).aux
+  A26: u.aux mod 2 = (2*k + 0) mod 2 by A15,A25,NEWTON:101
+                 .= 0 mod 2 by NAT_1:73
+                 .= 0 by NAT_1:78;
+  A27: IExec(I, u).aux
      = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).aux by SCMFSA6C:1
-    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).aux by A22,A27,SCMFSA8B:21
+    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).aux by A21,A26,SCMFSA8B:21
     .= Exec(AddTo(next, result), Initialize IExec(I3i0 ';' I3i1, u)).aux
         by SCMFSA6C:6
-    .= u.aux div 2 by A9,A21,SCMFSA_2:90;
+    .= u.aux div 2 by A8,A20,SCMFSA_2:90;
 
-       0 <= u.aux div 2 by A16,Th3;
+       0 <= u.aux div 2 by A15,INT_1:82;
    then reconsider au1 = u.aux div 2 as Nat by INT_1:16;
    reconsider ne1 = ne + re as Nat;
    take au1, ne1, re;
-   thus IExec(I, u).aux = au1 by A28;
+   thus IExec(I, u).aux = au1 by A27;
    thus IExec(I, u).next
      = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).next by SCMFSA6C:1
-    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).next by A22,A27,SCMFSA8B:21
+    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).next by A21,A26,SCMFSA8B:21
     .= Exec(AddTo(next, result), Initialize IExec(I3i0 ';' I3i1, u)).next
         by SCMFSA6C:6
-    .= ne1 by A24,A25,SCMFSA_2:90;
+    .= ne1 by A23,A24,SCMFSA_2:90;
    thus IExec(I, u).result
      = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).result by SCMFSA6C:1
-    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).result by A22,A27,SCMFSA8B:21
+    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).result by A21,A26,SCMFSA8B:21
     .= Exec(AddTo(next, result), Initialize IExec(I3i0 ';' I3i1, u)).result
         by SCMFSA6C:6
-    .= re by A14,A25,SCMFSA_2:90;
+    .= re by A13,A24,SCMFSA_2:90;
    thus IExec(I, u).N
      = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).N by SCMFSA6C:1
-    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).N by A22,A27,SCMFSA8B:21
+    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).N by A21,A26,SCMFSA8B:21
     .= Exec(AddTo(next, result), Initialize IExec(I3i0 ';' I3i1, u)).N
         by SCMFSA6C:6
-    .= n by A5,A23,SCMFSA_2:90;
-           au1 = au div 2 by A16,Th5
-           .= k by A26,AMI_5:3;
-   hence Fusc n = ne1 * Fusc au1 + re * Fusc (au1+1) by A20,A26,PRE_FF:22;
+    .= n by A4,A22,SCMFSA_2:90;
+           au1 = au div 2 by A15,NEWTON:101
+           .= k by A25,NAT_1:72;
+   hence Fusc n = ne1 * Fusc au1 + re * Fusc (au1+1) by A19,A25,PRE_FF:22;
    thus au1 = u.aux div 2;
   end;
   suppose au is odd; then consider k being Nat such that
-  A29: au = 2*k +1 by Th1;
+  A28: au = 2*k +1 by Th1;
 
-  A30: u.aux mod 2 = (2*k + 1) mod 2 by A16,A29,Th5
-                 .= 1 mod 2 by GR_CY_1:1
-                 .= 1 by GR_CY_1:4;
-  A31: IExec(I, u).aux
+  A29: u.aux mod 2 = (2*k + 1) mod 2 by A15,A28,NEWTON:101
+                 .= 1 mod 2 by NAT_1:73
+                 .= 1 by NAT_1:76;
+  A30: IExec(I, u).aux
      = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).aux by SCMFSA6C:1
-    .= IExec(I3I2I1, IExec(I3i0 ';' I3i1, u)).aux by A22,A30,SCMFSA8B:21
+    .= IExec(I3I2I1, IExec(I3i0 ';' I3i1, u)).aux by A21,A29,SCMFSA8B:21
     .= Exec(AddTo(result, next), Initialize IExec(I3i0 ';' I3i1, u)).aux
         by SCMFSA6C:6
-    .= u.aux div 2 by A12,A21,SCMFSA_2:90;
+    .= u.aux div 2 by A11,A20,SCMFSA_2:90;
 
-       0 <= u.aux div 2 by A16,Th3;
+       0 <= u.aux div 2 by A15,INT_1:82;
    then reconsider au1 = u.aux div 2 as Nat by INT_1:16;
    reconsider re1 = ne + re as Nat;
    take au1, ne, re1;
-   thus IExec(I, u).aux = au1 by A31;
+   thus IExec(I, u).aux = au1 by A30;
    thus IExec(I, u).next
      = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).next by SCMFSA6C:1
-    .= IExec(I3I2I1, IExec(I3i0 ';' I3i1, u)).next by A22,A30,SCMFSA8B:21
+    .= IExec(I3I2I1, IExec(I3i0 ';' I3i1, u)).next by A21,A29,SCMFSA8B:21
     .= Exec(AddTo(result, next), Initialize IExec(I3i0 ';' I3i1, u)).next
         by SCMFSA6C:6
-    .= ne by A14,A24,SCMFSA_2:90;
+    .= ne by A13,A23,SCMFSA_2:90;
    thus IExec(I, u).result
      = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).result by SCMFSA6C:1
     .= IExec(I3I2I1, IExec(I3i0 ';' I3i1, u)).result
-         by A22,A30,SCMFSA8B:21
+         by A21,A29,SCMFSA8B:21
     .= Exec(AddTo(result, next), Initialize IExec(I3i0 ';' I3i1, u)).result
         by SCMFSA6C:6
-    .= re1 by A24,A25,SCMFSA_2:90;
+    .= re1 by A23,A24,SCMFSA_2:90;
    thus IExec(I, u).N
      = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).N by SCMFSA6C:1
-    .= IExec(I3I2I1, IExec(I3i0 ';' I3i1, u)).N by A22,A30,SCMFSA8B:21
+    .= IExec(I3I2I1, IExec(I3i0 ';' I3i1, u)).N by A21,A29,SCMFSA8B:21
     .= Exec(AddTo(result, next), Initialize IExec(I3i0 ';' I3i1, u)).N
         by SCMFSA6C:6
-    .= n by A1,A23,SCMFSA_2:90;
-           au1 = au div 2 by A16,Th5
-           .= 2*k div 2 by A29,NAT_2:28
-           .= k by AMI_5:3;
-   hence Fusc n = ne * Fusc au1 + re1 * Fusc (au1+1) by A20,A29,PRE_FF:21;
+    .= n by A1,A22,SCMFSA_2:90;
+           au1 = au div 2 by A15,NEWTON:101
+           .= 2*k div 2 by A28,NAT_2:28
+           .= k by NAT_1:72;
+   hence Fusc n = ne * Fusc au1 + re1 * Fusc (au1+1) by A19,A28,PRE_FF:21;
    thus au1 = u.aux div 2;
 end;
 end;
@@ -2941,154 +2894,154 @@ end;
  set It = Initialize t;
 
          t.intloc 0 = 1 by SCMFSA6B:35;
-then A32: t | D = It | D by SCMFSA8C:27;
-A33: It.intloc 0 = 1 by SCMFSA6C:3;
+then A31: t | D = It | D by SCMFSA8C:27;
+A32: It.intloc 0 = 1 by SCMFSA6C:3;
 
  set SWt = StepWhile>0(aux, I, It);
  defpred X[Nat] means ex au, ne, re being Nat
     st SWt.$1.aux = au & SWt.$1.next = ne &
        SWt.$1.result = re & SWt.$1.N = n &
        Fusc n = ne * Fusc au + re * Fusc (au+1);
-A34: X[0]
+A33: X[0]
     proof
-  A35: SWt.0 = It by SCMFSA_9:def 5;
+  A34: SWt.0 = It by SCMFSA_9:def 5;
      take au = n;
      take ne = 1;
      take re = 0;
-     thus SWt.0.aux = t.aux by A32,A35,SCMFSA6A:38
+     thus SWt.0.aux = t.aux by A31,A34,SCMFSA6A:38
        .= Exec(i2, IExec(i0 ';' i1, s)).aux by SCMFSA6C:7
        .= IExec(i0 ';' i1, s).N by SCMFSA_2:89
        .= Exec(i1, Exec(i0, Initialize s)).N by SCMFSA6C:9
-       .= Exec(i0, Initialize s).N by A5,SCMFSA_2:89
+       .= Exec(i0, Initialize s).N by A4,SCMFSA_2:89
        .= (Initialize s).N by A1,SCMFSA_2:91
-       .= au by A3,SCMFSA6C:3;
+       .= au by A2,SCMFSA6C:3;
 
-     thus SWt.0.next = t.next by A32,A35,SCMFSA6A:38
+     thus SWt.0.next = t.next by A31,A34,SCMFSA6A:38
        .= Exec(i2, IExec(i0 ';' i1, s)).next by SCMFSA6C:7
-       .= IExec(i0 ';' i1, s).next by A9,SCMFSA_2:89
+       .= IExec(i0 ';' i1, s).next by A8,SCMFSA_2:89
        .= Exec(i1, Exec(i0, Initialize s)).next by SCMFSA6C:9
        .= Exec(i0, Initialize s).intloc 0 by SCMFSA_2:89
        .= (Initialize s).intloc 0 by SCMFSA_2:91
        .= ne by SCMFSA6C:3;
 
-     thus SWt.0.result = t.result by A32,A35,SCMFSA6A:38
+     thus SWt.0.result = t.result by A31,A34,SCMFSA6A:38
        .= Exec(i2, IExec(i0 ';' i1, s)).result by SCMFSA6C:7
-       .= IExec(i0 ';' i1, s).result by A12,SCMFSA_2:89
+       .= IExec(i0 ';' i1, s).result by A11,SCMFSA_2:89
        .= Exec(i1, Exec(i0, Initialize s)).result by SCMFSA6C:9
-       .= Exec(i0, Initialize s).result by A14,SCMFSA_2:89
+       .= Exec(i0, Initialize s).result by A13,SCMFSA_2:89
        .= (Initialize s).result - (Initialize s).result by SCMFSA_2:91
        .= re;
-     thus SWt.0.N = t.N by A32,A35,SCMFSA6A:38
+     thus SWt.0.N = t.N by A31,A34,SCMFSA6A:38
        .= Exec(i2, IExec(i0 ';' i1, s)).N by SCMFSA6C:7
-       .= IExec(i0 ';' i1, s).N by A7,SCMFSA_2:89
+       .= IExec(i0 ';' i1, s).N by A6,SCMFSA_2:89
        .= Exec(i1, Exec(i0, Initialize s)).N by SCMFSA6C:9
-       .= Exec(i0, Initialize s).N by A5,SCMFSA_2:89
+       .= Exec(i0, Initialize s).N by A4,SCMFSA_2:89
        .= (Initialize s).N by A1,SCMFSA_2:91
-       .= n by A3,SCMFSA6C:3;
+       .= n by A2,SCMFSA6C:3;
 
      thus Fusc n
         = ne * Fusc au + re * Fusc (au+1);
     end;
-A36: for k being Nat st X[k] holds X[k+1]
+A35: for k being Nat st X[k] holds X[k+1]
    proof let k be Nat;
       given au, ne, re being Nat such that
-  A37: SWt.k.aux = au and
-  A38: SWt.k.next = ne and
-  A39: SWt.k.result = re and
-  A40: SWt.k.N = n and
-  A41: Fusc n = ne * Fusc au + re * Fusc (au+1);
-  A42: SWt.k.intloc 0 = 1 by A33,Th39;
+  A36: SWt.k.aux = au and
+  A37: SWt.k.next = ne and
+  A38: SWt.k.result = re and
+  A39: SWt.k.N = n and
+  A40: Fusc n = ne * Fusc au + re * Fusc (au+1);
+  A41: SWt.k.intloc 0 = 1 by A32,Th39;
       per cases;
       suppose SWt.k.aux > 0;
-      then A43:  SWt.(k+1) | D = IExec(I, SWt.k) | D by A42,Th38;
+      then A42:  SWt.(k+1) | D = IExec(I, SWt.k) | D by A41,Th38;
         consider au1, ne1, re1 being Nat such that
-      A44: IExec(I, SWt.k).aux = au1 and
-      A45: IExec(I, SWt.k).next = ne1 and
-      A46: IExec(I, SWt.k).result = re1 and
-      A47: IExec(I, SWt.k).N = n and
-      A48: Fusc n = ne1 * Fusc au1 + re1 * Fusc (au1+1) and
-              au1 = SWt.k.aux div 2 by A15,A37,A38,A39,A40,A41;
+      A43: IExec(I, SWt.k).aux = au1 and
+      A44: IExec(I, SWt.k).next = ne1 and
+      A45: IExec(I, SWt.k).result = re1 and
+      A46: IExec(I, SWt.k).N = n and
+      A47: Fusc n = ne1 * Fusc au1 + re1 * Fusc (au1+1) and
+              au1 = SWt.k.aux div 2 by A14,A36,A37,A38,A39,A40;
 
        take au1, ne1, re1;
-       thus SWt.(k+1).aux = au1 by A43,A44,SCMFSA6A:38;
-       thus SWt.(k+1).next = ne1 by A43,A45,SCMFSA6A:38;
-       thus SWt.(k+1).result = re1 by A43,A46,SCMFSA6A:38;
-       thus SWt.(k+1).N = n by A43,A47,SCMFSA6A:38;
-       thus Fusc n = ne1 * Fusc au1 + re1 * Fusc (au1+1) by A48;
+       thus SWt.(k+1).aux = au1 by A42,A43,SCMFSA6A:38;
+       thus SWt.(k+1).next = ne1 by A42,A44,SCMFSA6A:38;
+       thus SWt.(k+1).result = re1 by A42,A45,SCMFSA6A:38;
+       thus SWt.(k+1).N = n by A42,A46,SCMFSA6A:38;
+       thus Fusc n = ne1 * Fusc au1 + re1 * Fusc (au1+1) by A47;
       end;
       suppose SWt.k.aux <= 0;
-      then A49:  SWt.(k+1) | D = SWt.k | D by Th37;
+      then A48:  SWt.(k+1) | D = SWt.k | D by Th37;
        take au, ne, re;
-       thus SWt.(k+1).aux = au by A37,A49,SCMFSA6A:38;
-       thus SWt.(k+1).next = ne by A38,A49,SCMFSA6A:38;
-       thus SWt.(k+1).result = re by A39,A49,SCMFSA6A:38;
-       thus SWt.(k+1).N = n by A40,A49,SCMFSA6A:38;
-       thus Fusc n = ne * Fusc au + re * Fusc (au+1) by A41;
+       thus SWt.(k+1).aux = au by A36,A48,SCMFSA6A:38;
+       thus SWt.(k+1).next = ne by A37,A48,SCMFSA6A:38;
+       thus SWt.(k+1).result = re by A38,A48,SCMFSA6A:38;
+       thus SWt.(k+1).N = n by A39,A48,SCMFSA6A:38;
+       thus Fusc n = ne * Fusc au + re * Fusc (au+1) by A40;
     end;
     end;
-A50: for k being Nat holds X[k] from NAT_1:sch 1(A34, A36);
+A49: for k being Nat holds X[k] from NAT_1:sch 1(A33, A35);
    deffunc U(Element of product the Object-Kind of SCM+FSA) =  abs($1.aux);
    consider f being Function of product the Object-Kind of SCM+FSA,NAT
      such that
-A51: for x being Element of product the Object-Kind of SCM+FSA
+A50: for x being Element of product the Object-Kind of SCM+FSA
       holds f.x = U(x) from FUNCT_2:sch 4;
 
    for k being Nat holds f.(SWt.(k+1)) < f.(SWt.k) or SWt.k.aux <= 0
  proof let k be Nat;
      consider au, ne, re being Nat such that
- A52: SWt.k.aux = au and
- A53:   SWt.k.next = ne & SWt.k.result = re & SWt.k.N = n &
-       Fusc n = ne * Fusc au + re * Fusc (au+1) by A50;
+ A51: SWt.k.aux = au and
+ A52:   SWt.k.next = ne & SWt.k.result = re & SWt.k.N = n &
+       Fusc n = ne * Fusc au + re * Fusc (au+1) by A49;
 
- A55:  f.(SWt.k) = abs(SWt.k.aux) by A51
-            .= au by A52,ABSVALUE:def 1;
+ A53:  f.(SWt.k) = abs(SWt.k.aux) by A50
+            .= au by A51,ABSVALUE:def 1;
         now assume
-     A56: au > 0;
+     A54: au > 0;
          consider au1, ne1, re1 being Nat such that
-     A57: IExec(I, SWt.k).aux = au1 and
+     A55: IExec(I, SWt.k).aux = au1 and
               IExec(I, SWt.k).next = ne1 & IExec(I, SWt.k).result = re1 &
            IExec(I, SWt.k).N = n &
            Fusc n = ne1 * Fusc au1 + re1 * Fusc (au1+1) and
-     A58:   au1 = SWt.k.aux div 2 by A15,A52,A53;
-              SWt.k.intloc 0 = 1 by A33,Th39;
-         then SWt.(k+1) | D = IExec(I, SWt.k) | D by A52,A56,Th38;
-     then A59: SWt.(k+1).aux
-       = au1 by A57,SCMFSA6A:38;
-             f.(SWt.(k+1)) = abs(SWt.(k+1).aux) by A51
-                    .= au1 by A59,ABSVALUE:def 1;
-      hence f.(SWt.(k+1)) < f.(SWt.k) by A52,A55,A56,A58,Th4;
+     A56:   au1 = SWt.k.aux div 2 by A14,A51,A52;
+              SWt.k.intloc 0 = 1 by A32,Th39;
+         then SWt.(k+1) | D = IExec(I, SWt.k) | D by A51,A54,Th38;
+     then A57: SWt.(k+1).aux
+       = au1 by A55,SCMFSA6A:38;
+             f.(SWt.(k+1)) = abs(SWt.(k+1).aux) by A50
+                    .= au1 by A57,ABSVALUE:def 1;
+      hence f.(SWt.(k+1)) < f.(SWt.k) by A51,A53,A54,A56,Th4;
      end;
-  hence f.(SWt.(k+1)) < f.(SWt.k) or SWt.k.aux <= 0 by A52;
+  hence f.(SWt.(k+1)) < f.(SWt.k) or SWt.k.aux <= 0 by A51;
  end;
 
-then A61: WithVariantWhile>0 aux, I, It by Def5;
+then A58: WithVariantWhile>0 aux, I, It by Def5;
 
    then consider k being Nat such that
-A62: ExitsAtWhile>0(aux, I, It) = k and
-A63: (StepWhile>0(aux, I, It).k).aux <= 0 and
+A59: ExitsAtWhile>0(aux, I, It) = k and
+A60: (StepWhile>0(aux, I, It).k).aux <= 0 and
         for i being Nat st SWt.i.aux <= 0 holds k <= i and
         ((Computation (It +* (while>0(aux, I) +* SAt))).
                         (LifeSpan (It +* (while>0(aux, I) +* SAt)))) | D
      = StepWhile>0(aux, I, It).k | D by Def6;
 
    consider au, ne, re being Nat such that
-A64: SWt.k.aux = au and
+A61: SWt.k.aux = au and
         SWt.k.next = ne and
-A65: SWt.k.result = re and
-A66: SWt.k.N = n and
-A67: Fusc n = ne * Fusc au + re * Fusc (au+1) by A50;
-A68: au = 0 by A63,A64;
+A62: SWt.k.result = re and
+A63: SWt.k.N = n and
+A64: Fusc n = ne * Fusc au + re * Fusc (au+1) by A49;
+A65: au = 0 by A60,A61;
 
-A69:  IExec(I3, t) | D = SWt.k | D by A61,A62,Th42;
+A66:  IExec(I3, t) | D = SWt.k | D by A58,A59,Th42;
 
-        I3 is_closed_on It & I3 is_halting_on It by A61,Th34;
-then A70: I3 is_closed_on t & I3 is_halting_on t by A32,SCMFSA8B:8;
+        I3 is_closed_on It & I3 is_halting_on It by A58,Th34;
+then A67: I3 is_closed_on t & I3 is_halting_on t by A31,SCMFSA8B:8;
 
  hence IExec(Fusc_macro(N, result), s).result
     = IExec(I3, t).result by SFMASTR1:8
-   .= Fusc n by A65,A67,A68,A69,PRE_FF:17,SCMFSA6A:38;
+   .= Fusc n by A62,A64,A65,A66,PRE_FF:17,SCMFSA6A:38;
  thus IExec(Fusc_macro(N, result), s).N
-    = IExec(I3, t).N by A70,SFMASTR1:8
-   .= n by A66,A69,SCMFSA6A:38;
+    = IExec(I3, t).N by A67,SFMASTR1:8
+   .= n by A63,A66,SCMFSA6A:38;
 end;
 

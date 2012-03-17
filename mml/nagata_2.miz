@@ -27,7 +27,7 @@ environ
       BORSUK_1, METRIC_1, FINSET_1, TOPS_1, SEQ_1, FINSEQ_1, TOPREAL6,
       FRAENKEL, PSCOMP_1, NEWTON;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
- definitions FUNCT_2, TARSKI, TOPS_2, XBOOLE_0;
+ definitions FUNCT_2, TARSKI, TOPS_2, XBOOLE_0, BINOP_1;
  theorems SQUARE_1, REAL_1, NAT_1, NEWTON, FUNCT_2, PCOMPS_1, PCOMPS_2,
       NAGATA_1, SUBSET_1, METRIC_6, FUNCT_3, FUNCT_1, METRIC_1, XREAL_0,
       XCMPLX_1, ABSVALUE, TOPMETR, TMAP_1, BORSUK_1, XBOOLE_1, TARSKI,
@@ -126,12 +126,12 @@ A1:for n,m be Element of NAT holds (2|^n)*(2*m+1)-1 in NAT
     hence thesis;
   end;
   consider NN being Function of [:NAT,NAT:],NAT such that
-A2: for n,m being Element of NAT holds NN.[n,m] = N(n,m)
-    from FUNCT_2:sch 8;
+A2: for n,m being Element of NAT holds NN.(n,m) = N(n,m)
+    from BINOP_1:sch 4;
   take NN;
   let n,m;
 A3: (2|^n)*(2*m+1)-1 in NAT by A1;
-  NN.[n,m] = In((2|^n)*(2*m+1)-1,NAT) by A2
+  NN.(n,m) = In((2|^n)*(2*m+1)-1,NAT) by A2
           .= (2|^n)*(2*m+1)-1 by A3,FUNCT_7:def 1;
   hence thesis;
 end;
@@ -143,9 +143,9 @@ A4: for n,m holds N1.[n,m] = (2|^n)*(2*m+1)-1 and
 A5: for n,m holds N2.[n,m] = (2|^n)*(2*m+1)-1;
   now let n,m be Element of NAT;
     N1.[n,m] = (2|^n)*(2*m+1)-1 & N2.[n,m] = (2|^n)*(2*m+1)-1 by A4,A5;
-    hence N1.[n,m]=N2.[n,m];
+    hence N1.(n,m)=N2.(n,m);
   end;
-  hence thesis by FUNCT_2:120;
+  hence thesis by BINOP_1:2;
 end;
 end;
 
@@ -164,8 +164,7 @@ proof
       reconsider n1,n2,m1,m2 as Nat by A2,A3;
       (2|^n1)*(2*m1+1)-1=PairFunc.nm1 & (2|^n2)*(2*m2+1)-1=PairFunc.nm2
         by A2,A3,Def1;
-      then (2|^n1)*(2*m1+1)=(2|^n2)*(2*m2+1) by A1;
-      then n1=n2 & m1=m2 by CARD_4:52;
+      then n1=n2 & m1=m2 by A1,CARD_4:52;
       hence nm1=nm2 by A2,A3;
     end;
     hence thesis by FUNCT_2:25;
@@ -177,8 +176,8 @@ proof
       consider n, m be Nat such that
 A4:   i'+1=(2|^n) *(2*m+1) by Th1;
       i'+1=0+((2|^n) *(2*m+1)) by A4;
-      then i'-0=((2|^n) *(2*m+1))-1 & dom PairFunc = [:NAT,NAT:]
-        by FUNCT_2:def 1;
+      i'-0=((2|^n) *(2*m+1))-1 & dom PairFunc = [:NAT,NAT:]
+        by FUNCT_2:def 1,A4;
       then [n,m] in dom PairFunc & i= PairFunc.[n,m] by Def1;
       hence i in rng PairFunc by FUNCT_1:def 5;
     end;
@@ -199,7 +198,7 @@ A1: for y being set st y in X holds D(y) in REAL
       let y be set;
       assume y in X;
       f.[x,y] in REAL;
-      hence D(y) in REAL by BINOP_1:def 1;
+      hence D(y) in REAL;
     end;
   consider DIST be Function of X,REAL such that
 A2: for y being set st y in X holds DIST.y =D(y) from FUNCT_2:sch 2(A1);
@@ -208,7 +207,7 @@ A2: for y being set st y in X holds DIST.y =D(y) from FUNCT_2:sch 2(A1);
       let y be Element of X;
       not [x,y] in dom f & not y in dom DIST by A3,ZFMISC_1:113;
       then f.[x,y]={} & DIST.y={} by FUNCT_1:def 4;
-      hence f.(x,y)=DIST.y by BINOP_1:def 1;
+      hence f.(x,y)=DIST.y;
     end;
     suppose X is non empty;
       hence for y be Element of X holds DIST.y = f.(x,y) by A2;
@@ -354,7 +353,7 @@ proof
       let R be Subset of R^1 such that A3:R is open & distx.t in R;
       reconsider xt=[x,t] as Point of [:T,T:] by BORSUK_1:def 5;
       pmetR is_continuous_at xt & distx.t=pmet.(x,t) & pmet.(x,t)=pmet.xt
-        by A2,Def2,BINOP_1:def 1,TMAP_1:55;
+        by A2,Def2,TMAP_1:55;
       then consider XU be Subset of [:T,T:] such that
 A4:   XU is open & xt in XU & pmetR.:XU c= R by A3,TMAP_1:48;
       set U=pr2(cT,cT).:(XU/\[:{x},cT:]);
@@ -379,8 +378,8 @@ A9:    x' in cT & u' in cT & xu=[x',u'] by A8,ZFMISC_1:def 2;
 ,XBOOLE_0:def 3;
         then x'=x & u'=u by A8,ZFMISC_1:128;
         then pmet.(x',u')=du & [x',u'] in XU & pmet'.[x',u']=pmet.(x',u')
-          & dom pmetR=the carrier of [:T,T:] by A7,A8,A9,Def2,BINOP_1:def 1
-,FUNCT_2:def 1,XBOOLE_0:def 3;
+          & dom pmetR=the carrier of [:T,T:] by A7,A8,A9,Def2,FUNCT_2:def 1,
+XBOOLE_0:def 3;
         then du in pmetR.:XU by FUNCT_1:def 12;
         hence thesis by A4;
       end;
@@ -431,7 +430,7 @@ A2:now let xy be set; assume xy in dom f;then
 A3: x in X & y in X & [x,y] = xy by ZFMISC_1:def 2;
     reconsider x,y as Element of X by A3;
     f.(x,y) >=0 by A1,NAGATA_1:29;
-    then f.xy >=0 & 0>-1 by A3,BINOP_1:def 1;
+    then f.xy >=0 & 0>-1 by A3;
     hence f.xy>-1;
   end;
   now let A be non empty Subset of X,x be Element of X;
@@ -788,13 +787,11 @@ proof
         consider pmet1 such that
 A4:     FS2.n=pmet1 & pmet1 is_a_pseudometric_of cT by A1;
         pmet1.(a,a)=0 by A4,NAGATA_1:28;
-        then pmet1.aa=0 by BINOP_1:def 1;
         hence F.n=0*F.n by A4,SEQFUNC:def 11;
       end;
       then F=0(#)F & F is summable  by A2,SEQ_1:13;
       then Sum(F)=0*Sum(F) by SERIES_1:13;
-      then pmet.aa=0 by A3;
-      hence thesis by BINOP_1:def 1;
+      hence thesis by A3;
     end;
     thus pmet.(a,c)<=pmet.(a,b)+pmet.(c,b)
     proof
@@ -807,17 +804,16 @@ SERIES_1:10;
         consider pmet1 such that
 A6:     FS2.n=pmet1 & pmet1 is_a_pseudometric_of cT by A1;
         pmet1.(a,c)<=pmet1.(a,b)+pmet1.(c,b) & 0<=pmet1.(a,c) & pmet1.(c,b)=
-        pmet1.cb & pmet1.(a,c)=pmet1.ac by A6,BINOP_1:def 1,NAGATA_1:28,29;
+        pmet1.cb & pmet1.(a,c)=pmet1.ac by A6,NAGATA_1:28,29;
         then 0<=FS2.n.ac & FS2.n.ac<=(FS2.n.ab+FS2.n.cb) & FS2.n.ac=
-          Fac.n & FS2.n.ab=Fab.n by A6,BINOP_1:def 1,SEQFUNC:def 11;
+          Fac.n & FS2.n.ab=Fab.n by A6,SEQFUNC:def 11;
         then 0<=Fac.n & Fac.n<=(Fab.n+Fcb.n) by SEQFUNC:def 11;
         hence 0<=Fac.n & Fac.n<=(Fab+Fcb).n by SEQ_1:11;
       end;
       then Sum(Fac)<=Sum(Fab+Fcb)&Sum(Fab)=pmet.ab&Sum(Fcb)=pmet.cb &
       pmet.ab=pmet.(a,b)& pmet.cb=pmet.(c,b)
-        by A3,A5,BINOP_1:def 1,SERIES_1:24;
-      then pmet.ac<=pmet.(a,b)+pmet.(c,b) by A3,A5;
-      hence thesis by BINOP_1:def 1;
+        by A3,A5,SERIES_1:24;
+      hence thesis by A3,A5;
     end;
   end;
   hence thesis by NAGATA_1:28;
@@ -1050,8 +1046,7 @@ A33:       SS = FSn.k & SS is open & p in SS & for f1 st FS1.k=f1
         sp is summable & sq is summable by A12;
         then Sum(sp)=PSp.n+Sum(spn) & Sum(sq)=PSq.n+Sum(sqn) & fRp=Sum(sp) &
           fRq=Sum(sq) by A3,SERIES_1:18;
-        then abs(fR.p-fR.q)=abs((PSp.n+Sum(spn))-(PSq.n+Sum(sqn)))
-        .=abs((PSp.n-PSq.n)+(Sum(spn)-Sum(sqn)));
+        then abs(fR.p-fR.q) =abs((PSp.n-PSq.n)+(Sum(spn)-Sum(sqn)));
         then A35:abs(fR.p-fR.q)<=abs(PSp.n-PSq.n)+abs(Sum(spn)-Sum(sqn)) &
         abs(Sum(spn)-Sum(sqn))<=abs(Sum(spn))+abs(Sum(sqn)) by COMPLEX1:142,
 COMPLEX1:143;
@@ -1096,7 +1091,7 @@ A5:   FS2.n=pmet1 & pmet1 is_a_pseudometric_of cT &
           & for pmet1' st pmet1=pmet1' holds pmet1' is continuous by A1;
       deffunc F(Element of cT,Element of cT)=(Geo.n)*pmet1.($1,$2);
       consider GF be Function of [:cT,cT:],REAL such that
-A6:   for p for q holds GF.[p,q]=F(p,q) from FUNCT_2:sch 8;
+A6:   for p for q holds GF.(p,q)=F(p,q) from BINOP_1:sch 4;
 A7:   GeoF.n=GF
       proof
 A8:     (GeoF.n)=(Geo.n)(#)FS2.n by A3;then
@@ -1104,9 +1099,9 @@ A9:     dom (FS2.n)=dom (GeoF.n)& dom pmet1=[:cT,cT:]& dom GF=
               [:cT,cT:] by FUNCT_2:def 1,SEQ_1:def 6;
         now let x,y; assume A10:[x,y] in dom (GeoF.n);then
           reconsider x'=x,y'=y as Point of T by ZFMISC_1:106;
-          (GeoF.n).[x,y]=(Geo.n)*pmet1.[x,y] & GF.[x',y']=
+          (GeoF.n).(x,y)=(Geo.n)*pmet1.[x,y] & GF.(x',y')=
           (Geo.n)*pmet1.(x',y') by A5,A6,A8,A10,SEQ_1:def 6;
-          hence (GeoF.n).[x,y]=GF.[x,y] by BINOP_1:def 1;
+          hence (GeoF.n).[x,y]=GF.[x,y];
         end;
         hence thesis by A5,A9,PARTFUN1:35;
       end;
@@ -1115,8 +1110,8 @@ A9:     dom (FS2.n)=dom (GeoF.n)& dom pmet1=[:cT,cT:]& dom GF=
         now let a,b,c be Point of T;
           thus GF.(a,a)=0
           proof
-            GF.[a,a]=(Geo.n)*pmet1.(a,a) & pmet1.(a,a)=0 by A5,A6,NAGATA_1:28;
-            hence thesis by BINOP_1:def 1;
+            GF.(a,a)=(Geo.n)*pmet1.(a,a) & pmet1.(a,a)=0 by A5,A6,NAGATA_1:28;
+            hence thesis;
           end;
           thus GF.(a,c)<=GF.(a,b)+GF.(c,b)
           proof
@@ -1125,10 +1120,9 @@ A9:     dom (FS2.n)=dom (GeoF.n)& dom pmet1=[:cT,cT:]& dom GF=
               by A5,NAGATA_1:28,PREPOWER:def 1;
             then pmet1.(a,c)*((1/2)GeoSeq.n)<=(pmet1.(a,b)+
             pmet1.(c,b))*(Geo.n) by XREAL_1:66;
-            then GF.[a,c]<=(Geo.n)*pmet1.(a,b)+(Geo.n)*pmet1.(c,b)&
-            (Geo.n)*pmet1.(a,b)=GF.[a,b]& GF.[a,b]=GF.(a,b) & (Geo.n)*
-            pmet1.(c,b)=GF.[c,b] &GF.[c,b]= GF.(c,b) by A6,BINOP_1:def 1;
-            hence thesis by BINOP_1:def 1;
+            then GF.(a,c)<=(Geo.n)*pmet1.(a,b)+(Geo.n)*pmet1.(c,b)&
+            (Geo.n)*pmet1.(a,b)=GF.(a,b) & (Geo.n)*pmet1.(c,b)=GF.(c,b) by A6;
+            hence thesis;
           end;
         end;
         hence thesis by NAGATA_1:28;
@@ -1152,7 +1146,7 @@ A13:   x in cT & y in cT & [x,y]=pq by ZFMISC_1:def 2;
         .=GeoF.k.pq by A3 .=(GeoF#pq).k by SEQFUNC:def 11;
       (1/2)|^k>0 by HEINE:5;
       then 0<=pmet1.(x,y)& pmet1.pq<=s& pmet1.(x,y)=pmet1.pq &Geo.k>0 by A12
-,A13,BINOP_1:def 1,NAGATA_1:29,PREPOWER:def 1;
+,A13,NAGATA_1:29,PREPOWER:def 1;
       then 0<=(Geo.k)*(pmet1.pq) &(Geo.k)*(pmet1.pq)<=(Geo.k)*s by XREAL_1:66
 ,REAL_2:121;
       hence thesis by A12,A14,SEQ_1:13;
@@ -1308,13 +1302,14 @@ A3:for p,A' st not p in A' & A' is closed
   set cT=the carrier of T,Geo=(1/2)GeoSeq;
   deffunc pm(Element of cT,Element of cT)=Sum(Geo(#)(FS2#[$1,$2]));
   consider pmet such that
-A4:for p,q holds pmet.[p,q]=pm(p,q) from FUNCT_2:sch 8;
+A4:for p,q holds pmet.(p,q)=pm(p,q) from BINOP_1:sch 4;
 A5:for pq holds pmet.pq=Sum(Geo(#)(FS2#pq))
     proof
       let pq;
       consider p,q be set such that
 A6:   p in cT & q in cT & pq=[p,q] by ZFMISC_1:def 2;
-      thus thesis by A4,A6;
+       pmet.pq = pmet.(p,q) by A6;
+      hence thesis by A4,A6;
     end;
 A7: for pq,n holds 0<=(Geo(#)(FS2#pq)).n & (Geo(#)(FS2#pq)).n<=(s(#)Geo).n
     proof
@@ -1328,7 +1323,7 @@ A9:   x in cT & y in cT & [x,y]=pq by ZFMISC_1:def 2;
       reconsider x,y as Point of T by A9;
       (1/2)|^n>0 by HEINE:5;
       then 0<=pmet1.(x,y)& pmet1.pq<=s & pmet1.(x,y)=pmet1.pq & Geo.n>0 &
-        pmet1.pq=(FS2#pq).n by A8,A9,BINOP_1:def 1,NAGATA_1:29,PREPOWER:def 1
+        pmet1.pq=(FS2#pq).n by A8,A9,NAGATA_1:29,PREPOWER:def 1
 ,SEQFUNC:def 11;
       then 0<=(Geo.n)*(FS2#pq).n &(Geo.n)*(FS2#pq).n<=(Geo.n)*s &
        (Geo.n)*s=(s(#)Geo).n by XREAL_1:66,REAL_2:121,SEQ_1:13;
@@ -1344,7 +1339,7 @@ A10: for p,q holds pmet.(p,q)=0 implies p=q
       then Geo is summable by SERIES_1:28;
       then s(#)Geo is summable & pmet.pq=pmet.(p,q) &
       for n holds 0<=(Geo(#)(FS2#pq)).n &
-        (Geo(#)(FS2#pq)).n<=(s(#)Geo).n by A7,BINOP_1:def 1,SERIES_1:13;
+        (Geo(#)(FS2#pq)).n<=(s(#)Geo).n by A7,SERIES_1:13;
       then A12:Geo(#)(FS2#pq) is summable & Sum(Geo(#)(FS2#pq))=0
         & for n holds 0<=(Geo(#)(FS2#pq)).n by A5,A11,SERIES_1:24;
       set Q={q};
@@ -1364,7 +1359,7 @@ A14:  FS2.n=pmet1 & pmet1 is_a_pseudometric_of cT &
       (Geo(#)(FS2#pq)).n=0 & (1/2)|^n>0 by A12,HEINE:5,RSSPACE:21;
       then Geo.n *(FS2#pq).n=0 & Geo.n<>0 by PREPOWER:def 1,SEQ_1:12;
       then (FS2#pq).n=0 & FS2.n.pq=pmet1.(p,q) & pmet1.(p,q)=dist(pmet1,p).q
-        by A14,Def2,BINOP_1:def 1,XCMPLX_1:6;
+        by A14,Def2,XCMPLX_1:6;
       hence thesis by A15,SEQFUNC:def 11;
     end;
   pmet is_a_pseudometric_of cT by A2,A5,Th15;
@@ -1419,7 +1414,7 @@ FUNCT_1:def 12;
         then s(#)Geo is summable & for k holds 0<=(Geo(#)(FS2#pa)).k &
           (Geo(#)(FS2#pa)).k<=(s(#)Geo).k by A7,SERIES_1:13;
         then Geo(#)(FS2#pa) is summable & pmet.pa=pmet.(p,a)
-          & for k holds 0<=(Geo(#)(FS2#pa)).k by BINOP_1:def 1,SERIES_1:24;
+          & for k holds 0<=(Geo(#)(FS2#pa)).k by SERIES_1:24;
         then (Geo(#)(FS2#pa)).n <=Sum(Geo(#)(FS2#pa)) & rn=pmet.pa &
           pmet is bounded_below by A26,A28,Def2,Lm1,RSSPACE2:4;
         then rn>=(Geo(#)(FS2#pa)).n & inf(dist(pmet,p).:A)=0 by A5,A21,Def3;
@@ -1433,8 +1428,7 @@ FUNCT_1:def 12;
         then inf(pmet1,Cl A).p<=dist(pmet1,p).a & dist(pmet1,p).a=pmet1.(p,a)
           & (FS2#pa).n= pmet1.pa & (1/2)|^n>0 by A23,Def2,HEINE:5
 ,SEQFUNC:def 11,SEQ_4:def 5;
-        then inf(pmet1,Cl A).p<=(FS2#pa).n & Geo.n>0 by BINOP_1:def 1
-,PREPOWER:def 1;
+        then inf(pmet1,Cl A).p<=(FS2#pa).n & Geo.n>0 by PREPOWER:def 1;
         then r<=Geo.n *(FS2#pa).n by XREAL_1:66;
         then r<=(Geo(#)(FS2#pa)).n by SEQ_1:12;
         then r<r/2 by A29,XREAL_1:2;
@@ -1471,6 +1465,12 @@ A5:p*P=(q^r) & dom P = dom p & rng P = dom p by A1,BHSP_5:1;
   then B "**" (q ^ r) = B.(B "**" q,B "**" r) & B "**" p= B "**" (q^r) by A2,A5
 ,FINSOP_1:6,8;
   hence thesis by A3;
+end;
+
+registration let T1,T2 be TopSpace; let f be RealMap of [:T1,T2:];
+ let t1 be Point of T1, t2 be Point of T2;
+ cluster f.(t1,t2) -> real;
+ coherence;
 end;
 
 :: NAGATA SMIRNOV THEOREM
@@ -1606,7 +1606,7 @@ A25:    SFxx is finite from FRAENKEL:sch 21(A24);
         hence thesis by A25,FINSET_1:13;
      end;
      defpred funcdist[RealMap of T,Function] means
-     for p,q holds $2.[p,q]=abs($1.p-$1.q);
+     for p,q holds $2.(p,q)=abs($1.p-$1.q);
 A26: for f be Element of Funcs(cT,REAL)
      ex fxy be Element of Fun st funcdist[f,fxy]
      proof
@@ -1615,8 +1615,8 @@ A26: for f be Element of Funcs(cT,REAL)
 A27:   for x,y be Element of cT
        ex r be Element of REAL st fd[x,y,r];
        consider Fd be Function of [:cT,cT:],REAL such that
-A28:   for x,y be Element of cT holds fd[x,y,Fd.[x,y]]
-         from FUNCT_2:sch 7(A27);
+A28:   for x,y be Element of cT holds fd[x,y,Fd.(x,y)]
+         from BINOP_1:sch 3(A27);
        [:cT,cT:]= cTT by BORSUK_1:def 5;
        then Fd in Fun & funcdist[f,Fd] by A28,FUNCT_2:11;
        hence thesis;
@@ -1699,7 +1699,7 @@ A44: for f,g be Element of Fun ex fg be Element of Fun st add'[f,g,fg]
      end;
      consider ADD be BinOp of Funcs(the carrier of [:T,T:],REAL) such that
 A45: for f,g be Element of Fun holds add'[f,g,ADD.(f,g)]
-       from BINOP_1:sch 1(A44);
+       from BINOP_1:sch 3(A44);
 A46: for f1,f2 be RealMap of [:T,T:] holds ADD.(f1,f2)=f1+f2
      proof
        let f1,f2 be RealMap of [:T,T:];
@@ -1893,7 +1893,7 @@ A82:               Fn.A=FnA & not (FnA.p > 0 or FnA.q > 0) by A81;
                  end;
                end;
                then fd.p-fd.q=0 & fd in Funcs(cT,REAL) by FUNCT_2:11;
-               then A83:abs(fd.p-fd.q)=0 & Fdistfd.pq=abs(fd.p-fd.q) by
+               then A83:abs(fd.p-fd.q)=0 & Fdistfd.(p,q)=abs(fd.p-fd.q) by
 A29,ABSVALUE:7;
                per cases;
                suppose k=0;
@@ -1961,7 +1961,7 @@ A96:   S2No is one-to-one & rng S2No=rng S2 \rng NoiS2 &
        reconsider ANoNoiS2=ADD"**"NoNoiS2,ANo=ADD"**"No,AS1No=ADD"**"S1No,
        AS2No=ADD"**"S2No,ANoiS2=ADD"**"NoiS2,AS1=ADD"**"S1,AS2=ADD"**"S2
          as RealMap of [:T,T:] by FUNCT_2:121;
-A97:   ANoNoiS2.pq1>=0
+A97:   ANoNoiS2.(p1,q1)>=0
        proof
          set N=NoNoiS2;
          per cases;
@@ -1970,7 +1970,7 @@ A97:   ANoNoiS2.pq1>=0
            then ADD "**" N=the_unity_wrt ADD & ex f be Element of Fun st
            f is_a_unity_wrt ADD by A98,FINSOP_1:def 1,SETWISEO:def 2;
            then ADD"**"N is_a_unity_wrt ADD by BINOP_1:def 8;
-           hence ANoNoiS2.pq1>=0 by A60;
+           hence ANoNoiS2.(p1,q1)>=0 by A84,A60;
          end;
          suppose A99:len N<>0;
            then len N >=1 by NAT_1:39;
@@ -1979,7 +1979,7 @@ A100:       F.1 = N.1 & (for n st 0 <> n & n < len N holds
              F.(n + 1) = ADD.(F.n,N.(n + 1))) & ADD "**" N=F.(len N)
               by FINSOP_1:def 1;
            defpred R[Nat] means $1<>0 & $1<=len N implies
-             for Fn be RealMap of [:T,T:] st Fn=F.$1 holds Fn.pq1>=0;
+             for Fn be RealMap of [:T,T:] st Fn=F.$1 holds Fn.(p1,q1)>=0;
        A101:R[0];
        A102:for k holds R[k] implies R[k+1]
            proof
@@ -1997,26 +1997,27 @@ A100:       F.1 = N.1 & (for n st 0 <> n & n < len N holds
              then reconsider Fdistfd=Fdist.fd,Fk1=F.(k+1),
                Fk=F.k,Nk1=N.(k+1) as RealMap of [:T,T:] by FUNCT_2:121;
              fd in Funcs(cT,REAL) by FUNCT_2:11;
-             then A107:abs(fd.p1-fd.q1)>=0 & Fdistfd.pq1=abs(fd.p1-fd.q1)
-               by A29,A84,COMPLEX1:132;
+             then A107:abs(fd.p1-fd.q1)>=0 & Fdistfd.(p1,q1)=abs(fd.p1-fd.q1)
+               by A29,COMPLEX1:132;
         A108: now per cases;
                suppose k=0;
-                 hence Fk1.pq1>=0 by A100,A106,A107;
+                 hence Fk1.(p1,q1)>=0 by A100,A106,A107;
                end;
                suppose k>0;
                  then Fk1=ADD.(Fk,Nk1)& k>0 by A100,A105;
-                 then Fk1=Fk+Nk1 & Fk.pq1 >= 0& Nk1.pq1 >= 0
+                 then Fk1=Fk+Nk1 & Fk.(p1,q1) >= 0& Nk1.(p1,q1) >= 0
                    by A46,A103,A104,A106,A107,NAT_1:38;
-                 then 0+0<=Fk.pq1+Nk1.pq1 & Fk.pq1+Nk1.pq1=Fk1.pq1
-                   by NAGATA_1:def 7,XREAL_1:9;
-                 hence Fk1.pq1>=0;
+                 then 0+0<=Fk.(p1,q1)+Nk1.(p1,q1) &
+                     Fk.(p1,q1)+Nk1.(p1,q1)=Fk1.(p1,q1)
+                   by NAGATA_1:def 7,XREAL_1:9,A84;
+                 hence Fk1.(p1,q1) >=0;
                end;
              end;
              let Fn be RealMap of [:T,T:];
              assume Fn=F.(k+1); hence thesis by A108;
            end;
            for n holds R[n] from NAT_1:sch 1(A101,A102);
-           hence ANoNoiS2.pq1>=0 by A99,A100;
+           hence ANoNoiS2.(p1,q1)>=0 by A99,A100;
          end;
        end;
        AS1=ANo+AS1No & ANo=ANoiS2+ANoNoiS2 & AS2=ANoiS2+AS2No & rng S2No=
@@ -2049,8 +2050,9 @@ A100:       F.1 = N.1 & (for n st 0 <> n & n < len N holds
        end;
        now let SumFdist1,SumFdist2 be RealMap of [:T,T:]; assume
 A112:      SumFdist1=SumFdist.pq1 & SumFdist2 = SumFdist.pq2;then
-          AS2.pq1<=AS1.pq1 & SumFdist2=AS2 by A48,A97,A109,XREAL_1:9;
-          hence SumFdist1.pq1 >= SumFdist2.pq1 by A48,A112;
+          AS2.(p1,q1)<=AS1.(p1,q1) & SumFdist2=AS2
+            by A48,A97,A109,XREAL_1:9,A84;
+          hence SumFdist1.pq1 >= SumFdist2.pq1 by A84,A48,A112;
         end;
         hence thesis;
       end;
@@ -2102,7 +2104,7 @@ A112:      SumFdist1=SumFdist.pq1 & SumFdist2 = SumFdist.pq2;then
                 then reconsider Fdistfd=Fdist.fd,Fk1=F.(k+1),Fk=F.k,
                   SFk1=SF.(k+1) as RealMap of [:T,T:] by FUNCT_2:121;
                 fd in Funcs(cT,REAL) by FUNCT_2:11;then
-            A125:abs(fd.p-fd.p)=0&Fdistfd.pp=abs(fd.p-fd.p) by A29,
+            A125:abs(fd.p-fd.p)=0&Fdistfd.(p,p)=abs(fd.p-fd.p) by A29,
 ABSVALUE:7;
                 per cases;
                 suppose k=0;
@@ -2120,8 +2122,7 @@ ABSVALUE:7;
             end;
           end;
           then (ADD"**"SF).pp=0 & SumFdist.pp=ADD "**" SF by A48;
-          then SumFTS.pp=0 by NAGATA_1:def 8;
-          hence thesis by BINOP_1:def 1;
+          hence thesis by NAGATA_1:def 8;
         end;
         thus SumFTS.(p,r)<=SumFTS.(p,q)+SumFTS.(r,q)
         proof
@@ -2170,9 +2171,9 @@ ABSVALUE:7;
                 fd.p-fd.r=(fd.p-fd.q)+(fd.q-fd.r)
                   & fd in Funcs(cT,REAL) by FUNCT_2:11;
                 then A137:abs(fd.p-fd.r)<=abs(fd.p-fd.q)+ abs(fd.q-fd.r)
-                  & abs(fd.q-fd.r)=abs(-(fd.q-fd.r)) & Fdistfd.pr=
-                  abs(fd.p-fd.r) & Fdistfd.pq=abs(fd.p-fd.q) &
-                  Fdistfd.rq=abs(fd.r-fd.q) by A29,COMPLEX1:142,
+                  & abs(fd.q-fd.r)=abs(-(fd.q-fd.r)) & Fdistfd.(p,r)=
+                  abs(fd.p-fd.r) & Fdistfd.(p,q)=abs(fd.p-fd.q) &
+                  Fdistfd.(r,q)=abs(fd.r-fd.q) by A29,COMPLEX1:142,
 COMPLEX1:138;
                 let F' be RealMap of [:T,T:] such that A138:F'=F.(k+1);
                 per cases;
@@ -2199,9 +2200,7 @@ COMPLEX1:138;
             SumFpq.pq+SumFrq.rq by XREAL_1:9;
           then SumFpr.pr<=SumFpq.pq+SumFrq.rq & SumFTS.pr = SumFpr.pr &
             SumFTS.pq = SumFpq.pq by XREAL_1:2,NAGATA_1:def 8;
-          then SumFTS.pr<=SumFTS.pq+SumFTS.rq &SumFTS.pr=SumFTS.(p,r)
-          & SumFTS.pq=SumFTS.(p,q) by BINOP_1:def 1,NAGATA_1:def 8;
-          hence thesis by BINOP_1:def 1;
+          hence thesis by NAGATA_1:def 8;
         end;
       end;
       then A139:SumFTS is_a_pseudometric_of cT by NAGATA_1:28;
@@ -2216,7 +2215,7 @@ A140:  for p,q st ex A,B st A is open & B is open & A in Bn.m
         reconsider ASF=ADD"**"SF as RealMap of [:T,T:] by FUNCT_2:121;
         assume A142:SumFTS'.[p,q] < 1;
 A143:    SumFTS.pq=SumFTS.(p,q) & SumFTS.pq=SumFdist.pq.pq &
-          SumFdist.pq=ASF by A48,BINOP_1:def 1,NAGATA_1:def 8;
+          SumFdist.pq=ASF by A48,NAGATA_1:def 8;
         consider x,y be Point of T such that
 A144:    [x,y]=pq & rng SF=RNG(Fx(x)\/Fx(y)) by A43;
         consider A,B such that
@@ -2254,7 +2253,7 @@ A149:    for k st k <>0 & k <=len SF
           then consider fd be RealMap of T such that
       A152:Fdist.fd =SF.k & fd in Fx(x)\/Fx(y);
           Fdist.fd=f & fd in Funcs(cT,REAL) by A151,A152,FUNCT_2:11;
-          then f.pq=abs(fd.p-fd.q) by A29;
+          then f.(p,q)=abs(fd.p-fd.q) by A29;
           hence thesis by COMPLEX1:132;
         end;
         defpred P[Nat] means
@@ -2314,7 +2313,7 @@ A162:    for i holds P[i] from NAT_1:sch 1(A153,A154);
           by A147,FUNCT_2:121;
         F[B,Fn.B] by A20,A145;then
         FnB in Funcs(cT,REAL) & FnB.p =1 & FnB.q=0 by A145,A146,FUNCT_2:7;
-        then A163:FdistFnB.pq=abs(1-0) & abs(1)=1 by A29,ABSVALUE:def 1;
+        then A163:FdistFnB.(p,q)=abs(1-0) & abs(1)=1 by A29,ABSVALUE:def 1;
         consider k be set such that
 A164:    k in dom SF & SF.k=Fdist.FnB by A147,FUNCT_1:def 5;
 A165:    k in Seg(len SF) by A164,FINSEQ_1:def 3;
@@ -2341,13 +2340,7 @@ A168:   now let p,q; assume
 ,SQUARE_1:def 1;
         hence 1=min(1,SumFTS').[p,q] by NAGATA_1:def 9;
       end;
-      ex pmet st pmet'=pmet & pmet' is continuous &
-        pmet is_a_pseudometric_of cT &
-      for p,q holds pmet.[p,q]<=1 & for p,q st
-        ex A,B st A is open & B is open & A in Bn.m & B in Bn.n &
-        p in A & Cl A c= B & not q in B holds pmet.[p,q] =1
-        by A166,A167,A168;
-      hence thesis;
+      hence thesis by A166,A167;
     end;
     defpred N[set,set] means
     ex F be RealMap of [:T,T:] st F = $2 &
@@ -2460,13 +2453,11 @@ A195:    a in dom dist(pmet,p) & a in A' & rn=(dist(pmet,p)).a
         then not a in U by A195,XBOOLE_0:3;
         then Fk.[p,a]=1 & pmet.(p,a)=dist(pmet,p).a
            by A187,A188,A189,A191,A192,Def2;
-        hence thesis by A191,A192,A195,BINOP_1:def 1;
+        hence thesis by A191,A192,A195;
       end;
-      then A196:inf ((dist(pmet,p)).:A') >= 1 & pmet is bounded_below by A192
-,A194,Lm1,SEQ_4:60;
-      let pmet1; assume F'.k=pmet1; then
-      inf(pmet1,A').p >=1 by A191,A192,A196,Def3;
-      hence thesis;
+      then inf ((dist(pmet,p)).:A') >= 1 & pmet is bounded_below
+                 by A192,A194,Lm1,SEQ_4:60;
+     hence thesis by A191,A192,Def3;
     end;
     hence T is metrizable by A2,A177,Th17;
   end;

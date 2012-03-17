@@ -32,7 +32,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="20">
+<Pred kind="V" nr="21">
 <Fraenkel>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -72,7 +72,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="20">
+<Pred kind="V" nr="21">
 <Fraenkel>
 <Typ kind="M" nr="4">
 <Cluster/>

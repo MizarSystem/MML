@@ -10,22 +10,24 @@ environ
  vocabularies RLVECT_1, VECTSP_1, ARYTM_1, COMPLEX1, ABSVALUE, ARYTM_3,
       SQUARE_1, COMPLFLD, HAHNBAN, FUNCT_1, SUBSET_1, FUNCOP_1, GRCAT_1,
       UNIALG_1, BINOP_1, LATTICES, ALGSTR_2, RLSUB_1, RELAT_1, BOOLE, HAHNBAN1,
-      XCMPLX_0, ARYTM, GROUP_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
+      XCMPLX_0, ARYTM, GROUP_1, REALSET1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1,
+      REALSET1, NUMBERS, ARYTM_0,
       XCMPLX_0, XREAL_0, STRUCT_0, REAL_1, SQUARE_1, PRE_TOPC, RLVECT_1,
       GROUP_1, VECTSP_1, RLSUB_1, VECTSP_4, FUNCT_1, FUNCT_2, BINOP_1,
       RELSET_1, NATTRA_1, BORSUK_1, COMPLEX1, HAHNBAN, COMPLFLD;
  constructors REAL_1, SQUARE_1, RLSUB_1, VECTSP_4, NATTRA_1, BORSUK_1, HAHNBAN,
-      COMPLFLD, DOMAIN_1, MEMBERED, ARYTM_0, ARYTM_3, BINOP_2;
+      COMPLFLD, DOMAIN_1, MEMBERED, ARYTM_0, ARYTM_3, BINOP_2, REALSET1;
  registrations STRUCT_0, VECTSP_1, RELSET_1, FUNCT_1, SUBSET_1, COMPLFLD,
       RLVECT_1, HAHNBAN, MEMBERED, XCMPLX_0, XREAL_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, RLVECT_1, VECTSP_1, RLSUB_1, HAHNBAN;
+ definitions TARSKI, RLSUB_1, HAHNBAN, REALSET1;
+ definitions SQUARE_1, BINOP_1, RLVECT_1, VECTSP_1;
  theorems TARSKI, ZFMISC_1, SQUARE_1, ABSVALUE, FUNCT_1, FUNCT_2, COMPLEX1,
       COMPLFLD, STRUCT_0, PRE_TOPC, VECTSP_1, FUNCOP_1, RLVECT_1, BINOP_1,
       HAHNBAN, VECTSP_4, XBOOLE_0, RELAT_1, XCMPLX_1, ARYTM_0, GROUP_1,
       XREAL_1;
- schemes FUNCT_2;
+ schemes FUNCT_2, BINOP_1;
 
 begin :: Preliminaries
 
@@ -85,24 +87,24 @@ begin :: Preliminaries
       |.z.|+0*<i> = 0 by A1;
       hence thesis by A2;
     end;
-    suppose A4: |.z.| <> 0;
-    A5: (z*'/[*|.z.|,0*])*z = z*z*'/[*|.z.|,0*] by XCMPLX_1:75;
-    A6: Re(z*z*') = (Re z)^2 + (Im z)^2 & Im(z*z*') = 0 by COMPLEX1:126;
+    suppose A3: |.z.| <> 0;
+    A4: (z*'/[*|.z.|,0*])*z = z*z*'/[*|.z.|,0*] by XCMPLX_1:75;
+    A5: Re(z*z*') = (Re z)^2 + (Im z)^2 & Im(z*z*') = 0 by COMPLEX1:126;
     [*|.z.|,0*] = |.z.|+0*<i> by COMPLEX1:27;
     then
-    A7: Re [*|.z.|,0*] = |.z.| & Im [*|.z.|,0*] = 0 by COMPLEX1:28;
-    then A8: Re((z*'/[*|.z.|,0*])*z) = (((Re z)^2+(Im z)^2)*|.z.| + 0*0) / (|.z
+    A6: Re [*|.z.|,0*] = |.z.| & Im [*|.z.|,0*] = 0 by COMPLEX1:28;
+    then A7: Re((z*'/[*|.z.|,0*])*z) = (((Re z)^2+(Im z)^2)*|.z.| + 0*0) / (|.z
 .|^2 +0)
-                                          by A5,A6,COMPLEX1:82,SQUARE_1:60
+                                          by A4,A5,COMPLEX1:82,SQUARE_1:60
        .= |.z*z.|*|.z.| / |.z.|^2 by COMPLEX1:154
-       .= |.z*z.|*|.z.| / (|.z.|*|.z.|) by SQUARE_1:def 3
-       .= |.z*z.| / |.z.| by A4,XCMPLX_1:92
+       .= |.z*z.|*|.z.| / (|.z.|*|.z.|)
+       .= |.z*z.| / |.z.| by A3,XCMPLX_1:92
        .= |.z.|*|.z.| / |.z.| by COMPLEX1:151
-       .= |.z.| by A4,XCMPLX_1:90;
-X:   [*|.z.|,0*] = |.z.|+0*<i> by COMPLEX1:27;
+       .= |.z.| by A3,XCMPLX_1:90;
+A8:   [*|.z.|,0*] = |.z.|+0*<i> by COMPLEX1:27;
         Im((z*'/[*|.z.|,0*])*z) = (|.z.|*0 - ((Re z)^2+(Im z)^2)*0) / (|.z.|^2
-        +0) by A5,A6,A7,COMPLEX1:82,SQUARE_1:60;
-    hence thesis by A8,COMPLEX1:29,X;
+        +0) by A4,A5,A6,COMPLEX1:82,SQUARE_1:60;
+    hence thesis by A7,COMPLEX1:29,A8;
     end;
    end;
 
@@ -129,12 +131,7 @@ begin :: Some Facts on the Field of Complex Numbers
   end;
 
   theorem
-    i_FC = [*0,1*] & i_FC = [**0,1**]
-   proof
-    thus i_FC = [*0,1*] by COMPLEX1:def 8;
-     0+1*<i> = [**0,1**];
-    hence i_FC = [**0,1**];
-   end;
+    i_FC = [*0,1*] & i_FC = [**0,1**] by COMPLEX1:def 8;
 
   theorem
     |.i_FC.| = 1 by COMPLEX1:135;
@@ -159,8 +156,7 @@ begin :: Some Facts on the Field of Complex Numbers
     [**x1,y1**] + [**x2,y2**] = [**x1 + x2,y1 + y2**]
    proof
     let x1,y1,x2,y2 be Real;
-        [**x1,y1**] = x1+y1*<i> & [**x2,y2**] = x2+y2*<i>;
-    hence [**x1,y1**] + [**x2,y2**] = x1+y1*<i> + (x2+y2*<i>) by COMPLFLD:3
+    thus [**x1,y1**] + [**x2,y2**] = x1+y1*<i> + (x2+y2*<i>) by COMPLFLD:3
        .= x1 + x2+(y1 + y2)*<i>
        .= [**x1 + x2,y1 + y2**];
    end;
@@ -170,8 +166,7 @@ begin :: Some Facts on the Field of Complex Numbers
     [**x1,y1**] * [**x2,y2**] = [**x1*x2 - y1*y2,x1*y2+x2*y1**]
    proof
     let x1,y1,x2,y2 be Real;
-        [**x1,y1**] = x1+y1*<i> & [**x2,y2**] = x2+y2*<i>;
-    hence [**x1,y1**] * [**x2,y2**] = (x1+y1*<i>)*(x2+y2*<i>) by COMPLFLD:6
+    thus [**x1,y1**] * [**x2,y2**] = (x1+y1*<i>)*(x2+y2*<i>) by COMPLFLD:6
        .= x1*x2 + y1*y2*(<i>*<i>) + x1*y2*<i> + x2*y1*<i>
        .= x1*x2 - y1*y2 + (x1*y2+x2*y1)*<i>
        .= [**x1*x2 - y1*y2,x1*y2+x2*y1**];
@@ -182,31 +177,14 @@ begin :: Some Facts on the Field of Complex Numbers
     abs(|.z.|) = |.z.|;
 
   theorem
-   for r be Real holds |.[**r,0**].| = abs r
-   proof
-    let r be Real;
-     r = r+0*<i>;
-    hence thesis;
-   end;
+   for r be Real holds |.[**r,0**].| = abs r;
 
   theorem Th14:
-   for r be Real holds [**r,0**]*i_FC = [**0,r**]
-   proof
-    let r be Real;
-        [**r,0**] = r+0*<i>;
-    hence [**r,0**]*i_FC = 0+r*<i> by COMPLFLD:6
-       .= [**0,r**];
-   end;
+   for r be Real holds [**r,0**]*i_FC = [**0,r**] by COMPLFLD:6;
 
   theorem Th15:
    for x,y be Real holds
-    Re [**x,y**] = x & Im [**x,y**] = y
-   proof
-    let x,y be Real;
- [**x,y**] = x+y*<i>;
-    hence Re [**x,y**] = x by COMPLEX1:28;
-    thus thesis by COMPLEX1:28;
-   end;
+    Re [**x,y**] = x & Im [**x,y**] = y by COMPLEX1:28;
 
   theorem Th16:
    for x,y be Element of F_Complex holds
@@ -776,12 +754,12 @@ begin :: The Vector Space of linear Functionals
      thus thesis;
     end;
     consider ad be Function of [:ca,ca:],ca such that
-     A4: for x,y be Element of ca holds P[x,y,ad.[x,y]] from FUNCT_2:sch 7(A3);
+     A4: for x,y be Element of ca holds P[x,y,ad.(x,y)] from BINOP_1:sch 3(A3);
     A5: now let f,g be linear-Functional of V;
      reconsider x=f,y=g as Element of ca by A1;
      consider f1,g1 be Functional of V such that
-      A6: x=f1 & y=g1 & ad.[x,y]=f1+g1 by A4;
-     thus ad.(f,g) = f+g by A6,BINOP_1:def 1;
+      A6: x=f1 & y=g1 & ad.(x,y)=f1+g1 by A4;
+     thus ad.(f,g) = f+g by A6;
     end;
     reconsider 0F=0Functional(V) as Element of ca by A1;
     defpred P[Element of K,set,set] means
@@ -797,13 +775,13 @@ begin :: The Vector Space of linear Functionals
     end;
     consider lm be Function of [:the carrier of K,ca:],ca such that
      A8: for x be Element of K,y be Element of ca holds
-      P[x,y,lm.[x,y]] from FUNCT_2:sch 7(A7);
+      P[x,y,lm.(x,y)] from BINOP_1:sch 3(A7);
     A9: now let f be linear-Functional of V;
      let x be Element of K;
      reconsider y=f as Element of ca by A1;
      consider f1 be Functional of V such that
-      A10: y=f1 & lm.[x,y]=x*f1 by A8;
-     thus lm.(x,f) = x*f by A10,BINOP_1:def 1;
+      A10: y=f1 & lm.(x,y)=x*f1 by A8;
+     thus lm.(x,f) = x*f by A10;
     end;
     reconsider V1 = VectSpStr(# ca,ad,0F,lm #)
       as non empty strict VectSpStr over K;
@@ -864,11 +842,11 @@ begin :: The Vector Space of linear Functionals
     let v,w be Element of V*';
     reconsider f=v,g=w as linear-Functional of V by Def14;
     thus v+w = (the add of V*').[v,w]
-       .= (the add of V*').(v,w) by BINOP_1:def 1
+       .= (the add of V*').(v,w)
        .= f+g by Def14
        .= g+f by Th20
        .= (the add of V*').(w,v) by Def14
-       .= (the add of V*').[w,v] by BINOP_1:def 1
+       .= (the add of V*').[w,v]
        .= w+v;
    end;
   end;
@@ -883,17 +861,17 @@ begin :: The Vector Space of linear Functionals
     let u,v,w be Element of V*';
     reconsider f=u,g=v,h=w as linear-Functional of V by Def14;
     thus u+v+w = (the add of V*').[u+v,w]
-       .= (the add of V*').(u+v,w) by BINOP_1:def 1
+       .= (the add of V*').(u+v,w)
        .= (the add of V*').((the add of V*').[u,v],w)
-       .= (the add of V*').((the add of V*').(u,v),w) by BINOP_1:def 1
+       .= (the add of V*').((the add of V*').(u,v),w)
        .= (the add of V*').(f+g,w) by Def14
        .= f+g+h by Def14
        .= f+(g+h) by Th21
        .= (the add of V*').(u,g+h) by Def14
        .= (the add of V*').(u,(the add of V*').(v,w)) by Def14
-       .= (the add of V*').(u,(the add of V*').[v,w]) by BINOP_1:def 1
+       .= (the add of V*').(u,(the add of V*').[v,w])
        .= (the add of V*').(u,v+w)
-       .= (the add of V*').[u,v+w] by BINOP_1:def 1
+       .= (the add of V*').[u,v+w]
        .= u+(v+w);
    end;
 
@@ -903,7 +881,7 @@ begin :: The Vector Space of linear Functionals
     let x be Element of V*';
     reconsider f=x as linear-Functional of V by Def14;
     thus x + 0.(V*') = (the add of V*').[x,0.(V*')]
-       .= (the add of V*').(x,0.(V*')) by BINOP_1:def 1
+       .= (the add of V*').(x,0.(V*'))
        .= (the add of V*').(x,the Zero of V*')
        .= (the add of V*').(x,0Functional(V)) by Def14
        .= f+0Functional(V) by Def14
@@ -918,7 +896,7 @@ begin :: The Vector Space of linear Functionals
     reconsider b = -f as Element of V*' by Def14;
     take b;
     thus x+b = (the add of V*').[x,b]
-       .= (the add of V*').(x,-f) by BINOP_1:def 1
+       .= (the add of V*').(x,-f)
        .= f+-f by Def14
        .= f-f
        .= 0Functional(V) by Th24
@@ -939,7 +917,7 @@ begin :: The Vector Space of linear Functionals
     reconsider f=v,g=w as linear-Functional of V by Def14;
     thus x*(v+w) = (the lmult of V*').(x,v+w)
        .= (the lmult of V*').(x,(the add of V*').[v,w])
-       .= (the lmult of V*').(x,(the add of V*').(v,w)) by BINOP_1:def 1
+       .= (the lmult of V*').(x,(the add of V*').(v,w))
        .= (the lmult of V*').(x,f+g) by Def14
        .= x*(f+g) by Def14
        .= x*f+x*g by Th25
@@ -949,7 +927,7 @@ begin :: The Vector Space of linear Functionals
                                                                        by Def14
        .= (the add of V*').(x*v,(the lmult of V*').(x,g))
        .= (the add of V*').(x*v,x*w)
-       .= (the add of V*').[x*v,x*w] by BINOP_1:def 1
+       .= (the add of V*').[x*v,x*w]
        .= x*v+x*w;
     thus (x+y)*v = (the lmult of V*').(x+y,v)
        .= (x+y)*f by Def14
@@ -960,7 +938,7 @@ begin :: The Vector Space of linear Functionals
                                                                        by Def14
        .= (the add of V*').(x*v,(the lmult of V*').(y,f))
        .= (the add of V*').(x*v,y*v)
-       .= (the add of V*').[x*v,y*v] by BINOP_1:def 1
+       .= (the add of V*').[x*v,y*v]
        .= x*v+y*v;
     thus (x*y)*v = (the lmult of V*').(x*y,v)
        .= (x*y)*f by Def14
@@ -1180,13 +1158,12 @@ begin :: Hahn Banach Theorem
     consider f be Function of [:REAL, the carrier of V:], the carrier of V
      such that
      A1: for r be Real, v be Vector of V holds
-      f.[r,v]=F(r,v) from FUNCT_2:sch 8;
+      f.(r,v)=F(r,v) from BINOP_1:sch 4;
     take R = RLSStruct (#the carrier of V, the Zero of V, the add of V, f#);
     thus the LoopStr of R = the LoopStr of V;
     let r be Real;
     let v be Vector of V;
-    thus (the Mult of R).(r,v) = (the Mult of R).[r,v] by BINOP_1:def 1
-       .= [**r,0**]*v by A1;
+    thus (the Mult of R).(r,v) = [**r,0**]*v by A1;
    end;
    uniqueness
    proof
@@ -1199,12 +1176,10 @@ begin :: Hahn Banach Theorem
      (the Mult of b).(r,v)=[**r,0**]*v;
         now
      let r be Real, v be Vector of V;
-     thus (the Mult of a).[r,v] = (the Mult of a).(r,v) by BINOP_1:def 1
-                          .= [**r,0**]*v by A3
-                          .= (the Mult of b).(r,v) by A5
-                          .= (the Mult of b).[r,v] by BINOP_1:def 1;
+     thus (the Mult of a).(r,v) = [**r,0**]*v by A3
+                          .= (the Mult of b).(r,v) by A5;
     end;
-    hence a=b by A2,A4,FUNCT_2:120;
+    hence a=b by A2,A4,BINOP_1:2;
    end;
   end;
 
@@ -1303,7 +1278,7 @@ end;
       set a1=[**a,0**];
       reconsider v1=v,w1=w as Element of V by A1;
       thus a * (v + w) = (the Mult of RealVS(V)).[a,v+w]
-            .= (the Mult of RealVS(V)).(a,v+w) by BINOP_1:def 1
+            .= (the Mult of RealVS(V)).(a,v+w)
             .= (the Mult of RealVS(V)).(a,((the add of V).[v1,w1])) by A1
             .= (the Mult of RealVS(V)).(a,(v1 + w1))
             .= [**a,0**] * (v1 + w1) by Def22
@@ -1315,9 +1290,9 @@ end;
                                       ((the Mult of RealVS(V)).(a,w))] by A1,
 Def22
             .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
-                              ((the Mult of RealVS(V)).(a,w))] by BINOP_1:def 1
+                              ((the Mult of RealVS(V)).(a,w))]
             .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
-                              ((the Mult of RealVS(V)).[a,w])] by BINOP_1:def 1
+                              ((the Mult of RealVS(V)).[a,w])]
             .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
                                       (a*w)]
             .= (the add of RealVS(V)).[a*v,a*w]
@@ -1331,12 +1306,11 @@ Def22
       A2: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
       set a1=[**a,0**];
       set b1=[**b,0**];
-          [**a,0**] = a+0*<i> & [**b,0**] = b+0*<i>;
-      then A3: [**a,0**] + [**b,0**] = a+0*<i> + b+0*<i> by COMPLFLD:3
+      A3: [**a,0**] + [**b,0**] = a+0*<i> + b+0*<i> by COMPLFLD:3
                                     .= [**a+b,0**];
       reconsider v1=v as Element of V by A2;
       thus (a + b) * v = (the Mult of RealVS(V)).[a+b,v]
-             .= (the Mult of RealVS(V)).(a+b,v) by BINOP_1:def 1
+             .= (the Mult of RealVS(V)).(a+b,v)
              .= ([**a,0**] + [**b,0**]) * v1 by A3,Def22
              .= a1 * v1 + b1 * v1 by VECTSP_1:def 26
              .= (the add of RealVS(V)).[([**a,0**]*v1),([**b,0**]*v1)] by A2
@@ -1345,9 +1319,9 @@ Def22
              .= (the add of RealVS(V)).[((the Mult of RealVS(V)).(a,v)),
                                       ((the Mult of RealVS(V)).(b,v))] by Def22
              .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
-                              ((the Mult of RealVS(V)).(b,v))] by BINOP_1:def 1
+                              ((the Mult of RealVS(V)).(b,v))]
              .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
-                              ((the Mult of RealVS(V)).[b,v])] by BINOP_1:def 1
+                              ((the Mult of RealVS(V)).[b,v])]
              .= (the add of RealVS(V)).[((the Mult of RealVS(V)).[a,v]),
                                                        b*v]
              .= (the add of RealVS(V)).[a*v,b*v]
@@ -1359,31 +1333,29 @@ Def22
       let a,b be Real;
       let v be Element of RealVS(V);
       A4: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
-      A6: [**a*b,0**] = a*b - 0*0+(a*0+b*0)*<i>
+      A5: [**a*b,0**] = a*b - 0*0+(a*0+b*0)*<i>
                      .= [**a,0**]*[**b,0**] by COMPLFLD:6;
       reconsider v1=v as Element of V by A4;
       thus (a * b) * v = (the Mult of RealVS(V)).[a*b,v]
-       .= (the Mult of RealVS(V)).(a*b,v) by BINOP_1:def 1
-       .= ([**a,0**] * [**b,0**]) * v1 by A6,Def22
+       .= (the Mult of RealVS(V)).(a*b,v)
+       .= ([**a,0**] * [**b,0**]) * v1 by A5,Def22
        .= [**a,0**] * ([**b,0**] * v1) by VECTSP_1:def 26
        .= (the Mult of RealVS(V)).(a,([**b,0**] * v1)) by Def22
        .= (the Mult of RealVS(V)).(a,(the Mult of RealVS(V)).(b,v)) by Def22
        .= (the Mult of RealVS(V)).[a,(the Mult of RealVS(V)).(b,v)]
-                                                             by BINOP_1:def 1
        .= (the Mult of RealVS(V)).[a,(the Mult of RealVS(V)).[b,v]]
-                                                             by BINOP_1:def 1
        .= (the Mult of RealVS(V)).[a,b*v]
        .= a * (b * v);
      end;
     let v be Element of RealVS(V);
         the LoopStr of V = the LoopStr of RealVS(V) by Def22;
     then reconsider v1=v as Element of V;
-    A7: [**1,0**] = 1+0*<i>
+    A6: [**1,0**] = 1+0*<i>
           .= 1.(F_Complex) by COMPLFLD:10,COMPLEX1:def 7;
     thus 1 * v = (the Mult of RealVS(V)).[1,v]
-              .= (the Mult of RealVS(V)).(1,v) by BINOP_1:def 1
+              .= (the Mult of RealVS(V)).(1,v)
               .= [**1,0**] * v1 by Def22
-              .= v by A7,VECTSP_1:def 26;
+              .= v by A6,VECTSP_1:def 26;
    end;
   end;
 
@@ -1399,13 +1371,9 @@ Def22
     A3: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
     hence A4: the carrier of RealVS(M) c= the carrier of RealVS(V) by A2,
 VECTSP_4:def 2;
-
-    thus the Zero of RealVS(M) = the Zero of RealVS(V) by A2,A3,VECTSP_4:def 2
-;
-
-    thus the add of RealVS(M) = (the add of RealVS(V)) |
-          [:the carrier of RealVS(M),the carrier of RealVS(M):] by A2,A3,
-VECTSP_4:def 2;
+    thus the Zero of RealVS(M) = the Zero of RealVS(V) by A2,A3,VECTSP_4:def 2;
+    thus the add of RealVS(M)
+    = (the add of RealVS(V))||the carrier of RealVS(M) by A2,A3,VECTSP_4:def 2;
         [:REAL,the carrier of RealVS(M):] c= [:REAL,the carrier of RealVS(V):]
                                                           by A4,ZFMISC_1:118;
     then [:REAL,the carrier of RealVS(M):] c= dom (the Mult of RealVS(V))
@@ -1441,12 +1409,12 @@ VECTSP_4:def 2;
      then A11: [[**a,0**],b2] in dom ((the lmult of V) |
           [:the carrier of F_Complex, the carrier of M:]) by FUNCT_1:68;
          y = (the Mult of RealVS(V)).[a,b] by A7,A8,A9,FUNCT_1:70
-      .= (the Mult of RealVS(V)).(a,b) by BINOP_1:def 1
+      .= (the Mult of RealVS(V)).(a,b)
       .= [**a,0**]*b2 by Def22
       .= (the lmult of V).([**a,0**],b2)
-      .= (the lmult of V).[[**a,0**],b2] by BINOP_1:def 1
+      .= (the lmult of V).[[**a,0**],b2]
       .= (the lmult of M).[[**a,0**],b1] by A6,A11,FUNCT_1:70
-      .= (the lmult of M).([**a,0**],b1) by BINOP_1:def 1
+      .= (the lmult of M).([**a,0**],b1)
       .= [**a,0**]*b1
       .= (the Mult of RealVS(M)).(a,b) by Def22;
      hence y in the carrier of RealVS(M);
@@ -1477,14 +1445,14 @@ VECTSP_4:def 2;
           [:the carrier of F_Complex, the carrier of M:]) by FUNCT_1:68;
      thus (the Mult of RealVS(M)).(a,b) = [**a,0**]*b1 by Def22
         .= (the lmult of M).([**a,0**],b1)
-        .= (the lmult of M).[[**a,0**],b1] by BINOP_1:def 1
+        .= (the lmult of M).[[**a,0**],b1]
         .= (the lmult of V).[[**a,0**],b2] by A6,A15,FUNCT_1:70
-        .= (the lmult of V).([**a,0**],b2) by BINOP_1:def 1
+        .= (the lmult of V).([**a,0**],b2)
         .= [**a,0**]*b2
         .= (the Mult of RealVS(V)).(a,b) by Def22
-        .= (the Mult of RealVS(V)).[a,b] by BINOP_1:def 1
+        .= (the Mult of RealVS(V)).[a,b]
         .= RM.[a,b] by A13,FUNCT_1:70
-        .= RM.(a,b) by BINOP_1:def 1;
+        .= RM.(a,b);
     end;
     hence the Mult of RealVS(M) =
     (the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(M):] by BINOP_1:2;
@@ -1517,7 +1485,7 @@ VECTSP_4:def 2;
          the LoopStr of V = the LoopStr of RealVS(V) by Def22;
      then reconsider x1=x as Vector of V;
          r*x = (the Mult of RealVS(V)).[r,x]
-        .= (the Mult of RealVS(V)).(r,x) by BINOP_1:def 1
+        .= (the Mult of RealVS(V)).(r,x)
         .= [**r,0**]*x1 by Def22;
      hence p1.(r*x) = |.[**r,0**].|*p1.x by Def19
         .= abs(r)*p1.x
@@ -1674,7 +1642,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
         the LoopStr of V = the LoopStr of RealVS(V) by Def22;
     then reconsider x1=x as VECTOR of RealVS(V);
         [**r,0**]*x = (the Mult of RealVS(V)).(r,x) by Def22
-       .= (the Mult of RealVS(V)).[r,x] by BINOP_1:def 1
+       .= (the Mult of RealVS(V)).[r,x]
        .= r*x1;
     hence (RtoC l).([**r,0**]*x) = l.(r*x1)
        .= r*l.x1 by HAHNBAN:def 5
@@ -1693,7 +1661,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
         the LoopStr of V = the LoopStr of RealVS(V) by Def22;
     then reconsider x1=x as Vector of V;
         [**r,0**]*x1 = (the Mult of RealVS(V)).(r,x1) by Def22
-       .= (the Mult of RealVS(V)).[r,x1] by BINOP_1:def 1
+       .= (the Mult of RealVS(V)).[r,x1]
        .= r*x;
     hence (CtoR l).(r*x) = l.([**r,0**]*x1)
        .= r*l.x1 by Def18
@@ -1792,7 +1760,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
          the LoopStr of V = the LoopStr of RealVS(V) by Def22;
      then reconsider x1=x as Vector of V;
          r*x = (the Mult of RealVS(V)).[r,x]
-        .= (the Mult of RealVS(V)).(r,x) by BINOP_1:def 1
+        .= (the Mult of RealVS(V)).(r,x)
         .= [**r,0**]*x1 by Def22;
      hence (projRe(l)).(r*x) = Re(l.([**r,0**]*x1)) by Def23
         .= Re([**r,0**]*l.x1) by Def12
@@ -1831,7 +1799,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
          the LoopStr of V = the LoopStr of RealVS(V) by Def22;
      then reconsider x1=x as Vector of V;
          r*x = (the Mult of RealVS(V)).[r,x]
-        .= (the Mult of RealVS(V)).(r,x) by BINOP_1:def 1
+        .= (the Mult of RealVS(V)).(r,x)
         .= [**r,0**]*x1 by Def22;
      hence (projIm(l)).(r*x) = Im(l.([**r,0**]*x1)) by Def24
         .= Im([**r,0**]*l.x1) by Def12
@@ -1878,27 +1846,27 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
      let r be Scalar of V;
      reconsider r1=r as Element of COMPLEX by COMPLFLD:def 1;
      set a=Re r1,b=Im r1;
-     A3: r1 = a+b*<i> by COMPLEX1:29;
-     then A4: r = [**a,b**];
-     A5: a*((RtoC l).x)-b*(-(RtoC l).(i_FC*x)) = a*((RtoC l).x)+b*(RtoC l).(
+     A2: r1 = a+b*<i> by COMPLEX1:29;
+     then A3: r = [**a,b**];
+     A4: a*((RtoC l).x)-b*(-(RtoC l).(i_FC*x)) = a*((RtoC l).x)+b*(RtoC l).(
 i_FC*x)
       .= (RtoC l).([**a,0**]*x)+b*(RtoC l).(i_FC*x) by Def18
       .= (RtoC l).([**a,0**]*x)+(RtoC l).([**0,b**]*x) by Th29
       .= (RtoC l).([**a,0**]*x+[**0,b**]*x) by Def17
       .= (RtoC l).(([**a,0**]+[**0,b**])*x) by VECTSP_1:def 26
       .= (RtoC l).([**a+0,0+b**]*x) by Th10
-      .= (RtoC l).(r*x) by A3;
-     A6: x = (-1.F_Complex)*(-1.F_Complex)*x by Th9,VECTSP_1:def 26
+      .= (RtoC l).(r*x) by A2;
+     A5: x = (-1.F_Complex)*(-1.F_Complex)*x by Th9,VECTSP_1:def 26
       .= i_FC*(i_FC*(-1.F_Complex))*x by Th8,GROUP_1:def 4
       .= i_FC*((-1.F_Complex)*i_FC*x) by VECTSP_1:def 26;
          -1.F_Complex = -[*1,0*] by Lm3,COMPLFLD:4,10
       .= -(1+0*<i>) by COMPLEX1:27
       .= -1+(-0)*<i>
       .= [**-1,0**];
-then A7: [**0,-b**]*(-1.F_Complex) = [**0*-1-(-b)*0,0*0+(-b)*-1**] by Th11
+then A6: [**0,-b**]*(-1.F_Complex) = [**0*-1-(-b)*0,0*0+(-b)*-1**] by Th11
       .=[**0,b*1**];
-     A8: a*(-(RtoC l).(i_FC*x))+((RtoC l).x)*b =
- -a*(RtoC l).(i_FC*x)+b*(RtoC l).(i_FC*((-1.F_Complex)*i_FC*x)) by A6
+     A7: a*(-(RtoC l).(i_FC*x))+((RtoC l).x)*b =
+ -a*(RtoC l).(i_FC*x)+b*(RtoC l).(i_FC*((-1.F_Complex)*i_FC*x)) by A5
       .= -(RtoC l).([**a,0**]*(i_FC*x))+
          -(-b)*(RtoC l).(i_FC*((-1.F_Complex)*i_FC*x)) by Def18
       .= -(RtoC l).([**a,0**]*(i_FC*x))+
@@ -1908,24 +1876,24 @@ then A7: [**0,-b**]*(-1.F_Complex) = [**0*-1-(-b)*0,0*0+(-b)*-1**] by Th11
       .= -(RtoC l).([**a,0**]*(i_FC*x))+
          -(RtoC l).([**0,-b**]*(-1.F_Complex)*(i_FC*x)) by VECTSP_1:def 26
       .= -((RtoC l).([**a,0**]*(i_FC*x))+(RtoC l).([**0,b**]*(i_FC*x)))
-                                                     by A7,XCMPLX_1:140
+                                                     by A6,XCMPLX_1:140
       .= -(RtoC l).([**a,0**]*(i_FC*x)+[**0,b**]*(i_FC*x)) by Def17
       .= -(RtoC l).(([**a,0**]+[**0,b**])*(i_FC*x)) by VECTSP_1:def 26
       .= -(RtoC l).([**a+0,0+b**]*(i_FC*x)) by Th10
-      .= -(RtoC l).(i_FC*r*x) by A4,VECTSP_1:def 26;
+      .= -(RtoC l).(i_FC*r*x) by A3,VECTSP_1:def 26;
      thus (prodReIm(l)).(r*x) =
            [**(RtoC l).(r*x),-(i-shift(RtoC l)).(r*x)**] by Def28
         .= [**(RtoC l).(r*x),-(RtoC l).(i_FC*(r*x))**] by Def27
         .= [**(RtoC l).(r*x),-(RtoC l).(i_FC*r*x)**] by VECTSP_1:def 26
-       .= (RtoC l).(r*x)+(a*(-(RtoC l).(i_FC*x))+((RtoC l).x)*b)*<i> by A8
+       .= (RtoC l).(r*x)+(a*(-(RtoC l).(i_FC*x))+((RtoC l).x)*b)*<i> by A7
         .= a*(RtoC l).x-b*(-(RtoC l).(i_FC*x))+a*(-(RtoC l).(i_FC*x))*<i>
-           +b*<i>*(RtoC l).x by A5
+           +b*<i>*(RtoC l).x by A4
         .= a*(RtoC l).x+b*(-(RtoC l).(i_FC*x))*(-1)+a*(-(RtoC l).(i_FC*x))*<i>
            +b*<i>*(RtoC l).x
         .= a*(RtoC l).x+a*(-(RtoC l).(i_FC*x))*<i>
            +b*<i>*(RtoC l).x+b*(-(RtoC l).(i_FC*x))*(<i>*<i>)
         .= (a+b*<i>)*((RtoC l).x+(-(RtoC l).(i_FC*x))*<i>)
-        .= r*[**(RtoC l).x,-(RtoC l).(i_FC*x)**] by A3,COMPLFLD:6
+        .= r*[**(RtoC l).x,-(RtoC l).(i_FC*x)**] by A2,COMPLFLD:6
         .= r*[**(RtoC l).x,-(i-shift(RtoC l)).x**] by Def27
         .= r*(prodReIm(l)).x by Def28;
     end;
@@ -1979,24 +1947,24 @@ then A7: [**0,-b**]*(-1.F_Complex) = [**0*-1-(-b)*0,0*0+(-b)*-1**] by Th11
      A7: L1.x1 = (projRe(l)).x1 by A3,A5,FUNCT_1:72
         .= Re(l.x) by Def23;
      reconsider lx=l.x as Element of COMPLEX by COMPLFLD:def 1;
-X: [*0,1*] = 0+1*<i> & [*Re lx,Im lx*] = Re lx +(Im lx)*<i> by COMPLEX1:27;
+A8: [*0,1*] = 0+1*<i> & [*Re lx,Im lx*] = Re lx +(Im lx)*<i> by COMPLEX1:27;
          lx = Re lx+(Im lx)*<i> by COMPLEX1:29
           .= [*Re lx,Im lx*] by COMPLEX1:27;
-     then A8: i_FC*l.x = [*0,1*]*[*Re lx,Im lx*] by COMPLEX1:def 8
+     then A9: i_FC*l.x = [*0,1*]*[*Re lx,Im lx*] by COMPLEX1:def 8
 ,COMPLFLD:6
-        .= 0*Re lx-1*Im lx + (0*Im lx+1*Re lx)*<i> by X
+        .= 0*Re lx-1*Im lx + (0*Im lx+1*Re lx)*<i> by A8
         .= [*-Im lx,Re lx*] by COMPLEX1:27;
-X: [*-Im lx,Re lx*] = -Im lx+(Re lx)*<i> by COMPLEX1:27;
-     A9: i_FC*x = i_FC*x2 by VECTSP_4:22;
-     then A10: L1.ix1 = (projRe(l)).ix1 by A3,A5,FUNCT_1:72
-        .= Re(l.(i_FC*x)) by A9,Def23
-        .= Re [*-Im lx,Re lx*] by A8,Def12
-        .= -Im(l.x) by COMPLEX1:28,X;
+A10: [*-Im lx,Re lx*] = -Im lx+(Re lx)*<i> by COMPLEX1:27;
+     A11: i_FC*x = i_FC*x2 by VECTSP_4:22;
+     then A12: L1.ix1 = (projRe(l)).ix1 by A3,A5,FUNCT_1:72
+        .= Re(l.(i_FC*x)) by A11,Def23
+        .= Re [*-Im lx,Re lx*] by A9,Def12
+        .= -Im(l.x) by COMPLEX1:28,A10;
      thus (L|tcM).x = L.x by FUNCT_1:72
         .= [**(RtoC L1).x2,-(i-shift(RtoC L1)).x2**] by Def28
         .= [**(RtoC L1).x2,-(RtoC L1).(i_FC*x2)**] by Def27
         .= [**Re(l.x),-(RtoC L1).(i_FC*x2)**] by A7
-        .= [**Re(l.x),--Im(l.x)**] by A10
+        .= [**Re(l.x),--Im(l.x)**] by A12
         .= Re(l.x)+(Im(l.x))*<i>
         .= l.x by COMPLEX1:29;
     end;
@@ -2007,33 +1975,33 @@ X: [*-Im lx,Re lx*] = -Im lx+(Re lx)*<i> by COMPLEX1:27;
                                                            by COMPLFLD:def 1;
     reconsider e1=e,Ledze=Ledz*e as VECTOR of RealVS(V) by A2;
     per cases;
-     suppose A11: |.Le.| <> 0;
-      A12: |.[*|.Le.|,0*].| = abs |.Le.| by Th4
+     suppose A13: |.Le.| <> 0;
+      A14: |.[*|.Le.|,0*].| = abs |.Le.| by Th4
          .= |.Le.|;
-      A13: |.Ledz.| = |.Le*'.|/|.[*|.Le.|,0*].| by COMPLEX1:153
-         .= |.Le.|/|.Le.| by A12,COMPLEX1:139
-         .= 1 by A11,XCMPLX_1:60;
-      A14: p1.Ledze = |.Ledz.|*p.e by Def19
-         .= p.e by A13;
-X:  [*|.Le.|,0*] = |.Le.|+0*<i> by COMPLEX1:27;
+      A15: |.Ledz.| = |.Le*'.|/|.[*|.Le.|,0*].| by COMPLEX1:153
+         .= |.Le.|/|.Le.| by A14,COMPLEX1:139
+         .= 1 by A13,XCMPLX_1:60;
+      A16: p1.Ledze = |.Ledz.|*p.e by Def19
+         .= p.e by A15;
+A17:  [*|.Le.|,0*] = |.Le.|+0*<i> by COMPLEX1:27;
         then [*|.Le.|,0*] = (Le*'/(|.Le.|+0*<i>))*Le by Th5
-         .= Ledz*L.e by COMPLFLD:6,X
+         .= Ledz*L.e by COMPLFLD:6,A17
          .= L.(Ledz*e) by Def12
          .= [**(RtoC L1).(Ledz*e),-(i-shift(RtoC L1)).(Ledz*e)**] by Def28
          .= (RtoC L1).(Ledz*e)+(-(i-shift(RtoC L1)).(Ledz*e))*<i>
          .= [*(RtoC L1).(Ledz*e),-(i-shift(RtoC L1)).(Ledz*e)*] by COMPLEX1:27
          .= [*L1.Ledze,-(i-shift(RtoC L1)).(Ledz*e)*];
       then L1.Ledze = |.L.e.| by ARYTM_0:12;
-      hence |.L.e.| <= p.e by A6,A14;
+      hence |.L.e.| <= p.e by A6,A16;
      end;
-     suppose A15: |.Le.| = 0;
+     suppose A18: |.Le.| = 0;
       |.L.e.| = |.[**(RtoC L1).e,-(i-shift(RtoC L1)).e**].| by Def28
          .= |.(RtoC L1).e+(-(i-shift(RtoC L1)).e)*<i>.|
          .= |.[*(RtoC L1).e,-(i-shift(RtoC L1)).e*].| by COMPLEX1:27;
       then [*(RtoC L1).e,-(i-shift(RtoC L1)).e*] = [*0,0*]
-         by A15,Lm2,COMPLEX1:131,def 6;
+         by A18,Lm2,COMPLEX1:131,def 6;
       then (RtoC L1).e = 0 by ARYTM_0:12;
       then L1.e1 = 0;
-      hence |.L.e.| <= p.e by A6,A15;
+      hence |.L.e.| <= p.e by A6,A18;
    end;
    end;

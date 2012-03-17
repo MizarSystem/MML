@@ -471,22 +471,22 @@ theorem Th7:
   for n being Nat holds p^<*n*> in succ p iff n < card succ p
   proof let t be finite-branching Tree, p be Element of t;
     deffunc U(Nat) = p^<*$1*>;
-A2: for x being set st x in succ p ex n being Nat st x = U(n)
+A1: for x being set st x in succ p ex n being Nat st x = U(n)
      proof let x be set; assume x in succ p;
        then ex n being Nat st x = U(n) & U(n) in t;
       hence thesis;
      end;
-A3: for i,j being Nat st i < j & U(j) in succ p holds U(i) in succ p
+A2: for i,j being Nat st i < j & U(j) in succ p holds U(i) in succ p
      proof let i,j be Nat; assume i < j & p^<*j*> in succ p;
        then p^<*i*> in t by TREES_1:def 5;
       hence thesis;
      end;
-A4: for i,j being Nat st U(i) = U(j) holds i = j
+A3: for i,j being Nat st U(i) = U(j) holds i = j
      proof let i,j be Nat; assume p^<*i*> = p^<*j*>;
       hence i = (p^<*j*>).(len p+1) by FINSEQ_1:59 .= j by FINSEQ_1:59;
      end;
    thus for n being Nat holds U(n) in succ p iff n < card succ p
-        from FinOrdSet(A2,A3,A4);
+        from FinOrdSet(A1,A2,A3);
   end;
 
 definition
@@ -510,48 +510,48 @@ A3:  for i being Nat st i < len q holds q.(i+1) = p^<*i*>
         then q.(i+1) = p^<*i+1-1*> by A1,A2;
        hence thesis;
       end;
-A5:   q is one-to-one
+A4:   q is one-to-one
       proof let x1,x2 be set; assume
-A6:     x1 in dom q & x2 in dom q;
+A5:     x1 in dom q & x2 in dom q;
        then reconsider i1 = x1, i2 = x2 as Nat;
            (p^<*i1-1*>).(len p+1) = i1-1 & (p^<*i2-1*>).(len p+1) = i2-1 &
-        q.x1 = p^<*i1-1*> & q.x2 = p^<*i2-1*> by A1,A2,A6,FINSEQ_1:59;
+        q.x1 = p^<*i1-1*> & q.x2 = p^<*i2-1*> by A1,A2,A5,FINSEQ_1:59;
        hence thesis by XCMPLX_1:19;
       end;
-A7:   rng q c= succ p
+A6:   rng q c= succ p
       proof let x be set; assume x in rng q;
        then consider k being Nat such that
-A8:      k < len q & x = q.(k+1) by Lm4;
-           x = p^<*k*> by A3,A8;
-       hence thesis by A1,A8,Th7;
+A7:      k < len q & x = q.(k+1) by Lm4;
+           x = p^<*k*> by A3,A7;
+       hence thesis by A1,A7,Th7;
       end;
-    then reconsider q as one-to-one FinSequence of succ p by A5,FINSEQ_1:def 4;
-    take q; thus len q = card succ p & rng q c= succ p by A1,A7;
+    then reconsider q as one-to-one FinSequence of succ p by A4,FINSEQ_1:def 4;
+    take q; thus len q = card succ p & rng q c= succ p by A1,A6;
     thus succ p c= rng q
       proof let x be set; assume
-A9:      x in succ p;
+A8:      x in succ p;
        then consider n being Nat such that
-A10:      x = p^<*n*> & p^<*n*> in t;
-           n < card succ p by A9,A10,Th7;
-        then q.(n+1) = x & q.(n+1) in rng q by A1,A3,A10,Lm3;
+A9:      x = p^<*n*> & p^<*n*> in t;
+           n < card succ p by A8,A9,Th7;
+        then q.(n+1) = x & q.(n+1) in rng q by A1,A3,A9,Lm3;
        hence thesis;
       end;
     thus thesis by A3;
    end;
   uniqueness
    proof let q1, q2 be one-to-one FinSequence of t such that
-A11:  len q1 = card succ p & rng q1 = succ p and
-A12:  for i being Nat st i < len q1 holds q1.(i+1) = p^<*i*> and
-A13:  len q2 = card succ p & rng q2 = succ p and
-A14:  for i being Nat st i < len q2 holds q2.(i+1) = p^<*i*>;
-A15:   dom q1 = Seg card succ p & dom q2 = Seg card succ p
-      by A11,A13,FINSEQ_1:def 3;
+A10:  len q1 = card succ p & rng q1 = succ p and
+A11:  for i being Nat st i < len q1 holds q1.(i+1) = p^<*i*> and
+A12:  len q2 = card succ p & rng q2 = succ p and
+A13:  for i being Nat st i < len q2 holds q2.(i+1) = p^<*i*>;
+A14:   dom q1 = Seg card succ p & dom q2 = Seg card succ p
+      by A10,A12,FINSEQ_1:def 3;
         now let k be Nat; assume k in Seg card succ p;
       then consider n being Nat such that
-A16:     k = n+1 & n < len q1 by A15,Lm1;
-      thus q1.k = p^<*n*> by A12,A16 .= q2.k by A11,A13,A14,A16;
+A15:     k = n+1 & n < len q1 by A14,Lm1;
+      thus q1.k = p^<*n*> by A11,A15 .= q2.k by A10,A12,A13,A15;
      end;
-    hence thesis by A15,FINSEQ_1:17;
+    hence thesis by A14,FINSEQ_1:17;
    end;
 end;
 
@@ -625,8 +625,7 @@ A11:     <*n*> in dom t & e^<*n*> = <*n*> & succ e = A by A7,A10,TREES_1:46
 then A12:     n+1 in dom doms p & n+1 in dom p by A8,Lm3;
       then consider k being Nat such that
 A13:     k+1 = n+1 & p.(n+1) = t|<*k*> by A4,A5;
-          k = n by A13;
-       then (doms p).(n+1) = dom (t|<*n*>) by A12,A13,FUNCT_6:31
+       (doms p).(n+1) = dom (t|<*n*>) by A12,A13,FUNCT_6:31
                 .= (dom t)|<*n*> by TREES_2:def 11;
       hence q in (doms p).(n+1) & x = <*n*>^q by A10,A11,TREES_1:def 9;
      end;
@@ -641,8 +640,7 @@ A16:    n < len doms p & q in (doms p).(n+1) & x = <*n*>^q by A14,TREES_1:47;
 A17:    n+1 in dom p by A8,A16,Lm3;
      then consider k being Nat such that
 A18:    k+1 = n+1 & p.(n+1) = t|<*k*> by A4,A5;
-         k = n by A18;
-    then (doms p).(n+1) = dom (t|<*n*>) by A17,A18,FUNCT_6:31
+    (doms p).(n+1) = dom (t|<*n*>) by A17,A18,FUNCT_6:31
                .= (dom t)|<*n*> by TREES_2:def 11;
      then reconsider q as Element of (dom t)|<*n*> by A16;
          <*n*> in A & e^<*n*> = <*n*> & succ e = A by A6,A7,A8,A16;
@@ -749,8 +747,7 @@ registration let t be finite DecoratedTree;
  cluster -> finite Element of Subtrees t;
  coherence
   proof let x be Element of Subtrees t;
-       Subtrees t = {t|p where p is Node of t: not contradiction};
-    then x in {t|p where p is Node of t: not contradiction};
+    x in {t|p where p is Node of t: not contradiction};
     then ex p being Node of t st x = t|p;
    hence x is finite;
   end;
@@ -759,11 +756,7 @@ end;
 reserve x for set, t,t1,t2 for DecoratedTree;
 
 theorem Th11:
- x in Subtrees t iff ex n being Node of t st x = t|n
-  proof
-       Subtrees t = {t|p where p is Node of t: not contradiction};
-   hence thesis;
-  end;
+ x in Subtrees t iff ex n being Node of t st x = t|n;
 
 theorem Th12:
  t in Subtrees t
@@ -831,12 +824,7 @@ registration
 end;
 
 theorem
- x in FixedSubtrees t iff ex n being Node of t st x = [n,t|n]
-  proof
-       FixedSubtrees t =
-     {[p,t|p] where p is Node of t: not contradiction};
-   hence thesis;
-  end;
+ x in FixedSubtrees t iff ex n being Node of t st x = [n,t|n];
 
 theorem Th16:
  [{},t] in FixedSubtrees t
@@ -877,12 +865,7 @@ reserve C for set;
 
 theorem Th18:
  x in C-Subtrees t iff
-  ex n being Node of t st x = t|n & (not n in Leaves dom t or t.n in C)
-  proof
-       C-Subtrees t =
-     {t|p where p is Node of t: not p in Leaves dom t or t.p in C};
-   hence thesis;
-  end;
+  ex n being Node of t st x = t|n & (not n in Leaves dom t or t.n in C);
 
 theorem
     C-Subtrees t is empty iff t is root & not t.{} in C
@@ -1044,12 +1027,7 @@ end;
 reserve X,Y for non empty constituted-DTrees set;
 
 theorem Th20:
- x in Subtrees X iff ex t being Element of X, n being Node of t st x = t|n
-  proof
-       Subtrees X = {t|p where t is Element of X, p is Node of t:
-      not contradiction};
-   hence thesis;
-  end;
+ x in Subtrees X iff ex t being Element of X, n being Node of t st x = t|n;
 
 theorem
     t in X implies t in Subtrees X
@@ -1134,12 +1112,7 @@ end;
 
 theorem Th25:
  x in C-Subtrees X iff ex t being Element of X, n being Node of t st
-     x = t|n & (not n in Leaves dom t or t.n in C)
-  proof
-       C-Subtrees X = {t|p where t is Element of X, p is Node of t:
-        not p in Leaves dom t or t.p in C};
-   hence thesis;
-  end;
+     x = t|n & (not n in Leaves dom t or t.n in C);
 
 theorem
     C-Subtrees X is empty iff

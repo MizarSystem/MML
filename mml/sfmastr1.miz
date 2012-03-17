@@ -1558,10 +1558,7 @@ end;
 registration
  let n be Nat, p be programmed FinPartState of SCM+FSA;
  cluster n-thNotUsed p -> read-write;
- coherence proof
-     n-thNotUsed p = n-thRWNotIn UsedIntLoc p;
-  hence thesis;
- end;
+ coherence;
 end;
 
 begin :: A macro for the Fibonacci sequence
@@ -1647,10 +1644,10 @@ A10: i30 ';' I31 = Macro i30 ';' I31 by SCMFSA6A:def 5;
   reconsider I301 = i30 ';' I31 as good parahalting Macro-Instruction;
   set I3 = Times( aux, I301 );
   set i4 = N := Nsave;
-A12: I31 does_not_destroy aux by A2,Th1;
+A11: I31 does_not_destroy aux by A2,Th1;
       i30 does_not_destroy aux by A2,A3,SCMFSA7B:13;
    then Macro i30 does_not_destroy aux by SCMFSA8C:77;
-then A13: I301 does_not_destroy aux by A10,A12,SCMFSA8C:81;
+then A12: I301 does_not_destroy aux by A10,A11,SCMFSA8C:81;
  defpred P[Nat] means
    for s1 being State of SCM+FSA
     st $1 = s1.aux & s1.intloc 0 = 1
@@ -1660,36 +1657,36 @@ then A13: I301 does_not_destroy aux by A10,A12,SCMFSA8C:81;
         holds IExec(I3, s1).result = Fib (m + $1) &
               IExec(I3, s1).next = Fib (m + 1 + $1);
  set D = Int-Locations \/ FinSeq-Locations;
-A14: P[0]
+A13: P[0]
     proof
      let s1 be State of SCM+FSA; assume
       0 = s1.aux & s1.intloc 0 = 1;
- then A15:  IExec(I3, s1) | D = s1 | D by SCMFSA8C:123;
+ then A14:  IExec(I3, s1) | D = s1 | D by SCMFSA8C:123;
      hence IExec(I3, s1).Nsave = s1.Nsave by SCMFSA6A:38;
      let m be Nat; assume
- A16:  s1.result = Fib m & s1.next = Fib (m+1);
-     hence IExec(I3, s1).result = Fib (m + 0) by A15,SCMFSA6A:38;
-     thus IExec(I3, s1).next = Fib (m+1+0) by A15,A16,SCMFSA6A:38;
+ A15:  s1.result = Fib m & s1.next = Fib (m+1);
+     hence IExec(I3, s1).result = Fib (m + 0) by A14,SCMFSA6A:38;
+     thus IExec(I3, s1).next = Fib (m+1+0) by A14,A15,SCMFSA6A:38;
     end;
-A17: now let n be Nat such that
- A18:  P[n];
+A16: now let n be Nat such that
+ A17:  P[n];
      thus P[n+1]
      proof
       let s1 be State of SCM+FSA such that
- A19:  n+1 = s1.aux & s1.intloc 0 = 1;
- A20: s1.aux > 0 by A19,NAT_1:19;
+ A18:  n+1 = s1.aux & s1.intloc 0 = 1;
+ A19: s1.aux > 0 by A18,NAT_1:19;
  set s2 = IExec(I301 ';' SubFrom(aux, intloc 0), s1);
- A21:  IExec(I3, s1) | D = IExec(I3, s2) | D by A13,A20,SCMFSA8C:124;
- A22:  s2.aux = n+1-1 by A13,A19,A20,SCMFSA8C:124
+ A20:  IExec(I3, s1) | D = IExec(I3, s2) | D by A12,A19,SCMFSA8C:124;
+ A21:  s2.aux = n+1-1 by A12,A18,A19,SCMFSA8C:124
             .= n;
- A23:  s2.intloc 0
+ A22:  s2.intloc 0
     = Exec(SubFrom(aux, intloc 0), IExec(I301, s1)).intloc 0 by SCMFSA6C:7
    .= IExec(I301, s1).intloc 0 by SCMFSA_2:91
    .= 1 by SCMFSA6B:35;
 
      thus IExec(I3, s1).Nsave
-        = IExec(I3, s2).Nsave by A21,SCMFSA6A:38
-       .= s2.Nsave by A18,A22,A23
+        = IExec(I3, s2).Nsave by A20,SCMFSA6A:38
+       .= s2.Nsave by A17,A21,A22
        .= Exec(SubFrom(aux, intloc 0), IExec(I301, s1)).Nsave by SCMFSA6C:7
        .= IExec(I301, s1).Nsave by A6,SCMFSA_2:91
        .= IExec(I31, Exec(i30, Initialize s1)).Nsave by SCMFSA8B:12
@@ -1697,15 +1694,15 @@ A17: now let n be Nat such that
        .= (Initialize s1).Nsave by A8,SCMFSA_2:90
        .= s1.Nsave by SCMFSA6C:3;
      let m be Nat; assume
- A24:  s1.result = Fib m & s1.next = Fib (m+1);
- A25:  s2.result
+ A23:  s1.result = Fib m & s1.next = Fib (m+1);
+ A24:  s2.result
     = Exec(SubFrom(aux, intloc 0), IExec(I301, s1)).result by SCMFSA6C:7
    .= IExec(I301, s1).result by A2,A3,SCMFSA_2:91
    .= IExec(I31, Exec(i30, Initialize s1)).result by SCMFSA8B:12
    .= Exec(i30, Initialize s1).next by SCMFSA6C:11
    .= (Initialize s1).next by A5,SCMFSA_2:90
-   .= Fib (m+1) by A24,SCMFSA6C:3;
- A26:   s2.next
+   .= Fib (m+1) by A23,SCMFSA6C:3;
+ A25:   s2.next
     = Exec(SubFrom(aux, intloc 0), IExec(I301, s1)).next by SCMFSA6C:7
    .= IExec(I301, s1).next by A2,A4,SCMFSA_2:91
    .= IExec(I31, Exec(i30, Initialize s1)).next by SCMFSA8B:12
@@ -1713,20 +1710,20 @@ A17: now let n be Nat such that
    .= (Initialize s1).result + (Initialize s1).next by SCMFSA_2:90
    .= s1.result + (Initialize s1).next by SCMFSA6C:3
    .= s1.result + s1.next by SCMFSA6C:3
-   .= Fib (m+1+1) by A24,PRE_FF:1;
+   .= Fib (m+1+1) by A23,PRE_FF:1;
 
      thus IExec(I3, s1).result
-        = IExec(I3, s2).result by A21,SCMFSA6A:38
-       .= Fib (m+1+n) by A18,A22,A23,A25,A26
+        = IExec(I3, s2).result by A20,SCMFSA6A:38
+       .= Fib (m+1+n) by A17,A21,A22,A24,A25
        .= Fib (m+(n+1));
      thus IExec(I3, s1).next
-        = IExec(I3, s2).next by A21,SCMFSA6A:38
-       .= Fib (m+1+1+n) by A18,A22,A23,A25,A26
+        = IExec(I3, s2).next by A20,SCMFSA6A:38
+       .= Fib (m+1+1+n) by A17,A21,A22,A24,A25
        .= Fib (m+1+(n+1));
      end;
     end;
-A27: for n being Nat holds P[n] from NAT_1:sch 1(A14, A17);
-A28: s1.intloc 0
+A26: for n being Nat holds P[n] from NAT_1:sch 1(A13, A16);
+A27: s1.intloc 0
    = Exec(i2, IExec(i00 ';' i0 ';' i1, s)).intloc 0 by SCMFSA6C:7
   .= IExec(i00 ';' i0 ';' i1, s).intloc 0 by SCMFSA_2:89
   .= Exec(i1, IExec(i00 ';' i0, s)).intloc 0 by SCMFSA6C:7
@@ -1735,7 +1732,7 @@ A28: s1.intloc 0
   .= Exec(i00, Initialize s).intloc 0 by SCMFSA_2:91
   .= (Initialize s).intloc 0 by SCMFSA_2:89
   .= 1 by SCMFSA6C:3;
-A29: s1.Nsave
+A28: s1.Nsave
    = Exec(i2, IExec(i00 ';' i0 ';' i1, s)).Nsave by SCMFSA6C:7
   .= IExec(i00 ';' i0 ';' i1, s).Nsave by A6,SCMFSA_2:89
   .= Exec(i1, IExec(i00 ';' i0, s)).Nsave by SCMFSA6C:7
@@ -1744,7 +1741,7 @@ A29: s1.Nsave
   .= Exec(i00, Initialize s).Nsave by A8,SCMFSA_2:91
   .= (Initialize s).N by SCMFSA_2:89
   .= s.N by SCMFSA6C:3;
-A30: s1.result
+A29: s1.result
    = Exec(i2, IExec(i00 ';' i0 ';' i1, s)).result by SCMFSA6C:7
   .= IExec(i00 ';' i0 ';' i1, s).result by A2,A3,SCMFSA_2:89
   .= Exec(i1, IExec(i00 ';' i0, s)).result by SCMFSA6C:7
@@ -1753,7 +1750,7 @@ A30: s1.result
   .= (Exec(i00, Initialize s)).result -
      (Exec(i00, Initialize s)).result by SCMFSA_2:91
   .= Fib 0 by PRE_FF:1;
-A31: s1.next
+A30: s1.next
    = Exec(i2, IExec(i00 ';' i0 ';' i1, s)).next by SCMFSA6C:7
   .= IExec(i00 ';' i0 ';' i1, s).next by A2,A4,SCMFSA_2:89
   .= Exec(i1, IExec(i00 ';' i0, s)).next by SCMFSA6C:7
@@ -1762,7 +1759,7 @@ A31: s1.next
   .= Exec(i00, Initialize s).intloc 0 by SCMFSA_2:91
   .= (Initialize s).intloc 0 by SCMFSA_2:89
   .= Fib (0+1) by PRE_FF:1,SCMFSA6C:3;
-A32: s1.aux
+A31: s1.aux
    = Exec(i2, IExec(i00 ';' i0 ';' i1, s)).aux by SCMFSA6C:7
   .= IExec(i00 ';' i0 ';' i1, s).Nsave by SCMFSA_2:89
   .= Exec(i1, IExec(i00 ';' i0, s)).Nsave by SCMFSA6C:7
@@ -1772,23 +1769,23 @@ A32: s1.aux
   .= (Initialize s).N by SCMFSA_2:89
   .= s.N by SCMFSA6C:3;
  let n be Nat such that
-A33: n = s.N;
-A34: i02 is_halting_on Initialize s by SCMFSA7B:25;
-A35: I3 is_closed_on s1 & I3 is_halting_on s1 by A13,A28,SCMFSA8C:119;
-A36: i02 is_closed_on Initialize s by SCMFSA7B:24;
+A32: n = s.N;
+A33: i02 is_halting_on Initialize s by SCMFSA7B:25;
+A34: I3 is_closed_on s1 & I3 is_halting_on s1 by A12,A27,SCMFSA8C:119;
+A35: i02 is_closed_on Initialize s by SCMFSA7B:24;
     reconsider i02 as good Macro-Instruction;
-A37: i02 ';' I3 is_halting_on Initialize s by A34,A35,A36,Th4;
-A38: i02 ';' I3 is_closed_on Initialize s by A34,A35,A36,Th3;
+A36: i02 ';' I3 is_halting_on Initialize s by A33,A34,A35,Th4;
+A37: i02 ';' I3 is_closed_on Initialize s by A33,A34,A35,Th3;
  hence IExec(Fib_macro(N, result), s).result
-    = Exec(i4, IExec(i02 ';' I3, s)).result by A37,Th12
+    = Exec(i4, IExec(i02 ';' I3, s)).result by A36,Th12
    .= IExec( i02 ';' I3, s).result by A1,SCMFSA_2:89
-   .= IExec(I3, s1).result by A35,Th8
-   .= Fib (0+n) by A27,A28,A30,A31,A32,A33
+   .= IExec(I3, s1).result by A34,Th8
+   .= Fib (0+n) by A26,A27,A29,A30,A31,A32
    .= Fib n;
  thus IExec(Fib_macro(N, result), s).N
-    = Exec(i4, IExec(i02 ';' I3, s)).N by A37,A38,Th12
+    = Exec(i4, IExec(i02 ';' I3, s)).N by A36,A37,Th12
    .= IExec( i02 ';' I3, s).Nsave by SCMFSA_2:89
-   .= IExec(I3, s1).Nsave by A35,Th8
-   .= s.N by A27,A28,A29,A32,A33;
+   .= IExec(I3, s1).Nsave by A34,Th8
+   .= s.N by A26,A27,A28,A31,A32;
 end;
 

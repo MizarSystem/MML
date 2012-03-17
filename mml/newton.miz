@@ -19,6 +19,7 @@ environ
       FINSEQ_1, FINSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FINSEQ_1;
+ definitions SQUARE_1;
  theorems TARSKI, REAL_1, NAT_1, RVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       FINSEQ_4, FUNCT_1, INT_1, XREAL_0, ORDINAL2, XBOOLE_0, XCMPLX_1, REAL_2,
       ABSVALUE, INT_2, FINSET_1, CQC_THE1, CARD_2, CARD_1, XBOOLE_1, XREAL_1,
@@ -145,11 +146,7 @@ end;
 
 registration let x be real number; let n be natural number;
   cluster x|^n -> real;
-coherence
- proof
-   x|^n = Product(n |-> x);
-   hence thesis;
- end;
+coherence;
 end;
 
 definition let x be Real; let n be natural number;
@@ -160,11 +157,7 @@ end;
 canceled;
 
 theorem
-Th9: x|^0 = 1
- proof
-  0 |-> x = <*> REAL by FINSEQ_2:72;
-  hence thesis by RVSUM_1:124;
- end;
+Th9: x|^0 = 1 by FINSEQ_2:72,RVSUM_1:124;
 
 theorem
 Th10: x|^1 = x
@@ -308,11 +301,7 @@ end;
 registration
   let n be natural number;
   cluster n! -> real;
-  coherence
-  proof
-    n! = Product(idseq n);
-    hence thesis;
-  end;
+  coherence;
 end;
 
 definition let n be natural number;
@@ -326,11 +315,7 @@ theorem Th18:
   0! = 1 by FINSEQ_2:58,RVSUM_1:124;
 
 theorem Th19:
-  1! = 1
- proof
-  1! = Product<*1 qua Real*> by FINSEQ_2:59 .= 1 by RVSUM_1:125;
-  hence thesis;
- end;
+  1! = 1 by FINSEQ_2:59,RVSUM_1:125;
 
 theorem
   2! = 2
@@ -467,10 +452,10 @@ theorem
 Th29: s choose 0 = 1
  proof
   reconsider m = s-0 as Nat by ORDINAL2:def 21;
-  A2: s!<>0 by Th23;
+  A1: s!<>0 by Th23;
      m = s;
   then (s choose 0) = (s!)/(1 * (s!)) by Def3,Th18
-   .= 1 by A2,XCMPLX_1:60;
+   .= 1 by A1,XCMPLX_1:60;
   hence thesis;
  end;
 
@@ -484,8 +469,7 @@ Th30: for s,t st s>=t holds
   assume A2: r = s-t;
   A3:s>=r
    proof
-    t>=0;
-    then t-s>=0-s by XREAL_1:11;
+    t-s>=0-s by XREAL_1:11;
     then --s>=-(t-s) by XREAL_1:26;
     hence thesis by A2;
    end;
@@ -536,16 +520,16 @@ theorem Th32:
      hence thesis by A7,A8,Def3;
    end;
    end;
-    suppose A1:s=t;
+    suppose A9:s=t;
       then s<t+1 by NAT_1:38;
       then (t+1) choose (s+1)=1 & t choose s =1 & t choose (s+1)=0
-      by A1,Th31,Def3;
+      by A9,Th31,Def3;
       hence thesis;
     end;
-    suppose A1:s>t;
+    suppose A10:s>t;
       then s+1>t+0 & s+1 >t+1 by XREAL_1:10;
       then (t+1) choose (s+1)=0 & t choose s =0 & t choose (s+1)=0
-        by A1,Def3;
+        by A10,Def3;
       hence thesis;
     end;
  end;
@@ -591,10 +575,10 @@ A4: for r st r <> 0 holds ((s+1) choose r) is Nat
       assume A5: r <> 0;
       ((s+1) choose r) is Nat
       proof
-        consider t being Nat such that A9: r = t+1 by A5,NAT_1:22;
+        consider t being Nat such that A6: r = t+1 by A5,NAT_1:22;
         reconsider m1 = (s choose t), m2 = (s choose (t+1)) as Nat by A3;
         m1 + m2 =(s choose t) + (s choose (t+1));
-        hence thesis by A9,Th32;
+        hence thesis by A6,Th32;
       end;
       hence thesis;
     end;
@@ -646,13 +630,13 @@ A12: for i,l st i in dom G & l = n+i-1 holds G.i = l choose n
      hence G.i = l choose n by A4,A13,A14;
     end;
     dom F = Seg (m+1) by A4,FINSEQ_1:def 3;
-   then A16: m+1 in dom F by FINSEQ_1:6;
+   then A15: m+1 in dom F by FINSEQ_1:6;
    n+m = n +(m+1)-1;
-   then A17: (n+m) choose n = (G^<*x*>).(len G +1) by A4,A5,A6,A16 .= x by
+   then A16: (n+m) choose n = (G^<*x*>).(len G +1) by A4,A5,A6,A15 .= x by
 FINSEQ_1:59;
    thus Sum F = Sum G + x by A5,RVSUM_1:104
     .= (n+m) choose (n+1) + (n+m) choose n
-      by A3,A7,A11,A12,A17 .= (n+m+1) choose (n+1) by Th32
+      by A3,A7,A11,A12,A16 .= (n+m+1) choose (n+1) by Th32
     .= (n+(m+1)) choose (n+1);
    end;
   end;
@@ -769,9 +753,9 @@ theorem Th39:
     reconsider m1 = 1-1 as Nat by INT_1:18;
     reconsider l1 = s-m1 as natural number;
     len ((a,b) In_Power s) = s+1 by Def4;
-    then A2: dom ((a,b) In_Power s) = Seg (s+1) by FINSEQ_1:def 3;
+    then A1: dom ((a,b) In_Power s) = Seg (s+1) by FINSEQ_1:def 3;
     s+1>=0+1 by XREAL_1:8;
-    then 1 in dom ((a,b) In_Power s) by A2;
+    then 1 in dom ((a,b) In_Power s) by A1;
     then ((a,b) In_Power s).1 = (s choose 0)*a|^l1*b|^m1 by Def4
       .= 1*a|^l1*b|^m1 by Th29
       .= a|^s by Th9;
@@ -896,22 +880,22 @@ A35:        1<=j & j+1<=n+1+1 by A18,A31,NAT_1:38;
         A39: l1+1 = n+1-(m2+1);
            j-1<=n+1-1 by A36,XREAL_1:11;
         then reconsider l2 = n-m2 as Nat by INT_1:18;
-        A41: x = ((a,b) In_Power n).j by A37,FINSEQ_4:def 4;
-        A42: r = ((a,b) In_Power n).i by A33,FINSEQ_4:def 4;
-        A43: r1 = ((a*((a,b) In_Power n))^<*0*>).i by A16,FINSEQ_4:def 4;
-        A44: r2 = (<*0*>^(b*((a,b) In_Power n))).i by A17,FINSEQ_4:def 4;
-        A45: r1 = (a*((a,b) In_Power n)).i by A34,A43,FINSEQ_1:def 7
-         .= a*r by A42,RVSUM_1:66;
-            r2 = (<*0*>^(b*((a,b) In_Power n))).(len <*0*> +j) by A18,A44,
+        A40: x = ((a,b) In_Power n).j by A37,FINSEQ_4:def 4;
+        A41: r = ((a,b) In_Power n).i by A33,FINSEQ_4:def 4;
+        A42: r1 = ((a*((a,b) In_Power n))^<*0*>).i by A16,FINSEQ_4:def 4;
+        A43: r2 = (<*0*>^(b*((a,b) In_Power n))).i by A17,FINSEQ_4:def 4;
+        A44: r1 = (a*((a,b) In_Power n)).i by A34,A42,FINSEQ_1:def 7
+         .= a*r by A41,RVSUM_1:66;
+            r2 = (<*0*>^(b*((a,b) In_Power n))).(len <*0*> +j) by A18,A43,
 FINSEQ_1:57
          .= (b*((a,b) In_Power n)).j by A38,FINSEQ_1:def 7
-         .= b*x by A41,RVSUM_1:66;
-        then F.i = a*r + b*x by A15,A43,A44,A45,RVSUM_1:26
-         .= a*(a|^l1*(n choose m1)*b|^m1) + b*x by A33,A42,Def4
+         .= b*x by A40,RVSUM_1:66;
+        then F.i = a*r + b*x by A15,A42,A43,A44,RVSUM_1:26
+         .= a*(a|^l1*(n choose m1)*b|^m1) + b*x by A33,A41,Def4
          .= a*a|^l1*((n choose m1)*b|^m1) + b*x
          .= a|^(l1+1)*((n choose m1)*b|^m1) + b*x by Th11
          .= a|^(l1+1)*((n choose m1)*b|^m1) + b*(b|^m2*((n choose m2)*a|^l2))
- by A37,A41,Def4
+ by A37,A40,Def4
          .= a|^(l1+1)*((n choose m1)*b|^m1) + b*b|^m2*((n choose m2)*a|^l2)
          .=
 a|^(l1+1)*((n choose (m2+1))*b|^(m2+1)) + b|^(m2+1)*((n choose m2)*a|^l2)
@@ -924,48 +908,48 @@ a|^(l1+1)*((n choose (m2+1))*b|^(m2+1)) + b|^(m2+1)*((n choose m2)*a|^l2)
          .= ((a,b) In_Power (n+1)).i by A11,A39,Def4;
         hence thesis;
        end;
-      A46: i in {n+1+1} implies F.i = ((a,b) In_Power (n+1)).i
+      A45: i in {n+1+1} implies F.i = ((a,b) In_Power (n+1)).i
        proof
-        assume A47: i in {n+1+1};
-        then A48: i = n+1+1 by TARSKI:def 1;
-        A49: j = n+1+1-1 by A47,TARSKI:def 1 .= n+1;
-        A50: n+1 = len ((a,b) In_Power n) by Def4
+        assume A46: i in {n+1+1};
+        then A47: i = n+1+1 by TARSKI:def 1;
+        A48: j = n+1+1-1 by A46,TARSKI:def 1 .= n+1;
+        A49: n+1 = len ((a,b) In_Power n) by Def4
          .= len (a*((a,b) In_Power n)) by Th6;
            n+1 in Seg (n+1) by FINSEQ_1:6;
-        then j in Seg len (((a,b) In_Power n)) by A49,Def4;
-        then A51: j in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
-        then A52: j in dom (b*((a,b) In_Power n)) by Th7;
-        A53: x = ((a,b) In_Power n).j by A51,FINSEQ_4:def 4;
-        A54: x = ((a,b) In_Power n).(n+1) by A49,A51,FINSEQ_4:def 4
+        then j in Seg len (((a,b) In_Power n)) by A48,Def4;
+        then A50: j in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
+        then A51: j in dom (b*((a,b) In_Power n)) by Th7;
+        A52: x = ((a,b) In_Power n).j by A50,FINSEQ_4:def 4;
+        A53: x = ((a,b) In_Power n).(n+1) by A48,A50,FINSEQ_4:def 4
                .= b|^n by Th40;
-        A55: r1 = F1.i by A16,FINSEQ_4:def 4;
-        A56: r1 =
+        A54: r1 = F1.i by A16,FINSEQ_4:def 4;
+        A55: r1 =
 ((a*((a,b) In_Power n))^<*0*>).(len (a*((a,b) In_Power n))+1)
-           by A16,A48,A50,FINSEQ_4:def 4
+           by A16,A47,A49,FINSEQ_4:def 4
          .= 0 by FINSEQ_1:59;
-        A57: r2 = F2.i by A17,FINSEQ_4:def 4;
-        A58: r2 = (<*0*>^(b*((a,b) In_Power n))).(1+n+1) by A17,A48,
+        A56: r2 = F2.i by A17,FINSEQ_4:def 4;
+        A57: r2 = (<*0*>^(b*((a,b) In_Power n))).(1+n+1) by A17,A47,
 FINSEQ_4:def 4
-         .= (<*0*>^(b*((a,b) In_Power n))).(len <*0*> +j) by A49,FINSEQ_1:56
-         .= (b*((a,b) In_Power n)).j by A52,FINSEQ_1:def 7
-         .= b*b|^n by A53,A54,RVSUM_1:66 .= b|^(n+1) by Th11;
-           F.i = 0+r2 by A55,A56,A57,RVSUM_1:27
-         .= ((a,b) In_Power (n+1)).i by A48,A58,Th40;
+         .= (<*0*>^(b*((a,b) In_Power n))).(len <*0*> +j) by A48,FINSEQ_1:56
+         .= (b*((a,b) In_Power n)).j by A51,FINSEQ_1:def 7
+         .= b*b|^n by A52,A53,RVSUM_1:66 .= b|^(n+1) by Th11;
+           F.i = 0+r2 by A54,A55,A56,RVSUM_1:27
+         .= ((a,b) In_Power (n+1)).i by A47,A57,Th40;
         hence thesis;
        end;
          now assume i in {1} \/ {k: 1<k & k<n+1+1} \/ {n+1+1};
       then i in {1} \/ {k: 1<k & k<n+1+1} or i in {n+1+1} by XBOOLE_0:def 2;
-      hence F.i = ((a,b) In_Power (n+1)).i by A20,A30,A46,XBOOLE_0:def 2;
+      hence F.i = ((a,b) In_Power (n+1)).i by A20,A30,A45,XBOOLE_0:def 2;
       end;
       hence thesis by A11,A13,A19,Th5;
      end;
        len ((a,b) In_Power (n+1)) = len F by A9,Def4;
     hence thesis by A4,A8,A10,Th3;
    end;
-A59:  for n holds P[n] from NAT_1:sch 1(A1,A2);
+A58:  for n holds P[n] from NAT_1:sch 1(A1,A2);
   let s;
   s is Nat by ORDINAL2:def 21;
-  hence thesis by A59;
+  hence thesis by A58;
  end;
 
 definition let n be natural number;
@@ -1085,7 +1069,7 @@ begin :: Addenda
 
 :: from NAT_LAT
 
-theorem Th2:
+theorem Th45:
   l >= 1 implies k*l>=k
   proof
     assume A1: l>=1;
@@ -1106,11 +1090,11 @@ theorem Th2:
  hence thesis;
 end;
 
-theorem Th3:
+theorem Th46:
   l >= 1 & n >= k*l implies n>=k
 proof
   assume that A1: l>=1 and A2: n>=k*l;
-  k*l>=k by A1,Th2;
+  k*l>=k by A1,Th45;
   hence thesis by A2,XREAL_1:2;
 end;
 
@@ -1119,7 +1103,7 @@ definition let n;
   coherence by Th22;
 end;
 
-theorem Th5:
+theorem Th47:
   l <> 0 implies l divides l!
 proof
   assume l<>0;
@@ -1143,7 +1127,7 @@ A3:(n+1)/n=n/n+1/n by XCMPLX_1:63
    hence thesis by A3,XREAL_1:31;
   end;
 
-theorem Tw9:
+theorem Th49:
   k/(k+1) < 1
   proof
     defpred P[Nat] means $1/($1+1)<1;
@@ -1158,7 +1142,7 @@ A2: P[m] implies P[m+1] proof
   hence thesis;
  end;
 
-theorem TH10:
+theorem Th50:
   for l being Nat holds l! >= l
   proof
     defpred P[Nat] means $1! >= $1;
@@ -1172,8 +1156,8 @@ A4: l!*(l+1)=(l+1)! by Th21;
        case l=0;
        hence thesis by Th19;
        end;
-       case A6: l>=1;  (l+1)!>=(l+1)*l by A3,A4,XREAL_1:66;
-       hence (l+1)!>=(l+1) by A6,Th3;
+       case A5: l>=1;  (l+1)!>=(l+1)*l by A3,A4,XREAL_1:66;
+       hence (l+1)!>=(l+1) by A5,Th46;
      end;
     end;
     hence (l+1)!>=(l+1);
@@ -1183,7 +1167,7 @@ A4: l!*(l+1)=(l+1)! by Th21;
 
  reserve t,s,j,r for Nat;
 
-theorem Th12:
+theorem Th51:
   for m,n st m<>1 holds m divides n implies not m divides (n+1)
    proof let m,n;
     assume that A1:m<>1 and A2:m divides n and A3: m divides (n+1);
@@ -1198,7 +1182,7 @@ A7:  s<>0 by A5;
 then A9:       t=n*s/(n+1) by XCMPLX_1:90
            .=s*(n/(n+1)) by XCMPLX_1:75;
 A10:  s>0 by A7;
-      n/(n+1)<1 by Tw9;
+      n/(n+1)<1 by Th49;
       hence contradiction by A8,A9,A10,REAL_2:145;
      end;
     then reconsider r =s-t as Nat by INT_1:18;
@@ -1207,13 +1191,13 @@ A10:  s>0 by A7;
 end;
 
 theorem
-  j divides l & j divides l+1 iff j=1 by Th12,NAT_1:53;
+  j divides l & j divides l+1 iff j=1 by Th51,NAT_1:53;
 
-theorem Th15:
+theorem Th53:
   for k,j st j<>0 holds j divides (j+k)!
   proof
     defpred P[Nat] means for j st j<>0 holds j divides (j+$1)!;
-A1: P[0] by Th5;
+A1: P[0] by Th47;
 A2: for k st P[k] holds P[k+1]  proof let k;
     assume A3: for j st j<>0 holds j divides (j+k)!;
     let j;
@@ -1225,20 +1209,20 @@ A2: for k st P[k] holds P[k+1]  proof let k;
    thus for k holds P[k] from NAT_1:sch 1(A1,A2);
   end;
 
-theorem Th16:
+theorem Th54:
   j<=l & j<>0 implies j divides l!
   proof
     assume that A1: j<=l and A2: j<>0;
     ex k st l=j+k by A1,NAT_1:28;
-    hence thesis by A2,Th15;
+    hence thesis by A2,Th53;
   end;
 
-theorem Th17:
+theorem Th55:
   for l,j st j<>1 & j<>0 holds j divides (l!+1) implies j>l
   proof let l,j;
     assume that A1: j<>1 and A2: j<>0 and A3: j divides (l!+1);
-    not j divides l! by A1,A3,Th12;
-    hence thesis by A2,Th16;
+    not j divides l! by A1,A3,Th51;
+    hence thesis by A2,Th54;
   end;
 
 :: The fundamental properties of lcm, hcf
@@ -1279,7 +1263,7 @@ theorem
  hence thesis;
 end;
 
-theorem Th20:
+theorem Th57:
   m divides n iff m lcm n = n
 proof
 thus m divides n implies m lcm n = n
@@ -1324,7 +1308,7 @@ A1: m divides M & 1 divides M & for l st m divides l & 1 divides
  hence thesis by NAT_1:def 4; end;
 hence thesis by A1,NAT_1:52; end;
 
-theorem Th27:
+theorem Th60:
   m lcm n divides m*n
 proof
    set s=m*n;
@@ -1370,7 +1354,7 @@ theorem
  hence thesis;
  end;
 
-theorem Th30:
+theorem Th62:
   n divides m implies n hcf m = n
 proof
  set N = n hcf m;
@@ -1418,29 +1402,29 @@ A1: m divides M
    M divides m by NAT_1:def 5;
 hence thesis by A1,NAT_1:52;end;
 
-theorem Th37:
+theorem Th66:
   (m hcf n) lcm n = n
 proof
   set M = m hcf n;
   M divides m & M divides n & for k st k divides m & k divides
   n holds k divides M by NAT_1:def 5;
-  hence thesis by Th20;
+  hence thesis by Th57;
 end;
 
-theorem Th38:
+theorem Th67:
   m hcf (m lcm n) = m
 proof
   set M = m lcm n;
   m divides M & n divides M & for k st m divides k & n divides
   k holds M divides k by NAT_1:def 4;
-  hence m hcf (m lcm n) = m by Th30;
+  hence m hcf (m lcm n) = m by Th62;
 end;
 
 theorem
   m hcf (m lcm n) = (n hcf m) lcm m
 proof
-  m hcf (m lcm n) = m by Th38;
-  hence thesis by Th37;
+  m hcf (m lcm n) = m by Th67;
+  hence thesis by Th66;
 end;
 
 theorem
@@ -1481,7 +1465,7 @@ theorem
   m > 0 & n > 0 implies m lcm n > 0
 proof
    assume that A1: m>0 and A2: n>0 and A3: m lcm n <= 0;
-A4:(m lcm n) divides m*n by Th27;
+A4:(m lcm n) divides m*n by Th60;
    m lcm n = 0 or m lcm n < 0 by A3;
    then ex r st m*n = 0*r by A4,NAT_1:def 3;
    hence contradiction by A1,A2,REAL_2:122;
@@ -1558,7 +1542,7 @@ theorem
    hence n -m * (n div m) = n mod m;
   end;
 
-theorem
+theorem Th78:
   i2 >= 0 implies i1 mod i2 >= 0
   proof
    assume A1:i2 >= 0;
@@ -1576,7 +1560,7 @@ theorem
  end;
  end;
 
-theorem
+theorem Th79:
   i2 > 0 implies i1 mod i2 < i2
 proof
   assume A1: i2 > 0;
@@ -1589,7 +1573,7 @@ proof
   hence thesis by A1,INT_1:def 8;
 end;
 
-theorem
+theorem Th80:
   i2 <> 0 implies i1 = (i1 div i2) * i2 + (i1 mod i2)
 proof
   assume i2 <> 0;
@@ -1695,7 +1679,7 @@ A17: p divides n by A9,A15;
 
 definition
   func SetPrimes -> Subset of NAT means
-:Def17: for n being Nat holds n in it iff n is prime;
+:Def6: for n being Nat holds n in it iff n is prime;
   existence
   proof
     defpred P[Nat] means $1 is prime;
@@ -1729,7 +1713,7 @@ end;
          x for set;
 
 definition let p be Nat;
-  func SetPrimenumber p -> Subset of NAT means :Def19:
+  func SetPrimenumber p -> Subset of NAT means :Def7:
     for q being Nat holds q in it iff (q < p & q is prime);
   existence
   proof defpred P[Nat] means $1 < p & $1 is prime;
@@ -1750,7 +1734,7 @@ A1: for q being Nat holds q in X iff P[q] from SUBSET_1:sch 3;
   end;
 end;
 
-theorem Th77:
+theorem Th82:
   for p being Nat holds SetPrimenumber p c= SetPrimes
 proof
   let p be Nat;
@@ -1758,8 +1742,8 @@ proof
   proof let x;
    assume A1: x in SetPrimenumber p;
    then reconsider x' = x as Nat;
-   x' < p & x' is prime by A1,Def19;
-   hence thesis by Def17;
+   x' < p & x' is prime by A1,Def7;
+   hence thesis by Def6;
  end;
  hence thesis by TARSKI:def 3;
 end;
@@ -1773,19 +1757,19 @@ proof let p,q be Nat;
   proof let x;
    assume A2: x in SetPrimenumber p;
    then reconsider x' = x as Nat;
-   x' < p & x' is prime by A2,Def19;
+   x' < p & x' is prime by A2,Def7;
    then x' < q & x' is prime by A1,XREAL_1:2;
-   hence thesis by Def19;
+   hence thesis by Def7;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem Th79:
+theorem Th84:
   for p being Nat holds SetPrimenumber p c= Seg p
 proof let p be Nat; let x be set;
   assume A1: x in SetPrimenumber p;
   then reconsider q = x as Nat;
-  A2: q < p & q is prime by A1,Def19;
+  A2: q < p & q is prime by A1,Def7;
   then 1 <= q by INT_2:def 5;
   hence thesis by A2;
 end;
@@ -1794,11 +1778,11 @@ theorem
   for p being Nat holds SetPrimenumber p is finite
 proof
   let p be Nat;
-  SetPrimenumber p c= Seg p by Th79;
+  SetPrimenumber p c= Seg p by Th84;
   hence thesis by FINSET_1:13;
 end;
 
-Lm14: k=0 or k=1 or 2<=k
+Lm1: k=0 or k=1 or 2<=k
  proof
   assume k<>0 & k<>1;
   then 1<k by CQC_THE1:2;
@@ -1808,20 +1792,20 @@ Lm14: k=0 or k=1 or 2<=k
 
  reserve p for Prime;
 
-theorem Th81:
+theorem Th86:
   for l holds ex p st p is prime & p>l
   proof let l;
    reconsider two = 2 as Prime by INT_2:44;
    l=0 & (ex p st p is prime & p>l) or (l=1 & (ex p st p is prime & p>l)) or
    (2<=l & (ex p st p is prime & p>l))
    proof
-    per cases by Lm14;
+    per cases by Lm1;
      case A1: l=0; take two; thus thesis by A1;
      end;
      case A2: l=1; take two; thus thesis by A2;
      end;
      case A3: 2<=l;
-      l<=l! by TH10;
+      l<=l! by Th50;
       then 2<=l! by A3,XREAL_1:2;
       then (2+0) <= (l!+1) by XREAL_1:9;
       then consider j such that
@@ -1830,23 +1814,23 @@ theorem Th81:
 A7:   j<>0 by A4,INT_2:def 5;
       reconsider j'=j as Prime by A4;
       take j';
-      thus thesis by A5,A6,A7,Th17;
+      thus thesis by A5,A6,A7,Th55;
     end;
    end;
    hence thesis;
   end;
 
 theorem
-  SetPrimes <> {} by Def17,INT_2:44;
+  SetPrimes <> {} by Def6,INT_2:44;
 
-theorem Th85:
+theorem Th88:
   {k:k<2 & k is prime} = {}
   proof
     consider x being Element of {k:k<2 & k is prime};
     assume {k:k<2 & k is prime}<>{};
     then x in {k:k<2 & k is prime};
     then ex n st x=n & n<2 & n is prime;
-    then 0 is prime or 1 is prime by Lm14;
+    then 0 is prime or 1 is prime by Lm1;
     hence contradiction by INT_2:def 5;
   end;
 
@@ -1859,7 +1843,7 @@ proof let p;
   hence x in NAT;
 end;
 
-theorem Th87:
+theorem Th90:
   for m holds {k:k<m & k is prime} c= Seg m
 proof let m;
   for x holds x in {k:k<m & k is prime} implies x in Seg m
@@ -1872,14 +1856,14 @@ proof let m;
  hence thesis by TARSKI:def 3;
 end;
 
-theorem Th88:
+theorem Th91:
   for m holds {k:k<m & k is prime} is finite
 proof let m;
-  {k:k<m & k is prime} c= Seg m by Th87;
+  {k:k<m & k is prime} c= Seg m by Th90;
   hence thesis by FINSET_1:13;
 end;
 
-theorem Th89:
+theorem Th92:
   for f being Nat holds not f in {k: k<f & k is prime}
   proof let f be Nat;
    assume f in {k: k<f & k is prime};
@@ -1890,11 +1874,11 @@ theorem Th89:
 theorem
   for f being Nat holds {k: k<f & k is prime}\/{f} is finite
 proof let f be Nat;
-  {k:k<f & k is prime} is finite by Th88;
+  {k:k<f & k is prime} is finite by Th91;
   hence thesis by FINSET_1:14;
 end;
 
-theorem Th91:
+theorem Th94:
   for f,g being Prime st f<g holds
     {k1: k1<f & k1 is prime} \/ {f} c= {k2: k2<g & k2 is prime}
 proof let f,g be Prime;
@@ -1931,19 +1915,19 @@ theorem
   end;
 
 definition let n;
-  func primenumber n -> Prime means :Def20:
+  func primenumber n -> Prime means :Def8:
     ex B being finite set st B = {k:k<it & k is prime} & n = card B;
 existence
 proof
   defpred P1[Nat] means ex m st
    ex B being finite set st B = {k:k<m & k is prime} & $1=card B & m is Prime;
-A1: P1[0] by Th85,CARD_1:78,INT_2:44;
+A1: P1[0] by Th88,CARD_1:78,INT_2:44;
 A2: for n st P1[n] holds P1[n+1]
     proof let n;
      given m being Nat, B being finite set such that
 A3:  B = {k1:k1<m & k1 is prime} & n=card B & m is Prime;
      defpred P[Nat] means $1 is prime & $1>m;
-     ex p st p is prime & p>m by Th81;
+     ex p st p is prime & p>m by Th86;
      then A4: ex k st P[k];
      consider k such that
 A5:  P[k] & for l st P[l] holds k <= l from NAT_1:sch 5(A4);
@@ -1976,14 +1960,14 @@ A9:       s<=m by A5,A8;
          end;
         hence thesis by TARSKI:def 3;
        end;
-      {k1: k1<m & k1 is prime}\/{m}c={k2: k2<k & k2 is prime} by A3,A5,Th91;
+      {k1: k1<m & k1 is prime}\/{m}c={k2: k2<k & k2 is prime} by A3,A5,Th94;
       hence thesis by A7,XBOOLE_0:def 10;
       end;
-     reconsider C = {k1:k1<k & k1 is prime} as finite set by Th88;
+     reconsider C = {k1:k1<k & k1 is prime} as finite set by Th91;
      take C;
      set x=m;
     thus C = {k1:k1<k & k1 is prime};
-    not x in {k1:k1<m & k1 is prime} by Th89;
+    not x in {k1:k1<m & k1 is prime} by Th92;
     hence n + 1 = card C by A3,A6,CARD_2:54;
     thus k is Prime by A5;
     end;
@@ -2004,9 +1988,9 @@ A13: f<>g;
   proof
    per cases by A13,XREAL_1:1;
     case f<g;
-    then A14: {k1: k1<f & k1 is prime}\/{f}c={k2: k2<g & k2 is prime} by Th91;
-A15: {k2: k2<g & k2 is prime} is finite by Th88;
-A16: not f in {k1:k1<f & k1 is prime} by Th89;
+    then A14: {k1: k1<f & k1 is prime}\/{f}c={k2: k2<g & k2 is prime} by Th94;
+A15: {k2: k2<g & k2 is prime} is finite by Th91;
+A16: not f in {k1:k1<f & k1 is prime} by Th92;
      set x=f;
      reconsider B1 = {k4: k4<f & k4 is prime}\/{x},
                 B2 = {k3: k3<g & k3 is prime} as finite set
@@ -2015,9 +1999,9 @@ A16: not f in {k1:k1<f & k1 is prime} by Th89;
      hence thesis by A11,A12,A16,CARD_2:54;
     end;
     case g<f;
-    then A17: {k2: k2<g & k2 is prime}\/{g}c={k1: k1<f & k1 is prime} by Th91;
-A18: {k1: k1<f & k1 is prime} is finite by Th88;
-A19: not g in {k2:k2<g & k2 is prime} by Th89;
+    then A17: {k2: k2<g & k2 is prime}\/{g}c={k1: k1<f & k1 is prime} by Th94;
+A18: {k1: k1<f & k1 is prime} is finite by Th91;
+A19: not g in {k2:k2<g & k2 is prime} by Th92;
      reconsider B3 = {k4: k4<g & k4 is prime}\/{g},
       B4 = {k3: k3<f & k3 is prime} as finite set by A17,A18,FINSET_1:13;
     card B3 <= card B4 by A17,CARD_1:80;
@@ -2028,7 +2012,7 @@ A19: not g in {k2:k2<g & k2 is prime} by Th89;
  end;
 end;
 
-theorem Th93:
+theorem Th96:
   SetPrimenumber p = {k:k<p & k is prime}
 proof
   for x holds x in SetPrimenumber p iff x in {k:k<p & k is prime}
@@ -2037,21 +2021,21 @@ A1: for x holds x in SetPrimenumber p implies x in {k:k<p & k is prime}
    proof let x;
     assume A2: x in SetPrimenumber p;
     then reconsider x' = x as Nat;
-    x' < p & x' is prime by A2,Def19;
+    x' < p & x' is prime by A2,Def7;
     hence thesis;
    end;
    for x holds x in {k:k<p & k is prime} implies x in SetPrimenumber p
    proof let x;
     assume x in {k:k<p & k is prime};
     then ex n st n=x & n < p & n is prime;
-    hence thesis by Def19;
+    hence thesis by Def7;
    end;
    hence thesis by A1;
   end;
   hence thesis by TARSKI:2;
 end;
 
-theorem Th98: :: Euclid
+theorem Th97: :: Euclid
   SetPrimes is infinite
 proof
   assume A1: SetPrimes is finite;
@@ -2061,23 +2045,23 @@ proof
   Card SetPrimes = Card Seg n by A2,CARD_1:21;
   then Card SetPrimes = Card n by FINSEQ_1:76;
   then A3: card SP = n by CARD_1:def 11;
-A4: SetPrimenumber p c= SP by Th77;
+A4: SetPrimenumber p c= SP by Th82;
   then reconsider SPp = SetPrimenumber p as finite set by FINSET_1:13;
 A5: card SPp <= card SP by A4,CARD_1:80;
   consider B being finite set such that
-A6: B = {k:k< p & k is prime} & n + 1 = card B by Def20;
-  n+1 <= n by A3,A5,A6,Th93;
+A6: B = {k:k< p & k is prime} & n + 1 = card B by Def8;
+  n+1 <= n by A3,A5,A6,Th96;
   hence contradiction by NAT_1:38;
 end;
 
 registration
   cluster SetPrimes -> non empty infinite;
-  coherence by Th98;
+  coherence by Th97;
 end;
 
  reserve m,i for Nat;
 
-Lm15: n is prime implies n > 0 by INT_2:def 5;
+Lm2: n is prime implies n > 0 by INT_2:def 5;
 
 theorem :: divisibility
   for i st i is prime holds
@@ -2107,7 +2091,7 @@ A11: m < p'
      proof
        assume A12: m >= p';
        set m1 = m mod p';
-A13:   p' > 0 by A4,Lm15;
+A13:   p' > 0 by A4,Lm2;
        then m1 < p' by NAT_1:46;
        then A14: m1 < m by A12,XREAL_1:2;
 A15:   p' divides p' * (m div p') by NAT_1:def 3;
@@ -2206,5 +2190,40 @@ theorem
   proof
     let x be real number;
     thus x * x = (x |^ 1) * x by Th10 .= x |^ (1+1) by Th11 .= x |^ 2;
-    hence x|^2 = x * x .= x^2 by SQUARE_1:def 3;
+    hence x|^2 = x * x .= x^2;
   end;
+
+:: from SCMFSA9A, 2005.11.16, A.T
+
+theorem
+ for m,n being natural number holds
+ m qua Integer div n = m div n &
+ m qua Integer mod n = m mod n
+proof
+  let m,n be natural number;
+   per cases;
+   suppose
+A1: 0 < n;
+  reconsider M = m as Integer;
+A2: m = n * (m div n) + (m mod n) by A1,NAT_1:47;
+A3: M = n * (M div n) + (M mod n) by A1,Th80;
+      0 <= M mod n by Th78;
+   then reconsider Mm = M mod n as Nat by INT_1:16;
+      0 <= M div n by A1,INT_1:82;
+   then reconsider Md = M div n as Nat by INT_1:16;
+A4: m mod n < n by A1,NAT_1:46;
+A5: Mm < n by A1,Th79;
+     Md = M div n;
+ hence thesis by A2,A3,A4,A5,NAT_1:43;
+ end;
+ suppose
+A6: n = 0;
+  hence m qua Integer div n = 0 by INT_1:75
+    .= m div n by A6,NAT_1:def 1;
+  thus m qua Integer mod n = 0 by A6,INT_1:def 8
+    .= m mod n by A6,NAT_1:def 2;
+end;
+end;
+
+
+

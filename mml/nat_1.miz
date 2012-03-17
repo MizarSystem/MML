@@ -24,7 +24,7 @@ definition
 end;
 
  reserve x for Real,
-         k,l,m,n for Nat,
+         p,g,q,k,l,m,n for Nat,
          h,i,j for natural number,
          X for Subset of REAL;
 
@@ -260,10 +260,8 @@ A8:      for n,m st P[k,n] & P[k,m] holds n = m;
 A9:      P[k+1,n] & P[k+1,m];
        consider l,u be Nat such that
 A10:      k + 1 = l + 1 & P[l,u] & n = F(k + 1,u) by A1,A9;
-       consider v,w be Nat such that
-A11:      k + 1 = v + 1 & P[v,w] & m = F(k + 1,w) by A1,A9;
-       l = k & v = k by A10,A11;
-       hence n = m by A8,A10,A11;
+        ex v,w be Nat st k + 1 = v + 1 & P[v,w] & m = F(k + 1,w) by A1,A9;
+       hence n = m by A8,A10;
       end;
     thus for k holds P[k] from Ind(A5,A7);
    end;
@@ -281,19 +279,19 @@ A2:  for i st P[i] holds P[i+1]
 A3:     i <= j + 1 implies i <= j or i = j + 1;
       let j such that
 A4:     i + 1 <= j + 1;
-A7:     now assume
-A8:       j = 0;
-then A9:       i <= 0 by A4,XREAL_1:8;
+A5:     now assume
+A6:       j = 0;
+then A7:       i <= 0 by A4,XREAL_1:8;
             0 <= i by Th18;
-        hence thesis by A8,A9,XREAL_1:1;
+        hence thesis by A6,A7,XREAL_1:1;
        end;
         now given k such that
-A10:       j = k + 1;
-         i <= k + 1 by A4,A10,XREAL_1:8;
+A8:       j = k + 1;
+         i <= k + 1 by A4,A8,XREAL_1:8;
          then i <= k or i = k + 1 by A3;
-        hence thesis by A10,XREAL_1:8;
+        hence thesis by A8,XREAL_1:8;
        end;
-     hence thesis by A7,Th22;
+     hence thesis by A5,Th22;
     end;
    thus for i holds P[i] from NatInd(A1,A2);
   end;
@@ -462,9 +460,7 @@ A2:  i = m + 1 by Th22;
     j <> 0 by A1;
    then consider l such that
 A3:  j = l + 1 by Th22;
-       (m + 1) * (l + 1) = m * l + m + l + 1;
-    then m * l + m + l + 1 = 0 + 1 by A1,A2,A3;
-    then m * l + m + l = 0;
+    m * l + m + l + 1 = 0 + 1 by A1,A2,A3;
     then m * l + m = 0 & l = 0 by Th23;
    hence thesis by A2,A3;
   end;
@@ -474,10 +470,7 @@ theorem Th41:
  proof
   let k, n be natural number;
   assume A1: k <> 0;
-   A2: now assume n = n + k;
-     then n + 0 = n + k;
-    hence contradiction by A1;
-   end;
+   A2: n <> n + k by A1;
     n <= n + k & n <= k + n by Th37;
   hence n < n + k by A2,REAL_1:def 5;
  end;
@@ -937,9 +930,7 @@ A17:    l <> 0 & Q(n) divides Q(l) & Q(n) divides Q(l + 1);
 A18:    l = m + 1 by Th22;
       take m;
 A19:    m <= m + 1 by Th29;
-          now assume m = m + 1; then m + 0 = m + 1;
-         hence contradiction;
-       end;
+        m <> m + 1;
       hence m < l by A18,A19,REAL_1:def 5;
 A20:  now assume
 A21:    Q(m + 1) = 0;
@@ -1218,4 +1209,104 @@ registration
   cluster -> non negative (natural number);
   coherence by Th18;
 end;
+
+:: from AMI_5, 2005.11.16, A.T.
+
+theorem
+   for m,k being Nat st k <> 0 holds m * k div k = m
+  proof
+   let m,k be Nat;
+   assume k <> 0;
+   then m*k = k * m + 0 & 0 < k or m = 0 & k = 0;
+   hence m*k div k = m by Def1;
+  end;
+
+:: from GR_CY_1, 2005.11.16, A.T.
+
+theorem Th1:
+ for m,n,k being natural number holds m mod n = (n*k + m) mod n
+ proof
+   let m,n,k be natural number;
+  per cases;
+  suppose A1: n > 0;
+       m mod n = t implies (n*k + m) mod n = t
+   proof
+    assume m mod n = t;
+    then consider q such that A2: m = n * q + t & t < n by A1,Def2;
+        ex g st n*k + m = n*g + t & t < n
+      proof
+        reconsider g = k+q as Nat by ORDINAL2:def 21;
+        take g;
+       thus thesis by A2;
+      end;
+    hence thesis by Def2;
+   end;
+ hence thesis;
+ end;
+ suppose n = 0;
+ hence thesis;
+end;
+end;
+
+theorem Th2:
+ for p,s,n being natural number holds (p+s) mod n = ((p mod n)+s) mod n
+ proof
+   let p,s,n be natural number;
+  per cases;
+  suppose n > 0;
+  then (p + s) mod n = (n*(p div n) + (p mod n) + s) mod n by Th47
+                .=(n*(p div n) + ((p mod n) + s)) mod n
+                .=((p mod n) + s) mod n by Th1;
+   hence thesis;
+   end;
+   suppose
+A1:  n = 0;
+   hence (p+s) mod n = 0 by Def2
+     .= ((p mod n)+s) mod n by A1,Def2;
+ end;
+ end;
+
+theorem
+   for p,s,n being natural number holds  (p+s) mod n = (p + ( s mod n)) mod n
+   by Th2;
+
+theorem Th4:
+ for n,k being natural number holds k < n implies k mod n = k
+ proof
+   let n,k be natural number;
+   assume A1:k<n;
+A2: k is Nat by ORDINAL2:def 21;
+    ex p st k=n*p + k & k<n
+   proof
+      k=n*0 + k;
+     hence thesis by A1;
+   end;
+  hence thesis by A2,Def2;
+ end;
+
+theorem Th5:
+ for n being natural number holds n mod n = 0
+ proof
+   let n be natural number;
+  per cases;
+  suppose A1:n>0;
+      ex p st n=n*p +0 & 0<n
+   proof
+        n=n*1+0;
+    hence thesis by A1;
+   end;
+  hence thesis by Def2;
+  end;
+  suppose n = 0;
+  hence thesis by Def2;
+ end;
+ end;
+
+theorem Th6:
+ for n being natural number holds 0 = 0 mod n
+  proof
+    let n be natural number;
+        n = 0 or n > 0;
+    hence thesis by Th4,Def2;
+  end;
 

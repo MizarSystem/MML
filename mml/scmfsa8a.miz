@@ -444,14 +444,7 @@ end;
 
 theorem Th18: ::T38
  for I being programmed FinPartState of SCM+FSA holds
-     Directed I = Directed(I,insloc card I)
- proof
-   let I be programmed FinPartState of SCM+FSA;
-   thus Directed I
-    = ((id the Instructions of SCM+FSA) +*
-        (halt SCM+FSA .--> goto insloc card I)) * I by SCMFSA6A:def 1
-   .= Directed(I,insloc card I);
- end;
+     Directed I = Directed(I,insloc card I) by SCMFSA6A:def 1;
 
 registration
  let P be programmed FinPartState of SCM+FSA;
@@ -460,9 +453,7 @@ registration
  correctness
   proof
    A1: halt SCM+FSA <> goto l by SCMFSA_2:47,124;
-      Directed(P,l) =
-       ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto l)) * P;
-   then rng Directed(P,l) c= rng ((id the Instructions of SCM+FSA) +*
+   rng Directed(P,l) c= rng ((id the Instructions of SCM+FSA) +*
        (halt SCM+FSA .--> goto l)) by RELAT_1:45;
    then not halt SCM+FSA in rng Directed(P,l) by A1,FUNCT_7:14;
    hence thesis by SCMFSA7B:def 6;
@@ -488,11 +479,11 @@ theorem Th19: ::T21
    let l be Instruction-Location of SCM+FSA;
    set X = the Instructions of SCM+FSA;
    set P = (id X) +* (halt SCM+FSA .--> goto l);
-A2: rng I c= X by SCMFSA_4:1;
-A3: dom id X = X by RELAT_1:71;
+A1: rng I c= X by SCMFSA_4:1;
+A2: dom id X = X by RELAT_1:71;
       dom P = (dom id X) \/ dom (halt SCM+FSA .--> goto l) by FUNCT_4:def 1;
-   then X c= dom P by A3,XBOOLE_1:7;
-   then rng I c= dom P by A2,XBOOLE_1:1;
+   then X c= dom P by A2,XBOOLE_1:7;
+   then rng I c= dom P by A1,XBOOLE_1:1;
    hence thesis by RELAT_1:46;
  end;
 
@@ -930,12 +921,7 @@ then A1: x in dom Directed I by SCMFSA6A:14;
 
 theorem Th29: ::T31(@BBB8)
  for l being Instruction-Location of SCM+FSA holds
-     card Goto l = 1
- proof
-   let l be Instruction-Location of SCM+FSA;
-   thus card Goto l = card (insloc 0 .--> goto l)
-   .= 1 by Lm1;
- end;
+     card Goto l = 1 by Lm1;
 
 theorem Th30: ::T39
  for P being programmed FinPartState of SCM+FSA, x being set
@@ -1262,31 +1248,31 @@ then A1: not halt SCM+FSA in rng I by SCMFSA7B:def 6;
       dom g
     = (dom id X) \/ dom (halt SCM+FSA .--> goto l) by FUNCT_4:def 1
    .= X \/ dom (halt SCM+FSA .--> goto l) by FUNCT_1:34;
-then A3: X c= dom g by XBOOLE_1:7;
+then A2: X c= dom g by XBOOLE_1:7;
       now let y be set;
       assume y in rng f;
       then consider x being set such that
-  A4: x in dom f and
-  A5: y = f.x by FUNCT_1:def 5;
+  A3: x in dom f and
+  A4: y = f.x by FUNCT_1:def 5;
       consider s being State of SCM+FSA;
          dom f c= A by AMI_3:def 13;
-      then reconsider l = x as Instruction-Location of SCM+FSA by A4;
-         (s +* f).l = f.l by A4,FUNCT_4:14;
-      hence y in X by A5;
+      then reconsider l = x as Instruction-Location of SCM+FSA by A3;
+         (s +* f).l = f.l by A3,FUNCT_4:14;
+      hence y in X by A4;
      end;
-then A6: rng f c= X by TARSKI:def 3;
-   then rng f c= dom g by A3,XBOOLE_1:1;
-then A7: dom (g * f) = dom f by RELAT_1:46;
+then A5: rng f c= X by TARSKI:def 3;
+   then rng f c= dom g by A2,XBOOLE_1:1;
+then A6: dom (g * f) = dom f by RELAT_1:46;
       now let x be set;
-      assume A8: x in dom f;
-  then A9: f.x in rng f by FUNCT_1:def 5;
+      assume A7: x in dom f;
+  then A8: f.x in rng f by FUNCT_1:def 5;
          dom (halt SCM+FSA .--> goto l) = {halt SCM+FSA} by CQC_LANG:5;
-  then A10: not f.x in dom (halt SCM+FSA .--> goto l) by A1,A9,TARSKI:def 1;
-      thus (g * f).x = g.(f.x) by A8,FUNCT_1:23
-      .= (id X).(f.x) by A10,FUNCT_4:12
-      .= f.x by A6,A9,FUNCT_1:35;
+  then A9: not f.x in dom (halt SCM+FSA .--> goto l) by A1,A8,TARSKI:def 1;
+      thus (g * f).x = g.(f.x) by A7,FUNCT_1:23
+      .= (id X).(f.x) by A9,FUNCT_4:12
+      .= f.x by A5,A8,FUNCT_1:35;
      end;
-   hence thesis by A7,FUNCT_1:9;
+   hence thesis by A6,FUNCT_1:9;
  end;
 
 theorem Th40: ::T35
@@ -1743,12 +1729,7 @@ theorem  ::TI9' <> _T22''
 
 theorem Th47: ::TB61'(TB61'@BBB8)
  for l being Instruction-Location of SCM+FSA holds
-     insloc 0 in dom Goto l & (Goto l).insloc 0 = goto l
- proof
-   let l be Instruction-Location of SCM+FSA;
-      Goto l = (insloc 0 .--> goto l);
-   hence thesis by Lm1;
- end;
+     insloc 0 in dom Goto l & (Goto l).insloc 0 = goto l by Lm1;
 
 theorem Th48: ::T70
   for N being with_non-empty_elements set,

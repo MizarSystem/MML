@@ -27,7 +27,8 @@ environ
       TOPREAL9, NAT_1, TOPALG_2, TOPREALB, TOPMETR, RCOMP_1, RELAT_1, PSCOMP_1,
       TEX_1, REVROT_1, PARTFUN3, SUBSET_1, TOPALG_5;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
- definitions TARSKI, XBOOLE_0, BORSUK_1, BORSUK_2, TOPALG_2, PSCOMP_1, ABIAN;
+ definitions TARSKI, XBOOLE_0, BORSUK_1, BORSUK_2, TOPALG_2, PSCOMP_1, ABIAN,
+      SQUARE_1, BINOP_1;
  theorems TOPRNS_1, XREAL_0, TARSKI, FUNCT_2, TSEP_1, RFUNCT_1, PRE_TOPC,
       EUCLID, RELAT_1, GRCAT_1, FUNCT_1, ABIAN, ZFMISC_1, JGRAPH_2, XBOOLE_1,
       XBOOLE_0, TOPS_2, BORSUK_1, TOPALG_1, EQREL_1, BORSUK_2, BINOP_1,
@@ -79,11 +80,11 @@ registration
 coherence
 proof
   consider s1, s2 being Element of S such that
-a1: s1 <> s2 by YELLOW_8:def 1;
+A1: s1 <> s2 by YELLOW_8:def 1;
   consider t1 being Element of T;
   per cases;
   suppose s1 = t1;
-  then [s2,t1] in DiffElems(S,T) by a1;
+  then [s2,t1] in DiffElems(S,T) by A1;
   hence thesis;
   end;
   suppose s1 <> t1;
@@ -101,10 +102,10 @@ coherence
 proof
   consider s1 being Element of S;
   consider t1, t2 being Element of T such that
-a2: t1 <> t2 by YELLOW_8:def 1;
+A1: t1 <> t2 by YELLOW_8:def 1;
   per cases;
   suppose s1 = t1;
-  then [s1,t2] in DiffElems(S,T) by a2;
+  then [s1,t2] in DiffElems(S,T) by A1;
   hence thesis;
   end;
   suppose s1 <> t1;
@@ -114,16 +115,16 @@ a2: t1 <> t2 by YELLOW_8:def 1;
 end;
 end;
 
-theorem Tcl0:
+theorem Th2:
   cl_Ball(x,0) = {x}
   proof
     thus cl_Ball(x,0) c= {x}
     proof
       let a be set;
       assume
-a1:   a in cl_Ball(x,0);
+A1:   a in cl_Ball(x,0);
       then reconsider a as Point of TOP-REAL n;
-      |. a-x .| <= 0 by a1,TOPREAL9:8;
+      |. a-x .| <= 0 by A1,TOPREAL9:8;
       then |. a-x .| = 0 by TOPRNS_1:26;
       then a = x by TOPRNS_1:29;
       hence thesis by TARSKI:def 1;
@@ -131,9 +132,9 @@ a1:   a in cl_Ball(x,0);
     let a be set;
     assume a in {x};
     then
-a3: a = x by TARSKI:def 1;
+A2: a = x by TARSKI:def 1;
     |. x-x .| = 0 by TOPRNS_1:29;
-    hence thesis by a3,TOPREAL9:8;
+    hence thesis by A2,TOPREAL9:8;
   end;
 
 definition
@@ -150,11 +151,10 @@ registration
 coherence;
 end;
 
-theorem Tcard:
+theorem Th3:
   the carrier of Tdisk(x,r) = cl_Ball(x,r)
 proof
-  Tdisk(x,r) = (TOP-REAL n) | cl_Ball(x,r);
-  then [#]Tdisk(x,r) = cl_Ball(x,r) by PRE_TOPC:def 10;
+  [#]Tdisk(x,r) = cl_Ball(x,r) by PRE_TOPC:def 10;
   hence the carrier of Tdisk(x,r) = cl_Ball(x,r)
     by PRE_TOPC:12;
 end;
@@ -164,7 +164,7 @@ registration
   cluster Tdisk(x,r) -> convex;
 coherence
 proof
-  the carrier of Tdisk(x,r) = cl_Ball(x,r) by Tcard;
+  the carrier of Tdisk(x,r) = cl_Ball(x,r) by Th3;
   hence [#]Tdisk(x,r) is convex Subset of TOP-REAL n by PRE_TOPC:12;
 end;
 end;
@@ -174,58 +174,58 @@ reserve
    r for non negative (real number),
    s, t, x for Point of TOP-REAL n;
 
-theorem Tex1:
+theorem Th4:
   s <> t & s is Point of Tdisk(x,r) & s is not Point of Tcircle(x,r) implies
   ex e being Point of Tcircle(x,r) st {e} = halfline(s,t) /\ Sphere(x,r)
 proof
   assume that
-a3: s <> t and
-er: s is Point of Tdisk(x,r) and
-a4: s is not Point of Tcircle(x,r);
-a5: the carrier of Tcircle(x,r) = Sphere(x,r) by TOPREALB:9;
-A1: the carrier of Tdisk(x,r) = cl_Ball(x,r) by Tcard;
-b1: |. s-x .| <> r by a4,a5,TOPREAL9:9;
+A1: s <> t and
+A2: s is Point of Tdisk(x,r) and
+A3: s is not Point of Tcircle(x,r);
+A4: the carrier of Tcircle(x,r) = Sphere(x,r) by TOPREALB:9;
+A5: the carrier of Tdisk(x,r) = cl_Ball(x,r) by Th3;
+A6: |. s-x .| <> r by A3,A4,TOPREAL9:9;
   reconsider S = s, T = t, X = x as Element of REAL n by EUCLID:25;
   set a = (-(2*|(t-s,s-x)|) + sqrt delta
   (Sum sqr (T-S), 2 * |(t-s,s-x)|, Sum sqr (S-X) - r^2)) / (2 * Sum sqr (T-S));
-  |. s-x .| <= r by er,A1,TOPREAL9:8;
-  then |. s-x .| < r by b1,REAL_1:def 5;
+  |. s-x .| <= r by A2,A5,TOPREAL9:8;
+  then |. s-x .| < r by A6,REAL_1:def 5;
   then s in Ball(x,r) by TOPREAL9:7;
   then consider e1 being Point of TOP-REAL n such that
-a7: {e1} = halfline(s,t) /\ Sphere(x,r) and
-    e1 = (1-a)*s + a*t by a3,TOPREAL9:37;
+A7: {e1} = halfline(s,t) /\ Sphere(x,r) and
+    e1 = (1-a)*s + a*t by A1,TOPREAL9:37;
 e1 in {e1} by TARSKI:def 1;
-  then e1 in Sphere(x,r) by a7,XBOOLE_0:def 3;
-  hence thesis by a5,a7;
+  then e1 in Sphere(x,r) by A7,XBOOLE_0:def 3;
+  hence thesis by A4,A7;
 end;
 
-theorem Tex2:
+theorem Th5:
   s <> t & s in the carrier of Tcircle(x,r) & t is Point of Tdisk(x,r) implies
    ex e being Point of Tcircle(x,r) st e <> s &
      {s,e} = halfline(s,t) /\ Sphere(x,r)
 proof
   assume that
-a3: s <> t and
-a4: s in the carrier of Tcircle(x,r) and
-a2: t is Point of Tdisk(x,r);
-a5: the carrier of Tcircle(x,r) = Sphere(x,r) by TOPREALB:9;
+A1: s <> t and
+A2: s in the carrier of Tcircle(x,r) and
+A3: t is Point of Tdisk(x,r);
+A4: the carrier of Tcircle(x,r) = Sphere(x,r) by TOPREALB:9;
   reconsider S = 1/2*s + 1/2*t, T = t, X = x as Element of REAL n by EUCLID:25;
   set a = (-(2*|(t-(1/2*s + 1/2*t),1/2*s + 1/2*t-x)|) + sqrt delta
       (Sum sqr (T-S), 2 * |(t-(1/2*s + 1/2*t),1/2*s + 1/2*t-x)|,
       Sum sqr (S-X) - r^2)) / (2 * Sum sqr (T-S));
-  the carrier of Tdisk(x,r) = cl_Ball(x,r) by Tcard;
+  the carrier of Tdisk(x,r) = cl_Ball(x,r) by Th3;
   then consider e1 being Point of TOP-REAL n such that
-a6:  e1 <> s and
-a7:  {s,e1} = halfline(s,t) /\ Sphere(x,r) and
+A5:  e1 <> s and
+A6:  {s,e1} = halfline(s,t) /\ Sphere(x,r) and
      (t in Sphere(x,r) implies e1 = t) &
      (not t in Sphere(x,r) &
       a = (-(2*|(t-(1/2*s + 1/2*t),1/2*s + 1/2*t-x)|) + sqrt delta
       (Sum sqr (T-S), 2 * |(t-(1/2*s + 1/2*t),1/2*s + 1/2*t-x)|,
       Sum sqr (S-X) - r^2)) / (2 * Sum sqr (T-S))
-      implies e1 = (1-a)*(1/2*s + 1/2*t) + a*t) by a2,a3,a5,a4,TOPREAL9:38;
+      implies e1 = (1-a)*(1/2*s + 1/2*t) + a*t) by A3,A1,A4,A2,TOPREAL9:38;
   e1 in {s,e1} & s in {s,e1} by TARSKI:def 2;
-  then e1 in Sphere(x,r) & s in Sphere(x,r) by a7,XBOOLE_0:def 3;
-  hence thesis by a5,a6,a7;
+  then e1 in Sphere(x,r) & s in Sphere(x,r) by A6,XBOOLE_0:def 3;
+  hence thesis by A4,A5,A6;
 end;
 
 definition
@@ -233,63 +233,63 @@ definition
       s, t be Point of TOP-REAL n,
       r be non negative (real number);
   assume that
-a4: s is Point of Tdisk(o,r) and
-a3: t is Point of Tdisk(o,r) and
-a5: s <> t;
-  func HC(s,t,o,r) -> Point of TOP-REAL n means :dhcc:
+A1: s is Point of Tdisk(o,r) and
+A2: t is Point of Tdisk(o,r) and
+A3: s <> t;
+  func HC(s,t,o,r) -> Point of TOP-REAL n means :Def3:
   it in halfline(s,t) /\ Sphere(o,r) & it <> s;
 existence
 proof
   per cases;
   suppose
-ee: s is Point of Tcircle(o,r);
+A4: s is Point of Tcircle(o,r);
   consider e being Point of Tcircle(o,r) such that
-d1: e <> s &
-    {s,e} = halfline(s,t) /\ Sphere(o,r) by a3,a5,ee,Tex2;
+A5: e <> s &
+    {s,e} = halfline(s,t) /\ Sphere(o,r) by A2,A3,A4,Th5;
   reconsider e as Point of TOP-REAL n by TOPMETR:2;
   take e;
-  thus thesis by d1,TARSKI:def 2;
+  thus thesis by A5,TARSKI:def 2;
   end;
   suppose
-a1: s is not Point of Tcircle(o,r);
+A6: s is not Point of Tcircle(o,r);
   consider e1 being Point of Tcircle(o,r) such that
-b1: {e1} = halfline(s,t) /\ Sphere(o,r) by a1,a5,a4,Tex1;
+A7: {e1} = halfline(s,t) /\ Sphere(o,r) by A6,A3,A1,Th4;
   reconsider e1 as Point of TOP-REAL n by TOPMETR:2;
   take e1;
-  thus thesis by b1,a1,TARSKI:def 1;
+  thus thesis by A7,A6,TARSKI:def 1;
   end;
 end;
 uniqueness
 proof
   let m, u be Point of TOP-REAL n such that
-A1:  m in halfline(s,t) /\ Sphere(o,r) & m <> s and
-A2:  u in halfline(s,t) /\ Sphere(o,r) & u <> s;
+A8:  m in halfline(s,t) /\ Sphere(o,r) & m <> s and
+A9:  u in halfline(s,t) /\ Sphere(o,r) & u <> s;
   per cases;
   suppose
-ee: s is Point of Tcircle(o,r);
+A10: s is Point of Tcircle(o,r);
   consider f1 being Point of Tcircle(o,r) such that
     f1 <> s and
-z2: {s,f1} = halfline(s,t) /\ Sphere(o,r) by a3,a5,ee,Tex2;
-  per cases by A1,A2,z2,TARSKI:def 2;
+A11: {s,f1} = halfline(s,t) /\ Sphere(o,r) by A2,A3,A10,Th5;
+  per cases by A8,A9,A11,TARSKI:def 2;
   suppose m = f1 & u = f1;
   hence m = u;
   end;
   suppose m = f1 & u = s;
-  hence m = u by A2;
+  hence m = u by A9;
   end;
   suppose m = s & u = f1;
-  hence m = u by A1;
+  hence m = u by A8;
   end;
   suppose m = s & u = s;
   hence m = u;
   end;
   end;
   suppose
-ee: s is not Point of Tcircle(o,r);
+A12: s is not Point of Tcircle(o,r);
   consider e being Point of Tcircle(o,r) such that
-A3: {e} = halfline(s,t) /\ Sphere(o,r) by ee,a4,a5,Tex1;
-  m = e by A1,A3,TARSKI:def 1;
-  hence m = u by A2,A3,TARSKI:def 1;
+A13: {e} = halfline(s,t) /\ Sphere(o,r) by A12,A1,A3,Th4;
+  m = e by A8,A13,TARSKI:def 1;
+  hence m = u by A9,A13,TARSKI:def 1;
   end;
 end;
 end;
@@ -298,15 +298,15 @@ reserve
    n for non empty Nat,
    s, t, o for Point of TOP-REAL n;
 
-theorem T1:
+theorem Th6:
   s is Point of Tdisk(o,r) & t is Point of Tdisk(o,r) & s <> t implies
   HC(s,t,o,r) is Point of Tcircle(o,r)
 proof
   assume
-a0: s is Point of Tdisk(o,r) & t is Point of Tdisk(o,r) & s <> t;
-a1: the carrier of Tcircle(o,r) = Sphere(o,r) by TOPREALB:9;
-  HC(s,t,o,r) in halfline(s,t) /\ Sphere(o,r) by a0,dhcc;
-  hence thesis by a1,XBOOLE_0:def 3;
+A1: s is Point of Tdisk(o,r) & t is Point of Tdisk(o,r) & s <> t;
+A2: the carrier of Tcircle(o,r) = Sphere(o,r) by TOPREALB:9;
+  HC(s,t,o,r) in halfline(s,t) /\ Sphere(o,r) by A1,Def3;
+  hence thesis by A2,XBOOLE_0:def 3;
 end;
 
 theorem
@@ -317,10 +317,10 @@ theorem
   implies HC(s,t,o,r) = (1-a)*s+a*t
 proof
   let S, T, O be Element of REAL n such that
-T1: S = s & T = t & O = o and
-a1: s is Point of Tdisk(o,r) and
-a2: t is Point of Tdisk(o,r) and
-a3: s <> t;
+A1: S = s & T = t & O = o and
+A2: s is Point of Tdisk(o,r) and
+A3: t is Point of Tdisk(o,r) and
+A4: s <> t;
   set H = HC(s,t,o,r);
   set M = |(t-s,s-o)|;
   set A = Sum sqr (T-S);
@@ -329,63 +329,61 @@ a3: s <> t;
   set l1 = (- B - sqrt delta(A,B,C)) / (2 * A);
   set l2 = (- B + sqrt delta(A,B,C)) / (2 * A);
   assume
-a7: a = (-M+sqrt(M^2-A*C)) / A;
-b0: H in halfline(s,t) /\ Sphere(o,r) by a1,a2,a3,dhcc;
+A5: a = (-M+sqrt(M^2-A*C)) / A;
+A6: H in halfline(s,t) /\ Sphere(o,r) by A2,A3,A4,Def3;
   then H in halfline(s,t) by XBOOLE_0:def 3;
   then consider l being real number such that
-b5: H = (1-l)*s + l*t and
-b6: 0 <= l by TOPREAL9:26;
-dd: H = 1 * s -l*s + l*t by b5,EUCLID:54
+A7: H = (1-l)*s + l*t and
+A8: 0 <= l by TOPREAL9:26;
+A9: H = 1 * s -l*s + l*t by A7,EUCLID:54
      .= s -l*s + l*t by EUCLID:33
      .= s+l*t-l*s by JORDAN2C:9
      .= s+(l*t-l*s) by EUCLID:49
      .= s+l*(t-s) by EUCLID:53;
-A5: |. T-S .| <> 0 by T1,a3,EUCLID:19;
-A6:now
+A10: |. T-S .| <> 0 by A1,A4,EUCLID:19;
+A11:now
     assume A <= 0;
     then A = 0 by RVSUM_1:116;
-    hence contradiction by A5,EUCLID:def 5,SQUARE_1:82;
+    hence contradiction by A10,EUCLID:def 5,SQUARE_1:82;
   end;
-jj: delta(A,B,C) = B^2 - 4*A*C by QUIN_1:def 1
-    .= 2^2*M^2 - 4*A*C by SQUARE_1:68
-    .= 2*2*M^2 - 4*A*C by SQUARE_1:def 3
+A12: delta(A,B,C) = B^2 - 4*A*C by QUIN_1:def 1
+    .= 2^2*M^2 - 4*A*C
+    .= 2*2*M^2 - 4*A*C
     .= 4*(M^2-A*C);
-  the carrier of Tdisk(o,r) = cl_Ball(o,r) by Tcard;
+  the carrier of Tdisk(o,r) = cl_Ball(o,r) by Th3;
   then
-A7: |. s-o .| <= r by a1,TOPREAL9:8;
-A8: |. S-O .| = sqrt Sum sqr (S-O) by EUCLID:def 5;
-A9: |. S-O .| >= 0 by EUCLID:12;
-  t-s = T-S by T1,EUCLID:def 13;
+A13: |. s-o .| <= r by A2,TOPREAL9:8;
+A14: |. S-O .| = sqrt Sum sqr (S-O) by EUCLID:def 5;
+A15: |. S-O .| >= 0 by EUCLID:12;
+  t-s = T-S by A1,EUCLID:def 13;
   then
-A10: |. t-s .| = |. T-S .| by TOPRNS_1:def 6;
-A11: |. T-S .| = sqrt Sum sqr (T-S) by EUCLID:def 5;
+A16: |. t-s .| = |. T-S .| by TOPRNS_1:def 6;
+A17: |. T-S .| = sqrt Sum sqr (T-S) by EUCLID:def 5;
   Sum sqr (T-S) >= 0 by RVSUM_1:116;
   then
-A12: |. T-S .|^2 = Sum sqr (T-S) by A11,SQUARE_1:def 4;
+A18: |. T-S .|^2 = Sum sqr (T-S) by A17,SQUARE_1:def 4;
   Sum sqr (S-O) >= 0 by RVSUM_1:116;
   then
-A13: |. S-O .|^2 = Sum sqr (S-O) by A8,SQUARE_1:def 4;
-  s-o = S-O by T1,EUCLID:def 13;
+A19: |. S-O .|^2 = Sum sqr (S-O) by A14,SQUARE_1:def 4;
+  s-o = S-O by A1,EUCLID:def 13;
   then
-A14: |. s-o .| = |. S-O .| by TOPRNS_1:def 6;
+A20: |. s-o .| = |. S-O .| by TOPRNS_1:def 6;
   then
-a15: (sqrt Sum sqr (S-O))^2 <= r^2 by A7,A8,A9,SQUARE_1:77;
+A21: (sqrt Sum sqr (S-O))^2 <= r^2 by A13,A14,A15,SQUARE_1:77;
   then
-A15: C <= 0 by A8,A13,REAL_2:106;
-A17: delta(A,B,C) = B^2 - 4*A*C by QUIN_1:def 1;
-  4*A > 0 by A6,XREAL_1:131;
+A22: C <= 0 by A14,A19,REAL_2:106;
+A23: delta(A,B,C) = B^2 - 4*A*C by QUIN_1:def 1;
+  4*A > 0 by A11,XREAL_1:131;
   then
-A18: 4*A*C <= 0 by A15,XREAL_1:133;
-  B^2 >= 0 by SQUARE_1:72;
-  then
-A19: B^2 - 4*A*C >= 0 by A18,REAL_2:174;
+A24: 4*A*C <= 0 by A22,XREAL_1:133;
+A25: B^2 - 4*A*C >= 0 by A24,REAL_2:174;
   l is Real by XREAL_0:def 1;
   then
-A32: |. l*(t-s) .|^2 = (abs(l)*|. t-s .|)^2 by TOPRNS_1:8
-   .= (abs(l))^2 * |. t-s .|^2 by SQUARE_1:68
+A26: |. l*(t-s) .|^2 = (abs(l)*|. t-s .|)^2 by TOPRNS_1:8
+   .= (abs(l))^2 * |. t-s .|^2
    .= l^2 * |. t-s .|^2 by COMPLEX1:161;
-  H in Sphere(o,r) by b0,XBOOLE_0:def 3;
-  then r = |. (1-l)*s+l*t - o .| by b5,TOPREAL9:9
+  H in Sphere(o,r) by A6,XBOOLE_0:def 3;
+  then r = |. (1-l)*s+l*t - o .| by A7,TOPREAL9:9
     .= |. 1 * s - l*s + l*t - o .| by EUCLID:54
     .= |. s - l*s + l*t - o .| by EUCLID:33
     .= |. s - (l*s - l*t) - o .| by EUCLID:51
@@ -395,89 +393,88 @@ A32: |. l*(t-s) .|^2 = (abs(l)*|. t-s .|)^2 by TOPRNS_1:8
     .= |. s-o + l*(-(s-t)) .| by EUCLID:44
     .= |. s-o + l*(t-s) .| by EUCLID:48;
   then
-Z:r^2 = |. s-o .|^2 + 2*|(l*(t-s),s-o)| + |. l*(t-s) .|^2 by EUCLID_2:67
+A27:r^2 = |. s-o .|^2 + 2*|(l*(t-s),s-o)| + |. l*(t-s) .|^2 by EUCLID_2:67
     .= |. s-o .|^2 + 2*(l*|(t-s,s-o)|) + |. l*(t-s) .|^2 by EUCLID_2:41;
   (Sum sqr (T-S))*l^2+(2*M)*l+Sum sqr (S-O) - r^2
-     = (|. T-S .|^2)*l^2+(2*M)*l+Sum sqr (S-O) - r^2 by A12
-    .= (|. T-S .|^2)*l^2+(2*M)*l+(|. S-O .|^2) - r^2 by A13
-    .= (|. t-s .|^2)*l^2+(2*M)*l+(|. S-O .|^2) - r^2 by A10
-    .= |. l*(t-s) .|^2+(2*M)*l+(|. S-O .|^2) - r^2 by A32
-    .= |. l*(t-s) .|^2+(2*M)*l+(|. s-o .|^2) - r^2 by A14
-    .= 0 by Z;
+     = (|. T-S .|^2)*l^2+(2*M)*l+Sum sqr (S-O) - r^2 by A18
+    .= (|. T-S .|^2)*l^2+(2*M)*l+(|. S-O .|^2) - r^2 by A19
+    .= (|. t-s .|^2)*l^2+(2*M)*l+(|. S-O .|^2) - r^2 by A16
+    .= |. l*(t-s) .|^2+(2*M)*l+(|. S-O .|^2) - r^2 by A26
+    .= |. l*(t-s) .|^2+(2*M)*l+(|. s-o .|^2) - r^2 by A20
+    .= 0 by A27;
   then A*l^2+B*l+C = 0;
   then
-d4: Poly2(A,B,C,l) = 0 by POLYEQ_1:def 2;
-  A*C <= 0 by A6,A15,XREAL_1:133;
+A28: Poly2(A,B,C,l) = 0 by POLYEQ_1:def 2;
+  A*C <= 0 by A11,A22,XREAL_1:133;
   then
-c2: -0 <= -A*C by XREAL_1:26;
-  0 <= M^2 by SQUARE_1:72;
-  then 0+0 <= M^2+-A*C by c2,XREAL_1:9;
+A29: -0 <= -A*C by XREAL_1:26;
+  0+0 <= M^2+-A*C by A29,XREAL_1:9;
   then
-we: l2 = (-B+sqrt(4)*sqrt(M^2-A*C)) / (2*A) by jj,SQUARE_1:97
+A30: l2 = (-B+sqrt(4)*sqrt(M^2-A*C)) / (2*A) by A12,SQUARE_1:97
     .= (2*(-(M-sqrt(M^2-A*C)))) / (2*A) by SQUARE_1:85
-    .= a by a7,XCMPLX_1:92;
-wr: l = l1 or l = l2 by A6,A17,d4,A19,POLYEQ_1:5;
+    .= a by A5,XCMPLX_1:92;
+A31: l = l1 or l = l2 by A11,A23,A28,A25,POLYEQ_1:5;
   for x being real number holds Poly2(A,B,C,x) = Quard(A,l1,l2,x)
   proof
     let x be real number;
     thus Poly2(A,B,C,x) = A*x^2+B*x+C by POLYEQ_1:def 2
-      .= A*(x-l1)*(x-l2) by A6,A17,A19,QUIN_1:16
+      .= A*(x-l1)*(x-l2) by A11,A23,A25,QUIN_1:16
       .= A*((x-l1)*(x-l2))
       .= Quard(A,l1,l2,x) by POLYEQ_1:def 3;
   end;
   then
-e1: C/A = l1*l2 by A6,POLYEQ_1:11;
-d1: 2*A > 0 by A6,XREAL_1:131;
-e2: now
+A32: C/A = l1*l2 by A11,POLYEQ_1:11;
+A33: 2*A > 0 by A11,XREAL_1:131;
+A34: now
     set D = sqrt delta(A,B,C);
     assume l1 > l2;
-    then -D - B > D - B by d1,REAL_1:73;
+    then -D - B > D - B by A33,REAL_1:73;
     then -D > D by XREAL_1:11;
     then
-d2: -D+D > D+D by XREAL_1:8;
-    0 <= D by A17,A19,SQUARE_1:def 4;
+A35: -D+D > D+D by XREAL_1:8;
+    0 <= D by A23,A25,SQUARE_1:def 4;
     then 0+0 <= D+D by XREAL_1:9;
-    hence contradiction by d2;
+    hence contradiction by A35;
   end;
-  per cases by a15,A8,A13,REAL_2:106;
+  per cases by A21,A14,A19,REAL_2:106;
   suppose C < 0;
-  then C/A < 0 by A6,REAL_2:128;
-  hence H = (1-a)*s+a*t by e2,wr,we,b6,b5,e1,XREAL_1:135;
+  then C/A < 0 by A11,REAL_2:128;
+  hence H = (1-a)*s+a*t by A34,A31,A30,A8,A7,A32,XREAL_1:135;
   end;
   suppose l1 = l2;
-  hence H = (1-a)*s+a*t by wr,we,b5;
+  hence H = (1-a)*s+a*t by A31,A30,A7;
   end;
   suppose
-s1:  C = 0;
+A36:  C = 0;
   now
     assume
-s4:   l = l1;
-s3: now
+A37:   l = l1;
+A38: now
       assume l = 0;
-      then H = s+0.REAL n by dd,EUCLID:33
+      then H = s+0.REAL n by A9,EUCLID:33
       .= s by EUCLID:31;
-      hence contradiction by a1,a2,a3,dhcc;
+      hence contradiction by A2,A3,A4,Def3;
     end;
     per cases;
     suppose
-s5:   0 < B;
+A39:   0 < B;
     then
-s6: (-2)*B < 0 by XREAL_1:134;
-    l1 = (-B-B) / (2*A) by s5,s1,A17,SQUARE_1:89;
-    hence contradiction by s4,s6,b6,d1,REAL_2:128;
+A40: (-2)*B < 0 by XREAL_1:134;
+    l1 = (-B-B) / (2*A) by A39,A36,A23,SQUARE_1:89;
+    hence contradiction by A37,A40,A8,A33,REAL_2:128;
     end;
     suppose
-s5:   B <= 0;
-    l1 = (-B--B) / (2*A) by s5,s1,A17,SQUARE_1:90
+A41:   B <= 0;
+    l1 = (-B--B) / (2*A) by A41,A36,A23,SQUARE_1:90
     .= 0;
-    hence contradiction by s4,s3;
+    hence contradiction by A37,A38;
     end;
   end;
-  hence H = (1-a)*s+a*t by wr,we,b5;
+  hence H = (1-a)*s+a*t by A31,A30,A7;
   end;
 end;
 
-theorem Twzor:
+theorem Th8:
   for r1, r2, s1, s2 being real number,
       s, t, o being Point of TOP-REAL 2 holds
   s is Point of Tdisk(o,r) & t is Point of Tdisk(o,r) & s <> t &
@@ -488,14 +485,14 @@ theorem Twzor:
 proof
   let r1, r2, s1, s2 be real number,
       s, t, o be Point of TOP-REAL 2 such that
-a1: s is Point of Tdisk(o,r) and
-a2: t is Point of Tdisk(o,r) and
-a3: s <> t and
-a6: r1 = t`1-s`1 and
-a4: r2 = t`2-s`2 and
-a8: s1 = s`1-o`1 and
-a9: s2 = s`2-o`2 and
-a7: a = (-(s1*r1+s2*r2)+sqrt((s1*r1+s2*r2)^2-(r1^2+r2^2)*(s1^2+s2^2-r^2)))
+A1: s is Point of Tdisk(o,r) and
+A2: t is Point of Tdisk(o,r) and
+A3: s <> t and
+A4: r1 = t`1-s`1 and
+A5: r2 = t`2-s`2 and
+A6: s1 = s`1-o`1 and
+A7: s2 = s`2-o`2 and
+A8: a = (-(s1*r1+s2*r2)+sqrt((s1*r1+s2*r2)^2-(r1^2+r2^2)*(s1^2+s2^2-r^2)))
        / (r1^2+r2^2);
   set H = HC(s,t,o,r);
   set M = s1*r1+s2*r2;
@@ -504,134 +501,131 @@ a7: a = (-(s1*r1+s2*r2)+sqrt((s1*r1+s2*r2)^2-(r1^2+r2^2)*(s1^2+s2^2-r^2)))
   set C = s1^2+s2^2-r^2;
   set l1 = (- B - sqrt delta(A,B,C)) / (2 * A);
   set l2 = (- B + sqrt delta(A,B,C)) / (2 * A);
-b0: H in halfline(s,t) /\ Sphere(o,r) by a1,a2,a3,dhcc;
+A9: H in halfline(s,t) /\ Sphere(o,r) by A1,A2,A3,Def3;
   then H in halfline(s,t) by XBOOLE_0:def 3;
   then consider l being real number such that
-b5: H = (1-l)*s + l*t and
-b6: 0 <= l by TOPREAL9:26;
-dd: H = 1 * s -l*s + l*t by b5,EUCLID:54
+A10: H = (1-l)*s + l*t and
+A11: 0 <= l by TOPREAL9:26;
+A12: H = 1 * s -l*s + l*t by A10,EUCLID:54
      .= s -l*s + l*t by EUCLID:33
      .= s+l*t-l*s by JORDAN2C:9
      .= s+(l*t-l*s) by EUCLID:49
      .= s+l*(t-s) by EUCLID:53;
-b4: H`1 = s`1+(l*(t-s))`1 by dd,TOPREAL3:7
+A13: H`1 = s`1+(l*(t-s))`1 by A12,TOPREAL3:7
        .= s`1+l*(t-s)`1 by TOPREAL3:9
        .= s`1+l*(t`1-s`1) by TOPREAL3:8;
-B4: H`2 = s`2+(l*(t-s))`2 by dd,TOPREAL3:7
+A14: H`2 = s`2+(l*(t-s))`2 by A12,TOPREAL3:7
      .= s`2+l*(t-s)`2 by TOPREAL3:9
      .= s`2+l*(t`2-s`2) by TOPREAL3:8;
-  s`1 <> t`1 or s`2 <> t`2 by a3,TOPREAL3:11;
-  then r1 <> 0 or r2 <> 0 by a6,a4;
-  then (0 < r1^2 or 0 < r2^2) & 0 <= r1^2 & 0 <= r2^2 by SQUARE_1:72,74;
+  s`1 <> t`1 or s`2 <> t`2 by A3,TOPREAL3:11;
+  then r1 <> 0 or r2 <> 0 by A4,A5;
+  then (0 < r1^2 or 0 < r2^2) & 0 <= r1^2 & 0 <= r2^2 by SQUARE_1:74;
   then
-A6: 0+0 < A by XREAL_1:10;
-jj: delta(A,B,C) = B^2 - 4*A*C by QUIN_1:def 1
-    .= 2^2*M^2 - 4*A*C by SQUARE_1:68
-    .= 2*2*M^2 - 4*A*C by SQUARE_1:def 3
+A15: 0+0 < A by XREAL_1:10;
+A16: delta(A,B,C) = B^2 - 4*A*C by QUIN_1:def 1
+    .= 2^2*M^2 - 4*A*C
+    .= 2*2*M^2 - 4*A*C
     .= 4*(M^2-A*C);
 A17: delta(A,B,C) = B^2 - 4*A*C by QUIN_1:def 1;
-  H in Sphere(o,r) by b0,XBOOLE_0:def 3;
+  H in Sphere(o,r) by A9,XBOOLE_0:def 3;
   then |. H-o .| = r by TOPREAL9:9;
   then r^2 = ((H-o)`1)^2 + ((H-o)`2)^2 by JGRAPH_1:46
     .= (H`1-o`1)^2 + ((H-o)`2)^2 by TOPREAL3:8
     .= (H`1-o`1)^2 + (H`2-o`2)^2 by TOPREAL3:8
-    .= ((1-l)*s`1+l*t`1-o`1)^2 + (H`2-o`2)^2 by b5,TOPREAL9:41
-    .= ((1-l)*s`1+l*t`1-o`1)^2 + ((1-l)*s`2+l*t`2-o`2)^2 by b5,TOPREAL9:42
-    .= (s1+l*r1)^2 + (s2+l*r2)^2 by a6,a4,a8,a9
-    .= s1^2+2*s1*(l*r1)+(l*r1)^2 + (s2+l*r2)^2 by SQUARE_1:63
-    .= s1^2+2*s1*(l*r1)+(l*r1)^2 + (s2^2+2*s2*(l*r2)+(l*r2)^2) by SQUARE_1:63
+    .= ((1-l)*s`1+l*t`1-o`1)^2 + (H`2-o`2)^2 by A10,TOPREAL9:41
+    .= ((1-l)*s`1+l*t`1-o`1)^2 + ((1-l)*s`2+l*t`2-o`2)^2 by A10,TOPREAL9:42
+    .= (s1+l*r1)^2 + (s2+l*r2)^2 by A4,A5,A6,A7
+    .= s1^2+2*s1*(l*r1)+(l*r1)^2 + (s2+l*r2)^2
+    .= s1^2+2*s1*(l*r1)+(l*r1)^2 + (s2^2+2*s2*(l*r2)+(l*r2)^2)
     .= s1^2+2*s1*(l*r1)+(l*r1)^2 + s2^2+2*s2*(l*r2)+(l*r2)^2
-    .= s1^2+2*s1*(l*r1)+l^2*r1^2 + s2^2+2*s2*(l*r2)+(l*r2)^2 by SQUARE_1:68
-    .= s1^2+2*s1*(l*r1)+l^2*r1^2 + s2^2+2*s2*(l*r2)+l^2*r2^2 by SQUARE_1:68
+    .= s1^2+2*s1*(l*r1)+l^2*r1^2 + s2^2+2*s2*(l*r2)+(l*r2)^2
+    .= s1^2+2*s1*(l*r1)+l^2*r1^2 + s2^2+2*s2*(l*r2)+l^2*r2^2
     .= l^2*(r1^2+r2^2)+l*2*M+s1^2+s2^2;
   then A*l^2+B*l+C = 0;
   then
-d4: Poly2(A,B,C,l) = 0 by POLYEQ_1:def 2;
-d2: 0 <= |. s-o .| by TOPRNS_1:26;
-  the carrier of Tdisk(o,r) = cl_Ball(o,r) by Tcard;
-  then |. s-o .| <= r by a1,TOPREAL9:8;
+A18: Poly2(A,B,C,l) = 0 by POLYEQ_1:def 2;
+A19: 0 <= |. s-o .| by TOPRNS_1:26;
+  the carrier of Tdisk(o,r) = cl_Ball(o,r) by Th3;
+  then |. s-o .| <= r by A1,TOPREAL9:8;
   then
-d1: |. s-o .|^2 <= r^2 by d2,SQUARE_1:77;
+A20: |. s-o .|^2 <= r^2 by A19,SQUARE_1:77;
   |. s-o .|^2 = ((s-o)`1)^2+((s-o)`2)^2 by JGRAPH_1:46
-    .= s1^2+((s-o)`2)^2 by a8,TOPREAL3:8
-    .= s1^2+s2^2 by a9,TOPREAL3:8;
+    .= s1^2+((s-o)`2)^2 by A6,TOPREAL3:8
+    .= s1^2+s2^2 by A7,TOPREAL3:8;
   then
-d5: C <= r^2-r^2 by d1,XREAL_1:11;
-  then A*C <= 0 by A6,XREAL_1:133;
+A21: C <= r^2-r^2 by A20,XREAL_1:11;
+  then A*C <= 0 by A15,XREAL_1:133;
   then
-c2: -0 <= -A*C by XREAL_1:26;
-  0 <= M^2 by SQUARE_1:72;
-  then 0+0 <= M^2+-A*C by c2,XREAL_1:9;
+A22: -0 <= -A*C by XREAL_1:26;
+  0+0 <= M^2+-A*C by A22,XREAL_1:9;
   then
-we: l2 = (-B+sqrt(4)*sqrt(M^2-A*C)) / (2*A) by jj,SQUARE_1:97
+A23: l2 = (-B+sqrt(4)*sqrt(M^2-A*C)) / (2*A) by A16,SQUARE_1:97
     .= (2*(-(M-sqrt(M^2-A*C)))) / (2*A) by SQUARE_1:85
-    .= a by a7,XCMPLX_1:92;
-  4*A > 0 by A6,XREAL_1:131;
+    .= a by A8,XCMPLX_1:92;
+  4*A > 0 by A15,XREAL_1:131;
   then
-A18: 4*A*C <= 0 by d5,XREAL_1:133;
-  B^2 >= 0 by SQUARE_1:72;
+A24: 4*A*C <= 0 by A21,XREAL_1:133;
+A25: B^2 - 4*A*C >= 0 by A24,REAL_2:174;
   then
-A19: B^2 - 4*A*C >= 0 by A18,REAL_2:174;
-  then
-wr: l = l1 or l = l2 by A6,A17,d4,POLYEQ_1:5;
+A26: l = l1 or l = l2 by A15,A17,A18,POLYEQ_1:5;
   for x being real number holds Poly2(A,B,C,x) = Quard(A,l1,l2,x)
   proof
     let x be real number;
     thus Poly2(A,B,C,x) = A*x^2+B*x+C by POLYEQ_1:def 2
-      .= A*(x-l1)*(x-l2) by A6,A17,A19,QUIN_1:16
+      .= A*(x-l1)*(x-l2) by A15,A17,A25,QUIN_1:16
       .= A*((x-l1)*(x-l2))
       .= Quard(A,l1,l2,x) by POLYEQ_1:def 3;
   end;
   then
-e1: C/A = l1*l2 by A6,POLYEQ_1:11;
-d1: 2*A > 0 by A6,XREAL_1:131;
-e2: now
+A27: C/A = l1*l2 by A15,POLYEQ_1:11;
+A28: 2*A > 0 by A15,XREAL_1:131;
+A29: now
     set D = sqrt delta(A,B,C);
     assume l1 > l2;
-    then -D - B > D - B by d1,REAL_1:73;
+    then -D - B > D - B by A28,REAL_1:73;
     then -D > D by XREAL_1:11;
     then
-d2: -D+D > D+D by XREAL_1:8;
-    0 <= D by A17,A19,SQUARE_1:def 4;
+A30: -D+D > D+D by XREAL_1:8;
+    0 <= D by A17,A25,SQUARE_1:def 4;
     then 0+0 <= D+D by XREAL_1:9;
-    hence contradiction by d2;
+    hence contradiction by A30;
   end;
-  per cases by d5;
+  per cases by A21;
   suppose C < 0;
-  then C/A < 0 by A6,REAL_2:128;
+  then C/A < 0 by A15,REAL_2:128;
   hence H = |[ s`1+a*r1, s`2+a*r2 ]|
-    by e2,wr,we,b6,e1,b4,B4,a6,a4,EUCLID:57,XREAL_1:135;
+    by A29,A26,A23,A11,A27,A13,A14,A4,A5,EUCLID:57,XREAL_1:135;
   end;
   suppose l1 = l2;
-  hence H = |[ s`1+a*r1, s`2+a*r2 ]| by b4,wr,we,B4,a6,a4,EUCLID:57;
+  hence H = |[ s`1+a*r1, s`2+a*r2 ]| by A13,A26,A23,A14,A4,A5,EUCLID:57;
   end;
   suppose
-s1:  C = 0;
+A31:  C = 0;
   now
     assume
-s4:   l = l1;
-s3: now
+A32:   l = l1;
+A33: now
       assume l = 0;
-      then H = s+0.REAL 2 by dd,EUCLID:33
+      then H = s+0.REAL 2 by A12,EUCLID:33
       .= s by EUCLID:31;
-      hence contradiction by a1,a2,a3,dhcc;
+      hence contradiction by A1,A2,A3,Def3;
     end;
     per cases;
     suppose
-s5:   0 < B;
+A34:   0 < B;
     then
-s6: (-2)*B < 0 by XREAL_1:134;
-    l1 = (-B-B) / (2*A) by s5,s1,A17,SQUARE_1:89;
-    hence contradiction by s4,s6,b6,d1,REAL_2:128;
+A35: (-2)*B < 0 by XREAL_1:134;
+    l1 = (-B-B) / (2*A) by A34,A31,A17,SQUARE_1:89;
+    hence contradiction by A32,A35,A11,A28,REAL_2:128;
     end;
     suppose
-s5:   B <= 0;
-    l1 = (-B--B) / (2*A) by s5,s1,A17,SQUARE_1:90
+A36:   B <= 0;
+    l1 = (-B--B) / (2*A) by A36,A31,A17,SQUARE_1:90
     .= 0;
-    hence contradiction by s4,s3;
+    hence contradiction by A32,A33;
     end;
   end;
-  hence H = |[ s`1+a*r1, s`2+a*r2 ]| by b4,B4,a6,a4,wr,we,EUCLID:57;
+  hence H = |[ s`1+a*r1, s`2+a*r2 ]| by A13,A14,A4,A5,A26,A23,EUCLID:57;
   end;
 end;
 
@@ -640,39 +634,39 @@ definition
       r be non negative (real number);
   let x be Point of Tdisk(o,r);
   let f be Function of Tdisk(o,r), Tdisk(o,r) such that
-ff:   not x is_a_fixpoint_of f;
-  func HC(x,f) -> Point of Tcircle(o,r) means :dhc:
+A1:   not x is_a_fixpoint_of f;
+  func HC(x,f) -> Point of Tcircle(o,r) means :Def4:
   ex y, z being Point of TOP-REAL n st y = x & z = f.x & it = HC(z,y,o,r);
 existence
 proof
   reconsider y = x, z = f.x as Point of TOP-REAL n by TOPMETR:2;
-  x <> f.x by ff,ABIAN:def 4;
-  then reconsider a = HC(z,y,o,r) as Point of Tcircle(o,r) by T1;
+  x <> f.x by A1,ABIAN:def 4;
+  then reconsider a = HC(z,y,o,r) as Point of Tcircle(o,r) by Th6;
   take a;
   thus thesis;
 end;
 uniqueness;
 end;
 
-theorem Thc:
+theorem Th9:
   for x being Point of Tdisk(o,r),
       f being Function of Tdisk(o,r), Tdisk(o,r) st not x is_a_fixpoint_of f &
    x is Point of Tcircle(o,r) holds HC(x,f) = x
 proof
   let x be Point of Tdisk(o,r);
   let f be Function of Tdisk(o,r), Tdisk(o,r) such that
-ff:  not x is_a_fixpoint_of f and
-a1:  x is Point of Tcircle(o,r);
-a5: x <> f.x by ff,ABIAN:def 4;
+A1:  not x is_a_fixpoint_of f and
+A2:  x is Point of Tcircle(o,r);
+A3: x <> f.x by A1,ABIAN:def 4;
   consider y, z being Point of TOP-REAL n such that
-ww:  y = x & z = f.x & HC(x,f) = HC(z,y,o,r) by ff,dhc;
-b1: x in halfline(z,y) by ww,TOPREAL9:28;
+A4:  y = x & z = f.x & HC(x,f) = HC(z,y,o,r) by A1,Def4;
+A5: x in halfline(z,y) by A4,TOPREAL9:28;
   the carrier of Tcircle(o,r) = Sphere(o,r) by TOPREALB:9;
-  then x in halfline(z,y) /\ Sphere(o,r) by a1,b1,XBOOLE_0:def 3;
-  hence HC(x,f) = x by ww,a5,dhcc;
+  then x in halfline(z,y) /\ Sphere(o,r) by A2,A5,XBOOLE_0:def 3;
+  hence HC(x,f) = x by A4,A3,Def3;
 end;
 
-theorem Tretr:
+theorem Th10:
   for r being positive (real number),
       o being Point of TOP-REAL 2,
       Y being non empty SubSpace of Tdisk(o,r) st Y = Tcircle(o,r)
@@ -681,26 +675,26 @@ proof
   let r be positive (real number),
       o be Point of TOP-REAL 2,
       Y be non empty SubSpace of Tdisk(o,r) such that
-a1: Y = Tcircle(o,r);
+A1: Y = Tcircle(o,r);
   set X = Tdisk(o,r);
   given R being continuous Function of X,Y such that
-a2: R is_a_retraction;
-cc: the carrier of Tcircle(o,r) = Sphere(o,r) by TOPREALB:9;
-cz: Sphere(o,r) c= cl_Ball(o,r) by TOPREAL9:17;
+A2: R is_a_retraction;
+A3: the carrier of Tcircle(o,r) = Sphere(o,r) by TOPREALB:9;
+A4: Sphere(o,r) c= cl_Ball(o,r) by TOPREAL9:17;
   consider y0 being Point of Y;
   y0 in the carrier of Y;
-  then reconsider x0 = y0 as Point of X by a1,cc,cz,Tcard;
+  then reconsider x0 = y0 as Point of X by A1,A3,A4,Th3;
   consider C being constant Loop of x0;
-d2: C = I[01] --> x0 by BORSUK_2:6
+A5: C = I[01] --> x0 by BORSUK_2:6
    .= (the carrier of I[01]) --> y0;
   then reconsider D = C as Function of I[01], Y;
-d1: D = I[01] --> y0 by d2;
+A6: D = I[01] --> y0 by A5;
   reconsider a0 = 0, a1 = 1 as Point of I[01] by BORSUK_1:def 17,def 18;
-ww: y0,y0 are_connected;
-  D.a0 = y0 & D.a1 = y0 by d2,FUNCOP_1:13;
-  then reconsider D as constant Loop of y0 by d1,ww,BORSUK_2:def 2;
-  reconsider z0 = y0 as Point of Tcircle(o,r) by a1;
-uu: the carrier of pi_1(Tcircle(o,r),z0) is infinite;
+A7: y0,y0 are_connected;
+  D.a0 = y0 & D.a1 = y0 by A5,FUNCOP_1:13;
+  then reconsider D as constant Loop of y0 by A6,A7,BORSUK_2:def 2;
+  reconsider z0 = y0 as Point of Tcircle(o,r) by A1;
+A8: the carrier of pi_1(Tcircle(o,r),z0) is infinite;
   the carrier of pi_1(Y,y0) = { Class(EqRel(Y,y0),D) }
   proof
     set E = EqRel(Y,y0);
@@ -708,86 +702,86 @@ uu: the carrier of pi_1(Tcircle(o,r),z0) is infinite;
       let x be set;
       assume x in the carrier of pi_1(Y,y0);
       then consider f0 being Loop of y0 such that
-a3:     x = Class(E,f0) by TOPALG_1:48;
+A9:     x = Class(E,f0) by TOPALG_1:48;
       reconsider g0 = f0 as Loop of x0 by TOPALG_2:1;
       g0,C are_homotopic by TOPALG_2:2;
       then consider f being Function of [:I[01],I[01]:], X such that
-f1:    f is continuous and
-f2:    for s being Point of I[01] holds f.(s,0) = g0.s & f.(s,1) = C.s &
+A10:    f is continuous and
+A11:    for s being Point of I[01] holds f.(s,0) = g0.s & f.(s,1) = C.s &
        for t being Point of I[01] holds f.(0,t) = x0 & f.(1,t) = x0
          by BORSUK_2:def 7;
       f0,D are_homotopic
       proof
         take F = R*f;
-        thus F is continuous by f1,TOPS_2:58;
+        thus F is continuous by A10,TOPS_2:58;
         let s be Point of I[01];
-        thus F.(s,0) = F. [s,a0] by BINOP_1:def 1
+        thus F.(s,0) = F. [s,a0]
           .= R.(f. [s,0]) by FUNCT_2:21
-          .= R.(f.(s,0)) by BINOP_1:def 1
-          .= R.(g0.s) by f2
-          .= f0.s by a2,BORSUK_1:def 19;
-        thus F.(s,1) = F. [s,a1] by BINOP_1:def 1
+          .= R.(f.(s,0))
+          .= R.(g0.s) by A11
+          .= f0.s by A2,BORSUK_1:def 19;
+        thus F.(s,1) = F. [s,a1]
           .= R.(f. [s,1]) by FUNCT_2:21
-          .= R.(f.(s,1)) by BINOP_1:def 1
-          .= R.(C.s) by f2
-          .= D.s by a2,BORSUK_1:def 19;
+          .= R.(f.(s,1))
+          .= R.(C.s) by A11
+          .= D.s by A2,BORSUK_1:def 19;
         let t be Point of I[01];
-        thus F.(0,t) = F. [a0,t] by BINOP_1:def 1
+        thus F.(0,t) = F. [a0,t]
           .= R.(f. [0,t]) by FUNCT_2:21
-          .= R.(f.(0,t)) by BINOP_1:def 1
-          .= R.x0 by f2
-          .= y0 by a2,BORSUK_1:def 19;
-        thus F.(1,t) = F. [a1,t] by BINOP_1:def 1
+          .= R.(f.(0,t))
+          .= R.x0 by A11
+          .= y0 by A2,BORSUK_1:def 19;
+        thus F.(1,t) = F. [a1,t]
           .= R.(f. [1,t]) by FUNCT_2:21
-          .= R.(f.(1,t)) by BINOP_1:def 1
-          .= R.x0 by f2
-          .= y0 by a2,BORSUK_1:def 19;
+          .= R.(f.(1,t))
+          .= R.x0 by A11
+          .= y0 by A2,BORSUK_1:def 19;
       end;
-      then x = Class(E,D) by a3,TOPALG_1:47;
+      then x = Class(E,D) by A9,TOPALG_1:47;
       hence x in { Class(E,D) } by TARSKI:def 1;
     end;
     let x be set;
     assume x in { Class(E,D) };
     then
-a2:   x = Class(E,D) by TARSKI:def 1;
+A12:   x = Class(E,D) by TARSKI:def 1;
     D in Loops y0 by TOPALG_1:def 1;
-    then x in Class E by a2,EQREL_1:def 5;
+    then x in Class E by A12,EQREL_1:def 5;
     hence thesis by TOPALG_1:def 3;
   end;
-  hence contradiction by a1,uu;
+  hence contradiction by A1,A8;
 end;
 
 definition
   let n be non empty Nat; let r be non negative (real number);
   let o be Point of TOP-REAL n;
   let f be Function of Tdisk(o,r), Tdisk(o,r);
-  func BR-map(f) -> Function of Tdisk(o,r), Tcircle(o,r) means :dBR:
+  func BR-map(f) -> Function of Tdisk(o,r), Tcircle(o,r) means :Def5:
   for x being Point of Tdisk(o,r) holds it.x = HC(x,f);
 existence
 proof
   defpred P[Point of Tdisk(o,r),set] means $2 = HC($1,f);
-a1: for x being Point of Tdisk(o,r)
+A1: for x being Point of Tdisk(o,r)
      ex m being Point of Tcircle(o,r) st P[x,m];
   ex h being Function of Tdisk(o,r), Tcircle(o,r) st
-   for x being Point of Tdisk(o,r) holds P[x,h.x] from FUNCT_2:sch 3(a1);
+   for x being Point of Tdisk(o,r) holds P[x,h.x] from FUNCT_2:sch 3(A1);
   hence thesis;
 end;
 uniqueness
 proof
   let f1, f2 be Function of Tdisk(o,r), Tcircle(o,r) such that
-a1:for x being Point of Tdisk(o,r) holds f1.x = HC(x,f) and
-a2:for x being Point of Tdisk(o,r) holds f2.x = HC(x,f);
+A2:for x being Point of Tdisk(o,r) holds f1.x = HC(x,f) and
+A3:for x being Point of Tdisk(o,r) holds f2.x = HC(x,f);
   for x being Point of Tdisk(o,r) holds f1.x = f2.x
   proof
     let x be Point of Tdisk(o,r);
-    thus f1.x = HC(x,f) by a1
-      .= f2.x by a2;
+    thus f1.x = HC(x,f) by A2
+      .= f2.x by A3;
   end;
   hence thesis by FUNCT_2:113;
 end;
 end;
 
-theorem Thc1:
+theorem Th11:
   for o being Point of TOP-REAL n,
       x being Point of Tdisk(o,r),
       f being Function of Tdisk(o,r), Tdisk(o,r) st not x is_a_fixpoint_of f &
@@ -796,10 +790,10 @@ proof
   let o be Point of TOP-REAL n;
   let x be Point of Tdisk(o,r);
   let f be Function of Tdisk(o,r), Tdisk(o,r) such that
-ff:  not x is_a_fixpoint_of f and
-a1:  x is Point of Tcircle(o,r);
-  thus (BR-map(f)).x = HC(x,f) by dBR
-    .= x by ff,a1,Thc;
+A1:  not x is_a_fixpoint_of f and
+A2:  x is Point of Tcircle(o,r);
+  thus (BR-map(f)).x = HC(x,f) by Def5
+    .= x by A1,A2,Th9;
 end;
 
 theorem
@@ -807,33 +801,33 @@ theorem
   f has_no_fixpoint implies (BR-map(f)) | Sphere(o,r) = id Tcircle(o,r)
 proof
   let f be continuous Function of Tdisk(o,r), Tdisk(o,r) such that
-ff: f has_no_fixpoint;
+A1: f has_no_fixpoint;
   set g = BR-map(f);
   set C = Sphere(o,r);
   set D = cl_Ball(o,r);
-a2: dom g = the carrier of Tdisk(o,r) by FUNCT_2:def 1;
-b1: the carrier of Tdisk(o,r) = D by Tcard;
+A2: dom g = the carrier of Tdisk(o,r) by FUNCT_2:def 1;
+A3: the carrier of Tdisk(o,r) = D by Th3;
   C c= D by TOPREAL9:17;
   then
-a1: dom (g|C) = C by a2,b1,RELAT_1:91;
+A4: dom (g|C) = C by A2,A3,RELAT_1:91;
   id Tcircle(o,r) = id the carrier of Tcircle(o,r) by GRCAT_1:def 11;
   then
-a3: dom id Tcircle(o,r) = the carrier of Tcircle(o,r) by RELAT_1:71;
-b2: the carrier of Tcircle(o,r) = C by TOPREALB:9;
+A5: dom id Tcircle(o,r) = the carrier of Tcircle(o,r) by RELAT_1:71;
+A6: the carrier of Tcircle(o,r) = C by TOPREALB:9;
   for x being set st x in dom (g|C) holds (g|C).x = (id Tcircle(o,r)).x
   proof
     let x be set such that
-a5:  x in dom (g|C);
-    reconsider y = x as Point of Tdisk(o,r) by a5;
-mm: not x is_a_fixpoint_of f by ff,ABIAN:def 5;
-    thus (g|C).x = g.x by a1,a5,FUNCT_1:72
-      .= y by a1,a5,mm,b2,Thc1
-      .= (id Tcircle(o,r)).x by a1,a5,b2,GRCAT_1:11;
+A7:  x in dom (g|C);
+    reconsider y = x as Point of Tdisk(o,r) by A7;
+A8: not x is_a_fixpoint_of f by A1,ABIAN:def 5;
+    thus (g|C).x = g.x by A4,A7,FUNCT_1:72
+      .= y by A4,A7,A8,A6,Th11
+      .= (id Tcircle(o,r)).x by A4,A7,A6,GRCAT_1:11;
   end;
-  hence thesis by a1,b2,a3,FUNCT_1:9;
+  hence thesis by A4,A6,A5,FUNCT_1:9;
 end;
 
-Lm10:
+Lm2:
 now
   let T be non empty TopSpace;
   let a be Real;
@@ -865,7 +859,7 @@ A4: rng f misses Y by A2,ZFMISC_1:56;
 end;
 end;
 
-theorem Tcont:
+theorem Th13:
   for r being positive (real number),
       o being Point of TOP-REAL 2,
       f being continuous Function of Tdisk(o,r), Tdisk(o,r) holds
@@ -879,121 +873,124 @@ proof
   [:D2,D2:] is SubSpace of [:T2,T2:] by BORSUK_3:25;
   then the carrier of [:D2,D2:] is Subset of [:T2,T2:] by TSEP_1:1;
   then
-v1: OK c= (the carrier of [:T2,T2:]) /\ the carrier of [:T2,T2:]
+A1: OK c= (the carrier of [:T2,T2:]) /\ the carrier of [:T2,T2:]
   by XBOOLE_1:27;
   consider s being Point of S1;
-v7: s in the carrier of S1;
-v6: the carrier of S1 = Sphere(o,r) by TOPREALB:9;
-b1: the carrier of D2 = cl_Ball(o,r) by Tcard;
+A2: s in the carrier of S1;
+A3: the carrier of S1 = Sphere(o,r) by TOPREALB:9;
+A4: the carrier of D2 = cl_Ball(o,r) by Th3;
   Sphere(o,r) c= cl_Ball(o,r) by TOPREAL9:17;
   then
-v2: s is Point of D2 by v6,v7,Tcard;
-v5: s is Point of T2 by TOPMETR:2;
-v0: |. o-o .| = |. 0.REAL 2 .| by EUCLID:46
+A5: s is Point of D2 by A3,A2,Th3;
+A6: s is Point of T2 by TOPMETR:2;
+A7: |. o-o .| = |. 0.REAL 2 .| by EUCLID:46
   .= 0 by TOPRNS_1:24;
-  then o is Point of D2 by b1,TOPREAL9:8;
+  then o is Point of D2 by A4,TOPREAL9:8;
   then
-  [o,s] in [:the carrier of D2,the carrier of D2:] by v2,ZFMISC_1:106;
+  [o,s] in [:the carrier of D2,the carrier of D2:] by A5,ZFMISC_1:106;
   then
-v4: [o,s] in the carrier of [:D2,D2:] by BORSUK_1:def 5;
+A8: [o,s] in the carrier of [:D2,D2:] by BORSUK_1:def 5;
   now
     assume
-v8:   o = s;
-v9: Ball(o,r) misses Sphere(o,r) by TOPREAL9:19;
-    o in Ball(o,r) by v0,TOPREAL9:7;
-    hence contradiction by v8,v6,v9,XBOOLE_0:3;
+A9:   o = s;
+A10: Ball(o,r) misses Sphere(o,r) by TOPREAL9:19;
+    o in Ball(o,r) by A7,TOPREAL9:7;
+    hence contradiction by A9,A3,A10,XBOOLE_0:3;
   end;
-  then [o,s] in DiffElems(T2,T2) by v5;
-  then reconsider OK as non empty Subset of [:T2,T2:] by v1,v4,XBOOLE_0:def 3;
+  then [o,s] in DiffElems(T2,T2) by A6;
+  then reconsider OK as non empty Subset of [:T2,T2:] by A1,A8,XBOOLE_0:def 3;
   set TD = [:T2,T2:] | OK;
   let f be continuous Function of D2,D2 such that
-ff: f has_no_fixpoint;
+A11: f has_no_fixpoint;
   set g = BR-map(f);
-aa: [#]D2 = the carrier of D2 by PRE_TOPC:12;
-bb: [#]S1 = the carrier of S1 by PRE_TOPC:12;
+A12: [#]D2 = the carrier of D2 by PRE_TOPC:12;
+A13: [#]S1 = the carrier of S1 by PRE_TOPC:12;
   defpred xo[set,set] means ex x1, x2 being Point of T2 st
     $1 = [x1,x2] & $2 = x2`1 - o`1;
-b1: for x being set st x in the carrier of [:T2,T2:]
+A14: for x being set st x in the carrier of [:T2,T2:]
      ex r being Real st xo[x,r]
   proof
     let x be set;
     assume x in the carrier of [:T2,T2:];
     then consider x1, x2 being Point of T2 such that
-b2:   x = [x1,x2] by BORSUK_1:50;
+A15:   x = [x1,x2] by BORSUK_1:50;
     take x2`1 - o`1, x1, x2;
-    thus thesis by b2;
+    thus thesis by A15;
   end;
   consider xo being RealMap of [:T2,T2:] such that
-u1: for x being Point of [:T2,T2:] holds xo[x,xo.x] from PSCOMP_1:sch 1(b1);
+A16: for x being Point of [:T2,T2:] holds xo[x,xo.x] from PSCOMP_1:sch 1(A14);
   defpred yo[set,set] means ex x1, x2 being Point of T2 st
     $1 = [x1,x2] & $2 = x2`2 - o`2;
-b1: for x being set st x in the carrier of [:T2,T2:]
+A17: for x being set st x in the carrier of [:T2,T2:]
      ex r being Real st yo[x,r]
   proof
     let x be set;
     assume x in the carrier of [:T2,T2:];
     then consider x1, x2 being Point of T2 such that
-b2:   x = [x1,x2] by BORSUK_1:50;
+A18:   x = [x1,x2] by BORSUK_1:50;
     take x2`2 - o`2, x1, x2;
-    thus thesis by b2;
+    thus thesis by A18;
   end;
   consider yo being RealMap of [:T2,T2:] such that
-u2: for x being Point of [:T2,T2:] holds yo[x,yo.x] from PSCOMP_1:sch 1(b1);
+A19: for x being Point of [:T2,T2:] holds yo[x,yo.x] from PSCOMP_1:sch 1(A17);
   defpred dx[set,set] means ex x1, x2 being Point of T2 st
     $1 = [x1,x2] & $2 = x1`1 - x2`1;
-b1: for x being set st x in the carrier of [:T2,T2:]
+A20: for x being set st x in the carrier of [:T2,T2:]
      ex r being Real st dx[x,r]
   proof
     let x be set;
     assume x in the carrier of [:T2,T2:];
     then consider x1, x2 being Point of T2 such that
-b2:   x = [x1,x2] by BORSUK_1:50;
+A21:   x = [x1,x2] by BORSUK_1:50;
     take x1`1 - x2`1, x1, x2;
-    thus thesis by b2;
+    thus thesis by A21;
   end;
   consider dx being RealMap of [:T2,T2:] such that
-a1: for x being Point of [:T2,T2:] holds dx[x,dx.x] from PSCOMP_1:sch 1(b1);
+A22: for x being Point of [:T2,T2:] holds dx[x,dx.x] from PSCOMP_1:sch 1(A20);
   defpred dy[set,set] means ex y1, y2 being Point of T2 st
     $1 = [y1,y2] & $2 = y1`2 - y2`2;
-b1: for x being set st x in the carrier of [:T2,T2:] ex r being Real st dy[x,r]
+A23: for x being set st x in the carrier of [:T2,T2:] ex r being Real st dy[x,r
+]
   proof
     let x be set;
     assume x in the carrier of [:T2,T2:];
     then consider x1, x2 being Point of T2 such that
-b2:   x = [x1,x2] by BORSUK_1:50;
+A24:   x = [x1,x2] by BORSUK_1:50;
     take x1`2 - x2`2, x1, x2;
-    thus thesis by b2;
+    thus thesis by A24;
   end;
   consider dy being RealMap of [:T2,T2:] such that
-a2: for y being Point of [:T2,T2:] holds dy[y,dy.y] from PSCOMP_1:sch 1(b1);
+A25: for y being Point of [:T2,T2:] holds dy[y,dy.y] from PSCOMP_1:sch 1(A23);
   defpred fx2[set,set] means ex x1, x2 being Point of T2 st
     $1 = [x1,x2] & $2 = x2`1;
-b1: for x being set st x in the carrier of [:T2,T2:]
+A26: for x being set st x in the carrier of [:T2,T2:]
       ex r being Real st fx2[x,r]
   proof
     let x be set;
     assume x in the carrier of [:T2,T2:];
     then consider x1, x2 being Point of T2 such that
-b2:   x = [x1,x2] by BORSUK_1:50;
+A27:   x = [x1,x2] by BORSUK_1:50;
     take x2`1, x1, x2;
-    thus thesis by b2;
+    thus thesis by A27;
   end;
   consider fx2 being RealMap of [:T2,T2:] such that
-A1: for x being Point of [:T2,T2:] holds fx2[x,fx2.x] from PSCOMP_1:sch 1(b1);
+A28: for x being Point of [:T2,T2:] holds fx2[x,fx2.x] from PSCOMP_1:sch 1(A26)
+;
   defpred fy2[set,set] means ex x1, x2 being Point of T2 st
     $1 = [x1,x2] & $2 = x2`2;
-b1: for x being set st x in the carrier of [:T2,T2:]
+A29: for x being set st x in the carrier of [:T2,T2:]
      ex r being Real st fy2[x,r]
   proof
     let x be set;
     assume x in the carrier of [:T2,T2:];
     then consider x1, x2 being Point of T2 such that
-b2:   x = [x1,x2] by BORSUK_1:50;
+A30:   x = [x1,x2] by BORSUK_1:50;
     take x2`2, x1, x2;
-    thus thesis by b2;
+    thus thesis by A30;
   end;
   consider fy2 being RealMap of [:T2,T2:] such that
-A2: for x being Point of [:T2,T2:] holds fy2[x,fy2.x] from PSCOMP_1:sch 1(b1);
+A31: for x being Point of [:T2,T2:] holds fy2[x,fy2.x] from PSCOMP_1:sch 1(A29)
+;
   reconsider Dx = dx, Dy = dy, fX2 = fx2, fY2 = fy2, Xo = xo, Yo = yo
     as Function of [:T2,T2:],R^1 by TOPMETR:24;
   for p being Point of [:T2,T2:], V being Subset of R^1
@@ -1002,16 +999,16 @@ A2: for x being Point of [:T2,T2:] holds fy2[x,fy2.x] from PSCOMP_1:sch 1(b1);
   proof
     let p be Point of [:T2,T2:],
         V be Subset of R^1 such that
-a3:   Xo.p in V and
-a4:   V is open;
+A32:   Xo.p in V and
+A33:   V is open;
     consider p1, p2 being Point of T2 such that
-a5:   p = [p1,p2] and
-a6:   Xo.p = p2`1 - o`1 by u1;
+A34:   p = [p1,p2] and
+A35:   Xo.p = p2`1 - o`1 by A16;
     set r = p2`1 - o`1;
-    reconsider V1 = V as open Subset of REAL by a4,TOPMETR:24,BORSUK_5:62;
+    reconsider V1 = V as open Subset of REAL by A33,TOPMETR:24,BORSUK_5:62;
     consider g being real number such that
-a7:   0 < g and
-a8:   ].r-g,r+g.[ c= V1 by a3,a6,RCOMP_1:40;
+A36:   0 < g and
+A37:   ].r-g,r+g.[ c= V1 by A32,A35,RCOMP_1:40;
     reconsider g as Element of REAL by XREAL_0:def 1;
     set W2 = {|[x,y]| where x, y is Element of REAL: p2`1-g < x & x < p2`1+g};
     W2 c= the carrier of T2
@@ -1024,30 +1021,30 @@ a8:   ].r-g,r+g.[ c= V1 by a3,a6,RCOMP_1:40;
     end;
     then reconsider W2 as Subset of T2;
     take [:[#]T2,W2:];
-b1: p2 = |[p2`1,p2`2]| by EUCLID:57;
-    p2`1-g < p2`1-0 & p2`1+0 < p2`1+g by a7,XREAL_1:8,REAL_1:92;
+A38: p2 = |[p2`1,p2`2]| by EUCLID:57;
+    p2`1-g < p2`1-0 & p2`1+0 < p2`1+g by A36,XREAL_1:8,REAL_1:92;
     then
-    p2 in W2 by b1;
-    hence p in [:[#]T2,W2:] by a5,Lm1,ZFMISC_1:def 2;
+    p2 in W2 by A38;
+    hence p in [:[#]T2,W2:] by A34,Lm1,ZFMISC_1:def 2;
     W2 is open by PSCOMP_1:66;
     hence [:[#]T2,W2:] is open by BORSUK_1:46;
     let b be set;
     assume b in Xo.:[:[#]T2,W2:];
     then consider a being Point of [:T2,T2:] such that
-a10:  a in [:[#]T2,W2:] and
-a11:  Xo.a = b by FUNCT_2:116;
+A39:  a in [:[#]T2,W2:] and
+A40:  Xo.a = b by FUNCT_2:116;
     consider a1, a2 being Point of T2 such that
-a12:  a = [a1,a2] and
-a13:  xo.a = a2`1 - o`1 by u1;
-    a2 in W2 by a10,a12,ZFMISC_1:106;
+A41:  a = [a1,a2] and
+A42:  xo.a = a2`1 - o`1 by A16;
+    a2 in W2 by A39,A41,ZFMISC_1:106;
     then consider x2, y2 being Element of REAL such that
-a18:  a2 = |[x2,y2]| and
-a19:  p2`1-g < x2 & x2 < p2`1+g;
-    a2`1 = x2 by a18,EUCLID:56;
+A43:  a2 = |[x2,y2]| and
+A44:  p2`1-g < x2 & x2 < p2`1+g;
+    a2`1 = x2 by A43,EUCLID:56;
     then p2`1 - g - o`1 < a2`1 - o`1 & a2`1 - o`1 < p2`1 + g - o`1
-      by a19,XREAL_1:11;
+      by A44,XREAL_1:11;
     then a2`1 - o`1 in ].r-g,r+g.[ by RCOMP_1:47;
-    hence b in V by a8,a11,a13;
+    hence b in V by A37,A40,A42;
   end;
   then Xo is continuous by JGRAPH_2:20;
   then reconsider xo as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
@@ -1057,16 +1054,16 @@ a19:  p2`1-g < x2 & x2 < p2`1+g;
   proof
     let p be Point of [:T2,T2:],
         V be Subset of R^1 such that
-a3:   Yo.p in V and
-a4:   V is open;
+A45:   Yo.p in V and
+A46:   V is open;
     consider p1, p2 being Point of T2 such that
-a5:   p = [p1,p2] and
-a6:   Yo.p = p2`2 - o`2 by u2;
+A47:   p = [p1,p2] and
+A48:   Yo.p = p2`2 - o`2 by A19;
     set r = p2`2 - o`2;
-    reconsider V1 = V as open Subset of REAL by a4,TOPMETR:24,BORSUK_5:62;
+    reconsider V1 = V as open Subset of REAL by A46,TOPMETR:24,BORSUK_5:62;
     consider g being real number such that
-a7:   0 < g and
-a8:   ].r-g,r+g.[ c= V1 by a3,a6,RCOMP_1:40;
+A49:   0 < g and
+A50:   ].r-g,r+g.[ c= V1 by A45,A48,RCOMP_1:40;
     reconsider g as Element of REAL by XREAL_0:def 1;
     set W2 = {|[x,y]| where x, y is Element of REAL: p2`2-g < y & y < p2`2+g};
     W2 c= the carrier of T2
@@ -1079,30 +1076,30 @@ a8:   ].r-g,r+g.[ c= V1 by a3,a6,RCOMP_1:40;
     end;
     then reconsider W2 as Subset of T2;
     take [:[#]T2,W2:];
-b1: p2 = |[p2`1,p2`2]| by EUCLID:57;
-    p2`2-g < p2`2-0 & p2`2+0 < p2`2+g by a7,XREAL_1:8,REAL_1:92;
+A51: p2 = |[p2`1,p2`2]| by EUCLID:57;
+    p2`2-g < p2`2-0 & p2`2+0 < p2`2+g by A49,XREAL_1:8,REAL_1:92;
     then
-    p2 in W2 by b1;
-    hence p in [:[#]T2,W2:] by a5,Lm1,ZFMISC_1:def 2;
+    p2 in W2 by A51;
+    hence p in [:[#]T2,W2:] by A47,Lm1,ZFMISC_1:def 2;
     W2 is open by PSCOMP_1:68;
     hence [:[#]T2,W2:] is open by BORSUK_1:46;
     let b be set;
     assume b in Yo.:[:[#]T2,W2:];
     then consider a being Point of [:T2,T2:] such that
-a10:  a in [:[#]T2,W2:] and
-a11:  Yo.a = b by FUNCT_2:116;
+A52:  a in [:[#]T2,W2:] and
+A53:  Yo.a = b by FUNCT_2:116;
     consider a1, a2 being Point of T2 such that
-a12:  a = [a1,a2] and
-a13:  yo.a = a2`2 - o`2 by u2;
-    a2 in W2 by a10,a12,ZFMISC_1:106;
+A54:  a = [a1,a2] and
+A55:  yo.a = a2`2 - o`2 by A19;
+    a2 in W2 by A52,A54,ZFMISC_1:106;
     then consider x2, y2 being Element of REAL such that
-a18:  a2 = |[x2,y2]| and
-a19:  p2`2-g < y2 & y2 < p2`2+g;
-    a2`2 = y2 by a18,EUCLID:56;
+A56:  a2 = |[x2,y2]| and
+A57:  p2`2-g < y2 & y2 < p2`2+g;
+    a2`2 = y2 by A56,EUCLID:56;
     then p2`2 - g - o`2 < a2`2 - o`2 & a2`2 - o`2 < p2`2 + g - o`2
-      by a19,XREAL_1:11;
+      by A57,XREAL_1:11;
     then a2`2 - o`2 in ].r-g,r+g.[ by RCOMP_1:47;
-    hence b in V by a8,a11,a13;
+    hence b in V by A50,A53,A55;
   end;
   then Yo is continuous by JGRAPH_2:20;
   then reconsider yo as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
@@ -1112,16 +1109,16 @@ a19:  p2`2-g < y2 & y2 < p2`2+g;
   proof
     let p be Point of [:T2,T2:],
         V be Subset of R^1 such that
-a3:   Dx.p in V and
-a4:   V is open;
+A58:   Dx.p in V and
+A59:   V is open;
     consider p1, p2 being Point of T2 such that
-a5:   p = [p1,p2] and
-a6:   dx.p = p1`1 - p2`1 by a1;
+A60:   p = [p1,p2] and
+A61:   dx.p = p1`1 - p2`1 by A22;
     set r = p1`1 - p2`1;
-    reconsider V1 = V as open Subset of REAL by a4,TOPMETR:24,BORSUK_5:62;
+    reconsider V1 = V as open Subset of REAL by A59,TOPMETR:24,BORSUK_5:62;
     consider g being real number such that
-a7:   0 < g and
-a8:   ].r-g,r+g.[ c= V1 by a3,a6,RCOMP_1:40;
+A62:   0 < g and
+A63:   ].r-g,r+g.[ c= V1 by A58,A61,RCOMP_1:40;
     reconsider g as Element of REAL by XREAL_0:def 1;
     set W1 = {|[x,y]| where x, y is Element of REAL:
       p1`1-g/2 < x & x < p1`1+g/2};
@@ -1146,55 +1143,55 @@ a8:   ].r-g,r+g.[ c= V1 by a3,a6,RCOMP_1:40;
     end;
     then reconsider W2 as Subset of T2;
     take [:W1,W2:];
-b1: p1 = |[p1`1,p1`2]| by EUCLID:57;
-c30: 0/2 < g/2 by a7,REAL_1:73;
+A64: p1 = |[p1`1,p1`2]| by EUCLID:57;
+A65: 0/2 < g/2 by A62,REAL_1:73;
     then p1`1-g/2 < p1`1-0 & p1`1+0 < p1`1+g/2 by XREAL_1:8,REAL_1:92;
     then
-a9: p1 in W1 by b1;
-b1: p2 = |[p2`1,p2`2]| by EUCLID:57;
-    p2`1-g/2 < p2`1-0 & p2`1+0 < p2`1+g/2 by c30,XREAL_1:8,REAL_1:92;
+A66: p1 in W1 by A64;
+A67: p2 = |[p2`1,p2`2]| by EUCLID:57;
+    p2`1-g/2 < p2`1-0 & p2`1+0 < p2`1+g/2 by A65,XREAL_1:8,REAL_1:92;
     then
-    p2 in W2 by b1;
-    hence p in [:W1,W2:] by a9,a5,ZFMISC_1:def 2;
+    p2 in W2 by A67;
+    hence p in [:W1,W2:] by A66,A60,ZFMISC_1:def 2;
     W1 is open & W2 is open by PSCOMP_1:66;
     hence [:W1,W2:] is open by BORSUK_1:46;
     let b be set;
     assume b in Dx.:[:W1,W2:];
     then consider a being Point of [:T2,T2:] such that
-a10:  a in [:W1,W2:] and
-a11:  Dx.a = b by FUNCT_2:116;
+A68:  a in [:W1,W2:] and
+A69:  Dx.a = b by FUNCT_2:116;
     consider a1, a2 being Point of T2 such that
-a12:  a = [a1,a2] and
-a13:  dx.a = a1`1 - a2`1 by a1;
-    a1 in W1 by a10,a12,ZFMISC_1:106;
+A70:  a = [a1,a2] and
+A71:  dx.a = a1`1 - a2`1 by A22;
+    a1 in W1 by A68,A70,ZFMISC_1:106;
     then consider x1, y1 being Element of REAL such that
-a15:  a1 = |[x1,y1]| and
-a16:  p1`1-g/2 < x1 and
-a17:  x1 < p1`1+g/2;
-a21: a1`1 = x1 by a15,EUCLID:56;
-    p1`1-g/2+g/2 < x1+g/2 & p1`1-x1 > p1`1-(p1`1+g/2) by a16,a17,XREAL_1:8,
+A72:  a1 = |[x1,y1]| and
+A73:  p1`1-g/2 < x1 and
+A74:  x1 < p1`1+g/2;
+A75: a1`1 = x1 by A72,EUCLID:56;
+    p1`1-g/2+g/2 < x1+g/2 & p1`1-x1 > p1`1-(p1`1+g/2) by A73,A74,XREAL_1:8,
 REAL_1:92;
     then p1`1-x1 < x1+g/2-x1 & p1`1-x1 > -g/2 by XREAL_1:11;
     then
-a24: abs(p1`1-x1) < g/2 by SEQ_2:9;
-    a2 in W2 by a10,a12,ZFMISC_1:106;
+A76: abs(p1`1-x1) < g/2 by SEQ_2:9;
+    a2 in W2 by A68,A70,ZFMISC_1:106;
     then consider x2, y2 being Element of REAL such that
-a18:  a2 = |[x2,y2]| and
-a19:  p2`1-g/2 < x2 and
-a20:  x2 < p2`1+g/2;
-a22: a2`1 = x2 by a18,EUCLID:56;
-    p2`1-g/2+g/2 < x2+g/2 & p2`1-x2 > p2`1-(p2`1+g/2) by a19,a20,XREAL_1:8,
+A77:  a2 = |[x2,y2]| and
+A78:  p2`1-g/2 < x2 and
+A79:  x2 < p2`1+g/2;
+A80: a2`1 = x2 by A77,EUCLID:56;
+    p2`1-g/2+g/2 < x2+g/2 & p2`1-x2 > p2`1-(p2`1+g/2) by A78,A79,XREAL_1:8,
 REAL_1:92;
     then p2`1-x2 < x2+g/2-x2 & p2`1-x2 > -g/2 by XREAL_1:11;
     then
     abs(p2`1-x2) < g/2 by SEQ_2:9;
     then
-a26: abs(p1`1-x1)+abs(p2`1-x2) < g/2+g/2 by a24,XREAL_1:10;
+A81: abs(p1`1-x1)+abs(p2`1-x2) < g/2+g/2 by A76,XREAL_1:10;
     abs(p1`1-x1-(p2`1-x2)) <= abs(p1`1-x1)+abs(p2`1-x2) by COMPLEX1:143;
     then abs-(p1`1-x1-(p2`1-x2)) <= abs(p1`1-x1)+abs(p2`1-x2) by COMPLEX1:138;
-    then abs(x1-x2-r) < g by a26,XREAL_1:2;
-    then a1`1 - a2`1 in ].r-g,r+g.[ by a21,a22,RCOMP_1:8;
-    hence b in V by a8,a11,a13;
+    then abs(x1-x2-r) < g by A81,XREAL_1:2;
+    then a1`1 - a2`1 in ].r-g,r+g.[ by A75,A80,RCOMP_1:8;
+    hence b in V by A63,A69,A71;
   end;
   then Dx is continuous by JGRAPH_2:20;
   then reconsider dx as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
@@ -1204,16 +1201,16 @@ a26: abs(p1`1-x1)+abs(p2`1-x2) < g/2+g/2 by a24,XREAL_1:10;
   proof
     let p be Point of [:T2,T2:],
         V be Subset of R^1 such that
-a3:   Dy.p in V and
-a4:   V is open;
+A82:   Dy.p in V and
+A83:   V is open;
     consider p1, p2 being Point of T2 such that
-a5:   p = [p1,p2] and
-a6:   dy.p = p1`2 - p2`2 by a2;
+A84:   p = [p1,p2] and
+A85:   dy.p = p1`2 - p2`2 by A25;
     set r = p1`2 - p2`2;
-    reconsider V1 = V as open Subset of REAL by a4,TOPMETR:24,BORSUK_5:62;
+    reconsider V1 = V as open Subset of REAL by A83,TOPMETR:24,BORSUK_5:62;
     consider g being real number such that
-a7:   0 < g and
-a8:   ].r-g,r+g.[ c= V1 by a3,a6,RCOMP_1:40;
+A86:   0 < g and
+A87:   ].r-g,r+g.[ c= V1 by A82,A85,RCOMP_1:40;
     reconsider g as Element of REAL by XREAL_0:def 1;
     set W1 = {|[x,y]| where x, y is Element of REAL:
       p1`2-g/2 < y & y < p1`2+g/2};
@@ -1238,55 +1235,55 @@ a8:   ].r-g,r+g.[ c= V1 by a3,a6,RCOMP_1:40;
     end;
     then reconsider W2 as Subset of T2;
     take [:W1,W2:];
-b1: p1 = |[p1`1,p1`2]| by EUCLID:57;
-c30: 0/2 < g/2 by a7,REAL_1:73;
+A88: p1 = |[p1`1,p1`2]| by EUCLID:57;
+A89: 0/2 < g/2 by A86,REAL_1:73;
     then p1`2-g/2 < p1`2-0 & p1`2+0 < p1`2+g/2 by XREAL_1:8,REAL_1:92;
     then
-a9: p1 in W1 by b1;
-b1: p2 = |[p2`1,p2`2]| by EUCLID:57;
-    p2`2-g/2 < p2`2-0 & p2`2+0 < p2`2+g/2 by c30,XREAL_1:8,REAL_1:92;
+A90: p1 in W1 by A88;
+A91: p2 = |[p2`1,p2`2]| by EUCLID:57;
+    p2`2-g/2 < p2`2-0 & p2`2+0 < p2`2+g/2 by A89,XREAL_1:8,REAL_1:92;
     then
-    p2 in W2 by b1;
-    hence p in [:W1,W2:] by a9,a5,ZFMISC_1:def 2;
+    p2 in W2 by A91;
+    hence p in [:W1,W2:] by A90,A84,ZFMISC_1:def 2;
     W1 is open & W2 is open by PSCOMP_1:68;
     hence [:W1,W2:] is open by BORSUK_1:46;
     let b be set;
     assume b in Dy.:[:W1,W2:];
     then consider a being Point of [:T2,T2:] such that
-a10:  a in [:W1,W2:] and
-a11:  Dy.a = b by FUNCT_2:116;
+A92:  a in [:W1,W2:] and
+A93:  Dy.a = b by FUNCT_2:116;
     consider a1, a2 being Point of T2 such that
-a12:  a = [a1,a2] and
-a13:  dy.a = a1`2 - a2`2 by a2;
-    a1 in W1 by a10,a12,ZFMISC_1:106;
+A94:  a = [a1,a2] and
+A95:  dy.a = a1`2 - a2`2 by A25;
+    a1 in W1 by A92,A94,ZFMISC_1:106;
     then consider x1, y1 being Element of REAL such that
-a15:  a1 = |[x1,y1]| and
-a16:  p1`2-g/2 < y1 and
-a17:  y1 < p1`2+g/2;
-a21: a1`2 = y1 by a15,EUCLID:56;
-    p1`2-g/2+g/2 < y1+g/2 & p1`2-y1 > p1`2-(p1`2+g/2) by a16,a17,XREAL_1:8,
+A96:  a1 = |[x1,y1]| and
+A97:  p1`2-g/2 < y1 and
+A98:  y1 < p1`2+g/2;
+A99: a1`2 = y1 by A96,EUCLID:56;
+    p1`2-g/2+g/2 < y1+g/2 & p1`2-y1 > p1`2-(p1`2+g/2) by A97,A98,XREAL_1:8,
 REAL_1:92;
     then p1`2-y1 < y1+g/2-y1 & p1`2-y1 > -g/2 by XREAL_1:11;
     then
-a24: abs(p1`2-y1) < g/2 by SEQ_2:9;
-    a2 in W2 by a10,a12,ZFMISC_1:106;
+A100: abs(p1`2-y1) < g/2 by SEQ_2:9;
+    a2 in W2 by A92,A94,ZFMISC_1:106;
     then consider x2, y2 being Element of REAL such that
-a18:  a2 = |[x2,y2]| and
-a19:  p2`2-g/2 < y2 and
-a20:  y2 < p2`2+g/2;
-a22: a2`2 = y2 by a18,EUCLID:56;
-    p2`2-g/2+g/2 < y2+g/2 & p2`2-y2 > p2`2-(p2`2+g/2) by a19,a20,XREAL_1:8,
+A101:  a2 = |[x2,y2]| and
+A102:  p2`2-g/2 < y2 and
+A103:  y2 < p2`2+g/2;
+A104: a2`2 = y2 by A101,EUCLID:56;
+    p2`2-g/2+g/2 < y2+g/2 & p2`2-y2 > p2`2-(p2`2+g/2) by A102,A103,XREAL_1:8,
 REAL_1:92;
     then p2`2-y2 < y2+g/2-y2 & p2`2-y2 > -g/2 by XREAL_1:11;
     then
     abs(p2`2-y2) < g/2 by SEQ_2:9;
     then
-a26: abs(p1`2-y1)+abs(p2`2-y2) < g/2+g/2 by a24,XREAL_1:10;
+A105: abs(p1`2-y1)+abs(p2`2-y2) < g/2+g/2 by A100,XREAL_1:10;
     abs(p1`2-y1-(p2`2-y2)) <= abs(p1`2-y1)+abs(p2`2-y2) by COMPLEX1:143;
     then abs-(p1`2-y1-(p2`2-y2)) <= abs(p1`2-y1)+abs(p2`2-y2) by COMPLEX1:138;
-    then abs(y1-y2-r) < g by a26,XREAL_1:2;
-    then a1`2 - a2`2 in ].r-g,r+g.[ by a21,a22,RCOMP_1:8;
-    hence b in V by a8,a11,a13;
+    then abs(y1-y2-r) < g by A105,XREAL_1:2;
+    then a1`2 - a2`2 in ].r-g,r+g.[ by A99,A104,RCOMP_1:8;
+    hence b in V by A87,A93,A95;
   end;
   then Dy is continuous by JGRAPH_2:20;
   then reconsider dy as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
@@ -1296,15 +1293,15 @@ a26: abs(p1`2-y1)+abs(p2`2-y2) < g/2+g/2 by a24,XREAL_1:10;
   proof
     let p be Point of [:T2,T2:],
         V be Subset of R^1 such that
-a3:   fX2.p in V and
-a4:   V is open;
+A106:   fX2.p in V and
+A107:   V is open;
     consider p1, p2 being Point of T2 such that
-a5:   p = [p1,p2] and
-a6:   fX2.p = p2`1 by A1;
-    reconsider V1 = V as open Subset of REAL by a4,TOPMETR:24,BORSUK_5:62;
+A108:   p = [p1,p2] and
+A109:   fX2.p = p2`1 by A28;
+    reconsider V1 = V as open Subset of REAL by A107,TOPMETR:24,BORSUK_5:62;
     consider g being real number such that
-a7:   0 < g and
-a8:   ].p2`1-g,p2`1+g.[ c= V1 by a3,a6,RCOMP_1:40;
+A110:   0 < g and
+A111:   ].p2`1-g,p2`1+g.[ c= V1 by A106,A109,RCOMP_1:40;
     reconsider g as Element of REAL by XREAL_0:def 1;
     set W1 = {|[x,y]| where x, y is Element of REAL: p2`1-g < x & x < p2`1+g};
     W1 c= the carrier of T2
@@ -1317,33 +1314,33 @@ a8:   ].p2`1-g,p2`1+g.[ c= V1 by a3,a6,RCOMP_1:40;
     end;
     then reconsider W1 as Subset of T2;
     take [:[#]T2,W1:];
-b1: p2 = |[p2`1,p2`2]| by EUCLID:57;
-    p2`1-g < p2`1-0 & p2`1+0 < p2`1+g by a7,XREAL_1:8,REAL_1:92;
-    then p2 in W1 by b1;
-    hence p in [:[#]T2,W1:] by a5,Lm1,ZFMISC_1:def 2;
+A112: p2 = |[p2`1,p2`2]| by EUCLID:57;
+    p2`1-g < p2`1-0 & p2`1+0 < p2`1+g by A110,XREAL_1:8,REAL_1:92;
+    then p2 in W1 by A112;
+    hence p in [:[#]T2,W1:] by A108,Lm1,ZFMISC_1:def 2;
     W1 is open by PSCOMP_1:66;
     hence [:[#]T2,W1:] is open by BORSUK_1:46;
     let b be set;
     assume b in fX2.:[:[#]T2,W1:];
     then consider a being Point of [:T2,T2:] such that
-a10:  a in [:[#]T2,W1:] and
-a11:  fX2.a = b by FUNCT_2:116;
+A113:  a in [:[#]T2,W1:] and
+A114:  fX2.a = b by FUNCT_2:116;
     consider a1, a2 being Point of T2 such that
-a12:  a = [a1,a2] and
-a13:  fX2.a = a2`1 by A1;
-    a2 in W1 by a10,a12,ZFMISC_1:106;
+A115:  a = [a1,a2] and
+A116:  fX2.a = a2`1 by A28;
+    a2 in W1 by A113,A115,ZFMISC_1:106;
     then consider x1, y1 being Element of REAL such that
-a15:  a2 = |[x1,y1]| and
-a16:  p2`1-g < x1 and
-a17:  x1 < p2`1+g;
-a21: a2`1 = x1 by a15,EUCLID:56;
-    p2`1-g+g < x1+g & p2`1-x1 > p2`1-(p2`1+g) by a16,a17,XREAL_1:8,REAL_1:92;
+A117:  a2 = |[x1,y1]| and
+A118:  p2`1-g < x1 and
+A119:  x1 < p2`1+g;
+A120: a2`1 = x1 by A117,EUCLID:56;
+    p2`1-g+g < x1+g & p2`1-x1 > p2`1-(p2`1+g) by A118,A119,XREAL_1:8,REAL_1:92;
     then p2`1-x1 < x1+g-x1 & p2`1-x1 > -g by XREAL_1:11;
     then abs(p2`1-x1) < g by SEQ_2:9;
     then abs-(p2`1-x1) < g by COMPLEX1:138;
     then abs(x1-p2`1) < g;
-    then a2`1 in ].p2`1-g,p2`1+g.[ by a21,RCOMP_1:8;
-    hence b in V by a8,a11,a13;
+    then a2`1 in ].p2`1-g,p2`1+g.[ by A120,RCOMP_1:8;
+    hence b in V by A111,A114,A116;
   end;
   then fX2 is continuous by JGRAPH_2:20;
   then reconsider fx2 as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
@@ -1353,15 +1350,15 @@ a21: a2`1 = x1 by a15,EUCLID:56;
   proof
     let p be Point of [:T2,T2:],
         V be Subset of R^1 such that
-a3:   fY2.p in V and
-a4:   V is open;
+A121:   fY2.p in V and
+A122:   V is open;
     consider p1, p2 being Point of T2 such that
-a5:   p = [p1,p2] and
-a6:   fY2.p = p2`2 by A2;
-    reconsider V1 = V as open Subset of REAL by a4,TOPMETR:24,BORSUK_5:62;
+A123:   p = [p1,p2] and
+A124:   fY2.p = p2`2 by A31;
+    reconsider V1 = V as open Subset of REAL by A122,TOPMETR:24,BORSUK_5:62;
     consider g being real number such that
-a7:   0 < g and
-a8:   ].p2`2-g,p2`2+g.[ c= V1 by a3,a6,RCOMP_1:40;
+A125:   0 < g and
+A126:   ].p2`2-g,p2`2+g.[ c= V1 by A121,A124,RCOMP_1:40;
     reconsider g as Element of REAL by XREAL_0:def 1;
     set W1 = {|[x,y]| where x, y is Element of REAL: p2`2-g < y & y < p2`2+g};
     W1 c= the carrier of T2
@@ -1374,39 +1371,39 @@ a8:   ].p2`2-g,p2`2+g.[ c= V1 by a3,a6,RCOMP_1:40;
     end;
     then reconsider W1 as Subset of T2;
     take [:[#]T2,W1:];
-b1: p2 = |[p2`1,p2`2]| by EUCLID:57;
-    p2`2-g < p2`2-0 & p2`2+0 < p2`2+g by a7,XREAL_1:8,REAL_1:92;
-    then p2 in W1 by b1;
-    hence p in [:[#]T2,W1:] by a5,Lm1,ZFMISC_1:def 2;
+A127: p2 = |[p2`1,p2`2]| by EUCLID:57;
+    p2`2-g < p2`2-0 & p2`2+0 < p2`2+g by A125,XREAL_1:8,REAL_1:92;
+    then p2 in W1 by A127;
+    hence p in [:[#]T2,W1:] by A123,Lm1,ZFMISC_1:def 2;
     W1 is open by PSCOMP_1:68;
     hence [:[#]T2,W1:] is open by BORSUK_1:46;
     let b be set;
     assume b in fY2.:[:[#]T2,W1:];
     then consider a being Point of [:T2,T2:] such that
-a10:  a in [:[#]T2,W1:] and
-a11:  fY2.a = b by FUNCT_2:116;
+A128:  a in [:[#]T2,W1:] and
+A129:  fY2.a = b by FUNCT_2:116;
     consider a1, a2 being Point of T2 such that
-a12:  a = [a1,a2] and
-a13:  fY2.a = a2`2 by A2;
-    a2 in W1 by a10,a12,ZFMISC_1:106;
+A130:  a = [a1,a2] and
+A131:  fY2.a = a2`2 by A31;
+    a2 in W1 by A128,A130,ZFMISC_1:106;
     then consider x1, y1 being Element of REAL such that
-a15:  a2 = |[x1,y1]| and
-a16:  p2`2-g < y1 and
-a17:  y1 < p2`2+g;
-a21: a2`2 = y1 by a15,EUCLID:56;
-    p2`2-g+g < y1+g & p2`2-y1 > p2`2-(p2`2+g) by a16,a17,XREAL_1:8,REAL_1:92;
+A132:  a2 = |[x1,y1]| and
+A133:  p2`2-g < y1 and
+A134:  y1 < p2`2+g;
+A135: a2`2 = y1 by A132,EUCLID:56;
+    p2`2-g+g < y1+g & p2`2-y1 > p2`2-(p2`2+g) by A133,A134,XREAL_1:8,REAL_1:92;
     then p2`2-y1 < y1+g-y1 & p2`2-y1 > -g by XREAL_1:11;
     then abs(p2`2-y1) < g by SEQ_2:9;
     then abs-(p2`2-y1) < g by COMPLEX1:138;
     then abs(y1-p2`2) < g;
-    then a2`2 in ].p2`2-g,p2`2+g.[ by a21,RCOMP_1:8;
-    hence b in V by a8,a11,a13;
+    then a2`2 in ].p2`2-g,p2`2+g.[ by A135,RCOMP_1:8;
+    hence b in V by A126,A129,A131;
   end;
   then fY2 is continuous by JGRAPH_2:20;
   then reconsider fy2 as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
   reconsider rr = r^2 as Real by XREAL_0:def 1;
   set f1 = (the carrier of [:T2,T2:]) --> rr;
-  reconsider f1 as continuous RealMap of [:T2,T2:] by Lm10;
+  reconsider f1 as continuous RealMap of [:T2,T2:] by Lm2;
   set Zf1 = f1 || OK;
   set Zfx2 = fx2 || OK;
   set Zfy2 = fy2 || OK;
@@ -1417,182 +1414,182 @@ a21: a2`2 = y1 by a15,EUCLID:56;
   set xx = Zxo(#)Zdx;
   set yy = Zyo(#)Zdy;
   set m = Zdx(#)Zdx + Zdy(#)Zdy;
-D0: the carrier of TD = OK by JORDAN1:1;
-D1: the carrier of TD = [#]TD by PRE_TOPC:12;
-z53: dom m = the carrier of TD by FUNCT_2:def 1;
-z23: dom (Zdx(#)Zdx) = the carrier of TD by FUNCT_2:def 1;
-z24: dom (Zdy(#)Zdy) = the carrier of TD by FUNCT_2:def 1;
-P0: for y, z being Point of D2 st y <> z holds [y,z] in OK
+A136: the carrier of TD = OK by JORDAN1:1;
+A137: the carrier of TD = [#]TD by PRE_TOPC:12;
+A138: dom m = the carrier of TD by FUNCT_2:def 1;
+A139: dom (Zdx(#)Zdx) = the carrier of TD by FUNCT_2:def 1;
+A140: dom (Zdy(#)Zdy) = the carrier of TD by FUNCT_2:def 1;
+A141: for y, z being Point of D2 st y <> z holds [y,z] in OK
   proof
     let y, z be Point of D2;
     assume
-a1:   y <> z;
+A142:   y <> z;
     y is Point of T2 & z is Point of T2 by TOPMETR:2;
-    then [y,z] in DiffElems(T2,T2) by a1;
+    then [y,z] in DiffElems(T2,T2) by A142;
     hence [y,z] in OK by XBOOLE_0:def 3;
   end;
-P1: for y, z being Point of D2 st y <> z holds Zdx. [y,z] = dx. [y,z]
+A143: for y, z being Point of D2 st y <> z holds Zdx. [y,z] = dx. [y,z]
   proof
     let y, z be Point of D2;
     assume y <> z;
     then
-a1: [y,z] in OK by P0;
+A144: [y,z] in OK by A141;
     thus Zdx. [y,z] = (dx | OK). [y,z]
-    .= dx. [y,z] by a1,FUNCT_1:72;
+    .= dx. [y,z] by A144,FUNCT_1:72;
   end;
-P2: for y, z being Point of D2 st y <> z holds Zdy. [y,z] = dy. [y,z]
+A145: for y, z being Point of D2 st y <> z holds Zdy. [y,z] = dy. [y,z]
   proof
     let y, z be Point of D2;
     assume y <> z;
     then
-a1: [y,z] in OK by P0;
+A146: [y,z] in OK by A141;
     thus Zdy. [y,z] = (dy | OK). [y,z]
-    .= dy. [y,z] by a1,FUNCT_1:72;
+    .= dy. [y,z] by A146,FUNCT_1:72;
   end;
-P3: for y, z being Point of D2 st y <> z holds Zfx2. [y,z] = fx2. [y,z]
+A147: for y, z being Point of D2 st y <> z holds Zfx2. [y,z] = fx2. [y,z]
   proof
     let y, z be Point of D2;
     assume y <> z;
     then
-a1: [y,z] in OK by P0;
+A148: [y,z] in OK by A141;
     thus Zfx2. [y,z] = (fx2 | OK). [y,z]
-    .= fx2. [y,z] by a1,FUNCT_1:72;
+    .= fx2. [y,z] by A148,FUNCT_1:72;
   end;
-P4: for y, z being Point of D2 st y <> z holds Zfy2. [y,z] = fy2. [y,z]
+A149: for y, z being Point of D2 st y <> z holds Zfy2. [y,z] = fy2. [y,z]
   proof
     let y, z be Point of D2;
     assume y <> z;
     then
-a1: [y,z] in OK by P0;
+A150: [y,z] in OK by A141;
     thus Zfy2. [y,z] = (fy2 | OK). [y,z]
-    .= fy2. [y,z] by a1,FUNCT_1:72;
+    .= fy2. [y,z] by A150,FUNCT_1:72;
   end;
-P5: for y, z being Point of D2 st y <> z holds Zf1. [y,z] = f1. [y,z]
+A151: for y, z being Point of D2 st y <> z holds Zf1. [y,z] = f1. [y,z]
   proof
     let y, z be Point of D2;
     assume y <> z;
     then
-a1: [y,z] in OK by P0;
+A152: [y,z] in OK by A141;
     thus Zf1. [y,z] = (f1 | OK). [y,z]
-    .= f1. [y,z] by a1,FUNCT_1:72;
+    .= f1. [y,z] by A152,FUNCT_1:72;
   end;
-P6: for y, z being Point of D2 st y <> z holds Zxo. [y,z] = xo. [y,z]
+A153: for y, z being Point of D2 st y <> z holds Zxo. [y,z] = xo. [y,z]
   proof
     let y, z be Point of D2;
     assume y <> z;
     then
-a1: [y,z] in OK by P0;
+A154: [y,z] in OK by A141;
     thus Zxo. [y,z] = (xo | OK). [y,z]
-    .= xo. [y,z] by a1,FUNCT_1:72;
+    .= xo. [y,z] by A154,FUNCT_1:72;
   end;
-P7: for y, z being Point of D2 st y <> z holds Zyo. [y,z] = yo. [y,z]
+A155: for y, z being Point of D2 st y <> z holds Zyo. [y,z] = yo. [y,z]
   proof
     let y, z be Point of D2;
     assume y <> z;
     then
-a1: [y,z] in OK by P0;
+A156: [y,z] in OK by A141;
     thus Zyo. [y,z] = (yo | OK). [y,z]
-    .= yo. [y,z] by a1,FUNCT_1:72;
+    .= yo. [y,z] by A156,FUNCT_1:72;
   end;
   now
     let b be real number;
     assume b in rng m;
     then consider a being set such that
-e1:   a in dom m and
-e2:   m.a = b by FUNCT_1:def 5;
-    a in DiffElems(T2,T2) by e1,D0,XBOOLE_0:def 3;
+A157:   a in dom m and
+A158:   m.a = b by FUNCT_1:def 5;
+    a in DiffElems(T2,T2) by A157,A136,XBOOLE_0:def 3;
     then consider y, z being Point of T2 such that
-e3:   a = [y,z] and
-e7:   y <> z;
-    a in the carrier of [:D2,D2:] by e1,D0,XBOOLE_0:def 3;
+A159:   a = [y,z] and
+A160:   y <> z;
+    a in the carrier of [:D2,D2:] by A157,A136,XBOOLE_0:def 3;
     then consider a1, a2 being Point of D2 such that
-qw:   a = [a1,a2] by BORSUK_1:50;
-PP: a1 = y & a2 = z by qw,e3,ZFMISC_1:33;
+A161:   a = [a1,a2] by BORSUK_1:50;
+A162: a1 = y & a2 = z by A161,A159,ZFMISC_1:33;
     consider x3, x4 being Point of T2 such that
-z18:  [y,z] = [x3,x4] and
-z19:  dx. [y,z] = x3`1 - x4`1 by a1;
-z20: y = x3 & z = x4 by z18,ZFMISC_1:33;
+A163:  [y,z] = [x3,x4] and
+A164:  dx. [y,z] = x3`1 - x4`1 by A22;
+A165: y = x3 & z = x4 by A163,ZFMISC_1:33;
     consider x5, x6 being Point of T2 such that
-z25:  [y,z] = [x5,x6] and
-z26:  dy. [y,z] = x5`2 - x6`2 by a2;
-z27: y = x5 & z = x6 by z25,ZFMISC_1:33;
+A166:  [y,z] = [x5,x6] and
+A167:  dy. [y,z] = x5`2 - x6`2 by A25;
+A168: y = x5 & z = x6 by A166,ZFMISC_1:33;
     set r1 = y`1-z`1,
         r2 = y`2-z`2;
-s1: Zdx. [y,z] = dx. [y,z] by e7,P1,PP;
-s2: Zdy. [y,z] = dy. [y,z] by e7,P2,PP;
-e4: m. [y,z] = (Zdx(#)Zdx). [y,z] + (Zdy(#)Zdy). [y,z] by e1,e3,SEQ_1:def 3
-    .= Zdx. [y,z] * Zdx. [y,z] + (Zdy(#)Zdy). [y,z] by e1,e3,z23,SEQ_1:def 5
+A169: Zdx. [y,z] = dx. [y,z] by A160,A143,A162;
+A170: Zdy. [y,z] = dy. [y,z] by A160,A145,A162;
+A171: m. [y,z] = (Zdx(#)Zdx). [y,z] + (Zdy(#)Zdy). [y,z] by A157,A159,SEQ_1:def
+3
+    .= Zdx. [y,z] * Zdx. [y,z] + (Zdy(#)Zdy). [y,z] by A157,A159,A139,SEQ_1:def
+5
     .= Zdx. [y,z] * Zdx. [y,z] + Zdy. [y,z] * Zdy. [y,z]
-       by e1,e3,z24,SEQ_1:def 5
-    .= r1^2+r2*r2 by s2,z26,z27,s1,z19,z20,SQUARE_1:def 3
-    .= r1^2+r2^2 by SQUARE_1:def 3;
-    0 <= r1^2 & 0 <= r2^2 by SQUARE_1:72;
-    then
-e5: 0+0 <= r1^2+r2^2 by XREAL_1:9;
+       by A157,A159,A140,SEQ_1:def 5
+    .= r1^2+r2*r2 by A170,A167,A168,A169,A164,A165
+    .= r1^2+r2^2;
+A172: 0+0 <= r1^2+r2^2 by XREAL_1:9;
     now
       assume r1^2+r2^2 = 0;
       then r1 = 0 & r2 = 0 by COMPLEX1:2;
       then y`1 = z`1 & y`2 = z`2;
-      hence contradiction by e7,TOPREAL3:11;
+      hence contradiction by A160,TOPREAL3:11;
     end;
-    hence 0 < b by  e2,e3,e4,e5;
+    hence 0 < b by  A158,A159,A171,A172;
   end;
   then reconsider m as positive-yielding continuous RealMap of TD
     by PARTFUN3:def 1;
   set p1 = (xx+yy)(#)(xx+yy);
   set p2 = Zxo(#)Zxo + Zyo(#)Zyo - Zf1;
-z44: dom p2 = the carrier of TD by FUNCT_2:def 1;
-z50: dom (Zxo(#)Zxo + Zyo(#)Zyo) = the carrier of TD by FUNCT_2:def 1;
-z51: dom (Zxo(#)Zxo) = the carrier of TD by FUNCT_2:def 1;
-z52: dom (Zyo(#)Zyo) = the carrier of TD by FUNCT_2:def 1;
+A173: dom p2 = the carrier of TD by FUNCT_2:def 1;
+A174: dom (Zxo(#)Zxo + Zyo(#)Zyo) = the carrier of TD by FUNCT_2:def 1;
+A175: dom (Zxo(#)Zxo) = the carrier of TD by FUNCT_2:def 1;
+A176: dom (Zyo(#)Zyo) = the carrier of TD by FUNCT_2:def 1;
   now
     let b be real number;
     assume b in rng p2;
     then consider a being set such that
-e1:   a in dom p2 and
-e2:   p2.a = b by FUNCT_1:def 5;
-    a in DiffElems(T2,T2) by e1,D0,XBOOLE_0:def 3;
+A177:   a in dom p2 and
+A178:   p2.a = b by FUNCT_1:def 5;
+    a in DiffElems(T2,T2) by A177,A136,XBOOLE_0:def 3;
     then consider y, z being Point of T2 such that
-e3:   a = [y,z] and
-e7:   y <> z;
+A179:   a = [y,z] and
+A180:   y <> z;
     set r3 = z`1-o`1, r4 = z`2-o`2;
-    a in the carrier of [:D2,D2:] by e1,D0,XBOOLE_0:def 3;
+    a in the carrier of [:D2,D2:] by A177,A136,XBOOLE_0:def 3;
     then consider a1, a2 being Point of D2 such that
-qw:   a = [a1,a2] by BORSUK_1:50;
-PP: a1 = y & a2 = z by qw,e3,ZFMISC_1:33;
+A181:   a = [a1,a2] by BORSUK_1:50;
+A182: a1 = y & a2 = z by A181,A179,ZFMISC_1:33;
     then
-s5: Zf1. [y,z] = f1. [y,z] by e7,P5;
-s6: Zxo. [y,z] = xo. [y,z] by e7,PP,P6;
-s7: Zyo. [y,z] = yo. [y,z] by e7,PP,P7;
+A183: Zf1. [y,z] = f1. [y,z] by A180,A151;
+A184: Zxo. [y,z] = xo. [y,z] by A180,A182,A153;
+A185: Zyo. [y,z] = yo. [y,z] by A180,A182,A155;
     consider x9, x10 being Point of T2 such that
-z62:  [y,z] = [x9,x10] and
-z63:  xo. [y,z] = x10`1 - o`1 by u1;
-z64: y = x9 & z = x10 by z62,ZFMISC_1:33;
+A186:  [y,z] = [x9,x10] and
+A187:  xo. [y,z] = x10`1 - o`1 by A16;
+A188: y = x9 & z = x10 by A186,ZFMISC_1:33;
     consider x11, x12 being Point of T2 such that
-z65:  [y,z] = [x11,x12] and
-z66:  yo. [y,z] = x12`2 - o`2 by u2;
-z67: y = x11 & z = x12 by z65,ZFMISC_1:33;
-z40: p2. [y,z] = (Zxo(#)Zxo + Zyo(#)Zyo). [y,z] - Zf1. [y,z]
-    by e3,e1,SEQ_1:def 4
-    .= (Zxo(#)Zxo + Zyo(#)Zyo). [y,z] - r^2 by s5,FUNCOP_1:13
+A189:  [y,z] = [x11,x12] and
+A190:  yo. [y,z] = x12`2 - o`2 by A19;
+A191: y = x11 & z = x12 by A189,ZFMISC_1:33;
+A192: p2. [y,z] = (Zxo(#)Zxo + Zyo(#)Zyo). [y,z] - Zf1. [y,z]
+    by A179,A177,SEQ_1:def 4
+    .= (Zxo(#)Zxo + Zyo(#)Zyo). [y,z] - r^2 by A183,FUNCOP_1:13
     .= (Zxo(#)Zxo). [y,z] + (Zyo(#)Zyo). [y,z] - r^2
-    by e3,e1,z50,SEQ_1:def 3
+    by A179,A177,A174,SEQ_1:def 3
     .= Zxo. [y,z] * Zxo. [y,z] + (Zyo(#)Zyo). [y,z] - r^2
-    by e3,e1,z51,SEQ_1:def 5
+    by A179,A177,A175,SEQ_1:def 5
     .= Zxo. [y,z] * Zxo. [y,z] + Zyo. [y,z] * Zyo. [y,z] - r^2
-    by e3,e1,z52,SEQ_1:def 5
-    .= r3^2 + yo. [y,z] * yo. [y,z] - r^2 by s7,s6,z63,z64,SQUARE_1:def 3
-    .= r3^2+r4^2-r^2 by z66,z67,SQUARE_1:def 3;
-d2: 0 <= |. z-o .| by TOPRNS_1:26;
-    the carrier of D2 = cl_Ball(o,r) by Tcard;
-    then |. z-o .| <= r by PP,TOPREAL9:8;
+    by A179,A177,A176,SEQ_1:def 5
+    .= r3^2 + yo. [y,z] * yo. [y,z] - r^2 by A185,A184,A187,A188
+    .= r3^2+r4^2-r^2 by A190,A191;
+A193: 0 <= |. z-o .| by TOPRNS_1:26;
+    the carrier of D2 = cl_Ball(o,r) by Th3;
+    then |. z-o .| <= r by A182,TOPREAL9:8;
     then
-d1: |. z-o .|^2 <= r^2 by d2,SQUARE_1:77;
+A194: |. z-o .|^2 <= r^2 by A193,SQUARE_1:77;
     |. z-o .|^2 = ((z-o)`1)^2+((z-o)`2)^2 by JGRAPH_1:46
       .= r3^2+((z-o)`2)^2 by TOPREAL3:8
       .= r3^2+r4^2 by TOPREAL3:8;
-    then r3^2+r4^2-r^2 <= r^2-r^2 by d1,XREAL_1:11;
-    hence 0 >= b by e2,e3,z40;
+    then r3^2+r4^2-r^2 <= r^2-r^2 by A194,XREAL_1:11;
+    hence 0 >= b by A178,A179,A192;
   end;
   then reconsider p2 as nonpositive-yielding continuous RealMap of TD
     by PARTFUN3:def 3;
@@ -1603,117 +1600,119 @@ d1: |. z-o .|^2 <= r^2 by d2,SQUARE_1:77;
   reconsider X3 = x3, Y3 = y3 as Function of TD,R^1 by TOPMETR:24;
   set F = <:X3,Y3:>;
   set R = R2Homeomorphism;
-ww: for x being Point of D2 holds g.x = (R*F). [x,f.x]
+A195: for x being Point of D2 holds g.x = (R*F). [x,f.x]
   proof
     let x be Point of D2;
-z0: not x is_a_fixpoint_of f by ff,ABIAN:def 5;
+A196: not x is_a_fixpoint_of f by A11,ABIAN:def 5;
     then consider y, z being Point of T2 such that
-z1:   y = x and
-z2:   z = f.x and
-z5:   HC(x,f) = HC(z,y,o,r) by dhc;
-z6: x <> f.x by z0,ABIAN:def 4;
-    then [x,f.x] in DiffElems (T2,T2) by z1,z2;
+A197:   y = x and
+A198:   z = f.x and
+A199:   HC(x,f) = HC(z,y,o,r) by Def4;
+A200: x <> f.x by A196,ABIAN:def 4;
+    then [x,f.x] in DiffElems (T2,T2) by A197,A198;
     then
-RR: [y,z] in OK by z1,z2,XBOOLE_0:def 3;
+A201: [y,z] in OK by A197,A198,XBOOLE_0:def 3;
     set r1 = y`1-z`1, r2 = y`2-z`2,
         r3 = z`1-o`1, r4 = z`2-o`2;
     set l = (-(r3*r1+r4*r2)+sqrt((r3*r1+r4*r2)^2-(r1^2+r2^2)*(r3^2+r4^2-r^2)))
         / (r1^2+r2^2);
     consider x1, x2 being Point of T2 such that
-z14:  [y,z] = [x1,x2] and
-z15:  fx2. [y,z] = x2`1 by A1;
-z16: z = x2 by z14,ZFMISC_1:33;
+A202:  [y,z] = [x1,x2] and
+A203:  fx2. [y,z] = x2`1 by A28;
+A204: z = x2 by A202,ZFMISC_1:33;
     consider x7, x8 being Point of T2 such that
-z33:  [y,z] = [x7,x8] and
-z34:  fy2. [y,z] = x8`2 by A2;
-z35: z = x8 by z33,ZFMISC_1:33;
+A205:  [y,z] = [x7,x8] and
+A206:  fy2. [y,z] = x8`2 by A31;
+A207: z = x8 by A205,ZFMISC_1:33;
     consider x3, x4 being Point of T2 such that
-z18:  [y,z] = [x3,x4] and
-z19:  dx. [y,z] = x3`1 - x4`1 by a1;
-z20: y = x3 & z = x4 by z18,ZFMISC_1:33;
+A208:  [y,z] = [x3,x4] and
+A209:  dx. [y,z] = x3`1 - x4`1 by A22;
+A210: y = x3 & z = x4 by A208,ZFMISC_1:33;
     consider x5, x6 being Point of T2 such that
-z25:  [y,z] = [x5,x6] and
-z26:  dy. [y,z] = x5`2 - x6`2 by a2;
-z27: y = x5 & z = x6 by z25,ZFMISC_1:33;
+A211:  [y,z] = [x5,x6] and
+A212:  dy. [y,z] = x5`2 - x6`2 by A25;
+A213: y = x5 & z = x6 by A211,ZFMISC_1:33;
     consider x9, x10 being Point of T2 such that
-z62:  [y,z] = [x9,x10] and
-z63:  xo. [y,z] = x10`1 - o`1 by u1;
-z64: y = x9 & z = x10 by z62,ZFMISC_1:33;
+A214:  [y,z] = [x9,x10] and
+A215:  xo. [y,z] = x10`1 - o`1 by A16;
+A216: y = x9 & z = x10 by A214,ZFMISC_1:33;
     consider x11, x12 being Point of T2 such that
-z65:  [y,z] = [x11,x12] and
-z66:  yo. [y,z] = x12`2 - o`2 by u2;
-z67: y = x11 & z = x12 by z65,ZFMISC_1:33;
-z7: dom X3 = the carrier of TD by FUNCT_2:def 1;
-z8: dom Y3 = the carrier of TD by FUNCT_2:def 1;
-z17: dom (k(#)Zdx) = the carrier of TD by FUNCT_2:def 1;
-z41: dom (k(#)Zdy) = the carrier of TD by FUNCT_2:def 1;
-z23: dom (Zdx(#)Zdx) = the carrier of TD by FUNCT_2:def 1;
-z24: dom (Zdy(#)Zdy) = the carrier of TD by FUNCT_2:def 1;
-z28: dom (-(xx+yy) + sqrt(pp)) = the carrier of TD by FUNCT_2:def 1;
-z29: dom -(xx+yy) = the carrier of TD by FUNCT_2:def 1;
-z30: dom (xx+yy) = the carrier of TD by FUNCT_2:def 1;
-z31: dom xx = the carrier of TD by FUNCT_2:def 1;
-z32: dom yy = the carrier of TD by FUNCT_2:def 1;
-z37: dom pp = the carrier of TD by FUNCT_2:def 1;
-z43: dom p1 = the carrier of TD by FUNCT_2:def 1;
-z38: dom (m(#)p2) = the carrier of TD by FUNCT_2:def 1;
-s1: Zdx. [y,z] = dx. [y,z] by z1,z2,z6,P1;
-s2: Zdy. [y,z] = dy. [y,z] by z1,z2,z6,P2;
-s5: Zf1. [y,z] = f1. [y,z] by z1,z2,z6,P5;
-s6: Zxo. [y,z] = xo. [y,z] by z1,z2,z6,P6;
-s7: Zyo. [y,z] = yo. [y,z] by z1,z2,z6,P7;
-z22: m. [y,z] = (Zdx(#)Zdx). [y,z] + (Zdy(#)Zdy). [y,z]
-    by RR,D0,z53,SEQ_1:def 3
+A217:  [y,z] = [x11,x12] and
+A218:  yo. [y,z] = x12`2 - o`2 by A19;
+A219: y = x11 & z = x12 by A217,ZFMISC_1:33;
+A220: dom X3 = the carrier of TD by FUNCT_2:def 1;
+A221: dom Y3 = the carrier of TD by FUNCT_2:def 1;
+A222: dom (k(#)Zdx) = the carrier of TD by FUNCT_2:def 1;
+A223: dom (k(#)Zdy) = the carrier of TD by FUNCT_2:def 1;
+A224: dom (Zdx(#)Zdx) = the carrier of TD by FUNCT_2:def 1;
+A225: dom (Zdy(#)Zdy) = the carrier of TD by FUNCT_2:def 1;
+A226: dom (-(xx+yy) + sqrt(pp)) = the carrier of TD by FUNCT_2:def 1;
+A227: dom -(xx+yy) = the carrier of TD by FUNCT_2:def 1;
+A228: dom (xx+yy) = the carrier of TD by FUNCT_2:def 1;
+A229: dom xx = the carrier of TD by FUNCT_2:def 1;
+A230: dom yy = the carrier of TD by FUNCT_2:def 1;
+A231: dom pp = the carrier of TD by FUNCT_2:def 1;
+A232: dom p1 = the carrier of TD by FUNCT_2:def 1;
+A233: dom (m(#)p2) = the carrier of TD by FUNCT_2:def 1;
+A234: Zdx. [y,z] = dx. [y,z] by A197,A198,A200,A143;
+A235: Zdy. [y,z] = dy. [y,z] by A197,A198,A200,A145;
+A236: Zf1. [y,z] = f1. [y,z] by A197,A198,A200,A151;
+A237: Zxo. [y,z] = xo. [y,z] by A197,A198,A200,A153;
+A238: Zyo. [y,z] = yo. [y,z] by A197,A198,A200,A155;
+A239: m. [y,z] = (Zdx(#)Zdx). [y,z] + (Zdy(#)Zdy). [y,z]
+    by A201,A136,A138,SEQ_1:def 3
     .= Zdx. [y,z] * Zdx. [y,z] + (Zdy(#)Zdy). [y,z]
-    by RR,D0,z23,SEQ_1:def 5
+    by A201,A136,A224,SEQ_1:def 5
     .= Zdx. [y,z] * Zdx. [y,z] + Zdy. [y,z] * Zdy. [y,z]
-    by RR,D0,z24,SEQ_1:def 5
-    .= r1^2 + Zdy. [y,z] * Zdy. [y,z] by s1,z19,z20,SQUARE_1:def 3
-    .= r1^2+r2^2 by s2,z26,z27,SQUARE_1:def 3;
-z60: xx. [y,z] = Zxo. [y,z] * Zdx. [y,z] by RR,D0,z31,SEQ_1:def 5;
-z61: yy. [y,z] = Zyo. [y,z] * Zdy. [y,z] by RR,D0,z32,SEQ_1:def 5;
-z42: (xx+yy). [y,z] = xx. [y,z] + yy. [y,z] by RR,D0,z30,SEQ_1:def 3;
-z39: p1. [y,z] = (xx+yy). [y,z] * (xx+yy). [y,z] by RR,D0,z43,SEQ_1:def 5
+    by A201,A136,A225,SEQ_1:def 5
+    .= r1^2 + Zdy. [y,z] * Zdy. [y,z] by A234,A209,A210
+    .= r1^2+r2^2 by A235,A212,A213;
+A240: xx. [y,z] = Zxo. [y,z] * Zdx. [y,z] by A201,A136,A229,SEQ_1:def 5;
+A241: yy. [y,z] = Zyo. [y,z] * Zdy. [y,z] by A201,A136,A230,SEQ_1:def 5;
+A242: (xx+yy). [y,z] = xx. [y,z] + yy. [y,z] by A201,A136,A228,SEQ_1:def 3;
+A243: p1. [y,z] = (xx+yy). [y,z] * (xx+yy). [y,z] by A201,A136,A232,SEQ_1:def 5
     .= (r3*r1+r4*r2)^2
-    by s1,z19,z20,s6,z63,z64,z42,z60,z61,s2,z26,z27,s7,z66,z67,SQUARE_1:def 3;
-z40: p2. [y,z] = (Zxo(#)Zxo + Zyo(#)Zyo). [y,z] - Zf1. [y,z]
-    by RR,D0,z44,SEQ_1:def 4
-    .= (Zxo(#)Zxo + Zyo(#)Zyo). [y,z] - r^2 by s5,FUNCOP_1:13
+    by A234,A209,A210,A237,A215,A216,A242,A240,A241,A235,A212,A213,A238,A218,
+A219;
+A244: p2. [y,z] = (Zxo(#)Zxo + Zyo(#)Zyo). [y,z] - Zf1. [y,z]
+    by A201,A136,A173,SEQ_1:def 4
+    .= (Zxo(#)Zxo + Zyo(#)Zyo). [y,z] - r^2 by A236,FUNCOP_1:13
     .= (Zxo(#)Zxo). [y,z] + (Zyo(#)Zyo). [y,z] - r^2
-    by RR,D0,z50,SEQ_1:def 3
+    by A201,A136,A174,SEQ_1:def 3
     .= Zxo. [y,z] * Zxo. [y,z] + (Zyo(#)Zyo). [y,z] - r^2
-    by RR,D0,z51,SEQ_1:def 5
+    by A201,A136,A175,SEQ_1:def 5
     .= Zxo. [y,z] * Zxo. [y,z] + Zyo. [y,z] * Zyo. [y,z] - r^2
-    by RR,D0,z52,SEQ_1:def 5
-    .= r3^2 + yo. [y,z] * yo. [y,z] - r^2 by s7,s6,z63,z64,SQUARE_1:def 3
-    .= r3^2+r4^2-r^2 by z66,z67,SQUARE_1:def 3;
+    by A201,A136,A176,SEQ_1:def 5
+    .= r3^2 + yo. [y,z] * yo. [y,z] - r^2 by A238,A237,A215,A216
+    .= r3^2+r4^2-r^2 by A218,A219;
    dom sqrt pp = the carrier of TD by FUNCT_2:def 1;
    then
-z36: sqrt(pp). [y,z] = sqrt(pp. [y,z]) by RR,D0,PARTFUN3:def 5
-    .= sqrt(p1. [y,z] - (m(#)p2). [y,z]) by RR,D0,z37,SEQ_1:def 4
+A245: sqrt(pp). [y,z] = sqrt(pp. [y,z]) by A201,A136,PARTFUN3:def 5
+    .= sqrt(p1. [y,z] - (m(#)p2). [y,z]) by A201,A136,A231,SEQ_1:def 4
     .= sqrt((r3*r1+r4*r2)^2-(r1^2+r2^2)*(r3^2+r4^2-r^2))
-    by RR,z22,z39,z40,D0,z38,SEQ_1:def 5;
+    by A201,A239,A243,A244,A136,A233,SEQ_1:def 5;
    dom k = the carrier of TD by FUNCT_2:def 1;
    then
-z21: k. [y,z] = (-(xx+yy) + sqrt(pp)). [y,z] * (m. [y,z])" by
-   RR,D0,RFUNCT_1:def 4
+A246: k. [y,z] = (-(xx+yy) + sqrt(pp)). [y,z] * (m. [y,z])" by
+   A201,A136,RFUNCT_1:def 4
   .= (-(xx+yy) + sqrt(pp)). [y,z] / m. [y,z] by XCMPLX_0:def 9
     .= ((-(xx+yy)). [y,z] + sqrt(pp). [y,z]) / (r1^2+r2^2)
-    by RR,D0,z28,z22,SEQ_1:def 3
-    .= l by RR,D0,s1,z19,z20,s6,z63,z64,z60,s2,z26,z27,s7,z66,z67,z61,
-    z42,z36,z29,SEQ_1:def 7;
-z10: X3. [y,z] = Zfx2. [y,z] + (k(#)Zdx). [y,z] by RR,D0,z7,SEQ_1:def 3
-    .= z`1 + (k(#)Zdx). [y,z] by z1,z2,z6,P3,z15,z16
-    .= z`1+l*r1 by RR,s1,z19,z20,z21,D0,z17,SEQ_1:def 5;
-z11: Y3. [y,z] = Zfy2. [y,z] + (k(#)Zdy). [y,z] by RR,D0,z8,SEQ_1:def 3
-    .= z`2 + (k(#)Zdy). [y,z] by z1,z2,z6,P4,z34,z35
-    .= z`2+l*r2 by RR,s2,z26,z27,z21,D0,z41,SEQ_1:def 5;
-    thus g.x = HC(x,f) by dBR
-    .= |[ z`1+l*r1, z`2+l*r2 ]| by z1,z2,z5,z6,Twzor
-    .= <*X3. [y,z], Y3. [y,z]*> by z10,z11,EUCLID:def 16
+    by A201,A136,A226,A239,SEQ_1:def 3
+    .= l by A201,A136,A234,A209,A210,A237,A215,A216,A240,A235,A212,A213,A238,
+A218,A219,A241,
+    A242,A245,A227,SEQ_1:def 7;
+A247: X3. [y,z] = Zfx2. [y,z] + (k(#)Zdx). [y,z] by A201,A136,A220,SEQ_1:def 3
+    .= z`1 + (k(#)Zdx). [y,z] by A197,A198,A200,A147,A203,A204
+    .= z`1+l*r1 by A201,A234,A209,A210,A246,A136,A222,SEQ_1:def 5;
+A248: Y3. [y,z] = Zfy2. [y,z] + (k(#)Zdy). [y,z] by A201,A136,A221,SEQ_1:def 3
+    .= z`2 + (k(#)Zdy). [y,z] by A197,A198,A200,A149,A206,A207
+    .= z`2+l*r2 by A201,A235,A212,A213,A246,A136,A223,SEQ_1:def 5;
+    thus g.x = HC(x,f) by Def5
+    .= |[ z`1+l*r1, z`2+l*r2 ]| by A197,A198,A199,A200,Th8
+    .= <*X3. [y,z], Y3. [y,z]*> by A247,A248,EUCLID:def 16
     .= R. [X3. [y,z], Y3. [y,z]] by TOPREALA:def 2
-    .= R.(F. [y,z]) by RR,z7,z8,D0,FUNCT_3:69
-    .= (R*F). [x,f.x] by RR,z1,z2,D0,FUNCT_2:21;
+    .= R.(F. [y,z]) by A201,A220,A221,A136,FUNCT_3:69
+    .= (R*F). [x,f.x] by A201,A197,A198,A136,FUNCT_2:21;
   end;
   X3 is continuous & Y3 is continuous by TOPREAL6:83;
   then reconsider F as continuous Function of TD,[:R^1,R^1:] by YELLOW12:41;
@@ -1723,118 +1722,118 @@ z11: Y3. [y,z] = Zfy2. [y,z] + (k(#)Zdy). [y,z] by RR,D0,z8,SEQ_1:def 3
   proof
     let p be Point of D2,
         V be Subset of S1 such that
-w1:   g.p in V and
-w2:   V is open;
+A249:   g.p in V and
+A250:   V is open;
     reconsider p1 = p, fp = f.p as Point of T2 by TOPMETR:2;
-    not p is_a_fixpoint_of f by ff,ABIAN:def 5;
+    not p is_a_fixpoint_of f by A11,ABIAN:def 5;
     then p <> f.p by ABIAN:def 4;
     then [p1,fp] in DiffElems (T2,T2);
     then
-RR: [p,f.p] in OK by XBOOLE_0:def 3;
+A251: [p,f.p] in OK by XBOOLE_0:def 3;
     consider V1 being Subset of T2 such that
-w3:   V1 is open and
-w4:   V1 /\ [#]S1 = V by w2,TOPS_2:32;
-w11: g.p = (R*F). [p,f.p] by ww;
+A252:   V1 is open and
+A253:   V1 /\ [#]S1 = V by A250,TOPS_2:32;
+A254: g.p = (R*F). [p,f.p] by A195;
     R" is_homeomorphism by TOPS_2:70,TOPREALA:56;
     then
-q1: R" .:V1 is open by w3,TOPGRP_1:25;
-q3: dom F = the carrier of [:T2,T2:] | OK by FUNCT_2:def 1;
-q4: dom R = the carrier of [:R^1,R^1:] by FUNCT_2:def 1;
+A255: R" .:V1 is open by A252,TOPGRP_1:25;
+A256: dom F = the carrier of [:T2,T2:] | OK by FUNCT_2:def 1;
+A257: dom R = the carrier of [:R^1,R^1:] by FUNCT_2:def 1;
     then
-e5: rng F c= dom R;
+A258: rng F c= dom R;
     then
-q2: dom (R*F) = dom F by RELAT_1:46;
-e2: rng R = [#]T2 & R is one-to-one by TOPS_2:def 5,TOPREALA:56;
-e1: R"*(R*F) = R"*R*F by RELAT_1:55
-            .= id dom R*F by e2,TOPS_2:65;
+A259: dom (R*F) = dom F by RELAT_1:46;
+A260: rng R = [#]T2 & R is one-to-one by TOPS_2:def 5,TOPREALA:56;
+A261: R"*(R*F) = R"*R*F by RELAT_1:55
+            .= id dom R*F by A260,TOPS_2:65;
     dom id dom R = dom R by RELAT_1:71;
     then
-e3: dom (id dom R*F) = dom F by e5,RELAT_1:46;
+A262: dom (id dom R*F) = dom F by A258,RELAT_1:46;
     for x being set st x in dom F holds (id dom R*F).x = F.x
     proof
       let x be set such that
-e6:     x in dom F;
-e7:   F.x in rng F by e6,FUNCT_1:def 5;
-      thus (id dom R*F).x = id dom R.(F.x) by e6,FUNCT_1:23
-        .= F.x by q4,e7,FUNCT_1:35;
+A263:     x in dom F;
+A264:   F.x in rng F by A263,FUNCT_1:def 5;
+      thus (id dom R*F).x = id dom R.(F.x) by A263,FUNCT_1:23
+        .= F.x by A257,A264,FUNCT_1:35;
     end;
     then
-E2: id dom R*F = F by e3,FUNCT_1:9;
-    (R*F). [p1,fp] in V1 by w1,w4,w11,XBOOLE_0:def 3;
+A265: id dom R*F = F by A262,FUNCT_1:9;
+    (R*F). [p1,fp] in V1 by A249,A253,A254,XBOOLE_0:def 3;
     then R" .((R*F). [p1,fp]) in R" .:V1 by FUNCT_2:43;
-    then (R"*(R*F)). [p1,fp] in R" .:V1 by RR,q2,q3,D0,FUNCT_1:23;
+    then (R"*(R*F)). [p1,fp] in R" .:V1 by A251,A259,A256,A136,FUNCT_1:23;
     then consider W being Subset of TD such that
-q5:  [p1,fp] in W and
-q6:  W is open and
-q7:  F.:W c= R" .:V1 by RR,q1,e1,E2,D0,JGRAPH_2:20;
+A266:  [p1,fp] in W and
+A267:  W is open and
+A268:  F.:W c= R" .:V1 by A251,A255,A261,A265,A136,JGRAPH_2:20;
     consider WW being Subset of [:T2,T2:] such that
-t3:   WW is open and
-t4:   WW /\ [#]TD = W by q6,TOPS_2:32;
+A269:   WW is open and
+A270:   WW /\ [#]TD = W by A267,TOPS_2:32;
     consider SF being Subset-Family of [:T2,T2:] such that
-w13:  WW = union SF and
-w14:  for e being set st e in SF
+A271:  WW = union SF and
+A272:  for e being set st e in SF
         ex X1 being Subset of T2, Y1 being Subset of T2 st
-          e = [:X1,Y1:] & X1 is open & Y1 is open by t3,BORSUK_1:45;
-    [p1,fp] in WW by t4,q5,XBOOLE_0:def 3;
+          e = [:X1,Y1:] & X1 is open & Y1 is open by A269,BORSUK_1:45;
+    [p1,fp] in WW by A270,A266,XBOOLE_0:def 3;
     then consider Z being set such that
-w15:  [p1,fp] in Z and
-w16:  Z in SF by w13,TARSKI:def 4;
+A273:  [p1,fp] in Z and
+A274:  Z in SF by A271,TARSKI:def 4;
     consider X1, Y1 being Subset of T2 such that
-w17:  Z = [:X1,Y1:] and
-w18:  X1 is open and
-w19:  Y1 is open by w14,w16;
+A275:  Z = [:X1,Y1:] and
+A276:  X1 is open and
+A277:  Y1 is open by A272,A274;
     set ZZ = Z /\ [#]TD;
     reconsider XX = X1 /\ [#]D2, YY = Y1 /\ [#]D2 as open Subset of D2
-      by aa,w18,w19,XBOOLE_1:17,TOPS_2:32;
-    fp in Y1 by w15,w17,ZFMISC_1:106;
-    then fp in YY by aa,XBOOLE_0:def 3;
+      by A12,A276,A277,XBOOLE_1:17,TOPS_2:32;
+    fp in Y1 by A273,A275,ZFMISC_1:106;
+    then fp in YY by A12,XBOOLE_0:def 3;
     then consider M being Subset of D2 such that
-w30: p in M and
-w31: M is open and
-w32: f.:M c= YY by JGRAPH_2:20;
+A278: p in M and
+A279: M is open and
+A280: f.:M c= YY by JGRAPH_2:20;
     take W1 = XX /\ M;
-    p in X1 by w15,w17,ZFMISC_1:106;
-    then p in XX by aa,XBOOLE_0:def 3;
-    hence p in W1 by w30,XBOOLE_0:def 3;
-    thus W1 is open by w31,TOPS_1:38;
+    p in X1 by A273,A275,ZFMISC_1:106;
+    then p in XX by A12,XBOOLE_0:def 3;
+    hence p in W1 by A278,XBOOLE_0:def 3;
+    thus W1 is open by A279,TOPS_1:38;
     let b be set;
     assume b in g.:W1;
     then consider a being Point of D2 such that
-w20:  a in W1 and
-w21:  b = g.a by FUNCT_2:116;
+A281:  a in W1 and
+A282:  b = g.a by FUNCT_2:116;
     reconsider a1 = a, fa = f.a as Point of T2 by TOPMETR:2;
-    a in XX by w20,XBOOLE_0:def 3;
+    a in XX by A281,XBOOLE_0:def 3;
     then
-w33: a in X1 by XBOOLE_0:def 3;
-    not a is_a_fixpoint_of f by ff,ABIAN:def 5;
+A283: a in X1 by XBOOLE_0:def 3;
+    not a is_a_fixpoint_of f by A11,ABIAN:def 5;
     then a <> f.a by ABIAN:def 4;
     then [a1,fa] in DiffElems (T2,T2);
     then
-RR: [a,f.a] in OK by XBOOLE_0:def 3;
-    a in M by w20,XBOOLE_0:def 3;
+A284: [a,f.a] in OK by XBOOLE_0:def 3;
+    a in M by A281,XBOOLE_0:def 3;
     then fa in f.:M by FUNCT_2:43;
-    then f.a in Y1 by w32,XBOOLE_0:def 3;
-    then [a,fa] in Z by w17,w33,ZFMISC_1:def 2;
-    then [a,fa] in ZZ by RR,D0,D1,XBOOLE_0:def 3;
+    then f.a in Y1 by A280,XBOOLE_0:def 3;
+    then [a,fa] in Z by A275,A283,ZFMISC_1:def 2;
+    then [a,fa] in ZZ by A284,A136,A137,XBOOLE_0:def 3;
     then
-w34: F. [a1,fa] in F.:ZZ by RR,D0,FUNCT_2:43;
-E3: R qua Function" = R" by e2,TOPS_2:def 4;
-r1: dom(R") = [#]T2 by e2,TOPS_2:62;
-    Z c= WW by w13,w16,ZFMISC_1:92;
+A285: F. [a1,fa] in F.:ZZ by A284,A136,FUNCT_2:43;
+A286: R qua Function" = R" by A260,TOPS_2:def 4;
+A287: dom(R") = [#]T2 by A260,TOPS_2:62;
+    Z c= WW by A271,A274,ZFMISC_1:92;
     then ZZ c= WW /\ [#]TD by XBOOLE_1:27;
-    then F.:ZZ c= F.:W by t4,RELAT_1:156;
-    then F. [a1,fa] in F.:W by w34;
-    then R.(F. [a1,fa]) in R.:(R" .:V1) by q7,FUNCT_2:43;
-    then (R*F). [a1,fa] in R.:(R" .:V1) by RR,D0,FUNCT_2:21;
-    then (R*F). [a1,fa] in V1 by e2,r1,E3,Lm1,PARTFUN3:1;
-    then g.a in V1 by ww;
-    hence b in V by bb,w4,w21,XBOOLE_0:def 3;
+    then F.:ZZ c= F.:W by A270,RELAT_1:156;
+    then F. [a1,fa] in F.:W by A285;
+    then R.(F. [a1,fa]) in R.:(R" .:V1) by A268,FUNCT_2:43;
+    then (R*F). [a1,fa] in R.:(R" .:V1) by A284,A136,FUNCT_2:21;
+    then (R*F). [a1,fa] in V1 by A260,A287,A286,Lm1,PARTFUN3:1;
+    then g.a in V1 by A195;
+    hence b in V by A13,A253,A282,XBOOLE_0:def 3;
   end;
   hence g is continuous by JGRAPH_2:20;
 end;
 
 :: Brouwer Fixed Point Theorem
-theorem Tmain:
+theorem Th14:
   for r being non negative (real number),
       o being Point of TOP-REAL 2,
       f being continuous Function of Tdisk(o,r), Tdisk(o,r) holds
@@ -1843,38 +1842,38 @@ proof
   let r be non negative (real number),
       o be Point of TOP-REAL 2,
       f be continuous Function of Tdisk(o,r), Tdisk(o,r);
-cc: the carrier of Tcircle(o,r) = Sphere(o,r) by TOPREALB:9;
-cd: the carrier of Tdisk(o,r) = cl_Ball(o,r) by Tcard;
+A1: the carrier of Tcircle(o,r) = Sphere(o,r) by TOPREALB:9;
+A2: the carrier of Tdisk(o,r) = cl_Ball(o,r) by Th3;
     per cases;
     suppose
-ai:   r is positive;
+A3:   r is positive;
       assume
-a1:   f has_no_fixpoint;
-      reconsider r as positive (real number) by ai;
+A4:   f has_no_fixpoint;
+      reconsider r as positive (real number) by A3;
       Sphere(o,r) c= cl_Ball(o,r) by TOPREAL9:17;
       then reconsider Y = Tcircle(o,r) as
-      non empty SubSpace of Tdisk(o,r) by cc,cd,TSEP_1:4;
-gg:   not Y is_a_retract_of Tdisk(o,r) by Tretr;
+      non empty SubSpace of Tdisk(o,r) by A1,A2,TSEP_1:4;
+A5:   not Y is_a_retract_of Tdisk(o,r) by Th10;
       reconsider g = BR-map(f) as Function of Tdisk(o,r),Y;
-a0:   g is continuous by a1,Tcont;
+A6:   g is continuous by A4,Th13;
       g is_a_retraction
       proof
         let W be Point of Tdisk(o,r);
         assume
-a3:     W in the carrier of Y;
-        not W is_a_fixpoint_of f by a1,ABIAN:def 5;
-        hence g.W = W by a3,Thc1;
+A7:     W in the carrier of Y;
+        not W is_a_fixpoint_of f by A4,ABIAN:def 5;
+        hence g.W = W by A7,Th11;
       end;
-      hence contradiction by a0,gg,BORSUK_1:def 20;
+      hence contradiction by A6,A5,BORSUK_1:def 20;
     end;
     suppose r is non positive;
       then reconsider r as non negative non positive (real number);
-f1:   cl_Ball(o,r) = {o} by Tcl0;
+A8:   cl_Ball(o,r) = {o} by Th2;
       take o;
       dom f = the carrier of Tdisk(o,r) by FUNCT_2:def 1;
-      hence o in dom f by f1,cd,TARSKI:def 1;
+      hence o in dom f by A8,A2,TARSKI:def 1;
       then f.o in rng f by FUNCT_1:def 5;
-      hence o = f.o by cd,f1,TARSKI:def 1;
+      hence o = f.o by A2,A8,TARSKI:def 1;
     end;
   end;
 
@@ -1887,11 +1886,11 @@ proof
   let r be non negative (real number),
       o be Point of TOP-REAL 2,
       f be continuous Function of Tdisk(o,r), Tdisk(o,r);
-  f has_a_fixpoint by Tmain;
+  f has_a_fixpoint by Th14;
   then consider x being set such that
-a1: x is_a_fixpoint_of f by ABIAN:def 5;
+A1: x is_a_fixpoint_of f by ABIAN:def 5;
   take x;
-  x in dom f by a1,ABIAN:def 3;
+  x in dom f by A1,ABIAN:def 3;
   hence x is Point of Tdisk(o,r);
-  thus f.x = x by a1,ABIAN:def 3;
+  thus f.x = x by A1,ABIAN:def 3;
 end;

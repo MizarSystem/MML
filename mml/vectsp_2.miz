@@ -29,7 +29,7 @@ definition
  :Def2: for x being Element of IT holds x * 1_ IT = x & 1_ IT * x = x;
 end;
 
-Lm31:
+Lm1:
 for L being non empty multLoopStr st L is well-unital
   holds L is unital
 proof
@@ -41,17 +41,17 @@ end;
 
 registration
  cluster well-unital -> unital (non empty multLoopStr);
-coherence by Lm31;
+coherence by Lm1;
 end;
 
-Lm30:
+Lm2:
 for L being non empty multLoopStr st L is well-unital holds 1_(L) = 1.L
  proof let L be non empty multLoopStr;
    assume
 A1: L is well-unital;
    then
 A2: for h being Element of L holds h * 1_(L) = h & 1_(L) * h = h by Def2;
-   L is unital by A1,Lm31;
+   L is unital by A1,Lm1;
    hence 1_(L) = 1.L by A2,GROUP_1:def 5;
  end;
 
@@ -255,7 +255,7 @@ end;
                (non empty LoopStr),
          x, y, z for Scalar of R;
 
-Lm1: x + y = z implies x = z - y
+Lm3: x + y = z implies x = z - y
 proof
  assume A1: x + y = z;
  thus x = x + 0.R by RLVECT_1:10
@@ -264,7 +264,7 @@ proof
   .= z - y;
 end;
 
-Lm2: x = z - y implies x + y = z
+Lm4: x = z - y implies x + y = z
 proof
  assume x = z - y;
  then x + y = (z + -y) + y
@@ -276,7 +276,7 @@ end;
 canceled 5;
 
 theorem
-    (x + y = z iff x = z - y) & (x + y = z iff y = z - x) by Lm1,Lm2;
+    (x + y = z iff x = z - y) & (x + y = z iff y = z - x) by Lm3,Lm4;
 
 canceled 11;
 
@@ -496,13 +496,7 @@ A2:   x""=x""*1.SF by VECTSP_1:def 13
 theorem Th50:
   x<>0.SF implies (1.SF)/x=x" & (1.SF)/x"=x
  proof
-       A1: for x holds (1.SF)/x=x"
-          proof
-             let x;
-             (1.SF)/x= 1.SF * x"
-             .=x" by VECTSP_1:def 19;
-             hence thesis;
-          end;
+       A1: for x holds (1.SF)/x=x" by VECTSP_1:def 19;
         x<>0.SF implies (1.SF)/x"=x
       proof
         assume A2: x<>0.SF;
@@ -516,20 +510,15 @@ theorem Th50:
 theorem
   x<>0.SF implies x*((1.SF)/x)=1.SF & ((1.SF)/x)*x=1.SF
 proof
-  assume A2:x<>0.SF;
+  assume A1:x<>0.SF;
   hence x*((1.SF)/x)=x*x" by Th50
-        .=1.SF by A2,Th43;
-  thus ((1.SF)/x)*x=x"*x by A2,Th50
-        .=1.SF by A2,Th43;
+        .=1.SF by A1,Th43;
+  thus ((1.SF)/x)*x=x"*x by A1,Th50
+        .=1.SF by A1,Th43;
 end;
 
 theorem
-     x<>0.SF implies x/x = 1.SF
-proof
-  assume A1: x<>0.SF;
-  thus x/x=x*x"
-   .=1.SF by A1,Th43;
-end;
+     x<>0.SF implies x/x = 1.SF by Th43;
 
 theorem Th53:
   y<>0.SF & z<>0.SF implies x/y=(x*z)/(y*z)
@@ -581,14 +570,7 @@ end;
 theorem
     z<>0.SF implies ( x/z + y/z = (x+y)/z ) & ( x/z - y/z = (x-y)/z )
 proof
- A1: for x,y,z holds ( x/z + y/z = (x+y)/z )
-   proof
-     let x,y,z;
-     thus x/z + y/z=x*z" + y/z
-       .=x*z" + y*z"
-       .=(x+y)*z" by VECTSP_1:def 18
-       .=(x+y)/z;
-    end;
+ A1: for x,y,z holds ( x/z + y/z = (x+y)/z ) by VECTSP_1:def 18;
     z<>0.SF implies x/z - y/z = (x-y)/z
     proof
       assume A2:z<>0.SF;
@@ -731,12 +713,12 @@ definition let R be Abelian add-associative right_zeroed
                .= x'+(0.R) by RLVECT_1:5
                .= x by RLVECT_1:10;
     consider b being Scalar of R such that
-A2:  x' + b = 0.R by RLVECT_1:def 8;
+A1:  x' + b = 0.R by RLVECT_1:def 8;
     reconsider b' = b as Element of IT;
     take b';
     thus x + b' = (the add of IT).(x,b') by RLVECT_1:5
                .= x'+ b by RLVECT_1:5
-               .= 0.IT by A2;
+               .= 0.IT by A1;
    end;
    hence thesis by VECTSP_1:7;
   end;
@@ -745,7 +727,7 @@ A2:  x' + b = 0.R by RLVECT_1:def 8;
 deffunc LEFTMODULE(Ring) = VectSpStr(# the carrier of $1,the add of $1,
               the Zero of $1, the mult of $1 #);
 
-Lm3:
+Lm5:
   LEFTMODULE(R) is Abelian add-associative right_zeroed right_complementable
   proof
 A1:now
@@ -779,10 +761,10 @@ A4:  y + z = y'+ z' by A1;
       let x be Element of LEFTMODULE(R);
       reconsider x'= x as Scalar of R;
       consider b' being Scalar of R such that
-A6:    x' + b' = 0.R by RLVECT_1:def 8;
+A5:    x' + b' = 0.R by RLVECT_1:def 8;
       reconsider b = b' as Element of LEFTMODULE(R);
       take b;
-      thus x+b = 0.(LEFTMODULE(R)) by A1,A6;
+      thus x+b = 0.(LEFTMODULE(R)) by A1,A5;
   end;
 
 registration let R;
@@ -791,7 +773,7 @@ registration let R;
 existence
 proof
     LEFTMODULE(R) is Abelian add-associative right_zeroed right_complementable
- by Lm3;
+ by Lm5;
  hence thesis;
 end;
 end;
@@ -803,13 +785,13 @@ definition let R;
    strict (non empty VectSpStr over R) equals
     VectSpStr (# the carrier of R, the add of R,
                            the Zero of R, the mult of R #);
- coherence by Lm3;
+ coherence by Lm5;
 end;
 
 deffunc RIGHTMODULE(Ring) = RightModStr(# the carrier of $1,the add of $1,
               the Zero of $1, the mult of $1 #);
 
-Lm4:
+Lm6:
   RIGHTMODULE(R) is Abelian add-associative right_zeroed right_complementable
   proof
 A1:now
@@ -841,10 +823,10 @@ A4:  y + z = y'+ z' by A1;
      let x be Element of RIGHTMODULE(R);
      reconsider x'= x as Scalar of R;
       consider b' being Scalar of R such that
-A6:    x' + b' = 0.R by RLVECT_1:def 8;
+A5:    x' + b' = 0.R by RLVECT_1:def 8;
       reconsider b = b' as Element of RIGHTMODULE(R);
       take b;
-      thus x+b = 0.(RIGHTMODULE(R)) by A1,A6;
+      thus x+b = 0.(RIGHTMODULE(R)) by A1,A5;
   end;
 
 registration let R;
@@ -853,7 +835,7 @@ registration let R;
 existence
 proof
     RIGHTMODULE(R) is Abelian add-associative right_zeroed right_complementable
- by Lm4;
+ by Lm6;
  hence thesis;
 end;
 end;
@@ -865,7 +847,7 @@ definition let R;
   right_complementable strict (non empty RightModStr over R) equals
    RightModStr (# the carrier of R, the add of R,
                          the Zero of R, the mult of R #);
- coherence by Lm4;
+ coherence by Lm6;
 end;
 
 definition let R be non empty 1-sorted, V be non empty RightModStr over R;
@@ -896,7 +878,7 @@ end;
 deffunc BIMODULE(Ring,Ring) = BiModStr(# {{}},op2,op0,
 pr2 (the carrier of $1, {{}}), pr1 ({{}},the carrier of $2) #);
 
-Lm5:
+Lm7:
   BIMODULE(R1,R2) is Abelian add-associative right_zeroed right_complementable
   proof
    set G = BiModStr(# {{}},op2,op0,pr2 (the carrier of R1, {{}}),
@@ -922,7 +904,7 @@ existence
 proof
     BIMODULE(R1,R2) is Abelian add-associative right_zeroed
 right_complementable
- by Lm5;
+ by Lm7;
  hence thesis;
 end;
 end;
@@ -934,7 +916,7 @@ definition let R1,R2;
    right_complementable strict (non empty BiModStr over R1,R2) equals
    BiModStr (# {{}},op2,op0,pr2 (the carrier of R1, {{}}),
    pr1 ({{}},the carrier of R2) #);
- coherence by Lm5;
+ coherence by Lm7;
 end;
 
 canceled 13;
@@ -1015,7 +997,7 @@ definition let R;
   VectSp-like (non empty VectSpStr over R);
 end;
 
-Lm6: LeftModule R is VectSp-like
+Lm8: LeftModule R is VectSp-like
 proof
  let x,y be Scalar of R;
  let v,w be Vector of LeftModule R;
@@ -1025,7 +1007,7 @@ end;
 registration let R;
  cluster LeftModule R -> Abelian add-associative right_zeroed
      right_complementable strict VectSp-like;
- coherence by Lm6;
+ coherence by Lm8;
 end;
 
 :: 18. AXIOMS OF LEFT MODULE OF RING
@@ -1125,7 +1107,7 @@ definition let R;
    right_complementable RightMod-like (non empty RightModStr over R);
 end;
 
-Lm7: RightModule R is RightMod-like
+Lm9: RightModule R is RightMod-like
 proof
  let x,y be Scalar of R;
  let v,w be Vector of RightModule R;
@@ -1135,12 +1117,12 @@ end;
 registration let R;
  cluster RightModule R -> Abelian add-associative right_zeroed
    right_complementable RightMod-like;
- coherence by Lm7;
+ coherence by Lm9;
 end;
 
 :: 20. AXIOMS OF RIGHT MODULE OF RING
 
-Lm8: for x,y being Scalar of R1 for p,q being Scalar of R2
+Lm10: for x,y being Scalar of R1 for p,q being Scalar of R2
       for v,w being Vector of BiModule(R1,R2) holds
                x*(v+w) = x*v+x*w &
                (x+y)*v = x*v+y*v &
@@ -1196,7 +1178,7 @@ registration let R1,R2;
          v*(p+q) = v*p+v*q &
          v*(q*p) = (v*q)*p &
          v*(1.R2) = v &
-         x*(v*p) = (x*v)*p by Lm8;
+         x*(v*p) = (x*v)*p by Lm10;
     hence thesis by Def23,Def24,VECTSP_1:def 26;
    end;
 end;
@@ -1238,7 +1220,7 @@ proof
           v*(p+q) = v*p+v*q &
           v*(q*p) = (v*q)*p &
           v*(1.R2) = v &
-          x*(v*p) = (x*v)*p) by Lm8;
+          x*(v*p) = (x*v)*p) by Lm10;
  hence thesis by Def23,Def24,VECTSP_1:def 26;
 end;
 
@@ -1250,4 +1232,4 @@ end;
 
 theorem
   for L being non empty multLoopStr st L is well-unital holds 1_(L) = 1.L
-by Lm30;
+by Lm2;

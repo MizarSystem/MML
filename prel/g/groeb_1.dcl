@@ -40,9 +40,9 @@
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="REALSET2"/>
+<ArticleID name="FINSEQ_3"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="MATRIX_1"/>
-<ArticleID name="MATRIX_2"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="FUNCT_6"/>
@@ -64,20 +64,20 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="10">
-<Func kind="K" nr="413">
+<Func kind="K" nr="400">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="433">
+<Func kind="K" nr="420">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="66"/>
+<Adjective nr="29" value="false"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
-<Adjective nr="82"/>
+<Adjective nr="70"/>
+<Adjective nr="83"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -16,7 +16,8 @@ environ
  registrations LATTICE2, ORDERS_2, RELSET_1, STRUCT_0, SUBSET_1, LATTICES,
       XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions XBOOLE_0, TARSKI, LATTICES, RELAT_1, RELAT_2, ORDERS_2, STRUCT_0;
+ definitions XBOOLE_0, TARSKI, LATTICES, RELAT_1, RELAT_2, ORDERS_2, STRUCT_0,
+ BINOP_1;
  theorems TARSKI, ENUMSET1, ZFMISC_1, FUNCT_1, FUNCT_2, BINOP_1, LATTICES,
       FILTER_0, FILTER_1, LATTICE2, RELAT_1, RELSET_1, ORDERS_2, STRUCT_0,
       XBOOLE_0, XBOOLE_1, RELAT_2, PARTFUN1, ORDERS_1;
@@ -38,11 +39,11 @@ definition let X be set;
    deffunc U(Subset of X,Subset of X) =  $1 \/ $2;
    consider j being BinOp of bool X such that
 A1:  for x,y being Subset of X holds j.(x,y) = U(x,y)
-      from BINOP_1:sch 2;
+      from BINOP_1:sch 4;
    deffunc U(Subset of X,Subset of X) =  $1 /\ $2;
    consider m being BinOp of bool X such that
 A2:  for x,y being Subset of X holds m.(x,y) = U(x,y)
-      from BINOP_1:sch 2;
+      from BINOP_1:sch 4;
    take LattStr(#bool X, j, m#);
    thus thesis by A1,A2;
   end;
@@ -247,11 +248,7 @@ end;
 
 registration let L be Lattice;
   cluster LattPOSet L -> non empty;
-  coherence
-  proof
-        LattPOSet L = RelStr(#the carrier of L, LattRel L#);
-   hence the carrier of LattPOSet L is non empty;
-  end;
+  coherence;
 end;
 
 theorem Th6:
@@ -259,9 +256,7 @@ theorem Th6:
    the LattStr of L1 = the LattStr of L2
   proof let L1,L2 be Lattice such that
 A1:  LattPOSet L1 = LattPOSet L2;
-  LattPOSet L1 = RelStr(#carr(L1), LattRel L1#) &
-    LattPOSet L2 = RelStr(#carr(L2), LattRel L2#);
-   then reconsider j = join(L2), m = met(L2) as BinOp of carr(L1) by A1;
+   reconsider j = join(L2), m = met(L2) as BinOp of carr(L1) by A1;
          now let a,b be Element of L1;
      reconsider x = a, y = b, xy = a"\/"
 b as Element of L2 by A1;
@@ -271,13 +266,13 @@ b as Element of L2 by A1;
       then [x,xy] in LattRel L2 & [y,xy] in LattRel L2 &
       [a,ab] in LattRel L1 & [b,ab] in LattRel L1 by A1,FILTER_1:32;
       then a [= ab & b [= ab & x [= xy & y [= xy by FILTER_1:32;
-then A3:    a"\/"b [= ab & x"\/"y [= xy by FILTER_0:6;
+then A2:    a"\/"b [= ab & x"\/"y [= xy by FILTER_0:6;
       then [ab,a"\/"b] in LattRel L1 by A1,FILTER_1:32;
       then ab [= a"\/"b & join(L1).(a,b) = a"\/"b & j.(x,y) = x"\/"y
        by FILTER_1:32;
-     hence join(L1).(a,b) = j.(a,b) by A3,LATTICES:26;
+     hence join(L1).(a,b) = j.(a,b) by A2,LATTICES:26;
     end;
-then A4:  join(L1) = j by BINOP_1:2;
+then A3:  join(L1) = j by BINOP_1:2;
          now let a,b be Element of L1;
      reconsider x = a, y = b, xy = a"/\"
 b as Element of L2 by A1;
@@ -287,29 +282,23 @@ b as Element of L2 by A1;
       then [xy,x] in LattRel L2 & [xy,y] in LattRel L2 &
       [ab,a] in LattRel L1 & [ab,b] in LattRel L1 by A1,FILTER_1:32;
       then ab [= a & ab [= b & xy [= x & xy [= y by FILTER_1:32;
-then A5:    ab [= a"/\"b & xy [= x"/\"y by FILTER_0:7;
+then A4:    ab [= a"/\"b & xy [= x"/\"y by FILTER_0:7;
       then [a"/\"b,ab] in LattRel L1 by A1,FILTER_1:32;
       then a"/\"b [= ab & met(L1).(a,b) = a"/\"b & m.(x,y) = x"/\"y
        by FILTER_1:32;
-     hence met(L1).(a,b) = m.(a,b) by A5,LATTICES:26;
+     hence met(L1).(a,b) = m.(a,b) by A4,LATTICES:26;
     end;
-   hence thesis by A1,A4,BINOP_1:2;
+   hence thesis by A1,A3,BINOP_1:2;
   end;
 
 definition let L be Lattice, p be Element of L;
  func p% -> Element of LattPOSet L equals   p;
-  correctness
-   proof LattPOSet L = RelStr(#the carrier of L, LattRel L#);
-     hence thesis;
-   end;
+  correctness;
 end;
 
 definition let L be Lattice, p be Element of LattPOSet L;
  func %p -> Element of L equals   p;
-  correctness
-   proof LattPOSet L = RelStr(#the carrier of L, LattRel L#);
-    hence thesis;
-   end;
+  correctness;
 end;
 
 reserve L for Lattice, p,q for Element of L;
@@ -348,39 +337,22 @@ end;
 
 registration let A be non empty RelStr;
  cluster A~ -> non empty;
- coherence
- proof A~ = RelStr(#the carrier of A, (the InternalRel of A)~#);
-  hence the carrier of A~ is non empty;
- end;
+ coherence;
 end;
 
 reserve A for RelStr, a,b,c for Element of A;
 
 theorem
-      A~~ = the RelStr of A
-  proof A~ = RelStr(#the carrier of A, (the InternalRel of A)~#);
-   hence A~~ = RelStr(#the carrier of A, (the InternalRel of A)~~#)
-           .= the RelStr of A;
-  end;
+      A~~ = the RelStr of A;
 
 definition let A be RelStr, a be Element of A;
  func a~ -> Element of A~ equals    a;
-  correctness
-   proof
-          the RelStr of A = RelStr(#the carrier of A, the InternalRel of A#) &
-     A~ = RelStr(#the carrier of A, (the InternalRel of A)~#);
-hence thesis;
-   end;
+  correctness;
 end;
 
 definition let A be RelStr, a be Element of A~;
  func ~a -> Element of A equals    a;
-  correctness
-   proof
-          the RelStr of A = RelStr(#the carrier of A, the InternalRel of A#) &
-     A~ = RelStr(#the carrier of A, (the InternalRel of A)~#);
-     hence thesis;
-   end;
+  correctness;
 end;
 
 theorem Th9:
@@ -770,8 +742,8 @@ A1:  for x,y being Element of A
        thus thesis;
      end;
    consider j being BinOp of the carrier of A such that
-A2:  for x,y being Element of A holds X[x,y,j.[x,y]]
-        from FUNCT_2:sch 7(A1);
+A2:  for x,y being Element of A holds X[x,y,j.(x,y)]
+        from BINOP_1:sch 3(A1);
    defpred X[Element of A,Element of A,set] means
      for x',y' being Element of A st x' = $1 & y' = $2
          holds $3 = x'"/\"y';
@@ -784,31 +756,25 @@ A3:  for x,y being Element of A
        thus thesis;
      end;
    consider m being BinOp of the carrier of A such that
-A4:  for x,y being Element of A holds X[x,y,m.[x,y]]
-        from FUNCT_2:sch 7(A3);
+A4:  for x,y being Element of A holds X[x,y,m.(x,y)]
+        from BINOP_1:sch 3(A3);
    set L = LattStr(#the carrier of A, j, m#);
 A5: now let a,b be Element of L;
       reconsider x = a, y = b as Element of A;
-         j.(y,x) = j.[y,x] & j.(x,y) = j.[x,y] by BINOP_1:def 1;
-      then x"\/"y = y"\/"x & a"\/"b = j.(a,b) & b"\/"a = j.(b,a) & j.(x,y) = x
+      x"\/"y = y"\/"x & a"\/"b = j.(a,b) & b"\/"a = j.(b,a) & j.(x,y) = x
 "\/"y &
       j.(y,x) = y"\/"x by A2;
      hence a"\/"b = b"\/"a;
     end;
 A6: now let a,b,c be Element of L;
-     reconsider x = a, y = b, z = c as Element of A
-   ;
+     reconsider x = a, y = b, z = c as Element of A;
      thus a"\/"(b"\/"c) = j.(a,b"\/"c)
            .= j.(a,j.(b,c))
-           .= j.(a,j.[b,c]) by BINOP_1:def 1
            .= j.(x,y"\/"z) by A2
-           .= j.[x,y"\/"z] by BINOP_1:def 1
            .= x"\/"(y"\/"z) by A2
            .= x"\/"y"\/"z by Th14
-           .= j.[x"\/"y,z] by A2
-           .= j.(x"\/"y,z) by BINOP_1:def 1
-           .= j.(j.[x,y],z) by A2
-           .= j.(j.(x,y),z) by BINOP_1:def 1
+           .= j.(x"\/"y,z) by A2
+           .= j.(j.(x,y),z) by A2
            .= j.(a"\/"b,c)
            .= (a"\/"b)"\/"c;
     end;
@@ -816,16 +782,13 @@ A7: now let a,b be Element of L;
      reconsider x = a, y = b as Element of A;
      thus (a"/\"b)"\/"b = j.(a"/\"b,b)
            .= j.(m.(x,y),y)
-           .= j.(m.[x,y],y) by BINOP_1:def 1
            .= j.(x"/\"y,y) by A4
-           .= j.[x"/\"y,y] by BINOP_1:def 1
            .= (x"/\"y)"\/"y by A2
            .= b by Th17;
     end;
 A8: now let a,b be Element of L;
       reconsider x = a, y = b as Element of A;
-         m.(y,x) = m.[y,x] & m.(x,y) = m.[x,y] by BINOP_1:def 1;
-      then x"/\"y = y"/\"x & a"/\"b = m.(a,b) & b"/\"a = m.(b,a) & m.(x,y) = x
+      x"/\"y = y"/\"x & a"/\"b = m.(a,b) & b"/\"a = m.(b,a) & m.(x,y) = x
 "/\"y &
       m.(y,x) = y"/\"x by A4;
      hence a"/\"b = b"/\"a;
@@ -834,15 +797,11 @@ A9: now let a,b,c be Element of L;
      reconsider x = a, y = b, z = c as Element of A;
      thus a"/\"(b"/\"c) = m.(a,b"/\"c)
            .= m.(a,m.(b,c))
-           .= m.(a,m.[b,c]) by BINOP_1:def 1
            .= m.(x,y"/\"z) by A4
-           .= m.[x,y"/\"z] by BINOP_1:def 1
            .= x"/\"(y"/\"z) by A4
            .= x"/\"y"/\"z by Th16
-           .= m.[x"/\"y,z] by A4
-           .= m.(x"/\"y,z) by BINOP_1:def 1
-           .= m.(m.[x,y],z) by A4
-           .= m.(m.(x,y),z) by BINOP_1:def 1
+           .= m.(x"/\"y,z) by A4
+           .= m.(m.(x,y),z) by A4
            .= m.(a"/\"b,c)
            .= (a"/\"b)"/\"c;
     end;
@@ -850,9 +809,7 @@ A9: now let a,b,c be Element of L;
      reconsider x = a, y = b as Element of A;
      thus a"/\"(a"\/"b) = m.(a,a"\/"b)
            .= m.(x,j.(x,y))
-           .= m.(x,j.[x,y]) by BINOP_1:def 1
            .= m.(x,x"\/"y) by A2
-           .= m.[x,x"\/"y] by BINOP_1:def 1
            .= x"/\"(x"\/"y) by A4
            .= a by Th18;
     end;
@@ -871,8 +828,7 @@ A10:  LattRel L = {[p,q] where p is Element of L,
          then consider p,q being Element of L such that
 A11:        [x,y] = [p,q] & p [= q by A10;
          reconsider p' = p, q' = q as Element of A;
-               p'"\/"q' = j.[p',q'] by A2
-                .= j.(p',q') by BINOP_1:def 1
+               p'"\/"q' = j.(p',q') by A2
                 .= p"\/"q
                 .= q by A11,LATTICES:def 3;
           then p' <= q' by Lm1;
@@ -888,8 +844,7 @@ A13:     x1 in the carrier of A & x2 in the carrier of A & [x,y] = [x1,x2]
             x1 <= x2 & x2 <= x2 by A12,A13,ORDERS_2:def 9;
        then x1"\/"x2 <= x2 & x2 <= x1"\/"x2 by Lm1;
        then x2 = x1"\/"x2 by ORDERS_2:25
-         .= j.[x1,x2] by A2
-         .= j.(x1,x2) by BINOP_1:def 1
+         .= j.(x1,x2) by A2
          .= y1"\/"y2;
        then y1 [= y2 by LATTICES:def 3;
       hence thesis by A10,A13;
@@ -921,16 +876,16 @@ A1:  LattRel L = {[p,q]: p [= q} & LattRel (L.:) = {[p',q']
         proof assume [x,y] in (LattRel L)~;
           then [y,x] in LattRel L by RELAT_1:def 7;
          then consider p,q such that
-A3:        [y,x] = [p,q] & p [= q by A1;
+A2:        [y,x] = [p,q] & p [= q by A1;
          reconsider p' = p, q' = q as Element of L.: by A1;
-               x = q & y = p & q' [= p' by A3,LATTICE2:53,ZFMISC_1:33;
+               x = q & y = p & q' [= p' by A2,LATTICE2:53,ZFMISC_1:33;
          hence [x,y] in LattRel (L.:) by A1;
         end;
       assume [x,y] in LattRel (L.:);
       then consider p', q' being Element of L.: such that
-A4:     [x,y] = [p',q'] & p' [= q' by A1;
+A3:     [x,y] = [p',q'] & p' [= q' by A1;
       reconsider p = p', q = q' as Element of L by A1;
-            x = p & y = q & q [= p by A4,LATTICE2:54,ZFMISC_1:33;
+            x = p & y = q & q [= p by A3,LATTICE2:54,ZFMISC_1:33;
        then [y,x] in LattRel L by A1;
       hence thesis by RELAT_1:def 7;
      end;
@@ -1299,20 +1254,19 @@ A2:       X is_<=_than a &
 A3:       p% = p & p = a;
         thus X is_less_than p
           proof let q be Element of latt A;
-          q% = q;
-           then reconsider b = q as Element of A by A1;
+           reconsider b = q as Element of A by A1;
            assume q in X; then b <= a by A2,Def9;
             then [b,a] in the InternalRel of A by ORDERS_2:def 9;
             then q% <= a' by A1,ORDERS_2:def 9;
            hence q [= p by A3,Th7;
           end;
         let q be Element of latt A; assume X is_less_than q;
-        then A5:       X is_<=_than q% by Th30;
+        then A4:       X is_<=_than q% by Th30;
         reconsider b = q% as Element of A by A1;
               X is_<=_than b
           proof let c be Element of A;
            reconsider c' = c as Element of B by A1;
-           assume c in X; then c' <= q% by A5,Def9;
+           assume c in X; then c' <= q% by A4,Def9;
             then [c,b] in the InternalRel of the RelStr of A by A1,
 ORDERS_2:def 9;
            hence c <= b by ORDERS_2:def 9;
@@ -1408,37 +1362,36 @@ A2:  for X, a holds a"/\""\/"(X,C) [= "\/"({a"/\"b: b in X}, C);
 theorem Th34:
  a = "/\"(X,C) iff a is_less_than X & for b st b is_less_than X holds b [= a
   proof set Y = {b: b is_less_than X};
-    "/\"(X,C) = "\/"(Y, C);
-then A2:  a = "/\"(X,C) iff Y is_less_than a &
+A1:  a = "/\"(X,C) iff Y is_less_than a &
      for c st Y is_less_than c holds a [= c by Def21;
    thus a = "/\"(X,C) implies a is_less_than X &
       for b st b is_less_than X holds b [= a
-     proof assume A3: a = "/\"(X,C);
-then A4:     Y is_less_than a & for c st Y is_less_than c holds a [= c by
+     proof assume A2: a = "/\"(X,C);
+then A3:     Y is_less_than a & for c st Y is_less_than c holds a [= c by
 Def21;
       thus a is_less_than X
         proof let b such that
-A5:        b in X;
+A4:        b in X;
                Y is_less_than b
            proof let c; assume c in Y;
              then ex d being Element of C st c = d &
                    d is_less_than X;
-            hence thesis by A5,Def16;
+            hence thesis by A4,Def16;
            end;
-         hence thesis by A3,Def21;
+         hence thesis by A2,Def21;
         end;
       let b; assume b is_less_than X; then b in Y;
-      hence thesis by A4,Def17;
+      hence thesis by A3,Def17;
      end;
    assume
-A6:  a is_less_than X & for b st b is_less_than X holds b [= a;
-A7:  Y is_less_than a
+A5:  a is_less_than X & for b st b is_less_than X holds b [= a;
+A6:  Y is_less_than a
      proof let b; assume b in Y;
        then ex c st b = c & c is_less_than X;
-      hence thesis by A6;
+      hence thesis by A5;
      end;
-         a in Y by A6;
-   hence thesis by A2,A7,Def17;
+         a in Y by A5;
+   hence thesis by A1,A6,Def17;
   end;
 
 theorem Th35:

@@ -16,15 +16,15 @@
 <Func kind="K" nr="28"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="7"/>
 <Adjective nr="8"/>
 <Adjective nr="9"/>
-<Adjective nr="17" value="false"/>
-<Adjective nr="18"/>
+<Adjective nr="10"/>
+<Adjective nr="18" value="false"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -19,7 +19,6 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLSUB_1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 <ArticleID name="RSSPACE"/>
@@ -27,60 +26,60 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="G" nr="4">
+<Func kind="K" nr="129"/>
+<Func kind="K" nr="134"/>
 <Func kind="K" nr="132"/>
-<Func kind="K" nr="137"/>
-<Func kind="K" nr="135"/>
-<Func kind="K" nr="136"/>
+<Func kind="K" nr="133"/>
 </Func>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="142"/>
+<Func kind="K" nr="139"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="36">
-<Func kind="K" nr="138"/>
+<Adjective nr="37">
+<Func kind="K" nr="135"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
 <Func kind="G" nr="6">
-<Func kind="K" nr="142"/>
-<Func kind="K" nr="141">
-<Func kind="K" nr="138"/>
-<Func kind="K" nr="142"/>
+<Func kind="K" nr="139"/>
+<Func kind="K" nr="138">
+<Func kind="K" nr="135"/>
+<Func kind="K" nr="139"/>
 </Func>
-<Func kind="K" nr="139">
-<Func kind="K" nr="138"/>
-<Func kind="K" nr="142"/>
+<Func kind="K" nr="136">
+<Func kind="K" nr="135"/>
+<Func kind="K" nr="139"/>
 </Func>
-<Func kind="K" nr="140">
-<Func kind="K" nr="138"/>
-<Func kind="K" nr="142"/>
+<Func kind="K" nr="137">
+<Func kind="K" nr="135"/>
+<Func kind="K" nr="139"/>
 </Func>
-<Func kind="K" nr="143"/>
+<Func kind="K" nr="140"/>
 </Func>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="42"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="144"/>
+<Func kind="K" nr="141"/>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -13,7 +13,6 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -36,10 +35,10 @@
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="204">
+<Func kind="K" nr="201">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -48,20 +47,20 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="24" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="30"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="90">
+<Adjective nr="7" value="false"/>
+<Adjective nr="21"/>
+<Adjective nr="24"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="84">
 <Func kind="U" nr="1">
-<Func kind="K" nr="204">
+<Func kind="K" nr="201">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 </Cluster>
 </RCluster>
 </Registrations>

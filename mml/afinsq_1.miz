@@ -387,9 +387,9 @@ proof let D be non empty set;
     set p = k --> y;
 A1: dom p = k & for n st n in k holds p.n= y by FUNCOP_1:13,19;
     then reconsider p = k --> y as XFinSequence by Th7;
-X:  rng p c= {y} by FUNCOP_1:19;
+A2:  rng p c= {y} by FUNCOP_1:19;
    {y} c= D by ZFMISC_1:37;
-   then rng p c= D by X,XBOOLE_1:1;
+   then rng p c= D by A2,XBOOLE_1:1;
    then reconsider p as XFinSequence of D by ORDINAL1:def 8;
   take p;
   thus thesis by A1, Def1;
@@ -756,24 +756,17 @@ Lm1:
  definition let x;
   redefine func <%x%> -> Function means
 :Def5:  dom it = 1 & it.0 = x;
-   coherence
-   proof
-      set p = <%x%>;
-   p = {[0,x]};
-      then reconsider p as Function by GRFUNC_1:15;
-         dom p = 1 by CARD_5:1,RELAT_1:23;
-     hence thesis;
-   end;
+   coherence by GRFUNC_1:15;
    compatibility
    proof
      let f be Function;
      hereby assume f = <%x%>;
-then A2:    f = { [0,x] };
+then A1:    f = { [0,x] };
        hence dom f = 1 by CARD_5:1,RELAT_1:23;
-          [0,x] in f by A2,TARSKI:def 1;
+          [0,x] in f by A1,TARSKI:def 1;
        hence f.0 = x by FUNCT_1:8;
      end;
-     assume A3: dom f = 1 & f.0 = x;
+     assume A2: dom f = 1 & f.0 = x;
      reconsider g = { [0,f.0] } as Function by GRFUNC_1:15;
         f = { [0,f.0] }
      proof
@@ -781,17 +774,17 @@ then A2:    f = { [0,x] };
       proof
         hereby assume [y,z] in f;
          then y in {0} & z in rng f & rng f = {f.0}
-            by A3,CARD_5:1,FUNCT_1:14,RELAT_1:def 4,def 5;
+            by A2,CARD_5:1,FUNCT_1:14,RELAT_1:def 4,def 5;
          then y = 0 & z = f.0 by TARSKI:def 1;
          hence [y,z] in g by TARSKI:def 1;
         end;
         assume [y,z] in g;
-        then y = 0 & z = f.0 & 0 in dom f by A3,Lm1,CARD_5:1,TARSKI:def 1;
+        then y = 0 & z = f.0 & 0 in dom f by A2,Lm1,CARD_5:1,TARSKI:def 1;
         hence [y,z] in f by FUNCT_1:def 4;
       end;
       hence thesis by RELAT_1:def 2;
      end;
-    hence thesis by A3;
+    hence thesis by A2;
   end;
  end;
 
@@ -837,60 +830,22 @@ end;
 
 registration let x,y;
   cluster <%x,y%> -> Function-like Relation-like;
-  coherence
-  proof
-       <%x%>^<%y%> = <%x,y%>;
-    hence thesis;
-  end;
-
+  coherence;
   let z;
   cluster <%x,y,z%> -> Function-like Relation-like;
-  coherence
-  proof
-       <%x%>^<%y%>^<%z%> = <%x,y,z%>;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration let x,y;
   cluster <%x,y%> -> finite T-Sequence-like;
-  coherence
-  proof
-       <%x%>^<%y%> = <%x,y%>;
-    hence thesis;
-  end;
-
+  coherence;
   let z;
   cluster <%x,y,z%> -> finite T-Sequence-like;
-  coherence
-  proof
-       <%x%>^<%y%>^<%z%> = <%x,y,z%>;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 theorem
-     <%x%> = { [0,x] }
-proof
-    for z holds z in <%x%> iff z=[0,x]
-   proof let z;
-      thus z in <%x%> implies z=[0,x]
-           proof assume A1: z in <%x%>;
-              then consider y1,y2 such that A2: [y1,y2]=z by RELAT_1:def 1;
-           A3: y1 in dom <%x%> & y2=<%x%>.y1 by A1,A2,FUNCT_1:8;
-then A4:              y1 in {0} by Def5,CARD_5:1;
-            then y2 = <%x%>.0 by A3,TARSKI:def 1
-              .= x by Def5;
-             hence z = [0,x] by A2,A4,TARSKI:def 1;
-           end;
-        assume A5: z=[0,x];
-             0 in 0+1 by Th1;
-      then A6:  0 in dom <%x%> by Def5;
-             <%x%>.0=x by Def5;
-       hence z in <%x%> by A5,A6,FUNCT_1:8;
-   end;
-  hence thesis;
-end;
+     <%x%> = { [0,x] };
 
 theorem Th36:
    p=<%x%> iff dom p = 1 & rng p = {x}
@@ -946,14 +901,7 @@ end;
 
 theorem Th41:
   <%x,y,z%>=<%x%>^<%y,z%> &
-  <%x,y,z%>=<%x,y%>^<%z%>
-proof
-  thus <%x,y,z%>=<%x%>^<%y%>^<%z%>
-          .=<%x%>^(<%y%>^<%z%>) by Th30
-          .=<%x%>^<%y,z%>;
-  thus <%x,y,z%>=<%x%>^<%y%>^<%z%>
-         .=<%x,y%>^<%z%>;
-end;
+  <%x,y,z%>=<%x,y%>^<%z%> by Th30;
 
 theorem Th42:
   p = <%x,y%> iff len p = 2 & p.0=x & p.1=y

@@ -37,8 +37,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="36">
+<Adjective nr="30"/>
+<Adjective nr="37">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -61,11 +61,11 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="5"/>
-<Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
 <Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </RCluster>
 <CCluster>
@@ -80,8 +80,8 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="29"/>
-<Adjective nr="36">
+<Adjective nr="30"/>
+<Adjective nr="37">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

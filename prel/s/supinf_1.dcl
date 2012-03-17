@@ -21,15 +21,6 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="21"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
 <Adjective nr="22"/>
 </Cluster>
 </RCluster>
@@ -40,6 +31,15 @@
 </Typ>
 <Cluster>
 <Adjective nr="23"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="24"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -117,7 +117,7 @@
 <Func kind="K" nr="66"/>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -128,9 +128,9 @@
 <Func kind="K" nr="52"/>
 </Typ>
 <Cluster>
-<Adjective nr="17"/>
 <Adjective nr="18"/>
-<Adjective nr="23"/>
+<Adjective nr="19"/>
+<Adjective nr="24"/>
 </Cluster>
 </CCluster>
 </Registrations>

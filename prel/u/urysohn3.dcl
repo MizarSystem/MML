@@ -32,8 +32,8 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="17"/>
-<Adjective nr="24"/>
+<Adjective nr="18"/>
+<Adjective nr="25"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -26,16 +26,16 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="10"/>
 <Adjective nr="11"/>
 <Adjective nr="12"/>
-<Adjective nr="19"/>
+<Adjective nr="13"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
-<Adjective nr="22" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="22"/>
+<Adjective nr="23" value="false"/>
 <Adjective nr="24"/>
-<Adjective nr="25" value="false"/>
+<Adjective nr="25"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -45,13 +45,13 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
-<Adjective nr="22" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="22"/>
+<Adjective nr="23" value="false"/>
 <Adjective nr="24"/>
-<Adjective nr="25" value="false"/>
+<Adjective nr="25"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </RCluster>
 </Registrations>

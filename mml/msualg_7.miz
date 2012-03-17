@@ -9,18 +9,20 @@ environ
  vocabularies PBOOLE, MSUALG_5, EQREL_1, RELAT_1, FUNCT_1, MSUALG_4, PRALG_2,
       LATTICES, BOOLE, CLOSURE2, MSUALG_2, SETFAM_1, FUNCT_4, CANTOR_1,
       ZF_REFLE, BHSP_3, LATTICE3, MSSUBFAM, NAT_LAT, RCOMP_1, REAL_LAT,
-      SQUARE_1, BINOP_1, SUPINF_1, ORDINAL2, ARYTM_3, ARYTM_1, SEQ_2, MSUALG_7;
+      SQUARE_1, BINOP_1, SUPINF_1, ORDINAL2, ARYTM_3, ARYTM_1, SEQ_2, MSUALG_7,
+      REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, SUPINF_1, REAL_1,
       SQUARE_1, STRUCT_0, RELSET_1, DOMAIN_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      RCOMP_1, EQREL_1, BINOP_1, PBOOLE, LATTICES, LATTICE3, NAT_LAT, REAL_LAT,
+      RCOMP_1, EQREL_1, BINOP_1, REALSET1,
+      PBOOLE, LATTICES, LATTICE3, NAT_LAT, REAL_LAT,
       MSUALG_3, MSUALG_4, MSUALG_5, SETFAM_1, MSSUBFAM, CLOSURE2;
  constructors DOMAIN_1, SUPINF_1, SQUARE_1, REAL_1, BINOP_1, LATTICE3,
       REAL_LAT, RCOMP_1, MSUALG_3, MSUALG_5, CLOSURE2, MEMBERED, MSSUBFAM,
-      PRALG_2, SETFAM_1;
+      PRALG_2, SETFAM_1, REALSET1;
  registrations SUBSET_1, STRUCT_0, LATTICE3, SUPINF_1, MSSUBFAM, CLOSURE2,
-      LATTICES, XREAL_0, RELSET_1, XBOOLE_0, MEMBERED;
+      LATTICES, XREAL_0, RELSET_1, XBOOLE_0, MEMBERED, REALSET1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, LATTICE3, XBOOLE_0;
+ definitions TARSKI, LATTICE3, XBOOLE_0, BINOP_1, REALSET1;
  theorems TARSKI, PBOOLE, MSSUBFAM, LATTICE3, VECTSP_8, MSUALG_4, MSUALG_5,
       ZFMISC_1, RELSET_1, SETFAM_1, EQREL_1, LATTICES, NAT_LAT, BINOP_1,
       FUNCT_1, REAL_LAT, FUNCT_2, SQUARE_1, REAL_1, REAL_2, RCOMP_1, SUPINF_1,
@@ -548,19 +550,15 @@ begin
     let a',b' be Element of L';
     assume A1: a = a' & b = b';
     thus a "\/" b = (the L_join of L).(a,b) by LATTICES:def 1
-     .= (the L_join of L). [a',b'] by A1,BINOP_1:def 1
-     .= ((the L_join of L) | [:the carrier of L',the carrier of L':]). [a',b']
-                                                                by FUNCT_1:72
-     .= ((the L_join of L) | [:the carrier of L',the carrier of L':]).(a',b')
-                                                            by BINOP_1:def 1
+     .= (the L_join of L). [a',b'] by A1
+     .= ((the L_join of L)||the carrier of L'). [a',b'] by FUNCT_1:72
+     .= ((the L_join of L)||the carrier of L').(a',b')
      .= (the L_join of L').(a',b') by NAT_LAT:def 16
      .= a' "\/" b' by LATTICES:def 1;
     thus a "/\" b = (the L_meet of L).(a,b) by LATTICES:def 2
-     .= (the L_meet of L). [a',b'] by A1,BINOP_1:def 1
-     .= ((the L_meet of L) | [:the carrier of L',the carrier of L':]). [a',b']
-                                                                by FUNCT_1:72
-     .= ((the L_meet of L) | [:the carrier of L',the carrier of L':]).(a',b')
-                                                            by BINOP_1:def 1
+     .= (the L_meet of L). [a',b'] by A1
+     .= ((the L_meet of L)||the carrier of L'). [a',b'] by FUNCT_1:72
+     .= ((the L_meet of L)||the carrier of L').(a',b')
      .= (the L_meet of L').(a',b') by NAT_LAT:def 16
      .= a' "/\" b' by LATTICES:def 2;
    end;
@@ -815,14 +813,14 @@ begin
    let r1,r2 such that A1: r1 <= r2;
    func RealSubLatt(r1,r2) -> strict Lattice means :Def4:
     the carrier of it = [.r1,r2.] &
-    the L_join of it = maxreal|([:[.r1,r2.],[.r1,r2.]:] qua set) &
-    the L_meet of it = minreal|([:[.r1,r2.],[.r1,r2.]:] qua set);
+    the L_join of it = maxreal||[.r1,r2.] &
+    the L_meet of it = minreal||[.r1,r2.];
    existence
    proof
         r2 in { r : r1 <= r & r <= r2 } by A1;
     then reconsider A = [.r1,r2.] as non empty set by RCOMP_1:def 1;
         [:A,A:] c= [:REAL,REAL:] by ZFMISC_1:119;
-    then reconsider Ma = maxreal|[:A,A:] , Mi = minreal|[:A,A:]
+    then reconsider Ma = maxreal||A , Mi = minreal||A
                                    as Function of [:A,A:],REAL by FUNCT_2:38;
     A2: dom Ma = [:A,A:] & dom Mi = [:A,A:] by FUNCT_2:def 1;
         now let x;
@@ -836,7 +834,7 @@ begin
      then consider y2 be Element of REAL such that
       A7: x2 = y2 & r1 <= y2 & y2 <= r2;
          Ma.x = maxreal. [x1,x2] by A3,A4,FUNCT_1:72
-         .= maxreal.(x1,x2) by BINOP_1:def 1
+         .= maxreal.(x1,x2)
          .= max(y1,y2) by A6,A7,REAL_LAT:def 2;
      then Ma.x = y1 or Ma.x = y2 by SQUARE_1:49;
      then Ma.x in { r : r1 <= r & r <= r2 } by A6,A7;
@@ -854,7 +852,7 @@ begin
      then consider y2 be Element of REAL such that
       A12: x2 = y2 & r1 <= y2 & y2 <= r2;
          Mi.x = minreal. [x1,x2] by A8,A9,FUNCT_1:72
-         .= minreal.(x1,x2) by BINOP_1:def 1
+         .= minreal.(x1,x2)
          .= min(y1,y2) by A11,A12,REAL_LAT:def 1;
      then Mi.x = y1 or Mi.x = y2 by SQUARE_1:38;
      then Mi.x in { r : r1 <= r & r <= r2 } by A11,A12;
@@ -873,13 +871,13 @@ begin
     reconsider L = L' as non empty LattStr;
     A15: now let a,b be Element of L;
      thus a"\/"b = (the L_join of L).(a,b) by LATTICES:def 1
-           .= (maxreal|[:A,A:]). [a,b] by BINOP_1:def 1
+           .= (maxreal||A). [a,b]
            .= maxreal. [a,b] by FUNCT_1:72
-           .= maxreal.(a,b) by BINOP_1:def 1;
+           .= maxreal.(a,b);
      thus a"/\"b = (the L_meet of L).(a,b) by LATTICES:def 2
-           .= (minreal|[:A,A:]). [a,b] by BINOP_1:def 1
+           .= (minreal||A). [a,b]
            .= minreal. [a,b] by FUNCT_1:72
-           .= minreal.(a,b) by BINOP_1:def 1;
+           .= minreal.(a,b);
     end;
     A16: now let p,q be Element of L;
      reconsider p' = p, q' = q as Element of R by A13;
@@ -940,8 +938,8 @@ begin
     set L' = RealSubLatt(r1,r2);
     reconsider R1 = r1 , R2 = r2 as R_eal by SUPINF_1:10;
     A2: the carrier of L' = [.r1,r2.] &
-    the L_join of L' = maxreal|([:[.r1,r2.],[.r1,r2.]:] qua set) &
-    the L_meet of L' = minreal|([:[.r1,r2.],[.r1,r2.]:] qua set) by A1,Def4;
+    the L_join of L' = maxreal||[.r1,r2.] &
+    the L_meet of L' = minreal||[.r1,r2.] by A1,Def4;
         now let X be Subset of L';
      per cases;
       suppose A3: X is empty;
@@ -962,10 +960,10 @@ begin
          A5: b = b1 & r1 <= b1 & b1 <= r2;
         reconsider b' = b as Element of REAL by A4;
         assume b is_less_than X;
-            b "/\" a = (minreal|([:A,A:] qua set)).(b,a) by A2,LATTICES:def 2
-              .= (minreal|([:A,A:] qua set)). [b,a] by BINOP_1:def 1
+            b "/\" a = (minreal||A).(b,a) by A2,LATTICES:def 2
+              .= (minreal||A). [b,a]
               .= minreal. [b,a] by A2,FUNCT_1:72
-              .= minreal.(b,a) by BINOP_1:def 1
+              .= minreal.(b,a)
               .= min(b',r2) by REAL_LAT:def 1
               .= b by A5,SQUARE_1:def 1;
         hence b [= a by LATTICES:21;
@@ -1047,10 +1045,10 @@ RCOMP_1:def 1;
          then A1 <=' Q by A7,SUPINF_1:def 10;
          then consider a1 , q1 be Real such that
           A18: a1 = A1 & q1 = Q & a1 <= q1 by A17,SUPINF_1:16;
-             a "/\" q = (minreal|([:A,A:] qua set)).(a,q) by A2,LATTICES:def 2
-               .= (minreal|([:A,A:] qua set)). [a,q] by BINOP_1:def 1
+             a "/\" q = (minreal||A).(a,q) by A2,LATTICES:def 2
+               .= (minreal||A). [a,q]
                .= minreal. [a,q] by A2,FUNCT_1:72
-               .= minreal.(a,q) by BINOP_1:def 1
+               .= minreal.(a,q)
                .= min(a',q') by REAL_LAT:def 1
                .= a by A18,SQUARE_1:def 1;
          hence a [= q by LATTICES:21;
@@ -1068,9 +1066,9 @@ RCOMP_1:def 1;
          then reconsider h' = h as Real;
          A21: b [= h1 by A19,A20,LATTICE3:def 16;
              min(b',h') = minreal.(b,h1) by REAL_LAT:def 1
-                       .= minreal. [b,h1] by BINOP_1:def 1
-                       .= (minreal|([:A,A:] qua set)). [b,h1] by A2,FUNCT_1:72
-                       .= (minreal|([:A,A:] qua set)).(b,h1) by BINOP_1:def 1
+                       .= minreal. [b,h1]
+                       .= (minreal||A). [b,h1] by A2,FUNCT_1:72
+                       .= (minreal||A).(b,h1)
                        .= b "/\" h1 by A2,LATTICES:def 2
                        .= b' by A21,LATTICES:21;
          then b' <= h' by SQUARE_1:def 1;
@@ -1080,10 +1078,10 @@ RCOMP_1:def 1;
         then B <=' A1 by SUPINF_1:def 17;
         then consider b1 , a1 be Real such that
          A22: b1 = B & a1 = A1 & b1 <= a1 by A11,SUPINF_1:16;
-            b "/\" a = (minreal|([:A,A:] qua set)).(b,a) by A2,LATTICES:def 2
-              .= (minreal|([:A,A:] qua set)). [b,a] by BINOP_1:def 1
+            b "/\" a = (minreal||A).(b,a) by A2,LATTICES:def 2
+              .= (minreal||A). [b,a]
               .= minreal. [b,a] by A2,FUNCT_1:72
-              .= minreal.(b,a) by BINOP_1:def 1
+              .= minreal.(b,a)
               .= min(b',a') by REAL_LAT:def 1
               .= b by A22,SQUARE_1:def 1;
         hence b [= a by LATTICES:21;
@@ -1102,10 +1100,9 @@ RCOMP_1:def 1;
     then reconsider A = [.0,1.] as non empty set by RCOMP_1:def 1;
     set L = RealSubLatt(0,1);
     A2: A = the carrier of L &
-     the L_join of L = maxreal|([:[.0,1.],[.0,1.]:] qua set) &
-     the L_meet of L = minreal|([:[.0,1.],[.0,1.]:] qua set) by Def4;
-    then reconsider Ma = maxreal|([:A,A:] qua set),
-               Mi = minreal|([:A,A:] qua set) as BinOp of A;
+     the L_join of L = maxreal||[.0,1.] &
+     the L_meet of L = minreal||[.0,1.] by Def4;
+    then reconsider Ma = maxreal||A, Mi = minreal||A as BinOp of A;
     reconsider L as complete Lattice by Th21;
     set B = {0,1} \/ ].1/2,1.[;
     A3: B = {0} \/ { x where x is Element of REAL : 1/2 < x & x <= 1 }
@@ -1177,7 +1174,7 @@ RCOMP_1:def 1;
     end;
     then A11: B c= A by TARSKI:def 3;
     then A12: [:B,B:] c= [:A,A:] by ZFMISC_1:119;
-    then reconsider ma = Ma|[:B,B:] , mi = Mi|[:B,B:]
+    then reconsider ma = Ma||B , mi = Mi||B
                                       as Function of [:B,B:],A by FUNCT_2:38;
     A13: dom ma = [:B,B:] & dom mi = [:B,B:] by FUNCT_2:def 1;
         now let x' be set;
@@ -1192,7 +1189,7 @@ RCOMP_1:def 1;
          then A18: x2 = 0 by TARSKI:def 1;
              ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
               .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
-              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= maxreal.(x1,x2)
               .= max(0,0) by A17,A18,REAL_LAT:def 2
               .= 0;
          then ma.x' in {0} by TARSKI:def 1;
@@ -1203,7 +1200,7 @@ RCOMP_1:def 1;
           A19: x2 = y2 & 1/2 < y2 & y2 <= 1;
              ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
               .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
-              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= maxreal.(x1,x2)
               .= max(0,y2) by A17,A19,REAL_LAT:def 2;
          then ma.x' = 0 or ma.x' = y2 by SQUARE_1:49;
          then ma.x' in {0} or ma.x' in
@@ -1222,7 +1219,7 @@ RCOMP_1:def 1;
          then A21: x2 = 0 by TARSKI:def 1;
              ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
               .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
-              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= maxreal.(x1,x2)
               .= max(y1,0) by A20,A21,REAL_LAT:def 2;
          then ma.x' = y1 or ma.x' = 0 by SQUARE_1:49;
          then ma.x' in { x where x is Element of REAL : 1/2 < x & x <= 1 }
@@ -1234,7 +1231,7 @@ RCOMP_1:def 1;
           A22: x2 = y2 & 1/2 < y2 & y2 <= 1;
              ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
               .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
-              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= maxreal.(x1,x2)
               .= max(y1,y2) by A20,A22,REAL_LAT:def 2;
          then ma.x' = y1 or ma.x' = y2 by SQUARE_1:49;
          then ma.x' in { x where x is Element of REAL : 1/2 < x & x <= 1 }
@@ -1260,7 +1257,7 @@ RCOMP_1:def 1;
          then A27: x2 = 0 by TARSKI:def 1;
              mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
               .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
-              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= minreal.(x1,x2)
               .= min(0,0) by A26,A27,REAL_LAT:def 1
               .= 0;
          then mi.x' in {0} by TARSKI:def 1;
@@ -1271,7 +1268,7 @@ RCOMP_1:def 1;
           A28: x2 = y2 & 1/2 < y2 & y2 <= 1;
              mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
               .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
-              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= minreal.(x1,x2)
               .= min(0,y2) by A26,A28,REAL_LAT:def 1;
          then mi.x' = 0 or mi.x' = y2 by SQUARE_1:38;
          then mi.x' in {0} or mi.x' in
@@ -1290,7 +1287,7 @@ RCOMP_1:def 1;
          then A30: x2 = 0 by TARSKI:def 1;
              mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
               .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
-              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= minreal.(x1,x2)
               .= min(y1,0) by A29,A30,REAL_LAT:def 1;
          then mi.x' = y1 or mi.x' = 0 by SQUARE_1:38;
          then mi.x' in { x where x is Element of REAL : 1/2 < x & x <= 1 }
@@ -1302,7 +1299,7 @@ RCOMP_1:def 1;
           A31: x2 = y2 & 1/2 < y2 & y2 <= 1;
              mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
               .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
-              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= minreal.(x1,x2)
               .= min(y1,y2) by A29,A31,REAL_LAT:def 1;
          then mi.x' = y1 or mi.x' = y2 by SQUARE_1:38;
          then mi.x' in { x where x is Element of REAL : 1/2 < x & x <= 1 }
@@ -1342,15 +1339,15 @@ RCOMP_1:def 1;
     A36: now let a,b be Element of L';
      A37: [a,b] in [:B,B:];
      thus a"\/"b = (the L_join of L').(a,b) by LATTICES:def 1
-           .= (Ma|[:B,B:]). [a,b] by BINOP_1:def 1
-           .= (maxreal|[:A,A:]). [a,b] by FUNCT_1:72
+           .= (Ma||B). [a,b]
+           .= (maxreal||A). [a,b] by FUNCT_1:72
            .= maxreal. [a,b] by A12,A37,FUNCT_1:72
-           .= maxreal.(a,b) by BINOP_1:def 1;
+           .= maxreal.(a,b);
      thus a"/\"b = (the L_meet of L').(a,b) by LATTICES:def 2
-           .= (Mi|[:B,B:]). [a,b] by BINOP_1:def 1
-           .= (minreal|[:A,A:]). [a,b] by FUNCT_1:72
+           .= (Mi||B). [a,b]
+           .= (minreal||A). [a,b] by FUNCT_1:72
            .= minreal. [a,b] by A12,A37,FUNCT_1:72
-           .= minreal.(a,b) by BINOP_1:def 1;
+           .= minreal.(a,b);
     end;
     A38: now let p,q be Element of L';
      reconsider p' = p , q' = q as Element of L by A34;
@@ -1424,9 +1421,9 @@ RCOMP_1:def 1;
        reconsider z1 = z as Element of REAL by TARSKI:def 3;
        A48: z [= "\/" (X,L) by A44,A47,LATTICE3:def 17;
            min(z1,y) = minreal.(z,"\/" (X,L)) by A43,REAL_LAT:def 1
-                    .= minreal. [z,"\/" (X,L)] by BINOP_1:def 1
-                    .= (minreal|[:A,A:]). [z,"\/" (X,L)] by A2,FUNCT_1:72
-                    .= (minreal|[:A,A:]).(z,"\/" (X,L)) by BINOP_1:def 1
+                    .= minreal. [z,"\/" (X,L)]
+                    .= (minreal||A). [z,"\/" (X,L)] by A2,FUNCT_1:72
+                    .= (minreal||A).(z,"\/" (X,L))
                     .= z "/\" "\/" (X,L) by A2,LATTICES:def 2
                     .= z1 by A48,LATTICES:21;
        then z1 <= y by SQUARE_1:def 1;
@@ -1449,10 +1446,10 @@ RCOMP_1:def 1;
          then consider e be Element of REAL such that
           A51: r1 = e & 0 <= e & e <= 1;
          assume X is_less_than r1;
-             w "/\" r1 = (minreal|[:A,A:]).(w,r1) by A2,LATTICES:def 2
-                .= (minreal|[:A,A:]). [w,r1] by BINOP_1:def 1
+             w "/\" r1 = (minreal||A).(w,r1) by A2,LATTICES:def 2
+                .= (minreal||A). [w,r1]
                 .= minreal. [w,r1] by A2,FUNCT_1:72
-                .= minreal.(w,r1) by BINOP_1:def 1
+                .= minreal.(w,r1)
                 .= min(0,e) by A51,REAL_LAT:def 1
                 .= w by A51,SQUARE_1:def 1;
          hence w [= r1 by LATTICES:21;
@@ -1489,10 +1486,10 @@ RCOMP_1:def 1;
       assume q in X;
       then consider y be Element of REAL such that
        A53: q = y & 1/2 < y & y <= 1;
-          z "/\" q = (minreal|[:A,A:]).(z,q) by A2,LATTICES:def 2
-            .= (minreal|[:A,A:]). [z,q] by BINOP_1:def 1
+          z "/\" q = (minreal||A).(z,q) by A2,LATTICES:def 2
+            .= (minreal||A). [z,q]
             .= minreal. [z,q] by A2,FUNCT_1:72
-            .= minreal.(z,q) by BINOP_1:def 1
+            .= minreal.(z,q)
             .= min(1/2,q') by A52,REAL_LAT:def 1
             .= z by A52,A53,SQUARE_1:def 1;
       hence z [= q by LATTICES:21;
@@ -1524,17 +1521,17 @@ RCOMP_1:def 1;
        then b = "/\" (X,L) by A55,A56,LATTICE3:42;
        then b [= c by A61,LATTICE3:38;
        then b' = b "/\" c by A55,LATTICES:21
-              .= (minreal|[:A,A:]).(b,c) by A2,LATTICES:def 2
-              .= (minreal|[:A,A:]). [b,c] by BINOP_1:def 1
+              .= (minreal||A).(b,c) by A2,LATTICES:def 2
+              .= (minreal||A). [b,c]
               .= minreal. [b,c] by A2,FUNCT_1:72
-              .= minreal.(b,c) by BINOP_1:def 1
+              .= minreal.(b,c)
               .= min(b',(1/2 + b')/2) by A55,REAL_LAT:def 1;
        hence contradiction by A59,SQUARE_1:def 1;
       end;
-          b "/\" z = (minreal|[:A,A:]).(b,z) by A2,LATTICES:def 2
-            .= (minreal|[:A,A:]). [b,z] by BINOP_1:def 1
+          b "/\" z = (minreal||A).(b,z) by A2,LATTICES:def 2
+            .= (minreal||A). [b,z]
             .= minreal. [b,z] by A2,FUNCT_1:72
-            .= minreal.(b,z) by BINOP_1:def 1
+            .= minreal.(b,z)
             .= min(b',1/2) by A55,REAL_LAT:def 1
             .= b by A55,A57,SQUARE_1:def 1;
       hence b [= z by LATTICES:21;
@@ -1567,10 +1564,9 @@ RCOMP_1:def 1;
     then reconsider A = [.0,1.] as non empty set by RCOMP_1:def 1;
     set L = RealSubLatt(0,1);
     A2: A = the carrier of L &
-     the L_join of L = maxreal|([:[.0,1.],[.0,1.]:] qua set) &
-     the L_meet of L = minreal|([:[.0,1.],[.0,1.]:] qua set) by Def4;
-    set Ma = maxreal|([:A,A:] qua set);
-    set Mi = minreal|([:A,A:] qua set);
+     the L_join of L = maxreal||[.0,1.] &
+     the L_meet of L = minreal||[.0,1.] by Def4;
+    set Ma = maxreal||A, Mi = minreal||A;
     reconsider Ma , Mi as BinOp of A by A2;
     reconsider L as complete Lattice by Th21;
     set B = {0,1} \/ ].0,1/2.[;
@@ -1644,7 +1640,7 @@ RCOMP_1:def 1;
     end;
     then A11: B c= A by TARSKI:def 3;
     then A12: [:B,B:] c= [:A,A:] by ZFMISC_1:119;
-    then reconsider ma = Ma|[:B,B:] , mi = Mi|[:B,B:]
+    then reconsider ma = Ma||B , mi = Mi||B
                                       as Function of [:B,B:],A by FUNCT_2:38;
     A13: dom ma = [:B,B:] & dom mi = [:B,B:] by FUNCT_2:def 1;
         now let x' be set;
@@ -1659,7 +1655,7 @@ RCOMP_1:def 1;
          then A18: x2 = 1 by TARSKI:def 1;
              ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
               .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
-              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= maxreal.(x1,x2)
               .= max(1,1) by A17,A18,REAL_LAT:def 2
               .= 1;
          then ma.x' in {1} by TARSKI:def 1;
@@ -1670,7 +1666,7 @@ RCOMP_1:def 1;
           A19: x2 = y2 & 0 <= y2 & y2 < 1/2;
              ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
               .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
-              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= maxreal.(x1,x2)
               .= max(1,y2) by A17,A19,REAL_LAT:def 2;
          then ma.x' = 1 or ma.x' = y2 by SQUARE_1:49;
          then ma.x' in {1} or ma.x' in
@@ -1689,7 +1685,7 @@ RCOMP_1:def 1;
          then A21: x2 = 1 by TARSKI:def 1;
              ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
               .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
-              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= maxreal.(x1,x2)
               .= max(y1,1) by A20,A21,REAL_LAT:def 2;
          then ma.x' = y1 or ma.x' = 1 by SQUARE_1:49;
          then ma.x' in { x where x is Element of REAL : 0 <= x & x < 1/2 }
@@ -1701,7 +1697,7 @@ RCOMP_1:def 1;
           A22: x2 = y2 & 0 <= y2 & y2 < 1/2;
              ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
               .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
-              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= maxreal.(x1,x2)
               .= max(y1,y2) by A20,A22,REAL_LAT:def 2;
          then ma.x' = y1 or ma.x' = y2 by SQUARE_1:49;
          then ma.x' in { x where x is Element of REAL : 0 <= x & x < 1/2 }
@@ -1727,7 +1723,7 @@ RCOMP_1:def 1;
          then A27: x2 = 1 by TARSKI:def 1;
              mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
               .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
-              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= minreal.(x1,x2)
               .= min(1,1) by A26,A27,REAL_LAT:def 1
               .= 1;
          then mi.x' in {1} by TARSKI:def 1;
@@ -1738,7 +1734,7 @@ RCOMP_1:def 1;
           A28: x2 = y2 & 0 <= y2 & y2 < 1/2;
              mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
               .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
-              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= minreal.(x1,x2)
               .= min(1,y2) by A26,A28,REAL_LAT:def 1;
          then mi.x' = 1 or mi.x' = y2 by SQUARE_1:38;
          then mi.x' in {1} or mi.x' in
@@ -1757,7 +1753,7 @@ RCOMP_1:def 1;
          then A30: x2 = 1 by TARSKI:def 1;
              mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
               .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
-              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= minreal.(x1,x2)
               .= min(y1,1) by A29,A30,REAL_LAT:def 1;
          then mi.x' = y1 or mi.x' = 1 by SQUARE_1:38;
          then mi.x' in { x where x is Element of REAL : 0 <= x & x < 1/2 }
@@ -1769,7 +1765,7 @@ RCOMP_1:def 1;
           A31: x2 = y2 & 0 <= y2 & y2 < 1/2;
              mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
               .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
-              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= minreal.(x1,x2)
               .= min(y1,y2) by A29,A31,REAL_LAT:def 1;
          then mi.x' = y1 or mi.x' = y2 by SQUARE_1:38;
          then mi.x' in { x where x is Element of REAL : 0 <= x & x < 1/2 }
@@ -1792,7 +1788,7 @@ RCOMP_1:def 1;
      thus x1 is Element of R by A33,REAL_LAT:def 4;
     end;
     A34: now let x1 be Element of B;
-         now per cases by A3,XBOOLE_0:def 2;
+         per cases by A3,XBOOLE_0:def 2;
       suppose x1 in {1};
        then x1 = 1 by TARSKI:def 1;
        hence x1 is Element of L by A1,A2,RCOMP_1:def 1;
@@ -1805,21 +1801,19 @@ RCOMP_1:def 1;
        then x1 in { r : 0 <= r & r <= 1 } by A35;
        hence x1 is Element of L by A2,RCOMP_1:def 1;
      end;
-     end;
-     hence x1 is Element of L;
     end;
     A36: now let a,b be Element of L';
      A37: [a,b] in [:B,B:];
      thus a"\/"b = (the L_join of L').(a,b) by LATTICES:def 1
-           .= (Ma|[:B,B:]). [a,b] by BINOP_1:def 1
-           .= (maxreal|[:A,A:]). [a,b] by FUNCT_1:72
+           .= (Ma||B). [a,b]
+           .= (maxreal||A). [a,b] by FUNCT_1:72
            .= maxreal. [a,b] by A12,A37,FUNCT_1:72
-           .= maxreal.(a,b) by BINOP_1:def 1;
+           .= maxreal.(a,b);
      thus a"/\"b = (the L_meet of L').(a,b) by LATTICES:def 2
-           .= (Mi|[:B,B:]). [a,b] by BINOP_1:def 1
-           .= (minreal|[:A,A:]). [a,b] by FUNCT_1:72
+           .= (Mi||B). [a,b]
+           .= (minreal||A). [a,b] by FUNCT_1:72
            .= minreal. [a,b] by A12,A37,FUNCT_1:72
-           .= minreal.(a,b) by BINOP_1:def 1;
+           .= minreal.(a,b);
     end;
     A38: now let p,q be Element of L';
      reconsider p' = p , q' = q as Element of L by A34;
@@ -1871,7 +1865,9 @@ RCOMP_1:def 1;
           meet-commutative meet-associative join-absorbing
     by A38,A39,A40,A41,A42,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
     then reconsider L' as Lattice by LATTICES:def 10;
-    reconsider L' as SubLattice of RealSubLatt(0,1) by A2,A11,NAT_LAT:def 16;
+    set K = RealSubLatt(0,1);
+    reconsider L' as SubLattice of RealSubLatt(0,1)
+                by A2,A11,NAT_LAT:def 16;
     take L';
         now let X be Subset of L';
      thus "/\" (X,L) in the carrier of L'
@@ -1893,9 +1889,9 @@ RCOMP_1:def 1;
        reconsider z1 = z as Element of REAL by TARSKI:def 3;
        A48: "/\" (X,L) [= z by A44,A47,LATTICE3:def 16;
             min(z1,y) = minreal.(z,"/\" (X,L)) by A43,REAL_LAT:def 1
-                    .= minreal. [z,"/\" (X,L)] by BINOP_1:def 1
-                    .= (minreal|[:A,A:]). [z,"/\" (X,L)] by A2,FUNCT_1:72
-                    .= (minreal|[:A,A:]).(z,"/\" (X,L)) by BINOP_1:def 1
+                    .= minreal. [z,"/\" (X,L)]
+                    .= (minreal||A). [z,"/\" (X,L)] by A2,FUNCT_1:72
+                    .= (minreal||A).(z,"/\" (X,L))
                     .= z "/\" "/\" (X,L) by A2,LATTICES:def 2
                     .= y by A43,A48,LATTICES:21;
        then y <= z1 by SQUARE_1:def 1;
@@ -1918,10 +1914,10 @@ RCOMP_1:def 1;
          then consider e be Element of REAL such that
           A51: r1 = e & 0 <= e & e <= 1;
          assume r1 is_less_than X;
-             r1 "/\" w = (minreal|[:A,A:]).(r1,w) by A2,LATTICES:def 2
-                .= (minreal|[:A,A:]). [r1,w] by BINOP_1:def 1
+             r1 "/\" w = (minreal||A).(r1,w) by A2,LATTICES:def 2
+                .= (minreal||A). [r1,w]
                 .= minreal. [r1,w] by A2,FUNCT_1:72
-                .= minreal.(r1,w) by BINOP_1:def 1
+                .= minreal.(r1,w)
                 .= min(e,1) by A51,REAL_LAT:def 1
                 .= r1 by A51,SQUARE_1:def 1;
          hence r1 [= w by LATTICES:21;
@@ -1959,10 +1955,10 @@ RCOMP_1:def 1;
       assume q in X;
       then consider y be Element of REAL such that
        A53: q = y & 0 <= y & y < 1/2;
-          q "/\" z = (minreal|[:A,A:]).(q,z) by A2,LATTICES:def 2
-            .= (minreal|[:A,A:]). [q,z] by BINOP_1:def 1
+          q "/\" z = (minreal||A).(q,z) by A2,LATTICES:def 2
+            .= (minreal||A). [q,z]
             .= minreal. [q,z] by A2,FUNCT_1:72
-            .= minreal.(q,z) by BINOP_1:def 1
+            .= minreal.(q,z)
             .= min(q',1/2) by A52,REAL_LAT:def 1
             .= q by A52,A53,SQUARE_1:def 1;
       hence q [= z by LATTICES:21;
@@ -1993,17 +1989,17 @@ RCOMP_1:def 1;
        then b = "\/" (X,L) by A55,A56,LATTICE3:41;
        then c [= b by A61,LATTICE3:38;
        then (1/2 + b')/2 = c "/\" b by LATTICES:21
-                        .= (minreal|[:A,A:]).(c,b) by A2,LATTICES:def 2
-                        .= (minreal|[:A,A:]). [c,b] by BINOP_1:def 1
+                        .= (minreal||A).(c,b) by A2,LATTICES:def 2
+                        .= (minreal||A). [c,b]
                         .= minreal. [c,b] by A2,FUNCT_1:72
-                        .= minreal.(c,b) by BINOP_1:def 1
+                        .= minreal.(c,b)
                         .= min((1/2 + b')/2,b') by A55,REAL_LAT:def 1;
        hence contradiction by A59,SQUARE_1:def 1;
       end;
-          z "/\" b = (minreal|[:A,A:]).(z,b) by A2,LATTICES:def 2
-            .= (minreal|[:A,A:]). [z,b] by BINOP_1:def 1
+          z "/\" b = (minreal||A).(z,b) by A2,LATTICES:def 2
+            .= (minreal||A). [z,b]
             .= minreal. [z,b] by A2,FUNCT_1:72
-            .= minreal.(z,b) by BINOP_1:def 1
+            .= minreal.(z,b)
             .= min(1/2,b') by A55,REAL_LAT:def 1
             .= z by A57,SQUARE_1:def 1;
       hence z [= b by LATTICES:21;

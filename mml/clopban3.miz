@@ -21,11 +21,11 @@ environ
  registrations SUBSET_1, RELSET_1, STRUCT_0, ORDINAL2, XREAL_0, MEMBERED,
       SEQM_3, CLVECT_1, CLOPBAN2, COMPLEX1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions SEQ_2, SERIES_1, CLVECT_1, BHSP_3;
+ definitions SEQ_2, SERIES_1, CLVECT_1, BHSP_3, RLVECT_1, BINOP_1;
  theorems ABSVALUE, RLVECT_1, VECTSP_1, BINOP_1, SEQ_1, SEQ_2, SEQM_3,
       SERIES_1, NAT_1, INT_1, FUNCT_2, SEQ_4, PREPOWER, CLVECT_1, CSSPACE3,
       LOPBAN_3, CLOPBAN1, CFUNCDOM, CLOPBAN2, GROUP_1, FUNCOP_1, BHSP_3,
-      XREAL_1, COMPLEX1;
+      XREAL_1, COMPLEX1, FUNCT_1;
  schemes SEQ_1, RECDEF_1, NAT_1, FUNCT_2;
 
 begin :: Basic Properties of Sequences of Complex Normed Space
@@ -58,7 +58,7 @@ A6: P[k];
    take g0;
    now let n be Nat;
      thus g0.(n+1) = (the add of X).(g0.n,seq.(n+1)) by A3
-            .=g0.n+seq.(n+1) by RLVECT_1:5;
+            .=g0.n+seq.(n+1);
    end;
    hence thesis by A2;
 end;
@@ -171,9 +171,9 @@ proof
    let x,y,z be Element of X;
    thus ||.x-y.|| = ||.x-0.X-y.|| by RLVECT_1:26
                  .= ||.x-(z+-z)-y.|| by RLVECT_1:16
-                 .= ||.x-(z-z)-y.|| by RLVECT_1:def 11
+                 .= ||.x-(z-z)-y.||
                  .= ||.(x-z)+z-y.|| by RLVECT_1:43
-                 .= ||.(x-z)+(z-y).|| by RLVECT_1:42;
+                 .= ||.(x-z)+(z-y).|| by RLVECT_1:def 6;
 end;
 
 theorem Th4:
@@ -303,7 +303,7 @@ A2:  seq is constant;
      reconsider r = seq.n0 as Element of X;
      take r;
      let n be Nat;
-     thus seq.n = r by A1,A2,SEQM_3:def 5;
+     thus seq.n = r by A1,A2,FUNCT_1:def 16;
    end;
    given r be Element of X such that
 A3: for n be Nat holds seq.n=r;
@@ -314,7 +314,7 @@ A4:for n1,n2 being set st n1 in dom seq & n2 in dom seq holds seq.n1=seq.n2
 A5:  n1 in dom seq & n2 in dom seq;
      hence seq.n1 = r by A1,A3 .= seq.n2 by A1,A3,A5;
   end;
-  thus seq is constant by A4,SEQM_3:def 5;
+  thus seq is constant by A4,FUNCT_1:def 16;
 end;
 end;
 
@@ -726,7 +726,7 @@ A4:s ^\1 = Partial_Sums(s) ^\1 - Partial_Sums(s)
          by Def6; then
        (Partial_Sums(s) ^\1).n- (Partial_Sums(s)).n
          = (s ^\1).n+ ( (Partial_Sums(s)).n- (Partial_Sums(s)).n )
-             by RLVECT_1:42; then
+             by RLVECT_1:def 6; then
        (Partial_Sums(s) ^\1).n- (Partial_Sums(s)).n
          = (s ^\1).n+ ( 0.X) by RLVECT_1:28;
        hence (Partial_Sums(s) ^\1).n- (Partial_Sums(s)).n = (s ^\1).n
@@ -788,10 +788,10 @@ A1:(Partial_Sums(s1) - Partial_Sums(s2)).0
       .= (Partial_Sums(s1).n+s1.(n+1))-s2.(n+1)-Partial_Sums(s2).n
           by RLVECT_1:41
       .= Partial_Sums(s1).n+(s1.(n+1)-s2.(n+1))-Partial_Sums(s2).n
-          by RLVECT_1:42
+          by RLVECT_1:def 6
       .= (s1-s2).(n+1)+Partial_Sums(s1).n-Partial_Sums(s2).n by CLVECT_1:def 12
       .= (s1-s2).(n+1)+(Partial_Sums(s1).n-Partial_Sums(s2).n)
-          by RLVECT_1:42
+          by RLVECT_1:def 6
       .= (Partial_Sums(s1)-Partial_Sums(s2)).n+(s1-s2).(n+1)
           by CLVECT_1:def 12;
    end;
@@ -937,7 +937,7 @@ A2:((Partial_Sums(s)^\1) - s1).0 = (Partial_Sums(s)^\1).0 - s1.0
     .= Partial_Sums(s).(0+1) - s.0 by Def6
     .= Partial_Sums(s).0 + s.(0+1) - s.0 by Def1
     .= s.(0+1) + s.0 - s.0 by Def1
-    .= s.(0+1) + (s.0 - s.0) by RLVECT_1:42
+    .= s.(0+1) + (s.0 - s.0) by RLVECT_1:def 6
     .= s.(0+1) + 0.X  by RLVECT_1:28
     .=s.(0+1) by RLVECT_1:10
     .= (s^\1).0 by Def6;
@@ -948,7 +948,7 @@ A2:((Partial_Sums(s)^\1) - s1).0 = (Partial_Sums(s)^\1).0 - s1.0
       .= Partial_Sums(s).(k+1+1) - s.0 by Def6
       .= s.(k+1+1) + Partial_Sums(s).(k+1) - s.0 by Def1
       .= s.(k+1+1) + Partial_Sums(s).(k+1) - s1.k by A1
-      .= s.(k+1+1) + (Partial_Sums(s).(k+1) - s1.k) by RLVECT_1:42
+      .= s.(k+1+1) + (Partial_Sums(s).(k+1) - s1.k) by RLVECT_1:def 6
       .= s.(k+1+1) + ((Partial_Sums(s)^\1).k - s1.k) by Def6
       .= s.(k+1+1) + ((Partial_Sums(s)^\1) - s1).k by CLVECT_1:def 12
       .= ((Partial_Sums(s)^\1) - s1).k + (s^\1).(k+1) by Def6;
@@ -1060,7 +1060,7 @@ A4:for k be Nat st X[k] holds X[k+1]
 A5:  ||. s1.(n+k) - s1.n.|| <= abs(s2.(n+k) - s2.n);
      ||. s1.(n+(k+1)) - s1.n.|| = ||. s1.(n+k+1) - s1.n .||
       .= ||. s.(n+k+1) + s1.(n+k) - s1.n .|| by Def1
-      .= ||. s.(n+k+1) + (s1.(n+k) - s1.n).|| by RLVECT_1:42; then
+      .= ||. s.(n+k+1) + (s1.(n+k) - s1.n).|| by RLVECT_1:def 6; then
 A6:  ||. s1.(n+(k+1))-s1.n .|| <= ||.s.(n+k+1).||+||.s1.(n+k) - s1.n.||
        by CLVECT_1:def 10;
      ||.s.(n+k+1).|| + ||. s1.(n+k) - s1.n.||
@@ -1406,13 +1406,13 @@ proof
      0.X*x =(0.X+0.X)*x  by RLVECT_1:def 7
           .=0.X*x + 0.X*x by VECTSP_1:def 12; then
      0.X = 0.X*x + 0.X*x-0.X * x by RLVECT_1:28; then
-     0.X = 0.X*x + (0.X*x-0.X * x)  by RLVECT_1:42; then
+     0.X = 0.X*x + (0.X*x-0.X * x)  by RLVECT_1:def 6; then
      0.X = 0.X*x + 0.X by RLVECT_1:28;
      hence 0.X = 0.X*x by RLVECT_1:def 7;
      x*0.X =x*(0.X+0.X) by RLVECT_1:def 7
           .=x*0.X + x*0.X by CFUNCDOM:def 9; then
      0.X = x*0.X + x*0.X-x* 0.X by RLVECT_1:28; then
-     0.X = x*0.X + (x*0.X-x* 0.X)  by RLVECT_1:42; then
+     0.X = x*0.X + (x*0.X-x* 0.X)  by RLVECT_1:def 6; then
      0.X = x*0.X + 0.X by RLVECT_1:28;
      hence 0.X = x*0.X by RLVECT_1:def 7;
      thus thesis;
@@ -1423,22 +1423,22 @@ A1:x*(y-z)+x*z =x*((y-z)+z) by CFUNCDOM:def 9
           .=x*y by RLVECT_1:26;
    thus x*(y-z) =x*(y-z)+0.X by RLVECT_1:10
          .=x*(y-z)+(x*z-x*z) by RLVECT_1:28
-         .=x*y-x*z by A1,RLVECT_1:42;
+         .=x*y-x*z by A1,RLVECT_1:def 6;
 A2:(y-z)*x+z*x =((y-z)+z)*x  by VECTSP_1:def 12
           .=(y-(z-z))*x by RLVECT_1:43
           .=(y-0.X)*x    by RLVECT_1:28
           .=y*x by RLVECT_1:26;
    thus (y-z)*x =(y-z)*x+0.X by RLVECT_1:10
          .=(y-z)*x+(z*x-z*x) by RLVECT_1:28
-         .=y*x-z*x by A2,RLVECT_1:42;
-   thus x+y-z = x+(y-z) by RLVECT_1:42;
+         .=y*x-z*x by A2,RLVECT_1:def 6;
+   thus x+y-z = x+(y-z) by RLVECT_1:def 6;
    thus x-y+z = x-(y-z) by RLVECT_1:43;
    thus x-y-z = x-(y+z) by RLVECT_1:41;
    thus (x-z)+(z+y)=(x-z)+z+y by RLVECT_1:def 6
                         .=x-(z-z)+y by RLVECT_1:43
                         .=x-0.X + y  by RLVECT_1:28
                         .=x+y  by RLVECT_1:26;
-   thus (x-z)+(z-y) =x-z+z-y  by RLVECT_1:42
+   thus (x-z)+(z-y) =x-z+z-y  by RLVECT_1:def 6
                          .=x-(z-z)-y by RLVECT_1:43
                          .=x-0.X -y by RLVECT_1:28
                          .=x-y by RLVECT_1:26;
@@ -1588,7 +1588,7 @@ A4: P[k];
    take g0;
    now let n be Nat;
      thus g0.(n+1) = (the mult of X).[g0.n,z] by A1
-            .=(the mult of X).(g0.n,z) by BINOP_1:def 1
+            .=(the mult of X).(g0.n,z)
             .=g0.n * z by GROUP_1:def 1;
    end;
    hence thesis by A1;
@@ -1625,13 +1625,7 @@ end;
 
 theorem
 for X be Complex_Banach_Algebra, z be Element of X holds
-  z #N 0 = 1.X
-proof
-   let X be Complex_Banach_Algebra;
-   let z be Element of X;
-   thus z #N 0 = (z GeoSeq).0
-                   .= 1.X  by Def12;
-end;
+  z #N 0 = 1.X by Def12;
 
 theorem Th44:
 for X be Complex_Banach_Algebra, z be Element of X holds
@@ -1784,9 +1778,9 @@ A9:   (Partial_Sums(seq).(k+1))*(1.X -x)
          =(Partial_Sums(seq)).((k+1)+1)-seq.0 by Def6
         .=(Partial_Sums(seq)).(k+1)+seq.((k+1)+1)-seq.0 by Def1
         .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)-seq.0 by Def6
-        .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)+(-seq.0) by RLVECT_1:def 11
+        .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)+(-seq.0)
         .=(Partial_Sums(seq)^\1).(k)+(-seq.0) +seq.((k+1)+1) by RLVECT_1:def 6
-        .=(Partial_Sums(seq)^\1).(k)-seq.0 +seq.((k+1)+1) by RLVECT_1:def 11;
+        .=(Partial_Sums(seq)^\1).(k)-seq.0 +seq.((k+1)+1);
        hence (Partial_Sums(seq).(k+1))*(1.X -x)
         =(Partial_Sums(seq)^\1).(k+1)-seq.0 by A9;
      end;
@@ -1849,9 +1843,9 @@ A22:   (1.X -x)*(Partial_Sums(seq).(k+1))
          =(Partial_Sums(seq)).((k+1)+1)-seq.0 by Def6
         .=(Partial_Sums(seq)).(k+1)+seq.((k+1)+1)-seq.0 by Def1
         .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)-seq.0 by Def6
-        .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)+(-seq.0) by RLVECT_1:def 11
+        .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)+(-seq.0)
         .=(Partial_Sums(seq)^\1).(k)+(-seq.0) +seq.((k+1)+1) by RLVECT_1:def 6
-        .=(Partial_Sums(seq)^\1).(k)-seq.0 +seq.((k+1)+1) by RLVECT_1:def 11;
+        .=(Partial_Sums(seq)^\1).(k)-seq.0 +seq.((k+1)+1);
        hence (1.X -x)*(Partial_Sums(seq).(k+1))
          =(Partial_Sums(seq)^\1).(k+1)-seq.0 by A22;
      end;
@@ -1863,7 +1857,7 @@ A23:now let n be Nat;
 A24: 1.X -y*x =1.X -  0.X -y*x by RLVECT_1:26
        .=1.X - (yn*x-yn*x) -y*x by RLVECT_1:28
        .=1.X-yn*x+yn*x-y*x by RLVECT_1:43
-       .=(1.X-yn*x)+(yn*x-y*x) by RLVECT_1:42
+       .=(1.X-yn*x)+(yn*x-y*x) by RLVECT_1:def 6
        .=(1.X-yn*x)+(yn-y)*x by Th42;
 A25: yn*(1.X - (1.X-x))
         =  yn*1.X - yn*(1.X -x) by Th42
@@ -1882,7 +1876,7 @@ A26: yn*(1.X - (1.X-x))
      .=0.X-((seq ^\1).n-seq.0) by RLVECT_1:43
      .=-((seq ^\1).n-seq.0) by RLVECT_1:27
      .=seq.0+(- (seq ^\1).n) by RLVECT_1:47
-     .= (seq.0- (seq ^\1).n) by RLVECT_1:def 11
+     .= (seq.0- (seq ^\1).n)
      .=seq.0-seq.(n+1) by Def6
      .=1.X - seq.(n+1) by Def12;
 A27:  (1.X-yn*x) =1.X -(1.X - seq.(n+1) ) by A26,Th42
@@ -1916,7 +1910,7 @@ A30:now let n be Nat;
 A31: 1.X -x*y =1.X -  0.X -x*y by RLVECT_1:26
           .=1.X - (x*yn-x*yn) -x*y by RLVECT_1:28
           .=1.X-x*yn+x*yn-x*y  by RLVECT_1:43
-          .=(1.X-x*yn)+(x*yn-x*y) by RLVECT_1:42
+          .=(1.X-x*yn)+(x*yn-x*y) by RLVECT_1:def 6
            .=(1.X-x*yn)+x*(yn-y) by Th42;
 A32: (1.X - (1.X-x))*yn = 1.X*yn - (1.X -x)*yn by Th42
            .=  yn - (1.X -x)*yn by Th42
@@ -1934,7 +1928,7 @@ A33: (1.X - (1.X-x))*yn
       .=0.X-((seq ^\1).n-seq.0) by RLVECT_1:43
       .=-((seq ^\1).n-seq.0) by RLVECT_1:27
       .=seq.0+(- (seq ^\1).n) by RLVECT_1:47
-      .= (seq.0- (seq ^\1).n) by RLVECT_1:def 11
+      .= (seq.0- (seq ^\1).n)
       .=seq.0-seq.(n+1) by Def6
       .=1.X - seq.(n+1) by Def12;
 A34:  (1.X-x*yn)
@@ -1964,7 +1958,6 @@ A36: ||. (seq^\1).n .|| + ||. x*(yn-y) .||
                 +  ||. x .|| (#) ||. Partial_Sums(seq)-y.||).n  by SEQ_1:11;
    end;
 A37:Partial_Sums(seq) is convergent by A2,Def2;
-   lim Partial_Sums(seq) =y; then
 A38:||. Partial_Sums(seq)-y.|| is convergent
       & lim ||. Partial_Sums(seq)-y.|| =0 by A37,CLVECT_1:120;
 A39:||. x .|| (#)  ||. Partial_Sums(seq)-y.|| is convergent by A38,SEQ_2:21;

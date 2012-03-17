@@ -21,6 +21,7 @@ environ
  registrations RELSET_1, FINSEQ_6, FINSEQ_5, JORDAN1E, GOBOARD9, INT_1,
       REVROT_1, SPRECT_1, SPRECT_3, FINSEQ_1, SPPOL_2, MEMBERED, ORDINAL2,
       REALSET1;
+ registrations SUBSET_1, FINSET_1, CARD_1, MSSCYC_1, ABIAN, XREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FINSEQ_6, GOBOARD1, GOBOARD5, TOPREAL1, TARSKI;
  theorems AMISTD_1, GRAPH_2, GOBOARD1, FINSEQ_3, NAT_1, FINSEQ_5, TOPREAL1,
@@ -28,7 +29,7 @@ environ
       RELAT_1, RFINSEQ, INT_1, MSSCYC_1, JORDAN3, AMI_5, REVROT_1, JORDAN4,
       BINARITH, SPRECT_3, GOBOARD2, TOPREAL3, GOBOARD3, SPPOL_2, CQC_THE1,
       JORDAN8, GOBOARD5, GOBOARD7, ENUMSET1, SETFAM_1, XBOOLE_0, XBOOLE_1,
-      XCMPLX_1, REALSET1, XREAL_1;
+      XCMPLX_1, REALSET1, XREAL_1, CARD_1;
 
 begin
 
@@ -363,6 +364,35 @@ A44: 1 in dom g by FINSEQ_5:6;
 end;
 end;
 
+HAHA:
+ for p be FinSequence, m, n be Nat
+  st 1<=m & m<=n+1 & n<=len p
+ holds len (m, n)-cut p +m = n+1 &
+ for i being Nat st i<len (m, n)-cut p holds ((m, n)-cut p).(i+1)=p.(m+i)
+ proof let p be FinSequence, m, n be Nat such that
+Z: 1<=m & m<=n+1 & n<=len p;
+   n <= n+1 by NAT_1:29;
+   then
+A:  m <= n+1 by Z,XREAL_1:2;
+   then m = n+1 or m < n+1 by XREAL_1:1;
+   then
+B:  m = n+1 or m <= n by NAT_1:38;
+  per cases by B;
+  suppose
+B: m = n+1;
+   then n < m by XREAL_1:31;
+   then not(1<=m & m<=n & n<=len p);
+   then (m, n)-cut p = {} by Z,GRAPH_2:def 1,B;
+   then
+X:  len (m, n)-cut p = 0 by CARD_1:47;
+  hence len (m, n)-cut p +m = n+1 by Z,GRAPH_2:def 1,B;
+  thus thesis by A,Z,GRAPH_2:def 1,B,X;
+  end;
+  suppose m<=n;
+   hence thesis by Z,A,GRAPH_2:def 1;
+  end;
+ end;
+
 theorem Th13:
  for D being set, f being FinSequence of D st 1 <= k
   holds (k+1, len f)-cut f = f/^k
@@ -371,15 +401,17 @@ A1: 1 <= k;
   per cases;
   suppose
 A2: len f < k;
-    then len f + 1 < k+1 by XREAL_1:8;
-   hence (k+1, len f)-cut f = {} by GRAPH_2:def 1
+    k <= k+1 by NAT_1:29;
+    then len f < k+1 by A2,XREAL_1:2;
+   hence (k+1, len f)-cut f = {} by GRAPH_2:def 1,HAHA
     .= f/^k by A2,FINSEQ_5:35;
   end;
   suppose f = {};
    then len f = 0 by FINSEQ_1:25;
    then A3: k > len f by A1,XREAL_1:2;
-   then k+1 > len f + 1 by XREAL_1:8;
-  hence (k+1, len f)-cut f = <*>D by GRAPH_2:def 1
+   k +1 >= k by NAT_1:29;
+   then k+1 > len f by A3,XREAL_1:2;
+  hence (k+1, len f)-cut f = <*>D by GRAPH_2:def 1,HAHA
         .= f/^k by A3,RFINSEQ:def 2;
   end;
   suppose that
@@ -387,7 +419,7 @@ A4: k <= len f;
 A5: 1 <= k+1 by NAT_1:29;
    set IT = (k+1, len f)-cut f;
 A6: k+1 <= len f + 1 by A4,XREAL_1:8;
-   then len f + 1 = len IT + (k+1) by A5,GRAPH_2:def 1
+   then len f + 1 = len IT + (k+1) by A5,GRAPH_2:def 1,HAHA
        .= len IT + k+1;
    then len f = len IT + k;
    then A7: len IT = len f - k;
@@ -399,7 +431,7 @@ A8:    m in dom IT;
 A9:     m = 1+i by NAT_1:28;
          m <= len IT by A8,FINSEQ_3:27;
       then i < len IT by A9,NAT_1:38;
-     hence IT.m = f.(k+1+i) by A5,A6,A9,GRAPH_2:def 1
+     hence IT.m = f.(k+1+i) by A5,A6,A9,GRAPH_2:def 1,HAHA
         .= f.(m+k) by A9;
     end;
   hence (k+1, len f)-cut f = f/^k by A4,A7,RFINSEQ:def 2;
@@ -411,15 +443,27 @@ theorem Th14:
   holds (1, k)-cut f = f|k
 proof let D be set, f being FinSequence of D such that
 A1: k <= len f;
-A2: 1 <= k+1 by NAT_1:29;
-A3: len(f|k) = k by A1,FINSEQ_1:80;
+  per cases;
+  suppose
+A2: 0+1 > k;
+   then
+X:  (1, k)-cut f = {} by GRAPH_2:def 1;
+Y:  f|0 = {};
+    k <= 0 by A2, NAT_1:38;
+    then k = 0 by NAT_1:19;
+   hence thesis by X,Y;
+  end;
+  suppose
+A2: 1 <= k;
+A3: len(f|k)+1 = k+1 by A1,FINSEQ_1:80;
       for i being Nat st i<len(f|k) holds (f|k).(i+1)= f.(1+i)
     proof let i be Nat;
      assume i<len(f|k);
       then i+1 <= k by A3,NAT_1:38;
-     hence (f|k).(i+1)= f.(1+i) by JORDAN3:20;
+     hence (f|k).(i+1)= f.(1+i) by FINSEQ_3:121;
     end;
-  hence (1, k)-cut f = f|k by A1,A2,A3,GRAPH_2:def 1;
+  hence (1, k)-cut f = f|k by A1,A2,A3,GRAPH_2:def 1,HAHA;
+  end;
  end;
 
 theorem Th15:
@@ -486,7 +530,7 @@ A2: len f <> 0 by FINSEQ_1:25;
       g/.1 in rng f by A1,A2,Th4;
    then A5:  g/.1 = f.len f by A1,FINSEQ_4:29;
 A6: len f -' 1 <= len f by JORDAN3:7;
-A7: len f -' 1 + 1 = len f by A4,AMI_5:4;
+A7: len f -' 1 + 1 = len f by A4,BINARITH:53;
 A8: f^'g = f^(2, len g)-cut g by GRAPH_2:def 2;
   then rng f c= rng(f^'g) by FINSEQ_1:42;
  hence (f^'g-:g/.1) = (f^'g -| g/.1)^<*g/.1*> by A3,FINSEQ_6:44
@@ -735,35 +779,35 @@ A1: 1 <= i and
 A2: i+1 <= len h;
   A3: 1 <= i+1 by NAT_1:29;
  per cases;
- suppose not(1<=m & m<=n+1 & n<=len f);
-  then h = {} by GRAPH_2:def 1;
+ suppose not(1<=m & m<=n & n<=len f);
+  then h = {} by GRAPH_2:def 1,HAHA;
   then len h = 0 by FINSEQ_1:25;
  hence (h/.i)`1 = (h/.(i+1))`1 or (h/.i)`2 = (h/.(i+1))`2 by A2,A3,XREAL_1:2;
  end;
  suppose
-A4: 1<=m & m<=n+1 & n<=len f;
+A4: 1<=m & m<=n & n<=len f;
 A5: i-'1+m = i+m-'1 by A1,JORDAN4:3;
 A6: 1+1 <= i+m by A1,A4,XREAL_1:9;
    then A7: 1 <= i+m by XREAL_1:2;
 A8: 1 <= i-'1+m by A5,A6,SPRECT_3:8;
 A9: i < len h by A2,NAT_1:38;
-       len h +m = n+1 by A4,GRAPH_2:def 1;
+       len h +m = n+1 by A4,GRAPH_2:def 1,HAHA;
     then i+m < n+1 by A9,XREAL_1:8;
     then i+m <= n by NAT_1:38;
     then A10: i+m <= len f by A4,XREAL_1:2;
     then A11: i-'1+m <= len f by A5,JORDAN3:7;
      i -' 1 <= i by JORDAN3:7;
   then A12: i -' 1 < len h by A9,XREAL_1:2;
-       i-'1+1 = i by A1,AMI_5:4;
+       i-'1+1 = i by A1,BINARITH:53;
     then A13: h/.i =h.(i -' 1+1) by A1,A9,FINSEQ_4:24
-      .= f.(i-'1+m) by A4,A12,GRAPH_2:def 1
+      .= f.(i-'1+m) by A4,A12,GRAPH_2:def 1,HAHA
       .= f/.(i-'1+m) by A8,A11,FINSEQ_4:24;
       1 <= i+1 by NAT_1:29;
    then A14: h/.(i+1) =h.(i+1) by A2,FINSEQ_4:24
-      .= f.(i+m) by A4,A9,GRAPH_2:def 1
+      .= f.(i+m) by A4,A9,GRAPH_2:def 1,HAHA
       .= f/.(i+m) by A7,A10,FINSEQ_4:24;
      i-'1+m+1 = i+m-'1+1 by A1,JORDAN4:3
-      .= i+m by A7,AMI_5:4;
+      .= i+m by A7,BINARITH:53;
  hence (h/.i)`1 = (h/.(i+1))`1 or (h/.i)`2 = (h/.(i+1))`2
      by A8,A10,A13,A14,TOPREAL1:def 7;
 end;
@@ -784,7 +828,7 @@ A3: 1+1 <= len g by REALSET1:13;
       len g <= len g +1 by NAT_1:29;
    then A4: 2<=len g+1 by A3,XREAL_1:2;
      len h +1+1 = len h +(1+1)
-      .= len g+1 by A4,GRAPH_2:def 1;
+      .= len g+1 by A4,GRAPH_2:def 1,HAHA;
   then len h +1 = len g;
   then 1 <= len h by A3,XREAL_1:8;
   then A5: h/.1 = h.1 by FINSEQ_4:24
@@ -806,115 +850,115 @@ A2: 1 < len f by A1,XREAL_1:2;
   set SFY = { LSeg(f/^1,i) : 1 < i & i+1 < len(f/^1) },
    Reszta = union SFY;
    set h2 = f/^1;
-A4: 1+2 <= len f by A1,XREAL_1:2;
-   A5:  1 <= len f by A1,XREAL_1:2;
-   then A6: LSeg(f,1) /\ LSeg(f/^1,1) = LSeg(f,1) /\ LSeg(f,1+1) by SPPOL_2:4
-      .= {f/.(1+1)} by A4,TOPREAL1:def 8;
-A7: len h2 = len f - 1 by A5,RFINSEQ:def 2;
-  then A8: len h2 + 1 = len f;
+A3: 1+2 <= len f by A1,XREAL_1:2;
+   A4:  1 <= len f by A1,XREAL_1:2;
+   then A5: LSeg(f,1) /\ LSeg(f/^1,1) = LSeg(f,1) /\ LSeg(f,1+1) by SPPOL_2:4
+      .= {f/.(1+1)} by A3,TOPREAL1:def 8;
+A6: len h2 = len f - 1 by A4,RFINSEQ:def 2;
+  then A7: len h2 + 1 = len f;
        len f > 3+1 by A1;
-    then A9: len h2 > 2+1 by A8,XREAL_1:8;
-    then A10: 1 <= len(f/^1) by XREAL_1:2;
-A11: 1+1 <= len h2 by A9,NAT_1:38;
-      1+1 <= len(f/^1) by A9,XREAL_1:2;
-   then A12: 1 <= len(f/^1)-'1 by SPRECT_3:8;
-A13:  1+(len(f/^1)-'1) = len(f/^1) by A10,AMI_5:4
-     .= len f -' 1 by A5,A7,BINARITH:50;
-A14: L~(f/^1) c= LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) \/ Reszta
+    then A8: len h2 > 2+1 by A7,XREAL_1:8;
+    then A9: 1 <= len(f/^1) by XREAL_1:2;
+A10: 1+1 <= len h2 by A8,NAT_1:38;
+      1+1 <= len(f/^1) by A8,XREAL_1:2;
+   then A11: 1 <= len(f/^1)-'1 by SPRECT_3:8;
+A12:  1+(len(f/^1)-'1) = len(f/^1) by A9,BINARITH:53
+     .= len f -' 1 by A4,A6,BINARITH:50;
+A13: L~(f/^1) c= LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) \/ Reszta
     proof let u be set;
      assume u in L~(f/^1);
       then consider e being set such that
-A15:    u in e and
-A16:    e in { LSeg(f/^1,i) : 1 <= i & i+1 <= len(f/^1) } by TARSKI:def 4;
+A14:    u in e and
+A15:    e in { LSeg(f/^1,i) : 1 <= i & i+1 <= len(f/^1) } by TARSKI:def 4;
       consider i such that
-A17:    e = LSeg(f/^1,i) and
-A18:    1 <= i and
-A19:    i+1 <= len(f/^1) by A16;
-     per cases by A18,A19,XREAL_1:1;
+A16:    e = LSeg(f/^1,i) and
+A17:    1 <= i and
+A18:    i+1 <= len(f/^1) by A15;
+     per cases by A17,A18,XREAL_1:1;
      suppose i = 1;
-      then u in LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) by A15,A17,
+      then u in LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) by A14,A16,
 XBOOLE_0:def 2;
      hence thesis by XBOOLE_0:def 2;
      end;
      suppose i+1 = len(f/^1);
       then i = len(f/^1)-'1 by BINARITH:39;
-      then u in LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) by A15,A17,
+      then u in LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) by A14,A16,
 XBOOLE_0:def 2;
      hence thesis by XBOOLE_0:def 2;
      end;
      suppose 1 < i & i+1 < len(f/^1);
-      then e in SFY by A17;
-      then u in Reszta by A15,TARSKI:def 4;
+      then e in SFY by A16;
+      then u in Reszta by A14,TARSKI:def 4;
      hence thesis by XBOOLE_0:def 2;
     end;
     end;
-      LSeg(f/^1,1) in { LSeg(f/^1,i) : 1 <= i & i+1 <= len(f/^1) } by A11;
-   then A20:LSeg(f/^1,1) c= L~(f/^1) by ZFMISC_1:92;
-  len(f/^1)-'1+1 <= len(f/^1) by A10,AMI_5:4;
+      LSeg(f/^1,1) in { LSeg(f/^1,i) : 1 <= i & i+1 <= len(f/^1) } by A10;
+   then A19:LSeg(f/^1,1) c= L~(f/^1) by ZFMISC_1:92;
+  len(f/^1)-'1+1 <= len(f/^1) by A9,BINARITH:53;
    then LSeg(f/^1,len(f/^1)-'1) in { LSeg(f/^1,i) : 1 <= i & i+1 <= len(f/^1)
 }
-         by A12;
+         by A11;
    then LSeg(f/^1,len(f/^1)-'1) c= L~(f/^1) by ZFMISC_1:92;
-   then A21:LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) c= L~(f/^1) by A20,
+   then A20:LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) c= L~(f/^1) by A19,
 XBOOLE_1:8;
       Reszta c= L~(f/^1)
     proof let u be set;
      assume u in Reszta;
       then consider e being set such that
-A22:    u in e and
-A23:    e in SFY by TARSKI:def 4;
-         ex i st e = LSeg(f/^1,i) & 1 < i & i+1 < len(f/^1) by A23;
+A21:    u in e and
+A22:    e in SFY by TARSKI:def 4;
+         ex i st e = LSeg(f/^1,i) & 1 < i & i+1 < len(f/^1) by A22;
       then e in { LSeg(f/^1,i) : 1 <= i & i+1 <= len(f/^1) };
-     hence u in L~(f/^1) by A22,TARSKI:def 4;
+     hence u in L~(f/^1) by A21,TARSKI:def 4;
     end;
    then LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) \/ Reszta c= L~(f/^1)
-     by A21,XBOOLE_1:8;
-   then A24: L~(f/^1) = LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) \/ Reszta
-      by A14,XBOOLE_0:def 10;
+     by A20,XBOOLE_1:8;
+   then A23: L~(f/^1) = LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) \/ Reszta
+      by A13,XBOOLE_0:def 10;
       for Z being set holds Z in {{}} iff
     ex X,Y being set st X in {LSeg(f,1)} & Y in SFY & Z = X /\ Y
     proof let Z be set;
      thus Z in {{}} implies
         ex X,Y being set st X in {LSeg(f,1)} & Y in SFY & Z = X /\ Y
      proof assume
-A25:   Z in {{}};
+A24:   Z in {{}};
       take X = LSeg(f,1), Y = LSeg(f,2+1);
       thus X in {LSeg(f,1)} by TARSKI:def 1;
-          Y = LSeg(f/^1,2) by A5,SPPOL_2:4;
-      hence Y in SFY by A9;
-A26:    1+1 < 3;
+          Y = LSeg(f/^1,2) by A4,SPPOL_2:4;
+      hence Y in SFY by A8;
+A25:    1+1 < 3;
           3+1 < len f by A1;
-       then X misses Y by A26,GOBOARD5:def 4;
+       then X misses Y by A25,GOBOARD5:def 4;
        then X /\ Y = {} by XBOOLE_0:def 7;
-      hence Z = X /\ Y by A25,TARSKI:def 1;
+      hence Z = X /\ Y by A24,TARSKI:def 1;
      end;
      given X,Y being set such that
-A27:   X in {LSeg(f,1)} and
-A28:   Y in SFY and
-A29:   Z = X /\ Y;
-A30:    X = LSeg(f,1) by A27,TARSKI:def 1;
+A26:   X in {LSeg(f,1)} and
+A27:   Y in SFY and
+A28:   Z = X /\ Y;
+A29:    X = LSeg(f,1) by A26,TARSKI:def 1;
       consider i such that
-A31:    Y = LSeg(f/^1,i) and
-A32:    1 < i and
-A33:    i+1 < len(f/^1) by A28;
-A34:    LSeg(f/^1,i) = LSeg(f,i+1) by A2,A32,SPPOL_2:4;
-A35:   i+1+1 < len f by A8,A33,XREAL_1:8;
-         1+1 < i+1 by A32,XREAL_1:8;
-      then X misses Y by A30,A31,A34,A35,GOBOARD5:def 4;
-      then Z = {} by A29,XBOOLE_0:def 7;
+A30:    Y = LSeg(f/^1,i) and
+A31:    1 < i and
+A32:    i+1 < len(f/^1) by A27;
+A33:    LSeg(f/^1,i) = LSeg(f,i+1) by A2,A31,SPPOL_2:4;
+A34:   i+1+1 < len f by A7,A32,XREAL_1:8;
+         1+1 < i+1 by A31,XREAL_1:8;
+      then X misses Y by A29,A30,A33,A34,GOBOARD5:def 4;
+      then Z = {} by A28,XBOOLE_0:def 7;
      hence Z in {{}} by TARSKI:def 1;
     end;
    then INTERSECTION({LSeg(f,1)},SFY) = {{}} by SETFAM_1:def 5;
-   then A36: LSeg(f,1) /\Reszta
+   then A35: LSeg(f,1) /\Reszta
        = union {{}} by SETFAM_1:36
       .= {} by ZFMISC_1:31;
-A37: LSeg(f,1) /\ LSeg(f/^1,len(f/^1)-'1)
-       = LSeg(f,1) /\ LSeg(f,len f-'1) by A5,A12,A13,SPPOL_2:4
+A36: LSeg(f,1) /\ LSeg(f/^1,len(f/^1)-'1)
+       = LSeg(f,1) /\ LSeg(f,len f-'1) by A4,A11,A12,SPPOL_2:4
       .= {f/.1} by A1,REVROT_1:30;
  thus LSeg(f,1) /\ L~(f/^1)
     = LSeg(f,1) /\ (LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1)) \/ {}
-                    by A24,A36,XBOOLE_1:23
-   .= {f/.1} \/ {f/.2} by A6,A37,XBOOLE_1:23
+                    by A23,A35,XBOOLE_1:23
+   .= {f/.1} \/ {f/.2} by A5,A36,XBOOLE_1:23
    .= {f/.1,f/.2} by ENUMSET1:41;
 end;
 
@@ -1374,7 +1418,7 @@ A7: f is non empty and
 A8: len g = 1+1;
       len f <> 0 by A7,FINSEQ_1:25;
    then 1 <= len f by NAT_1:39;
-   then A9: k+1 = len f by AMI_5:4;
+   then A9: k+1 = len f by BINARITH:53;
        g|len g = g by FINSEQ_1:79;
     then g = <*g/.1,g/.2*> by A8,JORDAN8:1;
     then A10:   f^'g = f^<*g/.2*> by A5,A6,FINSEQ_6:50;
@@ -1392,7 +1436,7 @@ A13:  f is non empty and
 A14: 2 < len g;
       len f <> 0 by A13,FINSEQ_1:25;
    then 1 <= len f by NAT_1:39;
-   then A15: k+1 = len f by AMI_5:4;
+   then A15: k+1 = len f by BINARITH:53;
 A16: 1 + 2 <= len g by A14,NAT_1:38;
 A17: 1+1 <= len g by A14;
 A18: 1 <= len g by A14,XREAL_1:2;
@@ -1521,9 +1565,9 @@ A42: 1 in dom h1 by FINSEQ_5:6;
      .= h2/.len h2 by A9,A39,FINSEQ_5:30;
  thus g is_sequence_on G by A20,A24,A31,A34,A41,Th12;
       1 <= len g2 by A37,XREAL_1:2;
-   then A45: len g2 -'1 +1 = len g2 by AMI_5:4;
+   then A45: len g2 -'1 +1 = len g2 by BINARITH:53;
       1 <= len g1 by A7,A25,XREAL_1:2;
-   then A46: len g1 -'1 +1 = len g1 by AMI_5:4;
+   then A46: len g1 -'1 +1 = len g1 by BINARITH:53;
      len h2 > 3+1-1 by A5,A8,XREAL_1:11;
    then 2+1 < len g2 by A36,XREAL_1:2;
    then A47: 1+1 < len g2 -' 1 by SPRECT_3:5;

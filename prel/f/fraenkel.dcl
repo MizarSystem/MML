@@ -20,7 +20,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="2" value="false"/>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -37,7 +37,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -59,14 +59,14 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 </ArgTypes>

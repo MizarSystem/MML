@@ -17,25 +17,23 @@ environ
       SQUARE_1, COMPLEX1, SEQM_3, VECTSP_4, COMPLFLD, HAHNBAN1, VECTSP10,
       BILINEAR;
  constructors REAL_1, DOMAIN_1, SQUARE_1, BINOP_1, BILINEAR, MEMBERED, ARYTM_0,
-      BINOP_2, SIN_COS, HAHNBAN1;
+      BINOP_2, SIN_COS, HAHNBAN1, SEQM_3;
  registrations STRUCT_0, XREAL_0, SUBSET_1, RELSET_1, SQUARE_1, COMPLFLD,
       HAHNBAN1, VECTSP10, BILINEAR, COMPLEX1, MEMBERED, XCMPLX_0, NAT_1,
       SIN_COS;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
- definitions HAHNBAN1, TARSKI, XBOOLE_0, VECTSP_4, VECTSP10, BILINEAR, SEQM_3;
+ definitions HAHNBAN1, TARSKI, XBOOLE_0, VECTSP_4, VECTSP10, BILINEAR, SEQM_3,
+  FUNCT_1;
+ definitions SQUARE_1, RLVECT_1, BINOP_1;
  theorems COMPLEX1, SQUARE_1, ABSVALUE, COMPLFLD, COMPTRIG, XREAL_0, FUNCT_2,
       HAHNBAN1, VECTSP_1, RLVECT_1, VECTSP_4, VECTSP_6, TARSKI, SEQM_3,
       VECTSP10, BILINEAR, DOMAIN_1, ZFMISC_1, FUNCT_1, XCMPLX_0, XCMPLX_1,
-      GROUP_1, XREAL_1;
- schemes FUNCT_2;
+      GROUP_1, XREAL_1, BINOP_1;
+ schemes FUNCT_2, BINOP_1;
 
 begin :: Auxiliary Facts about Complex Numbers
 
-XX:0 = [**0,0**]
-proof
-  0+0*<i> = [**0,0**];
-  hence thesis;
-end;
+Lm1:0 = [**0,0**];
 
 theorem Th1:
 for a be complex number st a = a*' holds Im a = 0
@@ -48,9 +46,6 @@ for a be complex number st a = a*' holds Im a = 0
   hence thesis;
  end;
 
-Lm1:
-   0.F_Complex = the Zero of F_Complex by RLVECT_1:def 2;
-
 theorem Th2:
 for a be Element of COMPLEX st a <> 0c holds
  |.[*(Re a)/|.a.|, (-Im a)/|.a.|*].| = 1 &
@@ -58,31 +53,31 @@ for a be Element of COMPLEX st a <> 0c holds
  Im ([*(Re a)/|.a.|, (-Im a)/|.a.|*] * a)= 0
  proof let z be Element of COMPLEX;
   set r = |.z.|, a = [*(Re z)/r, (-Im z)/r*];
-X: a = (Re z)/r+((-Im z)/r)*<i> by COMPLEX1:27;
+A1: a = (Re z)/r+((-Im z)/r)*<i> by COMPLEX1:27;
   assume z <> 0c;
- then A1: 0 < r by COMPLEX1:133;
+ then A2: 0 < r by COMPLEX1:133;
      |.z*z.| = (Re z)^2 + (Im z)^2 by COMPLEX1:154;
- then A2: 0 <= (Re z)^2 + (Im z)^2 by COMPLEX1:132;
- A3: r^2 = (sqrt ((Re z)^2 + (Im z)^2))^2 by COMPLEX1:def 16
-       .= (Re z)^2 + (Im z)^2 by A2,SQUARE_1:def 4;
- A4: Re a = (Re z)/r & Im a = (-Im z)/r by COMPLEX1:28,X;
+ then A3: 0 <= (Re z)^2 + (Im z)^2 by COMPLEX1:132;
+ A4: r^2 = (sqrt ((Re z)^2 + (Im z)^2))^2 by COMPLEX1:def 16
+       .= (Re z)^2 + (Im z)^2 by A3,SQUARE_1:def 4;
+ A5: Re a = (Re z)/r & Im a = (-Im z)/r by COMPLEX1:28,A1;
   then (Re a)^2 + (Im a)^2 = (Re z)^2/r^2 + ((-Im z)/r)^2 by SQUARE_1:69
         .= (Re z)^2/r^2 + (-Im z)^2/r^2 by SQUARE_1:69
-        .= (Re z)^2/r^2 + (Im z)^2/r^2 by SQUARE_1:61
+        .= (Re z)^2/r^2 + (Im z)^2/r^2
         .= ((Re z)^2 + (Im z)^2)/r^2 by XCMPLX_1:63
-        .= (r/r)^2 by A3,SQUARE_1:69
-        .= 1 by A1,SQUARE_1:59,XCMPLX_1:60;
+        .= (r/r)^2 by A4,SQUARE_1:69
+        .= 1 by A2,SQUARE_1:59,XCMPLX_1:60;
   hence |.a.| = 1 by COMPLEX1:def 16,SQUARE_1:83;
-  thus Re (a*z) = (Re z)/r * Re z - (-Im z)/r * Im z by A4,COMPLEX1:24
+  thus Re (a*z) = (Re z)/r * Re z - (-Im z)/r * Im z by A5,COMPLEX1:24
         .= ((Re z)*(Re z))/r - (-Im z)/r * Im z by XCMPLX_1:75
         .= ((Re z)*(Re z))/r - ((-Im z)* Im z )/r by XCMPLX_1:75
-        .= (Re z)^2/r - ((-Im z)* Im z )/r by SQUARE_1:def 3
+        .= (Re z)^2/r - ((-Im z)* Im z )/r
         .= ((Re z)^2 - -(Im z * Im z) )/r by XCMPLX_1:121
         .= ((Re z)^2 + - (-(Im z * Im z )))/r
-        .= ((Re z)^2 + (Im z )^2)/r by SQUARE_1:def 3
-        .= r*r/r by A3,SQUARE_1:def 3
-        .= r by A1,XCMPLX_1:90;
-  thus Im(a*z) = (Re z)/r * Im z + Re z * ((-Im z)/r) by A4,COMPLEX1:24
+        .= ((Re z)^2 + (Im z )^2)/r
+        .= r*r/r by A4
+        .= r by A2,XCMPLX_1:90;
+  thus Im(a*z) = (Re z)/r * Im z + Re z * ((-Im z)/r) by A5,COMPLEX1:24
         .= (Re z) * (Im z) /r + Re z * ((-Im z)/r) by XCMPLX_1:75
         .= (Re z) * (Im z) /r + (-Im z)* (Re z) /r by XCMPLX_1:75
         .= ((Re z) * (Im z) + -(Im z)* (Re z)) /r by XCMPLX_1:63
@@ -129,14 +124,14 @@ for a be Element of F_Complex st a = a*' holds Im a = 0 by Th1;
 i_FC*' = Re i_FC - (Im i_FC)*<i> by COMPLEX1:def 15
     .= Re <i> - (Im <i>) * <i>
     .= 0 - 1 * <i> by COMPLEX1:17; then
-Th6: i_FC*' = <i>";
+Lm2: i_FC*' = <i>";
 
 canceled;
 
 theorem Th7:
 i_FC * i_FC*' = 1.F_Complex
  proof
-  thus i_FC * i_FC*' = <i> * <i>" by Th6,COMPLFLD:6
+  thus i_FC * i_FC*' = <i> * <i>" by Lm2,COMPLFLD:6
   .= 1
   .= 1.F_Complex by COMPLEX1:def 7,COMPLFLD:10;
  end;
@@ -152,13 +147,12 @@ A1: z <> 0.F_Complex;
   reconsider b = z as Element of COMPLEX by COMPLFLD:def 1;
   set a = [**(Re z)/|.z.|, (-Im z)/|.z.|**];
   set a1 = (Re z)/|.z.|+((-Im z)/|.z.|)*<i>;
-X: a1 = [*(Re z)/|.z.|,((-Im z)/|.z.|)*] by COMPLEX1:27;
- a = a1;
-  then a*z = a1*b by COMPLFLD:6;
-  hence thesis by A1,Th2,COMPLFLD:9,X;
+A2: a1 = [*(Re z)/|.z.|,((-Im z)/|.z.|)*] by COMPLEX1:27;
+   a*z = a1*b by COMPLFLD:6;
+  hence thesis by A1,Th2,COMPLFLD:9,A2;
  end;
 
-Lm230: the unity of F_Complex = 1r by COMPLFLD:def 1
+Lm3: the unity of F_Complex = 1r by COMPLFLD:def 1
  .= 1.F_Complex by COMPLFLD:10;
 
 theorem Th9:
@@ -167,25 +161,25 @@ for a be Element of F_Complex
   |.b.| = 1 & Re (b * a) = |.a.| & Im (b * a)= 0
  proof let z be Element of F_Complex;
   set r = |.z.|;
-  A2: r = 0 implies ex a be Element of F_Complex st
+  A1: r = 0 implies ex a be Element of F_Complex st
     |.a.| = 1 & Re (a * z) = r & Im (a * z) = 0
      proof
-      assume A3: r = 0;
-      then A4: z = the Zero of F_Complex by Lm1,COMPLFLD:94
+      assume A2: r = 0;
+      then A3: z = the Zero of F_Complex by COMPLFLD:94
        .= 0c by COMPLFLD:def 1 .= 0;
       take a=the unity of F_Complex;
       thus |.a.| = 1 by COMPLFLD:97;
-      Re z = 0 & Im z = 0 by XX,A4,HAHNBAN1:15;
-      hence thesis by Lm230,A3,VECTSP_1:def 13;
+      Re z = 0 & Im z = 0 by Lm1,A3,HAHNBAN1:15;
+      hence thesis by Lm3,A2,VECTSP_1:def 13;
      end;
      0 < r implies ex a be Element of F_Complex st
        |.a.| =1 & Re (a * z) = r & Im (a * z)= 0
      proof
-      assume A5: 0 < r;
+      assume A4: 0 < r;
       take [**(Re z)/r, (-Im z)/r**];
-      thus thesis by A5,Lm1,Th8,COMPLFLD:93;
+      thus thesis by A4,Th8,COMPLFLD:93;
      end;
-  hence thesis by A2,COMPLEX1:132;
+  hence thesis by A1,COMPLEX1:132;
  end;
 
 theorem Th10:
@@ -219,7 +213,7 @@ theorem
   hence Im (a*b) = Re b * 0 by Th11 .= 0;
  end;
 
- Th13:
+ Lm4:
 for a be Element of F_Complex holds Re a = Re (a*') by COMPLEX1:112;
 
 canceled;
@@ -237,13 +231,7 @@ for a be Element of F_Complex st Im a = 0 holds a = a*'
  end;
 
 theorem Th15:
-for r,s be Real holds [**r,0**]*[**s,0**] =[**r*s,0**]
- proof let r,s be Real;
-     [**r,0**] = r+0*<i> & [**s,0**] = s+0*<i>;
-  hence [**r,0**]*[**s,0**] = (r+0*<i>)*(s+0*<i>) by COMPLFLD:6
-   .=r*s - 0*0+(r*0+s*0)*<i>
-   .= [**r*s,0**];
- end;
+for r,s be Real holds [**r,0**]*[**s,0**] =[**r*s,0**] by COMPLFLD:6;
 
 theorem Th16:
 for a be Element of F_Complex holds a*a*' = [**|.a.|^2,0**]
@@ -269,7 +257,7 @@ A1: 0 <= Re z & Im z = 0;
 theorem Th18:
 for a be Element of F_Complex holds Re a + Re (a*') = 2 * Re a
  proof let z be Element of F_Complex;
-  thus Re z + Re (z*') = Re z + Re z by Th13
+  thus Re z + Re (z*') = Re z + Re z by Lm4
   .= 2* (Re z);
  end;
 
@@ -300,10 +288,9 @@ cluster cmplxhomogeneous -> 0-preserving Functional of V;
  coherence
   proof let F be Functional of V;
    assume A1:F is cmplxhomogeneous;
-  A2: 0.F_Complex = the Zero of F_Complex by RLVECT_1:def 2;
    thus F.(0.V) = F.((0.F_Complex) * 0.V) by VECTSP10:2
    .= (0.F_Complex)*' * F.(0.V) by A1,Def1
-   .= 0.F_Complex by A2,COMPLFLD:83,VECTSP_1:39;
+   .= 0.F_Complex by COMPLFLD:83,VECTSP_1:39;
   end;
 end;
 
@@ -366,7 +353,7 @@ registration
  let V be non empty VectSpStr over F_Complex;
  let f,g be cmplxhomogeneous Functional of V;
 cluster f-g -> cmplxhomogeneous;
- coherence proof f-g = f+ -g; hence thesis; end;
+ coherence;
 end;
 
 definition
@@ -448,7 +435,7 @@ cluster f*' -> non constant;
 coherence
  proof
   consider x,y be set such that
- A1: x in dom f & y in dom f & f.x <> f.y by SEQM_3:def 5;
+ A1: x in dom f & y in dom f & f.x <> f.y by FUNCT_1:def 16;
  A2: dom (f*') = the carrier of V by FUNCT_2:def 1;
   reconsider v=x,w=y as Vector of V by A1;
   take x,y;
@@ -493,7 +480,7 @@ theorem
   set f= 0Functional(V), K = F_Complex;
       now let v be Vector of V;
    thus f*'.v = (f.v)*' by Def2
-    .= 0.K by Lm1,COMPLFLD:83,HAHNBAN1:22
+    .= 0.K by COMPLFLD:83,HAHNBAN1:22
     .= f.v by HAHNBAN1:22;
    end;
   hence thesis by FUNCT_2:113;
@@ -564,9 +551,9 @@ for v be Vector of V holds f.v = 0.F_Complex iff f*'.v = 0.F_Complex
   let V be non empty VectSpStr over F_Complex, f be Functional of V;
   let v be Vector of V;
   thus f.v = 0.F_Complex implies f*'.v = 0.F_Complex
-      by Def2,Lm1,COMPLFLD:83;
+      by Def2,COMPLFLD:83;
   assume f*'.v = 0.F_Complex;
-  then (f.v)*'*' = 0.F_Complex by Def2,Lm1,COMPLFLD:83;
+  then (f.v)*'*' = 0.F_Complex by Def2,COMPLFLD:83;
   hence thesis;
  end;
 
@@ -579,15 +566,15 @@ for V be non empty VectSpStr over F_Complex, f be Functional of V holds
    proof
     let x be set; assume x in ker f;
     then consider v be Vector of V such that
-   A3: x=v & f.v = 0.F_Complex;
-       (f*').v = 0.F_Complex by A3,Th25;
-    hence thesis by A3;
+   A1: x=v & f.v = 0.F_Complex;
+       (f*').v = 0.F_Complex by A1,Th25;
+    hence thesis by A1;
    end;
   let x be set; assume x in ker f*';
   then consider v be Vector of V such that
- A4: x=v & (f*').v = 0.F_Complex;
-     f.v = 0.F_Complex by A4,Th25;
-  hence thesis by A4;
+ A2: x=v & (f*').v = 0.F_Complex;
+     f.v = 0.F_Complex by A2,Th25;
+  hence thesis by A2;
  end;
 
 theorem
@@ -620,15 +607,15 @@ for f be antilinear-Functional of V st the carrier of W c= ker f*'
  A3: C = the carrier of vq by VECTSP10:def 6;
        A in C by A3;
     then consider aa be Coset of W such that
- A5: A = aa;
+ A4: A = aa;
     consider a be Vector of V such that
- A6: aa = a+W by VECTSP_4:def 6;
+ A5: aa = a+W by VECTSP_4:def 6;
        r*A = (the lmult of vq).(r,A) by VECTSP_1:def 24
       .= (lmultCoset(V,W)).(r,A) by VECTSP10:def 6
-      .= r*a+ W by A3,A5,A6,VECTSP10:def 5;
+      .= r*a+ W by A3,A4,A5,VECTSP10:def 5;
    hence qf.(r*A) = f.(r*a) by A1,A2,VECTSP10:def 12
       .= r*'*f.a by Def1
-      .= r*'*(qf.A) by A1,A2,A5,A6,VECTSP10:def 12;
+      .= r*'*(qf.A) by A1,A2,A4,A5,VECTSP10:def 12;
   end;
  hence thesis by Def1;
 end;
@@ -686,35 +673,35 @@ cluster QcFunctional(f) -> non degenerated;
  proof
   set qf = QcFunctional(f), W = Ker (f*'), qV = VectQuot(V,W),
       K = F_Complex;
-  A2: the carrier of qV = CosetSet(V,W) by VECTSP10:def 6;
-  A5: the carrier of W = ker f*' by VECTSP10:def 11
+  A1: the carrier of qV = CosetSet(V,W) by VECTSP10:def 6;
+  A2: the carrier of W = ker f*' by VECTSP10:def 11
    .= ker f by Th26;
   thus ker qf c= {0.qV}
    proof
     let x be set; assume
        x in ker qf;
     then consider w be Vector of qV such that
-   A7: x= w & qf.w=0.K;
-       w in CosetSet(V,W) by A2;
+   A3: x= w & qf.w=0.K;
+       w in CosetSet(V,W) by A1;
     then consider A be Coset of W such that
-   A8: w = A;
+   A4: w = A;
     consider v be Vector of V such that
-   A9: A = v + W by VECTSP_4:def 6;
-       f.v = 0.K by A5,A7,A8,A9,VECTSP10:def 12;
+   A5: A = v + W by VECTSP_4:def 6;
+       f.v = 0.K by A2,A3,A4,A5,VECTSP10:def 12;
     then v in ker f;
-    then v in W by A5,RLVECT_1:def 1;
+    then v in W by A2,RLVECT_1:def 1;
     then v+W = the carrier of W by VECTSP_4:64;
-    then w = zeroCoset(V,W) by A8,A9
+    then w = zeroCoset(V,W) by A4,A5
     .= 0.qV by VECTSP10:22;
-    hence thesis by A7,TARSKI:def 1;
+    hence thesis by A3,TARSKI:def 1;
    end;
   thus {0.qV} c= ker qf
    proof
     let x be set; assume
        x in {0.qV};
-    then A10: x = 0.qV by TARSKI:def 1;
+    then A6: x = 0.qV by TARSKI:def 1;
        qf.(0.qV) = 0.K by HAHNBAN1:def 13;
-    hence thesis by A10;
+    hence thesis by A6;
    end;
   end;
 end;
@@ -733,7 +720,7 @@ theorem Th30:
 for V,W be non empty VectSpStr over F_Complex
 for v be Vector of V,w be Vector of W, a be Element of F_Complex
 for f be Form of V,W st f is cmplxhomogeneousFAF holds
- f.[v,a*w] = (a*')*f.[v,w]
+ f.(v,a*w) = (a*')*f.(v,w)
  proof
   let V,W be non empty VectSpStr over F_Complex,
    v1 be Vector of V, w be Vector of W,
@@ -741,42 +728,42 @@ for f be Form of V,W st f is cmplxhomogeneousFAF holds
   set F=FunctionalFAF(f,v1);
   assume f is cmplxhomogeneousFAF;
 then A1: F is cmplxhomogeneous by Def4;
-  thus f.[v1,r*w] = F.(r*w) by BILINEAR:9
+  thus f.(v1,r*w) = F.(r*w) by BILINEAR:9
     .= (r*')*F.w by A1,Def1
-    .= (r*')*f.[v1,w] by BILINEAR:9;
+    .= (r*')*f.(v1,w) by BILINEAR:9;
  end;
 
 definition
  let V be non empty VectSpStr over F_Complex;
  let f be Form of V,V;
 attr f is hermitan means :Def5:
-  for v,u be Vector of V holds f.[v,u] = (f.[u,v])*';
+  for v,u be Vector of V holds f.(v,u) = (f.(u,v))*';
 attr f is diagRvalued means :Def6:
-  for v be Vector of V holds Im (f.[v,v]) = 0;
+  for v be Vector of V holds Im (f.(v,v)) = 0;
 attr f is diagReR+0valued means :Def7:
-    for v be Vector of V holds 0 <= Re (f.[v,v]);
+    for v be Vector of V holds 0 <= Re (f.(v,v));
 end;
 
-Lm2:
+Lm5:
  now let V be non empty VectSpStr over F_Complex, f be Functional of V;
   set 0F = 0Functional(V);
   let v1,w be Vector of V;
-  thus (FormFunctional(f,0F)).[v1,w]= f.v1 * 0F.w by BILINEAR:def 11
+  thus (FormFunctional(f,0F)).(v1,w)= f.v1 * 0F.w by BILINEAR:def 11
      .= f.v1 * 0.F_Complex by HAHNBAN1:22
      .= 0.F_Complex by VECTSP_1:39;
  end;
 
-Lm3:
+Lm6:
 for V be non empty VectSpStr over F_Complex
 for f be Functional of V holds FormFunctional(f,0Functional(V)) is hermitan
  proof
   let V be non empty VectSpStr over F_Complex, f be Functional of V,
       v1,w be Vector of V;
   set 0F = 0Functional(V), F= FormFunctional(f,0F);
-  thus F.[v1,w] = 0.F_Complex by Lm2
-    .= the Zero of F_Complex by RLVECT_1:def 2
-    .= (0.F_Complex)*' by COMPLFLD:83,RLVECT_1:def 2
-    .= (F.[w,v1])*' by Lm2;
+  thus F.(v1,w) = 0.F_Complex by Lm5
+    .= the Zero of F_Complex
+    .= (0.F_Complex)*' by COMPLFLD:83
+    .= (F.(w,v1))*' by Lm5;
  end;
 
 registration
@@ -796,7 +783,7 @@ cluster NulForm(V,V) -> hermitan;
    proof
     NulForm(V,V) = FormFunctional(0Functional(V),0Functional(V))
     by BILINEAR:23;
-    hence thesis by Lm3;
+    hence thesis by Lm6;
    end;
 cluster NulForm(V,V) -> diagReR+0valued;
  coherence
@@ -813,7 +800,7 @@ cluster hermitan -> diagRvalued Form of V,V;
   proof let f be Form of V,V; assume
   A1:f is hermitan;
    let v be Vector of V;
-      f.[v,v] =(f.[v,v])*' by A1,Def5;
+      f.(v,v) =(f.(v,v))*' by A1,Def5;
    hence thesis by Th5;
   end;
 end;
@@ -847,16 +834,16 @@ cluster hermitan additiveFAF -> additiveSAF Form of V,V;
     set F = FunctionalSAF(f,w), F1 = FunctionalFAF(f,w);
    A2: F1 is additive by A1,BILINEAR:def 12;
         now let x,y be Vector of V;
-      thus F.(x+y) = f.[x+y,w] by BILINEAR:10
-       .= (f.[w,x+y])*' by A1,Def5
+      thus F.(x+y) = f.(x+y,w) by BILINEAR:10
+       .= (f.(w,x+y))*' by A1,Def5
        .= (F1.(x+y))*' by BILINEAR:9
        .= (F1.x+ F1.y)*' by A2,HAHNBAN1:def 11
-       .= (f.[w,x]+ F1.y)*' by BILINEAR:9
-       .= (f.[w,x]+ f.[w,y])*' by BILINEAR:9
-       .= (f.[w,x])*' + (f.[w,y])*' by COMPLFLD:87
-       .= f.[x,w]+ (f.[w,y])*' by A1,Def5
-       .= f.[x,w]+ f.[y,w] by A1,Def5
-       .= F.x+f.[y,w] by BILINEAR:10
+       .= (f.(w,x)+ F1.y)*' by BILINEAR:9
+       .= (f.(w,x)+ f.(w,y))*' by BILINEAR:9
+       .= (f.(w,x))*' + (f.(w,y))*' by COMPLFLD:87
+       .= f.(x,w)+ (f.(w,y))*' by A1,Def5
+       .= f.(x,w)+ f.(y,w) by A1,Def5
+       .= F.x+f.(y,w) by BILINEAR:10
        .= F.x+F.y by BILINEAR:10;
      end;
     hence thesis by HAHNBAN1:def 11;
@@ -873,16 +860,16 @@ cluster hermitan additiveSAF -> additiveFAF Form of V,V;
     set F = FunctionalFAF(f,v1), F2 = FunctionalSAF(f,v1);
    A2: F2 is additive by A1,BILINEAR:def 13;
         now let x,y be Vector of V;
-      thus F.(x+y) = f.[v1,x+y] by BILINEAR:9
-      .= (f.[x+y,v1])*' by A1,Def5
+      thus F.(x+y) = f.(v1,x+y) by BILINEAR:9
+      .= (f.(x+y,v1))*' by A1,Def5
       .= (F2.(x+y))*' by BILINEAR:10
       .= (F2.x+ F2.y)*' by A2,HAHNBAN1:def 11
-      .= (f.[x,v1]+ F2.y)*' by BILINEAR:10
-      .= (f.[x,v1]+ f.[y,v1])*' by BILINEAR:10
-      .= (f.[x,v1])*' + (f.[y,v1])*' by COMPLFLD:87
-      .= f.[v1,x]+ (f.[y,v1])*' by A1,Def5
-      .= f.[v1,x]+ f.[v1,y] by A1,Def5
-      .= F.x+f.[v1,y] by BILINEAR:9
+      .= (f.(x,v1)+ F2.y)*' by BILINEAR:10
+      .= (f.(x,v1)+ f.(y,v1))*' by BILINEAR:10
+      .= (f.(x,v1))*' + (f.(y,v1))*' by COMPLFLD:87
+      .= f.(v1,x)+ (f.(y,v1))*' by A1,Def5
+      .= f.(v1,x)+ f.(v1,y) by A1,Def5
+      .= F.x+f.(v1,y) by BILINEAR:9
       .= F.x+F.y by BILINEAR:9;
      end;
     hence thesis by HAHNBAN1:def 11;
@@ -899,13 +886,13 @@ cluster hermitan homogeneousSAF -> cmplxhomogeneousFAF Form of V,V;
     set F = FunctionalFAF(f,v1), F2 = FunctionalSAF(f,v1);
    A2: F2 is homogeneous by A1,BILINEAR:def 15;
         now let x be Vector of V, r be Scalar of V;
-      thus F.(r*x) = f.[v1,r*x] by BILINEAR:9
-      .= (f.[r*x,v1])*' by A1,Def5
+      thus F.(r*x) = f.(v1,r*x) by BILINEAR:9
+      .= (f.(r*x,v1))*' by A1,Def5
       .= (F2.(r*x))*' by BILINEAR:10
       .= (r*F2.x)*' by A2,HAHNBAN1:def 12
       .= r*' *(F2.x)*' by COMPLFLD:90
-      .= r*' *(f.[x,v1])*' by BILINEAR:10
-      .= r*' * f.[v1,x] by A1,Def5
+      .= r*' *(f.(x,v1))*' by BILINEAR:10
+      .= r*' * f.(v1,x) by A1,Def5
       .= r*' * F.x by BILINEAR:9;
      end;
     hence thesis by Def1;
@@ -922,14 +909,14 @@ cluster hermitan cmplxhomogeneousFAF -> homogeneousSAF Form of V,V;
     set F = FunctionalSAF(f,w), F2 = FunctionalFAF(f,w);
    A2: F2 is cmplxhomogeneous by A1,Def4;
         now let x be Vector of V, r be Scalar of V;
-      thus F.(r*x) = f.[r*x,w] by BILINEAR:10
-      .= (f.[w,r*x])*' by A1,Def5
+      thus F.(r*x) = f.(r*x,w) by BILINEAR:10
+      .= (f.(w,r*x))*' by A1,Def5
       .= (F2.(r*x))*' by BILINEAR:9
       .= (r*' * F2.x)*' by A2,Def1
       .= (r*')*' *(F2.x)*' by COMPLFLD:90
       .= r*(F2.x)*'
-      .= r *(f.[w,x])*' by BILINEAR:9
-      .= r * f.[x,w] by A1,Def5
+      .= r *(f.(w,x))*' by BILINEAR:9
+      .= r * f.(x,w) by A1,Def5
       .= r * F.x by BILINEAR:10;
      end;
     hence thesis by HAHNBAN1:def 12;
@@ -967,8 +954,8 @@ cluster FunctionalFAF(f,v) -> cmplxhomogeneous;
   proof
    set F = FunctionalFAF(f,v);
    let y be Vector of W,r be Scalar of W;
-   thus F.(r* y) = f.[v,r*y] by BILINEAR:9
-    .= r*'*f.[v,y] by Th30
+   thus F.(r* y) = f.(v,r*y) by BILINEAR:9
+    .= r*'*f.(v,y) by Th30
     .= r*' *F.y by BILINEAR:9;
   end;
 end;
@@ -1016,25 +1003,14 @@ registration
  let V,W be non empty VectSpStr over F_Complex;
  let f be cmplxhomogeneousFAF Form of V,W;
 cluster -f -> cmplxhomogeneousFAF;
- coherence
-  proof
-   let w be Vector of V;
-   set Ffg = FunctionalFAF(-f,w), Ff = FunctionalFAF(f,w);
-   let v be Vector of W, a be Scalar of W;
-   thus Ffg.(a*v) = (-Ff).(a*v) by BILINEAR:18
-   .= -Ff.(a*v) by HAHNBAN1:def 7
-   .= -(a*'*Ff.v) by Def1
-   .= a*'*(-Ff.v) by VECTSP_1:41
-   .= a*'*(-Ff).v by HAHNBAN1:def 7
-   .= a*'*Ffg.v by BILINEAR:18;
-  end;
+ coherence;
 end;
 
 registration
  let V,W be non empty VectSpStr over F_Complex;
  let f,g be cmplxhomogeneousFAF Form of V,W;
 cluster f-g -> cmplxhomogeneousFAF;
- coherence proof f-g = f+-g; hence thesis; end;
+ coherence;
 end;
 
 registration
@@ -1055,28 +1031,28 @@ definition
  let V,W be non empty VectSpStr over F_Complex;
  let f be Form of V,W;
 func f*' -> Form of V,W means :Def8:
- for v be Vector of V, w be Vector of W holds it.[v,w] = (f.[v,w])*';
+ for v be Vector of V, w be Vector of W holds it.(v,w) = (f.(v,w))*';
 existence
  proof
     set K = F_Complex, X = the carrier of V, Y = the carrier of W,
         Z = the carrier of K;
-    deffunc F(Element of X, Element of Y) = (f.[$1,$2])*';
+    deffunc F(Element of X, Element of Y) = (f.($1,$2))*';
     consider ff be Function of [:X,Y:],Z such that
   A1: for x be Element of X for y be Element of Y holds
-          ff.[x,y]=F(x,y) from FUNCT_2:sch 8;
+          ff.(x,y)=F(x,y) from BINOP_1:sch 4;
     reconsider ff as Form of V,W;
     take ff;
     thus thesis by A1;
   end;
  uniqueness
   proof let F,G be Form of V, W such that
-  A2: for v be Vector of V, w be Vector of W holds F.[v,w] = (f.[v,w])*' and
-  A3: for v be Vector of V, w be Vector of W holds G.[v,w] = (f.[v,w])*';
+  A2: for v be Vector of V, w be Vector of W holds F.(v,w) = (f.(v,w))*' and
+  A3: for v be Vector of V, w be Vector of W holds G.(v,w) = (f.(v,w))*';
        now let v be Vector of V, w be Vector of W;
-      thus F.[v,w] = (f.[v,w])*' by A2
-      .= G.[v,w] by A3;
+      thus F.(v,w) = (f.(v,w))*' by A2
+      .= G.(v,w) by A3;
      end;
-    hence thesis by FUNCT_2:120;
+    hence thesis by BINOP_1:2;
    end;
 end;
 
@@ -1089,13 +1065,13 @@ cluster f*' -> additiveFAF;
    let v be Vector of V;
    let w,t be Vector of W;
    set fg = FunctionalFAF(f*',v);
-   thus fg.(w+t) = (f*').[v,w+t] by BILINEAR:9
-    .= (f.[v,w+t])*' by Def8
-    .= (f.[v,w]+ f.[v,t])*' by BILINEAR:28
-    .= (f.[v,w])*'+ (f.[v,t])*' by COMPLFLD:87
-    .= (f*').[v,w]+ (f.[v,t])*' by Def8
-    .= (f*').[v,w]+ (f*').[v,t] by Def8
-    .= fg.w+ (f*').[v,t] by BILINEAR:9
+   thus fg.(w+t) = (f*').(v,w+t) by BILINEAR:9
+    .= (f.(v,w+t))*' by Def8
+    .= (f.(v,w)+ f.(v,t))*' by BILINEAR:28
+    .= (f.(v,w))*'+ (f.(v,t))*' by COMPLFLD:87
+    .= (f*').(v,w)+ (f.(v,t))*' by Def8
+    .= (f*').(v,w)+ (f*').(v,t) by Def8
+    .= fg.w+ (f*').(v,t) by BILINEAR:9
     .= fg.w+ fg.t by BILINEAR:9;
   end;
 end;
@@ -1109,13 +1085,13 @@ cluster f*' -> additiveSAF;
    let w be Vector of W;
    let v,t be Vector of V;
    set fg = FunctionalSAF(f*',w);
-   thus fg.(v+t) = (f*').[v+t,w] by BILINEAR:10
-    .= (f.[v+t,w])*' by Def8
-    .= (f.[v,w]+ f.[t,w])*' by BILINEAR:27
-    .= (f.[v,w])*'+ (f.[t,w])*' by COMPLFLD:87
-    .= (f*').[v,w]+ (f.[t,w])*' by Def8
-    .= (f*').[v,w]+ (f*').[t,w] by Def8
-    .= fg.v+ (f*').[t,w] by BILINEAR:10
+   thus fg.(v+t) = (f*').(v+t,w) by BILINEAR:10
+    .= (f.(v+t,w))*' by Def8
+    .= (f.(v,w)+ f.(t,w))*' by BILINEAR:27
+    .= (f.(v,w))*'+ (f.(t,w))*' by COMPLFLD:87
+    .= (f*').(v,w)+ (f.(t,w))*' by Def8
+    .= (f*').(v,w)+ (f*').(t,w) by Def8
+    .= fg.v+ (f*').(t,w) by BILINEAR:10
     .= fg.v+ fg.t by BILINEAR:10;
   end;
 end;
@@ -1129,11 +1105,11 @@ cluster f*' -> cmplxhomogeneousFAF;
    let v be Vector of V;
    let w be Vector of W, r be Scalar of W;
    set fg = FunctionalFAF(f*',v);
-   thus fg.(r*w) = (f*').[v,r*w] by BILINEAR:9
-    .= (f.[v,r*w])*' by Def8
-    .= (r*f.[v,w])*' by BILINEAR:33
-    .= r*'*(f.[v,w])*' by COMPLFLD:90
-    .= r*'*(f*').[v,w] by Def8
+   thus fg.(r*w) = (f*').(v,r*w) by BILINEAR:9
+    .= (f.(v,r*w))*' by Def8
+    .= (r*f.(v,w))*' by BILINEAR:33
+    .= r*'*(f.(v,w))*' by COMPLFLD:90
+    .= r*'*(f*').(v,w) by Def8
     .= r*'*fg.w by BILINEAR:9;
   end;
 end;
@@ -1147,12 +1123,12 @@ cluster f*' -> homogeneousFAF;
    let v be Vector of V;
    let w be Vector of W, r be Scalar of W;
    set fg = FunctionalFAF(f*',v);
-   thus fg.(r*w) = (f*').[v,r*w] by BILINEAR:9
-    .= (f.[v,r*w])*' by Def8
-    .= (r*'*f.[v,w])*' by Th30
-    .= r*'*'* (f.[v,w])*' by COMPLFLD:90
-    .= r* (f.[v,w])*'
-    .= r*(f*').[v,w] by Def8
+   thus fg.(r*w) = (f*').(v,r*w) by BILINEAR:9
+    .= (f.(v,r*w))*' by Def8
+    .= (r*'*f.(v,w))*' by Th30
+    .= r*'*'* (f.(v,w))*' by COMPLFLD:90
+    .= r* (f.(v,w))*'
+    .= r*(f*').(v,w) by Def8
     .= r* fg.w by BILINEAR:9;
   end;
 end;
@@ -1164,17 +1140,17 @@ cluster f*' -> non constant;
  coherence
   proof
    consider x,y be set such that
-  A1: x in dom f & y in dom f & f.x <> f.y by SEQM_3:def 5;
+  A1: x in dom f & y in dom f & f.x <> f.y by FUNCT_1:def 16;
   take x,y;
   A2: dom f = [:the carrier of V, the carrier of W:] by FUNCT_2:def 1;
    consider vx be Vector of V ,wx be Vector of W such that
   A3: x = [vx,wx] by A1,DOMAIN_1:9;
    consider vy be Vector of V ,wy be Vector of W such that
   A4: y = [vy,wy] by A1,DOMAIN_1:9;
-       now assume (f*').[vx,wx] = f*'.[vy,wy];
-     then (f.[vx,wx])*'*' = (f*'.[vy,wy])*' by Def8;
-     then f.[vx,wx] = (f*'.[vy,wy])*';
-     then f.[vx,wx] = (f.[vy,wy])*'*' by Def8;
+       now assume (f*').(vx,wx) = f*'.(vy,wy);
+     then (f.(vx,wx))*'*' = (f*'.(vy,wy))*' by Def8;
+     then f.(vx,wx) = (f*'.(vy,wy))*';
+     then f.(vx,wx) = (f.(vy,wy))*'*' by Def8;
      hence contradiction by A1,A3,A4;
     end;
    hence thesis by A1,A2,A3,A4,FUNCT_2:def 1;
@@ -1184,12 +1160,12 @@ end;
 theorem Th31:
 for V be non empty VectSpStr over F_Complex, f be Functional of V,
 v be Vector of V
-holds (FormFunctional(f,f*')).[v,v] = [**|. f.v .|^2, 0 **]
+holds (FormFunctional(f,f*')).(v,v) = [**|. f.v .|^2, 0 **]
  proof
   let V be non empty VectSpStr over F_Complex, f be Functional of V,
       v be Vector of V;
   set g = FormFunctional(f,f*');
-  thus g.[v,v] = f.v * (f*').v by BILINEAR:def 11
+  thus g.(v,v) = f.v * (f*').v by BILINEAR:def 11
   .= f.v * (f.v)*' by Def2
   .= [** |. f.v .|^2, 0 **] by Th16;
  end;
@@ -1204,25 +1180,25 @@ cluster FormFunctional(f,f*') -> diagReR+0valued hermitan diagRvalued;
    thus g is diagReR+0valued
     proof
      let v be Vector of V;
-     A1: g.[v,v] = [** |. f.v .|^2, 0 **] by Th31;
-        g.[v,v] = [**Re (g.[v,v]), Im (g.[v,v]) **] by COMPTRIG:9;
-     then Re (g.[v,v]) = |. f.v .|^2 by A1,COMPTRIG:8;
+     A1: g.(v,v) = [** |. f.v .|^2, 0 **] by Th31;
+        g.(v,v) = [**Re (g.(v,v)), Im (g.(v,v)) **] by COMPTRIG:9;
+     then Re (g.(v,v)) = |. f.v .|^2 by A1,COMPTRIG:8;
      hence thesis by SQUARE_1:72;
     end;
    thus g is hermitan
     proof
      let v,w be Vector of V;
-     thus g.[v,w] = (g.[v,w])*'*'
+     thus g.(v,w) = (g.(v,w))*'*'
      .= (f.v * (f*').w)*'*' by BILINEAR:def 11
      .= (f.v * (f.w)*')*'*' by Def2
      .= ((f.v)*' * (f.w)*'*')*' by COMPLFLD:90
      .= ((f.v)*' * f.w)*'
      .= (f.w * (f*').v)*' by Def2
-     .= (g.[w,v])*' by BILINEAR:def 11;
+     .= (g.(w,v))*' by BILINEAR:def 11;
     end;
    let v be Vector of V;
-   A2: g.[v,v] = [** |. f.v .|^2, 0 **] by Th31;
-      g.[v,v] = [**Re (g.[v,v]), Im (g.[v,v]) **] by COMPTRIG:9;
+   A2: g.(v,v) = [** |. f.v .|^2, 0 **] by Th31;
+      g.(v,v) = [**Re (g.(v,v)), Im (g.(v,v)) **] by COMPTRIG:9;
    hence thesis by A2,COMPTRIG:8;
   end;
 end;
@@ -1246,11 +1222,11 @@ holds (f*')*' = f
   let V,W be non empty VectSpStr over F_Complex;
   let f be Form of V,W;
       now let v be Vector of V, w be Vector of W;
-    thus (f*'*').[v,w] = ((f*').[v,w])*' by Def8
-     .= (f.[v,w])*'*' by Def8
-     .= f.[v,w];
+    thus (f*'*').(v,w) = ((f*').(v,w))*' by Def8
+     .= (f.(v,w))*'*' by Def8
+     .= f.(v,w);
    end;
-  hence thesis by FUNCT_2:120;
+  hence thesis by BINOP_1:2;
  end;
 
 theorem
@@ -1260,11 +1236,11 @@ theorem
   let V,W be non empty VectSpStr over F_Complex;
   set f= NulForm(V,W), K = F_Complex;
       now let v be Vector of V,w be Vector of W;
-   thus f*'.[v,w] = (f.[v,w])*' by Def8
-    .= 0.K by Lm1,BILINEAR:1,COMPLFLD:83
-    .= f.[v,w] by BILINEAR:1;
+   thus f*'.(v,w) = (f.(v,w))*' by Def8
+    .= 0.K by BILINEAR:1,COMPLFLD:83
+    .= f.(v,w) by BILINEAR:1;
    end;
-  hence thesis by FUNCT_2:120;
+  hence thesis by BINOP_1:2;
  end;
 
 theorem Th34:
@@ -1273,14 +1249,14 @@ for V,W be non empty VectSpStr over F_Complex, f,g be Form of V,W holds
  proof
   let V,W be non empty VectSpStr over F_Complex, f,g be Form of V,W;
       now let v be Vector of V,w be Vector of W;
-    thus (f+g)*'.[v,w] = ((f+g).[v,w])*' by Def8
-     .= (f.[v,w] +g.[v,w])*' by BILINEAR:def 3
-     .= (f.[v,w])*'+(g.[v,w])*' by COMPLFLD:87
-     .= f*'.[v,w] + (g.[v,w])*' by Def8
-     .= f*'.[v,w] + g*'.[v,w] by Def8
-     .= (f*'+ g*').[v,w] by BILINEAR:def 3;
+    thus (f+g)*'.(v,w) = ((f+g).(v,w))*' by Def8
+     .= (f.(v,w) +g.(v,w))*' by BILINEAR:def 3
+     .= (f.(v,w))*'+(g.(v,w))*' by COMPLFLD:87
+     .= f*'.(v,w) + (g.(v,w))*' by Def8
+     .= f*'.(v,w) + g*'.(v,w) by Def8
+     .= (f*'+ g*').(v,w) by BILINEAR:def 3;
    end;
-  hence thesis by FUNCT_2:120;
+  hence thesis by BINOP_1:2;
  end;
 
 theorem Th35:
@@ -1289,13 +1265,13 @@ for V,W be non empty VectSpStr over F_Complex, f be Form of V,W holds
  proof
   let V,W be non empty VectSpStr over F_Complex, f be Form of V,W;
       now let v be Vector of V,w be Vector of W;
-    thus (-f)*'.[v,w] = ((-f).[v,w])*' by Def8
-     .= (-f.[v,w])*' by BILINEAR:def 5
-     .= -(f.[v,w])*' by COMPLFLD:88
-     .= -(f*'.[v,w]) by Def8
-     .= (-(f*')).[v,w] by BILINEAR:def 5;
+    thus (-f)*'.(v,w) = ((-f).(v,w))*' by Def8
+     .= (-f.(v,w))*' by BILINEAR:def 5
+     .= -(f.(v,w))*' by COMPLFLD:88
+     .= -(f*'.(v,w)) by Def8
+     .= (-(f*')).(v,w) by BILINEAR:def 5;
    end;
-  hence thesis by FUNCT_2:120;
+  hence thesis by BINOP_1:2;
  end;
 
 theorem
@@ -1305,13 +1281,13 @@ theorem
   let V,W be non empty VectSpStr over F_Complex, f be Form of V,W,
       a be Element of F_Complex;
       now let v be Vector of V,w be Vector of W;
-    thus (a*f)*'.[v,w] = ((a*f).[v,w])*' by Def8
-     .= (a* (f.[v,w]))*' by BILINEAR:def 4
-     .= a*' * (f.[v,w])*' by COMPLFLD:90
-     .= a*' *(f*'.[v,w]) by Def8
-     .= (a*'* (f*')).[v,w] by BILINEAR:def 4;
+    thus (a*f)*'.(v,w) = ((a*f).(v,w))*' by Def8
+     .= (a* (f.(v,w)))*' by BILINEAR:def 4
+     .= a*' * (f.(v,w))*' by COMPLFLD:90
+     .= a*' *(f*'.(v,w)) by Def8
+     .= (a*'* (f*')).(v,w) by BILINEAR:def 4;
    end;
-  hence thesis by FUNCT_2:120;
+  hence thesis by BINOP_1:2;
  end;
 
 theorem
@@ -1328,32 +1304,32 @@ proof
 theorem Th38:
 for V,W be VectSp of F_Complex, v be Vector of V, w,t be Vector of W
 for f be additiveFAF cmplxhomogeneousFAF Form of V,W holds
- f.[v,w-t] = f.[v,w] - f.[v,t]
+ f.(v,w-t) = f.(v,w) - f.(v,t)
   proof
    set K = F_Complex;
    let V,W be VectSp of K, v1 be Vector of V, w,w2 be Vector of W,
      f be additiveFAF cmplxhomogeneousFAF Form of V,W;
-   thus f.[v1,w-w2] = f.[v1, w+(-w2)] by RLVECT_1:def 11
-    .= f.[v1,w] + f.[v1,-w2] by BILINEAR:28
-    .= f.[v1,w] + f.[v1,(-1.K)* w2] by VECTSP_1:59
-    .= f.[v1,w] + (-1.K)*' *f.[v1,w2] by Th30
-    .= f.[v1,w] + (-(the unity of F_Complex))*' *f.[v1,w2] by Lm230
-    .= f.[v1,w] + (-(the unity of F_Complex)) *f.[v1,w2] by COMPLFLD:85,88
-    .= f.[v1,w] + (-1.K) *f.[v1,w2] by Lm230
-    .= f.[v1,w] + - f.[v1,w2] by VECTSP_6:81
-    .= f.[v1,w] - f.[v1,w2]by RLVECT_1:def 11;
+   thus f.(v1,w-w2) = f.(v1, w+(-w2))
+    .= f.(v1,w) + f.(v1,-w2) by BILINEAR:28
+    .= f.(v1,w) + f.(v1,(-1.K)* w2) by VECTSP_1:59
+    .= f.(v1,w) + (-1.K)*' *f.(v1,w2) by Th30
+    .= f.(v1,w) + (-(the unity of F_Complex))*' *f.(v1,w2) by Lm3
+    .= f.(v1,w) + (-(the unity of F_Complex)) *f.(v1,w2) by COMPLFLD:85,88
+    .= f.(v1,w) + (-1.K) *f.(v1,w2) by Lm3
+    .= f.(v1,w) + - f.(v1,w2) by VECTSP_6:81
+    .= f.(v1,w) - f.(v1,w2);
   end;
 
 theorem Th39:
 for V,W be VectSp of F_Complex, v,u be Vector of V, w,t be Vector of W
 for f be sesquilinear-Form of V,W holds
- f.[v-u,w-t] = f.[v,w] - f.[v,t] -(f.[u,w] - f.[u,t])
+ f.(v-u,w-t) = f.(v,w) - f.(v,t) -(f.(u,w) - f.(u,t))
  proof
   let V,W be VectSp of F_Complex, v1,w1 be Vector of V, w,w2 be Vector of W;
   let f be sesquilinear-Form of V,W;
-  set v3 = f.[v1,w] , v4 = f.[v1,w2], v5 = f.[w1,w], v6 = f.[w1,w2];
-  thus f.[v1-w1,w-w2] = f.[v1,w-w2] - f.[w1,w-w2] by BILINEAR:36
-     .= v3 - v4 - f.[w1,w-w2] by Th38
+  set v3 = f.(v1,w) , v4 = f.(v1,w2), v5 = f.(w1,w), v6 = f.(w1,w2);
+  thus f.(v1-w1,w-w2) = f.(v1,w-w2) - f.(w1,w-w2) by BILINEAR:36
+     .= v3 - v4 - f.(w1,w-w2) by Th38
      .= v3 - v4 - (v5 - v6) by Th38;
  end;
 
@@ -1363,19 +1339,19 @@ for V,W be add-associative right_zeroed right_complementable
 for v,u be Vector of V, w,t be Vector of W
 for a,b be Element of F_Complex
  for f be sesquilinear-Form of V,W holds
-   f.[v+a*u,w+b*t] = f.[v,w] + b*' * f.[v,t] + (a*f.[u,w] + a*(b*' *f.[u,t]))
+   f.(v+a*u,w+b*t) = f.(v,w) + b*' * f.(v,t) + (a*f.(u,w) + a*(b*' *f.(u,t)))
  proof
   let V,W be add-associative right_zeroed right_complementable
    VectSp-like (non empty VectSpStr over F_Complex);
   let v1,w1 be Vector of V, w,w2 be Vector of W,
    r,s be Element of F_Complex,
    f be sesquilinear-Form of V,W;
-  set v3 = f.[v1,w], v4 = f.[v1,w2], v5 = f.[w1,w], v6 = f.[w1,w2];
-  thus f.[v1+r*w1,w+s*w2]
-    = v3 +f.[v1,s*w2] + (f.[r*w1,w] +f.[r*w1,s*w2]) by BILINEAR:29
-     .= v3 +s*'*v4 + (f.[r*w1,w] +f.[r*w1,s*w2]) by Th30
-     .= v3 + s*'*v4 + (r*v5 + f.[r*w1,s*w2]) by BILINEAR:32
-     .= v3 + s*'*v4 + (r*v5 + r*f.[w1,s*w2]) by BILINEAR:32
+  set v3 = f.(v1,w), v4 = f.(v1,w2), v5 = f.(w1,w), v6 = f.(w1,w2);
+  thus f.(v1+r*w1,w+s*w2)
+    = v3 +f.(v1,s*w2) + (f.(r*w1,w) +f.(r*w1,s*w2)) by BILINEAR:29
+     .= v3 +s*'*v4 + (f.(r*w1,w) +f.(r*w1,s*w2)) by Th30
+     .= v3 + s*'*v4 + (r*v5 + f.(r*w1,s*w2)) by BILINEAR:32
+     .= v3 + s*'*v4 + (r*v5 + r*f.(w1,s*w2)) by BILINEAR:32
      .= v3 + s*'*v4 + (r*v5 + r*(s*'*v6)) by Th30;
   end;
 
@@ -1383,17 +1359,17 @@ theorem Th41:
 for V,W be VectSp of F_Complex, v,u be Vector of V, w,t be Vector of W
 for a,b be Element of F_Complex
  for f be sesquilinear-Form of V,W holds
-   f.[v-a*u,w-b*t] = f.[v,w] - b*'*f.[v,t] - (a*f.[u,w] - a*(b*'*f.[u,t]))
+   f.(v-a*u,w-b*t) = f.(v,w) - b*'*f.(v,t) - (a*f.(u,w) - a*(b*'*f.(u,t)))
  proof
   let V,W be VectSp of F_Complex, v1,w1 be Vector of V, w,w2 be Vector of W,
    r,s be Element of F_Complex,
    f be sesquilinear-Form of V,W;
-  set v3 = f.[v1,w], v4 = f.[v1,w2], v5 = f.[w1,w], v6 = f.[w1,w2];
-  thus f.[v1-r*w1,w-s*w2]
-      = v3 -f.[v1,s*w2] - (f.[r*w1,w] -f.[r*w1,s*w2]) by Th39
-     .= v3 -s*'*v4 - (f.[r*w1,w] -f.[r*w1,s*w2]) by Th30
-     .= v3 - s*'*v4 - (r*v5 - f.[r*w1,s*w2]) by BILINEAR:32
-     .= v3 - s*'*v4 - (r*v5 - r*f.[w1,s*w2]) by BILINEAR:32
+  set v3 = f.(v1,w), v4 = f.(v1,w2), v5 = f.(w1,w), v6 = f.(w1,w2);
+  thus f.(v1-r*w1,w-s*w2)
+      = v3 -f.(v1,s*w2) - (f.(r*w1,w) -f.(r*w1,s*w2)) by Th39
+     .= v3 -s*'*v4 - (f.(r*w1,w) -f.(r*w1,s*w2)) by Th30
+     .= v3 - s*'*v4 - (r*v5 - f.(r*w1,s*w2)) by BILINEAR:32
+     .= v3 - s*'*v4 - (r*v5 - r*f.(w1,s*w2)) by BILINEAR:32
      .= v3 - s*'*v4 - (r*v5 - r*(s*'*v6)) by Th30;
   end;
 
@@ -1401,34 +1377,34 @@ theorem Th42:
 for V be add-associative right_zeroed right_complementable
              VectSp-like (non empty VectSpStr over F_Complex)
 for f be cmplxhomogeneousFAF Form of V,V
- for v be Vector of V holds f.[v,0.V] = 0.F_Complex
+ for v be Vector of V holds f.(v,0.V) = 0.F_Complex
  proof
   let V be add-associative right_zeroed right_complementable
              VectSp-like (non empty VectSpStr over F_Complex);
   let f be cmplxhomogeneousFAF Form of V,V, v be Vector of V;
   set F=FunctionalFAF(f,v);
-  thus f.[v,0.V] = f.[v,0.F_Complex *0.V] by VECTSP10:2
+  thus f.(v,0.V) = f.(v,0.F_Complex *0.V) by VECTSP10:2
    .= F.(0.F_Complex *0.V) by BILINEAR:9
    .= (0.F_Complex)*' * F.(0.V) by Def1
-   .= 0.F_Complex by Lm1,COMPLFLD:83,VECTSP_1:36;
+   .= 0.F_Complex by COMPLFLD:83,VECTSP_1:36;
  end;
 
 theorem
 :: Polarization Formulae
    for V be VectSp of F_Complex, v,w be Vector of V, f be hermitan-Form of V
  holds
-  f.[v,w] + f.[v,w] + f.[v,w] + f.[v,w]
-   = f.[v+w,v+w] - f.[v-w,v-w]
-    +i_FC *f.[v+i_FC*w,v+i_FC*w] -i_FC *f.[v-i_FC*w,v-i_FC*w]
+  f.(v,w) + f.(v,w) + f.(v,w) + f.(v,w)
+   = f.(v+w,v+w) - f.(v-w,v-w)
+    +i_FC *f.(v+i_FC*w,v+i_FC*w) -i_FC *f.(v-i_FC*w,v-i_FC*w)
   proof
   let V be VectSp of F_Complex, v1,w be Vector of V, f be hermitan-Form of V;
-   set v3 = f.[v1,v1], v4 = f.[v1,w], w2 = f.[w,w], w1 = f.[w,v1];
-A1: f.[v1+w,v1+w] = v3 +v4 + (w1 + w2) by BILINEAR:29;
-      f.[v1-w,v1-w] = v3 - v4 - (w1 - w2) by Th39;
-then A2: f.[v1+w,v1+w] - f.[v1-w,v1-w] =
-      v3 + v4 - (v3 - v4 - (w1 - w2)) + (w1 + w2) by A1,VECTSP_1:91
+   set v3 = f.(v1,v1), v4 = f.(v1,w), w2 = f.(w,w), w1 = f.(w,v1);
+A1: f.(v1+w,v1+w) = v3 +v4 + (w1 + w2) by BILINEAR:29;
+      f.(v1-w,v1-w) = v3 - v4 - (w1 - w2) by Th39;
+then A2: f.(v1+w,v1+w) - f.(v1-w,v1-w) =
+      v3 + v4 - (v3 - v4 - (w1 - w2)) + (w1 + w2) by A1,RLVECT_1:def 6
      .= (v3 + v4 - (v3 - v4)) + (w1 - w2) + (w1 + w2) by RLVECT_1:43
-     .= (v3 - (v3 - v4) + v4) + (w1 - w2) + (w1 + w2) by VECTSP_1:91
+     .= (v3 - (v3 - v4) + v4) + (w1 - w2) + (w1 + w2) by RLVECT_1:def 6
      .= (v3 - v3 + v4 + v4) + (w1 - w2) + (w1 + w2) by RLVECT_1:43
      .= ((0.F_Complex) + v4 + v4) + (w1 - w2) + (w1 + w2) by RLVECT_1:28
      .= (v4 + v4) + (w1 - w2) + (w1 + w2) by RLVECT_1:def 7
@@ -1437,28 +1413,28 @@ then A2: f.[v1+w,v1+w] - f.[v1-w,v1-w] =
      .= (v4 + v4) + (w1 - (w2 - w2) + w1) by RLVECT_1:43
      .= (v4 + v4) + (w1 - (0.F_Complex) + w1) by RLVECT_1:28
      .= (v4 + v4) + (w1 + w1) by RLVECT_1:26;
-      f.[v1+i_FC * w,v1 + i_FC * w]
+      f.(v1+i_FC * w,v1 + i_FC * w)
      = v3 + i_FC*' * v4 + (i_FC* w1 + i_FC*(i_FC*' * w2)) by Th40
     .= v3 + i_FC*' * v4 + i_FC*(w1 + i_FC*' * w2) by VECTSP_1:def 11;
-then A3: i_FC *f.[v1+i_FC*w,v1+i_FC*w]
+then A3: i_FC *f.(v1+i_FC*w,v1+i_FC*w)
     = i_FC * (v3 + i_FC*' * v4)+ i_FC*(i_FC*(w1 + i_FC*' * w2))
          by VECTSP_1:def 11
     .= i_FC * (v3 + i_FC*' * v4)+ i_FC*i_FC*(w1 + i_FC*' * w2)
          by GROUP_1:def 4
     .= i_FC * (v3 + i_FC*' * v4)+ -(w1 + i_FC*' * w2)
      by HAHNBAN1:8,VECTSP_6:81
-    .= i_FC * (v3 + i_FC*' * v4) -(w1 + i_FC*' * w2) by RLVECT_1:def 11
+    .= i_FC * (v3 + i_FC*' * v4) -(w1 + i_FC*' * w2)
     .= i_FC * v3 + i_FC *(i_FC*' * v4) -(w1 + i_FC*' * w2) by VECTSP_1:def 11
     .= i_FC * v3 + (i_FC *i_FC*') * v4 -(w1 + i_FC*' * w2) by GROUP_1:def 4
     .= i_FC * v3 + v4 -(w1 + i_FC*' * w2) by Th7,VECTSP_1:def 19;
-       f.[v1-i_FC * w,v1 - i_FC * w]
-     = f.[v1,v1-i_FC*w] - f.[i_FC*w,v1-i_FC*w] by BILINEAR:36
-    .= v3 - f.[v1,i_FC*w] - f.[i_FC*w,v1-i_FC*w] by Th38
-    .= v3 - i_FC*' * v4 - f.[i_FC*w,v1-i_FC*w] by Th30
-    .= v3 - i_FC*' * v4 - i_FC*f.[w,v1-i_FC*w] by BILINEAR:32
-    .= v3 - i_FC*' * v4 - i_FC*(w1 - f.[w,i_FC*w]) by Th38
+       f.(v1-i_FC * w,v1 - i_FC * w)
+     = f.(v1,v1-i_FC*w) - f.(i_FC*w,v1-i_FC*w) by BILINEAR:36
+    .= v3 - f.(v1,i_FC*w) - f.(i_FC*w,v1-i_FC*w) by Th38
+    .= v3 - i_FC*' * v4 - f.(i_FC*w,v1-i_FC*w) by Th30
+    .= v3 - i_FC*' * v4 - i_FC*f.(w,v1-i_FC*w) by BILINEAR:32
+    .= v3 - i_FC*' * v4 - i_FC*(w1 - f.(w,i_FC*w)) by Th38
     .= v3 - i_FC*' * v4 - i_FC*(w1 - i_FC*' * w2) by Th30;
-  then i_FC *f.[v1-i_FC*w,v1-i_FC*w]
+  then i_FC *f.(v1-i_FC*w,v1-i_FC*w)
     = i_FC * (v3 - i_FC*' * v4)- i_FC*(i_FC*(w1 - i_FC*' * w2))
          by VECTSP_1:43
     .= i_FC * (v3 - i_FC*' * v4)- i_FC*i_FC*(w1 - i_FC*' * w2)
@@ -1469,7 +1445,7 @@ then A3: i_FC *f.[v1+i_FC*w,v1+i_FC*w]
     .= i_FC * v3 - i_FC *(i_FC*' * v4) +(w1 - i_FC*' * w2) by VECTSP_1:43
     .= i_FC * v3 - (i_FC *i_FC*') * v4 +(w1 - i_FC*' * w2) by GROUP_1:def 4
     .= i_FC * v3 - v4 +(w1 - i_FC*' * w2) by Th7,VECTSP_1:def 19;
-     then i_FC *f.[v1+i_FC*w,v1+i_FC*w] - i_FC *f.[v1-i_FC*w,v1-i_FC*w]
+     then i_FC *f.(v1+i_FC*w,v1+i_FC*w) - i_FC *f.(v1-i_FC*w,v1-i_FC*w)
     = i_FC * v3 + v4 -(w1 + i_FC*' * w2)
        - (i_FC * v3 - v4) - (w1 - i_FC*' * w2) by A3,RLVECT_1:41
     .= i_FC * v3 + v4 - (i_FC * v3 - v4)
@@ -1477,24 +1453,24 @@ then A3: i_FC *f.[v1+i_FC*w,v1+i_FC*w]
     .= v4 + i_FC * v3 - i_FC * v3 + v4
        -(w1 + i_FC*' * w2) - (w1 - i_FC*' * w2) by RLVECT_1:43
     .= v4 + (i_FC * v3 - i_FC * v3) + v4
-       -(w1 + i_FC*' * w2) - (w1 - i_FC*' * w2) by RLVECT_1:42
+       -(w1 + i_FC*' * w2) - (w1 - i_FC*' * w2) by RLVECT_1:def 6
     .= v4 + (0.F_Complex) + v4
        -(w1 + i_FC*' * w2) - (w1 - i_FC*' * w2) by RLVECT_1:28
     .= v4 + v4 -(w1 + i_FC*' * w2) - (w1 - i_FC*' * w2)
        by RLVECT_1:def 7
      .= v4 + v4 -(w1 + i_FC*' * w2 + (w1 - i_FC*' * w2)) by RLVECT_1:41
-     .= v4 + v4 -(w1 + (i_FC*' * w2 + w1) - i_FC*' * w2) by RLVECT_1:42
+     .= v4 + v4 -(w1 + (i_FC*' * w2 + w1) - i_FC*' * w2) by RLVECT_1:def 6
      .= v4 + v4 -(w1 + w1 + i_FC*' * w2 - i_FC*' * w2) by RLVECT_1:def 6
-     .= v4 + v4 -(w1 + w1 + (i_FC*' * w2 - i_FC*' * w2)) by RLVECT_1:42
+     .= v4 + v4 -(w1 + w1 + (i_FC*' * w2 - i_FC*' * w2)) by RLVECT_1:def 6
      .= v4 + v4 -(w1 + w1 + 0.F_Complex)
         by RLVECT_1:28
      .= v4 + v4 -(w1 + w1) by RLVECT_1:def 7;
- then f.[v1+w,v1+w] - f.[v1-w,v1-w]
-    +i_FC *f.[v1+i_FC*w,v1+i_FC*w] -i_FC *f.[v1-i_FC*w,v1-i_FC*w]
+ then f.(v1+w,v1+w) - f.(v1-w,v1-w)
+    +i_FC *f.(v1+i_FC*w,v1+i_FC*w) -i_FC *f.(v1-i_FC*w,v1-i_FC*w)
      = v4 + v4 + (w1 + w1) + (v4 + v4 -(w1 + w1))
-         by A2,RLVECT_1:42
+         by A2,RLVECT_1:def 6
     .= v4 + v4 + (w1 + w1 + ((v4 + v4) -(w1 + w1))) by RLVECT_1:def 6
-    .= v4 + v4 + (w1 + w1 + (v4 + v4) -(w1 + w1)) by RLVECT_1:42
+    .= v4 + v4 + (w1 + w1 + (v4 + v4) -(w1 + w1)) by RLVECT_1:def 6
     .= v4 + v4 + (v4 + v4) by COMPLFLD:41
     .= v4 + v4 + v4 + v4 by RLVECT_1:def 6;
    hence thesis;
@@ -1504,7 +1480,7 @@ definition
   let V be non empty VectSpStr over F_Complex;
   let f be Form of V,V;
   let v be Vector of V;
-func signnorm(f,v) -> real number equals   Re (f.[v,v]);
+func signnorm(f,v) -> real number equals   Re (f.(v,v));
  coherence;
 end;
 
@@ -1513,12 +1489,12 @@ for V be add-associative right_zeroed right_complementable
          VectSp-like (non empty VectSpStr over F_Complex)
 for f be diagReR+0valued diagRvalued Form of V,V
 for v be Vector of V holds
-   |. f.[v,v] .| = Re (f.[v,v]) & signnorm (f,v) = |. f.[v,v] .|
+   |. f.(v,v) .| = Re (f.(v,v)) & signnorm (f,v) = |. f.(v,v) .|
  proof
   let V be add-associative right_zeroed right_complementable
      VectSp-like (non empty VectSpStr over F_Complex),
    f be diagReR+0valued diagRvalued Form of V,V, v be Vector of V;
-  set v1 = f.[v,v], s = signnorm(f,v);
+  set v1 = f.(v,v), s = signnorm(f,v);
      s = Re v1 & 0 <= Re v1 & Im v1 = 0 by Def6,Def7;
   hence thesis by Th17;
  end;
@@ -1531,20 +1507,20 @@ theorem Th45:
 for V be VectSp of F_Complex, v,w be Vector of V
 for f be sesquilinear-Form of V,V, r be Real,
 a be Element of F_Complex st
-|.a.| =1 & Re (a * f.[w,v]) = |.f.[w,v].| & Im (a * f.[w,v])= 0
+|.a.| =1 & Re (a * f.(w,v)) = |.f.(w,v).| & Im (a * f.(w,v))= 0
 holds
- f.[v-[**r,0**]*a*w, v-[**r,0**]*a*w]
-      = f.[v,v] - [**r,0**]*(a* f.[w,v])
-       - [**r,0**]*(a*'*f.[v,w]) + [**r^2,0**]*f.[w,w]
+ f.(v-[**r,0**]*a*w, v-[**r,0**]*a*w)
+      = f.(v,v) - [**r,0**]*(a* f.(w,v))
+       - [**r,0**]*(a*'*f.(v,w)) + [**r^2,0**]*f.(w,w)
  proof
   let V be VectSp of F_Complex, v1,w be Vector of V,
      f be sesquilinear-Form of V,V, r be Real,
      a be Element of F_Complex such that
- A1: |.a.| =1 & Re (a * f.[w,v1]) = |.f.[w,v1].| & Im (a * f.[w,v1])= 0;
-  set v3 = f.[v1,v1], v4 = f.[v1,w], w1 = f.[w,v1], w2 = f.[w,w];
+ A1: |.a.| =1 & Re (a * f.(w,v1)) = |.f.(w,v1).| & Im (a * f.(w,v1))= 0;
+  set v3 = f.(v1,v1), v4 = f.(v1,w), w1 = f.(w,v1), w2 = f.(w,w);
   set r1 = [**r,0**]*a;
  A2: Im [**r,0**] = 0 by HAHNBAN1:15;
- A3: f.[v1-r1*w,v1-r1*w]
+ A3: f.(v1-r1*w,v1-r1*w)
     = v3 - r1*'*v4 -(r1*w1 - r1*(r1*'*w2)) by Th41
    .= v3 - (([**r,0**])*'*a*')*v4 -
       ([**r,0**]*a*w1 - [**r,0**]*a*(([**r,0**]*a)*'*w2)) by COMPLFLD:90
@@ -1569,7 +1545,7 @@ holds
    .= a*[**r,0**]*[**r,0**]*a*'*w2 by GROUP_1:def 4
    .= a*([**r,0**]*[**r,0**])*a*'*w2 by GROUP_1:def 4
    .= a*[**r*r,0**]*a*'*w2 by Th15
-   .= a*[**r^2,0**]*a*'*w2 by SQUARE_1:def 3
+   .= a*[**r^2,0**]*a*'*w2
    .= [**r^2,0**]*(a*a*')*w2 by GROUP_1:def 4
    .= [**r^2,0**]*[**1,0**]*w2 by A1,Th16,SQUARE_1:59
    .= [**r^2*1,0**]*w2 by Th15;
@@ -1580,34 +1556,34 @@ theorem Th46:
 for V be VectSp of F_Complex, v,w be Vector of V
 for f be diagReR+0valued hermitan-Form of V, r be Real,
 a be Element of F_Complex st
-|.a.| =1 & Re (a * f.[w,v]) = |.f.[w,v].| & Im (a * f.[w,v])= 0
+|.a.| =1 & Re (a * f.(w,v)) = |.f.(w,v).| & Im (a * f.(w,v))= 0
 holds
-Re( f.[v-[**r,0**]*a*w, v-[**r,0**]*a*w])
-      = signnorm(f,v) - 2*|.f.[w,v].|*r + signnorm(f,w) * r^2 &
-0 <= signnorm(f,v) - 2*|.f.[w,v].|*r + signnorm(f,w) * r^2
+Re( f.(v-[**r,0**]*a*w, v-[**r,0**]*a*w))
+      = signnorm(f,v) - 2*|.f.(w,v).|*r + signnorm(f,w) * r^2 &
+0 <= signnorm(f,v) - 2*|.f.(w,v).|*r + signnorm(f,w) * r^2
  proof
   let V be VectSp of F_Complex, v1,w be Vector of V,
       f be diagReR+0valued hermitan-Form of V, r be Real,
       a be Element of F_Complex such that
- A1: |.a.| =1 & Re (a * f.[w,v1]) = |.f.[w,v1].| & Im (a * f.[w,v1])= 0;
-  set v3=f.[v1,v1], v4=f.[v1,w], w1=f.[w,v1], w2=f.[w,w],
+ A1: |.a.| =1 & Re (a * f.(w,v1)) = |.f.(w,v1).| & Im (a * f.(w,v1))= 0;
+  set v3=f.(v1,v1), v4=f.(v1,w), w1=f.(w,v1), w2=f.(w,w),
       A = signnorm(f,v1), B = |.w1.|, C = signnorm(f,w);
  A2: a*'*v4 = (a*'*v4)*'*'
    .= (a*'*' * v4*')*' by COMPLFLD:90
    .= (a * v4*')*'
    .= (a*w1)*' by Def5;
- A3: f.[v1-[**r,0**]*a*w,v1-[**r,0**]*a*w]
+ A3: f.(v1-[**r,0**]*a*w,v1-[**r,0**]*a*w)
     = v3 - [**r,0**]*(a* w1) - [**r,0**]*(a*'*v4) + [**r^2,0**]*w2 by A1,Th45;
- A6: Re [**r,0**] =r & Im [**r,0**] = 0 by HAHNBAN1:15;
- then A7: Re ([**r,0**]*(a* w1)) = r * B by A1,Th11;
- A8: Re ([**r,0**]*(a*'*v4)) = r * Re ((a*w1)*') by A2,A6,Th11
-   .= r * B by A1,Th13;
+ A4: Re [**r,0**] =r & Im [**r,0**] = 0 by HAHNBAN1:15;
+ then A5: Re ([**r,0**]*(a* w1)) = r * B by A1,Th11;
+ A6: Re ([**r,0**]*(a*'*v4)) = r * Re ((a*w1)*') by A2,A4,Th11
+   .= r * B by A1,Lm4;
      Re [**r^2,0**] =r^2 & Im [**r^2,0**] = 0 by HAHNBAN1:15;
   then Re ([**r^2,0**]*w2) = r^2 * C by Th11;
-  then Re (f.[v1-[**r,0**]*a*w,v1-[**r,0**]*a*w])
+  then Re (f.(v1-[**r,0**]*a*w,v1-[**r,0**]*a*w))
   = Re(v3 - [**r,0**]*(a* w1) - [**r,0**]*(a*'*v4)) + C * r^2 by A3,HAHNBAN1:16
-  .= Re(v3 - [**r,0**]*(a* w1)) - r*B + C * r^2 by A8,Th10
-  .= A - r*B - r*B + C * r^2 by A7,Th10
+  .= Re(v3 - [**r,0**]*(a* w1)) - r*B + C * r^2 by A6,Th10
+  .= A - r*B - r*B + C * r^2 by A5,Th10
   .= A -2*B*r + C * r^2;
  hence thesis by Def7;
 end;
@@ -1615,11 +1591,11 @@ end;
 theorem Th47:
 for V be VectSp of F_Complex, v,w be Vector of V
 for f be diagReR+0valued hermitan-Form of V
-st signnorm(f,w)= 0 holds |.f.[w,v].| = 0
+st signnorm(f,w)= 0 holds |.f.(w,v).| = 0
  proof
   let V be VectSp of F_Complex, v1,w be Vector of V,
       f be diagReR+0valued hermitan-Form of V;
-   set w1 = f.[w,v1], A = signnorm(f,v1), B = |.w1.|, C = signnorm(f,w);
+   set w1 = f.(w,v1), A = signnorm(f,v1), B = |.w1.|, C = signnorm(f,w);
   consider a be Element of F_Complex such that
  A1: |.a.| =1 & Re (a * w1) = |.w1.| & Im (a * w1)= 0 by Th9;
   reconsider A as Real;
@@ -1649,7 +1625,7 @@ st signnorm(f,w)= 0 holds |.f.[w,v].| = 0
   A12: now
        assume A13: A <0;
           0 <= A - 2*B*0 + C * 0^2 by A1,Th46;
-       hence contradiction by A2,A13;
+       hence contradiction by A13;
       end;
          now
        assume A14: A >0;
@@ -1671,11 +1647,11 @@ theorem Th48:
 :: Schwarz inequality
 for V be VectSp of F_Complex, v,w be Vector of V
 for f be diagReR+0valued hermitan-Form of V
-holds |. f.[v,w] .|^2 <= signnorm(f,v) * signnorm(f,w)
+holds |. f.(v,w) .|^2 <= signnorm(f,v) * signnorm(f,w)
  proof
   let V be VectSp of F_Complex, v1,w be Vector of V,
       f be diagReR+0valued hermitan-Form of V;
-  set v4=f.[v1,w], w1=f.[w,v1],
+  set v4=f.(v1,w), w1=f.(w,v1),
       A = signnorm(f,v1), B = |.w1.|, C = signnorm(f,w);
   reconsider A,B,C as Real;
   consider a be Element of F_Complex such that
@@ -1689,10 +1665,10 @@ holds |. f.[v,w] .|^2 <= signnorm(f,v) * signnorm(f,w)
       A - 2*B *(B/C) + C*(B/C)^2
      = A - (B*(2*B)/C) + C*(B/C)^2 by XCMPLX_1:75
      .= A - (B*B*2)/C + C*(B/C)^2
-     .= A - (B^2*2)/C + C*(B/C)^2 by SQUARE_1:def 3
+     .= A - (B^2*2)/C + C*(B/C)^2
      .= A - 2 *(B^2/C) + C*(B/C)^2 by XCMPLX_1:75
      .= A - 2 *(B^2/C) + C*(B^2/C^2) by SQUARE_1:69
-     .= A - 2 *(B^2/C) + C*(B^2/(C*C)) by SQUARE_1:def 3
+     .= A - 2 *(B^2/C) + C*(B^2/(C*C))
      .= A - 2 *(B^2/C) + (C*B^2)/(C*C) by XCMPLX_1:75
      .= A - 2 *(B^2/C) + B^2/C by A5,XCMPLX_1:92
      .= A - B^2/C
@@ -1704,21 +1680,20 @@ holds |. f.[v,w] .|^2 <= signnorm(f,v) * signnorm(f,w)
     then 0+ B^2 <= A*C - B^2 + B^2 by XREAL_1:8;
     hence thesis;
    end;
-     C = Re (f.[w,w]);
-  hence thesis by A2,A3,A4,Def7;
+  thus thesis by A2,A3,A4,Def7;
  end;
 
 theorem Th49:
 :: Schwarz inequality - second version
 for V be VectSp of F_Complex
 for f be diagReR+0valued hermitan-Form of V
- for v,w be Vector of V holds |. f.[v,w] .|^2 <= |. f.[v,v].| * |. f.[w,w] .|
+ for v,w be Vector of V holds |. f.(v,w) .|^2 <= |. f.(v,v).| * |. f.(w,w) .|
  proof
   let V be VectSp of F_Complex,
    f be diagReR+0valued hermitan-Form of V,
    v1,w be Vector of V;
-  set v3 = f.[v1,v1], s1 = signnorm(f,v1), s2 = signnorm(f,w);
-     |. f.[v1,w] .|^2 <= s1 * s2 & s1 = |.v3.| by Th44,Th48;
+  set v3 = f.(v1,v1), s1 = signnorm(f,v1), s2 = signnorm(f,w);
+     |. f.(v1,w) .|^2 <= s1 * s2 & s1 = |.v3.| by Th44,Th48;
   hence thesis by Th44;
  end;
 
@@ -1732,9 +1707,9 @@ for f be diagReR+0valued hermitan-Form of V
   let V be VectSp of F_Complex,
    f be diagReR+0valued hermitan-Form of V,
    v,w be Vector of V;
-  set v3 = f.[v,v], v4 = f.[v,w], w1 = f.[w,v], w2 = f.[w,w],
+  set v3 = f.(v,v), v4 = f.(v,w), w1 = f.(w,v), w2 = f.(w,w),
       sv = signnorm(f,v), sw = signnorm(f,w), svw = signnorm(f,v+w);
-A2:  svw = Re (f.[v+w,v+w])
+A1:  svw = Re (f.(v+w,v+w))
    .= Re (v3 + v4 +(w1+w2)) by BILINEAR:29
    .= Re (v3 + v4)+ Re(w1+w2) by HAHNBAN1:16
    .= Re v3 + Re v4 + Re(w1+w2) by HAHNBAN1:16
@@ -1743,24 +1718,24 @@ A2:  svw = Re (f.[v+w,v+w])
    .= sv + (Re v4 + Re (v4*')) + sw by Def5
    .= sv + 2*(Re v4) + sw by Th18
    .= sv + sw+ 2*(Re v4);
-A3:   Re v4 <= |.v4.| by COMPLEX1:140;
-A4:   0 <= |.v4.| by COMPLEX1:132;
+A2:   Re v4 <= |.v4.| by COMPLEX1:140;
+A3:   0 <= |.v4.| by COMPLEX1:132;
   then 0 <= |.v4.| *|.v4.| by XREAL_1:129;
-then A5:  0 <= |.v4.|^2 by SQUARE_1:def 3;
-A6:  0 <= sv & 0 <= sw by Def7;
+then A4:  0 <= |.v4.|^2;
+A5:  0 <= sv & 0 <= sw by Def7;
      |.v4.|^2 <= sv * sw by Th48;
-  then sqrt(|.v4.|^2) <= sqrt(sv * sw) by A5,SQUARE_1:94;
-  then |.v4.| <= sqrt(sv * sw) by A4,SQUARE_1:89;
-  then |.v4.| <= sqrt(sv) * sqrt(sw) by A6,SQUARE_1:97;
-  then Re v4 <= sqrt(sv) * sqrt(sw) by A3,XREAL_1:2;
+  then sqrt(|.v4.|^2) <= sqrt(sv * sw) by A4,SQUARE_1:94;
+  then |.v4.| <= sqrt(sv * sw) by A3,SQUARE_1:89;
+  then |.v4.| <= sqrt(sv) * sqrt(sw) by A5,SQUARE_1:97;
+  then Re v4 <= sqrt(sv) * sqrt(sw) by A2,XREAL_1:2;
   then 2* (Re v4) <= 2*(sqrt(sv) * sqrt(sw)) by XREAL_1:66;
-  then svw <= sv + sw + 2*(sqrt(sv) * sqrt(sw)) by A2,XREAL_1:8;
+  then svw <= sv + sw + 2*(sqrt(sv) * sqrt(sw)) by A1,XREAL_1:8;
   then svw <= (sqrt sv)^2 + sw + 2*(sqrt(sv) * sqrt(sw))
-         by A6,SQUARE_1:def 4;
+         by A5,SQUARE_1:def 4;
   then svw <= (sqrt sv)^2 + (sqrt sw)^2 + 2*(sqrt(sv) * sqrt(sw))
-           by A6,SQUARE_1:def 4;
+           by A5,SQUARE_1:def 4;
   then svw <= (sqrt sv)^2 + 2*(sqrt sv)* (sqrt sw)+(sqrt sw)^2;
-  hence thesis by SQUARE_1:63;
+  hence thesis;
  end;
 
 theorem
@@ -1768,12 +1743,12 @@ theorem
    for V be VectSp of F_Complex
 for f be diagReR+0valued hermitan-Form of V
  for v,w be Vector of V holds
- |. f.[v+w,v+w] .| <= (sqrt(|. f.[v,v] .|) + sqrt(|. f.[w,w] .|))^2
+ |. f.(v+w,v+w) .| <= (sqrt(|. f.(v,v) .|) + sqrt(|. f.(w,w) .|))^2
  proof
   let V be VectSp of F_Complex,
    f be diagReR+0valued hermitan-Form of V,
    v1,w be Vector of V;
-  set v3 = f.[v1,v1], v4 = f.[v1+w,v1+w],
+  set v3 = f.(v1,v1), v4 = f.(v1+w,v1+w),
       s1 = signnorm(f,v1), s2 = signnorm(f,w), s12 = signnorm(f,v1+w);
      s12 <= (sqrt(s1) + sqrt(s2))^2 & |.v3.| = s1 & |.v4.| =s12 by Th44,Th50;
   hence thesis by Th44;
@@ -1789,17 +1764,17 @@ for f be hermitan-Form of V
   let V be VectSp of F_Complex,
    f be hermitan-Form of V,
    v1,w be Element of V;
-  set v3 = f.[v1,v1], v4 = f.[v1,w], w1 = f.[w,v1], w2 = f.[w,w],
-   vp = f.[v1+w,v1+w], vm = f.[v1-w,v1-w], s1 = signnorm(f,v1),
+  set v3 = f.(v1,v1), v4 = f.(v1,w), w1 = f.(w,v1), w2 = f.(w,w),
+   vp = f.(v1+w,v1+w), vm = f.(v1-w,v1-w), s1 = signnorm(f,v1),
    s2 = signnorm(f,w), sp = signnorm(f,v1+w), sm = signnorm(f,v1-w);
      vp = v3 + v4 +(w1+w2) by BILINEAR:29;
 then A1: vp + vm = v3 + v4 +(w1+w2) + (v3 - v4 - (w1 -w2)) by Th39
-  .= (v3 + v4) +(w1+w2) + (v3 - v4) - (w1 -w2) by RLVECT_1:42
+  .= (v3 + v4) +(w1+w2) + (v3 - v4) - (w1 -w2) by RLVECT_1:def 6
   .= (v3 + v4) + (v3 - v4) + (w1+w2) - (w1 -w2) by RLVECT_1:def 6
   .= v3 + (v4 + (v3 - v4)) + (w1+w2) - (w1 -w2) by RLVECT_1:def 6
-  .= v3 + (v4 + v3 - v4) + (w1+w2) - (w1 -w2) by RLVECT_1:42
+  .= v3 + (v4 + v3 - v4) + (w1+w2) - (w1 -w2) by RLVECT_1:def 6
   .= v3 + v3 + (w1+w2) - (w1 -w2) by COMPLFLD:41
-  .= v3 + v3 + (w1+w2 - (w1 -w2)) by RLVECT_1:42
+  .= v3 + v3 + (w1+w2 - (w1 -w2)) by RLVECT_1:def 6
   .= v3 + v3 + (w1+w2 - w1 +w2) by RLVECT_1:43
   .= v3 + v3 + (w2 + w2) by COMPLFLD:41;
   thus sp + sm = Re vp + sm
@@ -1817,15 +1792,15 @@ theorem
    for V be VectSp of F_Complex
 for f be diagReR+0valued hermitan-Form of V
  for v,w be Element of V holds
- |. f.[v+w,v+w] .| + |. f.[v-w,v-w] .| = 2*|. f.[v,v] .| + 2*|. f.[w,w] .|
+ |. f.(v+w,v+w) .| + |. f.(v-w,v-w) .| = 2*|. f.(v,v) .| + 2*|. f.(w,w) .|
  proof
   let V be VectSp of F_Complex,
    f be diagReR+0valued hermitan-Form of V,
    v1,w be Element of V;
   set s1 = signnorm(f,v1), s2 = signnorm(f,w), sp = signnorm(f,v1+w),
     sm = signnorm(f,v1-w);
-     sp + sm = 2*s1 + 2*s2 & sp = |. f.[v1+w,v1+w] .| &
-  sm = |. f.[v1-w,v1-w] .| & s1 = |. f.[v1,v1] .| by Th44,Th52;
+     sp + sm = 2*s1 + 2*s2 & sp = |. f.(v1+w,v1+w) .| &
+  sm = |. f.(v1-w,v1-w) .| & s1 = |. f.(v1,v1) .| by Th44,Th52;
   hence thesis by Th44;
  end;
 
@@ -1876,9 +1851,9 @@ A1: quasinorm(f) is subadditive
      proof
      let v,w be Vector of V;
       set fvw = signnorm(f,v+w), fv = signnorm(f,v), fw = signnorm(f,w);
-   A2: fvw = Re (f.[v+w,v+w]) & 0 <= Re (f.[v+w,v+w]) & q.(v+w) = sqrt fvw &
-      fv = Re (f.[v,v]) & 0 <= Re (f.[v,v]) & q.v = sqrt fv &
-      fw = Re (f.[w,w]) & 0 <= Re (f.[w,w]) & q.w = sqrt fw
+   A2: fvw = Re (f.(v+w,v+w)) & 0 <= Re (f.(v+w,v+w)) & q.(v+w) = sqrt fvw &
+      fv = Re (f.(v,v)) & 0 <= Re (f.(v,v)) & q.v = sqrt fv &
+      fw = Re (f.(w,w)) & 0 <= Re (f.(w,w)) & q.w = sqrt fw
         by Def7,Def10;
       then 0<= q.v & 0<= q.w by SQUARE_1:def 4;
    then A3: 0+0<= q.v+q.w by XREAL_1:9;
@@ -1889,21 +1864,21 @@ A1: quasinorm(f) is subadditive
        quasinorm(f) is homogeneous
      proof
      let v be Vector of V, r be Scalar of V;
-   A4: f.[r*v,r*v] = r*f.[v,r*v] by BILINEAR:32
-        .= r*(r*' * f.[v,v]) by Th30
-        .= r*r*' * f.[v,v] by GROUP_1:def 4
-        .= [**|.r.|^2,0**] * f.[v,v] by Th16
-        .= [**|.r.|^2,0**] * [**Re(f.[v,v]),Im (f.[v,v])**]
+   A4: f.(r*v,r*v) = r*f.(v,r*v) by BILINEAR:32
+        .= r*(r*' * f.(v,v)) by Th30
+        .= r*r*' * f.(v,v) by GROUP_1:def 4
+        .= [**|.r.|^2,0**] * f.(v,v) by Th16
+        .= [**|.r.|^2,0**] * [**Re(f.(v,v)),Im (f.(v,v))**]
               by COMPTRIG:9
-        .= [**|.r.|^2,0**] * [**Re(f.[v,v]),0**] by Def6
-        .= [**|.r.|^2 * Re(f.[v,v]),0**] by Th15;
-    A5: 0 <= |.r.|^2 & 0 <= |.r.| & 0 <= Re(f.[v,v])
+        .= [**|.r.|^2,0**] * [**Re(f.(v,v)),0**] by Def6
+        .= [**|.r.|^2 * Re(f.(v,v)),0**] by Th15;
+    A5: 0 <= |.r.|^2 & 0 <= |.r.| & 0 <= Re(f.(v,v))
          by Def7,COMPLEX1:132,SQUARE_1:72;
       thus q.(r*v) = sqrt (signnorm(f,r*v)) by Def10
-      .= sqrt(Re (f.[r*v,r*v]))
-      .= sqrt (|.r.|^2 * Re(f.[v,v])) by A4,HAHNBAN1:15
-      .= sqrt (|.r.|^2) * sqrt (Re(f.[v,v])) by A5,SQUARE_1:97
-      .= |.r.| * sqrt (Re(f.[v,v])) by A5,SQUARE_1:89
+      .= sqrt(Re (f.(r*v,r*v)))
+      .= sqrt (|.r.|^2 * Re(f.(v,v))) by A4,HAHNBAN1:15
+      .= sqrt (|.r.|^2) * sqrt (Re(f.(v,v))) by A5,SQUARE_1:97
+      .= |.r.| * sqrt (Re(f.(v,v))) by A5,SQUARE_1:89
       .= |.r.| * sqrt (signnorm(f,v))
       .= |.r.|*q.v by Def10;
      end;
@@ -1922,7 +1897,7 @@ cluster diagker f -> non empty;
  coherence
   proof
    set F = F_Complex;
-      f.[0.V,0.V] = 0.F & diagker f = {v where v is Vector of V : f.[v,v] = 0.F
+      f.(0.V,0.V) = 0.F & diagker f = {v where v is Vector of V : f.(v,v) = 0.F
 }
         by Th42;
    then 0.V in diagker f;
@@ -1941,33 +1916,33 @@ theorem
     proof
     let v,u being Element of V;
      assume
-    A2: v in V1 & u in V1;
+    A1: v in V1 & u in V1;
      then consider a be Vector of V such that
-    A3: a = v & f.[a,a]= 0.F_Complex;
+    A2: a = v & f.(a,a)= 0.F_Complex;
     consider b be Vector of V such that
-    A4: b = u & f.[b,b]= 0.F_Complex by A2;
-    A5: f.[v+u,v+u] = 0.F_Complex + f.[v,u] +(f.[u,v]+0.F_Complex)
-                     by A3,A4,BILINEAR:29
-    .= f.[v,u] +(f.[u,v]+0.F_Complex) by RLVECT_1:10
-    .= f.[v,u] +f.[u,v] by RLVECT_1:10;
-       |.f.[v,u].|^2 <= |. f.[v,v].| * 0 &
-    0 <= |.f.[v,u].|^2 by A4,Lm1,Th49,COMPLFLD:93,SQUARE_1:72;
-    then |.f.[v,u].|^2 = 0;
-    then A6: |.f.[v,u].| = 0 by SQUARE_1:73;
-    then A7: f.[v,u] = 0.F_Complex by COMPLFLD:94;
-       0 = |.(f.[v,u])*'.| by A6,COMPLEX1:139
-    .= |.f.[u,v].| by Def5;
-    then f.[u,v] = 0.F_Complex by COMPLFLD:94;
-    then f.[v+u,v+u] = 0.F_Complex by A5,A7,RLVECT_1:10;
+    A3: b = u & f.(b,b)= 0.F_Complex by A1;
+    A4: f.(v+u,v+u) = 0.F_Complex + f.(v,u) +(f.(u,v)+0.F_Complex)
+                     by A2,A3,BILINEAR:29
+    .= f.(v,u) +(f.(u,v)+0.F_Complex) by RLVECT_1:10
+    .= f.(v,u) +f.(u,v) by RLVECT_1:10;
+       |.f.(v,u).|^2 <= |. f.(v,v).| * 0 &
+    0 <= |.f.(v,u).|^2 by A3,Th49,COMPLFLD:93,SQUARE_1:72;
+    then |.f.(v,u).|^2 = 0;
+    then A5: |.f.(v,u).| = 0 by SQUARE_1:73;
+    then A6: f.(v,u) = 0.F_Complex by COMPLFLD:94;
+       0 = |.(f.(v,u))*'.| by A5,COMPLEX1:139
+    .= |.f.(u,v).| by Def5;
+    then f.(u,v) = 0.F_Complex by COMPLFLD:94;
+    then f.(v+u,v+u) = 0.F_Complex by A4,A6,RLVECT_1:10;
     hence thesis;
    end;
   let a be Element of F_Complex;
   let v be Element of V;
    assume v in V1;
    then consider w be Vector of V such that
-  A8: w=v & f.[w,w]=0.F_Complex;
-     f.[a*v,a*v] = a *f.[v,a*v] by BILINEAR:32
-  .= a*(a*'* 0.F_Complex) by A8,Th30
+  A7: w=v & f.(w,w)=0.F_Complex;
+     f.(a*v,a*v) = a *f.(v,a*v) by BILINEAR:32
+  .= a*(a*'* 0.F_Complex) by A7,Th30
   .=a*0.F_Complex by VECTSP_1:36
   .=0.F_Complex by VECTSP_1:36;
   hence thesis;
@@ -1983,22 +1958,22 @@ for V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V
    let x be set;
     assume x in diagker f;
     then consider a be Vector of V such that
-  A3: a=x & f.[a,a] = 0. F_Complex;
+  A1: a=x & f.(a,a) = 0. F_Complex;
         now let w be Vector of V;
-         |.f.[a,w].|^2 <= 0*|. f.[w,w].| &
-      0 <= |.f.[a,w].|^2 by A3,Lm1,Th49,COMPLFLD:93,SQUARE_1:72;
-      then |.f.[a,w].|^2 = 0;
-      then |.f.[a,w].| = 0 by SQUARE_1:73;
-      hence f.[a,w]=0.F_Complex by COMPLFLD:94;
+         |.f.(a,w).|^2 <= 0*|. f.(w,w).| &
+      0 <= |.f.(a,w).|^2 by A1,Th49,COMPLFLD:93,SQUARE_1:72;
+      then |.f.(a,w).|^2 = 0;
+      then |.f.(a,w).| = 0 by SQUARE_1:73;
+      hence f.(a,w)=0.F_Complex by COMPLFLD:94;
      end;
-    hence thesis by A3;
+    hence thesis by A1;
    end;
   let x be set;
   assume x in leftker f;
   then consider a be Vector of V such that
-A4: a=x & for w be Vector of V holds f.[a,w] = 0.F_Complex;
-     f.[a,a] = 0.F_Complex by A4;
-  hence thesis by A4;
+A2: a=x & for w be Vector of V holds f.(a,w) = 0.F_Complex;
+     f.(a,a) = 0.F_Complex by A2;
+  hence thesis by A2;
  end;
 
 theorem Th56:
@@ -2011,15 +1986,15 @@ for V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V
    let x be set;
     assume x in diagker f;
     then consider a be Vector of V such that
-  A3: a=x & f.[a,a] = 0. F_Complex;
+  A1: a=x & f.(a,a) = 0. F_Complex;
         now let w be Vector of V;
-         |.f.[w,a].|^2 <= |. f.[w,w].|*0 & 0 <= |.f.[w,a].|^2
-         by A3,Lm1,Th49,COMPLFLD:93,SQUARE_1:72;
-      then |.f.[w,a].|^2 = 0;
-      then |.f.[w,a].| = 0 by SQUARE_1:73;
-      hence f.[w,a]=0.F_Complex by COMPLFLD:94;
+         |.f.(w,a).|^2 <= |. f.(w,w).|*0 & 0 <= |.f.(w,a).|^2
+         by A1,Th49,COMPLFLD:93,SQUARE_1:72;
+      then |.f.(w,a).|^2 = 0;
+      then |.f.(w,a).| = 0 by SQUARE_1:73;
+      hence f.(w,a)=0.F_Complex by COMPLFLD:94;
      end;
-    hence thesis by A3;
+    hence thesis by A1;
    end;
   thus thesis by BILINEAR:42;
  end;
@@ -2034,16 +2009,16 @@ diagker f = diagker f*'
    proof
     let x be set; assume x in diagker f;
     then consider v be Vector of V such that
-   A3: x=v & f.[v,v]= 0.K;
-       (f*').[v,v] = 0.K by A3,Def8,Lm1,COMPLFLD:83;
-    hence thesis by A3;
+   A1: x=v & f.(v,v)= 0.K;
+       (f*').(v,v) = 0.K by A1,Def8,COMPLFLD:83;
+    hence thesis by A1;
    end;
   let x be set; assume x in diagker f*';
   then consider v be Vector of V such that
- A4: x=v & f*'.[v,v]= 0.K;
-     (f.[v,v])*'*' = 0.K by A4,Def8,Lm1,COMPLFLD:83;
-  then f.[v,v] = 0.K;
-  hence thesis by A4;
+ A2: x=v & f*'.(v,v)= 0.K;
+     (f.(v,v))*'*' = 0.K by A2,Def8,COMPLFLD:83;
+  then f.(v,v) = 0.K;
+  hence thesis by A2;
  end;
 
 theorem Th58:
@@ -2056,45 +2031,45 @@ leftker f = leftker f*' & rightker f = rightker f*'
    proof
     let x be set; assume x in leftker f;
     then consider v be Vector of V such that
-   A3: x=v & for w be Vector of W holds f.[v,w]= 0.K;
+   A1: x=v & for w be Vector of W holds f.(v,w)= 0.K;
         now let w be Vector of W;
-         (f.[v,w])*' = 0.K by A3,Lm1,COMPLFLD:83;
-      hence (f*').[v,w] = 0.K by Def8;
+         (f.(v,w))*' = 0.K by A1,COMPLFLD:83;
+      hence (f*').(v,w) = 0.K by Def8;
      end;
-    hence thesis by A3;
+    hence thesis by A1;
    end;
   thus leftker f*' c= leftker f
    proof
     let x be set; assume x in leftker f*';
     then consider v be Vector of V such that
-   A4: x=v & for w be Vector of W holds f*'.[v,w]= 0.K;
+   A2: x=v & for w be Vector of W holds f*'.(v,w)= 0.K;
          now let w be Vector of W;
-          (f*'.[v,w])*' = 0.K by A4,Lm1,COMPLFLD:83;
-       then (f.[v,w])*'*' = 0.K by Def8;
-       hence f.[v,w] = 0.K;
+          (f*'.(v,w))*' = 0.K by A2,COMPLFLD:83;
+       then (f.(v,w))*'*' = 0.K by Def8;
+       hence f.(v,w) = 0.K;
       end;
-    hence thesis by A4;
+    hence thesis by A2;
    end;
   thus rightker f c= rightker f*'
    proof
     let x be set; assume x in rightker f;
     then consider w be Vector of W such that
-   A7: x=w & for v be Vector of V holds f.[v,w]= 0.K;
+   A3: x=w & for v be Vector of V holds f.(v,w)= 0.K;
         now let v be Vector of V;
-         (f.[v,w])*' = 0.K by A7,Lm1,COMPLFLD:83;
-      hence (f*').[v,w] = 0.K by Def8;
+         (f.(v,w))*' = 0.K by A3,COMPLFLD:83;
+      hence (f*').(v,w) = 0.K by Def8;
      end;
-    hence thesis by A7;
+    hence thesis by A3;
    end;
   let x be set; assume x in rightker f*';
   then consider w be Vector of W such that
- A8: x=w & for v be Vector of V holds f*'.[v,w]= 0.K;
+ A4: x=w & for v be Vector of V holds f*'.(v,w)= 0.K;
       now let v be Vector of V;
-       (f*'.[v,w])*' = 0.K by A8,Lm1,COMPLFLD:83;
-    then (f.[v,w])*'*' = 0.K by Def8;
-    hence f.[v,w] = 0.K;
+       (f*'.(v,w))*' = 0.K by A4,COMPLFLD:83;
+    then (f.(v,w))*'*' = 0.K by Def8;
+    hence f.(v,w) = 0.K;
    end;
-  hence thesis by A8;
+  hence thesis by A4;
  end;
 
 theorem Th59:
@@ -2112,29 +2087,29 @@ holds LKer f = RKer (f*')
 
 theorem Th60:
 for V be VectSp of F_Complex, f be diagReR+0valued diagRvalued Form of V,V
-for v be Vector of V st Re (f.[v,v])= 0 holds f.[v,v]= 0.F_Complex
+for v be Vector of V st Re (f.(v,v))= 0 holds f.(v,v)= 0.F_Complex
  proof
   let V be VectSp of F_Complex, f be diagReR+0valued diagRvalued Form of V,V,
       v be Vector of V;
-  assume A1: Re (f.[v,v]) = 0;
-A2:Im (f.[v,v]) = 0 by Def6;
+  assume A1: Re (f.(v,v)) = 0;
+A2:Im (f.(v,v)) = 0 by Def6;
   0.F_Complex = 0c by COMPLFLD:9 .= 0;
-  hence f.[v,v] = 0.F_Complex by A1,A2,COMPTRIG:9,XX;
+  hence f.(v,v) = 0.F_Complex by A1,A2,COMPTRIG:9,Lm1;
  end;
 
 theorem Th61:
 for V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V,
 v be Vector of V st
- Re (f.[v,v])= 0 &
+ Re (f.(v,v))= 0 &
 (f is non degenerated-on-left or f is non degenerated-on-right) holds v=0.V
  proof
   let V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V,
     v be Vector of V;
   assume that
-  A1: Re (f.[v,v])= 0 and
+  A1: Re (f.(v,v))= 0 and
   A2: f is non degenerated-on-left or f is non degenerated-on-right;
-     f.[v,v] = 0.F_Complex by A1,Th60;
-  then v in {w where w is Vector of V: f.[w,w]=0.F_Complex};
+     f.(v,v) = 0.F_Complex by A1,Th60;
+  then v in {w where w is Vector of V: f.(w,w)=0.F_Complex};
   then A3: v in diagker f;
   per cases by A2;
    suppose f is non degenerated-on-left;
@@ -2162,17 +2137,17 @@ theorem Th62:
 for V be non empty VectSpStr over F_Complex, W  be VectSp of F_Complex
 for f be additiveFAF cmplxhomogeneousFAF Form of V,W
 for v be Vector of V, w be Vector of W holds
-(RQ*Form(f)).[v,w+RKer (f*')] = f.[v,w]
+(RQ*Form(f)).(v,w+RKer (f*')) = f.(v,w)
  proof
   let V be non empty VectSpStr over F_Complex, W  be VectSp of F_Complex,
       f be additiveFAF cmplxhomogeneousFAF Form of V,W,
       v be Vector of V, w be Vector of W;
   reconsider A=w+RKer(f*') as Vector of VectQuot(W,RKer (f*')) by VECTSP10:24;
-  thus (RQ*Form(f)).[v,w+RKer (f*')] = (RQForm(f*'))*'.[v,w+RKer (f*')]
-  .= ((RQForm(f*')).[v,A])*' by Def8
-  .= (f*'.[v,w])*' by BILINEAR:def 22
-  .= (f.[v,w])*'*' by Def8
-  .= f.[v,w];
+  thus (RQ*Form(f)).(v,w+RKer (f*')) = (RQForm(f*'))*'.(v,w+RKer (f*'))
+  .= ((RQForm(f*')).(v,A))*' by Def8
+  .= (f*'.(v,w))*' by BILINEAR:def 22
+  .= (f.(v,w))*'*' by Def8
+  .= f.(v,w);
  end;
 
 registration
@@ -2189,12 +2164,12 @@ cluster LQForm(f) -> additiveFAF cmplxhomogeneousFAF;
      consider v be Vector of V such that
     A1: A = v + LKer(f) by VECTSP10:23;
      let w,t be Vector of W;
-     thus flf.(w+t) = lf.[A,w+t] by BILINEAR:9
-     .= f.[v,w+t] by A1,BILINEAR:def 21
-     .= f.[v,w]+f.[v,t] by BILINEAR:28
-     .= lf.[A,w]+ f.[v,t] by A1,BILINEAR:def 21
-     .= lf.[A,w]+ lf.[A,t] by A1,BILINEAR:def 21
-     .= flf.w+ lf.[A,t] by BILINEAR:9
+     thus flf.(w+t) = lf.(A,w+t) by BILINEAR:9
+     .= f.(v,w+t) by A1,BILINEAR:def 21
+     .= f.(v,w)+f.(v,t) by BILINEAR:28
+     .= lf.(A,w)+ f.(v,t) by A1,BILINEAR:def 21
+     .= lf.(A,w)+ lf.(A,t) by A1,BILINEAR:def 21
+     .= flf.w+ lf.(A,t) by BILINEAR:9
      .= flf.w + flf.t by BILINEAR:9;
     end;
    let A be Vector of VectQuot(V,LKer(f));
@@ -2202,10 +2177,10 @@ cluster LQForm(f) -> additiveFAF cmplxhomogeneousFAF;
    consider v be Vector of V such that
   A2: A = v + LKer(f) by VECTSP10:23;
    let w be Vector of W, r be Scalar of W;
-   thus flf.(r*w) = lf.[A,r*w] by BILINEAR:9
-    .= f.[v,r*w] by A2,BILINEAR:def 21
-    .= r*'*f.[v,w] by Th30
-    .= r*'*lf.[A,w] by A2,BILINEAR:def 21
+   thus flf.(r*w) = lf.(A,r*w) by BILINEAR:9
+    .= f.(v,r*w) by A2,BILINEAR:def 21
+    .= r*'*f.(v,w) by Th30
+    .= r*'*lf.(A,w) by A2,BILINEAR:def 21
     .= r*'*flf.w by BILINEAR:9;
   end;
 cluster RQ*Form(f) -> additiveSAF homogeneousSAF;
@@ -2219,12 +2194,12 @@ cluster RQ*Form(f) -> additiveSAF homogeneousSAF;
      consider w be Vector of W such that
     A3: A = w + RKer(f*') by VECTSP10:23;
      let v,t be Vector of V;
-     thus flf.(v+t) = lf.[v+t,A] by BILINEAR:10
-     .= f.[v+t,w] by A3,Th62
-     .= f.[v,w]+f.[t,w] by BILINEAR:27
-     .= lf.[v,A]+ f.[t,w] by A3,Th62
-     .= lf.[v,A]+ lf.[t,A] by A3,Th62
-     .= flf.v+ lf.[t,A] by BILINEAR:10
+     thus flf.(v+t) = lf.(v+t,A) by BILINEAR:10
+     .= f.(v+t,w) by A3,Th62
+     .= f.(v,w)+f.(t,w) by BILINEAR:27
+     .= lf.(v,A)+ f.(t,w) by A3,Th62
+     .= lf.(v,A)+ lf.(t,A) by A3,Th62
+     .= flf.v+ lf.(t,A) by BILINEAR:10
      .= flf.v + flf.t by BILINEAR:10;
     end;
    let A be Vector of VectQuot(W,RKer(f*'));
@@ -2232,10 +2207,10 @@ cluster RQ*Form(f) -> additiveSAF homogeneousSAF;
    consider w be Vector of W such that
   A4: A = w + RKer(f*') by VECTSP10:23;
    let v be Vector of V, r be Scalar of V;
-   thus flf.(r*v) = lf.[r*v,A] by BILINEAR:10
-    .= f.[r*v,w] by A4,Th62
-    .= r*f.[v,w] by BILINEAR:32
-    .= r*lf.[v,A] by A4,Th62
+   thus flf.(r*v) = lf.(r*v,A) by BILINEAR:10
+    .= f.(r*v,w) by A4,Th62
+    .= r*f.(v,w) by BILINEAR:32
+    .= r*lf.(v,A) by A4,Th62
     .= r*flf.v by BILINEAR:10;
   end;
 end;
@@ -2247,7 +2222,7 @@ func Q*Form(f) -> sesquilinear-Form of
  VectQuot(V,LKer(f)),VectQuot(W,RKer(f*')) means :Def12:
 for A be Vector of VectQuot(V,LKer f), B be Vector of VectQuot(W, RKer(f*'))
  for v be Vector of V, w be Vector of W
- st A = v + LKer f & B = w + RKer (f*') holds it.[A,B]= f.[v,w];
+ st A = v + LKer f & B = w + RKer (f*') holds it.(A,B)= f.(v,w);
 existence
  proof
   set K = F_Complex, L = LKer(f), vq = VectQuot(V,L), Cv = CosetSet(V,L),
@@ -2256,114 +2231,114 @@ existence
        aCw = addCoset(W,R), mCw = lmultCoset(W,R);
  A1: Cv = the carrier of vq by VECTSP10:def 6;
  A2: Cw = the carrier of wq by VECTSP10:def 6;
- A5: rightker f = rightker f*' by Th58;
+ A3: rightker f = rightker f*' by Th58;
  defpred P[set,set,set] means
     for v be Vector of V, w be Vector of W
-      st $1 = v+L & $2 = w+R holds $3 = f.[v,w];
- A6: now
+      st $1 = v+L & $2 = w+R holds $3 = f.(v,w);
+ A4: now
       let A be Vector of vq, B  be Vector of wq;
       consider a be Vector of V such that
-    A7: A = a+L by VECTSP10:23;
+    A5: A = a+L by VECTSP10:23;
       consider b be Vector of W such that
-    A8: B = b+R by VECTSP10:23;
-      take y = f.[a,b];
+    A6: B = b+R by VECTSP10:23;
+      take y = f.(a,b);
        now
       let a1 be Vector of V; let b1 be Vector of W;
       assume A = a1+L;
-      then a in a1+L by A7,VECTSP_4:59;
+      then a in a1+L by A5,VECTSP_4:59;
       then consider vv be Vector of V such that
-    A9: vv in L & a = a1 + vv by VECTSP_4:57;
+    A7: vv in L & a = a1 + vv by VECTSP_4:57;
       assume B = b1+R;
-      then b in b1+R by A8,VECTSP_4:59;
+      then b in b1+R by A6,VECTSP_4:59;
       then consider ww be Vector of W such that
-    A10: ww in R & b = b1 + ww by VECTSP_4:57;
-         vv in the carrier of L by A9,RLVECT_1:def 1;
+    A8: ww in R & b = b1 + ww by VECTSP_4:57;
+         vv in the carrier of L by A7,RLVECT_1:def 1;
       then vv in leftker f by BILINEAR:def 19;
       then consider aa be Vector of V such that
-    A11: aa=vv & for w0 be Vector of W holds f.[aa,w0] =0.K;
-         ww in the carrier of R by A10,RLVECT_1:def 1;
+    A9: aa=vv & for w0 be Vector of W holds f.(aa,w0) =0.K;
+         ww in the carrier of R by A8,RLVECT_1:def 1;
       then ww in rightker (f*') by BILINEAR:def 20;
       then consider bb be Vector of W such that
-    A12: bb=ww & for v0 be Vector of V holds f.[v0,bb] =0.K by A5;
-      thus y = f.[a1,b1]+f.[a1,ww] + (f.[vv,b1]+f.[vv,ww])
-          by A9,A10,BILINEAR:29
-       .=f.[a1,b1]+0.K + (f.[vv,b1]+f.[vv,ww]) by A12
-       .= f.[a1,b1] +0.K + (0.K+f.[vv,ww]) by A11
-       .= f.[a1,b1] + (0.K+f.[vv,ww]) by RLVECT_1:def 7
-       .= f.[a1,b1] + f.[vv,ww] by RLVECT_1:10
-       .= f.[a1,b1] + 0.K by A11
-       .= f.[a1,b1] by RLVECT_1:def 7;
+    A10: bb=ww & for v0 be Vector of V holds f.(v0,bb) =0.K by A3;
+      thus y = f.(a1,b1)+f.(a1,ww) + (f.(vv,b1)+f.(vv,ww))
+          by A7,A8,BILINEAR:29
+       .=f.(a1,b1)+0.K + (f.(vv,b1)+f.(vv,ww)) by A10
+       .= f.(a1,b1) +0.K + (0.K+f.(vv,ww)) by A9
+       .= f.(a1,b1) + (0.K+f.(vv,ww)) by RLVECT_1:def 7
+       .= f.(a1,b1) + f.(vv,ww) by RLVECT_1:10
+       .= f.(a1,b1) + 0.K by A9
+       .= f.(a1,b1) by RLVECT_1:def 7;
       end; hence P[A,B,y];
     end;
    consider ff be Function of
       [:the carrier of vq,the carrier of wq:], the carrier of K such that
- A13: for A be Vector of vq, B be Vector of wq holds
-    P[A, B, ff.[A,B]] from FUNCT_2:sch 7(A6);
+ A11: for A be Vector of vq, B be Vector of wq holds
+    P[A, B, ff.(A,B)] from BINOP_1:sch 3(A4);
    reconsider ff as Form of vq,wq;
-   A14: now
+   A12: now
      let ww be Vector of wq;
      consider w be Vector of W such that
-    A15: ww= w+R by VECTSP10:23;
+    A13: ww= w+R by VECTSP10:23;
      set ffw = FunctionalSAF(ff,ww);
           now
         let A,B be Vector of vq;
         consider a be Vector of V such that
-       A16: A = a+L by VECTSP10:23;
+       A14: A = a+L by VECTSP10:23;
         consider b be Vector of V such that
-       A17: B = b+L by VECTSP10:23;
-       A18: the add of vq = aCv by VECTSP10:def 6;
-       A19: aCv.(A,B) =a+b+L by A1,A16,A17,VECTSP10:def 3;
-        thus ffw.(A+B) = ff.[A+B,ww] by BILINEAR:10
-         .= ff.[(the add of vq).(A,B),ww] by RLVECT_1:5
-         .= f.[a+b,w] by A13,A15,A18,A19
-         .= f.[a,w] + f.[b,w] by BILINEAR:27
-         .= ff.[A,ww] + f.[b,w] by A13,A15,A16
-         .= ff.[A,ww] + ff.[B,ww] by A13,A15,A17
-         .= ffw.A + ff.[B,ww] by BILINEAR:10
+       A15: B = b+L by VECTSP10:23;
+       A16: the add of vq = aCv by VECTSP10:def 6;
+       A17: aCv.(A,B) =a+b+L by A1,A14,A15,VECTSP10:def 3;
+        thus ffw.(A+B) = ff.(A+B,ww) by BILINEAR:10
+         .= ff.((the add of vq).(A,B),ww)
+         .= f.(a+b,w) by A11,A13,A16,A17
+         .= f.(a,w) + f.(b,w) by BILINEAR:27
+         .= ff.(A,ww) + f.(b,w) by A11,A13,A14
+         .= ff.(A,ww) + ff.(B,ww) by A11,A13,A15
+         .= ffw.A + ff.(B,ww) by BILINEAR:10
          .= ffw.A + ffw.B by BILINEAR:10;
        end;
      hence ffw is additive by HAHNBAN1:def 11;
    end;
-  A20: now
+  A18: now
     let vv be Vector of vq;
     consider v be Vector of V such that
-   A21: vv= v+L by VECTSP10:23;
+   A19: vv= v+L by VECTSP10:23;
     set ffv = FunctionalFAF(ff,vv);
           now
         let A,B be Vector of wq;
         consider a be Vector of W such that
-      A22: A = a+R by VECTSP10:23;
+      A20: A = a+R by VECTSP10:23;
         consider b be Vector of W such that
-      A23: B = b+R by VECTSP10:23;
-      A24: the add of wq = aCw by VECTSP10:def 6;
-      A25: aCw.(A,B) =a+b+R by A2,A22,A23,VECTSP10:def 3;
-        thus ffv.(A+B) = ff.[vv,A+B] by BILINEAR:9
-         .= ff.[vv,(the add of wq).(A,B)] by RLVECT_1:5
-         .= f.[v,a+b] by A13,A21,A24,A25
-         .= f.[v,a] + f.[v,b] by BILINEAR:28
-         .= ff.[vv,A] + f.[v,b] by A13,A21,A22
-         .= ff.[vv,A] + ff.[vv,B] by A13,A21,A23
-         .= ffv.A + ff.[vv,B] by BILINEAR:9
+      A21: B = b+R by VECTSP10:23;
+      A22: the add of wq = aCw by VECTSP10:def 6;
+      A23: aCw.(A,B) =a+b+R by A2,A20,A21,VECTSP10:def 3;
+        thus ffv.(A+B) = ff.(vv,A+B) by BILINEAR:9
+         .= ff.(vv,(the add of wq).(A,B))
+         .= f.(v,a+b) by A11,A19,A22,A23
+         .= f.(v,a) + f.(v,b) by BILINEAR:28
+         .= ff.(vv,A) + f.(v,b) by A11,A19,A20
+         .= ff.(vv,A) + ff.(vv,B) by A11,A19,A21
+         .= ffv.A + ff.(vv,B) by BILINEAR:9
          .= ffv.A + ffv.B by BILINEAR:9;
          end;
       hence ffv is additive by HAHNBAN1:def 11;
      end;
-    A26:  now
+    A24:  now
        let ww be Vector of wq;
        consider w be Vector of W such that
-     A27: ww= w+R by VECTSP10:23;
+     A25: ww= w+R by VECTSP10:23;
        set ffw = FunctionalSAF(ff,ww);
             now
           let A be Vector of vq, r be Element of K;
           consider a be Vector of V such that
-         A28: A = a+L by VECTSP10:23;
-         A29: the lmult of vq = mCv by VECTSP10:def 6;
-         A30: mCv.(r,A) =r*a+L by A1,A28,VECTSP10:def 5;
-         thus ffw.(r*A) = ff.[r*A,ww] by BILINEAR:10
-          .= ff.[(the lmult of vq).(r,A),ww] by VECTSP_1:def 24
-          .= f.[r*a,w] by A13,A27,A29,A30
-           .= r*f.[a,w] by BILINEAR:32
-           .= r*ff.[A,ww] by A13,A27,A28
+         A26: A = a+L by VECTSP10:23;
+         A27: the lmult of vq = mCv by VECTSP10:def 6;
+         A28: mCv.(r,A) =r*a+L by A1,A26,VECTSP10:def 5;
+         thus ffw.(r*A) = ff.(r*A,ww) by BILINEAR:10
+          .= ff.((the lmult of vq).(r,A),ww) by VECTSP_1:def 24
+          .= f.(r*a,w) by A11,A25,A27,A28
+           .= r*f.(a,w) by BILINEAR:32
+           .= r*ff.(A,ww) by A11,A25,A26
            .= r*ffw.A by BILINEAR:10;
          end;
        hence ffw is homogeneous by HAHNBAN1:def 12;
@@ -2371,49 +2346,49 @@ existence
         now
       let vv be Vector of vq;
       consider v be Vector of V such that
-     A31: vv= v+L by VECTSP10:23;
+     A29: vv= v+L by VECTSP10:23;
       set ffv = FunctionalFAF(ff,vv);
           now
         let A be Vector of wq, r be Element of K;
         consider a be Vector of W such that
-       A32: A = a+R by VECTSP10:23;
-       A33: the lmult of wq = mCw by VECTSP10:def 6;
-       A34: mCw.(r,A) =r*a+R by A2,A32,VECTSP10:def 5;
-        thus ffv.(r*A) = ff.[vv,r*A] by BILINEAR:9
-        .= ff.[vv,(the lmult of wq).(r,A)] by VECTSP_1:def 24
-        .= f.[v,r*a] by A13,A31,A33,A34
-        .= r*'*f.[v,a] by Th30
-        .= r*'*ff.[vv,A] by A13,A31,A32
+       A30: A = a+R by VECTSP10:23;
+       A31: the lmult of wq = mCw by VECTSP10:def 6;
+       A32: mCw.(r,A) =r*a+R by A2,A30,VECTSP10:def 5;
+        thus ffv.(r*A) = ff.(vv,r*A) by BILINEAR:9
+        .= ff.(vv,(the lmult of wq).(r,A)) by VECTSP_1:def 24
+        .= f.(v,r*a) by A11,A29,A31,A32
+        .= r*'*f.(v,a) by Th30
+        .= r*'*ff.(vv,A) by A11,A29,A30
         .= r*'*ffv.A by BILINEAR:9;
        end;
       hence ffv is cmplxhomogeneous by Def1;
      end;
-   then reconsider ff as sesquilinear-Form of vq,wq by A14,A20,A26,Def4,
+   then reconsider ff as sesquilinear-Form of vq,wq by A12,A18,A24,Def4,
 BILINEAR:def 12,def 13,def 15;
    take ff;
-   thus thesis by A13;
+   thus thesis by A11;
  end;
 uniqueness
  proof
   set L = LKer(f), vq = VectQuot(V,L),
       R = RKer(f*'), wq = VectQuot(W,R);
   let f1,f2 be sesquilinear-Form of vq,wq; assume that
- A35: for A be Vector of vq, B be Vector of wq
+ A33: for A be Vector of vq, B be Vector of wq
       for v be Vector of V, w be Vector of W
-     st A = v + L & B = w + R holds f1.[A,B]= f.[v,w] and
- A36: for A be Vector of vq, B be Vector of wq
+     st A = v + L & B = w + R holds f1.(A,B)= f.(v,w) and
+ A34: for A be Vector of vq, B be Vector of wq
       for v be Vector of V, w be Vector of W
-      st A = v + L & B = w + R holds f2.[A,B]= f.[v,w];
+      st A = v + L & B = w + R holds f2.(A,B)= f.(v,w);
       now
      let A be Vector of vq, B be Vector of wq;
      consider a be Vector of V such that
-    A37: A = a + L by VECTSP10:23;
+    A35: A = a + L by VECTSP10:23;
      consider b be Vector of W such that
-    A38: B = b + R by VECTSP10:23;
-     thus f1.[A,B] = f.[a,b] by A35,A37,A38
-     .= f2.[A,B] by A36,A37,A38;
+    A36: B = b + R by VECTSP10:23;
+     thus f1.(A,B) = f.(a,b) by A33,A35,A36
+     .= f2.(A,B) by A34,A35,A36;
     end;
-   hence thesis by FUNCT_2:120;
+   hence thesis by BINOP_1:2;
   end;
 end;
 
@@ -2425,10 +2400,10 @@ coherence
  proof
   set K = F_Complex;
   consider v be Vector of V, w be Vector of W such that
- A1: f.[v,w] <> 0.K by BILINEAR:41;
+ A1: f.(v,w) <> 0.K by BILINEAR:41;
   reconsider A = v +LKer f as Vector of VectQuot(V,LKer(f)) by VECTSP10:24;
   reconsider B=w + RKer(f*') as Vector of VectQuot(W,RKer(f*')) by VECTSP10:24;
-     (Q*Form(f)).[A,B] = f.[v,w] by Def12;
+     (Q*Form(f)).(A,B) = f.(v,w) by Def12;
   hence thesis by A1,BILINEAR:41;
  end;
 end;
@@ -2441,29 +2416,29 @@ cluster RQ*Form(f) -> non degenerated-on-right;
  coherence
   proof
    set K= F_Complex, qf = RQ*Form(f), R = RKer(f*'), qW = VectQuot(W,R);
-  A3: rightker f = rightker f*' by Th58;
+  A1: rightker f = rightker f*' by Th58;
    thus rightker qf c= {0.qW}
     proof let x be set; assume x in rightker qf;
      then consider ww be Vector of qW such that
-    A4: x= ww & for v be Vector of V holds qf.[v,ww]=0.K;
+    A2: x= ww & for v be Vector of V holds qf.(v,ww)=0.K;
      consider w be Vector of W such that
-    A5: ww = w + R by VECTSP10:23;
+    A3: ww = w + R by VECTSP10:23;
          now let v be Vector of V;
-       thus f.[v,w] = qf.[v,ww] by A5,Th62
-        .= 0.K by A4;
+       thus f.(v,w) = qf.(v,ww) by A3,Th62
+        .= 0.K by A2;
       end;
      then w in rightker f;
-     then w in the carrier of R by A3,BILINEAR:def 20;
+     then w in the carrier of R by A1,BILINEAR:def 20;
      then w in R by RLVECT_1:def 1;
      then w+R = the carrier of R by VECTSP_4:64
      .= zeroCoset(W,R)
      .= 0.qW by VECTSP10:22;
-     hence thesis by A4,A5,TARSKI:def 1;
+     hence thesis by A2,A3,TARSKI:def 1;
     end;
    let x be set; assume x in {0.qW};
-  then A6: x = 0.qW by TARSKI:def 1;
-      for v be Vector of V holds qf.[v,0.qW] = 0.K by BILINEAR:30;
-   hence thesis by A6;
+  then A4: x = 0.qW by TARSKI:def 1;
+      for v be Vector of V holds qf.(v,0.qW) = 0.K by BILINEAR:30;
+   hence thesis by A4;
  end;
 end;
 
@@ -2480,24 +2455,24 @@ leftker f = leftker (RQ*Form f)
    proof
     let x be set; assume x in leftker f;
     then consider v be Vector of V such that
-   A3: x=v & for w be Vector of W holds f.[v,w] = 0.K;
+   A1: x=v & for w be Vector of W holds f.(v,w) = 0.K;
         now let A be Vector of qw;
       consider w be Vector of W such that
-     A4: A = w+RKer (f*') by VECTSP10:23;
-      thus rf.[v,A] = f.[v,w] by A4,Th62
-      .= 0.K by A3;
+     A2: A = w+RKer (f*') by VECTSP10:23;
+      thus rf.(v,A) = f.(v,w) by A2,Th62
+      .= 0.K by A1;
      end;
-    hence x in leftker(RQ*Form f) by A3;
+    hence x in leftker(RQ*Form f) by A1;
    end;
     let x be set; assume x in leftker rf;
     then consider v be Vector of V such that
-   A5: x=v & for A be Vector of qw holds rf.[v,A] = 0.K;
+   A3: x=v & for A be Vector of qw holds rf.(v,A) = 0.K;
         now let w be Vector of W;
       reconsider A = w + RKer f*' as Vector of qw by VECTSP10:24;
-      thus f.[v,w] = rf.[v,A] by Th62
-      .= 0.K by A5;
+      thus f.(v,w) = rf.(v,A) by Th62
+      .= 0.K by A3;
      end;
-    hence thesis by A5;
+    hence thesis by A3;
 end;
 
 theorem Th64:
@@ -2555,9 +2530,11 @@ for V,W be VectSp of F_Complex, f be sesquilinear-Form of V,W
     consider w be Vector of W such that
    A8: B = w + R by VECTSP10:23;
    A9:  R = RL by Th64;
-    thus (Q*Form(f)).x = f.[v,w] by A6,A7,A8,Def12
-    .= (LQForm(f)).[A,w] by A7,BILINEAR:def 21
-    .=(RQ*Form(LQForm(f))).x by A6,A8,A9,Th62;
+    thus (Q*Form(f)).x =  (Q*Form(f)).(A,B) by A6
+    .= f.(v,w) by A7,A8,Def12
+    .= (LQForm(f)).(A,w) by A7,BILINEAR:def 21
+    .=(RQ*Form(LQForm(f))).(A,B) by A8,A9,Th62
+    .=(RQ*Form(LQForm(f))).x by A6;
    end;
   hence Q*Form(f) = RQ*Form(LQForm(f)) by A1,A2,A4,FUNCT_1:9;
       now let x be set;
@@ -2572,9 +2549,11 @@ for V,W be VectSp of F_Complex, f be sesquilinear-Form of V,W
     consider w be Vector of W such that
    A12: B = w + R by VECTSP10:23;
    A13:  L = LR by Th65;
-    thus (Q*Form(f)).x = f.[v,w] by A10,A11,A12,Def12
-    .= (RQ*Form(f)).[v,B] by A12,Th62
-    .=(LQForm(RQ*Form(f))).x by A10,A11,A13,BILINEAR:def 21;
+    thus (Q*Form(f)).x =  (Q*Form(f)).(A,B) by A10
+    .= f.(v,w) by A11,A12,Def12
+    .= (RQ*Form(f)).(v,B) by A12,Th62
+    .=(LQForm(RQ*Form(f))).(A,B) by A11,A13,BILINEAR:def 21
+    .=(LQForm(RQ*Form(f))).x by A10;
    end;
   hence thesis by A1,A3,A5,FUNCT_1:9;
  end;
@@ -2596,95 +2575,95 @@ for V,W be VectSp of F_Complex, f be sesquilinear-Form of V,W holds
    proof
     let x be set; assume x in leftker qf;
     then consider vv be Vector of vq such that
-   A7: x=vv & for ww be Vector of wq holds qf.[vv,ww]=0.K;
+   A1: x=vv & for ww be Vector of wq holds qf.(vv,ww)=0.K;
         now let ww be Vector of wqr;
       reconsider w = ww as Vector of wq by Th64;
-      thus rlf.[vv,ww] = qf.[vv,w] by Th66
-      .= 0.K by A7;
+      thus rlf.(vv,ww) = qf.(vv,w) by Th66
+      .= 0.K by A1;
      end;
-    hence x in leftker rlf by A7;
+    hence x in leftker rlf by A1;
    end;
   thus leftker rlf c= leftker qf
    proof
     let x be set; assume x in leftker rlf;
     then consider vv be Vector of vq such that
-    A8: x=vv & for ww be Vector of wqr holds rlf.[vv,ww]=0.K;
+    A2: x=vv & for ww be Vector of wqr holds rlf.(vv,ww)=0.K;
         now let ww be Vector of wq;
       reconsider w = ww as Vector of wqr by Th64;
-      thus qf.[vv,ww] = rlf.[vv,w] by Th66
-       .= 0.K by A8;
+      thus qf.(vv,ww) = rlf.(vv,w) by Th66
+       .= 0.K by A2;
      end;
-    hence x in leftker qf by A8;
+    hence x in leftker qf by A2;
   end;
  thus rightker qf c= rightker rlf
   proof
    let x be set; assume x in rightker qf;
    then consider ww be Vector of wq such that
-  A9: x=ww & for vv be Vector of vq holds qf.[vv,ww]=0.K;
+  A3: x=ww & for vv be Vector of vq holds qf.(vv,ww)=0.K;
    reconsider w = ww as Vector of wqr by Th64;
        now let vv be Vector of vq;
-      thus rlf.[vv,w] = qf.[vv,ww] by Th66
-      .= 0.K by A9;
+      thus rlf.(vv,w) = qf.(vv,ww) by Th66
+      .= 0.K by A3;
      end;
-    hence x in rightker rlf by A9;
+    hence x in rightker rlf by A3;
   end;
  thus rightker rlf c= rightker qf
   proof
    let x be set; assume x in rightker rlf;
    then consider ww be Vector of wqr such that
-  A10: x=ww & for vv be Vector of vq holds rlf.[vv,ww]=0.K;
+  A4: x=ww & for vv be Vector of vq holds rlf.(vv,ww)=0.K;
    reconsider w = ww as Vector of wq by Th64;
        now let vv be Vector of vq;
-     thus qf.[vv,w] = rlf.[vv,ww] by Th66
-      .= 0.K by A10;
+     thus qf.(vv,w) = rlf.(vv,ww) by Th66
+      .= 0.K by A4;
     end;
-   hence x in rightker qf by A10;
+   hence x in rightker qf by A4;
   end;
  thus leftker qf c= leftker lrf
   proof
     let x be set; assume x in leftker qf;
     then consider vv be Vector of vq such that
-   A11: x=vv & for ww be Vector of wq holds qf.[vv,ww]=0.K;
+   A5: x=vv & for ww be Vector of wq holds qf.(vv,ww)=0.K;
     reconsider v=vv as Vector of vql by Th65;
         now let ww be Vector of wq;
-      thus lrf.[v,ww] = qf.[vv,ww] by Th66
-      .= 0.K by A11;
+      thus lrf.(v,ww) = qf.(vv,ww) by Th66
+      .= 0.K by A5;
      end;
-    hence x in leftker lrf by A11;
+    hence x in leftker lrf by A5;
    end;
   thus leftker lrf c= leftker qf
    proof
     let x be set; assume x in leftker lrf;
     then consider vv be Vector of vql such that
-    A12: x=vv & for ww be Vector of wq holds lrf.[vv,ww]=0.K;
+    A6: x=vv & for ww be Vector of wq holds lrf.(vv,ww)=0.K;
     reconsider v=vv as Vector of vq by Th65;
         now let ww be Vector of wq;
-      thus qf.[v,ww] = lrf.[vv,ww] by Th66
-       .= 0.K by A12;
+      thus qf.(v,ww) = lrf.(vv,ww) by Th66
+       .= 0.K by A6;
      end;
-    hence x in leftker qf by A12;
+    hence x in leftker qf by A6;
   end;
  thus rightker qf c= rightker lrf
   proof
    let x be set; assume x in rightker qf;
    then consider ww be Vector of wq such that
-  A13: x=ww & for vv be Vector of vq holds qf.[vv,ww]=0.K;
+  A7: x=ww & for vv be Vector of vq holds qf.(vv,ww)=0.K;
        now let vv be Vector of vql;
     reconsider v = vv as Vector of vq by Th65;
-      thus lrf.[vv,ww] = qf.[v,ww] by Th66
-      .= 0.K by A13;
+      thus lrf.(vv,ww) = qf.(v,ww) by Th66
+      .= 0.K by A7;
      end;
-    hence x in rightker lrf by A13;
+    hence x in rightker lrf by A7;
   end;
   let x be set; assume x in rightker lrf;
   then consider ww be Vector of wq such that
-  A14: x=ww & for vv be Vector of vql holds lrf.[vv,ww]=0.K;
+  A8: x=ww & for vv be Vector of vql holds lrf.(vv,ww)=0.K;
        now let vv be Vector of vq;
      reconsider v = vv as Vector of vql by Th65;
-     thus qf.[vv,ww] = lrf.[v,ww] by Th66
-      .= 0.K by A14;
+     thus qf.(vv,ww) = lrf.(v,ww) by Th66
+      .= 0.K by A8;
     end;
-   hence x in rightker qf by A14;
+   hence x in rightker qf by A8;
 end;
 
 registration
@@ -2729,7 +2708,7 @@ definition
  let V be non empty VectSpStr over F_Complex;
  let f be Form of V,V;
 attr f is positivediagvalued means :Def13:
-for v be Vector of V st v <> 0.V holds 0 < Re (f.[v,v]);
+for v be Vector of V st v <> 0.V holds 0 < Re (f.(v,v));
 end;
 
 registration
@@ -2742,7 +2721,7 @@ registration
    let v be Vector of V;
    per cases;
     suppose v = 0.V;
-     then A2: f.[v,v] = 0.F_Complex by A1,BILINEAR:31;
+     then A2: f.(v,v) = 0.F_Complex by A1,BILINEAR:31;
      0.F_Complex = 0c by COMPLFLD:9 .= 0; then
      [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPTRIG:9;
      hence thesis by A2,COMPTRIG:8;
@@ -2762,7 +2741,7 @@ registration
    let v be Vector of V;
    per cases;
     suppose v = 0.V;
-     then A2: f.[v,v] = 0.F_Complex by A1,BILINEAR:30;
+     then A2: f.(v,v) = 0.F_Complex by A1,BILINEAR:30;
      0.F_Complex = 0c by COMPLFLD:9 .= 0; then
      [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPTRIG:9;
      hence thesis by A2,COMPTRIG:8;
@@ -2794,10 +2773,10 @@ equals  Q*Form(f);
      consider va be Vector of V such that
     A3: v = va + LKer f by VECTSP10:23;
     A4: r*v = r*va + LKer f by A3,VECTSP10:26;
-     thus fg.(r*v) = (Q*Form(f)).[r*v,w] by BILINEAR:10
-     .= f.[r*va,wa] by A2,A4,Def12
-     .= r*f.[va,wa] by BILINEAR:32
-     .= r* sc.[v,w] by A2,A3,Def12
+     thus fg.(r*v) = (Q*Form(f)).(r*v,w) by BILINEAR:10
+     .= f.(r*va,wa) by A2,A4,Def12
+     .= r*f.(va,wa) by BILINEAR:32
+     .= r* sc.(v,w) by A2,A3,Def12
      .= r* fg.v by BILINEAR:10;
     end;
    A5: sc is additiveSAF
@@ -2813,12 +2792,12 @@ equals  Q*Form(f);
     consider vb be Vector of V such that
     A8: v2 = vb + LKer f by VECTSP10:23;
     A9: v1+v2 = va+vb + LKer f by A7,A8,VECTSP10:27;
-     thus fg.(v1+v2) = (Q*Form(f)).[v1+v2,w] by BILINEAR:10
-     .= f.[va+vb,wa] by A6,A9,Def12
-     .= f.[va,wa] + f.[vb,wa] by BILINEAR:27
-     .= sc.[v1,w] + f.[vb,wa] by A6,A7,Def12
-     .= sc.[v1,w] +sc.[v2,w] by A6,A8,Def12
-     .= fg.v1 +sc.[v2,w] by BILINEAR:10
+     thus fg.(v1+v2) = (Q*Form(f)).(v1+v2,w) by BILINEAR:10
+     .= f.(va+vb,wa) by A6,A9,Def12
+     .= f.(va,wa) + f.(vb,wa) by BILINEAR:27
+     .= sc.(v1,w) + f.(vb,wa) by A6,A7,Def12
+     .= sc.(v1,w) +sc.(v2,w) by A6,A8,Def12
+     .= fg.v1 +sc.(v2,w) by BILINEAR:10
      .= fg.v1 + fg.v2 by BILINEAR:10;
     end;
    A10: sc is hermitan
@@ -2832,9 +2811,9 @@ equals  Q*Form(f);
     A12: v = va + LKer f by VECTSP10:23;
     A13: B = va + RKer(f*') by A12,Th59;
     A14: w = wa + LKer f by A11,Th59;
-     thus sc.[v,w] = f.[va,wa] by A11,A12,Def12
-     .= (f.[wa,va])*' by Def5
-     .= (sc.[w,v])*' by A13,A14,Def12;
+     thus sc.(v,w) = f.(va,wa) by A11,A12,Def12
+     .= (f.(wa,va))*' by Def5
+     .= (sc.(w,v))*' by A13,A14,Def12;
     end;
       sc is diagReR+0valued
     proof
@@ -2843,17 +2822,17 @@ equals  Q*Form(f);
     A15: v = va + LKer f by VECTSP10:23;
      reconsider A = v as Vector of vr by Th59;
        A = va + RKer (f*') by A15,Th59;
-     then sc.[v,v] = f.[va,va] by A15,Def12;
+     then sc.(v,v) = f.(va,va) by A15,Def12;
      hence thesis by Def7;
     end;
    hence thesis by A1,A5,A10;
   end;
 end;
 
-theorem Th68:
+theorem
 for V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V
  for A,B be Vector of VectQuot(V,LKer(f)), v,w be Vector of V st
-  A = v + LKer f & B = w + LKer f holds (ScalarForm(f)).[A,B] = f.[v,w]
+  A = v + LKer f & B = w + LKer f holds (ScalarForm(f)).(A,B) = f.(v,w)
  proof
   let V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V;
   set vq = VectQuot(V,LKer(f)), vr = VectQuot(V,RKer(f*'));
@@ -2863,8 +2842,8 @@ for V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V
  A2: B = w + LKer f;
   reconsider W = B as Vector of vr by Th59;
  A3: W = w + RKer(f*') by A2,Th59;
-  thus (ScalarForm(f)).[A,B] = (Q*Form(f)).[A,W]
-  .= f.[v,w] by A1,A3,Def12;
+  thus (ScalarForm(f)).(A,B) = (Q*Form(f)).(A,W)
+  .= f.(v,w) by A1,A3,Def12;
  end;
 
 theorem Th69:
@@ -2878,54 +2857,28 @@ holds leftker ScalarForm(f) = leftker Q*Form(f)
    proof
     let x be set; assume x in leftker qhf;
     then consider A be Vector of vq such that
-   A3: x= A & for B be Vector of vq holds qhf.[A,B]=0.K;
+   A1: x= A & for B be Vector of vq holds qhf.(A,B)=0.K;
         now let B be Vector of vr;
       reconsider w=B as Vector of vq by Th59;
-      thus qf.[A,B] = qhf.[A,w]
-       .= 0.K by A3;
+      thus qf.(A,B) = qhf.(A,w)
+       .= 0.K by A1;
      end;
-    hence thesis by A3;
+    hence thesis by A1;
    end;
   let x be set; assume x in leftker qf;
   then consider A be Vector of vq such that
- A4: x= A & for B be Vector of vr holds qf.[A,B]=0.K;
+ A2: x= A & for B be Vector of vr holds qf.(A,B)=0.K;
       now let B be Vector of vq;
     reconsider w=B as Vector of vr by Th59;
-    thus qhf.[A,B] = qf.[A,w]
-    .= 0.K by A4;
+    thus qhf.(A,B) = qf.(A,w)
+    .= 0.K by A2;
    end;
-  hence thesis by A4;
+  hence thesis by A2;
  end;
 
 theorem Th70:
 for V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V
-holds rightker ScalarForm(f) = rightker Q*Form(f)
- proof
-  let V be VectSp of F_Complex, f be diagReR+0valued hermitan-Form of V;
-  set vq = VectQuot(V,LKer(f)), vr = VectQuot(V,RKer(f*')),
-   qf=Q*Form(f), qhf=ScalarForm(f), K = F_Complex;
-  thus rightker qhf c= rightker qf
-   proof
-    let x be set; assume x in rightker qhf;
-    then consider B be Vector of vq such that
-   A3: x= B & for A be Vector of vq holds qhf.[A,B]=0.K;
-    reconsider w=B as Vector of vr by Th59;
-        now let A be Vector of vq;
-      thus qf.[A,w] = qhf.[A,B]
-       .= 0.K by A3;
-     end;
-    hence thesis by A3;
-   end;
-  let x be set; assume x in rightker qf;
-  then consider B be Vector of vr such that
- A4: x= B & for A be Vector of vq holds qf.[A,B]=0.K;
-  reconsider w=B as Vector of vq by Th59;
-      now let A be Vector of vq;
-    thus qhf.[A,w] = qf.[A,B]
-    .= 0.K by A4;
-   end;
-  hence thesis by A4;
- end;
+holds rightker ScalarForm(f) = rightker Q*Form(f) by Th59;
 
 ::
 :: The From in Quotient Space Generated by Non negative Hermitan Form is the Scalar Product
@@ -2948,8 +2901,8 @@ cluster ScalarForm(f) -> non degenerated-on-left non degenerated-on-right
    qh is non degenerated-on-right by A1,BILINEAR:def 24,def 25;
   let A be Vector of vq;
   assume A <> 0.vq;
-   then Re (qh.[A,A]) <> 0 by A2,Th61;
-  hence 0 < Re (qh.[A,A]) by Def7;
+   then Re (qh.(A,A)) <> 0 by A2,Th61;
+  hence 0 < Re (qh.(A,A)) by Def7;
  end;
 end;
 
@@ -2957,14 +2910,6 @@ registration
  let V be non trivial VectSp of F_Complex;
  let f be diagReR+0valued non constant hermitan-Form of V;
 cluster ScalarForm(f) -> non constant;
- coherence
-  proof
-  set K = F_Complex;
-  consider v, w be Vector of V;
-  reconsider A = v +LKer f, B = w + LKer f as Vector of VectQuot(V,LKer(f))
-     by VECTSP10:24;
-     (ScalarForm(f)).[A,B] = f.[v,w] by Th68;
-  hence thesis;
- end;
+ coherence;
 end;
 

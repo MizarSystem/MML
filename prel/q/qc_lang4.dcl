@@ -39,10 +39,10 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="17"/>
-<Adjective nr="30"/>
-<Adjective nr="39"/>
+<Adjective nr="18"/>
+<Adjective nr="31"/>
 <Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </RCluster>
 </Registrations>

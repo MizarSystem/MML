@@ -33,8 +33,8 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL_2"/>
 <ArticleID name="COMPTS_1"/>
@@ -46,13 +46,13 @@
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="14"/>
-<Adjective nr="22"/>
+<Adjective nr="15"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="55"/>
+<Adjective nr="25"/>
 <Adjective nr="56"/>
-<Adjective nr="133"/>
+<Adjective nr="57"/>
+<Adjective nr="134"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

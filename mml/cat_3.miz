@@ -9,11 +9,12 @@ environ
  vocabularies CAT_1, FUNCT_1, FINSEQ_4, RELAT_1, FUNCOP_1, FUNCT_4, BOOLE,
       FUNCT_6, OPPCAT_1, WELLORD1, CAT_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, FUNCT_4,
-      FUNCT_2, FINSEQ_4, CAT_1, OPPCAT_1;
- constructors OPPCAT_1, FINSEQ_4, FUNCOP_1;
- registrations RELSET_1, XBOOLE_0, FUNCOP_1;
+      FUNCT_2, FINSEQ_4, CQC_LANG,
+      CAT_1, OPPCAT_1;
+ constructors OPPCAT_1, FINSEQ_4, FUNCOP_1, CQC_LANG;
+ registrations RELSET_1, XBOOLE_0, FUNCOP_1, CQC_LANG;
  requirements SUBSET, BOOLE;
- definitions CAT_1;
+ definitions CAT_1, CQC_LANG;
  theorems TARSKI, FUNCT_2, FUNCOP_1, FUNCT_4, CAT_1, OPPCAT_1, FINSEQ_4,
       RELSET_1, PARTFUN1;
  schemes FUNCT_2, WELLORD2;
@@ -82,6 +83,11 @@ A3:  x in I();
 
 definition let A,I; let a be Element of A;
  redefine func I --> a -> Function of I,A;
+  coherence by FUNCOP_1:58;
+end;
+
+definition let A,x; let a be Element of A;
+ redefine func x .--> a -> Function of {x},A;
   coherence by FUNCOP_1:58;
 end;
 
@@ -163,7 +169,7 @@ A1:   x in I;
 theorem Th10:
    doms((x1,x2)-->(p1,p2)) = (x1,x2)-->(dom p1,dom p2)
  proof
-  set F = (x1,x2)-->(p1,p2), f = {x1} --> p1, g = {x2} --> p2,
+  set F = (x1,x2)-->(p1,p2), f = x1 .--> p1, g = x2 .--> p2,
     F' = (x1,x2)-->(dom p1,dom p2), f' = {x1}-->(dom p1), g' = {x2}-->(dom p2);
 A1:  dom f = {x1} & dom f' = {x1} & dom g = {x2} & dom g' = {x2}
       by FUNCOP_1:19;
@@ -193,7 +199,7 @@ A6:   x in dom g;
 theorem Th11:
    cods((x1,x2)-->(p1,p2)) = (x1,x2)-->(cod p1,cod p2)
  proof
-  set F = (x1,x2)-->(p1,p2), f = {x1} --> p1, g = {x2} --> p2,
+  set F = (x1,x2)-->(p1,p2), f = x1 .--> p1, g = x2 .--> p2,
     F' = (x1,x2)-->(cod p1,cod p2), f' = {x1}-->(cod p1), g' = {x2}-->(cod p2);
 A1:  dom f = {x1} & dom f' = {x1} & dom g = {x2} & dom g' = {x2}
       by FUNCOP_1:19;
@@ -886,17 +892,18 @@ theorem Th46:
  end;
 
 theorem Th47:
-  dom f = a implies {y} --> f is Projections_family of a,{y}
- proof set F = {y} --> f;
+  dom f = a implies y .--> f is Projections_family of a,{y}
+ proof set F = y .--> f;
   assume
 A1:  dom f = a;
      now let x; assume
 A2:  x in {y};
    hence (doms F)/.x = dom(F/.x) by Def3
                      .= a by A1,A2,Th2
-                     .= ({y} --> a)/.x by A2,Th2;
+                     .= (y .--> a)/.x by A2,Th2;
   end;
-  hence doms F = {y} --> a by Th1;
+  hence doms F = y .--> a by Th1
+           .= {y} --> a;
  end;
 
 theorem Th48:
@@ -1192,8 +1199,8 @@ then A16:  dom(F/.x) = a by Th45;
  end;
 
 theorem
-      a is_a_product_wrt {y} --> id a
- proof set F = {y} --> id a;
+      a is_a_product_wrt y .--> id a
+ proof set F = y .--> id a;
      dom(id a) = a by CAT_1:44;
   hence F is Projections_family of a,{y} by Th47;
   let b; let F' be Projections_family of b,{y} such that
@@ -1613,17 +1620,18 @@ theorem
  end;
 
 theorem Th69:
-   cod f = a implies {y} --> f is Injections_family of a,{y}
- proof set F = {y} --> f;
+   cod f = a implies y .--> f is Injections_family of a,{y}
+ proof set F = y .--> f;
   assume
 A1:  cod f = a;
      now let x; assume
 A2:  x in {y};
    hence (cods F)/.x = cod(F/.x) by Def4
                      .= a by A1,A2,Th2
-                     .= ({y} --> a)/.x by A2,Th2;
+                     .= (y .--> a)/.x by A2,Th2;
   end;
-  hence cods F = {y} --> a by Th1;
+  hence cods F = y .--> a by Th1
+          .= {y} --> a;
  end;
 
 theorem Th70:
@@ -2127,8 +2135,8 @@ A5:  for g being Morphism of a,b holds h = g by A4,CAT_1:def 16;
  end;
 
 theorem
-      a is_a_coproduct_wrt {y} --> id a
- proof set F = {y} --> id a;
+      a is_a_coproduct_wrt y .--> id a
+ proof set F = y .--> id a;
      cod(id a) = a by CAT_1:44;
   hence F is Injections_family of a,{y} by Th69;
   let b; let F' be Injections_family of b,{y} such that

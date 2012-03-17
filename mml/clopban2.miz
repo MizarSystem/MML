@@ -14,18 +14,15 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, PARTFUN1, FUNCT_2,
       PRE_TOPC, BINOP_1, STRUCT_0, XCMPLX_0, XREAL_0, ORDINAL1, NUMBERS,
       REAL_1, NAT_1, PSCOMP_1, RLVECT_1, NORMSP_1, SEQ_1, SEQ_4, FUNCSDOM,
-      COMPLEX1, GROUP_1, VECTSP_1, REALSET2, SERIES_1,
-::PREPOWER,
-CFUNCT_1,
+      COMPLEX1, GROUP_1, VECTSP_1, REALSET2, SERIES_1, CFUNCT_1,
       COMSEQ_1, COMSEQ_3, CLVECT_1, CSSPACE, CSSPACE3, CLOPBAN1, CFUNCDOM,
       PREPOWER;
-
  constructors REAL_1, NAT_1, DOMAIN_1, PSCOMP_1, PREPOWER, PARTFUN1, LOPBAN_1,
       CSSPACE3, CLOPBAN1, REALSET2, SERIES_1, COMSEQ_1, COMSEQ_3, CFUNCDOM;
  registrations RELSET_1, STRUCT_0, XREAL_0, MEMBERED, CSSPACE3, CLOPBAN1,
       ORDINAL2, FUNCT_1, FUNCT_2, COMSEQ_1, CFUNCDOM, XCMPLX_0, NAT_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions STRUCT_0, GROUP_1, VECTSP_1, CLOPBAN1;
+ definitions STRUCT_0, GROUP_1, VECTSP_1, CLOPBAN1, BINOP_1;
  theorems ABSVALUE, RLVECT_1, VECTSP_1, BINOP_1, XCMPLX_0, SERIES_1, FUNCT_1,
       FUNCT_2, SEQ_4, PREPOWER, ANPROJ_1, CLOPBAN1, CLVECT_1, COMPLEX1,
       CFUNCDOM, CSSPACE3, COMSEQ_1, COMSEQ_3, CSSPACE, GROUP_1, XREAL_1;
@@ -78,41 +75,41 @@ proof
      C_NormSpace_of_BoundedLinearOperators(X,Y) by CLOPBAN1:def 8;
    reconsider gg=g as Point of
      C_NormSpace_of_BoundedLinearOperators(Y,Z) by CLOPBAN1:def 8;
-A3:now let v be VECTOR of X;
-A4:  ||.(g*f).v.|| = ||.g.(f.v).|| by FUNCT_2:21;
-A5:  ||.g.(f.(v)).|| <=||.gg.|| * ||.f.(v).|| by CLOPBAN1:36;
-A6:  ||.f.(v).|| <=||.ff.|| * ||.v.|| by CLOPBAN1:36;
+A1:now let v be VECTOR of X;
+A2:  ||.(g*f).v.|| = ||.g.(f.v).|| by FUNCT_2:21;
+A3:  ||.g.(f.(v)).|| <=||.gg.|| * ||.f.(v).|| by CLOPBAN1:36;
+A4:  ||.f.(v).|| <=||.ff.|| * ||.v.|| by CLOPBAN1:36;
       0 <=   ||.gg.|| by CLVECT_1:106;
-     then ||.gg.||*||.f.(v).|| <=||.gg.||*(||.ff.||*||.v.||) by A6,XREAL_1:66;
-     hence ||.(g*f).v.|| <=(||.gg.|| *  ||.ff.||) * ||.v.|| by A4,A5,XREAL_1:2
+     then ||.gg.||*||.f.(v).|| <=||.gg.||*(||.ff.||*||.v.||) by A4,XREAL_1:66;
+     hence ||.(g*f).v.|| <=(||.gg.|| *  ||.ff.||) * ||.v.|| by A2,A3,XREAL_1:2
 ;
    end;
     0 <=  ||.gg.|| & 0 <= ||.ff.|| by CLVECT_1:106;
-then A7:0 <= ||.gg.|| * ||.ff.|| by XREAL_1:129;
+then A5:0 <= ||.gg.|| * ||.ff.|| by XREAL_1:129;
    set K = ||.gg.|| * ||.ff.||;
-A8:(BoundedLinearOperatorsNorm(X,Y).f) = ||.ff.|| by CLVECT_1:def 9;
-A9:(BoundedLinearOperatorsNorm(Y,Z).g) = ||.gg.|| by CLVECT_1:def 9;
-A10:now let t be VECTOR of X such that
-A11: ||.t.|| <= 1;
-A12: K*||.t.|| <=K*1 by A7,A11,XREAL_1:66;
-      ||.(g*f).t.|| <=K* ||.t.|| by A3;
-     hence ||.(g*f).t.|| <=K by A12,XREAL_1:2;
+A6:(BoundedLinearOperatorsNorm(X,Y).f) = ||.ff.|| by CLVECT_1:def 9;
+A7:(BoundedLinearOperatorsNorm(Y,Z).g) = ||.gg.|| by CLVECT_1:def 9;
+A8:now let t be VECTOR of X such that
+A9: ||.t.|| <= 1;
+A10: K*||.t.|| <=K*1 by A5,A9,XREAL_1:66;
+      ||.(g*f).t.|| <=K* ||.t.|| by A1;
+     hence ||.(g*f).t.|| <=K by A10,XREAL_1:2;
    end;
 
    reconsider gf=g*f as bounded LinearOperator of X,Z
-     by A3,A7,Th1,CLOPBAN1:def 7;
+     by A1,A5,Th1,CLOPBAN1:def 7;
 
-A13:now let r be Real such that
-A14: r in PreNorms(gf);
+A11:now let r be Real such that
+A12: r in PreNorms(gf);
       r in {||.gf.t.|| where t is VECTOR of X : ||.t.|| <= 1 }
-       by A14;
+       by A12;
      then consider t be VECTOR of X such that
-A15: r=||.gf.t.|| & ||.t.|| <= 1;
-     thus r <=K by A10,A15;
+A13: r=||.gf.t.|| & ||.t.|| <= 1;
+     thus r <=K by A8,A13;
    end;
     (for s be real number st s in PreNorms(gf) holds s <=K) implies
    sup PreNorms(gf) <=K by SEQ_4:62;
-   hence thesis by A3,A8,A9,A13,CLOPBAN1:34;
+   hence thesis by A1,A6,A7,A11,CLOPBAN1:34;
 end;
 
 definition
@@ -159,7 +156,7 @@ proof
      Element of BoundedLinearOperators(X,X)) = $1*$2;
    consider F being BinOp of BoundedLinearOperators(X,X) such that
 A1: for x,y being Element of BoundedLinearOperators(X,X) holds
-     F.(x,y) = F(x,y) from BINOP_1:sch 2;
+     F.(x,y) = F(x,y) from BINOP_1:sch 4;
    take F;
    let f,g be Element of BoundedLinearOperators(X,X);
    thus F.(f,g) =(f*g) by A1;
@@ -278,19 +275,19 @@ for X be ComplexNormSpace
 proof
    let X be ComplexNormSpace;
    let f,g,h be Element of BoundedLinearOperators(X,X);
-A2:modetrans(g,X,X)*modetrans(h,X,X) is Element of
+A1:modetrans(g,X,X)*modetrans(h,X,X) is Element of
     BoundedLinearOperators(X,X) by CLOPBAN1:def 8;
     modetrans((g*h),X,X)
     =modetrans(modetrans(g,X,X)*modetrans(h,X,X),X,X )
-   .=modetrans(g,X,X)*modetrans(h,X,X) by A2,CLOPBAN1:def 10;
-then A3:modetrans(f,X,X)*modetrans((g*h),X,X)
+   .=modetrans(g,X,X)*modetrans(h,X,X) by A1,CLOPBAN1:def 10;
+then A2:modetrans(f,X,X)*modetrans((g*h),X,X)
    =(modetrans(f,X,X)*modetrans(g,X,X))*modetrans(h,X,X) by Th5;
-A4:modetrans(f,X,X)*modetrans(g,X,X) is Element of
+A3:modetrans(f,X,X)*modetrans(g,X,X) is Element of
      BoundedLinearOperators(X,X) by CLOPBAN1:def 8;
     modetrans((f*g),X,X)
     =modetrans(modetrans(f,X,X)*modetrans(g,X,X),X,X )
-   .=modetrans(f,X,X)*modetrans(g,X,X) by A4,CLOPBAN1:def 10;
-   hence thesis by A3;
+   .=modetrans(f,X,X)*modetrans(g,X,X) by A3,CLOPBAN1:def 10;
+   hence thesis by A2;
 end;
 
 theorem Th8:
@@ -330,41 +327,36 @@ proof
    set mg=modetrans(g,X,X);
    set mh=modetrans(h,X,X);
    set mgh=modetrans(g+h, X,X);
-A2:ADD.(mf*mg, mf*mh) =mf*mgh
+A1:ADD.(mf*mg, mf*mh) =mf*mgh
    proof
      reconsider ff = f as VECTOR of BLOP;
      reconsider gg = g as VECTOR of BLOP;
      reconsider hh = h as VECTOR of BLOP;
-A3:  gg=mg by CLOPBAN1:def 10;
-A4:  hh=mh by CLOPBAN1:def 10;
+A2:  gg=mg by CLOPBAN1:def 10;
+A3:  hh=mh by CLOPBAN1:def 10;
      reconsider k=mf*mgh as VECTOR of BLOP by CLOPBAN1:def 8;
      reconsider fg=mf*mg as VECTOR of BLOP by CLOPBAN1:def 8;
      reconsider fh=mf*mh as VECTOR of BLOP by CLOPBAN1:def 8;
-A5:  ADD.(mf*mg,mf*mh) =(the add of BLOP).[fg,fh] by BINOP_1:def 1
+A4:  ADD.(mf*mg,mf*mh) =(the add of BLOP).[fg,fh]
       .=fg+fh by RLVECT_1:def 3;
       for x be VECTOR of X holds (mf*mgh).x=(mf*mg).x + (mf*mh).x
      proof
        let x be VECTOR of X;
        reconsider gh=mgh as VECTOR of BLOP by CLOPBAN1:def 8;
-A6:    g+h=ADD.(g,h)
-         .=(the add of BLOP).[g,h] by BINOP_1:def 1
+A5:    g+h=ADD.(g,h)
+         .=(the add of BLOP).[g,h]
          .=gg+hh by RLVECT_1:def 3;
         modetrans(g+h, X,X) =g+h by CLOPBAN1:def 10;
-then A7:    mgh.x=mg.x+mh.x by A3,A4,A6,CLOPBAN1:39;
+then A6:    mgh.x=mg.x+mh.x by A2,A3,A5,CLOPBAN1:39;
        thus (mf*mgh).x=mf.(mgh.x) by Th4
-                     .=mf.(mg.x) +mf.(mh.x) by A7,CLOPBAN1:def 3
+                     .=mf.(mg.x) +mf.(mh.x) by A6,CLOPBAN1:def 3
                      .=(mf*mg).x+mf.(mh.x) by Th4
                      .=(mf*mg).x+ (mf*mh).x by Th4;
      end;
      then k=fg+fh by CLOPBAN1:39;
-     hence thesis by A5;
+     hence thesis by A4;
    end;
-
-    ADD.(mf*mg,mf*mh)
-          = ADD.(f*g,mf*mh)
-         .= ADD.(f*g,f*h)
-         .=f*g+f*h;
-   hence f *(g+h)=f*g+f*h by A2;
+   thus f *(g+h)=f*g+f*h by A1;
 end;
 
 theorem Th10:
@@ -382,39 +374,35 @@ proof
    set mg=modetrans(g,X,X);
    set mh=modetrans(h,X,X);
    set mgh=modetrans(g+h, X,X);
-A2:ADD.(mg*mf, mh*mf) =mgh*mf
+A1:ADD.(mg*mf, mh*mf) =mgh*mf
    proof
      reconsider ff = f as VECTOR of BLOP;
      reconsider gg = g as VECTOR of BLOP;
      reconsider hh = h as VECTOR of BLOP;
-A3:  gg=mg by CLOPBAN1:def 10;
-A4:  hh=mh by CLOPBAN1:def 10;
+A2:  gg=mg by CLOPBAN1:def 10;
+A3:  hh=mh by CLOPBAN1:def 10;
      reconsider k=mgh*mf as VECTOR of BLOP by CLOPBAN1:def 8;
      reconsider gf=mg*mf as VECTOR of BLOP by CLOPBAN1:def 8;
      reconsider hf=mh*mf as VECTOR of BLOP by CLOPBAN1:def 8;
-A5:  ADD.(mg*mf,mh*mf) =(the add of BLOP).[gf,hf] by BINOP_1:def 1
+A4:  ADD.(mg*mf,mh*mf) =(the add of BLOP).[gf,hf]
       .=gf+hf by RLVECT_1:def 3;
       for x be VECTOR of X holds (mgh*mf).x=(mg*mf).x + (mh*mf).x
      proof
        let x be VECTOR of X;
        reconsider gh=mgh as VECTOR of BLOP by CLOPBAN1:def 8;
-A6:    g+h=ADD.(g,h)
-        .=(the add of BLOP).[g,h] by BINOP_1:def 1
+A5:    g+h=ADD.(g,h)
+        .=(the add of BLOP).[g,h]
         .=gg+hh by RLVECT_1:def 3;
         modetrans(g+h, X,X) =g+h by CLOPBAN1:def 10;
-then A7:    mgh.(mf.x)=mg.(mf.x)+mh.(mf.x) by A3,A4,A6,CLOPBAN1:39;
+then A6:    mgh.(mf.x)=mg.(mf.x)+mh.(mf.x) by A2,A3,A5,CLOPBAN1:39;
        thus (mgh*mf).x=mgh.(mf.x) by Th4
-                    .=(mg*mf).x+mh.(mf.x) by A7,Th4
+                    .=(mg*mf).x+mh.(mf.x) by A6,Th4
                     .=(mg*mf).x+ (mh*mf).x by Th4;
      end;
      then k=gf+hf by CLOPBAN1:39;
-     hence thesis by A5;
+     hence thesis by A4;
    end;
-
-    ADD.(mg*mf,mh*mf) = ADD.(g*f,mh*mf)
-         .= ADD.(g*f,h*f)
-         .=g*f+h*f;
-   hence (g+h)*f=g*f+h*f by A2;
+   thus (g+h)*f=g*f+h*f by A1;
 end;
 
 theorem Th11:
@@ -434,14 +422,14 @@ proof
      set maf=modetrans((a*f),X,X);
      set mbg=modetrans(b*g,X,X);
      set mfg=modetrans(f*g,X,X);
-A2:EXMULT.(a*b,mf*mg)=maf*mbg
+A1:EXMULT.(a*b,mf*mg)=maf*mbg
    proof
      reconsider ff = f, gg = g as VECTOR of BLOP;
-A3:  ff=mf by CLOPBAN1:def 10;
-A4:  gg=mg by CLOPBAN1:def 10;
+A2:  ff=mf by CLOPBAN1:def 10;
+A3:  gg=mg by CLOPBAN1:def 10;
      reconsider fg=mf*mg as VECTOR of BLOP by CLOPBAN1:def 8;
      reconsider k=(maf)*(mbg) as VECTOR of BLOP by CLOPBAN1:def 8;
-A5:  EXMULT.(a*b,mf*mg)=(the Mult of BLOP).[a*b,fg] by BINOP_1:def 1
+A4:  EXMULT.(a*b,mf*mg)=(the Mult of BLOP).[a*b,fg]
      .=(a*b)*fg by CLVECT_1:def 1;
       for x be VECTOR of X holds
       ( (maf)*(mbg)).x=(a*b)*(mf*mg).x
@@ -449,28 +437,26 @@ A5:  EXMULT.(a*b,mf*mg)=(the Mult of BLOP).[a*b,fg] by BINOP_1:def 1
        let x be VECTOR of X;
        set y=b*mg.x;
        reconsider af=maf as VECTOR of BLOP by CLOPBAN1:def 8;
-A6:    a*f=EXMULT.(a,f)
-         .=(the Mult of BLOP).[a,f] by BINOP_1:def 1
+A5:    a*f=EXMULT.(a,f)
+         .=(the Mult of BLOP).[a,f]
          .=a*ff by CLVECT_1:def 1;
         modetrans(a*f, X,X) =a*f by CLOPBAN1:def 10;
-then A7:    maf.y=a*mf.y by A3,A6,CLOPBAN1:40;
+then A6:    maf.y=a*mf.y by A2,A5,CLOPBAN1:40;
        reconsider bg=mbg as VECTOR of BLOP by CLOPBAN1:def 8;
-A8:    b*g=EXMULT.(b,g)
-         .=(the Mult of BLOP).[b,g] by BINOP_1:def 1
+A7:    b*g=EXMULT.(b,g)
+         .=(the Mult of BLOP).[b,g]
          .=b*gg by CLVECT_1:def 1;
         modetrans(b*g, X,X) =b*g by CLOPBAN1:def 10;
-then A9:    mbg.x=b*mg.x by A4,A8,CLOPBAN1:40;
+then A8:    mbg.x=b*mg.x by A3,A7,CLOPBAN1:40;
        thus (maf*mbg).x=maf.(mbg.x) by Th4
-                      .=a*(b*mf.(mg.x)) by A7,A9,CLOPBAN1:def 4
+                      .=a*(b*mf.(mg.x)) by A6,A8,CLOPBAN1:def 4
                       .=(a*b)*mf.(mg.x) by CLVECT_1:def 2
                       .=(a*b)*(mf*mg).x by Th4;
      end;
      then k=(a*b)*fg by CLOPBAN1:40;
-     hence thesis by A5;
+     hence thesis by A4;
    end;
-    EXMULT.(a*b,mf*mg) = EXMULT.(a*b,f*g)
-          .=(a*b)*(f*g);
-   hence (a*b)*(f*g)=(a*f)*(b*g) by A2;
+   thus (a*b)*(f*g)=(a*f)*(b*g) by A1;
 end;
 
 theorem Th12:
@@ -496,7 +482,7 @@ proof
 A1:a*(f*g)=(a*1r)*(f*g) by COMPLEX1:def 7
          .=(a*f)*(1r*g) by Th11;
     (1r*g)=(EXMULT).(1r,g)
-        .= (EXMULT).[1r,g] by BINOP_1:def 1
+        .= (EXMULT).[1r,g]
         .=1r*gg by CLVECT_1:def 1
         .=g by CLVECT_1:def 2;
    hence a*(f*g)=(a*f)*g by A1;
@@ -519,34 +505,18 @@ registration
  cluster Ring_of_BoundedLinearOperators(X) -> non empty strict;
 coherence
 proof
-Ring_of_BoundedLinearOperators(X)
-    = doubleLoopStr(#
-       BoundedLinearOperators(X,X),
-       Add_(BoundedLinearOperators(X,X),
-                    C_VectorSpace_of_LinearOperators(X,X)),
-       FuncMult(X),
-       FuncUnit(X),
-       Zero_(BoundedLinearOperators(X,X),
-                   C_VectorSpace_of_LinearOperators(X,X)) #);
-   hence the carrier of Ring_of_BoundedLinearOperators(X) is non empty;
+   thus the carrier of Ring_of_BoundedLinearOperators(X) is non empty;
    thus thesis;
 end;
 end;
 
-Lm10: now
+Lm1: now
   let X be ComplexNormSpace;
   set F = Ring_of_BoundedLinearOperators(X);
   let x, e be Element of F;
   assume
 A1: e = FuncUnit(X);
- Ring_of_BoundedLinearOperators(X) = doubleLoopStr
-   (# BoundedLinearOperators(X,X),
-      Add_(BoundedLinearOperators(X,X),
-      C_VectorSpace_of_LinearOperators(X,X)),
-      FuncMult(X), FuncUnit(X),
-      Zero_(BoundedLinearOperators(X,X),
-      C_VectorSpace_of_LinearOperators(X,X)) #);
-  then reconsider f = x as Element of BoundedLinearOperators(X,X);
+  reconsider f = x as Element of BoundedLinearOperators(X,X);
   thus x * e = (the mult of F).(x,e)
   .= (FuncMult(X)).(f,FuncUnit(X)) by A1
   .= f * (FuncUnit(X)) by Def4
@@ -562,32 +532,18 @@ registration
   cluster Ring_of_BoundedLinearOperators(X) -> unital;
 coherence
 proof
-  Ring_of_BoundedLinearOperators(X) = doubleLoopStr
-   (# BoundedLinearOperators(X,X),
-      Add_(BoundedLinearOperators(X,X),
-      C_VectorSpace_of_LinearOperators(X,X)),
-      FuncMult(X), FuncUnit(X),
-      Zero_(BoundedLinearOperators(X,X),
-      C_VectorSpace_of_LinearOperators(X,X)) #);
-  then reconsider e = FuncUnit(X) as Element of
+  reconsider e = FuncUnit(X) as Element of
   Ring_of_BoundedLinearOperators(X);
   take e;
-  thus thesis by Lm10;
+  thus thesis by Lm1;
 end;
 end;
 
-Lm11: now
+Lm2: now
   let X be ComplexNormSpace;
   set F = Ring_of_BoundedLinearOperators(X);
-  Ring_of_BoundedLinearOperators(X) = doubleLoopStr
-   (# BoundedLinearOperators(X,X),
-      Add_(BoundedLinearOperators(X,X),
-      C_VectorSpace_of_LinearOperators(X,X)),
-      FuncMult(X), FuncUnit(X),
-      Zero_(BoundedLinearOperators(X,X),
-      C_VectorSpace_of_LinearOperators(X,X)) #);
-  then reconsider e = FuncUnit(X) as Element of F;
-  for x being Element of F holds x*e=x & e*x=x by Lm10;
+  reconsider e = FuncUnit(X) as Element of F;
+  for x being Element of F holds x*e=x & e*x=x by Lm1;
   hence 1.F = FuncUnit(X) by GROUP_1:def 5;
 end;
 
@@ -647,12 +603,12 @@ proof
    thus ex t being Element of RBLOP st x+t=(0.RBLOP)
    proof
      consider s be Element of RRL such that
-A2:  f + s = 0.RRL by RLVECT_1:def 8;
+A1:  f + s = 0.RRL by RLVECT_1:def 8;
      reconsider t=s as Element of RBLOP;
      take t;
      thus x+t = ADD.(f,s) by RLVECT_1:5
                .=f+s by RLVECT_1:5
-               .=ZE by A2,RLVECT_1:def 2
+               .=ZE by A1,RLVECT_1:def 2
                .=0.RBLOP by RLVECT_1:def 2;
    end;
    reconsider xx=x,yy=y,zz=z as Element of BLOP;
@@ -666,11 +622,11 @@ A2:  f + s = 0.RRL by RLVECT_1:def 8;
                   .= MULT.(x,(y*z))
                   .=x*(y*z);
    thus x*(1.RBLOP) = MULT.(x,1.IT)
-                     .= MULT.(x,UNIT) by Lm11
+                     .= MULT.(x,UNIT) by Lm2
                      .=xx*UNIT by Def4
                      .= x by Th8;
    thus (1.RBLOP)*x = MULT.(1.IT,x)
-                     .= MULT.(UNIT,x) by Lm11
+                     .= MULT.(UNIT,x) by Lm2
                      .=UNIT*xx by Def4
                      .= x by Th8;
    thus x*(y+z) = MULT.(x,y+z)
@@ -746,39 +702,18 @@ registration
  cluster C_Algebra_of_BoundedLinearOperators(X) -> non empty strict;
 coherence
 proof
-C_Algebra_of_BoundedLinearOperators(X) =
-     ComplexAlgebraStr (#
-       BoundedLinearOperators(X,X),
-       FuncMult(X),
-       Add_(BoundedLinearOperators(X,X),
-                     C_VectorSpace_of_LinearOperators(X,X)),
-       Mult_(BoundedLinearOperators(X,X),
-                 C_VectorSpace_of_LinearOperators(X,X)),
-       FuncUnit(X),
-       Zero_(BoundedLinearOperators(X,X),
-               C_VectorSpace_of_LinearOperators(X,X)) #);
-   hence the carrier of C_Algebra_of_BoundedLinearOperators(X) is non empty;
+   thus the carrier of C_Algebra_of_BoundedLinearOperators(X) is non empty;
    thus thesis;
 end;
 end;
 
-Lm20: now
+Lm3: now
   let X be ComplexNormSpace;
   set F = C_Algebra_of_BoundedLinearOperators(X);
   let x, e be Element of F;
   assume
 A1: e = FuncUnit(X);
- F = ComplexAlgebraStr
-    (# BoundedLinearOperators(X,X),
-        FuncMult(X),
-        Add_(BoundedLinearOperators(X,X),
-                     C_VectorSpace_of_LinearOperators(X,X)),
-        Mult_(BoundedLinearOperators(X,X),
-                 C_VectorSpace_of_LinearOperators(X,X)),
-      FuncUnit(X),
-      Zero_(BoundedLinearOperators(X,X),
-               C_VectorSpace_of_LinearOperators(X,X)) #);
-  then reconsider f = x as Element of BoundedLinearOperators(X,X);
+  reconsider f = x as Element of BoundedLinearOperators(X,X);
   thus x * e = (the mult of F).(x,e)
   .= (FuncMult(X)).(f,FuncUnit(X)) by A1
   .= f * (FuncUnit(X)) by Def4
@@ -794,38 +729,19 @@ registration
   cluster C_Algebra_of_BoundedLinearOperators(X) -> unital;
 coherence
 proof
-  C_Algebra_of_BoundedLinearOperators(X) = ComplexAlgebraStr
-    (# BoundedLinearOperators(X,X),
-        FuncMult(X),
-        Add_(BoundedLinearOperators(X,X),
-                     C_VectorSpace_of_LinearOperators(X,X)),
-        Mult_(BoundedLinearOperators(X,X),
-                 C_VectorSpace_of_LinearOperators(X,X)),
-      FuncUnit(X),
-      Zero_(BoundedLinearOperators(X,X),
-               C_VectorSpace_of_LinearOperators(X,X)) #);
-  then reconsider e = FuncUnit(X) as
+  reconsider e = FuncUnit(X) as
     Element of C_Algebra_of_BoundedLinearOperators(X);
   take e;
-  thus thesis by Lm20;
+  thus thesis by Lm3;
 end;
 end;
 
-Lm21: now
+Lm4: now
   let X be ComplexNormSpace;
   set F = C_Algebra_of_BoundedLinearOperators(X);
-  F = ComplexAlgebraStr (# BoundedLinearOperators(X,X),
-        FuncMult(X),
-        Add_(BoundedLinearOperators(X,X),
-                     C_VectorSpace_of_LinearOperators(X,X)),
-        Mult_(BoundedLinearOperators(X,X),
-                 C_VectorSpace_of_LinearOperators(X,X)),
-      FuncUnit(X),
-      Zero_(BoundedLinearOperators(X,X),
-               C_VectorSpace_of_LinearOperators(X,X)) #);
-  then reconsider e = FuncUnit(X) as Element of
+  reconsider e = FuncUnit(X) as Element of
   C_Algebra_of_BoundedLinearOperators(X);
-  for x being Element of F holds x*e=x & e*x=x by Lm20;
+  for x being Element of F holds x*e=x & e*x=x by Lm3;
   hence 1.F = FuncUnit(X) by GROUP_1:def 5;
 end;
 
@@ -892,12 +808,12 @@ proof
    thus ex t being Element of RBLOP st x+t=(0.RBLOP)
    proof
      consider s be Element of RRL such that
-A2:  f + s = 0.RRL by RLVECT_1:def 8;
+A1:  f + s = 0.RRL by RLVECT_1:def 8;
      reconsider t=s as Element of RBLOP;
      take t;
      thus x+t = ADD.(f,s) by RLVECT_1:5
                .=f+s by RLVECT_1:5
-               .=ZE by A2,RLVECT_1:def 2
+               .=ZE by A1,RLVECT_1:def 2
                .=0.RBLOP by RLVECT_1:def 2;
    end;
    reconsider xx=x,yy=y,zz=z as Element of BLOP;
@@ -911,11 +827,11 @@ A2:  f + s = 0.RRL by RLVECT_1:def 8;
                   .= MULT.(x,(y*z))
                   .=x*(y*z);
    thus x*(1.RBLOP) = MULT.(x,1.IT)
-                     .= MULT.(x,UNIT) by Lm21
+                     .= MULT.(x,UNIT) by Lm4
                      .=xx*UNIT by Def4
                      .= x by Th8;
    thus (1.RBLOP)*x = MULT.(1.IT,x)
-                     .= MULT.(UNIT,x) by Lm21
+                     .= MULT.(UNIT,x) by Lm4
                      .=UNIT*xx by Def4
                      .= x by Th8;
    thus x*(y+z) = MULT.(x,y+z)
@@ -943,12 +859,12 @@ A2:  f + s = 0.RRL by RLVECT_1:def 8;
    thus a*(x*y) =EXMULT.[a,x*y] by CLVECT_1:def 1
                    .= EXMULT.[a, MULT.(x,y)]
                    .= EXMULT.[a, (xx*yy)] by Def4
-                   .= EXMULT.(a, (xx*yy)) by BINOP_1:def 1
+                   .= EXMULT.(a, (xx*yy))
                    .= a*(xx*yy)
                    .= (a*xx)*(yy) by Th12
                   .= MULT.((a*xx),yy) by Def4
                   .= MULT.(EXMULT.(a,xx),yy)
-                  .= MULT.(EXMULT.[a,x],y) by BINOP_1:def 1
+                  .= MULT.(EXMULT.[a,x],y)
                    .= MULT.(a*x,y) by CLVECT_1:def 1
                    .=(a*x)*y;
    thus a*(x+y) =(the Mult of RBLOP).[a,(x+y)] by CLVECT_1:def 1
@@ -985,14 +901,14 @@ A2:  f + s = 0.RRL by RLVECT_1:def 8;
    thus (a*b)*(x*y) =EXMULT.[(a*b),x*y] by CLVECT_1:def 1
                    .= EXMULT.[(a*b), MULT.(x,y)]
                    .= EXMULT.[(a*b), (xx*yy)] by Def4
-                   .= EXMULT.((a*b), (xx*yy)) by BINOP_1:def 1
+                   .= EXMULT.((a*b), (xx*yy))
                    .= (a*b)*(xx*yy)
                    .= (a*xx)*(b*yy) by Th11
                    .= MULT.((a*xx),(b*yy)) by Def4
                    .= MULT.(EXMULT.(a,xx),(b*yy))
                    .= MULT.(EXMULT.(a,xx),EXMULT.(b,yy))
-                   .= MULT.(EXMULT.[a,x],EXMULT.(b,y)) by BINOP_1:def 1
-                   .= MULT.(EXMULT.[a,x],EXMULT.[b,y]) by BINOP_1:def 1
+                   .= MULT.(EXMULT.[a,x],EXMULT.(b,y))
+                   .= MULT.(EXMULT.[a,x],EXMULT.[b,y])
                    .= MULT.(a*x,EXMULT.[b,y]) by CLVECT_1:def 1
                    .= MULT.(a*x,b*y) by CLVECT_1:def 1
                    .=(a*x)*(b*y);
@@ -1185,42 +1101,19 @@ registration
  cluster C_Normed_Algebra_of_BoundedLinearOperators(X) -> non empty strict;
 coherence
 proof
-C_Normed_Algebra_of_BoundedLinearOperators(X) =
-    Normed_Complex_AlgebraStr
-    (# BoundedLinearOperators(X,X),
-        FuncMult(X),
-        Add_(BoundedLinearOperators(X,X),
-                     C_VectorSpace_of_LinearOperators(X,X)),
-        Mult_(BoundedLinearOperators(X,X),
-                 C_VectorSpace_of_LinearOperators(X,X)),
-        FuncUnit(X),
-        Zero_(BoundedLinearOperators(X,X),
-               C_VectorSpace_of_LinearOperators(X,X)),
-       BoundedLinearOperatorsNorm(X,X) #);
-   hence the carrier of
+   thus the carrier of
    C_Normed_Algebra_of_BoundedLinearOperators(X) is non empty;
    thus thesis;
 end;
 end;
 
-Lm30: now
+Lm5: now
   let X be ComplexNormSpace;
   set F = C_Normed_Algebra_of_BoundedLinearOperators(X);
   let x, e be Element of F;
   assume
 A1: e = FuncUnit(X);
- F =  Normed_Complex_AlgebraStr
-    (# BoundedLinearOperators(X,X),
-        FuncMult(X),
-        Add_(BoundedLinearOperators(X,X),
-                     C_VectorSpace_of_LinearOperators(X,X)),
-        Mult_(BoundedLinearOperators(X,X),
-                 C_VectorSpace_of_LinearOperators(X,X)),
-        FuncUnit(X),
-        Zero_(BoundedLinearOperators(X,X),
-               C_VectorSpace_of_LinearOperators(X,X)),
-       BoundedLinearOperatorsNorm(X,X) #);
-  then reconsider f = x as Element of BoundedLinearOperators(X,X);
+  reconsider f = x as Element of BoundedLinearOperators(X,X);
   thus x * e = (the mult of F).(x,e)
   .= (FuncMult(X)).(f,FuncUnit(X)) by A1
   .= f * (FuncUnit(X)) by Def4
@@ -1236,40 +1129,18 @@ registration
   cluster C_Normed_Algebra_of_BoundedLinearOperators(X) -> unital;
 coherence
 proof
- C_Normed_Algebra_of_BoundedLinearOperators(X) =  Normed_Complex_AlgebraStr
-    (# BoundedLinearOperators(X,X),
-        FuncMult(X),
-        Add_(BoundedLinearOperators(X,X),
-                     C_VectorSpace_of_LinearOperators(X,X)),
-        Mult_(BoundedLinearOperators(X,X),
-                 C_VectorSpace_of_LinearOperators(X,X)),
-        FuncUnit(X),
-        Zero_(BoundedLinearOperators(X,X),
-               C_VectorSpace_of_LinearOperators(X,X)),
-       BoundedLinearOperatorsNorm(X,X) #);
-  then reconsider e = FuncUnit(X) as
+  reconsider e = FuncUnit(X) as
     Element of C_Normed_Algebra_of_BoundedLinearOperators(X);
   take e;
-  thus thesis by Lm30;
+  thus thesis by Lm5;
 end;
 end;
 
-Lm31: now
+Lm6: now
   let X be ComplexNormSpace;
   set F = C_Normed_Algebra_of_BoundedLinearOperators(X);
-  F = Normed_Complex_AlgebraStr
-    (# BoundedLinearOperators(X,X),
-        FuncMult(X),
-        Add_(BoundedLinearOperators(X,X),
-                     C_VectorSpace_of_LinearOperators(X,X)),
-        Mult_(BoundedLinearOperators(X,X),
-                 C_VectorSpace_of_LinearOperators(X,X)),
-        FuncUnit(X),
-        Zero_(BoundedLinearOperators(X,X),
-               C_VectorSpace_of_LinearOperators(X,X)),
-       BoundedLinearOperatorsNorm(X,X) #);
-  then reconsider e = FuncUnit(X) as Element of F;
-  for x being Element of F holds x*e=x & e*x=x by Lm30;
+  reconsider e = FuncUnit(X) as Element of F;
+  for x being Element of F holds x*e=x & e*x=x by Lm5;
   hence 1.F = FuncUnit(X) by GROUP_1:def 5;
 end;
 
@@ -1338,12 +1209,12 @@ proof
   thus ex t being Element of RBLOP st x+t=(0.RBLOP)
   proof
     consider s be Element of RRL such that
-A2:  f + s = 0.RRL by RLVECT_1:def 8;
+A1:  f + s = 0.RRL by RLVECT_1:def 8;
     reconsider t=s as Element of RBLOP;
     take t;
     thus x+t = ADD.(f,s) by RLVECT_1:5
                .=f+s by RLVECT_1:5
-               .=ZE by A2,RLVECT_1:def 2
+               .=ZE by A1,RLVECT_1:def 2
                .=0.RBLOP by RLVECT_1:def 2;
    end;
 
@@ -1358,11 +1229,11 @@ A2:  f + s = 0.RRL by RLVECT_1:def 8;
                   .= MULT.(x,(y*z))
                   .=x*(y*z);
    thus x*(1.RBLOP) = MULT.(x,1.IT)
-                     .= MULT.(x,UNIT) by Lm31
+                     .= MULT.(x,UNIT) by Lm6
                      .=xx*UNIT by Def4
                      .= x by Th8;
    thus (1.RBLOP)*x = MULT.(1.IT,x)
-                     .= MULT.(UNIT,x) by Lm31
+                     .= MULT.(UNIT,x) by Lm6
                      .=UNIT*xx by Def4
                      .= x by Th8;
    thus x*(y+z) = MULT.(x,y+z)
@@ -1390,25 +1261,25 @@ A2:  f + s = 0.RRL by RLVECT_1:def 8;
    thus a*(x*y) =EXMULT.[a,x*y] by CLVECT_1:def 1
                    .= EXMULT.[a, MULT.(x,y)]
                    .= EXMULT.[a, (xx*yy)] by Def4
-                   .= EXMULT.(a, (xx*yy)) by BINOP_1:def 1
+                   .= EXMULT.(a, (xx*yy))
                    .= a*(xx*yy)
                    .= (a*xx)*(yy) by Th12
                   .= MULT.((a*xx),yy) by Def4
                   .= MULT.(EXMULT.(a,xx),yy)
-                  .= MULT.(EXMULT.[a,x],y) by BINOP_1:def 1
+                  .= MULT.(EXMULT.[a,x],y)
                    .= MULT.(a*x,y) by CLVECT_1:def 1
                    .=(a*x)*y;
    thus (a*b)*(x*y) =EXMULT.[(a*b),x*y] by CLVECT_1:def 1
                    .= EXMULT.[(a*b), MULT.(x,y)]
                    .= EXMULT.[(a*b), (xx*yy)] by Def4
-                   .= EXMULT.((a*b), (xx*yy)) by BINOP_1:def 1
+                   .= EXMULT.((a*b), (xx*yy))
                    .= (a*b)*(xx*yy)
                    .= (a*xx)*(b*yy) by Th11
                    .= MULT.((a*xx),(b*yy)) by Def4
                    .= MULT.(EXMULT.(a,xx),(b*yy))
                    .= MULT.(EXMULT.(a,xx),EXMULT.(b,yy))
-                   .= MULT.(EXMULT.[a,x],EXMULT.(b,y)) by BINOP_1:def 1
-                   .= MULT.(EXMULT.[a,x],EXMULT.[b,y]) by BINOP_1:def 1
+                   .= MULT.(EXMULT.[a,x],EXMULT.(b,y))
+                   .= MULT.(EXMULT.[a,x],EXMULT.[b,y])
                    .= MULT.(a*x,EXMULT.[b,y]) by CLVECT_1:def 1
                    .= MULT.(a*x,b*y) by CLVECT_1:def 1
                    .=(a*x)*(b*y);
@@ -1456,7 +1327,7 @@ for X be ComplexNormSpace holds
      associative ComplexAlgebra-like ComplexLinearSpace-like
 proof
    let X be ComplexNormSpace;
-A2:for x,y,z being Element of C_Normed_Algebra_of_BoundedLinearOperators(X)
+A1:for x,y,z being Element of C_Normed_Algebra_of_BoundedLinearOperators(X)
     for a,b be Complex holds
      x+y = y+x &
      (x+y)+z = x+(y+z) &
@@ -1487,7 +1358,7 @@ A2:for x,y,z being Element of C_Normed_Algebra_of_BoundedLinearOperators(X)
                  C_VectorSpace_of_LinearOperators(X,X));
    set UNIT=FuncUnit(X);
    set NRM=BoundedLinearOperatorsNorm(X,X);
-A4:(for a be Complex, v,w being VECTOR of RBLOP holds
+A2:(for a be Complex, v,w being VECTOR of RBLOP holds
       a * (v + w) = a * v + a * w) &
    (for a,b be Complex, v being VECTOR of RBLOP holds
       (a + b) * v = a * v + b * v) &
@@ -1498,7 +1369,7 @@ A4:(for a be Complex, v,w being VECTOR of RBLOP holds
      let x,y be Point of RBLOP;
      let a be Complex;
      reconsider x1 =x, y1 =y as Point of BS;
-A5:  ||.x + y.|| = ( the norm of RBLOP  ).(x+y) by CLVECT_1:def 9
+A3:  ||.x + y.|| = ( the norm of RBLOP  ).(x+y) by CLVECT_1:def 9
       .= NRM.(ADD.(x,y)) by RLVECT_1:5
       .= NRM.(x1+y1) by RLVECT_1:5
       .= ||.x1 + y1.|| by CLVECT_1:def 9;
@@ -1507,19 +1378,19 @@ A5:  ||.x + y.|| = ( the norm of RBLOP  ).(x+y) by CLVECT_1:def 9
       .= NRM.(x1) + NRM.(y1) by CLVECT_1:def 9
       .= ||.x.|| +( the norm of RBLOP  ).y by CLVECT_1:def 9
       .= ||.x.|| + ||.y.|| by CLVECT_1:def 9;
-     hence ||.x + y.|| <= ||.x.||  + ||. y.|| by A5,CLVECT_1:def 10;
-A6:  ||.x1.|| = NRM.(x1) by CLVECT_1:def 9
+     hence ||.x + y.|| <= ||.x.||  + ||. y.|| by A3,CLVECT_1:def 10;
+A4:  ||.x1.|| = NRM.(x1) by CLVECT_1:def 9
       .= ||.x.|| by CLVECT_1:def 9;
       0.BS=ZE by RLVECT_1:def 2
                .=0.RBLOP by RLVECT_1:def 2;
-     hence ||.x.|| = 0 iff  x= 0.RBLOP by A6,CLVECT_1:def 10;
+     hence ||.x.|| = 0 iff  x= 0.RBLOP by A4,CLVECT_1:def 10;
      thus ||.a*x.|| =  ( the norm of RBLOP  ).(a*x) by CLVECT_1:def 9
                    .= NRM.(EXMULT.[a,x]) by CLVECT_1:def 1
                   .= NRM.(a*x1) by CLVECT_1:def 1
                   .= ||.a*x1.|| by CLVECT_1:def 9
-                    .=|.a.|* ||.x.|| by A6,CLVECT_1:def 10;
+                    .=|.a.|* ||.x.|| by A4,CLVECT_1:def 10;
    end;
-   hence thesis by A2,A4,CFUNCDOM:def 9,CLVECT_1:def 2,def 10,GROUP_1:def 4
+   hence thesis by A1,A2,CFUNCDOM:def 9,CLVECT_1:def 2,def 10,GROUP_1:def 4
 ,RLVECT_1:def 5,def 6,def 7,def 8;
 end;
 
@@ -1600,7 +1471,7 @@ proof
    proof
      let x,y be Point of RBLOP;
      reconsider x1=x,y1=y as Element of BLOP;
-A3:  ||.x * y.||
+A1:  ||.x * y.||
        = ( the norm of RBLOP ).(x*y) by CLVECT_1:def 9
       .= NRM.(MULT.(x,y))
       .= NRM.(x1*y1) by Def4
@@ -1610,11 +1481,11 @@ A3:  ||.x * y.||
       .=NRM.(x1) *NRM.(y1) by CLOPBAN1:def 10
       .= ||.x .|| * NRM.(y) by CLVECT_1:def 9
       .= ||.x .|| * ||.y .|| by CLVECT_1:def 9;
-     hence ||.x * y.|| <= ||.x .|| * ||.y .|| by A3,Th2;
+     hence ||.x * y.|| <= ||.x .|| * ||.y .|| by A1,Th2;
    end;
    thus RBLOP is Banach_Algebra-like_2
    proof
-     1.RBLOP = UNIT by Lm31;
+     1.RBLOP = UNIT by Lm6;
      hence ||. 1.RBLOP .|| = NRM.(UNIT) by CLVECT_1:def 9
       .= NRM.(id (the carrier of X))
       .= 1 by Th18;
@@ -1632,7 +1503,7 @@ A3:  ||.x * y.||
      let x be Element of RBLOP;
      reconsider xx=x as Element of BLOP;
      thus (1.RBLOP)*x  = MULT.(1.RBLOP,x)
-                      .= MULT.(UNIT,x) by Lm31
+                      .= MULT.(UNIT,x) by Lm6
                       .=UNIT*xx by Def4
                      .= x by Th8;
    end;
@@ -1654,16 +1525,16 @@ A3:  ||.x * y.||
    end;
     now
      let seq be sequence of RBLOP such that
-A4:  seq is Cauchy_sequence_by_Norm;
+A2:  seq is Cauchy_sequence_by_Norm;
      reconsider seq1=seq as sequence of BS;
       now let r be Real such that
-A5:    r > 0;
+A3:    r > 0;
        consider k be Nat such that
-A6:     for n, m be Nat st
+A4:     for n, m be Nat st
          n >= k & m >= k holds ||.(seq.n) - (seq.m).|| < r
-          by A4,A5,CSSPACE3:10;
+          by A2,A3,CSSPACE3:10;
         now let n, m be Nat such that
-A7:      n >= k & m >= k;
+A5:      n >= k & m >= k;
           ||.(seq1.n) - (seq1.m).||
            = NRM.((seq1.n) - (seq1.m)) by CLVECT_1:def 9
           .= NRM.((seq1.n) +(- (seq1.m))) by RLVECT_1:def 11
@@ -1677,7 +1548,7 @@ A7:      n >= k & m >= k;
           .= NRM.((seq.n) +(- (seq.m))) by CLVECT_1:4
           .= NRM.((seq.n) - (seq.m)) by RLVECT_1:def 11
           .= ||.(seq.n) - (seq.m).|| by CLVECT_1:def 9;
-         hence ||.(seq1.n) - (seq1.m).|| < r by A6,A7;
+         hence ||.(seq1.n) - (seq1.m).|| < r by A4,A5;
        end;
        hence ex k be Nat st for n, m be Nat st
           n >= k & m >= k holds ||.(seq1.n) - (seq1.m).|| < r;
@@ -1685,18 +1556,18 @@ A7:      n >= k & m >= k;
      then seq1 is Cauchy_sequence_by_Norm by CSSPACE3:10;
      then seq1 is convergent by CLOPBAN1:def 14;
      then consider g1 be Point of BS such that
-A8:   for r be Real st 0 < r
+A6:   for r be Real st 0 < r
        ex m be Nat st for n be Nat st m <= n holds
         ||.(seq1.n) - g1.|| < r by CLVECT_1:def 15;
      reconsider g=g1 as Point of RBLOP;
       now let r be Real such that
-A9:    0 < r;
+A7:    0 < r;
        consider m be Nat such that
-A10:    for n be Nat st m <= n holds
-         ||.(seq1.n) - g1.|| < r by A8,A9;
+A8:    for n be Nat st m <= n holds
+         ||.(seq1.n) - g1.|| < r by A6,A7;
         now
          let n be Nat such that
-A11:     m <= n;
+A9:     m <= n;
           ||.(seq1.n) - (g1).||
           = NRM.((seq1.n) - (g1)) by CLVECT_1:def 9
          .= NRM.((seq1.n) +(- (g1))) by RLVECT_1:def 11
@@ -1709,7 +1580,7 @@ A11:     m <= n;
          .= NRM.((seq.n) +(- (g))) by CLVECT_1:4
          .= NRM.((seq.n) - (g)) by RLVECT_1:def 11
          .= ||.(seq.n) - (g).|| by CLVECT_1:def 9;
-         hence ||.(seq.n) - (g).|| < r by A10,A11;
+         hence ||.(seq.n) - (g).|| < r by A8,A9;
        end;
        hence ex m be Nat  st for n be Nat st m <= n holds
               ||.(seq.n) - g.|| < r;
@@ -1736,12 +1607,12 @@ end;
 
 theorem
   for X being ComplexNormSpace holds
-  1.Ring_of_BoundedLinearOperators(X) = FuncUnit(X) by Lm11;
+  1.Ring_of_BoundedLinearOperators(X) = FuncUnit(X) by Lm2;
 
 theorem
   for X being ComplexNormSpace holds
-  1.C_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X) by Lm21;
+  1.C_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X) by Lm4;
 
 theorem
   for X being ComplexNormSpace holds
-  1.C_Normed_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X) by Lm31;
+  1.C_Normed_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X) by Lm6;

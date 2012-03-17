@@ -19,11 +19,12 @@ environ
       RELSET_1, FUNCOP_1, SCMRING3, SQUARE_1, XBOOLE_0, FRAENKEL, SETFAM_1,
       STRUCT_0, CARD_4;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
- definitions TARSKI, AMI_1, AMISTD_1, AMISTD_2, XBOOLE_0;
+ definitions TARSKI, AMI_1, AMISTD_1, AMISTD_2, XBOOLE_0, SQUARE_1, CQC_LANG;
  theorems AMI_1, AMI_2, AMI_3, AMI_5, BVFUNC14, ENUMSET1, FUNCT_7, NAT_1,
       TARSKI, SCMFSA9A, YELLOW14, AMISTD_1, FUNCT_2, SUBSET_1, AMI_6, INT_1,
       SQUARE_1, FUNCOP_1, FUNCT_4, CQC_LANG, ZFMISC_1, PRE_FF, YELLOW_8,
-      CARD_3, FUNCT_1, YELLOW15, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1;
+      CARD_3, FUNCT_1, YELLOW15, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1,
+      NEWTON;
  schemes SUBSET_1;
 
 begin :: Preliminaries
@@ -124,17 +125,7 @@ theorem Th5:
      o being Object of A,
      w being Element of ObjectKind o
     st o <> IC A
-  holds IC s = IC (s+*(o,w))
-  proof
-    let A be IC-Ins-separated definite (non empty non void AMI-Struct over N),
-        s be State of A,
-        o be Object of A,
-        w be Element of ObjectKind o such that
-A1:   o <> IC A;
-    thus IC s = s.IC A
-      .= (s+*(o,w)).IC A by A1,FUNCT_7:34
-      .= IC (s+*(o,w));
-  end;
+  holds IC s = IC (s+*(o,w)) by FUNCT_7:34;
 
 theorem Th6:
  for A being standard (IC-Ins-separated definite
@@ -245,23 +236,23 @@ coherence
     let o be Object of STC N;
 A1: the carrier of STC N = NAT \/ {NAT} by AMISTD_1:def 11;
 A2: the Object-Kind of STC N =
-       (NAT --> {[1,0],[0,0]}) +* ({NAT} --> NAT) by AMISTD_1:def 11;
-A4: dom ({NAT} --> NAT) = {NAT} by FUNCOP_1:19;
+       (NAT --> {[1,0],[0,0]}) +* (NAT .--> NAT) by AMISTD_1:def 11;
+A3: dom (NAT .--> NAT) = {NAT} by FUNCOP_1:19;
     per cases by A1,XBOOLE_0:def 2;
     suppose
-A5:   o in NAT;
+A4:   o in NAT;
     then o <> NAT;
-    then not o in dom ({NAT} --> NAT) by A4,TARSKI:def 1;
-then A6: ObjectKind o = (NAT --> {[1,0],[0,0]}).o by A2,FUNCT_4:12
-      .= {[1,0],[0,0]} by A5,FUNCOP_1:13;
-A7: [1,0] <> [0,0] by ZFMISC_1:33;
+    then not o in dom (NAT .--> NAT) by A3,TARSKI:def 1;
+then A5: ObjectKind o = (NAT --> {[1,0],[0,0]}).o by A2,FUNCT_4:12
+      .= {[1,0],[0,0]} by A4,FUNCOP_1:13;
+A6: [1,0] <> [0,0] by ZFMISC_1:33;
        [1,0] in {[1,0],[0,0]} & [0,0] in {[1,0],[0,0]} by TARSKI:def 2;
-    hence ObjectKind o is non trivial by A6,A7,YELLOW_8:def 1;
+    hence ObjectKind o is non trivial by A5,A6,YELLOW_8:def 1;
     end;
     suppose
-A8:   o in {NAT};
-    then ObjectKind o = ({NAT} --> NAT).o by A2,A4,FUNCT_4:14
-      .= NAT by A8,FUNCOP_1:13;
+A7:   o in {NAT};
+    then ObjectKind o = (NAT .--> NAT).o by A2,A3,FUNCT_4:14
+      .= NAT by A7,FUNCOP_1:13;
     hence ObjectKind o is non trivial;
   end;
   end;
@@ -454,13 +445,7 @@ end;
 theorem Th9:
  for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
      I being Instruction of A holds
-  Out_\_Inp I misses Input I
-  proof
-    let A be IC-Ins-separated definite (non empty non void AMI-Struct over N),
-        I be Instruction of A;
-       Out_\_Inp I misses Out_U_Inp I \ Out_\_Inp I by XBOOLE_1:85;
-    hence thesis;
-  end;
+  Out_\_Inp I misses Input I by XBOOLE_1:85;
 
 theorem Th10:
  for A being with_non_trivial_ObjectKinds IC-Ins-separated definite
@@ -521,13 +506,7 @@ A2:     Exec(I,s+*(o,so)) = Exec(I,s) +* (o,so) by A1,Def5;
 theorem Th12:
  for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
      I being Instruction of A holds
-  Input I c= Out_U_Inp I
-  proof
-    let A be IC-Ins-separated definite (non empty non void AMI-Struct over N),
-        I be Instruction of A;
-       Input I = Out_U_Inp I \ Out_\_Inp I;
-    hence thesis by XBOOLE_1:36;
-  end;
+  Input I c= Out_U_Inp I by XBOOLE_1:36;
 
 theorem
     for A being with_non_trivial_ObjectKinds IC-Ins-separated definite
@@ -590,9 +569,9 @@ A2:       not o in Input I;
         hence thesis by A1;
         end;
         suppose
-A4:       o in Out_\_Inp I;
+A3:       o in Out_\_Inp I;
            Out_\_Inp I c= Output I by Th10;
-        hence thesis by A4;
+        hence thesis by A3;
       end;
       end;
       hence o in Output I \/ Input I by XBOOLE_0:def 2;
@@ -821,15 +800,7 @@ theorem Th24:
  for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
      I being Instruction of A st
    ex s being State of A st Exec(I,s).IC A <> IC s
-  holds IC A in Output I
-  proof
-    let A be IC-Ins-separated definite (non empty non void AMI-Struct over N),
-        I be Instruction of A;
-    given s being State of A such that
-A1:   Exec(I,s).IC A <> IC s;
-       s.IC A = IC s;
-    hence IC A in Output I by A1,Def3;
-  end;
+  holds IC A in Output I by Def3;
 
 theorem Th25:
  for A being standard (IC-Ins-separated definite
@@ -944,7 +915,7 @@ theorem Th31:
   proof
     consider j being Element of SCM-Instr-Loc such that
 A1: j = f & Next f = Next j by AMI_3:def 11;
-    j + 0 <> j + 2 by XREAL_1:10;
+    j + 0 <> j + 2;
     hence thesis by A1,AMI_2:def 15;
   end;
 
@@ -1013,8 +984,6 @@ A1:   o in Out_\_Inp I by SUBSET_1:10;
     then reconsider o as Data-Location;
     reconsider w = t.o + 1 as Element of ObjectKind o by Lm2;
     set s = t +* (o,w);
-    thus thesis
-    proof
       per cases;
       suppose
 A2:     o = a;
@@ -1031,7 +1000,6 @@ then A7:   Exec(I,t).o = t.o + 0 by AMI_3:8;
         .= w by Lm1,FUNCT_7:33;
       then Exec(I,t).o <> Exec(I,s).o by A7,XCMPLX_1:2;
       hence thesis by A1,Def4;
-    end;
     end;
   end;
   end;
@@ -1057,8 +1025,6 @@ A2:     o in Out_\_Inp I;
       end;
       suppose o is Data-Location;
       then reconsider o as Data-Location;
-      thus thesis
-      proof
         per cases;
         suppose o = a;
         hence thesis by TARSKI:def 1;
@@ -1072,7 +1038,6 @@ then A4:     Exec(I,t).o = t.o + 0 by AMI_3:8;
           .= w by Lm1,FUNCT_7:33;
         then Exec(I,t).o <> Exec(I,s).o by A4,XCMPLX_1:2;
         hence thesis by A2,Def4;
-      end;
       end;
     end;
     end;
@@ -1134,16 +1099,12 @@ A1:   o in Out_\_Inp I by SUBSET_1:10;
     reconsider w = t.o + 1 as Element of ObjectKind o by Lm2;
     reconsider w1 = w as Integer;
     set s = t +* (o,w);
-    thus thesis
-    proof
       per cases;
       suppose
 A2:     o = a;
 then A3:   Exec(I,t).o = t.a + t.b + 0 by AMI_3:9;
 A4:   Exec(I,s).o = s.a + s.b by A2,AMI_3:9
         .= w1 + s.b by A2,Lm1,FUNCT_7:33;
-      thus thesis
-      proof
         per cases;
         suppose
 A5:       a = b;
@@ -1162,7 +1123,6 @@ A9:     t.a + t.b + 1 = t.a + 1 + t.b;
         hence thesis by A1,Def4;
       end;
       end;
-      end;
       suppose
 A10:     o <> a;
 then A11:   Exec(I,t).o = t.o + 0 by AMI_3:9;
@@ -1170,7 +1130,6 @@ then A11:   Exec(I,t).o = t.o + 0 by AMI_3:9;
         .= w by Lm1,FUNCT_7:33;
       then Exec(I,t).o <> Exec(I,s).o by A11,XCMPLX_1:2;
       hence thesis by A1,Def4;
-    end;
     end;
   end;
   end;
@@ -1194,8 +1153,6 @@ A1:     o in Out_\_Inp I;
       end;
       suppose o is Data-Location;
       then reconsider o as Data-Location;
-      thus thesis
-      proof
         per cases;
         suppose o = a;
         hence thesis by TARSKI:def 1;
@@ -1209,7 +1166,6 @@ then A3:     Exec(I,t).o = t.o + 0 by AMI_3:10;
           .= w by Lm1,FUNCT_7:33;
         then Exec(I,t).o <> Exec(I,s).o by A3,XCMPLX_1:2;
         hence thesis by A1,Def4;
-      end;
       end;
     end;
     end;
@@ -1273,8 +1229,6 @@ A2:   o in Out_\_Inp I by SUBSET_1:10;
     reconsider w = t.o + 1 as Element of ObjectKind o by Lm2;
     reconsider w1 = w as Integer;
     set s = t +* (o,w);
-    thus thesis
-    proof
       per cases;
       suppose
 A3:     o = a;
@@ -1293,7 +1247,6 @@ then A8:   Exec(I,t).o = t.o + 0 by AMI_3:10;
         .= w by Lm1,FUNCT_7:33;
       then Exec(I,t).o <> Exec(I,s).o by A8,XCMPLX_1:2;
       hence thesis by A2,Def4;
-    end;
     end;
   end;
   end;
@@ -1314,8 +1267,6 @@ A1:   o in Out_\_Inp I by SUBSET_1:10;
     end;
     suppose o is Data-Location;
     then reconsider o as Data-Location;
-    thus thesis
-    proof
       per cases;
       suppose
 A2:     o = a;
@@ -1325,19 +1276,17 @@ then A3:   Exec(I,t).o = t.a * t.b by AMI_3:11;
       set s = t +* (o,w);
 A4:   Exec(I,s).o = s.a * s.b by A2,AMI_3:11
         .= w1 * s.b by A2,Lm1,FUNCT_7:33;
-      thus thesis
-      proof
         per cases;
         suppose
 A5:       a = b;
-then A6:     Exec(I,t).o = (t.a)^2 by A3,SQUARE_1:def 3;
+then A6:     Exec(I,t).o = (t.a)^2 by A3;
 A7:     Exec(I,s).o = w1 * w1 by A2,A4,A5,Lm1,FUNCT_7:33;
            now
           assume Exec(I,t).o = Exec(I,s).o;
-          then (t.a)^2 + 0 = (t.a + 1)^2 by A6,A7,SQUARE_1:def 3
-           .= (t.a)^2 + 2 * t.a * 1 + 1^2 by SQUARE_1:63
+          then (t.a)^2 + 0 = (t.a + 1)^2 by A6,A7
+           .= (t.a)^2 + 2 * t.a * 1 + 1^2
            .= (t.a)^2 + (2 * t.a * 1 + 1^2);
-          then 0 = 2 * t.a + 1 by SQUARE_1:59;
+          then 0 = 2 * t.a + 1;
           then 2 * t.a = 0 - 1;
 then A8:       t.a * 2 / 2 = -1 / 2;
 A9:      t.a * 1 = t.a * (2 / 2)
@@ -1368,7 +1317,6 @@ then A14:      r.a * r.b = (r.a + 1) * r.b by A2,A10,A12,A13,FUNCT_7:34;
         hence thesis by A1,Def4;
       end;
       end;
-      end;
       suppose
 A15:     o <> a;
 then A16:   Exec(I,t).o = t.o + 0 by AMI_3:11;
@@ -1378,7 +1326,6 @@ then A16:   Exec(I,t).o = t.o + 0 by AMI_3:11;
         .= w by Lm1,FUNCT_7:33;
       then Exec(I,t).o <> Exec(I,s).o by A16,XCMPLX_1:2;
       hence thesis by A1,Def4;
-    end;
     end;
   end;
   end;
@@ -1405,8 +1352,6 @@ A1:     o in Out_\_Inp I;
       reconsider w = t.o + 1 as Element of ObjectKind o by Lm2;
       reconsider w1 = w as Integer;
       set s = t +* (o,w);
-      thus thesis
-      proof
         per cases;
         suppose o = a;
         hence thesis by TARSKI:def 1;
@@ -1416,7 +1361,6 @@ then A2:     Exec(I,t).o = t.o & Exec(I,s).o = s.o by AMI_5:15;
            s.o = w1 + 0 by Lm1,FUNCT_7:33;
         then t.o <> s.o by XCMPLX_1:2;
         hence thesis by A1,A2,Def4;
-      end;
       end;
     end;
     end;
@@ -1489,18 +1433,16 @@ A8: dom t = the carrier of SCM by AMI_3:36;
     reconsider w = t.o + 1 as Element of ObjectKind o by Lm2;
     reconsider w1 = w as Integer;
     set s = t +* (o,w);
-    thus thesis
-    proof
       per cases;
       suppose
 A9:     o = a;
 then A10:   s.a = w by A8,FUNCT_7:33;
      s.b = t.b by A1,A9,FUNCT_7:34;
 then A11:   Exec(I,s).o = (7 + 1) div t.b by A1,A3,A9,A10,AMI_3:12
-       .= 8 div 4 by A4,SCMFSA9A:5
+       .= 8 div 4 by A4,NEWTON:101
        .= 2 by A5,NAT_1:def 1;
          Exec(I,t).o = 7 div t.b by A1,A3,A9,AMI_3:12
-       .= 7 div 4 by A4,SCMFSA9A:5
+       .= 7 div 4 by A4,NEWTON:101
        .= 1 by A6,NAT_1:def 1;
       then Exec(I,s).o <> Exec(I,t).o by A11;
       hence thesis by A2,Def4;
@@ -1511,10 +1453,10 @@ A13:     o = b;
 A14:   s.a = t.a by A12,FUNCT_7:34;
      s.b = w by A8,A13,FUNCT_7:33;
 then A15:   Exec(I,s).o = 7 mod (t.b + 1) by A3,A13,A14,AMI_3:12
-       .= 7 mod 5 by A4,SCMFSA9A:5
+       .= 7 mod 5 by A4,NEWTON:101
        .= 2 by A7,NAT_1:def 2;
          Exec(I,t).o = 7 mod t.b by A3,A13,AMI_3:12
-       .= 7 mod 4 by A4,SCMFSA9A:5
+       .= 7 mod 4 by A4,NEWTON:101
        .= 3 by A6,NAT_1:def 2;
       then Exec(I,s).o <> Exec(I,t).o by A15;
       hence thesis by A2,Def4;
@@ -1524,7 +1466,6 @@ then A16:   Exec(I,s).o = s.o & Exec(I,t).o = t.o by AMI_3:12;
          s.o = w1 + 0 by A8,FUNCT_7:33;
       then t.o <> s.o by XCMPLX_1:2;
       hence thesis by A2,A16,Def4;
-    end;
     end;
   end;
   end;
@@ -1606,12 +1547,12 @@ A3:   o = IC SCM;
     reconsider w = Next IC s as Element of ObjectKind IC SCM by AMI_1:def 11;
     set r = s +* (IC SCM,w);
 A4: Exec(I,s).IC SCM = Next IC s by A1,AMI_3:14;
-A6: s+*(IC SCM,w).a = s.a by Th30;
-A7: dom s = the carrier of SCM by AMI_3:36;
-A8: IC (s+*(IC SCM,w)) = (s+*(IC SCM,w)).IC SCM
-       .= w by A7,FUNCT_7:33;
+A5: s+*(IC SCM,w).a = s.a by Th30;
+A6: dom s = the carrier of SCM by AMI_3:36;
+A7: IC (s+*(IC SCM,w)) = (s+*(IC SCM,w)).IC SCM
+       .= w by A6,FUNCT_7:33;
        IC Exec(I,r) = Exec(I,r).IC SCM
-      .= Next Next IC s by A1,A6,A8,AMI_3:14;
+      .= Next Next IC s by A1,A5,A7,AMI_3:14;
     then Exec(I,s).o <> Exec(I,r).o by A3,A4,Th31;
     hence thesis by A2,A3,Def4;
     end;
@@ -1622,10 +1563,10 @@ A8: IC (s+*(IC SCM,w)) = (s+*(IC SCM,w)).IC SCM
     then reconsider o as Data-Location;
     reconsider w = t.o + 1 as Element of ObjectKind o by Lm2;
     set s = t +* (o,w);
-A9: Exec(I,t).o = t.o + 0 by AMI_3:14;
+A8: Exec(I,t).o = t.o + 0 by AMI_3:14;
        Exec(I,s).o = s.o by AMI_3:14
       .= w by Lm1,FUNCT_7:33;
-    then Exec(I,t).o <> Exec(I,s).o by A9,XCMPLX_1:2;
+    then Exec(I,t).o <> Exec(I,s).o by A8,XCMPLX_1:2;
     hence thesis by A2,Def4;
   end;
   end;
@@ -1645,12 +1586,12 @@ A3:   o = IC SCM;
     reconsider w = Next IC s as Element of ObjectKind IC SCM by AMI_1:def 11;
     set r = s +* (IC SCM,w);
 A4: Exec(I,s).IC SCM = Next IC s by A1,AMI_3:15;
-A6: s+*(IC SCM,w).a = s.a by Th30;
-A7: dom s = the carrier of SCM by AMI_3:36;
-A8: IC (s+*(IC SCM,w)) = (s+*(IC SCM,w)).IC SCM
-       .= w by A7,FUNCT_7:33;
+A5: s+*(IC SCM,w).a = s.a by Th30;
+A6: dom s = the carrier of SCM by AMI_3:36;
+A7: IC (s+*(IC SCM,w)) = (s+*(IC SCM,w)).IC SCM
+       .= w by A6,FUNCT_7:33;
        IC Exec(I,r) = Exec(I,r).IC SCM
-      .= Next Next IC s by A1,A6,A8,AMI_3:15;
+      .= Next Next IC s by A1,A5,A7,AMI_3:15;
     then Exec(I,s).o <> Exec(I,r).o by A3,A4,Th31;
     hence thesis by A2,A3,Def4;
     end;
@@ -1661,10 +1602,10 @@ A8: IC (s+*(IC SCM,w)) = (s+*(IC SCM,w)).IC SCM
     then reconsider o as Data-Location;
     reconsider w = t.o + 1 as Element of ObjectKind o by Lm2;
     set s = t +* (o,w);
-A9: Exec(I,t).o = t.o + 0 by AMI_3:15;
+A8: Exec(I,t).o = t.o + 0 by AMI_3:15;
        Exec(I,s).o = s.o by AMI_3:15
       .= w by Lm1,FUNCT_7:33;
-    then Exec(I,t).o <> Exec(I,s).o by A9,XCMPLX_1:2;
+    then Exec(I,t).o <> Exec(I,s).o by A8,XCMPLX_1:2;
     hence thesis by A2,Def4;
   end;
   end;
@@ -1836,10 +1777,10 @@ then A3: x = a or x = IC SCM by TARSKI:def 2;
     set t = s +* (a .--> 1) +* (b .--> 2);
        now
          a <> b or a = b;
-then A5:   t.a <> 0 by BVFUNC14:15,YELLOW14:3;
+then A4:   t.a <> 0 by BVFUNC14:15,YELLOW14:3;
       assume t.a = Exec(I,t).a;
       then t.a = t.a * t.b by AMI_3:11;
-      then t.b = 1 by A5,XCMPLX_1:7;
+      then t.b = 1 by A4,XCMPLX_1:7;
       hence contradiction by YELLOW14:3;
     end;
     hence thesis by A3,Def3,Th25;
@@ -1881,14 +1822,14 @@ A7: now
 then A8:   t.a = t.a div t.b by A4,AMI_3:12;
          7 = 2 * 3 + 1 & 2 = 2 * 1 + 0;
       then 7 div 2 = 3 & 2 div 2 = 1 by NAT_1:def 1;
-      hence contradiction by A5,A6,A8,SCMFSA9A:5;
+      hence contradiction by A5,A6,A8,NEWTON:101;
     end;
        now
       assume t.b = Exec(I,t).b;
 then A9:   t.b = t.a mod t.b by AMI_3:12;
          7 = 2 * 3 + 1 & 2 = 2 * 1 + 0;
       then 7 mod 2 = 1 & 2 mod 2 = 0 by NAT_1:def 2;
-      hence contradiction by A5,A6,A9,SCMFSA9A:5;
+      hence contradiction by A5,A6,A9,NEWTON:101;
     end;
     hence thesis by A3,A7,Def3,Th25;
     end;
@@ -2552,8 +2493,6 @@ A20:    Output I c= Out_U_Inp I by Th11;
        then a in Output I by ENUMSET1:def 1;
        hence a in Out_U_Inp I by A20;
      end;
-    thus thesis
-    proof
     per cases by A18,ENUMSET1:def 1;
     suppose o = IC SCM;
     hence thesis by Th27;
@@ -2580,7 +2519,6 @@ A25: Exec(I,s+*(o,w)).a = (s+*(o,w)).a div (s+*(o,w)).b by A1,AMI_3:12
         .= s.a div 1 by A21,A23,FUNCT_7:33
         .= s.a by PRE_FF:2;
       hence thesis by A24,A25,Def5;
-    end;
     end;
 
     end;
@@ -2649,15 +2587,12 @@ A42:    Output I c= Out_U_Inp I by Th11;
        then a in Output I by TARSKI:def 2;
        hence a in Out_U_Inp I by A42;
      end;
-    thus thesis
-    proof
     per cases by A40,ENUMSET1:def 1;
     suppose o = IC SCM;
     hence thesis by Th27;
     end;
     suppose o = a or o = b;
     hence thesis by A26,A41;
-    end;
     end;
   end;
   end;
@@ -2772,19 +2707,19 @@ A11:       d <> o;
 A12:   for i being Instruction-Location of SCM holds
         Exec(I,s+*(o,w)).i = (Exec(I,s) +* (o,w)).i by Th8;
 A13:   (s+*(o,w)).a = s.a by A4,FUNCT_7:34;
-A15:   Exec(I,s).IC SCM = IC Exec(I,s)
+A14:   Exec(I,s).IC SCM = IC Exec(I,s)
         .= IC (Exec(I,s) +* (o,w)) by A5,Th5;
          now per cases;
         suppose
-A16:       s.a = 0;
+A15:       s.a = 0;
         hence IC Exec(I,s+*(o,w)) = f by A13,AMI_3:14
-        .= IC (Exec(I,s) +* (o,w)) by A15,A16,AMI_3:14;
+        .= IC (Exec(I,s) +* (o,w)) by A14,A15,AMI_3:14;
         end;
         suppose
-A17:       s.a <> 0;
+A16:       s.a <> 0;
         hence IC Exec(I,s+*(o,w)) = Next IC (s+*(o,w)) by A13,AMI_3:14
         .= Next IC s by A5,Th5
-        .= IC (Exec(I,s) +* (o,w)) by A15,A17,AMI_3:14;
+        .= IC (Exec(I,s) +* (o,w)) by A14,A16,AMI_3:14;
       end;
       end;
       hence thesis by A2,A8,A12,AMI_5:26;
@@ -2793,36 +2728,36 @@ A17:       s.a <> 0;
 
     let o be set;
     assume
-A18:   o in { a, IC SCM };
-    per cases by A18,TARSKI:def 2;
+A17:   o in { a, IC SCM };
+    per cases by A17,TARSKI:def 2;
     suppose
-A19: o = a;
-A20: a <> IC SCM by AMI_5:20;
+A18: o = a;
+A19: a <> IC SCM by AMI_5:20;
     reconsider nf = f as Element of ObjectKind IC SCM by AMI_1:def 11;
     set q = t +* (IC SCM,nf);
     set s = q +* (a,1);
-A21: IC s = s.IC SCM
-        .= q.IC SCM by A20,FUNCT_7:34
+A20: IC s = s.IC SCM
+        .= q.IC SCM by A19,FUNCT_7:34
         .= nf by Lm1,FUNCT_7:33;
        dom q = the carrier of SCM by AMI_3:36;
-then A22: s.a = 1 by FUNCT_7:33;
+then A21: s.a = 1 by FUNCT_7:33;
     reconsider w = 0 as Element of ObjectKind a by Lm2;
        dom s = the carrier of SCM by AMI_3:36;
     then (s+*(a,w)).a = w by FUNCT_7:33;
-then A23: Exec(I,s+*(a,w)).IC SCM = f by AMI_3:14;
+then A22: Exec(I,s+*(a,w)).IC SCM = f by AMI_3:14;
        (Exec(I,s) +* (a,w)).IC SCM = IC (Exec(I,s) +* (a,w))
-      .= IC Exec(I,s) by A20,Th5
+      .= IC Exec(I,s) by A19,Th5
       .= Exec(I,s).IC SCM
-      .= Next f by A21,A22,AMI_3:14;
-    then Exec(I,s+*(a,w)) <> Exec(I,s) +* (a,w) by A23,Th31;
-    hence thesis by A19,Def5;
+      .= Next f by A20,A21,AMI_3:14;
+    then Exec(I,s+*(a,w)) <> Exec(I,s) +* (a,w) by A22,Th31;
+    hence thesis by A18,Def5;
     end;
     suppose
-A24: o = IC SCM;
-A25: Output I c= Out_U_Inp I by Th11;
+A23: o = IC SCM;
+A24: Output I c= Out_U_Inp I by Th11;
        Output I = {IC SCM} by Th50;
     then IC SCM in Output I by TARSKI:def 1;
-    hence thesis by A24,A25;
+    hence thesis by A23,A24;
   end;
   end;
 
@@ -2876,19 +2811,19 @@ A11:       d <> o;
 A12:   for i being Instruction-Location of SCM holds
         Exec(I,s+*(o,w)).i = (Exec(I,s) +* (o,w)).i by Th8;
 A13:   (s+*(o,w)).a = s.a by A4,FUNCT_7:34;
-A15:   Exec(I,s).IC SCM = IC Exec(I,s)
+A14:   Exec(I,s).IC SCM = IC Exec(I,s)
         .= IC (Exec(I,s) +* (o,w)) by A5,Th5;
          now per cases;
         suppose
-A16:       s.a > 0;
+A15:       s.a > 0;
         hence IC Exec(I,s+*(o,w)) = f by A13,AMI_3:15
-        .= IC (Exec(I,s) +* (o,w)) by A15,A16,AMI_3:15;
+        .= IC (Exec(I,s) +* (o,w)) by A14,A15,AMI_3:15;
         end;
         suppose
-A17:       s.a <= 0;
+A16:       s.a <= 0;
         hence IC Exec(I,s+*(o,w)) = Next IC (s+*(o,w)) by A13,AMI_3:15
         .= Next IC s by A5,Th5
-        .= IC (Exec(I,s) +* (o,w)) by A15,A17,AMI_3:15;
+        .= IC (Exec(I,s) +* (o,w)) by A14,A16,AMI_3:15;
       end;
       end;
       hence thesis by A2,A8,A12,AMI_5:26;
@@ -2897,36 +2832,36 @@ A17:       s.a <= 0;
 
     let o be set;
     assume
-A18:   o in { a, IC SCM };
-    per cases by A18,TARSKI:def 2;
+A17:   o in { a, IC SCM };
+    per cases by A17,TARSKI:def 2;
     suppose
-A19: o = a;
-A20: a <> IC SCM by AMI_5:20;
+A18: o = a;
+A19: a <> IC SCM by AMI_5:20;
     reconsider nf = f as Element of ObjectKind IC SCM by AMI_1:def 11;
     set q = t +* (IC SCM,nf);
     set s = q +* (a,0);
-A21: IC s = s.IC SCM
-        .= q.IC SCM by A20,FUNCT_7:34
+A20: IC s = s.IC SCM
+        .= q.IC SCM by A19,FUNCT_7:34
         .= nf by Lm1,FUNCT_7:33;
        dom q = the carrier of SCM by AMI_3:36;
-then A22: s.a = 0 by FUNCT_7:33;
+then A21: s.a = 0 by FUNCT_7:33;
     reconsider w = 1 as Element of ObjectKind a by Lm2;
        dom s = the carrier of SCM by AMI_3:36;
     then (s+*(a,w)).a = w by FUNCT_7:33;
-then A23: Exec(I,s+*(a,w)).IC SCM = f by AMI_3:15;
+then A22: Exec(I,s+*(a,w)).IC SCM = f by AMI_3:15;
        (Exec(I,s) +* (a,w)).IC SCM = IC (Exec(I,s) +* (a,w))
-      .= IC Exec(I,s) by A20,Th5
+      .= IC Exec(I,s) by A19,Th5
       .= Exec(I,s).IC SCM
-      .= Next f by A21,A22,AMI_3:15;
-    then Exec(I,s+*(a,w)) <> Exec(I,s) +* (a,w) by A23,Th31;
-    hence thesis by A19,Def5;
+      .= Next f by A20,A21,AMI_3:15;
+    then Exec(I,s+*(a,w)) <> Exec(I,s) +* (a,w) by A22,Th31;
+    hence thesis by A18,Def5;
     end;
     suppose
-A24: o = IC SCM;
-A25: Output I c= Out_U_Inp I by Th11;
+A23: o = IC SCM;
+A24: Output I c= Out_U_Inp I by Th11;
        Output I = {IC SCM} by Th51;
     then IC SCM in Output I by TARSKI:def 1;
-    hence thesis by A24,A25;
+    hence thesis by A23,A24;
   end;
   end;
 
@@ -2946,9 +2881,9 @@ theorem
     set I = a:=b;
     assume
 A1:   a <> b;
-A3: a <> IC SCM by AMI_5:20;
+A2: a <> IC SCM by AMI_5:20;
        Out_U_Inp I = { a, b, IC SCM } & Out_\_Inp I = { a } by A1,Th33,Th54;
-    hence thesis by A1,A3,Th1;
+    hence thesis by A1,A2,Th1;
   end;
 
 theorem

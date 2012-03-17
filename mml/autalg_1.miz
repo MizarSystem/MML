@@ -10,18 +10,20 @@ environ
  vocabularies UNIALG_1, FUNCT_1, GROUP_6, ALG_1, RELAT_1, FRAENKEL, FUNCT_2,
       BINOP_1, REALSET1, VECTSP_1, GROUP_1, PBOOLE, NATTRA_1, BOOLE, FUNCOP_1,
       PRALG_1, MSUALG_3, ZF_REFLE, AMI_1, MSUALG_1, CARD_3, MSUHOM_1, CQC_SIM1,
-      WELLORD1, AUTALG_1;
+      WELLORD1, AUTALG_1, CAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, FUNCOP_1, STRUCT_0, FINSEQ_1, BINOP_1, FRAENKEL, PBOOLE,
+      FUNCT_2, FUNCOP_1, CQC_LANG,
+      STRUCT_0, FINSEQ_1, BINOP_1, FRAENKEL, PBOOLE,
       GROUP_1, GROUP_6, CARD_3, PZFMISC1, UNIALG_1, UNIALG_2, ALG_1, MSUALG_1,
       MSUALG_3, MSUHOM_1;
  constructors BINOP_1, FRAENKEL, GROUP_6, ALG_1, MSUALG_3, MSUHOM_1, PRALG_1,
-      PRE_CIRC, PZFMISC1;
+      PRE_CIRC, PZFMISC1, CQC_LANG;
  registrations FRAENKEL, FUNCT_1, GROUP_1, MSUALG_1, PBOOLE, RELSET_1,
-      STRUCT_0, SUBSET_1, FUNCT_2, PARTFUN1, XBOOLE_0, ORDINAL2, FUNCOP_1;
+      STRUCT_0, SUBSET_1, FUNCT_2, PARTFUN1, XBOOLE_0, ORDINAL2, FUNCOP_1,
+      CQC_LANG;
  requirements BOOLE, SUBSET;
  definitions ALG_1, FRAENKEL, GROUP_1, GROUP_6, MSUALG_3, TARSKI, XBOOLE_0,
-      PZFMISC1;
+      PZFMISC1, CQC_LANG;
  theorems ALG_1, BINOP_1, CARD_3, FUNCOP_1, FUNCT_1, FUNCT_2, GROUP_1, GROUP_6,
       MSUALG_1, MSUALG_3, MSUHOM_1, PBOOLE, TARSKI, ZFMISC_1, RELAT_1,
       RELSET_1, XBOOLE_0, XBOOLE_1, PZFMISC1;
@@ -208,7 +210,7 @@ A1: for x, y be Element of UAAut UA ex m be Element of UAAut UA st P[x,y,m]
      thus thesis;
    end;
    thus ex IT being BinOp of UAAut UA st
-     for x, y be Element of UAAut UA holds P[x,y,IT.(x, y)] from BINOP_1:sch 1
+     for x, y be Element of UAAut UA holds P[x,y,IT.(x, y)] from BINOP_1:sch 3
 (A1);
  end;
 uniqueness
@@ -234,13 +236,9 @@ coherence
     set H = HGrStr (# UAAut UA, UAAutComp UA #);
        H is associative Group-like
     proof
-A1:    now
-        let f, g be Element of H,
-            A, B be Element of UAAut UA;
-        assume f = A & g = B;
-        hence f * g = (UAAutComp UA).(A, B)
-                   .= B * A by Def2;
-      end;
+A1:   for f, g be Element of H, A, B be Element of UAAut UA
+        st f = A & g = B
+       holds f * g = B * A by Def2;
       thus for f, g, h be Element of H
       holds (f * g) * h = f * (g * h)
       proof
@@ -288,11 +286,7 @@ end;
 
 registration let UA;
   cluster UAAutGroup UA -> strict;
-coherence
-  proof
-       UAAutGroup UA = HGrStr (# UAAut UA, UAAutComp UA #);
-    hence thesis;
-  end;
+coherence;
 end;
 
 Lm2:
@@ -307,31 +301,22 @@ for f be Element of UAAut UA holds dom f = rng f &
 
 theorem Th8:
 for x, y be Element of UAAutGroup UA
- for f, g be Element of UAAut UA st x = f & y = g holds x * y = g * f
-  proof
-    let x, y be Element of UAAutGroup UA;
-    let f, g be Element of UAAut UA;
-    assume A1: x = f & y = g;
-   UAAutGroup UA = HGrStr (# UAAut UA, UAAutComp UA #);
-    hence x * y = (UAAutComp UA).(f, g) by A1
-              .= g * f by Def2;
-  end;
+ for f, g be Element of UAAut UA st x = f & y = g holds x * y = g * f by Def2;
 
 theorem Th9:
 id the carrier of UA = 1.UAAutGroup UA
   proof
- UAAutGroup UA = HGrStr (# UAAut UA, UAAutComp UA #);
-    then reconsider g = id the carrier of UA
+    reconsider g = id the carrier of UA
       as Element of UAAutGroup UA by Th4;
     consider g1 be Function of the carrier of UA, the carrier of UA such that
-A2:    g1 = g;
+A1:    g1 = g;
     consider f be Element of UAAutGroup UA;
        f is Element of UAAut UA;
     then consider f1 be Function of the carrier of UA, the carrier of UA such
 that
-A3:    f1 = f;
-       g * f = f1 * g1 by A2,A3,Th8
-         .= f by A2,A3,FUNCT_2:74;
+A2:    f1 = f;
+       g * f = f1 * g1 by A1,A2,Th8
+         .= f by A1,A2,FUNCT_2:74;
     hence thesis by GROUP_1:15;
   end;
 
@@ -342,8 +327,7 @@ theorem
     let f be Element of UAAut UA;
     let g be Element of UAAutGroup UA;
     assume A1: f = g;
-       UAAutGroup UA = HGrStr (# UAAut UA, UAAutComp UA #);
-    then consider g1 be Element of UAAut UA such that
+    consider g1 be Element of UAAut UA such that
 A2:   g1 = g";
 A3: rng f = dom f by Lm2
          .= the carrier of UA by Lm2;
@@ -378,7 +362,7 @@ theorem
   end;
 
 theorem Th12:
-for x be set, A be ManySortedSet of {x} holds A = {x} --> A.x
+for x be set, A be ManySortedSet of {x} holds A = x .--> A.x
   proof
     let x be set;
     let A be ManySortedSet of {x};
@@ -896,12 +880,12 @@ for f1, f2 be Element of MSAAut U1 holds f1 ** f2 in MSAAut U1
 
 theorem Th34:
 for F be ManySortedFunction of MSAlg UA, MSAlg UA
- for f be Element of UAAut UA st F = {0} --> f
+ for f be Element of UAAut UA st F = 0 .--> f
   holds F in MSAAut MSAlg UA
   proof
     let F be ManySortedFunction of MSAlg UA, MSAlg UA;
     let f be Element of UAAut UA;
-    assume F = {0} --> f;
+    assume F = 0 .--> f;
 then A1: F = MSAlg f by MSUHOM_1:def 3;
        f is_isomorphism UA, UA by Def1;
     then MSAlg f is_isomorphism MSAlg UA, MSAlg UA Over MSSign UA
@@ -927,7 +911,7 @@ A1: for x, y be Element of MSAAut U1 ex m be Element of MSAAut U1 st P[x,y,m]
     end;
    thus ex IT being BinOp of MSAAut U1 st
      for x, y be Element of MSAAut U1 holds P[x,y,IT.(x, y)] from
-BINOP_1:sch 1(A1);
+BINOP_1:sch 3(A1);
   end;
 uniqueness
   proof
@@ -953,13 +937,9 @@ coherence
     set SO = the Sorts of U1;
        H is associative Group-like
     proof
-A1:    now
-        let f, g be Element of H,
-            A, B be Element of MSAAut U1;
-        assume f = A & g = B;
-        hence f * g = (MSAAutComp U1).(A, B)
-                   .= B ** A by Def8;
-      end;
+A1:   for f, g be Element of H, A, B be Element of MSAAut U1
+        st f = A & g = B
+       holds f * g = B ** A by Def8;
       thus for f, g, h be Element of H
       holds (f * g) * h = f * (g * h)
       proof
@@ -1003,39 +983,27 @@ end;
 
 registration let S, U1;
   cluster MSAAutGroup U1 -> strict;
-coherence
-  proof
-       MSAAutGroup U1 = HGrStr (# MSAAut U1, MSAAutComp U1 #);
-    hence thesis;
-  end;
+coherence;
 end;
 
 theorem Th35:
 for x, y be Element of MSAAutGroup U1
  for f, g be Element of MSAAut U1 st x = f & y = g holds x * y = g ** f
-  proof
-    let x, y be Element of MSAAutGroup U1;
-    let f, g be Element of MSAAut U1;
-    assume A1: x = f & y = g;
-   MSAAutGroup U1 = HGrStr (# MSAAut U1, MSAAutComp U1 #);
-    hence x * y = (MSAAutComp U1).(f, g) by A1
-              .= g ** f by Def8;
-  end;
+   by Def8;
 
 theorem Th36:
 id the Sorts of U1 = 1.MSAAutGroup U1
   proof
     set T = the Sorts of U1;
- MSAAutGroup U1 = HGrStr (# MSAAut U1, MSAAutComp U1 #);
-    then reconsider g = id T as Element of MSAAutGroup U1 by Th31;
+    reconsider g = id T as Element of MSAAutGroup U1 by Th31;
     consider g1 be ManySortedFunction of T, T such that
-A2:    g1 = g;
+A1:    g1 = g;
     consider f be Element of MSAAutGroup U1;
        f is Element of MSAAut U1;
     then consider f1 be ManySortedFunction of T, T such that
-A3:    f1 = f;
-       g * f = f1 ** g1 by A2,A3,Th35
-         .= f by A2,A3,MSUALG_3:3;
+A2:    f1 = f;
+       g * f = f1 ** g1 by A1,A2,Th35
+         .= f by A1,A2,MSUALG_3:3;
     hence thesis by GROUP_1:15;
   end;
 
@@ -1046,8 +1014,7 @@ theorem
     let f be Element of MSAAut U1;
     let g be Element of MSAAutGroup U1;
     assume A1: f = g;
-       MSAAutGroup U1 = HGrStr (# MSAAut U1, MSAAutComp U1 #);
-    then consider g1 be Element of MSAAut U1 such that
+    consider g1 be Element of MSAAut U1 such that
 A2:   g1 = g";
 A3: f is "1-1" & f is "onto" by Lm3;
        g1 ** f = g * g" by A1,A2,Th35;
@@ -1075,10 +1042,10 @@ A2: MSSign UA1 = MSSign UA2 by A1,MSUHOM_1:10;
     the Arity of MSSign UA1 = f &
     the ResultSort of MSSign UA1 = dom signature UA1-->0 by MSUALG_1:def 13;
 A4: 0 in {0} by TARSKI:def 1;
-A5: (MSSorts UA1).0 = ({0} --> the carrier of UA1).0 by MSUALG_1:def 14
+A5: (MSSorts UA1).0 = (0 .--> the carrier of UA1).0 by MSUALG_1:def 14
                    .= the carrier of UA1 by A4,FUNCOP_1:13;
 A6: MSAlg UA1 = MSAlgebra (#MSSorts UA1, MSCharact UA1#) by MSUALG_1:def 16;
-A7: (MSSorts UA2).0 = ({0} --> the carrier of UA2).0 by MSUALG_1:def 14
+A7: (MSSorts UA2).0 = (0 .--> the carrier of UA2).0 by MSUALG_1:def 14
                    .= the carrier of UA2 by A4,FUNCOP_1:13;
 A8: MSAlg UA2 = MSAlgebra (#MSSorts UA2, MSCharact UA2#) by MSUALG_1:def 16;
         MSAlg UA2 Over MSSign UA1 = MSAlg UA2 by A2,MSUHOM_1:9;
@@ -1087,7 +1054,7 @@ A8: MSAlg UA2 = MSAlgebra (#MSSorts UA2, MSCharact UA2#) by MSUALG_1:def 16;
 
 theorem Th39:
 for f be Element of UAAut UA
- holds {0} --> f is ManySortedFunction of MSAlg UA, MSAlg UA
+ holds 0 .--> f is ManySortedFunction of MSAlg UA, MSAlg UA
   proof
     let f be Element of UAAut UA;
        MSAlg f is ManySortedFunction of MSAlg UA, MSAlg UA by MSUHOM_1:9;
@@ -1096,11 +1063,11 @@ for f be Element of UAAut UA
 
 Lm4:
 for h be Function st (dom h = UAAut UA &
- for x be set st x in UAAut UA holds h.x = {0} --> x)
+ for x be set st x in UAAut UA holds h.x = 0 .--> x)
   holds rng h = MSAAut (MSAlg UA)
   proof
     let h be Function such that
-A1:   dom h = UAAut UA & for x be set st x in UAAut UA holds h.x = {0} --> x;
+A1:   dom h = UAAut UA & for x be set st x in UAAut UA holds h.x = 0 .--> x;
     thus rng h = MSAAut (MSAlg UA)
     proof
     thus rng h c= MSAAut (MSAlg UA)
@@ -1109,8 +1076,8 @@ A1:   dom h = UAAut UA & for x be set st x in UAAut UA holds h.x = {0} --> x;
       assume x in rng h;
       then consider q be set such that
 A2:     q in dom h & x = h.q by FUNCT_1:def 5;
-A3:   x = {0} --> q by A1,A2;
-         {0} --> q is ManySortedFunction of MSAlg UA, MSAlg UA
+A3:   x = 0 .--> q by A1,A2;
+         0 .--> q is ManySortedFunction of MSAlg UA, MSAlg UA
         by A1,A2,Th39;
       then consider d be ManySortedFunction of MSAlg UA, MSAlg UA such that
 A4:     d = x by A3;
@@ -1119,7 +1086,7 @@ A5:     q' = q by A1,A2;
          q' is_isomorphism UA, UA by Def1;
 then A6:   MSAlg q' is_isomorphism MSAlg UA, MSAlg UA Over MSSign UA
         by MSUHOM_1:20;
-         MSAlg q' = {0} --> q by A5,MSUHOM_1:def 3
+         MSAlg q' = 0 .--> q by A5,MSUHOM_1:def 3
               .= x by A1,A2;
       then d is_isomorphism MSAlg UA, MSAlg UA by A4,A6,MSUHOM_1:9;
       hence thesis by A4,Def7;
@@ -1137,7 +1104,7 @@ A8:   f is_isomorphism MSAlg UA, MSAlg UA by A7,Def7;
       the OperSymbols of MSSign UA = dom signature UA &
       the Arity of MSSign UA = g &
       the ResultSort of MSSign UA = dom signature UA -->0 by MSUALG_1:def 13;
-      then A9:   f = {0} --> f.0 by Th12;
+      then A9:   f = 0 .--> f.0 by Th12;
          ex q be set st q in dom h & x = h.q
       proof
         take q = f.0;
@@ -1159,35 +1126,34 @@ A8:   f is_isomorphism MSAlg UA, MSAlg UA by A7,Def7;
 
 theorem Th40:
 for h be Function st (dom h = UAAut UA &
- for x be set st x in UAAut UA holds h.x = {0} --> x)
+ for x be set st x in UAAut UA holds h.x = 0 .--> x)
   holds h is Homomorphism of UAAutGroup UA, MSAAutGroup (MSAlg UA)
   proof
     let h be Function such that
-A1: dom h = UAAut UA & for x be set st x in UAAut UA holds h.x = {0} --> x;
+A1: dom h = UAAut UA & for x be set st x in UAAut UA holds h.x = 0 .--> x;
     set G = UAAutGroup UA;
     set H = MSAAutGroup (MSAlg UA);
- H = HGrStr (# MSAAut MSAlg UA, MSAAutComp MSAlg UA #);
-    then rng h c= the carrier of H by A1,Lm4;
+    rng h c= the carrier of H by A1,Lm4;
     then reconsider h' = h as Function of the carrier of G, the carrier of H
  by A1,FUNCT_2:def 1,RELSET_1:11;
     now let a, b be Element of UAAutGroup UA;
       thus h'.(a * b) = (h'.a) * (h'.b)
       proof
         reconsider a' = a, b' = b as Element of UAAut UA;
-        reconsider A = {0} --> a', B = {0} --> b' as
+        reconsider A = 0 .--> a', B = 0 .--> b' as
           ManySortedFunction of MSAlg UA, MSAlg UA by Th39;
         reconsider A' = A, B' = B
         as Element of MSAAutGroup MSAlg UA by Th34;
         reconsider ha = h'.a, hb = h'.b as Element of MSAAut MSAlg UA;
-A4:     ha = A' & hb = B' by A1;
+A2:     ha = A' & hb = B' by A1;
         b' * a' is Element of UAAut UA by Th7;
-then A5:     h'.(b' * a') = {0} --> (b' * a') by A1;
+then A3:     h'.(b' * a') = 0 .--> (b' * a') by A1;
         thus h'.(a * b) = h'.(b' * a') by Th8
-                 .= MSAlg (b' * a') by A5,MSUHOM_1:def 3
+                 .= MSAlg (b' * a') by A3,MSUHOM_1:def 3
                  .= (MSAlg b') ** (MSAlg a') by MSUHOM_1:26
                  .= B ** MSAlg a' by MSUHOM_1:def 3
                  .= B ** A by MSUHOM_1:def 3
-                 .= h'.a * h'.b by A4,Th35;
+                 .= h'.a * h'.b by A2,Th35;
       end;
       end;
       then h' is Homomorphism of G, H by GROUP_6:def 7;
@@ -1196,12 +1162,12 @@ then A5:     h'.(b' * a') = {0} --> (b' * a') by A1;
 
 theorem Th41:
 for h be Homomorphism of UAAutGroup UA, MSAAutGroup (MSAlg UA) st
- for x be set st x in UAAut UA holds h.x = {0} --> x
+ for x be set st x in UAAut UA holds h.x = 0 .--> x
   holds h is_isomorphism
   proof
     let h be Homomorphism of UAAutGroup UA, MSAAutGroup (MSAlg UA);
     assume
-A1:   for x be set st x in UAAut UA holds h.x = {0} --> x;
+A1:   for x be set st x in UAAut UA holds h.x = 0 .--> x;
     set G = UAAutGroup UA;
     thus h is_isomorphism
     proof
@@ -1217,12 +1183,12 @@ A1:   for x be set st x in UAAut UA holds h.x = {0} --> x;
              for a, b be Element of G st h.a = h.b holds a = b
           proof
             let a, b be Element of G;
-            assume A4: h.a = h.b;
-A5:         h.a = {0} --> a by A1
+            assume A2: h.a = h.b;
+A3:         h.a = 0 .--> a by A1
                .= [:{0}, {a}:] by FUNCOP_1:def 2;
-               h.b = {0} --> b by A1
+               h.b = 0 .--> b by A1
                .= [:{0}, {b}:] by FUNCOP_1:def 2;
-            then {a} = {b} by A4,A5,ZFMISC_1:134;
+            then {a} = {b} by A2,A3,ZFMISC_1:134;
             hence thesis by ZFMISC_1:6;
           end;
           hence thesis by GROUP_6:1;
@@ -1234,7 +1200,7 @@ A5:         h.a = {0} --> a by A1
 theorem
    UAAutGroup UA, MSAAutGroup (MSAlg UA) are_isomorphic
   proof
-    deffunc F(set) = {0} --> $1;
+    deffunc F(set) = 0 .--> $1;
     consider h be Function such that
 A1:   dom h = UAAut UA
         & for x be set st x in UAAut UA holds h.x = F(x) from FUNCT_1:sch 3;

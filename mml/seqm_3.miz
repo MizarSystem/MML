@@ -14,7 +14,7 @@ environ
  registrations FUNCT_1, XREAL_0, RELSET_1, SEQ_1, ARYTM_3, MEMBERED, FUNCOP_1,
       ORDINAL2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions SEQ_2;
+ definitions SEQ_2, FUNCT_1;
  theorems FUNCT_1, SEQ_1, SEQ_2, ABSVALUE, NAT_1, TARSKI,
       FUNCT_2, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, XREAL_1,
       COMPLEX1;
@@ -256,12 +256,8 @@ A4: n = m+k by NAT_1:28;
     thus thesis by A3,A4,Lm5;
   end;
 
-definition let f be Function;
-  attr f is constant means
-:Def5: for n1,n2 being set st n1 in dom f & n2 in dom f holds f.n1=f.n2;
-end;
-
 definition let seq;
+ canceled;
   redefine attr seq is constant means
 :Def6: ex r st for n holds seq.n=r;
  compatibility
@@ -273,7 +269,7 @@ A2:   seq is constant;
     reconsider r = seq.n0 as real number;
     take r;
     let n be Nat;
-    thus seq.n = r by A1,A2,Def5;
+    thus seq.n = r by A1,A2,FUNCT_1:def 16;
    end;
    given r such that
 A3:  for n holds seq.n=r;
@@ -576,13 +572,13 @@ registration
  cluster increasing -> non-decreasing PartFunc of NAT, REAL;
  coherence
   proof let f be PartFunc of NAT, REAL such that
-Z1: f is increasing;
+A1: f is increasing;
    let m,n such that
-Z2: m in dom f & n in dom f and
-Z3: m <= n;
-   per cases by Z3, XREAL_1:1;
+A2: m in dom f & n in dom f and
+A3: m <= n;
+   per cases by A3, XREAL_1:1;
    suppose m < n;
-    then f.m < f.n by Z1,Z2,Def1;
+    then f.m < f.n by A1,A2,Def1;
    hence f.m <= f.n;
    end;
    suppose m = n;
@@ -592,13 +588,13 @@ Z3: m <= n;
  cluster decreasing -> non-increasing PartFunc of NAT, REAL;
  coherence
   proof let f be PartFunc of NAT, REAL such that
-Z1: f is decreasing;
+A4: f is decreasing;
    let m,n such that
-Z2: m in dom f & n in dom f and
-Z3: m <= n;
-   per cases by Z3, XREAL_1:1;
+A5: m in dom f & n in dom f and
+A6: m <= n;
+   per cases by A6, XREAL_1:1;
    suppose m < n;
-    then f.m > f.n by Z1,Z2,Def2;
+    then f.m > f.n by A4,A5,Def2;
    hence f.m >= f.n;
    end;
    suppose m = n;
@@ -608,29 +604,29 @@ Z3: m <= n;
  cluster constant -> non-decreasing non-increasing PartFunc of NAT, REAL;
  coherence
   proof let f be PartFunc of NAT, REAL such that
-Z:  f is constant;
+A7:  f is constant;
    thus f is non-decreasing
     proof let m,n;
      assume m in dom f & n in dom f & m <= n;
-      then f.m = f.n by Z,Def5;
+      then f.m = f.n by A7,FUNCT_1:def 16;
      hence f.m <= f.n;
     end;
    let m,n;
    assume m in dom f & n in dom f & m <= n;
-    then f.m = f.n by Z,Def5;
+    then f.m = f.n by A7,FUNCT_1:def 16;
    hence f.m >= f.n;
   end;
  cluster non-decreasing non-increasing -> constant PartFunc of NAT, REAL;
  coherence
   proof let f be PartFunc of NAT, REAL such that
-Z1: f is non-decreasing non-increasing;
+A8: f is non-decreasing non-increasing;
    let x,y;
    assume
-Z2: x in dom f & y in dom f;
+A9: x in dom f & y in dom f;
     dom f c= NAT by RELSET_1:12;
-    then reconsider m = x, n = y as Nat by Z2;
+    then reconsider m = x, n = y as Nat by A9;
     m <= n or n <= m;
-    then f.m <= f.n & f.n <= f.m by Z1,Z2,Def3,Def4;
+    then f.m <= f.n & f.n <= f.m by A8,A9,Def3,Def4;
    hence thesis by XREAL_1:1;
   end;
 end;
@@ -689,25 +685,25 @@ definition let IT be Relation;
   rng IT c= NAT;
 end;
 
-LmX: incl NAT is increasing natural-yielding
+Lm11: incl NAT is increasing natural-yielding
  proof set seq = incl NAT;
       now let y; assume y in rng seq;
-    then consider x such that A2:x in dom seq and
-                         A3:seq.x=y by FUNCT_1:def 5;
-       x in NAT by A2,FUNCT_2:def 1;
-    hence y in NAT by FUNCT_1:35,A3;
+    then consider x such that A1:x in dom seq and
+                         A2:seq.x=y by FUNCT_1:def 5;
+       x in NAT by A1,FUNCT_2:def 1;
+    hence y in NAT by FUNCT_1:35,A2;
    end;
-  then A4: rng seq c=NAT by TARSKI:def 3;
+  then A3: rng seq c=NAT by TARSKI:def 3;
   now let n;
       seq.n=n & seq.(n+1)=n+1 by FUNCT_1:35;
    hence seq.n<seq.(n+1) by NAT_1:38;
   end;
-  hence thesis by A4,Def8,Lm6;
+  hence thesis by A3,Def8,Lm6;
  end;
 
 registration
   cluster increasing natural-yielding Real_Sequence;
-existence by LmX;
+existence by Lm11;
 end;
 
 definition
@@ -849,7 +845,7 @@ definition let seq;
 :Def10:
    ex Nseq st it=seq*Nseq;
   existence
-   proof reconsider s = incl NAT as increasing Seq_of_Nat by LmX;
+   proof reconsider s = incl NAT as increasing Seq_of_Nat by Lm11;
     take seq, s;
     thus thesis by FUNCT_2:23;
    end;
@@ -1030,9 +1026,9 @@ theorem
         seq1.n=n & seq1.(n+1)=n+1 by FUNCT_1:35;
      hence seq1.n<seq1.(n+1) by NAT_1:38;
     end;
-   then A2:seq1 is increasing by Lm6;
+   then A1:seq1 is increasing by Lm6;
        for n holds seq1.n is Nat by FUNCT_1:35;
-   then reconsider seq1 as increasing Seq_of_Nat by A2,Th29;
+   then reconsider seq1 as increasing Seq_of_Nat by A1,Th29;
    take Nseq=seq1;
        now let n;
      thus (seq*Nseq).n=seq.(Nseq.n) by Th31
@@ -1853,4 +1849,4 @@ registration let X,x be set;
 end;
 
 theorem
- incl NAT is increasing natural-yielding by LmX;
+ incl NAT is increasing natural-yielding by Lm11;

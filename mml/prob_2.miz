@@ -90,11 +90,7 @@ Th5: (seq is convergent & for n holds seq1.n = r - seq.n) implies
 :: THEOREMS CONCERNED EVENTS
 ::
 theorem Th6:
-  A /\ Omega = A & A /\ ([#] Sigma) = A
-  proof
-  thus A /\ Omega = A by XBOOLE_1:28;
-  hence A /\ ([#] Sigma) = A;
-  end;
+  A /\ Omega = A & A /\ ([#] Sigma) = A by XBOOLE_1:28;
 
 definition let Omega,Sigma,ASeq,n;
   redefine func ASeq.n -> Event of Sigma;
@@ -377,14 +373,13 @@ Lm2: for P,ASeq st ASeq is non-decreasing holds
  A1: ASeq is non-decreasing;
   reconsider V = Union ASeq as Event of Sigma by PROB_1:58;
   set BSeq = @Complement ASeq;
-  BSeq = Complement ASeq;
- then A3: BSeq is non-increasing by A1,Lm1;
- then A4: P * BSeq is convergent by PROB_1:def 13;
+ A2: BSeq is non-increasing by A1,Lm1;
+ then A3: P * BSeq is convergent by PROB_1:def 13;
      Intersection BSeq = (Union Complement Complement ASeq)`
      .= Omega \ Union ASeq by SUBSET_1:def 5
      .= [#] Sigma \ Union ASeq;
- then A5: P.Intersection BSeq = 1 - P.V by PROB_1:68;
- A6: now let n;
+ then A4: P.Intersection BSeq = 1 - P.V by PROB_1:68;
+ A5: now let n;
              (P * BSeq).n = P.(BSeq.n) by Th11
           .= P.((ASeq.n)`) by PROB_1:def 4
           .= P.(Omega \ ASeq.n) by SUBSET_1:def 5
@@ -394,9 +389,9 @@ Lm2: for P,ASeq st ASeq is non-decreasing holds
           .= 1 + - (P * ASeq).n;
       hence (P * ASeq).n = 1 - (P * BSeq).n;
      end;
-  hence P * ASeq is convergent by A4,Th5;
-  thus lim (P * ASeq) = 1 - lim (P * BSeq) by A4,A6,Th5
-       .= 1 - (1 - P.V) by A3,A5,PROB_1:def 13
+  hence P * ASeq is convergent by A3,Th5;
+  thus lim (P * ASeq) = 1 - lim (P * BSeq) by A3,A5,Th5
+       .= 1 - (1 - P.V) by A2,A4,PROB_1:def 13
        .= P.(Union ASeq);
   end;
 
@@ -445,13 +440,12 @@ theorem
          Intersection ASeq = @Intersection ASeq;
       then reconsider V = Intersection ASeq as Event of Sigma;
      set BSeq = @Complement ASeq;
-      BSeq = Complement ASeq;
-     then A7: BSeq is non-decreasing by A3,Th17;
-     then A8: P * BSeq is convergent by A2;
+     A6: BSeq is non-decreasing by A3,Th17;
+     then A7: P * BSeq is convergent by A2;
          Union BSeq = (Union Complement ASeq)``
      .= (Intersection ASeq)`;
-     then A9: P.Union BSeq = 1 - P.V by A4;
-     A10: now let n;
+     then A8: P.Union BSeq = 1 - P.V by A4;
+     A9: now let n;
              (P * BSeq).n = P.(BSeq.n) by Th11
           .= P.((ASeq.n)`) by PROB_1:def 4
           .= 1 - P.(ASeq.n) by A4
@@ -459,9 +453,9 @@ theorem
           .= 1 + - (P * ASeq).n;
       hence (P * ASeq).n = 1 - (P * BSeq).n;
      end;
-  hence P * ASeq is convergent by A8,Th5;
-  thus lim (P * ASeq) = 1 - lim (P * BSeq) by A8,A10,Th5
-       .= 1 - (1 - P.V) by A2,A7,A9
+  hence P * ASeq is convergent by A7,Th5;
+  thus lim (P * ASeq) = 1 - lim (P * BSeq) by A7,A9,Th5
+       .= 1 - (1 - P.V) by A2,A6,A8
        .= P.(Intersection ASeq);
       end;
     hence thesis by A1,PROB_1:def 13;
@@ -791,19 +785,19 @@ A10:   dom(f*ASeq) = NAT by FUNCT_2:def 1;
 A11:   dom(P*BSeq) = NAT by FUNCT_2:def 1;
         now let n be set;
       assume
-a1:   n in dom(f*ASeq);
+A12:   n in dom(f*ASeq);
       then reconsider n1 = n as Nat by A10;
-      thus (f*ASeq).n = f.(ASeq.n) by a1,A10,Th11
+      thus (f*ASeq).n = f.(ASeq.n) by A12,A10,Th11
                        .= P.(ASeq.n1 /\ B)/P.B by A5
                        .= P.(BSeq.n)/P.B by A8
-                       .= (P*BSeq).n/P.B by a1,A10,Th11
+                       .= (P*BSeq).n/P.B by A12,A10,Th11
                        .= (P.B)" * (P*BSeq).n by XCMPLX_0:def 9;
      end;
-    then A12: f*ASeq = (P.B)" (#) (P*BSeq) by A10,A11,SEQ_1:def 6;
-    A13: P*BSeq is convergent & lim (P*BSeq) = P.(Intersection BSeq)
+    then A13: f*ASeq = (P.B)" (#) (P*BSeq) by A10,A11,SEQ_1:def 6;
+    A14: P*BSeq is convergent & lim (P*BSeq) = P.(Intersection BSeq)
                                                          by A9,PROB_1:def 13;
-     hence f*ASeq is convergent by A12,SEQ_2:21;
-     thus lim (f*ASeq) = (P.B)" * P.(@Intersection BSeq) by A12,A13,
+     hence f*ASeq is convergent by A13,SEQ_2:21;
+     thus lim (f*ASeq) = (P.B)" * P.(@Intersection BSeq) by A13,A14,
 SEQ_2:22
                       .= (P.(@Intersection BSeq))/P.B by XCMPLX_0:def 9
                       .= (P.((@Intersection ASeq) /\ B))/P.B
@@ -817,11 +811,11 @@ SEQ_2:22
   end;
   uniqueness
   proof let P1,P2; assume that
- A16: for A holds P1.A = P.(A /\ B)/P.B and
- A17: for A holds P2.A = P.(A /\ B)/P.B;
+ A15: for A holds P1.A = P.(A /\ B)/P.B and
+ A16: for A holds P2.A = P.(A /\ B)/P.B;
      now let A;
-  thus P1.A = P.(A /\ B)/P.B by A16
-            .= P2.A by A17;
+  thus P1.A = P.(A /\ B)/P.B by A15
+            .= P2.A by A16;
   end;
   hence thesis by Th13;
   end;

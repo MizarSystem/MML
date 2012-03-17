@@ -17,6 +17,7 @@ environ
  constructors REAL_1, NAT_1, SEQ_2, SERIES_1, BHSP_3, PREPOWER, PARTFUN1,
       CLVECT_2, BHSP_4, COMSEQ_1, COMSEQ_2, COMSEQ_3, FUNCOP_1;
  registrations INT_1, STRUCT_0, XREAL_0, MEMBERED, ORDINAL2, COMSEQ_1, SEQM_3;
+ definitions RLVECT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems NAT_1, FUNCT_2, SEQ_1, SEQ_2, SEQM_3, SERIES_1, ABSVALUE, RLVECT_1,
       PREPOWER, POWER, INT_1, REAL_2, XREAL_0, XCMPLX_1, CLVECT_1, CSSPACE,
@@ -129,14 +130,14 @@ A1:(PSseq1 - PSseq2).0 = (PSseq1).0 - (PSseq2).0 by CLVECT_1:def 12
       .= (PSseq1.n + seq1.(n + 1)) - PSseq2.(n + 1) by Def1
       .= (PSseq1.n + seq1.(n + 1)) - (seq2.(n + 1) + PSseq2.n) by Def1
       .= ((PSseq1.n + seq1.(n + 1)) - seq2.(n + 1)) - PSseq2.n by RLVECT_1:41
-      .= (PSseq1.n + (seq1.(n + 1) - seq2.(n + 1))) - PSseq2.n by RLVECT_1:42
-      .= PSseq1.n + ((seq1.(n + 1) - seq2.(n + 1)) - PSseq2.n) by RLVECT_1:42
+      .= (PSseq1.n + (seq1.(n + 1) - seq2.(n + 1))) - PSseq2.n
+                 by RLVECT_1:def 6
+      .= PSseq1.n + ((seq1.(n + 1) - seq2.(n + 1)) - PSseq2.n)
+                 by RLVECT_1:def 6
       .= PSseq1.n + (- PSseq2.n + (seq1.(n + 1) - seq2.(n + 1)))
-          by RLVECT_1:def 11
       .= (PSseq1.n + - PSseq2.n) + (seq1.(n + 1) - seq2.(n + 1))
           by RLVECT_1:def 6
       .= (PSseq1.n - PSseq2.n) + (seq1.(n + 1) - seq2.(n + 1))
-          by RLVECT_1:def 11
       .= (PSseq1 - PSseq2).n + (seq1.(n + 1) - seq2.(n + 1)) by CLVECT_1:def 12
       .= (PSseq1 - PSseq2).n + (seq1 - seq2).(n + 1) by CLVECT_1:def 12;
    end;
@@ -331,7 +332,7 @@ A2:((Partial_Sums(seq)^\1) - seq1).0 = (Partial_Sums(seq)^\1).0 - seq1.0
     .= Partial_Sums(seq).(0 + 1) - seq.0 by CLVECT_2:def 11
     .= Partial_Sums(seq).0 + seq.(0 + 1) - seq.0 by Def1
     .= seq.(0 + 1) + seq.0 - seq.0 by Def1
-    .= seq.(0 + 1) + (seq.0 - seq.0) by RLVECT_1:42
+    .= seq.(0 + 1) + (seq.0 - seq.0) by RLVECT_1:def 6
     .= seq.(0 + 1) + 0'(X) by RLVECT_1:28
     .= seq.(0 + 1) by RLVECT_1:10
     .= (seq^\1).0 by CLVECT_2:def 11;
@@ -342,7 +343,7 @@ A2:((Partial_Sums(seq)^\1) - seq1).0 = (Partial_Sums(seq)^\1).0 - seq1.0
       .= Partial_Sums(seq).(n + 1 + 1) - seq.0 by CLVECT_2:def 11
       .= seq.(n+1+1) + Partial_Sums(seq).(n + 1) - seq.0 by Def1
       .= seq.(n+1+1) + Partial_Sums(seq).(n + 1) - seq1.n by A1
-      .= seq.(n+1+1) + (Partial_Sums(seq).(n + 1) - seq1.n) by RLVECT_1:42
+      .= seq.(n+1+1) + (Partial_Sums(seq).(n + 1) - seq1.n) by RLVECT_1:def 6
       .= seq.(n+1+1) + ((Partial_Sums(seq)^\1).n - seq1.n) by CLVECT_2:def 11
       .= seq.(n+1+1) + ((Partial_Sums(seq)^\1) - seq1).n by CLVECT_1:def 12
       .= ((Partial_Sums(seq)^\1) - seq1).n + (seq^\1).(n + 1)
@@ -434,11 +435,7 @@ correctness;
 end;
 
 theorem Th15:
-Sum(seq, 0) = seq.0
-proof
-  thus Sum(seq, 0) = Partial_Sums(seq).0
-               .= seq.0 by Def1;
-end;
+Sum(seq, 0) = seq.0 by Def1;
 
 theorem Th16:
 Sum(seq,1) = Sum(seq,0) + seq.1
@@ -457,18 +454,13 @@ proof
 end;
 
 theorem Th18:
-Sum(seq,n+1) = Sum(seq,n) + seq.(n+1)
-proof
-   thus Sum(seq,n+1) = Partial_Sums(seq).(n+1)
-                    .= Partial_Sums(seq).n + seq.(n+1) by Def1
-                    .= Sum(seq,n) + seq.(n+1);
-end;
+Sum(seq,n+1) = Sum(seq,n) + seq.(n+1) by Def1;
 
 theorem Th19:
 seq.(n+1) = Sum(seq,n+1) - Sum(seq,n)
 proof
    thus Sum(seq,n+1)-Sum(seq,n) = (seq.(n+1)+Sum(seq,n)) - Sum(seq,n) by Th18
-     .= seq.(n+1) + (Sum(seq,n)-Sum(seq,n)) by RLVECT_1:42
+     .= seq.(n+1) + (Sum(seq,n)-Sum(seq,n)) by RLVECT_1:def 6
      .= seq.(n+1) + 0.X by RLVECT_1:28
      .= seq.(n+1) by RLVECT_1:10;
 end;
@@ -493,17 +485,13 @@ proof
     Sum(seq,1,0) = Sum(seq,1) - Sum(seq,0)
                .= (seq.0 + seq.1) - Sum(seq,0) by Th17
                .= (seq.1 + seq.0) - seq.0 by Th15
-               .= seq.1 + (seq.0 - seq.0) by RLVECT_1:42
+               .= seq.1 + (seq.0 - seq.0) by RLVECT_1:def 6
                .= seq.1 + 0'(X) by RLVECT_1:28;
    hence thesis by RLVECT_1:10;
 end;
 
 theorem
- Sum(seq,n+1,n) = seq.(n+1)
-proof
-    Sum(seq,n+1,n) = Sum(seq,n+1) - Sum(seq,n);
-   hence thesis by Th19;
-end;
+ Sum(seq,n+1,n) = seq.(n+1) by Th19;
 
 theorem Th23:
 X is Hilbert implies
@@ -1009,7 +997,7 @@ A5:  now let k;
 A6:    P[k];
         ||.PSseq.(n+(k+1)) - PSseq.n.||
          = ||.seq.(n+k+1) + PSseq.(n+k) - PSseq.n.|| by Def1
-        .= ||.seq.(n+k+1) + (PSseq.(n+k) - PSseq.n).|| by RLVECT_1:42;
+        .= ||.seq.(n+k+1) + (PSseq.(n+k) - PSseq.n).|| by RLVECT_1:def 6;
 then A7:    ||.PSseq.(n+(k+1)) - PSseq.n.||
         <= ||.seq.(n+k+1).|| + ||.PSseq.(n+k) - PSseq.n.|| by CSSPACE:48;
         ||.seq.(n+k+1).|| + ||.PSseq.(n+k) - PSseq.n.||
@@ -1051,7 +1039,7 @@ A17:   P[k];
         ||.PSseq.m - PSseq.(m+(k+1)).||
         = ||.PSseq.m - (PSseq.(m+k) + seq.(m+k+1)).|| by Def1
        .= ||.(PSseq.m - PSseq.(m+k)) - seq.(m+k+1).|| by RLVECT_1:41
-       .= ||.(PSseq.m - PSseq.(m+k)) + -seq.(m+k+1).|| by RLVECT_1:def 11;
+       .= ||.(PSseq.m - PSseq.(m+k)) + -seq.(m+k+1).||;
        then ||.PSseq.m - PSseq.(m+(k+1)).||
         <= ||.PSseq.m - PSseq.(m+k).|| + ||.-seq.(m+k+1).|| by CSSPACE:48;
 then A18:   ||.PSseq.m - PSseq.(m+(k+1)).||
@@ -1349,11 +1337,9 @@ then A15: ||.seq.n - g.|| < r/(b + ||.g.||) by A11;
      .= ||.(Cseq.n * seq.n - Cseq.n * g) - (p * g - Cseq.n * g).||
         by RLVECT_1:41
      .= ||.(Cseq.n * seq.n - Cseq.n * g) + -(p * g - Cseq.n * g).||
-        by RLVECT_1:def 11
      .= ||.(Cseq.n * seq.n - Cseq.n * g) + (Cseq.n * g + - p * g).||
         by RLVECT_1:47
-     .= ||.(Cseq.n * seq.n - Cseq.n * g) + (Cseq.n * g - p * g).||
-        by RLVECT_1:def 11;
+     .= ||.(Cseq.n * seq.n - Cseq.n * g) + (Cseq.n * g - p * g).||;
      then ||.(Cseq * seq).n - p * g.||
       <= ||.Cseq.n * seq.n - Cseq.n * g.|| + ||.Cseq.n * g - p * g.||
         by CSSPACE:48;
@@ -1467,11 +1453,11 @@ then A14:   ||.seq.n - lim seq.|| < r/(b + ||.lim seq.||) by CSSPACE:def 16;
        .= ||.(Cseq.n * seq.n - Cseq.n * lim seq) -
        (lim Cseq * lim seq - Cseq.n * lim seq).|| by RLVECT_1:41
        .= ||.(Cseq.n * seq.n - Cseq.n * lim seq) +
-       -(lim Cseq * lim seq - Cseq.n * lim seq).|| by RLVECT_1:def 11
+       -(lim Cseq * lim seq - Cseq.n * lim seq).||
        .= ||.(Cseq.n * seq.n - Cseq.n * lim seq) +
        (Cseq.n * lim seq + - lim Cseq * lim seq).|| by RLVECT_1:47
        .= ||.(Cseq.n * seq.n - Cseq.n * lim seq) +
-       (Cseq.n * lim seq - lim Cseq * lim seq).|| by RLVECT_1:def 11;
+       (Cseq.n * lim seq - lim Cseq * lim seq).||;
        then ||.(Cseq * seq).n - lim Cseq * lim seq.||
         <= ||.Cseq.n * seq.n - Cseq.n * lim seq.|| +
        ||.Cseq.n * lim seq - lim Cseq * lim seq.|| by CSSPACE:48;
@@ -1588,17 +1574,17 @@ A3:(Cseq * Partial_Sums(seq)).(0+1)
    .= (Cseq.0 * seq.0 + (Cseq.1 * seq.0 - Cseq.1 * seq.0))
      + Cseq.1 * seq.1 by RLVECT_1:28
    .= (Cseq.0 * seq.0 + (-(Cseq.1 * seq.0) + Cseq.1 * seq.0))
-     + Cseq.1 * seq.1 by RLVECT_1:def 11
+     + Cseq.1 * seq.1
    .= ((Cseq.0 * seq.0 + -(Cseq.1 * seq.0)) + Cseq.1 * seq.0)
      + Cseq.1 * seq.1 by RLVECT_1:def 6
    .= ((Cseq.0 * seq.0 - Cseq.1 * seq.0) + Cseq.1 * seq.0)
-     + Cseq.1 * seq.1 by RLVECT_1:def 11
+     + Cseq.1 * seq.1
    .= Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).0 +
       (Cseq * Partial_Sums(seq)).(0+1) by A2,A3,RLVECT_1:def 6;
    then Partial_Sums(Cseq * seq).(0+1) - (Cseq * Partial_Sums(seq)).(0+1)
     = Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).0 +
       ((Cseq * Partial_Sums(seq)).(0+1) - (Cseq * Partial_Sums(seq)).(0+1))
-       by RLVECT_1:42;
+       by RLVECT_1:def 6;
    then Partial_Sums(Cseq * seq).(0+1) - (Cseq * Partial_Sums(seq)).(0+1)
     = Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).0 + 0'(X)
        by RLVECT_1:28;
@@ -1677,7 +1663,7 @@ then A6:  Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).n +
 1)+1)
       = Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).(n+1)
        + ((Cseq * Partial_Sums(seq)).((n+1)+1) -
-        (Cseq * Partial_Sums(seq)).((n+1)+1)) by RLVECT_1:42;
+        (Cseq * Partial_Sums(seq)).((n+1)+1)) by RLVECT_1:def 6;
      then Partial_Sums(Cseq * seq).((n+1)+1) - (Cseq * Partial_Sums(seq)).((n+
 1)+1)
       = Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).(n+1)
@@ -1746,21 +1732,12 @@ proof
     = (Cseq * Partial_Sums(seq)).(n+1) +
      - Partial_Sums((Cseq^\1 - Cseq) * Partial_Sums(seq)).n
      by CLVECT_1:4;
-     hence thesis by RLVECT_1:def 11;
+     hence thesis;
 end;
 
 theorem
  for n holds
  Sum(Cseq*seq,n+1) =
   (Cseq*Partial_Sums(seq)).(n+1) - Sum((Cseq^\1 - Cseq)*Partial_Sums(seq),n)
-proof
-   let n;
-    Partial_Sums(Cseq * seq).(n+1)
-    = (Cseq * Partial_Sums(seq)).(n+1) -
-     Partial_Sums((Cseq^\1 - Cseq) * Partial_Sums(seq)).n by Th53;
-   then Sum(Cseq * seq, n+1)
-    = (Cseq * Partial_Sums(seq)).(n+1) -
-     Partial_Sums((Cseq^\1 - Cseq) * Partial_Sums(seq)).n;
-   hence thesis;
-end;
+     by Th53;
 

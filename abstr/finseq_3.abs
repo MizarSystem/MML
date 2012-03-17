@@ -7,11 +7,12 @@
 environ
 
  vocabularies FINSEQ_1, BOOLE, ARYTM_1, ZFMISC_1, RELAT_1, INT_1, FUNCT_1,
-      FINSET_1, CARD_1, TARSKI, FINSEQ_2, ORDINAL2, ARYTM;
+      FINSET_1, CARD_1, TARSKI, FINSEQ_2, ORDINAL2, ARYTM, MATRIX_2;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, ORDINAL1, ORDINAL2,
-      XCMPLX_0, XREAL_0, FINSEQ_1, RELAT_1, FUNCT_1, FINSEQ_2, FINSET_1,
-      CARD_1, NAT_1, INT_1;
- constructors DOMAIN_1, FINSEQ_2, REAL_1, WELLORD2, NAT_1, INT_1, PARTFUN1;
+      XCMPLX_0, XREAL_0, RELAT_1, FUNCT_1, FINSEQ_1, FUNCT_2, FINSEQ_2,
+      FINSET_1, CARD_1, NAT_1, INT_1, FINSEQOP;
+ constructors DOMAIN_1, FINSEQ_2, REAL_1, WELLORD2, NAT_1, INT_1, PARTFUN1,
+      FUNCT_2, FINSEQOP;
  registrations FINSEQ_1, FUNCT_1, INT_1, FINSET_1, RELSET_1, XREAL_0, ORDINAL2,
       NAT_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
@@ -382,3 +383,58 @@ theorem :: FINSEQ_3:112
  for df being FinSequence, d being set holds
   i in dom df implies (<*d*>^df).(i+1) = df.i;
 
+:: from MATRIX_2, 2005.11.16, A.T.
+
+definition let i; let p be FinSequence;
+  func Del(p,i) -> FinSequence equals
+:: FINSEQ_3:def 2
+  p * Sgm ((dom p) \ {i});
+end;
+
+theorem :: FINSEQ_3:113
+  for p being FinSequence holds
+  (i in dom p implies ex m being Nat st len p = m + 1 & len Del(p,i) = m) &
+  (not i in dom p implies Del(p,i) = p);
+
+theorem :: FINSEQ_3:114
+  for D being non empty set
+  for p being FinSequence of D holds Del(p,i) is FinSequence of D;
+
+:: from MATRLIN, 2005.11.16, A.T.
+
+  theorem :: FINSEQ_3:115
+    for p be FinSequence holds rng Del(p,i) c= rng p;
+
+:: from GOBOARD1, 2005.11.16, A.T.
+
+theorem :: FINSEQ_3:116
+n = m + 1 & i in Seg n implies len Sgm(Seg n \ {i}) = m;
+
+reserve j for Nat;
+
+theorem :: FINSEQ_3:117
+ for i,k,m,n being Nat st n=m+1 & k in Seg n & i in Seg m
+ holds (1<=i & i<k implies Sgm(Seg n \ {k}).i = i) &
+ (k<=i & i<=m implies Sgm(Seg n \ {k}).i = i+1);
+
+theorem :: FINSEQ_3:118
+for f being FinSequence, n,m st len f = m+1 & n in dom f holds len Del(f,n)=m;
+
+theorem :: FINSEQ_3:119
+for f being FinSequence,n,m,k being Nat st len f = m+1 & k<n
+   holds Del(f,n).k = f.k;
+
+theorem :: FINSEQ_3:120
+for f being FinSequence,n,m,k being Nat
+   st len f = m+1 & n in dom f & n<=k & k<=m
+  holds Del(f,n).k = f.(k+1);
+
+:: from JORDAN3, 2005.11.16, A.T.
+
+theorem :: FINSEQ_3:121
+ for f being FinSequence st k<=n holds (f|n).k=f.k;
+
+:: missing, 27.11.2005, A.T.
+
+theorem :: FINSEQ_3:122
+ for p,q being FinSequence st p c= q holds q|len p = p;

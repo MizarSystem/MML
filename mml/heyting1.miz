@@ -17,7 +17,7 @@ environ
  registrations FINSUB_1, FINSET_1, STRUCT_0, NORMFORM, RELSET_1, SUBSET_1,
       XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, FILTER_0, XBOOLE_0;
+ definitions TARSKI, FILTER_0, XBOOLE_0, BINOP_1;
  theorems LATTICES, LATTICE2, FUNCOP_1, NORMFORM, TARSKI, FUNCT_2, DOMAIN_1,
       FINSUB_1, FINSET_1, BINOP_1, FUNCT_1, FRAENKEL, MCART_1, SETWISEO,
       FILTER_0, ZFMISC_1, RELAT_1, XBOOLE_0, XBOOLE_1;
@@ -107,19 +107,9 @@ definition let A; let u be Element of NormForm A;
   coherence by NORMFORM:def 14;
 end;
 
-Lm2: mi (@u ^ @v) = (the L_meet of NormForm A).(u,v)
-  proof
-        @u = u & @v = v;
-   hence mi (@u ^ @v) = (the L_meet of NormForm A).(u,v)
-     by NORMFORM:def 14;
-  end;
+Lm2: mi (@u ^ @v) = (the L_meet of NormForm A).(u,v) by NORMFORM:def 14;
 
-Lm3: mi (@u \/ @v) = (the L_join of NormForm A).(u,v)
-  proof
-        @u = u & @v = v;
-   hence mi (@u \/ @v) = (the L_join of NormForm A).(u,v)
-     by NORMFORM:def 14;
-  end;
+Lm3: mi (@u \/ @v) = (the L_join of NormForm A).(u,v) by NORMFORM:def 14;
 
 reserve K,L for Element of Normal_forms_on A;
 
@@ -302,41 +292,41 @@ A4:  b c= c & b in mi (@u \/ @v) by NORMFORM:65;
 Lm5: (for a st a in u ex b st b in v & b c= a) implies u [= v
  proof assume
 A1: for a st a in u ex b st b in v & b c= a;
-A3: mi(@u \/ @v) c= @v
+A2: mi(@u \/ @v) c= @v
     proof let a;
      assume
-A4:    a in mi(@u \/ @v);
+A3:    a in mi(@u \/ @v);
       then a in u \/ v by NORMFORM:58;
       then a in u or a in v by XBOOLE_0:def 2;
       then consider b such that
-A5:    b in v and
-A6:    b c= a by A1;
-           b in u \/ v by A5,XBOOLE_0:def 2;
-     hence a in @v by A4,A5,A6,NORMFORM:60;
+A4:    b in v and
+A5:    b c= a by A1;
+           b in u \/ v by A4,XBOOLE_0:def 2;
+     hence a in @v by A3,A4,A5,NORMFORM:60;
     end;
-A7: @v c= mi(@u \/ @v)
+A6: @v c= mi(@u \/ @v)
     proof let a;
      assume
-A8:    a in @v;
-then A9:   a in @u \/ @v by XBOOLE_0:def 2;
-A10:   a in mi @v by A8,NORMFORM:66;
+A7:    a in @v;
+then A8:   a in @u \/ @v by XBOOLE_0:def 2;
+A9:   a in mi @v by A7,NORMFORM:66;
            now let b;
        assume that
-A11:     b in u \/ v and
-A12:     b c= a;
-             b in u or b in v by A11,XBOOLE_0:def 2;
+A10:     b in u \/ v and
+A11:     b c= a;
+             b in u or b in v by A10,XBOOLE_0:def 2;
         then consider c such that
-A13:      c in v and
-A14:      c c= b by A1;
-             c c= a by A12,A14,NORMFORM:5;
-        then c = a by A10,A13,NORMFORM:60;
-       hence b = a by A12,A14,NORMFORM:4;
+A12:      c in v and
+A13:      c c= b by A1;
+             c c= a by A11,A13,NORMFORM:5;
+        then c = a by A9,A12,NORMFORM:60;
+       hence b = a by A11,A13,NORMFORM:4;
       end;
-     hence a in mi(@u \/ @v) by A9,NORMFORM:61;
+     hence a in mi(@u \/ @v) by A8,NORMFORM:61;
     end;
         u "\/" v = (the L_join of NormForm A).(u,v) by LATTICES:def 1
          .= mi (@u \/ @v) by Lm3
-         .= v by A3,A7,XBOOLE_0:def 10;
+         .= v by A2,A6,XBOOLE_0:def 10;
   hence u [= v by LATTICES:def 3;
  end;
 
@@ -352,7 +342,7 @@ definition let A be set;
     = $1 \ $2;
     thus ex f being BinOp of [:Fin A,Fin A:] st
      for a,b being Element of [:Fin A, Fin A:] holds f.(a,b) = F(a,b)
-     from BINOP_1:sch 2;
+     from BINOP_1:sch 4;
   end;
  correctness
   proof let IT,IT' be BinOp of [:Fin A,Fin A:] such that
@@ -775,34 +765,34 @@ theorem Th25:
 A1:   for b st b in u ex c st c in v & c c= b \/ a;
       defpred P[Element of DISJOINT_PAIRS A,Element of [:Fin A, Fin A:]]
       means $2 in @v & $2 c= $1 \/ a;
-A3:   now let b; assume b in @u;
+A2:   now let b; assume b in @u;
         then consider c such that
-A4:       c in v & c c= b \/ a by A1;
+A3:       c in v & c c= b \/ a by A1;
         reconsider c as Element of [:Fin A, Fin A:];
         take x = c;
-        thus P[b,x] by A4;
+        thus P[b,x] by A3;
       end;
       consider f' such that
-A5:    b in @u implies P[b,f'.b] from FRAENKEL:sch 27(A3);
-            b in u implies f'.b in v by A5;
-then A6:    f'.:(@u) c= v by SETWISEO:15;
+A4:    b in @u implies P[b,f'.b] from FRAENKEL:sch 27(A2);
+            b in u implies f'.b in v by A4;
+then A5:    f'.:(@u) c= v by SETWISEO:15;
       set d = FinPairUnion(@u,pair_diff A.:(f',incl DISJOINT_PAIRS A));
-A7:      now let s;
-A8:     (pair_diff A.:(f',incl DISJOINT_PAIRS A)).s = f'.s \ s by Lm7;
+A6:      now let s;
+A7:     (pair_diff A.:(f',incl DISJOINT_PAIRS A)).s = f'.s \ s by Lm7;
        assume s in u;
-        then f'.s c= a \/ s by A5;
+        then f'.s c= a \/ s by A4;
        hence (pair_diff A.:
-(f',incl DISJOINT_PAIRS A)).s c= a by A8,NORMFORM:31;
+(f',incl DISJOINT_PAIRS A)).s c= a by A7,NORMFORM:31;
       end;
    then d c= a by NORMFORM:40;
       then reconsider d as Element of DISJOINT_PAIRS A by NORMFORM:45;
      take d;
            d in { FinPairUnion(@u,pair_diff A.:(f,incl DISJOINT_PAIRS A)) :
-         f.:@u c= v } by A6;
+         f.:@u c= v } by A5;
       then d in DISJOINT_PAIRS A /\ { FinPairUnion(@u,pair_diff A.:
         (f,incl DISJOINT_PAIRS A)) : f.:@u c= v } by XBOOLE_0:def 3;
      hence d in @u =>> @v;
-     thus thesis by A7,NORMFORM:40;
+     thus thesis by A6,NORMFORM:40;
     end;
 
 Lm8: a in K ^ (K =>> @u) implies ex b st b in u & b c= a
@@ -811,7 +801,7 @@ A1: b in K and
 A2: c in K =>> @u and
 A3: a = b \/ c by NORMFORM:55;
 A4: u = @u;
-   then consider f such that
+   consider f such that
 A5: f.:K c= u and
 A6: c = FinPairUnion(K,pair_diff A.:(f,incl DISJOINT_PAIRS A)) by A2,Th23;
 A7:(pair_diff A.:(f,incl DISJOINT_PAIRS A)).b = f.b \ b by Lm7;
@@ -897,11 +887,11 @@ A3:  IT'.u = mi (-@u);
           [:(the carrier of NormForm A), the carrier of NormForm A:],
                    Normal_forms_on A
       such that
-A4:    IT.[u,v] = F(u,v) from FUNCT_2:sch 8;
+A4:    IT.(u,v) = F(u,v) from BINOP_1:sch 4;
          the carrier of NormForm A = Normal_forms_on A by NORMFORM:def 14;
     then reconsider IT as BinOp of the carrier of NormForm A;
     take IT; let u,v;
-    thus IT.(u,v) = IT.[u,v] by BINOP_1:def 1 .= mi (@u =>> @v) by A4;
+    thus IT.(u,v) = mi (@u =>> @v) by A4;
    end;
   correctness
    proof let IT,IT' be BinOp of the carrier of NormForm A;
@@ -970,10 +960,9 @@ Lm9:  for u,v st v in SUB u holds v "\/" (diff u).v = u
    proof let u,v;
     assume v in SUB u;
 then A1:   v in bool u;
-  u = @u & v = @v;
-then A3:  @u \ @v = (diff u).v by Def11 .= @((diff u).v);
+A2:  @u \ @v = (diff u).v by Def11 .= @((diff u).v);
     thus v "\/" (diff u).v = J(A).(v, (diff u).v) by LATTICES:def 1
-           .= mi ( @v \/ (@u \ @v)) by A3,Lm3
+           .= mi ( @v \/ (@u \ @v)) by A2,Lm3
            .= mi (@u) by A1,XBOOLE_1:45
            .= u by NORMFORM:66;
    end;
@@ -1002,51 +991,51 @@ A1:    M c= u from FRAENKEL:sch 17;
       defpred P1[set] means $1 in u;
       defpred P2[Element of DISJOINT_PAIRS A] means P1[$1] & P[$1];
       defpred Q[set] means not contradiction;
-A3:   { F1(s): P1[s] & not F1(s) in
+A2:   { F1(s): P1[s] & not F1(s) in
       DISJOINT_PAIRS A } misses DISJOINT_PAIRS A from FRAENKEL:sch 18;
-      A4: { F1(t) where t is Element of DISJOINT_PAIRS A :
+      A3: { F1(t) where t is Element of DISJOINT_PAIRS A :
        t in {s where s is Element of DISJOINT_PAIRS A: P2[s]} & Q[t]} =
        { F1(s) where s is Element of DISJOINT_PAIRS A: P2[s] & Q[s] }
          from FRAENKEL:sch 14;
-A5: { F1(t) : t in {s : P2[s]} & Q[t]} = { F1(t1) : t1 in {s1 : P2[s1]}}
+A4: { F1(t) : t in {s : P2[s]} & Q[t]} = { F1(t1) : t1 in {s1 : P2[s1]}}
  proof
   thus { F1(t) : t in {s : P2[s]} & Q[t]} c= { F1(t1) : t1 in {s1 : P2[s1]}}
    proof
     let x be set; assume x in { F1(t) : t in {s : P2[s]} & Q[t]};
     then consider t such that
-A6:  x=F1(t) & t in {s : P2[s]} & Q[t];
-    thus x in { F1(t1) : t1 in {s1 : P2[s1]}} by A6;
+A5:  x=F1(t) & t in {s : P2[s]} & Q[t];
+    thus x in { F1(t1) : t1 in {s1 : P2[s1]}} by A5;
    end;
   let x be set; assume x in { F1(t) : t in {s : P2[s]}};
   then consider t such that
-A7:  x=F1(t) & t in {s : P2[s]};
-  thus x in { F1(t1) : t1 in {s1 : P2[s1]} & Q[t1]} by A7;
+A6:  x=F1(t) & t in {s : P2[s]};
+  thus x in { F1(t1) : t1 in {s1 : P2[s1]} & Q[t1]} by A6;
  end;
-A8: { F1(s1) : P2[s1] & Q[s1] } = { F1(s2) : P2[s2]}
+A7: { F1(s1) : P2[s1] & Q[s1] } = { F1(s2) : P2[s2]}
  proof
    thus { F1(s1) : P2[s1] & Q[s1] } c= { F1(s2) : P2[s2]}
     proof
       let x be set; assume x in { F1(s1) : P2[s1] & Q[s1] };
       then consider s1 such that
-A9:    x=F1(s1) & P2[s1] & Q[s1];
-      thus x in { F1(s2) : P2[s2]} by A9;
+A8:    x=F1(s1) & P2[s1] & Q[s1];
+      thus x in { F1(s2) : P2[s2]} by A8;
     end;
    let x be set; assume x in { F1(s1) : P2[s1] };
    then consider s1 such that
-A10: x=F1(s1) & P2[s1];
-   thus x in { F1(s2) : P2[s2] & Q[s2]} by A10;
+A9: x=F1(s1) & P2[s1];
+   thus x in { F1(s2) : P2[s2] & Q[s2]} by A9;
  end;
 deffunc G(Element of DISJOINT_PAIRS A, Element of DISJOINT_PAIRS A)=$1 \/ $2;
 defpred D[set,set] means $1 in M & $2 in { a };
 defpred E[set,set] means $2 = a & $1 in M;
-A11:    D[s,t] iff E[s,t] by TARSKI:def 1;
-A12:    { G(s,t): D[s,t] } = { G(s',t'): E[s',t'] } from FRAENKEL:sch 4(A11);
+A10:    D[s,t] iff E[s,t] by TARSKI:def 1;
+A11:    { G(s,t): D[s,t] } = { G(s',t'): E[s',t'] } from FRAENKEL:sch 4(A10);
 defpred F[set,set] means $1 in M;
    { G(s,t) where t is Element of DISJOINT_PAIRS A
                  : t = a & F[s,t] } = { G(s',a): F[s',a]} from FRAENKEL:sch 20;
       hence @v ^ { a } = DISJOINT_PAIRS A /\ { s \/ a: s in M }
-         by A12,NORMFORM:def 11
-       .= {} by A3,A4,A5,A8,XBOOLE_0:def 7;
+         by A11,NORMFORM:def 11
+       .= {} by A2,A3,A4,A7,XBOOLE_0:def 7;
       let b;
       assume b in (diff u).v;
        then b in u \ v by Def11;

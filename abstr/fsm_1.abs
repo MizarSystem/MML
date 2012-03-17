@@ -11,9 +11,10 @@ environ
       MCART_1, RELAT_2, FUNCOP_1, FUNCT_4, FSM_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
       INT_1, SETFAM_1, STRUCT_0, FINSET_1, GROUP_1, MCART_1, DOMAIN_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FINSEQ_1, CARD_1, EQREL_1, BORSUK_1,
-      MATRIX_2;
- constructors NAT_1, DOMAIN_1, FUNCT_4, BORSUK_1, MATRIX_2, MEMBERED, SETFAM_1;
+      FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCT_4, FINSEQ_1, FINSEQ_3, CARD_1,
+      EQREL_1, BORSUK_1, MATRIX_2;
+ constructors NAT_1, DOMAIN_1, FUNCT_4, BORSUK_1, MATRIX_2, MEMBERED, SETFAM_1,
+      FINSEQ_3, BINOP_1;
  registrations SUBSET_1, INT_1, FINSET_1, XBOOLE_0, RELSET_1, STRUCT_0,
       BORSUK_1, XREAL_0, MEMBERED, FUNCT_2, PARTFUN1, EQREL_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -285,7 +286,7 @@ theorem :: FSM_1:28
     st tfsm is_similar_to sfsm;
 
 theorem :: FSM_1:29
-ex sfsmf st tfsmf is_similar_to sfsmf;
+ ex sfsmf st tfsmf is_similar_to sfsmf;
 
 begin :: Equivalence of states and machines (for Mealy machines)
 
@@ -427,12 +428,12 @@ definition let IAlph, OAlph;
 end;
 
 theorem :: FSM_1:53
-k-eq_states_partition tfsm is final implies
+ k-eq_states_partition tfsm is final implies
      (k+1)-eq_states_EqR tfsm = k-eq_states_EqR tfsm;
 
 theorem :: FSM_1:54
  k-eq_states_partition tfsm = (k+1)-eq_states_partition tfsm
-   iff k-eq_states_partition tfsm is final;
+   implies k-eq_states_partition tfsm is final;
 
 theorem :: FSM_1:55
     for tfsm being finite non empty Mealy-FSM over IAlph, OAlph st
@@ -482,8 +483,8 @@ definition let IAlph, OAlph, tfsm;
 
  the carrier of it = final_states_partition tfsm &
  (for Q being State of it, s for q being State of tfsm st q in Q
-   holds (the Tran of tfsm).[q, s] in (the Tran of it).[Q, s] &
-         (the OFun of tfsm).[q, s] = (the OFun of it).[Q, s]) &
+   holds (the Tran of tfsm).(q, s) in (the Tran of it).(Q, s) &
+         (the OFun of tfsm).(q, s) = (the OFun of it).(Q, s)) &
   the InitS of tfsm in the InitS of it;
 end;
 
@@ -511,8 +512,8 @@ definition let IAlph, OAlph, tfsm1, tfsm2;
 
   ex Tf st Tf is bijective & Tf.the InitS of tfsm1 = the InitS of tfsm2 &
            for q11, s holds
-        Tf.((the Tran of tfsm1).[q11,s])=(the Tran of tfsm2).[Tf.q11, s] &
-        (the OFun of tfsm1).[q11,s] = (the OFun of tfsm2).[Tf.q11, s];
+        Tf.((the Tran of tfsm1).(q11,s))=(the Tran of tfsm2).(Tf.q11, s) &
+        (the OFun of tfsm1).(q11,s) = (the OFun of tfsm2).(Tf.q11, s);
  reflexivity;
  symmetry;
 end;
@@ -523,15 +524,15 @@ theorem :: FSM_1:59
 
 theorem :: FSM_1:60
 (for q being State of tfsm1, s
-    holds Tf.((the Tran of tfsm1).[q,s]) = (the Tran of tfsm2).[Tf.q,s])
+    holds Tf.((the Tran of tfsm1).(q,s)) = (the Tran of tfsm2).(Tf.q,s))
  implies for k st 1 <= k & k <= len w + 1
           holds Tf.((q11,w)-admissible.k) = (Tf.q11,w)-admissible.k;
 
 theorem :: FSM_1:61
   (Tf.the InitS of tfsm1 = the InitS of tfsm2 &
    for q being State of tfsm1, s holds
-         Tf.((the Tran of tfsm1).[q, s]) = (the Tran of tfsm2).[Tf.q, s] &
-            (the OFun of tfsm1).[q,s] = (the OFun of tfsm2).[Tf.q, s])
+         Tf.((the Tran of tfsm1).(q, s)) = (the Tran of tfsm2).(Tf.q, s) &
+            (the OFun of tfsm1).(q,s) = (the OFun of tfsm2).(Tf.q, s))
    implies (q11,q12-are_equivalent iff Tf.q11, Tf.q12 -are_equivalent);
 
 theorem :: FSM_1:62

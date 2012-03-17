@@ -637,9 +637,7 @@ registration
   cluster -> non empty Element of Components R;
   coherence
   proof let X be Element of Components R;
-       X in Components R;
-    then X in Class Path_Rel R;
-    then consider x being set such that
+    consider x being set such that
       A1: x in the carrier of R &
            X = Class(Path_Rel R,x) by EQREL_1:def 5;
     thus thesis by A1,EQREL_1:28;
@@ -658,24 +656,13 @@ definition
 
   func CComp s1 -> Component of R equals
   Class(Path_Rel R,s1);
-  correctness
-  proof
-    set C = Class(Path_Rel R,s1);
-       C in Class(Path_Rel R) by EQREL_1:def 5;
-    hence thesis;
-  end;
+  correctness by EQREL_1:def 5;
 end;
 
 theorem Th4:
   for R being non empty Poset,
       s1 be Element of R holds
-  s1 in CComp(s1)
-proof
-  let R be non empty Poset;
-  let s1 be Element of R;
-     s1 in Class(Path_Rel R,s1) by EQREL_1:28;
-  hence thesis;
-end;
+  s1 in CComp(s1) by EQREL_1:28;
 
 theorem Th5:
   for R being non empty Poset,
@@ -776,9 +763,7 @@ theorem Th8:
 proof
   let R be discrete non empty Poset,
       C be Component of R;
-     C in Components R;
-  then C in Class Path_Rel R;
-  then consider x being set such that
+  consider x being set such that
   A1: x in the carrier of R and
   A2: C = Class(Path_Rel R,x) by EQREL_1:def 5;
   reconsider x1 = x as Element of R by A1;
@@ -1968,11 +1953,7 @@ end;
 registration let S; let U1 be non-empty OSAlgebra of S;
  let R be OSCongruence of U1;
  cluster QuotOSAlg (U1,R) -> strict non-empty;
- coherence
-  proof
-      QuotOSAlg (U1,R) = MSAlgebra(# OSClass R, OSQuotCharact R #);
-   hence thesis by MSUALG_1:def 8;
-  end;
+ coherence by MSUALG_1:def 8;
 end;
 
 definition let S; let U1 be non-empty OSAlgebra of S;
@@ -2045,8 +2026,7 @@ existence
     end;
   then reconsider f as ManySortedFunction of the Sorts of U1,OSClass R
        by PBOOLE:def 18;
-      QuotOSAlg (U1,R) = MSAlgebra(#OSClass R, OSQuotCharact R#);
-  then reconsider f as ManySortedFunction of U1,QuotOSAlg (U1,R);
+  reconsider f as ManySortedFunction of U1,QuotOSAlg (U1,R);
   take f;
   thus thesis by A1;
  end;
@@ -2086,57 +2066,57 @@ theorem
     let x be Element of Args(o,U1);
     set ro = the_result_sort_of o,
         ar = the_arity_of o;
-    A2: Den(o,QA) = (OSQuotCharact R).o by MSUALG_1:def 11
+    A1: Den(o,QA) = (OSQuotCharact R).o by MSUALG_1:def 11
         .= OSQuotCharact(R,o) by Def21;
-    A3: dom (F#x) = dom ar & dom x = dom ar by MSUALG_3:6;
-    A4: dom (R #_os x) = dom ((OSClass R) * (the_arity_of o))
+    A2: dom (F#x) = dom ar & dom x = dom ar by MSUALG_3:6;
+    A3: dom (R #_os x) = dom ((OSClass R) * (the_arity_of o))
             by CARD_3:18;
        dom (OSClass R) = the carrier of S by PBOOLE:def 3;
     then rng ar c= dom (OSClass R);
-    then A5: dom (R #_os x) = dom ar by A4,RELAT_1:46;
+    then A4: dom (R #_os x) = dom ar by A3,RELAT_1:46;
        (the Arity of S).o = ar by MSUALG_1:def 6;
-    then A6: ((OSClass R)# * the Arity of S).o = product ((OSClass R) * ar)
+    then A5: ((OSClass R)# * the Arity of S).o = product ((OSClass R) * ar)
             by MSAFREE:1;
        for a be set st a in dom ar holds (F#x).a = (R #_os x).a
      proof
       let a be set;
-      assume A7: a in dom ar;
+      assume A6: a in dom ar;
       then reconsider n = a as Nat;
       set Fo = OSNat_Hom(U1,R,((ar)/.n)),
            s = ((ar)/.n);
-      A8: n in dom ((the Sorts of U1) * ar) by A7,PBOOLE:def 3;
+      A7: n in dom ((the Sorts of U1) * ar) by A6,PBOOLE:def 3;
       then ((the Sorts of U1) * ar).n = (the Sorts of U1).(ar.n)
            by FUNCT_1:22
-        .= S1.s by A7,FINSEQ_4:def 4;
-      then reconsider xn = x.n as Element of S1.s by A8,MSUALG_3:6;
+        .= S1.s by A6,FINSEQ_4:def 4;
+      then reconsider xn = x.n as Element of S1.s by A7,MSUALG_3:6;
       consider z being Element of S1.s such that
-      A9: z = x.n & (R #_os x).n = OSClass(R,z) by A7,Def15;
-      thus (F#x).a = (F.((ar)/.n)).(x.n) by A3,A7,MSUALG_3:def 8
+      A8: z = x.n & (R #_os x).n = OSClass(R,z) by A6,Def15;
+      thus (F#x).a = (F.((ar)/.n)).(x.n) by A2,A6,MSUALG_3:def 8
                  .= Fo.xn by Def24
-                 .= (R #_os x).a by A9,Def23;
+                 .= (R #_os x).a by A8,Def23;
      end;
-    then A10: F # x = R #_os x by A3,A5,FUNCT_1:9;
-    A11: dom Den(o,U1) = Args(o,U1) & rng Den(o,U1) c= Result(o,U1)
+    then A9: F # x = R #_os x by A2,A4,FUNCT_1:9;
+    A10: dom Den(o,U1) = Args(o,U1) & rng Den(o,U1) c= Result(o,U1)
          by FUNCT_2:def 1;
-    A12: dom (the Sorts of U1) = the carrier of S by PBOOLE:def 3;
-    A13: dom (the ResultSort of S) = the OperSymbols of S &
+    A11: dom (the Sorts of U1) = the carrier of S by PBOOLE:def 3;
+    A12: dom (the ResultSort of S) = the OperSymbols of S &
     rng (the ResultSort of S) c= the carrier of S
        by FUNCT_2:def 1;
-       rng (the ResultSort of S) c= dom (the Sorts of U1) by A12;
+       rng (the ResultSort of S) c= dom (the Sorts of U1) by A11;
      then dom ((the Sorts of U1) * the ResultSort of S) =
     dom (the ResultSort of S) by RELAT_1:46;
-    then A14: ((the Sorts of U1) * the ResultSort of S).o
+    then A13: ((the Sorts of U1) * the ResultSort of S).o
        = (the Sorts of U1).((the ResultSort of S).o)
-             by A13,FUNCT_1:22
+             by A12,FUNCT_1:22
      .= (the Sorts of U1).ro by MSUALG_1:def 7;
-    then A15: Result(o,U1) = S1.ro by MSUALG_1:def 10;
-    reconsider dx = (Den(o,U1)).x as Element of S1.ro by A14,MSUALG_1:def 10;
+    then A14: Result(o,U1) = S1.ro by MSUALG_1:def 10;
+    reconsider dx = (Den(o,U1)).x as Element of S1.ro by A13,MSUALG_1:def 10;
        rng Den(o,U1) c= dom OSQuotRes(R,o)
-        by A11,A14,A15,FUNCT_2:def 1;
-    then A16: dom ((OSQuotRes(R,o)) * Den(o,U1)) = dom Den(o,U1)
+        by A10,A13,A14,FUNCT_2:def 1;
+    then A15: dom ((OSQuotRes(R,o)) * Den(o,U1)) = dom Den(o,U1)
          by RELAT_1:46;
-       Den(o,QA).(F#x) = ((OSQuotRes(R,o)) * (Den(o,U1))).x by A2,A6,A10,Def20
-                   .= (OSQuotRes(R,o)) . dx by A11,A16,FUNCT_1:22
+       Den(o,QA).(F#x) = ((OSQuotRes(R,o)) * (Den(o,U1))).x by A1,A5,A9,Def20
+                   .= (OSQuotRes(R,o)) . dx by A10,A15,FUNCT_1:22
                    .= OSClass (R, dx) by Def16
                    .= (OSNat_Hom(U1,R,ro)).dx by Def23
                    .= (F.ro).((Den(o,U1)).x) by Def24;
@@ -2151,21 +2131,20 @@ theorem
      then reconsider s = i as Element of S;
      reconsider f = F.i as Function of S1.s, (the Sorts of QA).s
        by PBOOLE:def 18;
-        QA = MSAlgebra (# OSClass R,OSQuotCharact R #);
-     then A17: (the Sorts of QA).s = OSClass (R,s) by Def13;
-     A18: dom f = S1.s & rng f c= (the Sorts of QA).s
+     A16: (the Sorts of QA).s = OSClass (R,s) by Def13;
+     A17: dom f = S1.s & rng f c= (the Sorts of QA).s
          by FUNCT_2:def 1;
         for x be set st x in (the Sorts of QA).i holds x in rng f
       proof
        let x be set;
        assume x in (the Sorts of QA).i;
        then consider a1 being set such that
-       A19: a1 in S1.s & x = Class(CompClass(R,CComp(s)),a1) by A17,Def12;
-       reconsider a2 = a1 as Element of S1.s by A19;
-       A20: OSClass(R,a2) = x by A19;
-       A21: f.a1 in rng f by A18,A19,FUNCT_1:def 5;
+       A18: a1 in S1.s & x = Class(CompClass(R,CComp(s)),a1) by A16,Def12;
+       reconsider a2 = a1 as Element of S1.s by A18;
+       A19: OSClass(R,a2) = x by A18;
+       A20: f.a1 in rng f by A17,A18,FUNCT_1:def 5;
           f = OSNat_Hom(U1,R,s) by Def24;
-       hence thesis by A20,A21,Def23;
+       hence thesis by A19,A20,Def23;
       end;
      then (the Sorts of QA).i c= rng f by TARSKI:def 3;
      hence thesis by XBOOLE_0:def 10;
@@ -2173,17 +2152,17 @@ theorem
   hence F is "onto" by MSUALG_3:def 3;
   thus F is order-sorted
   proof
-    let s1,s2 be Element of S such that A22:  s1 <= s2;
-    let a1 be set such that A23: a1 in dom (F.s1);
+    let s1,s2 be Element of S such that A21:  s1 <= s2;
+    let a1 be set such that A22: a1 in dom (F.s1);
     reconsider S2 = S1 as OrderSortedSet of S by OSALG_1:17;
-    A24: S2.s1 c= S2.s2 by A22,OSALG_1:def 18;
-    A25: dom (F.s2) = S1.s2 by FUNCT_2:def 1;
-    A26: a1 in S1.s1 by A23;
-    hence a1 in dom (F.s2) by A24,A25;
-    reconsider b1 = a1 as Element of S1.s1 by A23;
-    reconsider b2 = a1 as Element of S1.s2 by A24,A26;
+    A23: S2.s1 c= S2.s2 by A21,OSALG_1:def 18;
+    A24: dom (F.s2) = S1.s2 by FUNCT_2:def 1;
+    A25: a1 in S1.s1 by A22;
+    hence a1 in dom (F.s2) by A23,A24;
+    reconsider b1 = a1 as Element of S1.s1 by A22;
+    reconsider b2 = a1 as Element of S1.s2 by A23,A25;
     thus (F.s1).a1 = OSNat_Hom(U1,R,s1).b1 by Def24
-         .= OSClass(R,b1) by Def23 .= OSClass(R,b2) by A22,Th14
+         .= OSClass(R,b1) by Def23 .= OSClass(R,b2) by A21,Th14
          .= OSNat_Hom(U1,R,s2).b2 by Def23 .= (F.s2).a1 by Def24;
   end;
  end;
@@ -2245,8 +2224,7 @@ existence
       cqa = the Sorts of qa,
       S1 = the Sorts of U1,
       S2 = the Sorts of U2;
-     qa = MSAlgebra (# OSClass OSCng(F),OSQuotCharact OSCng(F) #);
-  then A2: cqa.s = OSClass (OSCng(F),s) by Def13;
+  A2: cqa.s = OSClass (OSCng(F),s) by Def13;
   defpred P[set,set] means
    for a be Element of S1.s st $1 = OSClass(OSCng(F),a) holds
     $2 = (F.s).a;
@@ -2282,8 +2260,7 @@ uniqueness
      cqa = the Sorts of qa,
       u1 = the Sorts of U1,
       u2 = the Sorts of U2;
-     qa = MSAlgebra (# OSClass OSCng(F),OSQuotCharact OSCng(F) #);
-  then A7: cqa.s = OSClass (OSCng(F),s) by Def13;
+  A7: cqa.s = OSClass (OSCng(F),s) by Def13;
   let H,G be Function of cqa.s,u2.s;
   assume that
     A8: for a be Element of u1.s holds
@@ -2387,53 +2364,53 @@ for U1,U2 be non-empty OSAlgebra of S,
     reconsider o1 = o as OperSymbol of S;
     set ro = the_result_sort_of o,
         ar = the_arity_of o;
-    A3: Den(o,qa) = (OSQuotCharact mc).o by MSUALG_1:def 11
+    A2: Den(o,qa) = (OSQuotCharact mc).o by MSUALG_1:def 11
                  .= OSQuotCharact(mc,o1) by Def21;
         Args(o,qa) = ((OSClass mc)# * (the Arity of S)).o
           by MSUALG_1:def 9;
     then consider a be Element of Args(o,U1) such that
-    A4: x = mc #_os a by Th15;
-    A5: dom Den(o,U1) = Args(o,U1) & rng Den(o,U1) c= Result(o,U1)
+    A3: x = mc #_os a by Th15;
+    A4: dom Den(o,U1) = Args(o,U1) & rng Den(o,U1) c= Result(o,U1)
              by FUNCT_2:def 1;
        o in the OperSymbols of S;
      then o in dom (S1 * the ResultSort of S) by PBOOLE:def 3;
-    then A6: ((the Sorts of U1) * the ResultSort of S).o
+    then A5: ((the Sorts of U1) * the ResultSort of S).o
         = (the Sorts of U1).((the ResultSort of S).o)
                  by FUNCT_1:22
        .= (the Sorts of U1).ro by MSUALG_1:def 7;
-    then A7: Result(o,U1) = S1.ro by MSUALG_1:def 10;
-    reconsider da = (Den(o,U1)).a as Element of S1.ro by A6,MSUALG_1:def 10;
-    A8:  qh.ro = OSHomQuot(F,ro) by Def27;
+    then A6: Result(o,U1) = S1.ro by MSUALG_1:def 10;
+    reconsider da = (Den(o,U1)).a as Element of S1.ro by A5,MSUALG_1:def 10;
+    A7:  qh.ro = OSHomQuot(F,ro) by Def27;
        rng Den(o,U1) c= dom OSQuotRes(mc,o)
-       by A5,A6,A7,FUNCT_2:def 1;
-    then A9: dom ((OSQuotRes(mc,o)) * Den(o,U1)) = dom Den(o,U1)
+       by A4,A5,A6,FUNCT_2:def 1;
+    then A8: dom ((OSQuotRes(mc,o)) * Den(o,U1)) = dom Den(o,U1)
          by RELAT_1:46;
-    A10: dom (qh # x) = dom ar & dom (F # a) = dom ar &
+    A9: dom (qh # x) = dom ar & dom (F # a) = dom ar &
        dom x = dom ar & dom a = dom ar by MSUALG_3:6;
-     A11: now
+     A10: now
       let y be set;
-      assume A12: y in dom ar;
+      assume A11: y in dom ar;
       then reconsider n = y as Nat;
-      A13: ar/.n = ar.n by A12,FINSEQ_4:def 4;
-         ar.n in rng ar by A12,FUNCT_1:def 5;
+      A12: ar/.n = ar.n by A11,FINSEQ_4:def 4;
+         ar.n in rng ar by A11,FUNCT_1:def 5;
       then reconsider s = ar.n as SortSymbol of S;
       consider an being Element of S1.s such that
-      A14: an = a.n & x.n = OSClass(mc,an) by A4,A12,A13,Def15;
-         (qh # x).n = (qh.s).(x.n) by A10,A12,A13,MSUALG_3:def 8
-                .= OSHomQuot(F,s).OSClass(mc,an) by A14,Def27
+      A13: an = a.n & x.n = OSClass(mc,an) by A3,A11,A12,Def15;
+         (qh # x).n = (qh.s).(x.n) by A9,A11,A12,MSUALG_3:def 8
+                .= OSHomQuot(F,s).OSClass(mc,an) by A13,Def27
                 .= (F.s).an by A1,Def26
-                .= (F # a).n by A10,A12,A13,A14,MSUALG_3:def 8;
+                .= (F # a).n by A9,A11,A12,A13,MSUALG_3:def 8;
       hence (qh # x).y = (F # a).y;
      end;
        ar = (the Arity of S).o by MSUALG_1:def 6;
     then product((OSClass mc) * ar) =
     ((OSClass mc)# * the Arity of S).o by MSAFREE:1;
-    then Den(o,qa).x = (OSQuotRes(mc,o) * Den(o,U1)).a by A3,A4,Def20
-               .= (OSQuotRes(mc,o)) . da by A5,A9,FUNCT_1:22
+    then Den(o,qa).x = (OSQuotRes(mc,o) * Den(o,U1)).a by A2,A3,Def20
+               .= (OSQuotRes(mc,o)) . da by A4,A8,FUNCT_1:22
                .= OSClass (OSCng(F),da) by Def16;
-    then (qh.ro).(Den(o,qa).x) = (F.ro).((Den(o,U1)).a) by A1,A8,Def26
+    then (qh.ro).(Den(o,qa).x) = (F.ro).((Den(o,U1)).a) by A1,A7,Def26
     .= Den(o,U2).(F#a) by A1,MSUALG_3:def 9;
-    hence thesis by A10,A11,FUNCT_1:9;
+    hence thesis by A9,A10,FUNCT_1:9;
    end;
   hence qh is_homomorphism qa,U2 by MSUALG_3:def 9;
      for i be set st i in the carrier of S
@@ -2443,64 +2420,63 @@ for U1,U2 be non-empty OSAlgebra of S,
      set f = qh.i;
      assume i in the carrier of S;
      then reconsider s = i as SortSymbol of S;
-     A15: f = OSHomQuot(F,s) by Def27;
+     A14: f = OSHomQuot(F,s) by Def27;
         for x1,x2 be set st x1 in dom f & x2 in dom f & f.x1 = f.x2
       holds x1 = x2
       proof
       let x1,x2 be set;
-       assume A16: x1 in dom f & x2 in dom f & f.x1 = f.x2;
+       assume A15: x1 in dom f & x2 in dom f & f.x1 = f.x2;
        then x1 in (OSClass mc).s & x2 in
-       (OSClass mc).s by A15,FUNCT_2:def 1;
-       then A17: x1 in OSClass (mc,s) & x2 in OSClass (mc,s) by Def13;
+       (OSClass mc).s by A14,FUNCT_2:def 1;
+       then A16: x1 in OSClass (mc,s) & x2 in OSClass (mc,s) by Def13;
        then consider a1 being set such that
-       A18: a1 in S1.s &
+       A17: a1 in S1.s &
             x1 = Class( CompClass(OSCng(F),CComp(s)), a1) by Def12;
        consider a2 being set such that
-       A19: a2 in S1.s &
-            x2 = Class( CompClass(OSCng(F),CComp(s)), a2) by A17,Def12;
-       reconsider a1 as Element of S1.s by A18;
-       reconsider a2 as Element of S1.s by A19;
-       A20: x1 = OSClass(OSCng(F),a1) & x2 = OSClass(OSCng(F),a2)
-           by A18,A19;
+       A18: a2 in S1.s &
+            x2 = Class( CompClass(OSCng(F),CComp(s)), a2) by A16,Def12;
+       reconsider a1 as Element of S1.s by A17;
+       reconsider a2 as Element of S1.s by A18;
+       A19: x1 = OSClass(OSCng(F),a1) & x2 = OSClass(OSCng(F),a2)
+           by A17,A18;
           (F.s).a1 = f.(OSClass(OSCng(F),a1)) &
-            (F.s).a2 = f.(OSClass(OSCng(F),a2)) by A1,A15,Def26;
-       then [a1,a2] in MSCng(F,s) by A16,A20,MSUALG_4:def 19;
+            (F.s).a2 = f.(OSClass(OSCng(F),a2)) by A1,A14,Def26;
+       then [a1,a2] in MSCng(F,s) by A15,A19,MSUALG_4:def 19;
        then [a1,a2] in (MSCng(F)).s by A1,MSUALG_4:def 20;
        then [a1,a2] in (OSCng(F)).s by A1,Def25;
-       hence thesis by A20,Th13;
+       hence thesis by A19,Th13;
       end;
      hence thesis by FUNCT_1:def 8;
     end;
     hence qh is "1-1" by MSUALG_3:1;
     thus OSHomQuot(F) is order-sorted
     proof
-      let s1,s2 being Element of S such that A21:  s1 <= s2;
-      let a1 be set such that A22: a1 in dom (qh.s1);
+      let s1,s2 being Element of S such that A20:  s1 <= s2;
+      let a1 be set such that A21: a1 in dom (qh.s1);
       reconsider sqa = the Sorts of qa as OrderSortedSet of S;
       reconsider S1O = S1 as OrderSortedSet of S by OSALG_1:17;
-      A23: S1O.s1 c= S1O.s2 by A21,OSALG_1:def 18;
-      A24: dom (qh.s1) = (the Sorts of qa).s1 &
+      A22: S1O.s1 c= S1O.s2 by A20,OSALG_1:def 18;
+      A23: dom (qh.s1) = (the Sorts of qa).s1 &
            dom (qh.s2) = (the Sorts of qa).s2 by FUNCT_2:def 1;
-         sqa.s1 c= sqa.s2 by A21,OSALG_1:def 18;
-      hence a1 in dom (qh.s2) by A22,A24;
-         qa = MSAlgebra(# OSClass mc, OSQuotCharact mc #);
-      then a1 in (OSClass OSCng(F)).s1 by A22;
+         sqa.s1 c= sqa.s2 by A20,OSALG_1:def 18;
+      hence a1 in dom (qh.s2) by A21,A23;
+      a1 in (OSClass OSCng(F)).s1 by A21;
       then a1 in OSClass (OSCng(F),s1) by Def13;
       then consider x being set such that
-      A25: x in S1.s1 and
-      A26: a1 = Class( CompClass(OSCng(F),CComp(s1)), x) by Def12;
-      reconsider x1 = x as Element of S1.s1 by A25;
-      reconsider x2 = x as Element of S1.s2 by A23,A25;
+      A24: x in S1.s1 and
+      A25: a1 = Class( CompClass(OSCng(F),CComp(s1)), x) by Def12;
+      reconsider x1 = x as Element of S1.s1 by A24;
+      reconsider x2 = x as Element of S1.s2 by A22,A24;
       reconsider s3 = s1, s4 = s2 as Element of S;
-         x1 in dom (F.s3) by A25,FUNCT_2:def 1;
-      then A27: x1 in dom (F.s4) &
-           (F.s3).x1 = (F.s4).x1 by A1,A21,OSALG_3:def 1;
-      A28: a1 = OSClass(OSCng(F),x1) by A26;
-      then A29: a1 = OSClass(OSCng(F),x2) by A21,Th14;
-      thus (qh.s1).a1 = OSHomQuot(F,s1).(OSClass(OSCng(F),x1)) by A28,Def27
-      .= (F.s2).x1 by A1,A27,Def26 .=
+         x1 in dom (F.s3) by A24,FUNCT_2:def 1;
+      then A26: x1 in dom (F.s4) &
+           (F.s3).x1 = (F.s4).x1 by A1,A20,OSALG_3:def 1;
+      A27: a1 = OSClass(OSCng(F),x1) by A25;
+      then A28: a1 = OSClass(OSCng(F),x2) by A20,Th14;
+      thus (qh.s1).a1 = OSHomQuot(F,s1).(OSClass(OSCng(F),x1)) by A27,Def27
+      .= (F.s2).x1 by A1,A26,Def26 .=
  OSHomQuot(F,s2).(OSClass(OSCng(F),x2)) by A1,Def26
-      .= (qh.s2).a1 by A29,Def27;
+      .= (qh.s2).a1 by A28,Def27;
     end;
  end;
 
@@ -2539,8 +2515,7 @@ for U1,U2 be non-empty OSAlgebra of S,
     A7: a in dom (F.s) & (F.s).a = x by A6,FUNCT_1:def 5;
      reconsider a as Element of S1.s by A7;
     A8: f.(OSClass(OSCng(F),a)) = x by A1,A2,A4,A7,Def26;
-       qa = MSAlgebra(#OSClass OSCng(F),OSQuotCharact OSCng(F)#);
-    then Sq.s = OSClass (OSCng(F),s) by Def13;
+    Sq.s = OSClass (OSCng(F),s) by Def13;
     hence thesis by A5,A8,FUNCT_1:def 5;
    end;
   then qh is "onto" by MSUALG_3:def 3;
@@ -2725,96 +2700,96 @@ coherence
 proof
   set A = QuotOSAlg(U1,R);
   reconsider O1 = the Sorts of U1 as OrderSortedSet of S by OSALG_1:17;
-  let o1,o2 be OperSymbol of S such that A2:  o1 <= o2;
-  A3:  o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2) &
-  the_result_sort_of o1 <= the_result_sort_of o2 by A2,OSALG_1:def 22;
-  A4: dom Den(o2,A) = Args(o2,A) &
+  let o1,o2 be OperSymbol of S such that A1:  o1 <= o2;
+  A2:  o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2) &
+  the_result_sort_of o1 <= the_result_sort_of o2 by A1,OSALG_1:def 22;
+  A3: dom Den(o2,A) = Args(o2,A) &
        dom Den(o1,A) = Args(o1,A) by FUNCT_2:def 1;
-  A5: Args(o1,A) c= Args(o2,A) &
-       Result(o1,A) c= Result(o2,A) by A2,OSALG_1:26;
-  then A6: dom Den(o1,A) = (dom Den(o2,A)) /\ Args(o1,A) by A4,XBOOLE_1:28;
+  A4: Args(o1,A) c= Args(o2,A) &
+       Result(o1,A) c= Result(o2,A) by A1,OSALG_1:26;
+  then A5: dom Den(o1,A) = (dom Den(o2,A)) /\ Args(o1,A) by A3,XBOOLE_1:28;
      Den(o1,A) = (OSQuotCharact R).o1 &
        Den(o2,A) = (OSQuotCharact R).o2 by MSUALG_1:def 11;
-  then A7: Den(o1,A) = OSQuotCharact( R,o1) &
+  then A6: Den(o1,A) = OSQuotCharact( R,o1) &
        Den(o2,A) = OSQuotCharact( R,o2) by Def21;
-  A8: O1.(the_result_sort_of o1) c= O1.(the_result_sort_of o2)
-  by A3,OSALG_1:def 19;
+  A7: O1.(the_result_sort_of o1) c= O1.(the_result_sort_of o2)
+  by A2,OSALG_1:def 19;
      o1 in the OperSymbols of S &
   o2 in the OperSymbols of S;
-  then A9: o1 in dom (the ResultSort of S) &
+  then A8: o1 in dom (the ResultSort of S) &
         o2 in dom (the ResultSort of S) by FUNCT_2:def 1;
-     len (the_arity_of o1) = len (the_arity_of o2) by A3,OSALG_1:def 7;
-  then A10: dom (the_arity_of o1) = dom (the_arity_of o2) by FINSEQ_3:31;
+     len (the_arity_of o1) = len (the_arity_of o2) by A2,OSALG_1:def 7;
+  then A9: dom (the_arity_of o1) = dom (the_arity_of o2) by FINSEQ_3:31;
      for x being set st x in dom Den(o1,A) holds Den(o1,A).x = Den(o2,A).x
   proof
-    let x be set such that A11: x in dom Den(o1,A);
-    A12: x in Args(o1,A) by A11;
-    then x in Args(o2,A) by A5;
-    then A13: x in ((OSClass R)# * the Arity of S).o1 &
-    x in ((OSClass R)# * the Arity of S).o2 by A12,MSUALG_1:def 9;
+    let x be set such that A10: x in dom Den(o1,A);
+    A11: x in Args(o1,A) by A10;
+    then x in Args(o2,A) by A4;
+    then A12: x in ((OSClass R)# * the Arity of S).o1 &
+    x in ((OSClass R)# * the Arity of S).o2 by A11,MSUALG_1:def 9;
     then consider a1 being Element of Args(o1,U1) such that
-    A14: x = R #_os a1 by Th15;
+    A13: x = R #_os a1 by Th15;
     consider a2 being Element of Args(o2,U1) such that
-    A15: x = R #_os a2 by A13,Th15;
+    A14: x = R #_os a2 by A12,Th15;
        for y being Nat st y in dom a1 holds
         [a1.y,a2.y] in R.((the_arity_of o2)/.y)
     proof
-      let y be Nat such that A16: y in dom a1;
-      A17: y in dom (the_arity_of o1) &
-      y in dom (the_arity_of o2) by A10,A16,MSUALG_6:2;
+      let y be Nat such that A15: y in dom a1;
+      A16: y in dom (the_arity_of o1) &
+      y in dom (the_arity_of o2) by A9,A15,MSUALG_6:2;
       then consider z1 being Element of (the Sorts of U1).((the_arity_of o1)/.y
 )
-      such that A18: z1 = a1.y & (R #_os a1).y = OSClass(R, z1) by Def15;
+      such that A17: z1 = a1.y & (R #_os a1).y = OSClass(R, z1) by Def15;
       consider z2 being
       Element of (the Sorts of U1).((the_arity_of o2)/.y) such that
-      A19: z2 = a2.y & (R #_os a2).y = OSClass(R, z2) by A17,Def15;
-      A20: (the_arity_of o1)/.y = (the_arity_of o1).y &
-       (the_arity_of o2)/.y = (the_arity_of o2).y by A17,FINSEQ_4:def 4;
+      A18: z2 = a2.y & (R #_os a2).y = OSClass(R, z2) by A16,Def15;
+      A19: (the_arity_of o1)/.y = (the_arity_of o1).y &
+       (the_arity_of o2)/.y = (the_arity_of o2).y by A16,FINSEQ_4:def 4;
       reconsider s1 = (the_arity_of o1).y,
-      s2 = (the_arity_of o2).y as SortSymbol of S by A17,PARTFUN1:27;
-      A21: s1 <= s2 by A3,A17,OSALG_1:def 7;
+      s2 = (the_arity_of o2).y as SortSymbol of S by A16,PARTFUN1:27;
+      A20: s1 <= s2 by A2,A16,OSALG_1:def 7;
       then (the Sorts of U1).((the_arity_of o1)/.y) c=
-      (the Sorts of U1).((the_arity_of o2)/.y) by A20,OSALG_1:def 19;
+      (the Sorts of U1).((the_arity_of o2)/.y) by A19,OSALG_1:def 19;
       then reconsider z12 = z1 as
       Element of (the Sorts of U1).((the_arity_of o2)/.y) by TARSKI:def 3;
-         OSClass(R, z2) = OSClass(R, z12) by A14,A15,A18,A19,A20,A21,Th14;
-      hence [a1.y,a2.y] in R.((the_arity_of o2)/.y) by A18,A19,Th13;
+         OSClass(R, z2) = OSClass(R, z12) by A13,A14,A17,A18,A19,A20,Th14;
+      hence [a1.y,a2.y] in R.((the_arity_of o2)/.y) by A17,A18,Th13;
     end;
-    then A22: [Den(o1,U1).a1,Den(o2,U1).a2] in R.(the_result_sort_of o2)
-    by A2,Def28;
-    A23: OSQuotCharact(R,o1).(R #_os a1) =
+    then A21: [Den(o1,U1).a1,Den(o2,U1).a2] in R.(the_result_sort_of o2)
+    by A1,Def28;
+    A22: OSQuotCharact(R,o1).(R #_os a1) =
     ((OSQuotRes(R,o1)) * (Den(o1,U1))).a1 &
     OSQuotCharact(R,o2).(R #_os a2) =
-    ((OSQuotRes(R,o2)) * (Den(o2,U1))).a2 by A13,A14,A15,Def20;
+    ((OSQuotRes(R,o2)) * (Den(o2,U1))).a2 by A12,A13,A14,Def20;
        Result(o1,U1) =
     ((the Sorts of U1) * the ResultSort of S).o1 by MSUALG_1:def 10
-    .= (the Sorts of U1).((the ResultSort of S).o1) by A9,FUNCT_1:23
+    .= (the Sorts of U1).((the ResultSort of S).o1) by A8,FUNCT_1:23
     .= (the Sorts of U1).(the_result_sort_of o1) by MSUALG_1:def 7;
     then reconsider da1 = Den(o1,U1).a1 as
     Element of (the Sorts of U1).(the_result_sort_of o1);
        a1 in Args(o1,U1);
     then a1 in dom Den(o1,U1) by FUNCT_2:def 1;
-    then A24: ((OSQuotRes(R,o1)) * (Den(o1,U1))).a1 = OSQuotRes(R,o1).da1 by
+    then A23: ((OSQuotRes(R,o1)) * (Den(o1,U1))).a1 = OSQuotRes(R,o1).da1 by
 FUNCT_1:23
     .= OSClass(R,da1) by Def16;
        Result(o2,U1) =
     ((the Sorts of U1) * the ResultSort of S).o2 by MSUALG_1:def 10
-    .= (the Sorts of U1).((the ResultSort of S).o2) by A9,FUNCT_1:23
+    .= (the Sorts of U1).((the ResultSort of S).o2) by A8,FUNCT_1:23
     .= (the Sorts of U1).(the_result_sort_of o2) by MSUALG_1:def 7;
     then reconsider da2 = Den(o2,U1).a2 as
     Element of (the Sorts of U1).(the_result_sort_of o2);
        a2 in Args(o2,U1);
     then a2 in dom Den(o2,U1) by FUNCT_2:def 1;
-    then A25: ((OSQuotRes(R,o2)) * (Den(o2,U1))).a2 = OSQuotRes(R,o2).da2 by
+    then A24: ((OSQuotRes(R,o2)) * (Den(o2,U1))).a2 = OSQuotRes(R,o2).da2 by
 FUNCT_1:23
     .= OSClass(R,da2) by Def16;
     reconsider da12 = da1 as
-    Element of (the Sorts of U1).(the_result_sort_of o2) by A8,TARSKI:def 3;
-       OSClass(R,da1) = OSClass(R,da12) by A3,Th14
-    .= OSClass(R,da2) by A22,Th13;
-    hence Den(o1,A).x = Den(o2,A).x by A7,A14,A15,A23,A24,A25;
+    Element of (the Sorts of U1).(the_result_sort_of o2) by A7,TARSKI:def 3;
+       OSClass(R,da1) = OSClass(R,da12) by A2,Th14
+    .= OSClass(R,da2) by A21,Th13;
+    hence Den(o1,A).x = Den(o2,A).x by A6,A13,A14,A22,A23,A24;
   end;
-  hence Den(o2,A)|Args(o1,A) = Den(o1,A) by A6,FUNCT_1:68;
+  hence Den(o2,A)|Args(o1,A) = Den(o1,A) by A5,FUNCT_1:68;
   end;
 end;
 
@@ -2891,8 +2866,7 @@ existence
       cqa = the Sorts of qa,
       S1 = the Sorts of U1,
       S2 = the Sorts of U2;
-     qa = MSAlgebra (# OSClass R,OSQuotCharact R #);
-  then A2: cqa.s = OSClass (R,s) by Def13;
+  A2: cqa.s = OSClass (R,s) by Def13;
   defpred P[set,set] means
    for a be Element of S1.s st $1 = OSClass(R,a) holds
     $2 = (F.s).a;
@@ -2930,8 +2904,7 @@ uniqueness
      cqa = the Sorts of qa,
       u1 = the Sorts of U1,
       u2 = the Sorts of U2;
-     qa = MSAlgebra (# OSClass R,OSQuotCharact R #);
-  then A8: cqa.s = OSClass (R,s) by Def13;
+  A8: cqa.s = OSClass (R,s) by Def13;
   let H,G be Function of cqa.s,u2.s;
   assume that
     A9: for a be Element of u1.s holds
@@ -3039,83 +3012,82 @@ theorem
     reconsider o1 = o as OperSymbol of S;
     set ro = the_result_sort_of o,
         ar = the_arity_of o;
-    A3: Den(o,qa) = (OSQuotCharact mc).o by MSUALG_1:def 11
+    A2: Den(o,qa) = (OSQuotCharact mc).o by MSUALG_1:def 11
                  .= OSQuotCharact(mc,o1) by Def21;
         Args(o,qa) = ((OSClass mc)# * (the Arity of S)).o
           by MSUALG_1:def 9;
     then consider a be Element of Args(o,U1) such that
-    A4: x = mc #_os a by Th15;
-    A5: dom Den(o,U1) = Args(o,U1) & rng Den(o,U1) c= Result(o,U1)
+    A3: x = mc #_os a by Th15;
+    A4: dom Den(o,U1) = Args(o,U1) & rng Den(o,U1) c= Result(o,U1)
              by FUNCT_2:def 1;
        o in the OperSymbols of S;
      then o in dom (S1 * the ResultSort of S) by PBOOLE:def 3;
-    then A6: ((the Sorts of U1) * the ResultSort of S).o
+    then A5: ((the Sorts of U1) * the ResultSort of S).o
         = (the Sorts of U1).((the ResultSort of S).o)
                  by FUNCT_1:22
        .= (the Sorts of U1).ro by MSUALG_1:def 7;
-    then A7: Result(o,U1) = S1.ro by MSUALG_1:def 10;
-    reconsider da = (Den(o,U1)).a as Element of S1.ro by A6,MSUALG_1:def 10;
-    A8:  qh.ro = OSHomQuot(F,R,ro) by Def30;
+    then A6: Result(o,U1) = S1.ro by MSUALG_1:def 10;
+    reconsider da = (Den(o,U1)).a as Element of S1.ro by A5,MSUALG_1:def 10;
+    A7:  qh.ro = OSHomQuot(F,R,ro) by Def30;
        rng Den(o,U1) c= dom OSQuotRes(mc,o)
-       by A5,A6,A7,FUNCT_2:def 1;
-    then A9: dom ((OSQuotRes(mc,o)) * Den(o,U1)) = dom Den(o,U1)
+       by A4,A5,A6,FUNCT_2:def 1;
+    then A8: dom ((OSQuotRes(mc,o)) * Den(o,U1)) = dom Den(o,U1)
          by RELAT_1:46;
-    A10: dom (qh # x) = dom ar & dom (F # a) = dom ar &
+    A9: dom (qh # x) = dom ar & dom (F # a) = dom ar &
        dom x = dom ar & dom a = dom ar by MSUALG_3:6;
-     A11: now
+     A10: now
       let y be set;
-      assume A12: y in dom ar;
+      assume A11: y in dom ar;
       then reconsider n = y as Nat;
-      A13: ar/.n = ar.n by A12,FINSEQ_4:def 4;
-         ar.n in rng ar by A12,FUNCT_1:def 5;
+      A12: ar/.n = ar.n by A11,FINSEQ_4:def 4;
+         ar.n in rng ar by A11,FUNCT_1:def 5;
       then reconsider s = ar.n as SortSymbol of S;
       consider an being Element of S1.s such that
-      A14: an = a.n & x.n = OSClass(mc,an) by A4,A12,A13,Def15;
-         (qh # x).n = (qh.s).(x.n) by A10,A12,A13,MSUALG_3:def 8
-                .= OSHomQuot(F,R,s).OSClass(mc,an) by A14,Def30
+      A13: an = a.n & x.n = OSClass(mc,an) by A3,A11,A12,Def15;
+         (qh # x).n = (qh.s).(x.n) by A9,A11,A12,MSUALG_3:def 8
+                .= OSHomQuot(F,R,s).OSClass(mc,an) by A13,Def30
                 .= (F.s).an by A1,Def29
-                .= (F # a).n by A10,A12,A13,A14,MSUALG_3:def 8;
+                .= (F # a).n by A9,A11,A12,A13,MSUALG_3:def 8;
       hence (qh # x).y = (F # a).y;
      end;
        ar = (the Arity of S).o by MSUALG_1:def 6;
     then product((OSClass mc) * ar) =
     ((OSClass mc)# * the Arity of S).o by MSAFREE:1;
-    then Den(o,qa).x = (OSQuotRes(mc,o) * Den(o,U1)).a by A3,A4,Def20
-               .= (OSQuotRes(mc,o)) . da by A5,A9,FUNCT_1:22
+    then Den(o,qa).x = (OSQuotRes(mc,o) * Den(o,U1)).a by A2,A3,Def20
+               .= (OSQuotRes(mc,o)) . da by A4,A8,FUNCT_1:22
                .= OSClass (R,da) by Def16;
-    then (qh.ro).(Den(o,qa).x) = (F.ro).((Den(o,U1)).a) by A1,A8,Def29
+    then (qh.ro).(Den(o,qa).x) = (F.ro).((Den(o,U1)).a) by A1,A7,Def29
     .= Den(o,U2).(F#a) by A1,MSUALG_3:def 9;
-    hence thesis by A10,A11,FUNCT_1:9;
+    hence thesis by A9,A10,FUNCT_1:9;
    end;
   hence qh is_homomorphism qa,U2 by MSUALG_3:def 9;
     thus OSHomQuot(F,R) is order-sorted
     proof
-      let s1,s2 being Element of S such that A15:  s1 <= s2;
-      let a1 be set such that A16: a1 in dom (qh.s1);
+      let s1,s2 being Element of S such that A14:  s1 <= s2;
+      let a1 be set such that A15: a1 in dom (qh.s1);
       reconsider sqa = the Sorts of qa as OrderSortedSet of S;
       reconsider S1O = S1 as OrderSortedSet of S by OSALG_1:17;
-      A17: S1O.s1 c= S1O.s2 by A15,OSALG_1:def 18;
-      A18: dom (qh.s1) = (the Sorts of qa).s1 &
+      A16: S1O.s1 c= S1O.s2 by A14,OSALG_1:def 18;
+      A17: dom (qh.s1) = (the Sorts of qa).s1 &
            dom (qh.s2) = (the Sorts of qa).s2 by FUNCT_2:def 1;
-         sqa.s1 c= sqa.s2 by A15,OSALG_1:def 18;
-      hence a1 in dom (qh.s2) by A16,A18;
-         qa = MSAlgebra(# OSClass mc, OSQuotCharact mc #);
-      then a1 in (OSClass R).s1 by A16;
+         sqa.s1 c= sqa.s2 by A14,OSALG_1:def 18;
+      hence a1 in dom (qh.s2) by A15,A17;
+      a1 in (OSClass R).s1 by A15;
       then a1 in OSClass (R,s1) by Def13;
       then consider x being set such that
-      A19: x in S1.s1 and
-      A20: a1 = Class( CompClass(R,CComp(s1)), x) by Def12;
-      reconsider x1 = x as Element of S1.s1 by A19;
-      reconsider x2 = x as Element of S1.s2 by A17,A19;
+      A18: x in S1.s1 and
+      A19: a1 = Class( CompClass(R,CComp(s1)), x) by Def12;
+      reconsider x1 = x as Element of S1.s1 by A18;
+      reconsider x2 = x as Element of S1.s2 by A16,A18;
       reconsider s3 = s1, s4 = s2 as Element of S;
-         x1 in dom (F.s3) by A19,FUNCT_2:def 1;
-      then A21: x1 in dom (F.s4) &
-           (F.s3).x1 = (F.s4).x1 by A1,A15,OSALG_3:def 1;
-      A22: a1 = OSClass(R,x1) by A20;
-      then A23: a1 = OSClass(R,x2) by A15,Th14;
-      thus (qh.s1).a1 = OSHomQuot(F,R,s1).(OSClass(R,x1)) by A22,Def30
-      .= (F.s2).x1 by A1,A21,Def29 .=
+         x1 in dom (F.s3) by A18,FUNCT_2:def 1;
+      then A20: x1 in dom (F.s4) &
+           (F.s3).x1 = (F.s4).x1 by A1,A14,OSALG_3:def 1;
+      A21: a1 = OSClass(R,x1) by A19;
+      then A22: a1 = OSClass(R,x2) by A14,Th14;
+      thus (qh.s1).a1 = OSHomQuot(F,R,s1).(OSClass(R,x1)) by A21,Def30
+      .= (F.s2).x1 by A1,A20,Def29 .=
  OSHomQuot(F,R,s2).(OSClass(R,x2)) by A1,Def29
-      .= (qh.s2).a1 by A23,Def30;
+      .= (qh.s2).a1 by A22,Def30;
     end;
  end;

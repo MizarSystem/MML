@@ -32,7 +32,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="17">
+<Adjective nr="18">
 <LocusVar nr="1"/>
 <Func kind="K" nr="52"/>
 </Adjective>

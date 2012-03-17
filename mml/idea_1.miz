@@ -16,7 +16,7 @@ environ
       PARTFUN1, FUNCT_2, FUNCT_5, FUNCT_7, SERIES_1, CQC_LANG, FINSEQ_1,
       FINSEQ_2, FINSEQ_4, BINARITH, BINARI_3, WSIERP_1;
  constructors FUNCT_7, BINARI_2, SERIES_1, BINARITH, BINARI_3, FINSEQ_4,
-      WSIERP_1, FUNCT_5, PARTFUN1, NAT_1;
+      WSIERP_1, FUNCT_5, PARTFUN1, NAT_1, MATRIX_1;
  registrations INT_1, FUNCT_1, RELSET_1, MARGREL1, FUNCT_7, NAT_1, XREAL_0,
       FUNCT_2, ORDINAL2, FUNCOP_1, FRAENKEL, FINSEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -74,8 +74,8 @@ proof
          now per cases;
         suppose b >= 0;
           then reconsider a,b as Nat by A7,INT_1:16;
-          A8:(a*i + b*j) mod j = k by A3,A6,GR_CY_1:4;
-          A9: (a*i + b*j) mod j = (a*i + ((b*j) mod j)) mod j by GR_CY_1:3
+          A8:(a*i + b*j) mod j = k by A3,A6,NAT_1:76;
+          A9: (a*i + b*j) mod j = (a*i + ((b*j) mod j)) mod j by NAT_1:75
                                 .= (a*i + 0) mod j by NAT_1:63
                                 .= (a*i) mod j;
            take a;
@@ -89,8 +89,8 @@ proof
            then reconsider b' as Nat by A11,INT_1:16;
            take a;
               a*i + b*j + b'*j = a*i by A11;
-           then (a*i) mod j = k mod j by A6,GR_CY_1:1
-                           .= k by A3,GR_CY_1:4;
+           then (a*i) mod j = k mod j by A6,NAT_1:73
+                           .= k by A3,NAT_1:76;
            hence thesis;
       end;
       end;
@@ -117,9 +117,9 @@ proof
           A18:a*i + b*j + a2*j*i
                            = a'*i + b*j by A15;
              (k + a2*j*i) mod j = (k + a2*i*j) mod j
-                            .= k mod j by GR_CY_1:1
-                            .= k by A3,GR_CY_1:4;
-          hence (a'*i) mod j = k by A6,A18,GR_CY_1:1;
+                            .= k mod j by NAT_1:73
+                            .= k by A3,NAT_1:76;
+          hence (a'*i) mod j = k by A6,A18,NAT_1:73;
         end;
         suppose A19: b < 0;
           consider b' being Integer such that
@@ -128,8 +128,8 @@ proof
           then reconsider b' as Nat by A20,INT_1:16;
           take a';
              k + a2*j*i + b'*j = k + (a2*i+ b')*j;
-          hence (a'*i) mod j = k mod j by A6,A15,A20,GR_CY_1:1
-                           .= k by A3,GR_CY_1:4;
+          hence (a'*i) mod j = k mod j by A6,A15,A20,NAT_1:73
+                           .= k by A3,NAT_1:76;
     end;
     end;
     hence thesis;
@@ -316,12 +316,7 @@ proof
      now let j;
   assume A2:j in Seg n;
     then A3:j in dom ((ZERO(n)) 'xor' x) & j in dom x by A1,FINSEQ_1:def 3;
-       j in dom (ZERO(n))
-    proof
-         dom (ZERO(n)) = dom (n |-> FALSE)
-                   .= Seg n by FINSEQ_2:68;
-      hence thesis by A2;
-    end;
+       j in dom (ZERO(n)) by A2,FINSEQ_2:68;
     then A4:(ZERO(n))/.j = ZERO(n).j by FINSEQ_4:def 4
                           .= (n |-> FALSE).j
                           .= FALSE by A2,FINSEQ_2:70;
@@ -374,13 +369,8 @@ theorem
       assume A3: j in Seg n;
       A4: (0 div 2 to_power(j-'1)) mod 2
               = 0 mod 2 by NAT_2:4
-             .= 0 by GR_CY_1:6;
-         j in dom (ZERO(n))
-      proof
-           dom (ZERO(n)) = dom (n |-> FALSE)
-                     .= Seg n by FINSEQ_2:68;
-        hence thesis by A3;
-      end;
+             .= 0 by NAT_1:78;
+         j in dom (ZERO(n)) by A3,FINSEQ_2:68;
       then A5:(ZERO(n))/.j = ZERO(n).j by FINSEQ_4:def 4
                           .= (n |-> FALSE).j
                           .= FALSE by A3,FINSEQ_2:70;
@@ -438,16 +428,12 @@ theorem Th12:
                  = (i + NEG_MOD(i,n)) mod 2 to_power(n)
                 .= (i + (NEG_N(i,n) mod 2 to_power(n)))
                                       mod 2 to_power(n)
-                .= 2 to_power(n) mod 2 to_power(n) by A1,GR_CY_1:3
-                .= 0 by GR_CY_1:5;
+                .= 2 to_power(n) mod 2 to_power(n) by A1,NAT_1:75
+                .= 0 by NAT_1:77;
   end;
 
 theorem
-  ADD_MOD(i,j,n) = ADD_MOD(j,i,n)
-  proof
-    thus ADD_MOD(i,j,n) = (i + j) mod 2 to_power(n)
-                       .= ADD_MOD(j,i,n);
-  end;
+  ADD_MOD(i,j,n) = ADD_MOD(j,i,n);
 
 theorem Th14:
   i is_expressible_by n implies ADD_MOD(0,i,n) = i
@@ -455,7 +441,7 @@ theorem Th14:
     assume i is_expressible_by n;
     then A1:i < 2 to_power(n) by Def3;
     thus ADD_MOD(0,i,n) = (0 + i) mod 2 to_power(n)
-                       .= i by A1,GR_CY_1:4;
+                       .= i by A1,NAT_1:76;
   end;
 
 theorem Th15:
@@ -464,9 +450,9 @@ theorem Th15:
     thus ADD_MOD(ADD_MOD(i,j,n),k,n)
           = ADD_MOD((i+j) mod 2 to_power(n),k,n)
          .= ((i+j) mod 2 to_power(n) + k) mod 2 to_power(n)
-         .= (i+j+k) mod 2 to_power(n) by GR_CY_1:3
+         .= (i+j+k) mod 2 to_power(n) by NAT_1:75
          .= (i+(j+k)) mod 2 to_power(n)
-         .= (i + ((j+k) mod 2 to_power(n))) mod 2 to_power(n) by GR_CY_1:2
+         .= (i + ((j+k) mod 2 to_power(n))) mod 2 to_power(n) by NAT_1:74
          .= (i + ADD_MOD(j,k,n)) mod 2 to_power(n)
          .= ADD_MOD(i,ADD_MOD(j,k,n),n);
   end;
@@ -475,8 +461,7 @@ theorem Th16:
   ADD_MOD(i,j,n) is_expressible_by n
   proof
     A1: 2 to_power(n) > 0 by POWER:39;
-       ADD_MOD(i,j,n) = (i + j) mod 2 to_power(n);
-    then ADD_MOD(i,j,n) < 2 to_power(n) by A1,NAT_1:46;
+    ADD_MOD(i,j,n) < 2 to_power(n) by A1,NAT_1:46;
     hence thesis by Def3;
   end;
 
@@ -484,8 +469,7 @@ theorem
      NEG_MOD(i,n) is_expressible_by n
   proof
     A1: 2 to_power(n) > 0 by POWER:39;
-       NEG_MOD(i,n) = NEG_N(i,n) mod 2 to_power(n);
-    then NEG_MOD(i,n) < 2 to_power(n) by A1,NAT_1:46;
+    NEG_MOD(i,n) < 2 to_power(n) by A1,NAT_1:46;
     hence thesis by Def3;
   end;
 
@@ -605,8 +589,8 @@ definition
       then reconsider n3=2 to_power(n) + 1 - 1 - 1 as Nat by INT_1:16;
          n2 * n2 = nn*n3 + 1;
      then A5:(n2*n2) mod nn
-                      = 1 mod nn by GR_CY_1:1
-                     .= 1 by A3,GR_CY_1:4;
+                      = 1 mod nn by NAT_1:73
+                     .= 1 by A3,NAT_1:76;
          now per cases;
         suppose A6: i=0;
           consider j such that A7:j = 0;
@@ -626,7 +610,7 @@ definition
           then consider a being Nat such that
             A10: (a*i) mod (2 to_power(n)+1) = 1 & a < (2 to_power(n)+1)
                                                       by A1,A3,A9,Th1;
-          A11: a <> 0 by A10,GR_CY_1:4;
+          A11: a <> 0 by A10,NAT_1:76;
           take k=ChangeVal_2(a,n);
              now per cases;
             suppose A12:a <> 2 to_power(n);
@@ -733,13 +717,7 @@ definition
 end;
 
 theorem
-  MUL_MOD(i,j,n) = MUL_MOD(j,i,n)
-proof
-     MUL_MOD(i,j,n) = ChangeVal_2((ChangeVal_1(i,n)*ChangeVal_1(j,n))
-                        mod (2 to_power(n)+1),n)
-                .= MUL_MOD(j,i,n);
-  hence thesis;
-end;
+  MUL_MOD(i,j,n) = MUL_MOD(j,i,n);
 
 theorem Th23:
   i is_expressible_by n implies MUL_MOD(1,i,n) = i
@@ -748,22 +726,22 @@ proof
   then A1:i < 2 to_power n by Def3;
   A2:ChangeVal_1(1,n) = 1 by Def7;
   per cases;
-    suppose A4:i = 0;
-      then A5:ChangeVal_1(i,n) = 2 to_power(n) by Def7;
+    suppose A3:i = 0;
+      then A4:ChangeVal_1(i,n) = 2 to_power(n) by Def7;
          2 to_power n < (2 to_power n)+1 by XREAL_1:31;
-      then A6:(ChangeVal_1(i,n)) mod ((2 to_power n)+1) = 2 to_power(n)
-                                                    by A5,GR_CY_1:4;
+      then A5:(ChangeVal_1(i,n)) mod ((2 to_power n)+1) = 2 to_power(n)
+                                                    by A4,NAT_1:76;
          ChangeVal_2(2 to_power(n),n) = 0 by Def8;
-    hence thesis by A2,A4,A6;
+    hence thesis by A2,A3,A5;
     end;
     suppose i <> 0;
-      then A7:(ChangeVal_1(i,n)) mod ((2 to_power n)+1)
+      then A6:(ChangeVal_1(i,n)) mod ((2 to_power n)+1)
                        = i mod ((2 to_power n)+1) by Def7;
          2 to_power n < (2 to_power n)+1 by XREAL_1:31;
       then i < (2 to_power n)+1 by A1,XREAL_1:2;
-      then A8:(ChangeVal_1(i,n)) mod ((2 to_power n)+1) = i by A7,GR_CY_1:4;
+      then A7:(ChangeVal_1(i,n)) mod ((2 to_power n)+1) = i by A6,NAT_1:76;
          ChangeVal_2(i,n) = i by A1,Def8;
-    hence thesis by A2,A8;
+    hence thesis by A2,A7;
 end;
 end;
 
@@ -786,87 +764,87 @@ proof
      now
       (I*J) mod (2 to_power(n)+1)
                      < (2 to_power(n)+1) by NAT_1:46;
-      then A8:(I*J) mod (2 to_power(n)+1)
+      then A5:(I*J) mod (2 to_power(n)+1)
                      <= 2 to_power(n) by NAT_1:38;
       set CV = (I*J) mod (2 to_power(n)+1);
-      A9:CV <> 0 by A1,A2,A3,Th5;
-         now per cases by A8,XREAL_1:1;
-        suppose A10:CV = 2 to_power(n);
+      A6:CV <> 0 by A1,A2,A3,Th5;
+         now per cases by A5,XREAL_1:1;
+        suppose A7:CV = 2 to_power(n);
           then MUL_MOD(i,j,n) = 0 by Def8;
-          then A11:MUL_MOD(MUL_MOD(i,j,n),k,n)
+          then A8:MUL_MOD(MUL_MOD(i,j,n),k,n)
                  = ChangeVal_2((ChangeVal_1(0,n)*K)
                      mod (2 to_power(n)+1),n)
-                .= ChangeVal_2((CV*K) mod (2 to_power(n)+1),n) by A10,Def7
+                .= ChangeVal_2((CV*K) mod (2 to_power(n)+1),n) by A7,Def7
                 .= ChangeVal_2(((I*J)*K) mod (2 to_power(n)+1),n)
                                                     by EULER_2:10;
           set CV2 = (J*K) mod (2 to_power(n)+1);
           CV2 < (2 to_power(n)+1) by NAT_1:46;
-          then A12:CV2 <= 2 to_power(n) by NAT_1:38;
-          A13:CV2 <> 0 by A1,A3,A4,Th5;
-             now per cases by A12,XREAL_1:1;
-            suppose A14:CV2 = 2 to_power(n);
+          then A9:CV2 <= 2 to_power(n) by NAT_1:38;
+          A10:CV2 <> 0 by A1,A3,A4,Th5;
+             now per cases by A9,XREAL_1:1;
+            suppose A11:CV2 = 2 to_power(n);
               then MUL_MOD(i,MUL_MOD(j,k,n),n)
                      = MUL_MOD(i,0,n) by Def8
                     .= ChangeVal_2((I*ChangeVal_1(0,n))
                              mod (2 to_power(n)+1),n)
-                    .= ChangeVal_2((I*CV2) mod (2 to_power(n)+1),n) by A14,Def7
+                    .= ChangeVal_2((I*CV2) mod (2 to_power(n)+1),n) by A11,Def7
                     .= ChangeVal_2((I*(J*K)) mod (2 to_power(n)+1),n)
                                                        by EULER_2:10
                     .= ChangeVal_2((I*J*K) mod (2 to_power(n)+1),n);
-            hence thesis by A11;
+            hence thesis by A8;
             end;
-            suppose A15:CV2 < 2 to_power(n);
+            suppose A12:CV2 < 2 to_power(n);
                  MUL_MOD(j,k,n) = ChangeVal_2(CV2,n)
-                                 .= CV2 by A15,Def8;
+                                 .= CV2 by A12,Def8;
               then MUL_MOD(i,MUL_MOD(j,k,n),n)
                  = ChangeVal_2((I*ChangeVal_1(CV2,n))
                         mod (2 to_power(n)+1),n)
                 .= ChangeVal_2((I*CV2)
-                        mod (2 to_power(n)+1),n) by A13,Def7
+                        mod (2 to_power(n)+1),n) by A10,Def7
                 .= ChangeVal_2((I*(J*K)) mod (2 to_power(n)+1),n)
                                                    by EULER_2:10
                 .= ChangeVal_2((I*J*K) mod (2 to_power(n)+1),n);
-            hence thesis by A11;
+            hence thesis by A8;
           end;
           end;
         hence thesis;
         end;
         suppose CV < 2 to_power(n);
           then MUL_MOD(i,j,n) = CV by Def8;
-          then A16:MUL_MOD(MUL_MOD(i,j,n),k,n)
+          then A13:MUL_MOD(MUL_MOD(i,j,n),k,n)
                  = ChangeVal_2((ChangeVal_1(CV,n)*K)
                      mod (2 to_power(n)+1),n)
-                .= ChangeVal_2((CV*K) mod (2 to_power(n)+1),n) by A9,Def7
+                .= ChangeVal_2((CV*K) mod (2 to_power(n)+1),n) by A6,Def7
                 .= ChangeVal_2(((I*J)*K) mod (2 to_power(n)+1),n)
                                                     by EULER_2:10;
           set CV2 = (J*K) mod (2 to_power(n)+1);
           CV2 < (2 to_power(n)+1) by NAT_1:46;
-          then A17:CV2 <= 2 to_power(n) by NAT_1:38;
-          A18:CV2 <> 0 by A1,A3,A4,Th5;
-             now per cases by A17,XREAL_1:1;
-            suppose A19:CV2 = 2 to_power(n);
+          then A14:CV2 <= 2 to_power(n) by NAT_1:38;
+          A15:CV2 <> 0 by A1,A3,A4,Th5;
+             now per cases by A14,XREAL_1:1;
+            suppose A16:CV2 = 2 to_power(n);
               then MUL_MOD(j,k,n) = 0 by Def8;
               then MUL_MOD(i,MUL_MOD(j,k,n),n)
                      = ChangeVal_2((I*ChangeVal_1(0,n))
                              mod (2 to_power(n)+1),n)
-                    .= ChangeVal_2((I*CV2) mod (2 to_power(n)+1),n) by A19,Def7
+                    .= ChangeVal_2((I*CV2) mod (2 to_power(n)+1),n) by A16,Def7
                     .= ChangeVal_2((I*(J*K)) mod (2 to_power(n)+1),n)
                                                        by EULER_2:10
                     .= ChangeVal_2((I*J*K) mod (2 to_power(n)+1),n);
-            hence thesis by A16;
+            hence thesis by A13;
             end;
-            suppose A20:CV2 < 2 to_power(n);
+            suppose A17:CV2 < 2 to_power(n);
                  MUL_MOD(j,k,n) = ChangeVal_2(CV2,n)
-                            .= CV2 by A20,Def8;
+                            .= CV2 by A17,Def8;
               then MUL_MOD(i,MUL_MOD(j,k,n),n)
                  = ChangeVal_2((I*ChangeVal_1(CV2,n))
                         mod (2 to_power(n)+1),n)
                 .= ChangeVal_2((I*CV2)
-                        mod (2 to_power(n)+1),n) by A18,Def7
+                        mod (2 to_power(n)+1),n) by A15,Def7
                 .= ChangeVal_2((I*(J*K)) mod (2 to_power(n)+1),n)
                                                    by EULER_2:10
                 .= ChangeVal_2((I*J*K) mod (2 to_power(n)+1),n);
-            hence thesis by A16;
+            hence thesis by A13;
           end;
           end;
         hence thesis;
@@ -880,22 +858,22 @@ end;
 theorem Th25:
   MUL_MOD(i,j,n) is_expressible_by n
 proof
-  A2:0 < 2 to_power(n) by POWER:39;
+  A1:0 < 2 to_power(n) by POWER:39;
   (ChangeVal_1(i,n)*ChangeVal_1(j,n)) mod (2 to_power(n)+1)
                     < (2 to_power(n)+1) by NAT_1:46;
-  then A3:(ChangeVal_1(i,n)*ChangeVal_1(j,n)) mod (2 to_power(n)+1)
+  then A2:(ChangeVal_1(i,n)*ChangeVal_1(j,n)) mod (2 to_power(n)+1)
                     <= 2 to_power(n) by NAT_1:38;
   set CV = (ChangeVal_1(i,n)*ChangeVal_1(j,n)) mod (2 to_power(n)+1);
-     now per cases by A3,XREAL_1:1;
+     now per cases by A2,XREAL_1:1;
     suppose CV = 2 to_power(n);
       then ChangeVal_2(CV,n) = 0 by Def8;
-      then MUL_MOD(i,j,n) < 2 to_power(n) by A2;
+      then MUL_MOD(i,j,n) < 2 to_power(n) by A1;
     hence thesis by Def3;
     end;
-    suppose A4:CV < 2 to_power(n);
+    suppose A3:CV < 2 to_power(n);
       then ChangeVal_2(CV,n) = CV by Def8;
       then MUL_MOD(i,j,n) = CV;
-    hence thesis by A4,Def3;
+    hence thesis by A3,Def3;
   end;
   end;
   hence thesis;
@@ -2810,7 +2788,7 @@ theorem Th38:
              hence (<* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k)).i
                  = <* IDEA_Q(Line(Key,k+1),n) *>.1 by A5,FINSEQ_1:def 7
                 .= IDEA_Q(Line(Key,k+1),n) by FINSEQ_1:57
-                .= IDEA_Q(Line(Key,(k+1)-'1 + 1),n) by A6,AMI_5:4
+                .= IDEA_Q(Line(Key,(k+1)-'1 + 1),n) by A6,BINARITH:53
                 .= IDEA_Q_F(Key,n,k+1).i by A7,A17,Def18;
          end;
          end;
@@ -2828,27 +2806,27 @@ theorem Th39:
     let Key be Matrix of lk,6,NAT;
     let k be Nat;
     set p = Seg(k+1) --> MESSAGES;
-X:  dom p = Seg(k+1) by FUNCOP_1:19;
+A1:  dom p = Seg(k+1) by FUNCOP_1:19;
     then reconsider p as FinSequence by FINSEQ_1:def 2;
-    A1: len p = k+1 by X,FINSEQ_1:def 3;
-    A2: for j being Nat st j in Seg(k+1) holds p.j = MESSAGES by FUNCOP_1:13;
-    A3: len p = len IDEA_P_F(Key,n,k)+1 by A1,Def17;
+    A2: len p = k+1 by A1,FINSEQ_1:def 3;
+    A3: for j being Nat st j in Seg(k+1) holds p.j = MESSAGES by FUNCOP_1:13;
+    A4: len p = len IDEA_P_F(Key,n,k)+1 by A2,Def17;
        for i being Nat st i in dom IDEA_P_F(Key,n,k)
             holds IDEA_P_F(Key,n,k).i in Funcs(p.i, p.(i+1))
       proof
         let i be Nat;
-        assume A4: i in dom IDEA_P_F(Key,n,k);
+        assume A5: i in dom IDEA_P_F(Key,n,k);
         then i in Seg len IDEA_P_F(Key,n,k) by FINSEQ_1:def 3;
         then i in Seg k by Def17;
         then 1 <= i & i <= k by FINSEQ_1:3;
         then 1 <= i & i <= k+1 & 1 <= (i+1) & (i+1) <=
  k+1 by XREAL_1:8,NAT_1:37;
         then i in Seg (k+1) & (i+1) in Seg (k+1) by FINSEQ_1:3;
-        then A5: p.i = MESSAGES & p.(i+1) = MESSAGES by A2;
-           IDEA_P_F(Key,n,k).i = IDEA_P(Line(Key,i),n) by A4,Def17;
-        hence IDEA_P_F(Key,n,k).i in Funcs(p.i,p.(i+1)) by A5,FUNCT_2:12;
+        then A6: p.i = MESSAGES & p.(i+1) = MESSAGES by A3;
+           IDEA_P_F(Key,n,k).i = IDEA_P(Line(Key,i),n) by A5,Def17;
+        hence IDEA_P_F(Key,n,k).i in Funcs(p.i,p.(i+1)) by A6,FUNCT_2:12;
       end;
-    hence thesis by A3,FUNCT_7:def 8;
+    hence thesis by A4,FUNCT_7:def 8;
   end;
 
 theorem Th40:
@@ -2860,27 +2838,27 @@ theorem Th40:
     let Key be Matrix of lk,6,NAT;
     let k be Nat;
     set p = Seg(k+1) --> MESSAGES;
-X:  dom p = Seg(k+1) by FUNCOP_1:19;
+A1:  dom p = Seg(k+1) by FUNCOP_1:19;
     then reconsider p as FinSequence by FINSEQ_1:def 2;
-    A1: len p = k+1 by X,FINSEQ_1:def 3;
-    A2: for j being Nat st j in Seg(k+1) holds p.j = MESSAGES by FUNCOP_1:13;
-    A3: len p = len IDEA_Q_F(Key,n,k)+1 by A1,Def18;
+    A2: len p = k+1 by A1,FINSEQ_1:def 3;
+    A3: for j being Nat st j in Seg(k+1) holds p.j = MESSAGES by FUNCOP_1:13;
+    A4: len p = len IDEA_Q_F(Key,n,k)+1 by A2,Def18;
        for i being Nat st i in dom IDEA_Q_F(Key,n,k)
             holds IDEA_Q_F(Key,n,k).i in Funcs(p.i, p.(i+1))
       proof
         let i be Nat;
-        assume A4: i in dom IDEA_Q_F(Key,n,k);
+        assume A5: i in dom IDEA_Q_F(Key,n,k);
         then i in Seg len IDEA_Q_F(Key,n,k) by FINSEQ_1:def 3;
         then i in Seg k by Def18;
         then 1 <= i & i <= k by FINSEQ_1:3;
         then 1 <= i & i <= k+1 & 1 <= (i+1) & (i+1) <=
  k+1 by XREAL_1:8,NAT_1:37;
         then i in Seg (k+1) & (i+1) in Seg (k+1) by FINSEQ_1:3;
-        then A5: p.i = MESSAGES & p.(i+1) = MESSAGES by A2;
-           IDEA_Q_F(Key,n,k).i = IDEA_Q(Line(Key,k-'i+1),n) by A4,Def18;
-        hence IDEA_Q_F(Key,n,k).i in Funcs(p.i,p.(i+1)) by A5,FUNCT_2:12;
+        then A6: p.i = MESSAGES & p.(i+1) = MESSAGES by A3;
+           IDEA_Q_F(Key,n,k).i = IDEA_Q(Line(Key,k-'i+1),n) by A5,Def18;
+        hence IDEA_Q_F(Key,n,k).i in Funcs(p.i,p.(i+1)) by A6,FUNCT_2:12;
       end;
-    hence thesis by A3,FUNCT_7:def 8;
+    hence thesis by A4,FUNCT_7:def 8;
   end;
 
 theorem Th41:
